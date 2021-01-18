@@ -2,68 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D9D2FA25A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jan 2021 15:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3950E2FA411
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jan 2021 16:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392185AbhARNvO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Jan 2021 08:51:14 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:50848 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392307AbhARNee (ORCPT
+        id S2405319AbhARPGR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Jan 2021 10:06:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405394AbhARPFp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Jan 2021 08:34:34 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0UM8ExKs_1610976815;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UM8ExKs_1610976815)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 18 Jan 2021 21:33:35 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, haitao.huang@intel.com,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH] x86/sgx: Allows ioctl PROVISION to execute before CREATE
-Date:   Mon, 18 Jan 2021 21:33:35 +0800
-Message-Id: <20210118133335.98907-1-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.3.ge56e4f7
+        Mon, 18 Jan 2021 10:05:45 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E354C061573
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jan 2021 07:05:04 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id 23so24493891lfg.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jan 2021 07:05:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ri3ViwJIemCRo5Li//ENyLUFjkwkOFqO5AGiqHf+oUY=;
+        b=J331cjUcPG1tS5LoQgX2hRDa6mKfwajLBC1eFES7fOibDhYewVXHQyKQEWG2xYPZIf
+         Bh+BOz3otEDNfsKc5ab4MvmeQ5urrdGPC5Khca7RebCWDRObMz+WQM+B5hee9jRrYHzB
+         6SyV9UYRrG2o7wiLW0uqJQMJUxNJPFG11mtx9R++Ri3SWLwKh9awxAaekulbtLy218dH
+         oiCz8L9F35auVvyeiUAkqLfKC7Puj6g73fe/AipJyBAXU1Q0MaE+UuhKcJTE41H91vAX
+         hruB5gULNTqa/mvuYs+ehJznauVpD3Qkx4niQcw72qNYBGTzRkFulCzFq5R8Qljqom9r
+         H/rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ri3ViwJIemCRo5Li//ENyLUFjkwkOFqO5AGiqHf+oUY=;
+        b=iww3vRM1eIIufYX35U5ggoZPg2sMWAVW107dKioZKPIOPOimL2AGtUP+88YBxkQq3q
+         Gf7vtshgzIrFb4GetCRIgtVROM2qfuN3e4pZNdSJzosGPHsc8H9kK2wGgn8oiaZun+Fq
+         U8mot1B8sOxait3hx1LRc/Th+F67UhT0SoJpC3WFIk2gmg9DTC+6wdl4zWTmObRRJiqE
+         S4DYwFzCFgxI0eB0kXquvEenc5UPzmkf9W+JLxZDyEih+g8kStS7X6CTCcs/mY/n+wHE
+         BJlyWlVwhoIwUQCtH/lYZ0NPdwzdrrt314Gmz2y01lEn8gM5G/WDXO3rqbzI+N+spPoD
+         GkqQ==
+X-Gm-Message-State: AOAM532qMRxt4O+B8O/qakpFOThGdKy2v7X7jKOvmHeP1O2CRfnC2IDH
+        cbCAjIvEXKkot0SYrO3wjkwDNNVlEr1wU7HrcAajcQ==
+X-Google-Smtp-Source: ABdhPJxFI1/1/BERIAvssx71vAzMx/DieoiLXAg12yNY2zsJZ74uR0QW2dajc0J1Br5Sw3ihpextmWaR6Wp3bLSIuho=
+X-Received: by 2002:a19:8bc6:: with SMTP id n189mr11053598lfd.291.1610982303209;
+ Mon, 18 Jan 2021 07:05:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210107025731.226017-1-warthog618@gmail.com>
+In-Reply-To: <20210107025731.226017-1-warthog618@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 18 Jan 2021 16:04:51 +0100
+Message-ID: <CACRpkdZf2GhScg=sUG35nA5P6jXH93uuK0Fq_uhz29wBQLHOKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] selftests: gpio: rework and port to GPIO uAPI v2
+To:     Kent Gibson <warthog618@gmail.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        Bamvor Jian Zhang <bamv2005@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In function sgx_encl_create(), the logic of directly assigning
-value to attributes_mask determines that the call to
-SGX_IOC_ENCLAVE_PROVISION must be after the command of
-SGX_IOC_ENCLAVE_CREATE. If change this assignment statement to
-or operation, the PROVISION command can be executed earlier and
-more flexibly.
+On Thu, Jan 7, 2021 at 3:58 AM Kent Gibson <warthog618@gmail.com> wrote:
 
-Reported-by: Jia Zhang <zhang.jia@linux.alibaba.com>
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- arch/x86/kernel/cpu/sgx/ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>   selftests: gpio: rework and simplify test implementation
+>   selftests: gpio: remove obsolete gpio-mockup-chardev.c
+>   selftests: remove obsolete build restriction for gpio
+>   selftests: remove obsolete gpio references from kselftest_deps.sh
+>   tools: gpio: remove uAPI v1 code no longer used by selftests
+>   selftests: gpio: port to GPIO uAPI v2
+>   selftests: gpio: add CONFIG_GPIO_CDEV to config
 
-diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index f45957c05f69..0ca3fc238bc2 100644
---- a/arch/x86/kernel/cpu/sgx/ioctl.c
-+++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -108,7 +108,7 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
- 	encl->base = secs->base;
- 	encl->size = secs->size;
- 	encl->attributes = secs->attributes;
--	encl->attributes_mask = SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT | SGX_ATTR_KSS;
-+	encl->attributes_mask |= SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT | SGX_ATTR_KSS;
- 
- 	/* Set only after completion, as encl->lock has not been taken. */
- 	set_bit(SGX_ENCL_CREATED, &encl->flags);
--- 
-2.19.1.3.ge56e4f7
+Bartosz I think you can just merge these patches into the GPIO tree, at least
+I think that is what I have done in the past.
 
+Yours,
+Linus Walleij
