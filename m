@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE4F2FBED7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jan 2021 19:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569622FBEF7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jan 2021 19:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726212AbhASSXI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Jan 2021 13:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S1728709AbhASS3f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Jan 2021 13:29:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392349AbhASSWm (ORCPT
+        with ESMTP id S1727140AbhASS31 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jan 2021 13:22:42 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEBAC0613D3
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:22:02 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id r9so14406403qtp.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:22:02 -0800 (PST)
+        Tue, 19 Jan 2021 13:29:27 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB752C0613D6
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:28:26 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id e15so14408713qte.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:28:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=QB+qlyJrpIAY9PAVjnSSlEibl/VpzXPECBF8avvNf9g=;
-        b=ZpCwWJLwCV0bgOoVL6z7GNeJGgm4Ux+Pn0E59lHo+mYjHp2i9ibyDroLAo18CedooT
-         kFWXI2RiwNofDz7OzfpMir+6mOPzVoHJJk5PdgdsJ5ei66lQrPeyFvwv+QcS3UNtCO0t
-         2RFP05K/6+STlM5/b8Io3A+L3xuYA3g5q+gZAcQaSSDYMULQdlR85NzMPmd8ACUgE7RM
-         qsH98a4Sx8cX+CQpht1G3I6dzGiflHirrC61n6MhKJhhRwsk7UNDQ6DHfb7k8P9K/v3+
-         /KuKoV7IcO2i9d+7lQ8fiZxcxncF9vukjcoB36n4Z31WWTU9gMtM5Y295JWeXSWruOUx
-         ic0Q==
+        bh=ke7qD8F84c1d4EOseUsfShNOeUs7V6JI/1ybkVdZuas=;
+        b=XmQ0R0kZqyfx6kYtmKEuaQdnV3pA/Gk5AOzBRpiTYl4tlHVj1r8AGgHQ4HlCBrkqJq
+         d3htfUs3a6Vo7BoCaKhfTS/pKV/wBzzmfP1qsXIQg8CQxxbNzgZLm/tv7iPsO1sHRvpU
+         TCZW7i1jjllBwoa546R0ibB0zkSMqcrkOGwMgnllWMEUgURDH4T3uEK++bfZv7/+4pbj
+         kS8q1ESLc1z39UecPfNCeUXmJIGhwHZBA/TwP+5YpJBnaym8fbHoGkHnHv5RdAWXulup
+         dtDZh1pKug65yM1CA0ASf5OqBnSDmxdk7ota2wSPE6R9R/dxgH45I+bA7mqqlvFaweeD
+         jp4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=QB+qlyJrpIAY9PAVjnSSlEibl/VpzXPECBF8avvNf9g=;
-        b=FYmR8ntn3GLRFVGv5J3l3Re8bZFKGEnSI/zvFkfYtWdN0sVpeiP5zOx/9Y+ze0p0P+
-         gxW1sne2O2W6oV7f69hUNiCqhA0oZNvIqTYIlCsFJvOcKGEbx+Krnq29DRQ7VrqGjaM1
-         wU+z9Zl5WwSQR3X0zfJzelD05nTQL6GffwfYcYHXcCLTwzYt/EwFZqJeSQ5ij6Gjrj/D
-         eFjgzcRQXf+E116DdPdi+xFAwD+s2GWqkaBYsvtx2jBSNfEaRWP5nS3aNjXyTPX2yUO4
-         ZmgUyVddHgl27ZUTydmzqGlbwyy9rU2fNYybn3n+uK+nGVSidW40n87uNVVOlDxr/zvT
-         BQgA==
-X-Gm-Message-State: AOAM533DKRTveAm90rSbh8jn8LTOBFBKvaZMN2jomOsUpM/t+35LoBrM
-        0s7ifl1BfY6XiagGwRSEAojhUw==
-X-Google-Smtp-Source: ABdhPJz2ZDCDvyVyZdPuux/jcDhvN+advwUUSodu2d8iZEb7w0r1BPV9yWMXcNjrYJ+DwwIBy9Vyyg==
-X-Received: by 2002:ac8:7394:: with SMTP id t20mr5567220qtp.72.1611080521652;
-        Tue, 19 Jan 2021 10:22:01 -0800 (PST)
+        bh=ke7qD8F84c1d4EOseUsfShNOeUs7V6JI/1ybkVdZuas=;
+        b=efEgrtvADsO48UgIBecxhe+N5WHigC/naJu19rcjtqtV+mSXzt+mcNSTWVH5c5x/M5
+         AVIQLEXZ8vIcfz2+4eGpmEkalon0Rknyffyh6C6YO7jnChDZUuXobMAXvOFp7pZtEyRX
+         BlVPwsHzn7k7+W9OmRbHa6j/2sBL3n14yzd4wcx3m/o08FKXr7UP0sBEsI5zvJ67uRa0
+         hhET58hcRUCPL6VKu9lICItJKzAnfzXqDb/xYxi+uW7YlgxB+kGMx3wG4Bi32nM6tjNR
+         35w0T4GzI42Usdg8uW0oY7nDHQR7J+QFunZ4GpnJ4mmbzi95BJtm9sa6CDrNqGPARQ1x
+         lDug==
+X-Gm-Message-State: AOAM532vLGRy38EbkUWW+4l8RC0c/MCS5ufSkmVRfvEnSIlYDc0jOFiI
+        CrOAGGAFKKuA1ahRfkl3ehGBiw==
+X-Google-Smtp-Source: ABdhPJzA1g7p43l6AtNResDMMVS5o5wIwQMrXjddyfwRGWf3w+KrQJOMwx++nssqWWJKy8HjuEBVXA==
+X-Received: by 2002:ac8:2adb:: with SMTP id c27mr2484368qta.145.1611080906055;
+        Tue, 19 Jan 2021 10:28:26 -0800 (PST)
 Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
-        by smtp.gmail.com with ESMTPSA id i3sm12711419qtd.95.2021.01.19.10.22.01
+        by smtp.gmail.com with ESMTPSA id u5sm13640579qka.86.2021.01.19.10.28.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 10:22:01 -0800 (PST)
+        Tue, 19 Jan 2021 10:28:25 -0800 (PST)
 Received: from jgg by mlx with local (Exim 4.94)
         (envelope-from <jgg@ziepe.ca>)
-        id 1l1vdg-003pV4-Mu; Tue, 19 Jan 2021 14:22:00 -0400
-Date:   Tue, 19 Jan 2021 14:22:00 -0400
+        id 1l1vjt-003pdK-4n; Tue, 19 Jan 2021 14:28:25 -0400
+Date:   Tue, 19 Jan 2021 14:28:25 -0400
 From:   Jason Gunthorpe <jgg@ziepe.ca>
 To:     Pavel Tatashin <pasha.tatashin@soleen.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -63,37 +63,30 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         mgorman@suse.de, willy@infradead.org, rientjes@google.com,
         jhubbard@nvidia.com, linux-doc@vger.kernel.org,
         ira.weiny@intel.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 04/14] mm/gup: check for isolation errors
-Message-ID: <20210119182200.GZ4605@ziepe.ca>
+Subject: Re: [PATCH v5 03/14] mm/gup: return an error on migration failure
+Message-ID: <20210119182825.GA4605@ziepe.ca>
 References: <20210119043920.155044-1-pasha.tatashin@soleen.com>
- <20210119043920.155044-5-pasha.tatashin@soleen.com>
+ <20210119043920.155044-4-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210119043920.155044-5-pasha.tatashin@soleen.com>
+In-Reply-To: <20210119043920.155044-4-pasha.tatashin@soleen.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 11:39:10PM -0500, Pavel Tatashin wrote:
-> It is still possible that we pin movable CMA pages if there are isolation
-> errors and cma_page_list stays empty when we check again.
+On Mon, Jan 18, 2021 at 11:39:09PM -0500, Pavel Tatashin wrote:
+> When migration failure occurs, we still pin pages, which means
+> that we may pin CMA movable pages which should never be the case.
 > 
-> Check for isolation errors, and return success only when there are no
-> isolation errors, and cma_page_list is empty after checking.
+> Instead return an error without pinning pages when migration failure
+> happens.
 > 
-> Because isolation errors are transient, we retry indefinitely.
+> No need to retry migrating, because migrate_pages() already retries
+> 10 times.
 > 
 > Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-> ---
->  mm/gup.c | 60 ++++++++++++++++++++++++++++++++------------------------
->  1 file changed, 34 insertions(+), 26 deletions(-)
-
-This should have a fixme too, this is a bug.
-
-The patch looks OK, but I keep feeling this logic is all really
-overcomplicated...
+>  mm/gup.c | 17 +++++++----------
+>  1 file changed, 7 insertions(+), 10 deletions(-)
 
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Jason
