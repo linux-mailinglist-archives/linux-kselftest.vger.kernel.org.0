@@ -2,87 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAEF2FBA4F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jan 2021 15:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 757482FBDF7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jan 2021 18:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404794AbhASOvW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Jan 2021 09:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S2390431AbhASOua (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Jan 2021 09:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404286AbhASMdd (ORCPT
+        with ESMTP id S1731704AbhASKij (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jan 2021 07:33:33 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B486FC0613D6;
-        Tue, 19 Jan 2021 04:31:59 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id e9so6262609plh.3;
-        Tue, 19 Jan 2021 04:31:59 -0800 (PST)
+        Tue, 19 Jan 2021 05:38:39 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F055C061574
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 02:37:58 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id gx5so8543928ejb.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 02:37:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IKTIqcQhkM3h5tDVoQgabgdbJqdqY8zjeGWY7T21Mo0=;
-        b=Lc8inz36bV709VGqzp1ApA1O7MVA0IQfYykipyTgn/0gmhgn/eurbMV5w3oLjVzduZ
-         5UtfH8SSHGlCX/EoDe6h+foEGVtNCBd/p2rrNlgRC7gZuXVOyL7yFg6hQHx8+56of6e4
-         RPRVSqNr+WN7jF1mRyKnGaLItUF7rX921lru+jlO+aEMn+rGQCIs/T3VJ6BenyaJP7Kb
-         +BP9Ltj+JJ8WHBpOqpmncF+apD5wErwKpFL/b0+koR2UW6v5a195W8K4E2YI/2m9254+
-         26QMjlH1MYs1U+0Rzp7JRRAMtX0abw8CQXMf/73aSo6KXmBNqCU+CyDI4HsH7pUeUICy
-         1LYQ==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LtpYS3fE2cC5QgHZMy5lDBgkuvmbGBZXc8oUExaRobg=;
+        b=AVEAcv6erHpJS5IUR9N16OaW5mbpHSuKwXHB016yFyMXO8JGzwgihACuRmGR47q51n
+         EMHHMxJmnNtY5a3NtfFcauTpTOH0ANADTCmwYaemis6q7sTvHnBYaoHH+uYZswjsuO/B
+         UWmQ4vmYlfJK0lD44U35ZUM03AfHYAonkYRQQlw4bK6zSqGs8zWq+4nx3680wXx+gB9y
+         ekiyqIjewfmdo4Rgteu/klRNDwKVLtaQ4IppW7xFexWFFHzEfY8dyBfRtSUNPcLnN03N
+         vhhLIFqpra1Dp4KxKDyMOyKv6M9BvEJ6CzGh2Fwi9fXrfVZksEs17VACkAEuX3oxFDN2
+         DyFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IKTIqcQhkM3h5tDVoQgabgdbJqdqY8zjeGWY7T21Mo0=;
-        b=id4KJeXcZFqm6eZl731iP4Bok+dFN3A41+7mtgZfWE+jKc0dO6e/XfTSkuU4DWHGrT
-         V6LNNDBgvv/pfcHT9AP24lHpDe+bYq0N6MN1spOJHzZKpYkcG6dBSRzPy2NQva5YR2/9
-         NWUsAkYhogA0mVppY7AcUNT34d7S98foQazkoPGEr1dpId0cpDXnuLiZpKiE2K/rqupN
-         NwRPUkb+4lO9ZmtUYKZ57roKP1j2S9RJb/oJJNYri/pEA+2FbbqoMEJTMlaP3JWX5Rce
-         rBToICyaHtLpQ2wAh8NjvdSueCHBIBI7g7jCTa0GMgqDrpDeYsD3QCV+uGv8gjGvEzML
-         JCAA==
-X-Gm-Message-State: AOAM5331Mnws1neU2WT4Zz8B/HiYJPmVMhXbdk3lgdJ3qpOsGZOFSinx
-        +C1i6IognDaK0TJZCwvzgyPq9kdNONw=
-X-Google-Smtp-Source: ABdhPJya2Hri6hDk3mcgBsM+oNYotByVuzx9UzsuUXVoI4fHHkuvOqPQPg0Yubq/c7YO/relM51Clw==
-X-Received: by 2002:a17:90a:f988:: with SMTP id cq8mr5313365pjb.71.1611059519011;
-        Tue, 19 Jan 2021 04:31:59 -0800 (PST)
-Received: from sol.lan (106-69-181-154.dyn.iinet.net.au. [106.69.181.154])
-        by smtp.gmail.com with ESMTPSA id q4sm19283052pgr.39.2021.01.19.04.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 04:31:58 -0800 (PST)
-From:   Kent Gibson <warthog618@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bgolaszewski@baylibre.com,
-        linus.walleij@linaro.org, shuah@kernel.org, bamv2005@gmail.com
-Cc:     Kent Gibson <warthog618@gmail.com>
-Subject: [PATCH v3 7/7] selftests: gpio: add CONFIG_GPIO_CDEV to config
-Date:   Tue, 19 Jan 2021 20:30:59 +0800
-Message-Id: <20210119123059.102004-8-warthog618@gmail.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210119123059.102004-1-warthog618@gmail.com>
-References: <20210119123059.102004-1-warthog618@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LtpYS3fE2cC5QgHZMy5lDBgkuvmbGBZXc8oUExaRobg=;
+        b=j4ehkha5ADaiabXLAKruin3WHecc2I7/L9z6tIVCJ0Qlri5S/Om5QxN8FZOXOGN4ip
+         5KLXmTOBJ20Im0kASQqC5BB1NeFjHWvhVR0vsJ/mRC5SOSfvIhmgV5TdmR04Bkh4kyCY
+         Fycxr40ZiwmQg0ne0mHqXYj8yOWXZoqoSGy+P8+NZKPbgUKyHpndwcRHWbVXbrIII0yK
+         3oFOi/eNkwwWfKsiDQb7Q9yh1j26pzj73KupLSYW0kh3921CQe3HB+2GwuVFt+nq/Vlj
+         R5T5ez3l43PQzvUWvNSt5PK+7FLobVYT8u/IYLN2qIvtLBBq9uph4GC2jKbNtY8IGhhT
+         M3rQ==
+X-Gm-Message-State: AOAM532JHvMQJNnNmDieDKZEa4g9fOBAq65boL4ZppMpW8A+wAdpeTIU
+        rhPORqwhVRGkbnCxQfhsTHYUiZ4/1f2U0rvg3gstHw==
+X-Google-Smtp-Source: ABdhPJyAozB1lFwLmI79KJn1esgyufm62vTBA3EAVda+QYKmeD4MJINnKWS/8L9U70HoqJJRoGWTHTTlM9s5jgA+QNM=
+X-Received: by 2002:a17:906:19c3:: with SMTP id h3mr2521301ejd.429.1611052676821;
+ Tue, 19 Jan 2021 02:37:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210107025731.226017-1-warthog618@gmail.com> <CACRpkdZf2GhScg=sUG35nA5P6jXH93uuK0Fq_uhz29wBQLHOKQ@mail.gmail.com>
+ <20210119003455.GB5169@sol>
+In-Reply-To: <20210119003455.GB5169@sol>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Tue, 19 Jan 2021 11:37:46 +0100
+Message-ID: <CAMpxmJUkFL+w7afS2NKF-xiMR==HVR1Mk8uQm3782DBoG0qneA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] selftests: gpio: rework and port to GPIO uAPI v2
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Bamvor Jian Zhang <bamv2005@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-GPIO CDEV is now optional and required for the selftests so add it to
-the config.
+On Tue, Jan 19, 2021 at 1:35 AM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> On Mon, Jan 18, 2021 at 04:04:51PM +0100, Linus Walleij wrote:
+> > On Thu, Jan 7, 2021 at 3:58 AM Kent Gibson <warthog618@gmail.com> wrote:
+> >
+> > >   selftests: gpio: rework and simplify test implementation
+> > >   selftests: gpio: remove obsolete gpio-mockup-chardev.c
+> > >   selftests: remove obsolete build restriction for gpio
+> > >   selftests: remove obsolete gpio references from kselftest_deps.sh
+> > >   tools: gpio: remove uAPI v1 code no longer used by selftests
+> > >   selftests: gpio: port to GPIO uAPI v2
+> > >   selftests: gpio: add CONFIG_GPIO_CDEV to config
+> >
+> > Bartosz I think you can just merge these patches into the GPIO tree, at least
+> > I think that is what I have done in the past.
+> >
+>
+> Could you touch up that Fixes tag in patch 1 if you merge v2?
+>
+> Thanks,
+> Kent.
 
-Signed-off-by: Kent Gibson <warthog618@gmail.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- tools/testing/selftests/gpio/config | 1 +
- 1 file changed, 1 insertion(+)
+Kent,
 
-diff --git a/tools/testing/selftests/gpio/config b/tools/testing/selftests/gpio/config
-index abaa6902b7b6..ce100342c20b 100644
---- a/tools/testing/selftests/gpio/config
-+++ b/tools/testing/selftests/gpio/config
-@@ -1,2 +1,3 @@
- CONFIG_GPIOLIB=y
-+CONFIG_GPIO_CDEV=y
- CONFIG_GPIO_MOCKUP=m
--- 
-2.30.0
+This doesn't apply to my for-next branch - there's a conflict in
+tools/testing/selftests/gpio/Makefile, could you take a look?
 
+Bartosz
