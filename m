@@ -2,148 +2,409 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 727082FBA47
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jan 2021 15:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7952FBA49
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jan 2021 15:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390651AbhASOum (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Jan 2021 09:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S2404099AbhASOvK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Jan 2021 09:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393041AbhASMb6 (ORCPT
+        with ESMTP id S2393058AbhASMcQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jan 2021 07:31:58 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB23C061573;
-        Tue, 19 Jan 2021 04:31:17 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id t6so10433418plq.1;
-        Tue, 19 Jan 2021 04:31:16 -0800 (PST)
+        Tue, 19 Jan 2021 07:32:16 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B016C061575;
+        Tue, 19 Jan 2021 04:31:34 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id l23so12099154pjg.1;
+        Tue, 19 Jan 2021 04:31:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nS36t5MdMV6M9yjzyoSn9+892tFdOCVlnlg10RRFg7g=;
-        b=V3G8VacsqtfQWaKPnCU0sc21kZkaVKCZy5kJhlf/xxIOMdldWCyDrl1zupAr5RFKhG
-         I5gciOyM6qLzOCSYpBu3W5VmDuSpqUqCHnkSbknhNKoq+Hy4fPweRpANQiozr/qGQNvF
-         lsvRFFgioG7cZy7bF2zsOs9xdAFqZofEUapF8LIFV4SblopP731+gHow5sdMnDY+JBTF
-         eg0dC2kGjofl5GRPHh/YGIm6OhZwEw28n4dVWpWcNFgwOscNtE5yq4km+prsOwKgw7pQ
-         e2oWKaEl/Lq5iSDiMTbeQdcokU0EROaEPFQja2JYXvw/q2d2ri5PU53/ufva+RCOUMIC
-         OdkA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1061C5GbJxbMGTcv4TZUmyHubDhAesam0qEzqgdRcCk=;
+        b=cIcq/dSG0IoEC/dwzQTa59rPfKhaHmI16B1Y62L8QR0mBNGwjZrkZwxhegKTtlGjBD
+         WsFmyMG7YiE18LsAoarhrPmosUeLMN2jYVayASp+SupVr5++VqvCV9LjUs1JMg/EIXke
+         usvgqaHoZUXCllWVCEm+LUt+j+ksNAtc3XY30nEQ1UAJQeMFoAcGMSJCH8bfQMkv9jq1
+         pWukN3QWnUpeGJI0LBl55VlZKXt03FzPuyPkkqLYTicVuCHpU5u9tNHOTpfYoo9GKGje
+         +uN0oeO/mxrhaLTpvsU7OOphtGEdKMwSrQ8ZNZufwhzEZxYFG0jSBqx5a0+pKs5Xewni
+         k7ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nS36t5MdMV6M9yjzyoSn9+892tFdOCVlnlg10RRFg7g=;
-        b=NkvvMY5JYdeZ/CQEG3XNa08LrYJp943Ql4YD6NVd4Vd4rkFZqMQa+NfB4q1tnGrHf3
-         1oTTsVMOx05X3Mp4gIOgaIwPhfnwGWL8pzYAWWlq8XM5df2/4njx18guu9xUtOKGF0fG
-         uTOstVXBEWhI00EN/+K8oMkUaD7pTO1H94Zp1ZIhVJygjSPBRMhMYBjCYK8mGhADgcbn
-         aU6nABJuDjbb0FFVmUscDudo0QR0U9ourIaPe4fRWgXzEgpCqo8TWHju2y15kvm9Gu0I
-         nCT1wvzUfXG2giY9xgN6TBmpsDOHzUJBB7ymJrtwa3VjUftpQwCTDSY5I37FFUnTWtgi
-         G4Xw==
-X-Gm-Message-State: AOAM532VzBbLQzSo3OUrEiI4KEDJeJ0T5bRJPspLwAX1aaC8IcOkJKEH
-        ZXkNClCuzhwONZ/ntibIjT62OO10I4o=
-X-Google-Smtp-Source: ABdhPJxiY7d7vgdzhf1lpGZsAsiDWIT77Cgx4PhrSG3O31AvCsnSpMgZRQYcsXg3zO5FAIsZM2Ew5w==
-X-Received: by 2002:a17:90a:d181:: with SMTP id fu1mr5186551pjb.188.1611059475930;
-        Tue, 19 Jan 2021 04:31:15 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1061C5GbJxbMGTcv4TZUmyHubDhAesam0qEzqgdRcCk=;
+        b=kXeUoHy0rYLbUn0DQDOitKaTDcVFiyUAxsKRZVuJrPhWLP4Fh4FxG/LsAi87/o1mx4
+         Z/hvv5+NhDJCTzZlyGnYaNrQdamw3V6wUW+c5/15d7vmZ4yCDqpiZcRs0p/LIVzttVf1
+         YC08f/jLZsUBBotxzDObZDUYRDsKYM9D0dPEI9vEDPTXZqEUpageMViqI1RV1vHAgDzc
+         CJOvPcPSAxM1/y+XhqYkHNY3peHTNeZe3Hy5TEzHPf5zXhub2ubv+myjOTcG44Z5Qmow
+         LArJjkd3X0Ur2JhXDTFQQqsks8WR4rZM6h9ZI9E3BnDLheiD+4B5N/prGGNqVsiYLxfQ
+         8a5g==
+X-Gm-Message-State: AOAM533s0A/Tp99+jT/NIYyBY9EegQjK/LgKcj8pbtFQ1KdDc3vKTig6
+        DMi12BGlg8cD5FeOu1kLCKlRN5AsSy4=
+X-Google-Smtp-Source: ABdhPJz7x6+2/3PrWtn3+Xj5pHx7ju3o+JvrHBZySmt6XCZ4t6UCwxgOjm8nb4GqSw42SXaHwvpurg==
+X-Received: by 2002:a17:90a:d249:: with SMTP id o9mr5300563pjw.196.1611059493509;
+        Tue, 19 Jan 2021 04:31:33 -0800 (PST)
 Received: from sol.lan (106-69-181-154.dyn.iinet.net.au. [106.69.181.154])
-        by smtp.gmail.com with ESMTPSA id q4sm19283052pgr.39.2021.01.19.04.31.11
+        by smtp.gmail.com with ESMTPSA id q4sm19283052pgr.39.2021.01.19.04.31.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 04:31:14 -0800 (PST)
+        Tue, 19 Jan 2021 04:31:33 -0800 (PST)
 From:   Kent Gibson <warthog618@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kselftest@vger.kernel.org, bgolaszewski@baylibre.com,
         linus.walleij@linaro.org, shuah@kernel.org, bamv2005@gmail.com
 Cc:     Kent Gibson <warthog618@gmail.com>
-Subject: [PATCH v3 0/7] selftests: gpio: rework and port to GPIO uAPI v2
-Date:   Tue, 19 Jan 2021 20:30:52 +0800
-Message-Id: <20210119123059.102004-1-warthog618@gmail.com>
+Subject: [PATCH v3 2/7] selftests: gpio: remove obsolete gpio-mockup-chardev.c
+Date:   Tue, 19 Jan 2021 20:30:54 +0800
+Message-Id: <20210119123059.102004-3-warthog618@gmail.com>
 X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210119123059.102004-1-warthog618@gmail.com>
+References: <20210119123059.102004-1-warthog618@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Initially I just wanted to port the selftests to the latest GPIO uAPI,
-but on finding that, due to dependency issues, the selftests are not built
-for the buildroot environments that I do most of my GPIO testing in, I
-decided to take a closer look.
+GPIO selftests have changed to new gpio-mockup-cdev helper, so remove
+old gpio-mockup-chardev helper.
 
-The first patch is essentially a rewrite of the exising test suite.
-It uses a simplified abstraction of the uAPI interfaces to allow a common
-test suite to test the gpio-mockup using either of the uAPI interfaces.
-The simplified cdev interface is implemented in gpio-mockup.sh, with the
-actual driving of the uAPI implemented in gpio-mockup-cdev.c.
-The simplified sysfs interface replaces gpio-mockup-sysfs.sh and is
-loaded over the cdev implementation when selected.
-
-The new tests should also be simpler to extend to cover new mockup
-interfaces, such as the one Bart has been working on.
-
-I have dropped support for testing modules other than gpio-mockup from
-the command line options, as the tests are very gpio-mockup specific so
-I didn't see any calling for it.
-
-I have also tried to emphasise in the test output that the tests are
-covering the gpio-mockup itself.  They do perform some implicit testing
-of gpiolib and the uAPI interfaces, and so can be useful as smoke tests
-for those, but their primary focus is the gpio-mockup.
-
-Patches 2 through 5 do some cleaning up that is now possible with the
-new implementation, including enabling building in buildroot environments.
-Patch 4 doesn't strictly clean up all the old gpio references that it
-could - the gpio was the only Level 1 test, so the Level 1 tests could
-potentially be removed, but I was unsure if there may be other
-implications to removing a whole test level, or that it may be useful
-as a placeholder in case other static LDLIBS tests are added in
-the future??
-
-Patch 6 finally gets around to porting the tests to the latest GPIO uAPI.
-
-And Patch 7 updates the config to set the CONFIG_GPIO_CDEV option that
-was added in v5.10.
-
-Cheers,
-Kent.
-
-Changes v2 -> v3:
- - remove 'commit' from Fixes tag in patch 1.
- - rebase on Bart's gpio/for-next
-
-Changes v1 -> v2 (all in patch 1 and gpio-mockup.sh unless stated
- otherwise):
- - reorder includes in gpio-mockup-cdev.c
- - a multitude of improvements to gpio-mockup.sh and gpio-mockup-sysfs.sh
-   based on Andy's review comments
- - improved cleanup to ensure all child processes are killed on exit
- - added race condition prevention or mitigation including the wait in
-   release_line, the retries in assert_mock, the assert_mock in set_mock,
-   and the sleep in set_line
-
-Kent Gibson (7):
-  selftests: gpio: rework and simplify test implementation
-  selftests: gpio: remove obsolete gpio-mockup-chardev.c
-  selftests: remove obsolete build restriction for gpio
-  selftests: remove obsolete gpio references from kselftest_deps.sh
-  tools: gpio: remove uAPI v1 code no longer used by selftests
-  selftests: gpio: port to GPIO uAPI v2
-  selftests: gpio: add CONFIG_GPIO_CDEV to config
-
- tools/gpio/gpio-utils.c                       |  89 ----
- tools/gpio/gpio-utils.h                       |   6 -
- tools/testing/selftests/Makefile              |   9 -
- tools/testing/selftests/gpio/Makefile         |  26 +-
- tools/testing/selftests/gpio/config           |   1 +
- .../testing/selftests/gpio/gpio-mockup-cdev.c | 198 +++++++
- .../selftests/gpio/gpio-mockup-chardev.c      | 323 ------------
- .../selftests/gpio/gpio-mockup-sysfs.sh       | 168 ++----
- tools/testing/selftests/gpio/gpio-mockup.sh   | 497 ++++++++++++------
- tools/testing/selftests/kselftest_deps.sh     |   4 +-
- 10 files changed, 603 insertions(+), 718 deletions(-)
- create mode 100644 tools/testing/selftests/gpio/gpio-mockup-cdev.c
+Signed-off-by: Kent Gibson <warthog618@gmail.com>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ .../selftests/gpio/gpio-mockup-chardev.c      | 323 ------------------
+ 1 file changed, 323 deletions(-)
  delete mode 100644 tools/testing/selftests/gpio/gpio-mockup-chardev.c
 
-
-base-commit: 64e6066e16b8c562983dd9d33e604c0001ae0fc7
+diff --git a/tools/testing/selftests/gpio/gpio-mockup-chardev.c b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
+deleted file mode 100644
+index 73ead8828d3a..000000000000
+--- a/tools/testing/selftests/gpio/gpio-mockup-chardev.c
++++ /dev/null
+@@ -1,323 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * GPIO chardev test helper
+- *
+- * Copyright (C) 2016 Bamvor Jian Zhang
+- */
+-
+-#define _GNU_SOURCE
+-#include <unistd.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <errno.h>
+-#include <string.h>
+-#include <fcntl.h>
+-#include <getopt.h>
+-#include <sys/ioctl.h>
+-#include <libmount.h>
+-#include <err.h>
+-#include <dirent.h>
+-#include <linux/gpio.h>
+-#include "../../../gpio/gpio-utils.h"
+-
+-#define CONSUMER	"gpio-selftest"
+-#define	GC_NUM		10
+-enum direction {
+-	OUT,
+-	IN
+-};
+-
+-static int get_debugfs(char **path)
+-{
+-	struct libmnt_context *cxt;
+-	struct libmnt_table *tb;
+-	struct libmnt_iter *itr = NULL;
+-	struct libmnt_fs *fs;
+-	int found = 0, ret;
+-
+-	cxt = mnt_new_context();
+-	if (!cxt)
+-		err(EXIT_FAILURE, "libmount context allocation failed");
+-
+-	itr = mnt_new_iter(MNT_ITER_FORWARD);
+-	if (!itr)
+-		err(EXIT_FAILURE, "failed to initialize libmount iterator");
+-
+-	if (mnt_context_get_mtab(cxt, &tb))
+-		err(EXIT_FAILURE, "failed to read mtab");
+-
+-	while (mnt_table_next_fs(tb, itr, &fs) == 0) {
+-		const char *type = mnt_fs_get_fstype(fs);
+-
+-		if (!strcmp(type, "debugfs")) {
+-			found = 1;
+-			break;
+-		}
+-	}
+-	if (found) {
+-		ret = asprintf(path, "%s/gpio", mnt_fs_get_target(fs));
+-		if (ret < 0)
+-			err(EXIT_FAILURE, "failed to format string");
+-	}
+-
+-	mnt_free_iter(itr);
+-	mnt_free_context(cxt);
+-
+-	if (!found)
+-		return -1;
+-
+-	return 0;
+-}
+-
+-static int gpio_debugfs_get(const char *consumer, int *dir, int *value)
+-{
+-	char *debugfs;
+-	FILE *f;
+-	char *line = NULL;
+-	size_t len = 0;
+-	char *cur;
+-	int found = 0;
+-
+-	if (get_debugfs(&debugfs) != 0)
+-		err(EXIT_FAILURE, "debugfs is not mounted");
+-
+-	f = fopen(debugfs, "r");
+-	if (!f)
+-		err(EXIT_FAILURE, "read from gpio debugfs failed");
+-
+-	/*
+-	 * gpio-2   (                    |gpio-selftest               ) in  lo
+-	 */
+-	while (getline(&line, &len, f) != -1) {
+-		cur = strstr(line, consumer);
+-		if (cur == NULL)
+-			continue;
+-
+-		cur = strchr(line, ')');
+-		if (!cur)
+-			continue;
+-
+-		cur += 2;
+-		if (!strncmp(cur, "out", 3)) {
+-			*dir = OUT;
+-			cur += 4;
+-		} else if (!strncmp(cur, "in", 2)) {
+-			*dir = IN;
+-			cur += 4;
+-		}
+-
+-		if (!strncmp(cur, "hi", 2))
+-			*value = 1;
+-		else if (!strncmp(cur, "lo", 2))
+-			*value = 0;
+-
+-		found = 1;
+-		break;
+-	}
+-	free(debugfs);
+-	fclose(f);
+-	free(line);
+-
+-	if (!found)
+-		return -1;
+-
+-	return 0;
+-}
+-
+-static struct gpiochip_info *list_gpiochip(const char *gpiochip_name, int *ret)
+-{
+-	struct gpiochip_info *cinfo;
+-	struct gpiochip_info *current;
+-	const struct dirent *ent;
+-	DIR *dp;
+-	char *chrdev_name;
+-	int fd;
+-	int i = 0;
+-
+-	cinfo = calloc(sizeof(struct gpiochip_info) * 4, GC_NUM + 1);
+-	if (!cinfo)
+-		err(EXIT_FAILURE, "gpiochip_info allocation failed");
+-
+-	current = cinfo;
+-	dp = opendir("/dev");
+-	if (!dp) {
+-		*ret = -errno;
+-		goto error_out;
+-	} else {
+-		*ret = 0;
+-	}
+-
+-	while (ent = readdir(dp), ent) {
+-		if (check_prefix(ent->d_name, "gpiochip")) {
+-			*ret = asprintf(&chrdev_name, "/dev/%s", ent->d_name);
+-			if (*ret < 0)
+-				goto error_out;
+-
+-			fd = open(chrdev_name, 0);
+-			if (fd == -1) {
+-				*ret = -errno;
+-				fprintf(stderr, "Failed to open %s\n",
+-					chrdev_name);
+-				goto error_close_dir;
+-			}
+-			*ret = ioctl(fd, GPIO_GET_CHIPINFO_IOCTL, current);
+-			if (*ret == -1) {
+-				perror("Failed to issue CHIPINFO IOCTL\n");
+-				goto error_close_dir;
+-			}
+-			close(fd);
+-			if (strcmp(current->label, gpiochip_name) == 0
+-			    || check_prefix(current->label, gpiochip_name)) {
+-				*ret = 0;
+-				current++;
+-				i++;
+-			}
+-		}
+-	}
+-
+-	if ((!*ret && i == 0) || *ret < 0) {
+-		free(cinfo);
+-		cinfo = NULL;
+-	}
+-	if (!*ret && i > 0) {
+-		cinfo = realloc(cinfo, sizeof(struct gpiochip_info) * 4 * i);
+-		*ret = i;
+-	}
+-
+-error_close_dir:
+-	closedir(dp);
+-error_out:
+-	if (*ret < 0)
+-		err(EXIT_FAILURE, "list gpiochip failed: %s", strerror(*ret));
+-
+-	return cinfo;
+-}
+-
+-int gpio_pin_test(struct gpiochip_info *cinfo, int line, int flag, int value)
+-{
+-	struct gpiohandle_data data;
+-	unsigned int lines[] = {line};
+-	int fd;
+-	int debugfs_dir = IN;
+-	int debugfs_value = 0;
+-	int ret;
+-
+-	data.values[0] = value;
+-	ret = gpiotools_request_linehandle(cinfo->name, lines, 1, flag, &data,
+-					   CONSUMER);
+-	if (ret < 0)
+-		goto fail_out;
+-	else
+-		fd = ret;
+-
+-	ret = gpio_debugfs_get(CONSUMER, &debugfs_dir, &debugfs_value);
+-	if (ret) {
+-		ret = -EINVAL;
+-		goto fail_out;
+-	}
+-	if (flag & GPIOHANDLE_REQUEST_INPUT) {
+-		if (debugfs_dir != IN) {
+-			errno = -EINVAL;
+-			ret = -errno;
+-		}
+-	} else if (flag & GPIOHANDLE_REQUEST_OUTPUT) {
+-		if (flag & GPIOHANDLE_REQUEST_ACTIVE_LOW)
+-			debugfs_value = !debugfs_value;
+-
+-		if (!(debugfs_dir == OUT && value == debugfs_value)) {
+-			errno = -EINVAL;
+-			ret = -errno;
+-		}
+-	}
+-	gpiotools_release_linehandle(fd);
+-
+-fail_out:
+-	if (ret)
+-		err(EXIT_FAILURE, "gpio<%s> line<%d> test flag<0x%x> value<%d>",
+-		    cinfo->name, line, flag, value);
+-
+-	return ret;
+-}
+-
+-void gpio_pin_tests(struct gpiochip_info *cinfo, unsigned int line)
+-{
+-	printf("line<%d>", line);
+-	gpio_pin_test(cinfo, line, GPIOHANDLE_REQUEST_OUTPUT, 0);
+-	printf(".");
+-	gpio_pin_test(cinfo, line, GPIOHANDLE_REQUEST_OUTPUT, 1);
+-	printf(".");
+-	gpio_pin_test(cinfo, line,
+-		      GPIOHANDLE_REQUEST_OUTPUT | GPIOHANDLE_REQUEST_ACTIVE_LOW,
+-		      0);
+-	printf(".");
+-	gpio_pin_test(cinfo, line,
+-		      GPIOHANDLE_REQUEST_OUTPUT | GPIOHANDLE_REQUEST_ACTIVE_LOW,
+-		      1);
+-	printf(".");
+-	gpio_pin_test(cinfo, line, GPIOHANDLE_REQUEST_INPUT, 0);
+-	printf(".");
+-}
+-
+-/*
+- * ./gpio-mockup-chardev gpio_chip_name_prefix is_valid_gpio_chip
+- * Return 0 if successful or exit with EXIT_FAILURE if test failed.
+- * gpio_chip_name_prefix: The prefix of gpiochip you want to test. E.g.
+- *			  gpio-mockup
+- * is_valid_gpio_chip:	  Whether the gpio_chip is valid. 1 means valid,
+- *			  0 means invalid which could not be found by
+- *			  list_gpiochip.
+- */
+-int main(int argc, char *argv[])
+-{
+-	char *prefix;
+-	int valid;
+-	struct gpiochip_info *cinfo;
+-	struct gpiochip_info *current;
+-	int i;
+-	int ret;
+-
+-	if (argc < 3) {
+-		printf("Usage: %s prefix is_valid", argv[0]);
+-		exit(EXIT_FAILURE);
+-	}
+-
+-	prefix = argv[1];
+-	valid = strcmp(argv[2], "true") == 0 ? 1 : 0;
+-
+-	printf("Test gpiochip %s: ", prefix);
+-	cinfo = list_gpiochip(prefix, &ret);
+-	if (!cinfo) {
+-		if (!valid && ret == 0) {
+-			printf("Invalid test successful\n");
+-			ret = 0;
+-			goto out;
+-		} else {
+-			ret = -EINVAL;
+-			goto out;
+-		}
+-	} else if (cinfo && !valid) {
+-		ret = -EINVAL;
+-		goto out;
+-	}
+-	current = cinfo;
+-	for (i = 0; i < ret; i++) {
+-		gpio_pin_tests(current, 0);
+-		gpio_pin_tests(current, current->lines - 1);
+-		gpio_pin_tests(current, random() % current->lines);
+-		current++;
+-	}
+-	ret = 0;
+-	printf("successful\n");
+-
+-out:
+-	if (ret)
+-		fprintf(stderr, "gpio<%s> test failed\n", prefix);
+-
+-	if (cinfo)
+-		free(cinfo);
+-
+-	if (ret)
+-		exit(EXIT_FAILURE);
+-
+-	return ret;
+-}
 -- 
 2.30.0
 
