@@ -2,58 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BC82FC202
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jan 2021 22:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673D42FC1C6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jan 2021 22:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731022AbhASVLh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Jan 2021 16:11:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
+        id S1729219AbhASVDD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Jan 2021 16:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731229AbhASSsn (ORCPT
+        with ESMTP id S2404182AbhASUta (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jan 2021 13:48:43 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE31C0613D6
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:47:53 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id p5so9641276qvs.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:47:53 -0800 (PST)
+        Tue, 19 Jan 2021 15:49:30 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D608BC061575
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 12:48:48 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id n6so8107699edt.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 12:48:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nQtsb6P16nylvkQXum2zCiAgwE4Ex40JE2Dh9jAvfm4=;
-        b=IgbjYkdW3djs51hNlHYO9VNfWTGH7/ufXErYK8Yl5Fx4LHKBiCA5yvBpi5pswU6XFY
-         /AvEogrwJhlnPNZo2DNdbX1IOJG2GiYh0+feUZ0R4klG4XZAc6U9+5MmZRBPrQne1eRl
-         G452lLO6pY/Fo6fC2F9FCnn3yaLId/rJfFrfTKQLFl8jwdjBqh4zgZXYViW02CW0ANyo
-         gowSMDAo7j5F470PRut9ZssTLsH80Q9O/a3ZCQ81CUxtIa7xwCoOseqoXKDb+u9eoT0P
-         pwk8Gz6xyifQ5kf4eKKBgt2/ryPGpVG8HJbCHX1/GZ3TSP7EmwIf2GiIvrrzKBXFr4Np
-         uIAw==
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pkvwNS+El3HA8WD1wRriEqmYtWWjP+w29biUdXgRxJU=;
+        b=dSjBpa02JgglRGcx2/84mL0OXTCylHCQoDPgRwYBgrdb1HeoN9e0E5ozaqSaHQmRJQ
+         JEDFtdNYkjnRNQeiNWezHyCjWUGH/2rg0nNXA2QnrjGwXXd025IdsoTLQdA1uxQjS26+
+         cPfLfAiBXrj9cUDr24KbI0YvsYJLrKTOlLQ32ydg1HKyynrHQjQKJJ0mAgh3hNwrLJOz
+         zOStGtE9m+tRTCJAg3iZb5yyW4gCYRrXrq1RR6n6A1p7VVWXhf5XUvE71xzvcQbzG3+/
+         E8PEOsIclx3toavM02OCpAK44+Zx/5/MsgZKKBWQUOVOYE8kOLdYwf9kSTkRErEiWDiw
+         FCKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nQtsb6P16nylvkQXum2zCiAgwE4Ex40JE2Dh9jAvfm4=;
-        b=UI2whgrRAo6Tm2uiZs9oX5BqD3Hm0GqAuA4EN/McpYmNQcaLLn1+ot+cK9YodS4arB
-         nablHFpHGHzJ45nEwmLbYUPpWk5QVWDbJhmWMemQbMsfciJdEm83D952eVgoBkGbG1g7
-         Y4H2QfSuXt4YmDrNTu1jKHNjLQLniy259D5LV1QiwLJhcS3r/db6nv3LHgju+/ZouQ3A
-         F2288L+dPbNv6rgWxAJPL26lPrnHuRXDEl1yQQ8WgEziFjPY+1T9RJ0RSo13WrGgXHTr
-         u+nmD+E7mW8xrS3/ExsMcsNaaLGAO4cx/uqY4DqL1yzSL3yBxjLisdGnNnWngzZ6Eg6i
-         KBEg==
-X-Gm-Message-State: AOAM530gR3FQiIE7hIxIx/hMT+MyaDIQGZQKBCieaoTQupwX+3rcdKFy
-        kogbr8XQyqa1X3d2YcySWJZN4Q==
-X-Google-Smtp-Source: ABdhPJzEG7viBlbUZNrXhEySKXWcNrfI5RfoT7MZqwFElxER/T6/kunL+TjK4dW1RsHYnK+4ZN5Vzg==
-X-Received: by 2002:ad4:42a5:: with SMTP id e5mr5599059qvr.37.1611082072927;
-        Tue, 19 Jan 2021 10:47:52 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
-        by smtp.gmail.com with ESMTPSA id j7sm12802577qtb.87.2021.01.19.10.47.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 10:47:52 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1l1w2h-003q3W-Vv; Tue, 19 Jan 2021 14:47:51 -0400
-Date:   Tue, 19 Jan 2021 14:47:51 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Pavel Tatashin <pasha.tatashin@soleen.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pkvwNS+El3HA8WD1wRriEqmYtWWjP+w29biUdXgRxJU=;
+        b=pkCL3dViYqNtT3DEY8JwtqEhbfgCJNBvlSJG6KlE/XT18S8wD60gCsvOeXVp3niC3Y
+         V1xeZLbiQ5zWKIZPdaZZSIw0JU/uNrhDNN6TAg361F0VECpdL7rR8IOHFcOmh4UW5Gvm
+         UYFkNn+BPl1OckfpgeDLo/T98LCoAzsW/yT7pMSMIA/ynUR+LR5jU5rHLd5FCzpeDIGK
+         GPQhAwhVLLP7Vfiw0yhu1dG5hfZkHf8UjIHr+iMz4OtXtG2FJIZ8SL182epbuOdUfD9g
+         jnxmWs34cC0JgF0rR8XQxg1WekIX0t7e4zpn25eEG2gjiOJd9563WXt3Ke1Guwh/wV4V
+         qqHw==
+X-Gm-Message-State: AOAM530NO/jl1QE/IBPLdKSuBfIqwBRtrK1EbSjW8HE8qU1buS6UTjSf
+        cW39GZyv6NZklrFr1l2JFMk5bOO1o9sFUYaoddQhCw==
+X-Google-Smtp-Source: ABdhPJwV9Ku3qyoq2kBTxOz6KgfvN81wwX3pQbkfxuQ92kJTO4QXY1Tul7nDV11Bbxd6oY64UzZ7b7Hp4cw5mc6tznY=
+X-Received: by 2002:a05:6402:3508:: with SMTP id b8mr4912140edd.341.1611089327572;
+ Tue, 19 Jan 2021 12:48:47 -0800 (PST)
+MIME-Version: 1.0
+References: <20210119043920.155044-1-pasha.tatashin@soleen.com>
+ <20210119043920.155044-9-pasha.tatashin@soleen.com> <20210119183013.GB4605@ziepe.ca>
+ <CA+CK2bBKbht34Hkg9YvhwYAiAjd3NMd_+Eir9wfx+07V-Y2TTA@mail.gmail.com>
+ <20210119184751.GD4605@ziepe.ca> <CA+CK2bDGDR9B=n5d4Dz6my6kKyFF=6y79HJt-k-SCpLhF1fUQQ@mail.gmail.com>
+In-Reply-To: <CA+CK2bDGDR9B=n5d4Dz6my6kKyFF=6y79HJt-k-SCpLhF1fUQQ@mail.gmail.com>
+From:   Pavel Tatashin <pasha.tatashin@soleen.com>
+Date:   Tue, 19 Jan 2021 15:48:11 -0500
+Message-ID: <CA+CK2bDo-9dP4JZeVscE65dhkJ9jPKk+0_6v0vQXTCM3m0J1DQ@mail.gmail.com>
+Subject: Re: [PATCH v5 08/14] mm/gup: do not allow zero page for pinned pages
+To:     Jason Gunthorpe <jgg@ziepe.ca>
 Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
@@ -74,47 +75,45 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Ira Weiny <ira.weiny@intel.com>,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 08/14] mm/gup: do not allow zero page for pinned pages
-Message-ID: <20210119184751.GD4605@ziepe.ca>
-References: <20210119043920.155044-1-pasha.tatashin@soleen.com>
- <20210119043920.155044-9-pasha.tatashin@soleen.com>
- <20210119183013.GB4605@ziepe.ca>
- <CA+CK2bBKbht34Hkg9YvhwYAiAjd3NMd_+Eir9wfx+07V-Y2TTA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+CK2bBKbht34Hkg9YvhwYAiAjd3NMd_+Eir9wfx+07V-Y2TTA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 01:34:26PM -0500, Pavel Tatashin wrote:
-> On Tue, Jan 19, 2021 at 1:30 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> >
-> > On Mon, Jan 18, 2021 at 11:39:14PM -0500, Pavel Tatashin wrote:
-> > > Zero page should not be used for long term pinned pages. Once pages
-> > > are pinned their physical addresses cannot changed until they are unpinned.
-> > >
-> > > Guarantee to always return real pages when they are pinned by adding
-> > > FOLL_WRITE.
-> > >
-> > > Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-> > >  mm/gup.c | 10 +++++++++-
-> > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> >
-> > No, this will definitely break things
-> 
-> What will break
+> I was thinking about a use case where userland would pin an address
+> without FOLL_WRITE, because the PTE for that address is not going to
+> be writable, but some device via DMA will write to it. Now, if we got
+> a zero page we have a problem... If this usecase is not valid then the
+> fix for movable zero page is make the zero page always come from a
+> non-movable zone so we do not need to isolate it during migration, and
+> so the memory can be offlined later.
 
-Things assuming GUP doesn't break COW, making all GUP WRITE was
-already tried and revered for some other reason
+I looked into making zero_page non-movable, and I am confused here.
 
-> > Why does the zero page have to be movable?
-> 
-> It is not even about being movable, we can't cow pinned pages returned
-> by GUP call, how can we use zero page for that?
+huge zero page is already not movable:
+get_huge_zero_page()
+   zero_page = alloc_pages((GFP_TRANSHUGE | __GFP_ZERO) & ~__GFP_MOVABLE, ...
 
-The zero page is always zero, it is never written to. What does cow
-matter?
+Base zero page can be in a movable zone, which is a bug: if there are
+references to zero page, that page cannot be migrated, and we won't be
+hot-remove memory area where that page is located. On x86, zero page
+should always come from the bottom 4G of physical memory / DMA32 ZONE.
 
-Jason
+However, I see that sometimes it is not (I reproduce in QEMU emulator):
+QEMU instance with 16G of memory and kernelcore=5G
+
+Boot#1:
+zero_pfn 48a8d
+zero_pfn zone: ZONE_DMA32
+
+Boot#2:
+zero_pfn 20168d
+zero_pfn zone: ZONE_MOVABLE (???)
+
+The problem is that the x86 zero page comes from the .bss segment:
+https://soleen.com/source/xref/linux/arch/x86/kernel/head_64.S?r=31d85460#583
+
+Which, I thought would always be set within the first 4G of physical
+memory. What is going on here?
+
+Pasha
