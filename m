@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 407932FD32A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jan 2021 15:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE1F2FD2D9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jan 2021 15:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733210AbhATOvo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jan 2021 09:51:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41436 "EHLO mail.kernel.org"
+        id S2390059AbhATOiX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jan 2021 09:38:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41668 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390597AbhATOfk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 09:35:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E0AF23329;
-        Wed, 20 Jan 2021 14:34:56 +0000 (UTC)
+        id S2390099AbhATOhR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 Jan 2021 09:37:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A8FE22245C;
+        Wed, 20 Jan 2021 14:36:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611153299;
-        bh=iFdLpwpKeZkJepwYerrVF40vWRJ3GSqvzjorTDnVdD0=;
+        s=k20201202; t=1611153397;
+        bh=gIx6Byc8LjKVM2fxtZc3MbFvHCR2ATctdI9B+bQjgWA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ll53owdsB6m2x9i4robbS/FM07EzmKvW/7Iy/ycMt5rkzITycq9dnrnFdP+AL4q1P
-         cK+Clib06xz7LXRK9hzzM5GaP7fI7s3urYUPLNHkohZRf8DGauG3MiE4vtW/VU/B/6
-         e7xH/jQf/ZJlJ3uNK4QWDsACg6SQOcDKunvFaxU8pyfksjeDclo08iukFItIDqve6w
-         xA5binXJ584bFr5CpU+YcBfqp8WLH6Bvw4T+HnF+h8Sw2C18hFqSpFjmSaDDPmB1aD
-         F6pIoNgn0XkCzGxitIzuR0R1ekQPGnNtnoTUJrhekjhch9cznVHIOeR9m0FzHnT+Pg
-         nfMh51c56T6iw==
-Date:   Wed, 20 Jan 2021 16:34:53 +0200
+        b=fkSuyQs8KSB/KtNGKxIrVGEifND+44NVHwWeNayUTerkL80A0LoOgfjJoX2lY7xWu
+         Jjb0CRRjYi0vPSmrA0VC/ZpTt8zoq0WTd+lrjb801soxlOecDQ6uQ3nt2LdqUqR2Pz
+         bQnYfuUJFtLVjBACmcPG3CyitoIgoj6VftlYiMfceXHsyoeFEe0mxJbGhBaS7OwLmp
+         ApXp3/YG2LzIogMHRT16xfteWpqpp3FsMf8MNpT+UIap3qFkiwGt++1GlmynUQ8Q7J
+         fU+LNDLUQmKQKbWsLyJAC7qBYCsxZwH1in5DlB9M8LwYwF3CpeXMoS3pMSoKF+ufCD
+         iW7tB/rQMxsyw==
+Date:   Wed, 20 Jan 2021 16:36:31 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
@@ -35,92 +35,62 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Jia Zhang <zhang.jia@linux.alibaba.com>
-Subject: Re: [PATCH] selftests/x86: Simplify the code of getting vdso base
- address in sgx
-Message-ID: <YAg/jfoCdE0GanNQ@kernel.org>
-References: <20210118133321.98655-1-tianjia.zhang@linux.alibaba.com>
+Subject: Re: [PATCH] x86/sgx: Fix free_cnt counting logic in epc section
+Message-ID: <YAg/705sWZFriAdK@kernel.org>
+References: <20210118133347.99158-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210118133321.98655-1-tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <20210118133347.99158-1-tianjia.zhang@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 09:33:21PM +0800, Tianjia Zhang wrote:
-> The base address of vDSO can be obtained through the library function
-> `getauxval()`, so use `getauxval(AT_SYSINFO_EHDR)` instead of a custom
-> implementation to simplify the code.
+On Mon, Jan 18, 2021 at 09:33:47PM +0800, Tianjia Zhang wrote:
+> Increase `section->free_cnt` in sgx_sanitize_section() is
+> more reasonable, which is called in ksgxd kernel thread,
+> instead of assigning it to epc section pages number at
+> initialization. Although this is unlikely to fail, these
+> pages cannot be allocated after initialization, and which
+> need to be reset by ksgxd.
 > 
 > Reported-by: Jia Zhang <zhang.jia@linux.alibaba.com>
 > Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 
-- Remove reported-by, as there is no regression.
-- Please write to the long description what the commit does.
-  It's lacking that. I.e. instead of passive form: "Obtain the
-  base address...".
+There is nothing broken in the logic. Convince me otherwise.
+
+I.e. what is exactly broken, and how?
 
 /Jarkko
 
 > ---
->  tools/testing/selftests/sgx/main.c | 24 ++++--------------------
->  1 file changed, 4 insertions(+), 20 deletions(-)
+>  arch/x86/kernel/cpu/sgx/main.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> index 724cec700926..365d01dea67b 100644
-> --- a/tools/testing/selftests/sgx/main.c
-> +++ b/tools/testing/selftests/sgx/main.c
-> @@ -15,6 +15,7 @@
->  #include <sys/stat.h>
->  #include <sys/time.h>
->  #include <sys/types.h>
-> +#include <sys/auxv.h>
->  #include "defines.h"
->  #include "main.h"
->  #include "../kselftest.h"
-> @@ -28,24 +29,6 @@ struct vdso_symtab {
->  	Elf64_Word *elf_hashtab;
->  };
+> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+> index c519fc5f6948..9e9a3cf7c00b 100644
+> --- a/arch/x86/kernel/cpu/sgx/main.c
+> +++ b/arch/x86/kernel/cpu/sgx/main.c
+> @@ -48,9 +48,10 @@ static void sgx_sanitize_section(struct sgx_epc_section *section)
+>  					struct sgx_epc_page, list);
 >  
-> -static void *vdso_get_base_addr(char *envp[])
-> -{
-> -	Elf64_auxv_t *auxv;
-> -	int i;
-> -
-> -	for (i = 0; envp[i]; i++)
-> -		;
-> -
-> -	auxv = (Elf64_auxv_t *)&envp[i + 1];
-> -
-> -	for (i = 0; auxv[i].a_type != AT_NULL; i++) {
-> -		if (auxv[i].a_type == AT_SYSINFO_EHDR)
-> -			return (void *)auxv[i].a_un.a_val;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -
->  static Elf64_Dyn *vdso_get_dyntab(void *addr)
->  {
->  	Elf64_Ehdr *ehdr = addr;
-> @@ -162,7 +145,7 @@ static int user_handler(long rdi, long rsi, long rdx, long ursp, long r8, long r
->  	return 0;
+>  		ret = __eremove(sgx_get_epc_virt_addr(page));
+> -		if (!ret)
+> +		if (!ret) {
+>  			list_move(&page->list, &section->page_list);
+> -		else
+> +			section->free_cnt += 1;
+> +		} else
+>  			list_move_tail(&page->list, &dirty);
+>  
+>  		spin_unlock(&section->lock);
+> @@ -646,7 +647,6 @@ static bool __init sgx_setup_epc_section(u64 phys_addr, u64 size,
+>  		list_add_tail(&section->pages[i].list, &section->init_laundry_list);
+>  	}
+>  
+> -	section->free_cnt = nr_pages;
+>  	return true;
 >  }
->  
-> -int main(int argc, char *argv[], char *envp[])
-> +int main(int argc, char *argv[])
->  {
->  	struct sgx_enclave_run run;
->  	struct vdso_symtab symtab;
-> @@ -203,7 +186,8 @@ int main(int argc, char *argv[], char *envp[])
->  	memset(&run, 0, sizeof(run));
->  	run.tcs = encl.encl_base;
->  
-> -	addr = vdso_get_base_addr(envp);
-> +	/* Get vDSO base address */
-> +	addr = (void *)(uintptr_t)getauxval(AT_SYSINFO_EHDR);
->  	if (!addr)
->  		goto err;
 >  
 > -- 
 > 2.19.1.3.ge56e4f7
