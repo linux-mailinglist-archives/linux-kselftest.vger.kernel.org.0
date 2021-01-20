@@ -2,139 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 681CC2FD68E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jan 2021 18:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F84D2FD6EF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jan 2021 18:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731054AbhATRGj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jan 2021 12:06:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58714 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391685AbhATRFk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 12:05:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A0CF0233E2;
-        Wed, 20 Jan 2021 17:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611162296;
-        bh=va+8yzZazWv2hNG2ZtWuIyB2nJKfDd4jMqhGqRAZb7o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vmed0anBzGag0Z8bSuEA0Tx/cC2Rraek86TT4ZNBf5NWU9KhkSVm47/e5qYB2EgMG
-         Hh793Ebmr7UiucCD7spwxNAAotjKclldyTVEYvY9+Om97WYeu5OqlrmkqqKdKRpINM
-         GV6HUfz4n8Lekq7b7M91CggobdUqgDEJR05GIrgy0oOyeyO3ODydj2WcNDpe3XSGHF
-         QplrvZQrYQPXpoJ2Cyr26Z2rsG2RRiX+lrymQWzImJfV+oWjs+Ld2e7BrF1+MXHfM+
-         dqmV2WkQoEQfDON1aBRr8qJafeH3vkc+RZswoi3YHDceC2JJuhHPHvpbcu02/r+uVD
-         Qbg9LOZsR6tsA==
-Date:   Wed, 20 Jan 2021 19:04:39 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>
-Subject: Re: [PATCH v14 05/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <20210120170439.GP1106298@kernel.org>
-References: <20201203062949.5484-1-rppt@kernel.org>
- <20201203062949.5484-6-rppt@kernel.org>
- <20210119202213.GI2260413@casper.infradead.org>
- <20210120150510.GO1106298@kernel.org>
- <20210120160210.GK2260413@casper.infradead.org>
+        id S1728862AbhATOIY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jan 2021 09:08:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731680AbhATNXG (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 Jan 2021 08:23:06 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6159C061575
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jan 2021 05:22:25 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id 19so25233819qkm.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jan 2021 05:22:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TxOJ2i1obQZTYWUjOO4AH/QKsmg0DUJ9EGaechEIo20=;
+        b=IvzX1RMAtfsiwGFzzn5FfORQgcXPhllACg7D+ANj7TlWPd5qMsoyPmKGn1XhVA8NwM
+         tafb4+W9ckHIwIC2JBfwYCAPgXVbUIzt+6pL2UDYN50uqUst7fkRN9pWNY9xSsstQzUA
+         bb1vo+9Prb3OaiUP7mgZO7sGWE3g0yX548ApY/8loBpncFwLJA4OaUHs+Xei5i/ul45A
+         Poyg8uDGFCtY7vtgdHVF74Rvl9Rq59pDg4A1B9F/2weKRBdIUNb8ORuYNQnaTBdjr5Y+
+         abTearQ0KBLILW07vILaeT4ncQ5ARwtQ3rEQoueKnAru9qTf91hl1CGFQlLXQ2yJXPYo
+         ZxbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TxOJ2i1obQZTYWUjOO4AH/QKsmg0DUJ9EGaechEIo20=;
+        b=gyRD0ZpUv0/NiTxDN0w3sDb63molMskHhgLgvC+Lr3FkimK63eR5FPIZtp5UrwUHJj
+         6PCojyu2fV+ZI9LLXKrDUZWgbTFhNwbcRz8azp1QuqgQcwZnKlvM5+tEYSkQX/x2ymNY
+         ZIBnWTNxMk+0KNgm/L9ImGzdy/ynP7Tr5dqtpuBbsoVKuQuuyT/8hRvnFPxxA1f3szZE
+         geZi3XnTHf89vp82o9lzY1FreejTMkHPvWWXX6rjmsUSF4DsbILUIZU4dSWN+0ksM7ia
+         OtrTq9Xr4tWsCv+spSiyXTH3X9nY9NEvdSEYYxDjrppBX26T5VP3AVbb5mmhU8tDMQKA
+         yLVw==
+X-Gm-Message-State: AOAM530PACgfvrab5PU51Q0o2CGzHhveUdioe1HmgP+ydN/v1U/JjQKA
+        3fNN6JSBJjltuczs78rOpXrNNA==
+X-Google-Smtp-Source: ABdhPJxVh5jUl4y5I89LvXDP0n+KjibmY3MDSvd+QOMJtVbYZtAlkbEyk4UcJVKl2qWGnRtxmq5muA==
+X-Received: by 2002:a05:620a:125c:: with SMTP id a28mr9451371qkl.112.1611148945095;
+        Wed, 20 Jan 2021 05:22:25 -0800 (PST)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id r190sm1313094qka.54.2021.01.20.05.22.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jan 2021 05:22:24 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1l2DRH-004Tyo-Ee; Wed, 20 Jan 2021 09:22:23 -0400
+Date:   Wed, 20 Jan 2021 09:22:23 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Pavel Tatashin <pasha.tatashin@soleen.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, vbabka@suse.cz, mhocko@suse.com,
+        david@redhat.com, osalvador@suse.de, dan.j.williams@intel.com,
+        sashal@kernel.org, tyhicks@linux.microsoft.com,
+        iamjoonsoo.kim@lge.com, mike.kravetz@oracle.com,
+        rostedt@goodmis.org, mingo@redhat.com, peterz@infradead.org,
+        mgorman@suse.de, willy@infradead.org, rientjes@google.com,
+        jhubbard@nvidia.com, linux-doc@vger.kernel.org,
+        ira.weiny@intel.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 10/14] memory-hotplug.rst: add a note about
+ ZONE_MOVABLE and page pinning
+Message-ID: <20210120132223.GH4605@ziepe.ca>
+References: <20210120014333.222547-1-pasha.tatashin@soleen.com>
+ <20210120014333.222547-11-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210120160210.GK2260413@casper.infradead.org>
+In-Reply-To: <20210120014333.222547-11-pasha.tatashin@soleen.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 04:02:10PM +0000, Matthew Wilcox wrote:
-> On Wed, Jan 20, 2021 at 05:05:10PM +0200, Mike Rapoport wrote:
-> > On Tue, Jan 19, 2021 at 08:22:13PM +0000, Matthew Wilcox wrote:
-> > > On Thu, Dec 03, 2020 at 08:29:44AM +0200, Mike Rapoport wrote:
-> > > > +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
-> > > > +{
-> > > > +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> > > > +	struct inode *inode = file_inode(vmf->vma->vm_file);
-> > > > +	pgoff_t offset = vmf->pgoff;
-> > > > +	vm_fault_t ret = 0;
-> > > > +	unsigned long addr;
-> > > > +	struct page *page;
-> > > > +	int err;
-> > > > +
-> > > > +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-> > > > +		return vmf_error(-EINVAL);
-> > > > +
-> > > > +	page = find_get_page(mapping, offset);
-> > > > +	if (!page) {
-> > > > +
-> > > > +		page = secretmem_alloc_page(vmf->gfp_mask);
-> > > > +		if (!page)
-> > > > +			return vmf_error(-ENOMEM);
-> > > 
-> > > Just use VM_FAULT_OOM directly.
-> >  
-> > Ok.
-> > 
-> > > > +		err = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
-> > > > +		if (unlikely(err))
-> > > > +			goto err_put_page;
-> > > 
-> > > What if the error is EEXIST because somebody else raced with you to add
-> > > a new page to the page cache?
-> > 
-> > Right, for -EEXIST I need a retry here, thanks.
-> > 
-> > > > +		err = set_direct_map_invalid_noflush(page, 1);
-> > > > +		if (err)
-> > > > +			goto err_del_page_cache;
-> > > 
-> > > Does this work correctly if somebody else has a reference to the page
-> > > in the meantime?
-> > 
-> > Yes, it does. If somebody else won the race that page was dropped from the
-> > direct map and this call would be essentially a nop. And anyway, the very
-> > next patch changes the way pages are removed from the direct map ;-)
-> 
-> What I'm thinking is:
-> 
-> thread A page faults
-> doesn't find page
-> allocates page
-> adds page to page cache
-> 				thread B page faults
-> 				does find page in page cache
-> set direct map invalid fails
-> deletes from page cache
-> 				... ?
+On Tue, Jan 19, 2021 at 08:43:29PM -0500, Pavel Tatashin wrote:
+> +.. note::
+> +   Techniques that rely on long-term pinnings of memory (especially, RDMA and
+> +   vfio) are fundamentally problematic with ZONE_MOVABLE and, therefore, memory
+> +   hot remove. Pinned pages cannot reside on ZONE_MOVABLE, to guarantee that
+> +   memory can still get hot removed - be aware that pinning can fail even if
+> +   there is plenty of free memory in ZONE_MOVABLE. In addition, using
+> +   ZONE_MOVABLE might make page pinning more expensive, because pages have to be
+> +   migrated off that zone first.
 
-Hmm, this is not nice indeed...
+Just to point out, if anyone is using RDMA/etc with hotplug memory,
+this series is likekly going to be a major regression for those users.
 
--- 
-Sincerely yours,
-Mike.
+Jason
