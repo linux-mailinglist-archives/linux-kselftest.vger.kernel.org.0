@@ -2,108 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC7D2FD995
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jan 2021 20:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358422FDB04
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jan 2021 21:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732511AbhATT0Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jan 2021 14:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60402 "EHLO
+        id S1731182AbhATUjw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jan 2021 15:39:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436467AbhATTZw (ORCPT
+        with ESMTP id S2387822AbhATUiN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 14:25:52 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D83CC061757;
-        Wed, 20 Jan 2021 11:25:09 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id j3so7705900ljb.9;
-        Wed, 20 Jan 2021 11:25:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=puPe6u5eGjzcnpW6TMCNyyzNjrLc2snw2qd9AmS3wOs=;
-        b=SzZzHfAXPXi9k0Xc82ayuWcOl+5o9MCFSQ4b6b2hLQ0M3w6RGfSWN/dwCKd+2weeWj
-         tP1eAb3Fsn6/0N7TQNyl7CKMZ8NJAsQrJeLBXVkXj41XO4w+NV4PRGb2htkNOP3QH98o
-         9OnvbGjgu/QkW9hZrrizR8LuC4F6199aHwSJeglg4LSjJlnbNoybBIv5XWM4ynnqC4Y+
-         F2lND5oHtYmU0qpu5cdaZdr9eaG6RZYSsSERG2pPcSRFFRTSbYzvY8XB7aihrUduGuid
-         1zTkKpuyL8sRCxObqwqXcbQGGqCkc9Q9NcKRhg+Fkk5BKq2lkzOSgb3hwvknM6V22r7J
-         RIZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=puPe6u5eGjzcnpW6TMCNyyzNjrLc2snw2qd9AmS3wOs=;
-        b=V61W8023ZR554XfvuVid4er9soCagjnsNDrwevbTBPLKDsebxuYI5Ymuk3noX+l5XX
-         us5tzzsYDGPMBt7raMuxQvCabopg8SW5YlVt/htXYsnkeljbUlGNVtxS0D8b610X5Hgi
-         iFsv5dj+whVQN1RaCZPE/1qWhe74qC85VrSAh8J7n4M+F1BdP4GZ6W9LlF8fMhiWJtKs
-         7by3Wx939KL5wNCFSar3sqDw1Ay7ZK/ItcLZWvg4QFPhwORWw1QKmOecqqQtRk9Kuidm
-         rpy1Mq/XCb1tD03hXoMmsexAXBMfqWJEgMmd/0pMTYDF3ghdZlF0dc9zGpEvnBQSa/8/
-         oB6A==
-X-Gm-Message-State: AOAM530b85ICuSn+yUmd7D3hLrIPNXGisZjYosx9TAtaoK9/xewX6nvt
-        nVLdmT93u3v6Hce+NKIaLCuBDA11wwwy8UgQP3WzjgWR
-X-Google-Smtp-Source: ABdhPJzT1oUxuE5392bHQf83WMKzKnsEbmAiuaOs1PYZRsjtysNd0GsvPlvmPhJchyQ4EiR8Lu0VIBhKjsysdaptuI8=
-X-Received: by 2002:a2e:9dc1:: with SMTP id x1mr4838130ljj.32.1611170707741;
- Wed, 20 Jan 2021 11:25:07 -0800 (PST)
+        Wed, 20 Jan 2021 15:38:13 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA46C061575;
+        Wed, 20 Jan 2021 12:37:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wha2ICxXtgWp8RSsmCA+ALoEMK4ppTh6Oifr+i/Aq5k=; b=POzz2vX4NL2FOL5KBbnP1afVXx
+        7DUTchSw2uhr4v29pMLrprop/X/8ZeNKhQq7aAFkKjGCAaz+4r1ZagnvTwdmKGmT9i0FzNXsqZahm
+        q9E7TLVeaTjgo4hB//QCK/z3qo/IC038TH8qoDfcTrbEX4HQwU+j3xjBQbd2dBZq1M8sL4f6Bgywx
+        uWLIgA09gDv+4QyFtj2nzdZ6SX/r+mfucsyd3HnBXPOJQTMl8QIGIc+jM4N6BLZRg11soghFJAHDI
+        MBF25b/+EoBQGmRDSRBoj1XqDhYK0b2JcmyiChLejE9AC5YkNQhOshX3nQckPpNNZoG+dbrcsXsTk
+        Y0dgmP2g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1l2KC0-00GBPk-8o; Wed, 20 Jan 2021 20:35:07 +0000
+Date:   Wed, 20 Jan 2021 20:35:04 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v15 06/11] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-ID: <20210120203504.GM2260413@casper.infradead.org>
+References: <20210120180612.1058-1-rppt@kernel.org>
+ <20210120180612.1058-7-rppt@kernel.org>
 MIME-Version: 1.0
-References: <20210120140350.883-1-angkery@163.com>
-In-Reply-To: <20210120140350.883-1-angkery@163.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 20 Jan 2021 11:24:56 -0800
-Message-ID: <CAADnVQK0RiGYRnzdLRvSQRwTdyCOr1nBqZaNz7YR9gvyXu82fg@mail.gmail.com>
-Subject: Re: [PATCH] selftest/bpf: fix typo
-To:     angkery <angkery@163.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Junlin Yang <yangjunlin@yulong.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210120180612.1058-7-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 6:22 AM angkery <angkery@163.com> wrote:
->
-> From: Junlin Yang <yangjunlin@yulong.com>
->
-> Change 'exeeds' to 'exceeds'.
->
-> Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
+On Wed, Jan 20, 2021 at 08:06:07PM +0200, Mike Rapoport wrote:
+> +static struct page *secretmem_alloc_page(gfp_t gfp)
+> +{
+> +	/*
+> +	 * FIXME: use a cache of large pages to reduce the direct map
+> +	 * fragmentation
+> +	 */
+> +	return alloc_page(gfp);
+> +}
+> +
+> +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+> +{
+> +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+> +	struct inode *inode = file_inode(vmf->vma->vm_file);
+> +	pgoff_t offset = vmf->pgoff;
+> +	unsigned long addr;
+> +	struct page *page;
+> +	int err;
+> +
+> +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
+> +		return vmf_error(-EINVAL);
+> +
+> +retry:
+> +	page = find_lock_page(mapping, offset);
+> +	if (!page) {
+> +		page = secretmem_alloc_page(vmf->gfp_mask);
+> +		if (!page)
+> +			return VM_FAULT_OOM;
+> +
+> +		err = set_direct_map_invalid_noflush(page, 1);
+> +		if (err)
+> +			return vmf_error(err);
 
-The patch didn't reach patchwork.
-Please reduce cc list and resubmit to bpf@vger only.
-Also pls mention [PATCH bpf-next] in the subject.
+Haven't we leaked the page at this point?
 
-> ---
->  tools/testing/selftests/bpf/prog_tests/btf.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-> index 8ae97e2..ea008d0 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-> @@ -914,7 +914,7 @@ struct btf_raw_test {
->         .err_str = "Member exceeds struct_size",
->  },
->
-> -/* Test member exeeds the size of struct
-> +/* Test member exceeds the size of struct
->   *
->   * struct A {
->   *     int m;
-> @@ -948,7 +948,7 @@ struct btf_raw_test {
->         .err_str = "Member exceeds struct_size",
->  },
->
-> -/* Test member exeeds the size of struct
-> +/* Test member exceeds the size of struct
->   *
->   * struct A {
->   *     int m;
-> --
-> 1.9.1
->
->
+> +		__SetPageUptodate(page);
+> +		err = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
+
+At this point, doesn't the page contain data from the last person to use
+the page?  ie we've leaked data to this process?  I don't see anywhere
+that we write data to the page.
+
