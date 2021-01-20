@@ -2,129 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F068A2FDD89
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 01:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6944D2FDD8A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 01:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728852AbhAUABe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jan 2021 19:01:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55732 "EHLO mail.kernel.org"
+        id S1727351AbhAUACD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jan 2021 19:02:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43230 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732098AbhATVnk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 16:43:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E57F23600;
-        Wed, 20 Jan 2021 21:42:42 +0000 (UTC)
+        id S2388151AbhATWfb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 Jan 2021 17:35:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B1B12220B;
+        Wed, 20 Jan 2021 22:34:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611178974;
-        bh=ZemV/+dUIhWWETHuwU5pHRPb6MkbPLkRamXfzO/LwBk=;
+        s=k20201202; t=1611182089;
+        bh=2C82eInXgK2XP3lkS3yelUgVXzNNZFQQWo02fjG+A70=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uzb7oUqqqTl6faKktid0R1cfCdzOhvge6hefHpP1hVsOrRWHUIRjtRR24feMvviBV
-         qSPgQ0BpNLkdq1Dh3XK99XOPci+LskNVcWHz5989GtZRhQv44Gf357HRSoLSYk494t
-         IKjF5/HIb64hJBLOgZxf/YfAPKv47GTkUJBbd7DJcJTd2tSyzQVNhz0mzFh7G7vSAC
-         QsPumwQssV3QVC+8stgE0LaJa76huTme80dU3hSp8RBkxnlwydBxS3gUzVaX1cLjEk
-         zdGWVnOXpFdtYn/+WUm8E0F8/cTMAueXosEUkqwcn7jAPBJAPaxvqXgAzRBJ8CwIBD
-         wQMKvnyLvI9vA==
-Date:   Wed, 20 Jan 2021 23:42:39 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+        b=aKrcqVFk4tx3fqxndo4w3WVFUgE3tAHmDHisYKPZaOuc14wUi1g2ZdK912FZpJ8B4
+         cy3QdbZu7OqDNzg9k8AbdEVyxQbJVLEn2DMgL+LAOtm7cS611cUb3JPWzBUBzxJnV5
+         0bVoPRnizOAyyHRfd5nb8kDYUrn5QF3Nqerg0dEn/QGOBQIVHaUs16fIqX5dthLYF5
+         mhutvMvn6tZrTupydxSWesA6mihWF4/iiVTHMIc+rqc/drT7O47g4ycOGnyUyBPABx
+         duiJfyYq+wNDOzhMRURdsVwsyA5tBR9Y5QIlb/OUXNVVwAogvz94Yd61Z5ogPjZUc9
+         GlXSut2CHkrDw==
+Date:   Thu, 21 Jan 2021 00:34:43 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v15 06/11] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <20210120214239.GR1106298@kernel.org>
-References: <20210120180612.1058-1-rppt@kernel.org>
- <20210120180612.1058-7-rppt@kernel.org>
- <20210120203504.GM2260413@casper.infradead.org>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, haitao.huang@intel.com,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Subject: Re: [PATCH] x86/sgx: Allows ioctl PROVISION to execute before CREATE
+Message-ID: <YAiwA/oQkOVuTO+7@kernel.org>
+References: <20210118133335.98907-1-tianjia.zhang@linux.alibaba.com>
+ <YAc7h3zQR06eWPhZ@google.com>
+ <5037ee56-0211-f16c-3ea0-86cf8146b7f8@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210120203504.GM2260413@casper.infradead.org>
+In-Reply-To: <5037ee56-0211-f16c-3ea0-86cf8146b7f8@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 08:35:04PM +0000, Matthew Wilcox wrote:
-> On Wed, Jan 20, 2021 at 08:06:07PM +0200, Mike Rapoport wrote:
-> > +static struct page *secretmem_alloc_page(gfp_t gfp)
-> > +{
-> > +	/*
-> > +	 * FIXME: use a cache of large pages to reduce the direct map
-> > +	 * fragmentation
-> > +	 */
-> > +	return alloc_page(gfp);
-> > +}
-> > +
-> > +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
-> > +{
-> > +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> > +	struct inode *inode = file_inode(vmf->vma->vm_file);
-> > +	pgoff_t offset = vmf->pgoff;
-> > +	unsigned long addr;
-> > +	struct page *page;
-> > +	int err;
-> > +
-> > +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-> > +		return vmf_error(-EINVAL);
-> > +
-> > +retry:
-> > +	page = find_lock_page(mapping, offset);
-> > +	if (!page) {
-> > +		page = secretmem_alloc_page(vmf->gfp_mask);
-> > +		if (!page)
-> > +			return VM_FAULT_OOM;
-> > +
-> > +		err = set_direct_map_invalid_noflush(page, 1);
-> > +		if (err)
-> > +			return vmf_error(err);
+On Wed, Jan 20, 2021 at 11:57:18AM +0800, Tianjia Zhang wrote:
+> Hi,
 > 
-> Haven't we leaked the page at this point?
-
-Well, yes. :(
-
-But this code is anyway changed in the next patch. Is this really so
-important to fix this in the middle of the series?
- 
-> > +		__SetPageUptodate(page);
-> > +		err = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
+> On 1/20/21 4:05 AM, Sean Christopherson wrote:
+> > On Mon, Jan 18, 2021, Tianjia Zhang wrote:
+> > > In function sgx_encl_create(), the logic of directly assigning
+> > > value to attributes_mask determines that the call to
+> > > SGX_IOC_ENCLAVE_PROVISION must be after the command of
+> > > SGX_IOC_ENCLAVE_CREATE. If change this assignment statement to
+> > > or operation, the PROVISION command can be executed earlier and
+> > > more flexibly.
+> > > 
+> > > Reported-by: Jia Zhang <zhang.jia@linux.alibaba.com>
+> > > Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> > > ---
+> > >   arch/x86/kernel/cpu/sgx/ioctl.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+> > > index f45957c05f69..0ca3fc238bc2 100644
+> > > --- a/arch/x86/kernel/cpu/sgx/ioctl.c
+> > > +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+> > > @@ -108,7 +108,7 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
+> > >   	encl->base = secs->base;
+> > >   	encl->size = secs->size;
+> > >   	encl->attributes = secs->attributes;
+> > > -	encl->attributes_mask = SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT | SGX_ATTR_KSS;
+> > > +	encl->attributes_mask |= SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT | SGX_ATTR_KSS;
+> > 
+> > Alternatively, move the existing code to sgx_open()?  Initializing the field
+> > when the encl object is allocated feels more correct.
+> > 
 > 
-> At this point, doesn't the page contain data from the last person to use
-> the page?  ie we've leaked data to this process?  I don't see anywhere
-> that we write data to the page.
+> 
+> This seems like a good idea. Thanks for your suggestion. I have sent v2
+> patch, include the next two patches.
 
-The data is visible for all processes that share the file descriptor. So
-no, we don't leak anything unless the file descriptor itself is leaked.
+Did you ask from Sean about suggested-by's? Now it looks like
+that doing these patches were originally proposed by Sean.
 
-Did you have a particular scenario in mind?
-
--- 
-Sincerely yours,
-Mike.
+/Jarkko
