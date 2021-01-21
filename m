@@ -2,92 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A15922FDE65
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 02:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 155C02FE042
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 04:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391381AbhAUBBw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jan 2021 20:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S1727790AbhAUDys (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jan 2021 22:54:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392874AbhAUAPt (ORCPT
+        with ESMTP id S1728833AbhAUCjW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 19:15:49 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2187CC061575;
-        Wed, 20 Jan 2021 16:15:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cwu2zXGrhPIC6ERSbgMr9vODEIjubNUIY3egpnasEkM=; b=Titc2oh6mm6H8HrBnURdMCnuAy
-        B7tmu7WO5lk/dTol8pnvJFj1ALNIg2a0ayyvvXkEw9Hp66wKGgQ/BlGHZARXS97TlLGZY8EiZPMmA
-        ut30VcvnrKuPicxn8sbUQh1rQkfX6UOTVdhCPtU2awociCaRbIMPQ6MoLPRkjOOtwQ9FsIa0xGjnZ
-        /CSZq9i88CQi3WQl2rKH0j35vKzcRO3qR1A3h4r5WrMR6t4JOLRaCJ41q5mPTRUZf67Q1bFGxlKNx
-        5TkXSuCjJgxzJqjcJLYOACHaEtsrrVT7zqfOOOSI8cncXQ7oKbdLlZuACe9kpbaLDbLfrC+jRu/zm
-        xaT3mp2g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1l2Nah-00GNk2-9O; Thu, 21 Jan 2021 00:12:57 +0000
-Date:   Thu, 21 Jan 2021 00:12:47 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v15 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <20210121001247.GN2260413@casper.infradead.org>
-References: <20210120180612.1058-1-rppt@kernel.org>
- <20210120180612.1058-8-rppt@kernel.org>
+        Wed, 20 Jan 2021 21:39:22 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66A7C061795;
+        Wed, 20 Jan 2021 18:36:39 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id y19so1196351iov.2;
+        Wed, 20 Jan 2021 18:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=g72wU/e2+tUMN8rrYgJKmfgNJZa+U65gluRGUeFny/w=;
+        b=NnQsZ32aK4Wsq9BJ1UAOChepviWpvo0EVt8Is3i8V+zU2wHuYXhkRKVqTDkqtvYAcX
+         irS/zZgFuI37mfKLJvazJCnWyePPqkztbleSxE0MHV8UNHpeJy45JYdT1NONTAGrUWZ3
+         PmvopvnlEXIauSzpGxEYJC50R79rLhHpyvTgRrYvTcFum6wY6n3Kp4liA0C6m13z1obA
+         QGLJETolj3MKF18oBaGUcsqZ1AuwXyaKpKzYK2FwLEBxt3mAcvg3/OOtLvWZh7o44XKP
+         TB39za4cRBzPp5hKNBeueMWfgwJQpoKgooP90up4umA/w3bRib6hlD41BUA2hN+RlhRj
+         h65Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=g72wU/e2+tUMN8rrYgJKmfgNJZa+U65gluRGUeFny/w=;
+        b=qPtuSUHjn1Vk9WD4K13w0anJlsUI8/joC/xV0JDZ66Q+ZUynwiThW7/g1atxOEktvH
+         aXn7Ifl8jQtIM20gMJCFpiiqF3QYicvNsHsYTCpCtWKD9FXcjTK0t7lrUV6iMlTFIofx
+         tbWbv/0cFg+XrJl9JteexLnJpfx6jWJJFBLN2uXeu3OcceshVwHds2zyTavNe/GVUNmx
+         xSNi8vXA2k97cQdvpsZ2zubFssNIroAmtSW2zsPHJTETXOB+igOGYm0amW9s/QEvjMEO
+         llBhFTeiLIJd+Qqx6QBeBhUJT7Rw3U9YS4jIhz9O2wkIrotPIHYtlFqNvI+OmL3BZ7gN
+         umKA==
+X-Gm-Message-State: AOAM530+yfNrGeyXcQXoenNQ0XXnvYlfZjGCriulSd5vtiOnDqaD2J77
+        b7e7udqqjrWKtHVtadQD2XxHSmeDI3j7tKcE098=
+X-Google-Smtp-Source: ABdhPJzTja6a9DNn3K26Qf91jp1IMxAppFM3Kbkqi/Z7/kVG3gtk23ypo2ANcj04gHF12/kjuEe3JfV6RWr0FAUKfgg=
+X-Received: by 2002:a6b:90c4:: with SMTP id s187mr8980048iod.75.1611196599235;
+ Wed, 20 Jan 2021 18:36:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210120180612.1058-8-rppt@kernel.org>
+References: <20210116095413.72820-1-sedat.dilek@gmail.com> <20210120223546.GF1798087@krava>
+In-Reply-To: <20210120223546.GF1798087@krava>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 21 Jan 2021 03:36:28 +0100
+Message-ID: <CA+icZUU=nVxcQpfVR6s9fGomY0zEx22a8Ge4Uw8rL84JNu+0oA@mail.gmail.com>
+Subject: Re: [PATCH RFC] tools: Factor Clang, LLC and LLVM utils definitions
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Yulia Kartseva <hex@fb.com>, Andrey Ignatov <rdna@fb.com>,
+        Thomas Hebb <tommyhebb@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Briana Oursler <briana.oursler@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 08:06:08PM +0200, Mike Rapoport wrote:
-> +static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
->  {
-> +	unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
-> +	struct gen_pool *pool = ctx->pool;
-> +	unsigned long addr;
-> +	struct page *page;
-> +	int err;
-> +
-> +	page = cma_alloc(secretmem_cma, nr_pages, PMD_SIZE, gfp & __GFP_NOWARN);
-> +	if (!page)
-> +		return -ENOMEM;
+On Wed, Jan 20, 2021 at 11:36 PM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Sat, Jan 16, 2021 at 10:54:04AM +0100, Sedat Dilek wrote:
+> > When dealing with BPF/BTF/pahole and DWARF v5 I wanted to build bpftool.
+> >
+> > While looking into the source code I found duplicate assignments
+> > in misc tools for the LLVM eco system, e.g. clang and llvm-objcopy.
+> >
+> > Move the Clang, LLC and/or LLVM utils definitions to
+> > tools/scripts/Makefile.include file and add missing
+> > includes where needed.
+> > Honestly, I was inspired by commit c8a950d0d3b9
+> > ("tools: Factor HOSTCC, HOSTLD, HOSTAR definitions").
+> >
+> > I tested with bpftool and perf on Debian/testing AMD64 and
+> > LLVM/Clang v11.1.0-rc1.
+> >
+> > Build instructions:
+> >
+> > [ make and make-options ]
+> > MAKE="make V=1"
+> > MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1"
+> > MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
+> >
+> > [ clean-up ]
+> > $MAKE $MAKE_OPTS -C tools/ clean
+> >
+> > [ bpftool ]
+> > $MAKE $MAKE_OPTS -C tools/bpf/bpftool/
+> >
+> > [ perf ]
+> > PYTHON=python3 $MAKE $MAKE_OPTS -C tools/perf/
+> >
+> > I was careful with respecting the user's wish to override custom compiler,
+> > linker, GNU/binutils and/or LLVM utils settings.
+> >
+> > Some personal notes:
+> > 1. I have NOT tested with cross-toolchain for other archs (cross compiler/linker etc.).
+> > 2. This patch is on top of Linux v5.11-rc3.
+> >
+> > I hope to get some feedback from especially Linux-bpf folks.
+> >
+> > Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
+> > ---
+> >  tools/bpf/bpftool/Makefile                  | 2 --
+> >  tools/bpf/runqslower/Makefile               | 3 ---
+> >  tools/build/feature/Makefile                | 4 ++--
+> >  tools/perf/Makefile.perf                    | 1 -
+>
+> for tools/build and tools/perf
+>
+> Acked-by: Jiri Olsa <jolsa@redhat.com>
+>
 
-Does cma_alloc() zero the pages it allocates?  If not, where do we avoid
-leaking kernel memory to userspace?
+Thanks Jiri for your feedback and ACK.
 
+- Sedat -
+
+> jirka
+>
+> >  tools/scripts/Makefile.include              | 7 +++++++
+> >  tools/testing/selftests/bpf/Makefile        | 3 +--
+> >  tools/testing/selftests/tc-testing/Makefile | 3 +--
+> >  7 files changed, 11 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > index f897cb5fb12d..71c14efa6e91 100644
+> > --- a/tools/bpf/bpftool/Makefile
+> > +++ b/tools/bpf/bpftool/Makefile
+>
+> SNIP
+>
