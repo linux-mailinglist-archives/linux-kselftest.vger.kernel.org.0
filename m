@@ -2,163 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 155C02FE042
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 04:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B08D2FE07C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 05:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbhAUDys (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jan 2021 22:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        id S1728197AbhAUEPC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jan 2021 23:15:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728833AbhAUCjW (ORCPT
+        with ESMTP id S1727367AbhAUEMJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 21:39:22 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66A7C061795;
-        Wed, 20 Jan 2021 18:36:39 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id y19so1196351iov.2;
-        Wed, 20 Jan 2021 18:36:39 -0800 (PST)
+        Wed, 20 Jan 2021 23:12:09 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40337C0613C1;
+        Wed, 20 Jan 2021 20:11:29 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id y4so818758ybn.3;
+        Wed, 20 Jan 2021 20:11:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=g72wU/e2+tUMN8rrYgJKmfgNJZa+U65gluRGUeFny/w=;
-        b=NnQsZ32aK4Wsq9BJ1UAOChepviWpvo0EVt8Is3i8V+zU2wHuYXhkRKVqTDkqtvYAcX
-         irS/zZgFuI37mfKLJvazJCnWyePPqkztbleSxE0MHV8UNHpeJy45JYdT1NONTAGrUWZ3
-         PmvopvnlEXIauSzpGxEYJC50R79rLhHpyvTgRrYvTcFum6wY6n3Kp4liA0C6m13z1obA
-         QGLJETolj3MKF18oBaGUcsqZ1AuwXyaKpKzYK2FwLEBxt3mAcvg3/OOtLvWZh7o44XKP
-         TB39za4cRBzPp5hKNBeueMWfgwJQpoKgooP90up4umA/w3bRib6hlD41BUA2hN+RlhRj
-         h65Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qu3/Zdh2BNKct5hYooah1p1b6g8ncNuNlKHamiSiivA=;
+        b=g1GDQ0/2al2sF4aWAkymdbAOYl7xXJT9cS080xkUl2BLzz4WAflrgOdR9Ojm2yyihp
+         +/2j5bPtR3kI6MDbS1UBXWQknA+PjJxtmtSL0IrGqd8jjbtLYqLua7bgJFLlSD/5NdSO
+         ob+0I1vujlrPSvbyDDsM5YGUZkEUPmmu+eFeG4nN8H9gRtKvLlu3a314psxwaJGExRKt
+         El2oKC32NDPolLz8s+n/hgAlQAsVgZv7Dn2joEGFXA648OXggdgKoOHq9N3oyK8ph/o9
+         oYQl10t7H6B3aiXNX07rmuS/22JNKBdl0g35Hm00uC8tJyXIyT70jh3XfU+kvW0g0XF1
+         ZOYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=g72wU/e2+tUMN8rrYgJKmfgNJZa+U65gluRGUeFny/w=;
-        b=qPtuSUHjn1Vk9WD4K13w0anJlsUI8/joC/xV0JDZ66Q+ZUynwiThW7/g1atxOEktvH
-         aXn7Ifl8jQtIM20gMJCFpiiqF3QYicvNsHsYTCpCtWKD9FXcjTK0t7lrUV6iMlTFIofx
-         tbWbv/0cFg+XrJl9JteexLnJpfx6jWJJFBLN2uXeu3OcceshVwHds2zyTavNe/GVUNmx
-         xSNi8vXA2k97cQdvpsZ2zubFssNIroAmtSW2zsPHJTETXOB+igOGYm0amW9s/QEvjMEO
-         llBhFTeiLIJd+Qqx6QBeBhUJT7Rw3U9YS4jIhz9O2wkIrotPIHYtlFqNvI+OmL3BZ7gN
-         umKA==
-X-Gm-Message-State: AOAM530+yfNrGeyXcQXoenNQ0XXnvYlfZjGCriulSd5vtiOnDqaD2J77
-        b7e7udqqjrWKtHVtadQD2XxHSmeDI3j7tKcE098=
-X-Google-Smtp-Source: ABdhPJzTja6a9DNn3K26Qf91jp1IMxAppFM3Kbkqi/Z7/kVG3gtk23ypo2ANcj04gHF12/kjuEe3JfV6RWr0FAUKfgg=
-X-Received: by 2002:a6b:90c4:: with SMTP id s187mr8980048iod.75.1611196599235;
- Wed, 20 Jan 2021 18:36:39 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qu3/Zdh2BNKct5hYooah1p1b6g8ncNuNlKHamiSiivA=;
+        b=c4wHGn0x3aLzt/mXOFGHJFkVOo7Xz42pXlhy7uTOsoZQNiIg9u3z+T2LoJSpcD7h8d
+         MTtRX21jXnsR7ygGMuXs0lTmChodWWRCriBK1v6SD2PudONPL5Yl2rqiBu9TzODzLb5E
+         x+YzAwcCpQovQ6g6tXBx1VE+4SWWvICZmUpbH95Ycn6R3fhhmXcZKv866h6yyBkMnE0c
+         et73H2TnHnqdv39wCR8+o2oenRqhK4mP2PFNr5cZ+Y8NpY+WwmJ9ORe0Dw+JG9GMFqTE
+         8kSh0uH36gSLMDjzCWp3fYuWNHZm0W+c59BLrxiwahI9ksV/v0ZqoYVTXdIqAMrqQBfI
+         jwvg==
+X-Gm-Message-State: AOAM533hRfHNo2+XYl5pqEl91qEuAlcRWNp9aJ8N5eCQBoWQQVVQuECI
+        KhuXVv4vb2FA49o5AJwvXQ5hCsXDPPcgIMlVjnc=
+X-Google-Smtp-Source: ABdhPJyxFuBO0yyPvtF2m38+Pza5hBaaFi/2NaRzY0gNKkmdle6tpnDcpYQwquLeBzDnAk+uYOMOqOY7XTzGP2g34QQ=
+X-Received: by 2002:a25:854a:: with SMTP id f10mr16748389ybn.510.1611202288424;
+ Wed, 20 Jan 2021 20:11:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20210116095413.72820-1-sedat.dilek@gmail.com> <20210120223546.GF1798087@krava>
-In-Reply-To: <20210120223546.GF1798087@krava>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Thu, 21 Jan 2021 03:36:28 +0100
-Message-ID: <CA+icZUU=nVxcQpfVR6s9fGomY0zEx22a8Ge4Uw8rL84JNu+0oA@mail.gmail.com>
-Subject: Re: [PATCH RFC] tools: Factor Clang, LLC and LLVM utils definitions
-To:     Jiri Olsa <jolsa@redhat.com>
+References: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com> <1610921764-7526-2-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1610921764-7526-2-git-send-email-alan.maguire@oracle.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 20 Jan 2021 20:11:17 -0800
+Message-ID: <CAEf4BzYvPiWnJYfVjg5qXaefYOsR1QHHzMfB6XFUSVeOA9W8Rg@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/4] libbpf: add btf_has_size() and btf_int() inlines
+To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Yulia Kartseva <hex@fb.com>, Andrey Ignatov <rdna@fb.com>,
-        Thomas Hebb <tommyhebb@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        "Frank Ch. Eigler" <fche@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Briana Oursler <briana.oursler@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, morbo@google.com,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 11:36 PM Jiri Olsa <jolsa@redhat.com> wrote:
+On Sun, Jan 17, 2021 at 2:22 PM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> On Sat, Jan 16, 2021 at 10:54:04AM +0100, Sedat Dilek wrote:
-> > When dealing with BPF/BTF/pahole and DWARF v5 I wanted to build bpftool.
-> >
-> > While looking into the source code I found duplicate assignments
-> > in misc tools for the LLVM eco system, e.g. clang and llvm-objcopy.
-> >
-> > Move the Clang, LLC and/or LLVM utils definitions to
-> > tools/scripts/Makefile.include file and add missing
-> > includes where needed.
-> > Honestly, I was inspired by commit c8a950d0d3b9
-> > ("tools: Factor HOSTCC, HOSTLD, HOSTAR definitions").
-> >
-> > I tested with bpftool and perf on Debian/testing AMD64 and
-> > LLVM/Clang v11.1.0-rc1.
-> >
-> > Build instructions:
-> >
-> > [ make and make-options ]
-> > MAKE="make V=1"
-> > MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1"
-> > MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
-> >
-> > [ clean-up ]
-> > $MAKE $MAKE_OPTS -C tools/ clean
-> >
-> > [ bpftool ]
-> > $MAKE $MAKE_OPTS -C tools/bpf/bpftool/
-> >
-> > [ perf ]
-> > PYTHON=python3 $MAKE $MAKE_OPTS -C tools/perf/
-> >
-> > I was careful with respecting the user's wish to override custom compiler,
-> > linker, GNU/binutils and/or LLVM utils settings.
-> >
-> > Some personal notes:
-> > 1. I have NOT tested with cross-toolchain for other archs (cross compiler/linker etc.).
-> > 2. This patch is on top of Linux v5.11-rc3.
-> >
-> > I hope to get some feedback from especially Linux-bpf folks.
-> >
-> > Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > ---
-> >  tools/bpf/bpftool/Makefile                  | 2 --
-> >  tools/bpf/runqslower/Makefile               | 3 ---
-> >  tools/build/feature/Makefile                | 4 ++--
-> >  tools/perf/Makefile.perf                    | 1 -
+> BTF type data dumping will use them in later patches, and they
+> are useful generally when handling BTF data.
 >
-> for tools/build and tools/perf
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/lib/bpf/btf.h | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
 >
-> Acked-by: Jiri Olsa <jolsa@redhat.com>
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index 1237bcd..0c48f2e 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
+> @@ -294,6 +294,20 @@ static inline bool btf_is_datasec(const struct btf_type *t)
+>         return btf_kind(t) == BTF_KIND_DATASEC;
+>  }
 >
+> +static inline bool btf_has_size(const struct btf_type *t)
+> +{
+> +       switch (BTF_INFO_KIND(t->info)) {
+> +       case BTF_KIND_INT:
+> +       case BTF_KIND_STRUCT:
+> +       case BTF_KIND_UNION:
+> +       case BTF_KIND_ENUM:
+> +       case BTF_KIND_DATASEC:
+> +               return true;
+> +       default:
+> +               return false;
+> +       }
+> +}
 
-Thanks Jiri for your feedback and ACK.
+it's not clear what "has_size" means, actually. E.g., array type
+definitely has size, it's not just as readily available. And you are
+actually misusing this in your algorithm, I'll point it out in the
+respective patch. Please remove this, or if absolutely necessary move
+into btf_dump.c as an inner static function.
 
-- Sedat -
+> +
+>  static inline __u8 btf_int_encoding(const struct btf_type *t)
+>  {
+>         return BTF_INT_ENCODING(*(__u32 *)(t + 1));
+> @@ -309,6 +323,11 @@ static inline __u8 btf_int_bits(const struct btf_type *t)
+>         return BTF_INT_BITS(*(__u32 *)(t + 1));
+>  }
+>
+> +static inline __u32 btf_int(const struct btf_type *t)
+> +{
+> +       return *(__u32 *)(t + 1);
+> +}
+> +
 
-> jirka
->
-> >  tools/scripts/Makefile.include              | 7 +++++++
-> >  tools/testing/selftests/bpf/Makefile        | 3 +--
-> >  tools/testing/selftests/tc-testing/Makefile | 3 +--
-> >  7 files changed, 11 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> > index f897cb5fb12d..71c14efa6e91 100644
-> > --- a/tools/bpf/bpftool/Makefile
-> > +++ b/tools/bpf/bpftool/Makefile
->
-> SNIP
+there is btf_int_encoding(), btf_ind_offset() and btf_int_bits() that
+properly decompose what btf_int() above returns. I'm not convinced
+btf_int() has to be exposed as a public API.
+
+>  static inline struct btf_array *btf_array(const struct btf_type *t)
+>  {
+>         return (struct btf_array *)(t + 1);
+> --
+> 1.8.3.1
 >
