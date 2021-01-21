@@ -2,103 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5782FF3EB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 20:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D362FF520
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 20:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727036AbhAUTL0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jan 2021 14:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S1727701AbhAUTwh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jan 2021 14:52:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727013AbhAUTLX (ORCPT
+        with ESMTP id S1727683AbhAUTwf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jan 2021 14:11:23 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686F7C061756;
-        Thu, 21 Jan 2021 11:11:08 -0800 (PST)
-Received: from lwn.net (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 67463615C;
-        Thu, 21 Jan 2021 19:09:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 67463615C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1611256197; bh=0PfEGC/cPJ5o5ce4iP7kPM3qg+xRX/ZAzMq8mA7LR+w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LfmTwdSQP3IBIFsgIimE+P0zc4qOuRRENhFAbFZ81/G0xiY0DScELhTCtldW3XIfz
-         Ugs8obCBqzDnsrsJoi5krEbWrGHjyZPpGee+9oAGUJ1ZDXrSP/jMHtPw39Va3bBst2
-         L4SlcWZ4eBnLVGq3hawDKWCzzYzGfx0DG20ajnIZZRO05FEVzu6Z6QH1o0t7hxv9Z5
-         FAGLGDnT/R3zaflLKjCnNdzZoWBPmMbSxH+vE+gp8swBNJrsI901YZhh5xO0J5KAQE
-         q+gS4MkjsOprcfN5wLvJLeHWfw2eGdzUGLUYeV2MifPW5V3sfXPnjMGNWyuhz0xfWx
-         Q0+/sodoN2x/A==
-Date:   Thu, 21 Jan 2021 12:09:54 -0700
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jon Maloy <jmaloy@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Richard Gong <richard.gong@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Will Drewry <wad@chromium.org>,
-        Ying Xue <ying.xue@windriver.com>,
-        dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [PATCH v6 00/16] Fix several bad kernel-doc markups
-Message-ID: <20210121120954.5ed4c3b2@lwn.net>
-In-Reply-To: <cover.1610610937.git.mchehab+huawei@kernel.org>
-References: <cover.1610610937.git.mchehab+huawei@kernel.org>
-Organization: LWN.net
+        Thu, 21 Jan 2021 14:52:35 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8818C06174A;
+        Thu, 21 Jan 2021 11:51:54 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id r32so3214836ybd.5;
+        Thu, 21 Jan 2021 11:51:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b+ryxI2bZ0j1bhmK50ERwXaK1thGqk3WteUbJ53i1ic=;
+        b=nikmWnXA40vWCwZZVZZ5j0u1OqClkFGXfPfH6h5HRuYzVE4DSuawQF7VqmvpNe8Mtz
+         GDtonQs5pYYLSZxVEMhbHHgFhUVSfmL26s9qp38hCV8nU5aC4ujtDqfAwxAkY3Ml7CAs
+         ikEmVcDOins6/8X8WXmGSQcWU3Asm1ZTjq7o1eyKRO9UXtmn5ovccnC5BcOYEbzh3yhf
+         +b5zl1mxeIFvCL6o6DFXcoBAIuG5UMWKHEhFaj/tCpJUqprd9b5d261pO1cIL0j4XDJe
+         yfQZtUkp5mbXRgVv80J17ja2o0ag9mTZymUyqlQioxYKJnhk44DoOUD/H0lt1bqX2d2W
+         nHjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b+ryxI2bZ0j1bhmK50ERwXaK1thGqk3WteUbJ53i1ic=;
+        b=cUB1OtZFGkPBwcjI03XKRPob/KHA1HSJPQeT/dsbOWfArEMfjbyGgfTfRp6qL/gIa+
+         TEXRU63U+2Cm/Uy8KouO6ovLzEcapXSZX8y/y705p3y6cqwoks70z2psf0tsiSqmbz8M
+         XpAjzqrRAnVZevx9KD7JFOMTLEZVexAF5v4xxm/NobrgkQnrvQMqhJHhjwuCwphRGHEQ
+         /pJJ+qOAHuvhxaxXqbb/oko8i8MzQQy1Wu2U2ElQlaYpQJLuKFs0zyIcoCRLadwIg2Dx
+         aOSEwrqD1ZMPVPoXwTjUqu5hhWJL7+I+3iWZ8wI2PT20FZjxoedtebv769kMgQCWkPcE
+         2asg==
+X-Gm-Message-State: AOAM530WC90lHuge56pQU0fkRs1BIaAe2UlZB3IVhQOleiuEGw47d5Mq
+        biB1MrQ9QRWcRrK/Z8GwWmFaYd/9Q6OUFnsySI28N6Dy+yiiQQ==
+X-Google-Smtp-Source: ABdhPJytes9LDpHx1Bo4tt/+3nzBLErqkMs9KmRH9qNLLMFrQ4ALSFqZyyK7xkNsATVIzwxKb6W2jv+rt1D4z3DKlKM=
+X-Received: by 2002:a25:f40e:: with SMTP id q14mr1431799ybd.230.1611258714152;
+ Thu, 21 Jan 2021 11:51:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+References: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com>
+ <1610921764-7526-4-git-send-email-alan.maguire@oracle.com> <CAEf4BzZ6bYenSTUmwu7jXqQOyD=AG75oLsLE5B=9ycPjm1jOkw@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ6bYenSTUmwu7jXqQOyD=AG75oLsLE5B=9ycPjm1jOkw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 21 Jan 2021 11:51:42 -0800
+Message-ID: <CAEf4Bzb4z+ZA+taOEo=N9eSGZaCqMALpFxShujm9GahBOFnhvg@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 3/4] libbpf: BTF dumper support for typed data
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Bill Wendling <morbo@google.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 14 Jan 2021 09:04:36 +0100
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+On Wed, Jan 20, 2021 at 10:56 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Sun, Jan 17, 2021 at 2:22 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >
+> > Add a BTF dumper for typed data, so that the user can dump a typed
+> > version of the data provided.
+> >
+> > The API is
+> >
+> > int btf_dump__emit_type_data(struct btf_dump *d, __u32 id,
+> >                              const struct btf_dump_emit_type_data_opts *opts,
+> >                              void *data);
+> >
 
-> 1)  10 remaining fixup patches from the series I sent back on Dec, 1st:
-> 
->    parport: fix a kernel-doc markup
->    rapidio: fix kernel-doc a markup
->    fs: fix kernel-doc markups
->    pstore/zone: fix a kernel-doc markup
->    firmware: stratix10-svc: fix kernel-doc markups
->    connector: fix a kernel-doc markup
->    lib/crc7: fix a kernel-doc markup
->    memblock: fix kernel-doc markups
->    w1: fix a kernel-doc markup
->    selftests: kselftest_harness.h: partially fix kernel-doc markups
+Two more things I realized about this API overnight:
 
-A week later none of these have shown up in linux-next, so I went ahead
-and applied the set.
+1. It's error-prone to specify only the pointer to data without
+specifying the size. If user screws up and scecifies wrong type ID or
+if BTF data is corrupted, then this API would start reading and
+printing memory outside the bounds. I think it's much better to also
+require user to specify the size and bail out with error if we reach
+the end of the allowed memory area.
 
-Thanks,
+2. This API would be more useful if it also returns the amount of
+"consumed" bytes. That way users can do more flexible and powerful
+pretty-printing of raw data. So on success we'll have >= 0 number of
+bytes used for dumping given BTF type, or <0 on error. WDYT?
 
-jon
+> > ...where the id is the BTF id of the data pointed to by the "void *"
+> > argument; for example the BTF id of "struct sk_buff" for a
+> > "struct skb *" data pointer.  Options supported are
+> >
+> >  - a starting indent level (indent_lvl)
+> >  - a set of boolean options to control dump display, similar to those
+> >    used for BPF helper bpf_snprintf_btf().  Options are
+> >         - compact : omit newlines and other indentation
+> >         - noname: omit member names
+> >         - zero: show zero-value members
+> >
+> > Default output format is identical to that dumped by bpf_snprintf_btf(),
+> > for example a "struct sk_buff" representation would look like this:
+> >
+> > struct sk_buff){
+> >  (union){
+> >   (struct){
+>
+> Curious, these explicit anonymous (union) and (struct), is that
+> preferred way for explicitness, or is it just because it makes
+> implementation simpler and thus was chosen? I.e., if the goal was to
+> mimic C-style data initialization, you'd just have plain .next = ...,
+> .prev = ..., .dev = ..., .dev_scratch = ..., all on the same level. So
+> just checking for myself.
+>
+> >    .next = (struct sk_buff *)0xffffffffffffffff,
+> >    .prev = (struct sk_buff *)0xffffffffffffffff,
+> >    (union){
+> >     .dev = (struct net_device *)0xffffffffffffffff,
+> >     .dev_scratch = (long unsigned int)18446744073709551615,
+> >    },
+> >   },
+> > ...
+> >
+> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> > ---
+>
+
+[...]
