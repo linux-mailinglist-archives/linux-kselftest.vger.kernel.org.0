@@ -2,114 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0252FE2DE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 07:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43A72FE373
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 08:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726282AbhAUG3l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jan 2021 01:29:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S1727108AbhAUHC5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jan 2021 02:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726991AbhAUG24 (ORCPT
+        with ESMTP id S1727135AbhAUHC1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jan 2021 01:28:56 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF83C061757
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jan 2021 22:28:15 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id w1so992798ejf.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jan 2021 22:28:15 -0800 (PST)
+        Thu, 21 Jan 2021 02:02:27 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20356C0613C1;
+        Wed, 20 Jan 2021 23:01:47 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id i141so1129234yba.0;
+        Wed, 20 Jan 2021 23:01:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=rwgvP8AoqgDSPVMCmPqHU4aJ92n1EnfAeIj2Yz3Gw3Q=;
-        b=j/bL1BUg7wEjWJ2XEiCeKl5ZcKNAvNnxWb4MMMEdD5hOt51X0RghRJsnGZzz7W6s6o
-         8fGVG7w9V5qTwUN2nIOaymNIO2vSHqLlJ8QFAb6P3iio2PJzO2rKW6UQO2f5mSFeKKFn
-         kvQK+eS0BJtCrmt3U9sPtTggAwAtnXLtM9n716BJR2MzGyi5JZIwgXrnmUdQqCa9XsQm
-         05/7Q54+iwwqqeJQ/aZ8Miz7feHb9hqv3j+7JOmIGH7E6B6+saD8W3dtsJ+29ewj160F
-         C4cT+Z9ZVhY0hzNGiroOqdoIsoCvBleEJ/Dyi8YjqrT6WUgIwgOUzBY6PCC8frdh9ned
-         N+Ag==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q4Mx5AhqDtoCmA+H1AN8MmUPrDLatjJc96dmb4/mqdU=;
+        b=YqtszlM8OrX8lq4+B4r2zEPr+sdzPb8JO2JCf1DdzlmcdPO76slbYAHH5b9NHdJawj
+         fjXyRvfETJ78Ne6F/iX5mtpXrvoMBuPt4Iqywvjza+MbDFGzVAozGNRhIKEm1MryfxgZ
+         Wyom8WBYQOya2QElN39nyGxyQqdvsX1cA7XB1+3S3PldvYY/XlAVG0naGmCky2RU1jTG
+         ecWKHaGwfZGCea9yfHkf02kxYLr8utpwwJ6O6/txkmfuKnmBu1v1umY46k5tmR9VPp61
+         y0iZ/cPb2pV8unb2ffMl/B5yKLs4revbtEyS6y8fO6H1Pm/wGMttwrlyXOiv7cwmYjz3
+         ZKrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=rwgvP8AoqgDSPVMCmPqHU4aJ92n1EnfAeIj2Yz3Gw3Q=;
-        b=nlc5mlj/5SrBvd+Kpj/M0I6mmylP5evabrfEP/57UMGx0HFs50X3NNlt3kpk3c+Ld+
-         qWuxLY508KSVk6me162Cnoi/WBuTNeBTo2WzLoqZoOpZpLiZq2pJOt2rC0gksmRjTffT
-         nbMO4hiwa4KYK1GlswkO2p6tOm5U3rvvFI3fTQmfyw6KY1Pvv2J1wyjzuP6wPJhUyLHv
-         U51R3BKs1JtIhQmUstdES2QHlfZTLeh8eIIla+4DaAmUOOo1bHWECpdKcZKbNG/DyJR/
-         CSmp9bcMVvchqpjr9tbkE3PB7Zkvz1bXpZDjFZ4nyB2PzeQnL5DO9Yno1NxnwhLzP91B
-         l0VQ==
-X-Gm-Message-State: AOAM530+u2IS8tMc2o+is+WBUTJwjcTY44acvZz9ZzawyqK1Xpw9DlIU
-        7xuZByD453H4OSI1CfkPM+a4M/IZaVGWAhVxPOz83h+492N/rftF
-X-Google-Smtp-Source: ABdhPJyrVRb/FAVouTL2Re4ou3lIvSM3uEQTtZMyGaZXV+Wd0nJ3uq/TQmPAFTpawREd5KT4Aqg8GTONmAzC9HMMTHg=
-X-Received: by 2002:a17:906:796:: with SMTP id l22mr8379890ejc.247.1611210493617;
- Wed, 20 Jan 2021 22:28:13 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q4Mx5AhqDtoCmA+H1AN8MmUPrDLatjJc96dmb4/mqdU=;
+        b=DHGgKCV73AscCvCtwQXlR4NsLrMD+i0+R4yohXOd+4UvCgIStJz+au22CTJ7/38EdB
+         6W7f4F9Js5WhAnEUeSBJD6z/EPyyLt1YMOQEo7I+OOgFBbJiiG1dkha7jJUuaRA4UdE6
+         pShcNBG3tqnCQ1ejWyZspwDzKrWjXimghaFH7SnlB0G3TmA9L+l7TrKhZOfD4YMxATjS
+         WZ13VCz+oMxhHeYz/qlR9JP2qvge6Zm9pz2d2lE7uN3DRYm02+7OQcdV+//DFPaW3MjE
+         Ac0uwNw/sWv1LXfuBU1vl5kdhMn0FuzYidehpoT1de1BL66H/nJHeFYHA33MB39eJDef
+         XeTA==
+X-Gm-Message-State: AOAM532p7+ma4Z0VZxC7rEILeWbKdTIbmk+q0a+w2nA1yieUSlB9NK7z
+        V/r9dJni1UZlk44Vve7M9GpHITwa2P3EaknJGSg=
+X-Google-Smtp-Source: ABdhPJwEe9iKqTMPnxebf9ou14kmF7GajEuAXPiW/CJvlrSlSK1JYQH43V2gg18GOTEzOd9zMBKVoiE6EkUM1T0rnJM=
+X-Received: by 2002:a25:d6d0:: with SMTP id n199mr18534077ybg.27.1611212506452;
+ Wed, 20 Jan 2021 23:01:46 -0800 (PST)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 21 Jan 2021 11:58:02 +0530
-Message-ID: <CA+G9fYso2u4Km7mG-PWC_G_BXZRK5qLNN+NK6ws4KmpSZKq4cw@mail.gmail.com>
-Subject: test-definitions: kselftest upgrade to v5.10
-To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+References: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com> <1610921764-7526-5-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1610921764-7526-5-git-send-email-alan.maguire@oracle.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 20 Jan 2021 23:01:35 -0800
+Message-ID: <CAEf4BzZdO+tJ+L4uJysrPa=PzM2nEbTT-Xnu1MGQUdhbwzpVXw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 4/4] selftests/bpf: add dump type data tests
+ to btf dump tests
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, morbo@google.com,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Kevin Hilman <khilman@baylibre.com>, Tim.Bird@sony.com,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Anmar Oueja <anmar.oueja@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If you are not using the test-definitions project to run kselftest,
-please ignore this email.
+On Sun, Jan 17, 2021 at 2:21 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> Test various type data dumping operations by comparing expected
+> format with the dumped string; an snprintf-style printf function
+> is used to record the string dumped.
+>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/btf_dump.c | 233 ++++++++++++++++++++++
+>  1 file changed, 233 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> index c60091e..262561f4 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> @@ -232,6 +232,237 @@ void test_btf_dump_incremental(void)
+>         btf__free(btf);
+>  }
+>
+> +#define STRSIZE                                2048
+> +#define        EXPECTED_STRSIZE                256
+> +
+> +void btf_dump_snprintf(void *ctx, const char *fmt, va_list args)
+> +{
+> +       char *s = ctx, new[STRSIZE];
+> +
+> +       vsnprintf(new, STRSIZE, fmt, args);
+> +       strncat(s, new, STRSIZE);
+> +       vfprintf(ctx, fmt, args);
+> +}
+> +
+> +/* skip "enum "/"struct " prefixes */
+> +#define SKIP_PREFIX(_typestr, _prefix)                                 \
+> +       do {                                                            \
+> +               if (strstr(_typestr, _prefix) == _typestr)              \
 
-A new run script for kselftest, run_kselftest.sh [1], was created during the
-Linux v5.10 release.
+why not strncmp?
 
-This script allows someone to run both individual test cases and sets of
-test cases. Accordingly, the test-definitions kselftest script [2] was also
-improved to support these upstream changes [1].  Currently this change is in
-the test-definitions repository in a separate branch "kselftest". This has been
-running in LKFT's CI since November 2020 [3].
+> +                       _typestr += strlen(_prefix) + 1;                \
+> +       } while (0)
+> +
+> +int btf_dump_data(struct btf *btf, struct btf_dump *d,
+> +                 char *ptrtype, __u64 flags, void *ptr,
+> +                 char *str, char *expectedval)
+> +{
+> +       struct btf_dump_emit_type_data_opts opts = { 0 };
+> +       int ret = 0, cmp;
+> +       __s32 type_id;
+> +
+> +       opts.sz = sizeof(opts);
+> +       opts.compact = true;
 
-The test-definitions kselftest script will stop supporting older versions of
-the kselftest run script starting 1st-Feb-2021 from master branch.
-OTOH, One have to use test-definitions Tag 2021.01 (will be created) for older
-kselftest versions.
+Please use DECLARE_LIBBPF_OPTS(), check other examples in selftests
 
-We request that any users of test-definitions project start updating your
-kselftest sources to version v5.10 and above.
+> +       if (flags & BTF_F_NONAME)
+> +               opts.noname = true;
+> +       if (flags & BTF_F_ZERO)
+> +               opts.zero = true;
+> +       SKIP_PREFIX(ptrtype, "enum");
+> +       SKIP_PREFIX(ptrtype, "struct");
+> +       SKIP_PREFIX(ptrtype, "union");
+> +       type_id = btf__find_by_name(btf, ptrtype);
+> +       if (CHECK(type_id <= 0, "find type id",
+> +                 "no '%s' in BTF: %d\n", ptrtype, type_id)) {
+> +               ret = -ENOENT;
+> +               goto err;
+> +       }
+> +       str[0] = '\0';
+> +       ret = btf_dump__emit_type_data(d, type_id, &opts, ptr);
+> +       if (CHECK(ret < 0, "btf_dump__emit_type_data",
+> +                 "failed: %d\n", ret))
+> +               goto err;
+> +
+> +       cmp = strncmp(str, expectedval, EXPECTED_STRSIZE);
+> +       if (CHECK(cmp, "ensure expected/actual match",
+> +                 "'%s' does not match expected '%s': %d\n",
+> +                 str, expectedval, cmp))
+> +               ret = -EFAULT;
+> +
+> +err:
+> +       if (ret)
+> +               btf_dump__free(d);
+> +       return ret;
+> +}
+> +
+> +#define TEST_BTF_DUMP_DATA(_b, _d, _str, _type, _flags, _expected, ...)        \
+> +       do {                                                            \
+> +               char _expectedval[EXPECTED_STRSIZE] = _expected;        \
+> +               char __ptrtype[64] = #_type;                            \
+> +               char *_ptrtype = (char *)__ptrtype;                     \
+> +               static _type _ptrdata = __VA_ARGS__;                    \
+> +               void *_ptr = &_ptrdata;                                 \
+> +                                                                       \
+> +               if (btf_dump_data(_b, _d, _ptrtype, _flags, _ptr,       \
+> +                                 _str, _expectedval))                  \
+> +                       return;                                         \
+> +       } while (0)
+> +
+> +/* Use where expected data string matches its stringified declaration */
+> +#define TEST_BTF_DUMP_DATA_C(_b, _d, _str, _type, _opts, ...)          \
+> +       TEST_BTF_DUMP_DATA(_b, _d, _str, _type, _opts,                  \
+> +                          "(" #_type ")" #__VA_ARGS__, __VA_ARGS__)
+> +
+> +void test_btf_dump_data(void)
+> +{
+> +       struct btf *btf = libbpf_find_kernel_btf();
+> +       char str[STRSIZE];
+> +       struct btf_dump_opts opts = { .ctx = str };
+> +       struct btf_dump *d;
+> +
+> +       if (CHECK(!btf, "get kernel BTF", "no kernel BTF found"))
+> +               return;
+> +
 
-Upstream patch,
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/tools/testing/selftests/run_kselftest.sh?id=5da1918446a1d50d57f2f6062f7fdede0b052473
-[2] https://github.com/Linaro/test-definitions/tree/kselftest/automated/linux/kselftest
-[3] https://github.com/Linaro/test-definitions/tree/kselftest
+use libbpf_get_error(), btf won't be NULL on error
 
----
-From 5da1918446a1d50d57f2f6062f7fdede0b052473 Mon Sep 17 00:00:00 2001
-From: Kees Cook <keescook@chromium.org>
-Date: Mon, 28 Sep 2020 13:26:49 -0700
-Subject: selftests/run_kselftest.sh: Make each test individually selectable
+> +       d = btf_dump__new(btf, NULL, &opts, btf_dump_snprintf);
+> +
+> +       if (CHECK(!d, "new dump", "could not create BTF dump"))
 
-Currently with run_kselftest.sh there is no way to choose which test
-we could run. All the tests listed in kselftest-list.txt are all run
-every time. This patch enhanced the run_kselftest.sh to make the test
-collections (or tests) individually selectable. e.g.:
+same, d won't be NULL on error
 
-$ ./run_kselftest.sh -c seccomp -t timers:posix_timers -t timers:nanosleep
+> +               return;
+> +
+> +       /* Verify type display for various types. */
+> +
 
-Additionally adds a way to list all known tests with "-l", usage
-with "-h", and perform a dry run without running tests with "-n".
-
-Co-developed-by: Hangbin Liu <liuhangbin@gmail.com>
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-
---
-
-- Naresh Kamboju
+[...]
