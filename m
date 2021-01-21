@@ -2,55 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B08D2FE07C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 05:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E2E2FE0B6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 05:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728197AbhAUEPC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jan 2021 23:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S1732181AbhAUEaz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jan 2021 23:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727367AbhAUEMJ (ORCPT
+        with ESMTP id S1726599AbhAUEOY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 23:12:09 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40337C0613C1;
-        Wed, 20 Jan 2021 20:11:29 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id y4so818758ybn.3;
-        Wed, 20 Jan 2021 20:11:29 -0800 (PST)
+        Wed, 20 Jan 2021 23:14:24 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9C2C061757;
+        Wed, 20 Jan 2021 20:13:41 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id k4so806133ybp.6;
+        Wed, 20 Jan 2021 20:13:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qu3/Zdh2BNKct5hYooah1p1b6g8ncNuNlKHamiSiivA=;
-        b=g1GDQ0/2al2sF4aWAkymdbAOYl7xXJT9cS080xkUl2BLzz4WAflrgOdR9Ojm2yyihp
-         +/2j5bPtR3kI6MDbS1UBXWQknA+PjJxtmtSL0IrGqd8jjbtLYqLua7bgJFLlSD/5NdSO
-         ob+0I1vujlrPSvbyDDsM5YGUZkEUPmmu+eFeG4nN8H9gRtKvLlu3a314psxwaJGExRKt
-         El2oKC32NDPolLz8s+n/hgAlQAsVgZv7Dn2joEGFXA648OXggdgKoOHq9N3oyK8ph/o9
-         oYQl10t7H6B3aiXNX07rmuS/22JNKBdl0g35Hm00uC8tJyXIyT70jh3XfU+kvW0g0XF1
-         ZOYg==
+        bh=qdYGbaNQ6RXEEqSgvnErn9aTL2ruB523HmhLn4769P0=;
+        b=Y/wjnmDnqQEicOrIEn5igWesvc6VvkLe6H9gn0MNXrK8Od0OitS4GowYF4fZBPPYQU
+         aw0yU20PJVRA8tRoevm8VV1ZbEtrxk6Zy07mJdq9//Rq1/ub6dOFDxCxo3hEgCA4hOte
+         KP/8aLcT9f5NbXSKYIXEIe31sGI/yzcYnesDXp27vM1RLObprjK5syz6KZ7mtXQ5GrtF
+         XoHnNU+CcQRGdj8I7/F9UDwS9ibTJfJcwFDc5pBC2nn+LtJQ8ByNM1w37YKH1Tvqsoo8
+         VkRL8yFmGOdzvLdAR+SUHLcEd6aUFTvh3eInfHRyXS7mC6ailuxwU3oTpZOONIV6XwXJ
+         umvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qu3/Zdh2BNKct5hYooah1p1b6g8ncNuNlKHamiSiivA=;
-        b=c4wHGn0x3aLzt/mXOFGHJFkVOo7Xz42pXlhy7uTOsoZQNiIg9u3z+T2LoJSpcD7h8d
-         MTtRX21jXnsR7ygGMuXs0lTmChodWWRCriBK1v6SD2PudONPL5Yl2rqiBu9TzODzLb5E
-         x+YzAwcCpQovQ6g6tXBx1VE+4SWWvICZmUpbH95Ycn6R3fhhmXcZKv866h6yyBkMnE0c
-         et73H2TnHnqdv39wCR8+o2oenRqhK4mP2PFNr5cZ+Y8NpY+WwmJ9ORe0Dw+JG9GMFqTE
-         8kSh0uH36gSLMDjzCWp3fYuWNHZm0W+c59BLrxiwahI9ksV/v0ZqoYVTXdIqAMrqQBfI
-         jwvg==
-X-Gm-Message-State: AOAM533hRfHNo2+XYl5pqEl91qEuAlcRWNp9aJ8N5eCQBoWQQVVQuECI
-        KhuXVv4vb2FA49o5AJwvXQ5hCsXDPPcgIMlVjnc=
-X-Google-Smtp-Source: ABdhPJyxFuBO0yyPvtF2m38+Pza5hBaaFi/2NaRzY0gNKkmdle6tpnDcpYQwquLeBzDnAk+uYOMOqOY7XTzGP2g34QQ=
-X-Received: by 2002:a25:854a:: with SMTP id f10mr16748389ybn.510.1611202288424;
- Wed, 20 Jan 2021 20:11:28 -0800 (PST)
+        bh=qdYGbaNQ6RXEEqSgvnErn9aTL2ruB523HmhLn4769P0=;
+        b=a/p+AMFuKBF2yCuOnbaLzuXQdmA6oJ/qPvzOLk8QI1gEc+aMXEZFCVM+T0OTmIkSVa
+         vQLO9GyI04l1H63Mq+Y/3YLNDKBo/mwWRSPDT7njmOPhJjPLP1IcP7WR4onJiKkLTGk1
+         c/zokrL4UHuUZ1yg4L96HykdnWKg/l7RIAU80vElKfLgslbKvePl2BPjiQOBjRmtkEvR
+         RtJyUEdoctoUNwjcr3zWHFC/J+pyK27ydvGBiGaGOjROhC/LeNRs3oJ5uBLWX220Ncrp
+         xcCqpt4YJWnP5mGBMlHb4Nm+VfYZLLexPtoRPEI+G7SdLQuXOut9H1sUv3ZDgMQevCDr
+         7b9g==
+X-Gm-Message-State: AOAM530gO+WhPdJZQAPH8APCPWKX5ZCNN98XIbhRcN5dYTyt0xIyj71R
+        U4iLBUYV+Ex06jybOMFivy3+90gdhPjIY70ldRQ=
+X-Google-Smtp-Source: ABdhPJyw6udgxJBFQX0Vwqra1a/DaIb34pvGjg38qbZt2xv9lkediK7L08qo1hXvj7SN4BasIaTVpqghIM8fjo3C5sQ=
+X-Received: by 2002:a25:4b86:: with SMTP id y128mr3828051yba.403.1611202420666;
+ Wed, 20 Jan 2021 20:13:40 -0800 (PST)
 MIME-Version: 1.0
-References: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com> <1610921764-7526-2-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1610921764-7526-2-git-send-email-alan.maguire@oracle.com>
+References: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com> <1610921764-7526-3-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1610921764-7526-3-git-send-email-alan.maguire@oracle.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 20 Jan 2021 20:11:17 -0800
-Message-ID: <CAEf4BzYvPiWnJYfVjg5qXaefYOsR1QHHzMfB6XFUSVeOA9W8Rg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/4] libbpf: add btf_has_size() and btf_int() inlines
+Date:   Wed, 20 Jan 2021 20:13:29 -0800
+Message-ID: <CAEf4BzYZNUsdLH=fVqO_zXh2gwK6g325pQ7UeyH1NTK8kxSFmA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 2/4] libbpf: make skip_mods_and_typedefs
+ available internally in libbpf
 To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -68,65 +69,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jan 17, 2021 at 2:22 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+On Sun, Jan 17, 2021 at 2:20 PM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> BTF type data dumping will use them in later patches, and they
-> are useful generally when handling BTF data.
+> btf_dump.c will need it for type-based data display.
 >
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
->  tools/lib/bpf/btf.h | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+
+Given we make it into an internal API, let's call it
+btf_skip_mods_and_typedefs()? Otherwise all ok.
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+>  tools/lib/bpf/libbpf.c          | 4 +---
+>  tools/lib/bpf/libbpf_internal.h | 2 ++
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-> index 1237bcd..0c48f2e 100644
-> --- a/tools/lib/bpf/btf.h
-> +++ b/tools/lib/bpf/btf.h
-> @@ -294,6 +294,20 @@ static inline bool btf_is_datasec(const struct btf_type *t)
->         return btf_kind(t) == BTF_KIND_DATASEC;
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 2abbc38..4ef84e1 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -73,8 +73,6 @@
+>  #define __printf(a, b) __attribute__((format(printf, a, b)))
+>
+>  static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
+> -static const struct btf_type *
+> -skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
+>
+>  static int __base_pr(enum libbpf_print_level level, const char *format,
+>                      va_list args)
+> @@ -1885,7 +1883,7 @@ static int bpf_object__init_user_maps(struct bpf_object *obj, bool strict)
+>         return 0;
 >  }
 >
-> +static inline bool btf_has_size(const struct btf_type *t)
-> +{
-> +       switch (BTF_INFO_KIND(t->info)) {
-> +       case BTF_KIND_INT:
-> +       case BTF_KIND_STRUCT:
-> +       case BTF_KIND_UNION:
-> +       case BTF_KIND_ENUM:
-> +       case BTF_KIND_DATASEC:
-> +               return true;
-> +       default:
-> +               return false;
-> +       }
-> +}
-
-it's not clear what "has_size" means, actually. E.g., array type
-definitely has size, it's not just as readily available. And you are
-actually misusing this in your algorithm, I'll point it out in the
-respective patch. Please remove this, or if absolutely necessary move
-into btf_dump.c as an inner static function.
-
-> +
->  static inline __u8 btf_int_encoding(const struct btf_type *t)
+> -static const struct btf_type *
+> +const struct btf_type *
+>  skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id)
 >  {
->         return BTF_INT_ENCODING(*(__u32 *)(t + 1));
-> @@ -309,6 +323,11 @@ static inline __u8 btf_int_bits(const struct btf_type *t)
->         return BTF_INT_BITS(*(__u32 *)(t + 1));
->  }
+>         const struct btf_type *t = btf__type_by_id(btf, id);
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+> index 969d0ac..c25d2df 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+> @@ -108,6 +108,8 @@ static inline void *libbpf_reallocarray(void *ptr, size_t nmemb, size_t size)
+>  void *btf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
+>                   size_t cur_cnt, size_t max_cnt, size_t add_cnt);
+>  int btf_ensure_mem(void **data, size_t *cap_cnt, size_t elem_sz, size_t need_cnt);
+> +const struct btf_type *skip_mods_and_typedefs(const struct btf *btf, __u32 id,
+> +                                             __u32 *res_id);
 >
-> +static inline __u32 btf_int(const struct btf_type *t)
-> +{
-> +       return *(__u32 *)(t + 1);
-> +}
-> +
-
-there is btf_int_encoding(), btf_ind_offset() and btf_int_bits() that
-properly decompose what btf_int() above returns. I'm not convinced
-btf_int() has to be exposed as a public API.
-
->  static inline struct btf_array *btf_array(const struct btf_type *t)
->  {
->         return (struct btf_array *)(t + 1);
+>  static inline bool libbpf_validate_opts(const char *opts,
+>                                         size_t opts_sz, size_t user_sz,
 > --
 > 1.8.3.1
 >
