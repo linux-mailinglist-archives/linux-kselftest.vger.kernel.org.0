@@ -2,124 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E2E2FE0B6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 05:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0252FE2DE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jan 2021 07:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732181AbhAUEaz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jan 2021 23:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
+        id S1726282AbhAUG3l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jan 2021 01:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbhAUEOY (ORCPT
+        with ESMTP id S1726991AbhAUG24 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 23:14:24 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9C2C061757;
-        Wed, 20 Jan 2021 20:13:41 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id k4so806133ybp.6;
-        Wed, 20 Jan 2021 20:13:41 -0800 (PST)
+        Thu, 21 Jan 2021 01:28:56 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF83C061757
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jan 2021 22:28:15 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id w1so992798ejf.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jan 2021 22:28:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qdYGbaNQ6RXEEqSgvnErn9aTL2ruB523HmhLn4769P0=;
-        b=Y/wjnmDnqQEicOrIEn5igWesvc6VvkLe6H9gn0MNXrK8Od0OitS4GowYF4fZBPPYQU
-         aw0yU20PJVRA8tRoevm8VV1ZbEtrxk6Zy07mJdq9//Rq1/ub6dOFDxCxo3hEgCA4hOte
-         KP/8aLcT9f5NbXSKYIXEIe31sGI/yzcYnesDXp27vM1RLObprjK5syz6KZ7mtXQ5GrtF
-         XoHnNU+CcQRGdj8I7/F9UDwS9ibTJfJcwFDc5pBC2nn+LtJQ8ByNM1w37YKH1Tvqsoo8
-         VkRL8yFmGOdzvLdAR+SUHLcEd6aUFTvh3eInfHRyXS7mC6ailuxwU3oTpZOONIV6XwXJ
-         umvA==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=rwgvP8AoqgDSPVMCmPqHU4aJ92n1EnfAeIj2Yz3Gw3Q=;
+        b=j/bL1BUg7wEjWJ2XEiCeKl5ZcKNAvNnxWb4MMMEdD5hOt51X0RghRJsnGZzz7W6s6o
+         8fGVG7w9V5qTwUN2nIOaymNIO2vSHqLlJ8QFAb6P3iio2PJzO2rKW6UQO2f5mSFeKKFn
+         kvQK+eS0BJtCrmt3U9sPtTggAwAtnXLtM9n716BJR2MzGyi5JZIwgXrnmUdQqCa9XsQm
+         05/7Q54+iwwqqeJQ/aZ8Miz7feHb9hqv3j+7JOmIGH7E6B6+saD8W3dtsJ+29ewj160F
+         C4cT+Z9ZVhY0hzNGiroOqdoIsoCvBleEJ/Dyi8YjqrT6WUgIwgOUzBY6PCC8frdh9ned
+         N+Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qdYGbaNQ6RXEEqSgvnErn9aTL2ruB523HmhLn4769P0=;
-        b=a/p+AMFuKBF2yCuOnbaLzuXQdmA6oJ/qPvzOLk8QI1gEc+aMXEZFCVM+T0OTmIkSVa
-         vQLO9GyI04l1H63Mq+Y/3YLNDKBo/mwWRSPDT7njmOPhJjPLP1IcP7WR4onJiKkLTGk1
-         c/zokrL4UHuUZ1yg4L96HykdnWKg/l7RIAU80vElKfLgslbKvePl2BPjiQOBjRmtkEvR
-         RtJyUEdoctoUNwjcr3zWHFC/J+pyK27ydvGBiGaGOjROhC/LeNRs3oJ5uBLWX220Ncrp
-         xcCqpt4YJWnP5mGBMlHb4Nm+VfYZLLexPtoRPEI+G7SdLQuXOut9H1sUv3ZDgMQevCDr
-         7b9g==
-X-Gm-Message-State: AOAM530gO+WhPdJZQAPH8APCPWKX5ZCNN98XIbhRcN5dYTyt0xIyj71R
-        U4iLBUYV+Ex06jybOMFivy3+90gdhPjIY70ldRQ=
-X-Google-Smtp-Source: ABdhPJyw6udgxJBFQX0Vwqra1a/DaIb34pvGjg38qbZt2xv9lkediK7L08qo1hXvj7SN4BasIaTVpqghIM8fjo3C5sQ=
-X-Received: by 2002:a25:4b86:: with SMTP id y128mr3828051yba.403.1611202420666;
- Wed, 20 Jan 2021 20:13:40 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=rwgvP8AoqgDSPVMCmPqHU4aJ92n1EnfAeIj2Yz3Gw3Q=;
+        b=nlc5mlj/5SrBvd+Kpj/M0I6mmylP5evabrfEP/57UMGx0HFs50X3NNlt3kpk3c+Ld+
+         qWuxLY508KSVk6me162Cnoi/WBuTNeBTo2WzLoqZoOpZpLiZq2pJOt2rC0gksmRjTffT
+         nbMO4hiwa4KYK1GlswkO2p6tOm5U3rvvFI3fTQmfyw6KY1Pvv2J1wyjzuP6wPJhUyLHv
+         U51R3BKs1JtIhQmUstdES2QHlfZTLeh8eIIla+4DaAmUOOo1bHWECpdKcZKbNG/DyJR/
+         CSmp9bcMVvchqpjr9tbkE3PB7Zkvz1bXpZDjFZ4nyB2PzeQnL5DO9Yno1NxnwhLzP91B
+         l0VQ==
+X-Gm-Message-State: AOAM530+u2IS8tMc2o+is+WBUTJwjcTY44acvZz9ZzawyqK1Xpw9DlIU
+        7xuZByD453H4OSI1CfkPM+a4M/IZaVGWAhVxPOz83h+492N/rftF
+X-Google-Smtp-Source: ABdhPJyrVRb/FAVouTL2Re4ou3lIvSM3uEQTtZMyGaZXV+Wd0nJ3uq/TQmPAFTpawREd5KT4Aqg8GTONmAzC9HMMTHg=
+X-Received: by 2002:a17:906:796:: with SMTP id l22mr8379890ejc.247.1611210493617;
+ Wed, 20 Jan 2021 22:28:13 -0800 (PST)
 MIME-Version: 1.0
-References: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com> <1610921764-7526-3-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1610921764-7526-3-git-send-email-alan.maguire@oracle.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 20 Jan 2021 20:13:29 -0800
-Message-ID: <CAEf4BzYZNUsdLH=fVqO_zXh2gwK6g325pQ7UeyH1NTK8kxSFmA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/4] libbpf: make skip_mods_and_typedefs
- available internally in libbpf
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, morbo@google.com,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 21 Jan 2021 11:58:02 +0530
+Message-ID: <CA+G9fYso2u4Km7mG-PWC_G_BXZRK5qLNN+NK6ws4KmpSZKq4cw@mail.gmail.com>
+Subject: test-definitions: kselftest upgrade to v5.10
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Kevin Hilman <khilman@baylibre.com>, Tim.Bird@sony.com,
+        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
+        Justin Cook <justin.cook@linaro.org>,
+        Anmar Oueja <anmar.oueja@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jan 17, 2021 at 2:20 PM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> btf_dump.c will need it for type-based data display.
->
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
+If you are not using the test-definitions project to run kselftest,
+please ignore this email.
 
-Given we make it into an internal API, let's call it
-btf_skip_mods_and_typedefs()? Otherwise all ok.
+A new run script for kselftest, run_kselftest.sh [1], was created during the
+Linux v5.10 release.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+This script allows someone to run both individual test cases and sets of
+test cases. Accordingly, the test-definitions kselftest script [2] was also
+improved to support these upstream changes [1].  Currently this change is in
+the test-definitions repository in a separate branch "kselftest". This has been
+running in LKFT's CI since November 2020 [3].
 
->  tools/lib/bpf/libbpf.c          | 4 +---
->  tools/lib/bpf/libbpf_internal.h | 2 ++
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 2abbc38..4ef84e1 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -73,8 +73,6 @@
->  #define __printf(a, b) __attribute__((format(printf, a, b)))
->
->  static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
-> -static const struct btf_type *
-> -skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
->
->  static int __base_pr(enum libbpf_print_level level, const char *format,
->                      va_list args)
-> @@ -1885,7 +1883,7 @@ static int bpf_object__init_user_maps(struct bpf_object *obj, bool strict)
->         return 0;
->  }
->
-> -static const struct btf_type *
-> +const struct btf_type *
->  skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id)
->  {
->         const struct btf_type *t = btf__type_by_id(btf, id);
-> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-> index 969d0ac..c25d2df 100644
-> --- a/tools/lib/bpf/libbpf_internal.h
-> +++ b/tools/lib/bpf/libbpf_internal.h
-> @@ -108,6 +108,8 @@ static inline void *libbpf_reallocarray(void *ptr, size_t nmemb, size_t size)
->  void *btf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
->                   size_t cur_cnt, size_t max_cnt, size_t add_cnt);
->  int btf_ensure_mem(void **data, size_t *cap_cnt, size_t elem_sz, size_t need_cnt);
-> +const struct btf_type *skip_mods_and_typedefs(const struct btf *btf, __u32 id,
-> +                                             __u32 *res_id);
->
->  static inline bool libbpf_validate_opts(const char *opts,
->                                         size_t opts_sz, size_t user_sz,
-> --
-> 1.8.3.1
->
+The test-definitions kselftest script will stop supporting older versions of
+the kselftest run script starting 1st-Feb-2021 from master branch.
+OTOH, One have to use test-definitions Tag 2021.01 (will be created) for older
+kselftest versions.
+
+We request that any users of test-definitions project start updating your
+kselftest sources to version v5.10 and above.
+
+Upstream patch,
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/tools/testing/selftests/run_kselftest.sh?id=5da1918446a1d50d57f2f6062f7fdede0b052473
+[2] https://github.com/Linaro/test-definitions/tree/kselftest/automated/linux/kselftest
+[3] https://github.com/Linaro/test-definitions/tree/kselftest
+
+---
+From 5da1918446a1d50d57f2f6062f7fdede0b052473 Mon Sep 17 00:00:00 2001
+From: Kees Cook <keescook@chromium.org>
+Date: Mon, 28 Sep 2020 13:26:49 -0700
+Subject: selftests/run_kselftest.sh: Make each test individually selectable
+
+Currently with run_kselftest.sh there is no way to choose which test
+we could run. All the tests listed in kselftest-list.txt are all run
+every time. This patch enhanced the run_kselftest.sh to make the test
+collections (or tests) individually selectable. e.g.:
+
+$ ./run_kselftest.sh -c seccomp -t timers:posix_timers -t timers:nanosleep
+
+Additionally adds a way to list all known tests with "-l", usage
+with "-h", and perform a dry run without running tests with "-n".
+
+Co-developed-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+
+--
+
+- Naresh Kamboju
