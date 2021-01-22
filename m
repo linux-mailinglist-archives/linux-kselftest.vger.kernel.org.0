@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A2A2FF960
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jan 2021 01:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB182FF971
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jan 2021 01:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726239AbhAVAWv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jan 2021 19:22:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S1726314AbhAVA0X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jan 2021 19:26:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725831AbhAVAWu (ORCPT
+        with ESMTP id S1726094AbhAVA0W (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jan 2021 19:22:50 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2E4C06174A;
-        Thu, 21 Jan 2021 16:22:10 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id x21so7770041iog.10;
-        Thu, 21 Jan 2021 16:22:10 -0800 (PST)
+        Thu, 21 Jan 2021 19:26:22 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79829C06174A;
+        Thu, 21 Jan 2021 16:25:42 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id q129so7866099iod.0;
+        Thu, 21 Jan 2021 16:25:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc;
-        bh=7RDHBNB2FCL5JuAW2qahbN/lnntexdCOoPo1QguxefU=;
-        b=eDT0qNtacOrdxbrPGG0XkfzVrqFE24Q6gH9jrkD1qXTNSRO5dn5Ejqk8QK6hCoFkHx
-         sem98ZgjA/3x1DZMkWdIvpRR5QnOjPu0+pbvmVrzW1DttSAM3ouQLRdd9g2v+l7M7ue5
-         mnADw3WkEd2T1VQhgZ+6ThltJmyr5eoLgSvpgaXJPeNTjTi42DLw+hn9BKMHjXkPSeUX
-         Jv2Pe28RSpiYNFZvQazg5evmtvjpUKs4DCX9XC8gBjriMpByHuxft4HUf30/ySwoOfH5
-         TQ9EVAjzauxXcgM7nNH0sFo/dYivDFbkpGkW2EF/9o6hG/BDF5SGkUYLSxLi6kEhuyPM
-         PvoQ==
+        bh=ykOiitFyiN0YSC/lJm0MiGgBb0JXAdtJs/AnjN6QPxY=;
+        b=QDG0JJplOoNQz84k3mYR476kQh5U3VxQVzKvtt1e8CSfdDU8M8xdbIuGJjcZXrNbNC
+         lcmBx6MWm8ACOAF38UaCM0rT4//qt8cBuoS1xm1X1P3lngLnpJkcvTBbZBrjhmYfhhvZ
+         +DnawjDsJC0prF+exWXZexUH/WsmtUz9/xjVXxoO/XDC+sMpahwchcDb1nMJ2sLzWhN1
+         DHUDnHgm1p0HAexyYuRHLyzsQsfBt5ZpaqwkewmCA60fsHURrjAhbJPqcyJBBV0DDi24
+         sgSmuySVd8NFBRSNt3fRdKlZICvGbnyrgaamfofcoQm94m9dkgfBbHYmSc3ADcHm9TDl
+         Fx0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=7RDHBNB2FCL5JuAW2qahbN/lnntexdCOoPo1QguxefU=;
-        b=EQ5CKk5yRL9jnPATs9bMDKc448H9a8rUy66a8J9odhD0kW55oL8+dWw9zgOP5Luwqt
-         In6ehcoagfWYeWS9lGcG4J+U57et/4luxXqrC9HliJN1ZSLZVZhZrUKzQdG4kcNqIggi
-         kP9VZ6AMM58pEIj3XawNjKBJPS7peV0IOJ5msyLGgXYzgwQt/R8cU/u25DCxDAfsOdWD
-         z+NdAONekLCgrFiQxTe5s6AKT8UhGtQWXrC+cPoWfJi+QEoG8X0CjHilstOwkycrgDfY
-         4+qlxtGwlfKEZVicHlpK5fzxlZfziTqOXNDLE8w9WCWKzkkW3xOT3OlOqMB4O8/sH6eX
-         x1sw==
-X-Gm-Message-State: AOAM533X4UobBysaZqplqjv/asCH94Hq9Zc3l24gk0HbluZxua4k5iKv
-        UbuRa4mRv3b6ck65lWPqhpF0EIi1DGTauvqga2w=
-X-Google-Smtp-Source: ABdhPJwZsGaW5FNkegmgQF+y1eHlUJloKOHavkOK1D8ZuQKjrItgylmq22jE8YsMlEGbyFWX3WJVRrmQxB8VM2GcAzc=
-X-Received: by 2002:a05:6602:2b01:: with SMTP id p1mr1585423iov.156.1611274929572;
- Thu, 21 Jan 2021 16:22:09 -0800 (PST)
+        bh=ykOiitFyiN0YSC/lJm0MiGgBb0JXAdtJs/AnjN6QPxY=;
+        b=CBqDKjjDjEQnfzFc7R6V9TvJXPEo6IYppZjEB7JbM9DcdXzlVZ8tXwcZXBPwQ0tzd4
+         UIwccIR4GgvKdsdPzPZTw5syOjQ30Ka3FfgyrURDIyjRSF5Wv3JwD6W+mATGHUu7z6I6
+         rHhhW3It/sRhyjfdfUJCzJla3cmSYUNMYczEPM4Z5Sjp+MeIuPHFJvJmatE0RWBU6LWh
+         tdDlITWQfwuBvLAPdLZA7IQNiSrNPlxVG984JScnvQvNh1KUiiZEUxbGKq3w2XjadggS
+         aTPcmvp8w47fLfUQkOPiNN/kJvAj6QvCV0Re5dRPnZSumj+8y4sFNS2ek77h+3DEIX+b
+         CSnQ==
+X-Gm-Message-State: AOAM532Q62iHmFyoiXfHCdyNK15u4mo9B64rxAAcgQooNcrC8vIqQUxP
+        kWMWzb4gbugtmThMfD5POUFKitK9DL9gDZ5MGmw=
+X-Google-Smtp-Source: ABdhPJwA9IQtExG+5RlQWaPI0YodAZOnsMrpJLghO7Nv6S4fYgKHUyyRllGljUmIxkyy2DcFr61UVjM4KqztO1BDJcc=
+X-Received: by 2002:a6b:6a0e:: with SMTP id x14mr1540463iog.57.1611275141850;
+ Thu, 21 Jan 2021 16:25:41 -0800 (PST)
 MIME-Version: 1.0
 References: <20210116095413.72820-1-sedat.dilek@gmail.com> <20210120223546.GF1798087@krava>
- <CAEf4Bza2W061YpxtUx9ZKQUtE0-tS6gf4yg2Le_2g4kyi3FhnQ@mail.gmail.com> <CA+icZUUGKn4DiBGN8Tq3yrh0NH2Fqboaigwm4Q3yceDJVe9dAA@mail.gmail.com>
-In-Reply-To: <CA+icZUUGKn4DiBGN8Tq3yrh0NH2Fqboaigwm4Q3yceDJVe9dAA@mail.gmail.com>
+ <CAEf4Bza2W061YpxtUx9ZKQUtE0-tS6gf4yg2Le_2g4kyi3FhnQ@mail.gmail.com>
+ <CA+icZUUGKn4DiBGN8Tq3yrh0NH2Fqboaigwm4Q3yceDJVe9dAA@mail.gmail.com> <CA+icZUX_DsEi+k5kpko5fxrG2+-oL8H4gVRq93fXHjN6ny9K=Q@mail.gmail.com>
+In-Reply-To: <CA+icZUX_DsEi+k5kpko5fxrG2+-oL8H4gVRq93fXHjN6ny9K=Q@mail.gmail.com>
 Reply-To: sedat.dilek@gmail.com
 From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 22 Jan 2021 01:21:58 +0100
-Message-ID: <CA+icZUX_DsEi+k5kpko5fxrG2+-oL8H4gVRq93fXHjN6ny9K=Q@mail.gmail.com>
+Date:   Fri, 22 Jan 2021 01:25:30 +0100
+Message-ID: <CA+icZUW11s-rmu+hw4ue44cn4FDBLoJWSrZ78qpdfk-CSYHYHQ@mail.gmail.com>
 Subject: Re: [PATCH RFC] tools: Factor Clang, LLC and LLVM utils definitions
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
@@ -93,100 +94,110 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 1:12 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+On Fri, Jan 22, 2021 at 1:21 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 >
-> On Fri, Jan 22, 2021 at 1:04 AM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
+> On Fri, Jan 22, 2021 at 1:12 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 > >
-> > On Wed, Jan 20, 2021 at 2:36 PM Jiri Olsa <jolsa@redhat.com> wrote:
+> > On Fri, Jan 22, 2021 at 1:04 AM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
 > > >
-> > > On Sat, Jan 16, 2021 at 10:54:04AM +0100, Sedat Dilek wrote:
-> > > > When dealing with BPF/BTF/pahole and DWARF v5 I wanted to build bpftool.
+> > > On Wed, Jan 20, 2021 at 2:36 PM Jiri Olsa <jolsa@redhat.com> wrote:
 > > > >
-> > > > While looking into the source code I found duplicate assignments
-> > > > in misc tools for the LLVM eco system, e.g. clang and llvm-objcopy.
+> > > > On Sat, Jan 16, 2021 at 10:54:04AM +0100, Sedat Dilek wrote:
+> > > > > When dealing with BPF/BTF/pahole and DWARF v5 I wanted to build bpftool.
+> > > > >
+> > > > > While looking into the source code I found duplicate assignments
+> > > > > in misc tools for the LLVM eco system, e.g. clang and llvm-objcopy.
+> > > > >
+> > > > > Move the Clang, LLC and/or LLVM utils definitions to
+> > > > > tools/scripts/Makefile.include file and add missing
+> > > > > includes where needed.
+> > > > > Honestly, I was inspired by commit c8a950d0d3b9
+> > > > > ("tools: Factor HOSTCC, HOSTLD, HOSTAR definitions").
+> > > > >
+> > > > > I tested with bpftool and perf on Debian/testing AMD64 and
+> > > > > LLVM/Clang v11.1.0-rc1.
+> > > > >
+> > > > > Build instructions:
+> > > > >
+> > > > > [ make and make-options ]
+> > > > > MAKE="make V=1"
+> > > > > MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1"
+> > > > > MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
+> > > > >
+> > > > > [ clean-up ]
+> > > > > $MAKE $MAKE_OPTS -C tools/ clean
+> > > > >
+> > > > > [ bpftool ]
+> > > > > $MAKE $MAKE_OPTS -C tools/bpf/bpftool/
+> > > > >
+> > > > > [ perf ]
+> > > > > PYTHON=python3 $MAKE $MAKE_OPTS -C tools/perf/
+> > > > >
+> > > > > I was careful with respecting the user's wish to override custom compiler,
+> > > > > linker, GNU/binutils and/or LLVM utils settings.
+> > > > >
+> > > > > Some personal notes:
+> > > > > 1. I have NOT tested with cross-toolchain for other archs (cross compiler/linker etc.).
+> > > > > 2. This patch is on top of Linux v5.11-rc3.
+> > > > >
+> > > > > I hope to get some feedback from especially Linux-bpf folks.
+> > > > >
+> > > > > Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
+> > > > > ---
+> > > > >  tools/bpf/bpftool/Makefile                  | 2 --
+> > > > >  tools/bpf/runqslower/Makefile               | 3 ---
+> > > > >  tools/build/feature/Makefile                | 4 ++--
+> > > > >  tools/perf/Makefile.perf                    | 1 -
 > > > >
-> > > > Move the Clang, LLC and/or LLVM utils definitions to
-> > > > tools/scripts/Makefile.include file and add missing
-> > > > includes where needed.
-> > > > Honestly, I was inspired by commit c8a950d0d3b9
-> > > > ("tools: Factor HOSTCC, HOSTLD, HOSTAR definitions").
+> > > > for tools/build and tools/perf
 > > > >
-> > > > I tested with bpftool and perf on Debian/testing AMD64 and
-> > > > LLVM/Clang v11.1.0-rc1.
+> > > > Acked-by: Jiri Olsa <jolsa@redhat.com>
 > > > >
-> > > > Build instructions:
-> > > >
-> > > > [ make and make-options ]
-> > > > MAKE="make V=1"
-> > > > MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1"
-> > > > MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
-> > > >
-> > > > [ clean-up ]
-> > > > $MAKE $MAKE_OPTS -C tools/ clean
-> > > >
-> > > > [ bpftool ]
-> > > > $MAKE $MAKE_OPTS -C tools/bpf/bpftool/
-> > > >
-> > > > [ perf ]
-> > > > PYTHON=python3 $MAKE $MAKE_OPTS -C tools/perf/
-> > > >
-> > > > I was careful with respecting the user's wish to override custom compiler,
-> > > > linker, GNU/binutils and/or LLVM utils settings.
-> > > >
-> > > > Some personal notes:
-> > > > 1. I have NOT tested with cross-toolchain for other archs (cross compiler/linker etc.).
-> > > > 2. This patch is on top of Linux v5.11-rc3.
-> > > >
-> > > > I hope to get some feedback from especially Linux-bpf folks.
-> > > >
-> > > > Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > > > ---
-> > > >  tools/bpf/bpftool/Makefile                  | 2 --
-> > > >  tools/bpf/runqslower/Makefile               | 3 ---
-> > > >  tools/build/feature/Makefile                | 4 ++--
-> > > >  tools/perf/Makefile.perf                    | 1 -
 > > >
-> > > for tools/build and tools/perf
+> > > It's pretty straightforward and looks good for bpftool and runqslower,
+> > > but I couldn't apply directly to test due to merge conflicts.
 > > >
-> > > Acked-by: Jiri Olsa <jolsa@redhat.com>
+> > > Also, which tree this should go through, given it touches multiple
+> > > parts under tools/?
 > > >
 > >
-> > It's pretty straightforward and looks good for bpftool and runqslower,
-> > but I couldn't apply directly to test due to merge conflicts.
-> >
-> > Also, which tree this should go through, given it touches multiple
-> > parts under tools/?
+> > Sorry, for the conflicts.
+> > AFAICS I should do this again against Linux v5.11-rc4 vanilla?
+> > Is this OK to you?
 > >
 >
-> Sorry, for the conflicts.
-> AFAICS I should do this again against Linux v5.11-rc4 vanilla?
-> Is this OK to you?
+> I re-checked:
+> This patch was on top of Linux v5.11-rc3 and applies cleanly against
+> Linux v5.11-rc.
 >
 
-I re-checked:
-This patch was on top of Linux v5.11-rc3 and applies cleanly against
-Linux v5.11-rc.
+Bullshit.
 
-Please let me know if I should adapt to a different Git tree.
+I will send out a v2 against Linux v5.11-rc4 - was on the wrong local
+Git branch.
 
 - Sedat -
 
-> Good hint, cannot say through which tree this should go through.
+> Please let me know if I should adapt to a different Git tree.
 >
 > - Sedat -
 >
-> > > jirka
-> > >
-> > > >  tools/scripts/Makefile.include              | 7 +++++++
-> > > >  tools/testing/selftests/bpf/Makefile        | 3 +--
-> > > >  tools/testing/selftests/tc-testing/Makefile | 3 +--
-> > > >  7 files changed, 11 insertions(+), 12 deletions(-)
+> > Good hint, cannot say through which tree this should go through.
+> >
+> > - Sedat -
+> >
+> > > > jirka
 > > > >
-> > > > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> > > > index f897cb5fb12d..71c14efa6e91 100644
-> > > > --- a/tools/bpf/bpftool/Makefile
-> > > > +++ b/tools/bpf/bpftool/Makefile
-> > >
-> > > SNIP
-> > >
+> > > > >  tools/scripts/Makefile.include              | 7 +++++++
+> > > > >  tools/testing/selftests/bpf/Makefile        | 3 +--
+> > > > >  tools/testing/selftests/tc-testing/Makefile | 3 +--
+> > > > >  7 files changed, 11 insertions(+), 12 deletions(-)
+> > > > >
+> > > > > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > > > > index f897cb5fb12d..71c14efa6e91 100644
+> > > > > --- a/tools/bpf/bpftool/Makefile
+> > > > > +++ b/tools/bpf/bpftool/Makefile
+> > > >
+> > > > SNIP
+> > > >
