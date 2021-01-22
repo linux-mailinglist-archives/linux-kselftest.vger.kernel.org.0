@@ -2,267 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E592FF97C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jan 2021 01:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 723082FFB2C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jan 2021 04:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbhAVAdg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jan 2021 19:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
+        id S1726641AbhAVDij (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jan 2021 22:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbhAVAda (ORCPT
+        with ESMTP id S1726433AbhAVDic (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jan 2021 19:33:30 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77B0C06174A;
-        Thu, 21 Jan 2021 16:32:49 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id d22so4687895edy.1;
-        Thu, 21 Jan 2021 16:32:49 -0800 (PST)
+        Thu, 21 Jan 2021 22:38:32 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9790AC06174A
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jan 2021 19:37:51 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id h21so2062228qvb.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jan 2021 19:37:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=soleen.com; s=google;
         h=from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nIwDL815WbM3BXQJbXvq/f398/RbftQTQcC+LW4e8Cw=;
-        b=Lf/QJ4FCE4pP1A+ZNAiTRm3qOKQYC01QPyQkp2uTVS6NmtGP++27MYD9iyJe+aOVKS
-         46nqbLOgI7Cj8J/vlpRXGknrWIjebEM4jnRHe/7/OjiHUchWuyB367+MhbeQBzwlccVG
-         KmQjfOuDr5nABogQoKLmROIDJjX7KdGxnPwR5omDwIV9wwPK8U0qtR1fgSYSkkS/Tnq8
-         rdsp+jEy4lFlhAv8N5R4MOoe/rfWNU2YbrY1UAVnhpBxXsctWEuCP7rFWJZbMwGAPOEL
-         uHF8P/s33TgiJDeSENFPdma629195dAJErOrWrI+OYJbgE44QNyWfpdX3tDCTXyZUuJ1
-         ZnkQ==
+        bh=s59E/cH9Xmao+Y2rx3RINlo8VopyJ3wMUgW5EvdtGvw=;
+        b=mNjhvDvjEkATdmskggRHup5d3H9JzG+r0qK364cL39sHDm2qaVZAcThgxKFCK82fPK
+         HQHdB9Z+5xCT2S5q1h1fgHMC+U0wsezhUCY0yOcCUv6rgUsef2J3v/XLlciexWYep5Uy
+         wzQrqX2llQB9pC/zjmlqxUhy12YJUy081cZTE4uRp3ruyIvP/sO0X6QoXY3mLIfOywtS
+         FF8uwZ5F9Jl0wEuRabr+MShRRJFVY447nySO64CfCmdJQLx2UpsM2AL2Ps4WP0avu49h
+         iuzv1hYnmazOFEEuvbvC1bLgf+WmHXEbrKm8OcF0Iy5QrdFfE7quvkVsB8v8pHAgLImk
+         Y0fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nIwDL815WbM3BXQJbXvq/f398/RbftQTQcC+LW4e8Cw=;
-        b=apI8gj9x071p2B9DKhCRbta8mq5OCuJT/TDDurQSlrAuW2Oqd4R3Jji+oKwVUzZn64
-         JDTs9i8DOZHGP2GBxblKt80vEGErEJo/oaNEVleHKHFDFECqC/Lx6Ubg9nCPTWbGW+VN
-         gAowPVInVWDWLow9v0vGgF4I4MB++UoSWu4zpdmSyk12tlBV+qF8yF6aMAr8JUQvoebg
-         LLkbdZgA9v+9aXn7oBbzm5QVS2NbUvTfGC2z0hiVscRvh0WPyRtKlXrI3Sh3ePXURxUH
-         04mMuQo4UpJWyov9ALFaYmEAiKr+NJEMGkHOickmPfSJ6Md56pAQj8s26eDnyWgWIUfO
-         rUpA==
-X-Gm-Message-State: AOAM530qPg2NV101ugSOrowvDaS43GBTjIGztdL2hbISXUAX5Qh0QXpt
-        LAaqp5Yo0ppdDJylFxBy0G4=
-X-Google-Smtp-Source: ABdhPJw6BtROVfbIpW3jwgJ0vxfvIel4gFG+i8lZ6Iv6vOsXZ5CnXZOBuOk7KGKa4Z9ACOdCw1Ovpw==
-X-Received: by 2002:a05:6402:104e:: with SMTP id e14mr1334004edu.316.1611275568372;
-        Thu, 21 Jan 2021 16:32:48 -0800 (PST)
-Received: from localhost.localdomain (ip-109-40-66-206.web.vodafone.de. [109.40.66.206])
-        by smtp.gmail.com with ESMTPSA id f17sm3741870edu.25.2021.01.21.16.32.45
+        bh=s59E/cH9Xmao+Y2rx3RINlo8VopyJ3wMUgW5EvdtGvw=;
+        b=BbZRCcn9qKpWwIgPn1rJOZhQZM03bZsiq6mO+kl7hpdSt8nY+ivVPFPqsT4xLT1lQT
+         vv5EiZWxB6e4yOuU5pB1YPHhRjiux7vVGHeEzczFUA9gKA99apZjmsXuAoeTwiT5qwEM
+         lLWF0y5ZyVQPbeqp+M2OL4qCRaLIFD5LAT2Id5ODqb13O/RWHws/4Z3wPjiYmqRAWSsd
+         soiwV68vff3P/5XuoscCU9riQhVoWZvBTdm3D/YrGamgMpEd9XNYAxEHnJa00HPWwtHP
+         YfPjffPqeVFFWhICP18O/ogEA3WAVDMdgT15veunHh7/09YnHrdsWbDSBOSz3MIDrAWv
+         qaWA==
+X-Gm-Message-State: AOAM530AaKvXl2oJeYYeHL044Ymj3CdGODlzBvh/2WUViJ1vXqzz+xU2
+        IKPmR/PYcGNYRLOPXU9H63di2Q==
+X-Google-Smtp-Source: ABdhPJyL8MCvrzf3tavJE/2tM5z/Rcf6OM6sGOFEL2JaxzeltSw5Sv7EKR4Axm12m2FhAxcq5h/xUQ==
+X-Received: by 2002:a0c:eed3:: with SMTP id h19mr2816820qvs.18.1611286670609;
+        Thu, 21 Jan 2021 19:37:50 -0800 (PST)
+Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
+        by smtp.gmail.com with ESMTPSA id m85sm5426529qke.33.2021.01.21.19.37.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 16:32:47 -0800 (PST)
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Andrey Ignatov <rdna@fb.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        "Frank Ch. Eigler" <fche@redhat.com>,
-        Thomas Hebb <tommyhebb@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Briana Oursler <briana.oursler@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Davide Caratti <dcaratti@redhat.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH RFC v2] tools: Factor Clang, LLC and LLVM utils definitions
-Date:   Fri, 22 Jan 2021 01:32:25 +0100
-Message-Id: <20210122003235.77246-1-sedat.dilek@gmail.com>
-X-Mailer: git-send-email 2.30.0
+        Thu, 21 Jan 2021 19:37:49 -0800 (PST)
+From:   Pavel Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
+        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
+        dan.j.williams@intel.com, sashal@kernel.org,
+        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
+        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
+        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
+        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
+        linux-doc@vger.kernel.org, ira.weiny@intel.com,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v7 00/14] prohibit pinning pages in ZONE_MOVABLE
+Date:   Thu, 21 Jan 2021 22:37:34 -0500
+Message-Id: <20210122033748.924330-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When dealing with BPF/BTF/pahole and DWARF v5 I wanted to build bpftool.
+Changelog
+---------
+v7
+- Added reviewed-by's
+- Fixed a compile bug on non-mmu builds reported by robot
 
-While looking into the source code I found duplicate assignments
-in misc tools for the LLVM eco system, e.g. clang and llvm-objcopy.
+v6
+  Small update, but I wanted to send it out quicker, as it removes a
+  controversial patch and replaces it with something sane.
+- Removed forcing FOLL_WRITE for longterm gup, instead added a patch to
+  skip zero pages during migration.
+- Added reviewed-by's and minor log changes.
 
-Move the Clang, LLC and/or LLVM utils definitions to
-tools/scripts/Makefile.include file and add missing
-includes where needed.
-Honestly, I was inspired by commit c8a950d0d3b9
-("tools: Factor HOSTCC, HOSTLD, HOSTAR definitions").
+v5
+- Added the following patches to the beginning of series, which are fixes
+   to the other existing problems with CMA migration code:
+	mm/gup: check every subpage of a compound page during isolation
+	mm/gup: return an error on migration failure
+	mm/gup: check for isolation errors also at the beginning of series
+	mm/gup: do not allow zero page for pinned pages
+- remove .gfp_mask/.reclaim_idx changes from mm/vmscan.c
+- update movable zone header comment in patch 8 instead of patch 3, fix
+  the comment
+- Added acked, sign-offs
+- Updated commit logs based on feedback
+- Addressed issues reported by Michal and Jason.
+- Remove:
+	#define PINNABLE_MIGRATE_MAX	10
+	#define PINNABLE_ISOLATE_MAX	100
+   Instead: fail on the first migration failure, and retry isolation
+   forever as their failures are transient.
 
-I tested with bpftool and perf on Debian/testing AMD64 and
-LLVM/Clang v11.1.0-rc1.
+- In self-set addressed some of the comments from John Hubbard, updated
+  commit logs, and added comments. Renamed gup->flags with gup->test_flags.
 
-Build instructions:
+v4
+- Address page migration comments. New patch:
+  mm/gup: limit number of gup migration failures, honor failures
+  Implements the limiting number of retries for migration failures, and
+  also check for isolation failures.
+  Added a test case into gup_test to verify that pages never long-term
+  pinned in a movable zone, and also added tests to fault both in kernel
+  and in userland.
+v3
+- Merged with linux-next, which contains clean-up patch from Jason,
+  therefore this series is reduced by two patches which did the same
+  thing.
+v2
+- Addressed all review comments
+- Added Reviewed-by's.
+- Renamed PF_MEMALLOC_NOMOVABLE to PF_MEMALLOC_PIN
+- Added is_pinnable_page() to check if page can be longterm pinned
+- Fixed gup fast path by checking is_in_pinnable_zone()
+- rename cma_page_list to movable_page_list
+- add a admin-guide note about handling pinned pages in ZONE_MOVABLE,
+  updated caveat about pinned pages from linux/mmzone.h
+- Move current_gfp_context() to fast-path
 
-[ make and make-options ]
-MAKE="make V=1"
-MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1"
-MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
+---------
+When page is pinned it cannot be moved and its physical address stays
+the same until pages is unpinned.
 
-[ clean-up ]
-$MAKE $MAKE_OPTS -C tools/ clean
+This is useful functionality to allows userland to implementation DMA
+access. For example, it is used by vfio in vfio_pin_pages().
 
-[ bpftool ]
-$MAKE $MAKE_OPTS -C tools/bpf/bpftool/
+However, this functionality breaks memory hotplug/hotremove assumptions
+that pages in ZONE_MOVABLE can always be migrated.
 
-[ perf ]
-PYTHON=python3 $MAKE $MAKE_OPTS -C tools/perf/
+This patch series fixes this issue by forcing new allocations during
+page pinning to omit ZONE_MOVABLE, and also to migrate any existing
+pages from ZONE_MOVABLE during pinning.
 
-I was careful with respecting the user's wish to override custom compiler,
-linker, GNU/binutils and/or LLVM utils settings.
+It uses the same scheme logic that is currently used by CMA, and extends
+the functionality for all allocations.
 
-Some personal notes:
-1. I have NOT tested with cross-toolchain for other archs (cross compiler/linker etc.).
-2. This patch is on top of Linux v5.11-rc4.
+For more information read the discussion [1] about this problem.
+[1] https://lore.kernel.org/lkml/CA+CK2bBffHBxjmb9jmSKacm0fJMinyt3Nhk8Nx6iudcQSj80_w@mail.gmail.com
 
-I hope to get some feedback from especially Linux-bpf folks.
+Previous versions:
+v1
+https://lore.kernel.org/lkml/20201202052330.474592-1-pasha.tatashin@soleen.com
+v2
+https://lore.kernel.org/lkml/20201210004335.64634-1-pasha.tatashin@soleen.com
+v3
+https://lore.kernel.org/lkml/20201211202140.396852-1-pasha.tatashin@soleen.com
+v4
+https://lore.kernel.org/lkml/20201217185243.3288048-1-pasha.tatashin@soleen.com
+v5
+https://lore.kernel.org/lkml/20210119043920.155044-1-pasha.tatashin@soleen.com
+v6
+https://lore.kernel.org/lkml/20210120014333.222547-1-pasha.tatashin@soleen.com
 
-Acked-by: Jiri Olsa <jolsa@redhat.com> # tools/build and tools/perf
-Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
----
-Changelog RFC v1->v2:
-- Add Jiri's ACK
-- Adapt to fit Linux v5.11-rc4
 
- tools/bpf/bpftool/Makefile                  | 2 --
- tools/bpf/runqslower/Makefile               | 3 ---
- tools/build/feature/Makefile                | 4 ++--
- tools/perf/Makefile.perf                    | 1 -
- tools/scripts/Makefile.include              | 7 +++++++
- tools/testing/selftests/bpf/Makefile        | 3 +--
- tools/testing/selftests/tc-testing/Makefile | 3 +--
- 7 files changed, 11 insertions(+), 12 deletions(-)
+Pavel Tatashin (14):
+  mm/gup: don't pin migrated cma pages in movable zone
+  mm/gup: check every subpage of a compound page during isolation
+  mm/gup: return an error on migration failure
+  mm/gup: check for isolation errors
+  mm cma: rename PF_MEMALLOC_NOCMA to PF_MEMALLOC_PIN
+  mm: apply per-task gfp constraints in fast path
+  mm: honor PF_MEMALLOC_PIN for all movable pages
+  mm/gup: do not migrate zero page
+  mm/gup: migrate pinned pages out of movable zone
+  memory-hotplug.rst: add a note about ZONE_MOVABLE and page pinning
+  mm/gup: change index type to long as it counts pages
+  mm/gup: longterm pin migration cleanup
+  selftests/vm: test flag is broken
+  selftests/vm: test faulting in kernel, and verify pinnable pages
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index f897cb5fb12d..71c14efa6e91 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -75,8 +75,6 @@ endif
- 
- INSTALL ?= install
- RM ?= rm -f
--CLANG ?= clang
--LLVM_STRIP ?= llvm-strip
- 
- FEATURE_USER = .bpftool
- FEATURE_TESTS = libbfd disassembler-four-args reallocarray zlib libcap \
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index 4d5ca54fcd4c..9d9fb6209be1 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -3,9 +3,6 @@ include ../../scripts/Makefile.include
- 
- OUTPUT ?= $(abspath .output)/
- 
--CLANG ?= clang
--LLC ?= llc
--LLVM_STRIP ?= llvm-strip
- BPFTOOL_OUTPUT := $(OUTPUT)bpftool/
- DEFAULT_BPFTOOL := $(BPFTOOL_OUTPUT)bpftool
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 89ba522e377d..3e55edb3ea54 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -1,4 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
-+include ../../scripts/Makefile.include
-+
- FILES=                                          \
-          test-all.bin                           \
-          test-backtrace.bin                     \
-@@ -76,8 +78,6 @@ FILES=                                          \
- FILES := $(addprefix $(OUTPUT),$(FILES))
- 
- PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
--LLVM_CONFIG ?= llvm-config
--CLANG ?= clang
- 
- all: $(FILES)
- 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 62f3deb1d3a8..f4df7534026d 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -176,7 +176,6 @@ endef
- LD += $(EXTRA_LDFLAGS)
- 
- PKG_CONFIG = $(CROSS_COMPILE)pkg-config
--LLVM_CONFIG ?= llvm-config
- 
- RM      = rm -f
- LN      = ln -f
-diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index 1358e89cdf7d..4255e71f72b7 100644
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -69,6 +69,13 @@ HOSTCC  ?= gcc
- HOSTLD  ?= ld
- endif
- 
-+# Some tools require Clang, LLC and/or LLVM utils
-+CLANG		?= clang
-+LLC		?= llc
-+LLVM_CONFIG	?= llvm-config
-+LLVM_OBJCOPY	?= llvm-objcopy
-+LLVM_STRIP	?= llvm-strip
-+
- ifeq ($(CC_NO_CLANG), 1)
- EXTRA_WARNINGS += -Wstrict-aliasing=3
- endif
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index c51df6b91bef..952e2bc5f3bc 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- include ../../../../scripts/Kbuild.include
- include ../../../scripts/Makefile.arch
-+include ../../../scripts/Makefile.include
- 
- CXX ?= $(CROSS_COMPILE)g++
- 
-@@ -18,8 +19,6 @@ ifneq ($(wildcard $(GENHDR)),)
-   GENFLAGS := -DHAVE_GENHDR
- endif
- 
--CLANG		?= clang
--LLVM_OBJCOPY	?= llvm-objcopy
- BPF_GCC		?= $(shell command -v bpf-gcc;)
- SAN_CFLAGS	?=
- CFLAGS += -g -rdynamic -Wall -O2 $(GENFLAGS) $(SAN_CFLAGS)		\
-diff --git a/tools/testing/selftests/tc-testing/Makefile b/tools/testing/selftests/tc-testing/Makefile
-index 91fee5c43274..4d639279f41e 100644
---- a/tools/testing/selftests/tc-testing/Makefile
-+++ b/tools/testing/selftests/tc-testing/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
-+include ../../../scripts/Makefile.include
- 
- top_srcdir = $(abspath ../../../..)
- APIDIR := $(top_scrdir)/include/uapi
-@@ -7,8 +8,6 @@ TEST_GEN_FILES = action.o
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
--CLANG ?= clang
--LLC   ?= llc
- PROBE := $(shell $(LLC) -march=bpf -mcpu=probe -filetype=null /dev/null 2>&1)
- 
- ifeq ($(PROBE),)
+ .../admin-guide/mm/memory-hotplug.rst         |   9 +
+ include/linux/migrate.h                       |   1 +
+ include/linux/mm.h                            |  11 ++
+ include/linux/mmzone.h                        |  13 +-
+ include/linux/pgtable.h                       |   3 +-
+ include/linux/sched.h                         |   2 +-
+ include/linux/sched/mm.h                      |  27 +--
+ include/trace/events/migrate.h                |   3 +-
+ mm/gup.c                                      | 176 ++++++++----------
+ mm/gup_test.c                                 |  29 +--
+ mm/gup_test.h                                 |   3 +-
+ mm/hugetlb.c                                  |   4 +-
+ mm/page_alloc.c                               |  33 ++--
+ tools/testing/selftests/vm/gup_test.c         |  36 +++-
+ 14 files changed, 191 insertions(+), 159 deletions(-)
+
 -- 
-2.30.0
+2.25.1
 
