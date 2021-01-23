@@ -2,118 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EB43012F1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Jan 2021 05:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57478301429
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Jan 2021 10:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726590AbhAWENR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Jan 2021 23:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S1726754AbhAWJ1E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 23 Jan 2021 04:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726588AbhAWENM (ORCPT
+        with ESMTP id S1726699AbhAWJZC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Jan 2021 23:13:12 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C597C061786
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jan 2021 20:12:32 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id n10so5168827pgl.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jan 2021 20:12:32 -0800 (PST)
+        Sat, 23 Jan 2021 04:25:02 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0383EC0613D6;
+        Sat, 23 Jan 2021 01:24:37 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id cq1so5312032pjb.4;
+        Sat, 23 Jan 2021 01:24:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rfxqzONqLpenH9bMcTSEoRtSy4r+OTMclT611uQQPw0=;
-        b=VYOj8q7y3B1Ci/zXV0TKKQdP+Hr4DW7yRsr1E+oiVJMPmFipjS5UZ8xLl2xoHoz/6B
-         jkpCwgPiLIZPoGfOi1wN88wt16jBRvoyvro7VvrIPcH4RTJznQoHQmoB2t8HyrxAaJdZ
-         HBhFM+SE5uT3rPuNDZ63XGBOHfrbXdGCrMh+WmJzIou1s39XhI+QRXq2zuC7lcQ0WAEq
-         +J2EBBfVHpHbKs6R2YJuQHl6VFRabnTwOH35OE4IYc02CQ9CIGb17Ob6QmJQaoizK2CX
-         qmyOJqbeCl8AsonG5sk05tyhobY+J8YKqRp8zWdSTNaaYU7FnZoryWgNkEnc2zVWMeFD
-         MIhA==
+        bh=k3QR3JKXwG7wDIj5UwkwcvzwKyrFi2u7DZslhTlOQTU=;
+        b=ARNxYjMQKp/eKXPWu1Iz4DS2LcecIhnFDEC8G7h3rmHC3qKLcS3Mn4JvGmOWIpeEQA
+         63g2FSqAtphthauJ9wkrEn0m0i9HBSExCeiOf3ZEYi8Kui5RYhNmm2m1kzTvWURprDpa
+         rWJPlcOXDhZ4/RpvX29HZwoXsaYmq7j7dhhyXYbu/SskmqUMiJkA9T/yGManXB2lAchP
+         MxchhqEHr6Ej/eUnEBLdn6h9nFFHV9/y2zQKZLC+iKr+JlH6fox41M6PEA4GV8SlpV4S
+         tT/kqEMLj9Z1uzJ6v6zOsC91IYbIlFPi5YhCmkYINISTuHm59P7bNblWnorFUsyGPYfa
+         JaNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=rfxqzONqLpenH9bMcTSEoRtSy4r+OTMclT611uQQPw0=;
-        b=KhPZY7xI1HkXrGNiuGxDtZAVc2tk5fhoWNmh1XbaCCIxtsi0W/Kx5tvnPR7yuKx0AS
-         X3XVzrbkBj1n1elQKuEdZXfCZFUk+ppGAMifVr4/t8rS+VOvLHhfMkyW+Q69rqhCgBxB
-         J9AUFvHBcXeDGjxy5o4KgdZzR1V4BTl7XgcwK99jH/7b+9N5vMHLxDPv41evu4FaVSsV
-         Php3mN1YtLA6QbeKvsz3QRSTB5s2rQKZaf0D6eJ09p1c7wh5IhFJUeTEAkBI9I2wAA5T
-         UsBFw9n3UnOSpw0Z2myznHZgAzHyWwxiBLNcLdWH2YA4DY2T72ayhNd7CtkpN6SC7PWO
-         Rpgw==
-X-Gm-Message-State: AOAM5307vylm42wl4Y5m9iq6KXn2GlRbN5Zn/Jk/Izna+3rxlbycyqwn
-        M08TVO1kODQeLeRzPpRGTXgFCA==
-X-Google-Smtp-Source: ABdhPJz23uPwWexptJVrp5X0oeJBb+aQPxkhO88fX4JWNnDnVCTuobkNxuBQWZrcK1ekbZ/uQmCkcQ==
-X-Received: by 2002:a62:2aca:0:b029:1bb:4349:f889 with SMTP id q193-20020a622aca0000b02901bb4349f889mr8177532pfq.26.1611375151785;
-        Fri, 22 Jan 2021 20:12:31 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id f15sm10628173pja.24.2021.01.22.20.12.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k3QR3JKXwG7wDIj5UwkwcvzwKyrFi2u7DZslhTlOQTU=;
+        b=W60/HCT3QJVjYYp7kSRY248NuSQ7dI0aJZB7lACK62Yeam7up/c+z7ezU6/EvmktC6
+         wUWn8jcqEyZ0eKASFcZycvGQML6eIcTJRcgkIORfOt2wbeVoEolp3x2zsyUddoKoBYiL
+         hYHDlaDc3+GloVlZjBv8OzaBDwopbqPJdc64Crq4Thdah+NaqaUlCdu4gAOBLW8LvP+F
+         owPDUZwy3Z83iC/oPmGI11pTCgqI95ahfVi44nF3xH3A9h9EEVDAWNRs9EG4YTTHIeYb
+         nOurfVlu2G4uenKMyDQzZ6MyOs7deghXJEVUqvIcEdVSG7jbnoNNUNqfNtHB/PeE5Ugv
+         Njmg==
+X-Gm-Message-State: AOAM532Ou9AYtH6H2dRrFHG+73fGpVxPoY9R94CD+TBEhMg64qJj5ZJa
+        v4VMCT0eRKU9fSroiugCjI+ckf+QIedXww==
+X-Google-Smtp-Source: ABdhPJwp8S6t2yuqcDQHJpnqNcv3dB33tVAXer+vBpR9lznPa2NoI0f/1lYy8Ixu+bBOZ82Tr1QhGg==
+X-Received: by 2002:a17:90b:513:: with SMTP id r19mr10424293pjz.38.1611393876660;
+        Sat, 23 Jan 2021 01:24:36 -0800 (PST)
+Received: from localhost.localdomain ([182.226.226.37])
+        by smtp.googlemail.com with ESMTPSA id bt8sm16314808pjb.0.2021.01.23.01.24.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 20:12:30 -0800 (PST)
-Date:   Fri, 22 Jan 2021 20:12:30 -0800 (PST)
-X-Google-Original-Date: Fri, 22 Jan 2021 20:12:28 PST (-0800)
-Subject:     Re: [PATCH v15 03/11] riscv/Kconfig: make direct map manipulation options depend on MMU
-In-Reply-To: <20210120180612.1058-4-rppt@kernel.org>
-CC:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        luto@kernel.org, Arnd Bergmann <arnd@arndb.de>, bp@alien8.de,
-        catalin.marinas@arm.com, cl@linux.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, david@redhat.com,
-        elena.reshetova@intel.com, hpa@zytor.com, mingo@redhat.com,
-        jejb@linux.ibm.com, kirill@shutemov.name, willy@infradead.org,
-        mark.rutland@arm.com, rppt@linux.ibm.com, rppt@kernel.org,
-        mtk.manpages@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        peterz@infradead.org, rick.p.edgecombe@intel.com, guro@fb.com,
-        shakeelb@google.com, shuah@kernel.org, tglx@linutronix.de,
-        tycho@tycho.ws, will@kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, lkp@intel.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     rppt@kernel.org
-Message-ID: <mhng-5cbc9b30-ac9a-4748-bf12-8f0de4c89f79@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Sat, 23 Jan 2021 01:24:35 -0800 (PST)
+From:   Bongsu Jeon <bongsu.jeon2@gmail.com>
+X-Google-Original-From: Bongsu Jeon
+To:     kuba@kernel.org, shuah@kernel.org
+Cc:     krzk@kernel.org, netdev@vger.kernel.org, linux-nfc@lists.01.org,
+        linux-kselftest@vger.kernel.org,
+        Bongsu Jeon <bongsu.jeon@samsung.com>
+Subject: [PATCH net-next v3 0/2] Add nci suit and virtual nci device driver
+Date:   Sat, 23 Jan 2021 18:24:23 +0900
+Message-Id: <20210123092425.11434-1-bongsu.jeon@samsung.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 20 Jan 2021 10:06:04 PST (-0800), rppt@kernel.org wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
->
-> ARCH_HAS_SET_DIRECT_MAP and ARCH_HAS_SET_MEMORY configuration options have
-> no meaning when CONFIG_MMU is disabled and there is no point to enable them
-> for the nommu case.
->
-> Add an explicit dependency on MMU for these options.
->
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  arch/riscv/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index d82303dcc6b6..d35ce19ab1fa 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -25,8 +25,8 @@ config RISCV
->  	select ARCH_HAS_KCOV
->  	select ARCH_HAS_MMIOWB
->  	select ARCH_HAS_PTE_SPECIAL
-> -	select ARCH_HAS_SET_DIRECT_MAP
-> -	select ARCH_HAS_SET_MEMORY
-> +	select ARCH_HAS_SET_DIRECT_MAP if MMU
-> +	select ARCH_HAS_SET_MEMORY if MMU
->  	select ARCH_HAS_STRICT_KERNEL_RWX if MMU
->  	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
->  	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+From: Bongsu Jeon <bongsu.jeon@samsung.com>
 
-Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
-Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+A NCI virtual device can be made to simulate a NCI device in user space.
+Using the virtual NCI device, The NCI module and application can be
+validated. This driver supports to communicate between the virtual NCI
+device and NCI module. To test the basic features of NCI module, selftest
+for nci is added. Test cases consist of making the virtual NCI device
+on/off and controlling the device's polling for NCI1.0 and NCI2.0 version.
 
-LMK if you want this to go in via the RISC-V tree, otherwise I'm going to
-assume it's going in along with the rest of these.  FWIW I see these in other
-architectures without the MMU guard.
+1/2 is the Virtual NCI device driver.
+2/2 is the NCI selftest suite
 
-Thanks!
+v3:
+ 1/2
+ - change the Kconfig help comment.
+ - remove the mutex init code.
+ - remove the unnecessary mutex(nci_send_mutex).
+ - remove the full_txbuff.
+ - add the code to release skb at error case.
+ - refactor some code.
+v2:
+ 1/2
+ - change the permission of the Virtual NCI device.
+ - add the ioctl to find the nci device index.
+ 2/2
+ - add the NCI selftest suite.
+
+ MAINTAINERS                           |   8 +
+ drivers/nfc/Kconfig                   |  11 +
+ drivers/nfc/Makefile                  |   1 +
+ drivers/nfc/virtual_ncidev.c          | 227 ++++++++++
+ tools/testing/selftests/Makefile      |   1 +
+ tools/testing/selftests/nci/Makefile  |   6 +
+ tools/testing/selftests/nci/config    |   3 +
+ tools/testing/selftests/nci/nci_dev.c | 599 ++++++++++++++++++++++++++
+ 8 files changed, 856 insertions(+)
+ create mode 100644 drivers/nfc/virtual_ncidev.c
+ create mode 100644 tools/testing/selftests/nci/Makefile
+ create mode 100644 tools/testing/selftests/nci/config
+ create mode 100644 tools/testing/selftests/nci/nci_dev.c
+
+-- 
+2.25.1
+
