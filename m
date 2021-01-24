@@ -2,20 +2,20 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1819E301A2B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Jan 2021 07:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4E6301A31
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Jan 2021 07:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbhAXGaQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 24 Jan 2021 01:30:16 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:13536 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726526AbhAXGaO (ORCPT
+        id S1726524AbhAXGak (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 24 Jan 2021 01:30:40 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:42676 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726054AbhAXGah (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Jan 2021 01:30:14 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R561e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UMfTHuJ_1611469750;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UMfTHuJ_1611469750)
+        Sun, 24 Jan 2021 01:30:37 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UMf9yuo_1611469749;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UMf9yuo_1611469749)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 24 Jan 2021 14:29:10 +0800
+          Sun, 24 Jan 2021 14:29:09 +0800
 From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 To:     Jarkko Sakkinen <jarkko@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -27,9 +27,9 @@ To:     Jarkko Sakkinen <jarkko@kernel.org>,
         linux-kernel@vger.kernel.org,
         Jia Zhang <zhang.jia@linux.alibaba.com>
 Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v3 5/5] x86/sgx: Remove redundant if conditions in sgx_encl_create
-Date:   Sun, 24 Jan 2021 14:29:07 +0800
-Message-Id: <20210124062907.88229-6-tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v3 3/5] x86/sgx: Optimize the free_cnt count in sgx_epc_section
+Date:   Sun, 24 Jan 2021 14:29:05 +0800
+Message-Id: <20210124062907.88229-4-tianjia.zhang@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.3.ge56e4f7
 In-Reply-To: <20210124062907.88229-1-tianjia.zhang@linux.alibaba.com>
 References: <20210124062907.88229-1-tianjia.zhang@linux.alibaba.com>
@@ -39,34 +39,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In this scenario, there is no case where va_page is NULL, and
-the error has been checked. The if condition statement here is
-redundant, so remove the condition detection.
+`section->free_cnt` represents the free page in sgx_epc_section,
+which is assigned once after initialization. In fact, just after the
+initialization is completed, the pages are in the `init_laundry_list`
+list and cannot be allocated. This needs to be recovered by EREMOVE
+of function sgx_sanitize_section() before it can be used as a page
+that can be allocated. The sgx_sanitize_section() will be called in
+the kernel thread ksgxd.
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+This patch moves the initialization of `section->free_cnt` from the
+initialization function `sgx_setup_epc_section()` to the function
+`sgx_sanitize_section()`, and then accumulates the count after the
+successful execution of EREMOVE. This seems to be more reasonable,
+free_cnt will also truly reflect the allocatable free pages in EPC.
+
+Sined-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kernel/cpu/sgx/ioctl.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/x86/kernel/cpu/sgx/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index 1c6ecf9fbeff..b0b829f1b761 100644
---- a/arch/x86/kernel/cpu/sgx/ioctl.c
-+++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -66,9 +66,11 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
- 	va_page = sgx_encl_grow(encl);
- 	if (IS_ERR(va_page))
- 		return PTR_ERR(va_page);
--	else if (va_page)
--		list_add(&va_page->list, &encl->va_pages);
--	/* else the tail page of the VA page list had free slots. */
-+
-+	if (WARN_ONCE(!va_page, "non-empty VA page list before ECREATE"))
-+		return -EIO;
-+
-+	list_add(&va_page->list, &encl->va_pages);
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 4465912174fd..e455ec7b3449 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -48,6 +48,7 @@ static void sgx_sanitize_section(struct sgx_epc_section *section)
+ 		if (!ret) {
+ 			spin_lock(&section->lock);
+ 			list_move(&page->list, &section->page_list);
++			section->free_cnt++;
+ 			spin_unlock(&section->lock);
+ 		} else
+ 			list_move_tail(&page->list, &dirty);
+@@ -643,7 +644,6 @@ static bool __init sgx_setup_epc_section(u64 phys_addr, u64 size,
+ 		list_add_tail(&section->pages[i].list, &section->init_laundry_list);
+ 	}
  
- 	/* The extra page goes to SECS. */
- 	encl_size = secs->size + PAGE_SIZE;
+-	section->free_cnt = nr_pages;
+ 	return true;
+ }
+ 
 -- 
 2.19.1.3.ge56e4f7
 
