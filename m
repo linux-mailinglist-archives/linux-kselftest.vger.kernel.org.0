@@ -2,77 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 116403047AB
+	by mail.lfdr.de (Postfix) with ESMTP id 8C75E3047AC
 	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jan 2021 20:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731339AbhAZF6V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Jan 2021 00:58:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39552 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728299AbhAYMqn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jan 2021 07:46:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6868222A84;
-        Mon, 25 Jan 2021 12:45:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611578761;
-        bh=c1ESZ1aS34pGoP4FODnuFV3EEuoDWPCSVbwlqLba+wM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UJbNzV0PkXF7L4dtnJ3XXTVb5KqxyML1bOqWvfM18AFmy/942I+HDkwXp/+24n9Qp
-         k76W9D77JlVdn2f/9xG+hcC44mhHBungtffaSl173frfAjcelo9R6SeDr5XY2Q2rc9
-         KqLlfqUP/sb8ltt6+F4Kt/kjSFmo3nuO875DH8jwJqWI8gwEzO6/m9GACge0OI2izJ
-         L+MlIeZbKa426KistfPzlhYCwgWVctTXtFi3RBXskLO1R6Y61GrP1fBJgOB4+m3EFy
-         5xRW19AKq53J4TB7rzaSgKJE9yjU/O38UrK+CU1FY7jQ1kaZG0McdalkaTTUWQG1pd
-         XjW8pOXXRXx6g==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: [RFC 1/3] bitfield: build kunit tests without structleak plugin
-Date:   Mon, 25 Jan 2021 13:45:26 +0100
-Message-Id: <20210125124533.101339-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210125124533.101339-1-arnd@kernel.org>
-References: <20210125124533.101339-1-arnd@kernel.org>
+        id S1727440AbhAZF6g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Jan 2021 00:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729506AbhAYO3m (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 25 Jan 2021 09:29:42 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67873C0617AA
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 06:28:21 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id l23so7259927qtq.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 06:28:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gqrob1newlkQ15lRtU6auZ3RzaABmYXA8xpX2IglXFQ=;
+        b=dGX57SKqFdpXq5Em8dpxESukUDK+OYiiN20VisCm8Wi+VFYCGEzLwzJQYwF1wsuX7r
+         WjZJwHEvgvYAc4oAicLOOCAwPegzkAoCSLgLXVDWCGsrbRKY+vMoGhqIDIm/qcF3wyoX
+         b+hwihpHfWpDuJsB4/bB0oipat6DwE7Oql4xR1XMqYNVs6VvbUXm35h4WKvxzkvcdadX
+         kUDDTyr/b3yOo8C+AyPndWjFIf3sK4ivPmbG2qSZvbKM6s6BdVRmMkx02qk4qz5cKkBh
+         0E5bdtMqcDbzuKXs/tLLt3dvNzJfdlDzLp1x5LEheVzj+HrgZHJimVBItPJDW19vNXXO
+         8y2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gqrob1newlkQ15lRtU6auZ3RzaABmYXA8xpX2IglXFQ=;
+        b=HkSDS3VGUFWrEovfiznvxeCQzBddIRa7aK6+2gXh6Ea+cgnkivnAwyn2mkBRNGt3M7
+         zJTcc1UDkaYzawp+23gvjbM/FfKtombyYRWq8BK7w4Szf9wGlkqej8W5IjFlj9GtX4ZM
+         sisPuOaP4p3xoNEdFacSV6Og7sSt0FXtPfCwFVtaYlW3CUPH6aP5CaNlcCEqGNVzg68f
+         /00a6isUzktll0PprYrWwNHEY7ANEBvlJj0ZN9wqxx8sLMntCB+RpVC6CzwBfLwVVwVW
+         MribGvqeK5lBhRW8NC+ErEMnr4iBD79ig2DiP9qw16QlT/6gnd58wDYF+rmJCHD7bjdz
+         /TTQ==
+X-Gm-Message-State: AOAM531QqsGp1Ps7XAWli8HU4k4JEFiVrhlwvSly5GIDCu6AUttOOaXQ
+        WP/cxvFbCXmSWuYZDQiRc5S3zw==
+X-Google-Smtp-Source: ABdhPJzF2m7RRft4yyKJebF8jzkPIF+Jv8HIYEWXVMaMo2dw3cdqZZG9ubwMIkYD4CRazbEmFlt1hg==
+X-Received: by 2002:ac8:6edd:: with SMTP id f29mr654427qtv.213.1611584900594;
+        Mon, 25 Jan 2021 06:28:20 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
+        by smtp.gmail.com with ESMTPSA id m64sm12086816qkb.90.2021.01.25.06.28.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jan 2021 06:28:20 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1l42qp-006Vxe-HI; Mon, 25 Jan 2021 10:28:19 -0400
+Date:   Mon, 25 Jan 2021 10:28:19 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Pavel Tatashin <pasha.tatashin@soleen.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, mike.kravetz@oracle.com,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 08/14] mm/gup: do not migrate zero page
+Message-ID: <20210125142819.GU4605@ziepe.ca>
+References: <20210120014333.222547-1-pasha.tatashin@soleen.com>
+ <20210120014333.222547-9-pasha.tatashin@soleen.com>
+ <20210120131400.GF4605@ziepe.ca>
+ <CA+CK2bCu-uWWOxS_sPhfgzXTq-cqYFsHK_QFo7F+rStKpJJDRA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+CK2bCu-uWWOxS_sPhfgzXTq-cqYFsHK_QFo7F+rStKpJJDRA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Jan 20, 2021 at 09:26:41AM -0500, Pavel Tatashin wrote:
 
-The structleak plugin causes the stack frame size to grow immensely:
+> I thought about this, and it would code a little cleaner. But, the
+> reason I did not is because zero_page is perfectly pinnable, it is not
+> pinnable only when it is in a movable zone (and it should not be in a
+> movable zones for other reasons as well), but that is another bug that
+> needs to be resolved, and once that bug is resolved this condition can
+> be removed from gup migration.
 
-lib/bitfield_kunit.c: In function 'test_bitfields_constants':
-lib/bitfield_kunit.c:93:1: error: the frame size of 7440 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+My point is you've defined the zero page to be pinnable no matter what
+zone it is in, so is_pinnable(zero_page) == true
 
-Turn it off in this file.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- lib/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/lib/Makefile b/lib/Makefile
-index b5307d3eec1a..6a7300f0f02f 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -348,6 +348,7 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
- 
- # KUnit tests
- obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
-+CFLAGS_REMOVE_bitfield_kunit.o += -fplugin-arg-structleak_plugin-byref -fplugin-arg-structleak_plugin-byref-all
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
- obj-$(CONFIG_BITS_TEST) += test_bits.o
--- 
-2.29.2
-
+Jason
