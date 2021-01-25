@@ -2,102 +2,230 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A167A30271C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jan 2021 16:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7723027AD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jan 2021 17:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730058AbhAYPnp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Jan 2021 10:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S1729469AbhAYQVj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Jan 2021 11:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730270AbhAYPnR (ORCPT
+        with ESMTP id S1730628AbhAYQVe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jan 2021 10:43:17 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C836CC061220
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 07:39:31 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id s11so15901553edd.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 07:39:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rra/deV4BpPfJHrSK+j1oedRvhTg8xlMYVP/CjTCdbo=;
-        b=oT2pKEpwEYuKqNalnjLTRHdVcq6t3+B3XXVLdpXKu3V4ApIJJzXxasqADy9EZXqUXh
-         n/BuUY/5ALgsbICzl3RIKCjVDYUHtIYek61hqI9KUL/2LNmRfnQ0GzO+XTL2MXbd3aK/
-         UsbqMjXr25onQ0szEsqlgipwxapnw7EPmLS3cPXyk2d8H28WIA52mQ7Yvol7ZM9ht9Zh
-         4+OwuM1jkeN51/bu6vR4JrA/Y4arNiozGdwTdv4f8cWHV411+H+g+HOBpzxam46DRzaS
-         2ThNiPt5XjxOw3h37ikX+KNHPGrNudfwkzs0vddCFZbZchOu9DDhuhN4cG8oBxIGQClP
-         mP6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rra/deV4BpPfJHrSK+j1oedRvhTg8xlMYVP/CjTCdbo=;
-        b=ryOL6i5eBoXocuZQekBbe1etjOg9EgrS121KpYqbyl3fZzayrNnZTpwXsRWIO+xS4f
-         2wivANa+m9hRLrrUctu6suTOyMLapTlRfuulSCbRh2WLdSH8qDOUDCy2fpXneTrvPXsa
-         swraQbSaXwvnJXtsMNfQ8yoglv+8uu0bU4HT+GaTlMkm0NS/DKQr0Wa4JZ68UM6sG8/8
-         FL4qV0AGh2vfvimckP6l+wacprpbUB0GzTXg50LB/0Vj3kxCJk7yXzX0IH1nX/57+wqw
-         FB3i3/T5vSe0UsyULws1/GOi+ne/tEtqs1H302EG0BcCjyAGwn8pXDurc5x3S9H3yLkq
-         0X0Q==
-X-Gm-Message-State: AOAM532D0j71Z5aQp9yyATFuU9MJaFJqIDBI5YacL064KHq/I1T7lUbH
-        h3ZMvZbHY6K6MStZoHQpsLb+R90cOmwBpxLvnIc59A==
-X-Google-Smtp-Source: ABdhPJzFrqfAwV4lIbCCiVu+IspFq83jhqoaMG65PKSTrukGguTs7XiN5FLFH6wPnByDVaUokuQk0Sd4Y5Qva95xCmU=
-X-Received: by 2002:a05:6402:3508:: with SMTP id b8mr934395edd.341.1611589170542;
- Mon, 25 Jan 2021 07:39:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20210120014333.222547-1-pasha.tatashin@soleen.com>
- <20210120014333.222547-9-pasha.tatashin@soleen.com> <20210120131400.GF4605@ziepe.ca>
- <CA+CK2bCu-uWWOxS_sPhfgzXTq-cqYFsHK_QFo7F+rStKpJJDRA@mail.gmail.com> <20210125142819.GU4605@ziepe.ca>
-In-Reply-To: <20210125142819.GU4605@ziepe.ca>
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-Date:   Mon, 25 Jan 2021 10:38:54 -0500
-Message-ID: <CA+CK2bBa+8dOatFgUB405yyKnSYfX-iaypzXpAhOmZN_KNBMhA@mail.gmail.com>
-Subject: Re: [PATCH v6 08/14] mm/gup: do not migrate zero page
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
+        Mon, 25 Jan 2021 11:21:34 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266FCC06178C;
+        Mon, 25 Jan 2021 08:20:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IJWSMxQ0cSD59sZdRy00Q/p6Rk88W9Y0AQrU4XxStZg=; b=PuPaQ600mHPoHQdKyO6XI5TBrm
+        CnXgjHw3HKWzCm5rtjfhkN6pBiyt2h/9yeDanzks13gq46MuMu5ie6WAiuNN2m/RkKR/rpK0Ta+ng
+        fHJqJV/J5ZL7Mm56BAbERsDJQvtiznZxtFYP1h0WIVW4cRUSWOgeXte9ZAwEUfG7Limi/SljDPwHf
+        3LMXYk3STX6IxUUL3ZYWCYEFfmPendGeUlO+ZrAdcgyCMSmB3rEIdQrHxVOnGrHC53/rZBPfRUW94
+        buoqllvpB2FvdrEAlQBBWi7qPaBsXDmTgOiFPH1Y4lZIdk+po0IBNUEGXYPVncthQFPVdxLrQWtZK
+        FRfe61ig==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1l44Y6-004OSf-8C; Mon, 25 Jan 2021 16:17:11 +0000
+Date:   Mon, 25 Jan 2021 16:17:06 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 08/11] secretmem: add memcg accounting
+Message-ID: <20210125161706.GE308988@casper.infradead.org>
+References: <20210121122723.3446-1-rppt@kernel.org>
+ <20210121122723.3446-9-rppt@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121122723.3446-9-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 9:28 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Wed, Jan 20, 2021 at 09:26:41AM -0500, Pavel Tatashin wrote:
->
-> > I thought about this, and it would code a little cleaner. But, the
-> > reason I did not is because zero_page is perfectly pinnable, it is not
-> > pinnable only when it is in a movable zone (and it should not be in a
-> > movable zones for other reasons as well), but that is another bug that
-> > needs to be resolved, and once that bug is resolved this condition can
-> > be removed from gup migration.
->
-> My point is you've defined the zero page to be pinnable no matter what
-> zone it is in, so is_pinnable(zero_page) == true
+On Thu, Jan 21, 2021 at 02:27:20PM +0200, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Account memory consumed by secretmem to memcg. The accounting is updated
+> when the memory is actually allocated and freed.
 
-Sure, I will move it inside is_pinnable in the next update.
+I think this is wrong.  It fails to account subsequent allocators from
+the same PMD.  If you want to track like this, you need separate pools
+per memcg.
 
-Thank you,
-Pasha
+I think you shouldn't try to track like this; better to just track on
+a per-page basis.  After all, the page allocator doesn't track order-10
+pages to the memcg that initially caused them to be split.
 
->
-> Jason
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: Roman Gushchin <guro@fb.com>
+> Reviewed-by: Shakeel Butt <shakeelb@google.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Christopher Lameter <cl@linux.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Elena Reshetova <elena.reshetova@intel.com>
+> Cc: Hagen Paul Pfeifer <hagen@jauu.net>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: James Bottomley <jejb@linux.ibm.com>
+> Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Tycho Andersen <tycho@tycho.ws>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+>  mm/filemap.c   |  3 ++-
+>  mm/secretmem.c | 36 +++++++++++++++++++++++++++++++++++-
+>  2 files changed, 37 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 2d0c6721879d..bb28dd6d9e22 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -42,6 +42,7 @@
+>  #include <linux/psi.h>
+>  #include <linux/ramfs.h>
+>  #include <linux/page_idle.h>
+> +#include <linux/secretmem.h>
+>  #include "internal.h"
+>  
+>  #define CREATE_TRACE_POINTS
+> @@ -839,7 +840,7 @@ noinline int __add_to_page_cache_locked(struct page *page,
+>  	page->mapping = mapping;
+>  	page->index = offset;
+>  
+> -	if (!huge) {
+> +	if (!huge && !page_is_secretmem(page)) {
+>  		error = mem_cgroup_charge(page, current->mm, gfp);
+>  		if (error)
+>  			goto error;
+> diff --git a/mm/secretmem.c b/mm/secretmem.c
+> index 469211c7cc3a..05026460e2ee 100644
+> --- a/mm/secretmem.c
+> +++ b/mm/secretmem.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/memblock.h>
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/secretmem.h>
+> +#include <linux/memcontrol.h>
+>  #include <linux/set_memory.h>
+>  #include <linux/sched/signal.h>
+>  
+> @@ -44,6 +45,32 @@ struct secretmem_ctx {
+>  
+>  static struct cma *secretmem_cma;
+>  
+> +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
+> +{
+> +	int err;
+> +
+> +	err = memcg_kmem_charge_page(page, gfp, order);
+> +	if (err)
+> +		return err;
+> +
+> +	/*
+> +	 * seceremem caches are unreclaimable kernel allocations, so treat
+> +	 * them as unreclaimable slab memory for VM statistics purposes
+> +	 */
+> +	mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
+> +			      PAGE_SIZE << order);
+> +
+> +	return 0;
+> +}
+> +
+> +static void secretmem_unaccount_pages(struct page *page, int order)
+> +{
+> +
+> +	mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
+> +			      -PAGE_SIZE << order);
+> +	memcg_kmem_uncharge_page(page, order);
+> +}
+> +
+>  static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>  {
+>  	unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
+> @@ -56,6 +83,10 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>  	if (!page)
+>  		return -ENOMEM;
+>  
+> +	err = secretmem_account_pages(page, gfp, PMD_PAGE_ORDER);
+> +	if (err)
+> +		goto err_cma_release;
+> +
+>  	/*
+>  	 * clear the data left from the prevoius user before dropping the
+>  	 * pages from the direct map
+> @@ -65,7 +96,7 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>  
+>  	err = set_direct_map_invalid_noflush(page, nr_pages);
+>  	if (err)
+> -		goto err_cma_release;
+> +		goto err_memcg_uncharge;
+>  
+>  	addr = (unsigned long)page_address(page);
+>  	err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
+> @@ -83,6 +114,8 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>  	 * won't fail
+>  	 */
+>  	set_direct_map_default_noflush(page, nr_pages);
+> +err_memcg_uncharge:
+> +	secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
+>  err_cma_release:
+>  	cma_release(secretmem_cma, page, nr_pages);
+>  	return err;
+> @@ -314,6 +347,7 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
+>  	int i;
+>  
+>  	set_direct_map_default_noflush(page, nr_pages);
+> +	secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
+>  
+>  	for (i = 0; i < nr_pages; i++)
+>  		clear_highpage(page + i);
+> -- 
+> 2.28.0
+> 
