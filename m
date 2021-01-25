@@ -2,194 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E560302BE5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jan 2021 20:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7516302BFA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jan 2021 20:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731305AbhAYTmi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Jan 2021 14:42:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52078 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730445AbhAYTm3 (ORCPT
+        id S1731714AbhAYTu0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Jan 2021 14:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731914AbhAYTtf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jan 2021 14:42:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611603662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=77St/2pIleVFwEn5R0u17JSkV+PiEVZKe/zUbSvXECQ=;
-        b=GrWTRVWklhPa1kdfnOQ5MBD6Dmzl5Y+AzfPeaFAECMy3n9GGDEihYU21jgMBwSC2+zAlF2
-        gXvIPNIFmeGCZ9caJ2m8WAXMTce4JLrSJnvvTh8ZjqY53KPu6cDk54wbvJLDiL5T7QdoKF
-        wNW+eprVSaTqZLQlR1JtDMDzK3NRdtE=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-1-iR0jBLRSNpyyaUrNnb6Ffw-1; Mon, 25 Jan 2021 14:41:01 -0500
-X-MC-Unique: iR0jBLRSNpyyaUrNnb6Ffw-1
-Received: by mail-qv1-f69.google.com with SMTP id cu12so9949235qvb.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:41:00 -0800 (PST)
+        Mon, 25 Jan 2021 14:49:35 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBCCC06178C
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:47:59 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id d85so13713933qkg.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:47:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=gHgQfTRvar1lIU9rNG4Q491ak9Bif38ih9mdt5Czeeg=;
+        b=c7sG1z0zx4IBwrpL9ujY99TSc8IAU20MGw/TaPpyT+YoiodG5nGIzUR/NTujP0u1kd
+         Rn3irH637aV9Tmqlkhd1csC9dMvLFqE/l4J73pOWLHBaE3rnkGsjFAYCS75cZmh9X/Lt
+         1TOlZeUR85/P6119/G1x0xgTxAB4RbFCyKLmQv712qp8Sftqrk4WSgdOJZ6OAba0d3o1
+         ThrDl65vkoeoFfWW3zq4GYnGO2B/aFe1mVY6tV2v2QtEZtBJOicRcxRAsE6gZMKuRVhD
+         YBiPHBxO83ut5cd4fxWVQPDYCMuccwOB2WH2d9CFF/jxKSQJLwOgPwjtb3L85cI7WFie
+         N16g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=77St/2pIleVFwEn5R0u17JSkV+PiEVZKe/zUbSvXECQ=;
-        b=UeVB1yszCa8MNgfQU5crDdutm4CK2yCwNPpPpDkyG7RY7mJ5jZuvS9n6Uo+0EHAi9n
-         oGDOUtxpf0QXVBxriVBYut+D0NXjof6YexzXLQjo7LqNq2++J3TKYkXWzkxXVbQks9zp
-         xv/uB2lmQN19XU7HVnbkwh4DSxtKSNY99CNo9wBu1wnBKz3+kYjDs01CllgHwMupIoZm
-         1lfc+shfsPOGthWi7H/+1wYszgQ3sh9f8TZTapaqGz7VJAOKx8zR5XXXCxTW386eljv5
-         QuJMqGQz0s4OHOrnBA+IomMWSb1o3IlX62Y1qT5cRKLMMtl647UfU3kH3GA8ZIt9e9aY
-         1Ceg==
-X-Gm-Message-State: AOAM532j+7nx8Z/nv8Td5CkxuLy2/VPcMK3+PW+jufFIDuqf5d6P3lcp
-        fvwpk4PCAuP5WLXrp+h2ovgbEnoju77QY+Sw3q8BkJ4sYXf9pYsupoH3jrsiVd4GtdT4EiEoyza
-        LOuEB9Ape7gbjVpkhbfsFXbKQIOUh
-X-Received: by 2002:a0c:c30e:: with SMTP id f14mr2321881qvi.48.1611603660307;
-        Mon, 25 Jan 2021 11:41:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyeWyuqh+JaKFJ1xqUU6SXIHkrrOLJPawhrtxXmDS0r1Vi15nggpu9AbTZjlBOBQdInBYXhhA==
-X-Received: by 2002:a0c:c30e:: with SMTP id f14mr2321866qvi.48.1611603660045;
-        Mon, 25 Jan 2021 11:41:00 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 203sm12845898qkd.81.2021.01.25.11.40.58
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gHgQfTRvar1lIU9rNG4Q491ak9Bif38ih9mdt5Czeeg=;
+        b=f6w390931CIGCLsxSSuJZepIkGd1YLdo5p334CXdpP1J7T7xig46rAKTydJ7hyyrrM
+         SE2DBQdGu9k1G+vb6jybf95W0lI+ArtH+1lVxq1HUCRpovFpp2JO7m8vxWxbZ5GiFz3g
+         JHJEh7KBgRfgyk3IpfEwHNOzkNMRKybojKMInKNfFRRn//XMWcx+vag5GRsQNFDwzBU/
+         zgU7x+02/KWSoB+9RBimRJDr23TPTsExW4GfiGU4+Vt6uaQKTAEuhPiSViiMU28EE/9h
+         bEjF74TFO15+e2qDj3HvQOf2VvhrJinITlV8IAnnm4Sq1RCcVSfYjaLAqKSGZAU44Psc
+         OcoQ==
+X-Gm-Message-State: AOAM533WDa8Q4klQ82YNatTe2gCgT4L3YhcYAT+u+dUPXSUKZHOpqLAV
+        BLvSqntZqiWICPfGg2nIKQ0w6A==
+X-Google-Smtp-Source: ABdhPJz3Za/JbaLs+6ZSMuUuylAr92cCaBZaN+5myWkrAXEtJPMKFBUlfdcIgUMufV3m8N/ZNiYoqg==
+X-Received: by 2002:a37:8703:: with SMTP id j3mr2422378qkd.455.1611604078581;
+        Mon, 25 Jan 2021 11:47:58 -0800 (PST)
+Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
+        by smtp.gmail.com with ESMTPSA id c12sm12121569qtq.76.2021.01.25.11.47.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 11:40:59 -0800 (PST)
-From:   trix@redhat.com
-To:     shuah@kernel.org, mdf@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v4] selftests: drivers: fpga: A test for interrupt support
-Date:   Mon, 25 Jan 2021 11:40:53 -0800
-Message-Id: <20210125194053.2119041-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 25 Jan 2021 11:47:58 -0800 (PST)
+From:   Pavel Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
+        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
+        dan.j.williams@intel.com, sashal@kernel.org,
+        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
+        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
+        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
+        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
+        linux-doc@vger.kernel.org, ira.weiny@intel.com,
+        linux-kselftest@vger.kernel.org, jmorris@namei.org
+Subject: [PATCH v8 03/14] mm/gup: return an error on migration failure
+Date:   Mon, 25 Jan 2021 14:47:40 -0500
+Message-Id: <20210125194751.1275316-4-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
+References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+When migration failure occurs, we still pin pages, which means
+that we may pin CMA movable pages which should never be the case.
 
-Check that the ioctl DFL_FPGA_PORT_ERR_GET_IRQ_NUM returns
-an expected result.
+Instead return an error without pinning pages when migration failure
+happens.
 
-Tested on vf device 0xbcc1
+No need to retry migrating, because migrate_pages() already retries
+10 times.
 
-Sample run with
- # make -C tools/testing/selftests TARGETS=drivers/fpga run_tests
- ...
- TAP version 13
- 1..1
- # selftests: drivers/fpga: intr
- # TAP version 13
- # 1..1
- # # Starting 1 tests from 1 test cases.
- # #  RUN           global.afu_intr ...
- # #            OK  global.afu_intr
- # ok 1 global.afu_intr
- # # PASSED: 1 / 1 tests passed.
- # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
- ok 1 selftests: drivers/fpga: intr
-
-Signed-off-by: Tom Rix <trix@redhat.com>
-Acked-by: Moritz Fischer <mdf@kernel.org>
+Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
-v1: Convert to kselftest_harness.h framework
-v2: reverse xmas tree variables
-v3: rebase to linux-kselftest, tag linux-kselftest-next-5.11-rc3
----
- MAINTAINERS                                   |  1 +
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/drivers/fpga/Makefile |  7 ++++
- tools/testing/selftests/drivers/fpga/config   |  1 +
- tools/testing/selftests/drivers/fpga/intr.c   | 36 +++++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
- create mode 100644 tools/testing/selftests/drivers/fpga/config
- create mode 100644 tools/testing/selftests/drivers/fpga/intr.c
+ mm/gup.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6eff4f720c72..10bea5417c82 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6972,6 +6972,7 @@ F:	Documentation/driver-api/fpga/
- F:	Documentation/fpga/
- F:	drivers/fpga/
- F:	include/linux/fpga/
-+F:	tools/testing/selftests/drivers/fpga/
+diff --git a/mm/gup.c b/mm/gup.c
+index 16f10d5a9eb6..88ce41f41543 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -1557,7 +1557,6 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ {
+ 	unsigned long i;
+ 	bool drain_allow = true;
+-	bool migrate_allow = true;
+ 	LIST_HEAD(cma_page_list);
+ 	long ret = nr_pages;
+ 	struct page *prev_head, *head;
+@@ -1608,17 +1607,15 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 			for (i = 0; i < nr_pages; i++)
+ 				put_page(pages[i]);
  
- FPU EMULATOR
- M:	Bill Metzenthen <billm@melbpc.org.au>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index afbab4aeef3c..aad4763ec348 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -9,6 +9,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-+TARGETS += drivers/fpga
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += filesystems
-diff --git a/tools/testing/selftests/drivers/fpga/Makefile b/tools/testing/selftests/drivers/fpga/Makefile
-new file mode 100644
-index 000000000000..eba35c405d5b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+CFLAGS += -I../../../../../usr/include/
-+CFLAGS += -I../../../../../include/uapi/
+-		if (migrate_pages(&cma_page_list, alloc_migration_target, NULL,
+-			(unsigned long)&mtc, MIGRATE_SYNC, MR_CONTIG_RANGE)) {
+-			/*
+-			 * some of the pages failed migration. Do get_user_pages
+-			 * without migration.
+-			 */
+-			migrate_allow = false;
+-
++		ret = migrate_pages(&cma_page_list, alloc_migration_target,
++				    NULL, (unsigned long)&mtc, MIGRATE_SYNC,
++				    MR_CONTIG_RANGE);
++		if (ret) {
+ 			if (!list_empty(&cma_page_list))
+ 				putback_movable_pages(&cma_page_list);
++			return ret > 0 ? -ENOMEM : ret;
+ 		}
 +
-+TEST_GEN_PROGS := intr
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/drivers/fpga/config b/tools/testing/selftests/drivers/fpga/config
-new file mode 100644
-index 000000000000..e2111b81d8d7
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/config
-@@ -0,0 +1 @@
-+CONFIG_FPGA_DFL_AFU=m
-diff --git a/tools/testing/selftests/drivers/fpga/intr.c b/tools/testing/selftests/drivers/fpga/intr.c
-new file mode 100644
-index 000000000000..927dcc757f0b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/intr.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/fcntl.h>
-+#include <sys/ioctl.h>
-+#include <linux/fpga-dfl.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+TEST(afu_intr)
-+{
-+	struct dfl_fpga_port_info port_info;
-+	uint32_t irq_num = UINT32_MAX;
-+	int devfd, status;
-+
-+	devfd = open("/dev/dfl-port.0", O_RDONLY);
-+	if (devfd < 0)
-+		SKIP(0, "no fpga afu device 0");
-+	/*
-+	 * From fpga-dl.h :
-+	 * Currently hardware supports up to 1 irq.
-+	 * Return: 0 on success, -errno on failure.
-+	 */
-+	status = ioctl(devfd, DFL_FPGA_PORT_ERR_GET_IRQ_NUM, &irq_num);
-+	ASSERT_EQ(0, status) {
-+		TH_LOG("ioctl() failed to get the number irqs");
-+	}
-+	ASSERT_LT(irq_num, 256) {
-+		TH_LOG("unexpeced number of irqs");
-+	}
-+	close(devfd);
-+}
-+
-+TEST_HARNESS_MAIN
+ 		/*
+ 		 * We did migrate all the pages, Try to get the page references
+ 		 * again migrating any new CMA pages which we failed to isolate
+@@ -1628,7 +1625,7 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 						   pages, vmas, NULL,
+ 						   gup_flags);
+ 
+-		if ((ret > 0) && migrate_allow) {
++		if (ret > 0) {
+ 			nr_pages = ret;
+ 			drain_allow = true;
+ 			goto check_again;
 -- 
-2.27.0
+2.25.1
 
