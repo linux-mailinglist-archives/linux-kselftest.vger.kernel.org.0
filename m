@@ -2,270 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CD3302CA8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jan 2021 21:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBE6302E54
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jan 2021 22:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726396AbhAYUhk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Jan 2021 15:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732204AbhAYTvK (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jan 2021 14:51:10 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00887C0611BC
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:15 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id k193so13706117qke.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=Ca95TMJT4ShVUsz7drjIPNjU47Yiarr1AByU+uGNnGI=;
-        b=i1J3Ss8NvulKFTVXkwnvE/0omlR6s+5Yp2oyhLYvWL1INoRa37fVAIs1AMaQKDsfeo
-         PdOXcP0OmEJk5OEzyJ4GEECDUpV9nkoJx2Lq1cPqNB/ujBg7sIZe2Vvbm4rBxrTwlqO4
-         NS5GnxoxFJCKgp1JOCIEZYrPXWpwSFM51aML5h4z3blrZC4uO+biRbYG77176iqVVQZ2
-         xocUTbIap3U5TJsxD1GtaNlXIlrNlb78bxuTmryelGz3or93XhHLY7jGVL2GWYvC+48v
-         rBjYYe6Lfx9+WDb32fmcQq8FTzvKFTjozj7lUND+NYf2RdIU/2uEuMg6ihchuUBzJwmU
-         7ghA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ca95TMJT4ShVUsz7drjIPNjU47Yiarr1AByU+uGNnGI=;
-        b=hQT6AN3o9wpgIk8+ld8c1DkI5VJHFBWVsB/AIK+5GFmiDuWYHr7Ty4FlXXpmsvfe7a
-         nSBTpyTUser07E6Wf+GWFB0vkZlaQeQ29FCfh6ZdMwmc/aXvrLYVRWbvanriG3KYqO9V
-         t1pIAx78YqvCsot0qStPn3MCupKyMiryBtJAAr/gdkdSL68OgZC5miDJLQBh1OQ0EhYT
-         MbU80GDb5y8/5M8bcDmzirkn61TUIyptnyx5J0PRCQC4JeNy2RErWN+N6o9giTkYD2Cw
-         LeW7/ztHIWg0BbAmKt39athvsy51L4WwzoX0D3+eYCpoeM49B3fVJtaevZsT4217MHHV
-         eQ7A==
-X-Gm-Message-State: AOAM530uExdR61+WXvJutSkzebx3UzzKG9z9ogkcxHdZg9/CiQUENqt8
-        kOncnIlLOoLBUOHV5S4rBhtQgQ==
-X-Google-Smtp-Source: ABdhPJwhUd5EAmSYbcYIodK1SuK4RYyZuXxxxO7P4gD+3kK2D9MfxRx4+Ernng3+tzKIsO21XppT0w==
-X-Received: by 2002:a05:620a:b03:: with SMTP id t3mr2437218qkg.459.1611604095164;
-        Mon, 25 Jan 2021 11:48:15 -0800 (PST)
-Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id c12sm12121569qtq.76.2021.01.25.11.48.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 11:48:14 -0800 (PST)
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
-        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
-        dan.j.williams@intel.com, sashal@kernel.org,
-        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
-        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
-        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
-        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
-        linux-doc@vger.kernel.org, ira.weiny@intel.com,
-        linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v8 13/14] selftests/vm: gup_test: fix test flag
-Date:   Mon, 25 Jan 2021 14:47:50 -0500
-Message-Id: <20210125194751.1275316-14-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
-References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
+        id S1733033AbhAYVs6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Jan 2021 16:48:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36284 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732834AbhAYVib (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 25 Jan 2021 16:38:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F8A2229C6;
+        Mon, 25 Jan 2021 21:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611610543;
+        bh=2Di0IbIXl1xn2Q918lq0pHS35BBSv9IAQLWTpnF3034=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Cy17SSKvvNvxfTqzme3GulWvb12hmNhkF7DBhyy2a+M5IaoGf8exm+dMOhwdI3cnD
+         O9Y6le+GeozBAOlFWKkpEB+vZ71maF7XrODlor4nn34mqAaY2SmcJJTy1/7R4Vzp0U
+         bPshjl150D1+6AqGJJwRZluiwgpDdWOErZGjlhYbAQhuHLMYpqQxkt2okbl3QmaaEV
+         +AvTUTAKQGnim5uoCQhk9nL/vcRX66pRqMexDaS2sIjDuNGgW078c+2BX0w5Eu0hmE
+         oc6a5eiysTeaoVlQWOTzqTt5FOVdCY/F5kyVzE2NWYn7vW0p6El384BwmC/nQzLCGf
+         IjSwSAhpZJ+aA==
+Date:   Mon, 25 Jan 2021 23:35:26 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 08/11] secretmem: add memcg accounting
+Message-ID: <20210125213526.GK6332@kernel.org>
+References: <20210121122723.3446-1-rppt@kernel.org>
+ <20210121122723.3446-9-rppt@kernel.org>
+ <20210125161706.GE308988@casper.infradead.org>
+ <CALvZod7rn_5oXT6Z+iRCeMX_iMRO9G_8FnwSRGpJJwyBz5Wpnw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod7rn_5oXT6Z+iRCeMX_iMRO9G_8FnwSRGpJJwyBz5Wpnw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In gup_test both gup_flags and test_flags use the same flags field.
-This is broken.
+On Mon, Jan 25, 2021 at 09:18:04AM -0800, Shakeel Butt wrote:
+> On Mon, Jan 25, 2021 at 8:20 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Thu, Jan 21, 2021 at 02:27:20PM +0200, Mike Rapoport wrote:
+> > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > >
+> > > Account memory consumed by secretmem to memcg. The accounting is updated
+> > > when the memory is actually allocated and freed.
 
-Farther, in the actual gup_test.c all the passed gup_flags are erased and
-unconditionally replaced with FOLL_WRITE.
+I though about doing per-page accounting, but then one would be able to
+create a lot of secretmem file descriptors, use only a page from each while
+actual memory consumption will be way higher.
 
-Which means that test_flags are ignored, and code like this always
-performs pin dump test:
+> > I think this is wrong.  It fails to account subsequent allocators from
+> > the same PMD.  If you want to track like this, you need separate pools
+> > per memcg.
+> >
+> 
+> Are these secretmem pools shared between different jobs/memcgs?
 
-155  			if (gup->flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
-156  				nr = pin_user_pages(addr, nr, gup->flags,
-157  						    pages + i, NULL);
-158  			else
-159  				nr = get_user_pages(addr, nr, gup->flags,
-160  						    pages + i, NULL);
-161  			break;
+A secretmem pool is per anonymous file descriptor and this file descriptor
+can be shared only explicitly between several processes. So, the secretmem
+pool should not be shared between different jobs/memcg. Of course, it's
+possible to spread threads of a process across different memcgs, but in
+that case the accounting will be similar to what's happening today with
+sl*b. The first thread to cause kmalloc() will be charged for the
+allocation of the entire slab and subsequent allocations from that slab
+will not be accounted.
 
-Add a new test_flags field, to allow raw gup_flags to work.
-Add a new subcommand for DUMP_USER_PAGES_TEST to specify that pin test
-should be performed.
-Remove  unconditional overwriting of gup_flags via FOLL_WRITE. But,
-preserve the previous behaviour where FOLL_WRITE was the default flag,
-and add a new option "-W" to unset FOLL_WRITE.
+That said, having a pool per memcg will add ton of complexity with very
+dubious value.
 
-Rename flags with gup_flags.
-
-With the fix, dump works like this:
-
-root@virtme:/# gup_test  -c
----- page #0, starting from user virt addr: 0x7f8acb9e4000
-page:00000000d3d2ee27 refcount:2 mapcount:1 mapping:0000000000000000
-index:0x0 pfn:0x100bcf
-anon flags: 0x300000000080016(referenced|uptodate|lru|swapbacked)
-raw: 0300000000080016 ffffd0e204021608 ffffd0e208df2e88 ffff8ea04243ec61
-raw: 0000000000000000 0000000000000000 0000000200000000 0000000000000000
-page dumped because: gup_test: dump_pages() test
-DUMP_USER_PAGES_TEST: done
-
-root@virtme:/# gup_test  -c -p
----- page #0, starting from user virt addr: 0x7fd19701b000
-page:00000000baed3c7d refcount:1025 mapcount:1 mapping:0000000000000000
-index:0x0 pfn:0x108008
-anon flags: 0x300000000080014(uptodate|lru|swapbacked)
-raw: 0300000000080014 ffffd0e204200188 ffffd0e205e09088 ffff8ea04243ee71
-raw: 0000000000000000 0000000000000000 0000040100000000 0000000000000000
-page dumped because: gup_test: dump_pages() test
-DUMP_USER_PAGES_TEST: done
-
-Refcount shows the difference between pin vs no-pin case.
-Also change type of nr from int to long, as it counts number of pages.
-
-Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup_test.c                         | 23 ++++++++++-------------
- mm/gup_test.h                         |  3 ++-
- tools/testing/selftests/vm/gup_test.c | 15 +++++++++++----
- 3 files changed, 23 insertions(+), 18 deletions(-)
-
-diff --git a/mm/gup_test.c b/mm/gup_test.c
-index e3cf78e5873e..a6ed1c877679 100644
---- a/mm/gup_test.c
-+++ b/mm/gup_test.c
-@@ -94,7 +94,7 @@ static int __gup_test_ioctl(unsigned int cmd,
- {
- 	ktime_t start_time, end_time;
- 	unsigned long i, nr_pages, addr, next;
--	int nr;
-+	long nr;
- 	struct page **pages;
- 	int ret = 0;
- 	bool needs_mmap_lock =
-@@ -126,37 +126,34 @@ static int __gup_test_ioctl(unsigned int cmd,
- 			nr = (next - addr) / PAGE_SIZE;
- 		}
- 
--		/* Filter out most gup flags: only allow a tiny subset here: */
--		gup->flags &= FOLL_WRITE;
--
- 		switch (cmd) {
- 		case GUP_FAST_BENCHMARK:
--			nr = get_user_pages_fast(addr, nr, gup->flags,
-+			nr = get_user_pages_fast(addr, nr, gup->gup_flags,
- 						 pages + i);
- 			break;
- 		case GUP_BASIC_TEST:
--			nr = get_user_pages(addr, nr, gup->flags, pages + i,
-+			nr = get_user_pages(addr, nr, gup->gup_flags, pages + i,
- 					    NULL);
- 			break;
- 		case PIN_FAST_BENCHMARK:
--			nr = pin_user_pages_fast(addr, nr, gup->flags,
-+			nr = pin_user_pages_fast(addr, nr, gup->gup_flags,
- 						 pages + i);
- 			break;
- 		case PIN_BASIC_TEST:
--			nr = pin_user_pages(addr, nr, gup->flags, pages + i,
-+			nr = pin_user_pages(addr, nr, gup->gup_flags, pages + i,
- 					    NULL);
- 			break;
- 		case PIN_LONGTERM_BENCHMARK:
- 			nr = pin_user_pages(addr, nr,
--					    gup->flags | FOLL_LONGTERM,
-+					    gup->gup_flags | FOLL_LONGTERM,
- 					    pages + i, NULL);
- 			break;
- 		case DUMP_USER_PAGES_TEST:
--			if (gup->flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
--				nr = pin_user_pages(addr, nr, gup->flags,
-+			if (gup->test_flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
-+				nr = pin_user_pages(addr, nr, gup->gup_flags,
- 						    pages + i, NULL);
- 			else
--				nr = get_user_pages(addr, nr, gup->flags,
-+				nr = get_user_pages(addr, nr, gup->gup_flags,
- 						    pages + i, NULL);
- 			break;
- 		default:
-@@ -187,7 +184,7 @@ static int __gup_test_ioctl(unsigned int cmd,
- 
- 	start_time = ktime_get();
- 
--	put_back_pages(cmd, pages, nr_pages, gup->flags);
-+	put_back_pages(cmd, pages, nr_pages, gup->test_flags);
- 
- 	end_time = ktime_get();
- 	gup->put_delta_usec = ktime_us_delta(end_time, start_time);
-diff --git a/mm/gup_test.h b/mm/gup_test.h
-index 90a6713d50eb..887ac1d5f5bc 100644
---- a/mm/gup_test.h
-+++ b/mm/gup_test.h
-@@ -21,7 +21,8 @@ struct gup_test {
- 	__u64 addr;
- 	__u64 size;
- 	__u32 nr_pages_per_call;
--	__u32 flags;
-+	__u32 gup_flags;
-+	__u32 test_flags;
- 	/*
- 	 * Each non-zero entry is the number of the page (1-based: first page is
- 	 * page 1, so that zero entries mean "do nothing") from the .addr base.
-diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
-index 6c6336dd3b7f..943cc2608dc2 100644
---- a/tools/testing/selftests/vm/gup_test.c
-+++ b/tools/testing/selftests/vm/gup_test.c
-@@ -37,13 +37,13 @@ int main(int argc, char **argv)
- {
- 	struct gup_test gup = { 0 };
- 	unsigned long size = 128 * MB;
--	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 0;
-+	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 1;
- 	unsigned long cmd = GUP_FAST_BENCHMARK;
- 	int flags = MAP_PRIVATE;
- 	char *file = "/dev/zero";
- 	char *p;
- 
--	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwSH")) != -1) {
-+	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwWSHp")) != -1) {
- 		switch (opt) {
- 		case 'a':
- 			cmd = PIN_FAST_BENCHMARK;
-@@ -65,9 +65,13 @@ int main(int argc, char **argv)
- 			 */
- 			gup.which_pages[0] = 1;
- 			break;
-+		case 'p':
-+			/* works only with DUMP_USER_PAGES_TEST */
-+			gup.test_flags |= GUP_TEST_FLAG_DUMP_PAGES_USE_PIN;
-+			break;
- 		case 'F':
- 			/* strtol, so you can pass flags in hex form */
--			gup.flags = strtol(optarg, 0, 0);
-+			gup.gup_flags = strtol(optarg, 0, 0);
- 			break;
- 		case 'm':
- 			size = atoi(optarg) * MB;
-@@ -93,6 +97,9 @@ int main(int argc, char **argv)
- 		case 'w':
- 			write = 1;
- 			break;
-+		case 'W':
-+			write = 0;
-+			break;
- 		case 'f':
- 			file = optarg;
- 			break;
-@@ -140,7 +147,7 @@ int main(int argc, char **argv)
- 
- 	gup.nr_pages_per_call = nr_pages;
- 	if (write)
--		gup.flags |= FOLL_WRITE;
-+		gup.gup_flags |= FOLL_WRITE;
- 
- 	fd = open("/sys/kernel/debug/gup_test", O_RDWR);
- 	if (fd == -1) {
 -- 
-2.25.1
-
+Sincerely yours,
+Mike.
