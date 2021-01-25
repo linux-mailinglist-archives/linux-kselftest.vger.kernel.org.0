@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D739302CAF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jan 2021 21:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CD3302CA8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jan 2021 21:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732133AbhAYUhm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Jan 2021 15:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        id S1726396AbhAYUhk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Jan 2021 15:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732059AbhAYTvK (ORCPT
+        with ESMTP id S1732204AbhAYTvK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 25 Jan 2021 14:51:10 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CE0C0611C1
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:14 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id q9so13390136qkn.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:14 -0800 (PST)
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00887C0611BC
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:15 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id k193so13706117qke.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=IY6D8/ZMyGIUDKqllv86b5qOcyIRLy633LCHCtaaquY=;
-        b=B2YCL2rAyFoZqE4WT/4QUlTLv0sbMnioKPrp1NGkhpM4TfBDRU0nz+ueHoSh2qqzzH
-         Y3ws3+Lgh9rdkYaAlQ0tux2bwasCXVlUL3V6AoyITO940H+MX59ufzy3ves/bKkzEpvP
-         dJ4LorhjJ+Tiu2GN+FnEl5uMAkdvdCygd1cYuM9fDokHwsb3q1/9yKgL9Xcc8Ec8YcLh
-         5bmOyEKXP0SCtISkhaByU7tvRgoJVo1Re+PRCO8ka11ZRNARhNU+xkumGzdAt6VKyJgt
-         dPfcQqFEQF6Q9xhV87BVtimH/vmyY9cumqyNJZz5/5Roj8V4Q7adw/cXIEwnqMCwdzM1
-         9x3A==
+        bh=Ca95TMJT4ShVUsz7drjIPNjU47Yiarr1AByU+uGNnGI=;
+        b=i1J3Ss8NvulKFTVXkwnvE/0omlR6s+5Yp2oyhLYvWL1INoRa37fVAIs1AMaQKDsfeo
+         PdOXcP0OmEJk5OEzyJ4GEECDUpV9nkoJx2Lq1cPqNB/ujBg7sIZe2Vvbm4rBxrTwlqO4
+         NS5GnxoxFJCKgp1JOCIEZYrPXWpwSFM51aML5h4z3blrZC4uO+biRbYG77176iqVVQZ2
+         xocUTbIap3U5TJsxD1GtaNlXIlrNlb78bxuTmryelGz3or93XhHLY7jGVL2GWYvC+48v
+         rBjYYe6Lfx9+WDb32fmcQq8FTzvKFTjozj7lUND+NYf2RdIU/2uEuMg6ihchuUBzJwmU
+         7ghA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IY6D8/ZMyGIUDKqllv86b5qOcyIRLy633LCHCtaaquY=;
-        b=gX5nEuy0LsyFiTEZ2mEEyIbfzFwa4V3DybWHp5Hc08j+ETw67VDU21Xsug1qBlZNf4
-         GT0gG5+4TR+FH+3223NEEBrXU0AO/a0sYvBsYidpEsqpDLBfeW6e2ui+XVE9knNVzOz5
-         evQLieg0pZPLW+/JgZtQqANzGG8hS7uvVAfjPXxYIslgFrh5Yakn1BofOROu5LT27dzM
-         0s6yMKtsWmQnhqZbE6BlIUQ+7BdVrBu0tVqSsNQL2tOggLZI/E9TWkEf4R/pi8dt3oLK
-         nHRvgynau/ghpLFD2wA+JZtedqW1lox4UuW4xb3GxwkufxbHn9C+/U7iT6Lfm1CO7oXm
-         2Y7Q==
-X-Gm-Message-State: AOAM532eiSbUpcAJFC+kmXqiM8yooST+zSYizdbkCTe2EMGCkHjceXd7
-        HD89LP3+HDN+JFx2WRohAZqk2g==
-X-Google-Smtp-Source: ABdhPJytYypa/BCyR6Vkx3Q9a3yFIqDeeC4LQvsoMCNCusgTFdSKwLYE8QhUdAdv2IOy5rLuLeHXUQ==
-X-Received: by 2002:a37:a7d1:: with SMTP id q200mr2444716qke.365.1611604093523;
-        Mon, 25 Jan 2021 11:48:13 -0800 (PST)
+        bh=Ca95TMJT4ShVUsz7drjIPNjU47Yiarr1AByU+uGNnGI=;
+        b=hQT6AN3o9wpgIk8+ld8c1DkI5VJHFBWVsB/AIK+5GFmiDuWYHr7Ty4FlXXpmsvfe7a
+         nSBTpyTUser07E6Wf+GWFB0vkZlaQeQ29FCfh6ZdMwmc/aXvrLYVRWbvanriG3KYqO9V
+         t1pIAx78YqvCsot0qStPn3MCupKyMiryBtJAAr/gdkdSL68OgZC5miDJLQBh1OQ0EhYT
+         MbU80GDb5y8/5M8bcDmzirkn61TUIyptnyx5J0PRCQC4JeNy2RErWN+N6o9giTkYD2Cw
+         LeW7/ztHIWg0BbAmKt39athvsy51L4WwzoX0D3+eYCpoeM49B3fVJtaevZsT4217MHHV
+         eQ7A==
+X-Gm-Message-State: AOAM530uExdR61+WXvJutSkzebx3UzzKG9z9ogkcxHdZg9/CiQUENqt8
+        kOncnIlLOoLBUOHV5S4rBhtQgQ==
+X-Google-Smtp-Source: ABdhPJwhUd5EAmSYbcYIodK1SuK4RYyZuXxxxO7P4gD+3kK2D9MfxRx4+Ernng3+tzKIsO21XppT0w==
+X-Received: by 2002:a05:620a:b03:: with SMTP id t3mr2437218qkg.459.1611604095164;
+        Mon, 25 Jan 2021 11:48:15 -0800 (PST)
 Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id c12sm12121569qtq.76.2021.01.25.11.48.12
+        by smtp.gmail.com with ESMTPSA id c12sm12121569qtq.76.2021.01.25.11.48.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 11:48:13 -0800 (PST)
+        Mon, 25 Jan 2021 11:48:14 -0800 (PST)
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
@@ -59,9 +59,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v8 12/14] mm/gup: longterm pin migration cleanup
-Date:   Mon, 25 Jan 2021 14:47:49 -0500
-Message-Id: <20210125194751.1275316-13-pasha.tatashin@soleen.com>
+Subject: [PATCH v8 13/14] selftests/vm: gup_test: fix test flag
+Date:   Mon, 25 Jan 2021 14:47:50 -0500
+Message-Id: <20210125194751.1275316-14-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
 References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
@@ -71,158 +71,201 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When pages are longterm pinned, we must migrated them out of movable zone.
-The function that migrates them has a hidden loop with goto. The loop is
-to retry on isolation failures, and after successful migration.
+In gup_test both gup_flags and test_flags use the same flags field.
+This is broken.
 
-Make this code better by moving this loop to the caller.
+Farther, in the actual gup_test.c all the passed gup_flags are erased and
+unconditionally replaced with FOLL_WRITE.
+
+Which means that test_flags are ignored, and code like this always
+performs pin dump test:
+
+155  			if (gup->flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
+156  				nr = pin_user_pages(addr, nr, gup->flags,
+157  						    pages + i, NULL);
+158  			else
+159  				nr = get_user_pages(addr, nr, gup->flags,
+160  						    pages + i, NULL);
+161  			break;
+
+Add a new test_flags field, to allow raw gup_flags to work.
+Add a new subcommand for DUMP_USER_PAGES_TEST to specify that pin test
+should be performed.
+Remove  unconditional overwriting of gup_flags via FOLL_WRITE. But,
+preserve the previous behaviour where FOLL_WRITE was the default flag,
+and add a new option "-W" to unset FOLL_WRITE.
+
+Rename flags with gup_flags.
+
+With the fix, dump works like this:
+
+root@virtme:/# gup_test  -c
+---- page #0, starting from user virt addr: 0x7f8acb9e4000
+page:00000000d3d2ee27 refcount:2 mapcount:1 mapping:0000000000000000
+index:0x0 pfn:0x100bcf
+anon flags: 0x300000000080016(referenced|uptodate|lru|swapbacked)
+raw: 0300000000080016 ffffd0e204021608 ffffd0e208df2e88 ffff8ea04243ec61
+raw: 0000000000000000 0000000000000000 0000000200000000 0000000000000000
+page dumped because: gup_test: dump_pages() test
+DUMP_USER_PAGES_TEST: done
+
+root@virtme:/# gup_test  -c -p
+---- page #0, starting from user virt addr: 0x7fd19701b000
+page:00000000baed3c7d refcount:1025 mapcount:1 mapping:0000000000000000
+index:0x0 pfn:0x108008
+anon flags: 0x300000000080014(uptodate|lru|swapbacked)
+raw: 0300000000080014 ffffd0e204200188 ffffd0e205e09088 ffff8ea04243ee71
+raw: 0000000000000000 0000000000000000 0000040100000000 0000000000000000
+page dumped because: gup_test: dump_pages() test
+DUMP_USER_PAGES_TEST: done
+
+Refcount shows the difference between pin vs no-pin case.
+Also change type of nr from int to long, as it counts number of pages.
 
 Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 ---
- mm/gup.c | 93 ++++++++++++++++++++++----------------------------------
- 1 file changed, 37 insertions(+), 56 deletions(-)
+ mm/gup_test.c                         | 23 ++++++++++-------------
+ mm/gup_test.h                         |  3 ++-
+ tools/testing/selftests/vm/gup_test.c | 15 +++++++++++----
+ 3 files changed, 23 insertions(+), 18 deletions(-)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index f98af75dab0f..fabfe2a5c627 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1549,27 +1549,28 @@ struct page *get_dump_page(unsigned long addr)
- #endif /* CONFIG_ELF_CORE */
- 
- #ifdef CONFIG_MIGRATION
--static long check_and_migrate_movable_pages(struct mm_struct *mm,
--					    unsigned long start,
--					    unsigned long nr_pages,
-+/*
-+ * Check whether all pages are pinnable, if so return number of pages.  If some
-+ * pages are not pinnable, migrate them, and unpin all pages. Return zero if
-+ * pages were migrated, or if some pages were not successfully isolated.
-+ * Return negative error if migration fails.
-+ */
-+static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 					    struct page **pages,
--					    struct vm_area_struct **vmas,
- 					    unsigned int gup_flags)
+diff --git a/mm/gup_test.c b/mm/gup_test.c
+index e3cf78e5873e..a6ed1c877679 100644
+--- a/mm/gup_test.c
++++ b/mm/gup_test.c
+@@ -94,7 +94,7 @@ static int __gup_test_ioctl(unsigned int cmd,
  {
--	unsigned long i, isolation_error_count;
--	bool drain_allow;
-+	unsigned long i;
-+	unsigned long isolation_error_count = 0;
-+	bool drain_allow = true;
- 	LIST_HEAD(movable_page_list);
--	long ret = nr_pages;
--	struct page *prev_head, *head;
-+	long ret = 0;
-+	struct page *prev_head = NULL;
-+	struct page *head;
- 	struct migration_target_control mtc = {
- 		.nid = NUMA_NO_NODE,
- 		.gfp_mask = GFP_USER | __GFP_NOWARN,
- 	};
+ 	ktime_t start_time, end_time;
+ 	unsigned long i, nr_pages, addr, next;
+-	int nr;
++	long nr;
+ 	struct page **pages;
+ 	int ret = 0;
+ 	bool needs_mmap_lock =
+@@ -126,37 +126,34 @@ static int __gup_test_ioctl(unsigned int cmd,
+ 			nr = (next - addr) / PAGE_SIZE;
+ 		}
  
--check_again:
--	prev_head = NULL;
--	isolation_error_count = 0;
--	drain_allow = true;
- 	for (i = 0; i < nr_pages; i++) {
- 		head = compound_head(pages[i]);
- 		if (head == prev_head)
-@@ -1607,47 +1608,27 @@ static long check_and_migrate_movable_pages(struct mm_struct *mm,
- 	 * in the correct zone.
- 	 */
- 	if (list_empty(&movable_page_list) && !isolation_error_count)
--		return ret;
-+		return nr_pages;
- 
-+	if (gup_flags & FOLL_PIN) {
-+		unpin_user_pages(pages, nr_pages);
-+	} else {
-+		for (i = 0; i < nr_pages; i++)
-+			put_page(pages[i]);
-+	}
- 	if (!list_empty(&movable_page_list)) {
--		/*
--		 * drop the above get_user_pages reference.
--		 */
--		if (gup_flags & FOLL_PIN)
--			unpin_user_pages(pages, nr_pages);
--		else
--			for (i = 0; i < nr_pages; i++)
--				put_page(pages[i]);
+-		/* Filter out most gup flags: only allow a tiny subset here: */
+-		gup->flags &= FOLL_WRITE;
 -
- 		ret = migrate_pages(&movable_page_list, alloc_migration_target,
- 				    NULL, (unsigned long)&mtc, MIGRATE_SYNC,
- 				    MR_LONGTERM_PIN);
--		if (ret) {
--			if (!list_empty(&movable_page_list))
--				putback_movable_pages(&movable_page_list);
--			return ret > 0 ? -ENOMEM : ret;
--		}
--
--		/* We unpinned pages before migration, pin them again */
--		ret = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
--					      NULL, gup_flags);
--		if (ret <= 0)
--			return ret;
--		nr_pages = ret;
-+		if (ret && !list_empty(&movable_page_list))
-+			putback_movable_pages(&movable_page_list);
- 	}
+ 		switch (cmd) {
+ 		case GUP_FAST_BENCHMARK:
+-			nr = get_user_pages_fast(addr, nr, gup->flags,
++			nr = get_user_pages_fast(addr, nr, gup->gup_flags,
+ 						 pages + i);
+ 			break;
+ 		case GUP_BASIC_TEST:
+-			nr = get_user_pages(addr, nr, gup->flags, pages + i,
++			nr = get_user_pages(addr, nr, gup->gup_flags, pages + i,
+ 					    NULL);
+ 			break;
+ 		case PIN_FAST_BENCHMARK:
+-			nr = pin_user_pages_fast(addr, nr, gup->flags,
++			nr = pin_user_pages_fast(addr, nr, gup->gup_flags,
+ 						 pages + i);
+ 			break;
+ 		case PIN_BASIC_TEST:
+-			nr = pin_user_pages(addr, nr, gup->flags, pages + i,
++			nr = pin_user_pages(addr, nr, gup->gup_flags, pages + i,
+ 					    NULL);
+ 			break;
+ 		case PIN_LONGTERM_BENCHMARK:
+ 			nr = pin_user_pages(addr, nr,
+-					    gup->flags | FOLL_LONGTERM,
++					    gup->gup_flags | FOLL_LONGTERM,
+ 					    pages + i, NULL);
+ 			break;
+ 		case DUMP_USER_PAGES_TEST:
+-			if (gup->flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
+-				nr = pin_user_pages(addr, nr, gup->flags,
++			if (gup->test_flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
++				nr = pin_user_pages(addr, nr, gup->gup_flags,
+ 						    pages + i, NULL);
+ 			else
+-				nr = get_user_pages(addr, nr, gup->flags,
++				nr = get_user_pages(addr, nr, gup->gup_flags,
+ 						    pages + i, NULL);
+ 			break;
+ 		default:
+@@ -187,7 +184,7 @@ static int __gup_test_ioctl(unsigned int cmd,
  
--	/*
--	 * check again because pages were unpinned, and we also might have
--	 * had isolation errors and need more pages to migrate.
--	 */
--	goto check_again;
-+	return ret > 0 ? -ENOMEM : ret;
- }
- #else
--static long check_and_migrate_movable_pages(struct mm_struct *mm,
--					    unsigned long start,
--					    unsigned long nr_pages,
-+static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 					    struct page **pages,
--					    struct vm_area_struct **vmas,
- 					    unsigned int gup_flags)
+ 	start_time = ktime_get();
+ 
+-	put_back_pages(cmd, pages, nr_pages, gup->flags);
++	put_back_pages(cmd, pages, nr_pages, gup->test_flags);
+ 
+ 	end_time = ktime_get();
+ 	gup->put_delta_usec = ktime_us_delta(end_time, start_time);
+diff --git a/mm/gup_test.h b/mm/gup_test.h
+index 90a6713d50eb..887ac1d5f5bc 100644
+--- a/mm/gup_test.h
++++ b/mm/gup_test.h
+@@ -21,7 +21,8 @@ struct gup_test {
+ 	__u64 addr;
+ 	__u64 size;
+ 	__u32 nr_pages_per_call;
+-	__u32 flags;
++	__u32 gup_flags;
++	__u32 test_flags;
+ 	/*
+ 	 * Each non-zero entry is the number of the page (1-based: first page is
+ 	 * page 1, so that zero entries mean "do nothing") from the .addr base.
+diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
+index 6c6336dd3b7f..943cc2608dc2 100644
+--- a/tools/testing/selftests/vm/gup_test.c
++++ b/tools/testing/selftests/vm/gup_test.c
+@@ -37,13 +37,13 @@ int main(int argc, char **argv)
  {
- 	return nr_pages;
-@@ -1665,22 +1646,22 @@ static long __gup_longterm_locked(struct mm_struct *mm,
- 				  struct vm_area_struct **vmas,
- 				  unsigned int gup_flags)
- {
--	unsigned long flags = 0;
-+	unsigned int flags;
- 	long rc;
+ 	struct gup_test gup = { 0 };
+ 	unsigned long size = 128 * MB;
+-	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 0;
++	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 1;
+ 	unsigned long cmd = GUP_FAST_BENCHMARK;
+ 	int flags = MAP_PRIVATE;
+ 	char *file = "/dev/zero";
+ 	char *p;
  
--	if (gup_flags & FOLL_LONGTERM)
--		flags = memalloc_pin_save();
--
--	rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas, NULL,
--				     gup_flags);
-+	if (!(gup_flags & FOLL_LONGTERM))
-+		return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
-+					       NULL, gup_flags);
-+	flags = memalloc_pin_save();
-+	do {
-+		rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
-+					     NULL, gup_flags);
-+		if (rc <= 0)
+-	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwSH")) != -1) {
++	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwWSHp")) != -1) {
+ 		switch (opt) {
+ 		case 'a':
+ 			cmd = PIN_FAST_BENCHMARK;
+@@ -65,9 +65,13 @@ int main(int argc, char **argv)
+ 			 */
+ 			gup.which_pages[0] = 1;
+ 			break;
++		case 'p':
++			/* works only with DUMP_USER_PAGES_TEST */
++			gup.test_flags |= GUP_TEST_FLAG_DUMP_PAGES_USE_PIN;
 +			break;
-+		rc = check_and_migrate_movable_pages(rc, pages, gup_flags);
-+	} while (!rc);
-+	memalloc_pin_restore(flags);
+ 		case 'F':
+ 			/* strtol, so you can pass flags in hex form */
+-			gup.flags = strtol(optarg, 0, 0);
++			gup.gup_flags = strtol(optarg, 0, 0);
+ 			break;
+ 		case 'm':
+ 			size = atoi(optarg) * MB;
+@@ -93,6 +97,9 @@ int main(int argc, char **argv)
+ 		case 'w':
+ 			write = 1;
+ 			break;
++		case 'W':
++			write = 0;
++			break;
+ 		case 'f':
+ 			file = optarg;
+ 			break;
+@@ -140,7 +147,7 @@ int main(int argc, char **argv)
  
--	if (gup_flags & FOLL_LONGTERM) {
--		if (rc > 0)
--			rc = check_and_migrate_movable_pages(mm, start, rc,
--							     pages, vmas,
--							     gup_flags);
--		memalloc_pin_restore(flags);
--	}
- 	return rc;
- }
+ 	gup.nr_pages_per_call = nr_pages;
+ 	if (write)
+-		gup.flags |= FOLL_WRITE;
++		gup.gup_flags |= FOLL_WRITE;
  
+ 	fd = open("/sys/kernel/debug/gup_test", O_RDWR);
+ 	if (fd == -1) {
 -- 
 2.25.1
 
