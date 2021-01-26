@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5E43038ED
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jan 2021 10:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1643038EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jan 2021 10:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387711AbhAZJXx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Jan 2021 04:23:53 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57472 "EHLO mx2.suse.de"
+        id S2389667AbhAZJYM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Jan 2021 04:24:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:60132 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389361AbhAZJTr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Jan 2021 04:19:47 -0500
+        id S2390525AbhAZJVY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Jan 2021 04:21:24 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611652532; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1611652825; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=8+K0oyxRY1+vhNkSeXzm8M4Y2R64gVVtCdOHelIF+V8=;
-        b=kShKTVasjKcQgyk49obmmqJEv3Z3d6D+KjtCoEjGXxzkEZlE9pddLwPnfiYIY421ESnwFk
-        s121ANy6h6Uf22zm4fCv1pqav6eTOcya5rAIE9EhMH1YsS7w7Ixp5ITIzE4PQfYNNMffQz
-        Deb5a3d+IUk2PpGiCwbgFZJfGrBkuvI=
+        bh=7Fkh8i4u2Ds7suNHQy8ffJkc7y8JY+c/ULxceSUkTds=;
+        b=bqWhNQD/hZoyEpF0cNuKXozUxgro+R+IfdOU/BS2HiMG0+8sw32ccg9JoavrsQIkP6dpVh
+        K1iIWCeUmEMm4VHXkiZqSBFZqfHjVghsxokwQGllYDgcYi1VKxKpTZai9iq1zdfPF7t7A3
+        /qszOeSUVbFlKJZaNJgfQ/OCqYtH1GU=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 36ABFB293;
-        Tue, 26 Jan 2021 09:15:32 +0000 (UTC)
-Date:   Tue, 26 Jan 2021 10:15:27 +0100
+        by mx2.suse.de (Postfix) with ESMTP id C9DAAB291;
+        Tue, 26 Jan 2021 09:20:24 +0000 (UTC)
+Date:   Tue, 26 Jan 2021 10:20:23 +0100
 From:   Michal Hocko <mhocko@suse.com>
 To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -59,85 +59,85 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
         Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 08/11] secretmem: add memcg accounting
-Message-ID: <20210126091527.GG827@dhcp22.suse.cz>
+Subject: Re: [PATCH v16 06/11] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-ID: <20210126092023.GH827@dhcp22.suse.cz>
 References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-9-rppt@kernel.org>
- <20210125165451.GT827@dhcp22.suse.cz>
- <20210125213817.GM6332@kernel.org>
- <20210126073142.GY827@dhcp22.suse.cz>
- <20210126085654.GO6332@kernel.org>
+ <20210121122723.3446-7-rppt@kernel.org>
+ <20210125170122.GU827@dhcp22.suse.cz>
+ <20210125213618.GL6332@kernel.org>
+ <20210126071614.GX827@dhcp22.suse.cz>
+ <20210126083311.GN6332@kernel.org>
+ <20210126090013.GF827@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210126085654.GO6332@kernel.org>
+In-Reply-To: <20210126090013.GF827@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 26-01-21 10:56:54, Mike Rapoport wrote:
-> On Tue, Jan 26, 2021 at 08:31:42AM +0100, Michal Hocko wrote:
-> > On Mon 25-01-21 23:38:17, Mike Rapoport wrote:
-> > > On Mon, Jan 25, 2021 at 05:54:51PM +0100, Michal Hocko wrote:
-> > > > On Thu 21-01-21 14:27:20, Mike Rapoport wrote:
-> > > > > From: Mike Rapoport <rppt@linux.ibm.com>
+On Tue 26-01-21 10:00:14, Michal Hocko wrote:
+> On Tue 26-01-21 10:33:11, Mike Rapoport wrote:
+> > On Tue, Jan 26, 2021 at 08:16:14AM +0100, Michal Hocko wrote:
+> > > On Mon 25-01-21 23:36:18, Mike Rapoport wrote:
+> > > > On Mon, Jan 25, 2021 at 06:01:22PM +0100, Michal Hocko wrote:
+> > > > > On Thu 21-01-21 14:27:18, Mike Rapoport wrote:
+> > > > > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > > > > 
+> > > > > > Introduce "memfd_secret" system call with the ability to create memory
+> > > > > > areas visible only in the context of the owning process and not mapped not
+> > > > > > only to other processes but in the kernel page tables as well.
+> > > > > > 
+> > > > > > The user will create a file descriptor using the memfd_secret() system
+> > > > > > call. The memory areas created by mmap() calls from this file descriptor
+> > > > > > will be unmapped from the kernel direct map and they will be only mapped in
+> > > > > > the page table of the owning mm.
+> > > > > > 
+> > > > > > The secret memory remains accessible in the process context using uaccess
+> > > > > > primitives, but it is not accessible using direct/linear map addresses.
+> > > > > > 
+> > > > > > Functions in the follow_page()/get_user_page() family will refuse to return
+> > > > > > a page that belongs to the secret memory area.
+> > > > > > 
+> > > > > > A page that was a part of the secret memory area is cleared when it is
+> > > > > > freed.
+> > > > > > 
+> > > > > > The following example demonstrates creation of a secret mapping (error
+> > > > > > handling is omitted):
+> > > > > > 
+> > > > > > 	fd = memfd_secret(0);
+> > > > > > 	ftruncate(fd, MAP_SIZE);
+> > > > > > 	ptr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 > > > > > 
-> > > > > Account memory consumed by secretmem to memcg. The accounting is updated
-> > > > > when the memory is actually allocated and freed.
+> > > > > I do not see any access control or permission model for this feature.
+> > > > > Is this feature generally safe to anybody?
 > > > > 
-> > > > What does this mean?
+> > > > The mappings obey memlock limit. Besides, this feature should be enabled
+> > > > explicitly at boot with the kernel parameter that says what is the maximal
+> > > > memory size secretmem can consume.
 > > > 
-> > > That means that the accounting is updated when secretmem does cma_alloc()
-> > > and cma_relase().
+> > > Why is such a model sufficient and future proof? I mean even when it has
+> > > to be enabled by an admin it is still all or nothing approach. Mlock
+> > > limit is not really useful because it is per mm rather than per user.
 > > > 
-> > > > What are the lifetime rules?
-> > > 
-> > > Hmm, what do you mean by lifetime rules?
-> > 
-> > OK, so let's start by reservation time (mmap time right?) then the
-> > instantiation time (faulting in memory). What if the calling process of
-> > the former has a different memcg context than the later. E.g. when you
-> > send your fd or inherited fd over fork will move to a different memcg.
-> > 
-> > What about freeing path? E.g. when you punch a hole in the middle of
-> > a mapping?
-> > 
-> > Please make sure to document all this.
->  
-> So, does something like this answer your question:
+> > > Is there any reason why this is allowed for non-privileged processes?
+> > > Maybe this has been discussed in the past but is there any reason why
+> > > this cannot be done by a special device which will allow to provide at
+> > > least some permission policy?
+> >  
+> > Why this should not be allowed for non-privileged processes? This behaves
+> > similarly to mlocked memory, so I don't see a reason why secretmem should
+> > have different permissions model.
 > 
-> ---
-> The memory cgroup is charged when secremem allocates pages from CMA to
-> increase large pages pool during ->fault() processing.
+> Because appart from the reclaim aspect it fragments the direct mapping
+> IIUC. That might have an impact on all others, right?
 
-OK so that is when the memory is faulted in. Good that is a standard
-model we have. The memcg context of the creator of the secret memory is
-not really important. So whoever has created is not charged.
-
-> The pages are uncharged from memory cgroup when they are released back to
-> CMA at the time secretme inode is evicted.
-> ---
-
-so effectivelly when they are unmapped, right? This is similar to
-anonymous memory.
-
-As I've said it would be really great to have this life cycle documented
-properly.
-
-> > Please note that this all is a user visible stuff that will become PITA
-> > (if possible) to change later on. You should really have strong
-> > arguments in your justification here.
-> 
-> I think that adding a dedicated counter for few 2M areas per container is
-> not worth the churn. 
-
-What kind of churn you have in mind? What is the downside?
-
-> When we'll get to the point that secretmem can be used to back the entire
-> guest memory we can add a new counter and it does not seem to PITA to me.
-
-What does really prevent a larger use with this implementation?
-
+Also forgot to mention that you rely on a contiguous allocations and
+that can become a very scarce resource so what does prevent one abuser
+from using it all and deny the access to others. And unless I am missing
+something allocation failure would lead to OOM which cannot really help
+because the oom killer cannot compensate for the CMA reservation.
 -- 
 Michal Hocko
 SUSE Labs
