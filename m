@@ -2,31 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E5F303C9B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jan 2021 13:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FEE30410E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jan 2021 15:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392428AbhAZMJj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Jan 2021 07:09:39 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34440 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392429AbhAZMJM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Jan 2021 07:09:12 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611662905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rMlCz0R0+4hx1OA36aSmAlu8tlv8RUdQ0e7IJLpT36s=;
-        b=SMhufNb2gWzhhrAZNHftCxKV09Z4ON1Nna331EeVwq6g5uadItVhhfYPwqZMwl7NrZHGoe
-        sfrAnbEuROoHMCjd6kgLJlKlWNL6a2+tLn/JlOmK2zxwqEpUN438kLFMPBZjX2B+uErhsc
-        6f7ZU3sY9xTAQHU0CIqtjHt0JXNni38=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B5805AD26;
-        Tue, 26 Jan 2021 12:08:24 +0000 (UTC)
-Date:   Tue, 26 Jan 2021 13:08:23 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
+        id S2391500AbhAZO4k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Jan 2021 09:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391482AbhAZO4e (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Jan 2021 09:56:34 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E88C061A29;
+        Tue, 26 Jan 2021 06:55:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AfVmvy0+ars8vSXgUaa4Ou66AyTq8tua1GFfd4k4JEw=; b=nAP0nDbV1kwONwbXFxyftiqDWQ
+        jHiVYK1NDKnF8QM69l3dG2FMsAL3iwGEI4VIpsVWD8NwGnDS/qwfGpm/s7IvdCmdZxN6z0NBOUOMX
+        YsXcAxL04Ph78LoBwNMMvjI8JoSKao4Y2A92kUpREHLGb8TP6wqGFn4Z5Qa6E4pplksDWHdn/YL/T
+        u1awwBPfVKq2MKlAnFFBbUPwFq/kxETbl3BSIto9xDeIvrQZNrjdM6PseQVL1Nu+JuoDOKC4BRjze
+        R1vY4iXhTAIC177ONzK6Rj9jUVuhpyOkmi7Bw4tq7Ewm0jKEb9qOFULDXkvUQhNufow0/F7nS9cKe
+        A0rXnu7Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1l4Pe2-005lWp-2r; Tue, 26 Jan 2021 14:48:57 +0000
+Date:   Tue, 26 Jan 2021 14:48:38 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
@@ -35,11 +39,11 @@ Cc:     Mike Rapoport <rppt@kernel.org>,
         Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
         James Bottomley <jejb@linux.ibm.com>,
         "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
@@ -59,70 +63,34 @@ Cc:     Mike Rapoport <rppt@kernel.org>,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
         Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <20210126120823.GM827@dhcp22.suse.cz>
+Subject: Re: [PATCH v16 08/11] secretmem: add memcg accounting
+Message-ID: <20210126144838.GL308988@casper.infradead.org>
 References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-8-rppt@kernel.org>
- <20210126114657.GL827@dhcp22.suse.cz>
- <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
+ <20210121122723.3446-9-rppt@kernel.org>
+ <20210125165451.GT827@dhcp22.suse.cz>
+ <20210125213817.GM6332@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
+In-Reply-To: <20210125213817.GM6332@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 26-01-21 12:56:48, David Hildenbrand wrote:
-> On 26.01.21 12:46, Michal Hocko wrote:
-> > On Thu 21-01-21 14:27:19, Mike Rapoport wrote:
-> > > From: Mike Rapoport <rppt@linux.ibm.com>
-> > > 
-> > > Removing a PAGE_SIZE page from the direct map every time such page is
-> > > allocated for a secret memory mapping will cause severe fragmentation of
-> > > the direct map. This fragmentation can be reduced by using PMD-size pages
-> > > as a pool for small pages for secret memory mappings.
-> > > 
-> > > Add a gen_pool per secretmem inode and lazily populate this pool with
-> > > PMD-size pages.
-> > > 
-> > > As pages allocated by secretmem become unmovable, use CMA to back large
-> > > page caches so that page allocator won't be surprised by failing attempt to
-> > > migrate these pages.
-> > > 
-> > > The CMA area used by secretmem is controlled by the "secretmem=" kernel
-> > > parameter. This allows explicit control over the memory available for
-> > > secretmem and provides upper hard limit for secretmem consumption.
-> > 
-> > OK, so I have finally had a look at this closer and this is really not
-> > acceptable. I have already mentioned that in a response to other patch
-> > but any task is able to deprive access to secret memory to other tasks
-> > and cause OOM killer which wouldn't really recover ever and potentially
-> > panic the system. Now you could be less drastic and only make SIGBUS on
-> > fault but that would be still quite terrible. There is a very good
-> > reason why hugetlb implements is non-trivial reservation system to avoid
-> > exactly these problems.
-> > 
-> > So unless I am really misreading the code
-> > Nacked-by: Michal Hocko <mhocko@suse.com>
-> > 
-> > That doesn't mean I reject the whole idea. There are some details to
-> > sort out as mentioned elsewhere but you cannot really depend on
-> > pre-allocated pool which can fail at a fault time like that.
+On Mon, Jan 25, 2021 at 11:38:17PM +0200, Mike Rapoport wrote:
+> I cannot use __GFP_ACCOUNT because cma_alloc() does not use gfp.
+> Besides, kmem accounting with __GFP_ACCOUNT does not seem
+> to update stats and there was an explicit request for statistics:
+>  
+> https://lore.kernel.org/lkml/CALo0P13aq3GsONnZrksZNU9RtfhMsZXGWhK1n=xYJWQizCd4Zw@mail.gmail.com/
 > 
-> So, to do it similar to hugetlbfs (e.g., with CMA), there would have to be a
-> mechanism to actually try pre-reserving (e.g., from the CMA area), at which
-> point in time the pages would get moved to the secretmem pool, and a
-> mechanism for mmap() etc. to "reserve" from these secretmem pool, such that
-> there are guarantees at fault time?
+> As for (ab)using NR_SLAB_UNRECLAIMABLE_B, as it was already discussed here:
+> 
+> https://lore.kernel.org/lkml/20201129172625.GD557259@kernel.org/
+> 
+> I think that a dedicated stats counter would be too much at the moment and
+> NR_SLAB_UNRECLAIMABLE_B is the only explicit stat for unreclaimable memory.
 
-yes, reserve at mmap time and use during the fault. But this all sounds
-like a self inflicted problem to me. Sure you can have a pre-allocated
-or more dynamic pool to reduce the direct mapping fragmentation but you
-can always fall back to regular allocatios. In other ways have the pool
-as an optimization rather than a hard requirement. With a careful access
-control this sounds like a manageable solution to me.
--- 
-Michal Hocko
-SUSE Labs
+That's not true -- Mlocked is also unreclaimable.  And doesn't this
+feel more like mlocked memory than unreclaimable slab?  It's also
+Unevictable, so could be counted there instead.
