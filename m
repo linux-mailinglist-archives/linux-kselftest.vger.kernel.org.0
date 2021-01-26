@@ -2,78 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C1130360E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jan 2021 06:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5E43038ED
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jan 2021 10:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732232AbhAZF61 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Jan 2021 00:58:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39732 "EHLO mail.kernel.org"
+        id S2387711AbhAZJXx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Jan 2021 04:23:53 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57472 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728292AbhAYMr1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jan 2021 07:47:27 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B8EB622D04;
-        Mon, 25 Jan 2021 12:46:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611578806;
-        bh=kXFZkQ9+v70aH3YVPuA5/lu+eenOiEeGF4vdN+dLFXQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DXTCMseCI/Zpe+8B3NRpfNUmZER45GKnjtDKktN9SOa5UxRqf7GzeMm26nh7vHuzB
-         a1vxPTVpUEG3IS8mGE/i695PZBWod8q4jJKIcWH5d5wgIPBxbpGTJV/c8Gxh8k9oJR
-         lZGpFG2I1enjOqDI7LYKBuArgdxcJcuN/jhMLEN0qt6b3GVquUJEDWlwQhWxNwIvis
-         bubRTpFAdqO4LuM8OB2fmrZHyuOs4XhU4zCVbDYasw46qtiSq+2SEg3bMvH/5iCX8R
-         ReLQ+Li7judC1UxCNTvdGb97OGiO+bLO1RK4szwMpzgfJULqIM5mYRMY+wUy4YNLgG
-         EoeAvpQdDw+JA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        Andreas Noever <andreas.noever@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: [RFC 3/3] thunderbolt: build kunit tests without structleak plugin
-Date:   Mon, 25 Jan 2021 13:45:28 +0100
-Message-Id: <20210125124533.101339-4-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210125124533.101339-1-arnd@kernel.org>
-References: <20210125124533.101339-1-arnd@kernel.org>
+        id S2389361AbhAZJTr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Jan 2021 04:19:47 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611652532; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8+K0oyxRY1+vhNkSeXzm8M4Y2R64gVVtCdOHelIF+V8=;
+        b=kShKTVasjKcQgyk49obmmqJEv3Z3d6D+KjtCoEjGXxzkEZlE9pddLwPnfiYIY421ESnwFk
+        s121ANy6h6Uf22zm4fCv1pqav6eTOcya5rAIE9EhMH1YsS7w7Ixp5ITIzE4PQfYNNMffQz
+        Deb5a3d+IUk2PpGiCwbgFZJfGrBkuvI=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 36ABFB293;
+        Tue, 26 Jan 2021 09:15:32 +0000 (UTC)
+Date:   Tue, 26 Jan 2021 10:15:27 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 08/11] secretmem: add memcg accounting
+Message-ID: <20210126091527.GG827@dhcp22.suse.cz>
+References: <20210121122723.3446-1-rppt@kernel.org>
+ <20210121122723.3446-9-rppt@kernel.org>
+ <20210125165451.GT827@dhcp22.suse.cz>
+ <20210125213817.GM6332@kernel.org>
+ <20210126073142.GY827@dhcp22.suse.cz>
+ <20210126085654.GO6332@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210126085654.GO6332@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue 26-01-21 10:56:54, Mike Rapoport wrote:
+> On Tue, Jan 26, 2021 at 08:31:42AM +0100, Michal Hocko wrote:
+> > On Mon 25-01-21 23:38:17, Mike Rapoport wrote:
+> > > On Mon, Jan 25, 2021 at 05:54:51PM +0100, Michal Hocko wrote:
+> > > > On Thu 21-01-21 14:27:20, Mike Rapoport wrote:
+> > > > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > > > 
+> > > > > Account memory consumed by secretmem to memcg. The accounting is updated
+> > > > > when the memory is actually allocated and freed.
+> > > > 
+> > > > What does this mean?
+> > > 
+> > > That means that the accounting is updated when secretmem does cma_alloc()
+> > > and cma_relase().
+> > > 
+> > > > What are the lifetime rules?
+> > > 
+> > > Hmm, what do you mean by lifetime rules?
+> > 
+> > OK, so let's start by reservation time (mmap time right?) then the
+> > instantiation time (faulting in memory). What if the calling process of
+> > the former has a different memcg context than the later. E.g. when you
+> > send your fd or inherited fd over fork will move to a different memcg.
+> > 
+> > What about freeing path? E.g. when you punch a hole in the middle of
+> > a mapping?
+> > 
+> > Please make sure to document all this.
+>  
+> So, does something like this answer your question:
+> 
+> ---
+> The memory cgroup is charged when secremem allocates pages from CMA to
+> increase large pages pool during ->fault() processing.
 
-The structleak plugin causes the stack frame size to grow immensely:
+OK so that is when the memory is faulted in. Good that is a standard
+model we have. The memcg context of the creator of the secret memory is
+not really important. So whoever has created is not charged.
 
-drivers/thunderbolt/test.c:1529:1: error: the frame size of 1176 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> The pages are uncharged from memory cgroup when they are released back to
+> CMA at the time secretme inode is evicted.
+> ---
 
-Turn it off in this file.
+so effectivelly when they are unmapped, right? This is similar to
+anonymous memory.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/thunderbolt/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+As I've said it would be really great to have this life cycle documented
+properly.
 
-diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
-index 7aa48f6c41d9..e571c0495a84 100644
---- a/drivers/thunderbolt/Makefile
-+++ b/drivers/thunderbolt/Makefile
-@@ -7,6 +7,7 @@ thunderbolt-objs += nvm.o retimer.o quirks.o
- thunderbolt-${CONFIG_ACPI} += acpi.o
- thunderbolt-$(CONFIG_DEBUG_FS) += debugfs.o
- thunderbolt-${CONFIG_USB4_KUNIT_TEST} += test.o
-+CFLAGS_REMOVE_test.o += -fplugin-arg-structleak_plugin-byref -fplugin-arg-structleak_plugin-byref-all
- 
- thunderbolt_dma_test-${CONFIG_USB4_DMA_TEST} += dma_test.o
- obj-$(CONFIG_USB4_DMA_TEST) += thunderbolt_dma_test.o
+> > Please note that this all is a user visible stuff that will become PITA
+> > (if possible) to change later on. You should really have strong
+> > arguments in your justification here.
+> 
+> I think that adding a dedicated counter for few 2M areas per container is
+> not worth the churn. 
+
+What kind of churn you have in mind? What is the downside?
+
+> When we'll get to the point that secretmem can be used to back the entire
+> guest memory we can add a new counter and it does not seem to PITA to me.
+
+What does really prevent a larger use with this implementation?
+
 -- 
-2.29.2
-
+Michal Hocko
+SUSE Labs
