@@ -2,238 +2,247 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 348823047AF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jan 2021 20:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CED5430515D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jan 2021 05:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727873AbhAZF6u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Jan 2021 00:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726733AbhAYSy0 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jan 2021 13:54:26 -0500
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5DDC061756
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 10:53:45 -0800 (PST)
-Received: by mail-qv1-xf49.google.com with SMTP id e10so1416727qvp.22
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 10:53:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=Oos6Cbunyu96oTH36OiSBwJE5Z8pPZWjNBRUMHsJrek=;
-        b=CFPWfcJwitv3RohHIoGj2BqdQ7Pp+2rd5GeLW343a9K5r8G/MEZyAi84WH7+E8M//w
-         dlde5D9NEUrz8xC+XaXU5QDjNFAdVyeQErT27jBm77GsmbVFgDRFo4NY2eBYptiotlb4
-         qd7Fa9wAx5Zm4GSABaYbAFPoua2SnPPUWD+KrBZapv/HaM6kW3gnvA60wZgmMNowP4Qe
-         Qur9cLKgmfb9Y/ZBk6WwuYGiwTPgpE2hFT8BTgOG4L51RTI19z+XRpxnPYYnvALctiLS
-         oL1ld/X8v+o78xBQBeyiZll6/azAQ/IViHMT5/ipa33PAwX07rZHYJVHdaeF6LbICNdB
-         lrfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=Oos6Cbunyu96oTH36OiSBwJE5Z8pPZWjNBRUMHsJrek=;
-        b=adVlUzl2u9GllNoUA6UeckFc5UIMSKW01pm/KVZGiUL0dSk24ISCZeMqByYfH53bFw
-         Q4jYQZHrBpELPqy2/nz3MDmpzw6TIyNc5+spBvvGlprGF6blWczVcCrZaKZL6l9SI+Vv
-         K4C2oZs7fsXMliTOZvQv0LztV8JZ4ZsUbk+Tmb/M2tdC9eJtqWA4Jna0rBfLxzCUjzdg
-         fZMKQkafPwfc8kol57OlqmwXyrjM8xDFhsJ4oJHG+gHyEPgCSL3KBNjQWXI5E2lIsV5Y
-         ookUtpzwqtHg58ncl4nf5XEmV3cSM0CkBApbX9oEQXdPyBrhZOW9PYZkAnR9hggMArtW
-         tSNg==
-X-Gm-Message-State: AOAM532uRuczdf2X9Stkf1T4FPVW2C7ThNfaTvvcMftpOax4XRbDBcu2
-        0Hv6RSc4jp8wVExfOTprzeAufLmb1J5u/g==
-X-Google-Smtp-Source: ABdhPJxtO63kE7j6Bzw86L0veOyHkWfcllNJBpprW+SNRmPOrzQ/V/OYAcXNigUxrRgIeKZrjRqn8/iPfdGCQA==
-Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:a0c:eb0a:: with SMTP id
- j10mr2116242qvp.56.1611600825024; Mon, 25 Jan 2021 10:53:45 -0800 (PST)
-Date:   Mon, 25 Jan 2021 10:53:33 -0800
-Message-Id: <20210125185333.3337463-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-Subject: [PATCH] Documentation: kunit: add tips.rst for small examples
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S239532AbhA0EpW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Jan 2021 23:45:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49248 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392546AbhA0BnV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Jan 2021 20:43:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AB5B1206A4;
+        Wed, 27 Jan 2021 01:42:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611711760;
+        bh=oZMJJcJ0nMRqlk9Me0tYJaKWhDt6yRiNOVPiEcNIk2g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D7nJ9ALmlwk+oJIflEiPfap4ULEIMpsxE3DQ35mvKJimAzZIOL56iNrPSerk/b054
+         g2jQ2r4HjB+r+vd2vP2bZWll9NTXvAxag8vFWz/97X4v3zYvZ1cJDcCH64w7tZRG3g
+         bLGIJWeU5wEKMSFMemf4ovpZFziHZXvylO+Ortej4mCEmuBB+7qxFa2AUsTIbDAJTY
+         nAjDTyqRoH7xFBrozPVcgku25mF/objiS0IOa6tDZJC/y5Ag1XvbleJ+aZ497Z+DtW
+         SUm3uuGI+ij2D+9Ct8tmEvRTMapG621P63R5SAY81yMTGa1IVv/PUjby0AMcGjR3RS
+         Hdhpdu2X4dGrg==
+Date:   Tue, 26 Jan 2021 17:42:38 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Bongsu Jeon <bongsu.jeon2@gmail.com>
+Cc:     shuah@kernel.org, krzk@kernel.org, netdev@vger.kernel.org,
+        linux-nfc@lists.01.org, linux-kselftest@vger.kernel.org,
+        Bongsu Jeon <bongsu.jeon@samsung.com>
+Subject: Re: [PATCH net-next v3 1/2] nfc: Add a virtual nci device driver
+Message-ID: <20210126174238.16d9691a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210123092425.11434-2-bongsu.jeon@samsung.com>
+References: <20210123092425.11434-1-bongsu.jeon@samsung.com>
+        <20210123092425.11434-2-bongsu.jeon@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-./usage.rst contains fairly long examples and explanations of things
-like how to fake a class and how to use parameterized tests (and how you
-could do table-driven tests yourself).
+On Sat, 23 Jan 2021 18:24:24 +0900 Bongsu Jeon wrote:
+> From: Bongsu Jeon <bongsu.jeon@samsung.com>
+> 
+> NCI virtual device simulates a NCI device to the user. It can be used to
+> validate the NCI module and applications. This driver supports
+> communication between the virtual NCI device and NCI module.
+> 
+> Signed-off-by: Bongsu Jeon <bongsu.jeon@samsung.com>
 
-It's not exactly necessary information, so we add a new page with more
-digestible tips like "use kunit_kzalloc() instead of kzalloc() so you
-don't have to worry about calling kfree() yourself" and the like.
+> +static bool virtual_ncidev_check_enabled(void)
+> +{
+> +	bool ret = true;
+> +
+> +	mutex_lock(&nci_mutex);
+> +	if (state != virtual_ncidev_enabled)
+> +		ret = false;
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return ret;
 
-Change start.rst to point users to this new page first and let them know
-that usage.rst is more of optional further reading.
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- Documentation/dev-tools/kunit/index.rst |   2 +
- Documentation/dev-tools/kunit/start.rst |   4 +-
- Documentation/dev-tools/kunit/tips.rst  | 115 ++++++++++++++++++++++++
- 3 files changed, 120 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/dev-tools/kunit/tips.rst
+This can be simplified like:
 
-diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
-index c234a3ab3c34..848478838347 100644
---- a/Documentation/dev-tools/kunit/index.rst
-+++ b/Documentation/dev-tools/kunit/index.rst
-@@ -13,6 +13,7 @@ KUnit - Unit Testing for the Linux Kernel
- 	api/index
- 	style
- 	faq
-+	tips
- 
- What is KUnit?
- ==============
-@@ -88,6 +89,7 @@ How do I use it?
- ================
- 
- *   :doc:`start` - for new users of KUnit
-+*   :doc:`tips` - for short examples of best practices
- *   :doc:`usage` - for a more detailed explanation of KUnit features
- *   :doc:`api/index` - for the list of KUnit APIs used for testing
- *   :doc:`kunit-tool` - for more information on the kunit_tool helper script
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 454f307813ea..c09e2747c958 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -233,5 +233,7 @@ Congrats! You just wrote your first KUnit test!
- 
- Next Steps
- ==========
--*   Check out the :doc:`usage` page for a more
-+*   Check out the :doc:`tips` page for tips on
-+    writing idiomatic KUnit tests.
-+*   Optional: see the :doc:`usage` page for a more
-     in-depth explanation of KUnit.
-diff --git a/Documentation/dev-tools/kunit/tips.rst b/Documentation/dev-tools/kunit/tips.rst
-new file mode 100644
-index 000000000000..a6ca0af14098
---- /dev/null
-+++ b/Documentation/dev-tools/kunit/tips.rst
-@@ -0,0 +1,115 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+============================
-+Tips For Writing KUnit Tests
-+============================
-+
-+Exiting early on failed expectations
-+------------------------------------
-+
-+``KUNIT_EXPECT_EQ`` and friends will mark the test as failed and continue
-+execution.  In some cases, it's unsafe to continue and you can use the
-+``KUNIT_ASSERT`` variant to exit on failure.
-+
-+.. code-block:: c
-+
-+	void example_test_user_alloc_function(struct kunit *test)
-+	{
-+		void *object = alloc_some_object_for_me();
-+
-+		/* Make sure we got a valid pointer back. */
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, object);
-+		do_something_with_object(object);
-+	}
-+
-+Allocating memory
-+-----------------
-+
-+Where you would use ``kzalloc``, you should prefer ``kunit_kzalloc`` instead.
-+KUnit will ensure the memory is freed once the test completes.
-+
-+This is particularly useful since it lets you use the ``KUNIT_ASSERT_EQ``
-+macros to exit early from a test without having to worry about remembering to
-+call ``kfree``.
-+
-+Example:
-+
-+.. code-block:: c
-+
-+	void example_test_allocation(struct kunit *test)
-+	{
-+		char *buffer = kunit_kzalloc(test, 16, GFP_KERNEL);
-+		/* Ensure allocation succeeded. */
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buffer);
-+
-+		KUNIT_ASSERT_STREQ(test, buffer, "");
-+	}
-+
-+
-+Testing static functions
-+------------------------
-+
-+If you don't want to expose functions or variables just for testing, one option
-+is to conditionally ``#include`` the test file at the end of your .c file, e.g.
-+
-+.. code-block:: c
-+
-+	/* In my_file.c */
-+
-+	static int do_interesting_thing();
-+
-+	#ifdef CONFIG_MY_KUNIT_TEST
-+	#include "my_kunit_test.c"
-+	#endif
-+
-+Injecting test-only code
-+------------------------
-+
-+Similarly to the above, it can be useful to add test-specific logic.
-+
-+.. code-block:: c
-+
-+	/* In my_file.h */
-+
-+	#ifdef CONFIG_MY_KUNIT_TEST
-+	/* Defined in my_kunit_test.c */
-+	void test_only_hook(void);
-+	#else
-+	void test_only_hook(void) { }
-+	#endif
-+
-+TODO(dlatypov@google.com): add an example of using ``current->kunit_test`` in
-+such a hook when it's not only updated for ``CONFIG_KASAN=y``.
-+
-+Customizing error messages
-+--------------------------
-+
-+Each of the ``KUNIT_EXPECT`` and ``KUNIT_ASSERT`` macros have a ``_MSG`` variant.
-+These take a format string and arguments to provide additional context to the automatically generated error messages.
-+
-+.. code-block:: c
-+
-+	char some_str[41];
-+	generate_sha1_hex_string(some_str);
-+
-+	/* Before. Not easy to tell why the test failed. */
-+	KUNIT_EXPECT_EQ(test, strlen(some_str), 40);
-+
-+	/* After. Now we see the offending string. */
-+	KUNIT_EXPECT_EQ_MSG(test, strlen(some_str), 40, "some_str='%s'", some_str);
-+
-+Alternatively, one can take full control over the error message by using ``KUNIT_FAIL()``, e.g.
-+
-+.. code-block:: c
-+
-+	/* Before */
-+	KUNIT_EXPECT_EQ(test, some_setup_function(), 0);
-+
-+	/* After: full control over the failure message. */
-+	if (some_setup_function())
-+		KUNIT_FAIL(test, "Failed to setup thing for testing");
-+
-+Next Steps
-+==========
-+*   Optional: see the :doc:`usage` page for a more
-+    in-depth explanation of KUnit.
+	bool ret;
 
-base-commit: 6ee1d745b7c9fd573fba142a2efdad76a9f1cb04
--- 
-2.30.0.280.ga3ce27912f-goog
+	mutex_lock()
+	ret = state == virtual_ncidev_enabled;
+	mutex_unlock()
 
+	return ret;
+
+
+> +}
+> +
+> +static int virtual_nci_open(struct nci_dev *ndev)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int virtual_nci_close(struct nci_dev *ndev)
+> +{
+> +	mutex_lock(&nci_mutex);
+> +	if (send_buff)
+> +		kfree_skb(send_buff);
+
+kfree_skb() handles NULL, no need for the if, you can always call
+kfree_skb() here
+
+> +	send_buff = NULL;
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static int virtual_nci_send(struct nci_dev *ndev, struct sk_buff *skb)
+> +{
+> +	if (virtual_ncidev_check_enabled() == false)
+> +		return 0;
+
+Shouldn't you check this _under_ the lock below? 
+
+Otherwise there is a small window between check and use of send_buff
+
+> +	mutex_lock(&nci_mutex);
+> +	if (send_buff) {
+> +		mutex_unlock(&nci_mutex);
+> +		return -1;
+> +	}
+> +	send_buff = skb_copy(skb, GFP_KERNEL);
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct nci_ops virtual_nci_ops = {
+> +	.open = virtual_nci_open,
+> +	.close = virtual_nci_close,
+> +	.send = virtual_nci_send
+> +};
+> +
+> +static ssize_t virtual_ncidev_read(struct file *file, char __user *buf,
+> +				   size_t count, loff_t *ppos)
+> +{
+> +	size_t actual_len;
+> +
+> +	mutex_lock(&nci_mutex);
+> +	if (!send_buff) {
+> +		mutex_unlock(&nci_mutex);
+> +		return 0;
+> +	}
+> +
+> +	actual_len = min_t(size_t, count, send_buff->len);
+> +
+> +	if (copy_to_user(buf, send_buff->data, actual_len)) {
+> +		mutex_unlock(&nci_mutex);
+> +		return -EFAULT;
+> +	}
+> +
+> +	skb_pull(send_buff, actual_len);
+> +	if (send_buff->len == 0) {
+> +		consume_skb(send_buff);
+> +		send_buff = NULL;
+> +	}
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return actual_len;
+> +}
+> +
+> +static ssize_t virtual_ncidev_write(struct file *file,
+> +				    const char __user *buf,
+> +				    size_t count, loff_t *ppos)
+> +{
+> +	struct sk_buff *skb;
+> +
+> +	skb = alloc_skb(count, GFP_KERNEL);
+> +	if (!skb)
+> +		return -ENOMEM;
+> +
+> +	if (copy_from_user(skb_put(skb, count), buf, count)) {
+> +		kfree_skb(skb);
+> +		return -EFAULT;
+> +	}
+> +
+> +	nci_recv_frame(ndev, skb);
+> +	return count;
+> +}
+> +
+> +static int virtual_ncidev_open(struct inode *inode, struct file *file)
+> +{
+> +	int ret = 0;
+> +
+> +	mutex_lock(&nci_mutex);
+> +	if (state != virtual_ncidev_disabled) {
+> +		mutex_unlock(&nci_mutex);
+> +		return -EBUSY;
+> +	}
+> +
+> +	ndev = nci_allocate_device(&virtual_nci_ops, VIRTUAL_NFC_PROTOCOLS,
+> +				   0, 0);
+> +	if (!ndev) {
+> +		mutex_unlock(&nci_mutex);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	ret = nci_register_device(ndev);
+> +	if (ret < 0) {
+> +		nci_free_device(ndev);
+> +		mutex_unlock(&nci_mutex);
+> +		return ret;
+> +	}
+> +	state = virtual_ncidev_enabled;
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static int virtual_ncidev_close(struct inode *inode, struct file *file)
+> +{
+> +	mutex_lock(&nci_mutex);
+> +
+> +	if (state == virtual_ncidev_enabled) {
+> +		state = virtual_ncidev_disabling;
+> +		mutex_unlock(&nci_mutex);
+> +
+> +		nci_unregister_device(ndev);
+> +		nci_free_device(ndev);
+> +
+> +		mutex_lock(&nci_mutex);
+> +	}
+> +
+> +	state = virtual_ncidev_disabled;
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static long virtual_ncidev_ioctl(struct file *flip, unsigned int cmd,
+> +				 unsigned long arg)
+> +{
+> +	if (cmd == IOCTL_GET_NCIDEV_IDX) {
+> +		struct nfc_dev *nfc_dev = ndev->nfc_dev;
+> +		void __user *p = (void __user *)arg;
+> +
+> +		if (copy_to_user(p, &nfc_dev->idx, sizeof(nfc_dev->idx)))
+> +			return -EFAULT;
+> +	} else {
+> +		return -ENOTTY;
+> +	}
+> +
+> +	return 0;
+
+Please flip the condition and return early. I think I suggested this
+already:
+
+{
+	struct nfc_dev *nfc_dev = ndev->nfc_dev;
+	void __user *p = (void __user *)arg;		
+
+	if (cmd != IOCTL_GET_NCIDEV_IDX)
+		return -ENOTTY;
+
+	if (copy_to_user(p, &nfc_dev->idx, sizeof(nfc_dev->idx)))
+		return -EFAULT;
+
+	return 0;
