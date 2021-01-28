@@ -2,104 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8B6307A27
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Jan 2021 16:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD3A307A83
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Jan 2021 17:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbhA1P5a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Jan 2021 10:57:30 -0500
-Received: from gentwo.org ([3.19.106.255]:44642 "EHLO gentwo.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229885AbhA1P53 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Jan 2021 10:57:29 -0500
-Received: by gentwo.org (Postfix, from userid 1002)
-        id 70A813F4C1; Thu, 28 Jan 2021 15:56:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by gentwo.org (Postfix) with ESMTP id 6DA583F461;
-        Thu, 28 Jan 2021 15:56:36 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 15:56:36 +0000 (UTC)
-From:   Christoph Lameter <cl@linux.com>
-X-X-Sender: cl@www.lameter.com
-To:     Michal Hocko <mhocko@suse.com>
-cc:     Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-In-Reply-To: <YBLA7sEKn01HXd/U@dhcp22.suse.cz>
-Message-ID: <alpine.DEB.2.22.394.2101281549390.11861@www.lameter.com>
-References: <20210121122723.3446-1-rppt@kernel.org> <20210121122723.3446-8-rppt@kernel.org> <20210126114657.GL827@dhcp22.suse.cz> <303f348d-e494-e386-d1f5-14505b5da254@redhat.com> <20210126120823.GM827@dhcp22.suse.cz> <20210128092259.GB242749@kernel.org>
- <YBK1kqL7JA7NePBQ@dhcp22.suse.cz> <alpine.DEB.2.22.394.2101281326360.10563@www.lameter.com> <YBLA7sEKn01HXd/U@dhcp22.suse.cz>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S231436AbhA1QSJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Jan 2021 11:18:09 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:45280 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231634AbhA1QSH (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 28 Jan 2021 11:18:07 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <seth.forshee@canonical.com>)
+        id 1l59z1-0002aT-Kf
+        for linux-kselftest@vger.kernel.org; Thu, 28 Jan 2021 16:17:23 +0000
+Received: by mail-il1-f200.google.com with SMTP id b4so5079564ilj.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 08:17:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Tkk2BUb79GCkzB0eTMBLvXetGKpINayzR/LLA/HkVzI=;
+        b=R2D4W6YULsH7e0D8IBOXuUytjKz/6/LRhK8eB8VoSRlcXgASj3nsU/JQPrvMF/RUEX
+         M4g3XlVtI5lPMPP5wMIgIWnSJfEiGUBoMWhvFsZi7TYGrOGBNxSPy11liFWN6kgdup2R
+         Uvnl9SgnpgJOLSV1e0f7K+v7flMICUhMzOfAoYCjBQF8HBY4JbvVZVWxtudgxZoNNCKi
+         CAV99z2uFbzhV2xaQYj5dcfF3nG5hkv54W1rZemhlMNsn6HXKIEO8xixzlY/Ess9dqun
+         qG2Tui4t65KXJX80OJo6CaenjdNuvlq2HgnXIXo2CKnHUrfg3IVMYBD71OO0/TT+ueLV
+         oJfA==
+X-Gm-Message-State: AOAM531lwKPRLJ8WuLIUpuZz8wSL7JdyynuRCXVe26lenCK5DeZh7Pg9
+        GCAPjTwGiTBjGQ3wovhTVmZgnn3YyWIKTLifyclmRztmozPwaEEBmOOolwxhm+tyW84H6P14PVh
+        qBbbyDJbBXvjssLxp9zMhb8W8NBq1CnOLIEOYHufXIgG9mw==
+X-Received: by 2002:a92:358b:: with SMTP id c11mr13334168ilf.305.1611850642724;
+        Thu, 28 Jan 2021 08:17:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzXRVKkWU+ASLPWgeU5gL8fF7xCAiBTAgC12qWAiH5/nqd6FGmSEQ3n97e9J3Cd5lbQs6y/QQ==
+X-Received: by 2002:a92:358b:: with SMTP id c11mr13334147ilf.305.1611850642504;
+        Thu, 28 Jan 2021 08:17:22 -0800 (PST)
+Received: from localhost ([2605:a601:ac0f:820:52bc:7bc4:5d05:b6a5])
+        by smtp.gmail.com with ESMTPSA id y11sm2796979ilv.64.2021.01.28.08.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jan 2021 08:17:21 -0800 (PST)
+From:   Seth Forshee <seth.forshee@canonical.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/seccomp: Accept any valid fd in user_notification_addfd
+Date:   Thu, 28 Jan 2021 10:17:21 -0600
+Message-Id: <20210128161721.99150-1-seth.forshee@canonical.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 28 Jan 2021, Michal Hocko wrote:
+This test expects fds to have specific values, which works fine
+when the test is run standalone. However, the kselftest runner
+consumes a couple of extra fds for redirection when running
+tests, so the test fails when run via kselftest.
 
-> > > If you kill the allocating process then yes, it would work, but your
-> > > process might be the very last to be selected.
-> >
-> > OOMs are different if you have a "constrained allocation". In that case it
-> > is the fault of the process who wanted memory with certain conditions.
-> > That memory is not available. General memory is available though. In that
-> > case the allocating process is killed.
->
-> I do not see this implementation would do anything like that. Neither
-> anything like that implemented in the oom killer. Constrained
-> allocations (cpusets/memcg/mempolicy) only do restrict their selection
-> to processes which belong to the same domain. So I am not really sure
-> what you are referring to. The is only a global knob to _always_ kill
-> the allocating process on OOM.
+Change the test to pass on any valid fd number.
 
-Constrained allocations refer to allocations where the NUMA nodes are
-restricted or something else does not allow the use of arbitrary memory.
-The OOM killer changes its behavior. In the past we fell back to killing
-the calling process.
+Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-See constrained_alloc() in mm/oom_kill.c
-
-static const char * const oom_constraint_text[] = {
-        [CONSTRAINT_NONE] = "CONSTRAINT_NONE",
-        [CONSTRAINT_CPUSET] = "CONSTRAINT_CPUSET",
-        [CONSTRAINT_MEMORY_POLICY] = "CONSTRAINT_MEMORY_POLICY",
-        [CONSTRAINT_MEMCG] = "CONSTRAINT_MEMCG",
-};
-
-/*
- * Determine the type of allocation constraint.
- */
-static enum oom_constraint constrained_alloc(struct oom_control *oc)
-{
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 26c72f2b61b1..9338df6f4ca8 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -4019,18 +4019,14 @@ TEST(user_notification_addfd)
+ 
+ 	/* Verify we can set an arbitrary remote fd */
+ 	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd);
+-	/*
+-	 * The child has fds 0(stdin), 1(stdout), 2(stderr), 3(memfd),
+-	 * 4(listener), so the newly allocated fd should be 5.
+-	 */
+-	EXPECT_EQ(fd, 5);
++	EXPECT_GE(fd, 0);
+ 	EXPECT_EQ(filecmp(getpid(), pid, memfd, fd), 0);
+ 
+ 	/* Verify we can set an arbitrary remote fd with large size */
+ 	memset(&big, 0x0, sizeof(big));
+ 	big.addfd = addfd;
+ 	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD_BIG, &big);
+-	EXPECT_EQ(fd, 6);
++	EXPECT_GE(fd, 0);
+ 
+ 	/* Verify we can set a specific remote fd */
+ 	addfd.newfd = 42;
+-- 
+2.29.2
 
