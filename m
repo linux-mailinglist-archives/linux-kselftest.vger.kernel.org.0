@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A17F330840F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Jan 2021 04:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA21308410
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Jan 2021 04:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbhA2DF6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Jan 2021 22:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
+        id S231616AbhA2DGF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Jan 2021 22:06:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbhA2DF5 (ORCPT
+        with ESMTP id S231697AbhA2DF7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Jan 2021 22:05:57 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA181C061573
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:17 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id e9so4487355plh.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:17 -0800 (PST)
+        Thu, 28 Jan 2021 22:05:59 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5A2C061756
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:19 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id e9so5579869pjj.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6FtqZbVLoNhYzW/5zxBFGSTg2OJ2tv0Ub0qNAJ13xHs=;
-        b=j5yLzHZt+6y1rTjQAaHsDOTxGgaIO1Q9C9yvGJP/x3SkVLLnhJSUKnESb/H0Z9JJM3
-         X3o9CasXX6DZTksNat7StXwigWk+Orm9ia/zA32HYjwgB7fSoTv26tV1S3bs6YrGsFEp
-         z4HPk5S+5CgJFgVQdxw+V7SZtaTKny8EBvZ3oJTURUzJ+ccHaYle+g1y092cga4L8huN
-         RJggFGQ7Nhlb7TYWCH0Ubq1AsPnmdAUnLmHsDZinfH7eAFf/GnRcL4Dm4SijBHNx+FHZ
-         Bw43r3f9o5DaCRZX9xsjG0o3Lr7MVysYUjjKamy51VBjfsyrADAgEtsWNzZdhWgazp4N
-         PuAg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=++jZtzOYyQ1+vtEeMaOUIstaO3RLvVGMYd5LElrs3tk=;
+        b=uhyod5IVvkWiHsST5/O68YcC4Axe3RKRQzvKBXYml1+ezIoSduIUXyT3McvxxfQb6X
+         MdGdB6a0QGYeKJPc6EOPv4LDPZzHfkLWnQhCaEjmTW+3EDXkZRQFpri3M7TDZpXFwknB
+         nzDT/YpZaeczzI5+TCeNblHK1riCKukRLYsO4ZNEgO2aC4WhQT2Ut1dctUoeYX4W6t9T
+         ZW828X9T4wU/86xrUnE1rqIASwioP5MyUUMrrPaQuKKUYlALfUnddC1lV5fGS3MkmN8L
+         pujzNObUmAqlaJN71GQQzc71PDhg+rwgYMgYwG4kvOBSZEYKrvspyB0LF4dA10Zcxcfq
+         DqSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6FtqZbVLoNhYzW/5zxBFGSTg2OJ2tv0Ub0qNAJ13xHs=;
-        b=Fm24oKLxPHLbu2M2Mo7ZfzDeLFfJZP5889BBkJU2KjbjjJuIcCW4VnHEN9x+saSipt
-         6Pt+SDCW685WJAeaKfFpyrlHBSCinOXBJ5KDavzP3kvemR5MWNr8ocuH1411alW39UGs
-         WqIfVfRJg/HkorvAdOyg7eymjLHQa7hR8TQ+Uvn1fvr4XOjp6u0BKOGzOUBFqlDcW8+i
-         A7ye8XneQKpn8evJZw8Ocww8az7ooDDVGOcfJM/OXYwy8CqlNsEXuC5EYRNbiClxg1ge
-         vOYXXwAd+lIA/bwZ+iA3wW/DGA7+U00q2cae2X5BZxs8eEaHhA18UNY6pvSWzzmLVCCD
-         Z/3Q==
-X-Gm-Message-State: AOAM530ARnOANFFEnx/sRzg5G1BT0fo85W61Rq+J9NMNQr2BiOdhOd3j
-        zFgdyEmNp6Bf2fMyoGpe3yyyrg==
-X-Google-Smtp-Source: ABdhPJxNcoBMcdOeDQYd3FdgzjZ86Cf272Rz2la9I9NvjeaL4IhlWxZTBvB3/43QEa/+/6QJlLWKNA==
-X-Received: by 2002:a17:90a:d913:: with SMTP id c19mr2416772pjv.19.1611889517371;
-        Thu, 28 Jan 2021 19:05:17 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=++jZtzOYyQ1+vtEeMaOUIstaO3RLvVGMYd5LElrs3tk=;
+        b=tm0tYSU8SJ20tYAGLb9Q/s5jOhuLOvTqxNpPgmi43RDsYlPdhhnFq7I9YOJ1GaR2Qs
+         EYuIFiwkte1YROrT7BGc6J7OgAZN4maOb0dJLGfxYOcsqLAo+gH8Zl9TW9W9UVnkWfqL
+         X4oXR5aNgBZXh4gfPwM4aUA954nBhntHZMiZHifE9SbXA1QyxCrnK6m3IyOpxm00ZQdq
+         2arCSGn14n6KIAp3zbyGdjlts/hOTkqvd7wUqlWX8MT1/jhGTKSj8+nIZ8MMOdhoPofk
+         naS2gFLJwjIvouHGAUYlEhtCQnMX5XtDnH5glYRz4muktvP4D+PYrHIbgq/zNpSQlCV1
+         JOzQ==
+X-Gm-Message-State: AOAM533fZ5A2zS3bc8sNlGRGz8RX49evHEHlwm+nVj2NZnMmAYFiQgOn
+        niQdD8f6cg8LnW7FGVdDthA9Hw==
+X-Google-Smtp-Source: ABdhPJyGn3wdGoYadza5iNZE6bj/nXq6MrRCQBVxL3lyhFqvG5bHcjloTEwy1RXyVtmPLRFrsk59eQ==
+X-Received: by 2002:a17:902:a710:b029:dc:3817:e7c2 with SMTP id w16-20020a170902a710b02900dc3817e7c2mr2361020plq.0.1611889518950;
+        Thu, 28 Jan 2021 19:05:18 -0800 (PST)
 Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id y75sm6854496pfg.119.2021.01.28.19.05.15
+        by smtp.gmail.com with ESMTPSA id y75sm6854496pfg.119.2021.01.28.19.05.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jan 2021 19:05:16 -0800 (PST)
+        Thu, 28 Jan 2021 19:05:18 -0800 (PST)
 From:   John Stultz <john.stultz@linaro.org>
 To:     lkml <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -61,26 +61,19 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Daniel Mentz <danielmentz@google.com>,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/5] kselftests: dmabuf-heaps: Fix Makefile's inclusion of the kernel's usr/include dir
-Date:   Fri, 29 Jan 2021 03:05:10 +0000
-Message-Id: <20210129030514.1231773-1-john.stultz@linaro.org>
+Subject: [PATCH 2/5] kselftests: dmabuf-heaps: Add clearer checks on DMABUF_BEGIN/END_SYNC
+Date:   Fri, 29 Jan 2021 03:05:11 +0000
+Message-Id: <20210129030514.1231773-2-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210129030514.1231773-1-john.stultz@linaro.org>
+References: <20210129030514.1231773-1-john.stultz@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Copied in from somewhere else, the makefile was including
-the kerne's usr/include dir, which caused the asm/ioctl.h file
-to be used.
-
-Unfortunately, that file has different values for _IOC_SIZEBITS
-and _IOC_WRITE than include/uapi/asm-generic/ioctl.h which then
-causes the _IOCW macros to give the wrong ioctl numbers,
-specifically for DMA_BUF_IOCTL_SYNC.
-
-This patch simply removes the extra include from the Makefile
+Add logic to check the dmabuf sync calls succeed.
 
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: Brian Starkey <brian.starkey@arm.com>
@@ -93,23 +86,55 @@ Cc: Daniel Mentz <danielmentz@google.com>
 Cc: linux-media@vger.kernel.org
 Cc: dri-devel@lists.freedesktop.org
 Cc: linux-kselftest@vger.kernel.org
-Fixes: a8779927fd86c ("kselftests: Add dma-heap test")
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
- tools/testing/selftests/dmabuf-heaps/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/dmabuf-heaps/dmabuf-heap.c      | 20 ++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/dmabuf-heaps/Makefile b/tools/testing/selftests/dmabuf-heaps/Makefile
-index 607c2acd2082..604b43ece15f 100644
---- a/tools/testing/selftests/dmabuf-heaps/Makefile
-+++ b/tools/testing/selftests/dmabuf-heaps/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--CFLAGS += -static -O3 -Wl,-no-as-needed -Wall -I../../../../usr/include
-+CFLAGS += -static -O3 -Wl,-no-as-needed -Wall
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index 909da9cdda97..46f6759a8acc 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -130,16 +130,13 @@ static int dmabuf_heap_alloc(int fd, size_t len, unsigned int flags,
+ 					 dmabuf_fd);
+ }
  
- TEST_GEN_PROGS = dmabuf-heap
+-static void dmabuf_sync(int fd, int start_stop)
++static int dmabuf_sync(int fd, int start_stop)
+ {
+ 	struct dma_buf_sync sync = {
+ 		.flags = start_stop | DMA_BUF_SYNC_RW,
+ 	};
+-	int ret;
  
+-	ret = ioctl(fd, DMA_BUF_IOCTL_SYNC, &sync);
+-	if (ret)
+-		printf("sync failed %d\n", errno);
++	return ioctl(fd, DMA_BUF_IOCTL_SYNC, &sync);
+ }
+ 
+ #define ONE_MEG (1024 * 1024)
+@@ -197,9 +194,18 @@ static int test_alloc_and_import(char *heap_name)
+ 	}
+ 	printf("import passed\n");
+ 
+-	dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
++	ret = dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
++	if (ret < 0) {
++		printf("Sync start failed!\n");
++		goto out;
++	}
++
+ 	memset(p, 0xff, ONE_MEG);
+-	dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_END);
++	ret = dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_END);
++	if (ret < 0) {
++		printf("Sync end failed!\n");
++		goto out;
++	}
+ 	printf("syncs passed\n");
+ 
+ 	close_handle(importer_fd, handle);
 -- 
 2.25.1
 
