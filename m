@@ -2,149 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B77D3309DCA
-	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Jan 2021 17:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B17B30CEF8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Feb 2021 23:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbhAaQEy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 31 Jan 2021 11:04:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbhAaQEv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 31 Jan 2021 11:04:51 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE797C061574
-        for <linux-kselftest@vger.kernel.org>; Sun, 31 Jan 2021 08:04:09 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id f1so16045217edr.12
-        for <linux-kselftest@vger.kernel.org>; Sun, 31 Jan 2021 08:04:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ill5FtHsvnGnhyZq4PTZ+wfZWDbj85ydmjcR5hoQtSU=;
-        b=WA9qeWNS7cwGg8EThTQKocqoSAMpMXmdWEN96odCb1lDWcM2Sc6v0Qb7sDlmvA+l+I
-         A8f+UMiuSXRUXIbHorjezUUJhKowq2uMgSlOLaQKlQ2TE2CKW/8nPCtEsN+ULwFm0bCg
-         9/wX7BwKDdipxk5O1KYWXekm+8qe/E4QqrApq/d05iBQtDtZIXya1NS9k8a0s5lWncyh
-         g6ruf7EBD+cG/5qucNNMJ6+m+zjl1MiGsDM8tC4ZUV0lVOP0V6NdY9Qaskw+B2dxa5eF
-         WGMkCC6G04Cz0bCzZ3ggOUmnb142HmddZFEz3cJyHpOYgpANZbbHESkueT3GcqeRKuB9
-         a7HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ill5FtHsvnGnhyZq4PTZ+wfZWDbj85ydmjcR5hoQtSU=;
-        b=EATrf0emR2PC9xwS01dSvoibZAvhg0kFj2zEaWGujklnrIRYoQfKOTju9g1+g8dE4y
-         mXyvb5doQtOl+PfVKB1e8Zn8BzTSG5HhpiBQGn0RvcFit/JNdvKLFHQuvmm8bL33A8eg
-         MCY1tQBXrl9Tw1XPvKEg5jBSGFrJU03KoW24PbOCndcKCpHVwIctAwwVI+bLj3U9bPo8
-         J8nkvdj0j4RP2/BvbxLw7x9ZqlDX41vOjS5UK76f3afiu+6rBW0mvgcr+oPDiblgUHRA
-         Ht4skTBHQ0lm3LqKGqbTYho9F2jPHeZ6RXh9Byztqan29tKiERqwdVYB3sciuVe33Zxw
-         aq1A==
-X-Gm-Message-State: AOAM530YdBY8MJwUiRtZ5KT4ewkPevf6FAcolrtTXGKM6LHetQ2/QF22
-        0WcctwEbokmDpmYNwhl9pbBGYjgR2INtYcdOutdS2w==
-X-Google-Smtp-Source: ABdhPJyCGWQ/3ra4ZR4qn/M+OGAua47G1o3uToLGNFPGWhEhJk7alqSH8V206c7XvCeXq7s9hKIxxI4DTjqV9Fn0UKc=
-X-Received: by 2002:a05:6402:402:: with SMTP id q2mr14874940edv.116.1612109048337;
- Sun, 31 Jan 2021 08:04:08 -0800 (PST)
+        id S235065AbhBBWeZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Feb 2021 17:34:25 -0500
+Received: from [20.39.40.203] ([20.39.40.203]:61037 "EHLO optinix.in"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S230091AbhBBWeU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Feb 2021 17:34:20 -0500
+dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
+        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
+        b=Z/qoYR5e93G/1E5Uh8tLreepyziGYShILI7fcXozE97A3DqZKBadv9kcBZBcmHZnqAUcLkt0g+COxgI6WqJ5gdfKqksQSW540KJaAE4DNiZ+EZYtErJhsiZnZCgjfp9yI8W2dpgN2EsH5zUvgVY6Bl2MWU8ziaGqy1DCXSk4DXXi+2CTtkJX9uQrf2ohPvP7bhav6zr4dJxTQjQYoopWjV3h9j7RqQq/UIXqX3VBjVDZARoXQTZUB0KN0A
+        F7X8DeijiSCFEdYkkdQwasjHi3K0B6KloKBXegK0TgQ39PHt5t2MVnmtmeZadY0DbdImfujjk25mqjLTG700JJRoTl9A==
+Received: from User (Unknown [52.231.31.5])
+        by optinix.in with ESMTP
+        ; Sat, 30 Jan 2021 02:14:15 +0000
+Message-ID: <B0CC978E-0149-4652-A2D0-17DE1F49BCC1@optinix.in>
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <support@digitalsol.in>
+Subject: Re:read
+Date:   Sat, 30 Jan 2021 02:14:13 -0000
 MIME-Version: 1.0
-References: <20210125194751.1275316-8-pasha.tatashin@soleen.com> <20210131130903.4875-1-lecopzer@gmail.com>
-In-Reply-To: <20210131130903.4875-1-lecopzer@gmail.com>
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-Date:   Sun, 31 Jan 2021 11:03:32 -0500
-Message-ID: <CA+CK2bC_LKeffiYq8eraM-rLBFPfUS1034eD6FKQo5eR7s28Ew@mail.gmail.com>
-Subject: Re: [PATCH v8 07/14] mm: honor PF_MEMALLOC_PIN for all movable pages
-To:     Lecopzer Chen <lecopzer@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        James Morris <jmorris@namei.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jan 31, 2021 at 8:09 AM Lecopzer Chen <lecopzer@gmail.com> wrote:
->
->
-> Hi,
->
-> [...]
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index c93e801a45e9..3f17c73ad582 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -3807,16 +3807,13 @@ alloc_flags_nofragment(struct zone *zone, gfp_t gfp_mask)
-> >       return alloc_flags;
-> >  }
-> >
-> > -static inline unsigned int current_alloc_flags(gfp_t gfp_mask,
-> > -                                     unsigned int alloc_flags)
-> > +/* Must be called after current_gfp_context() which can change gfp_mask */
-> > +static inline unsigned int gpf_to_alloc_flags(gfp_t gfp_mask,
-> > +                                           unsigned int alloc_flags)
-> >  {
-> >  #ifdef CONFIG_CMA
-> > -     unsigned int pflags = current->flags;
-> > -
-> > -     if (!(pflags & PF_MEMALLOC_PIN) &&
-> > -         gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
-> > +     if (gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
-> >               alloc_flags |= ALLOC_CMA;
-> > -
-> >  #endif
-> >       return alloc_flags;
-> >  }
-> > @@ -4472,7 +4469,7 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
-> >       } else if (unlikely(rt_task(current)) && !in_interrupt())
-> >               alloc_flags |= ALLOC_HARDER;
-> >
-> > -     alloc_flags = current_alloc_flags(gfp_mask, alloc_flags);
-> > +     alloc_flags = gpf_to_alloc_flags(gfp_mask, alloc_flags);
-> >
-> >       return alloc_flags;
-> >  }
-> > @@ -4774,7 +4771,7 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
-> >
-> >       reserve_flags = __gfp_pfmemalloc_flags(gfp_mask);
-> >       if (reserve_flags)
-> > -             alloc_flags = current_alloc_flags(gfp_mask, reserve_flags);
-> > +             alloc_flags = gpf_to_alloc_flags(gfp_mask, reserve_flags);
-> >
-> >       /*
-> >        * Reset the nodemask and zonelist iterators if memory policies can be
-> > @@ -4943,7 +4940,7 @@ static inline bool prepare_alloc_pages(gfp_t gfp_mask, unsigned int order,
-> >       if (should_fail_alloc_page(gfp_mask, order))
-> >               return false;
-> >
-> > -     *alloc_flags = current_alloc_flags(gfp_mask, *alloc_flags);
-> > +     *alloc_flags = gpf_to_alloc_flags(gfp_mask, *alloc_flags);
->
-> I have a question, what is the abbreviation of "gpf" in the function
-> name gpf_to_alloc_flags()?
->
-> It seems that this function still use gfp_mask, is this supposed
-> to be gfp (Get Free Page)?
+Hello,
 
-Thank you for noticing this, it was accidental, I will rename the
-function gpf_to_alloc_flags() -> gfp_to_alloc_flags()
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
->
-> Thanks,
-> Lecopzer
->
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
+
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
+Regards,
+Ms. Reem.
+
