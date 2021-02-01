@@ -2,20 +2,20 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E1730A8A9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Feb 2021 14:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F00D030A8B4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Feb 2021 14:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbhBAN1o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Feb 2021 08:27:44 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:49176 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231201AbhBAN1n (ORCPT
+        id S232005AbhBAN23 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Feb 2021 08:28:29 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:60737 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231594AbhBAN2L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Feb 2021 08:27:43 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UNbR3Fw_1612186013;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UNbR3Fw_1612186013)
+        Mon, 1 Feb 2021 08:28:11 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UNbCiom_1612186013;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UNbCiom_1612186013)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 01 Feb 2021 21:26:53 +0800
+          Mon, 01 Feb 2021 21:26:54 +0800
 From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 To:     Jarkko Sakkinen <jarkko@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -27,9 +27,9 @@ To:     Jarkko Sakkinen <jarkko@kernel.org>,
         linux-kernel@vger.kernel.org,
         Jia Zhang <zhang.jia@linux.alibaba.com>
 Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v4 1/5] selftests/x86: Use getauxval() to simplify the code in sgx
-Date:   Mon,  1 Feb 2021 21:26:49 +0800
-Message-Id: <20210201132653.35690-2-tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v4 2/5] x86/sgx: Reduce the locking range in sgx_sanitize_section()
+Date:   Mon,  1 Feb 2021 21:26:50 +0800
+Message-Id: <20210201132653.35690-3-tianjia.zhang@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.3.ge56e4f7
 In-Reply-To: <20210201132653.35690-1-tianjia.zhang@linux.alibaba.com>
 References: <20210201132653.35690-1-tianjia.zhang@linux.alibaba.com>
@@ -39,70 +39,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Simplify the sgx code implemntation by using library function
-getauxval() instead of a custom function to get the base address
-of vDSO.
+The spin lock of sgx_epc_section only locks the page_list. The
+EREMOVE operation and init_laundry_list is not necessary in the
+protection range of the spin lock. This patch reduces the lock
+range of the spin lock in the function sgx_sanitize_section()
+and only protects the operation of the page_list.
 
+Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 ---
- tools/testing/selftests/sgx/main.c | 24 ++++--------------------
- 1 file changed, 4 insertions(+), 20 deletions(-)
+ arch/x86/kernel/cpu/sgx/main.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 724cec700926..5167505fbb46 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -15,6 +15,7 @@
- #include <sys/stat.h>
- #include <sys/time.h>
- #include <sys/types.h>
-+#include <sys/auxv.h>
- #include "defines.h"
- #include "main.h"
- #include "../kselftest.h"
-@@ -28,24 +29,6 @@ struct vdso_symtab {
- 	Elf64_Word *elf_hashtab;
- };
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index c519fc5f6948..4465912174fd 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -41,20 +41,17 @@ static void sgx_sanitize_section(struct sgx_epc_section *section)
+ 		if (kthread_should_stop())
+ 			return;
  
--static void *vdso_get_base_addr(char *envp[])
--{
--	Elf64_auxv_t *auxv;
--	int i;
+-		/* needed for access to ->page_list: */
+-		spin_lock(&section->lock);
 -
--	for (i = 0; envp[i]; i++)
--		;
--
--	auxv = (Elf64_auxv_t *)&envp[i + 1];
--
--	for (i = 0; auxv[i].a_type != AT_NULL; i++) {
--		if (auxv[i].a_type == AT_SYSINFO_EHDR)
--			return (void *)auxv[i].a_un.a_val;
--	}
--
--	return NULL;
--}
--
- static Elf64_Dyn *vdso_get_dyntab(void *addr)
- {
- 	Elf64_Ehdr *ehdr = addr;
-@@ -162,7 +145,7 @@ static int user_handler(long rdi, long rsi, long rdx, long ursp, long r8, long r
- 	return 0;
- }
+ 		page = list_first_entry(&section->init_laundry_list,
+ 					struct sgx_epc_page, list);
  
--int main(int argc, char *argv[], char *envp[])
-+int main(int argc, char *argv[])
- {
- 	struct sgx_enclave_run run;
- 	struct vdso_symtab symtab;
-@@ -203,7 +186,8 @@ int main(int argc, char *argv[], char *envp[])
- 	memset(&run, 0, sizeof(run));
- 	run.tcs = encl.encl_base;
+ 		ret = __eremove(sgx_get_epc_virt_addr(page));
+-		if (!ret)
++		if (!ret) {
++			spin_lock(&section->lock);
+ 			list_move(&page->list, &section->page_list);
+-		else
++			spin_unlock(&section->lock);
++		} else
+ 			list_move_tail(&page->list, &dirty);
  
--	addr = vdso_get_base_addr(envp);
-+	/* Get vDSO base address */
-+	addr = (void *)getauxval(AT_SYSINFO_EHDR);
- 	if (!addr)
- 		goto err;
+-		spin_unlock(&section->lock);
+-
+ 		cond_resched();
+ 	}
  
 -- 
 2.19.1.3.ge56e4f7
