@@ -2,176 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2099B30ABBB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Feb 2021 16:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4896730AD3E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Feb 2021 17:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbhBAPmU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Feb 2021 10:42:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbhBAPkq (ORCPT
+        id S231816AbhBAQ6K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Feb 2021 11:58:10 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8474 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231751AbhBAQ6C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Feb 2021 10:40:46 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBF7C061A28
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Feb 2021 07:38:55 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id r20so8949661qtm.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Feb 2021 07:38:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=9bnQ1cYpKSogma2d9jSskcM/kWG+ieYizroT/wf+fYw=;
-        b=exsx+5QFq+cRHRqiZa7rT587NP5KQIe61OMLBG++wUWQatrxxRLn5sZDzzTFFCp+xI
-         v9use1KTetxdp+cIA0jCaFEohKGm/5a75xIqwgxKqgb6U89WSmsAcpUOx1rwE4WJMpwP
-         5xTfpHdnJ8557hubYdMhersWyJ2keNNwYaAU5joQ78f2Ijz2YmTYWTSoqOH+qjSZPpsY
-         nnj4x4/uqqtnGJkk2dZ8ogHmYPHpBp/CmkRz/kSZttI6P4BEZIl4MP1J+5e/jcHEvp+4
-         3fwI46nd8yxjkHX2IaqAJ90yRI9VEzyuShg4qk1IIjX2yiEkziLksJtV9M2TU5Y5CPG+
-         OyIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9bnQ1cYpKSogma2d9jSskcM/kWG+ieYizroT/wf+fYw=;
-        b=arvitxEbACL/cvHTYKCi7Kp/5vJLpU4HJ2gqSymwIIW8kmNobieroVar9jCFC26EoI
-         33GW9BUFkisg1k5XVUc6qWuF98ffV0mji6kAfLcnlALS5h6hexbPDpkpB4wk5E54I4Rx
-         31jsojXcy+l0d6gZ43lu3CmNtQNvF1qQV36FscYhbfBQlW3HAGXHdoxPCSDxtUQYYUR7
-         QW3VA1dtifoI+S11SY03T3oo+KeTB/G68bMRbnrQLtY34FCFTgcNxpIRSAFNKsfpCjv5
-         Xy6X9W+iKwgIFO2Hn+K7dahN9YGTKW5XYBtAiPxSFpLJD4peTr+GfdTfZylyzP21nqpw
-         rPmQ==
-X-Gm-Message-State: AOAM533MlVNLBWrrLiiPEByPTKZZCA+w99NQU8q7iRYHo8vd+UydgYl/
-        XBrGbPFr/x7IWalLL4XympDczw==
-X-Google-Smtp-Source: ABdhPJyhr6Rr78ckZxktTwltqLPaxIcTqiiGpt+FOipTh9Ailw7X8EyiMAch+pl7JmPmb69X7j7Y+g==
-X-Received: by 2002:ac8:5156:: with SMTP id h22mr16073194qtn.176.1612193934750;
-        Mon, 01 Feb 2021 07:38:54 -0800 (PST)
-Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id 22sm14853307qke.123.2021.02.01.07.38.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Feb 2021 07:38:54 -0800 (PST)
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
-        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
-        dan.j.williams@intel.com, sashal@kernel.org,
-        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
-        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
-        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
-        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
-        linux-doc@vger.kernel.org, ira.weiny@intel.com,
-        linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v9 14/14] selftests/vm: gup_test: test faulting in kernel, and verify pinnable pages
-Date:   Mon,  1 Feb 2021 10:38:27 -0500
-Message-Id: <20210201153827.444374-15-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210201153827.444374-1-pasha.tatashin@soleen.com>
-References: <20210201153827.444374-1-pasha.tatashin@soleen.com>
+        Mon, 1 Feb 2021 11:58:02 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 111GglEJ113096;
+        Mon, 1 Feb 2021 11:56:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=wT7a/liLBSfcD7N/UPbkV3RD/KslWeh4NLQG5EPJ7nQ=;
+ b=kXkBzChwTSaNHsMVY+LTYccolmWv+mZ3ZGn7eEUUvVLxfBBPI8zUta1XvW7g70uLasS9
+ d0kJKgQu1dnLNQXDFjIopZmB9sTHhJDP3oPSyrFyYZArItFkrYbc0fnPmsfx4LaO19/B
+ gS3Uixq/pAGwHT/prSDU8KzbQN5/ynJ+Ukn891aJzwdQslDSjiXbXsHV4bYfJjVJ8WEF
+ At5mCisx5yq+hfISjZTWjkCnERXf9VUD7yAJaJeyECDFSM3fRjdUzxLOBdyJJ3y9Vl6d
+ Qu5S+5LmA7rR1AuPmGiirOyAgBqXBXMd37MobQIK9K4Qmw9U2wP/9xPBaN10moKzV8Pu Yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36en3vs16b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 11:56:31 -0500
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 111GgxhQ114162;
+        Mon, 1 Feb 2021 11:56:30 -0500
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36en3vs155-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 11:56:30 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 111GfuSI009246;
+        Mon, 1 Feb 2021 16:56:28 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03dal.us.ibm.com with ESMTP id 36eheka7ga-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 16:56:28 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 111GuRjN23003516
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 1 Feb 2021 16:56:27 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 692A278063;
+        Mon,  1 Feb 2021 16:56:27 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5CD187806B;
+        Mon,  1 Feb 2021 16:56:20 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.85.153.205])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  1 Feb 2021 16:56:20 +0000 (GMT)
+Message-ID: <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
+Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Date:   Mon, 01 Feb 2021 08:56:19 -0800
+In-Reply-To: <YBPF8ETGBHUzxaZR@dhcp22.suse.cz>
+References: <20210121122723.3446-1-rppt@kernel.org>
+         <20210121122723.3446-8-rppt@kernel.org>
+         <20210126114657.GL827@dhcp22.suse.cz>
+         <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
+         <20210126120823.GM827@dhcp22.suse.cz> <20210128092259.GB242749@kernel.org>
+         <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
+         <73738cda43236b5ac2714e228af362b67a712f5d.camel@linux.ibm.com>
+         <YBPF8ETGBHUzxaZR@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-01_06:2021-01-29,2021-02-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ mlxlogscore=818 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 mlxscore=0 clxscore=1015 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102010084
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When pages are pinned they can be faulted in userland and migrated, and
-they can be faulted right in kernel without migration.
+On Fri, 2021-01-29 at 09:23 +0100, Michal Hocko wrote:
+> On Thu 28-01-21 13:05:02, James Bottomley wrote:
+> > Obviously the API choice could be revisited
+> > but do you have anything to add over the previous discussion, or is
+> > this just to get your access control?
+> 
+> Well, access control is certainly one thing which I still believe is
+> missing. But if there is a general agreement that the direct map
+> manipulation is not that critical then this will become much less of
+> a problem of course.
 
-In either case, the pinned pages must end-up being pinnable (not movable).
+The secret memory is a scarce resource but it's not a facility that
+should only be available to some users.
 
-Add a new test to gup_test, to help verify that the gup/pup
-(get_user_pages() / pin_user_pages()) behavior with respect to pinnable
-and movable pages is reasonable and correct. Specifically, provide a
-way to:
+> It all boils down whether secret memory is a scarce resource. With
+> the existing implementation it really is. It is effectivelly
+> repeating same design errors as hugetlb did. And look now, we have a
+> subtle and convoluted reservation code to track mmap requests and we
+> have a cgroup controller to, guess what, have at least some control
+> over distribution if the preallocated pool. See where am I coming
+> from?
 
-1) Verify that only "pinnable" pages are pinned. This is checked
-automatically for you.
+I'm fairly sure rlimit is the correct way to control this.  The
+subtlety in both rlimit and memcg tracking comes from deciding to
+account under an existing category rather than having our own new one. 
+People don't like new stuff in accounting because it requires
+modifications to everything in userspace.  Accounting under and
+existing limit keeps userspace the same but leads to endless arguments
+about which limit it should be under.  It took us several patch set
+iterations to get to a fragile consensus on this which you're now
+disrupting for reasons you're not making clear.
 
-2) Verify that gup/pup performance is reasonable. This requires
-comparing benchmarks between doing gup/pup on pages that have been
-pre-faulted in from user space, vs. doing gup/pup on pages that are not
-faulted in until gup/pup time (via FOLL_TOUCH). This decision is
-controlled with the new -z command line option.
+> If the secret memory is more in line with mlock without any imposed
+> limit (other than available memory) in the end then, sure, using the
+> same access control as mlock sounds reasonable. Btw. if this is
+> really just a more restrictive mlock then is there any reason to not
+> hook this into the existing mlock infrastructure (e.g.
+> MCL_EXCLUSIVE)? Implications would be that direct map would be
+> handled on instantiation/tear down paths, migration would deal with
+> the same (if possible). Other than that it would be mlock like.
 
-Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup_test.c                         |  6 ++++++
- tools/testing/selftests/vm/gup_test.c | 23 +++++++++++++++++++----
- 2 files changed, 25 insertions(+), 4 deletions(-)
+In the very first patch set we proposed a mmap flag to do this.  Under
+detailed probing it emerged that this suffers from several design
+problems: the KVM people want VMM to be able to remove the secret
+memory range from the process; there may be situations where sharing is
+useful and some people want to be able to seal the operations.  All of
+this ended up convincing everyone that a file descriptor based approach
+was better than a mmap one.
 
-diff --git a/mm/gup_test.c b/mm/gup_test.c
-index a6ed1c877679..d974dec19e1c 100644
---- a/mm/gup_test.c
-+++ b/mm/gup_test.c
-@@ -52,6 +52,12 @@ static void verify_dma_pinned(unsigned int cmd, struct page **pages,
- 
- 				dump_page(page, "gup_test failure");
- 				break;
-+			} else if (cmd == PIN_LONGTERM_BENCHMARK &&
-+				WARN(!is_pinnable_page(page),
-+				     "pages[%lu] is NOT pinnable but pinned\n",
-+				     i)) {
-+				dump_page(page, "gup_test failure");
-+				break;
- 			}
- 		}
- 		break;
-diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
-index 943cc2608dc2..1e662d59c502 100644
---- a/tools/testing/selftests/vm/gup_test.c
-+++ b/tools/testing/selftests/vm/gup_test.c
-@@ -13,6 +13,7 @@
- 
- /* Just the flags we need, copied from mm.h: */
- #define FOLL_WRITE	0x01	/* check pte is writable */
-+#define FOLL_TOUCH	0x02	/* mark page accessed */
- 
- static char *cmd_to_str(unsigned long cmd)
- {
-@@ -39,11 +40,11 @@ int main(int argc, char **argv)
- 	unsigned long size = 128 * MB;
- 	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 1;
- 	unsigned long cmd = GUP_FAST_BENCHMARK;
--	int flags = MAP_PRIVATE;
-+	int flags = MAP_PRIVATE, touch = 0;
- 	char *file = "/dev/zero";
- 	char *p;
- 
--	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwWSHp")) != -1) {
-+	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwWSHpz")) != -1) {
- 		switch (opt) {
- 		case 'a':
- 			cmd = PIN_FAST_BENCHMARK;
-@@ -110,6 +111,10 @@ int main(int argc, char **argv)
- 		case 'H':
- 			flags |= (MAP_HUGETLB | MAP_ANONYMOUS);
- 			break;
-+		case 'z':
-+			/* fault pages in gup, do not fault in userland */
-+			touch = 1;
-+			break;
- 		default:
- 			return -1;
- 		}
-@@ -167,8 +172,18 @@ int main(int argc, char **argv)
- 	else if (thp == 0)
- 		madvise(p, size, MADV_NOHUGEPAGE);
- 
--	for (; (unsigned long)p < gup.addr + size; p += PAGE_SIZE)
--		p[0] = 0;
-+	/*
-+	 * FOLL_TOUCH, in gup_test, is used as an either/or case: either
-+	 * fault pages in from the kernel via FOLL_TOUCH, or fault them
-+	 * in here, from user space. This allows comparison of performance
-+	 * between those two cases.
-+	 */
-+	if (touch) {
-+		gup.gup_flags |= FOLL_TOUCH;
-+	} else {
-+		for (; (unsigned long)p < gup.addr + size; p += PAGE_SIZE)
-+			p[0] = 0;
-+	}
- 
- 	/* Only report timing information on the *_BENCHMARK commands: */
- 	if ((cmd == PIN_FAST_BENCHMARK) || (cmd == GUP_FAST_BENCHMARK) ||
--- 
-2.25.1
+James
+
 
