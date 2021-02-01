@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C27030ABCF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Feb 2021 16:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB8730ABCD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Feb 2021 16:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbhBAPoh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Feb 2021 10:44:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S231614AbhBAPoY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Feb 2021 10:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbhBAPjx (ORCPT
+        with ESMTP id S231438AbhBAPkI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Feb 2021 10:39:53 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BCCC061797
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Feb 2021 07:38:37 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id s77so3179785qke.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Feb 2021 07:38:37 -0800 (PST)
+        Mon, 1 Feb 2021 10:40:08 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E368C0617AA
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Feb 2021 07:38:39 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id l23so12479587qtq.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Feb 2021 07:38:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=g2firNhV/7kB7YU7cH9BNSgXaQWIxvW5HlS98FNnYEs=;
-        b=cQ7U9FQRpR9JGNNrg7Wiu9qDQUW+pR4nvGFdzAwg72lQTYccPZx1dsnRYuei2XGHR2
-         nAlpPdY8DvOXXmWhxdO2LVpkkk/LE3TWy1gnwdN9NGZ27+5o4ziEIQHINofLGI6f/ljN
-         xUImvXDI5GxWSaIoGrqJ9WAUFPoBXi7P8YlKOIrlNG9bSr0jV22PcDOKtLdrgcVa/eSO
-         npZal8wKnZ01rdB2fiGFC5d7sGwMqK/gqvcw9nRH7m7NG7fVylYebScPZJ8QRLAfJrjp
-         31zojxu9KuEQTeGfWRsA44sPb9srl/ktRriq5tGaxbxyU+o/nPqqMqtR4G4Ch4hpcFXK
-         bCsQ==
+        bh=PFXsW068QpY9UbKCYMnD/JEGxD6Ab44yTlAU93ZYP48=;
+        b=OnZgvqzmWp78jzXEk0ympLdYBmzijGgqV6WOliINVzAF7+6Qxx1Q4BHl9dG6u1nFXs
+         jgswZyLNa/yKyJWU2kZQvdQvgORglFpin9UvkanWRYeQTexYBXpV4qEe7pMKCV/C2+MY
+         of5qtmfcdieCesZbm6q4rUFP5YZbBO0GyGbwme9Cvtq6TEOw+hfbkk2Ma5YcsHEDx1FW
+         4DP8zNkMfnqiw09+YnCXveBSnhHYMImEjBINvFM23FZmZKiDvY0lixAgvVJPMZEGikFr
+         GSIJ6l0AaMdBaOnONhgsIxfl8QTG/NKxmiMy0J6SaFFY8kB6IiLJxYvoKqt7Hj7H7md9
+         EcIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=g2firNhV/7kB7YU7cH9BNSgXaQWIxvW5HlS98FNnYEs=;
-        b=fknKFDMUrMaRpjpatlSnd1FPlb0C/6Hy1+xCfhiDsjepFByXi7/GRW1ifRtpXo5HAG
-         ZbPqvMj/tRg/59nV6PiDo9KFfWw/2IrW/aP/6HgNpsGDyC1l+AyDo+ZTJReRZBgybQNI
-         cCAjIMtNWiIJbOwp3IeeH1+jsrV+8K2KQeAtCxa2Gngdph4cn5PnZnfIOdnQze3g5R0A
-         VId7FP+rvBKFeAfYwxZ2rXSg2/A12MbLB/HA3rUAD2X3onezc4g31XDL6WrxT1fzaBUB
-         x349teTiTU7wyT5qq3qBoMDWh9qf0+XZyZ2OiYQJ17v2ybHyZc+rWwPYZOhGnmw0+WI9
-         SkDQ==
-X-Gm-Message-State: AOAM532GjPrzbNSN9wrferS+ZjYdIy8bwbjoPMbbOXcMjhjfOK9M06ly
-        OgVNeysR0kmu29HVPOAoczQWWw==
-X-Google-Smtp-Source: ABdhPJz3cHryVBgm+sMaWB1E3xhYlRhY35s+BzBXgbN2R53/Sw/rzB5M+lv25DSTo/3rnxq17/J76A==
-X-Received: by 2002:a37:4d12:: with SMTP id a18mr16245768qkb.371.1612193916967;
-        Mon, 01 Feb 2021 07:38:36 -0800 (PST)
+        bh=PFXsW068QpY9UbKCYMnD/JEGxD6Ab44yTlAU93ZYP48=;
+        b=ToXB2iHJhTs3tMWVmvl7Ls3bpE6YNqz/+4An+cpVLU/e+AP7Hc/nxv+WEZGTkAg5K5
+         dJZvi3CIJHSrjH0vQRM96vf1+ZtV6bsxUD+stUI2dRQYL/8nkMW3XEAjGgu4zgxs9thR
+         IYbgjT+HHNNTC958dbBlOaw1CTojxSh8pMUvX50i80DOaoPRdHwZb5mNtKIfWUZ/Xw/u
+         wjfKVAHrWkE6e7XXR6/WvMAsJICn8G0MsTVDRKfod3flQ4iXEas4zqb5nfmJig82ufa3
+         FZ82lVxnDM15L3Melr14ehD7yeC6P4x5egFpxL7muzUvBNvT6sE2VNSOHo6oymah2X96
+         p4dg==
+X-Gm-Message-State: AOAM530baUU12kqok5hSSC3CGhsVpQezC+rjJwgmzp8xw4dLJFoHlc12
+        JmyERNdaJjCq4nPzyKl+YTsNqg==
+X-Google-Smtp-Source: ABdhPJyOCDJYiA9jDkQM0ER+KK8HrBkqULy5REpkTXGuoqf/RWtSecXLbxmQLHShGFfIMEg7VMAQvg==
+X-Received: by 2002:ac8:3986:: with SMTP id v6mr15521807qte.308.1612193918673;
+        Mon, 01 Feb 2021 07:38:38 -0800 (PST)
 Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id 22sm14853307qke.123.2021.02.01.07.38.35
+        by smtp.gmail.com with ESMTPSA id 22sm14853307qke.123.2021.02.01.07.38.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Feb 2021 07:38:36 -0800 (PST)
+        Mon, 01 Feb 2021 07:38:38 -0800 (PST)
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
@@ -59,9 +59,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v9 04/14] mm/gup: check for isolation errors
-Date:   Mon,  1 Feb 2021 10:38:17 -0500
-Message-Id: <20210201153827.444374-5-pasha.tatashin@soleen.com>
+Subject: [PATCH v9 05/14] mm cma: rename PF_MEMALLOC_NOCMA to PF_MEMALLOC_PIN
+Date:   Mon,  1 Feb 2021 10:38:18 -0500
+Message-Id: <20210201153827.444374-6-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210201153827.444374-1-pasha.tatashin@soleen.com>
 References: <20210201153827.444374-1-pasha.tatashin@soleen.com>
@@ -71,125 +71,141 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It is still possible that we pin movable CMA pages if there are isolation
-errors and cma_page_list stays empty when we check again.
+PF_MEMALLOC_NOCMA is used ot guarantee that the allocator will not return
+pages that might belong to CMA region. This is currently used for long
+term gup to make sure that such pins are not going to be done on any CMA
+pages.
 
-Check for isolation errors, and return success only when there are no
-isolation errors, and cma_page_list is empty after checking.
+When PF_MEMALLOC_NOCMA has been introduced we haven't realized that it is
+focusing on CMA pages too much and that there is larger class of pages that
+need the same treatment. MOVABLE zone cannot contain any long term pins as
+well so it makes sense to reuse and redefine this flag for that usecase as
+well. Rename the flag to PF_MEMALLOC_PIN which defines an allocation
+context which can only get pages suitable for long-term pins.
 
-Because isolation errors are transient, we retry indefinitely.
+Also re-name:
+memalloc_nocma_save()/memalloc_nocma_restore
+to
+memalloc_pin_save()/memalloc_pin_restore()
+and make the new functions common.
 
-Fixes: 9a4e9f3b2d73 ("mm: update get_user_pages_longterm to migrate pages allocated from CMA region")
 Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
 ---
- mm/gup.c | 60 ++++++++++++++++++++++++++++++++------------------------
- 1 file changed, 34 insertions(+), 26 deletions(-)
+ include/linux/sched.h    |  2 +-
+ include/linux/sched/mm.h | 21 +++++----------------
+ mm/gup.c                 |  4 ++--
+ mm/hugetlb.c             |  4 ++--
+ mm/page_alloc.c          |  4 ++--
+ 5 files changed, 12 insertions(+), 23 deletions(-)
 
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 763b15dd6a61..2589ee67b55c 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1576,7 +1576,7 @@ extern struct pid *cad_pid;
+ #define PF_SWAPWRITE		0x00800000	/* Allowed to write to swap */
+ #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle with cpus_mask */
+ #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process policy */
+-#define PF_MEMALLOC_NOCMA	0x10000000	/* All allocation request will have _GFP_MOVABLE cleared */
++#define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained to zones which allow long term pinning. */
+ #define PF_FREEZER_SKIP		0x40000000	/* Freezer should not count it as freezable */
+ #define PF_SUSPEND_TASK		0x80000000      /* This thread called freeze_processes() and should not be frozen */
+ 
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index 1ae08b8462a4..5f4dd3274734 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -270,29 +270,18 @@ static inline void memalloc_noreclaim_restore(unsigned int flags)
+ 	current->flags = (current->flags & ~PF_MEMALLOC) | flags;
+ }
+ 
+-#ifdef CONFIG_CMA
+-static inline unsigned int memalloc_nocma_save(void)
++static inline unsigned int memalloc_pin_save(void)
+ {
+-	unsigned int flags = current->flags & PF_MEMALLOC_NOCMA;
++	unsigned int flags = current->flags & PF_MEMALLOC_PIN;
+ 
+-	current->flags |= PF_MEMALLOC_NOCMA;
++	current->flags |= PF_MEMALLOC_PIN;
+ 	return flags;
+ }
+ 
+-static inline void memalloc_nocma_restore(unsigned int flags)
++static inline void memalloc_pin_restore(unsigned int flags)
+ {
+-	current->flags = (current->flags & ~PF_MEMALLOC_NOCMA) | flags;
++	current->flags = (current->flags & ~PF_MEMALLOC_PIN) | flags;
+ }
+-#else
+-static inline unsigned int memalloc_nocma_save(void)
+-{
+-	return 0;
+-}
+-
+-static inline void memalloc_nocma_restore(unsigned int flags)
+-{
+-}
+-#endif
+ 
+ #ifdef CONFIG_MEMCG
+ DECLARE_PER_CPU(struct mem_cgroup *, int_active_memcg);
 diff --git a/mm/gup.c b/mm/gup.c
-index 88ce41f41543..7ecca2d66dff 100644
+index 7ecca2d66dff..857b273e32ac 100644
 --- a/mm/gup.c
 +++ b/mm/gup.c
-@@ -1555,8 +1555,8 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
- 					struct vm_area_struct **vmas,
- 					unsigned int gup_flags)
- {
--	unsigned long i;
--	bool drain_allow = true;
-+	unsigned long i, isolation_error_count;
-+	bool drain_allow;
- 	LIST_HEAD(cma_page_list);
- 	long ret = nr_pages;
- 	struct page *prev_head, *head;
-@@ -1567,6 +1567,8 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+@@ -1669,7 +1669,7 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 	long rc;
  
- check_again:
- 	prev_head = NULL;
-+	isolation_error_count = 0;
-+	drain_allow = true;
- 	for (i = 0; i < nr_pages; i++) {
- 		head = compound_head(pages[i]);
- 		if (head == prev_head)
-@@ -1578,25 +1580,35 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
- 		 * of the CMA zone if possible.
- 		 */
- 		if (is_migrate_cma_page(head)) {
--			if (PageHuge(head))
--				isolate_huge_page(head, &cma_page_list);
--			else {
-+			if (PageHuge(head)) {
-+				if (!isolate_huge_page(head, &cma_page_list))
-+					isolation_error_count++;
-+			} else {
- 				if (!PageLRU(head) && drain_allow) {
- 					lru_add_drain_all();
- 					drain_allow = false;
- 				}
+ 	if (gup_flags & FOLL_LONGTERM)
+-		flags = memalloc_nocma_save();
++		flags = memalloc_pin_save();
  
--				if (!isolate_lru_page(head)) {
--					list_add_tail(&head->lru, &cma_page_list);
--					mod_node_page_state(page_pgdat(head),
--							    NR_ISOLATED_ANON +
--							    page_is_file_lru(head),
--							    thp_nr_pages(head));
-+				if (isolate_lru_page(head)) {
-+					isolation_error_count++;
-+					continue;
- 				}
-+				list_add_tail(&head->lru, &cma_page_list);
-+				mod_node_page_state(page_pgdat(head),
-+						    NR_ISOLATED_ANON +
-+						    page_is_file_lru(head),
-+						    thp_nr_pages(head));
- 			}
- 		}
+ 	rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas, NULL,
+ 				     gup_flags);
+@@ -1678,7 +1678,7 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 		if (rc > 0)
+ 			rc = check_and_migrate_cma_pages(mm, start, rc, pages,
+ 							 vmas, gup_flags);
+-		memalloc_nocma_restore(flags);
++		memalloc_pin_restore(flags);
  	}
- 
-+	/*
-+	 * If list is empty, and no isolation errors, means that all pages are
-+	 * in the correct zone.
-+	 */
-+	if (list_empty(&cma_page_list) && !isolation_error_count)
-+		return ret;
-+
- 	if (!list_empty(&cma_page_list)) {
- 		/*
- 		 * drop the above get_user_pages reference.
-@@ -1616,23 +1628,19 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
- 			return ret > 0 ? -ENOMEM : ret;
- 		}
- 
--		/*
--		 * We did migrate all the pages, Try to get the page references
--		 * again migrating any new CMA pages which we failed to isolate
--		 * earlier.
--		 */
--		ret = __get_user_pages_locked(mm, start, nr_pages,
--						   pages, vmas, NULL,
--						   gup_flags);
--
--		if (ret > 0) {
--			nr_pages = ret;
--			drain_allow = true;
--			goto check_again;
--		}
-+		/* We unpinned pages before migration, pin them again */
-+		ret = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
-+					      NULL, gup_flags);
-+		if (ret <= 0)
-+			return ret;
-+		nr_pages = ret;
- 	}
- 
--	return ret;
-+	/*
-+	 * check again because pages were unpinned, and we also might have
-+	 * had isolation errors and need more pages to migrate.
-+	 */
-+	goto check_again;
+ 	return rc;
  }
- #else
- static long check_and_migrate_cma_pages(struct mm_struct *mm,
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index a3e4fa2c5e94..8499ec73c3c7 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -1044,10 +1044,10 @@ static void enqueue_huge_page(struct hstate *h, struct page *page)
+ static struct page *dequeue_huge_page_node_exact(struct hstate *h, int nid)
+ {
+ 	struct page *page;
+-	bool nocma = !!(current->flags & PF_MEMALLOC_NOCMA);
++	bool pin = !!(current->flags & PF_MEMALLOC_PIN);
+ 
+ 	list_for_each_entry(page, &h->hugepage_freelists[nid], lru) {
+-		if (nocma && is_migrate_cma_page(page))
++		if (pin && is_migrate_cma_page(page))
+ 			continue;
+ 
+ 		if (PageHWPoison(page))
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 6446778cbc6b..39f46fe122b7 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3814,8 +3814,8 @@ static inline unsigned int current_alloc_flags(gfp_t gfp_mask,
+ #ifdef CONFIG_CMA
+ 	unsigned int pflags = current->flags;
+ 
+-	if (!(pflags & PF_MEMALLOC_NOCMA) &&
+-			gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
++	if (!(pflags & PF_MEMALLOC_PIN) &&
++	    gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
+ 		alloc_flags |= ALLOC_CMA;
+ 
+ #endif
 -- 
 2.25.1
 
