@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 493B030BB27
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Feb 2021 10:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C6F30BEB7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Feb 2021 13:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbhBBJh2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Feb 2021 04:37:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56880 "EHLO mx2.suse.de"
+        id S231998AbhBBMuS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Feb 2021 07:50:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50752 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233019AbhBBJfy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Feb 2021 04:35:54 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1612258506; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q54UyAniLH3WTtqS2/eEFFAOsABqgVttGqq1oJHHl3o=;
-        b=pwRKjSfmAAUl4rpfKIVMY6cCCIH0A1qOnaV8W5VBLKM6omzrGDOVmq/p9akJdMt/mFgkO8
-        V2tc8GFVYU80SWASGLlyhGF0EaS9YLNXv/f0XhQU0L4onN+4ztKCsUfGmCzaoW6V54AWau
-        ShSpuMgXIb5koikt2IimucJXrn9ZlD0=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9998AB171;
-        Tue,  2 Feb 2021 09:35:06 +0000 (UTC)
-Date:   Tue, 2 Feb 2021 10:35:05 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
+        id S231945AbhBBMuJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Feb 2021 07:50:09 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4EEB964F45;
+        Tue,  2 Feb 2021 12:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612270167;
+        bh=l1mxEt58DDcLUIYn/PeqqKhgepc/YzCCfJbWYo9gF+0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m6OTQfqwmfzsDSuhaE02irM8RXZ+6I61yxWerp81AbIHaAEqJgnUU1Tago6YYG+PZ
+         lr/J7OliC0mrwyFm+Yl+JHzEuSXK/3VdkUmPzprvLqNXJeT7c7s/R/J9ZCl2+IeFtF
+         rRdT17MK63P20HXBjgkEetlpW86oX2ThKpxrHLgmDgGybcXOIhr5G1LeWie80VfNKg
+         QlMcZq+bz+M1S4kZa3QSlb+JQ6x7L2zxJR92gCQJ28nKgn5G8407CWFGfDfkqlEtqc
+         0FuByC2cyuzV9p6QWIQuYAV6UBnFm4EyXxopzOj5OqjOkGbbBSYsX5rFiF13qam/3d
+         9vHDje5GpJPpg==
+Date:   Tue, 2 Feb 2021 14:48:57 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
         David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -61,9 +61,8 @@ Cc:     Mike Rapoport <rppt@kernel.org>,
         Palmer Dabbelt <palmerdabbelt@google.com>
 Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
  direct map fragmentation
-Message-ID: <YBkcyQsky2scjEcP@dhcp22.suse.cz>
-References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-8-rppt@kernel.org>
+Message-ID: <20210202124857.GN242749@kernel.org>
+References: <20210121122723.3446-8-rppt@kernel.org>
  <20210126114657.GL827@dhcp22.suse.cz>
  <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
  <20210126120823.GM827@dhcp22.suse.cz>
@@ -72,98 +71,56 @@ References: <20210121122723.3446-1-rppt@kernel.org>
  <73738cda43236b5ac2714e228af362b67a712f5d.camel@linux.ibm.com>
  <YBPF8ETGBHUzxaZR@dhcp22.suse.cz>
  <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
+ <YBkcyQsky2scjEcP@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
+In-Reply-To: <YBkcyQsky2scjEcP@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon 01-02-21 08:56:19, James Bottomley wrote:
-> On Fri, 2021-01-29 at 09:23 +0100, Michal Hocko wrote:
-> > On Thu 28-01-21 13:05:02, James Bottomley wrote:
-> > > Obviously the API choice could be revisited
-> > > but do you have anything to add over the previous discussion, or is
-> > > this just to get your access control?
-> > 
-> > Well, access control is certainly one thing which I still believe is
-> > missing. But if there is a general agreement that the direct map
-> > manipulation is not that critical then this will become much less of
-> > a problem of course.
+On Tue, Feb 02, 2021 at 10:35:05AM +0100, Michal Hocko wrote:
+> On Mon 01-02-21 08:56:19, James Bottomley wrote:
 > 
-> The secret memory is a scarce resource but it's not a facility that
-> should only be available to some users.
+> I have also proposed potential ways out of this. Either the pool is not
+> fixed sized and you make it a regular unevictable memory (if direct map
+> fragmentation is not considered a major problem)
 
-How those two objectives go along? Or maybe our understanding of what
-scrace really means here. If the pool of the secret memory is very limited
-then you really need a way to stop one party from depriving others. More
-on that below.
+I think that the direct map fragmentation is not a major problem, and the
+data we have confirms it, so I'd be more than happy to entirely drop the
+pool, allocate memory page by page and remove each page from the direct
+map. 
 
-> > It all boils down whether secret memory is a scarce resource. With
-> > the existing implementation it really is. It is effectivelly
-> > repeating same design errors as hugetlb did. And look now, we have a
-> > subtle and convoluted reservation code to track mmap requests and we
-> > have a cgroup controller to, guess what, have at least some control
-> > over distribution if the preallocated pool. See where am I coming
-> > from?
-> 
-> I'm fairly sure rlimit is the correct way to control this.  The
-> subtlety in both rlimit and memcg tracking comes from deciding to
-> account under an existing category rather than having our own new one. 
-> People don't like new stuff in accounting because it requires
-> modifications to everything in userspace.  Accounting under and
-> existing limit keeps userspace the same but leads to endless arguments
-> about which limit it should be under.  It took us several patch set
-> iterations to get to a fragile consensus on this which you're now
-> disrupting for reasons you're not making clear.
+Still, we cannot prove negative and it could happen that there is a
+workload that would suffer a lot from the direct map fragmentation, so
+having a pool of large pages upfront is better than trying to fix it
+afterwards. As we get more confidence that the direct map fragmentation is
+not an issue as it is common to believe we may remove the pool altogether.
 
-I hoped I had made my points really clear. The existing scheme allows
-one users (potentially adversary) to deplete the preallocated pool
-and cause a shitstorm of OOM killer because there is no real way to
-replenish the pool from the oom killer other than randomly keep killing
-tasks until one happens to release its secret memory back to the
-pool. Is that more clear now?
+I think that using PMD_ORDER allocations for the pool with a fallback to
+order 0 will do the job, but unfortunately I doubt we'll reach a consensus
+about this because dogmatic beliefs are hard to shake...
 
-And no, rlimit and memcg limit will not save you from that because the
-former is per process and later is hard to manage under a single limit
-which might be order of magnitude larger than the secret memory pool
-size. See the point?
+A more restrictive possibility is to still use plain PMD_ORDER allocations
+to fill the pool, without relying on CMA. In this case there will be no
+global secretmem specific pool to exhaust, but then it's possible to drain
+high order free blocks in a system, so CMA has an advantage of limiting
+secretmem pools to certain amount of memory with somewhat higher
+probability for high order allocation to succeed. 
 
-I have also proposed potential ways out of this. Either the pool is not
-fixed sized and you make it a regular unevictable memory (if direct map
-fragmentation is not considered a major problem) or you need a careful
-access control or you need SIGBUS on the mmap failure (to allow at least
-some fallback mode to caller).
+> or you need a careful access control 
 
-I do not see any other way around it. I might be missing some other
-ways but so far I keep hearing that the existing scheme is just fine
-because this has been discussed in the past and you have agreed it is
-ok. Without any specifics...
+Do you mind elaborating what do you mean by "careful access control"?
 
-Please keep in mind this is a user interface and it is due to careful
-scrutiny. So rather than pushing back with "you are disrupting a
-consensus" kinda feedback, please try to stay technical.
+> or you need SIGBUS on the mmap failure (to allow at least some fallback
+> mode to caller).
 
-> > If the secret memory is more in line with mlock without any imposed
-> > limit (other than available memory) in the end then, sure, using the
-> > same access control as mlock sounds reasonable. Btw. if this is
-> > really just a more restrictive mlock then is there any reason to not
-> > hook this into the existing mlock infrastructure (e.g.
-> > MCL_EXCLUSIVE)? Implications would be that direct map would be
-> > handled on instantiation/tear down paths, migration would deal with
-> > the same (if possible). Other than that it would be mlock like.
-> 
-> In the very first patch set we proposed a mmap flag to do this.  Under
-> detailed probing it emerged that this suffers from several design
-> problems: the KVM people want VMM to be able to remove the secret
-> memory range from the process; there may be situations where sharing is
-> useful and some people want to be able to seal the operations.  All of
-> this ended up convincing everyone that a file descriptor based approach
-> was better than a mmap one.
+As I've already said, I agree that SIGBUS is way better than OOM at #PF
+time.
+And we can add some means to fail at mmap() time if the pools are running
+low.
 
-OK, fair enough. This belongs to the changelog IMHO. It is good to know
-why existing interfaces do not match the need.
 -- 
-Michal Hocko
-SUSE Labs
+Sincerely yours,
+Mike.
