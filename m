@@ -2,202 +2,433 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CFC30DB0E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 14:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E8030DCDD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 15:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbhBCNY2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Feb 2021 08:24:28 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:50994 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbhBCNYZ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Feb 2021 08:24:25 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 113DDwRX135909;
-        Wed, 3 Feb 2021 13:22:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
- references : cc : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2020-01-29;
- bh=TOeoctcS+1/tarsBFXRxdsLyJmXJizkOzQDCs06rzWE=;
- b=EQs2hVvA9bpKGS4t/VNDZo2YBfbO0no/CgoLN07evCclkTPwJVQNpUrpjzhBsPlpQTNl
- M0levePS7dUYIgSDjVNtbohd9QeR/xvT2s2T0azCvKPwinlvH7HIYMEy9LWMI1qNbk1n
- TyGoKsQIV21gIPebqv9eia0J7gUVauQJWqlcyGupkOnzCxVUhlV2RDmLo3LklHI8d6jY
- KJ4O1GX2TBdb9QevBJMCWvsbglHGl7YHD5XFOucqy6cXxCHUZ+uD1Ge5F+PvMpVUubc4
- WfhibqUYzjAtTP/dw7p7YzYcaIJ+canaTDJlBpJoG0EzNnwJzOAlOTeyJELR5UQEDfNp lA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 36fs458qp2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 Feb 2021 13:22:34 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 113DGEsN163030;
-        Wed, 3 Feb 2021 13:22:33 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
-        by userp3020.oracle.com with ESMTP id 36dh7teqfc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 Feb 2021 13:22:33 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gV9T8LWz2Tz2RoHH42caMC6ubcbA1fFj0b7lV4qnq4B0PZA3vbH+VYMs00wJsacS3jdGWkkqAEqEh/Z7AJK/yZ221jswFmT2XJMXo/OQV32VAHzHXq876P/4oquZjp+sOF36IVpdAJPg/LQPC/Rbwp86GPKQHxcotEsfdboY+5sjVikeoRaXc3Vz4q9LPsUCVWT/nA6qFHVJL0QdW7tdlFwcQJlOGiaAp0EpprSswazgTg2Zs2RggDMpxW32h5HJPVuTIq0RkutESGiK7fa3pH7zldzqRINxDm6qza3wvQW6trVfJuJ/JehUt5HQqwzl/ocJ0NFMai1UlaB51yerfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TOeoctcS+1/tarsBFXRxdsLyJmXJizkOzQDCs06rzWE=;
- b=MNLaryJn/mYRqbTTo1Dq38pAp/p4ID046DkNSSideyn4kT9qPWoV1Qi2iZPnel6r1hIgkd/R0FTnDoSujy8icCHe/CqQraKNx0BeZ9uf+gRy+VeZOX9rpOrlZA/PPYrZ2xdZbEMZlG8hetGiz1YttJRXAIXWYqn/gi6EBxnhKAwAih3wxbl1SIKr9Q64ySuHMzP56OqrZzPh9RamkQjwI1UJvpaq08/hSCj2S9QY/Y+JbmOOIen/RujICLf5njfEtl0HRcBG9t3LZ8pDolif3yqC58Ek14i4yduHVfFZgQJ1m2nJKzyLtvXsUObvWZ81Uo/bCqQwACzwzsF42NtKCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TOeoctcS+1/tarsBFXRxdsLyJmXJizkOzQDCs06rzWE=;
- b=jxrKBysPD5h+vXsqJz/gMWkLd4KJKIePNdI3RfFhhTgivsRscGWd9MHhLf5tF+hrlxGWZhNbbmRYjcs9aigxBQeJafQ4YPbi+QMUfk8jX2BT2YFvhJ2gAMF96jwLH2QJqSgNVTkIKjgbHdkDtbx+oCH8HOHy3aYZ0PPorfLiQSU=
-Authentication-Results: namei.org; dkim=none (message not signed)
- header.d=none;namei.org; dmarc=none action=none header.from=oracle.com;
-Received: from BYAPR10MB3077.namprd10.prod.outlook.com (20.177.226.140) by
- BYAPR10MB3093.namprd10.prod.outlook.com (20.179.154.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3805.19; Wed, 3 Feb 2021 13:22:31 +0000
-Received: from BYAPR10MB3077.namprd10.prod.outlook.com
- ([fe80::74a8:8649:e20b:d571]) by BYAPR10MB3077.namprd10.prod.outlook.com
- ([fe80::74a8:8649:e20b:d571%7]) with mapi id 15.20.3805.024; Wed, 3 Feb 2021
- 13:22:31 +0000
-Subject: Re: [PATCH v8 02/14] mm/gup: check every subpage of a compound page
- during isolation
-To:     Pavel Tatashin <pasha.tatashin@soleen.com>, jgg@ziepe.ca
-References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
- <20210125194751.1275316-3-pasha.tatashin@soleen.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, vbabka@suse.cz, mhocko@suse.com,
-        david@redhat.com, osalvador@suse.de, dan.j.williams@intel.com,
-        sashal@kernel.org, tyhicks@linux.microsoft.com,
-        iamjoonsoo.kim@lge.com, mike.kravetz@oracle.com,
-        rostedt@goodmis.org, mingo@redhat.com, peterz@infradead.org,
-        mgorman@suse.de, willy@infradead.org, rientjes@google.com,
-        jhubbard@nvidia.com, linux-doc@vger.kernel.org,
-        ira.weiny@intel.com, linux-kselftest@vger.kernel.org,
-        jmorris@namei.org
-From:   Joao Martins <joao.m.martins@oracle.com>
-Message-ID: <05a66361-214c-2afe-22e4-12862ea1e4e2@oracle.com>
-Date:   Wed, 3 Feb 2021 13:22:18 +0000
-In-Reply-To: <20210125194751.1275316-3-pasha.tatashin@soleen.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [94.61.1.144]
-X-ClientProxiedBy: LO2P265CA0396.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:f::24) To BYAPR10MB3077.namprd10.prod.outlook.com
- (2603:10b6:a03:8c::12)
+        id S232984AbhBCOes (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Feb 2021 09:34:48 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:37490 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232948AbhBCOej (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Feb 2021 09:34:39 -0500
+X-Greylist: delayed 740 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Feb 2021 09:34:36 EST
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id E0410646; Wed,  3 Feb 2021 08:21:28 -0600 (CST)
+Date:   Wed, 3 Feb 2021 08:21:28 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v28 01/12] landlock: Add object management
+Message-ID: <20210203142128.GA21770@mail.hallyn.com>
+References: <20210202162710.657398-1-mic@digikod.net>
+ <20210202162710.657398-2-mic@digikod.net>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.1.67] (94.61.1.144) by LO2P265CA0396.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:f::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.20 via Frontend Transport; Wed, 3 Feb 2021 13:22:25 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c41cf4f6-2233-44b3-6e6f-08d8c846c275
-X-MS-TrafficTypeDiagnostic: BYAPR10MB3093:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR10MB3093D9EE9BC6695367215697BBB49@BYAPR10MB3093.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Qlm9/669OtqwllF4z3w+nWPuvD0q0nAJl2RGb2PEkaWVmoGi+0j3G3w4KZVjT6RrwYsLn7r7laJN1hUy74vyr0GtGCkBk9RQ465XjVOnXvsiMJrG+/meOuko3U+hCHLiScAXYGMdjQMpDFwRi3Z0Lyqk3yAEZsMZQg0MBxp26adsriZVeo8Q7fSLmAAwZ1pA0S3w1jgS8RVkUpZZ2KDA/TGm6WIGC1rZF/yWpIDudAA2Vxf5nYDeMfLsb02IJizGL7hesKnrlgyCXpR9jucMjb4IpEgoatQfyrLg76p5xPsYsxjdZ1i3C1r7bB22AQrc5OepncmJUTcM1JNKz+cvN+WEZw8nd/kIC+uGuxU5baXoR3vgZbnZLPXbu+V9qrYhhxepUGj9GLiPb1rNHguGw2WlF3wt6oZWCyWDFBMGc8h4cYoXkFnF9RUellzQzKDVdRBMdfIPZNptXBme+5pY1U3yIFbYWPhU8Nc2sz0iRBq0R1J0j3NKm0F2wz5WlSqBAsjKYoISzjsHjNHS26UwzrcUwECXSlpa2SUV7FigBxtOJQrZz360mm0vIFkZ/kr4JxYCoZPOE+eWnXQD9Umdgw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3077.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(366004)(136003)(346002)(396003)(39860400002)(66556008)(83380400001)(31686004)(26005)(66476007)(8936002)(66946007)(7416002)(6666004)(2906002)(53546011)(8676002)(36756003)(2616005)(6486002)(16576012)(16526019)(186003)(31696002)(86362001)(956004)(5660300002)(4326008)(316002)(478600001)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?QWhjcytFOTZ4REJhcU1zTER2bEJCV1VlQUU2cnZjWmdkdzlPSTN6eXpKZ1pa?=
- =?utf-8?B?dU1IblVlR2gxOUJOQnp0TDZtdWdtZWZRYkdQV0kvaVlTYU9vaVAyeFQzdEVw?=
- =?utf-8?B?VjQwOHBIZWZPZ0ZTYndrWjF3bkp1NW9PcFJORkxrY1NPcmhwcHNpUDY1UEFq?=
- =?utf-8?B?MDdEQUdnOHcxVnR5NStsTGVSRWx6SGhTUDRuaklpR2ppcW5ZUWwwWmxmS1BO?=
- =?utf-8?B?TDZ5SmdiT2VvZFJncTMzblErRjJybnlyb0pCdVc1RDhuZlEvWXk4SmZOb1V6?=
- =?utf-8?B?UHNKNUNZcTdzNzRCY1VoS2xsQ0l3b0w3cWRMc0p1UFpha3dPTnRjajltb0ds?=
- =?utf-8?B?NnVwSkZnNGs1YTVqWktGbHZ6Z3F4QWV6WlplQms5bkhEMDQxSk94TnR4QlZs?=
- =?utf-8?B?Y2dVNHhjeEthTHBkSkhBYVNldXMxVmphcUNSc0xsdkUzTmk2anVDNytOaVZz?=
- =?utf-8?B?K0lIdk50d0o5V01YelVkbUMzMnJCc002aE9yUzFZVGpESWRHSVFIc3dYYmVr?=
- =?utf-8?B?cjNNdXJHci9wQlNQREttaTl6ajNyWWRhQUtZMDh1emo3UFdmVkZEVTRJTmV5?=
- =?utf-8?B?bUdSV05ZVDhIQTZ3cXc1bEtoSXlSL0lrQ3ZRUWowMVNWSVIzTWdxWWZzcjlw?=
- =?utf-8?B?cHF3K2xJWnV4MWRTN0sxa2FERlVNa2FMQVlDdFpmNzhpOVR1d29uZ2RLajB6?=
- =?utf-8?B?Q2s3ZjUzUjZiUTJJTkVCWUpxa3RvSG5IKzlVa2xZR3pIVHlJdFh1K3JSSUJo?=
- =?utf-8?B?SWFyM01ac2grbVV1TTYxdVl1YmdiVTZCVURQWDRLZG9pQlhFTTZJcXRoNG1t?=
- =?utf-8?B?azFMcGpYOXBQRXM1d2U5dWpRTmhjZ3BkclkrNC82WEErUG5HOUxROFdlZng3?=
- =?utf-8?B?Z2hRWUcrOEl4MkpFeUc0ZGxoRjUwQnlhc21KQmp3eFMwbUdRNUVBQ0ZGNFVH?=
- =?utf-8?B?MkRyYzhieFVzYjZKeHlBaXdFdGtMcDdaM0NyY2phSUxYV2U4bHNUOEhDaSt5?=
- =?utf-8?B?Z1YvM3h5ekpTODNaTlNIeE55VkhwemlOUVhMVWk0U1ZDbzBOcGs0bCtIL2hX?=
- =?utf-8?B?VSs1bG1YU0RNWE0rN0EyZGtxdGV4alRaWFdOVWV6TDVKdEdpTnhVTUJIbVBk?=
- =?utf-8?B?VUZOcjhoUEYvUVhnTE9iQkFGd0pmVE9DNVBjM2pCeU5xRURwODRrbnA4ck45?=
- =?utf-8?B?MHhPbHBFdEdJZ2MrV1Z4TFRqbUJBbjJ1YTEzSXF4dTk4Rm5zU0dDdDNTd1dl?=
- =?utf-8?B?STBJQ2lIWjJKRkRnYm9OMUdvbDU5QzdWRWttaHV4c0pONFBET25vS1pacnc3?=
- =?utf-8?B?QklJYjF1ald0ZjhRUkl6RDMzMStsMzlhdUwwTUEvSGNPZnQ4OVFyQVU5VjA1?=
- =?utf-8?B?enJHS1ViQ1pMTVhOdmRocFpvSmo5MjNWKzhQMWVQaCs3dHBwekYrOFUwY1h0?=
- =?utf-8?Q?zT1l4EQI?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c41cf4f6-2233-44b3-6e6f-08d8c846c275
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3077.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2021 13:22:31.0196
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WTWrhJRFJG3M7ysOXnKfEbQIcmysCiTlv+CzCZuUclOypSJfWbeuYgUGwkEQeAzTi/+3OoF5NgYew28oRzkM3V0W43dPY7r46YG7KL8vyt4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB3093
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9883 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- suspectscore=0 spamscore=0 mlxlogscore=999 phishscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102030081
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9883 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 adultscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- phishscore=0 clxscore=1011 lowpriorityscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102030081
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210202162710.657398-2-mic@digikod.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/25/21 7:47 PM, Pavel Tatashin wrote:
-> When pages are isolated in check_and_migrate_movable_pages() we skip
-> compound number of pages at a time. However, as Jason noted, it is
-> not necessary correct that pages[i] corresponds to the pages that
-> we skipped. This is because it is possible that the addresses in
-> this range had split_huge_pmd()/split_huge_pud(), and these functions
-> do not update the compound page metadata.
+On Tue, Feb 02, 2021 at 05:26:59PM +0100, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
 > 
-> The problem can be reproduced if something like this occurs:
+> A Landlock object enables to identify a kernel object (e.g. an inode).
+> A Landlock rule is a set of access rights allowed on an object.  Rules
+> are grouped in rulesets that may be tied to a set of processes (i.e.
+> subjects) to enforce a scoped access-control (i.e. a domain).
 > 
-> 1. User faulted huge pages.
-> 2. split_huge_pmd() was called for some reason
-> 3. User has unmapped some sub-pages in the range
-> 4. User tries to longterm pin the addresses.
+> Because Landlock's goal is to empower any process (especially
+> unprivileged ones) to sandbox themselves, we cannot rely on a
+> system-wide object identification such as file extended attributes.
+> Indeed, we need innocuous, composable and modular access-controls.
 > 
-> The resulting pages[i] might end-up having pages which are not compound
-> size page aligned.
+> The main challenge with these constraints is to identify kernel objects
+> while this identification is useful (i.e. when a security policy makes
+> use of this object).  But this identification data should be freed once
+> no policy is using it.  This ephemeral tagging should not and may not be
+> written in the filesystem.  We then need to manage the lifetime of a
+> rule according to the lifetime of its objects.  To avoid a global lock,
+> this implementation make use of RCU and counters to safely reference
+> objects.
 > 
-> Fixes: aa712399c1e8 ("mm/gup: speed up check_and_migrate_cma_pages() on huge page")
-> Reported-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> A following commit uses this generic object management for inodes.
+> 
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
+
+Acked-by: Serge Hallyn <serge@hallyn.com>
+
+Just a few suggestions for the description below.
+
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Reviewed-by: Jann Horn <jannh@google.com>
 > ---
-
-[...]
-
->  		/*
->  		 * If we get a page from the CMA zone, since we are going to
->  		 * be pinning these entries, we might as well move them out
-> @@ -1599,8 +1596,6 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
->  				}
->  			}
->  		}
-> -
-> -		i += step;
->  	}
+> 
+> Changes since v27:
+> * Update Kconfig for landlock_restrict_self(2).
+> * Cosmetic fixes: use 80 columns in Kconfig and align Makefile
+>   declarations.
+> 
+> Changes since v26:
+> * Update Kconfig for landlock_enforce_ruleset_self(2).
+> * Fix spelling.
+> 
+> Changes since v24:
+> * Fix typo in comment (spotted by Jann Horn).
+> * Add Reviewed-by: Jann Horn <jannh@google.com>
+> 
+> Changes since v23:
+> * Update landlock_create_object() to return error codes instead of NULL.
+>   This help error handling in callers.
+> * When using make oldconfig with a previous configuration already
+>   including the CONFIG_LSM variable, no question is asked to update its
+>   content.  Update the Kconfig help to warn about LSM stacking
+>   configuration.
+> * Constify variable (spotted by Vincent Dagonneau).
+> 
+> Changes since v22:
+> * Fix spelling (spotted by Jann Horn).
+> 
+> Changes since v21:
+> * Update Kconfig help.
+> * Clean up comments.
+> 
+> Changes since v18:
+> * Account objects to kmemcg.
+> 
+> Changes since v14:
+> * Simplify the object, rule and ruleset management at the expense of a
+>   less aggressive memory freeing (contributed by Jann Horn, with
+>   additional modifications):
+>   - Remove object->list aggregating the rules tied to an object.
+>   - Remove landlock_get_object(), landlock_drop_object(),
+>     {get,put}_object_cleaner() and landlock_rule_is_disabled().
+>   - Rewrite landlock_put_object() to use a more simple mechanism
+>     (no tricky RCU).
+>   - Replace enum landlock_object_type and landlock_release_object() with
+>     landlock_object_underops->release()
+>   - Adjust unions and Sparse annotations.
+>   Cf. https://lore.kernel.org/lkml/CAG48ez21bEn0wL1bbmTiiu8j9jP5iEWtHOwz4tURUJ+ki0ydYw@mail.gmail.com/
+> * Merge struct landlock_rule into landlock_ruleset_elem to simplify the
+>   rule management.
+> * Constify variables.
+> * Improve kernel documentation.
+> * Cosmetic variable renames.
+> * Remove the "default" in the Kconfig (suggested by Jann Horn).
+> * Only use refcount_inc() through getter helpers.
+> * Update Kconfig description.
+> 
+> Changes since v13:
+> * New dedicated implementation, removing the need for eBPF.
+> 
+> Previous changes:
+> https://lore.kernel.org/lkml/20190721213116.23476-6-mic@digikod.net/
+> ---
+>  MAINTAINERS                | 10 +++++
+>  security/Kconfig           |  1 +
+>  security/Makefile          |  2 +
+>  security/landlock/Kconfig  | 21 +++++++++
+>  security/landlock/Makefile |  3 ++
+>  security/landlock/object.c | 67 ++++++++++++++++++++++++++++
+>  security/landlock/object.h | 91 ++++++++++++++++++++++++++++++++++++++
+>  7 files changed, 195 insertions(+)
+>  create mode 100644 security/landlock/Kconfig
+>  create mode 100644 security/landlock/Makefile
+>  create mode 100644 security/landlock/object.c
+>  create mode 100644 security/landlock/object.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d3e847f7f3dc..a0e57ade0524 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9936,6 +9936,16 @@ F:	net/core/sock_map.c
+>  F:	net/ipv4/tcp_bpf.c
+>  F:	net/ipv4/udp_bpf.c
 >  
+> +LANDLOCK SECURITY MODULE
+> +M:	Mickaël Salaün <mic@digikod.net>
+> +L:	linux-security-module@vger.kernel.org
+> +S:	Supported
+> +W:	https://landlock.io
+> +T:	git https://github.com/landlock-lsm/linux.git
+> +F:	security/landlock/
+> +K:	landlock
+> +K:	LANDLOCK
+> +
+>  LANTIQ / INTEL Ethernet drivers
+>  M:	Hauke Mehrtens <hauke@hauke-m.de>
+>  L:	netdev@vger.kernel.org
+> diff --git a/security/Kconfig b/security/Kconfig
+> index 7561f6f99f1d..15a4342b5d01 100644
+> --- a/security/Kconfig
+> +++ b/security/Kconfig
+> @@ -238,6 +238,7 @@ source "security/loadpin/Kconfig"
+>  source "security/yama/Kconfig"
+>  source "security/safesetid/Kconfig"
+>  source "security/lockdown/Kconfig"
+> +source "security/landlock/Kconfig"
+>  
+>  source "security/integrity/Kconfig"
+>  
+> diff --git a/security/Makefile b/security/Makefile
+> index 3baf435de541..47e432900e24 100644
+> --- a/security/Makefile
+> +++ b/security/Makefile
+> @@ -13,6 +13,7 @@ subdir-$(CONFIG_SECURITY_LOADPIN)	+= loadpin
+>  subdir-$(CONFIG_SECURITY_SAFESETID)    += safesetid
+>  subdir-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown
+>  subdir-$(CONFIG_BPF_LSM)		+= bpf
+> +subdir-$(CONFIG_SECURITY_LANDLOCK)	+= landlock
+>  
+>  # always enable default capabilities
+>  obj-y					+= commoncap.o
+> @@ -32,6 +33,7 @@ obj-$(CONFIG_SECURITY_SAFESETID)       += safesetid/
+>  obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
+>  obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
+>  obj-$(CONFIG_BPF_LSM)			+= bpf/
+> +obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
+>  
+>  # Object integrity file lists
+>  subdir-$(CONFIG_INTEGRITY)		+= integrity
+> diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
+> new file mode 100644
+> index 000000000000..79b7d0c3b11e
+> --- /dev/null
+> +++ b/security/landlock/Kconfig
+> @@ -0,0 +1,21 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config SECURITY_LANDLOCK
+> +	bool "Landlock support"
+> +	depends on SECURITY
+> +	select SECURITY_PATH
+> +	help
+> +	  Landlock is a safe sandboxing mechanism that enables processes to
 
-With this, longterm gup will 'regress' for hugetlbfs e.g. from ~6k -> 32k usecs when
-pinning a 16G hugetlb file.
+"safe" probably doesn't need to be there :)
 
-Splitting can only occur on THP right? If so, perhaps we could retain the @step increment
-for compound pages but when !is_transparent_hugepage(head) or just PageHuge(head) like:
+> +	  restrict themselves (and their future children) by gradually
+> +	  enforcing tailored access control policies.  A security policy is a
 
-+               if (!is_transparent_hugepage(head) && PageCompound(page))
-+                       i += (compound_nr(head) - (pages[i] - head));
+You're redefining "security policy" which could be confusing.  How about
+saying "a landlock security policy is a..."?
 
-Or making specific to hugetlbfs:
+> +	  set of access rights (e.g. open a file in read-only, make a
+> +	  directory, etc.) tied to a file hierarchy.  Such policy can be
+> +	  configured and enforced by any processes for themselves thanks to
 
-+               if (PageHuge(head))
-+                       i += (compound_nr(head) - (pages[i] - head));
+s/thanks to/using the/ ?
+
+> +	  dedicated system calls: landlock_create_ruleset(),
+> +	  landlock_add_rule(), and landlock_restrict_self().
+> +
+> +	  See Documentation/userspace-api/landlock.rst for further information.
+> +
+> +	  If you are unsure how to answer this question, answer N.  Otherwise,
+> +	  you should also prepend "landlock," to the content of CONFIG_LSM to
+> +	  enable Landlock at boot time.
+> diff --git a/security/landlock/Makefile b/security/landlock/Makefile
+> new file mode 100644
+> index 000000000000..cb6deefbf4c0
+> --- /dev/null
+> +++ b/security/landlock/Makefile
+> @@ -0,0 +1,3 @@
+> +obj-$(CONFIG_SECURITY_LANDLOCK) := landlock.o
+> +
+> +landlock-y := object.o
+> diff --git a/security/landlock/object.c b/security/landlock/object.c
+> new file mode 100644
+> index 000000000000..d674fdf9ff04
+> --- /dev/null
+> +++ b/security/landlock/object.c
+> @@ -0,0 +1,67 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Landlock LSM - Object management
+> + *
+> + * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
+> + * Copyright © 2018-2020 ANSSI
+> + */
+> +
+> +#include <linux/bug.h>
+> +#include <linux/compiler_types.h>
+> +#include <linux/err.h>
+> +#include <linux/kernel.h>
+> +#include <linux/rcupdate.h>
+> +#include <linux/refcount.h>
+> +#include <linux/slab.h>
+> +#include <linux/spinlock.h>
+> +
+> +#include "object.h"
+> +
+> +struct landlock_object *landlock_create_object(
+> +		const struct landlock_object_underops *const underops,
+> +		void *const underobj)
+> +{
+> +	struct landlock_object *new_object;
+> +
+> +	if (WARN_ON_ONCE(!underops || !underobj))
+> +		return ERR_PTR(-ENOENT);
+> +	new_object = kzalloc(sizeof(*new_object), GFP_KERNEL_ACCOUNT);
+> +	if (!new_object)
+> +		return ERR_PTR(-ENOMEM);
+> +	refcount_set(&new_object->usage, 1);
+> +	spin_lock_init(&new_object->lock);
+> +	new_object->underops = underops;
+> +	new_object->underobj = underobj;
+> +	return new_object;
+> +}
+> +
+> +/*
+> + * The caller must own the object (i.e. thanks to object->usage) to safely put
+> + * it.
+> + */
+> +void landlock_put_object(struct landlock_object *const object)
+> +{
+> +	/*
+> +	 * The call to @object->underops->release(object) might sleep, e.g.
+> +	 * because of iput().
+> +	 */
+> +	might_sleep();
+> +	if (!object)
+> +		return;
+> +
+> +	/*
+> +	 * If the @object's refcount cannot drop to zero, we can just decrement
+> +	 * the refcount without holding a lock. Otherwise, the decrement must
+> +	 * happen under @object->lock for synchronization with things like
+> +	 * get_inode_object().
+> +	 */
+> +	if (refcount_dec_and_lock(&object->usage, &object->lock)) {
+> +		__acquire(&object->lock);
+> +		/*
+> +		 * With @object->lock initially held, remove the reference from
+> +		 * @object->underobj to @object (if it still exists).
+> +		 */
+> +		object->underops->release(object);
+> +		kfree_rcu(object, rcu_free);
+> +	}
+> +}
+> diff --git a/security/landlock/object.h b/security/landlock/object.h
+> new file mode 100644
+> index 000000000000..56f17c51df01
+> --- /dev/null
+> +++ b/security/landlock/object.h
+> @@ -0,0 +1,91 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Landlock LSM - Object management
+> + *
+> + * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
+> + * Copyright © 2018-2020 ANSSI
+> + */
+> +
+> +#ifndef _SECURITY_LANDLOCK_OBJECT_H
+> +#define _SECURITY_LANDLOCK_OBJECT_H
+> +
+> +#include <linux/compiler_types.h>
+> +#include <linux/refcount.h>
+> +#include <linux/spinlock.h>
+> +
+> +struct landlock_object;
+> +
+> +/**
+> + * struct landlock_object_underops - Operations on an underlying object
+> + */
+> +struct landlock_object_underops {
+> +	/**
+> +	 * @release: Releases the underlying object (e.g. iput() for an inode).
+> +	 */
+> +	void (*release)(struct landlock_object *const object)
+> +		__releases(object->lock);
+> +};
+> +
+> +/**
+> + * struct landlock_object - Security blob tied to a kernel object
+> + *
+> + * The goal of this structure is to enable to tie a set of ephemeral access
+> + * rights (pertaining to different domains) to a kernel object (e.g an inode)
+> + * in a safe way.  This implies to handle concurrent use and modification.
+> + *
+> + * The lifetime of a &struct landlock_object depends of the rules referring to
+> + * it.
+> + */
+> +struct landlock_object {
+> +	/**
+> +	 * @usage: This counter is used to tie an object to the rules matching
+> +	 * it or to keep it alive while adding a new rule.  If this counter
+> +	 * reaches zero, this struct must not be modified, but this counter can
+> +	 * still be read from within an RCU read-side critical section.  When
+> +	 * adding a new rule to an object with a usage counter of zero, we must
+> +	 * wait until the pointer to this object is set to NULL (or recycled).
+> +	 */
+> +	refcount_t usage;
+> +	/**
+> +	 * @lock: Guards against concurrent modifications.  This lock must be
+> +	 * held from the time @usage drops to zero until any weak references
+> +	 * from @underobj to this object have been cleaned up.
+> +	 *
+> +	 * Lock ordering: inode->i_lock nests inside this.
+> +	 */
+> +	spinlock_t lock;
+> +	/**
+> +	 * @underobj: Used when cleaning up an object and to mark an object as
+> +	 * tied to its underlying kernel structure.  This pointer is protected
+> +	 * by @lock.  Cf. landlock_release_inodes() and release_inode().
+> +	 */
+> +	void *underobj;
+> +	union {
+> +		/**
+> +		 * @rcu_free: Enables lockless use of @usage, @lock and
+> +		 * @underobj from within an RCU read-side critical section.
+> +		 * @rcu_free and @underops are only used by
+> +		 * landlock_put_object().
+> +		 */
+> +		struct rcu_head rcu_free;
+> +		/**
+> +		 * @underops: Enables landlock_put_object() to release the
+> +		 * underlying object (e.g. inode).
+> +		 */
+> +		const struct landlock_object_underops *underops;
+> +	};
+> +};
+> +
+> +struct landlock_object *landlock_create_object(
+> +		const struct landlock_object_underops *const underops,
+> +		void *const underobj);
+> +
+> +void landlock_put_object(struct landlock_object *const object);
+> +
+> +static inline void landlock_get_object(struct landlock_object *const object)
+> +{
+> +	if (object)
+> +		refcount_inc(&object->usage);
+> +}
+> +
+> +#endif /* _SECURITY_LANDLOCK_OBJECT_H */
+> -- 
+> 2.30.0
