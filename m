@@ -2,97 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0134830E289
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 19:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FD930E386
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 20:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbhBCSa6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Feb 2021 13:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbhBCSa4 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Feb 2021 13:30:56 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2EFC061573
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 10:30:16 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id v1so787914ott.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 10:30:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hEe3LKST1YHcfKQNO2v4b7c0gwVjN8GSIL8jKaA5Cfo=;
-        b=ie1t7tv30f1+Kl61SxX+cXlirmj3FIWBalujA9MEeMhB41z62szQ2QLCu5q+lxLWv+
-         oVj4s9MFBx5q6M1frsxeVMzHnzWoMik3k5FEuuru82EObZlkAVI1zWWLXRIFUnj4MhK/
-         4J9S9fNg6y35WabREdeEpPQLO2SmuJdJPcq4Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hEe3LKST1YHcfKQNO2v4b7c0gwVjN8GSIL8jKaA5Cfo=;
-        b=jFDK1DWDZ8fGMGm7tT/N4Wa7c9e58pRFiaV190x+daEZYnVs2DT6+aGe2OlrYAEiAw
-         IdF447OPKr4W10+VFX+6UhlOjSTSxDEVghllnAgWeY8eYnxh7vbiswbqlKZoeu4hF8R0
-         pkDErRWZRXqiVICD4UfPWXHQDOH4I1p5s81V2QwyD7n7C0OSvvQlCpmxIjTHM6ufjZuz
-         +3WVC6hbWqWGWaxve2exbGIQOx62EWi1qpVJVREZxTkNd7KteNOrCN4W8auDTtSc3d5Y
-         3AIbF2nhDMFvpdNNzyhdYcQXroNkwNzRecpQlcIyAjzRkao3a6Xcmwej74+Stxa9pNHo
-         G3rw==
-X-Gm-Message-State: AOAM530whUSSZpDnxQ6V0/PkEeJLoa1qd+a7CY7CxjBU7pRWHn1Ni5bB
-        wiKwTz2Km77CJdOR+5Ew5J4JtA==
-X-Google-Smtp-Source: ABdhPJwJMmiOYDPicXwu33oqs9TY/hmcKJC1b+3L8fpmMemBdalMXX5WbxiE5C9+96fCPMhs7DwTzQ==
-X-Received: by 2002:a9d:7088:: with SMTP id l8mr2850061otj.333.1612377015508;
-        Wed, 03 Feb 2021 10:30:15 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id o98sm587061ota.0.2021.02.03.10.30.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Feb 2021 10:30:14 -0800 (PST)
-Subject: Re: [PATCH] selftests: breakpoints: Fix wrong argument of ptrace()
- when single step
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1612341547-22225-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f91f1e69-310e-5256-de6e-9bceeaa7b205@linuxfoundation.org>
-Date:   Wed, 3 Feb 2021 11:30:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S230437AbhBCTrq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Feb 2021 14:47:46 -0500
+Received: from mga11.intel.com ([192.55.52.93]:18261 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230316AbhBCTrp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Feb 2021 14:47:45 -0500
+IronPort-SDR: P6sBy8oVp7lJxv2SfAbickprf4PC2+uscnmncNlkJBAcmGBdusj84Y9sMk0iq2F83PTcp165IR
+ 7NyQA1Adxs8Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="177598988"
+X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
+   d="scan'208";a="177598988"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 11:46:00 -0800
+IronPort-SDR: 52iZM3s5rqgq2q8OLsrcAFLChzcxau/Kc78SOcYDoaRtcA2xFR6v0I+Yl6o7qK5x0SHVfNJz+y
+ FgRyqPFbRwSA==
+X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
+   d="scan'208";a="480467147"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 11:45:58 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1l7O67-001iOT-2g; Wed, 03 Feb 2021 21:45:55 +0200
+Date:   Wed, 3 Feb 2021 21:45:55 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     pmladek@suse.com, rostedt@goodmis.org,
+        sergey.senozhatsky@gmail.com, linux@rasmusvillemoes.dk,
+        shuah@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field
+ widths in vsscanf
+Message-ID: <YBr9c44Dvq1ZNrEa@smile.fi.intel.com>
+References: <20210203165009.6299-1-rf@opensource.cirrus.com>
+ <20210203165009.6299-2-rf@opensource.cirrus.com>
 MIME-Version: 1.0
-In-Reply-To: <1612341547-22225-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210203165009.6299-2-rf@opensource.cirrus.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/3/21 1:39 AM, Tiezhu Yang wrote:
-> According to the error message, the first argument of ptrace() should be
-> PTRACE_SINGLESTEP instead of PTRACE_CONT when ptrace single step.
+On Wed, Feb 03, 2021 at 04:50:07PM +0000, Richard Fitzgerald wrote:
+> The existing code attempted to handle numbers by doing a strto[u]l(),
+> ignoring the field width, and then repeatedly dividing to extract the
+> field out of the full converted value. If the string contains a run of
+> valid digits longer than will fit in a long or long long, this would
+> overflow and no amount of dividing can recover the correct value.
 > 
-> Fixes: f43365ee17f8 ("selftests: arm64: add test for unaligned/inexact watchpoint handling")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->   tools/testing/selftests/breakpoints/breakpoint_test_arm64.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
-> index ad41ea6..2f4d4d6 100644
-> --- a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
-> +++ b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
-> @@ -143,7 +143,7 @@ static bool run_test(int wr_size, int wp_size, int wr, int wp)
->   	if (!set_watchpoint(pid, wp_size, wp))
->   		return false;
->   
-> -	if (ptrace(PTRACE_CONT, pid, NULL, NULL) < 0) {
-> +	if (ptrace(PTRACE_SINGLESTEP, pid, NULL, NULL) < 0) {
->   		ksft_print_msg(
->   			"ptrace(PTRACE_SINGLESTEP) failed: %s\n",
->   			strerror(errno));
-> 
+> This patch fixes vsscanf to obey number field widths when parsing
 
-Right before this it does a set_watchpoint(). PTRACE_CONT is what
-makes sense to me. Error might be the one that is incorrect here?
+vsscanf()
 
-thanks,
--- Shuah
+> the number.
+> 
+> A new _parse_integer_limit() is added that takes a limit for the number
+> of characters to parse. The number field conversion in vsscanf is changed
+> to use this new function.
+> 
+> If a number starts with a radix prefix, the field width  must be long
+> enough for at last one digit after the prefix. If not, it will be handled
+> like this:
+> 
+>  sscanf("0x4", "%1i", &i): i=0, scanning continues with the 'x'
+>  sscanf("0x4", "%2i", &i): i=0, scanning continues with the '4'
+> 
+> This is consistent with the observed behaviour of userland sscanf.
+> 
+> Note that this patch does NOT fix the problem of a single field value
+> overflowing the target type. So for example:
+> 
+>   sscanf("123456789abcdef", "%x", &i);
+> 
+> Will not produce the correct result because the value obviously overflows
+> INT_MAX. But sscanf will report a successful conversion.
+
+...
+
+> +	for (; max_chars > 0; max_chars--) {
+
+Less fragile is to write
+
+	while (max_chars--)
+
+This allows max_char to be an unsigned type.
+
+Moreover...
+
+> +	return _parse_integer_limit(s, base, p, INT_MAX);
+
+You have inconsistency with INT_MAX vs, size_t above.
+
+...
+
+> +unsigned int _parse_integer_limit(const char *s, unsigned int base,
+> +				  unsigned long long *res, size_t max_chars);
+
+Also, can you leave res on previous line, so it will be easier to see what's
+the difference with the original one?
+
+>  unsigned int _parse_integer(const char *s, unsigned int base, unsigned long long *res);
+
+...
+
+> -	unsigned long long result;
+> +	const char *cp;
+> +	unsigned long long result = 0ULL;
+>  	unsigned int rv;
+>  
+> -	cp = _parse_integer_fixup_radix(cp, &base);
+> -	rv = _parse_integer(cp, base, &result);
+
+> +	if (max_chars == 0) {
+> +		cp = startp;
+> +		goto out;
+> +	}
+
+It's redundant if I'm not mistaken.
+
+> +	cp = _parse_integer_fixup_radix(startp, &base);
+> +	if ((cp - startp) >= max_chars) {
+> +		cp = startp + max_chars;
+> +		goto out;
+> +	}
+
+This will be exactly the same, no?
+
+Moreover you will have while (max_chars--) in the _limit() variant which is
+also a no-op.
+
+...
+
+> -
+
+Unrelated change.
+
+> +out:
+>  	if (endp)
+>  		*endp = (char *)cp;
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
