@@ -2,159 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4E130E23C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 19:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0134830E289
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 19:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232863AbhBCSPH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Feb 2021 13:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        id S231475AbhBCSa6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Feb 2021 13:30:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbhBCSNg (ORCPT
+        with ESMTP id S231210AbhBCSa4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Feb 2021 13:13:36 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F296AC061224
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 10:12:26 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id s24so285804iob.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 10:12:26 -0800 (PST)
+        Wed, 3 Feb 2021 13:30:56 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2EFC061573
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 10:30:16 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id v1so787914ott.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 10:30:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=t4wenknjZ2bs5eKNUbWK97l2NFAOkxWA8p4z0taSinQ=;
-        b=bK/hwc7BdBaznbintn00c0zRwBKC2JVyZWt36DBGWZYS3p6BVpJeOJEEamHAM+6vyC
-         PXMgKamY4JH2XBuWrtRG8FAQpXZ0SLZ28VkyLw2OPhYx4rxDJ1ScO65tUPG+qdprJ9XJ
-         vV1RasCSNiAfnS8ol5pPlvaIVj8bQiMEHpw8M=
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hEe3LKST1YHcfKQNO2v4b7c0gwVjN8GSIL8jKaA5Cfo=;
+        b=ie1t7tv30f1+Kl61SxX+cXlirmj3FIWBalujA9MEeMhB41z62szQ2QLCu5q+lxLWv+
+         oVj4s9MFBx5q6M1frsxeVMzHnzWoMik3k5FEuuru82EObZlkAVI1zWWLXRIFUnj4MhK/
+         4J9S9fNg6y35WabREdeEpPQLO2SmuJdJPcq4Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=t4wenknjZ2bs5eKNUbWK97l2NFAOkxWA8p4z0taSinQ=;
-        b=mkHWCMHkx5dp2ccPeOrR8TjqwXO/GkhAAdD+pdAerzpUsunIKX+7YwuA7wtCrnO7Yy
-         E7VsRSA3fvqlZu/IEglLhmSQEwg/QSAthOk1PdMTnYrT9lrXvRuQQ9s4yTiiVakyAEFX
-         eGSoDKkkU7eOhoUoP/Qu2keH4HiX91M/KFEh8lVwiQ+xzUyyL9yVKbwOfM0vqiYAqSdD
-         BQY447plJh496hTZ7r3WQYl8jAdAOan00cBmPDU8qfXh90rOcHDGzsSlHKMF2yG06pY3
-         55riygUoq0tfaxVoSSi4KUOCY2hB7ObzafX+MVz19L7SKif9ntBce4ShqRkdGlMO8nBe
-         aQ4g==
-X-Gm-Message-State: AOAM530hCQG6u/iAYq7+71iFbejCeaM2H/i6vREwu85tjn2Dg0NlOxan
-        CypmSNpVcDc3Vo2ihw80xZNhGQ==
-X-Google-Smtp-Source: ABdhPJzuni/KqIxziQLcVYre754B6JcsdqYKUpMJ3ElrpM0fP5ipHxD7+qBAafURTEbI1MVyvOBomg==
-X-Received: by 2002:a5e:a911:: with SMTP id c17mr2982344iod.20.1612375946517;
-        Wed, 03 Feb 2021 10:12:26 -0800 (PST)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h21sm399684iob.30.2021.02.03.10.12.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Feb 2021 10:12:26 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hEe3LKST1YHcfKQNO2v4b7c0gwVjN8GSIL8jKaA5Cfo=;
+        b=jFDK1DWDZ8fGMGm7tT/N4Wa7c9e58pRFiaV190x+daEZYnVs2DT6+aGe2OlrYAEiAw
+         IdF447OPKr4W10+VFX+6UhlOjSTSxDEVghllnAgWeY8eYnxh7vbiswbqlKZoeu4hF8R0
+         pkDErRWZRXqiVICD4UfPWXHQDOH4I1p5s81V2QwyD7n7C0OSvvQlCpmxIjTHM6ufjZuz
+         +3WVC6hbWqWGWaxve2exbGIQOx62EWi1qpVJVREZxTkNd7KteNOrCN4W8auDTtSc3d5Y
+         3AIbF2nhDMFvpdNNzyhdYcQXroNkwNzRecpQlcIyAjzRkao3a6Xcmwej74+Stxa9pNHo
+         G3rw==
+X-Gm-Message-State: AOAM530whUSSZpDnxQ6V0/PkEeJLoa1qd+a7CY7CxjBU7pRWHn1Ni5bB
+        wiKwTz2Km77CJdOR+5Ew5J4JtA==
+X-Google-Smtp-Source: ABdhPJwJMmiOYDPicXwu33oqs9TY/hmcKJC1b+3L8fpmMemBdalMXX5WbxiE5C9+96fCPMhs7DwTzQ==
+X-Received: by 2002:a9d:7088:: with SMTP id l8mr2850061otj.333.1612377015508;
+        Wed, 03 Feb 2021 10:30:15 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id o98sm587061ota.0.2021.02.03.10.30.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Feb 2021 10:30:14 -0800 (PST)
+Subject: Re: [PATCH] selftests: breakpoints: Fix wrong argument of ptrace()
+ when single step
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <1612341547-22225-1-git-send-email-yangtiezhu@loongson.cn>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     corbet@lwn.net, gregkh@linuxfoundation.org, peterz@infradead.org,
-        keescook@chromium.org, rafael@kernel.org, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        devel@driverdev.osuosl.org
-Subject: [PATCH v3 7/7] kobject: convert uevent_seqnum to seqnum_ops
-Date:   Wed,  3 Feb 2021 11:12:03 -0700
-Message-Id: <3ddd122c266e8cb460542d852e9b703c6eef2141.1612314468.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1612314468.git.skhan@linuxfoundation.org>
-References: <cover.1612314468.git.skhan@linuxfoundation.org>
+Message-ID: <f91f1e69-310e-5256-de6e-9bceeaa7b205@linuxfoundation.org>
+Date:   Wed, 3 Feb 2021 11:30:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1612341547-22225-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sequence Number api provides interfaces for unsigned atomic up counters
-leveraging atomic_t and atomic64_t ops underneath.
+On 2/3/21 1:39 AM, Tiezhu Yang wrote:
+> According to the error message, the first argument of ptrace() should be
+> PTRACE_SINGLESTEP instead of PTRACE_CONT when ptrace single step.
+> 
+> Fixes: f43365ee17f8 ("selftests: arm64: add test for unaligned/inexact watchpoint handling")
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>   tools/testing/selftests/breakpoints/breakpoint_test_arm64.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+> index ad41ea6..2f4d4d6 100644
+> --- a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+> +++ b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+> @@ -143,7 +143,7 @@ static bool run_test(int wr_size, int wp_size, int wr, int wp)
+>   	if (!set_watchpoint(pid, wp_size, wp))
+>   		return false;
+>   
+> -	if (ptrace(PTRACE_CONT, pid, NULL, NULL) < 0) {
+> +	if (ptrace(PTRACE_SINGLESTEP, pid, NULL, NULL) < 0) {
+>   		ksft_print_msg(
+>   			"ptrace(PTRACE_SINGLESTEP) failed: %s\n",
+>   			strerror(errno));
+> 
 
-Convert uevent_seqnum atomic counter to use seqnum_ops.
+Right before this it does a set_watchpoint(). PTRACE_CONT is what
+makes sense to me. Error might be the one that is incorrect here?
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- include/linux/kobject.h | 3 ++-
- kernel/ksysfs.c         | 3 ++-
- lib/kobject_uevent.c    | 9 ++++++---
- 3 files changed, 10 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-index ea30529fba08..8990e40344a2 100644
---- a/include/linux/kobject.h
-+++ b/include/linux/kobject.h
-@@ -27,6 +27,7 @@
- #include <linux/atomic.h>
- #include <linux/workqueue.h>
- #include <linux/uidgid.h>
-+#include <linux/seqnum_ops.h>
- 
- #define UEVENT_HELPER_PATH_LEN		256
- #define UEVENT_NUM_ENVP			64	/* number of env pointers */
-@@ -38,7 +39,7 @@ extern char uevent_helper[];
- #endif
- 
- /* counter to tag the uevent, read only except for the kobject core */
--extern u64 uevent_seqnum;
-+extern struct seqnum64 uevent_seqnum;
- 
- /*
-  * The actions here must match the index to the string array
-diff --git a/kernel/ksysfs.c b/kernel/ksysfs.c
-index 35859da8bd4f..15836f6e5998 100644
---- a/kernel/ksysfs.c
-+++ b/kernel/ksysfs.c
-@@ -17,6 +17,7 @@
- #include <linux/sched.h>
- #include <linux/capability.h>
- #include <linux/compiler.h>
-+#include <linux/seqnum_ops.h>
- 
- #include <linux/rcupdate.h>	/* rcu_expedited and rcu_normal */
- 
-@@ -31,7 +32,7 @@ static struct kobj_attribute _name##_attr = \
- static ssize_t uevent_seqnum_show(struct kobject *kobj,
- 				  struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%llu\n", (unsigned long long)uevent_seqnum);
-+	return sprintf(buf, "%llu\n", seqnum64_get(&uevent_seqnum));
- }
- KERNEL_ATTR_RO(uevent_seqnum);
- 
-diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
-index 7998affa45d4..3a7b2648f084 100644
---- a/lib/kobject_uevent.c
-+++ b/lib/kobject_uevent.c
-@@ -28,9 +28,10 @@
- #include <net/sock.h>
- #include <net/netlink.h>
- #include <net/net_namespace.h>
-+#include <linux/seqnum_ops.h>
- 
- 
--u64 uevent_seqnum;
-+struct seqnum64  uevent_seqnum;
- #ifdef CONFIG_UEVENT_HELPER
- char uevent_helper[UEVENT_HELPER_PATH_LEN] = CONFIG_UEVENT_HELPER_PATH;
- #endif
-@@ -584,7 +585,8 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
- 
- 	mutex_lock(&uevent_sock_mutex);
- 	/* we will send an event, so request a new sequence number */
--	retval = add_uevent_var(env, "SEQNUM=%llu", ++uevent_seqnum);
-+	retval = add_uevent_var(env, "SEQNUM=%llu",
-+				seqnum64_inc(&uevent_seqnum));
- 	if (retval) {
- 		mutex_unlock(&uevent_sock_mutex);
- 		goto exit;
-@@ -687,7 +689,8 @@ static int uevent_net_broadcast(struct sock *usk, struct sk_buff *skb,
- 	int ret;
- 
- 	/* bump and prepare sequence number */
--	ret = snprintf(buf, sizeof(buf), "SEQNUM=%llu", ++uevent_seqnum);
-+	ret = snprintf(buf, sizeof(buf), "SEQNUM=%llu",
-+			seqnum64_inc(&uevent_seqnum));
- 	if (ret < 0 || (size_t)ret >= sizeof(buf))
- 		return -ENOMEM;
- 	ret++;
--- 
-2.27.0
-
+thanks,
+-- Shuah
