@@ -2,152 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC1230DD4B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 15:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FB630DD51
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 15:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbhBCOwx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Feb 2021 09:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S233362AbhBCOyB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Feb 2021 09:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbhBCOwv (ORCPT
+        with ESMTP id S233185AbhBCOx4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Feb 2021 09:52:51 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A47C061786
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 06:52:09 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id y9so14600163ejp.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 06:52:09 -0800 (PST)
+        Wed, 3 Feb 2021 09:53:56 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECBAC0613D6
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 06:53:15 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id u20so23568951qku.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 06:53:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ba8vo7NYBPo9eSD9iOWqZ0kAa5nRbWhxZY4okQVnGnw=;
-        b=kabU4DJVcmFBq7Y/Y5iY/7dh3vcJdF72Bi6T33jpaCj1V26uxUKBXh1yOn5EA8wwlm
-         /+xBYhOekNZRvBc1hobzHgb4+0FgkyDE+jt/TEMFdCRxDCAPoG+/L4TCs5MdVBOk1kgI
-         yvHaN0O7w+ZJwAz1QB54rkyZLH2uyg+Qp5Fw0ZxIZc19NV/skkUUHB2fi7a6iEQGtx+h
-         sO+l+EY5zNKxiTg9dV0wXzHynAABbrarCWdlBcYumPEZOgXBsUs8kPLaCROsqPa4dLs4
-         Tt1tki7Aetn+Rysl2ZK6MvVicNY0q72pvToY74ctM7GWm6X9w5xCVvSlPQ545FqVh69n
-         /opA==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tWqEMDRRJjAPsFV9gqXLc6rsgZRz2m3wCpFXqt37vmg=;
+        b=OKUaNQOKewwCwxgBOL++qolHJYoYrTRTOyTapiNnICmjOju2zV7ruz7VJ1G7WlfL8n
+         WsVA2v5BqDiFoA0SIIPy9bk2Wm2yfuoXCci9i0tRqnmqF/dZw2/D1PmwBqxKVkpKUYOT
+         SOvK3/d0GYAHgC5ALoicPwgmnl9KtFHqGgnFb5fjSXC6naKrJfeL4cgg+jX1fZ3KFZ7R
+         MzM7m4y2nz0+Eb/9asZei5aOP5o2q60siHUnRvx5sIrak3DxfXeow3mRUqQQgMwVShm4
+         f0mcRQOFQeBZD7jZDGToDkxw/lfUnMJdOBQAH6DxLsSG7FG8n8pXxueB5LH0orU5C+Hn
+         Vblg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ba8vo7NYBPo9eSD9iOWqZ0kAa5nRbWhxZY4okQVnGnw=;
-        b=Pzap4HupzntEnevB1egwnUjSBY3EkR7V4pntclv9QcU/7Og1CbqrurgS6MWEgnsKiv
-         CBuzGjPTPeLbO7Dtt9WqTtWaSoApruzF8zNf5YgKTxyDaNYPxj1nf24jR4jrEICbiXPp
-         bIGnzdNJx+g+zU5Y68/F+qBb+2mhrkfPpwixQzl81BzzU2RtzIvMpUjchEYzjQDOUap1
-         M8dJgadE5wvmc8YsE0c5GVvTWW2hb4TSlJdK7UNQrB0ccygtY+P+co06lLycdNItT54y
-         0B2WhKwiMPJF5EFv3Vlma28Xzfn/n8DnjMMqii54797bOTlsTNlU0KmELU6egPHqlPkB
-         mz3g==
-X-Gm-Message-State: AOAM532EaCEknqmfbSf0YENoEF4nmmXWkyxM72DBmacsYoMpNbt+vL/8
-        pTlqn/zGSBiGqU7smwKOXsRmBrcnlBQl290W+9G7dw==
-X-Google-Smtp-Source: ABdhPJwDEE6FfRYKexhd7R5DOEGVnNd4L8WynkLlX3PUiXSfp1YsW6WZeZoAOwShPU8WkJdcJtYI8XYp1uZ5i8UmZts=
-X-Received: by 2002:a17:906:eddd:: with SMTP id sb29mr3441623ejb.383.1612363928105;
- Wed, 03 Feb 2021 06:52:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
- <20210125194751.1275316-3-pasha.tatashin@soleen.com> <05a66361-214c-2afe-22e4-12862ea1e4e2@oracle.com>
-In-Reply-To: <05a66361-214c-2afe-22e4-12862ea1e4e2@oracle.com>
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-Date:   Wed, 3 Feb 2021 09:51:32 -0500
-Message-ID: <CA+CK2bBSJ7T=jsukntQGqO0DoWE_MnhDwtHv-6rfXAPvznKh0Q@mail.gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tWqEMDRRJjAPsFV9gqXLc6rsgZRz2m3wCpFXqt37vmg=;
+        b=mQT7YK7Wkzt4/chbov4rzxUbOUu844uB/eXJJQHA6xfo8SgdKxI9HE9ISHlKTR6auH
+         G3YWFAdN7uU4vTVg3GQZY5W2+ceQsyKiVrilh1cd/to9W1eNnJX/k7oxcetvHSsN8ogx
+         DMxl66CEEzxzAjkzdPizeqc2+XHf5PVIUB1aDhGb2pOCqJRo+YP/C3ga7aUyL/ODhkuJ
+         cd4cZZp6ZpUqu+2khL3xYUbS+08uBQ4Uvn6IpdQFdqrLhKHS38NemGAgVqL4ns3/LNL4
+         5pLIKP/AgQJMq2oJ7zzem26jJ1f1KbBGS8GxN8/yLFixYFOe4gsjBgG0RTBfw2JfrVuC
+         Q7Dw==
+X-Gm-Message-State: AOAM533J+TffQtu8bzCkQ7AO6VbYQSnYfjCfXSw1HJAjONsZ485+8Vtr
+        oLXulx1ucrCqgn6CBYLsn+/Ggw==
+X-Google-Smtp-Source: ABdhPJxnBuDu0/Y4ebk4clO93dhdWtJeGD8m42ZMMPlbLv5AQ1yGXMN8J+Y8xJH+Vk+eugDQqMQzig==
+X-Received: by 2002:ae9:edd2:: with SMTP id c201mr2872281qkg.375.1612363994790;
+        Wed, 03 Feb 2021 06:53:14 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
+        by smtp.gmail.com with ESMTPSA id 196sm1758474qkn.64.2021.02.03.06.53.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Feb 2021 06:53:14 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1l7JWr-0031OU-H2; Wed, 03 Feb 2021 10:53:13 -0400
+Date:   Wed, 3 Feb 2021 10:53:13 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Joao Martins <joao.m.martins@oracle.com>
+Cc:     Pavel Tatashin <pasha.tatashin@soleen.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, vbabka@suse.cz, mhocko@suse.com,
+        david@redhat.com, osalvador@suse.de, dan.j.williams@intel.com,
+        sashal@kernel.org, tyhicks@linux.microsoft.com,
+        iamjoonsoo.kim@lge.com, mike.kravetz@oracle.com,
+        rostedt@goodmis.org, mingo@redhat.com, peterz@infradead.org,
+        mgorman@suse.de, willy@infradead.org, rientjes@google.com,
+        jhubbard@nvidia.com, linux-doc@vger.kernel.org,
+        ira.weiny@intel.com, linux-kselftest@vger.kernel.org,
+        jmorris@namei.org
 Subject: Re: [PATCH v8 02/14] mm/gup: check every subpage of a compound page
  during isolation
-To:     Joao Martins <joao.m.martins@oracle.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        linux-kselftest@vger.kernel.org, James Morris <jmorris@namei.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <20210203145313.GQ4718@ziepe.ca>
+References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
+ <20210125194751.1275316-3-pasha.tatashin@soleen.com>
+ <05a66361-214c-2afe-22e4-12862ea1e4e2@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05a66361-214c-2afe-22e4-12862ea1e4e2@oracle.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 3, 2021 at 8:23 AM Joao Martins <joao.m.martins@oracle.com> wrote:
->
-> On 1/25/21 7:47 PM, Pavel Tatashin wrote:
-> > When pages are isolated in check_and_migrate_movable_pages() we skip
-> > compound number of pages at a time. However, as Jason noted, it is
-> > not necessary correct that pages[i] corresponds to the pages that
-> > we skipped. This is because it is possible that the addresses in
-> > this range had split_huge_pmd()/split_huge_pud(), and these functions
-> > do not update the compound page metadata.
-> >
-> > The problem can be reproduced if something like this occurs:
-> >
-> > 1. User faulted huge pages.
-> > 2. split_huge_pmd() was called for some reason
-> > 3. User has unmapped some sub-pages in the range
-> > 4. User tries to longterm pin the addresses.
-> >
-> > The resulting pages[i] might end-up having pages which are not compound
-> > size page aligned.
-> >
-> > Fixes: aa712399c1e8 ("mm/gup: speed up check_and_migrate_cma_pages() on huge page")
-> > Reported-by: Jason Gunthorpe <jgg@nvidia.com>
-> > Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-> > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> > ---
->
-> [...]
->
-> >               /*
-> >                * If we get a page from the CMA zone, since we are going to
-> >                * be pinning these entries, we might as well move them out
-> > @@ -1599,8 +1596,6 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
-> >                               }
-> >                       }
-> >               }
-> > -
-> > -             i += step;
-> >       }
-> >
->
-
-Hi Joao,
+On Wed, Feb 03, 2021 at 01:22:18PM +0000, Joao Martins wrote:
 
 > With this, longterm gup will 'regress' for hugetlbfs e.g. from ~6k -> 32k usecs when
 > pinning a 16G hugetlb file.
 
-Estimate or you actually measured?
+Yes, but correctness demands it.
 
->
+The solution is to track these pages as we discover them so we know if
+a PMD/PUD points and can directly skip the duplicated work
 
-> Splitting can only occur on THP right? If so, perhaps we could retain the @step increment
+> Splitting can only occur on THP right? If so, perhaps we could
+> retain the @step increment for compound pages but when
+> !is_transparent_hugepage(head) or just PageHuge(head) like:
 
-Yes, I do not think we can split HugePage, only THP.
+Honestly I'd rather see it fixed properly which will give even bigger
+performance gains - avoiding the entire rescan of the page list will
+be a win
 
-> for compound pages but when !is_transparent_hugepage(head) or just PageHuge(head) like:
->
-> +               if (!is_transparent_hugepage(head) && PageCompound(page))
-> +                       i += (compound_nr(head) - (pages[i] - head));
->
-> Or making specific to hugetlbfs:
->
-> +               if (PageHuge(head))
-> +                       i += (compound_nr(head) - (pages[i] - head));
-
-Yes, this is reasonable optimization. I will submit a follow up patch
-against linux-next.
-
-Thank you,
-Pasha
+Jason
