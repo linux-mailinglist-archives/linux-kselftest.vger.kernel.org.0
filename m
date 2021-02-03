@@ -2,217 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EEA30E10E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 18:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321EF30E1BB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 19:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbhBCR26 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Feb 2021 12:28:58 -0500
-Received: from mga06.intel.com ([134.134.136.31]:4061 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232100AbhBCR2W (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Feb 2021 12:28:22 -0500
-IronPort-SDR: +mWdKhSBZ0syVFWUSNPLG1zIwlOD/6M2d7aQxIggnszvI4q2we80lGbMd/GCWlQomkf6wIv86g
- h141FEKBVrbw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="242592398"
-X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
-   d="scan'208";a="242592398"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 09:27:25 -0800
-IronPort-SDR: j3K4wtu89Nl2hvGQaYaWQWRke/PwVv9R2+HghHNEav9sN6DmYsFOI74EFHVKii4LrUk8B73u25
- 2jfRz+6hRxCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
-   d="scan'208";a="406723692"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Feb 2021 09:27:25 -0800
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
-        x86@kernel.org
-Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
-        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
-        carlos@redhat.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chang.seok.bae@intel.com, Borislav Petkov <bp@alien8.de>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 5/5] selftest/x86/signal: Include test cases for validating sigaltstack
-Date:   Wed,  3 Feb 2021 09:22:42 -0800
-Message-Id: <20210203172242.29644-6-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210203172242.29644-1-chang.seok.bae@intel.com>
-References: <20210203172242.29644-1-chang.seok.bae@intel.com>
+        id S232131AbhBCSBk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Feb 2021 13:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232138AbhBCSAr (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Feb 2021 13:00:47 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87516C061573
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 10:00:06 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id v126so537622qkd.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 10:00:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=maK4BO0r+TiWcThPzVJ4RLB+sQqUIwmjmNwcvNFw9mM=;
+        b=OYYwV/hPNphEgxWKjIs0jsEBIteW6sjsSXmm3kaRKAgNvo0roJkISTnB3HeCqjylB1
+         iLoTG4ajADQexcPU77OJd+AN9V5ickef33AD3Y5bjRuNtAHpzo0+8Yw1vns5Lt5UhnC1
+         uKxg7AHn0awSVc6rMvjtk3PJ5vyhywm73ut3NeHl8CZk7DWGSksRjlVCzx6En8NmAr93
+         1M9M89Hj+fI+hzquvwbsBnibhh4tZtP2rpBjGZDKqcCQbz0bmK7NiWxQgCR4lwSqUAby
+         tB+on+omxCPkuzrbxhR1IN8i6uluffWqHXTWxVrYzyuO2UNAn68SmpLVpA/L+mVnnkiK
+         iELA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=maK4BO0r+TiWcThPzVJ4RLB+sQqUIwmjmNwcvNFw9mM=;
+        b=X0fRu03nuYT7fw88UlsM5u3ndnAA2NWR46jTDBX3Zgn3K7STbSgFlztAFeYOouDhDR
+         7wkRSvqoAW6U89M+eY0J8msz2GIc1YtvbCJPkxeCgk5A59jMyF5WSeEwRoal2vbLCZKz
+         OT7nkDnT5weEsQbvOcSMYD7azjYbmT9Uz/NhWSfu8GW1SpiFmUdBj8gCjrP3ClPje+JM
+         4c5fPKFdZuKvp/cvaesUG/7C84N4KLcDI6asuIJOYEfmxUK3pTMXjnajYtjVWIUQ0Mf9
+         P6eLiW1h1qENmaNhXEIEBBHIKnxvPR7saeLMHctDpiEldh4wIUn54oaYnOTYBYUJWHs+
+         4yjA==
+X-Gm-Message-State: AOAM5314iYKWv2O1Ncoiz1ah78nGXQbLAnSBQTnYIKNaho0v57K/a2dV
+        xrPKvc2W9xNOiw778WzNOCL58Q==
+X-Google-Smtp-Source: ABdhPJwEkVpBQ0h4gu1N6ijIQ9L8ChOranP2j16LpvLRdZKU1JEvM2fYv79/G9ZWclAbkk9R8dy2PQ==
+X-Received: by 2002:a37:aa58:: with SMTP id t85mr3620548qke.229.1612375205841;
+        Wed, 03 Feb 2021 10:00:05 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
+        by smtp.gmail.com with ESMTPSA id h5sm1970465qti.22.2021.02.03.10.00.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Feb 2021 10:00:05 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1l7MRg-0034r0-IJ; Wed, 03 Feb 2021 14:00:04 -0400
+Date:   Wed, 3 Feb 2021 14:00:04 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Joao Martins <joao.m.martins@oracle.com>
+Cc:     Pavel Tatashin <pasha.tatashin@soleen.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, vbabka@suse.cz, mhocko@suse.com,
+        david@redhat.com, osalvador@suse.de, dan.j.williams@intel.com,
+        sashal@kernel.org, tyhicks@linux.microsoft.com,
+        iamjoonsoo.kim@lge.com, mike.kravetz@oracle.com,
+        rostedt@goodmis.org, mingo@redhat.com, peterz@infradead.org,
+        mgorman@suse.de, willy@infradead.org, rientjes@google.com,
+        jhubbard@nvidia.com, linux-doc@vger.kernel.org,
+        ira.weiny@intel.com, linux-kselftest@vger.kernel.org,
+        jmorris@namei.org
+Subject: Re: [PATCH v8 02/14] mm/gup: check every subpage of a compound page
+ during isolation
+Message-ID: <20210203180004.GS4718@ziepe.ca>
+References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
+ <20210125194751.1275316-3-pasha.tatashin@soleen.com>
+ <05a66361-214c-2afe-22e4-12862ea1e4e2@oracle.com>
+ <20210203145313.GQ4718@ziepe.ca>
+ <f82dca38-52bd-aa27-2d27-b5a67f5284f5@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f82dca38-52bd-aa27-2d27-b5a67f5284f5@oracle.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test measures the kernel's signal delivery with different (enough vs.
-insufficient) stack sizes.
+On Wed, Feb 03, 2021 at 04:13:21PM +0000, Joao Martins wrote:
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Reviewed-by: Len Brown <len.brown@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes from v3:
-* Revised test messages again (Borislav Petkov)
+> If check_and_migrate_movable_pages() is meant to migrate unpinned
+> pages, then rather than pinning+unpinning+moving, perhaps it would
+> be called in __get_user_pages() place where we are walking page
+> tables and know if it's a PUD/PMD and can skip all the subpages and
+> just record and migrate those instead. Was that your thinking?
 
-Changes from v2:
-* Revised test messages (Borislav Petkov)
----
- tools/testing/selftests/x86/Makefile      |   2 +-
- tools/testing/selftests/x86/sigaltstack.c | 128 ++++++++++++++++++++++
- 2 files changed, 129 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/sigaltstack.c
+I think a reasonable approach is to detect non-pinnable pages while
+walking the VMAs, when found isolate them and thread them on a linked
+list.
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 333980375bc7..65bba2ae86ee 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore
-+			syscall_arg_fault fsgsbase_restore sigaltstack
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
-new file mode 100644
-index 000000000000..f689af75e979
---- /dev/null
-+++ b/tools/testing/selftests/x86/sigaltstack.c
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#define _GNU_SOURCE
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <err.h>
-+#include <errno.h>
-+#include <limits.h>
-+#include <sys/mman.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <sys/resource.h>
-+#include <setjmp.h>
-+
-+/* sigaltstack()-enforced minimum stack */
-+#define ENFORCED_MINSIGSTKSZ	2048
-+
-+#ifndef AT_MINSIGSTKSZ
-+#  define AT_MINSIGSTKSZ	51
-+#endif
-+
-+static int nerrs;
-+
-+static bool sigalrm_expected;
-+
-+static unsigned long at_minstack_size;
-+
-+static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
-+		       int flags)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_sigaction = handler;
-+	sa.sa_flags = SA_SIGINFO | flags;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+}
-+
-+static void clearhandler(int sig)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_handler = SIG_DFL;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+}
-+
-+static int setup_altstack(void *start, unsigned long size)
-+{
-+	stack_t ss;
-+
-+	memset(&ss, 0, sizeof(ss));
-+	ss.ss_size = size;
-+	ss.ss_sp = start;
-+
-+	return sigaltstack(&ss, NULL);
-+}
-+
-+static jmp_buf jmpbuf;
-+
-+static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	if (sigalrm_expected) {
-+		printf("[FAIL]\tWrong signal delivered: SIGSEGV (expected SIGALRM).");
-+		nerrs++;
-+	} else {
-+		printf("[OK]\tSIGSEGV signal delivered.\n");
-+	}
-+
-+	siglongjmp(jmpbuf, 1);
-+}
-+
-+static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	if (!sigalrm_expected) {
-+		printf("[FAIL]\tWrong signal delivered: SIGALRM (expected SIGSEGV).");
-+		nerrs++;
-+	} else {
-+		printf("[OK]\tSIGALRM signal delivered.\n");
-+	}
-+}
-+
-+static void test_sigaltstack(void *altstack, unsigned long size)
-+{
-+	if (setup_altstack(altstack, size))
-+		err(1, "sigaltstack()");
-+
-+	sigalrm_expected = (size > at_minstack_size) ? true : false;
-+
-+	sethandler(SIGSEGV, sigsegv, 0);
-+	sethandler(SIGALRM, sigalrm, SA_ONSTACK);
-+
-+	if (!sigsetjmp(jmpbuf, 1)) {
-+		printf("[RUN]\tTest an alternate signal stack of %ssufficient size.\n",
-+		       sigalrm_expected ? "" : "in");
-+		printf("\tRaise SIGALRM. %s is expected to be delivered.\n",
-+		       sigalrm_expected ? "It" : "SIGSEGV");
-+		raise(SIGALRM);
-+	}
-+
-+	clearhandler(SIGALRM);
-+	clearhandler(SIGSEGV);
-+}
-+
-+int main(void)
-+{
-+	void *altstack;
-+
-+	at_minstack_size = getauxval(AT_MINSIGSTKSZ);
-+
-+	altstack = mmap(NULL, at_minstack_size + SIGSTKSZ, PROT_READ | PROT_WRITE,
-+			MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
-+	if (altstack == MAP_FAILED)
-+		err(1, "mmap()");
-+
-+	if ((ENFORCED_MINSIGSTKSZ + 1) < at_minstack_size)
-+		test_sigaltstack(altstack, ENFORCED_MINSIGSTKSZ + 1);
-+
-+	test_sigaltstack(altstack, at_minstack_size + SIGSTKSZ);
-+
-+	return nerrs == 0 ? 0 : 1;
-+}
--- 
-2.17.1
+When the VMA walk is done you'll have a linked list of isolated pages
+that need migration. So the check_and_migrate_movable_pages() gets
+split into the top half being diffused in the VMA walk and the bottom
+half still called after __get_user_pages() returns.
 
+Jason
