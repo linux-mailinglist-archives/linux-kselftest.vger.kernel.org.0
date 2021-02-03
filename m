@@ -2,100 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 321EF30E1BB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 19:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4F230E21D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Feb 2021 19:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbhBCSBk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Feb 2021 13:01:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S232384AbhBCSMx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Feb 2021 13:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbhBCSAr (ORCPT
+        with ESMTP id S232058AbhBCSMx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Feb 2021 13:00:47 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87516C061573
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 10:00:06 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id v126so537622qkd.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 10:00:06 -0800 (PST)
+        Wed, 3 Feb 2021 13:12:53 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A103C06178B
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 10:12:11 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id z18so97475ile.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 10:12:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=maK4BO0r+TiWcThPzVJ4RLB+sQqUIwmjmNwcvNFw9mM=;
-        b=OYYwV/hPNphEgxWKjIs0jsEBIteW6sjsSXmm3kaRKAgNvo0roJkISTnB3HeCqjylB1
-         iLoTG4ajADQexcPU77OJd+AN9V5ickef33AD3Y5bjRuNtAHpzo0+8Yw1vns5Lt5UhnC1
-         uKxg7AHn0awSVc6rMvjtk3PJ5vyhywm73ut3NeHl8CZk7DWGSksRjlVCzx6En8NmAr93
-         1M9M89Hj+fI+hzquvwbsBnibhh4tZtP2rpBjGZDKqcCQbz0bmK7NiWxQgCR4lwSqUAby
-         tB+on+omxCPkuzrbxhR1IN8i6uluffWqHXTWxVrYzyuO2UNAn68SmpLVpA/L+mVnnkiK
-         iELA==
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SB8riJOjuzgjOw1Wsc94yZlZbRu0f544yG+Du9Zqdfg=;
+        b=GqNljR3NKsjx1aOKKKpu7DPYAayE0yJ1cSIeVoqtDg/UDvcqLkBOFJN8mTXuu8AlnW
+         2/qg3wBHa6u37PqvAHoL/TEHy1UG6FAH/6PalY0HU1l079BwcJ9zMWmrZkugS+4apyhL
+         MeaUsA/GGDyF1u4u0949ghfqeRJPJK9inRKG0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=maK4BO0r+TiWcThPzVJ4RLB+sQqUIwmjmNwcvNFw9mM=;
-        b=X0fRu03nuYT7fw88UlsM5u3ndnAA2NWR46jTDBX3Zgn3K7STbSgFlztAFeYOouDhDR
-         7wkRSvqoAW6U89M+eY0J8msz2GIc1YtvbCJPkxeCgk5A59jMyF5WSeEwRoal2vbLCZKz
-         OT7nkDnT5weEsQbvOcSMYD7azjYbmT9Uz/NhWSfu8GW1SpiFmUdBj8gCjrP3ClPje+JM
-         4c5fPKFdZuKvp/cvaesUG/7C84N4KLcDI6asuIJOYEfmxUK3pTMXjnajYtjVWIUQ0Mf9
-         P6eLiW1h1qENmaNhXEIEBBHIKnxvPR7saeLMHctDpiEldh4wIUn54oaYnOTYBYUJWHs+
-         4yjA==
-X-Gm-Message-State: AOAM5314iYKWv2O1Ncoiz1ah78nGXQbLAnSBQTnYIKNaho0v57K/a2dV
-        xrPKvc2W9xNOiw778WzNOCL58Q==
-X-Google-Smtp-Source: ABdhPJwEkVpBQ0h4gu1N6ijIQ9L8ChOranP2j16LpvLRdZKU1JEvM2fYv79/G9ZWclAbkk9R8dy2PQ==
-X-Received: by 2002:a37:aa58:: with SMTP id t85mr3620548qke.229.1612375205841;
-        Wed, 03 Feb 2021 10:00:05 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
-        by smtp.gmail.com with ESMTPSA id h5sm1970465qti.22.2021.02.03.10.00.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SB8riJOjuzgjOw1Wsc94yZlZbRu0f544yG+Du9Zqdfg=;
+        b=qMJAWG/41ex0Uo3WPkXV5UE9YD2gSuHPJ7OmcyNWCwyW7eYUXdkTptoGeSom79bsaO
+         fFMwpguRzVu1BFHvQlQcLvNj/rYPR3XoQJTQ7+ETN+LGUMGVsgltU0Oux4FvDvzscoOw
+         4Oe/cCv2I63QtcYunvBwJLodqMeYujvxtTwDJralFRM4OogiFQe+8cPedQGmhjHRyw9O
+         p6zYhe5JQF9pTJGWo4ozSzEzmrrUKkxdm5VcAnsURyH5uLzA6f46QYwNaY86qt2JwsrQ
+         zT2O6iGDwMpKL7nw8eFZiH3nIxD5Lceo3wsqoIMH5E5oWGB9CXHNy474tE7cDB8nn4UU
+         H2OQ==
+X-Gm-Message-State: AOAM532jBZsGcGax2/oJUuKuotQSgriD2MBVGLLLg0ndS018tkPQBdtA
+        0K2fHMPl0OJYhm6fTlOeQ18wXg==
+X-Google-Smtp-Source: ABdhPJz2RPi0I2OuoWXqMNIMCO4ew11k/K1o0MoxUBjXKxBLRiPZWJwL//3sB8cqqu6t1+eIdcNEkg==
+X-Received: by 2002:a92:2e05:: with SMTP id v5mr3876876ile.241.1612375930585;
+        Wed, 03 Feb 2021 10:12:10 -0800 (PST)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id h21sm399684iob.30.2021.02.03.10.12.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Feb 2021 10:00:05 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1l7MRg-0034r0-IJ; Wed, 03 Feb 2021 14:00:04 -0400
-Date:   Wed, 3 Feb 2021 14:00:04 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Joao Martins <joao.m.martins@oracle.com>
-Cc:     Pavel Tatashin <pasha.tatashin@soleen.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, vbabka@suse.cz, mhocko@suse.com,
-        david@redhat.com, osalvador@suse.de, dan.j.williams@intel.com,
-        sashal@kernel.org, tyhicks@linux.microsoft.com,
-        iamjoonsoo.kim@lge.com, mike.kravetz@oracle.com,
-        rostedt@goodmis.org, mingo@redhat.com, peterz@infradead.org,
-        mgorman@suse.de, willy@infradead.org, rientjes@google.com,
-        jhubbard@nvidia.com, linux-doc@vger.kernel.org,
-        ira.weiny@intel.com, linux-kselftest@vger.kernel.org,
-        jmorris@namei.org
-Subject: Re: [PATCH v8 02/14] mm/gup: check every subpage of a compound page
- during isolation
-Message-ID: <20210203180004.GS4718@ziepe.ca>
-References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
- <20210125194751.1275316-3-pasha.tatashin@soleen.com>
- <05a66361-214c-2afe-22e4-12862ea1e4e2@oracle.com>
- <20210203145313.GQ4718@ziepe.ca>
- <f82dca38-52bd-aa27-2d27-b5a67f5284f5@oracle.com>
+        Wed, 03 Feb 2021 10:12:09 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     corbet@lwn.net, gregkh@linuxfoundation.org, peterz@infradead.org,
+        keescook@chromium.org, rafael@kernel.org, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Subject: [PATCH v3 0/7] Introduce Sequence Number Ops 
+Date:   Wed,  3 Feb 2021 11:11:56 -0700
+Message-Id: <cover.1612314468.git.skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f82dca38-52bd-aa27-2d27-b5a67f5284f5@oracle.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 04:13:21PM +0000, Joao Martins wrote:
+Sequence Number api provides interfaces for unsigned atomic up counters.
 
-> If check_and_migrate_movable_pages() is meant to migrate unpinned
-> pages, then rather than pinning+unpinning+moving, perhaps it would
-> be called in __get_user_pages() place where we are walking page
-> tables and know if it's a PUD/PMD and can skip all the subpages and
-> just record and migrate those instead. Was that your thinking?
+There are a number of atomic_t usages in the kernel where atomic_t api
+is used for counting sequence numbers and other statistical counters.
+Several of these usages, convert atomic_read() and atomic_inc_return()
+return values to unsigned. Introducing sequence number ops supports
+these use-cases with a standard core-api.
 
-I think a reasonable approach is to detect non-pinnable pages while
-walking the VMAs, when found isolate them and thread them on a linked
-list.
+Sequence Number ops provide interfaces to initialize, increment and get
+the sequence number. These ops also check for overflow and log message to
+indicate when overflow occurs. This check is intended to help catch cases
+where overflow could lead to problems.
 
-When the VMA walk is done you'll have a linked list of isolated pages
-that need migration. So the check_and_migrate_movable_pages() gets
-split into the top half being diffused in the VMA walk and the bottom
-half still called after __get_user_pages() returns.
+Since v2:
+- Uses atomic_inc_return() for incrementing the sequence number.
+- No longer uses atomic_read()
 
-Jason
+Shuah Khan (7):
+  seqnum_ops: Introduce Sequence Number Ops
+  selftests: lib:test_seqnum_ops: add new test for seqnum_ops
+  drivers/acpi: convert seqno to use seqnum_ops
+  drivers/acpi/apei: convert seqno to seqnum_ops
+  drivers/staging/rtl8723bs: convert event_seq to use seqnum_ops
+  drivers/staging/rtl8188eu: convert event_seq to use seqnum_ops
+  kobject: convert uevent_seqnum to seqnum_ops
+
+ Documentation/core-api/index.rst              |   1 +
+ Documentation/core-api/seqnum_ops.rst         |  62 ++++++++
+ MAINTAINERS                                   |   8 ++
+ drivers/acpi/acpi_extlog.c                    |   8 +-
+ drivers/acpi/apei/ghes.c                      |   8 +-
+ drivers/staging/rtl8188eu/core/rtw_mlme_ext.c |  23 ++-
+ .../staging/rtl8188eu/include/rtw_mlme_ext.h  |   3 +-
+ drivers/staging/rtl8723bs/core/rtw_cmd.c      |   3 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c |  33 +++--
+ drivers/staging/rtl8723bs/include/rtw_cmd.h   |   3 +-
+ .../staging/rtl8723bs/include/rtw_mlme_ext.h  |   3 +-
+ include/linux/kobject.h                       |   3 +-
+ include/linux/seqnum_ops.h                    | 131 +++++++++++++++++
+ kernel/ksysfs.c                               |   3 +-
+ lib/Kconfig                                   |   9 ++
+ lib/Makefile                                  |   1 +
+ lib/kobject_uevent.c                          |   9 +-
+ lib/test_seqnum_ops.c                         | 133 ++++++++++++++++++
+ tools/testing/selftests/lib/Makefile          |   1 +
+ tools/testing/selftests/lib/config            |   1 +
+ .../testing/selftests/lib/test_seqnum_ops.sh  |  10 ++
+ 21 files changed, 423 insertions(+), 33 deletions(-)
+ create mode 100644 Documentation/core-api/seqnum_ops.rst
+ create mode 100644 include/linux/seqnum_ops.h
+ create mode 100644 lib/test_seqnum_ops.c
+ create mode 100755 tools/testing/selftests/lib/test_seqnum_ops.sh
+
+-- 
+2.27.0
+
