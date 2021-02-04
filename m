@@ -2,117 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 189E330E7C3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Feb 2021 00:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3BD30EA47
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Feb 2021 03:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233362AbhBCXnC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Feb 2021 18:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbhBCXmq (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Feb 2021 18:42:46 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5657EC061793
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 15:41:29 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id v7so1457801ybl.15
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 15:41:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=/SVhbM2uQkfhx0nM8S6aEm/0ZcJ7ciNGwmg4LfVvDlo=;
-        b=Q+TS3qW6SM6wIum0mxOGE5YURZnsMYYXVSeHKas03nAKV+6CXav4beYt/9wPKkYXU6
-         W7jrNlSwqIxTLQK14x0h5aIOha4ZURMIfOSQfORcGG8lxtMT1NLiKJWFCSyrtFKDBLI+
-         OBD/YYnJKDCm/OXCc+d2le2RtKUf126s9WMiQHkHe0oSGLf1PwxnmLbyapGx3yC7AIzA
-         3iguXBVmPPf1f80hNqk25+6EINJkRiJ6JwMYJpTlrWAxulcRsYIZhjlTu5nPPWpYSS7k
-         /uHRc7Xbi186oOVVHyj/z4my/C0QM++n7iTgbkqPXswDLlj70yQViF+QgstB2XfXEsQd
-         327g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=/SVhbM2uQkfhx0nM8S6aEm/0ZcJ7ciNGwmg4LfVvDlo=;
-        b=A/1vmU/LEnUdKQtUH1JzSbtBfIJWje8soaod+uqZBKiIjq8x2zLRByCy4Psf5zdFx4
-         xfQdv3HcXmt2og9vRaVq2qsnLfPWsGw5N+TWI9G1cn1Yleb6pE9SKuE96lv5/RvTFcbt
-         X9zvuVN09CVQMtEiBXjd0DHjI4btvIjzGq/p592RRoqNXJc1Wieq8eRHwmZ3jW7jLbWd
-         cqb6sLEEBI6DOtPG2W3owEhSJ20JGfwjtpQGCK7BE0WNWpn75Z7TannVcLkhvppRrUju
-         huLYDLvdlHYFlbO3FsiRPYZrShBlklp12yJ034y+07aaLMcGa0uS20hTpRpddkn/wtLm
-         P4UA==
-X-Gm-Message-State: AOAM531RaxT2rA8sCvlt26b9FNhJ/BtKWElVJn2NCub70z8YHpxkyGtC
-        XMbgCeR050VdgCiCw/ZGMojGFg9YWCSHNQ==
-X-Google-Smtp-Source: ABdhPJxW1mSlBMiPe8VFlR0C0NhwCMngW1NOxzWO+d2kKzqhcyVSzN7MogWuLZ/h8WcbhdA1GJCFqxYTIbPQ1g==
-Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:bd7a:7717:5b5b:de27])
- (user=dlatypov job=sendgmr) by 2002:a05:6902:706:: with SMTP id
- k6mr8182212ybt.52.1612395688574; Wed, 03 Feb 2021 15:41:28 -0800 (PST)
-Date:   Wed,  3 Feb 2021 15:41:16 -0800
-In-Reply-To: <20210203234116.839819-1-dlatypov@google.com>
-Message-Id: <20210203234116.839819-4-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20210203234116.839819-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
-Subject: [PATCH 3/3] kunit: tool: fix unintentional statefulness in run_kernel()
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S234175AbhBDCh3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Feb 2021 21:37:29 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:35282 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233517AbhBDCh2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Feb 2021 21:37:28 -0500
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxadS2XRtg+ikDAA--.3874S3;
+        Thu, 04 Feb 2021 10:36:39 +0800 (CST)
+Subject: Re: [PATCH] selftests: breakpoints: Fix wrong argument of ptrace()
+ when single step
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <1612341547-22225-1-git-send-email-yangtiezhu@loongson.cn>
+ <f91f1e69-310e-5256-de6e-9bceeaa7b205@linuxfoundation.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <d560a99f-be45-c03f-e729-56ccdbc9a131@loongson.cn>
+Date:   Thu, 4 Feb 2021 10:36:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <f91f1e69-310e-5256-de6e-9bceeaa7b205@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxadS2XRtg+ikDAA--.3874S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFyfZF1kJr4kZFW7Zry7Jrb_yoW8KFWxpF
+        WfZr1ktFs3try5K3ZrX3yqvF1fGrs7ZFWxA34rJ34avr18tws3Jw1xKF4UKFy3u395X3sY
+        y3Z7GF4rua4UXrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
+        8wCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IU8mZX5UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a bug that has been present since the first version of this
-code.
-Using [] as a default parameter is dangerous, since it's mutable.
+On 02/04/2021 02:30 AM, Shuah Khan wrote:
+> On 2/3/21 1:39 AM, Tiezhu Yang wrote:
+>> According to the error message, the first argument of ptrace() should be
+>> PTRACE_SINGLESTEP instead of PTRACE_CONT when ptrace single step.
+>>
+>> Fixes: f43365ee17f8 ("selftests: arm64: add test for 
+>> unaligned/inexact watchpoint handling")
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   tools/testing/selftests/breakpoints/breakpoint_test_arm64.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git 
+>> a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c 
+>> b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+>> index ad41ea6..2f4d4d6 100644
+>> --- a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+>> +++ b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+>> @@ -143,7 +143,7 @@ static bool run_test(int wr_size, int wp_size, 
+>> int wr, int wp)
+>>       if (!set_watchpoint(pid, wp_size, wp))
+>>           return false;
+>>   -    if (ptrace(PTRACE_CONT, pid, NULL, NULL) < 0) {
+>> +    if (ptrace(PTRACE_SINGLESTEP, pid, NULL, NULL) < 0) {
+>>           ksft_print_msg(
+>>               "ptrace(PTRACE_SINGLESTEP) failed: %s\n",
+>>               strerror(errno));
+>>
+>
+> Right before this it does a set_watchpoint(). PTRACE_CONT is what
+> makes sense to me. Error might be the one that is incorrect here?
 
-Example using the REPL:
->>> def bad(param = []):
-...     param.append(len(param))
-...     print(param)
-...
->>> bad()
-[0]
->>> bad()
-[0, 1]
+What do you think the following change? If it is OK, I will send v2 soon.
 
-This wasn't a concern in the past since it would just keep appending the
-same values to it.
+diff --git a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c 
+b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+index ad41ea6..e704181 100644
+--- a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
++++ b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+@@ -145,7 +145,7 @@ static bool run_test(int wr_size, int wp_size, int 
+wr, int wp)
 
-E.g. before, `args` would just grow in size like:
-  [mem=1G', 'console=tty']
-  [mem=1G', 'console=tty', mem=1G', 'console=tty']
+         if (ptrace(PTRACE_CONT, pid, NULL, NULL) < 0) {
+                 ksft_print_msg(
+-                       "ptrace(PTRACE_SINGLESTEP) failed: %s\n",
++                       "ptrace(PTRACE_CONT) failed: %s\n",
+                         strerror(errno));
+                 return false;
+         }
+@@ -159,7 +159,7 @@ static bool run_test(int wr_size, int wp_size, int 
+wr, int wp)
+         }
+         alarm(0);
+         if (WIFEXITED(status)) {
+-               ksft_print_msg("child did not single-step\n");
++               ksft_print_msg("child exited prematurely\n");
+                 return false;
+         }
+         if (!WIFSTOPPED(status)) {
 
-But with now filter_glob, this is more dangerous, e.g.
-  run_kernel(filter_glob='my-test*') # default modified here
-  run_kernel()			     # filter_glob still applies here!
-That earlier `filter_glob` will affect all subsequent calls that don't
-specify `args`.
+Thanks,
+Tiezhu
 
-Note: currently the kunit tool only calls run_kernel() at most once, so
-it's not possible to trigger any negative side-effects right now.
-
-Fixes: 6ebf5866f2e8 ("kunit: tool: add Python wrappers for running KUnit tests")
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_kernel.py | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 71b1942f5ccd..6dd3cf6e8efa 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -199,7 +199,9 @@ class LinuxSourceTree(object):
- 			return False
- 		return self.validate_config(build_dir)
- 
--	def run_kernel(self, args=[], build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
-+	def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
-+		if not args:
-+			args = []
- 		args.extend(['mem=1G', 'console=tty'])
- 		if filter_glob:
- 			args.append('kunit.filter_glob='+filter_glob)
--- 
-2.30.0.365.g02bc693789-goog
+>
+> thanks,
+> -- Shuah
 
