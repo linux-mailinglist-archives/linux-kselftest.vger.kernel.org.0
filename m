@@ -2,116 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C768430F81C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Feb 2021 17:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B6E30F9CD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Feb 2021 18:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237000AbhBDQgP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Feb 2021 11:36:15 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35628 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237152AbhBDQgM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Feb 2021 11:36:12 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1612456515; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uUjLyiqQ4utGC6qodHBCUygl1CqqAiXa12iI219baz4=;
-        b=BNQK06tY3c6oPYMlrJUmoOwDwyyuPLcT9wQsvkuONAATKRqnR6IKOx+plLp6ZPu7Tjh+oM
-        2GiRxiAGJIETGsPK6Ffz+bkfC6h3+8wavXQt32yxXI/Mr8HjGkyCyPuy3TP58vz2svmjp0
-        dG61c+c0ct2JNcbGNyyZLJRbiQMCBEI=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C6C29AD87;
-        Thu,  4 Feb 2021 16:35:15 +0000 (UTC)
-Date:   Thu, 4 Feb 2021 17:35:15 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>, rostedt@goodmis.org,
-        sergey.senozhatsky@gmail.com, linux@rasmusvillemoes.dk,
-        shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field
- widths in vsscanf
-Message-ID: <YBwiQ+l6yqs+g+rr@alley>
-References: <20210203165009.6299-1-rf@opensource.cirrus.com>
- <20210203165009.6299-2-rf@opensource.cirrus.com>
- <YBr9c44Dvq1ZNrEa@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YBr9c44Dvq1ZNrEa@smile.fi.intel.com>
+        id S238463AbhBDRdu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Feb 2021 12:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238251AbhBDRbs (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 4 Feb 2021 12:31:48 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57827C06121C
+        for <linux-kselftest@vger.kernel.org>; Thu,  4 Feb 2021 09:30:56 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id i2so2604087plt.14
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Feb 2021 09:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=toZMlO8L4mNt/+T1e20QDyw4KGTzjt3zo2Fm4Ybrzl0=;
+        b=lFdpJJgP004d3TZEN4lxygIPoEXHnYFjDHiUOuAJto0JAFMLB1RsVQiiZDwNZeDue2
+         Cc47k6LyBn+zjjYLfHwqcNxnCZKeqBFbEtTbg9+HZpSsYFlz7VV5+hrQa3O5Og7YQUkd
+         cak/rHTHyTctqQkMDNYyUDtrBARvERBvrCitbK05p3YpJD03RU4nhwwaZTThTmcd0iZi
+         JOKRBRH9d2gcuxvBlYM0DzrT05GOYWEWZx7nIkulKrBKn59cN8lrMO1VWS9o0E0lSYat
+         j6IbtzbSUUTN9ZWyl/001YSzjW4G06lmqpIvOjPm8byrrmyJp1ByF/wi2hk4l8mJbxJi
+         LRqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=toZMlO8L4mNt/+T1e20QDyw4KGTzjt3zo2Fm4Ybrzl0=;
+        b=F3KKrFK6yYEkS4xrMNLcL8aEe2aQqdC9DwK10S6ZvZoLXBkXQmt8UDYoRdZ4+9U5QO
+         Vbc+IuPbZTLqYnTSYIObqIzIGW2arAiCBrojEEBZwDPPQqx41cvohZQcysw16KnjLZOh
+         +AVM28jtI7//MsMcwRI/5JOIJysCB8IMRGPVhJt5FdSwMXyJr7qgix+sVCETNRddHfxG
+         JrVpBUI7/Hd/0UueRcl6oiGEUn5a0VpNia8IcPRq4mrLorUNk3myxQxxml8ZS8tVWaj0
+         9X7WrMqkRs1EfrfvmKupW5J6K7fp285u9GYo3clp3vWMhGuo2UVKTBkj5sHK22n6Mnqg
+         pLjg==
+X-Gm-Message-State: AOAM532QMlrTd0r95tdqI+AsHHnpn9eE+Coi3HkQUQqQD9ZU7sEUyooy
+        LMVXj70vKj5IoFcNVhyn65GSm+obRSSxRA==
+X-Google-Smtp-Source: ABdhPJzQd64wYLCcP0U72Y1a9WakSWfAC+zRbyPKqXayyOUUVugjawZGIt2pZUUBmVo/hjapvX/iP5ulcwvF6Q==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:bd7a:7717:5b5b:de27])
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:7503:: with SMTP id
+ q3mr32450pjk.79.1612459855804; Thu, 04 Feb 2021 09:30:55 -0800 (PST)
+Date:   Thu,  4 Feb 2021 09:30:42 -0800
+Message-Id: <20210204173045.1138504-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
+Subject: [PATCH v2 0/3]  kunit: support running subsets of test suites from kunit.py
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed 2021-02-03 21:45:55, Andy Shevchenko wrote:
-> On Wed, Feb 03, 2021 at 04:50:07PM +0000, Richard Fitzgerald wrote:
-> > The existing code attempted to handle numbers by doing a strto[u]l(),
-> > ignoring the field width, and then repeatedly dividing to extract the
-> > field out of the full converted value. If the string contains a run of
-> > valid digits longer than will fit in a long or long long, this would
-> > overflow and no amount of dividing can recover the correct value.
+When using `kunit.py run` to run tests, users must populate a
+`kunitconfig` file to select the options the tests are hidden behind and
+all their dependencies.
 
-> ...
-> 
-> > +	for (; max_chars > 0; max_chars--) {
-> 
-> Less fragile is to write
-> 
-> 	while (max_chars--)
+The patch [1] to allow specifying a path to kunitconfig promises to make
+this nicer as we can have checked in files corresponding to different
+sets of tests.
 
-Except that the original was more obvious at least for me.
-I always prefer more readable code when the compiler might do
-the optimization easily. But this is my personal taste.
-I am fine with both variants.
+But it's still annoying 
+1) when trying to run a subet of tests
+2) when you want to run tests that don't have such a pre-existing
+kunitconfig and selecting all the necessary options is tricky.
 
-> 
-> This allows max_char to be an unsigned type.
-> 
-> Moreover...
-> 
-> > +	return _parse_integer_limit(s, base, p, INT_MAX);
-> 
-> You have inconsistency with INT_MAX vs, size_t above.
+This patch series aims to alleviate both:
+1) `kunit.py run 'my-suite-*'`
+I.e. use my current kunitconfig, but just run suites that match this glob
+2) `kunit.py run --alltests 'my-suite-*'`
+I.e. use allyesconfig so I don't have to worry about writing a
+kunitconfig at all.
 
-Ah, this was on my request. INT_MAX is already used on many other
-locations in vsnprintf() for this purpose.
+See the first commit message for more details and discussion about
+future work.
 
-An alternative is to fix all the other locations. We would need to
-check if it is really safe. Well, I do not want to force Richard
-to fix this historical mess. He already put a lot lot of effort
-into fixing this long term issue.
+This patch series also includes a bugfix for a latent bug that can't be
+triggered right now but has worse consequences as a result of the
+changes needed to plumb in this suite name glob.
 
-...
+[1] https://lore.kernel.org/linux-kselftest/20210201205514.3943096-1-dlatypov@google.com/
 
-> > -	unsigned long long result;
-> > +	const char *cp;
-> > +	unsigned long long result = 0ULL;
-> >  	unsigned int rv;
-> >  
-> > -	cp = _parse_integer_fixup_radix(cp, &base);
-> > -	rv = _parse_integer(cp, base, &result);
-> 
-> > +	if (max_chars == 0) {
-> > +		cp = startp;
-> > +		goto out;
-> > +	}
-> 
-> It's redundant if I'm not mistaken.
+---
+v1 -> v2:
+  Fix free of `suites` subarray in suite_set.
+  Found by Dan Carpenter and kernel test robot.
 
-Also this is more obvious and less error prone from my POV.
-But I agree that it is redundant. I am not sure if this
-function is used in some fast paths.
+Daniel Latypov (3):
+  kunit: add kunit.filter_glob cmdline option to filter suites
+  kunit: tool: add support for filtering suites by glob
+  kunit: tool: fix unintentional statefulness in run_kernel()
 
-Again I am fine with both variants.
+ lib/kunit/Kconfig                   |  1 +
+ lib/kunit/executor.c                | 91 ++++++++++++++++++++++++++---
+ tools/testing/kunit/kunit.py        | 21 +++++--
+ tools/testing/kunit/kunit_kernel.py |  6 +-
+ 4 files changed, 104 insertions(+), 15 deletions(-)
 
-> > +	cp = _parse_integer_fixup_radix(startp, &base);
-> > +	if ((cp - startp) >= max_chars) {
-> > +		cp = startp + max_chars;
-> > +		goto out;
-> > +	}
-> 
-> This will be exactly the same, no?
 
-Best Regards,
-Petr
+base-commit: 88bb507a74ea7d75fa49edd421eaa710a7d80598
+-- 
+2.30.0.365.g02bc693789-goog
+
