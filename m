@@ -2,29 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CAA310C3D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 14:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A688A310E7A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 18:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbhBENxk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Feb 2021 08:53:40 -0500
-Received: from mail.hallyn.com ([178.63.66.53]:47424 "EHLO mail.hallyn.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231284AbhBENvV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 08:51:21 -0500
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 0FC0F283; Fri,  5 Feb 2021 07:48:58 -0600 (CST)
-Date:   Fri, 5 Feb 2021 07:48:58 -0600
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+        id S230063AbhBEPgj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Feb 2021 10:36:39 -0500
+Received: from sonic307-15.consmr.mail.ne1.yahoo.com ([66.163.190.38]:40368
+        "EHLO sonic307-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233282AbhBEPeg (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Feb 2021 10:34:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1612545370; bh=LGQ2+Oq5r94j/3FnA4uP6fw1KLX7JE1Bzu43eSjT32U=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=E5Q3AHC7DrRTGTsWfwbVH/vY2ynDAPHpRKCt/EuZ59E+7FPCmkn/mZjw0Kau9q6GS5kPpCzuPrIyWCmwTAONGipXMrc+q+mLWYsPqJZrbFouCbWoJGlyWpVXfd/EupkhHNBQZW/8t3omo8omfzYCUYVBBb7z3Uu6VbP+snNIo8UiSxCxbh7umPhk1NFEXzX8nihG0EFtVwzz2OzkflNjC4Xjjv8cp9bH2XH+zPik9WTcwkx4+5MwTqPYfyy0cGmEobGIUfJ4y8RhLaBnHyN8WgNwC7TvLn4d/TjTxnvTIuX8qB5FJELhBmT3LHyXFp7xEVLsozxHQ3B/nDft+M65Pw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1612545370; bh=RlHn1VhnissI9uTgW7KeP1QI79PT7nrFo+7HHHHy9sH=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=VSopjJeSYc4oN0QWIUyYpEo+X57zqS0zmOzAvykpBx/u4TQDy4kwHwdW9vX1MWiXtH9RxUeKSRV0DVOJ5Qq5BqS9AiTCtBJqK96LHP28Ivn3VnPICJ6omjKvrOVgDyQ+W0XoT6PNBvQ1GCGb4ubWDLCi4RQCm6WzPE0siEQwA9ho+evnZgtK8x8/QgJno2mkOl7/McsGnAxGZ5mSpCSfet3FZRiI/Ylo6HnnuUFVGNr9lkoXipoh30Ywl9nCXY9ScAjJmT4C0QXHDx8PgRpoDUa2I6Nc6/ZwyDLu8m8PJ26H6K/GQaulgl9+RvxtlJogBemmPPa2NcJ4nYO9xaVShA==
+X-YMail-OSG: 4vk6bXoVM1neecdW7wnU5zezuyUc1WRLeXhj8yQJQhIu2KtYXYd28tosTbxPxcR
+ UrgCw4yaZH5U2lQXeyB9yBAIy0rwxN.rJT7pbFlH_AtqnBxj5cnG.H9NPOSFe2OYuI09WiNvdbs2
+ V6ZsZxSe3NZzYQRE7aW.q6amUOkLgLhxcE_N.xJeCoCw5THeoyAbRpRfhoKFsgQ0f_S_zuCP9pDI
+ iv6SkEhIIox2X22.afQptbIGBFMhynIZszfNjOEp4CPeD2QNd..SisHA6FZhKn4DFjwxKWNpuVDZ
+ kWp72CtdaPSsz.yy60I3Q7PjqASg88FlCVRugf6EIWFMfjX2svZD99rHJXWA76xvhClPoJ4h8jzs
+ VbGg9sZe1veNCX2IseMxYvjPG7TS3iAlyFGNJDyZDS2ROlmXKJseGrEmJLhHdK_f1wyNhWYenTFL
+ p.vEWU0FCkk485OYQkxSsIySjwJX3HziHXBljQ67Da8Go2VDDbuaTLqDYoeNKozFXtDebTutEuKS
+ m4R6sugwHTlIHmNHLMUEB4MukcGtof6AJxK6hVFrY2_Z_usb.vKDoGspF.miOiXIkkpyKF.VW_lb
+ HFQgz10VobTqp67nFY7ziF6wqrpnlfnTjDCaoxZMEvPEIvByqPYn1Js8OqcEyszo5ER8GXPMjSQu
+ .5pbKyQXJVDAw7qTUH8sfqAVUxyhpp6SFZoVTA34ZinQD5lM4yaCex7SVzd6MPX7ZtNqjStXWRjA
+ 3gVrp5mkhLCJQf5373a.KVjzC21kcSmwG2iffGadZ6IBEad1A_03oWU6F_pohXulRE9DNDrM6VLF
+ UKGovhVSlImQQwSuWhTh6Lmq6dCeOhbfHAQL14zpjpcAwJi9ZMM3ZyPzN3aeIwolZ64JG2Ltcnxk
+ zTaQkylzVdKB8ucf3x8citpTKu6Nh4NX1o0ER.iTzjmOzJTtldfismsgGS8qN58xgBZi9_QfLhmq
+ BREiYMUUbc.Beqb_JZ9e.hZST5SfMx_OaduvFd77wWJ7lj_0ahrKLBcAQ999bLD5ZK.zewlgxLkP
+ Y0QYpw_.Df9skZxay_VhOgAiZWqBpE01nSxNR4DA.B7d0OoZL_kQW2Yne3hzqOTtSMijAx6HGMnV
+ uRnpV_cB74ovP0roDKjwKs7VHMbUOVJ8.kdXABWnakvCEpdRzQ7QdtQFIIxrYAcuJo0h0DX2N1Yl
+ SKQoDR.5nv5Yw8j705V4sSsa4TQy25DV8XKjZ3KDzRa2gP1k9fL5nhHWE5IUcxupy5Qia4WTKEZ6
+ WcZeInLwPzs4mtVXjfEUwaXxr1gF4d2nOGgNFdcU9hmRHpZEyIX9gFSxgS3hO6MsFhebz4ammkdH
+ nTLC9xxBSsmhbt7jUEk7LXTjoqAKXW3fl1T_uQxkfrnlctFWhXYNXljJe62H8.hubANX4nChN6BD
+ CF6hkABc2X6LT8mr0c5yjOuH5twGJIxj5xwx6aPlZDegHKLF3hp8DlheLlSlfrstu_3U7QE_8ncb
+ yvTDN20SvcJWlyCRNoHmcX5cW02KFFlMNOA.XoSFHTIyrE5OXKsGsMfpsG2sr0R4iHmJmUD_kzzx
+ Y3XLexSfhtTQYgc392fpmJMZmvYHu44aG22h1Dqub3.3ZbAPioptx.h.1A7x4xHbWxF0eB.gQZe3
+ iOjewLa1BzcuyGSDaE6jPBIRg3NQLmO6idWF_Mm8h0y4hmNYHkiOM7NQntJ1TT._NiWPcO6pcvco
+ GW_6kSfSCv_WMG9z.Oy8RpevcEV1PWUtDyGEoNnltM66ZioWI3BhpD67MzNaFgU0RwlJn2RSjHXM
+ dlrYGVHQlpIKAVt1kIaWiXtJf47uCyLyFYM2qbkfYPCZE7chkdX2FfVpENhZqES786vW1gBRJkwb
+ UT_xbrRyZbtrtexASkXzRrpcIaxOafRHAE6a5AIUTisU.ymZJ0Kx.3A_nm.Q.rmA4AIpBIWnRUnP
+ 9T_u.Sfla279vVfjU1.nTx8NkOhfLM_dsOSyck3.ugMwaa.GpwPRdLcM_FAOtNKbUtJmfWI1m.6_
+ UCggP9jn7dDyrtrBInYBJSWaw149dnBOoBxrbA6jR2NJpig8N8b3crUpHvpMFeeeLimbTSweEHXz
+ 40eytbATLle5Lr4lg4BbT6OryZfNaeQA5dlTXfE2aKtexKp.BK_Mrg3ol8h307sT2YjIGNJbTVM6
+ ZjDbouOn5rmeP2Ow9pBCmRS2.aG3PrOGdY0DtcD.rPpaI7XM2grCMtVUYqfOy9nRBuj6OmXrvPI9
+ r9.4rWaDK6Y6BEMqc5of.DnNoVG13zV3FLfAmJADOdR1xcb7P7bkPcKHMY6qQaHhFSGe0nKep3Fd
+ UTSkGH68egJUeP5g73tRe_AyNtLU.Ehkh.Pr_9RChFWr5bnB9hATgvjz_RKnpDjcPtjkXe1YLtSZ
+ qrb6T0ULSROP0UhNH4CCR5JOEr5uRGhp2d9XH70Lt7adSWeck1nbNcP5MZCVGseJ08y4MaRjMB.H
+ pEl_hGwogZz3JgYzELYE6HQaXsNTejvtZNsoUpxpIPZFGLvuclLZLUgmOp4UVudq0eQrQmstgZ5L
+ csMHj8Nqt7HvG9Lg972uTdm_l238fMjwFXi7QbgefiGQ_x4hbkj9HuW3QaCxG1YvihRDvsO3ZPal
+ vjpAZon2p21ONztpiCwJ5Qbl9wAKxfY4FbXUS_bYbZ6TsQenl6aKLVp_hEBBBS5.Ns_PbJjQXQy1
+ XdvLDEprDx13fijlXZgUjRqFk3s19fl6FP96nRoRdsM4ou83TCPV8G9.iyXOe8prjAnj8im3Mf7d
+ g7Z_haPpc9jy4tEXW9B3qrAnA0SFgI4Vr0QoQlb4eBQcs2AU9oBqz2YoOf5uOwfrDuUEjJtQAaJ7
+ 1aS6ztYb8P.3lJ4G_5jzRQzN3R.dv0vOU8wYdFPH6bgNk.fcZDG.oXFiSD8ZNcEAMF1O5szuecOz
+ ubhWC7klruGOUByCHEOLu5G5IAmmoGqEFY5kD.bRt1sg85bDdga.09x5UsJ1iTNpUt7cRr6JeE7t
+ jns5ufY86Upn3G5RytK7MBwPAd2Im9nGsix3wxLqywZEQEqGfPCb5Hxgs.DO16ge1BtOo6CcOYUi
+ qzDYTQYe2PxSUDNoXui.b0OlFcohRJ8HPZMJ4tvhcrENlW7MOjMIlRHf7Rl7Soajft9fSUx_cQwE
+ UW_tfMThJgYk0hh.nQxyatYeq_aiImolN5sKmPQHcdohBJuOvsWPmp.hfMHDDB4P5gUEBCR0D6i7
+ 032.Tkzme5KEjw_HN0_xdtfLleGGskWHL_Kgh84qmt2aYqxl2Mvvv4hbmoPhYnQfGJQ.esw78tvz
+ lpD6k.RyVllO3GP.9udSefpKfb0zpmihyxKkDZCiiG6Yq_WXKQ30weM6XvccpZxN6kRoACK.OJKt
+ ZVC8ivzMNFwRI0y3_5TwaABWt3mCG4tVrFoOXskhasGd7eYB9yQ1SjJoeWE43iWU9E63fSeEIeR.
+ GaeaLCkyYyWwajOjGiRXyrDuKsdplMdvph1UVKx18o0PpedHbTiUaTVCgesF5H70JcJ3QzoweW6U
+ TMdzmG4Dn73nF6LC10W4GYclcCioswdpxT2nQ_Ghu4E93KC7CwO9OrC2uf8uc_LP4XPIQHhSWEER
+ 1q.BDXXoovU5eNr7dAcnyLM9jUlVBjSQSiDmBHe_ZQs1EysOyQKG9nNpPv9ofuq5CLkPTOHkzJcV
+ Lb4RmNeS9NacMDTLkG9nMGFRbpqSasr890GQK9pz8dMT66NXq3iMMsKuJhx_p4RxxjLlIhb7xDwg
+ kWK5u35AstbxTHWdOj7S8o6CmRC2d6t_yGK2DCRoG28hfO0Xsr.UHRDt32PHhHmkIaBW9a41qKwp
+ JdIk1SIhJF.P.7kwtMoLk9t.bx4c0.xG5rAUtJOnn94XD0snqDeknD5vK7YtxrnK58Is5f01Ppti
+ FLDAFMQdGwXSmpLUGwWE1l514TxghjlILmOCZzSnXICRNZXZQ1BXVcwuHhN7Ohj6.e.4gZZozxfm
+ _0qNrzSoOl4pqCtPbct0o1N_5gi.V7jsNTwExH1MBiTdouY8zW_NJhF5CjgbO4vNLIh72gBsosXy
+ SbN_oJqWf5Xoa9KgKGLaLhDacKKaO_RvBVGKbzjEaC_1Smv1WGcjjfBenb4GkN20Kne4mCpTqz1R
+ hIrpyVpVeS5LiT94.tYjEGKD1dG3QR1ZB7Rv_BD2Gmxp_pPGYQUxut9cEUs1Pitl9V.6w0wMzefb
+ BHB.4dwr00aShdirSPJwo1z08wDKfi9lzvUC1IQ8.wHl4LW6Ek_MBo1ApzHrkhrakVdFJAkkF9yr
+ rP7ALgOoJEePXmpg1iqXBq1VV2opUvaY.DQcZsE3d06FzKDjI1MAIVKTjrwAqCajLzhWIci0kbV6
+ 1QZiFwXKZQvON0RnQvz14mhzaokJf0tBnH7G40wr3vR3bBWPk1BPSChm4trk0wqilJdNEO0eTSiq
+ dHHwzCCWXV2N1mUihfIyUHZ0LQq8GcgR.9PT3rKBEu3.wh.6o0gWA6SkenGvTBWhpU.3aKrBLjCL
+ abZkg4OZhoFTUqP6A1IiIPxx9ep3ykt8ITmBEnX0V7XC4QLPZjhxOm7m3BVZ4Ka5IgYgzKH8yuLD
+ eaQmy2dQsU0KF
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Fri, 5 Feb 2021 17:16:10 +0000
+Received: by smtp419.mail.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 68f140bfc5e1e85057f24de192666647;
+          Fri, 05 Feb 2021 16:51:38 +0000 (UTC)
+Subject: Re: [PATCH v28 05/12] LSM: Infrastructure management of the
+ superblock
+To:     "Serge E. Hallyn" <serge@hallyn.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
 Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andy Lutomirski <luto@amacapital.net>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jeff Dike <jdike@addtoit.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
@@ -36,251 +101,64 @@ Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v28 04/12] landlock: Add ptrace restrictions
-Message-ID: <20210205134857.GA17981@mail.hallyn.com>
+        John Johansen <john.johansen@canonical.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
 References: <20210202162710.657398-1-mic@digikod.net>
- <20210202162710.657398-5-mic@digikod.net>
+ <20210202162710.657398-6-mic@digikod.net>
+ <20210205141749.GB17981@mail.hallyn.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Message-ID: <cb3f290b-e4e6-44b9-9c0d-4f892cc90767@schaufler-ca.com>
+Date:   Fri, 5 Feb 2021 08:51:35 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210202162710.657398-5-mic@digikod.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210205141749.GB17981@mail.hallyn.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Mailer: WebService/1.1.17648 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/11.0.8)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 02, 2021 at 05:27:02PM +0100, Mickaël Salaün wrote:
-> From: Mickaël Salaün <mic@linux.microsoft.com>
-> 
-> Using ptrace(2) and related debug features on a target process can lead
-> to a privilege escalation.  Indeed, ptrace(2) can be used by an attacker
-> to impersonate another task and to remain undetected while performing
-> malicious activities.  Thanks to  ptrace_may_access(), various part of
-> the kernel can check if a tracer is more privileged than a tracee.
-> 
-> A landlocked process has fewer privileges than a non-landlocked process
-> and must then be subject to additional restrictions when manipulating
-> processes. To be allowed to use ptrace(2) and related syscalls on a
-> target process, a landlocked process must have a subset of the target
-> process's rules (i.e. the tracee must be in a sub-domain of the tracer).
-> 
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Serge E. Hallyn <serge@hallyn.com>
+On 2/5/2021 6:17 AM, Serge E. Hallyn wrote:
+> On Tue, Feb 02, 2021 at 05:27:03PM +0100, Micka=C3=ABl Sala=C3=BCn wrot=
+e:
+>> From: Casey Schaufler <casey@schaufler-ca.com>
+>>
+>> Move management of the superblock->sb_security blob out of the
+>> individual security modules and into the security infrastructure.
+>> Instead of allocating the blobs from within the modules, the modules
+>> tell the infrastructure how much space is required, and the space is
+>> allocated there.
+>>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: John Johansen <john.johansen@canonical.com>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+>> Reviewed-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+> Acked-by: Serge Hallyn <serge@hallyn.com>
+>
+> I wonder how many out of tree modules this will impact :)
 
-Acked-by: Serge Hallyn <serge@hallyn.com>
+There are several blobs that have already been converted
+to infrastructure management. Not a peep from out-of-tree
+module developers/maintainers. I can only speculate that
+OOT modules are either less common than we may think, using
+alternative data management models (as does eBPF) or
+sticking with very old kernels. It's also possible that
+they're suffering in silence, which would be sad because
+every module that's worth having should be in the tree.
 
-Thanks, I appreciate that things are well named and easy to reason
-about.
+> Actually
+> if some new incoming module does an rcu callback to free the
+> sb_security, then the security_sb_free will need an update, but
+> that seems unlikely.
 
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> Reviewed-by: Jann Horn <jannh@google.com>
-> ---
-> 
-> Changes since v25:
-> * Rename function to landlock_add_ptrace_hooks().
-> 
-> Changes since v22:
-> * Add Reviewed-by: Jann Horn <jannh@google.com>
-> 
-> Changes since v21:
-> * Fix copyright dates.
-> 
-> Changes since v14:
-> * Constify variables.
-> 
-> Changes since v13:
-> * Make the ptrace restriction mandatory, like in the v10.
-> * Remove the eBPF dependency.
-> 
-> Previous changes:
-> https://lore.kernel.org/lkml/20191104172146.30797-5-mic@digikod.net/
-> ---
->  security/landlock/Makefile |   2 +-
->  security/landlock/ptrace.c | 120 +++++++++++++++++++++++++++++++++++++
->  security/landlock/ptrace.h |  14 +++++
->  security/landlock/setup.c  |   2 +
->  4 files changed, 137 insertions(+), 1 deletion(-)
->  create mode 100644 security/landlock/ptrace.c
->  create mode 100644 security/landlock/ptrace.h
-> 
-> diff --git a/security/landlock/Makefile b/security/landlock/Makefile
-> index 041ea242e627..f1d1eb72fa76 100644
-> --- a/security/landlock/Makefile
-> +++ b/security/landlock/Makefile
-> @@ -1,4 +1,4 @@
->  obj-$(CONFIG_SECURITY_LANDLOCK) := landlock.o
->  
->  landlock-y := setup.o object.o ruleset.o \
-> -	cred.o
-> +	cred.o ptrace.o
-> diff --git a/security/landlock/ptrace.c b/security/landlock/ptrace.c
-> new file mode 100644
-> index 000000000000..f55b82446de2
-> --- /dev/null
-> +++ b/security/landlock/ptrace.c
-> @@ -0,0 +1,120 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Landlock LSM - Ptrace hooks
-> + *
-> + * Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-> + * Copyright © 2019-2020 ANSSI
-> + */
-> +
-> +#include <asm/current.h>
-> +#include <linux/cred.h>
-> +#include <linux/errno.h>
-> +#include <linux/kernel.h>
-> +#include <linux/lsm_hooks.h>
-> +#include <linux/rcupdate.h>
-> +#include <linux/sched.h>
-> +
-> +#include "common.h"
-> +#include "cred.h"
-> +#include "ptrace.h"
-> +#include "ruleset.h"
-> +#include "setup.h"
-> +
-> +/**
-> + * domain_scope_le - Checks domain ordering for scoped ptrace
-> + *
-> + * @parent: Parent domain.
-> + * @child: Potential child of @parent.
-> + *
-> + * Checks if the @parent domain is less or equal to (i.e. an ancestor, which
-> + * means a subset of) the @child domain.
-> + */
-> +static bool domain_scope_le(const struct landlock_ruleset *const parent,
-> +		const struct landlock_ruleset *const child)
-> +{
-> +	const struct landlock_hierarchy *walker;
-> +
-> +	if (!parent)
-> +		return true;
-> +	if (!child)
-> +		return false;
-> +	for (walker = child->hierarchy; walker; walker = walker->parent) {
-> +		if (walker == parent->hierarchy)
-> +			/* @parent is in the scoped hierarchy of @child. */
-> +			return true;
-> +	}
-> +	/* There is no relationship between @parent and @child. */
-> +	return false;
-> +}
-> +
-> +static bool task_is_scoped(const struct task_struct *const parent,
-> +		const struct task_struct *const child)
-> +{
-> +	bool is_scoped;
-> +	const struct landlock_ruleset *dom_parent, *dom_child;
-> +
-> +	rcu_read_lock();
-> +	dom_parent = landlock_get_task_domain(parent);
-> +	dom_child = landlock_get_task_domain(child);
-> +	is_scoped = domain_scope_le(dom_parent, dom_child);
-> +	rcu_read_unlock();
-> +	return is_scoped;
-> +}
-> +
-> +static int task_ptrace(const struct task_struct *const parent,
-> +		const struct task_struct *const child)
-> +{
-> +	/* Quick return for non-landlocked tasks. */
-> +	if (!landlocked(parent))
-> +		return 0;
-> +	if (task_is_scoped(parent, child))
-> +		return 0;
-> +	return -EPERM;
-> +}
-> +
-> +/**
-> + * hook_ptrace_access_check - Determines whether the current process may access
-> + *			      another
-> + *
-> + * @child: Process to be accessed.
-> + * @mode: Mode of attachment.
-> + *
-> + * If the current task has Landlock rules, then the child must have at least
-> + * the same rules.  Else denied.
-> + *
-> + * Determines whether a process may access another, returning 0 if permission
-> + * granted, -errno if denied.
-> + */
-> +static int hook_ptrace_access_check(struct task_struct *const child,
-> +		const unsigned int mode)
-> +{
-> +	return task_ptrace(current, child);
-> +}
-> +
-> +/**
-> + * hook_ptrace_traceme - Determines whether another process may trace the
-> + *			 current one
-> + *
-> + * @parent: Task proposed to be the tracer.
-> + *
-> + * If the parent has Landlock rules, then the current task must have the same
-> + * or more rules.  Else denied.
-> + *
-> + * Determines whether the nominated task is permitted to trace the current
-> + * process, returning 0 if permission is granted, -errno if denied.
-> + */
-> +static int hook_ptrace_traceme(struct task_struct *const parent)
-> +{
-> +	return task_ptrace(parent, current);
-> +}
-> +
-> +static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
-> +	LSM_HOOK_INIT(ptrace_access_check, hook_ptrace_access_check),
-> +	LSM_HOOK_INIT(ptrace_traceme, hook_ptrace_traceme),
-> +};
-> +
-> +__init void landlock_add_ptrace_hooks(void)
-> +{
-> +	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
-> +			LANDLOCK_NAME);
-> +}
-> diff --git a/security/landlock/ptrace.h b/security/landlock/ptrace.h
-> new file mode 100644
-> index 000000000000..265b220ae3bf
-> --- /dev/null
-> +++ b/security/landlock/ptrace.h
-> @@ -0,0 +1,14 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Landlock LSM - Ptrace hooks
-> + *
-> + * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
-> + * Copyright © 2019 ANSSI
-> + */
-> +
-> +#ifndef _SECURITY_LANDLOCK_PTRACE_H
-> +#define _SECURITY_LANDLOCK_PTRACE_H
-> +
-> +__init void landlock_add_ptrace_hooks(void);
-> +
-> +#endif /* _SECURITY_LANDLOCK_PTRACE_H */
-> diff --git a/security/landlock/setup.c b/security/landlock/setup.c
-> index 8661112fb238..a5d6ef334991 100644
-> --- a/security/landlock/setup.c
-> +++ b/security/landlock/setup.c
-> @@ -11,6 +11,7 @@
->  
->  #include "common.h"
->  #include "cred.h"
-> +#include "ptrace.h"
->  #include "setup.h"
->  
->  struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
-> @@ -20,6 +21,7 @@ struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
->  static int __init landlock_init(void)
->  {
->  	landlock_add_cred_hooks();
-> +	landlock_add_ptrace_hooks();
->  	pr_info("Up and running.\n");
->  	return 0;
->  }
-> -- 
-> 2.30.0
+We're already doing that for the inode blob, so it's
+really just a small matter of cut-n-paste and s/inode/sb/
+to make that happen.
+
+
