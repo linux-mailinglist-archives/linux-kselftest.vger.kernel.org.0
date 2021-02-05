@@ -2,184 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E37D33114F0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 23:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20BA311570
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 23:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbhBEWTC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Feb 2021 17:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbhBEOdB (ORCPT
+        id S232564AbhBEWb6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Feb 2021 17:31:58 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:22678 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232453AbhBEORD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 09:33:01 -0500
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fa8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B77C061225
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 08:10:37 -0800 (PST)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DXJRw6S0qzMqPtr;
-        Fri,  5 Feb 2021 15:57:32 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4DXJRs4xvlzlh8TC;
-        Fri,  5 Feb 2021 15:57:29 +0100 (CET)
-Subject: Re: [PATCH v28 06/12] fs,security: Add sb_delete hook
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
+        Fri, 5 Feb 2021 09:17:03 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-51-InJ3Dwu4O4qYU7J-rkKpYw-1; Fri, 05 Feb 2021 15:23:47 +0000
+X-MC-Unique: InJ3Dwu4O4qYU7J-rkKpYw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Fri, 5 Feb 2021 15:23:46 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 5 Feb 2021 15:23:46 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andy Shevchenko' <andy.shevchenko@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+CC:     Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20210202162710.657398-1-mic@digikod.net>
- <20210202162710.657398-7-mic@digikod.net>
- <20210205142143.GA18451@mail.hallyn.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <92e6a8a6-19da-0b1f-c1cf-01dc0af61299@digikod.net>
-Date:   Fri, 5 Feb 2021 15:57:37 +0100
-User-Agent: 
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>
+Subject: RE: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field widths
+ in vsscanf
+Thread-Topic: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field
+ widths in vsscanf
+Thread-Index: AQHW+76k9HEDtLN2E0S7ghaNw2D2r6pJrWNA
+Date:   Fri, 5 Feb 2021 15:23:46 +0000
+Message-ID: <82696a371fe447c2b201fc812e5a4560@AcuMS.aculab.com>
+References: <20210203165009.6299-1-rf@opensource.cirrus.com>
+ <20210203165009.6299-2-rf@opensource.cirrus.com>
+ <YBr9c44Dvq1ZNrEa@smile.fi.intel.com> <YBwiQ+l6yqs+g+rr@alley>
+ <5bfefab6-7a1b-6f5f-319c-8897dbb79a5b@opensource.cirrus.com>
+ <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com>
+In-Reply-To: <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-In-Reply-To: <20210205142143.GA18451@mail.hallyn.com>
-Content-Type: text/plain; charset=iso-8859-15
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+RnJvbTogQW5keSBTaGV2Y2hlbmtvDQo+IFNlbnQ6IDA1IEZlYnJ1YXJ5IDIwMjEgMTI6NTENCj4g
+DQo+IE9uIEZyaSwgRmViIDUsIDIwMjEgYXQgMTozNSBQTSBSaWNoYXJkIEZpdHpnZXJhbGQNCj4g
+PHJmQG9wZW5zb3VyY2UuY2lycnVzLmNvbT4gd3JvdGU6DQo+ID4gT24gMDQvMDIvMjAyMSAxNjoz
+NSwgUGV0ciBNbGFkZWsgd3JvdGU6DQo+ID4gPiBPbiBXZWQgMjAyMS0wMi0wMyAyMTo0NTo1NSwg
+QW5keSBTaGV2Y2hlbmtvIHdyb3RlOg0KPiA+ID4+IE9uIFdlZCwgRmViIDAzLCAyMDIxIGF0IDA0
+OjUwOjA3UE0gKzAwMDAsIFJpY2hhcmQgRml0emdlcmFsZCB3cm90ZToNCj4gDQo+IC4uLg0KPiAN
+Cj4gPiA+Pj4gKyAgIGZvciAoOyBtYXhfY2hhcnMgPiAwOyBtYXhfY2hhcnMtLSkgew0KPiA+ID4+
+DQo+ID4gPj4gTGVzcyBmcmFnaWxlIGlzIHRvIHdyaXRlDQo+ID4gPj4NCj4gPiA+PiAgICAgIHdo
+aWxlIChtYXhfY2hhcnMtLSkNCj4gPiA+DQo+ID4gPiBFeGNlcHQgdGhhdCB0aGUgb3JpZ2luYWwg
+d2FzIG1vcmUgb2J2aW91cyBhdCBsZWFzdCBmb3IgbWUuDQo+ID4gPiBJIGFsd2F5cyBwcmVmZXIg
+bW9yZSByZWFkYWJsZSBjb2RlIHdoZW4gdGhlIGNvbXBpbGVyIG1pZ2h0IGRvDQo+ID4gPiB0aGUg
+b3B0aW1pemF0aW9uIGVhc2lseS4gQnV0IHRoaXMgaXMgbXkgcGVyc29uYWwgdGFzdGUuDQo+ID4g
+PiBJIGFtIGZpbmUgd2l0aCBib3RoIHZhcmlhbnRzLg0KPiANCj4gSSAqc2xpZ2h0bHkqIHByZWZl
+ciB3aGlsZS1sb29wICppbiB0aGlzIGNhc2UqIGR1ZSB0byBsZXNzIGNoYXJhY3RlcnMNCj4gdG8g
+cGFyc2UgdG8gdW5kZXJzdGFuZCB0aGUgbG9naWMuDQoNClRoZSB0d28gbG9vcHMgYXJlIGFsc28g
+aGF2ZSBkaWZmZXJlbnQgdmFsdWVzIGZvciAnbWF4X2NoYXJzJw0KaW5zaWRlIHRoZSBsb29wIGJv
+ZHkuDQoNCklmICdtYXhfY2hhcnMnIGlzIGtub3duIHRvIGJlIG5vbi16ZXJvIHRoZSBkbyAuLi4g
+d2hpbGUgKC0tbWF4X2NoYXJzKTsNCmxvb3Agd2lsbCBwcm9iYWJsZSBnZW5lcmF0ZSBiZXR0ZXIg
+Y29kZS4NCkJ1dCB0aGVyZSBpcyBubyBhY2NvdW50aW5nIGZvciBqdXN0IGhvdyBvZGQgc29tZSBk
+ZWNpc2lvbnMgZ2NjDQptYWtlcyBhcmUuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
+c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
+IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-On 05/02/2021 15:21, Serge E. Hallyn wrote:
-> On Tue, Feb 02, 2021 at 05:27:04PM +0100, Mickaël Salaün wrote:
->> From: Mickaël Salaün <mic@linux.microsoft.com>
->>
->> The sb_delete security hook is called when shutting down a superblock,
->> which may be useful to release kernel objects tied to the superblock's
->> lifetime (e.g. inodes).
->>
->> This new hook is needed by Landlock to release (ephemerally) tagged
->> struct inodes.  This comes from the unprivileged nature of Landlock
->> described in the next commit.
->>
->> Cc: Al Viro <viro@zeniv.linux.org.uk>
->> Cc: James Morris <jmorris@namei.org>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Serge E. Hallyn <serge@hallyn.com>
-> 
-> One note below, but
-> 
-> Acked-by: Serge Hallyn <serge@hallyn.com>
-> 
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->> Reviewed-by: Jann Horn <jannh@google.com>
->> ---
->>
->> Changes since v22:
->> * Add Reviewed-by: Jann Horn <jannh@google.com>
->>
->> Changes since v17:
->> * Initial patch to replace the direct call to landlock_release_inodes()
->>   (requested by James Morris).
->>   https://lore.kernel.org/lkml/alpine.LRH.2.21.2005150536440.7929@namei.org/
->> ---
->>  fs/super.c                    | 1 +
->>  include/linux/lsm_hook_defs.h | 1 +
->>  include/linux/lsm_hooks.h     | 2 ++
->>  include/linux/security.h      | 4 ++++
->>  security/security.c           | 5 +++++
->>  5 files changed, 13 insertions(+)
->>
->> diff --git a/fs/super.c b/fs/super.c
->> index 2c6cdea2ab2d..c3c5178cde65 100644
->> --- a/fs/super.c
->> +++ b/fs/super.c
->> @@ -454,6 +454,7 @@ void generic_shutdown_super(struct super_block *sb)
->>  		evict_inodes(sb);
->>  		/* only nonzero refcount inodes can have marks */
->>  		fsnotify_sb_delete(sb);
->> +		security_sb_delete(sb);
->>  
->>  		if (sb->s_dio_done_wq) {
->>  			destroy_workqueue(sb->s_dio_done_wq);
->> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
->> index 7aaa753b8608..32472b3849bc 100644
->> --- a/include/linux/lsm_hook_defs.h
->> +++ b/include/linux/lsm_hook_defs.h
->> @@ -59,6 +59,7 @@ LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
->>  LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
->>  	 struct fs_parameter *param)
->>  LSM_HOOK(int, 0, sb_alloc_security, struct super_block *sb)
->> +LSM_HOOK(void, LSM_RET_VOID, sb_delete, struct super_block *sb)
->>  LSM_HOOK(void, LSM_RET_VOID, sb_free_security, struct super_block *sb)
->>  LSM_HOOK(void, LSM_RET_VOID, sb_free_mnt_opts, void *mnt_opts)
->>  LSM_HOOK(int, 0, sb_eat_lsm_opts, char *orig, void **mnt_opts)
->> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
->> index 970106d98306..e339b201f79b 100644
->> --- a/include/linux/lsm_hooks.h
->> +++ b/include/linux/lsm_hooks.h
->> @@ -108,6 +108,8 @@
->>   *	allocated.
->>   *	@sb contains the super_block structure to be modified.
->>   *	Return 0 if operation was successful.
->> + * @sb_delete:
->> + *	Release objects tied to a superblock (e.g. inodes).
-> 
-> It's customary here to add the line detailing the @sb argument.
-
-What about "@sb contains the super_block structure being released."?
-
-> 
->>   * @sb_free_security:
->>   *	Deallocate and clear the sb->s_security field.
->>   *	@sb contains the super_block structure to be modified.
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index c35ea0ffccd9..c41a94e29b62 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -288,6 +288,7 @@ void security_bprm_committed_creds(struct linux_binprm *bprm);
->>  int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc);
->>  int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param);
->>  int security_sb_alloc(struct super_block *sb);
->> +void security_sb_delete(struct super_block *sb);
->>  void security_sb_free(struct super_block *sb);
->>  void security_free_mnt_opts(void **mnt_opts);
->>  int security_sb_eat_lsm_opts(char *options, void **mnt_opts);
->> @@ -620,6 +621,9 @@ static inline int security_sb_alloc(struct super_block *sb)
->>  	return 0;
->>  }
->>  
->> +static inline void security_sb_delete(struct super_block *sb)
->> +{ }
->> +
->>  static inline void security_sb_free(struct super_block *sb)
->>  { }
->>  
->> diff --git a/security/security.c b/security/security.c
->> index 9f979d4afe6c..1b4a73b2549a 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -900,6 +900,11 @@ int security_sb_alloc(struct super_block *sb)
->>  	return rc;
->>  }
->>  
->> +void security_sb_delete(struct super_block *sb)
->> +{
->> +	call_void_hook(sb_delete, sb);
->> +}
->> +
->>  void security_sb_free(struct super_block *sb)
->>  {
->>  	call_void_hook(sb_free_security, sb);
->> -- 
->> 2.30.0
