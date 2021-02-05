@@ -2,65 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D23D31073D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 09:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF36310A01
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 12:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbhBEI55 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Feb 2021 03:57:57 -0500
-Received: from mga01.intel.com ([192.55.52.88]:37904 "EHLO mga01.intel.com"
+        id S230281AbhBELLv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Feb 2021 06:11:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:55996 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229692AbhBEI5z (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 03:57:55 -0500
-IronPort-SDR: iAXMXhJ0uuFd7t0Ws7izw4lYADnHlYnYRpIIcls4rv09Zx+8BBri/5YZ5QYzSv6Zxnqd53hlRY
- MYmoydJgU14w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="200406780"
-X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
-   d="scan'208";a="200406780"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 00:57:13 -0800
-IronPort-SDR: bGV95ie11fAdgtrDeLxrxVhzgZM2Mxk+Cc4PXLyip1QeD+7LrY9nEGz8HG6tGYJahfYRybeZOT
- YwK2a0Nb/ebA==
-X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
-   d="scan'208";a="393769080"
-Received: from shao2-debian.sh.intel.com (HELO localhost) ([10.239.13.11])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 00:57:11 -0800
-From:   Rong Chen <rong.a.chen@intel.com>
-To:     Shuah Khan <shuah@kernel.org>, John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Rong Chen <rong.a.chen@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/vm: rename file run_vmtests to run_vmtests.sh
-Date:   Fri,  5 Feb 2021 16:55:07 +0800
-Message-Id: <20210205085507.1479894-1-rong.a.chen@intel.com>
-X-Mailer: git-send-email 2.20.1
+        id S230073AbhBELJp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Feb 2021 06:09:45 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85037D6E;
+        Fri,  5 Feb 2021 03:08:59 -0800 (PST)
+Received: from [10.37.8.15] (unknown [10.37.8.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 54CB33F73B;
+        Fri,  5 Feb 2021 03:08:58 -0800 (PST)
+Subject: Re: [PATCH] selftests/vDSO: fix ABI selftest on riscv
+To:     Palmer Dabbelt <palmer@dabbelt.com>, tklauser@distanz.ch,
+        shuah@kernel.org
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <mhng-1ed0f9e8-84ec-4f2e-ac42-5a608726e2fe@palmerdabbelt-glaptop>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <019fcafc-09b5-a13c-a83f-d6a0b1eb3224@arm.com>
+Date:   Fri, 5 Feb 2021 11:12:59 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <mhng-1ed0f9e8-84ec-4f2e-ac42-5a608726e2fe@palmerdabbelt-glaptop>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit c2aa8afc36fa has renamed run_vmtests in Makefile,
-but the file still uses the old name.
+On 2/5/21 7:06 AM, Palmer Dabbelt wrote:
+> On Thu, 04 Feb 2021 06:50:42 PST (-0800), tklauser@distanz.ch wrote:
+>> Only older versions of the RISC-V GCC toolchain define __riscv__. Check
+>> for __riscv as well, which is used by newer GCC toolchains. Also set
+>> VDSO_32BIT based on __riscv_xlen.
+>>
+>> Before (on riscv64):
+>>
+>> $ ./vdso_test_abi
+>> [vDSO kselftest] VDSO_VERSION: LINUX_4
+>> Could not find __vdso_gettimeofday
+>> Could not find __vdso_clock_gettime
+>> Could not find __vdso_clock_getres
+>> clock_id: CLOCK_REALTIME [PASS]
+>> Could not find __vdso_clock_gettime
+>> Could not find __vdso_clock_getres
+>> clock_id: CLOCK_BOOTTIME [PASS]
+>> Could not find __vdso_clock_gettime
+>> Could not find __vdso_clock_getres
+>> clock_id: CLOCK_TAI [PASS]
+>> Could not find __vdso_clock_gettime
+>> Could not find __vdso_clock_getres
+>> clock_id: CLOCK_REALTIME_COARSE [PASS]
+>> Could not find __vdso_clock_gettime
+>> Could not find __vdso_clock_getres
+>> clock_id: CLOCK_MONOTONIC [PASS]
+>> Could not find __vdso_clock_gettime
+>> Could not find __vdso_clock_getres
+>> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+>> Could not find __vdso_clock_gettime
+>> Could not find __vdso_clock_getres
+>> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+>> Could not find __vdso_time
+>>
+>> After (on riscv32):
+>>
+>> $ ./vdso_test_abi
+>> [vDSO kselftest] VDSO_VERSION: LINUX_4.15
+>> The time is 1612449376.015086
+>> The time is 1612449376.18340784
+>> The resolution is 0 1
+>> clock_id: CLOCK_REALTIME [PASS]
+>> The time is 774.842586182
+>> The resolution is 0 1
+>> clock_id: CLOCK_BOOTTIME [PASS]
+>> The time is 1612449376.22536565
+>> The resolution is 0 1
+>> clock_id: CLOCK_TAI [PASS]
+>> The time is 1612449376.20885172
+>> The resolution is 0 4000000
+>> clock_id: CLOCK_REALTIME_COARSE [PASS]
+>> The time is 774.845491269
+>> The resolution is 0 1
+>> clock_id: CLOCK_MONOTONIC [PASS]
+>> The time is 774.849534200
+>> The resolution is 0 1
+>> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+>> The time is 774.842139684
+>> The resolution is 0 4000000
+>> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+>> Could not find __vdso_time
+>>
+>> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+>> ---
+>>  tools/testing/selftests/vDSO/vdso_config.h | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/vDSO/vdso_config.h
+>> b/tools/testing/selftests/vDSO/vdso_config.h
+>> index 6a6fe8d4ff55..6188b16827d1 100644
+>> --- a/tools/testing/selftests/vDSO/vdso_config.h
+>> +++ b/tools/testing/selftests/vDSO/vdso_config.h
+>> @@ -47,10 +47,12 @@
+>>  #elif defined(__x86_64__)
+>>  #define VDSO_VERSION        0
+>>  #define VDSO_NAMES        1
+>> -#elif defined(__riscv__)
+>> +#elif defined(__riscv__) || defined(__riscv)
+>>  #define VDSO_VERSION        5
+>>  #define VDSO_NAMES        1
+>> +#if __riscv_xlen == 32
+>>  #define VDSO_32BIT        1
+>> +#endif
+>>  #else /* nds32 */
+>>  #define VDSO_VERSION        4
+>>  #define VDSO_NAMES        1
+> 
+> Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+>
 
-The kernel test robot reported the following issue:
+Acked-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
- # selftests: vm: run_vmtests.sh
- # Warning: file run_vmtests.sh is missing!
- not ok 1 selftests: vm: run_vmtests.sh
+> Not sure if you want this through the RISC-V tree, so I'm leaving it out for
+> now and assuming it'll go through a kselftest tree.
+> 
+> Thanks!
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: c2aa8afc36fa (selftests/vm: rename run_vmtests --> run_vmtests.sh)
-Signed-off-by: Rong Chen <rong.a.chen@intel.com>
----
- tools/testing/selftests/vm/{run_vmtests => run_vmtests.sh} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename tools/testing/selftests/vm/{run_vmtests => run_vmtests.sh} (100%)
-
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests.sh
-similarity index 100%
-rename from tools/testing/selftests/vm/run_vmtests
-rename to tools/testing/selftests/vm/run_vmtests.sh
 -- 
-2.20.1
-
+Regards,
+Vincenzo
