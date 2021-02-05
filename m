@@ -2,160 +2,285 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E78310B6E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 13:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CAA310C3D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 14:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbhBEMyj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Feb 2021 07:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232160AbhBEMwD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 07:52:03 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF8C061794;
-        Fri,  5 Feb 2021 04:51:13 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id lw17so6643011pjb.0;
-        Fri, 05 Feb 2021 04:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=13fwvpS1xwI8gzdjW+w10UvlAtlMyV6cweEgiobvtzU=;
-        b=buUsDEZj63icpM3xzVCBqH5pMnXieyUY28/1EhFsQU+Lt0WM9OlYAYOsucGgx4qCZ5
-         S1OZv366GCzNsbbjrgSPn6HpxrkCLuRxtRz13CAc4P827OqlAQ9laCpQF/KW3Zt3Elhv
-         Dl6xvDhY7EbPW2Ak/CcitJ9o+z/PJZ9AAW+T9QFc3AeBL0r0fmaKE1bHi/uC0SXo0nXW
-         husX/chw8WnFR/jhALaW2KJp/dXg9ZSyyc3invpS85BnQJwwV0VsQZYOFeXh+koTikrF
-         op1W8eBmABqdvk9IF4vVZXZry53CcP0cEzdz2YjBQ4IOBYDtfMeB+wzLDKeeNNQ/SgWq
-         GFuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=13fwvpS1xwI8gzdjW+w10UvlAtlMyV6cweEgiobvtzU=;
-        b=hzMCyaUceGP+0J7zeXyS4wbHnZnoClbcvryvZkGsogBEIG2MRtB/F6B5fG0Gq63fqK
-         jCrfjAN6lTdmhdQMmKnLaKp2w/wc5OR2FBjeYBNIedhP73+VEEvCZJQ54k/PubiJ4QnG
-         gmzn8qxcTjdUHP2JhpbHKC72ZMQNwRgP1TnDyByxKHJOOsnRcEx4lztFPgYcMikj94N8
-         eZOlrBRHHHXBQE8w1fg2URbfyiS2sAEdYyx6emeDw4Ls92mJjaZujpy34fPQFlsNRIhV
-         dnRW1hxmnlm53b6QVQMJdxoBXFMuiq8+XtRe/Rj7+meV1R7FkT/WoUKebhYNtgty3U2N
-         uyrQ==
-X-Gm-Message-State: AOAM533RT/25fN6S1kZwAtBulyNCnAM05RjCcbt6MOyTLO7jLkLZrpCZ
-        ezP3H2tbv90jokQxCrryvV3cn8crwae/EPZVHWo=
-X-Google-Smtp-Source: ABdhPJwXtU9vZdkXjHSxFPZU4pLFtzpPe+Rfqg5WPyMwqjE7xYAGpkiZJ5Mv8Z9NXzsRSfetkoorBgpXgJ5038AKgmE=
-X-Received: by 2002:a17:90a:644a:: with SMTP id y10mr4192332pjm.129.1612529472380;
- Fri, 05 Feb 2021 04:51:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20210203165009.6299-1-rf@opensource.cirrus.com>
- <20210203165009.6299-2-rf@opensource.cirrus.com> <YBr9c44Dvq1ZNrEa@smile.fi.intel.com>
- <YBwiQ+l6yqs+g+rr@alley> <5bfefab6-7a1b-6f5f-319c-8897dbb79a5b@opensource.cirrus.com>
-In-Reply-To: <5bfefab6-7a1b-6f5f-319c-8897dbb79a5b@opensource.cirrus.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 5 Feb 2021 14:50:56 +0200
-Message-ID: <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field widths
- in vsscanf
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        id S231587AbhBENxk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Feb 2021 08:53:40 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:47424 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231284AbhBENvV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Feb 2021 08:51:21 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 0FC0F283; Fri,  5 Feb 2021 07:48:58 -0600 (CST)
+Date:   Fri, 5 Feb 2021 07:48:58 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
         Shuah Khan <shuah@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v28 04/12] landlock: Add ptrace restrictions
+Message-ID: <20210205134857.GA17981@mail.hallyn.com>
+References: <20210202162710.657398-1-mic@digikod.net>
+ <20210202162710.657398-5-mic@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210202162710.657398-5-mic@digikod.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 1:35 PM Richard Fitzgerald
-<rf@opensource.cirrus.com> wrote:
-> On 04/02/2021 16:35, Petr Mladek wrote:
-> > On Wed 2021-02-03 21:45:55, Andy Shevchenko wrote:
-> >> On Wed, Feb 03, 2021 at 04:50:07PM +0000, Richard Fitzgerald wrote:
+On Tue, Feb 02, 2021 at 05:27:02PM +0100, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> Using ptrace(2) and related debug features on a target process can lead
+> to a privilege escalation.  Indeed, ptrace(2) can be used by an attacker
+> to impersonate another task and to remain undetected while performing
+> malicious activities.  Thanks to  ptrace_may_access(), various part of
+> the kernel can check if a tracer is more privileged than a tracee.
+> 
+> A landlocked process has fewer privileges than a non-landlocked process
+> and must then be subject to additional restrictions when manipulating
+> processes. To be allowed to use ptrace(2) and related syscalls on a
+> target process, a landlocked process must have a subset of the target
+> process's rules (i.e. the tracee must be in a sub-domain of the tracer).
+> 
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
 
-...
+Acked-by: Serge Hallyn <serge@hallyn.com>
 
-> >>> +   for (; max_chars > 0; max_chars--) {
-> >>
-> >> Less fragile is to write
-> >>
-> >>      while (max_chars--)
-> >
-> > Except that the original was more obvious at least for me.
-> > I always prefer more readable code when the compiler might do
-> > the optimization easily. But this is my personal taste.
-> > I am fine with both variants.
+Thanks, I appreciate that things are well named and easy to reason
+about.
 
-I *slightly* prefer while-loop *in this case* due to less characters
-to parse to understand the logic.
-
-> >> This allows max_char to be an unsigned type.
-> >>
-> >> Moreover...
-> >>
-> >>> +   return _parse_integer_limit(s, base, p, INT_MAX);
-> >>
-> >> You have inconsistency with INT_MAX vs, size_t above.
-> >
-> > Ah, this was on my request. INT_MAX is already used on many other
-> > locations in vsnprintf() for this purpose.
->
-> I originally had UINT_MAX and changed on Petr's request to be
-> consistent with other code. (Sorry Andy - my mistake not including
-> you on the earlier review versions).
->
-> But 0 < INT_MAX < UINT_MAX, so ok to pass to an unsigned. And as Petr
-> said on his original review, INT_MAX is "big enough".
-
-Some code has INT_MAX, some has UINT_MAX, while the parameter is size_t.
-I think all of these inconsistencies should have a comment either in
-the code, or in the commit message, or in the cover letter (depending
-on the importance).
-Or being fixed to be more consistent with existing code. Whichever you
-consider better.
-
-> I don't mind either way.
->
-> > An alternative is to fix all the other locations. We would need to
-> > check if it is really safe. Well, I do not want to force Richard
-> > to fix this historical mess. He already put a lot lot of effort
-> > into fixing this long term issue.
-
-...
-
-> >>> -   unsigned long long result;
-> >>> +   const char *cp;
-> >>> +   unsigned long long result = 0ULL;
-> >>>     unsigned int rv;
-> >>>
-> >>> -   cp = _parse_integer_fixup_radix(cp, &base);
-> >>> -   rv = _parse_integer(cp, base, &result);
-> >>
-> >>> +   if (max_chars == 0) {
-> >>> +           cp = startp;
-> >>> +           goto out;
-> >>> +   }
-> >>
-> >> It's redundant if I'm not mistaken.
-> >
-> > Also this is more obvious and less error prone from my POV.
-> > But I agree that it is redundant. I am not sure if this
-> > function is used in some fast paths.
-> >
-> > Again I am fine with both variants.
-
-I think we don't need a (redundant) code, but rather a comment.
-
-> >>> +   cp = _parse_integer_fixup_radix(startp, &base);
-> >>> +   if ((cp - startp) >= max_chars) {
-> >>> +           cp = startp + max_chars;
-> >>> +           goto out;
-> >>> +   }
-> >>
-> >> This will be exactly the same, no?
-
--- 
-With Best Regards,
-Andy Shevchenko
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Reviewed-by: Jann Horn <jannh@google.com>
+> ---
+> 
+> Changes since v25:
+> * Rename function to landlock_add_ptrace_hooks().
+> 
+> Changes since v22:
+> * Add Reviewed-by: Jann Horn <jannh@google.com>
+> 
+> Changes since v21:
+> * Fix copyright dates.
+> 
+> Changes since v14:
+> * Constify variables.
+> 
+> Changes since v13:
+> * Make the ptrace restriction mandatory, like in the v10.
+> * Remove the eBPF dependency.
+> 
+> Previous changes:
+> https://lore.kernel.org/lkml/20191104172146.30797-5-mic@digikod.net/
+> ---
+>  security/landlock/Makefile |   2 +-
+>  security/landlock/ptrace.c | 120 +++++++++++++++++++++++++++++++++++++
+>  security/landlock/ptrace.h |  14 +++++
+>  security/landlock/setup.c  |   2 +
+>  4 files changed, 137 insertions(+), 1 deletion(-)
+>  create mode 100644 security/landlock/ptrace.c
+>  create mode 100644 security/landlock/ptrace.h
+> 
+> diff --git a/security/landlock/Makefile b/security/landlock/Makefile
+> index 041ea242e627..f1d1eb72fa76 100644
+> --- a/security/landlock/Makefile
+> +++ b/security/landlock/Makefile
+> @@ -1,4 +1,4 @@
+>  obj-$(CONFIG_SECURITY_LANDLOCK) := landlock.o
+>  
+>  landlock-y := setup.o object.o ruleset.o \
+> -	cred.o
+> +	cred.o ptrace.o
+> diff --git a/security/landlock/ptrace.c b/security/landlock/ptrace.c
+> new file mode 100644
+> index 000000000000..f55b82446de2
+> --- /dev/null
+> +++ b/security/landlock/ptrace.c
+> @@ -0,0 +1,120 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Landlock LSM - Ptrace hooks
+> + *
+> + * Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
+> + * Copyright © 2019-2020 ANSSI
+> + */
+> +
+> +#include <asm/current.h>
+> +#include <linux/cred.h>
+> +#include <linux/errno.h>
+> +#include <linux/kernel.h>
+> +#include <linux/lsm_hooks.h>
+> +#include <linux/rcupdate.h>
+> +#include <linux/sched.h>
+> +
+> +#include "common.h"
+> +#include "cred.h"
+> +#include "ptrace.h"
+> +#include "ruleset.h"
+> +#include "setup.h"
+> +
+> +/**
+> + * domain_scope_le - Checks domain ordering for scoped ptrace
+> + *
+> + * @parent: Parent domain.
+> + * @child: Potential child of @parent.
+> + *
+> + * Checks if the @parent domain is less or equal to (i.e. an ancestor, which
+> + * means a subset of) the @child domain.
+> + */
+> +static bool domain_scope_le(const struct landlock_ruleset *const parent,
+> +		const struct landlock_ruleset *const child)
+> +{
+> +	const struct landlock_hierarchy *walker;
+> +
+> +	if (!parent)
+> +		return true;
+> +	if (!child)
+> +		return false;
+> +	for (walker = child->hierarchy; walker; walker = walker->parent) {
+> +		if (walker == parent->hierarchy)
+> +			/* @parent is in the scoped hierarchy of @child. */
+> +			return true;
+> +	}
+> +	/* There is no relationship between @parent and @child. */
+> +	return false;
+> +}
+> +
+> +static bool task_is_scoped(const struct task_struct *const parent,
+> +		const struct task_struct *const child)
+> +{
+> +	bool is_scoped;
+> +	const struct landlock_ruleset *dom_parent, *dom_child;
+> +
+> +	rcu_read_lock();
+> +	dom_parent = landlock_get_task_domain(parent);
+> +	dom_child = landlock_get_task_domain(child);
+> +	is_scoped = domain_scope_le(dom_parent, dom_child);
+> +	rcu_read_unlock();
+> +	return is_scoped;
+> +}
+> +
+> +static int task_ptrace(const struct task_struct *const parent,
+> +		const struct task_struct *const child)
+> +{
+> +	/* Quick return for non-landlocked tasks. */
+> +	if (!landlocked(parent))
+> +		return 0;
+> +	if (task_is_scoped(parent, child))
+> +		return 0;
+> +	return -EPERM;
+> +}
+> +
+> +/**
+> + * hook_ptrace_access_check - Determines whether the current process may access
+> + *			      another
+> + *
+> + * @child: Process to be accessed.
+> + * @mode: Mode of attachment.
+> + *
+> + * If the current task has Landlock rules, then the child must have at least
+> + * the same rules.  Else denied.
+> + *
+> + * Determines whether a process may access another, returning 0 if permission
+> + * granted, -errno if denied.
+> + */
+> +static int hook_ptrace_access_check(struct task_struct *const child,
+> +		const unsigned int mode)
+> +{
+> +	return task_ptrace(current, child);
+> +}
+> +
+> +/**
+> + * hook_ptrace_traceme - Determines whether another process may trace the
+> + *			 current one
+> + *
+> + * @parent: Task proposed to be the tracer.
+> + *
+> + * If the parent has Landlock rules, then the current task must have the same
+> + * or more rules.  Else denied.
+> + *
+> + * Determines whether the nominated task is permitted to trace the current
+> + * process, returning 0 if permission is granted, -errno if denied.
+> + */
+> +static int hook_ptrace_traceme(struct task_struct *const parent)
+> +{
+> +	return task_ptrace(parent, current);
+> +}
+> +
+> +static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+> +	LSM_HOOK_INIT(ptrace_access_check, hook_ptrace_access_check),
+> +	LSM_HOOK_INIT(ptrace_traceme, hook_ptrace_traceme),
+> +};
+> +
+> +__init void landlock_add_ptrace_hooks(void)
+> +{
+> +	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+> +			LANDLOCK_NAME);
+> +}
+> diff --git a/security/landlock/ptrace.h b/security/landlock/ptrace.h
+> new file mode 100644
+> index 000000000000..265b220ae3bf
+> --- /dev/null
+> +++ b/security/landlock/ptrace.h
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Landlock LSM - Ptrace hooks
+> + *
+> + * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
+> + * Copyright © 2019 ANSSI
+> + */
+> +
+> +#ifndef _SECURITY_LANDLOCK_PTRACE_H
+> +#define _SECURITY_LANDLOCK_PTRACE_H
+> +
+> +__init void landlock_add_ptrace_hooks(void);
+> +
+> +#endif /* _SECURITY_LANDLOCK_PTRACE_H */
+> diff --git a/security/landlock/setup.c b/security/landlock/setup.c
+> index 8661112fb238..a5d6ef334991 100644
+> --- a/security/landlock/setup.c
+> +++ b/security/landlock/setup.c
+> @@ -11,6 +11,7 @@
+>  
+>  #include "common.h"
+>  #include "cred.h"
+> +#include "ptrace.h"
+>  #include "setup.h"
+>  
+>  struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
+> @@ -20,6 +21,7 @@ struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
+>  static int __init landlock_init(void)
+>  {
+>  	landlock_add_cred_hooks();
+> +	landlock_add_ptrace_hooks();
+>  	pr_info("Up and running.\n");
+>  	return 0;
+>  }
+> -- 
+> 2.30.0
