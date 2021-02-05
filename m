@@ -2,94 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 610E83118E6
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Feb 2021 03:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7584B31186F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Feb 2021 03:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbhBFCt0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Feb 2021 21:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
+        id S231355AbhBFCh6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Feb 2021 21:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbhBFCks (ORCPT
+        with ESMTP id S231214AbhBFCfo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 21:40:48 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3879CC08ED8B
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 15:46:59 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id c132so5643400pga.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 15:46:59 -0800 (PST)
+        Fri, 5 Feb 2021 21:35:44 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B4EC08ED8F
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 15:53:09 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id q37so6228708qvf.14
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 15:53:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zX6LAEUW5s0QmD6Rf0/ICrn6zUgDH4EfSVtgD8vxVtM=;
-        b=XOdIoEoA0TCo2VC5koKUT+D38+jOajZjJFXFv67KOql0VJa8wUDFyGeqILcAx0Et2t
-         DVC+zcbGXSjkvRLVMA4M1Gv5UwQOagZqQuo0UvxVS85c/+v4lfEZcY4hBD7MhUsH5Mqb
-         rn/u0MiGN9+UQFUvYSJnh6KMg1et7bE0JYs03B7PWU/8NsLbm0k1c7dICRwT/FqV2S6S
-         20/fazmjPQgnV6rKg2zHGJnt4lJ2b18a8OPSUZFnAHfY4ldecdVv/k18kq9JblTRpDdV
-         ZnARCkb9u039i95VXHmdN7Gp+YY+8q9waAeTe/s1q10wboUzIUbF5HLU2DglhG+CuBqe
-         ndoA==
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=PlLvWoFhODO77w3ySrXmuuL5rJilH/MWtzg1pEDHD8w=;
+        b=JJKJgboeEwzxTaXxx/Y72B6j1XTrlBMj6s2nfEKuv8ndl6+MugSjSiMoE9qr7IZ1VG
+         juAdNNPQJeggx3Id04EbFlKX2Nuz6TeSO3xvLSoLQFEDJ6lxs0fCJLBg0ksb7lWpnHc8
+         FElOgdQPVutn/y11DQ/SNqp/6NG++Rmn0wYP/ZXr2OcSMClPzv5Wr9eccbgGVNsEUy/z
+         v6L/hZ/3nlHRseHq6t5qgth+HYzUODolngqx9n6/agITdMVxcTDWOGMpz27tbuOCeniX
+         qJupal0tEBKEIR4ZI8BkoDEnY/lA80MI7z+OW+Qu0Jxav/nUL1Z+EmOHBvePEUpOn69h
+         wSVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zX6LAEUW5s0QmD6Rf0/ICrn6zUgDH4EfSVtgD8vxVtM=;
-        b=ez42NguU13Crc6vBOUuQ1bRjBK7xdSt1jiQHTco3kmKMIkL3E1NCSxlK6NrRaoX7ve
-         iSsYd8dIP3WFVeGpBy/in2hsnKJM+inkcANwxdes6hvKubs89qjU32HC6MdrW8a6UoNZ
-         iGrcegtVEQrzmYVyndtvPUqkb74TCklIv8U98pQpSA9aqiXHYpUHBEVF/2thIp9F4GGl
-         lRN+TZcX1gs6Ca5nsuSvn36KXI6zGFkkQgIIN53h38pOOyY9xC+eNShXGEsE4mw6X2Tp
-         Fj6NVjp4DxztB2kqN+XEt5BPXNSEmWWXySd70D2YPKeR/vLplhnR+svIgHSqBzHk54oJ
-         PEwA==
-X-Gm-Message-State: AOAM532duwZwNyTfEGm09psXjcYw0ngAZ3ouKRMm22RAE7hT0rwBu/b2
-        nEbPKHDvIOJrT0vaP6PIt+9uwWsciNg2Wkfpf6VHtX+AFjkg0Q==
-X-Google-Smtp-Source: ABdhPJyhbZ9wlJ7d0ptMYYcjYrTV/FfyHJS1usloc3G4rB2pxMh8pQ6bqkBCD6t9IwOLVyoH8HtrQK8+gP7L3fhECjw=
-X-Received: by 2002:a63:c84a:: with SMTP id l10mr6648996pgi.159.1612568818593;
- Fri, 05 Feb 2021 15:46:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20210201205514.3943096-1-dlatypov@google.com>
-In-Reply-To: <20210201205514.3943096-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 5 Feb 2021 15:46:47 -0800
-Message-ID: <CAFd5g47zVi2eHDjCaSb1M7U6usK4sP9OM8T-YQgR6uZXooHtYg@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: make kunit_tool accept optional path to
- .kunitconfig fragment
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=PlLvWoFhODO77w3ySrXmuuL5rJilH/MWtzg1pEDHD8w=;
+        b=JJw3vFyPhGScgVLb8WQS1WqGjRn/io2RQ+6fHmwXhIbxS1jQX4lKHvz+lVhlQR2Qq6
+         HJRWdY7w0Qofuk2D7tgRPVlTdf4iJ80c7Ewk+Qje8KSPMm7Bk776Sy60LrQM4D2hHEak
+         xCH4U4GD5dt6Q9ShBofvC1P/l5ECOkU3uMA8/T78I/1SRNZxh91skZakFPjcq1KlQj8L
+         DoIsMz6GWnol990tvAeCHiw9byuwWQhB67gfSs3+zPq4POiwMCX2R1AejWy3l7GCuz4N
+         QDy2u2VyjQ0wg/h8AgbuptYJ5NqluAfX7tSXTvmyQB6mKblc+nUPV1fO4Eo9175AYQVz
+         r1qg==
+X-Gm-Message-State: AOAM533YToU/pUAkL2iSG73vbznnBda8NZrp43pNw4u9wWm+7BSFUzM2
+        4y8icSEyepXByCoIX6BESVlEBtoTsGpoHg==
+X-Google-Smtp-Source: ABdhPJwzCp+US9JJsnl1rBEeytyUhiYnpXlctiBEL2qaUvUkFr+i4rqQM3Sq1hx+QHRXccPLre1fGb3NIxu9Lw==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a8b1:128a:69fa:86fb])
+ (user=dlatypov job=sendgmr) by 2002:a05:6214:1348:: with SMTP id
+ b8mr6970824qvw.26.1612569188987; Fri, 05 Feb 2021 15:53:08 -0800 (PST)
+Date:   Fri,  5 Feb 2021 15:53:00 -0800
+Message-Id: <20210205235302.2022784-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
+Subject: [PATCH v2 0/2] kunit: fail tests on UBSAN errors
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     alan.maguire@oracle.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 1, 2021 at 12:55 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Currently running tests via KUnit tool means tweaking a .kunitconfig
-> file, which you'd keep around locally and never commit.
-> This changes makes it so users can pass in a path to a kunitconfig.
->
-> One of the imagined use cases is having kunitconfig fragments in-tree
-> to formalize interesting sets of tests for features/subsystems, e.g.
->   $ ./tools/testing/kunit/kunit.py run --kunticonfig=fs/ext4/kunitconfig
->
-> For now, this hypothetical fs/ext4/kunitconfig would contain
->   CONFIG_KUNIT=y
->   CONFIG_EXT4_FS=y
->   CONFIG_EXT4_KUNIT_TESTS=y
->
-> At the moment, it's not hard to manually whip up this file, but as more
-> and more tests get added, this will get tedious.
->
-> It also opens the door to documenting how to run all the tests relevant
-> to a specific subsystem or feature as a simple one-liner.
->
-> This can be seen as an analogue to tools/testing/selftests/*/config
-> But in the case of KUnit, the tests live in the same directory as the
-> code-under-test, so it feels more natural to allow the kunitconfig
-> fragments to live anywhere. (Though, people could create a separate
-> directory if wanted; this patch imposes no restrictions on the path).
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+v1 by Uriel is here: [1].
+Since it's been a while, I've dropped the Reviewed-By's.
 
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
+It depended on commit 83c4e7a0363b ("KUnit: KASAN Integration") which
+hadn't been merged yet, so that caused some kerfuffle with applying them
+previously and the series was reverted.
+
+This revives the series but makes the kunit_fail_current_test() function
+take a format string and logs the file and line number of the failing
+code, addressing Alan Maguire's comments on the previous version.
+
+As a result, the patch that makes UBSAN errors was tweaked slightly to
+include an error message.
+
+[1] https://lore.kernel.org/linux-kselftest/20200806174326.3577537-1-urielguajardojr@gmail.com/
+
+Uriel Guajardo (2):
+  kunit: support failure from dynamic analysis tools
+  kunit: ubsan integration
+
+ include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
+ lib/kunit/test.c         | 36 ++++++++++++++++++++++++++++++++----
+ lib/ubsan.c              |  3 +++
+ 3 files changed, 65 insertions(+), 4 deletions(-)
+ create mode 100644 include/kunit/test-bug.h
+
+
+base-commit: 1e0d27fce010b0a4a9e595506b6ede75934c31be
+-- 
+2.30.0.478.g8a0d178c01-goog
+
