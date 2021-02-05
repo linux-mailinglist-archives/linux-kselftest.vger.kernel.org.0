@@ -2,112 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 904163118E8
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Feb 2021 03:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8907F311943
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Feb 2021 04:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbhBFCtf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Feb 2021 21:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S232080AbhBFDAW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Feb 2021 22:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbhBFCnX (ORCPT
+        with ESMTP id S231749AbhBFCs3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 21:43:23 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDC9C08EDA0
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 15:53:13 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id u14so5261782plf.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 15:53:13 -0800 (PST)
+        Fri, 5 Feb 2021 21:48:29 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BC6C0698C7
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 14:18:15 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id p22so8623915ybc.18
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 14:18:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=t77+PuCigeZOcF53sLtwu0Du9UKFrCGhrRKsmy3L6C4=;
-        b=oiw8Q6GYyKteToglNy7gdpC0BukBR+3yrtUTagUwTRT+aluXP2YhlzxIytogmMfWMz
-         pzArK1ylL5HXFjdTLFlotXqZY3ynows31B902aEnpyEPk+H08PGdPDxET+4iFl+lt0/s
-         TswcIShTwC3LkJzv1KNMd2STFuQp4+YYC0KoI9L6zuSbPypmTs6v1JzKbPPvkGWgm2J9
-         rS8fVrV4dFfiEXSN0d3Hr7JafjATZru6O+grs5EgBOALzgNj6xF/Qh71AsH+bDSjgIUy
-         WVm4fNEMn5LLeEEXwRU7lFKAIT9l0DY7LDVGP3DdhhUoIEpP4Xn8Cke/s+2x4kStFA/s
-         LvCw==
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=h1P5+j+r2bLJx1bqqHOaKHRT8j4ftFPbzcum8mBY1zk=;
+        b=mcx4H+N3Y96PlBfUpR32o2wa1baEWAPMNaY3XlZY1crmU5fmQCozhESwTjOkU/6szQ
+         vb3P1crJn0ZXVSEpm3F8yGi8GYTvIwa3fEqWnP+j1RFjwWRZ0I38oZWMqRgSW28mCgZD
+         NvJeEGce11MQaIgEoSO8uJrph/cHXjKG1VqLZ9TdQx9bBLvrlsC45fEKwoRvDG/B9/5W
+         0Ql1PUSJdEFqjORTNZOEU1UNqJQu/tRQvReJpr/c3ProqZuGzClh+PWUXQmucdtxv6nG
+         3XD5xFJcS34ePMZIsM8GdhiZftCdjl93l6WFfHPY+SHiCN6m/w2bRhJ9PAbNKEoAuz8G
+         617w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=t77+PuCigeZOcF53sLtwu0Du9UKFrCGhrRKsmy3L6C4=;
-        b=PnA/w9QGy85dBNI0fcYl40VAc7wDj6lqma/3+8JRILZ58ddV0FFGMrsuReaQFd9Pya
-         uCL/f6qS0Zuf8pRP/PYUXAD7PGwSM52sgPv2ufnFtr99prZ3BcQdaDmOYeJfbUreGY06
-         98Z4AuJNNlfy1oASoTer1OCd9ksKYI3O9viSeiYkm6cbolOnJGoeGU8xDWOnRXhiPQcY
-         ttDkqAdtmeudtGPMINxOrhMBon//LLxZ+PVYzb3hfPwTsu1SUhVg/FbtV+kEX3W/lJMI
-         mA3pel+5YYOt2lTN+22tJ95W5htZhNb7mH96L/GtRzC560q4ZghHAL1b4r8q5HwGiipZ
-         Dj+Q==
-X-Gm-Message-State: AOAM530R5JhEh9RQII3G5bvve3CyQVuK8BRmt44nOiFCbuX6Z2JYPYGx
-        HLB7AQleHC0ixN5onYeohphsxyvTMeqQ5w==
-X-Google-Smtp-Source: ABdhPJwUXTrySp7ZE4Eqsd+iiglqdwGlkHvNviLq7t8BzZfzBm3E2RtqKaaxIevIdIwPBBzGPCL9xi3H7rs3+g==
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=h1P5+j+r2bLJx1bqqHOaKHRT8j4ftFPbzcum8mBY1zk=;
+        b=jv8ks6eX2ipfnfn2N6YKt+eYvyEbC2h5siLkOZGxRrFEaCgjRqS00VRCDnnOf/02+d
+         oh2CnRwPMU59RUBNgqv6PX+i5RpvEf5yj5UjHmjRjpS6LIvsXeXMHIs89Wmyuiia/+bZ
+         WcqAwNDd39EnT0S6r+CqLTlBqE/3gZxFtKK+02dV3bYyqub9XWwmlwLv0QXQMJNHsrOp
+         t3qvchKf0Czxio/AC/5FShbeZbGNLjFWLmieiZ8uA5Dm0syFhq//NfKKLmzAWZcQCnGp
+         PZtf/MJc8TJRySZ/2IYUNp2fbF/vNCP+tZz4I+bHhhRtuPLTzaHRCYDB8fg8I3rxTIEN
+         DgtA==
+X-Gm-Message-State: AOAM532PA5F/z/rFqqPIqGhNn9CLYsc8PmMI5j0USZUm9wXVZ98Vkc6K
+        5yh0I1H7fSPLau87xAbloQ2Modk3hhNWjg==
+X-Google-Smtp-Source: ABdhPJzEjw6yfxHwmlTOg2G4YDHFF0J/qsAiQnvNLMuWgD2tsDsoSSd9DtlGAuAgcOdTUfRL6Co12tiFY7WTHA==
 Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a8b1:128a:69fa:86fb])
- (user=dlatypov job=sendgmr) by 2002:a17:902:52a:b029:da:989f:6c01 with SMTP
- id 39-20020a170902052ab02900da989f6c01mr5920868plf.45.1612569192975; Fri, 05
- Feb 2021 15:53:12 -0800 (PST)
-Date:   Fri,  5 Feb 2021 15:53:02 -0800
-In-Reply-To: <20210205235302.2022784-1-dlatypov@google.com>
-Message-Id: <20210205235302.2022784-3-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:a25:d683:: with SMTP id
+ n125mr9741087ybg.256.1612563495011; Fri, 05 Feb 2021 14:18:15 -0800 (PST)
+Date:   Fri,  5 Feb 2021 14:18:08 -0800
+Message-Id: <20210205221808.1966010-1-dlatypov@google.com>
 Mime-Version: 1.0
-References: <20210205235302.2022784-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH v2 2/2] kunit: ubsan integration
+Subject: [PATCH] kunit: make KUNIT_EXPECT_STREQ() quote values, don't print literals
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     alan.maguire@oracle.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org,
-        Uriel Guajardo <urielguajardo@google.com>,
-        Daniel Latypov <dlatypov@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Uriel Guajardo <urielguajardo@google.com>
+Before:
+>  Expected str == "world", but
+>      str == hello
+>      "world" == world
 
-Integrates UBSAN into the KUnit testing framework. It fails KUnit tests
-whenever it reports undefined behavior.
+After:
+>  Expected str == "world", but
+>      str == "hello"
+<we don't need to tell the user that "world" == "world">
 
-When CONFIG_KUNIT=n, nothing is printed or even formatted, so this has
-no behavioral impact outside of tests.
+Note: like the literal ellision for integers, this doesn't handle the
+case of
+  KUNIT_EXPECT_STREQ(test, "hello", "world")
+since we don't expect it to realistically happen in checked in tests.
+(If you really wanted a test to fail, KUNIT_FAIL("msg") exists)
 
-kunit_fail_current_test() effectively does a pr_err() as well, so
-there's some slight duplication, but it also ensures an error is
-recorded in the debugfs entry for the running KUnit test.
+In that case, you'd get:
+>  Expected "hello" == "world", but
+<output for next failure>
 
-Print a shorter version of the message to make it less spammy.
-
-Co-developed-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- lib/ubsan.c | 3 +++
- 1 file changed, 3 insertions(+)
+ lib/kunit/assert.c | 30 ++++++++++++++++++++++++------
+ 1 file changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/lib/ubsan.c b/lib/ubsan.c
-index bec38c64d6a6..1ec7d6f1fe63 100644
---- a/lib/ubsan.c
-+++ b/lib/ubsan.c
-@@ -14,6 +14,7 @@
- #include <linux/types.h>
- #include <linux/sched.h>
- #include <linux/uaccess.h>
-+#include <kunit/test-bug.h>
- 
- #include "ubsan.h"
- 
-@@ -141,6 +142,8 @@ static void ubsan_prologue(struct source_location *loc, const char *reason)
- 		"========================================\n");
- 	pr_err("UBSAN: %s in %s:%d:%d\n", reason, loc->file_name,
- 		loc->line & LINE_MASK, loc->column & COLUMN_MASK);
-+
-+	kunit_fail_current_test("%s in %s", reason, loc->file_name);
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index e0ec7d6fed6f..176ef547fa94 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -156,6 +156,22 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
  }
+ EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
  
- static void ubsan_epilogue(void)
++/* Checks if KUNIT_EXPECT_STREQ() args were string literals.
++ * Note: `text` will have ""s where as `value` will not.
++ */
++static bool is_str_literal(const char *text, const char *value)
++{
++	int len;
++
++	len = strlen(text);
++	if (len < 2)
++		return false;
++	if (text[0] != '\"' || text[len-1] != '\"')
++		return false;
++
++	return strncmp(text+1, value, len-2) == 0;
++}
++
+ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+ 				    struct string_stream *stream)
+ {
+@@ -168,12 +184,14 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+ 			  binary_assert->left_text,
+ 			  binary_assert->operation,
+ 			  binary_assert->right_text);
+-	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %s\n",
+-			  binary_assert->left_text,
+-			  binary_assert->left_value);
+-	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %s",
+-			  binary_assert->right_text,
+-			  binary_assert->right_value);
++	if (!is_str_literal(binary_assert->left_text, binary_assert->left_value))
++		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"\n",
++				  binary_assert->left_text,
++				  binary_assert->left_value);
++	if (!is_str_literal(binary_assert->right_text, binary_assert->right_value))
++		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"",
++				  binary_assert->right_text,
++				  binary_assert->right_value);
+ 	kunit_assert_print_msg(assert, stream);
+ }
+ EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
+
+base-commit: 1e0d27fce010b0a4a9e595506b6ede75934c31be
+prerequisite-patch-id: 290f8022f30763cbfb6aec969b038a6f60a57482
 -- 
 2.30.0.478.g8a0d178c01-goog
 
