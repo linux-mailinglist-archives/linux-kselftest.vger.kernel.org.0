@@ -2,88 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F10311859
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Feb 2021 03:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A906831188A
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Feb 2021 03:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbhBFCfL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Feb 2021 21:35:11 -0500
-Received: from mga17.intel.com ([192.55.52.151]:63121 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230179AbhBFCco (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 21:32:44 -0500
-IronPort-SDR: e82Z/HV77K0RwfvWAG1RxHw8KWJc44XrZkABKWI/8Qi2A6VwXqcaydkpdflxmRzZ2eAdLmreIL
- u/0TNtR5WM+g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9886"; a="161249243"
-X-IronPort-AV: E=Sophos;i="5.81,156,1610438400"; 
-   d="scan'208";a="161249243"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 14:16:23 -0800
-IronPort-SDR: NRaIsHFlw3uFgHarMm4gK9o7SP+5teoIs0kpMxEdiegNa2O3M7s2Wf+xkk6NnQ8XS9giwlZgWq
- Vu92meHKWIDA==
-X-IronPort-AV: E=Sophos;i="5.81,156,1610438400"; 
-   d="scan'208";a="394033953"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 14:16:23 -0800
-Date:   Fri, 5 Feb 2021 14:16:21 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, corbet@lwn.net,
-        peterz@infradead.org, keescook@chromium.org, rafael@kernel.org,
-        lenb@kernel.org, james.morse@arm.com, bp@alien8.de,
-        devel@driverdev.osuosl.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 1/7] seqnum_ops: Introduce Sequence Number Ops
-Message-ID: <20210205221621.GA74059@agluck-desk2.amr.corp.intel.com>
-References: <cover.1612314468.git.skhan@linuxfoundation.org>
- <23f6347a7bb9f902babe7351f71b23644035673d.1612314468.git.skhan@linuxfoundation.org>
- <YB0WzBnLd+OcpxEE@kroah.com>
- <2fe15f90-2e33-d018-0d5d-cabe3846ed98@linuxfoundation.org>
+        id S231142AbhBFCk1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Feb 2021 21:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231344AbhBFChu (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Feb 2021 21:37:50 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8E3C08EC2F
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 14:28:27 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id e9so4625699pjj.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 14:28:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v9Vg/6Y6014A/4yyhkeEbYIw9mlQkZEORNcu2Rw0bog=;
+        b=wI2uVBwS5PbFdoFG+KbacEaeNBxCQ3oyY64EOGPG5AcFvJZ4olpJbXtMEASZWkg2B6
+         geXh938YPsD8dUaGtFkQ5n4biXCnp9lK6mA6whQo1OhJ99s9+Dc+4kzk858AzxKG57/p
+         LkBTtJOmjUw4VHpCbvxJIGSnNNj+FYfYi3CrZN//nW1CzlKhLQVe3QEveEH50iHQM1Kx
+         CEHHp+xuWZc/10S/cr2+lisNuKqP2HgbsBug90mre6aJiQvxbBgr52liXmmP4d9GhWTn
+         3gZnYxx5WsCtdUuZ4FmivqOoY/5vWDKNJ3bG2MZ0YVQWerYOL9ncWQ6QhbFTs8BpJ2oI
+         C1JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v9Vg/6Y6014A/4yyhkeEbYIw9mlQkZEORNcu2Rw0bog=;
+        b=Mud1KgqkDWaOXcQT4n7ULtP+iTMs3tIrLOoaM2WItjlTKtTHVt/V2Ibevhaw3Qqz0Q
+         okJ/16ivwcmqQBuvhLRHQY9EBqnxfPU8nSvEAcy4xvKm6eAyszvMK1MiAqkbP9OWAGdr
+         bsGA9KXTCnm1a8TBjb2elvRHEsHypP6MLhDSrdF+cZqfP6y95/tgtNdIl0a9eGaDzUJ6
+         cIPsrszDlvDEA+AWqNunOqfBOamwhnvFVWVnolt5W2CIzfOaBhuOacB4FNgsemACZI1s
+         pcge60w/5ApaWRAQT6YRzkBxclws8m4CR2xI/5tqKhfB3Nsrt/uNx7IooDHUdYrPC4y6
+         zkeA==
+X-Gm-Message-State: AOAM53347E6UXHWB6YcF47Wl1ATC8Dm6qyWec/AcGfvlPZ8KKGLuloUv
+        s54lbs/hInn4bGKGkeENI7rmerrCL99qyslSB365ZA==
+X-Google-Smtp-Source: ABdhPJyVIPrAcFHOnglt8XDNInhZpcNOqOkXnbSdoBOR5tsENhqfuHfWCoO8PScTHv2GRVbNVQ+yAJxh0MQLPmROmC0=
+X-Received: by 2002:a17:902:f686:b029:de:18c7:41f8 with SMTP id
+ l6-20020a170902f686b02900de18c741f8mr6048292plg.65.1612564107195; Fri, 05 Feb
+ 2021 14:28:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2fe15f90-2e33-d018-0d5d-cabe3846ed98@linuxfoundation.org>
+References: <20201208232102.339587-1-dlatypov@google.com>
+In-Reply-To: <20201208232102.339587-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 5 Feb 2021 14:28:16 -0800
+Message-ID: <CAFd5g456hj7D_xQkYQZbSD4yhKxaJNY0iF1LjjkzLYgiB8avAA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: simplify kconfig is_subset_of() logic
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 01:03:18PM -0700, Shuah Khan wrote:
-> On 2/5/21 2:58 AM, Greg KH wrote:
-> > On Wed, Feb 03, 2021 at 11:11:57AM -0700, Shuah Khan wrote:
-> > > +static inline u32 seqnum32_inc(struct seqnum32 *seq)
-> > > +{
-> > > +	atomic_t val = ATOMIC_INIT(seq->seqnum);
-> > > +
-> > > +	seq->seqnum = (u32) atomic_inc_return(&val);
-> > > +	if (seq->seqnum >= UINT_MAX)
-> > > +		pr_info("Sequence Number overflow %u detected\n",
-> > > +			seq->seqnum);
-> > > +	return seq->seqnum;
-> > 
-> > As Peter points out, this is doing doing what you think it is doing :(
-> > 
-> > Why do you not just have seq->seqnum be a real atomic variable?  Trying
-> > to switch to/from one like this does not work as there is no
-> > "atomic-ness" happening here at all.
-> > 
-> 
-> Yes. This is sloppy on my part. As Peter and Rafael also pointed. I have
-> to start paying more attention to my inner voice.
+On Tue, Dec 8, 2020 at 3:21 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Don't use an O(nm) algorithm* and make it more readable by using a dict.
+>
+> *Most obviously, it does a nested for-loop over the entire other config.
+> A bit more subtle, it calls .entries(), which constructs a set from the
+> list for _every_ outer iteration.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-What's the end goal with this sequence number type?
-
-Apart from the functional issues with this code already pointed
-out, it doesn't seem overly useful to just print the *value* of
-the sequence number when it hits the max value.  It might be
-more helpful if each instance had a seq->name field that is
-used here to tell the user *which* user of sequence numbers
-had seen the wrap arounnd.
-
-But that just begs the question of what should users of sequence
-numbers do when wrap around occurs? Any user that can run through
-sequence numbers at greater than 10 Hz is going to cause a problem
-for systems that stay running for years.
-
-Maybe you should force users to code for wraparound by initializing
-to something like 0xffffff00 so that they all get a wraparound event
-quickly, rather than slowly, (same as was done with jiffies)?
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
