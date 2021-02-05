@@ -2,84 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A163104F3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 07:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C193104FE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 07:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbhBEG2l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Feb 2021 01:28:41 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:60124 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229492AbhBEG2j (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 01:28:39 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0UNwRPr4_1612506441;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UNwRPr4_1612506441)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 05 Feb 2021 14:27:46 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     ast@kernel.org
-Cc:     daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, john.fastabend@gmail.com, shuah@kernel.org,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] selftests/bpf: Simplify the calculation of variables
-Date:   Fri,  5 Feb 2021 14:27:19 +0800
-Message-Id: <1612506439-56810-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S230514AbhBEGeu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Feb 2021 01:34:50 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:38320 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229492AbhBEGer (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Feb 2021 01:34:47 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGdTY5hxgfCAFAA--.6423S2;
+        Fri, 05 Feb 2021 14:34:00 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: breakpoints: Use correct error messages in breakpoint_test_arm64.c
+Date:   Fri,  5 Feb 2021 14:33:59 +0800
+Message-Id: <1612506839-27225-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxGdTY5hxgfCAFAA--.6423S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xr47Cry8Kr4xAryfJF18Xwb_yoWkZFgEka
+        43tw4DCFWDJryDA3W3WwnxAFykGa13uF42qrW3tF9xCr47Ka45tFWkCF1kZF1Sg3yYg39F
+        y3WqkrWavr1rJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2xYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r47MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUsjg4DUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following coccicheck warnings:
+When call ptrace(PTRACE_CONT, ...) failed, use correct error messages.
 
-./tools/testing/selftests/bpf/xdpxceiver.c:954:28-30: WARNING !A || A &&
-B is equivalent to !A || B.
-
-./tools/testing/selftests/bpf/xdpxceiver.c:932:28-30: WARNING !A || A &&
-B is equivalent to !A || B.
-
-./tools/testing/selftests/bpf/xdpxceiver.c:909:28-30: WARNING !A || A &&
-B is equivalent to !A || B.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/breakpoints/breakpoint_test_arm64.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 1e722ee..98ad4a2 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -906,7 +906,7 @@ static void *worker_testapp_validate(void *arg)
- 			ksft_print_msg("Destroying socket\n");
+diff --git a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+index ad41ea6..e704181 100644
+--- a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
++++ b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+@@ -145,7 +145,7 @@ static bool run_test(int wr_size, int wp_size, int wr, int wp)
+ 
+ 	if (ptrace(PTRACE_CONT, pid, NULL, NULL) < 0) {
+ 		ksft_print_msg(
+-			"ptrace(PTRACE_SINGLESTEP) failed: %s\n",
++			"ptrace(PTRACE_CONT) failed: %s\n",
+ 			strerror(errno));
+ 		return false;
  	}
- 
--	if (!opt_bidi || (opt_bidi && bidi_pass)) {
-+	if (!opt_bidi || bidi_pass) {
- 		xsk_socket__delete(((struct ifobject *)arg)->xsk->xsk);
- 		(void)xsk_umem__delete(((struct ifobject *)arg)->umem->umem);
+@@ -159,7 +159,7 @@ static bool run_test(int wr_size, int wp_size, int wr, int wp)
  	}
-@@ -929,7 +929,7 @@ static void testapp_validate(void)
- 	pthread_mutex_lock(&sync_mutex);
- 
- 	/*Spawn RX thread */
--	if (!opt_bidi || (opt_bidi && !bidi_pass)) {
-+	if (!opt_bidi || !bidi_pass) {
- 		if (pthread_create(&t0, &attr, worker_testapp_validate, (void *)ifdict[1]))
- 			exit_with_error(errno);
- 	} else if (opt_bidi && bidi_pass) {
-@@ -951,7 +951,7 @@ static void testapp_validate(void)
- 	pthread_mutex_unlock(&sync_mutex);
- 
- 	/*Spawn TX thread */
--	if (!opt_bidi || (opt_bidi && !bidi_pass)) {
-+	if (!opt_bidi || !bidi_pass) {
- 		if (pthread_create(&t1, &attr, worker_testapp_validate, (void *)ifdict[0]))
- 			exit_with_error(errno);
- 	} else if (opt_bidi && bidi_pass) {
+ 	alarm(0);
+ 	if (WIFEXITED(status)) {
+-		ksft_print_msg("child did not single-step\n");
++		ksft_print_msg("child exited prematurely\n");
+ 		return false;
+ 	}
+ 	if (!WIFSTOPPED(status)) {
 -- 
-1.8.3.1
+2.1.0
 
