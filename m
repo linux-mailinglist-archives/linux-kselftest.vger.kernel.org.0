@@ -2,118 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E1E310063
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Feb 2021 23:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C706531033C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Feb 2021 04:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbhBDW4V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Feb 2021 17:56:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S229783AbhBEDJa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Feb 2021 22:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbhBDW4R (ORCPT
+        with ESMTP id S229692AbhBEDJT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Feb 2021 17:56:17 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDD6C061797
-        for <linux-kselftest@vger.kernel.org>; Thu,  4 Feb 2021 14:55:01 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id q191so4838620ybg.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Feb 2021 14:55:01 -0800 (PST)
+        Thu, 4 Feb 2021 22:09:19 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C6DC06178C;
+        Thu,  4 Feb 2021 19:08:32 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id q7so5920372wre.13;
+        Thu, 04 Feb 2021 19:08:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=Wkqh1wBZi1KMSWP9n4B3+7R4NMp7xQIbcrZ87gljot4=;
-        b=iYbKyTjxF+2utdWW8EqdT/kRukPx6bdkOrTGffBQ3EQrvhGlQhMUHl9GQzbCEjBDRk
-         WyU4ioaBh/EghQ4qsB08wQUS+sh9s9/zbXYZUP6fnKZd9xakktG/+CYlj12MKFPFaJC+
-         RPm4eTDjCGHR9Eyt6MO6LqsklaY2Wtfft1AJ6oFyvC3cE/eCjZQFNRwwkHXe8Oil1Bk9
-         UgfjWtqPaiBO7r4jVqQb77XUeK5LvbHuUEObXh43X63HHx73M6IwvkvgNll9ofNG/huK
-         e0PGax3yohgTMXAN7PNdMPkK9359NPAuCHEPOhMt2wENbMkcX49Ce3Lbc1kRA4TTv3S3
-         ZfWQ==
+        d=gmail.com; s=20161025;
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=roDmxtRhMkm/M+rdoEt0Qt78NoV1kl723S0gA19soHTB6CWkiIDz2T11aOwbrMDY6V
+         Ys2/9vOeWv0+zEvNti813WvpHKjfnE0XfvI3o55lzYSr7FMS9pqd3g90b02x1u3JMwXv
+         jwm7vt6Z5cCdgHjJVZQwTlk6jYycGN4lmXW15t7CnWab1V8QrKNEtUGg2nxWlBFTAb7g
+         3tyTndX449mYvfhCtAQiOPotE52eq+ceAAEmtvrmiAYxXOt34ojhq72eC7aXSQbxViap
+         14gtHDNN0EAX6KfZDbdhAlBz6Ul96E/1Nt5Hdqk/v8F1BxcgEjoKqQSFFp4cmx1z4bPG
+         xWXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Wkqh1wBZi1KMSWP9n4B3+7R4NMp7xQIbcrZ87gljot4=;
-        b=NBIP9hU/bnsC4O7TGMDNzUuRDjrjJvOcZ0vuVdK3h0lJ4LJL0P8knCNOX8hklkd33+
-         e+x92vqHXs+74QNvLcnINU3Oa0stzH5IreIizI8+AePHLuU/0Fvvv31/4epaGP4qDIY3
-         wxwtPyov/AxUlWYNjzX3fY5W+ANhsqDW3q0STw45d2FDGhcLI2h3aezgbzMvvCIB2Iyy
-         j9KxwsRUn+LFmBppRTia0NC6xG+5YoFWI8SVDuOXUxmfswbUz7dO4l0e5dCbm0s3ox2I
-         ileRXtNeTYC2UF4LYTksztEsmHxTfNm9njqHLXZa3OKm7Hcwpv4Iopsduu7Y8Ks1Q6o7
-         j4eg==
-X-Gm-Message-State: AOAM532XSxaSkQJx9/nmdladFriTCWPz5BFSPK0zvoz/9AphYd8ZIzl4
-        UZdldwW7RrIEiMC0zKU4OSQn03FoUewRFQ==
-X-Google-Smtp-Source: ABdhPJwoINV61XBqm1+2y6JBPKINVE5ci4YcuQgf9RpZwrWA4UcY6q/lgnsC0tACbu0OUhf3hAuSoOwt1qLA3w==
-Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:bd7a:7717:5b5b:de27])
- (user=dlatypov job=sendgmr) by 2002:a25:d441:: with SMTP id
- m62mr1482057ybf.109.1612479300511; Thu, 04 Feb 2021 14:55:00 -0800 (PST)
-Date:   Thu,  4 Feb 2021 14:54:48 -0800
-In-Reply-To: <20210204225448.1393741-1-dlatypov@google.com>
-Message-Id: <20210204225448.1393741-4-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20210204225448.1393741-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH v3 3/3] kunit: tool: fix unintentional statefulness in run_kernel()
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=ebnRiC+XjDenmt3AvTWTyBPhL5wQxLY6XCu+Qf1r+7DH2IIlSgIQVbsxCiAB29J1yl
+         cf8WTyLO7J72aK1dtXBnH6HbOYZ6ZyZEggh0dvtiLZGNWtUS4yH8ivojHASUkXXXy/Bx
+         ge2vCjBTLK5oPbQ3kmtxfhahKSBaskx8C4HX2h5mcKmGPlsei9J/VZUyfYAveXS1n88y
+         rRU8Kxnfup4DLI/37n/AfhpIbxU/2c/pG9wIVNZ9YUUqdWlbUg9Q9A4i7R2mHfAmH66n
+         DsuaorOrIJmfSzQkEURu+enaECbvEbu0NpMbMAFeDm19Riug/6MO0h/Kph9u966nGExU
+         u1tg==
+X-Gm-Message-State: AOAM530AkMpoPqjroYTgZUgmTMai1vckbIDjx2/em0kdtLBWU7p1IMvP
+        s8kVIuknV7tYQoIm+X2AWsESY2cY2xdJNg==
+X-Google-Smtp-Source: ABdhPJx+5Qj2S9+z9ZpQu+EcE/DBxvDG3vinreZmPAS2rLR2ZAQah3cfUjrD6KET2IrCGEWluPw78w==
+X-Received: by 2002:adf:dd0a:: with SMTP id a10mr2434359wrm.424.1612494511485;
+        Thu, 04 Feb 2021 19:08:31 -0800 (PST)
+Received: from [192.168.1.6] ([154.124.28.35])
+        by smtp.gmail.com with ESMTPSA id n9sm10836813wrq.41.2021.02.04.19.08.29
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Thu, 04 Feb 2021 19:08:30 -0800 (PST)
+Message-ID: <601cb6ae.1c69fb81.5ea54.2eaa@mx.google.com>
+Sender: Skylar Anderson <barr.markimmbayie@gmail.com>
+From:   calantha camara <sgt.andersonskylar0@gmail.com>
+X-Google-Original-From: calantha camara
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: hi dear
+To:     Recipients <calantha@vger.kernel.org>
+Date:   Fri, 05 Feb 2021 03:08:24 +0000
+Reply-To: calanthac20@gmail.com
+X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a bug that has been present since the first version of this
-code.
-Using [] as a default parameter is dangerous, since it's mutable.
-
-Example using the REPL:
->>> def bad(param = []):
-...     param.append(len(param))
-...     print(param)
-...
->>> bad()
-[0]
->>> bad()
-[0, 1]
-
-This wasn't a concern in the past since it would just keep appending the
-same values to it.
-
-E.g. before, `args` would just grow in size like:
-  [mem=1G', 'console=tty']
-  [mem=1G', 'console=tty', mem=1G', 'console=tty']
-
-But with now filter_glob, this is more dangerous, e.g.
-  run_kernel(filter_glob='my-test*') # default modified here
-  run_kernel()			     # filter_glob still applies here!
-That earlier `filter_glob` will affect all subsequent calls that don't
-specify `args`.
-
-Note: currently the kunit tool only calls run_kernel() at most once, so
-it's not possible to trigger any negative side-effects right now.
-
-Fixes: 6ebf5866f2e8 ("kunit: tool: add Python wrappers for running KUnit tests")
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
- tools/testing/kunit/kunit_kernel.py | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 71b1942f5ccd..6dd3cf6e8efa 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -199,7 +199,9 @@ class LinuxSourceTree(object):
- 			return False
- 		return self.validate_config(build_dir)
- 
--	def run_kernel(self, args=[], build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
-+	def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
-+		if not args:
-+			args = []
- 		args.extend(['mem=1G', 'console=tty'])
- 		if filter_glob:
- 			args.append('kunit.filter_glob='+filter_glob)
--- 
-2.30.0.478.g8a0d178c01-goog
-
+do you speak Eglish
