@@ -2,69 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1816E311DC6
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Feb 2021 15:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FEB312140
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Feb 2021 05:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbhBFOi4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 6 Feb 2021 09:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbhBFOiz (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 6 Feb 2021 09:38:55 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF26C06178C
-        for <linux-kselftest@vger.kernel.org>; Sat,  6 Feb 2021 06:38:40 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id u7so2391685ooq.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 06 Feb 2021 06:38:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=OWTjK8rXt849N+r7VUE1A1baaeUQteNNVtlU/JINnmOicGiKhN85Dy+Fn031qC0+Hx
-         x7ERvkjM4Y72Td3/XS7WS1IDxIcTmr5T8kHQ3/CcVcKK1x1V4ibvLCpjKbJ06fkcHab3
-         Ozl8dmTg6VHe/RmHsfE1fHRQM5btqiLGWJN4SQpAPdfTFIi5p6dCfCOfazxy/8G9rATc
-         dIDS9+mcxTArPpN7/qWvfbU0y0zquozIitB3AO6RGqVTBHx3see9PUbdmjqM61POr5Py
-         rVJffi2/BZHTY0ddJiDiiNRf+rQBVyAzKQf6geTWRAnUJY40D6K+sPxo/PlJE5dTsEAK
-         KT4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=tHI73d8wHbXLNPXiOGfsrXVmMdu+YSgrxt+2aqk7XZ0SImAR5+rpQkQlfNfE5Wu8Wb
-         dCLpHR1dcbbbkv1q3AC1ypZLCm+bt1hLMYlVnlW1QmgRn0oCPBfpDq6xaIWqTyD55U5B
-         nijX0cUXCAMW/GcENE8BC8ix3qYxLkJjgg+AaVeNqWr2r1oY/HJigAyAlkVw9fAJpv9j
-         hJOufL8/PKfZXtHCg7MJXpgsEcuJ4RZJ3EW7axa5rjS7w/S/FgeKCsTKBQEFABPqOdGZ
-         QlhiEFDXym/qzcJxT8h7WUwXyTt/0AJTPv3vthXsETObzYesPm3fgfMy4IbwQ1xkE1Th
-         jh7g==
-X-Gm-Message-State: AOAM531E2b/2tPILpFVLpthNiftE6RHcf3wpxfinYBYXTYp5w0JgylSP
-        z64zv482MCZtqETcTOntKLA4+hV1ZiefALZse/0=
-X-Google-Smtp-Source: ABdhPJzo1/d6hUymQ4V657sXAIF21DxH2D8yan3L7KZMqjcSEI4Qa1deNsHtrx5qNyhcx9e/d4nG77DquSEqbladSJE=
-X-Received: by 2002:a4a:945:: with SMTP id 66mr1651930ooa.1.1612622319975;
- Sat, 06 Feb 2021 06:38:39 -0800 (PST)
+        id S229741AbhBGETC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 6 Feb 2021 23:19:02 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:36602 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229570AbhBGES7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 6 Feb 2021 23:18:59 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 3772F8AB; Sat,  6 Feb 2021 22:18:14 -0600 (CST)
+Date:   Sat, 6 Feb 2021 22:18:14 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v28 06/12] fs,security: Add sb_delete hook
+Message-ID: <20210207041814.GA7955@mail.hallyn.com>
+References: <20210202162710.657398-1-mic@digikod.net>
+ <20210202162710.657398-7-mic@digikod.net>
+ <20210205142143.GA18451@mail.hallyn.com>
+ <92e6a8a6-19da-0b1f-c1cf-01dc0af61299@digikod.net>
 MIME-Version: 1.0
-Received: by 2002:a9d:3e4c:0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:38:39 -0800 (PST)
-Reply-To: lawyer.nba@gmail.com
-From:   Barrister Daven Bango <stephennbada@gmail.com>
-Date:   Sat, 6 Feb 2021 15:38:39 +0100
-Message-ID: <CAO_fDi9nCDudm08mxG9sZnd6qTf1oYt_yjCfhFfm7=_p8XG=dg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <92e6a8a6-19da-0b1f-c1cf-01dc0af61299@digikod.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---=20
-Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
-ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
-MMF)
-u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
-dodatne informacije
+On Fri, Feb 05, 2021 at 03:57:37PM +0100, Mickaël Salaün wrote:
+> 
+> On 05/02/2021 15:21, Serge E. Hallyn wrote:
+> > On Tue, Feb 02, 2021 at 05:27:04PM +0100, Mickaël Salaün wrote:
+> >> From: Mickaël Salaün <mic@linux.microsoft.com>
+> >>
+> >> The sb_delete security hook is called when shutting down a superblock,
+> >> which may be useful to release kernel objects tied to the superblock's
+> >> lifetime (e.g. inodes).
+> >>
+> >> This new hook is needed by Landlock to release (ephemerally) tagged
+> >> struct inodes.  This comes from the unprivileged nature of Landlock
+> >> described in the next commit.
+> >>
+> >> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> >> Cc: James Morris <jmorris@namei.org>
+> >> Cc: Kees Cook <keescook@chromium.org>
+> >> Cc: Serge E. Hallyn <serge@hallyn.com>
+> > 
+> > One note below, but
+> > 
+> > Acked-by: Serge Hallyn <serge@hallyn.com>
+> > 
+> >> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> >> Reviewed-by: Jann Horn <jannh@google.com>
+> >> ---
+> >>
+> >> Changes since v22:
+> >> * Add Reviewed-by: Jann Horn <jannh@google.com>
+> >>
+> >> Changes since v17:
+> >> * Initial patch to replace the direct call to landlock_release_inodes()
+> >>   (requested by James Morris).
+> >>   https://lore.kernel.org/lkml/alpine.LRH.2.21.2005150536440.7929@namei.org/
+> >> ---
+> >>  fs/super.c                    | 1 +
+> >>  include/linux/lsm_hook_defs.h | 1 +
+> >>  include/linux/lsm_hooks.h     | 2 ++
+> >>  include/linux/security.h      | 4 ++++
+> >>  security/security.c           | 5 +++++
+> >>  5 files changed, 13 insertions(+)
+> >>
+> >> diff --git a/fs/super.c b/fs/super.c
+> >> index 2c6cdea2ab2d..c3c5178cde65 100644
+> >> --- a/fs/super.c
+> >> +++ b/fs/super.c
+> >> @@ -454,6 +454,7 @@ void generic_shutdown_super(struct super_block *sb)
+> >>  		evict_inodes(sb);
+> >>  		/* only nonzero refcount inodes can have marks */
+> >>  		fsnotify_sb_delete(sb);
+> >> +		security_sb_delete(sb);
+> >>  
+> >>  		if (sb->s_dio_done_wq) {
+> >>  			destroy_workqueue(sb->s_dio_done_wq);
+> >> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> >> index 7aaa753b8608..32472b3849bc 100644
+> >> --- a/include/linux/lsm_hook_defs.h
+> >> +++ b/include/linux/lsm_hook_defs.h
+> >> @@ -59,6 +59,7 @@ LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
+> >>  LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
+> >>  	 struct fs_parameter *param)
+> >>  LSM_HOOK(int, 0, sb_alloc_security, struct super_block *sb)
+> >> +LSM_HOOK(void, LSM_RET_VOID, sb_delete, struct super_block *sb)
+> >>  LSM_HOOK(void, LSM_RET_VOID, sb_free_security, struct super_block *sb)
+> >>  LSM_HOOK(void, LSM_RET_VOID, sb_free_mnt_opts, void *mnt_opts)
+> >>  LSM_HOOK(int, 0, sb_eat_lsm_opts, char *orig, void **mnt_opts)
+> >> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> >> index 970106d98306..e339b201f79b 100644
+> >> --- a/include/linux/lsm_hooks.h
+> >> +++ b/include/linux/lsm_hooks.h
+> >> @@ -108,6 +108,8 @@
+> >>   *	allocated.
+> >>   *	@sb contains the super_block structure to be modified.
+> >>   *	Return 0 if operation was successful.
+> >> + * @sb_delete:
+> >> + *	Release objects tied to a superblock (e.g. inodes).
+> > 
+> > It's customary here to add the line detailing the @sb argument.
+> 
+> What about "@sb contains the super_block structure being released."?
 
-Advokat: Daven Bango
-Telefon: +22891667276
-(URED MMF-a LOME TOGO)
+That's good.  Thanks.
+
+> > 
+> >>   * @sb_free_security:
+> >>   *	Deallocate and clear the sb->s_security field.
+> >>   *	@sb contains the super_block structure to be modified.
+> >> diff --git a/include/linux/security.h b/include/linux/security.h
+> >> index c35ea0ffccd9..c41a94e29b62 100644
+> >> --- a/include/linux/security.h
+> >> +++ b/include/linux/security.h
+> >> @@ -288,6 +288,7 @@ void security_bprm_committed_creds(struct linux_binprm *bprm);
+> >>  int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc);
+> >>  int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param);
+> >>  int security_sb_alloc(struct super_block *sb);
+> >> +void security_sb_delete(struct super_block *sb);
+> >>  void security_sb_free(struct super_block *sb);
+> >>  void security_free_mnt_opts(void **mnt_opts);
+> >>  int security_sb_eat_lsm_opts(char *options, void **mnt_opts);
+> >> @@ -620,6 +621,9 @@ static inline int security_sb_alloc(struct super_block *sb)
+> >>  	return 0;
+> >>  }
+> >>  
+> >> +static inline void security_sb_delete(struct super_block *sb)
+> >> +{ }
+> >> +
+> >>  static inline void security_sb_free(struct super_block *sb)
+> >>  { }
+> >>  
+> >> diff --git a/security/security.c b/security/security.c
+> >> index 9f979d4afe6c..1b4a73b2549a 100644
+> >> --- a/security/security.c
+> >> +++ b/security/security.c
+> >> @@ -900,6 +900,11 @@ int security_sb_alloc(struct super_block *sb)
+> >>  	return rc;
+> >>  }
+> >>  
+> >> +void security_sb_delete(struct super_block *sb)
+> >> +{
+> >> +	call_void_hook(sb_delete, sb);
+> >> +}
+> >> +
+> >>  void security_sb_free(struct super_block *sb)
+> >>  {
+> >>  	call_void_hook(sb_free_security, sb);
+> >> -- 
+> >> 2.30.0
