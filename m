@@ -2,131 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BCE313078
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 12:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C849313083
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 12:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbhBHLPy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Feb 2021 06:15:54 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:50558 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbhBHLNe (ORCPT
+        id S232403AbhBHLSh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Feb 2021 06:18:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:36421 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233007AbhBHLPy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 06:13:34 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 118BAbgI025685;
-        Mon, 8 Feb 2021 11:12:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=nvwahBSZXplQiMBwEr0U7duRvv9FAMET36RKzGB3kl8=;
- b=hiaVjMO43NnXDNgfE+kyJm9RWLNV++FYHnCUmZLJg9rYnpTJrCvPK2+7LutsxjtDKSOU
- DHlOGLkO4CBHCIn1Wp5ea3LvlpGpdf/Ce36+DA/LWiaG0tU63RybVuDxVTyF2EyYOeDo
- a3s0R6HzrdC/ujajhW07E96vewvfWmfqXC/5JA22S+r7O11duMK+hErV1haQLrtAG7e3
- HRHa4yiWiGH/oKbvGtRMCguo1TUk32toTJ7AUeDtC1uGn+q7n8T9sPYeM2b3J7kqiF6e
- /mp5e15AtQPEp7sGbuuF3v/KXglMLz70I8PePiLZjDSCUduwL5yX7v4U7tvi5iU6g86a iA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 36hjhqkhqy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 08 Feb 2021 11:12:35 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 118BBJc1131794;
-        Mon, 8 Feb 2021 11:12:34 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 36j50ymusx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 08 Feb 2021 11:12:34 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 118BCWRl014609;
-        Mon, 8 Feb 2021 11:12:32 GMT
-Received: from kadam (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 08 Feb 2021 03:12:31 -0800
-Date:   Mon, 8 Feb 2021 14:12:23 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     kbuild@lists.01.org, Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>, lkp@intel.com,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH 1/3] kunit: add kunit.filter_glob cmdline option to
- filter suites
-Message-ID: <20210208111223.GK20820@kadam>
-References: <20210203234116.839819-2-dlatypov@google.com>
- <20210204071100.GB2696@kadam>
- <CAGS_qxpOWG_chZEAtKFPPbcfet=ZQYeo9_3k5tHSj4WHCfMToA@mail.gmail.com>
+        Mon, 8 Feb 2021 06:15:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612782847;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rjBhYigDjL91xEreC6QyJ/Hq5Z8K5dAmnvBeKDYfa7U=;
+        b=e90AczawJx8pSW1PeHpMoq3ukT7qvocx5SAyi7bZilzaBD2+GapsBSzr+5jIzeiGO87gMc
+        tImXa2FZf6SvrSxbSwDNBwfEaPWR+q2teHGLN1TnmZfyoK2lwhFuDgL59kbcdXTVRxPmpv
+        552bOAv72GVZDyPUUKuOb6wqI7SI6N4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-92-kXoN8HQDORu6M_4PkL4cIg-1; Mon, 08 Feb 2021 06:14:03 -0500
+X-MC-Unique: kXoN8HQDORu6M_4PkL4cIg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5A00B801976;
+        Mon,  8 Feb 2021 11:13:58 +0000 (UTC)
+Received: from [10.36.113.240] (ovpn-113-240.ams2.redhat.com [10.36.113.240])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 01D995C1D0;
+        Mon,  8 Feb 2021 11:13:50 +0000 (UTC)
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+References: <20210208084920.2884-1-rppt@kernel.org>
+ <20210208084920.2884-9-rppt@kernel.org> <YCEP/bmqm0DsvCYN@dhcp22.suse.cz>
+ <38c0cad4-ac55-28e4-81c6-4e0414f0620a@redhat.com>
+ <YCEXwUYepeQvEWTf@dhcp22.suse.cz>
+ <a488a0bb-def5-0249-99e2-4643787cef69@redhat.com>
+ <YCEZAWOv63KYglJZ@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Subject: Re: [PATCH v17 08/10] PM: hibernate: disable when there are active
+ secretmem users
+Message-ID: <770690dc-634a-78dd-0772-3aba1a3beba8@redhat.com>
+Date:   Mon, 8 Feb 2021 12:13:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGS_qxpOWG_chZEAtKFPPbcfet=ZQYeo9_3k5tHSj4WHCfMToA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-IMR: 1
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9888 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 adultscore=0
- mlxlogscore=999 phishscore=0 spamscore=0 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102080075
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9888 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 impostorscore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1015 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102080075
+In-Reply-To: <YCEZAWOv63KYglJZ@dhcp22.suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 04, 2021 at 09:30:43AM -0800, Daniel Latypov wrote:
-> On Wed, Feb 3, 2021 at 11:13 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> >
-> > Hi Daniel,
-> >
-> > url:    https://github.com/0day-ci/linux/commits/Daniel-Latypov/kunit-support-running-subsets-of-test-suites-from/20210204-074405 
-> > base:   88bb507a74ea7d75fa49edd421eaa710a7d80598
-> > config: x86_64-randconfig-m001-20210202 (attached as .config)
-> > compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> >
-> > smatch warnings:
-> > lib/kunit/executor.c:110 kunit_run_all_tests() error: double free of 'suite_set.start'
-> >
-> > vim +110 lib/kunit/executor.c
-> >
-> > 8c0d884986ba22 Brendan Higgins 2020-08-04   96  int kunit_run_all_tests(void)
-> > aac35468ca20a3 Alan Maguire    2020-08-04   97  {
-> > aac35468ca20a3 Alan Maguire    2020-08-04   98          struct kunit_suite * const * const *suites;
-> > aac35468ca20a3 Alan Maguire    2020-08-04   99
-> > d5554dd78a454b Daniel Latypov  2021-02-03  100          struct suite_set suite_set = kunit_filter_suites();
-> > 45dcbb6f5ef78b Brendan Higgins 2020-08-04  101
-> > d5554dd78a454b Daniel Latypov  2021-02-03  102          kunit_print_tap_header(&suite_set);
-> > d5554dd78a454b Daniel Latypov  2021-02-03  103
-> > d5554dd78a454b Daniel Latypov  2021-02-03  104          for (suites = suite_set.start; suites < suite_set.end; suites++)
-> > aac35468ca20a3 Alan Maguire    2020-08-04  105                  __kunit_test_suites_init(*suites);
-> > aac35468ca20a3 Alan Maguire    2020-08-04  106
-> > d5554dd78a454b Daniel Latypov  2021-02-03  107          if (filter_glob) { /* a copy was made of each array */
-> > d5554dd78a454b Daniel Latypov  2021-02-03  108                  for (suites = suite_set.start; suites < suite_set.end; suites++)
-> >                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^
-> > This will free "suite_set.start" will in the first iteration through the
-> > loop
+On 08.02.21 11:57, Michal Hocko wrote:
+> On Mon 08-02-21 11:53:58, David Hildenbrand wrote:
+>> On 08.02.21 11:51, Michal Hocko wrote:
+>>> On Mon 08-02-21 11:32:11, David Hildenbrand wrote:
+>>>> On 08.02.21 11:18, Michal Hocko wrote:
+>>>>> On Mon 08-02-21 10:49:18, Mike Rapoport wrote:
+>>>>>> From: Mike Rapoport <rppt@linux.ibm.com>
+>>>>>>
+>>>>>> It is unsafe to allow saving of secretmem areas to the hibernation
+>>>>>> snapshot as they would be visible after the resume and this essentially
+>>>>>> will defeat the purpose of secret memory mappings.
+>>>>>>
+>>>>>> Prevent hibernation whenever there are active secret memory users.
+>>>>>
+>>>>> Does this feature need any special handling? As it is effectivelly
+>>>>> unevictable memory then it should behave the same as other mlock, ramfs
+>>>>> which should already disable hibernation as those cannot be swapped out,
+>>>>> no?
+>>>>>
+>>>>
+>>>> Why should unevictable memory not go to swap when hibernating? We're merely
+>>>> dumping all of our system RAM (including any unmovable allocations) to swap
+>>>> storage and the system is essentially completely halted.
+>>>>
+>>> My understanding is that mlock is never really made visible via swap
+>>> storage.
+>>
+>> "Using swap storage for hibernation" and "swapping at runtime" are two
+>> different things. I might be wrong, though.
 > 
-> Ah, the loop is supposed to contain `kfree(*suites)`.
-> I'll fix the patch and resend.
+> Well, mlock is certainly used to keep sensitive information, not only to
+> protect from major/minor faults.
 > 
-> I'm not familiar with conventions but it feels like adding Reported-by
-> on the amended patch would almost imply the report suggested the need
-> for the ability to filter suites.
-> So I'll add an informal attribution in the cover letter.
-> 
-> Thanks!
 
-These emails are autogenerated by the kbuild bot and I just look them
-over and hit forward.
+I think you're right in theory, the man page mentions "Cryptographic 
+security software often handles critical bytes like passwords or secret 
+keys as data structures" ...
 
-regards,
-dan carpenter
+however, I am not aware of any such swap handling and wasn't able to 
+spot it quickly. Let me take a closer look.
+
+
+-- 
+Thanks,
+
+David / dhildenb
 
