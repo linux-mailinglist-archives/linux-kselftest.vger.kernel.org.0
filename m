@@ -2,106 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBAE313166
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 12:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B5031321E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 13:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbhBHLve (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Feb 2021 06:51:34 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:55938 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233520AbhBHLsf (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 06:48:35 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 118Bkug3001347;
-        Mon, 8 Feb 2021 05:47:20 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=wMueiZd7LSNAZyTxU0yN7RmQI4fUtqDmom2M6VNmWzo=;
- b=CjiURHl2LwIWcGa2btPxarIRbYZblzjdQr+F6OFctnYi3gTg20N3v/RB0vzgrysJs+HC
- oSPjqvuIzLbWA8KbAP9O2C2zUE6tIw+ml/2jw02WSO8FP4tfMHOiDcyoBwxk3JXlHUgl
- jOSwn9URToPAgIldo0RAYqZI3VeAAldhZdcDG3Eg//ZzK4nffd6kjI8hDbWTJPG+AYAs
- K7tlH2CS8/FH7LutmVlW+Q9QkgcseQlUlZrWrF9qnfn/g0910XzPN//cDJI/7PPx7aXx
- mNjsriwT4z2LC6niCoh5NCTqXO5tu9G0BF3DhQPjeFNcrQUFuh21GYjK1AYiNWRmQ0ix Hg== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 36jdac94qs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 08 Feb 2021 05:47:20 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 8 Feb 2021
- 11:47:18 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
- Transport; Mon, 8 Feb 2021 11:47:18 +0000
-Received: from [10.0.2.15] (AUSNPC0LSNW1.ad.cirrus.com [198.61.64.240])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CF3FB45;
-        Mon,  8 Feb 2021 11:47:17 +0000 (UTC)
-Subject: Re: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field widths
- in vsscanf
-To:     Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <rostedt@goodmis.org>, <sergey.senozhatsky@gmail.com>,
-        <linux@rasmusvillemoes.dk>, <shuah@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20210203165009.6299-1-rf@opensource.cirrus.com>
- <20210203165009.6299-2-rf@opensource.cirrus.com>
- <YBr9c44Dvq1ZNrEa@smile.fi.intel.com> <YBwiQ+l6yqs+g+rr@alley>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-Message-ID: <6023974a-a2ba-8bfe-a8b8-125c45e13e01@opensource.cirrus.com>
-Date:   Mon, 8 Feb 2021 11:47:17 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S230049AbhBHMT1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Feb 2021 07:19:27 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57490 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232876AbhBHMSN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Feb 2021 07:18:13 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1612786646; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n+2LVFofWrDzo5XkXIbA8HqM46aC4ZldghhZ33psn6M=;
+        b=KSPyq7HV9X52hHkw5B3fAQ6GHHyEdJ7l95EmFctR048cvtpwwEJSzUjnHCHT2EQT2m1fwI
+        Jsts1jfz6j4PUcL+oOZWQPNH0wYw5qJxQghfmFs/AJ9ffQiRDEhRFqPxBNTbqXBqUQzMJN
+        tTTWa45AKjgqUKiY3BBR4wSnVehy4C8=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 268A7AC6E;
+        Mon,  8 Feb 2021 12:17:26 +0000 (UTC)
+Date:   Mon, 8 Feb 2021 13:17:24 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v17 08/10] PM: hibernate: disable when there are active
+ secretmem users
+Message-ID: <YCEr1JS8k/nDbcVR@dhcp22.suse.cz>
+References: <20210208084920.2884-1-rppt@kernel.org>
+ <20210208084920.2884-9-rppt@kernel.org>
+ <YCEP/bmqm0DsvCYN@dhcp22.suse.cz>
+ <38c0cad4-ac55-28e4-81c6-4e0414f0620a@redhat.com>
+ <YCEXwUYepeQvEWTf@dhcp22.suse.cz>
+ <a488a0bb-def5-0249-99e2-4643787cef69@redhat.com>
+ <YCEZAWOv63KYglJZ@dhcp22.suse.cz>
+ <770690dc-634a-78dd-0772-3aba1a3beba8@redhat.com>
+ <21f4e742-1aab-f8ba-f0e7-40faa6d6c0bb@redhat.com>
+ <5db6ac46-d4e1-3c68-22a0-94f2ecde8801@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YBwiQ+l6yqs+g+rr@alley>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- clxscore=1015 priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0
- malwarescore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102080081
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5db6ac46-d4e1-3c68-22a0-94f2ecde8801@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 04/02/2021 16:35, Petr Mladek wrote:
-> On Wed 2021-02-03 21:45:55, Andy Shevchenko wrote:
->> On Wed, Feb 03, 2021 at 04:50:07PM +0000, Richard Fitzgerald wrote:
->>> The existing code attempted to handle numbers by doing a strto[u]l(),
->>> ignoring the field width, and then repeatedly dividing to extract the
->>> field out of the full converted value. If the string contains a run of
->>> valid digits longer than will fit in a long or long long, this would
->>> overflow and no amount of dividing can recover the correct value.
+On Mon 08-02-21 12:26:31, David Hildenbrand wrote:
+[...]
+> My F33 system happily hibernates to disk, even with an application that
+> succeeded in din doing an mlockall().
 > 
->> ...
->>
->>> +	for (; max_chars > 0; max_chars--) {
->>
->> Less fragile is to write
->>
->> 	while (max_chars--)
+> And it somewhat makes sense. Even my freshly-booted, idle F33 has
 > 
-> Except that the original was more obvious at least for me.
-> I always prefer more readable code when the compiler might do
-> the optimization easily. But this is my personal taste.
-> I am fine with both variants.
+> $ cat /proc/meminfo  | grep lock
+> Mlocked:            4860 kB
 > 
->>
->> This allows max_char to be an unsigned type.
->>
->> Moreover...
->>
->>> +	return _parse_integer_limit(s, base, p, INT_MAX);
->>
->> You have inconsistency with INT_MAX vs, size_t above.
-> 
-> Ah, this was on my request. INT_MAX is already used on many other
-> locations in vsnprintf() for this purpose.
-> 
+> So, stopping to hibernate with mlocked memory would essentially prohibit any
+> modern Linux distro to hibernate ever.
 
-Strictly speaking this should be SIZE_MAX because the argument is a
-size_t.
+My system seems to be completely fine without mlocked memory. It would
+be interesting to see who mlocks memory on your system and check whether
+the expectated mlock semantic really works for those. This should be
+documented at least.
+-- 
+Michal Hocko
+SUSE Labs
