@@ -2,479 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E54312C67
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 09:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22081312CE7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 10:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbhBHIyA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Feb 2021 03:54:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43414 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230401AbhBHIwr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 03:52:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B0C1664E88;
-        Mon,  8 Feb 2021 08:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612774294;
-        bh=q5HEkWd/cYAmSMMNaeQUxF8AOgOluSntyYfMHQDZ9v0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LdCV5YsBxTqqmINOXfWWiT82rde7JgAgNx/VpBYJWV8qK6TVzc08NU2ZRWTcJTq+I
-         FIdFum3urXkR5zsDdQiKdrnRVDz2R4iL8Opu3l00i3zLFEumAytj832UYOS9/weGqt
-         L2ADA2BeUt9JArHl9k+kiS8B6bGTeeqwEpOz31yJEarY1SZkQJlkmjVyvMUdBkKo5Z
-         ugTHe81IBv9MM/lXwqbP23tp1JbltR4ObfKmnc0v1TtEEYIv48KMUczlnVvlcpHZhn
-         MGPhNJS9FA6MH2R24qY4GiN9pVRaapmf4X2ZsLPWWlDwwnor+U0HMhN2443Bn5cUou
-         uB1wP2q3bFk3Q==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: [PATCH v17 10/10] secretmem: test: add basic selftest for memfd_secret(2)
-Date:   Mon,  8 Feb 2021 10:49:20 +0200
-Message-Id: <20210208084920.2884-11-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210208084920.2884-1-rppt@kernel.org>
-References: <20210208084920.2884-1-rppt@kernel.org>
+        id S231272AbhBHJMF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Feb 2021 04:12:05 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12487 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231255AbhBHJJt (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Feb 2021 04:09:49 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DZ0Xf3KJhzjL2G;
+        Mon,  8 Feb 2021 17:07:30 +0800 (CST)
+Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
+ DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 8 Feb 2021 17:08:43 +0800
+From:   Yanan Wang <wangyanan55@huawei.com>
+To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Andrew Jones" <drjones@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
+        Yanan Wang <wangyanan55@huawei.com>
+Subject: [RFC PATCH 0/2] Add a test for kvm page table code
+Date:   Mon, 8 Feb 2021 17:08:39 +0800
+Message-ID: <20210208090841.333724-1-wangyanan55@huawei.com>
+X-Mailer: git-send-email 2.8.4.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.174.187.128]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+Hi,
 
-The test verifies that file descriptor created with memfd_secret does not
-allow read/write operations, that secret memory mappings respect
-RLIMIT_MEMLOCK and that remote accesses with process_vm_read() and
-ptrace() to the secret memory fail.
+This test is added to serve as a performance tester and a bug reproducer
+for kvm page table code (GPA->HPA mappings), it gives guidance for the
+people trying to make some improvement for kvm.
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Christopher Lameter <cl@linux.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Elena Reshetova <elena.reshetova@intel.com>
-Cc: Hagen Paul Pfeifer <hagen@jauu.net>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tycho Andersen <tycho@tycho.ws>
-Cc: Will Deacon <will@kernel.org>
+The following explains what we can exactly do through this test.
+And a RFC is sent for comments, thanks.
+
+The function guest_code() is designed to cover conditions where a single vcpu
+or multiple vcpus access guest pages within the same memory range, in three
+VM stages(before dirty-logging, during dirty-logging, after dirty-logging).
+Besides, the backing source memory type(ANONYMOUS/THP/HUGETLB) of the tested
+memory region can be specified by users, which means normal page mappings or
+block mappings can be chosen by users to be created in the test.
+
+If use of ANONYMOUS memory is specified, kvm will create page mappings for the
+tested memory region before dirty-logging, and update attributes of the page
+mappings from RO to RW during dirty-logging. If use of THP/HUGETLB memory is
+specified, kvm will create block mappings for the tested memory region before
+dirty-logging, and split the blcok mappings into page mappings during
+dirty-logging, and coalesce the page mappings back into block mappings after
+dirty-logging is stopped.
+
+So in summary, as a performance tester, this test can present the performance
+of kvm creating/updating normal page mappings, or the performance of kvm
+creating/splitting/recovering block mappings, through execution time.
+
+When we need to coalesce the page mappings back to block mappings after dirty
+logging is stopped, we have to firstly invalidate *all* the TLB entries for the
+page mappings right before installation of the block entry, because a TLB conflict
+abort error could occur if we can't invalidate the TLB entries fully. We have
+hit this TLB conflict twice on aarch64 software implementation and fixed it.
+As this test can imulate process from dirty-logging enabled to dirty-logging
+stopped of a VM with block mappings, so it can also reproduce this TLB conflict
+abort due to inadequate TLB invalidation when coalescing tables.
+
+Links about the TLB conflict abort:
+https://lore.kernel.org/lkml/20201201201034.116760-3-wangyanan55@huawei.com/
+
 ---
- tools/testing/selftests/vm/.gitignore     |   1 +
- tools/testing/selftests/vm/Makefile       |   3 +-
- tools/testing/selftests/vm/memfd_secret.c | 296 ++++++++++++++++++++++
- tools/testing/selftests/vm/run_vmtests    |  17 ++
- 4 files changed, 316 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/vm/memfd_secret.c
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 9a35c3f6a557..c8deddc81e7a 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -21,4 +21,5 @@ va_128TBswitch
- map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
-+memfd_secret
- local_config.*
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index d42115e4284d..0200fb61646c 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -34,6 +34,7 @@ TEST_GEN_FILES += khugepaged
- TEST_GEN_FILES += map_fixed_noreplace
- TEST_GEN_FILES += map_hugetlb
- TEST_GEN_FILES += map_populate
-+TEST_GEN_FILES += memfd_secret
- TEST_GEN_FILES += mlock-random-test
- TEST_GEN_FILES += mlock2-tests
- TEST_GEN_FILES += mremap_dontunmap
-@@ -133,7 +134,7 @@ warn_32bit_failure:
- endif
- endif
- 
--$(OUTPUT)/mlock-random-test: LDLIBS += -lcap
-+$(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
- 
- $(OUTPUT)/gup_test: ../../../../mm/gup_test.h
- 
-diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
-new file mode 100644
-index 000000000000..c878c2b841fc
---- /dev/null
-+++ b/tools/testing/selftests/vm/memfd_secret.c
-@@ -0,0 +1,296 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright IBM Corporation, 2020
-+ *
-+ * Author: Mike Rapoport <rppt@linux.ibm.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <sys/uio.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <sys/types.h>
-+#include <sys/ptrace.h>
-+#include <sys/syscall.h>
-+#include <sys/resource.h>
-+#include <sys/capability.h>
-+
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <stdio.h>
-+
-+#include "../kselftest.h"
-+
-+#define fail(fmt, ...) ksft_test_result_fail(fmt, ##__VA_ARGS__)
-+#define pass(fmt, ...) ksft_test_result_pass(fmt, ##__VA_ARGS__)
-+#define skip(fmt, ...) ksft_test_result_skip(fmt, ##__VA_ARGS__)
-+
-+#ifdef __NR_memfd_secret
-+
-+#define PATTERN	0x55
-+
-+static const int prot = PROT_READ | PROT_WRITE;
-+static const int mode = MAP_SHARED;
-+
-+static unsigned long page_size;
-+static unsigned long mlock_limit_cur;
-+static unsigned long mlock_limit_max;
-+
-+static int memfd_secret(unsigned long flags)
-+{
-+	return syscall(__NR_memfd_secret, flags);
-+}
-+
-+static void test_file_apis(int fd)
-+{
-+	char buf[64];
-+
-+	if ((read(fd, buf, sizeof(buf)) >= 0) ||
-+	    (write(fd, buf, sizeof(buf)) >= 0) ||
-+	    (pread(fd, buf, sizeof(buf), 0) >= 0) ||
-+	    (pwrite(fd, buf, sizeof(buf), 0) >= 0))
-+		fail("unexpected file IO\n");
-+	else
-+		pass("file IO is blocked as expected\n");
-+}
-+
-+static void test_mlock_limit(int fd)
-+{
-+	size_t len;
-+	char *mem;
-+
-+	len = mlock_limit_cur;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("unable to mmap secret memory\n");
-+		return;
-+	}
-+	munmap(mem, len);
-+
-+	len = mlock_limit_max * 2;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem != MAP_FAILED) {
-+		fail("unexpected mlock limit violation\n");
-+		munmap(mem, len);
-+		return;
-+	}
-+
-+	pass("mlock limit is respected\n");
-+}
-+
-+static void try_process_vm_read(int fd, int pipefd[2])
-+{
-+	struct iovec liov, riov;
-+	char buf[64];
-+	char *mem;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		exit(KSFT_FAIL);
-+	}
-+
-+	liov.iov_len = riov.iov_len = sizeof(buf);
-+	liov.iov_base = buf;
-+	riov.iov_base = mem;
-+
-+	if (process_vm_readv(getppid(), &liov, 1, &riov, 1, 0) < 0) {
-+		if (errno == ENOSYS)
-+			exit(KSFT_SKIP);
-+		exit(KSFT_PASS);
-+	}
-+
-+	exit(KSFT_FAIL);
-+}
-+
-+static void try_ptrace(int fd, int pipefd[2])
-+{
-+	pid_t ppid = getppid();
-+	int status;
-+	char *mem;
-+	long ret;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		perror("pipe write");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = ptrace(PTRACE_ATTACH, ppid, 0, 0);
-+	if (ret) {
-+		perror("ptrace_attach");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = waitpid(ppid, &status, WUNTRACED);
-+	if ((ret != ppid) || !(WIFSTOPPED(status))) {
-+		fprintf(stderr, "weird waitppid result %ld stat %x\n",
-+			ret, status);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0))
-+		exit(KSFT_PASS);
-+
-+	exit(KSFT_FAIL);
-+}
-+
-+static void check_child_status(pid_t pid, const char *name)
-+{
-+	int status;
-+
-+	waitpid(pid, &status, 0);
-+
-+	if (WIFEXITED(status) && WEXITSTATUS(status) == KSFT_SKIP) {
-+		skip("%s is not supported\n", name);
-+		return;
-+	}
-+
-+	if ((WIFEXITED(status) && WEXITSTATUS(status) == KSFT_PASS) ||
-+	    WIFSIGNALED(status)) {
-+		pass("%s is blocked as expected\n", name);
-+		return;
-+	}
-+
-+	fail("%s: unexpected memory access\n", name);
-+}
-+
-+static void test_remote_access(int fd, const char *name,
-+			       void (*func)(int fd, int pipefd[2]))
-+{
-+	int pipefd[2];
-+	pid_t pid;
-+	char *mem;
-+
-+	if (pipe(pipefd)) {
-+		fail("pipe failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		fail("fork failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	if (pid == 0) {
-+		func(fd, pipefd);
-+		return;
-+	}
-+
-+	mem = mmap(NULL, page_size, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("Unable to mmap secret memory\n");
-+		return;
-+	}
-+
-+	ftruncate(fd, page_size);
-+	memset(mem, PATTERN, page_size);
-+
-+	if (write(pipefd[1], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	check_child_status(pid, name);
-+}
-+
-+static void test_process_vm_read(int fd)
-+{
-+	test_remote_access(fd, "process_vm_read", try_process_vm_read);
-+}
-+
-+static void test_ptrace(int fd)
-+{
-+	test_remote_access(fd, "ptrace", try_ptrace);
-+}
-+
-+static int set_cap_limits(rlim_t max)
-+{
-+	struct rlimit new;
-+	cap_t cap = cap_init();
-+
-+	new.rlim_cur = max;
-+	new.rlim_max = max;
-+	if (setrlimit(RLIMIT_MEMLOCK, &new)) {
-+		perror("setrlimit() returns error");
-+		return -1;
-+	}
-+
-+	/* drop capabilities including CAP_IPC_LOCK */
-+	if (cap_set_proc(cap)) {
-+		perror("cap_set_proc() returns error");
-+		return -2;
-+	}
-+
-+	return 0;
-+}
-+
-+static void prepare(void)
-+{
-+	struct rlimit rlim;
-+
-+	page_size = sysconf(_SC_PAGE_SIZE);
-+	if (!page_size)
-+		ksft_exit_fail_msg("Failed to get page size %s\n",
-+				   strerror(errno));
-+
-+	if (getrlimit(RLIMIT_MEMLOCK, &rlim))
-+		ksft_exit_fail_msg("Unable to detect mlock limit: %s\n",
-+				   strerror(errno));
-+
-+	mlock_limit_cur = rlim.rlim_cur;
-+	mlock_limit_max = rlim.rlim_max;
-+
-+	printf("page_size: %ld, mlock.soft: %ld, mlock.hard: %ld\n",
-+	       page_size, mlock_limit_cur, mlock_limit_max);
-+
-+	if (page_size > mlock_limit_cur)
-+		mlock_limit_cur = page_size;
-+	if (page_size > mlock_limit_max)
-+		mlock_limit_max = page_size;
-+
-+	if (set_cap_limits(mlock_limit_max))
-+		ksft_exit_fail_msg("Unable to set mlock limit: %s\n",
-+				   strerror(errno));
-+}
-+
-+#define NUM_TESTS 4
-+
-+int main(int argc, char *argv[])
-+{
-+	int fd;
-+
-+	prepare();
-+
-+	ksft_print_header();
-+	ksft_set_plan(NUM_TESTS);
-+
-+	fd = memfd_secret(0);
-+	if (fd < 0) {
-+		if (errno == ENOSYS)
-+			ksft_exit_skip("memfd_secret is not supported\n");
-+		else
-+			ksft_exit_fail_msg("memfd_secret failed: %s\n",
-+					   strerror(errno));
-+	}
-+
-+	test_mlock_limit(fd);
-+	test_file_apis(fd);
-+	test_process_vm_read(fd);
-+	test_ptrace(fd);
-+
-+	close(fd);
-+
-+	ksft_exit(!ksft_get_fail_cnt());
-+}
-+
-+#else /* __NR_memfd_secret */
-+
-+int main(int argc, char *argv[])
-+{
-+	printf("skip: skipping memfd_secret test (missing __NR_memfd_secret)\n");
-+	return KSFT_SKIP;
-+}
-+
-+#endif /* __NR_memfd_secret */
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-index e953f3cd9664..95a67382f132 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -346,4 +346,21 @@ else
- 	exitcode=1
- fi
- 
-+echo "running memfd_secret test"
-+echo "------------------------------------"
-+./memfd_secret
-+ret_val=$?
-+
-+if [ $ret_val -eq 0 ]; then
-+	echo "[PASS]"
-+elif [ $ret_val -eq $ksft_skip ]; then
-+	echo "[SKIP]"
-+	exitcode=$ksft_skip
-+else
-+	echo "[FAIL]"
-+	exitcode=1
-+fi
-+
-+exit $exitcode
-+
- exit $exitcode
+Here are some test examples of this test:
+platform: HiSilicon Kunpeng920 (aarch64, FWB not supported)
+host kernel: Linux mainline
+
+(1) Based on v5.11-rc6
+
+cmdline: ./kvm_page_table_test -m 4 -t 0 -g 4K -s 1G -v 1
+	   (1 vcpu, 1G memory, page mappings(granule 4K))
+KVM_CREATE_MAPPINGS: 0.8196s 0.8260s 0.8258s 0.8169s 0.8190s
+KVM_UPDATE_MAPPINGS: 1.1930s 1.1949s 1.1940s 1.1934s 1.1946s
+
+cmdline: ./kvm_page_table_test -m 4 -t 0 -g 4K -s 1G -v 20
+	   (20 vcpus, 1G memory, page mappings(granule 4K))
+KVM_CREATE_MAPPINGS: 23.4028s 23.8015s 23.6702s 23.9437s 22.1646s
+KVM_UPDATE_MAPPINGS: 16.9550s 16.4734s 16.8300s 16.9621s 16.9402s
+
+cmdline: ./kvm_page_table_test -m 4 -t 2 -g 1G -s 20G -v 1
+	   (1 vcpu, 20G memory, block mappings(granule 1G))
+KVM_CREATE_MAPPINGS: 3.7040s 3.7053s 3.7047s 3.7061s 3.7068s
+KVM_ADJUST_MAPPINGS: 2.8264s 2.8266s 2.8272s 2.8259s 2.8283s
+
+cmdline: ./kvm_page_table_test -m 4 -t 2 -g 1G -s 20G -v 20
+	   (20 vcpus, 20G memory, block mappings(granule 1G))
+KVM_CREATE_MAPPINGS: 52.8338s 52.8327s 52.8336s 52.8255s 52.8303s
+KVM_ADJUST_MAPPINGS: 52.0466s 52.0473s 52.0550s 52.0518s 52.0467s
+
+(2) I have post a patch series to improve efficiency of stage2 page table code,
+    so test the performance changes.
+
+cmdline: ./kvm_page_table_test -m 4 -t 2 -g 1G -s 20G -v 20
+ 	   (20 vcpus, 20G memory, block mappings(granule 1G))
+Before patch: KVM_CREATE_MAPPINGS: 52.8338s 52.8327s 52.8336s 52.8255s 52.8303s
+After  patch: KVM_CREATE_MAPPINGS:  3.7022s  3.7031s  3.7028s  3.7012s  3.7024s
+
+Before patch: KVM_ADJUST_MAPPINGS: 52.0466s 52.0473s 52.0550s 52.0518s 52.0467s
+After  patch: KVM_ADJUST_MAPPINGS:  0.3008s  0.3004s  0.2974s  0.2917s  0.2900s
+
+cmdline: ./kvm_page_table_test -m 4 -t 2 -g 1G -s 20G -v 40
+	   (40 vcpus, 20G memory, block mappings(granule 1G))
+Before patch: KVM_CREATE_MAPPINGS: 104.560s 104.556s 104.554s 104.556s 104.550s
+After  patch: KVM_CREATE_MAPPINGS:  3.7011s  3.7103s  3.7005s  3.7024s  3.7106s
+
+Before patch: KVM_ADJUST_MAPPINGS: 103.931s 103.936s 103.927s 103.942s 103.927s
+After  patch: KVM_ADJUST_MAPPINGS:  0.3541s  0.3694s  0.3656s  0.3693s  0.3687s
+
+---
+
+Yanan Wang (2):
+  KVM: selftests: Add a macro to get string of vm_mem_backing_src_type
+  KVM: selftests: Add a test for kvm page table code
+
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   3 +
+ .../selftests/kvm/kvm_page_table_test.c       | 518 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   8 +
+ 4 files changed, 532 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/kvm_page_table_test.c
+
 -- 
-2.28.0
+2.23.0
 
