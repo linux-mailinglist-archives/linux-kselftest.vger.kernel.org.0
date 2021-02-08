@@ -2,232 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A00313BBA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 18:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973F7313B9A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 18:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235026AbhBHR4M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Feb 2021 12:56:12 -0500
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:19734 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235003AbhBHRyw (ORCPT
+        id S233969AbhBHRxU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Feb 2021 12:53:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233914AbhBHRv4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 12:54:52 -0500
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 118HlEZT030177;
-        Mon, 8 Feb 2021 11:53:34 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=Z1wCX52pPOBYgyZ35b58ckzQUQVq2ROG0qk4Mg5MZNo=;
- b=lCXeD630BD/WGTElhtH/Fniki7RTJIf0hRiRPEQU80PhVZuqDNDhyo6q2AR8TCpy2v9H
- u9DvdKoBwszdJWiuoMOYXqiR/VTouYQG+wGfs1mQ/moYIgszO6NY11DC8g+J/uxQGfZz
- KIDQ1fz89gjNd3q1Qb/ZwUXfhsC9Gdq6wjFOnxez/Ner6BcB1QSmmgRfVcozHbrJTIwQ
- QTzBKgCDD1ZqOf3L7NxE+p6qzfpfL6Quof13sgk1JdKEci/3htgeEVI2aV/90d80zu/y
- NL4Uc/svjQ6sYqcQBt5w3wwYoHgmjIgVNok074xtaLBqSN4OiEs6TLckv2qhp57u4nvS IA== 
-Received: from ediex02.ad.cirrus.com ([87.246.76.36])
-        by mx0b-001ae601.pphosted.com with ESMTP id 36hrv2atsq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 08 Feb 2021 11:53:34 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 8 Feb 2021
- 17:38:30 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
- Transport; Mon, 8 Feb 2021 17:38:30 +0000
-Received: from [10.0.2.15] (AUSNPC0LSNW1.ad.cirrus.com [198.61.64.240])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A484311CA;
-        Mon,  8 Feb 2021 17:38:29 +0000 (UTC)
-Subject: Re: [PATCH v5 2/4] lib: vsprintf: Fix handling of number field widths
- in vsscanf
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <pmladek@suse.com>, <rostedt@goodmis.org>,
-        <sergey.senozhatsky@gmail.com>, <linux@rasmusvillemoes.dk>,
-        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <patches@opensource.cirrus.com>
-References: <20210208140154.10964-1-rf@opensource.cirrus.com>
- <20210208140154.10964-2-rf@opensource.cirrus.com>
- <YCFWRp8a0sw3mUSI@smile.fi.intel.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-Message-ID: <2f9f57a3-f0d6-1e07-36f9-682d65b481ad@opensource.cirrus.com>
-Date:   Mon, 8 Feb 2021 17:38:29 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 8 Feb 2021 12:51:56 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADD9C06178A
+        for <linux-kselftest@vger.kernel.org>; Mon,  8 Feb 2021 09:43:36 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id e7so1749934pge.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Feb 2021 09:43:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RxLUe7o0XBsEMnyZ2ayM5Zt5mnJyMnV0qymbKsVL5xI=;
+        b=Fl/ILLaQ27dYD+8sqFnFsVrXGNE10dTiegetvaiJTd8Yx6XriE47wKym0jVJrTwrHf
+         BmXGbYYJjosrvsmaLpdY3H9q8eF58k8PP1WFfWPi2qffZgrb0bNsvXa+VX5kf/QlqCkg
+         zW4C1Pgh1YcHlMdx2FTREafj2nwr2qb8xCxF5CC0JuF7pQad93EkK6uHwL4TQ0IkiiDw
+         FJr4HH2jpQqHubAZoiIhJicivZ4xX7kULKs7IFpO3L7Vq8FbOv9flC917FeP7y19cUoB
+         3oGKpOxnPKNDCLpYb9Q629nRD1dx2AcBjTiqkhi/qvw1ElSP4jICnl2jLeWyNUPnju0P
+         Zh+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RxLUe7o0XBsEMnyZ2ayM5Zt5mnJyMnV0qymbKsVL5xI=;
+        b=dCaShK7KUPnudw5kGh13CpcjaXqSz0o1oKeEaXVB3iWVjQk0HYZvIE5hhw3kWwBjJ5
+         So1EAOFTlvU5wxDKJ3vQiOAqmrie0YcGqJynNDK+rkhGiWO1tZ44sc0/Mc2SZOxeBeWa
+         apsdpvOTaScyMrYy90YHac7qN3AL4xc2dnbt9BshiSUw4IxImp5F+Zqec4TdmWWJFrYK
+         5V5Oa6IJTvIBrgB/kTjyo8HK2dWL6NsY93/eyOSqPL/KKWzjCsgWxz4DAPAuJMv+54/X
+         ZPziBGame0VKcGwuYXz5+T+2UFhcvCao6bG8lsPSkyyzennzeRR3lmy7u8+R9Wfe2Xcg
+         4sDg==
+X-Gm-Message-State: AOAM5325V6w5u/pqAoKMcTaFBsI9CqSaIe+KF9u+f5l6tUip0VVPfZ1w
+        d4kbyJ1wIV/Uj6IFcIZXEgapUQ==
+X-Google-Smtp-Source: ABdhPJzgH48OCVyI5hH228/HKK7dPLNGjKP1Ay4WnHabg31jANO3Rit48bQBOUDkqOCYP8c+u+pspQ==
+X-Received: by 2002:a62:8cd7:0:b029:1d9:447c:e21a with SMTP id m206-20020a628cd70000b02901d9447ce21amr14414194pfd.2.1612806215874;
+        Mon, 08 Feb 2021 09:43:35 -0800 (PST)
+Received: from google.com ([2620:15c:f:10:e4db:abc1:a5c0:9dbc])
+        by smtp.gmail.com with ESMTPSA id c18sm9730201pfo.171.2021.02.08.09.43.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Feb 2021 09:43:35 -0800 (PST)
+Date:   Mon, 8 Feb 2021 09:43:28 -0800
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yanan Wang <wangyanan55@huawei.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Ben Gardon <bgardon@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        wanghaibin.wang@huawei.com, yuzenghui@huawei.com
+Subject: Re: [RFC PATCH 1/2] KVM: selftests: Add a macro to get string of
+ vm_mem_backing_src_type
+Message-ID: <YCF4QCPtSEFg3Qv4@google.com>
+References: <20210208090841.333724-1-wangyanan55@huawei.com>
+ <20210208090841.333724-2-wangyanan55@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <YCFWRp8a0sw3mUSI@smile.fi.intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- impostorscore=0 clxscore=1015 bulkscore=0 adultscore=0 malwarescore=0
- spamscore=0 phishscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102080111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210208090841.333724-2-wangyanan55@huawei.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 08/02/2021 15:18, Andy Shevchenko wrote:
-> On Mon, Feb 08, 2021 at 02:01:52PM +0000, Richard Fitzgerald wrote:
->> The existing code attempted to handle numbers by doing a strto[u]l(),
->> ignoring the field width, and then repeatedly dividing to extract the
->> field out of the full converted value. If the string contains a run of
->> valid digits longer than will fit in a long or long long, this would
->> overflow and no amount of dividing can recover the correct value.
->>
->> This patch fixes vsscanf() to obey number field widths when parsing
->> the number.
->>
->> A new _parse_integer_limit() is added that takes a limit for the number
->> of characters to parse. The number field conversion in vsscanf is changed
->> to use this new function.
->>
->> If a number starts with a radix prefix, the field width  must be long
->> enough for at last one digit after the prefix. If not, it will be handled
->> like this:
->>
->>   sscanf("0x4", "%1i", &i): i=0, scanning continues with the 'x'
->>   sscanf("0x4", "%2i", &i): i=0, scanning continues with the '4'
->>
->> This is consistent with the observed behaviour of userland sscanf.
->>
->> Note that this patch does NOT fix the problem of a single field value
->> overflowing the target type. So for example:
->>
->>    sscanf("123456789abcdef", "%x", &i);
->>
->> Will not produce the correct result because the value obviously overflows
->> INT_MAX. But sscanf will report a successful conversion.
+On Mon, Feb 08, 2021, Yanan Wang wrote:
+> Add a macro to get string of the backing source memory type, so that
+> application can add choices for source types in the help() function,
+> and users can specify which type to use for testing.
 > 
+> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util.h | 3 +++
+>  tools/testing/selftests/kvm/lib/kvm_util.c     | 8 ++++++++
+>  2 files changed, 11 insertions(+)
 > 
-> I have a few nit-picks, but it's up to you and maintainers how to proceed.
-> 
-> ...
-> 
->> -unsigned long long simple_strtoull(const char *cp, char **endp, unsigned int base)
->> +static unsigned long long simple_strntoull(const char *startp, size_t max_chars,
->> +					   char **endp, unsigned int base)
->>   {
->> -	unsigned long long result;
->> +	const char *cp;
->> +	unsigned long long result = 0ULL;
->>   	unsigned int rv;
->>   
->> -	cp = _parse_integer_fixup_radix(cp, &base);
->> -	rv = _parse_integer(cp, base, &result);
->> +	cp = _parse_integer_fixup_radix(startp, &base);
->> +	if ((cp - startp) >= max_chars) {
->> +		cp = startp + max_chars;
->> +		goto out;
->> +	}
->> +
->> +	max_chars -= (cp - startp);
->> +	rv = _parse_integer_limit(cp, base, &result, max_chars);
->>   	/* FIXME */
->>   	cp += (rv & ~KSTRTOX_OVERFLOW);
->>   
->> +out:
->>   	if (endp)
->>   		*endp = (char *)cp;
->>   
->>   	return result;
->>   }
-> 
-> A nit-pick: What if we rewrite above as
-> 
-> static unsigned long long simple_strntoull(const char *cp, size_t max_chars,
-> 					   char **endp, unsigned int base)
-> {
-> 	unsigned long long result = 0ULL;
-> 	const char *startp = cp;
-> 	unsigned int rv;
-> 	size_t chars;
-> 
-> 	cp = _parse_integer_fixup_radix(cp, &base);
-> 	chars = cp - startp;
-> 	if (chars >= max_chars) {
-> 		/* We hit the limit */
-> 		cp = startp + max_chars;
-> 	} else {
-> 		rv = _parse_integer_limit(cp, base, &result, max_chars - chars);
-> 		/* FIXME */
-> 		cp += (rv & ~KSTRTOX_OVERFLOW);
-> 	}
-> 
-> 	if (endp)
-> 		*endp = (char *)cp;
-> 
-> 	return result;
-> }
-> 
-> ...
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index 5cbb861525ed..f5fc29dc9ee6 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -69,7 +69,9 @@ enum vm_guest_mode {
+>  #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
+>  
+>  #define vm_guest_mode_string(m) vm_guest_mode_string[m]
+> +#define vm_mem_backing_src_type_string(s) vm_mem_backing_src_type_string[s]
+
+Oof, I see this is just following vm_guest_mode_string.  IMO, defining the
+string to look like a function is unnecessary and rather mean.
+
+>  extern const char * const vm_guest_mode_string[];
+> +extern const char * const vm_mem_backing_src_type_string[];
+>  
+>  struct vm_guest_mode_params {
+>  	unsigned int pa_bits;
+> @@ -83,6 +85,7 @@ enum vm_mem_backing_src_type {
+>  	VM_MEM_SRC_ANONYMOUS,
+>  	VM_MEM_SRC_ANONYMOUS_THP,
+>  	VM_MEM_SRC_ANONYMOUS_HUGETLB,
+> +	NUM_VM_BACKING_SRC_TYPES,
+>  };
+>  
+>  int kvm_check_cap(long cap);
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index fa5a90e6c6f0..a9b651c7f866 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -165,6 +165,14 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+>  _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+>  	       "Missing new mode params?");
+>  
+> +const char * const vm_mem_backing_src_type_string[] = {
+
+A shorter name would be nice, though I don't have a good suggestion.
+
+> +	"VM_MEM_SRC_ANONYMOUS        ",
+> +	"VM_MEM_SRC_ANONYMOUS_THP    ",
+> +	"VM_MEM_SRC_ANONYMOUS_HUGETLB",
+
+It'd be more robust to explicitly assign indices, that way tweaks to
+vm_mem_backing_src_type won't cause silent breakage.  Ditto for the existing
+vm_guest_mode_string.
+
+E.g. I think something like this would work (completely untested)
+
+const char *vm_guest_mode_string(int i)
+{
+	static const char *const strings[] = {
+		[VM_MODE_P52V48_4K]	= "PA-bits:52,  VA-bits:48,  4K pages",
+		[VM_MODE_P52V48_64K]	= "PA-bits:52,  VA-bits:48, 64K pages",
+		[VM_MODE_P48V48_4K]	= "PA-bits:48,  VA-bits:48,  4K pages",
+		[VM_MODE_P48V48_64K]	= "PA-bits:48,  VA-bits:48, 64K pages",
+		[VM_MODE_P40V48_4K]	= "PA-bits:40,  VA-bits:48,  4K pages",
+		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
+		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
+	};
+
+	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
+		       "Missing new mode strings?");
+
+	TEST_ASSERT(i < NUM_VM_MODES);
+
+	return strings[i];
+}
 
 
-I don't mind rewriting that code if you prefer that way.
-I am used to working on other kernel subsytems where the preference is
-to bail out on the error case so that the "normal" case flows without
-nesting.
-
-> 
->> +static long long simple_strntoll(const char *cp, size_t max_chars, char **endp,
->> +				 unsigned int base)
->> +{
->> +	/*
->> +	 * simple_strntoull safely handles receiving max_chars==0 in the
->> +	 * case we start with max_chars==1 and find a '-' prefix.
-> 
-> A nit-pick: Spaces surrounding '=='? simple_strntoull -> simple_strntoull()?
-> 
->> +	 */
-> 
-> Above misses to add something like:
-> 
-> "Otherwise we hit the '-' as an illegal number in the following
-> simple_strntoull() call."
-> 
->> +	if (*cp == '-' && max_chars > 0)
->> +		return -simple_strntoull(cp + 1, max_chars - 1, endp, base);
->> +
->> +	return simple_strntoull(cp, max_chars, endp, base);
-> 
-> 
->> +}
-> 
-> ...
-> 
->> +			val.s = simple_strntoll(str,
->> +						field_width > 0 ? field_width : SIZE_MAX,
->> +						&next, base);
-> 
-> A nit-pick: Wouldn't be negative field_width "big enough" to just being used as
-
-field_width is s16 so really should be sign-extended to make it "very
-big". I think this would be less readable what the intention is and what
-assumptions it is based on. There's a risk someone would look at
-
-(size_t)(long)field_width
-
-and think the (long) is redundant.
-Perhaps change field_width to int? There I ask myself "if it can be an
-int, why is it declared s16?" and worry there is something subtle in the
-code.
-
-My personal preference is to avoid using tricks in code that isn't time
-critical.
-
- > is? Also, is field_width == 0 should be treated as "parse to the MAX"?
- >
- > ...
-
-Earlier code terminates scanning if the width parsed from the format
-string is <= 0. So field_width can only be -1 or > 0 here. But now you
-point it out, that test would be better as field_width >= 0 ... so
-it deals with 0 if it ever happened to sneak through to here somehow.
-
-> 
->> +			val.u = simple_strntoull(str,
->> +						 field_width > 0 ? field_width : SIZE_MAX,
->> +						 &next, base);
-> 
-> Ditto.
+> +};
+> +_Static_assert(sizeof(vm_mem_backing_src_type_string)/sizeof(char *) == NUM_VM_BACKING_SRC_TYPES,
+> +	       "Missing new source type strings?");
+> +
+>  /*
+>   * VM Create
+>   *
+> -- 
+> 2.23.0
 > 
