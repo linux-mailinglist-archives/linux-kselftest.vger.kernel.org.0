@@ -2,66 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DA4314247
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 22:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C9131435E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 00:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236880AbhBHVvo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Feb 2021 16:51:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40508 "EHLO mail.kernel.org"
+        id S230145AbhBHXAr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Feb 2021 18:00:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236966AbhBHVus (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 16:50:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 7214464EA1;
-        Mon,  8 Feb 2021 21:50:06 +0000 (UTC)
+        id S229854AbhBHXAr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Feb 2021 18:00:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id DD61964E28;
+        Mon,  8 Feb 2021 23:00:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612821006;
-        bh=Fcu/FReFOPh9QkXjJSEkh0Q8nvJlLktqEuueX3iwpZA=;
+        s=k20201202; t=1612825206;
+        bh=MAroD10xmMQUxu3TS0dW0x5CnTiTJM0qcTA6OyCh4eo=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=s9CriMN2kktLleFCx8sPSvqsKwR7cBjrKHE5QLId8gFpxAjgk2Y/xA5wISvuvMtzS
-         yxBwQAF1Lg1G3y1H3n2hQn8L5a9NlxlQP/Mn34wQ1l3n6XPLP2OfMhOUshDjA8kS40
-         FWZOs+3bt4G8OEsK9kSWI9Aune1nStYtqALL6rjmzujIX/YN/qj7JRKe/OyqZJyTwB
-         MtybJC3oZ7WCLNsF3Cfs9Y+MMz1CrJhoUP6xdu+Vavwi/nR35DZ2vQXUj2vcHn7Wp4
-         6vogI+Hi4eIyERfp7InHuirp7aLkKJpjoJlWnvq5yrxyw2Ap/px/YyI+QRFLMWkZPT
-         2jWLztqm59Mow==
+        b=Fs/KGIhv+cf+x1bUn2aLDaMuoCg6QJ01vRr3UNMNYAhMzt4QoAaYKfUG8+9k0fP24
+         gT6SRgi7+kcj7laC8XJ9tlpSppPhxVDwLGZW9P23DzYxtkTUMZI/Iz69ZQtp8SHdwk
+         5zdx+lvQj3WImCekjlAbeSiI8tWGWvz1UeTnNdz8nyL+NrtKjIv9Tm+n6JIEMy8Cyh
+         bOaBH+0FFZp/87pZ9d//kWKk81rnVp+lB6ghDAG3Yr+5AhGBzEeBk+SGNpptrwE1IP
+         eUf/JVH0CkLdFD7+P942WJboKceIxwYtneDvGv2EOsU+jz6lH2KlGMi4HHxaYEQ2jL
+         /LNSYZTmoZPbQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5B6F260981;
-        Mon,  8 Feb 2021 21:50:06 +0000 (UTC)
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C9283609D4;
+        Mon,  8 Feb 2021 23:00:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf/benchs/bench_ringbufs: remove unneeded semicolon
+Subject: Re: [PATCH] selftests/net: so_txtime: remove unneeded semicolon
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161282100637.19080.17842293087429651326.git-patchwork-notify@kernel.org>
-Date:   Mon, 08 Feb 2021 21:50:06 +0000
-References: <1612684360-115910-1-git-send-email-yang.lee@linux.alibaba.com>
-In-Reply-To: <1612684360-115910-1-git-send-email-yang.lee@linux.alibaba.com>
+Message-Id: <161282520682.21105.3182571344470906337.git-patchwork-notify@kernel.org>
+Date:   Mon, 08 Feb 2021 23:00:06 +0000
+References: <1612776818-21930-1-git-send-email-yang.lee@linux.alibaba.com>
+In-Reply-To: <1612776818-21930-1-git-send-email-yang.lee@linux.alibaba.com>
 To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shuah@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hello:
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+This patch was applied to netdev/net-next.git (refs/heads/master):
 
-On Sun,  7 Feb 2021 15:52:40 +0800 you wrote:
+On Mon,  8 Feb 2021 17:33:38 +0800 you wrote:
 > Eliminate the following coccicheck warning:
-> ./tools/testing/selftests/bpf/benchs/bench_ringbufs.c:322:2-3: Unneeded
-> semicolon
+> ./tools/testing/selftests/net/so_txtime.c:199:3-4: Unneeded semicolon
 > 
 > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> 
-> [...]
+> ---
+>  tools/testing/selftests/net/so_txtime.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Here is the summary with links:
-  - bpf/benchs/bench_ringbufs: remove unneeded semicolon
-    https://git.kernel.org/bpf/bpf-next/c/215cb7d3823e
+  - selftests/net: so_txtime: remove unneeded semicolon
+    https://git.kernel.org/netdev/net-next/c/c85b3bb7b650
 
 You are awesome, thank you!
 --
