@@ -2,90 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24371312ED4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 11:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23242312EE2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 11:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbhBHKVh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Feb 2021 05:21:37 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36056 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232022AbhBHKT1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 05:19:27 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1612779520; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        id S231814AbhBHKYB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Feb 2021 05:24:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47203 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232157AbhBHKWT (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Feb 2021 05:22:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612779651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=FUp0sifzo5QTEnzB7ndOii0XZdyCiwTOujlpEkca5cM=;
-        b=Qbcw7jgSXKtAlANhPWc3Z7/0P5cS0SLsNfxe79dJAeSLS9zxSZIOgKQ4yx4VXh5YB1FVB+
-        55fvFklw7TEoDwyW+2lRw/2LHy5r5yY1UMZg1l8F3aOG1GEwyEbsXAG9lTduRQH97GtReJ
-        rWtcW7iHCW8MI13TZHpHq96oAWB7ik8=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6C932AD62;
-        Mon,  8 Feb 2021 10:18:40 +0000 (UTC)
-Date:   Mon, 8 Feb 2021 11:18:37 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v17 08/10] PM: hibernate: disable when there are active
- secretmem users
-Message-ID: <YCEP/bmqm0DsvCYN@dhcp22.suse.cz>
-References: <20210208084920.2884-1-rppt@kernel.org>
- <20210208084920.2884-9-rppt@kernel.org>
+        bh=2+jPd/3FVQIk0Q7688Eeo9WA6mV19wQqL9xJua3uhWQ=;
+        b=RmWbNN2Rw1CncCn4AKV1+2Rwj+OKvWBPMCYrh/Qxbl8lh7tC34iHGQb3pjNsvKp/z2qR7f
+        z9tBlKh2vBJQ8bSyLh+ERkSLy2ufP6VJXHHqtjVQx0L4iitiHe4fAVtsNV4KAPqB9BMk7J
+        +ZsdrKHgDn0dzcxufP5V4PJqbAU2DqE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-556-OA3UsJVMNmmFBwdz5KPmnQ-1; Mon, 08 Feb 2021 05:20:47 -0500
+X-MC-Unique: OA3UsJVMNmmFBwdz5KPmnQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8945410066F7;
+        Mon,  8 Feb 2021 10:20:38 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.40.193.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9E7FD100F496;
+        Mon,  8 Feb 2021 10:20:33 +0000 (UTC)
+Date:   Mon, 8 Feb 2021 11:20:27 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] KVM: selftests: Keep track of memslots more
+ efficiently
+Message-ID: <20210208102027.roclkurxiibpx6su@kamzik.brq.redhat.com>
+References: <5e5d83b305077e3e65b130dbb31c131bfb831170.1612139762.git.maciej.szmigiero@oracle.com>
+ <20210208101634.vfsr6zoxjnrguwuv@kamzik.brq.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210208084920.2884-9-rppt@kernel.org>
+In-Reply-To: <20210208101634.vfsr6zoxjnrguwuv@kamzik.brq.redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon 08-02-21 10:49:18, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On Mon, Feb 08, 2021 at 11:16:41AM +0100, Andrew Jones wrote:
+> > diff --git a/tools/testing/selftests/kvm/lib/rbtree.c b/tools/testing/selftests/kvm/lib/rbtree.c
+> > new file mode 100644
+> > index 000000000000..a703f0194ea3
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/lib/rbtree.c
+> > @@ -0,0 +1 @@
+> > +#include "../../../../lib/rbtree.c"
+> >
 > 
-> It is unsafe to allow saving of secretmem areas to the hibernation
-> snapshot as they would be visible after the resume and this essentially
-> will defeat the purpose of secret memory mappings.
+> We shouldn't dip into kernel code like this. We can use tools/lib/rbtree.c
+> though.
 > 
-> Prevent hibernation whenever there are active secret memory users.
+> Besides the rbtree.c thing,
 
-Does this feature need any special handling? As it is effectivelly
-unevictable memory then it should behave the same as other mlock, ramfs
-which should already disable hibernation as those cannot be swapped out,
-no?
+Oops, sorry, just realized the first '..' applies to kvm's lib subdir.
+So this is already using tools/lib/rbtree.c
 
--- 
-Michal Hocko
-SUSE Labs
+Thanks,
+drew
+
+> 
+> Reviewed-by: Andrew Jones <drjones@redhat.com>
+
