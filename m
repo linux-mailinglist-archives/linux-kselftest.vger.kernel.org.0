@@ -2,111 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A120C313BE8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 18:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCB3313D00
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 19:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234022AbhBHR6l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Feb 2021 12:58:41 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46648 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235146AbhBHR45 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 12:56:57 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1612806968; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qwX5AXIbxXOiec6IOEaZx2uQnDbXmhCzt+dVXpbysvA=;
-        b=EVBIKarOePQu94XVdxLXJJnkOl+DUYKHHxFANZoOe6CB21HFXP9fzT1oUvfNWTXYUiVqZ8
-        2DQlyXuxgB+ZdmH25poZbJG3fgAhqVaLFM/nE8rQ+9/bO68q7WNuKXqn2yUt9SA/N1l8e1
-        9Yu9/8qOFvUEcTlIJO8LscB/o0bLMV0=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 29846AD62;
-        Mon,  8 Feb 2021 17:56:08 +0000 (UTC)
-Date:   Mon, 8 Feb 2021 18:56:07 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Shuah Khan <shuah@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, patches@opensource.cirrus.com
-Subject: Re: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field
- widths in vsscanf
-Message-ID: <YCF7N0Fc9WC9flyd@alley>
-References: <20210203165009.6299-1-rf@opensource.cirrus.com>
- <20210203165009.6299-2-rf@opensource.cirrus.com>
- <YBr9c44Dvq1ZNrEa@smile.fi.intel.com>
- <YBwiQ+l6yqs+g+rr@alley>
- <5bfefab6-7a1b-6f5f-319c-8897dbb79a5b@opensource.cirrus.com>
- <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com>
+        id S235359AbhBHSQZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Feb 2021 13:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232336AbhBHSOK (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Feb 2021 13:14:10 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8D1C06178B
+        for <linux-kselftest@vger.kernel.org>; Mon,  8 Feb 2021 10:13:30 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id d6so13643764ilo.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Feb 2021 10:13:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/e5PLp3RTxWM6g/qVFsn49ZO2ohirYic5f4PB4jc4ZY=;
+        b=BFg1UkNZ9SMlhyTC6i87VjnB4xZ+DXY84WteYAKejtKFAFnYFyKbtiYDMizAWFEG0I
+         ViJWJoUapoct5jaDBcHYqQQdfNXEXZtFalj1LtGZuOggkN3TWv8No4VxNdwVj0OvLSqj
+         y5h0I4mpHlgQapMx2SPYQ1981oYIKbarywq2rBhscty+X4vAi44jaG4BH192+HWTQnqc
+         OrhV4DRtqUXZTIxUqYzY9BPgs1wO8if6DKTA+R9J0p4Y+pz+2kQH6bMThBm5+T9FUBfh
+         dXkjetwjUFTdM1oLCuHS+2a0+QtUuB+WqPydFTR9l359i4u5DbS5ECw/lLohqlD+2Xh7
+         leow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/e5PLp3RTxWM6g/qVFsn49ZO2ohirYic5f4PB4jc4ZY=;
+        b=BEX6NLWLDdTWr8AbsTStxHSf8+Y6KMIR6ERiaswdsqZ68DaVMAc52MDushfcTYQHzr
+         Tg/fNa5TdKmzWHxaI6XWpbOlfOJN6WVBMSUVIcbE9JI0hS8j+Vr4LnIFNkMKIh10fKvC
+         a9CzvsuM4mK6zw1yY7zNijeigrU4S580/UWSHJWC2/PNTX0qsKna8P9l31NeR93OeW05
+         kglex5gsrEDccTpAife34VMiEu/bkwqGJZ7m2K2mgqMxUxHZQnT6x1tgCm4OOl0wbEwG
+         uqGWasR69qZ5/oR+5YiANIaRQd2IyYeyVnAFfj45LYdUkeB80kMz7Xl980bYPJxVKCCn
+         SpLA==
+X-Gm-Message-State: AOAM530DBCRbD7j1ZtMOFfw3krE5kvDcwGHHIotqa5gioUHsv3y4ExFA
+        CPdxS03E31WbJj8NH+2nACIq/6gEJtimGyaph7+6Pg==
+X-Google-Smtp-Source: ABdhPJxWBm/7+d+3KjPYZevjBOfi/4p7431fD5LmT+LRlgqWcGBxS3YK+5yPxuNo74mcVr37b5wgf5gpi43olmI6hwM=
+X-Received: by 2002:a92:3f06:: with SMTP id m6mr16244038ila.283.1612808009705;
+ Mon, 08 Feb 2021 10:13:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com>
+References: <20210208090841.333724-1-wangyanan55@huawei.com> <20210208090841.333724-2-wangyanan55@huawei.com>
+In-Reply-To: <20210208090841.333724-2-wangyanan55@huawei.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 8 Feb 2021 10:13:18 -0800
+Message-ID: <CANgfPd967wgLk0tb6mNaWsaAa9Tn0LyecEZ_4-e+nKoa-HkCBg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] KVM: selftests: Add a macro to get string of vm_mem_backing_src_type
+To:     Yanan Wang <wangyanan55@huawei.com>
+Cc:     kvm <kvm@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        wanghaibin.wang@huawei.com, yuzenghui@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri 2021-02-05 14:50:56, Andy Shevchenko wrote:
-> On Fri, Feb 5, 2021 at 1:35 PM Richard Fitzgerald
-> <rf@opensource.cirrus.com> wrote:
-> > On 04/02/2021 16:35, Petr Mladek wrote:
-> > > On Wed 2021-02-03 21:45:55, Andy Shevchenko wrote:
-> > >> On Wed, Feb 03, 2021 at 04:50:07PM +0000, Richard Fitzgerald wrote:
-> > >> This allows max_char to be an unsigned type.
-> > >>
-> > >> Moreover...
-> > >>
-> > >>> +   return _parse_integer_limit(s, base, p, INT_MAX);
-> > >>
-> > >> You have inconsistency with INT_MAX vs, size_t above.
-> > >
-> > > Ah, this was on my request. INT_MAX is already used on many other
-> > > locations in vsnprintf() for this purpose.
-> >
-> > I originally had UINT_MAX and changed on Petr's request to be
-> > consistent with other code. (Sorry Andy - my mistake not including
-> > you on the earlier review versions).
-> >
-> > But 0 < INT_MAX < UINT_MAX, so ok to pass to an unsigned. And as Petr
-> > said on his original review, INT_MAX is "big enough".
-> 
-> Some code has INT_MAX, some has UINT_MAX, while the parameter is size_t.
+On Mon, Feb 8, 2021 at 1:08 AM Yanan Wang <wangyanan55@huawei.com> wrote:
+>
+> Add a macro to get string of the backing source memory type, so that
+> application can add choices for source types in the help() function,
+> and users can specify which type to use for testing.
 
-Yeah, if I remember correctly I wanted to have INT_MAX everywhere but
-I did not want to nitpick about it in the later versions. It looked
-like an arbitrary number anyway.
+Coincidentally, I sent out a change last week to do the same thing:
+"KVM: selftests: Add backing src parameter to dirty_log_perf_test"
+(https://lkml.org/lkml/2021/2/2/1430)
+Whichever way this ends up being implemented, I'm happy to see others
+interested in testing different backing source types too.
 
-> I think all of these inconsistencies should have a comment either in
-> the code, or in the commit message, or in the cover letter (depending
-> on the importance).
-> Or being fixed to be more consistent with existing code. Whichever you
-> consider better.
-
-OK, you made me to do some archaeology. The INT_MAX limit has
-been added into vsnprintf() in 2.6.2 by the commit:
-
-Author: Linus Torvalds <torvalds@home.osdl.org>
-Date:   Mon Feb 2 21:17:29 2004 -0800
-
-    Warn loudly if somebody passes a negative value as
-    the size to "vsnprintf()".
-
-    That's a pretty clear case of overflow.
-
-
-It might catch problems. And the limit seems to have worked all the time.
-
-IMHO, it would make sense to have INT_MAX limit also in
-_parse_integer_limit() and WARN() when a larger value is passed.
-
-By other words, it would mean to add this check and use INT_MAX
-everywhere in this patch.
-
-Best Regards,
-Petr
+>
+> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util.h | 3 +++
+>  tools/testing/selftests/kvm/lib/kvm_util.c     | 8 ++++++++
+>  2 files changed, 11 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index 5cbb861525ed..f5fc29dc9ee6 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -69,7 +69,9 @@ enum vm_guest_mode {
+>  #define PTES_PER_MIN_PAGE      ptes_per_page(MIN_PAGE_SIZE)
+>
+>  #define vm_guest_mode_string(m) vm_guest_mode_string[m]
+> +#define vm_mem_backing_src_type_string(s) vm_mem_backing_src_type_string[s]
+>  extern const char * const vm_guest_mode_string[];
+> +extern const char * const vm_mem_backing_src_type_string[];
+>
+>  struct vm_guest_mode_params {
+>         unsigned int pa_bits;
+> @@ -83,6 +85,7 @@ enum vm_mem_backing_src_type {
+>         VM_MEM_SRC_ANONYMOUS,
+>         VM_MEM_SRC_ANONYMOUS_THP,
+>         VM_MEM_SRC_ANONYMOUS_HUGETLB,
+> +       NUM_VM_BACKING_SRC_TYPES,
+>  };
+>
+>  int kvm_check_cap(long cap);
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index fa5a90e6c6f0..a9b651c7f866 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -165,6 +165,14 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+>  _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+>                "Missing new mode params?");
+>
+> +const char * const vm_mem_backing_src_type_string[] = {
+> +       "VM_MEM_SRC_ANONYMOUS        ",
+> +       "VM_MEM_SRC_ANONYMOUS_THP    ",
+> +       "VM_MEM_SRC_ANONYMOUS_HUGETLB",
+> +};
+> +_Static_assert(sizeof(vm_mem_backing_src_type_string)/sizeof(char *) == NUM_VM_BACKING_SRC_TYPES,
+> +              "Missing new source type strings?");
+> +
+>  /*
+>   * VM Create
+>   *
+> --
+> 2.23.0
+>
