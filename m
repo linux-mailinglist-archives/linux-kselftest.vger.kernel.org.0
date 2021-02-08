@@ -2,164 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 973F7313B9A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 18:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A120C313BE8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Feb 2021 18:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233969AbhBHRxU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Feb 2021 12:53:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbhBHRv4 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 12:51:56 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADD9C06178A
-        for <linux-kselftest@vger.kernel.org>; Mon,  8 Feb 2021 09:43:36 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id e7so1749934pge.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Feb 2021 09:43:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RxLUe7o0XBsEMnyZ2ayM5Zt5mnJyMnV0qymbKsVL5xI=;
-        b=Fl/ILLaQ27dYD+8sqFnFsVrXGNE10dTiegetvaiJTd8Yx6XriE47wKym0jVJrTwrHf
-         BmXGbYYJjosrvsmaLpdY3H9q8eF58k8PP1WFfWPi2qffZgrb0bNsvXa+VX5kf/QlqCkg
-         zW4C1Pgh1YcHlMdx2FTREafj2nwr2qb8xCxF5CC0JuF7pQad93EkK6uHwL4TQ0IkiiDw
-         FJr4HH2jpQqHubAZoiIhJicivZ4xX7kULKs7IFpO3L7Vq8FbOv9flC917FeP7y19cUoB
-         3oGKpOxnPKNDCLpYb9Q629nRD1dx2AcBjTiqkhi/qvw1ElSP4jICnl2jLeWyNUPnju0P
-         Zh+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RxLUe7o0XBsEMnyZ2ayM5Zt5mnJyMnV0qymbKsVL5xI=;
-        b=dCaShK7KUPnudw5kGh13CpcjaXqSz0o1oKeEaXVB3iWVjQk0HYZvIE5hhw3kWwBjJ5
-         So1EAOFTlvU5wxDKJ3vQiOAqmrie0YcGqJynNDK+rkhGiWO1tZ44sc0/Mc2SZOxeBeWa
-         apsdpvOTaScyMrYy90YHac7qN3AL4xc2dnbt9BshiSUw4IxImp5F+Zqec4TdmWWJFrYK
-         5V5Oa6IJTvIBrgB/kTjyo8HK2dWL6NsY93/eyOSqPL/KKWzjCsgWxz4DAPAuJMv+54/X
-         ZPziBGame0VKcGwuYXz5+T+2UFhcvCao6bG8lsPSkyyzennzeRR3lmy7u8+R9Wfe2Xcg
-         4sDg==
-X-Gm-Message-State: AOAM5325V6w5u/pqAoKMcTaFBsI9CqSaIe+KF9u+f5l6tUip0VVPfZ1w
-        d4kbyJ1wIV/Uj6IFcIZXEgapUQ==
-X-Google-Smtp-Source: ABdhPJzgH48OCVyI5hH228/HKK7dPLNGjKP1Ay4WnHabg31jANO3Rit48bQBOUDkqOCYP8c+u+pspQ==
-X-Received: by 2002:a62:8cd7:0:b029:1d9:447c:e21a with SMTP id m206-20020a628cd70000b02901d9447ce21amr14414194pfd.2.1612806215874;
-        Mon, 08 Feb 2021 09:43:35 -0800 (PST)
-Received: from google.com ([2620:15c:f:10:e4db:abc1:a5c0:9dbc])
-        by smtp.gmail.com with ESMTPSA id c18sm9730201pfo.171.2021.02.08.09.43.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Feb 2021 09:43:35 -0800 (PST)
-Date:   Mon, 8 Feb 2021 09:43:28 -0800
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yanan Wang <wangyanan55@huawei.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        id S234022AbhBHR6l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Feb 2021 12:58:41 -0500
+Received: from mx2.suse.de ([195.135.220.15]:46648 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235146AbhBHR45 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Feb 2021 12:56:57 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1612806968; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qwX5AXIbxXOiec6IOEaZx2uQnDbXmhCzt+dVXpbysvA=;
+        b=EVBIKarOePQu94XVdxLXJJnkOl+DUYKHHxFANZoOe6CB21HFXP9fzT1oUvfNWTXYUiVqZ8
+        2DQlyXuxgB+ZdmH25poZbJG3fgAhqVaLFM/nE8rQ+9/bO68q7WNuKXqn2yUt9SA/N1l8e1
+        9Yu9/8qOFvUEcTlIJO8LscB/o0bLMV0=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 29846AD62;
+        Mon,  8 Feb 2021 17:56:08 +0000 (UTC)
+Date:   Mon, 8 Feb 2021 18:56:07 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Marc Zyngier <maz@kernel.org>, Ben Gardon <bgardon@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        wanghaibin.wang@huawei.com, yuzenghui@huawei.com
-Subject: Re: [RFC PATCH 1/2] KVM: selftests: Add a macro to get string of
- vm_mem_backing_src_type
-Message-ID: <YCF4QCPtSEFg3Qv4@google.com>
-References: <20210208090841.333724-1-wangyanan55@huawei.com>
- <20210208090841.333724-2-wangyanan55@huawei.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, patches@opensource.cirrus.com
+Subject: Re: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field
+ widths in vsscanf
+Message-ID: <YCF7N0Fc9WC9flyd@alley>
+References: <20210203165009.6299-1-rf@opensource.cirrus.com>
+ <20210203165009.6299-2-rf@opensource.cirrus.com>
+ <YBr9c44Dvq1ZNrEa@smile.fi.intel.com>
+ <YBwiQ+l6yqs+g+rr@alley>
+ <5bfefab6-7a1b-6f5f-319c-8897dbb79a5b@opensource.cirrus.com>
+ <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210208090841.333724-2-wangyanan55@huawei.com>
+In-Reply-To: <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 08, 2021, Yanan Wang wrote:
-> Add a macro to get string of the backing source memory type, so that
-> application can add choices for source types in the help() function,
-> and users can specify which type to use for testing.
+On Fri 2021-02-05 14:50:56, Andy Shevchenko wrote:
+> On Fri, Feb 5, 2021 at 1:35 PM Richard Fitzgerald
+> <rf@opensource.cirrus.com> wrote:
+> > On 04/02/2021 16:35, Petr Mladek wrote:
+> > > On Wed 2021-02-03 21:45:55, Andy Shevchenko wrote:
+> > >> On Wed, Feb 03, 2021 at 04:50:07PM +0000, Richard Fitzgerald wrote:
+> > >> This allows max_char to be an unsigned type.
+> > >>
+> > >> Moreover...
+> > >>
+> > >>> +   return _parse_integer_limit(s, base, p, INT_MAX);
+> > >>
+> > >> You have inconsistency with INT_MAX vs, size_t above.
+> > >
+> > > Ah, this was on my request. INT_MAX is already used on many other
+> > > locations in vsnprintf() for this purpose.
+> >
+> > I originally had UINT_MAX and changed on Petr's request to be
+> > consistent with other code. (Sorry Andy - my mistake not including
+> > you on the earlier review versions).
+> >
+> > But 0 < INT_MAX < UINT_MAX, so ok to pass to an unsigned. And as Petr
+> > said on his original review, INT_MAX is "big enough".
 > 
-> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-> ---
->  tools/testing/selftests/kvm/include/kvm_util.h | 3 +++
->  tools/testing/selftests/kvm/lib/kvm_util.c     | 8 ++++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index 5cbb861525ed..f5fc29dc9ee6 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -69,7 +69,9 @@ enum vm_guest_mode {
->  #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
->  
->  #define vm_guest_mode_string(m) vm_guest_mode_string[m]
-> +#define vm_mem_backing_src_type_string(s) vm_mem_backing_src_type_string[s]
+> Some code has INT_MAX, some has UINT_MAX, while the parameter is size_t.
 
-Oof, I see this is just following vm_guest_mode_string.  IMO, defining the
-string to look like a function is unnecessary and rather mean.
+Yeah, if I remember correctly I wanted to have INT_MAX everywhere but
+I did not want to nitpick about it in the later versions. It looked
+like an arbitrary number anyway.
 
->  extern const char * const vm_guest_mode_string[];
-> +extern const char * const vm_mem_backing_src_type_string[];
->  
->  struct vm_guest_mode_params {
->  	unsigned int pa_bits;
-> @@ -83,6 +85,7 @@ enum vm_mem_backing_src_type {
->  	VM_MEM_SRC_ANONYMOUS,
->  	VM_MEM_SRC_ANONYMOUS_THP,
->  	VM_MEM_SRC_ANONYMOUS_HUGETLB,
-> +	NUM_VM_BACKING_SRC_TYPES,
->  };
->  
->  int kvm_check_cap(long cap);
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index fa5a90e6c6f0..a9b651c7f866 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -165,6 +165,14 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
->  _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
->  	       "Missing new mode params?");
->  
-> +const char * const vm_mem_backing_src_type_string[] = {
+> I think all of these inconsistencies should have a comment either in
+> the code, or in the commit message, or in the cover letter (depending
+> on the importance).
+> Or being fixed to be more consistent with existing code. Whichever you
+> consider better.
 
-A shorter name would be nice, though I don't have a good suggestion.
+OK, you made me to do some archaeology. The INT_MAX limit has
+been added into vsnprintf() in 2.6.2 by the commit:
 
-> +	"VM_MEM_SRC_ANONYMOUS        ",
-> +	"VM_MEM_SRC_ANONYMOUS_THP    ",
-> +	"VM_MEM_SRC_ANONYMOUS_HUGETLB",
+Author: Linus Torvalds <torvalds@home.osdl.org>
+Date:   Mon Feb 2 21:17:29 2004 -0800
 
-It'd be more robust to explicitly assign indices, that way tweaks to
-vm_mem_backing_src_type won't cause silent breakage.  Ditto for the existing
-vm_guest_mode_string.
+    Warn loudly if somebody passes a negative value as
+    the size to "vsnprintf()".
 
-E.g. I think something like this would work (completely untested)
-
-const char *vm_guest_mode_string(int i)
-{
-	static const char *const strings[] = {
-		[VM_MODE_P52V48_4K]	= "PA-bits:52,  VA-bits:48,  4K pages",
-		[VM_MODE_P52V48_64K]	= "PA-bits:52,  VA-bits:48, 64K pages",
-		[VM_MODE_P48V48_4K]	= "PA-bits:48,  VA-bits:48,  4K pages",
-		[VM_MODE_P48V48_64K]	= "PA-bits:48,  VA-bits:48, 64K pages",
-		[VM_MODE_P40V48_4K]	= "PA-bits:40,  VA-bits:48,  4K pages",
-		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
-		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
-	};
-
-	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
-		       "Missing new mode strings?");
-
-	TEST_ASSERT(i < NUM_VM_MODES);
-
-	return strings[i];
-}
+    That's a pretty clear case of overflow.
 
 
-> +};
-> +_Static_assert(sizeof(vm_mem_backing_src_type_string)/sizeof(char *) == NUM_VM_BACKING_SRC_TYPES,
-> +	       "Missing new source type strings?");
-> +
->  /*
->   * VM Create
->   *
-> -- 
-> 2.23.0
-> 
+It might catch problems. And the limit seems to have worked all the time.
+
+IMHO, it would make sense to have INT_MAX limit also in
+_parse_integer_limit() and WARN() when a larger value is passed.
+
+By other words, it would mean to add this check and use INT_MAX
+everywhere in this patch.
+
+Best Regards,
+Petr
