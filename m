@@ -2,99 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3D7315023
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 14:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02289315343
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 16:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbhBINZz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 08:25:55 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45102 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230335AbhBINZy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 08:25:54 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1612877107; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZVdQYAWpX2uS4c8GuGsp90KbxvIcZCLSEozx0GHShkA=;
-        b=AMu2gqbj/4bFKubqIvA00x5aKR/RM0bxKuI5rFq/VIF9xzAE5jv4eYLmgTbusqtjFAY5Df
-        Aox1zELPhI/1rzb/LrFIULNqnHdWSAlWT1TNgH3OziiDEXT769CiOawfnAmhijx6/V4k/9
-        8MT4wMa2DixXuIxBTpeQxrZHRPB3LL4=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 0E7E2AD6A;
-        Tue,  9 Feb 2021 13:25:07 +0000 (UTC)
-Date:   Tue, 9 Feb 2021 14:25:06 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v17 00/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <YCKNMqu8/g0OofqU@dhcp22.suse.cz>
-References: <20210208211326.GV242749@kernel.org>
- <1F6A73CF-158A-4261-AA6C-1F5C77F4F326@redhat.com>
- <YCJO8zLq8YkXGy8B@dhcp22.suse.cz>
- <662b5871-b461-0896-697f-5e903c23d7b9@redhat.com>
- <YCJbmR11ikrWKaU8@dhcp22.suse.cz>
- <c1e5e7b6-3360-ddc4-2ff5-0e79515ee23a@redhat.com>
+        id S232419AbhBIP51 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 10:57:27 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:52436 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232566AbhBIP50 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 9 Feb 2021 10:57:26 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 119Feba3008252;
+        Tue, 9 Feb 2021 09:56:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=5CEkKZOhO+kXh7ZJjl0JUmcEc38rbW3K6ghRgk6Zs3Q=;
+ b=qXUjWgAJECHF3EiAxvEUS/K7dVH7IdUJOlYovbmKqKJ1zZ9ZfPl1K+5wTO3n2RJl5z91
+ bh3KjNJN6vLDdpBOwqz5qxC//AC5JF7E0ylpGvfKlSIpk2EGYBE/tAq7BvxzPeyJ8h/G
+ 2rZqRQ037e0Fh1svLuYY8hXqUDP3CjtoW0n6JelmP7cjK/1cI17hBzUb2g0c67AkgNeY
+ BucJmA6FtHcEYeCRAjwvu9Vh1z2Wn/1aMZazkBUULXCsN9NS4pFRqXRxdWL7ETUFE7o5
+ UyEoPLcXN1fEE6cgV3i83acjDVNNdTW772fccI0CL5kW+R5/eFMF45E0Z01PphcrU+66 3g== 
+Received: from ediex01.ad.cirrus.com ([87.246.76.36])
+        by mx0b-001ae601.pphosted.com with ESMTP id 36hrv2c1af-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 09 Feb 2021 09:56:12 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 9 Feb 2021
+ 15:56:10 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
+ Transport; Tue, 9 Feb 2021 15:56:10 +0000
+Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.64.240])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 179F011CA;
+        Tue,  9 Feb 2021 15:56:06 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
+        <sergey.senozhatsky@gmail.com>,
+        <andriy.shevchenko@linux.intel.com>, <linux@rasmusvillemoes.dk>,
+        <shuah@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH v6 1/4] lib: vsprintf: scanf: Negative number must have field width > 1
+Date:   Tue, 9 Feb 2021 15:56:01 +0000
+Message-ID: <20210209155604.6998-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1e5e7b6-3360-ddc4-2ff5-0e79515ee23a@redhat.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=522 suspectscore=0
+ impostorscore=0 clxscore=1015 bulkscore=0 adultscore=0 malwarescore=0
+ spamscore=0 phishscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102090081
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 09-02-21 11:23:35, David Hildenbrand wrote:
-[...]
-> I am constantly trying to fight for making more stuff MOVABLE instead of
-> going into the other direction (e.g., because it's easier to implement,
-> which feels like the wrong direction).
-> 
-> Maybe I am the only person that really cares about ZONE_MOVABLE these days
-> :) I can't stop such new stuff from popping up, so at least I want it to be
-> documented.
+If a signed number field starts with a '-' the field width must be > 1,
+or unlimited, to allow at least one digit after the '-'.
 
-MOVABLE zone is certainly an important thing to keep working. And there
-is still quite a lot of work on the way. But as I've said this is more
-of a outlier than a norm. On the other hand movable zone is kinda hard
-requirement for a lot of application and it is to be expected that
-many features will be less than 100% compatible.  Some usecases even
-impossible. That's why I am arguing that we should have a central
-document where the movable zone is documented with all the potential
-problems we have encountered over time and explicitly state which
-features are fully/partially incompatible.
+This patch adds a check for this. If a signed field starts with '-'
+and field_width == 1 the scanf will quit.
 
+It is ok for a signed number field to have a field width of 1 if it
+starts with a digit. In that case the single digit can be converted.
+
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ lib/vsprintf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 3b53c73580c5..28bb26cd1f67 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -3434,8 +3434,12 @@ int vsscanf(const char *buf, const char *fmt, va_list args)
+ 		str = skip_spaces(str);
+ 
+ 		digit = *str;
+-		if (is_sign && digit == '-')
++		if (is_sign && digit == '-') {
++			if (field_width == 1)
++				break;
++
+ 			digit = *(str + 1);
++		}
+ 
+ 		if (!digit
+ 		    || (base == 16 && !isxdigit(digit))
 -- 
-Michal Hocko
-SUSE Labs
+2.20.1
+
