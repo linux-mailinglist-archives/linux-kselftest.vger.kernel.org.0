@@ -2,112 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF67315346
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 16:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B0A3153AB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 17:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbhBIP5m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 10:57:42 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:54474 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232294AbhBIP5j (ORCPT
+        id S232686AbhBIQTH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 11:19:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50567 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232400AbhBIQTG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 10:57:39 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 119Fh3J1011740;
-        Tue, 9 Feb 2021 09:56:24 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=4y/KMCv5Ll+ZgNu/hBLzOZq3keYHvT4kV6J7Uxtt17E=;
- b=LzyvM/a3qtRWG2HunrBfNB5bj7JpKteFl2/QlJmLYSwb42Hy4j0iVYQp6RJcnAz0RxCe
- kI8tv4wE+tVHrvzOfO3Fb6d7KGJPsv1evpPRfh1MiywyUEsulvUVdENLywMOPDHACsdp
- wqNSExJPoqhb+QCk8ITmDEH668GQVaIKDLsji1Q+up+xLtbhK2Wq4VFG4f+jq8Jfx4t9
- VV8FAFkBKbsAW4LiyvHNjDriWQIn87+1hSNA/amAcDI/hNzOMxwpeUNX8UIonhDCsDZG
- FzjogiEzB+rGLhaWEQKDngsRxKAen1V5R6a1wmKSDrsLGY9nZ3pNDZGzhtTSh9JtQel8 Fg== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 36jdacaw94-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 09 Feb 2021 09:56:24 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 9 Feb 2021
- 15:56:21 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
- Transport; Tue, 9 Feb 2021 15:56:21 +0000
-Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.64.240])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7156F2AB;
-        Tue,  9 Feb 2021 15:56:21 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
-        <sergey.senozhatsky@gmail.com>,
-        <andriy.shevchenko@linux.intel.com>, <linux@rasmusvillemoes.dk>,
-        <shuah@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v6 4/4] selftests: lib: Add wrapper script for test_scanf
-Date:   Tue, 9 Feb 2021 15:56:04 +0000
-Message-ID: <20210209155604.6998-4-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210209155604.6998-1-rf@opensource.cirrus.com>
-References: <20210209155604.6998-1-rf@opensource.cirrus.com>
+        Tue, 9 Feb 2021 11:19:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612887460;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rPEBUfuoE8xnXkHqh37MN3V58bCQtUE2J2aM+0+7Hhg=;
+        b=GO6YGVp19NtK1N7dVAYyLwM5lLtnOzWM11AF3TGBrqo9hoF8POgf1w4xEzFgWMM6R5ysae
+        Bf5gs34GfHPGvo7B7yhyyWfXS0vRcXVdV/C4XRSmxTaGgn6+eCxIPY3sWRf3MfXhZvJGIX
+        szQoOLLC62e0QwsiRiZm70o/7QLP2/k=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-279-uL8BkgqBNoSU9TSinWcnBQ-1; Tue, 09 Feb 2021 11:17:37 -0500
+X-MC-Unique: uL8BkgqBNoSU9TSinWcnBQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9332C801979;
+        Tue,  9 Feb 2021 16:17:31 +0000 (UTC)
+Received: from [10.36.113.141] (ovpn-113-141.ams2.redhat.com [10.36.113.141])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D16AE60BD9;
+        Tue,  9 Feb 2021 16:17:23 +0000 (UTC)
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+References: <20210208211326.GV242749@kernel.org>
+ <1F6A73CF-158A-4261-AA6C-1F5C77F4F326@redhat.com>
+ <YCJO8zLq8YkXGy8B@dhcp22.suse.cz>
+ <662b5871-b461-0896-697f-5e903c23d7b9@redhat.com>
+ <YCJbmR11ikrWKaU8@dhcp22.suse.cz>
+ <c1e5e7b6-3360-ddc4-2ff5-0e79515ee23a@redhat.com>
+ <YCKNMqu8/g0OofqU@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Subject: Re: [PATCH v17 00/10] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-ID: <8cbfe2c3-cfc6-72e0-bab1-852f80e20684@redhat.com>
+Date:   Tue, 9 Feb 2021 17:17:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
+In-Reply-To: <YCKNMqu8/g0OofqU@dhcp22.suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=929 phishscore=0
- clxscore=1015 priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0
- malwarescore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102090081
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adds a wrapper shell script for the test_scanf module.
+On 09.02.21 14:25, Michal Hocko wrote:
+> On Tue 09-02-21 11:23:35, David Hildenbrand wrote:
+> [...]
+>> I am constantly trying to fight for making more stuff MOVABLE instead of
+>> going into the other direction (e.g., because it's easier to implement,
+>> which feels like the wrong direction).
+>>
+>> Maybe I am the only person that really cares about ZONE_MOVABLE these days
+>> :) I can't stop such new stuff from popping up, so at least I want it to be
+>> documented.
+> 
+> MOVABLE zone is certainly an important thing to keep working. And there
+> is still quite a lot of work on the way. But as I've said this is more
+> of a outlier than a norm. On the other hand movable zone is kinda hard
+> requirement for a lot of application and it is to be expected that
+> many features will be less than 100% compatible.  Some usecases even
+> impossible. That's why I am arguing that we should have a central
+> document where the movable zone is documented with all the potential
+> problems we have encountered over time and explicitly state which
+> features are fully/partially incompatible.
+> 
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- tools/testing/selftests/lib/Makefile | 2 +-
- tools/testing/selftests/lib/config   | 1 +
- tools/testing/selftests/lib/scanf.sh | 4 ++++
- 3 files changed, 6 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/lib/scanf.sh
+I'll send a mail during the next weeks to gather current restrictions to 
+document them (and include my brain dump). We might see more excessive 
+use of ZONE_MOVABLE in the future and as history told us, of CMA as 
+well. We really should start documenting/caring.
 
-diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
-index a105f094676e..ee71fc99d5b5 100644
---- a/tools/testing/selftests/lib/Makefile
-+++ b/tools/testing/selftests/lib/Makefile
-@@ -4,6 +4,6 @@
- # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
- all:
- 
--TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh strscpy.sh
-+TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh scanf.sh strscpy.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-index b80ee3f6e265..776c8c42e78d 100644
---- a/tools/testing/selftests/lib/config
-+++ b/tools/testing/selftests/lib/config
-@@ -1,4 +1,5 @@
- CONFIG_TEST_PRINTF=m
-+CONFIG_TEST_SCANTF=m
- CONFIG_TEST_BITMAP=m
- CONFIG_PRIME_NUMBERS=m
- CONFIG_TEST_STRSCPY=m
-diff --git a/tools/testing/selftests/lib/scanf.sh b/tools/testing/selftests/lib/scanf.sh
-new file mode 100755
-index 000000000000..b59b8ba561c3
---- /dev/null
-+++ b/tools/testing/selftests/lib/scanf.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Tests the scanf infrastructure using test_scanf kernel module.
-+$(dirname $0)/../kselftest/module.sh "scanf" test_scanf
+@Mike, it would be sufficient for me if one of your patches at least 
+mention the situation in the description like
+
+"Please note that secretmem currently behaves much more like long-term 
+GUP instead of mlocked memory; secretmem is unmovable memory directly 
+consumed/controlled by user space. secretmem cannot be placed onto 
+ZONE_MOVABLE/CMA.
+
+As long as there is no excessive use of secretmem (e.g., maximum of 16 
+MiB for selected processes) in combination with ZONE_MOVABLE/CMA, this 
+is barely a real issue. However, it is something to keep in mind when a 
+significant amount of system RAM might be used for secretmem. In the 
+future, we might support migration of secretmem and make it look much 
+more like mlocked memory instead."
+
+Just a suggestion.
+
 -- 
-2.20.1
+Thanks,
+
+David / dhildenb
 
