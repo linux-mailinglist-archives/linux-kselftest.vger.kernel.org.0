@@ -2,106 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16095314EE6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 13:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9273B314FF6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 14:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbhBIMaw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 07:30:52 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41090 "EHLO mx2.suse.de"
+        id S231290AbhBINSH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 08:18:07 -0500
+Received: from mx2.suse.de ([195.135.220.15]:59034 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229584AbhBIMav (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 07:30:51 -0500
+        id S231284AbhBINSA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 9 Feb 2021 08:18:00 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1612876633; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hscVwXWbZS59k2Mrx2EQB55XPrmNAr7Nf/1W616aiRA=;
+        b=phJYgl2FDdsaxXzglirq+9E/PFvQ09SmMOXMZhmQCkX3xnUui6gyQgU8pq6VCgFZRP1Nj7
+        4ywYD8QcYFjpmTT73fbyJ99EI01XOD13cuJJ02YYNRiktCaeLBu0orc/YuPfY4sb+PIX+n
+        y3DWzu+Qklmtk5MHIoO/Fx8xciQgqDo=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 26F8DADE1;
-        Tue,  9 Feb 2021 12:30:08 +0000 (UTC)
-Subject: Re: [PATCH] kunit: tool: Disable PAGE_POISONING under --alltests
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210209071034.3268897-1-davidgow@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Message-ID: <91207d64-e50f-872d-10db-55153da41aec@suse.cz>
-Date:   Tue, 9 Feb 2021 13:30:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        by mx2.suse.de (Postfix) with ESMTP id 9362BAD6A;
+        Tue,  9 Feb 2021 13:17:12 +0000 (UTC)
+Date:   Tue, 9 Feb 2021 14:17:11 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-ID: <YCKLVzBR62+NtvyF@dhcp22.suse.cz>
+References: <20210208084920.2884-1-rppt@kernel.org>
+ <20210208084920.2884-8-rppt@kernel.org>
+ <YCEXMgXItY7xMbIS@dhcp22.suse.cz>
+ <20210208212605.GX242749@kernel.org>
+ <YCJMDBss8Qhha7g9@dhcp22.suse.cz>
+ <20210209090938.GP299309@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20210209071034.3268897-1-davidgow@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210209090938.GP299309@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/9/21 8:10 AM, David Gow wrote:
-> kunit_tool maintains a list of config options which are broken under
-> UML, which we exclude from an otherwise 'make ARCH=um allyesconfig'
-> build used to run all tests with the --alltests option.
+On Tue 09-02-21 11:09:38, Mike Rapoport wrote:
+> On Tue, Feb 09, 2021 at 09:47:08AM +0100, Michal Hocko wrote:
+> > On Mon 08-02-21 23:26:05, Mike Rapoport wrote:
+> > > On Mon, Feb 08, 2021 at 11:49:22AM +0100, Michal Hocko wrote:
+> > > > On Mon 08-02-21 10:49:17, Mike Rapoport wrote:
+> > [...]
+> > > > > The file descriptor based memory has several advantages over the
+> > > > > "traditional" mm interfaces, such as mlock(), mprotect(), madvise(). It
+> > > > > paves the way for VMMs to remove the secret memory range from the process;
+> > > > 
+> > > > I do not understand how it helps to remove the memory from the process
+> > > > as the interface explicitly allows to add a memory that is removed from
+> > > > all other processes via direct map.
+> > > 
+> > > The current implementation does not help to remove the memory from the
+> > > process, but using fd-backed memory seems a better interface to remove
+> > > guest memory from host mappings than mmap. As Andy nicely put it:
+> > > 
+> > > "Getting fd-backed memory into a guest will take some possibly major work in
+> > > the kernel, but getting vma-backed memory into a guest without mapping it
+> > > in the host user address space seems much, much worse."
+> > 
+> > OK, so IIUC this means that the model is to hand over memory from host
+> > to guest. I thought the guest would be under control of its address
+> > space and therefore it operates on the VMAs. This would benefit from
+> > an additional and more specific clarification.
 > 
-> Something in UML allyesconfig is causing segfaults when page poisining
-> is enabled (and is poisoning with a non-zero value). Previously, this
-> didn't occur, as allyesconfig enabled the CONFIG_PAGE_POISONING_ZERO
-> option, which worked around the problem by zeroing memory. This option
-> has since been removed, and memory is now poisoned with 0xAA, which
-> triggers segfaults in many different codepaths, preventing UML from
-> booting.
+> How guest would operate on VMAs if the interface between host and guest is
+> virtual hardware?
+
+I have to say that I am not really familiar with this area so my view
+might be misleading or completely wrong. I thought that the HW address
+ranges are mapped to the guest process and therefore have a VMA.
+
+> If you mean qemu (or any other userspace part of VMM that uses KVM), so one
+> of the points Andy mentioned back than is to remove mappings of the guest
+> memory from the qemu process.
+>  
+> > > > > As secret memory implementation is not an extension of tmpfs or hugetlbfs,
+> > > > > usage of a dedicated system call rather than hooking new functionality into
+> > > > > memfd_create(2) emphasises that memfd_secret(2) has different semantics and
+> > > > > allows better upwards compatibility.
+> > > > 
+> > > > What is this supposed to mean? What are differences?
+> > > 
+> > > Well, the phrasing could be better indeed. That supposed to mean that
+> > > they differ in the semantics behind the file descriptor: memfd_create
+> > > implements sealing for shmem and hugetlbfs while memfd_secret implements
+> > > memory hidden from the kernel.
+> > 
+> > Right but why memfd_create model is not sufficient for the usecase?
+> > Please note that I am arguing against. To be honest I do not really care
+> > much. Using an existing scheme is usually preferable from my POV but
+> > there might be real reasons why shmem as a backing "storage" is not
+> > appropriate.
+>    
+> Citing my older email:
 > 
-> Note that we have to disable both CONFIG_PAGE_POISONING and
-> CONFIG_DEBUG_PAGEALLOC, as the latter will 'select' the former on
-> architectures (such as UML) which don't implement __kernel_map_pages().
-> 
-> Ideally, we'd fix this properly by tracking down the real root cause,
-> but since this is breaking KUnit's --alltests feature, it's worth
-> disabling there in the meantime so the kernel can boot to the point
-> where tests can actually run.
+>     I've hesitated whether to continue to use new flags to memfd_create() or to
+>     add a new system call and I've decided to use a new system call after I've
+>     started to look into man pages update. There would have been two completely
+>     independent descriptions and I think it would have been very confusing.
 
-Agree on both arguments :)
+Could you elaborate? Unmapping from the kernel address space can work
+both for sealed or hugetlb memfds, no? Those features are completely
+orthogonal AFAICS. With a dedicated syscall you will need to introduce
+this functionality on top if that is required. Have you considered that?
+I mean hugetlb pages are used to back guest memory very often. Is this
+something that will be a secret memory usecase?
 
-> Fixes: f289041ed4 ("mm, page_poison: remove CONFIG_PAGE_POISONING_ZERO")
-> Signed-off-by: David Gow <davidgow@google.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-...
-
-> Disabling PAGE_POISONING fixes this. The issue can't be repoduced with
-> just PAGE_POISONING, there's clearly something (or several things) also
-> enabled by allyesconfig which contribute. Ideally, we'd track these down
-> and fix this at its root cause, but in the meantime it'd be nice to
-> disable PAGE_POISONING so we can at least get the kernel to boot. One
-> way would be to add a 'depends on !UML' or similar, but since
-> PAGE_POISONING does seem to work in the non-allyesconfig case, adding it
-> to our list of broken configs seemed the better choice.
-> 
-> Thoughts?
-
-Agreed that it's better to use kunit-specific config file instead of introducing
-such workaround dependencies in Kconfig proper.
-
-> (Note that to reproduce this, you'll want to run
-> ./tools/testing/kunit/kunit.py run --alltests --raw_output
-> It also depends on a couple of other fixes which are not upstream yet:
-> https://www.spinics.net/lists/linux-rtc/msg08294.html
-> https://lore.kernel.org/linux-i3c/20210127040636.1535722-1-davidgow@google.com/
-> 
-> Cheers,
-> -- David
-> 
->  tools/testing/kunit/configs/broken_on_uml.config | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/kunit/configs/broken_on_uml.config b/tools/testing/kunit/configs/broken_on_uml.config
-> index a7f0603d33f6..690870043ac0 100644
-> --- a/tools/testing/kunit/configs/broken_on_uml.config
-> +++ b/tools/testing/kunit/configs/broken_on_uml.config
-> @@ -40,3 +40,5 @@
->  # CONFIG_RESET_BRCMSTB_RESCAL is not set
->  # CONFIG_RESET_INTEL_GW is not set
->  # CONFIG_ADI_AXI_ADC is not set
-> +# CONFIG_DEBUG_PAGEALLOC is not set
-> +# CONFIG_PAGE_POISONING is not set
-> 
-
+Please be really specific when giving arguments to back a new syscall
+decision.
+-- 
+Michal Hocko
+SUSE Labs
