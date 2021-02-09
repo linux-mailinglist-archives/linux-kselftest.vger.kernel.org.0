@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 373D031554B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 18:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3960B3155BB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 19:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbhBIRkT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 12:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S233228AbhBISTg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 13:19:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233343AbhBIRjC (ORCPT
+        with ESMTP id S233127AbhBISRv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 12:39:02 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1524BC061793
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 09:38:22 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id q9so16863024ilo.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 09:38:22 -0800 (PST)
+        Tue, 9 Feb 2021 13:17:51 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF39C06178A
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 10:05:11 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id 19so8704711qkc.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 10:05:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Uleq2dgpQSxeSGJ+Db7DSnoxy5gpELJwClzZrOjILf4=;
-        b=FvAVJP/KNFs6k+0Trhsgbzf+GCYw8ulxEeM/j+DvzDRrfZURL59wpCMGHHgtbUwUaE
-         pHfZPTVGsJV95S1EdbTj+iE83YwpNKqzPkM9aLbClk3rwv6ByB9rh6StlATQi2NpnHy/
-         j6lovIfmqv9/zpOJfe3pu9feifwkliiXydejJ8xBvZNkdfmtcA/VY337DjPRpIW/+k0J
-         kxDjEGyF7OsvSqrwfTIrVhxHFtBZzhCa68KJIa9PBt+Y9PzeFg9ogg/7wzI+cW+YdaTa
-         wCIxoEtJXeu0wRghBsy+mXLU0nHWe7ENmifwDIuTlx4/YStcBVhEIU5kCCHZKpdQMGTM
-         F2lA==
+        bh=Mx7gvDzCXYae1O8/EVgmnBuqdpiZ/hGwAA1HSJaVP3A=;
+        b=oIwxQK1lrebWi6USlIcdija5LyWF5sFn8XTiBrX/t/dPxxepe2g16wIpm83QVqGZzt
+         z/jLstT99mijut9zjnstu8UzBjPH/AiRm6SOKsP1V+fiUoUM1u8979/UIKZCQUoqJtmb
+         Nll+YXb6kstMH6sgAHxodKgi2vQe1seiaQoRU++CrargjYZRdLFlf3RnkzssUDoCQapT
+         p5IuVEuaY3ESKTJkzl/3acWKJwcvqqrUdSWtvBr/pePHAZvEDeTEb4FgVFpJc7P4hmWH
+         k5szMrUdnyD0B5PKxcZ3Q2at+ZVqdiM9mGfoxTJcHV4UJT2Ef4hwjxjvy7bXdD9wskB2
+         jMvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Uleq2dgpQSxeSGJ+Db7DSnoxy5gpELJwClzZrOjILf4=;
-        b=Q2/D3dzy3mrZcrrBUF4D7b4a29ngw97Q5exGPq1zEJ5Gqqfga3UEcA8js7QYeC8Iim
-         P/ooGMsGAWjwnKvK3lMvD+zLnVZKwmIsvz8JewTIfUaXY01dZrfXTG4Hth+8HN9F6xCv
-         CMTLP1JpYFTUXb0sgz7UOBxEim34yxJG/Ak1xOMOUDQqhLqpTClXhidsGvgSCAPjPEJI
-         CPegoe6uSqCDefyjHJlEScrB33krJ7gvwOPzQuqYNvQsbfpzgkKN3zPUo/Gd+EyGeiHQ
-         3BnVgzLaRA+XchEb/2H5pbjSkYFDsOS5cisF3+ov/pJ2pa1gqOn68fUMmEx8mW4VTPal
-         cUfQ==
-X-Gm-Message-State: AOAM533dNcVPQvQSnqr7pZ58fmSiMrJlL0L9WLiUrMt5Z8kCLll3zYqX
-        UP0MPDjDkTptbkq2fGzKY0EBH19LF2BixTYdeirmWA==
-X-Google-Smtp-Source: ABdhPJzES/UZCZY7RQ1ZSzDt0/HlqDo3z3IZhAt7xJVYouDoI6eRJjyMBL039xEYnmkzOAlCzUAEITmH6LoHfaaLLu0=
-X-Received: by 2002:a92:cbce:: with SMTP id s14mr21884010ilq.306.1612892300966;
- Tue, 09 Feb 2021 09:38:20 -0800 (PST)
+        bh=Mx7gvDzCXYae1O8/EVgmnBuqdpiZ/hGwAA1HSJaVP3A=;
+        b=uW3ljdFOIsldKYOPKYn3jhaThCmkQ7kAHcryu9DoPpECAGnaEHJOeOv2QcuJby7v1m
+         fmUL0aogeSkd00kmDE0obBz2zedNM49onuC6UCYoqhSSA+39uQCJX1Z7BN7iAkNw+lbG
+         IDVVga+LdobkFPkrvItPOw+b9cx/vMgCsZ50EPbQO3vU3LYoIAtpUldQ+tDJbIPKTtqg
+         SWfiU7Zzzvp6VMSxe6lH8+HfnsJMIYEL6AiB8uKEY+/+8nxsvJ+A9AjjQPkl5yt0JsQG
+         hEuVd003MHDAsseLUirwElDEEl8idykyXIILEcNWmvuApdHKYTzh8fXPlKbPy1oJzSrs
+         4BLA==
+X-Gm-Message-State: AOAM5323qLvhl9oOkSRUbDQf2mztHYiVnL0jETdB4dNlVbrnZTfebcrA
+        9L0im6weesYcGF8kn9UrD5tb5KMeJJ8hvIfmp7OWI1TXj7TzAh7C
+X-Google-Smtp-Source: ABdhPJxIRdbrk7AeMsTI2VQKI6HAvLO4RHPW80g/qskJWyAZ2s471cF2YDJPPYZGsJ5ydr9dK51+LrpxOzSha38KY8E=
+X-Received: by 2002:a02:84e8:: with SMTP id f95mr23109793jai.4.1612893449754;
+ Tue, 09 Feb 2021 09:57:29 -0800 (PST)
 MIME-Version: 1.0
 References: <20210208090841.333724-1-wangyanan55@huawei.com>
  <20210208090841.333724-3-wangyanan55@huawei.com> <CANgfPd_yrtEmmm4_O+WaZTMXmW5gxQmJiwMk0JAswkrH+aYjsw@mail.gmail.com>
- <a7adf6ff-195f-6494-39c2-4b8592281309@huawei.com>
-In-Reply-To: <a7adf6ff-195f-6494-39c2-4b8592281309@huawei.com>
+ <51018d3c-2fe1-97be-4d70-f6386b1f4c62@huawei.com>
+In-Reply-To: <51018d3c-2fe1-97be-4d70-f6386b1f4c62@huawei.com>
 From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 9 Feb 2021 09:38:09 -0800
-Message-ID: <CANgfPd8NBM3TSVBU+jbY-wVf5r+x=wPBBZGYMXLUx6cc8_ZiAw@mail.gmail.com>
+Date:   Tue, 9 Feb 2021 09:57:18 -0800
+Message-ID: <CANgfPd9to1YgkU7Oqj+r+b8Wq2n72dpmRzT6cXq11ZPQSbwHnw@mail.gmail.com>
 Subject: Re: [RFC PATCH 2/2] KVM: selftests: Add a test for kvm page table code
 To:     "wangyanan (Y)" <wangyanan55@huawei.com>
 Cc:     kvm <kvm@vger.kernel.org>, linux-kselftest@vger.kernel.org,
@@ -69,9 +69,8 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 8, 2021 at 11:22 PM wangyanan (Y) <wangyanan55@huawei.com> wrote:
+On Tue, Feb 9, 2021 at 1:43 AM wangyanan (Y) <wangyanan55@huawei.com> wrote:
 >
-> Hi Ben,
 >
 > On 2021/2/9 4:29, Ben Gardon wrote:
 > > On Mon, Feb 8, 2021 at 1:08 AM Yanan Wang <wangyanan55@huawei.com> wrote:
@@ -118,61 +117,15 @@ On Mon, Feb 8, 2021 at 11:22 PM wangyanan (Y) <wangyanan55@huawei.com> wrote:
 > > most of the same features as this one.
 > > Please correct me if I'm wrong, but it seems like the major difference
 > > here is a more careful pattern of which pages are dirtied when.
-> Actually the procedures in KVM_UPDATE_MAPPINGS stage are specially
-> designed for
-> reproduce of the TLB conflict bug. The following explains why.
-> In x86 implementation, the related page mappings will be all destroyed
-> in advance when
-> stopping dirty logging while vcpus are still running. So after dirty
-> logging is successfully
-> stopped, there will certainly be page faults when accessing memory, and
-> KVM will handle
-> the faults and create block mappings once again. (Is this right?)
-> So in this case, dirty_log_perf_test can replicate the bug theoretically.
->
-> But there is difference in ARM implementation. The related page mappings
-> will not be
-> destroyed immediately when stopping dirty logging and will  be kept
-> instead. And after
-> dirty logging, KVM will destroy these mappings together with creation of
-> block mappings
-> when handling a guest fault (page fault or permission fault).  So based
-> on guest_code() in
-> dirty_log_perf_test, there will not be any page faults after dirty
-> logging because all the
-> page mappings have been created and KVM has no chance to recover block
-> mappings
-> at all. So this is why I left half of the pages clean and another half
-> dirtied.
-
-Ah okay, I'm sorry. I shouldn't have assumed that ARM does the same
-thing as x86 when disabling dirty logging. It makes sense then why
-your guest code is so carefully structured. Does that mean that if a
-VM dirties all its memory during dirty logging, that it will never be
-able to reconstitute the broken down mappings into large page / block
-mappings?
-
+> >
 > > Within Google we have a system for pre-specifying sets of arguments to
 > > e.g. the dirty_log_perf_test. I wonder if something similar, even as
 > > simple as a script that just runs dirty_log_perf_test several times
 > > would be helpful for cases where different arguments are needed for
 > > the test to cover different specific cases. Even with this test, for
-> I not sure I have got your point :), but it depends on what exactly the
-> specific cases are,
-> and sometimes we have to use different arguments. Is this right?
-
-Exactly, it might be kind of a moot point in this case though if the
-default arguments catch the TLB invalidation bug.
-
 > > example, I assume the test doesn't work very well with just 1 vCPU,
 > > but it's still a good default in the test, so having some kind of
 > > configuration (lite) file would be useful.
-> Actually it's only with 1 vCPU that the real efficiency of KVM page
-> table code path can be tested,
-> such as efficiency of creating new mappings or efficiency of updating
-> existing mappings.
-> And with numerous vCPUs, efficiency of KVM handling concurrent
-> conditions can be tested.
 > >
 > >> ---
 > >>   tools/testing/selftests/kvm/Makefile          |   3 +
@@ -485,7 +438,6 @@ default arguments catch the TLB invalidation bug.
 > >> +       uint64_t backing_src_granule;
 > > Nit: suggest changing this to block_page_size (or large_page_size) as
 > > you use below. (block|large)_page_size is easier for me to read.
-> Thanks for all the above suggestions, I will make adjustments accordingly.
 > >
 > >> +       uint64_t test_mem_size;
 > >> +       uint64_t phys_offset;
@@ -711,7 +663,43 @@ default arguments catch the TLB invalidation bug.
 > > VM_MEM_SRC_ANONYMOUS_1G_HUGETLB backing src type that causes the flag
 > > to be added in vm_userspace_mem_region_add.
 > >
-> >
+> Isn't VM_MEM_SRC_ANONYMOUS_HUGETLB enough for
+> vm_userspace_mem_region_add() ?
+> If users specify use of VM_MEM_SRC_ANONYMOUS_HUGETLB and have configed
+> enough
+> 1G hugepages on the system, then the HVA->HPA mappings of this region
+> will be created
+> with 1G granularity.  And I have seen the 1G block mappings created
+> successfully through
+> trace log in my local test. Is there other consideration for
+> VM_MEM_SRC_ANONYMOUS_1G_HUGETLB,
+> could you please let me know?
+>
+> Thanks,
+>
+> Yanan.
+
+I've worked with 1G pages a bit in the past, but don't know a ton
+about how they're allocated, so I'm hardly an expert here.
+When you say that if there are enough hugepages on the system, the
+memory allocation will be backed with 1G pages, does that imply that
+1G is the system-wide default huge TLB size? Or maybe default for just
+the process? In either case, I think this could lead to flaky tests if
+another process or memory allocation were to allocate some memory and
+take some of the pages this test was relying on.
+Passing MAP_HUGE_1GB as a flag to the mmap call may be a better option because:
+  1.) we can leave the default huge TLB size at 2M so that other
+operations don't allocate the limited 1G pages and
+  2.) the mmap operation will definitely fail if there are not enough
+1G pages on the system. I'm not sure what the behavior is when
+changing the default huge page size, but I could imagine mmap
+transparently falling back to 2M pages if there aren't enough 1G on
+the system.
+Adding VM_MEM_SRC_ANONYMOUS_1G_HUGETLB and passing MAP_HUGE_1GB to
+mmap could also be done in a later patch.
+
+>
+>
 > >> +       printf(" -p: specify guest physical test memory offset\n"
 > >> +              "     must be aligned to granule of the backing source pages.\n"
 > >> +              "     Warning: a low offset can conflict with the loaded test code.\n");
