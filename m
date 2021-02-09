@@ -2,124 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9ED3159A5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 23:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0E0315A37
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Feb 2021 00:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbhBIWq3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 17:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
+        id S234194AbhBIXqW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 18:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbhBIWYt (ORCPT
+        with ESMTP id S234199AbhBIWRy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 17:24:49 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89358C0698CF
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 14:21:47 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id o7so77993ils.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 14:21:47 -0800 (PST)
+        Tue, 9 Feb 2021 17:17:54 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46607C061788
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 14:14:57 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id m1so41991qvp.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 14:14:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dVB7ZPJgZD0gpsdinXm4ggMxiYerGmhY62XEYI3Nvq8=;
-        b=MxNbW+PSVA9TGA1dcXUzDd9bAT7WKBNgXyxHyeswIk6TSdAUod8lXC/nWOMXa979O/
-         xBxNNaElu7TdqiVNrY0TRFzj9jrwd3DdFBtJ48YlJrKoYVQGKsMGZYw1l7akRl14XWpL
-         t7b95PSVF8yxQloGrXMTYycD3J5vKU/hme/z/rF4fOpv9eqK3JmSPu+MC0b2anLybZyN
-         c2/vW44wOhfTXH6SKcrxC/Xcb5cWTh0equ1x4Rs0IGRxPC3QtVEEpwMmokOkOw8ALJRK
-         klH/MzllIuuySzxIaiqaCHjRwC7o6ooA1bm+hwuPmvhNYrbbp0GLBSNflkJDJ1EbkUkP
-         ZJnQ==
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=tHzagjGXNPuISlrYDgBoG4oBntJ3U4L6LA9+/1TvcMM=;
+        b=eCF1+XPVXmXXaI4fnLU1x7QL8R6qK2JNMWmlE2E62fRh1zTbhVtYHZj08JTzIqJ4PK
+         8iUfuF7ufpcCB7JhZSyh3JYJ8Djz95SyqrVAMqVWmIe0mz6ki+oSRh9ZxSBwUGPd4wOI
+         vzYq4ne15W5p0HA/9KS9h+YZF/J500SeX5+ulB2qPLksWvD2TyL5bl3zw1aFvyyWn2MS
+         3nRj4rhMIR/2JsmcbOKFxTemUEXojiox9b1ciw3AWuVRyBeXeYy2B+Lb99xZGooS5rzO
+         TwIlexBz0HelhQc60To56Q3eGlteuA6urOlfaBtWG+J5C10UWpCra+6nuFlarR7BKyDP
+         eB2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dVB7ZPJgZD0gpsdinXm4ggMxiYerGmhY62XEYI3Nvq8=;
-        b=aGb/SHNuYg54AEU3kr23BGexGxCtyRl9XTjtkUiyzUUsEm0LymZ22FUAP49yVJFuZR
-         FYKXIr7fhPHJX+X5Htvf95hL2baRg3ovn7/E22/3EnrzxJLpOIFNMuEVhnzTsW9ycfYO
-         lAuK4cXTA6AkRPq/lsr/cqhVeXi9KZDcEaCYAAtWUKJ9JLeE/Zma6no87THDwaV3wyPx
-         qbl/nnuxMuJlafzSUNO0qfeyocB/o1kLTzD3LpResObrxFpo/kNWTSLiUPierYztVBps
-         8SZWkXHR5l8khxqWD3qVy7mcPpLZnAghFBP1mIIlYQn9wF0e/SGezYihOSYDthCn2tGC
-         iZjQ==
-X-Gm-Message-State: AOAM533jyMlpi7xgs0uB2pi5oq8nyNJm4FNcnaBAzFyb6yLHA4aNATb7
-        Nb3oGiqsGzz286hvcv6cj3CGcxapKtRvGh+ycVC78A==
-X-Google-Smtp-Source: ABdhPJx5q2ZQo4k+YcVYi75bqEuxPbjDvIIaQC9E/n5oSuLoAlRW92mjRhtm3o1vU+aF/DAthpqhJ/Ny5hmX7n+FGqA=
-X-Received: by 2002:a92:cda6:: with SMTP id g6mr175127ild.274.1612909306850;
- Tue, 09 Feb 2021 14:21:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20210205235302.2022784-1-dlatypov@google.com> <20210205235302.2022784-2-dlatypov@google.com>
- <alpine.LRH.2.23.451.2102091717001.1783@localhost> <CAGS_qxoRt+yibVgVBoMGp+GpVt9TSKuyyk08vfcSyQeTyAgN+A@mail.gmail.com>
- <alpine.LRH.2.23.451.2102092210150.20236@localhost>
-In-Reply-To: <alpine.LRH.2.23.451.2102092210150.20236@localhost>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=tHzagjGXNPuISlrYDgBoG4oBntJ3U4L6LA9+/1TvcMM=;
+        b=BHQMnSf+v794E7ZXd1lA8pblRgaufbUwMj2AHk+CTPM/6imd+5KN2XJjtQICS8E6nq
+         0D8iBeVmIBJ37wVTmgrc9eFPDIoGqaUZsmijAm4DBW2x4iaXt5wmklDwXCk6GhhNH5k6
+         MAiI3fNslKKy6zV1u9i8ajw60TTzKgC0MXPVODaqA7xckTLWqlQTix76L9m4kFVFcj0q
+         3HSLpTB+W1HJtp4QqYgxSyuhKYdGurzNRXsw4YEOzGnBVYwR1i+llSjxBo2+DDJdKz7S
+         w6S8dmjC3nFKw/NDQwkOm+YYy0ebHHODyYivv/JB4Eh2DWkaY+9HUaRaGAhTbBlUcXQD
+         TQ2A==
+X-Gm-Message-State: AOAM531Lwv5nw+SlN49cIGby6KNOPFcijvu4veMDOu9fF2+E7wlaahec
+        6a3BGan2FbU4keK3867KM4ve7484UeRLIA==
+X-Google-Smtp-Source: ABdhPJxJ4VTOHMNM5P/K4n8751sRWqretvq2TSUKAFdhSNAerNSAqTaGPw0DXxQkdni7LFsqvrIJS9WrxYAu3Q==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:7dd9:967f:92f4:2aae])
+ (user=dlatypov job=sendgmr) by 2002:a05:6214:1ca:: with SMTP id
+ c10mr13380525qvt.44.1612908895933; Tue, 09 Feb 2021 14:14:55 -0800 (PST)
+Date:   Tue,  9 Feb 2021 14:14:41 -0800
+Message-Id: <20210209221443.78812-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
+Subject: [PATCH v3 0/2] kunit: fail tests on UBSAN errors
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 9 Feb 2021 14:21:35 -0800
-Message-ID: <CAGS_qxqZqn=Qve5C1pcCkhtifLqS+BmSjO=q9AcpJKwJhBN1kA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kunit: support failure from dynamic analysis tools
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Uriel Guajardo <urielguajardo@google.com>
+To:     brendanhiggins@google.com
+Cc:     davidgow@google.com, alan.maguire@oracle.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 9, 2021 at 2:12 PM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> On Tue, 9 Feb 2021, Daniel Latypov wrote:
->
-> > On Tue, Feb 9, 2021 at 9:26 AM Alan Maguire <alan.maguire@oracle.com> wrote:
-> > >
-> > > On Fri, 5 Feb 2021, Daniel Latypov wrote:
-> > >
-> > > > From: Uriel Guajardo <urielguajardo@google.com>
-> > > >
-> > > > Add a kunit_fail_current_test() function to fail the currently running
-> > > > test, if any, with an error message.
-> > > >
-> > > > This is largely intended for dynamic analysis tools like UBSAN and for
-> > > > fakes.
-> > > > E.g. say I had a fake ops struct for testing and I wanted my `free`
-> > > > function to complain if it was called with an invalid argument, or
-> > > > caught a double-free. Most return void and have no normal means of
-> > > > signalling failure (e.g. super_operations, iommu_ops, etc.).
-> > > >
-> > > > Key points:
-> > > > * Always update current->kunit_test so anyone can use it.
-> > > >   * commit 83c4e7a0363b ("KUnit: KASAN Integration") only updated it for
-> > > >   CONFIG_KASAN=y
-> > > >
-> > > > * Create a new header <kunit/test-bug.h> so non-test code doesn't have
-> > > > to include all of <kunit/test.h> (e.g. lib/ubsan.c)
-> > > >
-> > > > * Forward the file and line number to make it easier to track down
-> > > > failures
-> > > >
-> > >
-> > > Thanks for doing this!
-> > >
-> > > > * Declare it as a function for nice __printf() warnings about mismatched
-> > > > format strings even when KUnit is not enabled.
-> > > >
-> > >
-> > > One thing I _think_ this assumes is that KUnit is builtin;
-> > > don't we need an
-> >
-> > Ah, you're correct.
-> > Also going to rename it to have two _ to match other functions used in
-> > macros like __kunit_test_suites_init.
-> >
->
-> Great! If you're sending out an updated version with these
-> changes, feel free to add
->
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+v1 by Uriel is here: [1].
+Since it's been a while, I've dropped the Reviewed-By's.
 
-Oops, there was a race in sending v3 and seeing this in my inbox.
+It depended on commit 83c4e7a0363b ("KUnit: KASAN Integration") which
+hadn't been merged yet, so that caused some kerfuffle with applying them
+previously and the series was reverted.
 
-If you could reply to the v3 that'd be great. I've already amended the
-commit locally.
-Thanks!
+This revives the series but makes the kunit_fail_current_test() function
+take a format string and logs the file and line number of the failing
+code, addressing Alan Maguire's comments on the previous version.
+
+As a result, the patch that makes UBSAN errors was tweaked slightly to
+include an error message.
+
+v2 -> v3:
+  Fix kunit_fail_current_test() so it works w/ CONFIG_KUNIT=m
+  s/_/__ on the helper func to match others in test.c
+
+[1] https://lore.kernel.org/linux-kselftest/20200806174326.3577537-1-urielguajardojr@gmail.com/
+
+Uriel Guajardo (2):
+  kunit: support failure from dynamic analysis tools
+  kunit: ubsan integration
+
+ include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
+ lib/kunit/test.c         | 37 +++++++++++++++++++++++++++++++++----
+ lib/ubsan.c              |  3 +++
+ 3 files changed, 66 insertions(+), 4 deletions(-)
+ create mode 100644 include/kunit/test-bug.h
+
+
+base-commit: 1e0d27fce010b0a4a9e595506b6ede75934c31be
+-- 
+2.30.0.478.g8a0d178c01-goog
+
