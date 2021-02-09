@@ -2,142 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B0A3153AB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 17:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 803223154DC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 18:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232686AbhBIQTH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 11:19:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50567 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232400AbhBIQTG (ORCPT
+        id S233001AbhBIRT0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 12:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232932AbhBIRTY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 11:19:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612887460;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rPEBUfuoE8xnXkHqh37MN3V58bCQtUE2J2aM+0+7Hhg=;
-        b=GO6YGVp19NtK1N7dVAYyLwM5lLtnOzWM11AF3TGBrqo9hoF8POgf1w4xEzFgWMM6R5ysae
-        Bf5gs34GfHPGvo7B7yhyyWfXS0vRcXVdV/C4XRSmxTaGgn6+eCxIPY3sWRf3MfXhZvJGIX
-        szQoOLLC62e0QwsiRiZm70o/7QLP2/k=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-279-uL8BkgqBNoSU9TSinWcnBQ-1; Tue, 09 Feb 2021 11:17:37 -0500
-X-MC-Unique: uL8BkgqBNoSU9TSinWcnBQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9332C801979;
-        Tue,  9 Feb 2021 16:17:31 +0000 (UTC)
-Received: from [10.36.113.141] (ovpn-113-141.ams2.redhat.com [10.36.113.141])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D16AE60BD9;
-        Tue,  9 Feb 2021 16:17:23 +0000 (UTC)
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-References: <20210208211326.GV242749@kernel.org>
- <1F6A73CF-158A-4261-AA6C-1F5C77F4F326@redhat.com>
- <YCJO8zLq8YkXGy8B@dhcp22.suse.cz>
- <662b5871-b461-0896-697f-5e903c23d7b9@redhat.com>
- <YCJbmR11ikrWKaU8@dhcp22.suse.cz>
- <c1e5e7b6-3360-ddc4-2ff5-0e79515ee23a@redhat.com>
- <YCKNMqu8/g0OofqU@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Subject: Re: [PATCH v17 00/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <8cbfe2c3-cfc6-72e0-bab1-852f80e20684@redhat.com>
-Date:   Tue, 9 Feb 2021 17:17:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Tue, 9 Feb 2021 12:19:24 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBAAC061756
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 09:18:44 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id u20so19556599iot.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 09:18:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lUtnzAW46dlZiTOiwqO9uCdRWksCkXtHA4sUKlf1iCA=;
+        b=mPGpo9TqUVCxuvsIWZXrYrqbXhuqiZq4/bgvFH8ETfoC2cwS70d9kNXKaa/2ycZ8Le
+         uGL/hKxZtc6ngGicBNMeisLGHgorEunI3Vjzy3q8yFjX3LGq+595QxFtPFoqqE+6Q50+
+         v6NQApSLIfutLGyuvNhgDhcX8dJUIuVmGBTCnhABsgfj3ezGTVmwE7U4BBCmhEsIBd1j
+         2rDoNUGKb2DDJ7VQ9Ve4rBhO+ucSyHWN04kGaQUYkFWHJNDzbedAZDmJfz8gKFd1q5Xt
+         ymQY579V9yr3YpEHKROPs/8D5XBXvAz9ksqH71y8prOYXRi/qMzDNM0792csQnSYnq0T
+         EmJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lUtnzAW46dlZiTOiwqO9uCdRWksCkXtHA4sUKlf1iCA=;
+        b=PoH1I1eLj1SHO0W7PqGQ9JKp6TS8krT90YvfxnCsEN1vs4qP4gz4eYDkw1+Zws3Z+J
+         D/lcQEhbeB5bkjumzkYz3vjZGzvux8RXgHINCGIiZkyVCW4vJuMUhIuuYLEMaFZvC11Z
+         jmYgE051xVlsbgAcGwphcwOdC34a7nokIgWyWEBOjYYCKyMGsuv1tntcrSvbyIAxJ3ch
+         EIvgypegL8aztaZswTf+A2xFcYTm1XV9jQ3tMMzqTvWeGp7PmySKeCp5f0Fc+oVKPlkE
+         URK8wVvmG5qX5E16v8sEFwEFFsNAgBToPmvepbVWQm169eiWJDoFx8noMCrPkZVq4TjX
+         OoJw==
+X-Gm-Message-State: AOAM530mw43YVh+gj1fMYWCOPmOvo77TevyA1hDx/qVGTFcLuNbkZ1Je
+        BL/K4ucWQFBdHuxf3FVtHfVQxni1yQYoXYRbwG6d0Q==
+X-Google-Smtp-Source: ABdhPJweX41NuF64dCG1UI2nZGXXPZbi/LX4Sk0uxFDI+uTUx216zKSbRDPPiBcLSCyClF/rNTVuNKB74fH+EByTb+U=
+X-Received: by 2002:a05:6602:2e8c:: with SMTP id m12mr20049870iow.19.1612891123762;
+ Tue, 09 Feb 2021 09:18:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YCKNMqu8/g0OofqU@dhcp22.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+References: <20210208090841.333724-1-wangyanan55@huawei.com>
+ <20210208090841.333724-2-wangyanan55@huawei.com> <CANgfPd967wgLk0tb6mNaWsaAa9Tn0LyecEZ_4-e+nKoa-HkCBg@mail.gmail.com>
+ <c9c1207f-09ae-e601-5789-bd39ceb4071e@huawei.com>
+In-Reply-To: <c9c1207f-09ae-e601-5789-bd39ceb4071e@huawei.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Tue, 9 Feb 2021 09:18:32 -0800
+Message-ID: <CANgfPd_u2uGmt645e9mLbBcTOV1mQ_iXjq8h7WwCDKETZJ9GJg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] KVM: selftests: Add a macro to get string of vm_mem_backing_src_type
+To:     "wangyanan (Y)" <wangyanan55@huawei.com>
+Cc:     kvm <kvm@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        wanghaibin.wang@huawei.com, yuzenghui@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 09.02.21 14:25, Michal Hocko wrote:
-> On Tue 09-02-21 11:23:35, David Hildenbrand wrote:
-> [...]
->> I am constantly trying to fight for making more stuff MOVABLE instead of
->> going into the other direction (e.g., because it's easier to implement,
->> which feels like the wrong direction).
->>
->> Maybe I am the only person that really cares about ZONE_MOVABLE these days
->> :) I can't stop such new stuff from popping up, so at least I want it to be
->> documented.
-> 
-> MOVABLE zone is certainly an important thing to keep working. And there
-> is still quite a lot of work on the way. But as I've said this is more
-> of a outlier than a norm. On the other hand movable zone is kinda hard
-> requirement for a lot of application and it is to be expected that
-> many features will be less than 100% compatible.  Some usecases even
-> impossible. That's why I am arguing that we should have a central
-> document where the movable zone is documented with all the potential
-> problems we have encountered over time and explicitly state which
-> features are fully/partially incompatible.
-> 
+On Tue, Feb 9, 2021 at 3:21 AM wangyanan (Y) <wangyanan55@huawei.com> wrote:
+>
+>
+> On 2021/2/9 2:13, Ben Gardon wrote:
+> > On Mon, Feb 8, 2021 at 1:08 AM Yanan Wang <wangyanan55@huawei.com> wrote:
+> >> Add a macro to get string of the backing source memory type, so that
+> >> application can add choices for source types in the help() function,
+> >> and users can specify which type to use for testing.
+> > Coincidentally, I sent out a change last week to do the same thing:
+> > "KVM: selftests: Add backing src parameter to dirty_log_perf_test"
+> > (https://lkml.org/lkml/2021/2/2/1430)
+> > Whichever way this ends up being implemented, I'm happy to see others
+> > interested in testing different backing source types too.
+>
+> Thanks Ben! I have a little question here.
+>
+> Can we just present three IDs (0/1/2) but not strings for users to
+> choose which backing_src_type to use like the way of guest modes,
 
-I'll send a mail during the next weeks to gather current restrictions to 
-document them (and include my brain dump). We might see more excessive 
-use of ZONE_MOVABLE in the future and as history told us, of CMA as 
-well. We really should start documenting/caring.
+That would be fine with me. The string names are easier for me to read
+than an ID number (especially if you were to add additional options
+e.g. 1G hugetlb or file backed  / shared memory) but it's mostly an
+aesthetic preference, so I don't have strong feelings either way.
 
-@Mike, it would be sufficient for me if one of your patches at least 
-mention the situation in the description like
+>
+> which I think can make cmdlines more consise and easier to print. And is
+> it better to make a universal API to get backing_src_strings
+>
+> like Sean have suggested, so that the API can be used elsewhere ?
 
-"Please note that secretmem currently behaves much more like long-term 
-GUP instead of mlocked memory; secretmem is unmovable memory directly 
-consumed/controlled by user space. secretmem cannot be placed onto 
-ZONE_MOVABLE/CMA.
+Definitely. This should be as easy as possible to incorporate into all
+selftests.
 
-As long as there is no excessive use of secretmem (e.g., maximum of 16 
-MiB for selected processes) in combination with ZONE_MOVABLE/CMA, this 
-is barely a real issue. However, it is something to keep in mind when a 
-significant amount of system RAM might be used for secretmem. In the 
-future, we might support migration of secretmem and make it look much 
-more like mlocked memory instead."
-
-Just a suggestion.
-
--- 
-Thanks,
-
-David / dhildenb
-
+>
+> >> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+> >> ---
+> >>   tools/testing/selftests/kvm/include/kvm_util.h | 3 +++
+> >>   tools/testing/selftests/kvm/lib/kvm_util.c     | 8 ++++++++
+> >>   2 files changed, 11 insertions(+)
+> >>
+> >> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> >> index 5cbb861525ed..f5fc29dc9ee6 100644
+> >> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> >> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> >> @@ -69,7 +69,9 @@ enum vm_guest_mode {
+> >>   #define PTES_PER_MIN_PAGE      ptes_per_page(MIN_PAGE_SIZE)
+> >>
+> >>   #define vm_guest_mode_string(m) vm_guest_mode_string[m]
+> >> +#define vm_mem_backing_src_type_string(s) vm_mem_backing_src_type_string[s]
+> >>   extern const char * const vm_guest_mode_string[];
+> >> +extern const char * const vm_mem_backing_src_type_string[];
+> >>
+> >>   struct vm_guest_mode_params {
+> >>          unsigned int pa_bits;
+> >> @@ -83,6 +85,7 @@ enum vm_mem_backing_src_type {
+> >>          VM_MEM_SRC_ANONYMOUS,
+> >>          VM_MEM_SRC_ANONYMOUS_THP,
+> >>          VM_MEM_SRC_ANONYMOUS_HUGETLB,
+> >> +       NUM_VM_BACKING_SRC_TYPES,
+> >>   };
+> >>
+> >>   int kvm_check_cap(long cap);
+> >> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> >> index fa5a90e6c6f0..a9b651c7f866 100644
+> >> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> >> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> >> @@ -165,6 +165,14 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+> >>   _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+> >>                 "Missing new mode params?");
+> >>
+> >> +const char * const vm_mem_backing_src_type_string[] = {
+> >> +       "VM_MEM_SRC_ANONYMOUS        ",
+> >> +       "VM_MEM_SRC_ANONYMOUS_THP    ",
+> >> +       "VM_MEM_SRC_ANONYMOUS_HUGETLB",
+> >> +};
+> >> +_Static_assert(sizeof(vm_mem_backing_src_type_string)/sizeof(char *) == NUM_VM_BACKING_SRC_TYPES,
+> >> +              "Missing new source type strings?");
+> >> +
+> >>   /*
+> >>    * VM Create
+> >>    *
+> >> --
+> >> 2.23.0
+> >>
+> > .
