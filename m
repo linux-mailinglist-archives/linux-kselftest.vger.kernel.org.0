@@ -2,127 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F80314E2A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 12:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16095314EE6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Feb 2021 13:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbhBILYm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 06:24:42 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:2582 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbhBILWc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 06:22:32 -0500
-Received: from dggeme764-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4DZgQY40tpzW2Zc;
-        Tue,  9 Feb 2021 19:19:33 +0800 (CST)
-Received: from [10.174.187.128] (10.174.187.128) by
- dggeme764-chm.china.huawei.com (10.3.19.110) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Tue, 9 Feb 2021 19:21:47 +0800
-Subject: Re: [RFC PATCH 1/2] KVM: selftests: Add a macro to get string of
- vm_mem_backing_src_type
-To:     Ben Gardon <bgardon@google.com>
-CC:     kvm <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Marc Zyngier <maz@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>
-References: <20210208090841.333724-1-wangyanan55@huawei.com>
- <20210208090841.333724-2-wangyanan55@huawei.com>
- <CANgfPd967wgLk0tb6mNaWsaAa9Tn0LyecEZ_4-e+nKoa-HkCBg@mail.gmail.com>
-From:   "wangyanan (Y)" <wangyanan55@huawei.com>
-Message-ID: <c9c1207f-09ae-e601-5789-bd39ceb4071e@huawei.com>
-Date:   Tue, 9 Feb 2021 19:21:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S229601AbhBIMaw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 07:30:52 -0500
+Received: from mx2.suse.de ([195.135.220.15]:41090 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229584AbhBIMav (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 9 Feb 2021 07:30:51 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 26F8DADE1;
+        Tue,  9 Feb 2021 12:30:08 +0000 (UTC)
+Subject: Re: [PATCH] kunit: tool: Disable PAGE_POISONING under --alltests
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20210209071034.3268897-1-davidgow@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Message-ID: <91207d64-e50f-872d-10db-55153da41aec@suse.cz>
+Date:   Tue, 9 Feb 2021 13:30:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <CANgfPd967wgLk0tb6mNaWsaAa9Tn0LyecEZ_4-e+nKoa-HkCBg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20210209071034.3268897-1-davidgow@google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-Originating-IP: [10.174.187.128]
-X-ClientProxiedBy: dggeme704-chm.china.huawei.com (10.1.199.100) To
- dggeme764-chm.china.huawei.com (10.3.19.110)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 2/9/21 8:10 AM, David Gow wrote:
+> kunit_tool maintains a list of config options which are broken under
+> UML, which we exclude from an otherwise 'make ARCH=um allyesconfig'
+> build used to run all tests with the --alltests option.
+> 
+> Something in UML allyesconfig is causing segfaults when page poisining
+> is enabled (and is poisoning with a non-zero value). Previously, this
+> didn't occur, as allyesconfig enabled the CONFIG_PAGE_POISONING_ZERO
+> option, which worked around the problem by zeroing memory. This option
+> has since been removed, and memory is now poisoned with 0xAA, which
+> triggers segfaults in many different codepaths, preventing UML from
+> booting.
+> 
+> Note that we have to disable both CONFIG_PAGE_POISONING and
+> CONFIG_DEBUG_PAGEALLOC, as the latter will 'select' the former on
+> architectures (such as UML) which don't implement __kernel_map_pages().
+> 
+> Ideally, we'd fix this properly by tracking down the real root cause,
+> but since this is breaking KUnit's --alltests feature, it's worth
+> disabling there in the meantime so the kernel can boot to the point
+> where tests can actually run.
 
-On 2021/2/9 2:13, Ben Gardon wrote:
-> On Mon, Feb 8, 2021 at 1:08 AM Yanan Wang <wangyanan55@huawei.com> wrote:
->> Add a macro to get string of the backing source memory type, so that
->> application can add choices for source types in the help() function,
->> and users can specify which type to use for testing.
-> Coincidentally, I sent out a change last week to do the same thing:
-> "KVM: selftests: Add backing src parameter to dirty_log_perf_test"
-> (https://lkml.org/lkml/2021/2/2/1430)
-> Whichever way this ends up being implemented, I'm happy to see others
-> interested in testing different backing source types too.
+Agree on both arguments :)
 
-Thanks Ben! I have a little question here.
+> Fixes: f289041ed4 ("mm, page_poison: remove CONFIG_PAGE_POISONING_ZERO")
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Can we just present three IDs (0/1/2) but not strings for users to 
-choose which backing_src_type to use like the way of guest modes,
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-which I think can make cmdlines more consise and easier to print. And is 
-it better to make a universal API to get backing_src_strings
+...
 
-like Sean have suggested, so that the API can be used elsewhere ?
+> Disabling PAGE_POISONING fixes this. The issue can't be repoduced with
+> just PAGE_POISONING, there's clearly something (or several things) also
+> enabled by allyesconfig which contribute. Ideally, we'd track these down
+> and fix this at its root cause, but in the meantime it'd be nice to
+> disable PAGE_POISONING so we can at least get the kernel to boot. One
+> way would be to add a 'depends on !UML' or similar, but since
+> PAGE_POISONING does seem to work in the non-allyesconfig case, adding it
+> to our list of broken configs seemed the better choice.
+> 
+> Thoughts?
 
->> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
->> ---
->>   tools/testing/selftests/kvm/include/kvm_util.h | 3 +++
->>   tools/testing/selftests/kvm/lib/kvm_util.c     | 8 ++++++++
->>   2 files changed, 11 insertions(+)
->>
->> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
->> index 5cbb861525ed..f5fc29dc9ee6 100644
->> --- a/tools/testing/selftests/kvm/include/kvm_util.h
->> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
->> @@ -69,7 +69,9 @@ enum vm_guest_mode {
->>   #define PTES_PER_MIN_PAGE      ptes_per_page(MIN_PAGE_SIZE)
->>
->>   #define vm_guest_mode_string(m) vm_guest_mode_string[m]
->> +#define vm_mem_backing_src_type_string(s) vm_mem_backing_src_type_string[s]
->>   extern const char * const vm_guest_mode_string[];
->> +extern const char * const vm_mem_backing_src_type_string[];
->>
->>   struct vm_guest_mode_params {
->>          unsigned int pa_bits;
->> @@ -83,6 +85,7 @@ enum vm_mem_backing_src_type {
->>          VM_MEM_SRC_ANONYMOUS,
->>          VM_MEM_SRC_ANONYMOUS_THP,
->>          VM_MEM_SRC_ANONYMOUS_HUGETLB,
->> +       NUM_VM_BACKING_SRC_TYPES,
->>   };
->>
->>   int kvm_check_cap(long cap);
->> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
->> index fa5a90e6c6f0..a9b651c7f866 100644
->> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
->> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
->> @@ -165,6 +165,14 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
->>   _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
->>                 "Missing new mode params?");
->>
->> +const char * const vm_mem_backing_src_type_string[] = {
->> +       "VM_MEM_SRC_ANONYMOUS        ",
->> +       "VM_MEM_SRC_ANONYMOUS_THP    ",
->> +       "VM_MEM_SRC_ANONYMOUS_HUGETLB",
->> +};
->> +_Static_assert(sizeof(vm_mem_backing_src_type_string)/sizeof(char *) == NUM_VM_BACKING_SRC_TYPES,
->> +              "Missing new source type strings?");
->> +
->>   /*
->>    * VM Create
->>    *
->> --
->> 2.23.0
->>
-> .
+Agreed that it's better to use kunit-specific config file instead of introducing
+such workaround dependencies in Kconfig proper.
+
+> (Note that to reproduce this, you'll want to run
+> ./tools/testing/kunit/kunit.py run --alltests --raw_output
+> It also depends on a couple of other fixes which are not upstream yet:
+> https://www.spinics.net/lists/linux-rtc/msg08294.html
+> https://lore.kernel.org/linux-i3c/20210127040636.1535722-1-davidgow@google.com/
+> 
+> Cheers,
+> -- David
+> 
+>  tools/testing/kunit/configs/broken_on_uml.config | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/kunit/configs/broken_on_uml.config b/tools/testing/kunit/configs/broken_on_uml.config
+> index a7f0603d33f6..690870043ac0 100644
+> --- a/tools/testing/kunit/configs/broken_on_uml.config
+> +++ b/tools/testing/kunit/configs/broken_on_uml.config
+> @@ -40,3 +40,5 @@
+>  # CONFIG_RESET_BRCMSTB_RESCAL is not set
+>  # CONFIG_RESET_INTEL_GW is not set
+>  # CONFIG_ADI_AXI_ADC is not set
+> +# CONFIG_DEBUG_PAGEALLOC is not set
+> +# CONFIG_PAGE_POISONING is not set
+> 
+
