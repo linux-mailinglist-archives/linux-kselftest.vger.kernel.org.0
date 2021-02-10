@@ -2,93 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5824E315B69
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Feb 2021 01:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B04315E14
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Feb 2021 05:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbhBJAif (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 19:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233972AbhBJAgW (ORCPT
+        id S229788AbhBJEMZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 23:12:25 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:4624 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229684AbhBJEMY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 19:36:22 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722CBC06178A
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 16:35:35 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id i20so263856otl.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 16:35:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dwOJXb2rZMTXAcXXquhzDrJAGp/ZNEOKDykceMWb28A=;
-        b=Rw1pJIsLmw/sXXx/sFSlp0vuRw6O3I44Akle1rscvR13YwZQWie9HDEgVKQXRG48Dz
-         lukNI5tedUsTmgGXXCVqBb0ADD5F+jmvkT1Z0MeEGT3cIOETNwIWLStepoBj0mz2Dk7Q
-         NNWRUjkd9q6ADQg25Ra0r0+qi7bDGp+MS7WTQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dwOJXb2rZMTXAcXXquhzDrJAGp/ZNEOKDykceMWb28A=;
-        b=NxHnkbYz5ylUsu8ogPsMMstMWKNYM2GOe4LpuENjaKD9rrIwF7o6xkHCSrUqjcJN8e
-         flgLWIm1BQYwvdVchf7Rl1jFzYudS8baKEFP/QxIeGhKa7l7Wm3Fg1Ks17+zlt7fxNhZ
-         mKx4py0988AVMK4WDgFvTxZvO2wByUGM+vIvc9O1Aaf8QDTjnlAr8MbDTx5StGrb8h3L
-         GRjmj3RAliI54yJnIJhM7iq8hXAdMs4LY/wTE2o3cKd76t3VwSYxiXtgWGRqefgoPier
-         BpfcKy/KaxaKPrTqebUiSCXo8SyLp80lpr1SRnJAaqGYFRlQE5OlM+d6ELvgBV4aODse
-         zduw==
-X-Gm-Message-State: AOAM532PDt7hMOt8bCbDi3gAxiw4GA7W2i5KJLlsebt5zZCG7wIKimfE
-        rd1dUtLK+9U3qFwTijjWT3oFsA==
-X-Google-Smtp-Source: ABdhPJygWyurf7h0wIY5eUqxpUxgstMHldBRuMtondPeMYIcj+7EVNcjWXuGplid29b/vg6YQs5dbQ==
-X-Received: by 2002:a05:6830:3495:: with SMTP id c21mr223719otu.97.1612917334849;
-        Tue, 09 Feb 2021 16:35:34 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x187sm102792oig.3.2021.02.09.16.35.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Feb 2021 16:35:34 -0800 (PST)
-Subject: Re: [PATCH] selftests/seccomp: Accept any valid fd in
- user_notification_addfd
-To:     Kees Cook <keescook@chromium.org>,
-        Seth Forshee <seth.forshee@canonical.com>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210128161721.99150-1-seth.forshee@canonical.com>
- <202102091632.D5E0100A@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <89f34e46-17a0-e563-f75f-1206c5318a66@linuxfoundation.org>
-Date:   Tue, 9 Feb 2021 17:35:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Tue, 9 Feb 2021 23:12:24 -0500
+Received: from dggeme718-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Db5rv0y7TzY6gS;
+        Wed, 10 Feb 2021 12:10:23 +0800 (CST)
+Received: from [10.174.187.128] (10.174.187.128) by
+ dggeme718-chm.china.huawei.com (10.1.199.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2106.2; Wed, 10 Feb 2021 12:11:38 +0800
+Subject: Re: [RFC PATCH 1/2] KVM: selftests: Add a macro to get string of
+ vm_mem_backing_src_type
+To:     Sean Christopherson <seanjc@google.com>,
+        Ben Gardon <bgardon@google.com>
+CC:     kvm <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>
+References: <20210208090841.333724-1-wangyanan55@huawei.com>
+ <20210208090841.333724-2-wangyanan55@huawei.com>
+ <CANgfPd967wgLk0tb6mNaWsaAa9Tn0LyecEZ_4-e+nKoa-HkCBg@mail.gmail.com>
+ <c9c1207f-09ae-e601-5789-bd39ceb4071e@huawei.com>
+ <CANgfPd_u2uGmt645e9mLbBcTOV1mQ_iXjq8h7WwCDKETZJ9GJg@mail.gmail.com>
+ <YCLHy82RcATHEDtC@google.com>
+From:   "wangyanan (Y)" <wangyanan55@huawei.com>
+Message-ID: <bf173f0c-1694-8a31-4f96-55f821818cd1@huawei.com>
+Date:   Wed, 10 Feb 2021 12:11:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <202102091632.D5E0100A@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <YCLHy82RcATHEDtC@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.187.128]
+X-ClientProxiedBy: dggeme718-chm.china.huawei.com (10.1.199.114) To
+ dggeme718-chm.china.huawei.com (10.1.199.114)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/9/21 5:33 PM, Kees Cook wrote:
-> On Thu, Jan 28, 2021 at 10:17:21AM -0600, Seth Forshee wrote:
->> This test expects fds to have specific values, which works fine
->> when the test is run standalone. However, the kselftest runner
->> consumes a couple of extra fds for redirection when running
->> tests, so the test fails when run via kselftest.
->>
->> Change the test to pass on any valid fd number.
->>
->> Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
-> 
-> Thanks!
-> 
-> Acked-by: Kees Cook <keescook@chromium.org>
-> 
-> I'll snag this if Shuah doesn't first. :)
-> 
 
-I will apply this. I have several queued for 5.12-rc1 anyway.
-
-thanks,
--- Shuah
+On 2021/2/10 1:35, Sean Christopherson wrote:
+> On Tue, Feb 09, 2021, Ben Gardon wrote:
+>> On Tue, Feb 9, 2021 at 3:21 AM wangyanan (Y) <wangyanan55@huawei.com> wrote:
+>>>
+>>> On 2021/2/9 2:13, Ben Gardon wrote:
+>>>> On Mon, Feb 8, 2021 at 1:08 AM Yanan Wang <wangyanan55@huawei.com> wrote:
+>>>>> Add a macro to get string of the backing source memory type, so that
+>>>>> application can add choices for source types in the help() function,
+>>>>> and users can specify which type to use for testing.
+>>>> Coincidentally, I sent out a change last week to do the same thing:
+>>>> "KVM: selftests: Add backing src parameter to dirty_log_perf_test"
+>>>> (https://lkml.org/lkml/2021/2/2/1430)
+>>>> Whichever way this ends up being implemented, I'm happy to see others
+>>>> interested in testing different backing source types too.
+>>> Thanks Ben! I have a little question here.
+>>>
+>>> Can we just present three IDs (0/1/2) but not strings for users to
+>>> choose which backing_src_type to use like the way of guest modes,
+>> That would be fine with me. The string names are easier for me to read
+>> than an ID number (especially if you were to add additional options
+>> e.g. 1G hugetlb or file backed  / shared memory) but it's mostly an
+>> aesthetic preference, so I don't have strong feelings either way.
+> I vote to expose/consume strings, being able to do ".dirty_log_perf_test --help"
+> and understand the backing options without having to dig into source was super
+> nice.
+> .
+Fine then:), I will make some change based on 
+(https://lkml.org/lkml/2021/2/2/1430), thanks!
