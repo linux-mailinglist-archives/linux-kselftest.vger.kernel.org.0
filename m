@@ -2,80 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA333160B6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Feb 2021 09:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4293E316093
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Feb 2021 09:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbhBJINh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Feb 2021 03:13:37 -0500
-Received: from spam.auroraoh.com ([24.56.89.101]:55914 "EHLO
-        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233896AbhBJIN1 (ORCPT
+        id S232289AbhBJIHd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Feb 2021 03:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229713AbhBJIH1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Feb 2021 03:13:27 -0500
-X-ASG-Debug-ID: 1612944670-112c0d6a799cb90001-24X5E1
-Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id jJ81a9DkExpcgPkc; Wed, 10 Feb 2021 03:11:10 -0500 (EST)
-X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
-Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
- (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
- 02:45:33 -0500
-Content-Type: text/plain; charset="iso-8859-1"
-X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
+        Wed, 10 Feb 2021 03:07:27 -0500
+Received: from sym2.noone.org (sym2.noone.org [IPv6:2a01:4f8:120:4161::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E2FC061574
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Feb 2021 00:06:47 -0800 (PST)
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 4DbC5d0JN9zvjhQ; Wed, 10 Feb 2021 09:06:44 +0100 (CET)
+Date:   Wed, 10 Feb 2021 09:06:44 +0100
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, shuah@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, vincenzo.frascino@arm.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH] selftests/vDSO: fix ABI selftest on riscv
+Message-ID: <20210210080644.gc3wyt4fq72u3khz@distanz.ch>
+References: <20210204145042.7345-1-tklauser@distanz.ch>
+ <mhng-1ed0f9e8-84ec-4f2e-ac42-5a608726e2fe@palmerdabbelt-glaptop>
+ <20210205075745.jlf3vsjkp3n3rwss@distanz.ch>
+ <5a8923b2-0c5e-ab6c-52fd-f00bc1361a3f@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-To:     Recipients <januskad@auroraoh.com>
-X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-From:   <januskad@auroraoh.com>
-Date:   Tue, 9 Feb 2021 15:44:47 +0800
-Reply-To: <cfolimiited@gmail.com>
-X-Priority: 1 (High)
-X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <04dad0e2-2f3b-46a3-bb30-cab23ca007d4@COASRV-MAIL2.auroraoh.loc>
-X-Originating-IP: [197.210.29.8]
-X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
- COASRV-MAIL2.auroraoh.loc (10.3.1.15)
-X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
-X-Barracuda-Start-Time: 1612944670
-X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at auroraoh.com
-X-Barracuda-Scan-Msg-Size: 755
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 1.61
-X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87880
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.00 NO_REAL_NAME           From: does not include a real name
-        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
-        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
-                                   Address
-        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a8923b2-0c5e-ab6c-52fd-f00bc1361a3f@linuxfoundation.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
+On 2021-02-09 at 00:37:24 +0100, Shuah Khan <skhan@linuxfoundation.org> wrote:
+> On 2/5/21 12:57 AM, Tobias Klauser wrote:
+> > On 2021-02-05 at 08:06:37 +0100, Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> > > On Thu, 04 Feb 2021 06:50:42 PST (-0800), tklauser@distanz.ch wrote:
+> > 
+> > [...]
+> > 
+> > > Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> > > Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> > 
+> > Thank you!
+> > 
+> > > Not sure if you want this through the RISC-V tree, so I'm leaving it out for
+> > > now and assuming it'll go through a kselftest tree.
+> > 
+> > Either way is fine for me.
+> > 
+> 
+> Thank you. Applied to linux-kselftest next for 5.12-rc1
 
-We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
-
-Please contact us for more details;
-
-
-Kind regards,
-
-Paul McCann
-
--- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
-
+Thank you Shuah!
