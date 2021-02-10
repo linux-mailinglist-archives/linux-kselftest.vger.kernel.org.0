@@ -2,117 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01462315B63
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Feb 2021 01:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5824E315B69
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Feb 2021 01:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbhBJAh2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 19:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
+        id S233779AbhBJAif (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 19:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233764AbhBJAdx (ORCPT
+        with ESMTP id S233972AbhBJAgW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 19:33:53 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE623C061756
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 16:33:12 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id 8so234483plc.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 16:33:12 -0800 (PST)
+        Tue, 9 Feb 2021 19:36:22 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722CBC06178A
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 16:35:35 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id i20so263856otl.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 16:35:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=W9BJoRdCc8YZnOo7oaJ+mST3GsJkGFlQgGwy1YFljFo=;
-        b=QaMnQciGBp+PwMsVjqHJq1hNWlQ7kaL1APi3yZbWKY3k5Twk/UGPUmX7LfAqVmQ+bx
-         0j7SCOROogYatOy05lCNrI3Bx10ArTee6SMJFPXAlLXxqVlmDVLiW5eTpUGreId95J5E
-         Ng9orIM39lQ8Ml+G8VY8H8j7ACYZ5+Rvh1tMU=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=dwOJXb2rZMTXAcXXquhzDrJAGp/ZNEOKDykceMWb28A=;
+        b=Rw1pJIsLmw/sXXx/sFSlp0vuRw6O3I44Akle1rscvR13YwZQWie9HDEgVKQXRG48Dz
+         lukNI5tedUsTmgGXXCVqBb0ADD5F+jmvkT1Z0MeEGT3cIOETNwIWLStepoBj0mz2Dk7Q
+         NNWRUjkd9q6ADQg25Ra0r0+qi7bDGp+MS7WTQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W9BJoRdCc8YZnOo7oaJ+mST3GsJkGFlQgGwy1YFljFo=;
-        b=USCfD+34adoRuynx1jl9XKjys22trhpPXPz09Qu7LIVgPtLSlMEkJEg7It7HFa0Opn
-         KO+L5n2NxfvBBM/xOHx5G2MXF7SbPUaQK4azhSsDLKOY4r00ImO8QjqAv3Er1bLBadG3
-         5fhv0tcSG4Xx6VT6Nag+CUBv6jQCjKue/B6/Q5blugKev4i7KfHf+K2P8s9z2WkZwpAn
-         dJ5h7yQz+MKnln0HE8BXb+LjHI+bB4Pdu10XPZEscKqPJ8BGTu6rtbtT1jNU7pMeN+qT
-         qw2mTSjOWL4h4eY5+bQuwNDs9oJ8rWqUD62HLFvITFG0H0CG7EUEYVZ5n7Ug0aJitImy
-         8tJg==
-X-Gm-Message-State: AOAM532jOEu7I6Awa0HB1xMPjC3DxbNAVULaDYrld0WE3Bo7efh+jdpH
-        QV0y5GU6WnfYp77leMLeX1IJyXAxF85/3g==
-X-Google-Smtp-Source: ABdhPJx6ORN//J1stbfWGHNujgSBkXvMha9uuYPOQCCAGGQdZIn3a45ciNO1XqWRaiA3FwTI7a00aQ==
-X-Received: by 2002:a17:90a:5403:: with SMTP id z3mr495324pjh.198.1612917192393;
-        Tue, 09 Feb 2021 16:33:12 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n142sm97479pfd.82.2021.02.09.16.33.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Feb 2021 16:33:11 -0800 (PST)
-Date:   Tue, 9 Feb 2021 16:33:10 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Seth Forshee <seth.forshee@canonical.com>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dwOJXb2rZMTXAcXXquhzDrJAGp/ZNEOKDykceMWb28A=;
+        b=NxHnkbYz5ylUsu8ogPsMMstMWKNYM2GOe4LpuENjaKD9rrIwF7o6xkHCSrUqjcJN8e
+         flgLWIm1BQYwvdVchf7Rl1jFzYudS8baKEFP/QxIeGhKa7l7Wm3Fg1Ks17+zlt7fxNhZ
+         mKx4py0988AVMK4WDgFvTxZvO2wByUGM+vIvc9O1Aaf8QDTjnlAr8MbDTx5StGrb8h3L
+         GRjmj3RAliI54yJnIJhM7iq8hXAdMs4LY/wTE2o3cKd76t3VwSYxiXtgWGRqefgoPier
+         BpfcKy/KaxaKPrTqebUiSCXo8SyLp80lpr1SRnJAaqGYFRlQE5OlM+d6ELvgBV4aODse
+         zduw==
+X-Gm-Message-State: AOAM532PDt7hMOt8bCbDi3gAxiw4GA7W2i5KJLlsebt5zZCG7wIKimfE
+        rd1dUtLK+9U3qFwTijjWT3oFsA==
+X-Google-Smtp-Source: ABdhPJygWyurf7h0wIY5eUqxpUxgstMHldBRuMtondPeMYIcj+7EVNcjWXuGplid29b/vg6YQs5dbQ==
+X-Received: by 2002:a05:6830:3495:: with SMTP id c21mr223719otu.97.1612917334849;
+        Tue, 09 Feb 2021 16:35:34 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id x187sm102792oig.3.2021.02.09.16.35.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Feb 2021 16:35:34 -0800 (PST)
 Subject: Re: [PATCH] selftests/seccomp: Accept any valid fd in
  user_notification_addfd
-Message-ID: <202102091632.D5E0100A@keescook>
+To:     Kees Cook <keescook@chromium.org>,
+        Seth Forshee <seth.forshee@canonical.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
 References: <20210128161721.99150-1-seth.forshee@canonical.com>
+ <202102091632.D5E0100A@keescook>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <89f34e46-17a0-e563-f75f-1206c5318a66@linuxfoundation.org>
+Date:   Tue, 9 Feb 2021 17:35:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210128161721.99150-1-seth.forshee@canonical.com>
+In-Reply-To: <202102091632.D5E0100A@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 10:17:21AM -0600, Seth Forshee wrote:
-> This test expects fds to have specific values, which works fine
-> when the test is run standalone. However, the kselftest runner
-> consumes a couple of extra fds for redirection when running
-> tests, so the test fails when run via kselftest.
+On 2/9/21 5:33 PM, Kees Cook wrote:
+> On Thu, Jan 28, 2021 at 10:17:21AM -0600, Seth Forshee wrote:
+>> This test expects fds to have specific values, which works fine
+>> when the test is run standalone. However, the kselftest runner
+>> consumes a couple of extra fds for redirection when running
+>> tests, so the test fails when run via kselftest.
+>>
+>> Change the test to pass on any valid fd number.
+>>
+>> Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
 > 
-> Change the test to pass on any valid fd number.
+> Thanks!
 > 
-> Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
-
-Thanks!
-
-Acked-by: Kees Cook <keescook@chromium.org>
-
-I'll snag this if Shuah doesn't first. :)
-
--Kees
-
-> ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+> Acked-by: Kees Cook <keescook@chromium.org>
 > 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 26c72f2b61b1..9338df6f4ca8 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -4019,18 +4019,14 @@ TEST(user_notification_addfd)
->  
->  	/* Verify we can set an arbitrary remote fd */
->  	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd);
-> -	/*
-> -	 * The child has fds 0(stdin), 1(stdout), 2(stderr), 3(memfd),
-> -	 * 4(listener), so the newly allocated fd should be 5.
-> -	 */
-> -	EXPECT_EQ(fd, 5);
-> +	EXPECT_GE(fd, 0);
->  	EXPECT_EQ(filecmp(getpid(), pid, memfd, fd), 0);
->  
->  	/* Verify we can set an arbitrary remote fd with large size */
->  	memset(&big, 0x0, sizeof(big));
->  	big.addfd = addfd;
->  	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD_BIG, &big);
-> -	EXPECT_EQ(fd, 6);
-> +	EXPECT_GE(fd, 0);
->  
->  	/* Verify we can set a specific remote fd */
->  	addfd.newfd = 42;
-> -- 
-> 2.29.2
+> I'll snag this if Shuah doesn't first. :)
 > 
 
--- 
-Kees Cook
+I will apply this. I have several queued for 5.12-rc1 anyway.
+
+thanks,
+-- Shuah
