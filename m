@@ -2,111 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAB0315A36
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Feb 2021 00:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01462315B63
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Feb 2021 01:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbhBIXqQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Feb 2021 18:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S233691AbhBJAh2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Feb 2021 19:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbhBIWR2 (ORCPT
+        with ESMTP id S233764AbhBJAdx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 17:17:28 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB6AC0698E3
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 14:15:00 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id bg11so84865plb.16
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 14:15:00 -0800 (PST)
+        Tue, 9 Feb 2021 19:33:53 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE623C061756
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 16:33:12 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id 8so234483plc.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 16:33:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=t77+PuCigeZOcF53sLtwu0Du9UKFrCGhrRKsmy3L6C4=;
-        b=d9ikACbu6qy1ulW0wSWsHA6FQSQ6KWZ9q7y0tI23lcp6zqywGVCwUy0PyUQBPNGOUn
-         CTStJYZAFnTmq0LaDsVYpUnGVtQBXFm5fYzBp+Ut7OGHBhjKhMbr6GWtlCpwWV4HNDMZ
-         CR7vd1Cf8gvgh1gnBNj2M+QG3tWnuECEnY+5dEp6r8T5piVNqLYdVC1pt7wJV0wV0BKM
-         8eFD2qcB347FBqOweh8LWCkLU3OJ3nR+Z5mn/eK3G/ay5NAQd91a9nd9i1AChe2Dw7mM
-         deGqu0MMXhbfdQHAeGmRbbhz2AZnODTeVU6uikVsKvI29/KwDXZJjH3Yg5IyCmZcAkLk
-         kcvw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W9BJoRdCc8YZnOo7oaJ+mST3GsJkGFlQgGwy1YFljFo=;
+        b=QaMnQciGBp+PwMsVjqHJq1hNWlQ7kaL1APi3yZbWKY3k5Twk/UGPUmX7LfAqVmQ+bx
+         0j7SCOROogYatOy05lCNrI3Bx10ArTee6SMJFPXAlLXxqVlmDVLiW5eTpUGreId95J5E
+         Ng9orIM39lQ8Ml+G8VY8H8j7ACYZ5+Rvh1tMU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=t77+PuCigeZOcF53sLtwu0Du9UKFrCGhrRKsmy3L6C4=;
-        b=qvJrjPxQvPTbuLxMnfCgE84XNxBjHi/e+qSON7/+2kdvmM8bvQlvJrJPPVFJAt2Bk3
-         8hjSAqQR9Hz1+cQy5T8kRYG2LYfIOsEtV1gMTTwdwxSR/W6Vfy6jLef0/DyrxSU3ZPuG
-         Qt5InykqnceRS88NCQ3rwWci2a6rOZK6FlcxIT9eXzlwEdFEsXlTYyg91rN0BsSX//Ht
-         1qI028xjoxNIgJ2kNDr9vrlbpxj0L+bvI2OhxalOh/5pPXmwiJpKQ4YOkAr9gURFt2V6
-         IwdSfj5WmVCn1u7hkMACTQQKwXOG+VHHfVHDyM+zaPCVKU3Idr6htXpXYoz5byU071qa
-         pkAw==
-X-Gm-Message-State: AOAM531TFizmwut4Un+T3xiz+4ZHXSzYHzCeWxAVN4BVFCnWXb3xP7Zi
-        AHHItAd0WEpKWsX5pfe1aynpcXEXxX13NQ==
-X-Google-Smtp-Source: ABdhPJz6rbJFwUFn+s86ByXOsu1A/32Yea+7KK7JKMRSyX1h8XuZLwh6YV1us28bzRRXCk6ELNJKSF0ZkhSgOg==
-Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:7dd9:967f:92f4:2aae])
- (user=dlatypov job=sendgmr) by 2002:a63:4084:: with SMTP id
- n126mr124475pga.80.1612908900146; Tue, 09 Feb 2021 14:15:00 -0800 (PST)
-Date:   Tue,  9 Feb 2021 14:14:43 -0800
-In-Reply-To: <20210209221443.78812-1-dlatypov@google.com>
-Message-Id: <20210209221443.78812-3-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20210209221443.78812-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH v3 2/2] kunit: ubsan integration
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com
-Cc:     davidgow@google.com, alan.maguire@oracle.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Uriel Guajardo <urielguajardo@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W9BJoRdCc8YZnOo7oaJ+mST3GsJkGFlQgGwy1YFljFo=;
+        b=USCfD+34adoRuynx1jl9XKjys22trhpPXPz09Qu7LIVgPtLSlMEkJEg7It7HFa0Opn
+         KO+L5n2NxfvBBM/xOHx5G2MXF7SbPUaQK4azhSsDLKOY4r00ImO8QjqAv3Er1bLBadG3
+         5fhv0tcSG4Xx6VT6Nag+CUBv6jQCjKue/B6/Q5blugKev4i7KfHf+K2P8s9z2WkZwpAn
+         dJ5h7yQz+MKnln0HE8BXb+LjHI+bB4Pdu10XPZEscKqPJ8BGTu6rtbtT1jNU7pMeN+qT
+         qw2mTSjOWL4h4eY5+bQuwNDs9oJ8rWqUD62HLFvITFG0H0CG7EUEYVZ5n7Ug0aJitImy
+         8tJg==
+X-Gm-Message-State: AOAM532jOEu7I6Awa0HB1xMPjC3DxbNAVULaDYrld0WE3Bo7efh+jdpH
+        QV0y5GU6WnfYp77leMLeX1IJyXAxF85/3g==
+X-Google-Smtp-Source: ABdhPJx6ORN//J1stbfWGHNujgSBkXvMha9uuYPOQCCAGGQdZIn3a45ciNO1XqWRaiA3FwTI7a00aQ==
+X-Received: by 2002:a17:90a:5403:: with SMTP id z3mr495324pjh.198.1612917192393;
+        Tue, 09 Feb 2021 16:33:12 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n142sm97479pfd.82.2021.02.09.16.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Feb 2021 16:33:11 -0800 (PST)
+Date:   Tue, 9 Feb 2021 16:33:10 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Seth Forshee <seth.forshee@canonical.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/seccomp: Accept any valid fd in
+ user_notification_addfd
+Message-ID: <202102091632.D5E0100A@keescook>
+References: <20210128161721.99150-1-seth.forshee@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210128161721.99150-1-seth.forshee@canonical.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Uriel Guajardo <urielguajardo@google.com>
+On Thu, Jan 28, 2021 at 10:17:21AM -0600, Seth Forshee wrote:
+> This test expects fds to have specific values, which works fine
+> when the test is run standalone. However, the kselftest runner
+> consumes a couple of extra fds for redirection when running
+> tests, so the test fails when run via kselftest.
+> 
+> Change the test to pass on any valid fd number.
+> 
+> Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
 
-Integrates UBSAN into the KUnit testing framework. It fails KUnit tests
-whenever it reports undefined behavior.
+Thanks!
 
-When CONFIG_KUNIT=n, nothing is printed or even formatted, so this has
-no behavioral impact outside of tests.
+Acked-by: Kees Cook <keescook@chromium.org>
 
-kunit_fail_current_test() effectively does a pr_err() as well, so
-there's some slight duplication, but it also ensures an error is
-recorded in the debugfs entry for the running KUnit test.
+I'll snag this if Shuah doesn't first. :)
 
-Print a shorter version of the message to make it less spammy.
+-Kees
 
-Co-developed-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- lib/ubsan.c | 3 +++
- 1 file changed, 3 insertions(+)
+> ---
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 26c72f2b61b1..9338df6f4ca8 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -4019,18 +4019,14 @@ TEST(user_notification_addfd)
+>  
+>  	/* Verify we can set an arbitrary remote fd */
+>  	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd);
+> -	/*
+> -	 * The child has fds 0(stdin), 1(stdout), 2(stderr), 3(memfd),
+> -	 * 4(listener), so the newly allocated fd should be 5.
+> -	 */
+> -	EXPECT_EQ(fd, 5);
+> +	EXPECT_GE(fd, 0);
+>  	EXPECT_EQ(filecmp(getpid(), pid, memfd, fd), 0);
+>  
+>  	/* Verify we can set an arbitrary remote fd with large size */
+>  	memset(&big, 0x0, sizeof(big));
+>  	big.addfd = addfd;
+>  	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD_BIG, &big);
+> -	EXPECT_EQ(fd, 6);
+> +	EXPECT_GE(fd, 0);
+>  
+>  	/* Verify we can set a specific remote fd */
+>  	addfd.newfd = 42;
+> -- 
+> 2.29.2
+> 
 
-diff --git a/lib/ubsan.c b/lib/ubsan.c
-index bec38c64d6a6..1ec7d6f1fe63 100644
---- a/lib/ubsan.c
-+++ b/lib/ubsan.c
-@@ -14,6 +14,7 @@
- #include <linux/types.h>
- #include <linux/sched.h>
- #include <linux/uaccess.h>
-+#include <kunit/test-bug.h>
- 
- #include "ubsan.h"
- 
-@@ -141,6 +142,8 @@ static void ubsan_prologue(struct source_location *loc, const char *reason)
- 		"========================================\n");
- 	pr_err("UBSAN: %s in %s:%d:%d\n", reason, loc->file_name,
- 		loc->line & LINE_MASK, loc->column & COLUMN_MASK);
-+
-+	kunit_fail_current_test("%s in %s", reason, loc->file_name);
- }
- 
- static void ubsan_epilogue(void)
 -- 
-2.30.0.478.g8a0d178c01-goog
-
+Kees Cook
