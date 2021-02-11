@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B20E2318FFD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Feb 2021 17:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A723318FF4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Feb 2021 17:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbhBKQaK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Feb 2021 11:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36576 "EHLO
+        id S230402AbhBKQaA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Feb 2021 11:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbhBKQ1e (ORCPT
+        with ESMTP id S231932AbhBKQ1k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Feb 2021 11:27:34 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DD2C0611C1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:42 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id ew18so2814764qvb.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:42 -0800 (PST)
+        Thu, 11 Feb 2021 11:27:40 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3EEC0611C3
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:44 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id f17so2423727qkl.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=vFtb7b0TLXam2e0aSgOj3DDhIq1OSPT7SAwjt/JgMSo=;
-        b=GuSLnZfP8wJEXP3BvQ+7AnENrHoKxCqomT/DlUEKn8z/43ED1ocN+7Rjb5Xy9YLI7D
-         PMvihL04KPGberT/PXD29PCzYnmUf7r2qu0nc4+uowMSJ9tRymgKYkn4hJqQO1LjJHij
-         lcIjjVMuc1ZyVKAHY2hfAcvmVkzLB0S1h9/6IMFOB1vegIEKnqRuwjIE3fQzUnFQgys9
-         xIYUEH37orhL0JpDvprzfPSs6GL9vUyWtVc0Sy7x7+6uFB88Bgr+W+xwf3Usp2TwVZ8l
-         FwOGshdMCz44xib67tlBOu0DEu0P3Nwd8uyzATPsdk4ZQtVN1B618BcB+SKvt4r6rqdQ
-         5qvg==
+        bh=prBG2yVd2SajcEA/vsXnJLf3ft/ILJg+F6BSYByezwk=;
+        b=oAz0Ya81ae7I30nLXl3tvldk+DxVr8ux7PhzfLxLavCJTOtezoamvvZbpwIIO/GI3B
+         K5WdoPaOpjpPx5goaDk/Dqc5b0WPYO0CbTKQQfEQwCTr2qQB/jJO+RMuDGKqL/1373Fg
+         ddsw/WOGiVYr/NpsvFPiTOiwTV/+UsT3r1nhNsMqDDAPKeeVxzC0JI8ltxeMOs55FVpM
+         8h4IGwf1fRdWpHtQh33qnixErY+KayDRDICpZe0rxNudn3lDX/ftewm9BYcUOvtyosjV
+         /SRBC6kOqx4Af170XZtLCgXinNxuYAgbB8aFnBQg1nBdrdfAlvEe/dP6e3ExxKDp2NIm
+         fVqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vFtb7b0TLXam2e0aSgOj3DDhIq1OSPT7SAwjt/JgMSo=;
-        b=T/xg8omQAXQuTQI6E4p394RS39GrtIceP4J2Go/GmgFB2HO2mZuzRg3WjtKdeOhLXK
-         96ExfuNqqhkltq4a24XORW/8+bsenul4KI1BOjeDtAlMEJrtLyCLR9pr5xD4RjeSdkf9
-         yWSYX/rwEAibaPsJ9Po8keSuiR+oIBbqhUydCLZqvrRXdb5ZEI5hvjAVKsmM+ZjDB4CK
-         5R4ggOViz8hhkFhU6HQb+wHzB5dPM6rP9AGlHyD8XEWeGlpdbyW+hIKld400y+9J67mS
-         ryloI28EBvooYZ52XU2GZxBlYU4XdbAcZEJv9YiYdPY/9C1b6L1Tbo70qudX4j2EYjNg
-         nzwA==
-X-Gm-Message-State: AOAM533U6fniDmfEKpfX8fmN6Jbv0WuJmsdJYgO4KY+17GjFhOLrcNox
-        kPuFTDYQaq9JjVDKIV58a4H14Q==
-X-Google-Smtp-Source: ABdhPJyDv3BizAlWiHVEhqxZDYR768wuEmVRtyBG373FDXh51pcNa96wloLfU8fidQTqpajQEDtbIQ==
-X-Received: by 2002:a0c:b66c:: with SMTP id q44mr8438487qvf.3.1613060682040;
-        Thu, 11 Feb 2021 08:24:42 -0800 (PST)
+        bh=prBG2yVd2SajcEA/vsXnJLf3ft/ILJg+F6BSYByezwk=;
+        b=ow+qon+1KUukUbKeqI85soY+DnjWG7GGK5v7zhX/6yWSl1JYeA1fXZPXzENYUObzC1
+         O4MYFw79S9mvNwTBrMabVX/C0wm3Xh4LqNnWLQNKKI4as6BFOHQG9dHDqCGlYPsN9eFx
+         VoYnrn5yz0hR/RolA9SPYd/YyiloU/08H9IyOfoTIEogm/FQe8dhTvLwG0Z5509y7C8y
+         oxakSQk+zLjOZsM6QbJ0f5TesjVf2pd+ieIjoG+iw4q9FFg93Elwuixia3aXsJEBLUgL
+         xoG2F7pDwPt7z9hVXeP1f33nOxAdOz8O4+ne2DhQ8oxm+1+HPtj6g4FbhS/Mr93xQECU
+         BhSg==
+X-Gm-Message-State: AOAM530p7SOSL7BDXWSzmh56RWdTvYa+M5hwsJsEGZYOuywE2EaYtP/u
+        xhTErfVWqKyP9g6NA2zbQGImOw==
+X-Google-Smtp-Source: ABdhPJwGybK/jkhl+f1vZV40TFv7W218JXCOOLntEKFx1GZ4Vc1iNyzASNNjFKKIWhOo6BKAqOE+Qg==
+X-Received: by 2002:a37:7b02:: with SMTP id w2mr9028732qkc.291.1613060683612;
+        Thu, 11 Feb 2021 08:24:43 -0800 (PST)
 Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id i23sm3831778qtq.42.2021.02.11.08.24.40
+        by smtp.gmail.com with ESMTPSA id i23sm3831778qtq.42.2021.02.11.08.24.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 08:24:41 -0800 (PST)
+        Thu, 11 Feb 2021 08:24:43 -0800 (PST)
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
@@ -59,9 +59,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v10 08/14] mm/gup: do not migrate zero page
-Date:   Thu, 11 Feb 2021 11:24:21 -0500
-Message-Id: <20210211162427.618913-9-pasha.tatashin@soleen.com>
+Subject: [PATCH v10 09/14] mm/gup: migrate pinned pages out of movable zone
+Date:   Thu, 11 Feb 2021 11:24:22 -0500
+Message-Id: <20210211162427.618913-10-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210211162427.618913-1-pasha.tatashin@soleen.com>
 References: <20210211162427.618913-1-pasha.tatashin@soleen.com>
@@ -71,89 +71,206 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On some platforms ZERO_PAGE(0) might end-up in a movable zone. Do not
-migrate zero page in gup during longterm pinning as migration of zero page
-is not allowed.
-
-For example, in x86 QEMU with 16G of memory and kernelcore=5G parameter, I
-see the following:
-
-Boot#1: zero_pfn  0x48a8d zero_pfn zone: ZONE_DMA32
-Boot#2: zero_pfn 0x20168d zero_pfn zone: ZONE_MOVABLE
-
-On x86, empty_zero_page is declared in .bss and depending on the loader
-may end up in different physical locations during boots.
-
-Also, move is_zero_pfn() my_zero_pfn() functions under CONFIG_MMU, because
-zero_pfn that they are using is declared in memory.c which is compiled
-with CONFIG_MMU.
+We should not pin pages in ZONE_MOVABLE. Currently, we do not pin only
+movable CMA pages. Generalize the function that migrates CMA pages to
+migrate all movable pages. Use is_pinnable_page() to check which
+pages need to be migrated
 
 Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 ---
- include/linux/mm.h      |  3 ++-
- include/linux/mmzone.h  |  4 ++++
- include/linux/pgtable.h | 12 ++++++++++++
- 3 files changed, 18 insertions(+), 1 deletion(-)
+ include/linux/migrate.h        |  1 +
+ include/linux/mmzone.h         |  9 ++++-
+ include/trace/events/migrate.h |  3 +-
+ mm/gup.c                       | 67 +++++++++++++++++-----------------
+ 4 files changed, 44 insertions(+), 36 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9a31b2298c1d..9ea4b9305ae5 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1131,7 +1131,8 @@ static inline bool is_zone_movable_page(const struct page *page)
- #ifdef CONFIG_MIGRATION
- static inline bool is_pinnable_page(struct page *page)
- {
--	return !is_zone_movable_page(page) && !is_migrate_cma_page(page);
-+	return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
-+		is_zero_pfn(page_to_pfn(page));
- }
- #else
- static inline bool is_pinnable_page(struct page *page)
+diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+index 3a389633b68f..fdf65f23acec 100644
+--- a/include/linux/migrate.h
++++ b/include/linux/migrate.h
+@@ -27,6 +27,7 @@ enum migrate_reason {
+ 	MR_MEMPOLICY_MBIND,
+ 	MR_NUMA_MISPLACED,
+ 	MR_CONTIG_RANGE,
++	MR_LONGTERM_PIN,
+ 	MR_TYPES
+ };
+ 
 diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 47946cec7584..66132f8f051e 100644
+index 66132f8f051e..5e0f79a4092b 100644
 --- a/include/linux/mmzone.h
 +++ b/include/linux/mmzone.h
-@@ -427,6 +427,10 @@ enum zone_type {
- 	 *    techniques might use alloc_contig_range() to hide previously
- 	 *    exposed pages from the buddy again (e.g., to implement some sort
- 	 *    of memory unplug in virtio-mem).
-+	 * 6. ZERO_PAGE(0), kernelcore/movablecore setups might create
-+	 *    situations where ZERO_PAGE(0) which is allocated differently
-+	 *    on different platforms may end up in a movable zone. ZERO_PAGE(0)
-+	 *    cannot be migrated.
+@@ -407,8 +407,13 @@ enum zone_type {
+ 	 * to increase the number of THP/huge pages. Notable special cases are:
  	 *
- 	 * In general, no unmovable allocations that degrade memory offlining
- 	 * should end up in ZONE_MOVABLE. Allocators (like alloc_contig_range())
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index cdfc4e9f253e..9a218d7eed06 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -1107,6 +1107,7 @@ extern void untrack_pfn(struct vm_area_struct *vma, unsigned long pfn,
- extern void untrack_pfn_moved(struct vm_area_struct *vma);
- #endif
+ 	 * 1. Pinned pages: (long-term) pinning of movable pages might
+-	 *    essentially turn such pages unmovable. Memory offlining might
+-	 *    retry a long time.
++	 *    essentially turn such pages unmovable. Therefore, we do not allow
++	 *    pinning long-term pages in ZONE_MOVABLE. When pages are pinned and
++	 *    faulted, they come from the right zone right away. However, it is
++	 *    still possible that address space already has pages in
++	 *    ZONE_MOVABLE at the time when pages are pinned (i.e. user has
++	 *    touches that memory before pinning). In such case we migrate them
++	 *    to a different zone. When migration fails - pinning fails.
+ 	 * 2. memblock allocations: kernelcore/movablecore setups might create
+ 	 *    situations where ZONE_MOVABLE contains unmovable allocations
+ 	 *    after boot. Memory offlining and allocations fail early.
+diff --git a/include/trace/events/migrate.h b/include/trace/events/migrate.h
+index 4d434398d64d..363b54ce104c 100644
+--- a/include/trace/events/migrate.h
++++ b/include/trace/events/migrate.h
+@@ -20,7 +20,8 @@
+ 	EM( MR_SYSCALL,		"syscall_or_cpuset")		\
+ 	EM( MR_MEMPOLICY_MBIND,	"mempolicy_mbind")		\
+ 	EM( MR_NUMA_MISPLACED,	"numa_misplaced")		\
+-	EMe(MR_CONTIG_RANGE,	"contig_range")
++	EM( MR_CONTIG_RANGE,	"contig_range")			\
++	EMe(MR_LONGTERM_PIN,	"longterm_pin")
  
-+#ifdef CONFIG_MMU
- #ifdef __HAVE_COLOR_ZERO_PAGE
- static inline int is_zero_pfn(unsigned long pfn)
- {
-@@ -1130,6 +1131,17 @@ static inline unsigned long my_zero_pfn(unsigned long addr)
- 	return zero_pfn;
+ /*
+  * First define the enums in the above macros to be exported to userspace
+diff --git a/mm/gup.c b/mm/gup.c
+index 489bc02fc008..ced2303dc59e 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -87,11 +87,12 @@ __maybe_unused struct page *try_grab_compound_head(struct page *page,
+ 		int orig_refs = refs;
+ 
+ 		/*
+-		 * Can't do FOLL_LONGTERM + FOLL_PIN with CMA in the gup fast
+-		 * path, so fail and let the caller fall back to the slow path.
++		 * Can't do FOLL_LONGTERM + FOLL_PIN gup fast path if not in a
++		 * right zone, so fail and let the caller fall back to the slow
++		 * path.
+ 		 */
+-		if (unlikely(flags & FOLL_LONGTERM) &&
+-				is_migrate_cma_page(page))
++		if (unlikely((flags & FOLL_LONGTERM) &&
++			     !is_pinnable_page(page)))
+ 			return NULL;
+ 
+ 		/*
+@@ -1539,17 +1540,17 @@ struct page *get_dump_page(unsigned long addr)
  }
- #endif
-+#else
-+static inline int is_zero_pfn(unsigned long pfn)
-+{
-+	return 0;
-+}
-+
-+static inline unsigned long my_zero_pfn(unsigned long addr)
-+{
-+	return 0;
-+}
-+#endif /* CONFIG_MMU */
+ #endif /* CONFIG_ELF_CORE */
  
- #ifdef CONFIG_MMU
+-#ifdef CONFIG_CMA
+-static long check_and_migrate_cma_pages(struct mm_struct *mm,
+-					unsigned long start,
+-					unsigned long nr_pages,
+-					struct page **pages,
+-					struct vm_area_struct **vmas,
+-					unsigned int gup_flags)
++#ifdef CONFIG_MIGRATION
++static long check_and_migrate_movable_pages(struct mm_struct *mm,
++					    unsigned long start,
++					    unsigned long nr_pages,
++					    struct page **pages,
++					    struct vm_area_struct **vmas,
++					    unsigned int gup_flags)
+ {
+ 	unsigned long i, isolation_error_count;
+ 	bool drain_allow;
+-	LIST_HEAD(cma_page_list);
++	LIST_HEAD(movable_page_list);
+ 	long ret = nr_pages;
+ 	struct page *prev_head, *head;
+ 	struct migration_target_control mtc = {
+@@ -1567,13 +1568,12 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 			continue;
+ 		prev_head = head;
+ 		/*
+-		 * If we get a page from the CMA zone, since we are going to
+-		 * be pinning these entries, we might as well move them out
+-		 * of the CMA zone if possible.
++		 * If we get a movable page, since we are going to be pinning
++		 * these entries, try to move them out if possible.
+ 		 */
+-		if (is_migrate_cma_page(head)) {
++		if (!is_pinnable_page(head)) {
+ 			if (PageHuge(head)) {
+-				if (!isolate_huge_page(head, &cma_page_list))
++				if (!isolate_huge_page(head, &movable_page_list))
+ 					isolation_error_count++;
+ 			} else {
+ 				if (!PageLRU(head) && drain_allow) {
+@@ -1585,7 +1585,7 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 					isolation_error_count++;
+ 					continue;
+ 				}
+-				list_add_tail(&head->lru, &cma_page_list);
++				list_add_tail(&head->lru, &movable_page_list);
+ 				mod_node_page_state(page_pgdat(head),
+ 						    NR_ISOLATED_ANON +
+ 						    page_is_file_lru(head),
+@@ -1598,10 +1598,10 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 	 * If list is empty, and no isolation errors, means that all pages are
+ 	 * in the correct zone.
+ 	 */
+-	if (list_empty(&cma_page_list) && !isolation_error_count)
++	if (list_empty(&movable_page_list) && !isolation_error_count)
+ 		return ret;
  
+-	if (!list_empty(&cma_page_list)) {
++	if (!list_empty(&movable_page_list)) {
+ 		/*
+ 		 * drop the above get_user_pages reference.
+ 		 */
+@@ -1611,12 +1611,12 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 			for (i = 0; i < nr_pages; i++)
+ 				put_page(pages[i]);
+ 
+-		ret = migrate_pages(&cma_page_list, alloc_migration_target,
++		ret = migrate_pages(&movable_page_list, alloc_migration_target,
+ 				    NULL, (unsigned long)&mtc, MIGRATE_SYNC,
+-				    MR_CONTIG_RANGE);
++				    MR_LONGTERM_PIN);
+ 		if (ret) {
+-			if (!list_empty(&cma_page_list))
+-				putback_movable_pages(&cma_page_list);
++			if (!list_empty(&movable_page_list))
++				putback_movable_pages(&movable_page_list);
+ 			return ret > 0 ? -ENOMEM : ret;
+ 		}
+ 
+@@ -1635,16 +1635,16 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 	goto check_again;
+ }
+ #else
+-static long check_and_migrate_cma_pages(struct mm_struct *mm,
+-					unsigned long start,
+-					unsigned long nr_pages,
+-					struct page **pages,
+-					struct vm_area_struct **vmas,
+-					unsigned int gup_flags)
++static long check_and_migrate_movable_pages(struct mm_struct *mm,
++					    unsigned long start,
++					    unsigned long nr_pages,
++					    struct page **pages,
++					    struct vm_area_struct **vmas,
++					    unsigned int gup_flags)
+ {
+ 	return nr_pages;
+ }
+-#endif /* CONFIG_CMA */
++#endif /* CONFIG_MIGRATION */
+ 
+ /*
+  * __gup_longterm_locked() is a wrapper for __get_user_pages_locked which
+@@ -1668,8 +1668,9 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 
+ 	if (gup_flags & FOLL_LONGTERM) {
+ 		if (rc > 0)
+-			rc = check_and_migrate_cma_pages(mm, start, rc, pages,
+-							 vmas, gup_flags);
++			rc = check_and_migrate_movable_pages(mm, start, rc,
++							     pages, vmas,
++							     gup_flags);
+ 		memalloc_pin_restore(flags);
+ 	}
+ 	return rc;
 -- 
 2.25.1
 
