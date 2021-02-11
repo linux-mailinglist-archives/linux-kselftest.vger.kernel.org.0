@@ -2,176 +2,319 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA3431900A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Feb 2021 17:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A2F3194CC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Feb 2021 22:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbhBKQcT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Feb 2021 11:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S229544AbhBKU7Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Feb 2021 15:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbhBKQaO (ORCPT
+        with ESMTP id S229553AbhBKU7X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Feb 2021 11:30:14 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD0DC061B3F
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:52 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id o21so4563423qtr.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:52 -0800 (PST)
+        Thu, 11 Feb 2021 15:59:23 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB24C061574
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 12:58:43 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id m17so7167713ioy.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 12:58:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=9bnQ1cYpKSogma2d9jSskcM/kWG+ieYizroT/wf+fYw=;
-        b=WODa48jsTpc63QHw5FszzREapyzJwNIdi4zMwsb/OF7Vb+YxOJ0hgIKn7IK8jh3rym
-         rust/hchPAkbOJ2y4p3gyYc38ZFO4i/1CMQ0oJRJlc/R8VELWxey2akgNx6IW1dn9nU+
-         ZHnf8rVuYFTRMLLLWPMQR3+2tgmc4FtFbEHnit1IbshBgMWHiK59ewUELVJtd/zqxMKi
-         BCOm3l+ZJMvOFuKcnepN/dZ8cEs688MbXhURh9J1/AsWlXCH5ha2VXczrlbCZiNa4n7+
-         sZcOF5MDwfA0WtB9t1t8d4hZB0TqRlRqNnWbd5xfnnzoodp7RkPajrTt/hln5oa1/jrE
-         bKpA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=elQYs+CRXIUFdDZB9CGMtfOprXMD+hm3lRs8yHOI0LA=;
+        b=okWuQ3wA1SEGnMAhPUpBmEag/3+8gkpbLKpSw3cSONQDEP5aFC3EA1MOtaaZ/THUyt
+         IjUZuniBofMCvYCpy9tCzsdHNmQ2rw1/9k9sZhsslkY8yDXwnBSxKF1nfE41WG0/zQIn
+         WIh5UHW+XyvpFwPkL/3YYnoV6N/oukqmrFStpIK4Ox2MH8A49WtEpI3FiEnYC+gxyL25
+         ADpYrB35N37xQKXfGywu3vGqObItzfthVNkIanlugZYXxMJsAbbnRdA5G+CNYtdOrJNT
+         HSf/VTBvTKp2As62gfR1z9qR6qicPg5dGDwSHvQnC7wYSuxz7blL6rsqRlOSxxj0e5bm
+         sG0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9bnQ1cYpKSogma2d9jSskcM/kWG+ieYizroT/wf+fYw=;
-        b=A34YH625K3G/2N7BDteiWd+ALB4wc5gSc6pOqPMhLyt4mEXQkffTbgmLxVAsdxB+u1
-         q97GcRpauZE5tGHRazNz8HVxAc8pvm46A2xWHI1tWDBPAFRWnFjwjWsNwAR+Gz03MBlS
-         tdyVwSQ43RPq5sI2q+zXPyh3dcdvqP02sqefGesmYbHKtz16Ir4JBgYNgIL8rHrOsH/P
-         qcXmQDnS/MGETO/kYDXGA+RmaLoaBprmrisMwxQClmjbGNWGhTmAvmx2M3F06lc5nVRz
-         JTOeFSfV2gdvYdOWRKs0rnJYCKVk5uKUffMbJjrEoBtbedkjgjNB/EH9kFH4JH/iJ+6t
-         l9uA==
-X-Gm-Message-State: AOAM530kFUeGK8rYdJF7HybFdtJeKVxfmw7cw1jJHBf+Jt6ZRcrJxqLD
-        VOTD6LL97U3+plt/vszYYpj19Q==
-X-Google-Smtp-Source: ABdhPJy3eGGMIemPLPgSZwktYxTenY9EXBH97dFyVr2r62SSQtPmI6++kaHQQFngIxNVazgPeun67g==
-X-Received: by 2002:ac8:a0a:: with SMTP id b10mr6251281qti.72.1613060691438;
-        Thu, 11 Feb 2021 08:24:51 -0800 (PST)
-Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id i23sm3831778qtq.42.2021.02.11.08.24.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 08:24:50 -0800 (PST)
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
-        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
-        dan.j.williams@intel.com, sashal@kernel.org,
-        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
-        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
-        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
-        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
-        linux-doc@vger.kernel.org, ira.weiny@intel.com,
-        linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v10 14/14] selftests/vm: gup_test: test faulting in kernel, and verify pinnable pages
-Date:   Thu, 11 Feb 2021 11:24:27 -0500
-Message-Id: <20210211162427.618913-15-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210211162427.618913-1-pasha.tatashin@soleen.com>
-References: <20210211162427.618913-1-pasha.tatashin@soleen.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=elQYs+CRXIUFdDZB9CGMtfOprXMD+hm3lRs8yHOI0LA=;
+        b=JB/suJKJrpBSjsdKNVOt68cQme7NOJWfnldpkIDF1mocqx6gCG88cJDgPEZT23Dvw3
+         /0WI/L3AhKs9amcebRHsrheIEFq+upX+IJV4NpXhEln1Dkts0D7JGTA/25BsBP/jn5LX
+         49CblpgvbW7xuIKoNMDj1vjF386SrqG4oNtyPDEp6CoGVbFZvnp+qn/InfrbHPezLft5
+         +D8VcN7urkiS4D0twO+Jn1KxCcAHNkOgMmjbCdKdLfrlSWv8wM253U6Q4RqPhwqrufTC
+         SkMfuzSeiIjpSgmvMmC3E7AVZbbo/WvTICeGmy8O/ZZj+4+2QXaUiIeeywDJMODORSgZ
+         3D9w==
+X-Gm-Message-State: AOAM533M3k6vzrJ8z/u4jdMxBfv7qozD1mupEtdW4QT7TZ5U2FdHVLJI
+        mJX1RAOpySfKhX83q2CCkKdSYAA6MjKoBnVuqrLO4w==
+X-Google-Smtp-Source: ABdhPJytUcaehM/1YkNREeQ0c+ExZL1f5iry/sBr3PPsfl+gsjnHXfn6v9eY7u4X+W18f+/4WkfYKgwat5ww2gBaPPw=
+X-Received: by 2002:a6b:f112:: with SMTP id e18mr6772051iog.57.1613077122916;
+ Thu, 11 Feb 2021 12:58:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210209221443.78812-1-dlatypov@google.com> <20210209221443.78812-2-dlatypov@google.com>
+ <CABVgOS=j=23J55jqT=84AhzvBxwZSR-POMOndZxAo1JCyvBLtA@mail.gmail.com> <alpine.LRH.2.23.451.2102111524210.10553@localhost>
+In-Reply-To: <alpine.LRH.2.23.451.2102111524210.10553@localhost>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 11 Feb 2021 12:58:31 -0800
+Message-ID: <CAGS_qxpwLbeYiFxL58aKbrU0sgjMq1HCnmoZMhFhXETRSrhV7g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] kunit: support failure from dynamic analysis tools
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Uriel Guajardo <urielguajardo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When pages are pinned they can be faulted in userland and migrated, and
-they can be faulted right in kernel without migration.
+On Thu, Feb 11, 2021 at 7:40 AM Alan Maguire <alan.maguire@oracle.com> wrot=
+e:
+>
+> On Thu, 11 Feb 2021, David Gow wrote:
+>
+> > On Wed, Feb 10, 2021 at 6:14 AM Daniel Latypov <dlatypov@google.com> wr=
+ote:
+> > >
+> > > From: Uriel Guajardo <urielguajardo@google.com>
+> > >
+> > > Add a kunit_fail_current_test() function to fail the currently runnin=
+g
+> > > test, if any, with an error message.
+> > >
+> > > This is largely intended for dynamic analysis tools like UBSAN and fo=
+r
+> > > fakes.
+> > > E.g. say I had a fake ops struct for testing and I wanted my `free`
+> > > function to complain if it was called with an invalid argument, or
+> > > caught a double-free. Most return void and have no normal means of
+> > > signalling failure (e.g. super_operations, iommu_ops, etc.).
+> > >
+> > > Key points:
+> > > * Always update current->kunit_test so anyone can use it.
+> > >   * commit 83c4e7a0363b ("KUnit: KASAN Integration") only updated it =
+for
+> > >   CONFIG_KASAN=3Dy
+> > >
+> > > * Create a new header <kunit/test-bug.h> so non-test code doesn't hav=
+e
+> > > to include all of <kunit/test.h> (e.g. lib/ubsan.c)
+> > >
+> > > * Forward the file and line number to make it easier to track down
+> > > failures
+> > >
+> > > * Declare the helper function for nice __printf() warnings about mism=
+atched
+> > > format strings even when KUnit is not enabled.
+> > >
+> > > Example output from kunit_fail_current_test("message"):
+> > > [15:19:34] [FAILED] example_simple_test
+> > > [15:19:34]     # example_simple_test: initializing
+> > > [15:19:34]     # example_simple_test: lib/kunit/kunit-example-test.c:=
+24: message
+> > > [15:19:34]     not ok 1 - example_simple_test
+> > >
+> > > Co-developed-by: Daniel Latypov <dlatypov@google.com>
+> > > Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > ---
+> > >  include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
+> > >  lib/kunit/test.c         | 37 +++++++++++++++++++++++++++++++++----
+> > >  2 files changed, 63 insertions(+), 4 deletions(-)
+> > >  create mode 100644 include/kunit/test-bug.h
+> > >
+> > > diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
+> > > new file mode 100644
+> > > index 000000000000..18b1034ec43a
+> > > --- /dev/null
+> > > +++ b/include/kunit/test-bug.h
+> > > @@ -0,0 +1,30 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +/*
+> > > + * KUnit API allowing dynamic analysis tools to interact with KUnit =
+tests
+> > > + *
+> > > + * Copyright (C) 2020, Google LLC.
+> > > + * Author: Uriel Guajardo <urielguajardo@google.com>
+> > > + */
+> > > +
+> > > +#ifndef _KUNIT_TEST_BUG_H
+> > > +#define _KUNIT_TEST_BUG_H
+> > > +
+> > > +#define kunit_fail_current_test(fmt, ...) \
+> > > +       __kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARG=
+S__)
+> > > +
+> > > +#if IS_ENABLED(CONFIG_KUNIT)
+> >
+> > As the kernel test robot has pointed out on the second patch, this
+> > probably should be IS_BUILTIN(), otherwise this won't build if KUnit
+> > is a module, and the code calling it isn't.
+> >
+> > This does mean that things like UBSAN integration won't work if KUnit
+> > is a module, which is a shame.
+> >
+> > (It's worth noting that the KASAN integration worked around this by
+> > only calling inline functions, which would therefore be built-in even
+> > if the rest of KUnit was built as a module. I don't think it's quite
+> > as convenient to do that here, though.)
+> >
+>
+> Right, static inline'ing __kunit_fail_current_test() seems problematic
+> because it calls other exported functions; more below....
+>
+> > > +
+> > > +extern __printf(3, 4) void __kunit_fail_current_test(const char *fil=
+e, int line,
+> > > +                                                   const char *fmt, =
+...);
+> > > +
+> > > +#else
+> > > +
+> > > +static __printf(3, 4) void __kunit_fail_current_test(const char *fil=
+e, int line,
+> > > +                                                   const char *fmt, =
+...)
+> > > +{
+> > > +}
+> > > +
+> > > +#endif
+> > > +
+> > > +
+> > > +#endif /* _KUNIT_TEST_BUG_H */
+> > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > > index ec9494e914ef..5794059505cf 100644
+> > > --- a/lib/kunit/test.c
+> > > +++ b/lib/kunit/test.c
+> > > @@ -7,6 +7,7 @@
+> > >   */
+> > >
+> > >  #include <kunit/test.h>
+> > > +#include <kunit/test-bug.h>
+> > >  #include <linux/kernel.h>
+> > >  #include <linux/kref.h>
+> > >  #include <linux/sched/debug.h>
+> > > @@ -16,6 +17,38 @@
+> > >  #include "string-stream.h"
+> > >  #include "try-catch-impl.h"
+> > >
+> > > +/*
+> > > + * Fail the current test and print an error message to the log.
+> > > + */
+> > > +void __kunit_fail_current_test(const char *file, int line, const cha=
+r *fmt, ...)
+> > > +{
+> > > +       va_list args;
+> > > +       int len;
+> > > +       char *buffer;
+> > > +
+> > > +       if (!current->kunit_test)
+> > > +               return;
+> > > +
+> > > +       kunit_set_failure(current->kunit_test);
+> > > +
+>
+> currently kunit_set_failure() is static, but it could be inlined I
+> suspect.
+>
+> > > +       /* kunit_err() only accepts literals, so evaluate the args fi=
+rst. */
+> > > +       va_start(args, fmt);
+> > > +       len =3D vsnprintf(NULL, 0, fmt, args) + 1;
+> > > +       va_end(args);
+> > > +
+> > > +       buffer =3D kunit_kmalloc(current->kunit_test, len, GFP_KERNEL=
+);
+>
+> kunit_kmalloc()/kunit_kfree() are exported also, but we could probably
+> dodge allocation with a static buffer.  In fact since we end up
+> using an on-stack buffer for logging in kunit_log_append(), it might make
 
-In either case, the pinned pages must end-up being pinnable (not movable).
+Ah, right there's those as well.
 
-Add a new test to gup_test, to help verify that the gup/pup
-(get_user_pages() / pin_user_pages()) behavior with respect to pinnable
-and movable pages is reasonable and correct. Specifically, provide a
-way to:
+I originally had it on the stack, but the fact we use an on-stack
+buffer is why I switched over.
 
-1) Verify that only "pinnable" pages are pinned. This is checked
-automatically for you.
+I originally had it as a macro as you do now but liked the __printf()
+annotation to be closer* to the user's code and now down through
+several layers of macros (kunit_fail_current_test =3D> kunit_err =3D>
+kunit_printk =3D> kunit_log =3D> printk).
+And then having it on the stack and then calling into
+kunit_log_append() would (naively) use up 2 *KUNIT_LOG_SIZE stack
+space.
 
-2) Verify that gup/pup performance is reasonable. This requires
-comparing benchmarks between doing gup/pup on pages that have been
-pre-faulted in from user space, vs. doing gup/pup on pages that are not
-faulted in until gup/pup time (via FOLL_TOUCH). This decision is
-controlled with the new -z command line option.
+So only a minor concern, and so I like the simpler def using a macro
+given the messiness.
+(But we'd give up the __printf checking when compiling w/o KUnit,
+which is a bit sad)
 
-Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup_test.c                         |  6 ++++++
- tools/testing/selftests/vm/gup_test.c | 23 +++++++++++++++++++----
- 2 files changed, 25 insertions(+), 4 deletions(-)
+*E.g. if one misuses kunit_err(), we get this message which is
+understandable, but a bit more noisy than I'd prefer.
+../include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 e=
+xpects
+argument of type =E2=80=98int=E2=80=99, but argument 3 has type =E2=80=98ch=
+ar *=E2=80=99 [-Wformat=3D]
+    5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+      |                  ^~~~~~
+../include/kunit/test.h:621:10: note: in definition of macro =E2=80=98kunit=
+_log=E2=80=99
+  621 |   printk(lvl fmt, ##__VA_ARGS__);    \
+      |          ^~~
+../include/kunit/test.h:662:2: note: in expansion of macro =E2=80=98kunit_p=
+rintk=E2=80=99
+  662 |  kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
+      |  ^~~~~~~~~~~~
+../include/linux/kern_levels.h:11:18: note: in expansion of macro =E2=80=98=
+KERN_SOH=E2=80=99
+   11 | #define KERN_ERR KERN_SOH "3" /* error conditions */
+      |                  ^~~~~~~~
+../include/kunit/test.h:662:15: note: in expansion of macro =E2=80=98KERN_E=
+RR=E2=80=99
+  662 |  kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
+      |               ^~~~~~~~
+../lib/kunit/kunit-example-test.c:30:2: note: in expansion of macro =E2=80=
+=98kunit_err=E2=80=99
+   30 |  kunit_err(test, "invalid format string: %d", "hi");
+      |  ^~~~~~~~~
 
-diff --git a/mm/gup_test.c b/mm/gup_test.c
-index a6ed1c877679..d974dec19e1c 100644
---- a/mm/gup_test.c
-+++ b/mm/gup_test.c
-@@ -52,6 +52,12 @@ static void verify_dma_pinned(unsigned int cmd, struct page **pages,
- 
- 				dump_page(page, "gup_test failure");
- 				break;
-+			} else if (cmd == PIN_LONGTERM_BENCHMARK &&
-+				WARN(!is_pinnable_page(page),
-+				     "pages[%lu] is NOT pinnable but pinned\n",
-+				     i)) {
-+				dump_page(page, "gup_test failure");
-+				break;
- 			}
- 		}
- 		break;
-diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
-index 943cc2608dc2..1e662d59c502 100644
---- a/tools/testing/selftests/vm/gup_test.c
-+++ b/tools/testing/selftests/vm/gup_test.c
-@@ -13,6 +13,7 @@
- 
- /* Just the flags we need, copied from mm.h: */
- #define FOLL_WRITE	0x01	/* check pte is writable */
-+#define FOLL_TOUCH	0x02	/* mark page accessed */
- 
- static char *cmd_to_str(unsigned long cmd)
- {
-@@ -39,11 +40,11 @@ int main(int argc, char **argv)
- 	unsigned long size = 128 * MB;
- 	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 1;
- 	unsigned long cmd = GUP_FAST_BENCHMARK;
--	int flags = MAP_PRIVATE;
-+	int flags = MAP_PRIVATE, touch = 0;
- 	char *file = "/dev/zero";
- 	char *p;
- 
--	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwWSHp")) != -1) {
-+	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwWSHpz")) != -1) {
- 		switch (opt) {
- 		case 'a':
- 			cmd = PIN_FAST_BENCHMARK;
-@@ -110,6 +111,10 @@ int main(int argc, char **argv)
- 		case 'H':
- 			flags |= (MAP_HUGETLB | MAP_ANONYMOUS);
- 			break;
-+		case 'z':
-+			/* fault pages in gup, do not fault in userland */
-+			touch = 1;
-+			break;
- 		default:
- 			return -1;
- 		}
-@@ -167,8 +172,18 @@ int main(int argc, char **argv)
- 	else if (thp == 0)
- 		madvise(p, size, MADV_NOHUGEPAGE);
- 
--	for (; (unsigned long)p < gup.addr + size; p += PAGE_SIZE)
--		p[0] = 0;
-+	/*
-+	 * FOLL_TOUCH, in gup_test, is used as an either/or case: either
-+	 * fault pages in from the kernel via FOLL_TOUCH, or fault them
-+	 * in here, from user space. This allows comparison of performance
-+	 * between those two cases.
-+	 */
-+	if (touch) {
-+		gup.gup_flags |= FOLL_TOUCH;
-+	} else {
-+		for (; (unsigned long)p < gup.addr + size; p += PAGE_SIZE)
-+			p[0] = 0;
-+	}
- 
- 	/* Only report timing information on the *_BENCHMARK commands: */
- 	if ((cmd == PIN_FAST_BENCHMARK) || (cmd == GUP_FAST_BENCHMARK) ||
--- 
-2.25.1
 
+> sense to #define __kunit_fail_current_test() instead, i.e.
+>
+> #define __kunit_fail_current_test(file, line, fmt, ...)         \
+>         do {                                                    \
+>                 kunit_set_failure(current->kunit_test);         \
+>                 kunit_err(current->kunit_test, "%s:%d: " fmt,   \
+>                           ##__VA_ARGS__);                       \
+>         } while (0)
+>
+> > > +       if (!buffer)
+> > > +               return;
+> > > +
+> > > +       va_start(args, fmt);
+> > > +       vsnprintf(buffer, len, fmt, args);
+> > > +       va_end(args);
+> > > +
+> > > +       kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffe=
+r);
+>
+> To get kunit_err() to work, we'd need to "static inline"
+> kunit_log_append().  It's not a trivial function, but on the plus
+> side it doesn't call any other exported kunit functions AFAICT.
+>
+> So while any of the above suggestions aren't intended to block
+> Daniel's work, does the above seem reasonable for a follow-up
+> series to get UBSAN working with module-based KUnit? Thanks!
+
+Ack, so sounds like we'd want to go ahead with making it only work w/
+CONFIG_KUNIT=3Dy?
+
+I can simplify it down into a macro since the __printf() bit isn't too
+big of a deal.
+And then it'd let us only depend on kunit_log_append(), making it
+easier to get CONFIG_KUNIT=3Dm working.
+
+Thanks both for digging into this!
+I saw KTR's email and was dreading having to dig into what the
+smallest needed change would be.
+
+>
+> Alan
