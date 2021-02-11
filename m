@@ -2,232 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A66C318689
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Feb 2021 09:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A663186AE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Feb 2021 10:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbhBKIy3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Feb 2021 03:54:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbhBKIy1 (ORCPT
+        id S229974AbhBKJGy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Feb 2021 04:06:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36563 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229692AbhBKJDW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Feb 2021 03:54:27 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA95C0613D6
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 00:55:12 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id x7so4632297ljc.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 00:55:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=INpI2grpc39RPI1/uGmN/swUxZd9s7IImMKnJJk5cp4=;
-        b=MKwqC2I/GRbddB3AUH+OcSDsUNhzA4P3u3q/nC+WxRHdmZAvm3ML7H1oRtcVEtO0Rv
-         r9s10LKh/2MORlzerm19Dvia0+Kdb9YYzHqrej/s8C1nzns3wMSNHe5Y2sENj1FwvUt+
-         N5C+P1rbaeZRfeby7Q8o7wfOXU35hbC/q90WWGBaJWEXSkjM/ozuszciWmcKGHzCW77O
-         cuUf08qebgIzSFFMPOSGGm31V9Flj5uZi/Pier3UeuHVehz2S8KGdaAtuuEyiUvphf5e
-         FyG737ngsk3mD89lTxgnzWW3y6s2++N3aXNBWxTFk8Y82ZYCSvCYuJT1xZUwWKf7FH0a
-         /OTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=INpI2grpc39RPI1/uGmN/swUxZd9s7IImMKnJJk5cp4=;
-        b=htPO7fobBoJveDERh7hwOrFD6ZtC8cjbjq7C93AtJ8S9sv6vO2Xxm40ueY1LZOFSHh
-         cxwZ7/DC9pzoyhIFyux6IlxvQLH8CQv0TE4MwpFtD6shwj1Pzi60T2vMmQS0omLTSsty
-         pCzopE2CQCnFhPUdEfCNFR48BBu0UkhjoRTGerNcA1whUSOsa/MdxnCuXqaR0xK3WNQs
-         gyxWoXL5KZXfemje+5rQLIqnJrEzpRJ2rowm8/yNfZb+wsLq6cTfG269vIVw5jDRDOeQ
-         vE0EBEbiBrsS2Bpd6nTmhc1gbkbzX7n1nu3oyjiC7sjljewUT1lGhVJSX7HmjU6XHxuH
-         W8Ig==
-X-Gm-Message-State: AOAM532icUq8TutDnMvdyL6dQFPBvd5eWYjvsis6CoqX7EkIh8s3DhBA
-        PYv2Odn2LuKc9hQPFvszp6ONtmg/eSnIAzL278rP6A==
-X-Google-Smtp-Source: ABdhPJxHeBxriJutHMkUrHfyvMpoSrnKx0sjaHNL4noWCB1D1Oiic0z9Wa/KbGa8K9opHFmXE1fKL/utmVS1PrzsJ/Y=
-X-Received: by 2002:a2e:880e:: with SMTP id x14mr4437278ljh.89.1613033710765;
- Thu, 11 Feb 2021 00:55:10 -0800 (PST)
+        Thu, 11 Feb 2021 04:03:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613034114;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=87Impx6zBhFPew0MsLa4uFlCrkffLZXeuCsIAmOnb1o=;
+        b=Lk/M0qqeo34ImcbbCgR6VNkm4dMEWz1EyhOHirHngtdRHyhlfncwIHEYQMYH0Y3e2Qs1Rd
+        XHsxCqr7lkmdX9oKHSZaWj99yMAujEH2ETPqPH5qXYWC/k8AygFx5mmTKTQGv6bmmnPOMZ
+        jfw3xwGhj04iirr0U6S+EbCh9j6ZPOk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-339-CVxMxznvM0iwyXDkheMOxg-1; Thu, 11 Feb 2021 04:01:50 -0500
+X-MC-Unique: CVxMxznvM0iwyXDkheMOxg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B6F3E107B465;
+        Thu, 11 Feb 2021 09:01:44 +0000 (UTC)
+Received: from [10.36.114.52] (ovpn-114-52.ams2.redhat.com [10.36.114.52])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F05745DF58;
+        Thu, 11 Feb 2021 09:01:33 +0000 (UTC)
+To:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>
+Cc:     Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+References: <20210208084920.2884-1-rppt@kernel.org>
+ <20210208084920.2884-8-rppt@kernel.org> <YCEXMgXItY7xMbIS@dhcp22.suse.cz>
+ <20210208212605.GX242749@kernel.org> <YCJMDBss8Qhha7g9@dhcp22.suse.cz>
+ <20210209090938.GP299309@linux.ibm.com> <YCKLVzBR62+NtvyF@dhcp22.suse.cz>
+ <20210211071319.GF242749@kernel.org> <YCTtSrCEvuBug2ap@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-ID: <0d66baec-1898-987b-7eaf-68a015c027ff@redhat.com>
+Date:   Thu, 11 Feb 2021 10:01:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-References: <20210209221443.78812-1-dlatypov@google.com> <20210209221443.78812-2-dlatypov@google.com>
-In-Reply-To: <20210209221443.78812-2-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 11 Feb 2021 16:54:59 +0800
-Message-ID: <CABVgOS=j=23J55jqT=84AhzvBxwZSR-POMOndZxAo1JCyvBLtA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] kunit: support failure from dynamic analysis tools
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Uriel Guajardo <urielguajardo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YCTtSrCEvuBug2ap@dhcp22.suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 6:14 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> From: Uriel Guajardo <urielguajardo@google.com>
->
-> Add a kunit_fail_current_test() function to fail the currently running
-> test, if any, with an error message.
->
-> This is largely intended for dynamic analysis tools like UBSAN and for
-> fakes.
-> E.g. say I had a fake ops struct for testing and I wanted my `free`
-> function to complain if it was called with an invalid argument, or
-> caught a double-free. Most return void and have no normal means of
-> signalling failure (e.g. super_operations, iommu_ops, etc.).
->
-> Key points:
-> * Always update current->kunit_test so anyone can use it.
->   * commit 83c4e7a0363b ("KUnit: KASAN Integration") only updated it for
->   CONFIG_KASAN=y
->
-> * Create a new header <kunit/test-bug.h> so non-test code doesn't have
-> to include all of <kunit/test.h> (e.g. lib/ubsan.c)
->
-> * Forward the file and line number to make it easier to track down
-> failures
->
-> * Declare the helper function for nice __printf() warnings about mismatched
-> format strings even when KUnit is not enabled.
->
-> Example output from kunit_fail_current_test("message"):
-> [15:19:34] [FAILED] example_simple_test
-> [15:19:34]     # example_simple_test: initializing
-> [15:19:34]     # example_simple_test: lib/kunit/kunit-example-test.c:24: message
-> [15:19:34]     not ok 1 - example_simple_test
->
-> Co-developed-by: Daniel Latypov <dlatypov@google.com>
-> Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
->  include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
->  lib/kunit/test.c         | 37 +++++++++++++++++++++++++++++++++----
->  2 files changed, 63 insertions(+), 4 deletions(-)
->  create mode 100644 include/kunit/test-bug.h
->
-> diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-> new file mode 100644
-> index 000000000000..18b1034ec43a
-> --- /dev/null
-> +++ b/include/kunit/test-bug.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * KUnit API allowing dynamic analysis tools to interact with KUnit tests
-> + *
-> + * Copyright (C) 2020, Google LLC.
-> + * Author: Uriel Guajardo <urielguajardo@google.com>
-> + */
-> +
-> +#ifndef _KUNIT_TEST_BUG_H
-> +#define _KUNIT_TEST_BUG_H
-> +
-> +#define kunit_fail_current_test(fmt, ...) \
-> +       __kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
-> +
-> +#if IS_ENABLED(CONFIG_KUNIT)
+On 11.02.21 09:39, Michal Hocko wrote:
+> On Thu 11-02-21 09:13:19, Mike Rapoport wrote:
+>> On Tue, Feb 09, 2021 at 02:17:11PM +0100, Michal Hocko wrote:
+>>> On Tue 09-02-21 11:09:38, Mike Rapoport wrote:
+> [...]
+>>>> Citing my older email:
+>>>>
+>>>>      I've hesitated whether to continue to use new flags to memfd_create() or to
+>>>>      add a new system call and I've decided to use a new system call after I've
+>>>>      started to look into man pages update. There would have been two completely
+>>>>      independent descriptions and I think it would have been very confusing.
+>>>
+>>> Could you elaborate? Unmapping from the kernel address space can work
+>>> both for sealed or hugetlb memfds, no? Those features are completely
+>>> orthogonal AFAICS. With a dedicated syscall you will need to introduce
+>>> this functionality on top if that is required. Have you considered that?
+>>> I mean hugetlb pages are used to back guest memory very often. Is this
+>>> something that will be a secret memory usecase?
+>>>
+>>> Please be really specific when giving arguments to back a new syscall
+>>> decision.
+>>
+>> Isn't "syscalls have completely independent description" specific enough?
+> 
+> No, it's not as you can see from questions I've had above. More on that
+> below.
+> 
+>> We are talking about API here, not the implementation details whether
+>> secretmem supports large pages or not.
+>>
+>> The purpose of memfd_create() is to create a file-like access to memory.
+>> The purpose of memfd_secret() is to create a way to access memory hidden
+>> from the kernel.
+>>
+>> I don't think overloading memfd_create() with the secretmem flags because
+>> they happen to return a file descriptor will be better for users, but
+>> rather will be more confusing.
+> 
+> This is quite a subjective conclusion. I could very well argue that it
+> would be much better to have a single syscall to get a fd backed memory
+> with spedific requirements (sealing, unmapping from the kernel address
+> space). Neither of us would be clearly right or wrong. A more important
+> point is a future extensibility and usability, though. So let's just
+> think of few usecases I have outlined above. Is it unrealistic to expect
+> that secret memory should be sealable? What about hugetlb? Because if
+> the answer is no then a new API is a clear win as the combination of
+> flags would never work and then we would just suffer from the syscall
+> multiplexing without much gain. On the other hand if combination of the
+> functionality is to be expected then you will have to jam it into
+> memfd_create and copy the interface likely causing more confusion. See
+> what I mean?
+> 
+> I by no means do not insist one way or the other but from what I have
+> seen so far I have a feeling that the interface hasn't been thought
+> through enough. Sure you have landed with fd based approach and that
+> seems fair. But how to get that fd seems to still have some gaps IMHO.
+> 
 
-As the kernel test robot has pointed out on the second patch, this
-probably should be IS_BUILTIN(), otherwise this won't build if KUnit
-is a module, and the code calling it isn't.
+I agree with Michal. This has been raised by different
+people already, including on LWN (https://lwn.net/Articles/835342/).
 
-This does mean that things like UBSAN integration won't work if KUnit
-is a module, which is a shame.
+I can follow Mike's reasoning (man page), and I am also fine if there is
+a valid reason. However, IMHO the basic description seems to match quite good:
 
-(It's worth noting that the KASAN integration worked around this by
-only calling inline functions, which would therefore be built-in even
-if the rest of KUnit was built as a module. I don't think it's quite
-as convenient to do that here, though.)
+        memfd_create() creates an anonymous file and returns a file descriptor that refers to it.  The
+        file behaves like a regular file, and so can be modified, truncated, memory-mapped, and so on.
+        However,  unlike a regular file, it lives in RAM and has a volatile backing storage.  Once all
+        references to the file are dropped, it is automatically released.  Anonymous  memory  is  used
+        for  all  backing pages of the file.  Therefore, files created by memfd_create() have the same
+        semantics as other anonymous memory allocations such as those allocated using mmap(2) with the
+        MAP_ANONYMOUS flag.
 
-> +
-> +extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
-> +                                                   const char *fmt, ...);
-> +
-> +#else
-> +
-> +static __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
-> +                                                   const char *fmt, ...)
-> +{
-> +}
-> +
-> +#endif
-> +
-> +
-> +#endif /* _KUNIT_TEST_BUG_H */
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index ec9494e914ef..5794059505cf 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -7,6 +7,7 @@
->   */
->
->  #include <kunit/test.h>
-> +#include <kunit/test-bug.h>
->  #include <linux/kernel.h>
->  #include <linux/kref.h>
->  #include <linux/sched/debug.h>
-> @@ -16,6 +17,38 @@
->  #include "string-stream.h"
->  #include "try-catch-impl.h"
->
-> +/*
-> + * Fail the current test and print an error message to the log.
-> + */
-> +void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
-> +{
-> +       va_list args;
-> +       int len;
-> +       char *buffer;
-> +
-> +       if (!current->kunit_test)
-> +               return;
-> +
-> +       kunit_set_failure(current->kunit_test);
-> +
-> +       /* kunit_err() only accepts literals, so evaluate the args first. */
-> +       va_start(args, fmt);
-> +       len = vsnprintf(NULL, 0, fmt, args) + 1;
-> +       va_end(args);
-> +
-> +       buffer = kunit_kmalloc(current->kunit_test, len, GFP_KERNEL);
-> +       if (!buffer)
-> +               return;
-> +
-> +       va_start(args, fmt);
-> +       vsnprintf(buffer, len, fmt, args);
-> +       va_end(args);
-> +
-> +       kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffer);
-> +       kunit_kfree(current->kunit_test, buffer);
-> +}
-> +EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
-> +
->  /*
->   * Append formatted message to log, size of which is limited to
->   * KUNIT_LOG_SIZE bytes (including null terminating byte).
-> @@ -273,9 +306,7 @@ static void kunit_try_run_case(void *data)
->         struct kunit_suite *suite = ctx->suite;
->         struct kunit_case *test_case = ctx->test_case;
->
-> -#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
->         current->kunit_test = test;
-> -#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT) */
->
->         /*
->          * kunit_run_case_internal may encounter a fatal error; if it does,
-> @@ -624,9 +655,7 @@ void kunit_cleanup(struct kunit *test)
->                 spin_unlock(&test->lock);
->                 kunit_remove_resource(test, res);
->         }
-> -#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
->         current->kunit_test = NULL;
-> -#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT)*/
->  }
->  EXPORT_SYMBOL_GPL(kunit_cleanup);
->
-> --
-> 2.30.0.478.g8a0d178c01-goog
->
+AFAIKS, we would need MFD_SECRET and disallow
+MFD_ALLOW_SEALING and MFD_HUGETLB.
+
+In addition, we could add MFD_SECRET_NEVER_MAP, which could disallow any kind of
+temporary mappings (eor migration). TBC.
+
+---
+
+Some random thoughts regarding files.
+
+What is the page size of secretmem memory? Sometimes we use huge pages,
+sometimes we fallback to 4k pages. So I assume huge pages in general?
+
+What are semantics of MADV()/FALLOCATE() etc on such files?
+I assume PUNCH_HOLE fails in a nice way? does it work?
+
+Does mremap()/mremap(FIXED) work/is it blocked?
+
+Does mprotect() fail in a nice way?
+
+Is userfaultfd() properly fenced? Or does it even work (doubt)?
+
+How does it behave if I mmap(FIXED) something in between?
+In which granularity can I do that (->page-size?)?
+
+What are other granularity restrictions (->page size)?
+
+Don't want to open a big discussion here, just some random thoughts.
+Maybe it has all been already figured out and most of the answers
+above are "Fails with -EINVAL".
+
+-- 
+Thanks,
+
+David / dhildenb
+
