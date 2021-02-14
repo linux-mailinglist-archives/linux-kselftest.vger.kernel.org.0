@@ -2,31 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 469D831AFD0
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Feb 2021 10:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7F631AFF4
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Feb 2021 11:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbhBNJUy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Feb 2021 04:20:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46840 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229528AbhBNJUx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Feb 2021 04:20:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2CB2B64D73;
-        Sun, 14 Feb 2021 09:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613294412;
-        bh=IojP/99cv2KZA0UAqkGIVvcnNQXpAQrGnDSYSmISYMk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ggTE3epmRlYiZpCIulQqzfZIZLk/o9Hy+eMY/vtIj4RBJvlbLU6YBe6xW+nn3Nh9o
-         MyYMRX8NGusIKQSvjXjeNrYN2FzXGXOOYKN32wbF5K9UR5i2fL54NWoZ4kzch8O1fz
-         0j0N6t7YI6VhKfHIfT1MILdmaVlC+bJrUkGBAjCyOCyGfWtt4wmkaNl5ygGD55KRog
-         FpJCiXGCmq9B5RiAfE9vA/ahNtHagvIeFYzLpSK837gPh4weRSFHUqNEb1+FAp4m0u
-         60OF5nZHG/kKqrkEsLohg2nOPziZfAIwq4U8bxWTmen5x/8iLmJMxF5gj8klmC/iDZ
-         Da8cagTHmtKmw==
-Date:   Sun, 14 Feb 2021 11:19:54 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@linux.ibm.com>,
+        id S229740AbhBNKA3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Feb 2021 05:00:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52291 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229528AbhBNKAY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 14 Feb 2021 05:00:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613296735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FB1Zi7Y2SkOv/JvlFfpIv8DdC9H5NuowZUsuUzsgYnw=;
+        b=fad4dWRm90PFswTbJv9iB9qi1jJhfRMe61awqZs1ietSewBteDCq5TGY+aozecZ2lHLZrm
+        WV/23VXrLqLZMwGpuWSuBwNI5sf4S/zzZ9UxNxqExEWqRG4WccX7F0naK4jzhiVObtfZte
+        XsoYCVyAxcontsUVJ3GbOhQ2cJeStLo=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-490-1fxlIBbDN12eZjEivYgBLw-1; Sun, 14 Feb 2021 04:58:54 -0500
+X-MC-Unique: 1fxlIBbDN12eZjEivYgBLw-1
+Received: by mail-wr1-f69.google.com with SMTP id l10so6162837wry.16
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Feb 2021 01:58:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=FB1Zi7Y2SkOv/JvlFfpIv8DdC9H5NuowZUsuUzsgYnw=;
+        b=bQV0IrlqXYQRclDQDXiW3KUw0sXqCKLPhgML7xF8EiIyy6zEDiSqbqYQ2x9fYy0/vH
+         7xdcD9OHJouYZtUsRmFkBinFpKXYhZu6qHOt/eRxm4uXdNLSsk0TeEOeFRIICwO6bi62
+         P1FyH9xA+6kzT6hIH3nyexPsi+zxp/qLEGVaztp6GpGiXFhII7S70hJPtZw6HSuaGPpP
+         3j8ULzxhZVTwNLOXaDC/za42eYo1PVOpxBeVtcKbsd6ae0/Ns/yXfz1+Xv1GHKK7nQkk
+         VCOPglQA78wzvGS0fkCpVs3EK//A0zuY5Yq6hFmQgcqYH5e3i1q9vNdLCqOzkj7CO/YY
+         U3oA==
+X-Gm-Message-State: AOAM533snGkADImb8Od0dfZUYS+XgiinV40+SSvCDe2LjetfugM2GNDm
+        RQHvhVzTV9wzhVLfXVtN1pUBnoBV8YljkDtcPII3kF5ZI6GiMreidpuPKeVHCG4dhJQR3IzmLKo
+        wgXGbpAu00PIhNkHMd5nESsNVZ7Bv
+X-Received: by 2002:a7b:c5c1:: with SMTP id n1mr9687107wmk.163.1613296732936;
+        Sun, 14 Feb 2021 01:58:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy6AiGKsLxdVOEv3lcfmH3b0B76nApmRsRYcgYL0hyAbXvIT8wdTN/HlT3/mJBi3lug6LzkMg==
+X-Received: by 2002:a7b:c5c1:: with SMTP id n1mr9687058wmk.163.1613296732697;
+        Sun, 14 Feb 2021 01:58:52 -0800 (PST)
+Received: from [192.168.3.108] (p4ff23363.dip0.t-ipconnect.de. [79.242.51.99])
+        by smtp.gmail.com with ESMTPSA id x15sm18554557wro.66.2021.02.14.01.58.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Feb 2021 01:58:52 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   David Hildenbrand <david@redhat.com>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to create "secret" memory areas
+Date:   Sun, 14 Feb 2021 10:58:44 +0100
+Message-Id: <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
+References: <20210214091954.GM242749@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
@@ -58,64 +93,70 @@ Cc:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@linux.ibm.com>,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
         Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <20210214091954.GM242749@kernel.org>
-References: <YCJMDBss8Qhha7g9@dhcp22.suse.cz>
- <20210209090938.GP299309@linux.ibm.com>
- <YCKLVzBR62+NtvyF@dhcp22.suse.cz>
- <20210211071319.GF242749@kernel.org>
- <YCTtSrCEvuBug2ap@dhcp22.suse.cz>
- <0d66baec-1898-987b-7eaf-68a015c027ff@redhat.com>
- <20210211112702.GI242749@kernel.org>
- <05082284-bd85-579f-2b3e-9b1af663eb6f@redhat.com>
- <20210211230910.GL242749@kernel.org>
- <a903338e-3d56-ff0a-4f4f-0f23db7ec0da@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a903338e-3d56-ff0a-4f4f-0f23db7ec0da@redhat.com>
+In-Reply-To: <20210214091954.GM242749@kernel.org>
+To:     Mike Rapoport <rppt@kernel.org>
+X-Mailer: iPhone Mail (18D52)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 12, 2021 at 10:18:19AM +0100, David Hildenbrand wrote:
-> On 12.02.21 00:09, Mike Rapoport wrote:
-> > On Thu, Feb 11, 2021 at 01:07:10PM +0100, David Hildenbrand wrote:
-> > > On 11.02.21 12:27, Mike Rapoport wrote:
-> > > > On Thu, Feb 11, 2021 at 10:01:32AM +0100, David Hildenbrand wrote:
-> > > 
-> > > So let's talk about the main user-visible differences to other memfd files
-> > > (especially, other purely virtual files like hugetlbfs). With secretmem:
-> > > 
-> > > - File content can only be read/written via memory mappings.
-> > > - File content cannot be swapped out.
-> > > 
-> > > I think there are still valid ways to modify file content using syscalls:
-> > > e.g., fallocate(PUNCH_HOLE). Things like truncate also seems to work just
-> > > fine.
-> > These work perfectly with any file, so maybe we should have added
-> > memfd_create as a flag to open(2) back then and now the secretmem file
-> > descriptors?
-> 
-> I think open() vs memfd_create() makes sense: for open, the path specifies
-> main properties (tmpfs, hugetlbfs, filesystem). On memfd, there is no such
-> path and the "type" has to be specified differently.
-> 
-> Also, open() might open existing files - memfd always creates new files.
 
-Yes, but still open() returns a handle to a file and memfd_create() returns
-a handle to a file. The differences may be well hidden by e.g. O_MEMORY and
-than features unique to memfd files will have their set of O_SOMETHING
-flags.
+> Am 14.02.2021 um 10:20 schrieb Mike Rapoport <rppt@kernel.org>:
+>=20
+> =EF=BB=BFOn Fri, Feb 12, 2021 at 10:18:19AM +0100, David Hildenbrand wrote=
+:
+>>> On 12.02.21 00:09, Mike Rapoport wrote:
+>>> On Thu, Feb 11, 2021 at 01:07:10PM +0100, David Hildenbrand wrote:
+>>>> On 11.02.21 12:27, Mike Rapoport wrote:
+>>>>> On Thu, Feb 11, 2021 at 10:01:32AM +0100, David Hildenbrand wrote:
+>>>>=20
+>>>> So let's talk about the main user-visible differences to other memfd fi=
+les
+>>>> (especially, other purely virtual files like hugetlbfs). With secretmem=
+:
+>>>>=20
+>>>> - File content can only be read/written via memory mappings.
+>>>> - File content cannot be swapped out.
+>>>>=20
+>>>> I think there are still valid ways to modify file content using syscall=
+s:
+>>>> e.g., fallocate(PUNCH_HOLE). Things like truncate also seems to work ju=
+st
+>>>> fine.
+>>> These work perfectly with any file, so maybe we should have added
+>>> memfd_create as a flag to open(2) back then and now the secretmem file
+>>> descriptors?
+>>=20
+>> I think open() vs memfd_create() makes sense: for open, the path specifie=
+s
+>> main properties (tmpfs, hugetlbfs, filesystem). On memfd, there is no suc=
+h
+>> path and the "type" has to be specified differently.
+>>=20
+>> Also, open() might open existing files - memfd always creates new files.
+>=20
+> Yes, but still open() returns a handle to a file and memfd_create() return=
+s
+> a handle to a file. The differences may be well hidden by e.g. O_MEMORY an=
+d
+> than features unique to memfd files will have their set of O_SOMETHING
+> flags.
+>=20
 
-It's the same logic that says "we already have an interface that's close
-enough and it's fine to add a bunch of new flags there".
- 
-And here we come to the question "what are the differences that justify a
-new system call?" and the answer to this is very subjective. And as such we
-can continue bikeshedding forever.
+Let=E2=80=98s agree to disagree.
 
--- 
-Sincerely yours,
-Mike.
+> It's the same logic that says "we already have an interface that's close
+> enough and it's fine to add a bunch of new flags there".
+
+No, not quite. But let=E2=80=98s agree to disagree.
+
+>=20
+> And here we come to the question "what are the differences that justify a
+> new system call?" and the answer to this is very subjective. And as such w=
+e
+> can continue bikeshedding forever.
+
+I think this fits into the existing memfd_create() syscall just fine, and I h=
+eard no compelling argument why it shouldn=E2=80=98t. That=E2=80=98s all I c=
+an say.=
+
