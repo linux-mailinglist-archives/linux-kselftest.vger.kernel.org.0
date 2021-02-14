@@ -2,181 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFE331B1C1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Feb 2021 19:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B04931B235
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Feb 2021 20:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbhBNSBe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Feb 2021 13:01:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbhBNSBe (ORCPT
+        id S229873AbhBNTWs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Feb 2021 14:22:48 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52572 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229789AbhBNTWr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Feb 2021 13:01:34 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050::465:101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011A1C061574
-        for <linux-kselftest@vger.kernel.org>; Sun, 14 Feb 2021 10:00:53 -0800 (PST)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Ddw5J1FBzzQlX9;
-        Sun, 14 Feb 2021 19:00:52 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
-        t=1613325650;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v3WbmafDNcCYjucUAexKSPTk9yuhRyDCdvMt+sse33Q=;
-        b=rcHlOFL07blaXI5Hggtx3YUSlxwCxMeb0+tUTzkM1iHDh/j2ouEfSWP8EtH0Ws6I2kTpi8
-        vCWoXBa//3eAkfBeY7n5rTuKkr19xZUXUnL103T3yh2eCzl0gPxAFX80jkEr8Jq+9RTJYl
-        sclOMQ5FYUzdMppFIjkkqbmC4xvkks3kuajAO+PGkj4l4RBrBsgLxBemdUczXNAc8ZUkM2
-        zKCkKlRRSSrQSA+Nsa14r9M8xR5Caaht1FMFOM90Szm3lIrpN5gwjuI4eR2VHR1E0YB6mH
-        qbJB/gc4v/0jHwrIaTU4YXWGRNmpac7LEnLgvSGfB3h8dVegLEoG/rzzjJLkyA==
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
-        with ESMTP id yiHYCMzStuR6; Sun, 14 Feb 2021 19:00:45 +0100 (CET)
-Subject: Re: [PATCH] testptp: Fix compile with musl libc
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     shuah@kernel.org, richardcochran@gmail.com, davem@davemloft.net,
-        vincent.cheng.xh@renesas.com, christian.riesch@omicron.at,
-        linux-kselftest@vger.kernel.org
-References: <20210214170940.32358-1-hauke@hauke-m.de>
- <20210214173716.hxzb2nk6f7cx262n@skbuf>
-From:   Hauke Mehrtens <hauke@hauke-m.de>
-Message-ID: <07b844e0-ea27-8607-b631-f946fe8af7f9@hauke-m.de>
-Date:   Sun, 14 Feb 2021 19:00:39 +0100
+        Sun, 14 Feb 2021 14:22:47 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11EJ2Rjv004234;
+        Sun, 14 Feb 2021 14:21:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=2HSfs+PHnEoAspVggOn3BgvrrXw9WRy1/NNpdkKxiCQ=;
+ b=AZF0XAteS7BybRomRYX1JsIb2ozox9iZcsuANYL0RXt1DOGpH5dDZncHkhOo1MmCqO6N
+ bN9wDwYuysQC6qwZbZvf0iJ5XmeNG1OR+xeJIVS2mYsLLxHM6iTaq0y08eK4tADF0CEA
+ fkKoOtagmhJTVKNKvvgmVoCVGUffCCrVq0F4GQp/Z4xrqebHU1nVIEsLWO+HWe+bCS6r
+ bxMHJhhpU5/ixYri+C6GmE6c9iFjLYxsnQtsC23Dv5jV6sm/gZX8ewVelDj99njvNoVd
+ /xsREIEyrQHhgvKq8L1FVYyY6/sCJqI4CmD3ZR5qi97i+5qF8aX1c+uVIqwzH+Ok2HJK Dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36q9nk09b6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 Feb 2021 14:21:13 -0500
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11EJ2LTu003594;
+        Sun, 14 Feb 2021 14:21:12 -0500
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36q9nk09ar-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 Feb 2021 14:21:12 -0500
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11EJHkRa014564;
+        Sun, 14 Feb 2021 19:21:11 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04wdc.us.ibm.com with ESMTP id 36p6d8j9rj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 Feb 2021 19:21:11 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11EJLAVZ11862324
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 14 Feb 2021 19:21:10 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B369B7805E;
+        Sun, 14 Feb 2021 19:21:10 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 372EB7805C;
+        Sun, 14 Feb 2021 19:21:04 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.85.199.127])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Sun, 14 Feb 2021 19:21:03 +0000 (GMT)
+Message-ID: <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
+Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     David Hildenbrand <david@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Date:   Sun, 14 Feb 2021 11:21:02 -0800
+In-Reply-To: <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
+References: <20210214091954.GM242749@kernel.org>
+         <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <20210214173716.hxzb2nk6f7cx262n@skbuf>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="j8HX4ftHpd09W9Fwh05X8Jy7PD4ombGVK"
-X-MBO-SPAM-Probability: 
-X-Rspamd-Score: -8.16 / 15.00 / 15.00
-X-Rspamd-Queue-Id: D59D51848
-X-Rspamd-UID: 467781
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-14_06:2021-02-12,2021-02-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=828 clxscore=1015
+ mlxscore=0 bulkscore=0 spamscore=0 suspectscore=0 impostorscore=0
+ phishscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102140159
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---j8HX4ftHpd09W9Fwh05X8Jy7PD4ombGVK
-Content-Type: multipart/mixed; boundary="0cQslolJofwAAahOaGut6bYbwOUIaTqcA";
- protected-headers="v1"
-From: Hauke Mehrtens <hauke@hauke-m.de>
-To: Vladimir Oltean <olteanv@gmail.com>
-Cc: shuah@kernel.org, richardcochran@gmail.com, davem@davemloft.net,
- vincent.cheng.xh@renesas.com, christian.riesch@omicron.at,
- linux-kselftest@vger.kernel.org
-Message-ID: <07b844e0-ea27-8607-b631-f946fe8af7f9@hauke-m.de>
-Subject: Re: [PATCH] testptp: Fix compile with musl libc
-References: <20210214170940.32358-1-hauke@hauke-m.de>
- <20210214173716.hxzb2nk6f7cx262n@skbuf>
-In-Reply-To: <20210214173716.hxzb2nk6f7cx262n@skbuf>
+On Sun, 2021-02-14 at 10:58 +0100, David Hildenbrand wrote:
+[...]
+> > And here we come to the question "what are the differences that
+> > justify a new system call?" and the answer to this is very
+> > subjective. And as such we can continue bikeshedding forever.
+> 
+> I think this fits into the existing memfd_create() syscall just fine,
+> and I heard no compelling argument why it shouldn‘t. That‘s all I can
+> say.
 
---0cQslolJofwAAahOaGut6bYbwOUIaTqcA
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+OK, so let's review history.  In the first two incarnations of the
+patch, it was an extension of memfd_create().  The specific objection
+by Kirill Shutemov was that it doesn't share any code in common with
+memfd and so should be a separate system call:
 
-On 2/14/21 6:37 PM, Vladimir Oltean wrote:
-> Hi Hauke,
->=20
-> On Sun, Feb 14, 2021 at 06:09:40PM +0100, Hauke Mehrtens wrote:
->> Musl libc does not define the glibc specific macro __GLIBC_PREREQ(), b=
-ut
->> it has the clock_adjtime() function. Assume that a libc implementation=
+https://lore.kernel.org/linux-api/20200713105812.dnwtdhsuyj3xbh4f@box/
 
->> which does not define __GLIBC_PREREQ at all still implements
->> clock_adjtime().
->>
->> This fixes a build problem with musl libc because the __GLIBC_PREREQ()=
+The other objection raised offlist is that if we do use memfd_create,
+then we have to add all the secret memory flags as an additional ioctl,
+whereas they can be specified on open if we do a separate system call. 
+The container people violently objected to the ioctl because it can't
+be properly analysed by seccomp and much preferred the syscall version.
 
->> macro is missing.
->>
->> Fixes: 42e1358e103d ("ptp: In the testptp utility, use clock_adjtime f=
-rom glibc when available")
->> Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
->> ---
->>   tools/testing/selftests/ptp/testptp.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/sel=
-ftests/ptp/testptp.c
->> index f7911aaeb007..ecffe2c78543 100644
->> --- a/tools/testing/selftests/ptp/testptp.c
->> +++ b/tools/testing/selftests/ptp/testptp.c
->> @@ -38,6 +38,7 @@
->>   #define NSEC_PER_SEC 1000000000LL
->>  =20
->>   /* clock_adjtime is not available in GLIBC < 2.14 */
->> +#ifdef __GLIBC_PREREQ
->>   #if !__GLIBC_PREREQ(2, 14)
->>   #include <sys/syscall.h>
->>   static int clock_adjtime(clockid_t id, struct timex *tx)
->> @@ -45,6 +46,7 @@ static int clock_adjtime(clockid_t id, struct timex =
-*tx)
->>   	return syscall(__NR_clock_adjtime, id, tx);
->>   }
->>   #endif
->> +#endif /* __GLIBC_PREREQ */
->=20
-> I guess this works, but as you say, there is still an assumption to be
-> made there, which is that all other C libraries provide the clock_adjti=
-me
-> syscall definition. So it is likely that this set of #if's and #ifdef's=
+Since we're dumping the uncached variant, the ioctl problem disappears
+but so does the possibility of ever adding it back if we take on the
+container peoples' objection.  This argues for a separate syscall
+because we can add additional features and extend the API with flags
+without causing anti-ioctl riots.
 
-> will be revisited again and again and ...
->=20
-> Maybe this is a matter of personal preference, but I wonder if it's not=
-
-> actually preferable to do something like this?
->=20
-> #include <sys/syscall.h>
->=20
-> static int compat_clock_adjtime(clockid_t id, struct timex *tx)
-> {
-> 	return syscall(__NR_clock_adjtime, id, tx);
-> }
->=20
-> #define clock_adjtime compat_clock_adjtime
->=20
-> This way, everybody uses the same definition of clock_adjtime, and we
-> bypass the definition provided by libc if there is one, and we provide
-> our own if there is none.
->=20
-Hi,
-
-glibc 2.14 was released 1. June 2011 and musl libc also supports this=20
-function since version v0.9.7 28. October 2012. I would just assume that =
-
-the libc has this function.
-
-musl also does some special handling, probably for the 64 bit time=20
-handling, in this function:
-https://git.musl-libc.org/cgit/musl/tree/src/linux/clock_adjtime.c#n37
-I am not sure if this will also work fine with the compat function.
-
-Hauke
+James
 
 
---0cQslolJofwAAahOaGut6bYbwOUIaTqcA--
-
---j8HX4ftHpd09W9Fwh05X8Jy7PD4ombGVK
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEyz0/uAcd+JwXmwtD8bdnhZyy68cFAmApZUcACgkQ8bdnhZyy
-68dD0ggA4RKnOXLGujNriLj8wEG1+FZhAip8PSZNZ8w4SKMWjRlqgRv1241zbf7r
-mcUp11iP86llnkb4YEydtZ4tcnzetIbsm1378ItWyCVNdabU3r6VQPspYX1XZF8y
-4sNilh8NxpMJGbp9ACrFsUjK89RHstn9V/OdzbN3WN0pJTNEYi4Ly011SDi1f5i6
-GFbE4kamkFw5G77lmTLkG3aZxschKuKdmmPZjOO3eHimU1dMvK0+iyeNa6aP1Jbh
-Wdl/o4PQHkppK5wxOnrCHdhTA3WvM1eMoc90NnnlYttNyvXZOowPWCEU7vl0yQHQ
-JDJ8zo1IVlnjBjWGmTW66okMqNao3w==
-=/XUL
------END PGP SIGNATURE-----
-
---j8HX4ftHpd09W9Fwh05X8Jy7PD4ombGVK--
