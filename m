@@ -2,161 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7F631AFF4
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Feb 2021 11:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AD131B175
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Feb 2021 18:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbhBNKA3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Feb 2021 05:00:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52291 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229528AbhBNKAY (ORCPT
+        id S229884AbhBNRLk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Feb 2021 12:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229844AbhBNRLj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Feb 2021 05:00:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613296735;
+        Sun, 14 Feb 2021 12:11:39 -0500
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2A7C061574
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Feb 2021 09:10:58 -0800 (PST)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4Ddtzg0qsSzQlYT;
+        Sun, 14 Feb 2021 18:10:55 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
+        t=1613322653;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FB1Zi7Y2SkOv/JvlFfpIv8DdC9H5NuowZUsuUzsgYnw=;
-        b=fad4dWRm90PFswTbJv9iB9qi1jJhfRMe61awqZs1ietSewBteDCq5TGY+aozecZ2lHLZrm
-        WV/23VXrLqLZMwGpuWSuBwNI5sf4S/zzZ9UxNxqExEWqRG4WccX7F0naK4jzhiVObtfZte
-        XsoYCVyAxcontsUVJ3GbOhQ2cJeStLo=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-490-1fxlIBbDN12eZjEivYgBLw-1; Sun, 14 Feb 2021 04:58:54 -0500
-X-MC-Unique: 1fxlIBbDN12eZjEivYgBLw-1
-Received: by mail-wr1-f69.google.com with SMTP id l10so6162837wry.16
-        for <linux-kselftest@vger.kernel.org>; Sun, 14 Feb 2021 01:58:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=FB1Zi7Y2SkOv/JvlFfpIv8DdC9H5NuowZUsuUzsgYnw=;
-        b=bQV0IrlqXYQRclDQDXiW3KUw0sXqCKLPhgML7xF8EiIyy6zEDiSqbqYQ2x9fYy0/vH
-         7xdcD9OHJouYZtUsRmFkBinFpKXYhZu6qHOt/eRxm4uXdNLSsk0TeEOeFRIICwO6bi62
-         P1FyH9xA+6kzT6hIH3nyexPsi+zxp/qLEGVaztp6GpGiXFhII7S70hJPtZw6HSuaGPpP
-         3j8ULzxhZVTwNLOXaDC/za42eYo1PVOpxBeVtcKbsd6ae0/Ns/yXfz1+Xv1GHKK7nQkk
-         VCOPglQA78wzvGS0fkCpVs3EK//A0zuY5Yq6hFmQgcqYH5e3i1q9vNdLCqOzkj7CO/YY
-         U3oA==
-X-Gm-Message-State: AOAM533snGkADImb8Od0dfZUYS+XgiinV40+SSvCDe2LjetfugM2GNDm
-        RQHvhVzTV9wzhVLfXVtN1pUBnoBV8YljkDtcPII3kF5ZI6GiMreidpuPKeVHCG4dhJQR3IzmLKo
-        wgXGbpAu00PIhNkHMd5nESsNVZ7Bv
-X-Received: by 2002:a7b:c5c1:: with SMTP id n1mr9687107wmk.163.1613296732936;
-        Sun, 14 Feb 2021 01:58:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy6AiGKsLxdVOEv3lcfmH3b0B76nApmRsRYcgYL0hyAbXvIT8wdTN/HlT3/mJBi3lug6LzkMg==
-X-Received: by 2002:a7b:c5c1:: with SMTP id n1mr9687058wmk.163.1613296732697;
-        Sun, 14 Feb 2021 01:58:52 -0800 (PST)
-Received: from [192.168.3.108] (p4ff23363.dip0.t-ipconnect.de. [79.242.51.99])
-        by smtp.gmail.com with ESMTPSA id x15sm18554557wro.66.2021.02.14.01.58.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Feb 2021 01:58:52 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   David Hildenbrand <david@redhat.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to create "secret" memory areas
-Date:   Sun, 14 Feb 2021 10:58:44 +0100
-Message-Id: <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
-References: <20210214091954.GM242749@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-In-Reply-To: <20210214091954.GM242749@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-X-Mailer: iPhone Mail (18D52)
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GxbQ9HJO1VA3LunZTpKKynkctAU7mWQYF4dgVt0R2g4=;
+        b=cytgZU/zpWW8ELR0fkW7HYs0xsPLIJ+gS628TlfeIjm1U+Sgha7zjpE2nzf+gHVLuDjjfZ
+        hRaVPIPN33KQCSso41Qksjmhni1a3kXkxgZzL0qkBuzFNWNEqW/DDnwyHhP3HVyL4Uv8HP
+        TFyhRRc//nio36KVmjpuVYy8QH2LPbo/Lnb7uxt5Em8zKqzGUb8msfHuQ54z5QOROPrQgY
+        PnKTyTCcCaaFJI5AWPJT+pNHAQ6oDKdV1vrSYawog/Ch+IV5QOYP0CdxKE1Vr/IKYxy8OH
+        zbJC53XntMvRJK6Hi60/ZpR8HsD5/aGeEDqmyWmJnxLv0FJZ3JUHtDKvbKs6Hg==
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117]) (amavisd-new, port 10030)
+        with ESMTP id DzTylZPN8-OW; Sun, 14 Feb 2021 18:10:48 +0100 (CET)
+From:   Hauke Mehrtens <hauke@hauke-m.de>
+To:     shuah@kernel.org
+Cc:     richardcochran@gmail.com, davem@davemloft.net, olteanv@gmail.com,
+        vincent.cheng.xh@renesas.com, christian.riesch@omicron.at,
+        linux-kselftest@vger.kernel.org, Hauke Mehrtens <hauke@hauke-m.de>
+Subject: [PATCH] testptp: Fix compile with musl libc
+Date:   Sun, 14 Feb 2021 18:09:40 +0100
+Message-Id: <20210214170940.32358-1-hauke@hauke-m.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-MBO-SPAM-Probability: *
+X-Rspamd-Score: 0.27 / 15.00 / 15.00
+X-Rspamd-Queue-Id: CC65B1847
+X-Rspamd-UID: a45853
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Musl libc does not define the glibc specific macro __GLIBC_PREREQ(), but
+it has the clock_adjtime() function. Assume that a libc implementation
+which does not define __GLIBC_PREREQ at all still implements
+clock_adjtime().
 
-> Am 14.02.2021 um 10:20 schrieb Mike Rapoport <rppt@kernel.org>:
->=20
-> =EF=BB=BFOn Fri, Feb 12, 2021 at 10:18:19AM +0100, David Hildenbrand wrote=
-:
->>> On 12.02.21 00:09, Mike Rapoport wrote:
->>> On Thu, Feb 11, 2021 at 01:07:10PM +0100, David Hildenbrand wrote:
->>>> On 11.02.21 12:27, Mike Rapoport wrote:
->>>>> On Thu, Feb 11, 2021 at 10:01:32AM +0100, David Hildenbrand wrote:
->>>>=20
->>>> So let's talk about the main user-visible differences to other memfd fi=
-les
->>>> (especially, other purely virtual files like hugetlbfs). With secretmem=
-:
->>>>=20
->>>> - File content can only be read/written via memory mappings.
->>>> - File content cannot be swapped out.
->>>>=20
->>>> I think there are still valid ways to modify file content using syscall=
-s:
->>>> e.g., fallocate(PUNCH_HOLE). Things like truncate also seems to work ju=
-st
->>>> fine.
->>> These work perfectly with any file, so maybe we should have added
->>> memfd_create as a flag to open(2) back then and now the secretmem file
->>> descriptors?
->>=20
->> I think open() vs memfd_create() makes sense: for open, the path specifie=
-s
->> main properties (tmpfs, hugetlbfs, filesystem). On memfd, there is no suc=
-h
->> path and the "type" has to be specified differently.
->>=20
->> Also, open() might open existing files - memfd always creates new files.
->=20
-> Yes, but still open() returns a handle to a file and memfd_create() return=
-s
-> a handle to a file. The differences may be well hidden by e.g. O_MEMORY an=
-d
-> than features unique to memfd files will have their set of O_SOMETHING
-> flags.
->=20
+This fixes a build problem with musl libc because the __GLIBC_PREREQ()
+macro is missing.
 
-Let=E2=80=98s agree to disagree.
+Fixes: 42e1358e103d ("ptp: In the testptp utility, use clock_adjtime from glibc when available")
+Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
+---
+ tools/testing/selftests/ptp/testptp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> It's the same logic that says "we already have an interface that's close
-> enough and it's fine to add a bunch of new flags there".
-
-No, not quite. But let=E2=80=98s agree to disagree.
-
->=20
-> And here we come to the question "what are the differences that justify a
-> new system call?" and the answer to this is very subjective. And as such w=
-e
-> can continue bikeshedding forever.
-
-I think this fits into the existing memfd_create() syscall just fine, and I h=
-eard no compelling argument why it shouldn=E2=80=98t. That=E2=80=98s all I c=
-an say.=
+diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
+index f7911aaeb007..ecffe2c78543 100644
+--- a/tools/testing/selftests/ptp/testptp.c
++++ b/tools/testing/selftests/ptp/testptp.c
+@@ -38,6 +38,7 @@
+ #define NSEC_PER_SEC 1000000000LL
+ 
+ /* clock_adjtime is not available in GLIBC < 2.14 */
++#ifdef __GLIBC_PREREQ
+ #if !__GLIBC_PREREQ(2, 14)
+ #include <sys/syscall.h>
+ static int clock_adjtime(clockid_t id, struct timex *tx)
+@@ -45,6 +46,7 @@ static int clock_adjtime(clockid_t id, struct timex *tx)
+ 	return syscall(__NR_clock_adjtime, id, tx);
+ }
+ #endif
++#endif /* __GLIBC_PREREQ */
+ 
+ static void show_flag_test(int rq_index, unsigned int flags, int err)
+ {
+-- 
+2.20.1
 
