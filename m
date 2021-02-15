@@ -2,181 +2,383 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE68E31C262
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Feb 2021 20:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3F431C2BC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Feb 2021 21:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbhBOTVj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Feb 2021 14:21:39 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49872 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229991AbhBOTVf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Feb 2021 14:21:35 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1613416848; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=35iSk0+5UfxNhbQoMoqK8Z0u+AvwuK5VeLDZ0BFtGgc=;
-        b=LxudusPDnEIzx32bpsNd8eGk9aEHEp8nORbgbhfo9m/WaYQJNvskWIV49SwUk+3e+wUm6W
-        bvkuJfdiurilR7t9l+AqCl48/0xWlWnh1jxDaWj32SfJk9fDbkh0PhlICshQRWBYaiM9H0
-        Cssa+KhpPwQxypJN/O8+L/ThpHbYF+4=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C9B2BAC32;
-        Mon, 15 Feb 2021 19:20:47 +0000 (UTC)
-Date:   Mon, 15 Feb 2021 20:20:45 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        id S230000AbhBOUAH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Feb 2021 15:00:07 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34292 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229961AbhBOUAH (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Feb 2021 15:00:07 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id 338351F44FE0
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@collabora.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <YCrJjYmr7A2nO6lA@dhcp22.suse.cz>
-References: <20210214091954.GM242749@kernel.org>
- <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
- <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
- <YCo7TqUnBdgJGkwN@dhcp22.suse.cz>
- <be1d821d3f0aec24ad13ca7126b4359822212eb0.camel@linux.ibm.com>
+        Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        kernel@collabora.com, pgriffais@valvesoftware.com,
+        z.figura12@gmail.com, joel@joelfernandes.org,
+        malteskarupke@fastmail.fm, linux-api@vger.kernel.org,
+        fweimer@redhat.com, libc-alpha@sourceware.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org, acme@kernel.org,
+        corbet@lwn.net
+Subject: Re: [RFC PATCH 01/13] futex2: Implement wait and wake functions
+Organization: Collabora
+References: <20210215152404.250281-1-andrealmeid@collabora.com>
+        <20210215152404.250281-2-andrealmeid@collabora.com>
+Date:   Mon, 15 Feb 2021 14:59:18 -0500
+In-Reply-To: <20210215152404.250281-2-andrealmeid@collabora.com>
+ (=?utf-8?Q?=22Andr=C3=A9?=
+        Almeida"'s message of "Mon, 15 Feb 2021 12:23:52 -0300")
+Message-ID: <87k0r9w19l.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <be1d821d3f0aec24ad13ca7126b4359822212eb0.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon 15-02-21 10:14:43, James Bottomley wrote:
-> On Mon, 2021-02-15 at 10:13 +0100, Michal Hocko wrote:
-> > On Sun 14-02-21 11:21:02, James Bottomley wrote:
-> > > On Sun, 2021-02-14 at 10:58 +0100, David Hildenbrand wrote:
-> > > [...]
-> > > > > And here we come to the question "what are the differences that
-> > > > > justify a new system call?" and the answer to this is very
-> > > > > subjective. And as such we can continue bikeshedding forever.
-> > > > 
-> > > > I think this fits into the existing memfd_create() syscall just
-> > > > fine, and I heard no compelling argument why it shouldn‘t. That‘s
-> > > > all I can say.
-> > > 
-> > > OK, so let's review history.  In the first two incarnations of the
-> > > patch, it was an extension of memfd_create().  The specific
-> > > objection by Kirill Shutemov was that it doesn't share any code in
-> > > common with memfd and so should be a separate system call:
-> > > 
-> > > https://lore.kernel.org/linux-api/20200713105812.dnwtdhsuyj3xbh4f@box/
-> > 
-> > Thanks for the pointer. But this argument hasn't been challenged at
-> > all. It hasn't been brought up that the overlap would be considerable
-> > higher by the hugetlb/sealing support. And so far nobody has claimed
-> > those combinations as unviable.
-> 
-> Kirill is actually interested in the sealing path for his KVM code so
-> we took a look.  There might be a two line overlap in memfd_create for
-> the seal case, but there's no real overlap in memfd_add_seals which is
-> the bulk of the code.  So the best way would seem to lift the inode ...
-> -> seals helpers to be non-static so they can be reused and roll our
-> own add_seals.
+André Almeida <andrealmeid@collabora.com> writes:
 
-These are implementation details which are not really relevant to the
-API IMHO. 
+> Create a new set of futex syscalls known as futex2. This new interface
+> is aimed to implement a more maintainable code, while removing obsolete
+> features and expanding it with new functionalities.
 
-> I can't see a use case at all for hugetlb support, so it seems to be a
-> bit of an angels on pin head discussion.  However, if one were to come
-> along handling it in the same way seems reasonable.
+Hi André.  Some comments below
 
-Those angels have made their way to mmap, System V shm, memfd_create and
-other MM interfaces which have never envisioned when introduced. Hugetlb
-pages to back guest memory is quite a common usecase so why do you think
-those guests wouldn't like to see their memory be "secret"?
+> +/* kernel/futex2.c */
+> +asmlinkage long sys_futex_wait(void __user *uaddr, unsigned int val,
+> +			       unsigned int flags,
+> +			       struct __kernel_timespec __user __user *timo);
 
-As I've said in my last response (YCZEGuLK94szKZDf@dhcp22.suse.cz), I am
-not going to argue all these again. I have made my point and you are
-free to take it or leave it.
+Duplicated __user attribute
 
-> > > The other objection raised offlist is that if we do use
-> > > memfd_create, then we have to add all the secret memory flags as an
-> > > additional ioctl, whereas they can be specified on open if we do a
-> > > separate system call.  The container people violently objected to
-> > > the ioctl because it can't be properly analysed by seccomp and much
-> > > preferred the syscall version.
-> > > 
-> > > Since we're dumping the uncached variant, the ioctl problem
-> > > disappears but so does the possibility of ever adding it back if we
-> > > take on the container peoples' objection.  This argues for a
-> > > separate syscall because we can add additional features and extend
-> > > the API with flags without causing anti-ioctl riots.
-> > 
-> > I am sorry but I do not understand this argument.
-> 
-> You don't understand why container guarding technology doesn't like
-> ioctls?
+> +asmlinkage long sys_futex_wake(void __user *uaddr, unsigned int nr_wake,
+> +			       unsigned int flags);
+> +
+>  /* kernel/hrtimer.c */
+>  asmlinkage long sys_nanosleep(struct __kernel_timespec __user *rqtp,
+>  			      struct __kernel_timespec __user *rmtp);
+> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> index 728752917785..57e19200f7e4 100644
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -862,8 +862,14 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
+>  #define __NR_epoll_pwait2 441
+>  __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
+>  
+> +#define __NR_futex_wait 442
+> +__SYSCALL(__NR_futex_wait, sys_futex_wait)
+> +
+> +#define __NR_futex_wake 443
+> +__SYSCALL(__NR_futex_wake, sys_futex_wake)
+> +
+>  #undef __NR_syscalls
+> -#define __NR_syscalls 442
+> +#define __NR_syscalls 444
+>  
+>  /*
+>   * 32 bit systems traditionally used different
+> diff --git a/include/uapi/linux/futex.h b/include/uapi/linux/futex.h
+> index a89eb0accd5e..9fbdaaf4f254 100644
+> --- a/include/uapi/linux/futex.h
+> +++ b/include/uapi/linux/futex.h
+> @@ -41,6 +41,62 @@
+>  #define FUTEX_CMP_REQUEUE_PI_PRIVATE	(FUTEX_CMP_REQUEUE_PI | \
+>  					 FUTEX_PRIVATE_FLAG)
+>  
+> +/* Size argument to futex2 syscall */
+> +#define FUTEX_8		0
+> +#define FUTEX_16	1
+> +#define FUTEX_32	2
+> +
+> +#define FUTEX_SIZE_MASK	0x3
+> +
+> +#define FUTEX_SHARED_FLAG 8
+> +
+> +#define FUTEX_NUMA_FLAG 16
+> +
+> +/**
+> + * struct futexXX_numa - struct for NUMA-aware futex operation
+> + * @value: futex value
+> + * @hint:  node id to operate
+> + */
+> +
+> +struct futex8_numa {
+> +	__u8 value;
+> +	__s8 hint;
+> +};
+> +
+> +struct futex16_numa {
+> +	__u16 value;
+> +	__s16 hint;
+> +};
+> +
+> +struct futex32_numa {
+> +	__u32 value;
+> +	__s32 hint;
+> +};
 
-No, I did not see where the ioctl argument came from.
+This patchset doesn't use these structures as far as I can see.  Maybe
+these should be on a later patchset, when there is actual support for
+numa awareness ?
 
-[...]
+> +
+> +#define FUTEX_WAITV_MAX 128
+> +
+> +/**
+> + * struct futex_waitv - A waiter for vectorized wait
+> + * @uaddr: User address to wait on
+> + * @val:   Expected value at uaddr
+> + * @flags: Flags for this waiter
+> + */
+> +struct futex_waitv {
+> +	void *uaddr;
+> +	unsigned int val;
+> +	unsigned int flags;
+> +};
 
-> >  What kind of flags are we talking about and why would that be a
-> > problem with memfd_create interface? Could you be more specific
-> > please?
-> 
-> You mean what were the ioctl flags in the patch series linked above? 
-> They were SECRETMEM_EXCLUSIVE and SECRETMEM_UNCACHED in patch 3/5. 
+Shouldn't this be in patch 3?
+> +
+> +/**
+> + * struct futex_requeue - Define an address and its flags for requeue operation
+> + * @uaddr: User address of one of the requeue arguments
+> + * @flags: Flags for this address
+> + */
+> +struct futex_requeue {
+> +	void *uaddr;
+> +	unsigned int flags;
+> +};
 
-OK I see. How many potential modes are we talking about? A few or
-potentially many?
+Shouldn't this be in patch 4?
 
-> They were eventually dropped after v10, because of problems with
-> architectural semantics, with the idea that it could be added back
-> again if a compelling need arose:
-> 
-> https://lore.kernel.org/linux-api/20201123095432.5860-1-rppt@kernel.org/
-> 
-> In theory the extra flags could be multiplexed into the memfd_create
-> flags like hugetlbfs is but with 32 flags and a lot already taken it
-> gets messy for expansion.  When we run out of flags the first question
-> people will ask is "why didn't you do separate system calls?".
+> +/**
+> + * struct futexv_head - List of futexes to be waited
+> + * @task:    Task to be awaken
+> + * @hint:    Was someone on this list awakened?
+> + * @objects: List of futexes
+> + */
+> +struct futexv_head {
+> +	struct task_struct *task;
+> +	bool hint;
+> +	struct futex_waiter objects[0];
+> +};
 
-OK, I do not necessarily see a lack of flag space a problem. I can be
-wrong here but I do not see how that would be solved by a separate
-syscall when it sounds rather forseeable that many modes supported by
-memfd_create will eventually find their way to a secret memory as well.
-If for no other reason, secret memory is nothing really special. It is
-just a memory which is not mapped to the kernel via 1:1 mapping. That's
-it. And that can be applied to any memory provided to the userspace.
+this structure is also used for a single futex.  maybe struct futex_waiter_head?
 
-But I am repeating myself again here so I better stop.
+> +
+> +/**
+> + * struct futex_bucket - A bucket of futex's hash table
+> + * @waiters: Number of waiters in the bucket
+> + * @lock:    Bucket lock
+> + * @list:    List of waiters on this bucket
+> + */
+> +struct futex_bucket {
+> +	atomic_t waiters;
+> +	spinlock_t lock;
+> +	struct list_head list;
+> +};
+> +
+> +/**
+> + * struct futex_single_waiter - Wrapper for a futexv_head of one element
+> + * @futexv: Single futexv element
+> + * @waiter: Single waiter element
+> + */
+> +struct futex_single_waiter {
+> +	struct futexv_head futexv;
+> +	struct futex_waiter waiter;
+> +} __packed;
+
+Is this struct necessary?  can't you just allocate the necessary space,
+i.e. a struct futexv_head with 1 futexv_head->object?
+> +
+> +/* Mask for futex2 flag operations */
+> +#define FUTEX2_MASK (FUTEX_SIZE_MASK | FUTEX_SHARED_FLAG | \
+> +		     FUTEX_CLOCK_REALTIME)
+
+SHARED_FLAG should be in patch 2
+
+> +
+> +/* Mask for sys_futex_waitv flag */
+> +#define FUTEXV_MASK (FUTEX_CLOCK_REALTIME)
+> +
+> +/* Mask for each futex in futex_waitv list */
+> +#define FUTEXV_WAITER_MASK (FUTEX_SIZE_MASK | FUTEX_SHARED_FLAG)
+> +
+> +struct futex_bucket *futex_table;
+> +unsigned int futex2_hashsize;
+> +
+> +/*
+> + * Reflects a new waiter being added to the waitqueue.
+> + */
+> +static inline void bucket_inc_waiters(struct futex_bucket *bucket)
+> +{
+> +#ifdef CONFIG_SMP
+> +	atomic_inc(&bucket->waiters);
+> +	/*
+> +	 * Issue a barrier after adding so futex_wake() will see that the
+> +	 * value had increased
+> +	 */
+> +	smp_mb__after_atomic();
+> +#endif
+> +}
+> +
+> +/*
+> + * Reflects a waiter being removed from the waitqueue by wakeup
+> + * paths.
+> + */
+> +static inline void bucket_dec_waiters(struct futex_bucket *bucket)
+> +{
+> +#ifdef CONFIG_SMP
+> +	atomic_dec(&bucket->waiters);
+> +#endif
+> +}
+> +
+> +/*
+> + * Get the number of waiters in a bucket
+> + */
+> +static inline int bucket_get_waiters(struct futex_bucket *bucket)
+> +{
+> +#ifdef CONFIG_SMP
+> +	/*
+> +	 * Issue a barrier before reading so we get an updated value from
+> +	 * futex_wait()
+> +	 */
+> +	smp_mb();
+> +	return atomic_read(&bucket->waiters);
+> +#else
+> +	return 1;
+> +#endif
+> +}
+> +
+> +/**
+> + * futex_get_bucket - Check if the user address is valid, prepare internal
+> + *                    data and calculate the hash
+> + * @uaddr:   futex user address
+> + * @key:     data that uniquely identifies a futex
+> + *
+> + * Return: address of bucket on success, error code otherwise
+> + */
+> +static struct futex_bucket *futex_get_bucket(void __user *uaddr,
+> +					     struct futex_key *key)
+> +{
+> +	uintptr_t address = (uintptr_t)uaddr;
+> +	u32 hash_key;
+> +
+> +	/* Checking if uaddr is valid and accessible */
+> +	if (unlikely(!IS_ALIGNED(address, sizeof(u32))))
+> +		return ERR_PTR(-EINVAL);
+> +	if (unlikely(!access_ok(address, sizeof(u32))))
+> +		return ERR_PTR(-EFAULT);
+
+This says the code only supports 32-bit.  So, maybe drop the other
+FUTEX_SIZE defines for now
+
+> +
+> +	key->offset = address % PAGE_SIZE;
+> +	address -= key->offset;
+> +	key->pointer = (u64)address;
+> +	key->index = (unsigned long)current->mm;
+
+Why split the key in offset and pointer and waste 1/3 more space to
+store each key?
+
+> +
+> +	/* Generate hash key for this futex using uaddr and current->mm */
+> +	hash_key = jhash2((u32 *)key, sizeof(*key) / sizeof(u32), 0);
+> +
+> +	/* Since HASH_SIZE is 2^n, subtracting 1 makes a perfect bit mask */
+> +	return &futex_table[hash_key & (futex2_hashsize - 1)];
+
+If someone inadvertely changes futex2_hashsize to something not 2^n this
+will silently break.  futex2_hashsize should be constant and you need
+a BUILD_BUG_ON().
+
+> +static int futex_enqueue(struct futexv_head *futexv, unsigned int nr_futexes,
+> +			 int *awakened)
+> +{
+> +	int i, ret;
+> +	u32 uval, *uaddr, val;
+> +	struct futex_bucket *bucket;
+> +
+> +retry:
+> +	set_current_state(TASK_INTERRUPTIBLE);
+> +
+> +	for (i = 0; i < nr_futexes; i++) {
+> +		uaddr = (u32 * __user)futexv->objects[i].uaddr;
+> +		val = (u32)futexv->objects[i].val;
+> +
+> +		bucket = futexv->objects[i].bucket;
+> +
+> +		bucket_inc_waiters(bucket);
+> +		spin_lock(&bucket->lock);
+> +
+> +		ret = futex_get_user(&uval, uaddr);
+> +
+> +		if (unlikely(ret)) {
+> +			spin_unlock(&bucket->lock);
+> +
+> +			bucket_dec_waiters(bucket);
+> +			__set_current_state(TASK_RUNNING);
+> +			*awakened = futex_dequeue_multiple(futexv, i);
+> +
+> +			if (__get_user(uval, uaddr))
+> +				return -EFAULT;
+> +
+> +			if (*awakened >= 0)
+> +				return 1;
+
+If you are awakened, you don't need to waste time with trying to get the
+next key.
+
+
+> +/**
+> + * futex_wait - Setup the timer (if there's one) and wait on a list of futexes
+> + * @futexv:     List of futexes
+> + * @nr_futexes: Length of futexv
+> + * @timo:	Timeout
+> + * @flags:	Timeout flags
+> + *
+> + * Return:
+> + * * 0 >= - Hint of which futex woke us
+> + * * 0 <  - Error code
+> + */
+> +static int futex_set_timer_and_wait(struct futexv_head *futexv,
+> +				    unsigned int nr_futexes,
+> +				    struct __kernel_timespec __user *timo,
+> +				    unsigned int flags)
+> +{
+> +	struct hrtimer_sleeper timeout;
+> +	int ret;
+> +
+> +	if (timo) {
+> +		ret = futex_setup_time(timo, &timeout, flags);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = __futex_wait(futexv, nr_futexes, timo ? &timeout : NULL);
+> +
+> +	if (timo)
+> +		hrtimer_cancel(&timeout.timer);
+> +
+> +	return ret;
+> +}
+
+I'm having a hard time understanding why this function exists.  part of
+the futex is set up outside of it, part inside.  Not sure if this isn't
+just part of sys_futex_wait.
+
+Thanks,
+
 -- 
-Michal Hocko
-SUSE Labs
+Gabriel Krisman Bertazi
