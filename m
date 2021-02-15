@@ -2,117 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E8931B645
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Feb 2021 10:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 582D231B7F5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Feb 2021 12:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbhBOJOj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Feb 2021 04:14:39 -0500
-Received: from mx2.suse.de ([195.135.220.15]:33862 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230088AbhBOJOi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Feb 2021 04:14:38 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1613380431; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=miCNDkPWZZBRVJ8Jtr1LFzD24yWA9N0KNTV3BkO+MBs=;
-        b=TETHPiEq8kl7uQEKm1Aff4L3NsQE0DM02/lfPkpKudaCI6/5lNvCven/uHuRT24qzIXWlb
-        R5BxAqdLhSywOBM2nG5lWN1rFZRScNEvDlYO6zf3OlgEc7VuRTl3HqG4uIymDgc/8zHABu
-        C6iAKZCoFVJI6hxssRHEbP17I8dvFo0=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9278BAD19;
-        Mon, 15 Feb 2021 09:13:51 +0000 (UTC)
-Date:   Mon, 15 Feb 2021 10:13:50 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <YCo7TqUnBdgJGkwN@dhcp22.suse.cz>
-References: <20210214091954.GM242749@kernel.org>
- <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
- <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
+        id S229811AbhBOLZn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Feb 2021 06:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229802AbhBOLZm (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Feb 2021 06:25:42 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22429C061574
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Feb 2021 03:25:02 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id y26so10449095eju.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Feb 2021 03:25:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=q5xS7lRux6r5/KQvjd1uY1boLs2WXO4iuyD7LvYL194=;
+        b=Av0x+TovCBGNsShSsqo8bGJVmFKdmLndJmjOpXZnG9qmNZtwPfDL0Dfav69fNbOkgb
+         9aA0LkIRdsveAAjxNajIYQhPzOAxjjFxt3lkzYIdpoDnlZR0LPhyD/lYNvEHilYDDbxw
+         JTJqqsB0Mvfrj8QNZqf4FdqAYFEI+PCggCiY8TnW4Vh3WuWjrDswgErtah90VufGQUEW
+         hQSitqSl3y+dmm7Ows3hJfHj2BuMTSwX+/pFAnyAjhMzH68Z7Ti22Lneu8Ao8mTMLa4O
+         lp4hteoCyGRoHjfA6+FjG2LHEvA0pMlCQxWiuxjlfs04B54GjbNrsX5ctwGPNU/JFMDT
+         OwdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q5xS7lRux6r5/KQvjd1uY1boLs2WXO4iuyD7LvYL194=;
+        b=terwYeyxcd96h+xQA4juV3DMKNlXrgbfeAmG0oRpRLXCI6yOszYzk76cWg3HMt+I8O
+         Z+Vuk2roiSZOrNlu+IngVx7c74BRCnnEz/Xdi3wcSXs1xD29+JPq8TVrWFZA57YRGBLf
+         dASGE2D0OFruOnZzEonX5T6Fy4HeVV9ROhauVkqV2+OH7ipzTUEjq1GeK9cxLv+B472M
+         qGyvgIh/Wg92R6+dnlbxFnPFhNZvX3HF8IDQm7XaJI6bzZQvJldzpWLIi0skyrXjOeFP
+         h3HmHGf6H/M95+LKPLXw671DD27cRDCO8QI1PimbpiP+LwyBdQOv5Ueb/SPRRWAi1syF
+         OsnA==
+X-Gm-Message-State: AOAM533UFEa8TqVQkbUrquLr+r35/E4Mow+hC1xwc+zWufsuunONMio5
+        TGqQWynkf6BiwuHNqXxhHgA=
+X-Google-Smtp-Source: ABdhPJxEc02iG2VSGpNQ1SXZJWX4Ni77JgEoCA8jqMRCkBmc89PcrZTV9rZzM/0PKhyZUOcn27h7kQ==
+X-Received: by 2002:a17:906:ae50:: with SMTP id lf16mr15299319ejb.66.1613388300895;
+        Mon, 15 Feb 2021 03:25:00 -0800 (PST)
+Received: from skbuf (5-12-227-87.residential.rdsnet.ro. [5.12.227.87])
+        by smtp.gmail.com with ESMTPSA id h10sm9543167edk.45.2021.02.15.03.25.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Feb 2021 03:25:00 -0800 (PST)
+Date:   Mon, 15 Feb 2021 13:24:59 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hauke Mehrtens <hauke@hauke-m.de>
+Cc:     shuah@kernel.org, richardcochran@gmail.com, davem@davemloft.net,
+        vincent.cheng.xh@renesas.com, christian.riesch@omicron.at,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] testptp: Fix compile with musl libc
+Message-ID: <20210215112459.rykixckksyb33qmc@skbuf>
+References: <20210214170940.32358-1-hauke@hauke-m.de>
+ <20210214173716.hxzb2nk6f7cx262n@skbuf>
+ <07b844e0-ea27-8607-b631-f946fe8af7f9@hauke-m.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
+In-Reply-To: <07b844e0-ea27-8607-b631-f946fe8af7f9@hauke-m.de>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun 14-02-21 11:21:02, James Bottomley wrote:
-> On Sun, 2021-02-14 at 10:58 +0100, David Hildenbrand wrote:
-> [...]
-> > > And here we come to the question "what are the differences that
-> > > justify a new system call?" and the answer to this is very
-> > > subjective. And as such we can continue bikeshedding forever.
-> > 
-> > I think this fits into the existing memfd_create() syscall just fine,
-> > and I heard no compelling argument why it shouldn‘t. That‘s all I can
-> > say.
-> 
-> OK, so let's review history.  In the first two incarnations of the
-> patch, it was an extension of memfd_create().  The specific objection
-> by Kirill Shutemov was that it doesn't share any code in common with
-> memfd and so should be a separate system call:
-> 
-> https://lore.kernel.org/linux-api/20200713105812.dnwtdhsuyj3xbh4f@box/
+On Sun, Feb 14, 2021 at 07:00:39PM +0100, Hauke Mehrtens wrote:
+> glibc 2.14 was released 1. June 2011 and musl libc also supports this
+> function since version v0.9.7 28. October 2012. I would just assume that the
+> libc has this function.
 
-Thanks for the pointer. But this argument hasn't been challenged at all.
-It hasn't been brought up that the overlap would be considerable higher
-by the hugetlb/sealing support. And so far nobody has claimed those
-combinations as unviable.
+Considering that somebody wanted it to work with a GNU libc prior to
+2011, why would we not assume that somebody will eventually want it to
+work with a musl libc prior to 2012?
 
-> The other objection raised offlist is that if we do use memfd_create,
-> then we have to add all the secret memory flags as an additional ioctl,
-> whereas they can be specified on open if we do a separate system call. 
-> The container people violently objected to the ioctl because it can't
-> be properly analysed by seccomp and much preferred the syscall version.
-> 
-> Since we're dumping the uncached variant, the ioctl problem disappears
-> but so does the possibility of ever adding it back if we take on the
-> container peoples' objection.  This argues for a separate syscall
-> because we can add additional features and extend the API with flags
-> without causing anti-ioctl riots.
+> musl also does some special handling, probably for the 64 bit time handling,
+> in this function:
+> https://git.musl-libc.org/cgit/musl/tree/src/linux/clock_adjtime.c#n37
+> I am not sure if this will also work fine with the compat function.
 
-I am sorry but I do not understand this argument. What kind of flags are
-we talking about and why would that be a problem with memfd_create
-interface? Could you be more specific please?
--- 
-Michal Hocko
-SUSE Labs
+I've stared at commit
+https://git.musl-libc.org/cgit/musl/commit/src/linux/clock_adjtime.c?id=2b4fd6f75b4fa66d28cddcf165ad48e8fda486d1
+which added the conversion logic between struct ktimex64/struct ktimex
+and struct timex, and sadly I don't understand what is the point of
+wrapping the clock_adjtime function around the SYS_clock_adjtime64
+syscall, when the struct timex::time member will still not be Y2038 safe
+on 32-bit systems...
+
+That being said, I didn't know that musl libc provides any wrappers
+around these syscalls.
