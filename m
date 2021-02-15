@@ -2,144 +2,225 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBD731BC66
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Feb 2021 16:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 463BD31BECC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Feb 2021 17:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbhBOP2L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Feb 2021 10:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
+        id S230425AbhBOQSi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Feb 2021 11:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbhBOP12 (ORCPT
+        with ESMTP id S231950AbhBOQOd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Feb 2021 10:27:28 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A37BC0613D6;
-        Mon, 15 Feb 2021 07:25:45 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 23AB81F44F31
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     kernel@collabora.com, krisman@collabora.com,
-        pgriffais@valvesoftware.com, z.figura12@gmail.com,
-        joel@joelfernandes.org, malteskarupke@fastmail.fm,
-        linux-api@vger.kernel.org, fweimer@redhat.com,
-        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [RFC PATCH 13/13] kernel: Enable waitpid() for futex2
-Date:   Mon, 15 Feb 2021 12:24:04 -0300
-Message-Id: <20210215152404.250281-14-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210215152404.250281-1-andrealmeid@collabora.com>
-References: <20210215152404.250281-1-andrealmeid@collabora.com>
+        Mon, 15 Feb 2021 11:14:33 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E59CC0613D6
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Feb 2021 08:13:52 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id r77so6774894qka.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Feb 2021 08:13:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EgOcbWVlXEaTgKR2YO46uJEZBiJ6ZIhzWJFxuAbweaw=;
+        b=cLqsFxDnVUK7Y9ck/9he2hDj69MH1f8OnnYTThtorOSvC+8klrQ4URYBDdvymVIvl2
+         hERmNfmVceoEMVPp1G2KkiT/VCrvoDAxz5FT/DAcUoVpLUdkr5MqD12G+3BfwNEZCjOJ
+         Cx+sSKpWKQubyXLM0wqECyXmo3Wo8qno269R73OwnnTUQo1ucJZxeEXgONvLB3jt/1dY
+         etUFBRiRPGsWvGbOgqI1I5wE0H7oGpxrMlcWMzCBHakPIhyDn0uE5/qHRkMaDlpSlU65
+         q0LTXG44zleaLM2brFtYb3WRlE0JBl8F6B4kXkm6eqGRDgFGa7ilWGpdS8qj3kPBWgrm
+         eBOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EgOcbWVlXEaTgKR2YO46uJEZBiJ6ZIhzWJFxuAbweaw=;
+        b=R8EGD95MjAZRxodeKg8Eg5alsPyHbma1Ip1K+pl4SyNvsFt6e8LGvNxmjBYHlrbw5n
+         qh4tjHh4Feoa9Tci8M69tLUcaypf2ONnVS5Ldl4EOPQvcq45XwaWiGLQ1GranqNUGbHL
+         ffDNK8XN97G0A/1AYWiQYHueCtDNTL0ogIcSAX1QvGiMGj7kANMmgjQ8qC+QPfbbHFVJ
+         0H4kT/DKgBHMTDvhC37Q0f+3SeXozesOFS8L/WFEJ171E5z9OnxzvAYTnGZndejNWAIt
+         figOuBdmZpGExhSAIszW6PcyI7XIPJvJexGZKt30gn1Ymwos0vOk5kdWKd+IOOaUIJIN
+         oQUA==
+X-Gm-Message-State: AOAM530qFuQtsO0GOr43za4kah3OPVWdR6OJuJfnwZ2zI/dWMR3JUAwn
+        JDvWsN/lQcUpOAddpvGgRyXtMQ==
+X-Google-Smtp-Source: ABdhPJxcFlGOXp1G4eLBqTJDnimeoLjm6V7Zt5zCfBSYhgAGdK3sw96DHL1ley2e0Eb8rfmhWqxFJA==
+X-Received: by 2002:a37:a191:: with SMTP id k139mr14960124qke.61.1613405631689;
+        Mon, 15 Feb 2021 08:13:51 -0800 (PST)
+Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
+        by smtp.gmail.com with ESMTPSA id u7sm10909213qta.75.2021.02.15.08.13.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Feb 2021 08:13:50 -0800 (PST)
+From:   Pavel Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
+        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
+        dan.j.williams@intel.com, sashal@kernel.org,
+        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
+        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
+        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
+        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
+        linux-doc@vger.kernel.org, ira.weiny@intel.com,
+        linux-kselftest@vger.kernel.org, jmorris@namei.org
+Subject: [PATCH v11 00/14] prohibit pinning pages in ZONE_MOVABLE
+Date:   Mon, 15 Feb 2021 11:13:35 -0500
+Message-Id: <20210215161349.246722-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To make pthreads works as expected if they are using futex2, wake
-clear_child_tid with futex2 as well. This is make applications that uses
-waitpid() (and clone(CLONE_CHILD_SETTID)) wake while waiting for the
-child to terminate. Given that apps should not mix futex() and futex2(),
-any correct app will trigger a harmless noop wakeup on the interface
-that it isn't using.
+Changelog
+---------
+v11
+- Another build fix reported by robot on i386: moved is_pinnable_page()
+  below set_page_section() in linux/mm.h
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
----
+v10
+- Fixed !CONFIG_MMU compiler issues by adding is_zero_pfn() stub.
 
-This commit is here for the intend to show what we need to do in order
-to get a full NPTL working on top of futex2. It should be merged after
-we talk to glibc folks on the details around the futex_wait() side. For
-instance, we could use this as an opportunity to use private futexes or
-8bit sized futexes, but both sides need to use the exactly same flags.
----
- include/linux/syscalls.h |  2 ++
- kernel/fork.c            |  2 ++
- kernel/futex2.c          | 30 ++++++++++++++++++------------
- 3 files changed, 22 insertions(+), 12 deletions(-)
+v9
+- Renamed gpf_to_alloc_flags() to gfp_to_alloc_flags_cma(); thanks Lecopzer
+  Chen for noticing.
+- Fixed warning reported scripts/checkpatch.pl:
+  "Logical continuations should be on the previous line"
 
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 06823bc7ef9d..38c2fc50ada9 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1312,6 +1312,8 @@ int ksys_ipc(unsigned int call, int first, unsigned long second,
- 	unsigned long third, void __user * ptr, long fifth);
- int compat_ksys_ipc(u32 call, int first, int second,
- 	u32 third, u32 ptr, u32 fifth);
-+long ksys_futex_wake(void __user *uaddr, unsigned long nr_wake,
-+		     unsigned int flags);
- 
- /*
-  * The following kernel syscall equivalents are just wrappers to fs-internal
-diff --git a/kernel/fork.c b/kernel/fork.c
-index d66cd1014211..e39846a73a43 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1308,6 +1308,8 @@ static void mm_release(struct task_struct *tsk, struct mm_struct *mm)
- 			put_user(0, tsk->clear_child_tid);
- 			do_futex(tsk->clear_child_tid, FUTEX_WAKE,
- 					1, NULL, NULL, 0, 0);
-+			ksys_futex_wake(tsk->clear_child_tid, 1,
-+					FUTEX_32 | FUTEX_SHARED_FLAG);
- 		}
- 		tsk->clear_child_tid = NULL;
- 	}
-diff --git a/kernel/futex2.c b/kernel/futex2.c
-index 8a8b45f98d3b..a810b7f5c3a0 100644
---- a/kernel/futex2.c
-+++ b/kernel/futex2.c
-@@ -942,18 +942,8 @@ static inline bool futex_match(struct futex_key key1, struct futex_key key2)
- 		key1.offset == key2.offset);
- }
- 
--/**
-- * sys_futex_wake - Wake a number of futexes waiting on an address
-- * @uaddr:   Address of futex to be woken up
-- * @nr_wake: Number of futexes waiting in uaddr to be woken up
-- * @flags:   Flags for size and shared
-- *
-- * Wake `nr_wake` threads waiting at uaddr.
-- *
-- * Returns the number of woken threads on success, error code otherwise.
-- */
--SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
--		unsigned int, flags)
-+long ksys_futex_wake(void __user *uaddr, unsigned long nr_wake,
-+		     unsigned int flags)
- {
- 	bool shared = (flags & FUTEX_SHARED_FLAG) ? true : false;
- 	unsigned int size = flags & FUTEX_SIZE_MASK;
-@@ -990,6 +980,22 @@ SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
- 	return ret;
- }
- 
-+/**
-+ * sys_futex_wake - Wake a number of futexes waiting on an address
-+ * @uaddr:   Address of futex to be woken up
-+ * @nr_wake: Number of futexes waiting in uaddr to be woken up
-+ * @flags:   Flags for size and shared
-+ *
-+ * Wake `nr_wake` threads waiting at uaddr.
-+ *
-+ * Returns the number of woken threads on success, error code otherwise.
-+ */
-+SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
-+		unsigned int, flags)
-+{
-+	return ksys_futex_wake(uaddr, nr_wake, flags);
-+}
-+
- static void futex_double_unlock(struct futex_bucket *b1, struct futex_bucket *b2)
- {
- 	spin_unlock(&b1->lock);
+v8
+- Added reviewed by's from John Hubbard
+- Fixed subjects for selftests patches
+- Moved zero page check inside is_pinnable_page() as requested by Jason
+  Gunthorpe.
+
+v7
+- Added reviewed-by's
+- Fixed a compile bug on non-mmu builds reported by robot
+
+v6
+  Small update, but I wanted to send it out quicker, as it removes a
+  controversial patch and replaces it with something sane.
+- Removed forcing FOLL_WRITE for longterm gup, instead added a patch to
+  skip zero pages during migration.
+- Added reviewed-by's and minor log changes.
+
+v5
+- Added the following patches to the beginning of series, which are fixes
+   to the other existing problems with CMA migration code:
+	mm/gup: check every subpage of a compound page during isolation
+	mm/gup: return an error on migration failure
+	mm/gup: check for isolation errors also at the beginning of series
+	mm/gup: do not allow zero page for pinned pages
+- remove .gfp_mask/.reclaim_idx changes from mm/vmscan.c
+- update movable zone header comment in patch 8 instead of patch 3, fix
+  the comment
+- Added acked, sign-offs
+- Updated commit logs based on feedback
+- Addressed issues reported by Michal and Jason.
+- Remove:
+	#define PINNABLE_MIGRATE_MAX	10
+	#define PINNABLE_ISOLATE_MAX	100
+   Instead: fail on the first migration failure, and retry isolation
+   forever as their failures are transient.
+
+- In self-set addressed some of the comments from John Hubbard, updated
+  commit logs, and added comments. Renamed gup->flags with gup->test_flags.
+
+v4
+- Address page migration comments. New patch:
+  mm/gup: limit number of gup migration failures, honor failures
+  Implements the limiting number of retries for migration failures, and
+  also check for isolation failures.
+  Added a test case into gup_test to verify that pages never long-term
+  pinned in a movable zone, and also added tests to fault both in kernel
+  and in userland.
+v3
+- Merged with linux-next, which contains clean-up patch from Jason,
+  therefore this series is reduced by two patches which did the same
+  thing.
+v2
+- Addressed all review comments
+- Added Reviewed-by's.
+- Renamed PF_MEMALLOC_NOMOVABLE to PF_MEMALLOC_PIN
+- Added is_pinnable_page() to check if page can be longterm pinned
+- Fixed gup fast path by checking is_in_pinnable_zone()
+- rename cma_page_list to movable_page_list
+- add a admin-guide note about handling pinned pages in ZONE_MOVABLE,
+  updated caveat about pinned pages from linux/mmzone.h
+- Move current_gfp_context() to fast-path
+
+---------
+When page is pinned it cannot be moved and its physical address stays
+the same until pages is unpinned.
+
+This is useful functionality to allows userland to implementation DMA
+access. For example, it is used by vfio in vfio_pin_pages().
+
+However, this functionality breaks memory hotplug/hotremove assumptions
+that pages in ZONE_MOVABLE can always be migrated.
+
+This patch series fixes this issue by forcing new allocations during
+page pinning to omit ZONE_MOVABLE, and also to migrate any existing
+pages from ZONE_MOVABLE during pinning.
+
+It uses the same scheme logic that is currently used by CMA, and extends
+the functionality for all allocations.
+
+For more information read the discussion [1] about this problem.
+[1] https://lore.kernel.org/lkml/CA+CK2bBffHBxjmb9jmSKacm0fJMinyt3Nhk8Nx6iudcQSj80_w@mail.gmail.com
+
+Previous versions:
+v1
+https://lore.kernel.org/lkml/20201202052330.474592-1-pasha.tatashin@soleen.com
+v2
+https://lore.kernel.org/lkml/20201210004335.64634-1-pasha.tatashin@soleen.com
+v3
+https://lore.kernel.org/lkml/20201211202140.396852-1-pasha.tatashin@soleen.com
+v4
+https://lore.kernel.org/lkml/20201217185243.3288048-1-pasha.tatashin@soleen.com
+v5
+https://lore.kernel.org/lkml/20210119043920.155044-1-pasha.tatashin@soleen.com
+v6
+https://lore.kernel.org/lkml/20210120014333.222547-1-pasha.tatashin@soleen.com
+v7
+https://lore.kernel.org/lkml/20210122033748.924330-1-pasha.tatashin@soleen.com
+v8
+https://lore.kernel.org/lkml/20210125194751.1275316-1-pasha.tatashin@soleen.com
+v9
+https://lore.kernel.org/lkml/20210201153827.444374-1-pasha.tatashin@soleen.com
+v10
+https://lore.kernel.org/lkml/20210211162427.618913-1-pasha.tatashin@soleen.com
+
+Pavel Tatashin (14):
+  mm/gup: don't pin migrated cma pages in movable zone
+  mm/gup: check every subpage of a compound page during isolation
+  mm/gup: return an error on migration failure
+  mm/gup: check for isolation errors
+  mm cma: rename PF_MEMALLOC_NOCMA to PF_MEMALLOC_PIN
+  mm: apply per-task gfp constraints in fast path
+  mm: honor PF_MEMALLOC_PIN for all movable pages
+  mm/gup: do not migrate zero page
+  mm/gup: migrate pinned pages out of movable zone
+  memory-hotplug.rst: add a note about ZONE_MOVABLE and page pinning
+  mm/gup: change index type to long as it counts pages
+  mm/gup: longterm pin migration cleanup
+  selftests/vm: gup_test: fix test flag
+  selftests/vm: gup_test: test faulting in kernel, and verify pinnable
+    pages
+
+ .../admin-guide/mm/memory-hotplug.rst         |   9 +
+ include/linux/migrate.h                       |   1 +
+ include/linux/mm.h                            |  19 ++
+ include/linux/mmzone.h                        |  13 +-
+ include/linux/pgtable.h                       |  12 ++
+ include/linux/sched.h                         |   2 +-
+ include/linux/sched/mm.h                      |  27 +--
+ include/trace/events/migrate.h                |   3 +-
+ mm/gup.c                                      | 174 ++++++++----------
+ mm/gup_test.c                                 |  29 +--
+ mm/gup_test.h                                 |   3 +-
+ mm/hugetlb.c                                  |   4 +-
+ mm/page_alloc.c                               |  33 ++--
+ tools/testing/selftests/vm/gup_test.c         |  36 +++-
+ 14 files changed, 208 insertions(+), 157 deletions(-)
+
 -- 
-2.30.1
+2.25.1
 
