@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D5F31C831
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Feb 2021 10:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A075A31C873
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Feb 2021 10:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbhBPJh7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Feb 2021 04:37:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S229924AbhBPJ5U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Feb 2021 04:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbhBPJhv (ORCPT
+        with ESMTP id S229917AbhBPJ5S (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Feb 2021 04:37:51 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B1DC061574;
-        Tue, 16 Feb 2021 01:37:11 -0800 (PST)
+        Tue, 16 Feb 2021 04:57:18 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2735AC061574;
+        Tue, 16 Feb 2021 01:56:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
         Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
         Sender:Reply-To:Content-ID:Content-Description;
-        bh=6p6aP26uvaDys5m2iqcqs2Sq1c/nYDnkVqNjuyxRkDU=; b=Nk4MUsvviR9MIo25CvF38GBU6P
-        HueibuWzMXbLsx5spRiXK/Folbl0pODU9941RNDDvdGqgpXmzjy+XIssHin4gBD797gR8i+2CiWsS
-        9rNh3U6F/8P9YMQY6P8erJIv5tuxOhuvYGDhouTECta/1hzgomSFVtfYUVB8PFrMQrWPJun1bxPxK
-        F5UliehaGMyP6rxujPhSnZT1x9VYjuxdQ5M2cyYF/evDQemtzv8Z0dsy2On6A4eZsIleh4omSGPQF
-        W5ijuSs/k6kq8DUN5Ye3nZYeP/C8DtVAKAcz0jQ+2sxAbBn89IkIUL9Noq6BYQT4PoZiUGODuLnVZ
-        RDBbf8JQ==;
+        bh=G1rJISCtbmEjkZgEkUza1CHcQJlALOsUgrEKGt62Ww0=; b=ITqmpNKLZ91FyiouFCGBCTWmOs
+        7sMWLgI50fSxJr25JP3GJS2U8az6ucJFSiedQ4Qo2+o230RH8NNwnYpL6n5xVjOADJWU5zSn62jEJ
+        ZduLmaFu/nJkd3yDWNiZjdoX3hDhrHWJTp9UpapAPbS4uttrIxjBdt1iyMSsPzJ/DRKqO1ya1tewI
+        JGElFy/xxGQZFzImfhm41Wp+NVWGBImdFFDnT7mJxme55PgDu4rWIz6/nZy1ADzI3Zy1WLyTDi8/c
+        uYnk5VR4fMgLcQ81zEb61F/uBgKYvytslkoZQpuqUFKBxUXO9c3Tfzyu6tEzAN0HXAuvkCouDrIgG
+        cBP2ZXtg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lBwl5-00GheO-QE; Tue, 16 Feb 2021 09:35:12 +0000
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1lBx5d-0004uh-0t; Tue, 16 Feb 2021 09:56:17 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46AE63059DD;
-        Tue, 16 Feb 2021 10:35:02 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BC20D3007CD;
+        Tue, 16 Feb 2021 10:56:14 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2CE432058CB0E; Tue, 16 Feb 2021 10:35:02 +0100 (CET)
-Date:   Tue, 16 Feb 2021 10:35:02 +0100
+        id ABB6E2B82AB42; Tue, 16 Feb 2021 10:56:14 +0100 (CET)
+Date:   Tue, 16 Feb 2021 10:56:14 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
@@ -50,7 +50,7 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
         shuah@kernel.org, acme@kernel.org, corbet@lwn.net
 Subject: Re: [RFC PATCH 01/13] futex2: Implement wait and wake functions
-Message-ID: <YCuRxl4uRhua+Y5b@hirez.programming.kicks-ass.net>
+Message-ID: <YCuWvlKRXAygNQZP@hirez.programming.kicks-ass.net>
 References: <20210215152404.250281-1-andrealmeid@collabora.com>
  <20210215152404.250281-2-andrealmeid@collabora.com>
 MIME-Version: 1.0
@@ -63,108 +63,30 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Mon, Feb 15, 2021 at 12:23:52PM -0300, André Almeida wrote:
+> Create a new set of futex syscalls known as futex2. This new interface
+> is aimed to implement a more maintainable code, while removing obsolete
+> features and expanding it with new functionalities.
+> 
+> Implements wait and wake semantics for futexes, along with the base
+> infrastructure for future operations.
 
-> +static int futex_dequeue_multiple(struct futexv_head *futexv, unsigned int nr)
-> +{
-> +	int i, ret = -1;
-> +
-> +	for (i = 0; i < nr; i++) {
-> +		spin_lock(&futexv->objects[i].bucket->lock);
-> +		if (!list_empty_careful(&futexv->objects[i].list)) {
-> +			list_del_init_careful(&futexv->objects[i].list);
-> +			bucket_dec_waiters(futexv->objects[i].bucket);
+> +	futex_table = alloc_large_system_hash("futex2", sizeof(struct futex_bucket),
+> +					      futex2_hashsize, 0,
+> +					      futex2_hashsize < 256 ? HASH_SMALL : 0,
+> +					      &futex_shift, NULL,
+> +					      futex2_hashsize, futex2_hashsize);
 
-What's with the careful? AFAICT all sites have that bucket->lock.
+So why are we implementing a whole second infrastrure and doubling the
+memory footprint of all this?
 
-> +		} else {
-> +			ret = i;
-> +		}
-> +		spin_unlock(&futexv->objects[i].bucket->lock);
-> +	}
-> +
-> +	return ret;
-> +}
+Sure, futex.c is a pain in the ass, but most of that is not because of
+the interface, most of it is having to deal with sharing state with
+userspace and that being fundamentally unreliable.
 
-> +static int futex_enqueue(struct futexv_head *futexv, unsigned int nr_futexes,
-> +			 int *awakened)
-> +{
-> +	int i, ret;
-> +	u32 uval, *uaddr, val;
-> +	struct futex_bucket *bucket;
-> +
-> +retry:
-> +	set_current_state(TASK_INTERRUPTIBLE);
-> +
-> +	for (i = 0; i < nr_futexes; i++) {
-> +		uaddr = (u32 * __user)futexv->objects[i].uaddr;
-> +		val = (u32)futexv->objects[i].val;
-> +
-> +		bucket = futexv->objects[i].bucket;
-> +
-> +		bucket_inc_waiters(bucket);
-> +		spin_lock(&bucket->lock);
-> +
-> +		ret = futex_get_user(&uval, uaddr);
-> +
-> +		if (unlikely(ret)) {
-> +			spin_unlock(&bucket->lock);
-> +
-> +			bucket_dec_waiters(bucket);
-> +			__set_current_state(TASK_RUNNING);
-> +			*awakened = futex_dequeue_multiple(futexv, i);
-> +
-> +			if (__get_user(uval, uaddr))
-> +				return -EFAULT;
-> +
-> +			if (*awakened >= 0)
-> +				return 1;
-> +
-> +			goto retry;
-> +		}
-> +
-> +		if (uval != val) {
-> +			spin_unlock(&bucket->lock);
-> +
-> +			bucket_dec_waiters(bucket);
-> +			__set_current_state(TASK_RUNNING);
-> +			*awakened = futex_dequeue_multiple(futexv, i);
-> +
-> +			if (*awakened >= 0)
-> +				return 1;
-> +
-> +			return -EAGAIN;
-> +		}
-> +
-> +		list_add_tail(&futexv->objects[i].list, &bucket->list);
+Once you want to add {,UN}LOCK{,_PI} and robust futex support, you're
+back to it being a giant rats nest of corner cases. Thinking a new
+interface can solve any of that is naive.
 
-and here
-
-> +		spin_unlock(&bucket->lock);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-
-> +static void futex_mark_wake(struct futex_waiter *waiter,
-> +			    struct futex_bucket *bucket,
-> +			    struct wake_q_head *wake_q)
-> +{
-> +	struct task_struct *task;
-> +	struct futexv_head *parent = futex_get_parent((uintptr_t)waiter,
-> +						      waiter->index);
-> +
-
-	lockdep_assert_held(&bucket->lock);
-
-> +	parent->hint = true;
-> +	task = parent->task;
-> +	get_task_struct(task);
-> +	list_del_init_careful(&waiter->list);
-
-and here
-
-> +	wake_q_add_safe(wake_q, task);
-> +	bucket_dec_waiters(bucket);
-> +}
-
+So while I'm in favour of adding a new interface, I'm not sure I see
+benefit of reimplementing the basics, sure it seems simpler now, but
+that's because you've not implemented all the 'fun' stuff.
