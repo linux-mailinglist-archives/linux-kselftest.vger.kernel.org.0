@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1985B31C7CA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Feb 2021 10:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D5F31C831
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Feb 2021 10:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbhBPJGi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Feb 2021 04:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        id S229956AbhBPJh7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Feb 2021 04:37:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbhBPJGJ (ORCPT
+        with ESMTP id S229806AbhBPJhv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Feb 2021 04:06:09 -0500
+        Tue, 16 Feb 2021 04:37:51 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3356C061574;
-        Tue, 16 Feb 2021 01:05:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B1DC061574;
+        Tue, 16 Feb 2021 01:37:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
         Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
         Sender:Reply-To:Content-ID:Content-Description;
-        bh=ueDYc2cZ6bpbKw5Gc+nyHkg0hLkWmeN2VNHfX5Xo3ag=; b=K+/WiHc6o5yV4kz+dOxC4G4yUC
-        8uNKBREjJ4Jzye1NK4C+S1Uz/YP2nm/DFL77Q5Cmq3OB62po9MPSnmyUS+479Ndr/zQaVVG0f3SBN
-        iKCQs+2BB74237hcpDgRoKRVaj4ZCWpOJfKjOVpxWqThLN/7Zez8qh1JvWOeKTRQnR2zl05mVGLk5
-        ZeIIeyGsPN7KwNUc2aFIYFACzoxRewV8R+Y0Wglm5Kwl/CdPyhVvRZ0/wL3tHKxEEOPdh/bFC2TU1
-        xCjT9j6TWdMWi8gYJIzbxqIlqHlFfLJIoKi1Vpz4wCKLS4WNqXrxs0O6UCSZhLeDQcjSegVQmb+g5
-        mm8Q5Kng==;
+        bh=6p6aP26uvaDys5m2iqcqs2Sq1c/nYDnkVqNjuyxRkDU=; b=Nk4MUsvviR9MIo25CvF38GBU6P
+        HueibuWzMXbLsx5spRiXK/Folbl0pODU9941RNDDvdGqgpXmzjy+XIssHin4gBD797gR8i+2CiWsS
+        9rNh3U6F/8P9YMQY6P8erJIv5tuxOhuvYGDhouTECta/1hzgomSFVtfYUVB8PFrMQrWPJun1bxPxK
+        F5UliehaGMyP6rxujPhSnZT1x9VYjuxdQ5M2cyYF/evDQemtzv8Z0dsy2On6A4eZsIleh4omSGPQF
+        W5ijuSs/k6kq8DUN5Ye3nZYeP/C8DtVAKAcz0jQ+2sxAbBn89IkIUL9Noq6BYQT4PoZiUGODuLnVZ
+        RDBbf8JQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lBwFc-00GfhV-8w; Tue, 16 Feb 2021 09:03:16 +0000
+        id 1lBwl5-00GheO-QE; Tue, 16 Feb 2021 09:35:12 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C67243003E5;
-        Tue, 16 Feb 2021 10:02:28 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46AE63059DD;
+        Tue, 16 Feb 2021 10:35:02 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2950D205A431C; Tue, 16 Feb 2021 10:02:28 +0100 (CET)
-Date:   Tue, 16 Feb 2021 10:02:28 +0100
+        id 2CE432058CB0E; Tue, 16 Feb 2021 10:35:02 +0100 (CET)
+Date:   Tue, 16 Feb 2021 10:35:02 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
@@ -50,7 +50,7 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
         shuah@kernel.org, acme@kernel.org, corbet@lwn.net
 Subject: Re: [RFC PATCH 01/13] futex2: Implement wait and wake functions
-Message-ID: <YCuKJEvcoXjgaNsb@hirez.programming.kicks-ass.net>
+Message-ID: <YCuRxl4uRhua+Y5b@hirez.programming.kicks-ass.net>
 References: <20210215152404.250281-1-andrealmeid@collabora.com>
  <20210215152404.250281-2-andrealmeid@collabora.com>
 MIME-Version: 1.0
@@ -63,77 +63,108 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Mon, Feb 15, 2021 at 12:23:52PM -0300, André Almeida wrote:
-> +static int __futex_wait(struct futexv_head *futexv, unsigned int nr_futexes,
-> +			struct hrtimer_sleeper *timeout)
+
+> +static int futex_dequeue_multiple(struct futexv_head *futexv, unsigned int nr)
 > +{
-> +	int ret;
+> +	int i, ret = -1;
 > +
-> +	while (1) {
-> +		int awakened = -1;
-> +
+> +	for (i = 0; i < nr; i++) {
+> +		spin_lock(&futexv->objects[i].bucket->lock);
+> +		if (!list_empty_careful(&futexv->objects[i].list)) {
+> +			list_del_init_careful(&futexv->objects[i].list);
+> +			bucket_dec_waiters(futexv->objects[i].bucket);
 
-Might be easier to understand if the set_current_state() is here,
-instead of squirreled away in futex_enqueue().
+What's with the careful? AFAICT all sites have that bucket->lock.
 
-> +		ret = futex_enqueue(futexv, nr_futexes, &awakened);
+> +		} else {
+> +			ret = i;
+> +		}
+> +		spin_unlock(&futexv->objects[i].bucket->lock);
+> +	}
 > +
-> +		if (ret) {
-> +			if (awakened >= 0)
-> +				return awakened;
-> +			return ret;
+> +	return ret;
+> +}
+
+> +static int futex_enqueue(struct futexv_head *futexv, unsigned int nr_futexes,
+> +			 int *awakened)
+> +{
+> +	int i, ret;
+> +	u32 uval, *uaddr, val;
+> +	struct futex_bucket *bucket;
+> +
+> +retry:
+> +	set_current_state(TASK_INTERRUPTIBLE);
+> +
+> +	for (i = 0; i < nr_futexes; i++) {
+> +		uaddr = (u32 * __user)futexv->objects[i].uaddr;
+> +		val = (u32)futexv->objects[i].val;
+> +
+> +		bucket = futexv->objects[i].bucket;
+> +
+> +		bucket_inc_waiters(bucket);
+> +		spin_lock(&bucket->lock);
+> +
+> +		ret = futex_get_user(&uval, uaddr);
+> +
+> +		if (unlikely(ret)) {
+> +			spin_unlock(&bucket->lock);
+> +
+> +			bucket_dec_waiters(bucket);
+> +			__set_current_state(TASK_RUNNING);
+> +			*awakened = futex_dequeue_multiple(futexv, i);
+> +
+> +			if (__get_user(uval, uaddr))
+> +				return -EFAULT;
+> +
+> +			if (*awakened >= 0)
+> +				return 1;
+> +
+> +			goto retry;
 > +		}
 > +
-> +		/* Before sleeping, check if someone was woken */
-> +		if (!futexv->hint && (!timeout || timeout->task))
-> +			freezable_schedule();
+> +		if (uval != val) {
+> +			spin_unlock(&bucket->lock);
 > +
-> +		__set_current_state(TASK_RUNNING);
+> +			bucket_dec_waiters(bucket);
+> +			__set_current_state(TASK_RUNNING);
+> +			*awakened = futex_dequeue_multiple(futexv, i);
+> +
+> +			if (*awakened >= 0)
+> +				return 1;
+> +
+> +			return -EAGAIN;
+> +		}
+> +
+> +		list_add_tail(&futexv->objects[i].list, &bucket->list);
 
-This is typically after the loop.
+and here
 
-> +
-> +		/*
-> +		 * One of those things triggered this wake:
-> +		 *
-> +		 * * We have been removed from the bucket. futex_wake() woke
-> +		 *   us. We just need to dequeue and return 0 to userspace.
-> +		 *
-> +		 * However, if no futex was dequeued by a futex_wake():
-> +		 *
-> +		 * * If the there's a timeout and it has expired,
-> +		 *   return -ETIMEDOUT.
-> +		 *
-> +		 * * If there is a signal pending, something wants to kill our
-> +		 *   thread, return -ERESTARTSYS.
-> +		 *
-> +		 * * If there's no signal pending, it was a spurious wake
-> +		 *   (scheduler gave us a change to do some work, even if we
-
-chance?
-
-> +		 *   don't want to). We need to remove ourselves from the
-> +		 *   bucket and add again, to prevent losing wakeups in the
-> +		 *   meantime.
-> +		 */
-
-Anyway, doing a dequeue and enqueue for spurious wakes is a bit of an
-anti-pattern that can lead to starvation. I've not actually looked at
-much detail yet as this is my first read-through, but did figure I'd
-mention it.
-
-> +
-> +		ret = futex_dequeue_multiple(futexv, nr_futexes);
-> +
-> +		/* Normal wake */
-> +		if (ret >= 0)
-> +			return ret;
-> +
-> +		if (timeout && !timeout->task)
-> +			return -ETIMEDOUT;
-> +
-> +		if (signal_pending(current))
-> +			return -ERESTARTSYS;
-> +
-> +		/* Spurious wake, do everything again */
+> +		spin_unlock(&bucket->lock);
 > +	}
+> +
+> +	return 0;
 > +}
+> +
+
+> +static void futex_mark_wake(struct futex_waiter *waiter,
+> +			    struct futex_bucket *bucket,
+> +			    struct wake_q_head *wake_q)
+> +{
+> +	struct task_struct *task;
+> +	struct futexv_head *parent = futex_get_parent((uintptr_t)waiter,
+> +						      waiter->index);
+> +
+
+	lockdep_assert_held(&bucket->lock);
+
+> +	parent->hint = true;
+> +	task = parent->task;
+> +	get_task_struct(task);
+> +	list_del_init_careful(&waiter->list);
+
+and here
+
+> +	wake_q_add_safe(wake_q, task);
+> +	bucket_dec_waiters(bucket);
+> +}
+
