@@ -2,86 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C83A831C75D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Feb 2021 09:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1985B31C7CA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Feb 2021 10:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbhBPIcA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Feb 2021 03:32:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43380 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229754AbhBPIbS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Feb 2021 03:31:18 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 38DB264E08;
-        Tue, 16 Feb 2021 08:29:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613464180;
-        bh=xp2E7pVtr9+d2BktWCe8eCxmT+MJcLpfXlVFen7+2R8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P22fm4xO1zbk7rb9lHb1iki62q78cwkLEo/0/ifn+xuvYoCtWnZdBFohO+QY6+DQj
-         lUqGucXVJadLmm7X54q4ogiIOMxMrod7Phou2sj8rEYX8E/q0oUPR2GMbHf10+PYJv
-         AEGyJR2BAA1aOMKoTQnQTFvu9li6nOLLcSjSQ6cxicxwyiI7Uovblg0ZFhvTxWbP8o
-         xbb3dKCGDV4VxoQlEKXphmPoob0UGdnzUi17aVn/pWb75R/vOeASREdwex3x/MS3bV
-         f8lgptM2P4oFLtSAXg/It5BQEDHhCle5Ev3vzwHZClEhvOY3FDjIbWWMNZ8ffRJW+y
-         PA3YhwWimKwCA==
-Date:   Tue, 16 Feb 2021 10:29:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+        id S229811AbhBPJGi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Feb 2021 04:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230001AbhBPJGJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 16 Feb 2021 04:06:09 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3356C061574;
+        Tue, 16 Feb 2021 01:05:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=ueDYc2cZ6bpbKw5Gc+nyHkg0hLkWmeN2VNHfX5Xo3ag=; b=K+/WiHc6o5yV4kz+dOxC4G4yUC
+        8uNKBREjJ4Jzye1NK4C+S1Uz/YP2nm/DFL77Q5Cmq3OB62po9MPSnmyUS+479Ndr/zQaVVG0f3SBN
+        iKCQs+2BB74237hcpDgRoKRVaj4ZCWpOJfKjOVpxWqThLN/7Zez8qh1JvWOeKTRQnR2zl05mVGLk5
+        ZeIIeyGsPN7KwNUc2aFIYFACzoxRewV8R+Y0Wglm5Kwl/CdPyhVvRZ0/wL3tHKxEEOPdh/bFC2TU1
+        xCjT9j6TWdMWi8gYJIzbxqIlqHlFfLJIoKi1Vpz4wCKLS4WNqXrxs0O6UCSZhLeDQcjSegVQmb+g5
+        mm8Q5Kng==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lBwFc-00GfhV-8w; Tue, 16 Feb 2021 09:03:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C67243003E5;
+        Tue, 16 Feb 2021 10:02:28 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2950D205A431C; Tue, 16 Feb 2021 10:02:28 +0100 (CET)
+Date:   Tue, 16 Feb 2021 10:02:28 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Shuah Khan <shuah@kernel.org>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-Subject: Re: [PATCH v5 3/3] x86/sgx: Remove redundant if conditions in
- sgx_encl_create
-Message-ID: <YCuCaG2CWNeoKQFQ@kernel.org>
-References: <20210216033133.79543-1-tianjia.zhang@linux.alibaba.com>
- <20210216033133.79543-4-tianjia.zhang@linux.alibaba.com>
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        kernel@collabora.com, krisman@collabora.com,
+        pgriffais@valvesoftware.com, z.figura12@gmail.com,
+        joel@joelfernandes.org, malteskarupke@fastmail.fm,
+        linux-api@vger.kernel.org, fweimer@redhat.com,
+        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, acme@kernel.org, corbet@lwn.net
+Subject: Re: [RFC PATCH 01/13] futex2: Implement wait and wake functions
+Message-ID: <YCuKJEvcoXjgaNsb@hirez.programming.kicks-ass.net>
+References: <20210215152404.250281-1-andrealmeid@collabora.com>
+ <20210215152404.250281-2-andrealmeid@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210216033133.79543-4-tianjia.zhang@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210215152404.250281-2-andrealmeid@collabora.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 16, 2021 at 11:31:33AM +0800, Tianjia Zhang wrote:
-> In this scenario, there is no case where va_page is NULL, and
-> the error has been checked. The if-condition statement here is
-> redundant, so remove the condition detection.
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
->  arch/x86/kernel/cpu/sgx/ioctl.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-> index 1c6ecf9fbeff..719c21cca569 100644
-> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> @@ -66,9 +66,10 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
->  	va_page = sgx_encl_grow(encl);
->  	if (IS_ERR(va_page))
->  		return PTR_ERR(va_page);
-> -	else if (va_page)
-> -		list_add(&va_page->list, &encl->va_pages);
-> -	/* else the tail page of the VA page list had free slots. */
-> +	if (!va_page)
-> +		return -EIO;
+On Mon, Feb 15, 2021 at 12:23:52PM -0300, André Almeida wrote:
+> +static int __futex_wait(struct futexv_head *futexv, unsigned int nr_futexes,
+> +			struct hrtimer_sleeper *timeout)
+> +{
+> +	int ret;
+> +
+> +	while (1) {
+> +		int awakened = -1;
+> +
 
-Why this check?
+Might be easier to understand if the set_current_state() is here,
+instead of squirreled away in futex_enqueue().
+
+> +		ret = futex_enqueue(futexv, nr_futexes, &awakened);
+> +
+> +		if (ret) {
+> +			if (awakened >= 0)
+> +				return awakened;
+> +			return ret;
+> +		}
+> +
+> +		/* Before sleeping, check if someone was woken */
+> +		if (!futexv->hint && (!timeout || timeout->task))
+> +			freezable_schedule();
+> +
+> +		__set_current_state(TASK_RUNNING);
+
+This is typically after the loop.
 
 > +
-> +	list_add(&va_page->list, &encl->va_pages);
->  
->  	/* The extra page goes to SECS. */
->  	encl_size = secs->size + PAGE_SIZE;
-> -- 
-> 2.19.1.3.ge56e4f7
-> 
-> 
+> +		/*
+> +		 * One of those things triggered this wake:
+> +		 *
+> +		 * * We have been removed from the bucket. futex_wake() woke
+> +		 *   us. We just need to dequeue and return 0 to userspace.
+> +		 *
+> +		 * However, if no futex was dequeued by a futex_wake():
+> +		 *
+> +		 * * If the there's a timeout and it has expired,
+> +		 *   return -ETIMEDOUT.
+> +		 *
+> +		 * * If there is a signal pending, something wants to kill our
+> +		 *   thread, return -ERESTARTSYS.
+> +		 *
+> +		 * * If there's no signal pending, it was a spurious wake
+> +		 *   (scheduler gave us a change to do some work, even if we
 
-/Jarkko
+chance?
+
+> +		 *   don't want to). We need to remove ourselves from the
+> +		 *   bucket and add again, to prevent losing wakeups in the
+> +		 *   meantime.
+> +		 */
+
+Anyway, doing a dequeue and enqueue for spurious wakes is a bit of an
+anti-pattern that can lead to starvation. I've not actually looked at
+much detail yet as this is my first read-through, but did figure I'd
+mention it.
+
+> +
+> +		ret = futex_dequeue_multiple(futexv, nr_futexes);
+> +
+> +		/* Normal wake */
+> +		if (ret >= 0)
+> +			return ret;
+> +
+> +		if (timeout && !timeout->task)
+> +			return -ETIMEDOUT;
+> +
+> +		if (signal_pending(current))
+> +			return -ERESTARTSYS;
+> +
+> +		/* Spurious wake, do everything again */
+> +	}
+> +}
