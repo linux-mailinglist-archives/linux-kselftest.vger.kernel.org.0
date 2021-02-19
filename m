@@ -2,143 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5534331F0D6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Feb 2021 21:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFF131FC15
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Feb 2021 16:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbhBRULz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Feb 2021 15:11:55 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:43052 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbhBRUJx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Feb 2021 15:09:53 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 482F51F45D91
-Subject: Re: [RFC PATCH 01/13] futex2: Implement wait and wake functions
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        kernel@collabora.com, krisman@collabora.com,
-        pgriffais@valvesoftware.com, z.figura12@gmail.com,
-        joel@joelfernandes.org, malteskarupke@fastmail.fm,
-        linux-api@vger.kernel.org, fweimer@redhat.com,
-        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, acme@kernel.org, corbet@lwn.net
-References: <20210215152404.250281-1-andrealmeid@collabora.com>
- <20210215152404.250281-2-andrealmeid@collabora.com>
- <YCuKJEvcoXjgaNsb@hirez.programming.kicks-ass.net>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-Message-ID: <d1b34b2e-8fb2-1ad4-6aa9-8240520bf89d@collabora.com>
-Date:   Thu, 18 Feb 2021 17:09:02 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S229850AbhBSPfH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Feb 2021 10:35:07 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:51598 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229824AbhBSPfE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Feb 2021 10:35:04 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 679722BF; Fri, 19 Feb 2021 09:34:14 -0600 (CST)
+Date:   Fri, 19 Feb 2021 09:34:14 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v28 07/12] landlock: Support filesystem access-control
+Message-ID: <20210219153414.GA18061@mail.hallyn.com>
+References: <20210202162710.657398-1-mic@digikod.net>
+ <20210202162710.657398-8-mic@digikod.net>
+ <20210210193624.GA29893@mail.hallyn.com>
+ <aeba97b6-37cd-4870-0a40-3e7aa84ebd36@digikod.net>
 MIME-Version: 1.0
-In-Reply-To: <YCuKJEvcoXjgaNsb@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <aeba97b6-37cd-4870-0a40-3e7aa84ebd36@digikod.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Peter,
-
-Ã€s 06:02 de 16/02/21, Peter Zijlstra escreveu:
-> On Mon, Feb 15, 2021 at 12:23:52PM -0300, AndrÃ© Almeida wrote:
->> +static int __futex_wait(struct futexv_head *futexv, unsigned int nr_futexes,
->> +			struct hrtimer_sleeper *timeout)
->> +{
->> +	int ret;
->> +
->> +	while (1) {
->> +		int awakened = -1;
->> +
+On Wed, Feb 10, 2021 at 09:17:25PM +0100, Mickaël Salaün wrote:
 > 
-> Might be easier to understand if the set_current_state() is here,
-> instead of squirreled away in futex_enqueue().
+> On 10/02/2021 20:36, Serge E. Hallyn wrote:
+> > On Tue, Feb 02, 2021 at 05:27:05PM +0100, Mickaël Salaün wrote:
+> >> From: Mickaël Salaün <mic@linux.microsoft.com>
+> >>
+> >> Thanks to the Landlock objects and ruleset, it is possible to identify
+> >> inodes according to a process's domain.  To enable an unprivileged
+> > 
+> > This throws me off a bit.  "identify inodes according to a process's domain".
+> > What exactly does it mean?  "identify" how ?
 > 
+> A domain is a set of rules (i.e. layers of rulesets) enforced on a set
+> of threads. Inodes are tagged per domain (i.e. not system-wide) and
+> actions are restricted thanks to these tags, which form rules. It means
+> that the created access-controls are scoped to a set of threads.
 
-I placed set_current_state() inside futex_enqueue() because we need to 
-set RUNNING and then INTERRUPTIBLE again for the retry path.
+Thanks, that's helpful.  To me it would be much clearer if you used the word
+'tagged' :
 
->> +		ret = futex_enqueue(futexv, nr_futexes, &awakened);
->> +
->> +		if (ret) {
->> +			if (awakened >= 0)
->> +				return awakened;
->> +			return ret;
->> +		}
->> +
->> +		/* Before sleeping, check if someone was woken */
->> +		if (!futexv->hint && (!timeout || timeout->task))
->> +			freezable_schedule();
->> +
->> +		__set_current_state(TASK_RUNNING);
-> 
-> This is typically after the loop.
-> 
+  Using the Landlock objects and ruleset, it is possible to tag inodes
+  according to a process's domain.
 
-Sorry, which loop?
-
->> +
->> +		/*
->> +		 * One of those things triggered this wake:
->> +		 *
->> +		 * * We have been removed from the bucket. futex_wake() woke
->> +		 *   us. We just need to dequeue and return 0 to userspace.
->> +		 *
->> +		 * However, if no futex was dequeued by a futex_wake():
->> +		 *
->> +		 * * If the there's a timeout and it has expired,
->> +		 *   return -ETIMEDOUT.
->> +		 *
->> +		 * * If there is a signal pending, something wants to kill our
->> +		 *   thread, return -ERESTARTSYS.
->> +		 *
->> +		 * * If there's no signal pending, it was a spurious wake
->> +		 *   (scheduler gave us a change to do some work, even if we
-> 
-> chance?
-
-Indeed, fixed.
-
-> 
->> +		 *   don't want to). We need to remove ourselves from the
->> +		 *   bucket and add again, to prevent losing wakeups in the
->> +		 *   meantime.
->> +		 */
-> 
-> Anyway, doing a dequeue and enqueue for spurious wakes is a bit of an
-> anti-pattern that can lead to starvation. I've not actually looked at
-> much detail yet as this is my first read-through, but did figure I'd
-> mention it.
-> 
-
-So we could just leave everything enqueued for spurious wake? I was 
-expecting that we would need to do all the work again (including 
-rechecking *uaddr == val) to see if we didn't miss a futex_wake() 
-between the kernel thread waking (spuriously) and going to sleep again.
-
->> +
->> +		ret = futex_dequeue_multiple(futexv, nr_futexes);
->> +
->> +		/* Normal wake */
->> +		if (ret >= 0)
->> +			return ret;
->> +
->> +		if (timeout && !timeout->task)
->> +			return -ETIMEDOUT;
->> +
->> +		if (signal_pending(current))
->> +			return -ERESTARTSYS;
->> +
->> +		/* Spurious wake, do everything again */
->> +	}
->> +}
-
-Thanks,
-	AndrÃ©
+> >> process to express a file hierarchy, it first needs to open a directory
+> >> (or a file) and pass this file descriptor to the kernel through
+> >> landlock_add_rule(2).  When checking if a file access request is
+> >> allowed, we walk from the requested dentry to the real root, following
+> >> the different mount layers.  The access to each "tagged" inodes are
+> >> collected according to their rule layer level, and ANDed to create
+> >> access to the requested file hierarchy.  This makes possible to identify
+> >> a lot of files without tagging every inodes nor modifying the
+> >> filesystem, while still following the view and understanding the user
+> >> has from the filesystem.
+> >>
+> >> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
+> >> keep the same struct inodes for the same inodes whereas these inodes are
+> >> in use.
+> > 
+> > -serge
+> > 
