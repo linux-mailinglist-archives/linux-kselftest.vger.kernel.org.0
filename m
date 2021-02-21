@@ -2,315 +2,773 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E27320CA3
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Feb 2021 19:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF30320CF2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Feb 2021 20:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbhBUSiw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Feb 2021 13:38:52 -0500
-Received: from mout.gmx.net ([212.227.17.22]:38985 "EHLO mout.gmx.net"
+        id S230508AbhBUTC4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Feb 2021 14:02:56 -0500
+Received: from mga07.intel.com ([134.134.136.100]:53122 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230088AbhBUSiv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Feb 2021 13:38:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1613932620;
-        bh=SlIggBd+WqRJccgKoSY+jsgMPGho7MOSNDrdTCHcJIE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=JSnUXw2WWYy/DcBcBvxf/eck/peQmc+Fc1fB5o+3gPF41xLs0gwYV+iNV6rUbyUlC
-         yEkqL6t1uAMZrY/8GxV5dIA77bU0VRqkMZDRHwtSUnC2bobeLRVNF+ArmmXGUeJvoV
-         qMU2xhfSMe+3QMQKi5REclkK4rtajjBtRptizwZk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([83.52.229.153]) by mail.gmx.net
- (mrgmx104 [212.227.17.174]) with ESMTPSA (Nemesis) id
- 1MQvD5-1lS0sO3gRz-00NyX8; Sun, 21 Feb 2021 19:37:00 +0100
-From:   John Wood <john.wood@gmx.com>
-To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>, Shuah Khan <shuah@kernel.org>
-Cc:     John Wood <john.wood@gmx.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 5/8] security/brute: Mitigate a brute force attack
-Date:   Sun, 21 Feb 2021 16:49:16 +0100
-Message-Id: <20210221154919.68050-6-john.wood@gmx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210221154919.68050-1-john.wood@gmx.com>
-References: <20210221154919.68050-1-john.wood@gmx.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:UPdUC4a8CRZEE5wqJf0baxsrqjeCTJQ5IRIHSh41m/k51iqL/UV
- TNftC3ZL3GMVW3AMkaO74Msv+MJHrIxfPoePdQ07ujLmm3w2THpFJXsyR/BShj589SZbV3f
- ZenPq+NKddx/+ukYG/5ZCcpnMgiIqSbMWKfLkflS1HXDfA/ITxIhF5Iwyy0/LuPoplsmH1i
- YHsG7FF4rVjmJauyxWI8g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/COfCpmUkGI=:TDb8v4wPPri8+NAYVVpP9V
- 5SNAtp5VnfkbCzavNXd9GRuDpX4wVOxFBCq1w1UKQ5ca7+ZUOKAA5zVF40h9M7QL3/1VqNJIU
- nEaBJnZhnJl8JHRWEIUArL4DQ8O1n9F4prk2GxQJYT0iY5AVqoQSv7tmI0sb/BDarbX+2XTnD
- TQH94UEIRc+h3BXszdMCC4WZm+w2QV7uCvwre2I4p0D7+looHaVXilzHSJ8Qp5oCAfrRz4V4I
- YgVe9aCIFWhpPA8e3FVCJR2FsZqXzUgF9QwILNR30CxpJ11jM+kluTUHlFdnomdyrPilV5Eqw
- ok0A6jiOKwZI+g6Kzg5Bq2ciDIKzaundOx8NPNMGntX3pFw4YerbrI8F7gLbi6yUmLVu8qkn6
- BOP4VoVbCsTqSHOiRHFCGf11jviWZhrXMPz41gDdshM1JggEw/+AcFyTSM25aKeJsst1+lUF1
- +ThWXXbVrKBqpPyWLSFGhxRyLOMlTCVqNFnqhrkKVnKMCoOOOPGe6q3yMvlPYCrponccUrzBc
- H5u9RKnrawPnzgWgwgzvr/xYPtZtbNmDJ+hooiGCKvw1hhVWRMXBSRqcs2kVCBDKs/fvISSQl
- XID8JF0jXGCTpsvKy4kPU7XFFgM7Sv9YUcXuZmTMgdiPd5/2Khs5nPW/jSx9udLInAv0E1O6T
- 71n0VrEWPUvimEnpVMgXqEwf8Oac/VqB7VfayS23qGbXcBHPsnR207l70XJ17APg4RgF/owYb
- KyP78S3e3kkoPT563Q3nHe5VfCJ7U21//c7BEJlgUTfEUoLFibudAilByxoB1C2nQnYGIe1zf
- mpx3SnsqK9+3FzgwpRXk6VXY8QUACLJy3t2nMb67EG1ueFvQ14r7kbVP99AQwGwpxmet1wy7d
- VcLnpD9EUZpVaZdOHwOw==
+        id S230482AbhBUTCr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 21 Feb 2021 14:02:47 -0500
+IronPort-SDR: rYqcVWilT5fVsePsMTJeK+tTjZYcrMQaICynq6Br7+3wckXX6iqCkgtKGiJTpHg/fpfVbUQt6s
+ B5Mh4axiJsuw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9902"; a="248330334"
+X-IronPort-AV: E=Sophos;i="5.81,195,1610438400"; 
+   d="scan'208";a="248330334"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2021 11:01:29 -0800
+IronPort-SDR: GDmrI8W7Z+WkRGT8w5hbaM/7+SDEk1IZ2b0LmVB0kJWlCNW2dkQa9x9hoCPl2WVkUnNAtrZNC/
+ 2kCvv5Cr1z1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,195,1610438400"; 
+   d="scan'208";a="429792143"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Feb 2021 11:01:29 -0800
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, luto@kernel.org, tglx@linutronix.de, mingo@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, jing2.liu@intel.com,
+        ravi.v.shankar@intel.com, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 20/22] selftest/x86/amx: Include test cases for the AMX state management
+Date:   Sun, 21 Feb 2021 10:56:35 -0800
+Message-Id: <20210221185637.19281-21-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210221185637.19281-1-chang.seok.bae@intel.com>
+References: <20210221185637.19281-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to mitigate a brute force attack all the offending tasks involved
-in the attack must be killed. In other words, it is necessary to kill all
-the tasks that share the fork and/or exec statistical data related to the
-attack. Moreover, if the attack happens through the fork system call, the
-processes that have the same group_leader that the current task (the task
-that has crashed) must be avoided since they are in the path to be killed.
+This selftest exercises the kernel's behavior not to inherit AMX state and
+the ability to switch the context by verifying that they retain unique
+data between multiple threads.
 
-When the SIGKILL signal is sent to the offending tasks, the function
-"brute_kill_offending_tasks" will be called in a recursive way from the
-task_fatal_signal LSM hook due to a small crash period. So, to avoid kill
-again the same tasks due to a recursive call of this function, it is
-necessary to disable the attack detection for the involved hierarchies.
+Also, ptrace() is used to insert AMX state into existing threads -- both
+before and after the existing thread has initialized its AMX state.
 
-To disable the attack detection, set to zero the last crash timestamp and
-avoid to compute the application crash period in this case.
+Collect the test cases of validating those operations together, as they
+share some common setup for the AMX state.
 
-Signed-off-by: John Wood <john.wood@gmx.com>
-=2D--
- security/brute/brute.c | 141 ++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 132 insertions(+), 9 deletions(-)
+These test cases do not depend on AMX compiler support, as they employ
+userspace-XSAVE directly to access AMX state.
 
-diff --git a/security/brute/brute.c b/security/brute/brute.c
-index 8d03ea0ecac5..581aba291438 100644
-=2D-- a/security/brute/brute.c
-+++ b/security/brute/brute.c
-@@ -22,6 +22,7 @@
- #include <linux/math64.h>
- #include <linux/netdevice.h>
- #include <linux/path.h>
-+#include <linux/pid.h>
- #include <linux/printk.h>
- #include <linux/refcount.h>
- #include <linux/rwlock.h>
-@@ -64,7 +65,7 @@ struct brute_cred {
-  * @lock: Lock to protect the brute_stats structure.
-  * @refc: Reference counter.
-  * @faults: Number of crashes.
-- * @jiffies: Last crash timestamp.
-+ * @jiffies: Last crash timestamp. If zero, the attack detection is disab=
-led.
-  * @period: Crash period's moving average.
-  * @saved_cred: Saved credentials.
-  * @network: Network activity flag.
-@@ -566,6 +567,125 @@ static inline void print_fork_attack_running(void)
- 	pr_warn("Fork brute force attack detected [%s]\n", current->comm);
- }
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+---
+Changes from v2:
+* Updated the test messages and the changelog as tile data is not inherited
+  to a child anymore.
+* Removed bytecode for the instructions already supported by binutils.
+* Changed to check the XSAVE availability in a reliable way.
 
-+/**
-+ * brute_disabled() - Test if the brute force attack detection is disable=
-d.
-+ * @stats: Statistical data shared by all the fork hierarchy processes.
-+ *
-+ * The brute force attack detection enabling/disabling is based on the la=
-st
-+ * crash timestamp. A zero timestamp indicates that this feature is disab=
-led. A
-+ * timestamp greater than zero indicates that the attack detection is ena=
-bled.
-+ *
-+ * The statistical data shared by all the fork hierarchy processes cannot=
- be
-+ * NULL.
-+ *
-+ * It's mandatory to disable interrupts before acquiring the brute_stats:=
-:lock
-+ * since the task_free hook can be called from an IRQ context during the
-+ * execution of the task_fatal_signal hook.
-+ *
-+ * Context: Must be called with interrupts disabled and brute_stats_ptr_l=
-ock
-+ *          held.
-+ * Return: True if the brute force attack detection is disabled. False
-+ *         otherwise.
-+ */
-+static bool brute_disabled(struct brute_stats *stats)
-+{
-+	bool disabled;
+Changes from v1:
+* Removed signal testing code
+---
+ tools/testing/selftests/x86/Makefile |   2 +-
+ tools/testing/selftests/x86/amx.c    | 677 +++++++++++++++++++++++++++
+ 2 files changed, 678 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/amx.c
+
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 333980375bc7..2f7feb03867b 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -17,7 +17,7 @@ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+-TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering
++TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering amx
+ # Some selftests require 32bit support enabled also on 64bit systems
+ TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
+ 
+diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+new file mode 100644
+index 000000000000..f4ecdfd27ae9
+--- /dev/null
++++ b/tools/testing/selftests/x86/amx.c
+@@ -0,0 +1,677 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+	spin_lock(&stats->lock);
-+	disabled =3D !stats->jiffies;
-+	spin_unlock(&stats->lock);
++#define _GNU_SOURCE
++#include <err.h>
++#include <elf.h>
++#include <pthread.h>
++#include <sched.h>
++#include <setjmp.h>
++#include <signal.h>
++#include <stdio.h>
++#include <string.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <time.h>
++#include <malloc.h>
++#include <unistd.h>
++#include <ucontext.h>
 +
-+	return disabled;
-+}
++#include <linux/futex.h>
 +
-+/**
-+ * brute_disable() - Disable the brute force attack detection.
-+ * @stats: Statistical data shared by all the fork hierarchy processes.
-+ *
-+ * To disable the brute force attack detection it is only necessary to se=
-t the
-+ * last crash timestamp to zero. A zero timestamp indicates that this fea=
-ture is
-+ * disabled. A timestamp greater than zero indicates that the attack dete=
-ction
-+ * is enabled.
-+ *
-+ * The statistical data shared by all the fork hierarchy processes cannot=
- be
-+ * NULL.
-+ *
-+ * Context: Must be called with interrupts disabled and brute_stats_ptr_l=
-ock
-+ *          and brute_stats::lock held.
-+ */
-+static inline void brute_disable(struct brute_stats *stats)
-+{
-+	stats->jiffies =3D 0;
-+}
++#include <sys/ipc.h>
++#include <sys/mman.h>
++#include <sys/ptrace.h>
++#include <sys/shm.h>
++#include <sys/signal.h>
++#include <sys/syscall.h>
++#include <sys/time.h>
++#include <sys/types.h>
++#include <sys/wait.h>
++#include <sys/uio.h>
++#include <sys/ucontext.h>
 +
-+/**
-+ * enum brute_attack_type - Brute force attack type.
-+ * @BRUTE_ATTACK_TYPE_FORK: Attack that happens through the fork system c=
-all.
-+ * @BRUTE_ATTACK_TYPE_EXEC: Attack that happens through the execve system=
- call.
-+ */
-+enum brute_attack_type {
-+	BRUTE_ATTACK_TYPE_FORK,
-+	BRUTE_ATTACK_TYPE_EXEC,
++#include <x86intrin.h>
++
++#ifndef __x86_64__
++# error This test is 64-bit only
++#endif
++
++typedef uint8_t u8;
++typedef uint16_t u16;
++typedef uint32_t u32;
++typedef uint64_t u64;
++
++#define PAGE_SIZE			(1 << 12)
++
++#define NUM_TILES			8
++#define TILE_SIZE			1024
++#define XSAVE_SIZE			((NUM_TILES * TILE_SIZE) + PAGE_SIZE)
++
++struct xsave_data {
++	u8 area[XSAVE_SIZE];
++} __attribute__((aligned(64)));
++
++/* Tile configuration associated: */
++#define MAX_TILES			16
++#define RESERVED_BYTES			14
++
++struct tile_config {
++	u8  palette_id;
++	u8  start_row;
++	u8  reserved[RESERVED_BYTES];
++	u16 colsb[MAX_TILES];
++	u8  rows[MAX_TILES];
 +};
 +
-+/**
-+ * brute_kill_offending_tasks() - Kill the offending tasks.
-+ * @attack_type: Brute force attack type.
-+ * @stats: Statistical data shared by all the fork hierarchy processes.
-+ *
-+ * When a brute force attack is detected all the offending tasks involved=
- in the
-+ * attack must be killed. In other words, it is necessary to kill all the=
- tasks
-+ * that share the same statistical data. Moreover, if the attack happens =
-through
-+ * the fork system call, the processes that have the same group_leader th=
-at the
-+ * current task must be avoided since they are in the path to be killed.
-+ *
-+ * When the SIGKILL signal is sent to the offending tasks, this function =
-will be
-+ * called again from the task_fatal_signal hook due to a small crash peri=
-od. So,
-+ * to avoid kill again the same tasks due to a recursive call of this fun=
-ction,
-+ * it is necessary to disable the attack detection for this fork hierarch=
-y.
-+ *
-+ * The statistical data shared by all the fork hierarchy processes cannot=
- be
-+ * NULL.
-+ *
-+ * It's mandatory to disable interrupts before acquiring the brute_stats:=
-:lock
-+ * since the task_free hook can be called from an IRQ context during the
-+ * execution of the task_fatal_signal hook.
-+ *
-+ * Context: Must be called with interrupts disabled and tasklist_lock and
-+ *          brute_stats_ptr_lock held.
-+ */
-+static void brute_kill_offending_tasks(enum brute_attack_type attack_type=
-,
-+				       struct brute_stats *stats)
++struct tile_data {
++	u8 data[NUM_TILES * TILE_SIZE];
++};
++
++static inline u64 __xgetbv(u32 index)
 +{
-+	struct task_struct *p;
-+	struct brute_stats **p_stats;
++	u32 eax, edx;
 +
-+	spin_lock(&stats->lock);
++	asm volatile("xgetbv;"
++		     : "=a" (eax), "=d" (edx)
++		     : "c" (index));
++	return eax + ((u64)edx << 32);
++}
 +
-+	if (attack_type =3D=3D BRUTE_ATTACK_TYPE_FORK &&
-+	    refcount_read(&stats->refc) =3D=3D 1) {
-+		spin_unlock(&stats->lock);
++static inline void __cpuid(u32 *eax, u32 *ebx, u32 *ecx, u32 *edx)
++{
++	asm volatile("cpuid;"
++		     : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx)
++		     : "0" (*eax), "2" (*ecx));
++}
++
++/* Load tile configuration */
++static inline void __ldtilecfg(void *cfg)
++{
++	asm volatile(".byte 0xc4,0xe2,0x78,0x49,0x00"
++		     : : "a"(cfg));
++}
++
++/* Load tile data to %tmm0 register only */
++static inline void __tileloadd(void *tile)
++{
++	asm volatile(".byte 0xc4,0xe2,0x7b,0x4b,0x04,0x10"
++		     : : "a"(tile), "d"(0));
++}
++
++/* Save extended states */
++static inline void __xsave(void *buffer, u32 lo, u32 hi)
++{
++	asm volatile("xsave (%%rdi)"
++		     : : "D" (buffer), "a" (lo), "d" (hi)
++		     : "memory");
++}
++
++/* Restore extended states */
++static inline void __xrstor(void *buffer, u32 lo, u32 hi)
++{
++	asm volatile("xrstor (%%rdi)"
++		     : : "D" (buffer), "a" (lo), "d" (hi));
++}
++
++/* Release tile states to init values */
++static inline void __tilerelease(void)
++{
++	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0" ::);
++}
++
++static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
++		       int flags)
++{
++	struct sigaction sa;
++
++	memset(&sa, 0, sizeof(sa));
++	sa.sa_sigaction = handler;
++	sa.sa_flags = SA_SIGINFO | flags;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(sig, &sa, 0))
++		err(1, "sigaction");
++}
++
++static void clearhandler(int sig)
++{
++	struct sigaction sa;
++
++	memset(&sa, 0, sizeof(sa));
++	sa.sa_handler = SIG_DFL;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(sig, &sa, 0))
++		err(1, "sigaction");
++}
++
++/* Hardware info check: */
++
++static jmp_buf jmpbuf;
++static bool xsave_disabled;
++
++static void handle_sigill(int sig, siginfo_t *si, void *ctx_void)
++{
++	xsave_disabled = true;
++	siglongjmp(jmpbuf, 1);
++}
++
++#define XFEATURE_XTILE_CFG      17
++#define XFEATURE_XTILE_DATA     18
++#define XFEATURE_MASK_XTILE     ((1 << XFEATURE_XTILE_DATA) | \
++				 (1 << XFEATURE_XTILE_CFG))
++
++static inline bool check_xsave_supports_xtile(void)
++{
++	bool supported = false;
++
++	sethandler(SIGILL, handle_sigill, 0);
++
++	if (!sigsetjmp(jmpbuf, 1))
++		supported = __xgetbv(0) & XFEATURE_MASK_XTILE;
++
++	clearhandler(SIGILL);
++	return supported;
++}
++
++struct xtile_hwinfo {
++	struct {
++		u16 bytes_per_tile;
++		u16 bytes_per_row;
++		u16 max_names;
++		u16 max_rows;
++	} spec;
++
++	struct {
++		u32 offset;
++		u32 size;
++	} xsave;
++};
++
++static struct xtile_hwinfo xtile;
++
++static bool __enum_xtile_config(void)
++{
++	u32 eax, ebx, ecx, edx;
++	u16 bytes_per_tile;
++	bool valid = false;
++
++#define TILE_CPUID			0x1d
++#define TILE_PALETTE_CPUID_SUBLEAVE	0x1
++
++	eax = TILE_CPUID;
++	ecx = TILE_PALETTE_CPUID_SUBLEAVE;
++
++	__cpuid(&eax, &ebx, &ecx, &edx);
++	if (!eax || !ebx || !ecx)
++		return valid;
++
++	xtile.spec.max_names = ebx >> 16;
++	if (xtile.spec.max_names < NUM_TILES)
++		return valid;
++
++	bytes_per_tile = eax >> 16;
++	if (bytes_per_tile < TILE_SIZE)
++		return valid;
++
++	xtile.spec.bytes_per_row = ebx;
++	xtile.spec.max_rows = ecx;
++	valid = true;
++
++	return valid;
++}
++
++static bool __enum_xsave_tile(void)
++{
++	u32 eax, ebx, ecx, edx;
++	bool valid = false;
++
++#define XSTATE_CPUID			0xd
++#define XSTATE_USER_STATE_SUBLEAVE	0x0
++
++	eax = XSTATE_CPUID;
++	ecx = XFEATURE_XTILE_DATA;
++
++	__cpuid(&eax, &ebx, &ecx, &edx);
++	if (!eax || !ebx)
++		return valid;
++
++	xtile.xsave.offset = ebx;
++	xtile.xsave.size = eax;
++	valid = true;
++
++	return valid;
++}
++
++static bool __check_xsave_size(void)
++{
++	u32 eax, ebx, ecx, edx;
++	bool valid = false;
++
++	eax = XSTATE_CPUID;
++	ecx = XSTATE_USER_STATE_SUBLEAVE;
++
++	__cpuid(&eax, &ebx, &ecx, &edx);
++	if (ebx && ebx <= XSAVE_SIZE)
++		valid = true;
++
++	return valid;
++}
++
++/*
++ * Check the hardware-provided tile state info and cross-check it with the
++ * hard-coded values: XSAVE_SIZE, NUM_TILES, and TILE_SIZE.
++ */
++static int check_xtile_hwinfo(void)
++{
++	bool success = false;
++
++	if (!__check_xsave_size())
++		return success;
++
++	if (!__enum_xsave_tile())
++		return success;
++
++	if (!__enum_xtile_config())
++		return success;
++
++	if (sizeof(struct tile_data) >= xtile.xsave.size)
++		success = true;
++
++	return success;
++}
++
++/* The helpers for managing XSAVE buffer and tile states: */
++
++/* Use the uncompacted format without 'init optimization' */
++static void save_xdata(void *data)
++{
++	__xsave(data, -1, -1);
++}
++
++static void restore_xdata(void *data)
++{
++	__xrstor(data, -1, -1);
++}
++
++static inline u64 __get_xsave_xstate_bv(void *data)
++{
++#define XSAVE_HDR_OFFSET	512
++	return *(u64 *)(data + XSAVE_HDR_OFFSET);
++}
++
++static void set_tilecfg(struct tile_config *cfg)
++{
++	int i;
++
++	memset(cfg, 0, sizeof(*cfg));
++	/* The first implementation has one significant palette with id 1 */
++	cfg->palette_id = 1;
++	for (i = 0; i < xtile.spec.max_names; i++) {
++		cfg->colsb[i] = xtile.spec.bytes_per_row;
++		cfg->rows[i] = xtile.spec.max_rows;
++	}
++}
++
++static void load_tilecfg(struct tile_config *cfg)
++{
++	__ldtilecfg(cfg);
++}
++
++static void make_tiles(void *tiles)
++{
++	u32 iterations = xtile.xsave.size / sizeof(u32);
++	static u32 value = 1;
++	u32 *ptr = tiles;
++	int i;
++
++	for (i = 0, ptr = tiles; i < iterations; i++, ptr++)
++		*ptr  = value;
++	value++;
++}
++
++/*
++ * Initialize the XSAVE buffer:
++ *
++ * Make sure tile configuration loaded already. Load limited tile data (%tmm0 only)
++ * and save all the states. XSAVE buffer is ready to complete tile data.
++ */
++static void init_xdata(void *data)
++{
++	struct tile_data tiles;
++
++	make_tiles(&tiles);
++	__tileloadd(&tiles);
++	__xsave(data, -1, -1);
++}
++
++static inline void *__get_xsave_tile_data_addr(void *data)
++{
++	return data + xtile.xsave.offset;
++}
++
++static void copy_tiles_to_xdata(void *xdata, void *tiles)
++{
++	void *dst = __get_xsave_tile_data_addr(xdata);
++
++	memcpy(dst, tiles, xtile.xsave.size);
++}
++
++static int compare_xdata_tiles(void *xdata, void *tiles)
++{
++	void *tile_data = __get_xsave_tile_data_addr(xdata);
++
++	if (memcmp(tile_data, tiles, xtile.xsave.size))
++		return 1;
++
++	return 0;
++}
++
++static int nerrs, errs;
++
++/* Testing tile data inheritance */
++
++static void test_tile_data_inheritance(void)
++{
++	struct xsave_data xdata;
++	struct tile_data tiles;
++	struct tile_config cfg;
++	pid_t child;
++	int status;
++
++	set_tilecfg(&cfg);
++	load_tilecfg(&cfg);
++	init_xdata(&xdata);
++
++	make_tiles(&tiles);
++	copy_tiles_to_xdata(&xdata, &tiles);
++	restore_xdata(&xdata);
++
++	errs = 0;
++
++	child = fork();
++	if (child < 0)
++		err(1, "fork");
++
++	if (child == 0) {
++		memset(&xdata, 0, sizeof(xdata));
++		save_xdata(&xdata);
++		if (compare_xdata_tiles(&xdata, &tiles)) {
++			printf("[OK]\tchild didn't inherit tile data at fork()\n");
++		} else {
++			printf("[FAIL]\tchild inherited tile data at fork()\n");
++			nerrs++;
++		}
++		_exit(0);
++	}
++	wait(&status);
++}
++
++static void test_fork(void)
++{
++	pid_t child;
++	int status;
++
++	child = fork();
++	if (child < 0)
++		err(1, "fork");
++
++	if (child == 0) {
++		test_tile_data_inheritance();
++		_exit(0);
++	}
++
++	wait(&status);
++}
++
++/* Context switching test */
++
++#define ITERATIONS			10
++#define NUM_THREADS			5
++
++struct futex_info {
++	int current;
++	int next;
++	int *futex;
++};
++
++static inline void command_wait(struct futex_info *info, int value)
++{
++	do {
++		sched_yield();
++	} while (syscall(SYS_futex, info->futex, FUTEX_WAIT, value, 0, 0, 0));
++}
++
++static inline void command_wake(struct futex_info *info, int value)
++{
++	do {
++		*info->futex = value;
++		while (!syscall(SYS_futex, info->futex, FUTEX_WAKE, 1, 0, 0, 0))
++			sched_yield();
++	} while (0);
++}
++
++static inline int get_iterative_value(int id)
++{
++	return ((id << 1) & ~0x1);
++}
++
++static inline int get_endpoint_value(int id)
++{
++	return ((id << 1) | 0x1);
++}
++
++static void *check_tiles(void *info)
++{
++	struct futex_info *finfo = (struct futex_info *)info;
++	struct xsave_data xdata;
++	struct tile_data tiles;
++	struct tile_config cfg;
++	int i;
++
++	set_tilecfg(&cfg);
++	load_tilecfg(&cfg);
++	init_xdata(&xdata);
++
++	make_tiles(&tiles);
++	copy_tiles_to_xdata(&xdata, &tiles);
++	restore_xdata(&xdata);
++
++	for (i = 0; i < ITERATIONS; i++) {
++		command_wait(finfo, get_iterative_value(finfo->current));
++
++		memset(&xdata, 0, sizeof(xdata));
++		save_xdata(&xdata);
++		errs += compare_xdata_tiles(&xdata, &tiles);
++
++		make_tiles(&tiles);
++		copy_tiles_to_xdata(&xdata, &tiles);
++		restore_xdata(&xdata);
++
++		command_wake(finfo, get_iterative_value(finfo->next));
++	}
++
++	command_wait(finfo, get_endpoint_value(finfo->current));
++	__tilerelease();
++	return NULL;
++}
++
++static int create_children(int num, struct futex_info *finfo)
++{
++	const int shm_id = shmget(IPC_PRIVATE, sizeof(int), IPC_CREAT | 0666);
++	int *futex = shmat(shm_id, NULL, 0);
++	pthread_t thread;
++	int i;
++
++	for (i = 0; i < num; i++) {
++		finfo[i].futex = futex;
++		finfo[i].current = i + 1;
++		finfo[i].next = (i + 2) % (num + 1);
++
++		if (pthread_create(&thread, NULL, check_tiles, &finfo[i])) {
++			err(1, "pthread_create");
++			return 1;
++		}
++	}
++	return 0;
++}
++
++static void test_context_switch(void)
++{
++	struct futex_info *finfo;
++	cpu_set_t cpuset;
++	int i;
++
++	printf("[RUN]\t%u context switches of tile states in %d threads\n",
++	       ITERATIONS * NUM_THREADS, NUM_THREADS);
++
++	errs = 0;
++
++	CPU_ZERO(&cpuset);
++	CPU_SET(0, &cpuset);
++	if (sched_setaffinity(0, sizeof(cpuset), &cpuset) != 0)
++		err(1, "sched_setaffinity to CPU 0");
++
++	finfo = malloc(sizeof(*finfo) * NUM_THREADS);
++
++	if (create_children(NUM_THREADS, finfo))
++		return;
++
++	for (i = 0; i < ITERATIONS; i++) {
++		command_wake(finfo, get_iterative_value(1));
++		command_wait(finfo, get_iterative_value(0));
++	}
++
++	for (i = 1; i <= NUM_THREADS; i++)
++		command_wake(finfo, get_endpoint_value(i));
++
++	if (errs) {
++		printf("[FAIL]\t%u incorrect tile states\n", errs);
++		nerrs += errs;
 +		return;
 +	}
 +
-+	brute_disable(stats);
-+	spin_unlock(&stats->lock);
-+
-+	for_each_process(p) {
-+		if (attack_type =3D=3D BRUTE_ATTACK_TYPE_FORK &&
-+		    p->group_leader =3D=3D current->group_leader)
-+			continue;
-+
-+		p_stats =3D brute_stats_ptr(p);
-+		if (*p_stats !=3D stats)
-+			continue;
-+
-+		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_PID);
-+		pr_warn_ratelimited("Offending process %d [%s] killed\n",
-+				    p->pid, p->comm);
-+	}
++	printf("[OK]\tall tile states are correct\n");
 +}
 +
- /**
-  * brute_manage_fork_attack() - Manage a fork brute force attack.
-  * @stats: Statistical data shared by all the fork hierarchy processes.
-@@ -581,8 +701,8 @@ static inline void print_fork_attack_running(void)
-  * since the task_free hook can be called from an IRQ context during the
-  * execution of the task_fatal_signal hook.
-  *
-- * Context: Must be called with interrupts disabled and brute_stats_ptr_l=
-ock
-- *          held.
-+ * Context: Must be called with interrupts disabled and tasklist_lock and
-+ *          brute_stats_ptr_lock held.
-  * Return: The last crash timestamp before updating it.
-  */
- static u64 brute_manage_fork_attack(struct brute_stats *stats, u64 now)
-@@ -590,8 +710,10 @@ static u64 brute_manage_fork_attack(struct brute_stat=
-s *stats, u64 now)
- 	u64 last_fork_crash;
-
- 	last_fork_crash =3D brute_update_crash_period(stats, now);
--	if (brute_attack_running(stats))
-+	if (brute_attack_running(stats)) {
- 		print_fork_attack_running();
-+		brute_kill_offending_tasks(BRUTE_ATTACK_TYPE_FORK, stats);
++/* Ptrace test */
++
++static inline long get_tile_state(pid_t child, struct iovec *iov)
++{
++	return ptrace(PTRACE_GETREGSET, child, (u32)NT_X86_XSTATE, iov);
++}
++
++static inline long set_tile_state(pid_t child, struct iovec *iov)
++{
++	return ptrace(PTRACE_SETREGSET, child, (u32)NT_X86_XSTATE, iov);
++}
++
++static int write_tile_state(bool load_tile, pid_t child)
++{
++	struct xsave_data xdata;
++	struct tile_data tiles;
++	struct iovec iov;
++
++	iov.iov_base = &xdata;
++	iov.iov_len = sizeof(xdata);
++
++	if (get_tile_state(child, &iov))
++		err(1, "PTRACE_GETREGSET");
++
++	make_tiles(&tiles);
++	copy_tiles_to_xdata(&xdata, &tiles);
++	if (set_tile_state(child, &iov))
++		err(1, "PTRACE_SETREGSET");
++
++	memset(&xdata, 0, sizeof(xdata));
++	if (get_tile_state(child, &iov))
++		err(1, "PTRACE_GETREGSET");
++
++	if (!load_tile)
++		memset(&tiles, 0, sizeof(tiles));
++
++	return compare_xdata_tiles(&xdata, &tiles);
++}
++
++static void test_tile_state_write(bool load_tile)
++{
++	pid_t child;
++	int status;
++
++	child = fork();
++	if (child < 0)
++		err(1, "fork");
++
++	if (child == 0) {
++		printf("[RUN]\tPtrace-induced tile state write, ");
++		printf("%s tile data loaded\n", load_tile ? "with" : "without");
++
++		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
++			err(1, "PTRACE_TRACEME");
++
++		if (load_tile) {
++			struct tile_config cfg;
++			struct tile_data tiles;
++
++			set_tilecfg(&cfg);
++			load_tilecfg(&cfg);
++			make_tiles(&tiles);
++			/* Load only %tmm0 but inducing the #NM */
++			__tileloadd(&tiles);
++		}
++
++		raise(SIGTRAP);
++		_exit(0);
 +	}
-
- 	return last_fork_crash;
- }
-@@ -778,8 +900,10 @@ static void brute_manage_exec_attack(struct brute_sta=
-ts *stats, u64 now,
- 	if (fork_period =3D=3D exec_period)
- 		return;
-
--	if (brute_attack_running(exec_stats))
-+	if (brute_attack_running(exec_stats)) {
- 		print_exec_attack_running(exec_stats);
-+		brute_kill_offending_tasks(BRUTE_ATTACK_TYPE_EXEC, exec_stats);
++
++	do {
++		wait(&status);
++	} while (WSTOPSIG(status) != SIGTRAP);
++
++	errs = write_tile_state(load_tile, child);
++	if (errs) {
++		nerrs++;
++		printf("[FAIL]\t%s write\n", load_tile ? "incorrect" : "unexpected");
++	} else {
++		printf("[OK]\t%s write\n", load_tile ? "correct" : "no");
 +	}
- }
-
- /**
-@@ -895,10 +1019,9 @@ static void brute_task_fatal_signal(const kernel_sig=
-info_t *siginfo)
- 	read_lock(&tasklist_lock);
- 	read_lock_irqsave(&brute_stats_ptr_lock, flags);
-
--	if (WARN(!*stats, "No statistical data\n"))
--		goto unlock;
--
--	if (!brute_threat_model_supported(siginfo, *stats))
-+	if (WARN(!*stats, "No statistical data\n") ||
-+	    brute_disabled(*stats) ||
-+	    !brute_threat_model_supported(siginfo, *stats))
- 		goto unlock;
-
- 	last_fork_crash =3D brute_manage_fork_attack(*stats, now);
-=2D-
-2.25.1
++
++	ptrace(PTRACE_DETACH, child, NULL, NULL);
++	wait(&status);
++}
++
++static void test_ptrace(void)
++{
++	bool ptracee_loads_tiles;
++
++	ptracee_loads_tiles = true;
++	test_tile_state_write(ptracee_loads_tiles);
++
++	ptracee_loads_tiles = false;
++	test_tile_state_write(ptracee_loads_tiles);
++}
++
++int main(void)
++{
++	/* Check hardware availability at first */
++
++	if (!check_xsave_supports_xtile()) {
++		if (xsave_disabled)
++			printf("XSAVE disabled.\n");
++		else
++			printf("Tile data not available.\n");
++		return 0;
++	}
++
++	if (!check_xtile_hwinfo()) {
++		printf("Available tile state size is insufficient to test.\n");
++		return 0;
++	}
++
++	nerrs = 0;
++
++	test_fork();
++	test_context_switch();
++	test_ptrace();
++
++	return nerrs ? 1 : 0;
++}
+-- 
+2.17.1
 
