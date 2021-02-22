@@ -2,158 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEF632201A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Feb 2021 20:28:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E39F322267
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Feb 2021 23:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbhBVT1H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Feb 2021 14:27:07 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39752 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233066AbhBVTYm (ORCPT
+        id S232424AbhBVWxi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Feb 2021 17:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232416AbhBVWxe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Feb 2021 14:24:42 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11MJEpp1109474;
-        Mon, 22 Feb 2021 14:22:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=KAyj3eKLFKOMnwU1Es38+VsKyGm7gMDhy7ENyWKcDm4=;
- b=bn8IhK//XUxSeVLKRWaudUpoZzL3HN5vnUn4dYDpyPFm9aPCaPnD+QiwGxLCGeTzELxl
- PppAlRy+arUk88Dhx2rNqZySKY6ng2azqgGEVWR2grK/HbTghTHlijIE6pTMcJB3Vg/1
- GSPfdff6vMuq186WZnDTsg+gUMVvggORWXLF/f2a3vzpjKTMKAwgSXW3kjfo0kJ5ca75
- 10nkRQpUwTmxScPMGE5eZkL9fMfmn6thoNYthm6uAKXwqpRPs90KjqwDpJUUI4LRrd6O
- Q+BXIG4P3y9Geq5ul5vQRFgctbObacFSkjKUgekkyuvlqcgR4IITzI9pxcRVpdvK/lGJ 9A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36vjkkgbyp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Feb 2021 14:22:05 -0500
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 11MJFWXD164416;
-        Mon, 22 Feb 2021 14:22:04 -0500
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36vjkkgbwh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Feb 2021 14:22:03 -0500
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11MJLub8006699;
-        Mon, 22 Feb 2021 19:22:00 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma05wdc.us.ibm.com with ESMTP id 36tt29gytt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Feb 2021 19:22:00 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11MJLxGN50266622
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Feb 2021 19:21:59 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 795D87806D;
-        Mon, 22 Feb 2021 19:21:59 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B698978060;
-        Mon, 22 Feb 2021 19:21:51 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.80.227.153])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 22 Feb 2021 19:21:51 +0000 (GMT)
-Message-ID: <22003fc92c16852debfdd35293475e7093d2bc67.camel@linux.ibm.com>
-Subject: Re: [PATCH v17 08/10] PM: hibernate: disable when there are active
- secretmem users
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Mike Rapoport <rppt@kernel.org>
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-riscv@lists.infradead.org, X86 ML <x86@kernel.org>,
-        Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Date:   Mon, 22 Feb 2021 11:21:50 -0800
-In-Reply-To: <CAPcyv4hCXZFmeMkKxN54Yw3ZbvoYQ3Z9y9Ayv42i6u+24Bkmqg@mail.gmail.com>
-References: <20210208084920.2884-1-rppt@kernel.org>
-         <20210208084920.2884-9-rppt@kernel.org>
-         <20210222073452.GA30403@codon.org.uk> <20210222102359.GE1447004@kernel.org>
-         <CAPcyv4hCXZFmeMkKxN54Yw3ZbvoYQ3Z9y9Ayv42i6u+24Bkmqg@mail.gmail.com>
+        Mon, 22 Feb 2021 17:53:34 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75997C06174A
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Feb 2021 14:52:54 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id n14so8911593pgi.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Feb 2021 14:52:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=WCWa6LwM2bR7pmLc5+vjMwUQ7Td6/ol6HmkorD+Rs9E=;
+        b=lDd76rRs/xcSBBfRk70gFbmfgQxT9We6bVeJPObs5IDgLOlnPbzKIFIM/1ZOsf0aq+
+         WmPsPewXicb1MUkmTReT9/qGkuKCE6luXgSHW7iEKpAf62OLjNkjciRCDsmt92SULBEw
+         ADEQc+NSwaqo194CKHIQuqgHc65keoQ6nhjn0pVAVXQzuLSbNH7EMK4sXlTEA4Q0Cp6B
+         kZ+i6jYHuS74AQ1ZftWm4fMMnfp9B/ymM9NLFaiqlDJ7hCkJHLlaa6BGeiq7IlofQg4C
+         Yt1VGSjTumokX/yM6XK/cStxXbO4IqsXMuIbwMUpx+EeR0H8V/wiISMSpUCeYyrWn3Rt
+         kdXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=WCWa6LwM2bR7pmLc5+vjMwUQ7Td6/ol6HmkorD+Rs9E=;
+        b=F8uq3P238E1/vl5grAs25rMlyezwQTWsmTKnx9dLRwjNlC8G+ZF7GP2G9tGWlNqVK/
+         Kq1ncuDq2v4HQqC6T5dyMf7WNg6yKzLBvA3Yh5P5am7m5sOuAKW1h1HjvflJrll0xAAW
+         ubcOHh0uNTWzgolm6H97C2Ukj8NMXNHtLZYB97LTH8TXFU3RVKjTuanERf3X0Mhn9pzV
+         nvnWw+8WzS3y8T2hwADIb8iI6PRnLakjYvYW/wMRgEfAXmzC1V2SPb9BIvtK/7coz919
+         CAS5roG8G3n7MKrkzHSRI6R8IcVf6Gp+TM9bvVp8KEiPcprKgD7abJEyijJv/zO0fnlC
+         EEnA==
+X-Gm-Message-State: AOAM530soj+3K40XEZKbWSxhKLmDeVfviX7OUqMWnZWClornvIpwyUhE
+        HRSKVYGANznhnZrTyLAHWJWOrA3aF7xOkw==
+X-Google-Smtp-Source: ABdhPJwtHV6TBb9PF8vdxnwdg9i2ZEKDTAqAQRVyGEyJFdwR2yHkcqOSNcIG9NoO4tbOg7DEs6lhwUOXlxNwfQ==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1ce2:63d4:4764:e103])
+ (user=dlatypov job=sendgmr) by 2002:a62:8f0c:0:b029:1ed:8c8d:6910 with SMTP
+ id n12-20020a628f0c0000b02901ed8c8d6910mr9773014pfd.31.1614034373814; Mon, 22
+ Feb 2021 14:52:53 -0800 (PST)
+Date:   Mon, 22 Feb 2021 14:52:41 -0800
+Message-Id: <20210222225241.201145-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
+Subject: [PATCH] kunit: tool: make --kunitconfig accept dirs, add lib/kunit fragment
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, tytso@mit.edu,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-22_06:2021-02-22,2021-02-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 malwarescore=0
- clxscore=1011 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102220168
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2021-02-22 at 11:17 -0800, Dan Williams wrote:
-> On Mon, Feb 22, 2021 at 2:24 AM Mike Rapoport <rppt@kernel.org>
-> wrote:
-> > On Mon, Feb 22, 2021 at 07:34:52AM +0000, Matthew Garrett wrote:
-> > > On Mon, Feb 08, 2021 at 10:49:18AM +0200, Mike Rapoport wrote:
-> > > 
-> > > > It is unsafe to allow saving of secretmem areas to the
-> > > > hibernation snapshot as they would be visible after the resume
-> > > > and this essentially will defeat the purpose of secret memory
-> > > > mappings.
-> > > 
-> > > Sorry for being a bit late to this - from the point of view of
-> > > running processes (and even the kernel once resume is complete),
-> > > hibernation is effectively equivalent to suspend to RAM. Why do
-> > > they need to be handled differently here?
-> > 
-> > Hibernation leaves a copy of the data on the disk which we want to
-> > prevent.
-> 
-> Why not document that users should use data at rest protection
-> mechanisms for their hibernation device? Just because secretmem can't
-> assert its disclosure guarantee does not mean the hibernation device
-> is untrustworthy.
+TL;DR
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit
 
-It's not just data at rest.  Part of the running security guarantees
-are that the kernel never gets access to the data.  To support
-hibernate and swap we have to break that, so it reduces the runtime
-security posture as well as the data at rest one.
+Per suggestion from Ted [1], we can reduce the amount of typing by
+assuming a convention that these files are named '.kunitconfig'.
 
-This argues we could do it with a per region flags (something like less
-secure or more secure mappings), but when you give users that choice
-most of them rarely choose less secure.
+In the case of [1], we now have
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=fs/ext4
 
-James
+Also add in such a fragment for kunit itself so we can give that as an
+example more close to home (and thus less likely to be accidentally
+broken).
 
+[1] https://lore.kernel.org/linux-ext4/YCNF4yP1dB97zzwD@mit.edu/
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ lib/kunit/.kunitconfig                 | 3 +++
+ tools/testing/kunit/kunit.py           | 4 +++-
+ tools/testing/kunit/kunit_kernel.py    | 2 ++
+ tools/testing/kunit/kunit_tool_test.py | 6 ++++++
+ 4 files changed, 14 insertions(+), 1 deletion(-)
+ create mode 100644 lib/kunit/.kunitconfig
+
+diff --git a/lib/kunit/.kunitconfig b/lib/kunit/.kunitconfig
+new file mode 100644
+index 000000000000..9235b7d42d38
+--- /dev/null
++++ b/lib/kunit/.kunitconfig
+@@ -0,0 +1,3 @@
++CONFIG_KUNIT=y
++CONFIG_KUNIT_TEST=y
++CONFIG_KUNIT_EXAMPLE_TEST=y
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index d5144fcb03ac..5da8fb3762f9 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -184,7 +184,9 @@ def add_common_opts(parser) -> None:
+ 			    help='Run all KUnit tests through allyesconfig',
+ 			    action='store_true')
+ 	parser.add_argument('--kunitconfig',
+-			     help='Path to Kconfig fragment that enables KUnit tests',
++			     help='Path to Kconfig fragment that enables KUnit tests.'
++			     ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
++			     'will get  automatically appended.',
+ 			     metavar='kunitconfig')
+ 
+ def add_build_opts(parser) -> None:
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index f309a33256cd..89a7d4024e87 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -132,6 +132,8 @@ class LinuxSourceTree(object):
+ 			return
+ 
+ 		if kunitconfig_path:
++			if os.path.isdir(kunitconfig_path):
++				kunitconfig_path = os.path.join(kunitconfig_path, KUNITCONFIG_PATH)
+ 			if not os.path.exists(kunitconfig_path):
+ 				raise ConfigError(f'Specified kunitconfig ({kunitconfig_path}) does not exist')
+ 		else:
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 1ad3049e9069..2e809dd956a7 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -251,6 +251,12 @@ class LinuxSourceTreeTest(unittest.TestCase):
+ 		with tempfile.NamedTemporaryFile('wt') as kunitconfig:
+ 			tree = kunit_kernel.LinuxSourceTree('', kunitconfig_path=kunitconfig.name)
+ 
++	def test_dir_kunitconfig(self):
++		with tempfile.TemporaryDirectory('') as dir:
++			with open(os.path.join(dir, '.kunitconfig'), 'w') as f:
++				pass
++			tree = kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
++
+ 	# TODO: add more test cases.
+ 
+ 
+
+base-commit: b12b47249688915e987a9a2a393b522f86f6b7ab
+-- 
+2.30.0.617.g56c4b15f3c-goog
 
