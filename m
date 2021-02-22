@@ -2,124 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9419320F91
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Feb 2021 03:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B2F32118A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Feb 2021 08:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbhBVCsL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Feb 2021 21:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S230177AbhBVHqR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Feb 2021 02:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbhBVCsG (ORCPT
+        with ESMTP id S229925AbhBVHqQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Feb 2021 21:48:06 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD12C061574;
-        Sun, 21 Feb 2021 18:47:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=5fFHNeJ8nqeNMa0DGHcRPcH+3cOuL7XbveGYEMFXDD0=; b=zv4edCC+GUZ4S1hKw2n1qVccHA
-        SyAdKzZ7/YhO7qCGFXhKPPMOylEbFxDAr3gyFcD+aWyX7xIx/6p393eHfreBW3ie4QmMpK/fm81Bn
-        VZg+wbJHlpaMhy/OexPEqs2ay95PZ97d006cElTeOeBdu50B12NLBz3h+Gl0Q54P4S2AQ4Cuq9yE8
-        BnfK+54Y9cUu52AYwqTyGiyPerKvaKwtu4W9BqkMib187LitIbX5AWpKuN8nhXdNCISllSyZV3nw0
-        RcPrJWAo0C5WilVYiksG1s7MyFmNEyhvjkZFw5dYkxLNaT+C6UTobqz3cDtYT2UmpB5ffJ3KahLbz
-        EwpxiH5Q==;
-Received: from [2601:1c0:6280:3f0::d05b]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1lE1Fq-0001g8-QV; Mon, 22 Feb 2021 02:47:23 +0000
-Subject: Re: [PATCH v3 3/8] securtiy/brute: Detect a brute force attack
-To:     John Wood <john.wood@gmx.com>, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>, Shuah Khan <shuah@kernel.org>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20210221154919.68050-1-john.wood@gmx.com>
- <20210221154919.68050-4-john.wood@gmx.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <f4fd9e44-539e-279e-a3a6-8af39f863f73@infradead.org>
-Date:   Sun, 21 Feb 2021 18:47:16 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Mon, 22 Feb 2021 02:46:16 -0500
+X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 21 Feb 2021 23:45:35 PST
+Received: from cavan.codon.org.uk (cavan.codon.org.uk [IPv6:2a00:1098:84:22e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37C9C061786;
+        Sun, 21 Feb 2021 23:45:35 -0800 (PST)
+Received: by cavan.codon.org.uk (Postfix, from userid 1000)
+        id 2065540A21; Mon, 22 Feb 2021 07:34:52 +0000 (UTC)
+Date:   Mon, 22 Feb 2021 07:34:52 +0000
+From:   Matthew Garrett <mjg59@srcf.ucam.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v17 08/10] PM: hibernate: disable when there are active
+ secretmem users
+Message-ID: <20210222073452.GA30403@codon.org.uk>
+References: <20210208084920.2884-1-rppt@kernel.org>
+ <20210208084920.2884-9-rppt@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210221154919.68050-4-john.wood@gmx.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210208084920.2884-9-rppt@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi--
+On Mon, Feb 08, 2021 at 10:49:18AM +0200, Mike Rapoport wrote:
 
-scripts/kernel-doc does not like these items to be marked
-as being in kernel-doc notation. scripts/kernel-doc does not
-recognize them as one of: struct, union, enum, typedef, so it
-defaults to trying to interpret these as functions, and then
-says:
+> It is unsafe to allow saving of secretmem areas to the hibernation
+> snapshot as they would be visible after the resume and this essentially
+> will defeat the purpose of secret memory mappings.
 
-(I copied these blocks to my test megatest.c source file.)
-
-
-../src/megatest.c:1214: warning: cannot understand function prototype: 'const u64 BRUTE_EMA_WEIGHT_NUMERATOR = 7; '
-../src/megatest.c:1219: warning: cannot understand function prototype: 'const u64 BRUTE_EMA_WEIGHT_DENOMINATOR = 10; '
-../src/megatest.c:1228: warning: cannot understand function prototype: 'const unsigned char BRUTE_MAX_FAULTS = 200; '
-../src/megatest.c:1239: warning: cannot understand function prototype: 'const unsigned char BRUTE_MIN_FAULTS = 5; '
-../src/megatest.c:1249: warning: cannot understand function prototype: 'const u64 BRUTE_CRASH_PERIOD_THRESHOLD = 30000; '
-
-
-On 2/21/21 7:49 AM, John Wood wrote:
-> 
-> +/**
-> + * brute_stats_ptr_lock - Lock to protect the brute_stats structure pointer.
-> + */
-> +static DEFINE_RWLOCK(brute_stats_ptr_lock);
-
-> +/**
-> + * BRUTE_EMA_WEIGHT_NUMERATOR - Weight's numerator of EMA.
-> + */
-> +static const u64 BRUTE_EMA_WEIGHT_NUMERATOR = 7;
-
-> +/**
-> + * BRUTE_EMA_WEIGHT_DENOMINATOR - Weight's denominator of EMA.
-> + */
-> +static const u64 BRUTE_EMA_WEIGHT_DENOMINATOR = 10;
-
-> +/**
-> + * BRUTE_MAX_FAULTS - Maximum number of faults.
-> + *
-> + * If a brute force attack is running slowly for a long time, the application
-> + * crash period's EMA is not suitable for the detection. This type of attack
-> + * must be detected using a maximum number of faults.
-> + */
-> +static const unsigned char BRUTE_MAX_FAULTS = 200;
-
-> +/**
-> + * BRUTE_MIN_FAULTS - Minimum number of faults.
-> + *
-> + * The application crash period's EMA cannot be used until a minimum number of
-> + * data has been applied to it. This constraint allows getting a trend when this
-> + * moving average is used. Moreover, it avoids the scenario where an application
-> + * fails quickly from execve system call due to reasons unrelated to a real
-> + * attack.
-> + */
-> +static const unsigned char BRUTE_MIN_FAULTS = 5;
-
-> +/**
-> + * BRUTE_CRASH_PERIOD_THRESHOLD - Application crash period threshold.
-> + *
-> + * The units are expressed in milliseconds.
-> + *
-> + * A fast brute force attack is detected when the application crash period falls
-> + * below this threshold.
-> + */
-> +static const u64 BRUTE_CRASH_PERIOD_THRESHOLD = 30000;
-
-Basically we don't support scalars in kernel-doc notation...
-
--- 
-~Randy
-
+Sorry for being a bit late to this - from the point of view of running
+processes (and even the kernel once resume is complete), hibernation is
+effectively equivalent to suspend to RAM. Why do they need to be handled
+differently here?
