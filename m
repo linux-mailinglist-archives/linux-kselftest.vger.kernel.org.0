@@ -2,139 +2,240 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0178A3255E8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Feb 2021 19:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA78932568A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Feb 2021 20:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbhBYS44 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Feb 2021 13:56:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42360 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230371AbhBYS4x (ORCPT
+        id S234058AbhBYTRb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Feb 2021 14:17:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234361AbhBYTPZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Feb 2021 13:56:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614279327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V2KuMziu842JMfiM/AqGMgt14XmhOnxGCT/IAIzioz4=;
-        b=OZVjJQ4/VhcVSWCVKtHUDBLVu6lhQ3eh0mez+x13YRgE4WzT8peO+lTj37l3dRsJbc8Y0m
-        dVWyY19Gsdlz467Gcn+jvdRqnQBlbtJEab3cMq3J3dnq8rpRmjJ3H29xcu6jMFYG0ve1Wt
-        F8hJJX0I08xbBKvD5rmczsoAaj9lwqM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-94-lUrrAByYOcuxgzJK52RQTg-1; Thu, 25 Feb 2021 13:55:23 -0500
-X-MC-Unique: lUrrAByYOcuxgzJK52RQTg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7CFC01083E8F;
-        Thu, 25 Feb 2021 18:55:21 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.40.194.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 729D860C16;
-        Thu, 25 Feb 2021 18:55:09 +0000 (UTC)
-Date:   Thu, 25 Feb 2021 19:55:06 +0100
-From:   Andrew Jones <drjones@redhat.com>
-To:     Yanan Wang <wangyanan55@huawei.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Marc Zyngier <maz@kernel.org>, wanghaibin.wang@huawei.com,
-        yuzenghui@huawei.com
-Subject: Re: [RFC PATCH v2 3/7] KVM: selftests: Make a generic helper to get
- vm guest mode strings
-Message-ID: <20210225185506.r54k2z6e6xual7ag@kamzik.brq.redhat.com>
-References: <20210225055940.18748-1-wangyanan55@huawei.com>
- <20210225055940.18748-4-wangyanan55@huawei.com>
+        Thu, 25 Feb 2021 14:15:25 -0500
+Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [IPv6:2001:1600:4:17::190e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2261BC061788;
+        Thu, 25 Feb 2021 11:04:57 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Dmj050g39zMq2cw;
+        Thu, 25 Feb 2021 20:04:53 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Dmj034Nw9zlh8T3;
+        Thu, 25 Feb 2021 20:04:51 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v29 00/12] Landlock LSM
+Date:   Thu, 25 Feb 2021 20:06:02 +0100
+Message-Id: <20210225190614.2181147-1-mic@digikod.net>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210225055940.18748-4-wangyanan55@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 25, 2021 at 01:59:36PM +0800, Yanan Wang wrote:
-> For generality and conciseness, make an API which can be used in all
-> kvm libs and selftests to get vm guest mode strings. And the index i
-> is checked in the API in case of possiable faults.
-> 
-> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-> ---
->  .../testing/selftests/kvm/include/kvm_util.h  |  4 +--
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 29 ++++++++++++-------
->  2 files changed, 19 insertions(+), 14 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index 2d7eb6989e83..f52a7492f47f 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -68,9 +68,6 @@ enum vm_guest_mode {
->  #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
->  #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
->  
-> -#define vm_guest_mode_string(m) vm_guest_mode_string[m]
-> -extern const char * const vm_guest_mode_string[];
-> -
->  struct vm_guest_mode_params {
->  	unsigned int pa_bits;
->  	unsigned int va_bits;
-> @@ -84,6 +81,7 @@ int vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap);
->  int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
->  		    struct kvm_enable_cap *cap);
->  void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
-> +const char *vm_guest_mode_string(uint32_t i);
->  
->  struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
->  void kvm_vm_free(struct kvm_vm *vmp);
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index d787cb802b4a..cc22c4ab7d67 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -141,17 +141,24 @@ static void vm_open(struct kvm_vm *vm, int perm)
->  		"rc: %i errno: %i", vm->fd, errno);
->  }
->  
-> -const char * const vm_guest_mode_string[] = {
-> -	"PA-bits:52,  VA-bits:48,  4K pages",
-> -	"PA-bits:52,  VA-bits:48, 64K pages",
-> -	"PA-bits:48,  VA-bits:48,  4K pages",
-> -	"PA-bits:48,  VA-bits:48, 64K pages",
-> -	"PA-bits:40,  VA-bits:48,  4K pages",
-> -	"PA-bits:40,  VA-bits:48, 64K pages",
-> -	"PA-bits:ANY, VA-bits:48,  4K pages",
-> -};
-> -_Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
-> -	       "Missing new mode strings?");
-> +const char *vm_guest_mode_string(uint32_t i)
-> +{
-> +	static const char * const strings[] = {
-> +		[VM_MODE_P52V48_4K]	= "PA-bits:52,  VA-bits:48,  4K pages",
-> +		[VM_MODE_P52V48_64K]	= "PA-bits:52,  VA-bits:48, 64K pages",
-> +		[VM_MODE_P48V48_4K]	= "PA-bits:48,  VA-bits:48,  4K pages",
-> +		[VM_MODE_P48V48_64K]	= "PA-bits:48,  VA-bits:48, 64K pages",
-> +		[VM_MODE_P40V48_4K]	= "PA-bits:40,  VA-bits:48,  4K pages",
-> +		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
-> +		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
-> +	};
-> +	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
-> +		       "Missing new mode strings?");
-> +
-> +	TEST_ASSERT(i < NUM_VM_MODES, "Guest mode ID %d too big", i);
-> +
-> +	return strings[i];
-> +}
->  
->  const struct vm_guest_mode_params vm_guest_mode_params[] = {
->  	{ 52, 48,  0x1000, 12 },
-> -- 
-> 2.19.1
->
+Hi,
 
-Reviewed-by: Andrew Jones <drjones@redhat.com>
+This patch series mainly fixes race condition issues, explains specific
+lock rules and improves code related to concurrent calls of
+hook_sb_delete() and release_inode().  I exploited these races to
+validate the fixes.  Userspace tests are also improved along with some
+commit messages and comments.  Serge Hallyn's review is taken into
+account and his Acked-by are added to the corresponding patches.
+
+The SLOC count is 1328 for security/landlock/ and 2539 for
+tools/testing/selftest/landlock/ .  Test coverage for security/landlock/
+is 93.6% of lines.  The code not covered only deals with internal kernel
+errors (e.g. memory allocation) and race conditions.  This series is
+being fuzzed by syzkaller (which may cover internal kernel errors), and
+patches are on their way: https://github.com/google/syzkaller/pull/2380
+
+The compiled documentation is available here:
+https://landlock.io/linux-doc/landlock-v29/userspace-api/landlock.html
+
+This series can be applied on top of v5.11-7592-g1a3a9ffb27bb (Linus's
+master branch from Sunday).  This can be tested with
+CONFIG_SECURITY_LANDLOCK, CONFIG_SAMPLE_LANDLOCK and by prepending
+"landlock," to CONFIG_LSM.  This patch series can be found in a Git
+repository here:
+https://github.com/landlock-lsm/linux/commits/landlock-v29
+This patch series seems ready for upstream and I would really appreciate
+final reviews.
+
+
+# Landlock LSM
+
+The goal of Landlock is to enable to restrict ambient rights (e.g.
+global filesystem access) for a set of processes.  Because Landlock is a
+stackable LSM [1], it makes possible to create safe security sandboxes
+as new security layers in addition to the existing system-wide
+access-controls. This kind of sandbox is expected to help mitigate the
+security impact of bugs or unexpected/malicious behaviors in user-space
+applications. Landlock empowers any process, including unprivileged
+ones, to securely restrict themselves.
+
+Landlock is inspired by seccomp-bpf but instead of filtering syscalls
+and their raw arguments, a Landlock rule can restrict the use of kernel
+objects like file hierarchies, according to the kernel semantic.
+Landlock also takes inspiration from other OS sandbox mechanisms: XNU
+Sandbox, FreeBSD Capsicum or OpenBSD Pledge/Unveil.
+
+In this current form, Landlock misses some access-control features.
+This enables to minimize this patch series and ease review.  This series
+still addresses multiple use cases, especially with the combined use of
+seccomp-bpf: applications with built-in sandboxing, init systems,
+security sandbox tools and security-oriented APIs [2].
+
+Previous version:
+https://lore.kernel.org/lkml/20210202162710.657398-1-mic@digikod.net/
+
+[1] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
+[2] https://lore.kernel.org/lkml/f646e1c7-33cf-333f-070c-0a40ad0468cd@digikod.net/
+
+
+Casey Schaufler (1):
+  LSM: Infrastructure management of the superblock
+
+Mickaël Salaün (11):
+  landlock: Add object management
+  landlock: Add ruleset and domain management
+  landlock: Set up the security framework and manage credentials
+  landlock: Add ptrace restrictions
+  fs,security: Add sb_delete hook
+  landlock: Support filesystem access-control
+  landlock: Add syscall implementations
+  arch: Wire up Landlock syscalls
+  selftests/landlock: Add user space tests
+  samples/landlock: Add a sandbox manager example
+  landlock: Add user and kernel documentation
+
+ Documentation/security/index.rst              |    1 +
+ Documentation/security/landlock.rst           |   79 +
+ Documentation/userspace-api/index.rst         |    1 +
+ Documentation/userspace-api/landlock.rst      |  307 ++
+ MAINTAINERS                                   |   15 +
+ arch/Kconfig                                  |    7 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |    3 +
+ arch/arm/tools/syscall.tbl                    |    3 +
+ arch/arm64/include/asm/unistd.h               |    2 +-
+ arch/arm64/include/asm/unistd32.h             |    6 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |    3 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |    3 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |    3 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |    3 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |    3 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |    3 +
+ arch/s390/kernel/syscalls/syscall.tbl         |    3 +
+ arch/sh/kernel/syscalls/syscall.tbl           |    3 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |    3 +
+ arch/um/Kconfig                               |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    3 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    3 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |    3 +
+ fs/super.c                                    |    1 +
+ include/linux/lsm_hook_defs.h                 |    1 +
+ include/linux/lsm_hooks.h                     |    4 +
+ include/linux/security.h                      |    4 +
+ include/linux/syscalls.h                      |    7 +
+ include/uapi/asm-generic/unistd.h             |    8 +-
+ include/uapi/linux/landlock.h                 |  128 +
+ kernel/sys_ni.c                               |    5 +
+ samples/Kconfig                               |    7 +
+ samples/Makefile                              |    1 +
+ samples/landlock/.gitignore                   |    1 +
+ samples/landlock/Makefile                     |   13 +
+ samples/landlock/sandboxer.c                  |  238 ++
+ security/Kconfig                              |   11 +-
+ security/Makefile                             |    2 +
+ security/landlock/Kconfig                     |   21 +
+ security/landlock/Makefile                    |    4 +
+ security/landlock/common.h                    |   20 +
+ security/landlock/cred.c                      |   46 +
+ security/landlock/cred.h                      |   58 +
+ security/landlock/fs.c                        |  686 +++++
+ security/landlock/fs.h                        |   56 +
+ security/landlock/limits.h                    |   21 +
+ security/landlock/object.c                    |   67 +
+ security/landlock/object.h                    |   91 +
+ security/landlock/ptrace.c                    |  120 +
+ security/landlock/ptrace.h                    |   14 +
+ security/landlock/ruleset.c                   |  473 +++
+ security/landlock/ruleset.h                   |  165 +
+ security/landlock/setup.c                     |   40 +
+ security/landlock/setup.h                     |   18 +
+ security/landlock/syscalls.c                  |  445 +++
+ security/security.c                           |   51 +-
+ security/selinux/hooks.c                      |   58 +-
+ security/selinux/include/objsec.h             |    6 +
+ security/selinux/ss/services.c                |    3 +-
+ security/smack/smack.h                        |    6 +
+ security/smack/smack_lsm.c                    |   35 +-
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/landlock/.gitignore   |    2 +
+ tools/testing/selftests/landlock/Makefile     |   24 +
+ tools/testing/selftests/landlock/base_test.c  |  219 ++
+ tools/testing/selftests/landlock/common.h     |  183 ++
+ tools/testing/selftests/landlock/config       |    7 +
+ tools/testing/selftests/landlock/fs_test.c    | 2724 +++++++++++++++++
+ .../testing/selftests/landlock/ptrace_test.c  |  337 ++
+ tools/testing/selftests/landlock/true.c       |    5 +
+ 72 files changed, 6827 insertions(+), 77 deletions(-)
+ create mode 100644 Documentation/security/landlock.rst
+ create mode 100644 Documentation/userspace-api/landlock.rst
+ create mode 100644 include/uapi/linux/landlock.h
+ create mode 100644 samples/landlock/.gitignore
+ create mode 100644 samples/landlock/Makefile
+ create mode 100644 samples/landlock/sandboxer.c
+ create mode 100644 security/landlock/Kconfig
+ create mode 100644 security/landlock/Makefile
+ create mode 100644 security/landlock/common.h
+ create mode 100644 security/landlock/cred.c
+ create mode 100644 security/landlock/cred.h
+ create mode 100644 security/landlock/fs.c
+ create mode 100644 security/landlock/fs.h
+ create mode 100644 security/landlock/limits.h
+ create mode 100644 security/landlock/object.c
+ create mode 100644 security/landlock/object.h
+ create mode 100644 security/landlock/ptrace.c
+ create mode 100644 security/landlock/ptrace.h
+ create mode 100644 security/landlock/ruleset.c
+ create mode 100644 security/landlock/ruleset.h
+ create mode 100644 security/landlock/setup.c
+ create mode 100644 security/landlock/setup.h
+ create mode 100644 security/landlock/syscalls.c
+ create mode 100644 tools/testing/selftests/landlock/.gitignore
+ create mode 100644 tools/testing/selftests/landlock/Makefile
+ create mode 100644 tools/testing/selftests/landlock/base_test.c
+ create mode 100644 tools/testing/selftests/landlock/common.h
+ create mode 100644 tools/testing/selftests/landlock/config
+ create mode 100644 tools/testing/selftests/landlock/fs_test.c
+ create mode 100644 tools/testing/selftests/landlock/ptrace_test.c
+ create mode 100644 tools/testing/selftests/landlock/true.c
+
+
+base-commit: 31caf8b2a847214be856f843e251fc2ed2cd1075
+-- 
+2.30.0
 
