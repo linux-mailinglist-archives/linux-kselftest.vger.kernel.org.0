@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF25324A4D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Feb 2021 07:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D96324A52
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Feb 2021 07:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235374AbhBYGAn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Feb 2021 01:00:43 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:13376 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235106AbhBYGAk (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
+        id S235340AbhBYGAk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Thu, 25 Feb 2021 01:00:40 -0500
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DmMXT2w2pz7q4Z;
-        Thu, 25 Feb 2021 13:58:17 +0800 (CST)
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12205 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235037AbhBYGAh (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 25 Feb 2021 01:00:37 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DmMWz4KhlzlPwW;
+        Thu, 25 Feb 2021 13:57:51 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 25 Feb 2021 13:59:44 +0800
+ 14.3.498.0; Thu, 25 Feb 2021 13:59:45 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -31,9 +31,9 @@ CC:     Paolo Bonzini <pbonzini@redhat.com>,
         Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         "Yanan Wang" <wangyanan55@huawei.com>
-Subject: [RFC PATCH v2 2/7] KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
-Date:   Thu, 25 Feb 2021 13:59:35 +0800
-Message-ID: <20210225055940.18748-3-wangyanan55@huawei.com>
+Subject: [RFC PATCH v2 3/7] KVM: selftests: Make a generic helper to get vm guest mode strings
+Date:   Thu, 25 Feb 2021 13:59:36 +0800
+Message-ID: <20210225055940.18748-4-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210225055940.18748-1-wangyanan55@huawei.com>
 References: <20210225055940.18748-1-wangyanan55@huawei.com>
@@ -45,155 +45,78 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In addition to function of CLOCK_MONOTONIC, flag CLOCK_MONOTONIC_RAW can
-also shield possiable impact of NTP, which can provide more robustness.
+For generality and conciseness, make an API which can be used in all
+kvm libs and selftests to get vm guest mode strings. And the index i
+is checked in the API in case of possiable faults.
 
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
 ---
- tools/testing/selftests/kvm/demand_paging_test.c  |  8 ++++----
- tools/testing/selftests/kvm/dirty_log_perf_test.c | 14 +++++++-------
- tools/testing/selftests/kvm/lib/test_util.c       |  2 +-
- tools/testing/selftests/kvm/steal_time.c          |  4 ++--
- 4 files changed, 14 insertions(+), 14 deletions(-)
+ .../testing/selftests/kvm/include/kvm_util.h  |  4 +--
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 29 ++++++++++++-------
+ 2 files changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index 5f7a229c3af1..efbf0c1e9130 100644
---- a/tools/testing/selftests/kvm/demand_paging_test.c
-+++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -53,7 +53,7 @@ static void *vcpu_worker(void *data)
- 	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
- 	run = vcpu_state(vm, vcpu_id);
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index 2d7eb6989e83..f52a7492f47f 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -68,9 +68,6 @@ enum vm_guest_mode {
+ #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
+ #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
  
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+-#define vm_guest_mode_string(m) vm_guest_mode_string[m]
+-extern const char * const vm_guest_mode_string[];
+-
+ struct vm_guest_mode_params {
+ 	unsigned int pa_bits;
+ 	unsigned int va_bits;
+@@ -84,6 +81,7 @@ int vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap);
+ int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
+ 		    struct kvm_enable_cap *cap);
+ void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
++const char *vm_guest_mode_string(uint32_t i);
  
- 	/* Let the guest access its memory */
- 	ret = _vcpu_run(vm, vcpu_id);
-@@ -86,7 +86,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
- 	copy.len = perf_test_args.host_page_size;
- 	copy.mode = 0;
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 
- 	r = ioctl(uffd, UFFDIO_COPY, &copy);
- 	if (r == -1) {
-@@ -123,7 +123,7 @@ static void *uffd_handler_thread_fn(void *arg)
- 	struct timespec start;
- 	struct timespec ts_diff;
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	while (!quit_uffd_thread) {
- 		struct uffd_msg msg;
- 		struct pollfd pollfd[2];
-@@ -336,7 +336,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 
- 	pr_info("Finished creating vCPUs and starting uffd threads\n");
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 
- 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
- 		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 04a2641261be..6cff4ccf9525 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -50,7 +50,7 @@ static void *vcpu_worker(void *data)
- 	while (!READ_ONCE(host_quit)) {
- 		int current_iteration = READ_ONCE(iteration);
- 
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		ret = _vcpu_run(vm, vcpu_id);
- 		ts_diff = timespec_elapsed(start);
- 
-@@ -141,7 +141,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	iteration = 0;
- 	host_quit = false;
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
- 		vcpu_last_completed_iteration[vcpu_id] = -1;
- 
-@@ -162,7 +162,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 	/* Enable dirty logging */
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX,
- 				KVM_MEM_LOG_DIRTY_PAGES);
- 	ts_diff = timespec_elapsed(start);
-@@ -174,7 +174,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		 * Incrementing the iteration number will start the vCPUs
- 		 * dirtying memory again.
- 		 */
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		iteration++;
- 
- 		pr_debug("Starting iteration %d\n", iteration);
-@@ -189,7 +189,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		pr_info("Iteration %d dirty memory time: %ld.%.9lds\n",
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		kvm_vm_get_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap);
- 
- 		ts_diff = timespec_elapsed(start);
-@@ -199,7 +199,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 		if (dirty_log_manual_caps) {
--			clock_gettime(CLOCK_MONOTONIC, &start);
-+			clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 			kvm_vm_clear_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap, 0,
- 					       host_num_pages);
- 
-@@ -212,7 +212,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	}
- 
- 	/* Disable dirty logging */
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX, 0);
- 	ts_diff = timespec_elapsed(start);
- 	pr_info("Disabling dirty logging time: %ld.%.9lds\n",
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index 906c955384e2..c7c0627c6842 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -89,7 +89,7 @@ struct timespec timespec_elapsed(struct timespec start)
- {
- 	struct timespec end;
- 
--	clock_gettime(CLOCK_MONOTONIC, &end);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
- 	return timespec_sub(end, start);
+ struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
+ void kvm_vm_free(struct kvm_vm *vmp);
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index d787cb802b4a..cc22c4ab7d67 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -141,17 +141,24 @@ static void vm_open(struct kvm_vm *vm, int perm)
+ 		"rc: %i errno: %i", vm->fd, errno);
  }
  
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index fcc840088c91..5bc582d3f2a2 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -237,11 +237,11 @@ static void *do_steal_time(void *arg)
- {
- 	struct timespec ts, stop;
+-const char * const vm_guest_mode_string[] = {
+-	"PA-bits:52,  VA-bits:48,  4K pages",
+-	"PA-bits:52,  VA-bits:48, 64K pages",
+-	"PA-bits:48,  VA-bits:48,  4K pages",
+-	"PA-bits:48,  VA-bits:48, 64K pages",
+-	"PA-bits:40,  VA-bits:48,  4K pages",
+-	"PA-bits:40,  VA-bits:48, 64K pages",
+-	"PA-bits:ANY, VA-bits:48,  4K pages",
+-};
+-_Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
+-	       "Missing new mode strings?");
++const char *vm_guest_mode_string(uint32_t i)
++{
++	static const char * const strings[] = {
++		[VM_MODE_P52V48_4K]	= "PA-bits:52,  VA-bits:48,  4K pages",
++		[VM_MODE_P52V48_64K]	= "PA-bits:52,  VA-bits:48, 64K pages",
++		[VM_MODE_P48V48_4K]	= "PA-bits:48,  VA-bits:48,  4K pages",
++		[VM_MODE_P48V48_64K]	= "PA-bits:48,  VA-bits:48, 64K pages",
++		[VM_MODE_P40V48_4K]	= "PA-bits:40,  VA-bits:48,  4K pages",
++		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
++		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
++	};
++	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
++		       "Missing new mode strings?");
++
++	TEST_ASSERT(i < NUM_VM_MODES, "Guest mode ID %d too big", i);
++
++	return strings[i];
++}
  
--	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
- 	stop = timespec_add_ns(ts, MIN_RUN_DELAY_NS);
- 
- 	while (1) {
--		clock_gettime(CLOCK_MONOTONIC, &ts);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
- 		if (timespec_to_ns(timespec_sub(ts, stop)) >= 0)
- 			break;
- 	}
+ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+ 	{ 52, 48,  0x1000, 12 },
 -- 
 2.19.1
 
