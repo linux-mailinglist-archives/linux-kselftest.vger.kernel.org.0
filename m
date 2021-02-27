@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB66326D81
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Feb 2021 16:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBAB326D97
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Feb 2021 16:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbhB0PMa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 27 Feb 2021 10:12:30 -0500
-Received: from mout.gmx.net ([212.227.15.18]:53947 "EHLO mout.gmx.net"
+        id S230083AbhB0Pck (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 27 Feb 2021 10:32:40 -0500
+Received: from mout.gmx.net ([212.227.15.15]:42585 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229953AbhB0PM3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 27 Feb 2021 10:12:29 -0500
+        id S230063AbhB0Pcj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 27 Feb 2021 10:32:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1614438619;
-        bh=e+NzEQ0zUqFHpSiO6bYhm/QEn9aj/OszjJyG6A3hpJo=;
+        s=badeba3b8450; t=1614439829;
+        bh=uIGfW6v/62M3V75jNuVAjgL4pUU6vkmUTZjc5Ez9qXk=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=Dk5GBllLvbfhkEUcK/ofWBH8eKcQ3rBr9gKQqSyih1p5DUMl4KveCghi0qbvOfyV9
-         2lAWq6ET3V6jP+RlQEi6iJJCx80sYdMrb3NGfutO0W/g4xBv0quM/F79qh+p+w2zbD
-         F8vBpgmgksK8EcZF7bZvTy6QZ8TPP+NjdZXgJXxo=
+        b=XyYxKRu/SJkpLvm2gqQMHgwmUZtnfWb0VA6+RzBVLAaAW5Jqx2+p8KXOPX7Gwl48Z
+         lcvsvccVgi+uKqCBlnwcGCu+pMyFT4t1aVqDQlpIj6IOLgossDYqI1vbDTPvY4yfks
+         Y6i83EiX3ws19lBFVecjfrC+BJd/tR0V3EaJ1AQc=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([83.52.229.153]) by mail.gmx.net
  (mrgmx004 [212.227.17.184]) with ESMTPSA (Nemesis) id
- 1MvK4Z-1m79x40AyH-00rFK1; Sat, 27 Feb 2021 16:10:19 +0100
+ 1MzQg6-1m2VSm3XUW-00vO30; Sat, 27 Feb 2021 16:30:29 +0100
 From:   John Wood <john.wood@gmx.com>
 To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
         Randy Dunlap <rdunlap@infradead.org>,
@@ -34,31 +34,31 @@ Cc:     John Wood <john.wood@gmx.com>,
         linux-security-module@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         kernel-hardening@lists.openwall.com
-Subject: [PATCH v4 0/8] Fork brute force attack mitigation
-Date:   Sat, 27 Feb 2021 16:09:48 +0100
-Message-Id: <20210227150956.6022-1-john.wood@gmx.com>
+Subject: [PATCH v5 0/8] Fork brute force attack mitigation
+Date:   Sat, 27 Feb 2021 16:30:05 +0100
+Message-Id: <20210227153013.6747-1-john.wood@gmx.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:JUDWVnh+062iEY4yBjLXziakNvl1rxXf20M4ttvZZLbM8Fh8LzW
- 7Z1lgLNMD2zhexjJUex72ZQDux/N6pbSie9AHjJ6fFjLrgKVDGuK79Ym/Bgebxq0HFWW54x
- /MzwRP/2sndoF4DJz9GWplztRp+uxp2U7N47EzXMjYbuYo4QFiQFX/GnBDVhae4EJHf8Q64
- iFT5IusG50HN+0pOsQBxQ==
+X-Provags-ID: V03:K1:dyxRqyvivCNpow/94EJRuQjd1fD4g/kwOCLTCLIIsD9iaeW+tWt
+ bXetiYBbijKl3X2dXEvBzyS4VzlJREeIsadRJl6SuLOpSSalf/9znEMVkD1SZgQLUtqCA/n
+ 0jNMdRVyg+mvyl4TZ51DajR0DP3t3GOaR/SCCAKQlpx4joqNA3OugoY793Cryhk9cajxRRM
+ VFcbLTRSgJXD/fGUaWikw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:M2qAs66kCN0=:6UREdrllMK1XmD2NwllGwg
- n4GTD9SFTibaAH47paVJ/BPBydQasPzXcdNg1ciyy/E1Z9N0gsfQ17WYsK5gk668XR5FuPmyK
- kt9HWgIK9zZTRkwGj0Y2lPxiu/4KRHS8VuJgLbFrl86eNKeaozvIkV+NGRsKVYQSpHH/1PJx+
- gF8k8VtDb7yslEvbvSP/wIjNS3LvzyGUswLAFCQC/fLsg7TX62R5u9BoBSI9cWHZefp9JOglS
- ICV5BMm+QQR4tCcIwR/dpyCza7EET4VqkgDBMlL26syVd3fbhjg+ZYyjAtSxQdUIgkEAjHUXY
- mv6JyC1pZmD+uXKriRm5OinDc1oTk0Npg4v1jsyAa+4EcZwiRMQxm8w9rEYCTqg1JMwi7gvgT
- lVt5Femwg/hFr/8AIQaT3+COmecsHukN0xuQbJOT5Nhdl6rm6bpVDlwHmh8qVqsYJvwYidNZO
- fp3Tg/7xlfxTi3vgmOGC6wwss6PQovkbfrOuZ1voOYQ468syHKCVMXD4CUsA7Nv72K3jsFCCM
- jALkNWWSpWmUem7cVdltcU7pmFE4MrEInPWlavmuf4T+eJuiefZ5N34Prdw5x2DO+mbI5BGBr
- V9tGHrOzUQdnxlGI32EwUSckfmiXxLwHWIL0SHDCamqAbT9kkrOJGIcB0L1Bx4LgyBKuO5rxV
- VeKKmh3cUp9iAbuyWt8gOygV1nw2YrmWaTH2CHQMVeRS1ug9FRHLPwlQvmANKGzmEQ+X+YV8K
- EqHgXhuYRKxn3BTNPAxnyvFK/M/dYZDCKRZ9lII9vJJC+Q04BYcGAGRGuFB3g+RbWFhf8DzVI
- 5V8fOYL47VjJKfX3oFB41qlxXWlyJC53S8MIkejk3DR3+vl+OoKuvrQhhwSE9bxLb/AoLrQfV
- hn6IxJwmOPY5SH2PLOig==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/1bWpCycnXs=:Eips6YumXLkHQS0WPq1kMR
+ a3FrdqH8WAMX8xAcuZQe7cEZJ5533wVqcF1m5h3OAQdhkV4qMpcM7wzSrjNjoMIl+5DXg3iRz
+ iY/EUEUvewBNGsgN9BmanEFf7GMNa5FOOzXITU/pWSm2a+yIpYLiOX2jx+qWXclgUm3bgilaS
+ ufgMBTHAGJz94TjmAWbUIFbbBgOadTLPkzmYfwIExem20BybvCfRF0awx7Hva4Ny66jvYXIeT
+ 7fqfjWQC2Z/M77aIJcTZ3aUUU7scqqKPm3Ac9Ec74Z+9Fx29rq42ApYj31/Gt6Qg4CzOXfYDj
+ 00wEkciOCgNifbRxGDkBdR79997wLq8vyytmN67tsyN6nySZGYSAgJyO6iYDOyeQ+sguIvCuf
+ BydSe49pnNbOlUFQjRzY1tKEmc9UImXVyEOy6Qh/nW8PXs8Azgb4ROD9gJBycpGvvkXBngBYr
+ FHlyOcyPGpAMEGVuAxzCmmNeE0iT6YXTulGsz7vwgKb92JMpB8NnjuK2R+3Nza+ICslK2pYrH
+ muh8E7m4lQw2CZaoOTmfPeNY1LVpQsAtQHdrtejajZ/OEp5aRjQl172Py1t2/++QrIkJvKJM4
+ m7y7M0sQJQsV2PTbPBtl0PEO0oLQb+Jt7Z1Dv/bCAG/J29/p7GgkjOGDZuQIeIDI13S6TwcyP
+ dP9gmbyLuOA8/eq4pC6xbP5zJv4EGxj/O0EgahxnZrd5uMgraW4FlKQj76S+dYaf8SZdC3kGf
+ GZszzqvKLScTRpCqUJ8QVeBrDgdIDQBEDSIq+PAw09wpDHvY2rA/zmWMtBkOaG/MFTk/ZiHGn
+ 0y500J0FhCEGH+t2RTKKpo7ddbBl4W9Po4zrRo9apYSR76bMv3ZLrAFmb8rODcxZs8EvB+KCt
+ ORNKP4EL9tVmQa5qS7NQ==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -102,7 +102,7 @@ cross any of the commented bounds.
 The implementation details and comparison against other existing
 implementations can be found in the "Documentation" patch.
 
-This v4 version has changed a lot from the v2. Basically the application
+This v5 version has changed a lot from the v2. Basically the application
 crash period is now compute on an on-going basis using an exponential
 moving average (EMA), a detection of a brute force attack through the
 "execve" system call has been added and the crossing of the commented
@@ -159,6 +159,9 @@ mx.com/
 Version 3
 https://lore.kernel.org/lkml/20210221154919.68050-1-john.wood@gmx.com/
 
+Version 4
+https://lore.kernel.org/lkml/20210227150956.6022-1-john.wood@gmx.com/
+
 Changelog RFC -> v2
 =2D------------------
 - Rename this feature with a more suitable name (Jann Horn, Kees Cook).
@@ -190,6 +193,10 @@ Changelog v3 -> v4
 =2D-----------------
 - Fix all the warnings shown by the tool "scripts/kernel-doc" (Randy
   Dunlap).
+
+Changelog v4 -> v5
+=2D-----------------
+- Fix some typos (Randy Dunlap).
 
 Any constructive comments are welcome.
 Thanks.
