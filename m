@@ -2,146 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 636BB32BCF4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Mar 2021 23:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F1232BCF6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Mar 2021 23:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbhCCPGs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Mar 2021 10:06:48 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6562 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237766AbhCCApV (ORCPT
+        id S241113AbhCCPIq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Mar 2021 10:08:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238038AbhCCCFj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Mar 2021 19:45:21 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1230iOAC146158;
-        Tue, 2 Mar 2021 19:44:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=67DQOxSuXUNLFgrfWdXbjqKz/37AuPpoXqCh6LJOujw=;
- b=hq3LI+yJ6oFOso2OMKBhMEF0e3PzW39iXlbFXD5mzS+FegNWpUzXW6JFH35LvFZJQoKY
- jRy0+3Tkq4mF4JyBWRN9GpF60GG3K17L9Ddv6MuHUwEJcf02VhPREoBJsEirWJIaeC6N
- J9KddugOmgIj03C9xwvOEVePipo2rml8lhALhvrkTrU0LzYjMRgdp7+3ZknVS5fzVtyK
- ZMIogbJD4wY76oXTXlUJSLvf6eMqOMj4tGVWXqH1NWw0seTDbPaBvhPXJKnWsTYlgXjk
- zySf3Q3421nzY3/92D5GFHuOQgtyxGo2mOq0YOA0QjsqMh8Uj+FCkMpcD9BywHbwI/D5 1A== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 372061g052-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Mar 2021 19:44:30 -0500
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 1230XdUH004845;
-        Wed, 3 Mar 2021 00:44:27 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3712fmhahv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Mar 2021 00:44:27 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1230iPoX39321924
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 3 Mar 2021 00:44:25 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E7247AE053;
-        Wed,  3 Mar 2021 00:44:24 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 98538AE04D;
-        Wed,  3 Mar 2021 00:44:24 +0000 (GMT)
-Received: from vm.lan (unknown [9.145.31.74])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  3 Mar 2021 00:44:24 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v5] selftests: fix prepending $(OUTPUT) to $(TEST_PROGS)
-Date:   Wed,  3 Mar 2021 01:44:20 +0100
-Message-Id: <20210303004420.138360-1-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.29.2
-X-TM-AS-GCONF: 00
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 2 Mar 2021 21:05:39 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDFFC06178C;
+        Tue,  2 Mar 2021 18:03:55 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id gi9so10983328qvb.10;
+        Tue, 02 Mar 2021 18:03:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=SWgDl8ZesuDM2NAIYjMPAnyZm1VzAvxJEJ4cGxqrkw4=;
+        b=LK9FJeWUjvXOdiWeLfwdbKwClga1/MJA8WveK8zJFsbs/9+qeFyHjjozQSipVX9RCy
+         Yg41oIPHCqpB0aRtlLbqsegKEUIQMweECDYdGEbfV08JBYW7VfD2H8MKNSbR+oeUa6L/
+         kH2e3eLPgZJAYc3q33ryafRfSHow+2UHYnARebxMAxmEqJmdRRUZ8PC0/97DY6sNZwca
+         w8aeBkCkDrzwRS7RKtzwbPJcmO8jBtrOL9aw1mXSBgQ8Ppjdf9Ni2B1pgEiP+ywqV1lC
+         wYodvzTZFtgWJONbJ1jeDD9tP4APsO7dMJ7pfN2/dMOorLAijyr6J+XZnoD76RMIZNhZ
+         RRjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=SWgDl8ZesuDM2NAIYjMPAnyZm1VzAvxJEJ4cGxqrkw4=;
+        b=mI1k1HMDMrs3Fcde0viDTQz0dGVadEjjFSO7ElOXPfSb9Nk+hio4zxz0oJSz1hFBI2
+         gF6txAwRNeUJ31wNhxLJhtnacj+tIeWX/JIdvXBE5Bw6nt5YcBf11hxve0qE3ahEJIwi
+         Ae8X8rtKajb6VPPQ0Msg1oeu/ORR6Xv6YzkL0+wY/Vw23yt+Jh5C2B1gGar0S4kb13N9
+         g9gqModqKxb7WNLmsqv6us7KuWkTZ7s64fAc+VNQiujejlPfocVNY6IL910bAYV6hAMc
+         ohtXC2dyOxLFro6onJ2Diq/bih3HjD7C06eIecStcUWoF5iJ/AsCyvWQwOz+PlTXkoYD
+         aT4w==
+X-Gm-Message-State: AOAM531o2n6oXWf4c0coI+GsxhgWHQ6HDIlNzRqQIDO5ylIUfvZ7uac9
+        /CbzWGHTE4FYEj17TrBnv90=
+X-Google-Smtp-Source: ABdhPJyV6raoRUWcHcdGZB7qD7LCub9i0c1p9J0sY+UwxFtnLB3AmR9NqdBGpWHth0pYjtADGSX+ZQ==
+X-Received: by 2002:ad4:4c83:: with SMTP id bs3mr655518qvb.41.1614737034559;
+        Tue, 02 Mar 2021 18:03:54 -0800 (PST)
+Received: from smtp.gmail.com ([2804:14c:73:9e91::1001])
+        by smtp.gmail.com with ESMTPSA id v145sm17069268qka.27.2021.03.02.18.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Mar 2021 18:03:54 -0800 (PST)
+Date:   Tue, 2 Mar 2021 23:03:50 -0300
+From:   Lucas Stankus <lucas.p.stankus@gmail.com>
+To:     brendanhiggins@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] kunit: fix checkpatch warning
+Message-ID: <20210303020350.4sahuojkqnkcxquf@smtp.gmail.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-02_08:2021-03-01,2021-03-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 suspectscore=0 spamscore=0 phishscore=0 impostorscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103030001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the following command produces an error message:
+Tidy up code by fixing the following checkpatch warnings:
+CHECK: Alignment should match open parenthesis
+CHECK: Lines should not end with a '('
 
-    linux# make kselftest TARGETS=bpf O=/mnt/linux-build
-    # selftests: bpf: test_libbpf.sh
-    # ./test_libbpf.sh: line 23: ./test_libbpf_open: No such file or directory
-    # test_libbpf: failed at file test_l4lb.o
-    # selftests: test_libbpf [FAILED]
-
-The error message might not affect the return code of make, therefore
-one needs to grep make output in order to detect it.
-
-This is not the only instance of the same underlying problem; any test
-with more than one element in $(TEST_PROGS) fails the same way. Another
-example:
-
-    linux# make O=/mnt/linux-build TARGETS=splice kselftest
-    [...]
-    # ./short_splice_read.sh: 15: ./splice_read: not found
-    # FAIL: /sys/module/test_module/sections/.init.text 2
-    not ok 2 selftests: splice: short_splice_read.sh # exit=1
-
-The current logic prepends $(OUTPUT) only to the first member of
-$(TEST_PROGS). After that, run_one() does
-
-   cd `dirname $TEST`
-
-For all tests except the first one, `dirname $TEST` is ., which means
-they cannot access the files generated in $(OUTPUT).
-
-Fix by using $(addprefix) to prepend $(OUTPUT)/ to each member of
-$(TEST_PROGS).
-
-Fixes: 1a940687e424 ("selftests: lib.mk: copy test scripts and test files for make O=dir run")
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Signed-off-by: Lucas Stankus <lucas.p.stankus@gmail.com>
 ---
+Change log v1 -> v2
+fixed signed-off-by tag
+ lib/kunit/assert.c | 31 ++++++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 11 deletions(-)
 
-v1->v2:
-- Append / to $(OUTPUT).
-- Use $(addprefix) instead of $(foreach).
-
-v2->v3:
-- Split the patch in two.
-- Improve the commit message.
-
-v3: https://lore.kernel.org/linux-kselftest/20191024121347.22189-1-iii@linux.ibm.com/
-v3->v4:
-- Drop the first patch.
-- Add a note regarding make return code to the commit message.
-
-v4: https://lore.kernel.org/linux-kselftest/20191115150428.61131-1-iii@linux.ibm.com/
-v4->v5:
-- Add another reproducer to the commit message.
-
- tools/testing/selftests/lib.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index a5ce26d548e4..be17462fe146 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -74,7 +74,8 @@ ifdef building_out_of_srctree
- 		rsync -aq $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT); \
- 	fi
- 	@if [ "X$(TEST_PROGS)" != "X" ]; then \
--		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(OUTPUT)/$(TEST_PROGS)) ; \
-+		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
-+				  $(addprefix $(OUTPUT)/,$(TEST_PROGS))) ; \
- 	else \
- 		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS)); \
- 	fi
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index e0ec7d6fed6f..acfbf86bddd6 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -25,7 +25,7 @@ void kunit_base_assert_format(const struct kunit_assert *assert,
+ 	}
+ 
+ 	string_stream_add(stream, "%s FAILED at %s:%d\n",
+-			 expect_or_assert, assert->file, assert->line);
++			  expect_or_assert, assert->file, assert->line);
+ }
+ EXPORT_SYMBOL_GPL(kunit_base_assert_format);
+ 
+@@ -48,8 +48,9 @@ EXPORT_SYMBOL_GPL(kunit_fail_assert_format);
+ void kunit_unary_assert_format(const struct kunit_assert *assert,
+ 			       struct string_stream *stream)
+ {
+-	struct kunit_unary_assert *unary_assert = container_of(
+-			assert, struct kunit_unary_assert, assert);
++	struct kunit_unary_assert *unary_assert;
++
++	unary_assert = container_of(assert, struct kunit_unary_assert, assert);
+ 
+ 	kunit_base_assert_format(assert, stream);
+ 	if (unary_assert->expected_true)
+@@ -67,8 +68,10 @@ EXPORT_SYMBOL_GPL(kunit_unary_assert_format);
+ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+ 				     struct string_stream *stream)
+ {
+-	struct kunit_ptr_not_err_assert *ptr_assert = container_of(
+-			assert, struct kunit_ptr_not_err_assert, assert);
++	struct kunit_ptr_not_err_assert *ptr_assert;
++
++	ptr_assert = container_of(assert, struct kunit_ptr_not_err_assert,
++				  assert);
+ 
+ 	kunit_base_assert_format(assert, stream);
+ 	if (!ptr_assert->value) {
+@@ -111,8 +114,10 @@ static bool is_literal(struct kunit *test, const char *text, long long value,
+ void kunit_binary_assert_format(const struct kunit_assert *assert,
+ 				struct string_stream *stream)
+ {
+-	struct kunit_binary_assert *binary_assert = container_of(
+-			assert, struct kunit_binary_assert, assert);
++	struct kunit_binary_assert *binary_assert;
++
++	binary_assert = container_of(assert, struct kunit_binary_assert,
++				     assert);
+ 
+ 	kunit_base_assert_format(assert, stream);
+ 	string_stream_add(stream,
+@@ -137,8 +142,10 @@ EXPORT_SYMBOL_GPL(kunit_binary_assert_format);
+ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
+ 				    struct string_stream *stream)
+ {
+-	struct kunit_binary_ptr_assert *binary_assert = container_of(
+-			assert, struct kunit_binary_ptr_assert, assert);
++	struct kunit_binary_ptr_assert *binary_assert;
++
++	binary_assert = container_of(assert, struct kunit_binary_ptr_assert,
++				     assert);
+ 
+ 	kunit_base_assert_format(assert, stream);
+ 	string_stream_add(stream,
+@@ -159,8 +166,10 @@ EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
+ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+ 				    struct string_stream *stream)
+ {
+-	struct kunit_binary_str_assert *binary_assert = container_of(
+-			assert, struct kunit_binary_str_assert, assert);
++	struct kunit_binary_str_assert *binary_assert;
++
++	binary_assert = container_of(assert, struct kunit_binary_str_assert,
++				     assert);
+ 
+ 	kunit_base_assert_format(assert, stream);
+ 	string_stream_add(stream,
 -- 
-2.29.2
+2.30.1
 
