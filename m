@@ -2,135 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E562C32BCF3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Mar 2021 23:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 636BB32BCF4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Mar 2021 23:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234829AbhCCPGb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Mar 2021 10:06:31 -0500
-Received: from mout.gmx.net ([212.227.17.22]:53411 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234298AbhCBSnL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Mar 2021 13:43:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1614710365;
-        bh=yCkaUQfVe3q+lFu5gCVoEdjBCOmBnrzmeMXvU+zyOWI=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Z93Ueahc/J52n8dNsCcueRlcuBftsHsUHJESjn3E/XsL8c9NqhJZVkpi1r0yMs7Ty
-         /EyV+IWxCptf271B8cJjp6cYk2xUsaiybR42mtsGGr/P32nDzBJFoTO1FkZjcQ8M48
-         YyhJIF0KGm/H5XxVOof62fsn+Re4h5jPUx8UkmVk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ubuntu ([83.52.229.153]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1M5wPb-1lAJEN448x-007X9e; Tue, 02
- Mar 2021 19:39:25 +0100
-Date:   Tue, 2 Mar 2021 19:39:20 +0100
-From:   John Wood <john.wood@gmx.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     John Wood <john.wood@gmx.com>, 0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [security/brute]  cfe92ab6a3: WARNING:inconsistent_lock_state
-Message-ID: <20210302183920.GB3049@ubuntu>
-References: <20210227153013.6747-3-john.wood@gmx.com>
- <20210302054941.GA23892@xsang-OptiPlex-9020>
+        id S234298AbhCCPGs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Mar 2021 10:06:48 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6562 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237766AbhCCApV (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Mar 2021 19:45:21 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1230iOAC146158;
+        Tue, 2 Mar 2021 19:44:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=67DQOxSuXUNLFgrfWdXbjqKz/37AuPpoXqCh6LJOujw=;
+ b=hq3LI+yJ6oFOso2OMKBhMEF0e3PzW39iXlbFXD5mzS+FegNWpUzXW6JFH35LvFZJQoKY
+ jRy0+3Tkq4mF4JyBWRN9GpF60GG3K17L9Ddv6MuHUwEJcf02VhPREoBJsEirWJIaeC6N
+ J9KddugOmgIj03C9xwvOEVePipo2rml8lhALhvrkTrU0LzYjMRgdp7+3ZknVS5fzVtyK
+ ZMIogbJD4wY76oXTXlUJSLvf6eMqOMj4tGVWXqH1NWw0seTDbPaBvhPXJKnWsTYlgXjk
+ zySf3Q3421nzY3/92D5GFHuOQgtyxGo2mOq0YOA0QjsqMh8Uj+FCkMpcD9BywHbwI/D5 1A== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 372061g052-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Mar 2021 19:44:30 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 1230XdUH004845;
+        Wed, 3 Mar 2021 00:44:27 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3712fmhahv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Mar 2021 00:44:27 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1230iPoX39321924
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 3 Mar 2021 00:44:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E7247AE053;
+        Wed,  3 Mar 2021 00:44:24 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 98538AE04D;
+        Wed,  3 Mar 2021 00:44:24 +0000 (GMT)
+Received: from vm.lan (unknown [9.145.31.74])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  3 Mar 2021 00:44:24 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH v5] selftests: fix prepending $(OUTPUT) to $(TEST_PROGS)
+Date:   Wed,  3 Mar 2021 01:44:20 +0100
+Message-Id: <20210303004420.138360-1-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.29.2
+X-TM-AS-GCONF: 00
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210302054941.GA23892@xsang-OptiPlex-9020>
-X-Provags-ID: V03:K1:SMulKwKZ5mn8riOEfhU3TLcHfPC51QPIxJU6Nfk+e0ZTxy1gycj
- +pT1PyxKfSDHUS6yRCkNlhBhTK2i7ym2vK5iAwPAciZnAvrsX6yXN2LY3ccnJX9nKTSHOwm
- R5GsWhjSxYj4gmMdQEIhwmuPSFdxYdK+IqDsgRy6DokG0ZwpDAUbx+jy+XTZ7BNBGcJPJXK
- KP4CxRu/NsTu5nFs4ahiw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MsUK9Gbt9OA=:WKsNNDYEj3dj2C0laVyeAx
- nygW/4H8c59CitOYyDWkw2sJYb9+fhSmH4WrpskkbVbKVoq2aLhJA/0684c+0H36N3T6lB66Y
- mzYVzk/cgmbIqKbghIWm8aqf3klcTbgQ45PFTUFs3egqWSXwjfdNiV+BS7bkoWFZI2qYbFpRy
- 9co0WFmV3KzSrWF5fU0vvZrTLlfoUbFqPc8wfTAFG+0zyT2HRGSf/uztnX3CvyQp25Ja8yGRT
- DaCOrwNBlHujIyS3zPi85zZFbKEQuzeTL8aB7W1pA34paXW6dT7gnyc7P68hD6Uqd/0Jvp8R8
- A6rUYlV17FwX7vqCNHzqVyMnAOOntEVdkaD62uCRDzWZQfaIDYqvXtaQu2/nQveWJugyrPL0y
- XDxVe9jRya37FCn4asRTLyw05WM2YrBRRhBRvRc0cJIIErUoMzY+10C5/rus+ByeACJvJvFa7
- zacbiCXqyXAdjnDYmzy6W2l/38bYGRWIOGYJnAegZ0lGLr7CIVDuKnPtZQOm/GUCwVPVy1pxA
- TmqNpFQyynwAWCkBvqKFK+WFSb4eSEFXa/XXsRK5c7wpw8OPFgYqCdsUKgR6O0UTXMSuJC6pu
- ErTOlWlXnOPRch8v+d63AAtO9Tt4K/kRG6xkhO5j7Lg+KxVviXtNk7Qf94jQPl6BSwJpYeNCw
- q4aXm6MwAaIggA2O5PSpx0wn6AlmYmBRjPIbY6V04JjFOFywt8lT4NRD/S9DiZlSyWtJafDh2
- jMVm+OFCG07wOE3YHelm6FsTeq+KBCz/NO47Go4cZ0tEastaew43AOGHJAFM/13pgZTQLj9tW
- NuAd5J4EqCqABX/X/5/vHBzDZucpJqVcGw+80Wz5guyCgs5FRI9wGwMvgmFzVT2iFWqoRJ4bM
- mwkDtxx9Iyj/R2jOFSeg==
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-02_08:2021-03-01,2021-03-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 suspectscore=0 spamscore=0 phishscore=0 impostorscore=0
+ mlxscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103030001
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 01:49:41PM +0800, kernel test robot wrote:
->
->
-> Greeting,
->
-> FYI, we noticed the following commit (built with gcc-9):
->
-> commit: cfe92ab6a3ea700c08ba673b46822d51f38d6b40 ("[PATCH v5 2/8] securi=
-ty/brute: Define a LSM and manage statistical data")
-> url: https://github.com/0day-ci/linux/commits/John-Wood/Fork-brute-force=
--attack-mitigation/20210228-022911
-> base: https://git.kernel.org/cgit/linux/kernel/git/shuah/linux-kselftest=
-.git next
->
-> in testcase: trinity
-> version: trinity-static-i386-x86_64-f93256fb_2019-08-28
-> with following parameters:
->
-> 	group: ["group-00", "group-01", "group-02", "group-03", "group-04"]
->
-> test-description: Trinity is a linux system call fuzz tester.
-> test-url: http://codemonkey.org.uk/projects/trinity/
->
->
-> on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m=
- 8G
->
-> caused below changes (please refer to attached dmesg/kmsg for entire log=
-/backtrace):
->
->
-> +-----------------------------------------------------------------------=
---+------------+------------+
-> |                                                                       =
-  | 1d53b7aac6 | cfe92ab6a3 |
-> +-----------------------------------------------------------------------=
---+------------+------------+
-> | WARNING:inconsistent_lock_state                                       =
-  | 0          | 6          |
-> | inconsistent{IN-SOFTIRQ-W}->{SOFTIRQ-ON-W}usage                       =
-  | 0          | 6          |
-> +-----------------------------------------------------------------------=
---+------------+------------+
->
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->
->
-> [  116.852721] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> [  116.853120] WARNING: inconsistent lock state
-> [  116.853120] 5.11.0-rc7-00013-gcfe92ab6a3ea #1 Tainted: G S
-> [  116.853120] --------------------------------
->
-> [...]
+Currently the following command produces an error message:
 
-Thanks for the report. I will work on this for the next version.
+    linux# make kselftest TARGETS=bpf O=/mnt/linux-build
+    # selftests: bpf: test_libbpf.sh
+    # ./test_libbpf.sh: line 23: ./test_libbpf_open: No such file or directory
+    # test_libbpf: failed at file test_l4lb.o
+    # selftests: test_libbpf [FAILED]
 
-> Thanks,
-> Oliver Sang
+The error message might not affect the return code of make, therefore
+one needs to grep make output in order to detect it.
 
-Thanks,
-John Wood
+This is not the only instance of the same underlying problem; any test
+with more than one element in $(TEST_PROGS) fails the same way. Another
+example:
+
+    linux# make O=/mnt/linux-build TARGETS=splice kselftest
+    [...]
+    # ./short_splice_read.sh: 15: ./splice_read: not found
+    # FAIL: /sys/module/test_module/sections/.init.text 2
+    not ok 2 selftests: splice: short_splice_read.sh # exit=1
+
+The current logic prepends $(OUTPUT) only to the first member of
+$(TEST_PROGS). After that, run_one() does
+
+   cd `dirname $TEST`
+
+For all tests except the first one, `dirname $TEST` is ., which means
+they cannot access the files generated in $(OUTPUT).
+
+Fix by using $(addprefix) to prepend $(OUTPUT)/ to each member of
+$(TEST_PROGS).
+
+Fixes: 1a940687e424 ("selftests: lib.mk: copy test scripts and test files for make O=dir run")
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+
+v1->v2:
+- Append / to $(OUTPUT).
+- Use $(addprefix) instead of $(foreach).
+
+v2->v3:
+- Split the patch in two.
+- Improve the commit message.
+
+v3: https://lore.kernel.org/linux-kselftest/20191024121347.22189-1-iii@linux.ibm.com/
+v3->v4:
+- Drop the first patch.
+- Add a note regarding make return code to the commit message.
+
+v4: https://lore.kernel.org/linux-kselftest/20191115150428.61131-1-iii@linux.ibm.com/
+v4->v5:
+- Add another reproducer to the commit message.
+
+ tools/testing/selftests/lib.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index a5ce26d548e4..be17462fe146 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -74,7 +74,8 @@ ifdef building_out_of_srctree
+ 		rsync -aq $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT); \
+ 	fi
+ 	@if [ "X$(TEST_PROGS)" != "X" ]; then \
+-		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(OUTPUT)/$(TEST_PROGS)) ; \
++		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
++				  $(addprefix $(OUTPUT)/,$(TEST_PROGS))) ; \
+ 	else \
+ 		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS)); \
+ 	fi
+-- 
+2.29.2
+
