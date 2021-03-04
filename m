@@ -2,19 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E8632C8DD
+	by mail.lfdr.de (Postfix) with ESMTP id B2EC232C8DE
 	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Mar 2021 02:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235844AbhCDA5z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Mar 2021 19:57:55 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:41886 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453053AbhCDAnj (ORCPT
+        id S235237AbhCDA55 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Mar 2021 19:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1453055AbhCDAnp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Mar 2021 19:43:39 -0500
+        Wed, 3 Mar 2021 19:43:45 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3412AC061756;
+        Wed,  3 Mar 2021 16:43:05 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: tonyk)
-        with ESMTPSA id CD7D11F46027
+        with ESMTPSA id 6A5E21F46029
 From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
@@ -29,10 +32,12 @@ Cc:     kernel@collabora.com, krisman@collabora.com,
         libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
         shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
         =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [RFC PATCH v2 00/13] Add futex2 syscall
-Date:   Wed,  3 Mar 2021 21:42:06 -0300
-Message-Id: <20210304004219.134051-1-andrealmeid@collabora.com>
+Subject: [RFC PATCH v2 01/13] futex2: Implement wait and wake functions
+Date:   Wed,  3 Mar 2021 21:42:07 -0300
+Message-Id: <20210304004219.134051-2-andrealmeid@collabora.com>
 X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210304004219.134051-1-andrealmeid@collabora.com>
+References: <20210304004219.134051-1-andrealmeid@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -40,277 +45,915 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Create a new set of futex syscalls known as futex2. This new interface
+is aimed to implement a more maintainable code, while removing obsolete
+features and expanding it with new functionalities.
 
-This patch series introduces the futex2 syscalls.
+Implements wait and wake semantics for futexes, along with the base
+infrastructure for future operations. The whole wait path is designed to
+be used by N waiters, thus making easier to implement vectorized wait.
 
-* What happened to the current futex()?
+* Syscalls implemented by this patch:
 
-For some years now, developers have been trying to add new features to
-futex, but maintainers have been reluctant to accept then, given the
-multiplexed interface full of legacy features and tricky to do big
-changes. Some problems that people tried to address with patchsets are:
-NUMA-awareness[0], smaller sized futexes[1], wait on multiple futexes[2].
-NUMA, for instance, just doesn't fit the current API in a reasonable
-way. Considering that, it's not possible to merge new features into the
-current futex.
+- futex_wait(void *uaddr, unsigned int val, unsigned int flags,
+	     struct timespec *timo)
 
- ** The NUMA problem
+   The user thread is put to sleep, waiting for a futex_wake() at uaddr,
+   if the value at *uaddr is the same as val (otherwise, the syscall
+   returns immediately with -EAGAIN). timo is an optional timeout value
+   for the operation.
 
- At the current implementation, all futex kernel side infrastructure is
- stored on a single node. Given that, all futex() calls issued by
- processors that aren't located on that node will have a memory access
- penalty when doing it.
+   Return 0 on success, error code otherwise.
 
- ** The 32bit sized futex problem
+ - futex_wake(void *uaddr, unsigned long nr_wake, unsigned int flags)
 
- Embedded systems or anything with memory constrains would benefit of
- using smaller sizes for the futex userspace integer. Also, a mutex
- implementation can be done using just three values, so 8 bits is enough
- for various scenarios.
+   Wake `nr_wake` threads waiting at uaddr.
 
- ** The wait on multiple problem
+   Return the number of woken threads on success, error code otherwise.
 
- The use case lies in the Wine implementation of the Windows NT interface
- WaitMultipleObjects. This Windows API function allows a thread to sleep
- waiting on the first of a set of event sources (mutexes, timers, signal,
- console input, etc) to signal.  Considering this is a primitive
- synchronization operation for Windows applications, being able to quickly
- signal events on the producer side, and quickly go to sleep on the
- consumer side is essential for good performance of those running over Wine.
+** The `flag` argument
 
-[0] https://lore.kernel.org/lkml/20160505204230.932454245@linutronix.de/
-[1] https://lore.kernel.org/lkml/20191221155659.3159-2-malteskarupke@web.de/
-[2] https://lore.kernel.org/lkml/20200213214525.183689-1-andrealmeid@collabora.com/
+ The flag is used to specify the size of the futex word
+ (FUTEX_[8, 16, 32]). It's mandatory to define one, since there's no
+ default size.
 
-* The solution
+ By default, the timeout uses a monotonic clock, but can be used as a
+ realtime one by using the FUTEX_REALTIME_CLOCK flag.
 
-As proposed by Peter Zijlstra and Florian Weimer[3], a new interface
-is required to solve this, which must be designed with those features in
-mind. futex2() is that interface. As opposed to the current multiplexed
-interface, the new one should have one syscall per operation. This will
-allow the maintainability of the API if it gets extended, and will help
-users with type checking of arguments.
+ By default, futexes are of the private type, that means that this user
+ address will be accessed by threads that shares the same memory region.
+ This allows for some internal optimizations, so they are faster.
+ However, if the address needs to be shared with different processes
+ (like using `mmap()` or `shm()`), they need to be defined as shared and
+ the flag FUTEX_SHARED_FLAG is used to set that.
 
-In particular, the new interface is extended to support the ability to
-wait on any of a list of futexes at a time, which could be seen as a
-vectored extension of the FUTEX_WAIT semantics.
+ By default, the operation has no NUMA-awareness, meaning that the user
+ can't choose the memory node where the kernel side futex data will be
+ stored. The user can choose the node where it wants to operate by
+ setting the FUTEX_NUMA_FLAG and using the following structure (where X
+ can be 8, 16, or 32):
 
-[3] https://lore.kernel.org/lkml/20200303120050.GC2596@hirez.programming.kicks-ass.net/
+  struct futexX_numa {
+          __uX value;
+          __sX hint;
+  };
 
-* The interface
+ This structure should be passed at the `void *uaddr` of futex
+ functions. The address of the structure will be used to be waited/waken
+ on, and the `value` will be compared to `val` as usual. The `hint`
+ member is used to defined which node the futex will use. When waiting,
+ the futex will be registered on a kernel-side table stored on that
+ node; when waking, the futex will be searched for on that given table.
+ That means that there's no redundancy between tables, and the wrong
+ `hint` value will led to undesired behavior.  Userspace is responsible
+ for dealing with node migrations issues that may occur. `hint` can
+ range from [0, MAX_NUMA_NODES], for specifying a node, or -1, to use
+ the same node the current process is using.
 
-The new interface can be seen in details in the following patches, but
-this is a high level summary of what the interface can do:
+ When not using FUTEX_NUMA_FLAG on a NUMA system, the futex will be
+ stored on a global table on some node, defined at compilation time.
 
- - Supports wake/wait semantics, as in futex()
- - Supports requeue operations, similarly as FUTEX_CMP_REQUEUE, but with
-   individual flags for each address
- - Supports waiting for a vector of futexes, using a new syscall named
-   futex_waitv()
- - Supports variable sized futexes (8bits, 16bits and 32bits)
- - Supports NUMA-awareness operations, where the user can specify on
-   which memory node would like to operate
+** The `timo` argument
 
-* Implementation
+As per the Y2038 work done in the kernel, new interfaces shouldn't add
+timeout options known to be buggy. Given that, `timo` should be a 64bit
+timeout at all platforms, using an absolute timeout value.
 
-The internal implementation follows a similar design to the original futex.
-Given that we want to replicate the same external behavior of current
-futex, this should be somewhat expected. For some functions, like the
-init and the code to get a shared key, I literally copied code and
-comments from kernel/futex.c. I decided to do so instead of exposing the
-original function as a public function since in that way we can freely
-modify our implementation if required, without any impact on old futex.
-Also, the comments precisely describes the details and corner cases of
-the implementation.
-
-Each patch contains a brief description of implementation, but patch 6
-"docs: locking: futex2: Add documentation" adds a more complete document
-about it.
-
-* The patchset
-
-This patchset can be also found at my git tree:
-
-https://gitlab.collabora.com/tonyk/linux/-/tree/futex2-dev
-
-  - Patch 1: Implements wait/wake, and the basics foundations of futex2
-
-  - Patches 2-4: Implement the remaining features (shared, waitv, requeue).
-
-  - Patch 5:  Adds the x86_x32 ABI handling. I kept it in a separated
-    patch since I'm not sure if x86_x32 is still a thing, or if it should
-    return -ENOSYS.
-
-  - Patch 6: Add a documentation file which details the interface and
-    the internal implementation.
-
-  - Patches 7-13: Selftests for all operations along with perf
-    support for futex2.
-
-  - Patch 14: While working on porting glibc for futex2, I found out
-    that there's a futex_wake() call at the user thread exit path, if
-    that thread was created with clone(..., CLONE_CHILD_SETTID, ...). In
-    order to make pthreads work with futex2, it was required to add
-    this patch. Note that this is more a proof-of-concept of what we
-    will need to do in future, rather than part of the interface and
-    shouldn't be merged as it is.
-
-* Testing:
-
-This patchset provides selftests for each operation and their flags.
-Along with that, the following work was done:
-
- ** Stability
-
- To stress the interface in "real world scenarios":
-
- - glibc[4]: nptl's low level locking was modified to use futex2 API
-   (except for robust and PI things). All relevant nptl/ tests passed.
-
- - Wine[5]: Proton/Wine was modified in order to use futex2() for the
-   emulation of Windows NT sync mechanisms based on futex, called "fsync".
-   Triple-A games with huge CPU's loads and tons of parallel jobs worked
-   as expected when compared with the previous FUTEX_WAIT_MULTIPLE
-   implementation at futex(). Some games issue 42k futex2() calls
-   per second.
-
- - Full GNU/Linux distro: I installed the modified glibc in my host
-   machine, so all pthread's programs would use futex2(). After tweaking
-   systemd[6] to allow futex2() calls at seccomp, everything worked as
-   expected (web browsers do some syscall sandboxing and need some
-   configuration as well).
-
- - perf: The perf benchmarks tests can also be used to stress the
-   interface, and they can be found in this patchset.
-
- ** Performance
-
- - For comparing futex() and futex2() performance, I used the artificial
-   benchmarks implemented at perf (wake, wake-parallel, hash and
-   requeue). The setup was 200 runs for each test and using 8, 80, 800,
-   8000 for the number of threads, Note that for this test, I'm not using
-   patch 14 ("kernel: Enable waitpid() for futex2") , for reasons explained
-   at "The patchset" section.
-
- - For the first three ones, I measured an average of 4% gain in
-   performance. This is not a big step, but it shows that the new
-   interface is at least comparable in performance with the current one.
-
- - For requeue, I measured an average of 21% decrease in performance
-   compared to the original futex implementation. This is expected given
-   the new design with individual flags. The performance trade-offs are
-   explained at patch 4 ("futex2: Implement requeue operation").
-
-[4] https://gitlab.collabora.com/tonyk/glibc/-/tree/futex2
-[5] https://gitlab.collabora.com/tonyk/wine/-/tree/proton_5.13
-[6] https://gitlab.collabora.com/tonyk/systemd
-
-* FAQ
-
- ** "Where's the code for NUMA and FUTEX_8/16?"
-
- The current code is already complex enough to take some time for
- review, so I believe it's better to split that work out to a future
- iteration of this patchset. Besides that, this RFC is the core part of the
- infrastructure, and the following features will not pose big design
- changes to it, the work will be more about wiring up the flags and
- modifying some functions.
-
- ** "And what's about FUTEX_64?"
-
- By supporting 64 bit futexes, the kernel structure for futex would
- need to have a 64 bit field for the value, and that could defeat one of
- the purposes of having different sized futexes in the first place:
- supporting smaller ones to decrease memory usage. This might be
- something that could be disabled for 32bit archs (and even for
- CONFIG_BASE_SMALL).
-
- Which use case would benefit for FUTEX_64? Does it worth the trade-offs?
-
- ** "Where's the PI/robust stuff?"
-
- As said by Peter Zijlstra at [3], all those new features are related to
- the "simple" futex interface, that doesn't use PI or robust. Do we want
- to have this complexity at futex2() and if so, should it be part of
- this patchset or can it be future work?
-
-Thanks,
-	André
-
-* Changelog
-
-Changes from v1:
-- Unified futex_set_timer_and_wait and __futex_wait code
-- Dropped _carefull from linked list function calls
-- Fixed typos on docs patch
-- uAPI flags are now added as features are introduced, instead of all flags
-  in patch 1
-- Removed struct futex_single_waiter in favor of an anon struct
-v1: https://lore.kernel.org/lkml/20210215152404.250281-1-andrealmeid@collabora.com/
-
-
-André Almeida (13):
-  futex2: Implement wait and wake functions
-  futex2: Add support for shared futexes
-  futex2: Implement vectorized wait
-  futex2: Implement requeue operation
-  futex2: Add compatibility entry point for x86_x32 ABI
-  docs: locking: futex2: Add documentation
-  selftests: futex2: Add wake/wait test
-  selftests: futex2: Add timeout test
-  selftests: futex2: Add wouldblock test
-  selftests: futex2: Add waitv test
-  selftests: futex2: Add requeue test
-  perf bench: Add futex2 benchmark tests
-  kernel: Enable waitpid() for futex2
-
- Documentation/locking/futex2.rst              |  198 +++
- Documentation/locking/index.rst               |    1 +
- MAINTAINERS                                   |    2 +-
- arch/arm/tools/syscall.tbl                    |    4 +
- arch/arm64/include/asm/unistd.h               |    2 +-
- arch/arm64/include/asm/unistd32.h             |    8 +
- arch/x86/entry/syscalls/syscall_32.tbl        |    4 +
- arch/x86/entry/syscalls/syscall_64.tbl        |    4 +
- fs/inode.c                                    |    1 +
- include/linux/compat.h                        |   23 +
- include/linux/fs.h                            |    1 +
- include/linux/syscalls.h                      |   18 +
- include/uapi/asm-generic/unistd.h             |   14 +-
- include/uapi/linux/futex.h                    |   31 +
- init/Kconfig                                  |    7 +
- kernel/Makefile                               |    1 +
- kernel/fork.c                                 |    2 +
- kernel/futex2.c                               | 1239 +++++++++++++++++
- kernel/sys_ni.c                               |    6 +
- tools/arch/x86/include/asm/unistd_64.h        |   12 +
- tools/include/uapi/asm-generic/unistd.h       |   11 +-
- .../arch/x86/entry/syscalls/syscall_64.tbl    |    4 +
- tools/perf/bench/bench.h                      |    4 +
- tools/perf/bench/futex-hash.c                 |   24 +-
- tools/perf/bench/futex-requeue.c              |   57 +-
- tools/perf/bench/futex-wake-parallel.c        |   41 +-
- tools/perf/bench/futex-wake.c                 |   37 +-
- tools/perf/bench/futex.h                      |   47 +
- tools/perf/builtin-bench.c                    |   18 +-
- .../selftests/futex/functional/.gitignore     |    3 +
- .../selftests/futex/functional/Makefile       |    8 +-
- .../futex/functional/futex2_requeue.c         |  164 +++
- .../selftests/futex/functional/futex2_wait.c  |  209 +++
- .../selftests/futex/functional/futex2_waitv.c |  157 +++
- .../futex/functional/futex_wait_timeout.c     |   58 +-
- .../futex/functional/futex_wait_wouldblock.c  |   33 +-
- .../testing/selftests/futex/functional/run.sh |    6 +
- .../selftests/futex/include/futex2test.h      |  121 ++
- 38 files changed, 2527 insertions(+), 53 deletions(-)
- create mode 100644 Documentation/locking/futex2.rst
+Signed-off-by: André Almeida <andrealmeid@collabora.com>
+---
+ MAINTAINERS                                   |   2 +-
+ arch/arm/tools/syscall.tbl                    |   2 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   4 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   2 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   2 +
+ include/linux/syscalls.h                      |   7 +
+ include/uapi/asm-generic/unistd.h             |   8 +-
+ include/uapi/linux/futex.h                    |   5 +
+ init/Kconfig                                  |   7 +
+ kernel/Makefile                               |   1 +
+ kernel/futex2.c                               | 603 ++++++++++++++++++
+ kernel/sys_ni.c                               |   4 +
+ tools/include/uapi/asm-generic/unistd.h       |   8 +-
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   2 +
+ 15 files changed, 655 insertions(+), 4 deletions(-)
  create mode 100644 kernel/futex2.c
- create mode 100644 tools/testing/selftests/futex/functional/futex2_requeue.c
- create mode 100644 tools/testing/selftests/futex/functional/futex2_wait.c
- create mode 100644 tools/testing/selftests/futex/functional/futex2_waitv.c
- create mode 100644 tools/testing/selftests/futex/include/futex2test.h
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d92f85ca831d..01aceb92aa40 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7370,7 +7370,7 @@ F:	Documentation/locking/*futex*
+ F:	include/asm-generic/futex.h
+ F:	include/linux/futex.h
+ F:	include/uapi/linux/futex.h
+-F:	kernel/futex.c
++F:	kernel/futex*
+ F:	tools/perf/bench/futex*
+ F:	tools/testing/selftests/futex/
+ 
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index dcc1191291a2..2bf93c69e00a 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -456,3 +456,5 @@
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2
+ 442	common	mount_setattr			sys_mount_setattr
++443	common	futex_wait			sys_futex_wait
++444	common	futex_wake			sys_futex_wake
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 949788f5ba40..64ebdc1ec581 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -38,7 +38,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		443
++#define __NR_compat_syscalls		445
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index 3d874f624056..15c2cd5f1c95 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -893,6 +893,10 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
+ __SYSCALL(__NR_epoll_pwait2, compat_sys_epoll_pwait2)
+ #define __NR_mount_setattr 442
+ __SYSCALL(__NR_mount_setattr, sys_mount_setattr)
++#define __NR_futex_wait 443
++__SYSCALL(__NR_futex_wait, sys_futex_wait)
++#define __NR_futex_wake 444
++__SYSCALL(__NR_futex_wake, sys_futex_wake)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index a1c9f496fca6..17d22509d780 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -447,3 +447,5 @@
+ 440	i386	process_madvise		sys_process_madvise
+ 441	i386	epoll_pwait2		sys_epoll_pwait2		compat_sys_epoll_pwait2
+ 442	i386	mount_setattr		sys_mount_setattr
++443	i386	futex_wait		sys_futex_wait
++444	i386	futex_wake		sys_futex_wake
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index 7bf01cbe582f..3336b5cd5bdb 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -364,6 +364,8 @@
+ 440	common	process_madvise		sys_process_madvise
+ 441	common	epoll_pwait2		sys_epoll_pwait2
+ 442	common	mount_setattr		sys_mount_setattr
++443	common	futex_wait		sys_futex_wait
++444	common	futex_wake		sys_futex_wake
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 2839dc9a7c01..352f69a2b94c 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -619,6 +619,13 @@ asmlinkage long sys_get_robust_list(int pid,
+ asmlinkage long sys_set_robust_list(struct robust_list_head __user *head,
+ 				    size_t len);
+ 
++/* kernel/futex2.c */
++asmlinkage long sys_futex_wait(void __user *uaddr, unsigned int val,
++			       unsigned int flags,
++			       struct __kernel_timespec __user *timo);
++asmlinkage long sys_futex_wake(void __user *uaddr, unsigned int nr_wake,
++			       unsigned int flags);
++
+ /* kernel/hrtimer.c */
+ asmlinkage long sys_nanosleep(struct __kernel_timespec __user *rqtp,
+ 			      struct __kernel_timespec __user *rmtp);
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index ce58cff99b66..738315f148fa 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -864,8 +864,14 @@ __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
+ #define __NR_mount_setattr 442
+ __SYSCALL(__NR_mount_setattr, sys_mount_setattr)
+ 
++#define __NR_futex_wait 443
++__SYSCALL(__NR_futex_wait, sys_futex_wait)
++
++#define __NR_futex_wake 444
++__SYSCALL(__NR_futex_wake, sys_futex_wake)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 443
++#define __NR_syscalls 445
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/include/uapi/linux/futex.h b/include/uapi/linux/futex.h
+index a89eb0accd5e..8d30f4b6d094 100644
+--- a/include/uapi/linux/futex.h
++++ b/include/uapi/linux/futex.h
+@@ -41,6 +41,11 @@
+ #define FUTEX_CMP_REQUEUE_PI_PRIVATE	(FUTEX_CMP_REQUEUE_PI | \
+ 					 FUTEX_PRIVATE_FLAG)
+ 
++/* Size argument to futex2 syscall */
++#define FUTEX_32	2
++
++#define FUTEX_SIZE_MASK	0x3
++
+ /*
+  * Support for robust futexes: the kernel cleans up held futexes at
+  * thread exit time.
+diff --git a/init/Kconfig b/init/Kconfig
+index 22946fe5ded9..0dce39965bfb 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1538,6 +1538,13 @@ config FUTEX
+ 	  support for "fast userspace mutexes".  The resulting kernel may not
+ 	  run glibc-based applications correctly.
+ 
++config FUTEX2
++	bool "Enable futex2 support" if EXPERT
++	depends on FUTEX
++	default y
++	help
++	  Support for futex2 interface.
++
+ config FUTEX_PI
+ 	bool
+ 	depends on FUTEX && RT_MUTEXES
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 320f1f3941b7..b6407f92c9af 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -57,6 +57,7 @@ obj-$(CONFIG_PROFILING) += profile.o
+ obj-$(CONFIG_STACKTRACE) += stacktrace.o
+ obj-y += time/
+ obj-$(CONFIG_FUTEX) += futex.o
++obj-$(CONFIG_FUTEX2) += futex2.o
+ obj-$(CONFIG_GENERIC_ISA_DMA) += dma.o
+ obj-$(CONFIG_SMP) += smp.o
+ ifneq ($(CONFIG_SMP),y)
+diff --git a/kernel/futex2.c b/kernel/futex2.c
+new file mode 100644
+index 000000000000..91bbf06fef8a
+--- /dev/null
++++ b/kernel/futex2.c
+@@ -0,0 +1,603 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * futex2 system call interface by André Almeida <andrealmeid@collabora.com>
++ *
++ * Copyright 2021 Collabora Ltd.
++ *
++ * Based on original futex implementation by:
++ *  (C) 2002 Rusty Russell, IBM
++ *  (C) 2003, 2006 Ingo Molnar, Red Hat Inc.
++ *  (C) 2003, 2004 Jamie Lokier
++ *  (C) 2006 Thomas Gleixner, Timesys Corp.
++ *  (C) 2007 Eric Dumazet
++ *  (C) 2009 Darren Hart, IBM
++ */
++
++#include <linux/freezer.h>
++#include <linux/jhash.h>
++#include <linux/memblock.h>
++#include <linux/sched/wake_q.h>
++#include <linux/spinlock.h>
++#include <linux/syscalls.h>
++#include <uapi/linux/futex.h>
++
++/**
++ * struct futex_key - Components to build unique key for a futex
++ * @pointer: Pointer to current->mm
++ * @index: Start address of the page containing futex
++ * @offset: Address offset of uaddr in a page
++ */
++struct futex_key {
++	u64 pointer;
++	unsigned long index;
++	unsigned long offset;
++};
++
++/**
++ * struct futex_waiter - List entry for a waiter
++ * @uaddr:        Virtual address of userspace futex
++ * @key:          Information that uniquely identify a futex
++ * @list:	  List node struct
++ * @val:	  Expected value for this waiter
++ * @flags:        Flags
++ * @bucket:       Pointer to the bucket for this waiter
++ * @index:        Index of waiter in futexv list
++ */
++struct futex_waiter {
++	void __user *uaddr;
++	struct futex_key key;
++	struct list_head list;
++	unsigned int val;
++	unsigned int flags;
++	struct futex_bucket *bucket;
++	unsigned int index;
++};
++
++/**
++ * struct futex_waiter_head - List of futexes to be waited
++ * @task:    Task to be awaken
++ * @hint:    Was someone on this list awakened?
++ * @objects: List of futexes
++ */
++struct futex_waiter_head {
++	struct task_struct *task;
++	bool hint;
++	struct futex_waiter objects[0];
++};
++
++/**
++ * struct futex_bucket - A bucket of futex's hash table
++ * @waiters: Number of waiters in the bucket
++ * @lock:    Bucket lock
++ * @list:    List of waiters on this bucket
++ */
++struct futex_bucket {
++	atomic_t waiters;
++	spinlock_t lock;
++	struct list_head list;
++};
++
++/* Mask for futex2 flag operations */
++#define FUTEX2_MASK (FUTEX_SIZE_MASK | FUTEX_CLOCK_REALTIME)
++
++static struct futex_bucket *futex_table;
++static unsigned int futex2_hashsize;
++
++/*
++ * Reflects a new waiter being added to the waitqueue.
++ */
++static inline void bucket_inc_waiters(struct futex_bucket *bucket)
++{
++#ifdef CONFIG_SMP
++	atomic_inc(&bucket->waiters);
++	/*
++	 * Issue a barrier after adding so futex_wake() will see that the
++	 * value had increased
++	 */
++	smp_mb__after_atomic();
++#endif
++}
++
++/*
++ * Reflects a waiter being removed from the waitqueue by wakeup
++ * paths.
++ */
++static inline void bucket_dec_waiters(struct futex_bucket *bucket)
++{
++#ifdef CONFIG_SMP
++	atomic_dec(&bucket->waiters);
++#endif
++}
++
++/*
++ * Get the number of waiters in a bucket
++ */
++static inline int bucket_get_waiters(struct futex_bucket *bucket)
++{
++#ifdef CONFIG_SMP
++	/*
++	 * Issue a barrier before reading so we get an updated value from
++	 * futex_wait()
++	 */
++	smp_mb();
++	return atomic_read(&bucket->waiters);
++#else
++	return 1;
++#endif
++}
++
++/**
++ * futex_get_bucket - Check if the user address is valid, prepare internal
++ *                    data and calculate the hash
++ * @uaddr:   futex user address
++ * @key:     data that uniquely identifies a futex
++ *
++ * Return: address of bucket on success, error code otherwise
++ */
++static struct futex_bucket *futex_get_bucket(void __user *uaddr,
++					     struct futex_key *key)
++{
++	uintptr_t address = (uintptr_t)uaddr;
++	u32 hash_key;
++
++	/* Checking if uaddr is valid and accessible */
++	if (unlikely(!IS_ALIGNED(address, sizeof(u32))))
++		return ERR_PTR(-EINVAL);
++	if (unlikely(!access_ok(uaddr, sizeof(u32))))
++		return ERR_PTR(-EFAULT);
++
++	key->offset = address % PAGE_SIZE;
++	address -= key->offset;
++	key->pointer = (u64)address;
++	key->index = (unsigned long)current->mm;
++
++	/* Generate hash key for this futex using uaddr and current->mm */
++	hash_key = jhash2((u32 *)key, sizeof(*key) / sizeof(u32), 0);
++
++	/* Since HASH_SIZE is 2^n, subtracting 1 makes a perfect bit mask */
++	return &futex_table[hash_key & (futex2_hashsize - 1)];
++}
++
++/**
++ * futex_get_user - Get the userspace value on this address
++ * @uval:  variable to store the value
++ * @uaddr: userspace address
++ *
++ * Check the comment at futex_enqueue() for more information.
++ */
++static int futex_get_user(u32 *uval, u32 __user *uaddr)
++{
++	int ret;
++
++	pagefault_disable();
++	ret = __get_user(*uval, uaddr);
++	pagefault_enable();
++
++	return ret;
++}
++
++/**
++ * futex_setup_time - Prepare the timeout mechanism and start it.
++ * @timo:    Timeout value from userspace
++ * @timeout: Pointer to hrtimer handler
++ * @flags: Flags from userspace, to decide which clockid to use
++ *
++ * Return: 0 on success, error code otherwise
++ */
++static int futex_setup_time(struct __kernel_timespec __user *timo,
++			    struct hrtimer_sleeper *timeout,
++			    unsigned int flags)
++{
++	ktime_t time;
++	struct timespec64 ts;
++	clockid_t clockid = (flags & FUTEX_CLOCK_REALTIME) ?
++			    CLOCK_REALTIME : CLOCK_MONOTONIC;
++
++	if (get_timespec64(&ts, timo))
++		return -EFAULT;
++
++	if (!timespec64_valid(&ts))
++		return -EINVAL;
++
++	time = timespec64_to_ktime(ts);
++
++	hrtimer_init_sleeper(timeout, clockid, HRTIMER_MODE_ABS);
++
++	hrtimer_set_expires(&timeout->timer, time);
++
++	hrtimer_sleeper_start_expires(timeout, HRTIMER_MODE_ABS);
++
++	return 0;
++}
++
++/**
++ * futex_dequeue_multiple - Remove multiple futexes from hash table
++ * @futexv: list of waiters
++ * @nr:     number of futexes to be removed
++ *
++ * This function is used if (a) something went wrong while enqueuing, and we
++ * need to undo our work (then nr <= nr_futexes) or (b) we woke up, and thus
++ * need to remove every waiter, check if some was indeed woken and return.
++ * Before removing a waiter, we check if it's on the list, since we have no
++ * clue who have been waken.
++ *
++ * Return:
++ *  * -1  - If no futex was woken during the removal
++ *  * 0>= - At least one futex was found woken, index of the last one
++ */
++static int futex_dequeue_multiple(struct futex_waiter_head *futexv, unsigned int nr)
++{
++	int i, ret = -1;
++
++	for (i = 0; i < nr; i++) {
++		spin_lock(&futexv->objects[i].bucket->lock);
++		if (!list_empty(&futexv->objects[i].list)) {
++			list_del_init(&futexv->objects[i].list);
++			bucket_dec_waiters(futexv->objects[i].bucket);
++		} else {
++			ret = i;
++		}
++		spin_unlock(&futexv->objects[i].bucket->lock);
++	}
++
++	return ret;
++}
++
++/**
++ * futex_enqueue - Check the value and enqueue a futex on a wait list
++ *
++ * @futexv:     List of futexes
++ * @nr_futexes: Number of futexes in the list
++ * @awakened:	If a futex was awakened during enqueueing, store the index here
++ *
++ * Get the value from the userspace address and compares with the expected one.
++ *
++ * Getting the value from user futex address:
++ *
++ * Since we are in a hurry, we use a spin lock and we can't sleep.
++ * Try to get the value with page fault disabled (when enable, we might
++ * sleep).
++ *
++ * If we fail, we aren't sure if the address is invalid or is just a
++ * page fault. Then, release the lock (so we can sleep) and try to get
++ * the value with page fault enabled. In order to trigger a page fault
++ * handling, we just call __get_user() again. If we sleep with enqueued
++ * futexes, we might miss a wake, so dequeue everything before sleeping.
++ *
++ * If get_user succeeds, this mean that the address is valid and we do
++ * the work again. Since we just handled the page fault, the page is
++ * likely pinned in memory and we should be luckier this time and be
++ * able to get the value. If we fail anyway, we will try again.
++ *
++ * If even with page faults enabled we get and error, this means that
++ * the address is not valid and we return from the syscall.
++ *
++ * If we got an unexpected value or need to treat a page fault and realized that
++ * a futex was awakened, we can priority this and return success.
++ *
++ * In success, enqueue the futex in the correct bucket
++ *
++ * Return:
++ * * 1  - We were awake in the process and nothing is enqueued
++ * * 0  - Everything is enqueued and we are ready to sleep
++ * * 0< - Something went wrong, nothing is enqueued, return error code
++ */
++static int futex_enqueue(struct futex_waiter_head *futexv, unsigned int nr_futexes,
++			 int *awakened)
++{
++	int i, ret;
++	u32 uval, val;
++	u32 __user *uaddr;
++	struct futex_bucket *bucket;
++
++retry:
++	set_current_state(TASK_INTERRUPTIBLE);
++
++	for (i = 0; i < nr_futexes; i++) {
++		uaddr = (u32 __user *)futexv->objects[i].uaddr;
++		val = (u32)futexv->objects[i].val;
++
++		bucket = futexv->objects[i].bucket;
++
++		bucket_inc_waiters(bucket);
++		spin_lock(&bucket->lock);
++
++		ret = futex_get_user(&uval, uaddr);
++
++		if (unlikely(ret)) {
++			spin_unlock(&bucket->lock);
++
++			bucket_dec_waiters(bucket);
++			__set_current_state(TASK_RUNNING);
++			*awakened = futex_dequeue_multiple(futexv, i);
++
++			if (*awakened >= 0)
++				return 1;
++
++			if (__get_user(uval, uaddr))
++				return -EFAULT;
++
++			goto retry;
++		}
++
++		if (uval != val) {
++			spin_unlock(&bucket->lock);
++
++			bucket_dec_waiters(bucket);
++			__set_current_state(TASK_RUNNING);
++			*awakened = futex_dequeue_multiple(futexv, i);
++
++			if (*awakened >= 0)
++				return 1;
++
++			return -EAGAIN;
++		}
++
++		list_add_tail(&futexv->objects[i].list, &bucket->list);
++		spin_unlock(&bucket->lock);
++	}
++
++	return 0;
++}
++
++/**
++ * __futex_waitv - Enqueue the list of futexes and wait to be woken
++ * @futexv: List of futexes to wait
++ * @nr_futexes: Length of futexv
++ * @timo:	Timeout
++ * @flags:	Timeout flags
++ *
++ * Return:
++ * * 0 >= - Hint of which futex woke us
++ * * 0 <  - Error code
++ */
++static int __futex_waitv(struct futex_waiter_head *futexv, unsigned int nr_futexes,
++			 struct __kernel_timespec __user *timo,
++			 unsigned int flags)
++{
++	int ret;
++	struct hrtimer_sleeper timeout;
++
++	if (timo) {
++		ret = futex_setup_time(timo, &timeout, flags);
++		if (ret)
++			return ret;
++	}
++
++	while (1) {
++		int awakened = -1;
++
++		ret = futex_enqueue(futexv, nr_futexes, &awakened);
++
++		if (ret) {
++			if (awakened >= 0)
++				ret = awakened;
++			break;
++		}
++
++		/* Before sleeping, check if someone was woken */
++		if (!futexv->hint && (!timo || timeout.task))
++			freezable_schedule();
++
++		__set_current_state(TASK_RUNNING);
++
++		/*
++		 * One of those things triggered this wake:
++		 *
++		 * * We have been removed from the bucket. futex_wake() woke
++		 *   us. We just need to dequeue and return 0 to userspace.
++		 *
++		 * However, if no futex was dequeued by a futex_wake():
++		 *
++		 * * If the there's a timeout and it has expired,
++		 *   return -ETIMEDOUT.
++		 *
++		 * * If there is a signal pending, something wants to kill our
++		 *   thread, return -ERESTARTSYS.
++		 *
++		 * * If there's no signal pending, it was a spurious wake
++		 *   (scheduler gave us a chance to do some work, even if we
++		 *   don't want to). We need to remove ourselves from the
++		 *   bucket and add again, to prevent losing wakeups in the
++		 *   meantime.
++		 */
++
++		ret = futex_dequeue_multiple(futexv, nr_futexes);
++
++		/* Normal wake */
++		if (ret >= 0)
++			break;
++
++		if (timo && !timeout.task) {
++			ret = -ETIMEDOUT;
++			break;
++		}
++
++		if (signal_pending(current)) {
++			ret = -ERESTARTSYS;
++			break;
++		}
++
++		/* Spurious wake, do everything again */
++	}
++
++	if (timo)
++		hrtimer_cancel(&timeout.timer);
++
++	return ret;
++}
++
++/**
++ * sys_futex_wait - Wait on a futex address if (*uaddr) == val
++ * @uaddr: User address of futex
++ * @val:   Expected value of futex
++ * @flags: Specify the size of futex and the clockid
++ * @timo:  Optional absolute timeout.
++ *
++ * The user thread is put to sleep, waiting for a futex_wake() at uaddr, if the
++ * value at *uaddr is the same as val (otherwise, the syscall returns
++ * immediately with -EAGAIN).
++ *
++ * Returns 0 on success, error code otherwise.
++ */
++SYSCALL_DEFINE4(futex_wait, void __user *, uaddr, unsigned int, val,
++		unsigned int, flags, struct __kernel_timespec __user *, timo)
++{
++	unsigned int size = flags & FUTEX_SIZE_MASK;
++	struct futex_waiter *waiter;
++	struct futex_waiter_head *futexv;
++
++	/* Wrapper for a futexv_waiter_head with one element */
++	struct {
++		struct futex_waiter_head futexv;
++		struct futex_waiter waiter;
++	} __packed wait_single;
++
++	if (flags & ~FUTEX2_MASK)
++		return -EINVAL;
++
++	if (size != FUTEX_32)
++		return -EINVAL;
++
++	futexv = &wait_single.futexv;
++	futexv->task = current;
++	futexv->hint = false;
++
++	waiter = &wait_single.waiter;
++	waiter->index = 0;
++	waiter->val = val;
++	waiter->uaddr = uaddr;
++	memset(&wait_single.waiter.key, 0, sizeof(struct futex_key));
++
++	INIT_LIST_HEAD(&waiter->list);
++
++	/* Get an unlocked hash bucket */
++	waiter->bucket = futex_get_bucket(uaddr, &waiter->key);
++	if (IS_ERR(waiter->bucket))
++		return PTR_ERR(waiter->bucket);
++
++	return __futex_waitv(futexv, 1, timo, flags);
++}
++
++/**
++ * futex_get_parent - For a given futex in a futexv list, get a pointer to the futexv
++ * @waiter: Address of futex in the list
++ * @index: Index of futex in the list
++ *
++ * Return: A pointer to its futexv struct
++ */
++static inline struct futex_waiter_head *futex_get_parent(uintptr_t waiter,
++							 unsigned int index)
++{
++	uintptr_t parent = waiter - sizeof(struct futex_waiter_head)
++			   - (uintptr_t)(index * sizeof(struct futex_waiter));
++
++	return (struct futex_waiter_head *)parent;
++}
++
++/**
++ * futex_mark_wake - Find the task to be wake and add it in wake queue
++ * @waiter: Waiter to be wake
++ * @bucket: Bucket to be decremented
++ * @wake_q: Wake queue to insert the task
++ */
++static void futex_mark_wake(struct futex_waiter *waiter,
++			    struct futex_bucket *bucket,
++			    struct wake_q_head *wake_q)
++{
++	struct task_struct *task;
++	struct futex_waiter_head *parent = futex_get_parent((uintptr_t)waiter,
++							    waiter->index);
++
++	lockdep_assert_held(&bucket->lock);
++	parent->hint = true;
++	task = parent->task;
++	get_task_struct(task);
++	list_del_init(&waiter->list);
++	wake_q_add_safe(wake_q, task);
++	bucket_dec_waiters(bucket);
++}
++
++static inline bool futex_match(struct futex_key key1, struct futex_key key2)
++{
++	return (key1.index == key2.index &&
++		key1.pointer == key2.pointer &&
++		key1.offset == key2.offset);
++}
++
++/**
++ * sys_futex_wake - Wake a number of futexes waiting on an address
++ * @uaddr:   Address of futex to be woken up
++ * @nr_wake: Number of futexes waiting in uaddr to be woken up
++ * @flags:   Flags for size and shared
++ *
++ * Wake `nr_wake` threads waiting at uaddr.
++ *
++ * Returns the number of woken threads on success, error code otherwise.
++ */
++SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
++		unsigned int, flags)
++{
++	unsigned int size = flags & FUTEX_SIZE_MASK;
++	struct futex_waiter waiter, *aux, *tmp;
++	struct futex_bucket *bucket;
++	DEFINE_WAKE_Q(wake_q);
++	int ret = 0;
++
++	if (flags & ~FUTEX2_MASK)
++		return -EINVAL;
++
++	if (size != FUTEX_32)
++		return -EINVAL;
++
++	bucket = futex_get_bucket(uaddr, &waiter.key);
++	if (IS_ERR(bucket))
++		return PTR_ERR(bucket);
++
++	if (!bucket_get_waiters(bucket) || !nr_wake)
++		return 0;
++
++	spin_lock(&bucket->lock);
++	list_for_each_entry_safe(aux, tmp, &bucket->list, list) {
++		if (futex_match(waiter.key, aux->key)) {
++			futex_mark_wake(aux, bucket, &wake_q);
++			if (++ret >= nr_wake)
++				break;
++		}
++	}
++	spin_unlock(&bucket->lock);
++
++	wake_up_q(&wake_q);
++
++	return ret;
++}
++
++static int __init futex2_init(void)
++{
++	int i;
++	unsigned int futex_shift;
++
++#if CONFIG_BASE_SMALL
++	futex2_hashsize = 16;
++#else
++	futex2_hashsize = roundup_pow_of_two(256 * num_possible_cpus());
++#endif
++
++	futex_table = alloc_large_system_hash("futex2", sizeof(struct futex_bucket),
++					      futex2_hashsize, 0,
++					      futex2_hashsize < 256 ? HASH_SMALL : 0,
++					      &futex_shift, NULL,
++					      futex2_hashsize, futex2_hashsize);
++	futex2_hashsize = 1UL << futex_shift;
++
++	BUG_ON(!is_power_of_2(futex2_hashsize));
++
++	for (i = 0; i < futex2_hashsize; i++) {
++		INIT_LIST_HEAD(&futex_table[i].list);
++		spin_lock_init(&futex_table[i].lock);
++		atomic_set(&futex_table[i].waiters, 0);
++	}
++
++	return 0;
++}
++core_initcall(futex2_init);
+diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+index 19aa806890d5..27ef83ca8a9d 100644
+--- a/kernel/sys_ni.c
++++ b/kernel/sys_ni.c
+@@ -150,6 +150,10 @@ COND_SYSCALL_COMPAT(set_robust_list);
+ COND_SYSCALL(get_robust_list);
+ COND_SYSCALL_COMPAT(get_robust_list);
+ 
++/* kernel/futex2.c */
++COND_SYSCALL(futex_wait);
++COND_SYSCALL(futex_wake);
++
+ /* kernel/hrtimer.c */
+ 
+ /* kernel/itimer.c */
+diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
+index ce58cff99b66..738315f148fa 100644
+--- a/tools/include/uapi/asm-generic/unistd.h
++++ b/tools/include/uapi/asm-generic/unistd.h
+@@ -864,8 +864,14 @@ __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
+ #define __NR_mount_setattr 442
+ __SYSCALL(__NR_mount_setattr, sys_mount_setattr)
+ 
++#define __NR_futex_wait 443
++__SYSCALL(__NR_futex_wait, sys_futex_wait)
++
++#define __NR_futex_wake 444
++__SYSCALL(__NR_futex_wake, sys_futex_wake)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 443
++#define __NR_syscalls 445
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+index 78672124d28b..45632be70a15 100644
+--- a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -363,6 +363,8 @@
+ 439	common	faccessat2		sys_faccessat2
+ 440	common	process_madvise		sys_process_madvise
+ 441	common	epoll_pwait2		sys_epoll_pwait2
++443	common  futex_wait              sys_futex_wait
++444	common  futex_wake              sys_futex_wake
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
 -- 
 2.30.1
 
