@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DA732C8E8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Mar 2021 02:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D73632C8EA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Mar 2021 02:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235956AbhCDA6G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Mar 2021 19:58:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S235139AbhCDA6H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Mar 2021 19:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453079AbhCDAoj (ORCPT
+        with ESMTP id S1453080AbhCDAoo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Mar 2021 19:44:39 -0500
+        Wed, 3 Mar 2021 19:44:44 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3D1C061756;
-        Wed,  3 Mar 2021 16:43:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8738BC06175F;
+        Wed,  3 Mar 2021 16:44:04 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: tonyk)
-        with ESMTPSA id 1A03B1F4603B
+        with ESMTPSA id 6C76D1F46029
 From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
@@ -32,9 +32,9 @@ Cc:     kernel@collabora.com, krisman@collabora.com,
         libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
         shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
         =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [RFC PATCH v2 11/13] selftests: futex2: Add requeue test
-Date:   Wed,  3 Mar 2021 21:42:17 -0300
-Message-Id: <20210304004219.134051-12-andrealmeid@collabora.com>
+Subject: [RFC PATCH v2 12/13] perf bench: Add futex2 benchmark tests
+Date:   Wed,  3 Mar 2021 21:42:18 -0300
+Message-Id: <20210304004219.134051-13-andrealmeid@collabora.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210304004219.134051-1-andrealmeid@collabora.com>
 References: <20210304004219.134051-1-andrealmeid@collabora.com>
@@ -45,237 +45,523 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add testing for futex_requeue(). The first test just requeue from one
-waiter to another one, and wake it. The second performs both wake and
-requeue, and we check return values to see if the operation
-woke/requeued the expected number of waiters.
+Add support at the existing futex benchmarking code base to enable
+futex2 calls. `perf bench` tests can be used not only as a way to
+measure the performance of implementation, but also as stress testing
+for the kernel infrastructure.
 
 Signed-off-by: André Almeida <andrealmeid@collabora.com>
 ---
- .../selftests/futex/functional/.gitignore     |   1 +
- .../selftests/futex/functional/Makefile       |   3 +-
- .../futex/functional/futex2_requeue.c         | 164 ++++++++++++++++++
- .../selftests/futex/include/futex2test.h      |  16 ++
- 4 files changed, 183 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/futex/functional/futex2_requeue.c
+ tools/arch/x86/include/asm/unistd_64.h | 12 ++++++
+ tools/perf/bench/bench.h               |  4 ++
+ tools/perf/bench/futex-hash.c          | 24 +++++++++--
+ tools/perf/bench/futex-requeue.c       | 57 ++++++++++++++++++++------
+ tools/perf/bench/futex-wake-parallel.c | 41 +++++++++++++++---
+ tools/perf/bench/futex-wake.c          | 37 +++++++++++++----
+ tools/perf/bench/futex.h               | 47 +++++++++++++++++++++
+ tools/perf/builtin-bench.c             | 18 ++++++--
+ 8 files changed, 206 insertions(+), 34 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/.gitignore b/tools/testing/selftests/futex/functional/.gitignore
-index d0b8f637b786..af7557e821da 100644
---- a/tools/testing/selftests/futex/functional/.gitignore
-+++ b/tools/testing/selftests/futex/functional/.gitignore
-@@ -8,3 +8,4 @@ futex_wait_uninitialized_heap
- futex_wait_wouldblock
- futex2_wait
- futex2_waitv
-+futex2_requeue
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index 09c08ccdeaf2..3ccb9ea58ddd 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -17,7 +17,8 @@ TEST_GEN_FILES := \
- 	futex_wait_uninitialized_heap \
- 	futex_wait_private_mapped_file \
- 	futex2_wait \
--	futex2_waitv
-+	futex2_waitv \
-+	futex2_requeue
+diff --git a/tools/arch/x86/include/asm/unistd_64.h b/tools/arch/x86/include/asm/unistd_64.h
+index 4205ed4158bf..b65c51e8d675 100644
+--- a/tools/arch/x86/include/asm/unistd_64.h
++++ b/tools/arch/x86/include/asm/unistd_64.h
+@@ -17,3 +17,15 @@
+ #ifndef __NR_setns
+ #define __NR_setns 308
+ #endif
++
++#ifndef __NR_futex_wait
++# define __NR_futex_wait 443
++#endif
++
++#ifndef __NR_futex_wake
++# define __NR_futex_wake 444
++#endif
++
++#ifndef __NR_futex_requeue
++# define __NR_futex_requeue 446
++#endif
+diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
+index eac36afab2b3..12346844b354 100644
+--- a/tools/perf/bench/bench.h
++++ b/tools/perf/bench/bench.h
+@@ -38,9 +38,13 @@ int bench_mem_memcpy(int argc, const char **argv);
+ int bench_mem_memset(int argc, const char **argv);
+ int bench_mem_find_bit(int argc, const char **argv);
+ int bench_futex_hash(int argc, const char **argv);
++int bench_futex2_hash(int argc, const char **argv);
+ int bench_futex_wake(int argc, const char **argv);
++int bench_futex2_wake(int argc, const char **argv);
+ int bench_futex_wake_parallel(int argc, const char **argv);
++int bench_futex2_wake_parallel(int argc, const char **argv);
+ int bench_futex_requeue(int argc, const char **argv);
++int bench_futex2_requeue(int argc, const char **argv);
+ /* pi futexes */
+ int bench_futex_lock_pi(int argc, const char **argv);
+ int bench_epoll_wait(int argc, const char **argv);
+diff --git a/tools/perf/bench/futex-hash.c b/tools/perf/bench/futex-hash.c
+index b65373ce5c4f..1068749af40c 100644
+--- a/tools/perf/bench/futex-hash.c
++++ b/tools/perf/bench/futex-hash.c
+@@ -33,7 +33,7 @@ static unsigned int nthreads = 0;
+ static unsigned int nsecs    = 10;
+ /* amount of futexes per thread */
+ static unsigned int nfutexes = 1024;
+-static bool fshared = false, done = false, silent = false;
++static bool fshared = false, done = false, silent = false, futex2 = false;
+ static int futex_flag = 0;
  
- TEST_PROGS := run.sh
+ struct timeval bench__start, bench__end, bench__runtime;
+@@ -85,7 +85,10 @@ static void *workerfn(void *arg)
+ 			 * such as internal waitqueue handling, thus enlarging
+ 			 * the critical region protected by hb->lock.
+ 			 */
+-			ret = futex_wait(&w->futex[i], 1234, NULL, futex_flag);
++			if (!futex2)
++				ret = futex_wait(&w->futex[i], 1234, NULL, futex_flag);
++			else
++				ret = futex2_wait(&w->futex[i], 1234, futex_flag, NULL);
+ 			if (!silent &&
+ 			    (!ret || errno != EAGAIN || errno != EWOULDBLOCK))
+ 				warn("Non-expected futex return call");
+@@ -116,7 +119,7 @@ static void print_summary(void)
+ 	       (int)bench__runtime.tv_sec);
+ }
  
-diff --git a/tools/testing/selftests/futex/functional/futex2_requeue.c b/tools/testing/selftests/futex/functional/futex2_requeue.c
-new file mode 100644
-index 000000000000..1bc3704dc8c2
---- /dev/null
-+++ b/tools/testing/selftests/futex/functional/futex2_requeue.c
-@@ -0,0 +1,164 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/******************************************************************************
-+ *
-+ *   Copyright Collabora Ltd., 2021
-+ *
-+ * DESCRIPTION
-+ *	Test requeue mechanism of futex2, using 32bit sized futexes.
-+ *
-+ * AUTHOR
-+ *	André Almeida <andrealmeid@collabora.com>
-+ *
-+ * HISTORY
-+ *      2021-Feb-5: Initial version by André <andrealmeid@collabora.com>
-+ *
-+ *****************************************************************************/
-+
-+#include <errno.h>
-+#include <error.h>
-+#include <getopt.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <time.h>
-+#include <pthread.h>
-+#include <sys/shm.h>
-+#include <limits.h>
-+#include "futex2test.h"
-+#include "logging.h"
-+
-+#define TEST_NAME "futex2-wait"
-+#define timeout_ns  30000000
-+#define WAKE_WAIT_US 10000
-+volatile futex_t *f1;
-+
-+void usage(char *prog)
-+{
-+	printf("Usage: %s\n", prog);
-+	printf("  -c	Use color\n");
-+	printf("  -h	Display this help message\n");
-+	printf("  -v L	Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
-+	       VQUIET, VCRITICAL, VINFO);
-+}
-+
-+void *waiterfn(void *arg)
-+{
-+	struct timespec64 to64;
-+
-+	/* setting absolute timeout for futex2 */
-+	if (gettime64(CLOCK_MONOTONIC, &to64))
-+		error("gettime64 failed\n", errno);
-+
-+	to64.tv_nsec += timeout_ns;
-+
-+	if (to64.tv_nsec >= 1000000000) {
-+		to64.tv_sec++;
-+		to64.tv_nsec -= 1000000000;
-+	}
-+
-+	if (futex2_wait(f1, *f1, FUTEX_32, &to64))
-+		printf("waiter failed errno %d\n", errno);
-+
-+	return NULL;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	pthread_t waiter[10];
-+	int res, ret = RET_PASS;
-+	int c, i;
-+	volatile futex_t _f1 = 0;
-+	volatile futex_t f2 = 0;
-+	struct futex_requeue r1, r2;
-+
-+	f1 = &_f1;
-+
-+	r1.flags = FUTEX_32;
-+	r2.flags = FUTEX_32;
-+
-+	r1.uaddr = f1;
-+	r2.uaddr = &f2;
-+
-+	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
-+		switch (c) {
-+		case 'c':
-+			log_color(1);
-+			break;
-+		case 'h':
-+			usage(basename(argv[0]));
-+			exit(0);
-+		case 'v':
-+			log_verbosity(atoi(optarg));
-+			break;
-+		default:
-+			usage(basename(argv[0]));
-+			exit(1);
-+		}
-+	}
-+
-+	ksft_print_header();
-+	ksft_set_plan(2);
-+	ksft_print_msg("%s: Test FUTEX2_REQUEUE\n",
-+		       basename(argv[0]));
-+
-+	/*
-+	 * Requeue a waiter from f1 to f2, and wake f2.
-+	 */
-+	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
-+		error("pthread_create failed\n", errno);
-+
-+	usleep(WAKE_WAIT_US);
-+
-+	res = futex2_requeue(&r1, &r2, 0, 1, 0, 0);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex2_requeue private returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
-+		ret = RET_FAIL;
-+	}
-+
-+
-+	info("Calling private futex2_wake on f2: %u @ %p with val=%u\n", f2, &f2, f2);
-+	res = futex2_wake(&f2, 1, FUTEX_32);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex2_requeue private returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("futex2_requeue simple succeeds\n");
-+	}
-+
-+
-+	/*
-+	 * Create 10 waiters at f1. At futex_requeue, wake 3 and requeue 7.
-+	 * At futex_wake, wake INT_MAX (should be exaclty 7).
-+	 */
-+	for (i = 0; i < 10; i++) {
-+		if (pthread_create(&waiter[i], NULL, waiterfn, NULL))
-+			error("pthread_create failed\n", errno);
-+	}
-+
-+	usleep(WAKE_WAIT_US);
-+
-+	res = futex2_requeue(&r1, &r2, 3, 7, 0, 0);
-+	if (res != 10) {
-+		ksft_test_result_fail("futex2_requeue private returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
-+		ret = RET_FAIL;
-+	}
-+
-+	res = futex2_wake(&f2, INT_MAX, FUTEX_32);
-+	if (res != 7) {
-+		ksft_test_result_fail("futex2_requeue private returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("futex2_requeue succeeds\n");
-+	}
-+
-+	ksft_print_cnts();
-+	return ret;
-+}
-diff --git a/tools/testing/selftests/futex/include/futex2test.h b/tools/testing/selftests/futex/include/futex2test.h
-index 31979afc486f..e2635006b1a9 100644
---- a/tools/testing/selftests/futex/include/futex2test.h
-+++ b/tools/testing/selftests/futex/include/futex2test.h
-@@ -103,3 +103,19 @@ static inline int futex2_waitv(volatile struct futex_waitv *waiters, unsigned lo
+-int bench_futex_hash(int argc, const char **argv)
++static int __bench_futex_hash(int argc, const char **argv)
  {
- 	return syscall(__NR_futex_waitv, waiters, nr_waiters, flags, timo);
+ 	int ret = 0;
+ 	cpu_set_t cpuset;
+@@ -148,7 +151,9 @@ int bench_futex_hash(int argc, const char **argv)
+ 	if (!worker)
+ 		goto errmem;
+ 
+-	if (!fshared)
++	if (futex2)
++		futex_flag = FUTEX_32 | (fshared * FUTEX_SHARED_FLAG);
++	else if (!fshared)
+ 		futex_flag = FUTEX_PRIVATE_FLAG;
+ 
+ 	printf("Run summary [PID %d]: %d threads, each operating on %d [%s] futexes for %d secs.\n\n",
+@@ -228,3 +233,14 @@ int bench_futex_hash(int argc, const char **argv)
+ errmem:
+ 	err(EXIT_FAILURE, "calloc");
+ }
++
++int bench_futex_hash(int argc, const char **argv)
++{
++	return __bench_futex_hash(argc, argv);
++}
++
++int bench_futex2_hash(int argc, const char **argv)
++{
++	futex2 = true;
++	return __bench_futex_hash(argc, argv);
++}
+diff --git a/tools/perf/bench/futex-requeue.c b/tools/perf/bench/futex-requeue.c
+index 5fa23295ee5f..6cdd649b54f4 100644
+--- a/tools/perf/bench/futex-requeue.c
++++ b/tools/perf/bench/futex-requeue.c
+@@ -2,8 +2,8 @@
+ /*
+  * Copyright (C) 2013  Davidlohr Bueso <davidlohr@hp.com>
+  *
+- * futex-requeue: Block a bunch of threads on futex1 and requeue them
+- *                on futex2, N at a time.
++ * futex-requeue: Block a bunch of threads on addr1 and requeue them
++ *                on addr2, N at a time.
+  *
+  * This program is particularly useful to measure the latency of nthread
+  * requeues without waking up any tasks -- thus mimicking a regular futex_wait.
+@@ -28,7 +28,10 @@
+ #include <stdlib.h>
+ #include <sys/time.h>
+ 
+-static u_int32_t futex1 = 0, futex2 = 0;
++static u_int32_t addr1 = 0, addr2 = 0;
++
++static struct futex_requeue rq1 = { .uaddr = &addr1, .flags = FUTEX_32 };
++static struct futex_requeue rq2 = { .uaddr = &addr2, .flags = FUTEX_32 };
+ 
+ /*
+  * How many tasks to requeue at a time.
+@@ -37,7 +40,7 @@ static u_int32_t futex1 = 0, futex2 = 0;
+ static unsigned int nrequeue = 1;
+ 
+ static pthread_t *worker;
+-static bool done = false, silent = false, fshared = false;
++static bool done = false, silent = false, fshared = false, futex2 = false;
+ static pthread_mutex_t thread_lock;
+ static pthread_cond_t thread_parent, thread_worker;
+ static struct stats requeuetime_stats, requeued_stats;
+@@ -79,7 +82,11 @@ static void *workerfn(void *arg __maybe_unused)
+ 	pthread_cond_wait(&thread_worker, &thread_lock);
+ 	pthread_mutex_unlock(&thread_lock);
+ 
+-	futex_wait(&futex1, 0, NULL, futex_flag);
++	if (!futex2)
++		futex_wait(&addr1, 0, NULL, futex_flag);
++	else
++		futex2_wait(&addr1, 0, futex_flag, NULL);
++
+ 	return NULL;
+ }
+ 
+@@ -111,7 +118,7 @@ static void toggle_done(int sig __maybe_unused,
+ 	done = true;
+ }
+ 
+-int bench_futex_requeue(int argc, const char **argv)
++static int __bench_futex_requeue(int argc, const char **argv)
+ {
+ 	int ret = 0;
+ 	unsigned int i, j;
+@@ -139,15 +146,20 @@ int bench_futex_requeue(int argc, const char **argv)
+ 	if (!worker)
+ 		err(EXIT_FAILURE, "calloc");
+ 
+-	if (!fshared)
++	if (futex2) {
++		futex_flag = FUTEX_32 | (fshared * FUTEX_SHARED_FLAG);
++		rq1.flags |= FUTEX_SHARED_FLAG * fshared;
++		rq2.flags |= FUTEX_SHARED_FLAG * fshared;
++	} else if (!fshared) {
+ 		futex_flag = FUTEX_PRIVATE_FLAG;
++	}
+ 
+ 	if (nrequeue > nthreads)
+ 		nrequeue = nthreads;
+ 
+ 	printf("Run summary [PID %d]: Requeuing %d threads (from [%s] %p to %p), "
+ 	       "%d at a time.\n\n",  getpid(), nthreads,
+-	       fshared ? "shared":"private", &futex1, &futex2, nrequeue);
++	       fshared ? "shared":"private", &addr1, &addr2, nrequeue);
+ 
+ 	init_stats(&requeued_stats);
+ 	init_stats(&requeuetime_stats);
+@@ -176,11 +188,15 @@ int bench_futex_requeue(int argc, const char **argv)
+ 		gettimeofday(&start, NULL);
+ 		while (nrequeued < nthreads) {
+ 			/*
+-			 * Do not wakeup any tasks blocked on futex1, allowing
++			 * Do not wakeup any tasks blocked on addr1, allowing
+ 			 * us to really measure futex_wait functionality.
+ 			 */
+-			nrequeued += futex_cmp_requeue(&futex1, 0, &futex2, 0,
+-						       nrequeue, futex_flag);
++			if (!futex2)
++				nrequeued += futex_cmp_requeue(&addr1, 0, &addr2,
++							0, nrequeue, futex_flag);
++			else
++				nrequeued += futex2_requeue(&rq1, &rq2,
++							0, nrequeue, 0, 0);
+ 		}
+ 
+ 		gettimeofday(&end, NULL);
+@@ -194,8 +210,12 @@ int bench_futex_requeue(int argc, const char **argv)
+ 			       j + 1, nrequeued, nthreads, runtime.tv_usec / (double)USEC_PER_MSEC);
+ 		}
+ 
+-		/* everybody should be blocked on futex2, wake'em up */
+-		nrequeued = futex_wake(&futex2, nrequeued, futex_flag);
++		/* everybody should be blocked on addr2, wake'em up */
++		if (!futex2)
++			nrequeued = futex_wake(&addr2, nrequeued, futex_flag);
++		else
++			nrequeued = futex2_wake(&addr2, nrequeued, futex_flag);
++
+ 		if (nthreads != nrequeued)
+ 			warnx("couldn't wakeup all tasks (%d/%d)", nrequeued, nthreads);
+ 
+@@ -220,3 +240,14 @@ int bench_futex_requeue(int argc, const char **argv)
+ 	usage_with_options(bench_futex_requeue_usage, options);
+ 	exit(EXIT_FAILURE);
+ }
++
++int bench_futex_requeue(int argc, const char **argv)
++{
++       return __bench_futex_requeue(argc, argv);
++}
++
++int bench_futex2_requeue(int argc, const char **argv)
++{
++       futex2 = true;
++       return __bench_futex_requeue(argc, argv);
++}
+diff --git a/tools/perf/bench/futex-wake-parallel.c b/tools/perf/bench/futex-wake-parallel.c
+index 6e6f5247e1fe..cac90fc0bfb3 100644
+--- a/tools/perf/bench/futex-wake-parallel.c
++++ b/tools/perf/bench/futex-wake-parallel.c
+@@ -17,6 +17,12 @@ int bench_futex_wake_parallel(int argc __maybe_unused, const char **argv __maybe
+ 	pr_err("%s: pthread_barrier_t unavailable, disabling this test...\n", __func__);
+ 	return 0;
+ }
++
++int bench_futex2_wake_parallel(int argc __maybe_unused, const char **argv __maybe_unused)
++{
++	pr_err("%s: pthread_barrier_t unavailable, disabling this test...\n", __func__);
++	return 0;
++}
+ #else /* HAVE_PTHREAD_BARRIER */
+ /* For the CLR_() macros */
+ #include <string.h>
+@@ -47,7 +53,7 @@ static unsigned int nwakes = 1;
+ static u_int32_t futex = 0;
+ 
+ static pthread_t *blocked_worker;
+-static bool done = false, silent = false, fshared = false;
++static bool done = false, silent = false, fshared = false, futex2 = false;
+ static unsigned int nblocked_threads = 0, nwaking_threads = 0;
+ static pthread_mutex_t thread_lock;
+ static pthread_cond_t thread_parent, thread_worker;
+@@ -78,7 +84,11 @@ static void *waking_workerfn(void *arg)
+ 
+ 	gettimeofday(&start, NULL);
+ 
+-	waker->nwoken = futex_wake(&futex, nwakes, futex_flag);
++	if (!futex2)
++		waker->nwoken = futex_wake(&futex, nwakes, futex_flag);
++	else
++		waker->nwoken = futex2_wake(&futex, nwakes, futex_flag);
++
+ 	if (waker->nwoken != nwakes)
+ 		warnx("couldn't wakeup all tasks (%d/%d)",
+ 		      waker->nwoken, nwakes);
+@@ -129,8 +139,13 @@ static void *blocked_workerfn(void *arg __maybe_unused)
+ 	pthread_mutex_unlock(&thread_lock);
+ 
+ 	while (1) { /* handle spurious wakeups */
+-		if (futex_wait(&futex, 0, NULL, futex_flag) != EINTR)
+-			break;
++		if (!futex2) {
++			if (futex_wait(&futex, 0, NULL, futex_flag) != EINTR)
++				break;
++		} else {
++			if (futex2_wait(&futex, 0, futex_flag, NULL) != EINTR)
++				break;
++		}
+ 	}
+ 
+ 	pthread_exit(NULL);
+@@ -217,7 +232,7 @@ static void toggle_done(int sig __maybe_unused,
+ 	done = true;
+ }
+ 
+-int bench_futex_wake_parallel(int argc, const char **argv)
++static int __bench_futex_wake_parallel(int argc, const char **argv)
+ {
+ 	int ret = 0;
+ 	unsigned int i, j;
+@@ -261,7 +276,9 @@ int bench_futex_wake_parallel(int argc, const char **argv)
+ 	if (!blocked_worker)
+ 		err(EXIT_FAILURE, "calloc");
+ 
+-	if (!fshared)
++	if (futex2)
++		futex_flag = FUTEX_32 | (fshared * FUTEX_SHARED_FLAG);
++	else if (!fshared)
+ 		futex_flag = FUTEX_PRIVATE_FLAG;
+ 
+ 	printf("Run summary [PID %d]: blocking on %d threads (at [%s] "
+@@ -321,4 +338,16 @@ int bench_futex_wake_parallel(int argc, const char **argv)
+ 	free(blocked_worker);
+ 	return ret;
+ }
++
++int bench_futex_wake_parallel(int argc, const char **argv)
++{
++	return __bench_futex_wake_parallel(argc, argv);
++}
++
++int bench_futex2_wake_parallel(int argc, const char **argv)
++{
++	futex2 = true;
++	return __bench_futex_wake_parallel(argc, argv);
++}
++
+ #endif /* HAVE_PTHREAD_BARRIER */
+diff --git a/tools/perf/bench/futex-wake.c b/tools/perf/bench/futex-wake.c
+index 6d217868f53c..546d2818eed8 100644
+--- a/tools/perf/bench/futex-wake.c
++++ b/tools/perf/bench/futex-wake.c
+@@ -38,7 +38,7 @@ static u_int32_t futex1 = 0;
+ static unsigned int nwakes = 1;
+ 
+ pthread_t *worker;
+-static bool done = false, silent = false, fshared = false;
++static bool done = false, silent = false, fshared = false, futex2 = false;
+ static pthread_mutex_t thread_lock;
+ static pthread_cond_t thread_parent, thread_worker;
+ static struct stats waketime_stats, wakeup_stats;
+@@ -68,8 +68,13 @@ static void *workerfn(void *arg __maybe_unused)
+ 	pthread_mutex_unlock(&thread_lock);
+ 
+ 	while (1) {
+-		if (futex_wait(&futex1, 0, NULL, futex_flag) != EINTR)
+-			break;
++		if (!futex2) {
++			if (futex_wait(&futex1, 0, NULL, futex_flag) != EINTR)
++				break;
++		} else {
++			if (futex2_wait(&futex1, 0, futex_flag, NULL) != EINTR)
++				break;
++		}
+ 	}
+ 
+ 	pthread_exit(NULL);
+@@ -117,7 +122,7 @@ static void toggle_done(int sig __maybe_unused,
+ 	done = true;
+ }
+ 
+-int bench_futex_wake(int argc, const char **argv)
++static int __bench_futex_wake(int argc, const char **argv)
+ {
+ 	int ret = 0;
+ 	unsigned int i, j;
+@@ -147,7 +152,9 @@ int bench_futex_wake(int argc, const char **argv)
+ 	if (!worker)
+ 		err(EXIT_FAILURE, "calloc");
+ 
+-	if (!fshared)
++	if (futex2)
++		futex_flag = FUTEX_32 | (fshared * FUTEX_SHARED_FLAG);
++	else if (!fshared)
+ 		futex_flag = FUTEX_PRIVATE_FLAG;
+ 
+ 	printf("Run summary [PID %d]: blocking on %d threads (at [%s] futex %p), "
+@@ -179,9 +186,14 @@ int bench_futex_wake(int argc, const char **argv)
+ 
+ 		/* Ok, all threads are patiently blocked, start waking folks up */
+ 		gettimeofday(&start, NULL);
+-		while (nwoken != nthreads)
+-			nwoken += futex_wake(&futex1, nwakes, futex_flag);
++		while (nwoken != nthreads) {
++			if (!futex2)
++				nwoken += futex_wake(&futex1, nwakes, futex_flag);
++			else
++				nwoken += futex2_wake(&futex1, nwakes, futex_flag);
++		}
+ 		gettimeofday(&end, NULL);
++
+ 		timersub(&end, &start, &runtime);
+ 
+ 		update_stats(&wakeup_stats, nwoken);
+@@ -211,3 +223,14 @@ int bench_futex_wake(int argc, const char **argv)
+ 	free(worker);
+ 	return ret;
+ }
++
++int bench_futex_wake(int argc, const char **argv)
++{
++	return __bench_futex_wake(argc, argv);
++}
++
++int bench_futex2_wake(int argc, const char **argv)
++{
++	futex2 = true;
++	return __bench_futex_wake(argc, argv);
++}
+diff --git a/tools/perf/bench/futex.h b/tools/perf/bench/futex.h
+index 31b53cc7d5bc..6b2213cf3f64 100644
+--- a/tools/perf/bench/futex.h
++++ b/tools/perf/bench/futex.h
+@@ -86,4 +86,51 @@ futex_cmp_requeue(u_int32_t *uaddr, u_int32_t val, u_int32_t *uaddr2, int nr_wak
+ 	return futex(uaddr, FUTEX_CMP_REQUEUE, nr_wake, nr_requeue, uaddr2,
+ 		 val, opflags);
  }
 +
 +/**
-+ * futex2_requeue - Wake futexes at uaddr1 and requeue from uaddr1 to uaddr2
-+ * @uaddr1:     Original address to wake and requeue from
-+ * @uaddr2:     Address to requeue to
-+ * @nr_wake:    Number of futexes to wake at uaddr1 before requeuing
-+ * @nr_requeue: Number of futexes to requeue from uaddr1 to uaddr2
-+ * @cmpval:     If (uaddr1->uaddr != cmpval), return immediatally
-+ * @flgas:      Operation flags
++ * futex2_wait - Wait at uaddr if *uaddr == val, until timo.
++ * @uaddr: User address to wait for
++ * @val:   Expected value at uaddr
++ * @flags: Operation options
++ * @timo:  Optional timeout
++ *
++ * Return: 0 on success, error code otherwise
 + */
-+static inline int futex2_requeue(struct futex_requeue *uaddr1, struct futex_requeue *uaddr2,
++static inline int futex2_wait(volatile void *uaddr, unsigned long val,
++			      unsigned long flags, struct timespec *timo)
++{
++	return syscall(__NR_futex_wait, uaddr, val, flags, timo);
++}
++
++/**
++ * futex2_wake - Wake a number of waiters waiting at uaddr
++ * @uaddr: Address to wake
++ * @nr:    Number of waiters to wake
++ * @flags: Operation options
++ *
++ * Return: number of waked futexes
++ */
++static inline int futex2_wake(volatile void *uaddr, unsigned int nr, unsigned long flags)
++{
++	return syscall(__NR_futex_wake, uaddr, nr, flags);
++}
++
++/**
++ * futex2_requeue - Requeue waiters from an address to another one
++ * @uaddr1:     Address where waiters are currently waiting on
++ * @uaddr2:     New address to wait
++ * @nr_wake:    Number of waiters at uaddr1 to be wake
++ * @nr_requeue: After waking nr_wake, number of waiters to be requeued
++ * @cmpval:     Expected value at uaddr1
++ * @flags: Operation options
++ *
++ * Return: waked futexes + requeued futexes at uaddr1
++ */
++static inline int futex2_requeue(volatile struct futex_requeue *uaddr1,
++				 volatile struct futex_requeue *uaddr2,
 +				 unsigned int nr_wake, unsigned int nr_requeue,
 +				 unsigned int cmpval, unsigned long flags)
 +{
 +	return syscall(__NR_futex_requeue, uaddr1, uaddr2, nr_wake, nr_requeue, cmpval, flags);
 +}
+ #endif /* _FUTEX_H */
+diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
+index 62a7b7420a44..e41a95ad2db6 100644
+--- a/tools/perf/builtin-bench.c
++++ b/tools/perf/builtin-bench.c
+@@ -12,10 +12,11 @@
+  *
+  *  sched ... scheduler and IPC performance
+  *  syscall ... System call performance
+- *  mem   ... memory access performance
+- *  numa  ... NUMA scheduling and MM performance
+- *  futex ... Futex performance
+- *  epoll ... Event poll performance
++ *  mem    ... memory access performance
++ *  numa   ... NUMA scheduling and MM performance
++ *  futex  ... Futex performance
++ *  futex2 ... Futex2 performance
++ *  epoll  ... Event poll performance
+  */
+ #include <subcmd/parse-options.h>
+ #include "builtin.h"
+@@ -75,6 +76,14 @@ static struct bench futex_benchmarks[] = {
+ 	{ NULL,		NULL,						NULL			}
+ };
+ 
++static struct bench futex2_benchmarks[] = {
++	{ "hash",	   "Benchmark for futex2 hash table",            bench_futex2_hash	},
++	{ "wake",	   "Benchmark for futex2 wake calls",            bench_futex2_wake	},
++	{ "wake-parallel", "Benchmark for parallel futex2 wake calls",   bench_futex2_wake_parallel },
++	{ "requeue",	   "Benchmark for futex2 requeue calls",         bench_futex2_requeue	},
++	{ NULL,		NULL,						NULL			}
++};
++
+ #ifdef HAVE_EVENTFD_SUPPORT
+ static struct bench epoll_benchmarks[] = {
+ 	{ "wait",	"Benchmark epoll concurrent epoll_waits",       bench_epoll_wait	},
+@@ -105,6 +114,7 @@ static struct collection collections[] = {
+ 	{ "numa",	"NUMA scheduling and MM benchmarks",		numa_benchmarks		},
+ #endif
+ 	{"futex",       "Futex stressing benchmarks",                   futex_benchmarks        },
++	{"futex2",      "Futex2 stressing benchmarks",                  futex2_benchmarks        },
+ #ifdef HAVE_EVENTFD_SUPPORT
+ 	{"epoll",       "Epoll stressing benchmarks",                   epoll_benchmarks        },
+ #endif
 -- 
 2.30.1
 
