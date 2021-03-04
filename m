@@ -2,71 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7160E32D5D3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Mar 2021 16:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C07E132D9D9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Mar 2021 20:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbhCDPDQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Mar 2021 10:03:16 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:51200 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232988AbhCDPDF (ORCPT
+        id S235873AbhCDS7A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Mar 2021 13:59:00 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54832 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236077AbhCDS65 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Mar 2021 10:03:05 -0500
-Received: from cwcc.thunk.org (pool-72-74-133-215.bstnma.fios.verizon.net [72.74.133.215])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 124F1E6c002357
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 4 Mar 2021 10:01:15 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id A243015C3A88; Thu,  4 Mar 2021 10:01:14 -0500 (EST)
-Date:   Thu, 4 Mar 2021 10:01:14 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+        Thu, 4 Mar 2021 13:58:57 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 481E91F46675
+Subject: Re: [RFC PATCH v2 00/13] Add futex2 syscall
+To:     Peter Oskolkov <posk@posk.io>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Darren Hart <dvhart@infradead.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         kernel@collabora.com, krisman@collabora.com,
         pgriffais@valvesoftware.com, z.figura12@gmail.com,
         joel@joelfernandes.org, malteskarupke@fastmail.fm,
         linux-api@vger.kernel.org, fweimer@redhat.com,
         libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, acme@kernel.org, corbet@lwn.net
-Subject: Re: [RFC PATCH v2 00/13] Add futex2 syscall
-Message-ID: <YED2OrBdsiYWMqpp@mit.edu>
+        shuah@kernel.org, acme@kernel.org, Jonathan Corbet <corbet@lwn.net>
 References: <20210304004219.134051-1-andrealmeid@collabora.com>
+ <CAFTs51XAr2b3DmcSM4=qeU5cNuh0mTxUbhG66U6bc63YYzkzYA@mail.gmail.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+Message-ID: <bc54423b-753f-44be-4e4f-4535e27ad35c@collabora.com>
+Date:   Thu, 4 Mar 2021 15:58:07 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <CAFTs51XAr2b3DmcSM4=qeU5cNuh0mTxUbhG66U6bc63YYzkzYA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210304004219.134051-1-andrealmeid@collabora.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 09:42:06PM -0300, Andr� Almeida wrote:
->  ** Performance
+Hi Peter,
+
+Às 02:44 de 04/03/21, Peter Oskolkov escreveu:
+> On Wed, Mar 3, 2021 at 5:22 PM André Almeida <andrealmeid@collabora.com> wrote:
+>>
+>> Hi,
+>>
+>> This patch series introduces the futex2 syscalls.
+>>
+>> * FAQ
+>>
+>>   ** "And what's about FUTEX_64?"
+>>
+>>   By supporting 64 bit futexes, the kernel structure for futex would
+>>   need to have a 64 bit field for the value, and that could defeat one of
+>>   the purposes of having different sized futexes in the first place:
+>>   supporting smaller ones to decrease memory usage. This might be
+>>   something that could be disabled for 32bit archs (and even for
+>>   CONFIG_BASE_SMALL).
+>>
+>>   Which use case would benefit for FUTEX_64? Does it worth the trade-offs?
 > 
->  - For comparing futex() and futex2() performance, I used the artificial
->    benchmarks implemented at perf (wake, wake-parallel, hash and
->    requeue). The setup was 200 runs for each test and using 8, 80, 800,
->    8000 for the number of threads, Note that for this test, I'm not using
->    patch 14 ("kernel: Enable waitpid() for futex2") , for reasons explained
->    at "The patchset" section.
+> The ability to store a pointer value on 64bit platforms is an
+> important use case.
+> Imagine a simple producer/consumer scenario, with the producer updating
+> some shared memory data and waking the consumer. Storing the pointer
+> in the futex makes it so that only one shared memory location needs to be
+> accessed "atomically", etc. With two atomics synchronization becomes
+> more involved (= slower).
+> 
 
-How heavily contended where the benchmarks?  One of the benefits of
-the original futex was that no system call was necessary in the happy
-path when the lock is uncontended.  Especially on a non-NUMA system
-(which are the far more common case), since that's where relying on a
-single memory access was a huge win for the original futex.  I would
-expect that futex2 will fare worse in this particular case, since it
-requires a system call entry for all operations --- the question is
-how large is the delta in this worst case (for futex2) and best case
-(for futex) scenario.
+So the idea is to, instead of doing this:
 
-Cheers,
+T1:
+atomic_set(&shm_addr, buffer_addr);
+atomic_set(&futex, 0);
+futex_wake(&futex, 1);
 
-						- Ted
+T2:
+consume(shm_addr);
+
+To do that:
+
+T1:
+atomic_set(&futex, buffer_addr);
+futex_wake(&futex, 1);
+
+T2:
+consume(futex);
+
+Right?
+
+I'll try to write a small test to see how the perf numbers looks like.
