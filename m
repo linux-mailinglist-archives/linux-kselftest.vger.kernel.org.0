@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6027232C8E5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Mar 2021 02:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE18B32C8E4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Mar 2021 02:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbhCDA6B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Mar 2021 19:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S232165AbhCDA6A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Mar 2021 19:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453069AbhCDAoZ (ORCPT
+        with ESMTP id S1453070AbhCDAoZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 3 Mar 2021 19:44:25 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A221C061763;
-        Wed,  3 Mar 2021 16:43:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DC9C061764;
+        Wed,  3 Mar 2021 16:43:43 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: tonyk)
-        with ESMTPSA id 9E6631F46029
+        with ESMTPSA id 0567D1F46043
 From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
@@ -32,9 +32,9 @@ Cc:     kernel@collabora.com, krisman@collabora.com,
         libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
         shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
         =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [RFC PATCH v2 07/13] selftests: futex2: Add wake/wait test
-Date:   Wed,  3 Mar 2021 21:42:13 -0300
-Message-Id: <20210304004219.134051-8-andrealmeid@collabora.com>
+Subject: [RFC PATCH v2 08/13] selftests: futex2: Add timeout test
+Date:   Wed,  3 Mar 2021 21:42:14 -0300
+Message-Id: <20210304004219.134051-9-andrealmeid@collabora.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210304004219.134051-1-andrealmeid@collabora.com>
 References: <20210304004219.134051-1-andrealmeid@collabora.com>
@@ -45,124 +45,71 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a simple file to test wake/wait mechanism using futex2 interface.
-Test three scenarios: using a common local int variable as private
-futex, a shm futex as shared futex and a file-backed shared memory as a
-shared futex. This should test all branches of futex_get_key().
-
-Create helper files so more tests can evaluate futex2. While 32bit ABIs
-from glibc aren't yet able to use 64 bit sized time variables, add a
-temporary workaround that implements the required types and calls the
-appropriated syscalls, since futex2 doesn't supports 32 bit sized time.
+Adapt existing futex wait timeout file to test the same mechanism for
+futex2. futex2 accepts only absolute 64bit timers, but supports both
+monotonic and realtime clocks.
 
 Signed-off-by: André Almeida <andrealmeid@collabora.com>
 ---
- .../selftests/futex/functional/.gitignore     |   1 +
- .../selftests/futex/functional/Makefile       |   6 +-
- .../selftests/futex/functional/futex2_wait.c  | 209 ++++++++++++++++++
- .../testing/selftests/futex/functional/run.sh |   3 +
- .../selftests/futex/include/futex2test.h      |  79 +++++++
- 5 files changed, 296 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/futex/functional/futex2_wait.c
- create mode 100644 tools/testing/selftests/futex/include/futex2test.h
+ .../futex/functional/futex_wait_timeout.c     | 58 ++++++++++++++++---
+ 1 file changed, 49 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/.gitignore b/tools/testing/selftests/futex/functional/.gitignore
-index 0efcd494daab..d61f1df94360 100644
---- a/tools/testing/selftests/futex/functional/.gitignore
-+++ b/tools/testing/selftests/futex/functional/.gitignore
-@@ -6,3 +6,4 @@ futex_wait_private_mapped_file
- futex_wait_timeout
- futex_wait_uninitialized_heap
- futex_wait_wouldblock
-+futex2_wait
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index 23207829ec75..9b334f190759 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -1,10 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
--INCLUDES := -I../include -I../../
-+INCLUDES := -I../include -I../../ -I../../../../../usr/include/
- CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES)
- LDLIBS := -lpthread -lrt
+diff --git a/tools/testing/selftests/futex/functional/futex_wait_timeout.c b/tools/testing/selftests/futex/functional/futex_wait_timeout.c
+index ee55e6d389a3..b4dffe9e3b44 100644
+--- a/tools/testing/selftests/futex/functional/futex_wait_timeout.c
++++ b/tools/testing/selftests/futex/functional/futex_wait_timeout.c
+@@ -11,6 +11,7 @@
+  *
+  * HISTORY
+  *      2009-Nov-6: Initial version by Darren Hart <dvhart@linux.intel.com>
++ *      2021-Feb-5: Add futex2 test by André <andrealmeid@collabora.com>
+  *
+  *****************************************************************************/
  
- HEADERS := \
- 	../include/futextest.h \
-+	../include/futex2test.h \
- 	../include/atomic.h \
- 	../include/logging.h
- TEST_GEN_FILES := \
-@@ -14,7 +15,8 @@ TEST_GEN_FILES := \
- 	futex_requeue_pi_signal_restart \
- 	futex_requeue_pi_mismatched_ops \
- 	futex_wait_uninitialized_heap \
--	futex_wait_private_mapped_file
-+	futex_wait_private_mapped_file \
-+	futex2_wait
- 
- TEST_PROGS := run.sh
- 
-diff --git a/tools/testing/selftests/futex/functional/futex2_wait.c b/tools/testing/selftests/futex/functional/futex2_wait.c
-new file mode 100644
-index 000000000000..4b5416585c79
---- /dev/null
-+++ b/tools/testing/selftests/futex/functional/futex2_wait.c
-@@ -0,0 +1,209 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/******************************************************************************
-+ *
-+ *   Copyright Collabora Ltd., 2021
-+ *
-+ * DESCRIPTION
-+ *	Test wait/wake mechanism of futex2, using 32bit sized futexes.
-+ *
-+ * AUTHOR
-+ *	André Almeida <andrealmeid@collabora.com>
-+ *
-+ * HISTORY
-+ *      2021-Feb-5: Initial version by André <andrealmeid@collabora.com>
-+ *
-+ *****************************************************************************/
-+
-+#include <errno.h>
-+#include <error.h>
-+#include <getopt.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <time.h>
-+#include <pthread.h>
-+#include <sys/shm.h>
-+#include <sys/mman.h>
-+#include <fcntl.h>
-+#include <string.h>
+@@ -20,7 +21,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <time.h>
+-#include "futextest.h"
 +#include "futex2test.h"
-+#include "logging.h"
-+
-+#define TEST_NAME "futex2-wait"
-+#define timeout_ns  30000000
-+#define WAKE_WAIT_US 10000
-+#define SHM_PATH "futex2_shm_file"
-+futex_t *f1;
-+
-+void usage(char *prog)
-+{
-+	printf("Usage: %s\n", prog);
-+	printf("  -c	Use color\n");
-+	printf("  -h	Display this help message\n");
-+	printf("  -v L	Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
-+	       VQUIET, VCRITICAL, VINFO);
-+}
-+
-+void *waiterfn(void *arg)
-+{
+ #include "logging.h"
+ 
+ #define TEST_NAME "futex-wait-timeout"
+@@ -40,7 +41,8 @@ void usage(char *prog)
+ int main(int argc, char *argv[])
+ {
+ 	futex_t f1 = FUTEX_INITIALIZER;
+-	struct timespec to;
++	struct timespec to = {.tv_sec = 0, .tv_nsec = timeout_ns};
 +	struct timespec64 to64;
-+	unsigned int flags = 0;
+ 	int res, ret = RET_PASS;
+ 	int c;
+ 
+@@ -65,22 +67,60 @@ int main(int argc, char *argv[])
+ 	}
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(1);
++	ksft_set_plan(3);
+ 	ksft_print_msg("%s: Block on a futex and wait for timeout\n",
+ 	       basename(argv[0]));
+ 	ksft_print_msg("\tArguments: timeout=%ldns\n", timeout_ns);
+ 
+-	/* initialize timeout */
+-	to.tv_sec = 0;
+-	to.tv_nsec = timeout_ns;
+-
+ 	info("Calling futex_wait on f1: %u @ %p\n", f1, &f1);
+ 	res = futex_wait(&f1, f1, &to, FUTEX_PRIVATE_FLAG);
+ 	if (!res || errno != ETIMEDOUT) {
+-		fail("futex_wait returned %d\n", ret < 0 ? errno : ret);
++		ksft_test_result_fail("futex_wait returned %d\n", ret < 0 ? errno : ret);
++		ret = RET_FAIL;
++	} else {
++		ksft_test_result_pass("futex_wait timeout succeeds\n");
++	}
 +
-+	if (arg)
-+		flags = *((unsigned int *) arg);
-+
-+	/* setting absolute timeout for futex2 */
++	/* setting absolute monotonic timeout for futex2 */
 +	if (gettime64(CLOCK_MONOTONIC, &to64))
 +		error("gettime64 failed\n", errno);
 +
@@ -173,246 +120,39 @@ index 000000000000..4b5416585c79
 +		to64.tv_nsec -= 1000000000;
 +	}
 +
-+	if (futex2_wait(f1, *f1, FUTEX_32 | flags, &to64))
-+		printf("waiter failed errno %d\n", errno);
-+
-+	return NULL;
-+}
-+
-+void *waitershm(void *arg)
-+{
-+	futex2_wait(arg, 0, FUTEX_32 | FUTEX_SHARED_FLAG, NULL);
-+
-+	return NULL;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	pthread_t waiter;
-+	unsigned int flags = FUTEX_SHARED_FLAG;
-+	int res, ret = RET_PASS;
-+	int c;
-+	futex_t f_private = 0;
-+
-+	f1 = &f_private;
-+
-+	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
-+		switch (c) {
-+		case 'c':
-+			log_color(1);
-+			break;
-+		case 'h':
-+			usage(basename(argv[0]));
-+			exit(0);
-+		case 'v':
-+			log_verbosity(atoi(optarg));
-+			break;
-+		default:
-+			usage(basename(argv[0]));
-+			exit(1);
-+		}
-+	}
-+
-+	ksft_print_header();
-+	ksft_set_plan(3);
-+	ksft_print_msg("%s: Test FUTEX2_WAIT\n",
-+		       basename(argv[0]));
-+
-+	/* Testing a private futex */
-+	info("Calling private futex2_wait on f1: %u @ %p with val=%u\n", *f1, f1, *f1);
-+
-+	if (pthread_create(&waiter, NULL, waiterfn, NULL))
-+		error("pthread_create failed\n", errno);
-+
-+	usleep(WAKE_WAIT_US);
-+
-+	info("Calling private futex2_wake on f1: %u @ %p with val=%u\n", *f1, f1, *f1);
-+	res = futex2_wake(f1, 1, FUTEX_32);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex2_wake private returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
++	info("Calling futex2_wait on f1: %u @ %p\n", f1, &f1);
++	res = futex2_wait(&f1, f1, FUTEX_32, &to64);
++	if (!res || errno != ETIMEDOUT) {
++		ksft_test_result_fail("futex2_wait monotonic returned %d\n", ret < 0 ? errno : ret);
 +		ret = RET_FAIL;
 +	} else {
-+		ksft_test_result_pass("futex2_wake private succeeds\n");
++		ksft_test_result_pass("futex2_wait monotonic timeout succeeds\n");
 +	}
 +
-+	int shm_id = shmget(IPC_PRIVATE, 4096, IPC_CREAT | 0666);
++	/* setting absolute realtime timeout for futex2 */
++	if (gettime64(CLOCK_REALTIME, &to64))
++		error("gettime64 failed\n", errno);
 +
-+	if (shm_id < 0) {
-+		perror("shmget");
-+		exit(1);
++	to64.tv_nsec += timeout_ns;
++
++	if (to64.tv_nsec >= 1000000000) {
++		to64.tv_sec++;
++		to64.tv_nsec -= 1000000000;
 +	}
 +
-+	/* Testing an anon page shared memory */
-+	unsigned int *shared_data = shmat(shm_id, NULL, 0);
-+
-+	*shared_data = 0;
-+	f1 = shared_data;
-+
-+	info("Calling shared futex2_wait on f1: %u @ %p with val=%u\n", *f1, f1, *f1);
-+
-+	if (pthread_create(&waiter, NULL, waiterfn, &flags))
-+		error("pthread_create failed\n", errno);
-+
-+	usleep(WAKE_WAIT_US);
-+
-+	info("Calling shared futex2_wake on f1: %u @ %p with val=%u\n", *f1, f1, *f1);
-+	res = futex2_wake(f1, 1, FUTEX_32 | FUTEX_SHARED_FLAG);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex2_wake shared (shmget) returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
-+		ret = RET_FAIL;
++	info("Calling futex2_wait on f1: %u @ %p\n", f1, &f1);
++	res = futex2_wait(&f1, f1, FUTEX_32 | FUTEX_CLOCK_REALTIME, &to64);
++	if (!res || errno != ETIMEDOUT) {
++		ksft_test_result_fail("futex2_wait realtime returned %d\n", ret < 0 ? errno : ret);
+ 		ret = RET_FAIL;
 +	} else {
-+		ksft_test_result_pass("futex2_wake shared (shmget) succeeds\n");
-+	}
-+
-+	shmdt(shared_data);
-+
-+	/* Testing a file backed shared memory */
-+	void *shm;
-+	int fd, pid;
-+
-+	f_private = 0;
-+
-+	fd = open(SHM_PATH, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-+	if (fd < 0) {
-+		perror("open");
-+		exit(1);
-+	}
-+
-+	res = ftruncate(fd, sizeof(f_private));
-+	if (res) {
-+		perror("ftruncate");
-+		exit(1);
-+	}
-+
-+	shm = mmap(NULL, sizeof(f_private), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (shm == MAP_FAILED) {
-+		perror("mmap");
-+		exit(1);
-+	}
-+
-+	memcpy(shm, &f_private, sizeof(f_private));
-+
-+	pthread_create(&waiter, NULL, waitershm, shm);
-+
-+	usleep(WAKE_WAIT_US);
-+
-+	res = futex2_wake(shm, 1, FUTEX_32 | FUTEX_SHARED_FLAG);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex2_wake shared (mmap) returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("futex2_wake shared (mmap) succeeds\n");
-+	}
-+
-+	munmap(shm, sizeof(f_private));
-+
-+	remove(SHM_PATH);
-+
++		ksft_test_result_pass("futex2_wait realtime timeout succeeds\n");
+ 	}
+ 
+-	print_result(TEST_NAME, ret);
 +	ksft_print_cnts();
-+	return ret;
-+}
-diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index 1acb6ace1680..3730159c865a 100755
---- a/tools/testing/selftests/futex/functional/run.sh
-+++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -73,3 +73,6 @@ echo
- echo
- ./futex_wait_uninitialized_heap $COLOR
- ./futex_wait_private_mapped_file $COLOR
-+
-+echo
-+./futex2_wait $COLOR
-diff --git a/tools/testing/selftests/futex/include/futex2test.h b/tools/testing/selftests/futex/include/futex2test.h
-new file mode 100644
-index 000000000000..e724d56b917e
---- /dev/null
-+++ b/tools/testing/selftests/futex/include/futex2test.h
-@@ -0,0 +1,79 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/******************************************************************************
-+ *
-+ *   Copyright Collabora Ltd., 2021
-+ *
-+ * DESCRIPTION
-+ *	Futex2 library addons for old futex library
-+ *
-+ * AUTHOR
-+ *	André Almeida <andrealmeid@collabora.com>
-+ *
-+ * HISTORY
-+ *      2021-Feb-5: Initial version by André <andrealmeid@collabora.com>
-+ *
-+ *****************************************************************************/
-+#include "futextest.h"
-+#include <stdio.h>
-+
-+#define NSEC_PER_SEC	1000000000L
-+
-+#ifndef FUTEX_8
-+# define FUTEX_8	0
-+#endif
-+#ifndef FUTEX_16
-+# define FUTEX_16	1
-+#endif
-+#ifndef FUTEX_32
-+# define FUTEX_32	2
-+#endif
-+
-+/*
-+ * - Y2038 section for 32-bit applications -
-+ *
-+ * Remove this when glibc is ready for y2038. Then, always compile with
-+ * `-DTIME_BITS=64` or `-D__USE_TIME_BITS64`. glibc will provide both
-+ * timespec64 and clock_gettime64 so we won't need to define here.
-+ */
-+#if defined(__i386__) || __TIMESIZE == 32
-+# define NR_gettime __NR_clock_gettime64
-+#else
-+# define NR_gettime __NR_clock_gettime
-+#endif
-+
-+struct timespec64 {
-+	long long tv_sec;	/* seconds */
-+	long long tv_nsec;	/* nanoseconds */
-+};
-+
-+int gettime64(clock_t clockid, struct timespec64 *tv)
-+{
-+	return syscall(NR_gettime, clockid, tv);
-+}
-+/*
-+ * - End of Y2038 section -
-+ */
-+
-+/**
-+ * futex2_wait - If (*uaddr == val), wait at uaddr until timo
-+ * @uaddr: User address to wait on
-+ * @val:   Expected value at uaddr, return if is not equal
-+ * @flags: Operation flags
-+ * @timo:  Optional timeout for operation
-+ */
-+static inline int futex2_wait(volatile void *uaddr, unsigned long val,
-+			      unsigned long flags, struct timespec64 *timo)
-+{
-+	return syscall(__NR_futex_wait, uaddr, val, flags, timo);
-+}
-+
-+/**
-+ * futex2_wake - Wake a number of waiters at uaddr
-+ * @uaddr: Address to wake
-+ * @nr:    Number of waiters to wake
-+ * @flags: Operation flags
-+ */
-+static inline int futex2_wake(volatile void *uaddr, unsigned int nr, unsigned long flags)
-+{
-+	return syscall(__NR_futex_wake, uaddr, nr, flags);
-+}
+ 	return ret;
+ }
 -- 
 2.30.1
 
