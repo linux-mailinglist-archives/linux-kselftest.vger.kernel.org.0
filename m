@@ -2,103 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A8A32DDA1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Mar 2021 00:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1415732E510
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Mar 2021 10:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbhCDXMw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Mar 2021 18:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbhCDXMw (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Mar 2021 18:12:52 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53518C061574
-        for <linux-kselftest@vger.kernel.org>; Thu,  4 Mar 2021 15:12:52 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id 81so28017109iou.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Mar 2021 15:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jUZ+5Y+7BGWs1O3tEhBK3p++H+egFa6lEUy0QY+8uT8=;
-        b=HY2mwd1osvc/DaX2rtfHhYRKTqVnOcYRJbAPCKfsQRUPoPPUqYk4cj4XE6b95BpZs6
-         lF9go1uidmIq7lCROI0/FXexv8mPcscC+lEXWjdYoh8519eOh9cL8bNFE0o6SU6UEaf8
-         RqGJByqk9sdw+YA+LMuZUIKx6c/yI1FgAiHps=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jUZ+5Y+7BGWs1O3tEhBK3p++H+egFa6lEUy0QY+8uT8=;
-        b=PkpBqKDE3fmuyda8n5WlZxkjj4xUIxO1ZPpYr/1cv1whn7fvBOddvuNL5/YU4aHj/f
-         m/PcmT96Kj/12GfJwNyXtdyzIJoqbkJamt+Kj3Zs2gMlc57oDV0sArUFzlFn8r296UQ7
-         Q4oaf7qmzgQjTgQOxFNpk0tN55kiz33r8s/wW44O9GDSLEbBYX2Lqxksuxcar19Xm3mC
-         p4eQ6Dy7IPzmB7XIXqAkReoDc5QXHeVqe5eh6qOPFzK5uhgk173xVLYxucPRsG00Kb8L
-         pdt/61j63gAMdWKXhiR+stV+rVIFX/kLO9HaSJEbDz2Al/CEUEKWFd48up4VxcftDxDf
-         rTMw==
-X-Gm-Message-State: AOAM53102lbn0EHpp2DVYInxBAZ0rU7T5ESSBMB/YvU/wobBTrmtCyna
-        Gh1xzr+uS7T7JZZ9DmE9jMMaCQ==
-X-Google-Smtp-Source: ABdhPJzn7ToBpxp0AHbsI9AmRJo/8qncyfnDeoNc1LhN/lI2Txlbwjo0WqN4fwDDieKpUp2+NA8B3g==
-X-Received: by 2002:a05:6602:737:: with SMTP id g23mr5701641iox.130.1614899571864;
-        Thu, 04 Mar 2021 15:12:51 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id q14sm395658ilv.63.2021.03.04.15.12.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Mar 2021 15:12:51 -0800 (PST)
-Subject: Re: [PATCH v2] kunit: fix checkpatch warning
-To:     Lucas Stankus <lucas.p.stankus@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210303020350.4sahuojkqnkcxquf@smtp.gmail.com>
- <CAFd5g47rjt7i7JXWsYarqX_dShHiqSg8StKb7KCqOye3=eyZDg@mail.gmail.com>
- <20210304043554.jysk6qms4h4hue4i@smtp.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d9f1007a-8de4-45e4-b662-846054d50390@linuxfoundation.org>
-Date:   Thu, 4 Mar 2021 16:12:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <20210304043554.jysk6qms4h4hue4i@smtp.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S229578AbhCEJlQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Mar 2021 04:41:16 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:51726 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229653AbhCEJk6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Mar 2021 04:40:58 -0500
+X-Greylist: delayed 441 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Mar 2021 04:40:57 EST
+Received: from localhost.localdomain (unknown [124.16.141.241])
+        by APP-03 (Coremail) with SMTP id rQCowABXX0_V+kFg5nttAQ--.11138S2;
+        Fri, 05 Mar 2021 17:33:10 +0800 (CST)
+From:   Xu Wang <vulab@iscas.ac.cn>
+To:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] selftest/net/ipsec.c: Remove unneeded semicolon
+Date:   Fri,  5 Mar 2021 09:33:06 +0000
+Message-Id: <20210305093306.1403-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: rQCowABXX0_V+kFg5nttAQ--.11138S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4xAF45Zr45Kr4fGF4rXwb_yoW3Grb_tr
+        4Utas7CFs5AF9Fvr4fGF45uFZ5t3W5WF4xKFWUZa13tw4UAan8GFWkZr1DA3WxW3909342
+        vF4YyFy3W342gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbFAYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I
+        3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxV
+        WUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAF
+        wI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcI
+        k0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_
+        Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU56c_DUUUUU==
+X-Originating-IP: [124.16.141.241]
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCgoLA1z4jaEWoAAAs2
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/3/21 9:35 PM, Lucas Stankus wrote:
-> On Wed, Mar 03, 2021 at 12:56:05PM -0800, Brendan Higgins wrote:
->> Did you change anything other than fixing the Signed-off-by that Shuah
->> requested?
-> 
-> No, I only fixed the Signed-off-by warning.
-> 
->> Generally when you make a small change after receiving a Reviewed-by
->> (especially one so small as here), you are supposed to include the
->> Reviewed-by with the other git commit message footers directly below
->> the "Signed-off-by". Please remember to do so in the future.
->>
->> Also, when you make a change to a patch and send out a subsequent
->> revision, it is best practice to make note explaining the changes you
->> made since the last revision in the "comment section" [1] of the
->> git-diff, right after the three dashes and before the change log as
->> you can see in this example [2] (note that everything after
->> "Signed-off-by: David Gow <davidgow@google.com>\n ---" and before
->> "tools/testing/kunit/configs/broken_on_uml.config | 2 ++" is discarded
->> by git am).
-> 
-> Sorry for the incovenience regarding best practices, I'll keep that
-> noted for further contributions.
-> 
+fix semicolon.cocci warning:
+tools/testing/selftests/net/ipsec.c:1788:2-3: Unneeded semicolon
 
-Thank you both.
+Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
+---
+ tools/testing/selftests/net/ipsec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I will pick this up.
+diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
+index 17ced7d6ce25..f23438d512c5 100644
+--- a/tools/testing/selftests/net/ipsec.c
++++ b/tools/testing/selftests/net/ipsec.c
+@@ -1785,7 +1785,7 @@ static void grand_child_serv(unsigned int nr, int cmd_fd, void *buf,
+ 		break;
+ 	default:
+ 		printk("got unknown msg type %d", msg->type);
+-	};
++	}
+ }
+ 
+ static int grand_child_f(unsigned int nr, int cmd_fd, void *buf)
+-- 
+2.17.1
 
-thanks,
--- Shuah
