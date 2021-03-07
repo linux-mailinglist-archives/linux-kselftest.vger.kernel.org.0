@@ -2,70 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1011330245
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Mar 2021 15:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99068330297
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Mar 2021 16:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbhCGOzb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 7 Mar 2021 09:55:31 -0500
-Received: from mga17.intel.com ([192.55.52.151]:5870 "EHLO mga17.intel.com"
+        id S232326AbhCGPTf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 7 Mar 2021 10:19:35 -0500
+Received: from mga12.intel.com ([192.55.52.136]:15647 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231638AbhCGOzL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 7 Mar 2021 09:55:11 -0500
-IronPort-SDR: 8BF7a2thKp+AI9GPQa9A7KmXGmQtYpUjA3h/PRH1SHnVl8M0SHKhaRjBdJZ943QvSSroZYIv8v
- EBJNAiljK7Cg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="167813508"
+        id S232033AbhCGPTV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 7 Mar 2021 10:19:21 -0500
+IronPort-SDR: rcwVF1zsDWWfeydQ/onW8Q1t7k1DFqOO6V6HjdFh7is5vmZLV2snJ1iMeExH8+32o6TV9mDP9Z
+ 8Nx8zFLfjWrA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="167172190"
 X-IronPort-AV: E=Sophos;i="5.81,230,1610438400"; 
-   d="scan'208";a="167813508"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2021 06:55:10 -0800
-IronPort-SDR: hJcCWhI3iMAVs/doR0Mcqjyh77c7+fRAhii0EaYF7ejoZhBceH49AlxoWdcmA5x9pfSAkErqDr
- /no3oG3Hsy0A==
-X-ExtLoop1: 1
+   d="scan'208";a="167172190"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2021 07:19:21 -0800
+IronPort-SDR: VBQ85G5YYI/WVTz2b41mxqzXqF0+ssZMx7MQbDyrg3QsWTdTEwQLosgUq9Ov6r51Cb94QFKhyQ
+ E0ZQT8/IMYEw==
 X-IronPort-AV: E=Sophos;i="5.81,230,1610438400"; 
-   d="scan'208";a="437189149"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Mar 2021 06:55:10 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Shuah Khan" <shuah@kernel.org>, "Tony Luck" <tony.luck@intel.com>,
-        "Reinette Chatre" <reinette.chatre@intel.com>,
-        "Babu Moger" <babu.moger@amd.com>
-Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v5 21/21] selftests/resctrl: Create .gitignore to include resctrl_tests
-Date:   Sun,  7 Mar 2021 14:55:02 +0000
-Message-Id: <20210307145502.2916364-22-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210307145502.2916364-1-fenghua.yu@intel.com>
-References: <20210307145502.2916364-1-fenghua.yu@intel.com>
+   d="scan'208";a="409008502"
+Received: from tassilo.jf.intel.com ([10.54.74.11])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2021 07:19:21 -0800
+Date:   Sun, 7 Mar 2021 07:19:20 -0800
+From:   Andi Kleen <ak@linux.intel.com>
+To:     John Wood <john.wood@gmx.com>
+Cc:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: Re: [PATCH v5 7/8] Documentation: Add documentation for the Brute LSM
+Message-ID: <20210307151920.GR472138@tassilo.jf.intel.com>
+References: <20210227153013.6747-1-john.wood@gmx.com>
+ <20210227153013.6747-8-john.wood@gmx.com>
+ <878s78dnrm.fsf@linux.intel.com>
+ <20210302183032.GA3049@ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210302183032.GA3049@ubuntu>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Create .gitignore to hold the test file resctrl_tests generated after
-compiling.
+Sorry for the late answer. I somehow missed your email earlier.
 
-Suggested-by: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
----
-Change Log:
-v5:
-- Add this patch (Shuah)
+> As a mitigation method, all the offending tasks involved in the attack are
+> killed. Or in other words, all the tasks that share the same statistics
+> (statistics showing a fast crash rate) are killed.
 
- tools/testing/selftests/resctrl/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 tools/testing/selftests/resctrl/.gitignore
+So systemd will just restart the network daemon and then the attack works
+again?
 
-diff --git a/tools/testing/selftests/resctrl/.gitignore b/tools/testing/selftests/resctrl/.gitignore
-new file mode 100644
-index 000000000000..ab68442b6bc8
---- /dev/null
-+++ b/tools/testing/selftests/resctrl/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+resctrl_tests
--- 
-2.30.1
+Or if it's a interactive login you log in again.
 
+I think it might be useful even with these limitations, but it would
+be good to spell out the limitations of the method more clearly.
+
+I suspect to be useful it'll likely need some user space configuration
+changes too.
+
+-Andi
