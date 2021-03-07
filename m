@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA1B330238
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Mar 2021 15:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52160330241
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Mar 2021 15:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbhCGOz1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 7 Mar 2021 09:55:27 -0500
+        id S231784AbhCGOza (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 7 Mar 2021 09:55:30 -0500
 Received: from mga17.intel.com ([192.55.52.151]:5870 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231393AbhCGOzJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 7 Mar 2021 09:55:09 -0500
-IronPort-SDR: xzvX5q6Kg7JJXdLTYQFK8mzq10p17YpgewXGLSqZHJKwVX2a6pJd7N5TBe6rN3arglX9j+iSkf
- v4fMU6FH2uZw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="167813488"
+        id S231458AbhCGOzK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 7 Mar 2021 09:55:10 -0500
+IronPort-SDR: H+jls7WxRJZ49CJeHpiehxtbBUeQLpFh9vOKPgYQRehowYCRSz7zVGPWxihhitFkQIsimwaiaz
+ fi+v9kaYpgoA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="167813489"
 X-IronPort-AV: E=Sophos;i="5.81,230,1610438400"; 
-   d="scan'208";a="167813488"
+   d="scan'208";a="167813489"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2021 06:55:09 -0800
-IronPort-SDR: w9EfF6q31lWon1+WpUYodVXAtlVBPZoWnvlgTRO7bDoPRj9cAk6xbiuuodoInO4BbPEH0f92av
- D5QBxRt2rLAQ==
+IronPort-SDR: MAmP9RGehavqFt4KN8S+pHVqzDbWeP60VpTrJ7RbPy0KacVIV6QrfBCGAhVzoKhdwaIYfmKtv9
+ QGsf4JTgTRpA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,230,1610438400"; 
-   d="scan'208";a="437189085"
+   d="scan'208";a="437189089"
 Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
   by FMSMGA003.fm.intel.com with ESMTP; 07 Mar 2021 06:55:09 -0800
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -31,11 +31,10 @@ To:     "Shuah Khan" <shuah@kernel.org>, "Tony Luck" <tony.luck@intel.com>,
         "Babu Moger" <babu.moger@amd.com>
 Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        David Binderman <dcb314@hotmail.com>
-Subject: [PATCH v5 01/21] selftests/resctrl: Enable gcc checks to detect buffer overflows
-Date:   Sun,  7 Mar 2021 14:54:42 +0000
-Message-Id: <20210307145502.2916364-2-fenghua.yu@intel.com>
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: [PATCH v5 02/21] selftests/resctrl: Fix compilation issues for global variables
+Date:   Sun,  7 Mar 2021 14:54:43 +0000
+Message-Id: <20210307145502.2916364-3-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210307145502.2916364-1-fenghua.yu@intel.com>
 References: <20210307145502.2916364-1-fenghua.yu@intel.com>
@@ -45,76 +44,144 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-David reported a buffer overflow error in the check_results() function of
-the cmt unit test and he suggested enabling _FORTIFY_SOURCE gcc compiler
-option to automatically detect any such errors.
+Reinette reported following compilation issue on Fedora 32, gcc version
+10.1.1
 
-Feature Test Macros man page describes_FORTIFY_SOURCE as below
+/usr/bin/ld: cqm_test.o:<src_dir>/cqm_test.c:22: multiple definition of
+`cache_size'; cat_test.o:<src_dir>/cat_test.c:23: first defined here
 
-"Defining this macro causes some lightweight checks to be performed to
-detect some buffer overflow errors when employing various string and memory
-manipulation functions (for example, memcpy, memset, stpcpy, strcpy,
-strncpy, strcat, strncat, sprintf, snprintf, vsprintf, vsnprintf, gets, and
-wide character variants thereof). For some functions, argument consistency
-is checked; for example, a check is made that open has been supplied with a
-mode argument when the specified flags include O_CREAT. Not all problems
-are detected, just some common cases.
+The same issue is reported for long_mask, cbm_mask, count_of_bits etc
+variables as well. Compiler isn't happy because these variables are
+defined globally in two .c files namely cqm_test.c and cat_test.c and
+the compiler during compilation finds that the variable is already
+defined (multiple definition error).
 
-If _FORTIFY_SOURCE is set to 1, with compiler optimization level 1 (gcc
--O1) and above, checks that shouldn't change the behavior of conforming
-programs are performed.
+Taking a closer look at the usage of these variables reveals that these
+variables are used only locally to functions such as cqm_resctrl_val()
+(defined in cqm_test.c) and cat_perf_miss_val() (defined in cat_test.c).
+These variables are not shared between those functions. So, there is no
+need for these variables to be global. Hence, fix this issue by making
+them static variables.
 
-With _FORTIFY_SOURCE set to 2, some more checking is added, but some
-conforming programs might fail.
-
-Some of the checks can be performed at compile time (via macros logic
-implemented in header files), and result in compiler warnings; other checks
-take place at run time, and result in a run-time error if the check fails.
-
-Use of this macro requires compiler support, available with gcc since
-version 4.0."
-
-Fix the buffer overflow error in the check_results() function of the cmt
-unit test and enable _FORTIFY_SOURCE gcc check to catch any future buffer
-overflow errors.
-
-Reported-by: David Binderman <dcb314@hotmail.com>
-Suggested-by: David Binderman <dcb314@hotmail.com>
+Reported-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
 Change Log:
 v5:
-- Move from v4's patch 11 to patch 1 so the fix patch should be first
+- Define long_mask, cbm_mask, count_of_bits etc as static variables
   (Shuah).
+- Split this patch into patch 2 and 3 (Shuah).
 
- tools/testing/selftests/resctrl/Makefile   | 2 +-
- tools/testing/selftests/resctrl/cqm_test.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c  | 10 +++++-----
+ tools/testing/selftests/resctrl/cqm_test.c  | 10 +++++-----
+ tools/testing/selftests/resctrl/resctrl.h   |  2 +-
+ tools/testing/selftests/resctrl/resctrlfs.c | 10 +++++-----
+ 4 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
-index d585cc1948cc..6bcee2ec91a9 100644
---- a/tools/testing/selftests/resctrl/Makefile
-+++ b/tools/testing/selftests/resctrl/Makefile
-@@ -1,5 +1,5 @@
- CC = $(CROSS_COMPILE)gcc
--CFLAGS = -g -Wall
-+CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
- SRCS=$(wildcard *.c)
- OBJS=$(SRCS:.c=.o)
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 5da43767b973..bdeeb5772592 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -17,10 +17,10 @@
+ #define MAX_DIFF_PERCENT	4
+ #define MAX_DIFF		1000000
+ 
+-int count_of_bits;
+-char cbm_mask[256];
+-unsigned long long_mask;
+-unsigned long cache_size;
++static int count_of_bits;
++static char cbm_mask[256];
++static unsigned long long_mask;
++static unsigned long cache_size;
+ 
+ /*
+  * Change schemata. Write schemata to specified
+@@ -136,7 +136,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 		return -1;
+ 
+ 	/* Get default cbm mask for L3/L2 cache */
+-	ret = get_cbm_mask(cache_type);
++	ret = get_cbm_mask(cache_type, cbm_mask);
+ 	if (ret)
+ 		return ret;
  
 diff --git a/tools/testing/selftests/resctrl/cqm_test.c b/tools/testing/selftests/resctrl/cqm_test.c
-index c8756152bd61..5e7308ac63be 100644
+index 5e7308ac63be..de33d1c0466e 100644
 --- a/tools/testing/selftests/resctrl/cqm_test.c
 +++ b/tools/testing/selftests/resctrl/cqm_test.c
-@@ -86,7 +86,7 @@ static int check_results(struct resctrl_val_param *param, int no_of_bits)
- 		return errno;
- 	}
+@@ -16,10 +16,10 @@
+ #define MAX_DIFF		2000000
+ #define MAX_DIFF_PERCENT	15
  
--	while (fgets(temp, 1024, fp)) {
-+	while (fgets(temp, sizeof(temp), fp)) {
- 		char *token = strtok(temp, ":\t");
- 		int fields = 0;
+-int count_of_bits;
+-char cbm_mask[256];
+-unsigned long long_mask;
+-unsigned long cache_size;
++static int count_of_bits;
++static char cbm_mask[256];
++static unsigned long long_mask;
++static unsigned long cache_size;
  
+ static int cqm_setup(int num, ...)
+ {
+@@ -125,7 +125,7 @@ int cqm_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+ 	if (!validate_resctrl_feature_request("cqm"))
+ 		return -1;
+ 
+-	ret = get_cbm_mask("L3");
++	ret = get_cbm_mask("L3", cbm_mask);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 39bf59c6b9c5..959c71e39bdc 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -92,7 +92,7 @@ void tests_cleanup(void);
+ void mbm_test_cleanup(void);
+ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd);
+ void mba_test_cleanup(void);
+-int get_cbm_mask(char *cache_type);
++int get_cbm_mask(char *cache_type, char *cbm_mask);
+ int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size);
+ void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+ int cat_val(struct resctrl_val_param *param);
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 19c0ec4045a4..2a16100c9c3f 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -49,8 +49,6 @@ static int find_resctrl_mount(char *buffer)
+ 	return -ENOENT;
+ }
+ 
+-char cbm_mask[256];
+-
+ /*
+  * remount_resctrlfs - Remount resctrl FS at /sys/fs/resctrl
+  * @mum_resctrlfs:	Should the resctrl FS be remounted?
+@@ -205,16 +203,18 @@ int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size)
+ /*
+  * get_cbm_mask - Get cbm mask for given cache
+  * @cache_type:	Cache level L2/L3
+- *
+- * Mask is stored in cbm_mask which is global variable.
++ * @cbm_mask:	cbm_mask returned as a string
+  *
+  * Return: = 0 on success, < 0 on failure.
+  */
+-int get_cbm_mask(char *cache_type)
++int get_cbm_mask(char *cache_type, char *cbm_mask)
+ {
+ 	char cbm_mask_path[1024];
+ 	FILE *fp;
+ 
++	if (!cbm_mask)
++		return -1;
++
+ 	sprintf(cbm_mask_path, "%s/%s/cbm_mask", CBM_MASK_PATH, cache_type);
+ 
+ 	fp = fopen(cbm_mask_path, "r");
 -- 
 2.30.1
 
