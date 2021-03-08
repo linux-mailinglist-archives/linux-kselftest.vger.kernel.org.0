@@ -2,61 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CE133184F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Mar 2021 21:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7243318AF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Mar 2021 21:36:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbhCHUSf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Mar 2021 15:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbhCHUSc (ORCPT
+        id S229815AbhCHUgV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Mar 2021 15:36:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50276 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229575AbhCHUgD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Mar 2021 15:18:32 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA326C06174A;
-        Mon,  8 Mar 2021 12:18:31 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id h10so16664363edl.6;
-        Mon, 08 Mar 2021 12:18:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xEus+DE8Y+6Hz6uQIfLVbNTiNLnC290XtZObCVJPizs=;
-        b=EUVXoExh+Sb7GQH0WJBF5KGZnJitXfHwiaDIy6OqIYHVHSMsE6NID/Dk7v9elZrL6n
-         zdORUiumYCV3BCuMKSntef+syeMrVg9KsSwm3StkbqdR7HZE/Pad+HWOWrBkOfg8L5+8
-         i82xbDS+amkMh/WqZG1p70eWrMvppel8joPTAj7xLH56LXvjv0j8n5j78N8K02pI2Jw8
-         OyK5PQVFDWKWJouNCkY8vat1MWuDI/Z+Zqbk295UzLnV9GB0JJeqpM0hQ0xxVvZ6nPG3
-         xhTCmGExBmO2TN9GT/YUXdQZ13BADFWkSOGKe0QAwqGJ+luzfvs5UnkxxWLYzlWrzCQ2
-         5UGQ==
+        Mon, 8 Mar 2021 15:36:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615235762;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FtEM8SCXvIO16AentYXNZkKzs4IVjutP/ewH3m8Y9qw=;
+        b=C9d/UX28SWxCOzmgek3TXGHtJg8ktB09wF9AV77yYw9vc+dY8YYLlIi3cMBUYs+mcUubFC
+        PjS7C6oLFTwaYtiwDaHB+XnTb4dNOthH/SDFbcKRI0MtsZlzBA5ZvXi2g/ncG8GMn6lNHP
+        zkk3YabAJ0wmbK5f8p5Ba8tj7uJlmgI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-436-JBcNjJ4MORmKgmDPrYTswA-1; Mon, 08 Mar 2021 15:36:01 -0500
+X-MC-Unique: JBcNjJ4MORmKgmDPrYTswA-1
+Received: by mail-wr1-f72.google.com with SMTP id g5so5312481wrd.22
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Mar 2021 12:36:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xEus+DE8Y+6Hz6uQIfLVbNTiNLnC290XtZObCVJPizs=;
-        b=kpKa4bXenBLoVTkcCHCeLZkD1aLOXyZttmUFGFZvhdjYOyTm2ihksvOLkb61srK4MQ
-         g3lLhrTqBMLVz2f82i8LssYwqRolmTiFDfLDxxybhlHfGty4Q9KGIrm+cHCLdfMFG20U
-         NEPEzyrW1KmnyVNC2oQr9ElUgHeGts1SLuaL8dSAOTQJriW77MhDyk84SjRQ6bI+fU4g
-         zaNrOy3OSwiEBhFgJbnmEGiL6YlXx2dZ37Pvonbb1XNnToFDG68AX3Z8UZqh0f/tGGiy
-         wvCgDqVzyK6B8oqHcQSs9Ypy6sMzflZh9/3veiL70sNnHpCdwoYjH30ZnQSPwz+ZBfiS
-         xx0g==
-X-Gm-Message-State: AOAM532OHGPsS4EjBktbnq4O9/zRy7oxyOC+oGKCLRIP/01BR6rUkrnG
-        53yn+XjpoPPj+sBVKajX70yR5+wWNgUC/gQ1xbo=
-X-Google-Smtp-Source: ABdhPJw5NWT9CCgMIQc0lxRIDTONwFmO58W+E2Y3C5NdaO4UczGWnwZti6R+vaARQCjY4NUrZjX7RTqffmarYubxta4=
-X-Received: by 2002:aa7:c403:: with SMTP id j3mr321346edq.137.1615234710445;
- Mon, 08 Mar 2021 12:18:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20210308152221.28555-1-zi.yan@sent.com> <79458c46-b4b9-332b-77f7-44371502cbeb@redhat.com>
- <AD0AFA61-8DCF-467D-B961-ACFA1D33828C@nvidia.com> <8039e1d7-3442-f133-f4f6-fe934f02122e@redhat.com>
- <9A4EF5F7-1BFF-4F8D-80B8-B559C05635BE@nvidia.com> <CAHbLzkofsc4_wEGmMFKwkUrc1pg4Y7iZZ9QKAXggiyg8RuOMqA@mail.gmail.com>
- <c530e051-9292-1b2c-3036-70fc1eac3bfa@redhat.com>
-In-Reply-To: <c530e051-9292-1b2c-3036-70fc1eac3bfa@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 8 Mar 2021 12:18:18 -0800
-Message-ID: <CAHbLzkqjeLZ2ZK=m3+nBqcM366gtq=Ug-=ALiSmnpi+FyZfjZQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: huge_memory: a new debugfs interface for splitting
- THP tests.
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Zi Yan <ziy@nvidia.com>, Linux MM <linux-mm@kvack.org>,
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=FtEM8SCXvIO16AentYXNZkKzs4IVjutP/ewH3m8Y9qw=;
+        b=uMPjZvs4FtYMAW3VO7Rcf/4A+Zy88kU0dHiAUaoBqRFBOph2IVFDXgJdZmRYS2rC/C
+         O9YYZufyV8DFsjCINdt/YFpAYvRp0NQZH7YVDqYWgZsLaWyTiaEqqP/aCpkyvY0o0EMA
+         hnsroR7tQbcC4nf8FaUkeAkd28vxxnhDJN5ZazR5wswXjr5jbUszbNbV5cvl9f1nHcrO
+         tOFLvp4aJOQXfsL8YFPtMxvuPsfWMEeDT1JaOsHXIncBq8VfA8GenUETdzsPyV36qWXo
+         A5ZvlklZHgPe/iJRVUFzlgr+n/ENdv2SXx6TsSQnYobt47szMqq46HSSmOHFDAz05OKK
+         IfRg==
+X-Gm-Message-State: AOAM530q1XTvKVmvBuVGYNo7G5l5jnLy+A+LigfSbeD+UpsHfu7xqooB
+        W53snTeip4NZqzENxzUgYP4lsepNdCE5fS5E9s3McGQ9+pxv7Qo4dhOBakAUN1t2zcBroozlQpK
+        8ypOR9dKJhkqyKFWlkIqTTaGKDakL
+X-Received: by 2002:a5d:698d:: with SMTP id g13mr25530220wru.2.1615235759858;
+        Mon, 08 Mar 2021 12:35:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzM42sUxBjHtd8Lz8LSAruQlmts87ltWsaKFthq9Fv+YcDQ8wlH4KkqDNuaYsQk/GwjwHCPUQ==
+X-Received: by 2002:a5d:698d:: with SMTP id g13mr25530205wru.2.1615235759653;
+        Mon, 08 Mar 2021 12:35:59 -0800 (PST)
+Received: from [192.168.3.108] (p5b0c6c02.dip0.t-ipconnect.de. [91.12.108.2])
+        by smtp.gmail.com with ESMTPSA id d29sm20522202wra.51.2021.03.08.12.35.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Mar 2021 12:35:59 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   David Hildenbrand <david@redhat.com>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH] mm: huge_memory: a new debugfs interface for splitting THP tests.
+Date:   Mon, 8 Mar 2021 21:35:58 +0100
+Message-Id: <44C62A78-4B37-445D-A9F7-25D1A412A802@redhat.com>
+References: <CAHbLzkqjeLZ2ZK=m3+nBqcM366gtq=Ug-=ALiSmnpi+FyZfjZQ@mail.gmail.com>
+Cc:     David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
+        Linux MM <linux-mm@kvack.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-kselftest@vger.kernel.org,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
@@ -66,91 +70,103 @@ Cc:     Zi Yan <ziy@nvidia.com>, Linux MM <linux-mm@kvack.org>,
         Sandipan Das <sandipan@linux.ibm.com>,
         David Rientjes <rientjes@google.com>,
         Alex Shi <alex.shi@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAHbLzkqjeLZ2ZK=m3+nBqcM366gtq=Ug-=ALiSmnpi+FyZfjZQ@mail.gmail.com>
+To:     Yang Shi <shy828301@gmail.com>
+X-Mailer: iPhone Mail (18D52)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 11:30 AM David Hildenbrand <david@redhat.com> wrote:
->
-> On 08.03.21 20:11, Yang Shi wrote:
-> > On Mon, Mar 8, 2021 at 11:01 AM Zi Yan <ziy@nvidia.com> wrote:
-> >>
-> >> On 8 Mar 2021, at 13:11, David Hildenbrand wrote:
-> >>
-> >>> On 08.03.21 18:49, Zi Yan wrote:
-> >>>> On 8 Mar 2021, at 11:17, David Hildenbrand wrote:
-> >>>>
-> >>>>> On 08.03.21 16:22, Zi Yan wrote:
-> >>>>>> From: Zi Yan <ziy@nvidia.com>
-> >>>>>>
-> >>>>>> By writing "<pid>,<vaddr_start>,<vaddr_end>" to
-> >>>>>> <debugfs>/split_huge_pages_in_range_pid, THPs in the process with =
-the
-> >>>>>> given pid and virtual address range are split. It is used to test
-> >>>>>> split_huge_page function. In addition, a selftest program is added=
- to
-> >>>>>> tools/testing/selftests/vm to utilize the interface by splitting
-> >>>>>> PMD THPs and PTE-mapped THPs.
-> >>>>>
-> >>>>> Won't something like
-> >>>>>
-> >>>>> 1. MADV_HUGEPAGE
-> >>>>>
-> >>>>> 2. Access memory
-> >>>>>
-> >>>>> 3. MADV_NOHUGEPAGE
-> >>>>>
-> >>>>> Have a similar effect? What's the benefit of this?
-> >>>>
-> >>>> Thanks for checking the patch.
-> >>>>
-> >>>> No, MADV_NOHUGEPAGE just replaces VM_HUGEPAGE with VM_NOHUGEPAGE,
-> >>>> nothing else will be done.
-> >>>
-> >>> Ah, okay - maybe my memory was tricking me. There is some s390x KVM c=
-ode that forces MADV_NOHUGEPAGE and force-splits everything.
-> >>>
-> >>> I do wonder, though, if this functionality would be worth a proper us=
-er interface (e.g., madvise), though. There might be actual benefit in havi=
-ng this as a !debug interface.
-> >>>
-> >>> I think you aware of the discussion in https://lkml.kernel.org/r/d098=
-c392-273a-36a4-1a29-59731cdf5d3d@google.com
-> >>
-> >> Yes. Thanks for bringing this up.
-> >>
-> >>>
-> >>> If there will be an interface to collapse a THP -- "this memory area =
-is worth extra performance now by collapsing a THP if possible" -- it might=
- also be helpful to have the opposite functionality -- "this memory area is=
- not worth a THP, rather use that somehwere else".
-> >>>
-> >>> MADV_HUGE_COLLAPSE vs. MADV_HUGE_SPLIT
-> >>
-> >> I agree that MADV_HUGE_SPLIT would be useful as the opposite of COLLAP=
-SE when user might just want PAGESIZE mappings.
-> >> Right now, HUGE_SPLIT is implicit from mapping changes like mprotect o=
-r MADV_DONTNEED.
-> >
-> > IMHO, it sounds not very useful. MADV_DONTNEED would split PMD for any
-> > partial THP. If the range covers the whole THP, the whole THP is going
-> > to be freed anyway. All other places in kernel which need split THP
-> > have been covered. So I didn't realize any usecase from userspace for
-> > just splitting PMD to PTEs.
->
-> THP are a limited resource. So indicating which virtual memory regions
-> are not performance sensitive right now (e.g., cold pages in a databse)
-> and not worth a THP might be quite valuable, no?
 
-Such functionality could be achieved by MADV_COLD or MADV_PAGEOUT,
-right? Then a subsequent call to MADV_NOHUGEPAGE would prevent from
-collapsing or allocating THP for that area.
+> Am 08.03.2021 um 21:18 schrieb Yang Shi <shy828301@gmail.com>:
+>=20
+> =EF=BB=BFOn Mon, Mar 8, 2021 at 11:30 AM David Hildenbrand <david@redhat.c=
+om> wrote:
+>>=20
+>>> On 08.03.21 20:11, Yang Shi wrote:
+>>> On Mon, Mar 8, 2021 at 11:01 AM Zi Yan <ziy@nvidia.com> wrote:
+>>>>=20
+>>>> On 8 Mar 2021, at 13:11, David Hildenbrand wrote:
+>>>>=20
+>>>>> On 08.03.21 18:49, Zi Yan wrote:
+>>>>>> On 8 Mar 2021, at 11:17, David Hildenbrand wrote:
+>>>>>>=20
+>>>>>>> On 08.03.21 16:22, Zi Yan wrote:
+>>>>>>>> From: Zi Yan <ziy@nvidia.com>
+>>>>>>>>=20
+>>>>>>>> By writing "<pid>,<vaddr_start>,<vaddr_end>" to
+>>>>>>>> <debugfs>/split_huge_pages_in_range_pid, THPs in the process with t=
+he
+>>>>>>>> given pid and virtual address range are split. It is used to test
+>>>>>>>> split_huge_page function. In addition, a selftest program is added t=
+o
+>>>>>>>> tools/testing/selftests/vm to utilize the interface by splitting
+>>>>>>>> PMD THPs and PTE-mapped THPs.
+>>>>>>>=20
+>>>>>>> Won't something like
+>>>>>>>=20
+>>>>>>> 1. MADV_HUGEPAGE
+>>>>>>>=20
+>>>>>>> 2. Access memory
+>>>>>>>=20
+>>>>>>> 3. MADV_NOHUGEPAGE
+>>>>>>>=20
+>>>>>>> Have a similar effect? What's the benefit of this?
+>>>>>>=20
+>>>>>> Thanks for checking the patch.
+>>>>>>=20
+>>>>>> No, MADV_NOHUGEPAGE just replaces VM_HUGEPAGE with VM_NOHUGEPAGE,
+>>>>>> nothing else will be done.
+>>>>>=20
+>>>>> Ah, okay - maybe my memory was tricking me. There is some s390x KVM co=
+de that forces MADV_NOHUGEPAGE and force-splits everything.
+>>>>>=20
+>>>>> I do wonder, though, if this functionality would be worth a proper use=
+r interface (e.g., madvise), though. There might be actual benefit in having=
+ this as a !debug interface.
+>>>>>=20
+>>>>> I think you aware of the discussion in https://lkml.kernel.org/r/d098c=
+392-273a-36a4-1a29-59731cdf5d3d@google.com
+>>>>=20
+>>>> Yes. Thanks for bringing this up.
+>>>>=20
+>>>>>=20
+>>>>> If there will be an interface to collapse a THP -- "this memory area i=
+s worth extra performance now by collapsing a THP if possible" -- it might a=
+lso be helpful to have the opposite functionality -- "this memory area is no=
+t worth a THP, rather use that somehwere else".
+>>>>>=20
+>>>>> MADV_HUGE_COLLAPSE vs. MADV_HUGE_SPLIT
+>>>>=20
+>>>> I agree that MADV_HUGE_SPLIT would be useful as the opposite of COLLAPS=
+E when user might just want PAGESIZE mappings.
+>>>> Right now, HUGE_SPLIT is implicit from mapping changes like mprotect or=
+ MADV_DONTNEED.
+>>>=20
+>>> IMHO, it sounds not very useful. MADV_DONTNEED would split PMD for any
+>>> partial THP. If the range covers the whole THP, the whole THP is going
+>>> to be freed anyway. All other places in kernel which need split THP
+>>> have been covered. So I didn't realize any usecase from userspace for
+>>> just splitting PMD to PTEs.
+>>=20
+>> THP are a limited resource. So indicating which virtual memory regions
+>> are not performance sensitive right now (e.g., cold pages in a databse)
+>> and not worth a THP might be quite valuable, no?
+>=20
+> Such functionality could be achieved by MADV_COLD or MADV_PAGEOUT,
+> right? Then a subsequent call to MADV_NOHUGEPAGE would prevent from
+> collapsing or allocating THP for that area.
+>=20
 
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+I remember these deal with optimizing swapping. Not sure how they interact w=
+ith THP, especially on systems without swap - I would guess they don=E2=80=98=
+t as of now.
+
+>>=20
+>> --
+>> Thanks,
+>>=20
+>> David / dhildenb
+>>=20
+>=20
+
