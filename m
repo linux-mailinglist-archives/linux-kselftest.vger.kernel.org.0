@@ -2,133 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A47233050F
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Mar 2021 23:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 774BF330C04
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Mar 2021 12:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbhCGWtg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 7 Mar 2021 17:49:36 -0500
-Received: from mga01.intel.com ([192.55.52.88]:56668 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230341AbhCGWta (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 7 Mar 2021 17:49:30 -0500
-IronPort-SDR: BnzbvP2aDztsaDgXS93ybRq/dDYA0BFtnfY0bfEdB01WLPamV8yB7vsqvudOOcROnjV/2sXxs1
- 2Wi7sGMhPk9Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="207691650"
-X-IronPort-AV: E=Sophos;i="5.81,231,1610438400"; 
-   d="scan'208";a="207691650"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2021 14:49:29 -0800
-IronPort-SDR: kI7WKMsUaHp8xr+jCSAFZ0FdFoCwULV7M9gLBlJsmWaz/EJwASfeeWwLM1z8tjh0vOApz7L7lx
- cNQXdVnUFSaQ==
-X-IronPort-AV: E=Sophos;i="5.81,231,1610438400"; 
-   d="scan'208";a="375870368"
-Received: from tassilo.jf.intel.com ([10.54.74.11])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2021 14:49:28 -0800
-Date:   Sun, 7 Mar 2021 14:49:27 -0800
-From:   Andi Kleen <ak@linux.intel.com>
-To:     John Wood <john.wood@gmx.com>
-Cc:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v5 7/8] Documentation: Add documentation for the Brute LSM
-Message-ID: <20210307224927.GT472138@tassilo.jf.intel.com>
-References: <20210227153013.6747-1-john.wood@gmx.com>
- <20210227153013.6747-8-john.wood@gmx.com>
- <878s78dnrm.fsf@linux.intel.com>
- <20210302183032.GA3049@ubuntu>
- <20210307151920.GR472138@tassilo.jf.intel.com>
- <20210307164520.GA16296@ubuntu>
- <20210307172540.GS472138@tassilo.jf.intel.com>
- <20210307180541.GA17108@ubuntu>
+        id S231532AbhCHLM2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Mar 2021 06:12:28 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:60095 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231486AbhCHLMU (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Mar 2021 06:12:20 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-112-KNB_LER4Oqm6bhVHwCpAlw-1; Mon, 08 Mar 2021 11:11:13 +0000
+X-MC-Unique: KNB_LER4Oqm6bhVHwCpAlw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 8 Mar 2021 11:11:13 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 8 Mar 2021 11:11:13 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Stefan Metzmacher' <metze@samba.org>,
+        =?utf-8?B?QW5kcsOpIEFsbWVpZGE=?= <andrealmeid@collabora.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Darren Hart" <dvhart@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+CC:     "kernel@collabora.com" <kernel@collabora.com>,
+        "krisman@collabora.com" <krisman@collabora.com>,
+        "pgriffais@valvesoftware.com" <pgriffais@valvesoftware.com>,
+        "z.figura12@gmail.com" <z.figura12@gmail.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "malteskarupke@fastmail.fm" <malteskarupke@fastmail.fm>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "acme@kernel.org" <acme@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        io-uring <io-uring@vger.kernel.org>
+Subject: RE: [RFC PATCH v2 00/13] Add futex2 syscall
+Thread-Topic: [RFC PATCH v2 00/13] Add futex2 syscall
+Thread-Index: AQHXE0YJHACUUxYyXUab2jknvqbfD6p571Lw
+Date:   Mon, 8 Mar 2021 11:11:13 +0000
+Message-ID: <f594f043f5c7440d8e3534e9a14c97c4@AcuMS.aculab.com>
+References: <20210304004219.134051-1-andrealmeid@collabora.com>
+ <ecbed98e-882a-0c0e-d4e1-bd33960f3674@samba.org>
+In-Reply-To: <ecbed98e-882a-0c0e-d4e1-bd33960f3674@samba.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210307180541.GA17108@ubuntu>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Mar 07, 2021 at 07:05:41PM +0100, John Wood wrote:
-> On Sun, Mar 07, 2021 at 09:25:40AM -0800, Andi Kleen wrote:
-> > > processes created from it will be killed. If the systemd restart the network
-> > > daemon and it will crash again, then the systemd will be killed. I think this
-> > > way the attack is fully mitigated.
-> >
-> > Wouldn't that panic the system? Killing init is usually a panic.
-> 
-> The mitigation acts only over the process that crashes (network daemon) and the
-> process that exec() it (systemd). This mitigation don't go up in the processes
-> tree until reach the init process.
+RnJvbTogU3RlZmFuIE1ldHptYWNoZXINCj4gU2VudDogMDcgTWFyY2ggMjAyMSAxMTozNQ0KPiAN
+Cj4gSGkgQW5kcsOpLA0KPiA+ICAqKiBUaGUgd2FpdCBvbiBtdWx0aXBsZSBwcm9ibGVtDQo+ID4N
+Cj4gPiAgVGhlIHVzZSBjYXNlIGxpZXMgaW4gdGhlIFdpbmUgaW1wbGVtZW50YXRpb24gb2YgdGhl
+IFdpbmRvd3MgTlQgaW50ZXJmYWNlDQo+ID4gIFdhaXRNdWx0aXBsZU9iamVjdHMuIFRoaXMgV2lu
+ZG93cyBBUEkgZnVuY3Rpb24gYWxsb3dzIGEgdGhyZWFkIHRvIHNsZWVwDQo+ID4gIHdhaXRpbmcg
+b24gdGhlIGZpcnN0IG9mIGEgc2V0IG9mIGV2ZW50IHNvdXJjZXMgKG11dGV4ZXMsIHRpbWVycywg
+c2lnbmFsLA0KPiA+ICBjb25zb2xlIGlucHV0LCBldGMpIHRvIHNpZ25hbC4NCg0KVGhleSBhcmUg
+YWxsIGV2ZW50cy4NCllvdSBjYW4gb25seSB3YWl0IG9uIGVpdGhlciBldmVudHMgb3Igc29ja2V0
+cyAodXNpbmcgc2VsZWN0KS4NClRoZXJlIGlzIGEgc29ja2V0IGFwaSB0byBzaWduYWwgYW4gZXZl
+bnQgd2hlbiBkYXRhIGFycml2ZXMgKGV0YykuDQpUaGVyZSBpcyBhbHNvIHRoZSBpbnNhbmUgKHRo
+ZXNlIGRheXMpIHJlc3RyaWN0aW9uIG9mIDY0IGV2ZW50cy4NCg0KPiBXaXRoIHRoYXQgaW4gbWlu
+ZCB3b3VsZCBpdCBiZSBnb29kIHRvIGhhdmUgc29tZSBpbnRlcmFjdGlvbiB3aXRoIGVwb2xsIChh
+bmQgc2ltaWxhciBjYWxscyk/DQoNCk9yIGhvb2sgc29tZXRoaW5nIHVwIHNvIHRoYXQgcG9sbHdh
+a2V1cCBjYW4ga2ljayBhIGZ1dGV4IGFzIHdlbGwNCmFzIHdha2luZyB1cCBwb2xsKCkgYW5kIGFk
+ZGluZyBhbiBldmVudCB0byBlcG9sbCgpLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
+ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
+MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-Most daemons have some supervisor that respawns them when they crash. 
-(maybe read up on "supervisor trees" if you haven't, it's a standard concept)
-
-That's usually (but not) always init, as in systemd. There might be something
-inbetween it and init, but likely init would respawn the something in between
-it it. One of the main tasks of init is to respawn things under it.
-
-If you have a supervisor tree starting from init the kill should eventually
-travel up to init.
-
-At least that's the theory. Do you have some experiments that show
-this doesn't happen?
-
-> 
-> Note: I am a kernel newbie and I don't know if the systemd is init. Sorry if it
-> is a stupid question. AFAIK systemd is not the init process (the first process
-> that is executed) but I am not sure.
-
-At least the part of systemd that respawns is often (but not always) init.
-
-> 
-> >
-> > > > Or if it's a interactive login you log in again.
-> > >
-> > > First the login will be killed (if it fails with a fatal signal) and if it is
-> > > restarted, the process that exec() it again will be killed. In this case I think
-> > > that the threat is also completely mitigated.
-> >
-> > Okay so sshd will be killed. And if it gets restarted eventually init,
-> > so panic again.
-> 
-> In this scenario the process that exec() the login will be killed (sshd
-> process). But I think that sshd is not the init process. So no panic.
-
-sshd would be respawned by the supervisor, which is likely init.
-
-> > That's a fairly drastic consequence because even without panic
-> > it means nobody can fix the system anymore without a console.
-> 
-> So, you suggest that the mitigation method for the brute force attack through
-> the execve system call should be different (not kill the process that exec).
-> Any suggestions would be welcome to improve this feature.
-
-If the system is part of some cluster, then panicing on attack or failure
-could be a reasonable reaction. Some other system in the cluster should
-take over. There's also a risk that all the systems get taken
-out quickly one by one, in this case you might still need something
-like the below.
-
-But it's something that would need to be very carefully considered
-for the environment.
-
-The other case is when there isn't some fallback, as in a standalone
-machine.
-
-It could be only used when the supervisor daemons are aware of it.
-Often they already have respawn limits, but would need to make sure they
-trigger before your algorithm trigger. Or maybe some way to opt-out 
-per process.  Then the DoS would be only against that process, but
-not everything on the machine. 
-
-So I think it needs more work on the user space side for most usages.
-
--Andi
