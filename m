@@ -2,20 +2,20 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9CC3335C7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Mar 2021 07:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6072333640
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Mar 2021 08:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbhCJGXK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Mar 2021 01:23:10 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:53634 "EHLO
+        id S231140AbhCJHSv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Mar 2021 02:18:51 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:38560 "EHLO
         out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229525AbhCJGWz (ORCPT
+        by vger.kernel.org with ESMTP id S229574AbhCJHSo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Mar 2021 01:22:55 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0URDQaA7_1615357367;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0URDQaA7_1615357367)
+        Wed, 10 Mar 2021 02:18:44 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0URFMQEU_1615360715;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0URFMQEU_1615360715)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 10 Mar 2021 14:22:52 +0800
+          Wed, 10 Mar 2021 15:18:40 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 To:     shuah@kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -24,9 +24,9 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] selftests/bpf: fix warning comparing pointer to 0
-Date:   Wed, 10 Mar 2021 14:22:46 +0800
-Message-Id: <1615357366-97612-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] bpf: fix warning comparing pointer to 0
+Date:   Wed, 10 Mar 2021 15:18:34 +0800
+Message-Id: <1615360714-30381-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -34,28 +34,28 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Fix the following coccicheck warning:
 
-./tools/testing/selftests/bpf/progs/test_global_func10.c:17:12-13:
-WARNING comparing pointer to 0.
+./tools/testing/selftests/bpf/progs/fentry_test.c:67:12-13: WARNING
+comparing pointer to 0.
 
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- tools/testing/selftests/bpf/progs/test_global_func10.c | 2 +-
+ tools/testing/selftests/bpf/progs/fentry_test.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func10.c b/tools/testing/selftests/bpf/progs/test_global_func10.c
-index 61c2ae9..97b7031 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func10.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func10.c
-@@ -14,7 +14,7 @@ struct Big {
- 
- __noinline int foo(const struct Big *big)
+diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c b/tools/testing/selftests/bpf/progs/fentry_test.c
+index 5f645fd..52a550d 100644
+--- a/tools/testing/selftests/bpf/progs/fentry_test.c
++++ b/tools/testing/selftests/bpf/progs/fentry_test.c
+@@ -64,7 +64,7 @@ struct bpf_fentry_test_t {
+ SEC("fentry/bpf_fentry_test7")
+ int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
  {
--	if (big == 0)
-+	if (!big)
- 		return 0;
- 
- 	return bpf_get_prandom_u32() < big->y;
+-	if (arg == 0)
++	if (!arg)
+ 		test7_result = 1;
+ 	return 0;
+ }
 -- 
 1.8.3.1
 
