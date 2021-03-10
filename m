@@ -2,29 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCE833452E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Mar 2021 18:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2FB334555
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Mar 2021 18:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbhCJRcZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Mar 2021 12:32:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49358 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232697AbhCJRcH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Mar 2021 12:32:07 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8038E600EF;
-        Wed, 10 Mar 2021 17:32:06 +0000 (UTC)
-Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94)
-        (envelope-from <maz@kernel.org>)
-        id 1lK2gm-000oge-8P; Wed, 10 Mar 2021 17:32:04 +0000
-Date:   Wed, 10 Mar 2021 17:31:56 +0000
-Message-ID: <871rcmhq43.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
+        id S233186AbhCJRox (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Mar 2021 12:44:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22428 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233191AbhCJRof (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 10 Mar 2021 12:44:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615398273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hU8ekKHxTbztMp+pHZxvBx516z1N7ENAuWaGaufXY5Q=;
+        b=NCR2xmSG9Y4ys0xBlASbFmJjQSkPdCCDRj5nzRe8NPDPlu30WRgpTV9zZ5/i9ecOVgYOZc
+        PmGifb7MNb7tjdCAU7vSCE6YT1KptANyJMiK4BisSxmqTQ8ohcy7GorSKkAE55FVn5T/9d
+        V40fiTbBvLSwouBk82fJS4/mLVLKdk0=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-147-qOv8AtjsNyWz8B6Tkad2bA-1; Wed, 10 Mar 2021 12:44:31 -0500
+X-MC-Unique: qOv8AtjsNyWz8B6Tkad2bA-1
+Received: by mail-ej1-f72.google.com with SMTP id e13so7528944ejd.21
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Mar 2021 09:44:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hU8ekKHxTbztMp+pHZxvBx516z1N7ENAuWaGaufXY5Q=;
+        b=ThbMMckeReA8ddb8+p7YGOP/u3fDfnoxOegdVtwa7fsZTfUjPuMrNzv90ijR+64Bfu
+         KvReV+3XIzN5sC17ssC9EXMnjUOq8kNus4B+zMPK5Z4XcaYo7WXrfqyvCSz+MbE4l5zV
+         phSwz5EZ7Ii6hx3qyglCvLGnOCxE/4H9Fnww8pE0ShLYX8KmqQO5WjeRKc43dlhfSTtV
+         uJIkTxDAm7ifm6raDG4DC9DeFq/UMB4UDxWhty+hax8WoP5ZVzgUL0CbO+74nPXDR7r/
+         bludXH8HOKmP5wMtNYtIqAO99Ej4RGTMywK05l0u4Ud/NDAqg6SiVkjXmkq47wyuc79I
+         d8SQ==
+X-Gm-Message-State: AOAM530BJnFY/FnRwoGtyPR1KMdQwwDfQkZldd8w5wku9yVUyqFUlvp4
+        DK/7kIedSzKUQzNvI0qAfYDjzHbNjuwjOKHFqTJMj4ncaEhtdVQ3GwcLBPJC2CWEPobv1cA+z4E
+        ijsq3GrIHF+77DNt5aax9rhLhjIr/
+X-Received: by 2002:aa7:ca02:: with SMTP id y2mr4748925eds.53.1615398270276;
+        Wed, 10 Mar 2021 09:44:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxG/7Jpsz0wHHG4vrGLPJ/mZ70rGmjD1p1cn8m5yCq4LyuA7dJeziZrVH9s6TVL8ShkHCSIiQ==
+X-Received: by 2002:aa7:ca02:: with SMTP id y2mr4748899eds.53.1615398270150;
+        Wed, 10 Mar 2021 09:44:30 -0800 (PST)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id 90sm11387479edr.69.2021.03.10.09.44.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Mar 2021 09:44:29 -0800 (PST)
+Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
+ in binary format
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
         KVM ARM <kvmarm@lists.cs.columbia.edu>,
         Linux MIPS <linux-mips@vger.kernel.org>,
@@ -51,67 +81,47 @@ Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
         Oliver Upton <oupton@google.com>,
         David Rientjes <rientjes@google.com>,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics in binary format
-In-Reply-To: <2749fe68-acbb-8f4d-dc76-4cb23edb9b35@redhat.com>
 References: <20210310003024.2026253-1-jingzhangos@google.com>
-        <20210310003024.2026253-4-jingzhangos@google.com>
-        <875z1zxb11.wl-maz@kernel.org>
-        <a475d935-e404-93dd-4c6d-a5f8038d8f4d@redhat.com>
-        <8735x3x7lu.wl-maz@kernel.org>
-        <2749fe68-acbb-8f4d-dc76-4cb23edb9b35@redhat.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 62.31.163.78
-X-SA-Exim-Rcpt-To: pbonzini@redhat.com, jingzhangos@google.com, kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, will@kernel.org, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, seanjc@google.com, vkuznets@redhat.com, jmattson@google.com, pshier@google.com, oupton@google.com, rientjes@google.com, eesposit@redhat.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+ <20210310003024.2026253-4-jingzhangos@google.com>
+ <875z1zxb11.wl-maz@kernel.org>
+ <a475d935-e404-93dd-4c6d-a5f8038d8f4d@redhat.com>
+ <8735x3x7lu.wl-maz@kernel.org>
+ <2749fe68-acbb-8f4d-dc76-4cb23edb9b35@redhat.com>
+ <871rcmhq43.wl-maz@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <fd37d21f-f3ae-d370-f8e1-cf552be3b2ee@redhat.com>
+Date:   Wed, 10 Mar 2021 18:44:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
+MIME-Version: 1.0
+In-Reply-To: <871rcmhq43.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 10 Mar 2021 17:11:47 +0000,
-Paolo Bonzini <pbonzini@redhat.com> wrote:
-> 
-> On 10/03/21 18:05, Marc Zyngier wrote:
-> > On Wed, 10 Mar 2021 16:03:42 +0000,
-> > Paolo Bonzini <pbonzini@redhat.com> wrote:
-> >> 
-> >> On 10/03/21 16:51, Marc Zyngier wrote:
-> >>>> +	kvm_for_each_vcpu(j, vcpu, kvm) {
-> >>>> +		pdata = data + VM_STAT_COUNT;
-> >>>> +		for (i = 0; i < VCPU_STAT_COUNT; i++, pdata++)
-> >>>> +			*pdata += *((u64 *)&vcpu->stat + i);
-> >>> Do you really need the in-kernel copy? Why not directly organise the
-> >>> data structures in a way that would allow a bulk copy using
-> >>> copy_to_user()?
-> >> 
-> >> The result is built by summing per-vCPU counters, so that the counter
-> >> updates are fast and do not require a lock.  So consistency basically
-> >> cannot be guaranteed.
-> > 
-> > Sure, but I wonder whether there is scope for VM-global counters to be
-> > maintained in parallel with per-vCPU counters if speed/efficiency is
-> > of the essence (and this seems to be how it is sold in the cover
-> > letter).
-> 
-> Maintaining VM-global counters would require an atomic instruction and
-> would suffer lots of cacheline bouncing even on architectures that
-> have relaxed atomic memory operations.
+On 10/03/21 18:31, Marc Zyngier wrote:
+>> Maintaining VM-global counters would require an atomic instruction and
+>> would suffer lots of cacheline bouncing even on architectures that
+>> have relaxed atomic memory operations.
+> Which is why we have per-cpu counters already. Making use of them
+> doesn't seem that outlandish.
 
-Which is why we have per-cpu counters already. Making use of them
-doesn't seem that outlandish.
+But you wouldn't be able to guarantee consistency anyway, would you? 
+You *could* copy N*M counters to userspace, but there's no guarantee 
+that they are consistent, neither within a single vCPU nor within a 
+single counter.
 
-> Speed/efficiency of retrieving statistics is important, but let's keep
-> in mind that the baseline for comparison is hundreds of syscalls and
-> filesystem lookups.
+>> Speed/efficiency of retrieving statistics is important, but let's keep
+>> in mind that the baseline for comparison is hundreds of syscalls and
+>> filesystem lookups.
+>
+> Having that baseline in the cover letter would be a good start, as
+> well as an indication of the frequency this is used at.
 
-Having that baseline in the cover letter would be a good start, as
-well as an indication of the frequency this is used at.
+Can't disagree, especially on the latter which I have no idea about.
 
-	M.
+Paolo
 
--- 
-Without deviation from the norm, progress is not possible.
