@@ -2,123 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3070D333CD0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Mar 2021 13:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5398E33402B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Mar 2021 15:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbhCJMpK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Mar 2021 07:45:10 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:37202 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229948AbhCJMos (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Mar 2021 07:44:48 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=zhang.jia@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0URK2fWn_1615380284;
-Received: from ali-6c96cfd98fb5.local(mailfrom:zhang.jia@linux.alibaba.com fp:SMTPD_---0URK2fWn_1615380284)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 10 Mar 2021 20:44:45 +0800
-Subject: Re: [PATCH] selftests/sgx: fix EINIT failure dueto
- SGX_INVALID_SIGNATURE
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        id S232799AbhCJOTR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Mar 2021 09:19:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36280 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230373AbhCJOTK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 10 Mar 2021 09:19:10 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF53364FEF;
+        Wed, 10 Mar 2021 14:19:09 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lJzg3-000mQq-PG; Wed, 10 Mar 2021 14:19:07 +0000
+Date:   Wed, 10 Mar 2021 14:19:06 +0000
+Message-ID: <878s6vxfad.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Linux MIPS <linux-mips@vger.kernel.org>,
+        KVM PPC <kvm-ppc@vger.kernel.org>,
+        Linux S390 <linux-s390@vger.kernel.org>,
+        Linux kselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Sean Christopherson <seanjc@google.com>,
-        Shuah Khan <shuah@kernel.org>, X86 ML <x86@kernel.org>,
-        linux-sgx@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20210301051836.30738-1-tianjia.zhang@linux.alibaba.com>
- <YDy51R2Wva7s+k/x@kernel.org>
- <3bcdcf04-4bed-ed95-84b6-790675f18240@linux.alibaba.com>
- <CALCETrVn_inXAULfsPrCXeHUTBet+KnL1XsxuiaR+jgG1uTJNg@mail.gmail.com>
- <YD5B7P++T6jLoWBR@kernel.org>
-From:   Jia Zhang <zhang.jia@linux.alibaba.com>
-Message-ID: <1f5c2375-39e2-65a8-3ad3-8dc43422f568@linux.alibaba.com>
-Date:   Wed, 10 Mar 2021 20:44:44 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:78.0)
- Gecko/20100101 Thunderbird/78.8.0
-MIME-Version: 1.0
-In-Reply-To: <YD5B7P++T6jLoWBR@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Subject: Re: [RFC PATCH 1/4] KVM: stats: Separate statistics name strings from debugfs code
+In-Reply-To: <20210310003024.2026253-2-jingzhangos@google.com>
+References: <20210310003024.2026253-1-jingzhangos@google.com>
+        <20210310003024.2026253-2-jingzhangos@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: jingzhangos@google.com, kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, will@kernel.org, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, seanjc@google.com, vkuznets@redhat.com, jmattson@google.com, pshier@google.com, oupton@google.com, rientjes@google.com, eesposit@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi Jing,
 
+On Wed, 10 Mar 2021 00:30:21 +0000,
+Jing Zhang <jingzhangos@google.com> wrote:
+> 
+> Prepare the statistics name strings for supporting binary format
+> aggregated statistics data retrieval.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Jing Zhang <jingzhangos@google.com>
+> ---
+>  arch/arm64/kvm/guest.c    |  47 ++++--
+>  arch/mips/kvm/mips.c      | 114 ++++++++++----
+>  arch/powerpc/kvm/book3s.c | 107 +++++++++----
+>  arch/powerpc/kvm/booke.c  |  84 +++++++---
+>  arch/s390/kvm/kvm-s390.c  | 320 ++++++++++++++++++++++++++------------
+>  arch/x86/kvm/x86.c        | 127 ++++++++++-----
+>  include/linux/kvm_host.h  |  31 +++-
+>  7 files changed, 589 insertions(+), 241 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> index 9bbd30e62799..fb3aafe76b52 100644
+> --- a/arch/arm64/kvm/guest.c
+> +++ b/arch/arm64/kvm/guest.c
+> @@ -28,19 +28,42 @@
+>  
+>  #include "trace.h"
+>  
+> +const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN] = {
+> +	"remote_tlb_flush",
+> +};
+> +static_assert(sizeof(kvm_vm_stat_strings) ==
+> +		VM_STAT_COUNT * KVM_STATS_NAME_LEN);
+> +
+> +const char kvm_vcpu_stat_strings[][KVM_STATS_NAME_LEN] = {
+> +	"halt_successful_poll",
+> +	"halt_attempted_poll",
+> +	"halt_poll_success_ns",
+> +	"halt_poll_fail_ns",
+> +	"halt_poll_invalid",
+> +	"halt_wakeup",
+> +	"hvc_exit_stat",
+> +	"wfe_exit_stat",
+> +	"wfi_exit_stat",
+> +	"mmio_exit_user",
+> +	"mmio_exit_kernel",
+> +	"exits",
+> +};
+> +static_assert(sizeof(kvm_vcpu_stat_strings) ==
+> +		VCPU_STAT_COUNT * KVM_STATS_NAME_LEN);
+> +
+>  struct kvm_stats_debugfs_item debugfs_entries[] = {
+> -	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+> -	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+> -	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+> -	VCPU_STAT("halt_wakeup", halt_wakeup),
+> -	VCPU_STAT("hvc_exit_stat", hvc_exit_stat),
+> -	VCPU_STAT("wfe_exit_stat", wfe_exit_stat),
+> -	VCPU_STAT("wfi_exit_stat", wfi_exit_stat),
+> -	VCPU_STAT("mmio_exit_user", mmio_exit_user),
+> -	VCPU_STAT("mmio_exit_kernel", mmio_exit_kernel),
+> -	VCPU_STAT("exits", exits),
+> -	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+> -	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+> +	VCPU_STAT(halt_successful_poll),
+> +	VCPU_STAT(halt_attempted_poll),
+> +	VCPU_STAT(halt_poll_invalid),
+> +	VCPU_STAT(halt_wakeup),
+> +	VCPU_STAT(hvc_exit_stat),
+> +	VCPU_STAT(wfe_exit_stat),
+> +	VCPU_STAT(wfi_exit_stat),
+> +	VCPU_STAT(mmio_exit_user),
+> +	VCPU_STAT(mmio_exit_kernel),
+> +	VCPU_STAT(exits),
+> +	VCPU_STAT(halt_poll_success_ns),
+> +	VCPU_STAT(halt_poll_fail_ns),
 
-On 2021/3/2 下午9:47, Jarkko Sakkinen wrote:
-> On Mon, Mar 01, 2021 at 09:54:37PM -0800, Andy Lutomirski wrote:
->> On Mon, Mar 1, 2021 at 9:06 PM Tianjia Zhang
->> <tianjia.zhang@linux.alibaba.com> wrote:
->>>
->>>
->>>
->>> On 3/1/21 5:54 PM, Jarkko Sakkinen wrote:
->>>> On Mon, Mar 01, 2021 at 01:18:36PM +0800, Tianjia Zhang wrote:
->>>>> q2 is not always 384-byte length. Sometimes it only has 383-byte.
->>>>
->>>> What does determine this?
->>>>
->>>>> In this case, the valid portion of q2 is reordered reversely for
->>>>> little endian order, and the remaining portion is filled with zero.
->>>>
->>>> I'm presuming that you want to say "In this case, q2 needs to be reversed because...".
->>>>
->>>> I'm lacking these details:
->>>>
->>>> 1. Why the length of Q2 can vary?
->>>> 2. Why reversing the bytes is the correct measure to counter-measure
->>>>     this variation?
->>>>
->>>> /Jarkko
->>>>
->>>
->>> When use openssl to generate a key instead of using the built-in
->>> sign_key.pem, there is a probability that will encounter this problem.
->>>
->>> Here is a problematic key I encountered. The calculated q1 and q2 of
->>> this key are both 383 bytes, If the length is not processed, the
->>> hardware signature will fail.
->>
->> Presumably the issue is that some keys have parameters that have
->> enough leading 0 bits to be effectively shorter.  The openssl API
->> (and, sadly, a bunch  of the ASN.1 stuff) treats these parameters as
->> variable-size integers.
-> 
-> But the test uses a static key. It used to generate a key on fly but
+So we now have two arrays that can easily deviate in their order,
+whilst we didn't have that risk before. What is the advantage of doing
+this? The commit message doesn't really say...
 
-IMO even though the test code, it comes from the linux kernel, meaning
-that its quality has a certain guarantee and it is a good reference, so
-the test code still needs to ensure its correctness.
+[...]
 
-Jia
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 1b65e7204344..1ea297458306 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1162,6 +1162,18 @@ static inline bool kvm_is_error_gpa(struct kvm *kvm, gpa_t gpa)
+>  	return kvm_is_error_hva(hva);
+>  }
+>  
+> +#define VM_STAT_COUNT		(sizeof(struct kvm_vm_stat)/sizeof(ulong))
+> +#define VCPU_STAT_COUNT		(sizeof(struct kvm_vcpu_stat)/sizeof(u64))
+> +#define KVM_STATS_NAME_LEN	32
+> +
+> +/* Make sure it is synced with fields in struct kvm_vm_stat. */
+> +extern const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN];
+> +/* Make sure it is synced with fields in struct kvm_vcpu_stat. */
+> +extern const char kvm_vcpu_stat_strings[][KVM_STATS_NAME_LEN];
+> +
+> +#define VM_STAT_NAME(id)        (kvm_vm_stat_strings[id])
+> +#define VCPU_STAT_NAME(id)      (kvm_vcpu_stat_strings[id])
+> +
+>  enum kvm_stat_kind {
+>  	KVM_STAT_VM,
+>  	KVM_STAT_VCPU,
+> @@ -1182,10 +1194,21 @@ struct kvm_stats_debugfs_item {
+>  #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
+>  	((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
+>  
+> -#define VM_STAT(n, x, ...) 							\
+> -	{ n, offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__ }
+> -#define VCPU_STAT(n, x, ...)							\
+> -	{ n, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__ }
+> +#define VM_STAT(x, ...)                                                        \
+> +	{                                                                      \
+> +		VM_STAT_NAME(offsetof(struct kvm_vm_stat, x)/sizeof(ulong)),   \
+> +		offsetof(struct kvm, stat.x),                                  \
+> +		KVM_STAT_VM,                                                   \
+> +		## __VA_ARGS__                                                 \
+> +	}
+> +
+> +#define VCPU_STAT(x, ...)                                                      \
+> +	{                                                                      \
+> +		VCPU_STAT_NAME(offsetof(struct kvm_vcpu_stat, x)/sizeof(u64)), \
+> +		offsetof(struct kvm_vcpu, stat.x),                             \
+> +		KVM_STAT_VCPU,                                                 \
+> +		## __VA_ARGS__                                                 \
+> +	}
 
-> in some of the last versions I replaced key generation with a static
-> key:
-> 
-> static RSA *gen_sign_key(void)
-> {
-> 	unsigned long sign_key_length;
-> 	BIO *bio;
-> 	RSA *key;
-> 
-> 	sign_key_length = (unsigned long)&sign_key_end -
-> 			  (unsigned long)&sign_key;
-> 
-> 	bio = BIO_new_mem_buf(&sign_key, sign_key_length);
-> 	if (!bio)
-> 		return NULL;
-> 
-> 	key = PEM_read_bio_RSAPrivateKey(bio, NULL, NULL, NULL);
-> 	BIO_free(bio);
-> 
-> 	return key;
-> }
-> 
-> /Jarkko
-> 
+Is there any reason why we want to keep kvm_vm_stat populated with
+ulong, while kvm_vcpu_stat is populated with u64? I have the feeling
+that this is a fairly pointless difference, and that some of the
+macros could be unified.
+
+Also, using names initialisers would help with the readability of the
+macros.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
