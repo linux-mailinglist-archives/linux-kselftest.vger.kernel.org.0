@@ -2,60 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE28334262
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Mar 2021 17:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C563344C1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Mar 2021 18:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbhCJQD5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Mar 2021 11:03:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48115 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232821AbhCJQDt (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Mar 2021 11:03:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615392228;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T6LZWP2vn4gZYNN60dpd9pTIeb1KCd0er7xtszZkk6U=;
-        b=bhKXKhxw+ZSn/71Tksjz1NmcU1+mwOomex78JYC/oYUjKLGc3teEQ8M2d+jR61pb6M2IGb
-        OoWJjeBzLF/a5NOAqjYcvbSH26haJKbdVJR9rJVHIUIB+LHW09EOoahiJZU6YRlQFmhM5C
-        VVnJ/7symILjjKRlE4F0qBcEISc1YSQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-527-djbh-DBAO02BtAvMelcxiA-1; Wed, 10 Mar 2021 11:03:46 -0500
-X-MC-Unique: djbh-DBAO02BtAvMelcxiA-1
-Received: by mail-ed1-f69.google.com with SMTP id p6so8549389edq.21
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Mar 2021 08:03:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=T6LZWP2vn4gZYNN60dpd9pTIeb1KCd0er7xtszZkk6U=;
-        b=XVfUjNpLcV2YNPJnSqpf/Sx6jDGKyjbqGC9BNZPlKJ41Zo/QfsW3gEC40waiNcA78i
-         ojzlROSVNAHQIRCIihAi0Fak8utW9Qm6Avy6CxWMDJ+fqEWDzm2losE6S9e5Qz+U8o3e
-         Vm0idjIZq1GNKSmmhI51b9jTc8XMUFkjTaJw/2uDjpV4EvnNfjEkZkhXwjS/dH3Vy8VJ
-         3ES7T8gBg9FjdHGjWDeLdSeF0+IeMOhdOhH2AyRc85wDNvalOErGNidstDT4YAhWu/hZ
-         6QZ80c/Wsi+f8aRxNh4SJr6mx7f4cF3JTSwO6KnMZNbf3d6usckmydpSHBsRaDANgfMN
-         J4Sw==
-X-Gm-Message-State: AOAM531/t0p7B2v9TtpPd/plFaj66d7oaL2vybQ8D5IYGTBGhHon1b9y
-        7WZAFgO96ZllRIWNCVYyN5S5T0W4LhCxT1bZVZnyOGaKwMJjQRjxHH6rbz/zygDxw/S9kO8Wwqx
-        0jkYGeuwqSXiZ3Caa3BV0TRDzBy1K
-X-Received: by 2002:a17:906:c0c8:: with SMTP id bn8mr4365529ejb.445.1615392225073;
-        Wed, 10 Mar 2021 08:03:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw1V5iKaTO/Dprgp6gE22d8iEwpMy8ZGDfQA++8bp2mD+TtXAT0OFzpxwvgV6mj5ydH3tp6rw==
-X-Received: by 2002:a17:906:c0c8:: with SMTP id bn8mr4365501ejb.445.1615392224882;
-        Wed, 10 Mar 2021 08:03:44 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id k9sm8884545edn.68.2021.03.10.08.03.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Mar 2021 08:03:44 -0800 (PST)
-Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
- in binary format
-To:     Marc Zyngier <maz@kernel.org>, Jing Zhang <jingzhangos@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        id S232327AbhCJRFb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Mar 2021 12:05:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44850 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232437AbhCJRFE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 10 Mar 2021 12:05:04 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5AF3964FB0;
+        Wed, 10 Mar 2021 17:05:04 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lK2Gc-000oQf-9v; Wed, 10 Mar 2021 17:05:02 +0000
+Date:   Wed, 10 Mar 2021 17:05:01 +0000
+Message-ID: <8735x3x7lu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVM ARM <kvmarm@lists.cs.columbia.edu>,
         Linux MIPS <linux-mips@vger.kernel.org>,
         KVM PPC <kvm-ppc@vger.kernel.org>,
         Linux S390 <linux-s390@vger.kernel.org>,
@@ -80,35 +51,49 @@ Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
         Oliver Upton <oupton@google.com>,
         David Rientjes <rientjes@google.com>,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics in binary format
+In-Reply-To: <a475d935-e404-93dd-4c6d-a5f8038d8f4d@redhat.com>
 References: <20210310003024.2026253-1-jingzhangos@google.com>
- <20210310003024.2026253-4-jingzhangos@google.com>
- <875z1zxb11.wl-maz@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <a475d935-e404-93dd-4c6d-a5f8038d8f4d@redhat.com>
-Date:   Wed, 10 Mar 2021 17:03:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <875z1zxb11.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        <20210310003024.2026253-4-jingzhangos@google.com>
+        <875z1zxb11.wl-maz@kernel.org>
+        <a475d935-e404-93dd-4c6d-a5f8038d8f4d@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, jingzhangos@google.com, kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, will@kernel.org, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, seanjc@google.com, vkuznets@redhat.com, jmattson@google.com, pshier@google.com, oupton@google.com, rientjes@google.com, eesposit@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/03/21 16:51, Marc Zyngier wrote:
->> +	kvm_for_each_vcpu(j, vcpu, kvm) {
->> +		pdata = data + VM_STAT_COUNT;
->> +		for (i = 0; i < VCPU_STAT_COUNT; i++, pdata++)
->> +			*pdata += *((u64 *)&vcpu->stat + i);
-> Do you really need the in-kernel copy? Why not directly organise the
-> data structures in a way that would allow a bulk copy using
-> copy_to_user()?
+On Wed, 10 Mar 2021 16:03:42 +0000,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
+> 
+> On 10/03/21 16:51, Marc Zyngier wrote:
+> >> +	kvm_for_each_vcpu(j, vcpu, kvm) {
+> >> +		pdata = data + VM_STAT_COUNT;
+> >> +		for (i = 0; i < VCPU_STAT_COUNT; i++, pdata++)
+> >> +			*pdata += *((u64 *)&vcpu->stat + i);
+> > Do you really need the in-kernel copy? Why not directly organise the
+> > data structures in a way that would allow a bulk copy using
+> > copy_to_user()?
+> 
+> The result is built by summing per-vCPU counters, so that the counter
+> updates are fast and do not require a lock.  So consistency basically
+> cannot be guaranteed.
 
-The result is built by summing per-vCPU counters, so that the counter 
-updates are fast and do not require a lock.  So consistency basically 
-cannot be guaranteed.
+Sure, but I wonder whether there is scope for VM-global counters to be
+maintained in parallel with per-vCPU counters if speed/efficiency is
+of the essence (and this seems to be how it is sold in the cover
+letter).
 
-Paolo
+Thanks,
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
