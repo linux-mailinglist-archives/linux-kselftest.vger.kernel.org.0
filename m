@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A17336B44
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Mar 2021 05:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82489336BC2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Mar 2021 06:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbhCKEyX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Mar 2021 23:54:23 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:47832 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230231AbhCKExy (ORCPT
+        id S229730AbhCKF4X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Mar 2021 00:56:23 -0500
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:29126 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229637AbhCKFzx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Mar 2021 23:53:54 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0URNwJ8P_1615438430;
-Received: from B-455UMD6M-2027.local(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0URNwJ8P_1615438430)
+        Thu, 11 Mar 2021 00:55:53 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=zhang.jia@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0URPRUq5_1615442150;
+Received: from ali-6c96cfd98fb5.local(mailfrom:zhang.jia@linux.alibaba.com fp:SMTPD_---0URPRUq5_1615442150)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 11 Mar 2021 12:53:50 +0800
+          Thu, 11 Mar 2021 13:55:51 +0800
 Subject: Re: [PATCH] selftests/sgx: fix EINIT failure dueto
  SGX_INVALID_SIGNATURE
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -39,14 +39,14 @@ References: <20210301051836.30738-1-tianjia.zhang@linux.alibaba.com>
  <YEk8f/29icpsUhas@kernel.org>
  <20ef1254-007d-04ce-8df5-5122ffd4d8d3@linux.alibaba.com>
  <YEmRlQ8vL2inziEK@kernel.org>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Message-ID: <710b65d6-e492-ae24-f2af-6973e1df1b85@linux.alibaba.com>
-Date:   Thu, 11 Mar 2021 12:53:49 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.7.1
+From:   Jia Zhang <zhang.jia@linux.alibaba.com>
+Message-ID: <1c1c5b03-883d-8d37-aed1-cdad230d87e4@linux.alibaba.com>
+Date:   Thu, 11 Mar 2021 13:55:50 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:78.0)
+ Gecko/20100101 Thunderbird/78.8.0
 MIME-Version: 1.0
 In-Reply-To: <YEmRlQ8vL2inziEK@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -55,7 +55,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 
-On 3/11/21 11:42 AM, Jarkko Sakkinen wrote:
+On 2021/3/11 上午11:42, Jarkko Sakkinen wrote:
 > On Thu, Mar 11, 2021 at 10:47:50AM +0800, Jia Zhang wrote:
 >>
 >>
@@ -85,7 +85,7 @@ On 3/11/21 11:42 AM, Jarkko Sakkinen wrote:
 >>>>>>>>
 >>>>>>>> 1. Why the length of Q2 can vary?
 >>>>>>>> 2. Why reversing the bytes is the correct measure to counter-measure
->>>>>>>>      this variation?
+>>>>>>>>     this variation?
 >>>>>>>>
 >>>>>>>> /Jarkko
 >>>>>>>>
@@ -118,10 +118,49 @@ On 3/11/21 11:42 AM, Jarkko Sakkinen wrote:
 > 
 > A self-test needs is not meant to be generic to be directly used in 3rd
 > party code. With the current key there is not issue => there is no issue.
+
+Alright. So what we should do is to add a comment to explain why the
+selfcode does something wrong and essentially it is intended.
+
+Jia
+
 > 
-
-For keys generated on fly, self-test does not work properly, this 
-experience is really worse.
-
-Best regards,
-Tianjia
+>>
+>> Going back the technical background, I'm not a crypto expert, so I
+>> choose to check the code, doc and make experiment.
+>>
+>> Accorindg to intel sdm vol3 37.14:
+>>
+>> ```
+>> SIGSTRUCT includes four 3072-bit integers (MODULUS, SIGNATURE, Q1, Q2).
+>> Each such integer is represented as a byte strings of length 384, with
+>> the most significant byte at the position “offset + 383”, and the least
+>> significant byte at position “offset”.
+>>
+>> ...
+>>
+>> The 3072-bit integers Q1 and Q2 are defined by:
+>> q1 = floor(Signature^2 / Modulus);
+>> q2 = floor((Signature^3 - q1 * Signature * Modulus) / Modulus);
+>> ```
+>>
+>> and the implementation of singing tool from Intel SGX SDK
+>> (https://github.com/intel/linux-sgx/blob/master/sdk/sign_tool/SignTool/sign_tool.cpp#L381
+>> ), the most significant byte shuld be at the position “offset +
+>> q1/q2_actuall_len”, and the padding portion should be filled with zero,
+>> and don't involve the order reverse, but the selftest code always does.
+>> This is the root cause of SGX_INVALID_SIGNATURE.
+>>
+>> Just simplily enforce size_q1 and size_q2 to SE_KEY_SIZE, and generate
+>> randome siging key with `openssl genrsa -3 -out signing_key.pem 3072`,
+>> the SGX_INVALID_SIGNATURE error will appear up quickly.
+>>
+>> Jia
+>>
+>>>
+>>> /Jarkko
+>>>
+>>
+> 
+> /Jarkko
+> 
