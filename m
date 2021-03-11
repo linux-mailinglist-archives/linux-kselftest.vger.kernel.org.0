@@ -2,269 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A67337F4A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Mar 2021 21:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6CE3380A5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Mar 2021 23:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbhCKUx1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Mar 2021 15:53:27 -0500
-Received: from jptosegrel01.sonyericsson.com ([124.215.201.71]:7420 "EHLO
-        JPTOSEGREL01.sonyericsson.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229520AbhCKUxE (ORCPT
+        id S230437AbhCKWhq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Mar 2021 17:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229574AbhCKWhf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Mar 2021 15:53:04 -0500
-X-Greylist: delayed 1210 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Mar 2021 15:53:03 EST
-Subject: Re: [PATCH v5 5/8] security/brute: Mitigate a brute force attack
-To:     John Wood <john.wood@gmx.com>, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>, Shuah Khan <shuah@kernel.org>
-CC:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        <kernel-hardening@lists.openwall.com>
-References: <20210227153013.6747-1-john.wood@gmx.com>
- <20210227153013.6747-6-john.wood@gmx.com>
-From:   peter enderborg <peter.enderborg@sony.com>
-Message-ID: <5419ebe6-bb82-9b66-052b-0eefff93e5ae@sony.com>
-Date:   Thu, 11 Mar 2021 21:32:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 11 Mar 2021 17:37:35 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FF6C061574;
+        Thu, 11 Mar 2021 14:37:34 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id x21so5218745eds.4;
+        Thu, 11 Mar 2021 14:37:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fXghSk9caRWFDRCz6fZq581zxQ1h0J2EoY5DSpAlgro=;
+        b=lMzrbplLg4M4wJocvzEGEBYyWixVqH6cGi7JRgMkjT5Q/UszF26rY9VgsY7RA/0Uhk
+         GG/zYoTnqi0bwp+7ppeaR+OMjOKN6P6O52IlKBgqIsnVHp3j8B0Uq4OwDAp4i9xU4RbZ
+         cJcDc8sXYq/qem8W4zpOklI4ZJJH3iT2/RvdkM7OtjEIwW0xCQ2gS6jUGd+eAhVnsad0
+         J0MqZi9YXlC3DQ9nYgiWP5TKUcCSScSztJVDtVXZ0KMSa4qLHfsEE9duAnDqLDy9Ft5b
+         RccCUkWjb7HE2TBAOksJx0gIzv4HfD8EWVuaxwZ9VJ2xyfB2K8bPzKAAw4Qm8AyzGcsR
+         MbMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fXghSk9caRWFDRCz6fZq581zxQ1h0J2EoY5DSpAlgro=;
+        b=gHQtj7b8O7WJeupAYluqbdsekqvsbuUpnUQ5wE3/ZK47SipLTdBOMywZP4HWlp5vFD
+         0DWt0VNFjW7ImDFNJTt5irCwclg1z79LZqKCjsLO+6NVPRzpYZJEZtF6qvx0r7mEfuST
+         HzMZbFKfWN54Wk5XfnY3ebBRNLNxEBUiehaaL2drgwOwhg3lWQc5D9KAJwbd7McfRo+y
+         mSHYf9onYAtPrqg0AH9X0rcd1nJTvP+FiOeDz7VOSf5izELjcHQC8WzDuwcAt5ytmEWm
+         ARV6GoNQFZnFQPM/tFY5O0BgMPT/OuyLzCm9RG3QWTihTOQcphVeVUocueOFXxZmGZrF
+         aRYQ==
+X-Gm-Message-State: AOAM53236j/+tYxWjkpLkA9q21+vnL4Wx98o9oy24HEU+RTP7IpPakUL
+        8n8C+3AKqqxXojEwZUuT0BxPjMEYA+E92EBONgw=
+X-Google-Smtp-Source: ABdhPJzVKFYwSspdbEbBYCUOrZiXSEa8rHyVbd8LQ3zNjc4/aqAS0jN39CO9lHjA8rtfPUHdepo15UrmW+1WvpfqYE8=
+X-Received: by 2002:a05:6402:5189:: with SMTP id q9mr10774827edd.168.1615502253659;
+ Thu, 11 Mar 2021 14:37:33 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210227153013.6747-6-john.wood@gmx.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=fqOim2wf c=1 sm=1 tr=0 a=9drRLWArJOlETflmpfiyCA==:117 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10 a=7YfXLusrAAAA:8 a=WXpgeRTL1FoQa_35La8A:9 a=QEXdDO2ut3YA:10 a=SLz71HocmBbuEhFRYD3r:22
-X-SEG-SpamProfiler-Score: 0
+References: <20210310153544.434160-1-zi.yan@sent.com> <CAHbLzkqaGqW8_dmR=PBojEVFGU+FfUm2Y+Rhu0Ay8aP1cAChdA@mail.gmail.com>
+ <A3A1CBF3-B5D2-4CF2-97D6-9BC12E82BEAE@nvidia.com>
+In-Reply-To: <A3A1CBF3-B5D2-4CF2-97D6-9BC12E82BEAE@nvidia.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 11 Mar 2021 14:37:21 -0800
+Message-ID: <CAHbLzkpLhMkHW5JYu2K2XTgoGBjUcvR6u0iTT5UYyYHU3YDz_A@mail.gmail.com>
+Subject: Re: [PATCH v2] mm: huge_memory: a new debugfs interface for splitting
+ THP tests.
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mika Penttila <mika.penttila@nextfour.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/27/21 4:30 PM, John Wood wrote:
-> In order to mitigate a brute force attack all the offending tasks involved
-> in the attack must be killed. In other words, it is necessary to kill all
-> the tasks that share the fork and/or exec statistical data related to the
-> attack. Moreover, if the attack happens through the fork system call, the
-> processes that have the same group_leader that the current task (the task
-> that has crashed) must be avoided since they are in the path to be killed.
+On Thu, Mar 11, 2021 at 7:52 AM Zi Yan <ziy@nvidia.com> wrote:
 >
-> When the SIGKILL signal is sent to the offending tasks, the function
-> "brute_kill_offending_tasks" will be called in a recursive way from the
-> task_fatal_signal LSM hook due to a small crash period. So, to avoid kill
-> again the same tasks due to a recursive call of this function, it is
-> necessary to disable the attack detection for the involved hierarchies.
+> On 10 Mar 2021, at 20:12, Yang Shi wrote:
+>
+> > On Wed, Mar 10, 2021 at 7:36 AM Zi Yan <zi.yan@sent.com> wrote:
+> >>
+> >> From: Zi Yan <ziy@nvidia.com>
+> >>
+> >> We do not have a direct user interface of splitting the compound page
+> >> backing a THP and there is no need unless we want to expose the THP
+> >> implementation details to users. Adding an interface for debugging.
+> >>
+> >> By writing "<pid>,<vaddr_start>,<vaddr_end>" to
+> >> <debugfs>/split_huge_pages_in_range_pid, THPs within the given virtual
+> >
+> > Can we reuse the existing split_huge_page knob instead of creating a ne=
+w one?
+> >
+> > Two knobs for splitting huge pages on debugging purpose seem
+> > overkilling to me IMHO. I'm wondering if we could check if a special
+> > value (e.g. 1 or -1) is written then split all THPs as split_huge_page
+> > knob does?
+> >
+> > I don't think this interface is used widely so the risk should be very
+> > low for breaking userspace.
+>
+> Thanks for the suggestion.
+>
+> I prefer a separate interface to keep input handling simpler. I am also
+> planning to enhance this interface later to enable splitting huge pages
+> to any lower order when Matthew Wilcox=E2=80=99s large page in page cache=
+ gets in,
+> so it is better to keep it separate from existing split_huge_pages.
 
-Would it not be useful for forensic reasons to be able to send SIGABRT and get the a coredump?
+The input handling seems not that hard, you might be able to try to do:
 
+ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx,%d", &pid, &vaddr_start,
+&vaddr_end, order);
+switch(ret) {
+case ret =3D=3D 1:
+                split_all_thps
+case ret =3D=3D 3:
+                 split_thp_for_pid
+case ret =3D=3D 4:
+                 split_thp_for_pid_to_order
+default:
+                 return -EINVAL
+}
 
-> To disable the attack detection, set to zero the last crash timestamp and
-> avoid to compute the application crash period in this case.
->
-> Signed-off-by: John Wood <john.wood@gmx.com>
-> ---
->  security/brute/brute.c | 141 ++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 132 insertions(+), 9 deletions(-)
->
-> diff --git a/security/brute/brute.c b/security/brute/brute.c
-> index 0a99cd4c3303..48b07d923ec7 100644
-> --- a/security/brute/brute.c
-> +++ b/security/brute/brute.c
-> @@ -22,6 +22,7 @@
->  #include <linux/math64.h>
->  #include <linux/netdevice.h>
->  #include <linux/path.h>
-> +#include <linux/pid.h>
->  #include <linux/printk.h>
->  #include <linux/refcount.h>
->  #include <linux/rwlock.h>
-> @@ -64,7 +65,7 @@ struct brute_cred {
->   * @lock: Lock to protect the brute_stats structure.
->   * @refc: Reference counter.
->   * @faults: Number of crashes.
-> - * @jiffies: Last crash timestamp.
-> + * @jiffies: Last crash timestamp. If zero, the attack detection is disabled.
->   * @period: Crash period's moving average.
->   * @saved_cred: Saved credentials.
->   * @network: Network activity flag.
-> @@ -566,6 +567,125 @@ static inline void print_fork_attack_running(void)
->  	pr_warn("Fork brute force attack detected [%s]\n", current->comm);
->  }
->
-> +/**
-> + * brute_disabled() - Test if the brute force attack detection is disabled.
-> + * @stats: Statistical data shared by all the fork hierarchy processes.
-> + *
-> + * The brute force attack detection enabling/disabling is based on the last
-> + * crash timestamp. A zero timestamp indicates that this feature is disabled. A
-> + * timestamp greater than zero indicates that the attack detection is enabled.
-> + *
-> + * The statistical data shared by all the fork hierarchy processes cannot be
-> + * NULL.
-> + *
-> + * It's mandatory to disable interrupts before acquiring the brute_stats::lock
-> + * since the task_free hook can be called from an IRQ context during the
-> + * execution of the task_fatal_signal hook.
-> + *
-> + * Context: Must be called with interrupts disabled and brute_stats_ptr_lock
-> + *          held.
-> + * Return: True if the brute force attack detection is disabled. False
-> + *         otherwise.
-> + */
-> +static bool brute_disabled(struct brute_stats *stats)
-> +{
-> +	bool disabled;
-> +
-> +	spin_lock(&stats->lock);
-> +	disabled = !stats->jiffies;
-> +	spin_unlock(&stats->lock);
-> +
-> +	return disabled;
-> +}
-> +
-> +/**
-> + * brute_disable() - Disable the brute force attack detection.
-> + * @stats: Statistical data shared by all the fork hierarchy processes.
-> + *
-> + * To disable the brute force attack detection it is only necessary to set the
-> + * last crash timestamp to zero. A zero timestamp indicates that this feature is
-> + * disabled. A timestamp greater than zero indicates that the attack detection
-> + * is enabled.
-> + *
-> + * The statistical data shared by all the fork hierarchy processes cannot be
-> + * NULL.
-> + *
-> + * Context: Must be called with interrupts disabled and brute_stats_ptr_lock
-> + *          and brute_stats::lock held.
-> + */
-> +static inline void brute_disable(struct brute_stats *stats)
-> +{
-> +	stats->jiffies = 0;
-> +}
-> +
-> +/**
-> + * enum brute_attack_type - Brute force attack type.
-> + * @BRUTE_ATTACK_TYPE_FORK: Attack that happens through the fork system call.
-> + * @BRUTE_ATTACK_TYPE_EXEC: Attack that happens through the execve system call.
-> + */
-> +enum brute_attack_type {
-> +	BRUTE_ATTACK_TYPE_FORK,
-> +	BRUTE_ATTACK_TYPE_EXEC,
-> +};
-> +
-> +/**
-> + * brute_kill_offending_tasks() - Kill the offending tasks.
-> + * @attack_type: Brute force attack type.
-> + * @stats: Statistical data shared by all the fork hierarchy processes.
-> + *
-> + * When a brute force attack is detected all the offending tasks involved in the
-> + * attack must be killed. In other words, it is necessary to kill all the tasks
-> + * that share the same statistical data. Moreover, if the attack happens through
-> + * the fork system call, the processes that have the same group_leader that the
-> + * current task must be avoided since they are in the path to be killed.
-> + *
-> + * When the SIGKILL signal is sent to the offending tasks, this function will be
-> + * called again from the task_fatal_signal hook due to a small crash period. So,
-> + * to avoid kill again the same tasks due to a recursive call of this function,
-> + * it is necessary to disable the attack detection for this fork hierarchy.
-> + *
-> + * The statistical data shared by all the fork hierarchy processes cannot be
-> + * NULL.
-> + *
-> + * It's mandatory to disable interrupts before acquiring the brute_stats::lock
-> + * since the task_free hook can be called from an IRQ context during the
-> + * execution of the task_fatal_signal hook.
-> + *
-> + * Context: Must be called with interrupts disabled and tasklist_lock and
-> + *          brute_stats_ptr_lock held.
-> + */
-> +static void brute_kill_offending_tasks(enum brute_attack_type attack_type,
-> +				       struct brute_stats *stats)
-> +{
-> +	struct task_struct *p;
-> +	struct brute_stats **p_stats;
-> +
-> +	spin_lock(&stats->lock);
-> +
-> +	if (attack_type == BRUTE_ATTACK_TYPE_FORK &&
-> +	    refcount_read(&stats->refc) == 1) {
-> +		spin_unlock(&stats->lock);
-> +		return;
-> +	}
-> +
-> +	brute_disable(stats);
-> +	spin_unlock(&stats->lock);
-> +
-> +	for_each_process(p) {
-> +		if (attack_type == BRUTE_ATTACK_TYPE_FORK &&
-> +		    p->group_leader == current->group_leader)
-> +			continue;
-> +
-> +		p_stats = brute_stats_ptr(p);
-> +		if (*p_stats != stats)
-> +			continue;
-> +
-> +		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_PID);
-> +		pr_warn_ratelimited("Offending process %d [%s] killed\n",
-> +				    p->pid, p->comm);
-> +	}
-> +}
-> +
->  /**
->   * brute_manage_fork_attack() - Manage a fork brute force attack.
->   * @stats: Statistical data shared by all the fork hierarchy processes.
-> @@ -581,8 +701,8 @@ static inline void print_fork_attack_running(void)
->   * since the task_free hook can be called from an IRQ context during the
->   * execution of the task_fatal_signal hook.
->   *
-> - * Context: Must be called with interrupts disabled and brute_stats_ptr_lock
-> - *          held.
-> + * Context: Must be called with interrupts disabled and tasklist_lock and
-> + *          brute_stats_ptr_lock held.
->   * Return: The last crash timestamp before updating it.
->   */
->  static u64 brute_manage_fork_attack(struct brute_stats *stats, u64 now)
-> @@ -590,8 +710,10 @@ static u64 brute_manage_fork_attack(struct brute_stats *stats, u64 now)
->  	u64 last_fork_crash;
->
->  	last_fork_crash = brute_update_crash_period(stats, now);
-> -	if (brute_attack_running(stats))
-> +	if (brute_attack_running(stats)) {
->  		print_fork_attack_running();
-> +		brute_kill_offending_tasks(BRUTE_ATTACK_TYPE_FORK, stats);
-> +	}
->
->  	return last_fork_crash;
->  }
-> @@ -778,8 +900,10 @@ static void brute_manage_exec_attack(struct brute_stats *stats, u64 now,
->  	if (fork_period == exec_period)
->  		return;
->
-> -	if (brute_attack_running(exec_stats))
-> +	if (brute_attack_running(exec_stats)) {
->  		print_exec_attack_running(exec_stats);
-> +		brute_kill_offending_tasks(BRUTE_ATTACK_TYPE_EXEC, exec_stats);
-> +	}
->  }
->
->  /**
-> @@ -895,10 +1019,9 @@ static void brute_task_fatal_signal(const kernel_siginfo_t *siginfo)
->  	read_lock(&tasklist_lock);
->  	read_lock_irqsave(&brute_stats_ptr_lock, flags);
->
-> -	if (WARN(!*stats, "No statistical data\n"))
-> -		goto unlock;
-> -
-> -	if (!brute_threat_model_supported(siginfo, *stats))
-> +	if (WARN(!*stats, "No statistical data\n") ||
-> +	    brute_disabled(*stats) ||
-> +	    !brute_threat_model_supported(siginfo, *stats))
->  		goto unlock;
->
->  	last_fork_crash = brute_manage_fork_attack(*stats, now);
-> --
-> 2.25.1
->
+Will it work for you?
 
+>
+> =E2=80=94
+> Best Regards,
+> Yan Zi
