@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 488F5338C4F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Mar 2021 13:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A19E1338FB2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Mar 2021 15:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbhCLMCx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Mar 2021 07:02:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:28767 "EHLO
+        id S230136AbhCLOUf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Mar 2021 09:20:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:45554 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231772AbhCLMCg (ORCPT
+        by vger.kernel.org with ESMTP id S231837AbhCLOUY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Mar 2021 07:02:36 -0500
+        Fri, 12 Mar 2021 09:20:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615550556;
+        s=mimecast20190719; t=1615558823;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qrEHj5I0bZYnneD3PLLPPSpfhRiDox4bq62WY+1YUCQ=;
-        b=FpEcBJSXz94fi+p/3/f9SH/hV/U86pbI4xKAChu2t1jhQPpV22d4F3t8WnPC+z5uhE8IyV
-        4BVTnMjjdx0ZMMMdlmMLmH9tSOX+nhDfFb/nCwTK80hgR2UY99Ol2VlZbkfGw1iD1+FR4e
-        jBHYgvzEE2AWnIJoRhP6QfqigMtXvZs=
+        bh=iyzW9VLhSiF55pJJNbrs6VXCrRj80xwFwy0myLWOR14=;
+        b=PNjHcxonXV9e4J/n3AVor6UGIZxUEMuzgPKJ1/d9tlgsWWSUAF1kgIWSBPG88x9zVRNWqN
+        wgDqkLz6mUaU4KrAr7CI0uc/7J4rU6Uc9DB2BFqtJmn12TjBZn1Bx5wp+03lKzpnfoZPYO
+        FGj+DH5ICCQvUX25Ue41xaYEYWhWo/A=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-498-FBr7Ld_VMlW_trAbhxSQfg-1; Fri, 12 Mar 2021 07:02:34 -0500
-X-MC-Unique: FBr7Ld_VMlW_trAbhxSQfg-1
+ us-mta-510-50EHJXV4NM2hdaL4Q__wIg-1; Fri, 12 Mar 2021 09:20:21 -0500
+X-MC-Unique: 50EHJXV4NM2hdaL4Q__wIg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6C5EC1940920;
-        Fri, 12 Mar 2021 12:02:32 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CD03A760C4;
+        Fri, 12 Mar 2021 14:20:18 +0000 (UTC)
 Received: from kamzik.brq.redhat.com (unknown [10.40.192.104])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 89A6C60636;
-        Fri, 12 Mar 2021 12:02:24 +0000 (UTC)
-Date:   Fri, 12 Mar 2021 13:02:21 +0100
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C17E360636;
+        Fri, 12 Mar 2021 14:20:09 +0000 (UTC)
+Date:   Fri, 12 Mar 2021 15:20:06 +0100
 From:   Andrew Jones <drjones@redhat.com>
 To:     Yanan Wang <wangyanan55@huawei.com>
 Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -51,194 +51,613 @@ Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         wanghaibin.wang@huawei.com, yezengruan@huawei.com,
         yuzenghui@huawei.com
-Subject: Re: [RFC PATCH v4 7/9] KVM: selftests: List all hugetlb src types
- specified with page sizes
-Message-ID: <20210312120221.urbbfl7o3vocblk7@kamzik.brq.redhat.com>
+Subject: Re: [RFC PATCH v4 9/9] KVM: selftests: Add a test for kvm page table
+ code
+Message-ID: <20210312142006.hqhwazfsonsdqm2i@kamzik.brq.redhat.com>
 References: <20210302125751.19080-1-wangyanan55@huawei.com>
- <20210302125751.19080-8-wangyanan55@huawei.com>
+ <20210302125751.19080-10-wangyanan55@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210302125751.19080-8-wangyanan55@huawei.com>
+In-Reply-To: <20210302125751.19080-10-wangyanan55@huawei.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 08:57:49PM +0800, Yanan Wang wrote:
-> With VM_MEM_SRC_ANONYMOUS_HUGETLB, we currently can only use system
-> default hugetlb pages to back the testing guest memory. In order to
-> add flexibility, now list all the known hugetlb backing src types with
-> different page sizes, so that we can specify use of hugetlb pages of the
-> exact granularity that we want. And as all the known hugetlb page sizes
-> are listed, it's appropriate for all architectures.
+On Tue, Mar 02, 2021 at 08:57:51PM +0800, Yanan Wang wrote:
+> This test serves as a performance tester and a bug reproducer for
+> kvm page table code (GPA->HPA mappings), so it gives guidance for
+> people trying to make some improvement for kvm.
 > 
-> Besides, the helper get_backing_src_pagesz() is added to get the
-> granularity of different backing src types(anonumous, thp, hugetlb).
+> The function guest_code() can cover the conditions where a single vcpu or
+> multiple vcpus access guest pages within the same memory region, in three
+> VM stages(before dirty logging, during dirty logging, after dirty logging).
+> Besides, the backing src memory type(ANONYMOUS/THP/HUGETLB) of the tested
+> memory region can be specified by users, which means normal page mappings
+> or block mappings can be chosen by users to be created in the test.
 > 
-> Suggested-by: Ben Gardon <bgardon@google.com>
+> If ANONYMOUS memory is specified, kvm will create normal page mappings
+> for the tested memory region before dirty logging, and update attributes
+> of the page mappings from RO to RW during dirty logging. If THP/HUGETLB
+> memory is specified, kvm will create block mappings for the tested memory
+> region before dirty logging, and split the blcok mappings into normal page
+> mappings during dirty logging, and coalesce the page mappings back into
+> block mappings after dirty logging is stopped.
+> 
+> So in summary, as a performance tester, this test can present the
+> performance of kvm creating/updating normal page mappings, or the
+> performance of kvm creating/splitting/recovering block mappings,
+> through execution time.
+> 
+> When we need to coalesce the page mappings back to block mappings after
+> dirty logging is stopped, we have to firstly invalidate *all* the TLB
+> entries for the page mappings right before installation of the block entry,
+> because a TLB conflict abort error could occur if we can't invalidate the
+> TLB entries fully. We have hit this TLB conflict twice on aarch64 software
+> implementation and fixed it. As this test can imulate process from dirty
+> logging enabled to dirty logging stopped of a VM with block mappings,
+> so it can also reproduce this TLB conflict abort due to inadequate TLB
+> invalidation when coalescing tables.
+> 
 > Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
 > ---
->  .../testing/selftests/kvm/include/test_util.h | 18 +++++-
->  tools/testing/selftests/kvm/lib/kvm_util.c    |  2 +-
->  tools/testing/selftests/kvm/lib/test_util.c   | 59 +++++++++++++++----
->  3 files changed, 66 insertions(+), 13 deletions(-)
+>  tools/testing/selftests/kvm/Makefile          |   3 +
+>  .../selftests/kvm/kvm_page_table_test.c       | 476 ++++++++++++++++++
+>  2 files changed, 479 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/kvm_page_table_test.c
 > 
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> index e087174eefe5..fade3130eb01 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -71,16 +71,32 @@ enum vm_mem_backing_src_type {
->  	VM_MEM_SRC_ANONYMOUS,
->  	VM_MEM_SRC_ANONYMOUS_THP,
->  	VM_MEM_SRC_ANONYMOUS_HUGETLB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_16KB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_64KB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_512KB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_1MB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_8MB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_16MB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_32MB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_256MB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_512MB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB,
-> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
-> +	NUM_SRC_TYPES,
->  };
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index a6d61f451f88..bac81924166d 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -67,6 +67,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
+>  TEST_GEN_PROGS_x86_64 += demand_paging_test
+>  TEST_GEN_PROGS_x86_64 += dirty_log_test
+>  TEST_GEN_PROGS_x86_64 += dirty_log_perf_test
+> +TEST_GEN_PROGS_x86_64 += kvm_page_table_test
+>  TEST_GEN_PROGS_x86_64 += hardware_disable_test
+>  TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
+>  TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
+> @@ -78,6 +79,7 @@ TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list-sve
+>  TEST_GEN_PROGS_aarch64 += demand_paging_test
+>  TEST_GEN_PROGS_aarch64 += dirty_log_test
+>  TEST_GEN_PROGS_aarch64 += dirty_log_perf_test
+> +TEST_GEN_PROGS_aarch64 += kvm_page_table_test
+>  TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+>  TEST_GEN_PROGS_aarch64 += set_memory_region_test
+>  TEST_GEN_PROGS_aarch64 += steal_time
+> @@ -87,6 +89,7 @@ TEST_GEN_PROGS_s390x += s390x/resets
+>  TEST_GEN_PROGS_s390x += s390x/sync_regs_test
+>  TEST_GEN_PROGS_s390x += demand_paging_test
+>  TEST_GEN_PROGS_s390x += dirty_log_test
+> +TEST_GEN_PROGS_s390x += kvm_page_table_test
+>  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+>  TEST_GEN_PROGS_s390x += set_memory_region_test
+
+Please add these three lines in alphabetic order. Also we're missing
+the .gitignore entry.
+
 >  
->  struct vm_mem_backing_src_alias {
->  	const char *name;
-> -	enum vm_mem_backing_src_type type;
-> +	uint32_t flag;
->  };
->  
->  bool thp_configured(void);
->  size_t get_trans_hugepagesz(void);
->  size_t get_def_hugetlb_pagesz(void);
-> +const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
-> +size_t get_backing_src_pagesz(uint32_t i);
->  void backing_src_help(void);
->  enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
->  
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index cc22c4ab7d67..b91c8e3a7ee1 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -757,7 +757,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->  	region->mmap_start = mmap(NULL, region->mmap_size,
->  				  PROT_READ | PROT_WRITE,
->  				  MAP_PRIVATE | MAP_ANONYMOUS
-> -				  | (src_type == VM_MEM_SRC_ANONYMOUS_HUGETLB ? MAP_HUGETLB : 0),
-> +				  | vm_mem_backing_src_alias(src_type)->flag,
->  				  -1, 0);
->  	TEST_ASSERT(region->mmap_start != MAP_FAILED,
->  		    "test_malloc failed, mmap_start: %p errno: %i",
-> diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-> index 80d68dbd72d2..df8a42eff1f8 100644
-> --- a/tools/testing/selftests/kvm/lib/test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/test_util.c
-> @@ -11,6 +11,7 @@
->  #include <stdlib.h>
->  #include <time.h>
->  #include <sys/stat.h>
-> +#include <linux/mman.h>
->  #include "linux/kernel.h"
->  
->  #include "test_util.h"
-> @@ -112,12 +113,6 @@ void print_skip(const char *fmt, ...)
->  	puts(", skipping test");
->  }
->  
-> -const struct vm_mem_backing_src_alias backing_src_aliases[] = {
-> -	{"anonymous", VM_MEM_SRC_ANONYMOUS,},
-> -	{"anonymous_thp", VM_MEM_SRC_ANONYMOUS_THP,},
-> -	{"anonymous_hugetlb", VM_MEM_SRC_ANONYMOUS_HUGETLB,},
-> -};
-> -
->  bool thp_configured(void)
->  {
->  	int ret;
-> @@ -180,22 +175,64 @@ size_t get_def_hugetlb_pagesz(void)
->  	return 0;
->  }
->  
-> +const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
+> diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
+> new file mode 100644
+> index 000000000000..032b49d1483b
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
+> @@ -0,0 +1,476 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KVM page table test
+> + *
+> + * Copyright (C) 2021, Huawei, Inc.
+> + *
+> + * Make sure that THP has been enabled or enough HUGETLB pages with specific
+> + * page size have been pre-allocated on your system, if you are planning to
+> + * use hugepages to back the guest memory for testing.
+> + */
+> +
+> +#define _GNU_SOURCE /* for program_invocation_name */
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <time.h>
+> +#include <pthread.h>
+> +
+> +#include "test_util.h"
+> +#include "kvm_util.h"
+> +#include "processor.h"
+> +#include "guest_modes.h"
+> +
+> +#define TEST_MEM_SLOT_INDEX             1
+> +
+> +/* Default size(1GB) of the memory for testing */
+> +#define DEFAULT_TEST_MEM_SIZE		(1 << 30)
+> +
+> +/* Default guest test virtual memory offset */
+> +#define DEFAULT_GUEST_TEST_MEM		0xc0000000
+> +
+> +/* Number of guest memory accessing types(read/write) */
+> +#define NUM_ACCESS_TYPES		2
+
+This define doesn't really seem necessary.
+
+> +
+> +/* Different guest memory accessing stages */
+> +enum test_stage {
+> +	KVM_BEFORE_MAPPINGS,
+> +	KVM_CREATE_MAPPINGS,
+> +	KVM_UPDATE_MAPPINGS,
+> +	KVM_ADJUST_MAPPINGS,
+> +	NUM_TEST_STAGES,
+> +};
+> +
+> +static const char * const test_stage_string[] = {
+> +	"KVM_BEFORE_MAPPINGS",
+> +	"KVM_CREATE_MAPPINGS",
+> +	"KVM_UPDATE_MAPPINGS",
+> +	"KVM_ADJUST_MAPPINGS",
+> +};
+> +
+> +struct perf_test_vcpu_args {
+> +	int vcpu_id;
+> +	bool vcpu_write;
+> +};
+> +
+> +struct perf_test_args {
+> +	struct kvm_vm *vm;
+> +	uint64_t guest_test_virt_mem;
+> +	uint64_t host_page_size;
+> +	uint64_t host_num_pages;
+> +	uint64_t large_page_size;
+> +	uint64_t large_num_pages;
+> +	uint64_t host_pages_per_lpage;
+> +	enum vm_mem_backing_src_type src_type;
+> +	struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
+> +};
+> +
+> +/*
+> + * Guest variables. Use addr_gva2hva() if these variables need
+> + * to be changed in host.
+> + */
+> +static enum test_stage guest_test_stage;
+> +
+> +/* Host variables */
+> +static uint32_t nr_vcpus = 1;
+> +static struct perf_test_args perf_test_args;
+> +static enum test_stage *current_stage;
+> +static enum test_stage vcpu_last_completed_stage[KVM_MAX_VCPUS];
+> +static bool host_quit;
+> +
+> +/*
+> + * Guest physical memory offset of the testing memory slot.
+> + * This will be set to the topmost valid physical address minus
+> + * the test memory size.
+> + */
+> +static uint64_t guest_test_phys_mem;
+> +
+> +/*
+> + * Guest virtual memory offset of the testing memory slot.
+> + * Must not conflict with identity mapped test code.
+> + */
+> +static uint64_t guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
+> +
+> +static void guest_code(int vcpu_id)
 > +{
-> +	static const struct vm_mem_backing_src_alias aliases[] = {
-> +		{ "anonymous",               0                            },
-> +		{ "anonymous_thp",           0                            },
-> +		{ "anonymous_hugetlb",       MAP_HUGETLB                  },
-> +		{ "anonymous_hugetlb_16kb",  MAP_HUGETLB | MAP_HUGE_16KB  },
-> +		{ "anonymous_hugetlb_64kb",  MAP_HUGETLB | MAP_HUGE_64KB  },
-> +		{ "anonymous_hugetlb_512kb", MAP_HUGETLB | MAP_HUGE_512KB },
-> +		{ "anonymous_hugetlb_1mb",   MAP_HUGETLB | MAP_HUGE_1MB   },
-> +		{ "anonymous_hugetlb_2mb",   MAP_HUGETLB | MAP_HUGE_2MB   },
-> +		{ "anonymous_hugetlb_8mb",   MAP_HUGETLB | MAP_HUGE_8MB   },
-> +		{ "anonymous_hugetlb_16mb",  MAP_HUGETLB | MAP_HUGE_16MB  },
-> +		{ "anonymous_hugetlb_32mb",  MAP_HUGETLB | MAP_HUGE_32MB  },
-> +		{ "anonymous_hugetlb_256mb", MAP_HUGETLB | MAP_HUGE_256MB },
-> +		{ "anonymous_hugetlb_512mb", MAP_HUGETLB | MAP_HUGE_512MB },
-> +		{ "anonymous_hugetlb_1gb",   MAP_HUGETLB | MAP_HUGE_1GB   },
-> +		{ "anonymous_hugetlb_2gb",   MAP_HUGETLB | MAP_HUGE_2GB   },
-> +		{ "anonymous_hugetlb_16gb",  MAP_HUGETLB | MAP_HUGE_16GB  },
+> +	struct perf_test_vcpu_args *vcpu_args = &perf_test_args.vcpu_args[vcpu_id];
+> +	enum vm_mem_backing_src_type src_type = perf_test_args.src_type;
+> +	uint64_t host_page_size = perf_test_args.host_page_size;
+> +	uint64_t host_num_pages = perf_test_args.host_num_pages;
+> +	uint64_t large_page_size = perf_test_args.large_page_size;
+> +	uint64_t large_num_pages = perf_test_args.large_num_pages;
+> +	uint64_t host_pages_per_lpage = perf_test_args.host_pages_per_lpage;
+
+Why not just create a short alias for perf_test_args, e.g. p, in order
+to access these more tersely?
+
+> +	uint64_t half = host_pages_per_lpage / 2;
+> +	bool vcpu_write;
+> +	enum test_stage stage;
+> +	uint64_t addr;
+> +	int i, j;
+> +
+> +	/* Make sure vCPU args data structure is not corrupt */
+> +	GUEST_ASSERT(vcpu_args->vcpu_id == vcpu_id);
+> +	vcpu_write = vcpu_args->vcpu_write;
+> +
+> +	while (true) {
+> +		stage = READ_ONCE(guest_test_stage);
+> +		addr = perf_test_args.guest_test_virt_mem;
+> +
+> +		switch (stage) {
+> +		/*
+> +		 * Before dirty logging, vCPUs concurrently access the first
+> +		 * 8 bytes of each page (host page/large page) within the same
+> +		 * memory region with different accessing types (read/write).
+> +		 * Then KVM will create normal page mappings or huge block
+> +		 * mappings for them.
+> +		 */
+> +		case KVM_CREATE_MAPPINGS:
+> +			for (i = 0; i < large_num_pages; i++) {
+> +				if (vcpu_write)
+> +					*(uint64_t *)addr = 0x0123456789ABCDEF;
+> +				else
+> +					READ_ONCE(*(uint64_t *)addr);
+> +
+> +				addr += large_page_size;
+> +			}
+> +			break;
+> +
+> +		/*
+> +		 * During dirty logging, KVM will only update attributes of the
+> +		 * normal page mappings from RO to RW if memory backing src type
+> +		 * is anonymous. In other cases, KVM will split the huge block
+> +		 * mappings into normal page mappings if memory backing src type
+> +		 * is THP or HUGETLB.
+> +		 */
+> +		case KVM_UPDATE_MAPPINGS:
+> +			if (src_type == VM_MEM_SRC_ANONYMOUS) {
+> +				for (i = 0; i < host_num_pages; i++) {
+> +					*(uint64_t *)addr = 0x0123456789ABCDEF;
+> +					addr += host_page_size;
+> +				}
+> +				break;
+> +			}
+> +
+> +			for (i = 0; i < large_num_pages; i++) {
+> +				/*
+> +				 * Write to the first host page in each large
+> +				 * page region, and triger break of large pages.
+> +				 */
+> +				*(uint64_t *)addr = 0x0123456789ABCDEF;
+> +
+> +				/*
+> +				 * Access the middle host pages in each large
+> +				 * page region. Since dirty logging is enabled,
+> +				 * this will create new mappings at the smallest
+> +				 * granularity.
+> +				 */
+> +				addr += host_page_size * half;
+> +				for (j = half; j < host_pages_per_lpage; j++) {
+> +					READ_ONCE(*(uint64_t *)addr);
+> +					addr += host_page_size;
+> +				}
+> +			}
+> +			break;
+> +
+> +		/*
+> +		 * After dirty logging is stopped, vCPUs concurrently read
+> +		 * from every single host page. Then KVM will coalesce the
+> +		 * split page mappings back to block mappings. And a TLB
+> +		 * conflict abort could occur here if TLB entries of the
+> +		 * page mappings are not fully invalidated.
+> +		 */
+> +		case KVM_ADJUST_MAPPINGS:
+> +			for (i = 0; i < host_num_pages; i++) {
+> +				READ_ONCE(*(uint64_t *)addr);
+> +				addr += host_page_size;
+> +			}
+> +			break;
+> +
+> +		default:
+> +			break;
+> +		}
+> +
+> +		GUEST_SYNC(1);
+> +	}
+> +}
+> +
+> +static void *vcpu_worker(void *data)
+> +{
+> +	int ret;
+> +	struct perf_test_vcpu_args *vcpu_args = data;
+> +	struct kvm_vm *vm = perf_test_args.vm;
+> +	int vcpu_id = vcpu_args->vcpu_id;
+> +	struct kvm_run *run;
+> +	struct timespec start;
+> +	struct timespec ts_diff;
+> +	enum test_stage stage;
+> +
+> +	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
+> +	run = vcpu_state(vm, vcpu_id);
+> +
+> +	while (!READ_ONCE(host_quit)) {
+> +		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+> +		ret = _vcpu_run(vm, vcpu_id);
+> +		ts_diff = timespec_elapsed(start);
+> +
+> +		TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
+> +
+> +		TEST_ASSERT(get_ucall(vm, vcpu_id, NULL) == UCALL_SYNC,
+> +			    "Invalid guest sync status: exit_reason=%s\n",
+> +			    exit_reason_str(run->exit_reason));
+> +
+> +		pr_debug("Got sync event from vCPU %d\n", vcpu_id);
+> +		stage = READ_ONCE(*current_stage);
+> +		vcpu_last_completed_stage[vcpu_id] = stage;
+> +		pr_debug("vCPU %d has completed stage %s\n"
+> +			 "execution time is: %ld.%.9lds\n\n",
+> +			 vcpu_id, test_stage_string[stage],
+> +			 ts_diff.tv_sec, ts_diff.tv_nsec);
+> +
+> +		while (stage == READ_ONCE(*current_stage) &&
+> +		       !READ_ONCE(host_quit)) {}
+
+Why busy wait instead of using some synchronization? E.g. sem_wait?
+
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +struct test_params {
+> +	uint64_t phys_offset;
+> +	uint64_t test_mem_size;
+> +	enum vm_mem_backing_src_type src_type;
+> +};
+> +
+> +static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
+> +{
+> +	struct test_params *p = arg;
+> +	struct perf_test_vcpu_args *vcpu_args;
+> +	enum vm_mem_backing_src_type src_type = p->src_type;
+> +	uint64_t large_page_size = get_backing_src_pagesz(src_type);
+> +	uint64_t test_mem_size = p->test_mem_size, guest_num_pages;
+> +	uint64_t guest_page_size = vm_guest_mode_params[mode].page_size;
+> +	uint64_t host_page_size = getpagesize();
+> +	uint64_t alignment;
+> +	void *host_test_mem;
+> +	struct kvm_vm *vm;
+> +	int vcpu_id;
+> +
+> +	/* Align up the test memory size */
+> +	alignment = max(large_page_size, guest_page_size);
+> +	test_mem_size = (test_mem_size + alignment - 1) & ~(alignment - 1);
+> +
+> +	/* Create a VM with enough guest pages */
+> +	guest_num_pages = test_mem_size / guest_page_size;
+> +	vm = vm_create_with_vcpus(mode, nr_vcpus,
+> +				  guest_num_pages, 0, guest_code, NULL);
+> +
+> +	/* Align down GPA of the testing memslot */
+> +	if (!p->phys_offset)
+> +		guest_test_phys_mem = (vm_get_max_gfn(vm) - guest_num_pages) *
+> +				       guest_page_size;
+> +	else
+> +		guest_test_phys_mem = p->phys_offset;
+> +#ifdef __s390x__
+> +	alignment = max(0x100000, alignment);
+> +#endif
+> +	guest_test_phys_mem &= ~(alignment - 1);
+> +
+> +	/* Set up the shared data structure perf_test_args */
+> +	perf_test_args.vm = vm;
+> +	perf_test_args.guest_test_virt_mem = guest_test_virt_mem;
+> +	perf_test_args.host_page_size = host_page_size;
+> +	perf_test_args.host_num_pages = test_mem_size / host_page_size;
+> +	perf_test_args.large_page_size = large_page_size;
+> +	perf_test_args.large_num_pages = test_mem_size / large_page_size;
+> +	perf_test_args.host_pages_per_lpage = large_page_size / host_page_size;
+> +	perf_test_args.src_type = src_type;
+> +
+> +	for (vcpu_id = 0; vcpu_id < KVM_MAX_VCPUS; vcpu_id++) {
+> +		vcpu_args = &perf_test_args.vcpu_args[vcpu_id];
+> +		vcpu_args->vcpu_id = vcpu_id;
+> +		vcpu_args->vcpu_write = !(vcpu_id % NUM_ACCESS_TYPES);
+
+Why the '!'? Is this to ensure vcpu_id=0 is a writer? If so, why?
+
+> +
+> +		vcpu_last_completed_stage[vcpu_id] = NUM_TEST_STAGES;
+> +	}
+> +
+> +	/* Add an extra memory slot with specified backing src type */
+> +	vm_userspace_mem_region_add(vm, src_type, guest_test_phys_mem,
+> +				    TEST_MEM_SLOT_INDEX, guest_num_pages, 0);
+> +
+> +	/* Do mapping(GVA->GPA) for the testing memory slot */
+> +	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, guest_num_pages, 0);
+> +
+> +	/* Cache the HVA pointer of the region */
+> +	host_test_mem = addr_gpa2hva(vm, (vm_paddr_t)guest_test_phys_mem);
+> +
+> +	/* Export shared structure perf_test_args to guest */
+> +	ucall_init(vm, NULL);
+> +	sync_global_to_guest(vm, perf_test_args);
+> +
+> +	current_stage = addr_gva2hva(vm, (vm_vaddr_t)(&guest_test_stage));
+> +	*current_stage = NUM_TEST_STAGES;
+> +
+> +	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(mode));
+> +	pr_info("Testing memory backing src type: %s\n",
+> +		vm_mem_backing_src_alias(src_type)->name);
+> +	pr_info("Testing memory backing src granularity: 0x%lx\n",
+> +		large_page_size);
+> +	pr_info("Testing memory size(aligned): 0x%lx\n", test_mem_size);
+> +	pr_info("Guest physical test memory offset: 0x%lx\n",
+> +		guest_test_phys_mem);
+> +	pr_info("Host  virtual  test memory offset: 0x%lx\n",
+> +		(uint64_t)host_test_mem);
+> +	pr_info("Number of testing vCPUs: %d\n", nr_vcpus);
+> +
+> +	return vm;
+> +}
+> +
+> +static void run_test(enum vm_guest_mode mode, void *arg)
+> +{
+> +	pthread_t *vcpu_threads;
+> +	struct kvm_vm *vm;
+> +	int vcpu_id;
+> +	enum test_stage stage;
+> +	struct timespec start;
+> +	struct timespec ts_diff;
+> +
+> +	/* Create VM with vCPUs and make some pre-initialization */
+> +	vm = pre_init_before_test(mode, arg);
+> +
+> +	vcpu_threads = malloc(nr_vcpus * sizeof(*vcpu_threads));
+> +	TEST_ASSERT(vcpu_threads, "Memory allocation failed");
+> +
+> +	host_quit = false;
+> +	stage = KVM_BEFORE_MAPPINGS;
+> +	*current_stage = stage;
+> +
+> +	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+> +		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
+> +			       &perf_test_args.vcpu_args[vcpu_id]);
+> +	}
+> +	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+> +		while (READ_ONCE(vcpu_last_completed_stage[vcpu_id]) != stage)
+> +			pr_debug("Waiting for vCPU %d to complete stage %s\n",
+> +				 vcpu_id, test_stage_string[stage]);
+
+I'd do a timed wait on some synchronization and then assert that it
+doesn't time out. At least the pr_debug() in the loop doesn't look
+like a good idea.
+
+> +	}
+> +	pr_info("Started all vCPUs successfully\n");
+> +
+> +	/* Test the stage of KVM creating mappings */
+> +	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+> +	stage = KVM_CREATE_MAPPINGS;
+> +	*current_stage = stage;
+> +
+> +	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+> +		while (READ_ONCE(vcpu_last_completed_stage[vcpu_id]) != stage)
+> +			pr_debug("Waiting for vCPU %d to complete stage %s\n",
+> +				 vcpu_id, test_stage_string[stage]);
+> +	}
+> +
+> +	ts_diff = timespec_elapsed(start);
+> +	pr_info("KVM_CREATE_MAPPINGS: total execution time: %ld.%.9lds\n\n",
+> +		ts_diff.tv_sec, ts_diff.tv_nsec);
+
+Here the busy loop makes some sense for the time measuring. Alternatively
+we could still use sem_wait, but have the first vcpu to start record the
+start time and the last vcpu to finish record the end time. It might be
+nice to be able to see each individual vcpu's time too.
+
+> +
+> +	/* Test the stage of KVM updating mappings */
+> +	vm_mem_region_set_flags(vm, TEST_MEM_SLOT_INDEX,
+> +				KVM_MEM_LOG_DIRTY_PAGES);
+> +
+> +	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+> +	stage = KVM_UPDATE_MAPPINGS;
+> +	*current_stage = stage;
+> +
+> +	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+> +		while (READ_ONCE(vcpu_last_completed_stage[vcpu_id]) != stage)
+> +			pr_debug("Waiting for vCPU %d to complete stage %s\n",
+> +				 vcpu_id, test_stage_string[stage]);
+> +	}
+> +
+> +	ts_diff = timespec_elapsed(start);
+> +	pr_info("KVM_UPDATE_MAPPINGS: total execution time: %ld.%.9lds\n\n",
+> +		ts_diff.tv_sec, ts_diff.tv_nsec);
+> +
+> +	/* Test the stage of KVM adjusting mappings */
+> +	vm_mem_region_set_flags(vm, TEST_MEM_SLOT_INDEX, 0);
+> +
+> +	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+> +	stage = KVM_ADJUST_MAPPINGS;
+> +	*current_stage = stage;
+> +
+> +	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+> +		while (READ_ONCE(vcpu_last_completed_stage[vcpu_id]) != stage)
+> +			pr_debug("Waiting for vCPU %d to complete stage %s\n",
+> +				 vcpu_id, test_stage_string[stage]);
+> +	}
+> +
+> +	ts_diff = timespec_elapsed(start);
+> +	pr_info("KVM_ADJUST_MAPPINGS: total execution time: %ld.%.9lds\n\n",
+> +		ts_diff.tv_sec, ts_diff.tv_nsec);
+
+Same comments for the last two loops as above about pr_debug and possibly
+using some synchronization. At least these loops, which are all the same,
+could be factored out into a function.
+
+> +
+> +	/* Tell the vcpu thread to quit */
+> +	host_quit = true;
+> +	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++)
+> +		pthread_join(vcpu_threads[vcpu_id], NULL);
+> +
+> +	free(vcpu_threads);
+> +	ucall_uninit(vm);
+> +	kvm_vm_free(vm);
+> +}
+> +
+> +static void help(char *name)
+> +{
+> +	puts("");
+> +	printf("usage: %s [-h] [-p offset] [-m mode] "
+> +	       "[-b mem size] [-v vcpus] [-s mem type]\n", name);
+
+Please hyphenate the parameter names: mem-size, mem-type
+
+> +	puts("");
+> +	printf(" -p: specify guest physical test memory offset\n"
+> +	       "     Warning: a low offset can conflict with the loaded test code.\n");
+> +	guest_modes_help();
+> +	printf(" -b: specify size of the memory region for testing. e.g. 10M or 3G.\n"
+> +	       "     (default: 1G)\n");
+> +	printf(" -v: specify the number of vCPUs to run\n"
+> +	       "     (default: 1)\n");
+> +	printf(" -s: specify the type of memory that should be used to\n"
+> +	       "     back the guest data region.\n"
+> +	       "     (default: anonymous)\n\n");
+> +	backing_src_help();
+> +	puts("");
+> +	exit(0);
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
+> +	struct test_params p = {
+> +		.test_mem_size = DEFAULT_TEST_MEM_SIZE,
+> +		.src_type = VM_MEM_SRC_ANONYMOUS,
 > +	};
-> +	_Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
-> +		       "Missing new backing src types?");
+> +	int opt;
 > +
-> +	TEST_ASSERT(i < NUM_SRC_TYPES, "Backing src type ID %d too big", i);
+> +	guest_modes_append_default();
 > +
-> +	return &aliases[i];
+> +	while ((opt = getopt(argc, argv, "hp:m:b:v:s:")) != -1) {
+> +		switch (opt) {
+> +		case 'p':
+> +			p.phys_offset = strtoull(optarg, NULL, 0);
+> +			break;
+> +		case 'm':
+> +			guest_modes_cmdline(optarg);
+> +			break;
+> +		case 'b':
+> +			p.test_mem_size = parse_size(optarg);
+> +			break;
+> +		case 'v':
+> +			nr_vcpus = atoi(optarg);
+> +			TEST_ASSERT(nr_vcpus > 0 && nr_vcpus <= max_vcpus,
+> +				    "Invalid number of vcpus, must be between 1 and %d", max_vcpus);
+> +			break;
+> +		case 's':
+> +			p.src_type = parse_backing_src_type(optarg);
+> +			break;
+> +		case 'h':
+> +		default:
+> +			help(argv[0]);
+> +			break;
+> +		}
+> +	}
+> +
+> +	for_each_guest_mode(run_test, &p);
+> +
+> +	return 0;
 > +}
-> +
-> +size_t get_backing_src_pagesz(uint32_t i)
-> +{
-> +	uint32_t flag = vm_mem_backing_src_alias(i)->flag;
-> +
-> +	if (i == VM_MEM_SRC_ANONYMOUS)
-> +		return getpagesize();
-> +	if (i == VM_MEM_SRC_ANONYMOUS_THP)
-> +		return get_trans_hugepagesz();
-> +	if (i == VM_MEM_SRC_ANONYMOUS_HUGETLB)
-> +		return get_def_hugetlb_pagesz();
-> +
-> +	return MAP_HUGE_PAGE_SIZE(flag);
-> +}
-> +
->  void backing_src_help(void)
->  {
->  	int i;
->  
->  	printf("Available backing src types:\n");
-> -	for (i = 0; i < ARRAY_SIZE(backing_src_aliases); i++)
-> -		printf("\t%s\n", backing_src_aliases[i].name);
-> +		for (i = 0; i < NUM_SRC_TYPES; i++)
-> +			printf("\t%s\n", vm_mem_backing_src_alias(i)->name);
->  }
->  
->  enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name)
->  {
->  	int i;
->  
-> -	for (i = 0; i < ARRAY_SIZE(backing_src_aliases); i++)
-> -		if (!strcmp(type_name, backing_src_aliases[i].name))
-> -			return backing_src_aliases[i].type;
-> +	for (i = 0; i < NUM_SRC_TYPES; i++)
-> +		if (!strcmp(type_name, vm_mem_backing_src_alias(i)->name))
-> +			return i;
-
-This requires vm_mem_backing_src_alias.aliases[] to be in the same order
-as vm_mem_backing_src_type, so we should do the designated array
-initialization like in vm_guest_mode_string().
-
-Thanks,
-drew
-
->  
->  	backing_src_help();
->  	TEST_FAIL("Unknown backing src type: %s", type_name);
 > -- 
 > 2.23.0
-> 
+>
+
+Thanks,
+drew 
 
