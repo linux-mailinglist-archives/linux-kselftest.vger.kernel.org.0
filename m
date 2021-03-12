@@ -2,98 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B0D33959C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Mar 2021 18:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321AC3395E5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Mar 2021 19:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbhCLRzm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Mar 2021 12:55:42 -0500
-Received: from mout.gmx.net ([212.227.17.22]:46415 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232229AbhCLRzT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Mar 2021 12:55:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1615571687;
-        bh=5zvDdlBOTpGmg8SYWvlilFo6X3L3cFtO5aKa0CwJZc4=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=H2qPS5OMh+GAQjEPyXw7WHk3to0jYJ7sDl4tsYsXBZIWamCr2BW3Qrbg+JHG7GLpW
-         KzhLxagtJzjy1tyniaT4eP/Usxbgx9kB+XdCopLHZovz2yHUieSsG/4+p9nv1FV800
-         7A628qswk5DAsHm7U/eRWYrCcxiQIVEVoFFUzPj0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ubuntu ([83.52.229.153]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MxUnp-1leElK1mH3-00xtL2; Fri, 12
- Mar 2021 18:54:47 +0100
-Date:   Fri, 12 Mar 2021 18:54:44 +0100
-From:   John Wood <john.wood@gmx.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     John Wood <john.wood@gmx.com>, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v5 7/8] Documentation: Add documentation for the Brute LSM
-Message-ID: <20210312175444.GC3103@ubuntu>
-References: <20210227153013.6747-8-john.wood@gmx.com>
- <878s78dnrm.fsf@linux.intel.com>
- <20210302183032.GA3049@ubuntu>
- <20210307151920.GR472138@tassilo.jf.intel.com>
- <20210307164520.GA16296@ubuntu>
- <20210307172540.GS472138@tassilo.jf.intel.com>
- <20210307180541.GA17108@ubuntu>
- <20210307224927.GT472138@tassilo.jf.intel.com>
- <20210309184054.GA3058@ubuntu>
- <20210311200517.GG203350@tassilo.jf.intel.com>
+        id S231597AbhCLSLY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Mar 2021 13:11:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21204 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231906AbhCLSLR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 12 Mar 2021 13:11:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615572677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SQXRSD89A8xhrCuxpBydg6Y3MyKh1PtNusEjHfIcj18=;
+        b=bX2tgC6SGJS1FhnxL+ShdpbV0pLyAO9+FUIdqKoG98EqAFtJNab07mbizgtZniFZMTxfVe
+        yB3hiKnqXlPvJlqxRaWDIrxbtUgP3uC1ngCJHX7eueW1w6Vhr9+MV7xoZFQ+2Ix0NctftV
+        Et2RnuCBjO75v8YPGSuTU4nb8KEoCF0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-10-rqm6utqPNQuzX_rM-wl6sA-1; Fri, 12 Mar 2021 13:11:15 -0500
+X-MC-Unique: rqm6utqPNQuzX_rM-wl6sA-1
+Received: by mail-wr1-f71.google.com with SMTP id i5so11513491wrp.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Mar 2021 10:11:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=SQXRSD89A8xhrCuxpBydg6Y3MyKh1PtNusEjHfIcj18=;
+        b=Hci9vwWlx+RvpyMNIax0AnROKex1ztoAFS5Wpz9FRL4WXQAmcjD/TRYnXaU1u/YYrJ
+         OeF+2Dsi0UIe53nLjNP0irlh6GeUY3eLapaWX9N4oz0YfYzIEysK0e/AmIzjFpN6u8Kw
+         ku9MbUVVIgJmVkb8ZONlOIoBQeYK/NYBHXNznEu3wb+EJ0VW7mLLWwIxiv36U8QRf4S7
+         EcGdpBEfNATEbGgeB5HJUKtWOHiE3b2mRYC7HwrzwQSGmSZLlL5FUkR5Ys8U+WACvFef
+         WhFEsUvTqLFUKrB6Hn0qDshD+bYjmEnvj4C+Pm1AEYErvfr9mwYSyZngdLQrNRs1WRbZ
+         aPvg==
+X-Gm-Message-State: AOAM533ofQmE6ArNoiWXBbpq2BPcu+qic0SM4xR97xC2UB+1bpI07aQ4
+        DnzUikpw1eJRkcl7BuuWUShpnz0zWxArJuINZWjoAoIwrCag5qLELLg3343Nx00Gc5CUUkbW+6l
+        NLnoi3bFGmId/1fhfSLhDJsX5yzap
+X-Received: by 2002:a1c:498b:: with SMTP id w133mr14755139wma.134.1615572673384;
+        Fri, 12 Mar 2021 10:11:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx2aInA1bidlltyWIjYrqBjK+SGizjJOOZcscWT2RiFNd2X/0uEYFLiJqfA7xaEL8hELymOZw==
+X-Received: by 2002:a1c:498b:: with SMTP id w133mr14755105wma.134.1615572673180;
+        Fri, 12 Mar 2021 10:11:13 -0800 (PST)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id y8sm2934326wmi.46.2021.03.12.10.11.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Mar 2021 10:11:12 -0800 (PST)
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Linux MIPS <linux-mips@vger.kernel.org>,
+        KVM PPC <kvm-ppc@vger.kernel.org>,
+        Linux S390 <linux-s390@vger.kernel.org>,
+        Linux kselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+References: <20210310003024.2026253-1-jingzhangos@google.com>
+ <20210310003024.2026253-4-jingzhangos@google.com>
+ <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
+ <CAAdAUtjj52+cAhD4KUzAaqrMSJXHD0g=ecQNG-a92Mqn3BCxiQ@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
+ in binary format
+Message-ID: <ac7462de-1531-5428-5dca-4e3dfb897000@redhat.com>
+Date:   Fri, 12 Mar 2021 19:11:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210311200517.GG203350@tassilo.jf.intel.com>
-X-Provags-ID: V03:K1:SuNaC8l4ofMz5PeVWxAj2Ub9Iy1nxdyzxd1L6V/gtgj5gnFLD1S
- I5L/bUQtKOVdCBxKBO/ZP7Ncca+0qE8R3yw3fhaopP1rEuS5z8BzijroK8maIG7T6YhP+NZ
- z1VOvu+civtZqHxFIQLRLgTi7vErnDtFx9VwG5ckyMVuHs2NwPNZn2Te+26cCuctNXPpOCW
- 9tg918q9c3iomwA9F5b1A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2g/OjCOku7o=:a+cdNEVUGAIPK9zpYFpOP9
- TCWcVVVEzGCwEteqlEZcE7eWU/SLIKQHwRiNlS/duxRoTowXyMbY2AbfxUpp7lEImTUiF8WvC
- Ccxpi0oKPnIVJF7ZyexplRm5MsO0HGkA275ksMn92E23nIwzLA+bXIzwwX3CUL3dOBfitpIq+
- cwOhS3UxNcIo8I8oUo+y2KXmOMef/sYHlNKZyyp+oWLcv1T2aHGQJHGU11JEDEXeowj5d18H4
- mkGAuCOCCtCaeiHoaAqr8enyrjp/K3O95QROMvycy1hjBzVRm5dux5b7bDNOGfXN0rahVjamD
- lA4NSYsuwX0DhXIwKdobgJOJ6JwRsu9EJHx9m5iwGvlY+eBNRKgLsuNQ1etPpJqGBDIcLMf1b
- TLALI1YKZaEciWdYO+gUv59qBXbctxwUBfPxvO4MKNJWfm9etplamNUI/xCl1MVs0n1d434h4
- x+BslsfjnmmcFtfB83/3nusuqtL0sDmOkzmPps/53CJw2XZPa0c5Ig6GyvVR99bBxtb823jcR
- ULVMMpVE4ogc0OIPhOpFygvVTIeXQ2HeIh+G2a1ncuPaQLMj4LfwNTBsPRQx/YqKYV3xdKmAz
- KMjQwau3Hn30MVTMR9NUAiihKug/crLomVAW2oM4OWdsbPbP9NlBleIEVNBKXtMPu+EFuEY+k
- 30SyxfjHNAk7HAeDi04qnrDt6Ph8NVmi0+lbq/OehAQeJ5OOKNa60YtzLVRQQxu7NXeid8Y/b
- HFIKdUCtfYW1cwDLiFHtHxtBQzKLxXZO0SJPgQG7vvCwcIEBx46/c6xhMC6snSlktztnS44OE
- MPyFUBi2P7FdyycZV+QxmZZB9SlbM1On+dXSO6/1Ltgp60vhRJozmQUyw2D92Izn4t9PafMja
- BvyOzBBZiOelJTgq7PSg==
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAAdAUtjj52+cAhD4KUzAaqrMSJXHD0g=ecQNG-a92Mqn3BCxiQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 12:05:17PM -0800, Andi Kleen wrote:
->
-> Okay but that means that the brute force attack can just continue
-> because the attacked daemon will be respawned?
->
-> You need some way to stop the respawning, otherwise the
-> mitigation doesn't work for daemons.
->
-I will work on your solution regarding respawned daemons (use wait*() to i=
-nform
-userspace that the offending processes killed by the mitigation exited due=
- to
-this mitigation -> then the supervisor can adopt their own policy).
+On 10/03/21 22:41, Jing Zhang wrote:
+>> I would prefer a completely different interface, where you have a file
+>> descriptor that can be created and associated to a vCPU or VM (or even
+>> to /dev/kvm).  Having a file descriptor is important because the fd can
+>> be passed to a less-privileged process that takes care of gathering the
+>> metrics
+> Separate file descriptor solution is very tempting. We are still considering it
+> seriously. Our biggest concern is that the metrics gathering/handling process
+> is not necessary running on the same node as the one file descriptor belongs to.
+> It scales better to pass metrics data directly than to pass file descriptors.
 
->
-> -Andi
->
+If you want to pass metrics data directly, you can just read the file 
+descriptor from your VMM, just like you're using the ioctls now. 
+However the file descriptor also allows a privilege-separated same-host 
+interface.
 
-Thank you very much,
-John Wood
+>> 4 bytes flags (always zero)
+>> 4 bytes number of statistics
+>> 4 bytes offset of the first stat description
+>> 4 bytes offset of the first stat value
+>> stat descriptions:
+>>    - 4 bytes for the type (for now always zero: uint64_t)
+>>    - 4 bytes for the flags (for now always zero)
+>>    - length of name
+>>    - name
+>> statistics in 64-bit format
+> 
+> The binary format presented above is very flexible. I understand why it is
+> organized this way.
+> In our situation, the metrics data could be pulled periodically as short as
+> half second. They are used by different kinds of monitors/triggers/alerts.
+> To enhance efficiency and reduce traffic caused by metrics passing, we
+> treat all metrics info/data as two kinds. One is immutable information,
+> which doesn't change in a given system boot. The other is mutable
+> data (statistics data), which is pulled/transferred periodically at a high
+> frequency.
+
+The format allows to place the values before the descriptions.  So you 
+could use pread to only read the first part of the file descriptor, and 
+the file_operations implementation would then skip the work of building 
+the immutable data.  It doesn't have to be implemented from the
+beginning like that, but the above format supports it.
+
+Paolo
+
