@@ -2,131 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B2F3392FC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Mar 2021 17:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3053393F6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Mar 2021 17:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbhCLQUO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Mar 2021 11:20:14 -0500
-Received: from mout.gmx.net ([212.227.15.19]:55471 "EHLO mout.gmx.net"
+        id S232445AbhCLQx7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Mar 2021 11:53:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49506 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230302AbhCLQUJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Mar 2021 11:20:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1615565977;
-        bh=VZf1ffj/4RS89iXA7oEEQahAXYgObise/bJlm1SH0i8=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=IDV7wAHot5KJfxh/MckcvE9vjldhR0CievjD3XHItbuqmk3Mgazp/V4TGG8hFJ4ot
-         AcGK9fjtChrCqo8k2Tb9nAYLvkbgueHBUbcR4YTv530Cm6hpD43Jfv6+kZ1xqivQiM
-         l/4zsy1cHpzbtIxonrmjHTbaOdKx0Cn+YhR4wq5E=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ubuntu ([83.52.229.153]) by mail.gmx.net (mrgmx004
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1N3se2-1ll74D1ksS-00zlRE; Fri, 12
- Mar 2021 17:19:37 +0100
-Date:   Fri, 12 Mar 2021 17:19:21 +0100
-From:   John Wood <john.wood@gmx.com>
-To:     peter enderborg <peter.enderborg@sony.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>, Shuah Khan <shuah@kernel.org>
-Cc:     John Wood <john.wood@gmx.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v5 5/8] security/brute: Mitigate a brute force attack
-Message-ID: <20210312161921.GA3103@ubuntu>
-References: <20210227153013.6747-1-john.wood@gmx.com>
- <20210227153013.6747-6-john.wood@gmx.com>
- <5419ebe6-bb82-9b66-052b-0eefff93e5ae@sony.com>
+        id S232283AbhCLQxb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 12 Mar 2021 11:53:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C58E764FD9;
+        Fri, 12 Mar 2021 16:53:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615568011;
+        bh=aF/mMRBTJBBXplInmQ4Ie8yBGvNGzPk48GM4ArjgNIE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q3JXi+S0hFtM7MxJAZcxykl+OYDBOkih6O6UNKQGYBMLG+PAiy2VR2W9zXtkpEYKk
+         V8fftnIRLe65q1nHXjfuYR77hVjdPJ5LEMzH6nYNY0szn8mWyK+Yc4LeGJEkY1Igla
+         nDw0M+TJSTqdj76HRi4mcpWJsutWWz6BMlVLvx47h2E3yOH41kKXa/XtQOYhX4r3V0
+         tdwR02tvj109O1T6FwoJE7EZLIFlegiMwY9PC0xI13FDMWyAdZaUugZNFStpVQ1xa9
+         nqXM5QuRmRuNqjDLqMs87v4NQcw0untqVeetygnm6pwYoyVmbxQ9KR920fw+EkmzZ5
+         2FJC+04lDPyzw==
+Date:   Fri, 12 Mar 2021 18:53:06 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Jia Zhang <zhang.jia@linux.alibaba.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>, X86 ML <x86@kernel.org>,
+        linux-sgx@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/sgx: fix EINIT failure dueto
+ SGX_INVALID_SIGNATURE
+Message-ID: <YEuccsOIBlACqG6A@kernel.org>
+References: <20210301051836.30738-1-tianjia.zhang@linux.alibaba.com>
+ <YDy51R2Wva7s+k/x@kernel.org>
+ <3bcdcf04-4bed-ed95-84b6-790675f18240@linux.alibaba.com>
+ <CALCETrVn_inXAULfsPrCXeHUTBet+KnL1XsxuiaR+jgG1uTJNg@mail.gmail.com>
+ <YD5B7P++T6jLoWBR@kernel.org>
+ <1f5c2375-39e2-65a8-3ad3-8dc43422f568@linux.alibaba.com>
+ <YEk8f/29icpsUhas@kernel.org>
+ <20ef1254-007d-04ce-8df5-5122ffd4d8d3@linux.alibaba.com>
+ <YEmRlQ8vL2inziEK@kernel.org>
+ <710b65d6-e492-ae24-f2af-6973e1df1b85@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5419ebe6-bb82-9b66-052b-0eefff93e5ae@sony.com>
-X-Provags-ID: V03:K1:nYmy5eaPQHj33hgRpiMxaTOcPMTYvN7xaS3wyLDazjP5V/YFb4Z
- znbqz2yNzZRPv4v+XFaAXX+Xy1YuYETB7K1FSzeSQ5md6tzqj4qkIMLy7qnvRGB+bUMKerI
- Hb/iKHMgrnztcYSIrmeJqfekU4XRdUE9KXDk+RiRNfCdDfNKDGpFrqbXTlRloURX604NGHh
- WMhhaIq892k+SuVCS052g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TPWopnVyQWU=:NfpcNJWDWUL5ams7fHn7cV
- ejevW9rLBSX4FsFEKy6ZYk2l3BJjqw9L9bPFgiNcG5vYjf8STw/q8ZjDYW2KfCfQ1ko21arHJ
- RYhwPDvFE3biBT+p4shdN9vK3DdRbofwZbDS7bi0f3N3xAObXLJQc2RTBbDgMJ7xRePmhgHWp
- Lj3lRPRz0MgoWfwypkFBEeeaIZ5pyL38RWjuBE4TZ8YWS+qFZZIkSVsAOVUQpXZfjJ5bdM7ZP
- dyHetdrMr0M0pygmRv4I+TdELeTkMuAPueOYzj6jz1AtF0PtEn5EggjBAbcixayk7d2jgjWvS
- sG5ShaOHhwcT/bWSIHXdhIzlchVMIenECsj7+uGsZLt7IiICkDxBn5+FZ3FZQEk7udg47P5NJ
- P2MtDnfih+tSAqzN21jJL3n9nl7HsVU9JkOJC420kO+GMOO4vczoeYPGICqQVR3lZdzwskDg4
- zh14aHE05Ae/6C4dYTDFCU9Q15sNdtXUGg/QqhUgO6w74po9TgZHXR+w22Yeye8LYfoM8MBIO
- G9+f/VBz5GZ9bLgz4sYGzQMwSlbtTQX/Jcxlgc3P/8fCOnhRmOwaW8m+iU/2GHI1Msh5aoGRU
- 5VwnXSQ4lH7KAqx38dpXxAqc0pOs0jpscBGramBdM0kGlx4gllHJIibak7rjvm0mGVLJxqxfd
- Evc1miLzs4bsq7AidaFvmEesGvz/F5OHVByQyu9IrshWTyAtYdt9sJ/JVZBiqY2xcbrhrSu+4
- WxheGmLZIF6QyumbTKczXdhYqWbGU0IlGSRCFHi0gb8y9cnTs3m6/t+Kb4RHYfkMVcv/Iykol
- +Xp0kfBwI1vcC8wrzEH8Ob8XPYok10MfY58kllIXt4gwGn4alrGRh9KAzcExFr5jXo1kKJe3A
- lbMbcTaQ6SqOoW0yNKBw==
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <710b65d6-e492-ae24-f2af-6973e1df1b85@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Thu, Mar 11, 2021 at 12:53:49PM +0800, Tianjia Zhang wrote:
+> 
+> 
+> On 3/11/21 11:42 AM, Jarkko Sakkinen wrote:
+> > On Thu, Mar 11, 2021 at 10:47:50AM +0800, Jia Zhang wrote:
+> > > 
+> > > 
+> > > On 2021/3/11 上午5:39, Jarkko Sakkinen wrote:
+> > > > On Wed, Mar 10, 2021 at 08:44:44PM +0800, Jia Zhang wrote:
+> > > > > 
+> > > > > 
+> > > > > On 2021/3/2 下午9:47, Jarkko Sakkinen wrote:
+> > > > > > On Mon, Mar 01, 2021 at 09:54:37PM -0800, Andy Lutomirski wrote:
+> > > > > > > On Mon, Mar 1, 2021 at 9:06 PM Tianjia Zhang
+> > > > > > > <tianjia.zhang@linux.alibaba.com> wrote:
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > On 3/1/21 5:54 PM, Jarkko Sakkinen wrote:
+> > > > > > > > > On Mon, Mar 01, 2021 at 01:18:36PM +0800, Tianjia Zhang wrote:
+> > > > > > > > > > q2 is not always 384-byte length. Sometimes it only has 383-byte.
+> > > > > > > > > 
+> > > > > > > > > What does determine this?
+> > > > > > > > > 
+> > > > > > > > > > In this case, the valid portion of q2 is reordered reversely for
+> > > > > > > > > > little endian order, and the remaining portion is filled with zero.
+> > > > > > > > > 
+> > > > > > > > > I'm presuming that you want to say "In this case, q2 needs to be reversed because...".
+> > > > > > > > > 
+> > > > > > > > > I'm lacking these details:
+> > > > > > > > > 
+> > > > > > > > > 1. Why the length of Q2 can vary?
+> > > > > > > > > 2. Why reversing the bytes is the correct measure to counter-measure
+> > > > > > > > >      this variation?
+> > > > > > > > > 
+> > > > > > > > > /Jarkko
+> > > > > > > > > 
+> > > > > > > > 
+> > > > > > > > When use openssl to generate a key instead of using the built-in
+> > > > > > > > sign_key.pem, there is a probability that will encounter this problem.
+> > > > > > > > 
+> > > > > > > > Here is a problematic key I encountered. The calculated q1 and q2 of
+> > > > > > > > this key are both 383 bytes, If the length is not processed, the
+> > > > > > > > hardware signature will fail.
+> > > > > > > 
+> > > > > > > Presumably the issue is that some keys have parameters that have
+> > > > > > > enough leading 0 bits to be effectively shorter.  The openssl API
+> > > > > > > (and, sadly, a bunch  of the ASN.1 stuff) treats these parameters as
+> > > > > > > variable-size integers.
+> > > > > > 
+> > > > > > But the test uses a static key. It used to generate a key on fly but
+> > > > > 
+> > > > > IMO even though the test code, it comes from the linux kernel, meaning
+> > > > > that its quality has a certain guarantee and it is a good reference, so
+> > > > > the test code still needs to ensure its correctness.
+> > > > 
+> > > > Hmm... what is working incorrectly then?
+> > > 
+> > > In current implementation, it is working well, after all the static key
+> > > can derive the full 384-byte length of q1 and q2. As mentioned above, if
+> > > someone refers to the design of signing tool from selftest code, it is
+> > > quite possible that the actual implementation will use dynamical or
+> > > external signing key deriving shorter q1 and/or q2 in length.
+> > 
+> > A self-test needs is not meant to be generic to be directly used in 3rd
+> > party code. With the current key there is not issue => there is no issue.
+> > 
+> 
+> For keys generated on fly, self-test does not work properly, this experience
+> is really worse.
 
-On Thu, Mar 11, 2021 at 09:32:47PM +0100, peter enderborg wrote:
-> On 2/27/21 4:30 PM, John Wood wrote:
-> > In order to mitigate a brute force attack all the offending tasks invo=
-lved
-> > in the attack must be killed. In other words, it is necessary to kill =
-all
-> > the tasks that share the fork and/or exec statistical data related to =
-the
-> > attack. Moreover, if the attack happens through the fork system call, =
-the
-> > processes that have the same group_leader that the current task (the t=
-ask
-> > that has crashed) must be avoided since they are in the path to be kil=
-led.
-> >
-> > When the SIGKILL signal is sent to the offending tasks, the function
-> > "brute_kill_offending_tasks" will be called in a recursive way from th=
-e
-> > task_fatal_signal LSM hook due to a small crash period. So, to avoid k=
-ill
-> > again the same tasks due to a recursive call of this function, it is
-> > necessary to disable the attack detection for the involved hierarchies=
-.
->
-> Would it not be useful for forensic reasons to be able to send SIGABRT a=
-nd get the a coredump?
+It does not generate keys on fly. There's a static key.
 
-If there are many tasks involved in the attack we will generate a big numb=
-er of
-coredumps (one per task aborted). This can be solved if we send the SIGABR=
-T to
-terminate the first process found and send SIGKILL to terminate the remain=
-ing
-processes. But I don't know if under this scenario we will get a core dump=
- with
-lack of information (the info related to the other processes).
-
-Another scenario:
-
-The process that crashes is the last in the fork hierarchy and triggers a =
-brute
-force attack mitigation. In this case it it not necessary to kill the proc=
-ess
-that crashes since it is in the path to be killed. So, under this situatio=
-n we
-will not get a coredump (we don't send any signal). Lack of information ag=
-ain.
-
-Currently, we show the name of the task that triggers the mitigation, the =
-attack
-type (fork or exec) and the name and pid of all the offending tasks involv=
-ed in
-the attack (the tasks that we kill). If it's necessary we can show more in=
-fo.
-What info do you think would be necessary?
-
-Thanks,
-John Wood
+/Jarkko
