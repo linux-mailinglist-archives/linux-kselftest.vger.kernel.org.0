@@ -2,174 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 391CE3384D0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Mar 2021 06:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFB5338B52
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Mar 2021 12:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbhCLFDo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Mar 2021 00:03:44 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:3360 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbhCLFDe (ORCPT
+        id S233653AbhCLLPp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Mar 2021 06:15:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36515 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233332AbhCLLPd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Mar 2021 00:03:34 -0500
-Received: from DGGEMM406-HUB.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4DxYYY6x8gz5T4V;
-        Fri, 12 Mar 2021 13:01:05 +0800 (CST)
-Received: from dggpemm500023.china.huawei.com (7.185.36.83) by
- DGGEMM406-HUB.china.huawei.com (10.3.20.214) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Fri, 12 Mar 2021 13:03:23 +0800
-Received: from [10.174.187.128] (10.174.187.128) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2106.2; Fri, 12 Mar 2021 13:03:22 +0800
-Subject: Re: [RFC PATCH v4 0/9] KVM: selftests: some improvement and a new
- test for kvm page table
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Ben Gardon <bgardon@google.com>,
+        Fri, 12 Mar 2021 06:15:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615547732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hXSshFQeFLOgp+frZhl0j2pqci63p2uc+L6BvWuJgGc=;
+        b=hDDtuFwYah/+0re7f5q2Mg20ylFw/vom8fS/r1aFgwaGKd7vv+usAwVckgVhbFGvQpiaAx
+        HqWcdTg/zCXKBP+Dy1cQ4d/Jf/f+iFVu7yp+gY1FcAHVTgdTfd5AlZLzrzjV69+c+PKCme
+        DcZA27BdRGzu3zng6jGDwJM/qqgE2zk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-207-QvrsFBn2OPm5U9RfuB7OUg-1; Fri, 12 Mar 2021 06:15:30 -0500
+X-MC-Unique: QvrsFBn2OPm5U9RfuB7OUg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 27152100C691;
+        Fri, 12 Mar 2021 11:15:28 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.40.192.104])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 991C17A8CA;
+        Fri, 12 Mar 2021 11:14:59 +0000 (UTC)
+Date:   Fri, 12 Mar 2021 12:14:56 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     Yanan Wang <wangyanan55@huawei.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
         Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Ingo Molnar <mingo@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
-        <yuzenghui@huawei.com>
+        wanghaibin.wang@huawei.com, yezengruan@huawei.com,
+        yuzenghui@huawei.com
+Subject: Re: [RFC PATCH v4 2/9] tools headers: Add a macro to get HUGETLB
+ page sizes for mmap
+Message-ID: <20210312111456.ukxss6uxu3frqmiu@kamzik.brq.redhat.com>
 References: <20210302125751.19080-1-wangyanan55@huawei.com>
-From:   "wangyanan (Y)" <wangyanan55@huawei.com>
-Message-ID: <086dfadc-70c5-1a90-e7ff-e1f1095733bb@huawei.com>
-Date:   Fri, 12 Mar 2021 13:03:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+ <20210302125751.19080-3-wangyanan55@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20210302125751.19080-1-wangyanan55@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.187.128]
-X-ClientProxiedBy: dggeme714-chm.china.huawei.com (10.1.199.110) To
- dggpemm500023.china.huawei.com (7.185.36.83)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210302125751.19080-3-wangyanan55@huawei.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi all,
-
-Kindly ping :)!
-
-Are there any further comments for this v4 series? Please let me know if 
-there
-is still something that needs fixing.
-
-Or is this v4 series fine enough to be queued? Most of the patches have been
-added with Reviewed-by. If there are merge conflicts with the newest branch,
-please also let me know and I will send a new version fixed.
-
-Regards,
-Yanan
-
-On 2021/3/2 20:57, Yanan Wang wrote:
-> Hi,
-> This v4 series can mainly include two parts.
-> Based on kvm queue branch: https://git.kernel.org/pub/scm/virt/kvm/kvm.git/log/?h=queue
-> Links of v1: https://lore.kernel.org/lkml/20210208090841.333724-1-wangyanan55@huawei.com/
-> Links of v2: https://lore.kernel.org/lkml/20210225055940.18748-1-wangyanan55@huawei.com/
-> Links of v3: https://lore.kernel.org/lkml/20210301065916.11484-1-wangyanan55@huawei.com/
->
-> In the first part, all the known hugetlb backing src types specified
-> with different hugepage sizes are listed, so that we can specify use
-> of hugetlb source of the exact granularity that we want, instead of
-> the system default ones. And as all the known hugetlb page sizes are
-> listed, it's appropriate for all architectures. Besides, a helper that
-> can get granularity of different backing src types(anonumous/thp/hugetlb)
-> is added, so that we can use the accurate backing src granularity for
-> kinds of alignment or guest memory accessing of vcpus.
->
-> In the second part, a new test is added:
-> This test is added to serve as a performance tester and a bug reproducer
-> for kvm page table code (GPA->HPA mappings), it gives guidance for the
-> people trying to make some improvement for kvm. And the following explains
-> what we can exactly do through this test.
->
-> The function guest_code() can cover the conditions where a single vcpu or
-> multiple vcpus access guest pages within the same memory region, in three
-> VM stages(before dirty logging, during dirty logging, after dirty logging).
-> Besides, the backing src memory type(ANONYMOUS/THP/HUGETLB) of the tested
-> memory region can be specified by users, which means normal page mappings
-> or block mappings can be chosen by users to be created in the test.
->
-> If ANONYMOUS memory is specified, kvm will create normal page mappings
-> for the tested memory region before dirty logging, and update attributes
-> of the page mappings from RO to RW during dirty logging. If THP/HUGETLB
-> memory is specified, kvm will create block mappings for the tested memory
-> region before dirty logging, and split the blcok mappings into normal page
-> mappings during dirty logging, and coalesce the page mappings back into
-> block mappings after dirty logging is stopped.
->
-> So in summary, as a performance tester, this test can present the
-> performance of kvm creating/updating normal page mappings, or the
-> performance of kvm creating/splitting/recovering block mappings,
-> through execution time.
->
-> When we need to coalesce the page mappings back to block mappings after
-> dirty logging is stopped, we have to firstly invalidate *all* the TLB
-> entries for the page mappings right before installation of the block entry,
-> because a TLB conflict abort error could occur if we can't invalidate the
-> TLB entries fully. We have hit this TLB conflict twice on aarch64 software
-> implementation and fixed it. As this test can imulate process from dirty
-> logging enabled to dirty logging stopped of a VM with block mappings,
-> so it can also reproduce this TLB conflict abort due to inadequate TLB
-> invalidation when coalescing tables.
->
-> Links about the TLB conflict abort:
-> https://lore.kernel.org/lkml/20201201201034.116760-3-wangyanan55@huawei.com/
->
+On Tue, Mar 02, 2021 at 08:57:44PM +0800, Yanan Wang wrote:
+> We know that if a system supports multiple hugetlb page sizes,
+> the desired hugetlb page size can be specified in bits [26:31]
+> of the flag arguments. The value in these 6 bits will be the
+> shift of each hugetlb page size.
+> 
+> So add a macro to get the page size shift and then calculate the
+> corresponding hugetlb page size, using flag x.
+> 
+> Cc: Ben Gardon <bgardon@google.com>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Suggested-by: Ben Gardon <bgardon@google.com>
+> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
 > ---
->
-> Change logs:
->
-> v3->v4:
-> - Add a helper to get system default hugetlb page size
-> - Add tags of Reviewed-by of Ben in the patches
->
-> v2->v3:
-> - Add tags of Suggested-by, Reviewed-by in the patches
-> - Add a generic micro to get hugetlb page sizes
-> - Some changes for suggestions about v2 series
->
-> v1->v2:
-> - Add a patch to sync header files
-> - Add helpers to get granularity of different backing src types
-> - Some changes for suggestions about v1 series
->
-> ---
->
-> Yanan Wang (9):
->    tools headers: sync headers of asm-generic/hugetlb_encode.h
->    tools headers: Add a macro to get HUGETLB page sizes for mmap
->    KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
->    KVM: selftests: Make a generic helper to get vm guest mode strings
->    KVM: selftests: Add a helper to get system configured THP page size
->    KVM: selftests: Add a helper to get system default hugetlb page size
->    KVM: selftests: List all hugetlb src types specified with page sizes
->    KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
->    KVM: selftests: Add a test for kvm page table code
->
->   include/uapi/linux/mman.h                     |   2 +
->   tools/include/asm-generic/hugetlb_encode.h    |   3 +
->   tools/include/uapi/linux/mman.h               |   2 +
->   tools/testing/selftests/kvm/Makefile          |   3 +
->   .../selftests/kvm/demand_paging_test.c        |   8 +-
->   .../selftests/kvm/dirty_log_perf_test.c       |  14 +-
->   .../testing/selftests/kvm/include/kvm_util.h  |   4 +-
->   .../testing/selftests/kvm/include/test_util.h |  21 +-
->   .../selftests/kvm/kvm_page_table_test.c       | 476 ++++++++++++++++++
->   tools/testing/selftests/kvm/lib/kvm_util.c    |  59 ++-
->   tools/testing/selftests/kvm/lib/test_util.c   | 122 ++++-
->   tools/testing/selftests/kvm/steal_time.c      |   4 +-
->   12 files changed, 659 insertions(+), 59 deletions(-)
->   create mode 100644 tools/testing/selftests/kvm/kvm_page_table_test.c
->
+>  include/uapi/linux/mman.h       | 2 ++
+>  tools/include/uapi/linux/mman.h | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/include/uapi/linux/mman.h b/include/uapi/linux/mman.h
+> index f55bc680b5b0..8bd41128a0ee 100644
+> --- a/include/uapi/linux/mman.h
+> +++ b/include/uapi/linux/mman.h
+> @@ -41,4 +41,6 @@
+>  #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
+>  #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
+>  
+> +#define MAP_HUGE_PAGE_SIZE(x) (1 << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
+
+Needs to be '1ULL' to avoid shift overflow when given MAP_HUGE_16GB.
+
+Thanks,
+drew
+
+> +
+>  #endif /* _UAPI_LINUX_MMAN_H */
+> diff --git a/tools/include/uapi/linux/mman.h b/tools/include/uapi/linux/mman.h
+> index f55bc680b5b0..8bd41128a0ee 100644
+> --- a/tools/include/uapi/linux/mman.h
+> +++ b/tools/include/uapi/linux/mman.h
+> @@ -41,4 +41,6 @@
+>  #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
+>  #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
+>  
+> +#define MAP_HUGE_PAGE_SIZE(x) (1 << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
+> +
+>  #endif /* _UAPI_LINUX_MMAN_H */
+> -- 
+> 2.23.0
+> 
+
