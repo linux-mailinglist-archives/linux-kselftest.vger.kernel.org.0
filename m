@@ -2,108 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CADC333A484
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Mar 2021 12:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B5E33A989
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Mar 2021 03:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbhCNLQz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Mar 2021 07:16:55 -0400
-Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:37806 "EHLO
-        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235115AbhCNLQ0 (ORCPT
+        id S229767AbhCOCGt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Mar 2021 22:06:49 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:2600 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229784AbhCOCGi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Mar 2021 07:16:26 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0URqdWtn_1615720581;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0URqdWtn_1615720581)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 14 Mar 2021 19:16:22 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        Sun, 14 Mar 2021 22:06:38 -0400
+Received: from DGGEMM404-HUB.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4DzKTN656BzWLZW;
+        Mon, 15 Mar 2021 10:03:36 +0800 (CST)
+Received: from dggpemm500023.china.huawei.com (7.185.36.83) by
+ DGGEMM404-HUB.china.huawei.com (10.3.20.212) with Microsoft SMTP Server (TLS)
+ id 14.3.498.0; Mon, 15 Mar 2021 10:06:35 +0800
+Received: from [10.174.187.128] (10.174.187.128) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2106.2; Mon, 15 Mar 2021 10:06:34 +0800
+Subject: Re: [RFC PATCH v4 2/9] tools headers: Add a macro to get HUGETLB page
+ sizes for mmap
+To:     Andrew Jones <drjones@redhat.com>
+CC:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Ben Gardon" <bgardon@google.com>,
         Sean Christopherson <seanjc@google.com>,
-        Shuah Khan <shuah@kernel.org>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v6] selftests/x86: Use getauxval() to simplify the code in sgx
-Date:   Sun, 14 Mar 2021 19:16:21 +0800
-Message-Id: <20210314111621.68428-1-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.3.ge56e4f7
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "Arnaldo Carvalho de Melo" <acme@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
+        <yuzenghui@huawei.com>
+References: <20210302125751.19080-1-wangyanan55@huawei.com>
+ <20210302125751.19080-3-wangyanan55@huawei.com>
+ <20210312111456.ukxss6uxu3frqmiu@kamzik.brq.redhat.com>
+From:   "wangyanan (Y)" <wangyanan55@huawei.com>
+Message-ID: <84b12a41-a922-4a5a-8861-d2c310cdaa66@huawei.com>
+Date:   Mon, 15 Mar 2021 10:06:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210312111456.ukxss6uxu3frqmiu@kamzik.brq.redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.187.128]
+X-ClientProxiedBy: dggeme708-chm.china.huawei.com (10.1.199.104) To
+ dggpemm500023.china.huawei.com (7.185.36.83)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Simplify the sgx code implemntation by using library function
-getauxval() instead of a custom function to get the base address
-of vDSO.
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/sgx/main.c | 24 ++++--------------------
- 1 file changed, 4 insertions(+), 20 deletions(-)
-
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 724cec700926..5167505fbb46 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -15,6 +15,7 @@
- #include <sys/stat.h>
- #include <sys/time.h>
- #include <sys/types.h>
-+#include <sys/auxv.h>
- #include "defines.h"
- #include "main.h"
- #include "../kselftest.h"
-@@ -28,24 +29,6 @@ struct vdso_symtab {
- 	Elf64_Word *elf_hashtab;
- };
- 
--static void *vdso_get_base_addr(char *envp[])
--{
--	Elf64_auxv_t *auxv;
--	int i;
--
--	for (i = 0; envp[i]; i++)
--		;
--
--	auxv = (Elf64_auxv_t *)&envp[i + 1];
--
--	for (i = 0; auxv[i].a_type != AT_NULL; i++) {
--		if (auxv[i].a_type == AT_SYSINFO_EHDR)
--			return (void *)auxv[i].a_un.a_val;
--	}
--
--	return NULL;
--}
--
- static Elf64_Dyn *vdso_get_dyntab(void *addr)
- {
- 	Elf64_Ehdr *ehdr = addr;
-@@ -162,7 +145,7 @@ static int user_handler(long rdi, long rsi, long rdx, long ursp, long r8, long r
- 	return 0;
- }
- 
--int main(int argc, char *argv[], char *envp[])
-+int main(int argc, char *argv[])
- {
- 	struct sgx_enclave_run run;
- 	struct vdso_symtab symtab;
-@@ -203,7 +186,8 @@ int main(int argc, char *argv[], char *envp[])
- 	memset(&run, 0, sizeof(run));
- 	run.tcs = encl.encl_base;
- 
--	addr = vdso_get_base_addr(envp);
-+	/* Get vDSO base address */
-+	addr = (void *)getauxval(AT_SYSINFO_EHDR);
- 	if (!addr)
- 		goto err;
- 
--- 
-2.19.1.3.ge56e4f7
-
+On 2021/3/12 19:14, Andrew Jones wrote:
+> On Tue, Mar 02, 2021 at 08:57:44PM +0800, Yanan Wang wrote:
+>> We know that if a system supports multiple hugetlb page sizes,
+>> the desired hugetlb page size can be specified in bits [26:31]
+>> of the flag arguments. The value in these 6 bits will be the
+>> shift of each hugetlb page size.
+>>
+>> So add a macro to get the page size shift and then calculate the
+>> corresponding hugetlb page size, using flag x.
+>>
+>> Cc: Ben Gardon <bgardon@google.com>
+>> Cc: Ingo Molnar <mingo@kernel.org>
+>> Cc: Adrian Hunter <adrian.hunter@intel.com>
+>> Cc: Jiri Olsa <jolsa@redhat.com>
+>> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Suggested-by: Ben Gardon <bgardon@google.com>
+>> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+>> Reviewed-by: Ben Gardon <bgardon@google.com>
+>> ---
+>>   include/uapi/linux/mman.h       | 2 ++
+>>   tools/include/uapi/linux/mman.h | 2 ++
+>>   2 files changed, 4 insertions(+)
+>>
+>> diff --git a/include/uapi/linux/mman.h b/include/uapi/linux/mman.h
+>> index f55bc680b5b0..8bd41128a0ee 100644
+>> --- a/include/uapi/linux/mman.h
+>> +++ b/include/uapi/linux/mman.h
+>> @@ -41,4 +41,6 @@
+>>   #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
+>>   #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
+>>   
+>> +#define MAP_HUGE_PAGE_SIZE(x) (1 << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
+> Needs to be '1ULL' to avoid shift overflow when given MAP_HUGE_16GB.
+Thanks, drew. Will fix it.
+> Thanks,
+> drew
+>
+>> +
+>>   #endif /* _UAPI_LINUX_MMAN_H */
+>> diff --git a/tools/include/uapi/linux/mman.h b/tools/include/uapi/linux/mman.h
+>> index f55bc680b5b0..8bd41128a0ee 100644
+>> --- a/tools/include/uapi/linux/mman.h
+>> +++ b/tools/include/uapi/linux/mman.h
+>> @@ -41,4 +41,6 @@
+>>   #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
+>>   #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
+>>   
+>> +#define MAP_HUGE_PAGE_SIZE(x) (1 << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
+>> +
+>>   #endif /* _UAPI_LINUX_MMAN_H */
+>> -- 
+>> 2.23.0
+>>
+> .
