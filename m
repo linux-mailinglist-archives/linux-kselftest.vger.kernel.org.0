@@ -2,57 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B27833AD0F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Mar 2021 09:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1DB33AF42
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Mar 2021 10:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbhCOIIZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Mar 2021 04:08:25 -0400
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:55787 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229924AbhCOIHx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Mar 2021 04:07:53 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0URxYg3w_1615795656;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0URxYg3w_1615795656)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 15 Mar 2021 16:07:51 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     john.stultz@linaro.org
-Cc:     tglx@linutronix.de, sboyd@kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] selftests: timers: remove unneeded semicolon
-Date:   Mon, 15 Mar 2021 16:07:35 +0800
-Message-Id: <1615795655-5560-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S229490AbhCOJtp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Mar 2021 05:49:45 -0400
+Received: from mga04.intel.com ([192.55.52.120]:53018 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229507AbhCOJtm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Mar 2021 05:49:42 -0400
+IronPort-SDR: vlyfWj7s5VqZT2DHOROlMd+D0X3yvfWmqKk/XD3/rY7ZYURQujG6TweKgeKjoRBlr9rHGaETeb
+ KQ1EvAQkeCEg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9923"; a="186683205"
+X-IronPort-AV: E=Sophos;i="5.81,249,1610438400"; 
+   d="scan'208";a="186683205"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2021 02:49:42 -0700
+IronPort-SDR: ju2PdNjCk2vkHJj2p/UeomQy3cAGMMXMMz5NIaXdre6EMJKBqsfwMgnUVG8kP1AqbWm11r1zZe
+ 3NTQrvJaH4JQ==
+X-IronPort-AV: E=Sophos;i="5.81,249,1610438400"; 
+   d="scan'208";a="411782993"
+Received: from shao2-debian.sh.intel.com (HELO localhost) ([10.239.13.11])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2021 02:49:40 -0700
+From:   Rong Chen <rong.a.chen@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Rong Chen <rong.a.chen@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/vm: fix out-of-tree build
+Date:   Mon, 15 Mar 2021 17:47:00 +0800
+Message-Id: <20210315094700.522753-1-rong.a.chen@intel.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following coccicheck warnings:
+When building out-of-tree, attempting to make target from $(OUTPUT) directory:
 
-./tools/testing/selftests/timers/inconsistency-check.c:75:2-3: Unneeded
-semicolon.
+  make[1]: *** No rule to make target '$(OUTPUT)/protection_keys.c', needed by '$(OUTPUT)/protection_keys_32'.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Rong Chen <rong.a.chen@intel.com>
 ---
- tools/testing/selftests/timers/inconsistency-check.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/vm/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/timers/inconsistency-check.c b/tools/testing/selftests/timers/inconsistency-check.c
-index 022d3ff..e6756d9 100644
---- a/tools/testing/selftests/timers/inconsistency-check.c
-+++ b/tools/testing/selftests/timers/inconsistency-check.c
-@@ -72,7 +72,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 4cbc91d6869f..73e1cc96d7c2 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -102,7 +102,7 @@ endef
+ ifeq ($(CAN_BUILD_I386),1)
+ $(BINARIES_32): CFLAGS += -m32
+ $(BINARIES_32): LDLIBS += -lrt -ldl -lm
+-$(BINARIES_32): %_32: %.c
++$(BINARIES_32): $(OUTPUT)/%_32: %.c
+ 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
+ $(foreach t,$(TARGETS),$(eval $(call gen-target-rule-32,$(t))))
+ endif
+@@ -110,7 +110,7 @@ endif
+ ifeq ($(CAN_BUILD_X86_64),1)
+ $(BINARIES_64): CFLAGS += -m64
+ $(BINARIES_64): LDLIBS += -lrt -ldl
+-$(BINARIES_64): %_64: %.c
++$(BINARIES_64): $(OUTPUT)/%_64: %.c
+ 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
+ $(foreach t,$(TARGETS),$(eval $(call gen-target-rule-64,$(t))))
+ endif
 -- 
-1.8.3.1
+2.20.1
 
