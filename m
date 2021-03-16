@@ -2,171 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4304333D413
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Mar 2021 13:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B83933D7A6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Mar 2021 16:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbhCPMlp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Mar 2021 08:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbhCPMlX (ORCPT
+        id S237102AbhCPPeW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Mar 2021 11:34:22 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39188 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237018AbhCPPdi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Mar 2021 08:41:23 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795A4C061756;
-        Tue, 16 Mar 2021 05:41:22 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id l11so10377269wrp.7;
-        Tue, 16 Mar 2021 05:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=FKA9LCaSzGqlDY+ma6Pbkwu97ws+JFck82rXUU4n3VI=;
-        b=be6fZVZuK3yvPl4i1ZZ6jb7PBWRPcpFRTuwUepjnwS1EeHmOx/BmUerWkqsPFvZYlU
-         B159Nay12NqnXO0CPRkBlV0F5goAkxUVKDEa7zAevv8mTL3qYPV+2wc81zQplR7OFcj9
-         cxvWf71d6eHAaAYuzWhU3VPxJOz+tZLKpVk2nxMd9csDhsP6GAPkQRB/rG9i388B8FJn
-         iJQxeRduiFHbzwaknNZPkH72PxI86u1zklNDInIEotyTnTU5BteNllaGMNw4uD5pJKUP
-         kKwB64/sJV3PRqDCLTdSVZr9xOGTBr4yzkT3V/QQ2BWAljj2JQvXRypJzlwlsFsHexzL
-         6rtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=FKA9LCaSzGqlDY+ma6Pbkwu97ws+JFck82rXUU4n3VI=;
-        b=Wo7LirqBlacI6Sn9g8dUeAs1uUpnebvfCVdIW+5x2qeSOgczASyMarklNl/uL7USve
-         YH/6ZudzhTsc/AbrV/LKVJ+bh/ie9qHHzGAUwy6hW9t/FCsKGY6TKTz+zes/qCSil40H
-         2O4imwCNc/DAYMA8cguMUu7DTNmY86k0ffZkcar1Enjjfos7Cn6IaOSAfe6g1y3v/6fV
-         Hvi5wI4p6MblQWvnX73DGQMW5daPWQqmqshzApkFTC/3TUnjGsD/uAeliMUBJ037WQUn
-         fmg/3c2xoyiDL+jr/z9Efq73Pyo5qZ8Msr20WaAjZlcu9yRTL45Gw661rH420UBFgjbA
-         8ZIQ==
-X-Gm-Message-State: AOAM5313SmuYBt5Xt8u2i9bqopiSMqmzn32T+ExIf/9X5kyz0Bk/epk/
-        TDI89j3iuDEPg6kSbvXvzA0=
-X-Google-Smtp-Source: ABdhPJxXBUubcBSE2HzU+/3aoiwzGywJKL9g6xjyBDBdp+2XYBerL0EbLrX8hHvqMOgpV59FNK3TBg==
-X-Received: by 2002:a05:6000:1281:: with SMTP id f1mr4742194wrx.243.1615898481251;
-        Tue, 16 Mar 2021 05:41:21 -0700 (PDT)
-Received: from oliver-Z170M-D3H.cuni.cz ([2001:718:1e03:5128:e847:73bd:bb49:39d7])
-        by smtp.gmail.com with ESMTPSA id o2sm3042159wme.16.2021.03.16.05.41.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 05:41:20 -0700 (PDT)
-From:   glittao@gmail.com
-To:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, Oliver Glitta <glittao@gmail.com>
-Subject: [PATCH 2/2] slub: remove resiliency_test() function
-Date:   Tue, 16 Mar 2021 13:41:18 +0100
-Message-Id: <20210316124118.6874-2-glittao@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210316124118.6874-1-glittao@gmail.com>
-References: <20210316124118.6874-1-glittao@gmail.com>
+        Tue, 16 Mar 2021 11:33:38 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12GFWU6o028602;
+        Tue, 16 Mar 2021 11:33:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=wvx0A17d10zrF1mcTCQau1RHRzJqamyX8Hub+5TYDsg=;
+ b=jcB8jayUDWXcLDs8vv/3dlHCZ6kG/mXfNtzU52j1DlCh2TVRuv4IzWHSdULLYfSVaDN6
+ Pocc6gDD8AjHeAXEdo2X1K0rsIA9+2ZXrKwNqB691CnyAJZoxqe/zduxA2T33zz2t9qR
+ DoU9zGwXDMNjRW3IfbCDc05AdUxndf8Srm/tSt7ARzswypWmpLKlgi4ZNo/wMBTC9Jrj
+ 4qVmwEBvo6CleNmJntgUdxQzteHYLqoo3elFFEfDbyG47FoaELSu+HCvvBmb/+PCnNPR
+ Kd8OS9X/lzmZs0LKujf2VKYzkTy1Q6bPFkW8/xBbE6KiyQMoH5ePVMIGFfGX345JiuRx kQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37ap2tj1ns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Mar 2021 11:33:19 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12GFWnQA031997;
+        Tue, 16 Mar 2021 11:33:19 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37ap2tj1n0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Mar 2021 11:33:18 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12GFKemN006178;
+        Tue, 16 Mar 2021 15:33:17 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 378mnh9jrt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Mar 2021 15:33:16 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12GFXEAU44630412
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Mar 2021 15:33:14 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E2AE52051;
+        Tue, 16 Mar 2021 15:33:14 +0000 (GMT)
+Received: from bangoria.ibmuc.com (unknown [9.199.38.113])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 05C825205A;
+        Tue, 16 Mar 2021 15:33:10 +0000 (GMT)
+From:   Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+To:     ast@kernel.org, shuah@kernel.org
+Cc:     ravi.bangoria@linux.ibm.com, daniel@iogearbox.net, yhs@fb.com,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/bpf/get_cgroup_id: Use nanosleep() syscall instead of sleep()
+Date:   Tue, 16 Mar 2021 21:00:48 +0530
+Message-Id: <20210316153048.136447-1-ravi.bangoria@linux.ibm.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-16_05:2021-03-16,2021-03-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 lowpriorityscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 phishscore=0 clxscore=1011
+ impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2103160104
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Oliver Glitta <glittao@gmail.com>
+Glibc sleep() switched to clock_nanosleep() from nanosleep(),
+thus syscalls:sys_enter_nanosleep tracepoint is not hitting
+which is causing testcase failure. Instead of depending on
+glibc sleep(), call nanosleep() systemcall directly.
 
-Function resiliency_test() is hidden behind #ifdef
-SLUB_RESILIENCY_TEST that is not part of Kconfig, so nobody
-runs it.
+Before:
+  # ./get_cgroup_id_user
+  ...
+  main:FAIL:compare_cgroup_id kern cgid 0 user cgid 483
 
-This function is replaced with kselftest for SLUB added
-by the previous patch "selftests: add a kselftest for SLUB
-debugging functionality".
+After:
+  # ./get_cgroup_id_user
+  ...
+  main:PASS:compare_cgroup_id
 
-Signed-off-by: Oliver Glitta <glittao@gmail.com>
+Signed-off-by: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
 ---
- mm/slub.c | 64 -------------------------------------------------------
- 1 file changed, 64 deletions(-)
+ tools/testing/selftests/bpf/get_cgroup_id_user.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/mm/slub.c b/mm/slub.c
-index c00e2b263e03..bfeb9ecd56b4 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -153,9 +153,6 @@ static inline bool kmem_cache_has_cpu_partial(struct kmem_cache *s)
-  * - Variable sizing of the per node arrays
-  */
+diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+index b8d6aef99db4..99628e1a1e58 100644
+--- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
++++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+@@ -57,6 +57,10 @@ int main(int argc, char **argv)
+ 	__u32 key = 0, pid;
+ 	int exit_code = 1;
+ 	char buf[256];
++	const struct timespec req = {
++		.tv_sec = 1,
++		.tv_nsec = 0,
++	};
  
--/* Enable to test recovery from slab corruption on boot */
--#undef SLUB_RESILIENCY_TEST
--
- /* Enable to log cmpxchg failures */
- #undef SLUB_DEBUG_CMPXCHG
+ 	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
+ 	if (CHECK(cgroup_fd < 0, "cgroup_setup_and_join", "err %d errno %d\n", cgroup_fd, errno))
+@@ -115,7 +119,7 @@ int main(int argc, char **argv)
+ 		goto close_pmu;
  
-@@ -4910,66 +4907,6 @@ static int list_locations(struct kmem_cache *s, char *buf,
- }
- #endif	/* CONFIG_SLUB_DEBUG */
+ 	/* trigger some syscalls */
+-	sleep(1);
++	syscall(__NR_nanosleep, &req, NULL);
  
--#ifdef SLUB_RESILIENCY_TEST
--static void __init resiliency_test(void)
--{
--	u8 *p;
--	int type = KMALLOC_NORMAL;
--
--	BUILD_BUG_ON(KMALLOC_MIN_SIZE > 16 || KMALLOC_SHIFT_HIGH < 10);
--
--	pr_err("SLUB resiliency testing\n");
--	pr_err("-----------------------\n");
--	pr_err("A. Corruption after allocation\n");
--
--	p = kzalloc(16, GFP_KERNEL);
--	p[16] = 0x12;
--	pr_err("\n1. kmalloc-16: Clobber Redzone/next pointer 0x12->0x%p\n\n",
--	       p + 16);
--
--	validate_slab_cache(kmalloc_caches[type][4]);
--
--	/* Hmmm... The next two are dangerous */
--	p = kzalloc(32, GFP_KERNEL);
--	p[32 + sizeof(void *)] = 0x34;
--	pr_err("\n2. kmalloc-32: Clobber next pointer/next slab 0x34 -> -0x%p\n",
--	       p);
--	pr_err("If allocated object is overwritten then not detectable\n\n");
--
--	validate_slab_cache(kmalloc_caches[type][5]);
--	p = kzalloc(64, GFP_KERNEL);
--	p += 64 + (get_cycles() & 0xff) * sizeof(void *);
--	*p = 0x56;
--	pr_err("\n3. kmalloc-64: corrupting random byte 0x56->0x%p\n",
--	       p);
--	pr_err("If allocated object is overwritten then not detectable\n\n");
--	validate_slab_cache(kmalloc_caches[type][6]);
--
--	pr_err("\nB. Corruption after free\n");
--	p = kzalloc(128, GFP_KERNEL);
--	kfree(p);
--	*p = 0x78;
--	pr_err("1. kmalloc-128: Clobber first word 0x78->0x%p\n\n", p);
--	validate_slab_cache(kmalloc_caches[type][7]);
--
--	p = kzalloc(256, GFP_KERNEL);
--	kfree(p);
--	p[50] = 0x9a;
--	pr_err("\n2. kmalloc-256: Clobber 50th byte 0x9a->0x%p\n\n", p);
--	validate_slab_cache(kmalloc_caches[type][8]);
--
--	p = kzalloc(512, GFP_KERNEL);
--	kfree(p);
--	p[512] = 0xab;
--	pr_err("\n3. kmalloc-512: Clobber redzone 0xab->0x%p\n\n", p);
--	validate_slab_cache(kmalloc_caches[type][9]);
--}
--#else
--#ifdef CONFIG_SYSFS
--static void resiliency_test(void) {};
--#endif
--#endif	/* SLUB_RESILIENCY_TEST */
--
- #ifdef CONFIG_SYSFS
- enum slab_stat_type {
- 	SL_ALL,			/* All slabs */
-@@ -5819,7 +5756,6 @@ static int __init slab_sysfs_init(void)
- 	}
- 
- 	mutex_unlock(&slab_mutex);
--	resiliency_test();
- 	return 0;
- }
- 
+ 	err = bpf_map_lookup_elem(cgidmap_fd, &key, &kcgid);
+ 	if (CHECK(err, "bpf_map_lookup_elem", "err %d errno %d\n", err, errno))
 -- 
-2.17.1
+2.29.2
 
