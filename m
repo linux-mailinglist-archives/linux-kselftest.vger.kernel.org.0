@@ -2,129 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2606233D9C8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Mar 2021 17:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DFE33DB98
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Mar 2021 18:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237047AbhCPQsz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Mar 2021 12:48:55 -0400
-Received: from casper.infradead.org ([90.155.50.34]:45110 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbhCPQsa (ORCPT
+        id S235659AbhCPRzU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Mar 2021 13:55:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59777 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239412AbhCPRy5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Mar 2021 12:48:30 -0400
-X-Greylist: delayed 1498 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Mar 2021 12:48:29 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DBugU3Nv275YIe120uunlkMX1JrxtNo2cLcdJHIRRa8=; b=e7JSqiKnj0Fjy8O1VZdkU8gkCi
-        Zw/Iz1lwQluCLAZfBohkABD1rVdE2kVrfyvK1+4832d+TiXQMXv/lr7Q5hW4755SvvtnLeWhwu/UK
-        ZLr0wF8JD9oYUbfAhf4kWlWlhwV0UfhWLnOkYY5alFkWFpWXjzqrIlkryBF+tHF+Xbocxlzvp5OEx
-        qVMZb45DGlaHOVFiOyZAAFZXnfYz9YoFyJeR+nL720n8wmeHS9s48kvIZH9appNazEolBO9gjntaA
-        9nVKg7HW8n3e91niZlUAdzdIYj1JS80VkyAn9Y/6ffS+By5FZmWfr1feL+o9Uf5BGX7F9MVIW1Afk
-        dmXojOVA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lMCSf-000J72-0j; Tue, 16 Mar 2021 16:22:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81C26305C22;
-        Tue, 16 Mar 2021 17:22:23 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 52EDE20B05D7C; Tue, 16 Mar 2021 17:22:23 +0100 (CET)
-Date:   Tue, 16 Mar 2021 17:22:23 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
-        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
-        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
-        mascasa@google.com, pcc@google.com, irogers@google.com,
-        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 3/8] perf/core: Add support for event removal on
- exec
-Message-ID: <YFDbP3obvxn0SL4w@hirez.programming.kicks-ass.net>
-References: <20210310104139.679618-1-elver@google.com>
- <20210310104139.679618-4-elver@google.com>
+        Tue, 16 Mar 2021 13:54:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615917296;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q+nIYLcJsbNrOQJXNJzvpf/dZa2SR4YCfI1fCwdaCUY=;
+        b=WsvcAM/DVZVN+35RQG4SU18F0p3n/dpdLxLxWAAmKFjaqnh3e65gERW6qfIO7IqkCxJQ8q
+        qGH3g4UIkk5SlcSS6KQOmSYkXOMz25ctOFCeD3iIaRz7PMkb+aczhGLtHdL3gNhmH9DLcY
+        LB0dVH2+spXH+ePpC9hSAz8ozFvlNls=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-592-Y1Ruw4_lNZiTAuMSoJPMUA-1; Tue, 16 Mar 2021 13:54:54 -0400
+X-MC-Unique: Y1Ruw4_lNZiTAuMSoJPMUA-1
+Received: by mail-wr1-f69.google.com with SMTP id p12so14461990wrn.18
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Mar 2021 10:54:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=q+nIYLcJsbNrOQJXNJzvpf/dZa2SR4YCfI1fCwdaCUY=;
+        b=JKjX9db+/TKuOdkAg80fiu2uQzigKehBRIXi2tmEYt2U+wwojITcXsYvtbHHVtOEeX
+         JgDG4JP2lZNgkB2p+D9YkuY218NqTROrQwe1TSv1Y4+iTjDkr+zX3XOPxZQsYM+6Mh5+
+         RxiYoNvzN/pK+ckXJ/JoC1zILCkSEKsD35jl2WQbLnbem08J5WdwxJY2bYcPEopTqq5h
+         DUCaNw+njBLUoYnbBGvkJqKR8gbtzHdjN/FShJJwMbJhi5HSy629aGgehwpCxftCvhGS
+         8sg/rzefKZs2Lg7KEcwkIaO9FoD83PAZZLXrBAQ0oYMg3D2xb/YD4g+/rMRmOeAvvsCG
+         IUaQ==
+X-Gm-Message-State: AOAM533AoY34VguJHT4Qwi8gGLt/fwDiPCYDmEOWcI3w0X4tDVk9Dtmx
+        VXVb3/ruFxKZAH+rZGOTV5R4sGCyhjzAiQ2ayIOZsYdY0/jKe3tQq9Mkk23hjGJgIGqH2619H41
+        bMt3UKQaNW2+Q856RUTsY7UQHm2ON
+X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr100834wmk.30.1615917293665;
+        Tue, 16 Mar 2021 10:54:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyhx2jdBpeYlHU1yJBLoi471Tl00503kY5ZdmFFXsMHSMA2gpxqqBKYhTriICrO+/ourTLAQg==
+X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr100818wmk.30.1615917293485;
+        Tue, 16 Mar 2021 10:54:53 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id s83sm7994wms.16.2021.03.16.10.54.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Mar 2021 10:54:52 -0700 (PDT)
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Linux MIPS <linux-mips@vger.kernel.org>,
+        KVM PPC <kvm-ppc@vger.kernel.org>,
+        Linux S390 <linux-s390@vger.kernel.org>,
+        Linux kselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+References: <20210310003024.2026253-1-jingzhangos@google.com>
+ <20210310003024.2026253-4-jingzhangos@google.com>
+ <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
+ <CAAdAUth0J6z7fFpOkkmzKc83Bj+MST-jhsZ0uU0iYdRcE_-gMA@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
+ in binary format
+Message-ID: <26035a80-3cce-9872-ab1d-b25b5817d512@redhat.com>
+Date:   Tue, 16 Mar 2021 18:54:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210310104139.679618-4-elver@google.com>
+In-Reply-To: <CAAdAUth0J6z7fFpOkkmzKc83Bj+MST-jhsZ0uU0iYdRcE_-gMA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 11:41:34AM +0100, Marco Elver wrote:
-> Adds bit perf_event_attr::remove_on_exec, to support removing an event
-> from a task on exec.
-> 
-> This option supports the case where an event is supposed to be
-> process-wide only, and should not propagate beyond exec, to limit
-> monitoring to the original process image only.
-> 
-> Signed-off-by: Marco Elver <elver@google.com>
+On 15/03/21 23:31, Jing Zhang wrote:
+> We are considering about how to create the file descriptor. It might be risky
+> to create an extra fd for every vCPU. It will easily hit the fd limit for the
+> process or the system for machines running a ton of small VMs.
 
-> +/*
-> + * Removes all events from the current task that have been marked
-> + * remove-on-exec, and feeds their values back to parent events.
-> + */
-> +static void perf_event_remove_on_exec(void)
-> +{
-> +	int ctxn;
-> +
-> +	for_each_task_context_nr(ctxn) {
-> +		struct perf_event_context *ctx;
-> +		struct perf_event *event, *next;
-> +
-> +		ctx = perf_pin_task_context(current, ctxn);
-> +		if (!ctx)
-> +			continue;
-> +		mutex_lock(&ctx->mutex);
-> +
-> +		list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
-> +			if (!event->attr.remove_on_exec)
-> +				continue;
-> +
-> +			if (!is_kernel_event(event))
-> +				perf_remove_from_owner(event);
-> +			perf_remove_from_context(event, DETACH_GROUP);
+You already have a file descriptor for every vCPU, but I agree that 
+having twice as many is not very good.
 
-There's a comment on this in perf_event_exit_event(), if this task
-happens to have the original event, then DETACH_GROUP will destroy the
-grouping.
+> Looks like creating an extra file descriptor for every VM is a better option.
+> And then we can check per vCPU stats through Ioctl of this VM fd by
+> passing the vCPU index.
 
-I think this wants to be:
+The file descriptor idea is not really infeasible I think (not just 
+because the # of file descriptors is "only" doubled, but also because 
+most of the time I think you'd only care of per-VM stats).
 
-			perf_remove_from_text(event,
-					      child_event->parent ?  DETACH_GROUP : 0);
+If you really believe it's not usable for you, you can use two ioctls to 
+fill the description and the data respectively (i.e. ioctl(fd, 
+KVM_GET_STATS_{DESCRIPTION,VALUES}, pdata) using the same layout as 
+below.  If called with NULL argument, the ioctl returns how much data 
+they will fill in.
 
-or something.
+The (always zero) global flags can be replaced by the value returned by 
+KVM_CHECK_EXTENSION.
 
-> +			/*
-> +			 * Remove the event and feed back its values to the
-> +			 * parent event.
-> +			 */
-> +			perf_event_exit_event(event, ctx, current);
+The number of statistics can be obtained by ioctl(fd, 
+KVM_GET_STATS_VALUES, NULL), just divide the returned value by 8.
 
-Oooh, and here we call it... but it will do list_del_even() /
-perf_group_detach() *again*.
+Paolo
 
-So the problem is that perf_event_exit_task_context() doesn't use
-remove_from_context(), but instead does task_ctx_sched_out() and then
-relies on the events not being active.
+>> 4 bytes flags (always zero)
+>> 4 bytes number of statistics
+>> 4 bytes offset of the first stat description
+>> 4 bytes offset of the first stat value
+>> stat descriptions:
+>>     - 4 bytes for the type (for now always zero: uint64_t)
+>>     - 4 bytes for the flags (for now always zero)
+>>     - length of name
+>>     - name
+>> statistics in 64-bit format
 
-Whereas above you *DO* use remote_from_context(), but then
-perf_event_exit_event() will try and remove it more.
-
-> +		}
-> +		mutex_unlock(&ctx->mutex);
-
-		perf_unpin_context(ctx);
-
-> +		put_ctx(ctx);
-> +	}
-> +}
