@@ -2,69 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D727033CD58
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Mar 2021 06:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FA633CE43
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Mar 2021 07:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbhCPFaO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Mar 2021 01:30:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58240 "EHLO mail.kernel.org"
+        id S235778AbhCPG5t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Mar 2021 02:57:49 -0400
+Received: from mga07.intel.com ([134.134.136.100]:44615 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230330AbhCPFaI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Mar 2021 01:30:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 53463650EB;
-        Tue, 16 Mar 2021 05:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615872608;
-        bh=Jfbek6IwkNe8ICEeoHLfAofEcAHzeO7Toa0Aqg1o1ZQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JROCvxRDP1BdDTmwXnHwmQAambMb9c31CuwkBm1ED2Ps0liBuaj3loL0H4q+SUYKN
-         508hGkP2xLdyYuf83hOGn05jpcMlYpRmkRb1kIUlzYCOyAtFTIDq2MNqtxumPywfrl
-         dWQSjsw7ujfpWXTa5Fanj0Qi9cSLbf64J03/wcVAbRDYW4IA7qvOILoO8Y0+Yz/2hw
-         QQgJXe1vw5VWmf4Y1GgfYA3/gXitviyKmd54me3gqS0+42t/+AOsQmQazS+aofw0fa
-         rPzirOeWFN/JLsbVJMQKvVQRbU7Ck8mmPqXAtGn6q2xMEloPlNwbiyHeW4qrvkZXGZ
-         faQ8S7IIy0cIw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3F7A660A3D;
-        Tue, 16 Mar 2021 05:30:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: selftests: remove unused 'nospace_err' in tests for
- batched ops in array maps
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161587260825.28244.7747420744552197162.git-patchwork-notify@kernel.org>
-Date:   Tue, 16 Mar 2021 05:30:08 +0000
-References: <20210315132954.603108-1-pctammela@gmail.com>
-In-Reply-To: <20210315132954.603108-1-pctammela@gmail.com>
-To:     Pedro Tammela <pctammela@gmail.com>
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S233947AbhCPG5V (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 16 Mar 2021 02:57:21 -0400
+IronPort-SDR: YAy3cE5X1njBS5Zd2MuLxyzwGxk9KGtpqMZxG0rmU+XPEJAQ6Z2Se/sK3N1J+h4kKTPQH1B46Q
+ Zdsn26FJNfOw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9924"; a="253227834"
+X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
+   d="scan'208";a="253227834"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2021 23:57:12 -0700
+IronPort-SDR: EYIjEIIZkRC/ss4huiFmKexYFxB4fMZXc9S0tqodZ12MaAth+8Idhqi+j7dONcWReiat8kLdfW
+ 20KL9SmixRnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
+   d="scan'208";a="511296083"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Mar 2021 23:57:12 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
+        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
+        carlos@redhat.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
+Subject: [PATCH v7 4/6] selftest/sigaltstack: Use the AT_MINSIGSTKSZ aux vector if available
+Date:   Mon, 15 Mar 2021 23:52:13 -0700
+Message-Id: <20210316065215.23768-5-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210316065215.23768-1-chang.seok.bae@intel.com>
+References: <20210316065215.23768-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+The SIGSTKSZ constant may not represent enough stack size in some
+architectures as the hardware state size grows.
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+Use getauxval(AT_MINSIGSTKSZ) to increase the stack size.
 
-On Mon, 15 Mar 2021 14:29:51 +0100 you wrote:
-> This seems to be a reminiscent from the hashmap tests.
-> 
-> Signed-off-by: Pedro Tammela <pctammela@gmail.com>
-> ---
->  tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c | 5 -----
->  1 file changed, 5 deletions(-)
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes from v5:
+* Added as a new patch.
+---
+ tools/testing/selftests/sigaltstack/sas.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-Here is the summary with links:
-  - bpf: selftests: remove unused 'nospace_err' in tests for batched ops in array maps
-    https://git.kernel.org/bpf/bpf-next/c/23f50b5ac331
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
+index 8934a3766d20..c53b070755b6 100644
+--- a/tools/testing/selftests/sigaltstack/sas.c
++++ b/tools/testing/selftests/sigaltstack/sas.c
+@@ -17,6 +17,7 @@
+ #include <string.h>
+ #include <assert.h>
+ #include <errno.h>
++#include <sys/auxv.h>
+ 
+ #include "../kselftest.h"
+ 
+@@ -24,6 +25,11 @@
+ #define SS_AUTODISARM  (1U << 31)
+ #endif
+ 
++#ifndef AT_MINSIGSTKSZ
++#define AT_MINSIGSTKSZ	51
++#endif
++
++static unsigned int stack_size;
+ static void *sstack, *ustack;
+ static ucontext_t uc, sc;
+ static const char *msg = "[OK]\tStack preserved";
+@@ -47,7 +53,7 @@ void my_usr1(int sig, siginfo_t *si, void *u)
+ #endif
+ 
+ 	if (sp < (unsigned long)sstack ||
+-			sp >= (unsigned long)sstack + SIGSTKSZ) {
++			sp >= (unsigned long)sstack + stack_size) {
+ 		ksft_exit_fail_msg("SP is not on sigaltstack\n");
+ 	}
+ 	/* put some data on stack. other sighandler will try to overwrite it */
+@@ -108,6 +114,10 @@ int main(void)
+ 	stack_t stk;
+ 	int err;
+ 
++	/* Make sure more than the required minimum. */
++	stack_size = getauxval(AT_MINSIGSTKSZ) + SIGSTKSZ;
++	ksft_print_msg("[NOTE]\tthe stack size is %lu\n", stack_size);
++
+ 	ksft_print_header();
+ 	ksft_set_plan(3);
+ 
+@@ -117,7 +127,7 @@ int main(void)
+ 	sigaction(SIGUSR1, &act, NULL);
+ 	act.sa_sigaction = my_usr2;
+ 	sigaction(SIGUSR2, &act, NULL);
+-	sstack = mmap(NULL, SIGSTKSZ, PROT_READ | PROT_WRITE,
++	sstack = mmap(NULL, stack_size, PROT_READ | PROT_WRITE,
+ 		      MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+ 	if (sstack == MAP_FAILED) {
+ 		ksft_exit_fail_msg("mmap() - %s\n", strerror(errno));
+@@ -139,7 +149,7 @@ int main(void)
+ 	}
+ 
+ 	stk.ss_sp = sstack;
+-	stk.ss_size = SIGSTKSZ;
++	stk.ss_size = stack_size;
+ 	stk.ss_flags = SS_ONSTACK | SS_AUTODISARM;
+ 	err = sigaltstack(&stk, NULL);
+ 	if (err) {
+@@ -161,7 +171,7 @@ int main(void)
+ 		}
+ 	}
+ 
+-	ustack = mmap(NULL, SIGSTKSZ, PROT_READ | PROT_WRITE,
++	ustack = mmap(NULL, stack_size, PROT_READ | PROT_WRITE,
+ 		      MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+ 	if (ustack == MAP_FAILED) {
+ 		ksft_exit_fail_msg("mmap() - %s\n", strerror(errno));
+@@ -170,7 +180,7 @@ int main(void)
+ 	getcontext(&uc);
+ 	uc.uc_link = NULL;
+ 	uc.uc_stack.ss_sp = ustack;
+-	uc.uc_stack.ss_size = SIGSTKSZ;
++	uc.uc_stack.ss_size = stack_size;
+ 	makecontext(&uc, switch_fn, 0);
+ 	raise(SIGUSR1);
+ 
+-- 
+2.17.1
 
