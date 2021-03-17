@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E12733E395
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 01:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E6E33E428
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 02:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbhCQA5I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Mar 2021 20:57:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33454 "EHLO mail.kernel.org"
+        id S231869AbhCQA6s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Mar 2021 20:58:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230410AbhCQA4Y (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Mar 2021 20:56:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B049464FAE;
-        Wed, 17 Mar 2021 00:56:22 +0000 (UTC)
+        id S231386AbhCQA5p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 16 Mar 2021 20:57:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E626E64FE3;
+        Wed, 17 Mar 2021 00:57:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615942583;
+        s=k20201202; t=1615942659;
         bh=loSHwK2MBX8jk4o2QA+i+HmRZZgkfxNoedrsqCKiIZ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YV2Lg8y2uwicFNZI0+8HxVgreKQNKHt5gHOZhHohVRtb3GjcL4cGWLuNhR3IRPOxl
-         Wy0FmNGSMwcQ1SfPKT8KfTxFqSjor9TGqTAU83YsjWOw+8uR6/GM1u2YvU1z4m/KTc
-         lzEZ23bhLfTXdAaxC9bFxVj9oaYF+xzqo5nFgcincx4ctHkMbCL1vfJYdKCdnzJpEO
-         x949tcv0r4LhSh/o/AM6bELfogHKJ2W5JUEAr17H23YmJXnZoG/1UezH61Ni2YQ3mc
-         jPJrlTAFkqUH/+vtpdfNR0LrZoYEmx+2P2ppxyBcSwpbVNNCXCKf3lDJCTW80vT5UT
-         MaILj/xqvq6Bw==
+        b=WRCB2a5JyblMnXMCZAB9jcifpWCSQqKTT0mPp5RC1WyP2OiK5KvTD6PtLa8f9XrtY
+         fRdLgcTmhmYkF1zs1ooZpD4qktFMkDPFb0pyYaxf7JkOY8a4olCC+Kc6Wrv1Gn43FT
+         0hRfkNapG7e0FGP3pgISGhKznRLAg72pEWWMaglO2ObSayLtVHfrFkzst4ESPEvH+P
+         Ex2LFfVt1I79dUy4P+OeuyBv8luSHsItc6Q1AUDzpFU8hc3AHq6KkaXhJmMt8a2QHr
+         D69DHO0NoXAUGZhh+3R/MjBC9ZS1U11coGTLFKnqnDKWoQu30tdgmMiVtmrM+dDsB8
+         jp11C5OhqxzBA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 39/61] kselftest: arm64: Fix exit code of sve-ptrace
-Date:   Tue, 16 Mar 2021 20:55:13 -0400
-Message-Id: <20210317005536.724046-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 37/54] kselftest: arm64: Fix exit code of sve-ptrace
+Date:   Tue, 16 Mar 2021 20:56:36 -0400
+Message-Id: <20210317005654.724862-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210317005536.724046-1-sashal@kernel.org>
-References: <20210317005536.724046-1-sashal@kernel.org>
+In-Reply-To: <20210317005654.724862-1-sashal@kernel.org>
+References: <20210317005654.724862-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
