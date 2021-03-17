@@ -2,412 +2,168 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EF233F59B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 17:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7316633F87F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 19:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbhCQQfJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Mar 2021 12:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S232932AbhCQSxn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Mar 2021 14:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbhCQQen (ORCPT
+        with ESMTP id S232909AbhCQSx1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Mar 2021 12:34:43 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF54C06174A;
-        Wed, 17 Mar 2021 09:34:42 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id c10so3607191ejx.9;
-        Wed, 17 Mar 2021 09:34:42 -0700 (PDT)
+        Wed, 17 Mar 2021 14:53:27 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94252C06175F
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Mar 2021 11:53:27 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id b184so1769593pfa.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Mar 2021 11:53:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MkRZb5ASIvGNEKAuhAJgK+I2tK/jYldJYEW+ewUVePQ=;
-        b=n1JH6UgSxcTpzG9HinDVbwSj/YLiTNH4MjlzcTj+oVkBeDB5zZlL52g5Rf/7WSZHul
-         t4ti6GL1W5L3bwrn2jZATEmaYIv2mxqXwZSyRqkoS/ed5fFu9yBEjEn5AgWAvAHCWCAD
-         w1NS9Dct6h5gDl2mv+sZ35dA+PUxBIrIDm69x2ig86MweDzIoCjQnFHc97R0WG2BhOok
-         dxwkp7O3ElDuRMdUL2dd7WiF7O+jNJWMk4D09Tqvx4Fa0+aWjTcV2qambm+Lhx/WcmKr
-         leb3HoyB/uoe9Z/Tdj8IREG57Rd3+ZQurpqrroWjfEfFvtK3nab0lOLnlD2nDSdQJmOk
-         3w5g==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=EpIEJhPqe06X3xO3TBJy6+sWU6v0FG/RepSaN/YGeXU=;
+        b=kBiZbub2XsbNuSQITT31g5xVo2+tM/NTVg1jBl+05Vu02T+u3OwWN8JVxDAafR0cf4
+         +9N1Bysdteyj0HUKkmUopJKL7uWZ7rA/JY9Y8v9SnsSaXhbNh1Yo/Qzenq4HXPZIKXaU
+         Uwy7HfTFQZKiC2o3quSGFzcAw6wHg/rJdZNeelEuEHTZ93ot8gAwGHzPNxZ4llQZsxBU
+         61QPOECNMhsWIb/37Fycnf/u+AmgRXu3e0reZ3xKbT+xIJ6EciK0nZXI9WlwM3SeRe51
+         9Fe6vHlskEqrRkqPIS5SzTRm4NNDIUwkRz8xl498KOq3P2myxK6yTjy1jW5TrqbTwJEs
+         fjPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MkRZb5ASIvGNEKAuhAJgK+I2tK/jYldJYEW+ewUVePQ=;
-        b=Ro1RvbV8dZ/BB0w4Y7eSyEtvZQgkCrVgcwJPUqJ9na5gk72ObVrcKqOTw4DhLa/cES
-         JVsWMz7Tn7mgieU0RZISuq/yr3W/8rbEDw2h6+4oWKMKLcckoCp+5KxbPROJKA4HWaOB
-         3Gqq9OT8giChICSXq/8ePaex1hUhlrz2d9j8RNG2lok6m9ijPiq2cR7dD2EQkZ7FhsLk
-         S1KR1o4pp7lLHvAxI/FZ+G8AnAdEcmhgbbW2h/c8OWnKHnbyRXQXCL46YIKAY54FBV5N
-         dPQEuJtXvSKfVmlgPjdffMVHy/m9mm4uFGSBumEt8n2zpeQ24iKHFa+qQm0UwEO5gkfL
-         pv/A==
-X-Gm-Message-State: AOAM530Rj2PMzCS/qmC5R+y5jvuAQhBKvw/QN5d5gaSSg+V5zUda4uRb
-        YeEMDLWsbq8o4bS8WOn19HBMD9hUDLkDXS+IL9w=
-X-Google-Smtp-Source: ABdhPJznJfurp+cv2fAQ9tXA8hcsp4Gh5i5ks09ZVLuO2K4TRp9edOqOrXTflDMUjXiJ80mPtC09xQl1xuy5Lp0Nd/E=
-X-Received: by 2002:a17:906:bcfc:: with SMTP id op28mr35808524ejb.238.1615998881266;
- Wed, 17 Mar 2021 09:34:41 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=EpIEJhPqe06X3xO3TBJy6+sWU6v0FG/RepSaN/YGeXU=;
+        b=Voqn794bDiDdxRY9cDnAsy8vc0LCKXpirW/ZS8aam6I/DALYUgREMCgu0E5k5Lf1y9
+         Mx8XSmM0m/zeeTA/TKF5UkvQjZOIYX5kmAYkrZ10ho+NF/2x+9Wk7Csc/5Dm9WrsvFsh
+         sRcNFs9dmKM/kEzfUIWm9dZGg3uN2Cgam0M7IUx3zNYn8fIjS98C2kqntg4FTTh6ANmc
+         KSn5dA8GfSTQ+dMF0c1BOXAbnaJlca7Dy0gcKtVCEgQ8BCRbEtDagDfr5IWN1sXvqY/o
+         La+Srre0dTQS6NgZDdYH73KdBCou17mXCqGXBt1TgrzZO+dAErapKgVt+3mQLW9xVBDG
+         LJaA==
+X-Gm-Message-State: AOAM532IpGB6nDOv9Lji+kI0L8lq/59UlVzC2wLNksPy1MPQjr3sRz8j
+        MjaB3+GpMF/AS2anIrjAIhLfZw==
+X-Google-Smtp-Source: ABdhPJzFaFuTCDJAUuZWuuRCrMKusvWutkv0SHOxxnlKjrLtdpNSJXi9yJH4tJ61aljJTcGeI+GP7Q==
+X-Received: by 2002:a63:3485:: with SMTP id b127mr3883624pga.44.1616007206706;
+        Wed, 17 Mar 2021 11:53:26 -0700 (PDT)
+Received: from [2620:15c:17:3:b56a:51db:a0a1:259f] ([2620:15c:17:3:b56a:51db:a0a1:259f])
+        by smtp.gmail.com with ESMTPSA id r186sm20475684pfr.124.2021.03.17.11.53.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Mar 2021 11:53:25 -0700 (PDT)
+Date:   Wed, 17 Mar 2021 11:53:25 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+cc:     kernel test robot <oliver.sang@intel.com>, glittao@gmail.com,
+        0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [selftests] e48d82b67a:
+ BUG_TestSlub_RZ_alloc(Not_tainted):Redzone_overwritten
+In-Reply-To: <a389a8fb-2043-3b13-5180-e1f87e4d4a66@suse.cz>
+Message-ID: <a3f6261b-22b-89f1-ec24-7516f0fa1d4c@google.com>
+References: <20210317083612.GD22345@xsang-OptiPlex-9020> <a389a8fb-2043-3b13-5180-e1f87e4d4a66@suse.cz>
 MIME-Version: 1.0
-References: <20210315203349.171760-1-zi.yan@sent.com> <20210315203349.171760-2-zi.yan@sent.com>
- <CAHbLzkpmFhBxMRetg8QM4BQ4fDiTS823XBm73+5BV-eXsoCP+Q@mail.gmail.com> <10CA242B-9994-41D0-A84B-E711A5CD2975@nvidia.com>
-In-Reply-To: <10CA242B-9994-41D0-A84B-E711A5CD2975@nvidia.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 17 Mar 2021 09:34:29 -0700
-Message-ID: <CAHbLzkr0x3sk+WtseKMDn-rGEaTNNbDfYMhyReR3oH4oJz4BAw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] mm: huge_memory: debugfs for file-backed THP split.
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mika Penttila <mika.penttila@nextfour.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 8:00 AM Zi Yan <ziy@nvidia.com> wrote:
->
-> On 16 Mar 2021, at 19:18, Yang Shi wrote:
->
-> > On Mon, Mar 15, 2021 at 1:34 PM Zi Yan <zi.yan@sent.com> wrote:
-> >>
-> >> From: Zi Yan <ziy@nvidia.com>
-> >>
-> >> Further extend <debugfs>/split_huge_pages to accept
-> >> "<path>,<off_start>,<off_end>" for file-backed THP split tests since
-> >> tmpfs may have file backed by THP that mapped nowhere.
-> >>
-> >> Update selftest program to test file-backed THP split too.
-> >>
-> >> Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> >> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> >> ---
-> >>  mm/huge_memory.c                              | 95 ++++++++++++++++++=
--
-> >>  .../selftests/vm/split_huge_page_test.c       | 79 ++++++++++++++-
-> >>  2 files changed, 166 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> >> index 3bfee54e2cd0..da91ee97d944 100644
-> >> --- a/mm/huge_memory.c
-> >> +++ b/mm/huge_memory.c
-> >> @@ -3043,12 +3043,72 @@ static int split_huge_pages_pid(int pid, unsig=
-ned long vaddr_start,
-> >>         return ret;
-> >>  }
-> >>
-> >> +static int split_huge_pages_in_file(const char *file_path, pgoff_t of=
-f_start,
-> >> +                               pgoff_t off_end)
-> >> +{
-> >> +       struct filename *file;
-> >> +       struct file *candidate;
-> >> +       struct address_space *mapping;
-> >> +       int ret =3D -EINVAL;
-> >> +       pgoff_t off_cur;
-> >> +       unsigned long total =3D 0, split =3D 0;
-> >> +
-> >> +       file =3D getname_kernel(file_path);
-> >> +       if (IS_ERR(file))
-> >> +               return ret;
-> >> +
-> >> +       candidate =3D file_open_name(file, O_RDONLY, 0);
-> >> +       if (IS_ERR(candidate))
-> >> +               goto out;
-> >> +
-> >> +       pr_info("split file-backed THPs in file: %s, offset: [0x%lx - =
-0x%lx]\n",
-> >> +                file_path, off_start, off_end);
-> >> +
-> >> +       mapping =3D candidate->f_mapping;
-> >> +
-> >> +       for (off_cur =3D off_start; off_cur < off_end;) {
-> >> +               struct page *fpage =3D pagecache_get_page(mapping, off=
-_cur,
-> >> +                                               FGP_ENTRY | FGP_HEAD, =
-0);
-> >> +
-> >> +               if (xa_is_value(fpage) || !fpage) {
-> >
-> > Why do you have FGP_ENTRY? It seems it would return page instead of
-> > NULL if page is value. So I think you could remove FGP_ENTRY and
-> > xa_is_value() check as well.
->
-> The comment on FGP_ENTRY says =E2=80=9CIf there is a shadow/swap/DAX entr=
-y, return
-> it instead of allocating a new page to replace it=E2=80=9D. I do not thin=
-k we
-> want to allocate new pages here. I mostly follow the use of pagecache_get=
-_page()
-> in shmem_getpage_gfp without swapin or allocating new pages.
+On Wed, 17 Mar 2021, Vlastimil Babka wrote:
 
-Yes, you are correct. I overlooked that.
+> > Greeting,
+> > 
+> > FYI, we noticed the following commit (built with gcc-9):
+> > 
+> > commit: e48d82b67a2b760eedf7b95ca15f41267496386c ("[PATCH 1/2] selftests: add a kselftest for SLUB debugging functionality")
+> > url: https://github.com/0day-ci/linux/commits/glittao-gmail-com/selftests-add-a-kselftest-for-SLUB-debugging-functionality/20210316-204257
+> > base: https://git.kernel.org/cgit/linux/kernel/git/shuah/linux-kselftest.git next
+> > 
+> > in testcase: trinity
+> > version: trinity-static-i386-x86_64-f93256fb_2019-08-28
+> > with following parameters:
+> > 
+> > 	group: group-04
+> > 
+> > test-description: Trinity is a linux system call fuzz tester.
+> > test-url: http://codemonkey.org.uk/projects/trinity/
+> > 
+> > 
+> > on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 8G
+> > 
+> > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> > 
+> > 
+> > +---------------------------------------------------------------------------------------------------------------+-----------+------------+
+> > |                                                                                                               | v5.12-rc2 | e48d82b67a |
+> > +---------------------------------------------------------------------------------------------------------------+-----------+------------+
+> > | BUG_TestSlub_RZ_alloc(Not_tainted):Redzone_overwritten                                                        | 0         | 69         |
+> > | INFO:0x(ptrval)-0x(ptrval)@offset=#.First_byte#instead_of                                                     | 0         | 69         |
+> > | INFO:Allocated_in_resiliency_test_age=#cpu=#pid=                                                              | 0         | 69         |
+> > | INFO:Slab0x(ptrval)objects=#used=#fp=0x(ptrval)flags=                                                         | 0         | 69         |
+> > | INFO:Object0x(ptrval)@offset=#fp=0x(ptrval)                                                                   | 0         | 69         |
+> > | BUG_TestSlub_next_ptr_free(Tainted:G_B):Freechain_corrupt                                                     | 0         | 69         |
+> > | INFO:Freed_in_resiliency_test_age=#cpu=#pid=                                                                  | 0         | 69         |
+> > | BUG_TestSlub_next_ptr_free(Tainted:G_B):Wrong_object_count.Counter_is#but_counted_were                        | 0         | 69         |
+> > | BUG_TestSlub_next_ptr_free(Tainted:G_B):Redzone_overwritten                                                   | 0         | 69         |
+> > | BUG_TestSlub_next_ptr_free(Tainted:G_B):Objects_remaining_in_TestSlub_next_ptr_free_on__kmem_cache_shutdown() | 0         | 69         |
+> > | INFO:Object0x(ptrval)@offset=                                                                                 | 0         | 69         |
+> > | BUG_TestSlub_1th_word_free(Tainted:G_B):Poison_overwritten                                                    | 0         | 69         |
+> > | BUG_TestSlub_50th_word_free(Tainted:G_B):Poison_overwritten                                                   | 0         | 69         |
+> > | BUG_TestSlub_RZ_free(Tainted:G_B):Redzone_overwritten                                                         | 0         | 69         |
+> > +---------------------------------------------------------------------------------------------------------------+-----------+------------+
+> > 
+> > 
+> > If you fix the issue, kindly add following tag
+> > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > 
+> > 
+> > 
+> > [   22.154049] random: get_random_u32 called from __kmem_cache_create+0x23/0x3e0 with crng_init=0 
+> > [   22.154070] random: get_random_u32 called from cache_random_seq_create+0x7c/0x140 with crng_init=0 
+> > [   22.154167] random: get_random_u32 called from allocate_slab+0x155/0x5e0 with crng_init=0 
+> > [   22.154690] test_slub: 1. kmem_cache: Clobber Redzone 0x12->0x(ptrval)
+> > [   22.164499] =============================================================================
+> > [   22.166629] BUG TestSlub_RZ_alloc (Not tainted): Redzone overwritten
+> > [   22.168179] -----------------------------------------------------------------------------
+> > [   22.168179]
+> > [   22.168372] Disabling lock debugging due to kernel taint
+> > [   22.168372] INFO: 0x(ptrval)-0x(ptrval) @offset=1064. First byte 0x12 instead of 0xcc
+> > [   22.168372] INFO: Allocated in resiliency_test+0x47/0x1be age=3 cpu=0 pid=1 
+> > [   22.168372] __slab_alloc+0x57/0x80 
+> > [   22.168372] kmem_cache_alloc (kbuild/src/consumer/mm/slub.c:2871 kbuild/src/consumer/mm/slub.c:2915 kbuild/src/consumer/mm/slub.c:2920) 
+> > [   22.168372] resiliency_test (kbuild/src/consumer/lib/test_slub.c:34 kbuild/src/consumer/lib/test_slub.c:107) 
+> > [   22.168372] test_slub_init (kbuild/src/consumer/lib/test_slub.c:124) 
+> > [   22.168372] do_one_initcall (kbuild/src/consumer/init/main.c:1226) 
+> > [   22.168372] kernel_init_freeable (kbuild/src/consumer/init/main.c:1298 kbuild/src/consumer/init/main.c:1315 kbuild/src/consumer/init/main.c:1335 kbuild/src/consumer/init/main.c:1537) 
+> > [   22.168372] kernel_init (kbuild/src/consumer/init/main.c:1426) 
+> > [   22.168372] ret_from_fork (kbuild/src/consumer/arch/x86/entry/entry_32.S:856) 
+> > [   22.168372] INFO: Slab 0x(ptrval) objects=16 used=1 fp=0x(ptrval) flags=0x40000201
+> > [   22.168372] INFO: Object 0x(ptrval) @offset=1000 fp=0x(ptrval)
+> > [   22.168372]
+> > [   22.168372] Redzone (ptrval): cc cc cc cc cc cc cc cc                          ........
+> > [   22.168372] Object (ptrval): 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b  kkkkkkkkkkkkkkkk
+> > [   22.168372] Object (ptrval): 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  kkkkkkkkkkkkkkk.
+> > [   22.168372] Redzone (ptrval): 12 cc cc cc                                      ....
+> > [   22.168372] Padding (ptrval): 5a 5a 5a 5a 5a 5a 5a 5a                          ZZZZZZZZ
+> > [   22.168372] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G    B             5.12.0-rc2-00001-ge48d82b67a2b #1
+> > [   22.168372] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+> > [   22.168372] Call Trace:
+> > [   22.168372] dump_stack (kbuild/src/consumer/lib/dump_stack.c:122) 
+> > [   22.168372] print_trailer (kbuild/src/consumer/mm/slub.c:737) 
+> > [   22.168372] check_bytes_and_report.cold (kbuild/src/consumer/mm/slub.c:807) 
+> > [   22.168372] check_object (kbuild/src/consumer/mm/slub.c:914) 
+> > [   22.168372] validate_slab (kbuild/src/consumer/mm/slub.c:4635) 
+> 
+> Hm but in this case the output means the tested functionality (slub debugging)
+> is working as intended. So what can we do? Indicate/teach somehow to the bot
+> that this is OK? Does kselftest have some support for this? Or silence the
+> validation output for testing purposes? (I would prefer not to)
+> 
 
->
-> >
-> >> +                       off_cur +=3D PAGE_SIZE;
-> >> +                       continue;
-> >> +               }
-> >> +
-> >> +               if (!is_transparent_hugepage(fpage)) {
-> >> +                       off_cur +=3D PAGE_SIZE;
-> >> +                       goto next;
-> >> +               }
-> >> +               total++;
-> >> +               off_cur =3D fpage->index + thp_size(fpage);
-> >> +
-> >> +               if (!trylock_page(fpage))
-> >> +                       goto next;
-> >> +
-> >> +               if (!split_huge_page(fpage))
-> >> +                       split++;
-> >> +
-> >> +               unlock_page(fpage);
-> >> +next:
-> >> +               put_page(fpage);
-> >> +       }
-> >> +
-> >> +       filp_close(candidate, NULL);
-> >> +       ret =3D 0;
-> >> +
-> >> +       pr_info("%lu of %lu file-backed THP split\n", split, total);
-> >> +out:
-> >> +       putname(file);
-> >> +       return ret;
-> >> +}
-> >> +
-> >>  static ssize_t split_huge_pages_write(struct file *file, const char _=
-_user *buf,
-> >>                                 size_t count, loff_t *ppops)
-> >>  {
-> >>         static DEFINE_MUTEX(mutex);
-> >>         ssize_t ret;
-> >> -       char input_buf[80]; /* hold pid, start_vaddr, end_vaddr */
-> >> +       /* hold pid, start_vaddr, end_vaddr or file_path, off_start, o=
-ff_end */
-> >> +       char input_buf[MAX_INPUT];
-> >
-> > I didn't find where MAX_INPUT is defined in your patch. Just saw
-> > include/uapi/linux/limits.h have it defined. Is it the one you really
-> > refer to?
->
-> Yeah, I want to use 255 as the max input size and find MAX_INPUT. From yo=
-ur comment,
-> I think it is better to define a MACRO here explicitly.
->
->
-> >>         int pid;
-> >>         unsigned long vaddr_start, vaddr_end;
-> >>
-> >> @@ -3058,11 +3118,40 @@ static ssize_t split_huge_pages_write(struct f=
-ile *file, const char __user *buf,
-> >>
-> >>         ret =3D -EFAULT;
-> >>
-> >> -       memset(input_buf, 0, 80);
-> >> +       memset(input_buf, 0, MAX_INPUT);
-> >>         if (copy_from_user(input_buf, buf, min_t(size_t, count, 80)))
-> >>                 goto out;
-> >>
-> >> -       input_buf[79] =3D '\0';
-> >> +       input_buf[MAX_INPUT - 1] =3D '\0';
-> >> +
-> >> +       if (input_buf[0] =3D=3D '/') {
-> >> +               char *tok;
-> >> +               char *buf =3D input_buf;
-> >> +               char file_path[MAX_INPUT];
-> >> +               pgoff_t off_start =3D 0, off_end =3D 0;
-> >> +               size_t input_len =3D strlen(input_buf);
-> >> +
-> >> +               tok =3D strsep(&buf, ",");
-> >> +               if (tok) {
-> >> +                       strncpy(file_path, tok, MAX_INPUT);
-> >> +               } else {
-> >> +                       ret =3D -EINVAL;
-> >> +                       goto out;
-> >> +               }
-> >> +
-> >> +               ret =3D sscanf(buf, "0x%lx,0x%lx", &off_start, &off_en=
-d);
-> >> +               if (ret !=3D 2) {
-> >> +                       pr_info("ret: %ld\n", ret);
-> >> +                       ret =3D -EINVAL;
-> >> +                       goto out;
-> >> +               }
-> >> +               ret =3D split_huge_pages_in_file(file_path, off_start,=
- off_end);
-> >> +               if (!ret)
-> >> +                       ret =3D input_len;
-> >> +
-> >> +               goto out;
-> >> +       }
-> >> +
-> >>         ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start=
-, &vaddr_end);
-> >>         if (ret =3D=3D 1 && pid =3D=3D 1) {
-> >>                 split_huge_pages_all();
-> >> diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools=
-/testing/selftests/vm/split_huge_page_test.c
-> >> index 9f33ddbb3182..0202702f7eda 100644
-> >> --- a/tools/testing/selftests/vm/split_huge_page_test.c
-> >> +++ b/tools/testing/selftests/vm/split_huge_page_test.c
-> >> @@ -7,11 +7,13 @@
-> >>  #define _GNU_SOURCE
-> >>  #include <stdio.h>
-> >>  #include <stdlib.h>
-> >> +#include <stdarg.h>
-> >>  #include <unistd.h>
-> >>  #include <inttypes.h>
-> >>  #include <string.h>
-> >>  #include <fcntl.h>
-> >>  #include <sys/mman.h>
-> >> +#include <sys/mount.h>
-> >>  #include <malloc.h>
-> >>  #include <stdbool.h>
-> >>
-> >> @@ -24,6 +26,9 @@ uint64_t pmd_pagesize;
-> >>  #define SMAP_PATH "/proc/self/smaps"
-> >>  #define INPUT_MAX 80
-> >>
-> >> +#define PID_FMT "%d,0x%lx,0x%lx"
-> >> +#define PATH_FMT "%s,0x%lx,0x%lx"
-> >> +
-> >>  #define PFN_MASK     ((1UL<<55)-1)
-> >>  #define KPF_THP      (1UL<<22)
-> >>
-> >> @@ -87,13 +92,16 @@ static int write_file(const char *path, const char=
- *buf, size_t buflen)
-> >>         return (unsigned int) numwritten;
-> >>  }
-> >>
-> >> -static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vad=
-dr_end)
-> >> +static void write_debugfs(const char *fmt, ...)
-> >>  {
-> >>         char input[INPUT_MAX];
-> >>         int ret;
-> >> +       va_list argp;
-> >> +
-> >> +       va_start(argp, fmt);
-> >> +       ret =3D vsnprintf(input, INPUT_MAX, fmt, argp);
-> >> +       va_end(argp);
-> >>
-> >> -       ret =3D snprintf(input, INPUT_MAX, "%d,0x%lx,0x%lx", pid, vadd=
-r_start,
-> >> -                       vaddr_end);
-> >>         if (ret >=3D INPUT_MAX) {
-> >>                 printf("%s: Debugfs input is too long\n", __func__);
-> >>                 exit(EXIT_FAILURE);
-> >> @@ -178,7 +186,8 @@ void split_pmd_thp(void)
-> >>         }
-> >>
-> >>         /* split all THPs */
-> >> -       write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page=
- + len);
-> >> +       write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
-> >> +               (uint64_t)one_page + len);
-> >>
-> >>         for (i =3D 0; i < len; i++)
-> >>                 if (one_page[i] !=3D (char)i) {
-> >> @@ -269,7 +278,7 @@ void split_pte_mapped_thp(void)
-> >>         }
-> >>
-> >>         /* split all remapped THPs */
-> >> -       write_debugfs(getpid(), (uint64_t)pte_mapped,
-> >> +       write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
-> >>                       (uint64_t)pte_mapped + pagesize * 4);
-> >>
-> >>         /* smap does not show THPs after mremap, use kpageflags instea=
-d */
-> >> @@ -295,6 +304,65 @@ void split_pte_mapped_thp(void)
-> >>         close(kpageflags_fd);
-> >>  }
-> >>
-> >> +void split_file_backed_thp(void)
-> >> +{
-> >> +       int status;
-> >> +       int fd;
-> >> +       ssize_t num_written;
-> >> +       char tmpfs_template[] =3D "/tmp/thp_split_XXXXXX";
-> >> +       const char *tmpfs_loc =3D mkdtemp(tmpfs_template);
-> >> +       char testfile[INPUT_MAX];
-> >> +
-> >> +       status =3D mount("tmpfs", tmpfs_loc, "tmpfs", 0, "huge=3Dalway=
-s,size=3D4m");
-> >> +
-> >> +       if (status) {
-> >> +               printf("Unable to create a tmpfs for testing\n");
-> >> +               exit(EXIT_FAILURE);
-> >> +       }
-> >> +
-> >> +       status =3D snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_=
-loc);
-> >> +       if (status >=3D INPUT_MAX) {
-> >> +               printf("Fail to create file-backed THP split testing f=
-ile\n");
-> >> +               goto cleanup;
-> >> +       }
-> >> +
-> >> +       fd =3D open(testfile, O_CREAT|O_WRONLY);
-> >> +       if (fd =3D=3D -1) {
-> >> +               perror("Cannot open testing file\n");
-> >> +               goto cleanup;
-> >> +       }
-> >> +
-> >> +       /* write something to the file, so a file-backed THP can be al=
-located */
-> >> +       num_written =3D write(fd, tmpfs_loc, sizeof(tmpfs_loc));
-> >> +       close(fd);
-> >> +
-> >> +       if (num_written < 1) {
-> >> +               printf("Fail to write data to testing file\n");
-> >> +               goto cleanup;
-> >> +       }
-> >> +
-> >> +       /* split the file-backed THP */
-> >> +       write_debugfs(PATH_FMT, testfile, 0, 1024);
-> >> +
-> >> +       status =3D unlink(testfile);
-> >> +       if (status)
-> >> +               perror("Cannot remove testing file\n");
-> >> +
-> >> +cleanup:
-> >> +       status =3D umount(tmpfs_loc);
-> >> +       if (status) {
-> >> +               printf("Unable to umount %s\n", tmpfs_loc);
-> >> +               exit(EXIT_FAILURE);
-> >> +       }
-> >> +       status =3D rmdir(tmpfs_loc);
-> >> +       if (status) {
-> >> +               perror("cannot remove tmp dir");
-> >> +               exit(EXIT_FAILURE);
-> >> +       }
-> >> +
-> >> +       printf("file-backed THP split test done, please check dmesg fo=
-r more information\n");
-> >> +}
-> >> +
-> >>  int main(int argc, char **argv)
-> >>  {
-> >>         if (geteuid() !=3D 0) {
-> >> @@ -308,6 +376,7 @@ int main(int argc, char **argv)
-> >>
-> >>         split_pmd_thp();
-> >>         split_pte_mapped_thp();
-> >> +       split_file_backed_thp();
-> >>
-> >>         return 0;
-> >>  }
-> >> --
-> >> 2.30.1
-> >>
->
-> Thanks for the comments. :)
->
-> =E2=80=94
-> Best Regards,
-> Yan Zi
+Unless you're familiar with everything that CONFIG_TEST_SLUB does, maybe 
+this could be inferred as an actual issue that the test has uncovered that 
+is unexpected?
+
+I don't have a good way of silencing the check_bytes_and_report() output 
+other than a big hammer: implement {disable,enable}_slub_warnings() that 
+the resiliency test could call into before triggering these checks.
