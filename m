@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 142BE33E6DA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 03:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3623A33E6D5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 03:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbhCQCZD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Mar 2021 22:25:03 -0400
-Received: from mga01.intel.com ([192.55.52.88]:55652 "EHLO mga01.intel.com"
+        id S230486AbhCQCZC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Mar 2021 22:25:02 -0400
+Received: from mga01.intel.com ([192.55.52.88]:55651 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230433AbhCQCYf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S230436AbhCQCYf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 16 Mar 2021 22:24:35 -0400
-IronPort-SDR: Q7bE8qBN0x6L2cPeKOy1DtARq0kVbwUrtKATvuZm6iKcbgiIYH+uHP0NVh//aphiF72ZM08Vf/
- +CHwysJxvVSg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="209328708"
+IronPort-SDR: Xdlhj28r4XCbPc6VnK/Iacwq/FGIZl8+QwDIw+YmW2Io66rGcO3QPBpman2/RgeS+L8meFUmJ+
+ W6PPea/fbeMQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="209328710"
 X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
-   d="scan'208";a="209328708"
+   d="scan'208";a="209328710"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 19:24:33 -0700
-IronPort-SDR: 5X4G8+CDpGLsl6AOS3L5TjPi6/T7cAQwvVU+CifkYdWqBRuAznjeFTJahBLLRetbavBVj9sAup
- t7+TA83hVZsQ==
+IronPort-SDR: EMFpXkVz1wd01k7Dq916GN62inDYTvzi03S5uJONtMn3mBdam15hFc4BUO3ROGE2fdHjClrA4M
+ hjRyDfn+bX4w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
-   d="scan'208";a="440290254"
+   d="scan'208";a="440290257"
 Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
   by FMSMGA003.fm.intel.com with ESMTP; 16 Mar 2021 19:24:33 -0700
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -33,9 +33,9 @@ To:     "Shuah Khan" <shuah@kernel.org>, "Tony Luck" <tony.luck@intel.com>,
 Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v6 06/21] selftests/resctrl: Fix missing options "-n" and "-p"
-Date:   Wed, 17 Mar 2021 02:22:40 +0000
-Message-Id: <20210317022255.2536745-7-fenghua.yu@intel.com>
+Subject: [PATCH v6 07/21] selftests/resctrl: Rename CQM test as CMT test
+Date:   Wed, 17 Mar 2021 02:22:41 +0000
+Message-Id: <20210317022255.2536745-8-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20210317022255.2536745-1-fenghua.yu@intel.com>
 References: <20210317022255.2536745-1-fenghua.yu@intel.com>
@@ -45,41 +45,355 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-resctrl test suite accepts command line arguments (like -b, -t, -n and -p)
-as documented in the help. But passing -n and -p throws an invalid option
-error. This happens because -n and -p are missing in the list of
-characters that getopt() recognizes as valid arguments. Hence, they are
-treated as invalid options.
+CMT (Cache Monitoring Technology) [1] is a H/W feature that reports cache
+occupancy of a process. resctrl selftest suite has a unit test to test CMT
+for LLC but the test is named as CQM (Cache Quality Monitoring).
+Furthermore, the unit test source file is named as cqm_test.c and several
+functions, variables, comments, preprocessors and statements widely use
+"cqm" as either suffix or prefix. This rampant misusage of CQM for CMT
+might confuse someone who is newly looking at resctrl selftests because
+this feature is named CMT in the Intel Software Developer's Manual.
 
-Fix this by adding them to the list of characters that getopt() recognizes
-as valid arguments. Please note that the main() function already has the
-logic to deal with the values passed as part of these arguments and hence
-no changes are needed there.
+Hence, rename all the occurrences (unit test source file name, functions,
+variables, comments and preprocessors) of cqm with cmt.
 
+[1] Please see Intel SDM, Volume 3, chapter 17 and section 18 for more
+    information on CMT: https://software.intel.com/content/www/us/en/develop/articles/intel-sdm.html
+
+Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
 Tested-by: Babu Moger <babu.moger@amd.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
-Change Log:
-v5:
-- Move from v4's patch 9 to this patch as the fix patch should be first
-  (Shuah).
+ tools/testing/selftests/resctrl/README        |  4 +--
+ tools/testing/selftests/resctrl/cache.c       |  4 +--
+ .../resctrl/{cqm_test.c => cmt_test.c}        | 20 +++++++-------
+ tools/testing/selftests/resctrl/resctrl.h     |  6 ++---
+ .../testing/selftests/resctrl/resctrl_tests.c | 26 +++++++++----------
+ tools/testing/selftests/resctrl/resctrl_val.c | 12 ++++-----
+ tools/testing/selftests/resctrl/resctrlfs.c   | 10 +++----
+ 7 files changed, 41 insertions(+), 41 deletions(-)
+ rename tools/testing/selftests/resctrl/{cqm_test.c => cmt_test.c} (89%)
 
- tools/testing/selftests/resctrl/resctrl_tests.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 4b109a59f72d..ac2269610aa9 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -73,7 +73,7 @@ int main(int argc, char **argv)
- 		}
+diff --git a/tools/testing/selftests/resctrl/README b/tools/testing/selftests/resctrl/README
+index 6e5a0ffa18e8..4b36b25b6ac0 100644
+--- a/tools/testing/selftests/resctrl/README
++++ b/tools/testing/selftests/resctrl/README
+@@ -46,8 +46,8 @@ ARGUMENTS
+ Parameter '-h' shows usage information.
+ 
+ usage: resctrl_tests [-h] [-b "benchmark_cmd [options]"] [-t test list] [-n no_of_bits]
+-        -b benchmark_cmd [options]: run specified benchmark for MBM, MBA and CQM default benchmark is builtin fill_buf
+-        -t test list: run tests specified in the test list, e.g. -t mbm, mba, cqm, cat
++        -b benchmark_cmd [options]: run specified benchmark for MBM, MBA and CMT default benchmark is builtin fill_buf
++        -t test list: run tests specified in the test list, e.g. -t mbm, mba, cmt, cat
+         -n no_of_bits: run cache tests using specified no of bits in cache bit mask
+         -p cpu_no: specify CPU number to run the test. 1 is default
+         -h: help
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index 5922cc1b0386..2aa1b5c7d9e1 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -111,7 +111,7 @@ static int get_llc_perf(unsigned long *llc_perf_miss)
+ 
+ /*
+  * Get LLC Occupancy as reported by RESCTRL FS
+- * For CQM,
++ * For CMT,
+  * 1. If con_mon grp and mon grp given, then read from mon grp in
+  * con_mon grp
+  * 2. If only con_mon grp given, then read from con_mon grp
+@@ -192,7 +192,7 @@ int measure_cache_vals(struct resctrl_val_param *param, int bm_pid)
+ 	/*
+ 	 * Measure llc occupancy from resctrl.
+ 	 */
+-	if (!strncmp(param->resctrl_val, CQM_STR, sizeof(CQM_STR))) {
++	if (!strncmp(param->resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+ 		ret = get_llc_occu_resctrl(&llc_occu_resc);
+ 		if (ret < 0)
+ 			return ret;
+diff --git a/tools/testing/selftests/resctrl/cqm_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+similarity index 89%
+rename from tools/testing/selftests/resctrl/cqm_test.c
+rename to tools/testing/selftests/resctrl/cmt_test.c
+index 271752e9ef5b..4b63838dda32 100644
+--- a/tools/testing/selftests/resctrl/cqm_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Cache Monitoring Technology (CQM) test
++ * Cache Monitoring Technology (CMT) test
+  *
+  * Copyright (C) 2018 Intel Corporation
+  *
+@@ -11,7 +11,7 @@
+ #include "resctrl.h"
+ #include <unistd.h>
+ 
+-#define RESULT_FILE_NAME	"result_cqm"
++#define RESULT_FILE_NAME	"result_cmt"
+ #define NUM_OF_RUNS		5
+ #define MAX_DIFF		2000000
+ #define MAX_DIFF_PERCENT	15
+@@ -21,7 +21,7 @@ static char cbm_mask[256];
+ static unsigned long long_mask;
+ static unsigned long cache_size;
+ 
+-static int cqm_setup(int num, ...)
++static int cmt_setup(int num, ...)
+ {
+ 	struct resctrl_val_param *p;
+ 	va_list param;
+@@ -58,7 +58,7 @@ static void show_cache_info(unsigned long sum_llc_occu_resc, int no_of_bits,
+ 	else
+ 		res = false;
+ 
+-	printf("%sok CQM: diff within %d, %d\%%\n", res ? "" : "not",
++	printf("%sok CMT: diff within %d, %d\%%\n", res ? "" : "not",
+ 	       MAX_DIFF, (int)MAX_DIFF_PERCENT);
+ 
+ 	printf("# diff: %ld\n", avg_diff);
+@@ -106,12 +106,12 @@ static int check_results(struct resctrl_val_param *param, int no_of_bits)
+ 	return 0;
+ }
+ 
+-void cqm_test_cleanup(void)
++void cmt_test_cleanup(void)
+ {
+ 	remove(RESULT_FILE_NAME);
+ }
+ 
+-int cqm_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
++int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+ {
+ 	int ret, mum_resctrlfs;
+ 
+@@ -122,7 +122,7 @@ int cqm_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (!validate_resctrl_feature_request("cqm"))
++	if (!validate_resctrl_feature_request(CMT_STR))
+ 		return -1;
+ 
+ 	ret = get_cbm_mask("L3", cbm_mask);
+@@ -145,7 +145,7 @@ int cqm_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
  	}
  
--	while ((c = getopt(argc_new, argv, "ht:b:")) != -1) {
-+	while ((c = getopt(argc_new, argv, "ht:b:n:p:")) != -1) {
- 		char *token;
+ 	struct resctrl_val_param param = {
+-		.resctrl_val	= CQM_STR,
++		.resctrl_val	= CMT_STR,
+ 		.ctrlgrp	= "c1",
+ 		.mongrp		= "m1",
+ 		.cpu_no		= cpu_no,
+@@ -154,7 +154,7 @@ int cqm_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+ 		.mask		= ~(long_mask << n) & long_mask,
+ 		.span		= cache_size * n / count_of_bits,
+ 		.num_of_runs	= 0,
+-		.setup		= cqm_setup,
++		.setup		= cmt_setup,
+ 	};
  
- 		switch (c) {
+ 	if (strcmp(benchmark_cmd[0], "fill_buf") == 0)
+@@ -170,7 +170,7 @@ int cqm_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+ 	if (ret)
+ 		return ret;
+ 
+-	cqm_test_cleanup();
++	cmt_test_cleanup();
+ 
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 36da6136af96..1a58767a0bd2 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -64,7 +64,7 @@ struct resctrl_val_param {
+ 
+ #define MBM_STR			"mbm"
+ #define MBA_STR			"mba"
+-#define CQM_STR			"cqm"
++#define CMT_STR			"cmt"
+ #define CAT_STR			"cat"
+ 
+ extern pid_t bm_pid, ppid;
+@@ -103,9 +103,9 @@ void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+ int cat_val(struct resctrl_val_param *param);
+ void cat_test_cleanup(void);
+ int cat_perf_miss_val(int cpu_no, int no_of_bits, char *cache_type);
+-int cqm_resctrl_val(int cpu_no, int n, char **benchmark_cmd);
++int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd);
+ unsigned int count_bits(unsigned long n);
+-void cqm_test_cleanup(void);
++void cmt_test_cleanup(void);
+ int get_core_sibling(int cpu_no);
+ int measure_cache_vals(struct resctrl_val_param *param, int bm_pid);
+ 
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index ac2269610aa9..6b2ed2efaad4 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -37,10 +37,10 @@ void detect_amd(void)
+ static void cmd_help(void)
+ {
+ 	printf("usage: resctrl_tests [-h] [-b \"benchmark_cmd [options]\"] [-t test list] [-n no_of_bits]\n");
+-	printf("\t-b benchmark_cmd [options]: run specified benchmark for MBM, MBA and CQM");
++	printf("\t-b benchmark_cmd [options]: run specified benchmark for MBM, MBA and CMT");
+ 	printf("\t default benchmark is builtin fill_buf\n");
+ 	printf("\t-t test list: run tests specified in the test list, ");
+-	printf("e.g. -t mbm, mba, cqm, cat\n");
++	printf("e.g. -t mbm, mba, cmt, cat\n");
+ 	printf("\t-n no_of_bits: run cache tests using specified no of bits in cache bit mask\n");
+ 	printf("\t-p cpu_no: specify CPU number to run the test. 1 is default\n");
+ 	printf("\t-h: help\n");
+@@ -50,13 +50,13 @@ void tests_cleanup(void)
+ {
+ 	mbm_test_cleanup();
+ 	mba_test_cleanup();
+-	cqm_test_cleanup();
++	cmt_test_cleanup();
+ 	cat_test_cleanup();
+ }
+ 
+ int main(int argc, char **argv)
+ {
+-	bool has_ben = false, mbm_test = true, mba_test = true, cqm_test = true;
++	bool has_ben = false, mbm_test = true, mba_test = true, cmt_test = true;
+ 	int res, c, cpu_no = 1, span = 250, argc_new = argc, i, no_of_bits = 5;
+ 	char *benchmark_cmd[BENCHMARK_ARGS], bw_report[64], bm_type[64];
+ 	char benchmark_cmd_area[BENCHMARK_ARGS][BENCHMARK_ARG_SIZE];
+@@ -82,15 +82,15 @@ int main(int argc, char **argv)
+ 
+ 			mbm_test = false;
+ 			mba_test = false;
+-			cqm_test = false;
++			cmt_test = false;
+ 			cat_test = false;
+ 			while (token) {
+ 				if (!strncmp(token, MBM_STR, sizeof(MBM_STR))) {
+ 					mbm_test = true;
+ 				} else if (!strncmp(token, MBA_STR, sizeof(MBA_STR))) {
+ 					mba_test = true;
+-				} else if (!strncmp(token, CQM_STR, sizeof(CQM_STR))) {
+-					cqm_test = true;
++				} else if (!strncmp(token, CMT_STR, sizeof(CMT_STR))) {
++					cmt_test = true;
+ 				} else if (!strncmp(token, CAT_STR, sizeof(CAT_STR))) {
+ 					cat_test = true;
+ 				} else {
+@@ -178,13 +178,13 @@ int main(int argc, char **argv)
+ 		tests_run++;
+ 	}
+ 
+-	if (cqm_test) {
+-		printf("# Starting CQM test ...\n");
++	if (cmt_test) {
++		printf("# Starting CMT test ...\n");
+ 		if (!has_ben)
+-			sprintf(benchmark_cmd[5], "%s", CQM_STR);
+-		res = cqm_resctrl_val(cpu_no, no_of_bits, benchmark_cmd);
+-		printf("%sok CQM: test\n", res ? "not " : "");
+-		cqm_test_cleanup();
++			sprintf(benchmark_cmd[5], "%s", CMT_STR);
++		res = cmt_resctrl_val(cpu_no, no_of_bits, benchmark_cmd);
++		printf("%sok CMT: test\n", res ? "not " : "");
++		cmt_test_cleanup();
+ 		tests_run++;
+ 	}
+ 
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index aed71fd0713b..17770095c98e 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -492,7 +492,7 @@ static int print_results_bw(char *filename,  int bm_pid, float bw_imc,
+ 	return 0;
+ }
+ 
+-static void set_cqm_path(const char *ctrlgrp, const char *mongrp, char sock_num)
++static void set_cmt_path(const char *ctrlgrp, const char *mongrp, char sock_num)
+ {
+ 	if (strlen(ctrlgrp) && strlen(mongrp))
+ 		sprintf(llc_occup_path,	CON_MON_LCC_OCCUP_PATH,	RESCTRL_PATH,
+@@ -512,7 +512,7 @@ static void set_cqm_path(const char *ctrlgrp, const char *mongrp, char sock_num)
+  * @ctrlgrp:			Name of the control monitor group (con_mon grp)
+  * @mongrp:			Name of the monitor group (mon grp)
+  * @cpu_no:			CPU number that the benchmark PID is binded to
+- * @resctrl_val:		Resctrl feature (Eg: cat, cqm.. etc)
++ * @resctrl_val:		Resctrl feature (Eg: cat, cmt.. etc)
+  */
+ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
+ 					int cpu_no, char *resctrl_val)
+@@ -524,8 +524,8 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
+ 		return;
+ 	}
+ 
+-	if (!strncmp(resctrl_val, CQM_STR, sizeof(CQM_STR)))
+-		set_cqm_path(ctrlgrp, mongrp, resource_id);
++	if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
++		set_cmt_path(ctrlgrp, mongrp, resource_id);
+ }
+ 
+ static int
+@@ -682,7 +682,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+ 
+ 		initialize_mem_bw_resctrl(param->ctrlgrp, param->mongrp,
+ 					  param->cpu_no, resctrl_val);
+-	} else if (!strncmp(resctrl_val, CQM_STR, sizeof(CQM_STR)))
++	} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
+ 		initialize_llc_occu_resctrl(param->ctrlgrp, param->mongrp,
+ 					    param->cpu_no, resctrl_val);
+ 
+@@ -721,7 +721,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+ 			ret = measure_vals(param, &bw_resc_start);
+ 			if (ret)
+ 				break;
+-		} else if (!strncmp(resctrl_val, CQM_STR, sizeof(CQM_STR))) {
++		} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+ 			ret = param->setup(1, param);
+ 			if (ret) {
+ 				ret = 0;
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index bc52076bee7f..b47f4f150189 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -334,7 +334,7 @@ void run_benchmark(int signum, siginfo_t *info, void *ucontext)
+ 		operation = atoi(benchmark_cmd[4]);
+ 		sprintf(resctrl_val, "%s", benchmark_cmd[5]);
+ 
+-		if (strncmp(resctrl_val, CQM_STR, sizeof(CQM_STR)))
++		if (strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
+ 			buffer_span = span * MB;
+ 		else
+ 			buffer_span = span;
+@@ -458,8 +458,8 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
+ 	if (ret)
+ 		goto out;
+ 
+-	/* Create mon grp and write pid into it for "mbm" and "cqm" test */
+-	if (!strncmp(resctrl_val, CQM_STR, sizeof(CQM_STR)) ||
++	/* Create mon grp and write pid into it for "mbm" and "cmt" test */
++	if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)) ||
+ 	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR))) {
+ 		if (strlen(mongrp)) {
+ 			sprintf(monitorgroup_p, "%s/mon_groups", controlgroup);
+@@ -507,7 +507,7 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
+ 
+ 	if (strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) &&
+ 	    strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) &&
+-	    strncmp(resctrl_val, CQM_STR, sizeof(CQM_STR)))
++	    strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
+ 		return -ENOENT;
+ 
+ 	if (!schemata) {
+@@ -529,7 +529,7 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
+ 		sprintf(controlgroup, "%s/schemata", RESCTRL_PATH);
+ 
+ 	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) ||
+-	    !strncmp(resctrl_val, CQM_STR, sizeof(CQM_STR)))
++	    !strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
+ 		sprintf(schema, "%s%d%c%s", "L3:", resource_id, '=', schemata);
+ 	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)))
+ 		sprintf(schema, "%s%d%c%s", "MB:", resource_id, '=', schemata);
 -- 
 2.31.0
 
