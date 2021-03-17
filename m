@@ -2,167 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6411D33EF07
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 12:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FD433EF35
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 12:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbhCQLCL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Mar 2021 07:02:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:33184 "EHLO
+        id S231250AbhCQLID (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Mar 2021 07:08:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:23176 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231195AbhCQLBw (ORCPT
+        by vger.kernel.org with ESMTP id S231302AbhCQLHf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Mar 2021 07:01:52 -0400
+        Wed, 17 Mar 2021 07:07:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615978912;
+        s=mimecast20190719; t=1615979254;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8UuCsD850dkXejHGU+2PtFbLb7htKiE2TVgMOJIoD6g=;
-        b=TbW3tITd4LaxTCkavMSU/yV5TOlLpN1qnHrY8eo4Msr59sU0zC3AG14KPaE5nRANqXCAnU
-        jsRp3F2iGfcrPI+gBXX6xNDKBnabq+uxvenmjEoWO/AWhZ0R9fnMdWnFDrs4WFNbtlEv/A
-        5ml74TcTyPiToT2Foy8lN8VsD66y/qA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-582-3w-31rBUMTy-3G4Y17M9Zg-1; Wed, 17 Mar 2021 07:01:50 -0400
-X-MC-Unique: 3w-31rBUMTy-3G4Y17M9Zg-1
-Received: by mail-wr1-f70.google.com with SMTP id r12so18251603wro.15
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Mar 2021 04:01:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8UuCsD850dkXejHGU+2PtFbLb7htKiE2TVgMOJIoD6g=;
-        b=p0OXh7ms7g+mfVOJApc0nnTPeIc/2zD7F2cPgL3v4cXCV8uhbOfZ+637y3W3TLea/X
-         73+Fs3wcRZ64g2bZD9MLRH0tQLAAkIo9lINZIHzX/yzeA1X9QosaF0jAZRnI0jX20rjh
-         LN2irC8gtLp3xzCz/gSUkYrjbPRc1te/svj/uATDQrsgXRiZ4md5sC4zyx4xAS0wEkO/
-         362NjCsClnWUPNXELVyTU/XgENToWA7ruDIyy6EH3c8A3CA8Fcn6k/lar0P1FN8Bhrk0
-         YBAWRSRqHiX3EA/WKJW3W1Pa6TidvVW1CGMv+8UfoftdIp/UJE1clfPuUTDeN9DJva5B
-         rEUQ==
-X-Gm-Message-State: AOAM5328F5t0HAC38fNeI+yxcPvA0ZcSRVUucCDPZW1qUZQ+8G9ixxdT
-        cWZngnIOU5GeaH5rxK++jtCTusBu2SrMSb7k7hUGsib2e1bkGWcTP2lfo1YsTSDA4AGfYMEQf8x
-        qGe14Jkqc27BihRASVl3tdAI6MuDv
-X-Received: by 2002:a5d:570b:: with SMTP id a11mr3773362wrv.281.1615978909126;
-        Wed, 17 Mar 2021 04:01:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy0VbLKaFTaCVqAGRs1rbeHF4D2KRhuHJRPmfB/eQ82N3o85USqkuU5BHbA8VdPUP1BHaQSpw==
-X-Received: by 2002:a5d:570b:: with SMTP id a11mr3773334wrv.281.1615978908914;
-        Wed, 17 Mar 2021 04:01:48 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id e1sm26436179wrd.44.2021.03.17.04.01.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Mar 2021 04:01:48 -0700 (PDT)
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20210317074426.8224-1-eesposit@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH] selftests/kvm: add set_boot_cpu_id test
-Message-ID: <c4adbfcd-1c5a-3f7a-7d61-206964256963@redhat.com>
-Date:   Wed, 17 Mar 2021 12:01:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        bh=nSWPdHkyybmSgopy3PguxB1SkYa45HMIPNmr6xk1zOk=;
+        b=DVici8hGaD3AkGaLWTeby7KaIlBIgKY9x3l5wnYD+cK7w2HJjRI7wpap4GOFUJKX5ytRsb
+        MoZ7a2lkZ1f2ETerEORLxqpK1iTaAxbhZKd35YQ4oRNOSY3hVc15miYErDK0A7ll2gGZUJ
+        13zv0oOlIpq+PxmckD48D6ovXyr2mps=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-512-JlDeP0xVP1SSTbMfRxVhnA-1; Wed, 17 Mar 2021 07:07:33 -0400
+X-MC-Unique: JlDeP0xVP1SSTbMfRxVhnA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0A978911E3;
+        Wed, 17 Mar 2021 11:07:32 +0000 (UTC)
+Received: from t480s.redhat.com (ovpn-112-124.ams2.redhat.com [10.36.112.124])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 91A7A53E35;
+        Wed, 17 Mar 2021 11:07:26 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 3/5] MAINTAINERS: add tools/testing/selftests/vm/ to MEMORY MANAGEMENT
+Date:   Wed, 17 Mar 2021 12:06:42 +0100
+Message-Id: <20210317110644.25343-4-david@redhat.com>
+In-Reply-To: <20210317110644.25343-1-david@redhat.com>
+References: <20210317110644.25343-1-david@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20210317074426.8224-1-eesposit@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17/03/21 08:44, Emanuele Giuseppe Esposito wrote:
-> +	printf("vcpu executing...\n");
-> +	vcpu_run(vm, vcpuid);
-> +	printf("vcpu executed\n");
-> +
-> +	switch (get_ucall(vm, vcpuid, &uc)) {
-> +	case UCALL_SYNC:
-> +		printf("stage %d sync %ld\n", stage, uc.args[1]);
-> +		TEST_ASSERT(!strcmp((const char *)uc.args[0], "hello") &&
-> +			    uc.args[1] == stage + 1,
-> +			    "Stage %d: Unexpected register values vmexit, got %lx",
-> +			    stage + 1, (ulong)uc.args[1]);
-> +		return;
-> +	case UCALL_DONE:
-> +		printf("got done\n");
+MEMORY MANAGEMENT seems to be a good fit.
 
-You can remove the printfs here.
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +		return;
-> +	case UCALL_ABORT:
-> +		TEST_ASSERT(false, "%s at %s:%ld\n\tvalues: %#lx, %#lx", (const char *)uc.args[0],
-> +			    __FILE__, uc.args[1], uc.args[2], uc.args[3]);
-> +	default:
-> +		TEST_ASSERT(false, "Unexpected exit: %s",
-> +			    exit_reason_str(vcpu_state(vm, vcpuid)->exit_reason));
-> +	}
-> +}
-> +
-> +static void add_x86_vcpu(struct kvm_vm *vm, uint32_t vcpuid, void *code)
-> +{
-> +	vm_vcpu_add_default(vm, vcpuid, code);
-> +	vcpu_set_cpuid(vm, vcpuid, kvm_get_supported_cpuid());
-> +}
-> +
-> +static void run_vm_bsp(uint32_t bsp_vcpu)
-> +{
-> +	struct kvm_vm *vm;
-> +	int stage;
-> +	void *vcpu0_code, *vcpu1_code;
-> +
-> +	vm = create_vm();
-> +
-> +	vcpu0_code = guest_bsp_vcpu;
-> +	vcpu1_code = guest_not_bsp_vcpu;
-> +
-> +	if (bsp_vcpu == VCPU_ID1) {
-> +		vcpu0_code = guest_not_bsp_vcpu;
-> +		vcpu1_code = guest_bsp_vcpu;
-> +
-> +		vm_ioctl(vm, KVM_SET_BOOT_CPU_ID, (void *) VCPU_ID1);
-> +	}
-> +
-> +	add_x86_vcpu(vm, VCPU_ID0, vcpu0_code);
-> +	add_x86_vcpu(vm, VCPU_ID1, vcpu1_code);
-> +
-> +	for (stage = 0; stage < 2; stage++) {
-> +		run_vcpu(vm, VCPU_ID0, stage);
-> +		run_vcpu(vm, VCPU_ID1, stage);
-> +	}
-
-These are just stylistic nits, but:
-
-1) you could pass a bool to add_x86_vcpu, like
-
-	add_x86_vcpu(vm, VCPU_ID0, bsp_vcpu == VCPU_ID0);
-	add_x86_vcpu(vm, VCPU_ID1, bsp_vcpu == VCPU_ID1);
-
-instead of having the vcpu0_code and vcpu1_code pointers.
-
-2) you could move the for loop inside run_vcpu.  This way you can assert 
-that you get UCALL_DONE when stage == 2.
-
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	if (!kvm_check_cap(KVM_CAP_SET_BOOT_CPU_ID)) {
-> +		print_skip("set_boot_cpu_id not available");
-> +		return 0;
-> +	}
-> +
-> +	run_vm_bsp(VCPU_ID0);
-> +	run_vm_bsp(VCPU_ID1);
-> +	run_vm_bsp(VCPU_ID0);
-
-Looks good!  Just another small change: since this third test is not 
-adding much, you could instead invoke KVM_SET_BOOT_CPU_ID(VCPU_ID1) 
-*after* the creation of the vCPUs instead of before.  This should fail 
-with -EBUSY, and vcpu 0 will remain the BSP.
-
-Paolo
+diff --git a/MAINTAINERS b/MAINTAINERS
+index aa84121c5611..b00963f4aa09 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11560,6 +11560,7 @@ F:	include/linux/mm.h
+ F:	include/linux/mmzone.h
+ F:	include/linux/vmalloc.h
+ F:	mm/
++F:	tools/testing/selftests/vm/
+ 
+ MEMORY TECHNOLOGY DEVICES (MTD)
+ M:	Miquel Raynal <miquel.raynal@bootlin.com>
+-- 
+2.29.2
 
