@@ -2,83 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 843DD33F885
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 19:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430AB33FA3F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Mar 2021 22:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbhCQSyu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Mar 2021 14:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S233482AbhCQVBZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Mar 2021 17:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233029AbhCQSyg (ORCPT
+        with ESMTP id S232499AbhCQVBK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Mar 2021 14:54:36 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EA5C06175F
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Mar 2021 11:54:36 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 205so152346pgh.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Mar 2021 11:54:36 -0700 (PDT)
+        Wed, 17 Mar 2021 17:01:10 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D38CC06174A
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Mar 2021 14:01:10 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id x16so38672iob.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Mar 2021 14:01:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=yv6zPM7pUlq8ZRYfu9+Rm67Low/6QrEMjW8OfG4+8cQ=;
-        b=YFzn3VVUJSbVDNgya8SNZeD4soOBKyMydCL4WfX9JLgKAGcfPgt/aIcDTUWB/DMmc6
-         hindDnCjjTtYgkCfZ+KXo5diSGJxleE1YtRJK+/7Q23nr0XIbd9Ni1v0vgcZNTyrQU3y
-         Enay3gzr5WWE51j1Nrs205Yv4P7XzGjaZICkqoRnu/iw/hceqlXYlj5K23nBd/U3slHf
-         vy7zlUno14BwZIxHXhAiknnJlSOc1pdsdXh2y+glgXN+xx5yqKF0hUPqVwp+o05jGcig
-         DCWgUYoH/778U6gfZE03F9doo8KuTyeJc3W5sRSaITbezPXILJilLk1A8PfLLY0xwQ53
-         JohQ==
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XIuPYjA6l+N0tkJmYvNT6UOMEbB5ifXWgNDr0ucCHII=;
+        b=ImORc1nRT/HRASaMXqkXN8BsCBCKfXQItBBAcRUwhtwhwx7T3t4HpX0kKhNIhdJcVD
+         hr12+6tl6yzFb6eiNmPL5l7on75J0NnMH9UgvxtxPvdR/1HmYLuG85PHPQlPLPLM8M3S
+         9F0JmEediC2gHcPB0KjzghL5IwOT55EEN3eQqrTdP3aNEnbUm9eIQ+9gCSCJnWyiS5M6
+         VUfy9DBpyzzy70cB4Yt8O7Fx7Akz/0mCIjK9DMJ06y3t0I6Vaud0shtNs9g4hKa2deX2
+         jxCQmQTCUk+Os0qfffc4SFDyIdGj0LHqSbXtc9OTH1jbv64gbrQQWHb8Pd5bzU7p3wAk
+         oqYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=yv6zPM7pUlq8ZRYfu9+Rm67Low/6QrEMjW8OfG4+8cQ=;
-        b=tuVB0FBHEz4C270C5lN3n0csVRz9Rjd0JzjGOE1B+j3tngd1ahsZ1TfioEdVBy88XU
-         nV1J1yiJjIRgwK5xW8LetxKj1s89zxhgq34V/1IMUEFPh+PEFYkCPnILI50VkiubJFel
-         20DMiPjPBJdw0YV+yBPpb+yW/FV18TqKfGAaZrlj2HU6hQ9MPj+uWRsl3ZFbH3CVDU27
-         X5lyymdyi2gGXIRxtXxRu7LOeQJqoGZXH4bO5OP2PU3C6dWh5pokTbrTUGTd6OBTTfRC
-         exQfnVaT/7/Y6INNRuZ7ZLhAA3ZPvmplBxFWIcNYrr5txfKV1I04XvE5m2uJS0felKXh
-         fWyg==
-X-Gm-Message-State: AOAM5331ojNeES5vOzi8OdOSxCBeVQqENE+Yz74IPzi8FaSyvBP9g9c2
-        o2DQ7otM6hkibn2JwrcEAcUO5g==
-X-Google-Smtp-Source: ABdhPJwtjoKr8p+TtaWdwcd66x+jRrRVFgK2czmTEOtkzs9BcIrzlnTGp10l6glE3lYClcQfSDKoNw==
-X-Received: by 2002:a62:1c8f:0:b029:209:7eb2:748f with SMTP id c137-20020a621c8f0000b02902097eb2748fmr477175pfc.79.1616007276167;
-        Wed, 17 Mar 2021 11:54:36 -0700 (PDT)
-Received: from [2620:15c:17:3:b56a:51db:a0a1:259f] ([2620:15c:17:3:b56a:51db:a0a1:259f])
-        by smtp.gmail.com with ESMTPSA id t80sm2834084pgb.78.2021.03.17.11.54.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 11:54:35 -0700 (PDT)
-Date:   Wed, 17 Mar 2021 11:54:34 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Oliver Glitta <glittao@gmail.com>
-cc:     cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, vbabka@suse.cz, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] slub: remove resiliency_test() function
-In-Reply-To: <20210316124118.6874-2-glittao@gmail.com>
-Message-ID: <398a728-dc1c-5089-5578-7af596d616ac@google.com>
-References: <20210316124118.6874-1-glittao@gmail.com> <20210316124118.6874-2-glittao@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XIuPYjA6l+N0tkJmYvNT6UOMEbB5ifXWgNDr0ucCHII=;
+        b=nm4izsQ8wZQQSnq6buqTKcwHhHYwRh03y96CCc4+2XVYy8HUU++bnPVBmh0iVeILsw
+         pkKJQmXTfxUc5wG80m2eLHVscr3P3CzlPW8m5aoUggMtWhIz5hJ0oZ9B2Eoy/ACOiwOr
+         qP5PDQhPdxltBFZBtuR5p8kdj3cEFoypyvXY6uRHGxDZpoUBOZzpib8iP2LJRFtkHhNo
+         IsI0quoH2vTG1vFXGMqRrF1MN/C/drRcIy+zgifgZJp7ku3jM7RhxUA/mI82I5uGEC6P
+         v5CQdMFVd9wict/9MkrXQ+Nw70Lu9xnzdctzG4k4QskbYHEWodC5AI4scO0IZvcUfK47
+         a36g==
+X-Gm-Message-State: AOAM5300ys6Z/Bp3oAJTx+xWwtpnngNwBNKqvCfDpjTq+b/xqrn5a04G
+        CtfPxrrZKlQC62hn0Ba+VTAlBeUZjUTzVpRCY9nWYA==
+X-Google-Smtp-Source: ABdhPJwDP2lj/gbUKX+TfHoZVhc7uAFCyPe2vkNo1ZpAiZISMMaL+B8kp8uDxM+MMbmRLZGBK3p1cC3U27SktHyGObw=
+X-Received: by 2002:a02:9048:: with SMTP id y8mr4339484jaf.66.1616014869772;
+ Wed, 17 Mar 2021 14:01:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20210315114827.46036-1-psampat@linux.ibm.com> <20210315114827.46036-3-psampat@linux.ibm.com>
+In-Reply-To: <20210315114827.46036-3-psampat@linux.ibm.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Wed, 17 Mar 2021 14:00:57 -0700
+Message-ID: <CAAYoRsW-E_Rek-c=e3xr8dTNUWud1AkndNaNySCZpt=h1qSf7g@mail.gmail.com>
+Subject: Re: [RFC 2/2] selftest/cpuidle: Add support for cpuidle latency measurement
+To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>
+Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 16 Mar 2021, glittao@gmail.com wrote:
+Hi Pratik,
 
-> From: Oliver Glitta <glittao@gmail.com>
-> 
-> Function resiliency_test() is hidden behind #ifdef
-> SLUB_RESILIENCY_TEST that is not part of Kconfig, so nobody
-> runs it.
-> 
-> This function is replaced with kselftest for SLUB added
-> by the previous patch "selftests: add a kselftest for SLUB
-> debugging functionality".
-> 
-> Signed-off-by: Oliver Glitta <glittao@gmail.com>
+It just so happens that I have been trying Artem's version this last
+week, so I tried yours.
 
-Very nice!
+On Mon, Mar 15, 2021 at 4:49 AM Pratik Rajesh Sampat
+<psampat@linux.ibm.com> wrote:
+>
+...
+> To run this test specifically:
+> $ make -C tools/testing/selftests TARGETS="cpuidle" run_tests
 
-Acked-by: David Rientjes <rientjes@google.com>
+While I suppose it should have been obvious, I interpreted
+the "$" sign to mean I could run as a regular user, which I can not.
+
+> There are a few optinal arguments too that the script can take
+>         [-h <help>]
+>         [-m <location of the module>]
+>         [-o <location of the output>]
+>         [-v <verbose> (run on all cpus)]
+> Default Output location in: tools/testing/cpuidle/cpuidle.log
+
+Isn't it:
+
+tools/testing/selftests/cpuidle/cpuidle.log
+
+? At least, that is where my file was.
+
+Other notes:
+
+No idle state for CPU 0 ever gets disabled.
+I assume this is because CPU 0 can never be offline,
+so that bit of code (Disable all stop states) doesn't find its state.
+By the way, processor = Intel i5-9600K
+
+The system is left with all idle states disabled, well not for CPU 0
+as per the above comment. The suggestion is to restore them,
+otherwise my processor hogs 42 watts instead of 2.
+
+My results are highly variable per test.
+My system is very idle:
+Example (from turbostat at 6 seconds sample rate):
+Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt RAMWatt
+0.03    4600    153     28      2.03    1.89
+0.01    4600    103     29      2.03    1.89
+0.05    4600    115     29      2.08    1.89
+0.01    4600    95      28      2.09    1.89
+0.03    4600    114     28      2.11    1.89
+0.01    4600    107     29      2.07    1.89
+0.02    4600    102     29      2.11    1.89
+
+...
+
+... Doug
