@@ -2,75 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24853341C66
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 13:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6314342139
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 16:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbhCSMUn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Mar 2021 08:20:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231145AbhCSMUc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 08:20:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AF41A64F65;
-        Fri, 19 Mar 2021 12:20:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616156432;
-        bh=rn6jAzbbP50GmkDgKobeZZgcZxTcfVZQtfs6uQ0Stig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jREiiNaKerIggmPBkuAnhIrycchDeAAv+I8ZcRc9EahNlkqzJmVgWt0oBkhrUGxiY
-         wro+HmZ3UiRkHI2ecIu5kS1tcd288JPvg6hTEUL72Eut6adOb7TXUWdbmGKZfuBzpI
-         fTfJl5SVgqv3tSxhfkVaHMlXQfBYIjj99TnNdQcLmu5GVH7leievdKxWb22d2ynRFB
-         i3ms50RhfM9KKk5HLaW+iIeC+xc7cM4nplOgpLvJNYugSNYIGzHHPoXiccg6h2kKnB
-         IimrbJfqYnuKkgDzVWLpCKI0CxdqnN2h2O10yVAMxMqGIEt7Nnkl0jnGK+EpxJsaDE
-         W0ymoN++gA+MQ==
-Date:   Fri, 19 Mar 2021 12:20:28 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Martin <dave.martin@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: sve: Do not use non-canonical FFR
- register value
-Message-ID: <20210319122028.GA5619@sirena.org.uk>
-References: <20210319120128.29452-1-andre.przywara@arm.com>
+        id S230324AbhCSPwK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Mar 2021 11:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230355AbhCSPvw (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Mar 2021 11:51:52 -0400
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2752C06175F;
+        Fri, 19 Mar 2021 08:51:52 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F27g962FxzMqCNw;
+        Fri, 19 Mar 2021 16:51:49 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4F27g65j8Qzlh8TH;
+        Fri, 19 Mar 2021 16:51:46 +0100 (CET)
+Subject: Re: [PATCH v30 00/12] Landlock LSM
+To:     James Morris <jmorris@namei.org>
+Cc:     Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        Dmitry Vyukov <dvyukov@google.com>
+References: <20210316204252.427806-1-mic@digikod.net>
+ <651a1034-c59f-1085-d3f6-c5a41f6fbbb@namei.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <39a58eb2-7cd8-9cc9-cbf1-829b6ee59f6b@digikod.net>
+Date:   Fri, 19 Mar 2021 16:52:02 +0100
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
-Content-Disposition: inline
-In-Reply-To: <20210319120128.29452-1-andre.przywara@arm.com>
-X-Cookie: No purchase necessary.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <651a1034-c59f-1085-d3f6-c5a41f6fbbb@namei.org>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---EVF5PPMfhYS0aIcm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 19/03/2021 00:26, James Morris wrote:
+> I've queued this patchset here:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git landlock_lsm
+> 
+> and pulled it into next-testing, which will get it coverage in linux-next.
+> 
+> All going well, I'll aim to push this to Linus in the next merge window. 
+> More review and testing during that time will be helpful.
 
-On Fri, Mar 19, 2021 at 12:01:28PM +0000, Andre Przywara wrote:
-> The "First Fault Register" (FFR) is an SVE register that mimics a
-> predicate register, but clears bits when a load or store fails to handle
-> an element of a vector. The supposed usage scenario is to initialise
-
-Reviwed-by: Mark Brown <broonie@kernel.org>
-
---EVF5PPMfhYS0aIcm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBUlwsACgkQJNaLcl1U
-h9BRzQf/Spgqn2QBohXUfHZRk0bbIUR37vOlDcs33ImzdCDuA1VpECOCMjIpLfmZ
-/+R1eOB4KQtG79ZoTg9TFPysIwzLflnuqgOKKuF4gphIiyWyIYwdhQiRHyXv+YD+
-IziwV6AhY2sGjeBx5NikHkLN6aCFdTD5epyIkDTQg0Vg6plYje77CWyn2PgAIUjE
-NVQz/IAuB2TwIUqOBOzTPXFdO4hKuTgpaWlRfDiMHwcgdyLMqu0A9+TJWYv+dWnl
-rotZECh+NIoHsweH+dNEMJGDSn6qanuyp5Z9xanGXWASVK78bkXsBa4VUjdUdiC7
-zOAKKL/nopwrCEdKMFEt5H2tIK09Nw==
-=AfJ2
------END PGP SIGNATURE-----
-
---EVF5PPMfhYS0aIcm--
+Good, thanks! The syzkaller changes are now merged and up-to-date with
+linux-next:
+https://github.com/google/syzkaller/commits/3d01c4de549b4e4bddba6102715c212bbcff2fbb
