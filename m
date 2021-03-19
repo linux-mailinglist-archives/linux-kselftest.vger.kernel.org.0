@@ -2,130 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6FE341B4B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 12:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFF1341BEA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 13:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbhCSLUi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Mar 2021 07:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbhCSLUL (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 07:20:11 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A6FC06174A
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 04:20:10 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id c12-20020a4ae24c0000b02901bad05f40e4so2204161oot.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 04:20:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=563BAybzVyHEsgNkhjo3Ec3csusCS7gRQaGdAB7Gmag=;
-        b=GwMpeYjU0UPUDm9dz3INLUYoGdgFNUt7NzD/7SI5sYjGE+9FyhjLK01joQgS5pc+CO
-         bP5DgKDTqGjtUvrNBmKSoLe5aISbyJGEu0zIV8MV9UhPRRlYEf6RXbeMgdApY8e8cGfn
-         ING6er4kHFjYi/y2G6v3WloSZAuluDdJ5C/HrtyzDz3b9XtYTZnRXbur2WZM1E5Pyz4j
-         u0gT5ZJrNGM1MHlb5MO3hzAlpPmzQEOyzyvT4MbhcH0kXYcChKlsQMSG5iZ9AWvuPZrp
-         gglcwl5xSFxAN5s7GpN/g8AQvt7Z3tXHmjOLQlHcuxy1NKQqqxR4qMH6eTYnkz+KTmBh
-         FnSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=563BAybzVyHEsgNkhjo3Ec3csusCS7gRQaGdAB7Gmag=;
-        b=gzVmyzwPo96zL4jubMySWXWOuGj0BTv+QtBFcGWH9obtDcwUjbU1bMfNByLKKFg+Fo
-         t5IFVOrXOd21dkC5ljHc9GWVApaCrnHsh8WIr8LO9CMVDmJqcwn9GyGU2x2URoILFU6c
-         qKtRUEjRUSyA10uYPjuU0SEzCcms5hIi7nXm/GA2WQoRBTnaBjPrR0L2nI5Kie+Gjwwh
-         ytYkf+jSPRZNjok8s6PttgZ0BQDgXsRqClLI5RYnxy2UlBaKB138l5KygKGemV/sVH52
-         0grF4b/yXtQJS50HqFDXpIZ5z2ZwC28L6cH39nqXXYUjKN/fbSLeDQdwRZNs0aWMY16H
-         2zzQ==
-X-Gm-Message-State: AOAM530kI0sOO/w0W0AHFGKIFVtBvpHbEJni3qzlbGRkdESwU8cz3P7n
-        luJ41FnYbgnNCJCwbYmXC7StXAuSdwN5XTBHuOpoLQ==
-X-Google-Smtp-Source: ABdhPJxxLImaAPwO9waG0d7jrrqrIp8kbDzYx14Qc417p4oCxS11Mr56IHANMprCOhUvN7EIWCGQjbt6ugpIv1orY34=
-X-Received: by 2002:a05:6820:273:: with SMTP id c19mr993222ooe.54.1616152809948;
- Fri, 19 Mar 2021 04:20:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210316124118.6874-1-glittao@gmail.com> <YFM96dY1pfk/rs3U@elver.google.com>
- <3ba2228a-1442-40b4-578f-f693d9a054e7@suse.cz>
-In-Reply-To: <3ba2228a-1442-40b4-578f-f693d9a054e7@suse.cz>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 19 Mar 2021 12:19:58 +0100
-Message-ID: <CANpmjNPzO2ORHMb=WdSmZs-1k2NRzVda5rtLjvRnaGkb7xcCNw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] selftests: add a kselftest for SLUB debugging functionality
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     glittao@gmail.com, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S229634AbhCSMBr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Mar 2021 08:01:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:47836 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229756AbhCSMBg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Mar 2021 08:01:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFA86ED1;
+        Fri, 19 Mar 2021 05:01:35 -0700 (PDT)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 831BA3F70D;
+        Fri, 19 Mar 2021 05:01:34 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, Dave Martin <dave.martin@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] kselftest/arm64: sve: Do not use non-canonical FFR register value
+Date:   Fri, 19 Mar 2021 12:01:28 +0000
+Message-Id: <20210319120128.29452-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.14.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 19 Mar 2021 at 11:46, Vlastimil Babka <vbabka@suse.cz> wrote:
-> On 3/18/21 12:47 PM, Marco Elver wrote:
-> > On Tue, Mar 16, 2021 at 01:41PM +0100, glittao@gmail.com wrote:
-> >> From: Oliver Glitta <glittao@gmail.com>
-> >>
-> >> SLUB has resiliency_test() function which is hidden behind #ifdef
-> >> SLUB_RESILIENCY_TEST that is not part of Kconfig, so nobody
-> >> runs it. Kselftest should proper replacement for it.
-> >>
-> >> Try changing byte in redzone after allocation and changing
-> >> pointer to next free node, first byte, 50th byte and redzone
-> >> byte. Check if validation finds errors.
-> >>
-> >> There are several differences from the original resiliency test:
-> >> Tests create own caches with known state instead of corrupting
-> >> shared kmalloc caches.
-> >>
-> >> The corruption of freepointer uses correct offset, the original
-> >> resiliency test got broken with freepointer changes.
-> >>
-> >> Scratch changing random byte test, because it does not have
-> >> meaning in this form where we need deterministic results.
-> >>
-> >> Add new option CONFIG_TEST_SLUB in Kconfig.
-> >>
-> >> Add parameter to function validate_slab_cache() to return
-> >> number of errors in cache.
-> >>
-> >> Signed-off-by: Oliver Glitta <glittao@gmail.com>
-> >
-> > No objection per-se, but have you considered a KUnit-based test instead?
->
-> To be honest, we didn't realize about that option.
->
-> > There is no user space portion required to run this test, and a pure
-> > in-kernel KUnit test would be cleaner. Various boiler-plate below,
-> > including pr_err()s, the kselftest script etc. would simply not be
-> > necessary.
-> >
-> > This is only a suggestion, but just want to make sure you've considered
-> > the option and weighed its pros/cons.
->
-> Thanks for the suggestion. But I hope we would expand the tests later to e.g.
-> check the contents of various SLUB related sysfs files or even write to them,
-> and for that goal kselftest seems to be a better starting place?
+The "First Fault Register" (FFR) is an SVE register that mimics a
+predicate register, but clears bits when a load or store fails to handle
+an element of a vector. The supposed usage scenario is to initialise
+this register (using SETFFR), then *read* it later on to learn about
+elements that failed to load or store. Explicit writes to this register
+using the WRFFR instruction are only supposed to *restore* values
+previously read from the register (for context-switching only).
+As the manual describes, this register holds only certain values, it:
+"... contains a monotonic predicate value, in which starting from bit 0
+there are zero or more 1 bits, followed only by 0 bits in any remaining
+bit positions."
+Any other value is UNPREDICTABLE and is not supposed to be "restored"
+into the register.
 
-Not sure, but I would probably go about it this way:
+The SVE test currently tries to write a signature pattern into the
+register, which is *not* a canonical FFR value. Apparently the existing
+setups treat UNPREDICTABLE as "read-as-written", but a new
+implementation actually only stores canonical values. As a consequence,
+the sve-test fails immediately when comparing the FFR value:
+-----------
+ # ./sve-test
+Vector length:  128 bits
+PID:    207
+Mismatch: PID=207, iteration=0, reg=48
+        Expected [cf00]
+        Got      [0f00]
+Aborted
+-----------
 
-A. Anything that is purely in-kernel and doesn't require a user space
-component should be a KUnit test.
+Fix this by only populating the FFR with proper canonical values.
+Effectively the requirement described above limits us to 17 unique
+values over 16 bits worth of FFR, so we condense our signature down to 4
+bits (2 bits from the PID, 2 bits from the generation) and generate the
+canonical pattern from it. Any bits describing elements above the
+minimum 128 bit are set to 0.
 
-B. For any test that requires a user space component, it'd be a kselftest.
+This aligns the FFR usage to the architecture and fixes the test on
+microarchitectures implementing FFR in a more restricted way.
 
-And I think the best design here would also clearly separate those 2
-types of tests, and I wouldn't lump tests of type A into modules that
-are also used for B. That way, running tests of type A also is a bit
-easier, and if somebody wants to just quickly run those it's e.g. very
-quick to do so with kunit-tool.
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ tools/testing/selftests/arm64/fp/sve-test.S | 22 ++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-Thanks,
--- Marco
+diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
+index 9210691aa998..e3e08d9c7020 100644
+--- a/tools/testing/selftests/arm64/fp/sve-test.S
++++ b/tools/testing/selftests/arm64/fp/sve-test.S
+@@ -284,16 +284,28 @@ endfunction
+ // Set up test pattern in the FFR
+ // x0: pid
+ // x2: generation
++//
++// We need to generate a canonical FFR value, which consists of a number of
++// low "1" bits, followed by a number of zeros. This gives us 17 unique values
++// per 16 bits of FFR, so we create a 4 bit signature out of the PID and
++// generation, and use that as the initial number of ones in the pattern.
++// We fill the upper lanes of FFR with zeros.
+ // Beware: corrupts P0.
+ function setup_ffr
+ 	mov	x4, x30
+ 
+-	bl	pattern
++	and	w0, w0, #0x3
++	bfi	w0, w2, #2, #2
++	mov	w1, #1
++	lsl	w1, w1, w0
++	sub	w1, w1, #1
++
+ 	ldr	x0, =ffrref
+-	ldr	x1, =scratch
+-	rdvl	x2, #1
+-	lsr	x2, x2, #3
+-	bl	memcpy
++	strh	w1, [x0], 2
++	rdvl	x1, #1
++	lsr	x1, x1, #3
++	sub	x1, x1, #2
++	bl	memclr
+ 
+ 	mov	x0, #0
+ 	ldr	x1, =ffrref
+-- 
+2.25.1
+
