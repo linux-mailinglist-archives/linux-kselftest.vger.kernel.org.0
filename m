@@ -2,75 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6314342139
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 16:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11ACE342286
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 17:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbhCSPwK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Mar 2021 11:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbhCSPvw (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 11:51:52 -0400
-Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2752C06175F;
-        Fri, 19 Mar 2021 08:51:52 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F27g962FxzMqCNw;
-        Fri, 19 Mar 2021 16:51:49 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4F27g65j8Qzlh8TH;
-        Fri, 19 Mar 2021 16:51:46 +0100 (CET)
-Subject: Re: [PATCH v30 00/12] Landlock LSM
-To:     James Morris <jmorris@namei.org>
-Cc:     Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S230113AbhCSQyF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Mar 2021 12:54:05 -0400
+Received: from foss.arm.com ([217.140.110.172]:56790 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229991AbhCSQxm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Mar 2021 12:53:42 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8522B101E;
+        Fri, 19 Mar 2021 09:53:42 -0700 (PDT)
+Received: from e104803-lin.cambridge.arm.com (e104803-lin.cambridge.arm.com [10.1.197.64])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F1FFA3F70D;
+        Fri, 19 Mar 2021 09:53:40 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <20210316204252.427806-1-mic@digikod.net>
- <651a1034-c59f-1085-d3f6-c5a41f6fbbb@namei.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <39a58eb2-7cd8-9cc9-cbf1-829b6ee59f6b@digikod.net>
-Date:   Fri, 19 Mar 2021 16:52:02 +0100
-User-Agent: 
-MIME-Version: 1.0
-In-Reply-To: <651a1034-c59f-1085-d3f6-c5a41f6fbbb@namei.org>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH 00/11] kselftest/arm64: mte: Fix feature detection and compilation
+Date:   Fri, 19 Mar 2021 16:53:23 +0000
+Message-Id: <20210319165334.29213-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.17.5
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+When trying to run the arm64 MTE (Memory Tagging Extension) selftests
+on a model with the new FEAT_MTE3 capability, the MTE feature detection
+failed, because it was overzealously checking for one exact feature
+version only (0b0010). Trying to fix that (patch 06/11) led me into the
+rabbit hole of userland tool compilation, which triggered patches
+01-05/11, to let me actually compile the selftests on an arm64
+machine running Ubuntu 20.04. Before I actually fixed that, I tried some
+other compiler and distro; patches 07 and 08 are my witnesses.
+Then I got brave and tried clang: entering patches 09/11 and 10/11.
+Eventually I tried to run the whole thing on that model again, and,
+you guessed it, patch 11/11 concludes this apparent "2 minute job".
 
-On 19/03/2021 00:26, James Morris wrote:
-> I've queued this patchset here:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git landlock_lsm
-> 
-> and pulled it into next-testing, which will get it coverage in linux-next.
-> 
-> All going well, I'll aim to push this to Linus in the next merge window. 
-> More review and testing during that time will be helpful.
+Eventually I can now compile the mte selftests on Ubuntu 20.04 with both
+the native gcc and clang without warnings, also with some custom made
+cross compiler. And they even run now!
 
-Good, thanks! The syzkaller changes are now merged and up-to-date with
-linux-next:
-https://github.com/google/syzkaller/commits/3d01c4de549b4e4bddba6102715c212bbcff2fbb
+Please have a look, also you may try to compile it on your setup, if you
+feel adventurous:
+$ make -C tools/testing/selftests TARGETS=arm64 ARM64_SUBTARGETS=mte
+
+Cheers,
+Andre
+
+Andre Przywara (11):
+  kselftest/arm64: mte: Fix compilation with native compiler
+  kselftest/arm64: mte: Fix pthread linking
+  kselftest/arm64: mte: ksm_options: Fix fscanf warning
+  kselftest/arm64: mte: user_mem: Fix write() warning
+  kselftest/arm64: mte: common: Fix write() warnings
+  kselftest/arm64: mte: Fix MTE feature detection
+  kselftest/arm64: mte: Use cross-compiler if specified
+  kselftest/arm64: mte: Output warning about failing compiler
+  kselftest/arm64: mte: Makefile: Fix clang compilation
+  kselftest/arm64: mte: Fix clang warning
+  kselftest/arm64: mte: Report filename on failing temp file creation
+
+ tools/testing/selftests/arm64/mte/Makefile    | 15 +++++--
+ .../selftests/arm64/mte/check_ksm_options.c   |  5 ++-
+ .../selftests/arm64/mte/check_user_mem.c      |  3 +-
+ .../selftests/arm64/mte/mte_common_util.c     | 39 +++++++++++--------
+ 4 files changed, 39 insertions(+), 23 deletions(-)
+
+-- 
+2.17.5
+
