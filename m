@@ -2,272 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E679A3414EE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 06:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA76341715
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 09:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233767AbhCSFih (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Mar 2021 01:38:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47212 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233730AbhCSFiZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 01:38:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DA7F264EED;
-        Fri, 19 Mar 2021 05:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616132304;
-        bh=+1+vehoUYf3q5B5TrXV7HK7m6+TRZqh8slDFYWBYvuU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L1oAhqd46/hwRR/NseERrqSDDYXmaZiuDzK7pP1XZRJ/XqI6jVXWe4j2Y2OfQSjPK
-         ZuhUv4E5N1dJCWF0Gh5DYzX7Qtr8dbsSLX/gtoIuaZpxv644KpNX2SJm90DO7UUOBU
-         S7mP3a6BNLSmVGU882RGUaY6Ukat5R29by1dtvIDVf2uyyLq8BMjcII9/tRIXCeLaE
-         9xWF+o6QbycCPzhlAbNSrnhtpkFN9da67nX7vwAPGXGqZ1d8Ky/2c05GnXXFH3Dwip
-         OdlZ2hkAKj7aCQrojIylu5kBQaQmRuqoFxUHv8xYYaPwYvlj/i5OujWyzpXitB0/Iz
-         bvLeq+ZrSSGMg==
-Date:   Fri, 19 Mar 2021 07:37:57 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org, bp@alien8.de,
-        x86@kernel.org, linux-sgx@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/sgx: improve error detection and messages
-Message-ID: <YFQ4tdjXH6AZvIGm@kernel.org>
-References: <20210318194301.11D9A984@viggo.jf.intel.com>
+        id S234227AbhCSIHj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Mar 2021 04:07:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:30012 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234181AbhCSIHR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Mar 2021 04:07:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1616141237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Skqo6f9yW8lK62SqKGHOk+G8drCEfkExBud4qudsccw=;
+        b=Py3IaICHV1IBCvgJr1SRNqCNhSYy+/mgWsR3pIAT4BjkRTlpadJ2THVoW9fvM9LvS5AzKX
+        rgB8SYzSfG6wsf+P1cmcILpeWkMhAvA1RvSR+yCSzIUS6WTpEnfpSeC/WoSLqnmB/hza9g
+        R9tVQVega2nkIdZhIs5MgJAvEjYBJZ0=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-411-fqDQkIoMMxKpF6akHH304Q-1; Fri, 19 Mar 2021 04:07:15 -0400
+X-MC-Unique: fqDQkIoMMxKpF6akHH304Q-1
+Received: by mail-ej1-f70.google.com with SMTP id si4so17997668ejb.23
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 01:07:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Skqo6f9yW8lK62SqKGHOk+G8drCEfkExBud4qudsccw=;
+        b=AHr/in3qWUzfgLtJghfM9qcK9m02t8yotap4aSpWhD+mMLHhdZnLQ2KH3AnGAZzZcL
+         VbKs2721cp7IMEBAmtypYagcL/Zmg7O8p5+wppBuV20g86jnKhph5i9PCPg5q4ltJ1Rk
+         clk9BI+SSembGiJqfUr29TukihPa3XTJFKCvav5mJ1sQnzRrdAbYKcwuTUOvYx2jNJ4B
+         hfWgY6EfNl7cB1J+l+BDbyeTzFCheMiNP6qFJVSyOowGASfs4k7JzSYfnHOeVBAUjQ4e
+         KDqo4CxNn44qSMB+6OGfoUwMD1Ez9armTuD1RnyHf3otCThHlPMFCiRRE3QqWdf/b9a6
+         tlvQ==
+X-Gm-Message-State: AOAM533wH1QYKue9vV0FYePOOffBg2vpDT4Q60TeAcxcTyD1SsYmS0aE
+        bO3kovyBTRubSn8z7kLQ3vD/Yx12SfsSlzOXP85CgnuA4T4wNZmBiKxk1BKC4w1XwfRbIkPY/N+
+        LwRK5edfDkx61aK4K47aXW5DhS+pa
+X-Received: by 2002:a17:906:4955:: with SMTP id f21mr3064172ejt.74.1616141234395;
+        Fri, 19 Mar 2021 01:07:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxkhvLmdglHhe4zfW02VmKkQ4vHdspPb/cEApNgMloEmZsu3PphEPl8SexenPqbp0wXWjtuqQ==
+X-Received: by 2002:a17:906:4955:: with SMTP id f21mr3064155ejt.74.1616141234243;
+        Fri, 19 Mar 2021 01:07:14 -0700 (PDT)
+Received: from localhost.localdomain ([194.230.155.135])
+        by smtp.gmail.com with ESMTPSA id r17sm3311246ejz.109.2021.03.19.01.07.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Mar 2021 01:07:13 -0700 (PDT)
+Subject: Re: [PATCH] selftests/kvm: add get_msr_index_features
+To:     Andrew Jones <drjones@redhat.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210318145629.486450-1-eesposit@redhat.com>
+ <20210318170316.6vah7x2ws4bimmdf@kamzik.brq.redhat.com>
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Message-ID: <52d09cdf-3819-0cd8-5812-387febaa1ab3@redhat.com>
+Date:   Fri, 19 Mar 2021 09:07:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210318194301.11D9A984@viggo.jf.intel.com>
+In-Reply-To: <20210318170316.6vah7x2ws4bimmdf@kamzik.brq.redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 18, 2021 at 12:43:01PM -0700, Dave Hansen wrote:
-> 
-> From: Dave Hansen <dave.hansen@linux.intel.com>
-> 
-> The SGX device file (/dev/sgx_enclave) is unusual in that it requires
-> execute permissions.  It has to be both "chmod +x" *and* be on a
-> filesystem without 'noexec'.
-> 
-> In the future, udev and systemd should get updates to set up systems
-> automatically.  But, for now, nobody's systems do this automatically,
-> and everybody gets error messages like this when running ./test_sgx:
-> 
-> 	0x0000000000000000 0x0000000000002000 0x03
-> 	0x0000000000002000 0x0000000000001000 0x05
-> 	0x0000000000003000 0x0000000000003000 0x03
-> 	mmap() failed, errno=1.
-> 
-> That isn't very user friendly, even for forgetful kernel developers.
-> 
-> Further, the test case is rather haphazard about its use of fprintf()
-> versus perror().
-> 
-> Improve the error messages.  Use perror() where possible.  Lastly,
-> do some sanity checks on opening and mmap()ing the device file so
-> that we can get a decent error message out to the user.
-> 
-> Now, if your user doesn't have permission, you'll get the following:
-> 
-> 	$ ls -l /dev/sgx_enclave
-> 	crw------- 1 root root 10, 126 Mar 18 11:29 /dev/sgx_enclave
-> 	$ ./test_sgx
-> 	Unable to open /dev/sgx_enclave: Permission denied
-> 
-> If you then 'chown dave:dave /dev/sgx_enclave' (or whatever), but
-> you leave execute permissions off, you'll get:
-> 
-> 	$ ls -l /dev/sgx_enclave
-> 	crw------- 1 dave dave 10, 126 Mar 18 11:29 /dev/sgx_enclave
-> 	$ ./test_sgx
-> 	no execute permissions on device file
-> 
-> If you fix that with "chmod ug+x /dev/sgx" but you leave /dev as
-> noexec, you'll get this:
-> 
-> 	$ mount | grep "/dev .*noexec"
-> 	udev on /dev type devtmpfs (rw,nosuid,noexec,...)
-> 	$ ./test_sgx
-> 	ERROR: mmap for exec: Operation not permitted
-> 	mmap() succeeded for PROT_READ, but failed for PROT_EXEC
-> 	check that user has execute permissions on /dev/sgx_enclave and
-> 	that /dev does not have noexec set: 'mount | grep "/dev .*noexec"'
-> 
-> That can be fixed with:
-> 
-> 	mount -o remount,noexec /devESC
-> 
-> Hopefully, the combination of better error messages and the search
-> engines indexing this message will help people fix their systems
-> until we do this properly.
-> 
-> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: x86@kernel.org
-> Cc: linux-sgx@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
+Hi Andrew,
 
+Thank you for the feedback (also in v1).
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+On 18/03/2021 18:03, Andrew Jones wrote:
+> On Thu, Mar 18, 2021 at 03:56:29PM +0100, Emanuele Giuseppe Esposito wrote:
+>> Test the KVM_GET_MSR_FEATURE_INDEX_LIST
+>> and KVM_GET_MSR_INDEX_LIST ioctls.
+>>
+>> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+>> ---
+>>   tools/testing/selftests/kvm/.gitignore        |   1 +
+>>   tools/testing/selftests/kvm/Makefile          |   1 +
+>>   .../kvm/x86_64/get_msr_index_features.c       | 124 ++++++++++++++++++
+>>   3 files changed, 126 insertions(+)
+>>   create mode 100644 tools/testing/selftests/kvm/x86_64/get_msr_index_features.c
+>>
+>> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+>> index 32b87cc77c8e..d99f3969d371 100644
+>> --- a/tools/testing/selftests/kvm/.gitignore
+>> +++ b/tools/testing/selftests/kvm/.gitignore
+>> @@ -5,6 +5,7 @@
+>>   /s390x/resets
+>>   /s390x/sync_regs_test
+>>   /x86_64/cr4_cpuid_sync_test
+>> +/x86_64/get_msr_index_features
+>>   /x86_64/debug_regs
+>>   /x86_64/evmcs_test
+>>   /x86_64/get_cpuid_test
+>> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+>> index a6d61f451f88..c748b9650e28 100644
+>> --- a/tools/testing/selftests/kvm/Makefile
+>> +++ b/tools/testing/selftests/kvm/Makefile
+>> @@ -39,6 +39,7 @@ LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c
+>>   LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c lib/s390x/diag318_test_handler.c
+>>   
+>>   TEST_GEN_PROGS_x86_64 = x86_64/cr4_cpuid_sync_test
+>> +TEST_GEN_PROGS_x86_64 += x86_64/get_msr_index_features
+> 
+> Maybe we should give up trying to keep an alphabetic order.
 
-> ---
+My bad, I did not notice that it was in alphabetic order.
+
 > 
->  b/tools/testing/selftests/sgx/load.c |   66 +++++++++++++++++++++++++++--------
->  b/tools/testing/selftests/sgx/main.c |    2 -
->  2 files changed, 53 insertions(+), 15 deletions(-)
+>>   TEST_GEN_PROGS_x86_64 += x86_64/evmcs_test
+>>   TEST_GEN_PROGS_x86_64 += x86_64/get_cpuid_test
+>>   TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
+>> diff --git a/tools/testing/selftests/kvm/x86_64/get_msr_index_features.c b/tools/testing/selftests/kvm/x86_64/get_msr_index_features.c
+>> new file mode 100644
+>> index 000000000000..ad9972d99dfa
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/kvm/x86_64/get_msr_index_features.c
+>> @@ -0,0 +1,124 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Test that KVM_GET_MSR_INDEX_LIST and
+>> + * KVM_GET_MSR_FEATURE_INDEX_LIST work as intended
+>> + *
+>> + * Copyright (C) 2020, Red Hat, Inc.
+>> + */
+>> +#include <fcntl.h>
+>> +#include <stdio.h>
+>> +#include <stdlib.h>
+>> +#include <string.h>
+>> +#include <sys/ioctl.h>
+>> +
+>> +#include "test_util.h"
+>> +#include "kvm_util.h"
+>> +#include "processor.h"
+>> +#include "../lib/kvm_util_internal.h"
 > 
-> diff -puN tools/testing/selftests/sgx/load.c~sgx-selftest-err-rework tools/testing/selftests/sgx/load.c
-> --- a/tools/testing/selftests/sgx/load.c~sgx-selftest-err-rework	2021-03-18 12:18:38.649828215 -0700
-> +++ b/tools/testing/selftests/sgx/load.c	2021-03-18 12:40:46.388824904 -0700
-> @@ -45,19 +45,19 @@ static bool encl_map_bin(const char *pat
->  
->  	fd = open(path, O_RDONLY);
->  	if (fd == -1)  {
-> -		perror("open()");
-> +		perror("enclave executable open()");
->  		return false;
->  	}
->  
->  	ret = stat(path, &sb);
->  	if (ret) {
-> -		perror("stat()");
-> +		perror("enclave executable stat()");
->  		goto err;
->  	}
->  
->  	bin = mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
->  	if (bin == MAP_FAILED) {
-> -		perror("mmap()");
-> +		perror("enclave executable mmap()");
->  		goto err;
->  	}
->  
-> @@ -90,8 +90,7 @@ static bool encl_ioc_create(struct encl
->  	ioc.src = (unsigned long)secs;
->  	rc = ioctl(encl->fd, SGX_IOC_ENCLAVE_CREATE, &ioc);
->  	if (rc) {
-> -		fprintf(stderr, "SGX_IOC_ENCLAVE_CREATE failed: errno=%d\n",
-> -			errno);
-> +		perror("SGX_IOC_ENCLAVE_CREATE failed");
->  		munmap((void *)secs->base, encl->encl_size);
->  		return false;
->  	}
-> @@ -116,31 +115,69 @@ static bool encl_ioc_add_pages(struct en
->  
->  	rc = ioctl(encl->fd, SGX_IOC_ENCLAVE_ADD_PAGES, &ioc);
->  	if (rc < 0) {
-> -		fprintf(stderr, "SGX_IOC_ENCLAVE_ADD_PAGES failed: errno=%d.\n",
-> -			errno);
-> +		perror("SGX_IOC_ENCLAVE_ADD_PAGES failed");
->  		return false;
->  	}
->  
->  	return true;
->  }
->  
-> +
-> +
->  bool encl_load(const char *path, struct encl *encl)
->  {
-> +	const char device_path[] = "/dev/sgx_enclave";
->  	Elf64_Phdr *phdr_tbl;
->  	off_t src_offset;
->  	Elf64_Ehdr *ehdr;
-> +	struct stat sb;
-> +	void *ptr;
->  	int i, j;
->  	int ret;
-> +	int fd = -1;
->  
->  	memset(encl, 0, sizeof(*encl));
->  
-> -	ret = open("/dev/sgx_enclave", O_RDWR);
-> -	if (ret < 0) {
-> -		fprintf(stderr, "Unable to open /dev/sgx_enclave\n");
-> +	fd = open(device_path, O_RDWR);
-> +	if (fd < 0) {
-> +		perror("Unable to open /dev/sgx_enclave");
-> +		goto err;
-> +	}
-> +
-> +	ret = stat(device_path, &sb);
-> +	if (ret) {
-> +		perror("device file stat()");
-> +		goto err;
-> +	}
-> +
-> +	/*
-> +	 * This just checks if the /dev file has these permission
-> +	 * bits set.  It does not check that the current user is
-> +	 * the owner or in the owning group.
-> +	 */
-> +	if (!(sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))) {
-> +		fprintf(stderr, "no execute permissions on device file\n");
-> +		goto err;
-> +	}
-> +
-> +	ptr = mmap(NULL, PAGE_SIZE, PROT_READ, MAP_SHARED, fd, 0);
-> +	if (ptr == (void *)-1) {
-> +		perror("mmap for read");
-> +		goto err;
-> +	}
-> +	munmap(ptr, PAGE_SIZE);
-> +
-> +	ptr = mmap(NULL, PAGE_SIZE, PROT_EXEC, MAP_SHARED, fd, 0);
-> +	if (ptr == (void *)-1) {
-> +		perror("ERROR: mmap for exec");
-> +		fprintf(stderr, "mmap() succeeded for PROT_READ, but failed for PROT_EXEC\n");
-> +		fprintf(stderr, "check that user has execute permissions on %s and\n", device_path);
-> +		fprintf(stderr, "that /dev does not have noexec set: 'mount | grep \"/dev .*noexec\"'\n");
->  		goto err;
->  	}
-> +	munmap(ptr, PAGE_SIZE);
->  
-> -	encl->fd = ret;
-> +	encl->fd = fd;
->  
->  	if (!encl_map_bin(path, encl))
->  		goto err;
-> @@ -217,6 +254,8 @@ bool encl_load(const char *path, struct
->  	return true;
->  
->  err:
-> +	if (fd != -1)
-> +		close(fd);
->  	encl_delete(encl);
->  	return false;
->  }
-> @@ -229,7 +268,7 @@ static bool encl_map_area(struct encl *e
->  	area = mmap(NULL, encl_size * 2, PROT_NONE,
->  		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->  	if (area == MAP_FAILED) {
-> -		perror("mmap");
-> +		perror("reservation mmap()");
->  		return false;
->  	}
->  
-> @@ -268,8 +307,7 @@ bool encl_build(struct encl *encl)
->  	ioc.sigstruct = (uint64_t)&encl->sigstruct;
->  	ret = ioctl(encl->fd, SGX_IOC_ENCLAVE_INIT, &ioc);
->  	if (ret) {
-> -		fprintf(stderr, "SGX_IOC_ENCLAVE_INIT failed: errno=%d\n",
-> -			errno);
-> +		perror("SGX_IOC_ENCLAVE_INIT failed");
->  		return false;
->  	}
->  
-> diff -puN tools/testing/selftests/sgx/main.c~sgx-selftest-err-rework tools/testing/selftests/sgx/main.c
-> --- a/tools/testing/selftests/sgx/main.c~sgx-selftest-err-rework	2021-03-18 12:18:38.652828215 -0700
-> +++ b/tools/testing/selftests/sgx/main.c	2021-03-18 12:18:38.657828215 -0700
-> @@ -195,7 +195,7 @@ int main(int argc, char *argv[], char *e
->  		addr = mmap((void *)encl.encl_base + seg->offset, seg->size,
->  			    seg->prot, MAP_SHARED | MAP_FIXED, encl.fd, 0);
->  		if (addr == MAP_FAILED) {
-> -			fprintf(stderr, "mmap() failed, errno=%d.\n", errno);
-> +			perror("mmap() segment failed");
->  			exit(KSFT_FAIL);
->  		}
->  	}
-> _
+> I'm not sure why the original kvm selftests authors decided to do this
+> internal stuff, but we should either kill that or avoid doing stuff like
+> this.
+
+I need this include because of the KVM_DEV_PATH macro, to get the kvm_fd.
+No other reason for including it in this test.
+>> +
+>> +static int kvm_num_feature_msrs(int kvm_fd, int nmsrs)
+>> +{
+>> +	struct kvm_msr_list *list;
+>> +	int r;
+>> +
+>> +	list = malloc(sizeof(*list) + nmsrs * sizeof(list->indices[0]));
+>> +	list->nmsrs = nmsrs;
+>> +	r = ioctl(kvm_fd, KVM_GET_MSR_FEATURE_INDEX_LIST, list);
+>> +	TEST_ASSERT(r == -1 && errno == E2BIG,
+>> +		"Unexpected result from KVM_GET_MSR_FEATURE_INDEX_LIST probe, r: %i",
+>> +				r);
 > 
+> Weird indentation. I'd just leave it up on the last line. We don't care
+> about long lines.
+
+Ok. I wanted avoid warnings from the checkpatch script.
+
+Paolo, do you want me to send v2 with fixed indentation or you already 
+took care of it? I'll be happy to do so.
+
+Emanuele
+
