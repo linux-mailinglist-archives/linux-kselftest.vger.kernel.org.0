@@ -2,101 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D217A342343
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 18:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1B4342362
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 18:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbhCSR0c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Mar 2021 13:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
+        id S230199AbhCSR3t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Mar 2021 13:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbhCSR00 (ORCPT
+        with ESMTP id S230218AbhCSR3o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 13:26:26 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84FAC06174A
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 10:26:26 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id k23-20020a17090a5917b02901043e35ad4aso7016448pji.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 10:26:26 -0700 (PDT)
+        Fri, 19 Mar 2021 13:29:44 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A720C06174A
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 10:29:44 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id q29so11088678lfb.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 10:29:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=G2ciI+8gLo1fSwlXD2q75g0c52yk/hMrZ0yweTlh3Wk=;
-        b=VcZIRP1tPwWzWYflvDs2QtRdxoWgthJmMjpQFcvI0cw/Oi8U3fDykMwMJHUCRgLwLN
-         IHz3cdgeMpGlUNdsWBkf889IaBIr31ob91+6VjKlBUZbqbRwigbvyhVbfasbWmvR5lSa
-         t3CWNSy3svupvHUJAS0mJ7ozPSUoiXCBicW70=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tvHhezgm6LLrHkw6LiFzJkS2cxMTL9fEuJKrvKkiKUQ=;
+        b=qxS40zfHoppJ4w1lAzxDUZz14akR+3ew9ZSSFoJXHxNFw1LVt1bz/DmDYKQBrI35Te
+         eaRTyqZWelaZH0wZgpff2VPb4Ed6mjOVVxc14NXlZbFkTQpp94o+dmwpB6228UBHBwBh
+         kL+TsgwdDnlkZR1RwFOI/uytBecNjPKS8SPVK1UytrDqn7F3FVpuEMb15EIvTucYDQqy
+         8gpvccbxZ9p8+YrBPogXC4G/zmqng4gzbyT78DcjLlqk/UJwfusuijmbneZywzX81xq+
+         WxPKJQWO4dr6l0gDDrdf9e0uJ21NvIuYU9sZLHRJdAfUSzL/A9ExU8DyvTvq1Fk0ttMj
+         Iblw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=G2ciI+8gLo1fSwlXD2q75g0c52yk/hMrZ0yweTlh3Wk=;
-        b=egoepJumdrIDItSlMYexSfSvSAlAfUKTzv0FAcOZaoNMuWQpMcSkWyLAwscZ/jDClD
-         yNWszrMRDQRKC90kVKPbceqYCkUWKkdzHMhBh/NRuVbVINpW2Pzk2ezdDwqPvGXZ3Tl7
-         /8CjU5ZS+m9t5NJOM8IJug7H3ksSm7SaKxlI6M68cJ2++no8fj9bYnuJh5FjwXKImzTV
-         SPcU4AYgdH99k0VEivwz1kWtmwaA9aAhcv4tgAkpdrM+TJzvl+nA3yHPyoZveFSEocvK
-         lspxd+ANH+aC8wMBN1cHMXegtR8dnzgdgkbeaUiXdxpPiEBkVbkYiMjzze4P17QjZb7f
-         colg==
-X-Gm-Message-State: AOAM533vAxIQq8KpvRG9g/SG+fen8RZX1Fau0fSlTZqLbtQpg40AgEwh
-        bPuUlMMmuU2c4/hu7A+5gDWwWw==
-X-Google-Smtp-Source: ABdhPJzOKA9F+yXMnxyRNFmJt9DfXWSRK0fZPjEUoInFJxIRVNA3uwgGEl8gbZRw8mSeGT/QAF3Jqw==
-X-Received: by 2002:a17:90a:a403:: with SMTP id y3mr10703577pjp.227.1616174786403;
-        Fri, 19 Mar 2021 10:26:26 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r23sm6188880pje.38.2021.03.19.10.26.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Mar 2021 10:26:25 -0700 (PDT)
-Date:   Fri, 19 Mar 2021 10:26:25 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v30 11/12] samples/landlock: Add a sandbox manager example
-Message-ID: <202103191026.E2F74F8D9@keescook>
-References: <20210316204252.427806-1-mic@digikod.net>
- <20210316204252.427806-12-mic@digikod.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tvHhezgm6LLrHkw6LiFzJkS2cxMTL9fEuJKrvKkiKUQ=;
+        b=NesYthyiWY5lyELesXfKm9ZLaWY+VFgmc9WlH9xEJuxJ8TYV9GGcmfpld1bGNwRr1q
+         0ptgqFdfbHmffabPh3arhrKE9bOTyAmpKmjgVtnp5ZYzYj7qJykIN3LSQ63SgOKJGeh0
+         EJ4d3QhWVz4lPvZz8H2ogFIIzU1N/g0Ob4IcB0AxQUO7QnJP6NNB++pWeIRZNwfn7JqZ
+         Q+ZfQoBSDOnIrMu+vja63FVTKoXu19JEmi3zvkdE3IxYKmGPpqNZUuT1ZW7c7q5GBe0E
+         sLrG2zXpDTuEgezK4yWbXA4CNV3zmKkyNMiql0Q5L6kSKWKqgUMyFRY2rLq6k5xRVcyk
+         kMuA==
+X-Gm-Message-State: AOAM532ynQxwUmeO8h6oyXSda1Kd2opSHpEUfXHBJTsQW57I2OVA9vie
+        mVLEkYwAizJNOybpEwaFsfSydVA5Jec1ybFdV3tJhg==
+X-Google-Smtp-Source: ABdhPJzRz1nB+l60pFJwjW9wIy+NAzMWNbWYz5dq7MRdQPPqZStIy1/duwYDcBooz6oxJMlvPl/ekDQJiugt+eiH3Iw=
+X-Received: by 2002:ac2:538e:: with SMTP id g14mr1375802lfh.543.1616174982034;
+ Fri, 19 Mar 2021 10:29:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210316204252.427806-12-mic@digikod.net>
+References: <20210319165334.29213-1-andre.przywara@arm.com> <20210319165334.29213-2-andre.przywara@arm.com>
+In-Reply-To: <20210319165334.29213-2-andre.przywara@arm.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 19 Mar 2021 10:29:30 -0700
+Message-ID: <CAKwvOd=GT=dFUS4ihZ3X5_Vne2ZGqag=9zHaW6+wBLEj3jx-GA@mail.gmail.com>
+Subject: Re: [PATCH 01/11] kselftest/arm64: mte: Fix compilation with native compiler
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 09:42:51PM +0100, Mickaël Salaün wrote:
-> From: Mickaël Salaün <mic@linux.microsoft.com>
-> 
-> Add a basic sandbox tool to launch a command which can only access a
-> list of file hierarchies in a read-only or read-write way.
-> 
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Serge E. Hallyn <serge@hallyn.com>
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+On Fri, Mar 19, 2021 at 9:53 AM Andre Przywara <andre.przywara@arm.com> wrote:
+>
+> The mte selftest Makefile contains a check for GCC, to add the memtag
+> -march flag to the compiler options. This check fails if the compiler
+> is not explicitly specified, so reverts to the standard "cc", in which
+> case --version doesn't mention the "gcc" string we match against:
+> $ cc --version | head -n 1
+> cc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
+>
+> This will not add the -march switch to the command line, so compilation
+> fails:
+> mte_helper.S: Assembler messages:
+> mte_helper.S:25: Error: selected processor does not support `irg x0,x0,xzr'
+> mte_helper.S:38: Error: selected processor does not support `gmi x1,x0,xzr'
+> ...
+>
+> Actually clang accepts the same -march option as well, so we can just
+> drop this check and add this unconditionally to the command line, to avoid
+> any future issues with this check altogether (gcc actually prints
+> basename(argv[0]) when called with --version).
+>
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
-I'm very happy to see any example!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+>  tools/testing/selftests/arm64/mte/Makefile | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/arm64/mte/Makefile b/tools/testing/selftests/arm64/mte/Makefile
+> index 0b3af552632a..df15d44aeb8d 100644
+> --- a/tools/testing/selftests/arm64/mte/Makefile
+> +++ b/tools/testing/selftests/arm64/mte/Makefile
+> @@ -6,9 +6,7 @@ SRCS := $(filter-out mte_common_util.c,$(wildcard *.c))
+>  PROGS := $(patsubst %.c,%,$(SRCS))
+>
+>  #Add mte compiler option
+> -ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep gcc),)
+>  CFLAGS += -march=armv8.5-a+memtag
+> -endif
+>
+>  #check if the compiler works well
+>  mte_cc_support := $(shell if ($(CC) $(CFLAGS) -E -x c /dev/null -o /dev/null 2>&1) then echo "1"; fi)
+> --
+> 2.17.5
+>
+
 
 -- 
-Kees Cook
+Thanks,
+~Nick Desaulniers
