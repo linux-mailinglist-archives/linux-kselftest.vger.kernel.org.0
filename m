@@ -2,68 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD94034228D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 17:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 426FC342310
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 18:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbhCSQyI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Mar 2021 12:54:08 -0400
-Received: from foss.arm.com ([217.140.110.172]:56898 "EHLO foss.arm.com"
+        id S229949AbhCSRNZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Mar 2021 13:13:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37004 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230108AbhCSQx7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 12:53:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 499B5ED1;
-        Fri, 19 Mar 2021 09:53:59 -0700 (PDT)
-Received: from e104803-lin.cambridge.arm.com (e104803-lin.cambridge.arm.com [10.1.197.64])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BDA33F70D;
-        Fri, 19 Mar 2021 09:53:57 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Will Deacon <will@kernel.org>,
+        id S230047AbhCSRNA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Mar 2021 13:13:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B09B36191E;
+        Fri, 19 Mar 2021 17:12:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616173980;
+        bh=uDhMMbrq9my6cPt0LQ0nvw3mts2ZTsfmJd5fIsqnNUg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CQuP/rkNNhpR6bBvaP9CzRE66yWr6NfTvEZRFougZJ8n6q0S0bKXAKZeY+3ltkwnB
+         MnzJj7R6BsJmUnW3Fm46Hac8yMqerFdOPkF58lGUqmLYFGrczvRKQg9mNK8sFsURlO
+         cG0OovaHjv/Pg97DnWZWca+67FeMrMSz7DsNWcQNBcRMY0uHOyePHnzOsLoD7TU0om
+         aL9vbDNCdYpZtBqLWxz00toIasUP7cL684U2PkUgOCb0nyH2WHH0cKgOTLbT95jnoi
+         jTSr/eayK6tn3LBphwJUEOjAGH9nz3vJFGApa6+nkJVY99BUH4UKgt9p1X/EvISdxg
+         iiBvbWbRfEZRQ==
+Date:   Fri, 19 Mar 2021 17:12:56 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Mark Brown <broonie@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 11/11] kselftest/arm64: mte: Report filename on failing temp file creation
-Date:   Fri, 19 Mar 2021 16:53:34 +0000
-Message-Id: <20210319165334.29213-12-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.17.5
-In-Reply-To: <20210319165334.29213-1-andre.przywara@arm.com>
+        linux-kselftest@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH 00/11] kselftest/arm64: mte: Fix feature detection and
+ compilation
+Message-ID: <20210319171256.GJ5619@sirena.org.uk>
 References: <20210319165334.29213-1-andre.przywara@arm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LQAwcd5tHl0Qlnzi"
+Content-Disposition: inline
+In-Reply-To: <20210319165334.29213-1-andre.przywara@arm.com>
+X-Cookie: No purchase necessary.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The MTE selftests create temporary files in /dev/shm, for later mmap-ing
-them. When there is no tmpfs mounted on /dev/shm, or /dev/shm does not
-exist in the first place (on minimal filesystems), the error message is
-not giving good hints:
-    # FAIL: Unable to open temporary file
-    # FAIL: memory allocation
-    not ok 17 Check initial tags with private mapping, ...
 
-Add a perror() call, that gives both the filename and the actual error
-reason, so that users get a chance of correcting that.
+--LQAwcd5tHl0Qlnzi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- tools/testing/selftests/arm64/mte/mte_common_util.c | 1 +
- 1 file changed, 1 insertion(+)
+On Fri, Mar 19, 2021 at 04:53:23PM +0000, Andre Przywara wrote:
+> When trying to run the arm64 MTE (Memory Tagging Extension) selftests
+> on a model with the new FEAT_MTE3 capability, the MTE feature detection
+> failed, because it was overzealously checking for one exact feature
+> version only (0b0010). Trying to fix that (patch 06/11) led me into the
+> rabbit hole of userland tool compilation, which triggered patches
 
-diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
-index 040abdca079d..f50ac31920d1 100644
---- a/tools/testing/selftests/arm64/mte/mte_common_util.c
-+++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
-@@ -337,6 +337,7 @@ int create_temp_file(void)
- 	/* Create a file in the tmpfs filesystem */
- 	fd = mkstemp(&filename[0]);
- 	if (fd == -1) {
-+		perror(filename);
- 		ksft_print_msg("FAIL: Unable to open temporary file\n");
- 		return 0;
- 	}
--- 
-2.17.5
+Reviewed-by: Mark Brown <broone@kernel.org>
 
+--LQAwcd5tHl0Qlnzi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBU25cACgkQJNaLcl1U
+h9CEdwf3YoRRl30t3x5bn0WGArLP2mi6Ooy91v0UBGn8SFscluaqqoT/iW0j+fo9
+XgYlbrtm3Ebom03v+noCm5DxfhoKHv6WY2Zia1esAcx6DR6Jug+A2L0bThyv0F/Q
+KwSMs/u8hoonRB3D/TObp1bQBolcrQpxpMq1uuAqLp4Ri25OgEFhpeCs6r1ZLRrh
+SGGcQ2/5At6EBSOY1QOD4S9x9HIA9bzwy4x+67913KMMlmG81QXDSg6H1z8QhqgJ
+3fwkumsCXNHlWxUNSnekBWMfgXaqiCHj3rr+HnHf98i8r4tpwiZiCb1PhzBoVv/x
+6ALw7xjE/RT9etfrnZN2/1krg+TO
+=jCOF
+-----END PGP SIGNATURE-----
+
+--LQAwcd5tHl0Qlnzi--
