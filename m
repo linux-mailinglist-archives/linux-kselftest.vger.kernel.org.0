@@ -2,82 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 426FC342310
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 18:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 762B7342327
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 18:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbhCSRNZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Mar 2021 13:13:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37004 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230047AbhCSRNA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 13:13:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B09B36191E;
-        Fri, 19 Mar 2021 17:12:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616173980;
-        bh=uDhMMbrq9my6cPt0LQ0nvw3mts2ZTsfmJd5fIsqnNUg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CQuP/rkNNhpR6bBvaP9CzRE66yWr6NfTvEZRFougZJ8n6q0S0bKXAKZeY+3ltkwnB
-         MnzJj7R6BsJmUnW3Fm46Hac8yMqerFdOPkF58lGUqmLYFGrczvRKQg9mNK8sFsURlO
-         cG0OovaHjv/Pg97DnWZWca+67FeMrMSz7DsNWcQNBcRMY0uHOyePHnzOsLoD7TU0om
-         aL9vbDNCdYpZtBqLWxz00toIasUP7cL684U2PkUgOCb0nyH2WHH0cKgOTLbT95jnoi
-         jTSr/eayK6tn3LBphwJUEOjAGH9nz3vJFGApa6+nkJVY99BUH4UKgt9p1X/EvISdxg
-         iiBvbWbRfEZRQ==
-Date:   Fri, 19 Mar 2021 17:12:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S230041AbhCSRYy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Mar 2021 13:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230064AbhCSRYc (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Mar 2021 13:24:32 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0E5C061762
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 10:24:32 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id x184so6361730pfd.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 10:24:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=y3HPFVQQ8OcLuuAynRQtdLIpt1ZlQVl3Ddi5JOdBy0s=;
+        b=ijJD/g9ZP1Yyl5fSfAFOPGlYJua+C5SS43o3CNhGgSeVXgnDiCqKQcxgzUtQ61O1a6
+         H1DD1WppKq7fzQ315rtxWK9GISWoLs2ph+RpDHyd71ihbwa/fgRSHBtsctslONiHt+uZ
+         IeDn5qP5KUNNOs2PjSdqbqFrlcXgz6WS/Gnp4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=y3HPFVQQ8OcLuuAynRQtdLIpt1ZlQVl3Ddi5JOdBy0s=;
+        b=d95ikpiEiOYhvqdzYVemNz+OF53dJhjUNjjls1LXEHSd7T6sxdNWyHWPF8cBIXn2WZ
+         SAW4R9pUdvD0eaQADzCXaUV3T9qTI9HW/Gcl1/KQr9sQP0zZcZf0yR7SacPMREjrWZ+d
+         sw3BPQ5rwG1e8oerlu0Q33Z0KxDHj+UWAh51Lw/XcbITIoPFqayW89GHLFK9R3weWVO3
+         32+HXeczJuDCOzamtU/PBhisy+A0CYnQifLqtVQb0frl1tEomyo42Zru7FqsG1e1TCIw
+         XHACbdeaaP31FY9nufPZEbDpiK8zGFG4wMbUIi7kFIKmTo34GZHjSeHls9LY+hc3xZK1
+         lURw==
+X-Gm-Message-State: AOAM5323kagQe60bxxPOesFAP1oSoPgp/2L9M05xNS0bWHcETygfXp9u
+        zIVjV3ayE7Bw6fTEVWQPPBof0w==
+X-Google-Smtp-Source: ABdhPJxof2S7NAyn0wwLIRht63qQ8yxLGkdNHCaohi74HUCi/0cELJkStbwnSdwtemmhQBNrzgFv4w==
+X-Received: by 2002:a65:4887:: with SMTP id n7mr12266351pgs.14.1616174671959;
+        Fri, 19 Mar 2021 10:24:31 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 2sm5994795pfi.116.2021.03.19.10.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Mar 2021 10:24:31 -0700 (PDT)
+Date:   Fri, 19 Mar 2021 10:24:30 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
         Shuah Khan <shuah@kernel.org>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH 00/11] kselftest/arm64: mte: Fix feature detection and
- compilation
-Message-ID: <20210319171256.GJ5619@sirena.org.uk>
-References: <20210319165334.29213-1-andre.przywara@arm.com>
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: Re: [PATCH v30 05/12] LSM: Infrastructure management of the
+ superblock
+Message-ID: <202103191024.40EBCA2C@keescook>
+References: <20210316204252.427806-1-mic@digikod.net>
+ <20210316204252.427806-6-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LQAwcd5tHl0Qlnzi"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210319165334.29213-1-andre.przywara@arm.com>
-X-Cookie: No purchase necessary.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210316204252.427806-6-mic@digikod.net>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Mar 16, 2021 at 09:42:45PM +0100, Mickaël Salaün wrote:
+> From: Casey Schaufler <casey@schaufler-ca.com>
+> 
+> Move management of the superblock->sb_security blob out of the
+> individual security modules and into the security infrastructure.
+> Instead of allocating the blobs from within the modules, the modules
+> tell the infrastructure how much space is required, and the space is
+> allocated there.
+> 
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: John Johansen <john.johansen@canonical.com>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 
---LQAwcd5tHl0Qlnzi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-On Fri, Mar 19, 2021 at 04:53:23PM +0000, Andre Przywara wrote:
-> When trying to run the arm64 MTE (Memory Tagging Extension) selftests
-> on a model with the new FEAT_MTE3 capability, the MTE feature detection
-> failed, because it was overzealously checking for one exact feature
-> version only (0b0010). Trying to fix that (patch 06/11) led me into the
-> rabbit hole of userland tool compilation, which triggered patches
-
-Reviewed-by: Mark Brown <broone@kernel.org>
-
---LQAwcd5tHl0Qlnzi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBU25cACgkQJNaLcl1U
-h9CEdwf3YoRRl30t3x5bn0WGArLP2mi6Ooy91v0UBGn8SFscluaqqoT/iW0j+fo9
-XgYlbrtm3Ebom03v+noCm5DxfhoKHv6WY2Zia1esAcx6DR6Jug+A2L0bThyv0F/Q
-KwSMs/u8hoonRB3D/TObp1bQBolcrQpxpMq1uuAqLp4Ri25OgEFhpeCs6r1ZLRrh
-SGGcQ2/5At6EBSOY1QOD4S9x9HIA9bzwy4x+67913KMMlmG81QXDSg6H1z8QhqgJ
-3fwkumsCXNHlWxUNSnekBWMfgXaqiCHj3rr+HnHf98i8r4tpwiZiCb1PhzBoVv/x
-6ALw7xjE/RT9etfrnZN2/1krg+TO
-=jCOF
------END PGP SIGNATURE-----
-
---LQAwcd5tHl0Qlnzi--
+-- 
+Kees Cook
