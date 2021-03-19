@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B87B13411A1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 01:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B86D3411A2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Mar 2021 01:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbhCSAwb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Mar 2021 20:52:31 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:35029 "EHLO
+        id S230362AbhCSAwc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Mar 2021 20:52:32 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:51339 "EHLO
         new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231916AbhCSAw2 (ORCPT
+        by vger.kernel.org with ESMTP id S231892AbhCSAw2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 18 Mar 2021 20:52:28 -0400
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B3B1C5807C6;
+        by mailnew.nyi.internal (Postfix) with ESMTP id BC08C58089E;
         Thu, 18 Mar 2021 20:52:27 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
   by compute6.internal (MEProxy); Thu, 18 Mar 2021 20:52:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
-        :to:cc:subject:date:message-id:reply-to:mime-version
-        :content-transfer-encoding; s=fm3; bh=DWhV6GrC9Yq1xon4Q45eNtE470
-        l26QyYXs7Y5256wLQ=; b=qQv+N7sUpPtMkDNLvh8U/vNBA5SlSWNY+D2oYS8JGG
-        LwB1KMG/xhgjyIRXfabsMCDs9uI3TJdBY7/z2GmzJEmO6A40doF0fpgTLMNkTpd/
-        A+auIoQX1fusvLaLM7yA0ml//tNaLpRLWmVThtl1LWiNCCdDXMh9JGYbF/XoHdEy
-        SFMAmixqIj0glN+jc+XcuoHbFaqGwV/IcE9hePB1sLMLmGV9/0h1lPmKzLJ196sf
-        Kfq7wnsEiOMncG5kPAo1J864zr+sqUH4WwNxJtWWqwVG9rjm1i43GaWpXOi6gN+5
-        KjnTeA4o7+1tOdI3Tk/owxN13u9PVEyZ0reRz9cueXQQ==
+        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
+        :mime-version:content-transfer-encoding; s=fm3; bh=pSnbBxOun2OMD
+        hTC4+cbBE7aLYGsc8mCmhE9/gavhzg=; b=ond98dxUTO6pQfdquxnO35Z1ie1gi
+        LEaE5lMhB7rZXVVPrHhgVPSwJnJDD93/ye7+OV6CNJwsZFhfWj8nBkpZFPa37+df
+        loeomj/SKBjSyt7IDafDJdkXuDunTtLtclNFd5PtbIccOWN8k23eD2ASYLYlLJz4
+        /ozkULMxF/RDdg+T6AKr766rhMs4gNIV5K6dKFNMJ6iqmZqchUi9B+UkkAWvoSWm
+        AVj+x/BFYRVU88qJrm1Hv8QdY684jp4RZ71tfwIRn/Na7bixrehwa6NH67lsvVQR
+        8jmE5bQ6zSeGL4Qso7iDxdS03mV6++FWeS7xG5sa1RrPUiRBFsE2nqK4w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:reply-to:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=DWhV6G
-        rC9Yq1xon4Q45eNtE470l26QyYXs7Y5256wLQ=; b=XqNaqoq+10UmhG7rZR+KqF
-        vmNqaHx4JcicDzwn0q6jUt7pH+AZNF7JYRdfWXit/OnPBQUwVF3oOq2mpvLm7ltW
-        ZQoZ5oNKhOg8joDLKVgX5Qs+VpqY3gJnmVUtJbBQ7KAEuTx92lfB7Cu8iBFl6Rbi
-        FbyPUkmlu9TKmnrZ/BWHapihXAn1rQdwa6vDgfHkvQoPaiIog37dLnIrA77/vmqn
-        +LmpN34FD8tTgMmSHDaTfRSEojk/2qMJojun2x9S69X4zDrK5hkkVeZ9vlHYr1rI
-        5ZxVu3KNxN3Cse1B/hgoTJRgeJPwWqSkLLiK49wJGVG64Vp/p3YOEWtkTDh7x+kw
-        ==
-X-ME-Sender: <xms:yvVTYK9heP0DfNYMm1rF9_synGY_mMajevTAnpVyP8oYnJh5WKFqiw>
-    <xme:yvVTYKvtTivas7Lx8r-qB3_x18yvWzGTVGr__5kzs9BNj5JOdIAuGqJYBLZQhSO2X
-    rmB_TAzkzP15mGvOA>
+        :in-reply-to:message-id:mime-version:references:reply-to:subject
+        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; bh=pSnbBxOun2OMDhTC4+cbBE7aLYGsc8mCmhE9/gavhzg=; b=vAiESObS
+        A7mPUEsbW2kIlbDmzNkDk67Ub8gnnFGjb4xwSulGguoTcewlv/xYk+cQQs2bmhJt
+        dEyUSiEh/sRNSn7LHVwzcMuIcTF1zb10GCiQ7tRm7DiW2vNYAvpalmJHoR9s6pPp
+        F3UHLykxDpit67SYFxJJLjCZqHgqMOv/lx6GKR2Jivz4RiQPY324iBA/ogFBHppV
+        k3N6g4MBh+8MbprDuLX5Pf+AWmG7kCbNn2GhPlHLodYT8c+gWGh0OESgICav/NGs
+        r1Nrh0FIVAHdN/M9NWpjSpKTn0BmvgBPcRlIyVY0LCLpWvX1LDiIEkeEl1yAF5ul
+        UuLCQ+cEDuATZg==
+X-ME-Sender: <xms:y_VTYOpk1vfAihfvMpbuQLNuI3aO94EbrJGBQPYvg7Mc5FObKQdTPQ>
+    <xme:y_VTYMpPoWDvVRlUcRjOFcQEEQ7wTDF99ah0JN5uSDd8gJ8uj7vB7AxowFzROgxT5
+    u9G4f_GTT2BZHU-sg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudefjedgvdeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkfforhgggfestdhqredtredttdenucfhrhhomhepkghiucgjrghn
-    uceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepleetvddtvd
-    dttdetffdvkeehffdtjefhkedtheffjeehvdejueektedukedufeffnecukfhppedvtdel
-    rdeirdejuddrvddufeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
-X-ME-Proxy: <xmx:yvVTYAAsJ7V2hPMMQ-WZrhHOMqMKK4tpwnLp3Rk9ezYlGti56EcdkQ>
-    <xmx:yvVTYCcoGSgkOdUusqcgxmHlpcbVHOWJ6kOzNjXvQSnih2bt8oxQmg>
-    <xmx:yvVTYPPmAL_hASA_CFyIXTmt-9GAB2OjF7tAKkHrV0dXaGe_aO-qaw>
-    <xmx:y_VTYKqgdE-ugLaHSyYUau8MuLxp2SozIFPpiDwzZHWPcu50UAbhEg>
+    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
+    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
+    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedv
+    tdelrdeirdejuddrvddufeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
+X-ME-Proxy: <xmx:y_VTYDPN9sPA0-JgavcEw4c4TQEij_DNxSvWm2d-jlc1S8J-tNdaog>
+    <xmx:y_VTYN6cWNaz2zjjw73UhiczAGI3oBineAoure3Mk1oXkt3j5-mx9Q>
+    <xmx:y_VTYN4Clj0MAjKAICMxQ0i5NR31KVq0dJPyHxDKvVLF1RTAXjRAmg>
+    <xmx:y_VTYCGxZo-PG8laBNA-FIFgpXlt9NpXZczfKmKfZ5BRsWiUPqaEcA>
 Received: from Threadripper.local (209-6-71-213.s2259.c3-0.abr-cbr1.sbo-abr.ma.cable.rcncustomer.com [209.6.71.213])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 71B99240054;
+        by mail.messagingengine.com (Postfix) with ESMTPA id C126924005A;
         Thu, 18 Mar 2021 20:52:26 -0400 (EDT)
 From:   Zi Yan <zi.yan@sent.com>
 To:     linux-mm@kvack.org
@@ -67,10 +67,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Yang Shi <shy828301@gmail.com>,
         Mika Penttila <mika.penttila@nextfour.com>,
         Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v5 1/2] mm: huge_memory: a new debugfs interface for splitting THP tests.
-Date:   Thu, 18 Mar 2021 20:52:18 -0400
-Message-Id: <20210319005219.13595-1-zi.yan@sent.com>
+Subject: [PATCH v5 2/2] mm: huge_memory: debugfs for file-backed THP split.
+Date:   Thu, 18 Mar 2021 20:52:19 -0400
+Message-Id: <20210319005219.13595-2-zi.yan@sent.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210319005219.13595-1-zi.yan@sent.com>
+References: <20210319005219.13595-1-zi.yan@sent.com>
 Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -80,588 +82,293 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-We did not have a direct user interface of splitting the compound page
-backing a THP and there is no need unless we want to expose the THP
-implementation details to users. Make <debugfs>/split_huge_pages accept
-a new command to do that.
+Further extend <debugfs>/split_huge_pages to accept
+"<path>,<off_start>,<off_end>" for file-backed THP split tests since
+tmpfs may have file backed by THP that mapped nowhere.
 
-By writing "<pid>,<vaddr_start>,<vaddr_end>" to
-<debugfs>/split_huge_pages, THPs within the given virtual address range
-from the process with the given pid are split. It is used to test
-split_huge_page function. In addition, a selftest program is added to
-tools/testing/selftests/vm to utilize the interface by splitting
-PMD THPs and PTE-mapped THPs.
+Update selftest program to test file-backed THP split too.
 
-This does not change the old behavior, i.e., writing 1 to the interface
-to split all THPs in the system.
-
-Changelog:
-
-From v5:
-1. Skipped special VMAs and other fixes. (suggested by Yang Shi)
-
-From v4:
-1. Fixed the error code return issue, spotted by kernel test robot
-   <lkp@intel.com>.
-
-From v3:
-1. Factored out split huge pages in the given pid code to a separate
-   function.
-2. Added the missing put_page for not split pages.
-3. pr_debug -> pr_info, make reading results simpler.
-
-From v2:
-1. Reused existing <debugfs>/split_huge_pages interface. (suggested by
-   Yang Shi)
-
-From v1:
-1. Removed unnecessary calling to vma_migratable, spotted by kernel test
-   robot <lkp@intel.com>.
-2. Dropped the use of find_mm_struct and code it directly, since there
-   is no need for the permission check in that function and the function
-   is only available when migration is on.
-3. Added some comments in the selftest program to clarify how PTE-mapped
-   THPs are formed.
-
+Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Zi Yan <ziy@nvidia.com>
 ---
- mm/huge_memory.c                              | 143 +++++++-
- tools/testing/selftests/vm/.gitignore         |   1 +
- tools/testing/selftests/vm/Makefile           |   1 +
- .../selftests/vm/split_huge_page_test.c       | 318 ++++++++++++++++++
- 4 files changed, 456 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/vm/split_huge_page_test.c
+ mm/huge_memory.c                              | 97 ++++++++++++++++++-
+ .../selftests/vm/split_huge_page_test.c       | 79 ++++++++++++++-
+ 2 files changed, 168 insertions(+), 8 deletions(-)
 
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index bff92dea5ab3..9bf9bc489228 100644
+index 9bf9bc489228..6d6537cc8c56 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -7,6 +7,7 @@
-=20
- #include <linux/mm.h>
- #include <linux/sched.h>
-+#include <linux/sched/mm.h>
- #include <linux/sched/coredump.h>
- #include <linux/sched/numa_balancing.h>
- #include <linux/highmem.h>
-@@ -2922,16 +2923,14 @@ static struct shrinker deferred_split_shrinker =3D {
- };
-=20
- #ifdef CONFIG_DEBUG_FS
--static int split_huge_pages_set(void *data, u64 val)
-+static void split_huge_pages_all(void)
- {
- 	struct zone *zone;
- 	struct page *page;
- 	unsigned long pfn, max_zone_pfn;
- 	unsigned long total =3D 0, split =3D 0;
-=20
--	if (val !=3D 1)
--		return -EINVAL;
--
-+	pr_info("Split all THPs\n");
- 	for_each_populated_zone(zone) {
- 		max_zone_pfn =3D zone_end_pfn(zone);
- 		for (pfn =3D zone->zone_start_pfn; pfn < max_zone_pfn; pfn++) {
-@@ -2959,11 +2958,141 @@ static int split_huge_pages_set(void *data, u64 va=
-l)
- 	}
-=20
- 	pr_info("%lu of %lu THP split\n", split, total);
-+}
-=20
--	return 0;
-+static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
-+				unsigned long vaddr_end)
-+{
-+	int ret =3D 0;
-+	struct task_struct *task;
-+	struct mm_struct *mm;
-+	unsigned long total =3D 0, split =3D 0;
-+	unsigned long addr;
-+
-+	vaddr_start &=3D PAGE_MASK;
-+	vaddr_end &=3D PAGE_MASK;
-+
-+	/* Find the task_struct from pid */
-+	rcu_read_lock();
-+	task =3D find_task_by_vpid(pid);
-+	if (!task) {
-+		rcu_read_unlock();
-+		ret =3D -ESRCH;
-+		goto out;
-+	}
-+	get_task_struct(task);
-+	rcu_read_unlock();
-+
-+	/* Find the mm_struct */
-+	mm =3D get_task_mm(task);
-+	put_task_struct(task);
-+
-+	if (!mm) {
-+		ret =3D -EINVAL;
-+		goto out;
-+	}
-+
-+	pr_info("Split huge pages in pid: %d, vaddr: [0x%lx - 0x%lx]\n",
-+		 pid, vaddr_start, vaddr_end);
-+
-+	mmap_read_lock(mm);
-+	/*
-+	 * always increase addr by PAGE_SIZE, since we could have a PTE page
-+	 * table filled with PTE-mapped THPs, each of which is distinct.
-+	 */
-+	for (addr =3D vaddr_start; addr < vaddr_end; addr +=3D PAGE_SIZE) {
-+		struct vm_area_struct *vma =3D find_vma(mm, addr);
-+		unsigned int follflags;
-+		struct page *page;
-+
-+		if (!vma || addr < vma->vm_start)
-+			break;
-+
-+		/* skip special VMA and hugetlb VMA */
-+		if (vma_is_special_huge(vma) || is_vm_hugetlb_page(vma)) {
-+			addr =3D vma->vm_end;
-+			continue;
-+		}
-+
-+		/* FOLL_DUMP to ignore special (like zero) pages */
-+		follflags =3D FOLL_GET | FOLL_DUMP;
-+		page =3D follow_page(vma, addr, follflags);
-+
-+		if (IS_ERR(page))
-+			continue;
-+		if (!page)
-+			continue;
-+
-+		if (!is_transparent_hugepage(page))
-+			goto next;
-+
-+		total++;
-+		if (!can_split_huge_page(compound_head(page), NULL))
-+			goto next;
-+
-+		if (!trylock_page(page))
-+			goto next;
-+
-+		if (!split_huge_page(page))
-+			split++;
-+
-+		unlock_page(page);
-+next:
-+		put_page(page);
-+	}
-+	mmap_read_unlock(mm);
-+	mmput(mm);
-+
-+	pr_info("%lu of %lu THP split\n", split, total);
-+
-+out:
-+	return ret;
+@@ -3049,12 +3049,74 @@ static int split_huge_pages_pid(int pid, unsigned l=
+ong vaddr_start,
+ 	return ret;
  }
--DEFINE_DEBUGFS_ATTRIBUTE(split_huge_pages_fops, NULL, split_huge_pages_set,
--		"%llu\n");
-+
-+static ssize_t split_huge_pages_write(struct file *file, const char __user=
- *buf,
-+				size_t count, loff_t *ppops)
+=20
++static int split_huge_pages_in_file(const char *file_path, pgoff_t off_sta=
+rt,
++				pgoff_t off_end)
 +{
-+	static DEFINE_MUTEX(split_debug_mutex);
-+	ssize_t ret;
-+	char input_buf[80]; /* hold pid, start_vaddr, end_vaddr */
-+	int pid;
-+	unsigned long vaddr_start, vaddr_end;
++	struct filename *file;
++	struct file *candidate;
++	struct address_space *mapping;
++	int ret =3D -EINVAL;
++	pgoff_t off_cur;
++	unsigned long total =3D 0, split =3D 0;
 +
-+	ret =3D mutex_lock_interruptible(&split_debug_mutex);
-+	if (ret)
++	file =3D getname_kernel(file_path);
++	if (IS_ERR(file))
 +		return ret;
 +
-+	ret =3D -EFAULT;
-+
-+	memset(input_buf, 0, 80);
-+	if (copy_from_user(input_buf, buf, min_t(size_t, count, 80)))
++	candidate =3D file_open_name(file, O_RDONLY, 0);
++	if (IS_ERR(candidate))
 +		goto out;
 +
-+	input_buf[79] =3D '\0';
-+	ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_en=
-d);
-+	if (ret =3D=3D 1 && pid =3D=3D 1) {
-+		split_huge_pages_all();
-+		ret =3D strlen(input_buf);
-+		goto out;
-+	} else if (ret !=3D 3) {
-+		ret =3D -EINVAL;
++	pr_info("split file-backed THPs in file: %s, offset: [0x%lx - 0x%lx]\n",
++		 file_path, off_start, off_end);
++
++	mapping =3D candidate->f_mapping;
++
++	for (off_cur =3D off_start; off_cur < off_end;) {
++		struct page *fpage =3D pagecache_get_page(mapping, off_cur,
++						FGP_ENTRY | FGP_HEAD, 0);
++
++		if (xa_is_value(fpage) || !fpage) {
++			off_cur +=3D PAGE_SIZE;
++			continue;
++		}
++
++		if (!is_transparent_hugepage(fpage)) {
++			off_cur +=3D PAGE_SIZE;
++			goto next;
++		}
++		total++;
++		off_cur =3D fpage->index + thp_size(fpage);
++
++		if (!trylock_page(fpage))
++			goto next;
++
++		if (!split_huge_page(fpage))
++			split++;
++
++		unlock_page(fpage);
++next:
++		put_page(fpage);
++	}
++
++	filp_close(candidate, NULL);
++	ret =3D 0;
++
++	pr_info("%lu of %lu file-backed THP split\n", split, total);
++out:
++	putname(file);
++	return ret;
++}
++
++#define MAX_INPUT_BUF_SZ 255
++
+ static ssize_t split_huge_pages_write(struct file *file, const char __user=
+ *buf,
+ 				size_t count, loff_t *ppops)
+ {
+ 	static DEFINE_MUTEX(split_debug_mutex);
+ 	ssize_t ret;
+-	char input_buf[80]; /* hold pid, start_vaddr, end_vaddr */
++	/* hold pid, start_vaddr, end_vaddr or file_path, off_start, off_end */
++	char input_buf[MAX_INPUT_BUF_SZ];
+ 	int pid;
+ 	unsigned long vaddr_start, vaddr_end;
+=20
+@@ -3064,11 +3126,40 @@ static ssize_t split_huge_pages_write(struct file *=
+file, const char __user *buf,
+=20
+ 	ret =3D -EFAULT;
+=20
+-	memset(input_buf, 0, 80);
++	memset(input_buf, 0, MAX_INPUT_BUF_SZ);
+ 	if (copy_from_user(input_buf, buf, min_t(size_t, count, 80)))
+ 		goto out;
+=20
+-	input_buf[79] =3D '\0';
++	input_buf[MAX_INPUT_BUF_SZ - 1] =3D '\0';
++
++	if (input_buf[0] =3D=3D '/') {
++		char *tok;
++		char *buf =3D input_buf;
++		char file_path[MAX_INPUT_BUF_SZ];
++		pgoff_t off_start =3D 0, off_end =3D 0;
++		size_t input_len =3D strlen(input_buf);
++
++		tok =3D strsep(&buf, ",");
++		if (tok) {
++			strncpy(file_path, tok, MAX_INPUT_BUF_SZ);
++		} else {
++			ret =3D -EINVAL;
++			goto out;
++		}
++
++		ret =3D sscanf(buf, "0x%lx,0x%lx", &off_start, &off_end);
++		if (ret !=3D 2) {
++			pr_info("ret: %ld\n", ret);
++			ret =3D -EINVAL;
++			goto out;
++		}
++		ret =3D split_huge_pages_in_file(file_path, off_start, off_end);
++		if (!ret)
++			ret =3D input_len;
++
 +		goto out;
 +	}
 +
-+	ret =3D split_huge_pages_pid(pid, vaddr_start, vaddr_end);
-+	if (!ret)
-+		ret =3D strlen(input_buf);
-+out:
-+	mutex_unlock(&split_debug_mutex);
-+	return ret;
-+
-+}
-+
-+static const struct file_operations split_huge_pages_fops =3D {
-+	.owner	 =3D THIS_MODULE,
-+	.write	 =3D split_huge_pages_write,
-+	.llseek  =3D no_llseek,
-+};
-=20
- static int __init split_huge_pages_debugfs(void)
- {
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftest=
-s/vm/.gitignore
-index 9a35c3f6a557..1f651e85ed60 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -22,3 +22,4 @@ map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
- local_config.*
-+split_huge_page_test
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/=
-vm/Makefile
-index d42115e4284d..4cbc91d6869f 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -42,6 +42,7 @@ TEST_GEN_FILES +=3D on-fault-limit
- TEST_GEN_FILES +=3D thuge-gen
- TEST_GEN_FILES +=3D transhuge-stress
- TEST_GEN_FILES +=3D userfaultfd
-+TEST_GEN_FILES +=3D split_huge_page_test
-=20
- ifeq ($(MACHINE),x86_64)
- CAN_BUILD_I386 :=3D $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bi=
-t_program.c -m32)
+ 	ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_en=
+d);
+ 	if (ret =3D=3D 1 && pid =3D=3D 1) {
+ 		split_huge_pages_all();
 diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/test=
 ing/selftests/vm/split_huge_page_test.c
-new file mode 100644
-index 000000000000..2c0c18e60c57
---- /dev/null
+index 2c0c18e60c57..ebdf2d738978 100644
+--- a/tools/testing/selftests/vm/split_huge_page_test.c
 +++ b/tools/testing/selftests/vm/split_huge_page_test.c
-@@ -0,0 +1,318 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A test of splitting PMD THPs and PTE-mapped THPs from a specified virtu=
-al
-+ * address range in a process via <debugfs>/split_huge_pages interface.
-+ */
+@@ -7,11 +7,13 @@
+ #define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <stdarg.h>
+ #include <unistd.h>
+ #include <inttypes.h>
+ #include <string.h>
+ #include <fcntl.h>
+ #include <sys/mman.h>
++#include <sys/mount.h>
+ #include <malloc.h>
+ #include <stdbool.h>
+=20
+@@ -24,6 +26,9 @@ uint64_t pmd_pagesize;
+ #define SMAP_PATH "/proc/self/smaps"
+ #define INPUT_MAX 80
+=20
++#define PID_FMT "%d,0x%lx,0x%lx"
++#define PATH_FMT "%s,0x%lx,0x%lx"
 +
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <inttypes.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <sys/mman.h>
-+#include <malloc.h>
-+#include <stdbool.h>
-+
-+uint64_t pagesize;
-+unsigned int pageshift;
-+uint64_t pmd_pagesize;
-+
-+#define PMD_SIZE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
-+#define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages"
-+#define SMAP_PATH "/proc/self/smaps"
-+#define INPUT_MAX 80
-+
-+#define PFN_MASK     ((1UL<<55)-1)
-+#define KPF_THP      (1UL<<22)
-+
-+int is_backed_by_thp(char *vaddr, int pagemap_file, int kpageflags_file)
-+{
-+	uint64_t paddr;
-+	uint64_t page_flags;
-+
-+	if (pagemap_file) {
-+		pread(pagemap_file, &paddr, sizeof(paddr),
-+			((long)vaddr >> pageshift) * sizeof(paddr));
-+
-+		if (kpageflags_file) {
-+			pread(kpageflags_file, &page_flags, sizeof(page_flags),
-+				(paddr & PFN_MASK) * sizeof(page_flags));
-+
-+			return !!(page_flags & KPF_THP);
-+		}
-+	}
-+	return 0;
-+}
-+
-+
-+static uint64_t read_pmd_pagesize(void)
-+{
-+	int fd;
-+	char buf[20];
-+	ssize_t num_read;
-+
-+	fd =3D open(PMD_SIZE_PATH, O_RDONLY);
-+	if (fd =3D=3D -1) {
-+		perror("Open hpage_pmd_size failed");
-+		exit(EXIT_FAILURE);
-+	}
-+	num_read =3D read(fd, buf, 19);
-+	if (num_read < 1) {
-+		close(fd);
-+		perror("Read hpage_pmd_size failed");
-+		exit(EXIT_FAILURE);
-+	}
-+	buf[num_read] =3D '\0';
-+	close(fd);
-+
-+	return strtoul(buf, NULL, 10);
-+}
-+
-+static int write_file(const char *path, const char *buf, size_t buflen)
-+{
-+	int fd;
-+	ssize_t numwritten;
-+
-+	fd =3D open(path, O_WRONLY);
-+	if (fd =3D=3D -1)
-+		return 0;
-+
-+	numwritten =3D write(fd, buf, buflen - 1);
-+	close(fd);
-+	if (numwritten < 1)
-+		return 0;
-+
-+	return (unsigned int) numwritten;
-+}
-+
-+static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vaddr_en=
+ #define PFN_MASK     ((1UL<<55)-1)
+ #define KPF_THP      (1UL<<22)
+=20
+@@ -87,13 +92,16 @@ static int write_file(const char *path, const char *buf=
+, size_t buflen)
+ 	return (unsigned int) numwritten;
+ }
+=20
+-static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vaddr_en=
 d)
++static void write_debugfs(const char *fmt, ...)
+ {
+ 	char input[INPUT_MAX];
+ 	int ret;
++	va_list argp;
++
++	va_start(argp, fmt);
++	ret =3D vsnprintf(input, INPUT_MAX, fmt, argp);
++	va_end(argp);
+=20
+-	ret =3D snprintf(input, INPUT_MAX, "%d,0x%lx,0x%lx", pid, vaddr_start,
+-			vaddr_end);
+ 	if (ret >=3D INPUT_MAX) {
+ 		printf("%s: Debugfs input is too long\n", __func__);
+ 		exit(EXIT_FAILURE);
+@@ -183,7 +191,8 @@ void split_pmd_thp(void)
+ 	}
+=20
+ 	/* split all THPs */
+-	write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page + len);
++	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
++		(uint64_t)one_page + len);
+=20
+ 	for (i =3D 0; i < len; i++)
+ 		if (one_page[i] !=3D (char)i) {
+@@ -274,7 +283,7 @@ void split_pte_mapped_thp(void)
+ 	}
+=20
+ 	/* split all remapped THPs */
+-	write_debugfs(getpid(), (uint64_t)pte_mapped,
++	write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
+ 		      (uint64_t)pte_mapped + pagesize * 4);
+=20
+ 	/* smap does not show THPs after mremap, use kpageflags instead */
+@@ -300,6 +309,65 @@ void split_pte_mapped_thp(void)
+ 	close(kpageflags_fd);
+ }
+=20
++void split_file_backed_thp(void)
 +{
-+	char input[INPUT_MAX];
-+	int ret;
++	int status;
++	int fd;
++	ssize_t num_written;
++	char tmpfs_template[] =3D "/tmp/thp_split_XXXXXX";
++	const char *tmpfs_loc =3D mkdtemp(tmpfs_template);
++	char testfile[INPUT_MAX];
 +
-+	ret =3D snprintf(input, INPUT_MAX, "%d,0x%lx,0x%lx", pid, vaddr_start,
-+			vaddr_end);
-+	if (ret >=3D INPUT_MAX) {
-+		printf("%s: Debugfs input is too long\n", __func__);
++	status =3D mount("tmpfs", tmpfs_loc, "tmpfs", 0, "huge=3Dalways,size=3D4m=
+");
++
++	if (status) {
++		printf("Unable to create a tmpfs for testing\n");
 +		exit(EXIT_FAILURE);
 +	}
 +
-+	if (!write_file(SPLIT_DEBUGFS, input, ret + 1)) {
-+		perror(SPLIT_DEBUGFS);
++	status =3D snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_loc);
++	if (status >=3D INPUT_MAX) {
++		printf("Fail to create file-backed THP split testing file\n");
++		goto cleanup;
++	}
++
++	fd =3D open(testfile, O_CREAT|O_WRONLY);
++	if (fd =3D=3D -1) {
++		perror("Cannot open testing file\n");
++		goto cleanup;
++	}
++
++	/* write something to the file, so a file-backed THP can be allocated */
++	num_written =3D write(fd, tmpfs_loc, sizeof(tmpfs_loc));
++	close(fd);
++
++	if (num_written < 1) {
++		printf("Fail to write data to testing file\n");
++		goto cleanup;
++	}
++
++	/* split the file-backed THP */
++	write_debugfs(PATH_FMT, testfile, 0, 1024);
++
++	status =3D unlink(testfile);
++	if (status)
++		perror("Cannot remove testing file\n");
++
++cleanup:
++	status =3D umount(tmpfs_loc);
++	if (status) {
++		printf("Unable to umount %s\n", tmpfs_loc);
 +		exit(EXIT_FAILURE);
 +	}
++	status =3D rmdir(tmpfs_loc);
++	if (status) {
++		perror("cannot remove tmp dir");
++		exit(EXIT_FAILURE);
++	}
++
++	printf("file-backed THP split test done, please check dmesg for more info=
+rmation\n");
 +}
 +
-+#define MAX_LINE_LENGTH 500
-+
-+static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
-+{
-+	while (fgets(buf, MAX_LINE_LENGTH, fp) !=3D NULL) {
-+		if (!strncmp(buf, pattern, strlen(pattern)))
-+			return true;
-+	}
-+	return false;
-+}
-+
-+static uint64_t check_huge(void *addr)
-+{
-+	uint64_t thp =3D 0;
-+	int ret;
-+	FILE *fp;
-+	char buffer[MAX_LINE_LENGTH];
-+	char addr_pattern[MAX_LINE_LENGTH];
-+
-+	ret =3D snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
-+		       (unsigned long) addr);
-+	if (ret >=3D MAX_LINE_LENGTH) {
-+		printf("%s: Pattern is too long\n", __func__);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+
-+	fp =3D fopen(SMAP_PATH, "r");
-+	if (!fp) {
-+		printf("%s: Failed to open file %s\n", __func__, SMAP_PATH);
-+		exit(EXIT_FAILURE);
-+	}
-+	if (!check_for_pattern(fp, addr_pattern, buffer))
-+		goto err_out;
-+
-+	/*
-+	 * Fetch the AnonHugePages: in the same block and check the number of
-+	 * hugepages.
-+	 */
-+	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
-+		goto err_out;
-+
-+	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) !=3D 1) {
-+		printf("Reading smap error\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+err_out:
-+	fclose(fp);
-+	return thp;
-+}
-+
-+void split_pmd_thp(void)
-+{
-+	char *one_page;
-+	size_t len =3D 4 * pmd_pagesize;
-+	uint64_t thp_size;
-+	size_t i;
-+
-+	one_page =3D memalign(pmd_pagesize, len);
-+
-+	if (!one_page) {
-+		printf("Fail to allocate memory\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	madvise(one_page, len, MADV_HUGEPAGE);
-+
-+	for (i =3D 0; i < len; i++)
-+		one_page[i] =3D (char)i;
-+
-+	thp_size =3D check_huge(one_page);
-+	if (!thp_size) {
-+		printf("No THP is allocated\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* split all THPs */
-+	write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page + len);
-+
-+	for (i =3D 0; i < len; i++)
-+		if (one_page[i] !=3D (char)i) {
-+			printf("%ld byte corrupted\n", i);
-+			exit(EXIT_FAILURE);
-+		}
-+
-+
-+	thp_size =3D check_huge(one_page);
-+	if (thp_size) {
-+		printf("Still %ld kB AnonHugePages not split\n", thp_size);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	printf("Split huge pages successful\n");
-+	free(one_page);
-+}
-+
-+void split_pte_mapped_thp(void)
-+{
-+	char *one_page, *pte_mapped, *pte_mapped2;
-+	size_t len =3D 4 * pmd_pagesize;
-+	uint64_t thp_size;
-+	size_t i;
-+	const char *pagemap_template =3D "/proc/%d/pagemap";
-+	const char *kpageflags_proc =3D "/proc/kpageflags";
-+	char pagemap_proc[255];
-+	int pagemap_fd;
-+	int kpageflags_fd;
-+
-+	if (snprintf(pagemap_proc, 255, pagemap_template, getpid()) < 0) {
-+		perror("get pagemap proc error");
-+		exit(EXIT_FAILURE);
-+	}
-+	pagemap_fd =3D open(pagemap_proc, O_RDONLY);
-+
-+	if (pagemap_fd =3D=3D -1) {
-+		perror("read pagemap:");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	kpageflags_fd =3D open(kpageflags_proc, O_RDONLY);
-+
-+	if (kpageflags_fd =3D=3D -1) {
-+		perror("read kpageflags:");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	one_page =3D mmap((void *)(1UL << 30), len, PROT_READ | PROT_WRITE,
-+			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+
-+	madvise(one_page, len, MADV_HUGEPAGE);
-+
-+	for (i =3D 0; i < len; i++)
-+		one_page[i] =3D (char)i;
-+
-+	thp_size =3D check_huge(one_page);
-+	if (!thp_size) {
-+		printf("No THP is allocated\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* remap the first pagesize of first THP */
-+	pte_mapped =3D mremap(one_page, pagesize, pagesize, MREMAP_MAYMOVE);
-+
-+	/* remap the Nth pagesize of Nth THP */
-+	for (i =3D 1; i < 4; i++) {
-+		pte_mapped2 =3D mremap(one_page + pmd_pagesize * i + pagesize * i,
-+				     pagesize, pagesize,
-+				     MREMAP_MAYMOVE|MREMAP_FIXED,
-+				     pte_mapped + pagesize * i);
-+		if (pte_mapped2 =3D=3D (char *)-1) {
-+			perror("mremap failed");
-+			exit(EXIT_FAILURE);
-+		}
-+	}
-+
-+	/* smap does not show THPs after mremap, use kpageflags instead */
-+	thp_size =3D 0;
-+	for (i =3D 0; i < pagesize * 4; i++)
-+		if (i % pagesize =3D=3D 0 &&
-+		    is_backed_by_thp(&pte_mapped[i], pagemap_fd, kpageflags_fd))
-+			thp_size++;
-+
-+	if (thp_size !=3D 4) {
-+		printf("Some THPs are missing during mremap\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* split all remapped THPs */
-+	write_debugfs(getpid(), (uint64_t)pte_mapped,
-+		      (uint64_t)pte_mapped + pagesize * 4);
-+
-+	/* smap does not show THPs after mremap, use kpageflags instead */
-+	thp_size =3D 0;
-+	for (i =3D 0; i < pagesize * 4; i++) {
-+		if (pte_mapped[i] !=3D (char)i) {
-+			printf("%ld byte corrupted\n", i);
-+			exit(EXIT_FAILURE);
-+		}
-+		if (i % pagesize =3D=3D 0 &&
-+		    is_backed_by_thp(&pte_mapped[i], pagemap_fd, kpageflags_fd))
-+			thp_size++;
-+	}
-+
-+	if (thp_size) {
-+		printf("Still %ld THPs not split\n", thp_size);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	printf("Split PTE-mapped huge pages successful\n");
-+	munmap(one_page, len);
-+	close(pagemap_fd);
-+	close(kpageflags_fd);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	if (geteuid() !=3D 0) {
-+		printf("Please run the benchmark as root\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	pagesize =3D getpagesize();
-+	pageshift =3D ffs(pagesize) - 1;
-+	pmd_pagesize =3D read_pmd_pagesize();
-+
-+	split_pmd_thp();
-+	split_pte_mapped_thp();
-+
-+	return 0;
-+}
+ int main(int argc, char **argv)
+ {
+ 	if (geteuid() !=3D 0) {
+@@ -313,6 +381,7 @@ int main(int argc, char **argv)
+=20
+ 	split_pmd_thp();
+ 	split_pte_mapped_thp();
++	split_file_backed_thp();
+=20
+ 	return 0;
+ }
 --=20
 2.30.2
 
