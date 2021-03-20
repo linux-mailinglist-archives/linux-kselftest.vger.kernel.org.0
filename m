@@ -2,405 +2,402 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D53342D82
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Mar 2021 16:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AECA7342D88
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Mar 2021 16:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbhCTPDH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 20 Mar 2021 11:03:07 -0400
-Received: from mout.gmx.net ([212.227.15.19]:35291 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229564AbhCTPCz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 20 Mar 2021 11:02:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1616252530;
-        bh=Qyy316MMRLCeGzcR94PAqHg48ZDAQa0fq9Q52i0Shv4=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=HHm76Nxr7kXuOksjq0yHaPoZzQUcews5agadFz9TNWK9FhZYGxzh9emiG7lpNBQXp
-         esGuXlJjYQp/VJJCjo5X/EwQHTnqr3AiCxt4ifJEi5fUt4b9gtkbokMY8hpb9MquUX
-         FfmJtiEcHSM+ah+nq4AOpmmLnyWRutgn6wg8bTPU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ubuntu ([83.52.229.153]) by mail.gmx.net (mrgmx004
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1M1HZo-1lPGkC2SmA-002nOF; Sat, 20
- Mar 2021 16:02:10 +0100
-Date:   Sat, 20 Mar 2021 16:01:53 +0100
-From:   John Wood <john.wood@gmx.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     John Wood <john.wood@gmx.com>, Jann Horn <jannh@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v6 2/8] security/brute: Define a LSM and manage
- statistical data
-Message-ID: <20210320150153.GA3023@ubuntu>
-References: <20210307113031.11671-1-john.wood@gmx.com>
- <20210307113031.11671-3-john.wood@gmx.com>
- <202103171823.E7F64A593@keescook>
+        id S229874AbhCTPFS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 20 Mar 2021 11:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229791AbhCTPFF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 20 Mar 2021 11:05:05 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064ECC061763
+        for <linux-kselftest@vger.kernel.org>; Sat, 20 Mar 2021 08:05:04 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id t14so936114ilu.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 20 Mar 2021 08:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CTdkfzavYsU7uBmZflWHnpMTXrjQ4GrLQWSm3Aw52qU=;
+        b=N0RfnUOXW2oeWI9H7WqZV2lqxmfz9BEWPbk4WW85x/gRDtSG676KWxq8ch4mTFLYky
+         NYpjUDCoWdzRjqn2MMcMlR3r5LennwHo+BpZFOcFlrsWqit1qT1NZ1gknaAhY2WhGWMm
+         ov3K1bIKJ9HRArMK7wX7qdSxxkCcuR8IHmECP35EVfakGrauNX2NPgqQxMTSVf9a4XLs
+         43GfMZagjOoxMXfNNzSlTuTFS3t9P0RNAom7YuwY22ttoI0DPphOswCj4r6j/FTYOdPT
+         DlLJLszVMS9VXLDsRNOuEuqNuvHrf8CeuMMR/fYMNPuYmwBybopAIpThXSKMe2DFQcpg
+         WRwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CTdkfzavYsU7uBmZflWHnpMTXrjQ4GrLQWSm3Aw52qU=;
+        b=RrdPGQ5XkigSFRefVLvUYyk1xYzOmbc8uIOkuIC1lIBgHJ+sn/Kq0d2bJ1JDu8u8ni
+         i0wbcX8i0PUGcPYTT/eTdX5oyNruQU3yvOZNoA0tsXeb8c0ryQTfkkJfMDQHXodPzcaU
+         +G1SegmdLEZ/e2t2K/yqn1sxbVsihieF5nullpE36WJwDdJfK/SfBu175phK1HT63qNl
+         Zzqxr3qVs0L6/X+g75CxqPTz+dpLxXO8Tg6KGmeCkx1NMzja9rR+2MNNjqYq6VfnWM6j
+         2MDZAqNzgfgpwP5eoztEA2ySyNg4ff5BDUF22JTNFAuPjFwMkN8ORdTaDzb4QpDgFpTK
+         nCOg==
+X-Gm-Message-State: AOAM530hzNhag6Dox7PR3ChSJdNCp22NorANlqXsu4MI1G3hi+nvfcmp
+        z3YzOz1b4P2FQoyofzsADwiAyJsEyocEwVtPtMFspw==
+X-Google-Smtp-Source: ABdhPJxQJeCZORI6jQ94bT1y/U2i0yYOczKeBSfvBGxFvygEBQK7qo8VttFEYHnkfLp8OzctL4NewG/ry/iMrZPYyvw=
+X-Received: by 2002:a92:6511:: with SMTP id z17mr6183937ilb.232.1616252704239;
+ Sat, 20 Mar 2021 08:05:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202103171823.E7F64A593@keescook>
-X-Provags-ID: V03:K1:N3kDi3fcr7BY5jsLXEhpPT5eZCaHx6vuob6jMA+RdTaGjh8x9VS
- hV87Ez7R08B5a/LV4rUuS+sNRxEb0rRx9YG2RV+GiHLEyMffLwDJoqHDDtbHZme0X7p/ut0
- fALzuLGYUv3x79dHwdPPAU/s3LXWcFANyklULIR94sta/QDX8kUIAzk0Rg5JIBQHkNMSy1u
- ffOa76sdUHRXUIcjhEtVw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:znyhYE+hPho=:4IpP/8ClXstsl4SruKeZN+
- QBRMjJyTtACcGbLZY1iLRJA7wipKvsAez6Wxl0QsHTOEp4CjrLaf9zCxkM3+5qO91f0tIvD3q
- uoFVuR/e0xie6uXyLlVX7U44aprQ8JtF7YdOhta42A4pVijYKqz5kVdaxZfFSg231iqeNUCeJ
- ohTdH2mYstSXwpDLKbGFq6kdRUvTn1mskkPOM70kaoqDLWYJH2/hHIfm/SbNi0KPkMBkVzjo8
- 21zXP53PeLQa+1AYoK4Yi1h0f//PsJfaE53v0C67pX5GiAdbZlyj0xFcX+x6/N/BjKZyb46iA
- 9ydBQMVIpj1KTANBZLSPR1v6Q8vkwTAxiutsSxhHIlp6t0or/dhBH6bfHxzgFsSNhfsK2hV7X
- AOd2kcb9jksY+/pDCNlYbNpZaV9za0/myw0ghISjpdXNyAIaiH4JLdVdPWix13Pba9GXAKlry
- MkkjcA/oTvoS6zz7Ae34+vzhksKRte4DKnwvCLJudMs0Tsr6ZLnAOJK+yGGUdJF/PmOEmAZuG
- vKtVFVjRjqHE08Q5yD7cmQtdXvZAQds5eF7QSNNRrFZD/h4egly+AzviUZWM2DI+HIoGeDsZW
- XgjxIpz8Gnyfeoj+uPVjhBxfkCRFK/BJHnIUED4JLCVIxfPprj6DUEwAXXU4DQ4dOBrbHmiJ2
- 8L49dfglgJnAetJYIV3lvji50TjLsFtrfJ2NA682Nzr8c3wk4zyOJ6W/QqbBnytSJF/m6zJch
- BerqnhrhLJEZ1KOD1If6tf/zOq5S/X1afd50Ht7Dg7wAQoAgs4gFEEXSG8DK99qc+ok/pzh5U
- 2FfjyJdmPIibEVNOSZZGQ1HQURy5CVzsmQL29jk5gBxDnTUU3rTjEe9VvUZA2yqmLxkMlU1Ro
- CZBBwWM/EB8E2VB/BtEQ==
-Content-Transfer-Encoding: quoted-printable
+References: <20210315114827.46036-1-psampat@linux.ibm.com> <20210315114827.46036-3-psampat@linux.ibm.com>
+ <CAAYoRsW-E_Rek-c=e3xr8dTNUWud1AkndNaNySCZpt=h1qSf7g@mail.gmail.com> <5d001a54-68ca-4cb8-4beb-4e5210f03677@linux.ibm.com>
+In-Reply-To: <5d001a54-68ca-4cb8-4beb-4e5210f03677@linux.ibm.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Sat, 20 Mar 2021 08:04:51 -0700
+Message-ID: <CAAYoRsWcLr7E=He8EGTAom5nKgY3OU1E9Reyx10qPwAxsTFOsg@mail.gmail.com>
+Subject: Re: [RFC 2/2] selftest/cpuidle: Add support for cpuidle latency measurement
+To:     Pratik Sampat <psampat@linux.ibm.com>
+Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-First of all thanks for the review. More info and questions inline.
-
-On Wed, Mar 17, 2021 at 07:00:56PM -0700, Kees Cook wrote:
-> On Sun, Mar 07, 2021 at 12:30:25PM +0100, John Wood wrote:
+On Wed, Mar 17, 2021 at 11:44 PM Pratik Sampat <psampat@linux.ibm.com> wrote:
+>
+> Hi Doug,
+> Thanks for trying these patches out.
+>
+> On 18/03/21 2:30 am, Doug Smythies wrote:
+> > Hi Pratik,
 > >
-> >  config LSM
-> >  	string "Ordered list of enabled LSMs"
-> > -	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tom=
-oyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-> > -	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,=
-smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-> > -	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DE=
-FAULT_SECURITY_TOMOYO
-> > -	default "lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_S=
-ECURITY_DAC
-> > -	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tom=
-oyo,apparmor,bpf"
-> > +	default "brute,lockdown,yama,loadpin,safesetid,integrity,smack,selin=
-ux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-> > +	default "brute,lockdown,yama,loadpin,safesetid,integrity,apparmor,se=
-linux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-> > +	default "brute,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf"=
- if DEFAULT_SECURITY_TOMOYO
-> > +	default "brute,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEF=
-AULT_SECURITY_DAC
-> > +	default "brute,lockdown,yama,loadpin,safesetid,integrity,selinux,sma=
-ck,tomoyo,apparmor,bpf"
+> > It just so happens that I have been trying Artem's version this last
+> > week, so I tried yours.
+> >
+> > On Mon, Mar 15, 2021 at 4:49 AM Pratik Rajesh Sampat
+> > <psampat@linux.ibm.com> wrote:
+> > ...
+...
+> > Other notes:
+> >
+> > No idle state for CPU 0 ever gets disabled.
+> > I assume this is because CPU 0 can never be offline,
+> > so that bit of code (Disable all stop states) doesn't find its state.
+> > By the way, processor = Intel i5-9600K
 >
-> It probably doesn't matter much, but I think brute should be added
-> between lockdown and yama.
+> I had tried these patches on an IBM POWER 9 processor and disabling CPU0's idle
+> state works there. However, it does make sense for some processors to treat CPU
+> 0 differently.
+> Maybe I could write in a case if idle state disabling fails for a CPU then we
+> just skip it?
 
-What is the rationale for the stacking order (in relation with brute and
-lockdown)?
+I didn't try it, I just did a hack so I could continue for this reply.
 
-> > diff --git a/security/Makefile b/security/Makefile
-> > index 3baf435de541..1236864876da 100644
-> > --- a/security/Makefile
-> > +++ b/security/Makefile
-> > @@ -36,3 +36,7 @@ obj-$(CONFIG_BPF_LSM)			+=3D bpf/
-> >  # Object integrity file lists
-> >  subdir-$(CONFIG_INTEGRITY)		+=3D integrity
-> >  obj-$(CONFIG_INTEGRITY)			+=3D integrity/
-> > +
-> > +# Object brute file lists
-> > +subdir-$(CONFIG_SECURITY_FORK_BRUTE)	+=3D brute
-> > +obj-$(CONFIG_SECURITY_FORK_BRUTE)	+=3D brute/
+> > The system is left with all idle states disabled, well not for CPU 0
+> > as per the above comment. The suggestion is to restore them,
+> > otherwise my processor hogs 42 watts instead of 2.
+> >
+> > My results are highly variable per test.
 >
-> I don't think subdir is needed here? I think you can use obj-... like
-> loadpin, etc.
+> Question: Do you notice high variability with IPI test, Timer test or both?
 
-loadpin also uses subdir just like selinux, smack, tomoyo, etc.. So, why
-is it not necessary for brute?
-
-> > +#include <asm/current.h>
->
-> Why is this needed?
-
-IIUC, the "current" macro is defined in this header. I try to include the
-appropiate header for every macro and function used.
-
-> > +/**
-> > + * struct brute_stats - Fork brute force attack statistics.
-> > + * @lock: Lock to protect the brute_stats structure.
-> > + * @refc: Reference counter.
-> > + * @faults: Number of crashes.
-> > + * @jiffies: Last crash timestamp.
-> > + * @period: Crash period's moving average.
-> > + *
-> > + * This structure holds the statistical data shared by all the fork h=
-ierarchy
-> > + * processes.
-> > + */
-> > +struct brute_stats {
-> > +	spinlock_t lock;
-> > +	refcount_t refc;
-> > +	unsigned char faults;
-> > +	u64 jiffies;
-> > +	u64 period;
-> > +};
->
-> I assume the max-255 "faults" will be explained... why is this so small?
-
-If a brute force attack is running slowly for a long time, the application
-crash period's EMA is not suitable for the detection. This type of attack
-must be detected using a maximum number of faults. In this case, the
-BRUTE_MAX_FAULTS is defined as 200.
-
-> > [...]
-> > +static struct brute_stats *brute_new_stats(void)
-> > +{
-> > +	struct brute_stats *stats;
-> > +
-> > +	stats =3D kmalloc(sizeof(struct brute_stats), GFP_KERNEL);
-> > +	if (!stats)
-> > +		return NULL;
->
-> Since this is tied to process creation, I think it might make sense to
-> have a dedicated kmem cache for this (instead of using the "generic"
-> kmalloc). See kmem_cache_{create,*alloc,free}
-
-Thanks, I will work on it for the next version.
->
-> > +
-> > +	spin_lock_init(&stats->lock);
-> > +	refcount_set(&stats->refc, 1);
-> > +	stats->faults =3D 0;
-> > +	stats->jiffies =3D get_jiffies_64();
-> > +	stats->period =3D 0;
->
-> And either way, I'd recommend using the "z" variant of the allocator
-> (kmem_cache_zalloc, kzalloc) to pre-zero everything (and then you can
-> drop the "=3D 0" lines here).
-
-Understood.
+The IPI test has less variability than the Timer test.
 
 >
-> > +
-> > +	return stats;
-> > +}
-> > +
-> > +/**
-> > + * brute_share_stats() - Share the statistical data between processes=
-.
-> > + * @src: Source of statistics to be shared.
-> > + * @dst: Destination of statistics to be shared.
-> > + *
-> > + * Copy the src's pointer to the statistical data structure to the ds=
-t's pointer
-> > + * to the same structure. Since there is a new process that shares th=
-e same
-> > + * data, increase the reference counter. The src's pointer cannot be =
-NULL.
-> > + *
-> > + * It's mandatory to disable interrupts before acquiring the brute_st=
-ats::lock
-> > + * since the task_free hook can be called from an IRQ context during =
-the
-> > + * execution of the task_alloc hook.
-> > + */
-> > +static void brute_share_stats(struct brute_stats *src,
-> > +			      struct brute_stats **dst)
-> > +{
-> > +	unsigned long flags;
-> > +
-> > +	spin_lock_irqsave(&src->lock, flags);
-> > +	refcount_inc(&src->refc);
-> > +	*dst =3D src;
-> > +	spin_unlock_irqrestore(&src->lock, flags);
-> > +}
-> > +
-> > +/**
-> > + * brute_task_alloc() - Target for the task_alloc hook.
-> > + * @task: Task being allocated.
-> > + * @clone_flags: Contains the flags indicating what should be shared.
-> > + *
-> > + * For a correct management of a fork brute force attack it is necess=
-ary that
-> > + * all the tasks hold statistical data. The same statistical data nee=
-ds to be
-> > + * shared between all the tasks that hold the same memory contents or=
- in other
-> > + * words, between all the tasks that have been forked without any exe=
-cve call.
-> > + *
-> > + * To ensure this, if the current task doesn't have statistical data =
-when forks,
-> > + * it is mandatory to allocate a new statistics structure and share i=
-t between
-> > + * this task and the new one being allocated. Otherwise, share the st=
-atistics
-> > + * that the current task already has.
-> > + *
-> > + * Return: -ENOMEM if the allocation of the new statistics structure =
-fails. Zero
-> > + *         otherwise.
-> > + */
-> > +static int brute_task_alloc(struct task_struct *task, unsigned long c=
-lone_flags)
-> > +{
-> > +	struct brute_stats **stats, **p_stats;
-> > +
-> > +	stats =3D brute_stats_ptr(task);
-> > +	p_stats =3D brute_stats_ptr(current);
-> > +
-> > +	if (likely(*p_stats)) {
-> > +		brute_share_stats(*p_stats, stats);
-> > +		return 0;
-> > +	}
-> > +
-> > +	*stats =3D brute_new_stats();
-> > +	if (!*stats)
-> > +		return -ENOMEM;
-> > +
-> > +	brute_share_stats(*stats, p_stats);
-> > +	return 0;
-> > +}
+> I can think of two reasons for high run to run variance:
 >
-> During the task_alloc hook, aren't both "current" and "task" already
-> immutable (in the sense that no lock needs to be held for
-> brute_share_stats())?
-
-I will work on it.
-
-> And what is the case where brute_stats_ptr(current) returns NULL?
-
-Sorry, but I don't understand what you are trying to explain me.
-brute_stats_ptr(current) returns a pointer to a pointer. So, I think
-your question is: What's the purpose of the "if (likely(*p_stats))"
-check? If it is the case, this check is to guarantee that all the tasks
-have statistical data. If some task has been allocated prior the brute
-LSM initialization, this task doesn't have stats. So, with this check
-all the tasks that fork have stats.
-
-> > +
-> > +/**
-> > + * brute_task_execve() - Target for the bprm_committing_creds hook.
-> > + * @bprm: Points to the linux_binprm structure.
-> > + *
-> > + * When a forked task calls the execve system call, the memory conten=
-ts are set
-> > + * with new values. So, in this scenario the parent's statistical dat=
-a no need
-> > + * to be shared. Instead, a new statistical data structure must be al=
-located to
-> > + * start a new hierarchy. This condition is detected when the statist=
-ics
-> > + * reference counter holds a value greater than or equal to two (a fo=
-rk always
-> > + * sets the statistics reference counter to a minimum of two since th=
-e parent
-> > + * and the child task are sharing the same data).
-> > + *
-> > + * However, if the execve function is called immediately after anothe=
-r execve
-> > + * call, althought the memory contents are reset, there is no need to=
- allocate
-> > + * a new statistical data structure. This is possible because at this=
- moment
-> > + * only one task (the task that calls the execve function) points to =
-the data.
-> > + * In this case, the previous allocation is used but the statistics a=
-re reset.
-> > + *
-> > + * It's mandatory to disable interrupts before acquiring the brute_st=
-ats::lock
-> > + * since the task_free hook can be called from an IRQ context during =
-the
-> > + * execution of the bprm_committing_creds hook.
-> > + */
-> > +static void brute_task_execve(struct linux_binprm *bprm)
-> > +{
-> > +	struct brute_stats **stats;
-> > +	unsigned long flags;
-> > +
-> > +	stats =3D brute_stats_ptr(current);
-> > +	if (WARN(!*stats, "No statistical data\n"))
-> > +		return;
-> > +
-> > +	spin_lock_irqsave(&(*stats)->lock, flags);
-> > +
-> > +	if (!refcount_dec_not_one(&(*stats)->refc)) {
-> > +		/* execve call after an execve call */
-> > +		(*stats)->faults =3D 0;
-> > +		(*stats)->jiffies =3D get_jiffies_64();
-> > +		(*stats)->period =3D 0;
-> > +		spin_unlock_irqrestore(&(*stats)->lock, flags);
-> > +		return;
-> > +	}
-> > +
-> > +	/* execve call after a fork call */
-> > +	spin_unlock_irqrestore(&(*stats)->lock, flags);
-> > +	*stats =3D brute_new_stats();
-> > +	WARN(!*stats, "Cannot allocate statistical data\n");
-> > +}
+> 1. If you observe variance in timer tests, then I believe there could a
+> mechanism of "C-state pre-wake" on some Intel machines at play here, which can
+> pre-wake a CPU from an idle state when timers are armed. I'm not sure if the
+> Intel platform that you're running on does that or not.
 >
-> I don't think any of this locking is needed -- you're always operating
-> on "current", so its brute_stats will always be valid.
+> Artem had described this behavior to me a while ago and I think his wult page
+> describes this behavior in more detail:
+> https://intel.github.io/wult/#c-state-pre-wake
 
-But another process (that share the same stats) could be modifying this
-concurrently.
+Yes, I have reviewed all the references.
+And yes, I think my processors have the pre-wake stuff.
 
-Scenario 1: cpu 1 writes stats and cpu 2 writes stats.
-Scenario 2: cpu 1 writes stats, then IRQ on the same cpu writes stats.
+I do not have the proper hardware to do the Artem pre-wake workaround
+method, but might buy it in future.
 
-I think it is possible. So AFAIK we need locking. Sorry if I am wrong.
+> 2. I have noticed variability in results when there are kernel book-keeping or
+> jitter tasks scheduled from time to time on an otherwise idle core.
+> In the full per-CPU logs at tools/testing/selftests/cpuidle/cpuidle.log can you
+> spot any obvious outliers per-CPU state?
 
-> > +
-> > +/**
-> > + * brute_task_free() - Target for the task_free hook.
-> > + * @task: Task about to be freed.
-> > + *
-> > + * The statistical data that is shared between all the fork hierarchy=
- processes
-> > + * needs to be freed when this hierarchy disappears.
-> > + *
-> > + * It's mandatory to disable interrupts before acquiring the brute_st=
-ats::lock
-> > + * since the task_free hook can be called from an IRQ context during =
-the
-> > + * execution of the task_free hook.
-> > + */
-> > +static void brute_task_free(struct task_struct *task)
-> > +{
-> > +	struct brute_stats **stats;
-> > +	unsigned long flags;
-> > +	bool refc_is_zero;
-> > +
-> > +	stats =3D brute_stats_ptr(task);
-> > +	if (WARN(!*stats, "No statistical data\n"))
-> > +		return;
-> > +
-> > +	spin_lock_irqsave(&(*stats)->lock, flags);
-> > +	refc_is_zero =3D refcount_dec_and_test(&(*stats)->refc);
-> > +	spin_unlock_irqrestore(&(*stats)->lock, flags);
-> > +
-> > +	if (refc_is_zero) {
-> > +		kfree(*stats);
-> > +		*stats =3D NULL;
-> > +	}
-> > +}
->
-> Same thing -- this is what dec_and_test is for: it's atomic, so no
-> locking needed.
+Yes.
+I'll just paste in an example cpuidle.log file having used the -v option
+below, along with my hack job diff.
 
-Ok, in this case I can see that the locking is not necessary due to the
-stats::refc is atomic. But in the previous case, faults, jiffies and
-period are not atomic. So I think the lock is necessary. If not, what am
-I missing?
+doug@s19:~/temp-k-git/linux/tools/testing/selftests/cpuidle$ cat
+cpuidle.log.v3-1
+--IPI Latency Test---
+--Baseline IPI Latency measurement: CPU Busy--
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+0            0          140
+0            1          632
+0            2          675
+0            3          671
+0            4          675
+0            5          767
+0            6          653
+0            7          826
+0            8          819
+0            9          615
+0           10          758
+0           11          758
+Baseline Avg IPI latency(ns): 665
+---Enabling state: 0---
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+0            0           76
+0            1          484
+0            2          494
+0            3          539
+0            4          498
+0            5          491
+0            6          474
+0            7          434
+0            8          544
+0            9          476
+0           10          447
+0           11          467
+Expected IPI latency(ns): 0
+Observed Avg IPI latency(ns) - State 0: 452
+---Enabling state: 1---
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+0            0           72
+0            1         1081
+0            2          821
+0            3         1486
+0            4         1022
+0            5          960
+0            6         1634
+0            7          933
+0            8         1032
+0            9         1046
+0           10         1430
+0           11         1338
+Expected IPI latency(ns): 1000
+Observed Avg IPI latency(ns) - State 1: 1071
+---Enabling state: 2---
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+0            0          264
+0            1        30836
+0            2        30562
+0            3        30748
+0            4        35286
+0            5        30978
+0            6         1952
+0            7        36066
+0            8        30670
+0            9        30605
+0           10        30635
+0           11        35423
+Expected IPI latency(ns): 120000
+Observed Avg IPI latency(ns) - State 2: 27002
+---Enabling state: 3---
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+0            0           71
+0            1        30853
+0            2        32095
+0            3        32661
+0            4        30230
+0            5        34348
+0            6         2012
+0            7        30816
+0            8        30908
+0            9        31130
+0           10        34150
+0           11        32050
+Expected IPI latency(ns): 1034000
+Observed Avg IPI latency(ns) - State 3: 26777
 
-Thanks,
-John Wood
+--Timeout Latency Test--
+--Baseline Timeout Latency measurement: CPU Busy--
+Wakeup_src Baseline_delay(ns)
+0             453
+1             568
+2             387
+3             337
+4             433
+5             579
+6             330
+7             400
+8             561
+9             544
+10            569
+11            523
+Baseline Avg timeout diff(ns): 473
+---Enabling state: 0---
+Wakeup_src Baseline_delay(ns)  Delay(ns)
+0             399
+1             388
+2             352
+3             385
+4             334
+5             415
+6             320
+7             356
+8             401
+9             379
+10            339
+11            384
+Expected timeout(ns): 200
+Observed Avg timeout diff(ns) - State 0: 371
+---Enabling state: 1---
+Wakeup_src Baseline_delay(ns)  Delay(ns)
+0             666
+1             575
+2             608
+3             590
+4             608
+5             552
+6             582
+7             593
+8             597
+9             587
+10            588
+11            610
+Expected timeout(ns): 1200
+Observed Avg timeout diff(ns) - State 1: 596
+---Enabling state: 2---
+Wakeup_src Baseline_delay(ns)  Delay(ns)
+0           36386
+1            1069
+2             866
+3             884
+4             850
+5           55642
+6          408082
+7            1184
+8          406075
+9          406830
+10         414105
+11         406594
+Expected timeout(ns): 360200
+Observed Avg timeout diff(ns) - State 2: 178213
+---Enabling state: 3---
+Wakeup_src Baseline_delay(ns)  Delay(ns)
+0          406049
+1             913
+2          410134
+3             921
+4          406237
+5             950
+6          407181
+7             920
+8          407678
+9             894
+10         406320
+11         304161
+Expected timeout(ns): 3102200
+Observed Avg timeout diff(ns) - State 3: 229363
+
+
+My hack job, (CPUs always online):
+
+diff --git a/tools/testing/selftests/cpuidle/cpuidle.sh
+b/tools/testing/selftests/cpuidle/cpuidle.sh
+index de5141d5b76b..70bdacda5e91 100755
+--- a/tools/testing/selftests/cpuidle/cpuidle.sh
++++ b/tools/testing/selftests/cpuidle/cpuidle.sh
+@@ -86,10 +86,6 @@ disable_idle()
+ {
+        for ((cpu=0; cpu<NUM_CPUS; cpu++))
+        do
+-               local cpu_status=$(cpu_is_online $cpu)
+-               if [ $cpu_status == 0 ]; then
+-                       continue
+-               fi
+                for ((state=0; state<NUM_STATES; state++))
+                do
+                        echo 1 >
+/sys/devices/system/cpu/cpu$cpu/cpuidle/state$state/disable
+@@ -104,10 +100,6 @@ op_state()
+ {
+        for ((cpu=0; cpu<NUM_CPUS; cpu++))
+        do
+-               local cpu_status=$(cpu_is_online $cpu)
+-               if [ $cpu_status == 0 ]; then
+-                       continue
+-               fi
+                echo $1 >
+/sys/devices/system/cpu/cpu$cpu/cpuidle/state$2/disable
+        done
+ }
+@@ -124,17 +116,6 @@ cpuidle_disable_state()
+        op_state 1 $state
+ }
+
+-cpu_is_online()
+-{
+-       cpu=$1
+-       if [ ! -f "/sys/devices/system/cpu/cpu$cpu/online" ]; then
+-               echo 0
+-               return
+-       fi
+-       status=$(cat /sys/devices/system/cpu/cpu$cpu/online)
+-       echo $status
+-}
+-
+ # Extract latency in microseconds and convert to nanoseconds
+ extract_latency()
+ {
+@@ -179,10 +160,6 @@ run_ipi_tests()
+        printf "%s %10s %12s\n" "SRC_CPU" "DEST_CPU" "IPI_Latency(ns)" >> $LOG
+        for ((cpu=0; cpu<NUM_CPUS; cpu+=SMT))
+        do
+-               local cpu_status=$(cpu_is_online $cpu)
+-               if [ $cpu_status == 0 ]; then
+-                       continue
+-               fi
+                ipi_test_once "baseline" $cpu
+                printf "%-3s %10s %12s\n" $src_cpu $cpu $ipi_latency >> $LOG
+                avg_arr+=($ipi_latency)
+@@ -198,10 +175,6 @@ run_ipi_tests()
+                printf "%s %10s %12s\n" "SRC_CPU" "DEST_CPU"
+"IPI_Latency(ns)" >> $LOG
+                for ((cpu=0; cpu<NUM_CPUS; cpu+=SMT))
+                do
+-                       local cpu_status=$(cpu_is_online $cpu)
+-                       if [ $cpu_status == 0 ]; then
+-                               continue
+-                       fi
+                        # Running IPI test and logging results
+                        sleep 1
+                        ipi_test_once "test" $cpu
+@@ -262,10 +235,6 @@ run_timeout_tests()
+        printf "%s %10s %10s\n" "Wakeup_src" "Baseline_delay(ns)">> $LOG
+        for ((cpu=0; cpu<NUM_CPUS; cpu+=SMT))
+        do
+-               local cpu_status=$(cpu_is_online $cpu)
+-               if [ $cpu_status == 0 ]; then
+-                       continue
+-               fi
+                timeout_test_once "baseline" $cpu 1000000
+                printf "%-3s %13s\n" $src_cpu $timeout_diff >> $LOG
+                avg_arr+=($timeout_diff)
+@@ -281,10 +250,6 @@ run_timeout_tests()
+                printf "%s %10s %10s\n" "Wakeup_src"
+"Baseline_delay(ns)" "Delay(ns)" >> $LOG
+                for ((cpu=0; cpu<NUM_CPUS; cpu+=SMT))
+                do
+-                       local cpu_status=$(cpu_is_online $cpu)
+-                       if [ $cpu_status == 0 ]; then
+-                               continue
+-                       fi
+                        timeout_test_once "test" $cpu 1000000
+                        printf "%-3s %13s %18s\n" $src_cpu
+$baseline_timeout_diff $timeout_diff >> $LOG
+                        avg_arr+=($timeout_diff)
+@@ -314,3 +279,7 @@ run_timeout_tests
+ printf "Removing $MODULE module\n"
+ printf "Full Output logged at: $LOG\n"
+ rmmod $MODULE
++
++printf "enabling idle states\n"
++
++echo 0 | tee /sys/devices/system/cpu/cpu*/cpuidle/state*/disable
+(END)
