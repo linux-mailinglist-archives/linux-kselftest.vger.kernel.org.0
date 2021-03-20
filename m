@@ -2,360 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8358434293D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Mar 2021 01:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B11342A28
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Mar 2021 04:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbhCTAAd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Mar 2021 20:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        id S229846AbhCTDFt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Mar 2021 23:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbhCTAAM (ORCPT
+        with ESMTP id S229962AbhCTDFj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 20:00:12 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390DCC061760;
-        Fri, 19 Mar 2021 17:00:12 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id t18so12280006ejc.13;
-        Fri, 19 Mar 2021 17:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zTafU10YQYaIjshNkbpLe+B6v0K54rZkacG7T/BzgeA=;
-        b=VkvFmmMJsSp7M5acOUl+XJW8UZaR058eC0KPor1xSnVbiiNh/7Zahi0TsMrJoUp0PR
-         BaCGBNrE/KWmk5kOaLPeOVXyGzC5Dd7O1PHmNkcBDZT778gdYjfY+87DzrefSky3vbBA
-         RUTHkEMB92cDAbbRIvmjAa/toH8/DaWosqtRkz/02e6QC4Z6G6wIjFR2XhcNVam7kNq6
-         V1tsZei3RzpMs4K8NZMEJvbyaqiUUMGShReinfHl3hj5O9GpxJpdZFJGppRpT6pWdRK0
-         NGyRrl+02lHlth/7UixVMAdvltVRHfBiSUzrm1GDVAsgJ1R7BwHPbh/I369HbdSOdSTE
-         Zzzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zTafU10YQYaIjshNkbpLe+B6v0K54rZkacG7T/BzgeA=;
-        b=G3nTAEQq9vArzVCkrfKkWyY2ejB4BMZcjkGpymEbnWwV2HfvbitSkkkSkqDNWBBR+z
-         v4/R0G29FYfVVUVDm+QPzmODzudmEYuNMICt/Mi8UE44OWA1uHsmnlyqcKmTdxYxEogk
-         8EQbp1gZe6+LjbYTI8nRJX23bwkMJSSOhn+7ZeN2qe9eogw5C4Ks4rWg8lWbYVqtGNdg
-         qOJWi6Isf/BL2RlUDL8Yx2nUzvY3cipiiAvd5hD2qdMBukZ7s+tI+c2xuoJsVtxJbj4h
-         NpflDaaMp1O7Enz8FzNKhJpcfK+8U2hF8aYyUf4yIsKN+jyo44ysOfIyNqBqH46ktB4t
-         H7VQ==
-X-Gm-Message-State: AOAM530RsAiAXpWAhVqB9n1Do8jra/o3Z4/566kqf2p0E3fWu8UDp7dC
-        yr0O0u7NhjbOfanxvdBygUyNmGD/Wuc8T2Y/l6Y=
-X-Google-Smtp-Source: ABdhPJzF7qYEup/avluFhIIVJZLCv0GDiLAOHPc2MhqDxRgx52OkzuyIwGA7dSBXmrAlSsV9WWGjeAGxX3RuwZ0ZkdA=
-X-Received: by 2002:a17:906:789:: with SMTP id l9mr7129296ejc.161.1616198409563;
- Fri, 19 Mar 2021 17:00:09 -0700 (PDT)
+        Fri, 19 Mar 2021 23:05:39 -0400
+X-Greylist: delayed 2875 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 19 Mar 2021 20:05:39 PDT
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A157C061761
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Mar 2021 20:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
+        References:Message-ID:In-Reply-To:Subject:cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IA73I/1Q4ljXGa9sXgEYE5o60oxpvFT5RGp43jgdUZI=; b=oT1daocC/37cd1COpnbbd3BeV0
+        MtINmjA+3WKboa18UO3AFUWpkq/JC78nqf7ZqhP3lyvqbP21QlrEh0vntP04PXYEdRkXGpUXUxyhs
+        em/3ieJH16VYASnhsGtGOL6sJdqJge4/9E6/qfBhXJZg8x9PNskUs6JzeqJgBG+iUOv1yOh70R0EK
+        DHxGr7U4Ndnw/lKsXmQ5NiUEPp3BxMi42Izlg38k/w41YS4xJh+g30N6Ut0hanr5iIxuTfK8PKBK1
+        SP2YCvtThGg+poc9uTlQybvbw1/ag3lBIUSTyvUw/1Yrbrh4aTvZKiR6KtD5PzXTlEj+TiRLLyUqP
+        aE9IGPYw==;
+Received: from rdunlap (helo=localhost)
+        by bombadil.infradead.org with local-esmtp (Exim 4.94 #2 (Red Hat Linux))
+        id 1lNRBK-001ejd-M6; Sat, 20 Mar 2021 02:17:39 +0000
+Date:   Fri, 19 Mar 2021 19:17:38 -0700 (PDT)
+From:   Randy Dunlap <rdunlap@bombadil.infradead.org>
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
+cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: forwarding: Fix a typo
+In-Reply-To: <20210318232945.17834-1-unixbhaskar@gmail.com>
+Message-ID: <f9256be2-5b5-fdb5-8e12-771c2f952e15@bombadil.infradead.org>
+References: <20210318232945.17834-1-unixbhaskar@gmail.com>
 MIME-Version: 1.0
-References: <20210319005219.13595-1-zi.yan@sent.com> <20210319005219.13595-2-zi.yan@sent.com>
-In-Reply-To: <20210319005219.13595-2-zi.yan@sent.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 19 Mar 2021 16:59:57 -0700
-Message-ID: <CAHbLzkoX80=ZBYS85hnm-iSxGXijkf0=LgzNQ7dqjLW8KNbwhQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] mm: huge_memory: debugfs for file-backed THP split.
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mika Penttila <mika.penttila@nextfour.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+Sender: Randy Dunlap <rdunlap@infradead.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210319_191738_746279_4CAB6813 
+X-CRM114-Status: GOOD (  11.75  )
+X-Spam-Score: -0.0 (/)
+X-Spam-Report: Spam detection software, running on the system "bombadil.infradead.org",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ Content preview:  On Fri, 19 Mar 2021, Bhaskar Chowdhury wrote: > s/verfied/verified/
+    > > Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com> Acked-by: Randy
+    Dunlap <rdunlap@infradead.org> 
+ Content analysis details:   (-0.0 points, 5.0 required)
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -0.0 NO_RELAYS              Informational: message was not relayed via SMTP
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 18, 2021 at 5:52 PM Zi Yan <zi.yan@sent.com> wrote:
+
+
+On Fri, 19 Mar 2021, Bhaskar Chowdhury wrote:
+
+> s/verfied/verified/
 >
-> From: Zi Yan <ziy@nvidia.com>
->
-> Further extend <debugfs>/split_huge_pages to accept
-> "<path>,<off_start>,<off_end>" for file-backed THP split tests since
-> tmpfs may have file backed by THP that mapped nowhere.
->
-> Update selftest program to test file-backed THP split too.
->
-> Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+
 > ---
->  mm/huge_memory.c                              | 97 ++++++++++++++++++-
->  .../selftests/vm/split_huge_page_test.c       | 79 ++++++++++++++-
->  2 files changed, 168 insertions(+), 8 deletions(-)
+> tools/testing/selftests/net/forwarding/fib_offload_lib.sh | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 9bf9bc489228..6d6537cc8c56 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -3049,12 +3049,74 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
->         return ret;
->  }
+> diff --git a/tools/testing/selftests/net/forwarding/fib_offload_lib.sh b/tools/testing/selftests/net/forwarding/fib_offload_lib.sh
+> index 66496659bea7..e134a5f529c9 100644
+> --- a/tools/testing/selftests/net/forwarding/fib_offload_lib.sh
+> +++ b/tools/testing/selftests/net/forwarding/fib_offload_lib.sh
+> @@ -224,7 +224,7 @@ fib_ipv4_plen_test()
+> 	ip -n $ns link set dev dummy1 up
 >
-> +static int split_huge_pages_in_file(const char *file_path, pgoff_t off_start,
-> +                               pgoff_t off_end)
-> +{
-> +       struct filename *file;
-> +       struct file *candidate;
-> +       struct address_space *mapping;
-> +       int ret = -EINVAL;
-> +       pgoff_t off_cur;
-> +       unsigned long total = 0, split = 0;
-> +
-> +       file = getname_kernel(file_path);
-> +       if (IS_ERR(file))
-> +               return ret;
-> +
-> +       candidate = file_open_name(file, O_RDONLY, 0);
-> +       if (IS_ERR(candidate))
-> +               goto out;
-> +
-> +       pr_info("split file-backed THPs in file: %s, offset: [0x%lx - 0x%lx]\n",
-> +                file_path, off_start, off_end);
-> +
-> +       mapping = candidate->f_mapping;
-> +
-> +       for (off_cur = off_start; off_cur < off_end;) {
-> +               struct page *fpage = pagecache_get_page(mapping, off_cur,
-> +                                               FGP_ENTRY | FGP_HEAD, 0);
-> +
-> +               if (xa_is_value(fpage) || !fpage) {
-> +                       off_cur += PAGE_SIZE;
-> +                       continue;
-> +               }
-> +
-> +               if (!is_transparent_hugepage(fpage)) {
-> +                       off_cur += PAGE_SIZE;
-> +                       goto next;
-> +               }
-> +               total++;
-> +               off_cur = fpage->index + thp_size(fpage);
-> +
-> +               if (!trylock_page(fpage))
-> +                       goto next;
-> +
-> +               if (!split_huge_page(fpage))
-> +                       split++;
-> +
-> +               unlock_page(fpage);
-> +next:
-> +               put_page(fpage);
-> +       }
-> +
-> +       filp_close(candidate, NULL);
-> +       ret = 0;
-> +
-> +       pr_info("%lu of %lu file-backed THP split\n", split, total);
-> +out:
-> +       putname(file);
-> +       return ret;
-> +}
-> +
-> +#define MAX_INPUT_BUF_SZ 255
-
-As I mentioned in the first patch, you may move this to the first
-patch. I don't think it is necessary to add some code then remove it
-right in the following patch.
-
-Otherwise the patch looks good to me. Reviewed-by: Yang Shi
-<shy828301@gmail.com>
-
-> +
->  static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
->                                 size_t count, loff_t *ppops)
->  {
->         static DEFINE_MUTEX(split_debug_mutex);
->         ssize_t ret;
-> -       char input_buf[80]; /* hold pid, start_vaddr, end_vaddr */
-> +       /* hold pid, start_vaddr, end_vaddr or file_path, off_start, off_end */
-> +       char input_buf[MAX_INPUT_BUF_SZ];
->         int pid;
->         unsigned long vaddr_start, vaddr_end;
->
-> @@ -3064,11 +3126,40 @@ static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
->
->         ret = -EFAULT;
->
-> -       memset(input_buf, 0, 80);
-> +       memset(input_buf, 0, MAX_INPUT_BUF_SZ);
->         if (copy_from_user(input_buf, buf, min_t(size_t, count, 80)))
->                 goto out;
->
-> -       input_buf[79] = '\0';
-> +       input_buf[MAX_INPUT_BUF_SZ - 1] = '\0';
-> +
-> +       if (input_buf[0] == '/') {
-> +               char *tok;
-> +               char *buf = input_buf;
-> +               char file_path[MAX_INPUT_BUF_SZ];
-> +               pgoff_t off_start = 0, off_end = 0;
-> +               size_t input_len = strlen(input_buf);
-> +
-> +               tok = strsep(&buf, ",");
-> +               if (tok) {
-> +                       strncpy(file_path, tok, MAX_INPUT_BUF_SZ);
-> +               } else {
-> +                       ret = -EINVAL;
-> +                       goto out;
-> +               }
-> +
-> +               ret = sscanf(buf, "0x%lx,0x%lx", &off_start, &off_end);
-> +               if (ret != 2) {
-> +                       pr_info("ret: %ld\n", ret);
-> +                       ret = -EINVAL;
-> +                       goto out;
-> +               }
-> +               ret = split_huge_pages_in_file(file_path, off_start, off_end);
-> +               if (!ret)
-> +                       ret = input_len;
-> +
-> +               goto out;
-> +       }
-> +
->         ret = sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_end);
->         if (ret == 1 && pid == 1) {
->                 split_huge_pages_all();
-> diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/testing/selftests/vm/split_huge_page_test.c
-> index 2c0c18e60c57..ebdf2d738978 100644
-> --- a/tools/testing/selftests/vm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/vm/split_huge_page_test.c
-> @@ -7,11 +7,13 @@
->  #define _GNU_SOURCE
->  #include <stdio.h>
->  #include <stdlib.h>
-> +#include <stdarg.h>
->  #include <unistd.h>
->  #include <inttypes.h>
->  #include <string.h>
->  #include <fcntl.h>
->  #include <sys/mman.h>
-> +#include <sys/mount.h>
->  #include <malloc.h>
->  #include <stdbool.h>
->
-> @@ -24,6 +26,9 @@ uint64_t pmd_pagesize;
->  #define SMAP_PATH "/proc/self/smaps"
->  #define INPUT_MAX 80
->
-> +#define PID_FMT "%d,0x%lx,0x%lx"
-> +#define PATH_FMT "%s,0x%lx,0x%lx"
-> +
->  #define PFN_MASK     ((1UL<<55)-1)
->  #define KPF_THP      (1UL<<22)
->
-> @@ -87,13 +92,16 @@ static int write_file(const char *path, const char *buf, size_t buflen)
->         return (unsigned int) numwritten;
->  }
->
-> -static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vaddr_end)
-> +static void write_debugfs(const char *fmt, ...)
->  {
->         char input[INPUT_MAX];
->         int ret;
-> +       va_list argp;
-> +
-> +       va_start(argp, fmt);
-> +       ret = vsnprintf(input, INPUT_MAX, fmt, argp);
-> +       va_end(argp);
->
-> -       ret = snprintf(input, INPUT_MAX, "%d,0x%lx,0x%lx", pid, vaddr_start,
-> -                       vaddr_end);
->         if (ret >= INPUT_MAX) {
->                 printf("%s: Debugfs input is too long\n", __func__);
->                 exit(EXIT_FAILURE);
-> @@ -183,7 +191,8 @@ void split_pmd_thp(void)
->         }
->
->         /* split all THPs */
-> -       write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page + len);
-> +       write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
-> +               (uint64_t)one_page + len);
->
->         for (i = 0; i < len; i++)
->                 if (one_page[i] != (char)i) {
-> @@ -274,7 +283,7 @@ void split_pte_mapped_thp(void)
->         }
->
->         /* split all remapped THPs */
-> -       write_debugfs(getpid(), (uint64_t)pte_mapped,
-> +       write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
->                       (uint64_t)pte_mapped + pagesize * 4);
->
->         /* smap does not show THPs after mremap, use kpageflags instead */
-> @@ -300,6 +309,65 @@ void split_pte_mapped_thp(void)
->         close(kpageflags_fd);
->  }
->
-> +void split_file_backed_thp(void)
-> +{
-> +       int status;
-> +       int fd;
-> +       ssize_t num_written;
-> +       char tmpfs_template[] = "/tmp/thp_split_XXXXXX";
-> +       const char *tmpfs_loc = mkdtemp(tmpfs_template);
-> +       char testfile[INPUT_MAX];
-> +
-> +       status = mount("tmpfs", tmpfs_loc, "tmpfs", 0, "huge=always,size=4m");
-> +
-> +       if (status) {
-> +               printf("Unable to create a tmpfs for testing\n");
-> +               exit(EXIT_FAILURE);
-> +       }
-> +
-> +       status = snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_loc);
-> +       if (status >= INPUT_MAX) {
-> +               printf("Fail to create file-backed THP split testing file\n");
-> +               goto cleanup;
-> +       }
-> +
-> +       fd = open(testfile, O_CREAT|O_WRONLY);
-> +       if (fd == -1) {
-> +               perror("Cannot open testing file\n");
-> +               goto cleanup;
-> +       }
-> +
-> +       /* write something to the file, so a file-backed THP can be allocated */
-> +       num_written = write(fd, tmpfs_loc, sizeof(tmpfs_loc));
-> +       close(fd);
-> +
-> +       if (num_written < 1) {
-> +               printf("Fail to write data to testing file\n");
-> +               goto cleanup;
-> +       }
-> +
-> +       /* split the file-backed THP */
-> +       write_debugfs(PATH_FMT, testfile, 0, 1024);
-> +
-> +       status = unlink(testfile);
-> +       if (status)
-> +               perror("Cannot remove testing file\n");
-> +
-> +cleanup:
-> +       status = umount(tmpfs_loc);
-> +       if (status) {
-> +               printf("Unable to umount %s\n", tmpfs_loc);
-> +               exit(EXIT_FAILURE);
-> +       }
-> +       status = rmdir(tmpfs_loc);
-> +       if (status) {
-> +               perror("cannot remove tmp dir");
-> +               exit(EXIT_FAILURE);
-> +       }
-> +
-> +       printf("file-backed THP split test done, please check dmesg for more information\n");
-> +}
-> +
->  int main(int argc, char **argv)
->  {
->         if (geteuid() != 0) {
-> @@ -313,6 +381,7 @@ int main(int argc, char **argv)
->
->         split_pmd_thp();
->         split_pte_mapped_thp();
-> +       split_file_backed_thp();
->
->         return 0;
->  }
+> 	# Add two routes with the same key and different prefix length and
+> -	# make sure both are in hardware. It can be verfied that both are
+> +	# make sure both are in hardware. It can be verified that both are
+> 	# sharing the same leaf by checking the /proc/net/fib_trie
+> 	ip -n $ns route add 192.0.2.0/24 dev dummy1
+> 	ip -n $ns route add 192.0.2.0/25 dev dummy1
 > --
-> 2.30.2
+> 2.26.2
+>
 >
