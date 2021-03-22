@@ -2,128 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7373445A7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 14:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1396344A85
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 17:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbhCVNZN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Mar 2021 09:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S231991AbhCVQGk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Mar 2021 12:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbhCVNYt (ORCPT
+        with ESMTP id S231916AbhCVQFv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Mar 2021 09:24:49 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FFFC061763
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Mar 2021 06:24:48 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b9so16744524wrt.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Mar 2021 06:24:48 -0700 (PDT)
+        Mon, 22 Mar 2021 12:05:51 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87064C061756
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Mar 2021 09:05:51 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 11so11250057pfn.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Mar 2021 09:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TMhYVugyzUF8SPxHtKMVFHW2d9U56xBeasWjyoJCSqQ=;
-        b=GOqOWv3PWULYhWC+ww6Br08BQ3+hu5bgizm80HEdUmXKmH2mFt8bV1ZJy436PQ/9I5
-         uqSoy/QiB+fCzh6uhZhycXJbCky+BIPod2AXCDdjWJJy5jkc3wIbsyv6atzkUVUK1b9V
-         lp6MtiFkGpzvqILZvRtjTDwG3Us4UswvmqAjiXnZVMAmV00NvwQqvp4pHVypdvgVHpsj
-         0Jk3NjrrSI+idQKE/wL2kN/JEJ21gNfeK8dvwbM/g7+Jp1FlMj9p3HUdpF3mn58JjWbS
-         JMQpsSti1bw3o3xWPdyqz0C3D6iY3eJaQZm3NNBYTarCuRoKiTn+maEvlGeWtDXigD40
-         BN1Q==
+         :content-disposition:in-reply-to;
+        bh=+S7gjt3MgnLDrdKzofrJNhS6p4rg7p4WBFZi5EQinSg=;
+        b=Wy7l0LMnDchSVa4nHZzPzMiZRnITpR4PoPerfT2iHAmIT9Ejdvj8Gwb3rryaLfhDbk
+         WUOkBltZS5qEqozQ7KJcx0lI5aPMtp5JR3fkcbA4CoiKDu9QyojCDR8TNEmeqBHRsJYm
+         2fu3KpROUDNMpadlTB/vIT5rnme9urvpGX25MGZMgQdGQFq7t9RqvQjIJIBZs+BdtCH7
+         c16cz7mD9dsSrepz9Nuq4m+s993K8y7wq/D1qva8C0RrSD6RAn8/cEFI0Adnstc0B8Bk
+         9lC/cW6pFRcjegMSo89u8RGktQHjVyQow8Igb3Deyga/a0pmq7ZRZCHvArz1qbebRQ4r
+         MRow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TMhYVugyzUF8SPxHtKMVFHW2d9U56xBeasWjyoJCSqQ=;
-        b=EsWE2rPCYLsdP5m0UcUXdqnL/cdSLtlwRqmxnT+ikS33efCY5pUNXd8oueaeVyZ9oS
-         sDuWyzz1dKrzx6b9BnVf+GnO9E8p897wqOExKIxmnCb9NZvSQ6PWRIksj3r7xGcpkar7
-         zwZuCSCg/3CcbhwC/8Zrecr8jRXKVbXFJjxcx1W4Q3+Gz5ewsYJ6agUKqLAqDb//kcLv
-         YpWh4IIwLHA7AEBAhxe+qTofrE4udkAdctSOKK3n8i9ETcGK7glpIZ1k5ncNT4wMJ3hV
-         4KSJ/LHGdLf/7jsk+DqEagm6+zBv34InCiVYYcLcPZRWlhKVLiHfWMms00bjkl/DJ7tB
-         +QyQ==
-X-Gm-Message-State: AOAM531hNRL1aGs6nqRLft919E1BsaVv5tzhYWUEdLUL/PHfTAlomydK
-        z3XPmcjBZ4+4ZN+NTCg0hmDunw==
-X-Google-Smtp-Source: ABdhPJwC/rS7OkQu8efIWmWHkHtUUiOkhXCO7peTBGOEGaKEAdeI7EQBg4GOdpdUjIXkhjLjBvQVoQ==
-X-Received: by 2002:a1c:2857:: with SMTP id o84mr16021674wmo.181.1616419487136;
-        Mon, 22 Mar 2021 06:24:47 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:58e2:985b:a5ad:807c])
-        by smtp.gmail.com with ESMTPSA id i8sm19692969wrx.43.2021.03.22.06.24.45
+         :mime-version:content-disposition:in-reply-to;
+        bh=+S7gjt3MgnLDrdKzofrJNhS6p4rg7p4WBFZi5EQinSg=;
+        b=bH3Gkti92/7LFWsJ3fwPyG4QMsHasYZujdvwQN2IG3tJ3PITLbGV53bMJqWw4O9TrF
+         AYKT2jwglXw3vzz3kCQlWRUmeuRR8dOWf0SOUwcvf73s2MAXvqSroPX8JdwUDGGGNqEC
+         S8hA5SSkcHpM+e/lX5VjcSfoD76+Vud7FuC9sUQSPCNqGZ295aMPza338Gw1QvLHHeV9
+         bC5KglRZRLlfRCgmQ5zJPBmLPti4yPj0eiZnx1vTlHmHYNHHNdbjmwfX/H9SrXvSkB4+
+         39Bj2nBnnJbDpsGOw1VT5p3rtQX+P3875pozo0Q8C14DIfrdQqv9ywicdpLDl1eyGX4Z
+         aoJw==
+X-Gm-Message-State: AOAM5329wwkiwjo8NvPwl8fVaNqyTloCpF3EoOZzxIj/xHKFQSwuG401
+        IwwPDKEglMBPlOHUMf9v+xZMPQ==
+X-Google-Smtp-Source: ABdhPJwVj7AImbLlRr23Z0RxRD8gCshqvyDN+CM5FR1pwopcAY578lpSBDBdCy1oD0l38Ko9sYF6xw==
+X-Received: by 2002:a63:4761:: with SMTP id w33mr296710pgk.118.1616429150894;
+        Mon, 22 Mar 2021 09:05:50 -0700 (PDT)
+Received: from google.com ([2620:15c:f:10:5c8b:5536:d804:97ed])
+        by smtp.gmail.com with ESMTPSA id i8sm14475167pjl.32.2021.03.22.09.05.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Mar 2021 06:24:46 -0700 (PDT)
-Date:   Mon, 22 Mar 2021 14:24:40 +0100
-From:   Marco Elver <elver@google.com>
-To:     peterz@infradead.org, alexander.shishkin@linux.intel.com,
-        acme@kernel.org, mingo@redhat.com, jolsa@redhat.com,
-        mark.rutland@arm.com, namhyung@kernel.org, tglx@linutronix.de
-Cc:     glider@google.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
-        christian@brauner.io, dvyukov@google.com, jannh@google.com,
-        axboe@kernel.dk, mascasa@google.com, pcc@google.com,
-        irogers@google.com, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 8/8] selftests/perf: Add kselftest for
- remove_on_exec
-Message-ID: <YFiamKX+xYH2HJ4E@elver.google.com>
-References: <20210310104139.679618-1-elver@google.com>
- <20210310104139.679618-9-elver@google.com>
+        Mon, 22 Mar 2021 09:05:50 -0700 (PDT)
+Date:   Mon, 22 Mar 2021 09:05:43 -0700
+From:   Sean Christopherson <seanjc@google.com>
+To:     ira.weiny@intel.com
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V4 06/10] x86/fault: Adjust WARN_ON for PKey fault
+Message-ID: <YFjAV44u7i9t1TDL@google.com>
+References: <20210322053020.2287058-1-ira.weiny@intel.com>
+ <20210322053020.2287058-7-ira.weiny@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210310104139.679618-9-elver@google.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+In-Reply-To: <20210322053020.2287058-7-ira.weiny@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 11:41AM +0100, Marco Elver wrote:
-> Add kselftest to test that remove_on_exec removes inherited events from
-> child tasks.
+On Sun, Mar 21, 2021, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
 > 
-> Signed-off-by: Marco Elver <elver@google.com>
+> PKey faults may now happen on kernel mappings if the feature is enabled.
+> Remove the warning in the fault path if PKS is enabled.
 
-To make compatible with more recent libc, we'll need to fixup the tests
-with the below.
+When/why can they happen?  I read through all the changelogs, as well as the
+cover letters for v1 and the RFC, and didn't see any explicit statement about
+why pkey faults on supervisor accesses are now "legal".  Explaining what happens
+later in the page fault handler would also be helpful, e.g. is the flag simply
+ignored?  Does it lead directly to OOPS?
 
-Also, I've seen that tools/perf/tests exists, however it seems to be
-primarily about perf-tool related tests. Is this correct?
+Documenting what happens on a PKS #PF in the API patch would be nice to have, too.
 
-I'd propose to keep these purely kernel ABI related tests separate, and
-that way we can also make use of the kselftests framework which will
-also integrate into various CI systems such as kernelci.org.
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> ---
+>  arch/x86/mm/fault.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index a73347e2cdfc..731ec90ed413 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1141,11 +1141,12 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
+>  		   unsigned long address)
+>  {
+>  	/*
+> -	 * Protection keys exceptions only happen on user pages.  We
+> -	 * have no user pages in the kernel portion of the address
+> -	 * space, so do not expect them here.
+> +	 * PF_PK is expected on kernel addresses when supervisor pkeys are
 
-Thanks,
--- Marco
+"is expected" can be misinterpreted as "PF is expected on all kernel addresses...".
 
------- >8 ------
+This ties in with the lack of an explanation in the changelog.
 
-diff --git a/tools/testing/selftests/perf_events/remove_on_exec.c b/tools/testing/selftests/perf_events/remove_on_exec.c
-index e176b3a74d55..f89d0cfdb81e 100644
---- a/tools/testing/selftests/perf_events/remove_on_exec.c
-+++ b/tools/testing/selftests/perf_events/remove_on_exec.c
-@@ -13,6 +13,11 @@
- #define __have_siginfo_t 1
- #define __have_sigval_t 1
- #define __have_sigevent_t 1
-+#define __siginfo_t_defined
-+#define __sigval_t_defined
-+#define __sigevent_t_defined
-+#define _BITS_SIGINFO_CONSTS_H 1
-+#define _BITS_SIGEVENT_CONSTS_H 1
- 
- #include <linux/perf_event.h>
- #include <pthread.h>
-diff --git a/tools/testing/selftests/perf_events/sigtrap_threads.c b/tools/testing/selftests/perf_events/sigtrap_threads.c
-index 7ebb9bb34c2e..b9a7d4b64b3c 100644
---- a/tools/testing/selftests/perf_events/sigtrap_threads.c
-+++ b/tools/testing/selftests/perf_events/sigtrap_threads.c
-@@ -13,6 +13,11 @@
- #define __have_siginfo_t 1
- #define __have_sigval_t 1
- #define __have_sigevent_t 1
-+#define __siginfo_t_defined
-+#define __sigval_t_defined
-+#define __sigevent_t_defined
-+#define _BITS_SIGINFO_CONSTS_H 1
-+#define _BITS_SIGEVENT_CONSTS_H 1
- 
- #include <linux/hw_breakpoint.h>
- #include <linux/perf_event.h>
+> +	 * enabled.
+
+It'd be helpful to spell out "Protection keys exceptions" so that random readers
+don't need to search for PF_PK to understand what's up.  Maybe even use it as an
+opportunity to introduce "pkeys", e.g.
+
+	/* Protection keys (pkeys) exceptions are ... */
+
+>  	 */
+> -	WARN_ON_ONCE(hw_error_code & X86_PF_PK);
+> +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
+> +		WARN_ON_ONCE(hw_error_code & X86_PF_PK);
+
+Does this generate the same code if the whole thing is thrown in the WARN?  E.g.
+
+	WARN_ON_ONCE(!cpu_feature_enabled(X86_FEATURE_PKS) &&
+		     (hw_error_code & X86_PF_PK));
+
+> +
+>  
+>  #ifdef CONFIG_X86_32
+>  	/*
+> -- 
+> 2.28.0.rc0.12.gb6a658bd00c9
+> 
