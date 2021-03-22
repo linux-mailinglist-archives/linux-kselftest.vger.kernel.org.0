@@ -2,244 +2,240 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BF3343A7D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 08:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B84343C9D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 10:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbhCVHYW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Mar 2021 03:24:22 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:5106 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbhCVHX4 (ORCPT
+        id S229920AbhCVJUh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Mar 2021 05:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230071AbhCVJUL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Mar 2021 03:23:56 -0400
-Received: from dggeml406-hub.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4F3mCf2XB9zY8f2;
-        Mon, 22 Mar 2021 15:22:06 +0800 (CST)
-Received: from dggpemm500023.china.huawei.com (7.185.36.83) by
- dggeml406-hub.china.huawei.com (10.3.17.50) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Mon, 22 Mar 2021 15:23:54 +0800
-Received: from [10.174.187.128] (10.174.187.128) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2106.2; Mon, 22 Mar 2021 15:23:53 +0800
-Subject: Re: [RFC PATCH v4 7/9] KVM: selftests: List all hugetlb src types
- specified with page sizes
-To:     Andrew Jones <drjones@redhat.com>
-CC:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Ben Gardon" <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Arnaldo Carvalho de Melo" <acme@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
-        <yuzenghui@huawei.com>
-References: <20210302125751.19080-1-wangyanan55@huawei.com>
- <20210302125751.19080-8-wangyanan55@huawei.com>
- <20210312120221.urbbfl7o3vocblk7@kamzik.brq.redhat.com>
-From:   "wangyanan (Y)" <wangyanan55@huawei.com>
-Message-ID: <abbd81e3-060e-c409-b4c6-ab53c3b9490f@huawei.com>
-Date:   Mon, 22 Mar 2021 15:23:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        Mon, 22 Mar 2021 05:20:11 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6890FC061762
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Mar 2021 02:20:10 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id u5-20020a7bcb050000b029010e9316b9d5so8817352wmj.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Mar 2021 02:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=F5/VR6ur6ttgORsBImTX+DpB0R63FTk/snr4DsJXf+o=;
+        b=LAlde5AAdUVapw7vv1gIYubILL5Z2XANHWPhRQ/hbJ2Fou/NTJgHUFVZTaxjyRz3Ew
+         PTe96LsHdHSVzBvhe5oibh2MqK+onBku6Nwv46INNhyog8/I8FkmIm/kcSmyGuUY7ywC
+         edqX4hukcMMkcYjyrzb7l529S4IiCtdLP8oFMKrQPc5AWNL8UaydZOMkpk3Dm+IPHWcA
+         mx/Y5mzudbzTxHmc0dMQ6vbY3qw9vo3Xr8DeWuyUU2O2aEsj+t3FTqL5BXJzI0dZPni3
+         lRR9RaZM5hxKBqmrPe69kXeUTEHXrHe4wGYO4NTdmIaIfPmjAClTVL8KC1+wYVRa1a1D
+         NaBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=F5/VR6ur6ttgORsBImTX+DpB0R63FTk/snr4DsJXf+o=;
+        b=pl3FnUs0481oxCKJnmixUf1XizYT8D8Ik0TouXatQkLDRBVhxkLR8XVeg9uQWjCTBo
+         gZpjGcd8d+rS10XphXkvjmQib3xfm40RioeQMtquf1DFlhHuF453+9K9W88oUGu89/1e
+         JTE/dtdDgyoqLQ85Ozms4+jr80AZ9k/+U2DI+Ie835Gn9yFlt35vaDCk3QjHwAaKpsrj
+         XeSd6KZC88ftTxPp7IC7/ThPdmKYZJ5MNQo7FZYV+3InDOxLp8KRZgsBYo8do9qTMW/R
+         TjnOd5frk+GWLcO1byUeT6yjFY+03Zo6aE4ttCWWalKmby82fK+9Eua2SyuRhgR3luz8
+         ZwJQ==
+X-Gm-Message-State: AOAM531MwHVO5CXPm/1cvduTHh1i6wyg1ESaipbpUDogm9eBmaYLnO6R
+        k8IFEd2mVhOPP1XkWTGAavV1/A==
+X-Google-Smtp-Source: ABdhPJxdUPu8j7Fbf9CICQn/Kem6MGhyHY+14eKuLhORG8IcT+mpqiseapeHYTtiETMKXgFIbIShSQ==
+X-Received: by 2002:a05:600c:4013:: with SMTP id i19mr14956538wmm.33.1616404808866;
+        Mon, 22 Mar 2021 02:20:08 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:58e2:985b:a5ad:807c])
+        by smtp.gmail.com with ESMTPSA id u3sm19133667wrt.82.2021.03.22.02.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 02:20:08 -0700 (PDT)
+Date:   Mon, 22 Mar 2021 10:20:02 +0100
+From:   Marco Elver <elver@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
+        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
+        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
+        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
+        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
+        mascasa@google.com, pcc@google.com, irogers@google.com,
+        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v2 3/8] perf/core: Add support for event removal on
+ exec
+Message-ID: <YFhhQgUzXLSTlcu0@elver.google.com>
+References: <20210310104139.679618-1-elver@google.com>
+ <20210310104139.679618-4-elver@google.com>
+ <YFDbP3obvxn0SL4w@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20210312120221.urbbfl7o3vocblk7@kamzik.brq.redhat.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.187.128]
-X-ClientProxiedBy: dggeme710-chm.china.huawei.com (10.1.199.106) To
- dggpemm500023.china.huawei.com (7.185.36.83)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YFDbP3obvxn0SL4w@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Mar 16, 2021 at 05:22PM +0100, Peter Zijlstra wrote:
+> On Wed, Mar 10, 2021 at 11:41:34AM +0100, Marco Elver wrote:
+> > Adds bit perf_event_attr::remove_on_exec, to support removing an event
+> > from a task on exec.
+> > 
+> > This option supports the case where an event is supposed to be
+> > process-wide only, and should not propagate beyond exec, to limit
+> > monitoring to the original process image only.
+> > 
+> > Signed-off-by: Marco Elver <elver@google.com>
+> 
+> > +/*
+> > + * Removes all events from the current task that have been marked
+> > + * remove-on-exec, and feeds their values back to parent events.
+> > + */
+> > +static void perf_event_remove_on_exec(void)
+> > +{
+> > +	int ctxn;
+> > +
+> > +	for_each_task_context_nr(ctxn) {
+> > +		struct perf_event_context *ctx;
+> > +		struct perf_event *event, *next;
+> > +
+> > +		ctx = perf_pin_task_context(current, ctxn);
+> > +		if (!ctx)
+> > +			continue;
+> > +		mutex_lock(&ctx->mutex);
+> > +
+> > +		list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
+> > +			if (!event->attr.remove_on_exec)
+> > +				continue;
+> > +
+> > +			if (!is_kernel_event(event))
+> > +				perf_remove_from_owner(event);
+> > +			perf_remove_from_context(event, DETACH_GROUP);
+> 
+> There's a comment on this in perf_event_exit_event(), if this task
+> happens to have the original event, then DETACH_GROUP will destroy the
+> grouping.
+> 
+> I think this wants to be:
+> 
+> 			perf_remove_from_text(event,
+> 					      child_event->parent ?  DETACH_GROUP : 0);
+> 
+> or something.
+> 
+> > +			/*
+> > +			 * Remove the event and feed back its values to the
+> > +			 * parent event.
+> > +			 */
+> > +			perf_event_exit_event(event, ctx, current);
+> 
+> Oooh, and here we call it... but it will do list_del_even() /
+> perf_group_detach() *again*.
+> 
+> So the problem is that perf_event_exit_task_context() doesn't use
+> remove_from_context(), but instead does task_ctx_sched_out() and then
+> relies on the events not being active.
+> 
+> Whereas above you *DO* use remote_from_context(), but then
+> perf_event_exit_event() will try and remove it more.
 
-On 2021/3/12 20:02, Andrew Jones wrote:
-> On Tue, Mar 02, 2021 at 08:57:49PM +0800, Yanan Wang wrote:
->> With VM_MEM_SRC_ANONYMOUS_HUGETLB, we currently can only use system
->> default hugetlb pages to back the testing guest memory. In order to
->> add flexibility, now list all the known hugetlb backing src types with
->> different page sizes, so that we can specify use of hugetlb pages of the
->> exact granularity that we want. And as all the known hugetlb page sizes
->> are listed, it's appropriate for all architectures.
->>
->> Besides, the helper get_backing_src_pagesz() is added to get the
->> granularity of different backing src types(anonumous, thp, hugetlb).
->>
->> Suggested-by: Ben Gardon <bgardon@google.com>
->> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
->> ---
->>   .../testing/selftests/kvm/include/test_util.h | 18 +++++-
->>   tools/testing/selftests/kvm/lib/kvm_util.c    |  2 +-
->>   tools/testing/selftests/kvm/lib/test_util.c   | 59 +++++++++++++++----
->>   3 files changed, 66 insertions(+), 13 deletions(-)
->>
->> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
->> index e087174eefe5..fade3130eb01 100644
->> --- a/tools/testing/selftests/kvm/include/test_util.h
->> +++ b/tools/testing/selftests/kvm/include/test_util.h
->> @@ -71,16 +71,32 @@ enum vm_mem_backing_src_type {
->>   	VM_MEM_SRC_ANONYMOUS,
->>   	VM_MEM_SRC_ANONYMOUS_THP,
->>   	VM_MEM_SRC_ANONYMOUS_HUGETLB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_16KB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_64KB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_512KB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_1MB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_8MB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_16MB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_32MB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_256MB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_512MB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB,
->> +	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
->> +	NUM_SRC_TYPES,
->>   };
->>   
->>   struct vm_mem_backing_src_alias {
->>   	const char *name;
->> -	enum vm_mem_backing_src_type type;
->> +	uint32_t flag;
->>   };
->>   
->>   bool thp_configured(void);
->>   size_t get_trans_hugepagesz(void);
->>   size_t get_def_hugetlb_pagesz(void);
->> +const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
->> +size_t get_backing_src_pagesz(uint32_t i);
->>   void backing_src_help(void);
->>   enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
->>   
->> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
->> index cc22c4ab7d67..b91c8e3a7ee1 100644
->> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
->> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
->> @@ -757,7 +757,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->>   	region->mmap_start = mmap(NULL, region->mmap_size,
->>   				  PROT_READ | PROT_WRITE,
->>   				  MAP_PRIVATE | MAP_ANONYMOUS
->> -				  | (src_type == VM_MEM_SRC_ANONYMOUS_HUGETLB ? MAP_HUGETLB : 0),
->> +				  | vm_mem_backing_src_alias(src_type)->flag,
->>   				  -1, 0);
->>   	TEST_ASSERT(region->mmap_start != MAP_FAILED,
->>   		    "test_malloc failed, mmap_start: %p errno: %i",
->> diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
->> index 80d68dbd72d2..df8a42eff1f8 100644
->> --- a/tools/testing/selftests/kvm/lib/test_util.c
->> +++ b/tools/testing/selftests/kvm/lib/test_util.c
->> @@ -11,6 +11,7 @@
->>   #include <stdlib.h>
->>   #include <time.h>
->>   #include <sys/stat.h>
->> +#include <linux/mman.h>
->>   #include "linux/kernel.h"
->>   
->>   #include "test_util.h"
->> @@ -112,12 +113,6 @@ void print_skip(const char *fmt, ...)
->>   	puts(", skipping test");
->>   }
->>   
->> -const struct vm_mem_backing_src_alias backing_src_aliases[] = {
->> -	{"anonymous", VM_MEM_SRC_ANONYMOUS,},
->> -	{"anonymous_thp", VM_MEM_SRC_ANONYMOUS_THP,},
->> -	{"anonymous_hugetlb", VM_MEM_SRC_ANONYMOUS_HUGETLB,},
->> -};
->> -
->>   bool thp_configured(void)
->>   {
->>   	int ret;
->> @@ -180,22 +175,64 @@ size_t get_def_hugetlb_pagesz(void)
->>   	return 0;
->>   }
->>   
->> +const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
->> +{
->> +	static const struct vm_mem_backing_src_alias aliases[] = {
->> +		{ "anonymous",               0                            },
->> +		{ "anonymous_thp",           0                            },
->> +		{ "anonymous_hugetlb",       MAP_HUGETLB                  },
->> +		{ "anonymous_hugetlb_16kb",  MAP_HUGETLB | MAP_HUGE_16KB  },
->> +		{ "anonymous_hugetlb_64kb",  MAP_HUGETLB | MAP_HUGE_64KB  },
->> +		{ "anonymous_hugetlb_512kb", MAP_HUGETLB | MAP_HUGE_512KB },
->> +		{ "anonymous_hugetlb_1mb",   MAP_HUGETLB | MAP_HUGE_1MB   },
->> +		{ "anonymous_hugetlb_2mb",   MAP_HUGETLB | MAP_HUGE_2MB   },
->> +		{ "anonymous_hugetlb_8mb",   MAP_HUGETLB | MAP_HUGE_8MB   },
->> +		{ "anonymous_hugetlb_16mb",  MAP_HUGETLB | MAP_HUGE_16MB  },
->> +		{ "anonymous_hugetlb_32mb",  MAP_HUGETLB | MAP_HUGE_32MB  },
->> +		{ "anonymous_hugetlb_256mb", MAP_HUGETLB | MAP_HUGE_256MB },
->> +		{ "anonymous_hugetlb_512mb", MAP_HUGETLB | MAP_HUGE_512MB },
->> +		{ "anonymous_hugetlb_1gb",   MAP_HUGETLB | MAP_HUGE_1GB   },
->> +		{ "anonymous_hugetlb_2gb",   MAP_HUGETLB | MAP_HUGE_2GB   },
->> +		{ "anonymous_hugetlb_16gb",  MAP_HUGETLB | MAP_HUGE_16GB  },
->> +	};
->> +	_Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
->> +		       "Missing new backing src types?");
->> +
->> +	TEST_ASSERT(i < NUM_SRC_TYPES, "Backing src type ID %d too big", i);
->> +
->> +	return &aliases[i];
->> +}
->> +
->> +size_t get_backing_src_pagesz(uint32_t i)
->> +{
->> +	uint32_t flag = vm_mem_backing_src_alias(i)->flag;
->> +
->> +	if (i == VM_MEM_SRC_ANONYMOUS)
->> +		return getpagesize();
->> +	if (i == VM_MEM_SRC_ANONYMOUS_THP)
->> +		return get_trans_hugepagesz();
->> +	if (i == VM_MEM_SRC_ANONYMOUS_HUGETLB)
->> +		return get_def_hugetlb_pagesz();
->> +
->> +	return MAP_HUGE_PAGE_SIZE(flag);
->> +}
->> +
->>   void backing_src_help(void)
->>   {
->>   	int i;
->>   
->>   	printf("Available backing src types:\n");
->> -	for (i = 0; i < ARRAY_SIZE(backing_src_aliases); i++)
->> -		printf("\t%s\n", backing_src_aliases[i].name);
->> +		for (i = 0; i < NUM_SRC_TYPES; i++)
->> +			printf("\t%s\n", vm_mem_backing_src_alias(i)->name);
->>   }
->>   
->>   enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name)
->>   {
->>   	int i;
->>   
->> -	for (i = 0; i < ARRAY_SIZE(backing_src_aliases); i++)
->> -		if (!strcmp(type_name, backing_src_aliases[i].name))
->> -			return backing_src_aliases[i].type;
->> +	for (i = 0; i < NUM_SRC_TYPES; i++)
->> +		if (!strcmp(type_name, vm_mem_backing_src_alias(i)->name))
->> +			return i;
-> This requires vm_mem_backing_src_alias.aliases[] to be in the same order
-> as vm_mem_backing_src_type, so we should do the designated array
-> initialization like in vm_guest_mode_string().
-That's right!
+AFAIK, we want to deallocate the events and not just remove them, so
+doing what perf_event_exit_event() is the right way forward? Or did you
+have something else in mind?
+
+I'm still trying to make sense of the zoo of synchronisation mechanisms
+at play here. No matter what I try, it seems I get stuck on the fact
+that I can't cleanly "pause" the context to remove the events (warnings
+in event_function()).
+
+This is what I've been playing with to understand:
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 450ea9415ed7..c585cef284a0 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -4195,6 +4195,88 @@ static void perf_event_enable_on_exec(int ctxn)
+ 		put_ctx(clone_ctx);
+ }
+ 
++static void perf_remove_from_owner(struct perf_event *event);
++static void perf_event_exit_event(struct perf_event *child_event,
++				  struct perf_event_context *child_ctx,
++				  struct task_struct *child);
++
++/*
++ * Removes all events from the current task that have been marked
++ * remove-on-exec, and feeds their values back to parent events.
++ */
++static void perf_event_remove_on_exec(void)
++{
++	struct perf_event *event, *next;
++	int ctxn;
++
++	/*****************  BROKEN BROKEN BROKEN *****************/
++
++	for_each_task_context_nr(ctxn) {
++		struct perf_event_context *ctx;
++		bool removed = false;
++
++		ctx = perf_pin_task_context(current, ctxn);
++		if (!ctx)
++			continue;
++		mutex_lock(&ctx->mutex);
++
++		raw_spin_lock_irq(&ctx->lock);
++		/*
++		 * WIP: Ok, we will unschedule the context, _and_ tell everyone
++		 * still trying to use that it's dead... even though it isn't.
++		 *
++		 * This can't be right...
++		 */
++		task_ctx_sched_out(__get_cpu_context(ctx), ctx, EVENT_ALL);
++		RCU_INIT_POINTER(current->perf_event_ctxp[ctxn], NULL);
++		WRITE_ONCE(ctx->task, TASK_TOMBSTONE);
+
+This code here is obviously bogus, because it removes the context from
+the task: we might still need it since this task is not dead yet.
+
+What's the right way to pause the context to remove the events from it?
+
++		raw_spin_unlock_irq(&ctx->lock);
++
++		list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
++			if (!event->attr.remove_on_exec)
++				continue;
++			removed = true;
++
++			if (!is_kernel_event(event))
++				perf_remove_from_owner(event);
++
++			/*
++			 * WIP: Want to free the event and feed back its values
++			 * to the parent (if any) ...
++			 */
++			perf_event_exit_event(event, ctx, current);
++		}
++
+
+... need to schedule context back in here?
+
++
++		mutex_unlock(&ctx->mutex);
++		perf_unpin_context(ctx);
++		put_ctx(ctx);
++	}
++}
++
+ struct perf_read_data {
+ 	struct perf_event *event;
+ 	bool group;
+@@ -7553,6 +7635,8 @@ void perf_event_exec(void)
+ 				   true);
+ 	}
+ 	rcu_read_unlock();
++
++	perf_event_remove_on_exec();
+ }
+ 
 
 Thanks,
-Yanan
-> Thanks,
-> drew
->
->>   
->>   	backing_src_help();
->>   	TEST_FAIL("Unknown backing src type: %s", type_name);
->> -- 
->> 2.23.0
->>
-> .
+-- Marco
