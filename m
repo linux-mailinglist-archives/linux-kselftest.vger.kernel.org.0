@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB724343A7B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 08:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BF3343A7D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 08:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbhCVHXS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Mar 2021 03:23:18 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:5105 "EHLO
+        id S229547AbhCVHYW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Mar 2021 03:24:22 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:5106 "EHLO
         szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbhCVHWu (ORCPT
+        with ESMTP id S229972AbhCVHX4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Mar 2021 03:22:50 -0400
-Received: from DGGEML402-HUB.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4F3mBL68vzzY8f2;
-        Mon, 22 Mar 2021 15:20:58 +0800 (CST)
+        Mon, 22 Mar 2021 03:23:56 -0400
+Received: from dggeml406-hub.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4F3mCf2XB9zY8f2;
+        Mon, 22 Mar 2021 15:22:06 +0800 (CST)
 Received: from dggpemm500023.china.huawei.com (7.185.36.83) by
- DGGEML402-HUB.china.huawei.com (10.3.17.38) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Mon, 22 Mar 2021 15:22:46 +0800
+ dggeml406-hub.china.huawei.com (10.3.17.50) with Microsoft SMTP Server (TLS)
+ id 14.3.498.0; Mon, 22 Mar 2021 15:23:54 +0800
 Received: from [10.174.187.128] (10.174.187.128) by
  dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2106.2; Mon, 22 Mar 2021 15:22:45 +0800
+ 15.1.2106.2; Mon, 22 Mar 2021 15:23:53 +0800
 Subject: Re: [RFC PATCH v4 7/9] KVM: selftests: List all hugetlb src types
  specified with page sizes
 To:     Andrew Jones <drjones@redhat.com>
@@ -43,14 +43,14 @@ CC:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <yuzenghui@huawei.com>
 References: <20210302125751.19080-1-wangyanan55@huawei.com>
  <20210302125751.19080-8-wangyanan55@huawei.com>
- <20210312114938.zfwnux3kwz44fd2i@kamzik.brq.redhat.com>
+ <20210312120221.urbbfl7o3vocblk7@kamzik.brq.redhat.com>
 From:   "wangyanan (Y)" <wangyanan55@huawei.com>
-Message-ID: <80acf061-bf2b-30b8-f2b0-03849304a83e@huawei.com>
-Date:   Mon, 22 Mar 2021 15:22:45 +0800
+Message-ID: <abbd81e3-060e-c409-b4c6-ab53c3b9490f@huawei.com>
+Date:   Mon, 22 Mar 2021 15:23:53 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <20210312114938.zfwnux3kwz44fd2i@kamzik.brq.redhat.com>
+In-Reply-To: <20210312120221.urbbfl7o3vocblk7@kamzik.brq.redhat.com>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -63,7 +63,7 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-On 2021/3/12 19:49, Andrew Jones wrote:
+On 2021/3/12 20:02, Andrew Jones wrote:
 > On Tue, Mar 02, 2021 at 08:57:49PM +0800, Yanan Wang wrote:
 >> With VM_MEM_SRC_ANONYMOUS_HUGETLB, we currently can only use system
 >> default hugetlb pages to back the testing guest memory. In order to
@@ -201,8 +201,6 @@ On 2021/3/12 19:49, Andrew Jones wrote:
 >> +		return get_trans_hugepagesz();
 >> +	if (i == VM_MEM_SRC_ANONYMOUS_HUGETLB)
 >> +		return get_def_hugetlb_pagesz();
-> nit: a switch would look nicer (IMHO)
-Ok, will change.
 >> +
 >> +	return MAP_HUGE_PAGE_SIZE(flag);
 >> +}
@@ -216,9 +214,6 @@ Ok, will change.
 >> -		printf("\t%s\n", backing_src_aliases[i].name);
 >> +		for (i = 0; i < NUM_SRC_TYPES; i++)
 >> +			printf("\t%s\n", vm_mem_backing_src_alias(i)->name);
-> What happened with the indentation here?
-Thanks for pointing out this.
-It was a stupid mistake, I will fix it.
 >>   }
 >>   
 >>   enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name)
@@ -231,16 +226,20 @@ It was a stupid mistake, I will fix it.
 >> +	for (i = 0; i < NUM_SRC_TYPES; i++)
 >> +		if (!strcmp(type_name, vm_mem_backing_src_alias(i)->name))
 >> +			return i;
+> This requires vm_mem_backing_src_alias.aliases[] to be in the same order
+> as vm_mem_backing_src_type, so we should do the designated array
+> initialization like in vm_guest_mode_string().
+That's right!
+
+Thanks,
+Yanan
+> Thanks,
+> drew
+>
 >>   
 >>   	backing_src_help();
 >>   	TEST_FAIL("Unknown backing src type: %s", type_name);
 >> -- 
 >> 2.23.0
 >>
-> Otherwise
->
-> Reviewed-by: Andrew Jones <drjones@redhat.com>
-Thanks,
-Yanan
->
 > .
