@@ -2,134 +2,290 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1396344A85
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 17:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB07344B58
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 17:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbhCVQGk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Mar 2021 12:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
+        id S230445AbhCVQaA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Mar 2021 12:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbhCVQFv (ORCPT
+        with ESMTP id S231881AbhCVQ3x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Mar 2021 12:05:51 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87064C061756
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Mar 2021 09:05:51 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 11so11250057pfn.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Mar 2021 09:05:51 -0700 (PDT)
+        Mon, 22 Mar 2021 12:29:53 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BDAC061574;
+        Mon, 22 Mar 2021 09:29:51 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id e7so20048616edu.10;
+        Mon, 22 Mar 2021 09:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+S7gjt3MgnLDrdKzofrJNhS6p4rg7p4WBFZi5EQinSg=;
-        b=Wy7l0LMnDchSVa4nHZzPzMiZRnITpR4PoPerfT2iHAmIT9Ejdvj8Gwb3rryaLfhDbk
-         WUOkBltZS5qEqozQ7KJcx0lI5aPMtp5JR3fkcbA4CoiKDu9QyojCDR8TNEmeqBHRsJYm
-         2fu3KpROUDNMpadlTB/vIT5rnme9urvpGX25MGZMgQdGQFq7t9RqvQjIJIBZs+BdtCH7
-         c16cz7mD9dsSrepz9Nuq4m+s993K8y7wq/D1qva8C0RrSD6RAn8/cEFI0Adnstc0B8Bk
-         9lC/cW6pFRcjegMSo89u8RGktQHjVyQow8Igb3Deyga/a0pmq7ZRZCHvArz1qbebRQ4r
-         MRow==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+yQvc43S8r83HTfxyOEbHMJvrQICL6Aq5HxThzdm6Ks=;
+        b=a2GjEUZ1xP95PzLsG5fmHkO4GpwMpY7HUMMd4ayLoTo9cG/yg09LhITO4tawX3Gh2O
+         S7N+ryWZy5GouSEmtD1mb8SThKNuqs8Z9yN3ngdtTwDlYUEwij8RGRgLq1b5TWRGEUd1
+         lpEatp3TPzJo9OY97sCLpWhy9nfDF53L/h2iUXWniqZhnx142PstGYIRivRSbYwGo8Kg
+         r9rWKcxnIt5xc3nKSVK8Z7oVtV74FsmAfOQ+zP3tJthYvxIRZt7w6HZ5+SZiVyVUS3XS
+         fhbD029+04jfjdSQ9ATm5PtDSDdmIvSM8qmjNX3LIHLyZKFk8FWZuN6z7jV3s0P8r+kv
+         T80Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+S7gjt3MgnLDrdKzofrJNhS6p4rg7p4WBFZi5EQinSg=;
-        b=bH3Gkti92/7LFWsJ3fwPyG4QMsHasYZujdvwQN2IG3tJ3PITLbGV53bMJqWw4O9TrF
-         AYKT2jwglXw3vzz3kCQlWRUmeuRR8dOWf0SOUwcvf73s2MAXvqSroPX8JdwUDGGGNqEC
-         S8hA5SSkcHpM+e/lX5VjcSfoD76+Vud7FuC9sUQSPCNqGZ295aMPza338Gw1QvLHHeV9
-         bC5KglRZRLlfRCgmQ5zJPBmLPti4yPj0eiZnx1vTlHmHYNHHNdbjmwfX/H9SrXvSkB4+
-         39Bj2nBnnJbDpsGOw1VT5p3rtQX+P3875pozo0Q8C14DIfrdQqv9ywicdpLDl1eyGX4Z
-         aoJw==
-X-Gm-Message-State: AOAM5329wwkiwjo8NvPwl8fVaNqyTloCpF3EoOZzxIj/xHKFQSwuG401
-        IwwPDKEglMBPlOHUMf9v+xZMPQ==
-X-Google-Smtp-Source: ABdhPJwVj7AImbLlRr23Z0RxRD8gCshqvyDN+CM5FR1pwopcAY578lpSBDBdCy1oD0l38Ko9sYF6xw==
-X-Received: by 2002:a63:4761:: with SMTP id w33mr296710pgk.118.1616429150894;
-        Mon, 22 Mar 2021 09:05:50 -0700 (PDT)
-Received: from google.com ([2620:15c:f:10:5c8b:5536:d804:97ed])
-        by smtp.gmail.com with ESMTPSA id i8sm14475167pjl.32.2021.03.22.09.05.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Mar 2021 09:05:50 -0700 (PDT)
-Date:   Mon, 22 Mar 2021 09:05:43 -0700
-From:   Sean Christopherson <seanjc@google.com>
-To:     ira.weiny@intel.com
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V4 06/10] x86/fault: Adjust WARN_ON for PKey fault
-Message-ID: <YFjAV44u7i9t1TDL@google.com>
-References: <20210322053020.2287058-1-ira.weiny@intel.com>
- <20210322053020.2287058-7-ira.weiny@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+yQvc43S8r83HTfxyOEbHMJvrQICL6Aq5HxThzdm6Ks=;
+        b=a56FoD21xO2pcrsouJlrk53frtqZGuW16YhpuNXRMaYmh2f+qUE66q5XnB7MHokMFx
+         HuMU2tmxNldtqO1STsv9GPCrdpRuMeghKPerzhTdMVmzTd427fKJufJD8uehRS5gRDz3
+         XpRWe/5hYVRFoNPDQehkhigi3h3LRcbne273jZIN9gYaiVIbZYjZAhAsOLtec+anXyQ1
+         wT10dS754di2HmkSB1L/jj0IK7FC9LkaPa2IWWpC0BEulzax0fw3uZoLap3/ijuYyt5v
+         DBp5BiDmib3oItHwb/a7/a5qi36kHXi3HzD3+6HjCK83UcUSOqJ/E8nrCVRtCda0mHkh
+         xaoA==
+X-Gm-Message-State: AOAM531MkV2kFgD71d2wO7ZYKH14dDLziuV5kVyf8+qpjiBEPlu9ugmt
+        bA5vd/B3tkeb/VDegmE1Jfyk76G6MjHvcXj8Xwf2fK2h
+X-Google-Smtp-Source: ABdhPJw/98e78zuT8+5qNEOuBX8v/LXRegZluDS1c2KWIdAv/JnGkF+H8KcV3lYGkdIQsLlPNh9FOV8aUahW5xm10/M=
+X-Received: by 2002:a05:6402:518d:: with SMTP id q13mr363560edd.313.1616430590270;
+ Mon, 22 Mar 2021 09:29:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210322053020.2287058-7-ira.weiny@intel.com>
+References: <20210319005219.13595-1-zi.yan@sent.com> <CAHbLzkrys2K0A9uae+P5WqxfAMRCzurp9M-Rc3459808GAh_yg@mail.gmail.com>
+ <176A4DF5-B5B9-47E2-9B9D-CD82989AC466@nvidia.com>
+In-Reply-To: <176A4DF5-B5B9-47E2-9B9D-CD82989AC466@nvidia.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 22 Mar 2021 09:29:38 -0700
+Message-ID: <CAHbLzkrnfC8xcXhbgFpN4azZm5zEr0WO_JaBR-OTMsOT4QC4JA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] mm: huge_memory: a new debugfs interface for
+ splitting THP tests.
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mika Penttila <mika.penttila@nextfour.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Mar 21, 2021, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> PKey faults may now happen on kernel mappings if the feature is enabled.
-> Remove the warning in the fault path if PKS is enabled.
+On Sun, Mar 21, 2021 at 7:11 PM Zi Yan <ziy@nvidia.com> wrote:
+>
+> On 19 Mar 2021, at 19:37, Yang Shi wrote:
+>
+> > On Thu, Mar 18, 2021 at 5:52 PM Zi Yan <zi.yan@sent.com> wrote:
+> >>
+> >> From: Zi Yan <ziy@nvidia.com>
+> >>
+> >> We did not have a direct user interface of splitting the compound page
+> >> backing a THP and there is no need unless we want to expose the THP
+> >> implementation details to users. Make <debugfs>/split_huge_pages accept
+> >> a new command to do that.
+> >>
+> >> By writing "<pid>,<vaddr_start>,<vaddr_end>" to
+> >> <debugfs>/split_huge_pages, THPs within the given virtual address range
+> >> from the process with the given pid are split. It is used to test
+> >> split_huge_page function. In addition, a selftest program is added to
+> >> tools/testing/selftests/vm to utilize the interface by splitting
+> >> PMD THPs and PTE-mapped THPs.
+> >>
+> >> This does not change the old behavior, i.e., writing 1 to the interface
+> >> to split all THPs in the system.
+> >>
+> >> Changelog:
+> >>
+> >> From v5:
+> >> 1. Skipped special VMAs and other fixes. (suggested by Yang Shi)
+> >
+> > Looks good to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
+> >
+> > Some nits below:
+> >
+> >>
+> >> From v4:
+> >> 1. Fixed the error code return issue, spotted by kernel test robot
+> >>    <lkp@intel.com>.
+> >>
+> >> From v3:
+> >> 1. Factored out split huge pages in the given pid code to a separate
+> >>    function.
+> >> 2. Added the missing put_page for not split pages.
+> >> 3. pr_debug -> pr_info, make reading results simpler.
+> >>
+> >> From v2:
+> >> 1. Reused existing <debugfs>/split_huge_pages interface. (suggested by
+> >>    Yang Shi)
+> >>
+> >> From v1:
+> >> 1. Removed unnecessary calling to vma_migratable, spotted by kernel test
+> >>    robot <lkp@intel.com>.
+> >> 2. Dropped the use of find_mm_struct and code it directly, since there
+> >>    is no need for the permission check in that function and the function
+> >>    is only available when migration is on.
+> >> 3. Added some comments in the selftest program to clarify how PTE-mapped
+> >>    THPs are formed.
+> >>
+> >> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> >> ---
+> >>  mm/huge_memory.c                              | 143 +++++++-
+> >>  tools/testing/selftests/vm/.gitignore         |   1 +
+> >>  tools/testing/selftests/vm/Makefile           |   1 +
+> >>  .../selftests/vm/split_huge_page_test.c       | 318 ++++++++++++++++++
+> >>  4 files changed, 456 insertions(+), 7 deletions(-)
+> >>  create mode 100644 tools/testing/selftests/vm/split_huge_page_test.c
+> >>
+> >> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> >> index bff92dea5ab3..9bf9bc489228 100644
+> >> --- a/mm/huge_memory.c
+> >> +++ b/mm/huge_memory.c
+> >> @@ -7,6 +7,7 @@
+> >>
+> >>  #include <linux/mm.h>
+> >>  #include <linux/sched.h>
+> >> +#include <linux/sched/mm.h>
+> >>  #include <linux/sched/coredump.h>
+> >>  #include <linux/sched/numa_balancing.h>
+> >>  #include <linux/highmem.h>
+> >> @@ -2922,16 +2923,14 @@ static struct shrinker deferred_split_shrinker = {
+> >>  };
+> >>
+> >>  #ifdef CONFIG_DEBUG_FS
+> >> -static int split_huge_pages_set(void *data, u64 val)
+> >> +static void split_huge_pages_all(void)
+> >>  {
+> >>         struct zone *zone;
+> >>         struct page *page;
+> >>         unsigned long pfn, max_zone_pfn;
+> >>         unsigned long total = 0, split = 0;
+> >>
+> >> -       if (val != 1)
+> >> -               return -EINVAL;
+> >> -
+> >> +       pr_info("Split all THPs\n");
+> >>         for_each_populated_zone(zone) {
+> >>                 max_zone_pfn = zone_end_pfn(zone);
+> >>                 for (pfn = zone->zone_start_pfn; pfn < max_zone_pfn; pfn++) {
+> >> @@ -2959,11 +2958,141 @@ static int split_huge_pages_set(void *data, u64 val)
+> >>         }
+> >>
+> >>         pr_info("%lu of %lu THP split\n", split, total);
+> >> +}
+> >>
+> >> -       return 0;
+> >> +static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+> >> +                               unsigned long vaddr_end)
+> >> +{
+> >> +       int ret = 0;
+> >> +       struct task_struct *task;
+> >> +       struct mm_struct *mm;
+> >> +       unsigned long total = 0, split = 0;
+> >> +       unsigned long addr;
+> >> +
+> >> +       vaddr_start &= PAGE_MASK;
+> >> +       vaddr_end &= PAGE_MASK;
+> >> +
+> >> +       /* Find the task_struct from pid */
+> >> +       rcu_read_lock();
+> >> +       task = find_task_by_vpid(pid);
+> >> +       if (!task) {
+> >> +               rcu_read_unlock();
+> >> +               ret = -ESRCH;
+> >> +               goto out;
+> >> +       }
+> >> +       get_task_struct(task);
+> >> +       rcu_read_unlock();
+> >> +
+> >> +       /* Find the mm_struct */
+> >> +       mm = get_task_mm(task);
+> >> +       put_task_struct(task);
+> >> +
+> >> +       if (!mm) {
+> >> +               ret = -EINVAL;
+> >> +               goto out;
+> >> +       }
+> >> +
+> >> +       pr_info("Split huge pages in pid: %d, vaddr: [0x%lx - 0x%lx]\n",
+> >> +                pid, vaddr_start, vaddr_end);
+> >> +
+> >> +       mmap_read_lock(mm);
+> >> +       /*
+> >> +        * always increase addr by PAGE_SIZE, since we could have a PTE page
+> >> +        * table filled with PTE-mapped THPs, each of which is distinct.
+> >> +        */
+> >> +       for (addr = vaddr_start; addr < vaddr_end; addr += PAGE_SIZE) {
+> >> +               struct vm_area_struct *vma = find_vma(mm, addr);
+> >> +               unsigned int follflags;
+> >> +               struct page *page;
+> >> +
+> >> +               if (!vma || addr < vma->vm_start)
+> >> +                       break;
+> >> +
+> >> +               /* skip special VMA and hugetlb VMA */
+> >> +               if (vma_is_special_huge(vma) || is_vm_hugetlb_page(vma)) {
+> >
+> > VM_IO vma should be skipped as well. And you may extract this into a helper?
+>
+> Sure. Any name suggestion? :)
 
-When/why can they happen?  I read through all the changelogs, as well as the
-cover letters for v1 and the RFC, and didn't see any explicit statement about
-why pkey faults on supervisor accesses are now "legal".  Explaining what happens
-later in the page fault handler would also be helpful, e.g. is the flag simply
-ignored?  Does it lead directly to OOPS?
+How's about not_suitable_for_split() or suitable_for_split()?
 
-Documenting what happens on a PKS #PF in the API patch would be nice to have, too.
-
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> ---
->  arch/x86/mm/fault.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-> index a73347e2cdfc..731ec90ed413 100644
-> --- a/arch/x86/mm/fault.c
-> +++ b/arch/x86/mm/fault.c
-> @@ -1141,11 +1141,12 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
->  		   unsigned long address)
->  {
->  	/*
-> -	 * Protection keys exceptions only happen on user pages.  We
-> -	 * have no user pages in the kernel portion of the address
-> -	 * space, so do not expect them here.
-> +	 * PF_PK is expected on kernel addresses when supervisor pkeys are
-
-"is expected" can be misinterpreted as "PF is expected on all kernel addresses...".
-
-This ties in with the lack of an explanation in the changelog.
-
-> +	 * enabled.
-
-It'd be helpful to spell out "Protection keys exceptions" so that random readers
-don't need to search for PF_PK to understand what's up.  Maybe even use it as an
-opportunity to introduce "pkeys", e.g.
-
-	/* Protection keys (pkeys) exceptions are ... */
-
->  	 */
-> -	WARN_ON_ONCE(hw_error_code & X86_PF_PK);
-> +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-> +		WARN_ON_ONCE(hw_error_code & X86_PF_PK);
-
-Does this generate the same code if the whole thing is thrown in the WARN?  E.g.
-
-	WARN_ON_ONCE(!cpu_feature_enabled(X86_FEATURE_PKS) &&
-		     (hw_error_code & X86_PF_PK));
-
-> +
->  
->  #ifdef CONFIG_X86_32
->  	/*
-> -- 
-> 2.28.0.rc0.12.gb6a658bd00c9
-> 
+>
+>
+> >> +                       addr = vma->vm_end;
+> >> +                       continue;
+> >> +               }
+> >> +
+> >> +               /* FOLL_DUMP to ignore special (like zero) pages */
+> >> +               follflags = FOLL_GET | FOLL_DUMP;
+> >> +               page = follow_page(vma, addr, follflags);
+> >> +
+> >> +               if (IS_ERR(page))
+> >> +                       continue;
+> >> +               if (!page)
+> >> +                       continue;
+> >> +
+> >> +               if (!is_transparent_hugepage(page))
+> >> +                       goto next;
+> >> +
+> >> +               total++;
+> >> +               if (!can_split_huge_page(compound_head(page), NULL))
+> >> +                       goto next;
+> >> +
+> >> +               if (!trylock_page(page))
+> >> +                       goto next;
+> >> +
+> >> +               if (!split_huge_page(page))
+> >> +                       split++;
+> >> +
+> >> +               unlock_page(page);
+> >> +next:
+> >> +               put_page(page);
+> >> +       }
+> >> +       mmap_read_unlock(mm);
+> >> +       mmput(mm);
+> >> +
+> >> +       pr_info("%lu of %lu THP split\n", split, total);
+> >> +
+> >> +out:
+> >> +       return ret;
+> >>  }
+> >> -DEFINE_DEBUGFS_ATTRIBUTE(split_huge_pages_fops, NULL, split_huge_pages_set,
+> >> -               "%llu\n");
+> >> +
+> >> +static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
+> >> +                               size_t count, loff_t *ppops)
+> >> +{
+> >> +       static DEFINE_MUTEX(split_debug_mutex);
+> >> +       ssize_t ret;
+> >> +       char input_buf[80]; /* hold pid, start_vaddr, end_vaddr */
+> >
+> > Why not move buf len macro in the following patch to this patch? Then
+> > you don't have to change the length again.
+>
+> Sure.
+>
+> Thanks for the comments.
+>
+> --
+> Best Regards,
+> Yan Zi
