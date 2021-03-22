@@ -2,290 +2,308 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB07344B58
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 17:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21748344C0C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 17:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbhCVQaA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Mar 2021 12:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        id S230237AbhCVQpc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Mar 2021 12:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbhCVQ3x (ORCPT
+        with ESMTP id S230327AbhCVQpU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Mar 2021 12:29:53 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BDAC061574;
-        Mon, 22 Mar 2021 09:29:51 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id e7so20048616edu.10;
-        Mon, 22 Mar 2021 09:29:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+yQvc43S8r83HTfxyOEbHMJvrQICL6Aq5HxThzdm6Ks=;
-        b=a2GjEUZ1xP95PzLsG5fmHkO4GpwMpY7HUMMd4ayLoTo9cG/yg09LhITO4tawX3Gh2O
-         S7N+ryWZy5GouSEmtD1mb8SThKNuqs8Z9yN3ngdtTwDlYUEwij8RGRgLq1b5TWRGEUd1
-         lpEatp3TPzJo9OY97sCLpWhy9nfDF53L/h2iUXWniqZhnx142PstGYIRivRSbYwGo8Kg
-         r9rWKcxnIt5xc3nKSVK8Z7oVtV74FsmAfOQ+zP3tJthYvxIRZt7w6HZ5+SZiVyVUS3XS
-         fhbD029+04jfjdSQ9ATm5PtDSDdmIvSM8qmjNX3LIHLyZKFk8FWZuN6z7jV3s0P8r+kv
-         T80Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+yQvc43S8r83HTfxyOEbHMJvrQICL6Aq5HxThzdm6Ks=;
-        b=a56FoD21xO2pcrsouJlrk53frtqZGuW16YhpuNXRMaYmh2f+qUE66q5XnB7MHokMFx
-         HuMU2tmxNldtqO1STsv9GPCrdpRuMeghKPerzhTdMVmzTd427fKJufJD8uehRS5gRDz3
-         XpRWe/5hYVRFoNPDQehkhigi3h3LRcbne273jZIN9gYaiVIbZYjZAhAsOLtec+anXyQ1
-         wT10dS754di2HmkSB1L/jj0IK7FC9LkaPa2IWWpC0BEulzax0fw3uZoLap3/ijuYyt5v
-         DBp5BiDmib3oItHwb/a7/a5qi36kHXi3HzD3+6HjCK83UcUSOqJ/E8nrCVRtCda0mHkh
-         xaoA==
-X-Gm-Message-State: AOAM531MkV2kFgD71d2wO7ZYKH14dDLziuV5kVyf8+qpjiBEPlu9ugmt
-        bA5vd/B3tkeb/VDegmE1Jfyk76G6MjHvcXj8Xwf2fK2h
-X-Google-Smtp-Source: ABdhPJw/98e78zuT8+5qNEOuBX8v/LXRegZluDS1c2KWIdAv/JnGkF+H8KcV3lYGkdIQsLlPNh9FOV8aUahW5xm10/M=
-X-Received: by 2002:a05:6402:518d:: with SMTP id q13mr363560edd.313.1616430590270;
- Mon, 22 Mar 2021 09:29:50 -0700 (PDT)
+        Mon, 22 Mar 2021 12:45:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBA7C061574;
+        Mon, 22 Mar 2021 09:45:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1df6usl2xnnPsrzqbx3EXcAa7CHt7bVOPUkJ821J5Gw=; b=vdjjBNmqMgrKZCy+BgdAnzP/5W
+        QRR0Vsd6rGB02ZnaaTTlab42XbRMD6nTGnUFZ8ot4qrZT6xTPJKky5ouao/v6uEWeLX6aEOp7UaLB
+        NYKAoH+2YuXEdhhPnLmLlFX82ajJXiURPDhDd0yeZmv2LPT85O2/VXAjijXpDHhpSMJ9e2vHR95nH
+        Z1dOGHMd4MZbCaIh6ZkRK8ywSdvU70hpIeQQAsM+N8F9WbXqiyKOHXToNtfAqjuhOHxaH8P4UzD4t
+        YxYyFAVoHKrsi3r7KphkSSo8xEmqdaZGufK9cH6D+30vLZb5nhqfxy7tVNOE0LpO1WHo6zPAEc7Cr
+        fiv6aR0Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lONd9-008nQ9-Ma; Mon, 22 Mar 2021 16:42:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E55BC30377D;
+        Mon, 22 Mar 2021 17:42:14 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C792A2BF3371C; Mon, 22 Mar 2021 17:42:14 +0100 (CET)
+Date:   Mon, 22 Mar 2021 17:42:14 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
+        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
+        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
+        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
+        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
+        mascasa@google.com, pcc@google.com, irogers@google.com,
+        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v2 8/8] selftests/perf: Add kselftest for
+ remove_on_exec
+Message-ID: <YFjI5qU0z3Q7J/jF@hirez.programming.kicks-ass.net>
+References: <20210310104139.679618-1-elver@google.com>
+ <20210310104139.679618-9-elver@google.com>
+ <YFiamKX+xYH2HJ4E@elver.google.com>
 MIME-Version: 1.0
-References: <20210319005219.13595-1-zi.yan@sent.com> <CAHbLzkrys2K0A9uae+P5WqxfAMRCzurp9M-Rc3459808GAh_yg@mail.gmail.com>
- <176A4DF5-B5B9-47E2-9B9D-CD82989AC466@nvidia.com>
-In-Reply-To: <176A4DF5-B5B9-47E2-9B9D-CD82989AC466@nvidia.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 22 Mar 2021 09:29:38 -0700
-Message-ID: <CAHbLzkrnfC8xcXhbgFpN4azZm5zEr0WO_JaBR-OTMsOT4QC4JA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] mm: huge_memory: a new debugfs interface for
- splitting THP tests.
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mika Penttila <mika.penttila@nextfour.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YFiamKX+xYH2HJ4E@elver.google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Mar 21, 2021 at 7:11 PM Zi Yan <ziy@nvidia.com> wrote:
->
-> On 19 Mar 2021, at 19:37, Yang Shi wrote:
->
-> > On Thu, Mar 18, 2021 at 5:52 PM Zi Yan <zi.yan@sent.com> wrote:
-> >>
-> >> From: Zi Yan <ziy@nvidia.com>
-> >>
-> >> We did not have a direct user interface of splitting the compound page
-> >> backing a THP and there is no need unless we want to expose the THP
-> >> implementation details to users. Make <debugfs>/split_huge_pages accept
-> >> a new command to do that.
-> >>
-> >> By writing "<pid>,<vaddr_start>,<vaddr_end>" to
-> >> <debugfs>/split_huge_pages, THPs within the given virtual address range
-> >> from the process with the given pid are split. It is used to test
-> >> split_huge_page function. In addition, a selftest program is added to
-> >> tools/testing/selftests/vm to utilize the interface by splitting
-> >> PMD THPs and PTE-mapped THPs.
-> >>
-> >> This does not change the old behavior, i.e., writing 1 to the interface
-> >> to split all THPs in the system.
-> >>
-> >> Changelog:
-> >>
-> >> From v5:
-> >> 1. Skipped special VMAs and other fixes. (suggested by Yang Shi)
-> >
-> > Looks good to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
-> >
-> > Some nits below:
-> >
-> >>
-> >> From v4:
-> >> 1. Fixed the error code return issue, spotted by kernel test robot
-> >>    <lkp@intel.com>.
-> >>
-> >> From v3:
-> >> 1. Factored out split huge pages in the given pid code to a separate
-> >>    function.
-> >> 2. Added the missing put_page for not split pages.
-> >> 3. pr_debug -> pr_info, make reading results simpler.
-> >>
-> >> From v2:
-> >> 1. Reused existing <debugfs>/split_huge_pages interface. (suggested by
-> >>    Yang Shi)
-> >>
-> >> From v1:
-> >> 1. Removed unnecessary calling to vma_migratable, spotted by kernel test
-> >>    robot <lkp@intel.com>.
-> >> 2. Dropped the use of find_mm_struct and code it directly, since there
-> >>    is no need for the permission check in that function and the function
-> >>    is only available when migration is on.
-> >> 3. Added some comments in the selftest program to clarify how PTE-mapped
-> >>    THPs are formed.
-> >>
-> >> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> >> ---
-> >>  mm/huge_memory.c                              | 143 +++++++-
-> >>  tools/testing/selftests/vm/.gitignore         |   1 +
-> >>  tools/testing/selftests/vm/Makefile           |   1 +
-> >>  .../selftests/vm/split_huge_page_test.c       | 318 ++++++++++++++++++
-> >>  4 files changed, 456 insertions(+), 7 deletions(-)
-> >>  create mode 100644 tools/testing/selftests/vm/split_huge_page_test.c
-> >>
-> >> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> >> index bff92dea5ab3..9bf9bc489228 100644
-> >> --- a/mm/huge_memory.c
-> >> +++ b/mm/huge_memory.c
-> >> @@ -7,6 +7,7 @@
-> >>
-> >>  #include <linux/mm.h>
-> >>  #include <linux/sched.h>
-> >> +#include <linux/sched/mm.h>
-> >>  #include <linux/sched/coredump.h>
-> >>  #include <linux/sched/numa_balancing.h>
-> >>  #include <linux/highmem.h>
-> >> @@ -2922,16 +2923,14 @@ static struct shrinker deferred_split_shrinker = {
-> >>  };
-> >>
-> >>  #ifdef CONFIG_DEBUG_FS
-> >> -static int split_huge_pages_set(void *data, u64 val)
-> >> +static void split_huge_pages_all(void)
-> >>  {
-> >>         struct zone *zone;
-> >>         struct page *page;
-> >>         unsigned long pfn, max_zone_pfn;
-> >>         unsigned long total = 0, split = 0;
-> >>
-> >> -       if (val != 1)
-> >> -               return -EINVAL;
-> >> -
-> >> +       pr_info("Split all THPs\n");
-> >>         for_each_populated_zone(zone) {
-> >>                 max_zone_pfn = zone_end_pfn(zone);
-> >>                 for (pfn = zone->zone_start_pfn; pfn < max_zone_pfn; pfn++) {
-> >> @@ -2959,11 +2958,141 @@ static int split_huge_pages_set(void *data, u64 val)
-> >>         }
-> >>
-> >>         pr_info("%lu of %lu THP split\n", split, total);
-> >> +}
-> >>
-> >> -       return 0;
-> >> +static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
-> >> +                               unsigned long vaddr_end)
-> >> +{
-> >> +       int ret = 0;
-> >> +       struct task_struct *task;
-> >> +       struct mm_struct *mm;
-> >> +       unsigned long total = 0, split = 0;
-> >> +       unsigned long addr;
-> >> +
-> >> +       vaddr_start &= PAGE_MASK;
-> >> +       vaddr_end &= PAGE_MASK;
-> >> +
-> >> +       /* Find the task_struct from pid */
-> >> +       rcu_read_lock();
-> >> +       task = find_task_by_vpid(pid);
-> >> +       if (!task) {
-> >> +               rcu_read_unlock();
-> >> +               ret = -ESRCH;
-> >> +               goto out;
-> >> +       }
-> >> +       get_task_struct(task);
-> >> +       rcu_read_unlock();
-> >> +
-> >> +       /* Find the mm_struct */
-> >> +       mm = get_task_mm(task);
-> >> +       put_task_struct(task);
-> >> +
-> >> +       if (!mm) {
-> >> +               ret = -EINVAL;
-> >> +               goto out;
-> >> +       }
-> >> +
-> >> +       pr_info("Split huge pages in pid: %d, vaddr: [0x%lx - 0x%lx]\n",
-> >> +                pid, vaddr_start, vaddr_end);
-> >> +
-> >> +       mmap_read_lock(mm);
-> >> +       /*
-> >> +        * always increase addr by PAGE_SIZE, since we could have a PTE page
-> >> +        * table filled with PTE-mapped THPs, each of which is distinct.
-> >> +        */
-> >> +       for (addr = vaddr_start; addr < vaddr_end; addr += PAGE_SIZE) {
-> >> +               struct vm_area_struct *vma = find_vma(mm, addr);
-> >> +               unsigned int follflags;
-> >> +               struct page *page;
-> >> +
-> >> +               if (!vma || addr < vma->vm_start)
-> >> +                       break;
-> >> +
-> >> +               /* skip special VMA and hugetlb VMA */
-> >> +               if (vma_is_special_huge(vma) || is_vm_hugetlb_page(vma)) {
-> >
-> > VM_IO vma should be skipped as well. And you may extract this into a helper?
->
-> Sure. Any name suggestion? :)
+On Mon, Mar 22, 2021 at 02:24:40PM +0100, Marco Elver wrote:
+> To make compatible with more recent libc, we'll need to fixup the tests
+> with the below.
 
-How's about not_suitable_for_split() or suitable_for_split()?
+OK, that reprodiced things here, thanks!
 
->
->
-> >> +                       addr = vma->vm_end;
-> >> +                       continue;
-> >> +               }
-> >> +
-> >> +               /* FOLL_DUMP to ignore special (like zero) pages */
-> >> +               follflags = FOLL_GET | FOLL_DUMP;
-> >> +               page = follow_page(vma, addr, follflags);
-> >> +
-> >> +               if (IS_ERR(page))
-> >> +                       continue;
-> >> +               if (!page)
-> >> +                       continue;
-> >> +
-> >> +               if (!is_transparent_hugepage(page))
-> >> +                       goto next;
-> >> +
-> >> +               total++;
-> >> +               if (!can_split_huge_page(compound_head(page), NULL))
-> >> +                       goto next;
-> >> +
-> >> +               if (!trylock_page(page))
-> >> +                       goto next;
-> >> +
-> >> +               if (!split_huge_page(page))
-> >> +                       split++;
-> >> +
-> >> +               unlock_page(page);
-> >> +next:
-> >> +               put_page(page);
-> >> +       }
-> >> +       mmap_read_unlock(mm);
-> >> +       mmput(mm);
-> >> +
-> >> +       pr_info("%lu of %lu THP split\n", split, total);
-> >> +
-> >> +out:
-> >> +       return ret;
-> >>  }
-> >> -DEFINE_DEBUGFS_ATTRIBUTE(split_huge_pages_fops, NULL, split_huge_pages_set,
-> >> -               "%llu\n");
-> >> +
-> >> +static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
-> >> +                               size_t count, loff_t *ppops)
-> >> +{
-> >> +       static DEFINE_MUTEX(split_debug_mutex);
-> >> +       ssize_t ret;
-> >> +       char input_buf[80]; /* hold pid, start_vaddr, end_vaddr */
-> >
-> > Why not move buf len macro in the following patch to this patch? Then
-> > you don't have to change the length again.
->
-> Sure.
->
-> Thanks for the comments.
->
-> --
-> Best Regards,
-> Yan Zi
+The below seems to not explode instantly.... it still has the
+alternative version in as well (and I think it might even work too, but
+the one I left in seems simpler).
+
+---
+
+ kernel/events/core.c | 154 +++++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 111 insertions(+), 43 deletions(-)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index a7220e8c447e..8c0f905cc017 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -2167,8 +2172,9 @@ static void perf_group_detach(struct perf_event *event)
+ 	 * If this is a sibling, remove it from its group.
+ 	 */
+ 	if (leader != event) {
++		leader->nr_siblings--;
+ 		list_del_init(&event->sibling_list);
+-		event->group_leader->nr_siblings--;
++		event->group_leader = event;
+ 		goto out;
+ 	}
+ 
+@@ -2182,8 +2188,9 @@ static void perf_group_detach(struct perf_event *event)
+ 		if (sibling->event_caps & PERF_EV_CAP_SIBLING)
+ 			perf_remove_sibling_event(sibling);
+ 
+-		sibling->group_leader = sibling;
++		leader->nr_siblings--;
+ 		list_del_init(&sibling->sibling_list);
++		sibling->group_leader = sibling;
+ 
+ 		/* Inherit group flags from the previous leader */
+ 		sibling->group_caps = event->group_caps;
+@@ -2360,10 +2367,19 @@ __perf_remove_from_context(struct perf_event *event,
+ static void perf_remove_from_context(struct perf_event *event, unsigned long flags)
+ {
+ 	struct perf_event_context *ctx = event->ctx;
++	bool remove;
+ 
+ 	lockdep_assert_held(&ctx->mutex);
+ 
+-	event_function_call(event, __perf_remove_from_context, (void *)flags);
++	/*
++	 * There is concurrency vs remove_on_exec().
++	 */
++	raw_spin_lock_irq(&ctx->lock);
++	remove = (event->attach_state & PERF_ATTACH_CONTEXT);
++	raw_spin_unlock_irq(&ctx->lock);
++
++	if (remove)
++		event_function_call(event, __perf_remove_from_context, (void *)flags);
+ 
+ 	/*
+ 	 * The above event_function_call() can NO-OP when it hits
+@@ -4232,41 +4248,92 @@ static void perf_event_enable_on_exec(int ctxn)
+ static void perf_remove_from_owner(struct perf_event *event);
+ static void perf_event_exit_event(struct perf_event *child_event,
+ 				  struct perf_event_context *child_ctx,
+-				  struct task_struct *child);
++				  struct task_struct *child,
++				  bool removed);
+ 
+ /*
+  * Removes all events from the current task that have been marked
+  * remove-on-exec, and feeds their values back to parent events.
+  */
+-static void perf_event_remove_on_exec(void)
++static void perf_event_remove_on_exec(int ctxn)
+ {
+-	int ctxn;
++	struct perf_event_context *ctx, *clone_ctx = NULL;
++	struct perf_event *event, *next;
++	LIST_HEAD(free_list);
++	unsigned long flags;
++	bool modified = false;
+ 
+-	for_each_task_context_nr(ctxn) {
+-		struct perf_event_context *ctx;
+-		struct perf_event *event, *next;
++	ctx = perf_pin_task_context(current, ctxn);
++	if (!ctx)
++		return;
+ 
+-		ctx = perf_pin_task_context(current, ctxn);
+-		if (!ctx)
++	mutex_lock(&ctx->mutex);
++
++	if (WARN_ON_ONCE(ctx->task != current))
++		goto unlock;
++
++	list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
++		if (!event->attr.remove_on_exec)
+ 			continue;
+-		mutex_lock(&ctx->mutex);
+ 
+-		list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
+-			if (!event->attr.remove_on_exec)
+-				continue;
++		if (!is_kernel_event(event))
++			perf_remove_from_owner(event);
+ 
+-			if (!is_kernel_event(event))
+-				perf_remove_from_owner(event);
+-			perf_remove_from_context(event, DETACH_GROUP);
+-			/*
+-			 * Remove the event and feed back its values to the
+-			 * parent event.
+-			 */
+-			perf_event_exit_event(event, ctx, current);
+-		}
+-		mutex_unlock(&ctx->mutex);
+-		put_ctx(ctx);
++		modified = true;
++
++		perf_remove_from_context(event, !!event->parent * DETACH_GROUP);
++		perf_event_exit_event(event, ctx, current, true);
++	}
++
++	raw_spin_lock_irqsave(&ctx->lock, flags);
++	if (modified)
++		clone_ctx = unclone_ctx(ctx);
++	--ctx->pin_count;
++	raw_spin_unlock_irqrestore(&ctx->lock, flags);
++
++#if 0
++	struct perf_cpu_context *cpuctx;
++
++	if (!modified) {
++		perf_unpin_context(ctx);
++		goto unlock;
++	}
++
++	local_irq_save(flags);
++	cpuctx = __get_cpu_context(ctx);
++	perf_ctx_lock(cpuctx, ctx);
++	task_ctx_sched_out(cpuctx, ctx, EVENT_ALL);
++
++	list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
++		if (!event->attr.remove_on_exec)
++			continue;
++
++		if (event->parent)
++			perf_group_detach(event);
++		list_del_event(event, ctx);
++
++		list_add(&event->active_list, &free_list);
++	}
++
++	ctx_resched(cpuctx, ctx, EVENT_ALL);
++
++	clone_ctx = unclone_ctx(ctx);
++	--ctx->pin_count;
++	perf_ctx_unlock(cpuctx, ctx);
++	local_irq_restore(flags);
++
++	list_for_each_entry_safe(event, next, &free_list, active_entry) {
++		list_del(&event->active_entry);
++		perf_event_exit_event(event, ctx, current, true);
+ 	}
++#endif
++
++unlock:
++	mutex_unlock(&ctx->mutex);
++
++	put_ctx(ctx);
++	if (clone_ctx)
++		put_ctx(clone_ctx);
+ }
+ 
+ struct perf_read_data {
+@@ -7615,20 +7682,18 @@ void perf_event_exec(void)
+ 	struct perf_event_context *ctx;
+ 	int ctxn;
+ 
+-	rcu_read_lock();
+ 	for_each_task_context_nr(ctxn) {
+-		ctx = current->perf_event_ctxp[ctxn];
+-		if (!ctx)
+-			continue;
+-
+ 		perf_event_enable_on_exec(ctxn);
++		perf_event_remove_on_exec(ctxn);
+ 
+-		perf_iterate_ctx(ctx, perf_event_addr_filters_exec, NULL,
+-				   true);
++		rcu_read_lock();
++		ctx = rcu_dereference(current->perf_event_ctxp[ctxn]);
++		if (ctx) {
++			perf_iterate_ctx(ctx, perf_event_addr_filters_exec,
++					 NULL, true);
++		}
++		rcu_read_unlock();
+ 	}
+-	rcu_read_unlock();
+-
+-	perf_event_remove_on_exec();
+ }
+ 
+ struct remote_output {
+@@ -12509,7 +12574,7 @@ static void sync_child_event(struct perf_event *child_event,
+ static void
+ perf_event_exit_event(struct perf_event *child_event,
+ 		      struct perf_event_context *child_ctx,
+-		      struct task_struct *child)
++		      struct task_struct *child, bool removed)
+ {
+ 	struct perf_event *parent_event = child_event->parent;
+ 
+@@ -12526,12 +12591,15 @@ perf_event_exit_event(struct perf_event *child_event,
+ 	 * and being thorough is better.
+ 	 */
+ 	raw_spin_lock_irq(&child_ctx->lock);
+-	WARN_ON_ONCE(child_ctx->is_active);
++	if (!removed) {
++		WARN_ON_ONCE(child_ctx->is_active);
+ 
+-	if (parent_event)
+-		perf_group_detach(child_event);
+-	list_del_event(child_event, child_ctx);
+-	perf_event_set_state(child_event, PERF_EVENT_STATE_EXIT); /* is_event_hup() */
++		if (parent_event)
++			perf_group_detach(child_event);
++		list_del_event(child_event, child_ctx);
++	}
++	if (child_event->state >= PERF_EVENT_STATE_EXIT)
++		perf_event_set_state(child_event, PERF_EVENT_STATE_EXIT); /* is_event_hup() */
+ 	raw_spin_unlock_irq(&child_ctx->lock);
+ 
+ 	/*
+@@ -12617,7 +12685,7 @@ static void perf_event_exit_task_context(struct task_struct *child, int ctxn)
+ 	perf_event_task(child, child_ctx, 0);
+ 
+ 	list_for_each_entry_safe(child_event, next, &child_ctx->event_list, event_entry)
+-		perf_event_exit_event(child_event, child_ctx, child);
++		perf_event_exit_event(child_event, child_ctx, child, false);
+ 
+ 	mutex_unlock(&child_ctx->mutex);
+ 
