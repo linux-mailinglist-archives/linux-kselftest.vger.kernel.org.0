@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBC034603C
+	by mail.lfdr.de (Postfix) with ESMTP id B82AF34603D
 	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Mar 2021 14:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbhCWNxE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Mar 2021 09:53:04 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:14853 "EHLO
+        id S231614AbhCWNxD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Mar 2021 09:53:03 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:14855 "EHLO
         szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbhCWNws (ORCPT
+        with ESMTP id S231438AbhCWNws (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 23 Mar 2021 09:52:48 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4F4Xnd65Khz92xQ;
-        Tue, 23 Mar 2021 21:50:45 +0800 (CST)
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4F4Xnf0RQwz92yd;
+        Tue, 23 Mar 2021 21:50:46 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 23 Mar 2021 21:52:37 +0800
+ 14.3.498.0; Tue, 23 Mar 2021 21:52:38 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
@@ -34,9 +34,9 @@ CC:     Ben Gardon <bgardon@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v5 02/10] tools headers: Add a macro to get HUGETLB page sizes for mmap
-Date:   Tue, 23 Mar 2021 21:52:23 +0800
-Message-ID: <20210323135231.24948-3-wangyanan55@huawei.com>
+Subject: [RFC PATCH v5 03/10] KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
+Date:   Tue, 23 Mar 2021 21:52:24 +0800
+Message-ID: <20210323135231.24948-4-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210323135231.24948-1-wangyanan55@huawei.com>
 References: <20210323135231.24948-1-wangyanan55@huawei.com>
@@ -48,52 +48,158 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We know that if a system supports multiple hugetlb page sizes,
-the desired hugetlb page size can be specified in bits [26:31]
-of the flag arguments. The value in these 6 bits will be the
-shift of each hugetlb page size.
+In addition to function of CLOCK_MONOTONIC, flag CLOCK_MONOTONIC_RAW can
+also shield possiable impact of NTP, which can provide more robustness.
 
-So add a macro to get the page size shift and then calculate the
-corresponding hugetlb page size, using flag x.
-
-Cc: Ben Gardon <bgardon@google.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Suggested-by: Ben Gardon <bgardon@google.com>
+Suggested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
 Reviewed-by: Ben Gardon <bgardon@google.com>
+Reviewed-by: Andrew Jones <drjones@redhat.com>
 ---
- include/uapi/linux/mman.h       | 2 ++
- tools/include/uapi/linux/mman.h | 2 ++
- 2 files changed, 4 insertions(+)
+ tools/testing/selftests/kvm/demand_paging_test.c  |  8 ++++----
+ tools/testing/selftests/kvm/dirty_log_perf_test.c | 14 +++++++-------
+ tools/testing/selftests/kvm/lib/test_util.c       |  2 +-
+ tools/testing/selftests/kvm/steal_time.c          |  4 ++--
+ 4 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/include/uapi/linux/mman.h b/include/uapi/linux/mman.h
-index f55bc680b5b0..d72df73b182d 100644
---- a/include/uapi/linux/mman.h
-+++ b/include/uapi/linux/mman.h
-@@ -41,4 +41,6 @@
- #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
- #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
+diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+index 5f7a229c3af1..efbf0c1e9130 100644
+--- a/tools/testing/selftests/kvm/demand_paging_test.c
++++ b/tools/testing/selftests/kvm/demand_paging_test.c
+@@ -53,7 +53,7 @@ static void *vcpu_worker(void *data)
+ 	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
+ 	run = vcpu_state(vm, vcpu_id);
  
-+#define MAP_HUGE_PAGE_SIZE(x) (1ULL << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
-+
- #endif /* _UAPI_LINUX_MMAN_H */
-diff --git a/tools/include/uapi/linux/mman.h b/tools/include/uapi/linux/mman.h
-index f55bc680b5b0..d72df73b182d 100644
---- a/tools/include/uapi/linux/mman.h
-+++ b/tools/include/uapi/linux/mman.h
-@@ -41,4 +41,6 @@
- #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
- #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
  
-+#define MAP_HUGE_PAGE_SIZE(x) (1ULL << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
-+
- #endif /* _UAPI_LINUX_MMAN_H */
+ 	/* Let the guest access its memory */
+ 	ret = _vcpu_run(vm, vcpu_id);
+@@ -86,7 +86,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
+ 	copy.len = perf_test_args.host_page_size;
+ 	copy.mode = 0;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 
+ 	r = ioctl(uffd, UFFDIO_COPY, &copy);
+ 	if (r == -1) {
+@@ -123,7 +123,7 @@ static void *uffd_handler_thread_fn(void *arg)
+ 	struct timespec start;
+ 	struct timespec ts_diff;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 	while (!quit_uffd_thread) {
+ 		struct uffd_msg msg;
+ 		struct pollfd pollfd[2];
+@@ -336,7 +336,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 
+ 	pr_info("Finished creating vCPUs and starting uffd threads\n");
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 
+ 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+ 		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
+diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+index 04a2641261be..6cff4ccf9525 100644
+--- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+@@ -50,7 +50,7 @@ static void *vcpu_worker(void *data)
+ 	while (!READ_ONCE(host_quit)) {
+ 		int current_iteration = READ_ONCE(iteration);
+ 
+-		clock_gettime(CLOCK_MONOTONIC, &start);
++		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 		ret = _vcpu_run(vm, vcpu_id);
+ 		ts_diff = timespec_elapsed(start);
+ 
+@@ -141,7 +141,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	iteration = 0;
+ 	host_quit = false;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+ 		vcpu_last_completed_iteration[vcpu_id] = -1;
+ 
+@@ -162,7 +162,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 		ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
+ 	/* Enable dirty logging */
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX,
+ 				KVM_MEM_LOG_DIRTY_PAGES);
+ 	ts_diff = timespec_elapsed(start);
+@@ -174,7 +174,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 		 * Incrementing the iteration number will start the vCPUs
+ 		 * dirtying memory again.
+ 		 */
+-		clock_gettime(CLOCK_MONOTONIC, &start);
++		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 		iteration++;
+ 
+ 		pr_debug("Starting iteration %d\n", iteration);
+@@ -189,7 +189,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 		pr_info("Iteration %d dirty memory time: %ld.%.9lds\n",
+ 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
+-		clock_gettime(CLOCK_MONOTONIC, &start);
++		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 		kvm_vm_get_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap);
+ 
+ 		ts_diff = timespec_elapsed(start);
+@@ -199,7 +199,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
+ 		if (dirty_log_manual_caps) {
+-			clock_gettime(CLOCK_MONOTONIC, &start);
++			clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 			kvm_vm_clear_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap, 0,
+ 					       host_num_pages);
+ 
+@@ -212,7 +212,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	}
+ 
+ 	/* Disable dirty logging */
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX, 0);
+ 	ts_diff = timespec_elapsed(start);
+ 	pr_info("Disabling dirty logging time: %ld.%.9lds\n",
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index 906c955384e2..c7c0627c6842 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -89,7 +89,7 @@ struct timespec timespec_elapsed(struct timespec start)
+ {
+ 	struct timespec end;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &end);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+ 	return timespec_sub(end, start);
+ }
+ 
+diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+index fcc840088c91..5bc582d3f2a2 100644
+--- a/tools/testing/selftests/kvm/steal_time.c
++++ b/tools/testing/selftests/kvm/steal_time.c
+@@ -237,11 +237,11 @@ static void *do_steal_time(void *arg)
+ {
+ 	struct timespec ts, stop;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &ts);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+ 	stop = timespec_add_ns(ts, MIN_RUN_DELAY_NS);
+ 
+ 	while (1) {
+-		clock_gettime(CLOCK_MONOTONIC, &ts);
++		clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+ 		if (timespec_to_ns(timespec_sub(ts, stop)) >= 0)
+ 			break;
+ 	}
 -- 
 2.19.1
 
