@@ -2,337 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCBB345DC1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Mar 2021 13:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F60346045
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Mar 2021 14:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbhCWMJh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Mar 2021 08:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbhCWMJH (ORCPT
+        id S231570AbhCWNw6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Mar 2021 09:52:58 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:14854 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231362AbhCWNwr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Mar 2021 08:09:07 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99687C061764
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Mar 2021 05:09:04 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id 61so20482533wrm.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Mar 2021 05:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=B6h9ZiEvk3OjrxZiLfOl6jy0sUhDT3fazDwCa5g6frs=;
-        b=O0kY6dQAKFr9wlu7HnQpMWqc6zZphu1xuqfTAOsUBlwOdjbfuoX8auWdcm/J7kF1q9
-         86p/C7rWp3p4AI4OL0Khvxoc0onkh1X5vySB0k6tasLzuQ/Bxk4rsLC7fLRneNNqLAh/
-         n1Xg6FotkEBB4otnLAs7F687FQFxc9U6G3WcicQqgBjr2+2eEG5zaXBpPZohEPRrmGjj
-         EKky0wGDdoU0crenWHSBUWaiweGJTTlPRjjjtAUx0yC6kLEO1RfO5af7DqP5AJMZXqbA
-         kF4ZLnNDQeuNyl5nm9nR1fP6LtkfFMIYDGuZz7Om99YpCxqKH0ypGEKl5a6fLqoH8MMw
-         f8SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=B6h9ZiEvk3OjrxZiLfOl6jy0sUhDT3fazDwCa5g6frs=;
-        b=KDhrDzshOusbGuAQR8lK3MIakqR11VWY8sYUsuSmB3vlDZvREkgLiNa3nomrE+mW2H
-         BvYB39RnMfgbgt1oB5P8G3mYS0MGIC+UNZympqT3mB6O6XdHfCxsu3l2pKaqWy0Forac
-         sslr7UasdI5prDHNlLpkNhgcAIznNCQcx13Y91uIOIZsiIZtMC/Haz7Wk86Iqcs2MYmk
-         R6GfFxilTyPQfFWOWsnezXFt6iXe7cNHw+pbXfKAJhYnXjbqeYqaqGZfzgXhBA6Rguhf
-         Dp9OrTms9TnlJpwM27hQL5fm2T69XVgl3zyT3b7EDEzjJ2Vbc0RrVmzlHvPyf4Rr6LGM
-         0zrA==
-X-Gm-Message-State: AOAM532mtUrBFsoR1zKjzC4wgV9cAnMRjpBPsqdflm24O7iIOSTkzZ0u
-        Y5XnjGNwHeUzmqslhS8dWDZPUQ==
-X-Google-Smtp-Source: ABdhPJxh5+BazkYu61xCb+72wUX5blxNp3zaRB7T4ZsXIuPKcNW/QJR2dpW9wpW3SOAFvEzbns2vig==
-X-Received: by 2002:adf:ea0e:: with SMTP id q14mr3674929wrm.389.1616501343004;
-        Tue, 23 Mar 2021 05:09:03 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:4cfd:1405:ab5d:85f8])
-        by smtp.gmail.com with ESMTPSA id r26sm2338599wmn.28.2021.03.23.05.09.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 05:09:02 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 13:08:55 +0100
-From:   Marco Elver <elver@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        Tue, 23 Mar 2021 09:52:47 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4F4Xnd6vvQz92yY;
+        Tue, 23 Mar 2021 21:50:45 +0800 (CST)
+Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 23 Mar 2021 21:52:34 +0800
+From:   Yanan Wang <wangyanan55@huawei.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Xu <peterx@redhat.com>, "Ingo Molnar" <mingo@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH RFC v2 8/8] selftests/perf: Add kselftest for
- remove_on_exec
-Message-ID: <YFnaV/uY/fN9WI5+@elver.google.com>
-References: <20210310104139.679618-1-elver@google.com>
- <20210310104139.679618-9-elver@google.com>
- <YFiamKX+xYH2HJ4E@elver.google.com>
- <YFjI5qU0z3Q7J/jF@hirez.programming.kicks-ass.net>
- <YFm6aakSRlF2nWtu@elver.google.com>
- <YFnDo7dczjDzLP68@hirez.programming.kicks-ass.net>
- <CANpmjNO1mRBFBQ6Rij-6ojVPKkaB6JLHD2WOVxhQeqxsqit2-Q@mail.gmail.com>
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
+        Yanan Wang <wangyanan55@huawei.com>
+Subject: [RFC PATCH v5 00/10] KVM: selftests: some improvement and a new test for kvm page table
+Date:   Tue, 23 Mar 2021 21:52:21 +0800
+Message-ID: <20210323135231.24948-1-wangyanan55@huawei.com>
+X-Mailer: git-send-email 2.8.4.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNO1mRBFBQ6Rij-6ojVPKkaB6JLHD2WOVxhQeqxsqit2-Q@mail.gmail.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+Content-Type: text/plain
+X-Originating-IP: [10.174.187.128]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 11:41AM +0100, Marco Elver wrote:
-> On Tue, 23 Mar 2021 at 11:32, Peter Zijlstra <peterz@infradead.org> wrote:
-[...]
-> > > +             if (parent_event) {
-> > >                       /*
-> > > +                      * Remove event from parent, to avoid race where the
-> > > +                      * parent concurrently iterates through its children to
-> > > +                      * enable, disable, or otherwise modify an event.
-> > >                        */
-> > > +                     mutex_lock(&parent_event->child_mutex);
-> > > +                     list_del_init(&event->child_list);
-> > > +                     mutex_unlock(&parent_event->child_mutex);
-> > >               }
-> >
-> >                 ^^^ this, right?
-> >
-> > But that's something perf_event_exit_event() alread does. So then you're
-> > worried about the order of things.
-> 
-> Correct. We somehow need to prohibit the parent from doing an
-> event_function_call() while we potentially deactivate the context with
-> perf_remove_from_context().
-> 
-> > > +
-> > > +             perf_remove_from_context(event, !!event->parent * DETACH_GROUP);
-> > > +             perf_event_exit_event(event, ctx, current, true);
-> > >       }
-> >
-> > perf_event_release_kernel() first does perf_remove_from_context() and
-> > then clears the child_list, and that makes sense because if we're there,
-> > there's no external access anymore, the filedesc is gone and nobody will
-> > be iterating child_list anymore.
-> >
-> > perf_event_exit_task_context() and perf_event_exit_event() OTOH seem to
-> > rely on ctx->task == TOMBSTONE to sabotage event_function_call() such
-> > that if anybody is iterating the child_list, it'll NOP out.
-> >
-> > But here we don't have neither, and thus need to worry about the order
-> > vs child_list iteration.
-> >
-> > I suppose we should stick sync_child_event() in there as well.
-> >
-> > And at that point there's very little value in still using
-> > perf_event_exit_event()... let me see if there's something to be done
-> > about that.
-> 
-> I don't mind dropping use of perf_event_exit_event() and open coding
-> all of this. That would also avoid modifying perf_event_exit_event().
-> 
-> But I leave it to you what you think is nicest.
+Hi,
+This v5 series can mainly include two parts.
+Based on kvm queue branch: https://git.kernel.org/pub/scm/virt/kvm/kvm.git/log/?h=queue
 
-I played a bit more with it, and the below would be the version without
-using perf_event_exit_event(). Perhaps it isn't too bad.
+In the first part, all the known hugetlb backing src types specified
+with different hugepage sizes are listed, so that we can specify use
+of hugetlb source of the exact granularity that we want, instead of
+the system default ones. And as all the known hugetlb page sizes are
+listed, it's appropriate for all architectures. Besides, a helper that
+can get granularity of different backing src types(anonumous/thp/hugetlb)
+is added, so that we can use the accurate backing src granularity for
+kinds of alignment or guest memory accessing of vcpus.
 
-Thanks,
--- Marco
+In the second part, a new test is added:
+This test is added to serve as a performance tester and a bug reproducer
+for kvm page table code (GPA->HPA mappings), it gives guidance for the
+people trying to make some improvement for kvm. And the following explains
+what we can exactly do through this test.
 
------- >8 ------
+The function guest_code() can cover the conditions where a single vcpu or
+multiple vcpus access guest pages within the same memory region, in three
+VM stages(before dirty logging, during dirty logging, after dirty logging).
+Besides, the backing src memory type(ANONYMOUS/THP/HUGETLB) of the tested
+memory region can be specified by users, which means normal page mappings
+or block mappings can be chosen by users to be created in the test.
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index aa47e111435e..288b61820dab 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -2165,8 +2165,9 @@ static void perf_group_detach(struct perf_event *event)
- 	 * If this is a sibling, remove it from its group.
- 	 */
- 	if (leader != event) {
-+		leader->nr_siblings--;
- 		list_del_init(&event->sibling_list);
--		event->group_leader->nr_siblings--;
-+		event->group_leader = event;
- 		goto out;
- 	}
- 
-@@ -2180,8 +2181,9 @@ static void perf_group_detach(struct perf_event *event)
- 		if (sibling->event_caps & PERF_EV_CAP_SIBLING)
- 			perf_remove_sibling_event(sibling);
- 
--		sibling->group_leader = sibling;
-+		leader->nr_siblings--;
- 		list_del_init(&sibling->sibling_list);
-+		sibling->group_leader = sibling;
- 
- 		/* Inherit group flags from the previous leader */
- 		sibling->group_caps = event->group_caps;
-@@ -2358,10 +2360,19 @@ __perf_remove_from_context(struct perf_event *event,
- static void perf_remove_from_context(struct perf_event *event, unsigned long flags)
- {
- 	struct perf_event_context *ctx = event->ctx;
-+	bool remove;
- 
- 	lockdep_assert_held(&ctx->mutex);
- 
--	event_function_call(event, __perf_remove_from_context, (void *)flags);
-+	/*
-+	 * There is concurrency vs remove_on_exec().
-+	 */
-+	raw_spin_lock_irq(&ctx->lock);
-+	remove = (event->attach_state & PERF_ATTACH_CONTEXT);
-+	raw_spin_unlock_irq(&ctx->lock);
-+
-+	if (remove)
-+		event_function_call(event, __perf_remove_from_context, (void *)flags);
- 
- 	/*
- 	 * The above event_function_call() can NO-OP when it hits
-@@ -4196,43 +4207,86 @@ static void perf_event_enable_on_exec(int ctxn)
- }
- 
- static void perf_remove_from_owner(struct perf_event *event);
--static void perf_event_exit_event(struct perf_event *child_event,
--				  struct perf_event_context *child_ctx,
--				  struct task_struct *child);
-+static void sync_child_event(struct perf_event *child_event,
-+			     struct task_struct *child);
-+static void free_event(struct perf_event *event);
- 
- /*
-  * Removes all events from the current task that have been marked
-  * remove-on-exec, and feeds their values back to parent events.
-  */
--static void perf_event_remove_on_exec(void)
-+static void perf_event_remove_on_exec(int ctxn)
- {
--	int ctxn;
-+	struct perf_event_context *ctx, *clone_ctx = NULL;
-+	struct perf_event *event, *next;
-+	LIST_HEAD(free_list);
-+	unsigned long flags;
-+	bool modified = false;
- 
--	for_each_task_context_nr(ctxn) {
--		struct perf_event_context *ctx;
--		struct perf_event *event, *next;
-+	ctx = perf_pin_task_context(current, ctxn);
-+	if (!ctx)
-+		return;
- 
--		ctx = perf_pin_task_context(current, ctxn);
--		if (!ctx)
-+	mutex_lock(&ctx->mutex);
-+
-+	if (WARN_ON_ONCE(ctx->task != current))
-+		goto unlock;
-+
-+	list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
-+		struct perf_event *parent_event = event->parent;
-+
-+		if (!event->attr.remove_on_exec)
- 			continue;
--		mutex_lock(&ctx->mutex);
- 
--		list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
--			if (!event->attr.remove_on_exec)
--				continue;
-+		if (!is_kernel_event(event))
-+			perf_remove_from_owner(event);
-+
-+		modified = true;
- 
--			if (!is_kernel_event(event))
--				perf_remove_from_owner(event);
--			perf_remove_from_context(event, DETACH_GROUP);
-+		if (parent_event) {
- 			/*
--			 * Remove the event and feed back its values to the
--			 * parent event.
-+			 * Remove event from parent *before* modifying contexts,
-+			 * to avoid race where the parent concurrently iterates
-+			 * through its children to enable, disable, or otherwise
-+			 * modify an event.
- 			 */
--			perf_event_exit_event(event, ctx, current);
-+
-+			sync_child_event(event, current);
-+
-+			WARN_ON_ONCE(parent_event->ctx->parent_ctx);
-+			mutex_lock(&parent_event->child_mutex);
-+			list_del_init(&event->child_list);
-+			mutex_unlock(&parent_event->child_mutex);
-+
-+			perf_event_wakeup(parent_event);
-+			put_event(parent_event);
- 		}
--		mutex_unlock(&ctx->mutex);
--		put_ctx(ctx);
-+
-+		perf_remove_from_context(event, !!event->parent * DETACH_GROUP);
-+
-+		raw_spin_lock_irq(&ctx->lock);
-+		WARN_ON_ONCE(ctx->is_active);
-+		perf_event_set_state(event, PERF_EVENT_STATE_EXIT); /* is_event_hup() */
-+		raw_spin_unlock_irq(&ctx->lock);
-+
-+		if (parent_event)
-+			free_event(event);
-+		else
-+			perf_event_wakeup(event);
- 	}
-+
-+	raw_spin_lock_irqsave(&ctx->lock, flags);
-+	if (modified)
-+		clone_ctx = unclone_ctx(ctx);
-+	--ctx->pin_count;
-+	raw_spin_unlock_irqrestore(&ctx->lock, flags);
-+
-+unlock:
-+	mutex_unlock(&ctx->mutex);
-+
-+	put_ctx(ctx);
-+	if (clone_ctx)
-+		put_ctx(clone_ctx);
- }
- 
- struct perf_read_data {
-@@ -7581,20 +7635,18 @@ void perf_event_exec(void)
- 	struct perf_event_context *ctx;
- 	int ctxn;
- 
--	rcu_read_lock();
- 	for_each_task_context_nr(ctxn) {
--		ctx = current->perf_event_ctxp[ctxn];
--		if (!ctx)
--			continue;
--
- 		perf_event_enable_on_exec(ctxn);
-+		perf_event_remove_on_exec(ctxn);
- 
--		perf_iterate_ctx(ctx, perf_event_addr_filters_exec, NULL,
--				   true);
-+		rcu_read_lock();
-+		ctx = rcu_dereference(current->perf_event_ctxp[ctxn]);
-+		if (ctx) {
-+			perf_iterate_ctx(ctx, perf_event_addr_filters_exec,
-+					 NULL, true);
-+		}
-+		rcu_read_unlock();
- 	}
--	rcu_read_unlock();
--
--	perf_event_remove_on_exec();
- }
- 
- struct remote_output {
+If ANONYMOUS memory is specified, kvm will create normal page mappings
+for the tested memory region before dirty logging, and update attributes
+of the page mappings from RO to RW during dirty logging. If THP/HUGETLB
+memory is specified, kvm will create block mappings for the tested memory
+region before dirty logging, and split the blcok mappings into normal page
+mappings during dirty logging, and coalesce the page mappings back into
+block mappings after dirty logging is stopped.
+
+So in summary, as a performance tester, this test can present the
+performance of kvm creating/updating normal page mappings, or the
+performance of kvm creating/splitting/recovering block mappings,
+through execution time.
+
+When we need to coalesce the page mappings back to block mappings after
+dirty logging is stopped, we have to firstly invalidate *all* the TLB
+entries for the page mappings right before installation of the block entry,
+because a TLB conflict abort error could occur if we can't invalidate the
+TLB entries fully. We have hit this TLB conflict twice on aarch64 software
+implementation and fixed it. As this test can imulate process from dirty
+logging enabled to dirty logging stopped of a VM with block mappings,
+so it can also reproduce this TLB conflict abort due to inadequate TLB
+invalidation when coalescing tables.
+
+Links about the TLB conflict abort:
+https://lore.kernel.org/lkml/20201201201034.116760-3-wangyanan55@huawei.com/
+
+---
+
+Change logs:
+
+v4->v5:
+- Use synchronization(sem_wait) for time measurement
+- Add a new patch about TEST_ASSERT(patch 4)
+- Address Andrew Jones's comments for v4 series
+- Add Andrew Jones's R-b tags in some patches
+- v4: https://lore.kernel.org/lkml/20210302125751.19080-1-wangyanan55@huawei.com/
+
+v3->v4:
+- Add a helper to get system default hugetlb page size
+- Add tags of Reviewed-by of Ben in the patches
+- v3: https://lore.kernel.org/lkml/20210301065916.11484-1-wangyanan55@huawei.com/
+
+v2->v3:
+- Add tags of Suggested-by, Reviewed-by in the patches
+- Add a generic micro to get hugetlb page sizes
+- Some changes for suggestions about v2 series
+- v2: https://lore.kernel.org/lkml/20210225055940.18748-1-wangyanan55@huawei.com/
+
+v1->v2:
+- Add a patch to sync header files
+- Add helpers to get granularity of different backing src types
+- Some changes for suggestions about v1 series
+- v1: https://lore.kernel.org/lkml/20210208090841.333724-1-wangyanan55@huawei.com/
+
+---
+
+Yanan Wang (10):
+  tools headers: sync headers of asm-generic/hugetlb_encode.h
+  tools headers: Add a macro to get HUGETLB page sizes for mmap
+  KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
+  KVM: selftests: Print the errno besides error-string in TEST_ASSERT
+  KVM: selftests: Make a generic helper to get vm guest mode strings
+  KVM: selftests: Add a helper to get system configured THP page size
+  KVM: selftests: Add a helper to get system default hugetlb page size
+  KVM: selftests: List all hugetlb src types specified with page sizes
+  KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
+  KVM: selftests: Add a test for kvm page table code
+
+ include/uapi/linux/mman.h                     |   2 +
+ tools/include/asm-generic/hugetlb_encode.h    |   3 +
+ tools/include/uapi/linux/mman.h               |   2 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../selftests/kvm/demand_paging_test.c        |   8 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |  14 +-
+ .../testing/selftests/kvm/include/kvm_util.h  |   4 +-
+ .../testing/selftests/kvm/include/test_util.h |  21 +-
+ .../selftests/kvm/kvm_page_table_test.c       | 512 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/assert.c      |   4 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  59 +-
+ tools/testing/selftests/kvm/lib/test_util.c   | 163 +++++-
+ tools/testing/selftests/kvm/steal_time.c      |   4 +-
+ 14 files changed, 739 insertions(+), 61 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_page_table_test.c
+
+-- 
+2.23.0
+
