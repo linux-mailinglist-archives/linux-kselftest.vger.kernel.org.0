@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C133346043
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Mar 2021 14:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BAC346053
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Mar 2021 14:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbhCWNxG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Mar 2021 09:53:06 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13670 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbhCWNwx (ORCPT
+        id S231683AbhCWNxe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Mar 2021 09:53:34 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14074 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231600AbhCWNxF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Mar 2021 09:52:53 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F4Xn75GXkznV6l;
-        Tue, 23 Mar 2021 21:50:19 +0800 (CST)
+        Tue, 23 Mar 2021 09:53:05 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F4XnD4JDLzPkDC;
+        Tue, 23 Mar 2021 21:50:24 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 23 Mar 2021 21:52:43 +0800
+ 14.3.498.0; Tue, 23 Mar 2021 21:52:44 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
@@ -34,9 +34,9 @@ CC:     Ben Gardon <bgardon@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v5 06/10] KVM: selftests: Add a helper to get system configured THP page size
-Date:   Tue, 23 Mar 2021 21:52:27 +0800
-Message-ID: <20210323135231.24948-7-wangyanan55@huawei.com>
+Subject: [RFC PATCH v5 07/10] KVM: selftests: Add a helper to get system default hugetlb page size
+Date:   Tue, 23 Mar 2021 21:52:28 +0800
+Message-ID: <20210323135231.24948-8-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210323135231.24948-1-wangyanan55@huawei.com>
 References: <20210323135231.24948-1-wangyanan55@huawei.com>
@@ -48,79 +48,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If we want to have some tests about transparent hugepages, the system
-configured THP hugepage size should better be known by the tests, which
-can be used for kinds of alignment or guest memory accessing of vcpus...
-So it makes sense to add a helper to get the transparent hugepage size.
+If HUGETLB is configured in the host kernel, then we can know the system
+default hugetlb page size through *cat /proc/meminfo*. Otherwise, we will
+not see the information of hugetlb pages in file /proc/meminfo if it's not
+configured. So add a helper to determine whether HUGETLB is configured and
+then get the default page size by reading /proc/meminfo.
 
-With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
-we now stat /sys/kernel/mm/transparent_hugepage to check whether THP is
-configured in the host kernel before madvise(). Based on this, we can also
-read file /sys/kernel/mm/transparent_hugepage/hpage_pmd_size to get THP
-hugepage size.
+This helper can be useful when a program wants to use the default hugetlb
+pages of the system and doesn't know the default page size.
 
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
+Reviewed-by: Andrew Jones <drjones@redhat.com>
 ---
- .../testing/selftests/kvm/include/test_util.h |  2 ++
- tools/testing/selftests/kvm/lib/test_util.c   | 29 +++++++++++++++++++
- 2 files changed, 31 insertions(+)
+ .../testing/selftests/kvm/include/test_util.h |  1 +
+ tools/testing/selftests/kvm/lib/test_util.c   | 25 +++++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index b7f41399f22c..ef24c76ba89a 100644
+index ef24c76ba89a..e087174eefe5 100644
 --- a/tools/testing/selftests/kvm/include/test_util.h
 +++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -78,6 +78,8 @@ struct vm_mem_backing_src_alias {
- 	enum vm_mem_backing_src_type type;
- };
+@@ -80,6 +80,7 @@ struct vm_mem_backing_src_alias {
  
-+bool thp_configured(void);
-+size_t get_trans_hugepagesz(void);
+ bool thp_configured(void);
+ size_t get_trans_hugepagesz(void);
++size_t get_def_hugetlb_pagesz(void);
  void backing_src_help(void);
  enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
  
 diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index c7c0627c6842..efc1a7782de0 100644
+index efc1a7782de0..665724ccab97 100644
 --- a/tools/testing/selftests/kvm/lib/test_util.c
 +++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -10,6 +10,7 @@
- #include <limits.h>
- #include <stdlib.h>
- #include <time.h>
-+#include <sys/stat.h>
- #include "linux/kernel.h"
+@@ -146,6 +146,31 @@ size_t get_trans_hugepagesz(void)
+ 	return size;
+ }
  
- #include "test_util.h"
-@@ -117,6 +118,34 @@ const struct vm_mem_backing_src_alias backing_src_aliases[] = {
- 	{"anonymous_hugetlb", VM_MEM_SRC_ANONYMOUS_HUGETLB,},
- };
- 
-+bool thp_configured(void)
++size_t get_def_hugetlb_pagesz(void)
 +{
-+	int ret;
-+	struct stat statbuf;
-+
-+	ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
-+	TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
-+		    "Error in stating /sys/kernel/mm/transparent_hugepage");
-+
-+	return ret == 0;
-+}
-+
-+size_t get_trans_hugepagesz(void)
-+{
-+	size_t size;
++	char buf[64];
++	const char *tag = "Hugepagesize:";
 +	FILE *f;
 +
-+	TEST_ASSERT(thp_configured(), "THP is not configured in host kernel");
++	f = fopen("/proc/meminfo", "r");
++	TEST_ASSERT(f != NULL, "Error in opening /proc/meminfo");
 +
-+	f = fopen("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size", "r");
-+	TEST_ASSERT(f != NULL, "Error in opening transparent_hugepage/hpage_pmd_size");
++	while (fgets(buf, sizeof(buf), f) != NULL) {
++		if (strstr(buf, tag) == buf) {
++			fclose(f);
++			return strtoull(buf + strlen(tag), NULL, 10) << 10;
++		}
++	}
 +
-+	fscanf(f, "%ld", &size);
++	if (feof(f))
++		TEST_FAIL("HUGETLB is not configured in host kernel");
++	else
++		TEST_FAIL("Error in reading /proc/meminfo");
++
 +	fclose(f);
-+
-+	return size;
++	return 0;
 +}
 +
  void backing_src_help(void)
