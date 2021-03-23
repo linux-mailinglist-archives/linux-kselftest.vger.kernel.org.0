@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8201134603F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Mar 2021 14:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C133346043
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Mar 2021 14:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbhCWNxF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Mar 2021 09:53:05 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13672 "EHLO
+        id S231689AbhCWNxG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Mar 2021 09:53:06 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:13670 "EHLO
         szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbhCWNwx (ORCPT
+        with ESMTP id S231516AbhCWNwx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 23 Mar 2021 09:52:53 -0400
 Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F4Xn75h66znVCg;
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F4Xn75GXkznV6l;
         Tue, 23 Mar 2021 21:50:19 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 23 Mar 2021 21:52:41 +0800
+ 14.3.498.0; Tue, 23 Mar 2021 21:52:43 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
@@ -34,9 +34,9 @@ CC:     Ben Gardon <bgardon@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v5 05/10] KVM: selftests: Make a generic helper to get vm guest mode strings
-Date:   Tue, 23 Mar 2021 21:52:26 +0800
-Message-ID: <20210323135231.24948-6-wangyanan55@huawei.com>
+Subject: [RFC PATCH v5 06/10] KVM: selftests: Add a helper to get system configured THP page size
+Date:   Tue, 23 Mar 2021 21:52:27 +0800
+Message-ID: <20210323135231.24948-7-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210323135231.24948-1-wangyanan55@huawei.com>
 References: <20210323135231.24948-1-wangyanan55@huawei.com>
@@ -48,81 +48,84 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For generality and conciseness, make an API which can be used in all
-kvm libs and selftests to get vm guest mode strings. And the index i
-is checked in the API in case of possiable faults.
+If we want to have some tests about transparent hugepages, the system
+configured THP hugepage size should better be known by the tests, which
+can be used for kinds of alignment or guest memory accessing of vcpus...
+So it makes sense to add a helper to get the transparent hugepage size.
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
+With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
+we now stat /sys/kernel/mm/transparent_hugepage to check whether THP is
+configured in the host kernel before madvise(). Based on this, we can also
+read file /sys/kernel/mm/transparent_hugepage/hpage_pmd_size to get THP
+hugepage size.
+
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-Reviewed-by: Andrew Jones <drjones@redhat.com>
 Reviewed-by: Ben Gardon <bgardon@google.com>
 ---
- .../testing/selftests/kvm/include/kvm_util.h  |  4 +--
- tools/testing/selftests/kvm/lib/kvm_util.c    | 29 ++++++++++++-------
- 2 files changed, 19 insertions(+), 14 deletions(-)
+ .../testing/selftests/kvm/include/test_util.h |  2 ++
+ tools/testing/selftests/kvm/lib/test_util.c   | 29 +++++++++++++++++++
+ 2 files changed, 31 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 2d7eb6989e83..f52a7492f47f 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -68,9 +68,6 @@ enum vm_guest_mode {
- #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
- #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index b7f41399f22c..ef24c76ba89a 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -78,6 +78,8 @@ struct vm_mem_backing_src_alias {
+ 	enum vm_mem_backing_src_type type;
+ };
  
--#define vm_guest_mode_string(m) vm_guest_mode_string[m]
--extern const char * const vm_guest_mode_string[];
--
- struct vm_guest_mode_params {
- 	unsigned int pa_bits;
- 	unsigned int va_bits;
-@@ -84,6 +81,7 @@ int vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap);
- int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
- 		    struct kvm_enable_cap *cap);
- void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
-+const char *vm_guest_mode_string(uint32_t i);
++bool thp_configured(void);
++size_t get_trans_hugepagesz(void);
+ void backing_src_help(void);
+ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
  
- struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
- void kvm_vm_free(struct kvm_vm *vmp);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index e5fbf16f725b..2ea837fe03af 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -143,17 +143,24 @@ static void vm_open(struct kvm_vm *vm, int perm)
- 		"rc: %i errno: %i", vm->fd, errno);
- }
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index c7c0627c6842..efc1a7782de0 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -10,6 +10,7 @@
+ #include <limits.h>
+ #include <stdlib.h>
+ #include <time.h>
++#include <sys/stat.h>
+ #include "linux/kernel.h"
  
--const char * const vm_guest_mode_string[] = {
--	"PA-bits:52,  VA-bits:48,  4K pages",
--	"PA-bits:52,  VA-bits:48, 64K pages",
--	"PA-bits:48,  VA-bits:48,  4K pages",
--	"PA-bits:48,  VA-bits:48, 64K pages",
--	"PA-bits:40,  VA-bits:48,  4K pages",
--	"PA-bits:40,  VA-bits:48, 64K pages",
--	"PA-bits:ANY, VA-bits:48,  4K pages",
--};
--_Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
--	       "Missing new mode strings?");
-+const char *vm_guest_mode_string(uint32_t i)
+ #include "test_util.h"
+@@ -117,6 +118,34 @@ const struct vm_mem_backing_src_alias backing_src_aliases[] = {
+ 	{"anonymous_hugetlb", VM_MEM_SRC_ANONYMOUS_HUGETLB,},
+ };
+ 
++bool thp_configured(void)
 +{
-+	static const char * const strings[] = {
-+		[VM_MODE_P52V48_4K]	= "PA-bits:52,  VA-bits:48,  4K pages",
-+		[VM_MODE_P52V48_64K]	= "PA-bits:52,  VA-bits:48, 64K pages",
-+		[VM_MODE_P48V48_4K]	= "PA-bits:48,  VA-bits:48,  4K pages",
-+		[VM_MODE_P48V48_64K]	= "PA-bits:48,  VA-bits:48, 64K pages",
-+		[VM_MODE_P40V48_4K]	= "PA-bits:40,  VA-bits:48,  4K pages",
-+		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
-+		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
-+	};
-+	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
-+		       "Missing new mode strings?");
++	int ret;
++	struct stat statbuf;
 +
-+	TEST_ASSERT(i < NUM_VM_MODES, "Guest mode ID %d too big", i);
++	ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
++	TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
++		    "Error in stating /sys/kernel/mm/transparent_hugepage");
 +
-+	return strings[i];
++	return ret == 0;
 +}
- 
- const struct vm_guest_mode_params vm_guest_mode_params[] = {
- 	{ 52, 48,  0x1000, 12 },
++
++size_t get_trans_hugepagesz(void)
++{
++	size_t size;
++	FILE *f;
++
++	TEST_ASSERT(thp_configured(), "THP is not configured in host kernel");
++
++	f = fopen("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size", "r");
++	TEST_ASSERT(f != NULL, "Error in opening transparent_hugepage/hpage_pmd_size");
++
++	fscanf(f, "%ld", &size);
++	fclose(f);
++
++	return size;
++}
++
+ void backing_src_help(void)
+ {
+ 	int i;
 -- 
 2.19.1
 
