@@ -2,150 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F03345282
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Mar 2021 23:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B567E34538B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Mar 2021 01:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbhCVWo5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Mar 2021 18:44:57 -0400
-Received: from mga09.intel.com ([134.134.136.24]:14973 "EHLO mga09.intel.com"
+        id S230267AbhCWADB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Mar 2021 20:03:01 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46546 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229639AbhCVWor (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Mar 2021 18:44:47 -0400
-IronPort-SDR: 3XVnfYDZQ/siAJEUhSG2SPDz5ZYwXlecDBlAHHrpIi0qDlSYjR8dbQs7aau3XWGjID99ntvjyM
- ZryPIg430LvQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="190456249"
-X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="190456249"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 15:44:46 -0700
-IronPort-SDR: Cs90cP332n3ZwIZ+y9pl7057fKYog23Iah6j7pRk3RlXtypyIKmOoS8gd8Dobj3vdvqWv+XFt4
- NCdy85z+Y8mQ==
-X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="408012774"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 15:44:46 -0700
-Date:   Mon, 22 Mar 2021 15:44:46 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V4 06/10] x86/fault: Adjust WARN_ON for PKey fault
-Message-ID: <20210322224446.GQ3014244@iweiny-DESK2.sc.intel.com>
-References: <20210322053020.2287058-1-ira.weiny@intel.com>
- <20210322053020.2287058-7-ira.weiny@intel.com>
- <YFjAV44u7i9t1TDL@google.com>
+        id S229537AbhCWACl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 22 Mar 2021 20:02:41 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 3C969ADF1;
+        Tue, 23 Mar 2021 00:02:40 +0000 (UTC)
+To:     David Rientjes <rientjes@google.com>
+Cc:     kernel test robot <oliver.sang@intel.com>, glittao@gmail.com,
+        0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+References: <20210317083612.GD22345@xsang-OptiPlex-9020>
+ <a389a8fb-2043-3b13-5180-e1f87e4d4a66@suse.cz>
+ <a3f6261b-22b-89f1-ec24-7516f0fa1d4c@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [selftests] e48d82b67a:
+ BUG_TestSlub_RZ_alloc(Not_tainted):Redzone_overwritten
+Message-ID: <7789b386-bddd-37ba-fccd-370f1340e698@suse.cz>
+Date:   Tue, 23 Mar 2021 01:02:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YFjAV44u7i9t1TDL@google.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <a3f6261b-22b-89f1-ec24-7516f0fa1d4c@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 09:05:43AM -0700, Sean Christopherson wrote:
-> On Sun, Mar 21, 2021, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > PKey faults may now happen on kernel mappings if the feature is enabled.
-> > Remove the warning in the fault path if PKS is enabled.
+On 3/17/21 7:53 PM, David Rientjes wrote:
+> On Wed, 17 Mar 2021, Vlastimil Babka wrote:
+>> > 
+>> > [   22.154049] random: get_random_u32 called from __kmem_cache_create+0x23/0x3e0 with crng_init=0 
+>> > [   22.154070] random: get_random_u32 called from cache_random_seq_create+0x7c/0x140 with crng_init=0 
+>> > [   22.154167] random: get_random_u32 called from allocate_slab+0x155/0x5e0 with crng_init=0 
+>> > [   22.154690] test_slub: 1. kmem_cache: Clobber Redzone 0x12->0x(ptrval)
+>> > [   22.164499] =============================================================================
+>> > [   22.166629] BUG TestSlub_RZ_alloc (Not tainted): Redzone overwritten
+>> > [   22.168179] -----------------------------------------------------------------------------
+>> > [   22.168179]
+>> > [   22.168372] Disabling lock debugging due to kernel taint
+>> > [   22.168372] INFO: 0x(ptrval)-0x(ptrval) @offset=1064. First byte 0x12 instead of 0xcc
+>> > [   22.168372] INFO: Allocated in resiliency_test+0x47/0x1be age=3 cpu=0 pid=1 
+>> > [   22.168372] __slab_alloc+0x57/0x80 
+>> > [   22.168372] kmem_cache_alloc (kbuild/src/consumer/mm/slub.c:2871 kbuild/src/consumer/mm/slub.c:2915 kbuild/src/consumer/mm/slub.c:2920) 
+>> > [   22.168372] resiliency_test (kbuild/src/consumer/lib/test_slub.c:34 kbuild/src/consumer/lib/test_slub.c:107) 
+>> > [   22.168372] test_slub_init (kbuild/src/consumer/lib/test_slub.c:124) 
+>> > [   22.168372] do_one_initcall (kbuild/src/consumer/init/main.c:1226) 
+>> > [   22.168372] kernel_init_freeable (kbuild/src/consumer/init/main.c:1298 kbuild/src/consumer/init/main.c:1315 kbuild/src/consumer/init/main.c:1335 kbuild/src/consumer/init/main.c:1537) 
+>> > [   22.168372] kernel_init (kbuild/src/consumer/init/main.c:1426) 
+>> > [   22.168372] ret_from_fork (kbuild/src/consumer/arch/x86/entry/entry_32.S:856) 
+>> > [   22.168372] INFO: Slab 0x(ptrval) objects=16 used=1 fp=0x(ptrval) flags=0x40000201
+>> > [   22.168372] INFO: Object 0x(ptrval) @offset=1000 fp=0x(ptrval)
+>> > [   22.168372]
+>> > [   22.168372] Redzone (ptrval): cc cc cc cc cc cc cc cc                          ........
+>> > [   22.168372] Object (ptrval): 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b  kkkkkkkkkkkkkkkk
+>> > [   22.168372] Object (ptrval): 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  kkkkkkkkkkkkkkk.
+>> > [   22.168372] Redzone (ptrval): 12 cc cc cc                                      ....
+>> > [   22.168372] Padding (ptrval): 5a 5a 5a 5a 5a 5a 5a 5a                          ZZZZZZZZ
+>> > [   22.168372] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G    B             5.12.0-rc2-00001-ge48d82b67a2b #1
+>> > [   22.168372] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+>> > [   22.168372] Call Trace:
+>> > [   22.168372] dump_stack (kbuild/src/consumer/lib/dump_stack.c:122) 
+>> > [   22.168372] print_trailer (kbuild/src/consumer/mm/slub.c:737) 
+>> > [   22.168372] check_bytes_and_report.cold (kbuild/src/consumer/mm/slub.c:807) 
+>> > [   22.168372] check_object (kbuild/src/consumer/mm/slub.c:914) 
+>> > [   22.168372] validate_slab (kbuild/src/consumer/mm/slub.c:4635) 
+>> 
+>> Hm but in this case the output means the tested functionality (slub debugging)
+>> is working as intended. So what can we do? Indicate/teach somehow to the bot
+>> that this is OK? Does kselftest have some support for this? Or silence the
+>> validation output for testing purposes? (I would prefer not to)
+>> 
 > 
-> When/why can they happen?  I read through all the changelogs, as well as the
-> cover letters for v1 and the RFC, and didn't see any explicit statement about
-> why pkey faults on supervisor accesses are now "legal".
-
-Ok, I have to admit I did not think about documenting this detail...  I'll
-update the commit message a bit more.
-
-Prior to this series pkeys were only supported on user page mappings.
-Therefore seeing a X86_PF_PK error in this path was completely unexpected and
-warranted the extra WARN_ON to indicate that something went very wrong.
-
-> Explaining what happens
-> later in the page fault handler would also be helpful, e.g. is the flag simply
-> ignored?
-
-Ok I'll do this.  But the behavior does not change.  The fault is unhandled and
-results in an Ooops.  The only difference is that if PKS is enabled and
-configured on a kernel mapping the oops is to be expected.
-
-> Does it lead directly to OOPS?
-
-Yes, the series concludes with it being an ooops unless the test code is
-running.  The behavior does not change from before.  I'll more clearly document
-that...
-
+> Unless you're familiar with everything that CONFIG_TEST_SLUB does, maybe 
+> this could be inferred as an actual issue that the test has uncovered that 
+> is unexpected?
 > 
-> Documenting what happens on a PKS #PF in the API patch would be nice to have, too.
+> I don't have a good way of silencing the check_bytes_and_report() output 
+> other than a big hammer: implement {disable,enable}_slub_warnings() that 
+> the resiliency test could call into before triggering these checks.
 
-Ok, yes, good idea.
+So Oliver has implemented this, but now I got a different idea that should be
+much cleaner IMHO. We could add a per-cache flag SLAB_SILENT_ERRORS (similar to
+SLAB_RED_ZONE etc) instead of a global bool. The test would just create the
+caches with this flag.
+The flag should be added to the SLAB_NEVER_MERGE, SLAB_DEBUG_FLAGS,
+SLAB_FLAGS_PERMITTED macros as well.
 
-> 
-> > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > ---
-> >  arch/x86/mm/fault.c | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-> > index a73347e2cdfc..731ec90ed413 100644
-> > --- a/arch/x86/mm/fault.c
-> > +++ b/arch/x86/mm/fault.c
-> > @@ -1141,11 +1141,12 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
-> >  		   unsigned long address)
-> >  {
-> >  	/*
-> > -	 * Protection keys exceptions only happen on user pages.  We
-> > -	 * have no user pages in the kernel portion of the address
-> > -	 * space, so do not expect them here.
-> > +	 * PF_PK is expected on kernel addresses when supervisor pkeys are
-> 
-> "is expected" can be misinterpreted as "PF is expected on all kernel addresses...".
+A similar suggestion is that adding the errors counter parameter to all
+validate_slab_cache() and relevant functions is tedious - there are more that
+had to be modified like this than initially expected.
+Instead the error counter can be added to SLUB's struct kmem_cache definition,
+incremented by the various checks and the tests can look at that after validation.
 
-Yes the commit message was more clear by using 'may'.
-
-> 
-> This ties in with the lack of an explanation in the changelog.
-> 
-> > +	 * enabled.
-> 
-> It'd be helpful to spell out "Protection keys exceptions" so that random readers
-> don't need to search for PF_PK to understand what's up.  Maybe even use it as an
-> opportunity to introduce "pkeys", e.g.
-> 
-> 	/* Protection keys (pkeys) exceptions are ... */
-
-Fair enough.  Will do.  I've changed this to:
-
-        /*
-         * X86_PF_PK (Protection key exceptions) may occur on kernel addresses
-         * when PKS (PKeys Supervisor) are enabled.
-         *
-         * If PKS is not enabled an exception should only happen on user pages.
-         * Because, we have no user pages in the kernel portion of the address
-         * space something must have gone very wrong and we should WARN.
-         */
-
-> 
-> >  	 */
-> > -	WARN_ON_ONCE(hw_error_code & X86_PF_PK);
-> > +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-> > +		WARN_ON_ONCE(hw_error_code & X86_PF_PK);
-> 
-> Does this generate the same code if the whole thing is thrown in the WARN?  E.g.
-> 
-> 	WARN_ON_ONCE(!cpu_feature_enabled(X86_FEATURE_PKS) &&
-> 		     (hw_error_code & X86_PF_PK));
-
-I don't know in the general case.  But if CONFIG_BUG=n this would be better.
-
-I've changed it.
-
-Thanks!
-Ira
+Thanks,
+Vlastimil
