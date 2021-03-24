@@ -2,81 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F093482F4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Mar 2021 21:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10561348506
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Mar 2021 00:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238146AbhCXUfC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Mar 2021 16:35:02 -0400
-Received: from namei.org ([65.99.196.166]:51268 "EHLO mail.namei.org"
+        id S234071AbhCXXF4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Mar 2021 19:05:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59506 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238128AbhCXUen (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Mar 2021 16:34:43 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.namei.org (Postfix) with ESMTPS id 8051F4E1;
-        Wed, 24 Mar 2021 20:31:47 +0000 (UTC)
-Date:   Thu, 25 Mar 2021 07:31:47 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-cc:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v30 02/12] landlock: Add ruleset and domain management
-In-Reply-To: <acda4be1-4076-a31d-fcfd-27764dd598c8@digikod.net>
-Message-ID: <c9dc8adb-7fab-14a1-a658-40b288419fdf@namei.org>
-References: <20210316204252.427806-1-mic@digikod.net> <20210316204252.427806-3-mic@digikod.net> <202103191114.C87C5E2B69@keescook> <acda4be1-4076-a31d-fcfd-27764dd598c8@digikod.net>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1665246916-200031253-1616617907=:3442585"
+        id S234027AbhCXXFY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Mar 2021 19:05:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7369D61A10;
+        Wed, 24 Mar 2021 23:05:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1616627123;
+        bh=AEG7RhhDiP5fEemBnHg4pSVA89+Z5jifRafT/rWlPe0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MU587X1Yb8CzT0OgOco57QTCJqgtX01hd/LAxYo1HRHPWhRzmUADN2KMW+HqPejs9
+         +5mCIZNQr7APldHHO4wOzFRy6IKAYF+Q6WUfDZcp95Jg0HiEw4Blf6sLRQccCd6Oyq
+         LWgIbsmvkb274hjTru759T9dTDVTcCGyx7mmTi/c=
+Date:   Wed, 24 Mar 2021 16:05:22 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Ricardo =?ISO-8859-1?Q?Ca=F1uelo?= 
+        <ricardo.canuelo@collabora.com>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kael_w@yeah.net
+Subject: Re: [PATCH] tools: testing: Remove duplicate include of string.h
+Message-Id: <20210324160522.7b06ee1479b15ee65b9deea6@linux-foundation.org>
+In-Reply-To: <20210323033007.283521-1-wanjiabing@vivo.com>
+References: <20210323033007.283521-1-wanjiabing@vivo.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Tue, 23 Mar 2021 11:29:56 +0800 Wan Jiabing <wanjiabing@vivo.com> wrote:
 
---1665246916-200031253-1616617907=:3442585
-Content-Type: text/plain; charset=iso-8859-15
-Content-Transfer-Encoding: 8BIT
+> string.h has been included at line 15.So we remove the 
+> duplicate one at line 17.
 
-On Fri, 19 Mar 2021, Mickaël Salaün wrote:
-
-> 
-> >> Cc: Kees Cook <keescook@chromium.org>
-> >> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> >> Acked-by: Serge Hallyn <serge@hallyn.com>
-> >> Link: https://lore.kernel.org/r/20210316204252.427806-3-mic@digikod.net
-> > 
-> > (Aside: you appear to be self-adding your Link: tags -- AIUI, this is
-> > normally done by whoever pulls your series. I've only seen Link: tags
-> > added when needing to refer to something else not included in the
-> > series.)
-> 
-> It is an insurance to not lose history. :)
-
-How will history be lost? The code is in the repo and discussions can 
-easily be found by searching for subjects or message IDs.
-
-Is anyone else doing this self linking?
-
--- 
-James Morris
-<jmorris@namei.org>
-
---1665246916-200031253-1616617907=:3442585--
+Thanks.  But we already have
+https://lkml.kernel.org/r/20210316073336.426255-1-zhang.yunkai@zte.com.cn.
