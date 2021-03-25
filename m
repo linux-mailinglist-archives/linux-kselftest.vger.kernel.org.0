@@ -2,149 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69231348DCF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Mar 2021 11:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0F534915B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Mar 2021 13:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbhCYKRr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Mar 2021 06:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
+        id S230192AbhCYMBc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Mar 2021 08:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbhCYKRU (ORCPT
+        with ESMTP id S229888AbhCYMBB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Mar 2021 06:17:20 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2731EC061761
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 03:17:18 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id g25so863908wmh.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 03:17:17 -0700 (PDT)
+        Thu, 25 Mar 2021 08:01:01 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7EAC06174A;
+        Thu, 25 Mar 2021 05:01:01 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id v186so1546478pgv.7;
+        Thu, 25 Mar 2021 05:01:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LQYU7AshaChrIv5/sVzoGBNv4W3iyRIKQFQCOFPAGsA=;
-        b=aDRT36p1kgh5L+6KKg2GcwiS2kGmCefS5501HJavEe4puOS1g2TQ0VuHvw36qpETS8
-         LGn2FqE3X73sM00xuU4VxjOnZDlS8V5fM5my0l10nMJMTRvOVQ9Q8JkQinW7Fp34nsoO
-         PXHDCVEJCtopx6frWA5kbIRLpvVq4jocMQA60C3Fu50GBgIPSuKoPp68yrHJs4dp1xUc
-         Dv7Yzn9q/OEj4x807SfvFVg5NACM0Fx9evH07uuLQtREde+JgW4MQO2Jm8QWtFEWDNSy
-         LoLRoewqMJyyuAT8VD03wG5ggvKkE8Fv1fHc+7GS98JX3699ko0naxQhd9XUoRqy8aI/
-         DMXw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WvEHsPjKIq/P2TsSWLeMiXHZ4cDxRks9I5jtQKX/b+k=;
+        b=K1e2lO9tvzR3LDoDU86xEEwPisR7tDiX4AfI2nUBu4Tih6W4ixNZVdMKEC4pFWWKlN
+         3XItzPX5i57JZwLYtQsvyc9kXwIuQY+foL7hGmS7hkDxS1a+UKn+uQ104knm7rAUdmQo
+         hVNYRxupAJNKI9wpBYdBxOL2BArNd5xTZpjVYK+iizoiiwU/dDWqikMuDNnQGUUNbTM6
+         OmIVDwRzIhJ50RlK4gUYw2ntSkopWnbEwccie3iysM3ZYOEHF52txgEbFmZh/UHw9l1O
+         dKfJm76W6aEMBHnE/2pvESO+qOfoAckGift3RWJZGmoC+6M7IoeysQH2WYkUUA9bRf8p
+         9NLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LQYU7AshaChrIv5/sVzoGBNv4W3iyRIKQFQCOFPAGsA=;
-        b=lKSuCOTem/ZQVZSqN0X9YQaPva576nheq+xLkPaCjcej+bfFSpOZiz7VJoEbI9x6RO
-         RooV/f3rO7uJP9oZfRwXa5wLjHNFficBaaXk6ewrf/y9DEIVfbDNFTO55ACKMbCzdNmw
-         sJLoiY4nYYWQDAfA2BwDES9Fn7aPaRRxCchvcM7yU/Plr89mFnCy+PcvoMxv+y2BJJkc
-         EVFrwrjB3+sE5Pi9tpObHmeDtxqv+8fOZztEpa1skxzP6ci9UTAnMNuFi1tffoiyvH0g
-         c33kIfNt3p6fc08aBVYSJ7uI2C9KmmtvCYiU+5o7yTxzBZxXeR2TQf3dw5J0L/+7XmaR
-         SsBw==
-X-Gm-Message-State: AOAM530RR0vydxyq8kLwoHDJkwWxRrCwPLH7QbFJ8UmizYYKilkoEfMk
-        hiVxXufxa8PANQg2Xlec3QUqBA==
-X-Google-Smtp-Source: ABdhPJzVfCraC/WgVtFV9wV6xcx3lYTzd3E+tTXoWs6K3Ut/rJgJlgIbqTjqqc2nUr8HNm0Gfnrk2Q==
-X-Received: by 2002:a1c:4986:: with SMTP id w128mr7098059wma.37.1616667436411;
-        Thu, 25 Mar 2021 03:17:16 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:248e:270b:f7ab:435d])
-        by smtp.gmail.com with ESMTPSA id 1sm5847116wmj.2.2021.03.25.03.17.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WvEHsPjKIq/P2TsSWLeMiXHZ4cDxRks9I5jtQKX/b+k=;
+        b=T4Je16WVV6rrFZR4btG070SW9zoZWi69GEKFYC7PWpVZhDxcD0XwoBVopxq1VaixVl
+         T/mDwc26E0iEuwXrBesipgRiVOWy9UpDyq7WWdw18XVxJVoTByysLuwO0e8k4iZX5wtX
+         DsL2jtSFJw5vQ6iFzyymFgRT5MDpaXibcKzpDx6FXFyMYfsOIBwYQmE4nBJmI6D6AWsb
+         2bV+ZhJY+utwjNn2D0Hpco/V/cQdzc8fwop8m5Xa/fTblvv78wag7LI9dWd4I+cD5za+
+         Qff3kq6qmLsBrfDPTOK5fy0yECXe/aCWxlC+sIHtiO9iHkpIAGEc386lZSxZ1gbHGXXj
+         Ahmw==
+X-Gm-Message-State: AOAM532Anx3GzP7gip537+HaGV2H09yLsz0OLxt75ksO3QJYvpjhODqP
+        Yuq2f+xTKGRCy8sKrbmGwFjcpGlSvxKnvg==
+X-Google-Smtp-Source: ABdhPJx6IyzPnrKatQsltGUIvl65Am97UCYB/waM6Rn+FvzgXWCyfijbgZs6aY45zuiZKviepT2ypw==
+X-Received: by 2002:a62:5f83:0:b029:20e:70c3:c3e3 with SMTP id t125-20020a625f830000b029020e70c3c3e3mr7225214pfb.60.1616673660425;
+        Thu, 25 Mar 2021 05:01:00 -0700 (PDT)
+Received: from localhost ([112.79.237.176])
+        by smtp.gmail.com with ESMTPSA id a15sm5545035pju.34.2021.03.25.05.00.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 03:17:15 -0700 (PDT)
-Date:   Thu, 25 Mar 2021 11:17:09 +0100
-From:   Marco Elver <elver@google.com>
-To:     peterz@infradead.org
-Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
-        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
-        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
-        mascasa@google.com, pcc@google.com, irogers@google.com,
-        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 01/11] perf: Rework perf_event_exit_event()
-Message-ID: <YFxjJam0ErVmk99i@elver.google.com>
-References: <20210324112503.623833-1-elver@google.com>
- <20210324112503.623833-2-elver@google.com>
+        Thu, 25 Mar 2021 05:01:00 -0700 (PDT)
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     brouer@redhat.com, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next 0/5] libbpf: Add TC-BPF API
+Date:   Thu, 25 Mar 2021 17:29:58 +0530
+Message-Id: <20210325120020.236504-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210324112503.623833-2-elver@google.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 12:24PM +0100, Marco Elver wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
-> 
-> Make perf_event_exit_event() more robust, such that we can use it from
-> other contexts. Specifically the up and coming remove_on_exec.
-> 
-> For this to work we need to address a few issues. Remove_on_exec will
-> not destroy the entire context, so we cannot rely on TASK_TOMBSTONE to
-> disable event_function_call() and we thus have to use
-> perf_remove_from_context().
-> 
-> When using perf_remove_from_context(), there's two races to consider.
-> The first is against close(), where we can have concurrent tear-down
-> of the event. The second is against child_list iteration, which should
-> not find a half baked event.
-> 
-> To address this, teach perf_remove_from_context() to special case
-> !ctx->is_active and about DETACH_CHILD.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
-> v3:
-> * New dependency for series:
->   https://lkml.kernel.org/r/YFn/I3aKF+TOjGcl@hirez.programming.kicks-ass.net
-> ---
+This series adds support to libbpf for attaching SCHED_CLS and SCHED_ACT bpf
+programs to their respective tc attach points.
 
-syzkaller found a crash with stack trace pointing at changes in this
-patch. Can't tell if this is an old issue or introduced in this series.
+Currently, a user needs to shell out to the tc command line for add, change,
+replace, and del operations, which is not ideal.
 
-It looks like task_pid_ptr() wants to access task_struct::signal, but
-the task_struct pointer is NULL.
+Some of the features that have been omitted for the CLS API:
 
-Any ideas?
+* TCA_BPF_POLICE
+  Support for adding police actions to filter has been omitted for now.
+* TCA_RATE
+  Support for packet rate estimator has been omitted for now.
+* Attaching actions directly to the classifier
+  This allows the attached actions to be bound to classifier and get auto detached
+  when it is deleted. It translates to 'bind' refcount in the kernel internally.
+  They run after a successful classification from the SCHED_CLS prog.
+  Support for this can be added later, but has been omitted for now, primarily
+  because direct-action mode provides a better alternative.
 
-general protection fault, probably for non-canonical address 0xdffffc0000000103: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000818-0x000000000000081f]
-CPU: 2 PID: 15084 Comm: syz-executor.1 Not tainted 5.12.0-rc4+ #5
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:task_pid_ptr kernel/pid.c:325 [inline]
-RIP: 0010:__task_pid_nr_ns+0x137/0x3e0 kernel/pid.c:500
-Code: 8b 75 00 eb 08 e8 59 28 29 00 45 31 f6 31 ff 44 89 fe e8 5c 2c 29 00 45 85 ff 74 49 48 81 c3 20 08 00 00 48 89 d8 48 c1 e8 03 <42> 80 3c 20 00 74 08 48 89 df e8 aa 03 6d 00 48 8b 2b 44 89 fb bf
-RSP: 0018:ffffc9000c76f6d0 EFLAGS: 00010007
-RAX: 0000000000000103 RBX: 000000000000081f RCX: ffff8880717d8000
-RDX: ffff8880717d8000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 0000000000000001 R08: ffffffff814fe814 R09: fffffbfff1f296b1
-R10: fffffbfff1f296b1 R11: 0000000000000000 R12: dffffc0000000000
-R13: 1ffff1100e6dfc5c R14: ffff888057fba108 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff88802cf00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffcc3b05bc0 CR3: 0000000040ac0000 CR4: 0000000000750ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
-PKRU: 55555554
-Call Trace:
- perf_event_pid_type kernel/events/core.c:1412 [inline]
- perf_event_pid kernel/events/core.c:1421 [inline]
- perf_event_read_event kernel/events/core.c:7511 [inline]
- sync_child_event kernel/events/core.c:12521 [inline]
- perf_child_detach kernel/events/core.c:2223 [inline]
- __perf_remove_from_context+0x569/0xd30 kernel/events/core.c:2359
- perf_remove_from_context+0x19d/0x220 kernel/events/core.c:2395
- perf_event_exit_event+0x76/0x950 kernel/events/core.c:12559
- perf_event_exit_task_context kernel/events/core.c:12640 [inline]
- perf_event_exit_task+0x715/0xa40 kernel/events/core.c:12673
- do_exit+0x6c2/0x2290 kernel/exit.c:834
- do_group_exit+0x168/0x2d0 kernel/exit.c:922
- get_signal+0x1734/0x1ef0 kernel/signal.c:2779
- arch_do_signal_or_restart+0x41/0x620 arch/x86/kernel/signal.c:789
- handle_signal_work kernel/entry/common.c:147 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0xac/0x1e0 kernel/entry/common.c:208
- irqentry_exit_to_user_mode+0x6/0x40 kernel/entry/common.c:314
- exc_general_protection+0x222/0x370 arch/x86/kernel/traps.c:530
- asm_exc_general_protection+0x1e/0x30 arch/x86/include/asm/idtentry.h:571
+A high level TC-BPF API is also provided, and currently only supports attach and
+destroy operations. These functions return a pointer to a bpf_link object. When
+falling back to the low level API, the link must be disconnected to take over
+its ownership. It can be released using bpf_link__destroy, which will also cause
+the filter/action to be detached if not disconnected.
+
+The individual commits contain a general API summary and examples.
+
+Kumar Kartikeya Dwivedi (5):
+  tools pkt_cls.h: sync with kernel sources
+  libbpf: add helpers for preparing netlink attributes
+  libbpf: add low level TC-BPF API
+  libbpf: add high level TC-BPF API
+  libbpf: add selftests for TC-BPF API
+
+ tools/include/uapi/linux/pkt_cls.h            | 174 +++-
+ tools/lib/bpf/libbpf.c                        | 110 ++-
+ tools/lib/bpf/libbpf.h                        | 133 ++++
+ tools/lib/bpf/libbpf.map                      |  17 +
+ tools/lib/bpf/netlink.c                       | 752 +++++++++++++++++-
+ tools/lib/bpf/nlattr.h                        |  43 +
+ .../selftests/bpf/prog_tests/test_tc_bpf.c    | 261 ++++++
+ .../selftests/bpf/progs/test_tc_bpf_kern.c    |  18 +
+ 8 files changed, 1476 insertions(+), 32 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_tc_bpf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_tc_bpf_kern.c
+
+--
+2.30.2
+
