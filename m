@@ -2,152 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1371A3499FE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Mar 2021 20:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FE1349CBD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Mar 2021 00:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbhCYTLF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Mar 2021 15:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
+        id S230486AbhCYXLM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Mar 2021 19:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbhCYTLA (ORCPT
+        with ESMTP id S231334AbhCYXKv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Mar 2021 15:11:00 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DF1C06174A
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 12:10:59 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id m20-20020a7bcb940000b029010cab7e5a9fso3702790wmi.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 12:10:59 -0700 (PDT)
+        Thu, 25 Mar 2021 19:10:51 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AC5C061760
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 16:10:51 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id c7so4986124qka.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 16:10:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Xjvw4hFvgpXEdEyLOwCoYu7tEGHrW0NPxhD9uHWiJU4=;
-        b=bSWH/ycgN82Wejo6yRufImfb5gjJFjznf7cGlwQ2p3/NZTyhora8LDcSI+ctWWmDDl
-         4F+Ta01LBMTgMXVIDRgEneBIuinpxUttbZlCGp5Vo+QATDukVannUIcdru8puMUoCTfO
-         0AmqLlevQCNlOQZWMDZ9NP+9F0Ke9fH0lhyuR5XgqhBaq0HEnCNQVddSkZgWEDUd98aW
-         RAG4ixniMw2HaFxT7kmZUSyfW+nOLGxiDxoI1JoBshchAcDqH09MdQVgp3DPneI48z28
-         ArwSpHFbyYNlkxE/oxzF6kO8wyPSCerwnmnWZKjVx4TJnxqO7jcMdy7SIZoI04Vlsfln
-         Zksw==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=T2/d6sZyO3fSLr0PvTyvQEiPcFUt7lX67rgAyw6h6Ns=;
+        b=h1bf0BOjFAAjZ/OJMNbkTZfB+WyBmaMPewReLf9ogiiamNakB307KnJZ1bBBZ6jQx4
+         RhvZ7FB1Zy5NiTFlsZRnFckjMVZE+oPiW/9bSdixYnWeikINQcxUDOLhXqTOAzfOL69g
+         to40oavQvU4+P9dWA6DH+L2rLLSkjH6RFKUkWYMvv4tzPCiXSbasYU7KGMxlNJA2PazK
+         7f5loxZFJ5lt3xvZHobDUz3iiK38332zizKGS9eGxDdIcYSNdDf3dEUFSBrdR9HUw9bj
+         5vAmjPh6Iq8wy5yJFYDZbTtXaDuW8ZOJ32Tj0Mai5IQgkwT0X2ldZKLWZc4zBWLumNG0
+         Ruzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Xjvw4hFvgpXEdEyLOwCoYu7tEGHrW0NPxhD9uHWiJU4=;
-        b=JG/nrH5qwIBRPXG9yXKvlHacgRnVJ9SvaYbMSnDTCDfFK43x2WHBPm+V7/Ov52mUSu
-         2oW38HbbiAmV6uGYL9pvfDa+AkvXx2cJHUNSFv5+wdEAtZIZFLME54MfkkL0rAzZ2LWN
-         /mm1TOH+769MiHQvpQK+1eviYfcig+pS55zEu3rx+4xuZcIBCus55lL8JaE3ZpfLDHiz
-         gDQ9A3eHhfpyWBrjBl062VkXIlnttakVD4U99mH/6QhMhXKuw9kOM7pTZFCxxVfmmQt+
-         ZaBUipQcyXNBIstt0qvMNE/aLsf3f1CJ6zqJmbvP2EOSNLhUNuSWYc+TgSfDBfqVSYfB
-         yKlA==
-X-Gm-Message-State: AOAM533nF9nN/5sP38GZp7ye+zXrsER377TsHxeKjhwcU4M8lAyy5eL1
-        4ctPtFCRYqk1a5L5MjJCFybAnQ==
-X-Google-Smtp-Source: ABdhPJwT3my6f9/QdRwahfkowwHF6UPPglLJeluPEMYuJNzhRuH3FOlaVG9t7s3PvxZWZsbYoZhsUw==
-X-Received: by 2002:a1c:7209:: with SMTP id n9mr9680498wmc.132.1616699458252;
-        Thu, 25 Mar 2021 12:10:58 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:248e:270b:f7ab:435d])
-        by smtp.gmail.com with ESMTPSA id r10sm8011391wmh.45.2021.03.25.12.10.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 12:10:57 -0700 (PDT)
-Date:   Thu, 25 Mar 2021 20:10:51 +0100
-From:   Marco Elver <elver@google.com>
-To:     peterz@infradead.org
-Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
-        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
-        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
-        mascasa@google.com, pcc@google.com, irogers@google.com,
-        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 01/11] perf: Rework perf_event_exit_event()
-Message-ID: <YFzgO0AhGFODmgc1@elver.google.com>
-References: <20210324112503.623833-1-elver@google.com>
- <20210324112503.623833-2-elver@google.com>
- <YFxjJam0ErVmk99i@elver.google.com>
- <YFy3qI65dBfbsZ1z@elver.google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YFy3qI65dBfbsZ1z@elver.google.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=T2/d6sZyO3fSLr0PvTyvQEiPcFUt7lX67rgAyw6h6Ns=;
+        b=qxfh61iBElHUDTEeetjFwqWhg5jFmvxdPipgz0wNTyPBLH1y2qjIF7pOiGHVXeZJUd
+         ZbQYhQUWUwVw5kBhP64I8XQFljszvaehwPZah+9S3AmVjj3YqVB1sKTJ3r1u6CIdM9De
+         F9Y9Ce6R5f2zTfD9Qxdy1V4xhtenj2gLWAGOJr43UqbiktdhIStPcofpTysNHyMYMzYg
+         EogJlIWJBZYqzEJxYYSFKqUwJV7lKbDLb5FeZ881+eO/cIbtTdwjrNIzQaLC3XSvKaxC
+         EEzoDI8brmQfgFKGFC44vbowV7Nj2cdTTdC4QD6y55RbYqAEdXFi1hCzfN47xclc5m6/
+         A5Qg==
+X-Gm-Message-State: AOAM530eECSEHHcLQ1IuPYnc0nNrnSRDNePrEmzngjEBNlkleBCQlOG1
+        I8Fp1bdNa1uOlSWJUW4yy2z1Mv86ZWva1uhO5592
+X-Google-Smtp-Source: ABdhPJw8sxtVyVhdnPIHQmvOxevJeP2dQ9vkgim0lT9MuGC04CoGm+vtIGdtJVY8Vo4Ddkm5VWU/0lUxFwlOWuSixZdF
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:74e9:775f:faff:48d0])
+ (user=axelrasmussen job=sendgmr) by 2002:ad4:4e53:: with SMTP id
+ eb19mr10977331qvb.8.1616713850395; Thu, 25 Mar 2021 16:10:50 -0700 (PDT)
+Date:   Thu, 25 Mar 2021 16:10:27 -0700
+Message-Id: <20210325231027.3402321-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
+Subject: [PATCH] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTNUE error handling + accounting
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Michel Lespinasse <walken@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 05:17PM +0100, Marco Elver wrote:
-[...]
-> > syzkaller found a crash with stack trace pointing at changes in this
-> > patch. Can't tell if this is an old issue or introduced in this series.
-> 
-> Yay, I found a reproducer. v5.12-rc4 is good, and sadly with this patch only we
-> crash. :-/
-> 
-> Here's a stacktrace with just this patch applied:
-> 
-> | BUG: kernel NULL pointer dereference, address: 00000000000007af
-[...]
-> | RIP: 0010:task_pid_ptr kernel/pid.c:324 [inline]
-> | RIP: 0010:__task_pid_nr_ns+0x112/0x240 kernel/pid.c:500
-[...]
-> | Call Trace:
-> |  perf_event_pid_type kernel/events/core.c:1412 [inline]
-> |  perf_event_pid kernel/events/core.c:1421 [inline]
-> |  perf_event_read_event+0x78/0x1d0 kernel/events/core.c:7406
-> |  sync_child_event kernel/events/core.c:12404 [inline]
-> |  perf_child_detach kernel/events/core.c:2223 [inline]
-> |  __perf_remove_from_context+0x14d/0x280 kernel/events/core.c:2359
-> |  perf_remove_from_context+0x9f/0xf0 kernel/events/core.c:2395
-> |  perf_event_exit_event kernel/events/core.c:12442 [inline]
-> |  perf_event_exit_task_context kernel/events/core.c:12523 [inline]
-> |  perf_event_exit_task+0x276/0x4c0 kernel/events/core.c:12556
-> |  do_exit+0x4cd/0xed0 kernel/exit.c:834
-> |  do_group_exit+0x4d/0xf0 kernel/exit.c:922
-> |  get_signal+0x1d2/0xf30 kernel/signal.c:2777
-> |  arch_do_signal_or_restart+0xf7/0x750 arch/x86/kernel/signal.c:789
-> |  handle_signal_work kernel/entry/common.c:147 [inline]
-> |  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
-> |  exit_to_user_mode_prepare+0x113/0x190 kernel/entry/common.c:208
-> |  irqentry_exit_to_user_mode+0x6/0x30 kernel/entry/common.c:314
-> |  asm_exc_general_protection+0x1e/0x30 arch/x86/include/asm/idtentry.h:571
+Previously, in the error path, we unconditionally removed the page from
+the page cache. But in the continue case, we didn't add it - it was
+already there because the page is used by a second (non-UFFD-registered)
+mapping. So, in that case, it's incorrect to remove it as the other
+mapping may still use it normally.
 
-I spun up gdb, and it showed me this:
+For this error handling failure, trivially exercise it in the
+userfaultfd selftest, to detect this kind of bug in the future.
 
-| #0  perf_event_read_event (event=event@entry=0xffff888107cd5000, task=task@entry=0xffffffffffffffff)
-|     at kernel/events/core.c:7397
-									^^^ TASK_TOMBSTONE
-| #1  0xffffffff811fc9cd in sync_child_event (child_event=0xffff888107cd5000) at kernel/events/core.c:12404
-| #2  perf_child_detach (event=0xffff888107cd5000) at kernel/events/core.c:2223
-| #3  __perf_remove_from_context (event=event@entry=0xffff888107cd5000, cpuctx=cpuctx@entry=0xffff88842fdf0c00,
-|     ctx=ctx@entry=0xffff8881073cb800, info=info@entry=0x3 <fixed_percpu_data+3>) at kernel/events/core.c:2359
-| #4  0xffffffff811fcb9f in perf_remove_from_context (event=event@entry=0xffff888107cd5000, flags=flags@entry=3)
-|     at kernel/events/core.c:2395
-| #5  0xffffffff81204526 in perf_event_exit_event (ctx=0xffff8881073cb800, event=0xffff888107cd5000)
-|     at kernel/events/core.c:12442
-| #6  perf_event_exit_task_context (ctxn=0, child=0xffff88810531a200) at kernel/events/core.c:12523
-| #7  perf_event_exit_task (child=0xffff88810531a200) at kernel/events/core.c:12556
-| #8  0xffffffff8108838d in do_exit (code=code@entry=11) at kernel/exit.c:834
-| #9  0xffffffff81088e4d in do_group_exit (exit_code=11) at kernel/exit.c:922
+Also, we previously were unconditionally calling shmem_inode_acct_block.
+In the continue case, however, this is incorrect, because we would have
+already accounted for the RAM usage when the page was originally
+allocated (since at this point it's already in the page cache). So,
+doing it in the continue case causes us to double-count.
 
-and therefore synthesized this fix on top:
+Fixes: 00da60b9d0a0 ("userfaultfd: support minor fault handling for shmem")
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ mm/shmem.c                               | 15 ++++++++++-----
+ tools/testing/selftests/vm/userfaultfd.c | 12 ++++++++++++
+ 2 files changed, 22 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 57de8d436efd..e77294c7e654 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -12400,7 +12400,7 @@ static void sync_child_event(struct perf_event *child_event)
- 	if (child_event->attr.inherit_stat) {
- 		struct task_struct *task = child_event->ctx->task;
+diff --git a/mm/shmem.c b/mm/shmem.c
+index d2e0e81b7d2e..5ac8ea737004 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -2379,9 +2379,11 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 	int ret;
+ 	pgoff_t offset, max_off;
  
--		if (task)
-+		if (task && task != TASK_TOMBSTONE)
- 			perf_event_read_event(child_event, task);
- 	}
+-	ret = -ENOMEM;
+-	if (!shmem_inode_acct_block(inode, 1))
+-		goto out;
++	if (!is_continue) {
++		ret = -ENOMEM;
++		if (!shmem_inode_acct_block(inode, 1))
++			goto out;
++	}
  
-which fixes the problem. My guess is that the parent and child are both
-racing to exit?
+ 	if (is_continue) {
+ 		ret = -EFAULT;
+@@ -2389,6 +2391,7 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 		if (!page)
+ 			goto out_unacct_blocks;
+ 	} else if (!*pagep) {
++		ret = -ENOMEM;
+ 		page = shmem_alloc_page(gfp, info, pgoff);
+ 		if (!page)
+ 			goto out_unacct_blocks;
+@@ -2486,12 +2489,14 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ out_release_unlock:
+ 	pte_unmap_unlock(dst_pte, ptl);
+ 	ClearPageDirty(page);
+-	delete_from_page_cache(page);
++	if (!is_continue)
++		delete_from_page_cache(page);
+ out_release:
+ 	unlock_page(page);
+ 	put_page(page);
+ out_unacct_blocks:
+-	shmem_inode_unacct_blocks(inode, 1);
++	if (!is_continue)
++		shmem_inode_unacct_blocks(inode, 1);
+ 	goto out;
+ }
+ #endif /* CONFIG_USERFAULTFD */
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index f6c86b036d0f..d8541a59dae5 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -485,6 +485,7 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
+ static void continue_range(int ufd, __u64 start, __u64 len)
+ {
+ 	struct uffdio_continue req;
++	int ret;
+ 
+ 	req.range.start = start;
+ 	req.range.len = len;
+@@ -493,6 +494,17 @@ static void continue_range(int ufd, __u64 start, __u64 len)
+ 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
+ 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
+ 		    (uint64_t)start);
++
++	/*
++	 * Error handling within the kernel for continue is subtly different
++	 * from copy or zeropage, so it may be a source of bugs. Trigger an
++	 * error (-EEXIST) on purpose, to verify doing so doesn't cause a BUG.
++	 */
++	req.mapped = 0;
++	ret = ioctl(ufd, UFFDIO_CONTINUE, &req);
++	if (ret >= 0 || req.mapped != -EEXIST)
++		err("failed to exercise UFFDIO_CONTINUE error handling, ret=%d, mapped=%" PRId64,
++		    ret, req.mapped);
+ }
+ 
+ static void *locking_thread(void *arg)
+-- 
+2.31.0.291.g576ba9dcdaf-goog
 
-Does that make any sense?
-
-Thanks,
--- Marco
