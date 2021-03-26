@@ -2,105 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6854134A088
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Mar 2021 05:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8757934A11E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Mar 2021 06:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbhCZEb2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Mar 2021 00:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
+        id S229639AbhCZFph (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Mar 2021 01:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbhCZEa5 (ORCPT
+        with ESMTP id S229446AbhCZFpQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Mar 2021 00:30:57 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3940C061763
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 21:30:55 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id y5so4065496pfn.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 21:30:55 -0700 (PDT)
+        Fri, 26 Mar 2021 01:45:16 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C24C0613B0
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 22:45:14 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id m7so3856682pgj.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Mar 2021 22:45:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=35XopTC+7WOzIQnHzWXImRYQHw0CHWkdoXHcf/+9Onk=;
-        b=FuXqSLOY5UJibY4x5cy44xNCqVYXhs/QB8SAK6Ph5plXJluUdlmzkl2vYUhpV/m3iz
-         fBwsgAxyhUwk4l2OzfotcXS7ilTz5vz/4D0pRkceuJfu6MDHX6kEBtNhBX+0z1Q+x9Rq
-         gJAq/6u1b6zvaFaFWLn9VBJN47ayz/H6CG+SQ=
+        d=axtens.net; s=google;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=OqOZYiaXe2/4wha1fEs1gVf5T6I4+DZt+BtbIfVMO+A=;
+        b=NTfOSkbbavoRe1I6wHo5nMJh++tgT4yErZ9HicwtA0cg85vQvQq9byvRgoV807Y5p0
+         pKkzxaDg7V4iAOPeZn/xEAXQQo+vZ5eIUNo9sQEm8xVW7PEb0906GAQJFs9brSP4pxVL
+         zFUl4mAYffjkMLE2jAY8RPKeBsfsr0w8pWQSY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=35XopTC+7WOzIQnHzWXImRYQHw0CHWkdoXHcf/+9Onk=;
-        b=Jbu6LLEx61yNl5meXgRn/XcoTYWNfYMnUoEB3/6Zyf3nZyvg4R/TJ0PkMaGYda0l6K
-         yOs/f53NzLnoEMGS5q2lBFKFxWcWUH/w7OZPQC0CG/e0b210YSlFs/CaZ+k4XJxxkkOz
-         h66fJv1pkOpEQJjJJWmg9q3OUvAylRA7J3iRLgIsxznbcwGPhSOt8xewrQQ1ygcbHSww
-         ZqiQvVNMTEE9j/wvMftqtH2T9TJySnwrXuWl8Vxtg5l/P31qETtF+Eh1k9xpFl3kMZ1I
-         RSVFOxetCWNq6SgI72VCDotLObRu1we8WUYgqPJIPmXwbRdWAIx00UFMYsCGlBAQLrqe
-         FVFQ==
-X-Gm-Message-State: AOAM532TTv2/T3aH5dHBuQZfOzYfhpWbN0YalcdackizoZkGhGGv7P/7
-        G46NVoOWCs/eEAusnDPMHYZiBw==
-X-Google-Smtp-Source: ABdhPJxJ4Uh8qq7VGivmsaxoe1yrWQkMSLzdjT7KyXHUDkthLjeUOIqUGrr9oa/zfMmenb3JnsesWA==
-X-Received: by 2002:a62:7f86:0:b029:20a:a195:bb36 with SMTP id a128-20020a627f860000b029020aa195bb36mr11204021pfd.4.1616733055463;
-        Thu, 25 Mar 2021 21:30:55 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d1sm7098940pjc.24.2021.03.25.21.30.54
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=OqOZYiaXe2/4wha1fEs1gVf5T6I4+DZt+BtbIfVMO+A=;
+        b=VJf3ZaPuhZOnHtctmTF/75Cnjzo+FdN/t4tUY7SKt9L41OQgCDnI4twwFx0HDVMFsE
+         3xrOVOSRLtFPriWUdixJinL7fzJIl6I1dsEAHY2Kh8nqquAe8muhwOIDOHUmi3srAGjq
+         BoQfpCMdHK7655ozBhK5xsxd3H85pLz81d0NtCIdeHTgCmKP+cMvsvaY87AzSBfjuwGp
+         n6owbWIup990VlvJ5Ih6DYjZJYx7DfdBrhq3RSzNV/y/PKpO5V6dKVCAVC+AAgIys5mN
+         +KuxXlxAwxDy/auV331ocJozil+vGVSmSMlPwCf2GtVhan6QPJISFnyO8TEwcUHTew8G
+         ISFw==
+X-Gm-Message-State: AOAM53103zSHDKSRtvTM3Wf4u7btxLL8l1f6JetOeE7u38+fwF1BsdwO
+        vB6PnhFj9e0/EgEThwBiItJkfDB3khMk4A==
+X-Google-Smtp-Source: ABdhPJzNEr7O3Y4iBRs57Wo7KFkaic8g91kRGbfEuj3r1OipG51u0rllrwWAbzkp4/W2IqFt/5InAw==
+X-Received: by 2002:a05:6a00:c8f:b029:213:db69:18af with SMTP id a15-20020a056a000c8fb0290213db6918afmr11139010pfv.76.1616737513575;
+        Thu, 25 Mar 2021 22:45:13 -0700 (PDT)
+Received: from localhost (2001-44b8-111e-5c00-39c5-e677-fdb8-5d64.static.ipv6.internode.on.net. [2001:44b8:111e:5c00:39c5:e677:fdb8:5d64])
+        by smtp.gmail.com with ESMTPSA id u2sm6875572pgf.93.2021.03.25.22.45.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 21:30:54 -0700 (PDT)
-Date:   Thu, 25 Mar 2021 21:30:53 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
+        Thu, 25 Mar 2021 22:45:13 -0700 (PDT)
+From:   Daniel Axtens <dja@axtens.net>
+To:     Wan Jiabing <wanjiabing@vivo.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v31 10/12] selftests/landlock: Add user space tests
-Message-ID: <202103252130.54C78E4@keescook>
-References: <20210324191520.125779-1-mic@digikod.net>
- <20210324191520.125779-11-mic@digikod.net>
+        Wan Jiabing <wanjiabing@vivo.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kael_w@yeah.net
+Subject: Re: [PATCH] [v2] tools: testing: Remove duplicate includes
+In-Reply-To: <20210323061604.289958-1-wanjiabing@vivo.com>
+References: <20210323061604.289958-1-wanjiabing@vivo.com>
+Date:   Fri, 26 Mar 2021 16:45:10 +1100
+Message-ID: <87v99e79jt.fsf@linkitivity.dja.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210324191520.125779-11-mic@digikod.net>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 08:15:18PM +0100, Mickaël Salaün wrote:
-> From: Mickaël Salaün <mic@linux.microsoft.com>
-> 
-> Test all Landlock system calls, ptrace hooks semantic and filesystem
-> access-control with multiple layouts.
-> 
-> Test coverage for security/landlock/ is 93.6% of lines.  The code not
-> covered only deals with internal kernel errors (e.g. memory allocation)
-> and race conditions.
-> 
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Serge E. Hallyn <serge@hallyn.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+Wan Jiabing <wanjiabing@vivo.com> writes:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> sched.h has been included at line 33, so remove the 
+> duplicate one at line 36.
 
--- 
-Kees Cook
+> pthread.h has been included at line 17,so remove the 
+> duplicate one at line 20.
+
+I can see that both of these are correct from the diff.
+
+> inttypes.h has been included at line 19, so remove the 
+> duplicate one at line 23.
+
+For this one I checked the file. Indeed there is another inttypes.h, so
+this is also correct.
+
+Again, all the automated checks pass. (although I don't think any of the
+automated builds include selftests.)
+
+So:
+Reviewed-by: Daniel Axtens <dja@axtens.net>
+
+Kind regards,
+Daniel
+
+>
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  tools/testing/selftests/powerpc/mm/tlbie_test.c     | 1 -
+>  tools/testing/selftests/powerpc/tm/tm-poison.c      | 1 -
+>  tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c | 1 -
+>  3 files changed, 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/powerpc/mm/tlbie_test.c b/tools/testing/selftests/powerpc/mm/tlbie_test.c
+> index f85a0938ab25..48344a74b212 100644
+> --- a/tools/testing/selftests/powerpc/mm/tlbie_test.c
+> +++ b/tools/testing/selftests/powerpc/mm/tlbie_test.c
+> @@ -33,7 +33,6 @@
+>  #include <sched.h>
+>  #include <time.h>
+>  #include <stdarg.h>
+> -#include <sched.h>
+>  #include <pthread.h>
+>  #include <signal.h>
+>  #include <sys/prctl.h>
+> diff --git a/tools/testing/selftests/powerpc/tm/tm-poison.c b/tools/testing/selftests/powerpc/tm/tm-poison.c
+> index 29e5f26af7b9..27c083a03d1f 100644
+> --- a/tools/testing/selftests/powerpc/tm/tm-poison.c
+> +++ b/tools/testing/selftests/powerpc/tm/tm-poison.c
+> @@ -20,7 +20,6 @@
+>  #include <sched.h>
+>  #include <sys/types.h>
+>  #include <signal.h>
+> -#include <inttypes.h>
+>  
+>  #include "tm.h"
+>  
+> diff --git a/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c b/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c
+> index e2a0c07e8362..9ef37a9836ac 100644
+> --- a/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c
+> +++ b/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c
+> @@ -17,7 +17,6 @@
+>  #include <pthread.h>
+>  #include <sys/mman.h>
+>  #include <unistd.h>
+> -#include <pthread.h>
+>  
+>  #include "tm.h"
+>  #include "utils.h"
+> -- 
+> 2.25.1
