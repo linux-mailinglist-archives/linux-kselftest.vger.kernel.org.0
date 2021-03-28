@@ -2,59 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C88CA34BAE8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Mar 2021 06:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54A234BBA4
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Mar 2021 10:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbhC1Enk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 Mar 2021 00:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
+        id S231216AbhC1ILf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 28 Mar 2021 04:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbhC1EnL (ORCPT
+        with ESMTP id S230202AbhC1ILF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Mar 2021 00:43:11 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866D9C0613B1;
-        Sat, 27 Mar 2021 21:42:51 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id o66so10160873ybg.10;
-        Sat, 27 Mar 2021 21:42:51 -0700 (PDT)
+        Sun, 28 Mar 2021 04:11:05 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB83C061762;
+        Sun, 28 Mar 2021 01:11:05 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id c204so7843990pfc.4;
+        Sun, 28 Mar 2021 01:11:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BQQTG8eN57WyyOH6br70k0yqKqktm8rT0M7Y08AXIKo=;
-        b=pQVE+PySQMFnMAjmSDrvujNK7pl4RU3KDg0gqdXpftyc2aKmPxyiqXr4eYuMd+DdN5
-         SUDwwEyyRYMF8XCKBRmgTClwm6EnqVjkp1Xp4joleXkIAq6TlG47ah67xB2eXLHl58b0
-         YAKEnFWFeW9/wcQPtgWewidbE3jI//SuG39cz8jmGseOf6gywVwtFJB6yj4IeG0t7pu7
-         Epe2jocOXFMH6MN2Sw/uchG3apdinrE/+GtOPrHMIK34AmbM/qov6ItRAe4NdhTumRrs
-         k8G8ySSrLTh3dRc33JzBpiJMGXzDdt4KktJVVp8zM8JrJTf1FSwBDoFCBsQBpDr2WsfO
-         7XYA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1XdXQKnDghpTP9/KuIBNLvBqdWivOptTKhhbKCDsWIs=;
+        b=BH8FWnR0B3WVQoG8ayN2b+US8Fy2kGqGo/VjmZHcZfM4zwCMsDebfNl6zPlfpDP7aU
+         IXdDaYA3y3cFKVRk9TRy+GkRWHtSMnwYpHgKUkhYemneQJZW0TkjMwRVggxatkAw3rSg
+         3ZILefa4/GcdSdMQ7mQJ4Ae5s5i8f7Xb2HBw8+PAIFQjsYEjF8+O73m/0L389dj4zHtb
+         TfE/1KAFOi+YPMOv2F75Nrgq/h/HWgp7BPTzhvrD7fUmhLE0lcJ8r+zEi6/5jxQEjf4k
+         Cj8dsw+4TlLvNVGw2IdXQvEhwxRLNXVqfLpLDzxgP35Kise2WSTuOLRKspB9chz6VTja
+         eKdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BQQTG8eN57WyyOH6br70k0yqKqktm8rT0M7Y08AXIKo=;
-        b=QbDwNFXbA9MBvnGh7Nm2xInOUetOPGVKn2x/Tje9v8auGTyz1fBKnEi+mN/cpXEwVJ
-         kNK6SUyzFBWyYNiQsDP9aCk6DRpp4SsVcv5mWn3EDaSsi7Gq6lBIpccD5XJTrMG3UMMf
-         F7NPE3fs2wjNGocJ1r+kgtncKPosn4VasGB5hAryA1j0DI1/aIo4s3ZUSBzEIIz57ZlI
-         dLVlp8TgUub5S3dPGoGxziq8O1uUAUyK0lJpmRH/JZ+zQoe8RGRQoOW441FBPs4ls12k
-         +U95YkSkAuDRLobc9FwoIAPMIzwxMNcOIeB6MaqDBTQxjyk/ISkI0pAB9L4bS8HT7UJ1
-         PdsA==
-X-Gm-Message-State: AOAM532OmkV4zo4DfHxtUtlUFmvkXc5wfc7MrM03RMLUfSV2xRWXyGu2
-        sQVT2pE+WKx7cQaCVGslHY3Mq3MJ9f0H7hDnnLI=
-X-Google-Smtp-Source: ABdhPJzo3vRP4nEJxeKRHLYQH5KJI+igRifdlzr2HwtIN42Y7q0yHry1zBuQggFA9tTEoqE2//U9U725PBORpEhXsoc=
-X-Received: by 2002:a25:ab03:: with SMTP id u3mr24224904ybi.347.1616906570801;
- Sat, 27 Mar 2021 21:42:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210325120020.236504-1-memxor@gmail.com> <20210325120020.236504-4-memxor@gmail.com>
-In-Reply-To: <20210325120020.236504-4-memxor@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Sat, 27 Mar 2021 21:42:40 -0700
-Message-ID: <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1XdXQKnDghpTP9/KuIBNLvBqdWivOptTKhhbKCDsWIs=;
+        b=cFqEHhjDJsnjQXuF6aLYQSJ2WUa30gPKuw2OImG6BnwTSkycwa44WwtPKB9t2elZt1
+         IlJTiUHn2GpsiAyKty2GXXyu4cjjXHfANcHP1VFiB0vU39ZmVtWynuEhz/2ULdD6fAJl
+         w31Ne0j7dPDFFbsJMojXr3uAsB0qpkl928EhO95iNt9AGfpj6pAIxDhOivl+2t3NnWli
+         yjsTzCXLzEsg6FQPAFVCmHgU5i3b8eP78U+EN8gWnjnar7yYz710tg5k67UPsUM/jGnW
+         53eX7MUifUcsKfU3ONAsSffQ4D9ctq4cEPvSPKQvSYpsokJfaYGXE1utLFcYNzXJNSxm
+         wtIg==
+X-Gm-Message-State: AOAM532MDcjeCoidk/SqOrRe8GAI/lNva/jM1hikccC/YwOsdN7+aGNc
+        TRru37u2TSjgxxQwy0RZnCc=
+X-Google-Smtp-Source: ABdhPJy68PHbCVfGKlMGV3zTiAH7e8wgoAIgOSdv+k4EK0oMeBGyyfP8Kuf7LK1qRBzd5J4gr3IPsQ==
+X-Received: by 2002:a63:3189:: with SMTP id x131mr19282394pgx.430.1616919064473;
+        Sun, 28 Mar 2021 01:11:04 -0700 (PDT)
+Received: from localhost ([112.79.247.28])
+        by smtp.gmail.com with ESMTPSA id f20sm13850191pfa.10.2021.03.28.01.11.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Mar 2021 01:11:03 -0700 (PDT)
+Date:   Sun, 28 Mar 2021 13:41:00 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     bpf <bpf@vger.kernel.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -70,138 +69,42 @@ Cc:     bpf <bpf@vger.kernel.org>,
         Networking <netdev@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+Message-ID: <20210328080648.oorx2no2j6zslejk@apollo>
+References: <20210325120020.236504-1-memxor@gmail.com>
+ <20210325120020.236504-4-memxor@gmail.com>
+ <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 5:02 AM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> This adds functions that wrap the netlink API used for adding,
-> manipulating, and removing filters and actions. These functions operate
-> directly on the loaded prog's fd, and return a handle to the filter and
-> action using an out parameter (id for tc_cls, and index for tc_act).
->
-> The basic featureset is covered to allow for attaching, manipulation of
-> properties, and removal of filters and actions. Some additional features
-> like TCA_BPF_POLICE and TCA_RATE for tc_cls have been omitted. These can
-> added on top later by extending the bpf_tc_cls_opts struct.
->
-> Support for binding actions directly to a classifier by passing them in
-> during filter creation has also been omitted for now. These actions
-> have an auto clean up property because their lifetime is bound to the
-> filter they are attached to. This can be added later, but was omitted
-> for now as direct action mode is a better alternative to it.
->
-> An API summary:
->
-> The BPF TC-CLS API
->
-> bpf_tc_act_{attach, change, replace}_{dev, block} may be used to attach,
-> change, and replace SCHED_CLS bpf classifiers. Separate set of functions
-> are provided for network interfaces and shared filter blocks.
->
-> bpf_tc_cls_detach_{dev, block} may be used to detach existing SCHED_CLS
-> filter. The bpf_tc_cls_attach_id object filled in during attach,
-> change, or replace must be passed in to the detach functions for them to
-> remove the filter and its attached classififer correctly.
->
-> bpf_tc_cls_get_info is a helper that can be used to obtain attributes
-> for the filter and classififer. The opts structure may be used to
-> choose the granularity of search, such that info for a specific filter
-> corresponding to the same loaded bpf program can be obtained. By
-> default, the first match is returned to the user.
->
-> Examples:
->
->         struct bpf_tc_cls_attach_id id = {};
->         struct bpf_object *obj;
->         struct bpf_program *p;
->         int fd, r;
->
->         obj = bpf_object_open("foo.o");
->         if (IS_ERR_OR_NULL(obj))
->                 return PTR_ERR(obj);
->
->         p = bpf_object__find_program_by_title(obj, "classifier");
->         if (IS_ERR_OR_NULL(p))
->                 return PTR_ERR(p);
->
->         if (bpf_object__load(obj) < 0)
->                 return -1;
->
->         fd = bpf_program__fd(p);
->
->         r = bpf_tc_cls_attach_dev(fd, if_nametoindex("lo"),
->                                   BPF_TC_CLSACT_INGRESS, ETH_P_IP,
->                                   NULL, &id);
->         if (r < 0)
->                 return r;
->
-> ... which is roughly equivalent to (after clsact qdisc setup):
->   # tc filter add dev lo ingress bpf obj /home/kkd/foo.o sec classifier
->
-> If a user wishes to modify existing options on an attached filter, the
-> bpf_tc_cls_change_{dev, block} API may be used. Parameters like
-> chain_index, priority, and handle are ignored in the bpf_tc_cls_opts
-> struct as they cannot be modified after attaching a filter.
->
-> Example:
->
->         /* Optional parameters necessary to select the right filter */
->         DECLARE_LIBBPF_OPTS(bpf_tc_cls_opts, opts,
->                             .handle = id.handle,
->                             .priority = id.priority,
->                             .chain_index = id.chain_index)
->         /* Turn on direct action mode */
->         opts.direct_action = true;
->         r = bpf_tc_cls_change_dev(fd, id.ifindex, id.parent_id,
->                                   id.protocol, &opts, &id);
->         if (r < 0)
->                 return r;
->
->         /* Verify that the direct action mode has been set */
->         struct bpf_tc_cls_info info = {};
->         r = bpf_tc_cls_get_info_dev(fd, id.ifindex, id.parent_id,
->                                     id.protocol, &opts, &info);
->         if (r < 0)
->                 return r;
->
->         assert(info.bpf_flags & TCA_BPF_FLAG_ACT_DIRECT);
->
-> This would be roughly equivalent to doing:
->   # tc filter change dev lo egress prio <p> handle <h> bpf obj /home/kkd/foo.o section classifier da
->
-> ... except a new bpf program will be loaded and replace existing one.
->
-> If a user wishes to either replace an existing filter, or create a new
-> one with the same properties, they can use bpf_tc_cls_replace_dev. The
-> benefit of bpf_tc_cls_change is that it fails if no matching filter
-> exists.
->
-> The BPF TC-ACT API
-
-Is there some succinct but complete enough documentation/tutorial/etc
-that I can reasonably read to understand kernel APIs provided by TC
-(w.r.t. BPF, of course). I'm trying to wrap my head around this and
-whether API makes sense or not. Please share links, if you have some.
-
->
-> bpf_tc_act_{attach, replace} may be used to attach and replace already
-> attached SCHED_ACT actions. Passing an index of 0 has special meaning,
-> in that an index will be automatically chosen by the kernel. The index
-> chosen by the kernel is the return value of these functions in case of
-> success.
->
-> bpf_tc_act_detach may be used to detach a SCHED_ACT action prog
-> identified by the index parameter. The index 0 again has a special
-> meaning, in that passing it will flush all existing SCHED_ACT actions
-> loaded using the ACT API.
->
-> bpf_tc_act_get_info is a helper to get the required attributes of a
-> loaded program to be able to manipulate it futher, by passing them
-> into the aforementioned functions.
+On Sun, Mar 28, 2021 at 10:12:40AM IST, Andrii Nakryiko wrote:
+> Is there some succinct but complete enough documentation/tutorial/etc
+> that I can reasonably read to understand kernel APIs provided by TC
+> (w.r.t. BPF, of course). I'm trying to wrap my head around this and
+> whether API makes sense or not. Please share links, if you have some.
 >
 
-[...]
+Hi Andrii,
+
+Unfortunately for the kernel API part, I couldn't find any when I was working
+on this. So I had to read the iproute2 tc code (tc_filter.c, f_bpf.c,
+m_action.c, m_bpf.c) and the kernel side bits (cls_api.c, cls_bpf.c, act_api.c,
+act_bpf.c) to grok anything I didn't understand. There's also similar code in
+libnl (lib/route/{act,cls}.c).
+
+Other than that, these resources were useful (perhaps you already went through
+some/all of them):
+
+https://docs.cilium.io/en/latest/bpf/#tc-traffic-control
+https://qmonnet.github.io/whirl-offload/2020/04/11/tc-bpf-direct-action/
+tc(8), and tc-bpf(8) man pages
+
+I hope this is helpful!
+
+--
+Kartikeya
