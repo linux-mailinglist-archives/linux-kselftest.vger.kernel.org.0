@@ -2,58 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C54A234BBA4
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Mar 2021 10:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0AD34BD29
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Mar 2021 18:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbhC1ILf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 Mar 2021 04:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S230247AbhC1QMA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 28 Mar 2021 12:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbhC1ILF (ORCPT
+        with ESMTP id S229593AbhC1QLp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Mar 2021 04:11:05 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB83C061762;
-        Sun, 28 Mar 2021 01:11:05 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id c204so7843990pfc.4;
-        Sun, 28 Mar 2021 01:11:05 -0700 (PDT)
+        Sun, 28 Mar 2021 12:11:45 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07484C061756;
+        Sun, 28 Mar 2021 09:11:44 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id y2so7713878qtw.13;
+        Sun, 28 Mar 2021 09:11:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1XdXQKnDghpTP9/KuIBNLvBqdWivOptTKhhbKCDsWIs=;
-        b=BH8FWnR0B3WVQoG8ayN2b+US8Fy2kGqGo/VjmZHcZfM4zwCMsDebfNl6zPlfpDP7aU
-         IXdDaYA3y3cFKVRk9TRy+GkRWHtSMnwYpHgKUkhYemneQJZW0TkjMwRVggxatkAw3rSg
-         3ZILefa4/GcdSdMQ7mQJ4Ae5s5i8f7Xb2HBw8+PAIFQjsYEjF8+O73m/0L389dj4zHtb
-         TfE/1KAFOi+YPMOv2F75Nrgq/h/HWgp7BPTzhvrD7fUmhLE0lcJ8r+zEi6/5jxQEjf4k
-         Cj8dsw+4TlLvNVGw2IdXQvEhwxRLNXVqfLpLDzxgP35Kise2WSTuOLRKspB9chz6VTja
-         eKdw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qOxAbSv4oQR9JvPLWkGdDrb5Rd9zNV4UzWv0/jjmUno=;
+        b=vQGqzyd20GvHr3nnyZat2RTZqfN8sUABi3dJ60KzUkIomALMK3ZFQOHMXLKi5T9jis
+         ln80tZh3vuEqjbiGQO7mrteoF1FAQEmPOSsxCWVVZthbbUNECCXCuqIB/R9bD9ce12de
+         4Fac8B2aAo4Zeahz8kuEvBMIGzr+r8q9FhglOH+ifgbMVBVA1ymNb2CxbrmqJDoouMFp
+         yLRYda6Ln4wNHStvVr3DstzUKvkGWaJKf2MSU2wrh0abStQl1rAsGSjmjCdPra0lv3OY
+         rLe+7cUTuiUAPrYY7FGxTdyrXrzkiAZ0Lq7k7gq5OciC6DuVNUP4LxFjNL/8kuIbYh9Y
+         M6RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1XdXQKnDghpTP9/KuIBNLvBqdWivOptTKhhbKCDsWIs=;
-        b=cFqEHhjDJsnjQXuF6aLYQSJ2WUa30gPKuw2OImG6BnwTSkycwa44WwtPKB9t2elZt1
-         IlJTiUHn2GpsiAyKty2GXXyu4cjjXHfANcHP1VFiB0vU39ZmVtWynuEhz/2ULdD6fAJl
-         w31Ne0j7dPDFFbsJMojXr3uAsB0qpkl928EhO95iNt9AGfpj6pAIxDhOivl+2t3NnWli
-         yjsTzCXLzEsg6FQPAFVCmHgU5i3b8eP78U+EN8gWnjnar7yYz710tg5k67UPsUM/jGnW
-         53eX7MUifUcsKfU3ONAsSffQ4D9ctq4cEPvSPKQvSYpsokJfaYGXE1utLFcYNzXJNSxm
-         wtIg==
-X-Gm-Message-State: AOAM532MDcjeCoidk/SqOrRe8GAI/lNva/jM1hikccC/YwOsdN7+aGNc
-        TRru37u2TSjgxxQwy0RZnCc=
-X-Google-Smtp-Source: ABdhPJy68PHbCVfGKlMGV3zTiAH7e8wgoAIgOSdv+k4EK0oMeBGyyfP8Kuf7LK1qRBzd5J4gr3IPsQ==
-X-Received: by 2002:a63:3189:: with SMTP id x131mr19282394pgx.430.1616919064473;
-        Sun, 28 Mar 2021 01:11:04 -0700 (PDT)
-Received: from localhost ([112.79.247.28])
-        by smtp.gmail.com with ESMTPSA id f20sm13850191pfa.10.2021.03.28.01.11.03
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qOxAbSv4oQR9JvPLWkGdDrb5Rd9zNV4UzWv0/jjmUno=;
+        b=nqOehuzTUYDeyFRU2R9wJcFzRLE75/UCz8EZtoL6udBABp9QACdXM9adJycoc2Q3Et
+         nr/Wfgcv41c3VaGQcpafrcwTBP8PCwu7jbDnISMJKumcD8DXfKuz2EjTGC4ZM7fut2ns
+         iOcAMywOOo+BgLxcReqgHFNgwGGwLNgYzS4PDBFa/mAsNkNT10X2/1SeN43lxhSAEsMx
+         bUDY9VR0F4hd42oXbKW6uhH7OihPPAb3Z/q1T555CPRlF5pahdMbYtGJ/VWyfM8VqTcP
+         Hu+0Z+ANoISMSjwFUxG89kPqI1AVWomnQY5IDn9oqGOldXprA288a3FU2ri0wc1fMIX5
+         paSg==
+X-Gm-Message-State: AOAM531U3MD5j97TUErWIS+85ZQKuqhXi9t54w+TqGZVOKUhsKLbOWTc
+        MebpQn3OYYMm0CT5wJKK9hw=
+X-Google-Smtp-Source: ABdhPJzWVMi1VLKWqu3hQWDZMcuadRVOH57wAcQy3DSqT4gx3D0QZVZgN6qqKX8B3ko/zue+6TH/sg==
+X-Received: by 2002:a05:622a:3c8:: with SMTP id k8mr19756748qtx.101.1616947903971;
+        Sun, 28 Mar 2021 09:11:43 -0700 (PDT)
+Received: from localhost.localdomain ([179.218.4.27])
+        by smtp.gmail.com with ESMTPSA id o7sm11275232qkb.104.2021.03.28.09.11.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Mar 2021 01:11:03 -0700 (PDT)
-Date:   Sun, 28 Mar 2021 13:41:00 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Sun, 28 Mar 2021 09:11:43 -0700 (PDT)
+From:   Pedro Tammela <pctammela@gmail.com>
+X-Google-Original-From: Pedro Tammela <pctammela@mojatatu.com>
+Cc:     Pedro Tammela <pctammela@mojatatu.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -61,50 +58,185 @@ Cc:     bpf <bpf@vger.kernel.org>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
-Message-ID: <20210328080648.oorx2no2j6zslejk@apollo>
-References: <20210325120020.236504-1-memxor@gmail.com>
- <20210325120020.236504-4-memxor@gmail.com>
- <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+        Joe Stringer <joe@cilium.io>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Yang Li <yang.lee@linux.alibaba.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: add 'BPF_RB_MAY_WAKEUP' flag
+Date:   Sun, 28 Mar 2021 13:10:30 -0300
+Message-Id: <20210328161055.257504-1-pctammela@mojatatu.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Mar 28, 2021 at 10:12:40AM IST, Andrii Nakryiko wrote:
-> Is there some succinct but complete enough documentation/tutorial/etc
-> that I can reasonably read to understand kernel APIs provided by TC
-> (w.r.t. BPF, of course). I'm trying to wrap my head around this and
-> whether API makes sense or not. Please share links, if you have some.
->
+The current way to provide a no-op flag to 'bpf_ringbuf_submit()',
+'bpf_ringbuf_discard()' and 'bpf_ringbuf_output()' is to provide a '0'
+value.
 
-Hi Andrii,
+A '0' value might notify the consumer if it already caught up in processing,
+so let's provide a more descriptive notation for this value.
 
-Unfortunately for the kernel API part, I couldn't find any when I was working
-on this. So I had to read the iproute2 tc code (tc_filter.c, f_bpf.c,
-m_action.c, m_bpf.c) and the kernel side bits (cls_api.c, cls_bpf.c, act_api.c,
-act_bpf.c) to grok anything I didn't understand. There's also similar code in
-libnl (lib/route/{act,cls}.c).
+Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+---
+ include/uapi/linux/bpf.h                               | 8 ++++++++
+ tools/include/uapi/linux/bpf.h                         | 8 ++++++++
+ tools/testing/selftests/bpf/progs/ima.c                | 2 +-
+ tools/testing/selftests/bpf/progs/ringbuf_bench.c      | 2 +-
+ tools/testing/selftests/bpf/progs/test_ringbuf.c       | 2 +-
+ tools/testing/selftests/bpf/progs/test_ringbuf_multi.c | 2 +-
+ 6 files changed, 20 insertions(+), 4 deletions(-)
 
-Other than that, these resources were useful (perhaps you already went through
-some/all of them):
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 598716742593..100cb2e4c104 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4058,6 +4058,8 @@ union bpf_attr {
+  * 		Copy *size* bytes from *data* into a ring buffer *ringbuf*.
+  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
+  * 		of new data availability is sent.
++ * 		If **BPF_RB_MAY_WAKEUP** is specified in *flags*, notification
++ * 		of new data availability is sent if needed.
+  * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
+  * 		of new data availability is sent unconditionally.
+  * 	Return
+@@ -4066,6 +4068,7 @@ union bpf_attr {
+  * void *bpf_ringbuf_reserve(void *ringbuf, u64 size, u64 flags)
+  * 	Description
+  * 		Reserve *size* bytes of payload in a ring buffer *ringbuf*.
++ * 		*flags* must be 0.
+  * 	Return
+  * 		Valid pointer with *size* bytes of memory available; NULL,
+  * 		otherwise.
+@@ -4075,6 +4078,8 @@ union bpf_attr {
+  * 		Submit reserved ring buffer sample, pointed to by *data*.
+  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
+  * 		of new data availability is sent.
++ * 		If **BPF_RB_MAY_WAKEUP** is specified in *flags*, notification
++ * 		of new data availability is sent if needed.
+  * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
+  * 		of new data availability is sent unconditionally.
+  * 	Return
+@@ -4085,6 +4090,8 @@ union bpf_attr {
+  * 		Discard reserved ring buffer sample, pointed to by *data*.
+  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
+  * 		of new data availability is sent.
++ * 		If **BPF_RB_MAY_WAKEUP** is specified in *flags*, notification
++ * 		of new data availability is sent if needed.
+  * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
+  * 		of new data availability is sent unconditionally.
+  * 	Return
+@@ -4965,6 +4972,7 @@ enum {
+  * BPF_FUNC_bpf_ringbuf_output flags.
+  */
+ enum {
++	BPF_RB_MAY_WAKEUP		= 0,
+ 	BPF_RB_NO_WAKEUP		= (1ULL << 0),
+ 	BPF_RB_FORCE_WAKEUP		= (1ULL << 1),
+ };
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index ab9f2233607c..3d6d324184c0 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4058,6 +4058,8 @@ union bpf_attr {
+  * 		Copy *size* bytes from *data* into a ring buffer *ringbuf*.
+  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
+  * 		of new data availability is sent.
++ * 		If **BPF_RB_MAY_WAKEUP** is specified in *flags*, notification
++ * 		of new data availability is sent if needed.
+  * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
+  * 		of new data availability is sent unconditionally.
+  * 	Return
+@@ -4066,6 +4068,7 @@ union bpf_attr {
+  * void *bpf_ringbuf_reserve(void *ringbuf, u64 size, u64 flags)
+  * 	Description
+  * 		Reserve *size* bytes of payload in a ring buffer *ringbuf*.
++ * 		*flags* must be 0.
+  * 	Return
+  * 		Valid pointer with *size* bytes of memory available; NULL,
+  * 		otherwise.
+@@ -4075,6 +4078,8 @@ union bpf_attr {
+  * 		Submit reserved ring buffer sample, pointed to by *data*.
+  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
+  * 		of new data availability is sent.
++ * 		If **BPF_RB_MAY_WAKEUP** is specified in *flags*, notification
++ * 		of new data availability is sent if needed.
+  * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
+  * 		of new data availability is sent unconditionally.
+  * 	Return
+@@ -4085,6 +4090,8 @@ union bpf_attr {
+  * 		Discard reserved ring buffer sample, pointed to by *data*.
+  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
+  * 		of new data availability is sent.
++ * 		If **BPF_RB_MAY_WAKEUP** is specified in *flags*, notification
++ * 		of new data availability is sent if needed.
+  * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
+  * 		of new data availability is sent unconditionally.
+  * 	Return
+@@ -4959,6 +4966,7 @@ enum {
+  * BPF_FUNC_bpf_ringbuf_output flags.
+  */
+ enum {
++	BPF_RB_MAY_WAKEUP		= 0,
+ 	BPF_RB_NO_WAKEUP		= (1ULL << 0),
+ 	BPF_RB_FORCE_WAKEUP		= (1ULL << 1),
+ };
+diff --git a/tools/testing/selftests/bpf/progs/ima.c b/tools/testing/selftests/bpf/progs/ima.c
+index 96060ff4ffc6..0f4daced6aad 100644
+--- a/tools/testing/selftests/bpf/progs/ima.c
++++ b/tools/testing/selftests/bpf/progs/ima.c
+@@ -38,7 +38,7 @@ void BPF_PROG(ima, struct linux_binprm *bprm)
+ 			return;
+ 
+ 		*sample = ima_hash;
+-		bpf_ringbuf_submit(sample, 0);
++		bpf_ringbuf_submit(sample, BPF_RB_MAY_WAKEUP);
+ 	}
+ 
+ 	return;
+diff --git a/tools/testing/selftests/bpf/progs/ringbuf_bench.c b/tools/testing/selftests/bpf/progs/ringbuf_bench.c
+index 123607d314d6..808e2e0e3d64 100644
+--- a/tools/testing/selftests/bpf/progs/ringbuf_bench.c
++++ b/tools/testing/selftests/bpf/progs/ringbuf_bench.c
+@@ -24,7 +24,7 @@ static __always_inline long get_flags()
+ 	long sz;
+ 
+ 	if (!wakeup_data_size)
+-		return 0;
++		return BPF_RB_MAY_WAKEUP;
+ 
+ 	sz = bpf_ringbuf_query(&ringbuf, BPF_RB_AVAIL_DATA);
+ 	return sz >= wakeup_data_size ? BPF_RB_FORCE_WAKEUP : BPF_RB_NO_WAKEUP;
+diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf.c b/tools/testing/selftests/bpf/progs/test_ringbuf.c
+index 8ba9959b036b..03a5cbd21356 100644
+--- a/tools/testing/selftests/bpf/progs/test_ringbuf.c
++++ b/tools/testing/selftests/bpf/progs/test_ringbuf.c
+@@ -21,7 +21,7 @@ struct {
+ /* inputs */
+ int pid = 0;
+ long value = 0;
+-long flags = 0;
++long flags = BPF_RB_MAY_WAKEUP;
+ 
+ /* outputs */
+ long total = 0;
+diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c b/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c
+index edf3b6953533..f33c3fdfb1d6 100644
+--- a/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c
++++ b/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c
+@@ -71,7 +71,7 @@ int test_ringbuf(void *ctx)
+ 	sample->seq = total;
+ 	total += 1;
+ 
+-	bpf_ringbuf_submit(sample, 0);
++	bpf_ringbuf_submit(sample, BPF_RB_MAY_WAKEUP);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
 
-https://docs.cilium.io/en/latest/bpf/#tc-traffic-control
-https://qmonnet.github.io/whirl-offload/2020/04/11/tc-bpf-direct-action/
-tc(8), and tc-bpf(8) man pages
-
-I hope this is helpful!
-
---
-Kartikeya
