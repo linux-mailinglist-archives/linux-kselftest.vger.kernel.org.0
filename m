@@ -2,140 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5EC34CFBD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 14:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE29C34CFFA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 14:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbhC2MIr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Mar 2021 08:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbhC2MIa (ORCPT
+        id S230240AbhC2MYQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Mar 2021 08:24:16 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:7948 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230098AbhC2MYK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Mar 2021 08:08:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82BAC061574;
-        Mon, 29 Mar 2021 05:08:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Njn/KvV5Snuv3RW7HAFUHdZEr2iaxCFGr7M1vBWlqyE=; b=HItK73o0bQo72HLTdxmUfNE+Tx
-        5RC7H0/B82q23CUYsvFs3+5H8CYap7vGcfq0YcTFFhKd5km8DdGvhmT4fnKoYz9ZE3vucoJ+2e5Rj
-        mZG4oju+VZl5ri5ckYwXVae1tbFoFCSmsPqAvAJW48MZmiws+JLzDkUENY9Z45KTju7JPqvLLaChv
-        pRyQfWKopxnNivlzrjrXRhnUXf43yDuNsAoPHohWhLRzhmg19LtEKMgjX25v9t2cgNfwDMtidlkw0
-        xR56RxWS6dOWGRZolAj79Ss/uzt26prrNSUD+nrBUUQJq6ffU99UownAzF74gEXF3/xIqrE09E6Qv
-        jeMw0Dxw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lQqfm-001WyJ-TV; Mon, 29 Mar 2021 12:07:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D5B5B304B90;
-        Mon, 29 Mar 2021 14:07:09 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9D5F52071A3CB; Mon, 29 Mar 2021 14:07:09 +0200 (CEST)
-Date:   Mon, 29 Mar 2021 14:07:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
-        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
-        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
-        mascasa@google.com, pcc@google.com, irogers@google.com,
-        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-kselftest@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
-Message-ID: <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
-References: <20210324112503.623833-1-elver@google.com>
- <20210324112503.623833-7-elver@google.com>
- <YFxGb+QHEumZB6G8@elver.google.com>
+        Mon, 29 Mar 2021 08:24:10 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12TCMBAi030000;
+        Mon, 29 Mar 2021 07:23:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=be7gahKOHkuRaNoGKguDexXs3BpP7vM9QCY/E9w655k=;
+ b=OBrMAQzKcEB/5q+QP8U0anUC0bYVaAvyVkRSkZbQb47MxjV32TsPpdY+vTNuQcGbrPfx
+ E6mis4/9LcPklIct43qz6LctoyKiy5+PYNVlUNLhUMNyBCaGPntq7ipmcQHeNGRic2nk
+ y1deCLGupe3UN4uH55K2eGxjxEglnLCIDsFwWczJ8Kq8lWOxqVlNDB5RHdsKLsDEeOvu
+ mBo1RJ5gD6DFEnEuNlT4s8gdq9JWjfke66x1ZSzFnJ1RyP4h4Pk0xCKX04tsIwa+t8eO
+ HUQLxSFUe75l+zgxAzGswBfKjJZZh/xWiAzHpLTkoEdTabsojoRZ9PMOSUUx/255lGfY zA== 
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 37j2452cm4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 29 Mar 2021 07:23:32 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 29 Mar
+ 2021 13:08:27 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Mon, 29 Mar 2021 13:08:27 +0100
+Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.65.138])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7B8EC11CF;
+        Mon, 29 Mar 2021 12:08:27 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
+        <sergey.senozhatsky@gmail.com>,
+        <andriy.shevchenko@linux.intel.com>, <linux@rasmusvillemoes.dk>,
+        <shuah@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH v7 1/4] lib: vsprintf: scanf: Negative number must have field width > 1
+Date:   Mon, 29 Mar 2021 13:08:21 +0100
+Message-ID: <20210329120824.3006-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YFxGb+QHEumZB6G8@elver.google.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: FHpyh3QG9b-u_BweZhXwuKy8C2WvLczn
+X-Proofpoint-GUID: FHpyh3QG9b-u_BweZhXwuKy8C2WvLczn
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 clxscore=1015
+ impostorscore=0 mlxlogscore=589 malwarescore=0 mlxscore=0 bulkscore=0
+ phishscore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2103250000 definitions=main-2103290097
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 09:14:39AM +0100, Marco Elver wrote:
-> On Wed, Mar 24, 2021 at 12:24PM +0100, Marco Elver wrote:
-> [...]
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > index b6434697c516..1e4c949bf75f 100644
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -6391,6 +6391,17 @@ void perf_event_wakeup(struct perf_event *event)
-> >  	}
-> >  }
-> >  
-> > +static void perf_sigtrap(struct perf_event *event)
-> > +{
-> > +	struct kernel_siginfo info;
-> > +
-> 
-> I think we need to add something like this here:
-> 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 4b82788fbaab..4fcd6b45ce66 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -6395,6 +6395,13 @@ static void perf_sigtrap(struct perf_event *event)
->  {
->  	struct kernel_siginfo info;
->  
-> +	/*
-> +	 * This irq_work can race with an exiting task; bail out if sighand has
-> +	 * already been released in release_task().
-> +	 */
-> +	if (!current->sighand)
-> +		return;
-> +
->  	clear_siginfo(&info);
->  	info.si_signo = SIGTRAP;
->  	info.si_code = TRAP_PERF;
-> 
-> 
+If a signed number field starts with a '-' the field width must be > 1,
+or unlimited, to allow at least one digit after the '-'.
 
-Urgh.. I'm not entirely sure that check is correct, but I always forget
-the rules with signal. It could be we ought to be testing PF_EXISTING
-instead.
+This patch adds a check for this. If a signed field starts with '-'
+and field_width == 1 the scanf will quit.
 
-But also, I think Jiri Olsa was going to poke around here because all of
-this is broken on PREEMPT_RT. IIRC the plan was to add yet another stage
-to the construct. So where today we have:
+It is ok for a signed number field to have a field width of 1 if it
+starts with a digit. In that case the single digit can be converted.
 
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ lib/vsprintf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-	<NMI>
-		irq_work_queue()
-	</NMI>
-	...
-	<IRQ>
-		perf_pending_event()
-	</IRQ>
-
-(and we might already have a problem on some architectures where there
-can be significant time between these due to not having
-arch_irq_work_raise(), so ideally we ought to double check current in
-your case)
-
-The idea was, I think to add a task_work(), such that we get:
-
-	<NMI>
-		irq_work_queue()
-	</NMI>
-	...
-	<IRQ>
-		perf_pending_event()
-		  task_work_add()
-	</IRQ>
-
-	<ret-to-user>
-		run_task_work()
-		  ...
-		    kill_fasync();
-
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 41ddc353ebb8..f78651e9b030 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -3466,8 +3466,12 @@ int vsscanf(const char *buf, const char *fmt, va_list args)
+ 		str = skip_spaces(str);
+ 
+ 		digit = *str;
+-		if (is_sign && digit == '-')
++		if (is_sign && digit == '-') {
++			if (field_width == 1)
++				break;
++
+ 			digit = *(str + 1);
++		}
+ 
+ 		if (!digit
+ 		    || (base == 16 && !isxdigit(digit))
+-- 
+2.20.1
 
