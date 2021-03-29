@@ -2,58 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B5934C118
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 03:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A02934C136
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 03:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbhC2B0M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 Mar 2021 21:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        id S229861AbhC2BlK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 28 Mar 2021 21:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbhC2B0G (ORCPT
+        with ESMTP id S229762AbhC2Bkt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Mar 2021 21:26:06 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135FFC061574;
-        Sun, 28 Mar 2021 18:26:06 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id kr3-20020a17090b4903b02900c096fc01deso5145987pjb.4;
-        Sun, 28 Mar 2021 18:26:06 -0700 (PDT)
+        Sun, 28 Mar 2021 21:40:49 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868FEC061574;
+        Sun, 28 Mar 2021 18:40:48 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id l76so8417047pga.6;
+        Sun, 28 Mar 2021 18:40:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=D2qDTN7silotp2//OnN3/0i2DnrKYAYRXZS1eDoRb7Q=;
-        b=XobvU2uNpiHXgiqr20IGZVGwVnLsirMFL+2eoeCGHVygqUKiA8jdIzKWn8ZjGiJOnH
-         SkwzmKUiFguztt2b8nX3+//w8eSgQD6MAFC56xs+zHws0Xt/iscQfl7BxIsVS7049qYW
-         98SDzALrFGk1dHUS2Uz5AQul1daKjZl1S0WK/i7UsLJ5M9qugVCPisgizndFt82/lzX4
-         Ty1aBWMIVw2Gqgr3OGCpjvFKCwomm5zLlZk4HKz0q9NafFDh5onokMsXhoaaQd4JEKvz
-         maC/l8QAEN4VrJvAfc6dn12zdwro4ql332/Twzg0PlcgHw+bSH75eG8CWb8r1d045TZi
-         IeTg==
+         :content-disposition:in-reply-to;
+        bh=A31fTE6FaV7bDCF8xSgupyEIITubhNi2zHJbCkiQMck=;
+        b=gMXBRLbxgDGSiivJHaNkwk8IFZyp88K0+CIt3cIBrSI7i5ZjnQJevS+V8/Oep2we9U
+         zcmkDgxEh12E6z/cbWHSo4Ip3wF2O0wm8DuPxW0ScAsNrJdKTvki4CQJosuQrmA2nJBc
+         KlgwrOWTRpiNG0trd2FFKVvU5ad1ss1SC6QDoTSygpF0jfCw3Fb2eQXopFN3Budm54Bh
+         lp98nDGzHH7mBrDHFXIZimkHG0+JDowEi6k7rDh8PNAh3KRh/Miee1IwEMGz2tSGxOUt
+         7YD91vhKhlbHq/qaVO+f1ghDGryB8ddQazWGDx5W4Rx7cFFpUtVjpafxvymE4Bri7UTk
+         0G3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=D2qDTN7silotp2//OnN3/0i2DnrKYAYRXZS1eDoRb7Q=;
-        b=pymkGGTlnBfG+ma+/Rnb90PdOP1ROiQxl12KvBPTjovTrsh8JnzKU0aVjCeAkd+OcD
-         S9+2APGdNaIWSdnpUwj0lyaa+U1tZFvqLmNBhyUcH1Zj5n8cdyWAU6llpES28O1YSDzW
-         ASP9YMXNxZ6vMJRBZZY0jzdwOaauOOnP6FtM5bgIE5MhsusoElunu/gAAWlUpexN0wE+
-         w+C71N4mQYn4vtf47XdD1O+dxoKoXGUaZbMfOiFQXSMBkz1dYJZDXlDARuQciZZo/hCw
-         C/J9qQh6Z4BC5fuiUpfXraQPfsaKc9mfvhTVdaBgDob2Dqfww8Vpd0A7T9iF6z83aRrQ
-         j5fQ==
-X-Gm-Message-State: AOAM531wYJOUWkby9uivKCQjwZb/RiAsHw4nSvtaJ02E92uVW6zaHNdV
-        G2fYpuM+X2b5EdCXJfuit3s=
-X-Google-Smtp-Source: ABdhPJxjxzFXOqkBT6dy5DhXM8Uzx3EwHv1iP1Tibnt6sgZd+CfXJJggAP+Ef0IC0A65OPpzuSG5DQ==
-X-Received: by 2002:a17:90a:cb8c:: with SMTP id a12mr24654662pju.35.1616981165633;
-        Sun, 28 Mar 2021 18:26:05 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to;
+        bh=A31fTE6FaV7bDCF8xSgupyEIITubhNi2zHJbCkiQMck=;
+        b=sU2HcL+d+pUr2L0if3liV6FskpyXmQ/KOC+Y+MBBwf49WXNtlC25Md9mlcB4vAWUaP
+         YG7sI3aT01w323QaZfpBAD2joYbCXuFXYjLbfhjZW0nd9ucgel/6Lq+dwBA/jtdtba0e
+         lzvtWOyVrdkUY6lErnTYpZPY/Dh4rhvcnui0oMPLzhxwdguSscITdOW/kKrgZHRCpkHm
+         xPn2R/djENOBi0kx9zHR4txM6/BelBsxe1rf2UrokGap0uYzFIKP5/6OyJj77eAV0JQs
+         /zXg/Sf3N/XPAfeSAOOLJZh/jsdRzum+jsG0NMpRNv6Wmgxror2U7oS/2Bs9nrL/2Qaw
+         Kq0w==
+X-Gm-Message-State: AOAM532xmRBBoM2frxHd7+G/iMc2yBQ5YSmyoOfBnlIv/IFDjWN6vyN0
+        2EFJnhRH9H6jcHC1d70ii7M=
+X-Google-Smtp-Source: ABdhPJzlTquJbyX58kehPjSrAn+tbLmsKBKtqWJa6h9V/LJ1IFLn9pV+kMpIPv2UGFg6LjaD4qanBA==
+X-Received: by 2002:a05:6a00:b86:b029:207:8ac9:85de with SMTP id g6-20020a056a000b86b02902078ac985demr22525728pfj.66.1616982048021;
+        Sun, 28 Mar 2021 18:40:48 -0700 (PDT)
 Received: from ast-mbp ([2620:10d:c090:400::5:1b8f])
-        by smtp.gmail.com with ESMTPSA id w79sm15674455pfc.87.2021.03.28.18.26.03
+        by smtp.gmail.com with ESMTPSA id k21sm15960927pfi.28.2021.03.28.18.40.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Mar 2021 18:26:05 -0700 (PDT)
-Date:   Sun, 28 Mar 2021 18:26:02 -0700
+        Sun, 28 Mar 2021 18:40:47 -0700 (PDT)
+Date:   Sun, 28 Mar 2021 18:40:44 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
-        brouer@redhat.com, Alexei Starovoitov <ast@kernel.org>,
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
@@ -64,64 +66,68 @@ Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
         Jakub Kicinski <kuba@kernel.org>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Subject: Re: [PATCH bpf-next 5/5] libbpf: add selftests for TC-BPF API
-Message-ID: <20210329012602.4zzysn2ewbarbn3d@ast-mbp>
+Message-ID: <20210329014044.fkmusoeaqs2hjiek@ast-mbp>
 References: <20210325120020.236504-1-memxor@gmail.com>
  <20210325120020.236504-6-memxor@gmail.com>
  <20210327021534.pjfjctcdczj7facs@ast-mbp>
- <87h7kwaao3.fsf@toke.dk>
+ <CAEf4Bzba_gdTvak_UHqi96-w6GLF5JQcpQRcG7zxnx=kY8Sd5w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87h7kwaao3.fsf@toke.dk>
+In-Reply-To: <CAEf4Bzba_gdTvak_UHqi96-w6GLF5JQcpQRcG7zxnx=kY8Sd5w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 27, 2021 at 04:17:16PM +0100, Toke Høiland-Jørgensen wrote:
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-> 
-> > On Thu, Mar 25, 2021 at 05:30:03PM +0530, Kumar Kartikeya Dwivedi wrote:
-> >> This adds some basic tests for the low level bpf_tc_* API and its
-> >> bpf_program__attach_tc_* wrapper on top.
-> >
-> > *_block() apis from patch 3 and 4 are not covered by this selftest.
-> > Why were they added ? And how were they tested?
-> >
-> > Pls trim your cc. bpf@vger and netdev@vger would have been enough.
-> >
-> > My main concern with this set is that it adds netlink apis to libbpf while
-> > we already agreed to split xdp manipulation pieces out of libbpf.
-> > It would be odd to add tc apis now only to split them later.
-> 
-> We're not removing the ability to attach an XDP program via netlink from
-> libxdp, though. This is the equivalent for TC: the minimum support to
-> attach a program, and if you want to do more, you pull in another
-> library or roll your own.
-> 
-> I'm fine with cutting out more stuff and making this even more minimal
-> (e.g., remove the block stuff and only support attach/detach on ifaces),
-> but we figured we'd err on the side of including too much and getting
-> some feedback from others on which bits are the essential ones to keep,
-> and which can be dropped.
-
-This is up to you. I'm trying to understand the motivation for *_block() apis.
-I'm not taking a stance for/against them.
-
+On Sat, Mar 27, 2021 at 09:32:58PM -0700, Andrii Nakryiko wrote:
 > > I think it's better to start with new library for tc/xdp and have
 > > libbpf as a dependency on that new lib.
 > > For example we can add it as subdir in tools/lib/bpf/.
+> >
+> > Similarly I think integerating static linking into libbpf was a mistake.
+> > It should be a sub library as well.
+> >
+> > If we end up with core libbpf and ten sublibs for tc, xdp, af_xdp, linking,
+> > whatever else the users would appreciate that we don't shove single libbpf
+> > to them with a ton of features that they might never use.
 > 
-> I agree for the higher-level stuff (though I'm not sure what that would
-> be for TC), but right now TC programs are the only ones that cannot be
-> attached by libbpf, which is annoying; that's what we're trying to fix.
+> What's the concern exactly? The size of the library? Having 10
+> micro-libraries has its own set of downsides, 
 
-Sure. I wasn't saying that there is no place for these APIs in libbpf+.
-Just that existing libbpf is already became a kitchen sink of features
-that users are not going to use like static linking.
-tc-api was a straw that broke the camel's back.
-I think we must move static linking and skeleton out of libbpf before
-the next release.
+specifically?
+
+> I'm not convinced that's
+> a better situation for end users. And would certainly cause more
+> hassle for libbpf developers and packagers.
+
+For developers and packagers.. yes.
+For users.. quite the opposite.
+The skel gen and static linking must be split out before the next libbpf release.
+Not a single application linked with libbpf is going to use those pieces.
+bpftool is one and only that needs them. Hence forcing libbpf users
+to increase their .text with a dead code is a selfish call of libbpf
+developers and packagers. The user's priorities must come first.
+
+> And what did you include in "core libbpf"?
+
+I would take this opportunity to split libbpf into maintainable pieces:
+- libsysbpf - sys_bpf wrappers (pretty much tools/lib/bpf/bpf.c)
+- libbpfutil - hash, strset
+- libbtf - BTF read/write
+- libbpfelf - ELF parsing, CORE, ksym, kconfig
+- libbpfskel - skeleton gen used by bpftool only
+- libbpflink - linker used by bpftool only
+- libbpfnet - networking attachment via netlink including TC and XDP
+- libbpftrace - perfbuf, ringbuf
+- libxdp - Toke's xdp chaining
+- libxsk - af_xdp logic
+
+In the future the stack trace symbolization code can come
+into libbpftrace or be a part of its own lib.
+My upcoming loader program and signed prog generation logic
+can be part of libbpfskel.
