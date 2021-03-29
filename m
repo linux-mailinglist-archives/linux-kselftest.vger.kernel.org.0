@@ -2,91 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E9034D759
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 20:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0021834D8CB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 22:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbhC2Seb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Mar 2021 14:34:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:42448 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231652AbhC2SeI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Mar 2021 14:34:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617042847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pDaHHzh6SdLVte/qI+KKbIrazg9pPxb7giE0iRBcJy4=;
-        b=LA0Hm7dsxmCqJyCqZt+RRJDi9ZrXhe8UfCaKKQnqPZZGd3+oBr+93Uc4c42B7Rh+QrHntT
-        +wDO+KXVloMzusoQKqe4cBu3m60xm79LJPAAEvicVA5J5qdz5qtTpA5k1QqRmp1TE+zz5T
-        oOerLs9FyhJ2n95Rc0WGXFtQ3QiDc2s=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-428-6CvGnPCoONa9AJSA2KRzUg-1; Mon, 29 Mar 2021 14:34:03 -0400
-X-MC-Unique: 6CvGnPCoONa9AJSA2KRzUg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7C03F87A82A;
-        Mon, 29 Mar 2021 18:34:00 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.79])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 4D0395D6A1;
-        Mon, 29 Mar 2021 18:33:53 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 29 Mar 2021 20:34:00 +0200 (CEST)
-Date:   Mon, 29 Mar 2021 20:33:52 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
-Message-ID: <20210329183351.GD24849@redhat.com>
-References: <20210324112503.623833-1-elver@google.com>
- <20210324112503.623833-7-elver@google.com>
- <YFxGb+QHEumZB6G8@elver.google.com>
- <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
- <20210329142705.GA24849@redhat.com>
- <CANpmjNN=dpMmanU1mzigUscZQ6_Bx6u4u5mS4Ukhy0PTiexgDA@mail.gmail.com>
+        id S231815AbhC2UFd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Mar 2021 16:05:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40130 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231772AbhC2UFK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 29 Mar 2021 16:05:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E631561959;
+        Mon, 29 Mar 2021 20:05:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617048310;
+        bh=2++uRKTU4b8WWT9+vLiSjF8hbqooGsi8cRzTV06BIUQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JteAGXDeqZGzWh5gwim4TjGjyw45Xh39iDdWsW0sD73DHkPTRcbbUlzkfLpWsGzLF
+         faGJ8wPweUfxEPJzIrCvYm+K4IqHPuFkSXvsMrZtHztr4WMOH5AsDlJ37LCN5PLKkZ
+         I7QBlhin0qMxviE3mOUVz/lOLDiQwsVDvrJUcfIF1XajhbsaQAzfqhCZUe6/gjf+JG
+         BEBcSqzoRoG3DGSR3M6n+hXyjHG7VOP0kvw5Y/4r9aXYMkE9eKt/RDwx/fC2r8Bcrw
+         YM3jRRoq7Zfo1BN0xfFVxQv76nuUfbxwqYUOZWWzcVeXe9Vc/tqywzeFMRSgSrMyiU
+         mrxcG0XJTanCw==
+Received: by mail-lj1-f175.google.com with SMTP id u4so17331037ljo.6;
+        Mon, 29 Mar 2021 13:05:09 -0700 (PDT)
+X-Gm-Message-State: AOAM531xh2aP8V1NAQDf+UWYacfoHJFXgnk1omJAXvJFhSO7VHs7igvk
+        ph0tYk9uZP/rhGDFXMW24zQBtFDfhooxU054zJw=
+X-Google-Smtp-Source: ABdhPJygEQ9lfnd9I5K8XYuLNeiEtYlNMTXr2rh8VK6zhBztNef0K3tBq2Lw29o4mAGcmIOEzHOAxDMeYN5ioZMmSIg=
+X-Received: by 2002:a2e:809a:: with SMTP id i26mr18623975ljg.357.1617048308267;
+ Mon, 29 Mar 2021 13:05:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNN=dpMmanU1mzigUscZQ6_Bx6u4u5mS4Ukhy0PTiexgDA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+References: <20210330020656.26bb2dfd@xhacker>
+In-Reply-To: <20210330020656.26bb2dfd@xhacker>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 29 Mar 2021 13:04:57 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4Y1DGP-F2=R7ni7VqnGVes+g2xWWuT-ADOfRPTEkF=mg@mail.gmail.com>
+Message-ID: <CAPhsuW4Y1DGP-F2=R7ni7VqnGVes+g2xWWuT-ADOfRPTEkF=mg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: add LDFLAGS when building test_verifier
+To:     Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kselftest@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03/29, Marco Elver wrote:
+On Mon, Mar 29, 2021 at 11:13 AM Jisheng Zhang
+<jszhang3@mail.ustc.edu.cn> wrote:
 >
-> So, per off-list discussion, it appears that I should ask to clarify:
-> PF_EXISTING or PF_EXITING?
+> From: Jisheng Zhang <jszhang@kernel.org>
+>
+> This is useful for cross compile process to point linker to the
+> correct libelf, libcap, libz path.
 
-Aaaaaaah, sorry Marco.
+LGTM:
+Acked-by: Song Liu <songliubraving@fb.com>
 
-PF_EXITING, of course.
+btw: Do we also need LDFLAGS for some other binaries, like test_cpp,
+TRUNNER_BINARY, etc?
 
-Oleg.
+Thanks,
+Song
 
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  tools/testing/selftests/bpf/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 044bfdcf5b74..dac1c5094e28 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -447,7 +447,7 @@ verifier/tests.h: verifier/*.c
+>                 ) > verifier/tests.h)
+>  $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+>         $(call msg,BINARY,,$@)
+> -       $(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+> +       $(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+>
+>  # Make sure we are able to include and link libbpf against c++.
+>  $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
+> --
+> 2.31.0
+>
+>
