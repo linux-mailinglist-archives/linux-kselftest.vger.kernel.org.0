@@ -2,57 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7AC34C13E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 03:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9E734C1FA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 04:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbhC2BqJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 Mar 2021 21:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S230292AbhC2Cjb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 28 Mar 2021 22:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbhC2Bp3 (ORCPT
+        with ESMTP id S230271AbhC2CjF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Mar 2021 21:45:29 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF6AC061574;
-        Sun, 28 Mar 2021 18:45:29 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id f2-20020a17090a4a82b02900c67bf8dc69so6952398pjh.1;
-        Sun, 28 Mar 2021 18:45:29 -0700 (PDT)
+        Sun, 28 Mar 2021 22:39:05 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0EAC061574;
+        Sun, 28 Mar 2021 19:38:54 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id w8so12274478ybt.3;
+        Sun, 28 Mar 2021 19:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=H8D3sGtLUXJOTzb0NqtEbyGHIovhRrWGfN86FA/SzbI=;
-        b=kmmLAvVLSv+dgFeuvv9Hiqzz+TFTzYgoQQRIedNm3oyaPm4q9RR5udQo42Uie7F31a
-         uuK+mI5ALbVAWk/GlHFWc4TGUMHQTH79RO8Bl66Ci0lrNBba9TeF1gp6SnJc2gpIDgok
-         J1v4WOWQ1Qz+oafm8Nkcs82DtSCeP/8QJw7XN1mXgw0wAouEK43/MfFv3p1hDXlkgNde
-         Lwd4KZkFGai0/4Jqm0yCOEiBzR96Sk0o9psiDHqSWOEsapK9E53McPDYBklcGEezFrpA
-         OwfVvdHR+zDZ6Bye/vhzpAFnQcPsVuRFOl2T8rKCCaoZXhLOF7z4A4iLRqi9jVLkX7uy
-         +Flw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=33INFIPrDA+cLi64cYDVf5nELFJnPwDCsojs1BYS9e0=;
+        b=SC1GDA/YlCTwqzfTlUPUqTarHSRijy6NQPPURkC+c5JedNIaUevKXRNN6GR3Rzfsvo
+         0X5VLT+yQIEW8jE++wPbLPbAYI/RmfWGlcSlUjd0FVD64QP7vbBFFAYFTIXQkPV9joPP
+         L1TivumWiKtT2TZTFj2O5IBxl0f0PLovY08i44p4UIK5oqEKJBDYdj6NvqlYyY7bsiZi
+         yKRPTykL1LqQNs7vC5fqbIaQdhGGOU6rEuNWipa6TATu+vUZsMRzQk02fnsRTqzD9BJr
+         /Feo7egdRN4e7y21/GeoKE/PAEUT4j+M2PCl+Tjty5bn/nsw8+GbnAnrKkS76+KfguKx
+         w2HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H8D3sGtLUXJOTzb0NqtEbyGHIovhRrWGfN86FA/SzbI=;
-        b=TCuYe0FXWATAg4Bh2E2D/DHdP+i8GSsaGPHPD2QXNkD15cmji6dT1SzfDWTkZAQcte
-         K9vWfjaZo0OdH+JUEiH77Ox060aGR7RbhjUz57hXMu9ttRJIKQwpfPBJ756H6eodiZES
-         TfoU3solcJPTbp2wT5u1tNHIrrEcIoeTLHmS+8KERMAUFEsXFK/kVqyE3zwi4KUZNxaU
-         3RHomfkLUmol2IlyJbUt42652FzYcTVxF8RLVZofqEla/UjLB/V2lGVOl9GiU4HrcnJr
-         AN2ycwxMMZkRhBwbGgBAj/Byt+DRVf7rhtY0QrcU4ZOrCSZmbCrcaOUNg1pnTAWmGdvp
-         GPHg==
-X-Gm-Message-State: AOAM530OJRkJsPEbBbHyN1Wmv9nTBZieXYZDY3bvKaJN6/6N/1nULC6x
-        0+1QWoHYtiZXOH3Qo46dg/M=
-X-Google-Smtp-Source: ABdhPJxdei1FyzEUawUp2kv5omuyvqrbNp49jh9MWoBVGE7DLOmjFTOFyoCC5tOLAEyJlzCdBnTI/w==
-X-Received: by 2002:a17:90a:a88d:: with SMTP id h13mr23502208pjq.61.1616982328799;
-        Sun, 28 Mar 2021 18:45:28 -0700 (PDT)
-Received: from localhost ([112.79.240.89])
-        by smtp.gmail.com with ESMTPSA id k11sm13564044pjs.1.2021.03.28.18.45.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Mar 2021 18:45:28 -0700 (PDT)
-Date:   Mon, 29 Mar 2021 07:15:25 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=33INFIPrDA+cLi64cYDVf5nELFJnPwDCsojs1BYS9e0=;
+        b=ktgYA49fB3yJmsnLWcoSmO4j74KHBKkMPJNokQfKJG5Dmjm6Ap58ENL1Ek779SbDZ+
+         8SMpiFeQkyLa7TNFksp/poGCeON5Gqs8rdUwfRcPHc1/7oHd8sh7AYoj8Z8Mpj9mXhnF
+         eXjVcDIofGd0EXnXzG4bQBYF8a/zWwgeWqiu6VpL5KFSPgbyujKFrCGAj6RsQrxlxmdi
+         5fIK9XyeJEoF9FWxJ4My2ltpSTxB6ARgwkxMMAOMxko5ZwqpMf9xg7yTq9MMUTAP96gy
+         qqaQVlkyz5uGDIkWMJGCnJWmT4Ph2yiDJrzXQTxigrp/P4SQnzunLnjzsqnaCzhgEIIW
+         ardQ==
+X-Gm-Message-State: AOAM532Wh8usAFwp85iauCj5ZLV7wWEanxtVL3PPpO6dBsNhTGdE+axn
+        AK92y0MrGvvgVHp/dSaSrLpVw8e5AVzdAdcJ0wdMRuNwLLLADg==
+X-Google-Smtp-Source: ABdhPJz1j+34Rh8ICwuMs7SviJVhKkh9I5jSrmbaTtDKcHP5T82buMHpLjfGwIL+UvptjDLIVK+QfP842TaGHHEd0Bs=
+X-Received: by 2002:a25:4982:: with SMTP id w124mr33691184yba.27.1616985533223;
+ Sun, 28 Mar 2021 19:38:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210325120020.236504-1-memxor@gmail.com> <20210325120020.236504-6-memxor@gmail.com>
+ <20210327021534.pjfjctcdczj7facs@ast-mbp> <CAEf4Bzba_gdTvak_UHqi96-w6GLF5JQcpQRcG7zxnx=kY8Sd5w@mail.gmail.com>
+ <20210329014044.fkmusoeaqs2hjiek@ast-mbp>
+In-Reply-To: <20210329014044.fkmusoeaqs2hjiek@ast-mbp>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Sun, 28 Mar 2021 19:38:42 -0700
+Message-ID: <CAEf4BzZaWjVhfkr7vizir7PfbcsaN99yEwOoqKi32V4X17f0Ng@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/5] libbpf: add selftests for TC-BPF API
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        bpf@vger.kernel.org, brouer@redhat.com,
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -64,57 +69,149 @@ Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next 5/5] libbpf: add selftests for TC-BPF API
-Message-ID: <20210329014328.srm6y7d6odmgzhri@apollo>
-References: <20210325120020.236504-1-memxor@gmail.com>
- <20210325120020.236504-6-memxor@gmail.com>
- <20210327021534.pjfjctcdczj7facs@ast-mbp>
- <87h7kwaao3.fsf@toke.dk>
- <20210329012602.4zzysn2ewbarbn3d@ast-mbp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210329012602.4zzysn2ewbarbn3d@ast-mbp>
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 06:56:02AM IST, Alexei Starovoitov wrote:
-> This is up to you. I'm trying to understand the motivation for *_block() apis.
-> I'm not taking a stance for/against them.
+On Sun, Mar 28, 2021 at 6:40 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Sat, Mar 27, 2021 at 09:32:58PM -0700, Andrii Nakryiko wrote:
+> > > I think it's better to start with new library for tc/xdp and have
+> > > libbpf as a dependency on that new lib.
+> > > For example we can add it as subdir in tools/lib/bpf/.
+> > >
+> > > Similarly I think integerating static linking into libbpf was a mistake.
+> > > It should be a sub library as well.
+> > >
+> > > If we end up with core libbpf and ten sublibs for tc, xdp, af_xdp, linking,
+> > > whatever else the users would appreciate that we don't shove single libbpf
+> > > to them with a ton of features that they might never use.
+> >
+> > What's the concern exactly? The size of the library? Having 10
+> > micro-libraries has its own set of downsides,
+>
+> specifically?
 
-The block APIs simply attach to a different shared filter block, so in that
-sense they just forward to the bpf_tc_cls_*_dev API internally, where parent_id
-is substituted as block_index, and ifindex is set to a special value (to
-indicate operation on a block), but is still a distinct attach point, and both
-APIs cannot be mixed (i.e. manipulation of filter attached using block API is
-not possible using dev API).
+You didn't answer my question, but from what you write below I assume
+libbpf size is your main concern?
 
-e.g.
+As for downsides, I'm sure I'm not yet seeing all of the problems
+we'll encounter when splitting libbpf into 10 pieces. But as a user,
+having to figure out which libraries I need to use is a big hassle.
+E.g., for XDP application using ringbuf, I'll need libbpfelf,
+libbpftrace, libbpfnet, which implicitly also would depend on
+libsysbpf, libbtf, libbpfutil, I assume. So having to list 3 vs 1
+library is already annoying, but when statically linking I'd need to
+specify all 6. I'd very much rather know that it has to be -lbpf at it
+will provide me with all the basics (and it's already -lz and -lelf in
+static linking scenario, which I wish we could get rid of).
 
-# tc qdisc add dev <foo> ingress block 1
-# tc qdisc add dev <bar> ingress block 1
+>
+> > I'm not convinced that's
+> > a better situation for end users. And would certainly cause more
+> > hassle for libbpf developers and packagers.
+>
+> For developers and packagers.. yes.
+> For users.. quite the opposite.
 
-Now you can attach a filter to the shared block, e.g.
+See above. I don't know which hassle is libbpf for users today. You
+were implying code size used for functionality users might not use
+(e.g., linker). Libbpf is a very small library, <300KB. There are
+users building tools for constrained embedded systems that use libbpf.
+There are/were various problems mentioned, but the size of libbpf
+wasn't yet one of them. We should certainly watch the code bloat, but
+we are not yet at the point where library is too big for users to be
+turned off. In shared library case it's even less of a concern.
 
-# tc filter add block 1 bpf /home/kkd/foo.o sec cls direct-action
+> The skel gen and static linking must be split out before the next libbpf release.
+> Not a single application linked with libbpf is going to use those pieces.
+> bpftool is one and only that needs them. Hence forcing libbpf users
+> to increase their .text with a dead code is a selfish call of libbpf
+> developers and packagers. The user's priorities must come first.
+>
+> > And what did you include in "core libbpf"?
+>
+> I would take this opportunity to split libbpf into maintainable pieces:
+> - libsysbpf - sys_bpf wrappers (pretty much tools/lib/bpf/bpf.c)
+> - libbpfutil - hash, strset
 
-and it will attach the identical filter with the bpf prog classifier to both
-qdiscs in one go, instead of having to duplicate filter creation for each qdisc.
-You can add arbitrarily many qdiscs to such a filter block, easing filter
-management, and saving on resources.
+strset and hash are internal data structures, I never intended to
+expose them through public APIs. I haven't investigated, but if we
+have a separate shared library (libbpfutil), I imagine we won't be
+able to hide those APIs, right?
 
-So for the API, it made sense to separate this into its own function as it is a
-different attach point, both for the low level API and their higher level
-wrappers. This does increase the symbol count, but maintenance wise it is
-zero-cost since it simply forwards to the dev functions.
+> - libbtf - BTF read/write
+> - libbpfelf - ELF parsing, CORE, ksym, kconfig
+> - libbpfskel - skeleton gen used by bpftool only
 
-As for the tests, I'll add them for the block API in v2, when I get around to
-sending it (i.e. after the review is over).
+skeleton generation is already part of bpftool, there is no need to
+split anything out
 
-> [...]
+> - libbpflink - linker used by bpftool only
+> - libbpfnet - networking attachment via netlink including TC and XDP
+> - libbpftrace - perfbuf, ringbuf
 
---
-Kartikeya
+ringbuf and perfbuf are both very small code-wise, and are used in
+majority of BPF applications anyways
+
+> - libxdp - Toke's xdp chaining
+> - libxsk - af_xdp logic
+>
+
+Now, if we look at libbpf .o files, we can approximately see what
+functionality is using most code:
+
+File                Size Percent
+
+bpf.o              17800    4.88
+bpf_prog_linfo.o    2952    0.81
+btf_dump.o         20472    5.61
+btf.o              58160   15.93
+hashmap.o           4056    1.11
+libbpf_errno.o      2912    0.80
+libbpf.o          190072   52.06
+libbpf_probes.o     6696    1.83
+linker.o           29408    8.05
+netlink.o           5944    1.63
+nlattr.o            2744    0.75
+ringbuf.o           6128    1.68
+str_error.o         1640    0.45
+strset.o            3656    1.00
+xsk.o              12456    3.41
+
+Total             365096  100.00
+
+so libbpf.o which has mostly bpf_object open/load logic and CO-RE take
+more than half already. And it depends on still more stuff in btf,
+hashmap, bpf, libbpf_probes, errno. But the final code size is even
+smaller, because libbpf.so is just 285128 bytes (not 365096 as implied
+by the table above), so even these numbers are pessimistic.
+
+linker.o, which is about 8% of the code right now, but is also
+actually taking less than 29KB, because when I remove linker.o and
+re-compile, the final libbpf.so goes from 285128 to 267576 = 17552
+reduction. Even if it grows 2x, I'd still say it's not a big deal.
+
+One reason to keep BPF linker in libbpf is that it is not only bpftool
+that would be using it. Our libbpf Rust bindings
+ is implementing its own BPF skeleton generation, and we'd like to use
+linker APIs to support static linking when using libbpf-rs without
+depending on bpftool. So having it in libbpf and not in bpftool is
+good when you consider the wider ecosystem.
+
+But again, let's just reflect for a second that we are talking about
+the library that takes less than 300KB total. It would be also
+interesting to experiment with LTO and its effect on final binaries
+when statically linking against libbpf. I haven't tried yet, though.
+
+
+> In the future the stack trace symbolization code can come
+> into libbpftrace or be a part of its own lib.
+> My upcoming loader program and signed prog generation logic
+> can be part of libbpfskel.
