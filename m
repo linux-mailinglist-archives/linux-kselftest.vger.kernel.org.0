@@ -2,123 +2,246 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C664C34D003
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 14:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157DC34D01B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 14:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbhC2MZV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Mar 2021 08:25:21 -0400
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:39918 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231201AbhC2MZG (ORCPT
+        id S230399AbhC2Mct (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Mar 2021 08:32:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40787 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231126AbhC2McV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Mar 2021 08:25:06 -0400
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12TCLqvx010412;
-        Mon, 29 Mar 2021 07:23:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=OeBvXHVQoNXAilY5Tz5g05sOMFrWExNwsABdBOT0D3I=;
- b=py5XI0Dk8eWdNUtlmLBelDSu3kLJPLfZl0d+9BwIJi3kwPNzDGDh/8ZEUL25dfg9QCz6
- qPSfrezQBIm5pgPGqrUcjTkm6YlFCwCkeucg/SDmnGScWisVBcKh6njdYNqCTiCnADja
- Di4AwOVO7Wsj1ePrgIvvuf8s3MyCXDz8ZGbo1TWE6ucbQkW2Sn2fcMwIpHcS1WaSj69e
- Bmz8Br/OGUk/OeX+dlYYWlya35gv4L2TRoS5P/2cMAs27XqsdCjinBXEOeaYiHWsBQ3y
- 15nRSeIFRFxuaTJjH/BdgnKsc6xyIgEyO4W6dw7mGIsoa4egsyhR8EeS17PMQfm93exu JA== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0b-001ae601.pphosted.com with ESMTP id 37j14pjape-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 29 Mar 2021 07:23:32 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 29 Mar
- 2021 13:08:29 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Mon, 29 Mar 2021 13:08:29 +0100
-Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.65.138])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DBB1011D8;
-        Mon, 29 Mar 2021 12:08:28 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
-        <sergey.senozhatsky@gmail.com>,
-        <andriy.shevchenko@linux.intel.com>, <linux@rasmusvillemoes.dk>,
-        <shuah@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v7 4/4] selftests: lib: Add wrapper script for test_scanf
-Date:   Mon, 29 Mar 2021 13:08:24 +0100
-Message-ID: <20210329120824.3006-4-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210329120824.3006-1-rf@opensource.cirrus.com>
-References: <20210329120824.3006-1-rf@opensource.cirrus.com>
+        Mon, 29 Mar 2021 08:32:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617021140;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GD9jR8caEzP+19c9pN1aTSDBAL/jQfepjFuZgZ5AJQg=;
+        b=gjKcIRSlVba2ID5zQO+zobbMmWftiOBcRTz1P0DhFwm/jureTQkNU/UOnwZvTvXcnVeYgF
+        H5XmCqXgG1sGkYogd4m4JgX/MUIcv5ifVXBuWqFS49ctEX2uEMwOdB+qEzVEuGbJ66EjXo
+        5z3yjTYwMFpTD2vsKqkmz9GONjgM/6Y=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-214-lhNP-9U1M_-A-7xBlObStQ-1; Mon, 29 Mar 2021 08:32:18 -0400
+X-MC-Unique: lhNP-9U1M_-A-7xBlObStQ-1
+Received: by mail-ej1-f69.google.com with SMTP id di5so5717949ejc.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Mar 2021 05:32:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=GD9jR8caEzP+19c9pN1aTSDBAL/jQfepjFuZgZ5AJQg=;
+        b=K+5+gDK3M8pvTaeQtKA1KTtUNABfnEiAo4ISRbM+44M2hg9nrZjd6JuzWxQ76nJAyM
+         C2k0S/+/oP26mo6iSaxKsyC3/Htq99LqDeaGszxJIPl+FzwbCIYDMjs2bfcw8W6MmnsY
+         Qi5BPRq11TjI+8ueKdQDMIgdK2E5Cqr4WK/NiYs3QDKgEbR/WuHxbXZcRfUvMvXnFdz2
+         CyC3SjmevZImJa6wanuqVmm4tqjGxMZzccA1oHVLr35roShD8unpE86ACXLgXrjPh23m
+         NlhVui7kBd1ibZWmgECFksz7imFIzb7dfBXNjxBKg3rDv2SnL/fnTpqbbBx/7j1U9GAA
+         q0Qg==
+X-Gm-Message-State: AOAM5318CT8eLYeSkIzns/RJc6HenYvDPWT8e6iL5JX1IcuaWNnIKOeS
+        uHm+Jy6zCxfu+/PMhWqiiWR+q44FoCgw65SkwnBRuoVpbMHBah3+2BydZgBCr67YnwryK8fOOxL
+        75eW8Hipg+xy99htKN7YtU616FFxl
+X-Received: by 2002:aa7:c7c5:: with SMTP id o5mr27815385eds.31.1617021137530;
+        Mon, 29 Mar 2021 05:32:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxB6FtmWkTT1pDy9lNZ/oJD/8n2X2GcodTMfUAO+YgTpSdBjEi/lflWuIuFFQOFO79csJA6Eg==
+X-Received: by 2002:aa7:c7c5:: with SMTP id o5mr27815365eds.31.1617021137301;
+        Mon, 29 Mar 2021 05:32:17 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id w24sm8791315edt.44.2021.03.29.05.32.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Mar 2021 05:32:16 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 2925B180293; Mon, 29 Mar 2021 14:32:16 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Vlad Buslov <vladbu@nvidia.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, brouer@redhat.com,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+In-Reply-To: <ygnhh7kugp1t.fsf@nvidia.com>
+References: <20210325120020.236504-1-memxor@gmail.com>
+ <20210325120020.236504-4-memxor@gmail.com> <ygnhh7kugp1t.fsf@nvidia.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 29 Mar 2021 14:32:16 +0200
+Message-ID: <87ft0eta27.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: ZDIsfKCHLNkK8zrhxisRS35EF6yfgqJ4
-X-Proofpoint-ORIG-GUID: ZDIsfKCHLNkK8zrhxisRS35EF6yfgqJ4
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 suspectscore=0
- clxscore=1011 malwarescore=0 priorityscore=1501 mlxlogscore=999
- impostorscore=0 mlxscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2103250000
- definitions=main-2103290097
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adds a wrapper shell script for the test_scanf module.
+Vlad Buslov <vladbu@nvidia.com> writes:
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-Changes since v6:
-Fixed typo in tools/testing/selftests/lib/config:
+> On Thu 25 Mar 2021 at 14:00, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>> This adds functions that wrap the netlink API used for adding,
+>> manipulating, and removing filters and actions. These functions operate
+>> directly on the loaded prog's fd, and return a handle to the filter and
+>> action using an out parameter (id for tc_cls, and index for tc_act).
+>>
+>> The basic featureset is covered to allow for attaching, manipulation of
+>> properties, and removal of filters and actions. Some additional features
+>> like TCA_BPF_POLICE and TCA_RATE for tc_cls have been omitted. These can
+>> added on top later by extending the bpf_tc_cls_opts struct.
+>>
+>> Support for binding actions directly to a classifier by passing them in
+>> during filter creation has also been omitted for now. These actions
+>> have an auto clean up property because their lifetime is bound to the
+>> filter they are attached to. This can be added later, but was omitted
+>> for now as direct action mode is a better alternative to it.
+>>
+>> An API summary:
+>>
+>> The BPF TC-CLS API
+>>
+>> bpf_tc_act_{attach, change, replace}_{dev, block} may be used to attach,
+>> change, and replace SCHED_CLS bpf classifiers. Separate set of functions
+>> are provided for network interfaces and shared filter blocks.
+>>
+>> bpf_tc_cls_detach_{dev, block} may be used to detach existing SCHED_CLS
+>> filter. The bpf_tc_cls_attach_id object filled in during attach,
+>> change, or replace must be passed in to the detach functions for them to
+>> remove the filter and its attached classififer correctly.
+>>
+>> bpf_tc_cls_get_info is a helper that can be used to obtain attributes
+>> for the filter and classififer. The opts structure may be used to
+>> choose the granularity of search, such that info for a specific filter
+>> corresponding to the same loaded bpf program can be obtained. By
+>> default, the first match is returned to the user.
+>>
+>> Examples:
+>>
+>> 	struct bpf_tc_cls_attach_id id = {};
+>> 	struct bpf_object *obj;
+>> 	struct bpf_program *p;
+>> 	int fd, r;
+>>
+>> 	obj = bpf_object_open("foo.o");
+>> 	if (IS_ERR_OR_NULL(obj))
+>> 		return PTR_ERR(obj);
+>>
+>> 	p = bpf_object__find_program_by_title(obj, "classifier");
+>> 	if (IS_ERR_OR_NULL(p))
+>> 		return PTR_ERR(p);
+>>
+>> 	if (bpf_object__load(obj) < 0)
+>> 		return -1;
+>>
+>> 	fd = bpf_program__fd(p);
+>>
+>> 	r = bpf_tc_cls_attach_dev(fd, if_nametoindex("lo"),
+>> 				  BPF_TC_CLSACT_INGRESS, ETH_P_IP,
+>> 				  NULL, &id);
+>> 	if (r < 0)
+>> 		return r;
+>>
+>> ... which is roughly equivalent to (after clsact qdisc setup):
+>>   # tc filter add dev lo ingress bpf obj /home/kkd/foo.o sec classifier
+>>
+>> If a user wishes to modify existing options on an attached filter, the
+>> bpf_tc_cls_change_{dev, block} API may be used. Parameters like
+>> chain_index, priority, and handle are ignored in the bpf_tc_cls_opts
+>> struct as they cannot be modified after attaching a filter.
+>>
+>> Example:
+>>
+>> 	/* Optional parameters necessary to select the right filter */
+>> 	DECLARE_LIBBPF_OPTS(bpf_tc_cls_opts, opts,
+>> 			    .handle = id.handle,
+>> 			    .priority = id.priority,
+>> 			    .chain_index = id.chain_index)
+>> 	/* Turn on direct action mode */
+>> 	opts.direct_action = true;
+>> 	r = bpf_tc_cls_change_dev(fd, id.ifindex, id.parent_id,
+>> 			          id.protocol, &opts, &id);
+>> 	if (r < 0)
+>> 		return r;
+>>
+>> 	/* Verify that the direct action mode has been set */
+>> 	struct bpf_tc_cls_info info = {};
+>> 	r = bpf_tc_cls_get_info_dev(fd, id.ifindex, id.parent_id,
+>> 			            id.protocol, &opts, &info);
+>> 	if (r < 0)
+>> 		return r;
+>>
+>> 	assert(info.bpf_flags & TCA_BPF_FLAG_ACT_DIRECT);
+>>
+>> This would be roughly equivalent to doing:
+>>   # tc filter change dev lo egress prio <p> handle <h> bpf obj /home/kkd/foo.o section classifier da
+>>
+>> ... except a new bpf program will be loaded and replace existing one.
+>>
+>> If a user wishes to either replace an existing filter, or create a new
+>> one with the same properties, they can use bpf_tc_cls_replace_dev. The
+>> benefit of bpf_tc_cls_change is that it fails if no matching filter
+>> exists.
+>>
+>> The BPF TC-ACT API
+>>
+>> bpf_tc_act_{attach, replace} may be used to attach and replace already
+>> attached SCHED_ACT actions. Passing an index of 0 has special meaning,
+>> in that an index will be automatically chosen by the kernel. The index
+>> chosen by the kernel is the return value of these functions in case of
+>> success.
+>>
+>> bpf_tc_act_detach may be used to detach a SCHED_ACT action prog
+>> identified by the index parameter. The index 0 again has a special
+>> meaning, in that passing it will flush all existing SCHED_ACT actions
+>> loaded using the ACT API.
+>>
+>> bpf_tc_act_get_info is a helper to get the required attributes of a
+>> loaded program to be able to manipulate it futher, by passing them
+>> into the aforementioned functions.
+>>
+>> Example:
+>>
+>> 	struct bpf_object *obj;
+>> 	struct bpf_program *p;
+>> 	__u32 index;
+>> 	int fd, r;
+>>
+>> 	obj = bpf_object_open("foo.o");
+>> 	if (IS_ERR_OR_NULL(obj))
+>> 		return PTR_ERR(obj);
+>>
+>> 	p = bpf_object__find_program_by_title(obj, "action");
+>> 	if (IS_ERR_OR_NULL(p))
+>> 		return PTR_ERR(p);
+>>
+>> 	if (bpf_object__load(obj) < 0)
+>> 		return -1;
+>>
+>> 	fd = bpf_program__fd(p);
+>>
+>> 	r = bpf_tc_act_attach(fd, NULL, &index);
+>> 	if (r < 0)
+>> 		return r;
+>>
+>> 	if (bpf_tc_act_detach(index))
+>> 		return -1;
+>>
+>> ... which is equivalent to the following sequence:
+>> 	tc action add action bpf obj /home/kkd/foo.o sec action
+>> 	tc action del action bpf index <idx>
+>
+> How do you handle the locking here? Please note that while
+> RTM_{NEW|GET|DEL}FILTER API has been refactored to handle its own
+> locking internally (and registered with RTNL_FLAG_DOIT_UNLOCKED flag),
+> RTM_{NEW|GET|DEL}ACTION API still expects to be called with rtnl lock
+> taken.
 
-	-CONFIG_TEST_SCANTF=m
-	+CONFIG_TEST_SCANF=m
+Huh, locking? This is all userspace code that uses the netlink API...
 
-As this is a trivial change I have kept Petr Mladek's Reviewed-by and
-Andy Shevchenko's ack.
----
- tools/testing/selftests/lib/Makefile | 2 +-
- tools/testing/selftests/lib/config   | 1 +
- tools/testing/selftests/lib/scanf.sh | 4 ++++
- 3 files changed, 6 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/lib/scanf.sh
-
-diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
-index a105f094676e..ee71fc99d5b5 100644
---- a/tools/testing/selftests/lib/Makefile
-+++ b/tools/testing/selftests/lib/Makefile
-@@ -4,6 +4,6 @@
- # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
- all:
- 
--TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh strscpy.sh
-+TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh scanf.sh strscpy.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-index b80ee3f6e265..776c8c42e78d 100644
---- a/tools/testing/selftests/lib/config
-+++ b/tools/testing/selftests/lib/config
-@@ -1,4 +1,5 @@
- CONFIG_TEST_PRINTF=m
-+CONFIG_TEST_SCANF=m
- CONFIG_TEST_BITMAP=m
- CONFIG_PRIME_NUMBERS=m
- CONFIG_TEST_STRSCPY=m
-diff --git a/tools/testing/selftests/lib/scanf.sh b/tools/testing/selftests/lib/scanf.sh
-new file mode 100755
-index 000000000000..b59b8ba561c3
---- /dev/null
-+++ b/tools/testing/selftests/lib/scanf.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Tests the scanf infrastructure using test_scanf kernel module.
-+$(dirname $0)/../kselftest/module.sh "scanf" test_scanf
--- 
-2.20.1
+-Toke
 
