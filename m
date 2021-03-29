@@ -2,370 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E924734D424
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 17:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C15434D474
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Mar 2021 18:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbhC2PkE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Mar 2021 11:40:04 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:50825 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230167AbhC2Pjh (ORCPT
+        id S229628AbhC2QFn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Mar 2021 12:05:43 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20368 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229515AbhC2QFi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Mar 2021 11:39:37 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7F07F58059D;
-        Mon, 29 Mar 2021 11:39:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 29 Mar 2021 11:39:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
-        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm3; bh=B02kY17mfGts1
-        USvLJhcoqNJjZkeReodTLssTpl/N5g=; b=Iw4w28g95lN7V/tI8MaqHVxn7i+Z0
-        qHMI/Q2kjpVqPA1DKnWj1f11Z0+ctnHkBt/0zTFuxvlyCiOnhHeYvw7vnOJPkHa+
-        Zq+HeQHwnfBAjo7g2IKzPvSuOrFgRLS0xFrB869yCJwV+S5auuQJUVPvmo9dL4eE
-        lXmYVgh1NjeFRBLlag+oR0ds/fPbcit7mIw9XZnq7EcEm29W5p/ZWN4i8wUckcgA
-        iSSqNgzFpUBAe4BAp0FKUBjW2/IYEzKUK8NXgjPfJmlHx9pfT6Ntj8tcocAa6Ekj
-        Wr7bCKoDKA/tksY1+ZrswipFHq8EGNhk5ZRXF0a4MOswv6uVykDk/wjzw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:reply-to:subject
-        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; bh=B02kY17mfGts1USvLJhcoqNJjZkeReodTLssTpl/N5g=; b=gQzFiKZE
-        QKfoJOrJhLc0/KB440VMCjyMo5OVxZpc41SU7WVVMqplm5ZEan5Kf2Qx1oetW4fy
-        grZHIYHxL7JvgA44tRbtKyi6m481ezkKhmcoHoHj4VGWXTVpMdKgbTpA3GtKp0n9
-        99bAD2gpMU8173F83C/oCwpDYBAWgzQGDvFzXFJKiA0qXGluLK9VSzINMPmgoF+l
-        kiTPfkbegYRdn4es+JeUOB9EB62TtGTp8F50NmAZy2ih7f7Ca07kdTG4AC2d5Vx/
-        BcaUwfiZkMYil26GsrWuMyFmfWjD6w1Rp5DPKw4+fADPQQDfv+NTGiM2lIQfpbKi
-        nwt35YQqbp13Ag==
-X-ME-Sender: <xms:t_RhYEcIqFOmLGP2FpcZf2t7zUmQxW-t1I_HT7muaiiZhQ___NrDRQ>
-    <xme:t_RhYGNsZRGeHHwu6Im1kxi0ejABKDLsSODsQAitfguFsY0TTzOMLKkoGfhRGOYlq
-    n9JxpguM1Rt3Ie3HA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudehkedgleefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
-    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
-    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedv
-    tdelrdeirdejuddrvddufeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
-X-ME-Proxy: <xmx:t_RhYFhwNESfGdadaIu59bra6jzdoR7khkD3Ebknbd_3ItIzKZVILg>
-    <xmx:t_RhYJ9RRk1BOA5IdR1X2q_CrWOGjI9R3k02996jlFZxry3nCE7X3w>
-    <xmx:t_RhYAtfHXFTE8w3ZoMWZ6FDXDem8P3hfGCsjL0IXKRVcBSUdZVTxA>
-    <xmx:uPRhYBnKlbQxS-EOyPx4TJfzEzq8KfljNKR91RlLvy9geXc0KoV86A>
-Received: from Threadripper.local (209-6-71-213.s2259.c3-0.abr-cbr1.sbo-abr.ma.cable.rcncustomer.com [209.6.71.213])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 588B6240065;
-        Mon, 29 Mar 2021 11:39:35 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mika Penttila <mika.penttila@nextfour.com>,
-        David Rientjes <rientjes@google.com>, Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v7 2/2] mm: huge_memory: debugfs for file-backed THP split.
-Date:   Mon, 29 Mar 2021 11:39:32 -0400
-Message-Id: <20210329153932.134510-2-zi.yan@sent.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210329153932.134510-1-zi.yan@sent.com>
-References: <20210329153932.134510-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
-MIME-Version: 1.0
+        Mon, 29 Mar 2021 12:05:38 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12TFxlLu012079;
+        Mon, 29 Mar 2021 09:05:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=aBFXoDRYCxWkBNJVob7+coYRN/Ym7OFlroJGzuBIzGE=;
+ b=bqrEc/kPUfDLJ8QxLga2Ct/I5rOv0dqihquhb9Bd64xaJCeWLrp5vBdb4cmaRp6/65Aq
+ Q76iwAJlYf/siviT6XwUxGHaZdge0Di4Sivc5bYpswzXeueBLfywXzCsAIBf3uLpTHrv
+ 4TPahWG+0YNBbcMs4PihnQfOQ1ZJ48+fS7U= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 37ka6sacu9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 29 Mar 2021 09:05:17 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 29 Mar 2021 09:05:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EoEd9AHGOLkb4PEcHPpy7qJTkQuHrvMrtq81CZviFmwucM0lUD+3H+alJS6yhvjlYnC8x6NqybkB/SDkAmaUCeCBbPQzofEN9q66cWRnSi9W+KehZ9lK59aO6dhdjxpzVu9Neb6vP/9w8Hb0IoMTfp1H5ZiHkWcyw0LnmAXVKbFcCioea9nNp5OT/At0S8uA5GdYYWyUid52LMDzBQqDoTxa9C9Q4OL4I4pNYUt6Ad28Rs4wnCFgNeYXdbwVqomAJvRLgPem+zx7tovPCPirYiYh2H78O4U85Ru+0/XY1ylIjc+MhDOesADNd/FRLgfDFouy21hY3DF+aOCljd6zPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aBFXoDRYCxWkBNJVob7+coYRN/Ym7OFlroJGzuBIzGE=;
+ b=nowbFvJKw+jRywYVOj7quJNq40cIHpsreTNcHp9+MvmEsZQ4NhOfCNQDuUT2d6cYa+35lU8JrqAWzlyvsDww7EemUSkLQ+zauCNgRQIBYggFhP91L1mTYvVSFjRTmq+49Bxh3yHs220w6hDvcgGYB1haR5xVSl5cv0lUseZPpyxI48J6Ulpv27WnvEzYRhuCl8dqQAqztrJ9orIb07MAMSmTYsMOO0FQKiL2XHilYENLXCwymtsF9tV6qmpYwvg4t48KX/W+shU4OTpcmVSA5GyapJVRft5Ja0mvbXJi5dmVUMcBjevtSMlj8uRtolmiPG4vkhjQrdldqC0vu7bkkg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com (2603:10b6:a03:fa::12)
+ by SJ0PR15MB4743.namprd15.prod.outlook.com (2603:10b6:a03:37c::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.25; Mon, 29 Mar
+ 2021 16:05:15 +0000
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::1ce0:8b27:f740:6b60]) by BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::1ce0:8b27:f740:6b60%4]) with mapi id 15.20.3933.039; Mon, 29 Mar 2021
+ 16:05:15 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Pedro Tammela <pctammela@gmail.com>
+CC:     Pedro Tammela <pctammela@mojatatu.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Joe Stringer <joe@cilium.io>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] bpf: add 'BPF_RB_MAY_WAKEUP' flag
+Thread-Topic: [PATCH bpf-next] bpf: add 'BPF_RB_MAY_WAKEUP' flag
+Thread-Index: AQHXI+0OiPs45KDjv0C2tzMBh/zVpaqbIr+A
+Date:   Mon, 29 Mar 2021 16:05:14 +0000
+Message-ID: <6C4369B6-4ECF-4764-8084-F38310642D09@fb.com>
+References: <20210328161055.257504-1-pctammela@mojatatu.com>
+In-Reply-To: <20210328161055.257504-1-pctammela@mojatatu.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3654.60.0.2.21)
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
+x-originating-ip: [2620:10d:c090:400::5:876e]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3230f29a-95b4-49e0-c4fd-08d8f2cc70bc
+x-ms-traffictypediagnostic: SJ0PR15MB4743:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <SJ0PR15MB4743A59CFA6644E5B529D3DCB37E9@SJ0PR15MB4743.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:2958;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5uVRfpQcIHXGIu/FJbr6HBqJhsHMEBzJ/xNnzxJNGsN1mNbMhTp9ARYnYcT5DDQdQvrsqUgxupfPaiLuIH16CIDastVbIEc3WTfRcY7soE3Ipy7SPnIJdpOsgm2BiyqU6xay5ftrIe5gXVz9ncLolmbPxKpUWdZQruG1Hnfp78DPu5zg5fxXD24fWslt9eTJRmKmzXE9PkamW3FIVaOtqVzQxZHzF2XifFR+qNhWBWLBLEcTyZtCZ+fbUs8cn6YGY+Jqkbn0oNH8SPL9ZUDRhXh028KfscJKFt2QSilwTtXiQgd9oAxf8+TkJ7ezpNSjqIn7aiYDnHZw3FTjeek6Y3jHBneBZDEDNmN1hFr7OgEHULLCrPrQ3Lkztvgl5nQUpOZaFYqwjwo4GdWy9bjb5td+jcKvEM+7nkMza8//s+gL0vqGqlOv8Rye5Ccco+jRYWRzZeHLvvK4zATfPbxJnPj5EP3ebxoeMXWPt3nCnW6F1CsUHWie2JysuhjD+lC8KtrfVEPSyJC0UfsMoTpdyo1FDiV+WfzqAPTWccOApTs1BDwIK3BEytiflLwULpNz6iF0apM3f15ORRcdGtaiHEsnn7x2vBMvWzF725hDVZV9GmCWi8lj9rFAwetFd0Afx/kiSMX8HL0WiHTi3cRzheGvp/8lwMcZijqi5ZoQopoHCWPSaIHY9lebbuz61hxp
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2999.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(396003)(376002)(346002)(39860400002)(6486002)(2906002)(91956017)(54906003)(66476007)(64756008)(76116006)(66556008)(66446008)(316002)(66946007)(7416002)(186003)(478600001)(86362001)(36756003)(4744005)(5660300002)(4326008)(53546011)(2616005)(38100700001)(6512007)(6506007)(8936002)(71200400001)(6916009)(33656002)(8676002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?/ZSbSt0m/ZqyimLHZ3YYLfdogduJjBzQu47ZLMEAKAQ6VEwMFaNteiUf8nAW?=
+ =?us-ascii?Q?zUVYPLzofwJGO81yQsTK62WIZn5ZwHzrzVnIiF5aoTL/k/32ISEgHoLkoH+3?=
+ =?us-ascii?Q?8aX0JMotIMs8nquPt2ZGXTwyUIeFuKeOAtCd/CBxRanZjGZVlyetyL/k4KPZ?=
+ =?us-ascii?Q?Xh4fFyUZwORtj4LWf7i/0yQSX1zzzAguibAbhzIaXPbUWW6CGRuYxqlb1Qz/?=
+ =?us-ascii?Q?iEoskJ0ia9GEpRNqXd9s/w+nwNa9RvVwsDnLz6CYXQCP5tIX3hYphgq/9Slq?=
+ =?us-ascii?Q?+33APX3WUS5hbIQTgtd+1SMNxRbPXqs3guSXDKaxylqdedbHxqjfA2Tymndt?=
+ =?us-ascii?Q?Yc7ocv5Bn200oG7fl4d+yZYbtpeb9cbK34HD2x+7laV5ZIrOZMM9ScRB9c9p?=
+ =?us-ascii?Q?y2f57dfjLYb3Kv3Xj8vus2RJUTIMZZfvLUM71ZB/oF8gaTWIVr2clTdACs0J?=
+ =?us-ascii?Q?K71Ysnh41aEkIvMi7Fhh468e6x3K6ypXq7tIjOfOMip3u+fo3tHaAMqCuiPy?=
+ =?us-ascii?Q?xsmb5qEct/L0KSHfvts3zaZpszPSQVcuypdBYFT2kKSoJ2izb1LVODjP/2aX?=
+ =?us-ascii?Q?OeDshssparshjZ/JCpIUOzVd3mYmVYPYxFujeMJ4TIKbB5JGuyaT4TY6+kXe?=
+ =?us-ascii?Q?Rvfk0b9UH2solxud0ghoUqDMZhxkFq6VOu5TUQclQk+6eDAt5d8uaL4Og15e?=
+ =?us-ascii?Q?In1qM3rac+RpCWSNXD1/vlSCNsk4Xrw7kZSKJs2LDh0OiMh5NOKBgtY4sOVC?=
+ =?us-ascii?Q?MMyURjZZqVtpC3O2HDin/Zzz9z1Giwj5mnmcMmHQ/gOawj5IRdQOHa1oGCPu?=
+ =?us-ascii?Q?Ow5g9pWOHjJ7CWuUt/4kKrcYrzhTaQYT2X6vTeo/uy7pDy4sQw0xP1is1egg?=
+ =?us-ascii?Q?fO8XCYCROhcIQLam3U/qv1mg55FKqunCiZwkxfA01fSuxgyFLsYweHO3Kbrc?=
+ =?us-ascii?Q?bUjlmpEb2lGSA9TJP0KVTOmPdkK4IRqkBMiwy/6wptAE3x4LbKS5UPa/QeBu?=
+ =?us-ascii?Q?et6nzCO8Yh0pYxbUWh+bNUAgNCKtBESOwRrTuKZqJmtoUT3DNBMJ/y+xCU41?=
+ =?us-ascii?Q?kKPd6hzDRDppMHg9S4ysra9YWyKq37xR3X3CwxDkKRopooxkmRzjNR5TsX82?=
+ =?us-ascii?Q?27QKNg1GY90oVujeNw6U/xBw5v2sCHYM33jtCQtwyfjDnqVCvgdfXyRrkF3O?=
+ =?us-ascii?Q?B2cgLDtD6QDhrVZxjdXpBXX2zv9IUz6vM1dJCR+kaXDMislc0GL6rpQmLBW5?=
+ =?us-ascii?Q?yYgojzlHaXSkveZ7NVywZmH4B8WwOOH4XUom503XsfaALfLmcli/8jW73GpM?=
+ =?us-ascii?Q?c6tyhUeAEvXf1nzrX0brSJVvPAz2gmWxudQ3G8YghIsuNLbQMALuTcXDxlUF?=
+ =?us-ascii?Q?0NIVKWo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <576F596F8286664EB3CF09A0BF1D489A@namprd15.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB2999.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3230f29a-95b4-49e0-c4fd-08d8f2cc70bc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2021 16:05:14.9795
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HF2Cj07cCVQFXJg+GCB1qBe8UoKo5eSGreBRghU8BdZ3DjEeWIpoJ3hHkMPBhoRg2/GL6440xEG1+SK5JdWgbg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4743
+X-OriginatorOrg: fb.com
+X-Proofpoint-ORIG-GUID: qk-o3RRfPt-4mQzZih6-nCcyqkvBjyBf
+X-Proofpoint-GUID: qk-o3RRfPt-4mQzZih6-nCcyqkvBjyBf
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-29_10:2021-03-26,2021-03-29 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 adultscore=0 clxscore=1011
+ phishscore=0 bulkscore=0 malwarescore=0 mlxscore=0 mlxlogscore=762
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2103250000 definitions=main-2103290117
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
 
-Further extend <debugfs>/split_huge_pages to accept
-"<path>,<off_start>,<off_end>" for file-backed THP split tests since
-tmpfs may have file backed by THP that mapped nowhere.
 
-Update selftest program to test file-backed THP split too.
+> On Mar 28, 2021, at 9:10 AM, Pedro Tammela <pctammela@gmail.com> wrote:
+>=20
+> The current way to provide a no-op flag to 'bpf_ringbuf_submit()',
+> 'bpf_ringbuf_discard()' and 'bpf_ringbuf_output()' is to provide a '0'
+> value.
+>=20
+> A '0' value might notify the consumer if it already caught up in processi=
+ng,
+> so let's provide a more descriptive notation for this value.
+>=20
+> Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
 
-Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Zi Yan <ziy@nvidia.com>
-Reviewed-by: Yang Shi <shy828301@gmail.com>
----
- mm/huge_memory.c                              | 91 ++++++++++++++++++-
- .../selftests/vm/split_huge_page_test.c       | 81 ++++++++++++++++-
- 2 files changed, 166 insertions(+), 6 deletions(-)
-
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 1bcab247aea8..ca47f5a317f3 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -3062,6 +3062,66 @@ static int split_huge_pages_pid(int pid, unsigned lo=
-ng vaddr_start,
- 	return ret;
- }
-=20
-+static int split_huge_pages_in_file(const char *file_path, pgoff_t off_sta=
-rt,
-+				pgoff_t off_end)
-+{
-+	struct filename *file;
-+	struct file *candidate;
-+	struct address_space *mapping;
-+	int ret =3D -EINVAL;
-+	pgoff_t off_cur;
-+	unsigned long total =3D 0, split =3D 0;
-+
-+	file =3D getname_kernel(file_path);
-+	if (IS_ERR(file))
-+		return ret;
-+
-+	candidate =3D file_open_name(file, O_RDONLY, 0);
-+	if (IS_ERR(candidate))
-+		goto out;
-+
-+	pr_debug("split file-backed THPs in file: %s, offset: [0x%lx - 0x%lx]\n",
-+		 file_path, off_start, off_end);
-+
-+	mapping =3D candidate->f_mapping;
-+
-+	for (off_cur =3D off_start; off_cur < off_end;) {
-+		struct page *fpage =3D pagecache_get_page(mapping, off_cur,
-+						FGP_ENTRY | FGP_HEAD, 0);
-+
-+		if (xa_is_value(fpage) || !fpage) {
-+			off_cur +=3D PAGE_SIZE;
-+			continue;
-+		}
-+
-+		if (!is_transparent_hugepage(fpage)) {
-+			off_cur +=3D PAGE_SIZE;
-+			goto next;
-+		}
-+		total++;
-+		off_cur =3D fpage->index + thp_size(fpage);
-+
-+		if (!trylock_page(fpage))
-+			goto next;
-+
-+		if (!split_huge_page(fpage))
-+			split++;
-+
-+		unlock_page(fpage);
-+next:
-+		put_page(fpage);
-+		cond_resched();
-+	}
-+
-+	filp_close(candidate, NULL);
-+	ret =3D 0;
-+
-+	pr_debug("%lu of %lu file-backed THP split\n", split, total);
-+out:
-+	putname(file);
-+	return ret;
-+}
-+
- #define MAX_INPUT_BUF_SZ 255
-=20
- static ssize_t split_huge_pages_write(struct file *file, const char __user=
- *buf,
-@@ -3069,7 +3129,8 @@ static ssize_t split_huge_pages_write(struct file *fi=
-le, const char __user *buf,
- {
- 	static DEFINE_MUTEX(split_debug_mutex);
- 	ssize_t ret;
--	char input_buf[MAX_INPUT_BUF_SZ]; /* hold pid, start_vaddr, end_vaddr */
-+	/* hold pid, start_vaddr, end_vaddr or file_path, off_start, off_end */
-+	char input_buf[MAX_INPUT_BUF_SZ];
- 	int pid;
- 	unsigned long vaddr_start, vaddr_end;
-=20
-@@ -3084,6 +3145,34 @@ static ssize_t split_huge_pages_write(struct file *f=
-ile, const char __user *buf,
- 		goto out;
-=20
- 	input_buf[MAX_INPUT_BUF_SZ - 1] =3D '\0';
-+
-+	if (input_buf[0] =3D=3D '/') {
-+		char *tok;
-+		char *buf =3D input_buf;
-+		char file_path[MAX_INPUT_BUF_SZ];
-+		pgoff_t off_start =3D 0, off_end =3D 0;
-+		size_t input_len =3D strlen(input_buf);
-+
-+		tok =3D strsep(&buf, ",");
-+		if (tok) {
-+			strncpy(file_path, tok, MAX_INPUT_BUF_SZ);
-+		} else {
-+			ret =3D -EINVAL;
-+			goto out;
-+		}
-+
-+		ret =3D sscanf(buf, "0x%lx,0x%lx", &off_start, &off_end);
-+		if (ret !=3D 2) {
-+			ret =3D -EINVAL;
-+			goto out;
-+		}
-+		ret =3D split_huge_pages_in_file(file_path, off_start, off_end);
-+		if (!ret)
-+			ret =3D input_len;
-+
-+		goto out;
-+	}
-+
- 	ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_en=
-d);
- 	if (ret =3D=3D 1 && pid =3D=3D 1) {
- 		split_huge_pages_all();
-diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/test=
-ing/selftests/vm/split_huge_page_test.c
-index 2c0c18e60c57..845a63cdb052 100644
---- a/tools/testing/selftests/vm/split_huge_page_test.c
-+++ b/tools/testing/selftests/vm/split_huge_page_test.c
-@@ -7,11 +7,13 @@
- #define _GNU_SOURCE
- #include <stdio.h>
- #include <stdlib.h>
-+#include <stdarg.h>
- #include <unistd.h>
- #include <inttypes.h>
- #include <string.h>
- #include <fcntl.h>
- #include <sys/mman.h>
-+#include <sys/mount.h>
- #include <malloc.h>
- #include <stdbool.h>
-=20
-@@ -24,6 +26,9 @@ uint64_t pmd_pagesize;
- #define SMAP_PATH "/proc/self/smaps"
- #define INPUT_MAX 80
-=20
-+#define PID_FMT "%d,0x%lx,0x%lx"
-+#define PATH_FMT "%s,0x%lx,0x%lx"
-+
- #define PFN_MASK     ((1UL<<55)-1)
- #define KPF_THP      (1UL<<22)
-=20
-@@ -87,13 +92,16 @@ static int write_file(const char *path, const char *buf=
-, size_t buflen)
- 	return (unsigned int) numwritten;
- }
-=20
--static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vaddr_en=
-d)
-+static void write_debugfs(const char *fmt, ...)
- {
- 	char input[INPUT_MAX];
- 	int ret;
-+	va_list argp;
-+
-+	va_start(argp, fmt);
-+	ret =3D vsnprintf(input, INPUT_MAX, fmt, argp);
-+	va_end(argp);
-=20
--	ret =3D snprintf(input, INPUT_MAX, "%d,0x%lx,0x%lx", pid, vaddr_start,
--			vaddr_end);
- 	if (ret >=3D INPUT_MAX) {
- 		printf("%s: Debugfs input is too long\n", __func__);
- 		exit(EXIT_FAILURE);
-@@ -183,7 +191,8 @@ void split_pmd_thp(void)
- 	}
-=20
- 	/* split all THPs */
--	write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page + len);
-+	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
-+		(uint64_t)one_page + len);
-=20
- 	for (i =3D 0; i < len; i++)
- 		if (one_page[i] !=3D (char)i) {
-@@ -274,7 +283,7 @@ void split_pte_mapped_thp(void)
- 	}
-=20
- 	/* split all remapped THPs */
--	write_debugfs(getpid(), (uint64_t)pte_mapped,
-+	write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
- 		      (uint64_t)pte_mapped + pagesize * 4);
-=20
- 	/* smap does not show THPs after mremap, use kpageflags instead */
-@@ -300,6 +309,67 @@ void split_pte_mapped_thp(void)
- 	close(kpageflags_fd);
- }
-=20
-+void split_file_backed_thp(void)
-+{
-+	int status;
-+	int fd;
-+	ssize_t num_written;
-+	char tmpfs_template[] =3D "/tmp/thp_split_XXXXXX";
-+	const char *tmpfs_loc =3D mkdtemp(tmpfs_template);
-+	char testfile[INPUT_MAX];
-+
-+	printf("Please enable pr_debug in split_huge_pages_in_file() if you need =
-more info.\n");
-+
-+	status =3D mount("tmpfs", tmpfs_loc, "tmpfs", 0, "huge=3Dalways,size=3D4m=
-");
-+
-+	if (status) {
-+		printf("Unable to create a tmpfs for testing\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	status =3D snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_loc);
-+	if (status >=3D INPUT_MAX) {
-+		printf("Fail to create file-backed THP split testing file\n");
-+		goto cleanup;
-+	}
-+
-+	fd =3D open(testfile, O_CREAT|O_WRONLY);
-+	if (fd =3D=3D -1) {
-+		perror("Cannot open testing file\n");
-+		goto cleanup;
-+	}
-+
-+	/* write something to the file, so a file-backed THP can be allocated */
-+	num_written =3D write(fd, tmpfs_loc, sizeof(tmpfs_loc));
-+	close(fd);
-+
-+	if (num_written < 1) {
-+		printf("Fail to write data to testing file\n");
-+		goto cleanup;
-+	}
-+
-+	/* split the file-backed THP */
-+	write_debugfs(PATH_FMT, testfile, 0, 1024);
-+
-+	status =3D unlink(testfile);
-+	if (status)
-+		perror("Cannot remove testing file\n");
-+
-+cleanup:
-+	status =3D umount(tmpfs_loc);
-+	if (status) {
-+		printf("Unable to umount %s\n", tmpfs_loc);
-+		exit(EXIT_FAILURE);
-+	}
-+	status =3D rmdir(tmpfs_loc);
-+	if (status) {
-+		perror("cannot remove tmp dir");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	printf("file-backed THP split test done, please check dmesg for more info=
-rmation\n");
-+}
-+
- int main(int argc, char **argv)
- {
- 	if (geteuid() !=3D 0) {
-@@ -313,6 +383,7 @@ int main(int argc, char **argv)
-=20
- 	split_pmd_thp();
- 	split_pte_mapped_thp();
-+	split_file_backed_thp();
-=20
- 	return 0;
- }
---=20
-2.30.2
+Acked-by: Song Liu <songliubraving@fb.com>
 
