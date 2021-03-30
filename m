@@ -2,161 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA6934EA50
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 16:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9C534F020
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 19:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbhC3OXG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Mar 2021 10:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S232515AbhC3RuB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Mar 2021 13:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbhC3OWt (ORCPT
+        with ESMTP id S232537AbhC3Rta (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 10:22:49 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F59C061574;
-        Tue, 30 Mar 2021 07:22:49 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id x17so16623243iog.2;
-        Tue, 30 Mar 2021 07:22:48 -0700 (PDT)
+        Tue, 30 Mar 2021 13:49:30 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE29C061762
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Mar 2021 10:49:30 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id h13so19199296eds.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Mar 2021 10:49:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GNHMCs6x+dR2Cqz7tLELzE1plonqANp2Czvp+h/1Vf8=;
-        b=ty8xpi5ikc4QUeUv6hKR+/9N2zPEnBot4pcKeNOEaZaJ44qTR3VEiVODng1iQmgRis
-         jjDDk0eoIYssFwk+wJ7B2s3kfT/R71pLJvJ4B8H9CkvjWNxm9rkTWoptZwy4XcpzblxL
-         eF3VXHAgsG1Jde5rlCkEaJOnfCBN2//1pESFyMe/88dC7rdge6niEiSGBQ2MRoPFRshu
-         7/YP80DZn1AIJbsg9H8y7vKl4xf5MJVRneUpqFIwiqe610OfoNX/OTInXF4Id9YfqD52
-         0/HQBm1VpzoF88NyXDbEuttpi/eEWGTH/tLwoyodHYgEZagn3+p7yM4R3wh4l2srhDEz
-         wtUw==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=vfLwFItpc6W5exosGG82WT6Ns18a8nrA8eo8H/JziQk=;
+        b=uUmob1QTIYNSrK5V6RXAm+bmf/dpQF54gtdmdFGY9bP+Qxqlu0kF4FFMzplQY8BaNM
+         PjiIi1upHTUP/vPMJ/m7euq+hVXbjsHpxQBC0BlVSqvdyVN0E2qR09iQcS+6RNyljGtY
+         1NUV4iA6oqxYYEAOGOXClcTyblEC8AsZPux1AlnfpIB/eX9TCm28mjbJqQgVagY4YTjr
+         cB04lXss0904jp8cLrpHV7wWdrlEHcOQZII5chPMZ1nIBMbKv63rNyuqMlmIVVRUlto4
+         KOoaXR0hHrJ7W0A6hACW5WegU8EHlpnn7VgKmKg6yiS7MXpf2JSUK0/7CbskZd1PBiLR
+         H8ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GNHMCs6x+dR2Cqz7tLELzE1plonqANp2Czvp+h/1Vf8=;
-        b=aDL1b5g7zT+TX/69iK8bs8G9UjC/zt/26/eDiVKWgzCc73NwGg5CkIXwmEJMfKAIFc
-         Wx0DRhaUZfYu2Pr5e3ksq+mz2ZGio73ldot3GOZHyS3qo2QGa0EUMXUW0HGaRzutzFOc
-         mpvbzZ0iVxebY8KERYwmwU6ZpO7cGUPbcEypPG3t1Q57CBAvKqvtTV5XcwXog3RfB8Yy
-         4AET2WMnfJTHDO6jG4mbHJMI7wG8gi8UA+ZkSLtIbXelpnI1w3ftkfYOHqiDs48AmggJ
-         eQks6PVVClzLIXlXgVzbVnefF0JrWSwEbP26otwZtlvnzXKT1CD7bR5o+EYbkBLTOlr/
-         epzA==
-X-Gm-Message-State: AOAM532PZkfxhr4Dn3yKtiU1K9zu/cchBBIIYAO/++1IVtSvUdeAIkkE
-        MOkqZBdDC5BKXf/D1oPkm7nkbdVBjaiEoZZk6j8lNujdZVWfmg==
-X-Google-Smtp-Source: ABdhPJx2lAQsZaWZav6RqWh2dIxFsrQ79CV0iN3oKmXwGO+ztVj2DfiDBZEwagnQYov43RlS7Ml7o3bDQLfX0pI1IoM=
-X-Received: by 2002:a02:c908:: with SMTP id t8mr10461264jao.78.1617114168349;
- Tue, 30 Mar 2021 07:22:48 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=vfLwFItpc6W5exosGG82WT6Ns18a8nrA8eo8H/JziQk=;
+        b=jbg/nMZqXOWss34IxhinYfoOIzuDCzbNdY6yez0tbPm9Tix7Lo7d4hsCeu4HSFJATQ
+         x8RYpakfw1j6a2stUdE/8GAl7YnZ+/Y6jCxL5NJ76wHfmKU+jVN3Ku3A4mSLgGj75h6J
+         QanX5yyIW7kkP8VCHH0EeyPJW8vzTHxn9TqXlG3IO4/E3W5WUCbXIQMbJY268k4+BQFs
+         IuJkNwRFxVnOjMLg1809r4Lt5vSRn3l1Z1ROwaP9+dcBMCS4cjcsFAMnAbajqSy8TOWE
+         gzoDlOcLyBpLuykWspxbKybbPoDoL758urfSsPA42KwNJpLQXgyej8b7F75zgFdqnSWD
+         lD/w==
+X-Gm-Message-State: AOAM530Upflw1P2dLEhj+iv1xMtbGrfsHWIByThdWQ5YOQ/oh5omt8Vl
+        OBj1/fU3XuKxDk00MEVjyydKvqolMSPQcv5SD0E/9w==
+X-Google-Smtp-Source: ABdhPJwUctGOq0NIkMdyLRzkpNPHLrzP2z0+jx3PHFuHkifjYPAsfGl9awKLvbbiZgO7US8w8PxxJcQL8yWWynRcdbU=
+X-Received: by 2002:aa7:d287:: with SMTP id w7mr34598326edq.23.1617126568781;
+ Tue, 30 Mar 2021 10:49:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210328161055.257504-1-pctammela@mojatatu.com>
- <20210328161055.257504-2-pctammela@mojatatu.com> <A175BAAD-39B2-4ECE-9BA0-D070E84484FF@fb.com>
-In-Reply-To: <A175BAAD-39B2-4ECE-9BA0-D070E84484FF@fb.com>
-From:   Pedro Tammela <pctammela@gmail.com>
-Date:   Tue, 30 Mar 2021 11:22:37 -0300
-Message-ID: <CAKY_9u0J8gurpOhR9YZceH3N2jJFm=v5VLw3atjo==gTp_-RQg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: check flags in 'bpf_ringbuf_discard()' and 'bpf_ringbuf_submit()'
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Pedro Tammela <pctammela@mojatatu.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Joe Stringer <joe@cilium.io>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 30 Mar 2021 23:19:16 +0530
+Message-ID: <CA+G9fYtXyMNuW=tuka49Y3C54qfcUGT3YChB3FDoWtdYz4gU-w@mail.gmail.com>
+Subject: BUG: key ffff000800eba398 has not been registered!
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Colin King <colin.king@canonical.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Em seg., 29 de mar. de 2021 =C3=A0s 13:10, Song Liu <songliubraving@fb.com>=
- escreveu:
->
->
->
-> > On Mar 28, 2021, at 9:10 AM, Pedro Tammela <pctammela@gmail.com> wrote:
-> >
-> > The current code only checks flags in 'bpf_ringbuf_output()'.
-> >
-> > Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
-> > ---
-> > include/uapi/linux/bpf.h       |  8 ++++----
-> > kernel/bpf/ringbuf.c           | 13 +++++++++++--
-> > tools/include/uapi/linux/bpf.h |  8 ++++----
-> > 3 files changed, 19 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index 100cb2e4c104..232b5e5dd045 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -4073,7 +4073,7 @@ union bpf_attr {
-> >  *            Valid pointer with *size* bytes of memory available; NULL=
-,
-> >  *            otherwise.
-> >  *
-> > - * void bpf_ringbuf_submit(void *data, u64 flags)
-> > + * int bpf_ringbuf_submit(void *data, u64 flags)
->
-> This should be "long" instead of "int".
->
-> >  *    Description
-> >  *            Submit reserved ring buffer sample, pointed to by *data*.
-> >  *            If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notif=
-ication
-> > @@ -4083,9 +4083,9 @@ union bpf_attr {
-> >  *            If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notif=
-ication
-> >  *            of new data availability is sent unconditionally.
-> >  *    Return
-> > - *           Nothing. Always succeeds.
-> > + *           0 on success, or a negative error in case of failure.
-> >  *
-> > - * void bpf_ringbuf_discard(void *data, u64 flags)
-> > + * int bpf_ringbuf_discard(void *data, u64 flags)
->
-> Ditto. And same for tools/include/uapi/linux/bpf.h
->
-> >  *    Description
-> >  *            Discard reserved ring buffer sample, pointed to by *data*=
-.
-> >  *            If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notif=
-ication
-> > @@ -4095,7 +4095,7 @@ union bpf_attr {
-> >  *            If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notif=
-ication
-> >  *            of new data availability is sent unconditionally.
-> >  *    Return
-> > - *           Nothing. Always succeeds.
-> > + *           0 on success, or a negative error in case of failure.
-> >  *
-> >  * u64 bpf_ringbuf_query(void *ringbuf, u64 flags)
-> >  *    Description
-> > diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-> > index f25b719ac786..f76dafe2427e 100644
-> > --- a/kernel/bpf/ringbuf.c
-> > +++ b/kernel/bpf/ringbuf.c
-> > @@ -397,26 +397,35 @@ static void bpf_ringbuf_commit(void *sample, u64 =
-flags, bool discard)
-> >
-> > BPF_CALL_2(bpf_ringbuf_submit, void *, sample, u64, flags)
-> > {
-> > +     if (unlikely(flags & ~(BPF_RB_NO_WAKEUP | BPF_RB_FORCE_WAKEUP)))
-> > +             return -EINVAL;
->
-> We can move this check to bpf_ringbuf_commit().
+While running kselftest recently added gpio gpio-sim.sh test case the following
+warning was triggered on Linux next tag 20210330 tag running on arm64 juno
+and hikey devices.
 
-I don't believe we can because in 'bpf_ringbuf_output()' the flag
-checking in 'bpf_ringbuf_commit()' is already
-too late.
+GOOD: next-20210326
+BAD: next-20210330
 
->
-> Thanks,
-> Song
->
-> [...]
+# selftests: gpio: gpio-sim.sh
+# 1. chip_name and dev_name attributes
+# 1.1. Chip name is communicated to user
+[  143.081193] BUG: key ffff000800eba398 has not been registered!
+[  143.087326] ------------[ cut here ]------------
+[  143.091987] DEBUG_LOCKS_WARN_ON(1)
+[  143.092005] WARNING: CPU: 1 PID: 1821 at
+/usr/src/kernel/kernel/locking/lockdep.c:4688
+lockdep_init_map_type+0xf0/0x298
+[  143.106223] Modules linked in: gpio_sim rfkill tda998x cec
+drm_kms_helper drm crct10dif_ce fuse [last unloaded: gpio_mockup]
+[  143.117495] CPU: 1 PID: 1821 Comm: mv Not tainted 5.12.0-rc5-next-20210330 #1
+[  143.124645] Hardware name: ARM Juno development board (r2) (DT)
+[  143.130572] pstate: 40000005 (nZcv daif -PAN -UAO -TCO BTYPE=--)
+[  143.136589] pc : lockdep_init_map_type+0xf0/0x298
+[  143.141302] lr : lockdep_init_map_type+0xf0/0x298
+[  143.146014] sp : ffff800013fb3560
+[  143.149330] x29: ffff800013fb3560 x28: 00000000ffffee4b
+[  143.154655] x27: 00000000000011b4 x26: 0000000000001000
+[  143.159979] x25: ffff000800eba380 x24: 0000000000000000
+[  143.165303] x23: 0000000000000000 x22: 0000000000000000
+[  143.170626] x21: ffff80001382b000 x20: ffff000800eba398
+[  143.175949] x19: ffff000827ac32a8 x18: ffffffffffffffff
+[  143.181273] x17: 0000000000000000 x16: 0000000000000000
+[  143.186595] x15: ffff800012900a88 x14: ffff800093fb3167
+[  143.191918] x13: ffff800013fb3175 x12: 000000000000a0ec
+[  143.197241] x11: 0000000005f5e0ff x10: ffff800013fb30c0
+[  143.202565] x9 : ffff800013fb3560 x8 : 4e5241575f534b43
+[  143.207888] x7 : ffff800012989ad8 x6 : ffff800013fb3180
+[  143.213211] x5 : 0000000000000001 x4 : 0000000000000001
+[  143.218534] x3 : ffff800012901000 x2 : 0000000000000000
+[  143.223856] x1 : b4b7acac5f71bc00 x0 : 0000000000000000
+[  143.229180] Call trace:
+[  143.231625]  lockdep_init_map_type+0xf0/0x298
+[  143.235989]  __kernfs_create_file+0xa8/0x1d0
+[  143.240268]  sysfs_add_file_mode_ns+0xa8/0x1f8
+[  143.244718]  internal_create_group+0x118/0x420
+[  143.249169]  sysfs_create_group+0x2c/0x38
+[  143.253185]  gpio_sim_probe+0x358/0x3c0 [gpio_sim]
+[  143.257995]  platform_probe+0x6c/0xd8
+[  143.261663]  really_probe+0x16c/0x508
+[  143.265332]  driver_probe_device+0x104/0x178
+[  143.269610]  __device_attach_driver+0xa4/0x130
+[  143.274062]  bus_for_each_drv+0x78/0xd8
+[  143.277903]  __device_attach+0xf0/0x178
+[  143.281745]  device_initial_probe+0x24/0x30
+[  143.285935]  bus_probe_device+0xa0/0xa8
+[  143.289776]  device_add+0x424/0x810
+[  143.293270]  platform_device_add+0x12c/0x2c0
+[  143.297545]  platform_device_register_full+0x124/0x150
+[  143.302692]  gpio_sim_config_commit_item+0x160/0x1e0 [gpio_sim]
+[  143.308628]  configfs_rename+0x1dc/0x220
+[  143.312557]  vfs_rename+0x394/0x960
+[  143.316051]  do_renameat2+0x408/0x4c0
+[  143.319718]  __arm64_sys_renameat+0x5c/0x70
+[  143.323908]  el0_svc_common+0x7c/0x158
+[  143.327665]  do_el0_svc+0x38/0x90
+[  143.330985]  el0_svc+0x20/0x30
+[  143.334045]  el0_sync_handler+0x8c/0xb0
+[  143.337886]  el0_sync+0x13c/0x140
+[  143.341204] irq event stamp: 5607
+[  143.344520] hardirqs last  enabled at (5607): [<ffff800011462dd8>]
+_raw_spin_unlock_irq+0x48/0x90
+[  143.353410] hardirqs last disabled at (5606): [<ffff8000114586c4>]
+__schedule+0x364/0x950
+[  143.361605] softirqs last  enabled at (5602): [<ffff800010010958>]
+__do_softirq+0x510/0x63c
+[  143.369971] softirqs last disabled at (5577): [<ffff8000100a7474>]
+irq_exit+0x1b4/0x1c0
+[  143.377992] ---[ end trace bc3c86ef609281aa ]---
+# 1.2. chip_name returns 'none' if the chip is still pending
 
-Pedro
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git describe: next-20210330
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/juno/lkft/linux-next/995/config
+
+Full test log link,
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210330/testrun/4268728/suite/linux-log-parser/test/check-kernel-bug-2463256/log
+
+git log --oneline next-20210326..next-20210330  -- tools/testing/selftests/gpio/
+9d940ab72645 selftests: gpio: add test cases for gpio-sim
+8a4cb2823240 selftests: gpio: add a helper for reading GPIO line names
+ab1dbed6f4e8 selftests: gpio: provide a helper for reading chip info
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
