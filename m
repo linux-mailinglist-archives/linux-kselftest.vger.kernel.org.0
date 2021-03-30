@@ -2,172 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2B734E7B9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 14:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA6934EA50
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 16:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbhC3MpZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Mar 2021 08:45:25 -0400
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:41863 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231803AbhC3MpO (ORCPT
+        id S231974AbhC3OXG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Mar 2021 10:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231829AbhC3OWt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 08:45:14 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0UTrhepb_1617108311;
-Received: from admindeMacBook-Pro-2.local(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0UTrhepb_1617108311)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 30 Mar 2021 20:45:11 +0800
-Subject: Re: [PATCH] selftests: get readahead size for check_file_mmap()
-To:     ricardo.canuelo@collabora.com, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org
-References: <20210330124058.65277-1-jefflexu@linux.alibaba.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-Message-ID: <fbebc7d0-a095-26db-389a-098d4b76370f@linux.alibaba.com>
-Date:   Tue, 30 Mar 2021 20:45:11 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.7.1
+        Tue, 30 Mar 2021 10:22:49 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F59C061574;
+        Tue, 30 Mar 2021 07:22:49 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id x17so16623243iog.2;
+        Tue, 30 Mar 2021 07:22:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=GNHMCs6x+dR2Cqz7tLELzE1plonqANp2Czvp+h/1Vf8=;
+        b=ty8xpi5ikc4QUeUv6hKR+/9N2zPEnBot4pcKeNOEaZaJ44qTR3VEiVODng1iQmgRis
+         jjDDk0eoIYssFwk+wJ7B2s3kfT/R71pLJvJ4B8H9CkvjWNxm9rkTWoptZwy4XcpzblxL
+         eF3VXHAgsG1Jde5rlCkEaJOnfCBN2//1pESFyMe/88dC7rdge6niEiSGBQ2MRoPFRshu
+         7/YP80DZn1AIJbsg9H8y7vKl4xf5MJVRneUpqFIwiqe610OfoNX/OTInXF4Id9YfqD52
+         0/HQBm1VpzoF88NyXDbEuttpi/eEWGTH/tLwoyodHYgEZagn3+p7yM4R3wh4l2srhDEz
+         wtUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GNHMCs6x+dR2Cqz7tLELzE1plonqANp2Czvp+h/1Vf8=;
+        b=aDL1b5g7zT+TX/69iK8bs8G9UjC/zt/26/eDiVKWgzCc73NwGg5CkIXwmEJMfKAIFc
+         Wx0DRhaUZfYu2Pr5e3ksq+mz2ZGio73ldot3GOZHyS3qo2QGa0EUMXUW0HGaRzutzFOc
+         mpvbzZ0iVxebY8KERYwmwU6ZpO7cGUPbcEypPG3t1Q57CBAvKqvtTV5XcwXog3RfB8Yy
+         4AET2WMnfJTHDO6jG4mbHJMI7wG8gi8UA+ZkSLtIbXelpnI1w3ftkfYOHqiDs48AmggJ
+         eQks6PVVClzLIXlXgVzbVnefF0JrWSwEbP26otwZtlvnzXKT1CD7bR5o+EYbkBLTOlr/
+         epzA==
+X-Gm-Message-State: AOAM532PZkfxhr4Dn3yKtiU1K9zu/cchBBIIYAO/++1IVtSvUdeAIkkE
+        MOkqZBdDC5BKXf/D1oPkm7nkbdVBjaiEoZZk6j8lNujdZVWfmg==
+X-Google-Smtp-Source: ABdhPJx2lAQsZaWZav6RqWh2dIxFsrQ79CV0iN3oKmXwGO+ztVj2DfiDBZEwagnQYov43RlS7Ml7o3bDQLfX0pI1IoM=
+X-Received: by 2002:a02:c908:: with SMTP id t8mr10461264jao.78.1617114168349;
+ Tue, 30 Mar 2021 07:22:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210330124058.65277-1-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210328161055.257504-1-pctammela@mojatatu.com>
+ <20210328161055.257504-2-pctammela@mojatatu.com> <A175BAAD-39B2-4ECE-9BA0-D070E84484FF@fb.com>
+In-Reply-To: <A175BAAD-39B2-4ECE-9BA0-D070E84484FF@fb.com>
+From:   Pedro Tammela <pctammela@gmail.com>
+Date:   Tue, 30 Mar 2021 11:22:37 -0300
+Message-ID: <CAKY_9u0J8gurpOhR9YZceH3N2jJFm=v5VLw3atjo==gTp_-RQg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: check flags in 'bpf_ringbuf_discard()' and 'bpf_ringbuf_submit()'
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Pedro Tammela <pctammela@mojatatu.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Joe Stringer <joe@cilium.io>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Em seg., 29 de mar. de 2021 =C3=A0s 13:10, Song Liu <songliubraving@fb.com>=
+ escreveu:
+>
+>
+>
+> > On Mar 28, 2021, at 9:10 AM, Pedro Tammela <pctammela@gmail.com> wrote:
+> >
+> > The current code only checks flags in 'bpf_ringbuf_output()'.
+> >
+> > Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+> > ---
+> > include/uapi/linux/bpf.h       |  8 ++++----
+> > kernel/bpf/ringbuf.c           | 13 +++++++++++--
+> > tools/include/uapi/linux/bpf.h |  8 ++++----
+> > 3 files changed, 19 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index 100cb2e4c104..232b5e5dd045 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -4073,7 +4073,7 @@ union bpf_attr {
+> >  *            Valid pointer with *size* bytes of memory available; NULL=
+,
+> >  *            otherwise.
+> >  *
+> > - * void bpf_ringbuf_submit(void *data, u64 flags)
+> > + * int bpf_ringbuf_submit(void *data, u64 flags)
+>
+> This should be "long" instead of "int".
+>
+> >  *    Description
+> >  *            Submit reserved ring buffer sample, pointed to by *data*.
+> >  *            If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notif=
+ication
+> > @@ -4083,9 +4083,9 @@ union bpf_attr {
+> >  *            If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notif=
+ication
+> >  *            of new data availability is sent unconditionally.
+> >  *    Return
+> > - *           Nothing. Always succeeds.
+> > + *           0 on success, or a negative error in case of failure.
+> >  *
+> > - * void bpf_ringbuf_discard(void *data, u64 flags)
+> > + * int bpf_ringbuf_discard(void *data, u64 flags)
+>
+> Ditto. And same for tools/include/uapi/linux/bpf.h
+>
+> >  *    Description
+> >  *            Discard reserved ring buffer sample, pointed to by *data*=
+.
+> >  *            If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notif=
+ication
+> > @@ -4095,7 +4095,7 @@ union bpf_attr {
+> >  *            If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notif=
+ication
+> >  *            of new data availability is sent unconditionally.
+> >  *    Return
+> > - *           Nothing. Always succeeds.
+> > + *           0 on success, or a negative error in case of failure.
+> >  *
+> >  * u64 bpf_ringbuf_query(void *ringbuf, u64 flags)
+> >  *    Description
+> > diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> > index f25b719ac786..f76dafe2427e 100644
+> > --- a/kernel/bpf/ringbuf.c
+> > +++ b/kernel/bpf/ringbuf.c
+> > @@ -397,26 +397,35 @@ static void bpf_ringbuf_commit(void *sample, u64 =
+flags, bool discard)
+> >
+> > BPF_CALL_2(bpf_ringbuf_submit, void *, sample, u64, flags)
+> > {
+> > +     if (unlikely(flags & ~(BPF_RB_NO_WAKEUP | BPF_RB_FORCE_WAKEUP)))
+> > +             return -EINVAL;
+>
+> We can move this check to bpf_ringbuf_commit().
 
+I don't believe we can because in 'bpf_ringbuf_output()' the flag
+checking in 'bpf_ringbuf_commit()' is already
+too late.
 
-On 3/30/21 8:40 PM, Jeffle Xu wrote:
-> The readahead size used to be 2MB, thus it's reasonable to set the file
-> size as 4MB when checking check_file_mmap().
-> 
-> However since commit c2e4cd57cfa1 ("block: lift setting the readahead
-> size into the block layer"), readahead could be as large as twice the
-> io_opt, and thus the hardcoded file size no longer works.
-> 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+>
+> Thanks,
+> Song
+>
+> [...]
 
-Forgot to mention that otherwise, "Read-ahead pages reached the end of
-the file" is reported in check_file_mmap().
-
-> ---
->  .../selftests/mincore/mincore_selftest.c      | 57 +++++++++++++++----
->  1 file changed, 47 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
-> index 5a1e85ff5d32..cf0c86697403 100644
-> --- a/tools/testing/selftests/mincore/mincore_selftest.c
-> +++ b/tools/testing/selftests/mincore/mincore_selftest.c
-> @@ -15,6 +15,11 @@
->  #include <string.h>
->  #include <fcntl.h>
->  #include <string.h>
-> +#include <sys/types.h>
-> +#include <sys/stat.h>
-> +#include <sys/ioctl.h>
-> +#include <sys/sysmacros.h>
-> +#include <sys/mount.h>
->  
->  #include "../kselftest.h"
->  #include "../kselftest_harness.h"
-> @@ -195,10 +200,42 @@ TEST(check_file_mmap)
->  	int fd;
->  	int i;
->  	int ra_pages = 0;
-> +	long ra_size, filesize;
-> +	struct stat stats;
-> +	dev_t devt;
-> +	unsigned int major, minor;
-> +	char devpath[32];
-> +
-> +	retval = stat(".", &stats);
-> +	ASSERT_EQ(0, retval) {
-> +		TH_LOG("Can't stat pwd: %s", strerror(errno));
-> +	}
-> +
-> +	devt = stats.st_dev;
-> +	major = major(devt);
-> +	minor = minor(devt);
-> +	snprintf(devpath, sizeof(devpath), "/dev/block/%u:%u", major, minor);
-> +
-> +	fd = open(devpath, O_RDONLY);
-> +	ASSERT_NE(-1, fd) {
-> +		TH_LOG("Can't open underlying disk %s", strerror(errno));
-> +	}
-> +
-> +	retval = ioctl(fd, BLKRAGET, &ra_size);
-> +	ASSERT_EQ(0, retval) {
-> +		TH_LOG("Error ioctl with the underlying disk: %s", strerror(errno));
-> +	}
-> +
-> +	/*
-> +	 * BLKRAGET ioctl returns the readahead size in sectors (512 bytes).
-> +	 * Make filesize large enough to contain the readahead window.
-> +	 */
-> +	ra_size *= 512;
-> +	filesize = ra_size * 2;
->  
->  	page_size = sysconf(_SC_PAGESIZE);
-> -	vec_size = FILE_SIZE / page_size;
-> -	if (FILE_SIZE % page_size)
-> +	vec_size = filesize / page_size;
-> +	if (filesize % page_size)
->  		vec_size++;
->  
->  	vec = calloc(vec_size, sizeof(unsigned char));
-> @@ -213,7 +250,7 @@ TEST(check_file_mmap)
->  			strerror(errno));
->  	}
->  	errno = 0;
-> -	retval = fallocate(fd, 0, 0, FILE_SIZE);
-> +	retval = fallocate(fd, 0, 0, filesize);
->  	ASSERT_EQ(0, retval) {
->  		TH_LOG("Error allocating space for the temporary file: %s",
->  			strerror(errno));
-> @@ -223,12 +260,12 @@ TEST(check_file_mmap)
->  	 * Map the whole file, the pages shouldn't be fetched yet.
->  	 */
->  	errno = 0;
-> -	addr = mmap(NULL, FILE_SIZE, PROT_READ | PROT_WRITE,
-> +	addr = mmap(NULL, filesize, PROT_READ | PROT_WRITE,
->  			MAP_SHARED, fd, 0);
->  	ASSERT_NE(MAP_FAILED, addr) {
->  		TH_LOG("mmap error: %s", strerror(errno));
->  	}
-> -	retval = mincore(addr, FILE_SIZE, vec);
-> +	retval = mincore(addr, filesize, vec);
->  	ASSERT_EQ(0, retval);
->  	for (i = 0; i < vec_size; i++) {
->  		ASSERT_EQ(0, vec[i]) {
-> @@ -240,14 +277,14 @@ TEST(check_file_mmap)
->  	 * Touch a page in the middle of the mapping. We expect the next
->  	 * few pages (the readahead window) to be populated too.
->  	 */
-> -	addr[FILE_SIZE / 2] = 1;
-> -	retval = mincore(addr, FILE_SIZE, vec);
-> +	addr[filesize / 2] = 1;
-> +	retval = mincore(addr, filesize, vec);
->  	ASSERT_EQ(0, retval);
-> -	ASSERT_EQ(1, vec[FILE_SIZE / 2 / page_size]) {
-> +	ASSERT_EQ(1, vec[filesize / 2 / page_size]) {
->  		TH_LOG("Page not found in memory after use");
->  	}
->  
-> -	i = FILE_SIZE / 2 / page_size + 1;
-> +	i = filesize / 2 / page_size + 1;
->  	while (i < vec_size && vec[i]) {
->  		ra_pages++;
->  		i++;
-> @@ -271,7 +308,7 @@ TEST(check_file_mmap)
->  		}
->  	}
->  
-> -	munmap(addr, FILE_SIZE);
-> +	munmap(addr, filesize);
->  	close(fd);
->  	free(vec);
->  }
-> 
-
--- 
-Thanks,
-Jeffle
+Pedro
