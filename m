@@ -2,108 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9972A34E1C2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 09:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D818D34E2C2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 10:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbhC3HII (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Mar 2021 03:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbhC3HIB (ORCPT
+        id S231340AbhC3IJN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Mar 2021 04:09:13 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14958 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229633AbhC3IJI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 03:08:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB916C061762;
-        Tue, 30 Mar 2021 00:07:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=X166VgoQn02EMb3f8ykwCC49d3dYou3bLIcu1kP5us0=; b=mEIz6zmnoSAw3j1Qd+Moj7BPqA
-        o1FPHvH8HA4uTXQgWju4LxdFzthKOCG4xQqrL5iK/DtsvNE48oHsIcpR4rDrTiLBm3iiBRrTlZTBN
-        CC8MY7tkotNFjxLmxv93ek4JzPSVR8fsaIhcAiUNmewBwq2a5sb9LM+WhRuum7nv4oxK/QaW/WVyX
-        PlfPdvhdFBiscnR/2IR8k05yLYzcxvS1h5uzsDwpA+Tr+RKs2MYbGuJT5frmJkmdcb0PPABLW7sem
-        +RW8E4axAPeY1QUxI69MN73T2kthyGMY+UiChulnX3Ic4YzdxLYFtMSFNCb/eT2TnJD6dbNbkURhT
-        GNOoFsZQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lR8Qa-002ddk-BT; Tue, 30 Mar 2021 07:04:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F3363307001;
-        Tue, 30 Mar 2021 09:04:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BBF922B960A7F; Tue, 30 Mar 2021 09:04:36 +0200 (CEST)
-Date:   Tue, 30 Mar 2021 09:04:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        Tue, 30 Mar 2021 04:09:08 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F8hqm4qfxzyNHw;
+        Tue, 30 Mar 2021 16:07:00 +0800 (CST)
+Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 30 Mar 2021 16:08:58 +0800
+From:   Yanan Wang <wangyanan55@huawei.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Xu <peterx@redhat.com>, "Ingo Molnar" <mingo@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
-Message-ID: <YGLNhKnx4wR38XpE@hirez.programming.kicks-ass.net>
-References: <20210324112503.623833-1-elver@google.com>
- <20210324112503.623833-7-elver@google.com>
- <YFxGb+QHEumZB6G8@elver.google.com>
- <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
- <20210329142705.GA24849@redhat.com>
- <CANpmjNN4kiGiuSSm2g0empgKo3DW-UJ=eNDB6sv1bpypD13vqQ@mail.gmail.com>
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
+        Yanan Wang <wangyanan55@huawei.com>
+Subject: [PATCH v6 00/10] KVM: selftests: some improvement and a new test for kvm page table
+Date:   Tue, 30 Mar 2021 16:08:46 +0800
+Message-ID: <20210330080856.14940-1-wangyanan55@huawei.com>
+X-Mailer: git-send-email 2.8.4.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNN4kiGiuSSm2g0empgKo3DW-UJ=eNDB6sv1bpypD13vqQ@mail.gmail.com>
+Content-Type: text/plain
+X-Originating-IP: [10.174.187.128]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 04:32:18PM +0200, Marco Elver wrote:
-> On Mon, 29 Mar 2021 at 16:27, Oleg Nesterov <oleg@redhat.com> wrote:
-> > On 03/29, Peter Zijlstra wrote:
-> > >
-> > > On Thu, Mar 25, 2021 at 09:14:39AM +0100, Marco Elver wrote:
-> > > > @@ -6395,6 +6395,13 @@ static void perf_sigtrap(struct perf_event *event)
-> > > >  {
-> > > >     struct kernel_siginfo info;
-> > > >
-> > > > +   /*
-> > > > +    * This irq_work can race with an exiting task; bail out if sighand has
-> > > > +    * already been released in release_task().
-> > > > +    */
-> > > > +   if (!current->sighand)
-> > > > +           return;
-> >
-> > This is racy. If "current" has already passed exit_notify(), current->parent
-> > can do release_task() and destroy current->sighand right after the check.
-> >
-> > > Urgh.. I'm not entirely sure that check is correct, but I always forget
-> > > the rules with signal. It could be we ought to be testing PF_EXISTING
-> > > instead.
-> >
-> > Agreed, PF_EXISTING check makes more sense in any case, the exiting task
-> > can't receive the signal anyway.
-> 
-> Thanks for confirming. I'll switch to just checking PF_EXITING
-> (PF_EXISTING does not exist :-)).
+Hi,
+This v6 series can mainly include two parts.
+Rebased on kvm queue branch: https://git.kernel.org/pub/scm/virt/kvm/kvm.git/log/?h=queue
 
-Indeed! Typing be hard :-)
+In the first part, all the known hugetlb backing src types specified
+with different hugepage sizes are listed, so that we can specify use
+of hugetlb source of the exact granularity that we want, instead of
+the system default ones. And as all the known hugetlb page sizes are
+listed, it's appropriate for all architectures. Besides, a helper that
+can get granularity of different backing src types(anonumous/thp/hugetlb)
+is added, so that we can use the accurate backing src granularity for
+kinds of alignment or guest memory accessing of vcpus.
+
+In the second part, a new test is added:
+This test is added to serve as a performance tester and a bug reproducer
+for kvm page table code (GPA->HPA mappings), it gives guidance for the
+people trying to make some improvement for kvm. And the following explains
+what we can exactly do through this test.
+
+The function guest_code() can cover the conditions where a single vcpu or
+multiple vcpus access guest pages within the same memory region, in three
+VM stages(before dirty logging, during dirty logging, after dirty logging).
+Besides, the backing src memory type(ANONYMOUS/THP/HUGETLB) of the tested
+memory region can be specified by users, which means normal page mappings
+or block mappings can be chosen by users to be created in the test.
+
+If ANONYMOUS memory is specified, kvm will create normal page mappings
+for the tested memory region before dirty logging, and update attributes
+of the page mappings from RO to RW during dirty logging. If THP/HUGETLB
+memory is specified, kvm will create block mappings for the tested memory
+region before dirty logging, and split the blcok mappings into normal page
+mappings during dirty logging, and coalesce the page mappings back into
+block mappings after dirty logging is stopped.
+
+So in summary, as a performance tester, this test can present the
+performance of kvm creating/updating normal page mappings, or the
+performance of kvm creating/splitting/recovering block mappings,
+through execution time.
+
+When we need to coalesce the page mappings back to block mappings after
+dirty logging is stopped, we have to firstly invalidate *all* the TLB
+entries for the page mappings right before installation of the block entry,
+because a TLB conflict abort error could occur if we can't invalidate the
+TLB entries fully. We have hit this TLB conflict twice on aarch64 software
+implementation and fixed it. As this test can imulate process from dirty
+logging enabled to dirty logging stopped of a VM with block mappings,
+so it can also reproduce this TLB conflict abort due to inadequate TLB
+invalidation when coalescing tables.
+
+Links about the TLB conflict abort:
+https://lore.kernel.org/lkml/20201201201034.116760-3-wangyanan55@huawei.com/
+
+---
+
+Change logs:
+
+v5->v6:
+- Address Andrew Jones's comments for v5 series
+- Add Andrew Jones's R-b tags in some patches
+- Rebased on newest kvm/queue tree
+- v5: https://lore.kernel.org/lkml/20210323135231.24948-1-wangyanan55@huawei.com/
+
+v4->v5:
+- Use synchronization(sem_wait) for time measurement
+- Add a new patch about TEST_ASSERT(patch 4)
+- Address Andrew Jones's comments for v4 series
+- Add Andrew Jones's R-b tags in some patches
+- v4: https://lore.kernel.org/lkml/20210302125751.19080-1-wangyanan55@huawei.com/
+
+v3->v4:
+- Add a helper to get system default hugetlb page size
+- Add tags of Reviewed-by of Ben in the patches
+- v3: https://lore.kernel.org/lkml/20210301065916.11484-1-wangyanan55@huawei.com/
+
+v2->v3:
+- Add tags of Suggested-by, Reviewed-by in the patches
+- Add a generic micro to get hugetlb page sizes
+- Some changes for suggestions about v2 series
+- v2: https://lore.kernel.org/lkml/20210225055940.18748-1-wangyanan55@huawei.com/
+
+v1->v2:
+- Add a patch to sync header files
+- Add helpers to get granularity of different backing src types
+- Some changes for suggestions about v1 series
+- v1: https://lore.kernel.org/lkml/20210208090841.333724-1-wangyanan55@huawei.com/
+
+---
+
+Yanan Wang (10):
+  tools headers: sync headers of asm-generic/hugetlb_encode.h
+  mm/hugetlb: Add a macro to get HUGETLB page sizes for mmap
+  KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
+  KVM: selftests: Print the errno besides error-string in TEST_ASSERT
+  KVM: selftests: Make a generic helper to get vm guest mode strings
+  KVM: selftests: Add a helper to get system configured THP page size
+  KVM: selftests: Add a helper to get system default hugetlb page size
+  KVM: selftests: List all hugetlb src types specified with page sizes
+  KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
+  KVM: selftests: Add a test for kvm page table code
+
+ include/uapi/linux/mman.h                     |   2 +
+ tools/include/asm-generic/hugetlb_encode.h    |   3 +
+ tools/include/uapi/linux/mman.h               |   2 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../selftests/kvm/demand_paging_test.c        |   8 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |  14 +-
+ .../testing/selftests/kvm/include/kvm_util.h  |   4 +-
+ .../testing/selftests/kvm/include/test_util.h |  21 +-
+ .../selftests/kvm/kvm_page_table_test.c       | 506 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/assert.c      |   4 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  59 +-
+ tools/testing/selftests/kvm/lib/test_util.c   | 163 +++++-
+ tools/testing/selftests/kvm/steal_time.c      |   4 +-
+ 14 files changed, 733 insertions(+), 61 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_page_table_test.c
+
+-- 
+2.23.0
+
