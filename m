@@ -2,266 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 018E934F50E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Mar 2021 01:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D4234F511
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Mar 2021 01:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbhC3XbM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Mar 2021 19:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
+        id S232939AbhC3XbN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Mar 2021 19:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbhC3Xav (ORCPT
+        with ESMTP id S232900AbhC3Xaw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 19:30:51 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF41DC061574
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Mar 2021 16:30:50 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id w2so15132235ilj.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Mar 2021 16:30:50 -0700 (PDT)
+        Tue, 30 Mar 2021 19:30:52 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991FEC061574;
+        Tue, 30 Mar 2021 16:30:51 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id o10so26300228lfb.9;
+        Tue, 30 Mar 2021 16:30:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=o671+X957x3ohIb8lZy+lC6mbupaAR79VW4I7NvzAKM=;
-        b=q3+rZbXz4Tlokww2KCM+zuxWcJwwrl95Q65TPi93mxksx1cxTwhxtRQthFoKlW/aaE
-         xYID/mh8kTYSBSFSfeMbQi09UlsGYuv8sTi/J70kP03kPtupVHpt9VM/2P9gZqtyP8Mv
-         BkqWQSDaOHMyIQHFlG5WOBGaB6HIzl/+hJoq3s8i1M+lLfy/3H7DnwEUm82xCg/zAUNA
-         jg7s43cR2owsrmQgLifKwSvKOxA9Aac0QfDYalUL1M0kAly1px5zGaIeprVHZmph+p9s
-         VD6+cGjT+xJe4apJ1QbLt4mEgkKKQJ15CYKhdnnztORfoWmXVvrLogqWQow8RAfchHEl
-         8j4w==
+        bh=q86N4Ipee4cOuOSoKuuXES9jQCxRaJsXucpi8+zhcjo=;
+        b=UqW8IjHcBTTLNRmgHR+MOJeglKm86mIssPm6cD9TIaSfxP3tdkcHPSA806Ouu2l3tc
+         aK72v0JGn69nOQ6cFT1F/P0SaKdi3DzhcGp+fnXUgh3NAjmm4Fw2OisCR35jFdw4IsvM
+         NSLMRwQgjftceRcbzHQ097DzPQcqflhDjzn4FyGQvmFo/NwANywgUJX3iePCMajaIUSY
+         yLJ02Zy+sUz6tfWxIpXE5wLe+Y0uBUjEXlJgys0wAe1WpiKmL/cGaS84XXlS/AmgPeMZ
+         IzJbwbl9hBbmvS7aBw5FlCcAc/gGT3lyRq5+QC/Q+c3CpijTdUu709l1ter0u1Hr3eoQ
+         MOFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=o671+X957x3ohIb8lZy+lC6mbupaAR79VW4I7NvzAKM=;
-        b=esuQEhcNeyZmmobdG9wGGKL2skds2HfAHMMlh/hQ+xgXf/owKC0juhlUTa8FtZpECP
-         fVuKgdNPR2S4Y8zNGJ+uMd4OvyEAyiMvdaIK4py7v9L1mXGWsQdxOrXiVQ+ZpmjnnPpK
-         Qxwk5yzM/1sWs4bKsGAo5tpmFxcnMS2GDYz+NF9DCN5/ZmQ8DxxheK4hwEPeiUJyM1jx
-         a7+Bo4caG9AMdNoRkjwvv/v9XAj8Xi5nbTHPcJd3SJkBrdAuMndTrQBXfqJcSSRRbIDF
-         WqmiMb+NMWXxK/L48R11JHShmGzbYxSAMLVMnRY4d7TFJapQQ+tbpwRewigMMFRUgVi/
-         H9UA==
-X-Gm-Message-State: AOAM532akyb+Y9HH+Ufrzh53orF83cAW1Krrtjlx9cc8x/oLl/8UYcD0
-        KOlO6R8cAgfFHudaMepftca1/I8be92zMDuqfgI0/A==
-X-Google-Smtp-Source: ABdhPJzmBW6GzmEVr5Cuj8rTTicENZCXn7A7uW/m9mCcv0pU4T0pZyDhXHJKXWKktFLUDdPAX+wHrIkVeNo8GZEDhXY=
-X-Received: by 2002:a05:6e02:ee3:: with SMTP id j3mr520900ilk.85.1617147049699;
+        bh=q86N4Ipee4cOuOSoKuuXES9jQCxRaJsXucpi8+zhcjo=;
+        b=WD4kihME6ZvL76JIBxfqp2LiB89L+BGxsIRk1C73ewfncFKjbLgX3QSynQ0prnWlr7
+         kCBAxq4Z75JXVfaI7B15gY2BHDQ+Nojx7QMZncF2otfnpLF2AE926sLGucO3904c3Su5
+         1dD5POGZQeXcFsP6u4CiCY8DCf6F+L22XRGSudu0XNmgJrxSrDOs4+9azIC+M8xOhtdx
+         qNG47zJDOVMTExUijWci+PKO7pfzRtb2Ie3DlHW4KJHJV/4TzSq0wvtTFkPnxphgPciG
+         SfX8o3+po/mXZuzoDRbhbgNszGa32avZOKgg8oLHvvpG1O6vdYkoedPR1vCelR70NiHU
+         Qc3Q==
+X-Gm-Message-State: AOAM530APQTnlbhNfFAyXLO13uBrj8BpppzVKBlAPC8F+I03DUNFPUtB
+        kKuokNPWUzVty8PqMeC2BDx7ir+MO7KwBjGCoS0=
+X-Google-Smtp-Source: ABdhPJzuGLnokRH73+DxvFOn0VExwcrwyd+AtuMcBo0lp5eY4kzWi1KoObq9KSpq/56E0YGL53oRZ+KgmIGZnSnpG0o=
+X-Received: by 2002:ac2:5ec2:: with SMTP id d2mr382924lfq.214.1617147049905;
  Tue, 30 Mar 2021 16:30:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210329234131.304999-1-axelrasmussen@google.com> <20210330205519.GK429942@xz-x1>
-In-Reply-To: <20210330205519.GK429942@xz-x1>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 30 Mar 2021 16:30:13 -0700
-Message-ID: <CAJHvVcikF9MJepyvf6riVKZEUxQvV1QMdoQoN5Kirs0TLcn-Dg@mail.gmail.com>
-Subject: Re: [PATCH v3] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTNUE behavior
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        linux-kselftest@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michel Lespinasse <walken@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
+References: <20210325120020.236504-1-memxor@gmail.com> <20210325120020.236504-4-memxor@gmail.com>
+ <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+ <20210328080648.oorx2no2j6zslejk@apollo> <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
+ <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
+In-Reply-To: <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 30 Mar 2021 16:30:38 -0700
+Message-ID: <CAADnVQ+xPH+i=Y44Vyr0ukU+3eHNZXYNW7s0JAJLUXtskYACng@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 1:55 PM Peter Xu <peterx@redhat.com> wrote:
+On Tue, Mar 30, 2021 at 2:26 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> On Mon, Mar 29, 2021 at 04:41:31PM -0700, Axel Rasmussen wrote:
-> > Previously, we shared too much of the code with COPY and ZEROPAGE, so we
-> > manipulated things in various invalid ways:
+> On 3/30/21 10:39 PM, Andrii Nakryiko wrote:
+> > On Sun, Mar 28, 2021 at 1:11 AM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
+> >> On Sun, Mar 28, 2021 at 10:12:40AM IST, Andrii Nakryiko wrote:
+> >>> Is there some succinct but complete enough documentation/tutorial/etc
+> >>> that I can reasonably read to understand kernel APIs provided by TC
+> >>> (w.r.t. BPF, of course). I'm trying to wrap my head around this and
+> >>> whether API makes sense or not. Please share links, if you have some.
+> >>
+> >> Hi Andrii,
+> >>
+> >> Unfortunately for the kernel API part, I couldn't find any when I was working
+> >> on this. So I had to read the iproute2 tc code (tc_filter.c, f_bpf.c,
+> >> m_action.c, m_bpf.c) and the kernel side bits (cls_api.c, cls_bpf.c, act_api.c,
+> >> act_bpf.c) to grok anything I didn't understand. There's also similar code in
+> >> libnl (lib/route/{act,cls}.c).
+> >>
+> >> Other than that, these resources were useful (perhaps you already went through
+> >> some/all of them):
+> >>
+> >> https://docs.cilium.io/en/latest/bpf/#tc-traffic-control
+> >> https://qmonnet.github.io/whirl-offload/2020/04/11/tc-bpf-direct-action/
+> >> tc(8), and tc-bpf(8) man pages
+> >>
+> >> I hope this is helpful!
 > >
-> > - Previously, we unconditionally called shmem_inode_acct_block. In the
-> >   continue case, we're looking up an existing page which would have been
-> >   accounted for properly when it was allocated. So doing it twice
-> >   results in double-counting, and eventually leaking.
+> > Thanks! I'll take a look. Sorry, I'm a bit behind with all the stuff,
+> > trying to catch up.
 > >
-> > - Previously, we made the pte writable whenever the VMA was writable.
-> >   However, for continue, consider this case:
+> > I was just wondering if it would be more natural instead of having
+> > _dev _block variants and having to specify __u32 ifindex, __u32
+> > parent_id, __u32 protocol, to have some struct specifying TC
+> > "destination"? Maybe not, but I thought I'd bring this up early. So
+> > you'd have just bpf_tc_cls_attach(), and you'd so something like
 > >
-> >   1. A tmpfs file was created
-> >   2. The non-UFFD-registered side mmap()-s with MAP_SHARED
-> >   3. The UFFD-registered side mmap()-s with MAP_PRIVATE
+> > bpf_tc_cls_attach(prog_fd, TC_DEV(ifindex, parent_id, protocol))
 > >
-> >   In this case, even though the UFFD-registered VMA may be writable, we
-> >   still want CoW behavior. So, check for this case and don't make the
-> >   pte writable.
+> > or
 > >
-> > - The initial pgoff / max_off check isn't necessary, so we can skip past
-> >   it. The second one seems likely to be unnecessary too, but keep it
-> >   just in case. Modify both checks to use pgoff, as offset is equivalent
-> >   and not needed.
+> > bpf_tc_cls_attach(prog_fd, TC_BLOCK(block_idx, protocol))
 > >
-> > - Previously, we unconditionally called ClearPageDirty() in the error
-> >   path. In the continue case though, since this is an existing page, it
-> >   might have already been dirty before we started touching it. It's very
-> >   problematic to clear the bit incorrectly, but not a problem to leave
-> >   it - so, just omit the ClearPageDirty() entirely.
+> > ? Or it's taking it too far?
 > >
-> > - Previously, we unconditionally removed the page from the page cache in
-> >   the error path. But in the continue case, we didn't add it - it was
-> >   already there because the page is present in some second
-> >   (non-UFFD-registered) mapping. So, removing it is invalid.
-> >
-> > Because the error handling issues are easy to exercise in the selftest,
-> > make a small modification there to do so.
-> >
-> > Finally, refactor shmem_mcopy_atomic_pte a bit. By this point, we've
-> > added a lot of "if (!is_continue)"-s everywhere. It's cleaner to just
-> > check for that mode first thing, and then "goto" down to where the parts
-> > we actually want are. This leaves the code in between cleaner.
-> >
-> > Changes since v2:
-> > - Drop the ClearPageDirty() entirely, instead of trying to remember the
-> >   old value.
-> > - Modify both pgoff / max_off checks to use pgoff. It's equivalent to
-> >   offset, but offset wasn't initialized until the first check (which
-> >   we're skipping).
-> > - Keep the second pgoff / max_off check in the continue case.
-> >
-> > Changes since v1:
-> > - Refactor to skip ahead with goto, instead of adding several more
-> >   "if (!is_continue)".
-> > - Fix unconditional ClearPageDirty().
-> > - Don't pte_mkwrite() when is_continue && !VM_SHARED.
-> >
-> > Fixes: 00da60b9d0a0 ("userfaultfd: support minor fault handling for shmem")
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > ---
-> >  mm/shmem.c                               | 60 +++++++++++++-----------
-> >  tools/testing/selftests/vm/userfaultfd.c | 12 +++++
-> >  2 files changed, 44 insertions(+), 28 deletions(-)
-> >
-> > diff --git a/mm/shmem.c b/mm/shmem.c
-> > index d2e0e81b7d2e..fbcce850a16e 100644
-> > --- a/mm/shmem.c
-> > +++ b/mm/shmem.c
-> > @@ -2377,18 +2377,22 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> >       struct page *page;
-> >       pte_t _dst_pte, *dst_pte;
-> >       int ret;
-> > -     pgoff_t offset, max_off;
-> > -
-> > -     ret = -ENOMEM;
-> > -     if (!shmem_inode_acct_block(inode, 1))
-> > -             goto out;
-> > +     pgoff_t max_off;
-> > +     int writable;
+> > But even if not, I think detaching can be unified between _dev and
+> > _block, can't it?
 >
-> Nit: can be bool.
+> Do we even need the _block variant? I would rather prefer to take the chance
+> and make it as simple as possible, and only iff really needed extend with
+> other APIs, for example:
 >
-> [...]
+>    bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS});
 >
-> > +install_ptes:
-> >       _dst_pte = mk_pte(page, dst_vma->vm_page_prot);
-> > -     if (dst_vma->vm_flags & VM_WRITE)
-> > +     /* For CONTINUE on a non-shared VMA, don't pte_mkwrite for CoW. */
-> > +     writable = is_continue && !(dst_vma->vm_flags & VM_SHARED)
-> > +             ? 0
-> > +             : dst_vma->vm_flags & VM_WRITE;
->
-> Nit: this code is slightly hard to read..  I'd slightly prefer "if
-> (is_continue)...".  But more below.
->
-> > +     if (writable)
-> >               _dst_pte = pte_mkwrite(pte_mkdirty(_dst_pte));
-> >       else {
-> >               /*
-> > @@ -2455,7 +2458,7 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> >
-> >       ret = -EFAULT;
-> >       max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
-> > -     if (unlikely(offset >= max_off))
-> > +     if (unlikely(pgoff >= max_off))
-> >               goto out_release_unlock;
-> >
-> >       ret = -EEXIST;
-> > @@ -2485,13 +2488,14 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> >       return ret;
-> >  out_release_unlock:
-> >       pte_unmap_unlock(dst_pte, ptl);
-> > -     ClearPageDirty(page);
-> > -     delete_from_page_cache(page);
-> > +     if (!is_continue)
-> > +             delete_from_page_cache(page);
-> >  out_release:
-> >       unlock_page(page);
-> >       put_page(page);
-> >  out_unacct_blocks:
-> > -     shmem_inode_unacct_blocks(inode, 1);
-> > +     if (!is_continue)
-> > +             shmem_inode_unacct_blocks(inode, 1);
->
-> If you see we still have tons of "if (!is_continue)".  Those are the places
-> error prone.. even if not in this patch, could be in the patch when this
-> function got changed again.
->
-> Sorry to say this a bit late: how about introduce a helper to install the pte?
+> Internally, this will create the sch_clsact qdisc & cls_bpf filter instance
+> iff not present yet, and attach to a default prio 1 handle 1, and _always_ in
+> direct-action mode. This is /as simple as it gets/ and we don't need to bother
+> users with more complex tc/cls_bpf internals unless desired. For example,
+> extended APIs could add prio/parent so that multi-prog can be attached to a
+> single cls_bpf instance, but even that could be a second step, imho.
 
-No worries. :)
-
-> Pesudo code:
->
-> int shmem_install_uffd_pte(..., bool writable)
-> {
->         ...
->         _dst_pte = mk_pte(page, dst_vma->vm_page_prot);
->         if (dst_vma->vm_flags & VM_WRITE)
->                 _dst_pte = pte_mkwrite(pte_mkdirty(_dst_pte));
->         else
->                 set_page_dirty(page);
->
->         dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
->         if (!pte_none(*dst_pte)) {
->                 pte_unmap_unlock(dst_pte, ptl);
->                 return -EEXIST;
->         }
->
->         inc_mm_counter(dst_mm, mm_counter_file(page));
->         page_add_file_rmap(page, false);
->         set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
->
->         /* No need to invalidate - it was non-present before */
->         update_mmu_cache(dst_vma, dst_addr, dst_pte);
->         pte_unmap_unlock(dst_pte, ptl);
->         return 0;
-> }
->
-> Then at the entry of shmem_mcopy_atomic_pte():
->
->         if (is_continue) {
->                 page = find_lock_page(mapping, pgoff);
->                 if (!page)
->                     return -EFAULT;
->                 ret = shmem_install_uffd_pte(...,
->                         is_continue && !(dst_vma->vm_flags & VM_SHARED));
->                 unlock_page(page);
->                 if (ret)
->                     put_page(page);
->                 return ret;
->         }
->
-> Do you think this would be cleaner?
-
-Yes, a refactor like that is promising. It's hard to say for certain
-without actually looking at the result - I'll spend some time tomorrow
-on a few options, and send along the cleanest version I come up with.
-
-Thanks for all the feedback and advice on this feature, Peter!
-
->
-> --
-> Peter Xu
->
++1 to support sched_cls in direct-action mode only.
