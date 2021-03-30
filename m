@@ -2,282 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F4634DC99
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 01:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5F734DF52
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 05:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbhC2XoR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Mar 2021 19:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S231318AbhC3D3f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Mar 2021 23:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbhC2XoO (ORCPT
+        with ESMTP id S230247AbhC3D3C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Mar 2021 19:44:14 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAD0C061765
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Mar 2021 16:44:14 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id v186so12900561ybe.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Mar 2021 16:44:14 -0700 (PDT)
+        Mon, 29 Mar 2021 23:29:02 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028A6C0613DB;
+        Mon, 29 Mar 2021 20:28:51 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id x26so11255164pfn.0;
+        Mon, 29 Mar 2021 20:28:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=uoU32IU0pqTRkbWEkjmYD519qCQDwaxCfM+B/mBEeuo=;
-        b=nsWDPG4/gHBmdumT95TxKr+RFTidK1afkH6jAkr7L0ngzD8b8e9ZPDpEmZpAeh2uyS
-         QPEYRRQl5TP8L0W8LhbBsrswqR3Wzjm1kkGwoco++CBEMZNWEQ6lOkM1fBeTttDtUCi/
-         Ltp9pspRsqyloBv1n3lFtDemERmM1N4opnVD/Mt1c4zVOhpM2j2Zq9sTXveOfUmrtD+Z
-         6b4k4PBuZydijBcvGlu2q16lGVL6PZz+HaRoS4x7wPVhW+BABzDYbzS/YSaDXTEfrz2u
-         bqRcMzJ1WzHXXnS5J3ait4UhU/etIqyINQUTlrvS1dRsBKBhRhSmJohg4pb+ignhth4j
-         5HFA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NeGShYc368rl6ljTCiB3vDzY/XEQ6/G4qOdDPRk1LoE=;
+        b=bFf6fi0kxldEIdu/O7RtxSVlFy6eaiIV2x2EbRWn3xlZmWfCMA7ZZ18URc353mjQgC
+         hpfIYbz4MqVrIP7g7LoYmcxaQ8I6UxIyodZoMOIikBNCu4UEwozVPJDCh8TcmA4Nf6lg
+         ORWJ2MxlkHhJLWLpchAtOgD9ANRba0UDFt969NzzTpOiVroZvP8TEN70oNHUlZYdGCfd
+         Crq1mxnEb6nznSzGP/7S8EsNwhEKWq34j0oi3L78VT5jhkAz0hUjNLoXFnsRALgVOzTd
+         WsZHzryU5Dgm1ZkD8Wt3VL2qBsXR/X8ksT+hlbAe7pnpREc6OSzAViWpvJ4bdBYQTKe3
+         rzUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=uoU32IU0pqTRkbWEkjmYD519qCQDwaxCfM+B/mBEeuo=;
-        b=t8W/jdosR2QX09Uy7nS4QuzdEoHfASPyY8KqTzOY8PpltHntUCaZ3BkGP4TqgcaY33
-         XMTWhLGdb/kY5uYgAda+Kc0qORbw/5LxrD9Gr4wuy9KcL0fTyQ3oayDo4qEDiy24Rh/W
-         5rvlaCi2+7u7MRi7mURqB/r1X/0XBo9tU+PNSuZXuQUN2YgFNgZTi2RP0GH7DAk8KH5X
-         aG4669fZ18cHhNMPH9dSw6ohIz6d4kQ46dhLY1WsN1pMMV0hkfi6kDwZRFAFtJ1+gAK7
-         c61iMkKV9gGXPV9ly2HkdZmNI+aywmMIrpGgzwCxCUArtAz5RvTAGi3oAthfJ8LiWi2z
-         ytsw==
-X-Gm-Message-State: AOAM532Hiijl94PCg5qIBFLBUjQm1dYLVDYIqxxKEg0MVC2wEYlkyZIQ
-        m1vRWJaxdD3CVpkrHVyDYzG/vWe1fFWa+lUmOg4y
-X-Google-Smtp-Source: ABdhPJwel6nkEx2Uf1jY/NOtLUUm4qo9nYXu+LKQeD/JFEoCY4Zo0CcVUV27K2q5Sw5mBSS1DEVk98amOijlC1q4s+YZ
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:8578:c167:dddf:13a2])
- (user=axelrasmussen job=sendgmr) by 2002:a5b:751:: with SMTP id
- s17mr778317ybq.108.1617061453526; Mon, 29 Mar 2021 16:44:13 -0700 (PDT)
-Date:   Mon, 29 Mar 2021 16:41:31 -0700
-Message-Id: <20210329234131.304999-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v3] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTNUE behavior
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michel Lespinasse <walken@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NeGShYc368rl6ljTCiB3vDzY/XEQ6/G4qOdDPRk1LoE=;
+        b=ToJ3TtkTa0KXj9ssYlqqphWzwv/qmaNurVZXgHr7d0KQgeqSwxeXyqWDV1HAvsuIcg
+         SPc7XvC0p7lRw5RsgCBqaOGI+oLAAhrVb5Fy1pieiOawMJVh6MdeXZUKOKqo1UkujfWS
+         +L2I9O2558A+l88ix5d3r7y/42uZur3gWmTyHcUeQ35jhuRr6s4s645wiyjytxEfsLBC
+         PgO6HY8N8uAHuhJe/PVzWnCB1VnNlMw6/sFHESwOXfQmWtojY4b1Ss2GyGU0VbYsk0Wm
+         z/lM1vg66UgjPqv8OtL125a9uEszWUl8oOc8bG42Qx6UfmSvJSsqY4i2AEnXGqghE8XL
+         Vg/w==
+X-Gm-Message-State: AOAM532xZhrSA6+VGuLEWwMaum729hnkq/Sx4a7Pquefp3S3D7li/3Ts
+        TNFKMDJ2dNiRgLecJ73ouSw=
+X-Google-Smtp-Source: ABdhPJxQEeRUjdLNXMCL85Y6dwTbcDaCO3w8D+R2Rb4PuiftGi6xtc6j4l5+YjV5wYcFqoeBeqzCsw==
+X-Received: by 2002:aa7:9a89:0:b029:1f6:26b9:bb73 with SMTP id w9-20020aa79a890000b02901f626b9bb73mr27968335pfi.78.1617074930450;
+        Mon, 29 Mar 2021 20:28:50 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:400::5:19e9])
+        by smtp.gmail.com with ESMTPSA id m16sm17174021pgj.26.2021.03.29.20.28.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Mar 2021 20:28:49 -0700 (PDT)
+Date:   Mon, 29 Mar 2021 20:28:46 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 5/5] libbpf: add selftests for TC-BPF API
+Message-ID: <20210330032846.rg455fe2danojuus@ast-mbp>
+References: <20210325120020.236504-1-memxor@gmail.com>
+ <20210325120020.236504-6-memxor@gmail.com>
+ <20210327021534.pjfjctcdczj7facs@ast-mbp>
+ <CAEf4Bzba_gdTvak_UHqi96-w6GLF5JQcpQRcG7zxnx=kY8Sd5w@mail.gmail.com>
+ <20210329014044.fkmusoeaqs2hjiek@ast-mbp>
+ <CAEf4BzZaWjVhfkr7vizir7PfbcsaN99yEwOoqKi32V4X17f0Ng@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZaWjVhfkr7vizir7PfbcsaN99yEwOoqKi32V4X17f0Ng@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previously, we shared too much of the code with COPY and ZEROPAGE, so we
-manipulated things in various invalid ways:
+On Sun, Mar 28, 2021 at 07:38:42PM -0700, Andrii Nakryiko wrote:
+> 
+> See above. I don't know which hassle is libbpf for users today. You
+> were implying code size used for functionality users might not use
+> (e.g., linker). Libbpf is a very small library, <300KB. There are
+> users building tools for constrained embedded systems that use libbpf.
+> There are/were various problems mentioned, but the size of libbpf
+> wasn't yet one of them. We should certainly watch the code bloat, but
+> we are not yet at the point where library is too big for users to be
+> turned off. 
 
-- Previously, we unconditionally called shmem_inode_acct_block. In the
-  continue case, we're looking up an existing page which would have been
-  accounted for properly when it was allocated. So doing it twice
-  results in double-counting, and eventually leaking.
+It's true that today sizeof(libbpf + libelf + libz) ~ 500k is not a concern.
+I'm worried what it will get to if we don't start splitting things up.
 
-- Previously, we made the pte writable whenever the VMA was writable.
-  However, for continue, consider this case:
+Why split libxdp into its own lib?
+If tc attach is going to part of libbpf all things xdp should be
+part of libbpf as well.
 
-  1. A tmpfs file was created
-  2. The non-UFFD-registered side mmap()-s with MAP_SHARED
-  3. The UFFD-registered side mmap()-s with MAP_PRIVATE
+But af_xdp folks are probably annoyed that they need to add -lelf an -lz
+though they're not using them. Just a tech debt that eventually need to be paid.
 
-  In this case, even though the UFFD-registered VMA may be writable, we
-  still want CoW behavior. So, check for this case and don't make the
-  pte writable.
+> > I would take this opportunity to split libbpf into maintainable pieces:
+> > - libsysbpf - sys_bpf wrappers (pretty much tools/lib/bpf/bpf.c)
+> > - libbpfutil - hash, strset
+> 
+> strset and hash are internal data structures, I never intended to
+> expose them through public APIs. I haven't investigated, but if we
+> have a separate shared library (libbpfutil), I imagine we won't be
+> able to hide those APIs, right?
 
-- The initial pgoff / max_off check isn't necessary, so we can skip past
-  it. The second one seems likely to be unnecessary too, but keep it
-  just in case. Modify both checks to use pgoff, as offset is equivalent
-  and not needed.
+In the other thread you've proposed to copy paste hash implemenation
+into pahole. That's not ideal. If we had libbpfutil other projects
+could have used that without copy-paste.
 
-- Previously, we unconditionally called ClearPageDirty() in the error
-  path. In the continue case though, since this is an existing page, it
-  might have already been dirty before we started touching it. It's very
-  problematic to clear the bit incorrectly, but not a problem to leave
-  it - so, just omit the ClearPageDirty() entirely.
+> But again, let's just reflect for a second that we are talking about
+> the library that takes less than 300KB total. 
 
-- Previously, we unconditionally removed the page from the page cache in
-  the error path. But in the continue case, we didn't add it - it was
-  already there because the page is present in some second
-  (non-UFFD-registered) mapping. So, removing it is invalid.
-
-Because the error handling issues are easy to exercise in the selftest,
-make a small modification there to do so.
-
-Finally, refactor shmem_mcopy_atomic_pte a bit. By this point, we've
-added a lot of "if (!is_continue)"-s everywhere. It's cleaner to just
-check for that mode first thing, and then "goto" down to where the parts
-we actually want are. This leaves the code in between cleaner.
-
-Changes since v2:
-- Drop the ClearPageDirty() entirely, instead of trying to remember the
-  old value.
-- Modify both pgoff / max_off checks to use pgoff. It's equivalent to
-  offset, but offset wasn't initialized until the first check (which
-  we're skipping).
-- Keep the second pgoff / max_off check in the continue case.
-
-Changes since v1:
-- Refactor to skip ahead with goto, instead of adding several more
-  "if (!is_continue)".
-- Fix unconditional ClearPageDirty().
-- Don't pte_mkwrite() when is_continue && !VM_SHARED.
-
-Fixes: 00da60b9d0a0 ("userfaultfd: support minor fault handling for shmem")
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- mm/shmem.c                               | 60 +++++++++++++-----------
- tools/testing/selftests/vm/userfaultfd.c | 12 +++++
- 2 files changed, 44 insertions(+), 28 deletions(-)
-
-diff --git a/mm/shmem.c b/mm/shmem.c
-index d2e0e81b7d2e..fbcce850a16e 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2377,18 +2377,22 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 	struct page *page;
- 	pte_t _dst_pte, *dst_pte;
- 	int ret;
--	pgoff_t offset, max_off;
--
--	ret = -ENOMEM;
--	if (!shmem_inode_acct_block(inode, 1))
--		goto out;
-+	pgoff_t max_off;
-+	int writable;
- 
- 	if (is_continue) {
- 		ret = -EFAULT;
- 		page = find_lock_page(mapping, pgoff);
- 		if (!page)
--			goto out_unacct_blocks;
--	} else if (!*pagep) {
-+			goto out;
-+		goto install_ptes;
-+	}
-+
-+	ret = -ENOMEM;
-+	if (!shmem_inode_acct_block(inode, 1))
-+		goto out;
-+
-+	if (!*pagep) {
- 		page = shmem_alloc_page(gfp, info, pgoff);
- 		if (!page)
- 			goto out_unacct_blocks;
-@@ -2415,30 +2419,29 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 		*pagep = NULL;
- 	}
- 
--	if (!is_continue) {
--		VM_BUG_ON(PageSwapBacked(page));
--		VM_BUG_ON(PageLocked(page));
--		__SetPageLocked(page);
--		__SetPageSwapBacked(page);
--		__SetPageUptodate(page);
--	}
-+	VM_BUG_ON(PageSwapBacked(page));
-+	VM_BUG_ON(PageLocked(page));
-+	__SetPageLocked(page);
-+	__SetPageSwapBacked(page);
-+	__SetPageUptodate(page);
- 
- 	ret = -EFAULT;
--	offset = linear_page_index(dst_vma, dst_addr);
- 	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
--	if (unlikely(offset >= max_off))
-+	if (unlikely(pgoff >= max_off))
- 		goto out_release;
- 
--	/* If page wasn't already in the page cache, add it. */
--	if (!is_continue) {
--		ret = shmem_add_to_page_cache(page, mapping, pgoff, NULL,
--					      gfp & GFP_RECLAIM_MASK, dst_mm);
--		if (ret)
--			goto out_release;
--	}
-+	ret = shmem_add_to_page_cache(page, mapping, pgoff, NULL,
-+				      gfp & GFP_RECLAIM_MASK, dst_mm);
-+	if (ret)
-+		goto out_release;
- 
-+install_ptes:
- 	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
--	if (dst_vma->vm_flags & VM_WRITE)
-+	/* For CONTINUE on a non-shared VMA, don't pte_mkwrite for CoW. */
-+	writable = is_continue && !(dst_vma->vm_flags & VM_SHARED)
-+		? 0
-+		: dst_vma->vm_flags & VM_WRITE;
-+	if (writable)
- 		_dst_pte = pte_mkwrite(pte_mkdirty(_dst_pte));
- 	else {
- 		/*
-@@ -2455,7 +2458,7 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 
- 	ret = -EFAULT;
- 	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
--	if (unlikely(offset >= max_off))
-+	if (unlikely(pgoff >= max_off))
- 		goto out_release_unlock;
- 
- 	ret = -EEXIST;
-@@ -2485,13 +2488,14 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 	return ret;
- out_release_unlock:
- 	pte_unmap_unlock(dst_pte, ptl);
--	ClearPageDirty(page);
--	delete_from_page_cache(page);
-+	if (!is_continue)
-+		delete_from_page_cache(page);
- out_release:
- 	unlock_page(page);
- 	put_page(page);
- out_unacct_blocks:
--	shmem_inode_unacct_blocks(inode, 1);
-+	if (!is_continue)
-+		shmem_inode_unacct_blocks(inode, 1);
- 	goto out;
- }
- #endif /* CONFIG_USERFAULTFD */
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index f6c86b036d0f..d8541a59dae5 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -485,6 +485,7 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
- static void continue_range(int ufd, __u64 start, __u64 len)
- {
- 	struct uffdio_continue req;
-+	int ret;
- 
- 	req.range.start = start;
- 	req.range.len = len;
-@@ -493,6 +494,17 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
- 		    (uint64_t)start);
-+
-+	/*
-+	 * Error handling within the kernel for continue is subtly different
-+	 * from copy or zeropage, so it may be a source of bugs. Trigger an
-+	 * error (-EEXIST) on purpose, to verify doing so doesn't cause a BUG.
-+	 */
-+	req.mapped = 0;
-+	ret = ioctl(ufd, UFFDIO_CONTINUE, &req);
-+	if (ret >= 0 || req.mapped != -EEXIST)
-+		err("failed to exercise UFFDIO_CONTINUE error handling, ret=%d, mapped=%" PRId64,
-+		    ret, req.mapped);
- }
- 
- static void *locking_thread(void *arg)
--- 
-2.31.0.291.g576ba9dcdaf-goog
-
+that's today. Plus mandatory libelf and libz.
+I would like to have libsysbpf that doesn't depend on libelf/libz
+for folks that don't need it.
+Also I'd like to see symbolizer to be included in "libbpf package".
+Currently it's the main component that libbcc offers, but libbpf doesn't.
+Say we don't split libbpf. Then symbolizer will bring some dwarf library
+(say libdwarves ~ 1Mbyte) and libiberty ~ 500k (for c++ demangle).
+Now we're looking at multi megabyte libbpf package.
+I think the users would benefit from smaller building blocks.
+Splitting into 10 mini libs is overkill, of course,
+but some split is necessary.
+I agree that moving static linking into separate lib won't really
+affect .text size. The point is not to reduce text, but to establish
+a framework where such things are possible. Then symbolizer and
+anything fancier that would depend on other libs can be part
+of "libbpf package". I mean single rpm that contains all libbpf libs.
+Basic libsysbpf wouldn't need libelf/z.
+libbpfsymbolizer would need libdwarf, etc.
+Maybe some libbpfnet would depend on libnl or what not.
