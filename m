@@ -2,107 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD6334F189
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 21:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B4134F19C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Mar 2021 21:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbhC3T0U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Mar 2021 15:26:20 -0400
-Received: from mga17.intel.com ([192.55.52.151]:14266 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233084AbhC3T0B (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 15:26:01 -0400
-IronPort-SDR: L9sJ7igl1phoiIEXAuQ9xJl3YrFkr5VLBPwSCegmCvDwewQjFDw4MBYaP7f9zeWRHhi9PKl6Gi
- leJ92X76RCfQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="171863215"
-X-IronPort-AV: E=Sophos;i="5.81,291,1610438400"; 
-   d="scan'208";a="171863215"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 12:25:59 -0700
-IronPort-SDR: s4znUWJU2XXel6e0JhbKBdQEeigoyLFbRp7i1UPfMAnK5HT36ADEossmBe48hJB8pmJGbEO6H8
- JDsDlUuZuNdA==
-X-IronPort-AV: E=Sophos;i="5.81,291,1610438400"; 
-   d="scan'208";a="418305275"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 12:25:58 -0700
-Date:   Tue, 30 Mar 2021 12:25:58 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V4 07/10] x86/pks: Preserve the PKRS MSR on context switch
-Message-ID: <20210330192558.GD3014244@iweiny-DESK2.sc.intel.com>
-References: <20210322053020.2287058-1-ira.weiny@intel.com>
- <20210322053020.2287058-8-ira.weiny@intel.com>
+        id S233150AbhC3Tam (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Mar 2021 15:30:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22483 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233128AbhC3Tal (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 30 Mar 2021 15:30:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617132641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eTWTr8cAwYev5yD8LuZQ3faxQx+nRJ4mRBG0w/bSeiQ=;
+        b=OIXvJaj7fTR6rzyC5QQHh1NXo9W99hjnT1glkX/Xa+d0BMBOR7QlR7ccJAZiXMAnysoopc
+        HmR7PAYeXepusWcj/uhrJynhMJOzJvwC7ZU4vGgw4eRqIEloozFHIZZPTPAYvmjJYr3f8d
+        Fe7klVA5fnrDsvJiNjJMffD8TE/dgug=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-428-VdVI23fzMqqwbqr38R4dmQ-1; Tue, 30 Mar 2021 15:30:39 -0400
+X-MC-Unique: VdVI23fzMqqwbqr38R4dmQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 68F069CDA4;
+        Tue, 30 Mar 2021 19:30:38 +0000 (UTC)
+Received: from localhost.localdomain.com (ovpn-112-41.ams2.redhat.com [10.36.112.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 99F9719C44;
+        Tue, 30 Mar 2021 19:30:36 +0000 (UTC)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH] kvm: fix minor typos in x86/kvm.h and selftests/processor.c
+Date:   Tue, 30 Mar 2021 21:30:29 +0200
+Message-Id: <20210330193029.47746-1-eesposit@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210322053020.2287058-8-ira.weiny@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[snip]
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+---
+ tools/arch/x86/include/uapi/asm/kvm.h              | 2 +-
+ tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-<self review>
-
-The test bot reported build errors on i386 yesterday.  Not sure why they were
-not caught before...
-
-Anyway that caused me to look at this patch again and I've found a couple of
-issues noted below.  Combined with Sean's review I'll be re-spinning a new v5.
-
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 546d6ecf0a35..c15a049bf6ac 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -765,6 +765,7 @@
->  
->  #define MSR_IA32_TSC_DEADLINE		0x000006E0
->  
-> +#define MSR_IA32_PKRS			0x000006E1
-
-This belongs in patch 5 where it is 'used'.  Note that nothing is really used
-until the final test patch...  But in review this define does not make any
-sense here...
-
->  
->  #define MSR_TSX_FORCE_ABORT		0x0000010F
->  
-> diff --git a/arch/x86/include/asm/pkeys_common.h b/arch/x86/include/asm/pkeys_common.h
-> index 0681522974ba..6917f1a27479 100644
-> --- a/arch/x86/include/asm/pkeys_common.h
-> +++ b/arch/x86/include/asm/pkeys_common.h
-> @@ -17,4 +17,18 @@
->  #define PKR_AD_KEY(pkey)     (PKR_AD_BIT << PKR_PKEY_SHIFT(pkey))
->  #define PKR_WD_KEY(pkey)     (PKR_WD_BIT << PKR_PKEY_SHIFT(pkey))
->  
-> +/*
-> + * Define a default PKRS value for each task.
-> + *
-> + * Key 0 has no restriction.  All other keys are set to the most restrictive
-> + * value which is access disabled (AD=1).
-> + *
-> + * NOTE: This needs to be a macro to be used as part of the INIT_THREAD macro.
-> + */
-> +#define INIT_PKRS_VALUE (PKR_AD_KEY(1) | PKR_AD_KEY(2) | PKR_AD_KEY(3) | \
-> +			 PKR_AD_KEY(4) | PKR_AD_KEY(5) | PKR_AD_KEY(6) | \
-> +			 PKR_AD_KEY(7) | PKR_AD_KEY(8) | PKR_AD_KEY(9) | \
-> +			 PKR_AD_KEY(10) | PKR_AD_KEY(11) | PKR_AD_KEY(12) | \
-> +			 PKR_AD_KEY(13) | PKR_AD_KEY(14) | PKR_AD_KEY(15))
-
-The same is true for this macro.  While it is used in this patch it is used
-first in patch 5.  So it should be there.
-
-I'm letting 0-day crank on these changes but there should be a v5 out very
-soon.
-
-Sorry for the noise,
-Ira
+diff --git a/tools/arch/x86/include/uapi/asm/kvm.h b/tools/arch/x86/include/uapi/asm/kvm.h
+index 5a3022c8af82..e00d44bc5f55 100644
+--- a/tools/arch/x86/include/uapi/asm/kvm.h
++++ b/tools/arch/x86/include/uapi/asm/kvm.h
+@@ -190,7 +190,7 @@ struct kvm_msrs {
+ 
+ /* for KVM_GET_MSR_INDEX_LIST */
+ struct kvm_msr_list {
+-	__u32 nmsrs; /* number of msrs in entries */
++	__u32 nmsrs; /* number of msrs in indices */
+ 	__u32 indices[0];
+ };
+ 
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index a8906e60a108..e676fe40bfe6 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -714,7 +714,7 @@ uint64_t kvm_get_feature_msr(uint64_t msr_index)
+  *
+  * Return: KVM CPUID (KVM_GET_CPUID2)
+  *
+- * Set the VCPU's CPUID.
++ * Get the VCPU's CPUID.
+  */
+ struct kvm_cpuid2 *vcpu_get_cpuid(struct kvm_vm *vm, uint32_t vcpuid)
+ {
+-- 
+2.30.2
 
