@@ -2,110 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8893D350990
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Mar 2021 23:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390B13509CA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Mar 2021 23:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbhCaVfH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Mar 2021 17:35:07 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:3926 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbhCaVe6 (ORCPT
+        id S230073AbhCaVww (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Mar 2021 17:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231579AbhCaVwU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Mar 2021 17:34:58 -0400
-Received: from dggeml405-hub.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4F9fg66FHCz5kbM;
-        Thu,  1 Apr 2021 05:32:50 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggeml405-hub.china.huawei.com (10.3.17.49) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Thu, 1 Apr 2021 05:34:56 +0800
-Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
- dggpeml500008.china.huawei.com (7.185.36.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2106.2; Thu, 1 Apr 2021 05:34:55 +0800
-Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
- dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.2106.013;
- Thu, 1 Apr 2021 05:34:55 +0800
-From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-To:     "fanghao (A)" <fanghao11@huawei.com>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linuxarm@openeuler.org" <linuxarm@openeuler.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH] dma-mapping: benchmark: use the correct HiSilicon
- copyright
-Thread-Topic: [PATCH] dma-mapping: benchmark: use the correct HiSilicon
- copyright
-Thread-Index: AQHXJS8F+iJ+5bI0VEyNwDk2aU6XPKqenpRw
-Date:   Wed, 31 Mar 2021 21:34:55 +0000
-Message-ID: <becc61ba065644c29da60e031ce88553@hisilicon.com>
-References: <1617086028-18986-1-git-send-email-fanghao11@huawei.com>
-In-Reply-To: <1617086028-18986-1-git-send-email-fanghao11@huawei.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.203.26]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 31 Mar 2021 17:52:20 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43109C061574;
+        Wed, 31 Mar 2021 14:52:20 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id o5so389615qkb.0;
+        Wed, 31 Mar 2021 14:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iVgFfy9Gk4TopgDWAZb3OEMFsekIXo3QttoRKgThI1I=;
+        b=LlC/3vOcZu0Rh5837wBCMc/jMQBLoS5tu19QTNj1eof7IhHTCSrowwreYpcEeTbT5X
+         NlWLfUqhbD9HhkHO9DsT4Tyx2dRlg91X71xYeCMm7fKtrUmafIBq7/LrPrNoupfhFp3m
+         GewFfvppFWbs9VRkNf6T/omLtxmxV/Um2gbRVOo+AHZwOoh9mGFiVd9+oTJRsbPr+urV
+         9+SzjFJBATN+dQCPHnqvB4BC59ngCo/QcWw7P40soldfgVxjJkBfgZEWDD018mop0vXZ
+         RHFwc/5vTY5r72yfm8jOOOnGx6oz9cJw+eVDnJnP827bZO8OihlinIME1rTQWHzKsxKK
+         ckUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iVgFfy9Gk4TopgDWAZb3OEMFsekIXo3QttoRKgThI1I=;
+        b=agDMhbaDAHhjurNo28A9Y1aV0ZC/Zyt/xhO3l+yk31Vamck4ce7KHRm/vpbK+iLv7d
+         Wy6a9M6RF+Uhduu77L93Ar3mhuT2m+2/OdcydyCeDcIsBllYc8CVFLlxQJ74lNd0Qt/W
+         ZZ4PRKhthAZ4aCENq1pGyu/517QKZvod6UwcUnCWfDwHUaAIE6jOz52ffkQ+wN0yrt5Q
+         p6dJPbYNBGC5aoHTk3zyKj9y9AIzI+z3m2jwlnIiWC7PHCJqVIKiyH1tnDmp3vzxzGfv
+         xQIBg/aGjzEwZYTBKih505nmNuF7iTi45Io5/Y67q2ZdVAEP2dS0f9Bp9gu6aLkR98Ld
+         lWfQ==
+X-Gm-Message-State: AOAM533G4wIwFMIZpqZKQPjpNwq5k6JnUGs59f8qpN6bU0TE+I+fvTdK
+        ZD3YHFrVtp7CHOPDD0Q6OzU=
+X-Google-Smtp-Source: ABdhPJwK1AgyeLn7/B6+lfbSP03Q/ohuFDGUVnzdZCNHOlmGfkjpcbj+5GbXHWQQi4iDLVthXpiBHg==
+X-Received: by 2002:a37:78b:: with SMTP id 133mr5361746qkh.109.1617227539232;
+        Wed, 31 Mar 2021 14:52:19 -0700 (PDT)
+Received: from localhost ([207.98.216.60])
+        by smtp.gmail.com with ESMTPSA id d84sm2453310qke.53.2021.03.31.14.52.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Mar 2021 14:52:18 -0700 (PDT)
+Date:   Wed, 31 Mar 2021 14:52:18 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH] memfd_secret: use unsigned int rather than long as
+ syscall flags type
+Message-ID: <20210331215218.GA3437@yury-ThinkPad>
+References: <20210331142345.27532-1-rppt@kernel.org>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210331142345.27532-1-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: fanghao (A)
-> Sent: Tuesday, March 30, 2021 7:34 PM
-> To: hch@lst.de; m.szyprowski@samsung.com; robin.murphy@arm.com; Song Bao Hua
-> (Barry Song) <song.bao.hua@hisilicon.com>
-> Cc: iommu@lists.linux-foundation.org; linuxarm@openeuler.org;
-> linux-kselftest@vger.kernel.org; fanghao (A) <fanghao11@huawei.com>
-> Subject: [PATCH] dma-mapping: benchmark: use the correct HiSilicon copyright
+On Wed, Mar 31, 2021 at 05:23:45PM +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> s/Hisilicon/HiSilicon/g.
-> It should use capital S, according to
-> https://www.hisilicon.com/en/terms-of-use.
+> Yuri Norov says:
 > 
-
-My bad. Thanks.
-
-Acked-by: Barry Song <song.bao.hua@hisilicon.com>
-
-> Signed-off-by: Hao Fang <fanghao11@huawei.com>
-> ---
->  kernel/dma/map_benchmark.c                      | 2 +-
->  tools/testing/selftests/dma/dma_map_benchmark.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>   If parameter size is the same for native and compat ABIs, we may
+>   wire a syscall made by compat client to native handler. This is
+>   true for unsigned int, but not true for unsigned long or pointer.
 > 
-> diff --git a/kernel/dma/map_benchmark.c b/kernel/dma/map_benchmark.c
-> index e0e64f8..00d6549 100644
-> --- a/kernel/dma/map_benchmark.c
-> +++ b/kernel/dma/map_benchmark.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * Copyright (C) 2020 Hisilicon Limited.
-> + * Copyright (C) 2020 HiSilicon Limited.
->   */
+>   That's why I suggest using unsigned int and so avoid creating compat
+>   entry point.
 > 
->  #define pr_fmt(fmt)	KBUILD_MODNAME ": " fmt
-> diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c
-> b/tools/testing/selftests/dma/dma_map_benchmark.c
-> index fb23ce9..b492bed 100644
-> --- a/tools/testing/selftests/dma/dma_map_benchmark.c
-> +++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * Copyright (C) 2020 Hisilicon Limited.
-> + * Copyright (C) 2020 HiSilicon Limited.
->   */
+> Use unsigned int as the type of the flags parameter in memfd_secret()
+> system call.
 > 
->  #include <fcntl.h>
-> --
-> 2.8.1
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 
+Acked-by: Yury Norov <yury.norov@gmail.com>
