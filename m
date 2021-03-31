@@ -2,85 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4397F3501C9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Mar 2021 16:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D78C350212
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Mar 2021 16:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbhCaN7z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Mar 2021 09:59:55 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:23848 "EHLO pegase1.c-s.fr"
+        id S235976AbhCaOYU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Mar 2021 10:24:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36172 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235758AbhCaN7Y (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Mar 2021 09:59:24 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4F9Sbn1nmCz9v07Q;
-        Wed, 31 Mar 2021 15:59:17 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 3rRmCpjMfqXX; Wed, 31 Mar 2021 15:59:17 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4F9Sbn0llnz9v07K;
-        Wed, 31 Mar 2021 15:59:17 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2CE458B82A;
-        Wed, 31 Mar 2021 15:59:18 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id dLeeJDDL2ccw; Wed, 31 Mar 2021 15:59:18 +0200 (CEST)
-Received: from po16121vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id EAD958B829;
-        Wed, 31 Mar 2021 15:59:17 +0200 (CEST)
-Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id A10F867640; Wed, 31 Mar 2021 13:59:17 +0000 (UTC)
-Message-Id: <469f37ab91984309eb68c0fb47e8438cdf5b6463.1617198956.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH] selftests: timens: Fix gettime_perf to work on powerpc
-To:     Shuah Khan <shuah@kernel.org>, Andrei Vagin <avagin@gmail.com>,
-        Dmitry Safonov <dima@arista.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Date:   Wed, 31 Mar 2021 13:59:17 +0000 (UTC)
+        id S235452AbhCaOX7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 31 Mar 2021 10:23:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 725C060FED;
+        Wed, 31 Mar 2021 14:23:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617200639;
+        bh=MKND8RUjXo0TsNaafQ2pFvm3xr35TmSoHeHO5Oj9xjQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TAXb6eUsGCa4pdiVCqqKZnGfljZXt9haax8xWlFgCI3e0unvgRQx8xBTVeRrFGV/q
+         ifZGF5satsq3w54m9YLloJlD4yd2NX9uvO/KNJ8oESnJDgML/1NhMS+UOSZqrNVaVB
+         LOeHARVji+rKirnnqECw1FuhzLstxw2Vju9F73YHNEp4DrZmDImtmvzWpwBG3HHmkU
+         gyTLq73p2b/dG60fDAuaUlJ92XmMV6XhiJLMiNEc5a1fHlv3Qz8pkdKafJ7VR5xJgS
+         Ch6PZXwz4Jdc6b/Yk37ku10IPVem2+6nVLkRC8BEnQFfEbcLU9I3SOjITDFAaL1C8C
+         nZikeyOe+Fp1w==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: [PATCH] memfd_secret: use unsigned int rather than long as syscall flags type
+Date:   Wed, 31 Mar 2021 17:23:45 +0300
+Message-Id: <20210331142345.27532-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On powerpc:
-- VDSO library is named linux-vdso32.so.1 or linux-vdso64.so.1
-- clock_gettime is named __kernel_clock_gettime()
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Ensure gettime_perf tries these names before giving up.
+Yuri Norov says:
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+  If parameter size is the same for native and compat ABIs, we may
+  wire a syscall made by compat client to native handler. This is
+  true for unsigned int, but not true for unsigned long or pointer.
+
+  That's why I suggest using unsigned int and so avoid creating compat
+  entry point.
+
+Use unsigned int as the type of the flags parameter in memfd_secret()
+system call.
+
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- tools/testing/selftests/timens/gettime_perf.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/tools/testing/selftests/timens/gettime_perf.c b/tools/testing/selftests/timens/gettime_perf.c
-index 7bf841a3967b..6b13dc277724 100644
---- a/tools/testing/selftests/timens/gettime_perf.c
-+++ b/tools/testing/selftests/timens/gettime_perf.c
-@@ -25,12 +25,20 @@ static void fill_function_pointers(void)
- 	if (!vdso)
- 		vdso = dlopen("linux-gate.so.1",
- 			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
-+	if (!vdso)
-+		vdso = dlopen("linux-vdso32.so.1",
-+			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
-+	if (!vdso)
-+		vdso = dlopen("linux-vdso64.so.1",
-+			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
- 	if (!vdso) {
- 		pr_err("[WARN]\tfailed to find vDSO\n");
- 		return;
- 	}
+@Andrew,
+The patch is vs v5.12-rc5-mmots-2021-03-30-23, I'd appreciate if it would
+be added as a fixup to the memfd_secret series.
+
+ include/linux/syscalls.h                  | 2 +-
+ mm/secretmem.c                            | 2 +-
+ tools/testing/selftests/vm/memfd_secret.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 49c93c906893..1a1b5d724497 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -1050,7 +1050,7 @@ asmlinkage long sys_landlock_create_ruleset(const struct landlock_ruleset_attr _
+ asmlinkage long sys_landlock_add_rule(int ruleset_fd, enum landlock_rule_type rule_type,
+ 		const void __user *rule_attr, __u32 flags);
+ asmlinkage long sys_landlock_restrict_self(int ruleset_fd, __u32 flags);
+-asmlinkage long sys_memfd_secret(unsigned long flags);
++asmlinkage long sys_memfd_secret(unsigned int flags);
  
- 	vdso_clock_gettime = (vgettime_t)dlsym(vdso, "__vdso_clock_gettime");
-+	if (!vdso_clock_gettime)
-+		vdso_clock_gettime = (vgettime_t)dlsym(vdso, "__kernel_clock_gettime");
- 	if (!vdso_clock_gettime)
- 		pr_err("Warning: failed to find clock_gettime in vDSO\n");
+ /*
+  * Architecture-specific system calls
+diff --git a/mm/secretmem.c b/mm/secretmem.c
+index f2ae3f32a193..3b1ba3991964 100644
+--- a/mm/secretmem.c
++++ b/mm/secretmem.c
+@@ -199,7 +199,7 @@ static struct file *secretmem_file_create(unsigned long flags)
+ 	return file;
+ }
  
+-SYSCALL_DEFINE1(memfd_secret, unsigned long, flags)
++SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
+ {
+ 	struct file *file;
+ 	int fd, err;
+diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
+index c878c2b841fc..2462f52e9c96 100644
+--- a/tools/testing/selftests/vm/memfd_secret.c
++++ b/tools/testing/selftests/vm/memfd_secret.c
+@@ -38,7 +38,7 @@ static unsigned long page_size;
+ static unsigned long mlock_limit_cur;
+ static unsigned long mlock_limit_max;
+ 
+-static int memfd_secret(unsigned long flags)
++static int memfd_secret(unsigned int flags)
+ {
+ 	return syscall(__NR_memfd_secret, flags);
+ }
 -- 
-2.25.0
+2.28.0
 
