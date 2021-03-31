@@ -2,139 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D78C350212
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Mar 2021 16:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FEB3502C0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Mar 2021 16:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235976AbhCaOYU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Mar 2021 10:24:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36172 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235452AbhCaOX7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Mar 2021 10:23:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 725C060FED;
-        Wed, 31 Mar 2021 14:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617200639;
-        bh=MKND8RUjXo0TsNaafQ2pFvm3xr35TmSoHeHO5Oj9xjQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TAXb6eUsGCa4pdiVCqqKZnGfljZXt9haax8xWlFgCI3e0unvgRQx8xBTVeRrFGV/q
-         ifZGF5satsq3w54m9YLloJlD4yd2NX9uvO/KNJ8oESnJDgML/1NhMS+UOSZqrNVaVB
-         LOeHARVji+rKirnnqECw1FuhzLstxw2Vju9F73YHNEp4DrZmDImtmvzWpwBG3HHmkU
-         gyTLq73p2b/dG60fDAuaUlJ92XmMV6XhiJLMiNEc5a1fHlv3Qz8pkdKafJ7VR5xJgS
-         Ch6PZXwz4Jdc6b/Yk37ku10IPVem2+6nVLkRC8BEnQFfEbcLU9I3SOjITDFAaL1C8C
-         nZikeyOe+Fp1w==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
+        id S236050AbhCaOwW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Mar 2021 10:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236161AbhCaOwF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 31 Mar 2021 10:52:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12DBC061574;
+        Wed, 31 Mar 2021 07:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L5geNAyQH+boxxpn3CD1XfVTlUhklOODJ6Oi2N1dlJs=; b=nJV214+JXkiH+RO1/2cAeAsgFb
+        Hxe4P91A3C6GzMV4cickSb23IPmgedqc1gnKs+GZAU4KQVpZdeBX/8ij49rr7irr8PGxAQJePLxcl
+        b0sYi2MrNwnPJJeSVSbBymJO9XGHN3Iqtj6afAscpcZa9pznsXRHzQ6yq/Anw1dsGdIObmN6SVRrM
+        DZoLsWffy8cEfXjoWQwScM9v6syMbieoDs77kcH/mqCumR7X6FreCgYDCrwqllIGpeKYsxuYxNCZw
+        HfkOfH95OJGNZ7XaPQQ4ydA9Pll1fWEHCtgy0WDGdJLc+b+Pyh/kbNLjnhF20IIiW/jkTYH3gxBLN
+        mA/GTqTA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lRcBd-004hOd-H9; Wed, 31 Mar 2021 14:51:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F091230705A;
+        Wed, 31 Mar 2021 16:51:08 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C4D762B867506; Wed, 31 Mar 2021 16:51:08 +0200 (CEST)
+Date:   Wed, 31 Mar 2021 16:51:08 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: [PATCH] memfd_secret: use unsigned int rather than long as syscall flags type
-Date:   Wed, 31 Mar 2021 17:23:45 +0300
-Message-Id: <20210331142345.27532-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
+        Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian@brauner.io>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Matt Morehouse <mascasa@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Ian Rogers <irogers@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
+Message-ID: <YGSMXJvLBpQOm3WV@hirez.programming.kicks-ass.net>
+References: <20210324112503.623833-1-elver@google.com>
+ <20210324112503.623833-7-elver@google.com>
+ <YFxGb+QHEumZB6G8@elver.google.com>
+ <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
+ <CANpmjNOPJNhJ2L7cxrvf__tCZpy=+T1nBotKmzr2xMJypd-oJQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNOPJNhJ2L7cxrvf__tCZpy=+T1nBotKmzr2xMJypd-oJQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+On Wed, Mar 31, 2021 at 02:32:58PM +0200, Marco Elver wrote:
+> On Mon, 29 Mar 2021 at 14:07, Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > (and we might already have a problem on some architectures where there
+> > can be significant time between these due to not having
+> > arch_irq_work_raise(), so ideally we ought to double check current in
+> > your case)
+> 
+> I missed this bit -- just to verify: here we want to check that
+> event->ctx->task == current, in case the the irq_work runs when the
+> current task has already been replaced. Correct?
 
-Yuri Norov says:
-
-  If parameter size is the same for native and compat ABIs, we may
-  wire a syscall made by compat client to native handler. This is
-  true for unsigned int, but not true for unsigned long or pointer.
-
-  That's why I suggest using unsigned int and so avoid creating compat
-  entry point.
-
-Use unsigned int as the type of the flags parameter in memfd_secret()
-system call.
-
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
-
-@Andrew,
-The patch is vs v5.12-rc5-mmots-2021-03-30-23, I'd appreciate if it would
-be added as a fixup to the memfd_secret series.
-
- include/linux/syscalls.h                  | 2 +-
- mm/secretmem.c                            | 2 +-
- tools/testing/selftests/vm/memfd_secret.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 49c93c906893..1a1b5d724497 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1050,7 +1050,7 @@ asmlinkage long sys_landlock_create_ruleset(const struct landlock_ruleset_attr _
- asmlinkage long sys_landlock_add_rule(int ruleset_fd, enum landlock_rule_type rule_type,
- 		const void __user *rule_attr, __u32 flags);
- asmlinkage long sys_landlock_restrict_self(int ruleset_fd, __u32 flags);
--asmlinkage long sys_memfd_secret(unsigned long flags);
-+asmlinkage long sys_memfd_secret(unsigned int flags);
- 
- /*
-  * Architecture-specific system calls
-diff --git a/mm/secretmem.c b/mm/secretmem.c
-index f2ae3f32a193..3b1ba3991964 100644
---- a/mm/secretmem.c
-+++ b/mm/secretmem.c
-@@ -199,7 +199,7 @@ static struct file *secretmem_file_create(unsigned long flags)
- 	return file;
- }
- 
--SYSCALL_DEFINE1(memfd_secret, unsigned long, flags)
-+SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
- {
- 	struct file *file;
- 	int fd, err;
-diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
-index c878c2b841fc..2462f52e9c96 100644
---- a/tools/testing/selftests/vm/memfd_secret.c
-+++ b/tools/testing/selftests/vm/memfd_secret.c
-@@ -38,7 +38,7 @@ static unsigned long page_size;
- static unsigned long mlock_limit_cur;
- static unsigned long mlock_limit_max;
- 
--static int memfd_secret(unsigned long flags)
-+static int memfd_secret(unsigned int flags)
- {
- 	return syscall(__NR_memfd_secret, flags);
- }
--- 
-2.28.0
-
+Yeah, just not sure what a decent failure would be, silent ignore seems
+undesired, maybe WARN and archs that can trigger it get to fix it ?
