@@ -2,190 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCA435197E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Apr 2021 20:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054F6351DB4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Apr 2021 20:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235336AbhDARxt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Apr 2021 13:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S234424AbhDASbo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Apr 2021 14:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236535AbhDARpZ (ORCPT
+        with ESMTP id S239847AbhDASRD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Apr 2021 13:45:25 -0400
-Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE077C03117F;
-        Thu,  1 Apr 2021 10:11:06 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FB8pb136rzMqMD8;
-        Thu,  1 Apr 2021 19:11:03 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4FB8pQ6Nzrzlh8TN;
-        Thu,  1 Apr 2021 19:10:54 +0200 (CEST)
-Subject: Re: [PATCH v31 07/12] landlock: Support filesystem access-control
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-References: <20210324191520.125779-1-mic@digikod.net>
- <20210324191520.125779-8-mic@digikod.net>
- <d2764451-8970-6cbd-e2bf-254a42244ffc@digikod.net>
- <YGUslUPwp85Zrp4t@zeniv-ca.linux.org.uk>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <84e1cd29-0f09-1ed4-c680-65ca8c6988a3@digikod.net>
-Date:   Thu, 1 Apr 2021 19:12:05 +0200
-User-Agent: 
+        Thu, 1 Apr 2021 14:17:03 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2BFC0045D4
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Apr 2021 07:20:16 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id z136so2341449iof.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Apr 2021 07:20:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=arLJjw4ajAn6LC2XU3pN5oUvvehh5rZnK18PYWOQ1S8=;
+        b=nkdfGtVhMjlzAB0EIpfcmNGJJ696OllsdsRfOozLzy0eLJLCoATRzaf/Xq5yvlueL3
+         rNqHpuplOXHyg3OBheLDVzX37E1v/eDmmA3GF8HRX2QTCH10p8xAZJ1zUsbXlgNVDNGC
+         Q0XEPQ4JSP2wFLlzBJnH8/uXLALYELVO5BWF/EPVX77mZqBNgoqeHAa05z05nibVRfUc
+         vtIbjt8AJl7Fd5ZLVdeUx/SdjzCTRjR7rHdZEjO7opX03sJLyyQeZD/3DIqq7S9SGmtL
+         quDp0XQEYlQnDJ8tHkHC15Ztu4HpJcEA+3qTfVe7CsPQnC+a7Mud0pfKwC050wc1eGXy
+         VYFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=arLJjw4ajAn6LC2XU3pN5oUvvehh5rZnK18PYWOQ1S8=;
+        b=lBngllCZsR655vTFz5FYnjlhZg3GN3Lx1PEWkNIHfhPI7vzoY39+Kuu5L4F3WQbt3e
+         iE1lvxHDtdHXjFWiJvK5au2x74B5Rc+C3Ue/W+PLuqhNCZjPw6YuNZgxRUJwJn5HPNRI
+         82tjMB2EMyMfCHhqnzg2fUPZNzxw1sUY/WOwrVDMyJgeCk61/AumxPStvPwvS9Jwfh5d
+         Zt2vM5uOr+nfCPyoGVw1r5htMhKUVcc05w51iCR/Yq4wdaCzt8khQhXN3SevwtAYdnyG
+         PGH14KtKpHX8ArQC9AZ57E2gXneNZUxvCjg1gQ29ZY8xStKdqBxYaBFxmSCgZkxeVvGP
+         zWVQ==
+X-Gm-Message-State: AOAM531MYcoM2QzeVr0dYpiCTgNleo+PLQ+pupqiRWhHpTvBEU4bXyDf
+        J+PiJKlGPiav2YpdymSR0lHh/G2GoPifodVxwAIM5OsUDiOwRQ==
+X-Google-Smtp-Source: ABdhPJx8Ggwt2TYEdPil3I1GR2SjgbK6JKlPxgCO9tnx1FYBi+4eSi2KGQpQOJk/EvUnzsWRA0xy9FcDM9dhj0/ZGb0=
+X-Received: by 2002:a05:6e02:1522:: with SMTP id i2mr6773778ilu.252.1617286804652;
+ Thu, 01 Apr 2021 07:20:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YGUslUPwp85Zrp4t@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a02:1d42:0:0:0:0:0 with HTTP; Thu, 1 Apr 2021 07:20:03 -0700 (PDT)
+Reply-To: elizabethelizabethedward@gmail.com
+From:   Elizabeth Edward <alimanibrahim4@gmail.com>
+Date:   Thu, 1 Apr 2021 15:20:03 +0100
+Message-ID: <CAAQ2OVxR5rHebJv9a=oBhoZ9usWk+Tn5=c3=TshHi1pEfBibPA@mail.gmail.com>
+Subject: REPLY ME URGENTLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Greeting
 
-On 01/04/2021 04:14, Al Viro wrote:
-> On Wed, Mar 31, 2021 at 07:33:50PM +0200, Mickaël Salaün wrote:
-> 
->>> +static inline u64 unmask_layers(
->>> +		const struct landlock_ruleset *const domain,
->>> +		const struct path *const path, const u32 access_request,
->>> +		u64 layer_mask)
->>> +{
->>> +	const struct landlock_rule *rule;
->>> +	const struct inode *inode;
->>> +	size_t i;
->>> +
->>> +	if (d_is_negative(path->dentry))
->>> +		/* Continues to walk while there is no mapped inode. */
-> 				     ^^^^^
-> Odd comment, that...
+Please forgive me for stressing you with my predicaments and I sorry
+to approach you through this media it is because it serves the fastest
+means of communication. I came across your E-mail from my personal
+search and I decided to contact you believing you will be honest to
+fulfill my final wish before I die.
 
-I'll replace that with something more appropriate, e.g. "Ignore
-nonexistent leafs".
+I am Mrs. Elizabeth Edward, 63 years, from USA, I am childless and I
+am suffering from a pro-long critical cancer, my doctors confirmed I
+may not live beyond two months from now as my ill health has defiled
+all forms of medical treatment.
 
-> 
->>> +static int check_access_path(const struct landlock_ruleset *const domain,
->>> +		const struct path *const path, u32 access_request)
->>> +{
-> 
->>> +	walker_path = *path;
->>> +	path_get(&walker_path);
-> 
->>> +	while (true) {
->>> +		struct dentry *parent_dentry;
->>> +
->>> +		layer_mask = unmask_layers(domain, &walker_path,
->>> +				access_request, layer_mask);
->>> +		if (layer_mask == 0) {
->>> +			/* Stops when a rule from each layer grants access. */
->>> +			allowed = true;
->>> +			break;
->>> +		}
->>> +
->>> +jump_up:
->>> +		if (walker_path.dentry == walker_path.mnt->mnt_root) {
->>> +			if (follow_up(&walker_path)) {
->>> +				/* Ignores hidden mount points. */
->>> +				goto jump_up;
->>> +			} else {
->>> +				/*
->>> +				 * Stops at the real root.  Denies access
->>> +				 * because not all layers have granted access.
->>> +				 */
->>> +				allowed = false;
->>> +				break;
->>> +			}
->>> +		}
->>> +		if (unlikely(IS_ROOT(walker_path.dentry))) {
->>> +			/*
->>> +			 * Stops at disconnected root directories.  Only allows
->>> +			 * access to internal filesystems (e.g. nsfs, which is
->>> +			 * reachable through /proc/<pid>/ns/<namespace>).
->>> +			 */
->>> +			allowed = !!(walker_path.mnt->mnt_flags & MNT_INTERNAL);
->>> +			break;
->>> +		}
->>> +		parent_dentry = dget_parent(walker_path.dentry);
->>> +		dput(walker_path.dentry);
->>> +		walker_path.dentry = parent_dentry;
->>> +	}
->>> +	path_put(&walker_path);
->>> +	return allowed ? 0 : -EACCES;
-> 
-> That's a whole lot of grabbing/dropping references...  I realize that it's
-> an utterly tactless question, but... how costly it is?  IOW, do you have
-> profiling data?
+Since my days are numbered, I=E2=80=99ve decided willingly to fulfill my
+long-time promise to donate you the sum ($5.000.000.00) million
+dollars I inherited from my late husband Mr. Edward Herbart, foreign
+bank account over years. I need a very honest person who can assist in
+transfer of this money to his or her account and use the funds for
+charities work of God while you use 50% for yourself. I want you to
+know there are no risk involved, it is 100% hitch free & safe. If you
+will be interesting to assist in getting this fund into your account
+for charity project to fulfill my promise before I die please let me
+know immediately. I will appreciate your utmost confidentiality as I
+wait for your reply.
 
-It looks like a legitimate question.
+Best Regards
 
-First, Landlock may not be appropriate for every workloads. The
-check_access_path()'s complexity is now linear, which is a consequence
-of the "unprivileged" target (i.e. multiple layers of file hierarchies).
-Adding caching should help a lot to improve performance (i.e. limit the
-path walking), but it will come with future improvements.
-
-I profiled a "find" loop on the linux-5.12-rc3 source tree in a tmpfs
-(and with cached entries): openat(2) calls spend ~30% of their time in
-check_access_path() with a base directory of one parent (/linux) and
-~45% with a base directory of ten parents (/1/2/3/4/5/6/7/8/9/linux).
-Overall, the performance impact is between 3.0% (with a minimum depth of
-1) and 5.4% (with a minimum depth of 10) of the full execution time of
-these worse case scenarios, which are ~4800 openat(2) calls. This is not
-a surprise and doesn't seem so bad without optimization.
-
-
-> 
->>> +/*
->>> + * pivot_root(2), like mount(2), changes the current mount namespace.  It must
->>> + * then be forbidden for a landlocked process.
-> 
-> ... and cross-directory rename(2) can change the tree topology.  Do you ban that
-> as well?
-> 
-> [snip]
-> 
->>> +static int hook_path_rename(const struct path *const old_dir,
->>> +		struct dentry *const old_dentry,
->>> +		const struct path *const new_dir,
->>> +		struct dentry *const new_dentry)
->>> +{
->>> +	const struct landlock_ruleset *const dom =
->>> +		landlock_get_current_domain();
->>> +
->>> +	if (!dom)
->>> +		return 0;
->>> +	/* The mount points are the same for old and new paths, cf. EXDEV. */
->>> +	if (old_dir->dentry != new_dir->dentry)
->>> +		/* For now, forbids reparenting. */
->>> +		return -EACCES;
-> 
-> You do, apparently, and not in a way that would have the userland fall
-> back to copy+unlink.  Lovely...  Does e.g. git survive such restriction?
-> Same question for your average package build...
-
-As explained in the documentation, there is some limitations that make
-this first step not appropriate for all use cases. I'll use EXDEV to
-gracefully forbid reparenting, which gives a chance to userspace to deal
-with that. It may not be enough for package management though. I plan to
-address such limitation with future evolutions.
-
-Thanks for these suggestions.
+Mrs. Elizabeth Edward
