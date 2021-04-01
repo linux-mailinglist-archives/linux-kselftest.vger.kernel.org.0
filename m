@@ -2,164 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EB2352283
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 00:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DA63522FC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 00:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235960AbhDAWNv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Apr 2021 18:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236020AbhDAWNc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Apr 2021 18:13:32 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B39DC0613AD
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Apr 2021 15:13:30 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id il9-20020a17090b1649b0290114bcb0d6c2so3797163pjb.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Apr 2021 15:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zMK0dD8EUOpMnQqN+YrkNT1KRoH/Rg1BtnXVKHHSQEw=;
-        b=FEec6d8j783rUOlGRor6Ix55R/XeyADTFdyGebVpwODs8v1VbT6NPeGTU2Qx0NfqO1
-         cqoQ61LHpuaCaEhG9PjflLvPT65ZFGaHAGbsh5qoS7O1Myj2BzX6ZJ5cjjdjdDLHsiUW
-         1gTCOMrrPCvEjDpAdKV0c4o5xE1uVaitI2elI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zMK0dD8EUOpMnQqN+YrkNT1KRoH/Rg1BtnXVKHHSQEw=;
-        b=FZw23naukXo5tD9yQklPgyhZSlDowPErcRJqSGr/TC+ndyhjcijuVzn8l7B+taI08P
-         k2wQ04EE5c3JBBG3ENOTZXyrnUb76Cik7Cmc57PkkBj7ilxCA0OZQ0pWmvD9kga1DiaN
-         pIiPr4MABptU4vuDwFlX+sGtxLOKP17gEmuAi3i60k2zbBiWYmQoJ7hlgY8YQqOaNwgy
-         PXbvqpwcMAMjHqNQDtb8KoTNdWn1qXyqXwB+rPuREB88Wk4UrIMpuLfnqxAnzrC3e8zz
-         gMuR1JS0+kfEMTooFWXuyxZIOArwRBQCwnitxeMoFjbcawx5G+fPWZbwbodKDfolDDSZ
-         1phQ==
-X-Gm-Message-State: AOAM5337n9S4t4zsZm/tUk3WNuc1OToVJSu6hAfts52Q2ZY5HJwtrbSl
-        esUkDeK5pJPfF1IfNVHnHwtVRA==
-X-Google-Smtp-Source: ABdhPJz+He35I/mX8zgLQgen2hel8CVQVyy/0OetIdnt55DRJtYU9oNFtDNxLJhw0IJRLu0nNB5p8Q==
-X-Received: by 2002:a17:902:aa0c:b029:e5:da5f:5f66 with SMTP id be12-20020a170902aa0cb02900e5da5f5f66mr9806341plb.81.1617315210147;
-        Thu, 01 Apr 2021 15:13:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 186sm6655069pfb.143.2021.04.01.15.13.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 15:13:28 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, Christoph Hellwig <hch@lst.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com, Michal Hocko <mhocko@suse.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Adam Nichols <adam@grimm-co.com>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v4 3/3] sysfs: Unconditionally use vmalloc for buffer
-Date:   Thu,  1 Apr 2021 15:13:20 -0700
-Message-Id: <20210401221320.2717732-4-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210401221320.2717732-1-keescook@chromium.org>
-References: <20210401221320.2717732-1-keescook@chromium.org>
+        id S235728AbhDAW6i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Apr 2021 18:58:38 -0400
+Received: from mga02.intel.com ([134.134.136.20]:29509 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235149AbhDAW6h (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 1 Apr 2021 18:58:37 -0400
+IronPort-SDR: P/dvUkbl3D5ClUtgHyxYJZdWhCjyi1k+zULgfeeUrsH5FySklMUYqfqT8Jyd2mjfIc37S1jkpm
+ h4E1SU1ltuMw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="179479811"
+X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
+   d="scan'208";a="179479811"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 15:58:36 -0700
+IronPort-SDR: SgQu8lZe1uDjtEHipCT/VqlIizAG1NJDjm+JJLidA9DZSWV80UmCDGZKy3IJtF9/i2CU8hrmZ5
+ AjvHf0MpDhHw==
+X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
+   d="scan'208";a="419402230"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 15:58:35 -0700
+From:   ira.weiny@intel.com
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH V6 00/10] PKS: Add Protection Key Supervisor support
+Date:   Thu,  1 Apr 2021 15:58:23 -0700
+Message-Id: <20210401225833.566238-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 MIME-Version: 1.0
-X-Patch-Hashes: v=1; h=sha256; g=c5db4de46e2fb011df00756d4f9e98c350db4340; i=MEvu9Y2iWCN6KW+GL93HEcZTxkhRtLohrU2GVi3yOA0=; m=B8J2zz7Y7XtsJeOjLQdM8fQ2tr4ToEl/kdZtP2sPkVo=; p=RMI7dJzQuU2ORbbN3pLYdhsh2IhVTz/8JKubIRzXcE8=
-X-Patch-Sig: m=pgp; i=keescook@chromium.org; s=0x0x8972F4DFDC6DC026; b=iQIzBAABCgAdFiEEpcP2jyKd1g9yPm4TiXL039xtwCYFAmBmRX8ACgkQiXL039xtwCaYSQ/9G7W veN/zfdOwGX1mTnL3JETf/YN7qmk/i17DV9sk+90V2GFpMrZd4mCP6IiejJO+oHNidVLOyjw+hhdV LWoHb0juROgtSbTzsrqPznUuHE/GHS0aWOvILlgPzg6Y2vsQ9sPnqj5ruWOAtS9gbjBXMAwBRlB6d B6U+uKHoFdHCaTn0hfpomgwBg3N4kiII1j7f31c+FdTUO7mFieVPd50b226QL2dTL1b3VcL3FCa1J 5xz4HXGQt0Wzw8P8DMhGwD7CLQUISRHWF609rjSb7vP4KYphXWoeX1ZGlVmdrVyfh/bpFeO9JsQsG usToUcnz5T8NZ8BCG9g0rgd3b2Ak0Fz+gTku/iq92DPM9mUc3Jc+Yz7IQ4RX7nL0qFbeXqglFXeVv bBieHV4e9dqZdA26C4Igx8WQX5FVjsgl9E9BLCqCi6esSsh3jZo02n91jqp1btE+h9LIk4rM4PE9H ZA+twsg5g4XMMN3kGZpyhTFXJO5/mt6KhJBwa/wEfyTtIJ5N/UXeRppIgmCYAvboPy00dgEYKXeUn LFk0mJDoqePbN+6cD2FUkRMIWXR/scEVHBhHL/uMrU2+H4RvoWQe2WXFGZCkLM+2uzgaJ/YszJdKJ GR/n8w5O/RdeJj5rUfT6cvTvZPH4pD7UjkH47rzTgenq3C+zBqPAkrihofQBMzYc=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The sysfs interface to seq_file continues to be rather fragile
-(seq_get_buf() should not be used outside of seq_file), as seen with
-some recent exploits[1]. Move the seq_file buffer to the vmap area
-(while retaining the accounting flag), since it has guard pages that will
-catch and stop linear overflows. This seems justified given that sysfs's
-use of seq_file almost always already uses PAGE_SIZE allocations, has
-normally short-lived allocations, and is not normally on a performance
-critical path.
+From: Ira Weiny <ira.weiny@intel.com>
 
-Once seq_get_buf() has been removed (and all sysfs callbacks using
-seq_file directly), this change can also be removed.
+Introduce a new page protection mechanism for supervisor pages, Protection Key
+Supervisor (PKS).
 
-[1] https://blog.grimm-co.com/2021/03/new-old-bugs-in-linux-kernel.html
+Generally PKS enables protections on 'domains' of supervisor pages to limit
+supervisor mode access to pages beyond the normal paging protections.  PKS
+works in a similar fashion to user space pkeys, PKU.  As with PKU, supervisor
+pkeys are checked in addition to normal paging protections and Access or Writes
+can be disabled via a MSR update without TLB flushes when permissions change.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/sysfs/file.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+Also like PKU, a page mapping is assigned to a domain by setting pkey bits in
+the page table entry for that mapping.
 
-diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-index 9aefa7779b29..351ff75a97b1 100644
---- a/fs/sysfs/file.c
-+++ b/fs/sysfs/file.c
-@@ -16,6 +16,7 @@
- #include <linux/mutex.h>
- #include <linux/seq_file.h>
- #include <linux/mm.h>
-+#include <linux/vmalloc.h>
- 
- #include "sysfs.h"
- 
-@@ -32,6 +33,31 @@ static const struct sysfs_ops *sysfs_file_ops(struct kernfs_node *kn)
- 	return kobj->ktype ? kobj->ktype->sysfs_ops : NULL;
- }
- 
-+/*
-+ * To be proactively defensive against sysfs show() handlers that do not
-+ * correctly stay within their PAGE_SIZE buffer, use the vmap area to gain
-+ * the trailing guard page which will stop linear buffer overflows.
-+ */
-+static void *sysfs_kf_seq_start(struct seq_file *sf, loff_t *ppos)
-+{
-+	struct kernfs_open_file *of = sf->private;
-+	struct kernfs_node *kn = of->kn;
-+
-+	WARN_ON_ONCE(sf->buf);
-+	sf->buf = __vmalloc(kn->attr.size, GFP_KERNEL_ACCOUNT);
-+	if (!sf->buf)
-+		return ERR_PTR(-ENOMEM);
-+	sf->size = kn->attr.size;
-+
-+	/*
-+	 * Use the same behavior and code as single_open(): continue
-+	 * if pos is at the beginning; otherwise, NULL.
-+	 */
-+	if (*ppos)
-+		return NULL;
-+	return SEQ_OPEN_SINGLE;
-+}
-+
- /*
-  * Reads on sysfs are handled through seq_file, which takes care of hairy
-  * details like buffering and seeking.  The following function pipes
-@@ -206,14 +232,17 @@ static const struct kernfs_ops sysfs_file_kfops_empty = {
- };
- 
- static const struct kernfs_ops sysfs_file_kfops_ro = {
-+	.seq_start	= sysfs_kf_seq_start,
- 	.seq_show	= sysfs_kf_seq_show,
- };
- 
- static const struct kernfs_ops sysfs_file_kfops_wo = {
-+	.seq_start	= sysfs_kf_seq_start,
- 	.write		= sysfs_kf_write,
- };
- 
- static const struct kernfs_ops sysfs_file_kfops_rw = {
-+	.seq_start	= sysfs_kf_seq_start,
- 	.seq_show	= sysfs_kf_seq_show,
- 	.write		= sysfs_kf_write,
- };
+Access is controlled through a PKRS register which is updated via WRMSR/RDMSR.
+
+XSAVE is not supported for the PKRS MSR.  Therefore the implementation
+saves/restores the MSR across context switches and during exceptions.  Nested
+exceptions are supported by each exception getting a new PKS state.
+
+For consistent behavior with current paging protections, pkey 0 is reserved and
+configured to allow full access via the pkey mechanism, thus preserving the
+default paging protections on mappings with the default pkey value of 0.
+
+Other keys, (1-15) are allocated by an allocator which prepares us for key
+contention from day one.  Kernel users should be prepared for the allocator to
+fail either because of key exhaustion or due to PKS not being supported on the
+CPU instance.
+
+The following are key attributes of PKS.
+
+	1) Fast switching of permissions
+		1a) Prevents access without page table manipulations
+		1b) No TLB flushes required
+	2) Works on a per thread basis
+
+PKS is available with 4 and 5 level paging.  Like PKRU it consumes 4 bits from
+the PTE to store the pkey within the entry.
+
+All code to support PKS is configured via ARCH_ENABLE_SUPERVISOR_PKEYS which
+is designed to only be turned on when a user is configured on in the kernel.
+Those users must depend on ARCH_HAS_SUPERVISOR_PKEYS to properly work with
+other architectures which do not yet support PKS.
+
+Originally this series was submitted as part of a large patch set which
+converted the kmap call sites.[1]
+
+Many follow on discussions revealed a few problems.  The first of which was
+that some callers leak a kmap mapping across threads rather than containing it
+to a critical section.  Attempts were made to see if these 'global kmaps' could
+be supported.[2]  However, supporting global kmaps had many problems.  Work is
+being done in parallel on converting as many kmap calls to the new
+kmap_local_page().[3]
+
+
+Changes from V5 [6]
+	From Dave Hansen
+		Remove 'we' from comments
+
+Changes from V4 [5]
+	From kernel test robot <lkp@intel.com>
+		Fix i386 build: pks_init_task not found
+	Move MSR_IA32_PKRS and INIT_PKRS_VALUE into patch 5 where they are
+		first 'used'.  (Technically nothing is 'used' until the final
+		test patch.  But review wise this is much cleaner.)
+	From Sean Christoperson
+		Add documentation details on what happens if the pkey is violated
+		Change cpu_feature_enabled to be in WARN_ON check
+		Clean up commit message of patch 6
+
+
+[1] https://lore.kernel.org/lkml/20201009195033.3208459-1-ira.weiny@intel.com/
+
+[2] https://lore.kernel.org/lkml/87mtycqcjf.fsf@nanos.tec.linutronix.de/
+
+[3] https://lore.kernel.org/lkml/20210128061503.1496847-1-ira.weiny@intel.com/
+    https://lore.kernel.org/lkml/20210210062221.3023586-1-ira.weiny@intel.com/
+    https://lore.kernel.org/lkml/20210205170030.856723-1-ira.weiny@intel.com/
+    https://lore.kernel.org/lkml/20210217024826.3466046-1-ira.weiny@intel.com/
+
+[4] https://lore.kernel.org/lkml/20201106232908.364581-1-ira.weiny@intel.com/
+
+[5] https://lore.kernel.org/lkml/20210322053020.2287058-1-ira.weiny@intel.com/
+
+[6] https://lore.kernel.org/lkml/20210331191405.341999-1-ira.weiny@intel.com/
+
+
+Fenghua Yu (1):
+  x86/pks: Add PKS kernel API
+
+Ira Weiny (9):
+  x86/pkeys: Create pkeys_common.h
+  x86/fpu: Refactor arch_set_user_pkey_access() for PKS support
+  x86/pks: Add additional PKEY helper macros
+  x86/pks: Add PKS defines and Kconfig options
+  x86/pks: Add PKS setup code
+  x86/fault: Adjust WARN_ON for PKey fault
+  x86/pks: Preserve the PKRS MSR on context switch
+  x86/entry: Preserve PKRS MSR across exceptions
+  x86/pks: Add PKS test code
+
+ Documentation/core-api/protection-keys.rst  | 112 +++-
+ arch/x86/Kconfig                            |   1 +
+ arch/x86/entry/calling.h                    |  26 +
+ arch/x86/entry/common.c                     |  57 ++
+ arch/x86/entry/entry_64.S                   |  22 +-
+ arch/x86/entry/entry_64_compat.S            |   6 +-
+ arch/x86/include/asm/cpufeatures.h          |   1 +
+ arch/x86/include/asm/disabled-features.h    |   8 +-
+ arch/x86/include/asm/msr-index.h            |   1 +
+ arch/x86/include/asm/pgtable.h              |  15 +-
+ arch/x86/include/asm/pgtable_types.h        |  12 +
+ arch/x86/include/asm/pkeys.h                |   4 +
+ arch/x86/include/asm/pkeys_common.h         |  34 +
+ arch/x86/include/asm/pks.h                  |  54 ++
+ arch/x86/include/asm/processor-flags.h      |   2 +
+ arch/x86/include/asm/processor.h            |  47 +-
+ arch/x86/include/uapi/asm/processor-flags.h |   2 +
+ arch/x86/kernel/cpu/common.c                |   2 +
+ arch/x86/kernel/fpu/xstate.c                |  22 +-
+ arch/x86/kernel/head_64.S                   |   7 +-
+ arch/x86/kernel/process.c                   |   3 +
+ arch/x86/kernel/process_64.c                |   2 +
+ arch/x86/mm/fault.c                         |  30 +-
+ arch/x86/mm/pkeys.c                         | 218 +++++-
+ include/linux/pgtable.h                     |   4 +
+ include/linux/pkeys.h                       |  34 +
+ kernel/entry/common.c                       |  14 +-
+ lib/Kconfig.debug                           |  11 +
+ lib/Makefile                                |   3 +
+ lib/pks/Makefile                            |   3 +
+ lib/pks/pks_test.c                          | 694 ++++++++++++++++++++
+ mm/Kconfig                                  |   5 +
+ tools/testing/selftests/x86/Makefile        |   3 +-
+ tools/testing/selftests/x86/test_pks.c      | 149 +++++
+ 34 files changed, 1527 insertions(+), 81 deletions(-)
+ create mode 100644 arch/x86/include/asm/pkeys_common.h
+ create mode 100644 arch/x86/include/asm/pks.h
+ create mode 100644 lib/pks/Makefile
+ create mode 100644 lib/pks/pks_test.c
+ create mode 100644 tools/testing/selftests/x86/test_pks.c
+
 -- 
-2.25.1
+2.28.0.rc0.12.gb6a658bd00c9
 
