@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB98352301
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 00:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27261352302
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 00:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235775AbhDAW6j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S235795AbhDAW6j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Thu, 1 Apr 2021 18:58:39 -0400
-Received: from mga04.intel.com ([192.55.52.120]:11530 "EHLO mga04.intel.com"
+Received: from mga04.intel.com ([192.55.52.120]:11532 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235188AbhDAW6h (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Apr 2021 18:58:37 -0400
-IronPort-SDR: lL4dQUuc+GoZonyn3tGjHFSZieVLaI6nHRgyRRnp9RJOxRFAmpDIjXcCLRKdv5HTcVR+ul3mV6
- 22ihYYYEnpjQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="190117100"
+        id S235751AbhDAW6i (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 1 Apr 2021 18:58:38 -0400
+IronPort-SDR: UEBRw1Y13m8I1++SbxX33J+9FWAY+/KIeJZQZcYeGt1PCiKSV0ZPB+6R4w/klnDQEwjEo1Vkvq
+ 2S8N3fkrBK3A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="190117102"
 X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="190117100"
+   d="scan'208";a="190117102"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 15:58:36 -0700
-IronPort-SDR: 0SpMwS7muan2xU01xnsskKq3Ua/zLN/26a3JAKZxvjXYuQWrI90YjNfIHdc/vWfmjfqS5Z/yoN
- 7RnHf4CfLSVg==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 15:58:37 -0700
+IronPort-SDR: NfyHGbi0E9rJeJES3FdWFKPSwcb29DAUhhlrFvItMnhmrzDneaT2Va6f32Gb2cr16BtqOvwRqh
+ ELKi7w/jEH0A==
 X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="611092347"
+   d="scan'208";a="611092352"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
   by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 15:58:36 -0700
 From:   ira.weiny@intel.com
@@ -31,12 +31,13 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>
 Cc:     Ira Weiny <ira.weiny@intel.com>,
         Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH V6 03/10] x86/pks: Add additional PKEY helper macros
-Date:   Thu,  1 Apr 2021 15:58:26 -0700
-Message-Id: <20210401225833.566238-4-ira.weiny@intel.com>
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH V6 04/10] x86/pks: Add PKS defines and Kconfig options
+Date:   Thu,  1 Apr 2021 15:58:27 -0700
+Message-Id: <20210401225833.566238-5-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 In-Reply-To: <20210401225833.566238-1-ira.weiny@intel.com>
 References: <20210401225833.566238-1-ira.weiny@intel.com>
@@ -48,91 +49,128 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-Avoid open coding shift and mask operations by defining and using helper
-macros for PKey operations.
+Protection Keys for Supervisor pages (PKS) enables fast, hardware thread
+specific, manipulation of permission restrictions on supervisor page
+mappings.  It uses the same mechanism of Protection Keys as those on
+User mappings but applies that mechanism to supervisor mappings using a
+supervisor specific MSR.
+
+Kernel users can define domains of page mappings which have an extra
+level of protection beyond those specified in the supervisor page table
+entries.
+
+Define the PKS CPU feature bits.
+
+Add the Kconfig ARCH_HAS_SUPERVISOR_PKEYS to indicate to consumers that
+an architecture supports pkeys.
+
+Introduce ARCH_ENABLE_SUPERVISOR_PKEYS to allow kernel users to specify
+to the arch that they wish to use the supervisor key support if
+ARCH_HAS_SUPERVISOR_PKEYS is available.  ARCH_ENABLE_SUPERVISOR_PKEYS
+remains off until the first use case sets it.
 
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
 Changes from V3:
-	new patch suggested by Dan Williams to use macros better.
----
- arch/x86/include/asm/pgtable.h      |  7 ++-----
- arch/x86/include/asm/pkeys_common.h | 11 ++++++++---
- arch/x86/mm/pkeys.c                 |  8 +++-----
- 3 files changed, 13 insertions(+), 13 deletions(-)
+	From Dan
+		Clean up commit message
+		Add ARCH_ENABLE_SUPERVISOR_PKEYS option there is no
+		overhead of PKS unless there is a user
+	Clean up commit message grammar
 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 53bbde334193..07e9779b76d2 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1370,16 +1370,13 @@ extern u32 init_pkru_value;
+Changes from V2
+	New patch for V3:  Split this off from the enable patch to be
+	able to create cleaner bisectability
+---
+ arch/x86/Kconfig                            | 1 +
+ arch/x86/include/asm/cpufeatures.h          | 1 +
+ arch/x86/include/asm/disabled-features.h    | 8 +++++++-
+ arch/x86/include/uapi/asm/processor-flags.h | 2 ++
+ mm/Kconfig                                  | 4 ++++
+ 5 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 2792879d398e..5e3a7c2bc342 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1870,6 +1870,7 @@ config X86_INTEL_MEMORY_PROTECTION_KEYS
+ 	depends on X86_64 && (CPU_SUP_INTEL || CPU_SUP_AMD)
+ 	select ARCH_USES_HIGH_VMA_FLAGS
+ 	select ARCH_HAS_PKEYS
++	select ARCH_HAS_SUPERVISOR_PKEYS
+ 	help
+ 	  Memory Protection Keys provides a mechanism for enforcing
+ 	  page-based protections, but without requiring modification of the
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index cc96e26d69f7..83ed73407417 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -359,6 +359,7 @@
+ #define X86_FEATURE_MOVDIR64B		(16*32+28) /* MOVDIR64B instruction */
+ #define X86_FEATURE_ENQCMD		(16*32+29) /* ENQCMD and ENQCMDS instructions */
+ #define X86_FEATURE_SGX_LC		(16*32+30) /* Software Guard Extensions Launch Control */
++#define X86_FEATURE_PKS			(16*32+31) /* Protection Keys for Supervisor pages */
  
- static inline bool __pkru_allows_read(u32 pkru, u16 pkey)
- {
--	int pkru_pkey_bits = pkey * PKR_BITS_PER_PKEY;
--
--	return !(pkru & (PKR_AD_BIT << pkru_pkey_bits));
-+	return !(pkru & PKR_AD_KEY(pkey));
- }
+ /* AMD-defined CPU features, CPUID level 0x80000007 (EBX), word 17 */
+ #define X86_FEATURE_OVERFLOW_RECOV	(17*32+ 0) /* MCA overflow recovery support */
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index b7dd944dc867..fd09ae852c04 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -44,6 +44,12 @@
+ # define DISABLE_OSPKE		(1<<(X86_FEATURE_OSPKE & 31))
+ #endif /* CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS */
  
- static inline bool __pkru_allows_write(u32 pkru, u16 pkey)
- {
--	int pkru_pkey_bits = pkey * PKR_BITS_PER_PKEY;
- 	/* Access-disable disables writes too so check both bits here. */
--	return !(pkru & ((PKR_AD_BIT|PKR_WD_BIT) << pkru_pkey_bits));
-+	return !(pkru & (PKR_AD_KEY(pkey) | PKR_WD_KEY(pkey)));
- }
- 
- static inline u16 pte_flags_pkey(unsigned long pte_flags)
-diff --git a/arch/x86/include/asm/pkeys_common.h b/arch/x86/include/asm/pkeys_common.h
-index e40b0ced733f..0681522974ba 100644
---- a/arch/x86/include/asm/pkeys_common.h
-+++ b/arch/x86/include/asm/pkeys_common.h
-@@ -6,10 +6,15 @@
- #define PKR_WD_BIT 0x2
- #define PKR_BITS_PER_PKEY 2
- 
-+#define PKR_PKEY_SHIFT(pkey) (pkey * PKR_BITS_PER_PKEY)
-+#define PKR_PKEY_MASK(pkey)  (((1 << PKR_BITS_PER_PKEY) - 1) << PKR_PKEY_SHIFT(pkey))
++#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
++# define DISABLE_PKS		0
++#else
++# define DISABLE_PKS		(1<<(X86_FEATURE_PKS & 31))
++#endif
 +
+ #ifdef CONFIG_X86_5LEVEL
+ # define DISABLE_LA57	0
+ #else
+@@ -88,7 +94,7 @@
+ #define DISABLED_MASK14	0
+ #define DISABLED_MASK15	0
+ #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
+-			 DISABLE_ENQCMD)
++			 DISABLE_ENQCMD|DISABLE_PKS)
+ #define DISABLED_MASK17	0
+ #define DISABLED_MASK18	0
+ #define DISABLED_MASK19	0
+diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/include/uapi/asm/processor-flags.h
+index bcba3c643e63..191c574b2390 100644
+--- a/arch/x86/include/uapi/asm/processor-flags.h
++++ b/arch/x86/include/uapi/asm/processor-flags.h
+@@ -130,6 +130,8 @@
+ #define X86_CR4_SMAP		_BITUL(X86_CR4_SMAP_BIT)
+ #define X86_CR4_PKE_BIT		22 /* enable Protection Keys support */
+ #define X86_CR4_PKE		_BITUL(X86_CR4_PKE_BIT)
++#define X86_CR4_PKS_BIT		24 /* enable Protection Keys for Supervisor */
++#define X86_CR4_PKS		_BITUL(X86_CR4_PKS_BIT)
+ 
  /*
-- * Generate an Access-Disable mask for the given pkey.  Several of these can be
-- * OR'd together to generate pkey register values.
-+ * Generate an Access-Disable and Write-Disable mask for the given pkey.
-+ * Several of the AD's are OR'd together to generate a default pkey register
-+ * value.
-  */
--#define PKR_AD_KEY(pkey)	(PKR_AD_BIT << ((pkey) * PKR_BITS_PER_PKEY))
-+#define PKR_AD_KEY(pkey)     (PKR_AD_BIT << PKR_PKEY_SHIFT(pkey))
-+#define PKR_WD_KEY(pkey)     (PKR_WD_BIT << PKR_PKEY_SHIFT(pkey))
+  * x86-64 Task Priority Register, CR8
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 24c045b24b95..c7d1fc780358 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -808,6 +808,10 @@ config ARCH_USES_HIGH_VMA_FLAGS
+ 	bool
+ config ARCH_HAS_PKEYS
+ 	bool
++config ARCH_HAS_SUPERVISOR_PKEYS
++	bool
++config ARCH_ENABLE_SUPERVISOR_PKEYS
++	bool
  
- #endif /*_ASM_X86_PKEYS_COMMON_H */
-diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index d1dfe743e79f..fc8c7e2bb21b 100644
---- a/arch/x86/mm/pkeys.c
-+++ b/arch/x86/mm/pkeys.c
-@@ -218,16 +218,14 @@ __setup("init_pkru=", setup_init_pkru);
-  */
- u32 update_pkey_val(u32 pk_reg, int pkey, unsigned int flags)
- {
--	int pkey_shift = pkey * PKR_BITS_PER_PKEY;
--
- 	/*  Mask out old bit values */
--	pk_reg &= ~(((1 << PKR_BITS_PER_PKEY) - 1) << pkey_shift);
-+	pk_reg &= ~PKR_PKEY_MASK(pkey);
- 
- 	/*  Or in new values */
- 	if (flags & PKEY_DISABLE_ACCESS)
--		pk_reg |= PKR_AD_BIT << pkey_shift;
-+		pk_reg |= PKR_AD_KEY(pkey);
- 	if (flags & PKEY_DISABLE_WRITE)
--		pk_reg |= PKR_WD_BIT << pkey_shift;
-+		pk_reg |= PKR_WD_KEY(pkey);
- 
- 	return pk_reg;
- }
+ config PERCPU_STATS
+ 	bool "Collect percpu memory statistics"
 -- 
 2.28.0.rc0.12.gb6a658bd00c9
 
