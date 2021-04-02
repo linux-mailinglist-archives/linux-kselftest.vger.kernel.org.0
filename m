@@ -2,148 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8834F353036
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 22:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C06353095
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 23:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236590AbhDBUWz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Apr 2021 16:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236580AbhDBUWy (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Apr 2021 16:22:54 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8732AC06178C;
-        Fri,  2 Apr 2021 13:22:51 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id o10so8980720lfb.9;
-        Fri, 02 Apr 2021 13:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FuM4xH1nH2MjkVsKxAPd9c0o/UVsSU6PVrCfHekMLP0=;
-        b=HGiJplNIiEH49Jc+MlHgbms83lQfmWfQQvLsBsGybACK6X10jxnc1dYwNuuV15UZCX
-         jhZP18OliuP+gcBgdvqhkPcbd3k65haQ3WlFQMeLfOGqdptBZYGTEFZF99j0I5pv1P3j
-         7ClfoHpOBXfsphKUAz9CKwioYHbBzGASq5cx/VeAOVvjP35FDsbuulQHqQO0OPXsbJXz
-         1K9ekdx3MygGIACspecePntZyfNEF9+xXWn9ufGdk1SQvcQSwGRq0qRK0zcl+2cj19z6
-         c66yIaQGfx1RF0UzxmsqkgcUTe4CZeTKvthqPorMptIg+zsH3B2RWIfPfQ1ZiMTV3xtf
-         HPkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FuM4xH1nH2MjkVsKxAPd9c0o/UVsSU6PVrCfHekMLP0=;
-        b=nMARnsrTq7EH+2M8Yw5noN8+CMxaqiUFQXUPOHqZs4pVs80vJz121s+4XOnlO6XtTP
-         2PGVWPS5ToLqGNEHHFhYQdgdjEUPAZqPhIilkucaLADJQwA8IKoWAIfAOkHr41Y+KktP
-         BiR/cb1W0D1ATA2C6pp1WJYfiXf36K1AP+XhH06s70MBAFOD9ng6/Vgte4pgPX7vNQCv
-         5Ip7/S+xnnTalhv3DBDNG0KQXa8AeCK+GYX30a3Nq8ptj8s4w16bhnz4oZ3Dkt+nbdOc
-         /w/cPwnNeDqP9OJgBLKxMU6K1iVOTgU0beA+l7RGFPaGhuNj4RAnp3xCLQRr6YfZQxXr
-         ulsQ==
-X-Gm-Message-State: AOAM530r0J1Z5ZqV/RrDweNiqtha5jje2aboV9PzFeLxA0plDXDcnbgh
-        JlZPKvp2e260Au4RkUEj/RE=
-X-Google-Smtp-Source: ABdhPJw4j+0eY/DUzPzdoOF9LRcINRLYxtb4g8ug6Fp5KR0G9M/RO9DMa5S7TgsP7x1z5tA0JXaCjA==
-X-Received: by 2002:ac2:57c6:: with SMTP id k6mr9832610lfo.264.1617394970033;
-        Fri, 02 Apr 2021 13:22:50 -0700 (PDT)
-Received: from pc638.lan (h5ef52e3d.seluork.dyn.perspektivbredband.net. [94.245.46.61])
-        by smtp.gmail.com with ESMTPSA id f11sm952514lfr.119.2021.04.02.13.22.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Apr 2021 13:22:49 -0700 (PDT)
-From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-Subject: [PATCH-next 3/5] vm/test_vmalloc.sh: adapt for updated driver interface
-Date:   Fri,  2 Apr 2021 22:22:35 +0200
-Message-Id: <20210402202237.20334-3-urezki@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210402202237.20334-1-urezki@gmail.com>
-References: <20210402202237.20334-1-urezki@gmail.com>
+        id S231577AbhDBVHz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Apr 2021 17:07:55 -0400
+Received: from mga14.intel.com ([192.55.52.115]:17832 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231406AbhDBVHz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Apr 2021 17:07:55 -0400
+IronPort-SDR: vpI/AKc/jMvzfh4R7XqFnFcD5p9DGWGRCfoa+mlTqUhd+zy8x56B6EpidJiuUa5xxQfgCDHk81
+ jliZgfmQQPAg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9942"; a="192017127"
+X-IronPort-AV: E=Sophos;i="5.81,300,1610438400"; 
+   d="scan'208";a="192017127"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2021 14:07:53 -0700
+IronPort-SDR: hJ5K3+3GjSt2mxesegwSFijJTwqbTnFcp2R+z7jGeAZFT70vVsum1zpcG7kuNAaHV8SIpYDahi
+ h0xr9Y0SKWcw==
+X-IronPort-AV: E=Sophos;i="5.81,300,1610438400"; 
+   d="scan'208";a="413336770"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2021 14:07:53 -0700
+Date:   Fri, 2 Apr 2021 21:07:42 +0000
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 00/21] Miscellaneous fixes for resctrl selftests
+Message-ID: <YGeHnkEnhNrXuYeL@otcwcpicx3.sc.intel.com>
+References: <20210317022255.2536745-1-fenghua.yu@intel.com>
+ <YF451jic7QNyUCVD@otcwcpicx3.sc.intel.com>
+ <b10f5509-5111-e3e4-c247-dde542c36358@linuxfoundation.org>
+ <YGdgDqyma+/VXNcc@otcwcpicx3.sc.intel.com>
+ <c2221c02-5646-0521-a501-87717d872b37@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c2221c02-5646-0521-a501-87717d872b37@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A 'single_cpu_test' parameter is odd and it does not exist
-anymore. Instead there was introduced a 'nr_threads' one.
-If it is not set it behaves as the former parameter.
+On Fri, Apr 02, 2021 at 02:04:16PM -0600, Shuah Khan wrote:
+> On 4/2/21 12:18 PM, Fenghua Yu wrote:
+> > Hi, Shuah,
+> > 
+> > On Fri, Apr 02, 2021 at 12:17:17PM -0600, Shuah Khan wrote:
+> > > On 3/26/21 1:45 PM, Fenghua Yu wrote:
+> > > > Hi, Shuah,
+> > > > 
+> > > > On Wed, Mar 17, 2021 at 02:22:34AM +0000, Fenghua Yu wrote:
+> > > > > This patch set has several miscellaneous fixes to resctrl selftest tool
+> > > > > that are easily visible to user. V1 had fixes to CAT test and CMT test
+> > > > > but they were dropped in V2 because having them here made the patchset
+> > > > > humongous. So, changes to CAT test and CMT test will be posted in another
+> > > > > patchset.
+> > > > > 
+> > > > > Change Log:
+> > > > > v6:
+> > > > > - Add Tested-by: Babu Moger <babu.moger@amd.com>.
+> > > > > - Replace "cat" by CAT_STR etc (Babu).
+> > > > > - Capitalize the first letter of printed message (Babu).
+> > > > 
+> > > > Any comment on this series? Will you push it into linux-kselftest.git?
+> > > > 
+> > > Yes. Will apply for 5.13-rc1
+> > 
+> > Great! Thank you very much for your help!
+> > 
+> 
+> Done. Now applied to linux-selftest next.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/
+> next
+> 
+> Ran sanity test and suggested a change in message for 12/21.
+> 
+> Please take a look other such messages and improve them as well
+> and send follow-on patches.
 
-That is why update a "stress mode" according to this change
-specifying number of workers which are equal to number of CPUs.
-Also update an output of help message based on a new interface.
+Sure. Will send a follow-on patch to change the messages.
 
-CC: linux-kselftest@vger.kernel.org
-CC: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
----
- tools/testing/selftests/vm/test_vmalloc.sh | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+Thanks.
 
-diff --git a/tools/testing/selftests/vm/test_vmalloc.sh b/tools/testing/selftests/vm/test_vmalloc.sh
-index 06d2bb109f06..d73b846736f1 100755
---- a/tools/testing/selftests/vm/test_vmalloc.sh
-+++ b/tools/testing/selftests/vm/test_vmalloc.sh
-@@ -11,6 +11,7 @@
- 
- TEST_NAME="vmalloc"
- DRIVER="test_${TEST_NAME}"
-+NUM_CPUS=`grep -c ^processor /proc/cpuinfo`
- 
- # 1 if fails
- exitcode=1
-@@ -22,9 +23,9 @@ ksft_skip=4
- # Static templates for performance, stressing and smoke tests.
- # Also it is possible to pass any supported parameters manualy.
- #
--PERF_PARAM="single_cpu_test=1 sequential_test_order=1 test_repeat_count=3"
--SMOKE_PARAM="single_cpu_test=1 test_loop_count=10000 test_repeat_count=10"
--STRESS_PARAM="test_repeat_count=20"
-+PERF_PARAM="sequential_test_order=1 test_repeat_count=3"
-+SMOKE_PARAM="test_loop_count=10000 test_repeat_count=10"
-+STRESS_PARAM="nr_threads=$NUM_CPUS test_repeat_count=20"
- 
- check_test_requirements()
- {
-@@ -58,8 +59,8 @@ run_perfformance_check()
- 
- run_stability_check()
- {
--	echo "Run stability tests. In order to stress vmalloc subsystem we run"
--	echo "all available test cases on all available CPUs simultaneously."
-+	echo "Run stability tests. In order to stress vmalloc subsystem all"
-+	echo "available test cases are run by NUM_CPUS workers simultaneously."
- 	echo "It will take time, so be patient."
- 
- 	modprobe $DRIVER $STRESS_PARAM > /dev/null 2>&1
-@@ -92,17 +93,17 @@ usage()
- 	echo "# Shows help message"
- 	echo "./${DRIVER}.sh"
- 	echo
--	echo "# Runs 1 test(id_1), repeats it 5 times on all online CPUs"
--	echo "./${DRIVER}.sh run_test_mask=1 test_repeat_count=5"
-+	echo "# Runs 1 test(id_1), repeats it 5 times by NUM_CPUS workers"
-+	echo "./${DRIVER}.sh nr_threads=$NUM_CPUS run_test_mask=1 test_repeat_count=5"
- 	echo
- 	echo -n "# Runs 4 tests(id_1|id_2|id_4|id_16) on one CPU with "
- 	echo "sequential order"
--	echo -n "./${DRIVER}.sh single_cpu_test=1 sequential_test_order=1 "
-+	echo -n "./${DRIVER}.sh sequential_test_order=1 "
- 	echo "run_test_mask=23"
- 	echo
--	echo -n "# Runs all tests on all online CPUs, shuffled order, repeats "
-+	echo -n "# Runs all tests by NUM_CPUS workers, shuffled order, repeats "
- 	echo "20 times"
--	echo "./${DRIVER}.sh test_repeat_count=20"
-+	echo "./${DRIVER}.sh nr_threads=$NUM_CPUS test_repeat_count=20"
- 	echo
- 	echo "# Performance analysis"
- 	echo "./${DRIVER}.sh performance"
--- 
-2.20.1
-
+-Fenghua
