@@ -2,83 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 896223528CF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 11:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BE83528E3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 11:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234397AbhDBJcu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Apr 2021 05:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S234888AbhDBJfl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Apr 2021 05:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbhDBJct (ORCPT
+        with ESMTP id S234856AbhDBJfk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Apr 2021 05:32:49 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EF1C061788
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Apr 2021 02:32:49 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id cl17-20020a17090af691b02900da5fe25f0eso5881453pjb.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Apr 2021 02:32:49 -0700 (PDT)
+        Fri, 2 Apr 2021 05:35:40 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E12C061788
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Apr 2021 02:35:40 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id g10so2292096plt.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Apr 2021 02:35:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=trKfGY9uhUqGYG99eS6DDb3u4HvS8gho5043rTjuAIE=;
-        b=otyqSWdA0X9lbf9YSg2AosoTSed9WnhA0MDCP8OwCPAOnOWeHUcb4W5N9Lw5DQE7dV
-         iae6S2snE76CvZ7gUB0l4aeRX8yvNKSSVwNTtSakhuHtAzhCBkjXJUmWSZ/4wMLwHvot
-         NFrGGWYIO6Re1kejnSpdVXWVKz0oyv2cEWpL1IgrgyWx13PRYmvk/JCSvvVGrYU/eK6J
-         4d0o5UMP40bKtbnlXnFGM440DnnEkG+93hXl1m5GN8BGOgDJGEDumcHYht2xN049Ymxv
-         gRI7kgcbad6Ow0Ido/dMxvmEQhSnRlDIggi3CSw+mC7xB2MMuU46X1CQcvSnfvImeTa7
-         FG9g==
+        bh=Vzsll8xm6IiKjDMVW+o/pjkDPKy52BSlu05WlFxYDWg=;
+        b=lw0EoYhqJhGX8SPEFLmOV2btucFVHF3pktGUDsEVTFu3pt8yUUSZy7cAvgaDfvR/wP
+         xtR2oXP0UxmsNz/e5J3oep5W8dky162AggYzpXTzzKtQm3bJaYAImta+BhNk61Eyz0/m
+         Ci5SAKFD8IQ195z/q5IuGYbvBPQEs80uw1YRlncD+f12QbzmlFkWouVVfb230H7sce/9
+         lsoC7fM2LzKkqEanro9zNu8535k78ZvoJDFBaKECHuYAzzZn868JmoDfcY2cUJqp1pKa
+         aIK9xso8t7epicH4BMctN8ad18wNKnie27XxBdMW06Bo6dZEiPCDarJn1TfiPi7Y2hf5
+         pWwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=trKfGY9uhUqGYG99eS6DDb3u4HvS8gho5043rTjuAIE=;
-        b=Qg+vyDhP3yvqj+IuCnUI5at4XgF7ed43/B/Z/qojKocH+Rqq+0UKAt1fjdCs1kfE6k
-         mbD5sCJh5H4w9VqYHY2x+5cfdSw8HwD0/oL5/o7s+22k+WIMZ+quloVOuDGIuGBNtkG1
-         qSmJuC67X7onZriu3sJXXJrhcEsbKteUwWhT4a1vfO2yVCJLsFoWvEoXYF/K6SCYeBbL
-         3g7ws9CS5YzOAhhD7JoOtB65t9hlru6KbJc/dlEV2k287LpT/AdfwH9i2tPf+/vvOZ/L
-         e8uyT16P5Y6IyslVBYMAW3Qdp6yrxySedrP68VoWL+3AtX00Y652WQjOAIQt3oBFqaPD
-         kCRg==
-X-Gm-Message-State: AOAM531iB5ViZnr5oWdEw2sAFpRQAN9LwLEXjFU6Rq0RBEiwDm+AsyM0
-        KqNp7m7Y7IMx0jlzXqXTEiHSUsAPdMBfyY7FXrF7ig==
-X-Google-Smtp-Source: ABdhPJz7bFan7cRo+1G4QGaBQRj1CIdg1b8H1JoG4yC3cbLh2WW0JiRZiau+Sl1tIDCycW4tO39W5m5g5y+/HxICAXQ+bw==
-X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:29f7:72aa:ed3e:9c33])
- (user=brendanhiggins job=sendgmr) by 2002:a63:f247:: with SMTP id
- d7mr10876971pgk.112.1617355968529; Fri, 02 Apr 2021 02:32:48 -0700 (PDT)
-Date:   Fri,  2 Apr 2021 02:32:28 -0700
-In-Reply-To: <20210222225241.201145-1-dlatypov@google.com>
-Message-Id: <20210402093228.755260-1-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20210222225241.201145-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
-Subject: Re: [PATCH] kunit: tool: make --kunitconfig accept dirs, add
- lib/kunit fragment
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vzsll8xm6IiKjDMVW+o/pjkDPKy52BSlu05WlFxYDWg=;
+        b=EBDNge1waczepAzKzW5yLr4Zl38mBnojvl1FVx5KlmOH7VVLCCA/1wpOJf51fdE2xp
+         5wUaPQIaMrTXwwona/l86u3COFwBJHzMQDAwBVS1yojnDMnkslC5qFqTWbpq2+HhAq8I
+         ljIqDYMXpm53C9pdKs9pirKm8OAeCX22glono5TfSsVYjou1EGFi6pCNdt8x5SeHvm/R
+         r7FSZyQYh3hBjYN92cqbzYcV4kD5bN0CWh9pvWaFunAj0slXq9CTljoFIFLtJYSQAaTF
+         sNoY6rf+EwtOxIzAuGyL8CjSXwP7u8japz4Zd7r6JRBN6oCskUo7hbtgiKdLb/gsb4P/
+         OJ3g==
+X-Gm-Message-State: AOAM530kutkyFOYCY8rjJfjqig8MAwgPN/uypHfN1vkiDYcxdn0zBsgr
+        V6KAxDfpj2Rd3GEoCy6ec1WfqsAwwc8AwR5b/vZxYA==
+X-Google-Smtp-Source: ABdhPJxtHQje2ABPOvATkPWo/tuEsAUSHxdTmSX3fcinRyWYKyVYdH8MLsgXx00XcN2QGccrBXldJbWqUGGpXAQL0MI=
+X-Received: by 2002:a17:90b:100e:: with SMTP id gm14mr13135037pjb.217.1617356139684;
+ Fri, 02 Apr 2021 02:35:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210205221808.1966010-1-dlatypov@google.com>
+In-Reply-To: <20210205221808.1966010-1-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-To:     dlatypov@google.com
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        tytso@mit.edu
+Date:   Fri, 2 Apr 2021 02:35:28 -0700
+Message-ID: <CAFd5g44PL+DrN6+0bw-oYQCjCSR-f4Y0=QZL9DsSO-3hKLsFzw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: make KUNIT_EXPECT_STREQ() quote values, don't
+ print literals
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> TL;DR
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit
-> 
-> Per suggestion from Ted [1], we can reduce the amount of typing by
-> assuming a convention that these files are named '.kunitconfig'.
-> 
-> In the case of [1], we now have
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=fs/ext4
-> 
-> Also add in such a fragment for kunit itself so we can give that as an
-> example more close to home (and thus less likely to be accidentally
-> broken).
-> 
-> [1] https://lore.kernel.org/linux-ext4/YCNF4yP1dB97zzwD@mit.edu/
-> 
+On Fri, Feb 5, 2021 at 2:18 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Before:
+> >  Expected str == "world", but
+> >      str == hello
+> >      "world" == world
+>
+> After:
+> >  Expected str == "world", but
+> >      str == "hello"
+> <we don't need to tell the user that "world" == "world">
+>
+> Note: like the literal ellision for integers, this doesn't handle the
+> case of
+>   KUNIT_EXPECT_STREQ(test, "hello", "world")
+> since we don't expect it to realistically happen in checked in tests.
+> (If you really wanted a test to fail, KUNIT_FAIL("msg") exists)
+>
+> In that case, you'd get:
+> >  Expected "hello" == "world", but
+> <output for next failure>
+>
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
