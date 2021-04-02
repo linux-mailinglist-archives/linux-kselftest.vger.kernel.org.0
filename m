@@ -2,109 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFCC352386
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 01:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03306352469
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 02:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234968AbhDAX1P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Apr 2021 19:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
+        id S235761AbhDBAUL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Apr 2021 20:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbhDAX1O (ORCPT
+        with ESMTP id S233677AbhDBAUK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Apr 2021 19:27:14 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F32C061788
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Apr 2021 16:27:14 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id k25so3824986iob.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Apr 2021 16:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n/Cy9GFSSG292kbWWXXjaNyNH/4apg+3HJDMSJ6lS/0=;
-        b=cnGPeiI0reWFraLFVR4ze+oO/uopDQHdjCCjQGr7HYMB3+g/7D7+MyXjBwAxVqqAcg
-         Z8gbSe19fHzXp+1tRlQB/wNt++TDIlccEIj7DzgssBOoHWqg75WcMQgHetZEA9vQ0dHS
-         puqYQ22lO5Y3r6baZBtXdEkpznip1fHW1wVA4YeOAe7hqwQG7NsMkRxDy5ISkk6VicP3
-         1YUxLe90IYzaODAl/7qi/l5c8aJZVpFzu4nvs4zzw8zcadsqPrjCtailwDOurWHsK7Pq
-         TAQ9MNeZ8X4tgyvF9z7uXQ7rQgaoAf/R/qSlyHDc41d9/ou94mxwOVG4pGPJVC2W7w1b
-         n6eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n/Cy9GFSSG292kbWWXXjaNyNH/4apg+3HJDMSJ6lS/0=;
-        b=NejXfQdfGfUITqOtcvQh4yMbfMo6HBSya6XjBTAYO4RO3kUFtf4ArKQ+/IZaPvEdUt
-         gnvtwXhGO6ksxEwPJD5j0npqFclToCgcOF3NepvcAcHaGyECpvVHVbDQ6/2aW9fivoZU
-         Sax2SdCywwZmQGWtHOR176Ph7Ka+LWkmxcNeNGy/wxVkNOmmVSKHlMc3EZwvEjfND+bK
-         rerOnIEZhrL1EpvdTh2kx+sOK8afYI7VqCBmv09HM9V31FEZ5T+wp4XWzHOdxGu/HzW1
-         Cdjlr3WryFPmOjt9Mr3CXCSRFdZFN+oTSW81nasSW2+u7Fx7TyvdZyE3c9GHueoDwDvX
-         mv3Q==
-X-Gm-Message-State: AOAM530eW28c+2m0BLy0IgfookVvfsBkwFeKbENxMtyNuZwD+bUJk36x
-        LdXlTUaf58xzS57N7/jaXqHPJ8dry6KkpS+8j6TsNQ==
-X-Google-Smtp-Source: ABdhPJy5WrUR32ElfKa80MigZbS1m8oMj+ZQkP4ozZ9oygO7G1Z+PTnvQcBiDCoRD/ZUi/2BaLZkWoRmbEi3OD8LhqQ=
-X-Received: by 2002:a5d:8453:: with SMTP id w19mr8595652ior.25.1617319633765;
- Thu, 01 Apr 2021 16:27:13 -0700 (PDT)
+        Thu, 1 Apr 2021 20:20:10 -0400
+Received: from www62.your-server.de (www62.your-server.de [IPv6:2a01:4f8:d0a:276a::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB528C0613E6;
+        Thu,  1 Apr 2021 17:20:10 -0700 (PDT)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1lS7X8-0008fS-Ef; Fri, 02 Apr 2021 02:19:30 +0200
+Received: from [85.7.101.30] (helo=pc-6.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1lS7X7-0001gm-W8; Fri, 02 Apr 2021 02:19:30 +0200
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20210325120020.236504-1-memxor@gmail.com>
+ <20210325120020.236504-4-memxor@gmail.com>
+ <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+ <20210328080648.oorx2no2j6zslejk@apollo>
+ <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
+ <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
+ <20210331094400.ldznoctli6fljz64@apollo>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
+Date:   Fri, 2 Apr 2021 02:19:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20210401114504.13466-1-psampat@linux.ibm.com> <20210401114504.13466-3-psampat@linux.ibm.com>
-In-Reply-To: <20210401114504.13466-3-psampat@linux.ibm.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Thu, 1 Apr 2021 16:27:04 -0700
-Message-ID: <CAAYoRsWKw2eXXoXGhdaM2pqhvDGXz8o=hV5K5HmYaZvetxv96w@mail.gmail.com>
-Subject: Re: [RFC v2 2/2] selftest/cpuidle: Add support for cpuidle latency measurement
-To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>
-Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210331094400.ldznoctli6fljz64@apollo>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26127/Thu Apr  1 13:11:26 2021)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Pratik,
+On 3/31/21 11:44 AM, Kumar Kartikeya Dwivedi wrote:
+> On Wed, Mar 31, 2021 at 02:55:47AM IST, Daniel Borkmann wrote:
+>> Do we even need the _block variant? I would rather prefer to take the chance
+>> and make it as simple as possible, and only iff really needed extend with
+>> other APIs, for example:
+> 
+> The block variant can be dropped, I'll use the TC_BLOCK/TC_DEV alternative which
+> sets parent_id/ifindex properly.
+> 
+>>    bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS});
+>>
+>> Internally, this will create the sch_clsact qdisc & cls_bpf filter instance
+>> iff not present yet, and attach to a default prio 1 handle 1, and _always_ in
+>> direct-action mode. This is /as simple as it gets/ and we don't need to bother
+>> users with more complex tc/cls_bpf internals unless desired. For example,
+>> extended APIs could add prio/parent so that multi-prog can be attached to a
+>> single cls_bpf instance, but even that could be a second step, imho.
+> 
+> I am not opposed to clsact qdisc setup if INGRESS/EGRESS is supplied (not sure
+> how others feel about it).
 
-On Thu, Apr 1, 2021 at 4:45 AM Pratik Rajesh Sampat
-<psampat@linux.ibm.com> wrote:
->
-...
+What speaks against it? It would be 100% clear from API side where the prog is
+being attached. Same as with tc cmdline where you specify 'ingress'/'egress'.
 
-> To run this test specifically:
-> $ make -C tools/testing/selftests TARGETS="cpuidle" run_tests
+> We could make direct_action mode default, and similarly choose prio
 
-I have not become any smarter than I was with version 1,
-and still assumed that the "$" meant regular user.
-Please put it as "#" or separate the two steps, compile and run.
+To be honest, I wouldn't even support a mode from the lib/API side where direct_action
+is not set. It should always be forced to true. Everything else is rather broken
+setup-wise, imho, since it won't scale. We added direct_action a bit later to the
+kernel than original cls_bpf, but if I would do it again today, I'd make it the
+only available option. I don't see a reasonable use-case where you have it to false.
 
->
-> There are a few optinal arguments too that the script can take
+> as 1 by default instead of letting the kernel do it. Then you can just pass in
+> NULL for bpf_tc_cls_opts and be close to what you're proposing. For protocol we
+> can choose ETH_P_ALL by default too if the user doesn't set it.
 
-optional
+Same here with ETH_P_ALL, I'm not sure anyone uses anything other than ETH_P_ALL,
+so yes, that should be default.
 
-Suggest to also specifically mention how to run without re-compile,
+> With these modifications, the equivalent would look like
+> 	bpf_tc_cls_attach(prog_fd, TC_DEV(ifindex, INGRESS), NULL, &id);
 
-# ./cpuidle.sh -v
+Few things compared to bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
 
-Note also that the test still leaves all idle states disabled when done.
+1) nit, but why even 'cls' in the name. I think we shouldn't expose such old-days
+    tc semantics to a user. Just bpf_tc_attach() is cleaner/simpler to understand.
+2) What's the 'TC_DEV(ifindex, INGRESS)' macro doing exactly? Looks unnecessary,
+    why not regular args to the API?
+3) Exposed bpf_tc_attach() API could internally call a bpf_tc_attach_opts() API
+    with preset defaults, and the latter could have all the custom bits if the user
+    needs to go beyond the simple API, so from your bpf_tc_cls_attach() I'd also
+    drop the NULL.
+4) For the simple API I'd likely also drop the id (you could have a query API if
+    needed).
 
->         [-h <help>]
->         [-i <run timer tests>]
->         [-m <location of the module>]
->         [-o <location of the output>]
->         [-v <verbose> (run on all cpus)]
-> Default Output location in: tools/testing/selftest/cpuidle/cpuidle.log
+> So as long as the user doesn't care about other details, they can just pass opts
+> as NULL.
 
-...
-
-> +cpu_is_online()
-> +{
-> +       cpu=$1
-> +       if [ ! -f "/sys/devices/system/cpu/cpu$cpu/online" ]; then
-> +               echo 0
-
-incorrect. should be:
-
-> +               echo 1
-
-... Doug
