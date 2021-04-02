@@ -2,141 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C5A352FD5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 21:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B60352FEA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 21:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235904AbhDBTfP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Apr 2021 15:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
+        id S231149AbhDBTsH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Apr 2021 15:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235938AbhDBTfN (ORCPT
+        with ESMTP id S229553AbhDBTsH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Apr 2021 15:35:13 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973F4C0613E6
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Apr 2021 12:35:11 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id c18so1551803iln.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Apr 2021 12:35:11 -0700 (PDT)
+        Fri, 2 Apr 2021 15:48:07 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3314EC0613E6
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Apr 2021 12:48:06 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id h7so5408998ilj.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Apr 2021 12:48:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HBqlmfmBZlgpLqBL3SMy547Si+woT6C4nrftJlSxtCY=;
-        b=Y3tiXPLIlb1lzWlsyUDHVY5DWAWMiQp5Txnbbu7BoQamrR1AxQ8fD6q+OwD6rLf79u
-         PzXXkyD+oalp0xFMENBsEhqsYV9uhmRm2PbxVZuMy5B4kTWdE+vkaDOYbhltLyGb6HRR
-         +3HH7tZYVpM56s1nIucsyDv2u6w1JKb7CUuvRLSIEyY6Ii+mRgQ6QFgP17NGhhSiD8/v
-         CCIo93CW7R64xRId3SkW0ubYkMLnJkr/sNFsekJqHW7hepxP+DiSVg2jAU+PNsSAnKl+
-         W/7/WFyiQVXRFo7b0FdHanJEr+h8WAvcjb97NmM0eNZkPLV9BIWmUhZGi29QTNQAI3EC
-         3c3A==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iHLXeOgoJJwmSWdDXV69tzMVoLXBDndScOXkQMnjrV0=;
+        b=doTIYLPGjaNwJWg0K4FVYoKIThZXXlTnrOdWyT6niRVVA1mwj+zdMm+nvUtCCUQ79h
+         y7uXKv1ARjZ+OHKF8ra7+X0IlgHtNWXCwKSvhSEztTezgo7UN7GXq+mbctTRDdFeZ604
+         TzFIqRUGw7c2MzttnuyFN2hMPjlnovSROTrnE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HBqlmfmBZlgpLqBL3SMy547Si+woT6C4nrftJlSxtCY=;
-        b=fEIu4+svBDw6iOVhjbVtxlg5SIwdry+0fZLE8kSSK/baQVmDDmC8X0tDb1ig/Rv8Uk
-         f4Du+eyLtfRkUV+6SuhgfXGErJiL6kntc9C1xMNCsGarOtmK00kLd5sOMLP9kzt+Xh7v
-         xOvErVy8P3TSgDZR4/FnjCGhtt+yDjeE7rrflVMqDVBSUWpHVgXU4orbpk/mMP99Fast
-         1YFSxam+u2w1pulXFVKNXcOK/P6v5i+D2/k9vSXqoh+JiMJHYBz5Gyv2pFArMkwHh9sg
-         zaHVYsAURpwdGLXL+nzxBWAb2h20cXvKg/f2H+w3fko3ABMpm+fiWbUK61SlXocWKI0T
-         tgcQ==
-X-Gm-Message-State: AOAM532Kx5ybOGhBp5YTvTUJ4VxMsfUMb6yc4ln+gx0atmEPp7bQNuXV
-        V8kcDxybmkTep8wolIX5fQkWehxvbTsOXJ5lmdQ3+A==
-X-Google-Smtp-Source: ABdhPJzHqBBDYpgyx1WUONYHlQnPh/L3qvcOipT8l+cgDuynaIlhcoA99kAIy0pHZeEalzvjKi9AoXgX6fHVa8kg6iA=
-X-Received: by 2002:a92:c24c:: with SMTP id k12mr11564544ilo.75.1617392110956;
- Fri, 02 Apr 2021 12:35:10 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iHLXeOgoJJwmSWdDXV69tzMVoLXBDndScOXkQMnjrV0=;
+        b=TVcxK2rDGolB8Y060lEWZkcL5F612B1qsxbbdqECVE5YznFREnIjL+sB2VSCLrk916
+         wtWoZxpCEc9wDlsQQQ5HQYlU9/U5VrzVJGbxzTkf2T0kzNQ6UzqkL6QbQC8AARnHJAuG
+         wFjWaCtLOmv2+A8d1o8Y8dnLtWRh08vSYYrOxtECTs1I8EmA1Fa52JaAXAODCkMus5bL
+         wCgJwv86k9udi5JgZBdUrb6/nhECnGzJgGmKPgCUZEOznr3/pPEw23u3wQPJaALCc8Su
+         GeqSf7UVuKpMgFqPwV7Q/3NY1PxovqHXfQrOMdIHZphPMiS+svYhLUou0GObBYTkx3oW
+         600g==
+X-Gm-Message-State: AOAM530kTR3O5NiHfc6t0u85iZEAdIpCnMU4/4+OuLaKjyzVBklBkXJd
+        k5GMPjXWiDOihFQaFT+MSAQO8A==
+X-Google-Smtp-Source: ABdhPJzN3wsWL0RIK0m4BvHNYZy4gx6aSrgSJtQkhLgrH403uNNurZ0odS2hjHg5ZUG3tCPgAVgeqQ==
+X-Received: by 2002:a05:6e02:13e8:: with SMTP id w8mr12164264ilj.237.1617392885666;
+        Fri, 02 Apr 2021 12:48:05 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id h6sm3077512ilr.24.2021.04.02.12.48.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Apr 2021 12:48:05 -0700 (PDT)
+Subject: Re: [PATCH v6 12/21] selftests/resctrl: Check for resctrl mount point
+ only if resctrl FS is supported
+To:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20210317022255.2536745-1-fenghua.yu@intel.com>
+ <20210317022255.2536745-13-fenghua.yu@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <b25fa4eb-803c-dc44-421a-080668c54aff@linuxfoundation.org>
+Date:   Fri, 2 Apr 2021 13:48:04 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-References: <20210205221808.1966010-1-dlatypov@google.com> <CAFd5g44PL+DrN6+0bw-oYQCjCSR-f4Y0=QZL9DsSO-3hKLsFzw@mail.gmail.com>
- <9f5df593-6584-b7d4-3b6e-ad77ee6f8760@linuxfoundation.org>
- <CAGS_qxqE9btMn639uCgDoiqO6PNnNJzqyLA4Vj+b6Ccjhpkbfg@mail.gmail.com> <ec95c1b5-7273-9f0b-ad1f-f41e818eaf6f@linuxfoundation.org>
-In-Reply-To: <ec95c1b5-7273-9f0b-ad1f-f41e818eaf6f@linuxfoundation.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 2 Apr 2021 12:34:59 -0700
-Message-ID: <CAGS_qxoZ5PyU7pdWB+TEO85JTXptHcXUk6Gc3BYHHOuMpPTEtQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: make KUNIT_EXPECT_STREQ() quote values, don't
- print literals
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210317022255.2536745-13-fenghua.yu@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 2, 2021 at 12:19 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 4/2/21 1:09 PM, Daniel Latypov wrote:
-> > On Fri, Apr 2, 2021 at 10:47 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>
-> >> On 4/2/21 3:35 AM, Brendan Higgins wrote:
-> >>> On Fri, Feb 5, 2021 at 2:18 PM Daniel Latypov <dlatypov@google.com> wrote:
-> >>>>
-> >>>> Before:
-> >>>>>    Expected str == "world", but
-> >>>>>        str == hello
-> >>>>>        "world" == world
-> >>>>
-> >>>> After:
-> >>>>>    Expected str == "world", but
-> >>>>>        str == "hello"
-> >>>> <we don't need to tell the user that "world" == "world">
-> >>>>
-> >>>> Note: like the literal ellision for integers, this doesn't handle the
-> >>>> case of
-> >>>>     KUNIT_EXPECT_STREQ(test, "hello", "world")
-> >>>> since we don't expect it to realistically happen in checked in tests.
-> >>>> (If you really wanted a test to fail, KUNIT_FAIL("msg") exists)
-> >>>>
-> >>>> In that case, you'd get:
-> >>>>>    Expected "hello" == "world", but
-> >>>> <output for next failure>
-> >>>>
-> >>>> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> >>>
-> >>> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> >>>
-> >>
-> >> Hi Daniel,
-> >>
-> >> Please run checkpatch on your patches in the future. I am seeing
-> >> a few checkpatch readability type improvements that can be made.
-> >>
-> >> Please make changes and send v2 with Brendan's Reviewed-by.
-> >
-> > Are there some flags you'd like me to pass to checkpatch?
-> >
-> > $ ./scripts/checkpatch.pl --git HEAD
-> > total: 0 errors, 0 warnings, 42 lines checked
-> >
->
-> My commit script uses --strict which shows readability errors.
+On 3/16/21 8:22 PM, Fenghua Yu wrote:
+> check_resctrlfs_support() does the following
+> 1. Checks if the platform supports resctrl file system or not by looking
+>     for resctrl in /proc/filesystems
+> 2. Calls opendir() on default resctrl file system path
+>     (i.e. /sys/fs/resctrl)
+> 3. Checks if resctrl file system is mounted or not by looking at
+>     /proc/mounts
+> 
+> Steps 2 and 3 will fail if the platform does not support resctrl file
+> system. So, there is no need to check for them if step 1 fails.
+> 
+> Fix this by returning immediately if the platform does not support
+> resctrl file system.
+> 
+> Tested-by: Babu Moger <babu.moger@amd.com>
+> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+> ---
+>   tools/testing/selftests/resctrl/resctrlfs.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+> index 6b22a186790a..87195eb78356 100644
+> --- a/tools/testing/selftests/resctrl/resctrlfs.c
+> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+> @@ -570,6 +570,9 @@ bool check_resctrlfs_support(void)
+>   	ksft_print_msg("%s kernel supports resctrl filesystem\n",
+>   		       ret ? "Pass:" : "Fail:");
+>   
 
-Oh neat, TIL.
-I'll make sure to use that in the future, thanks!
+This message is a bit confusing. Please change this to read
+and send a follow-on patch on top of linux-kselftest next
 
-v2: https://lore.kernel.org/linux-kselftest/20210402193357.819176-1-dlatypov@google.com/
+"Check kernel support for resctrl filesystem"
 
->
-> > Commit f66884e8b831 ("kunit: make KUNIT_EXPECT_STREQ() quote values,
-> > don't print literals") has no obvious style problems and is ready for
-> > submission.
-> >
-> > I just rebased onto linus/master again since I know checkpatch.pl's
-> > default behavior had changed recently, but I didn't see any errors
-> > there.
-> >
-> > I know this commit made some lines go just over 80 characters, so
-> > $ ./scripts/checkpatch.pl --max-line-length=80 --git HEAD
-> > ...
-> > total: 0 errors, 4 warnings, 42 lines checked
-> >
->
-> Don't worry about line wrap warns. I just ignore them. :)
->
-> thanks,
-> -- Shuah
->
->
->
+thanks,
+-- Shuah
