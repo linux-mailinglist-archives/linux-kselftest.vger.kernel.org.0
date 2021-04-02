@@ -2,142 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD30C352F80
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 21:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5FB352F88
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 21:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbhDBTIQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Apr 2021 15:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
+        id S231443AbhDBTKN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Apr 2021 15:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbhDBTIP (ORCPT
+        with ESMTP id S231149AbhDBTKM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Apr 2021 15:08:15 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433C8C0613E6;
-        Fri,  2 Apr 2021 12:08:13 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id c17so4121664pfn.6;
-        Fri, 02 Apr 2021 12:08:13 -0700 (PDT)
+        Fri, 2 Apr 2021 15:10:12 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE91C061788
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Apr 2021 12:10:11 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id w2so2453107ilj.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Apr 2021 12:10:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=P6/8i5KYWBwtKewMiq4TVS1lrndCLrJeUPK5dwemxFM=;
-        b=TntiS3Fs12b1MOrQAQJtAYmrceTL6VNqagyxw/qoTckayCCYX+nxjIhDtJPAYIzDVs
-         XJSV6rOq8Q0dCkge1pxfqwF1/sPeCfHj9ehl/vnZT+UUkA02orlemYpbb7+B2/VOdD5d
-         KnL+9+nxzwtD7jakueMhVHgR89Y5CVwGjBZ08vFmW+HVY8C5qm1a845PbWIF0a3iwpa8
-         tUGHU0NvGizDy4C4k8cRS/idPwQPH+daPy0OMeyl7rBbu6V7AfdqWwm/kZbaGCCOtdD7
-         VdnWoYNrJpIu71tN00MqoiEi/7NdKFpsO2liqxIJB5XYwKKIsDOIe3Kj+lKgXPwYx5Ns
-         nzDA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7JlFDJAcRG6/Jm43XBCYYpnXYN2lAD9aQqAdSxiEkDs=;
+        b=EiHnux0s7dQ3PcMjGa8vxU7IIiN7Fa2B6iJ2AJ8c62lDKE+WYDkbJ8wzuU7+rZMWg0
+         rZhWkgCnFScZFTXIAf8bhzpZzyo42XSPgYl46t5KJutWanMHoD+oGba52PiINY5llUQ/
+         P1fKd+MNu+0svuIOIkEBjftL3rkMJS0dI/BG1b0j9rVh0S7xfco6DQeBz0/a0gPDORJh
+         vsd0g2rnBIRLR44G1rgrO+GNEkqRAkEEC2+/+OJ9W9ifsnXhUd+eqpuYqcqOz08AFkqa
+         kLJ9Y8FR7XHzoywVA2Z+i31hmpGeYKMYxGv3+9Poks7t2b04NlRIC0EXIIKBNSzDfdoH
+         iYYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P6/8i5KYWBwtKewMiq4TVS1lrndCLrJeUPK5dwemxFM=;
-        b=fi7XvXo0kXt6q0JcwG7oZ79WZe8AgHDuDjn2viUR7fvhUEaiI0UlPzdwS7UEx3PvFk
-         s5H9Nfiw34wHjajrXYzKC5H1BscknfWlJYJBjiWpzPnH2JvxvKSSOoygVBbwU95yo8g9
-         k6DaOu82vULhmrj1cTaLADZSVhRTf/KzJURcydJlfDJePzveYQ59TK2AbJx5uKnN2qXW
-         71iyPH7E8ijtYP1Jp8o8biltWcHu4BBMSmsNfsNuHfYgzAimvW5YsbVdccuLcU2umm72
-         MwA5T4LY4LJtyE2ZctNpRDww2tY7uFsKIw9IGuyEmX+Pn8/TirOyUzCqL8zn4Tc9TjkC
-         VE7Q==
-X-Gm-Message-State: AOAM5308cskjiiaKk5GHT+XraQi64raSq0/JOXYPr01qfjM1zDFBmYKn
-        NDM0SwEWzGGTtpIgJ6Tq8ocf3e60km0rbA==
-X-Google-Smtp-Source: ABdhPJz25seraxy07Imz6KaRoG0kPQpZqaCFhF5Ayb89Y9TeOvdSu9ff+SFq49eH/nFxal4lPwe4YA==
-X-Received: by 2002:a63:79c6:: with SMTP id u189mr12942397pgc.154.1617390492540;
-        Fri, 02 Apr 2021 12:08:12 -0700 (PDT)
-Received: from localhost ([112.79.204.47])
-        by smtp.gmail.com with ESMTPSA id k13sm8773580pfc.50.2021.04.02.12.08.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Apr 2021 12:08:12 -0700 (PDT)
-Date:   Sat, 3 Apr 2021 00:38:06 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7JlFDJAcRG6/Jm43XBCYYpnXYN2lAD9aQqAdSxiEkDs=;
+        b=N0EVXjcOVvtLifqYWuZEXGg44MOKC3N6SlmrOvnUCSgZ0clmmMlkmygGlqWRwb8oIr
+         n2sctW+/5fd/MJCWknT2X03zC1KB90PMiXoAV9t+uEQcutLmCwIdquyHPIurvcQ0yvWx
+         q7OQYhmCn5vKxt4p1EnxxKEnz/haU1TKA/dtyc7IZWnteIbbkUXcN8zQejyoL4NyA0GG
+         /YXGZmF10lm/eK/5Fiv1fBLsx8awAza7/K56QOZ2+IdpHsnSgBnbXK0in4TqGx2kYugQ
+         uplR/15/XlctnUoOnI1/utE2Cm5Y8DLYMpw9Pq7x/HarZUfGcPMmr/wDbmIagPuFKtkT
+         AYoA==
+X-Gm-Message-State: AOAM530vjSuJOGuAMJM+Po7EqslUzKFPJXrKlRhjvlwKaxznLOYsgTBS
+        nqG5HzwTJB/EugFAmhSTjWvY/De3meV+erlnpjX47A==
+X-Google-Smtp-Source: ABdhPJzZlUx/qgHuq28bDzFofQxEcbrvDubBVZIrnqA7YzNDMQ14VSBDvffECtAMDc3TvMG18/ntODesGW/SmZtA+vc=
+X-Received: by 2002:a05:6e02:d52:: with SMTP id h18mr439861ilj.133.1617390610533;
+ Fri, 02 Apr 2021 12:10:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210205221808.1966010-1-dlatypov@google.com> <CAFd5g44PL+DrN6+0bw-oYQCjCSR-f4Y0=QZL9DsSO-3hKLsFzw@mail.gmail.com>
+ <9f5df593-6584-b7d4-3b6e-ad77ee6f8760@linuxfoundation.org>
+In-Reply-To: <9f5df593-6584-b7d4-3b6e-ad77ee6f8760@linuxfoundation.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 2 Apr 2021 12:09:59 -0700
+Message-ID: <CAGS_qxqE9btMn639uCgDoiqO6PNnNJzqyLA4Vj+b6Ccjhpkbfg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: make KUNIT_EXPECT_STREQ() quote values, don't
+ print literals
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
-Message-ID: <20210402190806.nhcgappm3iocvd3d@apollo>
-References: <20210325120020.236504-1-memxor@gmail.com>
- <20210325120020.236504-4-memxor@gmail.com>
- <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
- <20210328080648.oorx2no2j6zslejk@apollo>
- <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
- <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
- <20210331094400.ldznoctli6fljz64@apollo>
- <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
- <20210402152743.dbadpgcmrgjt4eca@apollo>
- <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov wrote:
-> On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> > [...]
+On Fri, Apr 2, 2021 at 10:47 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> All of these things are messy because of tc legacy. bpf tried to follow tc style
-> with cls and act distinction and it didn't quite work. cls with
-> direct-action is the only
-> thing that became mainstream while tc style attach wasn't really addressed.
-> There were several incidents where tc had tens of thousands of progs attached
-> because of this attach/query/index weirdness described above.
-> I think the only way to address this properly is to introduce bpf_link style of
-> attaching to tc. Such bpf_link would support ingress/egress only.
-> direction-action will be implied. There won't be any index and query
-> will be obvious.
+> On 4/2/21 3:35 AM, Brendan Higgins wrote:
+> > On Fri, Feb 5, 2021 at 2:18 PM Daniel Latypov <dlatypov@google.com> wrote:
+> >>
+> >> Before:
+> >>>   Expected str == "world", but
+> >>>       str == hello
+> >>>       "world" == world
+> >>
+> >> After:
+> >>>   Expected str == "world", but
+> >>>       str == "hello"
+> >> <we don't need to tell the user that "world" == "world">
+> >>
+> >> Note: like the literal ellision for integers, this doesn't handle the
+> >> case of
+> >>    KUNIT_EXPECT_STREQ(test, "hello", "world")
+> >> since we don't expect it to realistically happen in checked in tests.
+> >> (If you really wanted a test to fail, KUNIT_FAIL("msg") exists)
+> >>
+> >> In that case, you'd get:
+> >>>   Expected "hello" == "world", but
+> >> <output for next failure>
+> >>
+> >> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> >
+> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> >
+>
+> Hi Daniel,
+>
+> Please run checkpatch on your patches in the future. I am seeing
+> a few checkpatch readability type improvements that can be made.
+>
+> Please make changes and send v2 with Brendan's Reviewed-by.
 
-Note that we already have bpf_link support working (without support for pinning
-ofcourse) in a limited way. The ifindex, protocol, parent_id, priority, handle,
-chain_index tuple uniquely identifies a filter, so we stash this in the bpf_link
-and are able to operate on the exact filter during release.
+Are there some flags you'd like me to pass to checkpatch?
 
-> So I would like to propose to take this patch set a step further from
-> what Daniel said:
-> int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
-> and make this proposed api to return FD.
-> To detach from tc ingress/egress just close(fd).
+$ ./scripts/checkpatch.pl --git HEAD
+total: 0 errors, 0 warnings, 42 lines checked
 
-You mean adding an fd-based TC API to the kernel?
+Commit f66884e8b831 ("kunit: make KUNIT_EXPECT_STREQ() quote values,
+don't print literals") has no obvious style problems and is ready for
+submission.
 
-> The user processes will not conflict with each other and will not accidently
-> detach bpf program that was attached by another user process.
-> Such api will address the existing tc query/attach/detach race race conditions.
+I just rebased onto linus/master again since I know checkpatch.pl's
+default behavior had changed recently, but I didn't see any errors
+there.
 
-Hmm, I think we do solve the race condition by returning the id. As long as you
-don't misuse the interface and go around deleting filters arbitrarily (i.e. only
-detach using the id), programs won't step over each other's filters. Storing the
-id from the netlink response received during detach also eliminates any
-ambigiuity from probing through get_info after attach. Same goes for actions,
-and the same applies to the bpf_link returning API (which stashes id/index).
+I know this commit made some lines go just over 80 characters, so
+$ ./scripts/checkpatch.pl --max-line-length=80 --git HEAD
+...
+total: 0 errors, 4 warnings, 42 lines checked
 
-Do you have any other example that can still be racy given the current API?
+I can go and line wrap these but had figured they were more readable
+this way if checkpatch.pl no longer complained by default.
 
-The only advantage of fd would be the possibility of pinning it, and extending
-lifetime of the filter.
+Thanks,
+Daniel
 
-> And libbpf side of support for this api will be trivial. Single bpf
-> link_create command
-> with ifindex and ingress|egress arguments.
-> wdyt?
-
---
-Kartikeya
+>
+> thanks,
+> -- Shuah
