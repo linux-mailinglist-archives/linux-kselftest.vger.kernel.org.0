@@ -2,110 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F473530B5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 23:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C105A3530BA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Apr 2021 23:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235273AbhDBVXy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Apr 2021 17:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
+        id S235273AbhDBVZO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Apr 2021 17:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234526AbhDBVXx (ORCPT
+        with ESMTP id S235241AbhDBVZN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Apr 2021 17:23:53 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9843C061788
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Apr 2021 14:23:51 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id gv19-20020a17090b11d3b029014c516f4eb5so1298430pjb.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Apr 2021 14:23:51 -0700 (PDT)
+        Fri, 2 Apr 2021 17:25:13 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8B6C061788
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Apr 2021 14:25:12 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id w2so2676309ilj.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Apr 2021 14:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=08HQieGvJ5s4z39bQ9/VIsRPK3KWDyfUJY19CVcTpoA=;
-        b=ZZHUC404vOs5t/NKB0to6ybKeOuaagPe7GwEPz8E4aRbI9bzhmQ5eh2W3fmlGIAQ5G
-         Zt/fFdSLqRat7R08DbmWJyelbPm9NoUFsXTYln4CMBO6HfJXssG1Hr1HTZiCoU7Zt5xd
-         iPVcqhkNAIOTylk143rBaRMhzzLH4EjarZKoQ=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M9rvBUxt0gD7J/4lPVmkW5NC9txJcpKPfeTcuPwhZrE=;
+        b=IAS9s+W/KelcH9FuBLGV79jg3RBD5yGvJgOPiLqa5H2ENC9WE56t7KHhTKARkdCq4s
+         nrUjlGcDeknGHHiHSXf31RMlCUm7UYHs/BnjnMhy0EWgeH9KpnnNSLlOJE5Q4Qr8OLwN
+         8NLNIn+7V5ZYtslSy5abpNiUJ+jHt2RaTgDWr0j3NWTqk89KKA+I7zJjHWbJIxUnZxUL
+         TUcf8qxem91c49uxqRDrN2jLEZq7Gd6npHKc8tCgVxO6MVcGI8rMvoaICojGuDpUyTiS
+         x6UcGDiqXdRp2yr2aMuyJ6woPc6faJgR16MTSiGLnjinGjZrfTvC0BsxZ5s98nHH4ydL
+         yluA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=08HQieGvJ5s4z39bQ9/VIsRPK3KWDyfUJY19CVcTpoA=;
-        b=QF298hzUUuamKmSxCioUYnuobttqWw+Ao7tktn+CtP9Isx3vE9oEGJzsOueK0n9xoN
-         52KnTZ5/O727sXKxKdb0IFKBHmLxQkbE6bfAhbjHhtuLTr7d8ARhBQQxZMT+2xFPPYXv
-         j17sfZANQCgo0v2yKvSHdkDBQt4/Ox9UvUzjSZ97gBdIcCu4eFd1pkaAMS5AZwb0tc70
-         53rgKewk4Q3wGX5t6rLl2u/dPrYIGWmXU9OYP7VQUr6yYZiZOYms5mwe88Q5fT83aCEu
-         et0YYALNYjdDi1Bsn9pgc+UR1lFir/fpO5CCyEraJrtwC/f2Xl/HzfNFApBDcJaMDl9T
-         QtKA==
-X-Gm-Message-State: AOAM530wNmK+IBLPEf1hD9gkcYxmfQfxTeqALoVV4varA4dpS2NmyMIw
-        y/C7p6FH3rWkqjcg6Go7LzQfdg==
-X-Google-Smtp-Source: ABdhPJzh1TjlfwSjwK/4Uhusa5K7hvHNWHdJg95xMTE30zaT3vWl2AH09tOC2m+ie/IgJcGERoPLbw==
-X-Received: by 2002:a17:90a:420d:: with SMTP id o13mr15596212pjg.61.1617398631259;
-        Fri, 02 Apr 2021 14:23:51 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t3sm8999011pfg.176.2021.04.02.14.23.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Apr 2021 14:23:50 -0700 (PDT)
-Date:   Fri, 2 Apr 2021 14:23:48 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com, Michal Hocko <mhocko@suse.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Adam Nichols <adam@grimm-co.com>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] sysfs: Unconditionally use vmalloc for buffer
-Message-ID: <202104021421.97A06AE@keescook>
-References: <20210401221320.2717732-1-keescook@chromium.org>
- <20210401221320.2717732-4-keescook@chromium.org>
- <20210402063221.GA5260@lst.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M9rvBUxt0gD7J/4lPVmkW5NC9txJcpKPfeTcuPwhZrE=;
+        b=KZ8byCUp+yEbU94qXvCfMGyRL2PJtP5Xco/PEnPEVoqFZHl+PE+OTyW4JHuZ8Bg7jo
+         kZu6HknQ5an9PIb6CGdTM4d7fd0A/9QlSupVKXuE0HCOKABU6NpVbHaYSPm4dnqq8vjd
+         6ZS3aT5aEM+rDx9plLh3UHtAaP9CazXq8ZTew7UDSzj/k5KfEVyOyjOaY1PSSsebnIhj
+         65Xdj4CSFazklozQM8CzshapSOtsET2S7zyP7k585pKBZeJgH6hEQAU3opx5PrevmxT9
+         KWyGQ6zzDsUoCSgvTC8IeQU24JKtxJrvlQnMdE3are9rjQNMlWZLoLxmWGHvFGzS/CIf
+         6wcQ==
+X-Gm-Message-State: AOAM5338BSKEUWIiC5pyaYnRV4t8lTi5LeklDxMslsdzo+QiXackRiKh
+        9B9xhXzOv6NkXVPFvC3AJGqaB1NUVpfdNHeZyfsXTA==
+X-Google-Smtp-Source: ABdhPJwCDq6Ept4G8BvWEHVX+L6RWxh/oywAHSZGHMZbbuglhagFIk94ClfIQQ2KRrf/TwAi8ObwNkWq6gHyXtPcPvQ=
+X-Received: by 2002:a92:c24c:: with SMTP id k12mr11813867ilo.75.1617398711588;
+ Fri, 02 Apr 2021 14:25:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210402063221.GA5260@lst.de>
+References: <20210311152314.3814916-1-dlatypov@google.com> <20210311152314.3814916-2-dlatypov@google.com>
+ <CAFd5g46fy_9mPH6AihwUf5GW7aTJ=ecvmD0S266EKtNtweSOcg@mail.gmail.com> <16fe1cc0-5819-986d-9065-433a80783edb@linuxfoundation.org>
+In-Reply-To: <16fe1cc0-5819-986d-9065-433a80783edb@linuxfoundation.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 2 Apr 2021 14:25:00 -0700
+Message-ID: <CAGS_qxozjVfeOa42Y+v7dB0s6Ucvf8yHhRxDpficEJ9MGE-orw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] kunit: support failure from dynamic analysis tools
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Uriel Guajardo <urielguajardo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 02, 2021 at 08:32:21AM +0200, Christoph Hellwig wrote:
-> On Thu, Apr 01, 2021 at 03:13:20PM -0700, Kees Cook wrote:
-> > The sysfs interface to seq_file continues to be rather fragile
-> > (seq_get_buf() should not be used outside of seq_file), as seen with
-> > some recent exploits[1]. Move the seq_file buffer to the vmap area
-> > (while retaining the accounting flag), since it has guard pages that will
-> > catch and stop linear overflows. This seems justified given that sysfs's
-> > use of seq_file almost always already uses PAGE_SIZE allocations, has
-> > normally short-lived allocations, and is not normally on a performance
-> > critical path.
-> 
-> This looks completely weird to me.  In the end sysfs uses nothing
-> of the seq_file infrastructure, so why do we even pretend to use it?
-> Just switch sysfs_file_kfops_ro and sysfs_file_kfops_rw from using
-> ->seq_show to ->read and do the vmalloc there instead of pretending
-> this is a seq_file.
+On Fri, Apr 2, 2021 at 10:53 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 4/2/21 2:55 AM, Brendan Higgins wrote:
+> > On Thu, Mar 11, 2021 at 7:23 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >>
+> >> From: Uriel Guajardo <urielguajardo@google.com>
+> >>
+> >> Add a kunit_fail_current_test() function to fail the currently running
+> >> test, if any, with an error message.
+> >>
+> >> This is largely intended for dynamic analysis tools like UBSAN and for
+> >> fakes.
+> >> E.g. say I had a fake ops struct for testing and I wanted my `free`
+> >> function to complain if it was called with an invalid argument, or
+> >> caught a double-free. Most return void and have no normal means of
+> >> signalling failure (e.g. super_operations, iommu_ops, etc.).
+> >>
+> >> Key points:
+> >> * Always update current->kunit_test so anyone can use it.
+> >>    * commit 83c4e7a0363b ("KUnit: KASAN Integration") only updated it for
+> >>    CONFIG_KASAN=y
+> >>
+> >> * Create a new header <kunit/test-bug.h> so non-test code doesn't have
+> >> to include all of <kunit/test.h> (e.g. lib/ubsan.c)
+> >>
+> >> * Forward the file and line number to make it easier to track down
+> >> failures
+> >>
+> >> * Declare the helper function for nice __printf() warnings about mismatched
+> >> format strings even when KUnit is not enabled.
+> >>
+> >> Example output from kunit_fail_current_test("message"):
+> >> [15:19:34] [FAILED] example_simple_test
+> >> [15:19:34]     # example_simple_test: initializing
+> >> [15:19:34]     # example_simple_test: lib/kunit/kunit-example-test.c:24: message
+> >> [15:19:34]     not ok 1 - example_simple_test
+> >>
+> >> Co-developed-by: Daniel Latypov <dlatypov@google.com>
+> >> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> >> Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+> >> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> >
+> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> >
+>
+> Please run checkpatch on your patches in the future. I am seeing
+> a few checkpatch readability type improvements that can be made.
+>
+> Please make changes and send v2 with Brendan's Reviewed-by.
 
-As far as I can tell it's a result of kernfs using seq_file, but sysfs
-never converted all its callbacks to use seq_file.
+Thanks for the catch.
+checkpatch.pl --strict should now be happy (aside from complaining
+about line wrapping)
 
-> > Once seq_get_buf() has been removed (and all sysfs callbacks using
-> > seq_file directly), this change can also be removed.
-> 
-> And with sysfs out of the way I think kiling off the other few users
-> should be pretty easy as well.
+v5 here: https://lore.kernel.org/linux-kselftest/20210402212131.835276-1-dlatypov@google.com
 
-Let me look at switching to "read" ... it is a twisty maze. :)
+Note: Brendan didn't give an explicit Reviewed-by on the second patch,
+not sure if that was intentional.
 
--- 
-Kees Cook
+>
+> thanks,
+> -- Shuah
