@@ -2,168 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDAD3532D6
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Apr 2021 08:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CBF353428
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Apr 2021 15:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbhDCGiK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 3 Apr 2021 02:38:10 -0400
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:43892 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232140AbhDCGiI (ORCPT
+        id S236657AbhDCNeW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 3 Apr 2021 09:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230343AbhDCNeV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Apr 2021 02:38:08 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UUJ2NqA_1617431884;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0UUJ2NqA_1617431884)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 03 Apr 2021 14:38:04 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     ricardo.canuelo@collabora.com, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
-Subject: [PATCH v2] selftests/mincore: get readahead size for check_file_mmap()
-Date:   Sat,  3 Apr 2021 14:38:00 +0800
-Message-Id: <20210403063800.56278-1-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 3 Apr 2021 09:34:21 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0DCC0613E6;
+        Sat,  3 Apr 2021 06:34:17 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id t14so6681900ilu.3;
+        Sat, 03 Apr 2021 06:34:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VJp4D6U+YVHcyZ2m4PpfXIZzUzuqJ6Sl/X10+bQZIBc=;
+        b=a3TBbUvFzns2MCsfROJI0NUhmSQTS5MUQ6OpuFtBvkq1yKPFOLcnS9qTkHdqXrWm7l
+         Ug1yBU1UkyeNkIn10LHJQpJRvQ3xrKQCpZMkvgAPrSTn08bfPg0Uj7SaFgK04gxNZTWf
+         agTafj/dY7Kv+zyZM39BVmVaVDCEhg7xXeOmyZDswqN0h87V/iuCHQ7Tq2eczAqUJkv7
+         WjrRrf2f+iQ/+sc0INQW9BMlsUASkPhTrjNjLLUvosMBpfRwMYYII/77TzGCeyqOLZaQ
+         mX+68Pt8nSY356gPO3l2lvBpta1SoT9iYHvRFR5IvWgM0AcwtOi8/B0lAh+cqkzI5f6/
+         gHSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VJp4D6U+YVHcyZ2m4PpfXIZzUzuqJ6Sl/X10+bQZIBc=;
+        b=iM6xeGjtLeQDohiMR9wRtTXxVB8875fNs+WyYMiVDUwjYGD54Df+vFK53+2FeZGrYV
+         sGaLJZwp/8mbwUrB71oJFf/3jXxEGMuPfB1n3rI6d8TYWN/QodvOPvPUmVM0nhuHT27Y
+         Ew+UdlFqjbNUUSxyNMP/aStWLxUaR2VJV1Z9jRdESl7JcgApcZZDuL7xmzbXGI6NJJEq
+         4uj1lk3On7wqcvkVnqwPlC1RzmhwqYLan0eaIm745xI7XzipyUgN9XwU2Dng7HfRycek
+         3Qo7cd2JC9ARZaNu9AWDU+PF96Jnp8M5HoxrNu+vSNDfNFemTb0UR84dtZM1aAlYmm0n
+         S4ew==
+X-Gm-Message-State: AOAM532NnruJZnmrQ08lYbvZVbdwg4xY1pOKcU0M+GFSbXigUT7TByRl
+        ybuUXyhd88Av1Cuer0Lru3dU+LzYd9RRvtn+GjE=
+X-Google-Smtp-Source: ABdhPJydjLs7rBGgKGAm12yIF25CeQ48+Ys+nKLxtS9Gz/hpaVxDb3wIsNYdLAqZbijKnK/eqdn6bIcMNWEb9n4MWF4=
+X-Received: by 2002:a05:6e02:e10:: with SMTP id a16mr795805ilk.118.1617456857309;
+ Sat, 03 Apr 2021 06:34:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210328161055.257504-1-pctammela@mojatatu.com> <CAEf4BzZ+O3x9AksV6MGuicDQO+gObFCQQR7t6UK=RBhuSbOiZg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ+O3x9AksV6MGuicDQO+gObFCQQR7t6UK=RBhuSbOiZg@mail.gmail.com>
+From:   Pedro Tammela <pctammela@gmail.com>
+Date:   Sat, 3 Apr 2021 10:34:06 -0300
+Message-ID: <CAKY_9u0CQHmzA3YMWw24w-NbH8CK3d7Nt-jaB4EoyN7pK_fJUA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: add 'BPF_RB_MAY_WAKEUP' flag
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Pedro Tammela <pctammela@mojatatu.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Joe Stringer <joe@cilium.io>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The readahead size used to be 2MB, thus it's reasonable to set the file
-size as 4MB when checking check_file_mmap().
+Em qua., 31 de mar. de 2021 =C3=A0s 03:54, Andrii Nakryiko
+<andrii.nakryiko@gmail.com> escreveu:
+>
+> On Sun, Mar 28, 2021 at 9:11 AM Pedro Tammela <pctammela@gmail.com> wrote=
+:
+> >
+> > The current way to provide a no-op flag to 'bpf_ringbuf_submit()',
+> > 'bpf_ringbuf_discard()' and 'bpf_ringbuf_output()' is to provide a '0'
+> > value.
+> >
+> > A '0' value might notify the consumer if it already caught up in proces=
+sing,
+> > so let's provide a more descriptive notation for this value.
+> >
+> > Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+> > ---
+>
+> flags =3D=3D 0 means "no extra modifiers of behavior". That's default
+> adaptive notification. If you want to adjust default behavior, only
+> then you specify non-zero flags. I don't think anyone will bother
+> typing BPF_RB_MAY_WAKEUP for this, nor I think it's really needed. The
+> documentation update is nice (if no flags are specified notification
+> will be sent if needed), but the new "pseudo-flag" seems like an
+> overkill to me.
 
-However since commit c2e4cd57cfa1 ("block: lift setting the readahead
-size into the block layer"), readahead size could be as large as twice
-the io_opt, and thus the hardcoded file size no longer works.
-check_file_mmap() may report "Read-ahead pages reached the end of the
-file" when the readahead size actually exceeds the file size in this
-case.
+My intention here is to make '0' more descriptive.
+But if you think just the documentation update is enough, then I will
+remove the flag.
 
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
----
-chnages since v1:
-- add the test name "mincore" in the subject line
-- add the error message in commit message
-- rename @filesize to @file_size to keep a more consistent naming
-  convention
----
- .../selftests/mincore/mincore_selftest.c      | 57 +++++++++++++++----
- 1 file changed, 47 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
-index 5a1e85ff5d32..3ca542934080 100644
---- a/tools/testing/selftests/mincore/mincore_selftest.c
-+++ b/tools/testing/selftests/mincore/mincore_selftest.c
-@@ -15,6 +15,11 @@
- #include <string.h>
- #include <fcntl.h>
- #include <string.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <sys/ioctl.h>
-+#include <sys/sysmacros.h>
-+#include <sys/mount.h>
- 
- #include "../kselftest.h"
- #include "../kselftest_harness.h"
-@@ -195,10 +200,42 @@ TEST(check_file_mmap)
- 	int fd;
- 	int i;
- 	int ra_pages = 0;
-+	long ra_size, file_size;
-+	struct stat stats;
-+	dev_t devt;
-+	unsigned int major, minor;
-+	char devpath[32];
-+
-+	retval = stat(".", &stats);
-+	ASSERT_EQ(0, retval) {
-+		TH_LOG("Can't stat pwd: %s", strerror(errno));
-+	}
-+
-+	devt = stats.st_dev;
-+	major = major(devt);
-+	minor = minor(devt);
-+	snprintf(devpath, sizeof(devpath), "/dev/block/%u:%u", major, minor);
-+
-+	fd = open(devpath, O_RDONLY);
-+	ASSERT_NE(-1, fd) {
-+		TH_LOG("Can't open underlying disk %s", strerror(errno));
-+	}
-+
-+	retval = ioctl(fd, BLKRAGET, &ra_size);
-+	ASSERT_EQ(0, retval) {
-+		TH_LOG("Error ioctl with the underlying disk: %s", strerror(errno));
-+	}
-+
-+	/*
-+	 * BLKRAGET ioctl returns the readahead size in sectors (512 bytes).
-+	 * Make file_size large enough to contain the readahead window.
-+	 */
-+	ra_size *= 512;
-+	file_size = ra_size * 2;
- 
- 	page_size = sysconf(_SC_PAGESIZE);
--	vec_size = FILE_SIZE / page_size;
--	if (FILE_SIZE % page_size)
-+	vec_size = file_size / page_size;
-+	if (file_size % page_size)
- 		vec_size++;
- 
- 	vec = calloc(vec_size, sizeof(unsigned char));
-@@ -213,7 +250,7 @@ TEST(check_file_mmap)
- 			strerror(errno));
- 	}
- 	errno = 0;
--	retval = fallocate(fd, 0, 0, FILE_SIZE);
-+	retval = fallocate(fd, 0, 0, file_size);
- 	ASSERT_EQ(0, retval) {
- 		TH_LOG("Error allocating space for the temporary file: %s",
- 			strerror(errno));
-@@ -223,12 +260,12 @@ TEST(check_file_mmap)
- 	 * Map the whole file, the pages shouldn't be fetched yet.
- 	 */
- 	errno = 0;
--	addr = mmap(NULL, FILE_SIZE, PROT_READ | PROT_WRITE,
-+	addr = mmap(NULL, file_size, PROT_READ | PROT_WRITE,
- 			MAP_SHARED, fd, 0);
- 	ASSERT_NE(MAP_FAILED, addr) {
- 		TH_LOG("mmap error: %s", strerror(errno));
- 	}
--	retval = mincore(addr, FILE_SIZE, vec);
-+	retval = mincore(addr, file_size, vec);
- 	ASSERT_EQ(0, retval);
- 	for (i = 0; i < vec_size; i++) {
- 		ASSERT_EQ(0, vec[i]) {
-@@ -240,14 +277,14 @@ TEST(check_file_mmap)
- 	 * Touch a page in the middle of the mapping. We expect the next
- 	 * few pages (the readahead window) to be populated too.
- 	 */
--	addr[FILE_SIZE / 2] = 1;
--	retval = mincore(addr, FILE_SIZE, vec);
-+	addr[file_size / 2] = 1;
-+	retval = mincore(addr, file_size, vec);
- 	ASSERT_EQ(0, retval);
--	ASSERT_EQ(1, vec[FILE_SIZE / 2 / page_size]) {
-+	ASSERT_EQ(1, vec[file_size / 2 / page_size]) {
- 		TH_LOG("Page not found in memory after use");
- 	}
- 
--	i = FILE_SIZE / 2 / page_size + 1;
-+	i = file_size / 2 / page_size + 1;
- 	while (i < vec_size && vec[i]) {
- 		ra_pages++;
- 		i++;
-@@ -271,7 +308,7 @@ TEST(check_file_mmap)
- 		}
- 	}
- 
--	munmap(addr, FILE_SIZE);
-+	munmap(addr, file_size);
- 	close(fd);
- 	free(vec);
- }
--- 
-2.27.0
-
+>
+> >  include/uapi/linux/bpf.h                               | 8 ++++++++
+> >  tools/include/uapi/linux/bpf.h                         | 8 ++++++++
+> >  tools/testing/selftests/bpf/progs/ima.c                | 2 +-
+> >  tools/testing/selftests/bpf/progs/ringbuf_bench.c      | 2 +-
+> >  tools/testing/selftests/bpf/progs/test_ringbuf.c       | 2 +-
+> >  tools/testing/selftests/bpf/progs/test_ringbuf_multi.c | 2 +-
+> >  6 files changed, 20 insertions(+), 4 deletions(-)
+> >
+>
+> [...]
