@@ -2,148 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E985E3534FD
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Apr 2021 19:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3954353735
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Apr 2021 09:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbhDCRr3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 3 Apr 2021 13:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236819AbhDCRr2 (ORCPT
+        id S229689AbhDDHe1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 4 Apr 2021 03:34:27 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44654 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229675AbhDDHe0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Apr 2021 13:47:28 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7B8C0613E6;
-        Sat,  3 Apr 2021 10:47:26 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id e14so3849774plj.2;
-        Sat, 03 Apr 2021 10:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aMqC3q3yAP+PRhHyfHb6sOXU6iKAQ26G+msN6ctwe/U=;
-        b=MM8I/HCn9NjggsmbOVUE4dFRaa40dMCKk+N69/vwAtOjkg9EpPjsyAzNF7yGZhzSoH
-         bMzR0GYE2HeMvjKADEbh2po3MvsO09EQsd9OviK5O0ZvJxLuACuIHJ1QllINe/86dCNX
-         cESc1/5t4m+cZe5lyrNfHmbSBnEkTnKxLFduelrokyCGkjb10ldXREoFU4TANnqBjLCS
-         lFmv2MNsBn0yolCUFqxKHomdCtfYI2inorMaBqeZMY1jsZkkQMCMsbroHgaIHP8yE7jN
-         IdMNm25PZqHGxOl8J1fWR/0zUMayaM9YOQR7rl2ooa7yzk3alUbTL9KP6TVclBaHssYS
-         wT/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aMqC3q3yAP+PRhHyfHb6sOXU6iKAQ26G+msN6ctwe/U=;
-        b=j3u9zFNNYVe1Gviw+fGeIEYMwNWm760Luqr/pYLpJXShv7Q+n+BA2IZEm7lJGrzEBi
-         BXepf/KFgl/kP6sTzVdULMK3R++dpTvNSJAvOCckt9pURoImuEceu99KDEpiMZX8adwV
-         VeTO/4U2j9JHsPM2rLQ9SQh5mzbrw2MY5lpnkzOiJ29/VLkxN3hnVABI7w4OcwSL+NBJ
-         1IzKHwTvn0GB1xAbgPSA2x1nnaXbD0hI9ce9/nqSQaEmOvmukN8irYqzAwYNPwxGP6ID
-         m0fGidch1bbURo1H59w96t75Uboeef3RKFpRlUJkKcUggYhdaCX6WxcOF6wlTaE7qztz
-         4CQw==
-X-Gm-Message-State: AOAM531fAIl6hzmQYzeX2P+P6ULmZVlWjwIG8vl/zvVvSkZeAZtWuknT
-        2gtwvKz+tnbPMTpiR2pzL/Ht3gee2c4=
-X-Google-Smtp-Source: ABdhPJw98FxrUA+nG7Dgj63yP9uw4Ls/uaKtpJd0lUtudDmGb99lgUjMghgofjQLVwoS740Zg1zlSg==
-X-Received: by 2002:a17:90a:8a0f:: with SMTP id w15mr18919553pjn.200.1617472044863;
-        Sat, 03 Apr 2021 10:47:24 -0700 (PDT)
-Received: from ast-mbp ([2620:10d:c090:400::5:f671])
-        by smtp.gmail.com with ESMTPSA id f21sm10709658pfe.6.2021.04.03.10.47.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Apr 2021 10:47:24 -0700 (PDT)
-Date:   Sat, 3 Apr 2021 10:47:21 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
-Message-ID: <20210403174721.vg4wle327wvossgl@ast-mbp>
-References: <20210325120020.236504-4-memxor@gmail.com>
- <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
- <20210328080648.oorx2no2j6zslejk@apollo>
- <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
- <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
- <20210331094400.ldznoctli6fljz64@apollo>
- <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
- <20210402152743.dbadpgcmrgjt4eca@apollo>
- <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
- <20210402190806.nhcgappm3iocvd3d@apollo>
+        Sun, 4 Apr 2021 03:34:26 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1347XRKR142409;
+        Sun, 4 Apr 2021 03:34:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2R8reBzTetkARKhf+wUoL3rELP7Dnxr7IKA7hJpDfDs=;
+ b=ISI9H4Bf2li3WkVobfOXqVEbilXmV06xH1NDYUoXXhyOlg1o/1KBAKCCq6ZX4CQPWh1T
+ TobEJBOSQ9EXk1Two7Ka/SFXdDmfx/GYB65Xm3LiwW+Ej2nhyXVekCTBZAoy7uRPRzsp
+ KgBMFPbll9NUZFrL3aukaUV+mCT9I3QEcV/ZJLwQ+u2CmXZR5WHsK/DGhrMnriRihjgc
+ +5gm6StV5jdrzgcQ6Vkdsd3uT9bXBUh0jJPRzUFKmPsLQhX7ioj632u8DoO3emMIqEtq
+ sf6pQfRcJxGXRT8Ylupz6hOPSu2b033JOZ2DozV8AxkffgSKCMf3Up+RzipkCrsRi9TT +g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37q5p93e7g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 04 Apr 2021 03:34:17 -0400
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1347YHdr143347;
+        Sun, 4 Apr 2021 03:34:17 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37q5p93e74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 04 Apr 2021 03:34:16 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 1347Rtov000606;
+        Sun, 4 Apr 2021 07:34:15 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 37q2n2r714-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 04 Apr 2021 07:34:14 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1347YClC45351374
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 4 Apr 2021 07:34:12 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0A84AE045;
+        Sun,  4 Apr 2021 07:34:12 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CEC6AE051;
+        Sun,  4 Apr 2021 07:34:11 +0000 (GMT)
+Received: from [9.85.90.174] (unknown [9.85.90.174])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun,  4 Apr 2021 07:34:10 +0000 (GMT)
+Subject: Re: [RFC v2 2/2] selftest/cpuidle: Add support for cpuidle latency
+ measurement
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com
+References: <20210401114504.13466-1-psampat@linux.ibm.com>
+ <20210401114504.13466-3-psampat@linux.ibm.com>
+ <CAAYoRsWKw2eXXoXGhdaM2pqhvDGXz8o=hV5K5HmYaZvetxv96w@mail.gmail.com>
+From:   Pratik Sampat <psampat@linux.ibm.com>
+Message-ID: <b6d19fec-d9c9-817f-0ba1-4445d53e9616@linux.ibm.com>
+Date:   Sun, 4 Apr 2021 13:04:10 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210402190806.nhcgappm3iocvd3d@apollo>
+In-Reply-To: <CAAYoRsWKw2eXXoXGhdaM2pqhvDGXz8o=hV5K5HmYaZvetxv96w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: da90MTzAnjH_JKePqHot8qQuC7FFtz8X
+X-Proofpoint-GUID: 2Zfd0OdT5tlkWOm_GLjKbCPRcOfwTw71
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-04-04_01:2021-04-01,2021-04-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 adultscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104030000 definitions=main-2104040050
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 03, 2021 at 12:38:06AM +0530, Kumar Kartikeya Dwivedi wrote:
-> On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov wrote:
-> > On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> > > [...]
-> >
-> > All of these things are messy because of tc legacy. bpf tried to follow tc style
-> > with cls and act distinction and it didn't quite work. cls with
-> > direct-action is the only
-> > thing that became mainstream while tc style attach wasn't really addressed.
-> > There were several incidents where tc had tens of thousands of progs attached
-> > because of this attach/query/index weirdness described above.
-> > I think the only way to address this properly is to introduce bpf_link style of
-> > attaching to tc. Such bpf_link would support ingress/egress only.
-> > direction-action will be implied. There won't be any index and query
-> > will be obvious.
-> 
-> Note that we already have bpf_link support working (without support for pinning
-> ofcourse) in a limited way. The ifindex, protocol, parent_id, priority, handle,
-> chain_index tuple uniquely identifies a filter, so we stash this in the bpf_link
-> and are able to operate on the exact filter during release.
+Hello Doug,
 
-Except they're not unique. The library can stash them, but something else
-doing detach via iproute2 or their own netlink calls will detach the prog.
-This other app can attach to the same spot a different prog and now
-bpf_link__destroy will be detaching somebody else prog.
+Thanks for your review.
 
-> > So I would like to propose to take this patch set a step further from
-> > what Daniel said:
-> > int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
-> > and make this proposed api to return FD.
-> > To detach from tc ingress/egress just close(fd).
-> 
-> You mean adding an fd-based TC API to the kernel?
+On 02/04/21 4:57 am, Doug Smythies wrote:
+> Hi Pratik,
+>
+> On Thu, Apr 1, 2021 at 4:45 AM Pratik Rajesh Sampat
+> <psampat@linux.ibm.com> wrote:
+> ...
+>
+>> To run this test specifically:
+>> $ make -C tools/testing/selftests TARGETS="cpuidle" run_tests
+> I have not become any smarter than I was with version 1,
+> and still assumed that the "$" meant regular user.
+> Please put it as "#" or separate the two steps, compile and run.
 
-yes.
+Apologies, I missed incorporating the root user discussion we had.
+I'll add a sudo past the "$" symbol.
 
-> > The user processes will not conflict with each other and will not accidently
-> > detach bpf program that was attached by another user process.
-> > Such api will address the existing tc query/attach/detach race race conditions.
-> 
-> Hmm, I think we do solve the race condition by returning the id. As long as you
-> don't misuse the interface and go around deleting filters arbitrarily (i.e. only
-> detach using the id), programs won't step over each other's filters. Storing the
-> id from the netlink response received during detach also eliminates any
-> ambigiuity from probing through get_info after attach. Same goes for actions,
-> and the same applies to the bpf_link returning API (which stashes id/index).
+>> There are a few optinal arguments too that the script can take
+> optional
+>
+> Suggest to also specifically mention how to run without re-compile,
+>
+> # ./cpuidle.sh -v
 
-There are plenty of tools and libraries out there that do attach/detach of bpf
-to tc. Everyone is not going to convert to this new libbpf api overnight.
-So 'miuse of the interface' is not a misuse. It's a reality that is going to keep
-happening unless the kernel guarantees ownership of the attachment via FD.
+Sure thing, I'll add a comment specifying this.
 
-> The only advantage of fd would be the possibility of pinning it, and extending
-> lifetime of the filter.
+> Note also that the test still leaves all idle states disabled when done.
 
-Pinning is one of the advantages. The main selling point of FD is ownership
-of the attachment.
+Yes, I missed out enabling all the idle states after the tests are done.
+I'll spin a new version where I enable idle states at the end of the experiment
+so that the system stays coherent.
+
+>>          [-h <help>]
+>>          [-i <run timer tests>]
+>>          [-m <location of the module>]
+>>          [-o <location of the output>]
+>>          [-v <verbose> (run on all cpus)]
+>> Default Output location in: tools/testing/selftest/cpuidle/cpuidle.log
+> ...
+>
+>> +cpu_is_online()
+>> +{
+>> +       cpu=$1
+>> +       if [ ! -f "/sys/devices/system/cpu/cpu$cpu/online" ]; then
+>> +               echo 0
+> incorrect. should be:
+>
+>> +               echo 1
+
+Right! Thanks for catching this.
+
+> ... Doug
+
+Thank you,
+Pratik
+
