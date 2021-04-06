@@ -2,156 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CE63558DA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 18:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380C3355A63
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 19:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346268AbhDFQJP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Apr 2021 12:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
+        id S236342AbhDFR3X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Apr 2021 13:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346246AbhDFQJM (ORCPT
+        with ESMTP id S232752AbhDFR3W (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Apr 2021 12:09:12 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76FFC06174A
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Apr 2021 09:09:04 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id y32so7517220pga.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Apr 2021 09:09:04 -0700 (PDT)
+        Tue, 6 Apr 2021 13:29:22 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E91C061756
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Apr 2021 10:29:13 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id w2so10606079qts.18
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Apr 2021 10:29:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4a/4YHv3JxQpEzv09S9kusNf9ICn+oYA1ZctOwQOXqY=;
-        b=rPv/WPI61zJvR+SqeD/PRp7WZPQP1azAMVLLxsGmCg9WwJ6GYAEv0dJivPlEOOcrFr
-         HUIwY60rXdiDjDETsyDc8s77pIyU2BeB97Ty9Eo/xI3skX2FKW6xTv2vJ6R5mXyTjMlZ
-         vbQiN+xdFD2TJ/TpayLtC2CwkRSEJ9InmUmX9e2WkAcmEm2mCyYu+YBksoBHaII87XOh
-         3wXn8ILoPEDnwofbjwneHEkX+k8H+vZ0AAV4/T+u66gAZVmnahqjaJVYLq0jxT7Gd8xv
-         2/6SvqpDy9Cd7eXZBtlnNfsv8P15w8iBLW4I2lYWPh2QHuTbryA319hwOobBNhL39n6+
-         N26A==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=WY0464vhNIAqC43+lzSsh1rIIOgxPL3xjkkDU85detM=;
+        b=oZ47kUX5UpS/DRNaxvnO4zZQuUVqPvuA8SmZoN2qvnLnvGH5ndNl4e3FnQuzOo1Cep
+         NwSl3wscmcWjKwFetit7h0p4snRkgV6WQ3eiaZuSWLTrMC2PEkzXtsRJO6iZCAIX/lsc
+         r9ZyON6I3Wehbn1RvprrziaZ68DmiH/Jp6ONZFM4nEXzTU0rx8NGylKh3oSoM0KsxECT
+         UQ1hkIR3H2QXHTJ8uv6Iifwl5JQ4FgoO/AHzDtOD2jsgu8RgEOW4WTa8hZ4GigzEgOYw
+         3qp6BJpOJMRpmzeuMbryjoYond/h/TzNC4cvHQtTF/RHJiKpwvISsDrK1DChn0OpEZ7x
+         OEtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4a/4YHv3JxQpEzv09S9kusNf9ICn+oYA1ZctOwQOXqY=;
-        b=uHrNk+/3ZI5bGqfTlu67Tdxqhh9TY9lIBey3nBdjUBwS+trg6/jw1uYY8LUPUFSW21
-         o8otJlp+xlQrbev8yu0eMbyogYtEQzG58SYgUrazyuYAXWJF1by9BqFRkWVpTOSEn0HP
-         rLPKQXmnWv2+hSHttEU85yJRN4PCUFep2Qsn2XZwlWrXXj8s2t0Yq0obeE/itvD/4SgQ
-         bS/k8pIYqhOuFxnzQsVaJdTdlNSgP8eAxUXOHA72E6jqYhvpxkkZv6f8Ajx6KGYZCl9C
-         LrgRNd8rqR1npM3Rx1A0Fd7EbIvUqNkAt8PZ3MGlYE2EIqIWbwbejUiDN/QM7Lsq0KYR
-         mbXg==
-X-Gm-Message-State: AOAM532jyJNZniyVOkEbtvwSDZReWeZB0SBx0Na92dYTPo+F7woA1T0V
-        qDQFyjVETnsGiQT4m/t6jywNoQ==
-X-Google-Smtp-Source: ABdhPJx1YgZHW/piOT0X4kjZvHal1VF7O1qAiZkkNs2f/l+keI/fNoptH0eWbnXx1/x5zT0YD1LPMg==
-X-Received: by 2002:a63:ea50:: with SMTP id l16mr28420726pgk.70.1617725344407;
-        Tue, 06 Apr 2021 09:09:04 -0700 (PDT)
-Received: from google.com (240.111.247.35.bc.googleusercontent.com. [35.247.111.240])
-        by smtp.gmail.com with ESMTPSA id a21sm2906605pfo.189.2021.04.06.09.09.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 09:09:03 -0700 (PDT)
-Date:   Tue, 6 Apr 2021 16:09:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        Andrew Jones <drjones@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] KVM: x86: Fix a spurious -E2BIG in
- KVM_GET_EMULATED_CPUID
-Message-ID: <YGyHnLXhV3Iy/AtE@google.com>
-References: <20210406082642.20115-1-eesposit@redhat.com>
- <20210406082642.20115-2-eesposit@redhat.com>
- <87k0pfcx4b.fsf@vitty.brq.redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k0pfcx4b.fsf@vitty.brq.redhat.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=WY0464vhNIAqC43+lzSsh1rIIOgxPL3xjkkDU85detM=;
+        b=uXMvvlyscZqANd19PBRnPoV61g19XHdNKoWAOsyEylW9XoFaY6Ai/ZkmFjVRHYb+uw
+         ustSOdGLcxmi3j7Q5258ALlyJsPd3T5TDCGd6O2ZTzbA18+MnHMnVc7rPMEmYfX444Ka
+         gYWtbyE8/3bBXvd1RXymxLlfOvcGdzN+9PTUIK9C/caWWPx9/RBJk1sRaE1ZWq7wE6dH
+         5/vneJN0YLp57EWA3X2of3UHcXKB1/btleSyD/0xlsyOGOSg5CEjA03YT4F09K5QdV5/
+         IUkXv5Eiqvw9EpssCzev0RKOHwd233jHKagvY1lP1qRXs45XhZUHPNQRQzIfMWH3Q8Jn
+         +GiQ==
+X-Gm-Message-State: AOAM530ESKH5bg+Ukeszq7S0oOFfKkELdpaRo50mGp8OS6+Mel7GWOnL
+        pIfSAd1vc+R5W9w09egEXEpCYU+x3KHGbg==
+X-Google-Smtp-Source: ABdhPJxdmWDI96bW/cZQgF/mseMZzpySOdCyNYQZi+codgvKD9VoLUMuszsRysUf4TqmolAWryPCgaBvC44y2A==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:f46d:9fde:7b0b:e01a])
+ (user=dlatypov job=sendgmr) by 2002:a05:6214:d65:: with SMTP id
+ 5mr29702299qvs.56.1617730152184; Tue, 06 Apr 2021 10:29:12 -0700 (PDT)
+Date:   Tue,  6 Apr 2021 10:29:01 -0700
+Message-Id: <20210406172901.1729216-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
+Subject: [PATCH] kunit: fix -Wunused-function warning for __kunit_fail_current_test
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, sfr@canb.auug.org.au,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 06, 2021, Vitaly Kuznetsov wrote:
-> Emanuele Giuseppe Esposito <eesposit@redhat.com> writes:
-> 
-> > When retrieving emulated CPUID entries, check for an insufficient array
-> > size if and only if KVM is actually inserting an entry.
-> > If userspace has a priori knowledge of the exact array size,
-> > KVM_GET_EMULATED_CPUID will incorrectly fail due to effectively requiring
-> > an extra, unused entry.
-> >
-> > Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-> > ---
-> >  arch/x86/kvm/cpuid.c | 33 ++++++++++++++++-----------------
-> >  1 file changed, 16 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> > index 6bd2f8b830e4..27059ddf9f0a 100644
-> > --- a/arch/x86/kvm/cpuid.c
-> > +++ b/arch/x86/kvm/cpuid.c
-> > @@ -567,34 +567,33 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
-> >  
-> >  static int __do_cpuid_func_emulated(struct kvm_cpuid_array *array, u32 func)
-> >  {
-> > -	struct kvm_cpuid_entry2 *entry;
-> > -
-> > -	if (array->nent >= array->maxnent)
-> > -		return -E2BIG;
-> > +	struct kvm_cpuid_entry2 entry;
-> >  
-> > -	entry = &array->entries[array->nent];
-> > -	entry->function = func;
-> > -	entry->index = 0;
-> > -	entry->flags = 0;
-> > +	memset(&entry, 0, sizeof(entry));
-> > +	entry.function = func;
-> >  
-> >  	switch (func) {
-> >  	case 0:
-> > -		entry->eax = 7;
-> > -		++array->nent;
-> > +		entry.eax = 7;
-> >  		break;
-> >  	case 1:
-> > -		entry->ecx = F(MOVBE);
-> > -		++array->nent;
-> > +		entry.ecx = F(MOVBE);
-> >  		break;
-> >  	case 7:
-> > -		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
-> > -		entry->eax = 0;
-> > -		entry->ecx = F(RDPID);
-> > -		++array->nent;
-> > -	default:
-> > +		entry.flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
-> > +		entry.eax = 0;
-> 
-> Nitpick: there's no need to set entry.eax = 0 as the whole structure was
-> zeroed. Also, '|=' for flags could be just '='.
+When CONFIG_KUNIT is not enabled, __kunit_fail_current_test() an empty
+static function.
 
-Agreed on dropping "entry.eax = 0".  I could go either way on flags; I do like
-that the "|=" is consistent with do_host_cpuid().
+But GCC complains about unused static functions, *unless* they're static inline.
+So add inline to make GCC happy.
 
-> > +		entry.ecx = F(RDPID);
-> >  		break;
-> > +	default:
-> > +		goto out;
-> >  	}
-> >  
-> > +	if (array->nent >= array->maxnent)
-> > +		return -E2BIG;
-> > +
-> > +	memcpy(&array->entries[array->nent++], &entry, sizeof(entry));
-> > +
-> > +out:
-> >  	return 0;
-> >  }
-> 
-> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> 
-> -- 
-> Vitaly
-> 
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Fixes: 359a376081d4 ("kunit: support failure from dynamic analysis tools")
+---
+ include/kunit/test-bug.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
+index ce6f6edc7801..5fc58081d511 100644
+--- a/include/kunit/test-bug.h
++++ b/include/kunit/test-bug.h
+@@ -19,8 +19,8 @@ extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
+ 
+ #else
+ 
+-static __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
+-						    const char *fmt, ...)
++static inline __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
++							    const char *fmt, ...)
+ {
+ }
+ 
+
+base-commit: 359a376081d4fadfb073e3ddeb6bd6dc94d98341
+-- 
+2.31.0.208.g409f899ff0-goog
+
