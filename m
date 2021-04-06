@@ -2,284 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD5F355BDE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 20:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E57355BF2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 21:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237557AbhDFSzm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Apr 2021 14:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
+        id S234140AbhDFTFu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Apr 2021 15:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240934AbhDFSzV (ORCPT
+        with ESMTP id S230391AbhDFTFu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Apr 2021 14:55:21 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E311C06175F;
-        Tue,  6 Apr 2021 11:55:12 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id h3so4709006qvr.10;
-        Tue, 06 Apr 2021 11:55:12 -0700 (PDT)
+        Tue, 6 Apr 2021 15:05:50 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D668C06174A;
+        Tue,  6 Apr 2021 12:05:42 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id p10so2901350pld.0;
+        Tue, 06 Apr 2021 12:05:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=HlGPj7kENQWAqZAKMcG5RxVYRrzRUc0vMrF8iaMnLfo=;
-        b=bk4zOtPHTFbM3C4MmxJA44HpEK/h0U8kMnIWkHVb01gVOaL6tGncyPMUCGy7TNP241
-         iNydqR7X//mdd8oK57i2nCkHVkEuWVYLUM5bPefSyHaBCdS98osmGv9mefetlNWMUAxW
-         +PSy5fiVRbZMRhixiV7iD1p7+LvpesAUT0KdCdbernugvABwefa2adAPMJI75LSxc+a2
-         01dYmtt8ohJo5hamN0tkJk7KWFx6UcZzBjJwuEcG9/M2mrhyZawadH9OLR2+ugoINH6Q
-         4JXnIUmli3V0mFL9uW4EyUZLzsZqJEzYsdaC033uDv4fkAVbfAIz30zCy2NrmULBOL24
-         1aAA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fR7uBE+KZgKRNGirNt0J9yqoqy113eytjrhGmdX8vhc=;
+        b=TojC3B0s7I3+/nfSWs80/9xaTunkHwnkKDBu0qMg6TLU4XRxHMsgSdErm3Rmk3JsJU
+         mryDZ+lYvgfSbnj2+2DV+tNy2hSnZzx9JSrwv05R4WdMAhs0ldJA89oJuEcMaEwRndqS
+         MYny9f2VB0fXOvTK4N4sVcpxeE/Rj7Ws45TRD7hgPxX5eQIYECZ56yD1nAnqoFnWWeL1
+         eGCWd7lCWR1nvBSe7EnoOCkg/OH0bhhpF9SykB/kkPf0+nJ7MSvuSYGOY7shixqk36UC
+         Dj+tJMc9KRxOBwmpf6HwkJQicZBtHFvS1JDVL1le3a1DwLNXmIHGHzqKgTLlur+jthEJ
+         5ZcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HlGPj7kENQWAqZAKMcG5RxVYRrzRUc0vMrF8iaMnLfo=;
-        b=k/Bu+UvW7Aqhl2p7ix9EQsvJO+tbCZp9ExqvCejZr/Y8TnrmrCeZOGu2vzY6Uc9Sa5
-         d2HHeVJ2QCOYxY1PhgD8afnYWf2F9Is2YYUwrhtOOJHb0CTjQQtIKlXeJYnaOaSGONJT
-         1QY37ZqHZOnUHKFoRtxa+BXp2gVHqSzGQK4IkNiBZnlf5uMzTNzJQY4yRZMbquspctIe
-         atlO2AHrwkCpccxY3kHVJxiK2GUCzP7JVPZBXtnhkjJDJJHVye/dZOlWrTM+xt69HxoA
-         EsKeBZhrfkPQfG8EIIRtSKYP5Y2F+YtsXX9dbF6f8wL794huwMa1JRk0zwxgBKOzb5CF
-         5GbQ==
-X-Gm-Message-State: AOAM533GCmyHLAs1sGbXN199AVzWEc8sEHetJooGxW7UUg2UHTQSKZvC
-        unkdXIrJsQadtk1hDiu4Ogs=
-X-Google-Smtp-Source: ABdhPJxS7wJM3BeTs3M/mWyc8zOXo/JKoDwJDp6j1bTrPJ+Bzipdv+w5T59b1svPm+pRtfJ8q1U+vw==
-X-Received: by 2002:a05:6214:f0d:: with SMTP id gw13mr30093548qvb.33.1617735311961;
-        Tue, 06 Apr 2021 11:55:11 -0700 (PDT)
-Received: from localhost.localdomain ([179.218.4.27])
-        by smtp.gmail.com with ESMTPSA id a19sm16581652qkl.126.2021.04.06.11.55.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fR7uBE+KZgKRNGirNt0J9yqoqy113eytjrhGmdX8vhc=;
+        b=aodHXExjcJa1UBJzDo74A5a/hp4E2KMQgyZEk3RbMjZY9B6LgkjAUEukUKobmzxN/W
+         ts7IqeeqeV4WvyBEEG9UrJKjf7Z/V03Jc3z7CDokOkdq/BRfT4xpoD7D1g5P5Tz+Pz9Y
+         ww0vLStlrsYKbr2nqPVFImX5PGYo4KAiGTdO6HdHwA0EcOyl1FdJWZzhTZUVfFuyT17S
+         neLTCOuYKZaZp0Jm9kO5KIUF6hjs5o/zJYNNOoAubOsJIQswLsW9TTwqJQq+awStiSC5
+         YPu91F1yu7UD6kIw3tqN5ODkkbJyUWyUTKlsl8U956lJHbB0QnPJ2UujkLgD/0heq6lK
+         cuAw==
+X-Gm-Message-State: AOAM530ZjUeiCZgK+I5WHVwkuvRvmoxzfiRc7XeJKwCmxBcWUNA+3VHZ
+        WIyVoo12X0eUuunamjxouCE=
+X-Google-Smtp-Source: ABdhPJwlP3QmABh4/nIwmiUI0ymstaWn3umCEZUef0OvuVGmL6HHCgt6yYD9gjyKppqKOMZS8rnNyw==
+X-Received: by 2002:a17:90a:f2cc:: with SMTP id gt12mr5723370pjb.136.1617735941762;
+        Tue, 06 Apr 2021 12:05:41 -0700 (PDT)
+Received: from localhost ([47.9.169.206])
+        by smtp.gmail.com with ESMTPSA id l10sm18453586pfc.125.2021.04.06.12.05.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 11:55:11 -0700 (PDT)
-From:   Pedro Tammela <pctammela@gmail.com>
-X-Google-Original-From: Pedro Tammela <pctammela@mojatatu.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        Tue, 06 Apr 2021 12:05:41 -0700 (PDT)
+Date:   Wed, 7 Apr 2021 00:35:38 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        David Verbeiren <david.verbeiren@tessares.net>,
-        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
-        bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
-        linux-kernel@vger.kernel.org (open list),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v2 3/3] bpf: selftests: update array map tests for per-cpu batched ops
-Date:   Tue,  6 Apr 2021 15:53:54 -0300
-Message-Id: <20210406185400.377293-4-pctammela@mojatatu.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210406185400.377293-1-pctammela@mojatatu.com>
-References: <20210406185400.377293-1-pctammela@mojatatu.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+Message-ID: <20210406190538.fdqo7g2tzolgckpy@apollo>
+References: <20210325120020.236504-1-memxor@gmail.com>
+ <20210325120020.236504-4-memxor@gmail.com>
+ <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+ <20210328080648.oorx2no2j6zslejk@apollo>
+ <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
+ <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
+ <20210331094400.ldznoctli6fljz64@apollo>
+ <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
+ <20210402152743.dbadpgcmrgjt4eca@apollo>
+ <CAEf4Bzbk9t9Cx4DONzNu8reP+Fkdq8WA90syqesgQYgAQyCaLw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4Bzbk9t9Cx4DONzNu8reP+Fkdq8WA90syqesgQYgAQyCaLw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Follows the same logic as the hashtable tests.
+On Mon, Apr 05, 2021 at 10:51:09PM IST, Andrii Nakryiko wrote:
+> > [...]
+>
+> if _block variant is just a special ifindex value, then it should be
+> fine for users to know such a detail (we can leave a comment
+> mentioning this specifically), especially given it's not a very
+> popular thing. Almost doubling amount of APIs just for this doesn't
+> make much sense, IMO.
+>
 
-Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
----
- .../bpf/map_tests/array_map_batch_ops.c       | 114 +++++++++++++-----
- 1 file changed, 85 insertions(+), 29 deletions(-)
+Ok.
 
-diff --git a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
-index e42ea1195d18..e71b5fbf41b4 100644
---- a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
-+++ b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
-@@ -7,35 +7,68 @@
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
- 
-+#include <bpf_util.h>
- #include <test_maps.h>
- 
-+typedef BPF_PERCPU_TYPE(int) pcpu_map_value_t;
-+
- static void map_batch_update(int map_fd, __u32 max_entries, int *keys,
--			     int *values)
-+			     void *values, bool is_pcpu)
- {
--	int i, err;
-+	unsigned int nr_cpus = bpf_num_possible_cpus();
-+	pcpu_map_value_t *v;
-+	int i, j, err;
-+	int offset = 0;
- 	DECLARE_LIBBPF_OPTS(bpf_map_batch_opts, opts,
- 		.elem_flags = 0,
- 		.flags = 0,
- 	);
- 
-+	if (is_pcpu)
-+		v = values;
-+
- 	for (i = 0; i < max_entries; i++) {
- 		keys[i] = i;
--		values[i] = i + 1;
-+		if (is_pcpu)
-+			for (j = 0; j < nr_cpus; j++)
-+				bpf_percpu(v + offset, j) = i + 1 + j;
-+		else
-+			((int *)values)[i] = i + 1;
-+		offset += nr_cpus;
- 	}
- 
- 	err = bpf_map_update_batch(map_fd, keys, values, &max_entries, &opts);
- 	CHECK(err, "bpf_map_update_batch()", "error:%s\n", strerror(errno));
- }
- 
--static void map_batch_verify(int *visited, __u32 max_entries,
--			     int *keys, int *values)
-+static void map_batch_verify(int *visited, __u32 max_entries, int *keys,
-+			     void *values, bool is_pcpu)
- {
--	int i;
-+	unsigned int nr_cpus = bpf_num_possible_cpus();
-+	pcpu_map_value_t *v;
-+	int i, j;
-+	int offset = 0;
-+
-+	if (is_pcpu)
-+		v = values;
- 
- 	memset(visited, 0, max_entries * sizeof(*visited));
- 	for (i = 0; i < max_entries; i++) {
--		CHECK(keys[i] + 1 != values[i], "key/value checking",
--		      "error: i %d key %d value %d\n", i, keys[i], values[i]);
-+		if (is_pcpu) {
-+			for (j = 0; j < nr_cpus; j++) {
-+				int value = bpf_percpu(v + offset, j);
-+				CHECK(keys[i] + j + 1 != value,
-+				      "key/value checking",
-+				      "error: i %d j %d key %d value %d\n", i,
-+				      j, keys[i], value);
-+			}
-+		} else {
-+			CHECK(keys[i] + 1 != ((int *)values)[i],
-+			      "key/value checking",
-+			      "error: i %d key %d value %d\n", i, keys[i],
-+			      ((int *)values)[i]);
-+		}
-+		offset += nr_cpus;
- 		visited[i] = 1;
- 	}
- 	for (i = 0; i < max_entries; i++) {
-@@ -44,19 +77,22 @@ static void map_batch_verify(int *visited, __u32 max_entries,
- 	}
- }
- 
--void test_array_map_batch_ops(void)
-+void __test_map_lookup_and_update_batch(bool is_pcpu)
- {
-+	unsigned int nr_cpus = bpf_num_possible_cpus();
- 	struct bpf_create_map_attr xattr = {
- 		.name = "array_map",
--		.map_type = BPF_MAP_TYPE_ARRAY,
-+		.map_type = is_pcpu ? BPF_MAP_TYPE_PERCPU_ARRAY :
-+				      BPF_MAP_TYPE_ARRAY,
- 		.key_size = sizeof(int),
- 		.value_size = sizeof(int),
- 	};
--	int map_fd, *keys, *values, *visited;
-+	int map_fd, *keys, *visited;
- 	__u32 count, total, total_success;
- 	const __u32 max_entries = 10;
- 	__u64 batch = 0;
--	int err, step;
-+	int err, step, value_size;
-+	void *values;
- 	DECLARE_LIBBPF_OPTS(bpf_map_batch_opts, opts,
- 		.elem_flags = 0,
- 		.flags = 0,
-@@ -67,22 +103,24 @@ void test_array_map_batch_ops(void)
- 	CHECK(map_fd == -1,
- 	      "bpf_create_map_xattr()", "error:%s\n", strerror(errno));
- 
--	keys = malloc(max_entries * sizeof(int));
--	values = malloc(max_entries * sizeof(int));
--	visited = malloc(max_entries * sizeof(int));
-+	if (is_pcpu)
-+		value_size = sizeof(pcpu_map_value_t) * nr_cpus;
-+	else
-+		value_size = sizeof(int);
-+
-+	keys = malloc(max_entries * sizeof(*keys));
-+	values = calloc(max_entries, value_size);
-+	visited = malloc(max_entries * sizeof(*visited));
- 	CHECK(!keys || !values || !visited, "malloc()", "error:%s\n",
- 	      strerror(errno));
- 
--	/* populate elements to the map */
--	map_batch_update(map_fd, max_entries, keys, values);
--
- 	/* test 1: lookup in a loop with various steps. */
- 	total_success = 0;
- 	for (step = 1; step < max_entries; step++) {
--		map_batch_update(map_fd, max_entries, keys, values);
--		map_batch_verify(visited, max_entries, keys, values);
-+		map_batch_update(map_fd, max_entries, keys, values, is_pcpu);
-+		map_batch_verify(visited, max_entries, keys, values, is_pcpu);
- 		memset(keys, 0, max_entries * sizeof(*keys));
--		memset(values, 0, max_entries * sizeof(*values));
-+		memset(values, 0, max_entries * value_size);
- 		batch = 0;
- 		total = 0;
- 		/* iteratively lookup/delete elements with 'step'
-@@ -91,10 +129,10 @@ void test_array_map_batch_ops(void)
- 		count = step;
- 		while (true) {
- 			err = bpf_map_lookup_batch(map_fd,
--						total ? &batch : NULL, &batch,
--						keys + total,
--						values + total,
--						&count, &opts);
-+						   total ? &batch : NULL,
-+						   &batch, keys + total,
-+						   values + total * value_size,
-+						   &count, &opts);
- 
- 			CHECK((err && errno != ENOENT), "lookup with steps",
- 			      "error: %s\n", strerror(errno));
-@@ -108,7 +146,7 @@ void test_array_map_batch_ops(void)
- 		CHECK(total != max_entries, "lookup with steps",
- 		      "total = %u, max_entries = %u\n", total, max_entries);
- 
--		map_batch_verify(visited, max_entries, keys, values);
-+		map_batch_verify(visited, max_entries, keys, values, is_pcpu);
- 
- 		total_success++;
- 	}
-@@ -116,9 +154,27 @@ void test_array_map_batch_ops(void)
- 	CHECK(total_success == 0, "check total_success",
- 	      "unexpected failure\n");
- 
--	printf("%s:PASS\n", __func__);
--
- 	free(keys);
--	free(values);
- 	free(visited);
-+
-+	if (!is_pcpu)
-+		free(values);
-+}
-+
-+void array_map_batch_ops(void)
-+{
-+	__test_map_lookup_and_update_batch(false);
-+	printf("test_%s:PASS\n", __func__);
-+}
-+
-+void array_percpu_map_batch_ops(void)
-+{
-+	__test_map_lookup_and_update_batch(true);
-+	printf("test_%s:PASS\n", __func__);
-+}
-+
-+void test_array_map_batch_ops(void)
-+{
-+	array_map_batch_ops();
-+	array_percpu_map_batch_ops();
- }
--- 
-2.25.1
+>
+> If we know that we need variant with options, I'd vote for having just
+> one bpf_tc_attach() API which always takes options. Passing NULL for
+> opts is simple, no need for two APIs, I think.
+>
 
+Ack.
+
+>
+> Which parts of that id struct is the data that caller might not know
+> or can't know? Is it handle and chain_index? Or just one of them?
+> Or?... If there is something that has to be returned back, I'd keep
+> only that, instead of returning 6+ fields, most of which user should
+> already know.
+>
+
+The user will know ifindex and parent_id, and perhaps protocol (it would be
+ETH_P_ALL if they don't supply one by default). Other fields like handle,
+priority and chain_index can all be kernel assigned, so keeping those still
+makes sense. I'll change this in v2.
+
+--
+Kartikeya
