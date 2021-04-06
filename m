@@ -2,171 +2,582 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C565355F17
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Apr 2021 00:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A603355FB6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Apr 2021 01:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244057AbhDFWvh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Apr 2021 18:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344565AbhDFWvX (ORCPT
+        id S1344736AbhDFXuJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Apr 2021 19:50:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45520 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344718AbhDFXuE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Apr 2021 18:51:23 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E51DC061760
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Apr 2021 15:51:14 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id t5so21700741ybc.18
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Apr 2021 15:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=IOyxvbKPk8Cp2/x/ErG6esc4l62olFKQEwMahR274MA=;
-        b=XCHcGFbcOvLlG/lOAuH+0uqAFmHoJwDmht8Gi7oHEOyMA5J6LGk9F8B/cBR2kxyN2x
-         Di9uawIPvx/9VyjQ/1k8ESjrXI9lGgAqn8JLYOU1qjCR8xi7i9Ja2I/6Y6+r76aNe5Hl
-         Mi4yCic5y8LqkicvOm6ukbk7q9/fCqcECAr5IgG8LGx/QZR2bM7fXCo407vPXLob7Ixx
-         HcjFOi4IXHrg6iQ8AIQGAOEk2OPlMKkMahluiAO/wXtOXpS1DLafmZhkJge3NnzqCWun
-         XIvu8qh5gt0WDSXRVtj8kuLBZ2tcAU94LduA9Yfbt+o3Ei5+mw7KHgjxQO61CfPSkb4v
-         DG3w==
+        Tue, 6 Apr 2021 19:50:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617752994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iK4YEOPzox19vegpXUSBHH0PF7zuoloKdQL4StFn8Jc=;
+        b=FvhotwCCa/RfWu1qne69KVUMvSdmMH0MVMlq23P4QDgGXWGAeM+Hcy/YQUttIx+5R3EfRv
+        iutxWKYn9LRlYIuKNG7vNO5Hc+pIPIJQQb+RnzlRhkEg0AL0cyP4qxaOXDoEKGigB0fOVd
+        gWnnDaInQ4J8zsMg8RjN3AkfOi7zyTE=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-35-UgPRw2y8N5-GlJ9guWGIfQ-1; Tue, 06 Apr 2021 19:49:53 -0400
+X-MC-Unique: UgPRw2y8N5-GlJ9guWGIfQ-1
+Received: by mail-qv1-f72.google.com with SMTP id dz17so11474507qvb.14
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Apr 2021 16:49:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=IOyxvbKPk8Cp2/x/ErG6esc4l62olFKQEwMahR274MA=;
-        b=AoUF6Qm2LG7Serhak+dpBemd+YVSccZY63Ger5WqarpWdgoqjqZEZWJJRvzFHOsczk
-         aSM7Ck0Iru/YxX1NsSt2UrCn5z+6NfsjMNcnKGYWZ3U+0eB6brjvEg5lOL+y0bGylQUW
-         h+Ov8Zqqfjj/LDDay3tr4pwf+YEemNfLlb97NRBLHzs5TTrbj/bMp8fy3BWQxz/SHZhD
-         AmiuL+nadd9KSNMMq9/Lg8YORVySI7nBqy6U7o4CK26gSjteySh2sz7KcCLu4p5JBsJY
-         EvqKoA4ceGAbTF3aFgS+gkj2ypP9ygZ1hRBoP7Fwj2XOpVeDpnCyxTfOrulc/a2QNUTX
-         2ktQ==
-X-Gm-Message-State: AOAM532QLFpszxMW+5ij/NKm4NfdOcrVnPfwuXurAw5oxDlIe80Z52yz
-        RPNM4SKHdeTfADtNOQe8AhjhAjCD/G/dwg==
-X-Google-Smtp-Source: ABdhPJygI4Xj2Dospmg+WnEam96QXYzVpORvi3AWLIbVogXWJ1fJKf5Q5OJ9ORU9Bv3CXFpi/p74y3eFrotJaA==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:f46d:9fde:7b0b:e01a])
- (user=dlatypov job=sendgmr) by 2002:a25:492:: with SMTP id
- 140mr556876ybe.150.1617749473305; Tue, 06 Apr 2021 15:51:13 -0700 (PDT)
-Date:   Tue,  6 Apr 2021 15:51:00 -0700
-Message-Id: <20210406225100.1883967-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
-Subject: [PATCH] Documentation: kunit: add tips for using current->kunit_test
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iK4YEOPzox19vegpXUSBHH0PF7zuoloKdQL4StFn8Jc=;
+        b=gB+vdtpWFQ/Ds2N1ANF/7X5JgEXYY88z8ImNAilh+OrPzoB1ifJb+Ze+uSJa6RX1zP
+         2Dh9kcCINE6uUt5q3okrBga4qudq0DWxvohyQSxIxVZNAJHUZB8ldecW4L8cKMjPMM7w
+         RWHqUeaoqu3gKWzVnlGWzwtDGRkg7kFwVmJd+a/n91Gpf54JErYFYX7Fct84tXExXdXf
+         ejUFkg1udASngm6o23krqPxTS89WwV9Mvpn6KMTkDiryv1gL34jHJTBIJGK44Z8YsuWy
+         1izeAKXGiqWu8vMDpKszIIQukhFetEsDGOZzCXIqwt/yfduYzOTvXVdn1TZRkiF34NK1
+         sWmA==
+X-Gm-Message-State: AOAM5337HSpWopvLA8YOrabM73KkiwuBvWEmRBbprcfOrGnNaahhR2wk
+        HlyBfVTMDThjMf+SQgbjGm+Obo5D3XtYlJybaeuNAj9wiQtfev2R9YKGQyZuTWjPQp1HWM5ercQ
+        9f0YezqrP8GgLE7tslE8/CMRbPdgP
+X-Received: by 2002:a05:620a:152c:: with SMTP id n12mr467488qkk.334.1617752992229;
+        Tue, 06 Apr 2021 16:49:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzBHx1XBwXwZaki0l2YlH58uwwbkMgmuA3SuuMnFwuKKWz3KB1DdYeREJgfB9PKJ4H1H/5Ofg==
+X-Received: by 2002:a05:620a:152c:: with SMTP id n12mr467462qkk.334.1617752991816;
+        Tue, 06 Apr 2021 16:49:51 -0700 (PDT)
+Received: from xz-x1 (bras-base-toroon474qw-grc-82-174-91-135-175.dsl.bell.ca. [174.91.135.175])
+        by smtp.gmail.com with ESMTPSA id j13sm15493544qth.57.2021.04.06.16.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Apr 2021 16:49:51 -0700 (PDT)
+Date:   Tue, 6 Apr 2021 19:49:49 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Michel Lespinasse <walken@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v5] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTINUE behavior
+Message-ID: <20210406234949.GN628002@xz-x1>
+References: <20210405171917.2423068-1-axelrasmussen@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210405171917.2423068-1-axelrasmussen@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As of commit 359a376081d4 ("kunit: support failure from dynamic analysis
-tools"), we can use current->kunit_test to find the current kunit test.
+On Mon, Apr 05, 2021 at 10:19:17AM -0700, Axel Rasmussen wrote:
+> Previously, the continue implementation in shmem_mcopy_atomic_pte was
+> incorrect for two main reasons:
+> 
+> - It didn't correctly skip some sections of code which make sense for
+>   newly allocated pages, but absolutely don't make sense for
+>   pre-existing page cache pages.
+> 
+> - Because shmem_mcopy_continue_pte is called only if VM_SHARED is
+>   detected in mm/userfaultd.c, we were incorrectly not supporting the
+>   case where a tmpfs file had been mmap()-ed with MAP_PRIVATE.
+> 
+> So, this patch does the following:
+> 
+> In mm/userfaultfd.c, break the logic to install PTEs out of
+> mcopy_atomic_pte, into a separate helper function.
+> 
+> In mfill_atomic_pte, for the MCOPY_ATOMIC_CONTINUE case, simply look
+> up the existing page in the page cache, and then use the PTE
+> installation helper to setup the mapping. This addresses the two issues
+> noted above.
+> 
+> The previous code's bugs manifested clearly in the error handling path.
+> So, to detect this kind of issue in the future, modify the selftest to
+> exercise the error handling path as well.
+> 
+> Note that this patch is based on linux-next/akpm; the "fixes" line
+> refers to a SHA1 in that branch.
+> 
+> Changes since v4:
+> - Added back the userfaultfd.c selftest changes from v3; this file was
+>   mistakenly reverted in v4.
+> 
+> Changes since v3:
+> - Significantly refactored the patch. Continue handling now happens in
+>   mm/userfaultfd.c, via a PTE installation helper. Most of the
+>   mm/shmem.c changes from the patch being fixed [1] are reverted.
+> 
+> Changes since v2:
+> - Drop the ClearPageDirty() entirely, instead of trying to remember the
+>   old value.
+> - Modify both pgoff / max_off checks to use pgoff. It's equivalent to
+>   offset, but offset wasn't initialized until the first check (which
+>   we're skipping).
+> - Keep the second pgoff / max_off check in the continue case.
+> 
+> Changes since v1:
+> - Refactor to skip ahead with goto, instead of adding several more
+>   "if (!is_continue)".
+> - Fix unconditional ClearPageDirty().
+> - Don't pte_mkwrite() when is_continue && !VM_SHARED.
+> 
+> [1] https://lore.kernel.org/patchwork/patch/1392464/
+> 
+> Fixes: 00da60b9d0a0 ("userfaultfd: support minor fault handling for shmem")
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>  mm/shmem.c                               |  56 +++----
+>  mm/userfaultfd.c                         | 183 ++++++++++++++++-------
+>  tools/testing/selftests/vm/userfaultfd.c |  12 ++
+>  3 files changed, 168 insertions(+), 83 deletions(-)
+> 
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 5cfd2fb6e52b..9d9a9f254f33 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2366,7 +2366,6 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  			   unsigned long dst_addr, unsigned long src_addr,
+>  			   enum mcopy_atomic_mode mode, struct page **pagep)
+>  {
+> -	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
+>  	struct inode *inode = file_inode(dst_vma->vm_file);
+>  	struct shmem_inode_info *info = SHMEM_I(inode);
+>  	struct address_space *mapping = inode->i_mapping;
+> @@ -2377,18 +2376,17 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  	struct page *page;
+>  	pte_t _dst_pte, *dst_pte;
+>  	int ret;
+> -	pgoff_t offset, max_off;
+> +	pgoff_t max_off;
+> +
+> +	/* Handled by mcontinue_atomic_pte instead. */
+> +	if (WARN_ON_ONCE(mode == MCOPY_ATOMIC_CONTINUE))
+> +		return -EINVAL;
 
-Mention this in tips.rst and give an example of how this can be used in
-conjunction with `test->priv` to pass around state and specifically
-implement something like mocking.
-There's a lot more we could go into on that topic, but given that
-example is already longer than every other "tip" on this page, we just
-point to the API docs and leave filling in the blanks as an exercise to
-the reader.
+(It would be ideal if this patch can be squashed into original one, since
+ ideally shmem_mcopy_atomic_pte could be mostly untouched to support uffd-minor
+ then we can avoid a lot of code churns; it's just that we noticed it too
+ late.. then this warn_on_one will not be needed too since previously it was a
+ bool)
 
-Also give an example of kunit_fail_current_test().
+>  
+>  	ret = -ENOMEM;
+>  	if (!shmem_inode_acct_block(inode, 1))
+>  		goto out;
+>  
+> -	if (is_continue) {
+> -		ret = -EFAULT;
+> -		page = find_lock_page(mapping, pgoff);
+> -		if (!page)
+> -			goto out_unacct_blocks;
+> -	} else if (!*pagep) {
+> +	if (!*pagep) {
+>  		page = shmem_alloc_page(gfp, info, pgoff);
+>  		if (!page)
+>  			goto out_unacct_blocks;
+> @@ -2415,27 +2413,21 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  		*pagep = NULL;
+>  	}
+>  
+> -	if (!is_continue) {
+> -		VM_BUG_ON(PageSwapBacked(page));
+> -		VM_BUG_ON(PageLocked(page));
+> -		__SetPageLocked(page);
+> -		__SetPageSwapBacked(page);
+> -		__SetPageUptodate(page);
+> -	}
+> +	VM_BUG_ON(PageSwapBacked(page));
+> +	VM_BUG_ON(PageLocked(page));
+> +	__SetPageLocked(page);
+> +	__SetPageSwapBacked(page);
+> +	__SetPageUptodate(page);
+>  
+>  	ret = -EFAULT;
+> -	offset = linear_page_index(dst_vma, dst_addr);
+>  	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -	if (unlikely(offset >= max_off))
+> +	if (unlikely(pgoff >= max_off))
+>  		goto out_release;
+>  
+> -	/* If page wasn't already in the page cache, add it. */
+> -	if (!is_continue) {
+> -		ret = shmem_add_to_page_cache(page, mapping, pgoff, NULL,
+> -					      gfp & GFP_RECLAIM_MASK, dst_mm);
+> -		if (ret)
+> -			goto out_release;
+> -	}
+> +	ret = shmem_add_to_page_cache(page, mapping, pgoff, NULL,
+> +				      gfp & GFP_RECLAIM_MASK, dst_mm);
+> +	if (ret)
+> +		goto out_release;
+>  
+>  	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
+>  	if (dst_vma->vm_flags & VM_WRITE)
+> @@ -2455,22 +2447,20 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  
+>  	ret = -EFAULT;
+>  	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -	if (unlikely(offset >= max_off))
+> +	if (unlikely(pgoff >= max_off))
+>  		goto out_release_unlock;
+>  
+>  	ret = -EEXIST;
+>  	if (!pte_none(*dst_pte))
+>  		goto out_release_unlock;
+>  
+> -	if (!is_continue) {
+> -		lru_cache_add(page);
+> +	lru_cache_add(page);
+>  
+> -		spin_lock_irq(&info->lock);
+> -		info->alloced++;
+> -		inode->i_blocks += BLOCKS_PER_PAGE;
+> -		shmem_recalc_inode(inode);
+> -		spin_unlock_irq(&info->lock);
+> -	}
+> +	spin_lock_irq(&info->lock);
+> +	info->alloced++;
+> +	inode->i_blocks += BLOCKS_PER_PAGE;
+> +	shmem_recalc_inode(inode);
+> +	spin_unlock_irq(&info->lock);
+>  
+>  	inc_mm_counter(dst_mm, mm_counter_file(page));
+>  	page_add_file_rmap(page, false);
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index cbb7c8d79a4d..286d0657fbe2 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -48,21 +48,103 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
+>  	return dst_vma;
+>  }
+>  
+> +/*
+> + * Install PTEs, to map dst_addr (within dst_vma) to page.
+> + *
+> + * This function handles MCOPY_ATOMIC_CONTINUE (which is always file-backed),
+> + * whether or not dst_vma is VM_SHARED. It also handles the more general
+> + * MCOPY_ATOMIC_NORMAL case, when dst_vma is *not* VM_SHARED (it may be file
+> + * backed, or not).
+> + *
+> + * Note that MCOPY_ATOMIC_NORMAL for a VM_SHARED dst_vma is handled by
+> + * shmem_mcopy_atomic_pte instead.
+> + */
+> +static int mcopy_atomic_install_ptes(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> +				     struct vm_area_struct *dst_vma,
+> +				     unsigned long dst_addr, struct page *page,
+> +				     enum mcopy_atomic_mode mode, bool wp_copy)
+> +{
+> +	int ret;
+> +	pte_t _dst_pte, *dst_pte;
+> +	bool is_continue = mode == MCOPY_ATOMIC_CONTINUE;
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- Documentation/dev-tools/kunit/tips.rst | 78 +++++++++++++++++++++++++-
- 1 file changed, 76 insertions(+), 2 deletions(-)
+Nit: brackets?
 
-diff --git a/Documentation/dev-tools/kunit/tips.rst b/Documentation/dev-tools/kunit/tips.rst
-index a6ca0af14098..8d8c238f7f79 100644
---- a/Documentation/dev-tools/kunit/tips.rst
-+++ b/Documentation/dev-tools/kunit/tips.rst
-@@ -78,8 +78,82 @@ Similarly to the above, it can be useful to add test-specific logic.
- 	void test_only_hook(void) { }
- 	#endif
- 
--TODO(dlatypov@google.com): add an example of using ``current->kunit_test`` in
--such a hook when it's not only updated for ``CONFIG_KASAN=y``.
-+This test-only code can be made more useful by accessing the current kunit
-+test, see below.
-+
-+Accessing the current test
-+--------------------------
-+
-+In some cases, you need to call test-only code from outside the test file, e.g.
-+like in the example above or if you're providing a fake implementation of an
-+ops struct.
-+There is a ``kunit_test`` field in ``task_struct``, so you can access it via
-+``current->kunit_test``.
-+
-+Here's a slightly in-depth example of how one could implement "mocking":
-+
-+.. code-block:: c
-+
-+	#include <linux/sched.h> /* for current */
-+
-+	struct test_data {
-+		int foo_result;
-+		int want_foo_called_with;
-+	};
-+
-+	static int fake_foo(int arg)
-+	{
-+		struct kunit *test = current->kunit_test;
-+		struct test_data *test_data = test->priv;
-+
-+		KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
-+		return test_data->foo_result;
-+	}
-+
-+	static void example_simple_test(struct kunit *test)
-+	{
-+		/* Assume priv is allocated in the suite's .init */
-+		struct test_data *test_data = test->priv;
-+
-+		test_data->foo_result = 42;
-+		test_data->want_foo_called_with = 1;
-+
-+		/* In a real test, we'd probably pass a pointer to fake_foo somewhere
-+		 * like an ops struct, etc. instead of calling it directly. */
-+		KUNIT_EXPECT_EQ(test, fake_foo(1), 42);
-+	}
-+
-+
-+Note: here we're able to get away with using ``test->priv``, but if you wanted
-+something more flexible you could use a named ``kunit_resource``, see :doc:`api/test`.
-+
-+Failing the current test
-+------------------------
-+
-+But sometimes, you might just want to fail the current test. In that case, we
-+have ``kunit_fail_current_test(fmt, args...)`` which is defined in ``<kunit/test-bug.h>`` and
-+doesn't require pulling in ``<kunit/test.h>``.
-+
-+E.g. say we had an option to enable some extra debug checks on some data structure:
-+
-+.. code-block:: c
-+
-+	#include <kunit/test-bug.h>
-+
-+	#ifdef CONFIG_EXTRA_DEBUG_CHECKS
-+	static void validate_my_data(struct data *data)
-+	{
-+		if (is_valid(data))
-+			return;
-+
-+		kunit_fail_current_test("data %p is invalid", data);
-+
-+		/* Normal, non-KUnit, error reporting code here. */
-+	}
-+	#else
-+	static void my_debug_function(void) { }
-+	#endif
-+
- 
- Customizing error messages
- --------------------------
+> +	int writable;
+> +	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
+> +	bool is_file_backed = dst_vma->vm_file;
 
-base-commit: 0a50438c84363bd37fe18fe432888ae9a074dcab
+Nit: Maybe "!vma_is_anonymous(dst_vma)" is better?
+
+> +	spinlock_t *ptl;
+> +	struct inode *inode;
+> +	pgoff_t offset, max_off;
+> +
+> +	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
+> +	writable = dst_vma->vm_flags & VM_WRITE;
+> +	/* For CONTINUE on a non-shared VMA, don't pte_mkwrite for CoW. */
+> +	if (is_continue && !vm_shared)
+
+Curious whether we can drop "mode" in this function.
+
+For this one, can it be replaced with "!vma_is_anonymous() && !vm_shared"?
+
+> +		writable = 0;
+> +
+> +	if (writable) {
+> +		_dst_pte = pte_mkdirty(_dst_pte);
+
+This was unconditional previously at least for anonymous, see [1] below.  I
+think we need to keep that behavior..
+
+Probably you saw that shmem code has the dirty bit conditionally set, however
+I'm thinking maybe it's easier to always set it (I'll do it in uffd-wp shmem
+series anyways), then we can even drop the set_page_dirty() below, afaict.
+
+> +		if (wp_copy)
+> +			_dst_pte = pte_mkuffd_wp(_dst_pte);
+> +		else
+> +			_dst_pte = pte_mkwrite(_dst_pte);
+> +	} else if (vm_shared) {
+> +		/*
+> +		 * Since we didn't pte_mkdirty(), mark the page dirty or it
+> +		 * could be freed from under us. We could do this
+> +		 * unconditionally, but doing it only if !writable is faster.
+> +		 */
+> +		set_page_dirty(page);
+> +	}
+> +
+> +	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+> +
+> +	if (is_file_backed) {
+> +		/* The shmem MAP_PRIVATE case requires checking the i_size */
+> +		inode = dst_vma->vm_file->f_inode;
+> +		offset = linear_page_index(dst_vma, dst_addr);
+> +		max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> +		ret = -EFAULT;
+> +		if (unlikely(offset >= max_off))
+> +			goto out_unlock;
+
+Frankly I don't really know why this must be put into pgtable lock..  Since if
+not required then it can be moved into UFFDIO_COPY path, as CONTINUE doesn't
+need it iiuc.  Just raise it up as a pure question.
+
+> +	}
+> +
+> +	ret = -EEXIST;
+> +	if (!pte_none(*dst_pte))
+> +		goto out_unlock;
+> +
+> +	inc_mm_counter(dst_mm, mm_counter(page));
+> +	if (is_file_backed)
+> +		page_add_file_rmap(page, false);
+> +	else
+> +		page_add_new_anon_rmap(page, dst_vma, dst_addr, false);
+> +
+> +	if (!is_continue)
+> +		lru_cache_add_inactive_or_unevictable(page, dst_vma);
+> +
+> +	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+> +
+> +	/* No need to invalidate - it was non-present before */
+> +	update_mmu_cache(dst_vma, dst_addr, dst_pte);
+> +	pte_unmap_unlock(dst_pte, ptl);
+> +	ret = 0;
+> +out:
+
+This label seems not needed any more, we can "return 0" here and "return ret"
+below so as to drop the last reference.
+
+> +	return ret;
+> +out_unlock:
+> +	pte_unmap_unlock(dst_pte, ptl);
+> +	goto out;
+> +}
+> +
+>  static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+>  			    pmd_t *dst_pmd,
+>  			    struct vm_area_struct *dst_vma,
+>  			    unsigned long dst_addr,
+>  			    unsigned long src_addr,
+>  			    struct page **pagep,
+> +			    enum mcopy_atomic_mode mode,
+
+When reach this function, mode must be MCOPY_ATOMIC_NORMAL, right?  Then I
+think we can drop it and use MCOPY_ATOMIC_NORMAL directly below.  Moreover, if
+you read above and agree "mode" can be dropped in mcopy_atomic_install_ptes(),
+then it's even cleaner since we just drop all "mode" parameters.
+
+>  			    bool wp_copy)
+>  {
+> -	pte_t _dst_pte, *dst_pte;
+> -	spinlock_t *ptl;
+>  	void *page_kaddr;
+>  	int ret;
+>  	struct page *page;
+> -	pgoff_t offset, max_off;
+> -	struct inode *inode;
+>  
+>  	if (!*pagep) {
+>  		ret = -ENOMEM;
+> @@ -99,43 +181,12 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+>  	if (mem_cgroup_charge(page, dst_mm, GFP_KERNEL))
+>  		goto out_release;
+>  
+> -	_dst_pte = pte_mkdirty(mk_pte(page, dst_vma->vm_page_prot));
+
+[1]
+
+> -	if (dst_vma->vm_flags & VM_WRITE) {
+> -		if (wp_copy)
+> -			_dst_pte = pte_mkuffd_wp(_dst_pte);
+> -		else
+> -			_dst_pte = pte_mkwrite(_dst_pte);
+> -	}
+> -
+> -	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+> -	if (dst_vma->vm_file) {
+> -		/* the shmem MAP_PRIVATE case requires checking the i_size */
+> -		inode = dst_vma->vm_file->f_inode;
+> -		offset = linear_page_index(dst_vma, dst_addr);
+> -		max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -		ret = -EFAULT;
+> -		if (unlikely(offset >= max_off))
+> -			goto out_release_uncharge_unlock;
+> -	}
+> -	ret = -EEXIST;
+> -	if (!pte_none(*dst_pte))
+> -		goto out_release_uncharge_unlock;
+> -
+> -	inc_mm_counter(dst_mm, MM_ANONPAGES);
+> -	page_add_new_anon_rmap(page, dst_vma, dst_addr, false);
+> -	lru_cache_add_inactive_or_unevictable(page, dst_vma);
+> -
+> -	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+> -
+> -	/* No need to invalidate - it was non-present before */
+> -	update_mmu_cache(dst_vma, dst_addr, dst_pte);
+> -
+> -	pte_unmap_unlock(dst_pte, ptl);
+> -	ret = 0;
+> +	ret = mcopy_atomic_install_ptes(dst_mm, dst_pmd, dst_vma, dst_addr,
+> +					page, mode, wp_copy);
+> +	if (ret)
+> +		goto out_release;
+>  out:
+>  	return ret;
+> -out_release_uncharge_unlock:
+> -	pte_unmap_unlock(dst_pte, ptl);
+>  out_release:
+>  	put_page(page);
+>  	goto out;
+> @@ -176,6 +227,38 @@ static int mfill_zeropage_pte(struct mm_struct *dst_mm,
+>  	return ret;
+>  }
+>  
+> +static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
+> +				pmd_t *dst_pmd,
+> +				struct vm_area_struct *dst_vma,
+> +				unsigned long dst_addr,
+> +				bool wp_copy)
+> +{
+> +	struct inode *inode = file_inode(dst_vma->vm_file);
+> +	struct address_space *mapping = inode->i_mapping;
+> +	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
+> +	struct page *page;
+> +	int ret;
+> +
+> +	ret = -EFAULT;
+> +	page = find_lock_page(mapping, pgoff);
+> +	if (!page)
+> +		goto out;
+> +
+> +	ret = mcopy_atomic_install_ptes(dst_mm, dst_pmd, dst_vma, dst_addr,
+> +					page, MCOPY_ATOMIC_CONTINUE, wp_copy);
+> +	if (ret)
+> +		goto out_release;
+> +
+> +	unlock_page(page);
+> +	ret = 0;
+> +out:
+> +	return ret;
+> +out_release:
+> +	unlock_page(page);
+> +	put_page(page);
+> +	goto out;
+> +}
+> +
+>  static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address)
+>  {
+>  	pgd_t *pgd;
+> @@ -418,7 +501,13 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+>  						enum mcopy_atomic_mode mode,
+>  						bool wp_copy)
+>  {
+> -	ssize_t err;
+> +	ssize_t err = 0;
+> +
+> +	if (mode == MCOPY_ATOMIC_CONTINUE) {
+> +		err = mcontinue_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+> +					   wp_copy);
+> +		goto out;
+
+Why not return directly? :)
+
+Thanks,
+
+> +	}
+>  
+>  	/*
+>  	 * The normal page fault path for a shmem will invoke the
+> @@ -431,26 +520,20 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+>  	 * and not in the radix tree.
+>  	 */
+>  	if (!(dst_vma->vm_flags & VM_SHARED)) {
+> -		switch (mode) {
+> -		case MCOPY_ATOMIC_NORMAL:
+> +		if (mode == MCOPY_ATOMIC_NORMAL)
+>  			err = mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma,
+>  					       dst_addr, src_addr, page,
+> -					       wp_copy);
+> -			break;
+> -		case MCOPY_ATOMIC_ZEROPAGE:
+> +					       mode, wp_copy);
+> +		else if (mode == MCOPY_ATOMIC_ZEROPAGE)
+>  			err = mfill_zeropage_pte(dst_mm, dst_pmd,
+>  						 dst_vma, dst_addr);
+> -			break;
+> -		case MCOPY_ATOMIC_CONTINUE:
+> -			err = -EINVAL;
+> -			break;
+> -		}
+>  	} else {
+>  		VM_WARN_ON_ONCE(wp_copy);
+>  		err = shmem_mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+>  					     src_addr, mode, page);
+>  	}
+>  
+> +out:
+>  	return err;
+>  }
+>  
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index f6c86b036d0f..d8541a59dae5 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -485,6 +485,7 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
+>  static void continue_range(int ufd, __u64 start, __u64 len)
+>  {
+>  	struct uffdio_continue req;
+> +	int ret;
+>  
+>  	req.range.start = start;
+>  	req.range.len = len;
+> @@ -493,6 +494,17 @@ static void continue_range(int ufd, __u64 start, __u64 len)
+>  	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
+>  		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
+>  		    (uint64_t)start);
+> +
+> +	/*
+> +	 * Error handling within the kernel for continue is subtly different
+> +	 * from copy or zeropage, so it may be a source of bugs. Trigger an
+> +	 * error (-EEXIST) on purpose, to verify doing so doesn't cause a BUG.
+> +	 */
+> +	req.mapped = 0;
+> +	ret = ioctl(ufd, UFFDIO_CONTINUE, &req);
+> +	if (ret >= 0 || req.mapped != -EEXIST)
+> +		err("failed to exercise UFFDIO_CONTINUE error handling, ret=%d, mapped=%" PRId64,
+> +		    ret, req.mapped);
+>  }
+>  
+>  static void *locking_thread(void *arg)
+> -- 
+> 2.31.0.208.g409f899ff0-goog
+> 
+
 -- 
-2.31.0.208.g409f899ff0-goog
+Peter Xu
 
