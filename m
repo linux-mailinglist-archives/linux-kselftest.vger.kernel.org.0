@@ -2,68 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E493354682
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Apr 2021 20:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D863549D0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 02:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbhDESEW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Apr 2021 14:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234052AbhDESEO (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Apr 2021 14:04:14 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9EDC061756
-        for <linux-kselftest@vger.kernel.org>; Mon,  5 Apr 2021 11:04:07 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id a6so5611056wrw.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Apr 2021 11:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=V+ZL6IBlYhDhqaW2K8qSQL0I2+furW7I5Lbh2PK3hX0=;
-        b=Bvw+tquGYXJSE3tWE333wEKuNT23nrefjiMDmDpcpL0Epv+/Ae8RSBwmekKKnSuVWm
-         d8MvJ/t9l2Kwrt+yY+9w4AMn6ggMHHBR0SSxqql+NYfpRaZx/3+wBabeBN8k6YeUEtvX
-         nfbgk8FWFcT4noTfRHxZWGo8askw8OF5Koo5+0rFoawXKfHB1EPdTWv28tK3vIYKV6m0
-         jG4SL8rrr60DeLsp6bdRMHMIzjOjNG8bCDlE/lAK969X7JX3JI7vXtGFGGXrtl1Hvfxk
-         3m3ocIdokAQD2pPQHZDl78OZBJRQ4PNkM6fLDVeO2Z3K9p7nv5kH3yR6RrdpEJ4r8gGM
-         ENYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=V+ZL6IBlYhDhqaW2K8qSQL0I2+furW7I5Lbh2PK3hX0=;
-        b=ljwX3Wzp6hJ180gOLlaADLJFmf4zOuzu32YUebKOt+4gQugDXqPgoD1uu48LXbWtLy
-         HtMeOodfLp4FuxGwrSfwdfjeO0iVPlqLAp2FdIhRH4py2qFuSTh3vTG3eEO/t4x3qsTI
-         /E9H9M7t3ZmXjjVxVASSyrcjQ+EKYCY1A37CJYITUI5gz7WHmVfxMqU9oaOhikmZh62B
-         0mc9DUv2tkQxruwx5G35H04+M8O50q2TbsBV4xbWmNhBEbPT4PlDYo1UlN/4iLJCBC6W
-         TLSknU9DokU20oKbuhUCs2wnJ1fpwaqBaMDmDrjrxTEPVlKhzL8/6D9QhmV2tDybQoVZ
-         nddA==
-X-Gm-Message-State: AOAM533RaPUEHnyjjD4BIGN4qBgovFrtjQbYnZrCVk+vfIzfeFLrW/HX
-        TsVMA+JA+pZiF5vuQFzUSjU=
-X-Google-Smtp-Source: ABdhPJz5MWbVaSR3201vlks2D0i5dRPHDG66+p1FubTgys9+TNogA2PJ/THyuPu5iT+gXX5tDoF0UQ==
-X-Received: by 2002:a5d:694e:: with SMTP id r14mr17717442wrw.84.1617645846492;
-        Mon, 05 Apr 2021 11:04:06 -0700 (PDT)
-Received: from [192.168.1.152] ([102.64.185.200])
-        by smtp.gmail.com with ESMTPSA id u9sm263548wmq.30.2021.04.05.11.04.02
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Mon, 05 Apr 2021 11:04:06 -0700 (PDT)
-Message-ID: <606b5116.1c69fb81.20eb0.0ab7@mx.google.com>
-From:   Vanina curt <odamawussi@gmail.com>
-X-Google-Original-From: Vanina curt
-Content-Type: text/plain; charset="iso-8859-1"
+        id S243033AbhDFAxM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Apr 2021 20:53:12 -0400
+Received: from mga03.intel.com ([134.134.136.65]:50206 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237938AbhDFAxK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 5 Apr 2021 20:53:10 -0400
+IronPort-SDR: xeIaEK2e31K3rYK10lKHgsVtSX5ZgUbN506vdrcNi558yp9dVjQFNSAPmPRYy7zLIDkBERJVKN
+ KaexUyfBz/gA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9945"; a="192993131"
+X-IronPort-AV: E=Sophos;i="5.81,308,1610438400"; 
+   d="scan'208";a="192993131"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 17:53:02 -0700
+IronPort-SDR: lC5vbvukdzXt21VHIfSyHrHOJShRjOAe5LMv4XbGc2iPafxEBAHQoPjB8fKLlt8WqMkUJhDK6k
+ NXACFn4+YQWQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,308,1610438400"; 
+   d="scan'208";a="386353022"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by fmsmga007.fm.intel.com with ESMTP; 05 Apr 2021 17:53:01 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Shuah Khan" <shuah@kernel.org>,
+        "Ravi V Shankar" <ravi.v.shankar@intel.com>
+Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: [PATCH] selftests/resctrl: Change a few printed messages
+Date:   Tue,  6 Apr 2021 00:52:42 +0000
+Message-Id: <20210406005242.3248706-1-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: HI,
-To:     Recipients <Vanina@vger.kernel.org>
-Date:   Mon, 05 Apr 2021 18:03:57 +0000
-Reply-To: curtisvani9008@gmail.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-How are you? I'm Vanina. I picked interest in you and I would like to know =
-more about you and establish relationship with you. i will wait for your re=
-sponse. thank you.
+A few printed messages contain pass/fail strings which should be shown
+in test results. Remove the pass/fail strings in the messages to avoid
+confusion.
+
+Add "\n" at the end of one printed message.
+
+Suggested-by: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+---
+This is a follow-up patch of recent resctrl selftest patches and can be
+applied cleanly to:
+git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+branch next.
+
+ tools/testing/selftests/resctrl/cache.c     | 3 +--
+ tools/testing/selftests/resctrl/mba_test.c  | 9 +++------
+ tools/testing/selftests/resctrl/mbm_test.c  | 3 +--
+ tools/testing/selftests/resctrl/resctrlfs.c | 7 ++-----
+ 4 files changed, 7 insertions(+), 15 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index 362e3a418caa..310bbc997c60 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -301,8 +301,7 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
+ 	ret = platform && abs((int)diff_percent) > max_diff_percent &&
+ 	      (cmt ? (abs(avg_diff) > max_diff) : true);
+ 
+-	ksft_print_msg("%s cache miss rate within %d%%\n",
+-		       ret ? "Fail:" : "Pass:", max_diff_percent);
++	ksft_print_msg("Check cache miss rate within %d%%\n", max_diff_percent);
+ 
+ 	ksft_print_msg("Percent diff=%d\n", abs((int)diff_percent));
+ 	ksft_print_msg("Number of bits: %d\n", no_of_bits);
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index 26f12ad4c663..a909a745754f 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -80,9 +80,7 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+ 		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+ 		avg_diff_per = (int)(avg_diff * 100);
+ 
+-		ksft_print_msg("%s MBA: diff within %d%% for schemata %u\n",
+-			       avg_diff_per > MAX_DIFF_PERCENT ?
+-			       "Fail:" : "Pass:",
++		ksft_print_msg("Check MBA diff within %d%% for schemata %u\n",
+ 			       MAX_DIFF_PERCENT,
+ 			       ALLOCATION_MAX - ALLOCATION_STEP * allocation);
+ 
+@@ -93,10 +91,9 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+ 			failed = true;
+ 	}
+ 
+-	ksft_print_msg("%s schemata change using MBA\n",
+-		       failed ? "Fail:" : "Pass:");
++	ksft_print_msg("Check schemata change using MBA\n");
+ 	if (failed)
+-		ksft_print_msg("At least one test failed");
++		ksft_print_msg("At least one test failed\n");
+ }
+ 
+ static int check_results(void)
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 02b1ed03f1e5..e2e7ee4ec630 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -37,8 +37,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, int span)
+ 	avg_diff_per = (int)(avg_diff * 100);
+ 
+ 	ret = avg_diff_per > MAX_DIFF_PERCENT;
+-	ksft_print_msg("%s MBM: diff within %d%%\n",
+-		       ret ? "Fail:" : "Pass:", MAX_DIFF_PERCENT);
++	ksft_print_msg("Check MBM diff within %d%%\n", MAX_DIFF_PERCENT);
+ 	ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
+ 	ksft_print_msg("Span (MB): %d\n", span);
+ 	ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index ade5f2b8b843..91cb3c48a7da 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -570,15 +570,12 @@ bool check_resctrlfs_support(void)
+ 
+ 	fclose(inf);
+ 
+-	ksft_print_msg("%s kernel supports resctrl filesystem\n",
+-		       ret ? "Pass:" : "Fail:");
+-
++	ksft_print_msg("Check kernel support for resctrl filesystem\n");
+ 	if (!ret)
+ 		return ret;
+ 
+ 	dp = opendir(RESCTRL_PATH);
+-	ksft_print_msg("%s resctrl mountpoint \"%s\" exists\n",
+-		       dp ? "Pass:" : "Fail:", RESCTRL_PATH);
++	ksft_print_msg("Check resctrl mountpoint \"%s\"\n", RESCTRL_PATH);
+ 	if (dp)
+ 		closedir(dp);
+ 
+-- 
+2.31.1
+
