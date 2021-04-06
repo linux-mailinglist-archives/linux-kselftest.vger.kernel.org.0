@@ -2,119 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 539D2354A40
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 03:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01332354B16
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 05:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238787AbhDFBnU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Apr 2021 21:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238598AbhDFBnR (ORCPT
+        id S243508AbhDFDFd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Apr 2021 23:05:33 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:3934 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243510AbhDFDFd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Apr 2021 21:43:17 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6B1C06174A;
-        Mon,  5 Apr 2021 18:42:30 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id w2so8776798ilj.12;
-        Mon, 05 Apr 2021 18:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=PrSDtDYLYZ4HLqUStDekIt+fn6OzEwVC74efgP8t0E8=;
-        b=GJc/rD3kJ2ljFwr04aHOd0yq65Hx3XvI7M3N8iFEfwihNBeI722VrTGxaQRQLpwhmb
-         cgKB8hd6JMaD1Gomos/5R/fwlCkEvrkK63HgCo0J5VOlOEXiHGgcC5kZbjKHZClHNTPF
-         p3HLev563vwoBG9HJoQf1Ae75c8KzCrlYIMFnp/T5GaNB5HLzfijdS8gdpZx18pQyHwF
-         RzuZRrEHN0TJ3qgsZ8CvPsMiZKNsWEwQ68l5f7irMj36upkF5QjL1U600x8uBtX/5x2v
-         EqfvymZJVt5Z7awPQbR9R/6aSj2BBjMNMiwZk2oEF5oA5csfPGYxHV/JkGk0FGMrCj8D
-         cE5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=PrSDtDYLYZ4HLqUStDekIt+fn6OzEwVC74efgP8t0E8=;
-        b=FT/l5C5eBdd2i3jmdY0D4k9nzREzLix7FHwuuGOYsp0UUvJQBAUOMi4MihdVO1hxiV
-         vGKVfCo8tu9tx8lmpdhPnK2ThNxW20NMSWXrhM/FT5oMvqBbf1Sq1DNctqTSreicuz0G
-         dA8LK6QNVeBNjEPyYHb1aR7HGUylb2efn00ogLYIxu1hV7WN0nlSNmZgk+3j865Oiz1V
-         SeqaxJaHvygnw7OKpUzfIfZUcCPSCOhwbo2DGlGupisd1lPAKPrg0Lks5jjZBBGNIkzU
-         MVETqzKWSkgC9Ea+Wr90n2zhD24HWN9CMsEUAVUOvBEJKYuzCXxbAtNEPHzX5wtoLTKT
-         Sztw==
-X-Gm-Message-State: AOAM5310hfrh1Tx5FQaH0bAa38RKpS+xcEQ3cmOaG0B5jYQlUd5IkBaC
-        NJ0B8zFfim2erYW974rEa8c=
-X-Google-Smtp-Source: ABdhPJwIOD7eCg9Vve36yyS+GNc3QOioD/OAIB05JZ/Q/KPP5BBtqGonhE0XwZFN+SKpxTrX/1pNjQ==
-X-Received: by 2002:a92:c26e:: with SMTP id h14mr17219229ild.33.1617673349649;
-        Mon, 05 Apr 2021 18:42:29 -0700 (PDT)
-Received: from localhost ([172.242.244.146])
-        by smtp.gmail.com with ESMTPSA id r4sm1076219ilb.51.2021.04.05.18.42.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Apr 2021 18:42:29 -0700 (PDT)
-Date:   Mon, 05 Apr 2021 18:42:21 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Pedro Tammela <pctammela@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        David Verbeiren <david.verbeiren@tessares.net>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        "(open list:BPF \\(Safe dynamic programs and tools\\))" 
-        <netdev@vger.kernel.org>,
-        bpf@vger.kernel.org (open list:BPF \(Safe dynamic programs and tools\)),
-        "(open list:BPF \\(Safe dynamic programs and tools\\) open list)" 
-        <linux-kernel@vger.kernel.org>,
-        "(open list:BPF \\(Safe dynamic programs and tools\\) open list open
-        list:KERNEL SELFTEST FRAMEWORK)" <linux-kselftest@vger.kernel.org> (open
-        list:BPF \(Safe dynamic programs and tools\) open list open list:KERNEL
-        SELFTEST FRAMEWORK)
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>
-Message-ID: <606bbc7db9d66_d464620822@john-XPS-13-9370.notmuch>
-In-Reply-To: <20210404200256.300532-2-pctammela@mojatatu.com>
-References: <20210404200256.300532-1-pctammela@mojatatu.com>
- <20210404200256.300532-2-pctammela@mojatatu.com>
-Subject: RE: [PATCH bpf-next 1/3] bpf: add batched ops support for percpu
- array
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        Mon, 5 Apr 2021 23:05:33 -0400
+Received: from dggeml405-hub.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FDsm209M2z5lm9;
+        Tue,  6 Apr 2021 11:03:14 +0800 (CST)
+Received: from dggpemm500023.china.huawei.com (7.185.36.83) by
+ dggeml405-hub.china.huawei.com (10.3.17.49) with Microsoft SMTP Server (TLS)
+ id 14.3.498.0; Tue, 6 Apr 2021 11:05:22 +0800
+Received: from [10.174.187.128] (10.174.187.128) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2106.2; Tue, 6 Apr 2021 11:05:22 +0800
+Subject: Re: [PATCH v6 00/10] KVM: selftests: some improvement and a new test
+ for kvm page table
+To:     Paolo Bonzini <pbonzini@redhat.com>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Andrew Jones <drjones@redhat.com>, Ben Gardon <bgardon@google.com>,
+        "Sean Christopherson" <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "Arnaldo Carvalho de Melo" <acme@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>
+References: <20210330080856.14940-1-wangyanan55@huawei.com>
+From:   "wangyanan (Y)" <wangyanan55@huawei.com>
+Message-ID: <31ab81be-bf14-62f3-d579-9685ccec578a@huawei.com>
+Date:   Tue, 6 Apr 2021 11:05:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
+MIME-Version: 1.0
+In-Reply-To: <20210330080856.14940-1-wangyanan55@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.187.128]
+X-ClientProxiedBy: dggeme704-chm.china.huawei.com (10.1.199.100) To
+ dggpemm500023.china.huawei.com (7.185.36.83)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Pedro Tammela wrote:
-> Suggested-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+Kindly ping...
+
+Hi Paolo,
+Will this series be picked up soon, or is there any other work for me to do?
+
+Regards,
+Yanan
+
+
+On 2021/3/30 16:08, Yanan Wang wrote:
+> Hi,
+> This v6 series can mainly include two parts.
+> Rebased on kvm queue branch: https://git.kernel.org/pub/scm/virt/kvm/kvm.git/log/?h=queue
+>
+> In the first part, all the known hugetlb backing src types specified
+> with different hugepage sizes are listed, so that we can specify use
+> of hugetlb source of the exact granularity that we want, instead of
+> the system default ones. And as all the known hugetlb page sizes are
+> listed, it's appropriate for all architectures. Besides, a helper that
+> can get granularity of different backing src types(anonumous/thp/hugetlb)
+> is added, so that we can use the accurate backing src granularity for
+> kinds of alignment or guest memory accessing of vcpus.
+>
+> In the second part, a new test is added:
+> This test is added to serve as a performance tester and a bug reproducer
+> for kvm page table code (GPA->HPA mappings), it gives guidance for the
+> people trying to make some improvement for kvm. And the following explains
+> what we can exactly do through this test.
+>
+> The function guest_code() can cover the conditions where a single vcpu or
+> multiple vcpus access guest pages within the same memory region, in three
+> VM stages(before dirty logging, during dirty logging, after dirty logging).
+> Besides, the backing src memory type(ANONYMOUS/THP/HUGETLB) of the tested
+> memory region can be specified by users, which means normal page mappings
+> or block mappings can be chosen by users to be created in the test.
+>
+> If ANONYMOUS memory is specified, kvm will create normal page mappings
+> for the tested memory region before dirty logging, and update attributes
+> of the page mappings from RO to RW during dirty logging. If THP/HUGETLB
+> memory is specified, kvm will create block mappings for the tested memory
+> region before dirty logging, and split the blcok mappings into normal page
+> mappings during dirty logging, and coalesce the page mappings back into
+> block mappings after dirty logging is stopped.
+>
+> So in summary, as a performance tester, this test can present the
+> performance of kvm creating/updating normal page mappings, or the
+> performance of kvm creating/splitting/recovering block mappings,
+> through execution time.
+>
+> When we need to coalesce the page mappings back to block mappings after
+> dirty logging is stopped, we have to firstly invalidate *all* the TLB
+> entries for the page mappings right before installation of the block entry,
+> because a TLB conflict abort error could occur if we can't invalidate the
+> TLB entries fully. We have hit this TLB conflict twice on aarch64 software
+> implementation and fixed it. As this test can imulate process from dirty
+> logging enabled to dirty logging stopped of a VM with block mappings,
+> so it can also reproduce this TLB conflict abort due to inadequate TLB
+> invalidation when coalescing tables.
+>
+> Links about the TLB conflict abort:
+> https://lore.kernel.org/lkml/20201201201034.116760-3-wangyanan55@huawei.com/
+>
 > ---
-
-A commit message describing some of the change details and a note it uses
-the for-each cpu copies (same as normal syscall on percpu map) and not the
-per-cpu ones would be nice. I at least had to go and check the generic_map*
-batch operations.
-
-Also something about why generic_map_delete_batch is omitted?
-
->  kernel/bpf/arraymap.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index 463d25e1e67e..3c4105603f9d 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
-> @@ -698,6 +698,8 @@ const struct bpf_map_ops percpu_array_map_ops = {
->  	.map_delete_elem = array_map_delete_elem,
->  	.map_seq_show_elem = percpu_array_map_seq_show_elem,
->  	.map_check_btf = array_map_check_btf,
-> +	.map_lookup_batch = generic_map_lookup_batch,
-> +	.map_update_batch = generic_map_update_batch,
->  	.map_set_for_each_callback_args = map_set_for_each_callback_args,
->  	.map_for_each_callback = bpf_for_each_array_elem,
->  	.map_btf_name = "bpf_array",
-> -- 
-> 2.25.1
-> 
-
-
+>
+> Change logs:
+>
+> v5->v6:
+> - Address Andrew Jones's comments for v5 series
+> - Add Andrew Jones's R-b tags in some patches
+> - Rebased on newest kvm/queue tree
+> - v5: https://lore.kernel.org/lkml/20210323135231.24948-1-wangyanan55@huawei.com/
+>
+> v4->v5:
+> - Use synchronization(sem_wait) for time measurement
+> - Add a new patch about TEST_ASSERT(patch 4)
+> - Address Andrew Jones's comments for v4 series
+> - Add Andrew Jones's R-b tags in some patches
+> - v4: https://lore.kernel.org/lkml/20210302125751.19080-1-wangyanan55@huawei.com/
+>
+> v3->v4:
+> - Add a helper to get system default hugetlb page size
+> - Add tags of Reviewed-by of Ben in the patches
+> - v3: https://lore.kernel.org/lkml/20210301065916.11484-1-wangyanan55@huawei.com/
+>
+> v2->v3:
+> - Add tags of Suggested-by, Reviewed-by in the patches
+> - Add a generic micro to get hugetlb page sizes
+> - Some changes for suggestions about v2 series
+> - v2: https://lore.kernel.org/lkml/20210225055940.18748-1-wangyanan55@huawei.com/
+>
+> v1->v2:
+> - Add a patch to sync header files
+> - Add helpers to get granularity of different backing src types
+> - Some changes for suggestions about v1 series
+> - v1: https://lore.kernel.org/lkml/20210208090841.333724-1-wangyanan55@huawei.com/
+>
+> ---
+>
+> Yanan Wang (10):
+>    tools headers: sync headers of asm-generic/hugetlb_encode.h
+>    mm/hugetlb: Add a macro to get HUGETLB page sizes for mmap
+>    KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
+>    KVM: selftests: Print the errno besides error-string in TEST_ASSERT
+>    KVM: selftests: Make a generic helper to get vm guest mode strings
+>    KVM: selftests: Add a helper to get system configured THP page size
+>    KVM: selftests: Add a helper to get system default hugetlb page size
+>    KVM: selftests: List all hugetlb src types specified with page sizes
+>    KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
+>    KVM: selftests: Add a test for kvm page table code
+>
+>   include/uapi/linux/mman.h                     |   2 +
+>   tools/include/asm-generic/hugetlb_encode.h    |   3 +
+>   tools/include/uapi/linux/mman.h               |   2 +
+>   tools/testing/selftests/kvm/.gitignore        |   1 +
+>   tools/testing/selftests/kvm/Makefile          |   3 +
+>   .../selftests/kvm/demand_paging_test.c        |   8 +-
+>   .../selftests/kvm/dirty_log_perf_test.c       |  14 +-
+>   .../testing/selftests/kvm/include/kvm_util.h  |   4 +-
+>   .../testing/selftests/kvm/include/test_util.h |  21 +-
+>   .../selftests/kvm/kvm_page_table_test.c       | 506 ++++++++++++++++++
+>   tools/testing/selftests/kvm/lib/assert.c      |   4 +-
+>   tools/testing/selftests/kvm/lib/kvm_util.c    |  59 +-
+>   tools/testing/selftests/kvm/lib/test_util.c   | 163 +++++-
+>   tools/testing/selftests/kvm/steal_time.c      |   4 +-
+>   14 files changed, 733 insertions(+), 61 deletions(-)
+>   create mode 100644 tools/testing/selftests/kvm/kvm_page_table_test.c
+>
