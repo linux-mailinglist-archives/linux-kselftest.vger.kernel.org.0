@@ -2,124 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E57355BF2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 21:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BB2355D3D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 22:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234140AbhDFTFu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Apr 2021 15:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
+        id S243046AbhDFUum (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Apr 2021 16:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbhDFTFu (ORCPT
+        with ESMTP id S240214AbhDFUul (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Apr 2021 15:05:50 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D668C06174A;
-        Tue,  6 Apr 2021 12:05:42 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id p10so2901350pld.0;
-        Tue, 06 Apr 2021 12:05:42 -0700 (PDT)
+        Tue, 6 Apr 2021 16:50:41 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E05CC061756
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Apr 2021 13:50:33 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id w10so5791174pgh.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Apr 2021 13:50:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fR7uBE+KZgKRNGirNt0J9yqoqy113eytjrhGmdX8vhc=;
-        b=TojC3B0s7I3+/nfSWs80/9xaTunkHwnkKDBu0qMg6TLU4XRxHMsgSdErm3Rmk3JsJU
-         mryDZ+lYvgfSbnj2+2DV+tNy2hSnZzx9JSrwv05R4WdMAhs0ldJA89oJuEcMaEwRndqS
-         MYny9f2VB0fXOvTK4N4sVcpxeE/Rj7Ws45TRD7hgPxX5eQIYECZ56yD1nAnqoFnWWeL1
-         eGCWd7lCWR1nvBSe7EnoOCkg/OH0bhhpF9SykB/kkPf0+nJ7MSvuSYGOY7shixqk36UC
-         Dj+tJMc9KRxOBwmpf6HwkJQicZBtHFvS1JDVL1le3a1DwLNXmIHGHzqKgTLlur+jthEJ
-         5ZcA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=45gywtFS7vFeJG2FHCl1wMYRQ5pWycXZasjRBGHBHf0=;
+        b=DQUn8uT6mNsJry3m0l32a87qkver2AwRJ5w5tVFOLqqzJ4M3VwThuukE+Jdxl32/Va
+         KapCQ25lXeJ88uZbko+guP9pgKtlWC/jCbWfS1Q3VV7CZNIX98BXHTf+T+6R78G9nLIs
+         TA+jL0InTal86IrphFcPZA9dIV2QkmxnGsbRzUnurOBtyjYRRuTBgmorLHEoVizI7tYi
+         Z5Azzkej/ufDyx1HQMEqGv5xUO5evgS9vILku1EONx5AzPHSpJOdZqanA+UTIk9obKOM
+         nV7pXGBOWUZQGsC7XFaUtmxbSyW5Qf6MuHrdJ8O3zG/Tmyr6l1gccgQUqwA3WncPM8XL
+         N0wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fR7uBE+KZgKRNGirNt0J9yqoqy113eytjrhGmdX8vhc=;
-        b=aodHXExjcJa1UBJzDo74A5a/hp4E2KMQgyZEk3RbMjZY9B6LgkjAUEukUKobmzxN/W
-         ts7IqeeqeV4WvyBEEG9UrJKjf7Z/V03Jc3z7CDokOkdq/BRfT4xpoD7D1g5P5Tz+Pz9Y
-         ww0vLStlrsYKbr2nqPVFImX5PGYo4KAiGTdO6HdHwA0EcOyl1FdJWZzhTZUVfFuyT17S
-         neLTCOuYKZaZp0Jm9kO5KIUF6hjs5o/zJYNNOoAubOsJIQswLsW9TTwqJQq+awStiSC5
-         YPu91F1yu7UD6kIw3tqN5ODkkbJyUWyUTKlsl8U956lJHbB0QnPJ2UujkLgD/0heq6lK
-         cuAw==
-X-Gm-Message-State: AOAM530ZjUeiCZgK+I5WHVwkuvRvmoxzfiRc7XeJKwCmxBcWUNA+3VHZ
-        WIyVoo12X0eUuunamjxouCE=
-X-Google-Smtp-Source: ABdhPJwlP3QmABh4/nIwmiUI0ymstaWn3umCEZUef0OvuVGmL6HHCgt6yYD9gjyKppqKOMZS8rnNyw==
-X-Received: by 2002:a17:90a:f2cc:: with SMTP id gt12mr5723370pjb.136.1617735941762;
-        Tue, 06 Apr 2021 12:05:41 -0700 (PDT)
-Received: from localhost ([47.9.169.206])
-        by smtp.gmail.com with ESMTPSA id l10sm18453586pfc.125.2021.04.06.12.05.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 12:05:41 -0700 (PDT)
-Date:   Wed, 7 Apr 2021 00:35:38 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
-Message-ID: <20210406190538.fdqo7g2tzolgckpy@apollo>
-References: <20210325120020.236504-1-memxor@gmail.com>
- <20210325120020.236504-4-memxor@gmail.com>
- <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
- <20210328080648.oorx2no2j6zslejk@apollo>
- <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
- <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
- <20210331094400.ldznoctli6fljz64@apollo>
- <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
- <20210402152743.dbadpgcmrgjt4eca@apollo>
- <CAEf4Bzbk9t9Cx4DONzNu8reP+Fkdq8WA90syqesgQYgAQyCaLw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=45gywtFS7vFeJG2FHCl1wMYRQ5pWycXZasjRBGHBHf0=;
+        b=XxanFNTiY50wViivmdCpmNVKkvCSVYfZzfYaOUMCiJnoF7WEGgByZmNGvbE41tDtiH
+         auy/a/U/R19lafRwDTeErQoFDfLWJIb456+pAME5ntXtfWzM7Id/vlQKE5u/mCSsC2ID
+         B6y4F9Ia3BQRyYgbYTYEqQ541Ui58BvWBf4F0cNiZHtUrpa2qt6JosqCZJ2j/Kc3+YNf
+         FifhWRjlidz5eLsneNkE2SIgHZIFc9q/H5QcwNgPw3n3wnEAEJnMhgaXM3uGBH1EuXKk
+         Us69x895Ha1+lgdHCfsTRQBPNI8BhluVHF3Rh5XrbzLWY5lSjVDRuqc1E2rwT3JTkx7A
+         iFXw==
+X-Gm-Message-State: AOAM531QCpzOumYPN3OZ23kPty/cXI9l0nLB1FlrM3s67uIUO9Mm0OMc
+        BIgdvqqgqmvEXJZQPjPivDqPh97Q2zLzy30bGOdWgg==
+X-Google-Smtp-Source: ABdhPJy/QPOsCWYwjuBu6gg6eN7ce56618HZFTHEDxI8l0kKlNlQ3CKqwg9qjVReonlXkogTUCUmud4eu3ooOT/97nI=
+X-Received: by 2002:a63:570e:: with SMTP id l14mr26828pgb.159.1617742232557;
+ Tue, 06 Apr 2021 13:50:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzbk9t9Cx4DONzNu8reP+Fkdq8WA90syqesgQYgAQyCaLw@mail.gmail.com>
+References: <20210406172901.1729216-1-dlatypov@google.com>
+In-Reply-To: <20210406172901.1729216-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 6 Apr 2021 13:50:21 -0700
+Message-ID: <CAFd5g472E_Q-CoM2ONNONP_oeGZe0HGpNdqVhyRkKhP74b7h7A@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix -Wunused-function warning for __kunit_fail_current_test
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 05, 2021 at 10:51:09PM IST, Andrii Nakryiko wrote:
-> > [...]
+On Tue, Apr 6, 2021 at 10:29 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> if _block variant is just a special ifindex value, then it should be
-> fine for users to know such a detail (we can leave a comment
-> mentioning this specifically), especially given it's not a very
-> popular thing. Almost doubling amount of APIs just for this doesn't
-> make much sense, IMO.
+> When CONFIG_KUNIT is not enabled, __kunit_fail_current_test() an empty
+> static function.
 >
-
-Ok.
-
+> But GCC complains about unused static functions, *unless* they're static inline.
+> So add inline to make GCC happy.
 >
-> If we know that we need variant with options, I'd vote for having just
-> one bpf_tc_attach() API which always takes options. Passing NULL for
-> opts is simple, no need for two APIs, I think.
->
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Fixes: 359a376081d4 ("kunit: support failure from dynamic analysis tools")
 
-Ack.
-
->
-> Which parts of that id struct is the data that caller might not know
-> or can't know? Is it handle and chain_index? Or just one of them?
-> Or?... If there is something that has to be returned back, I'd keep
-> only that, instead of returning 6+ fields, most of which user should
-> already know.
->
-
-The user will know ifindex and parent_id, and perhaps protocol (it would be
-ETH_P_ALL if they don't supply one by default). Other fields like handle,
-priority and chain_index can all be kernel assigned, so keeping those still
-makes sense. I'll change this in v2.
-
---
-Kartikeya
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
