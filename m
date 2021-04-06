@@ -2,143 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D863549D0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 02:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539D2354A40
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Apr 2021 03:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243033AbhDFAxM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Apr 2021 20:53:12 -0400
-Received: from mga03.intel.com ([134.134.136.65]:50206 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237938AbhDFAxK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Apr 2021 20:53:10 -0400
-IronPort-SDR: xeIaEK2e31K3rYK10lKHgsVtSX5ZgUbN506vdrcNi558yp9dVjQFNSAPmPRYy7zLIDkBERJVKN
- KaexUyfBz/gA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9945"; a="192993131"
-X-IronPort-AV: E=Sophos;i="5.81,308,1610438400"; 
-   d="scan'208";a="192993131"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 17:53:02 -0700
-IronPort-SDR: lC5vbvukdzXt21VHIfSyHrHOJShRjOAe5LMv4XbGc2iPafxEBAHQoPjB8fKLlt8WqMkUJhDK6k
- NXACFn4+YQWQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,308,1610438400"; 
-   d="scan'208";a="386353022"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Apr 2021 17:53:01 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Shuah Khan" <shuah@kernel.org>,
-        "Ravi V Shankar" <ravi.v.shankar@intel.com>
-Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH] selftests/resctrl: Change a few printed messages
-Date:   Tue,  6 Apr 2021 00:52:42 +0000
-Message-Id: <20210406005242.3248706-1-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S238787AbhDFBnU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Apr 2021 21:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238598AbhDFBnR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 5 Apr 2021 21:43:17 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6B1C06174A;
+        Mon,  5 Apr 2021 18:42:30 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id w2so8776798ilj.12;
+        Mon, 05 Apr 2021 18:42:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=PrSDtDYLYZ4HLqUStDekIt+fn6OzEwVC74efgP8t0E8=;
+        b=GJc/rD3kJ2ljFwr04aHOd0yq65Hx3XvI7M3N8iFEfwihNBeI722VrTGxaQRQLpwhmb
+         cgKB8hd6JMaD1Gomos/5R/fwlCkEvrkK63HgCo0J5VOlOEXiHGgcC5kZbjKHZClHNTPF
+         p3HLev563vwoBG9HJoQf1Ae75c8KzCrlYIMFnp/T5GaNB5HLzfijdS8gdpZx18pQyHwF
+         RzuZRrEHN0TJ3qgsZ8CvPsMiZKNsWEwQ68l5f7irMj36upkF5QjL1U600x8uBtX/5x2v
+         EqfvymZJVt5Z7awPQbR9R/6aSj2BBjMNMiwZk2oEF5oA5csfPGYxHV/JkGk0FGMrCj8D
+         cE5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=PrSDtDYLYZ4HLqUStDekIt+fn6OzEwVC74efgP8t0E8=;
+        b=FT/l5C5eBdd2i3jmdY0D4k9nzREzLix7FHwuuGOYsp0UUvJQBAUOMi4MihdVO1hxiV
+         vGKVfCo8tu9tx8lmpdhPnK2ThNxW20NMSWXrhM/FT5oMvqBbf1Sq1DNctqTSreicuz0G
+         dA8LK6QNVeBNjEPyYHb1aR7HGUylb2efn00ogLYIxu1hV7WN0nlSNmZgk+3j865Oiz1V
+         SeqaxJaHvygnw7OKpUzfIfZUcCPSCOhwbo2DGlGupisd1lPAKPrg0Lks5jjZBBGNIkzU
+         MVETqzKWSkgC9Ea+Wr90n2zhD24HWN9CMsEUAVUOvBEJKYuzCXxbAtNEPHzX5wtoLTKT
+         Sztw==
+X-Gm-Message-State: AOAM5310hfrh1Tx5FQaH0bAa38RKpS+xcEQ3cmOaG0B5jYQlUd5IkBaC
+        NJ0B8zFfim2erYW974rEa8c=
+X-Google-Smtp-Source: ABdhPJwIOD7eCg9Vve36yyS+GNc3QOioD/OAIB05JZ/Q/KPP5BBtqGonhE0XwZFN+SKpxTrX/1pNjQ==
+X-Received: by 2002:a92:c26e:: with SMTP id h14mr17219229ild.33.1617673349649;
+        Mon, 05 Apr 2021 18:42:29 -0700 (PDT)
+Received: from localhost ([172.242.244.146])
+        by smtp.gmail.com with ESMTPSA id r4sm1076219ilb.51.2021.04.05.18.42.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Apr 2021 18:42:29 -0700 (PDT)
+Date:   Mon, 05 Apr 2021 18:42:21 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Pedro Tammela <pctammela@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        David Verbeiren <david.verbeiren@tessares.net>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        "(open list:BPF \\(Safe dynamic programs and tools\\))" 
+        <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org (open list:BPF \(Safe dynamic programs and tools\)),
+        "(open list:BPF \\(Safe dynamic programs and tools\\) open list)" 
+        <linux-kernel@vger.kernel.org>,
+        "(open list:BPF \\(Safe dynamic programs and tools\\) open list open
+        list:KERNEL SELFTEST FRAMEWORK)" <linux-kselftest@vger.kernel.org> (open
+        list:BPF \(Safe dynamic programs and tools\) open list open list:KERNEL
+        SELFTEST FRAMEWORK)
+Cc:     Jamal Hadi Salim <jhs@mojatatu.com>
+Message-ID: <606bbc7db9d66_d464620822@john-XPS-13-9370.notmuch>
+In-Reply-To: <20210404200256.300532-2-pctammela@mojatatu.com>
+References: <20210404200256.300532-1-pctammela@mojatatu.com>
+ <20210404200256.300532-2-pctammela@mojatatu.com>
+Subject: RE: [PATCH bpf-next 1/3] bpf: add batched ops support for percpu
+ array
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A few printed messages contain pass/fail strings which should be shown
-in test results. Remove the pass/fail strings in the messages to avoid
-confusion.
+Pedro Tammela wrote:
+> Suggested-by: Jamal Hadi Salim <jhs@mojatatu.com>
+> Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+> ---
 
-Add "\n" at the end of one printed message.
+A commit message describing some of the change details and a note it uses
+the for-each cpu copies (same as normal syscall on percpu map) and not the
+per-cpu ones would be nice. I at least had to go and check the generic_map*
+batch operations.
 
-Suggested-by: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
----
-This is a follow-up patch of recent resctrl selftest patches and can be
-applied cleanly to:
-git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
-branch next.
+Also something about why generic_map_delete_batch is omitted?
 
- tools/testing/selftests/resctrl/cache.c     | 3 +--
- tools/testing/selftests/resctrl/mba_test.c  | 9 +++------
- tools/testing/selftests/resctrl/mbm_test.c  | 3 +--
- tools/testing/selftests/resctrl/resctrlfs.c | 7 ++-----
- 4 files changed, 7 insertions(+), 15 deletions(-)
+>  kernel/bpf/arraymap.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+> index 463d25e1e67e..3c4105603f9d 100644
+> --- a/kernel/bpf/arraymap.c
+> +++ b/kernel/bpf/arraymap.c
+> @@ -698,6 +698,8 @@ const struct bpf_map_ops percpu_array_map_ops = {
+>  	.map_delete_elem = array_map_delete_elem,
+>  	.map_seq_show_elem = percpu_array_map_seq_show_elem,
+>  	.map_check_btf = array_map_check_btf,
+> +	.map_lookup_batch = generic_map_lookup_batch,
+> +	.map_update_batch = generic_map_update_batch,
+>  	.map_set_for_each_callback_args = map_set_for_each_callback_args,
+>  	.map_for_each_callback = bpf_for_each_array_elem,
+>  	.map_btf_name = "bpf_array",
+> -- 
+> 2.25.1
+> 
 
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index 362e3a418caa..310bbc997c60 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -301,8 +301,7 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
- 	ret = platform && abs((int)diff_percent) > max_diff_percent &&
- 	      (cmt ? (abs(avg_diff) > max_diff) : true);
- 
--	ksft_print_msg("%s cache miss rate within %d%%\n",
--		       ret ? "Fail:" : "Pass:", max_diff_percent);
-+	ksft_print_msg("Check cache miss rate within %d%%\n", max_diff_percent);
- 
- 	ksft_print_msg("Percent diff=%d\n", abs((int)diff_percent));
- 	ksft_print_msg("Number of bits: %d\n", no_of_bits);
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 26f12ad4c663..a909a745754f 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -80,9 +80,7 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
- 		avg_diff_per = (int)(avg_diff * 100);
- 
--		ksft_print_msg("%s MBA: diff within %d%% for schemata %u\n",
--			       avg_diff_per > MAX_DIFF_PERCENT ?
--			       "Fail:" : "Pass:",
-+		ksft_print_msg("Check MBA diff within %d%% for schemata %u\n",
- 			       MAX_DIFF_PERCENT,
- 			       ALLOCATION_MAX - ALLOCATION_STEP * allocation);
- 
-@@ -93,10 +91,9 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 			failed = true;
- 	}
- 
--	ksft_print_msg("%s schemata change using MBA\n",
--		       failed ? "Fail:" : "Pass:");
-+	ksft_print_msg("Check schemata change using MBA\n");
- 	if (failed)
--		ksft_print_msg("At least one test failed");
-+		ksft_print_msg("At least one test failed\n");
- }
- 
- static int check_results(void)
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 02b1ed03f1e5..e2e7ee4ec630 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -37,8 +37,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, int span)
- 	avg_diff_per = (int)(avg_diff * 100);
- 
- 	ret = avg_diff_per > MAX_DIFF_PERCENT;
--	ksft_print_msg("%s MBM: diff within %d%%\n",
--		       ret ? "Fail:" : "Pass:", MAX_DIFF_PERCENT);
-+	ksft_print_msg("Check MBM diff within %d%%\n", MAX_DIFF_PERCENT);
- 	ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
- 	ksft_print_msg("Span (MB): %d\n", span);
- 	ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index ade5f2b8b843..91cb3c48a7da 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -570,15 +570,12 @@ bool check_resctrlfs_support(void)
- 
- 	fclose(inf);
- 
--	ksft_print_msg("%s kernel supports resctrl filesystem\n",
--		       ret ? "Pass:" : "Fail:");
--
-+	ksft_print_msg("Check kernel support for resctrl filesystem\n");
- 	if (!ret)
- 		return ret;
- 
- 	dp = opendir(RESCTRL_PATH);
--	ksft_print_msg("%s resctrl mountpoint \"%s\" exists\n",
--		       dp ? "Pass:" : "Fail:", RESCTRL_PATH);
-+	ksft_print_msg("Check resctrl mountpoint \"%s\"\n", RESCTRL_PATH);
- 	if (dp)
- 		closedir(dp);
- 
--- 
-2.31.1
 
