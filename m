@@ -2,798 +2,737 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD214356378
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Apr 2021 07:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927CA3563CA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Apr 2021 08:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244456AbhDGFuS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Apr 2021 01:50:18 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52636 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S243435AbhDGFuR (ORCPT
+        id S1345469AbhDGGPB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Apr 2021 02:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345191AbhDGGPB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Apr 2021 01:50:17 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1375XA3P119670;
-        Wed, 7 Apr 2021 01:49:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=6dJESdgxAkwXFBnCLpSQ9nV87w9EIXwCqBj4Xs9YRxI=;
- b=AgcsC7d4u71g5RRw7BKvHBuLZ1Ua4ZFCMy4ZV6cEKhLlEcg6ZZPk9JnGPyq4ejiUdTdz
- GJWQLGiW0aOE3+kmnv5pv5tINKQPYWw/o8oWS3PUIbFi2Q1ZWK2GUYBZrg76blfTLLa/
- TcHYqzvY6GPgnWh2ow6hVMpdGedhbJhOPW1gLAzgT7xTyj9PuJobXVsaiDpS3pZ6Zevu
- heQN85dquj3xHRI/T+F7oz4X8ITzKZsaRIs3foYx/2VyGnUmgHSaJQY46j2LnT2ipn1I
- VCDQWz6tXmzm4mdsiiyqv6zDrtlP5KqvtQFmv7ZrgB1CzHzCx1yrvHRg5EjfT7IoNnva aQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 37rwf04rq2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Apr 2021 01:49:56 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 1375lMLj020583;
-        Wed, 7 Apr 2021 05:49:54 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 37rvbqgchw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Apr 2021 05:49:54 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1375nqZF38142460
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 7 Apr 2021 05:49:52 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4054CA4040;
-        Wed,  7 Apr 2021 05:49:52 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A1F35A404D;
-        Wed,  7 Apr 2021 05:49:50 +0000 (GMT)
-Received: from bangoria.ibmuc.com (unknown [9.199.44.100])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  7 Apr 2021 05:49:50 +0000 (GMT)
-From:   Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-To:     mpe@ellerman.id.au
-Cc:     ravi.bangoria@linux.ibm.com, shuah@kernel.org, mikey@neuling.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 4/4] powerpc/selftests: Add selftest to test concurrent perf/ptrace events
-Date:   Wed,  7 Apr 2021 11:19:38 +0530
-Message-Id: <20210407054938.312857-5-ravi.bangoria@linux.ibm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210407054938.312857-1-ravi.bangoria@linux.ibm.com>
-References: <20210407054938.312857-1-ravi.bangoria@linux.ibm.com>
+        Wed, 7 Apr 2021 02:15:01 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D78C061756
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Apr 2021 23:14:52 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id 1so13037818qtb.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Apr 2021 23:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=1pbqYApEvoRF4GjTw6WQv+Ccw2/PelCjqZ+uguwKS6Q=;
+        b=g/H5VMUmMU6UtP291Cp/7okW4SJukOwdB9kujwhJMd2JE5fFAaSozWdVvmld0wbHhF
+         3JSJjVSjFLMY4vOBjq7MtCUyFQnizikl8VDBqhQAXoeJCd5FuVNZjde8EIzJUeYZo1oo
+         Y70G43xiAQUggZwtdmszvVLkGXEpRSC23U2PcV29iszvbFxjJXaUxYSQXd+wML0lv/ho
+         weDK0Td/i8B3281s3QilnukIXkRO5ILMHcdmLN/MsMcNy8ssWJIxTNRyesaDrigGLXgl
+         UYShb5Onx4SPpCV/Ey0MuB0mjHubgW4sXjQfXl6JUQht5aBUfkuBmMIVJsjxRbV5+h/a
+         8eMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=1pbqYApEvoRF4GjTw6WQv+Ccw2/PelCjqZ+uguwKS6Q=;
+        b=o14vqe9l4mVqb8Crm60qjGDfwbUbsBbcfOpqErqJsh+7jFgkR5Fv3ygeTjipedBohL
+         aYUV7tU55d/C7ROdbmjuz9/Hkcdeu+82z/wkn+LMcAydOYufJhZY7QV2+AbKHlULEQUC
+         S7Ei9zSr+cFCYFw6kbTUYsQA963BjZ7A8L+xB4S74gPFNoyk9xEZdQDGiVwdKqdoym/b
+         5o/gS6llgpj8v/wEnfdsh5qvWqgMdIztQJ+h4N/Yha2Q3XI95/VavCGkGtDmylB3dmhT
+         VgwodQOtp07Dov8Ez7AIa3QizdfFIgsDl4TNZk1PYFFxK0OPqju9rRdzf6hYc+DdX23F
+         OtpQ==
+X-Gm-Message-State: AOAM530S+SowrhsVk3RLckaNoDmgh2vijnhftK9RUyvnaIbA8T0hfm+I
+        VPXT3RyDgs3OctrlAweQi6q8Dg==
+X-Google-Smtp-Source: ABdhPJzv6p41yaqrnIt20nljqXN5tWIMBJr3z3kM6T2pH1TnWFibpp44OqHbNbj8VtAQ8uXAARgtfw==
+X-Received: by 2002:ac8:4453:: with SMTP id m19mr1432668qtn.149.1617776090738;
+        Tue, 06 Apr 2021 23:14:50 -0700 (PDT)
+Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id b27sm17347547qkl.102.2021.04.06.23.14.48
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Tue, 06 Apr 2021 23:14:50 -0700 (PDT)
+Date:   Tue, 6 Apr 2021 23:14:30 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@eggly.anvils
+To:     Axel Rasmussen <axelrasmussen@google.com>
+cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Michel Lespinasse <walken@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v4] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTINUE
+ behavior
+In-Reply-To: <20210401183701.1774159-1-axelrasmussen@google.com>
+Message-ID: <alpine.LSU.2.11.2104062307110.14082@eggly.anvils>
+References: <20210401183701.1774159-1-axelrasmussen@google.com>
+User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jW0I5Be7VWJvupPyLafCCFyjKS7FeJiJ
-X-Proofpoint-ORIG-GUID: jW0I5Be7VWJvupPyLafCCFyjKS7FeJiJ
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-04-07_03:2021-04-06,2021-04-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- malwarescore=0 impostorscore=0 phishscore=0 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=999 mlxscore=0
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104070039
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ptrace and perf watchpoints can't co-exists if their address range
-overlaps. See commit 29da4f91c0c1 ("powerpc/watchpoint: Don't allow
-concurrent perf and ptrace events") for more detail. Add selftest
-for the same.
+[PATCH v4] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTINUE behavior
+was a significant rework, so here I'm reviewing a synthetic patch
+merged from 5.12-rc5's 2021-03-31 mmotm patches:
+  userfaultfd-support-minor-fault-handling-for-shmem.patch
+  userfaultfd-support-minor-fault-handling-for-shmem-fix.patch
+  userfaultfd-support-minor-fault-handling-for-shmem-fix-2.patch
+Plus the PATCH v4 which akpm added the next day as fix-3:
+  userfaultfd-support-minor-fault-handling-for-shmem-fix-3.patch
 
-Sample o/p:
-  # ./ptrace-perf-hwbreak
-  test: ptrace-perf-hwbreak
-  tags: git_version:powerpc-5.8-7-118-g937fa174a15d-dirty
-  perf cpu event -> ptrace thread event (Overlapping): Ok
-  perf cpu event -> ptrace thread event (Non-overlapping): Ok
-  perf thread event -> ptrace same thread event (Overlapping): Ok
-  perf thread event -> ptrace same thread event (Non-overlapping): Ok
-  perf thread event -> ptrace other thread event: Ok
-  ptrace thread event -> perf kernel event: Ok
-  ptrace thread event -> perf same thread event (Overlapping): Ok
-  ptrace thread event -> perf same thread event (Non-overlapping): Ok
-  ptrace thread event -> perf other thread event: Ok
-  ptrace thread event -> perf cpu event (Overlapping): Ok
-  ptrace thread event -> perf cpu event (Non-overlapping): Ok
-  ptrace thread event -> perf same thread & cpu event (Overlapping): Ok
-  ptrace thread event -> perf same thread & cpu event (Non-overlapping): Ok
-  ptrace thread event -> perf other thread & cpu event: Ok
-  success: ptrace-perf-hwbreak
+[PATCH v5] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTINUE behavior
+was the same as v4, except for adding a change in selftests, which
+would not apply at this stage of the series: so I've ignored it.
 
-Signed-off-by: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
----
- .../selftests/powerpc/ptrace/.gitignore       |   1 +
- .../testing/selftests/powerpc/ptrace/Makefile |   2 +-
- .../powerpc/ptrace/ptrace-perf-hwbreak.c      | 659 ++++++++++++++++++
- 3 files changed, 661 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/powerpc/ptrace/ptrace-perf-hwbreak.c
+>  fs/userfaultfd.c                 |    6 
+>  include/linux/shmem_fs.h         |   26 +--
+>  include/uapi/linux/userfaultfd.h |    4 
+>  mm/memory.c                      |    8 -
+>  mm/shmem.c                       |   65 +++------
+>  mm/userfaultfd.c                 |  192 ++++++++++++++++++++---------
+>  6 files changed, 186 insertions(+), 115 deletions(-)
+> 
+> diff -purN 5125m243/fs/userfaultfd.c 5125m247/fs/userfaultfd.c
+> --- 5125m243/fs/userfaultfd.c	2021-04-04 22:32:32.018244547 -0700
+> +++ 5125m247/fs/userfaultfd.c	2021-04-04 22:34:14.946860343 -0700
+> @@ -1267,8 +1267,7 @@ static inline bool vma_can_userfault(str
+>  	}
+>  
+>  	if (vm_flags & VM_UFFD_MINOR) {
+> -		/* FIXME: Add minor fault interception for shmem. */
+> -		if (!is_vm_hugetlb_page(vma))
+> +		if (!(is_vm_hugetlb_page(vma) || vma_is_shmem(vma)))
+>  			return false;
+>  	}
+>  
+> @@ -1941,7 +1940,8 @@ static int userfaultfd_api(struct userfa
+>  	/* report all available features and ioctls to userland */
+>  	uffdio_api.features = UFFD_API_FEATURES;
+>  #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+> -	uffdio_api.features &= ~UFFD_FEATURE_MINOR_HUGETLBFS;
+> +	uffdio_api.features &=
+> +		~(UFFD_FEATURE_MINOR_HUGETLBFS | UFFD_FEATURE_MINOR_SHMEM);
+>  #endif
+>  	uffdio_api.ioctls = UFFD_API_IOCTLS;
+>  	ret = -EFAULT;
+> diff -purN 5125m243/include/linux/shmem_fs.h 5125m247/include/linux/shmem_fs.h
+> --- 5125m243/include/linux/shmem_fs.h	2021-02-14 14:32:24.000000000 -0800
+> +++ 5125m247/include/linux/shmem_fs.h	2021-04-04 22:34:14.958860415 -0700
+> @@ -9,6 +9,7 @@
+>  #include <linux/percpu_counter.h>
+>  #include <linux/xattr.h>
+>  #include <linux/fs_parser.h>
+> +#include <linux/userfaultfd_k.h>
 
-diff --git a/tools/testing/selftests/powerpc/ptrace/.gitignore b/tools/testing/selftests/powerpc/ptrace/.gitignore
-index 0e96150b7c7e..eb75e5360e31 100644
---- a/tools/testing/selftests/powerpc/ptrace/.gitignore
-+++ b/tools/testing/selftests/powerpc/ptrace/.gitignore
-@@ -14,3 +14,4 @@ perf-hwbreak
- core-pkey
- ptrace-pkey
- ptrace-syscall
-+ptrace-perf-hwbreak
-diff --git a/tools/testing/selftests/powerpc/ptrace/Makefile b/tools/testing/selftests/powerpc/ptrace/Makefile
-index 8d3f006c98cc..a500639da97a 100644
---- a/tools/testing/selftests/powerpc/ptrace/Makefile
-+++ b/tools/testing/selftests/powerpc/ptrace/Makefile
-@@ -2,7 +2,7 @@
- TEST_GEN_PROGS := ptrace-gpr ptrace-tm-gpr ptrace-tm-spd-gpr \
-               ptrace-tar ptrace-tm-tar ptrace-tm-spd-tar ptrace-vsx ptrace-tm-vsx \
-               ptrace-tm-spd-vsx ptrace-tm-spr ptrace-hwbreak ptrace-pkey core-pkey \
--              perf-hwbreak ptrace-syscall
-+              perf-hwbreak ptrace-syscall ptrace-perf-hwbreak
- 
- top_srcdir = ../../../../..
- include ../../lib.mk
-diff --git a/tools/testing/selftests/powerpc/ptrace/ptrace-perf-hwbreak.c b/tools/testing/selftests/powerpc/ptrace/ptrace-perf-hwbreak.c
-new file mode 100644
-index 000000000000..6b8804a4942e
---- /dev/null
-+++ b/tools/testing/selftests/powerpc/ptrace/ptrace-perf-hwbreak.c
-@@ -0,0 +1,659 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+#include <stdio.h>
-+#include <string.h>
-+#include <signal.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <linux/hw_breakpoint.h>
-+#include <linux/perf_event.h>
-+#include <asm/unistd.h>
-+#include <sys/ptrace.h>
-+#include <sys/wait.h>
-+#include "ptrace.h"
-+
-+char data[16];
-+
-+/* Overlapping address range */
-+volatile __u64 *ptrace_data1 = (__u64 *)&data[0];
-+volatile __u64 *perf_data1 = (__u64 *)&data[4];
-+
-+/* Non-overlapping address range */
-+volatile __u64 *ptrace_data2 = (__u64 *)&data[0];
-+volatile __u64 *perf_data2 = (__u64 *)&data[8];
-+
-+static unsigned long pid_max_addr(void)
-+{
-+	FILE *fp;
-+	char *line, *c;
-+	char addr[100];
-+	size_t len = 0;
-+
-+	fp = fopen("/proc/kallsyms", "r");
-+	if (!fp) {
-+		printf("Failed to read /proc/kallsyms. Exiting..\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	while (getline(&line, &len, fp) != -1) {
-+		if (!strstr(line, "pid_max") || strstr(line, "pid_max_max") ||
-+		    strstr(line, "pid_max_min"))
-+			continue;
-+
-+		strncpy(addr, line, len < 100 ? len : 100);
-+		c = strchr(addr, ' ');
-+		*c = '\0';
-+		return strtoul(addr, &c, 16);
-+	}
-+	fclose(fp);
-+	printf("Could not find pix_max. Exiting..\n");
-+	exit(EXIT_FAILURE);
-+	return -1;
-+}
-+
-+static void perf_user_event_attr_set(struct perf_event_attr *attr, __u64 addr, __u64 len)
-+{
-+	memset(attr, 0, sizeof(struct perf_event_attr));
-+	attr->type           = PERF_TYPE_BREAKPOINT;
-+	attr->size           = sizeof(struct perf_event_attr);
-+	attr->bp_type        = HW_BREAKPOINT_R;
-+	attr->bp_addr        = addr;
-+	attr->bp_len         = len;
-+	attr->exclude_kernel = 1;
-+	attr->exclude_hv     = 1;
-+}
-+
-+static void perf_kernel_event_attr_set(struct perf_event_attr *attr)
-+{
-+	memset(attr, 0, sizeof(struct perf_event_attr));
-+	attr->type           = PERF_TYPE_BREAKPOINT;
-+	attr->size           = sizeof(struct perf_event_attr);
-+	attr->bp_type        = HW_BREAKPOINT_R;
-+	attr->bp_addr        = pid_max_addr();
-+	attr->bp_len         = sizeof(unsigned long);
-+	attr->exclude_user   = 1;
-+	attr->exclude_hv     = 1;
-+}
-+
-+static int perf_cpu_event_open(int cpu, __u64 addr, __u64 len)
-+{
-+	struct perf_event_attr attr;
-+
-+	perf_user_event_attr_set(&attr, addr, len);
-+	return syscall(__NR_perf_event_open, &attr, -1, cpu, -1, 0);
-+}
-+
-+static int perf_thread_event_open(pid_t child_pid, __u64 addr, __u64 len)
-+{
-+	struct perf_event_attr attr;
-+
-+	perf_user_event_attr_set(&attr, addr, len);
-+	return syscall(__NR_perf_event_open, &attr, child_pid, -1, -1, 0);
-+}
-+
-+static int perf_thread_cpu_event_open(pid_t child_pid, int cpu, __u64 addr, __u64 len)
-+{
-+	struct perf_event_attr attr;
-+
-+	perf_user_event_attr_set(&attr, addr, len);
-+	return syscall(__NR_perf_event_open, &attr, child_pid, cpu, -1, 0);
-+}
-+
-+static int perf_thread_kernel_event_open(pid_t child_pid)
-+{
-+	struct perf_event_attr attr;
-+
-+	perf_kernel_event_attr_set(&attr);
-+	return syscall(__NR_perf_event_open, &attr, child_pid, -1, -1, 0);
-+}
-+
-+static int perf_cpu_kernel_event_open(int cpu)
-+{
-+	struct perf_event_attr attr;
-+
-+	perf_kernel_event_attr_set(&attr);
-+	return syscall(__NR_perf_event_open, &attr, -1, cpu, -1, 0);
-+}
-+
-+static int child(void)
-+{
-+	int ret;
-+
-+	ret = ptrace(PTRACE_TRACEME, 0, NULL, 0);
-+	if (ret) {
-+		printf("Error: PTRACE_TRACEME failed\n");
-+		return 0;
-+	}
-+	kill(getpid(), SIGUSR1); /* --> parent (SIGUSR1) */
-+
-+	return 0;
-+}
-+
-+static void ptrace_ppc_hw_breakpoint(struct ppc_hw_breakpoint *info, int type,
-+				     __u64 addr, int len)
-+{
-+	info->version = 1;
-+	info->trigger_type = type;
-+	info->condition_mode = PPC_BREAKPOINT_CONDITION_NONE;
-+	info->addr = addr;
-+	info->addr2 = addr + len;
-+	info->condition_value = 0;
-+	if (!len)
-+		info->addr_mode = PPC_BREAKPOINT_MODE_EXACT;
-+	else
-+		info->addr_mode = PPC_BREAKPOINT_MODE_RANGE_INCLUSIVE;
-+}
-+
-+static int ptrace_open(pid_t child_pid, __u64 wp_addr, int len)
-+{
-+	struct ppc_hw_breakpoint info;
-+
-+	ptrace_ppc_hw_breakpoint(&info, PPC_BREAKPOINT_TRIGGER_RW, wp_addr, len);
-+	return ptrace(PPC_PTRACE_SETHWDEBUG, child_pid, 0, &info);
-+}
-+
-+static int test1(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread event by ptrace)
-+	 *	if (existing cpu event by perf)
-+	 *		if (addr range overlaps)
-+	 *			fail;
-+	 */
-+
-+	perf_fd = perf_cpu_event_open(0, (__u64)perf_data1, sizeof(*perf_data1));
-+	if (perf_fd < 0)
-+		return -1;
-+
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data1, sizeof(*ptrace_data1));
-+	if (ptrace_fd > 0 || errno != ENOSPC)
-+		ret = -1;
-+
-+	close(perf_fd);
-+	return ret;
-+}
-+
-+static int test2(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread event by ptrace)
-+	 *	if (existing cpu event by perf)
-+	 *		if (addr range does not overlaps)
-+	 *			allow;
-+	 */
-+
-+	perf_fd = perf_cpu_event_open(0, (__u64)perf_data2, sizeof(*perf_data2));
-+	if (perf_fd < 0)
-+		return -1;
-+
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data2, sizeof(*ptrace_data2));
-+	if (ptrace_fd < 0) {
-+		ret = -1;
-+		goto perf_close;
-+	}
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+
-+perf_close:
-+	close(perf_fd);
-+	return ret;
-+}
-+
-+static int test3(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread event by ptrace)
-+	 *	if (existing thread event by perf on the same thread)
-+	 *		if (addr range overlaps)
-+	 *			fail;
-+	 */
-+	perf_fd = perf_thread_event_open(child_pid, (__u64)perf_data1,
-+					 sizeof(*perf_data1));
-+	if (perf_fd < 0)
-+		return -1;
-+
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data1, sizeof(*ptrace_data1));
-+	if (ptrace_fd > 0 || errno != ENOSPC)
-+		ret = -1;
-+
-+	close(perf_fd);
-+	return ret;
-+}
-+
-+static int test4(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread event by ptrace)
-+	 *	if (existing thread event by perf on the same thread)
-+	 *		if (addr range does not overlaps)
-+	 *			fail;
-+	 */
-+	perf_fd = perf_thread_event_open(child_pid, (__u64)perf_data2,
-+					 sizeof(*perf_data2));
-+	if (perf_fd < 0)
-+		return -1;
-+
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data2, sizeof(*ptrace_data2));
-+	if (ptrace_fd < 0) {
-+		ret = -1;
-+		goto perf_close;
-+	}
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+
-+perf_close:
-+	close(perf_fd);
-+	return ret;
-+}
-+
-+static int test5(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int cpid;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread event by ptrace)
-+	 *	if (existing thread event by perf on the different thread)
-+	 *		allow;
-+	 */
-+	cpid = fork();
-+	if (!cpid) {
-+		/* Temporary Child */
-+		pause();
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	perf_fd = perf_thread_event_open(cpid, (__u64)perf_data1, sizeof(*perf_data1));
-+	if (perf_fd < 0) {
-+		ret = -1;
-+		goto kill_child;
-+	}
-+
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data1, sizeof(*ptrace_data1));
-+	if (ptrace_fd < 0) {
-+		ret = -1;
-+		goto perf_close;
-+	}
-+
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+perf_close:
-+	close(perf_fd);
-+kill_child:
-+	kill(cpid, SIGINT);
-+	return ret;
-+}
-+
-+static int test6(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread kernel event by perf)
-+	 *	if (existing thread event by ptrace on the same thread)
-+	 *		allow;
-+	 * -- OR --
-+	 * if (new per cpu kernel event by perf)
-+	 *	if (existing thread event by ptrace)
-+	 *		allow;
-+	 */
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data1, sizeof(*ptrace_data1));
-+	if (ptrace_fd < 0)
-+		return -1;
-+
-+	perf_fd = perf_thread_kernel_event_open(child_pid);
-+	if (perf_fd < 0) {
-+		ret = -1;
-+		goto ptrace_close;
-+	}
-+	close(perf_fd);
-+
-+	perf_fd = perf_cpu_kernel_event_open(0);
-+	if (perf_fd < 0) {
-+		ret = -1;
-+		goto ptrace_close;
-+	}
-+	close(perf_fd);
-+
-+ptrace_close:
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+	return ret;
-+}
-+
-+static int test7(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread event by perf)
-+	 *	if (existing thread event by ptrace on the same thread)
-+	 *		if (addr range overlaps)
-+	 *			fail;
-+	 */
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data1, sizeof(*ptrace_data1));
-+	if (ptrace_fd < 0)
-+		return -1;
-+
-+	perf_fd = perf_thread_event_open(child_pid, (__u64)perf_data1,
-+					 sizeof(*perf_data1));
-+	if (perf_fd > 0 || errno != ENOSPC)
-+		ret = -1;
-+
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+	return ret;
-+}
-+
-+static int test8(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread event by perf)
-+	 *	if (existing thread event by ptrace on the same thread)
-+	 *		if (addr range does not overlaps)
-+	 *			allow;
-+	 */
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data2, sizeof(*ptrace_data2));
-+	if (ptrace_fd < 0)
-+		return -1;
-+
-+	perf_fd = perf_thread_event_open(child_pid, (__u64)perf_data2,
-+					 sizeof(*perf_data2));
-+	if (perf_fd < 0) {
-+		ret = -1;
-+		goto ptrace_close;
-+	}
-+	close(perf_fd);
-+
-+ptrace_close:
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+	return ret;
-+}
-+
-+static int test9(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int cpid;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread event by perf)
-+	 *	if (existing thread event by ptrace on the other thread)
-+	 *		allow;
-+	 */
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data1, sizeof(*ptrace_data1));
-+	if (ptrace_fd < 0)
-+		return -1;
-+
-+	cpid = fork();
-+	if (!cpid) {
-+		/* Temporary Child */
-+		pause();
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	perf_fd = perf_thread_event_open(cpid, (__u64)perf_data1, sizeof(*perf_data1));
-+	if (perf_fd < 0) {
-+		ret = -1;
-+		goto kill_child;
-+	}
-+	close(perf_fd);
-+
-+kill_child:
-+	kill(cpid, SIGINT);
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+	return ret;
-+}
-+
-+static int test10(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per cpu event by perf)
-+	 *	if (existing thread event by ptrace on the same thread)
-+	 *		if (addr range overlaps)
-+	 *			fail;
-+	 */
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data1, sizeof(*ptrace_data1));
-+	if (ptrace_fd < 0)
-+		return -1;
-+
-+	perf_fd = perf_cpu_event_open(0, (__u64)perf_data1, sizeof(*perf_data1));
-+	if (perf_fd > 0 || errno != ENOSPC)
-+		ret = -1;
-+
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+	return ret;
-+}
-+
-+static int test11(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per cpu event by perf)
-+	 *	if (existing thread event by ptrace on the same thread)
-+	 *		if (addr range does not overlap)
-+	 *			allow;
-+	 */
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data2, sizeof(*ptrace_data2));
-+	if (ptrace_fd < 0)
-+		return -1;
-+
-+	perf_fd = perf_cpu_event_open(0, (__u64)perf_data2, sizeof(*perf_data2));
-+	if (perf_fd < 0) {
-+		ret = -1;
-+		goto ptrace_close;
-+	}
-+	close(perf_fd);
-+
-+ptrace_close:
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+	return ret;
-+}
-+
-+static int test12(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread and per cpu event by perf)
-+	 *	if (existing thread event by ptrace on the same thread)
-+	 *		if (addr range overlaps)
-+	 *			fail;
-+	 */
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data1, sizeof(*ptrace_data1));
-+	if (ptrace_fd < 0)
-+		return -1;
-+
-+	perf_fd = perf_thread_cpu_event_open(child_pid, 0, (__u64)perf_data1,
-+						sizeof(*perf_data1));
-+	if (perf_fd > 0 || errno != ENOSPC)
-+		ret = -1;
-+
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+	return ret;
-+}
-+
-+static int test13(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread and per cpu event by perf)
-+	 *	if (existing thread event by ptrace on the same thread)
-+	 *		if (addr range does not overlap)
-+	 *			allow;
-+	 */
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data2, sizeof(*ptrace_data2));
-+	if (ptrace_fd < 0)
-+		return -1;
-+
-+	perf_fd = perf_thread_cpu_event_open(child_pid, 0, (__u64)perf_data2,
-+						sizeof(*perf_data2));
-+	if (perf_fd < 0) {
-+		ret = -1;
-+		goto ptrace_close;
-+	}
-+	close(perf_fd);
-+
-+ptrace_close:
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+	return ret;
-+}
-+
-+static int test14(pid_t child_pid)
-+{
-+	int perf_fd;
-+	int ptrace_fd;
-+	int cpid;
-+	int ret = 0;
-+
-+	/* Test:
-+	 * if (new per thread and per cpu event by perf)
-+	 *	if (existing thread event by ptrace on the other thread)
-+	 *		allow;
-+	 */
-+	ptrace_fd = ptrace_open(child_pid, (__u64)ptrace_data1, sizeof(*ptrace_data1));
-+	if (ptrace_fd < 0)
-+		return -1;
-+
-+	cpid = fork();
-+	if (!cpid) {
-+		/* Temporary Child */
-+		pause();
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	perf_fd = perf_thread_cpu_event_open(cpid, 0, (__u64)perf_data1,
-+					     sizeof(*perf_data1));
-+	if (perf_fd < 0) {
-+		ret = -1;
-+		goto kill_child;
-+	}
-+	close(perf_fd);
-+
-+kill_child:
-+	kill(cpid, SIGINT);
-+	ptrace(PPC_PTRACE_DELHWDEBUG, child_pid, 0, ptrace_fd);
-+	return ret;
-+}
-+
-+#define TEST(msg, fun, arg, ret) {		\
-+	int r;					\
-+	r = fun(arg);				\
-+	if (r)					\
-+		printf("%s: Error\n", msg);	\
-+	else					\
-+		printf("%s: Ok\n", msg);	\
-+	ret |= r;				\
-+}
-+
-+char *desc[14] = {
-+	"perf cpu event -> ptrace thread event (Overlapping)",
-+	"perf cpu event -> ptrace thread event (Non-overlapping)",
-+	"perf thread event -> ptrace same thread event (Overlapping)",
-+	"perf thread event -> ptrace same thread event (Non-overlapping)",
-+	"perf thread event -> ptrace other thread event",
-+	"ptrace thread event -> perf kernel event",
-+	"ptrace thread event -> perf same thread event (Overlapping)",
-+	"ptrace thread event -> perf same thread event (Non-overlapping)",
-+	"ptrace thread event -> perf other thread event",
-+	"ptrace thread event -> perf cpu event (Overlapping)",
-+	"ptrace thread event -> perf cpu event (Non-overlapping)",
-+	"ptrace thread event -> perf same thread & cpu event (Overlapping)",
-+	"ptrace thread event -> perf same thread & cpu event (Non-overlapping)",
-+	"ptrace thread event -> perf other thread & cpu event",
-+};
-+
-+static int test(pid_t child_pid)
-+{
-+	int ret = TEST_PASS;
-+
-+	TEST(desc[0], test1, child_pid, ret);
-+	TEST(desc[1], test2, child_pid, ret);
-+	TEST(desc[2], test3, child_pid, ret);
-+	TEST(desc[3], test4, child_pid, ret);
-+	TEST(desc[4], test5, child_pid, ret);
-+	TEST(desc[5], test6, child_pid, ret);
-+	TEST(desc[6], test7, child_pid, ret);
-+	TEST(desc[7], test8, child_pid, ret);
-+	TEST(desc[8], test9, child_pid, ret);
-+	TEST(desc[9], test10, child_pid, ret);
-+	TEST(desc[10], test11, child_pid, ret);
-+	TEST(desc[11], test12, child_pid, ret);
-+	TEST(desc[12], test13, child_pid, ret);
-+	TEST(desc[13], test14, child_pid, ret);
-+
-+	return ret;
-+}
-+
-+static void get_dbginfo(pid_t child_pid, struct ppc_debug_info *dbginfo)
-+{
-+	if (ptrace(PPC_PTRACE_GETHWDBGINFO, child_pid, NULL, dbginfo)) {
-+		perror("Can't get breakpoint info");
-+		exit(-1);
-+	}
-+}
-+
-+static int ptrace_perf_hwbreak(void)
-+{
-+	int ret;
-+	pid_t child_pid;
-+	struct ppc_debug_info dbginfo;
-+
-+	child_pid = fork();
-+	if (!child_pid)
-+		return child();
-+
-+	/* parent */
-+	wait(NULL); /* <-- child (SIGUSR1) */
-+
-+	get_dbginfo(child_pid, &dbginfo);
-+	SKIP_IF(dbginfo.num_data_bps <= 1);
-+
-+	ret = perf_cpu_event_open(0, (__u64)perf_data1, sizeof(*perf_data1));
-+	SKIP_IF(ret < 0);
-+	close(ret);
-+
-+	ret = test(child_pid);
-+
-+	ptrace(PTRACE_CONT, child_pid, NULL, 0);
-+	return ret;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	return test_harness(ptrace_perf_hwbreak, "ptrace-perf-hwbreak");
-+}
--- 
-2.27.0
+I'd much rather not include userfaultfd_k.h in shmem_fs.h, and go back
+to including it in mm/shmem.c: it's better to minimize everyone's header
+file inclusion, where reasonably possible.  A small change below for that.
 
+I advise the same for include/linux/hugetlb.h and mm/hugetlb.c,
+but those are outside the scope of this userfaultfd/shmem patch.
+
+>  
+>  /* inode in-kernel data */
+>  
+> @@ -122,21 +123,16 @@ static inline bool shmem_file(struct fil
+>  extern bool shmem_charge(struct inode *inode, long pages);
+>  extern void shmem_uncharge(struct inode *inode, long pages);
+>  
+> +#ifdef CONFIG_USERFAULTFD
+>  #ifdef CONFIG_SHMEM
+> -extern int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> -				  struct vm_area_struct *dst_vma,
+> -				  unsigned long dst_addr,
+> -				  unsigned long src_addr,
+> -				  struct page **pagep);
+> -extern int shmem_mfill_zeropage_pte(struct mm_struct *dst_mm,
+> -				    pmd_t *dst_pmd,
+> -				    struct vm_area_struct *dst_vma,
+> -				    unsigned long dst_addr);
+> -#else
+> -#define shmem_mcopy_atomic_pte(dst_mm, dst_pte, dst_vma, dst_addr, \
+> -			       src_addr, pagep)        ({ BUG(); 0; })
+> -#define shmem_mfill_zeropage_pte(dst_mm, dst_pmd, dst_vma, \
+> -				 dst_addr)      ({ BUG(); 0; })
+> -#endif
+
+Please add
+enum mcopy_atomic_mode;
+here, so the compiler can understand it without needing userfaultfd_k.h.
+
+> +int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> +			   struct vm_area_struct *dst_vma,
+> +			   unsigned long dst_addr, unsigned long src_addr,
+> +			   enum mcopy_atomic_mode mode, struct page **pagep);
+> +#else /* !CONFIG_SHMEM */
+> +#define shmem_mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr, \
+> +			       src_addr, mode, pagep)        ({ BUG(); 0; })
+> +#endif /* CONFIG_SHMEM */
+> +#endif /* CONFIG_USERFAULTFD */
+>  
+>  #endif
+> diff -purN 5125m243/include/uapi/linux/userfaultfd.h 5125m247/include/uapi/linux/userfaultfd.h
+> --- 5125m243/include/uapi/linux/userfaultfd.h	2021-04-04 22:32:32.042244690 -0700
+> +++ 5125m247/include/uapi/linux/userfaultfd.h	2021-04-04 22:34:14.962860439 -0700
+> @@ -31,7 +31,8 @@
+>  			   UFFD_FEATURE_MISSING_SHMEM |		\
+>  			   UFFD_FEATURE_SIGBUS |		\
+>  			   UFFD_FEATURE_THREAD_ID |		\
+> -			   UFFD_FEATURE_MINOR_HUGETLBFS)
+> +			   UFFD_FEATURE_MINOR_HUGETLBFS |	\
+> +			   UFFD_FEATURE_MINOR_SHMEM)
+>  #define UFFD_API_IOCTLS				\
+>  	((__u64)1 << _UFFDIO_REGISTER |		\
+>  	 (__u64)1 << _UFFDIO_UNREGISTER |	\
+> @@ -196,6 +197,7 @@ struct uffdio_api {
+>  #define UFFD_FEATURE_SIGBUS			(1<<7)
+>  #define UFFD_FEATURE_THREAD_ID			(1<<8)
+>  #define UFFD_FEATURE_MINOR_HUGETLBFS		(1<<9)
+> +#define UFFD_FEATURE_MINOR_SHMEM		(1<<10)
+
+That's fine, but looking at the file itself, UFFD_FEATURE_MINOR_HUGETLBFS
+has been given a comment above this list, so UFFD_FEATURE_MINOR_SHMEM is
+feeling lonely without one.
+
+>  	__u64 features;
+>  
+>  	__u64 ioctls;
+> diff -purN 5125m243/mm/memory.c 5125m247/mm/memory.c
+> --- 5125m243/mm/memory.c	2021-04-04 22:32:32.082244929 -0700
+> +++ 5125m247/mm/memory.c	2021-04-04 22:34:15.002860678 -0700
+> @@ -3972,9 +3972,11 @@ static vm_fault_t do_read_fault(struct v
+>  	 * something).
+>  	 */
+>  	if (vma->vm_ops->map_pages && fault_around_bytes >> PAGE_SHIFT > 1) {
+> -		ret = do_fault_around(vmf);
+> -		if (ret)
+> -			return ret;
+> +		if (likely(!userfaultfd_minor(vmf->vma))) {
+> +			ret = do_fault_around(vmf);
+> +			if (ret)
+> +				return ret;
+> +		}
+
+Ah yes, that's important, well spotted.
+
+>  	}
+>  
+>  	ret = __do_fault(vmf);
+> diff -purN 5125m243/mm/shmem.c 5125m247/mm/shmem.c
+> --- 5125m243/mm/shmem.c	2021-02-28 18:30:29.692414467 -0800
+> +++ 5125m247/mm/shmem.c	2021-04-04 22:34:15.014860751 -0700
+> @@ -77,7 +77,6 @@ static struct vfsmount *shm_mnt;
+>  #include <linux/syscalls.h>
+>  #include <linux/fcntl.h>
+>  #include <uapi/linux/memfd.h>
+> -#include <linux/userfaultfd_k.h>
+>  #include <linux/rmap.h>
+>  #include <linux/uuid.h>
+>  
+> @@ -1785,8 +1784,8 @@ unlock:
+>   * vm. If we swap it in we mark it dirty since we also free the swap
+>   * entry since a page cannot live in both the swap and page cache.
+>   *
+> - * vmf and fault_type are only supplied by shmem_fault:
+> - * otherwise they are NULL.
+> + * vma, vmf, and fault_type are only supplied by shmem_fault: otherwise they
+
+Yes, you're right (though I did prefer the newline after ":" as before).
+
+> + * are NULL.
+>   */
+>  static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
+>  	struct page **pagep, enum sgp_type sgp, gfp_t gfp,
+> @@ -1830,6 +1829,13 @@ repeat:
+>  		return error;
+>  	}
+>  
+> +	if (page && vma && userfaultfd_minor(vma)) {
+> +		unlock_page(page);
+> +		put_page(page);
+> +		*fault_type = handle_userfault(vmf, VM_UFFD_MINOR);
+> +		return 0;
+> +	}
+> +
+
+Yes and no. The problem here is that just above is an early return
+from the xa_is_value() shmem_swapin_page() case: if the page had been
+out on swap, VM_UFFD_MINOR must return there too.
+
+(I haven't looked into the neatest way of coding that: it would
+be preferable to have just one userfaultfd_minor() check and one
+handle_userfault() call for both swapped-out and in-cache cases;
+but maybe doing it that way would turn out to uglify the flow.)
+
+(Should shmem_getpage_gfp() return before doing shmem_swapin_page(),
+if swap is found when VM_UFFD_MINOR? Leaving it to userspace to touch
+the page and swap it in? That could be more efficient, letting userspace
+do it without the mmap_lock; but that would not be a robust interface,
+and the exceptional swap path does not need such optmization.)
+
+>  	if (page)
+>  		hindex = page->index;
+>  	if (page && sgp == SGP_WRITE)
+> @@ -2354,13 +2360,11 @@ static struct inode *shmem_get_inode(str
+>  	return inode;
+>  }
+>  
+> -static int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+> -				  pmd_t *dst_pmd,
+> -				  struct vm_area_struct *dst_vma,
+> -				  unsigned long dst_addr,
+> -				  unsigned long src_addr,
+> -				  bool zeropage,
+> -				  struct page **pagep)
+> +#ifdef CONFIG_USERFAULTFD
+
+Thank you! It's particularly helpful, given that "shmem_mcopy_atomic_pte"
+gives no hint that it's for userfaultfd. (And I had to read Documentation
+to understand why it likes to say "atomic" here.)  Okay, it's not your job
+to change userfaultfd naming and organization; but on these rare occasions
+that I have to revisit it, I do wish it were easier to follow.
+
+> +int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> +			   struct vm_area_struct *dst_vma,
+> +			   unsigned long dst_addr, unsigned long src_addr,
+> +			   enum mcopy_atomic_mode mode, struct page **pagep)
+>  {
+>  	struct inode *inode = file_inode(dst_vma->vm_file);
+>  	struct shmem_inode_info *info = SHMEM_I(inode);
+> @@ -2372,7 +2376,11 @@ static int shmem_mfill_atomic_pte(struct
+>  	struct page *page;
+>  	pte_t _dst_pte, *dst_pte;
+>  	int ret;
+> -	pgoff_t offset, max_off;
+> +	pgoff_t max_off;
+> +
+> +	/* Handled by mcontinue_atomic_pte instead. */
+> +	if (WARN_ON_ONCE(mode == MCOPY_ATOMIC_CONTINUE))
+> +		return -EINVAL;
+>  
+>  	ret = -ENOMEM;
+>  	if (!shmem_inode_acct_block(inode, 1))
+> @@ -2383,7 +2391,7 @@ static int shmem_mfill_atomic_pte(struct
+>  		if (!page)
+>  			goto out_unacct_blocks;
+>  
+> -		if (!zeropage) {	/* mcopy_atomic */
+> +		if (mode == MCOPY_ATOMIC_NORMAL) {	/* mcopy_atomic */
+>  			page_kaddr = kmap_atomic(page);
+>  			ret = copy_from_user(page_kaddr,
+>  					     (const void __user *)src_addr,
+> @@ -2397,7 +2405,7 @@ static int shmem_mfill_atomic_pte(struct
+>  				/* don't free the page */
+>  				return -ENOENT;
+>  			}
+> -		} else {		/* mfill_zeropage_atomic */
+> +		} else {		/* zeropage */
+>  			clear_highpage(page);
+>  		}
+>  	} else {
+> @@ -2405,15 +2413,15 @@ static int shmem_mfill_atomic_pte(struct
+>  		*pagep = NULL;
+>  	}
+>  
+> -	VM_BUG_ON(PageLocked(page) || PageSwapBacked(page));
+> +	VM_BUG_ON(PageSwapBacked(page));
+> +	VM_BUG_ON(PageLocked(page));
+>  	__SetPageLocked(page);
+>  	__SetPageSwapBacked(page);
+>  	__SetPageUptodate(page);
+>  
+>  	ret = -EFAULT;
+> -	offset = linear_page_index(dst_vma, dst_addr);
+>  	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -	if (unlikely(offset >= max_off))
+> +	if (unlikely(pgoff >= max_off))
+
+Yes, that's better.
+
+>  		goto out_release;
+>  
+>  	ret = shmem_add_to_page_cache(page, mapping, pgoff, NULL,
+> @@ -2439,7 +2447,7 @@ static int shmem_mfill_atomic_pte(struct
+>  
+>  	ret = -EFAULT;
+>  	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -	if (unlikely(offset >= max_off))
+> +	if (unlikely(pgoff >= max_off))
+>  		goto out_release_unlock;
+>  
+>  	ret = -EEXIST;
+> @@ -2476,28 +2484,7 @@ out_unacct_blocks:
+>  	shmem_inode_unacct_blocks(inode, 1);
+>  	goto out;
+>  }
+> -
+> -int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm,
+> -			   pmd_t *dst_pmd,
+> -			   struct vm_area_struct *dst_vma,
+> -			   unsigned long dst_addr,
+> -			   unsigned long src_addr,
+> -			   struct page **pagep)
+> -{
+> -	return shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
+> -				      dst_addr, src_addr, false, pagep);
+> -}
+> -
+> -int shmem_mfill_zeropage_pte(struct mm_struct *dst_mm,
+> -			     pmd_t *dst_pmd,
+> -			     struct vm_area_struct *dst_vma,
+> -			     unsigned long dst_addr)
+> -{
+> -	struct page *page = NULL;
+> -
+> -	return shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
+> -				      dst_addr, 0, true, &page);
+> -}
+
+Yes, I like the way you have combined them into one.
+
+> +#endif /* CONFIG_USERFAULTFD */
+>  
+>  #ifdef CONFIG_TMPFS
+>  static const struct inode_operations shmem_symlink_inode_operations;
+> diff -purN 5125m243/mm/userfaultfd.c 5125m247/mm/userfaultfd.c
+> --- 5125m243/mm/userfaultfd.c	2021-04-04 22:32:32.102245048 -0700
+> +++ 5125m247/mm/userfaultfd.c	2021-04-04 22:34:15.022860799 -0700
+> @@ -48,21 +48,103 @@ struct vm_area_struct *find_dst_vma(stru
+>  	return dst_vma;
+>  }
+>  
+> +/*
+> + * Install PTEs, to map dst_addr (within dst_vma) to page.
+> + *
+> + * This function handles MCOPY_ATOMIC_CONTINUE (which is always file-backed),
+> + * whether or not dst_vma is VM_SHARED. It also handles the more general
+> + * MCOPY_ATOMIC_NORMAL case, when dst_vma is *not* VM_SHARED (it may be file
+> + * backed, or not).
+> + *
+> + * Note that MCOPY_ATOMIC_NORMAL for a VM_SHARED dst_vma is handled by
+> + * shmem_mcopy_atomic_pte instead.
+> + */
+> +static int mcopy_atomic_install_ptes(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> +				     struct vm_area_struct *dst_vma,
+> +				     unsigned long dst_addr, struct page *page,
+> +				     enum mcopy_atomic_mode mode, bool wp_copy)
+> +{
+> +	int ret;
+> +	pte_t _dst_pte, *dst_pte;
+> +	bool is_continue = mode == MCOPY_ATOMIC_CONTINUE;
+> +	int writable;
+> +	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
+> +	bool is_file_backed = dst_vma->vm_file;
+> +	spinlock_t *ptl;
+> +	struct inode *inode;
+> +	pgoff_t offset, max_off;
+> +
+> +	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
+> +	writable = dst_vma->vm_flags & VM_WRITE;
+> +	/* For CONTINUE on a non-shared VMA, don't pte_mkwrite for CoW. */
+> +	if (is_continue && !vm_shared)
+> +		writable = 0;
+
+Indeed, there is nothing more important than keeping pte_write() off
+page cache mapped privately.
+
+> +
+> +	if (writable) {
+> +		_dst_pte = pte_mkdirty(_dst_pte);
+> +		if (wp_copy)
+> +			_dst_pte = pte_mkuffd_wp(_dst_pte);
+> +		else
+> +			_dst_pte = pte_mkwrite(_dst_pte);
+> +	} else if (vm_shared) {
+> +		/*
+> +		 * Since we didn't pte_mkdirty(), mark the page dirty or it
+> +		 * could be freed from under us. We could do this
+> +		 * unconditionally, but doing it only if !writable is faster.
+> +		 */
+> +		set_page_dirty(page);
+
+I do not remember why Andrea or I preferred set_page_dirty() here to
+pte_mkdirty(); but I suppose there might somewhere be a BUG_ON(pte_dirty)
+which this would avoid.  Risky to change it, though it does look odd.
+
+> +	}
+> +
+> +	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+> +
+> +	if (is_file_backed) {
+> +		/* The shmem MAP_PRIVATE case requires checking the i_size */
+> +		inode = dst_vma->vm_file->f_inode;
+> +		offset = linear_page_index(dst_vma, dst_addr);
+> +		max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> +		ret = -EFAULT;
+> +		if (unlikely(offset >= max_off))
+> +			goto out_unlock;
+> +	}
+> +
+> +	ret = -EEXIST;
+> +	if (!pte_none(*dst_pte))
+> +		goto out_unlock;
+> +
+> +	inc_mm_counter(dst_mm, mm_counter(page));
+> +	if (is_file_backed)
+> +		page_add_file_rmap(page, false);
+> +	else
+> +		page_add_new_anon_rmap(page, dst_vma, dst_addr, false);
+> +
+> +	if (!is_continue)
+> +		lru_cache_add_inactive_or_unevictable(page, dst_vma);
+
+I'm beginning to think that you took a wrong direction in v4 and v5,
+sending MINOR/CONTINUE this way instead of into shmem.c.  I haven't
+spotted any mistakes in this function, but it's not easy.
+
+If shmem_mcopy_atomic_pte() ended up using this mcopy_atomic_install_ptes()
+(and so mm/shmem.c contain no pte manipulation at all), that would be one
+kind of nice outcome.
+
+Or if shmem_mcopy_atomic_pte() handled all of the shmem page cache issues,
+and this just did the anonymous, that would be a different nice outcome.
+
+But here we have mcopy_atomic_install_ptes(), with a host of at-first-sight
+independent booleans (is_continue, is_file_backed, vm_shared, writable,
+wp_copy), doing too much yet not enough.
+
+I think it needs to shift in one direction or another: maybe revert
+back towards something more like v3, or maybe go further with
+mcopy_atomic_install_ptes().
+
+> +
+> +	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+> +
+> +	/* No need to invalidate - it was non-present before */
+> +	update_mmu_cache(dst_vma, dst_addr, dst_pte);
+> +	pte_unmap_unlock(dst_pte, ptl);
+> +	ret = 0;
+
+	ret =0;
+out_unlock:
+	pte_unmap_unlock(dst_pte, ptl);
+
+would avoid the goto out contortions at out_unlock below.
+
+> +out:
+> +	return ret;
+> +out_unlock:
+> +	pte_unmap_unlock(dst_pte, ptl);
+> +	goto out;
+> +}
+> +
+>  static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+>  			    pmd_t *dst_pmd,
+>  			    struct vm_area_struct *dst_vma,
+>  			    unsigned long dst_addr,
+>  			    unsigned long src_addr,
+>  			    struct page **pagep,
+> +			    enum mcopy_atomic_mode mode,
+>  			    bool wp_copy)
+>  {
+> -	pte_t _dst_pte, *dst_pte;
+> -	spinlock_t *ptl;
+>  	void *page_kaddr;
+>  	int ret;
+>  	struct page *page;
+> -	pgoff_t offset, max_off;
+> -	struct inode *inode;
+>  
+>  	if (!*pagep) {
+>  		ret = -ENOMEM;
+> @@ -99,43 +181,12 @@ static int mcopy_atomic_pte(struct mm_st
+>  	if (mem_cgroup_charge(page, dst_mm, GFP_KERNEL))
+>  		goto out_release;
+>  
+> -	_dst_pte = pte_mkdirty(mk_pte(page, dst_vma->vm_page_prot));
+> -	if (dst_vma->vm_flags & VM_WRITE) {
+> -		if (wp_copy)
+> -			_dst_pte = pte_mkuffd_wp(_dst_pte);
+> -		else
+> -			_dst_pte = pte_mkwrite(_dst_pte);
+> -	}
+> -
+> -	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+> -	if (dst_vma->vm_file) {
+> -		/* the shmem MAP_PRIVATE case requires checking the i_size */
+> -		inode = dst_vma->vm_file->f_inode;
+> -		offset = linear_page_index(dst_vma, dst_addr);
+> -		max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -		ret = -EFAULT;
+> -		if (unlikely(offset >= max_off))
+> -			goto out_release_uncharge_unlock;
+> -	}
+> -	ret = -EEXIST;
+> -	if (!pte_none(*dst_pte))
+> -		goto out_release_uncharge_unlock;
+> -
+> -	inc_mm_counter(dst_mm, MM_ANONPAGES);
+> -	page_add_new_anon_rmap(page, dst_vma, dst_addr, false);
+> -	lru_cache_add_inactive_or_unevictable(page, dst_vma);
+> -
+> -	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+> -
+> -	/* No need to invalidate - it was non-present before */
+> -	update_mmu_cache(dst_vma, dst_addr, dst_pte);
+> -
+> -	pte_unmap_unlock(dst_pte, ptl);
+> -	ret = 0;
+> +	ret = mcopy_atomic_install_ptes(dst_mm, dst_pmd, dst_vma, dst_addr,
+> +					page, mode, wp_copy);
+> +	if (ret)
+> +		goto out_release;
+>  out:
+>  	return ret;
+> -out_release_uncharge_unlock:
+> -	pte_unmap_unlock(dst_pte, ptl);
+>  out_release:
+>  	put_page(page);
+>  	goto out;
+> @@ -176,6 +227,38 @@ out_unlock:
+>  	return ret;
+>  }
+>  
+> +static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
+> +				pmd_t *dst_pmd,
+> +				struct vm_area_struct *dst_vma,
+> +				unsigned long dst_addr,
+> +				bool wp_copy)
+> +{
+> +	struct inode *inode = file_inode(dst_vma->vm_file);
+> +	struct address_space *mapping = inode->i_mapping;
+> +	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
+> +	struct page *page;
+> +	int ret;
+> +
+> +	ret = -EFAULT;
+> +	page = find_lock_page(mapping, pgoff);
+> +	if (!page)
+> +		goto out;
+
+No. That looks nice and generic, but IIUC only shmem gets to come this way,
+and find_lock_page() is not allowing for swap. Agreed that it will be
+unlikely for the page (vetted by userspace before ioctl'ing to here) to
+have gotten swapped out meanwhile, but we must allow for that unlikelihood.
+
+You will need to use shmem_getpage(SGP_CACHE) instead: NULL vma so you
+don't get trapped into endless userfaultfd_minor() breakouts.  (If someone
+else punched a hole in the file meanwhile, shmem_getpage() will allocate
+a new page you don't particularly want: but that is not a case we need to
+care about, beyond getting the accounting right and not crashing.)
+
+> +
+> +	ret = mcopy_atomic_install_ptes(dst_mm, dst_pmd, dst_vma, dst_addr,
+> +					page, MCOPY_ATOMIC_CONTINUE, wp_copy);
+> +	if (ret)
+> +		goto out_release;
+> +
+> +	unlock_page(page);
+> +	ret = 0;
+> +out:
+> +	return ret;
+> +out_release:
+> +	unlock_page(page);
+> +	put_page(page);
+> +	goto out;
+> +}
+> +
+>  static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address)
+>  {
+>  	pgd_t *pgd;
+> @@ -415,10 +498,16 @@ static __always_inline ssize_t mfill_ato
+>  						unsigned long dst_addr,
+>  						unsigned long src_addr,
+>  						struct page **page,
+> -						bool zeropage,
+> +						enum mcopy_atomic_mode mode,
+>  						bool wp_copy)
+>  {
+> -	ssize_t err;
+> +	ssize_t err = 0;
+> +
+> +	if (mode == MCOPY_ATOMIC_CONTINUE) {
+> +		err = mcontinue_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+> +					   wp_copy);
+> +		goto out;
+> +	}
+>  
+>  	/*
+>  	 * The normal page fault path for a shmem will invoke the
+> @@ -431,24 +520,20 @@ static __always_inline ssize_t mfill_ato
+>  	 * and not in the radix tree.
+>  	 */
+>  	if (!(dst_vma->vm_flags & VM_SHARED)) {
+> -		if (!zeropage)
+> +		if (mode == MCOPY_ATOMIC_NORMAL)
+>  			err = mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma,
+>  					       dst_addr, src_addr, page,
+> -					       wp_copy);
+> -		else
+> +					       mode, wp_copy);
+> +		else if (mode == MCOPY_ATOMIC_ZEROPAGE)
+>  			err = mfill_zeropage_pte(dst_mm, dst_pmd,
+>  						 dst_vma, dst_addr);
+>  	} else {
+>  		VM_WARN_ON_ONCE(wp_copy);
+> -		if (!zeropage)
+> -			err = shmem_mcopy_atomic_pte(dst_mm, dst_pmd,
+> -						     dst_vma, dst_addr,
+> -						     src_addr, page);
+> -		else
+> -			err = shmem_mfill_zeropage_pte(dst_mm, dst_pmd,
+> -						       dst_vma, dst_addr);
+> +		err = shmem_mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+> +					     src_addr, mode, page);
+>  	}
+>  
+> +out:
+>  	return err;
+>  }
+>  
+> @@ -467,7 +552,6 @@ static __always_inline ssize_t __mcopy_a
+>  	long copied;
+>  	struct page *page;
+>  	bool wp_copy;
+> -	bool zeropage = (mcopy_mode == MCOPY_ATOMIC_ZEROPAGE);
+>  
+>  	/*
+>  	 * Sanitize the command parameters:
+> @@ -530,7 +614,7 @@ retry:
+>  
+>  	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
+>  		goto out_unlock;
+> -	if (mcopy_mode == MCOPY_ATOMIC_CONTINUE)
+> +	if (!vma_is_shmem(dst_vma) && mcopy_mode == MCOPY_ATOMIC_CONTINUE)
+>  		goto out_unlock;
+>  
+>  	/*
+> @@ -578,7 +662,7 @@ retry:
+>  		BUG_ON(pmd_trans_huge(*dst_pmd));
+>  
+>  		err = mfill_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+> -				       src_addr, &page, zeropage, wp_copy);
+> +				       src_addr, &page, mcopy_mode, wp_copy);
+>  		cond_resched();
+>  
+>  		if (unlikely(err == -ENOENT)) {
+
+I didn't pay a great deal of attention to the remainder above: I think it's
+right, but it would have been easier to review if mcopy_mode and refactoring
+had been introduced in a preliminary patch, before going on to implement
+MINOR/CONTINUE on shmem.
+
+Hugh
