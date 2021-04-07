@@ -2,114 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E413577F9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 00:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FE03577FB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 00:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbhDGWvX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Apr 2021 18:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S229546AbhDGWv5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Apr 2021 18:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbhDGWvW (ORCPT
+        with ESMTP id S229459AbhDGWv5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Apr 2021 18:51:22 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8684FC061760
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Apr 2021 15:51:11 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id x11so300552qkp.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Apr 2021 15:51:11 -0700 (PDT)
+        Wed, 7 Apr 2021 18:51:57 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CA5C061760;
+        Wed,  7 Apr 2021 15:51:47 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id lr1-20020a17090b4b81b02900ea0a3f38c1so3798967pjb.0;
+        Wed, 07 Apr 2021 15:51:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=akFwvW1OPNUTvr2e/zyj+KD9T58HeKDdv1pZyCx4m3s=;
-        b=DuFPi2GpNFK4QFLfLRuf3hEguynbfHsAkqPmG8FbTdFT76p/tQXsHu07amyvhobFvS
-         vdHvFMcHUQtsmDgP53Bd3z4x/ghUyUMHBYMBCVmNuyc9P/mfugQ/MWu633B3iu5zrNRN
-         +yb1Y/tjbE6cRQ777L85d/W9xXkQ7CVwD2vYbml96Qvi0j2hBMZjazbPYNFE+RIk5vxh
-         aZECALgLkrvWjt7yA/LFghP261JTdP/bY1sS6vWhUlAAWLgITKSXmrnE6T15+QdiA7c0
-         VQX73UCJjunCOkEgVZrLWtV5bffDnY+V+P6/Ir84+to3gBRpvt+atQPcpGSScNLdFera
-         Y2MA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FgPfAhHXqMoy6vJnPfG5IIOlPZRwNfuNehQ3+fiErZg=;
+        b=WBPzgtBaGILmG5MWe1cdPTLspW1zWPgzBxOHeRFyI9oNgTBRoOzxlnCjHPxfxsOC1/
+         m5xMiCcbeIlSQhSeBCZvi3j1iz8OwIZbuVA9308Nzf8lh3p9CtlaneD4kLEtFK5QISVF
+         etkA/4s5UMX0nod2rmWZCCNOvfHlIjnSs8wLjHDMGht5idehxHRlvY4Yo7yCssj68Q6G
+         sCnbxhLo+tydgph4Pt3/NWPmoez+FUc0fayrCVydlixpjkCV8/1cnDr45HwexuOHTEKM
+         mVNFyAz6Nk8SxoTYEnwavg9uAqYm7mxdcper0f3ut4YLX0d9+sma51NWlKp/uQ3uqfZe
+         IMHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=akFwvW1OPNUTvr2e/zyj+KD9T58HeKDdv1pZyCx4m3s=;
-        b=Yu0FRr6EZzqSC24LI9JwXQJLEKAMpay6b10hKvWccVVQP3tVVveWvoIcbRi792Nf+E
-         3FB/WymyfYkXtDDSb+DIw31X/J4TMgUWa3IUcNQO7Cevt/tPGuWSY7VwQd6Rfz+eOG44
-         wzbfUJD8pio+UQQr2fCsS0TL5/8SmmWyJlOCNcqEs/dplKeKuBTciYxk291wuk3Ua1ZT
-         cyHPbKAwznPMtcRHhYSyKDRa9s8K+sfOFhhtWRes5TdrW7TPArtbphGZRNmyRYvIwNzF
-         mY4QMspVFuyJVkfoeHJimP72R/n8tjRje5UnTbrs+3qLwMGQK9grdxrWWmPdsg+zixvg
-         9TdA==
-X-Gm-Message-State: AOAM530awtdM0RslbLthSYOk8JtUe4T15FGTbTmVe7NbVG64qXjusx3w
-        TCHjnQBFkRQruPF7/O7VMZf/PQ==
-X-Google-Smtp-Source: ABdhPJxwo5ZTCb8pJWYlrRQi+hQ9q5Ts9Qg8T9xfYtLCCgFcYREh0mV5OiX7ERdLHMrCb14BuF1v5Q==
-X-Received: by 2002:a37:dcb:: with SMTP id 194mr5795509qkn.4.1617835870547;
-        Wed, 07 Apr 2021 15:51:10 -0700 (PDT)
-Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id s19sm19059776qks.130.2021.04.07.15.51.08
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Wed, 07 Apr 2021 15:51:10 -0700 (PDT)
-Date:   Wed, 7 Apr 2021 15:50:54 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@eggly.anvils
-To:     Axel Rasmussen <axelrasmussen@google.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        linux-kselftest@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michel Lespinasse <walken@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v4] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTINUE
- behavior
-In-Reply-To: <CAJHvVcgGbdeoniOzwQsc370idV5gJ5cfq8Kzu3hneBAaB+CL6g@mail.gmail.com>
-Message-ID: <alpine.LSU.2.11.2104071542190.15034@eggly.anvils>
-References: <20210401183701.1774159-1-axelrasmussen@google.com> <alpine.LSU.2.11.2104062307110.14082@eggly.anvils> <CAJHvVcgGbdeoniOzwQsc370idV5gJ5cfq8Kzu3hneBAaB+CL6g@mail.gmail.com>
-User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FgPfAhHXqMoy6vJnPfG5IIOlPZRwNfuNehQ3+fiErZg=;
+        b=YlHnMRcT5G6Ft52FucN7M+hJ3MNoIeCH16Hxa6mBY0YdtlFXUiJlfFEtXHyci417AZ
+         qK52UKedcWe1D91dihapKSGCdM3bNISiY0Q8ehPlBfuLM9EDcLEamZyS6v0Bx1JUvjt1
+         vPt2bp8aKt2n6P+oj86QjqtjVDX3v7hX4pVM1n28mry+PGQY301s7PHwDjFn6SN0gLxl
+         A48O4wEoxQphugl2Ls7HY1Dge7dZhaUcGT/i6H3Sc3oK7OTiL3LmZI3aV77UBC70tvtO
+         26xEesFrbLgR3k5WngT8qIX/spmbLL93goqaicyJJDFWysJNeQth1xZvxHUsKM186xnx
+         WYzQ==
+X-Gm-Message-State: AOAM53332I/ySdXlQQDrvY+Phx9eiD9IdMxpeoHdTvpd+GCGdpzJGRQU
+        lbruDVTDB1ZNKzpA91p5PwQvgGS1sK1PBYsr5BM=
+X-Google-Smtp-Source: ABdhPJy9stg3QYcMaqURxTma45eWavwwq9g44GznI2BjzG6qp/K16EWCe6Sb/5WyxsV3R7ja14c87YL720P9Ph2eWzU=
+X-Received: by 2002:a17:90a:5407:: with SMTP id z7mr5559293pjh.228.1617835906867;
+ Wed, 07 Apr 2021 15:51:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
+In-Reply-To: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 8 Apr 2021 01:51:28 +0300
+Message-ID: <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com>
+Subject: Re: [next] [arm64] [gpio] BUG: key has not been registered! DEBUG_LOCKS_WARN_ON:
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Colin King <colin.king@canonical.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 7 Apr 2021, Axel Rasmussen wrote:
-> Agreed about taking one direction or the other further.
-> 
-> I get the sense that Peter prefers the mcopy_atomic_install_ptes()
-> version, and would thus prefer to just expose that and let
-> shmem_mcopy_atomic_pte() use it.
-> 
-> But, I get the sense that you (Hugh) slightly prefer the other way -
-> just letting shmem_mcopy_atomic_pte() deal with both the VM_SHARED and
-> !VM_SHARED cases.
+On Thu, Apr 8, 2021 at 12:38 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> While running kselftest recently added gpio gpio-sim.sh test case the following
+> warning was triggered on Linux next tag 20210330 tag running on arm64 juno
+> and hikey devices.
+>
+> GOOD: next-20210326
+> BAD: next-20210330
+>
+> This is still happening today on Linux next tag 20210407.
 
-No, either direction seems plausible to me: start from whichever
-end you prefer.
+Can you add the following
 
-> 
-> I was planning to write "I prefer option X because (reasons), and
-> objections?" but I'm realizing that it isn't really clear to me which
-> route would end up being cleaner. I think I have to just pick one,
-> write it out, and see where I end up. If it ends up gross, I don't
-> mind backtracking and taking the other route. :) To that end, I'll
-> proceed by having shmem_mcopy_atomic_pte() call the new
-> mcopy_atomic_install_ptes() helper, and see how it looks (unless there
-> are objections).
+  sysfs_attr_init(attrs[i]);
 
-I am pleased to read that: it's exactly how I would approach it -
-so it must be right :-)
+to the end of the loop in gpio_sim_setup_sysfs()?
 
-Hugh
+If it fixes an issue I'll send a formal patch.
+
+-- 
+With Best Regards,
+Andy Shevchenko
