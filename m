@@ -2,109 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A3D35740B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Apr 2021 20:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8C2357462
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Apr 2021 20:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348411AbhDGSPs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Apr 2021 14:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
+        id S1348846AbhDGScE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Apr 2021 14:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbhDGSPr (ORCPT
+        with ESMTP id S229970AbhDGScD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Apr 2021 14:15:47 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D1EC061760
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Apr 2021 11:15:35 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id i81so19685061oif.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Apr 2021 11:15:35 -0700 (PDT)
+        Wed, 7 Apr 2021 14:32:03 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0864C06175F;
+        Wed,  7 Apr 2021 11:31:53 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id e188so10166049ybb.13;
+        Wed, 07 Apr 2021 11:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uoEi3BP3d29vcJAQRKbNC4SG8iDtnjjh94HE5FU651c=;
-        b=K83N5rh9ut515leNqDhrXT9JgDlyPDxDpX77guxK/mO9vXGV3Jbe8iKqVkZHOC5lm3
-         h0RIqlqvs4vpnd7fztqsO4S62/zNapA/6Q/Jz2FC1x2TDQHiF6zPY2h4rqSKJAiWWkXg
-         +wo5BpbBT+qCOujgsniETQRNPwduzfyciOZvs=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kn69rhRMMVrayDs5H+UzYud2Z7b87MPu6OYNo7BSq9A=;
+        b=Q2cgRQjRQoFVUE6O76KGZGQ0T10GT/8WWUQ4aLFIvZB1FdDAVI7p0zTOtKA3w5gmxC
+         GJ9+qEn9Pl6LOQDUOz/2AscK4HGX/1pzTtrWrclrliS9UWu2vetCXRLORs9r1/0BGOll
+         z4+IUGKVMpbbjvfjr/Cer+mqJQIqGPMQaVcF5Wyn9jFeVGrczf9AvISUdu3E3Z08gfCa
+         tqIR2B9NeRkhhNaVWenAAVcYue4UsqlMAHKD8aTXMxbjTHbTowFcZ9tqnt9JmYZmEz7E
+         /9dWXUufoX7o7RKzVcI7hhwlnKcS3T8x6l6I9Z/4vTJoPub06WYZ4jEsnzbDbBkuD1Tm
+         E7bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uoEi3BP3d29vcJAQRKbNC4SG8iDtnjjh94HE5FU651c=;
-        b=V+6F3zRy9CXlldZIwkMqg/FoaHTE4KylXv9cgPZfwdDewgGdVWA+6w3cw1cGfT56Mu
-         1iVwwcL0JgG0betf/29QkNGqAa/z5deXP/h2Ag5Z4wC0+ed2aBUt0z1Knzv9lo8ojdrx
-         5dEq6pBaN5YYS0ZB+LFAAzIjBuhpJ5mQZwHaG8rnDasvvypkp91n7nkGi7zUgPE3IINl
-         VW641N57GBzqLlOhurnoHBf3+5Kwn+pcj78JArX7Wj3MlJB3yjoVrnqEoWT2PXXeI4AJ
-         bYNcGpHkeJNy6wkHfYBm2KX2S//HORpR/ZbESzLualjlNRkeYL32N74qoLIHjdsiTVYt
-         TpTw==
-X-Gm-Message-State: AOAM530IoY2h/yQubzvoEIeInhNfM/eD0TUcVbdIFRbqxRdIpxKj7HvU
-        QXKFEEcIJ44vhUWrj13k9rc8rA==
-X-Google-Smtp-Source: ABdhPJwuzgvRhgvbMl5pTOzFGcrVdkaCXJC/0TY6RWsoDgz8FNEjiObb1YugHss+uSxcImQRZ7yyPA==
-X-Received: by 2002:aca:4a95:: with SMTP id x143mr3106178oia.59.1617819335056;
-        Wed, 07 Apr 2021 11:15:35 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id k24sm4416554oic.51.2021.04.07.11.15.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Apr 2021 11:15:34 -0700 (PDT)
-Subject: Re: [PATCH] selftests/resctrl: Change a few printed messages
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210406005242.3248706-1-fenghua.yu@intel.com>
- <67062f6c-d09a-f8e0-4d22-49c4452d0552@linuxfoundation.org>
- <YG3n7gsIhqOGjltv@otcwcpicx3.sc.intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9c38f6fd-d53f-0f79-f5fe-456090368330@linuxfoundation.org>
-Date:   Wed, 7 Apr 2021 12:15:33 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kn69rhRMMVrayDs5H+UzYud2Z7b87MPu6OYNo7BSq9A=;
+        b=tjp51UgVsUw9dveE7K+1oE+bd3Ctnq4pJWYA80F2s6HXG/IPD6zUI1wBC5aQ09xQ24
+         aLD50NVBF0W3F/VorcOvnLwIkztiN/jne3Yx12u/0sEQvqHKqTmktiD7nHPa3NsoxP65
+         /20f+ukdNa15M93YFwfoPnVJ1HMx/QrnvPkLVFsGUPGRZjdtNURNhdpL0JTJf4xhVUWx
+         lHgurknNNJ8op4EfRYXJqhWG9U7ORFdhNcA1tDZ8ZvY2iBxSA999yUS5tA3dZ4m9U4LV
+         b2A408wYtpDIbCDVr+ciAS6DqKHZ+EJPyVrm4E1sVOfX2d9uVeiorzisCFwp5CfQj4Bz
+         GHmA==
+X-Gm-Message-State: AOAM532eVSixlRrilev70gKpirjFw1UwiE5lI6tmv/ZWNOjEi6qHK1GH
+        kA1uc41GWFfz5BAHqpgFgXp2jQIqm+IdmCtEC1c=
+X-Google-Smtp-Source: ABdhPJwyD46iJ/cTYmc9rpHBrMJfjKJ5VR+417ZI8GKSj4oYvi0t0OHizfMM7YPKvVsq94rSk7oftNhfxDjL2qjXeCo=
+X-Received: by 2002:a25:9942:: with SMTP id n2mr6307629ybo.230.1617820312912;
+ Wed, 07 Apr 2021 11:31:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YG3n7gsIhqOGjltv@otcwcpicx3.sc.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210406185400.377293-1-pctammela@mojatatu.com> <20210406185400.377293-3-pctammela@mojatatu.com>
+In-Reply-To: <20210406185400.377293-3-pctammela@mojatatu.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 7 Apr 2021 11:31:42 -0700
+Message-ID: <CAEf4BzYmj_ZPDq8Zi4dbntboJKRPU2TVopysBNrdd9foHTfLZw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/3] libbpf: selftests: refactor
+ 'BPF_PERCPU_TYPE()' and 'bpf_percpu()' macros
+To:     Pedro Tammela <pctammela@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        David Verbeiren <david.verbeiren@tessares.net>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/7/21 11:12 AM, Fenghua Yu wrote:
-> Hi, Shuah,
-> 
-> On Wed, Apr 07, 2021 at 08:33:23AM -0600, Shuah Khan wrote:
->> On 4/5/21 6:52 PM, Fenghua Yu wrote:
->>> -	ksft_print_msg("%s cache miss rate within %d%%\n",
->>> -		       ret ? "Fail:" : "Pass:", max_diff_percent);
->>> +	ksft_print_msg("Check cache miss rate within %d%%\n", max_diff_percent);
->>
->> You need %s and pass in the ret ? "Fail:" : "Pass:" result for the
->> message to read correctly.
-> 
-> Should I keep the ":" after "Pass"/"Fail"?
-> 
+On Tue, Apr 6, 2021 at 11:55 AM Pedro Tammela <pctammela@gmail.com> wrote:
+>
+> This macro was refactored out of the bpf selftests.
+>
+> Since percpu values are rounded up to '8' in the kernel, a careless
+> user in userspace might encounter unexpected values when parsing the
+> output of the batched operations.
 
-Yes please.
+I wonder if a user has to be more careful, though? This
+BPF_PERCPU_TYPE, __bpf_percpu_align and bpf_percpu macros seem to
+create just another opaque layer. It actually seems detrimental to me.
 
->>
->> I am seeing:
->>
->> # Check kernel support for resctrl filesystem
->>
->> It should say the following:
->>
->> # Fail Check kernel support for resctrl filesystem
-> 
-> i.e. should the printed messages be like the following?
-> # Fail: Check kernel support for resctrl filesystem
-> or
-> # Pass: Check kernel support for resctrl filesystem
-> 
+I'd rather emphasize in the documentation (e.g., in
+bpf_map_lookup_elem) that all per-cpu maps are aligning values at 8
+bytes, so user has to make sure that array of values provided to
+bpf_map_lookup_elem() has each element size rounded up to 8.
 
-This looks good.
+In practice, I'd recommend users to always use __u64/__s64 when having
+primitive integers in a map (they are not saving anything by using
+int, it just creates an illusion of savings). Well, maybe on 32-bit
+arches they would save a bit of CPU, but not on typical 64-bit
+architectures. As for using structs as values, always mark them as
+__attribute__((aligned(8))).
 
-thanks,
--- Shuah
+Basically, instead of obscuring the real use some more, let's clarify
+and maybe even provide some examples in documentation?
 
+>
+> Now that both array and hash maps have support for batched ops in the
+> percpu variant, let's provide a convenient macro to declare percpu map
+> value types.
+>
+> Updates the tests to a "reference" usage of the new macro.
+>
+> Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+> ---
+>  tools/lib/bpf/bpf.h                           | 10 ++++
+>  tools/testing/selftests/bpf/bpf_util.h        |  7 ---
+>  .../bpf/map_tests/htab_map_batch_ops.c        | 48 ++++++++++---------
+>  .../selftests/bpf/prog_tests/map_init.c       |  5 +-
+>  tools/testing/selftests/bpf/test_maps.c       | 16 ++++---
+>  5 files changed, 46 insertions(+), 40 deletions(-)
+>
 
+[...]
+
+> @@ -400,11 +402,11 @@ static void test_arraymap(unsigned int task, void *data)
+>  static void test_arraymap_percpu(unsigned int task, void *data)
+>  {
+>         unsigned int nr_cpus = bpf_num_possible_cpus();
+> -       BPF_DECLARE_PERCPU(long, values);
+> +       pcpu_map_value_t values[nr_cpus];
+>         int key, next_key, fd, i;
+>
+>         fd = bpf_create_map(BPF_MAP_TYPE_PERCPU_ARRAY, sizeof(key),
+> -                           sizeof(bpf_percpu(values, 0)), 2, 0);
+> +                           sizeof(long), 2, 0);
+>         if (fd < 0) {
+>                 printf("Failed to create arraymap '%s'!\n", strerror(errno));
+>                 exit(1);
+> @@ -459,7 +461,7 @@ static void test_arraymap_percpu(unsigned int task, void *data)
+>  static void test_arraymap_percpu_many_keys(void)
+>  {
+>         unsigned int nr_cpus = bpf_num_possible_cpus();
+
+This just sets a bad example for anyone using selftests as an
+aspiration for their own code. bpf_num_possible_cpus() does exit(1)
+internally if libbpf_num_possible_cpus() returns error. No one should
+write real production code like that. So maybe let's provide a better
+example instead with error handling and malloc (or perhaps alloca)?
+
+> -       BPF_DECLARE_PERCPU(long, values);
+> +       pcpu_map_value_t values[nr_cpus];
+>         /* nr_keys is not too large otherwise the test stresses percpu
+>          * allocator more than anything else
+>          */
+> @@ -467,7 +469,7 @@ static void test_arraymap_percpu_many_keys(void)
+>         int key, fd, i;
+>
+>         fd = bpf_create_map(BPF_MAP_TYPE_PERCPU_ARRAY, sizeof(key),
+> -                           sizeof(bpf_percpu(values, 0)), nr_keys, 0);
+> +                           sizeof(long), nr_keys, 0);
+>         if (fd < 0) {
+>                 printf("Failed to create per-cpu arraymap '%s'!\n",
+>                        strerror(errno));
+> --
+> 2.25.1
+>
