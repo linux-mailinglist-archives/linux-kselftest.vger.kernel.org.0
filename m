@@ -2,170 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5133577ED
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 00:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E413577F9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 00:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbhDGWqx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Apr 2021 18:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
+        id S229488AbhDGWvX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Apr 2021 18:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbhDGWqt (ORCPT
+        with ESMTP id S229523AbhDGWvW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Apr 2021 18:46:49 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC049C061760
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Apr 2021 15:46:39 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id x207so196849oif.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Apr 2021 15:46:39 -0700 (PDT)
+        Wed, 7 Apr 2021 18:51:22 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8684FC061760
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Apr 2021 15:51:11 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id x11so300552qkp.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Apr 2021 15:51:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=v9CYBF5Iw/k3vda2gKO3t4S07zzMN0pC5vDg5Hp6IBo=;
-        b=R39eI2nipgb2W8+jPBCz3bDsJKVqEAbTmws3XJd7L35txdgd9PwTapmBtRWwPdQBKf
-         vStzTIi6vq+c/pBk31x3KwxKN3n4aIZYrfBbYFX9sN0OdWIyIKokxdXx/voDM+1jTU+g
-         vuf1fGTLBF4nKc/bTVMu2tX3MoZPn6K94zPXM=
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=akFwvW1OPNUTvr2e/zyj+KD9T58HeKDdv1pZyCx4m3s=;
+        b=DuFPi2GpNFK4QFLfLRuf3hEguynbfHsAkqPmG8FbTdFT76p/tQXsHu07amyvhobFvS
+         vdHvFMcHUQtsmDgP53Bd3z4x/ghUyUMHBYMBCVmNuyc9P/mfugQ/MWu633B3iu5zrNRN
+         +yb1Y/tjbE6cRQ777L85d/W9xXkQ7CVwD2vYbml96Qvi0j2hBMZjazbPYNFE+RIk5vxh
+         aZECALgLkrvWjt7yA/LFghP261JTdP/bY1sS6vWhUlAAWLgITKSXmrnE6T15+QdiA7c0
+         VQX73UCJjunCOkEgVZrLWtV5bffDnY+V+P6/Ir84+to3gBRpvt+atQPcpGSScNLdFera
+         Y2MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=v9CYBF5Iw/k3vda2gKO3t4S07zzMN0pC5vDg5Hp6IBo=;
-        b=smrkRsKEd4FrAiNIUe3Et+fDaxvdTsEl5Tq8aXazejzZdsbq7qE7Y+K42orbZ+CbuK
-         Aerm3JQ8B3TaRSy5o5BtZjl7rqlJChj/2nfMkrgIgAOMbUmOCSinGfpgd12rJWwf3zHC
-         /x9+wdtYe0sYWJw5oAFjYRjwhNkgpgbIslRva0tmXhuKJz5G+TiEfO4/41Wm0Q09x80p
-         4zLTbPlip+FZUq97f6HBfbaD/pphIccfF4OaC29xFMDEM6lFIK+ui3ApEPXoVm7wEf37
-         WswBgpS4tsYvUYJkivCUZTw/zRGJntcU1D6nQcy/AoeTtvR92eVNnQSE7sYYaDAkBKqC
-         SWHg==
-X-Gm-Message-State: AOAM531YyneEnAk2pj2NODopxRIrLCLNUbOEnsu/bGbhxUBmGA4BATCw
-        ipsDda6m/P85DrsK3kAZ/OhFdQ==
-X-Google-Smtp-Source: ABdhPJwmEqjEsIXQgcKB/LZNh8ClqNZbnNkMsFBy+Q8ObLn5ebow5X6aGTapMsk5QPsQ67+wFx/Ltw==
-X-Received: by 2002:aca:7543:: with SMTP id q64mr3893522oic.100.1617835599123;
-        Wed, 07 Apr 2021 15:46:39 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h24sm5814668otg.20.2021.04.07.15.46.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Apr 2021 15:46:38 -0700 (PDT)
-Subject: Re: [PATCH v2] selftests/resctrl: Change a few printed messages
-To:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>
-Cc:     linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210407195728.1436270-1-fenghua.yu@intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <bc53f24b-7ec9-992f-6013-d40459e2b360@linuxfoundation.org>
-Date:   Wed, 7 Apr 2021 16:46:38 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=akFwvW1OPNUTvr2e/zyj+KD9T58HeKDdv1pZyCx4m3s=;
+        b=Yu0FRr6EZzqSC24LI9JwXQJLEKAMpay6b10hKvWccVVQP3tVVveWvoIcbRi792Nf+E
+         3FB/WymyfYkXtDDSb+DIw31X/J4TMgUWa3IUcNQO7Cevt/tPGuWSY7VwQd6Rfz+eOG44
+         wzbfUJD8pio+UQQr2fCsS0TL5/8SmmWyJlOCNcqEs/dplKeKuBTciYxk291wuk3Ua1ZT
+         cyHPbKAwznPMtcRHhYSyKDRa9s8K+sfOFhhtWRes5TdrW7TPArtbphGZRNmyRYvIwNzF
+         mY4QMspVFuyJVkfoeHJimP72R/n8tjRje5UnTbrs+3qLwMGQK9grdxrWWmPdsg+zixvg
+         9TdA==
+X-Gm-Message-State: AOAM530awtdM0RslbLthSYOk8JtUe4T15FGTbTmVe7NbVG64qXjusx3w
+        TCHjnQBFkRQruPF7/O7VMZf/PQ==
+X-Google-Smtp-Source: ABdhPJxwo5ZTCb8pJWYlrRQi+hQ9q5Ts9Qg8T9xfYtLCCgFcYREh0mV5OiX7ERdLHMrCb14BuF1v5Q==
+X-Received: by 2002:a37:dcb:: with SMTP id 194mr5795509qkn.4.1617835870547;
+        Wed, 07 Apr 2021 15:51:10 -0700 (PDT)
+Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id s19sm19059776qks.130.2021.04.07.15.51.08
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Wed, 07 Apr 2021 15:51:10 -0700 (PDT)
+Date:   Wed, 7 Apr 2021 15:50:54 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@eggly.anvils
+To:     Axel Rasmussen <axelrasmussen@google.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        linux-kselftest@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Michel Lespinasse <walken@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v4] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTINUE
+ behavior
+In-Reply-To: <CAJHvVcgGbdeoniOzwQsc370idV5gJ5cfq8Kzu3hneBAaB+CL6g@mail.gmail.com>
+Message-ID: <alpine.LSU.2.11.2104071542190.15034@eggly.anvils>
+References: <20210401183701.1774159-1-axelrasmussen@google.com> <alpine.LSU.2.11.2104062307110.14082@eggly.anvils> <CAJHvVcgGbdeoniOzwQsc370idV5gJ5cfq8Kzu3hneBAaB+CL6g@mail.gmail.com>
+User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
 MIME-Version: 1.0
-In-Reply-To: <20210407195728.1436270-1-fenghua.yu@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/7/21 1:57 PM, Fenghua Yu wrote:
-> Change a few printed messages to report test progress more clearly.
+On Wed, 7 Apr 2021, Axel Rasmussen wrote:
+> Agreed about taking one direction or the other further.
 > 
-> Add a missing "\n" at the end of one printed message.
+> I get the sense that Peter prefers the mcopy_atomic_install_ptes()
+> version, and would thus prefer to just expose that and let
+> shmem_mcopy_atomic_pte() use it.
 > 
-> Suggested-by: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> ---
-> Change log:
-> v2:
-> - Add "Pass:" and "Fail:" sub-strings back (Shuah).
-> 
-> This is a follow-up patch of recent resctrl selftest patches and can be
-> applied cleanly to:
-> git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
-> branch next.
-> 
->   tools/testing/selftests/resctrl/cache.c     | 2 +-
->   tools/testing/selftests/resctrl/mba_test.c  | 6 +++---
->   tools/testing/selftests/resctrl/mbm_test.c  | 2 +-
->   tools/testing/selftests/resctrl/resctrlfs.c | 4 ++--
->   4 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-> index 362e3a418caa..68ff856d36f0 100644
-> --- a/tools/testing/selftests/resctrl/cache.c
-> +++ b/tools/testing/selftests/resctrl/cache.c
-> @@ -301,7 +301,7 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
->   	ret = platform && abs((int)diff_percent) > max_diff_percent &&
->   	      (cmt ? (abs(avg_diff) > max_diff) : true);
->   
-> -	ksft_print_msg("%s cache miss rate within %d%%\n",
-> +	ksft_print_msg("%s Check cache miss rate within %d%%\n",
->   		       ret ? "Fail:" : "Pass:", max_diff_percent);
->   
->   	ksft_print_msg("Percent diff=%d\n", abs((int)diff_percent));
-> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-> index 26f12ad4c663..1a1bdb6180cf 100644
-> --- a/tools/testing/selftests/resctrl/mba_test.c
-> +++ b/tools/testing/selftests/resctrl/mba_test.c
-> @@ -80,7 +80,7 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
->   		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
->   		avg_diff_per = (int)(avg_diff * 100);
->   
-> -		ksft_print_msg("%s MBA: diff within %d%% for schemata %u\n",
-> +		ksft_print_msg("%s Check MBA diff within %d%% for schemata %u\n",
->   			       avg_diff_per > MAX_DIFF_PERCENT ?
->   			       "Fail:" : "Pass:",
->   			       MAX_DIFF_PERCENT,
-> @@ -93,10 +93,10 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
->   			failed = true;
->   	}
->   
-> -	ksft_print_msg("%s schemata change using MBA\n",
-> +	ksft_print_msg("%s Check schemata change using MBA\n",
->   		       failed ? "Fail:" : "Pass:");
->   	if (failed)
-> -		ksft_print_msg("At least one test failed");
-> +		ksft_print_msg("At least one test failed\n");
->   }
->   
->   static int check_results(void)
-> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-> index 02b1ed03f1e5..8392e5c55ed0 100644
-> --- a/tools/testing/selftests/resctrl/mbm_test.c
-> +++ b/tools/testing/selftests/resctrl/mbm_test.c
-> @@ -37,7 +37,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, int span)
->   	avg_diff_per = (int)(avg_diff * 100);
->   
->   	ret = avg_diff_per > MAX_DIFF_PERCENT;
-> -	ksft_print_msg("%s MBM: diff within %d%%\n",
-> +	ksft_print_msg("%s Check MBM diff within %d%%\n",
->   		       ret ? "Fail:" : "Pass:", MAX_DIFF_PERCENT);
->   	ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
->   	ksft_print_msg("Span (MB): %d\n", span);
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-> index ade5f2b8b843..5f5a166ade60 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -570,14 +570,14 @@ bool check_resctrlfs_support(void)
->   
->   	fclose(inf);
->   
-> -	ksft_print_msg("%s kernel supports resctrl filesystem\n",
-> +	ksft_print_msg("%s Check kernel supports resctrl filesystem\n",
->   		       ret ? "Pass:" : "Fail:");
->   
->   	if (!ret)
->   		return ret;
->   
->   	dp = opendir(RESCTRL_PATH);
-> -	ksft_print_msg("%s resctrl mountpoint \"%s\" exists\n",
-> +	ksft_print_msg("%s Check resctrl mountpoint \"%s\" exists\n",
->   		       dp ? "Pass:" : "Fail:", RESCTRL_PATH);
->   	if (dp)
->   		closedir(dp);
-> 
+> But, I get the sense that you (Hugh) slightly prefer the other way -
+> just letting shmem_mcopy_atomic_pte() deal with both the VM_SHARED and
+> !VM_SHARED cases.
 
-Thank you. Applied to linux-kseftest next branch for 5.13-rc1
+No, either direction seems plausible to me: start from whichever
+end you prefer.
 
-thanks,
--- Shuah
+> 
+> I was planning to write "I prefer option X because (reasons), and
+> objections?" but I'm realizing that it isn't really clear to me which
+> route would end up being cleaner. I think I have to just pick one,
+> write it out, and see where I end up. If it ends up gross, I don't
+> mind backtracking and taking the other route. :) To that end, I'll
+> proceed by having shmem_mcopy_atomic_pte() call the new
+> mcopy_atomic_install_ptes() helper, and see how it looks (unless there
+> are objections).
+
+I am pleased to read that: it's exactly how I would approach it -
+so it must be right :-)
+
+Hugh
