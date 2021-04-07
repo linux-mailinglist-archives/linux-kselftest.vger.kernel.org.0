@@ -2,140 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D0135754B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Apr 2021 21:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19F2357585
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Apr 2021 22:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348878AbhDGT5x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Apr 2021 15:57:53 -0400
-Received: from mga04.intel.com ([192.55.52.120]:42318 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231335AbhDGT5w (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Apr 2021 15:57:52 -0400
-IronPort-SDR: redly7H3jfJI+WW5Usc216fVlgSEHdVI47VXjaX3lDq+dwMriNltW7Lhroj+vN1HoZdo9QLKDk
- lpNNjFZW8USQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="191227339"
-X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
-   d="scan'208";a="191227339"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2021 12:57:43 -0700
-IronPort-SDR: n3aZFrTVorVAcVb/gIfKRVknSctv4AwMUnh8B+o3gJ0yaF1QYkusBS8WSwt3IQ1g+2UevDeGXx
- RBPH8YXQjCmA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
-   d="scan'208";a="448376696"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Apr 2021 12:57:42 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Shuah Khan" <shuah@kernel.org>,
-        "Ravi V Shankar" <ravi.v.shankar@intel.com>
-Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v2] selftests/resctrl: Change a few printed messages
-Date:   Wed,  7 Apr 2021 19:57:28 +0000
-Message-Id: <20210407195728.1436270-1-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.31.1
+        id S1349135AbhDGUIS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Apr 2021 16:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355925AbhDGUIR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 7 Apr 2021 16:08:17 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE916C061761
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Apr 2021 13:08:06 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id bg21so7348881pjb.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Apr 2021 13:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mSd/S+8tc7IcQcSS/RpGMSx73CsARnvQdtoCEBJh4RE=;
+        b=kdegvuLLfLm5o78sb3liPn/fXrlCsdbIKwWtIdW5f+cxv+zThPjVXprrQ7NbmPmOi3
+         cFRU83hgkL/FLRMjgr6eNLao39YBnyr35OHA2RE1zjohqTdUvbV2bsDduBEOf4VxShM+
+         TPgYbzkjuEIcQlKz1S+TiOv2wFamsk4RE38gpSUces43Jr7q3/36LXlRXcErMVVhm6Ri
+         6Sz5rfJkdtQEBjOOhxhekCVRiYdg8GIHClJsDP1BzDgMRXjl2WVLhb8qA57M03dYZbBq
+         vfqG+7CRlsaA2MuHX6hy0z1xUV/GNi1sB6GazNRRc592zKl1PzykqXHlcE0ZDcWGYk4+
+         3K2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mSd/S+8tc7IcQcSS/RpGMSx73CsARnvQdtoCEBJh4RE=;
+        b=o5OLIlTS+R/SPbYlTotQMMO15ssOnMmTUB3nNI+pa54qyuLQBQ1Tq6O5fqvwaRwMde
+         hlpBFcuZN+QQTvWyNlLw6RlzuVQo+d6bFIcXzmID4IjCeKtOVRjkJfI8p5G2EXBzBsYa
+         PuW/DgytaHLEMPZD0FkI5ORU2CtNLpVENVmaz7rdQ95g337OkCbuTe0MxklzChbp4YVq
+         Ed+akjRm65+o6V7EHJZ07L//VpPAIFf6ILBD0dBy/o63xUPAtcnXovtQ0Ye682giiO+j
+         MLVfyJqgA4LhK4PXufzDL95CK89szcuO+mJ8hPWAu5s1EdnfgVFnsk6lsS30i7EM8KDQ
+         9I6w==
+X-Gm-Message-State: AOAM533k9K8ip2SjTghCmk2MD+LOw1j8888O5RioHymOEAQFWPklaRGN
+        qlbtgX+8mZFa3QtQ6b9ZXhLycvYkjvayEqVMVAxxgA==
+X-Google-Smtp-Source: ABdhPJyyoL7VJ+OqLRPUux+V1NXnU4wvbvky0xki0Lfi2+ZBdBzpwZ+xJbPVPFD/Wd8/DCQHt2XFgpqgMrubjtjKf3c=
+X-Received: by 2002:a17:902:b482:b029:e8:c21a:6ad2 with SMTP id
+ y2-20020a170902b482b02900e8c21a6ad2mr4490815plr.51.1617826086092; Wed, 07 Apr
+ 2021 13:08:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210406225100.1883967-1-dlatypov@google.com>
+In-Reply-To: <20210406225100.1883967-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 7 Apr 2021 13:07:54 -0700
+Message-ID: <CAFd5g47EE3J5V9ofZ4r3H+3+16u41-yqa+uwFYVgpVCg4CKOwg@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: add tips for using current->kunit_test
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Change a few printed messages to report test progress more clearly.
+On Tue, Apr 6, 2021 at 3:51 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> As of commit 359a376081d4 ("kunit: support failure from dynamic analysis
+> tools"), we can use current->kunit_test to find the current kunit test.
+>
+> Mention this in tips.rst and give an example of how this can be used in
+> conjunction with `test->priv` to pass around state and specifically
+> implement something like mocking.
+> There's a lot more we could go into on that topic, but given that
+> example is already longer than every other "tip" on this page, we just
+> point to the API docs and leave filling in the blanks as an exercise to
+> the reader.
+>
+> Also give an example of kunit_fail_current_test().
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Add a missing "\n" at the end of one printed message.
-
-Suggested-by: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
----
-Change log:
-v2:
-- Add "Pass:" and "Fail:" sub-strings back (Shuah).
-
-This is a follow-up patch of recent resctrl selftest patches and can be
-applied cleanly to:
-git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
-branch next.
-
- tools/testing/selftests/resctrl/cache.c     | 2 +-
- tools/testing/selftests/resctrl/mba_test.c  | 6 +++---
- tools/testing/selftests/resctrl/mbm_test.c  | 2 +-
- tools/testing/selftests/resctrl/resctrlfs.c | 4 ++--
- 4 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index 362e3a418caa..68ff856d36f0 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -301,7 +301,7 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
- 	ret = platform && abs((int)diff_percent) > max_diff_percent &&
- 	      (cmt ? (abs(avg_diff) > max_diff) : true);
- 
--	ksft_print_msg("%s cache miss rate within %d%%\n",
-+	ksft_print_msg("%s Check cache miss rate within %d%%\n",
- 		       ret ? "Fail:" : "Pass:", max_diff_percent);
- 
- 	ksft_print_msg("Percent diff=%d\n", abs((int)diff_percent));
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 26f12ad4c663..1a1bdb6180cf 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -80,7 +80,7 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
- 		avg_diff_per = (int)(avg_diff * 100);
- 
--		ksft_print_msg("%s MBA: diff within %d%% for schemata %u\n",
-+		ksft_print_msg("%s Check MBA diff within %d%% for schemata %u\n",
- 			       avg_diff_per > MAX_DIFF_PERCENT ?
- 			       "Fail:" : "Pass:",
- 			       MAX_DIFF_PERCENT,
-@@ -93,10 +93,10 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 			failed = true;
- 	}
- 
--	ksft_print_msg("%s schemata change using MBA\n",
-+	ksft_print_msg("%s Check schemata change using MBA\n",
- 		       failed ? "Fail:" : "Pass:");
- 	if (failed)
--		ksft_print_msg("At least one test failed");
-+		ksft_print_msg("At least one test failed\n");
- }
- 
- static int check_results(void)
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 02b1ed03f1e5..8392e5c55ed0 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -37,7 +37,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, int span)
- 	avg_diff_per = (int)(avg_diff * 100);
- 
- 	ret = avg_diff_per > MAX_DIFF_PERCENT;
--	ksft_print_msg("%s MBM: diff within %d%%\n",
-+	ksft_print_msg("%s Check MBM diff within %d%%\n",
- 		       ret ? "Fail:" : "Pass:", MAX_DIFF_PERCENT);
- 	ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
- 	ksft_print_msg("Span (MB): %d\n", span);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index ade5f2b8b843..5f5a166ade60 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -570,14 +570,14 @@ bool check_resctrlfs_support(void)
- 
- 	fclose(inf);
- 
--	ksft_print_msg("%s kernel supports resctrl filesystem\n",
-+	ksft_print_msg("%s Check kernel supports resctrl filesystem\n",
- 		       ret ? "Pass:" : "Fail:");
- 
- 	if (!ret)
- 		return ret;
- 
- 	dp = opendir(RESCTRL_PATH);
--	ksft_print_msg("%s resctrl mountpoint \"%s\" exists\n",
-+	ksft_print_msg("%s Check resctrl mountpoint \"%s\" exists\n",
- 		       dp ? "Pass:" : "Fail:", RESCTRL_PATH);
- 	if (dp)
- 		closedir(dp);
--- 
-2.31.1
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
