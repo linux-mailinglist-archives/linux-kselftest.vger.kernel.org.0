@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE57A35825B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 13:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4E6358265
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 13:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbhDHLoZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Apr 2021 07:44:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29758 "EHLO
+        id S231521AbhDHLod (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Apr 2021 07:44:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56917 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231469AbhDHLoX (ORCPT
+        by vger.kernel.org with ESMTP id S231506AbhDHLoc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Apr 2021 07:44:23 -0400
+        Thu, 8 Apr 2021 07:44:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617882251;
+        s=mimecast20190719; t=1617882261;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nYGtSBURRU7WTSXl83fHRTlB7M6uxRtcmancVGQ+Jas=;
-        b=fNdy3iz8pJa2JUDoBQDY0cFvSSJYNlK3cNUIIDwkLGxNFCFGAo1YtEUhxeCeUkgEpeFWjR
-        PPFeQ4Xsh7teStc/eOGFoyHW261nOuvw6Q6vsersG5DT4DZ/LSam/xx88Lg1qC4L12L94h
-        6lNDTQG4N3PCo7gaYu4WMDGBfblO+/M=
+        bh=huJU/7eTGA9L+HVGecfG2Pp+AIuWsVkRoZrlV5LSukk=;
+        b=DqDEeUOf1kaJ0M1coKQLBjusBNg8fEuD8JeMAYY4IglJ3YntIwddlmOKGH472n4p04bynP
+        G7q/qn0xqw5OFa7Ed0RTizTfgAMmwrnAj/1cfmtkEcshc8dO43iP8nEtZBrY6CWlatDvHh
+        f457wlfjeikYQwXj+0K0eL1FvYUrqKA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-444-d7Y0XKD6PneSx2FsHBUBHQ-1; Thu, 08 Apr 2021 07:44:08 -0400
-X-MC-Unique: d7Y0XKD6PneSx2FsHBUBHQ-1
+ us-mta-127-0b_Rs50mOt6XjvqH1P6FWQ-1; Thu, 08 Apr 2021 07:44:17 -0400
+X-MC-Unique: 0b_Rs50mOt6XjvqH1P6FWQ-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E76AD188352D;
-        Thu,  8 Apr 2021 11:44:06 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8A0DF10054F6;
+        Thu,  8 Apr 2021 11:44:15 +0000 (UTC)
 Received: from localhost.localdomain.com (ovpn-113-155.ams2.redhat.com [10.36.113.155])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 314A119CB4;
-        Thu,  8 Apr 2021 11:43:49 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6BC9F5B4A8;
+        Thu,  8 Apr 2021 11:44:07 +0000 (UTC)
 From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -47,9 +47,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Alexander Graf <graf@amazon.com>,
         Andrew Jones <drjones@redhat.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 3/4] selftests: add kvm_get_emulated_cpuid to processor.h
-Date:   Thu,  8 Apr 2021 13:43:02 +0200
-Message-Id: <20210408114303.30310-4-eesposit@redhat.com>
+Subject: [PATCH v4 4/4] selftests: KVM: extend get_cpuid_test to include KVM_GET_EMULATED_CPUID
+Date:   Thu,  8 Apr 2021 13:43:03 +0200
+Message-Id: <20210408114303.30310-5-eesposit@redhat.com>
 In-Reply-To: <20210408114303.30310-1-eesposit@redhat.com>
 References: <20210408114303.30310-1-eesposit@redhat.com>
 MIME-Version: 1.0
@@ -59,72 +59,141 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As the similar kvm_get_supported_cpuid(),
-kvm_get_emulated_cpuid  allocates and gets
-a struct kvm_cpuid2 filled with emulated features.
+Extend the get_cpuid_test.c selftest to include the KVM_GET_EMULATED_CPUID
+ioctl. Since the behavior and functionality is similar to
+KVM_GET_SUPPORTED_CPUID, we only check additionally:
+
+1) checks for corner case in the nent field of the struct kvm_cpuid2.
+2) sets and gets it as cpuid from the guest VM
 
 Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  |  1 +
- .../selftests/kvm/lib/x86_64/processor.c      | 33 +++++++++++++++++++
- 2 files changed, 34 insertions(+)
+ .../selftests/kvm/x86_64/get_cpuid_test.c     | 90 ++++++++++++++++++-
+ 1 file changed, 88 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 0b30b4e15c38..ae1b9530e187 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -353,6 +353,7 @@ void vcpu_load_state(struct kvm_vm *vm, uint32_t vcpuid,
- struct kvm_msr_list *kvm_get_msr_index_list(void);
- uint64_t kvm_get_feature_msr(uint64_t msr_index);
- struct kvm_cpuid2 *kvm_get_supported_cpuid(void);
-+struct kvm_cpuid2 *kvm_get_emulated_cpuid(void);
+diff --git a/tools/testing/selftests/kvm/x86_64/get_cpuid_test.c b/tools/testing/selftests/kvm/x86_64/get_cpuid_test.c
+index 9b78e8889638..b9f0fba1b0ea 100644
+--- a/tools/testing/selftests/kvm/x86_64/get_cpuid_test.c
++++ b/tools/testing/selftests/kvm/x86_64/get_cpuid_test.c
+@@ -13,6 +13,7 @@
+ #include "processor.h"
  
- struct kvm_cpuid2 *vcpu_get_cpuid(struct kvm_vm *vm, uint32_t vcpuid);
- void vcpu_set_cpuid(struct kvm_vm *vm, uint32_t vcpuid,
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index e676fe40bfe6..2ea14421bdfe 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -669,6 +669,39 @@ struct kvm_cpuid2 *kvm_get_supported_cpuid(void)
- 	return cpuid;
+ #define VCPU_ID 0
++#define MAX_NENT 1000
+ 
+ /* CPUIDs known to differ */
+ struct {
+@@ -137,7 +138,8 @@ static void run_vcpu(struct kvm_vm *vm, uint32_t vcpuid, int stage)
+ 	}
  }
  
-+/*
-+ * KVM Emulated CPUID Get
-+ *
-+ * Input Args: None
-+ *
-+ * Output Args:
-+ *
-+ * Return: The emulated KVM CPUID
-+ *
-+ * Get the guest CPUID emulated by KVM.
-+ */
-+struct kvm_cpuid2 *kvm_get_emulated_cpuid(void)
+-struct kvm_cpuid2 *vcpu_alloc_cpuid(struct kvm_vm *vm, vm_vaddr_t *p_gva, struct kvm_cpuid2 *cpuid)
++static struct kvm_cpuid2 *vcpu_alloc_cpuid(struct kvm_vm *vm, vm_vaddr_t *p_gva,
++					struct kvm_cpuid2 *cpuid)
+ {
+ 	int size = sizeof(*cpuid) + cpuid->nent * sizeof(cpuid->entries[0]);
+ 	vm_vaddr_t gva = vm_vaddr_alloc(vm, size,
+@@ -150,9 +152,84 @@ struct kvm_cpuid2 *vcpu_alloc_cpuid(struct kvm_vm *vm, vm_vaddr_t *p_gva, struct
+ 	return guest_cpuids;
+ }
+ 
++static struct kvm_cpuid2 *alloc_custom_kvm_cpuid2(int nent)
 +{
-+	static struct kvm_cpuid2 *cpuid;
-+	int ret;
-+	int kvm_fd;
++	struct kvm_cpuid2 *cpuid;
++	size_t size;
 +
-+	if (cpuid)
-+		return cpuid;
++	size = sizeof(*cpuid);
++	size += nent * sizeof(struct kvm_cpuid_entry2);
++	cpuid = calloc(1, size);
++	if (!cpuid) {
++		perror("malloc");
++		abort();
++	}
 +
-+	cpuid = allocate_kvm_cpuid2();
-+	kvm_fd = open(KVM_DEV_PATH, O_RDONLY);
-+	if (kvm_fd < 0)
-+		exit(KSFT_SKIP);
++	cpuid->nent = nent;
 +
-+	ret = ioctl(kvm_fd, KVM_GET_EMULATED_CPUID, cpuid);
-+	TEST_ASSERT(ret == 0, "KVM_GET_EMULATED_CPUID failed %d %d\n",
-+		    ret, errno);
-+
-+	close(kvm_fd);
 +	return cpuid;
 +}
 +
- /*
-  * KVM Get MSR
-  *
++static void clean_entries_kvm_cpuid2(struct kvm_cpuid2 *cpuid)
++{
++	size_t size;
++	int old_nent = cpuid->nent;
++
++	size = sizeof(*cpuid);
++	size += MAX_NENT * sizeof(struct kvm_cpuid_entry2);
++	memset(cpuid, 0, size);
++	cpuid->nent = old_nent;
++}
++
++static void test_emulated_entries(struct kvm_vm *vm)
++{
++	int res, right_nent;
++	struct kvm_cpuid2 *cpuid;
++
++	cpuid = alloc_custom_kvm_cpuid2(MAX_NENT);
++
++	/* 0 nent, return E2BIG */
++	cpuid->nent = 0;
++	res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
++	TEST_ASSERT(res == -1 && errno == E2BIG, "nent=0 should fail as E2BIG");
++	clean_entries_kvm_cpuid2(cpuid);
++
++	/* high nent, set the entries and adjust */
++	cpuid->nent = MAX_NENT;
++	res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
++	TEST_ASSERT(res == 0, "nent > actual nent should not fail");
++	right_nent = cpuid->nent;
++	clean_entries_kvm_cpuid2(cpuid);
++
++	/* high nent, set the entries and adjust */
++	cpuid->nent++;
++	res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
++	TEST_ASSERT(res == 0, "nent > actual nent should not fail");
++	TEST_ASSERT(right_nent == cpuid->nent, "nent should be always the same");
++	clean_entries_kvm_cpuid2(cpuid);
++
++	/* low nent, return E2BIG */
++	if (right_nent > 1) {
++		cpuid->nent = 1;
++		res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
++		TEST_ASSERT(res == -1 && errno == E2BIG, "nent=1 should fail");
++		clean_entries_kvm_cpuid2(cpuid);
++	}
++
++	/* exact nent */
++	cpuid->nent = right_nent;
++	res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
++	TEST_ASSERT(res == 0, "nent == actual nent should not fail");
++	TEST_ASSERT(cpuid->nent == right_nent,
++		"KVM_GET_EMULATED_CPUID should be invaried when nent is exact");
++	clean_entries_kvm_cpuid2(cpuid);
++
++	free(cpuid);
++}
++
+ int main(void)
+ {
+-	struct kvm_cpuid2 *supp_cpuid, *cpuid2;
++	struct kvm_cpuid2 *supp_cpuid, *emul_cpuid, *cpuid2;
+ 	vm_vaddr_t cpuid_gva;
+ 	struct kvm_vm *vm;
+ 	int stage;
+@@ -171,5 +248,14 @@ int main(void)
+ 	for (stage = 0; stage < 3; stage++)
+ 		run_vcpu(vm, VCPU_ID, stage);
+ 
++	if (kvm_check_cap(KVM_CAP_EXT_EMUL_CPUID)) {
++		emul_cpuid = kvm_get_emulated_cpuid();
++		vcpu_set_cpuid(vm, VCPU_ID, emul_cpuid);
++		cpuid2 = vcpu_get_cpuid(vm, VCPU_ID);
++
++		test_emulated_entries(vm);
++		compare_cpuids(emul_cpuid, cpuid2);
++	}
++
+ 	kvm_vm_free(vm);
+ }
 -- 
 2.30.2
 
