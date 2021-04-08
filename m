@@ -2,120 +2,227 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D832357FCB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 11:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010E53580B4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 12:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbhDHJrm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Apr 2021 05:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
+        id S230383AbhDHKg6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Apr 2021 06:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbhDHJrm (ORCPT
+        with ESMTP id S230322AbhDHKg6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Apr 2021 05:47:42 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173FDC061760;
-        Thu,  8 Apr 2021 02:47:30 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id t20so730072plr.13;
-        Thu, 08 Apr 2021 02:47:30 -0700 (PDT)
+        Thu, 8 Apr 2021 06:36:58 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B71C061763
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Apr 2021 03:36:46 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id w2so850298qts.18
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Apr 2021 03:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PnV0J8nT4j9vAMnnAhfzCebkcqE6zUO4OM97+q9ZYAo=;
-        b=jG6sR68hkJd2v0SpFbAi4EkdDo37+pdAoRVaP9nRyzLun0VHwdC4rd9/3+xOM/FRQZ
-         Q/Ogc7aMDu1VEwHg1vhDN4CAzEVZoA3EXVCE5Ic9CMscyAFORtYmxTnW7aNsKN76VdKG
-         uPDSFnWyCkNVl/um6qVY9O7PC1Ri/Mdm7EbFUFm16b+C1Z9ro5PRNz1BtR8zi0/ZumhP
-         jFJhKL+K9xPqUrlIxydZv/iEj9AegtQG7M3NOh+oX4m7ncjmoDKG7LLSrBYwGbc3Nebf
-         PvdmGle4FC1+9+4agYNvw3ny2kmRKFwpOs29dcHCVtZng4zwhVDSNEsmPgbBfYGmxAUR
-         hPjw==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=EzmzmhSLYOYTzia53fwYPMbr67HMT97fl1vfB43xxy0=;
+        b=CE/uDe25jrKi/EcWF45IReCs/HFAUYt/zKGAJidnrsKwFNUr8ELTjdagRfyFQubgHp
+         iGKU1yedoQKg9fMIiEMOCB3X5xySq6bxtlRa7gbdIy84EcFI+ZaBdYUSX0YGoN8IbF8Y
+         saaPZu8y4+OBvZpN3gGUiW2h2NqH9Vs2Xvh3RRI8U9gXA6pbiZJREjQO1swkLYN40VjR
+         EEB2PGx7uESg3MkI3iaXTokKj92jpxPJhoTB83ZiPUqToht77ooyoWVfhaEtMHA5zTId
+         F+shhJlLS7yvXzL8u6aTmnR31XOQyP31C6qewYpqfFP9Cq1PfrEdoURacVW5ZRCY87G1
+         mtxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PnV0J8nT4j9vAMnnAhfzCebkcqE6zUO4OM97+q9ZYAo=;
-        b=NLOEUhjOnQVSkhXxql0B05GygrF8dSlf8kju0jhfY0pw0Ipt/Aaq4yMsDjVokrnZop
-         PFzgMYtlDa2u84SZCZZGTr7IzDbTzncxcrLTjIWZA7kI/xwQVGF7aHFPeF74hUw+2lSC
-         Bf0+1jV3O+qmGRk4YCqQgOx32IC+mQRoqMJrPYthW2ScHcaLdVDMeX4KwOKLJPknDLm+
-         RghyX43w2ys1G90TksQBT2ovusA+K+bIVIZZd+GgykBzRuAuiXwTZNyVHOkWePv2zbjV
-         kRzYzrF5gGMvAtALmFoNJatgrE9ohoQQDTChzThc4lHzTnktZwOvq1Y+HGFz1mFP4hlc
-         /LEw==
-X-Gm-Message-State: AOAM533JqM02yzOGDZzMvv3FVfUYYKRpiltvoFu0WSIoAmshQb75lX5q
-        tDloLPO6DGOAR5upOp8MEkkudkVvbE5xDyVLW2U=
-X-Google-Smtp-Source: ABdhPJzONwCYTjNR9XF+/k3EFvV70hIKqAUs3+4MK2GVkd0ZfVW3JG4nQrVzkOHbs0w5xrv/TzTRM3yWg1v5W/GeDoo=
-X-Received: by 2002:a17:90a:156:: with SMTP id z22mr7815188pje.181.1617875249307;
- Thu, 08 Apr 2021 02:47:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
- <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com> <CA+G9fYuG12WaC6QAdx1k80v8-As7a7oVVkhaUDxqgV=BaunfxQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYuG12WaC6QAdx1k80v8-As7a7oVVkhaUDxqgV=BaunfxQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 8 Apr 2021 12:47:13 +0300
-Message-ID: <CAHp75Vf1S5Ra4fdkV=faw4tCXbeNiifC3y8MF0_bCqHGfDBLsQ@mail.gmail.com>
-Subject: Re: [next] [arm64] [gpio] BUG: key has not been registered! DEBUG_LOCKS_WARN_ON:
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Colin King <colin.king@canonical.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=EzmzmhSLYOYTzia53fwYPMbr67HMT97fl1vfB43xxy0=;
+        b=khsqwwk0vMy8jbBOO6by5jf8+ul5L74cjmfJrSox712LbJKhtoMC/lzqzbU5c3YhzI
+         Sk1spy+HJk2TLwfMKi1qxlI01KLvz5+J5Z3fqPe6103rbWq5NTNNDW1r2f8+Ye4OImsv
+         x79XBDwmRaZI+DlR4SFh8OY5Fn6j7ubBF1zIXLWmn70DEl8bbsfZXgeHkIY8dxmfMNUM
+         +1HuFCRqcOLJg7sZdui4UT4I24oVvHRzffXNlkYOhJOe2d/Fmi3mZjzhHcS5Zhhz08/B
+         J9+Z7gxpl4QuFvxTIOpLndMA6lJbAYLFwIwtr/Yso6MNbU5yZSysRHbSzgLbAfjT2DTY
+         u6cg==
+X-Gm-Message-State: AOAM531wbzUEXvLMBpEYM4f0bACVdoPOv+fdnw/QGgpwXhCrnxjZIrRC
+        W6Jdz7QTNOj6atS7b66ypGHIlhMFtA==
+X-Google-Smtp-Source: ABdhPJzB0aHqU6Vvk6OAMCFdlq8fMrwJtVqGP2BZ9KnPFLZKFqsgLtH3YCZklfy1Z87D+fhG091DtXga6A==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:9038:bbd3:4a12:abda])
+ (user=elver job=sendgmr) by 2002:a0c:b348:: with SMTP id a8mr7834915qvf.7.1617878205926;
+ Thu, 08 Apr 2021 03:36:45 -0700 (PDT)
+Date:   Thu,  8 Apr 2021 12:35:55 +0200
+Message-Id: <20210408103605.1676875-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
+Subject: [PATCH v4 00/10] Add support for synchronous signals on perf events
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, peterz@infradead.org,
+        alexander.shishkin@linux.intel.com, acme@kernel.org,
+        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
+        namhyung@kernel.org, tglx@linutronix.de
+Cc:     glider@google.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
+        christian@brauner.io, dvyukov@google.com, jannh@google.com,
+        axboe@kernel.dk, mascasa@google.com, pcc@google.com,
+        irogers@google.com, oleg@redhat.com, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 8, 2021 at 11:33 AM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
-> On Thu, 8 Apr 2021 at 04:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Thu, Apr 8, 2021 at 12:38 AM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > While running kselftest recently added gpio gpio-sim.sh test case the following
-> > > warning was triggered on Linux next tag 20210330 tag running on arm64 juno
-> > > and hikey devices.
-> > >
-> > > GOOD: next-20210326
-> > > BAD: next-20210330
-> > >
-> > > This is still happening today on Linux next tag 20210407.
-> >
-> > Can you add the following
-> >
-> >   sysfs_attr_init(attrs[i]);
-> >
-> > to the end of the loop in gpio_sim_setup_sysfs()?
->
-> Do you mean like this,
->
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index ea17289a869c..5fe67ccf45f7 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -296,6 +296,7 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
->                 dev_attr->store = gpio_sim_sysfs_line_store;
->
->                 attrs[i] = &dev_attr->attr;
-> +               sysfs_attr_init(attrs[i]);
->         }
->
->         chip->attr_group.name = "line-ctrl";
+The perf subsystem today unifies various tracing and monitoring
+features, from both software and hardware. One benefit of the perf
+subsystem is automatically inheriting events to child tasks, which
+enables process-wide events monitoring with low overheads. By default
+perf events are non-intrusive, not affecting behaviour of the tasks
+being monitored.
 
-Precisely.
+For certain use-cases, however, it makes sense to leverage the
+generality of the perf events subsystem and optionally allow the tasks
+being monitored to receive signals on events they are interested in.
+This patch series adds the option to synchronously signal user space on
+events.
 
-> > If it fixes an issue I'll send a formal patch.
->
-> I will build and test this and report here.
+To better support process-wide synchronous self-monitoring, without
+events propagating to children that do not share the current process's
+shared environment, two pre-requisite patches are added to optionally
+restrict inheritance to CLONE_THREAD, and remove events on exec (without
+affecting the parent).
 
-Thanks!
+Examples how to use these features can be found in the tests added at
+the end of the series. In addition to the tests added, the series has
+also been subjected to syzkaller fuzzing (focus on 'kernel/events/'
+coverage).
+
+Motivation and Example Uses
+---------------------------
+
+1. 	Our immediate motivation is low-overhead sampling-based race
+	detection for user space [1]. By using perf_event_open() at
+	process initialization, we can create hardware
+	breakpoint/watchpoint events that are propagated automatically
+	to all threads in a process. As far as we are aware, today no
+	existing kernel facility (such as ptrace) allows us to set up
+	process-wide watchpoints with minimal overheads (that are
+	comparable to mprotect() of whole pages).
+
+2.	Other low-overhead error detectors that rely on detecting
+	accesses to certain memory locations or code, process-wide and
+	also only in a specific set of subtasks or threads.
+
+[1] https://llvm.org/devmtg/2020-09/slides/Morehouse-GWP-Tsan.pdf
+
+Other ideas for use-cases we found interesting, but should only
+illustrate the range of potential to further motivate the utility (we're
+sure there are more):
+
+3.	Code hot patching without full stop-the-world. Specifically, by
+	setting a code breakpoint to entry to the patched routine, then
+	send signals to threads and check that they are not in the
+	routine, but without stopping them further. If any of the
+	threads will enter the routine, it will receive SIGTRAP and
+	pause.
+
+4.	Safepoints without mprotect(). Some Java implementations use
+	"load from a known memory location" as a safepoint. When threads
+	need to be stopped, the page containing the location is
+	mprotect()ed and threads get a signal. This could be replaced with
+	a watchpoint, which does not require a whole page nor DTLB
+	shootdowns.
+
+5.	Threads receiving signals on performance events to
+	throttle/unthrottle themselves.
+
+6.	Tracking data flow globally.
+
+Changelog
+---------
+v4:
+* Fix for parent and child racing to exit in sync_child_event().
+* Fix race between irq_work running and task's sighand being released by
+  release_task().
+* Generalize setting si_perf and si_addr independent of event type;
+  introduces perf_event_attr::sig_data, which can be set by user space
+  to be propagated to si_perf.
+* Warning in perf_sigtrap() if ctx->task and current mismatch; we expect
+  this on architectures that do not properly implement
+  arch_irq_work_raise().
+* Require events that want sigtrap to be associated with a task.
+* Dropped "perf: Add breakpoint information to siginfo on SIGTRAP"
+  in favor of more generic solution (perf_event_attr::sig_data).
+
+v3: 
+* Add patch "perf: Rework perf_event_exit_event()" to beginning of
+  series, courtesy of Peter Zijlstra.
+* Rework "perf: Add support for event removal on exec" based on
+  the added "perf: Rework perf_event_exit_event()".
+* Fix kselftests to work with more recent libc, due to the way it forces
+  using the kernel's own siginfo_t.
+* Add basic perf-tool built-in test.
+
+v2/RFC: https://lkml.kernel.org/r/20210310104139.679618-1-elver@google.com
+* Patch "Support only inheriting events if cloned with CLONE_THREAD"
+  added to series.
+* Patch "Add support for event removal on exec" added to series.
+* Patch "Add kselftest for process-wide sigtrap handling" added to
+  series.
+* Patch "Add kselftest for remove_on_exec" added to series.
+* Implicitly restrict inheriting events if sigtrap, but the child was
+  cloned with CLONE_CLEAR_SIGHAND, because it is not generally safe if
+  the child cleared all signal handlers to continue sending SIGTRAP.
+* Various minor fixes (see details in patches).
+
+v1/RFC: https://lkml.kernel.org/r/20210223143426.2412737-1-elver@google.com
+
+Pre-series: The discussion at [2] led to the changes in this series. The
+approach taken in "Add support for SIGTRAP on perf events" to trigger
+the signal was suggested by Peter Zijlstra in [3].
+
+[2] https://lore.kernel.org/lkml/CACT4Y+YPrXGw+AtESxAgPyZ84TYkNZdP0xpocX2jwVAbZD=-XQ@mail.gmail.com/
+
+[3] https://lore.kernel.org/lkml/YBv3rAT566k+6zjg@hirez.programming.kicks-ass.net/
+
+Marco Elver (9):
+  perf: Apply PERF_EVENT_IOC_MODIFY_ATTRIBUTES to children
+  perf: Support only inheriting events if cloned with CLONE_THREAD
+  perf: Add support for event removal on exec
+  signal: Introduce TRAP_PERF si_code and si_perf to siginfo
+  perf: Add support for SIGTRAP on perf events
+  selftests/perf_events: Add kselftest for process-wide sigtrap handling
+  selftests/perf_events: Add kselftest for remove_on_exec
+  tools headers uapi: Sync tools/include/uapi/linux/perf_event.h
+  perf test: Add basic stress test for sigtrap handling
+
+Peter Zijlstra (1):
+  perf: Rework perf_event_exit_event()
+
+ arch/m68k/kernel/signal.c                     |   3 +
+ arch/x86/kernel/signal_compat.c               |   5 +-
+ fs/signalfd.c                                 |   4 +
+ include/linux/compat.h                        |   2 +
+ include/linux/perf_event.h                    |   9 +-
+ include/linux/signal.h                        |   1 +
+ include/uapi/asm-generic/siginfo.h            |   6 +-
+ include/uapi/linux/perf_event.h               |  12 +-
+ include/uapi/linux/signalfd.h                 |   4 +-
+ kernel/events/core.c                          | 302 +++++++++++++-----
+ kernel/fork.c                                 |   2 +-
+ kernel/signal.c                               |  11 +
+ tools/include/uapi/linux/perf_event.h         |  12 +-
+ tools/perf/tests/Build                        |   1 +
+ tools/perf/tests/builtin-test.c               |   5 +
+ tools/perf/tests/sigtrap.c                    | 150 +++++++++
+ tools/perf/tests/tests.h                      |   1 +
+ .../testing/selftests/perf_events/.gitignore  |   3 +
+ tools/testing/selftests/perf_events/Makefile  |   6 +
+ tools/testing/selftests/perf_events/config    |   1 +
+ .../selftests/perf_events/remove_on_exec.c    | 260 +++++++++++++++
+ tools/testing/selftests/perf_events/settings  |   1 +
+ .../selftests/perf_events/sigtrap_threads.c   | 210 ++++++++++++
+ 23 files changed, 924 insertions(+), 87 deletions(-)
+ create mode 100644 tools/perf/tests/sigtrap.c
+ create mode 100644 tools/testing/selftests/perf_events/.gitignore
+ create mode 100644 tools/testing/selftests/perf_events/Makefile
+ create mode 100644 tools/testing/selftests/perf_events/config
+ create mode 100644 tools/testing/selftests/perf_events/remove_on_exec.c
+ create mode 100644 tools/testing/selftests/perf_events/settings
+ create mode 100644 tools/testing/selftests/perf_events/sigtrap_threads.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.31.0.208.g409f899ff0-goog
+
