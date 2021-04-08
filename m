@@ -2,291 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D633580ED
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 12:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2BF358240
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 13:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbhDHKiE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Apr 2021 06:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbhDHKhh (ORCPT
+        id S230443AbhDHLn3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Apr 2021 07:43:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29872 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230434AbhDHLn0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Apr 2021 06:37:37 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53197C0613E8
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Apr 2021 03:37:11 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id h19so655602ejk.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Apr 2021 03:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=BCBGbOGg89seqk0GJ8e7eMRxQa1aJCiARfAN/gtOasU=;
-        b=Abilg05WGGBatoHpAGoYZVInSdef9vyAP/aPw2pF3+K6u42MIhLRm1sClMALqLyj6I
-         kI5EnTuyjZ8LEADUh38lXlk4sxI+cp7UD9DueBr/OsvTinmd4+bccadauq8EMeeKIqAK
-         f89MQh18O3shRje614FI5wkCbm+h/0mDdprFhqIcYRdaNrUNPDUTalQztZqNugjHwf5O
-         V2OlsC6C+pK99dr65nYJnXHeLK7lej5LUlLxgO60R7QglxTPDi9SZR9N5tDgEp99PkQ3
-         auQhwe2nl3OhR/pA40i2wjWK3OdPNtUg4GbCFBsXF0adEBCi/kZjpEQpSipTfv85BmiL
-         y0IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=BCBGbOGg89seqk0GJ8e7eMRxQa1aJCiARfAN/gtOasU=;
-        b=Q192mlrKbZfAJo7mViQDrlD3rYW2VfLFmHwY6Is1lAUm7knhA5mQLDCpA5dAm4jcD9
-         QpxgYIJY0dCTX1JSVxEMnJc7YFyQo48ZPIDp/yPukgVWYO5M+dJ8ghsyTHZjS0tLfufk
-         29EnKLYrTSTJbA7UMEyaDBpYBWfHu5R6Shs54u+pG17qSY0K82DQ/X5liDvjs9Y7vXvh
-         VMmVzKBmAf6gdD0D1zNp2xZJSfLHmuznk/OWtk0QBhXx6KqtakuudyrtYdNC4kIcxtPn
-         96oFCPMxU+RhFSo+45NDgDBVPHl+dqz1I4wtq3VZkcZDe6yffIfR92Swe70gEsbnpnZz
-         EX2w==
-X-Gm-Message-State: AOAM533wSzvWp0tfsm1QQ8fBDJl4EmDueBpP0oFSDlvVFxyMs2Y1aRZn
-        GFVakRSsv/t9yPBwpm1tZZcAw03MPw==
-X-Google-Smtp-Source: ABdhPJwUyB3TxRpuM73O4rL06IetXxXvzAxviPSheqdhPNzkKUHZ7b08H4mQzxLXA3ZvtpFt3rt8pum25A==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:9038:bbd3:4a12:abda])
- (user=elver job=sendgmr) by 2002:a17:906:ce4e:: with SMTP id
- se14mr9777476ejb.54.1617878229875; Thu, 08 Apr 2021 03:37:09 -0700 (PDT)
-Date:   Thu,  8 Apr 2021 12:36:05 +0200
-In-Reply-To: <20210408103605.1676875-1-elver@google.com>
-Message-Id: <20210408103605.1676875-11-elver@google.com>
-Mime-Version: 1.0
-References: <20210408103605.1676875-1-elver@google.com>
-X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
-Subject: [PATCH v4 10/10] perf test: Add basic stress test for sigtrap handling
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, peterz@infradead.org,
-        alexander.shishkin@linux.intel.com, acme@kernel.org,
-        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de
-Cc:     glider@google.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
-        christian@brauner.io, dvyukov@google.com, jannh@google.com,
-        axboe@kernel.dk, mascasa@google.com, pcc@google.com,
-        irogers@google.com, oleg@redhat.com, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 8 Apr 2021 07:43:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617882195;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TlJwbyVHILxzSJx1fvaYPc1QqoC+7GiXUwRC58bfvdQ=;
+        b=Gl/LwUlT1qQiSGn9Aj/ndNlOyh8ujI9R/qmlhl0TbqSmuQKvNcr44qpAvZvbkcZoW/s49U
+        qgetNWJ/EtnjtIMpgOXMlBuRtYMDtp+mJLW5xHRKG+osDMIln7uSCRAqA0WjffHgSB1Hn7
+        v22IV+2dt4u//eyRFSj/e+WCbrvwIE4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-264-h2uHmcYrO_GCbt-Sf0xvuw-1; Thu, 08 Apr 2021 07:43:13 -0400
+X-MC-Unique: h2uHmcYrO_GCbt-Sf0xvuw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4343E5B378;
+        Thu,  8 Apr 2021 11:43:12 +0000 (UTC)
+Received: from localhost.localdomain.com (ovpn-113-155.ams2.redhat.com [10.36.113.155])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5D56E18A60;
+        Thu,  8 Apr 2021 11:43:05 +0000 (UTC)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        Andrew Jones <drjones@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 0/4] KVM: cpuid: fix KVM_GET_EMULATED_CPUID implementation
+Date:   Thu,  8 Apr 2021 13:42:59 +0200
+Message-Id: <20210408114303.30310-1-eesposit@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add basic stress test for sigtrap handling as a perf tool built-in test.
-This allows sanity checking the basic sigtrap functionality from within
-the perf tool.
+This series aims to clarify the behavior of the KVM_GET_EMULATED_CPUID
+ioctl, and fix a corner case where -E2BIG is returned when
+the nent field of struct kvm_cpuid2 is matching the amount of
+emulated entries that kvm returns.
 
-Note: A more elaborate kselftest version of this test can also be found
-in tools/testing/selftests/perf_events/sigtrap_threads.c.
+Patch 1 proposes the nent field fix to cpuid.c,
+patch 2 updates the ioctl documentation accordingly and
+patches 3 and 4 extend the x86_64/get_cpuid_test.c selftest to check
+the intended behavior of KVM_GET_EMULATED_CPUID.
 
-Signed-off-by: Marco Elver <elver@google.com>
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 ---
 v4:
-* Update for new perf_event_attr::sig_data / si_perf handling.
+- Address nitpicks given in the mailing list
 
-v3:
-* Added to series (per suggestion from Ian Rogers).
----
- tools/perf/tests/Build          |   1 +
- tools/perf/tests/builtin-test.c |   5 ++
- tools/perf/tests/sigtrap.c      | 150 ++++++++++++++++++++++++++++++++
- tools/perf/tests/tests.h        |   1 +
- 4 files changed, 157 insertions(+)
- create mode 100644 tools/perf/tests/sigtrap.c
+Emanuele Giuseppe Esposito (4):
+  KVM: x86: Fix a spurious -E2BIG in KVM_GET_EMULATED_CPUID
+  Documentation: KVM: update KVM_GET_EMULATED_CPUID ioctl description
+  selftests: add kvm_get_emulated_cpuid to processor.h
+  selftests: KVM: extend get_cpuid_test to include
+    KVM_GET_EMULATED_CPUID
 
-diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
-index 650aec19d490..a429c7a02b37 100644
---- a/tools/perf/tests/Build
-+++ b/tools/perf/tests/Build
-@@ -64,6 +64,7 @@ perf-y += parse-metric.o
- perf-y += pe-file-parsing.o
- perf-y += expand-cgroup.o
- perf-y += perf-time-to-tsc.o
-+perf-y += sigtrap.o
- 
- $(OUTPUT)tests/llvm-src-base.c: tests/bpf-script-example.c tests/Build
- 	$(call rule_mkdir)
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index c4b888f18e9c..28a1cb5eaa77 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -359,6 +359,11 @@ static struct test generic_tests[] = {
- 		.func = test__perf_time_to_tsc,
- 		.is_supported = test__tsc_is_supported,
- 	},
-+	{
-+		.desc = "Sigtrap support",
-+		.func = test__sigtrap,
-+		.is_supported = test__wp_is_supported, /* uses wp for test */
-+	},
- 	{
- 		.func = NULL,
- 	},
-diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
-new file mode 100644
-index 000000000000..c367cc2f64d5
---- /dev/null
-+++ b/tools/perf/tests/sigtrap.c
-@@ -0,0 +1,150 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Basic test for sigtrap support.
-+ *
-+ * Copyright (C) 2021, Google LLC.
-+ */
-+
-+#include <stdint.h>
-+#include <stdlib.h>
-+#include <linux/hw_breakpoint.h>
-+#include <pthread.h>
-+#include <signal.h>
-+#include <sys/ioctl.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+
-+#include "cloexec.h"
-+#include "debug.h"
-+#include "event.h"
-+#include "tests.h"
-+#include "../perf-sys.h"
-+
-+#define NUM_THREADS 5
-+
-+static struct {
-+	int tids_want_signal;		/* Which threads still want a signal. */
-+	int signal_count;		/* Sanity check number of signals received. */
-+	volatile int iterate_on;	/* Variable to set breakpoint on. */
-+	siginfo_t first_siginfo;	/* First observed siginfo_t. */
-+} ctx;
-+
-+#define TEST_SIG_DATA (~(uint64_t)(&ctx.iterate_on))
-+
-+static struct perf_event_attr make_event_attr(void)
-+{
-+	struct perf_event_attr attr = {
-+		.type		= PERF_TYPE_BREAKPOINT,
-+		.size		= sizeof(attr),
-+		.sample_period	= 1,
-+		.disabled	= 1,
-+		.bp_addr	= (unsigned long)&ctx.iterate_on,
-+		.bp_type	= HW_BREAKPOINT_RW,
-+		.bp_len		= HW_BREAKPOINT_LEN_1,
-+		.inherit	= 1, /* Children inherit events ... */
-+		.inherit_thread = 1, /* ... but only cloned with CLONE_THREAD. */
-+		.remove_on_exec = 1, /* Required by sigtrap. */
-+		.sigtrap	= 1, /* Request synchronous SIGTRAP on event. */
-+		.sig_data	= TEST_SIG_DATA,
-+	};
-+	return attr;
-+}
-+
-+static void
-+sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __maybe_unused)
-+{
-+	if (!__atomic_fetch_add(&ctx.signal_count, 1, __ATOMIC_RELAXED))
-+		ctx.first_siginfo = *info;
-+	__atomic_fetch_sub(&ctx.tids_want_signal, syscall(SYS_gettid), __ATOMIC_RELAXED);
-+}
-+
-+static void *test_thread(void *arg)
-+{
-+	pthread_barrier_t *barrier = (pthread_barrier_t *)arg;
-+	pid_t tid = syscall(SYS_gettid);
-+	int i;
-+
-+	pthread_barrier_wait(barrier);
-+
-+	__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
-+	for (i = 0; i < ctx.iterate_on - 1; i++)
-+		__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
-+
-+	return NULL;
-+}
-+
-+static int run_test_threads(pthread_t *threads, pthread_barrier_t *barrier)
-+{
-+	int i;
-+
-+	pthread_barrier_wait(barrier);
-+	for (i = 0; i < NUM_THREADS; i++)
-+		TEST_ASSERT_EQUAL("pthread_join() failed", pthread_join(threads[i], NULL), 0);
-+
-+	return TEST_OK;
-+}
-+
-+static int run_stress_test(int fd, pthread_t *threads, pthread_barrier_t *barrier)
-+{
-+	int ret;
-+
-+	ctx.iterate_on = 3000;
-+
-+	TEST_ASSERT_EQUAL("misfired signal?", ctx.signal_count, 0);
-+	TEST_ASSERT_EQUAL("enable failed", ioctl(fd, PERF_EVENT_IOC_ENABLE, 0), 0);
-+	ret = run_test_threads(threads, barrier);
-+	TEST_ASSERT_EQUAL("disable failed", ioctl(fd, PERF_EVENT_IOC_DISABLE, 0), 0);
-+
-+	TEST_ASSERT_EQUAL("unexpected sigtraps", ctx.signal_count, NUM_THREADS * ctx.iterate_on);
-+	TEST_ASSERT_EQUAL("missing signals or incorrectly delivered", ctx.tids_want_signal, 0);
-+	TEST_ASSERT_VAL("unexpected si_addr", ctx.first_siginfo.si_addr == &ctx.iterate_on);
-+	TEST_ASSERT_EQUAL("unexpected si_errno", ctx.first_siginfo.si_errno, PERF_TYPE_BREAKPOINT);
-+#if 0 /* FIXME: test build and enable when libc's signal.h has si_perf. */
-+	TEST_ASSERT_VAL("unexpected si_perf", ctx.first_siginfo.si_perf == TEST_SIG_DATA);
-+#endif
-+
-+	return ret;
-+}
-+
-+int test__sigtrap(struct test *test __maybe_unused, int subtest __maybe_unused)
-+{
-+	struct perf_event_attr attr = make_event_attr();
-+	struct sigaction action = {};
-+	struct sigaction oldact;
-+	pthread_t threads[NUM_THREADS];
-+	pthread_barrier_t barrier;
-+	int i, fd, ret = TEST_FAIL;
-+
-+	pthread_barrier_init(&barrier, NULL, NUM_THREADS + 1);
-+
-+	action.sa_flags = SA_SIGINFO | SA_NODEFER;
-+	action.sa_sigaction = sigtrap_handler;
-+	sigemptyset(&action.sa_mask);
-+	if (sigaction(SIGTRAP, &action, &oldact)) {
-+		pr_debug("FAILED sigaction()\n");
-+		goto out;
-+	}
-+
-+	fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
-+	if (fd < 0) {
-+		pr_debug("FAILED sys_perf_event_open()\n");
-+		goto out_restore_sigaction;
-+	}
-+
-+	for (i = 0; i < NUM_THREADS; i++) {
-+		if (pthread_create(&threads[i], NULL, test_thread, &barrier)) {
-+			pr_debug("FAILED pthread_create()");
-+			goto out_close_perf_event;
-+		}
-+	}
-+
-+	ret = run_stress_test(fd, threads, &barrier);
-+
-+out_close_perf_event:
-+	close(fd);
-+out_restore_sigaction:
-+	sigaction(SIGTRAP, &oldact, NULL);
-+out:
-+	pthread_barrier_destroy(&barrier);
-+	return ret;
-+}
-diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-index b85f005308a3..c3f2e2ecbfd6 100644
---- a/tools/perf/tests/tests.h
-+++ b/tools/perf/tests/tests.h
-@@ -127,6 +127,7 @@ int test__parse_metric(struct test *test, int subtest);
- int test__pe_file_parsing(struct test *test, int subtest);
- int test__expand_cgroup_events(struct test *test, int subtest);
- int test__perf_time_to_tsc(struct test *test, int subtest);
-+int test__sigtrap(struct test *test, int subtest);
- 
- bool test__bp_signal_is_supported(void);
- bool test__bp_account_is_supported(void);
+ Documentation/virt/kvm/api.rst                | 10 +--
+ arch/x86/kvm/cpuid.c                          | 33 ++++---
+ .../selftests/kvm/include/x86_64/processor.h  |  1 +
+ .../selftests/kvm/lib/x86_64/processor.c      | 33 +++++++
+ .../selftests/kvm/x86_64/get_cpuid_test.c     | 90 ++++++++++++++++++-
+ 5 files changed, 142 insertions(+), 25 deletions(-)
+
 -- 
-2.31.0.208.g409f899ff0-goog
+2.30.2
 
