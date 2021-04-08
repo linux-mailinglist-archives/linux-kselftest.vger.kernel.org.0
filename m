@@ -2,130 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E356358873
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 17:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1BF358E63
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 22:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbhDHPbE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Apr 2021 11:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S231852AbhDHU3x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Apr 2021 16:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbhDHPa4 (ORCPT
+        with ESMTP id S232322AbhDHU3t (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Apr 2021 11:30:56 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A645FC061760;
-        Thu,  8 Apr 2021 08:30:43 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id f29so1648385pgm.8;
-        Thu, 08 Apr 2021 08:30:43 -0700 (PDT)
+        Thu, 8 Apr 2021 16:29:49 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0846C061763
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Apr 2021 13:29:36 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q10so2219702pgj.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Apr 2021 13:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oO/23sQ10zNdJXUePDBr15zWZE3PAPzpbovMLWW7jBo=;
-        b=tjirxve3e4NPqRl/bXEIjEtydWWwLPJiYhUXPb8No26jWfVlABkQsz8ngfXTZSy2eU
-         ROqo0D0+xiP5QpYEIp1Fzrv3icGGF2joJqM/dezoe4Kos+SxF4GwUhmSgGT7wm9AV28I
-         xRnrgRw4AbD6WmrvlPG2R+zDn4dm7FBxXdCz/g7bCq7+KG2nYJHAHq1kZuXuJw+/7cwP
-         yet1G/dTl6q4jbTGTvLt7hZhyCuw61YGP6TVFsuhWOBm6qEj8dL4ZXFV8LAMW4gnN1HO
-         UjD1pvr4Q3cpOQBz5GSclww3QxJuHBsxKQDkRaFddau3Qd1E8hr6M1Mplcqzo0EOAd9R
-         mtZQ==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=B3epSKmnBT2lOgW+FtwpytJLhDI4YaPl1UXPH/kPrf4=;
+        b=us1xgYm47xcc2KkJazv7NQLjSD0QuHiKkWdX+z+HD48lTOnCTInYsWMsErucX36Ti8
+         bksjSUi2lpczo5OHiERN4OQBBdB66BHr6VJY41udy2iM+TDfzID13PjI/IVuOpHXOocZ
+         8TI6CTYeaGX6oGgv8rTKVz+LtOIzwLghc/tWDFxO48v1m3fMmojy2Q0s2Qx+veIUMeNt
+         cRrFKxQVpnRQZo6rFiV+XDthvsWG/PRlby2sKsY3wj4PnFk77CYXXMrpj4ypCydtGyCJ
+         tWnSRdlMB8YcyNu7NI40yMUCIsMwXFeRfyIWhAdYz2lZKEEggIa6L3nFAc1IL2L7cl65
+         ZL3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oO/23sQ10zNdJXUePDBr15zWZE3PAPzpbovMLWW7jBo=;
-        b=cthJOZPeKK/WNMzg/oJ9QsvABpj/QxiAy6VG/YN1tN1Q+FAVxX63JL5pDrgrrjPosV
-         X5UNP3LwP/RDDA4h1pkaiPkA++RR2dWZ4EkKbKkZQLhw+qz0xLS8qO5RecixeV7Ys0It
-         KNDSGGKu5dKjXQE8/n0fPeCzHNME4jJel5+1v4N/Ko/6fcP5O6mAwqdOUA5t0UYZwkXB
-         P9neiBiEhOFtelPKzx2TfldEMM4HhC3TuILeoRomdLEzB0vtmwDx+Y3xzOaCn2S4bIEV
-         BJQOSKz2OFYeM4q3OQBO7lo5fvYHPSCqHqAj6rRqHhl1EvcdKfIkjCKtcGTMTJD6cPDw
-         42nw==
-X-Gm-Message-State: AOAM533wfaiLl6BOjRAmEQuTWGrIeLaA7sBLNQLHoO99J5qTqS63JrJo
-        OdzhE/E4CuE8Ps8kODpNV60FZ3ThJRxtSYZ4aqc=
-X-Google-Smtp-Source: ABdhPJx3vRd/dP/5NBJB97jSnzkg4mtFwN9apjja9l0XgzUhFHKu5r6RtZf/NZFLldFSKwcOQ66ckVzaBmmlqGlkSkE=
-X-Received: by 2002:a62:7c43:0:b029:1ef:20ce:ba36 with SMTP id
- x64-20020a627c430000b02901ef20ceba36mr8145230pfc.40.1617895843021; Thu, 08
- Apr 2021 08:30:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B3epSKmnBT2lOgW+FtwpytJLhDI4YaPl1UXPH/kPrf4=;
+        b=VjZfUgbBAl67CVp20uHJdX//MMXfJ+W4LOd0KVldEqC6PtQ4hC2QjabPwSh9mK+et6
+         AN6CKKBLn10SiX5OaNL/37VjpGCpyVBT+atigJ6kKyXuxnxMF6Tklrv65mO/JzsP5Wlo
+         YyT/plHPR/dhh9gw9ymVdodWFf/74T18k+7vd43n+ObKOAHfZTTdmdfhcfi2XsB3od8W
+         4eRMzKxAsUOKJdn4UTF/rwrMTA0fECsyjXhgga2yvuFhjzm4wjust3DIu0MQcoq/83/V
+         adSNWqdzNNONhClnDLs6nLWt4pYIYs3mATpcA2NWgZxlu5M+B075JhfLjIupErMijyC+
+         y8aw==
+X-Gm-Message-State: AOAM533dXp1SEzvtAB1tBB7OzgdLGBWew1zrr1jvzINp3b6iKe5sC9WK
+        hoYl9eUc1kRNuadh7mXjlRYz2A==
+X-Google-Smtp-Source: ABdhPJxqetogGDOm4gwvRxgpG4WBTGqlPTKUmpNQxLJoDE+CcSaW4t+AMq8hi5IHekhy3tleLwhh/w==
+X-Received: by 2002:a63:575b:: with SMTP id h27mr10057262pgm.180.1617913776017;
+        Thu, 08 Apr 2021 13:29:36 -0700 (PDT)
+Received: from google.com (240.111.247.35.bc.googleusercontent.com. [35.247.111.240])
+        by smtp.gmail.com with ESMTPSA id w15sm249019pja.18.2021.04.08.13.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Apr 2021 13:29:35 -0700 (PDT)
+Date:   Thu, 8 Apr 2021 20:29:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        Andrew Jones <drjones@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] KVM: x86: Fix a spurious -E2BIG in
+ KVM_GET_EMULATED_CPUID
+Message-ID: <YG9nq6Y7GhFo9dUh@google.com>
+References: <20210408114303.30310-1-eesposit@redhat.com>
+ <20210408114303.30310-2-eesposit@redhat.com>
 MIME-Version: 1.0
-References: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
- <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com>
- <CA+G9fYuG12WaC6QAdx1k80v8-As7a7oVVkhaUDxqgV=BaunfxQ@mail.gmail.com>
- <CAHp75Vf1S5Ra4fdkV=faw4tCXbeNiifC3y8MF0_bCqHGfDBLsQ@mail.gmail.com> <CA+G9fYuYC3QK2Zi8pbud0ebai4d4YgB0A4DXg5XWaE1pLWP5tw@mail.gmail.com>
-In-Reply-To: <CA+G9fYuYC3QK2Zi8pbud0ebai4d4YgB0A4DXg5XWaE1pLWP5tw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 8 Apr 2021 18:30:26 +0300
-Message-ID: <CAHp75VcFo7SxMaKggyx1TM22tfKk7+_ZT4m5N1bXryABjqVeoA@mail.gmail.com>
-Subject: Re: [next] [arm64] [gpio] BUG: key has not been registered! DEBUG_LOCKS_WARN_ON:
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Colin King <colin.king@canonical.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210408114303.30310-2-eesposit@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 8, 2021 at 3:59 PM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> On Thu, 8 Apr 2021 at 15:17, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Thu, Apr 8, 2021 at 11:33 AM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote:
-> > > On Thu, 8 Apr 2021 at 04:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > > > On Thu, Apr 8, 2021 at 12:38 AM Naresh Kamboju
-> > > > <naresh.kamboju@linaro.org> wrote:
-> > > > >
-> > > > > While running kselftest recently added gpio gpio-sim.sh test case the following
-> > > > > warning was triggered on Linux next tag 20210330 tag running on arm64 juno
-> > > > > and hikey devices.
-> > > > >
-> > > > > GOOD: next-20210326
-> > > > > BAD: next-20210330
-> > > > >
-> > > > > This is still happening today on Linux next tag 20210407.
-> > > >
-> > > > Can you add the following
-> > > >
-> > > >   sysfs_attr_init(attrs[i]);
-> > > >
-> > > > to the end of the loop in gpio_sim_setup_sysfs()?
-> > >
-> > > Do you mean like this,
-> > >
-> > > diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> > > index ea17289a869c..5fe67ccf45f7 100644
-> > > --- a/drivers/gpio/gpio-sim.c
-> > > +++ b/drivers/gpio/gpio-sim.c
-> > > @@ -296,6 +296,7 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
-> > >                 dev_attr->store = gpio_sim_sysfs_line_store;
-> > >
-> > >                 attrs[i] = &dev_attr->attr;
-> > > +               sysfs_attr_init(attrs[i]);
-> > >         }
-> > >
-> > >         chip->attr_group.name = "line-ctrl";
-> >
-> > Precisely.
->
-> As per your suggestions the above line added and build tested
-> the reported issue is fixed now.
->
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+On Thu, Apr 08, 2021, Emanuele Giuseppe Esposito wrote:
+> When retrieving emulated CPUID entries, check for an insufficient array
+> size if and only if KVM is actually inserting an entry.
+> If userspace has a priori knowledge of the exact array size,
+> KVM_GET_EMULATED_CPUID will incorrectly fail due to effectively requiring
+> an extra, unused entry.
+> 
+> Fixes: 433f4ba19041 ("KVM: x86: fix out-of-bounds write in KVM_GET_EMULATED_CPUID (CVE-2019-19332)")
+> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+> ---
+>  arch/x86/kvm/cpuid.c | 33 ++++++++++++++++-----------------
+>  1 file changed, 16 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 6bd2f8b830e4..d30194081892 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -567,34 +567,33 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
+>  
+>  static int __do_cpuid_func_emulated(struct kvm_cpuid_array *array, u32 func)
+>  {
+> -	struct kvm_cpuid_entry2 *entry;
+> -
+> -	if (array->nent >= array->maxnent)
+> -		return -E2BIG;
+> +	struct kvm_cpuid_entry2 entry;
+>  
+> -	entry = &array->entries[array->nent];
+> -	entry->function = func;
+> -	entry->index = 0;
+> -	entry->flags = 0;
+> +	memset(&entry, 0, sizeof(entry));
+>  
+>  	switch (func) {
+>  	case 0:
+> -		entry->eax = 7;
+> -		++array->nent;
+> +		entry.eax = 7;
+>  		break;
+>  	case 1:
+> -		entry->ecx = F(MOVBE);
+> -		++array->nent;
+> +		entry.ecx = F(MOVBE);
+>  		break;
+>  	case 7:
+> -		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
+> -		entry->eax = 0;
+> -		entry->ecx = F(RDPID);
+> -		++array->nent;
+> -	default:
+> +		entry.flags = KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
+> +		entry.ecx = F(RDPID);
+>  		break;
+> +	default:
+> +		goto out;
+>  	}
+>  
+> +	/* This check is performed only when func is valid */
 
-Thanks, I'll send a formal patch.
+Sorry to keep nitpicking and bikeshedding.  Funcs aren't really "invalid", KVM
+just doesn't have any features it emulates in other leafs.  Maybe be more literal
+in describing what triggers the check?
 
-The rest I leave for Bart to figure out what to do.
+	/* Check the array capacity iff the entry is being copied over. */
 
+Not a sticking point, so either way:
 
--- 
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+> +	if (array->nent >= array->maxnent)
+> +		return -E2BIG;
+> +
+> +	entry.function = func;
+> +	memcpy(&array->entries[array->nent++], &entry, sizeof(entry));
+> +
+> +out:
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.30.2
+> 
