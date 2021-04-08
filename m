@@ -2,61 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D27357804
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 00:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B55357E21
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Apr 2021 10:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbhDGWzF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Apr 2021 18:55:05 -0400
-Received: from mga18.intel.com ([134.134.136.126]:51762 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229449AbhDGWzD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Apr 2021 18:55:03 -0400
-IronPort-SDR: dtY8tk0NAsUUDfTygFN0j5NvbBhzMRSd4JaxJ339nmC6e7rGyihq1tIptdWIvt/UmX+dPUazF1
- EWs/DBySzw7A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="180955838"
-X-IronPort-AV: E=Sophos;i="5.82,204,1613462400"; 
-   d="scan'208";a="180955838"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2021 15:54:52 -0700
-IronPort-SDR: ebqtshAfC6rJrYpIB5ut3KOCQS5XWGOkEguXRhQRwMrMAAzA/m7rFAKvSSRUSjcc8eY+0BIa9e
- JkT2YPhpYhcw==
-X-IronPort-AV: E=Sophos;i="5.82,204,1613462400"; 
-   d="scan'208";a="421923121"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2021 15:54:52 -0700
-Date:   Wed, 7 Apr 2021 22:54:46 +0000
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] selftests/resctrl: Change a few printed messages
-Message-ID: <YG44NgogMXnge8+O@otcwcpicx3.sc.intel.com>
-References: <20210407195728.1436270-1-fenghua.yu@intel.com>
- <bc53f24b-7ec9-992f-6013-d40459e2b360@linuxfoundation.org>
+        id S229687AbhDHIdo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Apr 2021 04:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229539AbhDHIdo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 8 Apr 2021 04:33:44 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D675EC061763
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Apr 2021 01:33:32 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id w3so1619003ejc.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Apr 2021 01:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5yCCjiWkAwqATqPSjIjQNyLbmG/huiKlevGSmwkEyR8=;
+        b=IILPK87co6cRB30SBUD84s8jNEWHphYGfXu/trBxCn+HYZUD6LJxbIvbuvoFnHEIkJ
+         8pT9+YwIxsWGPJRTvxmuhYnpdDMWE7ehCgXLZT0USf+os5lIdDr2/icw83jnnqMaPnDJ
+         xXGMlpCnW+2Bu77aPYpaluIWMrDqKvl0b4qJ+jfLyt0aqMRftlIA69uuWYb5OSO+DKwb
+         4bGlRcnt0chwis+3AaomfayoRZ6xkjTia6ZhRGhXeGDRVC2/knn8LJ4eYbjKQEIthRZr
+         ela4zkCP9xWbLI0gWkQc5AW86VMw5RLYQeftE2A7cyrwz4VxXYWsVzKjDOPL7iBUiTGz
+         7W1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5yCCjiWkAwqATqPSjIjQNyLbmG/huiKlevGSmwkEyR8=;
+        b=gnk1ATQqr1XTa9UEBzp5v4bmeYROZgbTkC3Gj62XnM2DbiItMzy6NfG+BCF+7GZs50
+         hqA0PXehFucxrkXXPPbspAkc4caUHecQhnWJpqhB22WgMcsetgclZLnrot8X+OJ1F+4J
+         /VssphqWXiOIK4e5hUW/pm9fnvhJKFUOi1nbBc1yB6O5JbPEfKqvcJG2JsRUoQ/oudHz
+         gtLzVUBMulHN386J/G/iIAoH4Gr0WHXbYD7EoQHth6EAvAi80mxYvB0AgdhdVXYD8Cac
+         f/GZ2xKAHLUXEr6YtNJTQBBS8kzPQt8Au2ta+sZ4fAXkrVbsIp5d3ln+uHt2UgGG72G+
+         o0Aw==
+X-Gm-Message-State: AOAM532w5YV4Ix8kdmz/vnMN2bX7P7JkxHKXxVYfTTl4hCRiedIhjN7t
+        IO2pkoB4SKJERHgbELhmvniwfdA5Q0k947bdOWrO7Q==
+X-Google-Smtp-Source: ABdhPJyu6/8vxWkUZcupdWZS44/FuHmo3e72vR0EqZhptpOKA0zGOzhX+uQpSlk8g3+BrTRTBir+tAGqYdWiAxlxXLk=
+X-Received: by 2002:a17:906:9605:: with SMTP id s5mr8993580ejx.287.1617870811400;
+ Thu, 08 Apr 2021 01:33:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bc53f24b-7ec9-992f-6013-d40459e2b360@linuxfoundation.org>
+References: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
+ <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com>
+In-Reply-To: <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 8 Apr 2021 14:03:20 +0530
+Message-ID: <CA+G9fYuG12WaC6QAdx1k80v8-As7a7oVVkhaUDxqgV=BaunfxQ@mail.gmail.com>
+Subject: Re: [next] [arm64] [gpio] BUG: key has not been registered! DEBUG_LOCKS_WARN_ON:
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Colin King <colin.king@canonical.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Shuah,
+On Thu, 8 Apr 2021 at 04:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+>
+> On Thu, Apr 8, 2021 at 12:38 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > While running kselftest recently added gpio gpio-sim.sh test case the following
+> > warning was triggered on Linux next tag 20210330 tag running on arm64 juno
+> > and hikey devices.
+> >
+> > GOOD: next-20210326
+> > BAD: next-20210330
+> >
+> > This is still happening today on Linux next tag 20210407.
+>
+> Can you add the following
+>
+>   sysfs_attr_init(attrs[i]);
+>
+> to the end of the loop in gpio_sim_setup_sysfs()?
 
-On Wed, Apr 07, 2021 at 04:46:38PM -0600, Shuah Khan wrote:
-> On 4/7/21 1:57 PM, Fenghua Yu wrote:
-> > Change a few printed messages to report test progress more clearly.
-> Thank you. Applied to linux-kseftest next branch for 5.13-rc1
+Do you mean like this,
 
-Great! I pull the next patch and test the patch. It works fine.
+diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+index ea17289a869c..5fe67ccf45f7 100644
+--- a/drivers/gpio/gpio-sim.c
++++ b/drivers/gpio/gpio-sim.c
+@@ -296,6 +296,7 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
+                dev_attr->store = gpio_sim_sysfs_line_store;
 
-BTW, as said in the cover patch in the series, there will be two
-new patch sets to fix a few other resctrl selftest issues on top of
-this series. I will send out them in the next weeks. Hopefully
-you will push them to 5.14:)
+                attrs[i] = &dev_attr->attr;
++               sysfs_attr_init(attrs[i]);
+        }
 
-Thank you very much for your help!
+        chip->attr_group.name = "line-ctrl";
 
--Fenghua
+
+>
+> If it fixes an issue I'll send a formal patch.
+
+I will build and test this and report here.
+
+- Naresh
