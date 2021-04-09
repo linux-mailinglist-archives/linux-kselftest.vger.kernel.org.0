@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6585A359F51
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Apr 2021 14:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F75359F52
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Apr 2021 14:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233734AbhDIMyy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Apr 2021 08:54:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55592 "EHLO
+        id S233713AbhDIMy4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Apr 2021 08:54:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38279 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233652AbhDIMyu (ORCPT
+        by vger.kernel.org with ESMTP id S233664AbhDIMyz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Apr 2021 08:54:50 -0400
+        Fri, 9 Apr 2021 08:54:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617972876;
+        s=mimecast20190719; t=1617972881;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UfpT86W/kEtT88MSCqogRvPyj1+EA4SWpFGICPB4Fvc=;
-        b=WEsnKzFkWMVjs+rSFYDOmj1GKl4uW+G9Nj7g1uyspyqcAaAV2eW3w7YO4H7IV2j5tYvrNi
-        YN7psq7pDyJ2F4C5l5/spfiQyLtJF+v2VKvACdebyADtygzx0AuSRGHS7es8kL6opz854c
-        9ztlqEcwv+ub8FWFfnalthVtlAfMGIg=
+        bh=i9iBaLNrNdHy5Myw5Ru7jrMYIVd0xBvqef8GrfatpKg=;
+        b=B0yAjbt99r0v2Y5aVvdY0rlMcHtcu3GlA8WV6PlGz16D8BYqjFsDqBAaTMSVKPBkXpaZ2W
+        xdE0aGv8LcIpLR/1Xo7GqwyfHPq/DNDIyfR+1309wRSaH2m+pTvgLZiezko80oDp4f18xn
+        n6euVLw0+RagEmPxQEa55ClyzLwwbqU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-380-hXj-E_vrPeukmuGH_-0BBA-1; Fri, 09 Apr 2021 08:54:35 -0400
-X-MC-Unique: hXj-E_vrPeukmuGH_-0BBA-1
+ us-mta-23-nRgApYQaMCKeMpIgqnMPNA-1; Fri, 09 Apr 2021 08:54:40 -0400
+X-MC-Unique: nRgApYQaMCKeMpIgqnMPNA-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E3B126D4EE;
-        Fri,  9 Apr 2021 12:54:33 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A9C366D4E6;
+        Fri,  9 Apr 2021 12:54:38 +0000 (UTC)
 Received: from localhost.localdomain.com (ovpn-114-61.ams2.redhat.com [10.36.114.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EB1F810013C1;
-        Fri,  9 Apr 2021 12:54:29 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 53A2310013C1;
+        Fri,  9 Apr 2021 12:54:34 +0000 (UTC)
 From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -47,9 +47,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Alexander Graf <graf@amazon.com>,
         Andrew Jones <drjones@redhat.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 1/4] KVM: x86: Fix a spurious -E2BIG in KVM_GET_EMULATED_CPUID
-Date:   Fri,  9 Apr 2021 14:54:20 +0200
-Message-Id: <20210409125423.26288-2-eesposit@redhat.com>
+Subject: [PATCH v5 2/4] Documentation: KVM: update KVM_GET_EMULATED_CPUID ioctl description
+Date:   Fri,  9 Apr 2021 14:54:21 +0200
+Message-Id: <20210409125423.26288-3-eesposit@redhat.com>
 In-Reply-To: <20210409125423.26288-1-eesposit@redhat.com>
 References: <20210409125423.26288-1-eesposit@redhat.com>
 MIME-Version: 1.0
@@ -59,75 +59,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When retrieving emulated CPUID entries, check for an insufficient array
-size if and only if KVM is actually inserting an entry.
-If userspace has a priori knowledge of the exact array size,
-KVM_GET_EMULATED_CPUID will incorrectly fail due to effectively requiring
-an extra, unused entry.
+KVM_GET_EMULATED_CPUID returns -E2BIG if the nent field of
+struct kvm_cpuid2 is smaller than the actual entries, while
+it adjusts nent if the provided amount is bigger than the
+actual amount.
 
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Fixes: 433f4ba19041 ("KVM: x86: fix out-of-bounds write in KVM_GET_EMULATED_CPUID (CVE-2019-19332)")
+Update documentation accordingly. ENOMEM is just returned if the
+allocation fails, like all other calls.
+
 Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 ---
- arch/x86/kvm/cpuid.c | 33 ++++++++++++++++-----------------
- 1 file changed, 16 insertions(+), 17 deletions(-)
+ Documentation/virt/kvm/api.rst | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 6bd2f8b830e4..9b9430bfc60e 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -567,34 +567,33 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 307f2fcf1b02..8ba23bc2a625 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -3404,12 +3404,10 @@ which features are emulated by kvm instead of being present natively.
  
- static int __do_cpuid_func_emulated(struct kvm_cpuid_array *array, u32 func)
- {
--	struct kvm_cpuid_entry2 *entry;
--
--	if (array->nent >= array->maxnent)
--		return -E2BIG;
-+	struct kvm_cpuid_entry2 entry;
+ Userspace invokes KVM_GET_EMULATED_CPUID by passing a kvm_cpuid2
+ structure with the 'nent' field indicating the number of entries in
+-the variable-size array 'entries'. If the number of entries is too low
+-to describe the cpu capabilities, an error (E2BIG) is returned. If the
+-number is too high, the 'nent' field is adjusted and an error (ENOMEM)
+-is returned. If the number is just right, the 'nent' field is adjusted
+-to the number of valid entries in the 'entries' array, which is then
+-filled.
++the variable-size array 'entries'.
++If the number of entries is too low to describe the cpu
++capabilities, an error (E2BIG) is returned.  If the number is too high,
++the 'nent' field is adjusted and the entries array is filled.
  
--	entry = &array->entries[array->nent];
--	entry->function = func;
--	entry->index = 0;
--	entry->flags = 0;
-+	memset(&entry, 0, sizeof(entry));
- 
- 	switch (func) {
- 	case 0:
--		entry->eax = 7;
--		++array->nent;
-+		entry.eax = 7;
- 		break;
- 	case 1:
--		entry->ecx = F(MOVBE);
--		++array->nent;
-+		entry.ecx = F(MOVBE);
- 		break;
- 	case 7:
--		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
--		entry->eax = 0;
--		entry->ecx = F(RDPID);
--		++array->nent;
--	default:
-+		entry.flags = KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
-+		entry.ecx = F(RDPID);
- 		break;
-+	default:
-+		goto out;
- 	}
- 
-+	/* Check the array capacity iff the entry is being copied over. */
-+	if (array->nent >= array->maxnent)
-+		return -E2BIG;
-+
-+	entry.function = func;
-+	memcpy(&array->entries[array->nent++], &entry, sizeof(entry));
-+
-+out:
- 	return 0;
- }
- 
+ The entries returned are the set CPUID bits of the respective features
+ which kvm emulates, as returned by the CPUID instruction, with unknown
 -- 
 2.30.2
 
