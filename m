@@ -2,279 +2,543 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC5035D13C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Apr 2021 21:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE9535D22D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Apr 2021 22:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245337AbhDLTky (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Apr 2021 15:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S238160AbhDLUmj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Apr 2021 16:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243025AbhDLTkv (ORCPT
+        with ESMTP id S230454AbhDLUmi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Apr 2021 15:40:51 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54389C061574;
-        Mon, 12 Apr 2021 12:40:32 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id o5so15557073qkb.0;
-        Mon, 12 Apr 2021 12:40:32 -0700 (PDT)
+        Mon, 12 Apr 2021 16:42:38 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD15C061574
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Apr 2021 13:42:20 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id c17so9961949pfn.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Apr 2021 13:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=G9l4aiKJM4go7FzAfgupa7+4yXIb0n+i6BsEUOdnQ3s=;
-        b=krv/jDks++/lqrmK/R+qy04YU1krDr4DtotLWy0e1RrCNLw7JK9FknbJN2nywtiQkH
-         0bFh28cJg9MdBt38eseA0K/7RDyepNKKJOnBjNdrKppYJ8unjTZ5nMqNuimNmxzOPWAz
-         LkoS7xc7l5F5KhopaP3UkuAD9ibAn/t1VcAbmd8mtl1DnJEEqztO+IQjBKKIHaxaBfWg
-         MG2vMSiY7WqSul6URzReSN3ysnzfhkoWZL/L8kd6S3iar/ber+n3uzmMzarb6p65yluA
-         peNEhTt8ud3gbO8WrV1fDWimH8cs1ilACeCmL4wndXSuQyjqozq0OcCAnbiGsdw9h2ID
-         1VKA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Psh+UPiev6cgaSTWXKHBX7O1HqA3S9jFAt33RXeOlkw=;
+        b=Hgg2v0PdRfr/hS/UsnbIB91G+lI2f+u/QY6jrPSIAflfMJuwbwlk0AyH1yZEwJz7u5
+         LAUvSy3TofBVsA4/ARzd8eG4aYOH2TzGK3ySv4P/VY0rQ7LzeOayGe3QS9OfxEU37qjI
+         /i2eE9flYTT0r92DFuq763V0ALzBpmMogotW3+pbfUt5y/x+DPnR5db99KTx5FURL6HL
+         wlVY52tdV6Q6L/da48ZNFPHzL2DAEv0RxGkZlgaWjUNgsTWphJP2faT27f/Uo8ZHNxYr
+         gE370PRcLG4lBXJeQyaEW8ax7DsOGB/IH11AlDCvfuAFjfHXPC+Cq9EpG+6XUIdZgW6D
+         SXVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=G9l4aiKJM4go7FzAfgupa7+4yXIb0n+i6BsEUOdnQ3s=;
-        b=VzPDxV5ost4JJeGtimR2NEKr+C8VRCB8QPb+HPDsIVGHjXYca+isbeY+xHSqNppx+v
-         c9C+WnD9yhiDXacjlIF5n16Bw8LMs+o4e8NZYu28o4ljPeyysm7BS2FpMvX2fldY+BXE
-         OwQh9/Hi57XOlE5wVEDYUfzR/oJ4e2bSkcEfMD8MOUAMDs1KVn6JlsvG3ldX60ANzrUY
-         m4L3wmdpyK1D6AkI6LRg2WkQq85E8TdFCnPfvbk4UeMaRUzGzWlrYh+7SieeJW1Nyh7z
-         sQgOSZz74a5iAcIgeqgxJe8CuSTelakv9h/POp1x27b1mm14a7thBw3kvkLQrCFt9iKu
-         f1og==
-X-Gm-Message-State: AOAM530hJVHnbhb1zEjNZj5DD5Acdsfko0c+CiWwGegwPgq1EMElJay9
-        UHDgSviiKyCr/4W1CbcghZI=
-X-Google-Smtp-Source: ABdhPJysd7n2jeV6h3HzQdLMPsBWj6M9XJqr7HyVS41pfGqG+gcQ+puHo1Btior3d/rpJQPL5g1FTA==
-X-Received: by 2002:a05:620a:3c1:: with SMTP id r1mr28188181qkm.339.1618256431595;
-        Mon, 12 Apr 2021 12:40:31 -0700 (PDT)
-Received: from localhost.localdomain ([179.218.4.27])
-        by smtp.gmail.com with ESMTPSA id j30sm8407911qka.57.2021.04.12.12.40.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 12:40:31 -0700 (PDT)
-From:   Pedro Tammela <pctammela@gmail.com>
-X-Google-Original-From: Pedro Tammela <pctammela@mojatatu.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        David Verbeiren <david.verbeiren@tessares.net>,
-        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
-        bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
-        linux-kernel@vger.kernel.org (open list),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v3 3/3] bpf: selftests: update array map tests for per-cpu batched ops
-Date:   Mon, 12 Apr 2021 16:40:01 -0300
-Message-Id: <20210412194001.946213-4-pctammela@mojatatu.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210412194001.946213-1-pctammela@mojatatu.com>
-References: <20210412194001.946213-1-pctammela@mojatatu.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Psh+UPiev6cgaSTWXKHBX7O1HqA3S9jFAt33RXeOlkw=;
+        b=lLLiQpjI85MeP/mOuk6lEr94sVp0gQjigkv2DKQC3zi3BIaZu8ZRfP5iSG/MfiWWDo
+         R9bh1hQKBWxmE4zTcnayT1L4/PKgy88PDQ27WvODWpRML5rszqAAv8dbVsdHrP5hKGEJ
+         lyYKbGEBxKDZOiWn8A0N43kW9IDGhGxKmmBCearl/laepNEgBFgxaoUG7SsFX+/3KRVN
+         uqj0RNdUXrOtyOz/gnRDPxoofj90p8NkJLoESxfkWd+rwP/CLJhscG6goBBVyXuNLc5+
+         y4witZGdKmdUw8KkP+feXe1w2GugWpIFonM9pfGpbf1SyuYRDbzAbKcFtPDCY5WLteD8
+         fNZw==
+X-Gm-Message-State: AOAM5306BWuvJqYC8W23rv7GjmqTirBH1p1YEj9gy/2X0JHS1ZHkl9BB
+        HE175eBd+8yzjk1tsBOVl7CM9JD9jBxEFCoZUdw9Ug==
+X-Google-Smtp-Source: ABdhPJzWiaypWjU7+8VU0oU926UbT6w2nhOF6mfnWyp9aAcUjB9WVuI7E/4eyI3nRAJ3QCVhZfGhkYdEM3JfJr/BsRM=
+X-Received: by 2002:a63:e509:: with SMTP id r9mr29288250pgh.384.1618260139728;
+ Mon, 12 Apr 2021 13:42:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210409180105.3825069-1-dlatypov@google.com> <CABVgOSnjE8PBF9TyBRtX26i1t51=XCy6x=rg8C-Hv-zyvc7D6w@mail.gmail.com>
+ <CAGS_qxrEt=nLSMx7Vvs5qw0jjMTiv4G1Jt4Y-JtptSGa4DQSBw@mail.gmail.com>
+In-Reply-To: <CAGS_qxrEt=nLSMx7Vvs5qw0jjMTiv4G1Jt4Y-JtptSGa4DQSBw@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 12 Apr 2021 13:42:08 -0700
+Message-ID: <CAFd5g46wYJZc9gm28UVSCr3aErufUx9fvPwJ2MiRxecqGMfxPQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: add tips for running KUnit
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Follows the same logic as the hashtable tests.
+On Mon, Apr 12, 2021 at 10:27 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> hOn Fri, Apr 9, 2021 at 9:10 PM David Gow <davidgow@google.com> wrote:
+> >
+> > Thanks for writing this: it's good to have these things documented at last!
+> >
+> > There are definitely a few things this document points out which still
+> > need deciding, which does make this document lean a bit into "design
+> > discussion" territory in a few of the notes. This doesn't bother me --
+> > it's an accurate description of the state of things -- but I wouldn't
+> > want this documentation held up too long because of these sorts of
+> > TODOs (and can definitely see how having too many of them might
+> > discourage KUnit use a bit). Particularly things like the
+> > ".kunitconfig" fragment file feature stuff: I feel that's something
+> > better discussed on patches adding/using the feature than in the
+> > documentation / reviews of the documentation, so I'd rather drop or
+> > simplify those '..note:'s than bokeshed about it here (something I'm a
+> > little guilty of below).
+>
+> I don't think we'll actually make progress on any of those in the near
+> future though.
+> So I figured it'd be best to accurately represent the state of the
+> world ~somewhere.
+>
+> But it did feel a bit strange to do it here, so I'm not against removing it.
 
-Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
----
- .../bpf/map_tests/array_map_batch_ops.c       | 110 +++++++++++++-----
- 1 file changed, 80 insertions(+), 30 deletions(-)
+I actually like the accurate and upfront way that you spelled these things out.
 
-diff --git a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
-index e42ea1195d18..707d17414dee 100644
---- a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
-+++ b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
-@@ -10,32 +10,59 @@
- #include <test_maps.h>
- 
- static void map_batch_update(int map_fd, __u32 max_entries, int *keys,
--			     int *values)
-+			     __s64 *values, bool is_pcpu)
- {
--	int i, err;
-+	int nr_cpus = libbpf_num_possible_cpus();
-+	int i, j, err;
-+	int offset = 0;
- 	DECLARE_LIBBPF_OPTS(bpf_map_batch_opts, opts,
- 		.elem_flags = 0,
- 		.flags = 0,
- 	);
- 
-+	CHECK(nr_cpus < 0, "nr_cpus checking",
-+	      "error: get possible cpus failed");
-+
- 	for (i = 0; i < max_entries; i++) {
- 		keys[i] = i;
--		values[i] = i + 1;
-+		if (is_pcpu)
-+			for (j = 0; j < nr_cpus; j++)
-+				(values + offset)[j] = i + 1 + j;
-+		else
-+			values[i] = i + 1;
-+		offset += nr_cpus;
- 	}
- 
- 	err = bpf_map_update_batch(map_fd, keys, values, &max_entries, &opts);
- 	CHECK(err, "bpf_map_update_batch()", "error:%s\n", strerror(errno));
- }
- 
--static void map_batch_verify(int *visited, __u32 max_entries,
--			     int *keys, int *values)
-+static void map_batch_verify(int *visited, __u32 max_entries, int *keys,
-+			     __s64 *values, bool is_pcpu)
- {
--	int i;
-+	int nr_cpus = libbpf_num_possible_cpus();
-+	int i, j;
-+	int offset = 0;
-+
-+	CHECK(nr_cpus < 0, "nr_cpus checking",
-+	      "error: get possible cpus failed");
- 
- 	memset(visited, 0, max_entries * sizeof(*visited));
- 	for (i = 0; i < max_entries; i++) {
--		CHECK(keys[i] + 1 != values[i], "key/value checking",
--		      "error: i %d key %d value %d\n", i, keys[i], values[i]);
-+		if (is_pcpu) {
-+			for (j = 0; j < nr_cpus; j++) {
-+				__s64 value = (values + offset)[j];
-+				CHECK(keys[i] + j + 1 != value,
-+				      "key/value checking",
-+				      "error: i %d j %d key %d value %d\n", i,
-+				      j, keys[i], value);
-+			}
-+		} else {
-+			CHECK(keys[i] + 1 != values[i], "key/value checking",
-+			      "error: i %d key %d value %d\n", i, keys[i],
-+			      values[i]);
-+		}
-+		offset += nr_cpus;
- 		visited[i] = 1;
- 	}
- 	for (i = 0; i < max_entries; i++) {
-@@ -44,45 +71,52 @@ static void map_batch_verify(int *visited, __u32 max_entries,
- 	}
- }
- 
--void test_array_map_batch_ops(void)
-+void __test_map_lookup_and_update_batch(bool is_pcpu)
- {
-+	int nr_cpus = libbpf_num_possible_cpus();
- 	struct bpf_create_map_attr xattr = {
- 		.name = "array_map",
--		.map_type = BPF_MAP_TYPE_ARRAY,
-+		.map_type = is_pcpu ? BPF_MAP_TYPE_PERCPU_ARRAY :
-+				      BPF_MAP_TYPE_ARRAY,
- 		.key_size = sizeof(int),
--		.value_size = sizeof(int),
-+		.value_size = sizeof(__s64),
- 	};
--	int map_fd, *keys, *values, *visited;
-+	int map_fd, *keys, *visited;
- 	__u32 count, total, total_success;
- 	const __u32 max_entries = 10;
- 	__u64 batch = 0;
--	int err, step;
-+	int err, step, value_size;
-+	void *values;
- 	DECLARE_LIBBPF_OPTS(bpf_map_batch_opts, opts,
- 		.elem_flags = 0,
- 		.flags = 0,
- 	);
- 
-+	CHECK(nr_cpus < 0, "nr_cpus checking",
-+	      "error: get possible cpus failed");
-+
- 	xattr.max_entries = max_entries;
- 	map_fd = bpf_create_map_xattr(&xattr);
- 	CHECK(map_fd == -1,
- 	      "bpf_create_map_xattr()", "error:%s\n", strerror(errno));
- 
--	keys = malloc(max_entries * sizeof(int));
--	values = malloc(max_entries * sizeof(int));
--	visited = malloc(max_entries * sizeof(int));
-+	value_size = sizeof(__s64);
-+	if (is_pcpu)
-+		value_size *= nr_cpus;
-+
-+	keys = malloc(max_entries * sizeof(*keys));
-+	values = calloc(max_entries, value_size);
-+	visited = malloc(max_entries * sizeof(*visited));
- 	CHECK(!keys || !values || !visited, "malloc()", "error:%s\n",
- 	      strerror(errno));
- 
--	/* populate elements to the map */
--	map_batch_update(map_fd, max_entries, keys, values);
--
- 	/* test 1: lookup in a loop with various steps. */
- 	total_success = 0;
- 	for (step = 1; step < max_entries; step++) {
--		map_batch_update(map_fd, max_entries, keys, values);
--		map_batch_verify(visited, max_entries, keys, values);
-+		map_batch_update(map_fd, max_entries, keys, values, is_pcpu);
-+		map_batch_verify(visited, max_entries, keys, values, is_pcpu);
- 		memset(keys, 0, max_entries * sizeof(*keys));
--		memset(values, 0, max_entries * sizeof(*values));
-+		memset(values, 0, max_entries * value_size);
- 		batch = 0;
- 		total = 0;
- 		/* iteratively lookup/delete elements with 'step'
-@@ -91,10 +125,10 @@ void test_array_map_batch_ops(void)
- 		count = step;
- 		while (true) {
- 			err = bpf_map_lookup_batch(map_fd,
--						total ? &batch : NULL, &batch,
--						keys + total,
--						values + total,
--						&count, &opts);
-+						   total ? &batch : NULL,
-+						   &batch, keys + total,
-+						   values + total * value_size,
-+						   &count, &opts);
- 
- 			CHECK((err && errno != ENOENT), "lookup with steps",
- 			      "error: %s\n", strerror(errno));
-@@ -108,7 +142,7 @@ void test_array_map_batch_ops(void)
- 		CHECK(total != max_entries, "lookup with steps",
- 		      "total = %u, max_entries = %u\n", total, max_entries);
- 
--		map_batch_verify(visited, max_entries, keys, values);
-+		map_batch_verify(visited, max_entries, keys, values, is_pcpu);
- 
- 		total_success++;
- 	}
-@@ -116,9 +150,25 @@ void test_array_map_batch_ops(void)
- 	CHECK(total_success == 0, "check total_success",
- 	      "unexpected failure\n");
- 
--	printf("%s:PASS\n", __func__);
--
- 	free(keys);
--	free(values);
- 	free(visited);
-+	free(values);
-+}
-+
-+void array_map_batch_ops(void)
-+{
-+	__test_map_lookup_and_update_batch(false);
-+	printf("test_%s:PASS\n", __func__);
-+}
-+
-+void array_percpu_map_batch_ops(void)
-+{
-+	__test_map_lookup_and_update_batch(true);
-+	printf("test_%s:PASS\n", __func__);
-+}
-+
-+void test_array_map_batch_ops(void)
-+{
-+	array_map_batch_ops();
-+	array_percpu_map_batch_ops();
- }
--- 
-2.25.1
+> > Otherwise, a few minor comments and nitpicks:
+> >
+> > -- David
+> >
+> > On Sat, Apr 10, 2021 at 2:01 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > >
+> > > This is long overdue.
+> > >
+> > > There are several things that aren't nailed down (in-tree
+> > > .kunitconfig's), or partially broken (GCOV on UML), but having them
+> > > documented, warts and all, is better than having nothing.
+> > >
+> > > This covers a bunch of the more recent features
+> > > * kunit_filter_glob
+> > > * kunit.py run --kunitconfig
+> > > * kunit.py run --alltests
+> > > * slightly more detail on building tests as modules
+> > > * CONFIG_KUNIT_DEBUGFS
+> > >
+> > > By my count, the only headline features now not mentioned are the KASAN
+> > > integration and KernelCI json output support (kunit.py run --json).
+> > >
+> > > And then it also discusses how to get code coverage reports under UML
+> > > and non-UML since this is a question people have repeatedly asked.
+> > >
+> > > Non-UML coverage collection is no differnt from normal, but we should
+> > > probably explicitly call thsi out.
+> >
+> > Nit: typos in 'different' and 'this'.
+> Fixed.
+> >
+> > >
+> > > As for UML, I was able to get it working again with two small hacks.*
+> > > E.g. with CONFIG_KUNIT=y && CONFIG_KUNIT_ALL_TESTS=y
+> > >   Overall coverage rate:
+> > >     lines......: 15.1% (18294 of 120776 lines)
+> > >     functions..: 16.8% (1860 of 11050 functions)
+> > >
+> > > *Switching to use gcc/gcov-6 and not using uml_abort().
+> > > I've documented these hacks in "Notes" but left TODOs for
+> > > brendanhiggins@google.com who tracked down the runtime issue in GCC.
+> > > To be clear: these are not issues specific to KUnit, but rather to UML.
+> >
+> > (We should probably note where uml_abort() needs to be replaced if
+> > we're mentioning this, though doing so below in the more detailed
+> > section may be more useful.)
+>
+> Updated to
+> *Using gcc/gcov-6 and not using uml_abort() in os_dump_core().
+>
+> I figured we'd be more precise in the documentation itself.
+>
+> >
+> > >
+> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > ---
+> > >  Documentation/dev-tools/kunit/index.rst       |   1 +
+> > >  .../dev-tools/kunit/running_tips.rst          | 278 ++++++++++++++++++
+> > >  Documentation/dev-tools/kunit/start.rst       |   2 +
+> > >  3 files changed, 281 insertions(+)
+> > >  create mode 100644 Documentation/dev-tools/kunit/running_tips.rst
+> > >
+> > > diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+> > > index 848478838347..7f7cf8d2ab20 100644
+> > > --- a/Documentation/dev-tools/kunit/index.rst
+> > > +++ b/Documentation/dev-tools/kunit/index.rst
+> > > @@ -14,6 +14,7 @@ KUnit - Unit Testing for the Linux Kernel
+> > >         style
+> > >         faq
+> > >         tips
+> > > +       running_tips
+> > >
+> > >  What is KUnit?
+> > >  ==============
+> > > diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
+> > > new file mode 100644
+> > > index 000000000000..d38e665e530f
+> > > --- /dev/null
+> > > +++ b/Documentation/dev-tools/kunit/running_tips.rst
+> > > @@ -0,0 +1,278 @@
+> > > +.. SPDX-License-Identifier: GPL-2.0
+> > > +
+> > > +============================
+> > > +Tips For Running KUnit Tests
+> > > +============================
+> > > +
+> > > +Using ``kunit.py run`` ("kunit tool")
+> > > +=====================================
+> > > +
+> > > +Running from any directory
+> > > +--------------------------
+> > > +
+> > > +It can be handy to create a bash function like:
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       function run_kunit() {
+> > > +         ( cd "$(git rev-parse --show-toplevel)" && ./tools/testing/kunit/kunit.py run $@ )
+> > > +       }
+> > > +
+> > > +.. note::
+> > > +       Early versions of ``kunit.py`` (before 5.6) didn't work unless run from
+> > > +       the kernel root, hence the use of a subshell and ``cd``.
+> > > +
+> > > +Running a subset of tests
+> > > +-------------------------
+> > > +
+> > > +``kunit.py run`` accepts an optional glob argument to filter tests. Currently
+> > > +this only matches against suite names, but this may change in the future.
+> > > +
+> > > +Say that we wanted to run the sysctl tests, we could do so via:
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       $ echo -e 'CONFIG_KUNIT=y\nCONFIG_KUNIT_ALL_TESTS=y' > .kunit/.kunitconfig
+> > > +       $ ./tools/testing/kunit/kunit.py run 'sysctl*'
+> > > +
+> > > +We're paying the cost of building more tests than we need this way, but it's
+> > > +easier than fiddling with ``.kunitconfig`` files or commenting out
+> > > +``kunit_suite``'s.
+> > > +
+> > > +However, if we wanted to define a set of tests in a less ad hoc way, the next
+> > > +tip is useful.
+> > > +
+> > > +Defining a set of tests
+> > > +-----------------------
+> > > +
+> > > +``kunit.py run`` (along with ``build``, and ``config``) supports a
+> > > +``--kunitconfig`` flag. So if you have a set of tests that you want to run on a
+> > > +regular basis (especially if they have other dependencies), you can create a
+> > > +specific ``.kunitconfig`` for them.
+> > > +
+> > > +E.g. kunit has own for its tests:
+> >
+> > Nit: 'one' for its tests (or 'its own' for its tests?)
+> Fixed, meant to be "one"
+> >
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit/.kunitconfig
+> > > +
+> > > +Alternatively, if you're following the convention of naming your
+> > > +file ``.kunitconfig``, you can just pass in the dir, e.g.
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit
+> > > +
+> > > +.. note::
+> > > +       This is a relatively new feature (5.12+) so we don't have any
+> > > +       conventions yet about on what files should be checked in versus just
+> > > +       kept around locally. But if the tests don't have any dependencies
+> > > +       (beyond ``CONFIG_KUNIT``), it's probably not worth writing and
+> > > +       maintaining a ``.kunitconfig`` fragment.  Running with
+> > > +       ``CONFIG_KUNIT_ALL_TESTS=y`` is probably easier.
+> >
+> > I think the rule of thumb for checked-in .kunitconfig files should be
+> > an explicit endorsement by the maintainer that these are the tests for
+> > a particular subsystem.
+>
+> Hmm, I'm not sure we want to prescribe a granularity here.
+> If we had something like a "How-to-Test-Cmd" in MAINTAINERS, I'd feel
+> more justified in doing so.
+>
+> But atm, I feel the line should be "use it if it's useful, check it in
+> if you think it's useful to 'enough' other people."
 
+I think that's fine.
+
+> > > +
+> > > +.. note::
+> > > +       Having ``.kunitconfig`` fragments in a parent and child directory is
+> > > +       iffy. There's discussion about adding an "import" statement in these
+> > > +       files to make it possible to have a top-level config run tests from all
+> > > +       child directories. But that would mean ``.kunitconfig`` files are no
+> > > +       longer just simple .config fragments.
+> > > +
+> > > +       One alternative would be to have kunit tool recursively combine configs
+> > > +       automagically, but tests could theoretically depend on incompatible
+> > > +       options, so handling that would be tricky.
+> > > +
+> > > +Running with ``allyesconfig``
+> > > +-----------------------------
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       $ ./tools/testing/kunit/kunit.py run --alltests
+> > > +
+> > > +This will try and use ``allyesconfig``, or rather ``allyesconfig`` with a list
+> > Excessively pedantic nit: 'try to use'
+> Done.
+>
+> > > +of UML-incompatible configs turned off. That list is maintained in
+> > > +``tools/testing/kunit/configs/broken_on_uml.config``.
+> > > +
+> > > +.. note::
+> > > +       This will take a *lot* longer to run and might be broken from time to
+> > > +       time, especially on -next. It's not recommended to use this unless you
+> > > +       need to or are morbidly curious.
+> >
+> > Given that it's been the plan to run this for KernelCI, I'm not sure
+> > we should discourage it in general to quite this
+> > extent. I think it is broken at the moment, though, so that's
+> > nevertheless worth noting.
+>
+> It was broken for me when I tried as I was writing this up, haven't
+> checked again yet.
+> I think until KernelCI uses it regularly, it's not going to be as easy
+> to keep it working.
+>
+> So IMO,
+> * KernelCI and other automation should try and use it
+> * we shouldn't necessarily encourage a human to go and try it at this time
+>   * or maybe never: this basically eliminates one of the biggest
+> selling points: the fast edit/compile/test cycle that KUnit on UML
+> has.
+>
+> So how about something like:
+>
+> This will take a *lot* longer to run and might be broken from time to time.
+> You'll probably be better off just building and running the tests you
+> care about if you need to do so more than once.
+
+Sounds good to me.
+
+> > > +
+> > > +Generating code coverage reports under UML
+> > > +------------------------------------------
+> > > +
+> > > +.. note::
+> > > +       TODO(brendanhiggins@google.com): There are various issues with UML and
+> > > +       versions of gcc 7 and up. You're likely to run into missing ``.gcda``
+> > > +       files or compile errors. We know one `faulty GCC commit
+> > > +       <https://github.com/gcc-mirror/gcc/commit/8c9434c2f9358b8b8bad2c1990edf10a21645f9d>`_
+> > > +       but not how we'd go about getting this fixed. The compile errors still
+> > > +       need some investigation.
+> > > +
+> > > +.. note::
+> > > +       TODO(brendanhiggins@google.com): for recent versions of Linux
+> > > +       (5.10-5.12, maybe earlier), there's a bug with gcov counters not being
+> > > +       flushed in UML. This translates to very low (<1%) reported coverage. This is
+> > > +       related to the above issue and can be worked around by replacing the
+> > > +       one call to ``uml_abort()`` with a plain ``exit()``.
+> >
+> > Can we be more specific than 'the one call' here? I know there is only
+> > one call, but maybe noting that it's in arch/um/os-Linux/util.c will
+> > make this clearer.
+>
+> Yeah, here's only one call, so I thought leaving it more vague in case
+> the file gets renamed or w/e would be safer.
+>
+> But yeah, if adding something more here makes it more clear, I can do that.
+> Hmm, looks like the function that calls it, os_dump_core(void) is
+> currently unique.
+> Thoughts on referring to that instead of the filename (I'm not sure
+> that either is meaningfully less likely to change)?
+>
+> >
+> > > +
+> > > +
+> > > +This is different from the "normal" way of getting coverage information that is
+> > > +documented in Documentation/dev-tools/gcov.rst.
+> > > +
+> > > +Instead of enabling ``CONFIG_GCOV_KERNEL=y``, we can set these options:
+> > > +
+> > > +.. code-block:: none
+> > > +
+> > > +       CONFIG_DEBUG_KERNEL=y
+> > > +       CONFIG_DEBUG_INFO=y
+> > > +       CONFIG_GCOV=y
+> > > +
+> > > +
+> > > +Putting it together into a copy-pastable sequence of commands:
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       # Append coverage options to the current config
+> > > +       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
+> > > +       $ ./tools/testing/kunit/kunit.py run
+> > > +       # Extract the coverage information from the build dir (.kunit/)
+> > > +       $ lcov -t "my_kunit_tests" -o coverage.info -c -d .kunit/
+> > > +
+> > > +       # From here on, it's the same process as with CONFIG_GCOV_KERNEL=y
+> > > +       # E.g. can generate an HTML report in a tmp dir like so:
+> > > +       $ genhtml -o /tmp/coverage_html coverage.info
+> > > +
+> > > +
+> > > +If your installed version of gcc doesn't work, you can tweak the steps:
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       # need to edit tools/testing/kunit/kunit_kernel.py to call make with 'CC=/usr/bin/gcc-6'
+> > > +       $ $EDITOR tools/testing/kunit/kunit_kernel.py
+> > > +
+> > > +       $ lcov -t "my_kunit_tests" -o coverage.info -c -d .kunit/ --gcov-tool=/usr/bin/gcov-6
+> > > +
+> > > +
+> > > +Running tests manually
+> > > +======================
+> > > +
+> > > +Running tests without using ``kunit.py run`` is also an important use case.
+> > > +Currently it's your only option if you want to test on architectures other than
+> > > +UML.
+> > > +
+> > > +As running the tests under UML is fairly straightforward (configure and compile
+> > > +the kernel, run the ``./linux`` binary), this section will focus on testing
+> > > +non-UML architectures.
+> > > +
+> > > +
+> > > +Running built-in tests
+> > > +----------------------
+> > > +
+> > > +When setting tests to ``=y``, the tests will run as part of boot and print
+> > > +results to dmesg in TAP format. So you just need to add your tests to your
+> > > +``.config``, build and boot your kernel as normal.
+> > > +
+> > > +So if we compiled our kernel with:
+> > > +
+> > > +.. code-block:: none
+> > > +
+> > > +       CONFIG_KUNIT=y
+> > > +       CONFIG_KUNIT_EXAMPLE_TEST=y
+> > > +
+> > > +Then we'd see output like this in dmesg signaling the test ran and passed:
+> > > +
+> > > +.. code-block:: none
+> > > +
+> > > +       TAP version 14
+> > > +       1..1
+> > > +           # Subtest: example
+> > > +           1..1
+> > > +           # example_simple_test: initializing
+> > > +           ok 1 - example_simple_test
+> > > +       ok 1 - example
+> > > +
+> > > +Running tests as modules
+> > > +------------------------
+> > > +
+> > > +Depending on the tests, you can build them as loadable modules.
+> > > +
+> > > +For example, we'd change the config options from before to
+> > > +
+> > > +.. code-block:: none
+> > > +
+> > > +       CONFIG_KUNIT=y
+> > > +       CONFIG_KUNIT_EXAMPLE_TEST=m
+> > > +
+> > > +Then after booting into our kernel, we can run the test via
+> > > +
+> > > +.. code-block:: none
+> > > +
+> > > +       $ modprobe kunit-example-test
+> > > +
+> > > +This will then cause it to print TAP output to stdout.
+> > > +
+> > > +.. note::
+> > > +       The ``modprobe`` will *not* have a non-zero exit code if any test
+> > > +       failed (as of 5.13). But ``kunit.py parse`` would, see below.
+> > > +
+> > > +.. note::
+> > > +       You can set ``CONFIG_KUNIT=m`` as well, however, some features will not
+> > > +       work and thus some tests might break. Ideally tests would specify they
+> > > +       depend on ``KUNIT=y`` in their ``Kconfig``'s, but this is an edge case
+> > > +       most test authors won't think about.
+> > > +       As of 5.13, the only difference is that ``current->kunit_test`` will
+> > > +       not exist.
+> > > +
+> > > +Pretty-printing results
+> > > +-----------------------
+> > > +
+> > > +You can use ``kunit.py parse`` to parse dmesg for test output and print out
+> > > +results in the same familiar format that ``kunit.py run`` does.
+> >
+> > This also should work for the debugfs files below, so maybe reword
+> > this to either mention that or not explicitly mention dmesg above.
+>
+> This won't work, actually :/
+> `kunit.py parse` expects a TAP version header, which doesn't get shown
+> in debugfs.
+>
+> It'll just print out the "no tests run!" message.
+
+Oh, I forgot about that. We need to fix that. Whoops.
+
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       $ ./tools/testing/kunit/kunit.py parse /var/log/dmesg
+> > > +
+> > > +
+> > > +Retrieving per suite results
+> > > +----------------------------
+> > > +
+> > > +Regardless of how you're running your tests, you can enable
+> > > +``CONFIG_KUNIT_DEBUGFS`` to expose per-suite TAP-formatted results:
+> > > +
+> > > +.. code-block:: none
+> > > +
+> > > +       CONFIG_KUNIT=y
+> > > +       CONFIG_KUNIT_EXAMPLE_TEST=m
+> > > +       CONFIG_KUNIT_DEBUGFS=y
+> > > +
+> > > +The results for each suite will be exposed under
+> > > +``/sys/kernel/debug/kunit/<suite>/results``.
+> > > +So using our example config:
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       $ modprobe kunit-example-test > /dev/null
+> > > +       $ cat /sys/kernel/debug/kunit/example/results
+> > > +       ... <TAP output> ...
+> > > +
+> > > +       # After removing the module, the corresponding files will go away
+> > > +       $ modprobe -r kunit-example-test
+> > > +       $ cat /sys/kernel/debug/kunit/example/results
+> > > +       /sys/kernel/debug/kunit/example/results: No such file or directory
+> > > +
+> > > +Generating code coverage reports
+> > > +--------------------------------
+> > > +
+> > > +See Documentation/dev-tools/gcov.rst for details on how to do this.
+> > > +
+> > > +The only vaguely KUnit-specific advice here is that you probably want to build
+> > > +your tests as modules. That way you can isolate the coverage from tests from
+> > > +other code executed during boot, e.g.
+> > > +
+> > > +.. code-block:: bash
+> > > +
+> > > +       # Reset coverage counters before running the test.
+> > > +       $ echo 0 > /sys/kernel/debug/gcov/reset
+> > > +       $ modprobe kunit-example-test
+> > > diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> > > index 0e65cabe08eb..aa56d7ca6bfb 100644
+> > > --- a/Documentation/dev-tools/kunit/start.rst
+> > > +++ b/Documentation/dev-tools/kunit/start.rst
+> > > @@ -236,5 +236,7 @@ Next Steps
+> > >  ==========
+> > >  *   Check out the :doc:`tips` page for tips on
+> > >      writing idiomatic KUnit tests.
+> > > +*   Check out the :doc:`running_tips` page for tips on
+> > > +    how to make running KUnit tests easier.
+> > >  *   Optional: see the :doc:`usage` page for a more
+> > >      in-depth explanation of KUnit.
+> > >
+> > > base-commit: de2fcb3e62013738f22bbb42cbd757d9a242574e
+> > > --
+> > > 2.31.1.295.g9ea45b61b8-goog
+> > >
