@@ -2,148 +2,561 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FE135D2C3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Apr 2021 23:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB9E35D2F2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Apr 2021 00:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239531AbhDLVzD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Apr 2021 17:55:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38322 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237700AbhDLVzC (ORCPT
+        id S240374AbhDLWTY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Apr 2021 18:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240100AbhDLWTX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Apr 2021 17:55:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618264484;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rSg/4g7S1VAs0BEe21c6JFZm2CbvqXRaPJMkscjjUzQ=;
-        b=inutjazrEeRzr033gJXnuAEJuuW9F61w88eB6QP+2TNHEt0tFFDArPcZj3U8M1YpVdk7JW
-        BfRB9Knk9OA2v5Oh3C41ky1mfC5O3GivqYUDNjomj4KBEATTIuEIIH23XIlgKaM6L0eDY2
-        K/Z+AJoaP01Cy69B1xAfDUia4djdYkY=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-32-ozIJvPrPO1CPAKI2qDQa8Q-1; Mon, 12 Apr 2021 17:54:42 -0400
-X-MC-Unique: ozIJvPrPO1CPAKI2qDQa8Q-1
-Received: by mail-qv1-f71.google.com with SMTP id p2so8860793qvi.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Apr 2021 14:54:42 -0700 (PDT)
+        Mon, 12 Apr 2021 18:19:23 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C1CC061574
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Apr 2021 15:19:05 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id c18so12409232iln.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Apr 2021 15:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UBHAcCDXUl9HlhkEDogeoPkzR4UM7O1k4BPrkGCAIvs=;
+        b=rAtWbunsQsTDPoIeeAfowF5qfisxBm/Oe1r3z1RTYcld2KlQPEbTbpoYKHw2oQ95xs
+         o77j/TAR7YudDZjc8JXzunE6AFMiK7W/5j2d7jm3XqVrNke8WxoQzLlPYEgLrik2uVKx
+         NsTl7FzBU4z+qXgPoHQ4VQh8xUfAB9/K4lfaZlEHrrk01VZY0gsSnNyogWBOmKfDPqRy
+         HaDgWcgKfh1EVnmqfrqiQ5bEKbv+HW/LYvi6K1u4L6Jbp0mv+tmEiKAJdQzND1ShATV5
+         Ov5U6+R0wx7iq8TKMxupeW1NJ4il7V+zp4pd92KdUsv89jztiPUA0eoR7FNDyxcIepgK
+         f/Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rSg/4g7S1VAs0BEe21c6JFZm2CbvqXRaPJMkscjjUzQ=;
-        b=nY6PvqFME2ZHIkOlQwLFFS5fkRzEWpqu0GYa9kAxfcYp4PbP6Ug1X9vzijSaD+AOYY
-         f1ZWkgF5QkvAMiC/hlZ40GmIazuV76oM+TJ/4VmGgdAU7iC5eW+8EAnPxmgviQsVr+hO
-         7L0g8SlOTq6kvX6jdHs7ynkya9y4dR3meR4cXejwx533p2aGJpwQ2ldlj6t1Bgp20e9H
-         fwAQsPfEBoIATbbly6MlZT4Ejaopn4k0N9og3s8O51HQv/wfd2NN4VqvCwg20ypcoChg
-         +JFfyfblAxNu3fmVTtGm6OFvGmRWiCriVbvbXBL3d7mUY5oqvYIaDTuxAHiMxGuSKz4m
-         YOyQ==
-X-Gm-Message-State: AOAM530N+gdHkEEi8OxyhOQ5pg1EfAUsLMXxJxq39yNDw/QbrjdZETVk
-        YkU79K2smsNrzp43zFyxhleHRuUvsR4pGYdna7mwM71rC9UoXaFscqS1EMRY/VNZBVmNdCMJiam
-        8snYjS4DtDccRsnPlt+rt2Wx5UyTb
-X-Received: by 2002:a05:6214:14b4:: with SMTP id bo20mr4943789qvb.20.1618264482035;
-        Mon, 12 Apr 2021 14:54:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzbD4DC7OMtAMwjp3Zq2ZGY5AAvdzECr9OQOYMWUawBpI5JNBVDfUwjpTZGyULdEUCkWeV3/g==
-X-Received: by 2002:a05:6214:14b4:: with SMTP id bo20mr4943769qvb.20.1618264481785;
-        Mon, 12 Apr 2021 14:54:41 -0700 (PDT)
-Received: from xz-x1 (bras-base-toroon474qw-grc-88-174-93-75-154.dsl.bell.ca. [174.93.75.154])
-        by smtp.gmail.com with ESMTPSA id z18sm3501170qkg.42.2021.04.12.14.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 14:54:40 -0700 (PDT)
-Date:   Mon, 12 Apr 2021 17:54:37 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michel Lespinasse <walken@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v4] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTINUE behavior
-Message-ID: <20210412215437.GA1001332@xz-x1>
-References: <20210401183701.1774159-1-axelrasmussen@google.com>
- <alpine.LSU.2.11.2104062307110.14082@eggly.anvils>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UBHAcCDXUl9HlhkEDogeoPkzR4UM7O1k4BPrkGCAIvs=;
+        b=fCCzhtx3PsKLw/r5GazK92UQzA57SZYC3HU5qBQGlXSKaMomB192z8JiTHIv9NZ8Bl
+         94Q2F7ZzTi+SlOi52bpAaoBEsVmCMmyZ0cj3V2hUzBJFhy1J7tR3fnpg2/r4ZXa/8rjX
+         m8WpV4/KAEg9n3DEORh4clbBq3uxZJhLBDXYhJxQZH4E5aCzoJi3AP9qRIWGvxozYfh1
+         /aKAIfNPcUoT3cwOmyrzOHq0zl6GHe9LFEkfPQyvUm4mQkZaIIMg2hqOaGKLqrootX/Y
+         8TgDbwp1M9e0ubnFlIMhujs9BWdg4IFD9Q9q+2swDmnhGAaqmQVVCzbQ9a5nP/xREZvy
+         1K1w==
+X-Gm-Message-State: AOAM532WGhswRW4qt5ydz+6O7Eu37xzcTvzMXWNoH5WVCyDV2xoneikX
+        64vboJof6/nlIOYc6VLjSb1yOPrXC8ekzcEEVQiC0Q==
+X-Google-Smtp-Source: ABdhPJwgMSRmdjZNsXP0+PHYLH00tfrWkt4C6ooAd7uhtsOiZFSki2flg9tP2qZu3adLlEZjJ2dszmha/2gGvut3pKY=
+X-Received: by 2002:a92:d5cd:: with SMTP id d13mr8874339ilq.133.1618265943988;
+ Mon, 12 Apr 2021 15:19:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.11.2104062307110.14082@eggly.anvils>
+References: <20210409180105.3825069-1-dlatypov@google.com> <CABVgOSnjE8PBF9TyBRtX26i1t51=XCy6x=rg8C-Hv-zyvc7D6w@mail.gmail.com>
+ <CAGS_qxrEt=nLSMx7Vvs5qw0jjMTiv4G1Jt4Y-JtptSGa4DQSBw@mail.gmail.com> <CAFd5g46wYJZc9gm28UVSCr3aErufUx9fvPwJ2MiRxecqGMfxPQ@mail.gmail.com>
+In-Reply-To: <CAFd5g46wYJZc9gm28UVSCr3aErufUx9fvPwJ2MiRxecqGMfxPQ@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 12 Apr 2021 15:18:52 -0700
+Message-ID: <CAGS_qxr_qg3Pn=WgVqKbPrZSD0hF-Z8uj57Loa=zYfZqFaCYFQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: add tips for running KUnit
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Hugh,
+On Mon, Apr 12, 2021 at 1:42 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> On Mon, Apr 12, 2021 at 10:27 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > hOn Fri, Apr 9, 2021 at 9:10 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > Thanks for writing this: it's good to have these things documented at last!
+> > >
+> > > There are definitely a few things this document points out which still
+> > > need deciding, which does make this document lean a bit into "design
+> > > discussion" territory in a few of the notes. This doesn't bother me --
+> > > it's an accurate description of the state of things -- but I wouldn't
+> > > want this documentation held up too long because of these sorts of
+> > > TODOs (and can definitely see how having too many of them might
+> > > discourage KUnit use a bit). Particularly things like the
+> > > ".kunitconfig" fragment file feature stuff: I feel that's something
+> > > better discussed on patches adding/using the feature than in the
+> > > documentation / reviews of the documentation, so I'd rather drop or
+> > > simplify those '..note:'s than bokeshed about it here (something I'm a
+> > > little guilty of below).
+> >
+> > I don't think we'll actually make progress on any of those in the near
+> > future though.
+> > So I figured it'd be best to accurately represent the state of the
+> > world ~somewhere.
+> >
+> > But it did feel a bit strange to do it here, so I'm not against removing it.
+>
+> I actually like the accurate and upfront way that you spelled these things out.
+>
+> > > Otherwise, a few minor comments and nitpicks:
+> > >
+> > > -- David
+> > >
+> > > On Sat, Apr 10, 2021 at 2:01 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > > >
+> > > > This is long overdue.
+> > > >
+> > > > There are several things that aren't nailed down (in-tree
+> > > > .kunitconfig's), or partially broken (GCOV on UML), but having them
+> > > > documented, warts and all, is better than having nothing.
+> > > >
+> > > > This covers a bunch of the more recent features
+> > > > * kunit_filter_glob
+> > > > * kunit.py run --kunitconfig
+> > > > * kunit.py run --alltests
+> > > > * slightly more detail on building tests as modules
+> > > > * CONFIG_KUNIT_DEBUGFS
+> > > >
+> > > > By my count, the only headline features now not mentioned are the KASAN
+> > > > integration and KernelCI json output support (kunit.py run --json).
+> > > >
+> > > > And then it also discusses how to get code coverage reports under UML
+> > > > and non-UML since this is a question people have repeatedly asked.
+> > > >
+> > > > Non-UML coverage collection is no differnt from normal, but we should
+> > > > probably explicitly call thsi out.
+> > >
+> > > Nit: typos in 'different' and 'this'.
+> > Fixed.
+> > >
+> > > >
+> > > > As for UML, I was able to get it working again with two small hacks.*
+> > > > E.g. with CONFIG_KUNIT=y && CONFIG_KUNIT_ALL_TESTS=y
+> > > >   Overall coverage rate:
+> > > >     lines......: 15.1% (18294 of 120776 lines)
+> > > >     functions..: 16.8% (1860 of 11050 functions)
+> > > >
+> > > > *Switching to use gcc/gcov-6 and not using uml_abort().
+> > > > I've documented these hacks in "Notes" but left TODOs for
+> > > > brendanhiggins@google.com who tracked down the runtime issue in GCC.
+> > > > To be clear: these are not issues specific to KUnit, but rather to UML.
+> > >
+> > > (We should probably note where uml_abort() needs to be replaced if
+> > > we're mentioning this, though doing so below in the more detailed
+> > > section may be more useful.)
+> >
+> > Updated to
+> > *Using gcc/gcov-6 and not using uml_abort() in os_dump_core().
+> >
+> > I figured we'd be more precise in the documentation itself.
+> >
+> > >
+> > > >
+> > > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > > ---
+> > > >  Documentation/dev-tools/kunit/index.rst       |   1 +
+> > > >  .../dev-tools/kunit/running_tips.rst          | 278 ++++++++++++++++++
+> > > >  Documentation/dev-tools/kunit/start.rst       |   2 +
+> > > >  3 files changed, 281 insertions(+)
+> > > >  create mode 100644 Documentation/dev-tools/kunit/running_tips.rst
+> > > >
+> > > > diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+> > > > index 848478838347..7f7cf8d2ab20 100644
+> > > > --- a/Documentation/dev-tools/kunit/index.rst
+> > > > +++ b/Documentation/dev-tools/kunit/index.rst
+> > > > @@ -14,6 +14,7 @@ KUnit - Unit Testing for the Linux Kernel
+> > > >         style
+> > > >         faq
+> > > >         tips
+> > > > +       running_tips
+> > > >
+> > > >  What is KUnit?
+> > > >  ==============
+> > > > diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
+> > > > new file mode 100644
+> > > > index 000000000000..d38e665e530f
+> > > > --- /dev/null
+> > > > +++ b/Documentation/dev-tools/kunit/running_tips.rst
+> > > > @@ -0,0 +1,278 @@
+> > > > +.. SPDX-License-Identifier: GPL-2.0
+> > > > +
+> > > > +============================
+> > > > +Tips For Running KUnit Tests
+> > > > +============================
+> > > > +
+> > > > +Using ``kunit.py run`` ("kunit tool")
+> > > > +=====================================
+> > > > +
+> > > > +Running from any directory
+> > > > +--------------------------
+> > > > +
+> > > > +It can be handy to create a bash function like:
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       function run_kunit() {
+> > > > +         ( cd "$(git rev-parse --show-toplevel)" && ./tools/testing/kunit/kunit.py run $@ )
+> > > > +       }
+> > > > +
+> > > > +.. note::
+> > > > +       Early versions of ``kunit.py`` (before 5.6) didn't work unless run from
+> > > > +       the kernel root, hence the use of a subshell and ``cd``.
+> > > > +
+> > > > +Running a subset of tests
+> > > > +-------------------------
+> > > > +
+> > > > +``kunit.py run`` accepts an optional glob argument to filter tests. Currently
+> > > > +this only matches against suite names, but this may change in the future.
+> > > > +
+> > > > +Say that we wanted to run the sysctl tests, we could do so via:
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       $ echo -e 'CONFIG_KUNIT=y\nCONFIG_KUNIT_ALL_TESTS=y' > .kunit/.kunitconfig
+> > > > +       $ ./tools/testing/kunit/kunit.py run 'sysctl*'
+> > > > +
+> > > > +We're paying the cost of building more tests than we need this way, but it's
+> > > > +easier than fiddling with ``.kunitconfig`` files or commenting out
+> > > > +``kunit_suite``'s.
+> > > > +
+> > > > +However, if we wanted to define a set of tests in a less ad hoc way, the next
+> > > > +tip is useful.
+> > > > +
+> > > > +Defining a set of tests
+> > > > +-----------------------
+> > > > +
+> > > > +``kunit.py run`` (along with ``build``, and ``config``) supports a
+> > > > +``--kunitconfig`` flag. So if you have a set of tests that you want to run on a
+> > > > +regular basis (especially if they have other dependencies), you can create a
+> > > > +specific ``.kunitconfig`` for them.
+> > > > +
+> > > > +E.g. kunit has own for its tests:
+> > >
+> > > Nit: 'one' for its tests (or 'its own' for its tests?)
+> > Fixed, meant to be "one"
+> > >
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit/.kunitconfig
+> > > > +
+> > > > +Alternatively, if you're following the convention of naming your
+> > > > +file ``.kunitconfig``, you can just pass in the dir, e.g.
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit
+> > > > +
+> > > > +.. note::
+> > > > +       This is a relatively new feature (5.12+) so we don't have any
+> > > > +       conventions yet about on what files should be checked in versus just
+> > > > +       kept around locally. But if the tests don't have any dependencies
+> > > > +       (beyond ``CONFIG_KUNIT``), it's probably not worth writing and
+> > > > +       maintaining a ``.kunitconfig`` fragment.  Running with
+> > > > +       ``CONFIG_KUNIT_ALL_TESTS=y`` is probably easier.
+> > >
+> > > I think the rule of thumb for checked-in .kunitconfig files should be
+> > > an explicit endorsement by the maintainer that these are the tests for
+> > > a particular subsystem.
+> >
+> > Hmm, I'm not sure we want to prescribe a granularity here.
+> > If we had something like a "How-to-Test-Cmd" in MAINTAINERS, I'd feel
+> > more justified in doing so.
+> >
+> > But atm, I feel the line should be "use it if it's useful, check it in
+> > if you think it's useful to 'enough' other people."
+>
+> I think that's fine.
 
-On Tue, Apr 06, 2021 at 11:14:30PM -0700, Hugh Dickins wrote:
-> > +static int mcopy_atomic_install_ptes(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> > +				     struct vm_area_struct *dst_vma,
-> > +				     unsigned long dst_addr, struct page *page,
-> > +				     enum mcopy_atomic_mode mode, bool wp_copy)
-> > +{
+David, thoughts?
 
-[...]
+If we want the wording changed, I can do that and send out a v2.
+Perhaps we can discuss the more precise wording more easily off-list.
 
-> > +	if (writable) {
-> > +		_dst_pte = pte_mkdirty(_dst_pte);
-> > +		if (wp_copy)
-> > +			_dst_pte = pte_mkuffd_wp(_dst_pte);
-> > +		else
-> > +			_dst_pte = pte_mkwrite(_dst_pte);
-> > +	} else if (vm_shared) {
-> > +		/*
-> > +		 * Since we didn't pte_mkdirty(), mark the page dirty or it
-> > +		 * could be freed from under us. We could do this
-> > +		 * unconditionally, but doing it only if !writable is faster.
-> > +		 */
-> > +		set_page_dirty(page);
-> 
-> I do not remember why Andrea or I preferred set_page_dirty() here to
-> pte_mkdirty(); but I suppose there might somewhere be a BUG_ON(pte_dirty)
-> which this would avoid.  Risky to change it, though it does look odd.
+>
+> > > > +
+> > > > +.. note::
+> > > > +       Having ``.kunitconfig`` fragments in a parent and child directory is
+> > > > +       iffy. There's discussion about adding an "import" statement in these
+> > > > +       files to make it possible to have a top-level config run tests from all
+> > > > +       child directories. But that would mean ``.kunitconfig`` files are no
+> > > > +       longer just simple .config fragments.
+> > > > +
+> > > > +       One alternative would be to have kunit tool recursively combine configs
+> > > > +       automagically, but tests could theoretically depend on incompatible
+> > > > +       options, so handling that would be tricky.
+> > > > +
+> > > > +Running with ``allyesconfig``
+> > > > +-----------------------------
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       $ ./tools/testing/kunit/kunit.py run --alltests
+> > > > +
+> > > > +This will try and use ``allyesconfig``, or rather ``allyesconfig`` with a list
+> > > Excessively pedantic nit: 'try to use'
+> > Done.
+> >
+> > > > +of UML-incompatible configs turned off. That list is maintained in
+> > > > +``tools/testing/kunit/configs/broken_on_uml.config``.
+> > > > +
+> > > > +.. note::
+> > > > +       This will take a *lot* longer to run and might be broken from time to
+> > > > +       time, especially on -next. It's not recommended to use this unless you
+> > > > +       need to or are morbidly curious.
+> > >
+> > > Given that it's been the plan to run this for KernelCI, I'm not sure
+> > > we should discourage it in general to quite this
+> > > extent. I think it is broken at the moment, though, so that's
+> > > nevertheless worth noting.
+> >
+> > It was broken for me when I tried as I was writing this up, haven't
+> > checked again yet.
+> > I think until KernelCI uses it regularly, it's not going to be as easy
+> > to keep it working.
+> >
+> > So IMO,
+> > * KernelCI and other automation should try and use it
+> > * we shouldn't necessarily encourage a human to go and try it at this time
+> >   * or maybe never: this basically eliminates one of the biggest
+> > selling points: the fast edit/compile/test cycle that KUnit on UML
+> > has.
+> >
+> > So how about something like:
+> >
+> > This will take a *lot* longer to run and might be broken from time to time.
+> > You'll probably be better off just building and running the tests you
+> > care about if you need to do so more than once.
+>
+> Sounds good to me.
 
-Is any of the possible BUG_ON(pte_dirty) going to trigger because the pte has
-write bit cleared?  That's one question I was not very sure, e.g., whether one
-pte is allowed to be "dirty" if it's not writable.
+Talking offline, seems more sensible to drop this section and I've
+done so locally.
+--alltests is more of a power-user feature, whereas this is meant to
+be more accessible to very new users.
 
-To me it's okay, it's actually very suitable for UFFDIO_COPY case, where it is
-definitely dirty data (so we must never drop it) even if it's installed as RO,
-however to achieve that we can still set the dirty on the page rather than the
-pte as what we do here.  It's just a bit awkward as you said.
+If we can get to a point where it's consistently not-broken, it can be
+something to come back to and include later.
 
-Meanwhile today I just noticed this in arm64 code:
-
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	/*
-	 * If hardware-dirty (PTE_WRITE/DBM bit set and PTE_RDONLY
-	 * clear), set the PTE_DIRTY bit.
-	 */
-	if (pte_hw_dirty(pte))
-		pte = pte_mkdirty(pte);
-
-	pte = clear_pte_bit(pte, __pgprot(PTE_WRITE));
-	pte = set_pte_bit(pte, __pgprot(PTE_RDONLY));
-	return pte;
-}
-
-So arm64 will explicitly set the dirty bit (from the HW dirty bit) when
-wr-protect.  It seems to prove that at least for arm64 it's very valid to have
-!write && dirty pte.
-
-Thanks,
-
--- 
-Peter Xu
-
+>
+> > > > +
+> > > > +Generating code coverage reports under UML
+> > > > +------------------------------------------
+> > > > +
+> > > > +.. note::
+> > > > +       TODO(brendanhiggins@google.com): There are various issues with UML and
+> > > > +       versions of gcc 7 and up. You're likely to run into missing ``.gcda``
+> > > > +       files or compile errors. We know one `faulty GCC commit
+> > > > +       <https://github.com/gcc-mirror/gcc/commit/8c9434c2f9358b8b8bad2c1990edf10a21645f9d>`_
+> > > > +       but not how we'd go about getting this fixed. The compile errors still
+> > > > +       need some investigation.
+> > > > +
+> > > > +.. note::
+> > > > +       TODO(brendanhiggins@google.com): for recent versions of Linux
+> > > > +       (5.10-5.12, maybe earlier), there's a bug with gcov counters not being
+> > > > +       flushed in UML. This translates to very low (<1%) reported coverage. This is
+> > > > +       related to the above issue and can be worked around by replacing the
+> > > > +       one call to ``uml_abort()`` with a plain ``exit()``.
+> > >
+> > > Can we be more specific than 'the one call' here? I know there is only
+> > > one call, but maybe noting that it's in arch/um/os-Linux/util.c will
+> > > make this clearer.
+> >
+> > Yeah, here's only one call, so I thought leaving it more vague in case
+> > the file gets renamed or w/e would be safer.
+> >
+> > But yeah, if adding something more here makes it more clear, I can do that.
+> > Hmm, looks like the function that calls it, os_dump_core(void) is
+> > currently unique.
+> > Thoughts on referring to that instead of the filename (I'm not sure
+> > that either is meaningfully less likely to change)?
+> >
+> > >
+> > > > +
+> > > > +
+> > > > +This is different from the "normal" way of getting coverage information that is
+> > > > +documented in Documentation/dev-tools/gcov.rst.
+> > > > +
+> > > > +Instead of enabling ``CONFIG_GCOV_KERNEL=y``, we can set these options:
+> > > > +
+> > > > +.. code-block:: none
+> > > > +
+> > > > +       CONFIG_DEBUG_KERNEL=y
+> > > > +       CONFIG_DEBUG_INFO=y
+> > > > +       CONFIG_GCOV=y
+> > > > +
+> > > > +
+> > > > +Putting it together into a copy-pastable sequence of commands:
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       # Append coverage options to the current config
+> > > > +       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
+> > > > +       $ ./tools/testing/kunit/kunit.py run
+> > > > +       # Extract the coverage information from the build dir (.kunit/)
+> > > > +       $ lcov -t "my_kunit_tests" -o coverage.info -c -d .kunit/
+> > > > +
+> > > > +       # From here on, it's the same process as with CONFIG_GCOV_KERNEL=y
+> > > > +       # E.g. can generate an HTML report in a tmp dir like so:
+> > > > +       $ genhtml -o /tmp/coverage_html coverage.info
+> > > > +
+> > > > +
+> > > > +If your installed version of gcc doesn't work, you can tweak the steps:
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       # need to edit tools/testing/kunit/kunit_kernel.py to call make with 'CC=/usr/bin/gcc-6'
+> > > > +       $ $EDITOR tools/testing/kunit/kunit_kernel.py
+> > > > +
+> > > > +       $ lcov -t "my_kunit_tests" -o coverage.info -c -d .kunit/ --gcov-tool=/usr/bin/gcov-6
+> > > > +
+> > > > +
+> > > > +Running tests manually
+> > > > +======================
+> > > > +
+> > > > +Running tests without using ``kunit.py run`` is also an important use case.
+> > > > +Currently it's your only option if you want to test on architectures other than
+> > > > +UML.
+> > > > +
+> > > > +As running the tests under UML is fairly straightforward (configure and compile
+> > > > +the kernel, run the ``./linux`` binary), this section will focus on testing
+> > > > +non-UML architectures.
+> > > > +
+> > > > +
+> > > > +Running built-in tests
+> > > > +----------------------
+> > > > +
+> > > > +When setting tests to ``=y``, the tests will run as part of boot and print
+> > > > +results to dmesg in TAP format. So you just need to add your tests to your
+> > > > +``.config``, build and boot your kernel as normal.
+> > > > +
+> > > > +So if we compiled our kernel with:
+> > > > +
+> > > > +.. code-block:: none
+> > > > +
+> > > > +       CONFIG_KUNIT=y
+> > > > +       CONFIG_KUNIT_EXAMPLE_TEST=y
+> > > > +
+> > > > +Then we'd see output like this in dmesg signaling the test ran and passed:
+> > > > +
+> > > > +.. code-block:: none
+> > > > +
+> > > > +       TAP version 14
+> > > > +       1..1
+> > > > +           # Subtest: example
+> > > > +           1..1
+> > > > +           # example_simple_test: initializing
+> > > > +           ok 1 - example_simple_test
+> > > > +       ok 1 - example
+> > > > +
+> > > > +Running tests as modules
+> > > > +------------------------
+> > > > +
+> > > > +Depending on the tests, you can build them as loadable modules.
+> > > > +
+> > > > +For example, we'd change the config options from before to
+> > > > +
+> > > > +.. code-block:: none
+> > > > +
+> > > > +       CONFIG_KUNIT=y
+> > > > +       CONFIG_KUNIT_EXAMPLE_TEST=m
+> > > > +
+> > > > +Then after booting into our kernel, we can run the test via
+> > > > +
+> > > > +.. code-block:: none
+> > > > +
+> > > > +       $ modprobe kunit-example-test
+> > > > +
+> > > > +This will then cause it to print TAP output to stdout.
+> > > > +
+> > > > +.. note::
+> > > > +       The ``modprobe`` will *not* have a non-zero exit code if any test
+> > > > +       failed (as of 5.13). But ``kunit.py parse`` would, see below.
+> > > > +
+> > > > +.. note::
+> > > > +       You can set ``CONFIG_KUNIT=m`` as well, however, some features will not
+> > > > +       work and thus some tests might break. Ideally tests would specify they
+> > > > +       depend on ``KUNIT=y`` in their ``Kconfig``'s, but this is an edge case
+> > > > +       most test authors won't think about.
+> > > > +       As of 5.13, the only difference is that ``current->kunit_test`` will
+> > > > +       not exist.
+> > > > +
+> > > > +Pretty-printing results
+> > > > +-----------------------
+> > > > +
+> > > > +You can use ``kunit.py parse`` to parse dmesg for test output and print out
+> > > > +results in the same familiar format that ``kunit.py run`` does.
+> > >
+> > > This also should work for the debugfs files below, so maybe reword
+> > > this to either mention that or not explicitly mention dmesg above.
+> >
+> > This won't work, actually :/
+> > `kunit.py parse` expects a TAP version header, which doesn't get shown
+> > in debugfs.
+> >
+> > It'll just print out the "no tests run!" message.
+>
+> Oh, I forgot about that. We need to fix that. Whoops.
+>
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       $ ./tools/testing/kunit/kunit.py parse /var/log/dmesg
+> > > > +
+> > > > +
+> > > > +Retrieving per suite results
+> > > > +----------------------------
+> > > > +
+> > > > +Regardless of how you're running your tests, you can enable
+> > > > +``CONFIG_KUNIT_DEBUGFS`` to expose per-suite TAP-formatted results:
+> > > > +
+> > > > +.. code-block:: none
+> > > > +
+> > > > +       CONFIG_KUNIT=y
+> > > > +       CONFIG_KUNIT_EXAMPLE_TEST=m
+> > > > +       CONFIG_KUNIT_DEBUGFS=y
+> > > > +
+> > > > +The results for each suite will be exposed under
+> > > > +``/sys/kernel/debug/kunit/<suite>/results``.
+> > > > +So using our example config:
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       $ modprobe kunit-example-test > /dev/null
+> > > > +       $ cat /sys/kernel/debug/kunit/example/results
+> > > > +       ... <TAP output> ...
+> > > > +
+> > > > +       # After removing the module, the corresponding files will go away
+> > > > +       $ modprobe -r kunit-example-test
+> > > > +       $ cat /sys/kernel/debug/kunit/example/results
+> > > > +       /sys/kernel/debug/kunit/example/results: No such file or directory
+> > > > +
+> > > > +Generating code coverage reports
+> > > > +--------------------------------
+> > > > +
+> > > > +See Documentation/dev-tools/gcov.rst for details on how to do this.
+> > > > +
+> > > > +The only vaguely KUnit-specific advice here is that you probably want to build
+> > > > +your tests as modules. That way you can isolate the coverage from tests from
+> > > > +other code executed during boot, e.g.
+> > > > +
+> > > > +.. code-block:: bash
+> > > > +
+> > > > +       # Reset coverage counters before running the test.
+> > > > +       $ echo 0 > /sys/kernel/debug/gcov/reset
+> > > > +       $ modprobe kunit-example-test
+> > > > diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> > > > index 0e65cabe08eb..aa56d7ca6bfb 100644
+> > > > --- a/Documentation/dev-tools/kunit/start.rst
+> > > > +++ b/Documentation/dev-tools/kunit/start.rst
+> > > > @@ -236,5 +236,7 @@ Next Steps
+> > > >  ==========
+> > > >  *   Check out the :doc:`tips` page for tips on
+> > > >      writing idiomatic KUnit tests.
+> > > > +*   Check out the :doc:`running_tips` page for tips on
+> > > > +    how to make running KUnit tests easier.
+> > > >  *   Optional: see the :doc:`usage` page for a more
+> > > >      in-depth explanation of KUnit.
+> > > >
+> > > > base-commit: de2fcb3e62013738f22bbb42cbd757d9a242574e
+> > > > --
+> > > > 2.31.1.295.g9ea45b61b8-goog
+> > > >
