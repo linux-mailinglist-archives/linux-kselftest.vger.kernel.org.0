@@ -2,175 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FECC35B910
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Apr 2021 05:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1992F35B9AB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Apr 2021 06:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235366AbhDLDqo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 11 Apr 2021 23:46:44 -0400
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:50803 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235261AbhDLDqo (ORCPT
+        id S229482AbhDLE6C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Apr 2021 00:58:02 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6498 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229448AbhDLE6C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 11 Apr 2021 23:46:44 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UVCN7Tf_1618199185;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0UVCN7Tf_1618199185)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 12 Apr 2021 11:46:25 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     ricardo.canuelo@collabora.com, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        James Wang <jnwang@linux.alibaba.com>
-Subject: [PATCH v3] selftests/mincore: get readahead size for check_file_mmap()
-Date:   Mon, 12 Apr 2021 11:46:22 +0800
-Message-Id: <20210412034622.59737-1-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210403063800.56278-1-jefflexu@linux.alibaba.com>
-References: <20210403063800.56278-1-jefflexu@linux.alibaba.com>
+        Mon, 12 Apr 2021 00:58:02 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13C4dsAv033001;
+        Mon, 12 Apr 2021 00:57:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=syKGsuPJ93IyVS/UYx0+bfEX0FvV7tTwm+T8vWXAWZA=;
+ b=fmqZsxE+98lwqWDtP6yjJRAF3YaBZ8K53FeKzvj+T80C1PL9EsRrdlvL29cLMLUjvQWD
+ SLNjwBy1NtPvPQibtLvN46yN4y8uIs7UgluGLYN72PiOrxMISnPw5dVUogiZhTTuEuON
+ HRE07LQtb19oama7ewJ0rMylXojSujQkqQNfYFe58Qs3Tz0FjoRozTlhHbtnmJvXTIYA
+ p9GJtRyKc9oaP5XBxzpppH+eZDubEGPCkDcBCmDMPAnSx7OUUDjn0BbmAAEg6vtBGBFQ
+ U2qPJ8rmO9CGUlQJbi2R0FXnW95TugVTb2lSKecdFEjwoqgYPFD/FJ+eA4sk99XOGV/z ug== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37us2um1uu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Apr 2021 00:57:32 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13C4vUNh016008;
+        Mon, 12 Apr 2021 04:57:30 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 37u3n88s2r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Apr 2021 04:57:29 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13C4vR6842795464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Apr 2021 04:57:27 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9BF7F11C05E;
+        Mon, 12 Apr 2021 04:57:27 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D9DF411C04A;
+        Mon, 12 Apr 2021 04:57:25 +0000 (GMT)
+Received: from [9.199.37.145] (unknown [9.199.37.145])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 12 Apr 2021 04:57:25 +0000 (GMT)
+Subject: Re: [PATCH v2 1/4] powerpc/selftests/ptrace-hwbreak: Add testcases
+ for 2nd DAWR
+To:     Daniel Axtens <dja@axtens.net>, mpe@ellerman.id.au
+Cc:     mikey@neuling.org, shuah@kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+References: <20210407054938.312857-1-ravi.bangoria@linux.ibm.com>
+ <20210407054938.312857-2-ravi.bangoria@linux.ibm.com>
+ <87mtu8eyqz.fsf@linkitivity.dja.id.au>
+From:   Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+Message-ID: <6a3b2779-ccf5-bd42-f30a-a4ae9d04dac2@linux.ibm.com>
+Date:   Mon, 12 Apr 2021 10:27:24 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <87mtu8eyqz.fsf@linkitivity.dja.id.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: IiEpbKhoS_S94yfdoUR6JaoamXhEpu3D
+X-Proofpoint-GUID: IiEpbKhoS_S94yfdoUR6JaoamXhEpu3D
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-12_03:2021-04-09,2021-04-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 clxscore=1011 impostorscore=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 priorityscore=1501 adultscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104120028
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The readahead size used to be 2MB, thus it's reasonable to set the file
-size as 4MB when checking check_file_mmap().
 
-However since commit c2e4cd57cfa1 ("block: lift setting the readahead
-size into the block layer"), readahead size could be as large as twice
-the io_opt, and thus the hardcoded file size no longer works.
-check_file_mmap() may report "Read-ahead pages reached the end of the
-file" when the readahead size actually exceeds the file size in this
-case.
+On 4/9/21 12:22 PM, Daniel Axtens wrote:
+> Hi Ravi,
+> 
+>> Add selftests to test multiple active DAWRs with ptrace interface.
+> 
+> It would be good if somewhere (maybe in the cover letter) you explain
+> what DAWR stands for and where to find more information about it. I
+> found the Power ISA v3.1 Book 3 Chapter 9 very helpful.
 
-Reported-by: James Wang <jnwang@linux.alibaba.com>
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
----
-chnages since v2:
-- add 'Reported-by'
+Sure. Will add the details in v2 cover letter.
 
-chnages since v1:
-- add the test name "mincore" in the subject line
-- add the error message in commit message
-- rename @filesize to @file_size to keep a more consistent naming
-  convention
----
- .../selftests/mincore/mincore_selftest.c      | 57 +++++++++++++++----
- 1 file changed, 47 insertions(+), 10 deletions(-)
+> Apart from that, I don't have any specific comments about this patch. It
+> looks good to me, it seems to do what it says, and there are no comments
+> from checkpatch. It is a bit sparse in terms of comments but it is
+> consistent with the rest of the file so I can't really complain there :)
+> 
+> Reviewed-by: Daniel Axtens <dja@axtens.net>
 
-diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
-index 5a1e85ff5d32..3ca542934080 100644
---- a/tools/testing/selftests/mincore/mincore_selftest.c
-+++ b/tools/testing/selftests/mincore/mincore_selftest.c
-@@ -15,6 +15,11 @@
- #include <string.h>
- #include <fcntl.h>
- #include <string.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <sys/ioctl.h>
-+#include <sys/sysmacros.h>
-+#include <sys/mount.h>
- 
- #include "../kselftest.h"
- #include "../kselftest_harness.h"
-@@ -195,10 +200,42 @@ TEST(check_file_mmap)
- 	int fd;
- 	int i;
- 	int ra_pages = 0;
-+	long ra_size, file_size;
-+	struct stat stats;
-+	dev_t devt;
-+	unsigned int major, minor;
-+	char devpath[32];
-+
-+	retval = stat(".", &stats);
-+	ASSERT_EQ(0, retval) {
-+		TH_LOG("Can't stat pwd: %s", strerror(errno));
-+	}
-+
-+	devt = stats.st_dev;
-+	major = major(devt);
-+	minor = minor(devt);
-+	snprintf(devpath, sizeof(devpath), "/dev/block/%u:%u", major, minor);
-+
-+	fd = open(devpath, O_RDONLY);
-+	ASSERT_NE(-1, fd) {
-+		TH_LOG("Can't open underlying disk %s", strerror(errno));
-+	}
-+
-+	retval = ioctl(fd, BLKRAGET, &ra_size);
-+	ASSERT_EQ(0, retval) {
-+		TH_LOG("Error ioctl with the underlying disk: %s", strerror(errno));
-+	}
-+
-+	/*
-+	 * BLKRAGET ioctl returns the readahead size in sectors (512 bytes).
-+	 * Make file_size large enough to contain the readahead window.
-+	 */
-+	ra_size *= 512;
-+	file_size = ra_size * 2;
- 
- 	page_size = sysconf(_SC_PAGESIZE);
--	vec_size = FILE_SIZE / page_size;
--	if (FILE_SIZE % page_size)
-+	vec_size = file_size / page_size;
-+	if (file_size % page_size)
- 		vec_size++;
- 
- 	vec = calloc(vec_size, sizeof(unsigned char));
-@@ -213,7 +250,7 @@ TEST(check_file_mmap)
- 			strerror(errno));
- 	}
- 	errno = 0;
--	retval = fallocate(fd, 0, 0, FILE_SIZE);
-+	retval = fallocate(fd, 0, 0, file_size);
- 	ASSERT_EQ(0, retval) {
- 		TH_LOG("Error allocating space for the temporary file: %s",
- 			strerror(errno));
-@@ -223,12 +260,12 @@ TEST(check_file_mmap)
- 	 * Map the whole file, the pages shouldn't be fetched yet.
- 	 */
- 	errno = 0;
--	addr = mmap(NULL, FILE_SIZE, PROT_READ | PROT_WRITE,
-+	addr = mmap(NULL, file_size, PROT_READ | PROT_WRITE,
- 			MAP_SHARED, fd, 0);
- 	ASSERT_NE(MAP_FAILED, addr) {
- 		TH_LOG("mmap error: %s", strerror(errno));
- 	}
--	retval = mincore(addr, FILE_SIZE, vec);
-+	retval = mincore(addr, file_size, vec);
- 	ASSERT_EQ(0, retval);
- 	for (i = 0; i < vec_size; i++) {
- 		ASSERT_EQ(0, vec[i]) {
-@@ -240,14 +277,14 @@ TEST(check_file_mmap)
- 	 * Touch a page in the middle of the mapping. We expect the next
- 	 * few pages (the readahead window) to be populated too.
- 	 */
--	addr[FILE_SIZE / 2] = 1;
--	retval = mincore(addr, FILE_SIZE, vec);
-+	addr[file_size / 2] = 1;
-+	retval = mincore(addr, file_size, vec);
- 	ASSERT_EQ(0, retval);
--	ASSERT_EQ(1, vec[FILE_SIZE / 2 / page_size]) {
-+	ASSERT_EQ(1, vec[file_size / 2 / page_size]) {
- 		TH_LOG("Page not found in memory after use");
- 	}
- 
--	i = FILE_SIZE / 2 / page_size + 1;
-+	i = file_size / 2 / page_size + 1;
- 	while (i < vec_size && vec[i]) {
- 		ra_pages++;
- 		i++;
-@@ -271,7 +308,7 @@ TEST(check_file_mmap)
- 		}
- 	}
- 
--	munmap(addr, FILE_SIZE);
-+	munmap(addr, file_size);
- 	close(fd);
- 	free(vec);
- }
--- 
-2.27.0
-
+Thanks
+Ravi
