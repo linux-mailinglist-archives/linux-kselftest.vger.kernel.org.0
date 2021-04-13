@@ -2,477 +2,404 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B0035E0AD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Apr 2021 15:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A310735E18A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Apr 2021 16:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbhDMNyq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Apr 2021 09:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346219AbhDMNyk (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Apr 2021 09:54:40 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9BDC061756
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 06:54:19 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id x77so7671813oix.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 06:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ShLbnr1P8rkomLYtDMJuS+GJV1J/N9tQY9gZZ3VLsqM=;
-        b=momaoOWW1dQyvXZhp8dQKNr+tfrSuO3BzjtKbBNiLtCrmH7CIXWRXpBehLKG+mWy0x
-         DfNhg5CGtE89yl60qDwj91BM8H19taA3n7pUtqykfsMJdDLAoRlSlIhWdFKalpNLFSYB
-         CzH9kgmlZ+1bhTxdu1qvBKbSLr3Vn7ZBlcnRo6YUCC7gji+uGOjypQ8mjTBVPv63HQfk
-         jqiROXEYrGFVA7cGJ82dUbxGM2rjdt7nl3isxIeP9/HdF3nFu21aLRYsOv1vn9qh8kaO
-         KKas+ezzUo3mvlhftkMKc0TYB5kzRuQMzw3JGm17jrDxXigG6Pv2Y0RbuHleZII1KaTd
-         TDzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ShLbnr1P8rkomLYtDMJuS+GJV1J/N9tQY9gZZ3VLsqM=;
-        b=IXkpBxFH8mQq2ZqXPRNiPNw3qgQWRUVy2HrzgzUgQmLe9FhZqjQ0xn4mMbv2sx+uiA
-         mPxNxKozBWcbGad17GjBg6agb5DRqKieFLQem5K4M8W3MZv1mlQ6OMXwSkvhq+wMabsv
-         kG30iZzvfNBdJaTo+Jlx2xvzT1QYJOPjD3lHzqPaj5ZqVGVclWM8Kk2fxCrxv46sD2sc
-         oEdyVx1RZjbnIEZuuiOygg0jIQo2JUz8lu9GYDn0e2VDDdly3lXFpEf+SPCjIXT6wSdp
-         3UDAC0Z/ZWM3XPqf3pDBK/79yz/zdV4U5hVTfbIMOO7j1dfeiB1aBo5k8/v0dZHRKuJa
-         3axw==
-X-Gm-Message-State: AOAM530E7br5Ms3eP4SA2gDifps007MDBFN2A2pjj46H1erbXJfQR+Jp
-        A1/DQPmZeOo1YApXqq2YdNfcNMqjVIV7rUFgi4Wolw==
-X-Google-Smtp-Source: ABdhPJz8sgcfKMPwDhaTisfENtsAh8kiIYb3fQ+WXEuQ7QEY2BXwGlzMye8wDd+3KT2NkWL0fQ3R+m0LXP1N1CWfNl8=
-X-Received: by 2002:aca:408a:: with SMTP id n132mr114803oia.70.1618322058975;
- Tue, 13 Apr 2021 06:54:18 -0700 (PDT)
+        id S245503AbhDMObn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Apr 2021 10:31:43 -0400
+Received: from vps-vb.mhejs.net ([37.28.154.113]:49572 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245415AbhDMOal (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Apr 2021 10:30:41 -0400
+X-Greylist: delayed 1288 seconds by postgrey-1.27 at vger.kernel.org; Tue, 13 Apr 2021 10:30:40 EDT
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.93.0.4)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1lWJiU-0003y5-Ib; Tue, 13 Apr 2021 16:08:34 +0200
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrew Jones <drjones@redhat.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] KVM: selftests: Keep track of memslots more efficiently
+Date:   Tue, 13 Apr 2021 16:08:27 +0200
+Message-Id: <b12749d47ee860468240cf027412c91b76dbe3db.1618253574.git.maciej.szmigiero@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20210413100747.4921-1-glittao@gmail.com> <20210413100747.4921-2-glittao@gmail.com>
-In-Reply-To: <20210413100747.4921-2-glittao@gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 13 Apr 2021 15:54:06 +0200
-Message-ID: <CANpmjNOOWuiR6Lb1igX+5Lp=PwcEE7Gx5co5KeGCnGz2WxbjNQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] mm/slub, kunit: add a KUnit test for SLUB
- debugging functionality
-To:     glittao@gmail.com
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 13 Apr 2021 at 12:07, <glittao@gmail.com> wrote:
-> From: Oliver Glitta <glittao@gmail.com>
->
-> SLUB has resiliency_test() function which is hidden behind #ifdef
-> SLUB_RESILIENCY_TEST that is not part of Kconfig, so nobody
-> runs it. KUnit should be a proper replacement for it.
->
-> Try changing byte in redzone after allocation and changing
-> pointer to next free node, first byte, 50th byte and redzone
-> byte. Check if validation finds errors.
->
-> There are several differences from the original resiliency test:
-> Tests create own caches with known state instead of corrupting
-> shared kmalloc caches.
->
-> The corruption of freepointer uses correct offset, the original
-> resiliency test got broken with freepointer changes.
->
-> Scratch changing random byte test, because it does not have
-> meaning in this form where we need deterministic results.
->
-> Add new option CONFIG_SLUB_KUNIT_TEST in Kconfig.
-> Because the test deliberatly modifies non-allocated objects, it depends on
-> !KASAN which would have otherwise prevented that.
+From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 
-Hmm, did the test fail with KASAN? Is it possible to skip the tests
-and still run a subset of tests with KASAN? It'd be nice if we could
-run some of these tests with KASAN as well.
+The KVM selftest framework was using a simple list for keeping track of
+the memslots currently in use.
+This resulted in lookups and adding a single memslot being O(n), the
+later due to linear scanning of the existing memslot set to check for
+the presence of any conflicting entries.
 
-> Use kunit_resource to count errors in cache and silence bug reports.
-> Count error whenever slab_bug() or slab_fix() is called or when
-> the count of pages is wrong.
->
-> Signed-off-by: Oliver Glitta <glittao@gmail.com>
+Before this change, benchmarking high count of memslots was more or less
+impossible as pretty much all the benchmark time was spent in the
+selftest framework code.
 
-Reviewed-by: Marco Elver <elver@google.com>
+We can simply use a rbtree for keeping track of both of gfn and hva.
+We don't need an interval tree for hva here as we can't have overlapping
+memslots because we allocate a completely new memory chunk for each new
+memslot.
 
-Thanks, this all looks good to me. But perhaps do test what works with
-KASAN, to see if you need the !KASAN constraint for all cases.
+Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+Reviewed-by: Andrew Jones <drjones@redhat.com>
+---
 
-> ---
-> Changes since v3
->
-> Use kunit_resource to silence bug reports and count errors suggested by
-> Marco Elver.
-> Make the test depends on !KASAN thanks to report from the kernel test robot.
->
-> Changes since v2
->
-> Use bit operation & instead of logical && as reported by kernel test
-> robot and Dan Carpenter
->
-> Changes since v1
->
-> Conversion from kselftest to KUnit test suggested by Marco Elver.
-> Error silencing.
-> Error counting improvements.
->  lib/Kconfig.debug |  12 ++++
->  lib/Makefile      |   1 +
->  lib/slub_kunit.c  | 150 ++++++++++++++++++++++++++++++++++++++++++++++
->  mm/slab.h         |   1 +
->  mm/slub.c         |  50 ++++++++++++++--
->  5 files changed, 209 insertions(+), 5 deletions(-)
->  create mode 100644 lib/slub_kunit.c
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 2779c29d9981..9b8a0d754278 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2371,6 +2371,18 @@ config BITS_TEST
->
->           If unsure, say N.
->
-> +config SLUB_KUNIT_TEST
-> +       tristate "KUnit test for SLUB cache error detection" if !KUNIT_ALL_TESTS
-> +       depends on SLUB_DEBUG && KUNIT && !KASAN
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This builds SLUB allocator unit test.
-> +         Tests SLUB cache debugging functionality.
-> +         For more information on KUnit and unit tests in general please refer
-> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +         If unsure, say N.
-> +
->  config TEST_UDELAY
->         tristate "udelay test driver"
->         help
-> diff --git a/lib/Makefile b/lib/Makefile
-> index b5307d3eec1a..1e59c6714ed8 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -352,5 +352,6 @@ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
->  obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
->  obj-$(CONFIG_BITS_TEST) += test_bits.o
->  obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-> +obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
->
->  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
-> diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-> new file mode 100644
-> index 000000000000..cb9ae9f7e8a6
-> --- /dev/null
-> +++ b/lib/slub_kunit.c
-> @@ -0,0 +1,150 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <kunit/test.h>
-> +#include <linux/mm.h>
-> +#include <linux/slab.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include "../mm/slab.h"
-> +
-> +static struct kunit_resource resource;
-> +static int slab_errors;
-> +
-> +static void test_clobber_zone(struct kunit *test)
-> +{
-> +       struct kmem_cache *s = kmem_cache_create("TestSlub_RZ_alloc", 64, 0,
-> +                               SLAB_RED_ZONE, NULL);
-> +       u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
-> +
-> +       p[64] = 0x12;
-> +
-> +       validate_slab_cache(s);
-> +       KUNIT_EXPECT_EQ(test, 2, slab_errors);
-> +
-> +       kmem_cache_free(s, p);
-> +       kmem_cache_destroy(s);
-> +}
-> +
-> +static void test_next_pointer(struct kunit *test)
-> +{
-> +       struct kmem_cache *s = kmem_cache_create("TestSlub_next_ptr_free", 64, 0,
-> +                               SLAB_POISON, NULL);
-> +       u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
-> +       unsigned long tmp;
-> +       unsigned long *ptr_addr;
-> +
-> +       kmem_cache_free(s, p);
-> +
-> +       ptr_addr = (unsigned long *)(p + s->offset);
-> +       tmp = *ptr_addr;
-> +       p[s->offset] = 0x12;
-> +
-> +       /*
-> +        * Expecting three errors.
-> +        * One for the corrupted freechain and the other one for the wrong
-> +        * count of objects in use. The third error is fixing broken cache.
-> +        */
-> +       validate_slab_cache(s);
-> +       KUNIT_EXPECT_EQ(test, 3, slab_errors);
-> +
-> +       /*
-> +        * Try to repair corrupted freepointer.
-> +        * Still expecting two errors. The first for the wrong count
-> +        * of objects in use.
-> +        * The second error is for fixing broken cache.
-> +        */
-> +       *ptr_addr = tmp;
-> +       slab_errors = 0;
-> +
-> +       validate_slab_cache(s);
-> +       KUNIT_EXPECT_EQ(test, 2, slab_errors);
-> +
-> +       /*
-> +        * Previous validation repaired the count of objects in use.
-> +        * Now expecting no error.
-> +        */
-> +       slab_errors = 0;
-> +       validate_slab_cache(s);
-> +       KUNIT_EXPECT_EQ(test, 0, slab_errors);
-> +
-> +       kmem_cache_destroy(s);
-> +}
-> +
-> +static void test_first_word(struct kunit *test)
-> +{
-> +       struct kmem_cache *s = kmem_cache_create("TestSlub_1th_word_free", 64, 0,
-> +                               SLAB_POISON, NULL);
-> +       u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
-> +
-> +       kmem_cache_free(s, p);
-> +       *p = 0x78;
-> +
-> +       validate_slab_cache(s);
-> +       KUNIT_EXPECT_EQ(test, 2, slab_errors);
-> +
-> +       kmem_cache_destroy(s);
-> +}
-> +
-> +static void test_clobber_50th_byte(struct kunit *test)
-> +{
-> +       struct kmem_cache *s = kmem_cache_create("TestSlub_50th_word_free", 64, 0,
-> +                               SLAB_POISON, NULL);
-> +       u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
-> +
-> +       kmem_cache_free(s, p);
-> +       p[50] = 0x9a;
-> +
-> +       validate_slab_cache(s);
-> +       KUNIT_EXPECT_EQ(test, 2, slab_errors);
-> +       kmem_cache_destroy(s);
-> +}
-> +
-> +static void test_clobber_redzone_free(struct kunit *test)
-> +{
-> +       struct kmem_cache *s = kmem_cache_create("TestSlub_RZ_free", 64, 0,
-> +                               SLAB_RED_ZONE, NULL);
-> +       u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
-> +
-> +       kmem_cache_free(s, p);
-> +       p[64] = 0xab;
-> +
-> +       validate_slab_cache(s);
-> +       KUNIT_EXPECT_EQ(test, 2, slab_errors);
-> +       kmem_cache_destroy(s);
-> +}
-> +
-> +static int test_init(struct kunit *test)
-> +{
-> +       slab_errors = 0;
-> +
-> +       /* FIXME: remove when CONFIG_KASAN requirement is dropped. */
-> +       current->kunit_test = test;
+Changes from v1:
+* Add Andrew's Reviewed-by: tag
 
-Note, the patch "kunit: support failure from dynamic analysis tools"
-is already in -next. It's probably safe to leave this, and send a
-follow-up patch later once that kunit patch is in mainline.
+ tools/testing/selftests/kvm/Makefile          |   2 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 141 ++++++++++++++----
+ .../selftests/kvm/lib/kvm_util_internal.h     |  15 +-
+ tools/testing/selftests/kvm/lib/rbtree.c      |   1 +
+ 4 files changed, 124 insertions(+), 35 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/lib/rbtree.c
 
-> +       kunit_add_named_resource(test, NULL, NULL, &resource,
-> +                                       "slab_errors", &slab_errors);
-> +       return 0;
-> +}
-> +
-> +static void test_exit(struct kunit *test)
-> +{
-> +       /* FIXME: remove when CONFIG_KASAN requirement is dropped. */
-> +       current->kunit_test = NULL;
-> +}
-> +
-> +static struct kunit_case test_cases[] = {
-> +       KUNIT_CASE(test_clobber_zone),
-> +       KUNIT_CASE(test_next_pointer),
-> +       KUNIT_CASE(test_first_word),
-> +       KUNIT_CASE(test_clobber_50th_byte),
-> +       KUNIT_CASE(test_clobber_redzone_free),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite test_suite = {
-> +       .name = "slub_test",
-> +       .init = test_init,
-> +       .exit = test_exit,
-> +       .test_cases = test_cases,
-> +};
-> +kunit_test_suite(test_suite);
-> +
-> +MODULE_LICENSE("GPL");
-> diff --git a/mm/slab.h b/mm/slab.h
-> index 076582f58f68..95cf42eb8396 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -215,6 +215,7 @@ DECLARE_STATIC_KEY_TRUE(slub_debug_enabled);
->  DECLARE_STATIC_KEY_FALSE(slub_debug_enabled);
->  #endif
->  extern void print_tracking(struct kmem_cache *s, void *object);
-> +long validate_slab_cache(struct kmem_cache *s);
->  #else
->  static inline void print_tracking(struct kmem_cache *s, void *object)
->  {
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 3021ce9bf1b3..d7df8841d90a 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -35,6 +35,7 @@
->  #include <linux/prefetch.h>
->  #include <linux/memcontrol.h>
->  #include <linux/random.h>
-> +#include <kunit/test.h>
->
->  #include <trace/events/kmem.h>
->
-> @@ -447,6 +448,26 @@ static inline bool cmpxchg_double_slab(struct kmem_cache *s, struct page *page,
->  static unsigned long object_map[BITS_TO_LONGS(MAX_OBJS_PER_PAGE)];
->  static DEFINE_SPINLOCK(object_map_lock);
->
-> +#if IS_ENABLED(CONFIG_KUNIT)
-> +static bool slab_add_kunit_errors(void)
-> +{
-> +       struct kunit_resource *resource;
-> +
-> +       if (likely(!current->kunit_test))
-> +               return false;
-> +
-> +       resource = kunit_find_named_resource(current->kunit_test, "slab_errors");
-> +       if (!resource)
-> +               return false;
-> +
-> +       (*(int *)resource->data)++;
-> +       kunit_put_resource(resource);
-> +       return true;
-> +}
-> +#else
-> +static inline bool slab_add_kunit_errors(void) { return false; }
-> +#endif
-> +
->  /*
->   * Determine a map of object in use on a page.
->   *
-> @@ -676,6 +697,9 @@ static void slab_fix(struct kmem_cache *s, char *fmt, ...)
->         struct va_format vaf;
->         va_list args;
->
-> +       if (slab_add_kunit_errors())
-> +               return;
-> +
->         va_start(args, fmt);
->         vaf.fmt = fmt;
->         vaf.va = &args;
-> @@ -739,6 +763,9 @@ static void print_trailer(struct kmem_cache *s, struct page *page, u8 *p)
->  void object_err(struct kmem_cache *s, struct page *page,
->                         u8 *object, char *reason)
->  {
-> +       if (slab_add_kunit_errors())
-> +               return;
-> +
->         slab_bug(s, "%s", reason);
->         print_trailer(s, page, object);
->  }
-> @@ -749,6 +776,9 @@ static __printf(3, 4) void slab_err(struct kmem_cache *s, struct page *page,
->         va_list args;
->         char buf[100];
->
-> +       if (slab_add_kunit_errors())
-> +               return;
-> +
->         va_start(args, fmt);
->         vsnprintf(buf, sizeof(buf), fmt, args);
->         va_end(args);
-> @@ -798,12 +828,16 @@ static int check_bytes_and_report(struct kmem_cache *s, struct page *page,
->         while (end > fault && end[-1] == value)
->                 end--;
->
-> +       if (slab_add_kunit_errors())
-> +               goto skip_bug_print;
-> +
->         slab_bug(s, "%s overwritten", what);
->         pr_err("INFO: 0x%p-0x%p @offset=%tu. First byte 0x%x instead of 0x%x\n",
-> -                                       fault, end - 1, fault - addr,
-> -                                       fault[0], value);
-> +                               fault, end - 1, fault - addr,
-> +                               fault[0], value);
->         print_trailer(s, page, object);
->
-> +skip_bug_print:
->         restore_bytes(s, what, value, fault, end);
->         return 0;
->  }
-> @@ -4650,9 +4684,11 @@ static int validate_slab_node(struct kmem_cache *s,
->                 validate_slab(s, page);
->                 count++;
->         }
-> -       if (count != n->nr_partial)
-> +       if (count != n->nr_partial) {
->                 pr_err("SLUB %s: %ld partial slabs counted but counter=%ld\n",
->                        s->name, count, n->nr_partial);
-> +               slab_add_kunit_errors();
-> +       }
->
->         if (!(s->flags & SLAB_STORE_USER))
->                 goto out;
-> @@ -4661,16 +4697,18 @@ static int validate_slab_node(struct kmem_cache *s,
->                 validate_slab(s, page);
->                 count++;
->         }
-> -       if (count != atomic_long_read(&n->nr_slabs))
-> +       if (count != atomic_long_read(&n->nr_slabs)) {
->                 pr_err("SLUB: %s %ld slabs counted but counter=%ld\n",
->                        s->name, count, atomic_long_read(&n->nr_slabs));
-> +               slab_add_kunit_errors();
-> +       }
->
->  out:
->         spin_unlock_irqrestore(&n->list_lock, flags);
->         return count;
->  }
->
-> -static long validate_slab_cache(struct kmem_cache *s)
-> +long validate_slab_cache(struct kmem_cache *s)
->  {
->         int node;
->         unsigned long count = 0;
-> @@ -4682,6 +4720,8 @@ static long validate_slab_cache(struct kmem_cache *s)
->
->         return count;
->  }
-> +EXPORT_SYMBOL(validate_slab_cache);
-> +
->  /*
->   * Generate lists of code addresses where slabcache objects are allocated
->   * and freed.
-> --
-> 2.31.1.272.g89b43f80a5
->
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index a6d61f451f88..c30a21c1d676 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -33,7 +33,7 @@ ifeq ($(ARCH),s390)
+ 	UNAME_M := s390x
+ endif
+ 
+-LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/sparsebit.c lib/test_util.c lib/guest_modes.c lib/perf_test_util.c
++LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/rbtree.c lib/sparsebit.c lib/test_util.c lib/guest_modes.c lib/perf_test_util.c
+ LIBKVM_x86_64 = lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c lib/x86_64/handlers.S
+ LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c
+ LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c lib/s390x/diag318_test_handler.c
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index e5fbf16f725b..69ee0a72c7d8 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -197,7 +197,9 @@ struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
+ 	TEST_ASSERT(vm != NULL, "Insufficient Memory");
+ 
+ 	INIT_LIST_HEAD(&vm->vcpus);
+-	INIT_LIST_HEAD(&vm->userspace_mem_regions);
++	vm->regions.gpa_tree = RB_ROOT;
++	vm->regions.hva_tree = RB_ROOT;
++	hash_init(vm->regions.slot_hash);
+ 
+ 	vm->mode = mode;
+ 	vm->type = 0;
+@@ -349,13 +351,14 @@ struct kvm_vm *vm_create_default(uint32_t vcpuid, uint64_t extra_mem_pages,
+  */
+ void kvm_vm_restart(struct kvm_vm *vmp, int perm)
+ {
++	int ctr;
+ 	struct userspace_mem_region *region;
+ 
+ 	vm_open(vmp, perm);
+ 	if (vmp->has_irqchip)
+ 		vm_create_irqchip(vmp);
+ 
+-	list_for_each_entry(region, &vmp->userspace_mem_regions, list) {
++	hash_for_each(vmp->regions.slot_hash, ctr, region, slot_node) {
+ 		int ret = ioctl(vmp->fd, KVM_SET_USER_MEMORY_REGION, &region->region);
+ 		TEST_ASSERT(ret == 0, "KVM_SET_USER_MEMORY_REGION IOCTL failed,\n"
+ 			    "  rc: %i errno: %i\n"
+@@ -418,14 +421,21 @@ uint32_t kvm_vm_reset_dirty_ring(struct kvm_vm *vm)
+ static struct userspace_mem_region *
+ userspace_mem_region_find(struct kvm_vm *vm, uint64_t start, uint64_t end)
+ {
+-	struct userspace_mem_region *region;
++	struct rb_node *node;
+ 
+-	list_for_each_entry(region, &vm->userspace_mem_regions, list) {
++	for (node = vm->regions.gpa_tree.rb_node; node; ) {
++		struct userspace_mem_region *region =
++			container_of(node, struct userspace_mem_region, gpa_node);
+ 		uint64_t existing_start = region->region.guest_phys_addr;
+ 		uint64_t existing_end = region->region.guest_phys_addr
+ 			+ region->region.memory_size - 1;
+ 		if (start <= existing_end && end >= existing_start)
+ 			return region;
++
++		if (start < existing_start)
++			node = node->rb_left;
++		else
++			node = node->rb_right;
+ 	}
+ 
+ 	return NULL;
+@@ -540,11 +550,16 @@ void kvm_vm_release(struct kvm_vm *vmp)
+ }
+ 
+ static void __vm_mem_region_delete(struct kvm_vm *vm,
+-				   struct userspace_mem_region *region)
++				   struct userspace_mem_region *region,
++				   bool unlink)
+ {
+ 	int ret;
+ 
+-	list_del(&region->list);
++	if (unlink) {
++		rb_erase(&region->gpa_node, &vm->regions.gpa_tree);
++		rb_erase(&region->hva_node, &vm->regions.hva_tree);
++		hash_del(&region->slot_node);
++	}
+ 
+ 	region->region.memory_size = 0;
+ 	ret = ioctl(vm->fd, KVM_SET_USER_MEMORY_REGION, &region->region);
+@@ -563,14 +578,16 @@ static void __vm_mem_region_delete(struct kvm_vm *vm,
+  */
+ void kvm_vm_free(struct kvm_vm *vmp)
+ {
+-	struct userspace_mem_region *region, *tmp;
++	int ctr;
++	struct hlist_node *node;
++	struct userspace_mem_region *region;
+ 
+ 	if (vmp == NULL)
+ 		return;
+ 
+ 	/* Free userspace_mem_regions. */
+-	list_for_each_entry_safe(region, tmp, &vmp->userspace_mem_regions, list)
+-		__vm_mem_region_delete(vmp, region);
++	hash_for_each_safe(vmp->regions.slot_hash, ctr, node, region, slot_node)
++		__vm_mem_region_delete(vmp, region, false);
+ 
+ 	/* Free sparsebit arrays. */
+ 	sparsebit_free(&vmp->vpages_valid);
+@@ -652,6 +669,57 @@ int kvm_memcmp_hva_gva(void *hva, struct kvm_vm *vm, vm_vaddr_t gva, size_t len)
+ 	return 0;
+ }
+ 
++static void vm_userspace_mem_region_gpa_insert(struct rb_root *gpa_tree,
++					       struct userspace_mem_region *region)
++{
++	struct rb_node **cur, *parent;
++
++	for (cur = &gpa_tree->rb_node, parent = NULL; *cur; ) {
++		struct userspace_mem_region *cregion;
++
++		cregion = container_of(*cur, typeof(*cregion), gpa_node);
++		parent = *cur;
++		if (region->region.guest_phys_addr <
++		    cregion->region.guest_phys_addr)
++			cur = &(*cur)->rb_left;
++		else {
++			TEST_ASSERT(region->region.guest_phys_addr !=
++				    cregion->region.guest_phys_addr,
++				    "Duplicate GPA in region tree");
++
++			cur = &(*cur)->rb_right;
++		}
++	}
++
++	rb_link_node(&region->gpa_node, parent, cur);
++	rb_insert_color(&region->gpa_node, gpa_tree);
++}
++
++static void vm_userspace_mem_region_hva_insert(struct rb_root *hva_tree,
++					       struct userspace_mem_region *region)
++{
++	struct rb_node **cur, *parent;
++
++	for (cur = &hva_tree->rb_node, parent = NULL; *cur; ) {
++		struct userspace_mem_region *cregion;
++
++		cregion = container_of(*cur, typeof(*cregion), hva_node);
++		parent = *cur;
++		if (region->host_mem < cregion->host_mem)
++			cur = &(*cur)->rb_left;
++		else {
++			TEST_ASSERT(region->host_mem !=
++				    cregion->host_mem,
++				    "Duplicate HVA in region tree");
++
++			cur = &(*cur)->rb_right;
++		}
++	}
++
++	rb_link_node(&region->hva_node, parent, cur);
++	rb_insert_color(&region->hva_node, hva_tree);
++}
++
+ /*
+  * VM Userspace Memory Region Add
+  *
+@@ -716,7 +784,8 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 			(uint64_t) region->region.memory_size);
+ 
+ 	/* Confirm no region with the requested slot already exists. */
+-	list_for_each_entry(region, &vm->userspace_mem_regions, list) {
++	hash_for_each_possible(vm->regions.slot_hash, region, slot_node,
++			       slot) {
+ 		if (region->region.slot != slot)
+ 			continue;
+ 
+@@ -796,8 +865,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 		ret, errno, slot, flags,
+ 		guest_paddr, (uint64_t) region->region.memory_size);
+ 
+-	/* Add to linked-list of memory regions. */
+-	list_add(&region->list, &vm->userspace_mem_regions);
++	/* Add to quick lookup data structures */
++	vm_userspace_mem_region_gpa_insert(&vm->regions.gpa_tree, region);
++	vm_userspace_mem_region_hva_insert(&vm->regions.hva_tree, region);
++	hash_add(vm->regions.slot_hash, &region->slot_node, slot);
+ }
+ 
+ /*
+@@ -820,10 +891,10 @@ memslot2region(struct kvm_vm *vm, uint32_t memslot)
+ {
+ 	struct userspace_mem_region *region;
+ 
+-	list_for_each_entry(region, &vm->userspace_mem_regions, list) {
++	hash_for_each_possible(vm->regions.slot_hash, region, slot_node,
++			       memslot)
+ 		if (region->region.slot == memslot)
+ 			return region;
+-	}
+ 
+ 	fprintf(stderr, "No mem region with the requested slot found,\n"
+ 		"  requested slot: %u\n", memslot);
+@@ -908,7 +979,7 @@ void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa)
+  */
+ void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot)
+ {
+-	__vm_mem_region_delete(vm, memslot2region(vm, slot));
++	__vm_mem_region_delete(vm, memslot2region(vm, slot), true);
+ }
+ 
+ /*
+@@ -1180,16 +1251,14 @@ void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa)
+ {
+ 	struct userspace_mem_region *region;
+ 
+-	list_for_each_entry(region, &vm->userspace_mem_regions, list) {
+-		if ((gpa >= region->region.guest_phys_addr)
+-			&& (gpa <= (region->region.guest_phys_addr
+-				+ region->region.memory_size - 1)))
+-			return (void *) ((uintptr_t) region->host_mem
+-				+ (gpa - region->region.guest_phys_addr));
++	region = userspace_mem_region_find(vm, gpa, gpa);
++	if (!region) {
++		TEST_FAIL("No vm physical memory at 0x%lx", gpa);
++		return NULL;
+ 	}
+ 
+-	TEST_FAIL("No vm physical memory at 0x%lx", gpa);
+-	return NULL;
++	return (void *)((uintptr_t)region->host_mem
++		+ (gpa - region->region.guest_phys_addr));
+ }
+ 
+ /*
+@@ -1211,15 +1280,22 @@ void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa)
+  */
+ vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva)
+ {
+-	struct userspace_mem_region *region;
++	struct rb_node *node;
++
++	for (node = vm->regions.hva_tree.rb_node; node; ) {
++		struct userspace_mem_region *region =
++			container_of(node, struct userspace_mem_region, hva_node);
++
++		if (hva >= region->host_mem) {
++			if (hva <= (region->host_mem
++				+ region->region.memory_size - 1))
++				return (vm_paddr_t)((uintptr_t)
++					region->region.guest_phys_addr
++					+ (hva - (uintptr_t)region->host_mem));
+ 
+-	list_for_each_entry(region, &vm->userspace_mem_regions, list) {
+-		if ((hva >= region->host_mem)
+-			&& (hva <= (region->host_mem
+-				+ region->region.memory_size - 1)))
+-			return (vm_paddr_t) ((uintptr_t)
+-				region->region.guest_phys_addr
+-				+ (hva - (uintptr_t) region->host_mem));
++			node = node->rb_right;
++		} else
++			node = node->rb_left;
+ 	}
+ 
+ 	TEST_FAIL("No mapping to a guest physical address, hva: %p", hva);
+@@ -1745,6 +1821,7 @@ int _kvm_ioctl(struct kvm_vm *vm, unsigned long cmd, void *arg)
+  */
+ void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
+ {
++	int ctr;
+ 	struct userspace_mem_region *region;
+ 	struct vcpu *vcpu;
+ 
+@@ -1752,7 +1829,7 @@ void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
+ 	fprintf(stream, "%*sfd: %i\n", indent, "", vm->fd);
+ 	fprintf(stream, "%*spage_size: 0x%x\n", indent, "", vm->page_size);
+ 	fprintf(stream, "%*sMem Regions:\n", indent, "");
+-	list_for_each_entry(region, &vm->userspace_mem_regions, list) {
++	hash_for_each(vm->regions.slot_hash, ctr, region, slot_node) {
+ 		fprintf(stream, "%*sguest_phys: 0x%lx size: 0x%lx "
+ 			"host_virt: %p\n", indent + 2, "",
+ 			(uint64_t) region->region.guest_phys_addr,
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util_internal.h b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
+index 34465dc562d8..af310110602b 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util_internal.h
++++ b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
+@@ -8,6 +8,9 @@
+ #ifndef SELFTEST_KVM_UTIL_INTERNAL_H
+ #define SELFTEST_KVM_UTIL_INTERNAL_H
+ 
++#include "linux/hashtable.h"
++#include "linux/rbtree.h"
++
+ #include "sparsebit.h"
+ 
+ #define KVM_DEV_PATH		"/dev/kvm"
+@@ -20,7 +23,9 @@ struct userspace_mem_region {
+ 	void *host_mem;
+ 	void *mmap_start;
+ 	size_t mmap_size;
+-	struct list_head list;
++	struct rb_node gpa_node;
++	struct rb_node hva_node;
++	struct hlist_node slot_node;
+ };
+ 
+ struct vcpu {
+@@ -33,6 +38,12 @@ struct vcpu {
+ 	uint32_t dirty_gfns_count;
+ };
+ 
++struct userspace_mem_regions {
++	struct rb_root gpa_tree;
++	struct rb_root hva_tree;
++	DECLARE_HASHTABLE(slot_hash, 9);
++};
++
+ struct kvm_vm {
+ 	int mode;
+ 	unsigned long type;
+@@ -45,7 +56,7 @@ struct kvm_vm {
+ 	unsigned int va_bits;
+ 	uint64_t max_gfn;
+ 	struct list_head vcpus;
+-	struct list_head userspace_mem_regions;
++	struct userspace_mem_regions regions;
+ 	struct sparsebit *vpages_valid;
+ 	struct sparsebit *vpages_mapped;
+ 	bool has_irqchip;
+diff --git a/tools/testing/selftests/kvm/lib/rbtree.c b/tools/testing/selftests/kvm/lib/rbtree.c
+new file mode 100644
+index 000000000000..a703f0194ea3
+--- /dev/null
++++ b/tools/testing/selftests/kvm/lib/rbtree.c
+@@ -0,0 +1 @@
++#include "../../../../lib/rbtree.c"
