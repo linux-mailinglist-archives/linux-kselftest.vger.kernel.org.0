@@ -2,147 +2,292 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A647A35D436
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Apr 2021 01:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD67635D453
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Apr 2021 02:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239187AbhDLX6Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Apr 2021 19:58:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52348 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238344AbhDLX6Q (ORCPT
+        id S239560AbhDMAIb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Apr 2021 20:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238309AbhDMAIb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Apr 2021 19:58:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618271877;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fk8f62xjqnl3mv3ljyxxc5ev3FlVYq11HMKlMY+I2mI=;
-        b=bKMDXmtQUNLwEAPA+/Iw8zheAt0uvZRDnTX/sIbCVDPuh8U4KUWlL/VcaHpxW+UBw8wpIm
-        IrEmpiat3SlzrUj8KxljfurZbZetD/jDX5p4D0xhaW4d6uCeFB9Io/WAlYwbh6wzCjDh+l
-        DNYbIKDH4AAnJgxZVJIBvZYQ2eWtpYg=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-255-rKexBiU5MR2X775YuY4xuw-1; Mon, 12 Apr 2021 19:57:55 -0400
-X-MC-Unique: rKexBiU5MR2X775YuY4xuw-1
-Received: by mail-qv1-f70.google.com with SMTP id a7so9018207qvx.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Apr 2021 16:57:55 -0700 (PDT)
+        Mon, 12 Apr 2021 20:08:31 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59691C061756
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Apr 2021 17:08:12 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id c4so1152041ybp.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Apr 2021 17:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=528n/XU1I2aQix/5LzpH6U+fVKtBCozvVZSzDVU9kHk=;
+        b=QFEOkq5d8vO/qSnz0eiFMeEa/WpbJXLNxN4qNchD6wj5dfcyJ8PNA4oHZTEz7KSHY8
+         qy3i7ywZ9nmbW0eDWB9pzPkOj469JGJBp5CRDb3lL+QIntai8MQVn0OZcBiwKsC+Jw0D
+         8XK7bkVqWKfVGvvaT4icvpu43V0+FMXKCVVyQ2OTy6uyOEI6Zd4FsoruhRLqZxwnxa8V
+         UNSrJkHZb6F0faqL97QQyp5+uEu9ydicbixNqnCP0Jg1izG8ZR7jDSNcXlv4t892ciZG
+         ZTZeNCgYq04gwqs4waUZNkGD1HvBEboOkESWvK6IL2vzb/2h29fOXjed4wDh3jUqGPc9
+         xm7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fk8f62xjqnl3mv3ljyxxc5ev3FlVYq11HMKlMY+I2mI=;
-        b=IS5dZHbqQ1ZuZ0Bi98BFDD8vKt8HnUpwZ5+EYMM1Xii26qb7glfuf1oyIkY06uXQbd
-         Mg6oRP8VsNFKVSHQSIGdukTDujd3HYRmtgmnvErOMYapMC6esdo59moQ4kz3i8iRPA7E
-         YvewXHXh+/JD3FEu/qxz73Le+bHsWAjQiGMkaYumACM8Ezfhd5Ta5KBcXYXpVsPcD//e
-         GCDoTC/6jyFq/ZJQxWo8aOqipuxFMvW3Dq3MTiz8kvxHe+i/aQ9NixYqoGXxVE6CMoCx
-         vRYXWXsC4AEA0O+3k1GS8YKe65tXlSufPNts6aWdeFl8Cjn+O6Kj1fdE2YJYTRgK/qzG
-         g3jQ==
-X-Gm-Message-State: AOAM533psO9xLEZUzQUw8dchdIxRSlWksgKPhwNEaCeOdaAyCUpjzOfD
-        RsY/Ek8zDXvZRrDY1qFpi6bHlHxgGmU/hadGyWVN9jA+siMSQf0IC50sQlcPoApF9Qgb4VBcKSa
-        hTXcyKwbTeRR6rVnPldSiIOuFEcuQ
-X-Received: by 2002:ac8:5bd0:: with SMTP id b16mr27256751qtb.265.1618271875256;
-        Mon, 12 Apr 2021 16:57:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyINLu5vRRG0SiDZ5ReSE5VIP4sHwe9BnqH3/WUUNCWDJZ4MX4YNqZ5FmXfacMqWYulpB87ZQ==
-X-Received: by 2002:ac8:5bd0:: with SMTP id b16mr27256724qtb.265.1618271875002;
-        Mon, 12 Apr 2021 16:57:55 -0700 (PDT)
-Received: from xz-x1 (bras-base-toroon474qw-grc-88-174-93-75-154.dsl.bell.ca. [174.93.75.154])
-        by smtp.gmail.com with ESMTPSA id n6sm8421251qtx.22.2021.04.12.16.57.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 16:57:54 -0700 (PDT)
-Date:   Mon, 12 Apr 2021 19:57:52 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Colascione <dancol@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Brian Geffon <bgeffon@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH 2/9] userfaultfd/shmem: combine
- shmem_{mcopy_atomic,mfill_zeropage}_pte
-Message-ID: <20210412235752.GC1002612@xz-x1>
-References: <20210408234327.624367-1-axelrasmussen@google.com>
- <20210408234327.624367-3-axelrasmussen@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210408234327.624367-3-axelrasmussen@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=528n/XU1I2aQix/5LzpH6U+fVKtBCozvVZSzDVU9kHk=;
+        b=WewGi+qg0SUSFxrwAqMe5zkozA+ANBROvtil5EySYJCWihd6lZLUXfQIlUTxk5r8h4
+         ypTO7W8wq0B+IIDTTejXjBWG3V5rjWaI7fYAe0TCkbrylzf3OE+hw85270HaL0kusUfg
+         MysE0ulO6YAl3X2PisNMFzn/+Kl5OVNfwpGdEfeE+WK7wrukqXzR/6APcbsNk9tH1YiZ
+         Yultoda/CNjtKKZ5uvdm5x2NmI7fE1n/5u6dOJyXFx8kBr2Y2z6NcrNlHpPzBrjUwx0E
+         AKZARNdkuURdKi4CaCOvbSHxd4wvyU/9W2hTLweCGrfpYa8D0A/qik30AP1LO9tGIaJl
+         Phbg==
+X-Gm-Message-State: AOAM532DaPQek4Oz88Y3Xazy+nKj9WtpAtnFkph0H9Fh71JjFRf+y0MD
+        3WozJUBzu68V++eaH6n/xrSOlLuxYB19FA==
+X-Google-Smtp-Source: ABdhPJya6eMpR5lhPM6eJCOliv3v2eGzjeSxZeG+5umxlWDyjW+zvpFGG4fttZrVefwTowrqg3GM2v0oSfMCKA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:9582:4774:7806:b32])
+ (user=dlatypov job=sendgmr) by 2002:a25:d7d4:: with SMTP id
+ o203mr31497028ybg.95.1618272491634; Mon, 12 Apr 2021 17:08:11 -0700 (PDT)
+Date:   Mon, 12 Apr 2021 17:08:03 -0700
+Message-Id: <20210413000803.778099-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
+Subject: [PATCH] kunit: add unit test for filtering suites by names
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 04:43:20PM -0700, Axel Rasmussen wrote:
-> Previously, we did a dance where we had one calling path in
-> userfaultfd.c (mfill_atomic_pte), but then we split it into two in
-> shmem_fs.h (shmem_{mcopy_atomic,mfill_zeropage}_pte), and then rejoined
-> into a single shared function in shmem.c (shmem_mfill_atomic_pte).
-> 
-> This is all a bit overly complex. Just call the single combined shmem
-> function directly, allowing us to clean up various branches,
-> boilerplate, etc.
-> 
-> While we're touching this function, two other small cleanup changes:
-> - offset is equivalent to pgoff, so we can get rid of offset entirely.
-> - Split two VM_BUG_ON cases into two statements. This means the line
->   number reported when the BUG is hit specifies exactly which condition
->   was true.
+This adds unit tests for kunit_filter_subsuite() and
+kunit_filter_suites().
 
-(For my own preference, I'll avoid touching the latter one)
+Note: what the executor means by "subsuite" is the array of suites
+corresponding to each test file.
 
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->  include/linux/shmem_fs.h | 15 +++++-------
->  mm/shmem.c               | 52 +++++++++++++---------------------------
->  mm/userfaultfd.c         | 10 +++-----
->  3 files changed, 25 insertions(+), 52 deletions(-)
-> 
-> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-> index d82b6f396588..919e36671fe6 100644
-> --- a/include/linux/shmem_fs.h
-> +++ b/include/linux/shmem_fs.h
-> @@ -122,21 +122,18 @@ static inline bool shmem_file(struct file *file)
->  extern bool shmem_charge(struct inode *inode, long pages);
->  extern void shmem_uncharge(struct inode *inode, long pages);
->  
-> +#ifdef CONFIG_USERFAULTFD
->  #ifdef CONFIG_SHMEM
->  extern int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
->  				  struct vm_area_struct *dst_vma,
->  				  unsigned long dst_addr,
->  				  unsigned long src_addr,
+This patch lightly refactors executor.c to avoid the use of global
+variables to make it testable.
+It also includes a clever `kfree_at_end()` helper that makes this test
+easier to write than it otherwise would have been.
 
-Not a problem of your patch, but it's just that we passed in odd src_addr
-values into mfill_atomic_pte() for zeropage case because we loop on src_addr in
-__mcopy_atomic()...  Then it'll further passed into shmem_mcopy_atomic_pte()
-now after this patch (as shmem_mfill_zeropage_pte() probably only did one thing
-good which is to clear src_addr).  Not a big deal, though.
+Tested by running just the new tests using itself
+$ ./tools/testing/kunit/kunit.py run '*exec*'
 
-All the rest looks sane to me.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ lib/kunit/executor.c      |  26 ++++----
+ lib/kunit/executor_test.c | 132 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 147 insertions(+), 11 deletions(-)
+ create mode 100644 lib/kunit/executor_test.c
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index 15832ed44668..96a4ae983786 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -19,7 +19,7 @@ MODULE_PARM_DESC(filter_glob,
+ 		"Filter which KUnit test suites run at boot-time, e.g. list*");
+ 
+ static struct kunit_suite * const *
+-kunit_filter_subsuite(struct kunit_suite * const * const subsuite)
++kunit_filter_subsuite(struct kunit_suite * const * const subsuite, const char *filter_glob)
+ {
+ 	int i, n = 0;
+ 	struct kunit_suite **filtered;
+@@ -52,19 +52,14 @@ struct suite_set {
+ 	struct kunit_suite * const * const *end;
+ };
+ 
+-static struct suite_set kunit_filter_suites(void)
++static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
++					    const char *filter_glob)
+ {
+ 	int i;
+ 	struct kunit_suite * const **copy, * const *filtered_subsuite;
+ 	struct suite_set filtered;
+ 
+-	const size_t max = __kunit_suites_end - __kunit_suites_start;
+-
+-	if (!filter_glob) {
+-		filtered.start = __kunit_suites_start;
+-		filtered.end = __kunit_suites_end;
+-		return filtered;
+-	}
++	const size_t max = suite_set->end - suite_set->start;
+ 
+ 	copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
+ 	filtered.start = copy;
+@@ -74,7 +69,7 @@ static struct suite_set kunit_filter_suites(void)
+ 	}
+ 
+ 	for (i = 0; i < max; ++i) {
+-		filtered_subsuite = kunit_filter_subsuite(__kunit_suites_start[i]);
++		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], filter_glob);
+ 		if (filtered_subsuite)
+ 			*copy++ = filtered_subsuite;
+ 	}
+@@ -98,8 +93,13 @@ static void kunit_print_tap_header(struct suite_set *suite_set)
+ int kunit_run_all_tests(void)
+ {
+ 	struct kunit_suite * const * const *suites;
++	struct suite_set suite_set = {
++		.start = __kunit_suites_start,
++		.end = __kunit_suites_end,
++	};
+ 
+-	struct suite_set suite_set = kunit_filter_suites();
++	if (filter_glob)
++		suite_set = kunit_filter_suites(&suite_set, filter_glob);
+ 
+ 	kunit_print_tap_header(&suite_set);
+ 
+@@ -115,4 +115,8 @@ int kunit_run_all_tests(void)
+ 	return 0;
+ }
+ 
++#if IS_BUILTIN(CONFIG_KUNIT_TEST)
++#include "executor_test.c"
++#endif
++
+ #endif /* IS_BUILTIN(CONFIG_KUNIT) */
+diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+new file mode 100644
+index 000000000000..8e925395beeb
+--- /dev/null
++++ b/lib/kunit/executor_test.c
+@@ -0,0 +1,132 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for the KUnit executor.
++ *
++ * Copyright (C) 2021, Google LLC.
++ * Author: Daniel Latypov <dlatypov@google.com>
++ */
++
++#include <kunit/test.h>
++
++static void kfree_at_end(struct kunit *test, const void *to_free);
++static struct kunit_suite *alloc_fake_suite(struct kunit *test,
++					    const char *suite_name);
++
++static void filter_subsuite_test(struct kunit *test)
++{
++	struct kunit_suite *subsuite[3] = {NULL, NULL, NULL};
++	struct kunit_suite * const *filtered;
++
++	subsuite[0] = alloc_fake_suite(test, "suite1");
++	subsuite[1] = alloc_fake_suite(test, "suite2");
++
++	/* Want: suite1, suite2, NULL -> suite2, NULL */
++	filtered = kunit_filter_subsuite(subsuite, "suite2*");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered);
++	kfree_at_end(test, filtered);
++
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered[0]);
++	KUNIT_EXPECT_STREQ(test, (const char *)filtered[0]->name, "suite2");
++
++	KUNIT_EXPECT_FALSE(test, filtered[1]);
++}
++
++static void filter_subsuite_to_empty_test(struct kunit *test)
++{
++	struct kunit_suite *subsuite[3] = {NULL, NULL, NULL};
++	struct kunit_suite * const *filtered;
++
++	subsuite[0] = alloc_fake_suite(test, "suite1");
++	subsuite[1] = alloc_fake_suite(test, "suite2");
++
++	filtered = kunit_filter_subsuite(subsuite, "not_found");
++	kfree_at_end(test, filtered); /* just in case */
++
++	KUNIT_EXPECT_FALSE_MSG(test, filtered,
++			       "should be NULL to indicate no match");
++}
++
++static void kfree_subsuites_at_end(struct kunit *test, struct suite_set *suite_set)
++{
++	struct kunit_suite * const * const *suites;
++
++	for (suites = suite_set->start; suites < suite_set->end; suites++)
++		kfree_at_end(test, *suites);
++}
++
++static void filter_suites_test(struct kunit *test)
++{
++	/* Suites per-file are stored as a NULL terminated array */
++	struct kunit_suite *subsuites[2][2] = {
++		{NULL, NULL},
++		{NULL, NULL},
++	};
++	/* Match the memory layout of suite_set */
++	struct kunit_suite * const * const suites[2] = {
++		subsuites[0], subsuites[1],
++	};
++
++	const struct suite_set suite_set = {
++		.start = suites,
++		.end = suites + 2,
++	};
++	struct suite_set filtered = {.start = NULL, .end = NULL};
++
++	/* Emulate two files, each having one suite */
++	subsuites[0][0] = alloc_fake_suite(test, "suite0");
++	subsuites[1][0] = alloc_fake_suite(test, "suite1");
++
++	/* Filter out suite1 */
++	filtered = kunit_filter_suites(&suite_set, "suite0");
++	kfree_subsuites_at_end(test, &filtered); /* let us use ASSERTs without leaking */
++	KUNIT_ASSERT_EQ(test, filtered.end - filtered.start, (ptrdiff_t) 1);
++
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered.start);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered.start[0]);
++	KUNIT_EXPECT_PTR_EQ(test, filtered.start[0][0], subsuites[0][0]);
++}
++
++static struct kunit_case executor_test_cases[] = {
++	KUNIT_CASE(filter_subsuite_test),
++	KUNIT_CASE(filter_subsuite_to_empty_test),
++	KUNIT_CASE(filter_suites_test),
++	{}
++};
++
++static struct kunit_suite executor_test_suite = {
++	.name = "kunit_executor_test",
++	.test_cases = executor_test_cases,
++};
++
++kunit_test_suites(&executor_test_suite);
++
++/* Test helpers */
++
++static void kfree_res_free(struct kunit_resource *res)
++{
++	kfree(res->data);
++}
++
++/* Use the resource API to register a call to kfree(to_free).
++ * Since we never actually use the resource, it's safe to use on const data.
++ */
++static void kfree_at_end(struct kunit *test, const void *to_free)
++{
++	/* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
++	if (IS_ERR_OR_NULL(to_free))
++		return;
++	kunit_alloc_and_get_resource(test, NULL, kfree_res_free, GFP_KERNEL,
++				     (void *)to_free);
++}
++
++static struct kunit_suite *alloc_fake_suite(struct kunit *test,
++					    const char *suite_name)
++{
++	struct kunit_suite *suite;
++
++	/* We normally never expect to allocate suites, hence the non-const cast. */
++	suite = kunit_kzalloc(test, sizeof(*suite), GFP_KERNEL);
++	strncpy((char *)suite->name, suite_name, sizeof(suite->name));
++
++	return suite;
++}
 
-I'll wait to look at the selftests since in all cases they should be prone to
-rebase (either based on the v2 cleanup I posted, or you'd need to post without
-err() - then I can rebase again), so I figured maybe I just read the new
-version.
-
-Thanks,
-
+base-commit: 1678e493d530e7977cce34e59a86bb86f3c5631e
 -- 
-Peter Xu
+2.31.1.295.g9ea45b61b8-goog
 
