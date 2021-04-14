@@ -2,463 +2,483 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC85735E89C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Apr 2021 23:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A233135EA05
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 02:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbhDMV4V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Apr 2021 17:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S1348858AbhDNAdf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Apr 2021 20:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbhDMV4U (ORCPT
+        with ESMTP id S1348320AbhDNAdf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Apr 2021 17:56:20 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FDDC061756
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 14:56:00 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id c18so15369719iln.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 14:56:00 -0700 (PDT)
+        Tue, 13 Apr 2021 20:33:35 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B014DC061574
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 17:33:14 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id a11so16879542ioo.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 17:33:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rpouA4JrTUXzW46yTmnFq2i5W5/FEemBhTDD09OgTEc=;
-        b=IAUPW2/2oute27fT+OUOq5d3n4mqZnZl9HNr/eLCFpu8U5bgh4lUlB4LL7vIqjE654
-         ICvw8gWlMxgn9NiNGi+IMfkk5JEioaGRscxudfANGamu0c/nwT+NrP/QuJXWo/0WaXfa
-         AT7PxiVxaCioIIsCoVZy9lag9LQcD5uQ4WE0hSiqyoio2J/QhnzGV9DfXHf5bKAt6Y3A
-         feJoWBDrt50rjy5gqRw+rQwAXDK2u9XCvULRnI5CYIcIJtYWFLey9lmq0BX6ZdeFSjNv
-         OVVffASDNJrb/AhgqYZQA+rAQeN4+yKmPE5k7FKimVSOI7xYjDDl3qPftTFoE8vE16xa
-         KJAw==
+         :cc;
+        bh=ajkY9cSvM0yJXBaUdfH+EY6hPA2iU5BvpjfgTOX51Fk=;
+        b=H/wsEyTwh3fVtfXOc81Q37NwyeheY5mjBR6Uvlzh0UYMnxEHIMGsTJ0qcvbaInhgJc
+         HnnScWvpxipVGxugIaipkfttKD0HHeWYixRsfHtkRfFwOvdX/Qx59YWEFMsNfmBfYz46
+         oK6GXu998Y3aVddI5gOMlrI+4xxUb2eDbfiAjDgj6leP2emIRJ2HtkhHTFg6qJ1u+WMl
+         sDEs3xJbMDXMtVSqF3Wgs8rsS4sDcXvm4Uvu68+3peKDwmk1VLatWoqzLJSAmMVQlRES
+         YNee2BQVn+nPG7oW/m/0Omix+YMMA+000P7BPmftBVQxL8hfgh76B3nBi4X7B1Vy7cex
+         nH5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rpouA4JrTUXzW46yTmnFq2i5W5/FEemBhTDD09OgTEc=;
-        b=mK4HSX2AihDJ2VZMfxE+yRgSSuMNYxrKhuQ7ug5ioM8c7DLE+OMaja2tVFIztd7gtX
-         9GoDlv84Hiectrz3ZbklFD5u4PfKIaWHlSLyZQci/5kA2hEAB2c6mSgzQdeVYRdzWAZe
-         LCmSdCd4NAxa6J188g6yYlPIdxCp6Jb4Wo4OeK4UqOdIIRb2H+lk21xDAqp7e21LC3ZM
-         LqYNFFz1jZ0fnGpY95hIuSgWZNJbInuRCOJJxAofUyi5hdn9YjqrC4UjlNPtxFBVRPSj
-         vOPL/8iOqx6KEHnAO7QKX3eaLifDDlEBeg540MUtpwreIOfeNafsDbVVrEOTB5OpREgG
-         3S8A==
-X-Gm-Message-State: AOAM533InA8uU6NP3wxGqx3+db3PUYR9fGbaYK+IDIM4aC/BZtKdupgH
-        EIP37CTeFLW14/JXix5Ise/7yYEAVIGXaPiDdFjaew==
-X-Google-Smtp-Source: ABdhPJxqOnIgKRDvWrE+Y4cd/f0oQSq/ST9P9lC3tU1NUezPW4OFiLdoO7wdZcY0gkqjjmKcJQw+NdyREF+qLu9wnc8=
-X-Received: by 2002:a92:6011:: with SMTP id u17mr29462637ilb.274.1618350959910;
- Tue, 13 Apr 2021 14:55:59 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=ajkY9cSvM0yJXBaUdfH+EY6hPA2iU5BvpjfgTOX51Fk=;
+        b=RerAeXgclUKEdOSwlX3RSWRB1B3FEVwQDcmVJPC7+5gGyCnGFMT2/K8cWeslKscIXV
+         pK8IVyam2HmdqRQ7WC6flVWhI+xIvGyDj/aM/zDbrQph1v16jt6pNsirtjfJiLd1XoKp
+         HTPjE8oJ7mU7tw8q72pmf1jDuSI/rqPfmieGcvvECW4mb3EPBjtMPGXQIJccjoe4lJEp
+         cP2bq+HYmPYH5IK0c8riYOU66E6bcNewdPon/mbbW4jq4TluXvvBkLzw6DmnC0IyTe78
+         PpHfGzusuk/QT2W5R/UyyWS9r7yYAUdIKs+h8vlLJZQ3GyEpDSs1T7MN28PuDNCd3c2R
+         mgUA==
+X-Gm-Message-State: AOAM531PCZR5200FC3bWaAK9Pr1Bl3phkb3Wv7swpLNtsNKbkHLF7Yay
+        LpYvB/uWFWJRkIUWkd/V2avKFxuEBo5a5AY1Yqg/EA==
+X-Google-Smtp-Source: ABdhPJwOKqsKv+OAXpb8uIShaFRPB3HxM8MSdwBmCP+iucCaLStLkTNLQ7R4xq+nOGbZ+syDNvZNR+vKp305VmP2cNQ=
+X-Received: by 2002:a6b:fa14:: with SMTP id p20mr27435380ioh.168.1618360393909;
+ Tue, 13 Apr 2021 17:33:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210413000803.778099-1-dlatypov@google.com> <CABVgOSm7ywx8KNQVLULgCPvJ9tcLsaS3Rk4zkre05bOdk9gfeg@mail.gmail.com>
-In-Reply-To: <CABVgOSm7ywx8KNQVLULgCPvJ9tcLsaS3Rk4zkre05bOdk9gfeg@mail.gmail.com>
+References: <20210412190715.555883-1-dlatypov@google.com> <CABVgOSnn1WYyPspo6xu2Dua_ryk0xsRqMpE-OTnvW4q6gG7Ykg@mail.gmail.com>
+In-Reply-To: <CABVgOSnn1WYyPspo6xu2Dua_ryk0xsRqMpE-OTnvW4q6gG7Ykg@mail.gmail.com>
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 13 Apr 2021 14:55:48 -0700
-Message-ID: <CAGS_qxqL9p+5DSwLu5yVG+cdLOji6B1PHUR9=+mHND2PfgB9XA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: add unit test for filtering suites by names
+Date:   Tue, 13 Apr 2021 17:33:02 -0700
+Message-ID: <CAGS_qxrD2+noEy7sF4bm1A_TBKuH7T_VWtpjvAppZeJk4098_w@mail.gmail.com>
+Subject: Re: [PATCH v5] lib: add basic KUnit test for lib/math
 To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 12, 2021 at 10:00 PM David Gow <davidgow@google.com> wrote:
+On Mon, Apr 12, 2021 at 11:41 PM David Gow <davidgow@google.com> wrote:
 >
-> On Tue, Apr 13, 2021 at 8:08 AM Daniel Latypov <dlatypov@google.com> wrot=
-e:
+> On Tue, Apr 13, 2021 at 3:07 AM Daniel Latypov <dlatypov@google.com> wrote:
 > >
-> > This adds unit tests for kunit_filter_subsuite() and
-> > kunit_filter_suites().
+> > Add basic test coverage for files that don't require any config options:
+> > * part of math.h (what seem to be the most commonly used macros)
+> > * gcd.c
+> > * lcm.c
+> > * int_sqrt.c
+> > * reciprocal_div.c
+> > (Ignored int_pow.c since it's a simple textbook algorithm.)
 > >
-> > Note: what the executor means by "subsuite" is the array of suites
-> > corresponding to each test file.
-> >
-> > This patch lightly refactors executor.c to avoid the use of global
-> > variables to make it testable.
-> > It also includes a clever `kfree_at_end()` helper that makes this test
-> > easier to write than it otherwise would have been.
-> >
-> > Tested by running just the new tests using itself
-> > $ ./tools/testing/kunit/kunit.py run '*exec*'
+> > These tests aren't particularly interesting, but they
+> > * provide short and simple examples of parameterized tests
+> > * provide a place to add tests for any new files in this dir
+> > * are written so adding new test cases to cover edge cases should be easy
+> >   * looking at code coverage, we hit all the branches in the .c files
 > >
 > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 >
-> I really like this test, thanks.
+> This looks good to me. A few comments/observations below, but nothing
+> that I think should actually block this.
 >
-> A few small notes below, including what I think is a missing
-> kfree_at_end() call.
->
-> Assuming that one issue is fixed (or I'm mistaken):
 > Reviewed-by: David Gow <davidgow@google.com>
 >
 > -- David
 >
 > > ---
-> >  lib/kunit/executor.c      |  26 ++++----
-> >  lib/kunit/executor_test.c | 132 ++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 147 insertions(+), 11 deletions(-)
-> >  create mode 100644 lib/kunit/executor_test.c
+> > Changes since v4:
+> > * add in test cases for some math.h macros (abs, round_up/round_down,
+> >   div_round_down/closest)
+> > * use parameterized testing less to keep things terser
 > >
-> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> > index 15832ed44668..96a4ae983786 100644
-> > --- a/lib/kunit/executor.c
-> > +++ b/lib/kunit/executor.c
-> > @@ -19,7 +19,7 @@ MODULE_PARM_DESC(filter_glob,
-> >                 "Filter which KUnit test suites run at boot-time, e.g. =
-list*");
+> > Changes since v3:
+> > * fix `checkpatch.pl --strict` warnings
+> > * add test cases for gcd(0,0) and lcm(0,0)
+> > * minor: don't test both gcd(a,b) and gcd(b,a) when a == b
 > >
-> >  static struct kunit_suite * const *
-> > -kunit_filter_subsuite(struct kunit_suite * const * const subsuite)
-> > +kunit_filter_subsuite(struct kunit_suite * const * const subsuite, con=
-st char *filter_glob)
-> >  {
-> >         int i, n =3D 0;
-> >         struct kunit_suite **filtered;
-> > @@ -52,19 +52,14 @@ struct suite_set {
-> >         struct kunit_suite * const * const *end;
-> >  };
+> > Changes since v2: mv math_test.c => math_kunit.c
 > >
-> > -static struct suite_set kunit_filter_suites(void)
-> > +static struct suite_set kunit_filter_suites(const struct suite_set *su=
-ite_set,
-> > +                                           const char *filter_glob)
-> >  {
-> >         int i;
-> >         struct kunit_suite * const **copy, * const *filtered_subsuite;
-> >         struct suite_set filtered;
+> > Changes since v1:
+> > * Rebase and rewrite to use the new parameterized testing support.
+> > * misc: fix overflow in literal and inline int_sqrt format string.
+> > * related: commit 1f0e943df68a ("Documentation: kunit: provide guidance
+> > for testing many inputs") was merged explaining the patterns shown here.
+> >   * there's an in-flight patch to update it for parameterized testing.
 > >
-> > -       const size_t max =3D __kunit_suites_end - __kunit_suites_start;
-> > -
-> > -       if (!filter_glob) {
-> > -               filtered.start =3D __kunit_suites_start;
-> > -               filtered.end =3D __kunit_suites_end;
-> > -               return filtered;
-> > -       }
-> > +       const size_t max =3D suite_set->end - suite_set->start;
+> > v1: https://lore.kernel.org/lkml/20201019224556.3536790-1-dlatypov@google.com/
+> > ---
+> >  lib/math/Kconfig      |   5 +
+> >  lib/math/Makefile     |   2 +
+> >  lib/math/math_kunit.c | 264 ++++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 271 insertions(+)
+> >  create mode 100644 lib/math/math_kunit.c
 > >
-> >         copy =3D kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL=
-);
-> >         filtered.start =3D copy;
-> > @@ -74,7 +69,7 @@ static struct suite_set kunit_filter_suites(void)
-> >         }
+> > diff --git a/lib/math/Kconfig b/lib/math/Kconfig
+> > index f19bc9734fa7..6ba8680439c1 100644
+> > --- a/lib/math/Kconfig
+> > +++ b/lib/math/Kconfig
+> > @@ -15,3 +15,8 @@ config PRIME_NUMBERS
 > >
-> >         for (i =3D 0; i < max; ++i) {
-> > -               filtered_subsuite =3D kunit_filter_subsuite(__kunit_sui=
-tes_start[i]);
-> > +               filtered_subsuite =3D kunit_filter_subsuite(suite_set->=
-start[i], filter_glob);
-> >                 if (filtered_subsuite)
-> >                         *copy++ =3D filtered_subsuite;
-> >         }
-> > @@ -98,8 +93,13 @@ static void kunit_print_tap_header(struct suite_set =
-*suite_set)
-> >  int kunit_run_all_tests(void)
-> >  {
-> >         struct kunit_suite * const * const *suites;
-> > +       struct suite_set suite_set =3D {
-> > +               .start =3D __kunit_suites_start,
-> > +               .end =3D __kunit_suites_end,
-> > +       };
-> >
-> > -       struct suite_set suite_set =3D kunit_filter_suites();
-> > +       if (filter_glob)
-> > +               suite_set =3D kunit_filter_suites(&suite_set, filter_gl=
-ob);
-> >
-> >         kunit_print_tap_header(&suite_set);
-> >
-> > @@ -115,4 +115,8 @@ int kunit_run_all_tests(void)
-> >         return 0;
-> >  }
-> >
-> > +#if IS_BUILTIN(CONFIG_KUNIT_TEST)
-> > +#include "executor_test.c"
-> > +#endif
+> >  config RATIONAL
+> >         bool
 > > +
-> >  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
-> > diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+> > +config MATH_KUNIT_TEST
+> > +       tristate "KUnit test for lib/math" if !KUNIT_ALL_TESTS
+> > +       default KUNIT_ALL_TESTS
+> > +       depends on KUNIT
+>
+> This could have a description of the test and KUnit here, as mentioned
+> in the style guide doc:
+> https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kconfig-entries
+>
+> (I think it's sufficiently self explanatory that it's not essential,
+> but it could be nice to have a more detailed description of the things
+> being tested than just "lib/math".)
+>
+
+Done. I've left off the details about what the test tests so we have
+less places to go and update if/when new tests are added.
+
+> > diff --git a/lib/math/Makefile b/lib/math/Makefile
+> > index be6909e943bd..30abb7a8d564 100644
+> > --- a/lib/math/Makefile
+> > +++ b/lib/math/Makefile
+> > @@ -4,3 +4,5 @@ obj-y += div64.o gcd.o lcm.o int_pow.o int_sqrt.o reciprocal_div.o
+> >  obj-$(CONFIG_CORDIC)           += cordic.o
+> >  obj-$(CONFIG_PRIME_NUMBERS)    += prime_numbers.o
+> >  obj-$(CONFIG_RATIONAL)         += rational.o
+> > +
+> > +obj-$(CONFIG_MATH_KUNIT_TEST)  += math_kunit.o
+> > diff --git a/lib/math/math_kunit.c b/lib/math/math_kunit.c
 > > new file mode 100644
-> > index 000000000000..8e925395beeb
+> > index 000000000000..80a087a32884
 > > --- /dev/null
-> > +++ b/lib/kunit/executor_test.c
-> > @@ -0,0 +1,132 @@
+> > +++ b/lib/math/math_kunit.c
+> > @@ -0,0 +1,264 @@
 > > +// SPDX-License-Identifier: GPL-2.0
 > > +/*
-> > + * KUnit test for the KUnit executor.
+> > + * Simple KUnit suite for math helper funcs that are always enabled.
 > > + *
-> > + * Copyright (C) 2021, Google LLC.
+> > + * Copyright (C) 2020, Google LLC.
 > > + * Author: Daniel Latypov <dlatypov@google.com>
 > > + */
 > > +
 > > +#include <kunit/test.h>
+> > +#include <linux/gcd.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/lcm.h>
+> > +#include <linux/reciprocal_div.h>
 > > +
-> > +static void kfree_at_end(struct kunit *test, const void *to_free);
-> > +static struct kunit_suite *alloc_fake_suite(struct kunit *test,
-> > +                                           const char *suite_name);
-> > +
-> > +static void filter_subsuite_test(struct kunit *test)
+> > +static void abs_test(struct kunit *test)
 > > +{
-> > +       struct kunit_suite *subsuite[3] =3D {NULL, NULL, NULL};
-> > +       struct kunit_suite * const *filtered;
-> > +
-> > +       subsuite[0] =3D alloc_fake_suite(test, "suite1");
-> > +       subsuite[1] =3D alloc_fake_suite(test, "suite2");
-> > +
-> > +       /* Want: suite1, suite2, NULL -> suite2, NULL */
-> > +       filtered =3D kunit_filter_subsuite(subsuite, "suite2*");
-> > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered);
-> > +       kfree_at_end(test, filtered);
-> > +
-> > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered[0]);
-> > +       KUNIT_EXPECT_STREQ(test, (const char *)filtered[0]->name, "suit=
-e2");
 >
-> Is it worth testing that filtered[0] =3D=3D subsuite[1], not just the
-> name? (I suspect it doesn't really matter, but that seems to be what's
-> happening in filter_suites_test() below.)
+> There's something weird about taking the absolute values of char
+> literals. I'm not sure if it's better to case integer literals (like
+> with 'short' below), or keep it as-is.
 
-I'll update filter_suites_test() to check the name instead as well.
-My reason reason for preferring checking the name is because if we
-ever support filtering on test names as well as suites, then the suite
-pointers will no longer be unchanged.
+I just thought it was amusing :)
+Converting it to be like the short test below.
 
-Semi-rant about why I didn't do that before in filter_suites_test():
-The intuitive approach
-  KUNIT_EXPECT_PTR_EQ(test, filtered.start[0][0], subsuites[0][0]);
-fails to compile with a very uninformative compiler error, see [1]
-  KUNIT_EXPECT_STREQ(test, (const char *)filtered.start[0][0]->name, "suite=
-0");
-_does_ compile, but is ugly.
-
-[1] useless compile error due to how the kunit expect macros are set up:
-ERROR:root:In file included from ../lib/kunit/executor.c:3:
-../lib/kunit/executor_test.c: In function =E2=80=98filter_suites_test=E2=80=
-=99:
-../include/kunit/test.h:1132:24: error: invalid initializer
- 1132 |  typeof(left) __left =3D (left);            \
-      |                        ^
-../include/kunit/test.h:1155:2: note: in expansion of macro
-=E2=80=98KUNIT_BINARY_STR_ASSERTION=E2=80=99
- 1155 |  KUNIT_BINARY_STR_ASSERTION(test,           \
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-../include/kunit/test.h:1162:2: note: in expansion of macro
-=E2=80=98KUNIT_BINARY_STR_EQ_MSG_ASSERTION=E2=80=99
- 1162 |  KUNIT_BINARY_STR_EQ_MSG_ASSERTION(test,           \
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../include/kunit/test.h:1446:2: note: in expansion of macro
-=E2=80=98KUNIT_BINARY_STR_EQ_ASSERTION=E2=80=99
- 1446 |  KUNIT_BINARY_STR_EQ_ASSERTION(test, KUNIT_EXPECTATION, left, right=
-)
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../lib/kunit/executor_test.c:87:2: note: in expansion of macro
-=E2=80=98KUNIT_EXPECT_STREQ=E2=80=99
-   87 |  KUNIT_EXPECT_STREQ(test, filtered.start[0][0]->name, "suite0");
-      |  ^~~~~~~~~~~~~~~~~~
-
-Root cause: kunit_suite.name is a const char[256] and the expect
-macros don't play kindly with arrays :(
-Note: nowhere in the error output does it mention any of the relevant types=
-!
-It's just complaining that you can't initialize array variables with
-anything besides a string literal or {}-enclosed expression.
-
->
+> > +       KUNIT_EXPECT_EQ(test, abs('\0'), '\0');
+> > +       KUNIT_EXPECT_EQ(test, abs('a'), 'a');
+> > +       KUNIT_EXPECT_EQ(test, abs(-'a'), 'a');
 > > +
-> > +       KUNIT_EXPECT_FALSE(test, filtered[1]);
+> > +       /* The expression in the macro is actually promoted to an int. */
+> > +       KUNIT_EXPECT_EQ(test, abs((short)0),  0);
+> > +       KUNIT_EXPECT_EQ(test, abs((short)42),  42);
+> > +       KUNIT_EXPECT_EQ(test, abs((short)-42),  42);
+> > +
+> > +       KUNIT_EXPECT_EQ(test, abs(0),  0);
+> > +       KUNIT_EXPECT_EQ(test, abs(42),  42);
+> > +       KUNIT_EXPECT_EQ(test, abs(-42),  42);
+> > +
+> > +       KUNIT_EXPECT_EQ(test, abs(0L), 0L);
+> > +       KUNIT_EXPECT_EQ(test, abs(42L), 42L);
+> > +       KUNIT_EXPECT_EQ(test, abs(-42L), 42L);
+> > +
+> > +       KUNIT_EXPECT_EQ(test, abs(0LL), 0LL);
+> > +       KUNIT_EXPECT_EQ(test, abs(42LL), 42LL);
+> > +       KUNIT_EXPECT_EQ(test, abs(-42LL), 42LL);
+> > +
+> > +       /* Unsigned types get casted to signed. */
+> > +       KUNIT_EXPECT_EQ(test, abs(0ULL), 0LL);
+> > +       KUNIT_EXPECT_EQ(test, abs(42ULL), 42LL);
+>
+> A part of me is curious what the result is for -0x80000000, but I
+> guess that's not defined, so shouldn't be tested. :-)
+
+abs(-42ULL) == 42, but the compiler spits out a warning.
+
 > > +}
 > > +
-> > +static void filter_subsuite_to_empty_test(struct kunit *test)
+> > +static void int_sqrt_test(struct kunit *test)
 > > +{
-> > +       struct kunit_suite *subsuite[3] =3D {NULL, NULL, NULL};
-> > +       struct kunit_suite * const *filtered;
-> > +
-> > +       subsuite[0] =3D alloc_fake_suite(test, "suite1");
-> > +       subsuite[1] =3D alloc_fake_suite(test, "suite2");
-> > +
-> > +       filtered =3D kunit_filter_subsuite(subsuite, "not_found");
-> > +       kfree_at_end(test, filtered); /* just in case */
-> > +
-> > +       KUNIT_EXPECT_FALSE_MSG(test, filtered,
-> > +                              "should be NULL to indicate no match");
+> > +       KUNIT_EXPECT_EQ(test, int_sqrt(0UL), 0UL);
+> > +       KUNIT_EXPECT_EQ(test, int_sqrt(1UL), 1UL);
+> > +       KUNIT_EXPECT_EQ(test, int_sqrt(4UL), 2UL);
+> > +       KUNIT_EXPECT_EQ(test, int_sqrt(5UL), 2UL);
+> > +       KUNIT_EXPECT_EQ(test, int_sqrt(8UL), 2UL);
+> > +       KUNIT_EXPECT_EQ(test, int_sqrt(1UL << 30), 1UL << 15);
 > > +}
 > > +
-> > +static void kfree_subsuites_at_end(struct kunit *test, struct suite_se=
-t *suite_set)
-> > +{
-> > +       struct kunit_suite * const * const *suites;
-> > +
-> > +       for (suites =3D suite_set->start; suites < suite_set->end; suit=
-es++)
-> > +               kfree_at_end(test, *suites);
-> > +}
-> > +
-> > +static void filter_suites_test(struct kunit *test)
-> > +{
-> > +       /* Suites per-file are stored as a NULL terminated array */
-> > +       struct kunit_suite *subsuites[2][2] =3D {
-> > +               {NULL, NULL},
-> > +               {NULL, NULL},
-> > +       };
-> > +       /* Match the memory layout of suite_set */
-> > +       struct kunit_suite * const * const suites[2] =3D {
-> > +               subsuites[0], subsuites[1],
-> > +       };
-> > +
-> > +       const struct suite_set suite_set =3D {
-> > +               .start =3D suites,
-> > +               .end =3D suites + 2,
-> > +       };
-> > +       struct suite_set filtered =3D {.start =3D NULL, .end =3D NULL};
-> > +
-> > +       /* Emulate two files, each having one suite */
-> > +       subsuites[0][0] =3D alloc_fake_suite(test, "suite0");
-> > +       subsuites[1][0] =3D alloc_fake_suite(test, "suite1");
-> > +
-> > +       /* Filter out suite1 */
-> > +       filtered =3D kunit_filter_suites(&suite_set, "suite0");
-> > +       kfree_subsuites_at_end(test, &filtered); /* let us use ASSERTs =
-without leaking */
 >
-> Do we also need to kfree_at_end(test, &filtered.start) here?
+> _Maybe_ it's worth a comment here that round_up (and round_down) only
+> support rounding to powers of two?
+> (Either that, or also test roundup/rounddown to provide the contrast.)
 
-Ah, I meant to have that in kfree_subsuites_at_end().
-Added the call there.
+Adding in those test cases for v6.
+Andy had asked for those as well but I had forgotten them by the time
+I sent out v5.
 
 >
-> > +       KUNIT_ASSERT_EQ(test, filtered.end - filtered.start, (ptrdiff_t=
-) 1);
-> > +
-> > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered.start);
-> > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered.start[0]);
-> > +       KUNIT_EXPECT_PTR_EQ(test, filtered.start[0][0], subsuites[0][0]=
-);
+> > +static void round_up_test(struct kunit *test)
+> > +{
+> > +       KUNIT_EXPECT_EQ(test, round_up(0, 1), 0);
+> > +       KUNIT_EXPECT_EQ(test, round_up(1, 2), 2);
+> > +       KUNIT_EXPECT_EQ(test, round_up(3, 2), 4);
+> > +       KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 2), 1 << 30);
+> > +       KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 1 << 29), 1 << 30);
 > > +}
 > > +
-> > +static struct kunit_case executor_test_cases[] =3D {
-> > +       KUNIT_CASE(filter_subsuite_test),
-> > +       KUNIT_CASE(filter_subsuite_to_empty_test),
-> > +       KUNIT_CASE(filter_suites_test),
+> > +static void round_down_test(struct kunit *test)
+> > +{
+> > +       KUNIT_EXPECT_EQ(test, round_down(0, 1), 0);
+> > +       KUNIT_EXPECT_EQ(test, round_down(1, 2), 0);
+> > +       KUNIT_EXPECT_EQ(test, round_down(3, 2), 2);
+> > +       KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 2), (1 << 30) - 2);
+> > +       KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 1 << 29), 1 << 29);
+> > +}
+> > +
+> > +static void div_round_up_test(struct kunit *test)
+> > +{
+> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(0, 1), 0);
+> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(20, 10), 2);
+> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 10), 3);
+> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 20), 2);
+> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 99), 1);
+> > +}
+> > +
+> > +static void div_round_closest_test(struct kunit *test)
+> > +{
+> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(0, 1), 0);
+> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(20, 10), 2);
+> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(21, 10), 2);
+> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(25, 10), 3);
+> > +}
+> > +
+> > +/* Generic test case for unsigned long inputs. */
+> > +struct test_case {
+> > +       unsigned long a, b;
+> > +       unsigned long result;
+> > +};
+> > +
+> > +static struct test_case gcd_cases[] = {
+> > +       {
+> > +               .a = 0, .b = 0,
+> > +               .result = 0,
+> > +       },
+> > +       {
+> > +               .a = 0, .b = 1,
+> > +               .result = 1,
+> > +       },
+> > +       {
+> > +               .a = 2, .b = 2,
+> > +               .result = 2,
+> > +       },
+> > +       {
+> > +               .a = 2, .b = 4,
+> > +               .result = 2,
+> > +       },
+> > +       {
+> > +               .a = 3, .b = 5,
+> > +               .result = 1,
+> > +       },
+> > +       {
+> > +               .a = 3 * 9, .b = 3 * 5,
+> > +               .result = 3,
+> > +       },
+> > +       {
+> > +               .a = 3 * 5 * 7, .b = 3 * 5 * 11,
+> > +               .result = 15,
+> > +       },
+> > +       {
+> > +               .a = 1 << 21,
+> > +               .b = (1 << 21) - 1,
+> > +               .result = 1,
+> > +       },
+> > +};
+> > +
+> > +KUNIT_ARRAY_PARAM(gcd, gcd_cases, NULL);
+> > +
+> > +static void gcd_test(struct kunit *test)
+> > +{
+> > +       const char *message_fmt = "gcd(%lu, %lu)";
+> > +       const struct test_case *test_param = test->param_value;
+> > +
+> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> > +                           gcd(test_param->a, test_param->b),
+> > +                           message_fmt, test_param->a,
+> > +                           test_param->b);
+> > +
+> > +       if (test_param->a == test_param->b)
+> > +               return;
+> > +
+> > +       /* gcd(a,b) == gcd(b,a) */
+> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> > +                           gcd(test_param->b, test_param->a),
+> > +                           message_fmt, test_param->b,
+> > +                           test_param->a);
+> > +}
+> > +
+> > +static struct test_case lcm_cases[] = {
+> > +       {
+> > +               .a = 0, .b = 0,
+> > +               .result = 0,
+> > +       },
+> > +       {
+> > +               .a = 0, .b = 1,
+> > +               .result = 0,
+> > +       },
+> > +       {
+> > +               .a = 1, .b = 2,
+> > +               .result = 2,
+> > +       },
+> > +       {
+> > +               .a = 2, .b = 2,
+> > +               .result = 2,
+> > +       },
+> > +       {
+> > +               .a = 3 * 5, .b = 3 * 7,
+> > +               .result = 3 * 5 * 7,
+> > +       },
+> > +};
+> > +
+> > +KUNIT_ARRAY_PARAM(lcm, lcm_cases, NULL);
+> > +
+> > +static void lcm_test(struct kunit *test)
+> > +{
+> > +       const char *message_fmt = "lcm(%lu, %lu)";
+> > +       const struct test_case *test_param = test->param_value;
+> > +
+> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> > +                           lcm(test_param->a, test_param->b),
+> > +                           message_fmt, test_param->a,
+> > +                           test_param->b);
+> > +
+> > +       if (test_param->a == test_param->b)
+> > +               return;
+> > +
+> > +       /* lcm(a,b) == lcm(b,a) */
+> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> > +                           lcm(test_param->b, test_param->a),
+> > +                           message_fmt, test_param->b,
+> > +                           test_param->a);
+> > +}
+> > +
+> > +struct u32_test_case {
+> > +       u32 a, b;
+> > +       u32 result;
+> > +};
+> > +
+> > +static struct u32_test_case reciprocal_div_cases[] = {
+> > +       {
+> > +               .a = 0, .b = 1,
+> > +               .result = 0,
+> > +       },
+> > +       {
+> > +               .a = 42, .b = 20,
+> > +               .result = 2,
+> > +       },
+> > +       {
+> > +               .a = 42, .b = 9999,
+> > +               .result = 0,
+> > +       },
+> > +       {
+> > +               .a = (1 << 16), .b = (1 << 14),
+> > +               .result = 1 << 2,
+> > +       },
+> > +};
+> > +
+> > +KUNIT_ARRAY_PARAM(reciprocal_div, reciprocal_div_cases, NULL);
+>
+> Is there a reason this test is using KUNIT_EXPECT_EQ_MSG() rather than
+> a get_desc function in KUNIT_ARRAY_PARAM()? I can sort-of see how the
+> former is a little simpler, so I'm not opposed to keeping it as-is,
+> but it's nice to have KUnit aware of a nicer name for the parameter if
+> all else is equal.
+> (I think there's a stronger case for keeping the gcd/lcm tests as is
+> because they actually have two checks per parameter, but even then,
+> it's not absurdly silly. And it'd be possible to have both a get_desc
+> function and use EXPECT_..._MSG() to get the best of both worlds,
+> albeit with twice as much work.)
+
+I can add in the get_desc for it if you want.
+
+That's partly a relic of the previous versions of this patchset where
+I reused the case arrays for the unary funcs as well.
+But now the unary use case has disappeared and we only need to write
+one get_desc.
+
+But yeah, given it can test two calls of gcd, I've opted to keep it
+using _MSG().
+And I figured I'd keep the reciprocal_div test the same for
+consistency (aka, I just copy-pasted it from gcd).
+
+
+
+
+>
+> > +
+> > +static void reciprocal_div_test(struct kunit *test)
+> > +{
+> > +       const struct u32_test_case *test_param = test->param_value;
+> > +       struct reciprocal_value rv = reciprocal_value(test_param->b);
+> > +
+> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> > +                           reciprocal_divide(test_param->a, rv),
+> > +                           "reciprocal_divide(%u, %u)",
+> > +                           test_param->a, test_param->b);
+> > +}
+> > +
+> > +static void reciprocal_scale_test(struct kunit *test)
+> > +{
+> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(0u, 100), 0u);
+> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(1u, 100), 0u);
+> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 4, 1 << 28), 1u);
+> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 16, 1 << 28), 1u << 12);
+> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(~0u, 1 << 28), (1u << 28) - 1);
+> > +}
+> > +
+> > +static struct kunit_case math_test_cases[] = {
+> > +       KUNIT_CASE(abs_test),
+> > +       KUNIT_CASE(int_sqrt_test),
+> > +       KUNIT_CASE(round_up_test),
+> > +       KUNIT_CASE(round_down_test),
+> > +       KUNIT_CASE(div_round_up_test),
+> > +       KUNIT_CASE(div_round_closest_test),
+> > +       KUNIT_CASE_PARAM(gcd_test, gcd_gen_params),
+> > +       KUNIT_CASE_PARAM(lcm_test, lcm_gen_params),
+> > +       KUNIT_CASE_PARAM(reciprocal_div_test, reciprocal_div_gen_params),
+> > +       KUNIT_CASE(reciprocal_scale_test),
 > > +       {}
 > > +};
 > > +
-> > +static struct kunit_suite executor_test_suite =3D {
-> > +       .name =3D "kunit_executor_test",
-> > +       .test_cases =3D executor_test_cases,
+> > +static struct kunit_suite math_test_suite = {
+> > +       .name = "lib-math",
+> > +       .test_cases = math_test_cases,
 > > +};
 > > +
-> > +kunit_test_suites(&executor_test_suite);
+> > +kunit_test_suites(&math_test_suite);
 > > +
-> > +/* Test helpers */
-> > +
-> > +static void kfree_res_free(struct kunit_resource *res)
-> > +{
-> > +       kfree(res->data);
-> > +}
-> > +
-> > +/* Use the resource API to register a call to kfree(to_free).
-> > + * Since we never actually use the resource, it's safe to use on const=
- data.
-> > + */
-> > +static void kfree_at_end(struct kunit *test, const void *to_free)
-> > +{
-> > +       /* kfree() handles NULL already, but avoid allocating a no-op c=
-leanup. */
-> > +       if (IS_ERR_OR_NULL(to_free))
-> > +               return;
-> > +       kunit_alloc_and_get_resource(test, NULL, kfree_res_free, GFP_KE=
-RNEL,
-> > +                                    (void *)to_free);
-> > +}
->
-> This actually seems useful enough to move out of this test and have as
-> part of the KUnit framework proper. Admittedly, I normally am very
-> sceptical about doing this when there's only one user, but this does
-> seem more obviously useful than most things. As a bonus, it could
-> reuse the kunit_kmalloc_free() function, rather than having its own
-> kfree_res_free() helper.
-
-I'm still a bit more on the fence about it, leaning towards not adding
-it into KUnit.
-I'm not too sure how much a plain `kfree()` would be needed outside of
-tests, and I know there's plenty of variant xxxfree(void *) functions.
-
-So a more generic form like [2] might be useful, but...
-
-By my count, we have ~100 (this is >=3D the actual # since it double
-counts decls+defs)
-$ ag --nomultiline 'void .*free\((const )?void \*[^,]+\)' | wc -l
-139
-
-Sample output to make sure the regex works:
-$ ag --nomultiline 'void .*free\((const )?void \*[^,]+\)' | head -5
-arch/parisc/boot/compressed/misc.c:213:void free(void *ptr)
-arch/powerpc/sysdev/fsl_85xx_cache_sram.c:59:void
-mpc85xx_cache_sram_free(void *ptr)
-arch/powerpc/boot/simple_alloc.c:83:static void simple_free(void *ptr)
-arch/powerpc/boot/ops.h:222:static inline void free(void *ptr)
-arch/powerpc/include/asm/fsl_85xx_cache_sram.h:31:extern void
-mpc85xx_cache_sram_free(void *ptr);
-
-But hmm, it seems like non-const is far more common than `const void *`.
-Looking at a few, they really should be `const void *`, sigh...
-We could cast away the differences, but that feels a bit iffy in the
-case where the function might actually need them to be non-const.
-
-So to do that "properly", I think we need a const and non-const
-version of the interface?
-If so, I don't think that's justified quite yet.
-
-[2] more generic interface
-struct kunit_cleanup_res {
-        void (*cleanup)(const void *);
-        const void *data;
-};
-
-static void kunit_cleanup_res(struct kunit_resource *res) {
-        struct kunit_cleanup_res *c =3D res->data;
-        c->cleanup(c->data);
-};
-
-static void kunit_register_cleanup(struct kunit *test, void
-(*cleanup)(const void *), const void *data)
-{
-        struct kunit_cleanup_res *res;
-
-        if (IS_ERR_OR_NULL(data))
-                return;
-
-        res =3D kunit_kmalloc(test, sizeof(*res), GFP_KERNEL);
-        res->cleanup =3D cleanup;
-        res->data =3D data;
-
-        kunit_alloc_and_get_resource(test, NULL, kunit_cleanup_res,
-GFP_KERNEL, res);
-}
-
-static void kfree_at_end(struct kunit *test, const void *to_free)
-{
-        kunit_register_cleanup(test, kfree, to_free);
-
-}
-
->
-> > +
-> > +static struct kunit_suite *alloc_fake_suite(struct kunit *test,
-> > +                                           const char *suite_name)
-> > +{
-> > +       struct kunit_suite *suite;
-> > +
-> > +       /* We normally never expect to allocate suites, hence the non-c=
-onst cast. */
-> > +       suite =3D kunit_kzalloc(test, sizeof(*suite), GFP_KERNEL);
-> > +       strncpy((char *)suite->name, suite_name, sizeof(suite->name));
-> > +
-> > +       return suite;
-> > +}
+> > +MODULE_LICENSE("GPL v2");
 > >
-> > base-commit: 1678e493d530e7977cce34e59a86bb86f3c5631e
+> > base-commit: 4fa56ad0d12e24df768c98bffe9039f915d1bc02
 > > --
 > > 2.31.1.295.g9ea45b61b8-goog
 > >
