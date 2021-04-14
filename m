@@ -2,483 +2,404 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A233135EA05
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 02:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FACC35EA17
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 02:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348858AbhDNAdf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Apr 2021 20:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S1348871AbhDNApt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Apr 2021 20:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348320AbhDNAdf (ORCPT
+        with ESMTP id S1348870AbhDNAps (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Apr 2021 20:33:35 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B014DC061574
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 17:33:14 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id a11so16879542ioo.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 17:33:14 -0700 (PDT)
+        Tue, 13 Apr 2021 20:45:48 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2530DC061756
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 17:45:28 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id p68so11412078ybg.20
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 17:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ajkY9cSvM0yJXBaUdfH+EY6hPA2iU5BvpjfgTOX51Fk=;
-        b=H/wsEyTwh3fVtfXOc81Q37NwyeheY5mjBR6Uvlzh0UYMnxEHIMGsTJ0qcvbaInhgJc
-         HnnScWvpxipVGxugIaipkfttKD0HHeWYixRsfHtkRfFwOvdX/Qx59YWEFMsNfmBfYz46
-         oK6GXu998Y3aVddI5gOMlrI+4xxUb2eDbfiAjDgj6leP2emIRJ2HtkhHTFg6qJ1u+WMl
-         sDEs3xJbMDXMtVSqF3Wgs8rsS4sDcXvm4Uvu68+3peKDwmk1VLatWoqzLJSAmMVQlRES
-         YNee2BQVn+nPG7oW/m/0Omix+YMMA+000P7BPmftBVQxL8hfgh76B3nBi4X7B1Vy7cex
-         nH5Q==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=xhCRcmRsYZrFq9cFzv1OlKaPXaHIqcMQ5sWeQoRqILA=;
+        b=fiEej1ZUdFV8ukf9l2FYvWN4MqbRsR1t7xr20zPlK20ZiwWuiD3/dRL69rwv/5MW6L
+         eio9F/Dp2uidGIaLsjWMaOvksmHn2H/WehFT4Vd0QTV18t0Ht3mYSzHb8QhmCw+0xEJ7
+         ohOBv35PH40WL5ewuLEBkjzjrY9qozwaFiOe1W2uYFyU6xXDz95h809CatDEMuw027ea
+         azEqKGj5oFpuQqEGA5razD8h+QhgwaWz3dpA7GVOGhQ4j6StC9/nahpRTeFcqZ/vqYEl
+         TpwEAiUrQoe/4IWiD5l4SVsjFEQzfJJF1+WLRr2VAGmsgOdDmFM04ZGi1TXDBj6mGW8A
+         6kOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ajkY9cSvM0yJXBaUdfH+EY6hPA2iU5BvpjfgTOX51Fk=;
-        b=RerAeXgclUKEdOSwlX3RSWRB1B3FEVwQDcmVJPC7+5gGyCnGFMT2/K8cWeslKscIXV
-         pK8IVyam2HmdqRQ7WC6flVWhI+xIvGyDj/aM/zDbrQph1v16jt6pNsirtjfJiLd1XoKp
-         HTPjE8oJ7mU7tw8q72pmf1jDuSI/rqPfmieGcvvECW4mb3EPBjtMPGXQIJccjoe4lJEp
-         cP2bq+HYmPYH5IK0c8riYOU66E6bcNewdPon/mbbW4jq4TluXvvBkLzw6DmnC0IyTe78
-         PpHfGzusuk/QT2W5R/UyyWS9r7yYAUdIKs+h8vlLJZQ3GyEpDSs1T7MN28PuDNCd3c2R
-         mgUA==
-X-Gm-Message-State: AOAM531PCZR5200FC3bWaAK9Pr1Bl3phkb3Wv7swpLNtsNKbkHLF7Yay
-        LpYvB/uWFWJRkIUWkd/V2avKFxuEBo5a5AY1Yqg/EA==
-X-Google-Smtp-Source: ABdhPJwOKqsKv+OAXpb8uIShaFRPB3HxM8MSdwBmCP+iucCaLStLkTNLQ7R4xq+nOGbZ+syDNvZNR+vKp305VmP2cNQ=
-X-Received: by 2002:a6b:fa14:: with SMTP id p20mr27435380ioh.168.1618360393909;
- Tue, 13 Apr 2021 17:33:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210412190715.555883-1-dlatypov@google.com> <CABVgOSnn1WYyPspo6xu2Dua_ryk0xsRqMpE-OTnvW4q6gG7Ykg@mail.gmail.com>
-In-Reply-To: <CABVgOSnn1WYyPspo6xu2Dua_ryk0xsRqMpE-OTnvW4q6gG7Ykg@mail.gmail.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=xhCRcmRsYZrFq9cFzv1OlKaPXaHIqcMQ5sWeQoRqILA=;
+        b=bcxxrmeA1J4k/BZMtcWYxJdCnTy6T6+8w9UWmVHNSFW4G22tyoHT9eD/Kbh27I7u2I
+         uhUctaIeGRjiwkrKI8Ilfi4qBvD+K1wbJPvtdw6wIq6AKXW7XsJNnAgnoEnUBWOjZQAl
+         1oIEiK28YkYvpe1hhqRWxRUn+Lhjdd2RG1K7UEOW+b07Y4pSPrrdd1QfAdEwrkewEUOl
+         ADu9D/hJECJmWBXzjE2AfJhBf4sQOPfAHfsJXEXZHfidhxhkqfqQKWC08jVMvCc8WKop
+         qDMgnsSB3rOXpLs10l3NhDmjM+g4QAYx9wypEwGkmkdcx7CK2ynDdrtuDuiqmn6tcaHD
+         qXAA==
+X-Gm-Message-State: AOAM5334O71Gpe355pxdu6iGsNXbGPuiTMckbqMXTSk8f7bI1BWrfaFW
+        WXE/iaAhmudq9/ToQOTRnFBSkfEvgxdUHw==
+X-Google-Smtp-Source: ABdhPJzMqTMwbgaZg2z4PAxiw4IlZHE11wyHp7rpfvTLYoe8aK/YHSJDyNj8hbFgRipz6dTO5DCye70SArRgCA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:9481:8203:e7dc:46ec])
+ (user=dlatypov job=sendgmr) by 2002:a25:3c01:: with SMTP id
+ j1mr20466421yba.176.1618361127273; Tue, 13 Apr 2021 17:45:27 -0700 (PDT)
+Date:   Tue, 13 Apr 2021 17:45:18 -0700
+Message-Id: <20210414004518.1116248-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
+Subject: [PATCH v3] Documentation: kunit: add tips for running KUnit
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 13 Apr 2021 17:33:02 -0700
-Message-ID: <CAGS_qxrD2+noEy7sF4bm1A_TBKuH7T_VWtpjvAppZeJk4098_w@mail.gmail.com>
-Subject: Re: [PATCH v5] lib: add basic KUnit test for lib/math
-To:     David Gow <davidgow@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+To:     brendanhiggins@google.com
+Cc:     davidgow@google.com, alan.maguire@oracle.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 12, 2021 at 11:41 PM David Gow <davidgow@google.com> wrote:
->
-> On Tue, Apr 13, 2021 at 3:07 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > Add basic test coverage for files that don't require any config options:
-> > * part of math.h (what seem to be the most commonly used macros)
-> > * gcd.c
-> > * lcm.c
-> > * int_sqrt.c
-> > * reciprocal_div.c
-> > (Ignored int_pow.c since it's a simple textbook algorithm.)
-> >
-> > These tests aren't particularly interesting, but they
-> > * provide short and simple examples of parameterized tests
-> > * provide a place to add tests for any new files in this dir
-> > * are written so adding new test cases to cover edge cases should be easy
-> >   * looking at code coverage, we hit all the branches in the .c files
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
->
-> This looks good to me. A few comments/observations below, but nothing
-> that I think should actually block this.
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
-> -- David
->
-> > ---
-> > Changes since v4:
-> > * add in test cases for some math.h macros (abs, round_up/round_down,
-> >   div_round_down/closest)
-> > * use parameterized testing less to keep things terser
-> >
-> > Changes since v3:
-> > * fix `checkpatch.pl --strict` warnings
-> > * add test cases for gcd(0,0) and lcm(0,0)
-> > * minor: don't test both gcd(a,b) and gcd(b,a) when a == b
-> >
-> > Changes since v2: mv math_test.c => math_kunit.c
-> >
-> > Changes since v1:
-> > * Rebase and rewrite to use the new parameterized testing support.
-> > * misc: fix overflow in literal and inline int_sqrt format string.
-> > * related: commit 1f0e943df68a ("Documentation: kunit: provide guidance
-> > for testing many inputs") was merged explaining the patterns shown here.
-> >   * there's an in-flight patch to update it for parameterized testing.
-> >
-> > v1: https://lore.kernel.org/lkml/20201019224556.3536790-1-dlatypov@google.com/
-> > ---
-> >  lib/math/Kconfig      |   5 +
-> >  lib/math/Makefile     |   2 +
-> >  lib/math/math_kunit.c | 264 ++++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 271 insertions(+)
-> >  create mode 100644 lib/math/math_kunit.c
-> >
-> > diff --git a/lib/math/Kconfig b/lib/math/Kconfig
-> > index f19bc9734fa7..6ba8680439c1 100644
-> > --- a/lib/math/Kconfig
-> > +++ b/lib/math/Kconfig
-> > @@ -15,3 +15,8 @@ config PRIME_NUMBERS
-> >
-> >  config RATIONAL
-> >         bool
-> > +
-> > +config MATH_KUNIT_TEST
-> > +       tristate "KUnit test for lib/math" if !KUNIT_ALL_TESTS
-> > +       default KUNIT_ALL_TESTS
-> > +       depends on KUNIT
->
-> This could have a description of the test and KUnit here, as mentioned
-> in the style guide doc:
-> https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kconfig-entries
->
-> (I think it's sufficiently self explanatory that it's not essential,
-> but it could be nice to have a more detailed description of the things
-> being tested than just "lib/math".)
->
+This is long overdue.
 
-Done. I've left off the details about what the test tests so we have
-less places to go and update if/when new tests are added.
+There are several things that aren't nailed down (in-tree
+.kunitconfig's), or partially broken (GCOV on UML), but having them
+documented, warts and all, is better than having nothing.
 
-> > diff --git a/lib/math/Makefile b/lib/math/Makefile
-> > index be6909e943bd..30abb7a8d564 100644
-> > --- a/lib/math/Makefile
-> > +++ b/lib/math/Makefile
-> > @@ -4,3 +4,5 @@ obj-y += div64.o gcd.o lcm.o int_pow.o int_sqrt.o reciprocal_div.o
-> >  obj-$(CONFIG_CORDIC)           += cordic.o
-> >  obj-$(CONFIG_PRIME_NUMBERS)    += prime_numbers.o
-> >  obj-$(CONFIG_RATIONAL)         += rational.o
-> > +
-> > +obj-$(CONFIG_MATH_KUNIT_TEST)  += math_kunit.o
-> > diff --git a/lib/math/math_kunit.c b/lib/math/math_kunit.c
-> > new file mode 100644
-> > index 000000000000..80a087a32884
-> > --- /dev/null
-> > +++ b/lib/math/math_kunit.c
-> > @@ -0,0 +1,264 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Simple KUnit suite for math helper funcs that are always enabled.
-> > + *
-> > + * Copyright (C) 2020, Google LLC.
-> > + * Author: Daniel Latypov <dlatypov@google.com>
-> > + */
-> > +
-> > +#include <kunit/test.h>
-> > +#include <linux/gcd.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/lcm.h>
-> > +#include <linux/reciprocal_div.h>
-> > +
-> > +static void abs_test(struct kunit *test)
-> > +{
->
-> There's something weird about taking the absolute values of char
-> literals. I'm not sure if it's better to case integer literals (like
-> with 'short' below), or keep it as-is.
+This covers a bunch of the more recent features
+* kunit_filter_glob
+* kunit.py run --kunitconfig
+* slightly more detail on building tests as modules
+* CONFIG_KUNIT_DEBUGFS
 
-I just thought it was amusing :)
-Converting it to be like the short test below.
+By my count, the only headline features now not mentioned are the KASAN
+integration and KernelCI json output support (kunit.py run --json).
 
-> > +       KUNIT_EXPECT_EQ(test, abs('\0'), '\0');
-> > +       KUNIT_EXPECT_EQ(test, abs('a'), 'a');
-> > +       KUNIT_EXPECT_EQ(test, abs(-'a'), 'a');
-> > +
-> > +       /* The expression in the macro is actually promoted to an int. */
-> > +       KUNIT_EXPECT_EQ(test, abs((short)0),  0);
-> > +       KUNIT_EXPECT_EQ(test, abs((short)42),  42);
-> > +       KUNIT_EXPECT_EQ(test, abs((short)-42),  42);
-> > +
-> > +       KUNIT_EXPECT_EQ(test, abs(0),  0);
-> > +       KUNIT_EXPECT_EQ(test, abs(42),  42);
-> > +       KUNIT_EXPECT_EQ(test, abs(-42),  42);
-> > +
-> > +       KUNIT_EXPECT_EQ(test, abs(0L), 0L);
-> > +       KUNIT_EXPECT_EQ(test, abs(42L), 42L);
-> > +       KUNIT_EXPECT_EQ(test, abs(-42L), 42L);
-> > +
-> > +       KUNIT_EXPECT_EQ(test, abs(0LL), 0LL);
-> > +       KUNIT_EXPECT_EQ(test, abs(42LL), 42LL);
-> > +       KUNIT_EXPECT_EQ(test, abs(-42LL), 42LL);
-> > +
-> > +       /* Unsigned types get casted to signed. */
-> > +       KUNIT_EXPECT_EQ(test, abs(0ULL), 0LL);
-> > +       KUNIT_EXPECT_EQ(test, abs(42ULL), 42LL);
->
-> A part of me is curious what the result is for -0x80000000, but I
-> guess that's not defined, so shouldn't be tested. :-)
+And then it also discusses how to get code coverage reports under UML
+and non-UML since this is a question people have repeatedly asked.
 
-abs(-42ULL) == 42, but the compiler spits out a warning.
+Non-UML coverage collection is no different from normal, but we should
+probably explicitly call this out.
 
-> > +}
-> > +
-> > +static void int_sqrt_test(struct kunit *test)
-> > +{
-> > +       KUNIT_EXPECT_EQ(test, int_sqrt(0UL), 0UL);
-> > +       KUNIT_EXPECT_EQ(test, int_sqrt(1UL), 1UL);
-> > +       KUNIT_EXPECT_EQ(test, int_sqrt(4UL), 2UL);
-> > +       KUNIT_EXPECT_EQ(test, int_sqrt(5UL), 2UL);
-> > +       KUNIT_EXPECT_EQ(test, int_sqrt(8UL), 2UL);
-> > +       KUNIT_EXPECT_EQ(test, int_sqrt(1UL << 30), 1UL << 15);
-> > +}
-> > +
->
-> _Maybe_ it's worth a comment here that round_up (and round_down) only
-> support rounding to powers of two?
-> (Either that, or also test roundup/rounddown to provide the contrast.)
+As for UML, I was able to get it working again with two small hacks.*
+E.g. with CONFIG_KUNIT=y && CONFIG_KUNIT_ALL_TESTS=y
+  Overall coverage rate:
+    lines......: 15.1% (18294 of 120776 lines)
+    functions..: 16.8% (1860 of 11050 functions)
 
-Adding in those test cases for v6.
-Andy had asked for those as well but I had forgotten them by the time
-I sent out v5.
+Note: this doesn't document --alltests since this is not stable yet.
+Hopefully being run more frequently as part of KernelCI will help...
 
->
-> > +static void round_up_test(struct kunit *test)
-> > +{
-> > +       KUNIT_EXPECT_EQ(test, round_up(0, 1), 0);
-> > +       KUNIT_EXPECT_EQ(test, round_up(1, 2), 2);
-> > +       KUNIT_EXPECT_EQ(test, round_up(3, 2), 4);
-> > +       KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 2), 1 << 30);
-> > +       KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 1 << 29), 1 << 30);
-> > +}
-> > +
-> > +static void round_down_test(struct kunit *test)
-> > +{
-> > +       KUNIT_EXPECT_EQ(test, round_down(0, 1), 0);
-> > +       KUNIT_EXPECT_EQ(test, round_down(1, 2), 0);
-> > +       KUNIT_EXPECT_EQ(test, round_down(3, 2), 2);
-> > +       KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 2), (1 << 30) - 2);
-> > +       KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 1 << 29), 1 << 29);
-> > +}
-> > +
-> > +static void div_round_up_test(struct kunit *test)
-> > +{
-> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(0, 1), 0);
-> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(20, 10), 2);
-> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 10), 3);
-> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 20), 2);
-> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 99), 1);
-> > +}
-> > +
-> > +static void div_round_closest_test(struct kunit *test)
-> > +{
-> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(0, 1), 0);
-> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(20, 10), 2);
-> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(21, 10), 2);
-> > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(25, 10), 3);
-> > +}
-> > +
-> > +/* Generic test case for unsigned long inputs. */
-> > +struct test_case {
-> > +       unsigned long a, b;
-> > +       unsigned long result;
-> > +};
-> > +
-> > +static struct test_case gcd_cases[] = {
-> > +       {
-> > +               .a = 0, .b = 0,
-> > +               .result = 0,
-> > +       },
-> > +       {
-> > +               .a = 0, .b = 1,
-> > +               .result = 1,
-> > +       },
-> > +       {
-> > +               .a = 2, .b = 2,
-> > +               .result = 2,
-> > +       },
-> > +       {
-> > +               .a = 2, .b = 4,
-> > +               .result = 2,
-> > +       },
-> > +       {
-> > +               .a = 3, .b = 5,
-> > +               .result = 1,
-> > +       },
-> > +       {
-> > +               .a = 3 * 9, .b = 3 * 5,
-> > +               .result = 3,
-> > +       },
-> > +       {
-> > +               .a = 3 * 5 * 7, .b = 3 * 5 * 11,
-> > +               .result = 15,
-> > +       },
-> > +       {
-> > +               .a = 1 << 21,
-> > +               .b = (1 << 21) - 1,
-> > +               .result = 1,
-> > +       },
-> > +};
-> > +
-> > +KUNIT_ARRAY_PARAM(gcd, gcd_cases, NULL);
-> > +
-> > +static void gcd_test(struct kunit *test)
-> > +{
-> > +       const char *message_fmt = "gcd(%lu, %lu)";
-> > +       const struct test_case *test_param = test->param_value;
-> > +
-> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > +                           gcd(test_param->a, test_param->b),
-> > +                           message_fmt, test_param->a,
-> > +                           test_param->b);
-> > +
-> > +       if (test_param->a == test_param->b)
-> > +               return;
-> > +
-> > +       /* gcd(a,b) == gcd(b,a) */
-> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > +                           gcd(test_param->b, test_param->a),
-> > +                           message_fmt, test_param->b,
-> > +                           test_param->a);
-> > +}
-> > +
-> > +static struct test_case lcm_cases[] = {
-> > +       {
-> > +               .a = 0, .b = 0,
-> > +               .result = 0,
-> > +       },
-> > +       {
-> > +               .a = 0, .b = 1,
-> > +               .result = 0,
-> > +       },
-> > +       {
-> > +               .a = 1, .b = 2,
-> > +               .result = 2,
-> > +       },
-> > +       {
-> > +               .a = 2, .b = 2,
-> > +               .result = 2,
-> > +       },
-> > +       {
-> > +               .a = 3 * 5, .b = 3 * 7,
-> > +               .result = 3 * 5 * 7,
-> > +       },
-> > +};
-> > +
-> > +KUNIT_ARRAY_PARAM(lcm, lcm_cases, NULL);
-> > +
-> > +static void lcm_test(struct kunit *test)
-> > +{
-> > +       const char *message_fmt = "lcm(%lu, %lu)";
-> > +       const struct test_case *test_param = test->param_value;
-> > +
-> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > +                           lcm(test_param->a, test_param->b),
-> > +                           message_fmt, test_param->a,
-> > +                           test_param->b);
-> > +
-> > +       if (test_param->a == test_param->b)
-> > +               return;
-> > +
-> > +       /* lcm(a,b) == lcm(b,a) */
-> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > +                           lcm(test_param->b, test_param->a),
-> > +                           message_fmt, test_param->b,
-> > +                           test_param->a);
-> > +}
-> > +
-> > +struct u32_test_case {
-> > +       u32 a, b;
-> > +       u32 result;
-> > +};
-> > +
-> > +static struct u32_test_case reciprocal_div_cases[] = {
-> > +       {
-> > +               .a = 0, .b = 1,
-> > +               .result = 0,
-> > +       },
-> > +       {
-> > +               .a = 42, .b = 20,
-> > +               .result = 2,
-> > +       },
-> > +       {
-> > +               .a = 42, .b = 9999,
-> > +               .result = 0,
-> > +       },
-> > +       {
-> > +               .a = (1 << 16), .b = (1 << 14),
-> > +               .result = 1 << 2,
-> > +       },
-> > +};
-> > +
-> > +KUNIT_ARRAY_PARAM(reciprocal_div, reciprocal_div_cases, NULL);
->
-> Is there a reason this test is using KUNIT_EXPECT_EQ_MSG() rather than
-> a get_desc function in KUNIT_ARRAY_PARAM()? I can sort-of see how the
-> former is a little simpler, so I'm not opposed to keeping it as-is,
-> but it's nice to have KUnit aware of a nicer name for the parameter if
-> all else is equal.
-> (I think there's a stronger case for keeping the gcd/lcm tests as is
-> because they actually have two checks per parameter, but even then,
-> it's not absurdly silly. And it'd be possible to have both a get_desc
-> function and use EXPECT_..._MSG() to get the best of both worlds,
-> albeit with twice as much work.)
+*Using gcc/gcov-6 and not using uml_abort() in os_dump_core().
+I've documented these hacks in "Notes" but left TODOs for
+brendanhiggins@google.com who tracked down the runtime issue in GCC.
+To be clear: these are not issues specific to KUnit, but rather to UML.
 
-I can add in the get_desc for it if you want.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+v2 -> v3:
+* Suggest --make_options=CC=/usr/bin/gcc-6 instead of manually editing
+kunit_kernel.py
+* update instructions on how to remove uml_abort() call
 
-That's partly a relic of the previous versions of this patchset where
-I reused the case arrays for the unary funcs as well.
-But now the unary use case has disappeared and we only need to write
-one get_desc.
+v1 -> v2:
+Fix typos, drop --alltests, changed wordiing on config fragments.
+---
+ Documentation/dev-tools/kunit/index.rst       |   1 +
+ .../dev-tools/kunit/running_tips.rst          | 258 ++++++++++++++++++
+ Documentation/dev-tools/kunit/start.rst       |   2 +
+ 3 files changed, 261 insertions(+)
+ create mode 100644 Documentation/dev-tools/kunit/running_tips.rst
 
-But yeah, given it can test two calls of gcd, I've opted to keep it
-using _MSG().
-And I figured I'd keep the reciprocal_div test the same for
-consistency (aka, I just copy-pasted it from gcd).
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+index 848478838347..7f7cf8d2ab20 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -14,6 +14,7 @@ KUnit - Unit Testing for the Linux Kernel
+ 	style
+ 	faq
+ 	tips
++	running_tips
+ 
+ What is KUnit?
+ ==============
+diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
+new file mode 100644
+index 000000000000..e2e9af711d1b
+--- /dev/null
++++ b/Documentation/dev-tools/kunit/running_tips.rst
+@@ -0,0 +1,258 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++============================
++Tips For Running KUnit Tests
++============================
++
++Using ``kunit.py run`` ("kunit tool")
++=====================================
++
++Running from any directory
++--------------------------
++
++It can be handy to create a bash function like:
++
++.. code-block:: bash
++
++	function run_kunit() {
++	  ( cd "$(git rev-parse --show-toplevel)" && ./tools/testing/kunit/kunit.py run $@ )
++	}
++
++.. note::
++	Early versions of ``kunit.py`` (before 5.6) didn't work unless run from
++	the kernel root, hence the use of a subshell and ``cd``.
++
++Running a subset of tests
++-------------------------
++
++``kunit.py run`` accepts an optional glob argument to filter tests. Currently
++this only matches against suite names, but this may change in the future.
++
++Say that we wanted to run the sysctl tests, we could do so via:
++
++.. code-block:: bash
++
++	$ echo -e 'CONFIG_KUNIT=y\nCONFIG_KUNIT_ALL_TESTS=y' > .kunit/.kunitconfig
++	$ ./tools/testing/kunit/kunit.py run 'sysctl*'
++
++We're paying the cost of building more tests than we need this way, but it's
++easier than fiddling with ``.kunitconfig`` files or commenting out
++``kunit_suite``'s.
++
++However, if we wanted to define a set of tests in a less ad hoc way, the next
++tip is useful.
++
++Defining a set of tests
++-----------------------
++
++``kunit.py run`` (along with ``build``, and ``config``) supports a
++``--kunitconfig`` flag. So if you have a set of tests that you want to run on a
++regular basis (especially if they have other dependencies), you can create a
++specific ``.kunitconfig`` for them.
++
++E.g. kunit has one for its tests:
++
++.. code-block:: bash
++
++	$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit/.kunitconfig
++
++Alternatively, if you're following the convention of naming your
++file ``.kunitconfig``, you can just pass in the dir, e.g.
++
++.. code-block:: bash
++
++	$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit
++
++.. note::
++	This is a relatively new feature (5.12+) so we don't have any
++	conventions yet about on what files should be checked in versus just
++	kept around locally. It's up to you and your maintainer to decide if a
++	config is useful enough to submit (and therefore have to maintain).
++
++.. note::
++	Having ``.kunitconfig`` fragments in a parent and child directory is
++	iffy. There's discussion about adding an "import" statement in these
++	files to make it possible to have a top-level config run tests from all
++	child directories. But that would mean ``.kunitconfig`` files are no
++	longer just simple .config fragments.
++
++	One alternative would be to have kunit tool recursively combine configs
++	automagically, but tests could theoretically depend on incompatible
++	options, so handling that would be tricky.
++
++Generating code coverage reports under UML
++------------------------------------------
++
++.. note::
++	TODO(brendanhiggins@google.com): There are various issues with UML and
++	versions of gcc 7 and up. You're likely to run into missing ``.gcda``
++	files or compile errors. We know one `faulty GCC commit
++	<https://github.com/gcc-mirror/gcc/commit/8c9434c2f9358b8b8bad2c1990edf10a21645f9d>`_
++	but not how we'd go about getting this fixed. The compile errors still
++	need some investigation.
++
++.. note::
++	TODO(brendanhiggins@google.com): for recent versions of Linux
++	(5.10-5.12, maybe earlier), there's a bug with gcov counters not being
++	flushed in UML. This translates to very low (<1%) reported coverage. This is
++	related to the above issue and can be worked around by replacing the
++	one call to ``uml_abort()`` with a plain ``exit()``.
++
++
++This is different from the "normal" way of getting coverage information that is
++documented in Documentation/dev-tools/gcov.rst.
++
++Instead of enabling ``CONFIG_GCOV_KERNEL=y``, we can set these options:
++
++.. code-block:: none
++
++	CONFIG_DEBUG_KERNEL=y
++	CONFIG_DEBUG_INFO=y
++	CONFIG_GCOV=y
++
++
++Putting it together into a copy-pastable sequence of commands:
++
++.. code-block:: bash
++
++	# Append coverage options to the current config
++	$ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
++	$ ./tools/testing/kunit/kunit.py run
++	# Extract the coverage information from the build dir (.kunit/)
++	$ lcov -t "my_kunit_tests" -o coverage.info -c -d .kunit/
++
++	# From here on, it's the same process as with CONFIG_GCOV_KERNEL=y
++	# E.g. can generate an HTML report in a tmp dir like so:
++	$ genhtml -o /tmp/coverage_html coverage.info
++
++
++If your installed version of gcc doesn't work, you can tweak the steps:
++
++.. code-block:: bash
++
++	$ ./tools/testing/kunit/kunit.py run --make_options=CC=/usr/bin/gcc-6
++	$ lcov -t "my_kunit_tests" -o coverage.info -c -d .kunit/ --gcov-tool=/usr/bin/gcov-6
++
++
++Running tests manually
++======================
++
++Running tests without using ``kunit.py run`` is also an important use case.
++Currently it's your only option if you want to test on architectures other than
++UML.
++
++As running the tests under UML is fairly straightforward (configure and compile
++the kernel, run the ``./linux`` binary), this section will focus on testing
++non-UML architectures.
++
++
++Running built-in tests
++----------------------
++
++When setting tests to ``=y``, the tests will run as part of boot and print
++results to dmesg in TAP format. So you just need to add your tests to your
++``.config``, build and boot your kernel as normal.
++
++So if we compiled our kernel with:
++
++.. code-block:: none
++
++	CONFIG_KUNIT=y
++	CONFIG_KUNIT_EXAMPLE_TEST=y
++
++Then we'd see output like this in dmesg signaling the test ran and passed:
++
++.. code-block:: none
++
++	TAP version 14
++	1..1
++	    # Subtest: example
++	    1..1
++	    # example_simple_test: initializing
++	    ok 1 - example_simple_test
++	ok 1 - example
++
++Running tests as modules
++------------------------
++
++Depending on the tests, you can build them as loadable modules.
++
++For example, we'd change the config options from before to
++
++.. code-block:: none
++
++	CONFIG_KUNIT=y
++	CONFIG_KUNIT_EXAMPLE_TEST=m
++
++Then after booting into our kernel, we can run the test via
++
++.. code-block:: none
++
++	$ modprobe kunit-example-test
++
++This will then cause it to print TAP output to stdout.
++
++.. note::
++	The ``modprobe`` will *not* have a non-zero exit code if any test
++	failed (as of 5.13). But ``kunit.py parse`` would, see below.
++
++.. note::
++	You can set ``CONFIG_KUNIT=m`` as well, however, some features will not
++	work and thus some tests might break. Ideally tests would specify they
++	depend on ``KUNIT=y`` in their ``Kconfig``'s, but this is an edge case
++	most test authors won't think about.
++	As of 5.13, the only difference is that ``current->kunit_test`` will
++	not exist.
++
++Pretty-printing results
++-----------------------
++
++You can use ``kunit.py parse`` to parse dmesg for test output and print out
++results in the same familiar format that ``kunit.py run`` does.
++
++.. code-block:: bash
++
++	$ ./tools/testing/kunit/kunit.py parse /var/log/dmesg
++
++
++Retrieving per suite results
++----------------------------
++
++Regardless of how you're running your tests, you can enable
++``CONFIG_KUNIT_DEBUGFS`` to expose per-suite TAP-formatted results:
++
++.. code-block:: none
++
++	CONFIG_KUNIT=y
++	CONFIG_KUNIT_EXAMPLE_TEST=m
++	CONFIG_KUNIT_DEBUGFS=y
++
++The results for each suite will be exposed under
++``/sys/kernel/debug/kunit/<suite>/results``.
++So using our example config:
++
++.. code-block:: bash
++
++	$ modprobe kunit-example-test > /dev/null
++	$ cat /sys/kernel/debug/kunit/example/results
++	... <TAP output> ...
++
++	# After removing the module, the corresponding files will go away
++	$ modprobe -r kunit-example-test
++	$ cat /sys/kernel/debug/kunit/example/results
++	/sys/kernel/debug/kunit/example/results: No such file or directory
++
++Generating code coverage reports
++--------------------------------
++
++See Documentation/dev-tools/gcov.rst for details on how to do this.
++
++The only vaguely KUnit-specific advice here is that you probably want to build
++your tests as modules. That way you can isolate the coverage from tests from
++other code executed during boot, e.g.
++
++.. code-block:: bash
++
++	# Reset coverage counters before running the test.
++	$ echo 0 > /sys/kernel/debug/gcov/reset
++	$ modprobe kunit-example-test
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index 0e65cabe08eb..aa56d7ca6bfb 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -236,5 +236,7 @@ Next Steps
+ ==========
+ *   Check out the :doc:`tips` page for tips on
+     writing idiomatic KUnit tests.
++*   Check out the :doc:`running_tips` page for tips on
++    how to make running KUnit tests easier.
+ *   Optional: see the :doc:`usage` page for a more
+     in-depth explanation of KUnit.
 
+base-commit: de2fcb3e62013738f22bbb42cbd757d9a242574e
+-- 
+2.31.1.295.g9ea45b61b8-goog
 
-
-
->
-> > +
-> > +static void reciprocal_div_test(struct kunit *test)
-> > +{
-> > +       const struct u32_test_case *test_param = test->param_value;
-> > +       struct reciprocal_value rv = reciprocal_value(test_param->b);
-> > +
-> > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > +                           reciprocal_divide(test_param->a, rv),
-> > +                           "reciprocal_divide(%u, %u)",
-> > +                           test_param->a, test_param->b);
-> > +}
-> > +
-> > +static void reciprocal_scale_test(struct kunit *test)
-> > +{
-> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(0u, 100), 0u);
-> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(1u, 100), 0u);
-> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 4, 1 << 28), 1u);
-> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 16, 1 << 28), 1u << 12);
-> > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(~0u, 1 << 28), (1u << 28) - 1);
-> > +}
-> > +
-> > +static struct kunit_case math_test_cases[] = {
-> > +       KUNIT_CASE(abs_test),
-> > +       KUNIT_CASE(int_sqrt_test),
-> > +       KUNIT_CASE(round_up_test),
-> > +       KUNIT_CASE(round_down_test),
-> > +       KUNIT_CASE(div_round_up_test),
-> > +       KUNIT_CASE(div_round_closest_test),
-> > +       KUNIT_CASE_PARAM(gcd_test, gcd_gen_params),
-> > +       KUNIT_CASE_PARAM(lcm_test, lcm_gen_params),
-> > +       KUNIT_CASE_PARAM(reciprocal_div_test, reciprocal_div_gen_params),
-> > +       KUNIT_CASE(reciprocal_scale_test),
-> > +       {}
-> > +};
-> > +
-> > +static struct kunit_suite math_test_suite = {
-> > +       .name = "lib-math",
-> > +       .test_cases = math_test_cases,
-> > +};
-> > +
-> > +kunit_test_suites(&math_test_suite);
-> > +
-> > +MODULE_LICENSE("GPL v2");
-> >
-> > base-commit: 4fa56ad0d12e24df768c98bffe9039f915d1bc02
-> > --
-> > 2.31.1.295.g9ea45b61b8-goog
-> >
