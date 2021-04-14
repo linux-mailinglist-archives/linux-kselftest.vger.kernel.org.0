@@ -2,121 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8EA35EBB3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 06:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795E035ED65
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 08:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbhDNEWt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Apr 2021 00:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S1349275AbhDNGoZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Apr 2021 02:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbhDNEWp (ORCPT
+        with ESMTP id S1346068AbhDNGoT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Apr 2021 00:22:45 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC2EC061756
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 21:22:24 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id a25so8534831ljm.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 21:22:24 -0700 (PDT)
+        Wed, 14 Apr 2021 02:44:19 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F81EC06175F
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 23:43:58 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id h13so1804146qka.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Apr 2021 23:43:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ed47Zap+Jm6v6LkB17Gtao1csFaOpRgN07gt7qnUJFs=;
-        b=aZ03d0rLRWSZ5+99OAhdQg0cUYtUxyoyybB5+jqI/KlDHMssOtMZDLCYjXWC8CVAFT
-         yPJhKktbHXo1vb2Sz3/aWgOm6vSO6ZfBJlp6fh7pPQEdtm94XBqBwJhHuDpvBMjKaAR/
-         0kO1Hn6BZWr/MHyoFno6xXW9eW/JXF3ORSsb0gqSwBWSjirsZ44LMLiEurExACh5w5VA
-         GGLD/vDoFUKdUlo3xKh0sAicAV6cyhWnb0MLOjahDD94dqz4ajPKEKahKjOTKhg1R9NS
-         JYyfl0ogtQjzeNeTkGMncJnomIRUdFi0ZUkWlTgd6uZ56Sk5+F+Z7Lt0wguzJeiHfmHH
-         RjYw==
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=xAItGVctj4Ym5XgJXrEHjFWuIEiXbFDkgH2LTVJTlqw=;
+        b=boogogHOP6aMxYaO4TKu7w6/UT0zb6tK49kFGEqd/tGljpv/chIVdkvDoZiKgvcWl3
+         uD72xEs3pGMozk801LATYIGOzSooQdo333X4M4rD3PNeWeoZ9/oX6LUPDbjvhVvQyG6/
+         nTt5wmIPnMoq8lxe0TYVtm4DE/rQlDzKDa0fCpcwtw5WUsLaifXWcqsMidIkzaY8/9og
+         +s8FqQNRmO6BXRBVpR03kz2epvzqQrKFmi5Hh/Dr9nzx9eIzWvOC83DKTQkse5T5QfKN
+         OwqGrAsqVhMbFN/3vaxP0hsIwcf4UGB3beOYirKF+LBu4y8XLIbOcMpkmguDaeVt3yZa
+         ZVXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ed47Zap+Jm6v6LkB17Gtao1csFaOpRgN07gt7qnUJFs=;
-        b=sbSQCaowLeLdKReL1q+Hiwchb80+bzCMt1FADp78iqQ4pw+voy1WNG2rOtWjov3R3N
-         YKQuZTbiP82KJ4Eg0DcTewxFNJEqXwYGqAa16gcb7Hxcog+V5ypuUUVOPSRGZZBCIiLY
-         aJV4xuESZfZOB4udG03PcfAYq0XFlpMbXOJ7AgUjSg4ISqHYTpsIC1PwteeG77MJ6Uhy
-         kMcTdaTPSfBeJXdWIaThxq5LdimSSjM9bWmscCX6N6EGRMngwrGm0OLtYqrh28UBufcV
-         vN61lrUDaXcoiZ1dcwsi2d6fUYnatTbwKQyu8xA89Id3r/UhTU3u3bXO6y5bcC81KiBb
-         REAQ==
-X-Gm-Message-State: AOAM531GEUQdAlqVuH+zO1MoESTL2v3vglI1LTnLSOlAPyNspKJz0qKd
-        2GXUXi3kZN/ilLBnEavM8TFVIUOv0D+nSrxSHVErTQ==
-X-Google-Smtp-Source: ABdhPJxTX3cikTX/eKxutfvDFFK8lRHmedOT93WY406+DV4r4wz+hxULKlxHSrC312/0Bz/cprPVHNdImzdTdcYPXjo=
-X-Received: by 2002:a2e:9cc2:: with SMTP id g2mr6473922ljj.245.1618374137046;
- Tue, 13 Apr 2021 21:22:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=xAItGVctj4Ym5XgJXrEHjFWuIEiXbFDkgH2LTVJTlqw=;
+        b=t4BxlmzhI+Cjf7Rx95eKDAPxixgBvzXrGkFPBPcFg7qbmFlUvESgGgRXw/WuTL+7RN
+         dV1KeYnvyqAEWwfuLq8n3FVy8+O9bbdyX9hONvE+2HUmILF+iEnVOWrhvUzzkKhMql8a
+         sMZ7w2msb799trFccZAHbIU+t82ToI5MXSXc1hT4A5fuwUdcEYh/syM/G6s1Mvj2BVtF
+         SWRWqwBruUuu0l6/ysSt4Ja0LVdJ0eq9qhJxTz6GbyOXdOvOgxw1nJyBAicdQqPZ1EIv
+         DrSzG9SEojS7YhpfMKBZLrVdfBOM5uBF68g9Coeretw4gt1G+8C7/h6nSHFO+FvTB57P
+         mH4A==
+X-Gm-Message-State: AOAM530SSrBWuBAbfqoc4sWVlXO5rvNha4k87PZ9rE6ADAsLPJOyiFqK
+        PpXXRf4nnaYKZgJpq6rIeZ5vTg==
+X-Google-Smtp-Source: ABdhPJyCbITTz5lmswPHeW0wVM8gnjbv6Zo4xmnNDnf/pa88GLZJNPjvZPoeIsTQcCXPoW3nk85tvw==
+X-Received: by 2002:ae9:e113:: with SMTP id g19mr34615511qkm.480.1618382637457;
+        Tue, 13 Apr 2021 23:43:57 -0700 (PDT)
+Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id x22sm5174625qtq.93.2021.04.13.23.43.55
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Tue, 13 Apr 2021 23:43:57 -0700 (PDT)
+Date:   Tue, 13 Apr 2021 23:43:41 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@eggly.anvils
+To:     Axel Rasmussen <axelrasmussen@google.com>
+cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        Brian Geffon <bgeffon@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v2 1/9] userfaultfd/hugetlbfs: avoid including userfaultfd_k.h
+ in hugetlb.h
+In-Reply-To: <20210413051721.2896915-2-axelrasmussen@google.com>
+Message-ID: <alpine.LSU.2.11.2104132336001.9086@eggly.anvils>
+References: <20210413051721.2896915-1-axelrasmussen@google.com> <20210413051721.2896915-2-axelrasmussen@google.com>
+User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
 MIME-Version: 1.0
-References: <20210414004518.1116248-1-dlatypov@google.com>
-In-Reply-To: <20210414004518.1116248-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 14 Apr 2021 12:22:05 +0800
-Message-ID: <CABVgOSm6VY_vVvjryYc8eAvw7QcNuisP1iesdw4s3Td4Dxo1aw@mail.gmail.com>
-Subject: Re: [PATCH v3] Documentation: kunit: add tips for running KUnit
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 8:45 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> This is long overdue.
->
-> There are several things that aren't nailed down (in-tree
-> .kunitconfig's), or partially broken (GCOV on UML), but having them
-> documented, warts and all, is better than having nothing.
->
-> This covers a bunch of the more recent features
-> * kunit_filter_glob
-> * kunit.py run --kunitconfig
-> * slightly more detail on building tests as modules
-> * CONFIG_KUNIT_DEBUGFS
->
-> By my count, the only headline features now not mentioned are the KASAN
-> integration and KernelCI json output support (kunit.py run --json).
->
-> And then it also discusses how to get code coverage reports under UML
-> and non-UML since this is a question people have repeatedly asked.
->
-> Non-UML coverage collection is no different from normal, but we should
-> probably explicitly call this out.
->
-> As for UML, I was able to get it working again with two small hacks.*
-> E.g. with CONFIG_KUNIT=y && CONFIG_KUNIT_ALL_TESTS=y
->   Overall coverage rate:
->     lines......: 15.1% (18294 of 120776 lines)
->     functions..: 16.8% (1860 of 11050 functions)
->
-> Note: this doesn't document --alltests since this is not stable yet.
-> Hopefully being run more frequently as part of KernelCI will help...
->
-> *Using gcc/gcov-6 and not using uml_abort() in os_dump_core().
-> I've documented these hacks in "Notes" but left TODOs for
-> brendanhiggins@google.com who tracked down the runtime issue in GCC.
-> To be clear: these are not issues specific to KUnit, but rather to UML.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+On Mon, 12 Apr 2021, Axel Rasmussen wrote:
+
+> Minimizing header file inclusion is desirable. In this case, we can do
+> so just by forward declaring the enumeration our signature relies upon.
+> 
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 > ---
+>  include/linux/hugetlb.h | 4 +++-
+>  mm/hugetlb.c            | 1 +
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 09f1fd12a6fa..3f47650ab79b 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -11,7 +11,6 @@
+>  #include <linux/kref.h>
+>  #include <linux/pgtable.h>
+>  #include <linux/gfp.h>
+> -#include <linux/userfaultfd_k.h>
+>  
+>  struct ctl_table;
+>  struct user_struct;
+> @@ -135,6 +134,8 @@ void hugetlb_show_meminfo(void);
+>  unsigned long hugetlb_total_pages(void);
+>  vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+>  			unsigned long address, unsigned int flags);
+> +
+> +enum mcopy_atomic_mode;
 
-I'm very happy with this now: all my issues with the previous versions
-are addressed. I'm particularly excited to have code coverage
-documented somewhere.
+Wrongly placed: the CONFIG_USERFAULTFD=y CONFIG_HUGETLB_PAGE=n build
+fails. Better place it up above with struct ctl_table etc.
 
-Assuming Brendan's happy with the TODOs being there, I think this is
-ready to go.
-
-I also built this with Sphinx and gave it a quick look, and it all
-looks good there as well.
-
-Therefore, this is:
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
+>  #ifdef CONFIG_USERFAULTFD
+>  int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
+>  				struct vm_area_struct *dst_vma,
+> @@ -143,6 +144,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
+>  				enum mcopy_atomic_mode mode,
+>  				struct page **pagep);
+>  #endif /* CONFIG_USERFAULTFD */
+> +
+>  bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
+>  						struct vm_area_struct *vma,
+>  						vm_flags_t vm_flags);
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 54d81d5947ed..b1652e747318 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -40,6 +40,7 @@
+>  #include <linux/hugetlb_cgroup.h>
+>  #include <linux/node.h>
+>  #include <linux/page_owner.h>
+> +#include <linux/userfaultfd_k.h>
+>  #include "internal.h"
+>  
+>  int hugetlb_max_hstate __read_mostly;
+> -- 
+> 2.31.1.295.g9ea45b61b8-goog
+> 
+> 
