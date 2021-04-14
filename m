@@ -2,243 +2,307 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 759BC35EE81
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 09:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAAAA35EF57
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 10:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349738AbhDNHgi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Apr 2021 03:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S1349994AbhDNIPs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Apr 2021 04:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347876AbhDNHgi (ORCPT
+        with ESMTP id S1349992AbhDNIPr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Apr 2021 03:36:38 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BABC061756
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 00:36:17 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id o11so9406087qvh.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 00:36:17 -0700 (PDT)
+        Wed, 14 Apr 2021 04:15:47 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2792C061756
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 01:15:26 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id w30so578036qvf.23
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 01:15:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=GaUGA4fr6Hw6htKmvc7pRm7Mf4SEh3Stb6wYmhoZJYc=;
-        b=t0yPWPJIsk9iay3f2CjEur5aS0g5HrDnPX5DO68Ja7IQekWawUZ544b0fSkQYco7be
-         vnU8kr7YEkZZt0eiWIBefJDSkXm89cJnISEiJnzeLqJ2gYwCKGkqbmo5OEK6ZIU0/65J
-         Z+HFrJbiWfQgfszDKlJzeJHq4TfMBN1/WOyY8irdBKlaajGyw7t2MYab1icBCkowu1DV
-         /U4Cz8JuXbckAMNKyI8IMicKc7kS2vcMomPSJLfPMT9t91R3mnL5QAeEtMgJ+Bk4xlGy
-         M9FcaRdMqMJw8s8Wb+SgS6ciO+ppLJtYXq7rFqkYcEi39Cur0r+ZoEv5GmOWjAFPN5ly
-         6nHA==
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=AgMaVIscO++7auf6j4FLvgrPACtR9LdIw5C1d+MACFs=;
+        b=ff4pFRJqwVZW8nsKGLkvzB4oHNxsMvh2embvkpElPGEOJsCCU0wEgWoXEB2JDRD765
+         z8e4cjzxAZbqFC3i8wgnv8tbqXqIZYmF8vD301f1coqJvpCKb8eFbktRg1+WrJHW3Ouc
+         qWy/rWB2HjxCrG/+MTRBfJ2yCXdr3fB98p8nX6kRNAO69qTwIgcYivzwKO7FgxCURqny
+         ti/tshk++i15GDO99bWrLNvt/HcJONBRJwIqUZ7oWw+oTaUFPBR1qYdHUleqyXTDoY2V
+         xTn7B8htI+2KdumXaWrbNIBRXkNTUtvigLefukSXUigsSqwydJ50kx110u3IJAXWyTFk
+         SV2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=GaUGA4fr6Hw6htKmvc7pRm7Mf4SEh3Stb6wYmhoZJYc=;
-        b=QcjQDJhHs64zYR3SwlFNrugQGYHIpvNGsthHLSw7R68sITmtwoOh/GbGtViCGY+iO1
-         CseqVsiLiAePObNwDV11WECyGFgZQPEpT1JLD9DkKTxdo3cRnOfbW8i06PWB8DxoAGMn
-         dFJPHU2MRhoMJGPGVSxgc2UeDLyoHTgM/bHFdEbTSVIU2i6SaouewrUpY1IO05pGhaQN
-         n3e42jrkaHLWY9QFHgCVcY1aoCK9PoDwn72+fRsp/wwDdazWKdm8U2iBcGSdA4e6NDrX
-         uVnla8EPu+32dpwSZQXxgYs0yUwfHk96IWwczS2qF+Azjd3AEDBm/ACs26SJAYieUire
-         QqKg==
-X-Gm-Message-State: AOAM532alDb1b34cgHiWGMdo0gm3AsHwZhBJDDi1YCsEtcE3AyK5BI8+
-        cSxMtz7eKKJtgRCwK0QLGRaH+A==
-X-Google-Smtp-Source: ABdhPJxl9GxGuvaLQKw76GkIfp3TxDRuj1LQ00uhUWr/sPOtwhRd5P7jxvFf1th4NEo5xR6Mn6Yu4A==
-X-Received: by 2002:ad4:4c4a:: with SMTP id cs10mr14099368qvb.14.1618385776565;
-        Wed, 14 Apr 2021 00:36:16 -0700 (PDT)
-Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id o29sm1922309qtl.8.2021.04.14.00.36.14
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Wed, 14 Apr 2021 00:36:16 -0700 (PDT)
-Date:   Wed, 14 Apr 2021 00:36:13 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@eggly.anvils
-To:     Axel Rasmussen <axelrasmussen@google.com>
-cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=AgMaVIscO++7auf6j4FLvgrPACtR9LdIw5C1d+MACFs=;
+        b=aO6qUBQHTB1lqKD64pZtjVdO1ZqW7QwlbLDkUFl27w/uu/kHLgSUPJVeSPkR+V7w9c
+         YhnA86rQiEaSckWony5o5Bp8f3reSxxBFhKngq9eTs2ktqDQh5y6kCGhnjsEfjLweyHk
+         rQIwR5Pk3qLpt8j00tbHDcc4uFoGogzGMD0am1R1lB2zPDBY6EeY95XgClF53m1rHG5g
+         IFTuYEn/66T3fKCSBBl+vX0d9q2qwwMipwLtvvoitzxlHAevXbaU5MUdd4k9pfSoWbiI
+         NMzlh/eRMeFItr/Hu6E9u38e0l8VhckfOZ2ymXHtE92OH5uNToKfwv7RiVH8ecBcubV8
+         KFiw==
+X-Gm-Message-State: AOAM530mIiI30o8gqZPkRBgOAl5qdpvSzmlqrbsBkQbGvQlT1TsY8Xhw
+        ud4iK/hQxMeUTCKNWtb7QBXaU5V6umHYqg==
+X-Google-Smtp-Source: ABdhPJyabAs4UuXw1jcjxpjLl3apM8l1LDZJ7sbIT+HdhZzAVluRCmTDonUBQFOw/YrIdzycEi12sUgV0yKYmA==
+X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:d6a:902e:c89c:e274])
+ (user=davidgow job=sendgmr) by 2002:a05:6214:252d:: with SMTP id
+ gg13mr19433456qvb.24.1618388125955; Wed, 14 Apr 2021 01:15:25 -0700 (PDT)
+Date:   Wed, 14 Apr 2021 01:14:29 -0700
+Message-Id: <20210414081428.337494-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
+Subject: [PATCH v2] Documentation: dev-tools: Add Testing Overview
+From:   David Gow <davidgow@google.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Brian Geffon <bgeffon@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v2 3/9] userfaultfd/shmem: support minor fault registration
- for shmem
-In-Reply-To: <20210413051721.2896915-4-axelrasmussen@google.com>
-Message-ID: <alpine.LSU.2.11.2104132351350.9086@eggly.anvils>
-References: <20210413051721.2896915-1-axelrasmussen@google.com> <20210413051721.2896915-4-axelrasmussen@google.com>
-User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>, linux-doc@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 12 Apr 2021, Axel Rasmussen wrote:
+The kernel now has a number of testing and debugging tools, and we've
+seen a bit of confusion about what the differences between them are.
 
-> This patch allows shmem-backed VMAs to be registered for minor faults.
-> Minor faults are appropriately relayed to userspace in the fault path,
-> for VMAs with the relevant flag.
-> 
-> This commit doesn't hook up the UFFDIO_CONTINUE ioctl for shmem-backed
-> minor faults, though, so userspace doesn't yet have a way to resolve
-> such faults.
+Add a basic documentation outlining the testing tools, when to use each,
+and how they interact.
 
-This is a very odd way to divide up the series: an "Intermission"
-half way through the implementation of MINOR/CONTINUE: this 3/9
-makes little sense without the 4/9 to mm/userfaultfd.c which follows.
+This is a pretty quick overview rather than the idealised "kernel
+testing guide" that'd probably be optimal, but given the number of times
+questions like "When do you use KUnit and when do you use Kselftest?"
+are being asked, it seemed worth at least having something. Hopefully
+this can form the basis for more detailed documentation later.
 
-But, having said that, I won't object and Peter did not object, and
-I don't know of anyone else looking here: it will only give each of
-us more trouble to insist on repartitioning the series, and it's the
-end state that's far more important to me and to all of us.
+Signed-off-by: David Gow <davidgow@google.com>
+---
+Thanks, everyone, for the comments on the doc. I've made a few of the
+suggested changes. Please let me know what you think!
 
-And I'll even seize on it, to give myself an intermission after
-this one, until tomorrow (when I'll look at 4/9 and 9/9 - but
-shall not look at the selftests ones at all).
+-- David
 
-Most of this is okay, except the mm/shmem.c part; and I've just now
-realized that somewhere (whether in this patch or separately) there
-needs to be an update to Documentation/admin-guide/mm/userfaultfd.rst
-(admin-guide? how weird, but not this series' business to correct).
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20210410070529.4113432-1-davidgow@g=
+oogle.com/
+- Note KUnit's speed and that one should provide selftests for syscalls
+- Mention lockdep as a Dynamic Analysis Tool
+- Refer to "Dynamic Analysis Tools" instead of "Sanitizers"
+- A number of minor formatting tweaks and rewordings for clarity.
 
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->  fs/userfaultfd.c                 |  6 +++---
->  include/uapi/linux/userfaultfd.h |  7 ++++++-
->  mm/memory.c                      |  8 +++++---
->  mm/shmem.c                       | 10 +++++++++-
->  4 files changed, 23 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index 14f92285d04f..9f3b8684cf3c 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -1267,8 +1267,7 @@ static inline bool vma_can_userfault(struct vm_area_struct *vma,
->  	}
->  
->  	if (vm_flags & VM_UFFD_MINOR) {
-> -		/* FIXME: Add minor fault interception for shmem. */
-> -		if (!is_vm_hugetlb_page(vma))
-> +		if (!(is_vm_hugetlb_page(vma) || vma_is_shmem(vma)))
->  			return false;
->  	}
->  
-> @@ -1941,7 +1940,8 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
->  	/* report all available features and ioctls to userland */
->  	uffdio_api.features = UFFD_API_FEATURES;
->  #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
-> -	uffdio_api.features &= ~UFFD_FEATURE_MINOR_HUGETLBFS;
-> +	uffdio_api.features &=
-> +		~(UFFD_FEATURE_MINOR_HUGETLBFS | UFFD_FEATURE_MINOR_SHMEM);
->  #endif
->  	uffdio_api.ioctls = UFFD_API_IOCTLS;
->  	ret = -EFAULT;
-> diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-> index bafbeb1a2624..159a74e9564f 100644
-> --- a/include/uapi/linux/userfaultfd.h
-> +++ b/include/uapi/linux/userfaultfd.h
-> @@ -31,7 +31,8 @@
->  			   UFFD_FEATURE_MISSING_SHMEM |		\
->  			   UFFD_FEATURE_SIGBUS |		\
->  			   UFFD_FEATURE_THREAD_ID |		\
-> -			   UFFD_FEATURE_MINOR_HUGETLBFS)
-> +			   UFFD_FEATURE_MINOR_HUGETLBFS |	\
-> +			   UFFD_FEATURE_MINOR_SHMEM)
->  #define UFFD_API_IOCTLS				\
->  	((__u64)1 << _UFFDIO_REGISTER |		\
->  	 (__u64)1 << _UFFDIO_UNREGISTER |	\
-> @@ -185,6 +186,9 @@ struct uffdio_api {
->  	 * UFFD_FEATURE_MINOR_HUGETLBFS indicates that minor faults
->  	 * can be intercepted (via REGISTER_MODE_MINOR) for
->  	 * hugetlbfs-backed pages.
-> +	 *
-> +	 * UFFD_FEATURE_MINOR_SHMEM indicates the same support as
-> +	 * UFFD_FEATURE_MINOR_HUGETLBFS, but for shmem-backed pages instead.
->  	 */
->  #define UFFD_FEATURE_PAGEFAULT_FLAG_WP		(1<<0)
->  #define UFFD_FEATURE_EVENT_FORK			(1<<1)
-> @@ -196,6 +200,7 @@ struct uffdio_api {
->  #define UFFD_FEATURE_SIGBUS			(1<<7)
->  #define UFFD_FEATURE_THREAD_ID			(1<<8)
->  #define UFFD_FEATURE_MINOR_HUGETLBFS		(1<<9)
-> +#define UFFD_FEATURE_MINOR_SHMEM		(1<<10)
->  	__u64 features;
->  
->  	__u64 ioctls;
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 4e358601c5d6..cc71a445c76c 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3972,9 +3972,11 @@ static vm_fault_t do_read_fault(struct vm_fault *vmf)
->  	 * something).
->  	 */
->  	if (vma->vm_ops->map_pages && fault_around_bytes >> PAGE_SHIFT > 1) {
-> -		ret = do_fault_around(vmf);
-> -		if (ret)
-> -			return ret;
-> +		if (likely(!userfaultfd_minor(vmf->vma))) {
-> +			ret = do_fault_around(vmf);
-> +			if (ret)
-> +				return ret;
-> +		}
->  	}
->  
->  	ret = __do_fault(vmf);
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index b72c55aa07fc..3f48cb5e8404 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -1785,7 +1785,7 @@ static int shmem_swapin_page(struct inode *inode, pgoff_t index,
->   * vm. If we swap it in we mark it dirty since we also free the swap
->   * entry since a page cannot live in both the swap and page cache.
->   *
-> - * vmf and fault_type are only supplied by shmem_fault:
-> + * vma, vmf, and fault_type are only supplied by shmem_fault:
->   * otherwise they are NULL.
->   */
->  static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
-> @@ -1820,6 +1820,14 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
->  
->  	page = pagecache_get_page(mapping, index,
->  					FGP_ENTRY | FGP_HEAD | FGP_LOCK, 0);
-> +
-> +	if (page && vma && userfaultfd_minor(vma)) {
-> +		unlock_page(page);
-> +		put_page(page);
-> +		*fault_type = handle_userfault(vmf, VM_UFFD_MINOR);
-> +		return 0;
-> +	}
-> +
+Not changed:
+- I haven't included an exhaustive list of differences, advantages, etc,
+  between KUnit and kselftest: for now, the doc continues to focus on
+  the difference between 'in-kernel' and 'userspace' testing here.
+- Similarly, I'm not linking out to docs defining and describing "Unit"
+  tests versus "End-to-end" tests. None of the existing documentation
+  elsewhere quite matches what we do in the kernel perfectly, so it
+  seems less confusing to focus on the 'in-kernel'/'userspace'
+  distinction, and leave other definitions as a passing mention for
+  those who are already familiar with the concepts.
+- I haven't linked to any talk videos here: a few of them are linked on
+  (e.g.) the KUnit webpage, but I wanted to keep the Kernel documentation
+  more self-contained for now. No objection to adding them in a follow-up
+  patch if people feel strongly about it, though.
+- The link from index.rst to this doc is unchanged. I personally think
+  that the link is prominent enough there: it's the first link, and
+  shows up a few times. One possibility if people disagreed would be to
+  merge this page with the index, but given not all dev-tools are going
+  to be testing-related, it seemed a bit arrogant. :-)
 
-Okay, Peter persuaded you to move that up here: where indeed it
-does look better than the earlier "swapped" version.
+ Documentation/dev-tools/index.rst            |   3 +
+ Documentation/dev-tools/testing-overview.rst | 117 +++++++++++++++++++
+ 2 files changed, 120 insertions(+)
+ create mode 100644 Documentation/dev-tools/testing-overview.rst
 
-But will crash on swap as it's currently written: it needs to say
-		if (!xa_is_value(page)) {
-			unlock_page(page);
-			put_page(page);
-		}
+diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/in=
+dex.rst
+index 1b1cf4f5c9d9..f590e5860794 100644
+--- a/Documentation/dev-tools/index.rst
++++ b/Documentation/dev-tools/index.rst
+@@ -7,6 +7,8 @@ be used to work on the kernel. For now, the documents have =
+been pulled
+ together without any significant effort to integrate them into a coherent
+ whole; patches welcome!
+=20
++A brief overview of testing-specific tools can be found in :doc:`testing-o=
+verview`.
++
+ .. class:: toc-title
+=20
+ 	   Table of contents
+@@ -14,6 +16,7 @@ whole; patches welcome!
+ .. toctree::
+    :maxdepth: 2
+=20
++   testing-overview
+    coccinelle
+    sparse
+    kcov
+diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation/d=
+ev-tools/testing-overview.rst
+new file mode 100644
+index 000000000000..ce36a8cdf6b5
+--- /dev/null
++++ b/Documentation/dev-tools/testing-overview.rst
+@@ -0,0 +1,117 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++Kernel Testing Guide
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++
++There are a number of different tools for testing the Linux kernel, so kno=
+wing
++when to use each of them can be a challenge. This document provides a roug=
+h
++overview of their differences, and how they fit together.
++
++
++Writing and Running Tests
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
++
++The bulk of kernel tests are written using either the kselftest or KUnit
++frameworks. These both provide infrastructure to help make running tests a=
+nd
++groups of tests easier, as well as providing helpers to aid in writing new
++tests.
++
++If you're looking to verify the behaviour of the Kernel =E2=80=94 particul=
+arly specific
++parts of the kernel =E2=80=94 then you'll want to use KUnit or kselftest.
++
++
++The Difference Between KUnit and kselftest
++------------------------------------------
++
++KUnit (Documentation/dev-tools/kunit/index.rst) is an entirely in-kernel s=
+ystem
++for "white box" testing: because test code is part of the kernel, it can a=
+ccess
++internal structures and functions which aren't exposed to userspace.
++
++KUnit tests therefore are best written against small, self-contained parts
++of the kernel, which can be tested in isolation. This aligns well with the
++concept of 'unit' testing.
++
++For example, a KUnit test might test an individual kernel function (or eve=
+n a
++single codepath through a function, such as an error handling case), rathe=
+r
++than a feature as a whole.
++
++This also makes KUnit tests very fast to build and run, allowing them to b=
+e
++run frequently as part of the development process.
++
++There is a KUnit test style guide which may give further pointers in
++Documentation/dev-tools/kunit/style.rst
++
++
++kselftest (Documentation/dev-tools/kselftest.rst), on the other hand, is
++largely implemented in userspace, and tests are normal userspace scripts o=
+r
++programs.
++
++This makes it easier to write more complicated tests, or tests which need =
+to
++manipulate the overall system state more (e.g., spawning processes, etc.).
++However, it's not possible to call kernel functions directly from kselftes=
+t.
++This means that only kernel functionality which is exposed to userspace so=
+mhow
++(e.g. by a syscall, device, filesystem, etc.) can be tested with kselftest=
+.  To
++work around this, some tests include a companion kernel module which expos=
+es
++more information or functionality. If a test runs mostly or entirely withi=
+n the
++kernel, however,  KUnit may be the more appropriate tool.
++
++kselftest is therefore suited well to tests of whole features, as these wi=
+ll
++expose an interface to userspace, which can be tested, but not implementat=
+ion
++details. This aligns well with 'system' or 'end-to-end' testing.
++
++For example, all new system calls should be accompanied by kselftest tests=
+.
++
++Code Coverage Tools
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++The Linux Kernel supports two different code coverage measurement tools. T=
+hese
++can be used to verify that a test is executing particular functions or lin=
+es
++of code. This is useful for determining how much of the kernel is being te=
+sted,
++and for finding corner-cases which are not covered by the appropriate test=
+.
++
++:doc:`gcov` is GCC's coverage testing tool, which can be used with the ker=
+nel
++to get global or per-module coverage. Unlike KCOV, it does not record per-=
+task
++coverage. Coverage data can be read from debugfs, and interpreted using th=
+e
++usual gcov tooling.
++
++:doc:`kcov` is a feature which can be built in to the kernel to allow
++capturing coverage on a per-task level. It's therefore useful for fuzzing =
+and
++other situations where information about code executed during, for example=
+, a
++single syscall is useful.
++
++
++Dynamic Analysis Tools
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++The kernel also supports a number of dynamic analysis tools, which attempt=
+ to
++detect classes of issues when the occur in a running kernel. These typical=
+ly
++look for undefined behaviour of some kind, such as invalid memory accesses=
+,
++concurrency issues such as data races, or other undefined behaviour like
++integer overflows.
++
++Some of these tools are listed below:
++
++* kmemleak detects possible memory leaks. See
++  Documentation/dev-tools/kmemleak.rst
++* KASAN detects invalid memory accesses such as out-of-bounds and
++  use-after-free errors. See Documentation/dev-tools/kasan.rst
++* UBSAN detects behaviour that is undefined by the C standard, like intege=
+r
++  overflows. See Documentation/dev-tools/ubsan.rst
++* KCSAN detects data races. See Documentation/dev-tools/kcsan.rst
++* KFENCE is a low-overhead detector of memory issues, which is much faster=
+ than
++  KASAN and can be used in production. See Documentation/dev-tools/kfence.=
+rst
++* lockdep is a locking correctness validator. See
++  Documentation/locking/lockdep-design.rst
++* There are several other pieces of debug instrumentation in the kernel, m=
+any
++  of which can be found in lib/Kconfig.debug
++
++These tools tend to test the kernel as a whole, and do not "pass" like
++kselftest or KUnit tests. They can be combined with KUnit or kselftest by
++running tests on a kernel with a sanitizer enabled: you can then be sure
++that none of these errors are occurring during the test.
++
++Some of these tools integrate with KUnit or kselftest and will
++automatically fail tests if an issue is detected.
++
+--=20
+2.31.1.295.g9ea45b61b8-goog
 
-I did say before that it's more robust to return from the swap
-case after doing the shmem_swapin_page(). But I might be slowly
-realizing that the ioctl to add the pte (in 4/9) will do its
-shmem_getpage_gfp(), and that will bring in the swap if user
-did not already do so: so I was wrong to claim more robustness
-the other way, this placement should be fine. I think.
-
->  	if (xa_is_value(page)) {
->  		error = shmem_swapin_page(inode, index, &page,
->  					  sgp, gfp, vma, fault_type);
-> -- 
-> 2.31.1.295.g9ea45b61b8-goog
