@@ -2,325 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5503E35F0F0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 11:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC05235F1CB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 12:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbhDNJkR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Apr 2021 05:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbhDNJkP (ORCPT
+        id S1346177AbhDNK7b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Apr 2021 06:59:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28429 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241309AbhDNK7Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Apr 2021 05:40:15 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD5AC061574
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 02:39:53 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id h3-20020a4ae8c30000b02901b68b39e2d3so4479919ooe.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 02:39:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=h6merFAI8nWuQUtaPMgNZzm0Zs+GfD/helzkO3aNm6M=;
-        b=Gpi0MuCR1W1QhfNJMyeuLEMzdGv2u9cUgcQKDLr2A2Z7SlRIk59djZP/Zf2H2SyFPx
-         3VEVmAZd++akAu43BavcVWFhv9+DDOwmy/w75/C8gJu84rvaeDKX3u8PRUDObn13vjsQ
-         EH0FugmPO04mpdbLrUyBhZezJXw8AmazdE4oNGrziKL2NBpWqW6axbhhveuM8DG10Z5w
-         HvxLjD53Swn9y2BGDbZ20Ln0jlLgm+eV5Jyyiq6JMc7yimjZlApDjq2kQY+nRW4ZrP9J
-         WYCO3nUgu1Fa/EVFWIVYKC3JXOSWIFw6Sbd5W3br/yYvm/xOc2xatsMsVkwwKp2sZ2yR
-         z5XA==
+        Wed, 14 Apr 2021 06:59:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618397935;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rs2PlOx2xiUIBK9k56hAPqdrqHZQ9ahIYUEPYnsCJD4=;
+        b=WrlWxQW8GgX5zkae04jnTW3zl+ai26XRqVBI30cF//nzSCvef3GHP3I7L5o3J/7olmDhl/
+        HqVZV1LzmWEAYClcu2slL1R8s6om9KUiXo9cubcQSiHhSUvvGvsyK5ja52g2K+YWlRkZCd
+        Qpzaz/RdTfLjgNRsDSXS0xYRcfaeYig=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-557-UfzKYHpqNuq0i-RceMDVcw-1; Wed, 14 Apr 2021 06:58:53 -0400
+X-MC-Unique: UfzKYHpqNuq0i-RceMDVcw-1
+Received: by mail-ed1-f71.google.com with SMTP id v5-20020a0564023485b029037ff13253bcso3107705edc.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 03:58:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=h6merFAI8nWuQUtaPMgNZzm0Zs+GfD/helzkO3aNm6M=;
-        b=brmdkCMGutEwRA0/3dpnIVnDME/WMNyym/9Ty2uDyOdZUbJe6yVRI9WbDF3k3nkfa8
-         aA4jgkMh23RbkJ3iRm0upkV4HeqZI4tExQV7p+2kYCtXCXFuTKzQSd0T6fNjOxOXdUpH
-         mAUXmlb5cvRM9n7zgncWkJuRTQxvnZInn8CnhmdHKXOI+F839eznJWtthwHo8gYA08i9
-         LZALCfMzeRSvZeez7VYGUj/t1IOvkylmShWj7lVNEKGa4q+ga/ElZ4aijoWq3uZBnX7U
-         0ZXrwKft7vo5JYnCqrriuwf9++9RTeFVyoXXQXn35gE5okpqO6Xi1PuN0/SOufXpmX2P
-         l4KA==
-X-Gm-Message-State: AOAM53098oIHXB7Ahaxx3FRRY0W1Wjka2dASYjuJISSMvm+PMIz3pLiC
-        DZNy7u7N7kSl7WOJbXmvHbDohp4zDRBGi6JNQGlDXw==
-X-Google-Smtp-Source: ABdhPJwP+m7PQ2KqWNLVMQtbp6TPlsLhusBZ0RCccTszTcZThlUiM1pmE6bpAXBBzKEcpDp9Xu+2/Ec/7YpA8CYjwrY=
-X-Received: by 2002:a4a:d0ce:: with SMTP id u14mr30250246oor.36.1618393192568;
- Wed, 14 Apr 2021 02:39:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210414081428.337494-1-davidgow@google.com>
-In-Reply-To: <20210414081428.337494-1-davidgow@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 14 Apr 2021 11:39:39 +0200
-Message-ID: <CANpmjNNWQZGOCiNQaTWr5ebh7jp7TMzTp0OXnss_5xpRP9GvSw@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: dev-tools: Add Testing Overview
-To:     David Gow <davidgow@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=Rs2PlOx2xiUIBK9k56hAPqdrqHZQ9ahIYUEPYnsCJD4=;
+        b=soOvfbM81q40Vf9pQoyi+wJxnnOOffc49QyyrVWcKWMYvbZYyilS4LwtvehEXWQfze
+         LR5BMcsSlBUQbVQAAZBjpOkqiiuCHXdC1g/QW3JXaZiz/v5uyq1NAZS5UDlV1DJ/zU7C
+         vsZk6cqrRJJvhVgv6wkoFCS9xJWmVOlspCL2luhoJSo5YLIrGFc3pDwiiR0vBsMXXrMu
+         ajhL8dfiRqp821n0pwdOn/krSSQZqCOSuQfTwJo7a6G5dt+y+VzSCQzpQLdT8U9TeeCG
+         8wX1juK3hVTiJKJmBoiAiIdD3xD8m76dELEWcYWQvOZ/9YcIgMLthCrZg8Qik7ISBiup
+         i3GQ==
+X-Gm-Message-State: AOAM531TC/JJvqvYRzCW+omyWAIJLZFtF8CFAuaXEQ9dauB0Kc1FpML1
+        YY91G9fvQ3PuP4+y7x1KX+JGyige1vs0226gACoKI/r7FNUuhAWjiyukLvHbtCXCOr32jQ+YQy2
+        KVbHY/8UC38T92eWawYimDPlepUFE
+X-Received: by 2002:a17:906:c7c3:: with SMTP id dc3mr25448714ejb.107.1618397932090;
+        Wed, 14 Apr 2021 03:58:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyCjw34YtxrVVL0DYTRyA3gVeSzc6JEjgugOoRuwH7v7SeRzgMLzV/QtDBxhy9IU7IiN5uHMw==
+X-Received: by 2002:a17:906:c7c3:: with SMTP id dc3mr25448688ejb.107.1618397931666;
+        Wed, 14 Apr 2021 03:58:51 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id c16sm9866499ejx.81.2021.04.14.03.58.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Apr 2021 03:58:50 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 1B5021804E8; Wed, 14 Apr 2021 12:58:50 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+In-Reply-To: <CAEf4BzaOJ-WD3A13B2uCrsE2yrctAL8QtJ8TuXHLeP+tm98pbA@mail.gmail.com>
+References: <20210325120020.236504-4-memxor@gmail.com>
+ <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+ <20210328080648.oorx2no2j6zslejk@apollo>
+ <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
+ <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
+ <20210331094400.ldznoctli6fljz64@apollo>
+ <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
+ <20210402152743.dbadpgcmrgjt4eca@apollo>
+ <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
+ <20210402190806.nhcgappm3iocvd3d@apollo>
+ <20210403174721.vg4wle327wvossgl@ast-mbp>
+ <CAEf4Bzaeu4apgEtwS_3q1iPuURjPXMs9H43cYUtJSmjPMU5M9A@mail.gmail.com>
+ <87blar4ti7.fsf@toke.dk>
+ <CAEf4BzaOJ-WD3A13B2uCrsE2yrctAL8QtJ8TuXHLeP+tm98pbA@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 14 Apr 2021 12:58:50 +0200
+Message-ID: <874kg9m8t1.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 14 Apr 2021 at 10:15, David Gow <davidgow@google.com> wrote:
->
-> The kernel now has a number of testing and debugging tools, and we've
-> seen a bit of confusion about what the differences between them are.
->
-> Add a basic documentation outlining the testing tools, when to use each,
-> and how they interact.
->
-> This is a pretty quick overview rather than the idealised "kernel
-> testing guide" that'd probably be optimal, but given the number of times
-> questions like "When do you use KUnit and when do you use Kselftest?"
-> are being asked, it seemed worth at least having something. Hopefully
-> this can form the basis for more detailed documentation later.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-Reviewed-by: Marco Elver <elver@google.com>
+> On Tue, Apr 6, 2021 at 3:06 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@red=
+hat.com> wrote:
+>>
+>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>>
+>> > On Sat, Apr 3, 2021 at 10:47 AM Alexei Starovoitov
+>> > <alexei.starovoitov@gmail.com> wrote:
+>> >>
+>> >> On Sat, Apr 03, 2021 at 12:38:06AM +0530, Kumar Kartikeya Dwivedi wro=
+te:
+>> >> > On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov wrote:
+>> >> > > On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <memxor@gm=
+ail.com> wrote:
+>> >> > > > [...]
+>> >> > >
+>> >> > > All of these things are messy because of tc legacy. bpf tried to =
+follow tc style
+>> >> > > with cls and act distinction and it didn't quite work. cls with
+>> >> > > direct-action is the only
+>> >> > > thing that became mainstream while tc style attach wasn't really =
+addressed.
+>> >> > > There were several incidents where tc had tens of thousands of pr=
+ogs attached
+>> >> > > because of this attach/query/index weirdness described above.
+>> >> > > I think the only way to address this properly is to introduce bpf=
+_link style of
+>> >> > > attaching to tc. Such bpf_link would support ingress/egress only.
+>> >> > > direction-action will be implied. There won't be any index and qu=
+ery
+>> >> > > will be obvious.
+>> >> >
+>> >> > Note that we already have bpf_link support working (without support=
+ for pinning
+>> >> > ofcourse) in a limited way. The ifindex, protocol, parent_id, prior=
+ity, handle,
+>> >> > chain_index tuple uniquely identifies a filter, so we stash this in=
+ the bpf_link
+>> >> > and are able to operate on the exact filter during release.
+>> >>
+>> >> Except they're not unique. The library can stash them, but something =
+else
+>> >> doing detach via iproute2 or their own netlink calls will detach the =
+prog.
+>> >> This other app can attach to the same spot a different prog and now
+>> >> bpf_link__destroy will be detaching somebody else prog.
+>> >>
+>> >> > > So I would like to propose to take this patch set a step further =
+from
+>> >> > > what Daniel said:
+>> >> > > int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
+>> >> > > and make this proposed api to return FD.
+>> >> > > To detach from tc ingress/egress just close(fd).
+>> >> >
+>> >> > You mean adding an fd-based TC API to the kernel?
+>> >>
+>> >> yes.
+>> >
+>> > I'm totally for bpf_link-based TC attachment.
+>> >
+>> > But I think *also* having "legacy" netlink-based APIs will allow
+>> > applications to handle older kernels in a much nicer way without extra
+>> > dependency on iproute2. We have a similar situation with kprobe, where
+>> > currently libbpf only supports "modern" fd-based attachment, but users
+>> > periodically ask questions and struggle to figure out issues on older
+>> > kernels that don't support new APIs.
+>>
+>> +1; I am OK with adding a new bpf_link-based way to attach TC programs,
+>> but we still need to support the netlink API in libbpf.
+>>
+>> > So I think we'd have to support legacy TC APIs, but I agree with
+>> > Alexei and Daniel that we should keep it to the simplest and most
+>> > straightforward API of supporting direction-action attachments and
+>> > setting up qdisc transparently (if I'm getting all the terminology
+>> > right, after reading Quentin's blog post). That coincidentally should
+>> > probably match how bpf_link-based TC API will look like, so all that
+>> > can be abstracted behind a single bpf_link__attach_tc() API as well,
+>> > right? That's the plan for dealing with kprobe right now, btw. Libbpf
+>> > will detect the best available API and transparently fall back (maybe
+>> > with some warning for awareness, due to inherent downsides of legacy
+>> > APIs: no auto-cleanup being the most prominent one).
+>>
+>> Yup, SGTM: Expose both in the low-level API (in bpf.c), and make the
+>> high-level API auto-detect. That way users can also still use the
+>> netlink attach function if they don't want the fd-based auto-close
+>> behaviour of bpf_link.
+>
+> So I thought a bit more about this, and it feels like the right move
+> would be to expose only higher-level TC BPF API behind bpf_link. It
+> will keep the API complexity and amount of APIs that libbpf will have
+> to support to the minimum, and will keep the API itself simple:
+> direct-attach with the minimum amount of input arguments. By not
+> exposing low-level APIs we also table the whole bpf_tc_cls_attach_id
+> design discussion, as we now can keep as much info as needed inside
+> bpf_link_tc (which will embed bpf_link internally as well) to support
+> detachment and possibly some additional querying, if needed.
 
-Looks good to me, thanks. I think one can write whole articles (or
-even books) about this topic, so it's easy to forget this is a quick
-overview, and keep on adding.
+But then there would be no way for the caller to explicitly select a
+mechanism? I.e., if I write a BPF program using this mechanism targeting
+a 5.12 kernel, I'll get netlink attachment, which can stick around when
+I do bpf_link__disconnect(). But then if the kernel gets upgraded to
+support bpf_link for TC programs I'll suddenly transparently get
+bpf_link and the attachments will go away unless I pin them. This
+seems... less than ideal?
 
-> ---
-> Thanks, everyone, for the comments on the doc. I've made a few of the
-> suggested changes. Please let me know what you think!
->
-> -- David
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20210410070529.4113432-1-davidgow=
-@google.com/
-> - Note KUnit's speed and that one should provide selftests for syscalls
-> - Mention lockdep as a Dynamic Analysis Tool
-> - Refer to "Dynamic Analysis Tools" instead of "Sanitizers"
-> - A number of minor formatting tweaks and rewordings for clarity.
->
-> Not changed:
-> - I haven't included an exhaustive list of differences, advantages, etc,
->   between KUnit and kselftest: for now, the doc continues to focus on
->   the difference between 'in-kernel' and 'userspace' testing here.
-> - Similarly, I'm not linking out to docs defining and describing "Unit"
->   tests versus "End-to-end" tests. None of the existing documentation
->   elsewhere quite matches what we do in the kernel perfectly, so it
->   seems less confusing to focus on the 'in-kernel'/'userspace'
->   distinction, and leave other definitions as a passing mention for
->   those who are already familiar with the concepts.
-> - I haven't linked to any talk videos here: a few of them are linked on
->   (e.g.) the KUnit webpage, but I wanted to keep the Kernel documentation
->   more self-contained for now. No objection to adding them in a follow-up
->   patch if people feel strongly about it, though.
-> - The link from index.rst to this doc is unchanged. I personally think
->   that the link is prominent enough there: it's the first link, and
->   shows up a few times. One possibility if people disagreed would be to
->   merge this page with the index, but given not all dev-tools are going
->   to be testing-related, it seemed a bit arrogant. :-)
->
->  Documentation/dev-tools/index.rst            |   3 +
->  Documentation/dev-tools/testing-overview.rst | 117 +++++++++++++++++++
->  2 files changed, 120 insertions(+)
->  create mode 100644 Documentation/dev-tools/testing-overview.rst
->
-> diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/=
-index.rst
-> index 1b1cf4f5c9d9..f590e5860794 100644
-> --- a/Documentation/dev-tools/index.rst
-> +++ b/Documentation/dev-tools/index.rst
-> @@ -7,6 +7,8 @@ be used to work on the kernel. For now, the documents hav=
-e been pulled
->  together without any significant effort to integrate them into a coheren=
-t
->  whole; patches welcome!
->
-> +A brief overview of testing-specific tools can be found in :doc:`testing=
--overview`.
-> +
->  .. class:: toc-title
->
->            Table of contents
-> @@ -14,6 +16,7 @@ whole; patches welcome!
->  .. toctree::
->     :maxdepth: 2
->
-> +   testing-overview
->     coccinelle
->     sparse
->     kcov
-> diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation=
-/dev-tools/testing-overview.rst
-> new file mode 100644
-> index 000000000000..ce36a8cdf6b5
-> --- /dev/null
-> +++ b/Documentation/dev-tools/testing-overview.rst
-> @@ -0,0 +1,117 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Kernel Testing Guide
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +
-> +There are a number of different tools for testing the Linux kernel, so k=
-nowing
-> +when to use each of them can be a challenge. This document provides a ro=
-ugh
-> +overview of their differences, and how they fit together.
-> +
-> +
-> +Writing and Running Tests
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> +
-> +The bulk of kernel tests are written using either the kselftest or KUnit
-> +frameworks. These both provide infrastructure to help make running tests=
- and
-> +groups of tests easier, as well as providing helpers to aid in writing n=
-ew
-> +tests.
-> +
-> +If you're looking to verify the behaviour of the Kernel =E2=80=94 partic=
-ularly specific
-> +parts of the kernel =E2=80=94 then you'll want to use KUnit or kselftest=
-.
-> +
-> +
-> +The Difference Between KUnit and kselftest
-> +------------------------------------------
-> +
-> +KUnit (Documentation/dev-tools/kunit/index.rst) is an entirely in-kernel=
- system
-> +for "white box" testing: because test code is part of the kernel, it can=
- access
-> +internal structures and functions which aren't exposed to userspace.
-> +
-> +KUnit tests therefore are best written against small, self-contained par=
-ts
-> +of the kernel, which can be tested in isolation. This aligns well with t=
-he
-> +concept of 'unit' testing.
-> +
-> +For example, a KUnit test might test an individual kernel function (or e=
-ven a
-> +single codepath through a function, such as an error handling case), rat=
-her
-> +than a feature as a whole.
-> +
-> +This also makes KUnit tests very fast to build and run, allowing them to=
- be
-> +run frequently as part of the development process.
-> +
-> +There is a KUnit test style guide which may give further pointers in
-> +Documentation/dev-tools/kunit/style.rst
-> +
-> +
-> +kselftest (Documentation/dev-tools/kselftest.rst), on the other hand, is
-> +largely implemented in userspace, and tests are normal userspace scripts=
- or
-> +programs.
-> +
-> +This makes it easier to write more complicated tests, or tests which nee=
-d to
-> +manipulate the overall system state more (e.g., spawning processes, etc.=
-).
-> +However, it's not possible to call kernel functions directly from kselft=
-est.
-> +This means that only kernel functionality which is exposed to userspace =
-somhow
-> +(e.g. by a syscall, device, filesystem, etc.) can be tested with kselfte=
-st.  To
-> +work around this, some tests include a companion kernel module which exp=
-oses
-> +more information or functionality. If a test runs mostly or entirely wit=
-hin the
-> +kernel, however,  KUnit may be the more appropriate tool.
-> +
-> +kselftest is therefore suited well to tests of whole features, as these =
-will
-> +expose an interface to userspace, which can be tested, but not implement=
-ation
-> +details. This aligns well with 'system' or 'end-to-end' testing.
-> +
-> +For example, all new system calls should be accompanied by kselftest tes=
-ts.
-> +
-> +Code Coverage Tools
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +The Linux Kernel supports two different code coverage measurement tools.=
- These
-> +can be used to verify that a test is executing particular functions or l=
-ines
-> +of code. This is useful for determining how much of the kernel is being =
-tested,
-> +and for finding corner-cases which are not covered by the appropriate te=
-st.
-> +
-> +:doc:`gcov` is GCC's coverage testing tool, which can be used with the k=
-ernel
-> +to get global or per-module coverage. Unlike KCOV, it does not record pe=
-r-task
-> +coverage. Coverage data can be read from debugfs, and interpreted using =
-the
-> +usual gcov tooling.
-> +
-> +:doc:`kcov` is a feature which can be built in to the kernel to allow
-> +capturing coverage on a per-task level. It's therefore useful for fuzzin=
-g and
-> +other situations where information about code executed during, for examp=
-le, a
-> +single syscall is useful.
-> +
-> +
-> +Dynamic Analysis Tools
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +The kernel also supports a number of dynamic analysis tools, which attem=
-pt to
-> +detect classes of issues when the occur in a running kernel. These typic=
-ally
-> +look for undefined behaviour of some kind, such as invalid memory access=
-es,
-> +concurrency issues such as data races, or other undefined behaviour like
-> +integer overflows.
-> +
-> +Some of these tools are listed below:
-> +
-> +* kmemleak detects possible memory leaks. See
-> +  Documentation/dev-tools/kmemleak.rst
-> +* KASAN detects invalid memory accesses such as out-of-bounds and
-> +  use-after-free errors. See Documentation/dev-tools/kasan.rst
-> +* UBSAN detects behaviour that is undefined by the C standard, like inte=
-ger
-> +  overflows. See Documentation/dev-tools/ubsan.rst
-> +* KCSAN detects data races. See Documentation/dev-tools/kcsan.rst
-> +* KFENCE is a low-overhead detector of memory issues, which is much fast=
-er than
-> +  KASAN and can be used in production. See Documentation/dev-tools/kfenc=
-e.rst
-> +* lockdep is a locking correctness validator. See
-> +  Documentation/locking/lockdep-design.rst
-> +* There are several other pieces of debug instrumentation in the kernel,=
- many
-> +  of which can be found in lib/Kconfig.debug
-> +
-> +These tools tend to test the kernel as a whole, and do not "pass" like
-> +kselftest or KUnit tests. They can be combined with KUnit or kselftest b=
-y
-> +running tests on a kernel with a sanitizer enabled: you can then be sure
-> +that none of these errors are occurring during the test.
-> +
-> +Some of these tools integrate with KUnit or kselftest and will
-> +automatically fail tests if an issue is detected.
-> +
-> --
-> 2.31.1.295.g9ea45b61b8-goog
->
+If we expose the low-level API I can elect to just use this if I know I
+want netlink behaviour, but if bpf_program__attach_tc() is the only API
+available it would at least need a flag to enforce one mode or the other
+(I can see someone wanting to enforce kernel bpf_link semantics as well,
+so a flag for either mode seems reasonable?).
+
+-Toke
+
