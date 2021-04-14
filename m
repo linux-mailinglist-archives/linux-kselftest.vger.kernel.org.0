@@ -2,167 +2,227 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D95E435FB1D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Apr 2021 20:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1D635FDB7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Apr 2021 00:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbhDNSwP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Apr 2021 14:52:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:21199 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230398AbhDNSwI (ORCPT
+        id S232343AbhDNWXG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Apr 2021 18:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231829AbhDNWXF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Apr 2021 14:52:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618426305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=olnINB9MiAVWvAGJIPu39IEipm/CRaDs3WWVqPj5ijQ=;
-        b=LhEVkhyN98Ne+wDQKzktr4ZCyfinHbP3Xa+rGqA6PiKl77gure8wi9HuMyLgBHc+nuGSEt
-        cvrtMpMbOJyDp/9uOMXCJaC0yP+PFY27r47RR22n4wBe5Pk+O2G3oPstrPxbwjJjC0ckjl
-        cxG2LFs1j1JFf6IGNTxIai6FTmIbSRM=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-447-vFBoKPfYN0i66gTEE6Nk5Q-1; Wed, 14 Apr 2021 14:51:40 -0400
-X-MC-Unique: vFBoKPfYN0i66gTEE6Nk5Q-1
-Received: by mail-qt1-f200.google.com with SMTP id a11-20020ac85b8b0000b02901a69faebe0cso2529288qta.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 11:51:40 -0700 (PDT)
+        Wed, 14 Apr 2021 18:23:05 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7049FC061574;
+        Wed, 14 Apr 2021 15:22:43 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id k73so17607726ybf.3;
+        Wed, 14 Apr 2021 15:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DBrFNOxaMA/7ZTSjVDCpN1Cf8EPs2BVUIE7dJq/XIFY=;
+        b=ZASmmu9cCOp0GLby5ge3ySdPHTyYlhTYWt0JOSAB6sZncJ1s1rnPPV+Mz2oZu8G3RO
+         bofdF4GlF/hbrO6Pa8d8VSjD+SX1THore3s/+xPaX2IlCEsbfN2SeVI66YR+B0U1gq5G
+         +52Qm55upbNs438HLYAax2yyCTikl2QkUb+Czg9yNGHKGFhjgxxOuBWWgbV8A76UfTED
+         SMk6If6tUFDT/uK8qBGYwQAVQWIA8NpOGqFptgfKRuCfVZ2XA6hFOlf5tCm8yWhrNmfU
+         IlE0XtimzWMa5zTqoZqYJPxhcRX2r9GSW6eGv0YG2ED5ES9mJ2zyS11Kvkk0LFn+alBr
+         F7cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=olnINB9MiAVWvAGJIPu39IEipm/CRaDs3WWVqPj5ijQ=;
-        b=W4RbnBvvVuCue1tuTYArQ06ix4goa2VbDdj2w3YevUEVhiu3G+nY8iKNDeteksxHIv
-         BYgM5fx9nKL5Te/nY7wHHE2yca+yZfhiNsA9cX3/fSk5kAV52I7mCcLTpjiecInchEUt
-         t4G2Qr2o7StGVRSJHR4YVmtVF6XPa6Tyc9F8IE8bNAt7F8N+cKhFp2DMvehk5b7LeXJX
-         E7Brpz6FCIvnbxQy2rsHQ5Uy8UPtNUVesu5EIRZdtT3hGn42MJZWG4GtG1YgSiVSVmp8
-         5ZLsSZgUp0WlB5eeOklcoPoBF+QS8evdPrNf7sCxk0G/dzwyLNBiZWA/YrnuP3LfVMJu
-         83cw==
-X-Gm-Message-State: AOAM5307B/fIezT3rSoIovAaO2x4Ce8I0qrs2fMFoHSbZPlBOdjasusA
-        t+kDlIH4SSPXpGS/2tABCCLZQo3ejJ8cQ1roSu8pbxNoiMiEUdwC/CWEw9WjfHTCEWN/WvIR4f0
-        2VHwhK/R1198q3QKkJeSDn9MppDlY
-X-Received: by 2002:a05:6214:849:: with SMTP id dg9mr1265813qvb.30.1618426300103;
-        Wed, 14 Apr 2021 11:51:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyg9sbLBXWyxGdJsTjNQr4DDmurtkXEAu8TTVg/ZkwZ2b+eql0sW4xwjZe0FJzN98fdLZhmxg==
-X-Received: by 2002:a05:6214:849:: with SMTP id dg9mr1265778qvb.30.1618426299817;
-        Wed, 14 Apr 2021 11:51:39 -0700 (PDT)
-Received: from xz-x1 (bras-base-toroon474qw-grc-88-174-93-75-154.dsl.bell.ca. [174.93.75.154])
-        by smtp.gmail.com with ESMTPSA id m11sm159011qtg.67.2021.04.14.11.51.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Apr 2021 11:51:38 -0700 (PDT)
-Date:   Wed, 14 Apr 2021 14:51:37 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Brian Geffon <bgeffon@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v2 3/9] userfaultfd/shmem: support minor fault
- registration for shmem
-Message-ID: <20210414185137.GK4440@xz-x1>
-References: <20210413051721.2896915-1-axelrasmussen@google.com>
- <20210413051721.2896915-4-axelrasmussen@google.com>
- <alpine.LSU.2.11.2104132351350.9086@eggly.anvils>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DBrFNOxaMA/7ZTSjVDCpN1Cf8EPs2BVUIE7dJq/XIFY=;
+        b=btySjORW4rvDYnJJ+ULu94FixVQDWqRGpucq1W3CNtjWgvYUsttQSxKiQUjiqiVJhi
+         osnCmwLOrDoLcC5dzFMDPSnuAwt3te+8ucs/Iryf/+E8f4zlTfMJ5nhSowx7BC1KQ/kj
+         pYClPRL7GkzZgFOpVmKpdaxNhgc3hvGF/zSjJV2KgexXvb1EbVMznOeAAvybp4nSgw9t
+         fnC7NVt8JHC/vmjrwQ0v+rYMxUV2laHu0PqAnyPrUNEtA0TbM9ZE7XKaq30P1LSeeRgK
+         Izot/nJ9gzQH4qhTUHxTQ0Xs5uDH/XWgFWGT3udrTCUuZxfCT9Je15BnnyX2D6RbJwfA
+         qn5Q==
+X-Gm-Message-State: AOAM531VMXMfKGV9hTAqFbuLd1IBxD5pyNJ8Ymzzw5Ryb+zQJFZHVpu+
+        Y3VtPe8z91YI4jqdiU4j8gRJTnkTCP4GVD7Ha/U=
+X-Google-Smtp-Source: ABdhPJxiog5q4JCineo0XCm6gpjbEOo7LKP6Kpc65ooTrU3BbGB4xCtX26vFc3CxiwdhgRLIApa7JjZICSStXX5WWzQ=
+X-Received: by 2002:a25:becd:: with SMTP id k13mr222090ybm.459.1618438962678;
+ Wed, 14 Apr 2021 15:22:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.11.2104132351350.9086@eggly.anvils>
+References: <20210325120020.236504-4-memxor@gmail.com> <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+ <20210328080648.oorx2no2j6zslejk@apollo> <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
+ <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net> <20210331094400.ldznoctli6fljz64@apollo>
+ <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net> <20210402152743.dbadpgcmrgjt4eca@apollo>
+ <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
+ <20210402190806.nhcgappm3iocvd3d@apollo> <20210403174721.vg4wle327wvossgl@ast-mbp>
+ <CAEf4Bzaeu4apgEtwS_3q1iPuURjPXMs9H43cYUtJSmjPMU5M9A@mail.gmail.com>
+ <87blar4ti7.fsf@toke.dk> <CAEf4BzaOJ-WD3A13B2uCrsE2yrctAL8QtJ8TuXHLeP+tm98pbA@mail.gmail.com>
+ <874kg9m8t1.fsf@toke.dk>
+In-Reply-To: <874kg9m8t1.fsf@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 14 Apr 2021 15:22:31 -0700
+Message-ID: <CAEf4BzaEkzPeAXqmm5aEdQxnCkrqJTHcSu7afnV11+697KgZTQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 12:36:13AM -0700, Hugh Dickins wrote:
-> On Mon, 12 Apr 2021, Axel Rasmussen wrote:
-> 
-> > This patch allows shmem-backed VMAs to be registered for minor faults.
-> > Minor faults are appropriately relayed to userspace in the fault path,
-> > for VMAs with the relevant flag.
-> > 
-> > This commit doesn't hook up the UFFDIO_CONTINUE ioctl for shmem-backed
-> > minor faults, though, so userspace doesn't yet have a way to resolve
-> > such faults.
-> 
-> This is a very odd way to divide up the series: an "Intermission"
-> half way through the implementation of MINOR/CONTINUE: this 3/9
-> makes little sense without the 4/9 to mm/userfaultfd.c which follows.
-> 
-> But, having said that, I won't object and Peter did not object, and
-> I don't know of anyone else looking here: it will only give each of
-> us more trouble to insist on repartitioning the series, and it's the
-> end state that's far more important to me and to all of us.
+On Wed, Apr 14, 2021 at 3:58 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>
+> > On Tue, Apr 6, 2021 at 3:06 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@r=
+edhat.com> wrote:
+> >>
+> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+> >>
+> >> > On Sat, Apr 3, 2021 at 10:47 AM Alexei Starovoitov
+> >> > <alexei.starovoitov@gmail.com> wrote:
+> >> >>
+> >> >> On Sat, Apr 03, 2021 at 12:38:06AM +0530, Kumar Kartikeya Dwivedi w=
+rote:
+> >> >> > On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov wrote:
+> >> >> > > On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <memxor@=
+gmail.com> wrote:
+> >> >> > > > [...]
+> >> >> > >
+> >> >> > > All of these things are messy because of tc legacy. bpf tried t=
+o follow tc style
+> >> >> > > with cls and act distinction and it didn't quite work. cls with
+> >> >> > > direct-action is the only
+> >> >> > > thing that became mainstream while tc style attach wasn't reall=
+y addressed.
+> >> >> > > There were several incidents where tc had tens of thousands of =
+progs attached
+> >> >> > > because of this attach/query/index weirdness described above.
+> >> >> > > I think the only way to address this properly is to introduce b=
+pf_link style of
+> >> >> > > attaching to tc. Such bpf_link would support ingress/egress onl=
+y.
+> >> >> > > direction-action will be implied. There won't be any index and =
+query
+> >> >> > > will be obvious.
+> >> >> >
+> >> >> > Note that we already have bpf_link support working (without suppo=
+rt for pinning
+> >> >> > ofcourse) in a limited way. The ifindex, protocol, parent_id, pri=
+ority, handle,
+> >> >> > chain_index tuple uniquely identifies a filter, so we stash this =
+in the bpf_link
+> >> >> > and are able to operate on the exact filter during release.
+> >> >>
+> >> >> Except they're not unique. The library can stash them, but somethin=
+g else
+> >> >> doing detach via iproute2 or their own netlink calls will detach th=
+e prog.
+> >> >> This other app can attach to the same spot a different prog and now
+> >> >> bpf_link__destroy will be detaching somebody else prog.
+> >> >>
+> >> >> > > So I would like to propose to take this patch set a step furthe=
+r from
+> >> >> > > what Daniel said:
+> >> >> > > int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
+> >> >> > > and make this proposed api to return FD.
+> >> >> > > To detach from tc ingress/egress just close(fd).
+> >> >> >
+> >> >> > You mean adding an fd-based TC API to the kernel?
+> >> >>
+> >> >> yes.
+> >> >
+> >> > I'm totally for bpf_link-based TC attachment.
+> >> >
+> >> > But I think *also* having "legacy" netlink-based APIs will allow
+> >> > applications to handle older kernels in a much nicer way without ext=
+ra
+> >> > dependency on iproute2. We have a similar situation with kprobe, whe=
+re
+> >> > currently libbpf only supports "modern" fd-based attachment, but use=
+rs
+> >> > periodically ask questions and struggle to figure out issues on olde=
+r
+> >> > kernels that don't support new APIs.
+> >>
+> >> +1; I am OK with adding a new bpf_link-based way to attach TC programs=
+,
+> >> but we still need to support the netlink API in libbpf.
+> >>
+> >> > So I think we'd have to support legacy TC APIs, but I agree with
+> >> > Alexei and Daniel that we should keep it to the simplest and most
+> >> > straightforward API of supporting direction-action attachments and
+> >> > setting up qdisc transparently (if I'm getting all the terminology
+> >> > right, after reading Quentin's blog post). That coincidentally shoul=
+d
+> >> > probably match how bpf_link-based TC API will look like, so all that
+> >> > can be abstracted behind a single bpf_link__attach_tc() API as well,
+> >> > right? That's the plan for dealing with kprobe right now, btw. Libbp=
+f
+> >> > will detect the best available API and transparently fall back (mayb=
+e
+> >> > with some warning for awareness, due to inherent downsides of legacy
+> >> > APIs: no auto-cleanup being the most prominent one).
+> >>
+> >> Yup, SGTM: Expose both in the low-level API (in bpf.c), and make the
+> >> high-level API auto-detect. That way users can also still use the
+> >> netlink attach function if they don't want the fd-based auto-close
+> >> behaviour of bpf_link.
+> >
+> > So I thought a bit more about this, and it feels like the right move
+> > would be to expose only higher-level TC BPF API behind bpf_link. It
+> > will keep the API complexity and amount of APIs that libbpf will have
+> > to support to the minimum, and will keep the API itself simple:
+> > direct-attach with the minimum amount of input arguments. By not
+> > exposing low-level APIs we also table the whole bpf_tc_cls_attach_id
+> > design discussion, as we now can keep as much info as needed inside
+> > bpf_link_tc (which will embed bpf_link internally as well) to support
+> > detachment and possibly some additional querying, if needed.
+>
+> But then there would be no way for the caller to explicitly select a
+> mechanism? I.e., if I write a BPF program using this mechanism targeting
+> a 5.12 kernel, I'll get netlink attachment, which can stick around when
+> I do bpf_link__disconnect(). But then if the kernel gets upgraded to
+> support bpf_link for TC programs I'll suddenly transparently get
+> bpf_link and the attachments will go away unless I pin them. This
+> seems... less than ideal?
 
-Agreed, ideally it should be after patch 4 since this patch enables the
-feature already.
+That's what we are doing with bpf_program__attach_kprobe(), though.
+And so far I've only seen people (privately) saying how good it would
+be to have bpf_link-based TC APIs, doesn't seem like anyone with a
+realistic use case prefers the current APIs. So I suspect it's not
+going to be a problem in practice. But at least I'd start there and
+see how people are using it and if they need anything else.
 
-> 
-> And I'll even seize on it, to give myself an intermission after
-> this one, until tomorrow (when I'll look at 4/9 and 9/9 - but
-> shall not look at the selftests ones at all).
-> 
-> Most of this is okay, except the mm/shmem.c part; and I've just now
-> realized that somewhere (whether in this patch or separately) there
-> needs to be an update to Documentation/admin-guide/mm/userfaultfd.rst
-> (admin-guide? how weird, but not this series' business to correct).
 
-(maybe some dir "devel" would suite better?  But I do also see soft-dirty.rst,
- idle_page_tracking.rst,..)
+>
+> If we expose the low-level API I can elect to just use this if I know I
+> want netlink behaviour, but if bpf_program__attach_tc() is the only API
+> available it would at least need a flag to enforce one mode or the other
+> (I can see someone wanting to enforce kernel bpf_link semantics as well,
+> so a flag for either mode seems reasonable?).
 
-[...]
+Sophisticated enough users can also do feature detection to know if
+it's going to work or not. There are many ways to skin this cat. I'd
+prioritize bpf_link-based TC APIs to be added with legacy TC API as a
+fallback.
 
-> >  static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
-> > @@ -1820,6 +1820,14 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
-> >  
-> >  	page = pagecache_get_page(mapping, index,
-> >  					FGP_ENTRY | FGP_HEAD | FGP_LOCK, 0);
-> > +
-> > +	if (page && vma && userfaultfd_minor(vma)) {
-> > +		unlock_page(page);
-> > +		put_page(page);
-> > +		*fault_type = handle_userfault(vmf, VM_UFFD_MINOR);
-> > +		return 0;
-> > +	}
-> > +
-> 
-> Okay, Peter persuaded you to move that up here: where indeed it
-> does look better than the earlier "swapped" version.
-> 
-> But will crash on swap as it's currently written: it needs to say
-> 		if (!xa_is_value(page)) {
-> 			unlock_page(page);
-> 			put_page(page);
-> 		}
-
-And this is definitely true...  Thanks,
-
-> 
-> I did say before that it's more robust to return from the swap
-> case after doing the shmem_swapin_page(). But I might be slowly
-> realizing that the ioctl to add the pte (in 4/9) will do its
-> shmem_getpage_gfp(), and that will bring in the swap if user
-> did not already do so: so I was wrong to claim more robustness
-> the other way, this placement should be fine. I think.
-> 
-> >  	if (xa_is_value(page)) {
-> >  		error = shmem_swapin_page(inode, index, &page,
-> >  					  sgp, gfp, vma, fault_type);
-> > -- 
-> > 2.31.1.295.g9ea45b61b8-goog
-> 
-
--- 
-Peter Xu
-
+>
+> -Toke
+>
