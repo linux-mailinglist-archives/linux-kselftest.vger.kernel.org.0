@@ -2,227 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1D635FDB7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Apr 2021 00:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43FE35FDBB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Apr 2021 00:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbhDNWXG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Apr 2021 18:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        id S232509AbhDNWXW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Apr 2021 18:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbhDNWXF (ORCPT
+        with ESMTP id S232486AbhDNWXW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Apr 2021 18:23:05 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7049FC061574;
-        Wed, 14 Apr 2021 15:22:43 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id k73so17607726ybf.3;
-        Wed, 14 Apr 2021 15:22:43 -0700 (PDT)
+        Wed, 14 Apr 2021 18:23:22 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52ECBC061574
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 15:23:00 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id d5so12794637iof.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Apr 2021 15:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DBrFNOxaMA/7ZTSjVDCpN1Cf8EPs2BVUIE7dJq/XIFY=;
-        b=ZASmmu9cCOp0GLby5ge3ySdPHTyYlhTYWt0JOSAB6sZncJ1s1rnPPV+Mz2oZu8G3RO
-         bofdF4GlF/hbrO6Pa8d8VSjD+SX1THore3s/+xPaX2IlCEsbfN2SeVI66YR+B0U1gq5G
-         +52Qm55upbNs438HLYAax2yyCTikl2QkUb+Czg9yNGHKGFhjgxxOuBWWgbV8A76UfTED
-         SMk6If6tUFDT/uK8qBGYwQAVQWIA8NpOGqFptgfKRuCfVZ2XA6hFOlf5tCm8yWhrNmfU
-         IlE0XtimzWMa5zTqoZqYJPxhcRX2r9GSW6eGv0YG2ED5ES9mJ2zyS11Kvkk0LFn+alBr
-         F7cQ==
+         :cc;
+        bh=HNT3NufKrIUcs5+uF24MnkRa6AH9RGOV3n+FhV4AzIg=;
+        b=jpC/Ewq35qcb9hDK/ZzGYMsPxIk+MOJTOKhmjhCsLaj1I0NDFUP/L8so4AOOn40/Ct
+         M8/7T62ZEkmyuhQ75BR0/ey+nC8wkHIUYVayd5Bc2ji/40fh6KhsZ60OXYnLgRTbno60
+         7c6hwgYGKu0+8kBgHW0MziCsM6hKjfb5oWymkmqsIC/FERkqxZeIz2FsiI/Ulg6IdzCV
+         VGBKWjuI/782ajBeBc6YhxkEbCfiFf4cG6vqlJFtgiUMT3ckotvhOWu+FLb4Gkg6Hyh6
+         XTgq5XT8Q95RUtWzDDntbOhuKoT7M412v37c+SZtPjKWTaw4awd4/IO4Wu8AlwNz0qUa
+         h1PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DBrFNOxaMA/7ZTSjVDCpN1Cf8EPs2BVUIE7dJq/XIFY=;
-        b=btySjORW4rvDYnJJ+ULu94FixVQDWqRGpucq1W3CNtjWgvYUsttQSxKiQUjiqiVJhi
-         osnCmwLOrDoLcC5dzFMDPSnuAwt3te+8ucs/Iryf/+E8f4zlTfMJ5nhSowx7BC1KQ/kj
-         pYClPRL7GkzZgFOpVmKpdaxNhgc3hvGF/zSjJV2KgexXvb1EbVMznOeAAvybp4nSgw9t
-         fnC7NVt8JHC/vmjrwQ0v+rYMxUV2laHu0PqAnyPrUNEtA0TbM9ZE7XKaq30P1LSeeRgK
-         Izot/nJ9gzQH4qhTUHxTQ0Xs5uDH/XWgFWGT3udrTCUuZxfCT9Je15BnnyX2D6RbJwfA
-         qn5Q==
-X-Gm-Message-State: AOAM531VMXMfKGV9hTAqFbuLd1IBxD5pyNJ8Ymzzw5Ryb+zQJFZHVpu+
-        Y3VtPe8z91YI4jqdiU4j8gRJTnkTCP4GVD7Ha/U=
-X-Google-Smtp-Source: ABdhPJxiog5q4JCineo0XCm6gpjbEOo7LKP6Kpc65ooTrU3BbGB4xCtX26vFc3CxiwdhgRLIApa7JjZICSStXX5WWzQ=
-X-Received: by 2002:a25:becd:: with SMTP id k13mr222090ybm.459.1618438962678;
- Wed, 14 Apr 2021 15:22:42 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=HNT3NufKrIUcs5+uF24MnkRa6AH9RGOV3n+FhV4AzIg=;
+        b=kCAouoXC3tqrq/u+UeUeaCuper5y8oZV1mDJZcAgQGBila2G6cyY8/+m7mXNEcq1S0
+         9ynlV6JqQRThA1u96FPPpjL2t6dhPdOuX0OWV9x5FFwWsp7sU/hKxZ5+yqVuJhHC0FDL
+         21i8JWKfIupS9ur1NGNxFqKqn8jlzNdEMqhSWcOWqIrp+PCAjkq+HSmNJ7nl3u4jEnOp
+         0xGloHAYqVVxdudmh14eJB7L+/DtYlfrECs12zYtpZ2AcZEEGzw733X+ml7kYw9XLs/5
+         PMMXqaPtNbq3X7kbZM8SWfkbbiUHT5bdUu8JNWK0T+aETDqaQnJlhxcZCRMZSH9ewaQj
+         KiCg==
+X-Gm-Message-State: AOAM533NMHYTykxiQWiRXtP5WhL26DHOssT3FSCnQL0JP5VHxXBm0Dl/
+        oJnP/01Wux29wlTmNBBG/+oxxkQuSnCkzeQnny0eiQ==
+X-Google-Smtp-Source: ABdhPJyXwtUg9Lud+Sx/M24/ZqjT8ivP4osMv+mVhBeNoiEcRIj9NNBtKWO8MyLAIjeC4kOVtKWUcXLpskZKx4B6pBI=
+X-Received: by 2002:a05:6638:204f:: with SMTP id t15mr134633jaj.75.1618438979587;
+ Wed, 14 Apr 2021 15:22:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210325120020.236504-4-memxor@gmail.com> <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
- <20210328080648.oorx2no2j6zslejk@apollo> <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
- <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net> <20210331094400.ldznoctli6fljz64@apollo>
- <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net> <20210402152743.dbadpgcmrgjt4eca@apollo>
- <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
- <20210402190806.nhcgappm3iocvd3d@apollo> <20210403174721.vg4wle327wvossgl@ast-mbp>
- <CAEf4Bzaeu4apgEtwS_3q1iPuURjPXMs9H43cYUtJSmjPMU5M9A@mail.gmail.com>
- <87blar4ti7.fsf@toke.dk> <CAEf4BzaOJ-WD3A13B2uCrsE2yrctAL8QtJ8TuXHLeP+tm98pbA@mail.gmail.com>
- <874kg9m8t1.fsf@toke.dk>
-In-Reply-To: <874kg9m8t1.fsf@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 14 Apr 2021 15:22:31 -0700
-Message-ID: <CAEf4BzaEkzPeAXqmm5aEdQxnCkrqJTHcSu7afnV11+697KgZTQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+References: <20210414004518.1116248-1-dlatypov@google.com> <CABVgOSm6VY_vVvjryYc8eAvw7QcNuisP1iesdw4s3Td4Dxo1aw@mail.gmail.com>
+In-Reply-To: <CABVgOSm6VY_vVvjryYc8eAvw7QcNuisP1iesdw4s3Td4Dxo1aw@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 14 Apr 2021 15:22:48 -0700
+Message-ID: <CAGS_qxrVmVK3sOuNR6AMu6-Xyw_wdd0MQD-YiFVXcD=bkTmr0A@mail.gmail.com>
+Subject: Re: [PATCH v3] Documentation: kunit: add tips for running KUnit
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 3:58 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
+On Tue, Apr 13, 2021 at 9:22 PM David Gow <davidgow@google.com> wrote:
 >
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->
-> > On Tue, Apr 6, 2021 at 3:06 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@r=
-edhat.com> wrote:
-> >>
-> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
-> >>
-> >> > On Sat, Apr 3, 2021 at 10:47 AM Alexei Starovoitov
-> >> > <alexei.starovoitov@gmail.com> wrote:
-> >> >>
-> >> >> On Sat, Apr 03, 2021 at 12:38:06AM +0530, Kumar Kartikeya Dwivedi w=
-rote:
-> >> >> > On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov wrote:
-> >> >> > > On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <memxor@=
-gmail.com> wrote:
-> >> >> > > > [...]
-> >> >> > >
-> >> >> > > All of these things are messy because of tc legacy. bpf tried t=
-o follow tc style
-> >> >> > > with cls and act distinction and it didn't quite work. cls with
-> >> >> > > direct-action is the only
-> >> >> > > thing that became mainstream while tc style attach wasn't reall=
-y addressed.
-> >> >> > > There were several incidents where tc had tens of thousands of =
-progs attached
-> >> >> > > because of this attach/query/index weirdness described above.
-> >> >> > > I think the only way to address this properly is to introduce b=
-pf_link style of
-> >> >> > > attaching to tc. Such bpf_link would support ingress/egress onl=
-y.
-> >> >> > > direction-action will be implied. There won't be any index and =
-query
-> >> >> > > will be obvious.
-> >> >> >
-> >> >> > Note that we already have bpf_link support working (without suppo=
-rt for pinning
-> >> >> > ofcourse) in a limited way. The ifindex, protocol, parent_id, pri=
-ority, handle,
-> >> >> > chain_index tuple uniquely identifies a filter, so we stash this =
-in the bpf_link
-> >> >> > and are able to operate on the exact filter during release.
-> >> >>
-> >> >> Except they're not unique. The library can stash them, but somethin=
-g else
-> >> >> doing detach via iproute2 or their own netlink calls will detach th=
-e prog.
-> >> >> This other app can attach to the same spot a different prog and now
-> >> >> bpf_link__destroy will be detaching somebody else prog.
-> >> >>
-> >> >> > > So I would like to propose to take this patch set a step furthe=
-r from
-> >> >> > > what Daniel said:
-> >> >> > > int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
-> >> >> > > and make this proposed api to return FD.
-> >> >> > > To detach from tc ingress/egress just close(fd).
-> >> >> >
-> >> >> > You mean adding an fd-based TC API to the kernel?
-> >> >>
-> >> >> yes.
-> >> >
-> >> > I'm totally for bpf_link-based TC attachment.
-> >> >
-> >> > But I think *also* having "legacy" netlink-based APIs will allow
-> >> > applications to handle older kernels in a much nicer way without ext=
-ra
-> >> > dependency on iproute2. We have a similar situation with kprobe, whe=
-re
-> >> > currently libbpf only supports "modern" fd-based attachment, but use=
-rs
-> >> > periodically ask questions and struggle to figure out issues on olde=
-r
-> >> > kernels that don't support new APIs.
-> >>
-> >> +1; I am OK with adding a new bpf_link-based way to attach TC programs=
-,
-> >> but we still need to support the netlink API in libbpf.
-> >>
-> >> > So I think we'd have to support legacy TC APIs, but I agree with
-> >> > Alexei and Daniel that we should keep it to the simplest and most
-> >> > straightforward API of supporting direction-action attachments and
-> >> > setting up qdisc transparently (if I'm getting all the terminology
-> >> > right, after reading Quentin's blog post). That coincidentally shoul=
-d
-> >> > probably match how bpf_link-based TC API will look like, so all that
-> >> > can be abstracted behind a single bpf_link__attach_tc() API as well,
-> >> > right? That's the plan for dealing with kprobe right now, btw. Libbp=
-f
-> >> > will detect the best available API and transparently fall back (mayb=
-e
-> >> > with some warning for awareness, due to inherent downsides of legacy
-> >> > APIs: no auto-cleanup being the most prominent one).
-> >>
-> >> Yup, SGTM: Expose both in the low-level API (in bpf.c), and make the
-> >> high-level API auto-detect. That way users can also still use the
-> >> netlink attach function if they don't want the fd-based auto-close
-> >> behaviour of bpf_link.
+> On Wed, Apr 14, 2021 at 8:45 AM Daniel Latypov <dlatypov@google.com> wrote:
 > >
-> > So I thought a bit more about this, and it feels like the right move
-> > would be to expose only higher-level TC BPF API behind bpf_link. It
-> > will keep the API complexity and amount of APIs that libbpf will have
-> > to support to the minimum, and will keep the API itself simple:
-> > direct-attach with the minimum amount of input arguments. By not
-> > exposing low-level APIs we also table the whole bpf_tc_cls_attach_id
-> > design discussion, as we now can keep as much info as needed inside
-> > bpf_link_tc (which will embed bpf_link internally as well) to support
-> > detachment and possibly some additional querying, if needed.
+> > This is long overdue.
+> >
+> > There are several things that aren't nailed down (in-tree
+> > .kunitconfig's), or partially broken (GCOV on UML), but having them
+> > documented, warts and all, is better than having nothing.
+> >
+> > This covers a bunch of the more recent features
+> > * kunit_filter_glob
+> > * kunit.py run --kunitconfig
+> > * slightly more detail on building tests as modules
+> > * CONFIG_KUNIT_DEBUGFS
+> >
+> > By my count, the only headline features now not mentioned are the KASAN
+> > integration and KernelCI json output support (kunit.py run --json).
+> >
+> > And then it also discusses how to get code coverage reports under UML
+> > and non-UML since this is a question people have repeatedly asked.
+> >
+> > Non-UML coverage collection is no different from normal, but we should
+> > probably explicitly call this out.
+> >
+> > As for UML, I was able to get it working again with two small hacks.*
+> > E.g. with CONFIG_KUNIT=y && CONFIG_KUNIT_ALL_TESTS=y
+> >   Overall coverage rate:
+> >     lines......: 15.1% (18294 of 120776 lines)
+> >     functions..: 16.8% (1860 of 11050 functions)
+> >
+> > Note: this doesn't document --alltests since this is not stable yet.
+> > Hopefully being run more frequently as part of KernelCI will help...
+> >
+> > *Using gcc/gcov-6 and not using uml_abort() in os_dump_core().
+> > I've documented these hacks in "Notes" but left TODOs for
+> > brendanhiggins@google.com who tracked down the runtime issue in GCC.
+> > To be clear: these are not issues specific to KUnit, but rather to UML.
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
 >
-> But then there would be no way for the caller to explicitly select a
-> mechanism? I.e., if I write a BPF program using this mechanism targeting
-> a 5.12 kernel, I'll get netlink attachment, which can stick around when
-> I do bpf_link__disconnect(). But then if the kernel gets upgraded to
-> support bpf_link for TC programs I'll suddenly transparently get
-> bpf_link and the attachments will go away unless I pin them. This
-> seems... less than ideal?
+> I'm very happy with this now: all my issues with the previous versions
+> are addressed. I'm particularly excited to have code coverage
+> documented somewhere.
 
-That's what we are doing with bpf_program__attach_kprobe(), though.
-And so far I've only seen people (privately) saying how good it would
-be to have bpf_link-based TC APIs, doesn't seem like anyone with a
-realistic use case prefers the current APIs. So I suspect it's not
-going to be a problem in practice. But at least I'd start there and
-see how people are using it and if they need anything else.
-
+I just realized I forgot to commit the updated wording you requested
+wrt uml_abort() in the patch itself.
+Sending a v4 now.
 
 >
-> If we expose the low-level API I can elect to just use this if I know I
-> want netlink behaviour, but if bpf_program__attach_tc() is the only API
-> available it would at least need a flag to enforce one mode or the other
-> (I can see someone wanting to enforce kernel bpf_link semantics as well,
-> so a flag for either mode seems reasonable?).
-
-Sophisticated enough users can also do feature detection to know if
-it's going to work or not. There are many ways to skin this cat. I'd
-prioritize bpf_link-based TC APIs to be added with legacy TC API as a
-fallback.
-
+> Assuming Brendan's happy with the TODOs being there, I think this is
+> ready to go.
 >
-> -Toke
+> I also built this with Sphinx and gave it a quick look, and it all
+> looks good there as well.
 >
+> Therefore, this is:
+>
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+> Cheers,
+> -- David
