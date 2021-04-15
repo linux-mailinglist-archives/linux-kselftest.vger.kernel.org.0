@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1343606A3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Apr 2021 12:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB0E3606D2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Apr 2021 12:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbhDOKKx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Apr 2021 06:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        id S232218AbhDOKMY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Apr 2021 06:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbhDOKKx (ORCPT
+        with ESMTP id S232119AbhDOKMY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Apr 2021 06:10:53 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC518C061574;
-        Thu, 15 Apr 2021 03:10:30 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t23so11816245pjy.3;
-        Thu, 15 Apr 2021 03:10:30 -0700 (PDT)
+        Thu, 15 Apr 2021 06:12:24 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6F3C061574;
+        Thu, 15 Apr 2021 03:12:01 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id cu16so9822098pjb.4;
+        Thu, 15 Apr 2021 03:12:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=NvHsKbfHKiPhhIDMvBo8gHDE39B/2bp+8K6UZXIMKE8=;
-        b=IFxNnCuGsZm/1xK/2JjuFIIK+WiBUISDtvKxkyOXqSgJYU7nGvjDzot5zKdJ2MzlMd
-         z1XpBvFc110U7/EVWRhYWo79Pt9ITPFwraplukM82BTBw/BnvEPAzlYdNn6SQK39v5EE
-         iXnoK9xy0kWD2sfocYXqYwIGfrg30bB8ZZHY62mIDiaR9ut+kQEsa4B8xd14c5QWgdiR
-         9REiErR00J8d7p8GsAwv6g5/ZGQSKv1ad6+k/a88XwXAknP32OxMg3hY2wb0Y4IvqPWF
-         Yqi7tf1my6VvGPBLrmCwkFfW8k47rKFLPn0cGYPw4bTWo/9M/ikKO/dy9mxDFoePHD0h
-         xa6g==
+        bh=kl1Dh89o9fdwp66vGr19g+a8TIhVMHCVwwe7/Es/UPQ=;
+        b=UktyuFIrKkPUpI6/nY6ScN00y8E69w+kj0EG5oD19N+w83FrI0rqgcqDHB9z7ajbWd
+         qjDdnJIh1TyF0eIgAWof65AKYXGk69USrBSvYHu39GrBUAgkvNDXklae0D8jNkH7H3oa
+         gXOqh8PHYmmw751EC5fuX05ei/+KWc5zZGMQyurE0S1KQ82lZPSou8+zKOV/hWs+Fx7o
+         PMmT3qsCm2LZOYeWquNNQx5Cs6vQMwo7KTuUKXOcZssFLSfORwyyN5oVNu9bridz/2Nc
+         kfd3m880n1jgwlsNy+GIUmJd0w/KhB67XoyXUUbiKTAAkduqdcwMFKEdA0vVWlCpwMHb
+         Kn3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NvHsKbfHKiPhhIDMvBo8gHDE39B/2bp+8K6UZXIMKE8=;
-        b=WUUDmbWVtDClggNB7Vqm0enFZ1QUcpGdmr7wtqYuuv/XedK5ejmWaRUjEP3OGqMNJM
-         HojtLSga1RJwgBy2yAr7HjYqbcYhMu89xG9EHKPKwGGZSS2XNzHw3uILBT06p8S8Dntj
-         nC+tXBFoLjpkZhJHhTZ8S1yWDWbgzB3irxxXK2FhFqka/QGjSwJ7DzAMhM+ltj4nrSoF
-         TNqlZame8gyz+hlsab+LyY8MRmzVQX2VxIxe2WBrhZb+vofGfKm3NU4Ai9Hi9LMjs1np
-         NZxlpUpyNPq9RGXuG/EUrqPoTJoCy/P1M/wd8yus0aWMs51OsPaBAWhCK3qsOKQP9NYN
-         Z+fQ==
-X-Gm-Message-State: AOAM530MaYS2n1PJNXnAIydYs8R0+sYh2GTChI0HLfsTKwCp5QXjBRz7
-        dou7IyrOs2LwCDn207sE630kNDjjFsqQaNEdGNc=
-X-Google-Smtp-Source: ABdhPJwAY4VM01K/INQpoA54VNzxkWTMwP9EDpd0+gJZzGwGj+3kl4ES1JgpLRckVZfj+9d/H1Z4xgXnh9Oj9DrQ4uo=
-X-Received: by 2002:a17:90b:30c3:: with SMTP id hi3mr2914460pjb.27.1618481430206;
- Thu, 15 Apr 2021 03:10:30 -0700 (PDT)
+        bh=kl1Dh89o9fdwp66vGr19g+a8TIhVMHCVwwe7/Es/UPQ=;
+        b=IZmwWB16FuApQrPNlcrvV8WSfIyOqy9rqMJm2v7OKDGV6F3vI0U0BOldhopQgSDVGC
+         xrjuGH0ZaDerR/IK7PMenNaper04x3hUUSlgUS2itAESWE4TjVBd4f6C58DPPMui+yyU
+         rcw9qaIRZ2w5cM5SsOMMcb9aisL97BhyoJzlwQ7IX0ty7u2jTC/7r8deeSwMaUfuz0dT
+         AUxjaKLV+XaCqz7PK8FnSD1AWL3VFwzIUuMaXjkpSKTEfwwN/1yvDowGoGrXczOeuyX7
+         ND0GwRfZi1aFbVPDfGNkj7+Zhfhvx/wNCEF8jubnEbrMVPNmRGcmDKghIw+MLQXJ9WxP
+         wEUQ==
+X-Gm-Message-State: AOAM533ESlEBqrIJ3kUTer3pDorrmXcR0LhzjHLl2hCs8xptT4F/CgGQ
+        czdx1syAb9ZZ2+2AtutBdI9CmBHrdGvq5DOCVCw=
+X-Google-Smtp-Source: ABdhPJxFHOBbn1iPOICBzJEYb+LeTziMcyeQej8Zvyr4LSp7uYMrrJbS4jqOIA+ERTS3IxuA5coLB2KnVe+fNYwJZCI=
+X-Received: by 2002:a17:90b:4c02:: with SMTP id na2mr3034906pjb.77.1618481521190;
+ Thu, 15 Apr 2021 03:12:01 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210413100747.4921-1-glittao@gmail.com> <20210413100747.4921-2-glittao@gmail.com>
- <CANpmjNOOWuiR6Lb1igX+5Lp=PwcEE7Gx5co5KeGCnGz2WxbjNQ@mail.gmail.com>
-In-Reply-To: <CANpmjNOOWuiR6Lb1igX+5Lp=PwcEE7Gx5co5KeGCnGz2WxbjNQ@mail.gmail.com>
+ <CAGS_qxoYaYKf=fkfLbOMS0us4O9LSVtRbJjrp5ooHhSmkabxVA@mail.gmail.com>
+In-Reply-To: <CAGS_qxoYaYKf=fkfLbOMS0us4O9LSVtRbJjrp5ooHhSmkabxVA@mail.gmail.com>
 From:   Oliver Glitta <glittao@gmail.com>
-Date:   Thu, 15 Apr 2021 12:10:19 +0200
-Message-ID: <CAD=R=qq9fUKnD7vxayigTPUF4E=_3w-4uZwM=ym4DfqXwP3QSw@mail.gmail.com>
+Date:   Thu, 15 Apr 2021 12:11:50 +0200
+Message-ID: <CAD=R=qqyiTg58oXKrgK44YkXuSj2F5rv8F=K5-e_r5h39Fedvw@mail.gmail.com>
 Subject: Re: [PATCH v4 2/3] mm/slub, kunit: add a KUnit test for SLUB
  debugging functionality
-To:     Marco Elver <elver@google.com>
+To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
@@ -61,21 +61,23 @@ Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         Linux Memory Management List <linux-mm@kvack.org>,
-        Daniel Latypov <dlatypov@google.com>
+        Marco Elver <elver@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ut 13. 4. 2021 o 15:54 Marco Elver <elver@google.com> nap=C3=ADsal(a):
+ut 13. 4. 2021 o 23:33 Daniel Latypov <dlatypov@google.com> nap=C3=ADsal(a)=
+:
 >
-> On Tue, 13 Apr 2021 at 12:07, <glittao@gmail.com> wrote:
+> On Tue, Apr 13, 2021 at 3:07 AM <glittao@gmail.com> wrote:
+> >
 > > From: Oliver Glitta <glittao@gmail.com>
 > >
 > > SLUB has resiliency_test() function which is hidden behind #ifdef
@@ -99,35 +101,31 @@ ut 13. 4. 2021 o 15:54 Marco Elver <elver@google.com> nap=C3=ADsal(a):
 > > Add new option CONFIG_SLUB_KUNIT_TEST in Kconfig.
 > > Because the test deliberatly modifies non-allocated objects, it depends=
  on
+>
+> nit: *deliberately
+>
 > > !KASAN which would have otherwise prevented that.
->
-> Hmm, did the test fail with KASAN? Is it possible to skip the tests
-> and still run a subset of tests with KASAN? It'd be nice if we could
-> run some of these tests with KASAN as well.
->
+> >
 > > Use kunit_resource to count errors in cache and silence bug reports.
 > > Count error whenever slab_bug() or slab_fix() is called or when
 > > the count of pages is wrong.
 > >
 > > Signed-off-by: Oliver Glitta <glittao@gmail.com>
 >
-> Reviewed-by: Marco Elver <elver@google.com>
+> Acked-by: Daniel Latypov <dlatypov@google.com>
 >
 
 Thank you.
 
-> Thanks, this all looks good to me. But perhaps do test what works with
-> KASAN, to see if you need the !KASAN constraint for all cases.
-
-I tried to run tests with KASAN functionality disabled with function
-kasan_disable_current() and three of the tests failed with wrong
-errors counts.
-So I add the !KASAN constraint for all tests, because the merge window
-is coming, we want to know if this version is stable and without other
-mistakes.
-We will take a closer look at that in the follow-up patch.
-
+> Looks good to me!
+> My one minor suggestion: perhaps let's log a summary of the error or
+> the func name in slab_add_kunit_errors().
 >
+
+That is a good suggestion, but now we want to know if this version is stabl=
+e.
+We will take a look at that in the follow-up patch.
+
 > > ---
 > > Changes since v3
 > >
@@ -221,6 +219,15 @@ e refer
 > > +
 > > +       kmem_cache_free(s, p);
 > > +       kmem_cache_destroy(s);
+>
+> Might not be worth doing for now:
+> I see kmem_cache_destroy() has a `if (err) { pr_err(...); dump_stack(); }=
+` call.
+> Does it make sense to cause that to fail the test?
+>
+> I see it's defined in mm/slab_common.c, so we might not want to touch
+> that in this patch.
+>
 > > +}
 > > +
 > > +static void test_next_pointer(struct kunit *test)
@@ -238,6 +245,12 @@ ree", 64, 0,
 > > +       tmp =3D *ptr_addr;
 > > +       p[s->offset] =3D 0x12;
 > > +
+>
+> I really like this test!
+> I think it'll be a good example to point to wrt handle mutating state
+> in tests (clear comments, using whitespace to break up steps, setting
+> up clear EXPECT calls, etc.)
+>
 > > +       /*
 > > +        * Expecting three errors.
 > > +        * One for the corrupted freechain and the other one for the wr=
@@ -323,11 +336,7 @@ free", 64, 0,
 > > +
 > > +       /* FIXME: remove when CONFIG_KASAN requirement is dropped. */
 > > +       current->kunit_test =3D test;
->
-> Note, the patch "kunit: support failure from dynamic analysis tools"
-> is already in -next. It's probably safe to leave this, and send a
-> follow-up patch later once that kunit patch is in mainline.
->
+> > +
 > > +       kunit_add_named_resource(test, NULL, NULL, &resource,
 > > +                                       "slab_errors", &slab_errors);
 > > +       return 0;
@@ -430,6 +439,25 @@ uct page *page, u8 *p)
 > > +               return;
 > > +
 > >         slab_bug(s, "%s", reason);
+>
+> Would it be a good idea for us to log the error text in slab_add_kunit_er=
+rors()?
+> Otherwise we could end up with getting the same error count but from
+> an unexpected set of code paths.
+>
+> Boils down to using this macro
+>   kunit_info(current->kunit_test, "%s", reason);
+>
+> Perhaps we could get away with just duplicating (a subset of) what
+> we'd pass into slab_bug(), i.e.
+>   if (slab_add_kunit_errors("%s", reason)) return;
+>   if (slab_add_kunit_errors("%s overwritten", what) return;
+> If the string we're printing is too annoying to duplicate, can get
+> away with just using __func__ as well.
+>
+> Or a more messy alternative would be to add some #if'd code in
+> slab_bug(), but I don't know if that's as good of an idea.
+>
 > >         print_trailer(s, page, object);
 > >  }
 > > @@ -749,6 +776,9 @@ static __printf(3, 4) void slab_err(struct kmem_cac=
