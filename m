@@ -2,545 +2,351 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 025EC360EC5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Apr 2021 17:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156C3360F96
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Apr 2021 17:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234226AbhDOPVF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Apr 2021 11:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237020AbhDOPUU (ORCPT
+        id S234093AbhDOP56 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Apr 2021 11:57:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25897 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232769AbhDOP54 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Apr 2021 11:20:20 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F875C06137F
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 08:17:51 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id a18-20020a17090a4812b02900fc63fabd38so12420054pjh.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 08:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=0LO6oJg1J/PSbt/I1DJNWKL6xWFnsibne8UGI7p/X7U=;
-        b=Mxcuusbsyo3Hl7tLG2sqa6ebs88NwSJ47Ssw0ntnprM1yBUVQTYoGiYaT7IVcN8enV
-         Et7Heq4PwuGsI4sU4wtvBKP0RU8RETkruYd8jp3wxMeEX3Rrh4FRkXaNL6Mp+0+loAGY
-         VOK4KMSLZROyyT71mB4atCNV1zgjB9z6R7NB0dR7rTTV7AeB6OTX+gYJ81BgZ3jfvbxv
-         YxM4vqy2JbWTvfTLZCfqqaSEkZSpq5HLFQCVLgi9yXI2Imc+aObITAsQTUkQKusGf1SX
-         PcQvltSBhN5/S5oM+O8OeYNUCQL2oftlq5fiVpfrFRWPhwiYJktSRAUb9geOOfrcGEDY
-         EW6g==
+        Thu, 15 Apr 2021 11:57:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618502253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+LsS0ftAjENjqdx8EBjDPwi/OUCdobBCtVY48zTQ40w=;
+        b=MBocAMNt8NtX1v8n3wYr6HV7/T++rhu9i/SnIKXWkAoKl0koWtJZfVwG9UuM6vIZjoQIPr
+        0BUfO59gmbDVz3n1v0dVNqY6Tr0C4bCWzBb3IRLOKi0tuqUZX2at6AP4rPf2z/uRVU2J3C
+        fWyjBj8nTIuGcOJJu5jc+8NVQbUoQb0=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-555-LabgAD7_NEiTR5j1pgxaLg-1; Thu, 15 Apr 2021 11:57:31 -0400
+X-MC-Unique: LabgAD7_NEiTR5j1pgxaLg-1
+Received: by mail-ej1-f72.google.com with SMTP id d16-20020a1709066410b0290373cd3ce7e6so1101632ejm.14
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 08:57:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=0LO6oJg1J/PSbt/I1DJNWKL6xWFnsibne8UGI7p/X7U=;
-        b=NdytwH50uvc7+qX2dvKmnm0bO+hNLqS/n27+hAM2DB/wxt89sxLDyXgsScTftql0cj
-         KFbMOrVkZEgdlaVegold6EyS5/ad+6huM5gu9PJ9s4YGFN/z2jIprXvdM03067yeUhoN
-         bha1arrAUPHd+u8uii2wNbhBlOYlWpB6Cg8hrtmwUTunEvWmWwuAK1JE/T7ygJNQDli/
-         KTaM3HPiKem7dQZDNpQx9/4bE7nf3pwsEJ6VPjuw8uanc+PocjunEzbqCGG0vmQbjJNv
-         9/TO7OAWda/ZdW2ZXKy8dgiaN6MI91nje6mCKinKsmfnX2fvg2mRzc0F7ycbeijfKfht
-         0j+w==
-X-Gm-Message-State: AOAM532TpdkmuJdCYNoktRhIcz4es/0ojVJBZ6zeQfZk+xeDH5bPorHk
-        I2zM5l5IIafLhliel6sIH2Sip1zH/1SCquMUtQ==
-X-Google-Smtp-Source: ABdhPJwino7iFjPKYYpune4AXyYUAIecsYG/l/m+KwgdSssG8W9x6U3tXbrfRzAa5LUdbWxs4Db0400ixbOyeMTLsw==
-X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
- (user=jingzhangos job=sendgmr) by 2002:a17:90a:bf84:: with SMTP id
- d4mr4390986pjs.118.1618499871205; Thu, 15 Apr 2021 08:17:51 -0700 (PDT)
-Date:   Thu, 15 Apr 2021 15:17:41 +0000
-In-Reply-To: <20210415151741.1607806-1-jingzhangos@google.com>
-Message-Id: <20210415151741.1607806-5-jingzhangos@google.com>
-Mime-Version: 1.0
-References: <20210415151741.1607806-1-jingzhangos@google.com>
-X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
-Subject: [PATCH v2 4/4] KVM: selftests: Add selftest for KVM statistics data
- binary interface
-From:   Jing Zhang <jingzhangos@google.com>
-To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     Jing Zhang <jingzhangos@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=+LsS0ftAjENjqdx8EBjDPwi/OUCdobBCtVY48zTQ40w=;
+        b=nyThsPGIkOExg971/1vWrMULCqCRAvPJpVb5VqBEFCGFnTuBneovxUNu5UfgVMROhu
+         bqnoHLsOYPLiNjC0KcwSUgB8FpjaxvOz0Yf5eZT9aNI1tafN6dLHGzN4mGH3VR5xFvcs
+         A6NwXpEtxxjjyCRC7CdO8D4DqtxrR2xeIGhY3w/0p1Fw2xL79tWYJOYvuKCG4NEMfK1g
+         UVsSuq03vdrqnI83a9FIwK0Ml3q2rnalrx3FHUYZpgB/FUxnPi/tMy0nMZRy8l4URCno
+         4dj2b/Kfyq8gYXO7gpgsIfFOw2EGmtseOCOw8erlyTe/pd2OcJvDrMLAaf9QqBEABVPV
+         9WYQ==
+X-Gm-Message-State: AOAM530rQ6DEImAt2OYUMiJ6w8zB2yR0egKrvd8FSe6j72L0Ov9yJhIK
+        wRFUuSXJiIzXZsSNeBJAl66xfOh3ncrU7vs0II6dZmYlsCzNN+5RA2xaDZNNTp6ZsqGbp+l1v7u
+        3RwTCm3YNFA/5DoRh6DZItR0XjNmy
+X-Received: by 2002:a17:906:7e53:: with SMTP id z19mr4151987ejr.422.1618502249508;
+        Thu, 15 Apr 2021 08:57:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx4N2v3zSfzaI8sojkPWLL/T2oIA/OEpL4yra5qcFBBjmH+et1M12PxSwhPmxWTUWs5xHO7Jw==
+X-Received: by 2002:a17:906:7e53:: with SMTP id z19mr4151940ejr.422.1618502249016;
+        Thu, 15 Apr 2021 08:57:29 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id qt10sm2285687ejb.34.2021.04.15.08.57.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Apr 2021 08:57:28 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 5AEE91806B3; Thu, 15 Apr 2021 17:57:27 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+In-Reply-To: <CAEf4Bzbb0ECMjhAvD-1wpp3qJJcrpgKr_=ONN4ZQmuNUgYrH4A@mail.gmail.com>
+References: <20210325120020.236504-4-memxor@gmail.com>
+ <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+ <20210328080648.oorx2no2j6zslejk@apollo>
+ <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
+ <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
+ <20210331094400.ldznoctli6fljz64@apollo>
+ <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
+ <20210402152743.dbadpgcmrgjt4eca@apollo>
+ <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
+ <20210402190806.nhcgappm3iocvd3d@apollo>
+ <20210403174721.vg4wle327wvossgl@ast-mbp>
+ <CAEf4Bzaeu4apgEtwS_3q1iPuURjPXMs9H43cYUtJSmjPMU5M9A@mail.gmail.com>
+ <87blar4ti7.fsf@toke.dk>
+ <CAEf4BzaOJ-WD3A13B2uCrsE2yrctAL8QtJ8TuXHLeP+tm98pbA@mail.gmail.com>
+ <874kg9m8t1.fsf@toke.dk>
+ <CAEf4BzaEkzPeAXqmm5aEdQxnCkrqJTHcSu7afnV11+697KgZTQ@mail.gmail.com>
+ <87wnt4jx8m.fsf@toke.dk>
+ <CAEf4Bzbb0ECMjhAvD-1wpp3qJJcrpgKr_=ONN4ZQmuNUgYrH4A@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 15 Apr 2021 17:57:27 +0200
+Message-ID: <87v98nilqw.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Signed-off-by: Jing Zhang <jingzhangos@google.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   3 +
- .../testing/selftests/kvm/include/kvm_util.h  |   3 +
- .../selftests/kvm/kvm_bin_form_stats.c        | 370 ++++++++++++++++++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  11 +
- 5 files changed, 388 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 32b87cc77c8e..0c8241bd9a17 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -38,3 +38,4 @@
- /memslot_modification_stress_test
- /set_memory_region_test
- /steal_time
-+/kvm_bin_form_stats
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index a6d61f451f88..5cdd52ccedf2 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -72,6 +72,7 @@ TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
- TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
- TEST_GEN_PROGS_x86_64 += set_memory_region_test
- TEST_GEN_PROGS_x86_64 += steal_time
-+TEST_GEN_PROGS_x86_64 += kvm_bin_form_stats
- 
- TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
- TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list-sve
-@@ -81,6 +82,7 @@ TEST_GEN_PROGS_aarch64 += dirty_log_perf_test
- TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
- TEST_GEN_PROGS_aarch64 += set_memory_region_test
- TEST_GEN_PROGS_aarch64 += steal_time
-+TEST_GEN_PROGS_aarch64 += kvm_bin_form_stats
- 
- TEST_GEN_PROGS_s390x = s390x/memop
- TEST_GEN_PROGS_s390x += s390x/resets
-@@ -89,6 +91,7 @@ TEST_GEN_PROGS_s390x += demand_paging_test
- TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
- TEST_GEN_PROGS_s390x += set_memory_region_test
-+TEST_GEN_PROGS_s390x += kvm_bin_form_stats
- 
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
- LIBKVM += $(LIBKVM_$(UNAME_M))
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 2d7eb6989e83..407f3a35ed3b 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -378,4 +378,7 @@ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc);
- #define GUEST_ASSERT_4(_condition, arg1, arg2, arg3, arg4) \
- 	__GUEST_ASSERT((_condition), 4, (arg1), (arg2), (arg3), (arg4))
- 
-+int vm_get_statsfd(struct kvm_vm *vm);
-+int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid);
-+
- #endif /* SELFTEST_KVM_UTIL_H */
-diff --git a/tools/testing/selftests/kvm/kvm_bin_form_stats.c b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
-new file mode 100644
-index 000000000000..5ed2fe74ce55
---- /dev/null
-+++ b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
-@@ -0,0 +1,370 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * kvm_bin_form_stats
-+ *
-+ * Copyright (C) 2021, Google LLC.
-+ *
-+ * Test the fd-based interface for KVM statistics.
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <errno.h>
-+
-+#include "test_util.h"
-+
-+#include "kvm_util.h"
-+#include "asm/kvm.h"
-+#include "linux/kvm.h"
-+
-+int vm_stats_test(struct kvm_vm *vm)
-+{
-+	ssize_t ret;
-+	int i, stats_fd, err = -1;
-+	size_t size_desc, size_data = 0;
-+	struct kvm_stats_header header;
-+	struct kvm_stats_desc *stats_desc, *pdesc;
-+	struct kvm_vm_stats_data *stats_data;
-+
-+	// Get fd for VM stats
-+	stats_fd = vm_get_statsfd(vm);
-+	if (stats_fd < 0) {
-+		perror("Get VM stats fd");
-+		return err;
-+	}
-+	// Read kvm vm stats header
-+	ret = read(stats_fd, &header, sizeof(header));
-+	if (ret != sizeof(header)) {
-+		perror("Read VM stats header");
-+		goto out_close_fd;
-+	}
-+	size_desc = sizeof(*stats_desc) + header.name_size;
-+	// Check id string in header, that should start with "kvm"
-+	if (strncmp(header.id, "kvm", 3) ||
-+			strlen(header.id) >= KVM_STATS_ID_MAXLEN) {
-+		printf("Invalid KVM VM stats type!\n");
-+		goto out_close_fd;
-+	}
-+	// Sanity check for other fields in header
-+	if (header.count == 0) {
-+		err = 0;
-+		goto out_close_fd;
-+	}
-+	// Check overlap
-+	if (header.desc_offset == 0 || header.data_offset == 0 ||
-+			header.desc_offset < sizeof(header) ||
-+			header.data_offset < sizeof(header)) {
-+		printf("Invalid offset fields in header!\n");
-+		goto out_close_fd;
-+	}
-+	if (header.desc_offset < header.data_offset &&
-+			(header.desc_offset + size_desc * header.count >
-+			header.data_offset)) {
-+		printf("Descriptor block is overlapped with data block!\n");
-+		goto out_close_fd;
-+	}
-+
-+	// Allocate memory for stats descriptors
-+	stats_desc = calloc(header.count, size_desc);
-+	if (!stats_desc) {
-+		perror("Allocate memory for VM stats descriptors");
-+		goto out_close_fd;
-+	}
-+	// Read kvm vm stats descriptors
-+	ret = pread(stats_fd, stats_desc,
-+			size_desc * header.count, header.desc_offset);
-+	if (ret != size_desc * header.count) {
-+		perror("Read KVM VM stats descriptors");
-+		goto out_free_desc;
-+	}
-+	// Sanity check for fields in descriptors
-+	for (i = 0; i < header.count; ++i) {
-+		pdesc = (void *)stats_desc + i * size_desc;
-+		// Check type,unit,scale boundaries
-+		if ((pdesc->flags & KVM_STATS_TYPE_MASK) > KVM_STATS_TYPE_MAX) {
-+			printf("Unknown KVM stats type!\n");
-+			goto out_free_desc;
-+		}
-+		if ((pdesc->flags & KVM_STATS_UNIT_MASK) > KVM_STATS_UNIT_MAX) {
-+			printf("Unknown KVM stats unit!\n");
-+			goto out_free_desc;
-+		}
-+		if ((pdesc->flags & KVM_STATS_SCALE_MASK) >
-+				KVM_STATS_SCALE_MAX) {
-+			printf("Unknown KVM stats scale!\n");
-+			goto out_free_desc;
-+		}
-+		/* Check exponent for stats unit
-+		 * Exponent for counter should be greater than or equal to 0
-+		 * Exponent for unit bytes should be greater than or equal to 0
-+		 * Exponent for unit seconds should be less than or equal to 0
-+		 * Exponent for unit clock cycles should be greater than or
-+		 * equal to 0
-+		 */
-+		switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
-+		case KVM_STATS_UNIT_NONE:
-+		case KVM_STATS_UNIT_BYTES:
-+		case KVM_STATS_UNIT_CYCLES:
-+			if (pdesc->exponent < 0) {
-+				printf("Unsupported KVM stats unit!\n");
-+				goto out_free_desc;
-+			}
-+			break;
-+		case KVM_STATS_UNIT_SECONDS:
-+			if (pdesc->exponent > 0) {
-+				printf("Unsupported KVM stats unit!\n");
-+				goto out_free_desc;
-+			}
-+			break;
-+		}
-+		// Check name string
-+		if (strlen(pdesc->name) >= header.name_size) {
-+			printf("KVM stats name(%s) too long!\n", pdesc->name);
-+			goto out_free_desc;
-+		}
-+		// Check size field, which should not be zero
-+		if (pdesc->size == 0) {
-+			printf("KVM descriptor(%s) with size of 0!\n",
-+					pdesc->name);
-+			goto out_free_desc;
-+		}
-+		size_data = pdesc->size * sizeof(stats_data->value[0]);
-+	}
-+	// Check overlap
-+	if (header.data_offset < header.desc_offset &&
-+		header.data_offset + size_data > header.desc_offset) {
-+		printf("Data block is overlapped with Descriptor block!\n");
-+		goto out_free_desc;
-+	}
-+
-+	// Allocate memory for stats data
-+	stats_data = malloc(size_data);
-+	if (!stats_data) {
-+		perror("Allocate memory for VM stats data");
-+		goto out_free_desc;
-+	}
-+	// Read kvm vm stats data
-+	ret = pread(stats_fd, stats_data, size_data, header.data_offset);
-+	if (ret != size_data) {
-+		perror("Read KVM VM stats data");
-+		goto out_free_data;
-+	}
-+
-+	err = 0;
-+out_free_data:
-+	free(stats_data);
-+out_free_desc:
-+	free(stats_desc);
-+out_close_fd:
-+	close(stats_fd);
-+	return err;
-+}
-+
-+int vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
-+{
-+	ssize_t ret;
-+	int i, stats_fd, err = -1;
-+	size_t size_desc, size_data = 0;
-+	struct kvm_stats_header header;
-+	struct kvm_stats_desc *stats_desc, *pdesc;
-+	struct kvm_vcpu_stats_data *stats_data;
-+
-+	// Get fd for VCPU stats
-+	stats_fd = vcpu_get_statsfd(vm, vcpu_id);
-+	if (stats_fd < 0) {
-+		perror("Get VCPU stats fd");
-+		return err;
-+	}
-+	// Read kvm vcpu stats header
-+	ret = read(stats_fd, &header, sizeof(header));
-+	if (ret != sizeof(header)) {
-+		perror("Read VCPU stats header");
-+		goto out_close_fd;
-+	}
-+	size_desc = sizeof(*stats_desc) + header.name_size;
-+	// Check id string in header, that should start with "kvm"
-+	if (strncmp(header.id, "kvm", 3) ||
-+			strlen(header.id) >= KVM_STATS_ID_MAXLEN) {
-+		printf("Invalid KVM VCPU stats type!\n");
-+		goto out_close_fd;
-+	}
-+	// Sanity check for other fields in header
-+	if (header.count == 0) {
-+		err = 0;
-+		goto out_close_fd;
-+	}
-+	// Check overlap
-+	if (header.desc_offset == 0 || header.data_offset == 0 ||
-+			header.desc_offset < sizeof(header) ||
-+			header.data_offset < sizeof(header)) {
-+		printf("Invalid offset fields in header!\n");
-+		goto out_close_fd;
-+	}
-+	if (header.desc_offset < header.data_offset &&
-+			(header.desc_offset + size_desc * header.count >
-+			header.data_offset)) {
-+		printf("Descriptor block is overlapped with data block!\n");
-+		goto out_close_fd;
-+	}
-+
-+	// Allocate memory for stats descriptors
-+	stats_desc = calloc(header.count, size_desc);
-+	if (!stats_desc) {
-+		perror("Allocate memory for VCPU stats descriptors");
-+		goto out_close_fd;
-+	}
-+	// Read kvm vcpu stats descriptors
-+	ret = pread(stats_fd, stats_desc,
-+			size_desc * header.count, header.desc_offset);
-+	if (ret != size_desc * header.count) {
-+		perror("Read KVM VCPU stats descriptors");
-+		goto out_free_desc;
-+	}
-+	// Sanity check for fields in descriptors
-+	for (i = 0; i < header.count; ++i) {
-+		pdesc = (void *)stats_desc + i * size_desc;
-+		// Check boundaries
-+		if ((pdesc->flags & KVM_STATS_TYPE_MASK) > KVM_STATS_TYPE_MAX) {
-+			printf("Unknown KVM stats type!\n");
-+			goto out_free_desc;
-+		}
-+		if ((pdesc->flags & KVM_STATS_UNIT_MASK) > KVM_STATS_UNIT_MAX) {
-+			printf("Unknown KVM stats unit!\n");
-+			goto out_free_desc;
-+		}
-+		if ((pdesc->flags & KVM_STATS_SCALE_MASK) >
-+				KVM_STATS_SCALE_MAX) {
-+			printf("Unknown KVM stats scale!\n");
-+			goto out_free_desc;
-+		}
-+		/* Check exponent for stats unit
-+		 * Exponent for counter should be greater than or equal to 0
-+		 * Exponent for unit bytes should be greater than or equal to 0
-+		 * Exponent for unit seconds should be less than or equal to 0
-+		 * Exponent for unit clock cycles should be greater than or
-+		 * equal to 0
-+		 */
-+		switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
-+		case KVM_STATS_UNIT_NONE:
-+		case KVM_STATS_UNIT_BYTES:
-+		case KVM_STATS_UNIT_CYCLES:
-+			if (pdesc->exponent < 0) {
-+				printf("Unsupported KVM stats unit!\n");
-+				goto out_free_desc;
-+			}
-+			break;
-+		case KVM_STATS_UNIT_SECONDS:
-+			if (pdesc->exponent > 0) {
-+				printf("Unsupported KVM stats unit!\n");
-+				goto out_free_desc;
-+			}
-+			break;
-+		}
-+		// Check name string
-+		if (strlen(pdesc->name) >= header.name_size) {
-+			printf("KVM stats name(%s) too long!\n", pdesc->name);
-+			goto out_free_desc;
-+		}
-+		// Check size field, which should not be zero
-+		if (pdesc->size == 0) {
-+			printf("KVM descriptor(%s) with size of 0!\n",
-+					pdesc->name);
-+			goto out_free_desc;
-+		}
-+		size_data = pdesc->size * sizeof(stats_data->value[0]);
-+	}
-+	// Check overlap
-+	if (header.data_offset < header.desc_offset &&
-+		header.data_offset + size_data > header.desc_offset) {
-+		printf("Data block is overlapped with Descriptor block!\n");
-+		goto out_free_desc;
-+	}
-+
-+	// Allocate memory for stats data
-+	stats_data = malloc(size_data);
-+	if (!stats_data) {
-+		perror("Allocate memory for VCPU stats data");
-+		goto out_free_desc;
-+	}
-+	// Read kvm vcpu stats data
-+	ret = pread(stats_fd, stats_data, size_data, header.data_offset);
-+	if (ret != size_data) {
-+		perror("Read KVM VCPU stats data");
-+		goto out_free_data;
-+	}
-+
-+	err = 0;
-+out_free_data:
-+	free(stats_data);
-+out_free_desc:
-+	free(stats_desc);
-+out_close_fd:
-+	close(stats_fd);
-+	return err;
-+}
-+
-+/*
-+ * Usage: kvm_bin_form_stats [#vm] [#vcpu]
-+ * The first parameter #vm set the number of VMs being created.
-+ * The second parameter #vcpu set the number of VCPUs being created.
-+ * By default, 1 VM and 1 VCPU for the VM would be created for testing.
-+ */
-+
-+int main(int argc, char *argv[])
-+{
-+	int max_vm = 1, max_vcpu = 1, ret, i, j, err = -1;
-+	struct kvm_vm **vms;
-+
-+	// Get the number of VMs and VCPUs that would be created for testing.
-+	if (argc > 1) {
-+		max_vm = strtol(argv[1], NULL, 0);
-+		if (max_vm <= 0)
-+			max_vm = 1;
-+	}
-+	if (argc > 2 ) {
-+		max_vcpu = strtol(argv[2], NULL, 0);
-+		if (max_vcpu <= 0)
-+			max_vcpu = 1;
-+	}
-+
-+	// Check the extension for binary stats
-+	ret = kvm_check_cap(KVM_CAP_STATS_BINARY_FD);
-+	if (ret < 0) {
-+		printf("Binary form statistics interface is not supported!\n");
-+		return err;
-+	}
-+
-+	// Create VMs and VCPUs
-+	vms = malloc(sizeof(vms[0]) * max_vm);
-+	if (!vms) {
-+		perror("Allocate memory for storing VM pointers");
-+		return err;
-+	}
-+	for (i = 0; i < max_vm; ++i) {
-+		vms[i] = vm_create(VM_MODE_DEFAULT,
-+				DEFAULT_GUEST_PHY_PAGES, O_RDWR);
-+		for (j = 0; j < max_vcpu; ++j) {
-+			vm_vcpu_add(vms[i], j);
-+		}
-+	}
-+
-+	// Check stats read for every VM and VCPU
-+	for (i = 0; i < max_vm; ++i) {
-+		if (vm_stats_test(vms[i]))
-+			goto out_free_vm;
-+		for (j = 0; j < max_vcpu; ++j) {
-+			if (vcpu_stats_test(vms[i], j))
-+				goto out_free_vm;
-+		}
-+	}
-+
-+	err = 0;
-+out_free_vm:
-+	for (i = 0; i < max_vm; ++i)
-+		kvm_vm_free(vms[i]);
-+	free(vms);
-+	return err;
-+}
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index e5fbf16f725b..be305e7b54ca 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -2013,3 +2013,14 @@ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size)
- 	n = DIV_ROUND_UP(size, vm_guest_mode_params[mode].page_size);
- 	return vm_adjust_num_guest_pages(mode, n);
- }
-+
-+int vm_get_statsfd(struct kvm_vm *vm)
-+{
-+	return ioctl(vm->fd, KVM_STATS_GETFD, NULL);
-+}
-+
-+int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid)
-+{
-+	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
-+	return ioctl(vcpu->fd, KVM_STATS_GETFD, NULL);
-+}
--- 
-2.31.1.295.g9ea45b61b8-goog
+> On Wed, Apr 14, 2021 at 3:51 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>>
+>> > On Wed, Apr 14, 2021 at 3:58 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke=
+@redhat.com> wrote:
+>> >>
+>> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>> >>
+>> >> > On Tue, Apr 6, 2021 at 3:06 AM Toke H=C3=B8iland-J=C3=B8rgensen <to=
+ke@redhat.com> wrote:
+>> >> >>
+>> >> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>> >> >>
+>> >> >> > On Sat, Apr 3, 2021 at 10:47 AM Alexei Starovoitov
+>> >> >> > <alexei.starovoitov@gmail.com> wrote:
+>> >> >> >>
+>> >> >> >> On Sat, Apr 03, 2021 at 12:38:06AM +0530, Kumar Kartikeya Dwive=
+di wrote:
+>> >> >> >> > On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov wr=
+ote:
+>> >> >> >> > > On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <mem=
+xor@gmail.com> wrote:
+>> >> >> >> > > > [...]
+>> >> >> >> > >
+>> >> >> >> > > All of these things are messy because of tc legacy. bpf tri=
+ed to follow tc style
+>> >> >> >> > > with cls and act distinction and it didn't quite work. cls =
+with
+>> >> >> >> > > direct-action is the only
+>> >> >> >> > > thing that became mainstream while tc style attach wasn't r=
+eally addressed.
+>> >> >> >> > > There were several incidents where tc had tens of thousands=
+ of progs attached
+>> >> >> >> > > because of this attach/query/index weirdness described abov=
+e.
+>> >> >> >> > > I think the only way to address this properly is to introdu=
+ce bpf_link style of
+>> >> >> >> > > attaching to tc. Such bpf_link would support ingress/egress=
+ only.
+>> >> >> >> > > direction-action will be implied. There won't be any index =
+and query
+>> >> >> >> > > will be obvious.
+>> >> >> >> >
+>> >> >> >> > Note that we already have bpf_link support working (without s=
+upport for pinning
+>> >> >> >> > ofcourse) in a limited way. The ifindex, protocol, parent_id,=
+ priority, handle,
+>> >> >> >> > chain_index tuple uniquely identifies a filter, so we stash t=
+his in the bpf_link
+>> >> >> >> > and are able to operate on the exact filter during release.
+>> >> >> >>
+>> >> >> >> Except they're not unique. The library can stash them, but some=
+thing else
+>> >> >> >> doing detach via iproute2 or their own netlink calls will detac=
+h the prog.
+>> >> >> >> This other app can attach to the same spot a different prog and=
+ now
+>> >> >> >> bpf_link__destroy will be detaching somebody else prog.
+>> >> >> >>
+>> >> >> >> > > So I would like to propose to take this patch set a step fu=
+rther from
+>> >> >> >> > > what Daniel said:
+>> >> >> >> > > int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
+>> >> >> >> > > and make this proposed api to return FD.
+>> >> >> >> > > To detach from tc ingress/egress just close(fd).
+>> >> >> >> >
+>> >> >> >> > You mean adding an fd-based TC API to the kernel?
+>> >> >> >>
+>> >> >> >> yes.
+>> >> >> >
+>> >> >> > I'm totally for bpf_link-based TC attachment.
+>> >> >> >
+>> >> >> > But I think *also* having "legacy" netlink-based APIs will allow
+>> >> >> > applications to handle older kernels in a much nicer way without=
+ extra
+>> >> >> > dependency on iproute2. We have a similar situation with kprobe,=
+ where
+>> >> >> > currently libbpf only supports "modern" fd-based attachment, but=
+ users
+>> >> >> > periodically ask questions and struggle to figure out issues on =
+older
+>> >> >> > kernels that don't support new APIs.
+>> >> >>
+>> >> >> +1; I am OK with adding a new bpf_link-based way to attach TC prog=
+rams,
+>> >> >> but we still need to support the netlink API in libbpf.
+>> >> >>
+>> >> >> > So I think we'd have to support legacy TC APIs, but I agree with
+>> >> >> > Alexei and Daniel that we should keep it to the simplest and most
+>> >> >> > straightforward API of supporting direction-action attachments a=
+nd
+>> >> >> > setting up qdisc transparently (if I'm getting all the terminolo=
+gy
+>> >> >> > right, after reading Quentin's blog post). That coincidentally s=
+hould
+>> >> >> > probably match how bpf_link-based TC API will look like, so all =
+that
+>> >> >> > can be abstracted behind a single bpf_link__attach_tc() API as w=
+ell,
+>> >> >> > right? That's the plan for dealing with kprobe right now, btw. L=
+ibbpf
+>> >> >> > will detect the best available API and transparently fall back (=
+maybe
+>> >> >> > with some warning for awareness, due to inherent downsides of le=
+gacy
+>> >> >> > APIs: no auto-cleanup being the most prominent one).
+>> >> >>
+>> >> >> Yup, SGTM: Expose both in the low-level API (in bpf.c), and make t=
+he
+>> >> >> high-level API auto-detect. That way users can also still use the
+>> >> >> netlink attach function if they don't want the fd-based auto-close
+>> >> >> behaviour of bpf_link.
+>> >> >
+>> >> > So I thought a bit more about this, and it feels like the right move
+>> >> > would be to expose only higher-level TC BPF API behind bpf_link. It
+>> >> > will keep the API complexity and amount of APIs that libbpf will ha=
+ve
+>> >> > to support to the minimum, and will keep the API itself simple:
+>> >> > direct-attach with the minimum amount of input arguments. By not
+>> >> > exposing low-level APIs we also table the whole bpf_tc_cls_attach_id
+>> >> > design discussion, as we now can keep as much info as needed inside
+>> >> > bpf_link_tc (which will embed bpf_link internally as well) to suppo=
+rt
+>> >> > detachment and possibly some additional querying, if needed.
+>> >>
+>> >> But then there would be no way for the caller to explicitly select a
+>> >> mechanism? I.e., if I write a BPF program using this mechanism target=
+ing
+>> >> a 5.12 kernel, I'll get netlink attachment, which can stick around wh=
+en
+>> >> I do bpf_link__disconnect(). But then if the kernel gets upgraded to
+>> >> support bpf_link for TC programs I'll suddenly transparently get
+>> >> bpf_link and the attachments will go away unless I pin them. This
+>> >> seems... less than ideal?
+>> >
+>> > That's what we are doing with bpf_program__attach_kprobe(), though.
+>> > And so far I've only seen people (privately) saying how good it would
+>> > be to have bpf_link-based TC APIs, doesn't seem like anyone with a
+>> > realistic use case prefers the current APIs. So I suspect it's not
+>> > going to be a problem in practice. But at least I'd start there and
+>> > see how people are using it and if they need anything else.
+>>
+>> *sigh* - I really wish you would stop arbitrarily declaring your own use
+>> cases "realistic" and mine (implied) "unrealistic". Makes it really hard
+>> to have a productive discussion...
+>
+> Well (sigh?..), this wasn't my intention, sorry you read it this way.
+> But we had similar discussions when I was adding bpf_link-based XDP
+> attach APIs.
+
+Great, thank you! And yeah, we did discuss exactly this before, which is
+where my mental sigh came from - I feel like we already covered this
+ground and that I'm just being dismissed with "that is not a real use
+case". But OK, I'll give it another shot, see below.
+
+> And guess what, now I see that samples/bpf/whatever_xdp is switched to
+> bpf_link-based XDP, because that makes everything simpler and more
+> reliable. What I also know is that in production we ran into multiple
+> issues with anything that doesn't auto-detach on process exit/crash
+> (unless pinned explicitly, of course). And that people that are trying
+> to use TC right now are saying how having bpf_link-based TC APIs would
+> make everything *simpler* and *safer*. So I don't know... I understand
+> it might be convenient in some cases to not care about a lifetime of
+> BPF programs you are attaching, but then there are usually explicit
+> and intentional ways to achieve at least similar behavior with safety
+> by default.
+>
+> So I guess call me unconvinced (yet? still?). Give it another shot,
+> though.
+
+I'm not arguing against adding bpf_link support, and I'm even fine with
+making it the default. As you say, there are plenty of use cases where
+the bpf_link semantics make sense, and the XDP programs in samples all
+fall in this category. So sure, let's add this support and make this
+convenient to use.
+
+But there are also use cases where the BPF program lifetime absolutely
+shouldn't follow that of the userspace application. This includes both
+applications that don't have a long-running daemon at all (like a
+firewall that just loads a ruleset at boot; xdp-filter is such an
+application in the BPF world, but I'm sure there are others). And
+daemons that use BPF as a data path and want the packets to keep flowing
+even when they restart, like Cilium as Daniel mentioned.
+
+So the latter category of applications need their BPF programs to be
+permanently attached to the interface. And sure, this can sorta be done
+by pinning the bpf_link; but not really, because then:
+
+- You incur a new dependency on bpffs, so you have to make sure that is
+  mounted and that you can get at the particular fs instance you're
+  using; the latter is especially painful if you switch namespaces.
+
+- Your BPF program lifetime is no longer tied to the interface, so you
+  have to deal with garbage collecting your pinned files somehow. This
+  is especially painful if you don't have a daemon.
+
+Together, these issues make bpf_link a much less compelling proposition,
+to the point where it's no longer the better API for these use cases,
+IMO. And I know that because I had to work around just these issues with
+bpf_link for xdp-tools.
+
+But I'm not even asking for the netlink API to be the default, I'm
+fine with bpf_link being the default and encouraged API. I'm just asking
+for a way to make it *possible* to select which attach mode I want.
+Either by a flag to bpf_program__attach_tc(), or by exposing the
+low-level bpf_tc_cls_*() netlink functions, like we do for XDP.
+
+>> >> If we expose the low-level API I can elect to just use this if I know=
+ I
+>> >> want netlink behaviour, but if bpf_program__attach_tc() is the only A=
+PI
+>> >> available it would at least need a flag to enforce one mode or the ot=
+her
+>> >> (I can see someone wanting to enforce kernel bpf_link semantics as we=
+ll,
+>> >> so a flag for either mode seems reasonable?).
+>> >
+>> > Sophisticated enough users can also do feature detection to know if
+>> > it's going to work or not.
+>>
+>> Sure, but that won't help if there's no API to pick the attach mode they
+>> want.
+>
+> I'm not intending to allow legacy kprobe APIs to be "chosen", for
+> instance. Because I'm convinced it's a bad API that no one should use
+> if they can use an FD-based one.
+
+I'd tend to agree with you for the tracing APIs, actually. But a
+BPF-based data plane is different, as I tried to explain above.
+
+> It might be a different case for TC, who knows. I'd just start with
+> safer APIs and then evaluate whether there is a real demand for less
+> safe ones. It's just some minor refactoring and exposing more APIs,
+> when/if we need them.
+
+There you go again with the "real demand" argument. How can I read this
+in any other way than that you don't consider my use case "real" (as you
+just assured me above was not the case)? What do you consider "real
+demand"?
+
+-Toke
 
