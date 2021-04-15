@@ -2,270 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A13C136115E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Apr 2021 19:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9553611A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Apr 2021 20:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234505AbhDORrf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Apr 2021 13:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S234405AbhDOSEQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Apr 2021 14:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234469AbhDORrc (ORCPT
+        with ESMTP id S232759AbhDOSEP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Apr 2021 13:47:32 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F89CC061574;
-        Thu, 15 Apr 2021 10:47:09 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id o17so17600778qkl.13;
-        Thu, 15 Apr 2021 10:47:09 -0700 (PDT)
+        Thu, 15 Apr 2021 14:04:15 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC5EC061756
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 11:03:52 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id d2so20889822ilm.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 11:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=uvNOfoTuzB56ceqkmKY+oWGvxVel5zO/sDE0EqYhDjY=;
-        b=R+pmEA1Hy+rIJ/KnSufJ9+sStWSjYP9+CzYroyzU3lLCpETEaa1K0y+sTZfFkXviJe
-         vt3ZPOVt9gXZoFePBP5sS+rq3BiYjr6XQ2ysjtK960CCYD0hd0FFUUYFp7GSKT5lg50j
-         YUji9g2vQxZ6qOe6kvxbuAIRWlnkTS/kXi0D198g+DkZfhr9R61G4oJhuLF7OI9PWLPE
-         zfqKoCaBFrrjMw72k1s7mXKQRKYR2v4IlMtnISi4Jbf8D5WjdxZNzX4UhL5w+TtLcCki
-         XUZmbQgySmUE47CT9YcrxyOQ942bus5XrvnUnR54qRPDvWvl1yWp/BBP9PP+u6Sm+es9
-         69cQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jMi3JQh4ceVfV/j7Lf7DWzkm4A/CG7sUwuBKTI9Y7vs=;
+        b=LOWfqGRgHZ2GaLk4r0jnjtm6hmUQDMtLwyD23G/zSp+dciXK8p9hxW5dpWlieJWVov
+         9fZxBC9Gq0vChe5/SI2Xz2rZtf5evjuecN76OfNiPb1n7JvJtsnyuPbcU7lyolclN6h9
+         xm/USSXnuwH42Jp23W8TX1U8yNA3aiVNF0zBR+WhMg086kxGgjnkrWSXlZ2K1t+dKvX5
+         mz6u4JCxYhvmR84+sH+l+BSsbQc2DhNnetCk62Xcxyf/eFiJ8bkw8HN++VM57h/YDUKu
+         p8uMAQs2++W6WuNhOtTfjydZwv7nX0X3/sjt3phwy8sk76atjR1aN3znqw1PgpCPveT8
+         oH7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uvNOfoTuzB56ceqkmKY+oWGvxVel5zO/sDE0EqYhDjY=;
-        b=iIDxkNg4S8qjcVJtkfNsbUsB+Ijcl1a4+83w7fzaeRphBHw4hmArYIA4HoyAtPQokv
-         6GcU6AOW+aTmOOdHWWFM5omScO8C+h3z+gSY11cEMRHfO1cY8NZ3vVcQCC5cF2m+omUS
-         NC9IgZl0UOCrQkihcviqeNEky0iFDeWpGlIasANL7Heo4307631W/ipNyPzDjpgAi1si
-         h1ZoNgx0hd45sc/fyj9+ML8OPUzeLzLzcOyjaG4f+sYUhlAw3wClN5luKlmzxngWtqVd
-         H22B4rtM8p+i5UB/SgKRrl8KeCTBNBC9E7YQkEwgivOepQiKB02pXWSw1caW5c+EqhJM
-         M3Vw==
-X-Gm-Message-State: AOAM531RFm3hxGO9g84zMqzlC8oqwgWBBFOZz7iFCQTwz1vRbZayAOIm
-        HJqmLmO3FpQ6xbCwiCl5l9c=
-X-Google-Smtp-Source: ABdhPJz0lQwGmc8J/JtVKCRlIuXLS1zpW74V9oV8175TOJ+QzzfdRHzDhdpsfRg8cU8N1oFGRYtTnQ==
-X-Received: by 2002:a05:620a:4096:: with SMTP id f22mr4626222qko.76.1618508828643;
-        Thu, 15 Apr 2021 10:47:08 -0700 (PDT)
-Received: from localhost.localdomain ([179.218.4.27])
-        by smtp.gmail.com with ESMTPSA id a4sm2186800qta.19.2021.04.15.10.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 10:47:08 -0700 (PDT)
-From:   Pedro Tammela <pctammela@gmail.com>
-X-Google-Original-From: Pedro Tammela <pctammela@mojatatu.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        David Verbeiren <david.verbeiren@tessares.net>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 3/3] bpf: selftests: update array map tests for per-cpu batched ops
-Date:   Thu, 15 Apr 2021 14:46:19 -0300
-Message-Id: <20210415174619.51229-4-pctammela@mojatatu.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210415174619.51229-1-pctammela@mojatatu.com>
-References: <20210415174619.51229-1-pctammela@mojatatu.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jMi3JQh4ceVfV/j7Lf7DWzkm4A/CG7sUwuBKTI9Y7vs=;
+        b=OLxSCAFwp/zYp8cgzcXOMbKzDmofOQP/f5sdY8u80JP70I0re5cJgFu8niS8+avXam
+         Mwj7Y/Fikj7XPQZBzCUZ0WEoqG+LEAJdH5EKBLm04K0v8seKmcNs2eqDvwFctm5NZBs4
+         tAgifP+XkoSDltMxNbcEBgG5Dqe+owDWwYJakGMxfXDvrHRWELH4yArrkmu4W/eP6LKy
+         uNza02b8gFx9e1kJTug46iBsVVFaPj/RNkiuxi5ZBfP3wjo6vT9cjcTTPKjmJ3f0i4st
+         rpsB+6UMhsuSk+J0tuuoe2EY23VzPSX0bGid+Tl0Cd6usIYsI0UzxVwDaMbGrBqY2odD
+         OZUA==
+X-Gm-Message-State: AOAM530Koozcu+2hQrpW5nMK8q+mQf4DZXAAWj0sFAgv51ejLxb842R4
+        jovtrAvTnB9un3iP8aIaosMf8+NE7/OTNxZ+UwKzyg==
+X-Google-Smtp-Source: ABdhPJzLg34mG/2F8echbVGsALC+cjlSLd1cDv+gDbhlWGfCHOBwcNyvJAecuz7DsvJdtaeQICx6VrotmYdZLAXz92k=
+X-Received: by 2002:a05:6e02:1d06:: with SMTP id i6mr1346852ila.165.1618509831881;
+ Thu, 15 Apr 2021 11:03:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210413051721.2896915-1-axelrasmussen@google.com>
+ <20210413051721.2896915-8-axelrasmussen@google.com> <20210413201535.GD4440@xz-x1>
+In-Reply-To: <20210413201535.GD4440@xz-x1>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 15 Apr 2021 11:03:14 -0700
+Message-ID: <CAJHvVcix2CO_+qQ7+gWMLYL9H5zyDNz_06UnThd84etMNr-SWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] userfaultfd/selftests: reinitialize test context
+ in each test
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        Brian Geffon <bgeffon@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Follows the same logic as the hashtable tests.
+On Tue, Apr 13, 2021 at 1:15 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Mon, Apr 12, 2021 at 10:17:19PM -0700, Axel Rasmussen wrote:
+> > Currently, the context (fds, mmap-ed areas, etc.) are global. Each test
+> > mutates this state in some way, in some cases really "clobbering it"
+> > (e.g., the events test mremap-ing area_dst over the top of area_src, or
+> > the minor faults tests overwriting the count_verify values in the test
+> > areas). We run the tests in a particular order, each test is careful to
+> > make the right assumptions about its starting state, etc.
+> >
+> > But, this is fragile. It's better for a test's success or failure to not
+> > depend on what some other prior test case did to the global state.
+> >
+> > To that end, clear and reinitialize the test context at the start of
+> > each test case, so whatever prior test cases did doesn't affect future
+> > tests.
+> >
+> > This is particularly relevant to this series because the events test's
+> > mremap of area_dst screws up assumptions the minor fault test was
+> > relying on. This wasn't a problem for hugetlb, as we don't mremap in
+> > that case.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >  tools/testing/selftests/vm/userfaultfd.c | 221 +++++++++++++----------
+> >  1 file changed, 127 insertions(+), 94 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> > index 1f65c4ab7994..0ff01f437a39 100644
+> > --- a/tools/testing/selftests/vm/userfaultfd.c
+> > +++ b/tools/testing/selftests/vm/userfaultfd.c
+> > @@ -89,7 +89,8 @@ static int shm_fd;
+> >  static int huge_fd;
+> >  static char *huge_fd_off0;
+> >  static unsigned long long *count_verify;
+> > -static int uffd, uffd_flags, finished, *pipefd;
+> > +static int uffd = -1;
+> > +static int uffd_flags, finished, *pipefd;
+> >  static char *area_src, *area_src_alias, *area_dst, *area_dst_alias;
+> >  static char *zeropage;
+> >  pthread_attr_t attr;
+> > @@ -342,6 +343,121 @@ static struct uffd_test_ops hugetlb_uffd_test_ops = {
+> >
+> >  static struct uffd_test_ops *uffd_test_ops;
+> >
+> > +static int userfaultfd_open(uint64_t *features)
+> > +{
+> > +     struct uffdio_api uffdio_api;
+> > +
+> > +     uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+>
+> Keep UFFD_USER_MODE_ONLY?
+>
+> [...]
+>
+> > @@ -961,10 +1045,9 @@ static int userfaultfd_zeropage_test(void)
+> >       printf("testing UFFDIO_ZEROPAGE: ");
+> >       fflush(stdout);
+> >
+> > -     uffd_test_ops->release_pages(area_dst);
+> > -
+> > -     if (userfaultfd_open(0))
+> > +     if (uffd_test_ctx_clear() || uffd_test_ctx_init(0))
+> >               return 1;
+>
+> Would it look even nicer to init() at the entry of each test, and clear() after
+> finish one test?
 
-Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
----
- .../bpf/map_tests/array_map_batch_ops.c       | 104 +++++++++++++-----
- 1 file changed, 75 insertions(+), 29 deletions(-)
+I slightly prefer clearing at the beginning, as it means we don't need
+to depend on the previous test being correct for this test to
+function. And, we don't need more complex error handling in the test
+cases to make sure we don't mess things up for the next test.
 
-diff --git a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
-index e42ea1195d18..f4d870da7684 100644
---- a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
-+++ b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
-@@ -9,10 +9,13 @@
- 
- #include <test_maps.h>
- 
-+static int nr_cpus;
-+
- static void map_batch_update(int map_fd, __u32 max_entries, int *keys,
--			     int *values)
-+			     __s64 *values, bool is_pcpu)
- {
--	int i, err;
-+	int i, j, err;
-+	int cpu_offset = 0;
- 	DECLARE_LIBBPF_OPTS(bpf_map_batch_opts, opts,
- 		.elem_flags = 0,
- 		.flags = 0,
-@@ -20,22 +23,41 @@ static void map_batch_update(int map_fd, __u32 max_entries, int *keys,
- 
- 	for (i = 0; i < max_entries; i++) {
- 		keys[i] = i;
--		values[i] = i + 1;
-+		if (is_pcpu) {
-+			cpu_offset = i * nr_cpus;
-+			for (j = 0; j < nr_cpus; j++)
-+				(values + cpu_offset)[j] = i + 1 + j;
-+		} else {
-+			values[i] = i + 1;
-+		}
- 	}
- 
- 	err = bpf_map_update_batch(map_fd, keys, values, &max_entries, &opts);
- 	CHECK(err, "bpf_map_update_batch()", "error:%s\n", strerror(errno));
- }
- 
--static void map_batch_verify(int *visited, __u32 max_entries,
--			     int *keys, int *values)
-+static void map_batch_verify(int *visited, __u32 max_entries, int *keys,
-+			     __s64 *values, bool is_pcpu)
- {
--	int i;
-+	int i, j;
-+	int cpu_offset = 0;
- 
- 	memset(visited, 0, max_entries * sizeof(*visited));
- 	for (i = 0; i < max_entries; i++) {
--		CHECK(keys[i] + 1 != values[i], "key/value checking",
--		      "error: i %d key %d value %d\n", i, keys[i], values[i]);
-+		if (is_pcpu) {
-+			cpu_offset = i * nr_cpus;
-+			for (j = 0; j < nr_cpus; j++) {
-+				__s64 value = (values + cpu_offset)[j];
-+				CHECK(keys[i] + j + 1 != value,
-+				      "key/value checking",
-+				      "error: i %d j %d key %d value %lld\n", i,
-+				      j, keys[i], value);
-+			}
-+		} else {
-+			CHECK(keys[i] + 1 != values[i], "key/value checking",
-+			      "error: i %d key %d value %lld\n", i, keys[i],
-+			      values[i]);
-+		}
- 		visited[i] = 1;
- 	}
- 	for (i = 0; i < max_entries; i++) {
-@@ -44,19 +66,21 @@ static void map_batch_verify(int *visited, __u32 max_entries,
- 	}
- }
- 
--void test_array_map_batch_ops(void)
-+static void __test_map_lookup_and_update_batch(bool is_pcpu)
- {
- 	struct bpf_create_map_attr xattr = {
- 		.name = "array_map",
--		.map_type = BPF_MAP_TYPE_ARRAY,
-+		.map_type = is_pcpu ? BPF_MAP_TYPE_PERCPU_ARRAY :
-+				      BPF_MAP_TYPE_ARRAY,
- 		.key_size = sizeof(int),
--		.value_size = sizeof(int),
-+		.value_size = sizeof(__s64),
- 	};
--	int map_fd, *keys, *values, *visited;
-+	int map_fd, *keys, *visited;
- 	__u32 count, total, total_success;
- 	const __u32 max_entries = 10;
- 	__u64 batch = 0;
--	int err, step;
-+	int err, step, value_size;
-+	void *values;
- 	DECLARE_LIBBPF_OPTS(bpf_map_batch_opts, opts,
- 		.elem_flags = 0,
- 		.flags = 0,
-@@ -67,22 +91,23 @@ void test_array_map_batch_ops(void)
- 	CHECK(map_fd == -1,
- 	      "bpf_create_map_xattr()", "error:%s\n", strerror(errno));
- 
--	keys = malloc(max_entries * sizeof(int));
--	values = malloc(max_entries * sizeof(int));
--	visited = malloc(max_entries * sizeof(int));
-+	value_size = sizeof(__s64);
-+	if (is_pcpu)
-+		value_size *= nr_cpus;
-+
-+	keys = calloc(max_entries, sizeof(*keys));
-+	values = calloc(max_entries, value_size);
-+	visited = calloc(max_entries, sizeof(*visited));
- 	CHECK(!keys || !values || !visited, "malloc()", "error:%s\n",
- 	      strerror(errno));
- 
--	/* populate elements to the map */
--	map_batch_update(map_fd, max_entries, keys, values);
--
- 	/* test 1: lookup in a loop with various steps. */
- 	total_success = 0;
- 	for (step = 1; step < max_entries; step++) {
--		map_batch_update(map_fd, max_entries, keys, values);
--		map_batch_verify(visited, max_entries, keys, values);
-+		map_batch_update(map_fd, max_entries, keys, values, is_pcpu);
-+		map_batch_verify(visited, max_entries, keys, values, is_pcpu);
- 		memset(keys, 0, max_entries * sizeof(*keys));
--		memset(values, 0, max_entries * sizeof(*values));
-+		memset(values, 0, max_entries * value_size);
- 		batch = 0;
- 		total = 0;
- 		/* iteratively lookup/delete elements with 'step'
-@@ -91,10 +116,10 @@ void test_array_map_batch_ops(void)
- 		count = step;
- 		while (true) {
- 			err = bpf_map_lookup_batch(map_fd,
--						total ? &batch : NULL, &batch,
--						keys + total,
--						values + total,
--						&count, &opts);
-+						   total ? &batch : NULL,
-+						   &batch, keys + total,
-+						   values + total * value_size,
-+						   &count, &opts);
- 
- 			CHECK((err && errno != ENOENT), "lookup with steps",
- 			      "error: %s\n", strerror(errno));
-@@ -108,7 +133,7 @@ void test_array_map_batch_ops(void)
- 		CHECK(total != max_entries, "lookup with steps",
- 		      "total = %u, max_entries = %u\n", total, max_entries);
- 
--		map_batch_verify(visited, max_entries, keys, values);
-+		map_batch_verify(visited, max_entries, keys, values, is_pcpu);
- 
- 		total_success++;
- 	}
-@@ -116,9 +141,30 @@ void test_array_map_batch_ops(void)
- 	CHECK(total_success == 0, "check total_success",
- 	      "unexpected failure\n");
- 
--	printf("%s:PASS\n", __func__);
--
- 	free(keys);
- 	free(values);
- 	free(visited);
- }
-+
-+static void array_map_batch_ops(void)
-+{
-+	__test_map_lookup_and_update_batch(false);
-+	printf("test_%s:PASS\n", __func__);
-+}
-+
-+static void array_percpu_map_batch_ops(void)
-+{
-+	__test_map_lookup_and_update_batch(true);
-+	printf("test_%s:PASS\n", __func__);
-+}
-+
-+void test_array_map_batch_ops(void)
-+{
-+	nr_cpus = libbpf_num_possible_cpus();
-+
-+	CHECK(nr_cpus < 0, "nr_cpus checking",
-+	      "error: get possible cpus failed");
-+
-+	array_map_batch_ops();
-+	array_percpu_map_batch_ops();
-+}
--- 
-2.25.1
+But, two things we can do to clean this up as-is:
 
+The initialization function can just call clear itself, so tests don't
+need to worry about it.
+
+And, with err(), we don't need these functions to return an int any more.
+
+I'll send a version like that, we can see how it looks.
+
+>
+> > +
+> >       uffdio_register.range.start = (unsigned long) area_dst;
+> >       uffdio_register.range.len = nr_pages * page_size;
+> >       uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+>
+> The rest looks good to me.  Thanks,
+>
+> --
+> Peter Xu
+>
