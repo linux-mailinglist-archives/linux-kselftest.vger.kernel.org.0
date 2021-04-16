@@ -2,415 +2,398 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D76E361A26
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 09:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3ECA361CAD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 11:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238845AbhDPG4w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Apr 2021 02:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbhDPG4w (ORCPT
+        id S240870AbhDPJBu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Apr 2021 05:01:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59270 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240816AbhDPJBt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Apr 2021 02:56:52 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFC3C061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 23:56:27 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id e185so5135175ybf.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 23:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=yfznvfhxWI9IPMcPWR1ywqNo58hzVB/wvWPYLtjWjJA=;
-        b=nviH1F8KnTn88UrvTJwTfvUOO+no5bQSXE8NWrlfdAhBzYFyQ/DBz6VWd5b1Jxwhr7
-         br7uE1lU43XzhdfU95wtewDjQGMIDsLPUj5ija1ZGe9Shjb1t7D4UbfOvuRGYHx+2mNQ
-         es9SDiHcz0tt5n7Sjb21bfpIZKTMLpiZajZ9AdHj5/ZcEBy50i8CzAWDMlytXT9/T1m8
-         V0XpWxQlwU8Cv0WsMPiygGMqCRSjMJhXuCD/X3S+0ESszetB5syUqIKi+P0tbVXqXnPx
-         m/ISy28aAyDrRFqgpb4y1pu2T+tH9/mTZJoIHCVzKSo8rH97Vz07dbbrjztNtKPbnlyv
-         aX7w==
+        Fri, 16 Apr 2021 05:01:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618563684;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zbXQJQ+eKOPY15XrfY8ykzys3QyLZZKF2BRvQh65MXg=;
+        b=UMVUHYhafFLgPKHTQbn2QmwqOkEwuRI8+GsHhlXqwkr6lDOIjEmxOmRRYNuQqnvolpJmM0
+        aJPcO9m0d+jm+51QIaTw6HYeDhXRClyh/dTxRJuu9BURzdRpTE0Pp9Wt0l8Xg8tg1dKsto
+        RgANVRrSh8aOW2RLZzaaBuWEHUW+Ug8=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-113-epW-zqgCPoKc6GgjY0fMSQ-1; Fri, 16 Apr 2021 05:01:23 -0400
+X-MC-Unique: epW-zqgCPoKc6GgjY0fMSQ-1
+Received: by mail-ed1-f69.google.com with SMTP id l22-20020a0564021256b0290384ebfba68cso2798261edw.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 02:01:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=yfznvfhxWI9IPMcPWR1ywqNo58hzVB/wvWPYLtjWjJA=;
-        b=Zm7eqvZst7iOIpIq95ey4gsH+g+meD/mjyHzDfUQUWFvGb+3qKVfIdmOb6MEO3cIP1
-         fA2FB4LSy3KwZJobLzoonmQNreAKjzQlrfXYTwrjECQIHW8zTDgWB9x0atL8Er44TUBp
-         tU6UjrOhngyb8xUypj3ozb+J8rj8KcoroEALgyerdH8wAMGan14JBheyU4SHmBnhXw35
-         sqpjmKtnOspVmvrdTqxfHSVQ8sEQf3DzTALa3jR6jounzzwZzASV4kd7j48ZFPnp2H9l
-         esharPCEuUVKJn5lbvxKfLf5guct/HFVVnyYUOEHQjBO3eHdrdh0JTM5zhS6717qa9LE
-         ukyA==
-X-Gm-Message-State: AOAM533OPtSqal8iAFnaw4ubDMa2ctkVhIrUWzF6Wv27rgbEiq4mWslg
-        UJsQlFYdmZHRy/5QnFxPZSCEO0EdkLQYXg==
-X-Google-Smtp-Source: ABdhPJxz0+kbsgxZyDgYjIKLVabLgCKP2FXN2R11XrBOHmwX6Pp/Grsy8+JgwSKbUdUI6dvJtyRW2j1Jv6hRpQ==
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:fe36:58a6:c432:3234])
- (user=davidgow job=sendgmr) by 2002:a25:2443:: with SMTP id
- k64mr10032328ybk.154.1618556187020; Thu, 15 Apr 2021 23:56:27 -0700 (PDT)
-Date:   Thu, 15 Apr 2021 23:56:23 -0700
-Message-Id: <20210416065623.882364-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.31.1.368.gbe11c130af-goog
-Subject: [PATCH v8] fat: Add KUnit tests for checksums and timestamps
-From:   David Gow <davidgow@google.com>
-To:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=zbXQJQ+eKOPY15XrfY8ykzys3QyLZZKF2BRvQh65MXg=;
+        b=Fm5joQlxzLkkZ8fcPmFKIWmtRH/uOXM+38J1E4PPX1mLuFUDvQ9mJs5yrAi0+rrQts
+         Fc854/igXisFBvAF4VlXfxmYt5TpDbwkeOvrBsP8SlM6hllSJhD+t5hjeP6kk6NyUNvJ
+         fZOGwSokOBOwb3S8grABjd8dXmuk4knG4j2LBJYfv9tO8JaR2EjeSh09WDvtpIFYLf+V
+         XASnbvPip0GRU5G/uks5XAS4w5bk8Sj7vWBrLh1PhH7MiOiMeXJ7zeeqgQ5rpkOJ0xXk
+         qEOLO9oJ5nXirmX3z/JZN+XLkVBdgBCS4mj3dAL45CX3MckWBN1ILrlEEMHZShYyhdBE
+         OJ6w==
+X-Gm-Message-State: AOAM530CxDlMUWMg626WimRttcrrtgoGEZEHfjDh1eCJ0ijvkhEVsTge
+        auz5wrMi8TvRWRQM6IexYO1+Tb6H9gE6RuJcaN2mYHkyWCzU9JGOdfyZz8fiPcEq7asP+r67L/4
+        EZmtzRmlvRqXt/uamVqokPvtCHwne
+X-Received: by 2002:aa7:c90a:: with SMTP id b10mr1024231edt.276.1618563681834;
+        Fri, 16 Apr 2021 02:01:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw3Mk8VVoJkMYKYMFvVpt6gQQvuTzy/+9IKG39EuysJ13U7wU86mLTRTieGDyRmgZMxMBKLfw==
+X-Received: by 2002:aa7:c90a:: with SMTP id b10mr1024196edt.276.1618563681558;
+        Fri, 16 Apr 2021 02:01:21 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id e16sm4803160edu.94.2021.04.16.02.01.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Apr 2021 02:01:19 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id AFBB71806B2; Fri, 16 Apr 2021 11:01:18 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+In-Reply-To: <13e37535-51f2-bbc3-b9dd-2e1c450c2391@iogearbox.net>
+References: <20210325120020.236504-4-memxor@gmail.com>
+ <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
+ <20210331094400.ldznoctli6fljz64@apollo>
+ <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
+ <20210402152743.dbadpgcmrgjt4eca@apollo>
+ <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
+ <20210402190806.nhcgappm3iocvd3d@apollo>
+ <20210403174721.vg4wle327wvossgl@ast-mbp>
+ <CAEf4Bzaeu4apgEtwS_3q1iPuURjPXMs9H43cYUtJSmjPMU5M9A@mail.gmail.com>
+ <87blar4ti7.fsf@toke.dk>
+ <CAEf4BzaOJ-WD3A13B2uCrsE2yrctAL8QtJ8TuXHLeP+tm98pbA@mail.gmail.com>
+ <874kg9m8t1.fsf@toke.dk>
+ <CAEf4BzaEkzPeAXqmm5aEdQxnCkrqJTHcSu7afnV11+697KgZTQ@mail.gmail.com>
+ <87wnt4jx8m.fsf@toke.dk>
+ <CAEf4Bzbb0ECMjhAvD-1wpp3qJJcrpgKr_=ONN4ZQmuNUgYrH4A@mail.gmail.com>
+ <4b99d6c3-0281-f539-e6dc-0b307c5a7db3@iogearbox.net>
+ <CAEf4BzZtivCFfMLa5vnu6QtNL75BC4WoreS=4v1TScsfVX1jQQ@mail.gmail.com>
+ <848d7864-44f3-79a2-ad3c-80adee6aa27a@iogearbox.net>
+ <CAEf4BzaHwiQLmXOHcDfDtuBuPF7HZgoDW-=u6eYhQ2svHuGAWw@mail.gmail.com>
+ <13e37535-51f2-bbc3-b9dd-2e1c450c2391@iogearbox.net>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 16 Apr 2021 11:01:18 +0200
+Message-ID: <87czuuiowx.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some basic sanity-check tests for the fat_checksum() function and
-the fat_time_unix2fat() and fat_time_fat2unix() functions. These unit
-tests verify these functions return correct output for a number of test
-inputs.
+Daniel Borkmann <daniel@iogearbox.net> writes:
 
-These tests were inspored by -- and serve a similar purpose to -- the
-timestamp parsing KUnit tests in ext4[1].
+> On 4/16/21 12:22 AM, Andrii Nakryiko wrote:
+>> On Thu, Apr 15, 2021 at 3:10 PM Daniel Borkmann <daniel@iogearbox.net> w=
+rote:
+>>> On 4/15/21 1:58 AM, Andrii Nakryiko wrote:
+>>>> On Wed, Apr 14, 2021 at 4:32 PM Daniel Borkmann <daniel@iogearbox.net>=
+ wrote:
+>>>>> On 4/15/21 1:19 AM, Andrii Nakryiko wrote:
+>>>>>> On Wed, Apr 14, 2021 at 3:51 PM Toke H=C3=B8iland-J=C3=B8rgensen <to=
+ke@redhat.com> wrote:
+>>>>>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>>>>>>>> On Wed, Apr 14, 2021 at 3:58 AM Toke H=C3=B8iland-J=C3=B8rgensen <=
+toke@redhat.com> wrote:
+>>>>>>>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>>>>>>>>>> On Tue, Apr 6, 2021 at 3:06 AM Toke H=C3=B8iland-J=C3=B8rgensen =
+<toke@redhat.com> wrote:
+>>>>>>>>>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>>>>>>>>>>>> On Sat, Apr 3, 2021 at 10:47 AM Alexei Starovoitov
+>>>>>>>>>>>> <alexei.starovoitov@gmail.com> wrote:
+>>>>>>>>>>>>> On Sat, Apr 03, 2021 at 12:38:06AM +0530, Kumar Kartikeya Dwi=
+vedi wrote:
+>>>>>>>>>>>>>> On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov w=
+rote:
+>>>>>>>>>>>>>>> On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <mem=
+xor@gmail.com> wrote:
+>>>>>>>>>>>>>>>> [...]
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> All of these things are messy because of tc legacy. bpf tri=
+ed to follow tc style
+>>>>>>>>>>>>>>> with cls and act distinction and it didn't quite work. cls =
+with
+>>>>>>>>>>>>>>> direct-action is the only
+>>>>>>>>>>>>>>> thing that became mainstream while tc style attach wasn't r=
+eally addressed.
+>>>>>>>>>>>>>>> There were several incidents where tc had tens of thousands=
+ of progs attached
+>>>>>>>>>>>>>>> because of this attach/query/index weirdness described abov=
+e.
+>>>>>>>>>>>>>>> I think the only way to address this properly is to introdu=
+ce bpf_link style of
+>>>>>>>>>>>>>>> attaching to tc. Such bpf_link would support ingress/egress=
+ only.
+>>>>>>>>>>>>>>> direction-action will be implied. There won't be any index =
+and query
+>>>>>>>>>>>>>>> will be obvious.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Note that we already have bpf_link support working (without =
+support for pinning
+>>>>>>>>>>>>>> ofcourse) in a limited way. The ifindex, protocol, parent_id=
+, priority, handle,
+>>>>>>>>>>>>>> chain_index tuple uniquely identifies a filter, so we stash =
+this in the bpf_link
+>>>>>>>>>>>>>> and are able to operate on the exact filter during release.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Except they're not unique. The library can stash them, but so=
+mething else
+>>>>>>>>>>>>> doing detach via iproute2 or their own netlink calls will det=
+ach the prog.
+>>>>>>>>>>>>> This other app can attach to the same spot a different prog a=
+nd now
+>>>>>>>>>>>>> bpf_link__destroy will be detaching somebody else prog.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> So I would like to propose to take this patch set a step fu=
+rther from
+>>>>>>>>>>>>>>> what Daniel said:
+>>>>>>>>>>>>>>> int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
+>>>>>>>>>>>>>>> and make this proposed api to return FD.
+>>>>>>>>>>>>>>> To detach from tc ingress/egress just close(fd).
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> You mean adding an fd-based TC API to the kernel?
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> yes.
+>>>>>>>>>>>>
+>>>>>>>>>>>> I'm totally for bpf_link-based TC attachment.
+>>>>>>>>>>>>
+>>>>>>>>>>>> But I think *also* having "legacy" netlink-based APIs will all=
+ow
+>>>>>>>>>>>> applications to handle older kernels in a much nicer way witho=
+ut extra
+>>>>>>>>>>>> dependency on iproute2. We have a similar situation with kprob=
+e, where
+>>>>>>>>>>>> currently libbpf only supports "modern" fd-based attachment, b=
+ut users
+>>>>>>>>>>>> periodically ask questions and struggle to figure out issues o=
+n older
+>>>>>>>>>>>> kernels that don't support new APIs.
+>>>>>>>>>>>
+>>>>>>>>>>> +1; I am OK with adding a new bpf_link-based way to attach TC p=
+rograms,
+>>>>>>>>>>> but we still need to support the netlink API in libbpf.
+>>>>>>>>>>>
+>>>>>>>>>>>> So I think we'd have to support legacy TC APIs, but I agree wi=
+th
+>>>>>>>>>>>> Alexei and Daniel that we should keep it to the simplest and m=
+ost
+>>>>>>>>>>>> straightforward API of supporting direction-action attachments=
+ and
+>>>>>>>>>>>> setting up qdisc transparently (if I'm getting all the termino=
+logy
+>>>>>>>>>>>> right, after reading Quentin's blog post). That coincidentally=
+ should
+>>>>>>>>>>>> probably match how bpf_link-based TC API will look like, so al=
+l that
+>>>>>>>>>>>> can be abstracted behind a single bpf_link__attach_tc() API as=
+ well,
+>>>>>>>>>>>> right? That's the plan for dealing with kprobe right now, btw.=
+ Libbpf
+>>>>>>>>>>>> will detect the best available API and transparently fall back=
+ (maybe
+>>>>>>>>>>>> with some warning for awareness, due to inherent downsides of =
+legacy
+>>>>>>>>>>>> APIs: no auto-cleanup being the most prominent one).
+>>>>>>>>>>>
+>>>>>>>>>>> Yup, SGTM: Expose both in the low-level API (in bpf.c), and mak=
+e the
+>>>>>>>>>>> high-level API auto-detect. That way users can also still use t=
+he
+>>>>>>>>>>> netlink attach function if they don't want the fd-based auto-cl=
+ose
+>>>>>>>>>>> behaviour of bpf_link.
+>>>>>>>>>>
+>>>>>>>>>> So I thought a bit more about this, and it feels like the right =
+move
+>>>>>>>>>> would be to expose only higher-level TC BPF API behind bpf_link.=
+ It
+>>>>>>>>>> will keep the API complexity and amount of APIs that libbpf will=
+ have
+>>>>>>>>>> to support to the minimum, and will keep the API itself simple:
+>>>>>>>>>> direct-attach with the minimum amount of input arguments. By not
+>>>>>>>>>> exposing low-level APIs we also table the whole bpf_tc_cls_attac=
+h_id
+>>>>>>>>>> design discussion, as we now can keep as much info as needed ins=
+ide
+>>>>>>>>>> bpf_link_tc (which will embed bpf_link internally as well) to su=
+pport
+>>>>>>>>>> detachment and possibly some additional querying, if needed.
+>>>>>>>>>
+>>>>>>>>> But then there would be no way for the caller to explicitly selec=
+t a
+>>>>>>>>> mechanism? I.e., if I write a BPF program using this mechanism ta=
+rgeting
+>>>>>>>>> a 5.12 kernel, I'll get netlink attachment, which can stick aroun=
+d when
+>>>>>>>>> I do bpf_link__disconnect(). But then if the kernel gets upgraded=
+ to
+>>>>>>>>> support bpf_link for TC programs I'll suddenly transparently get
+>>>>>>>>> bpf_link and the attachments will go away unless I pin them. This
+>>>>>>>>> seems... less than ideal?
+>>>>>>>>
+>>>>>>>> That's what we are doing with bpf_program__attach_kprobe(), though.
+>>>>>>>> And so far I've only seen people (privately) saying how good it wo=
+uld
+>>>>>>>> be to have bpf_link-based TC APIs, doesn't seem like anyone with a
+>>>>>>>> realistic use case prefers the current APIs. So I suspect it's not
+>>>>>>>> going to be a problem in practice. But at least I'd start there and
+>>>>>>>> see how people are using it and if they need anything else.
+>>>>>>>
+>>>>>>> *sigh* - I really wish you would stop arbitrarily declaring your ow=
+n use
+>>>>>>> cases "realistic" and mine (implied) "unrealistic". Makes it really=
+ hard
+>>>>>>> to have a productive discussion...
+>>>>>>
+>>>>>> Well (sigh?..), this wasn't my intention, sorry you read it this way.
+>>>>>> But we had similar discussions when I was adding bpf_link-based XDP
+>>>>>> attach APIs. And guess what, now I see that samples/bpf/whatever_xdp
+>>>>>> is switched to bpf_link-based XDP, because that makes everything
+>>>>>> simpler and more reliable. What I also know is that in production we
+>>>>>> ran into multiple issues with anything that doesn't auto-detach on
+>>>>>> process exit/crash (unless pinned explicitly, of course). And that
+>>>>>> people that are trying to use TC right now are saying how having
+>>>>>> bpf_link-based TC APIs would make everything *simpler* and *safer*. =
+So
+>>>>>> I don't know... I understand it might be convenient in some cases to
+>>>>>> not care about a lifetime of BPF programs you are attaching, but then
+>>>>>> there are usually explicit and intentional ways to achieve at least
+>>>>>> similar behavior with safety by default.
+>>>>>
+>>>>> [...]
+>>>>>
+>>>>>    >>> There are many ways to skin this cat. I'd prioritize bpf_link-=
+based TC
+>>>>>    >>> APIs to be added with legacy TC API as a fallback.
+>>>>>
+>>>>> I think the problem here is though that this would need to be determi=
+nistic
+>>>>> when upgrading from one kernel version to another where we don't use =
+the
+>>>>> fallback anymore, e.g. in case of Cilium we always want to keep the p=
+rogs
+>>>>> attached to allow headless updates on the agent, meaning, traffic kee=
+ps
+>>>>> flowing through the BPF datapath while in user space, our agent resta=
+rts
+>>>>> after upgrade, and atomically replaces the BPF progs once up and runn=
+ing
+>>>>> (we're doing this for the whole range of 4.9 to 5.x kernels that we s=
+upport).
+>>>>> While we use the 'simple' api that is discussed here internally in Ci=
+lium,
+>>>>> this attach behavior would have to be consistent, so transparent fall=
+back
+>>>>> inside libbpf on link vs non-link availability won't work (at least i=
+n our
+>>>>> case).
+>>>>
+>>>> What about pinning? It's not exactly the same, but bpf_link could
+>>>> actually pin a BPF program, if using legacy TC, and pin bpf_link, if
+>>>> using bpf_link-based APIs. Of course before switching from iproute2 to
+>>>> libbpf APIs you'd need to design your applications to use pinning
+>>>> instead of relying implicitly on permanently attached BPF program.
+>>>
+>>> All the progs we load from Cilium in a K8s setting w/ Pods, we could ha=
+ve easily
+>>> over 100 loaded at the same time on a node, and we template the per Pod=
+ ones, so
+>>> the complexity of managing those pinned lifecycles from the agent and d=
+ealing with
+>>> the semantic/fallback differences between kernels feels probably not wo=
+rth the
+>>> gain. So if there would be a libbpf tc simplified attach API, I'd for t=
+he time
+>>> being stick to the existing aka legacy means.
+>>=20
+>> Sure. Then what do you think about keeping only low-level TC APIs, and
+>> in the future add bpf_program__attach_tc(), which will use
+>> bpf_link-based one. It seems like it's not worth it to pretend we have
+>> bpf_link-based semantics with "legacy" current TC APIs. Similarly how
+>> we have a low-level XDP attach API, and bpf_link-based (only)
+>> bpf_program__attach_xdp().
+>
+> I think that's okay. I guess question is what do we define as initial sco=
+pe for
+> the low-level TC API. cls_bpf w/ fixed direct-action mode + fixed eth_p_a=
+ll,
+> allowing to flexibly specify handle / priority or a block_index feels rea=
+sonable.
 
-Note that, unlike fat_time_unix2fat, fat_time_fat2unix wasn't previously
-exported, so this patch exports it as well. This is required for the
-case where we're building the fat and fat_test as modules.
+Sounds reasonable to me, with the addition of 'parent' to the things you
+can specify.
 
-[1]:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/ext4/inode-test.c
+So snipping a few bits from Kumar's patch and paring it down a bit, we'd
+end up with something like this?
 
-Signed-off-by: David Gow <davidgow@google.com>
-Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
----
-
-It's been a while, but this hopefully is a final version of the FAT KUnit
-patchset. It has a number of changes to keep it up-to-date with current
-KUnit standards, notably the use of parameterised tests and the addition
-of a '.kunitconfig' file to allow for easy testing. It also fixes an
-endianness tagging issue picked up by the kernel test robot under sparse
-on pa-risc.
-
-Cheers,
--- David
-
-Changes since v7:
-https://lore.kernel.org/linux-kselftest/20201028064631.3774908-1-davidgow@google.com/
-- Make the two timestamp tests parameterised: this means that the KUnit
-  runtime and tooling are aware of the different testcases (and print a
-  nice list of them to the TAP log when the test is run).
-- Fix some issues sparse picked up with __le32 tagged integers.
-- Add an fs/fat/.kunitconfig file which contains all the Kconfig entries
-  needed to run the test. The test can now be run with:
-  ./tools/testing/kunit/kunit.py run --kunitconfig fs/fat/.kunitconfig
-
-Changes since v6:
-https://lore.kernel.org/linux-kselftest/20201024060558.2556249-1-davidgow@google.com/
-- Make CONFIG_FAT_DEFAULT_CODEPAGE depend on FAT_FS, rather than either
-  VFAT_FS or MSDOS_FS.
-  - This means that FAT_KUNIT_TEST can now also just depend of FAT_FS
-- Fix a few warnings that KUnit tool was eating:
-  - KUnit's type checking needs a specific cast for the fat_checksum()
-    expected results.
-  - The time test cases shouldn't be 'const'
-  - The fake superblock is now static, as otherwise it increased the
-    stack size too much.
-
-Changes since v4/5:
-https://lore.kernel.org/linux-kselftest/20201024052047.2526780-1-davidgow@google.com/
-- Fix a typo introduced in the Kconfig. It builds now.
-
-Changes since v3:
-https://lore.kernel.org/linux-kselftest/20201021061713.1545931-1-davidgow@google.com/
-- Update the Kconfig entry to use "depends on" rather than "select", as
-  discussed in [2].
-- Depend on "MSDOS_FS || VFAT_FS", rather than "FAT_FS", as we need the
-  CONFIG_FAT_DEFAULT_CODEPAGE symbol to be defined.
-
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20201020055856.1270482-1-davidgow@google.com/
-- Comment that the export for fat_time_fat2unix() function is for KUnit
-  tests.
-
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20201017064107.375174-1-davidgow@google.com/
-- Now export fat_time_fat2unix() so that the test can access it when
-  built as a module.
-
-
-[2]:
-https://lore.kernel.org/linux-ext4/52959e99-4105-3de9-730c-c46894b82bdd@infradead.org/T/#t
-
-
-
- fs/fat/.kunitconfig |   5 ++
- fs/fat/Kconfig      |  14 +++-
- fs/fat/Makefile     |   2 +
- fs/fat/fat_test.c   | 197 ++++++++++++++++++++++++++++++++++++++++++++
- fs/fat/misc.c       |   2 +
- 5 files changed, 219 insertions(+), 1 deletion(-)
- create mode 100644 fs/fat/.kunitconfig
- create mode 100644 fs/fat/fat_test.c
-
-diff --git a/fs/fat/.kunitconfig b/fs/fat/.kunitconfig
-new file mode 100644
-index 000000000000..0a6971dbeccb
---- /dev/null
-+++ b/fs/fat/.kunitconfig
-@@ -0,0 +1,5 @@
-+CONFIG_KUNIT=y
-+CONFIG_FAT_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_KUNIT_TEST=y
-diff --git a/fs/fat/Kconfig b/fs/fat/Kconfig
-index 66532a71e8fd..238cc55f84c4 100644
---- a/fs/fat/Kconfig
-+++ b/fs/fat/Kconfig
-@@ -77,7 +77,7 @@ config VFAT_FS
- 
- config FAT_DEFAULT_CODEPAGE
- 	int "Default codepage for FAT"
--	depends on MSDOS_FS || VFAT_FS
-+	depends on FAT_FS
- 	default 437
- 	help
- 	  This option should be set to the codepage of your FAT filesystems.
-@@ -115,3 +115,15 @@ config FAT_DEFAULT_UTF8
- 	  Say Y if you use UTF-8 encoding for file names, N otherwise.
- 
- 	  See <file:Documentation/filesystems/vfat.rst> for more information.
++struct bpf_tc_cls_opts {
++	size_t sz;
++	__u32 chain_index;
++	__u32 handle;
++	__u32 priority;
++	__u32 class_id;
++};
++#define bpf_tc_cls_opts__last_field class_id
 +
-+config FAT_KUNIT_TEST
-+	tristate "Unit Tests for FAT filesystems" if !KUNIT_ALL_TESTS
-+	depends on KUNIT && FAT_FS
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the FAT KUnit tests
-+
-+	  For more information on KUnit and unit tests in general, please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit
-+
-+	  If unsure, say N
-diff --git a/fs/fat/Makefile b/fs/fat/Makefile
-index 70645ce2f7fc..2b034112690d 100644
---- a/fs/fat/Makefile
-+++ b/fs/fat/Makefile
-@@ -10,3 +10,5 @@ obj-$(CONFIG_MSDOS_FS) += msdos.o
- fat-y := cache.o dir.o fatent.o file.o inode.o misc.o nfs.o
- vfat-y := namei_vfat.o
- msdos-y := namei_msdos.o
-+
-+obj-$(CONFIG_FAT_KUNIT_TEST) += fat_test.o
-diff --git a/fs/fat/fat_test.c b/fs/fat/fat_test.c
-new file mode 100644
-index 000000000000..febd25f57d4b
---- /dev/null
-+++ b/fs/fat/fat_test.c
-@@ -0,0 +1,197 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit tests for FAT filesystems.
-+ *
-+ * Copyright (C) 2020 Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+#include <kunit/test.h>
-+
-+#include "fat.h"
-+
-+static void fat_checksum_test(struct kunit *test)
-+{
-+	/* With no extension. */
-+	KUNIT_EXPECT_EQ(test, fat_checksum("VMLINUX    "), (u8)44);
-+	/* With 3-letter extension. */
-+	KUNIT_EXPECT_EQ(test, fat_checksum("README  TXT"), (u8)115);
-+	/* With short (1-letter) extension. */
-+	KUNIT_EXPECT_EQ(test, fat_checksum("ABCDEFGHA  "), (u8)98);
-+}
-+
-+
-+struct fat_timestamp_testcase {
-+	const char *name;
-+	struct timespec64 ts;
-+	__le16 time;
-+	__le16 date;
-+	u8 cs;
-+	int time_offset;
++/* Acts as a handle for an attached filter */
++struct bpf_tc_cls_attach_id {
++	__u32 ifindex;
++	union {
++		__u32 block_index;
++		__u32 parent_id;
++	};
++	__u32 protocol;
++	__u32 chain_index;
++	__u32 handle;
++	__u32 priority;
 +};
 +
-+static struct fat_timestamp_testcase time_test_cases[] = {
-+	{
-+		.name = "Earliest possible UTC (1980-01-01 00:00:00)",
-+		.ts = {.tv_sec = 315532800LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(0),
-+		.date = cpu_to_le16(33),
-+		.cs = 0,
-+		.time_offset = 0,
-+	},
-+	{
-+		.name = "Latest possible UTC (2107-12-31 23:59:58)",
-+		.ts = {.tv_sec = 4354819198LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(49021),
-+		.date = cpu_to_le16(65439),
-+		.cs = 0,
-+		.time_offset = 0,
-+	},
-+	{
-+		.name = "Earliest possible (UTC-11) (== 1979-12-31 13:00:00 UTC)",
-+		.ts = {.tv_sec = 315493200LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(0),
-+		.date = cpu_to_le16(33),
-+		.cs = 0,
-+		.time_offset = 11 * 60,
-+	},
-+	{
-+		.name = "Latest possible (UTC+11) (== 2108-01-01 10:59:58 UTC)",
-+		.ts = {.tv_sec = 4354858798LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(49021),
-+		.date = cpu_to_le16(65439),
-+		.cs = 0,
-+		.time_offset = -11 * 60,
-+	},
-+	{
-+		.name = "Leap Day / Year (1996-02-29 00:00:00)",
-+		.ts = {.tv_sec = 825552000LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(0),
-+		.date = cpu_to_le16(8285),
-+		.cs = 0,
-+		.time_offset = 0,
-+	},
-+	{
-+		.name = "Year 2000 is leap year (2000-02-29 00:00:00)",
-+		.ts = {.tv_sec = 951782400LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(0),
-+		.date = cpu_to_le16(10333),
-+		.cs = 0,
-+		.time_offset = 0,
-+	},
-+	{
-+		.name = "Year 2100 not leap year (2100-03-01 00:00:00)",
-+		.ts = {.tv_sec = 4107542400LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(0),
-+		.date = cpu_to_le16(61537),
-+		.cs = 0,
-+		.time_offset = 0,
-+	},
-+	{
-+		.name = "Leap year + timezone UTC+1 (== 2004-02-29 00:30:00 UTC)",
-+		.ts = {.tv_sec = 1078014600LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(48064),
-+		.date = cpu_to_le16(12380),
-+		.cs = 0,
-+		.time_offset = -60,
-+	},
-+	{
-+		.name = "Leap year + timezone UTC-1 (== 2004-02-29 23:30:00 UTC)",
-+		.ts = {.tv_sec = 1078097400LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(960),
-+		.date = cpu_to_le16(12385),
-+		.cs = 0,
-+		.time_offset = 60,
-+	},
-+	{
-+		.name = "VFAT odd-second resolution (1999-12-31 23:59:59)",
-+		.ts = {.tv_sec = 946684799LL, .tv_nsec = 0L},
-+		.time = cpu_to_le16(49021),
-+		.date = cpu_to_le16(10143),
-+		.cs = 100,
-+		.time_offset = 0,
-+	},
-+	{
-+		.name = "VFAT 10ms resolution (1980-01-01 00:00:00:0010)",
-+		.ts = {.tv_sec = 315532800LL, .tv_nsec = 10000000L},
-+		.time = cpu_to_le16(0),
-+		.date = cpu_to_le16(33),
-+		.cs = 1,
-+		.time_offset = 0,
-+	},
++struct bpf_tc_cls_info {
++	struct bpf_tc_cls_attach_id id;
++	__u32 class_id;
++	__u32 bpf_flags;
++	__u32 bpf_flags_gen;
 +};
 +
-+static void time_testcase_desc(struct fat_timestamp_testcase *t,
-+			       char *desc)
-+{
-+	strscpy(desc, t->name, KUNIT_PARAM_DESC_SIZE);
-+}
-+
-+KUNIT_ARRAY_PARAM(fat_time, time_test_cases, time_testcase_desc);
-+
-+static void fat_time_fat2unix_test(struct kunit *test)
-+{
-+	static struct msdos_sb_info fake_sb;
-+	struct timespec64 ts;
-+	struct fat_timestamp_testcase *testcase =
-+		(struct fat_timestamp_testcase *)test->param_value;
-+
-+	fake_sb.options.tz_set = 1;
-+	fake_sb.options.time_offset = testcase->time_offset;
-+
-+	fat_time_fat2unix(&fake_sb, &ts,
-+			  testcase->time,
-+			  testcase->date,
-+			  testcase->cs);
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    testcase->ts.tv_sec,
-+			    ts.tv_sec,
-+			    "Timestamp mismatch (seconds)\n");
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    testcase->ts.tv_nsec,
-+			    ts.tv_nsec,
-+			    "Timestamp mismatch (nanoseconds)\n");
-+}
-+
-+static void fat_time_unix2fat_test(struct kunit *test)
-+{
-+	static struct msdos_sb_info fake_sb;
-+	__le16 date, time;
-+	u8 cs;
-+	struct fat_timestamp_testcase *testcase =
-+		(struct fat_timestamp_testcase *)test->param_value;
-+
-+	fake_sb.options.tz_set = 1;
-+	fake_sb.options.time_offset = testcase->time_offset;
-+
-+	fat_time_unix2fat(&fake_sb, &(testcase->ts),
-+			  &time, &date, &cs);
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    le16_to_cpu(testcase->time),
-+			    le16_to_cpu(time),
-+			    "Time mismatch\n");
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    le16_to_cpu(testcase->date),
-+			    le16_to_cpu(date),
-+			    "Date mismatch\n");
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    testcase->cs,
-+			    cs,
-+			    "Centisecond mismatch\n");
-+}
-+
-+static struct kunit_case fat_test_cases[] = {
-+	KUNIT_CASE(fat_checksum_test),
-+	KUNIT_CASE_PARAM(fat_time_fat2unix_test, fat_time_gen_params),
-+	KUNIT_CASE_PARAM(fat_time_unix2fat_test, fat_time_gen_params),
-+	{},
-+};
-+
-+static struct kunit_suite fat_test_suite = {
-+	.name = "fat_test",
-+	.test_cases = fat_test_cases,
-+};
-+
-+kunit_test_suites(&fat_test_suite);
-+
-+MODULE_LICENSE("GPL v2");
-diff --git a/fs/fat/misc.c b/fs/fat/misc.c
-index 18a50a46b57f..9073fa927be3 100644
---- a/fs/fat/misc.c
-+++ b/fs/fat/misc.c
-@@ -229,6 +229,8 @@ void fat_time_fat2unix(struct msdos_sb_info *sbi, struct timespec64 *ts,
- 		ts->tv_nsec = 0;
- 	}
- }
-+/* Export fat_time_fat2unix() for the fat_test KUnit tests. */
-+EXPORT_SYMBOL_GPL(fat_time_fat2unix);
- 
- /* Convert linear UNIX date to a FAT time/date pair. */
- void fat_time_unix2fat(struct msdos_sb_info *sbi, struct timespec64 *ts,
--- 
-2.31.1.368.gbe11c130af-goog
++LIBBPF_API int bpf_tc_cls_attach_dev(int fd, __u32 ifindex, __u32 parent_i=
+d,
++				     const struct bpf_tc_cls_opts *opts,
++				     struct bpf_tc_cls_attach_id *id);
++LIBBPF_API int bpf_tc_cls_detach_dev(const struct bpf_tc_cls_attach_id *id=
+);
++LIBBPF_API int bpf_tc_cls_get_info_dev(int fd, __u32 ifindex, __u32 parent=
+_id,
++				       const struct bpf_tc_cls_opts *opts,
++				       struct bpf_tc_cls_info *info);
+
+
+
+What about change and replace? I guess we could do without those, right?
+
+-Toke
 
