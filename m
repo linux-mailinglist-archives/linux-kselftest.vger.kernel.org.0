@@ -2,398 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3ECA361CAD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 11:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0AD2362055
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 14:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240870AbhDPJBu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Apr 2021 05:01:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59270 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240816AbhDPJBt (ORCPT
+        id S240881AbhDPMyl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Apr 2021 08:54:41 -0400
+Received: from conssluserg-01.nifty.com ([210.131.2.80]:32415 "EHLO
+        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235495AbhDPMyk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Apr 2021 05:01:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618563684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zbXQJQ+eKOPY15XrfY8ykzys3QyLZZKF2BRvQh65MXg=;
-        b=UMVUHYhafFLgPKHTQbn2QmwqOkEwuRI8+GsHhlXqwkr6lDOIjEmxOmRRYNuQqnvolpJmM0
-        aJPcO9m0d+jm+51QIaTw6HYeDhXRClyh/dTxRJuu9BURzdRpTE0Pp9Wt0l8Xg8tg1dKsto
-        RgANVRrSh8aOW2RLZzaaBuWEHUW+Ug8=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-113-epW-zqgCPoKc6GgjY0fMSQ-1; Fri, 16 Apr 2021 05:01:23 -0400
-X-MC-Unique: epW-zqgCPoKc6GgjY0fMSQ-1
-Received: by mail-ed1-f69.google.com with SMTP id l22-20020a0564021256b0290384ebfba68cso2798261edw.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 02:01:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=zbXQJQ+eKOPY15XrfY8ykzys3QyLZZKF2BRvQh65MXg=;
-        b=Fm5joQlxzLkkZ8fcPmFKIWmtRH/uOXM+38J1E4PPX1mLuFUDvQ9mJs5yrAi0+rrQts
-         Fc854/igXisFBvAF4VlXfxmYt5TpDbwkeOvrBsP8SlM6hllSJhD+t5hjeP6kk6NyUNvJ
-         fZOGwSokOBOwb3S8grABjd8dXmuk4knG4j2LBJYfv9tO8JaR2EjeSh09WDvtpIFYLf+V
-         XASnbvPip0GRU5G/uks5XAS4w5bk8Sj7vWBrLh1PhH7MiOiMeXJ7zeeqgQ5rpkOJ0xXk
-         qEOLO9oJ5nXirmX3z/JZN+XLkVBdgBCS4mj3dAL45CX3MckWBN1ILrlEEMHZShYyhdBE
-         OJ6w==
-X-Gm-Message-State: AOAM530CxDlMUWMg626WimRttcrrtgoGEZEHfjDh1eCJ0ijvkhEVsTge
-        auz5wrMi8TvRWRQM6IexYO1+Tb6H9gE6RuJcaN2mYHkyWCzU9JGOdfyZz8fiPcEq7asP+r67L/4
-        EZmtzRmlvRqXt/uamVqokPvtCHwne
-X-Received: by 2002:aa7:c90a:: with SMTP id b10mr1024231edt.276.1618563681834;
-        Fri, 16 Apr 2021 02:01:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw3Mk8VVoJkMYKYMFvVpt6gQQvuTzy/+9IKG39EuysJ13U7wU86mLTRTieGDyRmgZMxMBKLfw==
-X-Received: by 2002:aa7:c90a:: with SMTP id b10mr1024196edt.276.1618563681558;
-        Fri, 16 Apr 2021 02:01:21 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id e16sm4803160edu.94.2021.04.16.02.01.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Apr 2021 02:01:19 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id AFBB71806B2; Fri, 16 Apr 2021 11:01:18 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Fri, 16 Apr 2021 08:54:40 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 13GCruXn017060;
+        Fri, 16 Apr 2021 21:53:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 13GCruXn017060
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1618577637;
+        bh=FpBTE/PmjepHTlzWsrX59REOgQgL2WrtsCCIoF/CYWE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pnl4cChP9BDT4wIiEZMCXce74IYPbyviH0geJnOMydzhvTMMKqvimUCJ8LuO/ydUi
+         B7GCRGzMyz8AbBjXaIdqdOj97w4Mvl4+xM1yl+DjOmMRHy8sXXrxwF2VPV6p3HkIDh
+         n6j6f7LmOePGYddtG4MeM1IJTF09NZL2HYvxNn0VmUbtcoGAQN0WIk8JwzmNwqxNuH
+         IfVvglF9RnOeg2qR9OQZYFuxmRVvfEgsWCD65f5cmxQGtubERM4wyCwE/Fx0XhOF6+
+         fHFg+T4J4DNZEIcoxa3aGVqRu3zGr7QifJpt93kYMOXSvEw6iuQScro++18+YzyjqF
+         Xuddd4D8zQwkQ==
+X-Nifty-SrcIP: [209.85.216.43]
+Received: by mail-pj1-f43.google.com with SMTP id em21-20020a17090b0155b029014e204a81e6so6371593pjb.1;
+        Fri, 16 Apr 2021 05:53:57 -0700 (PDT)
+X-Gm-Message-State: AOAM530bgqjsO3lWF/tHwnQMGcasjhkPXEs8XTPkhXTB07EP/ZLEsXmv
+        3mp4/TT+UMxTuIlUFayxCQxemxeq34bCCblaPSY=
+X-Google-Smtp-Source: ABdhPJxb/FC19twtF+zRiYRXoqGzOZCJTyiYCPanDW2DbASdA2RE0I7WCFpU5qPpBix6mu/jtdFnthAB/xgwIUGoUjg=
+X-Received: by 2002:a17:90a:1056:: with SMTP id y22mr9094969pjd.153.1618577636323;
+ Fri, 16 Apr 2021 05:53:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210415072700.147125-1-masahiroy@kernel.org> <20210415072700.147125-2-masahiroy@kernel.org>
+ <eb623ea6-a2f4-9692-ff3d-cb9f9b9ea15f@de.ibm.com> <0eeed665-a105-917b-e7fb-8dafe2ae9d94@de.ibm.com>
+In-Reply-To: <0eeed665-a105-917b-e7fb-8dafe2ae9d94@de.ibm.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 16 Apr 2021 21:53:18 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASfiiLJd9dOpaJ47pJ4FzgV8JL3vU8okOYz0=eaE4OYgQ@mail.gmail.com>
+Message-ID: <CAK7LNASfiiLJd9dOpaJ47pJ4FzgV8JL3vU8okOYz0=eaE4OYgQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tools: do not include scripts/Kbuild.include
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Harish <harish@linux.ibm.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf <bpf@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        kvm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
-In-Reply-To: <13e37535-51f2-bbc3-b9dd-2e1c450c2391@iogearbox.net>
-References: <20210325120020.236504-4-memxor@gmail.com>
- <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
- <20210331094400.ldznoctli6fljz64@apollo>
- <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
- <20210402152743.dbadpgcmrgjt4eca@apollo>
- <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
- <20210402190806.nhcgappm3iocvd3d@apollo>
- <20210403174721.vg4wle327wvossgl@ast-mbp>
- <CAEf4Bzaeu4apgEtwS_3q1iPuURjPXMs9H43cYUtJSmjPMU5M9A@mail.gmail.com>
- <87blar4ti7.fsf@toke.dk>
- <CAEf4BzaOJ-WD3A13B2uCrsE2yrctAL8QtJ8TuXHLeP+tm98pbA@mail.gmail.com>
- <874kg9m8t1.fsf@toke.dk>
- <CAEf4BzaEkzPeAXqmm5aEdQxnCkrqJTHcSu7afnV11+697KgZTQ@mail.gmail.com>
- <87wnt4jx8m.fsf@toke.dk>
- <CAEf4Bzbb0ECMjhAvD-1wpp3qJJcrpgKr_=ONN4ZQmuNUgYrH4A@mail.gmail.com>
- <4b99d6c3-0281-f539-e6dc-0b307c5a7db3@iogearbox.net>
- <CAEf4BzZtivCFfMLa5vnu6QtNL75BC4WoreS=4v1TScsfVX1jQQ@mail.gmail.com>
- <848d7864-44f3-79a2-ad3c-80adee6aa27a@iogearbox.net>
- <CAEf4BzaHwiQLmXOHcDfDtuBuPF7HZgoDW-=u6eYhQ2svHuGAWw@mail.gmail.com>
- <13e37535-51f2-bbc3-b9dd-2e1c450c2391@iogearbox.net>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 16 Apr 2021 11:01:18 +0200
-Message-ID: <87czuuiowx.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        <linux-kselftest@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Daniel Borkmann <daniel@iogearbox.net> writes:
-
-> On 4/16/21 12:22 AM, Andrii Nakryiko wrote:
->> On Thu, Apr 15, 2021 at 3:10 PM Daniel Borkmann <daniel@iogearbox.net> w=
-rote:
->>> On 4/15/21 1:58 AM, Andrii Nakryiko wrote:
->>>> On Wed, Apr 14, 2021 at 4:32 PM Daniel Borkmann <daniel@iogearbox.net>=
- wrote:
->>>>> On 4/15/21 1:19 AM, Andrii Nakryiko wrote:
->>>>>> On Wed, Apr 14, 2021 at 3:51 PM Toke H=C3=B8iland-J=C3=B8rgensen <to=
-ke@redhat.com> wrote:
->>>>>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->>>>>>>> On Wed, Apr 14, 2021 at 3:58 AM Toke H=C3=B8iland-J=C3=B8rgensen <=
-toke@redhat.com> wrote:
->>>>>>>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->>>>>>>>>> On Tue, Apr 6, 2021 at 3:06 AM Toke H=C3=B8iland-J=C3=B8rgensen =
-<toke@redhat.com> wrote:
->>>>>>>>>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->>>>>>>>>>>> On Sat, Apr 3, 2021 at 10:47 AM Alexei Starovoitov
->>>>>>>>>>>> <alexei.starovoitov@gmail.com> wrote:
->>>>>>>>>>>>> On Sat, Apr 03, 2021 at 12:38:06AM +0530, Kumar Kartikeya Dwi=
-vedi wrote:
->>>>>>>>>>>>>> On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov w=
-rote:
->>>>>>>>>>>>>>> On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <mem=
-xor@gmail.com> wrote:
->>>>>>>>>>>>>>>> [...]
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> All of these things are messy because of tc legacy. bpf tri=
-ed to follow tc style
->>>>>>>>>>>>>>> with cls and act distinction and it didn't quite work. cls =
-with
->>>>>>>>>>>>>>> direct-action is the only
->>>>>>>>>>>>>>> thing that became mainstream while tc style attach wasn't r=
-eally addressed.
->>>>>>>>>>>>>>> There were several incidents where tc had tens of thousands=
- of progs attached
->>>>>>>>>>>>>>> because of this attach/query/index weirdness described abov=
-e.
->>>>>>>>>>>>>>> I think the only way to address this properly is to introdu=
-ce bpf_link style of
->>>>>>>>>>>>>>> attaching to tc. Such bpf_link would support ingress/egress=
- only.
->>>>>>>>>>>>>>> direction-action will be implied. There won't be any index =
-and query
->>>>>>>>>>>>>>> will be obvious.
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> Note that we already have bpf_link support working (without =
-support for pinning
->>>>>>>>>>>>>> ofcourse) in a limited way. The ifindex, protocol, parent_id=
-, priority, handle,
->>>>>>>>>>>>>> chain_index tuple uniquely identifies a filter, so we stash =
-this in the bpf_link
->>>>>>>>>>>>>> and are able to operate on the exact filter during release.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Except they're not unique. The library can stash them, but so=
-mething else
->>>>>>>>>>>>> doing detach via iproute2 or their own netlink calls will det=
-ach the prog.
->>>>>>>>>>>>> This other app can attach to the same spot a different prog a=
-nd now
->>>>>>>>>>>>> bpf_link__destroy will be detaching somebody else prog.
->>>>>>>>>>>>>
->>>>>>>>>>>>>>> So I would like to propose to take this patch set a step fu=
-rther from
->>>>>>>>>>>>>>> what Daniel said:
->>>>>>>>>>>>>>> int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
->>>>>>>>>>>>>>> and make this proposed api to return FD.
->>>>>>>>>>>>>>> To detach from tc ingress/egress just close(fd).
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> You mean adding an fd-based TC API to the kernel?
->>>>>>>>>>>>>
->>>>>>>>>>>>> yes.
->>>>>>>>>>>>
->>>>>>>>>>>> I'm totally for bpf_link-based TC attachment.
->>>>>>>>>>>>
->>>>>>>>>>>> But I think *also* having "legacy" netlink-based APIs will all=
-ow
->>>>>>>>>>>> applications to handle older kernels in a much nicer way witho=
-ut extra
->>>>>>>>>>>> dependency on iproute2. We have a similar situation with kprob=
-e, where
->>>>>>>>>>>> currently libbpf only supports "modern" fd-based attachment, b=
-ut users
->>>>>>>>>>>> periodically ask questions and struggle to figure out issues o=
-n older
->>>>>>>>>>>> kernels that don't support new APIs.
->>>>>>>>>>>
->>>>>>>>>>> +1; I am OK with adding a new bpf_link-based way to attach TC p=
-rograms,
->>>>>>>>>>> but we still need to support the netlink API in libbpf.
->>>>>>>>>>>
->>>>>>>>>>>> So I think we'd have to support legacy TC APIs, but I agree wi=
-th
->>>>>>>>>>>> Alexei and Daniel that we should keep it to the simplest and m=
-ost
->>>>>>>>>>>> straightforward API of supporting direction-action attachments=
- and
->>>>>>>>>>>> setting up qdisc transparently (if I'm getting all the termino=
-logy
->>>>>>>>>>>> right, after reading Quentin's blog post). That coincidentally=
- should
->>>>>>>>>>>> probably match how bpf_link-based TC API will look like, so al=
-l that
->>>>>>>>>>>> can be abstracted behind a single bpf_link__attach_tc() API as=
- well,
->>>>>>>>>>>> right? That's the plan for dealing with kprobe right now, btw.=
- Libbpf
->>>>>>>>>>>> will detect the best available API and transparently fall back=
- (maybe
->>>>>>>>>>>> with some warning for awareness, due to inherent downsides of =
-legacy
->>>>>>>>>>>> APIs: no auto-cleanup being the most prominent one).
->>>>>>>>>>>
->>>>>>>>>>> Yup, SGTM: Expose both in the low-level API (in bpf.c), and mak=
-e the
->>>>>>>>>>> high-level API auto-detect. That way users can also still use t=
-he
->>>>>>>>>>> netlink attach function if they don't want the fd-based auto-cl=
-ose
->>>>>>>>>>> behaviour of bpf_link.
->>>>>>>>>>
->>>>>>>>>> So I thought a bit more about this, and it feels like the right =
-move
->>>>>>>>>> would be to expose only higher-level TC BPF API behind bpf_link.=
- It
->>>>>>>>>> will keep the API complexity and amount of APIs that libbpf will=
- have
->>>>>>>>>> to support to the minimum, and will keep the API itself simple:
->>>>>>>>>> direct-attach with the minimum amount of input arguments. By not
->>>>>>>>>> exposing low-level APIs we also table the whole bpf_tc_cls_attac=
-h_id
->>>>>>>>>> design discussion, as we now can keep as much info as needed ins=
-ide
->>>>>>>>>> bpf_link_tc (which will embed bpf_link internally as well) to su=
-pport
->>>>>>>>>> detachment and possibly some additional querying, if needed.
->>>>>>>>>
->>>>>>>>> But then there would be no way for the caller to explicitly selec=
-t a
->>>>>>>>> mechanism? I.e., if I write a BPF program using this mechanism ta=
-rgeting
->>>>>>>>> a 5.12 kernel, I'll get netlink attachment, which can stick aroun=
-d when
->>>>>>>>> I do bpf_link__disconnect(). But then if the kernel gets upgraded=
- to
->>>>>>>>> support bpf_link for TC programs I'll suddenly transparently get
->>>>>>>>> bpf_link and the attachments will go away unless I pin them. This
->>>>>>>>> seems... less than ideal?
->>>>>>>>
->>>>>>>> That's what we are doing with bpf_program__attach_kprobe(), though.
->>>>>>>> And so far I've only seen people (privately) saying how good it wo=
-uld
->>>>>>>> be to have bpf_link-based TC APIs, doesn't seem like anyone with a
->>>>>>>> realistic use case prefers the current APIs. So I suspect it's not
->>>>>>>> going to be a problem in practice. But at least I'd start there and
->>>>>>>> see how people are using it and if they need anything else.
->>>>>>>
->>>>>>> *sigh* - I really wish you would stop arbitrarily declaring your ow=
-n use
->>>>>>> cases "realistic" and mine (implied) "unrealistic". Makes it really=
- hard
->>>>>>> to have a productive discussion...
->>>>>>
->>>>>> Well (sigh?..), this wasn't my intention, sorry you read it this way.
->>>>>> But we had similar discussions when I was adding bpf_link-based XDP
->>>>>> attach APIs. And guess what, now I see that samples/bpf/whatever_xdp
->>>>>> is switched to bpf_link-based XDP, because that makes everything
->>>>>> simpler and more reliable. What I also know is that in production we
->>>>>> ran into multiple issues with anything that doesn't auto-detach on
->>>>>> process exit/crash (unless pinned explicitly, of course). And that
->>>>>> people that are trying to use TC right now are saying how having
->>>>>> bpf_link-based TC APIs would make everything *simpler* and *safer*. =
-So
->>>>>> I don't know... I understand it might be convenient in some cases to
->>>>>> not care about a lifetime of BPF programs you are attaching, but then
->>>>>> there are usually explicit and intentional ways to achieve at least
->>>>>> similar behavior with safety by default.
->>>>>
->>>>> [...]
->>>>>
->>>>>    >>> There are many ways to skin this cat. I'd prioritize bpf_link-=
-based TC
->>>>>    >>> APIs to be added with legacy TC API as a fallback.
->>>>>
->>>>> I think the problem here is though that this would need to be determi=
-nistic
->>>>> when upgrading from one kernel version to another where we don't use =
-the
->>>>> fallback anymore, e.g. in case of Cilium we always want to keep the p=
-rogs
->>>>> attached to allow headless updates on the agent, meaning, traffic kee=
-ps
->>>>> flowing through the BPF datapath while in user space, our agent resta=
-rts
->>>>> after upgrade, and atomically replaces the BPF progs once up and runn=
-ing
->>>>> (we're doing this for the whole range of 4.9 to 5.x kernels that we s=
-upport).
->>>>> While we use the 'simple' api that is discussed here internally in Ci=
-lium,
->>>>> this attach behavior would have to be consistent, so transparent fall=
-back
->>>>> inside libbpf on link vs non-link availability won't work (at least i=
-n our
->>>>> case).
->>>>
->>>> What about pinning? It's not exactly the same, but bpf_link could
->>>> actually pin a BPF program, if using legacy TC, and pin bpf_link, if
->>>> using bpf_link-based APIs. Of course before switching from iproute2 to
->>>> libbpf APIs you'd need to design your applications to use pinning
->>>> instead of relying implicitly on permanently attached BPF program.
->>>
->>> All the progs we load from Cilium in a K8s setting w/ Pods, we could ha=
-ve easily
->>> over 100 loaded at the same time on a node, and we template the per Pod=
- ones, so
->>> the complexity of managing those pinned lifecycles from the agent and d=
-ealing with
->>> the semantic/fallback differences between kernels feels probably not wo=
-rth the
->>> gain. So if there would be a libbpf tc simplified attach API, I'd for t=
-he time
->>> being stick to the existing aka legacy means.
->>=20
->> Sure. Then what do you think about keeping only low-level TC APIs, and
->> in the future add bpf_program__attach_tc(), which will use
->> bpf_link-based one. It seems like it's not worth it to pretend we have
->> bpf_link-based semantics with "legacy" current TC APIs. Similarly how
->> we have a low-level XDP attach API, and bpf_link-based (only)
->> bpf_program__attach_xdp().
+On Fri, Apr 16, 2021 at 2:56 PM Christian Borntraeger
+<borntraeger@de.ibm.com> wrote:
 >
-> I think that's okay. I guess question is what do we define as initial sco=
-pe for
-> the low-level TC API. cls_bpf w/ fixed direct-action mode + fixed eth_p_a=
-ll,
-> allowing to flexibly specify handle / priority or a block_index feels rea=
-sonable.
+>
+> On 15.04.21 10:06, Christian Borntraeger wrote:
+> >
+> > On 15.04.21 09:27, Masahiro Yamada wrote:
+> >> Since commit d9f4ff50d2aa ("kbuild: spilt cc-option and friends to
+> >> scripts/Makefile.compiler"), some kselftests fail to build.
+> >>
+> >> The tools/ directory opted out Kbuild, and went in a different
+> >> direction. They copy any kind of files to the tools/ directory
+> >> in order to do whatever they want to do in their world.
+> >>
+> >> tools/build/Build.include mimics scripts/Kbuild.include, but some
+> >> tool Makefiles included the Kbuild one to import a feature that is
+> >> missing in tools/build/Build.include:
+> >>
+> >>   - Commit ec04aa3ae87b ("tools/thermal: tmon: use "-fstack-protector"
+> >>     only if supported") included scripts/Kbuild.include from
+> >>     tools/thermal/tmon/Makefile to import the cc-option macro.
+> >>
+> >>   - Commit c2390f16fc5b ("selftests: kvm: fix for compilers that do
+> >>     not support -no-pie") included scripts/Kbuild.include from
+> >>     tools/testing/selftests/kvm/Makefile to import the try-run macro.
+> >>
+> >>   - Commit 9cae4ace80ef ("selftests/bpf: do not ignore clang
+> >>     failures") included scripts/Kbuild.include from
+> >>     tools/testing/selftests/bpf/Makefile to import the .DELETE_ON_ERROR
+> >>     target.
+> >>
+> >>   - Commit 0695f8bca93e ("selftests/powerpc: Handle Makefile for
+> >>     unrecognized option") included scripts/Kbuild.include from
+> >>     tools/testing/selftests/powerpc/pmu/ebb/Makefile to import the
+> >>     try-run macro.
+> >>
+> >> Copy what they want there, and stop including scripts/Kbuild.include
+> >> from the tool Makefiles.
+> >>
+> >> Link: https://lore.kernel.org/lkml/86dadf33-70f7-a5ac-cb8c-64966d2f45a1@linux.ibm.com/
+> >> Fixes: d9f4ff50d2aa ("kbuild: spilt cc-option and friends to scripts/Makefile.compiler")
+> >> Reported-by: Janosch Frank <frankja@linux.ibm.com>
+> >> Reported-by: Christian Borntraeger <borntraeger@de.ibm.com>
+> >> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> >
+> > When applying this on top of d9f4ff50d2aa ("kbuild: spilt cc-option and friends to scripts/Makefile.compiler")
+> >
+> > I still do get
+> >
+> > # ==== Test Assertion Failure ====
+> > #   lib/kvm_util.c:142: vm->fd >= 0
+> > #   pid=315635 tid=315635 - Invalid argument
+> > #      1    0x0000000001002f4b: vm_open at kvm_util.c:142
+> > #      2     (inlined by) vm_create at kvm_util.c:258
+> > #      3    0x00000000010015ef: test_add_max_memory_regions at set_memory_region_test.c:351
+> > #      4     (inlined by) main at set_memory_region_test.c:397
+> > #      5    0x000003ff971abb89: ?? ??:0
+> > #      6    0x00000000010017ad: .annobin_abi_note.c.hot at crt1.o:?
+> > #   KVM_CREATE_VM ioctl failed, rc: -1 errno: 22
+> > not ok 7 selftests: kvm: set_memory_region_test # exit=254
+> >
+> > and the testcase compilation does not pickup the pgste option.
+>
+> What does work is the following:
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index a6d61f451f88..d9c6d9c2069e 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -1,5 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   include ../../../../scripts/Kbuild.include
+> +include ../../../../scripts/Makefile.compiler
+>
+>   all:
+>
+>
+> as it does pickup the linker option handling.
 
-Sounds reasonable to me, with the addition of 'parent' to the things you
-can specify.
 
-So snipping a few bits from Kumar's patch and paring it down a bit, we'd
-end up with something like this?
+Kbuild and the tools are divorced.
 
-+struct bpf_tc_cls_opts {
-+	size_t sz;
-+	__u32 chain_index;
-+	__u32 handle;
-+	__u32 priority;
-+	__u32 class_id;
-+};
-+#define bpf_tc_cls_opts__last_field class_id
-+
-+/* Acts as a handle for an attached filter */
-+struct bpf_tc_cls_attach_id {
-+	__u32 ifindex;
-+	union {
-+		__u32 block_index;
-+		__u32 parent_id;
-+	};
-+	__u32 protocol;
-+	__u32 chain_index;
-+	__u32 handle;
-+	__u32 priority;
-+};
-+
-+struct bpf_tc_cls_info {
-+	struct bpf_tc_cls_attach_id id;
-+	__u32 class_id;
-+	__u32 bpf_flags;
-+	__u32 bpf_flags_gen;
-+};
-+
-+LIBBPF_API int bpf_tc_cls_attach_dev(int fd, __u32 ifindex, __u32 parent_i=
-d,
-+				     const struct bpf_tc_cls_opts *opts,
-+				     struct bpf_tc_cls_attach_id *id);
-+LIBBPF_API int bpf_tc_cls_detach_dev(const struct bpf_tc_cls_attach_id *id=
-);
-+LIBBPF_API int bpf_tc_cls_get_info_dev(int fd, __u32 ifindex, __u32 parent=
-_id,
-+				       const struct bpf_tc_cls_opts *opts,
-+				       struct bpf_tc_cls_info *info);
+They cannot be married unless the tools/
+build system is largely refactored.
+That will be a tons of works (and
+I am not sure if it is welcome).
+
+The Kbuild refactoring should not be bothered by
+the tools.
+For now, I want them separated from each other.
 
 
 
-What about change and replace? I guess we could do without those, right?
+--
+Best Regards
 
--Toke
-
+Masahiro Yamada
