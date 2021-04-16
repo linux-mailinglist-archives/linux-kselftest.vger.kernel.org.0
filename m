@@ -2,501 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EE3362783
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 20:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6994362A63
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 23:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238654AbhDPSLF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Apr 2021 14:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235968AbhDPSLF (ORCPT
+        id S236242AbhDPVgm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Apr 2021 17:36:42 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55708 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235540AbhDPVgl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Apr 2021 14:11:05 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352C4C061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 11:10:39 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id c3so17712211ils.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 11:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xstn/dXHIdaaIUz1NS6UeBVh62FHnGmloHj0dDERwlY=;
-        b=akiladVmfUiepmamK7kWWUPsj3STtRF9dmHeDooOucWRqM2hqMQNKrRq8ZI3cyuTgX
-         CrBHbib7wnFFosSfH9WxJSrETLEX4C4As3BMF/dM9BnL1nfnyvvVaDIxbEp6jziQhlff
-         Uz0Pc7xN9hZp9+O679rQiZbHe5lEnLdr+bDwZX+sEAVx0oDTWinir3KcFMQCyRNVtO/+
-         WpkCJAyp4spzKryLcESaG7QbpWzAjDbm6P6EbeVkp06zo4+aP+ZezblYmoldjVN6L4qJ
-         b4rK+NN9Cc0IQzwKv+uPwl8RWdwT6gUNTS3JOROqaSsVcJudzpF/pFvhSEgad+LiArDN
-         pALw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xstn/dXHIdaaIUz1NS6UeBVh62FHnGmloHj0dDERwlY=;
-        b=H1kjHACqGb4vz9ispOBQATTFEoAIcgdFGZB3nm8SMr4Ay+4OpmNouInxwZu7G/cWCC
-         NExX9sVImNT+35WdT55JbiIS/aeJVhi1awUzOnc5WJovpWl2cvQuJYczH+HxZct2mggZ
-         l6amr6PcLT83InC5f3EolHqULVkdGaW2zh2yOmlwiu+wThhY4cVmxQO7ouyUHHNz6y12
-         sY26d0nbqAK5+NKKmRJfPOdcrpcBFQwY+mTOpfgZDDzf0HtYZa0hVmzDjGkOm4nxEUzw
-         OZWecssfBcgG22KkzApGSfi6ZvRqDw62SD6rUllrjhgJdS8DztPtxkGHK23su7fFqSOI
-         OAig==
-X-Gm-Message-State: AOAM531ltJxtigJTpQppOIkXM5oPeZnzIGAh/Hlt8MIwq91JgmWJRFmq
-        mqV+bRyWg13y8JZ5DyOC7aW0YwkEiHFEcWnfK8Pbog==
-X-Google-Smtp-Source: ABdhPJzO668/4wXwJjGcJyMrWJ9SIk/vTvdPXWWJDQriXCUwCis+8FAIFwEPrbIMSjexN/1UUmB8bdYieUE8xoZhbRE=
-X-Received: by 2002:a05:6e02:1062:: with SMTP id q2mr7950188ilj.194.1618596638362;
- Fri, 16 Apr 2021 11:10:38 -0700 (PDT)
+        Fri, 16 Apr 2021 17:36:41 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13GLSpNg005118;
+        Fri, 16 Apr 2021 14:36:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=FEqA/dTwN7cCgHWT+Xl+2AuYK4FhTtzZNkkvwG8ciaw=;
+ b=imLiuRljvjJrmXdQhgIpykKHFhfOLlQQugAFLrdLAcCVtyzYDna2kLMVZ5vcxvMpC7ga
+ AiggzCVukYgqUmKeCkTgDOT/reC7A+NATh9cuUZy9NEUJydFBb0e3VW8RogY/paGisx7
+ lUNYP9gGUZ9inpmgmk6TpNwJEAz+82f7mZM= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 37ydj4swmv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 16 Apr 2021 14:36:00 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 16 Apr 2021 14:35:59 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QSsZmKUqsS8RgnCW+8RbzfiMYvzoYjSCiR4Kt+7U91LlMjjEip8bVBvP7STIdiQAOc+LUiTBbnC7hIdVzLP9xpynyq67tvqqMvJTspUTkLWQY6hTnRMlHFDBIIpt8UjusPXcelE+XpIrWMGXZxwkvIAUYQkerT1r9vbj90YmGApuUIdcaF66331JtIDQffWZIEfmbSIOKgYlNrhHSyTArftGina+YceBekwK/GoX/RogzbpsB7k6TP7mSATVi5DqMQolwGxz+sKSdlwpQMTYdL0oXICiRjoOBoBfWv0jro3VjtIEurvkQrtFgCS1p5oLAYrEukgGV6YDx9khFJHi1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FEqA/dTwN7cCgHWT+Xl+2AuYK4FhTtzZNkkvwG8ciaw=;
+ b=CW4hYBO27qzwKSptLuR74MnOZfPTRlTJGzca7kPnFiz3a1jSs4Ad3k2Xdo2jsvNXBkDKyhrxj1W6Rm8GXPYJRZSdp+ks8BEDUsxoFZH/3HcubXv6Y1LSGdRsKANjoynP57f54t88eni0bqDjd7jkYWI6BvTGlvjOImyrFZO/aj8fTiw2w1TsvKzComliCVu7XrpM5pIXddUUwLHAL4OyHU65giZDxzMCg6QBI7p08YkcbFbJ1WvBagX/wFvAPHFEbvKuS1kehf1PO7ZYg0Qi5EuiHP92oL5lMcmFcFufyFo3e5oJg5ZyjJa+cU1b1S/cXohTqALTVs7eFjUll7YeZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BY3PR15MB4801.namprd15.prod.outlook.com (2603:10b6:a03:3b4::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16; Fri, 16 Apr
+ 2021 21:35:58 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::718a:4142:4c92:732f]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::718a:4142:4c92:732f%6]) with mapi id 15.20.4042.019; Fri, 16 Apr 2021
+ 21:35:58 +0000
+Date:   Fri, 16 Apr 2021 14:35:53 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Pedro Tammela <pctammela@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        David Verbeiren <david.verbeiren@tessares.net>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v4 0/3] add batched ops for percpu array
+Message-ID: <20210416213553.wclvjwbkxpvs6rfr@kafai-mbp.dhcp.thefacebook.com>
+References: <20210415174619.51229-1-pctammela@mojatatu.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210415174619.51229-1-pctammela@mojatatu.com>
+X-Originating-IP: [2620:10d:c090:400::5:d4d1]
+X-ClientProxiedBy: MW4PR04CA0384.namprd04.prod.outlook.com
+ (2603:10b6:303:81::29) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
 MIME-Version: 1.0
-References: <20210412190715.555883-1-dlatypov@google.com> <CABVgOSnn1WYyPspo6xu2Dua_ryk0xsRqMpE-OTnvW4q6gG7Ykg@mail.gmail.com>
- <CAGS_qxrD2+noEy7sF4bm1A_TBKuH7T_VWtpjvAppZeJk4098_w@mail.gmail.com>
-In-Reply-To: <CAGS_qxrD2+noEy7sF4bm1A_TBKuH7T_VWtpjvAppZeJk4098_w@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 16 Apr 2021 11:10:27 -0700
-Message-ID: <CAGS_qxpQ0yoPQ0i_nRZ_7HtF_08ioSi56wLvnzq8UbHxt5vxQw@mail.gmail.com>
-Subject: Re: [PATCH v5] lib: add basic KUnit test for lib/math
-To:     David Gow <davidgow@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:d4d1) by MW4PR04CA0384.namprd04.prod.outlook.com (2603:10b6:303:81::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Fri, 16 Apr 2021 21:35:56 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 97d757b1-8db6-41c8-f6f5-08d9011f9f4c
+X-MS-TrafficTypeDiagnostic: BY3PR15MB4801:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BY3PR15MB4801426E4802C8440DB43737D54C9@BY3PR15MB4801.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vovBa+Ioh1Cg/8U2p+/ybgqAr6CnLLQ4ABhzSuVD1flNA0uScmUReFKOITmMjzYkDsYYuTIFxY3E9iTFcMfBAsTXj58LISSKHVJb1B5OxY8hfAd0yCX7Wyekrk0pOiPyI3bo74iVu1J5reOg/MXwFRrh6QmGfM0spLmW/Cfw7jBHpeMBml7v9eI1tmN22w1NFHnbhStsGcKzRKPUPNqGLj3JKCeRwW9KTVVzFC6QjVRdyvqpFJ/+KY676m3QSEG8bxfwCFpWtbWIRHS2PjX3eJ4PrZinx7hEiHkFo2RbNCCafxKqXwn61+IebJ9f5eG4Wgmy83KEPDTp4i/stXUVWXcPGdgmfrRVLh/bFVV2ZapJHEttaNfCGG1AgbKDvs4nsm3TXl/HgGBJKQFnr66cjDH9voz7E2TElQewxMr4LCxmJQkufUqM35nmfqK9d+tpTWhVYy3rgWUwAT4qUdnpabYr4Pd9PrQMt1tdNlEzRjpaSeJORt/BZq196TfieuKdkNiwglCeOeIjdUSzoocMy7axMlMdNwZ76z+ILbZ2FoyUR8Bw4YLbaPM7MndZybZx2KQO6kesgyLk5zfGa1Hn+w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66476007)(66556008)(66946007)(7696005)(498600001)(6666004)(7416002)(5660300002)(54906003)(8936002)(52116002)(6916009)(186003)(86362001)(4744005)(4326008)(8676002)(83380400001)(38100700002)(2906002)(9686003)(55016002)(16526019)(1076003)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?gIbZNMRI/uB034XLMbv7KpcwLKSfpTywCjqOabx3azfBXktvuZSlISMPnQ6K?=
+ =?us-ascii?Q?WdyXWQnOogiFdrE/xt4lQ3X0PajDFTYgx34LsTwiBmDkaUtkKJ8hM3W0rk9B?=
+ =?us-ascii?Q?P3nQSUiTFkdkfFQmh0HL2eeAvyerYKdj/pM1PKsLHAk+8tOIsjCPZz1Z+ysQ?=
+ =?us-ascii?Q?DmiJeDc0mHUBX8Ald5IQjWNrqzaPY0zDkAHaoQ0fEohhZ4/tIQtX4pbslS8B?=
+ =?us-ascii?Q?Et2V0+fDfSMup0XbLfqr7yN+kfCONPaG+DqQhA4qkY53xD3gF8P/LBi7Fkll?=
+ =?us-ascii?Q?049VpRklYXBT+aNRX0/acdINRV6q4OgOEPDaPpH2L4hR4I80QEhJva0Y4M6Q?=
+ =?us-ascii?Q?k+K79N8VMl9/8H7Mtsp7RWlgvQClwLD7jRbvIn+0god8SfRzfS/Q/IvSOWkl?=
+ =?us-ascii?Q?R+Ii5YfhLv/s1JnCRzuNRGKsEAoEeEgFJ2geTJrTVlkickdvHp39VwrPrDUu?=
+ =?us-ascii?Q?gwsZvkaoFvda5XTf+YsQbgjZ+Cjj6YMRNAPRciBEH5qEA2YjsinanRgGC0VR?=
+ =?us-ascii?Q?y4xhNj4M0R1giuGZkS3bAvJvb0aTzBwwJrvvsOzqlqgLkg8cVDoAOt5mEt3x?=
+ =?us-ascii?Q?O9CzOWyb4Qbq4YGy7JbO5UuctdBOL2NDjZt4B5qrLrvXL63NN6tQ7ANNDqeI?=
+ =?us-ascii?Q?MjmXgLBa47oiuFzy+m8ecTlMPtACyPZH7DXA4cU0wK8d/DjvZ94aeoQDTLmc?=
+ =?us-ascii?Q?MkURfSvc73mUz9cbaT3bLmuIToOvg7Ht6qQh03p4+QYcdwlyTX+dQHwcErZI?=
+ =?us-ascii?Q?tLfj2lGw8CpoFR+F86UvPBSmo/qKuykGY7hPrqakp5HHfDKt8hZoj1dJc+4C?=
+ =?us-ascii?Q?NSya1SIik85UvGOmvKB6rfKzMuBxnFBw3/qluNu/g9YgbMO4nlALA/WOEr+q?=
+ =?us-ascii?Q?OXecxOp4cxW+4josFXMrB+T8ogbbXtUmQr5e0z54gTHNyJ8e7hVJ8TXwTEcZ?=
+ =?us-ascii?Q?mRn2cYrHHIf/phPTfpU8mfjOLIt5rG6dIqQEz1KBOY35wxjVMK+4Xi2T7aJa?=
+ =?us-ascii?Q?SYwCbnG4NX2dZMAP/t/fis2W0NJWiDTiheGHU0fhjUoqCYNq9EdjLQvUtmI2?=
+ =?us-ascii?Q?IH/2gVEBYNYqCkvOq577eJOVifhLY+qN/voNu67mJBiwZHPCiU8AL8EftVeL?=
+ =?us-ascii?Q?p3XVQnOX0FGG9LP89NhIph36Ov+GqD94Z3XwVuqALRUXJvmXQ3EVJNcXi+81?=
+ =?us-ascii?Q?hnU0569PQQ6f8ORVFU3K3JG6hSAcF10udnaHhLdKn63G9vgyzUfoLZ8tjBrM?=
+ =?us-ascii?Q?x4A11YINfjkf3JYclH30Tn3QOLWlpWshe36zSACRYOZlLKUZ+KytCoJ9cqf9?=
+ =?us-ascii?Q?95JPcX/dwERKqGFyWhX26+DTCwCsWLjm9qnIt4DulqkVvw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97d757b1-8db6-41c8-f6f5-08d9011f9f4c
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2021 21:35:58.0889
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jLzvL6z4k0WsFEYPlo6i5hAhkP9OsKUE1pHgOacfNCKkxI8ZMmcIedxoYmdcJnv0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR15MB4801
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: 3bIx0rsCOGJKj-WNQZIJ-KbpFxFw_Lxq
+X-Proofpoint-ORIG-GUID: 3bIx0rsCOGJKj-WNQZIJ-KbpFxFw_Lxq
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-16_09:2021-04-16,2021-04-16 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ suspectscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 bulkscore=0
+ spamscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 adultscore=0
+ mlxlogscore=749 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104160151
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 5:33 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Mon, Apr 12, 2021 at 11:41 PM David Gow <davidgow@google.com> wrote:
-> >
-> > On Tue, Apr 13, 2021 at 3:07 AM Daniel Latypov <dlatypov@google.com> wrote:
-> > >
-> > > Add basic test coverage for files that don't require any config options:
-> > > * part of math.h (what seem to be the most commonly used macros)
-> > > * gcd.c
-> > > * lcm.c
-> > > * int_sqrt.c
-> > > * reciprocal_div.c
-> > > (Ignored int_pow.c since it's a simple textbook algorithm.)
-> > >
-> > > These tests aren't particularly interesting, but they
-> > > * provide short and simple examples of parameterized tests
-> > > * provide a place to add tests for any new files in this dir
-> > > * are written so adding new test cases to cover edge cases should be easy
-> > >   * looking at code coverage, we hit all the branches in the .c files
-> > >
-> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> >
-> > This looks good to me. A few comments/observations below, but nothing
-> > that I think should actually block this.
-> >
-> > Reviewed-by: David Gow <davidgow@google.com>
-> >
-> > -- David
-> >
-> > > ---
-> > > Changes since v4:
-> > > * add in test cases for some math.h macros (abs, round_up/round_down,
-> > >   div_round_down/closest)
-> > > * use parameterized testing less to keep things terser
-> > >
-> > > Changes since v3:
-> > > * fix `checkpatch.pl --strict` warnings
-> > > * add test cases for gcd(0,0) and lcm(0,0)
-> > > * minor: don't test both gcd(a,b) and gcd(b,a) when a == b
-> > >
-> > > Changes since v2: mv math_test.c => math_kunit.c
-> > >
-> > > Changes since v1:
-> > > * Rebase and rewrite to use the new parameterized testing support.
-> > > * misc: fix overflow in literal and inline int_sqrt format string.
-> > > * related: commit 1f0e943df68a ("Documentation: kunit: provide guidance
-> > > for testing many inputs") was merged explaining the patterns shown here.
-> > >   * there's an in-flight patch to update it for parameterized testing.
-> > >
-> > > v1: https://lore.kernel.org/lkml/20201019224556.3536790-1-dlatypov@google.com/
-> > > ---
-> > >  lib/math/Kconfig      |   5 +
-> > >  lib/math/Makefile     |   2 +
-> > >  lib/math/math_kunit.c | 264 ++++++++++++++++++++++++++++++++++++++++++
-> > >  3 files changed, 271 insertions(+)
-> > >  create mode 100644 lib/math/math_kunit.c
-> > >
-> > > diff --git a/lib/math/Kconfig b/lib/math/Kconfig
-> > > index f19bc9734fa7..6ba8680439c1 100644
-> > > --- a/lib/math/Kconfig
-> > > +++ b/lib/math/Kconfig
-> > > @@ -15,3 +15,8 @@ config PRIME_NUMBERS
-> > >
-> > >  config RATIONAL
-> > >         bool
-> > > +
-> > > +config MATH_KUNIT_TEST
-> > > +       tristate "KUnit test for lib/math" if !KUNIT_ALL_TESTS
-> > > +       default KUNIT_ALL_TESTS
-> > > +       depends on KUNIT
-> >
-> > This could have a description of the test and KUnit here, as mentioned
-> > in the style guide doc:
-> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kconfig-entries
-> >
-> > (I think it's sufficiently self explanatory that it's not essential,
-> > but it could be nice to have a more detailed description of the things
-> > being tested than just "lib/math".)
-> >
->
-> Done. I've left off the details about what the test tests so we have
-> less places to go and update if/when new tests are added.
->
-> > > diff --git a/lib/math/Makefile b/lib/math/Makefile
-> > > index be6909e943bd..30abb7a8d564 100644
-> > > --- a/lib/math/Makefile
-> > > +++ b/lib/math/Makefile
-> > > @@ -4,3 +4,5 @@ obj-y += div64.o gcd.o lcm.o int_pow.o int_sqrt.o reciprocal_div.o
-> > >  obj-$(CONFIG_CORDIC)           += cordic.o
-> > >  obj-$(CONFIG_PRIME_NUMBERS)    += prime_numbers.o
-> > >  obj-$(CONFIG_RATIONAL)         += rational.o
-> > > +
-> > > +obj-$(CONFIG_MATH_KUNIT_TEST)  += math_kunit.o
-> > > diff --git a/lib/math/math_kunit.c b/lib/math/math_kunit.c
-> > > new file mode 100644
-> > > index 000000000000..80a087a32884
-> > > --- /dev/null
-> > > +++ b/lib/math/math_kunit.c
-> > > @@ -0,0 +1,264 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Simple KUnit suite for math helper funcs that are always enabled.
-> > > + *
-> > > + * Copyright (C) 2020, Google LLC.
-> > > + * Author: Daniel Latypov <dlatypov@google.com>
-> > > + */
-> > > +
-> > > +#include <kunit/test.h>
-> > > +#include <linux/gcd.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/lcm.h>
-> > > +#include <linux/reciprocal_div.h>
-> > > +
-> > > +static void abs_test(struct kunit *test)
-> > > +{
-> >
-> > There's something weird about taking the absolute values of char
-> > literals. I'm not sure if it's better to case integer literals (like
-> > with 'short' below), or keep it as-is.
->
-> I just thought it was amusing :)
-> Converting it to be like the short test below.
->
-> > > +       KUNIT_EXPECT_EQ(test, abs('\0'), '\0');
-> > > +       KUNIT_EXPECT_EQ(test, abs('a'), 'a');
-> > > +       KUNIT_EXPECT_EQ(test, abs(-'a'), 'a');
-> > > +
-> > > +       /* The expression in the macro is actually promoted to an int. */
-> > > +       KUNIT_EXPECT_EQ(test, abs((short)0),  0);
-> > > +       KUNIT_EXPECT_EQ(test, abs((short)42),  42);
-> > > +       KUNIT_EXPECT_EQ(test, abs((short)-42),  42);
-> > > +
-> > > +       KUNIT_EXPECT_EQ(test, abs(0),  0);
-> > > +       KUNIT_EXPECT_EQ(test, abs(42),  42);
-> > > +       KUNIT_EXPECT_EQ(test, abs(-42),  42);
-> > > +
-> > > +       KUNIT_EXPECT_EQ(test, abs(0L), 0L);
-> > > +       KUNIT_EXPECT_EQ(test, abs(42L), 42L);
-> > > +       KUNIT_EXPECT_EQ(test, abs(-42L), 42L);
-> > > +
-> > > +       KUNIT_EXPECT_EQ(test, abs(0LL), 0LL);
-> > > +       KUNIT_EXPECT_EQ(test, abs(42LL), 42LL);
-> > > +       KUNIT_EXPECT_EQ(test, abs(-42LL), 42LL);
-> > > +
-> > > +       /* Unsigned types get casted to signed. */
-> > > +       KUNIT_EXPECT_EQ(test, abs(0ULL), 0LL);
-> > > +       KUNIT_EXPECT_EQ(test, abs(42ULL), 42LL);
-> >
-> > A part of me is curious what the result is for -0x80000000, but I
-> > guess that's not defined, so shouldn't be tested. :-)
->
-> abs(-42ULL) == 42, but the compiler spits out a warning.
->
-> > > +}
-> > > +
-> > > +static void int_sqrt_test(struct kunit *test)
-> > > +{
-> > > +       KUNIT_EXPECT_EQ(test, int_sqrt(0UL), 0UL);
-> > > +       KUNIT_EXPECT_EQ(test, int_sqrt(1UL), 1UL);
-> > > +       KUNIT_EXPECT_EQ(test, int_sqrt(4UL), 2UL);
-> > > +       KUNIT_EXPECT_EQ(test, int_sqrt(5UL), 2UL);
-> > > +       KUNIT_EXPECT_EQ(test, int_sqrt(8UL), 2UL);
-> > > +       KUNIT_EXPECT_EQ(test, int_sqrt(1UL << 30), 1UL << 15);
-> > > +}
-> > > +
-> >
-> > _Maybe_ it's worth a comment here that round_up (and round_down) only
-> > support rounding to powers of two?
-> > (Either that, or also test roundup/rounddown to provide the contrast.)
->
-> Adding in those test cases for v6.
-> Andy had asked for those as well but I had forgotten them by the time
-> I sent out v5.
->
-> >
-> > > +static void round_up_test(struct kunit *test)
-> > > +{
-> > > +       KUNIT_EXPECT_EQ(test, round_up(0, 1), 0);
-> > > +       KUNIT_EXPECT_EQ(test, round_up(1, 2), 2);
-> > > +       KUNIT_EXPECT_EQ(test, round_up(3, 2), 4);
-> > > +       KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 2), 1 << 30);
-> > > +       KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 1 << 29), 1 << 30);
-> > > +}
-> > > +
-> > > +static void round_down_test(struct kunit *test)
-> > > +{
-> > > +       KUNIT_EXPECT_EQ(test, round_down(0, 1), 0);
-> > > +       KUNIT_EXPECT_EQ(test, round_down(1, 2), 0);
-> > > +       KUNIT_EXPECT_EQ(test, round_down(3, 2), 2);
-> > > +       KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 2), (1 << 30) - 2);
-> > > +       KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 1 << 29), 1 << 29);
-> > > +}
-> > > +
-> > > +static void div_round_up_test(struct kunit *test)
-> > > +{
-> > > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(0, 1), 0);
-> > > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(20, 10), 2);
-> > > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 10), 3);
-> > > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 20), 2);
-> > > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 99), 1);
-> > > +}
-> > > +
-> > > +static void div_round_closest_test(struct kunit *test)
-> > > +{
-> > > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(0, 1), 0);
-> > > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(20, 10), 2);
-> > > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(21, 10), 2);
-> > > +       KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(25, 10), 3);
-> > > +}
-> > > +
-> > > +/* Generic test case for unsigned long inputs. */
-> > > +struct test_case {
-> > > +       unsigned long a, b;
-> > > +       unsigned long result;
-> > > +};
-> > > +
-> > > +static struct test_case gcd_cases[] = {
-> > > +       {
-> > > +               .a = 0, .b = 0,
-> > > +               .result = 0,
-> > > +       },
-> > > +       {
-> > > +               .a = 0, .b = 1,
-> > > +               .result = 1,
-> > > +       },
-> > > +       {
-> > > +               .a = 2, .b = 2,
-> > > +               .result = 2,
-> > > +       },
-> > > +       {
-> > > +               .a = 2, .b = 4,
-> > > +               .result = 2,
-> > > +       },
-> > > +       {
-> > > +               .a = 3, .b = 5,
-> > > +               .result = 1,
-> > > +       },
-> > > +       {
-> > > +               .a = 3 * 9, .b = 3 * 5,
-> > > +               .result = 3,
-> > > +       },
-> > > +       {
-> > > +               .a = 3 * 5 * 7, .b = 3 * 5 * 11,
-> > > +               .result = 15,
-> > > +       },
-> > > +       {
-> > > +               .a = 1 << 21,
-> > > +               .b = (1 << 21) - 1,
-> > > +               .result = 1,
-> > > +       },
-> > > +};
-> > > +
-> > > +KUNIT_ARRAY_PARAM(gcd, gcd_cases, NULL);
-> > > +
-> > > +static void gcd_test(struct kunit *test)
-> > > +{
-> > > +       const char *message_fmt = "gcd(%lu, %lu)";
-> > > +       const struct test_case *test_param = test->param_value;
-> > > +
-> > > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > > +                           gcd(test_param->a, test_param->b),
-> > > +                           message_fmt, test_param->a,
-> > > +                           test_param->b);
-> > > +
-> > > +       if (test_param->a == test_param->b)
-> > > +               return;
-> > > +
-> > > +       /* gcd(a,b) == gcd(b,a) */
-> > > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > > +                           gcd(test_param->b, test_param->a),
-> > > +                           message_fmt, test_param->b,
-> > > +                           test_param->a);
-> > > +}
-> > > +
-> > > +static struct test_case lcm_cases[] = {
-> > > +       {
-> > > +               .a = 0, .b = 0,
-> > > +               .result = 0,
-> > > +       },
-> > > +       {
-> > > +               .a = 0, .b = 1,
-> > > +               .result = 0,
-> > > +       },
-> > > +       {
-> > > +               .a = 1, .b = 2,
-> > > +               .result = 2,
-> > > +       },
-> > > +       {
-> > > +               .a = 2, .b = 2,
-> > > +               .result = 2,
-> > > +       },
-> > > +       {
-> > > +               .a = 3 * 5, .b = 3 * 7,
-> > > +               .result = 3 * 5 * 7,
-> > > +       },
-> > > +};
-> > > +
-> > > +KUNIT_ARRAY_PARAM(lcm, lcm_cases, NULL);
-> > > +
-> > > +static void lcm_test(struct kunit *test)
-> > > +{
-> > > +       const char *message_fmt = "lcm(%lu, %lu)";
-> > > +       const struct test_case *test_param = test->param_value;
-> > > +
-> > > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > > +                           lcm(test_param->a, test_param->b),
-> > > +                           message_fmt, test_param->a,
-> > > +                           test_param->b);
-> > > +
-> > > +       if (test_param->a == test_param->b)
-> > > +               return;
-> > > +
-> > > +       /* lcm(a,b) == lcm(b,a) */
-> > > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > > +                           lcm(test_param->b, test_param->a),
-> > > +                           message_fmt, test_param->b,
-> > > +                           test_param->a);
-> > > +}
-> > > +
-> > > +struct u32_test_case {
-> > > +       u32 a, b;
-> > > +       u32 result;
-> > > +};
-> > > +
-> > > +static struct u32_test_case reciprocal_div_cases[] = {
-> > > +       {
-> > > +               .a = 0, .b = 1,
-> > > +               .result = 0,
-> > > +       },
-> > > +       {
-> > > +               .a = 42, .b = 20,
-> > > +               .result = 2,
-> > > +       },
-> > > +       {
-> > > +               .a = 42, .b = 9999,
-> > > +               .result = 0,
-> > > +       },
-> > > +       {
-> > > +               .a = (1 << 16), .b = (1 << 14),
-> > > +               .result = 1 << 2,
-> > > +       },
-> > > +};
-> > > +
-> > > +KUNIT_ARRAY_PARAM(reciprocal_div, reciprocal_div_cases, NULL);
-> >
-> > Is there a reason this test is using KUNIT_EXPECT_EQ_MSG() rather than
-> > a get_desc function in KUNIT_ARRAY_PARAM()? I can sort-of see how the
-> > former is a little simpler, so I'm not opposed to keeping it as-is,
-> > but it's nice to have KUnit aware of a nicer name for the parameter if
-> > all else is equal.
-> > (I think there's a stronger case for keeping the gcd/lcm tests as is
-> > because they actually have two checks per parameter, but even then,
-> > it's not absurdly silly. And it'd be possible to have both a get_desc
-> > function and use EXPECT_..._MSG() to get the best of both worlds,
-> > albeit with twice as much work.)
->
-> I can add in the get_desc for it if you want.
->
-> That's partly a relic of the previous versions of this patchset where
-> I reused the case arrays for the unary funcs as well.
-> But now the unary use case has disappeared and we only need to write
-> one get_desc.
->
-> But yeah, given it can test two calls of gcd, I've opted to keep it
-> using _MSG().
-> And I figured I'd keep the reciprocal_div test the same for
-> consistency (aka, I just copy-pasted it from gcd).
-
-Btw another reason to use _MSG is that macro text gets expanded in the
-EXPECT calls.
-E.g.
-[11:07:19]     # round_down_test: EXPECTATION FAILED at lib/math/math_kunit.c:67
-[11:07:19]     Expected ((4) & ~((__typeof__(4))((2)-1))) == 2, but
-[11:07:19]         ((4) & ~((__typeof__(4))((2)-1))) == 4
-
-(I didn't do so for the non-parameterized tests since they point to
-the line number.)
-
-So unless one makes a get_desc function for every test, we should use
-_MSG variants to give a more readable "round_down(4, 2)." And the _MSG
-variant is just more convenient (and amenable to copy-paste).
-
->
->
->
->
-> >
-> > > +
-> > > +static void reciprocal_div_test(struct kunit *test)
-> > > +{
-> > > +       const struct u32_test_case *test_param = test->param_value;
-> > > +       struct reciprocal_value rv = reciprocal_value(test_param->b);
-> > > +
-> > > +       KUNIT_EXPECT_EQ_MSG(test, test_param->result,
-> > > +                           reciprocal_divide(test_param->a, rv),
-> > > +                           "reciprocal_divide(%u, %u)",
-> > > +                           test_param->a, test_param->b);
-> > > +}
-> > > +
-> > > +static void reciprocal_scale_test(struct kunit *test)
-> > > +{
-> > > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(0u, 100), 0u);
-> > > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(1u, 100), 0u);
-> > > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 4, 1 << 28), 1u);
-> > > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 16, 1 << 28), 1u << 12);
-> > > +       KUNIT_EXPECT_EQ(test, reciprocal_scale(~0u, 1 << 28), (1u << 28) - 1);
-> > > +}
-> > > +
-> > > +static struct kunit_case math_test_cases[] = {
-> > > +       KUNIT_CASE(abs_test),
-> > > +       KUNIT_CASE(int_sqrt_test),
-> > > +       KUNIT_CASE(round_up_test),
-> > > +       KUNIT_CASE(round_down_test),
-> > > +       KUNIT_CASE(div_round_up_test),
-> > > +       KUNIT_CASE(div_round_closest_test),
-> > > +       KUNIT_CASE_PARAM(gcd_test, gcd_gen_params),
-> > > +       KUNIT_CASE_PARAM(lcm_test, lcm_gen_params),
-> > > +       KUNIT_CASE_PARAM(reciprocal_div_test, reciprocal_div_gen_params),
-> > > +       KUNIT_CASE(reciprocal_scale_test),
-> > > +       {}
-> > > +};
-> > > +
-> > > +static struct kunit_suite math_test_suite = {
-> > > +       .name = "lib-math",
-> > > +       .test_cases = math_test_cases,
-> > > +};
-> > > +
-> > > +kunit_test_suites(&math_test_suite);
-> > > +
-> > > +MODULE_LICENSE("GPL v2");
-> > >
-> > > base-commit: 4fa56ad0d12e24df768c98bffe9039f915d1bc02
-> > > --
-> > > 2.31.1.295.g9ea45b61b8-goog
-> > >
+On Thu, Apr 15, 2021 at 02:46:16PM -0300, Pedro Tammela wrote:
+> This patchset introduces batched operations for the per-cpu variant of
+> the array map.
+> 
+> It also removes the percpu macros from 'bpf_util.h'. This change was
+> suggested by Andrii in a earlier iteration of this patchset.
+> 
+> The tests were updated to reflect all the new changes.
+Acked-by: Martin KaFai Lau <kafai@fb.com>
