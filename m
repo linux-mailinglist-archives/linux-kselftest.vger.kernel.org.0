@@ -2,203 +2,438 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEEC362423
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 17:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C9A362765
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 20:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243582AbhDPPkl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Apr 2021 11:40:41 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23526 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240673AbhDPPkl (ORCPT
+        id S234898AbhDPSFE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Apr 2021 14:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244238AbhDPSFA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Apr 2021 11:40:41 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13GFZdHO025560;
-        Fri, 16 Apr 2021 08:39:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=yFiKKtK1+hkiAuT0g442sJ0xzL1mtHVUUVjyCLo1AzI=;
- b=hFsKX5fIDG7ELXjP4+8mZDCWKwaB7VLohzzKoUrGxGvQ2QWy+UZ0ka1RpG5Zfj8jLhmZ
- fAFOYmk7ee2WWxGKPJb4pEVy0CPbuk7oKYxAii1i1lj+u+gSXti15MnZNQUdnjxeyoWZ
- 6GgkV181YINWcN2JgiIAzfJNIzf4IO8xIDw= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 37yb9y0sng-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 16 Apr 2021 08:39:29 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 16 Apr 2021 08:39:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fAAMouYlVtapTsZxwpMk7VIyNwZcb31LtFDxX4sR5KJIZ4dixDyYxosdgJfLmK3nzyaIU9P5vVnTj4Zq8pMSC7pwZdxJ8T5ZisatzSM3gZr8DO7f85p4Kr5sREhH6NHPg2eCelVlDbAqiXelpBWP2LR+qVLmu+ydvjeFqpZ7Jmq4RqHyHR2RPOcqPJJYFldICA8WmfW4K8GMZSRBhWIr2kIpfqdexRXFxKYELx0Sfa/QucrMUgL7rr+7FugHI0sMhedHuoo+aYm0EIxFoKbZp0uwszhjetJWtjI4aEai0CaPnR+bHcWupJL6kkFtgd31MuD3aVs9Ix8uU5Zq6szDLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yFiKKtK1+hkiAuT0g442sJ0xzL1mtHVUUVjyCLo1AzI=;
- b=aRQQYYT9bR1IauX+CpIIZ7lvJEJjdUk0IUlNUnNQuuWRtvG1c8VWPrg9QuxQpJF1X5O/4uBa4/EEG90Bsuk9qDBH3WTQBNWxwvz+ugZWmQEz7JmTsQEhcsDZwfg0nkdcawF7zH9eky+3lBsqbCrLGyUZtZNPbeke++9MNvmRQ6wWWwEXJCiyHTVd4/njCP84E0kJGfS6dWOO4g0dcQlITp4p61/ULc24qdIGKkXZ7IBDaxekLznGwltjqfoXyWRqiyckLcvYBL7zj687uDGr5MuShJtFgHEuQZ+aIPP2+xU0AThiLVp2x7K/wgQHbUwMMSaVzCVTaGf0mIbKPJuF8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SN6PR1501MB4096.namprd15.prod.outlook.com (2603:10b6:805:53::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.21; Fri, 16 Apr
- 2021 15:39:25 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::f433:fd99:f905:8912]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::f433:fd99:f905:8912%3]) with mapi id 15.20.3999.038; Fri, 16 Apr 2021
- 15:39:25 +0000
-Subject: Re: [PATCH v2] tools: do not include scripts/Kbuild.include
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        <linux-kbuild@vger.kernel.org>
-CC:     Janosch Frank <frankja@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>, <bpf@vger.kernel.org>,
-        <clang-built-linux@googlegroups.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>
-References: <20210416130051.239782-1-masahiroy@kernel.org>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <7e449775-7e57-384f-8d96-a32f651c2ff0@fb.com>
-Date:   Fri, 16 Apr 2021 08:39:19 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.9.1
-In-Reply-To: <20210416130051.239782-1-masahiroy@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-X-Originating-IP: [2620:10d:c090:400::5:7e08]
-X-ClientProxiedBy: MW4PR02CA0028.namprd02.prod.outlook.com
- (2603:10b6:303:80::28) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21d6::112e] (2620:10d:c090:400::5:7e08) by MW4PR02CA0028.namprd02.prod.outlook.com (2603:10b6:303:80::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.18 via Frontend Transport; Fri, 16 Apr 2021 15:39:22 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 73019d81-c0f8-40bb-2576-08d900edd01d
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB4096:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SN6PR1501MB4096BCF66F47839B45EBD760D34C9@SN6PR1501MB4096.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:632;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bdWa4frvnXP+f1ftHF6UxntSVmZ/hwGYWWStCl4PB0HMzkkRi/jZHKw7qAeAH3olxfsIyczu8PBrvswNpoN5GVgm7RHVWhkz/JF5S7BEmjMD4wllSzyXooesOZBjoNXczBGsoKT+HgNu5PnT9Zrjep3HPXSt2V8zKTNfQERlRDAjpWCqsg6mS1JFcin+kD6Eh9NQGjk5USOSXQkuM/oPBOPxQm+hKo+9OLmf5vBPpEhj/YYaLVuy8pAi6oRvCyiEh9zjze4lmj59lsXbz4HjsBy7ItqaACZDmK9bXbQf7G1nNspHztgIXp6r9WcE2oyoTP8jl2rEgz9ahzP8WczDfnBwytnVk0Dtw3tJXXwJiS8d8E917514inpWUatEVknMK7+mxjWxsnijHCUNNNbkHcFZB7bhwiTc98BVxYFxFeJIaoVd9C5DYQqjrDahlSfLcforiFMmuEt1MXshb2kCmVR6+bJ4Djhr3mcfkDzqsN7vaasWge+PiBAhyyotNzkGzOo5dlpK6SeR1dvGVLhC2Xb9PDFlM8RdnJOZr4ADu9mr0b7p7RUbBgYOwIEhpzC9JLddnP24e2OFqmfUc/OBtlnEI3ccJJUPp+4JqeODJ7DEnu5RQgVuWYiJ5llOdDIp4X6Slrtw4EB8dX65OanVV19QYYn/BclTO+YUaE1JuPmaPbm3QC5QZfyrRCv9uzA3sI6iDMFAdVv80bOSLRjRt2XMM/lxUGkyMNJIo0ssKeVMJO86NY83HST63K65ZzQjS57BACZC3BCzQrconkmEhQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(346002)(376002)(39860400002)(366004)(136003)(8936002)(16526019)(38100700002)(966005)(31686004)(54906003)(66476007)(186003)(8676002)(36756003)(83380400001)(52116002)(478600001)(2616005)(2906002)(5660300002)(4326008)(53546011)(6666004)(316002)(31696002)(7416002)(66946007)(66556008)(6486002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?RmtlR1hkMm1udlc5VjNGWVZuSnlTTVJtYnhvZjRQSjRNWm0zMGo3QlV0L05D?=
- =?utf-8?B?QkJ0SjNicGRFRGNOUGhKTjBNQ2crQ1cyc0trYmEvdEFta1lETjh1VnQ5dnJE?=
- =?utf-8?B?eXFnMjJBN3ZQOU9XRHVjWVhNRjBOanBGWDl6bm9NRG5xdXVsMENCUTU4SmhV?=
- =?utf-8?B?RHIvaFBrekxJQTNVZ1NWRTZQUU9QcFJpelJSaUpzZ29RcFl1S1lhc1Rrc09y?=
- =?utf-8?B?emlNdm15dkNqeTAxaUJwYkxreVhOdks5V2pkYVNiODE1Q0dUWG1UWVdTcGFY?=
- =?utf-8?B?QldIdENEU2RabEVBdE0vV1p5dVVxWkM3M0lqRjUrWFpjR08yd09lQU1jcEJJ?=
- =?utf-8?B?S2FRdFB2UzVaODdCZ0hXOHJhRk1yOXNiZk1CazFLTDBZcXhmUWhqSkt3eVVr?=
- =?utf-8?B?ZVpxSUxraEtUUEZwb0ZFSkdvWVN3RXpGczJUVEJMVGlCVUtqTjFUcE0rWkFt?=
- =?utf-8?B?ejhJMWhEcEJ1Y0VDSDdwN1FLbUtidlFoYnJEdm9kb2NkODNtQnprd2UxWXVX?=
- =?utf-8?B?M1oxd2hNVk5ocGpKdlMvbGF6N3lRUG4yMkIwQTRxd0xoeXMyU0NSa1c5cnU1?=
- =?utf-8?B?dk1tQmdDNytPbVBWSGV4VVlzVTlMRjN4am5yYUhiZmlHazltdUNCYUtJbktG?=
- =?utf-8?B?Y2VDNTdsTDg3SGwxMUtuOUdkbHJpN2tCUDE1UUt2d3QyMkpXVkdOYTA2MWw5?=
- =?utf-8?B?cEovR1AzNEZIaTNxbTkrRm1taVJzbWpXZk54WEpmZVMyUCtzRjlLZ2NOM3VK?=
- =?utf-8?B?VkZKc2c3Rk5sanBvL3R1VHhMRFJxR250OVJKVUlBS3RaQlgrVFZoNFlPUnZU?=
- =?utf-8?B?WjFwbHpPMjdjU0ltRDBwVkJqdnBuaVFRanRWYzU4bnhWSlN6RGtBbjNlVzZ0?=
- =?utf-8?B?U1NBNlNFRFp0SGY0cGZ2OU1mMzBCbDcxNTZQajBLMmFrbzJhek1vMFlSMjgr?=
- =?utf-8?B?VkdOVW1mT0hvemlrY3hFZ1ludUtKODJDSWtsYWt3N3VVMjhXcEc1MXRkd1d1?=
- =?utf-8?B?clBVVHZKK0F6NElpenl6QUhUa2JWRTNvbVMxeTRkVjJzRlBXRGhPalFUcWlO?=
- =?utf-8?B?MXd5M3ZLSjhYR1Q0aDNDaEJwamtySzB6L0VteW1lenczMUFBczRKQVd6Y0N0?=
- =?utf-8?B?ZDRIOU1EZk5BeUNGRFdoK1dqQktCZC94NGx5UWwrbU9zTi83SGJwQmIrYlZ1?=
- =?utf-8?B?TEtlTmhObllDU2R4Ukp2SFp6YjJJWlpRNVc2V01jRkN3aUtCK3NyT08zaTRF?=
- =?utf-8?B?bXZJUnRLTkRucnM0bEFyclpmeUtBNFlmdFJWOThyY3l2d3BNUi9Vc3VZc2NO?=
- =?utf-8?B?bHFlT2pYODBBalZYL3V0S1RobGNYd1ZNTHhmcEhXcitsQU9JajhXeVZmQUcz?=
- =?utf-8?B?THRCbGkwSktIVXFZZ2JsRXJpMWpzWENlLzB5SFVjQWJ2TWxpaThvREpUS2hl?=
- =?utf-8?B?L01LZHY4dVlPVllDZDJqQzYvdlVUazBxRGIwZWNxeUxtT1VGTndibnJNMmNj?=
- =?utf-8?B?REJuaVU2YWNHOEQwU0V2S0czUTN2WUY0UGNPLzZZMDRvN0c5YWpOdzUvVTNF?=
- =?utf-8?B?WkVmMTFNT1hFSjEreGdnaEthOCtybkphN0c3YkVrVEZQSGJmRmJKTm1zL2M4?=
- =?utf-8?B?bVZweTNONU5PTmt3bzNXOStLdkhBRzNPMTFKOUlaZzlNWFIvTUFOdXJmcFNp?=
- =?utf-8?B?WlFDV3ExMVZuNEYrRkI2bTJLV3NZc3ptRklaaHNhL2ZnMy8wS2xha2hidVhH?=
- =?utf-8?B?MGh5dm5xTU5hY3AyVHJNMUlEdlMzSzROYUpUUnQwdDRFSzJrbUpFK1BGdDdZ?=
- =?utf-8?B?ZUlMMWd0bHRGR0Z3SElqdz09?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73019d81-c0f8-40bb-2576-08d900edd01d
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2021 15:39:24.9815
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: frQYsBVKrAJuF7vR7Ase/SOP0L9L2ECQ258+t52vP1ugcNmlbB5gbRxycKzqTur9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR1501MB4096
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: k9WzYygd2JGmHK6poT92UlZawSVUkF2v
-X-Proofpoint-GUID: k9WzYygd2JGmHK6poT92UlZawSVUkF2v
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-16_08:2021-04-16,2021-04-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- spamscore=0 priorityscore=1501 phishscore=0 adultscore=0
- lowpriorityscore=0 bulkscore=0 mlxscore=0 suspectscore=0 impostorscore=0
- mlxlogscore=999 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104060000 definitions=main-2104160114
-X-FB-Internal: deliver
+        Fri, 16 Apr 2021 14:05:00 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1867DC061756
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 11:04:34 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id l30so7145644ybj.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 11:04:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=/H+m+ALhQKW7Ilv+GzFO9pjCjZCj8F3VFmPCGy2tCIo=;
+        b=vLxB60jVT0HTycIJZPpEqlQuwieieL8FDJrJIuCXXvh2kzWOc1RBN2K7mIEmvdiws9
+         jjY94AbGyrgyj2x5BwWsn95lOw2WMQE8arPljZoMOuE4vvDU/RvOHigmVKszYaoDFEwc
+         7jbeJyqevWz+nNycoYkpxn0pmIhZIUwBWySRdOuU6XOf8D0cTXyoTQkM4cYem/tMyOcs
+         6VZH5U0THlUzmkYP3vrcF2lvDbCkaK9lcNliKcIivI0S3Fk/vj1ogCRhwX9VpVAQkohc
+         ZaNmg0v1KzeXjrk3CHe8p25Ajh1Yp2iDT4ZFuvIocKan8xBm+hd0a1x3R/ukOR/LuiKW
+         57Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=/H+m+ALhQKW7Ilv+GzFO9pjCjZCj8F3VFmPCGy2tCIo=;
+        b=qH0BnbSNgrsDljZYTvLs2jU6Jguw6q7xG9pQzUVvsO9khXma7peGpgpZ+sSMJpiVfw
+         vU81BnR/L0Q77TMPcxe+3Ky3aLk/P5wik8tZ4kNxNlC2WfkykVm3Pol/6WGIFH5oZSqL
+         McggrbzQAGGWqnauH7Gcnk6rlRHEiugkolkQE5i4STYQ66Wpr1C5w/vJYhk683dCVQK2
+         AgiYTrEKIRyipYwXYSzjHvDPVuKMAOryZIf/0RtPpUL4ypQ7HLa4CJjzoSHSGwCLgFuB
+         CL3H9JBPHCX0n03LAQY+5h1D9cW5dl+KOOh7e69SC8sdCyg+W/3xSA/Fi85j+WY4aVEl
+         l7QQ==
+X-Gm-Message-State: AOAM531QRRiDGtmuAfLi6oNHcStg/GKcOA7KmAj1wfin+TMzBIVXdh1R
+        oZtci2/VOPd9w6wuw2CpyPHy45LZCkJcoA==
+X-Google-Smtp-Source: ABdhPJz30tGFtJUwlKaM9nGSiqouCiCRUIXx70H9H9TaPmMQbbQyemicL7XoJFvdOrIc/8Fgpl7n5m+InP/OtQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:78ba:f620:dba8:af82])
+ (user=dlatypov job=sendgmr) by 2002:a25:943:: with SMTP id
+ u3mr432192ybm.489.1618596273231; Fri, 16 Apr 2021 11:04:33 -0700 (PDT)
+Date:   Fri, 16 Apr 2021 11:04:27 -0700
+Message-Id: <20210416180427.1545645-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.368.gbe11c130af-goog
+Subject: [PATCH v6] lib: add basic KUnit test for lib/math
+From:   Daniel Latypov <dlatypov@google.com>
+To:     andriy.shevchenko@linux.intel.com
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Add basic test coverage for files that don't require any config options:
+* part of math.h (what seem to be the most commonly used macros)
+* gcd.c
+* lcm.c
+* int_sqrt.c
+* reciprocal_div.c
+(Ignored int_pow.c since it's a simple textbook algorithm.)
 
+These tests aren't particularly interesting, but they
+* provide short and simple examples of parameterized tests
+* provide a place to add tests for any new files in this dir
+* are written so adding new test cases to cover edge cases should be easy
+  * looking at code coverage, we hit all the branches in the .c files
 
-On 4/16/21 6:00 AM, Masahiro Yamada wrote:
-> Since commit d9f4ff50d2aa ("kbuild: spilt cc-option and friends to
-> scripts/Makefile.compiler"), some kselftests fail to build.
-> 
-> The tools/ directory opted out Kbuild, and went in a different
-> direction. They copy any kind of files to the tools/ directory
-> in order to do whatever they want in their world.
-> 
-> tools/build/Build.include mimics scripts/Kbuild.include, but some
-> tool Makefiles included the Kbuild one to import a feature that is
-> missing in tools/build/Build.include:
-> 
->   - Commit ec04aa3ae87b ("tools/thermal: tmon: use "-fstack-protector"
->     only if supported") included scripts/Kbuild.include from
->     tools/thermal/tmon/Makefile to import the cc-option macro.
-> 
->   - Commit c2390f16fc5b ("selftests: kvm: fix for compilers that do
->     not support -no-pie") included scripts/Kbuild.include from
->     tools/testing/selftests/kvm/Makefile to import the try-run macro.
-> 
->   - Commit 9cae4ace80ef ("selftests/bpf: do not ignore clang
->     failures") included scripts/Kbuild.include from
->     tools/testing/selftests/bpf/Makefile to import the .DELETE_ON_ERROR
->     target.
-> 
->   - Commit 0695f8bca93e ("selftests/powerpc: Handle Makefile for
->     unrecognized option") included scripts/Kbuild.include from
->     tools/testing/selftests/powerpc/pmu/ebb/Makefile to import the
->     try-run macro.
-> 
-> Copy what they need into tools/build/Build.include, and make them
-> include it instead of scripts/Kbuild.include.
-> 
-> Link: https://lore.kernel.org/lkml/86dadf33-70f7-a5ac-cb8c-64966d2f45a1@linux.ibm.com/
-> Fixes: d9f4ff50d2aa ("kbuild: spilt cc-option and friends to scripts/Makefile.compiler")
-> Reported-by: Janosch Frank <frankja@linux.ibm.com>
-> Reported-by: Christian Borntraeger <borntraeger@de.ibm.com>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+Changes since v5:
+* add in test cases for roundup/rounddown
+* address misc comments from David
 
-LGTM although I see some tools Makefile directly added 
-".DELETE_ON_ERROR:" in their Makefile.
+Changes since v4:
+* add in test cases for some math.h macros (abs, round_up/round_down,
+  div_round_down/closest)
+* use parameterized testing less to keep things terser
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Changes since v3:
+* fix `checkpatch.pl --strict` warnings
+* add test cases for gcd(0,0) and lcm(0,0)
+* minor: don't test both gcd(a,b) and gcd(b,a) when a == b
+
+Changes since v2: mv math_test.c => math_kunit.c
+
+Changes since v1:
+* Rebase and rewrite to use the new parameterized testing support.
+* misc: fix overflow in literal and inline int_sqrt format string.
+* related: commit 1f0e943df68a ("Documentation: kunit: provide guidance
+for testing many inputs") was merged explaining the patterns shown here.
+  * there's an in-flight patch to update it for parameterized testing.
+---
+ lib/math/Kconfig      |  12 ++
+ lib/math/Makefile     |   2 +
+ lib/math/math_kunit.c | 291 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 305 insertions(+)
+ create mode 100644 lib/math/math_kunit.c
+
+diff --git a/lib/math/Kconfig b/lib/math/Kconfig
+index f19bc9734fa7..a974d4db0f9c 100644
+--- a/lib/math/Kconfig
++++ b/lib/math/Kconfig
+@@ -15,3 +15,15 @@ config PRIME_NUMBERS
+ 
+ config RATIONAL
+ 	bool
++
++config MATH_KUNIT_TEST
++	tristate "KUnit test for lib/math and math.h" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++		This builds unit tests for lib/math and math.h.
++
++		For more information on KUnit and unit tests in general, please refer
++		to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++		If unsure, say N.
+diff --git a/lib/math/Makefile b/lib/math/Makefile
+index be6909e943bd..30abb7a8d564 100644
+--- a/lib/math/Makefile
++++ b/lib/math/Makefile
+@@ -4,3 +4,5 @@ obj-y += div64.o gcd.o lcm.o int_pow.o int_sqrt.o reciprocal_div.o
+ obj-$(CONFIG_CORDIC)		+= cordic.o
+ obj-$(CONFIG_PRIME_NUMBERS)	+= prime_numbers.o
+ obj-$(CONFIG_RATIONAL)		+= rational.o
++
++obj-$(CONFIG_MATH_KUNIT_TEST)	+= math_kunit.o
+diff --git a/lib/math/math_kunit.c b/lib/math/math_kunit.c
+new file mode 100644
+index 000000000000..556c23b17c3c
+--- /dev/null
++++ b/lib/math/math_kunit.c
+@@ -0,0 +1,291 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Simple KUnit suite for math helper funcs that are always enabled.
++ *
++ * Copyright (C) 2020, Google LLC.
++ * Author: Daniel Latypov <dlatypov@google.com>
++ */
++
++#include <kunit/test.h>
++#include <linux/gcd.h>
++#include <linux/kernel.h>
++#include <linux/lcm.h>
++#include <linux/reciprocal_div.h>
++
++static void abs_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, abs((char)0), (char)0);
++	KUNIT_EXPECT_EQ(test, abs((char)42), (char)42);
++	KUNIT_EXPECT_EQ(test, abs((char)-42), (char)42);
++
++	/* The expression in the macro is actually promoted to an int. */
++	KUNIT_EXPECT_EQ(test, abs((short)0),  0);
++	KUNIT_EXPECT_EQ(test, abs((short)42),  42);
++	KUNIT_EXPECT_EQ(test, abs((short)-42),  42);
++
++	KUNIT_EXPECT_EQ(test, abs(0),  0);
++	KUNIT_EXPECT_EQ(test, abs(42),  42);
++	KUNIT_EXPECT_EQ(test, abs(-42),  42);
++
++	KUNIT_EXPECT_EQ(test, abs(0L), 0L);
++	KUNIT_EXPECT_EQ(test, abs(42L), 42L);
++	KUNIT_EXPECT_EQ(test, abs(-42L), 42L);
++
++	KUNIT_EXPECT_EQ(test, abs(0LL), 0LL);
++	KUNIT_EXPECT_EQ(test, abs(42LL), 42LL);
++	KUNIT_EXPECT_EQ(test, abs(-42LL), 42LL);
++
++	/* Unsigned types get casted to signed. */
++	KUNIT_EXPECT_EQ(test, abs(0ULL), 0LL);
++	KUNIT_EXPECT_EQ(test, abs(42ULL), 42LL);
++}
++
++static void int_sqrt_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, int_sqrt(0UL), 0UL);
++	KUNIT_EXPECT_EQ(test, int_sqrt(1UL), 1UL);
++	KUNIT_EXPECT_EQ(test, int_sqrt(4UL), 2UL);
++	KUNIT_EXPECT_EQ(test, int_sqrt(5UL), 2UL);
++	KUNIT_EXPECT_EQ(test, int_sqrt(8UL), 2UL);
++	KUNIT_EXPECT_EQ(test, int_sqrt(1UL << 30), 1UL << 15);
++}
++
++static void round_up_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, round_up(0, 1), 0);
++	KUNIT_EXPECT_EQ(test, round_up(1, 2), 2);
++	KUNIT_EXPECT_EQ(test, round_up(3, 2), 4);
++	KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 2), 1 << 30);
++	KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 1 << 29), 1 << 30);
++}
++
++static void round_down_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, round_down(0, 1), 0);
++	KUNIT_EXPECT_EQ(test, round_down(1, 2), 0);
++	KUNIT_EXPECT_EQ(test, round_down(3, 2), 2);
++	KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 2), (1 << 30) - 2);
++	KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 1 << 29), 1 << 29);
++}
++
++/* These versions can round to numbers that aren't a power of two */
++static void roundup_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, roundup(0, 1), 0);
++	KUNIT_EXPECT_EQ(test, roundup(1, 2), 2);
++	KUNIT_EXPECT_EQ(test, roundup(3, 2), 4);
++	KUNIT_EXPECT_EQ(test, roundup((1 << 30) - 1, 2), 1 << 30);
++	KUNIT_EXPECT_EQ(test, roundup((1 << 30) - 1, 1 << 29), 1 << 30);
++
++	KUNIT_EXPECT_EQ(test, roundup(3, 2), 4);
++	KUNIT_EXPECT_EQ(test, roundup(4, 3), 6);
++}
++
++static void rounddown_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, rounddown(0, 1), 0);
++	KUNIT_EXPECT_EQ(test, rounddown(1, 2), 0);
++	KUNIT_EXPECT_EQ(test, rounddown(3, 2), 2);
++	KUNIT_EXPECT_EQ(test, rounddown((1 << 30) - 1, 2), (1 << 30) - 2);
++	KUNIT_EXPECT_EQ(test, rounddown((1 << 30) - 1, 1 << 29), 1 << 29);
++
++	KUNIT_EXPECT_EQ(test, rounddown(3, 2), 2);
++	KUNIT_EXPECT_EQ(test, rounddown(4, 3), 3);
++}
++
++static void div_round_up_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(0, 1), 0);
++	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(20, 10), 2);
++	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 10), 3);
++	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 20), 2);
++	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 99), 1);
++}
++
++static void div_round_closest_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(0, 1), 0);
++	KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(20, 10), 2);
++	KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(21, 10), 2);
++	KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(25, 10), 3);
++}
++
++/* Generic test case for unsigned long inputs. */
++struct test_case {
++	unsigned long a, b;
++	unsigned long result;
++};
++
++static struct test_case gcd_cases[] = {
++	{
++		.a = 0, .b = 0,
++		.result = 0,
++	},
++	{
++		.a = 0, .b = 1,
++		.result = 1,
++	},
++	{
++		.a = 2, .b = 2,
++		.result = 2,
++	},
++	{
++		.a = 2, .b = 4,
++		.result = 2,
++	},
++	{
++		.a = 3, .b = 5,
++		.result = 1,
++	},
++	{
++		.a = 3 * 9, .b = 3 * 5,
++		.result = 3,
++	},
++	{
++		.a = 3 * 5 * 7, .b = 3 * 5 * 11,
++		.result = 15,
++	},
++	{
++		.a = 1 << 21,
++		.b = (1 << 21) - 1,
++		.result = 1,
++	},
++};
++
++KUNIT_ARRAY_PARAM(gcd, gcd_cases, NULL);
++
++static void gcd_test(struct kunit *test)
++{
++	const char *message_fmt = "gcd(%lu, %lu)";
++	const struct test_case *test_param = test->param_value;
++
++	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
++			    gcd(test_param->a, test_param->b),
++			    message_fmt, test_param->a,
++			    test_param->b);
++
++	if (test_param->a == test_param->b)
++		return;
++
++	/* gcd(a,b) == gcd(b,a) */
++	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
++			    gcd(test_param->b, test_param->a),
++			    message_fmt, test_param->b,
++			    test_param->a);
++}
++
++static struct test_case lcm_cases[] = {
++	{
++		.a = 0, .b = 0,
++		.result = 0,
++	},
++	{
++		.a = 0, .b = 1,
++		.result = 0,
++	},
++	{
++		.a = 1, .b = 2,
++		.result = 2,
++	},
++	{
++		.a = 2, .b = 2,
++		.result = 2,
++	},
++	{
++		.a = 3 * 5, .b = 3 * 7,
++		.result = 3 * 5 * 7,
++	},
++};
++
++KUNIT_ARRAY_PARAM(lcm, lcm_cases, NULL);
++
++static void lcm_test(struct kunit *test)
++{
++	const char *message_fmt = "lcm(%lu, %lu)";
++	const struct test_case *test_param = test->param_value;
++
++	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
++			    lcm(test_param->a, test_param->b),
++			    message_fmt, test_param->a,
++			    test_param->b);
++
++	if (test_param->a == test_param->b)
++		return;
++
++	/* lcm(a,b) == lcm(b,a) */
++	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
++			    lcm(test_param->b, test_param->a),
++			    message_fmt, test_param->b,
++			    test_param->a);
++}
++
++struct u32_test_case {
++	u32 a, b;
++	u32 result;
++};
++
++static struct u32_test_case reciprocal_div_cases[] = {
++	{
++		.a = 0, .b = 1,
++		.result = 0,
++	},
++	{
++		.a = 42, .b = 20,
++		.result = 2,
++	},
++	{
++		.a = 42, .b = 9999,
++		.result = 0,
++	},
++	{
++		.a = (1 << 16), .b = (1 << 14),
++		.result = 1 << 2,
++	},
++};
++
++KUNIT_ARRAY_PARAM(reciprocal_div, reciprocal_div_cases, NULL);
++
++static void reciprocal_div_test(struct kunit *test)
++{
++	const struct u32_test_case *test_param = test->param_value;
++	struct reciprocal_value rv = reciprocal_value(test_param->b);
++
++	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
++			    reciprocal_divide(test_param->a, rv),
++			    "reciprocal_divide(%u, %u)",
++			    test_param->a, test_param->b);
++}
++
++static void reciprocal_scale_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, reciprocal_scale(0u, 100), 0u);
++	KUNIT_EXPECT_EQ(test, reciprocal_scale(1u, 100), 0u);
++	KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 4, 1 << 28), 1u);
++	KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 16, 1 << 28), 1u << 12);
++	KUNIT_EXPECT_EQ(test, reciprocal_scale(~0u, 1 << 28), (1u << 28) - 1);
++}
++
++static struct kunit_case math_test_cases[] = {
++	KUNIT_CASE(abs_test),
++	KUNIT_CASE(int_sqrt_test),
++	KUNIT_CASE(round_up_test),
++	KUNIT_CASE(round_down_test),
++	KUNIT_CASE(roundup_test),
++	KUNIT_CASE(rounddown_test),
++	KUNIT_CASE(div_round_up_test),
++	KUNIT_CASE(div_round_closest_test),
++	KUNIT_CASE_PARAM(gcd_test, gcd_gen_params),
++	KUNIT_CASE_PARAM(lcm_test, lcm_gen_params),
++	KUNIT_CASE_PARAM(reciprocal_div_test, reciprocal_div_gen_params),
++	KUNIT_CASE(reciprocal_scale_test),
++	{}
++};
++
++static struct kunit_suite math_test_suite = {
++	.name = "lib-math",
++	.test_cases = math_test_cases,
++};
++
++kunit_test_suites(&math_test_suite);
++
++MODULE_LICENSE("GPL v2");
+
+base-commit: 7e25f40eab52c57ff6772d27d2aef3640a3237d7
+-- 
+2.31.1.368.gbe11c130af-goog
+
