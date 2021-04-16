@@ -2,240 +2,247 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D813615D1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 01:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9BD361848
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Apr 2021 05:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbhDOXK3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Apr 2021 19:10:29 -0400
-Received: from www62.your-server.de ([213.133.104.62]:38876 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbhDOXK3 (ORCPT
+        id S238156AbhDPDlJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Apr 2021 23:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234816AbhDPDlI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Apr 2021 19:10:29 -0400
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lXB7a-00017s-Cs; Fri, 16 Apr 2021 01:10:02 +0200
-Received: from [85.7.101.30] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lXB7a-0003w3-0W; Fri, 16 Apr 2021 01:10:02 +0200
-Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20210325120020.236504-4-memxor@gmail.com>
- <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
- <20210331094400.ldznoctli6fljz64@apollo>
- <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
- <20210402152743.dbadpgcmrgjt4eca@apollo>
- <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
- <20210402190806.nhcgappm3iocvd3d@apollo>
- <20210403174721.vg4wle327wvossgl@ast-mbp>
- <CAEf4Bzaeu4apgEtwS_3q1iPuURjPXMs9H43cYUtJSmjPMU5M9A@mail.gmail.com>
- <87blar4ti7.fsf@toke.dk>
- <CAEf4BzaOJ-WD3A13B2uCrsE2yrctAL8QtJ8TuXHLeP+tm98pbA@mail.gmail.com>
- <874kg9m8t1.fsf@toke.dk>
- <CAEf4BzaEkzPeAXqmm5aEdQxnCkrqJTHcSu7afnV11+697KgZTQ@mail.gmail.com>
- <87wnt4jx8m.fsf@toke.dk>
- <CAEf4Bzbb0ECMjhAvD-1wpp3qJJcrpgKr_=ONN4ZQmuNUgYrH4A@mail.gmail.com>
- <4b99d6c3-0281-f539-e6dc-0b307c5a7db3@iogearbox.net>
- <CAEf4BzZtivCFfMLa5vnu6QtNL75BC4WoreS=4v1TScsfVX1jQQ@mail.gmail.com>
- <848d7864-44f3-79a2-ad3c-80adee6aa27a@iogearbox.net>
- <CAEf4BzaHwiQLmXOHcDfDtuBuPF7HZgoDW-=u6eYhQ2svHuGAWw@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <13e37535-51f2-bbc3-b9dd-2e1c450c2391@iogearbox.net>
-Date:   Fri, 16 Apr 2021 01:10:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <CAEf4BzaHwiQLmXOHcDfDtuBuPF7HZgoDW-=u6eYhQ2svHuGAWw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26141/Thu Apr 15 13:13:26 2021)
+        Thu, 15 Apr 2021 23:41:08 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A410CC061574
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 20:40:44 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id w3-20020a05621412e3b029019a7b97dd69so3201875qvv.14
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 20:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=bRyPvMWK8Npj/WYtdOVLc9Ru8MoKLbscf5g6mUndbAg=;
+        b=ZnE47k/XeM5jw10N2+TjSDQ+5rqO60/RnWyfxxRNp4pfrPol2syJpwtb4AS3nxjzn0
+         tkTsL0aZkhWjWdB1cnjAHRza041HRsJNZJO7k+qJcoC3EtMLX9Bvwhh5It/QUe6+JHFq
+         JWkFAyxq3unYO1xE6YFvLsLHGH0HldREA1VuzCMjOIv0zuYi57ejl3AEFc37ZW+dZpEN
+         02L2ocL1lVs9RmhTBEoPN2Fh+BRH/GVKpxKRl2/+Y1/KhBaq1ScYxYMSOJRMga2VIZ3J
+         n4YWeT9adyz6UXgFMrjqt4OU9XQr7hKbgxcbFZHr6a6O2tVQPiFiM7ozYe3mBujjFlF0
+         hofw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=bRyPvMWK8Npj/WYtdOVLc9Ru8MoKLbscf5g6mUndbAg=;
+        b=rE5UGzfOOghdYE2XamRnxbF+O/u/AN9p7X/CIh5XsYK5HvwuPzIwno4x5R7P+VyKYW
+         uhRBZCPsT2RZNN05Ja+Z1peDcpEfumSythqD4gK1SKMvNomMMjf9reGFU+BuhYcCZa3/
+         YjvKGULonYZaP1w4RSJ6FkjtnX0gDOJf8BTrO+uKahDpDrYzk/NZ+JtC4PmJMcqtTQPN
+         QQKofUoNQbohOZBhI39M9X/yMiKU9cytvL1mZ794CUuYIofp7UN69tKy7O0q6Fe0fmn2
+         f+7xpz9HGktw2eXy9v/f5bGpE02cjgxQU9n+OZ6RXfbLtviT4zn+ZaAYN90+hFPRQ8r7
+         qKUg==
+X-Gm-Message-State: AOAM530dtFmsCWGr8NRc8UMo2dwwNqmPHs4NzWkVOERLzAPJHwbOKJHu
+        JDw+TdnXEaGB+RT4jvo/2Gk88kbmyouExA==
+X-Google-Smtp-Source: ABdhPJxJWCxoSgcosSmI6fhw0zEyXaKUhP3fuvEBiDcw/YbDSJXKrOiF6qwW04sAamc/mK53Yo9uHhvQFPNGSA==
+X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:fe36:58a6:c432:3234])
+ (user=davidgow job=sendgmr) by 2002:a0c:c3cd:: with SMTP id
+ p13mr6790575qvi.4.1618544443832; Thu, 15 Apr 2021 20:40:43 -0700 (PDT)
+Date:   Thu, 15 Apr 2021 20:40:36 -0700
+Message-Id: <20210416034036.797727-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.368.gbe11c130af-goog
+Subject: [PATCH] Documentation: kunit: Update kunit_tool page
+From:   David Gow <davidgow@google.com>
+To:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/16/21 12:22 AM, Andrii Nakryiko wrote:
-> On Thu, Apr 15, 2021 at 3:10 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> On 4/15/21 1:58 AM, Andrii Nakryiko wrote:
->>> On Wed, Apr 14, 2021 at 4:32 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>>> On 4/15/21 1:19 AM, Andrii Nakryiko wrote:
->>>>> On Wed, Apr 14, 2021 at 3:51 PM Toke Høiland-Jørgensen <toke@redhat.com> wrote:
->>>>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->>>>>>> On Wed, Apr 14, 2021 at 3:58 AM Toke Høiland-Jørgensen <toke@redhat.com> wrote:
->>>>>>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->>>>>>>>> On Tue, Apr 6, 2021 at 3:06 AM Toke Høiland-Jørgensen <toke@redhat.com> wrote:
->>>>>>>>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->>>>>>>>>>> On Sat, Apr 3, 2021 at 10:47 AM Alexei Starovoitov
->>>>>>>>>>> <alexei.starovoitov@gmail.com> wrote:
->>>>>>>>>>>> On Sat, Apr 03, 2021 at 12:38:06AM +0530, Kumar Kartikeya Dwivedi wrote:
->>>>>>>>>>>>> On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov wrote:
->>>>>>>>>>>>>> On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->>>>>>>>>>>>>>> [...]
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> All of these things are messy because of tc legacy. bpf tried to follow tc style
->>>>>>>>>>>>>> with cls and act distinction and it didn't quite work. cls with
->>>>>>>>>>>>>> direct-action is the only
->>>>>>>>>>>>>> thing that became mainstream while tc style attach wasn't really addressed.
->>>>>>>>>>>>>> There were several incidents where tc had tens of thousands of progs attached
->>>>>>>>>>>>>> because of this attach/query/index weirdness described above.
->>>>>>>>>>>>>> I think the only way to address this properly is to introduce bpf_link style of
->>>>>>>>>>>>>> attaching to tc. Such bpf_link would support ingress/egress only.
->>>>>>>>>>>>>> direction-action will be implied. There won't be any index and query
->>>>>>>>>>>>>> will be obvious.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Note that we already have bpf_link support working (without support for pinning
->>>>>>>>>>>>> ofcourse) in a limited way. The ifindex, protocol, parent_id, priority, handle,
->>>>>>>>>>>>> chain_index tuple uniquely identifies a filter, so we stash this in the bpf_link
->>>>>>>>>>>>> and are able to operate on the exact filter during release.
->>>>>>>>>>>>
->>>>>>>>>>>> Except they're not unique. The library can stash them, but something else
->>>>>>>>>>>> doing detach via iproute2 or their own netlink calls will detach the prog.
->>>>>>>>>>>> This other app can attach to the same spot a different prog and now
->>>>>>>>>>>> bpf_link__destroy will be detaching somebody else prog.
->>>>>>>>>>>>
->>>>>>>>>>>>>> So I would like to propose to take this patch set a step further from
->>>>>>>>>>>>>> what Daniel said:
->>>>>>>>>>>>>> int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
->>>>>>>>>>>>>> and make this proposed api to return FD.
->>>>>>>>>>>>>> To detach from tc ingress/egress just close(fd).
->>>>>>>>>>>>>
->>>>>>>>>>>>> You mean adding an fd-based TC API to the kernel?
->>>>>>>>>>>>
->>>>>>>>>>>> yes.
->>>>>>>>>>>
->>>>>>>>>>> I'm totally for bpf_link-based TC attachment.
->>>>>>>>>>>
->>>>>>>>>>> But I think *also* having "legacy" netlink-based APIs will allow
->>>>>>>>>>> applications to handle older kernels in a much nicer way without extra
->>>>>>>>>>> dependency on iproute2. We have a similar situation with kprobe, where
->>>>>>>>>>> currently libbpf only supports "modern" fd-based attachment, but users
->>>>>>>>>>> periodically ask questions and struggle to figure out issues on older
->>>>>>>>>>> kernels that don't support new APIs.
->>>>>>>>>>
->>>>>>>>>> +1; I am OK with adding a new bpf_link-based way to attach TC programs,
->>>>>>>>>> but we still need to support the netlink API in libbpf.
->>>>>>>>>>
->>>>>>>>>>> So I think we'd have to support legacy TC APIs, but I agree with
->>>>>>>>>>> Alexei and Daniel that we should keep it to the simplest and most
->>>>>>>>>>> straightforward API of supporting direction-action attachments and
->>>>>>>>>>> setting up qdisc transparently (if I'm getting all the terminology
->>>>>>>>>>> right, after reading Quentin's blog post). That coincidentally should
->>>>>>>>>>> probably match how bpf_link-based TC API will look like, so all that
->>>>>>>>>>> can be abstracted behind a single bpf_link__attach_tc() API as well,
->>>>>>>>>>> right? That's the plan for dealing with kprobe right now, btw. Libbpf
->>>>>>>>>>> will detect the best available API and transparently fall back (maybe
->>>>>>>>>>> with some warning for awareness, due to inherent downsides of legacy
->>>>>>>>>>> APIs: no auto-cleanup being the most prominent one).
->>>>>>>>>>
->>>>>>>>>> Yup, SGTM: Expose both in the low-level API (in bpf.c), and make the
->>>>>>>>>> high-level API auto-detect. That way users can also still use the
->>>>>>>>>> netlink attach function if they don't want the fd-based auto-close
->>>>>>>>>> behaviour of bpf_link.
->>>>>>>>>
->>>>>>>>> So I thought a bit more about this, and it feels like the right move
->>>>>>>>> would be to expose only higher-level TC BPF API behind bpf_link. It
->>>>>>>>> will keep the API complexity and amount of APIs that libbpf will have
->>>>>>>>> to support to the minimum, and will keep the API itself simple:
->>>>>>>>> direct-attach with the minimum amount of input arguments. By not
->>>>>>>>> exposing low-level APIs we also table the whole bpf_tc_cls_attach_id
->>>>>>>>> design discussion, as we now can keep as much info as needed inside
->>>>>>>>> bpf_link_tc (which will embed bpf_link internally as well) to support
->>>>>>>>> detachment and possibly some additional querying, if needed.
->>>>>>>>
->>>>>>>> But then there would be no way for the caller to explicitly select a
->>>>>>>> mechanism? I.e., if I write a BPF program using this mechanism targeting
->>>>>>>> a 5.12 kernel, I'll get netlink attachment, which can stick around when
->>>>>>>> I do bpf_link__disconnect(). But then if the kernel gets upgraded to
->>>>>>>> support bpf_link for TC programs I'll suddenly transparently get
->>>>>>>> bpf_link and the attachments will go away unless I pin them. This
->>>>>>>> seems... less than ideal?
->>>>>>>
->>>>>>> That's what we are doing with bpf_program__attach_kprobe(), though.
->>>>>>> And so far I've only seen people (privately) saying how good it would
->>>>>>> be to have bpf_link-based TC APIs, doesn't seem like anyone with a
->>>>>>> realistic use case prefers the current APIs. So I suspect it's not
->>>>>>> going to be a problem in practice. But at least I'd start there and
->>>>>>> see how people are using it and if they need anything else.
->>>>>>
->>>>>> *sigh* - I really wish you would stop arbitrarily declaring your own use
->>>>>> cases "realistic" and mine (implied) "unrealistic". Makes it really hard
->>>>>> to have a productive discussion...
->>>>>
->>>>> Well (sigh?..), this wasn't my intention, sorry you read it this way.
->>>>> But we had similar discussions when I was adding bpf_link-based XDP
->>>>> attach APIs. And guess what, now I see that samples/bpf/whatever_xdp
->>>>> is switched to bpf_link-based XDP, because that makes everything
->>>>> simpler and more reliable. What I also know is that in production we
->>>>> ran into multiple issues with anything that doesn't auto-detach on
->>>>> process exit/crash (unless pinned explicitly, of course). And that
->>>>> people that are trying to use TC right now are saying how having
->>>>> bpf_link-based TC APIs would make everything *simpler* and *safer*. So
->>>>> I don't know... I understand it might be convenient in some cases to
->>>>> not care about a lifetime of BPF programs you are attaching, but then
->>>>> there are usually explicit and intentional ways to achieve at least
->>>>> similar behavior with safety by default.
->>>>
->>>> [...]
->>>>
->>>>    >>> There are many ways to skin this cat. I'd prioritize bpf_link-based TC
->>>>    >>> APIs to be added with legacy TC API as a fallback.
->>>>
->>>> I think the problem here is though that this would need to be deterministic
->>>> when upgrading from one kernel version to another where we don't use the
->>>> fallback anymore, e.g. in case of Cilium we always want to keep the progs
->>>> attached to allow headless updates on the agent, meaning, traffic keeps
->>>> flowing through the BPF datapath while in user space, our agent restarts
->>>> after upgrade, and atomically replaces the BPF progs once up and running
->>>> (we're doing this for the whole range of 4.9 to 5.x kernels that we support).
->>>> While we use the 'simple' api that is discussed here internally in Cilium,
->>>> this attach behavior would have to be consistent, so transparent fallback
->>>> inside libbpf on link vs non-link availability won't work (at least in our
->>>> case).
->>>
->>> What about pinning? It's not exactly the same, but bpf_link could
->>> actually pin a BPF program, if using legacy TC, and pin bpf_link, if
->>> using bpf_link-based APIs. Of course before switching from iproute2 to
->>> libbpf APIs you'd need to design your applications to use pinning
->>> instead of relying implicitly on permanently attached BPF program.
->>
->> All the progs we load from Cilium in a K8s setting w/ Pods, we could have easily
->> over 100 loaded at the same time on a node, and we template the per Pod ones, so
->> the complexity of managing those pinned lifecycles from the agent and dealing with
->> the semantic/fallback differences between kernels feels probably not worth the
->> gain. So if there would be a libbpf tc simplified attach API, I'd for the time
->> being stick to the existing aka legacy means.
-> 
-> Sure. Then what do you think about keeping only low-level TC APIs, and
-> in the future add bpf_program__attach_tc(), which will use
-> bpf_link-based one. It seems like it's not worth it to pretend we have
-> bpf_link-based semantics with "legacy" current TC APIs. Similarly how
-> we have a low-level XDP attach API, and bpf_link-based (only)
-> bpf_program__attach_xdp().
+The kunit_tool documentation page was pretty minimal, and a bit
+outdated. Update it and flesh it out a bit.
 
-I think that's okay. I guess question is what do we define as initial scope for
-the low-level TC API. cls_bpf w/ fixed direct-action mode + fixed eth_p_all,
-allowing to flexibly specify handle / priority or a block_index feels reasonable.
+In particular,
+- Mention that .kunitconfig is now in the build directory
+- Describe the use of --kunitconfig to specify a different config
+  framgent
+- Mention the split functionality (i.e., commands other than 'run')
+- Describe --raw_output and kunit.py parse
+- Mention the globbing support
+- Provide a quick overview of other options, including --build_dir and
+  --alltests
+
+Note that this does overlap a little with the new running_tips page. I
+don't think it's a problem having both: this page is supposed to be a
+bit more of a reference, rather than a list of useful tips, so the fact
+that they both describe the same features isn't a problem.
+
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ Documentation/dev-tools/kunit/kunit-tool.rst | 132 ++++++++++++++++++-
+ 1 file changed, 128 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
+index 29ae2fee8123..0b45affcd65c 100644
+--- a/Documentation/dev-tools/kunit/kunit-tool.rst
++++ b/Documentation/dev-tools/kunit/kunit-tool.rst
+@@ -22,14 +22,19 @@ not require any virtualization support: it is just a regular program.
+ What is a .kunitconfig?
+ =======================
+ 
+-It's just a defconfig that kunit_tool looks for in the base directory.
++It's just a defconfig that kunit_tool looks for in the build directory.
+ kunit_tool uses it to generate a .config as you might expect. In addition, it
+ verifies that the generated .config contains the CONFIG options in the
+ .kunitconfig; the reason it does this is so that it is easy to be sure that a
+ CONFIG that enables a test actually ends up in the .config.
+ 
+-How do I use kunit_tool?
+-========================
++It's also possible to pass a separate .kunitconfig fragment to kunit_tool,
++which is useful if you have several different groups of tests you wish
++to run independently, or if you want to use pre-defined test configs for
++certain subsystems.
++
++Getting Started with kunit_tool
++===============================
+ 
+ If a kunitconfig is present at the root directory, all you have to do is:
+ 
+@@ -48,10 +53,129 @@ However, you most likely want to use it with the following options:
+ 
+ .. note::
+ 	This command will work even without a .kunitconfig file: if no
+-        .kunitconfig is present, a default one will be used instead.
++	.kunitconfig is present, a default one will be used instead.
++
++If you wish to use a different .kunitconfig file (such as one provided for
++testing a particular subsystem), you can pass it as an option.
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run --kunitconfig=fs/ext4/.kunitconfig
+ 
+ For a list of all the flags supported by kunit_tool, you can run:
+ 
+ .. code-block:: bash
+ 
+ 	./tools/testing/kunit/kunit.py run --help
++
++Configuring, Building, and Running Tests
++========================================
++
++It's also possible to run just parts of the KUnit build process independently,
++which is useful if you want to make manual changes to part of the process.
++
++A .config can be generated from a .kunitconfig by using the ``config`` argument
++when running kunit_tool:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py config
++
++Similarly, if you just want to build a KUnit kernel from the current .config,
++you can use the ``build`` argument:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py build
++
++And, if you already have a built UML kernel with built-in KUnit tests, you can
++run the kernel and display the test results with the ``exec`` argument:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py exec
++
++The ``run`` command which is discussed above is equivalent to running all three
++of these in sequence.
++
++All of these commands accept a number of optional command-line arguments. The
++``--help`` flag will give a complete list of these, or keep reading this page
++for a guide to some of the more useful ones.
++
++Parsing Test Results
++====================
++
++KUnit tests output their results in TAP (Test Anything Protocol) format.
++kunit_tool will, when running tests, parse this output and print a summary
++which is much more pleasant to read. If you wish to look at the raw test
++results in TAP format, you can pass the ``--raw_output`` argument.
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run --raw_output
++
++.. note::
++	The raw output from test runs may contain other, non-KUnit kernel log
++	lines.
++
++If you have KUnit results in their raw TAP format, you can parse them and print
++the human-readable summary with the ``parse`` command for kunit_tool. This
++accepts a filename for an argument, or will read from standard input.
++
++.. code-block:: bash
++
++	# Reading from a file
++	./tools/testing/kunit/kunit.py parse /var/log/dmesg
++	# Reading from stdin
++	dmesg | ./tools/testing/kunit/kunit.py parse
++
++This is very useful if you wish to run tests in a configuration not supported
++by kunit_tool (such as on real hardware, or an unsupported architecture).
++
++Filtering Tests
++===============
++
++It's possible to run only a subset of the tests built into a kernel by passing
++a filter to the ``exec`` or ``run`` commands. For example, if you only wanted
++to run KUnit resource tests, you could use:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run 'kunit-resource*'
++
++This uses the standard glob format for wildcards.
++
++Other Useful Options
++====================
++
++kunit_tool has a number of other command-line arguments which can be useful
++when adapting it to fit your environment or needs.
++
++Some of the more useful ones are:
++
++``--help``
++	Lists all of the available options. Note that different commands
++	(``config``, ``build``, ``run``, etc) will have different supported
++	options. Place ``--help`` before the command to list common options,
++	and after the command for options specific to that command.
++
++``--build_dir``
++	Specifies the build directory that kunit_tool will use. This is where
++	the .kunitconfig file is located, as well as where the .config and
++	compiled kernel will be placed. Defaults to ``.kunit``.
++
++``--make_options``
++	Specifies additional options to pass to ``make`` when compiling a
++	kernel (with the ``build`` or ``run`` commands). For example, to enable
++	compiler warnings, you can pass ``--make_options W=1``.
++
++``--alltests``
++	Builds a UML kernel with all config options enabled using
++	``make allyesconfig``. This allows you to run as many tests as is
++	possible, but is very slow and prone to breakage as new options are
++	added or modified. Most people should add ``CONFIG_KUNIT_ALL_TESTS=1``
++	to their .kunitconfig instead if they wish to run "all tests".
++
++
++There are several other options (and new ones are often added), so do check
++``--help`` if you're looking for something not mentioned here.
+-- 
+2.31.1.368.gbe11c130af-goog
+
