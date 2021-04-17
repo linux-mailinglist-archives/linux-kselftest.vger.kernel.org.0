@@ -2,316 +2,263 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD738362C73
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Apr 2021 02:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25832362D5F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Apr 2021 05:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbhDQAfP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Apr 2021 20:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S235589AbhDQDqX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Apr 2021 23:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235186AbhDQAfO (ORCPT
+        with ESMTP id S234999AbhDQDqX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Apr 2021 20:35:14 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1379C061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 17:34:47 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id d23so18661610qko.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 17:34:47 -0700 (PDT)
+        Fri, 16 Apr 2021 23:46:23 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8BEC061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 20:45:57 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id u73-20020a25ab4f0000b0290410f38a2f81so855321ybi.22
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Apr 2021 20:45:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=uIksWak7SFr1E70pBah+NSYxowBoEqEgg2o79SFp6/s=;
-        b=eeco8Eo1b6XKreVLdrIzFapBg3OD6V7CQTsi7hbrcAVdqLjwYSdqYzWpWwUFD+rf5s
-         907v7V2n0Y2Frm9zSEuym+yCSLuojvf+R4W8RGdQ3WiqWpvxJbqAWDA9l2CLozizDWTX
-         dXpuVwyDIl2xqjAwMLfBMuGjoMpMirWVZrJrFfAAaxZvXOi2K1+gMybaX5O6nq5PqEF9
-         /+H8xMC7/ryI44kPHMTVuQpcJiVoqejoCjiqrY0puDIde83w5Tmk3UHgQN+HrAPfR3m0
-         32FgeEIUK9kJBKHv6bJD16ImvNCDJno4x/CPtx+I9BMrtBhlToqV8tE+m0KlXUeopisC
-         3IQw==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=DwfZ6Wi0V5teVjChDKKISP6jFpDU0ASTBwZn9CpapWY=;
+        b=YY9cghOZEU4tRYcLmU/Ul1HlY8NfrG8ZUTScwggfUTK7dFpM0nMTPLaKcavTo769pt
+         yyLJpEYJ7Pb7PYNfCqZFaqUemCzDpvY+Js40EHuGJ5DB4cSRCsJIL65xeuzEb8JiAzd4
+         qij0gag9alXE9MIHBZzBSo2oEb0ulyJ4t6pBHAbhx1beedGLuZ9VsuBRFoFUHwFx4kww
+         anm+XdoduyejZSWnrUWT+/OV6yMiFKf37EilqHuLzFfoR2tYM8iaizA4fA0vpDEJHRX7
+         RAN+LbUdoa78Oht962NNMr5KaEoNZ7kNBPJvw6tvqGOMaoA99iaINzUVolykxnYqDLSw
+         usPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=uIksWak7SFr1E70pBah+NSYxowBoEqEgg2o79SFp6/s=;
-        b=pdRA/AG9XNFseV87w/FHMiYZWp58GCftqI4rmGO/wnbS7nbO5ocv8ak2rdtvbx4txf
-         eU+epynV9Bc3yT6sMzc26YliOQUwLMBl9LrjbW+lG+jCh1AaCrdQkRnqz9tUiYLVZ35x
-         x6RkLqwb1y+GcWbM93J8Vv60WSjEIK/9JhrHm26XK7MaOmmj5r3uTHGTknCZYFp1tQ4E
-         CuMmBXzXecZ8A6cYlHL6T7FTHuZRk/ch74h+TCub9jg0HOqJjap7yn0PNJerSYhD1HHW
-         fPYxtp+3XFDH3kBmKs/kka98cSwFUx2S4IZmuIKcShTNPHEEpKbMbxtpWVRvzbJUB4Pa
-         jIHA==
-X-Gm-Message-State: AOAM533inWk8ad+o2GbOrCO+RFzvlHFHnOas2NpZGKXwPHzOjc4JfCjf
-        ShSnrkQy3O/Qd6n3wSq8meyQBw==
-X-Google-Smtp-Source: ABdhPJwQvWlo+O7u3+a2Gbcer/skxTUf4GsCZM4vSy5IgREWFXBEG2O7MzXmmDPXtLm1eJ1JvjNOWw==
-X-Received: by 2002:ae9:e8c6:: with SMTP id a189mr1887846qkg.463.1618619686707;
-        Fri, 16 Apr 2021 17:34:46 -0700 (PDT)
-Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id m10sm4443515qtp.43.2021.04.16.17.34.44
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Fri, 16 Apr 2021 17:34:46 -0700 (PDT)
-Date:   Fri, 16 Apr 2021 17:34:43 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@eggly.anvils
-To:     Axel Rasmussen <axelrasmussen@google.com>
-cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Brian Geffon <bgeffon@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v2 9/9] userfaultfd/shmem: modify shmem_mcopy_atomic_pte
- to use install_ptes
-In-Reply-To: <20210413051721.2896915-10-axelrasmussen@google.com>
-Message-ID: <alpine.LSU.2.11.2104161648020.25373@eggly.anvils>
-References: <20210413051721.2896915-1-axelrasmussen@google.com> <20210413051721.2896915-10-axelrasmussen@google.com>
-User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=DwfZ6Wi0V5teVjChDKKISP6jFpDU0ASTBwZn9CpapWY=;
+        b=kOKKUhuRyfHVyjEL6oRsl35+v0mmKB4jgimuxpD9gAhzRw+pO0KwwXz072rkZ86TuG
+         SYdM/KNQGPgrCKzfZWLF0wQsoWLPqQTm6r913f0eXhjFhqSsOkTim0Ayw2HO0212SS+p
+         qyZrme1brJuvs5dJk+lARqbea4VzcWfnfj9N3TbO6lBb3Lzz4fsOubDLRtllKqbyCfTD
+         0I04Be0svHtowMEcD6KeISMC3238c4w/SCdwUPnqvshBeGQ7XUfoHoKu2L/OsA0rtdPL
+         TYnxs7p4dHh5Ba/2yBUbfF7tGrWzwfnnwvcfaaYLXVfIVHpVf1z5IA1IPzyemvGdxzNW
+         lIxg==
+X-Gm-Message-State: AOAM533TQiJp4X5CNQuWALSfR+KKZxXIDfSl1jbu8Yrrrx4knkHBw0bv
+        8PYf5pP05tRWKtUKyFDyznZqapLBCptytw==
+X-Google-Smtp-Source: ABdhPJwZQrchzW9ElVi2IAqNHV0OFnElQ2XAIX74JNaYPR7mT2w4ryIWjLPeYWLKwxOLYvZGCpgUGg0VdFQ5/w==
+X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:fff4:37a8:7152:cd1f])
+ (user=davidgow job=sendgmr) by 2002:a25:e04b:: with SMTP id
+ x72mr3279598ybg.337.1618631156641; Fri, 16 Apr 2021 20:45:56 -0700 (PDT)
+Date:   Fri, 16 Apr 2021 20:45:53 -0700
+Message-Id: <20210417034553.1048895-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.368.gbe11c130af-goog
+Subject: [PATCH v2] Documentation: kunit: Update kunit_tool page
+From:   David Gow <davidgow@google.com>
+To:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 12 Apr 2021, Axel Rasmussen wrote:
+The kunit_tool documentation page was pretty minimal, and a bit
+outdated. Update it and flesh it out a bit.
 
-> In a previous commit, we added the mcopy_atomic_install_ptes() helper.
-> This helper does the job of setting up PTEs for an existing page, to map
-> it into a given VMA. It deals with both the anon and shmem cases, as
-> well as the shared and private cases.
-> 
-> In other words, shmem_mcopy_atomic_pte() duplicates a case it already
-> handles. So, expose it, and let shmem_mcopy_atomic_pte() use it
-> directly, to reduce code duplication.
-> 
-> This requires that we refactor shmem_mcopy_atomic-pte() a bit:
-> 
-> Instead of doing accounting (shmem_recalc_inode() et al) part-way
-> through the PTE setup, do it beforehand. This frees up
-> mcopy_atomic_install_ptes() from having to care about this accounting,
-> but it does mean we need to clean it up if we get a failure afterwards
-> (shmem_uncharge()).
-> 
-> We can *almost* use shmem_charge() to do this, reducing code
-> duplication. But, it does `inode->i_mapping->nrpages++`, which would
-> double-count since shmem_add_to_page_cache() also does this.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->  include/linux/userfaultfd_k.h |  5 ++++
->  mm/shmem.c                    | 52 +++++++----------------------------
->  mm/userfaultfd.c              | 25 ++++++++---------
->  3 files changed, 27 insertions(+), 55 deletions(-)
+In particular,
+- Mention that .kunitconfig is now in the build directory
+- Describe the use of --kunitconfig to specify a different config
+  framgent
+- Mention the split functionality (i.e., commands other than 'run')
+- Describe --raw_output and kunit.py parse
+- Mention the globbing support
+- Provide a quick overview of other options, including --build_dir and
+  --alltests
 
-Very nice, and it gets better.
+Note that this does overlap a little with the new running_tips page. I
+don't think it's a problem having both: this page is supposed to be a
+bit more of a reference, rather than a list of useful tips, so the fact
+that they both describe the same features isn't a problem.
 
-> 
-> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> index 794d1538b8ba..3e20bfa9ef80 100644
-> --- a/include/linux/userfaultfd_k.h
-> +++ b/include/linux/userfaultfd_k.h
-> @@ -53,6 +53,11 @@ enum mcopy_atomic_mode {
->  	MCOPY_ATOMIC_CONTINUE,
->  };
->  
-> +extern int mcopy_atomic_install_ptes(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+---
 
-mcopy_atomic_install_pte throughout as before.
+Adopted the changes from Daniel.
 
-> +				     struct vm_area_struct *dst_vma,
-> +				     unsigned long dst_addr, struct page *page,
-> +				     bool newly_allocated, bool wp_copy);
-> +
->  extern ssize_t mcopy_atomic(struct mm_struct *dst_mm, unsigned long dst_start,
->  			    unsigned long src_start, unsigned long len,
->  			    bool *mmap_changing, __u64 mode);
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 3f48cb5e8404..9b12298405a4 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -2376,10 +2376,8 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm,
->  	struct address_space *mapping = inode->i_mapping;
->  	gfp_t gfp = mapping_gfp_mask(mapping);
->  	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
-> -	spinlock_t *ptl;
->  	void *page_kaddr;
->  	struct page *page;
-> -	pte_t _dst_pte, *dst_pte;
->  	int ret;
->  	pgoff_t max_off;
->  
-> @@ -2389,8 +2387,10 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm,
->  
->  	if (!*pagep) {
->  		page = shmem_alloc_page(gfp, info, pgoff);
-> -		if (!page)
-> -			goto out_unacct_blocks;
-> +		if (!page) {
-> +			shmem_inode_unacct_blocks(inode, 1);
-> +			goto out;
-> +		}
->  
->  		if (!zeropage) {	/* COPY */
->  			page_kaddr = kmap_atomic(page);
-> @@ -2430,59 +2430,27 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm,
->  	if (ret)
->  		goto out_release;
->  
-> -	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
-> -	if (dst_vma->vm_flags & VM_WRITE)
-> -		_dst_pte = pte_mkwrite(pte_mkdirty(_dst_pte));
-> -	else {
-> -		/*
-> -		 * We don't set the pte dirty if the vma has no
-> -		 * VM_WRITE permission, so mark the page dirty or it
-> -		 * could be freed from under us. We could do it
-> -		 * unconditionally before unlock_page(), but doing it
-> -		 * only if VM_WRITE is not set is faster.
-> -		 */
-> -		set_page_dirty(page);
-> -	}
-> -
-> -	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
-> -
-> -	ret = -EFAULT;
-> -	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
-> -	if (unlikely(pgoff >= max_off))
-> -		goto out_release_unlock;
-> -
-> -	ret = -EEXIST;
-> -	if (!pte_none(*dst_pte))
-> -		goto out_release_unlock;
-> -
-> -	lru_cache_add(page);
-> -
->  	spin_lock_irq(&info->lock);
->  	info->alloced++;
->  	inode->i_blocks += BLOCKS_PER_PAGE;
->  	shmem_recalc_inode(inode);
->  	spin_unlock_irq(&info->lock);
->  
-> -	inc_mm_counter(dst_mm, mm_counter_file(page));
-> -	page_add_file_rmap(page, false);
-> -	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-> +	ret = mcopy_atomic_install_ptes(dst_mm, dst_pmd, dst_vma, dst_addr,
-> +					page, true, false);
-> +	if (ret)
-> +		goto out_release_uncharge;
->  
-> -	/* No need to invalidate - it was non-present before */
-> -	update_mmu_cache(dst_vma, dst_addr, dst_pte);
-> -	pte_unmap_unlock(dst_pte, ptl);
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20210416034036.797727-1-davidgow@google.com/
+- Mention that the default build directory is '.kunit' when discussing
+  '.kunitconfig' files.
+- Reword the discussion of 'CONFIG_KUNIT_ALL_TESTS' under '--alltests'
 
-In reviewing 4/9, I said to take out mcopy_atomic_install_pte()'s
-set_page_dirty().  Just call it here instead, before the unlock_page().
-You have an array of choices for how to write it:
 
-	if (!(dst_vma->vm_flags & VM_WRITE))
-		set_page_dirty(page);
-or
-	if (!(dst_vma->vm_flags & VM_WRITE))
-		SetPageDirty(page);
-or
-	set_page_dirty(page);
-or
-	SetPageDirty(page);
 
-Personally, I'd go for the last: this function has just modified the
-page, so it ought to mark it dirty: without second-guessing what
-mcopy_atomic_install_pte() might do to make that redundant in the
-VM_WRITE case. set_page_dirty() or SetPageDirty()? Some years ago
-I tended to favour the former for its preparatory PageDirty check;
-nowadays (on shmem) I favour the latter, to avoid the function call
-indirection which became more expensive with spectre+retpoline.
+ Documentation/dev-tools/kunit/kunit-tool.rst | 140 +++++++++++++++++--
+ 1 file changed, 132 insertions(+), 8 deletions(-)
 
->  	unlock_page(page);
->  	ret = 0;
->  out:
->  	return ret;
-> -out_release_unlock:
-> -	pte_unmap_unlock(dst_pte, ptl);
-> -	ClearPageDirty(page);
-> +out_release_uncharge:
+diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
+index 29ae2fee8123..4247b7420e3b 100644
+--- a/Documentation/dev-tools/kunit/kunit-tool.rst
++++ b/Documentation/dev-tools/kunit/kunit-tool.rst
+@@ -22,14 +22,19 @@ not require any virtualization support: it is just a regular program.
+ What is a .kunitconfig?
+ =======================
+ 
+-It's just a defconfig that kunit_tool looks for in the base directory.
+-kunit_tool uses it to generate a .config as you might expect. In addition, it
+-verifies that the generated .config contains the CONFIG options in the
+-.kunitconfig; the reason it does this is so that it is easy to be sure that a
+-CONFIG that enables a test actually ends up in the .config.
++It's just a defconfig that kunit_tool looks for in the build directory
++(``.kunit`` by default).  kunit_tool uses it to generate a .config as you might
++expect. In addition, it verifies that the generated .config contains the CONFIG
++options in the .kunitconfig; the reason it does this is so that it is easy to
++be sure that a CONFIG that enables a test actually ends up in the .config.
+ 
+-How do I use kunit_tool?
+-========================
++It's also possible to pass a separate .kunitconfig fragment to kunit_tool,
++which is useful if you have several different groups of tests you wish
++to run independently, or if you want to use pre-defined test configs for
++certain subsystems.
++
++Getting Started with kunit_tool
++===============================
+ 
+ If a kunitconfig is present at the root directory, all you have to do is:
+ 
+@@ -48,10 +53,129 @@ However, you most likely want to use it with the following options:
+ 
+ .. note::
+ 	This command will work even without a .kunitconfig file: if no
+-        .kunitconfig is present, a default one will be used instead.
++	.kunitconfig is present, a default one will be used instead.
++
++If you wish to use a different .kunitconfig file (such as one provided for
++testing a particular subsystem), you can pass it as an option.
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run --kunitconfig=fs/ext4/.kunitconfig
+ 
+ For a list of all the flags supported by kunit_tool, you can run:
+ 
+ .. code-block:: bash
+ 
+ 	./tools/testing/kunit/kunit.py run --help
++
++Configuring, Building, and Running Tests
++========================================
++
++It's also possible to run just parts of the KUnit build process independently,
++which is useful if you want to make manual changes to part of the process.
++
++A .config can be generated from a .kunitconfig by using the ``config`` argument
++when running kunit_tool:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py config
++
++Similarly, if you just want to build a KUnit kernel from the current .config,
++you can use the ``build`` argument:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py build
++
++And, if you already have a built UML kernel with built-in KUnit tests, you can
++run the kernel and display the test results with the ``exec`` argument:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py exec
++
++The ``run`` command which is discussed above is equivalent to running all three
++of these in sequence.
++
++All of these commands accept a number of optional command-line arguments. The
++``--help`` flag will give a complete list of these, or keep reading this page
++for a guide to some of the more useful ones.
++
++Parsing Test Results
++====================
++
++KUnit tests output their results in TAP (Test Anything Protocol) format.
++kunit_tool will, when running tests, parse this output and print a summary
++which is much more pleasant to read. If you wish to look at the raw test
++results in TAP format, you can pass the ``--raw_output`` argument.
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run --raw_output
++
++.. note::
++	The raw output from test runs may contain other, non-KUnit kernel log
++	lines.
++
++If you have KUnit results in their raw TAP format, you can parse them and print
++the human-readable summary with the ``parse`` command for kunit_tool. This
++accepts a filename for an argument, or will read from standard input.
++
++.. code-block:: bash
++
++	# Reading from a file
++	./tools/testing/kunit/kunit.py parse /var/log/dmesg
++	# Reading from stdin
++	dmesg | ./tools/testing/kunit/kunit.py parse
++
++This is very useful if you wish to run tests in a configuration not supported
++by kunit_tool (such as on real hardware, or an unsupported architecture).
++
++Filtering Tests
++===============
++
++It's possible to run only a subset of the tests built into a kernel by passing
++a filter to the ``exec`` or ``run`` commands. For example, if you only wanted
++to run KUnit resource tests, you could use:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run 'kunit-resource*'
++
++This uses the standard glob format for wildcards.
++
++Other Useful Options
++====================
++
++kunit_tool has a number of other command-line arguments which can be useful
++when adapting it to fit your environment or needs.
++
++Some of the more useful ones are:
++
++``--help``
++	Lists all of the available options. Note that different commands
++	(``config``, ``build``, ``run``, etc) will have different supported
++	options. Place ``--help`` before the command to list common options,
++	and after the command for options specific to that command.
++
++``--build_dir``
++	Specifies the build directory that kunit_tool will use. This is where
++	the .kunitconfig file is located, as well as where the .config and
++	compiled kernel will be placed. Defaults to ``.kunit``.
++
++``--make_options``
++	Specifies additional options to pass to ``make`` when compiling a
++	kernel (with the ``build`` or ``run`` commands). For example, to enable
++	compiler warnings, you can pass ``--make_options W=1``.
++
++``--alltests``
++        Builds a UML kernel with all config options enabled using ``make
++        allyesconfig``. This allows you to run as many tests as is possible,
++        but is very slow and prone to breakage as new options are added or
++        modified. In most cases, enabling all tests which have satisfied
++        dependencies by adding ``CONFIG_KUNIT_ALL_TESTS=1`` to your
++        .kunitconfig is preferable.
++
++There are several other options (and new ones are often added), so do check
++``--help`` if you're looking for something not mentioned here.
+-- 
+2.31.1.368.gbe11c130af-goog
 
-Given how 4/9 was, this did still need the ClearPageDirty()
-before delete_from_page_cache(), to prevent a warning.
-But not needed here if SPD is done just before unlock_page().
-
->  	delete_from_page_cache(page);
-> +	shmem_uncharge(inode, 1);
->  out_release:
->  	unlock_page(page);
->  	put_page(page);
-> -out_unacct_blocks:
-> -	shmem_inode_unacct_blocks(inode, 1);
->  	goto out;
->  }
->  #endif /* CONFIG_USERFAULTFD */
-> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> index 8df0438f5d6a..3f73ba0b99f0 100644
-> --- a/mm/userfaultfd.c
-> +++ b/mm/userfaultfd.c
-> @@ -51,18 +51,13 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
->  /*
->   * Install PTEs, to map dst_addr (within dst_vma) to page.
->   *
-> - * This function handles MCOPY_ATOMIC_CONTINUE (which is always file-backed),
-> - * whether or not dst_vma is VM_SHARED. It also handles the more general
-> - * MCOPY_ATOMIC_NORMAL case, when dst_vma is *not* VM_SHARED (it may be file
-> - * backed, or not).
-> - *
-> - * Note that MCOPY_ATOMIC_NORMAL for a VM_SHARED dst_vma is handled by
-> - * shmem_mcopy_atomic_pte instead.
-> + * This function handles both MCOPY_ATOMIC_NORMAL and _CONTINUE for both shmem
-> + * and anon, and for both shared and private VMAs.
->   */
-> -static int mcopy_atomic_install_ptes(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> -				     struct vm_area_struct *dst_vma,
-> -				     unsigned long dst_addr, struct page *page,
-> -				     bool newly_allocated, bool wp_copy)
-> +int mcopy_atomic_install_ptes(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> +			      struct vm_area_struct *dst_vma,
-> +			      unsigned long dst_addr, struct page *page,
-> +			      bool newly_allocated, bool wp_copy)
->  {
->  	int ret;
->  	pte_t _dst_pte, *dst_pte;
-> @@ -116,8 +111,12 @@ static int mcopy_atomic_install_ptes(struct mm_struct *dst_mm, pmd_t *dst_pmd,
->  	else
->  		page_add_new_anon_rmap(page, dst_vma, dst_addr, false);
->  
-> -	if (newly_allocated)
-> -		lru_cache_add_inactive_or_unevictable(page, dst_vma);
-> +	if (newly_allocated) {
-> +		if (vma_is_shmem(dst_vma) && vm_shared)
-> +			lru_cache_add(page);
-> +		else
-> +			lru_cache_add_inactive_or_unevictable(page, dst_vma);
-> +	}
-
-This change is not required, you'll be glad to hear. Take a look at
-lru_cache_add_inactive_or_unevictable() in mm/swap.c: it's a wrapper
-to set PageMlocked and do associated accounting (if appropriate) before
-doing the lru_cache_add(page).  And, strictly speaking, should have been
-used in shmem_mcopy_atomic_pte() all along.
-
-I say "strictly speaking" because it would be exceptional to find a page
-needing Mlock there, and not an error to delay that Mlock until sometime
-later, before reclaim.  Worth a sentence in the commit message,
-but not worth a "Fixes:" tag.
-
->  
->  	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
->  
-> -- 
-> 2.31.1.295.g9ea45b61b8-goog
