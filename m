@@ -2,98 +2,220 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 950C036303D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Apr 2021 15:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB2C3630C3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Apr 2021 16:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbhDQNXx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 17 Apr 2021 09:23:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52578 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236287AbhDQNXr (ORCPT
+        id S236367AbhDQO6p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 17 Apr 2021 10:58:45 -0400
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:18686 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236187AbhDQO6o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 17 Apr 2021 09:23:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618665800;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yw4f9VhSLXXjilbd0IdU8Ck10pIC4eDkCvAmZBVAhG8=;
-        b=EAAz0oigrhNBX55vcauKnN5Ba2Leto7RrLNRT95eETDpCEZeHtP3R5DlBD2gX01vvOh0qA
-        WlYDG82Bqv0hbPsN4l4PN+oeYQ2G4Og0UkQdwry12JxC27DH/mY48x9bDWW6aSYQmwU8kA
-        5PJ4GcEoZf8Q52ki2mm2qAcnShPaqJI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-550-ymfjIuh3M5KCSQSAW58qug-1; Sat, 17 Apr 2021 09:23:19 -0400
-X-MC-Unique: ymfjIuh3M5KCSQSAW58qug-1
-Received: by mail-ed1-f70.google.com with SMTP id o4-20020a0564024384b0290378d45ecf57so8705171edc.12
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Apr 2021 06:23:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yw4f9VhSLXXjilbd0IdU8Ck10pIC4eDkCvAmZBVAhG8=;
-        b=qTZXqt+3VEkNWG60uEOHahi3valmJeNecwT1gltDEnGt/zbvr3wqa3dzoJIjTwBy2V
-         RywTrTe7ZH2mbyAbRJ4prLR9qQgtE/nIhZpMyTIvJ0VIk3cCe+Y40RplnT428jZxhmqn
-         FiravDZe2vwkILJj3pD1HkY5JU2bsDjno27evCqx6OFrlkSQtTSdGjBhznHAH/Spv+vK
-         xbWEcPfqg6mK5QvuWi9uukWrYhtBm7n/4SFv+AzJCK72Rw74tI4n91AtwdHEKAVm76dk
-         oSFjefnIfXXiwWkfZW+RAo/Uv6RZJ4nfPEMi79IjatUS53Yc2lSU1A4txZW8SFByo623
-         ipuQ==
-X-Gm-Message-State: AOAM531Txuhc/UVMfTefw8xxskPtI9wnQgHZJp3TLjrUxNtqurs/hKLF
-        U93S3yI6TzCD+M+z2RHKMaDC+DoB8cwxOGgllzJA1LcVGlZfZNsOVwiWfYqJ8olsC7mlT8jQBPO
-        k6YPMW9Omc2a8aXLtxXYDhJDlca1Y
-X-Received: by 2002:a05:6402:30a3:: with SMTP id df3mr1872138edb.230.1618665797758;
-        Sat, 17 Apr 2021 06:23:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyL6auAjlxcSnKoUJ3m9fol+gzEWBwhJEWW+ep+Ef3WHVkpTmoMhEHYolklG1TwSW06UNPrbw==
-X-Received: by 2002:a05:6402:30a3:: with SMTP id df3mr1872123edb.230.1618665797611;
-        Sat, 17 Apr 2021 06:23:17 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id d21sm6393214ejz.14.2021.04.17.06.23.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Apr 2021 06:23:17 -0700 (PDT)
-Subject: Re: [PATCH v6 03/10] KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for
- timing
-To:     Yanan Wang <wangyanan55@huawei.com>,
-        Andrew Jones <drjones@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        wanghaibin.wang@huawei.com, yuzenghui@huawei.com
-References: <20210330080856.14940-1-wangyanan55@huawei.com>
- <20210330080856.14940-4-wangyanan55@huawei.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <1f892f30-1a72-1bcb-462f-b3d6f2bababb@redhat.com>
-Date:   Sat, 17 Apr 2021 15:23:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Sat, 17 Apr 2021 10:58:44 -0400
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 13HEw2OO025146;
+        Sat, 17 Apr 2021 23:58:03 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 13HEw2OO025146
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1618671483;
+        bh=rq83/8SBq3PTT68e2iZ8nPK/k8i2Myf6G/JabZ9UCXk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=m/rWDIRwqAiR3uRtMHvdo4iK0ZEtfemTx6HIx8y94PKkX7OBTU1yDrryQpL6TPrA8
+         uFs51PcQ70KRRoGCMdoLh5K8bQ7R9dA9RzYCNVb3klVCULT5DZD9SF47kLFWPW+PQQ
+         3O/0tbhVx/hS+SwtxNYF93PK0APUhC2l1/uhVWb2eyK6JZYntN7nhlP1GEUGDenlEy
+         fMNTWvWK+I4Tobket8dRDmJFbYv6L9IpDUxIWz0K0JSP6mNRjKe7LW+HrNBsyR3fYl
+         6K5Y6wZ8Eux2lzlq3ss9ExvwlA0rU56ht7TG4sV5hALt4+44iHxNOdVgQ1s0uNcZRc
+         IbeyyMbKeZNBg==
+X-Nifty-SrcIP: [209.85.216.46]
+Received: by mail-pj1-f46.google.com with SMTP id nk8so2378276pjb.3;
+        Sat, 17 Apr 2021 07:58:03 -0700 (PDT)
+X-Gm-Message-State: AOAM532kpT0/NFNgtMoWGm5zVkvD0/fpQxy3jTiVkl80BmK3prikS/uO
+        1QSzHbO2/MDT6b/4AiZoJIuRY9AN5vo9G8G4CoU=
+X-Google-Smtp-Source: ABdhPJxWkCXt7g4Du/Ih7Ckz0ekVFUITURxJW3giTvuAUEWpP1/B8Iy1Q/VxSxCEtVTt62gkLz8TXtY7EWsJFR/AdpY=
+X-Received: by 2002:a17:90a:1056:: with SMTP id y22mr14523757pjd.153.1618671481674;
+ Sat, 17 Apr 2021 07:58:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210330080856.14940-4-wangyanan55@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210416130051.239782-1-masahiroy@kernel.org>
+In-Reply-To: <20210416130051.239782-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 17 Apr 2021 23:57:23 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS90BwrVZzpoavVE8AE0D01Ei7BuQg1E5eObQR+o74fow@mail.gmail.com>
+Message-ID: <CAK7LNAS90BwrVZzpoavVE8AE0D01Ei7BuQg1E5eObQR+o74fow@mail.gmail.com>
+Subject: Re: [PATCH v2] tools: do not include scripts/Kbuild.include
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Janosch Frank <frankja@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf <bpf@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        kvm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 30/03/21 10:08, Yanan Wang wrote:
-> In addition to function of CLOCK_MONOTONIC, flag CLOCK_MONOTONIC_RAW can
-> also shield possiable impact of NTP, which can provide more robustness.
-> 
-> Suggested-by: Vitaly Kuznetsov<vkuznets@redhat.com>
-> Signed-off-by: Yanan Wang<wangyanan55@huawei.com>
-> Reviewed-by: Ben Gardon<bgardon@google.com>
-> Reviewed-by: Andrew Jones<drjones@redhat.com>
+On Fri, Apr 16, 2021 at 10:01 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Since commit d9f4ff50d2aa ("kbuild: spilt cc-option and friends to
+> scripts/Makefile.compiler"), some kselftests fail to build.
+>
+> The tools/ directory opted out Kbuild, and went in a different
+> direction. They copy any kind of files to the tools/ directory
+> in order to do whatever they want in their world.
+>
+> tools/build/Build.include mimics scripts/Kbuild.include, but some
+> tool Makefiles included the Kbuild one to import a feature that is
+> missing in tools/build/Build.include:
+>
+>  - Commit ec04aa3ae87b ("tools/thermal: tmon: use "-fstack-protector"
+>    only if supported") included scripts/Kbuild.include from
+>    tools/thermal/tmon/Makefile to import the cc-option macro.
+>
+>  - Commit c2390f16fc5b ("selftests: kvm: fix for compilers that do
+>    not support -no-pie") included scripts/Kbuild.include from
+>    tools/testing/selftests/kvm/Makefile to import the try-run macro.
+>
+>  - Commit 9cae4ace80ef ("selftests/bpf: do not ignore clang
+>    failures") included scripts/Kbuild.include from
+>    tools/testing/selftests/bpf/Makefile to import the .DELETE_ON_ERROR
+>    target.
+>
+>  - Commit 0695f8bca93e ("selftests/powerpc: Handle Makefile for
+>    unrecognized option") included scripts/Kbuild.include from
+>    tools/testing/selftests/powerpc/pmu/ebb/Makefile to import the
+>    try-run macro.
+>
+> Copy what they need into tools/build/Build.include, and make them
+> include it instead of scripts/Kbuild.include.
+>
+> Link: https://lore.kernel.org/lkml/86dadf33-70f7-a5ac-cb8c-64966d2f45a1@linux.ibm.com/
+> Fixes: d9f4ff50d2aa ("kbuild: spilt cc-option and friends to scripts/Makefile.compiler")
+> Reported-by: Janosch Frank <frankja@linux.ibm.com>
+> Reported-by: Christian Borntraeger <borntraeger@de.ibm.com>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I'm not sure about this one, is the effect visible?
 
-Paolo
+Applied to linux-kbuild.
 
+
+
+
+> ---
+>
+> Changes in v2:
+>   - copy macros to tools/build/BUild.include
+>
+>  tools/build/Build.include                     | 24 +++++++++++++++++++
+>  tools/testing/selftests/bpf/Makefile          |  2 +-
+>  tools/testing/selftests/kvm/Makefile          |  2 +-
+>  .../selftests/powerpc/pmu/ebb/Makefile        |  2 +-
+>  tools/thermal/tmon/Makefile                   |  2 +-
+>  5 files changed, 28 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/build/Build.include b/tools/build/Build.include
+> index 585486e40995..2cf3b1bde86e 100644
+> --- a/tools/build/Build.include
+> +++ b/tools/build/Build.include
+> @@ -100,3 +100,27 @@ cxx_flags = -Wp,-MD,$(depfile) -Wp,-MT,$@ $(CXXFLAGS) -D"BUILD_STR(s)=\#s" $(CXX
+>  ## HOSTCC C flags
+>
+>  host_c_flags = -Wp,-MD,$(depfile) -Wp,-MT,$@ $(KBUILD_HOSTCFLAGS) -D"BUILD_STR(s)=\#s" $(HOSTCFLAGS_$(basetarget).o) $(HOSTCFLAGS_$(obj))
+> +
+> +# output directory for tests below
+> +TMPOUT = .tmp_$$$$
+> +
+> +# try-run
+> +# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
+> +# Exit code chooses option. "$$TMP" serves as a temporary file and is
+> +# automatically cleaned up.
+> +try-run = $(shell set -e;              \
+> +       TMP=$(TMPOUT)/tmp;              \
+> +       mkdir -p $(TMPOUT);             \
+> +       trap "rm -rf $(TMPOUT)" EXIT;   \
+> +       if ($(1)) >/dev/null 2>&1;      \
+> +       then echo "$(2)";               \
+> +       else echo "$(3)";               \
+> +       fi)
+> +
+> +# cc-option
+> +# Usage: cflags-y += $(call cc-option,-march=winchip-c6,-march=i586)
+> +cc-option = $(call try-run, \
+> +       $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> +
+> +# delete partially updated (i.e. corrupted) files on error
+> +.DELETE_ON_ERROR:
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 044bfdcf5b74..17a5cdf48d37 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -include ../../../../scripts/Kbuild.include
+> +include ../../../build/Build.include
+>  include ../../../scripts/Makefile.arch
+>  include ../../../scripts/Makefile.include
+>
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index a6d61f451f88..5ef141f265bd 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> -include ../../../../scripts/Kbuild.include
+> +include ../../../build/Build.include
+>
+>  all:
+>
+> diff --git a/tools/testing/selftests/powerpc/pmu/ebb/Makefile b/tools/testing/selftests/powerpc/pmu/ebb/Makefile
+> index af3df79d8163..c5ecb4634094 100644
+> --- a/tools/testing/selftests/powerpc/pmu/ebb/Makefile
+> +++ b/tools/testing/selftests/powerpc/pmu/ebb/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -include ../../../../../../scripts/Kbuild.include
+> +include ../../../../../build/Build.include
+>
+>  noarg:
+>         $(MAKE) -C ../../
+> diff --git a/tools/thermal/tmon/Makefile b/tools/thermal/tmon/Makefile
+> index 59e417ec3e13..9db867df7679 100644
+> --- a/tools/thermal/tmon/Makefile
+> +++ b/tools/thermal/tmon/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  # We need this for the "cc-option" macro.
+> -include ../../../scripts/Kbuild.include
+> +include ../../build/Build.include
+>
+>  VERSION = 1.0
+>
+> --
+> 2.27.0
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20210416130051.239782-1-masahiroy%40kernel.org.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
