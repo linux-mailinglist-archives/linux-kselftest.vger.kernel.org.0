@@ -2,220 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB2C3630C3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Apr 2021 16:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44783363441
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Apr 2021 09:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236367AbhDQO6p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 17 Apr 2021 10:58:45 -0400
-Received: from conssluserg-04.nifty.com ([210.131.2.83]:18686 "EHLO
-        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236187AbhDQO6o (ORCPT
+        id S229745AbhDRHzT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 18 Apr 2021 03:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229605AbhDRHzS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 17 Apr 2021 10:58:44 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 13HEw2OO025146;
-        Sat, 17 Apr 2021 23:58:03 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 13HEw2OO025146
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1618671483;
-        bh=rq83/8SBq3PTT68e2iZ8nPK/k8i2Myf6G/JabZ9UCXk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=m/rWDIRwqAiR3uRtMHvdo4iK0ZEtfemTx6HIx8y94PKkX7OBTU1yDrryQpL6TPrA8
-         uFs51PcQ70KRRoGCMdoLh5K8bQ7R9dA9RzYCNVb3klVCULT5DZD9SF47kLFWPW+PQQ
-         3O/0tbhVx/hS+SwtxNYF93PK0APUhC2l1/uhVWb2eyK6JZYntN7nhlP1GEUGDenlEy
-         fMNTWvWK+I4Tobket8dRDmJFbYv6L9IpDUxIWz0K0JSP6mNRjKe7LW+HrNBsyR3fYl
-         6K5Y6wZ8Eux2lzlq3ss9ExvwlA0rU56ht7TG4sV5hALt4+44iHxNOdVgQ1s0uNcZRc
-         IbeyyMbKeZNBg==
-X-Nifty-SrcIP: [209.85.216.46]
-Received: by mail-pj1-f46.google.com with SMTP id nk8so2378276pjb.3;
-        Sat, 17 Apr 2021 07:58:03 -0700 (PDT)
-X-Gm-Message-State: AOAM532kpT0/NFNgtMoWGm5zVkvD0/fpQxy3jTiVkl80BmK3prikS/uO
-        1QSzHbO2/MDT6b/4AiZoJIuRY9AN5vo9G8G4CoU=
-X-Google-Smtp-Source: ABdhPJxWkCXt7g4Du/Ih7Ckz0ekVFUITURxJW3giTvuAUEWpP1/B8Iy1Q/VxSxCEtVTt62gkLz8TXtY7EWsJFR/AdpY=
-X-Received: by 2002:a17:90a:1056:: with SMTP id y22mr14523757pjd.153.1618671481674;
- Sat, 17 Apr 2021 07:58:01 -0700 (PDT)
+        Sun, 18 Apr 2021 03:55:18 -0400
+Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B0EC06174A
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Apr 2021 00:54:50 -0700 (PDT)
+Received: by mail-vk1-xa44.google.com with SMTP id k12so3568462vkn.7
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Apr 2021 00:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=/OqM7mf0jzASPYq9pdfi/zierK2DVmMzbNUVbhxyVGg=;
+        b=K6EFAnvBCow1D0F+z+uZkyuMaP+nqWKZp8U4qCM+unJhwjSYlrJrkPfrA5ctBJV1yu
+         nVDkZjSTGd9sO14d2FU98i/p8HKSirYNMJ9XSjmKse9cbdBtqMGEnYE4+/pByxGJnC9w
+         304hm5G3SsLv0fYf4sZpRENGw4rEfF12unKSSsQ+H8zuEfLVbQUggnWPuN5gyYsUCHzc
+         avuYs+SHIycZtwx0Zq+I/cNjaLFvbdyJiwKj1yaDZxw4jHdzR5QxQUUaYhkyW704MftE
+         IXEqO23mX31OlBgPlBivqGkcFhRveBrQHKsl8rAZ+3o0NSPF65O+qiavChAh+mbGsxwL
+         atFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=/OqM7mf0jzASPYq9pdfi/zierK2DVmMzbNUVbhxyVGg=;
+        b=g9OnUeEj+WXYM61LHdud0ZmQLx5YMsOqXpjnJPdJkixWaMyqDIv0jEv+klkp3Fa2d7
+         8ZyTpcj5TfI4AdzcnfZGkMVjzLDeR8MyCeVENVq4kLCnttKm1reCRvV9fl4T01V1E6RN
+         EGFAn1c8J1SqaScfuSTbo8YT2uST4j5mmHwPtAWHYCkzT46AdLApE7+NjL8fyVLoruJq
+         ss3iNxgZbNVngXwmYioIySRd4AlDq0CSahtWGoGme42F6flNS4vxRQm87gnFIG0S9UrL
+         Bem8RkDVJq/U6JqHGptFgfRohl/0CUPjL1k3IqUn30icF6PRAIB+roWzJFMM+cN29cOS
+         nU+w==
+X-Gm-Message-State: AOAM530e75A91sI7oilCjSzWkCSJEDWXB2tFP0LMt++y9ezQaKklzVIc
+        E0d2nV2xUTZgKRT6e1jgexJVtz0+5eA36hjLsbg=
+X-Google-Smtp-Source: ABdhPJytkL5rJR8XAezwINpayQmqeIagzNpwqCw8zM7uA4PcjSMKX9y++S6L9DIsYdCPmmCsOe2awMDtG5RuUdYHkWk=
+X-Received: by 2002:a1f:2c15:: with SMTP id s21mr12146846vks.8.1618732489609;
+ Sun, 18 Apr 2021 00:54:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210416130051.239782-1-masahiroy@kernel.org>
-In-Reply-To: <20210416130051.239782-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 17 Apr 2021 23:57:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS90BwrVZzpoavVE8AE0D01Ei7BuQg1E5eObQR+o74fow@mail.gmail.com>
-Message-ID: <CAK7LNAS90BwrVZzpoavVE8AE0D01Ei7BuQg1E5eObQR+o74fow@mail.gmail.com>
-Subject: Re: [PATCH v2] tools: do not include scripts/Kbuild.include
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Janosch Frank <frankja@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf <bpf@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        kvm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Networking <netdev@vger.kernel.org>
+Reply-To: drdavidgilbert2@gmail.com
+Sender: msangelayounglio013@gmail.com
+Received: by 2002:ab0:2984:0:0:0:0:0 with HTTP; Sun, 18 Apr 2021 00:54:48
+ -0700 (PDT)
+From:   Dr David Gilbert <drdavidgilberts2@gmail.com>
+Date:   Sun, 18 Apr 2021 00:54:48 -0700
+X-Google-Sender-Auth: cK3dHSWQSwHUNCy9K4y0X4mPzF8
+Message-ID: <CACJ7M4TGjSMAXeMURXpG4Dy_8LCHsgv=e+uAWjfhekmLzBHTpw@mail.gmail.com>
+Subject: Urgent.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 16, 2021 at 10:01 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Since commit d9f4ff50d2aa ("kbuild: spilt cc-option and friends to
-> scripts/Makefile.compiler"), some kselftests fail to build.
->
-> The tools/ directory opted out Kbuild, and went in a different
-> direction. They copy any kind of files to the tools/ directory
-> in order to do whatever they want in their world.
->
-> tools/build/Build.include mimics scripts/Kbuild.include, but some
-> tool Makefiles included the Kbuild one to import a feature that is
-> missing in tools/build/Build.include:
->
->  - Commit ec04aa3ae87b ("tools/thermal: tmon: use "-fstack-protector"
->    only if supported") included scripts/Kbuild.include from
->    tools/thermal/tmon/Makefile to import the cc-option macro.
->
->  - Commit c2390f16fc5b ("selftests: kvm: fix for compilers that do
->    not support -no-pie") included scripts/Kbuild.include from
->    tools/testing/selftests/kvm/Makefile to import the try-run macro.
->
->  - Commit 9cae4ace80ef ("selftests/bpf: do not ignore clang
->    failures") included scripts/Kbuild.include from
->    tools/testing/selftests/bpf/Makefile to import the .DELETE_ON_ERROR
->    target.
->
->  - Commit 0695f8bca93e ("selftests/powerpc: Handle Makefile for
->    unrecognized option") included scripts/Kbuild.include from
->    tools/testing/selftests/powerpc/pmu/ebb/Makefile to import the
->    try-run macro.
->
-> Copy what they need into tools/build/Build.include, and make them
-> include it instead of scripts/Kbuild.include.
->
-> Link: https://lore.kernel.org/lkml/86dadf33-70f7-a5ac-cb8c-64966d2f45a1@linux.ibm.com/
-> Fixes: d9f4ff50d2aa ("kbuild: spilt cc-option and friends to scripts/Makefile.compiler")
-> Reported-by: Janosch Frank <frankja@linux.ibm.com>
-> Reported-by: Christian Borntraeger <borntraeger@de.ibm.com>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+I am Dr. David Gilbert, the director of the accounts & auditing
+department at the ONLINE Banking Central Bank Of Burkina Faso
+Ouagadougou-west Africa, (CBB) With due respect, I have decided to
+contact you on a business transaction, I will like you to help me in
+receiving of this fund into your Bank Account through online banking,
+However; It's just my urgent need for foreign partner that made me to
+contact you for this transaction, In my department I discovered an
+abandoned sum of (US$8.5 Million dollars) in an account that belongs
+to one of our foreign Customer (MR. PAUL LOUIS from Paris, France )
+who died along time in 6th of December 2016 in car accident.
 
+I am afraid if this money stays in our bank without claim for long
+period of time, our government will step in because the Banking laws
+here does not allow such huge amount of money to stay dormant for more
+than (Six) 6 years, And you will receiving this money into your Bank
+account within 10 or 14 banking days.
 
-Applied to linux-kbuild.
+The Banking law and guideline here stipulates that if such money
+remained unclaimed after 5 or 6 years and above, the money will be
+transferred into the Bank treasury as unclaimed fund, I agree that 40%
+of this money will be for you as foreign partner in respect to the
+provision of a foreign account, and while 50%would be for me, then 10%
+will map out for the expenses.
 
+If you agree to my business proposal, further details of the transfer
+will be forwarded to you as soon as I receive your return mail, Make
+sure you keep this transaction as your top secret and make it
+confidential till we receive the fund into your bank account that you
+will provide to the Bank, Don't disclose it to anybody, because the
+secrecy of this transaction is as well as the success of it.
 
+I quickly inform you because the new system of payment policy has been
+adopted and it will be very easy and short listed for payment via
+Online Banking, So immediately I receive your update; I will direct
+you on how to contact ONLINE Central Banking through their E-mail
+address, where the funds will be approved by Central Bank of Burkina
+Faso and transfer into your bank account through online Banking and
+make assure you follow their online payment instruction to enable the
+transaction goes successful.
 
-
-> ---
->
-> Changes in v2:
->   - copy macros to tools/build/BUild.include
->
->  tools/build/Build.include                     | 24 +++++++++++++++++++
->  tools/testing/selftests/bpf/Makefile          |  2 +-
->  tools/testing/selftests/kvm/Makefile          |  2 +-
->  .../selftests/powerpc/pmu/ebb/Makefile        |  2 +-
->  tools/thermal/tmon/Makefile                   |  2 +-
->  5 files changed, 28 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/build/Build.include b/tools/build/Build.include
-> index 585486e40995..2cf3b1bde86e 100644
-> --- a/tools/build/Build.include
-> +++ b/tools/build/Build.include
-> @@ -100,3 +100,27 @@ cxx_flags = -Wp,-MD,$(depfile) -Wp,-MT,$@ $(CXXFLAGS) -D"BUILD_STR(s)=\#s" $(CXX
->  ## HOSTCC C flags
->
->  host_c_flags = -Wp,-MD,$(depfile) -Wp,-MT,$@ $(KBUILD_HOSTCFLAGS) -D"BUILD_STR(s)=\#s" $(HOSTCFLAGS_$(basetarget).o) $(HOSTCFLAGS_$(obj))
-> +
-> +# output directory for tests below
-> +TMPOUT = .tmp_$$$$
-> +
-> +# try-run
-> +# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
-> +# Exit code chooses option. "$$TMP" serves as a temporary file and is
-> +# automatically cleaned up.
-> +try-run = $(shell set -e;              \
-> +       TMP=$(TMPOUT)/tmp;              \
-> +       mkdir -p $(TMPOUT);             \
-> +       trap "rm -rf $(TMPOUT)" EXIT;   \
-> +       if ($(1)) >/dev/null 2>&1;      \
-> +       then echo "$(2)";               \
-> +       else echo "$(3)";               \
-> +       fi)
-> +
-> +# cc-option
-> +# Usage: cflags-y += $(call cc-option,-march=winchip-c6,-march=i586)
-> +cc-option = $(call try-run, \
-> +       $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
-> +
-> +# delete partially updated (i.e. corrupted) files on error
-> +.DELETE_ON_ERROR:
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 044bfdcf5b74..17a5cdf48d37 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -1,5 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -include ../../../../scripts/Kbuild.include
-> +include ../../../build/Build.include
->  include ../../../scripts/Makefile.arch
->  include ../../../scripts/Makefile.include
->
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index a6d61f451f88..5ef141f265bd 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -1,5 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> -include ../../../../scripts/Kbuild.include
-> +include ../../../build/Build.include
->
->  all:
->
-> diff --git a/tools/testing/selftests/powerpc/pmu/ebb/Makefile b/tools/testing/selftests/powerpc/pmu/ebb/Makefile
-> index af3df79d8163..c5ecb4634094 100644
-> --- a/tools/testing/selftests/powerpc/pmu/ebb/Makefile
-> +++ b/tools/testing/selftests/powerpc/pmu/ebb/Makefile
-> @@ -1,5 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -include ../../../../../../scripts/Kbuild.include
-> +include ../../../../../build/Build.include
->
->  noarg:
->         $(MAKE) -C ../../
-> diff --git a/tools/thermal/tmon/Makefile b/tools/thermal/tmon/Makefile
-> index 59e417ec3e13..9db867df7679 100644
-> --- a/tools/thermal/tmon/Makefile
-> +++ b/tools/thermal/tmon/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # We need this for the "cc-option" macro.
-> -include ../../../scripts/Kbuild.include
-> +include ../../build/Build.include
->
->  VERSION = 1.0
->
-> --
-> 2.27.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20210416130051.239782-1-masahiroy%40kernel.org.
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Yours Sincerely,
+Dr. David Gilbert.
+Central Bank.
