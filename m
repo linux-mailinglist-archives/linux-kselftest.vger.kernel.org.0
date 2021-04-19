@@ -2,87 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DA63648FB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Apr 2021 19:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620D23649C4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Apr 2021 20:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbhDSR0T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Apr 2021 13:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbhDSR0S (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Apr 2021 13:26:18 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFE8C06174A;
-        Mon, 19 Apr 2021 10:25:47 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 65-20020a9d03470000b02902808b4aec6dso28546593otv.6;
-        Mon, 19 Apr 2021 10:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3HIbRDGM28FCUvqMIhymTERSRguapYMbEYU1+dJ/ZIc=;
-        b=fcw7b3c29DAiAuGdNpjLnViMXqN9PcBoUWTNDOv6U9yivfrmkv5SmHKMwNWPy6gIoJ
-         pugpcOMLlAeEZzk+kLr8zRXfzNTY6ykqEO6dKmNMJQZHfN8REYYI0u5EfQzo1+8SOym9
-         auBSKaH6NROvRflPV/LHt323tBc5uQTqL/FojAF3GDte5va4Th5OxkrdYmTP2FyZoKbo
-         ZC/NkzARjzo6bxzMBc1uiohwyIWWCXYfF0lOy925RWfu0KWRjtaGNiS9XBxbwe7obauU
-         MQDabAueC2T3oM1p2C2diGIO7LHMsFsL5wY0HsMsRnmFBHqLHoh9H5H68nBnbo99yPJV
-         TmLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3HIbRDGM28FCUvqMIhymTERSRguapYMbEYU1+dJ/ZIc=;
-        b=lMV8z7fNJlYn9B4+M+JsboWJRyagfSl6RTSxEs/Db6yjIukREL9PqizeE70yYvK/7e
-         L47lfWluJ/1r/H1ipK6U5Ve4yW/jfUuuwAI4UdKvqglJ0kFlLOMO2gmcRe/dBESAz8nJ
-         C8yNmfS2FOIfdau+2A8m9pOq6NAxZDve2ch+JOithVY6EHhC3VIZIGUX4BJxL+rhyjPG
-         dmHnD6wufCJdxXZUNKb/739TB2BC1gPTEIqRJn1xWKuV09AYDtjvbXw06igOryk9Tzd/
-         tDwZnb6uYF4jA9MyNDDcAYTZClhrFdFqSioxDkV8Vl497+TFBEjjWjjoiPaVVYFlON+n
-         AP2Q==
-X-Gm-Message-State: AOAM531eYqFOl3UfiL/mhmdj9RluLcEajkTieSAE1k1lC13MtOfGwCCi
-        bWF25d38zpPIa0+ZWTK6jeTK915pSYG2v7Z4yFY=
-X-Google-Smtp-Source: ABdhPJyl4zUa7RWvSiIV1QPL9ksPdGp/q99v9hfGaP7WlLMJCuZk8a9XUEteNr93Eux7KoCVmjyMuxm9dNgUCHyCXsM=
-X-Received: by 2002:a9d:61c1:: with SMTP id h1mr1298796otk.173.1618853146965;
- Mon, 19 Apr 2021 10:25:46 -0700 (PDT)
+        id S240865AbhDSSZV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Apr 2021 14:25:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48482 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233908AbhDSSZU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 19 Apr 2021 14:25:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E6B9611EE;
+        Mon, 19 Apr 2021 18:24:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618856690;
+        bh=YxOWGUrr9Arsoda9fsVSCB7Wv4rVHn47U+RWA4JnEik=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Eqgm4LWDn1T4KMIdCqYE+gjNg+SANj+00vJAZ20BOHkbCOUFadrvAoCiSfOO0vRry
+         cRCtQoRNQsNXz5MFoOsMVaaP5Gd9/+08n7XDGr80HYzIgK9xevo+a/Sm9FXoJXZjTk
+         HaSQiBdLsidEyOo5u5kxW/yk+MUsmi2kU2J8JYlAQ+COKbIhejTh20dmKGVs5wB+PQ
+         r8kxDIacMWEYzyfTRPMIDb6vu58wBn7mPmvUnoXAazvSjaTq6lhypXTWnItI4BvjoA
+         TnqdMG0PIIF9yA1redNzhKMCU4jKQXwnIlYMZ9uunZfCkBYwZUzqLYKrPmPwfNOjpf
+         8Nh3U2mR23q7w==
+Date:   Mon, 19 Apr 2021 21:24:30 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH] secretmem: optimize page_is_secretmem()
+Message-ID: <YH3K3sBFbNFOxTV+@kernel.org>
+References: <20210419084218.7466-1-rppt@kernel.org>
+ <20210419112302.GX2531743@casper.infradead.org>
+ <YH1v4XVzfXC1dYND@kernel.org>
+ <20210419122156.GZ2531743@casper.infradead.org>
 MIME-Version: 1.0
-References: <20210415174619.51229-1-pctammela@mojatatu.com> <20210416213553.wclvjwbkxpvs6rfr@kafai-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20210416213553.wclvjwbkxpvs6rfr@kafai-mbp.dhcp.thefacebook.com>
-From:   Brian Vazquez <brianvv.kernel@gmail.com>
-Date:   Mon, 19 Apr 2021 10:25:36 -0700
-Message-ID: <CABCgpaXOWWPeZysFTnrqvYFn_mbKZjdvgX=SEn4-BvktwO9tsA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 0/3] add batched ops for percpu array
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Pedro Tammela <pctammela@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        David Verbeiren <david.verbeiren@tessares.net>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, Brian Vazquez <brianvv@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210419122156.GZ2531743@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sorry I missed  this.
-I don't recall why I didn't add the array percpu variant, but LGTM.
+On Mon, Apr 19, 2021 at 01:21:56PM +0100, Matthew Wilcox wrote:
+> On Mon, Apr 19, 2021 at 02:56:17PM +0300, Mike Rapoport wrote:
+> 
+> > > With that fixed, you'll have a head page that you can use for testing,
+> > > which means you don't need to test PageCompound() (because you know the
+> > > page isn't PageTail), you can just test PageHead().
+> > 
+> > I can't say I follow you here. page_is_secretmem() is intended to be a
+> > generic test, so I don't see how it will get PageHead() if it is called
+> > from other places.
+> 
+> static inline bool head_is_secretmem(struct page *head)
+> {
+> 	if (PageHead(head))
+> 		return false;
+> 	...
+> }
+> 
+> static inline bool page_is_secretmem(struct page *page)
+> {
+> 	if (PageTail(page))
+> 		return false;
+> 	return head_is_secretmem(page);
+> }
+> 
+> (yes, calling it head is a misnomer, because it's not necessarily a head,
+> it might be a base page, but until we have a name for pages which might
+> be a head page or a base page, it'll have to do ...)
 
-Acked-by: Brian Vazquez <brianvv@google.com>
+To me this looks less clean and readable and in the end we have an extra
+check for PG_Head if that won't get optimized away.
 
-On Fri, Apr 16, 2021 at 3:09 PM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> On Thu, Apr 15, 2021 at 02:46:16PM -0300, Pedro Tammela wrote:
-> > This patchset introduces batched operations for the per-cpu variant of
-> > the array map.
-> >
-> > It also removes the percpu macros from 'bpf_util.h'. This change was
-> > suggested by Andrii in a earlier iteration of this patchset.
-> >
-> > The tests were updated to reflect all the new changes.
-> Acked-by: Martin KaFai Lau <kafai@fb.com>
+Does not seem to me there would be a measurable difference, but if this is
+important for future conversion to folio I don't mind using
+{head,page}_is_secretmem.
+
+-- 
+Sincerely yours,
+Mike.
