@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C773661ED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Apr 2021 00:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E358436620F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Apr 2021 00:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbhDTWIz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Apr 2021 18:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S234266AbhDTWKw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Apr 2021 18:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbhDTWIt (ORCPT
+        with ESMTP id S234273AbhDTWIw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Apr 2021 18:08:49 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE481C06174A
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Apr 2021 15:08:16 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id o15-20020ac872cf0000b02901b358afcd96so11870767qtp.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Apr 2021 15:08:16 -0700 (PDT)
+        Tue, 20 Apr 2021 18:08:52 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CD4C061342
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Apr 2021 15:08:18 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id s8-20020a5b04480000b029049fb35700b9so13400589ybp.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Apr 2021 15:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=QUApq8UPhLnVOskfaex0nbVtMhAbaCtXI1eHuCuwzK0=;
-        b=go415UuMQZc9Zin/DWljWc8XS2D43ct53uUZqRvif920L9paMAYqU8DAomFyOgMzKy
-         BASyq6I6UBR+/DPIvFLjEmsDFvBoeoZ8ZRqAX2l59ua7fWNbLvGvrhRxeGBTRF0jfteS
-         70u3jBHIPKb/9Fp7miWXNnTGQ+RuVwC3KWRNfByHS7cGBdjkut5Ve2iijXJfv/YyRKEd
-         DFUg/i50NODl/vWSwTyUkQezOd3vv3pPewiisUw3YwuocrFoFn/VnpTq0HEB1N7vAnIO
-         z3HzvKXFWBQIEl7E2RHB32Ym368rCk4ECwgyz7C+Todyzdc2OTqQCeObDg2ncNld7X6n
-         3ZPA==
+        bh=q0uullLY89k5tjNP5bU3tD7YqwSbU41Jf2SRzlEhX2Q=;
+        b=sDY5fiUuvC0Rx6q5+VtW2pUXtXPN28Dpcq442NoR4o5Q7ncPbrml5nRuyZyd2xyYJO
+         zduDulUJHI6EWSx9HKsTUErWdKEUuFYZr+xR9rJNfE/H6mkaRUzEAjms+9w6kvxskGj1
+         Nur1rZu+ynGqrWgwuUXixlMLcKGLtjKwC07MFESZpxI3GRbWslF6J9bleAcqYL/P3N0L
+         ZVDSqYoudAuN+pF5eP6HhajJbpFGdoc4dcwVz8YQcclCijhrbExCMgqfkGczNNfmjgwI
+         IH7UY9zoBuqr4U01GJqpSd7amvWJNhrFWpBlHU26toc+qlCBox4xow+ryia3+5CyH0zV
+         a8lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=QUApq8UPhLnVOskfaex0nbVtMhAbaCtXI1eHuCuwzK0=;
-        b=CbJYAVwb5zQ2RhnwOut4dMtlKZwObaWa+iYydix7ExdO8/XgL6f3gbvrTX+lAB0MY9
-         l2ke+r0R7IBYHHyFUZWeRk1KZ23wh05rSo5aIRgqqBUxDzNndIAYuTbMDpmya11AqzCm
-         Pqs45WdqdfLI42h+Js8oqKb0IUTXzpvVm+G/y/GAE9j0BJx0FsjiG3mymcJpYcmIcdcY
-         bwdM+4ZrwRJ28F3Cv3UDFv0aI7gEbMRpMJcZob8vl75bbUijw/DucYh95n2bV0GhFqfT
-         lbLQTAY3E/Alxm4VQIaG8q/4j+ZFv6WvWFiG1znvdKo3P+sqvkQfqJE89f6FHXdH0kbX
-         hocA==
-X-Gm-Message-State: AOAM533e2jRN+91u8uxotDwF1lyBbqaJkqeviFwhFfQMqOzs/jU9YpO4
-        d9hMFjc7Aot7tBO2qqbYK66ECdzbHHccfsHU+v41
-X-Google-Smtp-Source: ABdhPJysgqqNiiBX50a+ZoqyZ0kCGo4tvrGC3ywuggc7gqC2iDuh1na9Bbn6xDQ61bim3z6mT/0+24eR3Btt/RkfuRrA
+        bh=q0uullLY89k5tjNP5bU3tD7YqwSbU41Jf2SRzlEhX2Q=;
+        b=e7K7zOGCMgYd2Hiq77PxosudkD3DMc2lENFr3NQ9o4nwYWUL6IvuAD4w3iFYX1Ee07
+         sBXxG2Bmk8nUMYoDvrV33cGLLkaU0T4Wl3KIW/Xottt4Q0bQPM0nwB3TwWakfzG0fAAl
+         R61nD9gL96lE7ovxGPRDXLuOFUWH6e/fq6lMOaGKviIrZpFY+RCPdVMsHDtEj9Ntbs37
+         idzV5euLqSMlr/uiZ+6jGd88nEEXaNztP34r8oUb43LdT/fUm6RG+CUejaWJrpbKm8nW
+         8m5X8fSa5MNJGF5Vc4zVUbQ0AQDNUO0/jwD74CdQ7KMl4vDc9xkEn6CGE8J6I+pRh46c
+         ZMmg==
+X-Gm-Message-State: AOAM532AglKscs4oaHAc4a6Sz3830yO1yVqZE+ZDqYJoe2cKZI+mgKW1
+        bnNIhcPIGvGmgeeHQyOBnNGv1Kh3C7dA4eLCMplQ
+X-Google-Smtp-Source: ABdhPJyA40/+Xy2TbPk+Aikm9mHvgdzpsA+t59tWYmD21etDLRSCFrGCxDix1NluigV9XQ6hkCLRuykY3gFHdMw/G/jI
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:c40e:ee2c:2ab8:257a])
- (user=axelrasmussen job=sendgmr) by 2002:a05:6214:18d:: with SMTP id
- q13mr4532886qvr.60.1618956496024; Tue, 20 Apr 2021 15:08:16 -0700 (PDT)
-Date:   Tue, 20 Apr 2021 15:07:58 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a25:b983:: with SMTP id
+ r3mr28386146ybg.238.1618956497914; Tue, 20 Apr 2021 15:08:17 -0700 (PDT)
+Date:   Tue, 20 Apr 2021 15:07:59 -0700
 In-Reply-To: <20210420220804.486803-1-axelrasmussen@google.com>
-Message-Id: <20210420220804.486803-5-axelrasmussen@google.com>
+Message-Id: <20210420220804.486803-6-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20210420220804.486803-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.31.1.368.gbe11c130af-goog
-Subject: [PATCH v4 04/10] userfaultfd/shmem: support minor fault registration
- for shmem
+Subject: [PATCH v4 05/10] userfaultfd/selftests: use memfd_create for shmem
+ test type
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrea Arcangeli <aarcange@redhat.com>,
@@ -79,128 +79,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch allows shmem-backed VMAs to be registered for minor faults.
-Minor faults are appropriately relayed to userspace in the fault path,
-for VMAs with the relevant flag.
+This is a preparatory commit. In the future, we want to be able to setup
+alias mappings for area_src and area_dst in the shmem test, like we do
+in the hugetlb_shared test. With a VMA obtained via
+mmap(MAP_ANONYMOUS | MAP_SHARED), it isn't clear how to do this.
 
-This commit doesn't hook up the UFFDIO_CONTINUE ioctl for shmem-backed
-minor faults, though, so userspace doesn't yet have a way to resolve
-such faults.
+So, mmap() with an fd, so we can create alias mappings. Use memfd_create
+instead of actually passing in a tmpfs path like hugetlb does, since
+it's more convenient / simpler to run, and works just as well.
 
-Acked-by: Peter Xu <peterx@redhat.com>
+Future commits will:
+
+1. Setup the alias mappings.
+2. Extend our tests to actually take advantage of this, to test new
+   userfaultfd behavior being introduced in this series.
+
+Also, a small fix in the area we're changing: when the hugetlb setup
+fails in main(), pass in the right argv[] so we actually print out the
+hugetlb file path.
+
+Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- fs/userfaultfd.c                 |  6 +++---
- include/uapi/linux/userfaultfd.h |  7 ++++++-
- mm/memory.c                      |  8 +++++---
- mm/shmem.c                       | 12 +++++++++++-
- 4 files changed, 25 insertions(+), 8 deletions(-)
+ tools/testing/selftests/vm/userfaultfd.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 14f92285d04f..9f3b8684cf3c 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1267,8 +1267,7 @@ static inline bool vma_can_userfault(struct vm_area_struct *vma,
- 	}
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 6339aeaeeff8..fc40831f818f 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -85,6 +85,7 @@ static bool test_uffdio_wp = false;
+ static bool test_uffdio_minor = false;
  
- 	if (vm_flags & VM_UFFD_MINOR) {
--		/* FIXME: Add minor fault interception for shmem. */
--		if (!is_vm_hugetlb_page(vma))
-+		if (!(is_vm_hugetlb_page(vma) || vma_is_shmem(vma)))
- 			return false;
- 	}
+ static bool map_shared;
++static int shm_fd;
+ static int huge_fd;
+ static char *huge_fd_off0;
+ static unsigned long long *count_verify;
+@@ -277,8 +278,11 @@ static void shmem_release_pages(char *rel_area)
  
-@@ -1941,7 +1940,8 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
- 	/* report all available features and ioctls to userland */
- 	uffdio_api.features = UFFD_API_FEATURES;
- #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
--	uffdio_api.features &= ~UFFD_FEATURE_MINOR_HUGETLBFS;
-+	uffdio_api.features &=
-+		~(UFFD_FEATURE_MINOR_HUGETLBFS | UFFD_FEATURE_MINOR_SHMEM);
- #endif
- 	uffdio_api.ioctls = UFFD_API_IOCTLS;
- 	ret = -EFAULT;
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index bafbeb1a2624..159a74e9564f 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -31,7 +31,8 @@
- 			   UFFD_FEATURE_MISSING_SHMEM |		\
- 			   UFFD_FEATURE_SIGBUS |		\
- 			   UFFD_FEATURE_THREAD_ID |		\
--			   UFFD_FEATURE_MINOR_HUGETLBFS)
-+			   UFFD_FEATURE_MINOR_HUGETLBFS |	\
-+			   UFFD_FEATURE_MINOR_SHMEM)
- #define UFFD_API_IOCTLS				\
- 	((__u64)1 << _UFFDIO_REGISTER |		\
- 	 (__u64)1 << _UFFDIO_UNREGISTER |	\
-@@ -185,6 +186,9 @@ struct uffdio_api {
- 	 * UFFD_FEATURE_MINOR_HUGETLBFS indicates that minor faults
- 	 * can be intercepted (via REGISTER_MODE_MINOR) for
- 	 * hugetlbfs-backed pages.
-+	 *
-+	 * UFFD_FEATURE_MINOR_SHMEM indicates the same support as
-+	 * UFFD_FEATURE_MINOR_HUGETLBFS, but for shmem-backed pages instead.
- 	 */
- #define UFFD_FEATURE_PAGEFAULT_FLAG_WP		(1<<0)
- #define UFFD_FEATURE_EVENT_FORK			(1<<1)
-@@ -196,6 +200,7 @@ struct uffdio_api {
- #define UFFD_FEATURE_SIGBUS			(1<<7)
- #define UFFD_FEATURE_THREAD_ID			(1<<8)
- #define UFFD_FEATURE_MINOR_HUGETLBFS		(1<<9)
-+#define UFFD_FEATURE_MINOR_SHMEM		(1<<10)
- 	__u64 features;
- 
- 	__u64 ioctls;
-diff --git a/mm/memory.c b/mm/memory.c
-index 4e358601c5d6..cc71a445c76c 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3972,9 +3972,11 @@ static vm_fault_t do_read_fault(struct vm_fault *vmf)
- 	 * something).
- 	 */
- 	if (vma->vm_ops->map_pages && fault_around_bytes >> PAGE_SHIFT > 1) {
--		ret = do_fault_around(vmf);
--		if (ret)
--			return ret;
-+		if (likely(!userfaultfd_minor(vmf->vma))) {
-+			ret = do_fault_around(vmf);
-+			if (ret)
-+				return ret;
-+		}
- 	}
- 
- 	ret = __do_fault(vmf);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index b72c55aa07fc..30c0bb501dc9 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1785,7 +1785,7 @@ static int shmem_swapin_page(struct inode *inode, pgoff_t index,
-  * vm. If we swap it in we mark it dirty since we also free the swap
-  * entry since a page cannot live in both the swap and page cache.
-  *
-- * vmf and fault_type are only supplied by shmem_fault:
-+ * vma, vmf, and fault_type are only supplied by shmem_fault:
-  * otherwise they are NULL.
-  */
- static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
-@@ -1820,6 +1820,16 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
- 
- 	page = pagecache_get_page(mapping, index,
- 					FGP_ENTRY | FGP_HEAD | FGP_LOCK, 0);
+ static void shmem_allocate_area(void **alloc_area)
+ {
++	unsigned long offset =
++		alloc_area == (void **)&area_src ? 0 : nr_pages * page_size;
 +
-+	if (page && vma && userfaultfd_minor(vma)) {
-+		if (!xa_is_value(page)) {
-+			unlock_page(page);
-+			put_page(page);
-+		}
-+		*fault_type = handle_userfault(vmf, VM_UFFD_MINOR);
-+		return 0;
-+	}
-+
- 	if (xa_is_value(page)) {
- 		error = shmem_swapin_page(inode, index, &page,
- 					  sgp, gfp, vma, fault_type);
+ 	*alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
+-			   MAP_ANONYMOUS | MAP_SHARED, -1, 0);
++			   MAP_SHARED, shm_fd, offset);
+ 	if (*alloc_area == MAP_FAILED)
+ 		err("mmap of memfd failed");
+ }
+@@ -1448,6 +1452,16 @@ int main(int argc, char **argv)
+ 			err("Open of %s failed", argv[4]);
+ 		if (ftruncate(huge_fd, 0))
+ 			err("ftruncate %s to size 0 failed", argv[4]);
++	} else if (test_type == TEST_SHMEM) {
++		shm_fd = memfd_create(argv[0], 0);
++		if (shm_fd < 0)
++			err("memfd_create");
++		if (ftruncate(shm_fd, nr_pages * page_size * 2))
++			err("ftruncate");
++		if (fallocate(shm_fd,
++			      FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0,
++			      nr_pages * page_size * 2))
++			err("fallocate");
+ 	}
+ 	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+ 	       nr_pages, nr_pages_per_cpu);
 -- 
 2.31.1.368.gbe11c130af-goog
 
