@@ -2,32 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 620D23649C4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Apr 2021 20:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C033659A6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Apr 2021 15:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240865AbhDSSZV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Apr 2021 14:25:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48482 "EHLO mail.kernel.org"
+        id S232303AbhDTNRA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Apr 2021 09:17:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32900 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233908AbhDSSZU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Apr 2021 14:25:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E6B9611EE;
-        Mon, 19 Apr 2021 18:24:36 +0000 (UTC)
+        id S231422AbhDTNQ7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Apr 2021 09:16:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DB92561155;
+        Tue, 20 Apr 2021 13:16:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618856690;
-        bh=YxOWGUrr9Arsoda9fsVSCB7Wv4rVHn47U+RWA4JnEik=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Eqgm4LWDn1T4KMIdCqYE+gjNg+SANj+00vJAZ20BOHkbCOUFadrvAoCiSfOO0vRry
-         cRCtQoRNQsNXz5MFoOsMVaaP5Gd9/+08n7XDGr80HYzIgK9xevo+a/Sm9FXoJXZjTk
-         HaSQiBdLsidEyOo5u5kxW/yk+MUsmi2kU2J8JYlAQ+COKbIhejTh20dmKGVs5wB+PQ
-         r8kxDIacMWEYzyfTRPMIDb6vu58wBn7mPmvUnoXAazvSjaTq6lhypXTWnItI4BvjoA
-         TnqdMG0PIIF9yA1redNzhKMCU4jKQXwnIlYMZ9uunZfCkBYwZUzqLYKrPmPwfNOjpf
-         8Nh3U2mR23q7w==
-Date:   Mon, 19 Apr 2021 21:24:30 +0300
+        s=k20201202; t=1618924588;
+        bh=qhR1fpCqAsT1S7eszhL+8DGn+IohPdIv6ZmfP8rMA54=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KUF557NhH5l1t2K0OYATzazaNCSAUMl7v8OSvEA6BB3++H9JFEiE0m47Qe20TLsyA
+         Mg+bE3SvdjK4KbC0KDgBwkghXH1+SdNl7XPGJXfOGWL6rieURUdgwykpH/YpDMQBPG
+         rKBgMRdJAVDnOl31RwFKVeNmayE39KOv5tA+vfGakvNDvdEpQ+NJsJgelSxLbVraWI
+         bPMda19jc0MXqs60Xcjv5yfm6A6g9IJPG8oGUJGNTfLxnnkT0YtwmG/da8/HHsmN7t
+         JmXlm7VjlV/79DJvWlsaprQDngcrZLv3QMmwPhKSGYJzeKATbw0tpP/7J7LXi7vTV1
+         xuJcRy9ZW0OEg==
 From:   Mike Rapoport <rppt@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -39,10 +37,12 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
         James Bottomley <jejb@linux.ibm.com>,
         "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
         Matthew Garrett <mjg59@srcf.ucam.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Michal Hocko <mhocko@suse.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -59,57 +59,41 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH] secretmem: optimize page_is_secretmem()
-Message-ID: <YH3K3sBFbNFOxTV+@kernel.org>
-References: <20210419084218.7466-1-rppt@kernel.org>
- <20210419112302.GX2531743@casper.infradead.org>
- <YH1v4XVzfXC1dYND@kernel.org>
- <20210419122156.GZ2531743@casper.infradead.org>
+        x86@kernel.org
+Subject: [PATCH v2 0/2] secretmem: optimize page_is_secretmem()
+Date:   Tue, 20 Apr 2021 16:16:07 +0300
+Message-Id: <20210420131611.8259-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210419122156.GZ2531743@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 19, 2021 at 01:21:56PM +0100, Matthew Wilcox wrote:
-> On Mon, Apr 19, 2021 at 02:56:17PM +0300, Mike Rapoport wrote:
-> 
-> > > With that fixed, you'll have a head page that you can use for testing,
-> > > which means you don't need to test PageCompound() (because you know the
-> > > page isn't PageTail), you can just test PageHead().
-> > 
-> > I can't say I follow you here. page_is_secretmem() is intended to be a
-> > generic test, so I don't see how it will get PageHead() if it is called
-> > from other places.
-> 
-> static inline bool head_is_secretmem(struct page *head)
-> {
-> 	if (PageHead(head))
-> 		return false;
-> 	...
-> }
-> 
-> static inline bool page_is_secretmem(struct page *page)
-> {
-> 	if (PageTail(page))
-> 		return false;
-> 	return head_is_secretmem(page);
-> }
-> 
-> (yes, calling it head is a misnomer, because it's not necessarily a head,
-> it might be a base page, but until we have a name for pages which might
-> be a head page or a base page, it'll have to do ...)
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-To me this looks less clean and readable and in the end we have an extra
-check for PG_Head if that won't get optimized away.
+Hi,
 
-Does not seem to me there would be a measurable difference, but if this is
-important for future conversion to folio I don't mind using
-{head,page}_is_secretmem.
+This is an updated version of page_is_secretmem() changes.
+This is based on v5.12-rc7-mmots-2021-04-15-16-28.
+
+@Andrew, please let me know if you'd like me to rebase it differently or
+resend the entire set.
+
+v2:
+* move the check for secretmem page in gup_pte_range after we get a
+  reference to the page, per Matthew.
+
+Mike Rapoport (2):
+  secretmem/gup: don't check if page is secretmem without reference
+  secretmem: optimize page_is_secretmem()
+
+ include/linux/secretmem.h | 26 +++++++++++++++++++++++++-
+ mm/gup.c                  |  6 +++---
+ mm/secretmem.c            | 12 +-----------
+ 3 files changed, 29 insertions(+), 15 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+2.28.0
+
