@@ -2,253 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE80366C9C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Apr 2021 15:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94D6366EC4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Apr 2021 17:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241823AbhDUNVX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Apr 2021 09:21:23 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:49955 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241701AbhDUNUD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Apr 2021 09:20:03 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20210421131928euoutp0299efc448499a201be04a6d71568759c2~34hSDPhks2939229392euoutp02Z
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Apr 2021 13:19:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20210421131928euoutp0299efc448499a201be04a6d71568759c2~34hSDPhks2939229392euoutp02Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1619011168;
-        bh=Ot7cKGhTeJnugaHB2Siy39xRoc8Vv0ZeioxMP3AeOZk=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=bo8eBtJfgGO4D6orDaJuemMeeEnpKoszRFrW6ZVzaLBOn6vs9oKdRVPi6B6lww0Hq
-         6hXQSdn8i9mDqp3Qj5gz+AEoG0SyHk+I+Z3Bl/FbSWjA8U5jFxDtNQWa9ItLX6Wlh7
-         pw2fwzm+fXyqv7kcj3Jk++mIxcXvZ+CI4J5VJrx0=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20210421131927eucas1p239ff193b5fbcc096be2727a577ef0339~34hROYlPf2160021600eucas1p2I;
-        Wed, 21 Apr 2021 13:19:27 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 91.72.09444.F5620806; Wed, 21
-        Apr 2021 14:19:27 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20210421131927eucas1p1d279d753b66b18836beaa4e522427160~34hQnisY81054710547eucas1p1c;
-        Wed, 21 Apr 2021 13:19:27 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210421131927eusmtrp1970bf2f206e75b9869cc91d8c56ad61a~34hQmVok41876118761eusmtrp1Z;
-        Wed, 21 Apr 2021 13:19:27 +0000 (GMT)
-X-AuditID: cbfec7f4-dd5ff700000024e4-c3-6080265fe6a5
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id B7.8A.08696.F5620806; Wed, 21
-        Apr 2021 14:19:27 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20210421131925eusmtip2f9a903de11ac4c1b8dce99822f4f873d~34hPMgC2u1676516765eusmtip2l;
-        Wed, 21 Apr 2021 13:19:25 +0000 (GMT)
-Subject: Re: [PATCH v4 05/10] signal: Introduce TRAP_PERF si_code and
- si_perf to siginfo
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
+        id S243834AbhDUPIC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Apr 2021 11:08:02 -0400
+Received: from mail-eopbgr750043.outbound.protection.outlook.com ([40.107.75.43]:7844
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243835AbhDUPIB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 21 Apr 2021 11:08:01 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hodxI244DlnMlsd4U7em2E++AiS1m5luIMEOIhwG5G3yolHZZtucz9uQsDHVP8A/36AB4soPVuud29QDAAzzfVIw3GyyaTKZxEHhexKusp22nvl1RsNg8cH8E4iGQpEHshvXDaNg0qd61blzxUBB19lGFzAZBG1oUUbeJYJ17RoONA9HHetrQxAG3zE4v2/y3Hv1sKPHy+cm4FpzbQofE7Emoj5k4Uhwpgyz/nK+YhWe5nyAz1emiwfhzg0fz6kCj3PRG7cj1tjDvUKfT1yeh7f9GVccaf2DEj8BRqltxhapJjH1d43m8q3R3ydSjScJqxNYHoI5xY5Cji6WMJosWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1Hz6XlcExdhxkeP7H5H8MIczXGLVYlD+EsooV8ep78o=;
+ b=eeYhHVsgU+bG1hn4SwPDoTtS8xJ3vZubaljUxum792+0CTqoS1k1kkyF8bxX6nTNr6zioxh34UfA4UxlNmOM8QCXer9csIA+Z8cWNkMZld9sR7nHjIB8Aljg9eNn5OLrAZC4ULn9Vha4fiB65TJ3gMwlJr/Op4CdxnmUs46DrC26LDqATimykoEGjl27rP+U3ZRF90+nZdSmfTBCt8sE31v1U/ry0AeA5+Cye504g15gPytn7v+9GXxNkSE84hEA9BnGdc6RL56iw9jyeshdeC4XzJD+EC2ezbAyLLjxRg0uAvRybIDFPUq92L5/xZHhEgX+1BpUjHVUlyLRRkG1pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1Hz6XlcExdhxkeP7H5H8MIczXGLVYlD+EsooV8ep78o=;
+ b=QvibK0bQIlXEToEuSGxbc10I80vo/GX+weKlGanL+TbQDObvT6PXFjKAjnztmONGyzt8BnAR4r4KQ1bTQ+yyaJiN3QqjSa6USlqpnyaMrX2cpuE5x2In7aaQRwZ72JVG8Mgas5cnh+mbXLFZLHIKA5hrgFMlM6M6iXcU3xk7WXMh2DpKpCCB4dZWSqcZvANNjlUwZQbBW9co7o0u+sDdvH8Hx68ZDfjIp6s4h1QJ1mfVE5bJhJROh9nkHsROMyA0nKGSRlk5ubrY5fUBu+0FslGKsgsGBKXyQCYnVnLEesAGUd+AN6LMr7lYNomOQoyfX1XyYw2lame3SJ8rXS26zw==
+Received: from MWHPR20CA0048.namprd20.prod.outlook.com (2603:10b6:300:ed::34)
+ by MWHPR12MB1519.namprd12.prod.outlook.com (2603:10b6:301:d::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.21; Wed, 21 Apr
+ 2021 15:07:25 +0000
+Received: from CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:ed:cafe::1e) by MWHPR20CA0048.outlook.office365.com
+ (2603:10b6:300:ed::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.20 via Frontend
+ Transport; Wed, 21 Apr 2021 15:07:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; google.com; dkim=none (message not signed)
+ header.d=none;google.com; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ CO1NAM11FT052.mail.protection.outlook.com (10.13.174.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4065.21 via Frontend Transport; Wed, 21 Apr 2021 15:07:25 +0000
+Received: from [10.26.49.10] (172.20.145.6) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 21 Apr
+ 2021 15:07:15 +0000
+Subject: Re: [PATCH v4 05/10] signal: Introduce TRAP_PERF si_code and si_perf
+ to siginfo
+To:     Marco Elver <elver@google.com>, <peterz@infradead.org>,
+        <alexander.shishkin@linux.intel.com>, <acme@kernel.org>,
+        <mingo@redhat.com>, <jolsa@redhat.com>, <mark.rutland@arm.com>,
+        <namhyung@kernel.org>, <tglx@linutronix.de>
+CC:     <glider@google.com>, <viro@zeniv.linux.org.uk>, <arnd@arndb.de>,
+        <christian@brauner.io>, <dvyukov@google.com>, <jannh@google.com>,
+        <axboe@kernel.dk>, <mascasa@google.com>, <pcc@google.com>,
+        <irogers@google.com>, <oleg@redhat.com>,
+        <kasan-dev@googlegroups.com>, <linux-arch@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>, <linux-kselftest@vger.kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <cf6ed5cd-3202-65ce-86bc-6f1eba1b7d17@samsung.com>
-Date:   Wed, 21 Apr 2021 15:19:25 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
-        Gecko/20100101 Thunderbird/78.9.1
-MIME-Version: 1.0
-In-Reply-To: <CANpmjNM6bQpc49teN-9qQhCXoJXaek5stFGR2kPwDroSFBc0fw@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxbZRTGfe+9vb3gOi4F01dGcNbIIrpSnH+86iAaTLyCMxITsgwTKOOG
-        kgFr+jEYH0tlAUuHwHCGrQEGUgUZG6UUNhAoA6HrNjosQT4sQxyBwVYYgaHMUKW7Tvnvd855
-        nvc5J3kpXNhKBlFpmWpWmSlLF5O+RMfQ5p39iaHaJGn1QynS371GIp35Ag9tVQzx0aXpMhK1
-        nm/hoS+WX0Hls0V8VHT7Kg/NT/Vg6MvVHhzVFq7zkdO+Hw0Ob2GocX4GQ7quxwTq7rETaLSr
-        ikSVrhUSfTf+M4bqr/fxkLOvFkMF37cTqN1aCFCZa5xEtq/6MNRm/gZHd7ZsPPSn6R7vvWCm
-        uaYZMH89qQDMVvUqztSaNUz3WTvJtDWGMaPDGsbcVEwyyw4Hn+kf0AGmxh7HrPSOkUyppQkw
-        a+YQxjznxj71O+J7MIVNTzvBKsOjknzlg+d+AoqW8Ozfq0gtsO7TAx8K0m/Bwsll0stCuhHA
-        m5ZsjtcBnDC+rAe+27wG4LxuhffMYF77gc8NGgB8cG6T5IpVAI3DC8CrCqCPwAHHCO7lQFoM
-        3fdKca8Ip8coqOscwLwDko6Aerf+abaAjoIL97u2n6Uogn4Vts+e9LZfoJPhpPNvnJP4Q/uF
-        OcLLPnQcNPcNPbXi9EvwqrsK51gEp+YuYt4sSHf6wo2hcZxb+wNY2OcEHAfAJZuFz3EwvPV1
-        CcEZTgM467jM54oSAEcLzv/reBe6HE9I73Y4/Rps6Qrn2u/DJZMB87YhvRtOuP25JXbDio5K
-        nGsLoK5IyKlDocF25b/Y6yNOvByIDTtOM+w4x7DjHMP/ubWAaAIiVqPKSGVVb2ayWRKVLEOl
-        yUyVHD2eYQbbv/qWx7Z+DTQsrUr6AUaBfgApXBwomMnPSxIKUmQnc1jl8USlJp1V9YM9FCEW
-        CZItzYlCOlWmZo+xrIJVPptilE+QFpNQfpESa152wSfUj6eOHj5dXVOc/bi+bEofaY045Ejs
-        aY098OLl5+8uFrQtOZ3GlF5sUU6qlU1xE0ASjf+W9NEhR6Wi1+eNBT19Qh1jsSbUB0+XV6fx
-        YxKKD+RO5kZ4NuwrB2OmPWHM5w9NdSGHQ6T5Nk1eeoPJZPw1flHxS9jFY6GLM68/R2u1zkcN
-        o3vlAQmiwY2ZK7dR3N4od11+8XpdMinMHZNKc4Iii+5nRY/5CURnrJ+pjZcqH5yRv/3oQ7Ik
-        XhEoir05Hg+WxlzI1aQgbtzwSHP+6Bg5a+vaxStd/nbXns3ejy0zsZ53sjpDtSnRgOr2d5j2
-        GU9pcpGYUMllEWG4UiX7Bz8zoblEBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKKsWRmVeSWpSXmKPExsVy+t/xe7rxag0JBj9XsVt03dvBZtGxaSar
-        xd9Jx9gtVt/tZ7PYOGM9q0XjO2WLCQ/b2C3azmxntXh2ay+TRfvHvcwWC1q/sFtcOqlrcfTs
-        XyaLFc/uM1l07PrKYrFn70kWi8u75rBZTL/zns1i6fWLTBaLDx5gtbh0YAGTRdOyrSwWW/e3
-        Mlr037nOZnG89wCTxeZNU5ktzv89zmrxY8NjVgcZjzXz1jB6/P41idHj79yPzB4LNpV67Jl4
-        ks1j8wotj8tnSz02repk83h37hy7x6HDHYwe804Gerzfd5XNo2/LKkaPz5vkPDY9ecsUwB+l
-        Z1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRvZ5OSmpNZllqkb5egl3F0yhHG
-        gvX6FY/msDUw7lfvYuTkkBAwkdj0eSV7FyMXh5DAUkaJrVeXMEIkZCROTmtghbCFJf5c62KD
-        KHrPKHFr7Qs2kISwQJTEpb/vmEFsEQElibeP+5hBipgFbnJILNn5hAmiYzqrxJpZH8A62AQM
-        JbredoHZvAJ2Es9f7ALazcHBIqAqsfVhJUhYVCBJ4t7llcwQJYISJ2c+YQGxOQUCJTYdOAbW
-        yixgJjFv80NmCFteYvvbOVC2uMStJ/OZJjAKzULSPgtJyywkLbOQtCxgZFnFKJJaWpybnlts
-        pFecmFtcmpeul5yfu4kRmJ62Hfu5ZQfjylcf9Q4xMnEwHmKU4GBWEuG9X1uTIMSbklhZlVqU
-        H19UmpNafIjRFOidicxSosn5wASZVxJvaGZgamhiZmlgamlmrCTOa3JkTbyQQHpiSWp2ampB
-        ahFMHxMHp1QDE6PEzcfOpQEbemqLNNrkwriZhab/uSs7Q3hKj4JPFNMS2YVbnbMyKsQM/yb0
-        ZXpdV0yaJ50cvuT2nRVXdk9LdpY8Yedd4bVpmcTDQPHCNwGXy92mvSllz34vrfPprva/kOeq
-        zkdCuLJkJOX2r5x8zubXUvfUj4/nb7O0umD2teSWW74zf5ieXui8QyK/1wZHG1220Vsu2mOz
-        /I59JL+38ZZPr3vOHiw4c8egYXKHocuv5cxrpzMZs+cvWRFm/f3/pA7Fl1G7Fnj6cxWmrwmw
-        jub7nijC8lpT1HZSHNeJeLez17c9WfBgdaN8soGJs+jpWVIs2nI++n1yPEX2m+75Lt7ZFrxp
-        s0jg09mGrZeVWIozEg21mIuKEwFIrZpe2AMAAA==
-X-CMS-MailID: 20210421131927eucas1p1d279d753b66b18836beaa4e522427160
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20210420212618eucas1p102b427d1af9c682217dfe093f3eac3e8
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20210420212618eucas1p102b427d1af9c682217dfe093f3eac3e8
+        linux-tegra <linux-tegra@vger.kernel.org>
 References: <20210408103605.1676875-1-elver@google.com>
-        <CGME20210420212618eucas1p102b427d1af9c682217dfe093f3eac3e8@eucas1p1.samsung.com>
-        <20210408103605.1676875-6-elver@google.com>
-        <1fbf3429-42e5-0959-9a5c-91de80f02b6a@samsung.com>
-        <CANpmjNM8wEJngK=J8Lt9npkZgrSWoRsqkdajErWEoY_=M1GW5A@mail.gmail.com>
-        <43f8a3bf-34c5-0fc9-c335-7f92eaf23022@samsung.com>
-        <dccaa337-f3e5-08e4-fe40-a603811bb13e@samsung.com>
-        <CANpmjNP6-yKpxHqYFiA8Up-ujBQaeP7xyq1BrsV-NqMjJ-uHAQ@mail.gmail.com>
-        <740077ce-efe1-b171-f807-bc5fd95a32ba@samsung.com>
-        <f114ff4a-6612-0935-12ac-0e2ac18d896c@samsung.com>
-        <CANpmjNM6bQpc49teN-9qQhCXoJXaek5stFGR2kPwDroSFBc0fw@mail.gmail.com>
+ <20210408103605.1676875-6-elver@google.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <81254854-aa22-fab1-fc6f-22716b7c2732@nvidia.com>
+Date:   Wed, 21 Apr 2021 16:07:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+MIME-Version: 1.0
+In-Reply-To: <20210408103605.1676875-6-elver@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.145.6]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ec883513-a740-4be9-fa1c-08d904d72c58
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1519:
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1519E77813E2DDEDC4D904C5D9479@MWHPR12MB1519.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1148;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZoEHylcQurSelIXMAse60Pl6Vp6bWaXID/qD8iT4o2P7RDDj09dep7ybG0PGNTIPZtrO9bL8NPbghZ0enkUWyMBZHN91/+9n3JH8RjMdG0FpCQpYFunme/rAmMpWYWbpFgSVoLlp38AdziHzW+l++RuDY6RB+1NZNDrETm9xjiQskn+FvWbBj8tGw+awC08bZivrPCGC+N4yeGJ0nRtHW/jK7VZEd96vE1vusNKT2fFsXrIAvJ5+0hgJzCt0s3ethMw3JY+W2fpjSfxvUVI+XaNFFVZDHe/AgqpzSx/ujjyxX/hlP63lBz5WH84Y7nSKUF0hs0gksFl/oK/JeQjbNcPz4L97lbwW0md54jS6PlF1dc6X9gWV37D5ZBiS4RgxK4w4M05sU5b7Ve7RHZJeZHBUPvhHkmIAycLfi1SgP/yQ1kpZrDowPsp1LLvwso8WrtKUV29Z9oqHLO7JxPgKj5QoTeTDn8uDOdSLg3K+WSFpuul4IJcOPqfOEO2NLp6sR4jA50jUqBjNH8Zxf4rmb1BfuK9k7bzCnZCYm6JrX0qniphrEWqL2Jx8x2P307T3VACyCC7uL7hB2PIvqZ5G1OBZS4Iwykgb5GmrN8QtBtfXFC8J8oFbjpD3ZRqB7I/9wvT/Uqb9mnWRd+KMA/RWz0FsB6iAcEGpucyOox29HCw9x+jUK8+bKTotOMsG5PpWmaPK07XaTUFrDE7s6zKwqg==
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(39860400002)(136003)(396003)(346002)(376002)(46966006)(36840700001)(5660300002)(53546011)(4326008)(316002)(36860700001)(82740400003)(4744005)(82310400003)(47076005)(86362001)(2616005)(7636003)(31696002)(478600001)(2906002)(70206006)(83380400001)(7416002)(8676002)(36756003)(356005)(8936002)(31686004)(70586007)(16526019)(426003)(26005)(16576012)(36906005)(110136005)(186003)(336012)(54906003)(43740500002)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2021 15:07:25.7014
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec883513-a740-4be9-fa1c-08d904d72c58
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1519
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Marco,
+Hello!
 
-On 21.04.2021 13:03, Marco Elver wrote:
-> On Wed, 21 Apr 2021 at 12:57, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
->> On 21.04.2021 11:35, Marek Szyprowski wrote:
->>> On 21.04.2021 10:11, Marco Elver wrote:
->>>> On Wed, 21 Apr 2021 at 09:35, Marek Szyprowski
->>>> <m.szyprowski@samsung.com> wrote:
->>>>> On 21.04.2021 08:21, Marek Szyprowski wrote:
->>>>>> On 21.04.2021 00:42, Marco Elver wrote:
->>>>>>> On Tue, 20 Apr 2021 at 23:26, Marek Szyprowski
->>>>>>> <m.szyprowski@samsung.com> wrote:
->>>>>>>> On 08.04.2021 12:36, Marco Elver wrote:
->>>>>>>>> Introduces the TRAP_PERF si_code, and associated siginfo_t field
->>>>>>>>> si_perf. These will be used by the perf event subsystem to send
->>>>>>>>> signals
->>>>>>>>> (if requested) to the task where an event occurred.
->>>>>>>>>
->>>>>>>>> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
->>>>>>>>> Acked-by: Arnd Bergmann <arnd@arndb.de> # asm-generic
->>>>>>>>> Signed-off-by: Marco Elver <elver@google.com>
->>>>>>>> This patch landed in linux-next as commit fb6cc127e0b6 ("signal:
->>>>>>>> Introduce TRAP_PERF si_code and si_perf to siginfo"). It causes
->>>>>>>> regression on my test systems (arm 32bit and 64bit). Most systems
->>>>>>>> fails
->>>>>>>> to boot in the given time frame. I've observed that there is a
->>>>>>>> timeout
->>>>>>>> waiting for udev to populate /dev and then also during the network
->>>>>>>> interfaces configuration. Reverting this commit, together with
->>>>>>>> 97ba62b27867 ("perf: Add support for SIGTRAP on perf events") to
->>>>>>>> let it
->>>>>>>> compile, on top of next-20210420 fixes the issue.
->>>>>>> Thanks, this is weird for sure and nothing in particular stands out.
->>>>>>>
->>>>>>> I have questions:
->>>>>>> -- Can you please share your config?
->>>>>> This happens with standard multi_v7_defconfig (arm) or just defconfig
->>>>>> for arm64.
->>>>>>
->>>>>>> -- Also, can you share how you run this? Can it be reproduced in
->>>>>>> qemu?
->>>>>> Nothing special. I just boot my test systems and see that they are
->>>>>> waiting lots of time during the udev populating /dev and network
->>>>>> interfaces configuration. I didn't try with qemu yet.
->>>>>>> -- How did you derive this patch to be at fault? Why not just
->>>>>>> 97ba62b27867, given you also need to revert it?
->>>>>> Well, I've just run my boot tests with automated 'git bisect' and that
->>>>>> was its result. It was a bit late in the evening, so I didn't analyze
->>>>>> it further, I've just posted a report about the issue I've found. It
->>>>>> looks that bisecting pointed to a wrong commit somehow.
->>>>>>> If you are unsure which patch exactly it is, can you try just
->>>>>>> reverting 97ba62b27867 and see what happens?
->>>>>> Indeed, this is a real faulty commit. Initially I've decided to revert
->>>>>> it to let kernel compile (it uses some symbols introduced by this
->>>>>> commit). Reverting only it on top of linux-next 20210420 also fixes
->>>>>> the issue. I'm sorry for the noise in this thread. I hope we will find
->>>>>> what really causes the issue.
->>>>> This was a premature conclusion. It looks that during the test I've did
->>>>> while writing that reply, the modules were not deployed properly and a
->>>>> test board (RPi4) booted without modules. In that case the board booted
->>>>> fine and there was no udev timeout. After deploying kernel modules, the
->>>>> udev timeout is back.
->>>> I'm confused now. Can you confirm that the problem is due to your
->>>> kernel modules, or do you think it's still due to 97ba62b27867? Or
->>>> fb6cc127e0b6 (this patch)?
->>> I don't use any custom kernel modules. I just deploy all modules that
->>> are being built from the given kernel defconfig (arm
->>> multi_v7_defconfig or arm64 default) and they are automatically loaded
->>> during the boot by udev. I've checked again and bisect was right. The
->>> kernel built from fb6cc127e0b6 suffers from the described issue, while
->>> the one build from the previous commit (2e498d0a74e5) works fine.
->> I've managed to reproduce this issue with qemu. I've compiled the kernel
->> for arm 32bit with multi_v7_defconfig and used some older Debian rootfs
->> image. The log and qemu parameters are here:
->> https://protect2.fireeye.com/v1/url?k=7cfc23a2-23671aa9-7cfda8ed-002590f5b904-dab7e2ec39dae1f9&q=1&e=36a5ed13-6ad5-430c-8f44-e95c4f0af5c3&u=https%3A%2F%2Fpaste.debian.net%2F1194526%2F
->>
->> Check the timestamp for the 'EXT4-fs (vda): re-mounted' message and
->> 'done (timeout)' status for the 'Waiting for /dev to be fully populated'
->> message. This happens only when kernel modules build from the
->> multi_v7_defconfig are deployed on the rootfs.
-> Still hard to say what is going on and what is at fault. But being
-> able to repro this in qemu helps debug quicker -- would you also be
-> able to share the precise rootfs.img, i.e. upload it somewhere I can
-> fetch it? And just to be sure, please also share your .config, as it
-> might have compiler-version dependent configuration that might help
-> repro (unlikely, but you never know).
+On 08/04/2021 11:36, Marco Elver wrote:
+> Introduces the TRAP_PERF si_code, and associated siginfo_t field
+> si_perf. These will be used by the perf event subsystem to send signals
+> (if requested) to the task where an event occurred.
+> 
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
+> Acked-by: Arnd Bergmann <arnd@arndb.de> # asm-generic
+> Signed-off-by: Marco Elver <elver@google.com>
 
-I've managed to reproduce this issue with a public Raspberry Pi OS Lite 
-rootfs image, even without deploying kernel modules:
 
-https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2021-03-25/2021-03-04-raspios-buster-armhf-lite.zip
+Since next-20210420 I have noticed a boot regression on all 32-bit Tegra
+that we are testing. Bisect is pointing to this commit and reverting
+this patch and patch 6/10 does resolve the issue.
 
-# qemu-system-arm -M virt -smp 2 -m 512 -kernel zImage -append "earlycon 
-console=ttyAMA0 root=/dev/vda2 rw rootwait" -serial stdio -display none 
--monitor null -device virtio-blk-device,drive=virtio-blk -drive 
-file=/tmp/2021-03-04-raspios-buster-armhf-lite.img,id=virtio-blk,if=none,format=raw 
--netdev user,id=user -device virtio-net-device,netdev=user
+Interestingly there is no apparent crash, but these systems just appear
+to hang silently after mounting the rootfs. If anyone has any thoughts
+let me know!
 
-The above one doesn't boot if zImage z compiled from commit fb6cc127e0b6 
-and boots if compiled from 2e498d0a74e5. In both cases I've used default 
-arm/multi_v7_defconfig and 
-gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabi toolchain.
-
-Best regards
+Thanks
+Jon
 
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+nvpublic
