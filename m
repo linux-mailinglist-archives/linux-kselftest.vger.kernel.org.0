@@ -2,271 +2,268 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8A236628D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Apr 2021 01:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9B1366344
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Apr 2021 03:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234447AbhDTXlH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Apr 2021 19:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbhDTXlF (ORCPT
+        id S234379AbhDUBCn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Apr 2021 21:02:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46798 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234290AbhDUBCn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Apr 2021 19:41:05 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB781C061763
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Apr 2021 16:40:32 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id b10so40267385iot.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Apr 2021 16:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fgWXnAm5K+neiT/gTZszeD6IV/HEAXXB0Ki6E/5iwoE=;
-        b=Shv3OSWuEO9YdF2qaRdYXt8oe6JJgdn4ON977AMM1rMFMnWw4wt/6k1m68jLY6nLs/
-         nofYo+WYIITrUPi06juLCcHiHemO0TVH1kIZXwyzSMhRi/6O319n/0ruHXD1Jpx1wRKC
-         +6XK3PdmkQ7OG4KIuKmChjojNecLzUFegO0x0=
+        Tue, 20 Apr 2021 21:02:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618966930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L8lGFtSTtYe7QCj8558nLeh4ir6XUy3/NvMAR84JMCU=;
+        b=M5crLszDrJrNv/NNQhtUnQrc/VeqekaC7OxoEWmkSEQVKG+r4QyxedNUywQNdb36vv/CJE
+        gwsTHM7o51TvXkOSjcZAgz6kNC5RzQVKneptTPPvMgZGaqCa/tpGs6UKUMnafwn7nndsue
+        8DKfNF6fsxPLb2LnyK/2WGGsofLYrsA=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-107-p9ylfqVeNiOCTLY4cm5Yhw-1; Tue, 20 Apr 2021 21:02:09 -0400
+X-MC-Unique: p9ylfqVeNiOCTLY4cm5Yhw-1
+Received: by mail-qk1-f197.google.com with SMTP id n7-20020a05620a2227b02902e3b6e9f887so6075596qkh.21
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Apr 2021 18:02:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fgWXnAm5K+neiT/gTZszeD6IV/HEAXXB0Ki6E/5iwoE=;
-        b=aSCqjZG32nY5xG53YgjcjpxitgP1mOR3F1wykU6EAKeTniesRjyE66qtGiBYKiuY97
-         r2YZgnBuCo5vc6Z1q8qkaFjfgcaMg38SisIApAFPTlmjeYDo8DgbwnY3iVCwZIONNaEz
-         qUX2MRyspjV0Yss6ESK8alGatN83J5kWTYlJMx08ycmxsTCaxKksJaUfm4G4YQ3vDMeb
-         MIiqN3CoTIpnwzwYm8i8XiyM/fyXr42JhPvI+se0SDVOtNkEnP1NiSlCs0RolksgO+hp
-         exdhMRR+aOyq0OiDL8bYMKXSSdFIO8+kdMmbZsXNE15rZT7L34p8gsg2CYLi45K3WMgg
-         M5bQ==
-X-Gm-Message-State: AOAM531Y1Zr7dDx91nodtGEAV6fD08ukBs4tO7bzTczuA+4+J5+MohS6
-        +OAg+7uBPaDIT67psE+fMOYZbg==
-X-Google-Smtp-Source: ABdhPJwXSPUsZwcpCGfMhLrRjcZz7pUJKDN7e2coIvECoJ+GsaW10kjQ6DLyKuEQ7KHsmuf6k/ioOg==
-X-Received: by 2002:a6b:b48e:: with SMTP id d136mr11453669iof.47.1618962032076;
-        Tue, 20 Apr 2021 16:40:32 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 1sm181125ilz.11.2021.04.20.16.40.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Apr 2021 16:40:31 -0700 (PDT)
-Subject: Re: [PATCH v3] Documentation: dev-tools: Add Testing Overview
-To:     David Gow <davidgow@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L8lGFtSTtYe7QCj8558nLeh4ir6XUy3/NvMAR84JMCU=;
+        b=kGkvX5AqoWBuqpSi9Iu4yOgyVeJQJOwMrc6SB6MU794JzGqcTCyplXdsaXXlo2QyrZ
+         rBmMqNvNTqWc+LvpuFSCYYE31VC6RiNFBXmBt5sCqFcpGp9CBRaIC82woU0VzwXbnBZm
+         NF6il2qXvUzlbeA6ox/QhzrJ+dWh9Pr09AZki8zEVxKyQL5C4IfKwSu7v5Mx7CxTq/zd
+         sZjPD0sMRcivuekb6NHgYNL6pvGS8/qXJwpVP+GeOjEo+e2JUicAAQOCFVK+3JuaVM+z
+         Bcn2rSjaZqlmOscVNSZ1OcpRpWDlMY6AtjrVXxM2IJNSMe+hZtNX3ihOMT1uqi/Y56b+
+         wuGw==
+X-Gm-Message-State: AOAM531I2StKj6eo0YGce+aE+3/AksA/qObeHulMQRhwSUbh3Ib7fY18
+        w1uCFm1WLrb6GxUW71OCuCRz1zwGrNt0juC8NFdVymDlJxwcIs9LEGWi+wzvwS2N5IyhyHCtv/+
+        ZQg1OFPi6O74qic4R9zkhgYlAJa68
+X-Received: by 2002:a05:622a:1103:: with SMTP id e3mr20240287qty.346.1618966928468;
+        Tue, 20 Apr 2021 18:02:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyGZYeVQLcG1SJpG+xTK5I038ewCztBIA6zotSHXUk9vOdU2Z5J2CvbVwJs93g3BaQtIHkvHg==
+X-Received: by 2002:a05:622a:1103:: with SMTP id e3mr20240260qty.346.1618966928149;
+        Tue, 20 Apr 2021 18:02:08 -0700 (PDT)
+Received: from xz-x1 (bras-base-toroon474qw-grc-88-174-93-75-154.dsl.bell.ca. [174.93.75.154])
+        by smtp.gmail.com with ESMTPSA id c14sm457297qtc.5.2021.04.20.18.02.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Apr 2021 18:02:07 -0700 (PDT)
+Date:   Tue, 20 Apr 2021 21:02:05 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Marco Elver <elver@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-doc@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210415054036.581117-1-davidgow@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2a35b57e-3261-8ebe-d9f3-66b3dedff756@linuxfoundation.org>
-Date:   Tue, 20 Apr 2021 17:40:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        Brian Geffon <bgeffon@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v4 09/10] userfaultfd/shmem: modify
+ shmem_mcopy_atomic_pte to use install_pte()
+Message-ID: <20210421010205.GH4440@xz-x1>
+References: <20210420220804.486803-1-axelrasmussen@google.com>
+ <20210420220804.486803-10-axelrasmussen@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20210415054036.581117-1-davidgow@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210420220804.486803-10-axelrasmussen@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/14/21 11:40 PM, David Gow wrote:
-> The kernel now has a number of testing and debugging tools, and we've
-> seen a bit of confusion about what the differences between them are.
+On Tue, Apr 20, 2021 at 03:08:03PM -0700, Axel Rasmussen wrote:
+> In a previous commit, we added the mcopy_atomic_install_pte() helper.
+> This helper does the job of setting up PTEs for an existing page, to map
+> it into a given VMA. It deals with both the anon and shmem cases, as
+> well as the shared and private cases.
 > 
-> Add a basic documentation outlining the testing tools, when to use each,
-> and how they interact.
+> In other words, shmem_mcopy_atomic_pte() duplicates a case it already
+> handles. So, expose it, and let shmem_mcopy_atomic_pte() use it
+> directly, to reduce code duplication.
 > 
-> This is a pretty quick overview rather than the idealised "kernel
-> testing guide" that'd probably be optimal, but given the number of times
-> questions like "When do you use KUnit and when do you use Kselftest?"
-> are being asked, it seemed worth at least having something. Hopefully
-> this can form the basis for more detailed documentation later.
+> This requires that we refactor shmem_mcopy_atomic_pte() a bit:
 > 
-> Signed-off-by: David Gow <davidgow@google.com>
-> Reviewed-by: Marco Elver <elver@google.com>
-> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> Instead of doing accounting (shmem_recalc_inode() et al) part-way
+> through the PTE setup, do it beforehand. This frees up
+> mcopy_atomic_install_pte() from having to care about this accounting,
+> but it does mean we need to clean it up if we get a failure afterwards
+> (shmem_uncharge()).
+> 
+> We can *almost* use shmem_charge() to do this, reducing code
+> duplication. But, it does `inode->i_mapping->nrpages++`, which would
+> double-count since shmem_add_to_page_cache() also does this.
+
+Missing to mention the lru_cache_add() replacement comment as Hugh commented on
+this?
+
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 > ---
+>  include/linux/userfaultfd_k.h |  5 ++++
+>  mm/shmem.c                    | 53 ++++++++---------------------------
+>  mm/userfaultfd.c              | 17 ++++-------
+>  3 files changed, 22 insertions(+), 53 deletions(-)
 > 
-> Thanks again. Assuming no-one has any objections, I think this is good
-> to go.
-> 
-> -- David
-> 
-> Changes since v2:
-> https://lore.kernel.org/linux-kselftest/20210414081428.337494-1-davidgow@google.com/
-> - A few typo fixes (Thanks Daniel)
-> - Reworded description of dynamic analysis tools.
-> - Updated dev-tools index page to not use ':doc:' syntax, but to provide
->    a path instead.
-> - Added Marco and Daniel's Reviewed-by tags.
-> 
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20210410070529.4113432-1-davidgow@google.com/
-> - Note KUnit's speed and that one should provide selftests for syscalls
-> - Mention lockdep as a Dynamic Analysis Tool
-> - Refer to "Dynamic Analysis Tools" instead of "Sanitizers"
-> - A number of minor formatting tweaks and rewordings for clarity
-> 
->   Documentation/dev-tools/index.rst            |   4 +
->   Documentation/dev-tools/testing-overview.rst | 117 +++++++++++++++++++
->   2 files changed, 121 insertions(+)
->   create mode 100644 Documentation/dev-tools/testing-overview.rst
-> 
-> diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
-> index 1b1cf4f5c9d9..929d916ffd4c 100644
-> --- a/Documentation/dev-tools/index.rst
-> +++ b/Documentation/dev-tools/index.rst
-> @@ -7,6 +7,9 @@ be used to work on the kernel. For now, the documents have been pulled
->   together without any significant effort to integrate them into a coherent
->   whole; patches welcome!
->   
-> +A brief overview of testing-specific tools can be found in
-> +Documentation/dev-tools/testing-overview.rst
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index 794d1538b8ba..39c094cc6641 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -53,6 +53,11 @@ enum mcopy_atomic_mode {
+>  	MCOPY_ATOMIC_CONTINUE,
+>  };
+>  
+> +extern int mcopy_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> +				    struct vm_area_struct *dst_vma,
+> +				    unsigned long dst_addr, struct page *page,
+> +				    bool newly_allocated, bool wp_copy);
 > +
->   .. class:: toc-title
->   
->   	   Table of contents
-> @@ -14,6 +17,7 @@ whole; patches welcome!
->   .. toctree::
->      :maxdepth: 2
->   
-> +   testing-overview
->      coccinelle
->      sparse
->      kcov
-> diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation/dev-tools/testing-overview.rst
-> new file mode 100644
-> index 000000000000..b5b46709969c
-> --- /dev/null
-> +++ b/Documentation/dev-tools/testing-overview.rst
-> @@ -0,0 +1,117 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +====================
-> +Kernel Testing Guide
-> +====================
-> +
-> +
-> +There are a number of different tools for testing the Linux kernel, so knowing
-> +when to use each of them can be a challenge. This document provides a rough
-> +overview of their differences, and how they fit together.
-> +
-> +
-> +Writing and Running Tests
-> +=========================
-> +
-> +The bulk of kernel tests are written using either the kselftest or KUnit
-> +frameworks. These both provide infrastructure to help make running tests and
-> +groups of tests easier, as well as providing helpers to aid in writing new
-> +tests.
-> +
-> +If you're looking to verify the behaviour of the Kernel — particularly specific
-> +parts of the kernel — then you'll want to use KUnit or kselftest.
-> +
-> +
-> +The Difference Between KUnit and kselftest
-> +------------------------------------------
-> +
-> +KUnit (Documentation/dev-tools/kunit/index.rst) is an entirely in-kernel system
-> +for "white box" testing: because test code is part of the kernel, it can access
-> +internal structures and functions which aren't exposed to userspace.
-> +
-> +KUnit tests therefore are best written against small, self-contained parts
-> +of the kernel, which can be tested in isolation. This aligns well with the
-> +concept of 'unit' testing.
-> +
-> +For example, a KUnit test might test an individual kernel function (or even a
-> +single codepath through a function, such as an error handling case), rather
-> +than a feature as a whole.
-> +
-> +This also makes KUnit tests very fast to build and run, allowing them to be
-> +run frequently as part of the development process.
-> +
-> +There is a KUnit test style guide which may give further pointers in
-> +Documentation/dev-tools/kunit/style.rst
-> +
-> +
-> +kselftest (Documentation/dev-tools/kselftest.rst), on the other hand, is
-> +largely implemented in userspace, and tests are normal userspace scripts or
-> +programs.
-> +
-> +This makes it easier to write more complicated tests, or tests which need to
-> +manipulate the overall system state more (e.g., spawning processes, etc.).
-> +However, it's not possible to call kernel functions directly from kselftest.
-> +This means that only kernel functionality which is exposed to userspace somehow
-> +(e.g. by a syscall, device, filesystem, etc.) can be tested with kselftest.  To
-> +work around this, some tests include a companion kernel module which exposes
-> +more information or functionality. If a test runs mostly or entirely within the
-> +kernel, however,  KUnit may be the more appropriate tool.
-> +
-> +kselftest is therefore suited well to tests of whole features, as these will
-> +expose an interface to userspace, which can be tested, but not implementation
-> +details. This aligns well with 'system' or 'end-to-end' testing.
-> +
-> +For example, all new system calls should be accompanied by kselftest tests.
-> +
-> +Code Coverage Tools
-> +===================
-> +
-> +The Linux Kernel supports two different code coverage measurement tools. These
-> +can be used to verify that a test is executing particular functions or lines
-> +of code. This is useful for determining how much of the kernel is being tested,
-> +and for finding corner-cases which are not covered by the appropriate test.
-> +
-> +:doc:`gcov` is GCC's coverage testing tool, which can be used with the kernel
-> +to get global or per-module coverage. Unlike KCOV, it does not record per-task
-> +coverage. Coverage data can be read from debugfs, and interpreted using the
-> +usual gcov tooling.
-> +
-> +:doc:`kcov` is a feature which can be built in to the kernel to allow
-> +capturing coverage on a per-task level. It's therefore useful for fuzzing and
-> +other situations where information about code executed during, for example, a
-> +single syscall is useful.
-> +
-> +
-> +Dynamic Analysis Tools
-> +======================
-> +
-> +The kernel also supports a number of dynamic analysis tools, which attempt to
-> +detect classes of issues when they occur in a running kernel. These typically
-> +each look for a different class of bugs, such as invalid memory accesses,
-> +concurrency issues such as data races, or other undefined behaviour like
-> +integer overflows.
-> +
-> +Some of these tools are listed below:
-> +
-> +* kmemleak detects possible memory leaks. See
-> +  Documentation/dev-tools/kmemleak.rst
-> +* KASAN detects invalid memory accesses such as out-of-bounds and
-> +  use-after-free errors. See Documentation/dev-tools/kasan.rst
-> +* UBSAN detects behaviour that is undefined by the C standard, like integer
-> +  overflows. See Documentation/dev-tools/ubsan.rst
-> +* KCSAN detects data races. See Documentation/dev-tools/kcsan.rst
-> +* KFENCE is a low-overhead detector of memory issues, which is much faster than
-> +  KASAN and can be used in production. See Documentation/dev-tools/kfence.rst
-> +* lockdep is a locking correctness validator. See
-> +  Documentation/locking/lockdep-design.rst
-> +* There are several other pieces of debug instrumentation in the kernel, many
-> +  of which can be found in lib/Kconfig.debug
-> +
-> +These tools tend to test the kernel as a whole, and do not "pass" like
-> +kselftest or KUnit tests. They can be combined with KUnit or kselftest by
-> +running tests on a kernel with these tools enabled: you can then be sure
-> +that none of these errors are occurring during the test.
-> +
-> +Some of these tools integrate with KUnit or kselftest and will
-> +automatically fail tests if an issue is detected.
-> +
+>  extern ssize_t mcopy_atomic(struct mm_struct *dst_mm, unsigned long dst_start,
+>  			    unsigned long src_start, unsigned long len,
+>  			    bool *mmap_changing, __u64 mode);
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 30c0bb501dc9..9bfa80fcd414 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2378,10 +2378,8 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm,
+>  	struct address_space *mapping = inode->i_mapping;
+>  	gfp_t gfp = mapping_gfp_mask(mapping);
+>  	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
+> -	spinlock_t *ptl;
+>  	void *page_kaddr;
+>  	struct page *page;
+> -	pte_t _dst_pte, *dst_pte;
+>  	int ret;
+>  	pgoff_t max_off;
+>  
+> @@ -2391,8 +2389,10 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm,
+>  
+>  	if (!*pagep) {
+>  		page = shmem_alloc_page(gfp, info, pgoff);
+> -		if (!page)
+> -			goto out_unacct_blocks;
+> +		if (!page) {
+> +			shmem_inode_unacct_blocks(inode, 1);
+> +			goto out;
+> +		}
+>  
+>  		if (!zeropage) {	/* COPY */
+>  			page_kaddr = kmap_atomic(page);
+> @@ -2432,59 +2432,28 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm,
+>  	if (ret)
+>  		goto out_release;
+>  
+> -	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
+> -	if (dst_vma->vm_flags & VM_WRITE)
+> -		_dst_pte = pte_mkwrite(pte_mkdirty(_dst_pte));
+> -	else {
+> -		/*
+> -		 * We don't set the pte dirty if the vma has no
+> -		 * VM_WRITE permission, so mark the page dirty or it
+> -		 * could be freed from under us. We could do it
+> -		 * unconditionally before unlock_page(), but doing it
+> -		 * only if VM_WRITE is not set is faster.
+> -		 */
+> -		set_page_dirty(page);
+> -	}
+> -
+> -	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+> -
+> -	ret = -EFAULT;
+> -	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -	if (unlikely(pgoff >= max_off))
+> -		goto out_release_unlock;
+> -
+> -	ret = -EEXIST;
+> -	if (!pte_none(*dst_pte))
+> -		goto out_release_unlock;
+> -
+> -	lru_cache_add(page);
+> -
+>  	spin_lock_irq(&info->lock);
+>  	info->alloced++;
+>  	inode->i_blocks += BLOCKS_PER_PAGE;
+>  	shmem_recalc_inode(inode);
+>  	spin_unlock_irq(&info->lock);
+>  
+> -	inc_mm_counter(dst_mm, mm_counter_file(page));
+> -	page_add_file_rmap(page, false);
+> -	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+> +	ret = mcopy_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+> +				       page, true, false);
+> +	if (ret)
+> +		goto out_release_uncharge;
+>  
+> -	/* No need to invalidate - it was non-present before */
+> -	update_mmu_cache(dst_vma, dst_addr, dst_pte);
+> -	pte_unmap_unlock(dst_pte, ptl);
+> +	SetPageDirty(page);
+>  	unlock_page(page);
+>  	ret = 0;
+>  out:
+>  	return ret;
+> -out_release_unlock:
+> -	pte_unmap_unlock(dst_pte, ptl);
+> -	ClearPageDirty(page);
+> +out_release_uncharge:
+>  	delete_from_page_cache(page);
+> +	shmem_uncharge(inode, 1);
+>  out_release:
+>  	unlock_page(page);
+>  	put_page(page);
+> -out_unacct_blocks:
+
+Will all the "goto out_release" miss one call to shmem_inode_unacct_blocks()?
+
+> -	shmem_inode_unacct_blocks(inode, 1);
+>  	goto out;
+>  }
+>  #endif /* CONFIG_USERFAULTFD */
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index 51d8c0127161..3a9ddbb2dbbd 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -51,18 +51,13 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
+>  /*
+>   * Install PTEs, to map dst_addr (within dst_vma) to page.
+>   *
+> - * This function handles MCOPY_ATOMIC_CONTINUE (which is always file-backed),
+> - * whether or not dst_vma is VM_SHARED. It also handles the more general
+> - * MCOPY_ATOMIC_NORMAL case, when dst_vma is *not* VM_SHARED (it may be file
+> - * backed, or not).
+> - *
+> - * Note that MCOPY_ATOMIC_NORMAL for a VM_SHARED dst_vma is handled by
+> - * shmem_mcopy_atomic_pte instead.
+> + * This function handles both MCOPY_ATOMIC_NORMAL and _CONTINUE for both shmem
+> + * and anon, and for both shared and private VMAs.
+>   */
+> -static int mcopy_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> -				    struct vm_area_struct *dst_vma,
+> -				    unsigned long dst_addr, struct page *page,
+> -				    bool newly_allocated, bool wp_copy)
+> +int mcopy_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> +			     struct vm_area_struct *dst_vma,
+> +			     unsigned long dst_addr, struct page *page,
+> +			     bool newly_allocated, bool wp_copy)
+>  {
+>  	int ret;
+>  	pte_t _dst_pte, *dst_pte;
+> -- 
+> 2.31.1.368.gbe11c130af-goog
 > 
 
-Thank for you writing this much needed document.
-
-Looks great. How about adding a section for Static analysis tools?
-A mention coccicheck scripts and mention of smatch?
-
-thanks,
--- Shuah
+-- 
+Peter Xu
 
