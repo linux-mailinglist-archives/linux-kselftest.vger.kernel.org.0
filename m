@@ -2,58 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D13367985
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Apr 2021 07:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE61367987
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Apr 2021 07:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbhDVFxG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Apr 2021 01:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S234645AbhDVFx1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Apr 2021 01:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbhDVFxF (ORCPT
+        with ESMTP id S229962AbhDVFx1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Apr 2021 01:53:05 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F87C06138B
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Apr 2021 22:52:31 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id a1so50449076ljp.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Apr 2021 22:52:31 -0700 (PDT)
+        Thu, 22 Apr 2021 01:53:27 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B3BC06174A
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Apr 2021 22:52:53 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id b38so9283261ljf.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Apr 2021 22:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wlBZuZJpKddS9FWipfcldRHxE90gSWKH6VLNPWIbZE8=;
-        b=Ks6R6vv0FBcBlp9a2wW2yDdhiiLJLLQK0Lo/kp3hPLkwEavVgTzWZtXdxf4cIbb8vN
-         ZJ2hDv3AW+mHoi+8AFDZhxdLlcX1gcucrrEtBFKkciuSm3T4abyc7MF3PukHsg+Li4oi
-         vdFpTu/acdgdfPYCHACnEjoZvhNCvhuQY4bAtqEW2uSKfUerWK4uP1c2LiX2bXTKEX7v
-         W/rMC5px51jeRPTnhSuPNuEsp/C08yTeRDQ3l7dP4WLLxLOovjEYTa4C1LRbj4Pumwzy
-         K94V7z7O/1/zmCJAVGEsTMsZKV1cACjI35udBd9W3LOFNP8T0snGEIEk/CN6pzCWQzrY
-         bc+w==
+        bh=zdGMkI9TGwXlU6z5h6cFrk4sNZEl6jH28J5xJfUfohc=;
+        b=grtyIGRCq8GeZXFKc+5NDCuphq69TNdSOxX0J4jsRhiSbfK7O2IdP2HkLn1XK+jRYp
+         e0lzfNr4Npxloev11ezIrXjWn94FxoIlPz1zZ7+M230PTlqyGBLOAkF/HKRX5aAHys+4
+         SKqBeYNyA/ftwXMu4Y6Ieal1KjI8qJPCFERwpQXKRL22/jC/TatZJyCRQbbOdUe/agWC
+         8UJhy1pKQYpe7EO1dtOFBdBxGOpYfWXhx0aSWY1zcJgbfN2aRSifKS7EUvv9ICSe0OzW
+         q3Ku2vfqBto14DUtNORxUv05N1PaEboopbFRk8dNZwoQfqB+OTvBxmLJgqW7sDHbxqqA
+         zoBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wlBZuZJpKddS9FWipfcldRHxE90gSWKH6VLNPWIbZE8=;
-        b=DuIftAsvzqEqncucykj2P4cgcA/GUqhkEbt0wKW6vU3DfHT0WX1jCHlSK6kJx+82F5
-         pHrC39wqmjWGl0X7BoXhnVnzV5b6ZgbreEJhg6NrOwZrUFH3HvuKSLfmnwcmnrUeEgRf
-         tinfD/E86CDjYi7ebGDnwDHQ7W2iJjtGUOrvuLBHgwoN8xetYU759/i96pOGPPryDtTO
-         CWjJCUPaaOxnfmcK3iaheMYOiVpbUtpBd7k7UduYKQrHob3Gs3Q2lAvMVHFoTH6pINc8
-         bKmEZR+t6fC0CSBKA73Q7Zs08bIYkCVP0hh/9BBA4vSdnXtKZVMMhRvpknxYKTXPtUIw
-         ZyXQ==
-X-Gm-Message-State: AOAM530/x1L9jfwqcr2BR3C9LeYtWoCDa8dZxjneAusIHunPD83x8rGj
-        mc5ayF9r5C3HWPNOfm9KCFd/Ew8yzDu/V8XwZkAcXQ==
-X-Google-Smtp-Source: ABdhPJzzJY1/4fopv99DhbVgWhXzB+zQA/jEPEBBQxiQYJFph/e27bdnDC1li1O1UFRvPwNTFVd72I3/oRm5YST4Lr8=
-X-Received: by 2002:a2e:a7c8:: with SMTP id x8mr1291001ljp.89.1619070749681;
- Wed, 21 Apr 2021 22:52:29 -0700 (PDT)
+        bh=zdGMkI9TGwXlU6z5h6cFrk4sNZEl6jH28J5xJfUfohc=;
+        b=AsBEf58Dfbk9MnY7JwJca0TzTHQmq05R32O9ASo785wlol/AO4m+4I9jQeIaV8Bt9M
+         qm8Mkl31Ty1pUYfeTODfCo+r5VxjeiSnh2AZGB/sUTHebyPuWUFHgtvcT2RTE5TSu2uH
+         AQY6G7f0xGkwR3taO+XOF5sicbS0cVW2EFZpaN8ew9/lwaVt3FKRIBt6cMYqvZn05yxq
+         UPRqiPfDtlTjsmRFK3/SBEaq5RlrOyG9CgBjV5WpbBxR5kji9DfVM+1ycccgbzCcL8+Z
+         EaXrjIZ6Rj1BXimF+qIHGp2BQ0Fh4OYRCyAFsbkSk7CucT5t5kvSk4Okig8Px1n+S9FM
+         8AVg==
+X-Gm-Message-State: AOAM531KIMEWcobpymyn+w4PaEUTnYDTJkfGc7hRepjlKtipFo4+A0ls
+        x4cdVvLXFUycvKd9qRyxwIzhZyj3VcJ3guMgynawEQ==
+X-Google-Smtp-Source: ABdhPJwvWTYxTlk4IvCfUQEIf1sf5sPIA1JBr9l53MABGRGKiDvbUTMDUNC+NOtfj41XAHbFkZO/7L2iZyNDKj+58wY=
+X-Received: by 2002:a2e:87c6:: with SMTP id v6mr1346786ljj.490.1619070771358;
+ Wed, 21 Apr 2021 22:52:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210421183222.2557747-1-dlatypov@google.com>
-In-Reply-To: <20210421183222.2557747-1-dlatypov@google.com>
+References: <20210421183210.2557462-1-dlatypov@google.com>
+In-Reply-To: <20210421183210.2557462-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 22 Apr 2021 13:52:17 +0800
-Message-ID: <CABVgOS=3OcPK-s_PO9t87_ruaUq4d+AO0zuCC5SxRd3vC3Vxgg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] lib/test: convert lib/test_list_sort.c to use KUnit
+Date:   Thu, 22 Apr 2021 13:52:39 +0800
+Message-ID: <CABVgOSnGC=15FXcRz0CKYTgY=-vFxWCWBGqLg7uGCNs8wgW2Dw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: introduce kunit_kmalloc_array/kunit_kcalloc() helpers
 To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
@@ -66,69 +65,188 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Thu, Apr 22, 2021 at 2:32 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Functionally, this just means that the test output will be slightly
-> changed and it'll now depend on CONFIG_KUNIT=y/m.
+> Add in:
+> * kunit_kmalloc_array() and wire up kunit_kmalloc() to be a special
+> case of it.
+> * kunit_kcalloc() for symmetry with kunit_kzalloc()
 >
-> It'll still run at boot time and can still be built as a loadable
-> module.
+> This should using KUnit more natural by making it more similar to the
+> existing *alloc() APIs.
 >
-> There was a pre-existing patch to convert this test that I found later,
-> here [1]. Compared to [1], this patch doesn't rename files and uses
-> KUnit features more heavily (i.e. does more than converting pr_err()
-> calls to KUNIT_FAIL()).
->
-> What this conversion gives us:
-> * a shorter test thanks to KUnit's macros
-> * a way to run this a bit more easily via kunit.py (and
-> CONFIG_KUNIT_ALL_TESTS=y) [2]
-> * a structured way of reporting pass/fail
-> * uses kunit-managed allocations to avoid the risk of memory leaks
-> * more descriptive error messages:
->   * i.e. it prints out which fields are invalid, what the expected
->   values are, etc.
->
-> What this conversion does not do:
-> * change the name of the file (and thus the name of the module)
-> * change the name of the config option
->
-> Leaving these as-is for now to minimize the impact to people wanting to
-> run this test. IMO, that concern trumps following KUnit's style guide
-> for both names, at least for now.
->
-> [1] https://lore.kernel.org/linux-kselftest/20201015014616.309000-1-vitor@massaru.org/
-> [2] Can be run via
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
-> CONFIG_KUNIT=y
-> CONFIG_TEST_LIST_SORT=y
-> EOF
->
-> [16:55:56] Configuring KUnit Kernel ...
-> [16:55:56] Building KUnit Kernel ...
-> [16:56:29] Starting KUnit Kernel ...
-> [16:56:32] ============================================================
-> [16:56:32] ======== [PASSED] list_sort ========
-> [16:56:32] [PASSED] list_sort_test
-> [16:56:32] ============================================================
-> [16:56:32] Testing complete. 1 tests run. 0 failed. 0 crashed.
-> [16:56:32] Elapsed time: 35.668s total, 0.001s configuring, 32.725s building, 0.000s running
->
-> Note: the build time is as after a `make mrproper`.
+> And while we shouldn't necessarily be writing unit tests where overflow
+> should be a concern, it can't hurt to be safe.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
-This looks good to me: I'm not an expert in the test, though, so I may
-have missed something. I did run it, though, and it seemed to work
-fine.
+This seems like a good addition to me: a bug and a couple of useless
+asides below.
 
-It's a shame the functions can no-longer be marked __init, but I think
-the advantages of KUnit outweigh it, particularly since this is
-unlikely to be being used in production.
-
-(BTW: This doesn't appear to be posted as a reply to Patch 1/2, which
-made it a bit trickier to find.)
-
-This is
-Tested-by: David Gow <davidgow@google.com>
+Apart from the "kzalloc"/"kcalloc" confusion in the comment below, this is
+Reviewed-by: David Gow <davidgow@google.com>
 
 -- David
+
+>  include/kunit/test.h | 36 ++++++++++++++++++++++++++++++++----
+>  lib/kunit/test.c     | 22 ++++++++++++----------
+>  2 files changed, 44 insertions(+), 14 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 49601c4b98b8..7fa0de4af977 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -577,16 +577,30 @@ static inline int kunit_destroy_named_resource(struct kunit *test,
+>  void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
+>
+>  /**
+> - * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
+> + * kunit_kmalloc_array() - Like kmalloc_array() except the allocation is *test managed*.
+>   * @test: The test context object.
+> + * @n: number of elements.
+>   * @size: The size in bytes of the desired memory.
+>   * @gfp: flags passed to underlying kmalloc().
+>   *
+> - * Just like `kmalloc(...)`, except the allocation is managed by the test case
+> + * Just like `kmalloc_array(...)`, except the allocation is managed by the test case
+>   * and is automatically cleaned up after the test case concludes. See &struct
+>   * kunit_resource for more information.
+>   */
+> -void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp);
+> +void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t flags);
+> +
+> +/**
+> + * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
+> + * @test: The test context object.
+> + * @size: The size in bytes of the desired memory.
+> + * @gfp: flags passed to underlying kmalloc().
+> + *
+> + * See kmalloc() and kunit_kmalloc_array() for more information.
+> + */
+> +static inline void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
+> +{
+> +       return kunit_kmalloc_array(test, 1, size, gfp);
+
+Do we want to implement kunit_kmalloc() in terms of kunit_kmalloc_array()?
+It's interestingly backwards given that kmalloc_array() is implemented
+in terms of kmalloc().
+The other option would be to have each kunit_* function wrap the
+actual function that's called, but that would introduce a lot of code
+duplication for a very small performance benefit.
+
+I'm happy with it the way it is now that I've looked through the
+implementations, but I was a little uneasy at first that some of these
+functions might not actually call the function they're theoretically
+wrapping.
+
+> +}
+>
+>  /**
+>   * kunit_kfree() - Like kfree except for allocations managed by KUnit.
+> @@ -601,13 +615,27 @@ void kunit_kfree(struct kunit *test, const void *ptr);
+>   * @size: The size in bytes of the desired memory.
+>   * @gfp: flags passed to underlying kmalloc().
+>   *
+> - * See kzalloc() and kunit_kmalloc() for more information.
+> + * See kzalloc() and kunit_kmalloc_array() for more information.
+>   */
+>  static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
+>  {
+>         return kunit_kmalloc(test, size, gfp | __GFP_ZERO);
+>  }
+>
+> +/**
+> + * kunit_kzalloc() - Just like kunit_kmalloc_array(), but zeroes the allocation.
+
+The function is called kunit_kcalloc(), but the documentation comment
+calls it kunit_kzalloc().
+Copy + paste error from above?
+
+> + * @test: The test context object.
+> + * @n: number of elements.
+> + * @size: The size in bytes of the desired memory.
+> + * @gfp: flags passed to underlying kmalloc().
+> + *
+> + * See kcalloc() and kunit_kmalloc_array() for more information.
+> + */
+> +static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp_t flags)
+> +{
+> +       return kunit_kmalloc_array(test, n, size, flags | __GFP_ZERO);
+> +}
+> +
+>  void kunit_cleanup(struct kunit *test);
+>
+>  void kunit_log_append(char *log, const char *fmt, ...);
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index ec9494e914ef..052fccf69eef 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -540,41 +540,43 @@ int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_destroy_resource);
+>
+> -struct kunit_kmalloc_params {
+> +struct kunit_kmalloc_array_params {
+> +       size_t n;
+
+It's worth noting that we never actually use this after the resource
+is created. kmalloc_array() discards 'n' after the overflow check and
+multiply anyway.
+
+Of course, we don't need 'size' either, and we were already tracking
+that. I guess it's just an overhead of the resource system, so nothing
+worth actually changing here.
+
+
+
+>         size_t size;
+>         gfp_t gfp;
+>  };
+>
+> -static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
+> +static int kunit_kmalloc_array_init(struct kunit_resource *res, void *context)
+>  {
+> -       struct kunit_kmalloc_params *params = context;
+> +       struct kunit_kmalloc_array_params *params = context;
+>
+> -       res->data = kmalloc(params->size, params->gfp);
+> +       res->data = kmalloc_array(params->n, params->size, params->gfp);
+>         if (!res->data)
+>                 return -ENOMEM;
+>
+>         return 0;
+>  }
+>
+> -static void kunit_kmalloc_free(struct kunit_resource *res)
+> +static void kunit_kmalloc_array_free(struct kunit_resource *res)
+>  {
+>         kfree(res->data);
+>  }
+>
+> -void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
+> +void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
+>  {
+> -       struct kunit_kmalloc_params params = {
+> +       struct kunit_kmalloc_array_params params = {
+>                 .size = size,
+> +               .n = n,
+>                 .gfp = gfp
+>         };
+>
+>         return kunit_alloc_resource(test,
+> -                                   kunit_kmalloc_init,
+> -                                   kunit_kmalloc_free,
+> +                                   kunit_kmalloc_array_init,
+> +                                   kunit_kmalloc_array_free,
+>                                     gfp,
+>                                     &params);
+>  }
+> -EXPORT_SYMBOL_GPL(kunit_kmalloc);
+> +EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
+>
+>  void kunit_kfree(struct kunit *test, const void *ptr)
+>  {
+>
+> base-commit: 16fc44d6387e260f4932e9248b985837324705d8
+> --
+> 2.31.1.498.g6c1eba8ee3d-goog
+>
