@@ -2,215 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6ABD3678F7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Apr 2021 06:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D13367985
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Apr 2021 07:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbhDVEy4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Apr 2021 00:54:56 -0400
-Received: from mga18.intel.com ([134.134.136.126]:45534 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232002AbhDVEyz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Apr 2021 00:54:55 -0400
-IronPort-SDR: 9mgYFXgs1R6rxY3+P8G2NvGbbT8zd7M1hpAyWpmFk1rcQxP40klWUB4vvlHIJpUCkyF2hBJlNs
- 6o6AK+lsLoJA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9961"; a="183311519"
-X-IronPort-AV: E=Sophos;i="5.82,241,1613462400"; 
-   d="scan'208";a="183311519"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2021 21:54:17 -0700
-IronPort-SDR: iuWv1RGultJPAEimWc6O+2MUpUlz62hArWyYV7mZnBXIwqPA0IvaDo5E4DgkG5XCKdzMOaZcDf
- Wi/6SkKmpyww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,241,1613462400"; 
-   d="scan'208";a="524515422"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2021 21:54:16 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
-        x86@kernel.org
-Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
-        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
-        carlos@redhat.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
-Subject: [PATCH v8 6/6] selftest/x86/signal: Include test cases for validating sigaltstack
-Date:   Wed, 21 Apr 2021 21:48:56 -0700
-Message-Id: <20210422044856.27250-7-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210422044856.27250-1-chang.seok.bae@intel.com>
-References: <20210422044856.27250-1-chang.seok.bae@intel.com>
+        id S229938AbhDVFxG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Apr 2021 01:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229548AbhDVFxF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 22 Apr 2021 01:53:05 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F87C06138B
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Apr 2021 22:52:31 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id a1so50449076ljp.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Apr 2021 22:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wlBZuZJpKddS9FWipfcldRHxE90gSWKH6VLNPWIbZE8=;
+        b=Ks6R6vv0FBcBlp9a2wW2yDdhiiLJLLQK0Lo/kp3hPLkwEavVgTzWZtXdxf4cIbb8vN
+         ZJ2hDv3AW+mHoi+8AFDZhxdLlcX1gcucrrEtBFKkciuSm3T4abyc7MF3PukHsg+Li4oi
+         vdFpTu/acdgdfPYCHACnEjoZvhNCvhuQY4bAtqEW2uSKfUerWK4uP1c2LiX2bXTKEX7v
+         W/rMC5px51jeRPTnhSuPNuEsp/C08yTeRDQ3l7dP4WLLxLOovjEYTa4C1LRbj4Pumwzy
+         K94V7z7O/1/zmCJAVGEsTMsZKV1cACjI35udBd9W3LOFNP8T0snGEIEk/CN6pzCWQzrY
+         bc+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wlBZuZJpKddS9FWipfcldRHxE90gSWKH6VLNPWIbZE8=;
+        b=DuIftAsvzqEqncucykj2P4cgcA/GUqhkEbt0wKW6vU3DfHT0WX1jCHlSK6kJx+82F5
+         pHrC39wqmjWGl0X7BoXhnVnzV5b6ZgbreEJhg6NrOwZrUFH3HvuKSLfmnwcmnrUeEgRf
+         tinfD/E86CDjYi7ebGDnwDHQ7W2iJjtGUOrvuLBHgwoN8xetYU759/i96pOGPPryDtTO
+         CWjJCUPaaOxnfmcK3iaheMYOiVpbUtpBd7k7UduYKQrHob3Gs3Q2lAvMVHFoTH6pINc8
+         bKmEZR+t6fC0CSBKA73Q7Zs08bIYkCVP0hh/9BBA4vSdnXtKZVMMhRvpknxYKTXPtUIw
+         ZyXQ==
+X-Gm-Message-State: AOAM530/x1L9jfwqcr2BR3C9LeYtWoCDa8dZxjneAusIHunPD83x8rGj
+        mc5ayF9r5C3HWPNOfm9KCFd/Ew8yzDu/V8XwZkAcXQ==
+X-Google-Smtp-Source: ABdhPJzzJY1/4fopv99DhbVgWhXzB+zQA/jEPEBBQxiQYJFph/e27bdnDC1li1O1UFRvPwNTFVd72I3/oRm5YST4Lr8=
+X-Received: by 2002:a2e:a7c8:: with SMTP id x8mr1291001ljp.89.1619070749681;
+ Wed, 21 Apr 2021 22:52:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210421183222.2557747-1-dlatypov@google.com>
+In-Reply-To: <20210421183222.2557747-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 22 Apr 2021 13:52:17 +0800
+Message-ID: <CABVgOS=3OcPK-s_PO9t87_ruaUq4d+AO0zuCC5SxRd3vC3Vxgg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] lib/test: convert lib/test_list_sort.c to use KUnit
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test measures the kernel's signal delivery with different (enough vs.
-insufficient) stack sizes.
+On Thu, Apr 22, 2021 at 2:32 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Functionally, this just means that the test output will be slightly
+> changed and it'll now depend on CONFIG_KUNIT=y/m.
+>
+> It'll still run at boot time and can still be built as a loadable
+> module.
+>
+> There was a pre-existing patch to convert this test that I found later,
+> here [1]. Compared to [1], this patch doesn't rename files and uses
+> KUnit features more heavily (i.e. does more than converting pr_err()
+> calls to KUNIT_FAIL()).
+>
+> What this conversion gives us:
+> * a shorter test thanks to KUnit's macros
+> * a way to run this a bit more easily via kunit.py (and
+> CONFIG_KUNIT_ALL_TESTS=y) [2]
+> * a structured way of reporting pass/fail
+> * uses kunit-managed allocations to avoid the risk of memory leaks
+> * more descriptive error messages:
+>   * i.e. it prints out which fields are invalid, what the expected
+>   values are, etc.
+>
+> What this conversion does not do:
+> * change the name of the file (and thus the name of the module)
+> * change the name of the config option
+>
+> Leaving these as-is for now to minimize the impact to people wanting to
+> run this test. IMO, that concern trumps following KUnit's style guide
+> for both names, at least for now.
+>
+> [1] https://lore.kernel.org/linux-kselftest/20201015014616.309000-1-vitor@massaru.org/
+> [2] Can be run via
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
+> CONFIG_KUNIT=y
+> CONFIG_TEST_LIST_SORT=y
+> EOF
+>
+> [16:55:56] Configuring KUnit Kernel ...
+> [16:55:56] Building KUnit Kernel ...
+> [16:56:29] Starting KUnit Kernel ...
+> [16:56:32] ============================================================
+> [16:56:32] ======== [PASSED] list_sort ========
+> [16:56:32] [PASSED] list_sort_test
+> [16:56:32] ============================================================
+> [16:56:32] Testing complete. 1 tests run. 0 failed. 0 crashed.
+> [16:56:32] Elapsed time: 35.668s total, 0.001s configuring, 32.725s building, 0.000s running
+>
+> Note: the build time is as after a `make mrproper`.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Reviewed-by: Len Brown <len.brown@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes from v3:
-* Revised test messages again (Borislav Petkov)
+This looks good to me: I'm not an expert in the test, though, so I may
+have missed something. I did run it, though, and it seemed to work
+fine.
 
-Changes from v2:
-* Revised test messages (Borislav Petkov)
----
- tools/testing/selftests/x86/Makefile      |   2 +-
- tools/testing/selftests/x86/sigaltstack.c | 128 ++++++++++++++++++++++
- 2 files changed, 129 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/sigaltstack.c
+It's a shame the functions can no-longer be marked __init, but I think
+the advantages of KUnit outweigh it, particularly since this is
+unlikely to be being used in production.
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 333980375bc7..65bba2ae86ee 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore
-+			syscall_arg_fault fsgsbase_restore sigaltstack
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
-new file mode 100644
-index 000000000000..f689af75e979
---- /dev/null
-+++ b/tools/testing/selftests/x86/sigaltstack.c
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#define _GNU_SOURCE
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <err.h>
-+#include <errno.h>
-+#include <limits.h>
-+#include <sys/mman.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <sys/resource.h>
-+#include <setjmp.h>
-+
-+/* sigaltstack()-enforced minimum stack */
-+#define ENFORCED_MINSIGSTKSZ	2048
-+
-+#ifndef AT_MINSIGSTKSZ
-+#  define AT_MINSIGSTKSZ	51
-+#endif
-+
-+static int nerrs;
-+
-+static bool sigalrm_expected;
-+
-+static unsigned long at_minstack_size;
-+
-+static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
-+		       int flags)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_sigaction = handler;
-+	sa.sa_flags = SA_SIGINFO | flags;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+}
-+
-+static void clearhandler(int sig)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_handler = SIG_DFL;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+}
-+
-+static int setup_altstack(void *start, unsigned long size)
-+{
-+	stack_t ss;
-+
-+	memset(&ss, 0, sizeof(ss));
-+	ss.ss_size = size;
-+	ss.ss_sp = start;
-+
-+	return sigaltstack(&ss, NULL);
-+}
-+
-+static jmp_buf jmpbuf;
-+
-+static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	if (sigalrm_expected) {
-+		printf("[FAIL]\tWrong signal delivered: SIGSEGV (expected SIGALRM).");
-+		nerrs++;
-+	} else {
-+		printf("[OK]\tSIGSEGV signal delivered.\n");
-+	}
-+
-+	siglongjmp(jmpbuf, 1);
-+}
-+
-+static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	if (!sigalrm_expected) {
-+		printf("[FAIL]\tWrong signal delivered: SIGALRM (expected SIGSEGV).");
-+		nerrs++;
-+	} else {
-+		printf("[OK]\tSIGALRM signal delivered.\n");
-+	}
-+}
-+
-+static void test_sigaltstack(void *altstack, unsigned long size)
-+{
-+	if (setup_altstack(altstack, size))
-+		err(1, "sigaltstack()");
-+
-+	sigalrm_expected = (size > at_minstack_size) ? true : false;
-+
-+	sethandler(SIGSEGV, sigsegv, 0);
-+	sethandler(SIGALRM, sigalrm, SA_ONSTACK);
-+
-+	if (!sigsetjmp(jmpbuf, 1)) {
-+		printf("[RUN]\tTest an alternate signal stack of %ssufficient size.\n",
-+		       sigalrm_expected ? "" : "in");
-+		printf("\tRaise SIGALRM. %s is expected to be delivered.\n",
-+		       sigalrm_expected ? "It" : "SIGSEGV");
-+		raise(SIGALRM);
-+	}
-+
-+	clearhandler(SIGALRM);
-+	clearhandler(SIGSEGV);
-+}
-+
-+int main(void)
-+{
-+	void *altstack;
-+
-+	at_minstack_size = getauxval(AT_MINSIGSTKSZ);
-+
-+	altstack = mmap(NULL, at_minstack_size + SIGSTKSZ, PROT_READ | PROT_WRITE,
-+			MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
-+	if (altstack == MAP_FAILED)
-+		err(1, "mmap()");
-+
-+	if ((ENFORCED_MINSIGSTKSZ + 1) < at_minstack_size)
-+		test_sigaltstack(altstack, ENFORCED_MINSIGSTKSZ + 1);
-+
-+	test_sigaltstack(altstack, at_minstack_size + SIGSTKSZ);
-+
-+	return nerrs == 0 ? 0 : 1;
-+}
--- 
-2.17.1
+(BTW: This doesn't appear to be posted as a reply to Patch 1/2, which
+made it a bit trickier to find.)
 
+This is
+Tested-by: David Gow <davidgow@google.com>
+
+-- David
