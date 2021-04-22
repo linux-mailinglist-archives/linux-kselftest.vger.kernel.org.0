@@ -2,88 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A233688C1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Apr 2021 23:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0023C3688D6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Apr 2021 00:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbhDVV4w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Apr 2021 17:56:52 -0400
-Received: from www62.your-server.de ([213.133.104.62]:39264 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbhDVV4w (ORCPT
+        id S236660AbhDVWG2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Apr 2021 18:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236989AbhDVWG1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Apr 2021 17:56:52 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lZhIs-000DUm-AJ; Thu, 22 Apr 2021 23:56:06 +0200
-Received: from [85.7.101.30] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lZhIs-000JP5-1R; Thu, 22 Apr 2021 23:56:06 +0200
-Subject: Re: [PATCH] selftests/bpf: fix warning comparing pointer to 0
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, shuah@kernel.org
-Cc:     ast@kernel.org, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1619085648-36826-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <7ecb85e6-410b-65bb-a042-74045ee17c3f@iogearbox.net>
-Date:   Thu, 22 Apr 2021 23:56:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 22 Apr 2021 18:06:27 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF51DC06138C
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Apr 2021 15:05:51 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id b10so47086400iot.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Apr 2021 15:05:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AFk7BH45ORIdrkfNh1F4hyVbR2dk8H/UC2K3JhS/KUs=;
+        b=VUzn1MHbSHNAy7Ei+9InpDkS65ICvIJKxEJLWPTDS0ijRuQAzd11Rpzlj3MSVWVMjv
+         xve9ML4hEvVzJU7+zMUHrDmZC3kqHCsiP1/ct8ERTY0ju5i5ekjH8RkF7Ei8iIARwbe1
+         ac0WqS88RUUAv6BwhAYU54vL36l2IJwW5+CneLDm1/wPihJKPDOrxeoJ9KpJCBS081W2
+         uci7pHXo5JdisDqtWNnxRCviYma1yYJPWplAW1iZU3RIxrVrx4BheuYp7BiEAI1WmUTy
+         bjAPTtnJz9MJURkVYnY6cLXvxniMP897bu8yPuK5DzRDCI5SPwq9vnUBjCwd3VKgmU5D
+         1e4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AFk7BH45ORIdrkfNh1F4hyVbR2dk8H/UC2K3JhS/KUs=;
+        b=F/Uce1diLmCHcxQkv9+5FEnwYjGU8H13d3kKV8LgcYjQDPX+g51vutStbI/uJdJ6/U
+         Qqn+QagxV6Ly0wbNbsNM6F3dgOA4RWzwGTbG8Zv1S+yOa504xciDc7EFisfr41YqZqNx
+         nm8mzNEGsz2t4j7IMcvwAIG6ItMgMdlGEXK+pBhenPiVu6P/5zI7JZ6nAtJK23SdsHDl
+         BKJnj+vD7w6itCks3ZaYjVLnVb3dhhVxOIbc7FXyLd6zTo6VjwarVYPZa4YhpESPDx2B
+         DxhiWTMJwwUXgv1CwExg9berVw3BsHjWNj+osuIT1UplW0KJntQfLkThWo0HMxR3crIi
+         Fz6g==
+X-Gm-Message-State: AOAM533myKSaUwCZKM8NNwp0XtUULyWeUzxRgQATpqp34r/T3qt/y4l6
+        8rN9Cw4BvQrEVWRxUTYBiL+N/dNIewc1ZG0QzmsynQ==
+X-Google-Smtp-Source: ABdhPJxBGb1P3MtuTKhDCA2eTGl9jzdfgCFgq1+C3DBoGvJw068w+BypVdPyLeyurB1t52k5rpStyCAVc85KqUpzqKc=
+X-Received: by 2002:a5e:8a47:: with SMTP id o7mr883885iom.57.1619129150741;
+ Thu, 22 Apr 2021 15:05:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1619085648-36826-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26148/Thu Apr 22 13:06:46 2021)
+References: <20210420220804.486803-1-axelrasmussen@google.com>
+ <20210420220804.486803-4-axelrasmussen@google.com> <CAJHvVchQk1zrgah08n_P3sHUVzQLZUXHSMbkpd9rG-w5jUGNdw@mail.gmail.com>
+ <20210422211847.GF6404@xz-x1>
+In-Reply-To: <20210422211847.GF6404@xz-x1>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 22 Apr 2021 15:05:14 -0700
+Message-ID: <CAJHvVchBeYG1g-EXCVAF2k1uxUeaUn_nC_KxfLK5S5JLwYv20Q@mail.gmail.com>
+Subject: Re: [PATCH v4 03/10] userfaultfd/shmem: support UFFDIO_CONTINUE for shmem
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        Brian Geffon <bgeffon@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/22/21 12:00 PM, Jiapeng Chong wrote:
-> Fix the following coccicheck warning:
-> 
-> ./tools/testing/selftests/bpf/progs/fentry_test.c:76:15-16: WARNING
-> comparing pointer to 0.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+On Thu, Apr 22, 2021 at 2:18 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> Axel,
+>
+> On Thu, Apr 22, 2021 at 01:22:02PM -0700, Axel Rasmussen wrote:
+> > > +       if (page_in_cache)
+> > > +               page_add_file_rmap(page, false);
+> > > +       else
+> > > +               page_add_new_anon_rmap(page, dst_vma, dst_addr, false);
+> > > +
+> > > +       /*
+> > > +        * Must happen after rmap, as mm_counter() checks mapping (via
+> > > +        * PageAnon()), which is set by __page_set_anon_rmap().
+> > > +        */
+> > > +       inc_mm_counter(dst_mm, mm_counter(page));
+> >
+> > Actually, I've noticed that this is still slightly incorrect.
+> >
+> > As Hugh pointed out, this works for the anon case, because
+> > page_add_new_anon_rmap() sets page->mapping.
+> >
+> > But for the page_in_cache case, it doesn't work: unlike its anon
+> > counterpart, page_add_file_rmap() *does not* set page->mapping.
+>
+> If it's already in the page cache, shouldn't it be set already in e.g. one
+> previous call to shmem_add_to_page_cache()?  Thanks,
 
-How many more of those 'comparing pointer to 0' patches do you have?
-Right now we already merged the following with similar trivial pattern:
+Ah, of course. Sorry for the noise. This should have been obvious to
+me from how page_in_cache is defined.
 
-  - ebda107e5f222a086c83ddf6d1ab1da97dd15810
-  - a9c80b03e586fd3819089fbd33c38fb65ad5e00c
-  - 04ea63e34a2ee85cfd38578b3fc97b2d4c9dd573
+I had run into the same "Bad rss-counter state" warning while applying
+my patches to an earlier kernel version, and got concerned about this
+line after looking at page_add_file_rmap().
 
-Given they don't really 'fix' anything, I would like to reduce such
-patch cleanup churn on the bpf tree. Please _consolidate_ all other
-such occurrences into a _single_ patch for BPF selftests, and resubmit.
+But, you're right that this ought to work, and indeed I can't
+reproduce the warning when the patches are based on the mm snapshot
+mentioned in the cover letter. So, it seems the problem lies with this
+other unrelated merge I'm doing, not the series itself. :)
 
-Thanks!
-
-> ---
->   tools/testing/selftests/bpf/progs/fentry_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c b/tools/testing/selftests/bpf/progs/fentry_test.c
-> index 52a550d..d4247d6 100644
-> --- a/tools/testing/selftests/bpf/progs/fentry_test.c
-> +++ b/tools/testing/selftests/bpf/progs/fentry_test.c
-> @@ -73,7 +73,7 @@ int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
->   SEC("fentry/bpf_fentry_test8")
->   int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
->   {
-> -	if (arg->a == 0)
-> +	if (!arg->a)
->   		test8_result = 1;
->   	return 0;
->   }
-> 
-
+>
+> --
+> Peter Xu
+>
