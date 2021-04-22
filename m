@@ -2,251 +2,265 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE61367987
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Apr 2021 07:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3706F3679B4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Apr 2021 08:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbhDVFx1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Apr 2021 01:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbhDVFx1 (ORCPT
+        id S234799AbhDVGNg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Apr 2021 02:13:36 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:16959 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234708AbhDVGNf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Apr 2021 01:53:27 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B3BC06174A
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Apr 2021 22:52:53 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id b38so9283261ljf.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Apr 2021 22:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zdGMkI9TGwXlU6z5h6cFrk4sNZEl6jH28J5xJfUfohc=;
-        b=grtyIGRCq8GeZXFKc+5NDCuphq69TNdSOxX0J4jsRhiSbfK7O2IdP2HkLn1XK+jRYp
-         e0lzfNr4Npxloev11ezIrXjWn94FxoIlPz1zZ7+M230PTlqyGBLOAkF/HKRX5aAHys+4
-         SKqBeYNyA/ftwXMu4Y6Ieal1KjI8qJPCFERwpQXKRL22/jC/TatZJyCRQbbOdUe/agWC
-         8UJhy1pKQYpe7EO1dtOFBdBxGOpYfWXhx0aSWY1zcJgbfN2aRSifKS7EUvv9ICSe0OzW
-         q3Ku2vfqBto14DUtNORxUv05N1PaEboopbFRk8dNZwoQfqB+OTvBxmLJgqW7sDHbxqqA
-         zoBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zdGMkI9TGwXlU6z5h6cFrk4sNZEl6jH28J5xJfUfohc=;
-        b=AsBEf58Dfbk9MnY7JwJca0TzTHQmq05R32O9ASo785wlol/AO4m+4I9jQeIaV8Bt9M
-         qm8Mkl31Ty1pUYfeTODfCo+r5VxjeiSnh2AZGB/sUTHebyPuWUFHgtvcT2RTE5TSu2uH
-         AQY6G7f0xGkwR3taO+XOF5sicbS0cVW2EFZpaN8ew9/lwaVt3FKRIBt6cMYqvZn05yxq
-         UPRqiPfDtlTjsmRFK3/SBEaq5RlrOyG9CgBjV5WpbBxR5kji9DfVM+1ycccgbzCcL8+Z
-         EaXrjIZ6Rj1BXimF+qIHGp2BQ0Fh4OYRCyAFsbkSk7CucT5t5kvSk4Okig8Px1n+S9FM
-         8AVg==
-X-Gm-Message-State: AOAM531KIMEWcobpymyn+w4PaEUTnYDTJkfGc7hRepjlKtipFo4+A0ls
-        x4cdVvLXFUycvKd9qRyxwIzhZyj3VcJ3guMgynawEQ==
-X-Google-Smtp-Source: ABdhPJwvWTYxTlk4IvCfUQEIf1sf5sPIA1JBr9l53MABGRGKiDvbUTMDUNC+NOtfj41XAHbFkZO/7L2iZyNDKj+58wY=
-X-Received: by 2002:a2e:87c6:: with SMTP id v6mr1346786ljj.490.1619070771358;
- Wed, 21 Apr 2021 22:52:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210421183210.2557462-1-dlatypov@google.com>
-In-Reply-To: <20210421183210.2557462-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 22 Apr 2021 13:52:39 +0800
-Message-ID: <CABVgOSnGC=15FXcRz0CKYTgY=-vFxWCWBGqLg7uGCNs8wgW2Dw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: introduce kunit_kmalloc_array/kunit_kcalloc() helpers
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+        Thu, 22 Apr 2021 02:13:35 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20210422061258euoutp01193b9d7b1746531876864d24e647dd10~4GWL1x0uQ1538115381euoutp01Y
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Apr 2021 06:12:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20210422061258euoutp01193b9d7b1746531876864d24e647dd10~4GWL1x0uQ1538115381euoutp01Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1619071978;
+        bh=F0PjIyOcubJnY7+qhwxO7Q7JqOwk4FqnDrRIqy6JxX8=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=FHmXtW/r5uQfrbsUEdu3/vRloVWdgbF2aVYmbJ23Nmojbf3mMNrNt2vANHWfB2X2E
+         blxygf4OZHaMPt78aDpiCz+kZo9NiKyqI7v7JHoUDFkA63GvbNIppHHi89fNhwIpKX
+         Zgj/UK9uilvsF77zcitgNskBONZ8aabnTgKyFtEI=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20210422061258eucas1p1de7228b9f3acb3f7e5db89f5922b37ee~4GWLNMu8Q1409814098eucas1p1Q;
+        Thu, 22 Apr 2021 06:12:58 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 4C.B3.09452.9E311806; Thu, 22
+        Apr 2021 07:12:58 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20210422061257eucas1p1222af71d8da6a2e55bd93804c3be1869~4GWKkBDyv1326913269eucas1p1_;
+        Thu, 22 Apr 2021 06:12:57 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210422061257eusmtrp2cb4fad19555e9b46202aba614594a2b0~4GWKilVPi0288702887eusmtrp2k;
+        Thu, 22 Apr 2021 06:12:57 +0000 (GMT)
+X-AuditID: cbfec7f2-ab7ff700000024ec-b4-608113e99344
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 1F.23.08696.9E311806; Thu, 22
+        Apr 2021 07:12:57 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20210422061255eusmtip24d75f5e31ad58c0e9c546589fa2cbbaa~4GWI9jJcF2898528985eusmtip2A;
+        Thu, 22 Apr 2021 06:12:55 +0000 (GMT)
+Subject: Re: [PATCH v4 05/10] signal: Introduce TRAP_PERF si_code and
+ si_perf to siginfo
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian@brauner.io>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Matt Morehouse <mascasa@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Ian Rogers <irogers@google.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-tegra@vger.kernel.org, jonathanh@nvidia.com
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <dd99b921-3d79-a21f-8942-40fa5bf53190@samsung.com>
+Date:   Thu, 22 Apr 2021 08:12:54 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
+        Gecko/20100101 Thunderbird/78.9.1
+MIME-Version: 1.0
+In-Reply-To: <YIBtr2w/8KhOoiUA@elver.google.com>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUxTVxzN7Xt9LQ2wB8i4EZGkui00UiVzyU0wiHMxL9vYV9Bp3QKdvIAI
+        RVu6uWXGVrErH1roMrBFPgITmq6ItiDala/y0XUbhZUBs0OUwZTgAFFYnFAZ7ZON/8753fM7
+        53eSy8VCu4mN3KOSXFoqEWfxCR5+vfef/tjpMGXqjuIlgArGbhBIbdaxkVfby0Hf3dYQ6NrF
+        RjZSzm5BxeMqDlL93MJG9zytLPTVfCuGqs8tcJDbGYt6+rwslKevwZHh3h0WUlsXcWSeGGYj
+        W6sTR4PWSwQqG50jUP6CnkCXR35hodrODjZyd1Sz0Jm6Zhw1t58DSDM6QiDH+Q4Wspi/wVC/
+        18FGT65OsBOjKVOlCVBLT7WA8lbMY1S1WU7ZSpwEZTEIqME+OWU25hPUrMvFoexdakBVOt+n
+        LN+eps6fnSWoubYhgrrQZATUY/Pm90JEvF1pdNbRT2np9oRUXsb9H+5wjlduPdnwsAdTgNKo
+        AhDAheROaDMp2D4cShoAtBnjCwBvFS8AeE1bhTHkMYB388Y5axu6KdPzjXoA5zTHGNE8gI7F
+        Xr8ojBTBLtcA5sMbSD6cmbjgd8LIjgDo+LrEv02QcbBgpoDw4SAyAc6axvxznHwJFukr/PNw
+        8hN4y72CMZoQ6NRN4j4cQO6ACkONPwwjo2HLzCWMwRHQM1nF8oVBcogHXa21q4S7St6Af9Vl
+        Mw3C4LSj6XmbTXDl5pr+LIDjrgYOQ4oAHDxzETCqeDjqekr4jDAyBjZatzOee+DV5UAGBsPf
+        ZkKYE4Kh9noZxoyDoFoVyni8DPWOK/+ldg64sWLA168rpl9XRr+ujP7/2GqAG0EELZdlp9Oy
+        OAn9mVAmzpbJJenCIznZZrD60X965nh0A1RMzwvtgMUFdgC5GH9DUINMkRoalCb+/AtampMi
+        lWfRMjuI5OL8iCBjuSkllEwX59LHaPo4LV17ZXEDNipYUcrlvMzhzZ1xnV3pY5FZ6sG3c0R1
+        +FSfsz3xhOCELv/3sK1dDwr3Pgq2En9mGvYkpcSoPs47UjR1quSjvd3wxdlD3vCTmt0PrMqd
+        0VhueZSjpTU5JV7iGR7QLu+nhP1fLkrfNcR6DpsOHOj/8e+VfXdfqX+1Z6ld/TDw9pWbbnfN
+        mDCp2jYUUnr417kXip4EawJK7wdaO5qwTbbJzLJ3JG1vbjHUbkvmnt7W9eH+yL4kUUblEG+p
+        dvfB76OSY/ILhVWNharS8pK3JpT7YhM8dUPLbSLLs/ARrSQR65HZmxebdLdaptJGD8V0A8Eu
+        ZdUHr7sFvY7XLicdPFX8R3d0s63ewsdlGeI4ASaVif8F5/V6YVcEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFKsWRmVeSWpSXmKPExsVy+t/xe7ovhRsTDNbsErHoureDzaJj00xW
+        i7+TjrFbrL7bz2axccZ6VovGd8oWEx62sVu0ndnOavHs1l4mi/aPe5ktFrR+Ybe4dFLX4ujZ
+        v0wWLbMWsViseHafyaJj11cWi02Pr7Fa7Nl7ksXi8q45bBbT77xns+j8MovNYun1i0wWiw8e
+        YLW4dGABk0XTsq0sFlv3tzJa9N+5zmZxvPcAk8XmTVOZLc7/Pc5q8WPDY1YHeY8189Ywevz+
+        NYnR4+/cj8weCzaVeuyZeJLNY/MKLY/LZ0s9Nq3qZPN4d+4cu8ehwx2MHvNOBnpsXlLv0dv8
+        js3j/b6rbB59W1YxenzeJBcgGKVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSq
+        pG9nk5Kak1mWWqRvl6CX8fzEffaCeSoVaz8cZW5gnCbbxcjJISFgIjHzxRrWLkYuDiGBpYwS
+        DedWMEIkZCROTmtghbCFJf5c62KDKHrPKHHz/g0WkISwQJTEpb/vmEFsEQElibeP+5hBipgF
+        DnFK/H/yCarjHKvE4d5TbCBVbAKGEl1vu8BsXgE7iXdr7oGtYBFQleiZNRcsLiqQJHHv8kpm
+        iBpBiZMzn4Bt4xQwkGhYsYgdxGYWMJOYt/khM4QtL7H97RwoW1zi1pP5TBMYhWYhaZ+FpGUW
+        kpZZSFoWMLKsYhRJLS3OTc8tNtIrTswtLs1L10vOz93ECExk24793LKDceWrj3qHGJk4GA8x
+        SnAwK4nwri1uSBDiTUmsrEotyo8vKs1JLT7EaAr0z0RmKdHkfGAqzSuJNzQzMDU0MbM0MLU0
+        M1YS5zU5siZeSCA9sSQ1OzW1ILUIpo+Jg1OqgWl/8kO9Xk6fOwmTK80v3QwROD1TpaJLfbtF
+        p4/K0YSP57cayDbeWms798rr3Zs+HvMNvnzyXILrqrc1W7Z0tihPb716IMdCY8neiDCLPHbr
+        m1v6vZwfyTl3n9k610niuPTVY0ohs+3rxBUKv21ceH6Cv6qI5tJ74oyFJ9jYNToV/D9a35ZN
+        ctnjemKWy70LF+67GuUYrj6RdnXZxDq/SWF1O5yehO6+V7Do4MlX21tcmyZ7m6jWrYi1DDZK
+        trTRfzL/1KL716pvi8z4uzDN/Y6QreeJd7PWLd+mdFhf96TUnsfzllx84D7t/uPyZ+9NvbgK
+        dBme5bQ/ubN0u5DjzRiLu8bqIYKWn+M9bssuUhFXYinOSDTUYi4qTgQAiY5lx+0DAAA=
+X-CMS-MailID: 20210422061257eucas1p1222af71d8da6a2e55bd93804c3be1869
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20210421182355eucas1p23b419002936ab5f1ffc25652135cc152
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20210421182355eucas1p23b419002936ab5f1ffc25652135cc152
+References: <CANpmjNM8wEJngK=J8Lt9npkZgrSWoRsqkdajErWEoY_=M1GW5A@mail.gmail.com>
+        <43f8a3bf-34c5-0fc9-c335-7f92eaf23022@samsung.com>
+        <dccaa337-f3e5-08e4-fe40-a603811bb13e@samsung.com>
+        <CANpmjNP6-yKpxHqYFiA8Up-ujBQaeP7xyq1BrsV-NqMjJ-uHAQ@mail.gmail.com>
+        <740077ce-efe1-b171-f807-bc5fd95a32ba@samsung.com>
+        <f114ff4a-6612-0935-12ac-0e2ac18d896c@samsung.com>
+        <CANpmjNM6bQpc49teN-9qQhCXoJXaek5stFGR2kPwDroSFBc0fw@mail.gmail.com>
+        <cf6ed5cd-3202-65ce-86bc-6f1eba1b7d17@samsung.com>
+        <CANpmjNPr_JtRC762ap8PQVmsFNY5YhHvOk0wNcPHq=ZQt-qxYg@mail.gmail.com>
+        <YIBSg7Vi+U383dT7@elver.google.com>
+        <CGME20210421182355eucas1p23b419002936ab5f1ffc25652135cc152@eucas1p2.samsung.com>
+        <YIBtr2w/8KhOoiUA@elver.google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 22, 2021 at 2:32 AM Daniel Latypov <dlatypov@google.com> wrote:
+Hi Marco,
+
+On 21.04.2021 20:23, Marco Elver wrote:
+> On Wed, Apr 21, 2021 at 06:27PM +0200, Marco Elver wrote:
+>> On Wed, Apr 21, 2021 at 05:11PM +0200, Marco Elver wrote:
+>>> +Cc linux-arm-kernel
+>>>
+>> [...]
+>>>> I've managed to reproduce this issue with a public Raspberry Pi OS Lite
+>>>> rootfs image, even without deploying kernel modules:
+>>>>
+>>>> https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2021-03-25/2021-03-04-raspios-buster-armhf-lite.zip
+>>>>
+>>>> # qemu-system-arm -M virt -smp 2 -m 512 -kernel zImage -append "earlycon
+>>>> console=ttyAMA0 root=/dev/vda2 rw rootwait" -serial stdio -display none
+>>>> -monitor null -device virtio-blk-device,drive=virtio-blk -drive
+>>>> file=/tmp/2021-03-04-raspios-buster-armhf-lite.img,id=virtio-blk,if=none,format=raw
+>>>> -netdev user,id=user -device virtio-net-device,netdev=user
+>>>>
+>>>> The above one doesn't boot if zImage z compiled from commit fb6cc127e0b6
+>>>> and boots if compiled from 2e498d0a74e5. In both cases I've used default
+>>>> arm/multi_v7_defconfig and
+>>>> gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabi toolchain.
+>>> Yup, I've narrowed it down to the addition of "__u64 _perf" to
+>>> siginfo_t. My guess is the __u64 causes a different alignment for a
+>>> bunch of adjacent fields. It seems that x86 and m68k are the only ones
+>>> that have compile-time tests for the offsets. Arm should probably add
+>>> those -- I have added a bucket of static_assert() in
+>>> arch/arm/kernel/signal.c and see that something's off.
+>>>
+>>> I'll hopefully have a fix in a day or so.
+>> Arm and compiler folks: are there some special alignment requirement for
+>> __u64 on arm 32-bit? (And if there is for arm64, please shout as well.)
+>>
+>> With the static-asserts below, the only thing that I can do to fix it is
+>> to completely remove the __u64. Padding it before or after with __u32
+>> just does not work. It seems that the use of __u64 shifts everything
+>> in __sifields by 4 bytes.
+>>
+>> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+>> index d0bb9125c853..b02a4ac55938 100644
+>> --- a/include/uapi/asm-generic/siginfo.h
+>> +++ b/include/uapi/asm-generic/siginfo.h
+>> @@ -92,7 +92,10 @@ union __sifields {
+>>   				__u32 _pkey;
+>>   			} _addr_pkey;
+>>   			/* used when si_code=TRAP_PERF */
+>> -			__u64 _perf;
+>> +			struct {
+>> +				__u32 _perf1;
+>> +				__u32 _perf2;
+>> +			} _perf;
+>>   		};
+>>   	} _sigfault;
+>>
+>> ^^ works, but I'd hate to have to split this into 2 __u32 because it
+>> makes the whole design worse.
+>>
+>> What alignment trick do we have to do here to fix it for __u64?
+> So I think we just have to settle on 'unsigned long' here. On many
+> architectures, like 32-bit Arm, the alignment of a structure is that of
+> its largest member. This means that there is no portable way to add
+> 64-bit integers to siginfo_t on 32-bit architectures.
 >
-> Add in:
-> * kunit_kmalloc_array() and wire up kunit_kmalloc() to be a special
-> case of it.
-> * kunit_kcalloc() for symmetry with kunit_kzalloc()
+> In the case of the si_perf field, word size is sufficient since the data
+> it contains is user-defined. On 32-bit architectures, any excess bits of
+> perf_event_attr::sig_data will therefore be truncated when copying into
+> si_perf.
 >
-> This should using KUnit more natural by making it more similar to the
-> existing *alloc() APIs.
+> Feel free to test the below if you have time, but the below lets me boot
+> 32-bit arm which previously timed out. It also passes all the
+> static_asserts() I added (will send those as separate patches).
 >
-> And while we shouldn't necessarily be writing unit tests where overflow
-> should be a concern, it can't hurt to be safe.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+> Once I'm convinced this passes all others tests too, I'll send a patch.
 
-This seems like a good addition to me: a bug and a couple of useless
-asides below.
+This fixes the issue I've observed on my test systems. Feel free to add:
 
-Apart from the "kzalloc"/"kcalloc" confusion in the comment below, this is
-Reviewed-by: David Gow <davidgow@google.com>
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
--- David
-
->  include/kunit/test.h | 36 ++++++++++++++++++++++++++++++++----
->  lib/kunit/test.c     | 22 ++++++++++++----------
->  2 files changed, 44 insertions(+), 14 deletions(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 49601c4b98b8..7fa0de4af977 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -577,16 +577,30 @@ static inline int kunit_destroy_named_resource(struct kunit *test,
->  void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
->
->  /**
-> - * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
-> + * kunit_kmalloc_array() - Like kmalloc_array() except the allocation is *test managed*.
->   * @test: The test context object.
-> + * @n: number of elements.
->   * @size: The size in bytes of the desired memory.
->   * @gfp: flags passed to underlying kmalloc().
->   *
-> - * Just like `kmalloc(...)`, except the allocation is managed by the test case
-> + * Just like `kmalloc_array(...)`, except the allocation is managed by the test case
->   * and is automatically cleaned up after the test case concludes. See &struct
->   * kunit_resource for more information.
->   */
-> -void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp);
-> +void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t flags);
-> +
-> +/**
-> + * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
-> + * @test: The test context object.
-> + * @size: The size in bytes of the desired memory.
-> + * @gfp: flags passed to underlying kmalloc().
-> + *
-> + * See kmalloc() and kunit_kmalloc_array() for more information.
-> + */
-> +static inline void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-> +{
-> +       return kunit_kmalloc_array(test, 1, size, gfp);
-
-Do we want to implement kunit_kmalloc() in terms of kunit_kmalloc_array()?
-It's interestingly backwards given that kmalloc_array() is implemented
-in terms of kmalloc().
-The other option would be to have each kunit_* function wrap the
-actual function that's called, but that would introduce a lot of code
-duplication for a very small performance benefit.
-
-I'm happy with it the way it is now that I've looked through the
-implementations, but I was a little uneasy at first that some of these
-functions might not actually call the function they're theoretically
-wrapping.
-
-> +}
->
->  /**
->   * kunit_kfree() - Like kfree except for allocations managed by KUnit.
-> @@ -601,13 +615,27 @@ void kunit_kfree(struct kunit *test, const void *ptr);
->   * @size: The size in bytes of the desired memory.
->   * @gfp: flags passed to underlying kmalloc().
->   *
-> - * See kzalloc() and kunit_kmalloc() for more information.
-> + * See kzalloc() and kunit_kmalloc_array() for more information.
->   */
->  static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
->  {
->         return kunit_kmalloc(test, size, gfp | __GFP_ZERO);
->  }
->
-> +/**
-> + * kunit_kzalloc() - Just like kunit_kmalloc_array(), but zeroes the allocation.
-
-The function is called kunit_kcalloc(), but the documentation comment
-calls it kunit_kzalloc().
-Copy + paste error from above?
-
-> + * @test: The test context object.
-> + * @n: number of elements.
-> + * @size: The size in bytes of the desired memory.
-> + * @gfp: flags passed to underlying kmalloc().
-> + *
-> + * See kcalloc() and kunit_kmalloc_array() for more information.
-> + */
-> +static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp_t flags)
-> +{
-> +       return kunit_kmalloc_array(test, n, size, flags | __GFP_ZERO);
-> +}
-> +
->  void kunit_cleanup(struct kunit *test);
->
->  void kunit_log_append(char *log, const char *fmt, ...);
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index ec9494e914ef..052fccf69eef 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -540,41 +540,43 @@ int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
->  }
->  EXPORT_SYMBOL_GPL(kunit_destroy_resource);
->
-> -struct kunit_kmalloc_params {
-> +struct kunit_kmalloc_array_params {
-> +       size_t n;
-
-It's worth noting that we never actually use this after the resource
-is created. kmalloc_array() discards 'n' after the overflow check and
-multiply anyway.
-
-Of course, we don't need 'size' either, and we were already tracking
-that. I guess it's just an overhead of the resource system, so nothing
-worth actually changing here.
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
 
+> Thanks,
+> -- Marco
+>
+>
+> diff --git a/include/linux/compat.h b/include/linux/compat.h
+> index c8821d966812..f0d2dd35d408 100644
+> --- a/include/linux/compat.h
+> +++ b/include/linux/compat.h
+> @@ -237,7 +237,7 @@ typedef struct compat_siginfo {
+>   					u32 _pkey;
+>   				} _addr_pkey;
+>   				/* used when si_code=TRAP_PERF */
+> -				compat_u64 _perf;
+> +				compat_ulong_t _perf;
+>   			};
+>   		} _sigfault;
+>   
+> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+> index d0bb9125c853..03d6f6d2c1fe 100644
+> --- a/include/uapi/asm-generic/siginfo.h
+> +++ b/include/uapi/asm-generic/siginfo.h
+> @@ -92,7 +92,7 @@ union __sifields {
+>   				__u32 _pkey;
+>   			} _addr_pkey;
+>   			/* used when si_code=TRAP_PERF */
+> -			__u64 _perf;
+> +			unsigned long _perf;
+>   		};
+>   	} _sigfault;
+>   
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
->         size_t size;
->         gfp_t gfp;
->  };
->
-> -static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
-> +static int kunit_kmalloc_array_init(struct kunit_resource *res, void *context)
->  {
-> -       struct kunit_kmalloc_params *params = context;
-> +       struct kunit_kmalloc_array_params *params = context;
->
-> -       res->data = kmalloc(params->size, params->gfp);
-> +       res->data = kmalloc_array(params->n, params->size, params->gfp);
->         if (!res->data)
->                 return -ENOMEM;
->
->         return 0;
->  }
->
-> -static void kunit_kmalloc_free(struct kunit_resource *res)
-> +static void kunit_kmalloc_array_free(struct kunit_resource *res)
->  {
->         kfree(res->data);
->  }
->
-> -void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-> +void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
->  {
-> -       struct kunit_kmalloc_params params = {
-> +       struct kunit_kmalloc_array_params params = {
->                 .size = size,
-> +               .n = n,
->                 .gfp = gfp
->         };
->
->         return kunit_alloc_resource(test,
-> -                                   kunit_kmalloc_init,
-> -                                   kunit_kmalloc_free,
-> +                                   kunit_kmalloc_array_init,
-> +                                   kunit_kmalloc_array_free,
->                                     gfp,
->                                     &params);
->  }
-> -EXPORT_SYMBOL_GPL(kunit_kmalloc);
-> +EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
->
->  void kunit_kfree(struct kunit *test, const void *ptr)
->  {
->
-> base-commit: 16fc44d6387e260f4932e9248b985837324705d8
-> --
-> 2.31.1.498.g6c1eba8ee3d-goog
->
