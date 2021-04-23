@@ -2,121 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0023C3688D6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Apr 2021 00:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD523690EF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Apr 2021 13:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236660AbhDVWG2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Apr 2021 18:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236989AbhDVWG1 (ORCPT
+        id S242216AbhDWLQb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Apr 2021 07:16:31 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:43716 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231185AbhDWLQa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Apr 2021 18:06:27 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF51DC06138C
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Apr 2021 15:05:51 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id b10so47086400iot.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Apr 2021 15:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AFk7BH45ORIdrkfNh1F4hyVbR2dk8H/UC2K3JhS/KUs=;
-        b=VUzn1MHbSHNAy7Ei+9InpDkS65ICvIJKxEJLWPTDS0ijRuQAzd11Rpzlj3MSVWVMjv
-         xve9ML4hEvVzJU7+zMUHrDmZC3kqHCsiP1/ct8ERTY0ju5i5ekjH8RkF7Ei8iIARwbe1
-         ac0WqS88RUUAv6BwhAYU54vL36l2IJwW5+CneLDm1/wPihJKPDOrxeoJ9KpJCBS081W2
-         uci7pHXo5JdisDqtWNnxRCviYma1yYJPWplAW1iZU3RIxrVrx4BheuYp7BiEAI1WmUTy
-         bjAPTtnJz9MJURkVYnY6cLXvxniMP897bu8yPuK5DzRDCI5SPwq9vnUBjCwd3VKgmU5D
-         1e4A==
+        Fri, 23 Apr 2021 07:16:30 -0400
+Received: from mail-pj1-f72.google.com ([209.85.216.72])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1lZtmr-0000N3-C2
+        for linux-kselftest@vger.kernel.org; Fri, 23 Apr 2021 11:15:53 +0000
+Received: by mail-pj1-f72.google.com with SMTP id p11-20020a17090ad30bb029014dcd9154e1so3178817pju.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Apr 2021 04:15:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AFk7BH45ORIdrkfNh1F4hyVbR2dk8H/UC2K3JhS/KUs=;
-        b=F/Uce1diLmCHcxQkv9+5FEnwYjGU8H13d3kKV8LgcYjQDPX+g51vutStbI/uJdJ6/U
-         Qqn+QagxV6Ly0wbNbsNM6F3dgOA4RWzwGTbG8Zv1S+yOa504xciDc7EFisfr41YqZqNx
-         nm8mzNEGsz2t4j7IMcvwAIG6ItMgMdlGEXK+pBhenPiVu6P/5zI7JZ6nAtJK23SdsHDl
-         BKJnj+vD7w6itCks3ZaYjVLnVb3dhhVxOIbc7FXyLd6zTo6VjwarVYPZa4YhpESPDx2B
-         DxhiWTMJwwUXgv1CwExg9berVw3BsHjWNj+osuIT1UplW0KJntQfLkThWo0HMxR3crIi
-         Fz6g==
-X-Gm-Message-State: AOAM533myKSaUwCZKM8NNwp0XtUULyWeUzxRgQATpqp34r/T3qt/y4l6
-        8rN9Cw4BvQrEVWRxUTYBiL+N/dNIewc1ZG0QzmsynQ==
-X-Google-Smtp-Source: ABdhPJxBGb1P3MtuTKhDCA2eTGl9jzdfgCFgq1+C3DBoGvJw068w+BypVdPyLeyurB1t52k5rpStyCAVc85KqUpzqKc=
-X-Received: by 2002:a5e:8a47:: with SMTP id o7mr883885iom.57.1619129150741;
- Thu, 22 Apr 2021 15:05:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bSnrI9pLqbkLYsZ1fjcEqsSyBUockPgKVVHwwmrSw5Y=;
+        b=ZZG2ob0PrvZvbVdFClo3IoGfPCI4FfD+iAF2lxlx84TxhIR1PXQQxffY7ri7RFle23
+         NgqwOXml4lbPPj6saZY0W36wbiIrG48YSbW0mY0Im/6/MddzMmwHR2Ds1ZfuEnYaVWCA
+         WjKpK8tES8dB0U0E5jUVaw9uq4LCb/suowxXrn2qxsQPyjA5J0vAd7TgVMbFL378KoEx
+         Q9TIjCYdYzie2LOB7dID7XgpkvEXO4mx/YbasKcrlG4flSHmWKya+iygH+Q4+XqjXv2K
+         OdolZThJeyXsfIIIVw+39bfWoxT/bg490qhKA5R1J9lVhpCfaN6i7BkYVUPIWHaFk35W
+         TozQ==
+X-Gm-Message-State: AOAM533wJMOBIWuIHBzNClx7YzsSXna69lKXs0u3PO07jDrA9kFe5k1M
+        npyvs9dB5jOG2PuomFdJXiwsdjAiH3JDypTlx8uNt9Q5djjR2wucb37atgipF8Kb0U4cgR6AGXy
+        7zR+NyiHcH59KReT5lus3cZgmmExJXWofsbYLZsWl8CSD
+X-Received: by 2002:a17:902:bb95:b029:ec:8ad4:d62c with SMTP id m21-20020a170902bb95b02900ec8ad4d62cmr3554097pls.19.1619176551753;
+        Fri, 23 Apr 2021 04:15:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzH8VIHkl3araIMp1Mu6LTIx3ouUWdz8gp9ETzkSXTwaEPzx+B+Sa5hINQ712Xtrcqz8tmkHA==
+X-Received: by 2002:a17:902:bb95:b029:ec:8ad4:d62c with SMTP id m21-20020a170902bb95b02900ec8ad4d62cmr3554065pls.19.1619176551302;
+        Fri, 23 Apr 2021 04:15:51 -0700 (PDT)
+Received: from localhost.localdomain (61-220-137-38.HINET-IP.hinet.net. [61.220.137.38])
+        by smtp.gmail.com with ESMTPSA id z17sm4227370pfe.181.2021.04.23.04.15.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Apr 2021 04:15:50 -0700 (PDT)
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        skhan@linuxfoundation.org
+Subject: [PATCH] selftests/net: bump timeout to 5 minutes
+Date:   Fri, 23 Apr 2021 19:15:38 +0800
+Message-Id: <20210423111538.83084-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210420220804.486803-1-axelrasmussen@google.com>
- <20210420220804.486803-4-axelrasmussen@google.com> <CAJHvVchQk1zrgah08n_P3sHUVzQLZUXHSMbkpd9rG-w5jUGNdw@mail.gmail.com>
- <20210422211847.GF6404@xz-x1>
-In-Reply-To: <20210422211847.GF6404@xz-x1>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 22 Apr 2021 15:05:14 -0700
-Message-ID: <CAJHvVchBeYG1g-EXCVAF2k1uxUeaUn_nC_KxfLK5S5JLwYv20Q@mail.gmail.com>
-Subject: Re: [PATCH v4 03/10] userfaultfd/shmem: support UFFDIO_CONTINUE for shmem
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        Brian Geffon <bgeffon@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 22, 2021 at 2:18 PM Peter Xu <peterx@redhat.com> wrote:
->
-> Axel,
->
-> On Thu, Apr 22, 2021 at 01:22:02PM -0700, Axel Rasmussen wrote:
-> > > +       if (page_in_cache)
-> > > +               page_add_file_rmap(page, false);
-> > > +       else
-> > > +               page_add_new_anon_rmap(page, dst_vma, dst_addr, false);
-> > > +
-> > > +       /*
-> > > +        * Must happen after rmap, as mm_counter() checks mapping (via
-> > > +        * PageAnon()), which is set by __page_set_anon_rmap().
-> > > +        */
-> > > +       inc_mm_counter(dst_mm, mm_counter(page));
-> >
-> > Actually, I've noticed that this is still slightly incorrect.
-> >
-> > As Hugh pointed out, this works for the anon case, because
-> > page_add_new_anon_rmap() sets page->mapping.
-> >
-> > But for the page_in_cache case, it doesn't work: unlike its anon
-> > counterpart, page_add_file_rmap() *does not* set page->mapping.
->
-> If it's already in the page cache, shouldn't it be set already in e.g. one
-> previous call to shmem_add_to_page_cache()?  Thanks,
+We found that with the latest mainline kernel (5.12.0-051200rc8) on
+some KVM instances / bare-metal systems, the following tests will take
+longer than the kselftest framework default timeout (45 seconds) to
+run and thus got terminated with TIMEOUT error:
+* xfrm_policy.sh - took about 2m20s
+* pmtu.sh - took about 3m5s
+* udpgso_bench.sh - took about 60s
 
-Ah, of course. Sorry for the noise. This should have been obvious to
-me from how page_in_cache is defined.
+Bump the timeout setting to 5 minutes to allow them have a chance to
+finish.
 
-I had run into the same "Bad rss-counter state" warning while applying
-my patches to an earlier kernel version, and got concerned about this
-line after looking at page_add_file_rmap().
+https://bugs.launchpad.net/bugs/1856010
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/Makefile | 2 ++
+ tools/testing/selftests/net/settings | 1 +
+ 2 files changed, 3 insertions(+)
+ create mode 100644 tools/testing/selftests/net/settings
 
-But, you're right that this ought to work, and indeed I can't
-reproduce the warning when the patches are based on the mm snapshot
-mentioned in the cover letter. So, it seems the problem lies with this
-other unrelated merge I'm doing, not the series itself. :)
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 25f198b..2be4670 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -37,6 +37,8 @@ TEST_GEN_FILES += ipsec
+ TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
+ TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls
+ 
++TEST_FILES := settings
++
+ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
+ 
+diff --git a/tools/testing/selftests/net/settings b/tools/testing/selftests/net/settings
+new file mode 100644
+index 0000000..694d707
+--- /dev/null
++++ b/tools/testing/selftests/net/settings
+@@ -0,0 +1 @@
++timeout=300
+-- 
+2.7.4
 
->
-> --
-> Peter Xu
->
