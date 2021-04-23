@@ -2,125 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E1136975D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Apr 2021 18:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 750B636991A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Apr 2021 20:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243123AbhDWQsY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Apr 2021 12:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S232569AbhDWSSM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Apr 2021 14:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243109AbhDWQsY (ORCPT
+        with ESMTP id S243649AbhDWSSJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Apr 2021 12:48:24 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FD9C061574;
-        Fri, 23 Apr 2021 09:47:47 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id l22so49016409ljc.9;
-        Fri, 23 Apr 2021 09:47:47 -0700 (PDT)
+        Fri, 23 Apr 2021 14:18:09 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E7EC06138C
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Apr 2021 11:17:31 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id h2-20020a17090a6482b029014e6c039e61so20360320pjj.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Apr 2021 11:17:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Z9CSkWjoaT/hQ88KgcDlGnLSBzYbOvKna9ZhP8lUZlE=;
-        b=hh2gs7JpCs90IkiY1rJczvQ4E//glxdSIg/kg+tq2pkIs4RN3xiMFPZ+TMAuGELAyM
-         57ls2e8+VzwclzTEv4xYxrB0/CnzL0unkwFIs6KTd7ECdG/7eJ4fIWeg9SpFKuOx4vB0
-         TWgV+nXk0XrtEuuLhwu4Crrf++Cl/7ERHNZikP8jfpNKX8KmZiqxSKRoDyZULJY/yUmZ
-         FnD/a86WVXqJ/zLNyTEgZoQKrUfPbaIywZuGhuwOac9YNZCANo+KH91Vm5AAoWBdaugE
-         LgidWvZ866PrB9S+uBJLpd8XnFtPvCC7yywctkJxX1gs4MWHhrmK/kN7ZyvnEFdqRuce
-         8fKg==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=jZ9aELeTtebSkfbpomfAFciujOueU+/1u2IVpj9kO9Q=;
+        b=RyBxs7miM4jdCQ3yugSc8OvrTlv5u+dF3p+Ra7seVMrj1RVtjB+pFXakJoRIl1jsLS
+         4JBtMKLiNnj9NnUNB9BsPmg2GgDdmytyBuu/qlKens774np+kb3bnNCuXir7AcEhlc1/
+         MMqfYw4RQYaFjE94XkSwKSrhOxKcqkWzlvWkJUaoPIQajn3YTSQmT7PSjqoq+mzFElwD
+         Nmi2pZp5/s1xwbLuQYIu7SednNnDgqlgHAbjSb3Ng+chogeOuRdzvwODmr0TjSFEqRbh
+         /2xlGDh8qLD5AOsfQQHMcbZvPA7WcxPJHgBTYDJjHZfxvE6utLgsp5D6rJBK8yPps95G
+         xQ1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Z9CSkWjoaT/hQ88KgcDlGnLSBzYbOvKna9ZhP8lUZlE=;
-        b=Cg7GTGJrPJNDtDXjNP5saJ0H5QsShwQI/t1triNCOHaRU1Do1D/izQsTRb05TD033N
-         kP/ZDWpDDQmOAwPf3UuXVr/3Wu9k2ieZ3Fr1fhyxBYOxY8WmUnoW5CAukfnJslCrEmBb
-         Hh0Bg6Ss1DG0KpwHO5NvpzuYG4UJ+ed4J6kkmwT7PK2Md/SzKSYSLpXCWLXPMFGEh1b9
-         jj9NU2GJQQ7kHgLQA2YOuF3O4jwrdhVlOVmzFGzQLiyWVorAHWqNTTZ2OIuODJHShX/T
-         mdA6A9dMtv8Y4TfwGdTPH0frHLSX+ciR/5PH6Xc5SCOIhppo0aFPFlQYHApmL7nwiDrg
-         rz7w==
-X-Gm-Message-State: AOAM531O8xdyOQe0gGjBpq/QWx9KZGwXfqJqXj7elHYxmQ8W2iKdU65s
-        tZA7hV+Qh88TzOOqoTAYvWuuRIqTURDesvQI1de7Rh6Z
-X-Google-Smtp-Source: ABdhPJxpbgAqS1GibhcllwDT+1U4zjY+5kMeemf9VlkANhkfYipY7NLqbF5yJgJW4JdQkixwi8+KQjlNOUQR7YAdedk=
-X-Received: by 2002:a2e:6c0d:: with SMTP id h13mr3226834ljc.486.1619196465904;
- Fri, 23 Apr 2021 09:47:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <1619085648-36826-1-git-send-email-jiapeng.chong@linux.alibaba.com>
- <7ecb85e6-410b-65bb-a042-74045ee17c3f@iogearbox.net> <93957f3e-2274-c389-64a4-235ed8a228bf@linux.alibaba.com>
-In-Reply-To: <93957f3e-2274-c389-64a4-235ed8a228bf@linux.alibaba.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 23 Apr 2021 09:47:34 -0700
-Message-ID: <CAADnVQJoJW9GWk4guqzHQkDPD4RWoh-puVhnfW0LBPT_N6-4HA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: fix warning comparing pointer to 0
-To:     Abaci Robot <abaci@linux.alibaba.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=jZ9aELeTtebSkfbpomfAFciujOueU+/1u2IVpj9kO9Q=;
+        b=AM9KJCS6SQIjRGIOAPZXuZjgoI3maMT5Fn8VbSRoQ6oJUnpGn6cQDes2Is65JY85Hw
+         fAsL06uOJjRuZrjTP0Z4YTRd8tj/EJXsoIWOL23dFGRJw6KNgERjaMYt8Mnfy93RgYsV
+         4awIOauDZtV7HVZuRxHU4ZTKfSKcE0ajEevla7Vtxc8Pb5kCqWni7eN9XYVrOmpWwkUQ
+         LnRwinHPeq8MFyXGgRPO+X1ypKzsCLzT+c1iRcdPnAwGRQD9j0/eASZuGKdkPy9+Ekyl
+         CatfNXj9nlRpChJo9RjXS+8hQ1AcN5jAwLJCikq2p/VhLL5wWDkPMA5Ta1txWdyQTC7w
+         lLzw==
+X-Gm-Message-State: AOAM530NLFKfZeYLauZAZypLyeWZ++KWQacYFwTSx5J1fIrPj4Dk8tgm
+        EMySxTxAF4jjybMZ84mrrVt3QpvYv2eSy7j+xg==
+X-Google-Smtp-Source: ABdhPJybLPMWN/SpAe3p+WeheeiGCmvt6zlmflTWrm4w6vD8liP2VaphrDYff46dFN5dJ0IrExvz0uL99CbVXXMV7Q==
+X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
+ (user=jingzhangos job=sendgmr) by 2002:a17:90b:e98:: with SMTP id
+ fv24mr1049588pjb.1.1619201850403; Fri, 23 Apr 2021 11:17:30 -0700 (PDT)
+Date:   Fri, 23 Apr 2021 18:17:23 +0000
+Message-Id: <20210423181727.596466-1-jingzhangos@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
+Subject: [PATCH v3 0/4] KVM statistics data fd-based binary interface
+From:   Jing Zhang <jingzhangos@google.com>
+To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     Jing Zhang <jingzhangos@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 4:57 AM Abaci Robot <abaci@linux.alibaba.com> wrote=
-:
->
-> =E5=9C=A8 2021/4/23 =E4=B8=8A=E5=8D=885:56, Daniel Borkmann =E5=86=99=E9=
-=81=93:
-> > On 4/22/21 12:00 PM, Jiapeng Chong wrote:
-> >> Fix the following coccicheck warning:
-> >>
-> >> ./tools/testing/selftests/bpf/progs/fentry_test.c:76:15-16: WARNING
-> >> comparing pointer to 0.
-> >>
-> >> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> >> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> >
-> > How many more of those 'comparing pointer to 0' patches do you have?
-> > Right now we already merged the following with similar trivial pattern:
-> >
-> > - ebda107e5f222a086c83ddf6d1ab1da97dd15810
-> > - a9c80b03e586fd3819089fbd33c38fb65ad5e00c
-> > - 04ea63e34a2ee85cfd38578b3fc97b2d4c9dd573
-> >
-> > Given they don't really 'fix' anything, I would like to reduce such
-> > patch cleanup churn on the bpf tree. Please _consolidate_ all other
-> > such occurrences into a _single_ patch for BPF selftests, and resubmit.
-> >
-> > Thanks!
-> >
-> >> ---
-> >>   tools/testing/selftests/bpf/progs/fentry_test.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c
-> >> b/tools/testing/selftests/bpf/progs/fentry_test.c
-> >> index 52a550d..d4247d6 100644
-> >> --- a/tools/testing/selftests/bpf/progs/fentry_test.c
-> >> +++ b/tools/testing/selftests/bpf/progs/fentry_test.c
-> >> @@ -73,7 +73,7 @@ int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
-> >>   SEC("fentry/bpf_fentry_test8")
-> >>   int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
-> >>   {
-> >> -    if (arg->a =3D=3D 0)
-> >> +    if (!arg->a)
-> >>           test8_result =3D 1;
-> >>       return 0;
-> >>   }
-> >>
->
-> Hi,
->
-> Thanks for your reply.
->
-> TLDR:
-> 1. Now all this kind of warning in tools/testing/selftests/bpf/progs/
-> were reported and discussed except this one.
-> 2. We might not do scanning and check reports on
-> tools/testing/selftests/bpf/progs/ in the future,
+This patchset provides a file descriptor for every VM and VCPU to read
+KVM statistics data in binary format.
+It is meant to provide a lightweight, flexible, scalable and efficient
+lock-free solution for user space telemetry applications to pull the
+statistics data periodically for large scale systems. The pulling
+frequency could be as high as a few times per second.
+In this patchset, every statistics data are treated to have some
+attributes as below:
+  * architecture dependent or common
+  * VM statistics data or VCPU statistics data
+  * type: cumulative, instantaneous,
+  * unit: none for simple counter, nanosecond, microsecond,
+    millisecond, second, Byte, KiByte, MiByte, GiByte. Clock Cycles
+Since no lock/synchronization is used, the consistency between all
+the statistics data is not guaranteed. That means not all statistics
+data are read out at the exact same time, since the statistics date
+are still being updated by KVM subsystems while they are read out.
 
-please stop such scans in selftests/bpf.
-I don't see any value in such patches.
+---
+
+* v2 -> v3
+  - Rebase to kvm/queue, commit edf408f5257b ("KVM: avoid "deadlock" between
+    install_new_memslots and MMU notifier")
+  - Resolve some nitpicks about format
+
+* v1 -> v2
+  - Use ARRAY_SIZE to count the number of stats descriptors
+  - Fix missing `size` field initialization in macro STATS_DESC
+
+[1] https://lore.kernel.org/kvm/20210402224359.2297157-1-jingzhangos@google.com
+[2] https://lore.kernel.org/kvm/20210415151741.1607806-1-jingzhangos@google.com
+
+---
+
+Jing Zhang (4):
+  KVM: stats: Separate common stats from architecture specific ones
+  KVM: stats: Add fd-based API to read binary stats data
+  KVM: stats: Add documentation for statistics data binary interface
+  KVM: selftests: Add selftest for KVM statistics data binary interface
+
+ Documentation/virt/kvm/api.rst                | 171 ++++++++
+ arch/arm64/include/asm/kvm_host.h             |   9 +-
+ arch/arm64/kvm/guest.c                        |  42 +-
+ arch/mips/include/asm/kvm_host.h              |   9 +-
+ arch/mips/kvm/mips.c                          |  67 +++-
+ arch/powerpc/include/asm/kvm_host.h           |   9 +-
+ arch/powerpc/kvm/book3s.c                     |  68 +++-
+ arch/powerpc/kvm/book3s_hv.c                  |  12 +-
+ arch/powerpc/kvm/book3s_pr.c                  |   2 +-
+ arch/powerpc/kvm/book3s_pr_papr.c             |   2 +-
+ arch/powerpc/kvm/booke.c                      |  63 ++-
+ arch/s390/include/asm/kvm_host.h              |   9 +-
+ arch/s390/kvm/kvm-s390.c                      | 133 ++++++-
+ arch/x86/include/asm/kvm_host.h               |   9 +-
+ arch/x86/kvm/x86.c                            |  71 +++-
+ include/linux/kvm_host.h                      | 132 ++++++-
+ include/linux/kvm_types.h                     |  12 +
+ include/uapi/linux/kvm.h                      |  50 +++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   3 +
+ .../selftests/kvm/kvm_bin_form_stats.c        | 370 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  11 +
+ virt/kvm/kvm_main.c                           | 237 ++++++++++-
+ 24 files changed, 1405 insertions(+), 90 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
+
+
+base-commit: edf408f5257ba39e63781b820528e1ce1ec0f543
+-- 
+2.31.1.498.g6c1eba8ee3d-goog
+
