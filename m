@@ -2,143 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CECD936919C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Apr 2021 13:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8521369610
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Apr 2021 17:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236815AbhDWL6C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Apr 2021 07:58:02 -0400
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:58168 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230431AbhDWL6B (ORCPT
+        id S231627AbhDWPXE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Apr 2021 11:23:04 -0400
+Received: from smtp-1908.mail.infomaniak.ch ([185.125.25.8]:51443 "EHLO
+        smtp-1908.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231320AbhDWPXD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Apr 2021 07:58:01 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=abaci@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UWVQKet_1619179042;
-Received: from B-V3K2HV2H-1858.local(mailfrom:abaci@linux.alibaba.com fp:SMTPD_---0UWVQKet_1619179042)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 23 Apr 2021 19:57:23 +0800
-Subject: Re: [PATCH] selftests/bpf: fix warning comparing pointer to 0
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1619085648-36826-1-git-send-email-jiapeng.chong@linux.alibaba.com>
- <7ecb85e6-410b-65bb-a042-74045ee17c3f@iogearbox.net>
-From:   Abaci Robot <abaci@linux.alibaba.com>
-Message-ID: <93957f3e-2274-c389-64a4-235ed8a228bf@linux.alibaba.com>
-Date:   Fri, 23 Apr 2021 19:57:22 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.0
+        Fri, 23 Apr 2021 11:23:03 -0400
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FRdM55TyDzMrV2C;
+        Fri, 23 Apr 2021 17:22:25 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4FRdM160b0zlh8TR;
+        Fri, 23 Apr 2021 17:22:21 +0200 (CEST)
+Subject: Re: [PATCH v34 00/13] Landlock LSM
+To:     James Morris <jmorris@namei.org>
+Cc:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20210422154123.13086-1-mic@digikod.net>
+ <9c775578-627c-e682-873a-ec7b763a7fcd@namei.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <ac26af3b-067b-de01-8c99-687c5de432e5@digikod.net>
+Date:   Fri, 23 Apr 2021 17:22:11 +0200
+User-Agent: 
 MIME-Version: 1.0
-In-Reply-To: <7ecb85e6-410b-65bb-a042-74045ee17c3f@iogearbox.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <9c775578-627c-e682-873a-ec7b763a7fcd@namei.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-在 2021/4/23 上午5:56, Daniel Borkmann 写道:
-> On 4/22/21 12:00 PM, Jiapeng Chong wrote:
->> Fix the following coccicheck warning:
+
+On 22/04/2021 21:31, James Morris wrote:
+> On Thu, 22 Apr 2021, Mickaël Salaün wrote:
+> 
+>> Hi,
 >>
->> ./tools/testing/selftests/bpf/progs/fentry_test.c:76:15-16: WARNING
->> comparing pointer to 0.
->>
->> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
->> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+>> This updated patch series adds a new patch on top of the previous ones.
+>> It brings a new flag to landlock_create_ruleset(2) that enables
+>> efficient and simple backward compatibility checks for future evolutions
+>> of Landlock (e.g. new access-control rights).
 > 
-> How many more of those 'comparing pointer to 0' patches do you have?
-> Right now we already merged the following with similar trivial pattern:
+> Applied to git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git 
+> landlock_lsm_v34
 > 
-> - ebda107e5f222a086c83ddf6d1ab1da97dd15810
-> - a9c80b03e586fd3819089fbd33c38fb65ad5e00c
-> - 04ea63e34a2ee85cfd38578b3fc97b2d4c9dd573
-> 
-> Given they don't really 'fix' anything, I would like to reduce such
-> patch cleanup churn on the bpf tree. Please _consolidate_ all other
-> such occurrences into a _single_ patch for BPF selftests, and resubmit.
-> 
-> Thanks!
-> 
->> ---
->>   tools/testing/selftests/bpf/progs/fentry_test.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c 
->> b/tools/testing/selftests/bpf/progs/fentry_test.c
->> index 52a550d..d4247d6 100644
->> --- a/tools/testing/selftests/bpf/progs/fentry_test.c
->> +++ b/tools/testing/selftests/bpf/progs/fentry_test.c
->> @@ -73,7 +73,7 @@ int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
->>   SEC("fentry/bpf_fentry_test8")
->>   int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
->>   {
->> -    if (arg->a == 0)
->> +    if (!arg->a)
->>           test8_result = 1;
->>       return 0;
->>   }
->>
+> and it replaces the v33 branch in next-testing.
 
-Hi,
-
-Thanks for your reply.
-
-TLDR:
-1. Now all this kind of warning in tools/testing/selftests/bpf/progs/ 
-were reported and discussed except this one.
-2. We might not do scanning and check reports on 
-tools/testing/selftests/bpf/progs/ in the future, because some 
-contributors want the progs to stay as close as possible to the way they 
-were written. 
-(https://patchwork.kernel.org/project/linux-kselftest/patch/1618307549-78149-1-git-send-email-yang.lee@linux.alibaba.com/)
-
-
-Details:
-
-We have checked the recent linux master (commit: 
-16fc44d6387e260f4932e9248b985837324705d8), and the related reports and 
-their current status is shown as follows:
-
-./tools/testing/selftests/bpf/progs/fentry_test.c:67:12-13: WARNING 
-comparing pointer to 0
-(not appear in the bpf-next branch)
-
-
-./tools/testing/selftests/bpf/progs/fentry_test.c:76:15-16: WARNING 
-comparing pointer to 0
-(the above patch try to eliminate it)
-
-
-./tools/testing/selftests/bpf/progs/fexit_test.c:68:12-13: WARNING 
-comparing pointer to 0
-./tools/testing/selftests/bpf/progs/fexit_test.c:77:15-16: WARNING 
-comparing pointer to 0
-(eliminated in 
-https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ebda107e5f222a086c83ddf6d1ab1da97dd15810)
-
-./tools/testing/selftests/bpf/progs/profiler.inc.h:364:18-22: WARNING 
-comparing pointer to 0
-./tools/testing/selftests/bpf/progs/profiler.inc.h:364:18-22: WARNING 
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:537:23-27: WARNING 
-comparing pointer to 0
-./tools/testing/selftests/bpf/progs/profiler.inc.h:537:23-27: WARNING 
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:544:21-25: WARNING 
-comparing pointer to 0
-./tools/testing/selftests/bpf/progs/profiler.inc.h:544:21-25: WARNING 
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:692:29-33: WARNING 
-comparing pointer to 0
-./tools/testing/selftests/bpf/progs/profiler.inc.h:770:13-17: WARNING 
-comparing pointer to 0
-(Discussed in 
-https://patchwork.kernel.org/project/linux-kselftest/patch/1618307549-78149-1-git-send-email-yang.lee@linux.alibaba.com/)
-
-./tools/testing/selftests/bpf/progs/test_global_func10.c:17:12-13: 
-WARNING comparing pointer to 0
-(cleanup in 
-https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=04ea63e34a2ee85cfd38578b3fc97b2d4c9dd573)
-
-Thanks.
+Thanks! It is now in next:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/?h=next-20210423
