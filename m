@@ -2,98 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE91336A2BE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Apr 2021 21:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81ACC36A33A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Apr 2021 23:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbhDXTFY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 24 Apr 2021 15:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S229800AbhDXVqR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 24 Apr 2021 17:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbhDXTFY (ORCPT
+        with ESMTP id S229778AbhDXVqQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 24 Apr 2021 15:05:24 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C47C061574;
-        Sat, 24 Apr 2021 12:04:45 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id v23so842069qkj.13;
-        Sat, 24 Apr 2021 12:04:45 -0700 (PDT)
+        Sat, 24 Apr 2021 17:46:16 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05A2C061574;
+        Sat, 24 Apr 2021 14:45:37 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id y136so21008580qkb.1;
+        Sat, 24 Apr 2021 14:45:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=EmREJ2/iRw8n3hCpoagIR/SHHYbiB6HFNVxF3BqpXcE=;
-        b=Bvx1MzorBEcYwYZLnkgNU1eqcJP9O3U4ynU4Qmb0bJlAUD/ElebctJvi8oIeZOtsRM
-         Lwu97kgeDyCD7tQSkQETgR1NaVopc/zeCeUVLSYBnR+T1XMW/s2pTGrl+Y3Jz7TYYW5t
-         ZidcznrxCOXRYUe/0qvY2WzacKypTZ0J61mfNBeHyZrLlqpyXEnqBplTfsElZkX6pHzs
-         PLxdhPAEUL7r7CbBDNo/BYkncGVeIvt4t9tm4SbF5a6yeRnBvgg+vr0CfCLLnuxyH+zB
-         63eXxsnAIPDO19K3mULJucY2bP/GMsA29M8hBYY7lLRynZIdmBrOxZSs02zjkfnWR/ls
-         BfAg==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yJ8wJLMMAquK5WtfrTW6hzTEU+ckVaXd0nyZfZC6hyk=;
+        b=Om5/5+hzFTmqf+55Fk2jo4zNCknQgMCWenWPL3gUhDNKGGBwMVRbNsopRbhxhBb4Qj
+         GP0RHxv8GP6r/b1FFTDBwCCo5A0e7NKstxZrJc8hfybJ8ov5hzT8vViq2inNkmrFHHd5
+         eEDvx6FlWkUw5ZVHyIm4/mdb/KsM+ytJTqNdBav09vG+vxQ/5VRAWThnXHOfre5NuQhP
+         /xQbhTEE+uNlcBmbURuky/N42LvppPlVqexaF+aPJNwdeAKoBMjgKeSG2icfaph+iynE
+         BEdzk/M7XK9lanw8R7WCaFgVQWo7CqMTs1OQC1048cBoFPvdZxU3cj3cN3DOJ3ca5rtI
+         Ix6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=EmREJ2/iRw8n3hCpoagIR/SHHYbiB6HFNVxF3BqpXcE=;
-        b=FW6B47sljrcwfdYzImecwrvaSELR6dqhpHcpFf9C3PBfBT6nuBHz6SOI0hSGRDfjTg
-         DilOW2MzX+qtwAuOxx+Tthikk/LSVlI37CvqYNwgKckCQMBuY0/1g0XcZxM91OsKw1yM
-         s4n8gvUVGRFzpyAW80gdn+14fZs3VWUSVCr4VG2SPIWhZtQB9b7oq+484EoT9xBbLVXN
-         g44XhgAbJQlQLBzape56s6Yg6YJFDcP7o0NTDOvrBzOay24BJcXUlOSoPW65RIQlPAyw
-         J1VPiXyB+Q0zPGvRcsb8uK5HSSzT6CT0++8Cwj1HT1KO3K5rAG5L6ISsqBDp8IKIWd0U
-         IntA==
-X-Gm-Message-State: AOAM531lLH5NV70dLsnNd+FRE61arEMOx+d+5kfhF7eNXASw665r5zg3
-        HU0FzxsvFlVMC0KgkQg+uJMvnzUvz+lZlA==
-X-Google-Smtp-Source: ABdhPJwO6DpoeBBrWiO7IviNss6A856Tm0ryAhdIaD6aAsimCq1O/C8d6ELBmk+NX5+GT6pwYkGXJg==
-X-Received: by 2002:a37:58c5:: with SMTP id m188mr9823498qkb.327.1619291084626;
-        Sat, 24 Apr 2021 12:04:44 -0700 (PDT)
-Received: from smtp.gmail.com ([2804:30c:909:ed00:eb66:a9ae:aa9c:152f])
-        by smtp.gmail.com with ESMTPSA id u4sm1005367qkp.22.2021.04.24.12.04.42
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yJ8wJLMMAquK5WtfrTW6hzTEU+ckVaXd0nyZfZC6hyk=;
+        b=PmJ0xLuPuMiANoJ3chAc+X+8PP/jzxOA2cT3pwezAkiG9jQvDjcog9dJ5aLG50RnD/
+         CWwrxnEVKObUBhYzOSqWfJ1ws2JrCL1vYSH67n/Bnv3LHKWeP4BhfOftYBb98zIDZlfD
+         rbig0mNbJYUavDcWKSR/6bDKoTmo1y8cpvulhh62tnLZ/9BlvfK0VRGn/j1698q4YyEs
+         vlbL9WwOyZnjDLDNo7oIuW+X6NpcHKhc0UqhhiYlPhnQ2kqibWNpUlvzUMg74qQri8lA
+         B544bZl2mx5+5SjpQ6lf9gr9PRjrUjWY+MR1MvvpqzU0dqbaRykxDRiOcA2d320PMS/s
+         fcaA==
+X-Gm-Message-State: AOAM532g6ABIclZ495AYAt0Obf1OLlNPbhHfPEXTj46JMV02w1fJp7gI
+        KjK0NRYr3nk4f9JpjuMD0DY=
+X-Google-Smtp-Source: ABdhPJzLZmTBQzvohUaspwiOSF1VO1y8v7lYyd71lzQ6jYrXsyFdmQ4Ii9IrPMqzo7ON71d+1lpf8w==
+X-Received: by 2002:a37:7b41:: with SMTP id w62mr9916583qkc.256.1619300736679;
+        Sat, 24 Apr 2021 14:45:36 -0700 (PDT)
+Received: from localhost.localdomain ([179.218.4.27])
+        by smtp.gmail.com with ESMTPSA id b17sm6638904qto.88.2021.04.24.14.45.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Apr 2021 12:04:44 -0700 (PDT)
-Date:   Sat, 24 Apr 2021 16:04:41 -0300
-From:   Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     andersonreisrosa@gmail.com
-Subject: Running kunit_tool on unclean trees
-Message-ID: <YIRryUf6noodWiqe@smtp.gmail.com>
+        Sat, 24 Apr 2021 14:45:36 -0700 (PDT)
+From:   Pedro Tammela <pctammela@gmail.com>
+X-Google-Original-From: Pedro Tammela <pctammela@mojatatu.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        David Verbeiren <david.verbeiren@tessares.net>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v5 0/2] add batched ops for percpu array
+Date:   Sat, 24 Apr 2021 18:45:08 -0300
+Message-Id: <20210424214510.806627-1-pctammela@mojatatu.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, a friend and I were chasing bug 205219 [1] listed in Bugzilla.
-We step into something a little bit different when trying to reproduce
-the buggy behavior. In our try, compilation failed with a message form
-make asking us to clean the source tree. We couldn't run kunit_tool
-after compiling the kernel for x86, as described by Ted in the
-discussion pointed out by the bug report.
+This patchset introduces batched operations for the per-cpu variant of
+the array map.
 
-Steps to reproduce:
+Also updates the batch ops test for arrays.
 
-0) Run kunit_tool
-$ ./tools/testing/kunit/kunit.py run
-Works fine with a clean tree.
+v4 -> v5:
+- Revert removal of percpu macros
 
-1) Compile the kernel for some architecture (we did it for x86_64).
+v3 -> v4:
+- Prefer 'calloc()' over 'malloc()' on batch ops tests
+- Add missing static keyword in a couple of test functions
+- 'offset' to 'cpu_offset' as suggested by Martin
 
-2) Run kunit_tool again
-$ ./tools/testing/kunit/kunit.py run
-Fails with a message form make asking us to clean the source tree.
+v2 -> v3:
+- Remove percpu macros as suggested by Andrii
+- Update tests that used the per cpu macros
 
-Removing the clean source tree check from the top-level Makefile gives
-us a similar error to what was described in the bug report. We see that
-after running `git clean -fdx` kunit_tool runs nicely again. However,
-this is not a real solution since some kernel binaries are erased by git.
+v1 -> v2:
+- Amended a more descriptive commit message
 
-We also had a look into the commit messages of Masahiro Yamada but
-couldn't quite grasp why the check for the tree to be clean was added.
-We could invest more time in this issue but actually don't know how to
-proceed. We'd be glad to receive any comment about it. We could also try
-something else if it's a too hard issue for beginners.
+Pedro Tammela (2):
+  bpf: add batched ops support for percpu array
+  bpf: selftests: update array map tests for per-cpu batched ops
 
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=205219
+ kernel/bpf/arraymap.c                         |   2 +
+ .../bpf/map_tests/array_map_batch_ops.c       | 104 +++++++++++++-----
+ 2 files changed, 77 insertions(+), 29 deletions(-)
 
+-- 
+2.25.1
 
-Best Regards,
-
-Marcelo
