@@ -2,113 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 565AF36BA14
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Apr 2021 21:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111AC36BB38
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Apr 2021 23:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239021AbhDZTbG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Apr 2021 15:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S235500AbhDZVcV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Apr 2021 17:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240430AbhDZTbC (ORCPT
+        with ESMTP id S235381AbhDZVcV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Apr 2021 15:31:02 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1691AC061574
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Apr 2021 12:30:20 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id d14so3282401edc.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Apr 2021 12:30:20 -0700 (PDT)
+        Mon, 26 Apr 2021 17:32:21 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE6EC061574
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Apr 2021 14:31:37 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id s9so7929740ljj.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Apr 2021 14:31:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20150623.gappssmtp.com; s=20150623;
-        h=to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Dr87k9ZfKSIjKnHclx7DePEImf+rQ7+qp484Yc2GQDI=;
-        b=PPOrCQABnsVUARLGHk3k4EHRz5rL54WAC/3DmqIc9Chmcl13vZveHm9YTgPByu9ISi
-         BCM/sigWLiv6oopbIxbMFfnPjXDDtLMM7ucX+DRa10VkRS6dPJUiaf2WgASxfslYX16E
-         +bppZXEMf+sV9kNORgUP1nYT3q7/2Za5BgRMgLnxUbuBHvygarfczX+R3rRy0AfqqvgH
-         Xitwa51T16WbhvkAvSG4cEktOXnr6XxCEyVTfulx1je4TvHzlBJ10ZT2yTfsjgzv6ePw
-         Y9LgkJ4yyVK6FRcD7HdvGU04WKY4YtpvKyRVuqndTXJYPUNTtQ3PWYHDR1yWXuDSDmmy
-         jROw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BRra/jPCviRQtIjxwlgYvRcZtIqfcfIxl/QCOhP8XqM=;
+        b=EP90p7ehHJgY9KOuBLpqwJgUuPk26rDZaLsYDOARIyfUD1fUzFTxEvCMTbbvLT/eAQ
+         /HofzxErUfyaUxu42mnvT3eSHi++IydOeLXKom0EquNHllzWRxGw4GtTPFehG/4g46k3
+         c2/HfzLw0vSVk3MS7Bq014JfUDcTKiYbBYaI6rKuJ4L4NuNzyLythel33HovI4hZxYZ2
+         sJKdHi+Co5GRMFTNYxjJFMnu86wlEPZmkjHgDttNoiNENZXZiuNV2+2SnAfVO8ZfTOZX
+         8yjobRRjFIwTisT3sTYTPem40ksdqpTx/RO7h+1uRqhfRJMAl+PhGwfIcYX6z2QkFRHc
+         kjlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Dr87k9ZfKSIjKnHclx7DePEImf+rQ7+qp484Yc2GQDI=;
-        b=Gewr35KmhYyouiHLCXI7cWPX1ZmpuaVf4MslANvJlTv5EAMZiYwU2DASggMAlbcmm0
-         c0RYR+s1AVBiRORzxsNGECrp6pLhsSodI0kgbscwRbxdZDWpQCKImYYk1PoqMbiMMo/1
-         k0D1a5OG1wo+DXlYEHpgFPvKWEe1kPL8+thLKSfG9Utdw4Ix/lUGoZ+q+pt2lt2T0NAX
-         i50EWwbe6X1r8w9nWX+nN8HzLj0P74N1nKb84y8LhqhS1vo23ma7yQeJMNC6CqNeeo6b
-         XZoW+CTzD4RgUkzXEsjjFrpp/iCZABmvSetFNqz5OMDfbxZUXvy2m2v81+HwrHegZoOZ
-         y0Lw==
-X-Gm-Message-State: AOAM531JfDPQBofn9ftrYH3ri6leTyvu5tcGiFy9LYhhHqI0RkenD9eT
-        Gd9npd8R1Q3u+8OMOsHazuTRkQ==
-X-Google-Smtp-Source: ABdhPJwEsGiSPn86sUce28FQhOIkZd9EDC808DnlsPjgtQS2kJzYU55xlwjSXiAaAe8rkGOR/w0UhA==
-X-Received: by 2002:a05:6402:3514:: with SMTP id b20mr267417edd.348.1619465418825;
-        Mon, 26 Apr 2021 12:30:18 -0700 (PDT)
-Received: from tsr-lap-08.nix.tessares.net ([46.166.143.116])
-        by smtp.gmail.com with ESMTPSA id r10sm12090371ejd.112.2021.04.26.12.30.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Apr 2021 12:30:18 -0700 (PDT)
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthias Maennich <maennich@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mptcp@lists.01.org, netdev@vger.kernel.org
-References: <20210424114841.394239-1-masahiroy@kernel.org>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Subject: Re: [PATCH] kbuild: replace LANG=C with LC_ALL=C
-Message-ID: <2f8ccc46-16a1-e0fe-7cb0-0912295153ee@tessares.net>
-Date:   Mon, 26 Apr 2021 21:30:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BRra/jPCviRQtIjxwlgYvRcZtIqfcfIxl/QCOhP8XqM=;
+        b=MeUtd0P3KKmpFQbodXY7Q+FTRKN8RmU8SQrkPwW/+jYwqBk7oKXS+J2MfW531L2hV2
+         RWIWX2/9IZhbSPezSE6dvX5yS0jek1/u1yZMczrH+JubAtvWQgRxDgNaMd79kTAmczAC
+         +6f6ONhFS39fvwQiLm7nYX/Qt99Eogu67L9R0IodOZXxNqf0kT9h2CgobUepoUy3WK5A
+         A/CxcrcmaYo+tsNJRFEYIF6ls7u7pwwGOaoR7SshIVWq0+QG6KVWF21/dCNBcQF55qwt
+         LrDtvXlJIPa6eEiuCvB2OYZHZnw+/EZJkRpvmdN8QaKXDoDJu+JnVLX+UBcPKj2oSjhL
+         hVTg==
+X-Gm-Message-State: AOAM532YjUeCgaTLQzhCeF9S4FRwZkEl1KIcg2PU5IlH9GiPVoKLTTUs
+        fIiwvE7VSfiEVoYpOf8ebheNjnY5xAorbPj5YrsuzrVC2s8pcNcL
+X-Google-Smtp-Source: ABdhPJwb6noPMEQT7PFHLLDX/Wj/+CQ5T7aiSIwPoaMBKaaARccUgY4lxKlabFJX+twK0ijxUkBKZjoGrmU1D5Tq7BE=
+X-Received: by 2002:a05:651c:1102:: with SMTP id d2mr13553294ljo.490.1619472696085;
+ Mon, 26 Apr 2021 14:31:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210424114841.394239-1-masahiroy@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+References: <YIRryUf6noodWiqe@smtp.gmail.com> <CAK7LNATsbkhYHk6NCZJCDrtT0NFfBwe_n9GRSrEvURaXaW+gfg@mail.gmail.com>
+In-Reply-To: <CAK7LNATsbkhYHk6NCZJCDrtT0NFfBwe_n9GRSrEvURaXaW+gfg@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 27 Apr 2021 05:31:27 +0800
+Message-ID: <CABVgOSmxdQJKgWpXNuuPX=KLaqb4BqdndMRkJ6wpXvLdhieppw@mail.gmail.com>
+Subject: Re: Running kunit_tool on unclean trees
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        andersonreisrosa@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Mon, Apr 26, 2021 at 3:06 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Sun, Apr 25, 2021 at 4:05 AM Marcelo Schmitt
+> <marcelo.schmitt1@gmail.com> wrote:
+> >
+> > Hi, a friend and I were chasing bug 205219 [1] listed in Bugzilla.
+> > We step into something a little bit different when trying to reproduce
+> > the buggy behavior. In our try, compilation failed with a message form
+> > make asking us to clean the source tree. We couldn't run kunit_tool
+> > after compiling the kernel for x86, as described by Ted in the
+> > discussion pointed out by the bug report.
+> >
+> > Steps to reproduce:
+> >
+> > 0) Run kunit_tool
+> > $ ./tools/testing/kunit/kunit.py run
+> > Works fine with a clean tree.
+> >
+> > 1) Compile the kernel for some architecture (we did it for x86_64).
+> >
+> > 2) Run kunit_tool again
+> > $ ./tools/testing/kunit/kunit.py run
+> > Fails with a message form make asking us to clean the source tree.
+>
+> This is probably because
+> tools/testing/kunit/kunit_kernel.py
+> runs make with O= option.
+>
+>
+>
 
-Thank you for the patch!
+Yes: KUnit's tooling has started setting O=.kunit by default[1]. If
+you'd rather build KUnit in-tree, you can use the "kunit.py run
+--build_dir=." option, which should work.
 
-On 24/04/2021 13:48, Masahiro Yamada wrote:
-> LANG gives a weak default to each LC_* in case it is not explicitly
-> defined. LC_ALL, if set, overrides all other LC_* variables.
-> 
->   LANG  <  LC_CTYPE, LC_COLLATE, LC_MONETARY, LC_NUMERIC, ...  <  LC_ALL
-> 
-> This is why documentation such as [1] suggests to set LC_ALL in build
-> scripts to get the deterministic result.
-> 
-> LANG=C is not strong enough to override LC_* that may be set by end
-> users.
-> 
-> [1]: https://reproducible-builds.org/docs/locales/
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  arch/powerpc/boot/wrapper                          | 2 +-
->  scripts/nsdeps                                     | 2 +-
->  scripts/recordmcount.pl                            | 2 +-
->  scripts/setlocalversion                            | 2 +-
->  scripts/tags.sh                                    | 2 +-
->  tools/testing/selftests/net/mptcp/mptcp_connect.sh | 2 +-
+-- David
 
-Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net> (mptcp)
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/tools/testing/kunit?id=ddbd60c779b4ddaa87173a160ce90146933fb8f9
