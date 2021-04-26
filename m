@@ -2,97 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B59136AD9D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Apr 2021 09:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB36D36B089
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Apr 2021 11:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbhDZHh3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Apr 2021 03:37:29 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:3266 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232902AbhDZHgy (ORCPT
+        id S232161AbhDZJ3V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Apr 2021 05:29:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25679 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232116AbhDZJ3R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Apr 2021 03:36:54 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13Q7XxWP121133;
-        Mon, 26 Apr 2021 03:35:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=vj2OQzjjLqs7BiSXWVriVvTs25SIobcYvo68jiLw4Uk=;
- b=pZmvAi6SqPloP4v7yebHdc376wD3sw97hQdlDLpgHHtDAFdSFjAqi0wi61SCKgrResq2
- hd4baQE5Sj0VYwQYDh/mC9mwNq8xiPAnQL8BEU/N81J7EL6YCWPbXZtudeSsE5RHiiRM
- ZMj5wnI/JOscQ4nj8zELPGRq79+N5VCDp8l1+KNJRhVqsURAU1HVx6EgUdrulY2XZQRM
- qf9ztQuiI//bP0p88GFeiwFOn+nt02uWiDbKBN7NAv6aivP7FJvnAYKE4bLGHaB7qoJG
- A68eM7fDI+xxp2EY6o4CHfevNg4duUalo5JOAQVkcO4dg8iDz6zZuSw7h26R7c7WzYMV 5g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 385ry00h6e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Apr 2021 03:35:36 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13Q7Y96u121861;
-        Mon, 26 Apr 2021 03:35:35 -0400
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 385ry00h55-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Apr 2021 03:35:35 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13Q7TTCD031842;
-        Mon, 26 Apr 2021 07:35:33 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 384gjxradp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Apr 2021 07:35:32 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13Q7ZTiC28377576
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 26 Apr 2021 07:35:29 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3C76E5205A;
-        Mon, 26 Apr 2021 07:35:29 +0000 (GMT)
-Received: from oc8242746057.ibm.com.com (unknown [9.171.71.219])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id C5D5E52057;
-        Mon, 26 Apr 2021 07:35:27 +0000 (GMT)
-From:   Alexander Egorenkov <egorenar@linux.ibm.com>
-To:     elver@google.com
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com, arnd@arndb.de,
-        axboe@kernel.dk, b.zolnierkie@samsung.com, christian@brauner.io,
-        dvyukov@google.com, geert@linux-m68k.org, glider@google.com,
-        irogers@google.com, jannh@google.com, jolsa@redhat.com,
-        jonathanh@nvidia.com, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-tegra@vger.kernel.org,
-        m.szyprowski@samsung.com, mark.rutland@arm.com, mascasa@google.com,
-        mingo@redhat.com, namhyung@kernel.org, oleg@redhat.com,
-        pcc@google.com, peterz@infradead.org, tglx@linutronix.de,
-        viro@zeniv.linux.org.uk, x86@kernel.org,
-        Alexander Egorenkov <egorenar@linux.ibm.com>
-Subject: Re: [PATCH v4 05/10] signal: Introduce TRAP_PERF si_code and si_perf to siginfo
-Date:   Mon, 26 Apr 2021 09:35:11 +0200
-Message-Id: <20210426073511.270990-1-egorenar@linux.ibm.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <CANpmjNPbMOUd_Wh5aHGdH8WLrYpyBFUpwx6g3Kj2D6eevvaU8w@mail.gmail.com>
-References: <CANpmjNPbMOUd_Wh5aHGdH8WLrYpyBFUpwx6g3Kj2D6eevvaU8w@mail.gmail.com>
+        Mon, 26 Apr 2021 05:29:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619429316;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OtWVNId0H4MlH7zGbJHW4vVmuaAH+xdS1wmcTWoY6w0=;
+        b=MGpMy4blRgdfHWBAG/8i9oVUjmPlEcQATJEG5ZVKmxzbMpN2l/bXUx6qmP3q1F23dF6sYz
+        eZ73Sc7ZAUNeiJ9BYNAaK6xZEe1IFkUcJUF150MaYfcgKCrhH0/WQ8lktbIaNf270CYPG2
+        udVKxttbXe0AMH8ztapoBr38SK5KRWA=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-281-vo0W3vEWOW-y8CcKHT00ug-1; Mon, 26 Apr 2021 05:28:33 -0400
+X-MC-Unique: vo0W3vEWOW-y8CcKHT00ug-1
+Received: by mail-ed1-f72.google.com with SMTP id i17-20020a50fc110000b0290387c230e257so521112edr.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Apr 2021 02:28:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OtWVNId0H4MlH7zGbJHW4vVmuaAH+xdS1wmcTWoY6w0=;
+        b=obkSELJgsX8bDKHKMycWEkWYOKCFdT1Q1GjKW6O6bKPW4RPq1SGYEKtor863M6acrO
+         jhCJsaxaTN3bncvktP/rPREK4pU9LFdPqn/s8PMjGU3ctUCGrqplkY7VJgitOB12nG4Z
+         UWRcQWWATeU+10+aYqanPJRzGgaPbzTZgZPq5lSItK/q39fXn5aI4dI9Xyz5r396GnEt
+         6ZYnZMEyGQ4VDvHp5mBypX5xuejjziYYI7bLjTbEY9Fz/dDuWMxfD7ywXsBT2q92CszJ
+         nI+p64cJr3rb9KeUDwGMlsfuFKrRBqNO3VTDDhjUrFt6yknUoOdrJHI70dVCaJs/e0k3
+         SDLw==
+X-Gm-Message-State: AOAM532smV7cFvgeQU2Q1fVCR3QoImsRMdinfG/d15QqMzuF8PTnhHSG
+        O8r0VJ1K1z5mnCOmqwz/ZRxrGsF1hBcxaRNuPhiQU3V1FfW1LKfHj1qIFgreGI0Ab5E1udpruFa
+        6y0M+jWmxdM/mO6Z6sJDgEVEOrMML
+X-Received: by 2002:aa7:c4c1:: with SMTP id p1mr19783007edr.133.1619429311947;
+        Mon, 26 Apr 2021 02:28:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJytAfyLKl2YKK7lKos9PhDPbKzINP26aWILO7ar4wTBgQ7gjsJ4KrtD/Mf8e0g7fXX2pHMNmA==
+X-Received: by 2002:aa7:c4c1:: with SMTP id p1mr19783001edr.133.1619429311818;
+        Mon, 26 Apr 2021 02:28:31 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.gmail.com with ESMTPSA id b8sm14195751edu.41.2021.04.26.02.28.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Apr 2021 02:28:31 -0700 (PDT)
+Subject: Re: [PATCH] selftests: kvm: Fix the check of return value
+To:     Zhenzhong Duan <zhenzhong.duan@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        shuah@kernel.org
+References: <20210426193138.118276-1-zhenzhong.duan@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <0d23822d-1510-d615-c3bf-200b6636b766@redhat.com>
+Date:   Mon, 26 Apr 2021 11:28:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: QwXFwizg1FxfiD25IzOGoHgPL-LRsFTX
-X-Proofpoint-ORIG-GUID: 5lSoIFOb8pvez6BcVwFc5uehLV_UXxCL
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-25_11:2021-04-23,2021-04-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
- mlxlogscore=905 phishscore=0 adultscore=0 malwarescore=0 clxscore=1011
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104260057
+In-Reply-To: <20210426193138.118276-1-zhenzhong.duan@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On 26/04/21 21:31, Zhenzhong Duan wrote:
+> In vm_vcpu_rm() and kvm_vm_release(), a stale return value is checked in
+> TEST_ASSERT macro.
+> 
+> Fix it by assigning variable ret with correct return value.
+> 
+> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+> ---
+>   tools/testing/selftests/kvm/lib/kvm_util.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index b8849a1aca79..53d3a7eb0d47 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -514,7 +514,7 @@ static void vm_vcpu_rm(struct kvm_vm *vm, struct vcpu *vcpu)
+>   	ret = munmap(vcpu->state, vcpu_mmap_sz());
+>   	TEST_ASSERT(ret == 0, "munmap of VCPU fd failed, rc: %i "
+>   		"errno: %i", ret, errno);
+> -	close(vcpu->fd);
+> +	ret = close(vcpu->fd);
+>   	TEST_ASSERT(ret == 0, "Close of VCPU fd failed, rc: %i "
+>   		"errno: %i", ret, errno);
+>   
+> @@ -534,7 +534,7 @@ void kvm_vm_release(struct kvm_vm *vmp)
+>   	TEST_ASSERT(ret == 0, "Close of vm fd failed,\n"
+>   		"  vmp->fd: %i rc: %i errno: %i", vmp->fd, ret, errno);
+>   
+> -	close(vmp->kvm_fd);
+> +	ret = close(vmp->kvm_fd);
+>   	TEST_ASSERT(ret == 0, "Close of /dev/kvm fd failed,\n"
+>   		"  vmp->kvm_fd: %i rc: %i errno: %i", vmp->kvm_fd, ret, errno);
+>   }
+> 
 
-this also fixes s390.
-strace's tests-m32 on s390 were failing.
+Queued, thanks.
 
-Regards
-Alex
+Paolo
+
