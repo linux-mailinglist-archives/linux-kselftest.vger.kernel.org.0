@@ -2,112 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB36D36B089
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Apr 2021 11:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4672336B16F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Apr 2021 12:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbhDZJ3V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Apr 2021 05:29:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25679 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232116AbhDZJ3R (ORCPT
+        id S232987AbhDZKR4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Apr 2021 06:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232601AbhDZKRy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Apr 2021 05:29:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619429316;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OtWVNId0H4MlH7zGbJHW4vVmuaAH+xdS1wmcTWoY6w0=;
-        b=MGpMy4blRgdfHWBAG/8i9oVUjmPlEcQATJEG5ZVKmxzbMpN2l/bXUx6qmP3q1F23dF6sYz
-        eZ73Sc7ZAUNeiJ9BYNAaK6xZEe1IFkUcJUF150MaYfcgKCrhH0/WQ8lktbIaNf270CYPG2
-        udVKxttbXe0AMH8ztapoBr38SK5KRWA=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-281-vo0W3vEWOW-y8CcKHT00ug-1; Mon, 26 Apr 2021 05:28:33 -0400
-X-MC-Unique: vo0W3vEWOW-y8CcKHT00ug-1
-Received: by mail-ed1-f72.google.com with SMTP id i17-20020a50fc110000b0290387c230e257so521112edr.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Apr 2021 02:28:32 -0700 (PDT)
+        Mon, 26 Apr 2021 06:17:54 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83421C061756
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Apr 2021 03:17:11 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id a22-20020a05600c2256b0290142870824e9so414592wmm.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Apr 2021 03:17:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8+5RmGaKx5Tt6qhKXUKXBTfFBE8HCr3VUmHINr25V7Q=;
+        b=coA7t6ZU+3D3rzonl2MD8DtCSIxY3Bhr4uKsu96mtDdzfd1ReGK6wCZtVh38ADMexc
+         h0iVGJEbrn8P6LyrozH4sDaKslxXLK0zCaGUMo+2rH5MQkagWl25RZRfRiQ64WRP6j8Z
+         S5BMEvU9z3yuqIaqKcSwNUSWYp8KvdUTE/q5unzz04xJK+hpibQiiS3sL7aRWXrgqXa7
+         rz7Mm1vD68LG1OBJeXHCGzk+Cafabfw0o6DCvXYZ60tdQ2uzZXztGBnggqfYRT9S2QQv
+         fO5Iq5fyEsYMu54iVrhMLQty7HKqWSkdq8XmUOL4gMGVdswNg6+e71e996Lm3mlZZFJP
+         Bx2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OtWVNId0H4MlH7zGbJHW4vVmuaAH+xdS1wmcTWoY6w0=;
-        b=obkSELJgsX8bDKHKMycWEkWYOKCFdT1Q1GjKW6O6bKPW4RPq1SGYEKtor863M6acrO
-         jhCJsaxaTN3bncvktP/rPREK4pU9LFdPqn/s8PMjGU3ctUCGrqplkY7VJgitOB12nG4Z
-         UWRcQWWATeU+10+aYqanPJRzGgaPbzTZgZPq5lSItK/q39fXn5aI4dI9Xyz5r396GnEt
-         6ZYnZMEyGQ4VDvHp5mBypX5xuejjziYYI7bLjTbEY9Fz/dDuWMxfD7ywXsBT2q92CszJ
-         nI+p64cJr3rb9KeUDwGMlsfuFKrRBqNO3VTDDhjUrFt6yknUoOdrJHI70dVCaJs/e0k3
-         SDLw==
-X-Gm-Message-State: AOAM532smV7cFvgeQU2Q1fVCR3QoImsRMdinfG/d15QqMzuF8PTnhHSG
-        O8r0VJ1K1z5mnCOmqwz/ZRxrGsF1hBcxaRNuPhiQU3V1FfW1LKfHj1qIFgreGI0Ab5E1udpruFa
-        6y0M+jWmxdM/mO6Z6sJDgEVEOrMML
-X-Received: by 2002:aa7:c4c1:: with SMTP id p1mr19783007edr.133.1619429311947;
-        Mon, 26 Apr 2021 02:28:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJytAfyLKl2YKK7lKos9PhDPbKzINP26aWILO7ar4wTBgQ7gjsJ4KrtD/Mf8e0g7fXX2pHMNmA==
-X-Received: by 2002:aa7:c4c1:: with SMTP id p1mr19783001edr.133.1619429311818;
-        Mon, 26 Apr 2021 02:28:31 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.gmail.com with ESMTPSA id b8sm14195751edu.41.2021.04.26.02.28.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Apr 2021 02:28:31 -0700 (PDT)
-Subject: Re: [PATCH] selftests: kvm: Fix the check of return value
-To:     Zhenzhong Duan <zhenzhong.duan@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-        shuah@kernel.org
-References: <20210426193138.118276-1-zhenzhong.duan@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <0d23822d-1510-d615-c3bf-200b6636b766@redhat.com>
-Date:   Mon, 26 Apr 2021 11:28:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8+5RmGaKx5Tt6qhKXUKXBTfFBE8HCr3VUmHINr25V7Q=;
+        b=dNJ/0Y1JFegtu/OA7bTKXpHACcK3S4laay8Z+UGxORjsoSU5CuqgRNgF9FpxXCkq+C
+         Gacu+2vZc/Xwgz7dTA3inx81l6Xz/RTnP4pdBGTWIuJf0NPGf+LHTNQXCwV10rQRcGex
+         A6OX/CyyrE3ToouubM9AuRsr+R4mcD1FZDP9mSgZkYbvAzZwGu2FEiuTuV4Uk3e/h47H
+         rMmXp2Ic+NRp3/t8f39Ul24Rul4aBu/hbq8SOot3KRhJ1y2o5jyaC8QojFCsSPq+vUpP
+         h+UccI/32anRziWkORjd2n4wKGJFrTpd+5Qi6a3G95Ck/u3GMhlSX6l1KtelffzlGF19
+         Y2sw==
+X-Gm-Message-State: AOAM531hl4Iaj4YS3MxvalASFd/5F3+Q2lQEh21umSs5ChGJhk8pZHoV
+        YKnBxOpKNCAdbbZxE05tALjEmw==
+X-Google-Smtp-Source: ABdhPJwYsZ5Bdm0jMDlAvLoRue+X2IuYqd6A0q8UkP92NgRfMr63EtUQ2jnm3b8u++7Sr4Bji8w4vg==
+X-Received: by 2002:a1c:6244:: with SMTP id w65mr20538092wmb.27.1619432229857;
+        Mon, 26 Apr 2021 03:17:09 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:de72:8b77:f30e:ff1e])
+        by smtp.gmail.com with ESMTPSA id a2sm20837694wrt.82.2021.04.26.03.17.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Apr 2021 03:17:09 -0700 (PDT)
+Date:   Mon, 26 Apr 2021 11:17:08 +0100
+From:   Matthias Maennich <maennich@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        mptcp@lists.01.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] kbuild: replace LANG=C with LC_ALL=C
+Message-ID: <YIaTJE5iZ75eGSSO@google.com>
+References: <20210424114841.394239-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210426193138.118276-1-zhenzhong.duan@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20210424114841.394239-1-masahiroy@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26/04/21 21:31, Zhenzhong Duan wrote:
-> In vm_vcpu_rm() and kvm_vm_release(), a stale return value is checked in
-> TEST_ASSERT macro.
-> 
-> Fix it by assigning variable ret with correct return value.
-> 
-> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
-> ---
->   tools/testing/selftests/kvm/lib/kvm_util.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index b8849a1aca79..53d3a7eb0d47 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -514,7 +514,7 @@ static void vm_vcpu_rm(struct kvm_vm *vm, struct vcpu *vcpu)
->   	ret = munmap(vcpu->state, vcpu_mmap_sz());
->   	TEST_ASSERT(ret == 0, "munmap of VCPU fd failed, rc: %i "
->   		"errno: %i", ret, errno);
-> -	close(vcpu->fd);
-> +	ret = close(vcpu->fd);
->   	TEST_ASSERT(ret == 0, "Close of VCPU fd failed, rc: %i "
->   		"errno: %i", ret, errno);
->   
-> @@ -534,7 +534,7 @@ void kvm_vm_release(struct kvm_vm *vmp)
->   	TEST_ASSERT(ret == 0, "Close of vm fd failed,\n"
->   		"  vmp->fd: %i rc: %i errno: %i", vmp->fd, ret, errno);
->   
-> -	close(vmp->kvm_fd);
-> +	ret = close(vmp->kvm_fd);
->   	TEST_ASSERT(ret == 0, "Close of /dev/kvm fd failed,\n"
->   		"  vmp->kvm_fd: %i rc: %i errno: %i", vmp->kvm_fd, ret, errno);
->   }
-> 
+On Sat, Apr 24, 2021 at 08:48:41PM +0900, Masahiro Yamada wrote:
+>LANG gives a weak default to each LC_* in case it is not explicitly
+>defined. LC_ALL, if set, overrides all other LC_* variables.
+>
+>  LANG  <  LC_CTYPE, LC_COLLATE, LC_MONETARY, LC_NUMERIC, ...  <  LC_ALL
+>
+>This is why documentation such as [1] suggests to set LC_ALL in build
+>scripts to get the deterministic result.
+>
+>LANG=C is not strong enough to override LC_* that may be set by end
+>users.
+>
+>[1]: https://reproducible-builds.org/docs/locales/
+>
+>Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Queued, thanks.
+Reviewed-by: Matthias Maennich <maennich@google.com>
 
-Paolo
+Cheers,
+Matthias
 
+>---
+>
+> arch/powerpc/boot/wrapper                          | 2 +-
+> scripts/nsdeps                                     | 2 +-
+> scripts/recordmcount.pl                            | 2 +-
+> scripts/setlocalversion                            | 2 +-
+> scripts/tags.sh                                    | 2 +-
+> tools/testing/selftests/net/mptcp/mptcp_connect.sh | 2 +-
+> usr/gen_initramfs.sh                               | 2 +-
+> 7 files changed, 7 insertions(+), 7 deletions(-)
+>
+>diff --git a/arch/powerpc/boot/wrapper b/arch/powerpc/boot/wrapper
+>index 41fa0a8715e3..cdb796b76e2e 100755
+>--- a/arch/powerpc/boot/wrapper
+>+++ b/arch/powerpc/boot/wrapper
+>@@ -191,7 +191,7 @@ if [ -z "$kernel" ]; then
+>     kernel=vmlinux
+> fi
+>
+>-LANG=C elfformat="`${CROSS}objdump -p "$kernel" | grep 'file format' | awk '{print $4}'`"
+>+LC_ALL=C elfformat="`${CROSS}objdump -p "$kernel" | grep 'file format' | awk '{print $4}'`"
+> case "$elfformat" in
+>     elf64-powerpcle)	format=elf64lppc	;;
+>     elf64-powerpc)	format=elf32ppc	;;
+>diff --git a/scripts/nsdeps b/scripts/nsdeps
+>index e8ce2a4d704a..04c4b96e95ec 100644
+>--- a/scripts/nsdeps
+>+++ b/scripts/nsdeps
+>@@ -44,7 +44,7 @@ generate_deps() {
+> 		for source_file in $mod_source_files; do
+> 			sed '/MODULE_IMPORT_NS/Q' $source_file > ${source_file}.tmp
+> 			offset=$(wc -l ${source_file}.tmp | awk '{print $1;}')
+>-			cat $source_file | grep MODULE_IMPORT_NS | LANG=C sort -u >> ${source_file}.tmp
+>+			cat $source_file | grep MODULE_IMPORT_NS | LC_ALL=C sort -u >> ${source_file}.tmp
+> 			tail -n +$((offset +1)) ${source_file} | grep -v MODULE_IMPORT_NS >> ${source_file}.tmp
+> 			if ! diff -q ${source_file} ${source_file}.tmp; then
+> 				mv ${source_file}.tmp ${source_file}
+>diff --git a/scripts/recordmcount.pl b/scripts/recordmcount.pl
+>index 867860ea57da..0a7fc9507d6f 100755
+>--- a/scripts/recordmcount.pl
+>+++ b/scripts/recordmcount.pl
+>@@ -497,7 +497,7 @@ sub update_funcs
+> #
+> # Step 2: find the sections and mcount call sites
+> #
+>-open(IN, "LANG=C $objdump -hdr $inputfile|") || die "error running $objdump";
+>+open(IN, "LC_ALL=C $objdump -hdr $inputfile|") || die "error running $objdump";
+>
+> my $text;
+>
+>diff --git a/scripts/setlocalversion b/scripts/setlocalversion
+>index bb709eda96cd..db941f6d9591 100755
+>--- a/scripts/setlocalversion
+>+++ b/scripts/setlocalversion
+>@@ -126,7 +126,7 @@ scm_version()
+> 	fi
+>
+> 	# Check for svn and a svn repo.
+>-	if rev=$(LANG= LC_ALL= LC_MESSAGES=C svn info 2>/dev/null | grep '^Last Changed Rev'); then
+>+	if rev=$(LC_ALL=C svn info 2>/dev/null | grep '^Last Changed Rev'); then
+> 		rev=$(echo $rev | awk '{print $NF}')
+> 		printf -- '-svn%s' "$rev"
+>
+>diff --git a/scripts/tags.sh b/scripts/tags.sh
+>index fd96734deff1..db8ba411860a 100755
+>--- a/scripts/tags.sh
+>+++ b/scripts/tags.sh
+>@@ -326,5 +326,5 @@ esac
+>
+> # Remove structure forward declarations.
+> if [ -n "$remove_structs" ]; then
+>-    LANG=C sed -i -e '/^\([a-zA-Z_][a-zA-Z0-9_]*\)\t.*\t\/\^struct \1;.*\$\/;"\tx$/d' $1
+>+    LC_ALL=C sed -i -e '/^\([a-zA-Z_][a-zA-Z0-9_]*\)\t.*\t\/\^struct \1;.*\$\/;"\tx$/d' $1
+> fi
+>diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+>index 10a030b53b23..1d2a6e7b877c 100755
+>--- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+>+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+>@@ -273,7 +273,7 @@ check_mptcp_disabled()
+> 	ip netns exec ${disabled_ns} sysctl -q net.mptcp.enabled=0
+>
+> 	local err=0
+>-	LANG=C ip netns exec ${disabled_ns} ./mptcp_connect -t $timeout -p 10000 -s MPTCP 127.0.0.1 < "$cin" 2>&1 | \
+>+	LC_ALL=C ip netns exec ${disabled_ns} ./mptcp_connect -t $timeout -p 10000 -s MPTCP 127.0.0.1 < "$cin" 2>&1 | \
+> 		grep -q "^socket: Protocol not available$" && err=1
+> 	ip netns delete ${disabled_ns}
+>
+>diff --git a/usr/gen_initramfs.sh b/usr/gen_initramfs.sh
+>index 8ae831657e5d..63476bb70b41 100755
+>--- a/usr/gen_initramfs.sh
+>+++ b/usr/gen_initramfs.sh
+>@@ -147,7 +147,7 @@ dir_filelist() {
+> 	header "$1"
+>
+> 	srcdir=$(echo "$1" | sed -e 's://*:/:g')
+>-	dirlist=$(find "${srcdir}" -printf "%p %m %U %G\n" | LANG=C sort)
+>+	dirlist=$(find "${srcdir}" -printf "%p %m %U %G\n" | LC_ALL=C sort)
+>
+> 	# If $dirlist is only one line, then the directory is empty
+> 	if [  "$(echo "${dirlist}" | wc -l)" -gt 1 ]; then
+>-- 
+>2.27.0
+>
