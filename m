@@ -2,59 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9413536CA02
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Apr 2021 19:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9060936CAD1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Apr 2021 20:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236627AbhD0REm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Apr 2021 13:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235735AbhD0REl (ORCPT
+        id S238488AbhD0SEJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Apr 2021 14:04:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47829 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238531AbhD0SEG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Apr 2021 13:04:41 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77769C06175F
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 10:03:56 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id l21so17092978iob.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 10:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GR5JD0ns+pkMtnVUKEORcsBQhRfif8pxVKBIY8qVHxA=;
-        b=QmLHoLcsn+BCVDfzUQrjwg8Xy2xVvUXFxBBU5ft+H64o4TFVvBIXxXHuqOMECGEcTO
-         dtvozDEMUp4GFivPJePB0PbkV52eNybLkucfQwmJgQrhAYuEEpl8ey6u5rr7froL9831
-         wYVyAxisrA82rOkudABuC3U8PenfOlk7D+S7mAqWQheynJuG+L6t550RQN2xH3AtQmcj
-         YZOVPtow4jaHCIeBDjTYIj5/8GSNps1Fuw/jToYXPcH3cgKCRyqq/rZVHA/3bXXQ2Nve
-         2ueglmp/SjvnojiN9svPkpekJLSz97FI7Aop3wlrKzIy55Bwfsy6mB/auPJu3BpBHN4P
-         BL/A==
+        Tue, 27 Apr 2021 14:04:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619546602;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uxq6LnPiTdql8TXSE99+fcYiPX1sdJEySNHvDoQFyd4=;
+        b=U8qCmvKce8Dvyr/C4zSJkPoULaMh9QvbQMqrqF8Yuqk+IdPIWkVoXtnA/tjCC12Vjy48tI
+        RqMRcmA9BelfEPwyR1eyAU6F7MK1LSCk5spsnyaeRIbq1Pfgy/bHe/zYgJXml2k03BBZut
+        StTxlFIsiii24f4X/f/8ZEjMnJ0rbjg=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-244-Vz087TycPDiAA2eFBZzKPQ-1; Tue, 27 Apr 2021 14:03:18 -0400
+X-MC-Unique: Vz087TycPDiAA2eFBZzKPQ-1
+Received: by mail-qv1-f71.google.com with SMTP id m19-20020a0cdb930000b029019a25080c40so26385577qvk.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 11:03:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GR5JD0ns+pkMtnVUKEORcsBQhRfif8pxVKBIY8qVHxA=;
-        b=TijSEGoUjyZIy0037y0FJ1vDlNNfeL5mgP8bSbHz1ImgzBTMqZwhzXtUTr5WizLsei
-         m2Lw5jKE+VncN9bOog7p0stcaxRkNrT3jv8BgW6mXwUvjvQln7y10n4gS0/MF3LBbUZZ
-         6upY4ohaTsdZFYsB6q3naS3lzUZQaUeLCNmfW7uzPxFoMlxJVxD1lb6eD0BH7PJ4q8pI
-         k3felyawvxRfAnuDjfd0kB1Ah7L+aRaRv99UsVWOOXiI3q9UXdLSbtehVsLjZ7t6TGMQ
-         5bkSgxW8DySN8jId7kDlMQJRfYRACKowmSexZ9ENLs69FphGayokMF5KQcm0QG6buMTN
-         ldnA==
-X-Gm-Message-State: AOAM5313N+Xe8CvDYKZFPO06u9LbjVYKHkZU4JLLBPaw/JcHd1227jQW
-        ws5FEAgDC6zIQqoiCYw7EOnYO2YP9EiTywp+Mfp1kA==
-X-Google-Smtp-Source: ABdhPJwulj3vaxVO0sHbkW6fF/E/7qJzf+HEs1+HRhzpNXwno9kM3bLiLURQiT9BXMHQwBaFd9a8rHY/eeZXQQ4/jXo=
-X-Received: by 2002:a5d:9682:: with SMTP id m2mr20925814ion.20.1619543035845;
- Tue, 27 Apr 2021 10:03:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210420220804.486803-1-axelrasmussen@google.com>
- <20210420220804.486803-5-axelrasmussen@google.com> <alpine.LSU.2.11.2104261920110.2998@eggly.anvils>
- <20210427155713.GC6820@xz-x1>
-In-Reply-To: <20210427155713.GC6820@xz-x1>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 27 Apr 2021 10:03:20 -0700
-Message-ID: <CAJHvVciKEu3F3mF3-1AC0hR5FgkKHWdHQvSkKJLwibjsW9Zb0g@mail.gmail.com>
-Subject: Re: [PATCH v4 04/10] userfaultfd/shmem: support minor fault
- registration for shmem
-To:     Peter Xu <peterx@redhat.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uxq6LnPiTdql8TXSE99+fcYiPX1sdJEySNHvDoQFyd4=;
+        b=ET9m0OB9jzfey/97xP+hCJH4WG0MWhDKd/f9qzYHk4XZXr4j1MveAmSsOEwe2naXZ6
+         su61g0BMNWtta1NkgEkM+Cp9O29zhU+JJrecWEU+wQzzCAmWOfLJAmtQf+9B280NaefF
+         f+lUyKINolxnfjVrh7IfUw8aWLM0mksFHFGfnUs0RfB5xXkY+s1E5Kz2QFvSXW4no/zX
+         UMtroUj9Zcrs8ZJ7JfV171daCBP8Sy7j/RfWY/nQQSvhZIm1tp0fozhvgdxihbgOCtKq
+         3MibNAeJPRjwhIkw+64XaraGp0jUqgtrqL7rgKfWzIUpA09H7T4SolfwRRAGhRdn0el2
+         Grpg==
+X-Gm-Message-State: AOAM530oyETtg4VXOQjJ6r4Q2O34sFTOf96kavEJ/mFnytDDJfeLIXrU
+        4Z4cKODCHI1p8VW71yCAEHGEZTOrenaHiBfLv0olL0MzVL9GZUCzE+5BACXP36kPUg+Qk1Bg23Q
+        euPRUAN//g86PKlFIsNrS14OLOpBR
+X-Received: by 2002:a05:620a:f:: with SMTP id j15mr24057468qki.307.1619546597725;
+        Tue, 27 Apr 2021 11:03:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJztCC+XrZldYdKF/5ItbBDWFXLnijjmmS8bfVQi6TI1Vej0NaMb+NFRcFob5jVc3TcuhD2/Iw==
+X-Received: by 2002:a05:620a:f:: with SMTP id j15mr24057430qki.307.1619546597418;
+        Tue, 27 Apr 2021 11:03:17 -0700 (PDT)
+Received: from xz-x1 (bras-base-toroon474qw-grc-77-184-145-104-227.dsl.bell.ca. [184.145.104.227])
+        by smtp.gmail.com with ESMTPSA id q26sm1313209qkn.81.2021.04.27.11.03.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Apr 2021 11:03:16 -0700 (PDT)
+Date:   Tue, 27 Apr 2021 14:03:14 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Hugh Dickins <hughd@google.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrea Arcangeli <aarcange@redhat.com>,
@@ -73,52 +71,59 @@ Cc:     Hugh Dickins <hughd@google.com>,
         "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
         Mina Almasry <almasrymina@google.com>,
         Oliver Upton <oupton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 03/10] userfaultfd/shmem: support UFFDIO_CONTINUE for
+ shmem
+Message-ID: <20210427180314.GD6820@xz-x1>
+References: <20210420220804.486803-1-axelrasmussen@google.com>
+ <20210420220804.486803-4-axelrasmussen@google.com>
+ <alpine.LSU.2.11.2104261906390.2998@eggly.anvils>
+ <20210427155414.GB6820@xz-x1>
+ <CAJHvVciNrE_F0B0nu=Mib6LhcFhL8+qgO-yiKNsJuBjOMkn5+g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJHvVciNrE_F0B0nu=Mib6LhcFhL8+qgO-yiKNsJuBjOMkn5+g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ah yes, I should have modified the commit message when I swapped them
-the first time - sorry for overlooking it.
+On Tue, Apr 27, 2021 at 09:57:16AM -0700, Axel Rasmussen wrote:
+> I'd prefer to keep them separate, as they are not tiny patches (they
+> are roughly +200/-150 each). And, they really are quite independent -
+> at least in the sense that I can reorder them via rebase with no
+> conflicts, and the code builds at each commit in either orientation. I
+> think this implies they're easier to review separately, rather than
+> squashed.
+> 
+> I don't have a strong feeling about the order. I slightly prefer
+> swapping them compared to this v4 series: first introduce minor
+> faults, then introduce CONTINUE.
+> 
+> Since Peter also has no strong opinion, and Hugh it sounds like you
+> prefer it the other way around, I'll swap them as we had in some
+> previous version of this series: first introduce minor faults, then
+> introduce CONTINUE.
 
-As I said in the other thread, unless someone strongly objects I'll
-just re-order them the other way around, minor faults first and then
-CONTINUE, which resolves this concern at least.
+Yes I have no strong opinion, but that's probably the least I prefer. :-)
 
-I'm not too worried about leaving them split. Clearly we'll never
-release a kernel with one but not the other. So the only scenario I
-can imagine is, bisecting. But, bisecting across the range where UFFD
-shmem minor faults were introduced, if you're using that feature,
-won't really work out well no matter what we do. If you aren't using
-this feature explicitly, then any of the configurations we've talked
-about are fine.
+Because you'll declare UFFD_FEATURE_MINOR_SHMEM and enable this feature without
+the feature being completely implemented (without UFFDIO_CONTINUE, it's not
+complete since no one will be able to resolve that minor fault).
 
-On Tue, Apr 27, 2021 at 8:57 AM Peter Xu <peterx@redhat.com> wrote:
->
-> On Mon, Apr 26, 2021 at 07:23:57PM -0700, Hugh Dickins wrote:
-> > On Tue, 20 Apr 2021, Axel Rasmussen wrote:
-> >
-> > > This patch allows shmem-backed VMAs to be registered for minor faults.
-> > > Minor faults are appropriately relayed to userspace in the fault path,
-> > > for VMAs with the relevant flag.
-> > >
-> > > This commit doesn't hook up the UFFDIO_CONTINUE ioctl for shmem-backed
-> > > minor faults, though, so userspace doesn't yet have a way to resolve
-> > > such faults.
-> > >
-> > > Acked-by: Peter Xu <peterx@redhat.com>
-> > > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> >
-> > And if this "04/10" had been numbered 03/10, I would have said
-> > Acked-by: Hugh Dickins <hughd@google.com>
-> >
-> > Just read the comment above: "so userspace doesn't yet have a way to
-> > resolve such faults" - if it doesn't by this stage, we're in trouble.
->
-> Right, so merging the two patches might be easier.  Even if we don't merge
-> them, we'll need to touch up the commit message since at least above paragraph
-> is not true anymore as we've already have UFFDIO_CONTINUE.  Thanks,
->
-> --
-> Peter Xu
->
+Not a big deal anyway, but since we're at it... Basically I think three things
+to do for minor shmem support:
+
+  (1) UFFDIO_CONTINUE (resolving path)
+  (2) Handle fault path for shmem minor fault (faulting path)
+  (3) Enablement of UFFD_FEATURE_MINOR_SHMEM (from which point, user can detect
+      and enable it)
+
+I have no preference on how you'd like to merge these steps (right now you did
+1 first, then 2+3 later; or as Hugh suggested do 1+2+3 together), but I'd still
+hope item 3 should always be the last, if possible...
+
+Thanks,
+
+-- 
+Peter Xu
+
