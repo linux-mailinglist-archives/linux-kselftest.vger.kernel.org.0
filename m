@@ -2,223 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 738BB36C754
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Apr 2021 15:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BED736C8E7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Apr 2021 17:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236538AbhD0Nyb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Apr 2021 09:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236074AbhD0Ny2 (ORCPT
+        id S236597AbhD0PzH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Apr 2021 11:55:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:49201 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236398AbhD0PzG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Apr 2021 09:54:28 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C48C061756;
-        Tue, 27 Apr 2021 06:53:43 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 5BA351F424AB
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH 2/2] selftests: futex: Expand timeout test
-Date:   Tue, 27 Apr 2021 10:53:28 -0300
-Message-Id: <20210427135328.11013-3-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210427135328.11013-1-andrealmeid@collabora.com>
-References: <20210427135328.11013-1-andrealmeid@collabora.com>
+        Tue, 27 Apr 2021 11:55:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619538861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F2EAyRlyPf7sFuC/hgHV65Ah6f40dk7Oz+0C6LVfX60=;
+        b=L4pqxUR6NY8jLaDqChcH3obTeRg1SAtHhcnLGNR3znVwvlGC13ojYdB7ZTGxSixKN05fyY
+        sQsg1zUUJJDQMzzaN7Zp7u7DYGIWpHPGj/b8brVoSNbXIohdyBKPDUtbfySuRy4y1MYkQ+
+        JH8O8mty2h2baJ7FWrEIPnIOCd2Bn84=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-139-fGB6k3LHPBGxGOCrQete0Q-1; Tue, 27 Apr 2021 11:54:17 -0400
+X-MC-Unique: fGB6k3LHPBGxGOCrQete0Q-1
+Received: by mail-qk1-f198.google.com with SMTP id g184-20020a3784c10000b02902e385de9adaso22844968qkd.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 08:54:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F2EAyRlyPf7sFuC/hgHV65Ah6f40dk7Oz+0C6LVfX60=;
+        b=jwblbO8ihYetlP2+5ZrLbKwTY1OTj/JwEf1tkRR0GRCeXLF/zTZehnNcyUsPxulhNQ
+         cHy5kmw3CZXjII9XVOCtiTCoYX7yLUIVNzNZPAxsJ4USJonQj/yG3x8UiK8XwA8WojmN
+         tVk8TZy0v9Fjze7lrOOrDhPdwAOJ3jMOK9jAEVesWeYVQ8BuF3KQ3h/GYJQzFKVdV8Nw
+         +m14El8UOwOEZHEXIf5KsT/JY6jz8fbBgd54z6y+v6KTgOtGMLmBIy1iepCKzIsa894Z
+         YGF6TbmZ0KSsGBKm5xFfRAPWgNqAuPSJox7r5NAmfWT+qQO1dSeZuC3+sM4eMwexpXSs
+         BHeA==
+X-Gm-Message-State: AOAM5300HUy1/lf0aXB/+ussfpHVUT8yXerfxJuf3HaeMUKu1DNRDJgG
+        5QsTmbEqZMf6CeVL+XZ2vM9kNkOfhomgTtjb2cYXB+m9BjqAdCSMxrPKqPKNZZl63AqxThF4YP4
+        IqnP/FBVlTyCNQQrKK5gm8lfk+isu
+X-Received: by 2002:ac8:4455:: with SMTP id m21mr11149102qtn.192.1619538857287;
+        Tue, 27 Apr 2021 08:54:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxjPXLMKWECur9Mqt8jATos9gtIg5JYkYXdpYunNG2EodbYnflzFS1Fc8CUzF2HNgSB2Ko5hg==
+X-Received: by 2002:ac8:4455:: with SMTP id m21mr11149060qtn.192.1619538857004;
+        Tue, 27 Apr 2021 08:54:17 -0700 (PDT)
+Received: from xz-x1 (bras-base-toroon474qw-grc-77-184-145-104-227.dsl.bell.ca. [184.145.104.227])
+        by smtp.gmail.com with ESMTPSA id f24sm167754qto.45.2021.04.27.08.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Apr 2021 08:54:16 -0700 (PDT)
+Date:   Tue, 27 Apr 2021 11:54:14 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        Brian Geffon <bgeffon@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v4 03/10] userfaultfd/shmem: support UFFDIO_CONTINUE for
+ shmem
+Message-ID: <20210427155414.GB6820@xz-x1>
+References: <20210420220804.486803-1-axelrasmussen@google.com>
+ <20210420220804.486803-4-axelrasmussen@google.com>
+ <alpine.LSU.2.11.2104261906390.2998@eggly.anvils>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <alpine.LSU.2.11.2104261906390.2998@eggly.anvils>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Improve futex timeout testing by checking all the operations that
-supports timeout and their available modes.
+On Mon, Apr 26, 2021 at 07:19:58PM -0700, Hugh Dickins wrote:
+> On Tue, 20 Apr 2021, Axel Rasmussen wrote:
+> 
+> > With this change, userspace can resolve a minor fault within a
+> > shmem-backed area with a UFFDIO_CONTINUE ioctl. The semantics for this
+> > match those for hugetlbfs - we look up the existing page in the page
+> > cache, and install a PTE for it.
+> > 
+> > This commit introduces a new helper: mcopy_atomic_install_pte.
+> > 
+> > Why handle UFFDIO_CONTINUE for shmem in mm/userfaultfd.c, instead of in
+> > shmem.c? The existing userfault implementation only relies on shmem.c
+> > for VM_SHARED VMAs. However, minor fault handling / CONTINUE work just
+> > fine for !VM_SHARED VMAs as well. We'd prefer to handle CONTINUE for
+> > shmem in one place, regardless of shared/private (to reduce code
+> > duplication).
+> > 
+> > Why add a new mcopy_atomic_install_pte helper? A problem we have with
+> > continue is that shmem_mcopy_atomic_pte() and mcopy_atomic_pte() are
+> > *close* to what we want, but not exactly. We do want to setup the PTEs
+> > in a CONTINUE operation, but we don't want to e.g. allocate a new page,
+> > charge it (e.g. to the shmem inode), manipulate various flags, etc. Also
+> > we have the problem stated above: shmem_mcopy_atomic_pte() and
+> > mcopy_atomic_pte() both handle one-half of the problem (shared /
+> > private) continue cares about. So, introduce mcontinue_atomic_pte(), to
+> > handle all of the shmem continue cases. Introduce the helper so it
+> > doesn't duplicate code with mcopy_atomic_pte().
+> > 
+> > In a future commit, shmem_mcopy_atomic_pte() will also be modified to
+> > use this new helper. However, since this is a bigger refactor, it seems
+> > most clear to do it as a separate change.
+> > 
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> 
+> If this "03/10" had been numbered 04/10, I would have said
+> Acked-by: Hugh Dickins <hughd@google.com>
+> 
+> But I find this new ordering incomprehensible - I'm surprised that it
+> even builds this way around (if it does): this patch is so much about
+> what has been enabled in "04/10" (references to UFFDIO_CONTINUE shmem
+> VMAs etc).
+> 
+> Does Peter still think this way round is better? If he does, then we
+> shall have to compromise by asking you just to squash the two together.
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
----
- .../futex/functional/futex_wait_timeout.c     | 126 +++++++++++++++---
- 1 file changed, 110 insertions(+), 16 deletions(-)
+Hi, Hugh, Axel,
 
-diff --git a/tools/testing/selftests/futex/functional/futex_wait_timeout.c b/tools/testing/selftests/futex/functional/futex_wait_timeout.c
-index ee55e6d389a3..1f8f6daaf1e7 100644
---- a/tools/testing/selftests/futex/functional/futex_wait_timeout.c
-+++ b/tools/testing/selftests/futex/functional/futex_wait_timeout.c
-@@ -11,21 +11,18 @@
-  *
-  * HISTORY
-  *      2009-Nov-6: Initial version by Darren Hart <dvhart@linux.intel.com>
-+ *      2021-Apr-26: More test cases by André Almeida <andrealmeid@collabora.com>
-  *
-  *****************************************************************************/
- 
--#include <errno.h>
--#include <getopt.h>
--#include <stdio.h>
--#include <stdlib.h>
--#include <string.h>
--#include <time.h>
-+#include <pthread.h>
- #include "futextest.h"
- #include "logging.h"
- 
- #define TEST_NAME "futex-wait-timeout"
- 
- static long timeout_ns = 100000;	/* 100us default timeout */
-+static futex_t futex_pi;
- 
- void usage(char *prog)
- {
-@@ -37,11 +34,67 @@ void usage(char *prog)
- 	       VQUIET, VCRITICAL, VINFO);
- }
- 
-+/*
-+ * Get a PI lock and hold it forever, so the main thread lock_pi will block
-+ * and we can test the timeout
-+ */
-+void *get_pi_lock(void *arg)
-+{
-+	int ret;
-+	volatile futex_t lock = 0;
-+
-+	ret = futex_lock_pi(&futex_pi, NULL, 0, 0);
-+	if (ret != 0)
-+		error("futex_lock_pi failed\n", ret);
-+
-+	/* Blocks forever */
-+	ret = futex_wait(&lock, 0, NULL, 0);
-+	error("futex_wait failed\n", ret);
-+
-+	return NULL;
-+}
-+
-+/*
-+ * Check if the function returned the expected error
-+ */
-+static void test_timeout(int res, int *ret, char *test_name, int err)
-+{
-+	if (!res || errno != err) {
-+		ksft_test_result_fail("%s returned %d\n", test_name,
-+				      res < 0 ? errno : res);
-+		*ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("%s succeeds\n", test_name);
-+	}
-+}
-+
-+/*
-+ * Calculate absolute timeout and correct overflow
-+ */
-+static int futex_get_abs_timeout(clockid_t clockid, struct timespec *to,
-+				 long timeout_ns)
-+{
-+	if (clock_gettime(clockid, to)) {
-+		error("clock_gettime failed\n", errno);
-+		return errno;
-+	}
-+
-+	to->tv_nsec += timeout_ns;
-+
-+	if (to->tv_nsec >= 1000000000) {
-+		to->tv_sec++;
-+		to->tv_nsec -= 1000000000;
-+	}
-+
-+	return 0;
-+}
-+
- int main(int argc, char *argv[])
- {
- 	futex_t f1 = FUTEX_INITIALIZER;
--	struct timespec to;
- 	int res, ret = RET_PASS;
-+	struct timespec to;
-+	pthread_t thread;
- 	int c;
- 
- 	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
-@@ -65,22 +118,63 @@ int main(int argc, char *argv[])
- 	}
- 
- 	ksft_print_header();
--	ksft_set_plan(1);
-+	ksft_set_plan(7);
- 	ksft_print_msg("%s: Block on a futex and wait for timeout\n",
- 	       basename(argv[0]));
- 	ksft_print_msg("\tArguments: timeout=%ldns\n", timeout_ns);
- 
--	/* initialize timeout */
-+	pthread_create(&thread, NULL, get_pi_lock, NULL);
-+
-+	/* initialize relative timeout */
- 	to.tv_sec = 0;
- 	to.tv_nsec = timeout_ns;
- 
--	info("Calling futex_wait on f1: %u @ %p\n", f1, &f1);
--	res = futex_wait(&f1, f1, &to, FUTEX_PRIVATE_FLAG);
--	if (!res || errno != ETIMEDOUT) {
--		fail("futex_wait returned %d\n", ret < 0 ? errno : ret);
--		ret = RET_FAIL;
--	}
-+	res = futex_wait(&f1, f1, &to, 0);
-+	test_timeout(res, &ret, "futex_wait relative", ETIMEDOUT);
-+
-+	/* FUTEX_WAIT_BITSET with CLOCK_REALTIME */
-+	if (futex_get_abs_timeout(CLOCK_REALTIME, &to, timeout_ns))
-+		return RET_FAIL;
-+	res = futex_wait_bitset(&f1, f1, &to, 1, FUTEX_CLOCK_REALTIME);
-+	test_timeout(res, &ret, "futex_wait_bitset realtime", ETIMEDOUT);
-+
-+	/* FUTEX_WAIT_BITSET with CLOCK_MONOTONIC */
-+	if (futex_get_abs_timeout(CLOCK_MONOTONIC, &to, timeout_ns))
-+		return RET_FAIL;
-+	res = futex_wait_bitset(&f1, f1, &to, 1, 0);
-+	test_timeout(res, &ret, "futex_wait_bitset monotonic", ETIMEDOUT);
-+
-+	/* FUTEX_WAIT_REQUEUE_PI with CLOCK_REALTIME */
-+	if (futex_get_abs_timeout(CLOCK_REALTIME, &to, timeout_ns))
-+		return RET_FAIL;
-+	res = futex_wait_requeue_pi(&f1, f1, &futex_pi, &to, FUTEX_CLOCK_REALTIME);
-+	test_timeout(res, &ret, "futex_wait_requeue_pi realtime", ETIMEDOUT);
-+
-+	/* FUTEX_WAIT_REQUEUE_PI with CLOCK_MONOTONIC */
-+	if (futex_get_abs_timeout(CLOCK_MONOTONIC, &to, timeout_ns))
-+		return RET_FAIL;
-+	res = futex_wait_requeue_pi(&f1, f1, &futex_pi, &to, 0);
-+	test_timeout(res, &ret, "futex_wait_requeue_pi monotonic", ETIMEDOUT);
-+
-+	/*
-+	 * FUTEX_LOCK_PI with CLOCK_REALTIME
-+	 * Due to historical reasons, FUTEX_LOCK_PI supports only realtime
-+	 * clock, but requires the caller to not set CLOCK_REALTIME flag.
-+	 *
-+	 * If you call FUTEX_LOCK_PI with a monotonic clock, it'll be
-+	 * interpreted as a realtime clock, and (unless you mess your machine's
-+	 * time or your time machine) the monotonic clock value is always
-+	 * smaller than realtime and the syscall will timeout immediately.
-+	 */
-+	if (futex_get_abs_timeout(CLOCK_REALTIME, &to, timeout_ns))
-+		return RET_FAIL;
-+	res = futex_lock_pi(&futex_pi, &to, 0, 0);
-+	test_timeout(res, &ret, "futex_lock_pi realtime", ETIMEDOUT);
-+
-+	/* Test operations that don't support FUTEX_CLOCK_REALTIME */
-+	res = futex_lock_pi(&futex_pi, NULL, 0, FUTEX_CLOCK_REALTIME);
-+	test_timeout(res, &ret, "futex_lock_pi invalid timeout flag", ENOSYS);
- 
--	print_result(TEST_NAME, ret);
-+	ksft_print_cnts();
- 	return ret;
- }
+I have no strong opinion. To me, UFFDIO_CONTINUE can be introduced earlier like
+this. As long as we don't enable the feature (which is done in the next patch),
+no one will be able to call it, then it looks clean.  Merging them also looks
+good to me.
+
+Thanks,
+
 -- 
-2.31.1
+Peter Xu
 
