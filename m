@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BED736C8E7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Apr 2021 17:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF3836C8F4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Apr 2021 17:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236597AbhD0PzH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Apr 2021 11:55:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:49201 "EHLO
+        id S238034AbhD0P6C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Apr 2021 11:58:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:44122 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236398AbhD0PzG (ORCPT
+        by vger.kernel.org with ESMTP id S236589AbhD0P6C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Apr 2021 11:55:06 -0400
+        Tue, 27 Apr 2021 11:58:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619538861;
+        s=mimecast20190719; t=1619539038;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=F2EAyRlyPf7sFuC/hgHV65Ah6f40dk7Oz+0C6LVfX60=;
-        b=L4pqxUR6NY8jLaDqChcH3obTeRg1SAtHhcnLGNR3znVwvlGC13ojYdB7ZTGxSixKN05fyY
-        sQsg1zUUJJDQMzzaN7Zp7u7DYGIWpHPGj/b8brVoSNbXIohdyBKPDUtbfySuRy4y1MYkQ+
-        JH8O8mty2h2baJ7FWrEIPnIOCd2Bn84=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-139-fGB6k3LHPBGxGOCrQete0Q-1; Tue, 27 Apr 2021 11:54:17 -0400
-X-MC-Unique: fGB6k3LHPBGxGOCrQete0Q-1
-Received: by mail-qk1-f198.google.com with SMTP id g184-20020a3784c10000b02902e385de9adaso22844968qkd.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 08:54:17 -0700 (PDT)
+        bh=UeRAYJi3jVz2RcJA5cfm9/ZZeziOqivA1BEyk0ctB+8=;
+        b=cPw5KuU5YKX57TvUkrq0W/Bm1Zp2yUw19CrCFDBBWUqu0InCoXXYyHPmCB7U4z3hTqjVb/
+        jJIDvQMPlki2zShs2iuAJm81/wRHJBrZev6SBDZYVo879CqQPJXgrsugNhkOXGp6U/KjKc
+        QYmQkK4MA7xKhhZl65RZhyDexxCjqV0=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-233-xMytMof9Ol-b28DftIWnFg-1; Tue, 27 Apr 2021 11:57:16 -0400
+X-MC-Unique: xMytMof9Ol-b28DftIWnFg-1
+Received: by mail-qt1-f197.google.com with SMTP id a11-20020ac85b8b0000b02901a69faebe0cso23501885qta.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 08:57:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=F2EAyRlyPf7sFuC/hgHV65Ah6f40dk7Oz+0C6LVfX60=;
-        b=jwblbO8ihYetlP2+5ZrLbKwTY1OTj/JwEf1tkRR0GRCeXLF/zTZehnNcyUsPxulhNQ
-         cHy5kmw3CZXjII9XVOCtiTCoYX7yLUIVNzNZPAxsJ4USJonQj/yG3x8UiK8XwA8WojmN
-         tVk8TZy0v9Fjze7lrOOrDhPdwAOJ3jMOK9jAEVesWeYVQ8BuF3KQ3h/GYJQzFKVdV8Nw
-         +m14El8UOwOEZHEXIf5KsT/JY6jz8fbBgd54z6y+v6KTgOtGMLmBIy1iepCKzIsa894Z
-         YGF6TbmZ0KSsGBKm5xFfRAPWgNqAuPSJox7r5NAmfWT+qQO1dSeZuC3+sM4eMwexpXSs
-         BHeA==
-X-Gm-Message-State: AOAM5300HUy1/lf0aXB/+ussfpHVUT8yXerfxJuf3HaeMUKu1DNRDJgG
-        5QsTmbEqZMf6CeVL+XZ2vM9kNkOfhomgTtjb2cYXB+m9BjqAdCSMxrPKqPKNZZl63AqxThF4YP4
-        IqnP/FBVlTyCNQQrKK5gm8lfk+isu
-X-Received: by 2002:ac8:4455:: with SMTP id m21mr11149102qtn.192.1619538857287;
-        Tue, 27 Apr 2021 08:54:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxjPXLMKWECur9Mqt8jATos9gtIg5JYkYXdpYunNG2EodbYnflzFS1Fc8CUzF2HNgSB2Ko5hg==
-X-Received: by 2002:ac8:4455:: with SMTP id m21mr11149060qtn.192.1619538857004;
-        Tue, 27 Apr 2021 08:54:17 -0700 (PDT)
+        bh=UeRAYJi3jVz2RcJA5cfm9/ZZeziOqivA1BEyk0ctB+8=;
+        b=Ym5IhJgjUKjVEF+CjPkk/rkxhTjeqrFgjLWS1kojmK4y31oEeUwtImq6thfkQztUz2
+         acFTF58rORGgnQh3YM2hI5Y4FrSWYcrqvH26BxOXXOlqnRU4TVSNblFEjcA5UrRpvdcZ
+         jSAGXekdo2OnNre0wHhuUyRZ+iy+AxkO1QsV1RZvftkThVohYGMbXzIzBbiFl10Lh0or
+         hBImhjf8Zl9Paq1rBdflGSJ8VYn2giHdxQfQCCgBbxsfo+3iHBSghF/rjiCepHC5ZPYs
+         efwHbn8g5wYUWGKQ7P3lJZOCkq1GEW9Y1Sv0Di6LxtnIzsg2+CU3mkozfJNlgqWOb274
+         V1Xg==
+X-Gm-Message-State: AOAM530oi5whNRhMIFWJshACRrUTCitDrvw3N1HmtCDqfihDXRQMpo+8
+        OgJBkkti29dA1tlF3E2B5De8SO+ghvFQBk1OOc2haZD85kiXsrpCIFs+ao2RGuxUokR943ecD9M
+        +hIiyk4DxczGySLI3+g7jl/lOlvF8
+X-Received: by 2002:a37:9305:: with SMTP id v5mr23224454qkd.223.1619539036071;
+        Tue, 27 Apr 2021 08:57:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwt9C9yyPCKjs/11oWJ2ljp8cgvSKc3nf/K+fOGkHMK5svdKo+b6nP8QjYAWsUrtuDALqrP7A==
+X-Received: by 2002:a37:9305:: with SMTP id v5mr23224422qkd.223.1619539035849;
+        Tue, 27 Apr 2021 08:57:15 -0700 (PDT)
 Received: from xz-x1 (bras-base-toroon474qw-grc-77-184-145-104-227.dsl.bell.ca. [184.145.104.227])
-        by smtp.gmail.com with ESMTPSA id f24sm167754qto.45.2021.04.27.08.54.15
+        by smtp.gmail.com with ESMTPSA id h62sm2925543qkf.116.2021.04.27.08.57.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Apr 2021 08:54:16 -0700 (PDT)
-Date:   Tue, 27 Apr 2021 11:54:14 -0400
+        Tue, 27 Apr 2021 08:57:15 -0700 (PDT)
+Date:   Tue, 27 Apr 2021 11:57:13 -0400
 From:   Peter Xu <peterx@redhat.com>
 To:     Hugh Dickins <hughd@google.com>
 Cc:     Axel Rasmussen <axelrasmussen@google.com>,
@@ -71,73 +71,43 @@ Cc:     Axel Rasmussen <axelrasmussen@google.com>,
         "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
         Mina Almasry <almasrymina@google.com>,
         Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v4 03/10] userfaultfd/shmem: support UFFDIO_CONTINUE for
- shmem
-Message-ID: <20210427155414.GB6820@xz-x1>
+Subject: Re: [PATCH v4 04/10] userfaultfd/shmem: support minor fault
+ registration for shmem
+Message-ID: <20210427155713.GC6820@xz-x1>
 References: <20210420220804.486803-1-axelrasmussen@google.com>
- <20210420220804.486803-4-axelrasmussen@google.com>
- <alpine.LSU.2.11.2104261906390.2998@eggly.anvils>
+ <20210420220804.486803-5-axelrasmussen@google.com>
+ <alpine.LSU.2.11.2104261920110.2998@eggly.anvils>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.11.2104261906390.2998@eggly.anvils>
+In-Reply-To: <alpine.LSU.2.11.2104261920110.2998@eggly.anvils>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 07:19:58PM -0700, Hugh Dickins wrote:
+On Mon, Apr 26, 2021 at 07:23:57PM -0700, Hugh Dickins wrote:
 > On Tue, 20 Apr 2021, Axel Rasmussen wrote:
 > 
-> > With this change, userspace can resolve a minor fault within a
-> > shmem-backed area with a UFFDIO_CONTINUE ioctl. The semantics for this
-> > match those for hugetlbfs - we look up the existing page in the page
-> > cache, and install a PTE for it.
+> > This patch allows shmem-backed VMAs to be registered for minor faults.
+> > Minor faults are appropriately relayed to userspace in the fault path,
+> > for VMAs with the relevant flag.
 > > 
-> > This commit introduces a new helper: mcopy_atomic_install_pte.
+> > This commit doesn't hook up the UFFDIO_CONTINUE ioctl for shmem-backed
+> > minor faults, though, so userspace doesn't yet have a way to resolve
+> > such faults.
 > > 
-> > Why handle UFFDIO_CONTINUE for shmem in mm/userfaultfd.c, instead of in
-> > shmem.c? The existing userfault implementation only relies on shmem.c
-> > for VM_SHARED VMAs. However, minor fault handling / CONTINUE work just
-> > fine for !VM_SHARED VMAs as well. We'd prefer to handle CONTINUE for
-> > shmem in one place, regardless of shared/private (to reduce code
-> > duplication).
-> > 
-> > Why add a new mcopy_atomic_install_pte helper? A problem we have with
-> > continue is that shmem_mcopy_atomic_pte() and mcopy_atomic_pte() are
-> > *close* to what we want, but not exactly. We do want to setup the PTEs
-> > in a CONTINUE operation, but we don't want to e.g. allocate a new page,
-> > charge it (e.g. to the shmem inode), manipulate various flags, etc. Also
-> > we have the problem stated above: shmem_mcopy_atomic_pte() and
-> > mcopy_atomic_pte() both handle one-half of the problem (shared /
-> > private) continue cares about. So, introduce mcontinue_atomic_pte(), to
-> > handle all of the shmem continue cases. Introduce the helper so it
-> > doesn't duplicate code with mcopy_atomic_pte().
-> > 
-> > In a future commit, shmem_mcopy_atomic_pte() will also be modified to
-> > use this new helper. However, since this is a bigger refactor, it seems
-> > most clear to do it as a separate change.
-> > 
+> > Acked-by: Peter Xu <peterx@redhat.com>
 > > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 > 
-> If this "03/10" had been numbered 04/10, I would have said
+> And if this "04/10" had been numbered 03/10, I would have said
 > Acked-by: Hugh Dickins <hughd@google.com>
 > 
-> But I find this new ordering incomprehensible - I'm surprised that it
-> even builds this way around (if it does): this patch is so much about
-> what has been enabled in "04/10" (references to UFFDIO_CONTINUE shmem
-> VMAs etc).
-> 
-> Does Peter still think this way round is better? If he does, then we
-> shall have to compromise by asking you just to squash the two together.
+> Just read the comment above: "so userspace doesn't yet have a way to
+> resolve such faults" - if it doesn't by this stage, we're in trouble.
 
-Hi, Hugh, Axel,
-
-I have no strong opinion. To me, UFFDIO_CONTINUE can be introduced earlier like
-this. As long as we don't enable the feature (which is done in the next patch),
-no one will be able to call it, then it looks clean.  Merging them also looks
-good to me.
-
-Thanks,
+Right, so merging the two patches might be easier.  Even if we don't merge
+them, we'll need to touch up the commit message since at least above paragraph
+is not true anymore as we've already have UFFDIO_CONTINUE.  Thanks,
 
 -- 
 Peter Xu
