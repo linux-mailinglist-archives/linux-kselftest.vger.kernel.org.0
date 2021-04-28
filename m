@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E1E36CFD2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Apr 2021 02:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8136836CFD8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Apr 2021 02:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbhD1AD1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Apr 2021 20:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
+        id S230368AbhD1AEH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Apr 2021 20:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235653AbhD1AD1 (ORCPT
+        with ESMTP id S238071AbhD1AEG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Apr 2021 20:03:27 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF11C061761
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 17:02:43 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id z20-20020a0568301294b02902a52ecbaf18so4552413otp.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 17:02:43 -0700 (PDT)
+        Tue, 27 Apr 2021 20:04:06 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CE1C061761
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 17:03:21 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id 5-20020a9d09050000b029029432d8d8c5so30967735otp.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 17:03:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:to:cc:subject:in-reply-to:message-id:references
          :user-agent:mime-version;
-        bh=6p+JC3rKVjYrYlLA8QianvKVOFGkYhcWLY47LZagLL0=;
-        b=QG2EIYp+HC97NQun7wDIY0YwlOSn1mnmnxpu3OvXDOY3mR4wRvei0y53o8fYQr5kTV
-         8oDkBNSoqmkyXMHAwBO0cmXYQgr5+9vGeBJ/0riXwQt8lIi7PmcgOAJ52+kiL4jLit1L
-         iOGMBNecyxBH0usH0DNCUpLcwyQbR1kz6FnIaEXAYwcxtDyt9i5EDkI0LmU3ZIod5MDv
-         gA6TozSWFZVS0SXEnj1kfysquTzkeq9DfWE+8JAZIZ8kkrGTq3IYs1sSJElWSQA3MnPr
-         JLEx6WZ4dcSnczVjd1SgNKsmoUO5ngTfmw34QUGn9VvgnfOwgMEhsBUt/ioMW4IINC4j
-         Mmuw==
+        bh=xacAZXww+/r1bYXmcQWffobgGN8QvzDcUp5VNbqVO2g=;
+        b=h59I82pBb9CSjo53IXp5WlilB8BELyUyymcAkd7h7D/t8//pyn5b1QYqX/2KNcMMte
+         AArc97JJ6OtqU61vD0xKuqULCy4SntW4x1jnWa8jX1jAdd7z1a0wvl+1c43Ax+tPfgvp
+         GySDj+7ZVf0MRQwIc8xOBSN7GWeeDZr51l4ZLBjUw8ISAfdOPsh1RsUYMHRu3emXp16S
+         Gzu3w9xqBLGrm+yukJsGw2+ETqrSRIQBfjrA3OwvGoxyReveyWDafwio18B05Vtjf3Yz
+         LMxBS6XZ5bGhvFIKOJzoz3O2FEEUEmh7DDllLTRdPVLhtX+lZb+Nson3KQz/GNJPDKW9
+         PIaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
          :references:user-agent:mime-version;
-        bh=6p+JC3rKVjYrYlLA8QianvKVOFGkYhcWLY47LZagLL0=;
-        b=tdTB3k/ZpFHeMgDmtLYLW+YtewYNKgwYEo4f1TD5ICaKNr3F1+q+EZSNjudwRKcWsm
-         pwQuPFIYx6OD1rSiNTRfIOMgToE/euCgnI9VC3f89sw6dZyi8N7n26mzaoRdrDRu26uu
-         iswURaMivXATET3YqKPVfD2x7SEhwHMDt1kG2jmoPzobqalBHUplX8gf6WZ19WVj/tz1
-         yNOaSMbKbW9fZFl1CBfVVu2EJh2giMLFDKCiGxxBcA0pBQNP37d4PNrBfJti2FXEqW2j
-         s0Itcc71YVmIG6E6xhS5KeOTum/C1TXDcL+1geOB9MUn3+XPgd3Qqiv2i++z4nIFWInp
-         erlg==
-X-Gm-Message-State: AOAM530RXUZZMcxiN5ymUuy1qy4//wVgxqxWQcgL678C8fLNhQNj7arA
-        agfdRD9nFAcIR5XKVckPzIPAwg==
-X-Google-Smtp-Source: ABdhPJwX+Lblum7o2eVDbKoe89/QxHjJmiEd80w3XLF7Lh4KSMp8fjmUEoWUdcfv02tMyqPsSx7AAA==
-X-Received: by 2002:a05:6830:2418:: with SMTP id j24mr1782028ots.87.1619568162507;
-        Tue, 27 Apr 2021 17:02:42 -0700 (PDT)
+        bh=xacAZXww+/r1bYXmcQWffobgGN8QvzDcUp5VNbqVO2g=;
+        b=qYZWZBo966Btvk7YBd0lCKIrWFai5KFHvctNuxWDtiLEH50vwr6/asxmr/Z83jozqZ
+         wn8XAAHyiAGdXjx6YeePqGiEUXqXsG2rXjOsGb8Z2z5ayu41nSbS7SwCAddCfndhVu3n
+         Hg6aILEWcrstEUuujvjnndrV1rEMKLddeP6LcGDcQ0q5IMTBhZbLNDM9/tb6qIrLw0yi
+         dsFH/wemDA4QBu4L/+YxhaB6Ep3tTVdU0np/9SBPwIB8PPV0ea2twWlR45u3a44KPX1F
+         ivVelLWm83edJQCRU8aOjZBGJQQFieoU3Q/Iod8TtcJ3cYU+rAGER98SXDsnvoxibOaq
+         6OIA==
+X-Gm-Message-State: AOAM530mSb1fCTjJcrRyUfxZoSa+EvlxkmcibgB9EQSaoWKtjPWoErsK
+        QcmsWb88QbPHv9ry1Me+5iv29w==
+X-Google-Smtp-Source: ABdhPJzE3/VyNTj6Deb8Jn0iF9zjPFK3uybT4s/FTec9X68bbLS2maO9mVnotyq3tMx9A2f40jmlSA==
+X-Received: by 2002:a9d:6c52:: with SMTP id g18mr20760460otq.29.1619568200397;
+        Tue, 27 Apr 2021 17:03:20 -0700 (PDT)
 Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id a21sm981529oop.20.2021.04.27.17.02.40
+        by smtp.gmail.com with ESMTPSA id e12sm324759otq.46.2021.04.27.17.03.18
         (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Tue, 27 Apr 2021 17:02:42 -0700 (PDT)
-Date:   Tue, 27 Apr 2021 17:02:25 -0700 (PDT)
+        Tue, 27 Apr 2021 17:03:20 -0700 (PDT)
+Date:   Tue, 27 Apr 2021 17:03:17 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@eggly.anvils
 To:     Axel Rasmussen <axelrasmussen@google.com>
@@ -71,11 +71,11 @@ cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
         Mina Almasry <almasrymina@google.com>,
         Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v5 03/10] userfaultfd/shmem: support minor fault registration
- for shmem
-In-Reply-To: <20210427225244.4326-4-axelrasmussen@google.com>
-Message-ID: <alpine.LSU.2.11.2104271701500.7111@eggly.anvils>
-References: <20210427225244.4326-1-axelrasmussen@google.com> <20210427225244.4326-4-axelrasmussen@google.com>
+Subject: Re: [PATCH v5 04/10] userfaultfd/shmem: support UFFDIO_CONTINUE for
+ shmem
+In-Reply-To: <20210427225244.4326-5-axelrasmussen@google.com>
+Message-ID: <alpine.LSU.2.11.2104271702470.7111@eggly.anvils>
+References: <20210427225244.4326-1-axelrasmussen@google.com> <20210427225244.4326-5-axelrasmussen@google.com>
 User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
@@ -85,25 +85,39 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Tue, 27 Apr 2021, Axel Rasmussen wrote:
 
-> This patch allows shmem-backed VMAs to be registered for minor faults.
-> Minor faults are appropriately relayed to userspace in the fault path,
-> for VMAs with the relevant flag.
+> With this change, userspace can resolve a minor fault within a
+> shmem-backed area with a UFFDIO_CONTINUE ioctl. The semantics for this
+> match those for hugetlbfs - we look up the existing page in the page
+> cache, and install a PTE for it.
 > 
-> This commit doesn't hook up the UFFDIO_CONTINUE ioctl for shmem-backed
-> minor faults, though, so userspace doesn't yet have a way to resolve
-> such faults.
+> This commit introduces a new helper: mcopy_atomic_install_pte.
 > 
-> Because of this, we also don't yet advertise this as a supported
-> feature. That will be done in a separate commit when the feature is
-> fully implemented.
+> Why handle UFFDIO_CONTINUE for shmem in mm/userfaultfd.c, instead of in
+> shmem.c? The existing userfault implementation only relies on shmem.c
+> for VM_SHARED VMAs. However, minor fault handling / CONTINUE work just
+> fine for !VM_SHARED VMAs as well. We'd prefer to handle CONTINUE for
+> shmem in one place, regardless of shared/private (to reduce code
+> duplication).
 > 
-> Acked-by: Peter Xu <peterx@redhat.com>
+> Why add a new mcopy_atomic_install_pte helper? A problem we have with
+> continue is that shmem_mcopy_atomic_pte() and mcopy_atomic_pte() are
+> *close* to what we want, but not exactly. We do want to setup the PTEs
+> in a CONTINUE operation, but we don't want to e.g. allocate a new page,
+> charge it (e.g. to the shmem inode), manipulate various flags, etc. Also
+> we have the problem stated above: shmem_mcopy_atomic_pte() and
+> mcopy_atomic_pte() both handle one-half of the problem (shared /
+> private) continue cares about. So, introduce mcontinue_atomic_pte(), to
+> handle all of the shmem continue cases. Introduce the helper so it
+> doesn't duplicate code with mcopy_atomic_pte().
+> 
+> In a future commit, shmem_mcopy_atomic_pte() will also be modified to
+> use this new helper. However, since this is a bigger refactor, it seems
+> most clear to do it as a separate change.
+> 
 > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
 Acked-by: Hugh Dickins <hughd@google.com>
 
 > ---
->  fs/userfaultfd.c |  3 +--
->  mm/memory.c      |  8 +++++---
->  mm/shmem.c       | 12 +++++++++++-
->  3 files changed, 17 insertions(+), 6 deletions(-)
+>  mm/userfaultfd.c | 172 ++++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 127 insertions(+), 45 deletions(-)
