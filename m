@@ -2,555 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D7D36F12E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Apr 2021 22:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C41236F162
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Apr 2021 22:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbhD2Uik (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Apr 2021 16:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S237254AbhD2UwH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Apr 2021 16:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237127AbhD2Uij (ORCPT
+        with ESMTP id S236983AbhD2UwC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Apr 2021 16:38:39 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28740C06138F
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Apr 2021 13:37:51 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id i7-20020ac84f470000b02901b944d49e13so20204555qtw.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Apr 2021 13:37:51 -0700 (PDT)
+        Thu, 29 Apr 2021 16:52:02 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBE4C06138B
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Apr 2021 13:51:13 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id v7-20020a05620a0a87b02902e02f31812fso28801289qkg.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Apr 2021 13:51:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=DGuTrXLrIE0AwJaOgaPE+rI733C/cBS81rZyJyudRUg=;
-        b=CqSAY77xY3fLuS2VcKAtq2Lh/iXEhRcTjT5WtsZKMifSQxkMUCM2knS6s950eUiuml
-         +JFGGJBU3kI10rWj+wysvnb+CitgRbrd06hWX4Y76q49wMTrGCtlWQ3aVWHKw6wTngJX
-         qP+h445Qqdrp55CX26Exl4n/EDWtoN1GyQcD6k5TFOEDyjoApX693nHwPaB0kF9jsMPQ
-         sgNWx3TjJjFers5QKR7Ec1UyMdvdSet1Ch7jziLb4Ka4c3tWKG1JFUI5aPazJ9DxHvja
-         FVAUTG9O0dZKGI3KffFz0zUyMa6Ox3v+EYIOHEdCEzFEFvdA4HFA2V3x4T4LEZsBPf1U
-         zPhQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=dtgYO1S7XdMlHmgHKpXOFlISeb7ZWP6ta+z/fi7RlbU=;
+        b=jFuL+TlClLAojEheY7NZlwRso47kGA92K349+XUxYpYLyR/RKh2MEe7I83WJEM1Qfz
+         epQnQJlai5kQ4+6T4OKujuxZVIUgu9d+zVurCcHmZMRzu5bkgc7UyCZSAMwmCRay7Mg6
+         yNuyebBe8gTvEKTdWhHEhLqbyxN43NJ2YFF+dC9pk1hyefxaR/4BsQSpBfp6yCG+saZW
+         +Dhs2/3tO0qb9Wb8v8VzGLKgTp5rQ4uvLXI0HlkvNzBJvpzS/6TB2qyPdoJDyyTMgX7a
+         J+0NjB4V7uFYISLkGYRq6ZLTniZZJJLqsbXkZx3gkUhoMNiTKGpe08QzH+8X4xpDatAu
+         /F3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=DGuTrXLrIE0AwJaOgaPE+rI733C/cBS81rZyJyudRUg=;
-        b=JZX9nYgirMehKUG+cGn1bW+yxb1GSDToMn2NW82049t5NBL08RYbBi8zouOmHl0Q/y
-         rjasFznM1GkrXFj/nBDd27NN/hQoZP9hWqsvkR7dGl91AE9PY/WAODn0wrPkP1IjixrB
-         wyREgVSGngw11/xV6RUmi1lEUkaJFF7OHec84jteUdeglUsaTFDWzkOBBEq5vO12Zk1C
-         KdY+ZONifH8F3q84w3gfPCTvEoeoNZb3RJpMpLloneeiRmXd8fk+PXNRQfwdQ3wN9IcB
-         J2uX3bXkaA6iveKLY+2QeOQoccxSvFz/BQMoCAj14hMtIInSHR0geUugHUyfpYKM9pU+
-         m5dw==
-X-Gm-Message-State: AOAM531jxRIOl9FPQUB3A2LioguPZTGJBQiqoXEWpxUiXngIDR8fM5r6
-        ZcYbc6JL0vpdhCPq+8lgPSknv0vuPh1JPcsxpA==
-X-Google-Smtp-Source: ABdhPJyD0GN56aRIU0VEenLkT1iIgfuv45myyMT03zBJmxB+/kErjH0L7J8m5rZy1KKGSWEGRP8JLv4N5gE1zv9uCw==
-X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
- (user=jingzhangos job=sendgmr) by 2002:a0c:b218:: with SMTP id
- x24mr1918180qvd.55.1619728670111; Thu, 29 Apr 2021 13:37:50 -0700 (PDT)
-Date:   Thu, 29 Apr 2021 20:37:40 +0000
-In-Reply-To: <20210429203740.1935629-1-jingzhangos@google.com>
-Message-Id: <20210429203740.1935629-5-jingzhangos@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=dtgYO1S7XdMlHmgHKpXOFlISeb7ZWP6ta+z/fi7RlbU=;
+        b=P9FtQjXWGZ2w2xzE81fvlbIKGW2SWW6NZDO3Ior5WbKc69TFKmM/RXgeRgnkEs13OQ
+         ZZx0KYvETRYujf8Irx4Q519B4DOg4946edOvIi38OxSKng/gstopTdLeD88Gde8sSow9
+         bBPe0/P4MUiO11MEgggcqic+pzxrpf7DhcDYkmtqarAke7Vkg1ySCW/1ipRLGPxydSt6
+         lKR4yiBQgvaAMQSw2Eo686gewkad6FtcBKCIxeSUbTymJOPejxDlv4qGUK74HdN3RIsz
+         s92LUdCrw34bh2neiGfd3V8AEOc+0wFx6/cslbcia5RsiM097PAzcXz/HYoFiLrFKI8D
+         zuyA==
+X-Gm-Message-State: AOAM533Ady37Ho16j6FAFOVhJeN6F2jpktZ67A4b1zIOUGid9zLWdfUz
+        VFiXF1cYIJEEZiTyhUIe6BB3Fx4Ncvd+rH0H47uFMQ==
+X-Google-Smtp-Source: ABdhPJz5HQSIb3IbjAgzFERiyYXy98nvz2QX7ZMYpTInmokbaHrSH4oBuXMiGKV6ElZs0qQyqGSM6UzTe3GLlFuZJPoqzA==
+X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:bab5:c64e:5a6c:36bd])
+ (user=brendanhiggins job=sendgmr) by 2002:a0c:fd8e:: with SMTP id
+ p14mr1770099qvr.23.1619729473077; Thu, 29 Apr 2021 13:51:13 -0700 (PDT)
+Date:   Thu, 29 Apr 2021 13:51:05 -0700
+Message-Id: <20210429205109.2847831-1-brendanhiggins@google.com>
 Mime-Version: 1.0
-References: <20210429203740.1935629-1-jingzhangos@google.com>
 X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
-Subject: [PATCH v4 4/4] KVM: selftests: Add selftest for KVM statistics data
- binary interface
-From:   Jing Zhang <jingzhangos@google.com>
-To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     Jing Zhang <jingzhangos@google.com>
+Subject: [RFC v2 0/4] kunit: tool: add support for QEMU
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     shuah@kernel.org, davidgow@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org, sboyd@kernel.org, keescook@chromium.org,
+        frowand.list@gmail.com, dlatypov@google.com,
+        Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Signed-off-by: Jing Zhang <jingzhangos@google.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   3 +
- .../testing/selftests/kvm/include/kvm_util.h  |   3 +
- .../selftests/kvm/kvm_bin_form_stats.c        | 380 ++++++++++++++++++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  11 +
- 5 files changed, 398 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
+TL;DR: Add support to kunit_tool to dispatch tests via QEMU. Also add
+support to immediately shutdown a kernel after running KUnit tests.
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index bd83158e0e0b..35796667c944 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -43,3 +43,4 @@
- /memslot_modification_stress_test
- /set_memory_region_test
- /steal_time
-+/kvm_bin_form_stats
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index ea5c42841307..e06ced4f99a2 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -76,6 +76,7 @@ TEST_GEN_PROGS_x86_64 += kvm_page_table_test
- TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
- TEST_GEN_PROGS_x86_64 += set_memory_region_test
- TEST_GEN_PROGS_x86_64 += steal_time
-+TEST_GEN_PROGS_x86_64 += kvm_bin_form_stats
- 
- TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
- TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list-sve
-@@ -87,6 +88,7 @@ TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
- TEST_GEN_PROGS_aarch64 += kvm_page_table_test
- TEST_GEN_PROGS_aarch64 += set_memory_region_test
- TEST_GEN_PROGS_aarch64 += steal_time
-+TEST_GEN_PROGS_aarch64 += kvm_bin_form_stats
- 
- TEST_GEN_PROGS_s390x = s390x/memop
- TEST_GEN_PROGS_s390x += s390x/resets
-@@ -96,6 +98,7 @@ TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
- TEST_GEN_PROGS_s390x += kvm_page_table_test
- TEST_GEN_PROGS_s390x += set_memory_region_test
-+TEST_GEN_PROGS_s390x += kvm_bin_form_stats
- 
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
- LIBKVM += $(LIBKVM_$(UNAME_M))
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index a8f022794ce3..ee01a67022d9 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -387,4 +387,7 @@ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc);
- #define GUEST_ASSERT_4(_condition, arg1, arg2, arg3, arg4) \
- 	__GUEST_ASSERT((_condition), 4, (arg1), (arg2), (arg3), (arg4))
- 
-+int vm_get_statsfd(struct kvm_vm *vm);
-+int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid);
-+
- #endif /* SELFTEST_KVM_UTIL_H */
-diff --git a/tools/testing/selftests/kvm/kvm_bin_form_stats.c b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
-new file mode 100644
-index 000000000000..486e54ff2e1e
---- /dev/null
-+++ b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
-@@ -0,0 +1,380 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * kvm_bin_form_stats
-+ *
-+ * Copyright (C) 2021, Google LLC.
-+ *
-+ * Test the fd-based interface for KVM statistics.
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <errno.h>
-+
-+#include "test_util.h"
-+
-+#include "kvm_util.h"
-+#include "asm/kvm.h"
-+#include "linux/kvm.h"
-+
-+int vm_stats_test(struct kvm_vm *vm)
-+{
-+	ssize_t ret;
-+	int i, stats_fd, err = -1;
-+	size_t size_desc, size_data = 0;
-+	struct kvm_stats_header header;
-+	struct kvm_stats_desc *stats_desc, *pdesc;
-+	struct kvm_vm_stats_data *stats_data;
-+
-+	/* Get fd for VM stats */
-+	stats_fd = vm_get_statsfd(vm);
-+	if (stats_fd < 0) {
-+		perror("Get VM stats fd");
-+		return err;
-+	}
-+	/* Read kvm vm stats header */
-+	ret = read(stats_fd, &header, sizeof(header));
-+	if (ret != sizeof(header)) {
-+		perror("Read VM stats header");
-+		goto out_close_fd;
-+	}
-+	size_desc = sizeof(*stats_desc) + header.name_size;
-+	/* Check id string in header, that should start with "kvm" */
-+	if (strncmp(header.id, "kvm", 3) ||
-+			strlen(header.id) >= KVM_STATS_ID_MAXLEN) {
-+		printf("Invalid KVM VM stats type!\n");
-+		goto out_close_fd;
-+	}
-+	/* Sanity check for other fields in header */
-+	if (header.count == 0) {
-+		err = 0;
-+		goto out_close_fd;
-+	}
-+	/* Check overlap */
-+	if (header.desc_offset == 0 || header.data_offset == 0 ||
-+			header.desc_offset < sizeof(header) ||
-+			header.data_offset < sizeof(header)) {
-+		printf("Invalid offset fields in header!\n");
-+		goto out_close_fd;
-+	}
-+	if (header.desc_offset < header.data_offset &&
-+			(header.desc_offset + size_desc * header.count >
-+			header.data_offset)) {
-+		printf("VM Descriptor block is overlapped with data block!\n");
-+		goto out_close_fd;
-+	}
-+
-+	/* Allocate memory for stats descriptors */
-+	stats_desc = calloc(header.count, size_desc);
-+	if (!stats_desc) {
-+		perror("Allocate memory for VM stats descriptors");
-+		goto out_close_fd;
-+	}
-+	/* Read kvm vm stats descriptors */
-+	ret = pread(stats_fd, stats_desc,
-+			size_desc * header.count, header.desc_offset);
-+	if (ret != size_desc * header.count) {
-+		perror("Read KVM VM stats descriptors");
-+		goto out_free_desc;
-+	}
-+	/* Sanity check for fields in descriptors */
-+	for (i = 0; i < header.count; ++i) {
-+		pdesc = (void *)stats_desc + i * size_desc;
-+		/* Check type,unit,scale boundaries */
-+		if ((pdesc->flags & KVM_STATS_TYPE_MASK) > KVM_STATS_TYPE_MAX) {
-+			printf("Unknown KVM stats type!\n");
-+			goto out_free_desc;
-+		}
-+		if ((pdesc->flags & KVM_STATS_UNIT_MASK) > KVM_STATS_UNIT_MAX) {
-+			printf("Unknown KVM stats unit!\n");
-+			goto out_free_desc;
-+		}
-+		if ((pdesc->flags & KVM_STATS_SCALE_MASK) >
-+				KVM_STATS_SCALE_MAX) {
-+			printf("Unknown KVM stats scale!\n");
-+			goto out_free_desc;
-+		}
-+		/* Check exponent for stats unit
-+		 * Exponent for counter should be greater than or equal to 0
-+		 * Exponent for unit bytes should be greater than or equal to 0
-+		 * Exponent for unit seconds should be less than or equal to 0
-+		 * Exponent for unit clock cycles should be greater than or
-+		 * equal to 0
-+		 */
-+		switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
-+		case KVM_STATS_UNIT_NONE:
-+		case KVM_STATS_UNIT_BYTES:
-+		case KVM_STATS_UNIT_CYCLES:
-+			if (pdesc->exponent < 0) {
-+				printf("Unsupported KVM stats unit!\n");
-+				goto out_free_desc;
-+			}
-+			break;
-+		case KVM_STATS_UNIT_SECONDS:
-+			if (pdesc->exponent > 0) {
-+				printf("Unsupported KVM stats unit!\n");
-+				goto out_free_desc;
-+			}
-+			break;
-+		}
-+		/* Check name string */
-+		if (strlen(pdesc->name) >= header.name_size) {
-+			printf("KVM stats name(%s) too long!\n", pdesc->name);
-+			goto out_free_desc;
-+		}
-+		/* Check size field, which should not be zero */
-+		if (pdesc->size == 0) {
-+			printf("KVM descriptor(%s) with size of 0!\n",
-+					pdesc->name);
-+			goto out_free_desc;
-+		}
-+		size_data += pdesc->size * sizeof(stats_data->value[0]);
-+	}
-+	/* Check overlap */
-+	if (header.data_offset < header.desc_offset &&
-+		header.data_offset + size_data > header.desc_offset) {
-+		printf("Data block is overlapped with Descriptor block!\n");
-+		goto out_free_desc;
-+	}
-+	/* Check validity of all stats data size */
-+	if (size_data < header.count * sizeof(stats_data->value[0])) {
-+		printf("Data size is not correct!\n");
-+		goto out_free_desc;
-+	}
-+
-+	/* Allocate memory for stats data */
-+	stats_data = malloc(size_data);
-+	if (!stats_data) {
-+		perror("Allocate memory for VM stats data");
-+		goto out_free_desc;
-+	}
-+	/* Read kvm vm stats data */
-+	ret = pread(stats_fd, stats_data, size_data, header.data_offset);
-+	if (ret != size_data) {
-+		perror("Read KVM VM stats data");
-+		goto out_free_data;
-+	}
-+
-+	err = 0;
-+out_free_data:
-+	free(stats_data);
-+out_free_desc:
-+	free(stats_desc);
-+out_close_fd:
-+	close(stats_fd);
-+	return err;
-+}
-+
-+int vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
-+{
-+	ssize_t ret;
-+	int i, stats_fd, err = -1;
-+	size_t size_desc, size_data = 0;
-+	struct kvm_stats_header header;
-+	struct kvm_stats_desc *stats_desc, *pdesc;
-+	struct kvm_vcpu_stats_data *stats_data;
-+
-+	/* Get fd for VCPU stats */
-+	stats_fd = vcpu_get_statsfd(vm, vcpu_id);
-+	if (stats_fd < 0) {
-+		perror("Get VCPU stats fd");
-+		return err;
-+	}
-+	/* Read kvm vcpu stats header */
-+	ret = read(stats_fd, &header, sizeof(header));
-+	if (ret != sizeof(header)) {
-+		perror("Read VCPU stats header");
-+		goto out_close_fd;
-+	}
-+	size_desc = sizeof(*stats_desc) + header.name_size;
-+	/* Check id string in header, that should start with "kvm" */
-+	if (strncmp(header.id, "kvm", 3) ||
-+			strlen(header.id) >= KVM_STATS_ID_MAXLEN) {
-+		printf("Invalid KVM VCPU stats type!\n");
-+		goto out_close_fd;
-+	}
-+	/* Sanity check for other fields in header */
-+	if (header.count == 0) {
-+		err = 0;
-+		goto out_close_fd;
-+	}
-+	/* Check overlap */
-+	if (header.desc_offset == 0 || header.data_offset == 0 ||
-+			header.desc_offset < sizeof(header) ||
-+			header.data_offset < sizeof(header)) {
-+		printf("Invalid offset fields in header!\n");
-+		goto out_close_fd;
-+	}
-+	if (header.desc_offset < header.data_offset &&
-+			(header.desc_offset + size_desc * header.count >
-+			header.data_offset)) {
-+		printf("VCPU Descriptor block is overlapped with data block!\n");
-+		goto out_close_fd;
-+	}
-+
-+	/* Allocate memory for stats descriptors */
-+	stats_desc = calloc(header.count, size_desc);
-+	if (!stats_desc) {
-+		perror("Allocate memory for VCPU stats descriptors");
-+		goto out_close_fd;
-+	}
-+	/* Read kvm vcpu stats descriptors */
-+	ret = pread(stats_fd, stats_desc,
-+			size_desc * header.count, header.desc_offset);
-+	if (ret != size_desc * header.count) {
-+		perror("Read KVM VCPU stats descriptors");
-+		goto out_free_desc;
-+	}
-+	/* Sanity check for fields in descriptors */
-+	for (i = 0; i < header.count; ++i) {
-+		pdesc = (void *)stats_desc + i * size_desc;
-+		/* Check boundaries */
-+		if ((pdesc->flags & KVM_STATS_TYPE_MASK) > KVM_STATS_TYPE_MAX) {
-+			printf("Unknown KVM stats type!\n");
-+			goto out_free_desc;
-+		}
-+		if ((pdesc->flags & KVM_STATS_UNIT_MASK) > KVM_STATS_UNIT_MAX) {
-+			printf("Unknown KVM stats unit!\n");
-+			goto out_free_desc;
-+		}
-+		if ((pdesc->flags & KVM_STATS_SCALE_MASK) >
-+				KVM_STATS_SCALE_MAX) {
-+			printf("Unknown KVM stats scale!\n");
-+			goto out_free_desc;
-+		}
-+		/* Check exponent for stats unit
-+		 * Exponent for counter should be greater than or equal to 0
-+		 * Exponent for unit bytes should be greater than or equal to 0
-+		 * Exponent for unit seconds should be less than or equal to 0
-+		 * Exponent for unit clock cycles should be greater than or
-+		 * equal to 0
-+		 */
-+		switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
-+		case KVM_STATS_UNIT_NONE:
-+		case KVM_STATS_UNIT_BYTES:
-+		case KVM_STATS_UNIT_CYCLES:
-+			if (pdesc->exponent < 0) {
-+				printf("Unsupported KVM stats unit!\n");
-+				goto out_free_desc;
-+			}
-+			break;
-+		case KVM_STATS_UNIT_SECONDS:
-+			if (pdesc->exponent > 0) {
-+				printf("Unsupported KVM stats unit!\n");
-+				goto out_free_desc;
-+			}
-+			break;
-+		}
-+		/* Check name string */
-+		if (strlen(pdesc->name) >= header.name_size) {
-+			printf("KVM stats name(%s) too long!\n", pdesc->name);
-+			goto out_free_desc;
-+		}
-+		/* Check size field, which should not be zero */
-+		if (pdesc->size == 0) {
-+			printf("KVM descriptor(%s) with size of 0!\n",
-+					pdesc->name);
-+			goto out_free_desc;
-+		}
-+		size_data += pdesc->size * sizeof(stats_data->value[0]);
-+	}
-+	/* Check overlap */
-+	if (header.data_offset < header.desc_offset &&
-+		header.data_offset + size_data > header.desc_offset) {
-+		printf("Data block is overlapped with Descriptor block!\n");
-+		goto out_free_desc;
-+	}
-+	/* Check validity of all stats data size */
-+	if (size_data < header.count * sizeof(stats_data->value[0])) {
-+		printf("Data size is not correct!\n");
-+		goto out_free_desc;
-+	}
-+
-+	/* Allocate memory for stats data */
-+	stats_data = malloc(size_data);
-+	if (!stats_data) {
-+		perror("Allocate memory for VCPU stats data");
-+		goto out_free_desc;
-+	}
-+	/* Read kvm vcpu stats data */
-+	ret = pread(stats_fd, stats_data, size_data, header.data_offset);
-+	if (ret != size_data) {
-+		perror("Read KVM VCPU stats data");
-+		goto out_free_data;
-+	}
-+
-+	err = 0;
-+out_free_data:
-+	free(stats_data);
-+out_free_desc:
-+	free(stats_desc);
-+out_close_fd:
-+	close(stats_fd);
-+	return err;
-+}
-+
-+/*
-+ * Usage: kvm_bin_form_stats [#vm] [#vcpu]
-+ * The first parameter #vm set the number of VMs being created.
-+ * The second parameter #vcpu set the number of VCPUs being created.
-+ * By default, 1 VM and 1 VCPU for the VM would be created for testing.
-+ */
-+
-+int main(int argc, char *argv[])
-+{
-+	int max_vm = 1, max_vcpu = 1, ret, i, j, err = -1;
-+	struct kvm_vm **vms;
-+
-+	/* Get the number of VMs and VCPUs that would be created for testing. */
-+	if (argc > 1) {
-+		max_vm = strtol(argv[1], NULL, 0);
-+		if (max_vm <= 0)
-+			max_vm = 1;
-+	}
-+	if (argc > 2 ) {
-+		max_vcpu = strtol(argv[2], NULL, 0);
-+		if (max_vcpu <= 0)
-+			max_vcpu = 1;
-+	}
-+
-+	/* Check the extension for binary stats */
-+	ret = kvm_check_cap(KVM_CAP_STATS_BINARY_FD);
-+	if (ret < 0) {
-+		printf("Binary form statistics interface is not supported!\n");
-+		return err;
-+	}
-+
-+	/* Create VMs and VCPUs */
-+	vms = malloc(sizeof(vms[0]) * max_vm);
-+	if (!vms) {
-+		perror("Allocate memory for storing VM pointers");
-+		return err;
-+	}
-+	for (i = 0; i < max_vm; ++i) {
-+		vms[i] = vm_create(VM_MODE_DEFAULT,
-+				DEFAULT_GUEST_PHY_PAGES, O_RDWR);
-+		for (j = 0; j < max_vcpu; ++j) {
-+			vm_vcpu_add(vms[i], j);
-+		}
-+	}
-+
-+	/* Check stats read for every VM and VCPU */
-+	for (i = 0; i < max_vm; ++i) {
-+		if (vm_stats_test(vms[i]))
-+			goto out_free_vm;
-+		for (j = 0; j < max_vcpu; ++j) {
-+			if (vcpu_stats_test(vms[i], j))
-+				goto out_free_vm;
-+		}
-+	}
-+
-+	err = 0;
-+out_free_vm:
-+	for (i = 0; i < max_vm; ++i)
-+		kvm_vm_free(vms[i]);
-+	free(vms);
-+	return err;
-+}
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index fc83f6c5902d..9b5768f893f9 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -2090,3 +2090,14 @@ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size)
- 	n = DIV_ROUND_UP(size, vm_guest_mode_params[mode].page_size);
- 	return vm_adjust_num_guest_pages(mode, n);
- }
-+
-+int vm_get_statsfd(struct kvm_vm *vm)
-+{
-+	return ioctl(vm->fd, KVM_STATS_GETFD, NULL);
-+}
-+
-+int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid)
-+{
-+	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
-+	return ioctl(vcpu->fd, KVM_STATS_GETFD, NULL);
-+}
+Background
+----------
+
+KUnit has supported running on all architectures for quite some time;
+however, kunit_tool - the script commonly used to invoke KUnit tests -
+has only fully supported KUnit run on UML. Its functionality has been
+broken up for some time to separate the configure, build, run, and parse
+phases making it possible to be used in part on other architectures to a
+small extent. Nevertheless, kunit_tool has not supported running tests
+on other architectures.
+
+What this patchset does
+-----------------------
+
+This patchset introduces first class support to kunit_tool for KUnit to
+be run on many popular architectures via QEMU. It does this by adding
+two new flags: `--arch` and `--cross_compile`.
+
+`--arch` allows an architecture to be specified by the name the
+architecture is given in `arch/`. It uses the specified architecture to
+select a minimal amount of Kconfigs and QEMU configs needed for the
+architecture to run in QEMU and provide a console from which KTAP
+results can be scraped.
+
+`--cross_compile` allows a toolchain prefix to be specified to make
+similar to how `CROSS_COMPILE` is used.
+
+Additionally, this patchset revives the previously considered "kunit:
+tool: add support for QEMU"[1] patchs. The motivation for this new
+kernel command line flags, `kunit_shutdown`, is to better support
+running KUnit tests inside of QEMU. For most popular architectures, QEMU
+can be made to terminate when the Linux kernel that is being run is
+reboted, halted, or powered off. As Kees pointed out in a previous
+discussion[2], it is possible to make a kernel initrd that can reboot
+the kernel immediately, doing this for every architecture would likely
+be infeasible. Instead, just having an option for the kernel to shutdown
+when it is done with testing seems a lot simpler, especially since it is
+an option which would only available in testing configurations of the
+kernel anyway.
+
+What discussion remains for this patchset?
+------------------------------------------
+
+The first most obvious thing is settling the debate about
+`kunit_shutdown`. If I recall correctly, Kees suggested that it might be
+better to just add a new initrd; however, as I mentioned above, now to
+support many new architectures, it may be substantially easier to
+support this option. So I am hoping with this new usecase, the argument
+for `kunit_shutdown` will be more compelling.
+
+The second and likely harder issue is figuring out the best way to
+configure and provide configs for running KUnit tests via QEMU. I
+provide a pretty primitive way in this patchset which is not super
+flexible; for example, for our PPC support we have it set to build big
+endian, and POWER8 - we currently don't support a way to change that.
+Nevertheless, having sensible defaults is handy too, so we will probably
+want to have some support for overriding defaults, while still being
+able to have defaults.
+
+[1] http://patches.linaro.org/patch/208336/
+[2] https://lkml.org/lkml/2020/6/26/988
+
+Brendan Higgins (3):
+  Documentation: Add kunit_shutdown to kernel-parameters.txt
+  kunit: tool: add support for QEMU
+  Documentation: kunit: document support for QEMU in kunit_tool
+
+David Gow (1):
+  kunit: Add 'kunit_shutdown' option
+
+ .../admin-guide/kernel-parameters.txt         |   8 +
+ Documentation/dev-tools/kunit/usage.rst       |  37 +++-
+ lib/kunit/executor.c                          |  20 ++
+ tools/testing/kunit/kunit.py                  |  33 ++-
+ tools/testing/kunit/kunit_config.py           |   2 +-
+ tools/testing/kunit/kunit_kernel.py           | 209 +++++++++++++++---
+ tools/testing/kunit/kunit_parser.py           |   2 +-
+ tools/testing/kunit/kunit_tool_test.py        |  15 +-
+ 8 files changed, 278 insertions(+), 48 deletions(-)
+
+
+base-commit: 7af08140979a6e7e12b78c93b8625c8d25b084e2
 -- 
-2.31.1.527.g47e6f16901-goog
+2.31.1.498.g6c1eba8ee3d-goog
 
