@@ -2,168 +2,206 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5BE36E743
+	by mail.lfdr.de (Postfix) with ESMTP id B651536E745
 	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Apr 2021 10:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbhD2Ipx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Apr 2021 04:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S235092AbhD2IqI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Apr 2021 04:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239901AbhD2Ipw (ORCPT
+        with ESMTP id S233180AbhD2IqH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Apr 2021 04:45:52 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B5BC06138C
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Apr 2021 01:45:04 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e8-20020a2587480000b02904e5857564e2so45043818ybn.16
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Apr 2021 01:45:04 -0700 (PDT)
+        Thu, 29 Apr 2021 04:46:07 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A92EC06138B
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Apr 2021 01:45:21 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id d185-20020ae9efc20000b02902e45ca32479so11181003qkg.21
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Apr 2021 01:45:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=/nFl5CA5odwYD5KZSvpkh3fKWk1qJg9klTkH7PLEp40=;
-        b=Csx7tXvAkqG1rNLJ4ziBFX7Lg1zHUuDoMPI7aO3KI++HaNREOqduBF67lPG/jPKMRZ
-         GrTunRH+w6hR21p/aoNJb0j9h4PkzmmztseijgLWBnbit+a+bdzB9Pl15zbJRAhpjgSt
-         mFO8pHYaQHq8S69jiXFl1/q5pWrVJW8xsmFnwwJ4vj89DtdPE9JYpANbdFgIZghtZMm1
-         fImBZfywnR3uuMiKVgouic096JDzbHKu11GthTpkPfOyHRyzpq1XYZZaB2Kj4959kFII
-         NLYDoGR33YbqANpqPU/SyZYCcqSA7ZSbfhObtF8jRCDFZp8L1boyfYfBjl/yn0P3NbZj
-         i77A==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=jczHCwrsUz4nxGytYAbOYxiwVzhOvP/hHxvtUgEKyfY=;
+        b=gF2qYHrDn89JrVsHKfB0auMYhxo5tdLoOGPcZ6s8bOXQ0rnJoYf2p8vyqIEDyUOMNx
+         uBMjP2jiho5Djuvtg8p0rVR1hjrI2W/TwZuyWJhKehBBFrpAoSkW2s9/yWyDXpJuXmkH
+         GdplhNz8B6ObULbxmKPzDpiLLkOEsttTrqrxXdrLhyif+LGxqSvgBLeeBfbiPHMheV+n
+         YO1Q002eC6G4L7pVhvJTzbLWa+Y4aRWS+R7wRnb/IVK+9J6VjtDsDkpz1r3mwu3sXIMM
+         dtMOdzWVtGdaKmyMzxMRhDFO8zIsfDUN9IGhjvHzdVAWJOLsGew4m7E1oGPYNywe2HA8
+         Adug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=/nFl5CA5odwYD5KZSvpkh3fKWk1qJg9klTkH7PLEp40=;
-        b=bqT9S76C3TLuLb5JZjv1IMB5AajjIB7OKZbkBs/AZIUmHkn/zajEks0SdqidIzBITz
-         ABx31+g4Y+oNrW83co6RUty6RsJcxgyJkny5lsxAtOYzBw0Ed4tgdcBVBXay0P/4/PPT
-         FSDcGIBbwOvffMnfJQGxO6PLogrKumL4uMpz1bLeI0OKoA0YTOzWVtJ7sY2nRvuZe+4p
-         IFu/I3bM9mXy9sBScYsDdRnp6A2cK2659fwh036dcGwiMQUXdp11gm5Ttbhc5MAlPYTI
-         Q9zMU837xgxD00WhtFCB9Ospmuc2Me/65QnyRdp9QFgcdsMD1z9JPA3ad2MoNPzEcOQ3
-         GD5w==
-X-Gm-Message-State: AOAM533/QxoqoUUZS3Axc5F16pSV3KaLHIfWQJaH5fzMQ86asv4vIuuJ
-        pdCBpYSGSC7iPxL4gZTYkpIrbS0+9SuX
-X-Google-Smtp-Source: ABdhPJyTKGs6WbIoCvxIYmvdsv2tJEWq83Zwt/Jixm+zA/fQIXI57h/Z+5snW9ptCCRxtofohsmBki1sP5Ka
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=jczHCwrsUz4nxGytYAbOYxiwVzhOvP/hHxvtUgEKyfY=;
+        b=MrVZMvgLnszhhWNGzkQWp9qZ2K5zvNBSfKO/HLD/KfONAR1rFH/GSCeYu6c81Ytcwe
+         K0IeUMZIpRDUvJMmXbc2/pHdRyIH+7y4iqjBj3RnggqHkEmYLzZW5NZpoHV8LPCX4foV
+         UnKvqmGcK9SKpm35vBUy3/ielmWhCs0NKAMvOUxey+K+3tYCyI+0jqNL2PueIMaKidZr
+         t5HubWDP5xEjAAsNeIzS6kJpwOYCcqVnMQbAwQxLeLgDXaqLoYkkdBTJVc/3ZwlP8b+0
+         3XJJte6UdMJ0phlQsFHpxmLGmNr6kdq8366khztNyp95ypVp9E9/nvXLVqwTj8sNK7kT
+         dphA==
+X-Gm-Message-State: AOAM532heZTXhwH/ARasTvgjzIGO/ES9kjkFSiXOELamRNs/bHvOmekk
+        59KA0WC92IC2BHkrX1cQiG638hy5Hohi
+X-Google-Smtp-Source: ABdhPJwlSiTQ5Nd0y1YGK9qKbAQ/7M6H6puRAmZzvfiyHIBongleXchfeflsgyh6ffhNstvlx7r6z1R347SI
 X-Received: from nandos.syd.corp.google.com ([2401:fa00:9:14:30c1:7a5a:2ec9:29e5])
- (user=amistry job=sendgmr) by 2002:a25:ba92:: with SMTP id
- s18mr49884608ybg.438.1619685902643; Thu, 29 Apr 2021 01:45:02 -0700 (PDT)
-Date:   Thu, 29 Apr 2021 18:44:08 +1000
-Message-Id: <20210429084410.783998-1-amistry@google.com>
+ (user=amistry job=sendgmr) by 2002:ad4:4c11:: with SMTP id
+ bz17mr17371179qvb.42.1619685920462; Thu, 29 Apr 2021 01:45:20 -0700 (PDT)
+Date:   Thu, 29 Apr 2021 18:44:10 +1000
+In-Reply-To: <20210429084410.783998-1-amistry@google.com>
+Message-Id: <20210429184101.RFC.v2.2.I0d44ed3cc06ff2924c1b5e418e0599e1c1731c3c@changeid>
 Mime-Version: 1.0
+References: <20210429084410.783998-1-amistry@google.com>
 X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
-Subject: [RFC PATCH v2 0/2] x86/speculation: Add finer control for when to
- issue IBPB
+Subject: [RFC PATCH v2 2/2] selftests: Benchmark for the cost of disabling IB speculation
 From:   Anand K Mistry <amistry@google.com>
 To:     x86@kernel.org
 Cc:     joelaf@google.com, asteinhauser@google.com, bp@alien8.de,
         tglx@linutronix.de, Anand K Mistry <amistry@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jay Lang <jaytlang@mit.edu>, Jens Axboe <axboe@kernel.dk>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Mel Gorman <mgorman@suse.de>, Mike Rapoport <rppt@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+This is a simple benchmark for determining the cost of disabling IB
+speculation. It forks a child process and does a simple ping-pong
+using pipes between the parent and child. The child process can have IB
+speculation disabled by running with 'd' as the first argument.
 
-It is documented in Documentation/admin-guide/hw-vuln/spectre.rst, that
-disabling indirect branch speculation for a user-space process creates
-more overhead and cause it to run slower. The performance hit varies by
-CPU, but on the AMD A4-9120C and A6-9220C CPUs, a simple ping-pong using
-pipes between two processes runs ~10x slower when disabling IB
-speculation.
+The test increases the number of iterations until the iterations take at
+least 1 second, to minimise noise.
 
-Patch 2, included in this RFC but not intended for commit, is a simple
-program that demonstrates this issue. Running on a A4-9120C without IB
-speculation disabled, each process ping-pong takes ~7us:
-localhost ~ # taskset 1 /usr/local/bin/test
-...
-iters: 262144, t: 1936300, iter/sec: 135383, us/iter: 7
+This file is NOT intended for inclusion in the kernel source. It is
+presented here as a patch for reference and for others to replicate
+results.
 
-But when IB speculation is disabled, that number increases
-significantly:
-localhost ~ # taskset 1 /usr/local/bin/test d
-...
-iters: 16384, t: 1500518, iter/sec: 10918, us/iter: 91
+The binary should be run with 'taskset' and pinned to a single core,
+since the goal is to benchmark process switching on a single core.
 
-Although this test is a worst-case scenario, we can also consider a real
-situation: an audio server (i.e. pulse). If we imagine a low-latency
-capture, with 10ms packets and a concurrent task on the same CPU (i.e.
-video encoding, for a video call), the audio server will preempt the
-CPU at a rate of 100HZ. At 91us overhead per preemption (switching to
-and from the audio process), that's 0.9% overhead for one process doing
-preemption. In real-world testing (on a A4-9120C), I've seen 9% of CPU
-used by IBPB when doing a 2-person video call.
+Signed-off-by: Anand K Mistry <amistry@google.com>
+---
 
-With this patch, the number of IBPBs issued can be reduced to the
-minimum necessary, only when there's a potential attacker->victim
-process switch.
+(no changes since v1)
 
-Running on the same A4-9120C device, this patch reduces the performance
-hit of IBPB by ~half, as expected:
-localhost ~ # taskset 1 /usr/local/bin/test ds
-...
-iters: 32768, t: 1824043, iter/sec: 17964, us/iter: 55
-
-It should be noted, CPUs from multiple vendors experience a performance
-hit due to IBPB. I also tested a Intel i3-8130U which sees a noticable
-(~2x) increase in process switch time due to IBPB.
-IB spec enabled:
-localhost ~ # taskset 1 /usr/local/bin/test
-...
-iters: 262144, t: 1210821us, iter/sec: 216501, us/iter: 4
-
-IB spec disabled:
-localhost ~ # taskset 1 /usr/local/bin/test d
-...
-iters: 131072, t: 1257583us, iter/sec: 104225, us/iter: 9
-
-Open questions:
-- There are a significant number of task flags, which also now reaches the
-  limit of the 'long' on 32-bit systems. Should the 'mode' flags be
-  stored somewhere else?
-- Having x86-specific flags in linux/sched.h feels wrong. However, this
-  is the mechanism for doing atomic flag updates. Is there an alternate
-  approach?
-
-Open tasks:
-- Documentation
-- Naming
-
-
-Changes in v2:
-- Make flag per-process using prctl().
-
-Anand K Mistry (2):
-  x86/speculation: Allow per-process control of when to issue IBPB
-  selftests: Benchmark for the cost of disabling IB speculation
-
- arch/x86/include/asm/thread_info.h            |   4 +
- arch/x86/kernel/cpu/bugs.c                    |  56 +++++++++
- arch/x86/kernel/process.c                     |  10 ++
- arch/x86/mm/tlb.c                             |  51 ++++++--
- include/linux/sched.h                         |  10 ++
- include/uapi/linux/prctl.h                    |   5 +
  .../testing/selftests/ib_spec/ib_spec_bench.c | 109 ++++++++++++++++++
- 7 files changed, 236 insertions(+), 9 deletions(-)
+ 1 file changed, 109 insertions(+)
  create mode 100644 tools/testing/selftests/ib_spec/ib_spec_bench.c
 
+diff --git a/tools/testing/selftests/ib_spec/ib_spec_bench.c b/tools/testing/selftests/ib_spec/ib_spec_bench.c
+new file mode 100644
+index 000000000000..e8eab910a9d0
+--- /dev/null
++++ b/tools/testing/selftests/ib_spec/ib_spec_bench.c
+@@ -0,0 +1,109 @@
++#include <stdio.h>
++#include <time.h>
++#include <stdint.h>
++#include <assert.h>
++#include <unistd.h>
++#include <sys/prctl.h>
++
++#define PR_SPEC_IBPB_MODE 2
++#define PR_SPEC_IBPB_MODE_DEFAULT 0
++#define PR_SPEC_IBPB_MODE_SANDBOX 1
++#define PR_SPEC_IBPB_MODE_PROTECT 2
++
++int64_t get_time_us() {
++	struct timespec ts = {0};
++	assert(clock_gettime(CLOCK_MONOTONIC, &ts) == 0);
++	return (ts.tv_sec * 1000000) + (ts.tv_nsec/1000);
++}
++
++void pong(int read_fd, int write_fd) {
++	int ret;
++	char buf;
++
++	while (1) {
++		ret = read(read_fd, &buf, 1);
++		if (ret == 0)
++			return;
++		assert(ret == 1);
++
++		assert(write(write_fd, &buf, 1) == 1);
++	}
++}
++
++void ping_once(int write_fd, int read_fd) {
++	char buf = 42;
++	assert(write(write_fd, &buf, 1) == 1);
++	assert(read(read_fd, &buf, 1) == 1);
++}
++
++int64_t ping_multi(int iters, int write_fd, int read_fd) {
++	int64_t start_time = get_time_us();
++	for (int i = 0; i < iters; i++)
++		ping_once(write_fd, read_fd);
++	return get_time_us() - start_time;
++}
++
++void run_test(int write_fd, int read_fd) {
++	int64_t iters = 1;
++	int64_t t;
++	for (int i = 0; i < 60; i++) {
++		t = ping_multi(iters, write_fd, read_fd);
++		printf("iters: %d, t: %dus, iter/sec: %d, us/iter: %d\n",
++					 iters, t, (iters * 1000000LL) / t, t/iters);
++
++		if (t > 1000000)
++			break;
++		iters <<= 1;
++	}
++}
++
++int main(int argc, char* argv[]) {
++	int fds_ping[2], fds_pong[2];
++	assert(pipe(fds_ping) == 0);
++	assert(pipe(fds_pong) == 0);
++
++	int disable_ib = 0;
++	int spec_ibpb_mode = 0;
++
++	if (argc > 1) {
++		int done = 0;
++		for (int i = 0; !done; i++) {
++			switch (argv[1][i]) {
++				case 0:
++					done = 1;
++					break;
++				case 'd':
++					disable_ib = 1;
++					break;
++				case 's':
++					spec_ibpb_mode = PR_SPEC_IBPB_MODE_SANDBOX;
++					break;
++				case 'p':
++					spec_ibpb_mode = PR_SPEC_IBPB_MODE_PROTECT;
++					break;
++			}
++		}
++	}
++
++	pid_t pid = fork();
++	assert(pid >= 0);
++	if (!pid) {
++		if (prctl(PR_SET_SPECULATION_CTRL,
++							PR_SPEC_IBPB_MODE, spec_ibpb_mode, 0, 0)) {
++			perror("Unable to set IBPB mode");
++		}
++
++		if (disable_ib)
++			assert(prctl(PR_SET_SPECULATION_CTRL,
++									 PR_SPEC_INDIRECT_BRANCH,
++									 PR_SPEC_DISABLE, 0, 0) == 0);
++
++		close(fds_ping[1]);
++		pong(fds_ping[0], fds_pong[1]);
++	} else {
++		run_test(fds_ping[1], fds_pong[0]);
++		close(fds_ping[1]);
++	}
++
++	return 0;
++}
 -- 
 2.31.1.498.g6c1eba8ee3d-goog
 
