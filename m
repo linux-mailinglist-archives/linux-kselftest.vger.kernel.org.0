@@ -2,135 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A7336F800
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Apr 2021 11:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9379E36F9C5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Apr 2021 14:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbhD3Jh5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Apr 2021 05:37:57 -0400
-Received: from wind.enjellic.com ([76.10.64.91]:47766 "EHLO wind.enjellic.com"
+        id S231805AbhD3MIL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Apr 2021 08:08:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36930 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229543AbhD3Jh5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Apr 2021 05:37:57 -0400
-X-Greylist: delayed 667 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Apr 2021 05:37:56 EDT
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 13U9PdY5006270;
-        Fri, 30 Apr 2021 04:25:39 -0500
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 13U9PcEj006269;
-        Fri, 30 Apr 2021 04:25:38 -0500
-Date:   Fri, 30 Apr 2021 04:25:38 -0500
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Tim Gardner <tim.gardner@canonical.com>,
-        dave.hansen@linux.intel.com, jarkko@kernel.org, shuah@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Subject: [PATCH 0/1] SGX self test fails
-Message-ID: <20210430092538.GA5887@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20210429183952.22797-1-tim.gardner@canonical.com> <c0725600-0a00-31dd-2ec3-20d4a86b33c5@intel.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0725600-0a00-31dd-2ec3-20d4a86b33c5@intel.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Fri, 30 Apr 2021 04:25:39 -0500 (CDT)
+        id S229911AbhD3MIL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Apr 2021 08:08:11 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B66D361059;
+        Fri, 30 Apr 2021 12:07:22 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lcRvU-00ABa7-Gh; Fri, 30 Apr 2021 13:07:20 +0100
+Date:   Fri, 30 Apr 2021 13:07:19 +0100
+Message-ID: <87bl9wnfgo.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Subject: Re: [PATCH v4 1/4] KVM: stats: Separate common stats from architecture specific ones
+In-Reply-To: <20210429203740.1935629-2-jingzhangos@google.com>
+References: <20210429203740.1935629-1-jingzhangos@google.com>
+        <20210429203740.1935629-2-jingzhangos@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: jingzhangos@google.com, kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, will@kernel.org, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, seanjc@google.com, vkuznets@redhat.com, jmattson@google.com, pshier@google.com, oupton@google.com, rientjes@google.com, eesposit@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 11:55:23AM -0700, Dave Hansen wrote:
+On Thu, 29 Apr 2021 21:37:37 +0100,
+Jing Zhang <jingzhangos@google.com> wrote:
 
-Good morning, I hope the end of the week is going well for everyone.
+> +struct kvm_vm_stat_common {
+> +	ulong remote_tlb_flush;
+> +};
+> +
+> +struct kvm_vcpu_stat_common {
+> +	u64 halt_successful_poll;
+> +	u64 halt_attempted_poll;
+> +	u64 halt_poll_invalid;
+> +	u64 halt_wakeup;
+> +	u64 halt_poll_success_ns;
+> +	u64 halt_poll_fail_ns;
+> +};
 
-> On 4/29/21 11:39 AM, Tim Gardner wrote:
-> > I'm just starting my learning curve on SGX, so I don't know if
-> > I've missed some setup for the SGX device entries. After looking
-> > at arch/x86/kernel/cpu/sgx/driver.c I see that there is no mode
-> > value for either sgx_dev_enclave or sgx_dev_provision.
-> >
-> > With this patch I can get the SGX self test to complete:
-> > 
-> > sudo ./test_sgx
-> > Warning: no execute permissions on device file /dev/sgx_enclave
-> > 0x0000000000000000 0x0000000000002000 0x03
-> > 0x0000000000002000 0x0000000000001000 0x05
-> > 0x0000000000003000 0x0000000000003000 0x03
-> > SUCCESS
-> > 
-> > Is the warning even necessary ?
-> 
-> Dang, I just added that warning.  I thought it was necessary, but I
-> guess not:
-> 
-> $ ls -l /dev/sgx_enclave
-> crw------- 1 dave dave 10, 125 Apr 28 11:32 /dev/sgx_enclave
-> $ ./test_sgx
-> 0x0000000000000000 0x0000000000002000 0x03
-> 0x0000000000002000 0x0000000000001000 0x05
-> 0x0000000000003000 0x0000000000003000 0x03
-> SUCCESS
-> 
-> *But*, is that OK?  Should we be happily creating a PROT_EXEC mapping on
-> a ugo-x file?  Why were we respecting noexec on the filesystem but not
-> ugo-x on the file?
+Why can't we make everything a u64? Is there anything that really
+needs to be a ulong? On most architectures, they are the same anyway,
+so we might as well bite the bullet.
 
-Because no one placed any explicit executable mode bit checks on the
-inode that is underlying the character device file in
-arch/x86/kernel/cpu/sgx/driver.c:sgx_open() and the controls on
-executable virtual memory are implemented in the mm/mmap.c:do_mmap()
-path when the mmap system call is executed.
+	M.
 
-The notion of using discretionary access controls, and arguably MAC's,
-since the true identity of a file is its inode label, to gate
-executable permissions by a user on the contents of a file are a
-function of the exec* system calls.
-
-The notion of whether or not it is 'OK' to not allow system
-administrators the ability to control SGX usage with file level exec
-privileges would seem to be more philosophical then practical.  The
-SGX device node does not represent an executable entity, it represents
-a gateway to the right to create and then populate anonymous
-executable memory.
-
-From the standpoint of current systems administration practice, the
-notion and need for executable bits being important on device nodes is
-foreign, and violates the concept of least surprise.  As we have
-already seen with the issue of noexec on /dev, the historical notion
-of security has been that executable files should not be allowed in
-the /dev heirarchy.
-
-With that mindset, the notion of gating SGX permissions with only the
-write bit on the character device would seem to make conceptual sense.
-It does, however, limit the utility of using the bprm* LSM hooks to
-implement whatever LSM controls over SGX that are envisioned for the
-future.
-
-At the risk of fanning dormant embers into flame, the relevance of all
-of this needs to be considered in a future that will include Enclave
-Dynamic Memory Management (EDMM).  At that point in time, access to
-the SGX device node, gated through either discretionary or mandatory
-access controls, means that an eligible entity will have unrestricted
-rights to load completely anonymous, in fact cryptographically
-anonymous, text into memory and execute it.
-
-The utility of anything but yes/no decisions needs to be made with
-that concept in mind.
-
-To avoid the risk of being classified as a blatherer, I will return to
-my work on maintaining support for cryptographic access controls on
-all of this... :-)
-
-Best wishes for a pleasant spring weekend to everyone.
-
-Dr. Greg
-
-As always,
-Dr. Greg Wettstein, Ph.D, Worker      Autonomously self-defensive
-Enjellic Systems Development, LLC     IOT platforms and edge devices.
-4206 N. 19th Ave.
-Fargo, ND  58102
-PH: 701-281-1686                      EMAIL: greg@enjellic.com
-------------------------------------------------------------------------------
-"Everything should be made as simple as possible, but not simpler."
-                                -- Albert Einstein
+-- 
+Without deviation from the norm, progress is not possible.
