@@ -2,141 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB51371725
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 May 2021 16:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA24237181B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 May 2021 17:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbhECOz0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 May 2021 10:55:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39092 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229909AbhECOzZ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 May 2021 10:55:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620053672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3b540+x5tTROkhNIivHz2jfrf6p5DdmXEjkUmZeSpJM=;
-        b=KcG/boF7aAEIrUAWGBPZx8j3vkBIRRWofcQ6AWeCeVWYlcEGn1TPmWLFXZO7cNx3wln3jH
-        qcbTyDIoPsBtkA5UgPG/1IU+gxRdMdVoLgYY0Nf5ThandzXlNOjtnJ3/uJkyJx27TyYoXs
-        mGqSfflmaSaY0D/w00xzeHJ5dWEKv6Y=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-584-LI3nWViUNOWGjmynAuvUqg-1; Mon, 03 May 2021 10:54:30 -0400
-X-MC-Unique: LI3nWViUNOWGjmynAuvUqg-1
-Received: by mail-ed1-f72.google.com with SMTP id i17-20020a50fc110000b0290387c230e257so4700705edr.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 May 2021 07:54:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3b540+x5tTROkhNIivHz2jfrf6p5DdmXEjkUmZeSpJM=;
-        b=QFG1v86rLTJxtkq7rbMzsRtYqOJXCcWd/GLR5vMD0+vtIl+0OnINFyUj5V/3LgRPHr
-         X4CVZGeskgNtnqxJaDcOuRnMW7OTilr7CemZ0o0MIeudA642Rik1Wk9x+HVoqaJKn//D
-         BTrw2tHsg5hlnbB0wDbSV6EwEnraoEs4EfQ8GqcQDy4ERGhTj5qH1tlb9Z5pUEbic4An
-         wk2yPdyfIgMN1JuB0P1AogWg1WjeVgZnIFOItEzbKHQSZJrc+hlCmCmL4ZIfLh25BrIV
-         tO83Y0rEPLCfBg3sUtgarA049BH5lolM8sH9ihuUSlTh4CYkXXqxQ1lpZahtdXDbtbp1
-         yeeA==
-X-Gm-Message-State: AOAM532RCGhh+oJ8u5pVPYh9PR/ctAbkq02weqgrB3CGwua2OFXKCWV+
-        iHmWluAbrN2oRL1o8rvbBwl5IolDkSimwTV1BuozoJf+Qryfnf1yyAR/iGo0FNa3XX6J0D53AGu
-        z2JAHcMAqZRH+FFjIdiiJyPTNuQiZh36ALKjOgHAWB3Bngq7ZzdA3YMDXqlLmabcTsC18CcUl3y
-        gpyaFP
-X-Received: by 2002:a17:906:3884:: with SMTP id q4mr3800256ejd.492.1620053669213;
-        Mon, 03 May 2021 07:54:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxoR23CFOSjH9ccO37wfLz2PUmLdvsRxh6LTPVmadaUWrtpbDf7jx//gWJ/S64YXlz2inuaaw==
-X-Received: by 2002:a17:906:3884:: with SMTP id q4mr3800225ejd.492.1620053668986;
-        Mon, 03 May 2021 07:54:28 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id go38sm11070888ejc.40.2021.05.03.07.54.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 May 2021 07:54:28 -0700 (PDT)
-Subject: Re: [PATCH v4] KVM: x86: Fix KVM_GET_CPUID2 ioctl to return cpuid
- entries count
-To:     Sean Christopherson <seanjc@google.com>,
-        Valeriy Vdovin <valeriy.vdovin@virtuozzo.com>
-Cc:     linux-kernel@vger.kernel.org, Denis Lunev <den@openvz.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Alexander Graf <graf@amazon.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        Like Xu <like.xu@linux.intel.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20210428172729.3551-1-valeriy.vdovin@virtuozzo.com>
- <YIoFFl72VSeuhCRt@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <0d68dbc3-8462-7763-fbad-f3b895fcf6e6@redhat.com>
-Date:   Mon, 3 May 2021 16:54:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S230418AbhECPjD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 May 2021 11:39:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55548 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230122AbhECPjD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 3 May 2021 11:39:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6385061159;
+        Mon,  3 May 2021 15:38:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620056289;
+        bh=SkaNcNSC8IW7uIOhzo9I99etpohr4y6w3U/SqE4P9TU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BK8aSu1CYZo7rclcvcJtm5GkJ8t2fTA+FeviFJUlWgwoNdcJHHfBqlXKQ/Zy7AKg3
+         qyVFwSEYFTJNlxOhbWsGr41CrJNjbmojHwiqFnnMtu5xhP+djSB3MtLGxHtgZghX2I
+         jFf9ZSdr2nshzoQXxy+Y/3Cm20OWhiB/BFv9NA2tvbNgAHBqu6Gy3sCpxBqm3O6+vo
+         YRlwBfdAzdvua1ISTKNAWbabPe08Hva1q9Y4AAu3caNfbMJplqtV8YXum0bes8Bh5a
+         4MjbYyF0Xx1mPDmSjwp0Fz5iloVSIyTZtrqUNWhGIB953KDgxYh59avni2U/j97BGu
+         2b9AqQ1qY314w==
+Date:   Mon, 3 May 2021 18:38:07 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tim Gardner <tim.gardner@canonical.com>
+Cc:     dave.hansen@linux.intel.com, shuah@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Subject: [PATCH 0/1] SGX self test fails
+Message-ID: <YJAY345r2GZ0X9bP@kernel.org>
+References: <20210429183952.22797-1-tim.gardner@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <YIoFFl72VSeuhCRt@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210429183952.22797-1-tim.gardner@canonical.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 29/04/21 03:00, Sean Christopherson wrote:
-> On Wed, Apr 28, 2021, Valeriy Vdovin wrote:
->> It's very explicit by the code that it was designed to receive some
->> small number of entries to return E2BIG along with the corrected number.
-> 
-> LOL, saying KVM_GET_CPUID2 was "designed" is definitely giving the KVM
-> forefathers the benefit of the doubt.
+On Thu, Apr 29, 2021 at 12:39:51PM -0600, Tim Gardner wrote:
+> I'm just starting my learning curve on SGX, so I don't know if I've missed
+> some setup for the SGX device entries. After looking at arch/x86/kernel/cpu/sgx/driver.c
+> I see that there is no mode value for either sgx_dev_enclave or sgx_dev_provision.
 
-I was going to make a different joke, i.e. that KVM_GET_CPUID2 was 
-indeed designed the way Valeriy described, but that design was forgotten 
-soon after.
+Take a look at
 
-Really, this ioctl has been such a trainwreck that I think the only good 
-solution here is to drop it.
+https://github.com/systemd/systemd/pull/18944
 
-Paolo
+> With this patch I can get the SGX self test to complete:
+> 
+> sudo ./test_sgx
+> Warning: no execute permissions on device file /dev/sgx_enclave
+> 0x0000000000000000 0x0000000000002000 0x03
+> 0x0000000000002000 0x0000000000001000 0x05
+> 0x0000000000003000 0x0000000000003000 0x03
+> SUCCESS
+> 
+> Is the warning even necessary ?
+> 
+> Tim
 
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index efc7a82ab140..3f941b1f4e78 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -4773,14 +4773,17 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->>   		r = -EFAULT;
->>   		if (copy_from_user(&cpuid, cpuid_arg, sizeof(cpuid)))
->>   			goto out;
->> +
->>   		r = kvm_vcpu_ioctl_get_cpuid2(vcpu, &cpuid,
->>   					      cpuid_arg->entries);
->> -		if (r)
->> +
->> +		if (r && r != -E2BIG)
->>   			goto out;
->> -		r = -EFAULT;
->> -		if (copy_to_user(cpuid_arg, &cpuid, sizeof(cpuid)))
->> +
->> +		if (copy_to_user(cpuid_arg, &cpuid, sizeof(cpuid))) {
->> +			r = -EFAULT;
->>   			goto out;
-> 
-> As I pointed out[*], copying the number of entries but not the entries themselves
-> is wrong.  All of my feedback on v1 still stands.
-> 
-> [*] https://lkml.kernel.org/r/YIl4M/GgaYvwNuXv@google.com
-> 
->> -		r = 0;
->> +		}
->>   		break;
->>   	}
->>   	case KVM_GET_MSRS: {
-> 
+With a quick look, I think that check is too strict. AFAIK, mmap(PROT_EXEC)
+can be done, as long as the file is not in a noexec FS.
 
+Dave?
+
+For reference:
+
+https://lore.kernel.org/linux-sgx/20210318194301.11D9A984@viggo.jf.intel.com/
+
+/Jarkko
