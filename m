@@ -2,88 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F18D937182D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 May 2021 17:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A444A371B4F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 May 2021 18:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbhECPl5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 May 2021 11:41:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46854 "EHLO mail.kernel.org"
+        id S232314AbhECQpe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 May 2021 12:45:34 -0400
+Received: from mga18.intel.com ([134.134.136.126]:46799 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230213AbhECPl4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 May 2021 11:41:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C23B961159;
-        Mon,  3 May 2021 15:41:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620056463;
-        bh=h5qmhx+5ZVl78XWAQLNoSqoyVBg9I1Ilhgksiu+zPpQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gaTbWj4SLwG75jsCexmUqAGQ2vuj9dYXLYj0IwM4kCP28a0K9r0fGEBdTr8O0vplg
-         lHjfSUBEUtvwfDW9vmZzR8Lmms1iRkS7izV/FJrthzXFwSmiVAtQPnJABjMLlx4I+L
-         qfeJl/d6E+LZ8YuFKQosOwpCy1y/sT5IjWueBYPZzaVnAlZnkvoSnT/z5p+/uqQAvr
-         Xgt3VFZTm7KeKfBwpwTpbmb0Nwa6cKSSPlq1EwOqDG/UlJfJPPNnaCF6AFM5OiSgCu
-         jZuhYr3eHKzkoV/23MfhsEm8xDSqwU0WMtt9kfN/0rImIDrWrqTBZUmgRsmNRj40K3
-         A3Tujwm16NCUQ==
-Date:   Mon, 3 May 2021 18:41:00 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
+        id S232721AbhECQmg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 3 May 2021 12:42:36 -0400
+IronPort-SDR: 0jt5G0JkIubNQtt8m4V+iOsyZ14Jl+dq9lLa8SZjDktRgG7spIGxHrNxescy2zwQKIEQroBoNt
+ BoFa4SZzWvcQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9973"; a="185255906"
+X-IronPort-AV: E=Sophos;i="5.82,270,1613462400"; 
+   d="scan'208";a="185255906"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2021 09:39:08 -0700
+IronPort-SDR: yHHx6PtNpAh6T91PU1WyF1JBxOElKZhBJX7jRdG90CUzGWqR0/SKvxhbWG8N87EJ437DZ5xHWP
+ DrnkL139eJUw==
+X-IronPort-AV: E=Sophos;i="5.82,270,1613462400"; 
+   d="scan'208";a="432824303"
+Received: from tbroiles-mobl.amr.corp.intel.com (HELO [10.209.47.222]) ([10.209.47.222])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2021 09:39:07 -0700
+Subject: Re: Subject: [PATCH 0/1] SGX self test fails
+To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     Tim Gardner <tim.gardner@canonical.com>,
         dave.hansen@linux.intel.com, shuah@kernel.org,
         linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: Subject: [PATCH 0/1] SGX self test fails
-Message-ID: <YJAZjP2k6Aff7wgk@kernel.org>
 References: <20210429183952.22797-1-tim.gardner@canonical.com>
  <c0725600-0a00-31dd-2ec3-20d4a86b33c5@intel.com>
+ <YJAZjP2k6Aff7wgk@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <6645d579-57f9-7adf-8a3d-f4fb2316b324@intel.com>
+Date:   Mon, 3 May 2021 09:39:05 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0725600-0a00-31dd-2ec3-20d4a86b33c5@intel.com>
+In-Reply-To: <YJAZjP2k6Aff7wgk@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 11:55:23AM -0700, Dave Hansen wrote:
-> On 4/29/21 11:39 AM, Tim Gardner wrote:
-> > I'm just starting my learning curve on SGX, so I don't know if I've missed
-> > some setup for the SGX device entries. After looking at arch/x86/kernel/cpu/sgx/driver.c
-> > I see that there is no mode value for either sgx_dev_enclave or sgx_dev_provision.
-> > 
-> > With this patch I can get the SGX self test to complete:
-> > 
-> > sudo ./test_sgx
-> > Warning: no execute permissions on device file /dev/sgx_enclave
-> > 0x0000000000000000 0x0000000000002000 0x03
-> > 0x0000000000002000 0x0000000000001000 0x05
-> > 0x0000000000003000 0x0000000000003000 0x03
-> > SUCCESS
-> > 
-> > Is the warning even necessary ?
+On 5/3/21 8:41 AM, Jarkko Sakkinen wrote:
+>> $ ls -l /dev/sgx_enclave
+>> crw------- 1 dave dave 10, 125 Apr 28 11:32 /dev/sgx_enclave
+>> $ ./test_sgx
+>> 0x0000000000000000 0x0000000000002000 0x03
+>> 0x0000000000002000 0x0000000000001000 0x05
+>> 0x0000000000003000 0x0000000000003000 0x03
+>> SUCCESS
+>>
+>> *But*, is that OK?  Should we be happily creating a PROT_EXEC mapping on
+>> a ugo-x file?  Why were we respecting noexec on the filesystem but not
+>> ugo-x on the file?
+> Yeah, this supports my earlier response:
 > 
-> Dang, I just added that warning.  I thought it was necessary, but I
-> guess not:
+> "EPERM  The prot argument asks for PROT_EXEC but the mapped area
+>  belongs to a file on a filesystem that was mounted no-exec."
+> https://man7.org/linux/man-pages/man2/mmap.2.html
 > 
-> $ ls -l /dev/sgx_enclave
-> crw------- 1 dave dave 10, 125 Apr 28 11:32 /dev/sgx_enclave
-> $ ./test_sgx
-> 0x0000000000000000 0x0000000000002000 0x03
-> 0x0000000000002000 0x0000000000001000 0x05
-> 0x0000000000003000 0x0000000000003000 0x03
-> SUCCESS
-> 
-> *But*, is that OK?  Should we be happily creating a PROT_EXEC mapping on
-> a ugo-x file?  Why were we respecting noexec on the filesystem but not
-> ugo-x on the file?
+> I guess the right model is to think just as "anonymous memory"
+> with equivalent access control semantics after succesfully
+> opened for read and write.
 
-Yeah, this supports my earlier response:
+I guess I'll answer my own question: The "x" bit on file permissions
+really only controls the ability for the file to be execve()'d, but has
+no bearing on the ability for an executable *mapping* to be created.
+This is existing VFS behavior and is not specific to SGX.
 
-"EPERM  The prot argument asks for PROT_EXEC but the mapped area
- belongs to a file on a filesystem that was mounted no-exec."
-https://man7.org/linux/man-pages/man2/mmap.2.html
-
-I guess the right model is to think just as "anonymous memory"
-with equivalent access control semantics after succesfully
-opened for read and write.
-
-BTW, this is good material for the man page :-)
-
-/Jarkko
+I think I'll just send a patch to pull that warning out.
