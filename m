@@ -2,723 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC463725F4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 May 2021 08:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5099737267E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 May 2021 09:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbhEDGut (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 May 2021 02:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbhEDGus (ORCPT
+        id S229839AbhEDHXl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 May 2021 03:23:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31527 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229806AbhEDHXl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 May 2021 02:50:48 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B80C061574
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 May 2021 23:49:53 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id v6so9795378ljj.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 May 2021 23:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nlaffdIeTRbOKm4RKjaE/9QGoX1cK6lOPYlilWwMkfQ=;
-        b=insOh8jhU6wbMoKvLLXPg3QMxpXbOGlSWZVxkULjWjRd/ETZfefmHCnbs0i+4ywJ7v
-         5/rNAlsdDHOs0Xj7JTRcJVtLsstmHQBtL/FAJ5uUatdczMNO1xjvGt4M5k6Uy2F9misy
-         EGAZ7ewkOgLWt9FpeY0RJAdJTR/01wiCiWfCclUkmgZ11IS95etH/ZGs4WEOo53v1F5i
-         3F9kZgP5w6kTncxQLLcCjCt9ICpTDU8Y3W8cyR3ww4OuR/YQMBzQXFph3ev/DJcenfJI
-         DJawRRt88xBGr4xDuwcSDy1JVW8DVmnJbrD6qQFO3WrbR5rQleRdEKYodA1+8a22MO3j
-         iAlQ==
+        Tue, 4 May 2021 03:23:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1620112966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mhr4vtYbIV3+gcbn8jvNDanz77HnPGouREoZC9BXQoM=;
+        b=SNwuBqbg7bnevrYr9RX7os7BHJjsvVu6ygpCl4U2VGy+yf8w7mHnubxyXEOL5gOFHojf0/
+        m0vOW84WsC6Kuds0YA17KBwFKte4K70NdGnT/KmBf0vY+CbaROsNBOin1QWkLE4ZQORw5n
+        fDuELjyszUpi54AzH2tTQi1dQXuSG3I=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-398-K9J0mhN4OWiU78KcmE-JaQ-1; Tue, 04 May 2021 03:22:45 -0400
+X-MC-Unique: K9J0mhN4OWiU78KcmE-JaQ-1
+Received: by mail-ej1-f72.google.com with SMTP id z6-20020a17090665c6b02903700252d1ccso2758709ejn.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 May 2021 00:22:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nlaffdIeTRbOKm4RKjaE/9QGoX1cK6lOPYlilWwMkfQ=;
-        b=bBzU9ZJrpgG0x88/N619TGC9cKdt1eIUDSSKC+6woYrAVGmo+hNtdwlSB2emYDcX/S
-         tEB4IcIUeOKRR29hLoi/Z8pap6DAcjf57Mkmkw2T5MRZD5KoruXV4RJ8o+UqgreLup9u
-         8jae5VOLeeAOsR92cQuhsvVWNJHKUqIAUbTr4Ezrf+ceQuCnQ8DDLZeJyUGrlevSMmNJ
-         O64MO+ahi+p278cUPGPe2kw7C0cPmvWJdkjApsmpjPr1CNoAM8jgMp0EpepF5g2OScLD
-         CtbgYu+8IqEEr17xQ3HwY9Mae7swaiaHisfjPIj5hAE98CqhOb3Oce4yInJUuwgKqEcC
-         YLzw==
-X-Gm-Message-State: AOAM5312+dvVOGLFwfszPof01PAOA0swPmSp2S12otSIWAhO6l1hMks+
-        DLVYHEKaDW7DMaIWiDU/+kwqjHoeWQt9XAJmeHgPrQ==
-X-Google-Smtp-Source: ABdhPJzHLlbCITx22uQyXjNxeJYBJJVgJfzp0TYLT5VdafvRHXtFD57fi5cMMFmbNUCpXGl4CjjyeOsciK/JHXChdPY=
-X-Received: by 2002:a2e:a554:: with SMTP id e20mr16064846ljn.286.1620110991659;
- Mon, 03 May 2021 23:49:51 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Mhr4vtYbIV3+gcbn8jvNDanz77HnPGouREoZC9BXQoM=;
+        b=dBQS0Kui8d2lr8Wzf136x8n26Enc4CGK2fFstLgyqrfpq038YK/ItAbrm9XtZ8RpRz
+         73P1zhV6Nixao8AAQR667JoaBLvupz8Zqhbmge9pNJnPqfVH83II6bEo0DFFHKZsULmU
+         1jECLkX/QTbm5hAvivO7skucGErxqHl9WxELFkycdVzRCT5ak9AtVYay6VzUvXtYa94W
+         nawCdJjsNHB5PobsR249MLwnQVCwaiVfmjYtKnoKsG3PwPxZYtdwmfs/EIV4aJZ1R67x
+         Rbmg06zUw2kqb+uO4TjQ7TU3mCwIIwVsVgXrkdAJyrtcyXS1ihlzhlP5qnjx/jSLuOkv
+         N8+g==
+X-Gm-Message-State: AOAM530HM4VYk+3uzP7b5duOLf78b9hs3+hErJqkW/dKw3lxTsa7L47i
+        J9LZW36ezafzoOUPfAfwq/QnAqbfuAHDgNm5djVI1B21HEAsRtxmEOC0SoDX/f4SLlkv83roCbL
+        5fweyzmFlRE/j5JxUwJyBxaHGFtTm
+X-Received: by 2002:aa7:d146:: with SMTP id r6mr20887983edo.344.1620112964220;
+        Tue, 04 May 2021 00:22:44 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwg6GUPMEJ8U43lXv68gNhg8URZDrfW8WNW3qQKYNn5OC+cqrppm05kGj9FncYwc8cQ70hywA==
+X-Received: by 2002:aa7:d146:: with SMTP id r6mr20887973edo.344.1620112964071;
+        Tue, 04 May 2021 00:22:44 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id q16sm14022935edv.61.2021.05.04.00.22.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 May 2021 00:22:43 -0700 (PDT)
+Subject: Re: [PATCH v2] selftests: kvm: remove reassignment of non-absolute
+ variables
+To:     Jim Mattson <jmattson@google.com>, Bill Wendling <morbo@google.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kvm list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Shuah Khan <shuah@kernel.org>, Jian Cai <caij2003@gmail.com>
+References: <X9LJE6ElVfKECnno@google.com>
+ <20201211012317.3722214-1-morbo@google.com>
+ <CALMp9eSvMtaXndor9=h40utaefQs9BPKknV7nbWFQi0phr_TvA@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <01ac0ff6-f35b-5bab-a355-edcb499cd2d2@redhat.com>
+Date:   Tue, 4 May 2021 09:22:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210503211536.1384578-1-dlatypov@google.com>
-In-Reply-To: <20210503211536.1384578-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 4 May 2021 14:49:39 +0800
-Message-ID: <CABVgOSm49+kT_ZN4NGdsUYWL5ntdFJeCCVS1prESbwCGPXhWYw@mail.gmail.com>
-Subject: Re: [PATCH] lib/test: convert test_overflow.c to use KUnit
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CALMp9eSvMtaXndor9=h40utaefQs9BPKknV7nbWFQi0phr_TvA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 4, 2021 at 5:15 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> This largely consists of:
-> * replacing `err |= test_func(...)` calls with `test_func(test, ...)`.
-> * changing pr_warn to KUNIT_*_MSG() macros to mark the failed test
-> while printing a diagnostic message
-> * dropping __init as there are concerns of this causing issues w/ KUnit
-> when running on some other arches.
->
-> With the exception of now needing to set CONFIG_KUNIT=y, the test can
-> still be run as before, at boot time or as a test module.
-> But now the output of the test will be TAP (Test Anything Protocol),
-> the format used by kselftest instead of just warnings and printing
-> "FAIL!" , see [1].
->
-> But now the test can also be run more quickly via kunit.py
->
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
-> CONFIG_KUNIT=y
-> CONFIG_TEST_OVERFLOW=y
-> EOF
->
-> Note: after a mrproper this took
-> > Elapsed time: 38.683s total, 3.598s configuring, 32.141s building, 0.000s running
->
-> (Normally would be less clunky as you wouldn't use a heredoc).
->
-> [1] Here's an example failure message after tweaking the test array:
->   TAP version 14
->   1..1
->       # Subtest: lib_overflow
->       1..10
->   u8 : 18 arithmetic tests
->       # test_u8_overflow: EXPECTATION FAILED at lib/test_overflow.c:250
->       Expected _got == p->sum, but
->           _got == 1
->           p->sum == 0
->   wrong result for 1 + 0 (type u8)
->   ...
->       not ok 1 - test_u8_overflow
->   s8 : 19 arithmetic tests
->       ok 2 - test_s8_overflow
->   ...
->   ok: (s32)(0 << 31) == 0
->   ok: (s64)(0 << 63) == 0
->       ok 9 - test_overflow_shift
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+On 03/05/21 20:37, Jim Mattson wrote:
+> On Thu, Dec 10, 2020 at 7:58 PM Bill Wendling <morbo@google.com> wrote:
+>>
+>> Clang's integrated assembler does not allow symbols with non-absolute
+>> values to be reassigned. Modify the interrupt entry loop macro to be
+>> compatible with IAS by using a label and an offset.
+>>
+>> Cc: Jian Cai <caij2003@gmail.com>
+>> Signed-off-by: Bill Wendling <morbo@google.com>
+>> References: https://lore.kernel.org/lkml/20200714233024.1789985-1-caij2003@gmail.com/
+> Reviewed-by: Jim Mattson <jmattson@google.com>
+> 
 
-This worked fine for me (and correctly picked up on any errors I
-deliberately introduced). It's much nicer to be able to read the
-results from kunit_tool's summary.
+Queued, thanks.
 
-I will add that this is a very verbose test, and in particular it
-causes a stacktrace with the vmalloc overflow test. This doesn't
-appear to be new to the KUnit version (indeed, it's great to have
-kunit_tool to cut through the noise), but there are definitely a few
-extra places where some extra text output could be removed or
-streamlined. Some thoughts re: this below.
+Paolo
 
-This is, therefore:
-Tested-by: David Gow <davidgow@google.com>
-
-
->  lib/Kconfig.debug   |   4 +-
->  lib/test_overflow.c | 406 ++++++++++++++++++++------------------------
->  2 files changed, 185 insertions(+), 225 deletions(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 678c13967580..8e19ba9ac22c 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2195,7 +2195,9 @@ config TEST_XARRAY
->         tristate "Test the XArray code at runtime"
->
->  config TEST_OVERFLOW
-> -       tristate "Test check_*_overflow() functions at runtime"
-> +       tristate "Test check_*_overflow() functions at runtime" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
->
->  config TEST_RHASHTABLE
->         tristate "Perform selftest on resizable hash table"
-> diff --git a/lib/test_overflow.c b/lib/test_overflow.c
-> index 7a4b6f6c5473..1719b924f04f 100644
-> --- a/lib/test_overflow.c
-> +++ b/lib/test_overflow.c
-> @@ -2,10 +2,9 @@
->  /*
->   * Test cases for arithmetic overflow checks.
->   */
-> -#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +#include <kunit/test.h>
->
->  #include <linux/device.h>
-> -#include <linux/init.h>
->  #include <linux/kernel.h>
->  #include <linux/mm.h>
->  #include <linux/module.h>
-> @@ -19,7 +18,7 @@
->                 t a, b;                         \
->                 t sum, diff, prod;              \
->                 bool s_of, d_of, p_of;          \
-> -       } t ## _tests[] __initconst
-> +       } t ## _tests[]
->
->  DEFINE_TEST_ARRAY(u8) = {
->         {0, 0, 0, 0, 0, false, false, false},
-> @@ -215,48 +214,38 @@ DEFINE_TEST_ARRAY(s64) = {
->         {0, -S64_MAX, -S64_MAX, S64_MAX, 0, false, false, false},
->  };
->
-> -#define check_one_op(t, fmt, op, sym, a, b, r, of) do {                \
-> -       t _r;                                                   \
-> -       bool _of;                                               \
-> -                                                               \
-> -       _of = check_ ## op ## _overflow(a, b, &_r);             \
-> -       if (_of != of) {                                        \
-> -               pr_warn("expected "fmt" "sym" "fmt              \
-> -                       " to%s overflow (type %s)\n",           \
-> -                       a, b, of ? "" : " not", #t);            \
-> -               err = 1;                                        \
-> -       }                                                       \
-> -       if (_r != r) {                                          \
-> -               pr_warn("expected "fmt" "sym" "fmt" == "        \
-> -                       fmt", got "fmt" (type %s)\n",           \
-> -                       a, b, r, _r, #t);                       \
-> -               err = 1;                                        \
-> -       }                                                       \
-> +#define check_one_op(t, fmt, op, sym, a, b, want, of) do {             \
-> +       t _got;                                                         \
-> +       bool _of;                                                       \
-> +                                                                       \
-> +       _of = check_ ## op ## _overflow(a, b, &_got);                   \
-> +       KUNIT_EXPECT_EQ_MSG(test, _of, of,                              \
-> +               "expected " fmt " " sym " " fmt " to%s overflow "       \
-> +               "(type %s)", a, b, of ? "" : " not", #t);               \
-> +                                                                       \
-> +       KUNIT_EXPECT_EQ_MSG(test, _got, want,                           \
-> +               "wrong result for " fmt " " sym " " fmt " (type %s)",   \
-> +               a, b, #t);                                              \
->  } while (0)
->
->  #define DEFINE_TEST_FUNC(t, fmt)                                       \
-> -static int __init do_test_ ## t(const struct test_ ## t *p)            \
-> -{                                                                      \
-> -       int err = 0;                                                    \
-> -                                                                       \
-> +static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p)\
-> +{                                                                      \
->         check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);    \
->         check_one_op(t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);    \
->         check_one_op(t, fmt, sub, "-", p->a, p->b, p->diff, p->d_of);   \
->         check_one_op(t, fmt, mul, "*", p->a, p->b, p->prod, p->p_of);   \
->         check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);   \
-> -                                                                       \
-> -       return err;                                                     \
->  }                                                                      \
->                                                                         \
-> -static int __init test_ ## t ## _overflow(void) {                      \
-> -       int err = 0;                                                    \
-> +static void test_ ## t ## _overflow(struct kunit *test)                        \
-> +{                                                                      \
->         unsigned i;                                                     \
->                                                                         \
->         pr_info("%-3s: %zu arithmetic tests\n", #t,                     \
->                 ARRAY_SIZE(t ## _tests));                               \
->         for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)                   \
-> -               err |= do_test_ ## t(&t ## _tests[i]);                  \
-> -       return err;                                                     \
-> +               do_test_ ## t(test, &t ## _tests[i]);                   \
->  }
->
->  DEFINE_TEST_FUNC(u8, "%d");
-> @@ -270,30 +259,10 @@ DEFINE_TEST_FUNC(u64, "%llu");
->  DEFINE_TEST_FUNC(s64, "%lld");
->  #endif
->
-> -static int __init test_overflow_calculation(void)
-> +static void test_overflow_shift(struct kunit *test)
->  {
-> -       int err = 0;
-> -
-> -       err |= test_u8_overflow();
-> -       err |= test_s8_overflow();
-> -       err |= test_u16_overflow();
-> -       err |= test_s16_overflow();
-> -       err |= test_u32_overflow();
-> -       err |= test_s32_overflow();
-> -#if BITS_PER_LONG == 64
-> -       err |= test_u64_overflow();
-> -       err |= test_s64_overflow();
-> -#endif
-> -
-> -       return err;
-> -}
-> -
-> -static int __init test_overflow_shift(void)
-> -{
-> -       int err = 0;
-> -
->  /* Args are: value, shift, type, expected result, overflow expected */
-> -#define TEST_ONE_SHIFT(a, s, t, expect, of) ({                         \
-> +#define TEST_ONE_SHIFT(a, s, t, expect, of) do {                       \
->         int __failed = 0;                                               \
->         typeof(a) __a = (a);                                            \
->         typeof(s) __s = (s);                                            \
-> @@ -316,153 +285,153 @@ static int __init test_overflow_shift(void)
->         if (!__failed)                                                  \
->                 pr_info("ok: (%s)(%s << %s) == %s\n", #t, #a, #s,       \
->                         of ? "overflow" : #expect);                     \
-
-This is one of a number of pr_{info,warn}() calls in the
-TEST_ONE_SHIFT macro. Could we use the KUnit log here instead, so that
-potentially this output is kept if kunit's debugfs support is enabled?
-Or we could get rid of some to make the test less verbose...
-
-That being said, this macro still has a bunch of pr_warn() calls for
-"expected (something)" which might be better off as direct
-KUNIT_EXPECT_ calls.
-
-> -       __failed;                                                       \
-> -})
-> +       KUNIT_EXPECT_EQ_MSG(test, __failed, 0,                          \
-> +                          "(%s)(%s << %s) failed", #t, #a, #s);        \
-
-This is not a particularly great failure message: if we replaced the
-pr_warn()s above, they would provide more context as to what exactly
-failed in the test.
-
-> +} while (0)
->
->         /* Sane shifts. */
-> -       err |= TEST_ONE_SHIFT(1, 0, u8, 1 << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 4, u8, 1 << 4, false);
-> -       err |= TEST_ONE_SHIFT(1, 7, u8, 1 << 7, false);
-> -       err |= TEST_ONE_SHIFT(0xF, 4, u8, 0xF << 4, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, u16, 1 << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 10, u16, 1 << 10, false);
-> -       err |= TEST_ONE_SHIFT(1, 15, u16, 1 << 15, false);
-> -       err |= TEST_ONE_SHIFT(0xFF, 8, u16, 0xFF << 8, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, int, 1 << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 16, int, 1 << 16, false);
-> -       err |= TEST_ONE_SHIFT(1, 30, int, 1 << 30, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, s32, 1 << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 16, s32, 1 << 16, false);
-> -       err |= TEST_ONE_SHIFT(1, 30, s32, 1 << 30, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, unsigned int, 1U << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 20, unsigned int, 1U << 20, false);
-> -       err |= TEST_ONE_SHIFT(1, 31, unsigned int, 1U << 31, false);
-> -       err |= TEST_ONE_SHIFT(0xFFFFU, 16, unsigned int, 0xFFFFU << 16, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, u32, 1U << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 20, u32, 1U << 20, false);
-> -       err |= TEST_ONE_SHIFT(1, 31, u32, 1U << 31, false);
-> -       err |= TEST_ONE_SHIFT(0xFFFFU, 16, u32, 0xFFFFU << 16, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, u64, 1ULL << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 40, u64, 1ULL << 40, false);
-> -       err |= TEST_ONE_SHIFT(1, 63, u64, 1ULL << 63, false);
-> -       err |= TEST_ONE_SHIFT(0xFFFFFFFFULL, 32, u64,
-> -                             0xFFFFFFFFULL << 32, false);
-> +       TEST_ONE_SHIFT(1, 0, u8, 1 << 0, false);
-> +       TEST_ONE_SHIFT(1, 4, u8, 1 << 4, false);
-> +       TEST_ONE_SHIFT(1, 7, u8, 1 << 7, false);
-> +       TEST_ONE_SHIFT(0xF, 4, u8, 0xF << 4, false);
-> +       TEST_ONE_SHIFT(1, 0, u16, 1 << 0, false);
-> +       TEST_ONE_SHIFT(1, 10, u16, 1 << 10, false);
-> +       TEST_ONE_SHIFT(1, 15, u16, 1 << 15, false);
-> +       TEST_ONE_SHIFT(0xFF, 8, u16, 0xFF << 8, false);
-> +       TEST_ONE_SHIFT(1, 0, int, 1 << 0, false);
-> +       TEST_ONE_SHIFT(1, 16, int, 1 << 16, false);
-> +       TEST_ONE_SHIFT(1, 30, int, 1 << 30, false);
-> +       TEST_ONE_SHIFT(1, 0, s32, 1 << 0, false);
-> +       TEST_ONE_SHIFT(1, 16, s32, 1 << 16, false);
-> +       TEST_ONE_SHIFT(1, 30, s32, 1 << 30, false);
-> +       TEST_ONE_SHIFT(1, 0, unsigned int, 1U << 0, false);
-> +       TEST_ONE_SHIFT(1, 20, unsigned int, 1U << 20, false);
-> +       TEST_ONE_SHIFT(1, 31, unsigned int, 1U << 31, false);
-> +       TEST_ONE_SHIFT(0xFFFFU, 16, unsigned int, 0xFFFFU << 16, false);
-> +       TEST_ONE_SHIFT(1, 0, u32, 1U << 0, false);
-> +       TEST_ONE_SHIFT(1, 20, u32, 1U << 20, false);
-> +       TEST_ONE_SHIFT(1, 31, u32, 1U << 31, false);
-> +       TEST_ONE_SHIFT(0xFFFFU, 16, u32, 0xFFFFU << 16, false);
-> +       TEST_ONE_SHIFT(1, 0, u64, 1ULL << 0, false);
-> +       TEST_ONE_SHIFT(1, 40, u64, 1ULL << 40, false);
-> +       TEST_ONE_SHIFT(1, 63, u64, 1ULL << 63, false);
-> +       TEST_ONE_SHIFT(0xFFFFFFFFULL, 32, u64, 0xFFFFFFFFULL << 32, false);
->
->         /* Sane shift: start and end with 0, without a too-wide shift. */
-> -       err |= TEST_ONE_SHIFT(0, 7, u8, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 15, u16, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 31, unsigned int, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 31, u32, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 63, u64, 0, false);
-> +       TEST_ONE_SHIFT(0, 7, u8, 0, false);
-> +       TEST_ONE_SHIFT(0, 15, u16, 0, false);
-> +       TEST_ONE_SHIFT(0, 31, unsigned int, 0, false);
-> +       TEST_ONE_SHIFT(0, 31, u32, 0, false);
-> +       TEST_ONE_SHIFT(0, 63, u64, 0, false);
->
->         /* Sane shift: start and end with 0, without reaching signed bit. */
-> -       err |= TEST_ONE_SHIFT(0, 6, s8, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 14, s16, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 30, int, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 30, s32, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 62, s64, 0, false);
-> +       TEST_ONE_SHIFT(0, 6, s8, 0, false);
-> +       TEST_ONE_SHIFT(0, 14, s16, 0, false);
-> +       TEST_ONE_SHIFT(0, 30, int, 0, false);
-> +       TEST_ONE_SHIFT(0, 30, s32, 0, false);
-> +       TEST_ONE_SHIFT(0, 62, s64, 0, false);
->
->         /* Overflow: shifted the bit off the end. */
-> -       err |= TEST_ONE_SHIFT(1, 8, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 16, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 32, unsigned int, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 32, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 64, u64, 0, true);
-> +       TEST_ONE_SHIFT(1, 8, u8, 0, true);
-> +       TEST_ONE_SHIFT(1, 16, u16, 0, true);
-> +       TEST_ONE_SHIFT(1, 32, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(1, 32, u32, 0, true);
-> +       TEST_ONE_SHIFT(1, 64, u64, 0, true);
->
->         /* Overflow: shifted into the signed bit. */
-> -       err |= TEST_ONE_SHIFT(1, 7, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 15, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 31, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 31, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 63, s64, 0, true);
-> +       TEST_ONE_SHIFT(1, 7, s8, 0, true);
-> +       TEST_ONE_SHIFT(1, 15, s16, 0, true);
-> +       TEST_ONE_SHIFT(1, 31, int, 0, true);
-> +       TEST_ONE_SHIFT(1, 31, s32, 0, true);
-> +       TEST_ONE_SHIFT(1, 63, s64, 0, true);
->
->         /* Overflow: high bit falls off unsigned types. */
->         /* 10010110 */
-> -       err |= TEST_ONE_SHIFT(150, 1, u8, 0, true);
-> +       TEST_ONE_SHIFT(150, 1, u8, 0, true);
->         /* 1000100010010110 */
-> -       err |= TEST_ONE_SHIFT(34966, 1, u16, 0, true);
-> +       TEST_ONE_SHIFT(34966, 1, u16, 0, true);
->         /* 10000100000010001000100010010110 */
-> -       err |= TEST_ONE_SHIFT(2215151766U, 1, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(2215151766U, 1, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(2215151766U, 1, u32, 0, true);
-> +       TEST_ONE_SHIFT(2215151766U, 1, unsigned int, 0, true);
->         /* 1000001000010000010000000100000010000100000010001000100010010110 */
-> -       err |= TEST_ONE_SHIFT(9372061470395238550ULL, 1, u64, 0, true);
-> +       TEST_ONE_SHIFT(9372061470395238550ULL, 1, u64, 0, true);
->
->         /* Overflow: bit shifted into signed bit on signed types. */
->         /* 01001011 */
-> -       err |= TEST_ONE_SHIFT(75, 1, s8, 0, true);
-> +       TEST_ONE_SHIFT(75, 1, s8, 0, true);
->         /* 0100010001001011 */
-> -       err |= TEST_ONE_SHIFT(17483, 1, s16, 0, true);
-> +       TEST_ONE_SHIFT(17483, 1, s16, 0, true);
->         /* 01000010000001000100010001001011 */
-> -       err |= TEST_ONE_SHIFT(1107575883, 1, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(1107575883, 1, int, 0, true);
-> +       TEST_ONE_SHIFT(1107575883, 1, s32, 0, true);
-> +       TEST_ONE_SHIFT(1107575883, 1, int, 0, true);
->         /* 0100000100001000001000000010000001000010000001000100010001001011 */
-> -       err |= TEST_ONE_SHIFT(4686030735197619275LL, 1, s64, 0, true);
-> +       TEST_ONE_SHIFT(4686030735197619275LL, 1, s64, 0, true);
->
->         /* Overflow: bit shifted past signed bit on signed types. */
->         /* 01001011 */
-> -       err |= TEST_ONE_SHIFT(75, 2, s8, 0, true);
-> +       TEST_ONE_SHIFT(75, 2, s8, 0, true);
->         /* 0100010001001011 */
-> -       err |= TEST_ONE_SHIFT(17483, 2, s16, 0, true);
-> +       TEST_ONE_SHIFT(17483, 2, s16, 0, true);
->         /* 01000010000001000100010001001011 */
-> -       err |= TEST_ONE_SHIFT(1107575883, 2, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(1107575883, 2, int, 0, true);
-> +       TEST_ONE_SHIFT(1107575883, 2, s32, 0, true);
-> +       TEST_ONE_SHIFT(1107575883, 2, int, 0, true);
->         /* 0100000100001000001000000010000001000010000001000100010001001011 */
-> -       err |= TEST_ONE_SHIFT(4686030735197619275LL, 2, s64, 0, true);
-> +       TEST_ONE_SHIFT(4686030735197619275LL, 2, s64, 0, true);
->
->         /* Overflow: values larger than destination type. */
-> -       err |= TEST_ONE_SHIFT(0x100, 0, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFF, 0, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0x10000U, 0, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFFFFU, 0, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0x100000000ULL, 0, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0x100000000ULL, 0, unsigned int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFFFFFFFFUL, 0, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFFFFFFFFUL, 0, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFFFFFFFFFFFFFFFFULL, 0, s64, 0, true);
-> +       TEST_ONE_SHIFT(0x100, 0, u8, 0, true);
-> +       TEST_ONE_SHIFT(0xFF, 0, s8, 0, true);
-> +       TEST_ONE_SHIFT(0x10000U, 0, u16, 0, true);
-> +       TEST_ONE_SHIFT(0xFFFFU, 0, s16, 0, true);
-> +       TEST_ONE_SHIFT(0x100000000ULL, 0, u32, 0, true);
-> +       TEST_ONE_SHIFT(0x100000000ULL, 0, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(0xFFFFFFFFUL, 0, s32, 0, true);
-> +       TEST_ONE_SHIFT(0xFFFFFFFFUL, 0, int, 0, true);
-> +       TEST_ONE_SHIFT(0xFFFFFFFFFFFFFFFFULL, 0, s64, 0, true);
->
->         /* Nonsense: negative initial value. */
-> -       err |= TEST_ONE_SHIFT(-1, 0, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(-1, 0, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(-5, 0, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(-5, 0, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(-10, 0, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(-10, 0, unsigned int, 0, true);
-> -       err |= TEST_ONE_SHIFT(-100, 0, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(-100, 0, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(-10000, 0, s64, 0, true);
-> -       err |= TEST_ONE_SHIFT(-10000, 0, u64, 0, true);
-> +       TEST_ONE_SHIFT(-1, 0, s8, 0, true);
-> +       TEST_ONE_SHIFT(-1, 0, u8, 0, true);
-> +       TEST_ONE_SHIFT(-5, 0, s16, 0, true);
-> +       TEST_ONE_SHIFT(-5, 0, u16, 0, true);
-> +       TEST_ONE_SHIFT(-10, 0, int, 0, true);
-> +       TEST_ONE_SHIFT(-10, 0, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(-100, 0, s32, 0, true);
-> +       TEST_ONE_SHIFT(-100, 0, u32, 0, true);
-> +       TEST_ONE_SHIFT(-10000, 0, s64, 0, true);
-> +       TEST_ONE_SHIFT(-10000, 0, u64, 0, true);
->
->         /* Nonsense: negative shift values. */
-> -       err |= TEST_ONE_SHIFT(0, -5, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -5, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -10, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -10, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -15, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -15, unsigned int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -20, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -20, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -30, s64, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -30, u64, 0, true);
-> +       TEST_ONE_SHIFT(0, -5, s8, 0, true);
-> +       TEST_ONE_SHIFT(0, -5, u8, 0, true);
-> +       TEST_ONE_SHIFT(0, -10, s16, 0, true);
-> +       TEST_ONE_SHIFT(0, -10, u16, 0, true);
-> +       TEST_ONE_SHIFT(0, -15, int, 0, true);
-> +       TEST_ONE_SHIFT(0, -15, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(0, -20, s32, 0, true);
-> +       TEST_ONE_SHIFT(0, -20, u32, 0, true);
-> +       TEST_ONE_SHIFT(0, -30, s64, 0, true);
-> +       TEST_ONE_SHIFT(0, -30, u64, 0, true);
->
->         /* Overflow: shifted at or beyond entire type's bit width. */
-> -       err |= TEST_ONE_SHIFT(0, 8, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 9, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 8, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 9, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 16, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 17, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 16, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 17, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 32, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 33, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 32, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 33, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 32, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 33, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 64, u64, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 65, u64, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 64, s64, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 65, s64, 0, true);
-> +       TEST_ONE_SHIFT(0, 8, u8, 0, true);
-> +       TEST_ONE_SHIFT(0, 9, u8, 0, true);
-> +       TEST_ONE_SHIFT(0, 8, s8, 0, true);
-> +       TEST_ONE_SHIFT(0, 9, s8, 0, true);
-> +       TEST_ONE_SHIFT(0, 16, u16, 0, true);
-> +       TEST_ONE_SHIFT(0, 17, u16, 0, true);
-> +       TEST_ONE_SHIFT(0, 16, s16, 0, true);
-> +       TEST_ONE_SHIFT(0, 17, s16, 0, true);
-> +       TEST_ONE_SHIFT(0, 32, u32, 0, true);
-> +       TEST_ONE_SHIFT(0, 33, u32, 0, true);
-> +       TEST_ONE_SHIFT(0, 32, int, 0, true);
-> +       TEST_ONE_SHIFT(0, 33, int, 0, true);
-> +       TEST_ONE_SHIFT(0, 32, s32, 0, true);
-> +       TEST_ONE_SHIFT(0, 33, s32, 0, true);
-> +       TEST_ONE_SHIFT(0, 64, u64, 0, true);
-> +       TEST_ONE_SHIFT(0, 65, u64, 0, true);
-> +       TEST_ONE_SHIFT(0, 64, s64, 0, true);
-> +       TEST_ONE_SHIFT(0, 65, s64, 0, true);
->
->         /*
->          * Corner case: for unsigned types, we fail when we've shifted
-> @@ -473,13 +442,11 @@ static int __init test_overflow_shift(void)
->          * signed bit). So, for now, we will test this condition but
->          * mark it as not expected to overflow.
->          */
-> -       err |= TEST_ONE_SHIFT(0, 7, s8, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 15, s16, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 31, int, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 31, s32, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 63, s64, 0, false);
-> -
-> -       return err;
-> +       TEST_ONE_SHIFT(0, 7, s8, 0, false);
-> +       TEST_ONE_SHIFT(0, 15, s16, 0, false);
-> +       TEST_ONE_SHIFT(0, 31, int, 0, false);
-> +       TEST_ONE_SHIFT(0, 31, s32, 0, false);
-> +       TEST_ONE_SHIFT(0, 63, s64, 0, false);
->  }
->
->  /*
-> @@ -499,7 +466,7 @@ static int __init test_overflow_shift(void)
->  #define TEST_SIZE              (5 * 4096)
->
->  #define DEFINE_TEST_ALLOC(func, free_func, want_arg, want_gfp, want_node)\
-> -static int __init test_ ## func (void *arg)                            \
-> +static void test_ ## func (struct kunit *test, void *arg)              \
->  {                                                                      \
->         volatile size_t a = TEST_SIZE;                                  \
->         volatile size_t b = (SIZE_MAX / TEST_SIZE) + 1;                 \
-> @@ -507,31 +474,26 @@ static int __init test_ ## func (void *arg)                               \
->                                                                         \
->         /* Tiny allocation test. */                                     \
->         ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg, 1);\
-> -       if (!ptr) {                                                     \
-> -               pr_warn(#func " failed regular allocation?!\n");        \
-> -               return 1;                                               \
-> -       }                                                               \
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, ptr,                     \
-> +               #func " failed regular allocation?!");                  \
->         free ## want_arg (free_func, arg, ptr);                         \
->                                                                         \
->         /* Wrapped allocation test. */                                  \
->         ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg,    \
->                                                           a * b);       \
-> -       if (!ptr) {                                                     \
-> -               pr_warn(#func " unexpectedly failed bad wrapping?!\n"); \
-> -               return 1;                                               \
-> -       }                                                               \
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, ptr,                     \
-> +               #func " unexpectedly failed bad wrapping?!");           \
->         free ## want_arg (free_func, arg, ptr);                         \
->                                                                         \
->         /* Saturated allocation test. */                                \
->         ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg,    \
->                                                    array_size(a, b));   \
->         if (ptr) {                                                      \
-> -               pr_warn(#func " missed saturation!\n");                 \
-> +               KUNIT_FAIL(test, #func " missed saturation!\n");        \
->                 free ## want_arg (free_func, arg, ptr);                 \
-> -               return 1;                                               \
-> +               return;                                                 \
->         }                                                               \
->         pr_info(#func " detected saturation\n");                        \
-> -       return 0;                                                       \
->  }
->
->  /*
-> @@ -555,60 +517,56 @@ DEFINE_TEST_ALLOC(kvzalloc_node, kvfree,     0, 1, 1);
->  DEFINE_TEST_ALLOC(devm_kmalloc,  devm_kfree, 1, 1, 0);
->  DEFINE_TEST_ALLOC(devm_kzalloc,  devm_kfree, 1, 1, 0);
->
-> -static int __init test_overflow_allocation(void)
-> +static void test_overflow_allocation(struct kunit *test)
->  {
->         const char device_name[] = "overflow-test";
->         struct device *dev;
-> -       int err = 0;
->
->         /* Create dummy device for devm_kmalloc()-family tests. */
->         dev = root_device_register(device_name);
-> -       if (IS_ERR(dev)) {
-> -               pr_warn("Cannot register test device\n");
-> -               return 1;
-> -       }
-> -
-> -       err |= test_kmalloc(NULL);
-> -       err |= test_kmalloc_node(NULL);
-> -       err |= test_kzalloc(NULL);
-> -       err |= test_kzalloc_node(NULL);
-> -       err |= test_kvmalloc(NULL);
-> -       err |= test_kvmalloc_node(NULL);
-> -       err |= test_kvzalloc(NULL);
-> -       err |= test_kvzalloc_node(NULL);
-> -       err |= test_vmalloc(NULL);
-> -       err |= test_vmalloc_node(NULL);
-> -       err |= test_vzalloc(NULL);
-> -       err |= test_vzalloc_node(NULL);
-> -       err |= test_devm_kmalloc(dev);
-> -       err |= test_devm_kzalloc(dev);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, dev,
-> +                                        "Cannot register test device");
-> +
-> +       test_kmalloc(test, NULL);
-> +       test_kmalloc_node(test, NULL);
-> +       test_kzalloc(test, NULL);
-> +       test_kzalloc_node(test, NULL);
-> +       test_kvmalloc(test, NULL);
-> +       test_kvmalloc_node(test, NULL);
-> +       test_kvzalloc(test, NULL);
-> +       test_kvzalloc_node(test, NULL);
-> +       test_vmalloc(test, NULL);
-> +       test_vmalloc_node(test, NULL);
-> +       test_vzalloc(test, NULL);
-> +       test_vzalloc_node(test, NULL);
-> +       test_devm_kmalloc(test, dev);
-> +       test_devm_kzalloc(test, dev);
->
->         device_unregister(dev);
-> -
-> -       return err;
->  }
->
-> -static int __init test_module_init(void)
-> -{
-> -       int err = 0;
-> -
-> -       err |= test_overflow_calculation();
-> -       err |= test_overflow_shift();
-> -       err |= test_overflow_allocation();
-> +static struct kunit_case overflow_test_cases[] = {
-> +       KUNIT_CASE(test_u8_overflow),
-> +       KUNIT_CASE(test_s8_overflow),
-> +       KUNIT_CASE(test_u16_overflow),
-> +       KUNIT_CASE(test_s16_overflow),
-> +       KUNIT_CASE(test_u32_overflow),
-> +       KUNIT_CASE(test_s32_overflow),
-> +#if BITS_PER_LONG == 64
-> +       KUNIT_CASE(test_u64_overflow),
-> +       KUNIT_CASE(test_s64_overflow),
-> +#endif
->
-> -       if (err) {
-> -               pr_warn("FAIL!\n");
-> -               err = -EINVAL;
-> -       } else {
-> -               pr_info("all tests passed\n");
-> -       }
-> +       KUNIT_CASE(test_overflow_shift),
-> +       KUNIT_CASE(test_overflow_allocation),
-> +       {}
-> +};
->
-> -       return err;
-> -}
-> +static struct kunit_suite overflow_test_suite = {
-> +       .name = "lib_overflow",
-> +       .test_cases = overflow_test_cases,
-> +};
->
-> -static void __exit test_module_exit(void)
-> -{ }
-> +kunit_test_suites(&overflow_test_suite);
->
-> -module_init(test_module_init);
-> -module_exit(test_module_exit);
->  MODULE_LICENSE("Dual MIT/GPL");
->
-> base-commit: cda689f8708b6bef0b921c3a17fcdecbe959a079
-> --
-> 2.31.1.527.g47e6f16901-goog
->
