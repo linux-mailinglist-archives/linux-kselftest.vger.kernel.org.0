@@ -2,496 +2,571 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3323730B7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 May 2021 21:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA79373137
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 May 2021 22:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbhEDTXI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 May 2021 15:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
+        id S232535AbhEDUIv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 May 2021 16:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbhEDTXI (ORCPT
+        with ESMTP id S229960AbhEDUIu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 May 2021 15:23:08 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4802C06174A;
-        Tue,  4 May 2021 12:22:12 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1le0cN-0006Tn-3N; Tue, 04 May 2021 21:22:03 +0200
-Date:   Tue, 4 May 2021 21:22:03 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
-Cc:     fw@strlen.de, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        Tue, 4 May 2021 16:08:50 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B136C06174A
+        for <linux-kselftest@vger.kernel.org>; Tue,  4 May 2021 13:07:55 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id a11so5946698plh.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 May 2021 13:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VMwgtHBCRDn+LkFyuADHWdcyq5/VtHtoFRjI/wlF+DU=;
+        b=j6PQbKdFSjDQJJNzPIqEtCftJyE4SfSidXWudXKP5NAaA3O36L4WSWF94emKAI5wwI
+         12VLlHHk6/4rfsqz78tEXRKOD2nlwAMdk2e6zw3rmhchKKd2+jPhPPt6ZnGsX8A3O1zr
+         rLLyrEQwn8np/Skr9SOTtiVVCQVIx6CuNLP1zOW+OUO+trT5t89zZ1m9G3CLEfkWkFGt
+         Z15z4fd0OEAVEBU7EVCh2naHBfgnuOaw9CGjihtPjD1/OuUg7oGZP1LDIc6WS6CyLKI/
+         PaJf/uBrGQBxEWIm6g1g3mkvgoPZ1k6UunG8lTmzUqoEKuOLtSCWEW7g/vb1c8EnS4uu
+         y3nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VMwgtHBCRDn+LkFyuADHWdcyq5/VtHtoFRjI/wlF+DU=;
+        b=Tsi39lwBzsBtew40tcbAZBDUoqaen+XLFOQL1S6vUSJv6xzwOXxNG6h6w1a5cXISHN
+         HUpbNSbJj+pIr6NaJBdVp2oAA2kT/nGwPgcuSBqN1bn0ypOOhl2FgLB7pcncS/CgqaAG
+         jvmYoOyaVJFFuXDSvuVhZpvEvN0skX+PazgNsVNfDSZukZmBi+bG/Sf7i8cnjbrDttVS
+         7Tbv88joWHT+iPcB+e0L9l5bdeXl1Lsf1mvUY2OowWZ3z+BrI1dlVriFg3Mr3VVkeF+C
+         S9BRVoZLqb0rBDdD+F/Nr23wj3BZ2TQyaYSNENJP5ARBRgdtPqVAvd/5tcvZGPuaX5VO
+         C1kA==
+X-Gm-Message-State: AOAM530a/IqFT3pW6UA2qEm4UvSjN0HFj9X/Fn98sP1VIaqifb8NDAKk
+        VAyKbTwKDBHQD6KgH3RIKtL9tQ==
+X-Google-Smtp-Source: ABdhPJy/ZMD+yiFdoJBZMDm4FGaIPzK6wjD9/Ku8sBXst9JTopJNsPrwoMmdBet+gstjZBp6/ai+rQ==
+X-Received: by 2002:a17:902:ce89:b029:ed:3aeb:2c50 with SMTP id f9-20020a170902ce89b02900ed3aeb2c50mr28265505plg.43.1620158874729;
+        Tue, 04 May 2021 13:07:54 -0700 (PDT)
+Received: from google.com ([2620:15c:2cb:201:10d7:bc55:1441:1248])
+        by smtp.gmail.com with ESMTPSA id a13sm4260359pgm.43.2021.05.04.13.07.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 May 2021 13:07:54 -0700 (PDT)
+Date:   Tue, 4 May 2021 13:07:48 -0700
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3] netfilter: nf_conntrack: Add conntrack helper for
- ESP/IPsec
-Message-ID: <20210504192203.GA12364@breakpoint.cc>
-References: <20210426123743.GB975@breakpoint.cc>
- <20210503010646.11111-1-Cole.Dishington@alliedtelesis.co.nz>
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Daniel Latypov <dlatypov@google.com>
+Subject: Re: [RFC v2 3/4] kunit: tool: add support for QEMU
+Message-ID: <YJGplIw5COtzKqso@google.com>
+References: <20210429205109.2847831-1-brendanhiggins@google.com>
+ <20210429205109.2847831-4-brendanhiggins@google.com>
+ <CABVgOSnrSD64aTRsBqTTB4A26whcxegT0_DK3MjThsHnWeFdqA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210503010646.11111-1-Cole.Dishington@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CABVgOSnrSD64aTRsBqTTB4A26whcxegT0_DK3MjThsHnWeFdqA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Cole Dishington <Cole.Dishington@alliedtelesis.co.nz> wrote:
-> Introduce changes to add ESP connection tracking helper to netfilter
-> conntrack. The connection tracking of ESP is based on IPsec SPIs. The
-> underlying motivation for this patch was to allow multiple VPN ESP
-> clients to be distinguished when using NAT.
+On Tue, May 04, 2021 at 02:08:41PM +0800, David Gow wrote:
+> On Fri, Apr 30, 2021 at 4:51 AM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > Add basic support to run QEMU via kunit_tool. Add support for i386,
+> > x86_64, arm, arm64, and a bunch more.
+> >
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 > 
-> Added config flag CONFIG_NF_CT_PROTO_ESP to enable the ESP/IPsec
-> conntrack helper.
+> I've tested this out on a few architectures (x86-32, ppc64, etc), and
+> it all seems to work pretty well. I've got quite a few comments below.
+> The main one -- the location of the qemu configs -- is basically
+> echoing what Daniel said and what you've done on the Gerrit version,
+> but I felt was worth having on the record.
 > 
-> Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
-> ---
+> Otherwise, a bunch of nitpicks around missing places cross_compile
+> should be supported.
 > 
-> Notes:
->     Thanks for your time reviewing!
->
->     Q.
->     > +static int esp_tuple_to_nlattr(struct sk_buff *skb,
->     > +                            const struct nf_conntrack_tuple *t)
->     > +{
->     > +     if (nla_put_be16(skb, CTA_PROTO_SRC_ESP_ID, t->src.u.esp.id) ||
->     > +         nla_put_be16(skb, CTA_PROTO_DST_ESP_ID, t->dst.u.esp.id))
->     > +             goto nla_put_failure;
->     
->     This exposes the 16 bit kernel-generated IDs, right?
->     Should this dump the real on-wire SPIs instead?
->     
->     Or is there are reason why the internal IDs need exposure?
->     
->     A.
->     I think I need to expose the internal esp ids here due to esp_nlattr_to_tuple().
->     If esp id was changed to real SPIs here I would be unable to lookup the correct
->     tuple (without IP addresses too).
-
-Oh, right. I keep forgetting the ESP tracker hooks into the tuple
-creation function.  In that case I think it would be good to include the
-raw/on-wire ESP IDs as well when dumping so conntrack -L can print them.
-
-The internal numbers are seemingly pointless, except that you need them
-to populate the tuple, and can't obtain the internal numbers based on
-the on-wire ESP ID.
-
-The only other solution I see is to check presence of
-CTA_IP_DST|CTA_IP_SRC in 'flags', then take the ip addresses from the
-provided tuple, and do a lookup in the rhashtable with the addresses
-and the raw esp values.
-
-Obvious downside: This will force users to provide the ip address as
-well, search based on ESP value alone won't work anymore.
-
-[ Unless a full table walk is done, but that might be ambiguous
-  without the ip addresses, as on-wire ESP may not be unique ].
-
->    changes in v3:
->     - Flush all esp entries for a given netns on nf_conntrack_proto_pernet_fini
->     - Replace _esp_table (and its spinlock) shared over netns with per netns linked lists and bitmap (for esp ids)
->     - Init IPv6 any address with IN6ADDR_ANY_INIT rather than ipv6_addr_set()
->     - Change l3num on hash key from u16 to u8
->     - Add selftests file for testing tracker with ipv4 and ipv6
-
-Thanks for this.  Can you place the selftest in a 2/2 patch in v4?
-
-checkpatch doesn't like some whitespace, but I did not see any critical
-warnings.
-
-> diff --git a/include/net/netfilter/nf_conntrack.h b/include/net/netfilter/nf_conntrack.h
-> index 439379ca9ffa..4011be8c5e39 100644
-> --- a/include/net/netfilter/nf_conntrack.h
-> @@ -47,6 +49,10 @@ struct nf_conntrack_net {
->  	unsigned int users4;
->  	unsigned int users6;
->  	unsigned int users_bridge;
-> +
-> +#ifdef CONFIG_NF_CT_PROTO_ESP
-> +	DECLARE_BITMAP(esp_id_map, 1024);
-
-Can we avoid the magic number?
-
-Either make this 1024 and then have the esp.c file use a define
-based on ARRAY_SIZE + BITS_PER_TYPE to 'recompute' the 1024 (or whatever
-the exact size give is), or add a #define and use that for the bitmap
-declaration, then use that consistently in the esp.c file.
-
-Or come up with an alternative solution.
-
->  #include <linux/types.h>
-> diff --git a/include/net/netfilter/nf_conntrack_l4proto.h b/include/net/netfilter/nf_conntrack_l4proto.h
-> diff --git a/include/net/netns/conntrack.h b/include/net/netns/conntrack.h
-> index 806454e767bf..43cd1e78f790 100644
-> --- a/include/net/netns/conntrack.h
-> +++ b/include/net/netns/conntrack.h
-> @@ -69,6 +69,20 @@ struct nf_gre_net {
->  };
->  #endif
->  
-> +#ifdef CONFIG_NF_CT_PROTO_ESP
-> +enum esp_conntrack {
-> +	ESP_CT_UNREPLIED,
-> +	ESP_CT_REPLIED,
-> +	ESP_CT_MAX
-> +};
-> +
-> +struct nf_esp_net {
-> +	spinlock_t id_list_lock;
-> +	struct list_head id_list;
-
-Can you place the list_id/_lock in nf_conntrack_net structure?
-
-The nf_esp_net is placed in 'struct net', the other one is allocated
-only when the conntrack module is loaded.
-
-> +	unsigned int esp_timeouts[ESP_CT_MAX];
-
-This is fine.
-
->  	CTA_PROTO_ICMPV6_TYPE,
->  	CTA_PROTO_ICMPV6_CODE,
-> +	CTA_PROTO_SRC_ESP_ID,
-> +	CTA_PROTO_DST_ESP_ID,
-
-See above, if the internal IDs have to be exposed,
-this should be something like:
-
-> +	CTA_PROTO_SRC_ESP_ID,
-> +	CTA_PROTO_DST_ESP_ID,
-> +	CTA_PROTO_SRC_ESP_SPI,
-> +	CTA_PROTO_DST_ESP_SPI,
-
-... with the latter two exposing the __be32 of the ESP tunnel.
-You could also just re-use existing CTA_SRC_PORT/DST_PORT for the
-internal esp ids given that ESP has no ports.
-
-I will leave that up to you though, we don't have to avoid new
-enums here.
-
-> +#ifdef CONFIG_NF_CT_PROTO_ESP
-> +	ret = nf_conntrack_esp_init();
-> +	if (ret < 0)
-> +		goto cleanup_sockopt;
-
-Ouch, thats a bug in the existing code, I will send a patch.
-
-> diff --git a/net/netfilter/nf_conntrack_proto_esp.c b/net/netfilter/nf_conntrack_proto_esp.c
-> new file mode 100644
-> index 000000000000..1bc0cb879bfd
-> --- /dev/null
-> +++ b/net/netfilter/nf_conntrack_proto_esp.c
-> @@ -0,0 +1,741 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * <:copyright-gpl
-> + * Copyright 2008 Broadcom Corp. All Rights Reserved.
-> + * Copyright (C) 2021 Allied Telesis Labs NZ
-> + *
-> + * This program is free software; you can distribute it and/or modify it
-> + * under the terms of the GNU General Public License (Version 2) as
-> + * published by the Free Software Foundation.
-> + *
-> + * This program is distributed in the hope it will be useful, but WITHOUT
-> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-> + * for more details.
-> + *
-> + * You should have received a copy of the GNU General Public License along
-> + * with this program.
-> + * :>
-
-The SPDX tag is enough, the GPL boilerplate can be removed.
-
-> +static void free_esp_entry(struct nf_conntrack_net *cnet, struct _esp_entry *esp_entry)
-> +{
-> +	if (esp_entry) {
-> +		/* Remove from all the hash tables */
-> +		pr_debug("Removing entry %x from all tables", esp_entry->esp_id);
-> +		list_del(&esp_entry->net_node);
-> +		rhashtable_remove_fast(&ltable, &esp_entry->lnode, ltable_params);
-> +		rhashtable_remove_fast(&rtable, &esp_entry->rnode, rtable_params);
-> +		rhltable_remove(&incmpl_rtable, &esp_entry->incmpl_rlist, incmpl_rtable_params);
-> +		clear_bit(esp_entry->esp_id - TEMP_SPI_START, cnet->esp_id_map);
-> +		kfree(esp_entry);
-> +	}
-> +}
-> +
-> +/* Free an entry referred to by esp_id.
-> + *
-> + * NOTE:
-> + * Per net linked list locking and unlocking is the responsibility of the calling function.
-
-Why? I think it makes more sense to lock/unlock in free_esp_entry, when
-the 'list_del(->net_node)' is done.
-
-> + * NOTE: This function may block on per net list lock.
-
-Is that important?  Its a spinlock, so noone should hold it for
-long period. search_esp_entry_by_spi() has same comment and in that
-case its not used in most cases.
-
-> +	spin_lock(&esp_net->id_list_lock);
-> +	list_add(&esp_entry->net_node, &esp_net->id_list);
-
-spin_lock_bh() ?
-
-> +		err = rhashtable_insert_fast(&rtable, &esp_entry->rnode, rtable_params);
-> +		if (err) {
-> +			struct nf_esp_net *esp_net = esp_pernet(net);
-> +
-> +			spin_lock(&esp_net->id_list_lock);
-
-spin_lock_bh?  And why does the entire free_esp_entry_by_id() need this
-lock?
-
-> +		}
-> +		esp_entry->l_spi = spi;
-> +		esp_entry->l3num = tuple->src.l3num;
-> +		esp_ip_addr_copy(esp_entry->l3num, &esp_entry->l_ip, &tuple->src.u3);
-> +		esp_ip_addr_copy(esp_entry->l3num, &esp_entry->r_ip, &tuple->dst.u3);
-> +
-> +		/* Add entries to the hash tables */
-> +
-> +		calculate_key(net_hmix, esp_entry->l_spi, esp_entry->l3num, &esp_entry->l_ip,
-> +			      &esp_entry->r_ip, &key);
-> +		esp_entry_old = rhashtable_lookup_get_insert_key(&ltable, &key, &esp_entry->lnode,
-> +								 ltable_params);
-> +		if (esp_entry_old) {
-> +			spin_lock(&esp_net->id_list_lock);
-> +
-> +			if (IS_ERR(esp_entry_old)) {
-> +				free_esp_entry_by_id(net, esp_entry->esp_id);
-> +				spin_unlock(&esp_net->id_list_lock);
-> +				return false;
-> +			}
-> +
-> +			free_esp_entry_by_id(net, esp_entry->esp_id);
-
-This looks weird.  Both branches contain the same free_esp_entry_by_id() call.
-
-I suspect this should be something like this:
-
-	if (esp_entry_old) {
-		free_esp_entry(net, esp_entry);
-
-		if (IS_ERR(esp_entry_old))
-			return false;
-
-		esp_entry = esp_entry_old;
-
-... because we want to remove the entry we allocated right before in the
-same function, so why would be have to search by id?
-
-> +		}
-> +		/* esp_entry_old == NULL -- insertion successful */
-
-Probably better to avoid this comment, and, if needed, add a 'insertion
-raced, other CPU added same entry' or similar, in the if (esp_entry_old)
-case.
-
-Up to you.
-
-> +/* Returns verdict for packet, and may modify conntrack */
-> +int nf_conntrack_esp_packet(struct nf_conn *ct, struct sk_buff *skb,
-> +			    unsigned int dataoff,
-> +			    enum ip_conntrack_info ctinfo,
-> +			    const struct nf_hook_state *state)
-> +{
-> +	int esp_id;
-> +	struct nf_conntrack_tuple *tuple;
-> +	unsigned int *timeouts = nf_ct_timeout_lookup(ct);
-> +	struct nf_esp_net *esp_net = esp_pernet(nf_ct_net(ct));
-> +
-> +	if (!timeouts)
-> +		timeouts = esp_net->esp_timeouts;
-> +
-> +	/* If we've seen traffic both ways, this is some kind of ESP
-> +	 * stream.  Extend timeout.
-> +	 */
-> +	if (test_bit(IPS_SEEN_REPLY_BIT, &ct->status)) {
-> +		nf_ct_refresh_acct(ct, ctinfo, skb, timeouts[ESP_CT_REPLIED]);
-> +		/* Also, more likely to be important, and not a probe */
-> +		if (!test_and_set_bit(IPS_ASSURED_BIT, &ct->status)) {
-> +			/* Was originally IPCT_STATUS but this is no longer an option.
-> +			 * GRE uses assured for same purpose
-> +			 */
-
-Please remove the above comment, almost noone remembers what
-IPCT_STATUS was 8-)
-
-> +			esp_id = tuple->src.u.esp.id;
-> +			if (esp_id >= TEMP_SPI_START && esp_id <= TEMP_SPI_MAX) {
-> +				struct _esp_entry *esp_entry;
-> +
-> +				spin_lock(&esp_net->id_list_lock);
-> +				esp_entry = find_esp_entry_by_id(esp_net, esp_id);
-
-There should be no list walk from packet path.  I would suggest to add
-another rhashtable for this, or switch entire id allocation to IDR.
-
-If you go for idr, you can place the idr root in nf_esp_net since its
-going to be used in lookup path too.  idr can be used with rcu (for
-read accesses).
-
-This is my mistake, I did not realize the need for per-id lookup via
-this list, I thought the existing rhashtables already covered this.
-
-I thought the only need for this list was to quickly remove all the
-allocated entries on netns teardown.
-
-[ walking a (shared across all netns) rhashtable on netns destruction
-  can be expensive ]
-
-> +void nf_ct_esp_pernet_flush(struct net *net)
-> +{
-> +	struct nf_conntrack_net *cnet = net_generic(net, nf_conntrack_net_id);
-> +	struct nf_esp_net *esp_net = esp_pernet(net);
-> +	struct list_head *pos, *tmp, *head = &esp_net->id_list;
-> +	struct _esp_entry *esp_entry;
-> +
-> +	spin_lock(&esp_net->id_list_lock);
-> +	list_for_each_safe(pos, tmp, head) {
-
-list_for_each_entry_safe()?
-
-> +		esp_entry = list_entry(pos, struct _esp_entry, net_node);
-> +		free_esp_entry(cnet, esp_entry);
-> +	}
-> +	spin_unlock(&esp_net->id_list_lock);
-
-I think it would be better to move the list lock/unlock to only cover
-the single list_del operation to make it clear that this lock only
-guards the list and nothing else.
-
-> +/* Called when a conntrack entry has already been removed from the hashes
-> + * and is about to be deleted from memory
-> + */
-> +void destroy_esp_conntrack_entry(struct nf_conn *ct)
-> +{
-> +	struct nf_conntrack_tuple *tuple;
-> +	enum ip_conntrack_dir dir;
-> +	int esp_id;
-> +	struct net *net = nf_ct_net(ct);
-> +	struct nf_esp_net *esp_net = esp_pernet(net);
-
-Nit: some people (not me) are very obsessed with reverse xmas tree
-ordering, i.e.
-
-	struct nf_esp_net *esp_net = esp_pernet(net);
-	struct net *net = nf_ct_net(ct);
-	struct nf_conntrack_tuple *tuple;
-	enum ip_conntrack_dir dir;
-	int esp_id;
-
-In addition, could you please use 'unsigned' except when you need to
-store numbers < 0?
-
-> +	 * but the free function handles repeated frees, so best to do them all.
-> +	 */
-> +	for (dir = IP_CT_DIR_ORIGINAL; dir < IP_CT_DIR_MAX; dir++) {
-> +		tuple = nf_ct_tuple(ct, dir);
-> +
-> +		spin_lock(&esp_net->id_list_lock);
-> +
-> +		esp_id = tuple->src.u.esp.id;
-> +		if (esp_id >= TEMP_SPI_START && esp_id <= TEMP_SPI_MAX)
-> +			free_esp_entry_by_id(net, esp_id);
-
-I find this repeated use of esp_id >= && <= ... confusing. Why is this
-needed?
-
-Could you move this down to where you need to protect illegal memory
-accesses or similar, so this is just
-
-   free_esp_entry_by_id(net, esp_id) ?
-
-Also, I think it might be better to instead do this:
-
-esp_id_src = tuple->src.u.esp.id;
-tuple = nf_ct_tuple(ct, IP_CT_DIR_REPLY);
-esp_id_repl = tuple->src.u.esp.id;
-
-free_esp_entry_by_id(net, esp_id_orig);
-if (esp_id_orig != esp_id_repl)
-  free_esp_entry_by_id(net, esp_id_repl);
-
-This avoids race with esp_id reallocation after the first
-clear_bit().
-
-I wonder if it would be possible to change how the assocation of the
-reverse direction works.
-
-1. Only use on-wire SPI value (no internal 'esp id' allocation anymore)
-
-2. Use expectation infrastructure to associate the 'reverse' direction
-   with the existing/orignal conntrack entry instead.
-
-For ORIGINAL, the ESP Id gets split in two 16 bit halves, stored in the tuple
-(so instead of tcp sport x dport y), it would be spi & 0xffff  && spi << 16.
-
-This avoids size increase of the tuple, and we don't change the way tuples work,
-i.e. all contents of the tuple are derived from packet header fields.
-
-1. esp_pkt_to_tuple extracts the 32bit SPI, fills the tuple
-   with the two 16bit halves.
-
-2. esp_pkt_to_tuple does SPI lookup (just like now).
-   found full match -> done
-
-3. no match?
-   Basically do what search_esp_entry_init_remote() does, i.e.
-   check if its a 'reverse direction'.
-
-Otherwise, assume the new connection is the reverse tunnel of an existing
-connection.
-
-Add an expectation for this connection, so it will be picked up as RELATED
-rather than new. 
-
-As far as I can see, all that is needed for the expectations can be
-found using info stored in the rhashtable(s).
-
-nf_conntrack_find_get() finds us the existing conntrack entry
-that we need to pass to nf_ct_expect_alloc().
-
-The needed tuple could just be stored in the rhltable that gets
-searched in search_esp_entry_init_remote().
-
-Everything else we need for nf_ct_expect_init() is already present
-in the tuple.
-
-This creates a related conntrack entry that is linked to the existing
-connection.
-
-Do you see anything that prevents this from working or has other,
-undesireable properties vs. the existing proposal?
-
-This would also be easier to review, since it could be layered:
-
-First patch would just add a really simple ESP tracker that just
-extracts the SPI, without any rhashtable usage.
-
-Just enough code to make it so 'conntrack -L' or the older /proc file show each
-address/spi as independent connection, rather than just the single
-'generic' entry.
-
-Then, add the rhashtable code and the hooks you already have to clear
-out entries on netns removal and when a conntrack gets destroyed.
-
-Then, in a 3rd patch, add the expectation code, so that a 'new'
-connection turns into a related one if the rhtable/rhlist finds
-something relevant.
-
-What do you think?
+> Still, great to see this happening: it's nice to be able to test on
+> non-UML architectures more easily.
+> 
+> Tested-by: David Gow <davidgow@google.com>
+
+Sweet, thanks!
+
+> -- David
+> 
+> > ---
+> >  tools/testing/kunit/kunit.py           |  33 +++-
+> >  tools/testing/kunit/kunit_config.py    |   2 +-
+> >  tools/testing/kunit/kunit_kernel.py    | 207 +++++++++++++++++++++----
+> >  tools/testing/kunit/kunit_tool_test.py |  15 +-
+> >  4 files changed, 217 insertions(+), 40 deletions(-)
+> >
+> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> > index d5144fcb03acd..07ef80062873b 100755
+> > --- a/tools/testing/kunit/kunit.py
+> > +++ b/tools/testing/kunit/kunit.py
+> > @@ -70,10 +70,10 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+> >         kunit_parser.print_with_timestamp('Building KUnit Kernel ...')
+> >
+> >         build_start = time.time()
+> > -       success = linux.build_um_kernel(request.alltests,
+> > -                                       request.jobs,
+> > -                                       request.build_dir,
+> > -                                       request.make_options)
+> > +       success = linux.build_kernel(request.alltests,
+> > +                                    request.jobs,
+> > +                                    request.build_dir,
+> > +                                    request.make_options)
+> >         build_end = time.time()
+> >         if not success:
+> >                 return KunitResult(KunitStatus.BUILD_FAILURE,
+> > @@ -187,6 +187,14 @@ def add_common_opts(parser) -> None:
+> >                              help='Path to Kconfig fragment that enables KUnit tests',
+> >                              metavar='kunitconfig')
+> >
+> > +       parser.add_argument('--arch',
+> > +                           help='Specifies the architecture to run tests under.',
+> > +                           type=str, default='um', metavar='arch')
+> 
+> It'd be nice to note explicitly that non-'um' values here will run under qemu.
+
+Good point. Will fix.
+
+> > +
+> > +       parser.add_argument('--cross_compile',
+> > +                           help='Sets make\'s CROSS_COMPILE variable.',
+> > +                           metavar='cross_compile')
+> > +
+> 
+> It'd be nice to have a slightly more detailed description here (that
+> its the compiler name's prefix or something).
+
+How about?:
+
+Sets make's CROSS_COMPILE variable; it should be set to a toolchain path
+prefix (the prefix of gcc and other tools in your toolchain, for example
+`sparc64-linux-gnu-` if you have the sparc toolchain installed on your
+system, or `$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux-`
+if you have downloaded the microblaze toolchain from the 0-day website
+to a directory in your home directory called `toolchains`).
+
+> >  def add_build_opts(parser) -> None:
+> >         parser.add_argument('--jobs',
+> >                             help='As in the make command, "Specifies  the number of '
+> > @@ -268,7 +276,10 @@ def main(argv, linux=None):
+> >                         os.mkdir(cli_args.build_dir)
+> >
+> >                 if not linux:
+> > -                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir, kunitconfig_path=cli_args.kunitconfig)
+> > +                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+> > +                                       kunitconfig_path=cli_args.kunitconfig,
+> > +                                       arch=cli_args.arch,
+> > +                                       cross_compile=cli_args.cross_compile)
+> >
+> >                 request = KunitRequest(cli_args.raw_output,
+> >                                        cli_args.timeout,
+> > @@ -287,7 +298,9 @@ def main(argv, linux=None):
+> >                         os.mkdir(cli_args.build_dir)
+> >
+> >                 if not linux:
+> > -                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir, kunitconfig_path=cli_args.kunitconfig)
+> > +                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+> > +                                       kunitconfig_path=cli_args.kunitconfig,
+> > +                                       arch=cli_args.arch)
+> >
+> >                 request = KunitConfigRequest(cli_args.build_dir,
+> >                                              cli_args.make_options)
+> > @@ -299,7 +312,9 @@ def main(argv, linux=None):
+> >                         sys.exit(1)
+> >         elif cli_args.subcommand == 'build':
+> >                 if not linux:
+> > -                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir, kunitconfig_path=cli_args.kunitconfig)
+> > +                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+> > +                                       kunitconfig_path=cli_args.kunitconfig,
+> > +                                       arch=cli_args.arch)
+> 
+> Why aren't we passing cross_compile through here? It's pretty
+> important for the 'build' step.
+
+Good catch. Will fix.
+
+> >
+> >                 request = KunitBuildRequest(cli_args.jobs,
+> >                                             cli_args.build_dir,
+> > @@ -313,7 +328,9 @@ def main(argv, linux=None):
+> >                         sys.exit(1)
+> >         elif cli_args.subcommand == 'exec':
+> >                 if not linux:
+> > -                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir)
+> > +                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+> > +                                       kunitconfig_path=cli_args.kunitconfig,
+> > +                                       arch=cli_args.arch)
+> >
+> >                 exec_request = KunitExecRequest(cli_args.timeout,
+> >                                                 cli_args.build_dir,
+> > diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+> > index 1e2683dcc0e7a..07d76be392544 100644
+> > --- a/tools/testing/kunit/kunit_config.py
+> > +++ b/tools/testing/kunit/kunit_config.py
+> > @@ -53,7 +53,7 @@ class Kconfig(object):
+> >                 return True
+> >
+> >         def write_to_file(self, path: str) -> None:
+> > -               with open(path, 'w') as f:
+> > +               with open(path, 'a+') as f:
+> >                         for entry in self.entries():
+> >                                 f.write(str(entry) + '\n')
+> >
+> > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> > index 7d5b77967d48f..b8b3b76aaa17e 100644
+> > --- a/tools/testing/kunit/kunit_kernel.py
+> > +++ b/tools/testing/kunit/kunit_kernel.py
+> > @@ -15,6 +15,8 @@ from typing import Iterator
+> >
+> >  from contextlib import ExitStack
+> >
+> > +from collections import namedtuple
+> > +
+> >  import kunit_config
+> >  import kunit_parser
+> >
+> > @@ -40,6 +42,10 @@ class BuildError(Exception):
+> >  class LinuxSourceTreeOperations(object):
+> >         """An abstraction over command line operations performed on a source tree."""
+> >
+> > +       def __init__(self, linux_arch, cross_compile):
+> > +               self._linux_arch = linux_arch
+> > +               self._cross_compile = cross_compile
+> > +
+> >         def make_mrproper(self) -> None:
+> >                 try:
+> >                         subprocess.check_output(['make', 'mrproper'], stderr=subprocess.STDOUT)
+> > @@ -48,12 +54,18 @@ class LinuxSourceTreeOperations(object):
+> >                 except subprocess.CalledProcessError as e:
+> >                         raise ConfigError(e.output.decode())
+> >
+> > +       def make_arch_qemuconfig(self, build_dir):
+> > +               pass
+> > +
+> >         def make_olddefconfig(self, build_dir, make_options) -> None:
+> > -               command = ['make', 'ARCH=um', 'olddefconfig']
+> > +               command = ['make', 'ARCH=' + self._linux_arch, 'olddefconfig']
+> > +               if self._cross_compile:
+> > +                       command += ['CROSS_COMPILE=' + self._cross_compile]
+> >                 if make_options:
+> >                         command.extend(make_options)
+> >                 if build_dir:
+> >                         command += ['O=' + build_dir]
+> > +               print(' '.join(command))
+> >                 try:
+> >                         subprocess.check_output(command, stderr=subprocess.STDOUT)
+> >                 except OSError as e:
+> > @@ -61,6 +73,154 @@ class LinuxSourceTreeOperations(object):
+> >                 except subprocess.CalledProcessError as e:
+> >                         raise ConfigError(e.output.decode())
+> >
+> > +       def make(self, jobs, build_dir, make_options) -> None:
+> > +               command = ['make', 'ARCH=' + self._linux_arch, '--jobs=' + str(jobs)]
+> > +               if make_options:
+> > +                       command.extend(make_options)
+> > +               if self._cross_compile:
+> > +                       command += ['CROSS_COMPILE=' + self._cross_compile]
+> > +               if build_dir:
+> > +                       command += ['O=' + build_dir]
+> > +               print(' '.join(command))
+> > +               try:
+> > +                       proc = subprocess.Popen(command,
+> > +                                               stderr=subprocess.PIPE,
+> > +                                               stdout=subprocess.DEVNULL)
+> > +               except OSError as e:
+> > +                       raise BuildError('Could not call execute make: ' + e)
+> > +               except subprocess.CalledProcessError as e:
+> > +                       raise BuildError(e.output)
+> > +               _, stderr = proc.communicate()
+> > +               if proc.returncode != 0:
+> > +                       raise BuildError(stderr.decode())
+> > +               if stderr:  # likely only due to build warnings
+> > +                       print(stderr.decode())
+> > +
+> > +       def run(self, params, timeout, build_dir, outfile) -> None:
+> > +               pass
+> > +
+> > +
+> > +QemuArchParams = namedtuple('QemuArchParams', ['linux_arch',
+> > +                                              'qemuconfig',
+> > +                                              'qemu_arch',
+> > +                                              'kernel_path',
+> > +                                              'kernel_command_line',
+> > +                                              'extra_qemu_params'])
+> > +
+> > +
+> > +QEMU_ARCHS = {
+> > +       'i386'          : QemuArchParams(linux_arch='i386',
+> > +                               qemuconfig='CONFIG_SERIAL_8250=y\nCONFIG_SERIAL_8250_CONSOLE=y',
+> 
+> I'm not keen on these configs being condensed like this in the source.
+> As mentioned below, moving the QemuArchParams to a separate file
+> helps, but even then it'd be nice to at least have each entry on a
+> separate line like with 'arm' below.
+
+Good to note. I was not sure about the multiline strings, part of me
+thought they were an improvement. Part of me thought they were horribly
+ugly.
+
+> The other option would be to have this as a path to a separate
+> Kconfig/.kunitconfig file with these configs, rather than having them
+> inline here. I fear that could lead to every architecture needing
+> several support files, though some (e.g. x86/x86_64/alpha/sparc) could
+> share a file.
+
+Yeah, I went back and forth on it. Part of me thinks it is nice to have
+all your configs in one place. The other part of me agrees with what you
+said here. I think I will stick with the way I am doing it now for no
+other reason than that's the way I already have it. If someone feels
+strongly though, I would be happy to change it.
+
+> > +                               qemu_arch='x86_64',
+> > +                               kernel_path='arch/x86/boot/bzImage',
+> > +                               kernel_command_line='console=ttyS0',
+> > +                               extra_qemu_params=['']),
+> > +       'x86_64'        : QemuArchParams(linux_arch='x86_64',
+> > +                               qemuconfig='CONFIG_SERIAL_8250=y\nCONFIG_SERIAL_8250_CONSOLE=y',
+> > +                               qemu_arch='x86_64',
+> > +                               kernel_path='arch/x86/boot/bzImage',
+> > +                               kernel_command_line='console=ttyS0',
+> > +                               extra_qemu_params=['']),
+> > +       'arm'           : QemuArchParams(linux_arch='arm',
+> > +                               qemuconfig='''CONFIG_ARCH_VIRT=y
+> > +CONFIG_SERIAL_AMBA_PL010=y
+> > +CONFIG_SERIAL_AMBA_PL010_CONSOLE=y
+> > +CONFIG_SERIAL_AMBA_PL011=y
+> > +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+> > +                               qemu_arch='arm',
+> > +                               kernel_path='arch/arm/boot/zImage',
+> > +                               kernel_command_line='console=ttyAMA0',
+> > +                               extra_qemu_params=['-machine virt']),
+> > +       'arm64'         : QemuArchParams(linux_arch='arm64',
+> > +                               qemuconfig='''CONFIG_SERIAL_AMBA_PL010=y
+> > +CONFIG_SERIAL_AMBA_PL010_CONSOLE=y
+> > +CONFIG_SERIAL_AMBA_PL011=y
+> > +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+> > +                               qemu_arch='aarch64',
+> > +                               kernel_path='arch/arm64/boot/Image.gz',
+> > +                               kernel_command_line='console=ttyAMA0',
+> > +                               extra_qemu_params=['-machine virt', '-cpu cortex-a57']),
+> > +       'alpha'         : QemuArchParams(linux_arch='alpha',
+> > +                               qemuconfig='CONFIG_SERIAL_8250=y\nCONFIG_SERIAL_8250_CONSOLE=y',
+> > +                               qemu_arch='alpha',
+> > +                               kernel_path='arch/alpha/boot/vmlinux',
+> > +                               kernel_command_line='console=ttyS0',
+> > +                               extra_qemu_params=['']),
+> > +       'powerpc'       : QemuArchParams(linux_arch='powerpc',
+> > +                               qemuconfig='CONFIG_PPC64=y\nCONFIG_SERIAL_8250=y\nCONFIG_SERIAL_8250_CONSOLE=y\nCONFIG_HVC_CONSOLE=y',
+> > +                               qemu_arch='ppc64',
+> > +                               kernel_path='vmlinux',
+> > +                               kernel_command_line='console=ttyS0',
+> > +                               extra_qemu_params=['-M pseries', '-cpu power8']),
+> > +       'riscv'         : QemuArchParams(linux_arch='riscv',
+> > +                               qemuconfig='CONFIG_SOC_VIRT=y\nCONFIG_SERIAL_8250=y\nCONFIG_SERIAL_8250_CONSOLE=y\nCONFIG_SERIAL_OF_PLATFORM=y\nCONFIG_SERIAL_EARLYCON_RISCV_SBI=y',
+> > +                               qemu_arch='riscv64',
+> > +                               kernel_path='arch/riscv/boot/Image',
+> > +                               kernel_command_line='console=ttyS0',
+> > +                               extra_qemu_params=['-machine virt', '-cpu rv64', '-bios opensbi-riscv64-generic-fw_dynamic.bin']),
+> > +       's390'          : QemuArchParams(linux_arch='s390',
+> > +                               qemuconfig='CONFIG_EXPERT=y\nCONFIG_TUNE_ZEC12=y\nCONFIG_NUMA=y\nCONFIG_MODULES=y',
+> > +                               qemu_arch='s390x',
+> > +                               kernel_path='arch/s390/boot/bzImage',
+> > +                               kernel_command_line='console=ttyS0',
+> > +                               extra_qemu_params=[
+> > +                                               '-machine s390-ccw-virtio',
+> > +                                               '-cpu qemu',]),
+> > +       'sparc'         : QemuArchParams(linux_arch='sparc',
+> > +                               qemuconfig='CONFIG_SERIAL_8250=y\nCONFIG_SERIAL_8250_CONSOLE=y',
+> > +                               qemu_arch='sparc',
+> > +                               kernel_path='arch/sparc/boot/zImage',
+> > +                               kernel_command_line='console=ttyS0 mem=256M',
+> > +                               extra_qemu_params=['-m 256']),
+> > +}
+> 
+> So, as mentioned, I agree with Daniel in thinking that this really
+> doesn't belong here. Ideally, I think these configs should be
+> specified somewhere else, either as a (alas, very long) series of
+> command-line arguments, or in a separate file. Moving them to a single
+> 'qemu_configs.py' as Daniel mentioned would be an improvement, but
+> IMHO still falls well short of ideal. I think each config should be in
+> its own file, as there are several reasons someone might want to have
+> multiple different configs for a given architecture and we'll want
+> people to be able to add/remove these easily in their own
+> environments.
+> 
+> The proposed solution of having each config in a separate file --
+> which we discussed offline -- is a big improvement:
+> https://kunit-review.googlesource.com/c/linux/+/4489
+
+Good to know, I will incorporate it into the next revision.
+
+> I still think that the python format here is a bit verbose and ugly,
+> but it's probably worth it compared to adding a parser for a whole new
+> type of config file.
+
+That's where I am at with it. I feel as though I have added enough
+parsers to the kernel tree. :-)
+
+> Similarly, I'm not sure about keeping a separate
+> qemu_configs.py around with the builtin defaults rather than just
+> having them all as separate files all the time. (Even appreciating
+> that that requires some filename magic to find the correct file.)
+> These are all more nitpicky though.
+
+This raises an excellent point, what should we do with the --arch flag
+if we add the --qemu_config flag?
+
+The only reason I just added --qemu_config without touching the existing
+configs was just because I was being lazy; nevertheless, my original
+plan was just to drop --arch entirely and just expect the user to know
+that to run KUnit on i386 you need:
+
+tools/testing/kunit/kunit.py run --qemu_config=./tools/testing/kunit/qemu_configs/i386.py
+
+and to run KUnit on arm you need:
+
+tools/testing/kunit/kunit.py run --qemu_config=./tools/testing/kunit/qemu_configs/arm.py --cross_compile=arm-linux-gnueabihf-
+
+(or something like that).
+
+Is that OK, or as you hint, should we do some file system magic so that
+you have the option of
+
+tools/testing/kunit/kunit.py run --qemu_config=./tools/testing/kunit/qemu_configs/i386.py
+
+OR
+
+tools/testing/kunit/kunit.py run --arch=i386
+
+?
+
+My preference is for the former since it is more explicit about what it
+is doing.
+
+> > +
+> > +class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+> > +
+> > +       def __init__(self, qemu_arch_params, cross_compile):
+> > +               super().__init__(linux_arch=qemu_arch_params.linux_arch,
+> > +                                cross_compile=cross_compile)
+> > +               self._qemuconfig = qemu_arch_params.qemuconfig
+> > +               self._qemu_arch = qemu_arch_params.qemu_arch
+> > +               self._kernel_path = qemu_arch_params.kernel_path
+> > +               print(self._kernel_path)
+> > +               self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
+> > +               self._extra_qemu_params = qemu_arch_params.extra_qemu_params
+> > +
+> > +       def make_arch_qemuconfig(self, build_dir):
+> > +               qemuconfig = kunit_config.Kconfig()
+> > +               qemuconfig.parse_from_string(self._qemuconfig)
+> > +               qemuconfig.write_to_file(get_kconfig_path(build_dir))
+> > +
+> > +       def run(self, params, timeout, build_dir, outfile):
+> > +               kernel_path = os.path.join(build_dir, self._kernel_path)
+> > +               qemu_command = ['qemu-system-' + self._qemu_arch,
+> > +                               '-nodefaults',
+> > +                               '-m', '1024',
+> > +                               '-kernel', kernel_path,
+> > +                               '-append', '\'' + ' '.join(params + [self._kernel_command_line]) + '\'',
+> > +                               '-no-reboot',
+> > +                               '-nographic',
+> > +                               '-serial stdio'] + self._extra_qemu_params
+> > +               print(' '.join(qemu_command))
+> > +               with open(outfile, 'w') as output:
+> > +                       process = subprocess.Popen(' '.join(qemu_command),
+> > +                                                  stdin=subprocess.PIPE,
+> > +                                                  stdout=output,
+> > +                                                  stderr=subprocess.STDOUT,
+> > +                                                  text=True, shell=True)
+> > +               try:
+> > +                       process.wait(timeout=timeout)
+> > +               except Exception as e:
+> > +                       print(e)
+> > +                       process.terminate()
+> > +               return process
+> > +
+> > +class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+> > +       """An abstraction over command line operations performed on a source tree."""
+> > +
+> > +       def __init__(self):
+> > +               super().__init__(linux_arch='um', cross_compile=None)
+> > +
+> 
+> Why is cross_compile None here? Shouldn't it be possible to cross
+> compile UML kernels? (This should, I think, be possible for i386 on an
+> x86_64 host, for instance.)
+
+Fair point. Will fix.
+
+> >         def make_allyesconfig(self, build_dir, make_options) -> None:
+> >                 kunit_parser.print_with_timestamp(
+> >                         'Enabling all CONFIGs for UML...')
+> > @@ -83,32 +243,16 @@ class LinuxSourceTreeOperations(object):
+> >                 kunit_parser.print_with_timestamp(
+> >                         'Starting Kernel with all configs takes a few minutes...')
+> >
+> > -       def make(self, jobs, build_dir, make_options) -> None:
+> > -               command = ['make', 'ARCH=um', '--jobs=' + str(jobs)]
+> > -               if make_options:
+> > -                       command.extend(make_options)
+> > -               if build_dir:
+> > -                       command += ['O=' + build_dir]
+> > -               try:
+> > -                       proc = subprocess.Popen(command,
+> > -                                               stderr=subprocess.PIPE,
+> > -                                               stdout=subprocess.DEVNULL)
+> > -               except OSError as e:
+> > -                       raise BuildError('Could not call make command: ' + str(e))
+> > -               _, stderr = proc.communicate()
+> > -               if proc.returncode != 0:
+> > -                       raise BuildError(stderr.decode())
+> > -               if stderr:  # likely only due to build warnings
+> > -                       print(stderr.decode())
+> > -
+> > -       def linux_bin(self, params, timeout, build_dir) -> None:
+> > +       def run(self, params, timeout, build_dir, outfile):
+> >                 """Runs the Linux UML binary. Must be named 'linux'."""
+> >                 linux_bin = get_file_path(build_dir, 'linux')
+> >                 outfile = get_outfile_path(build_dir)
+> >                 with open(outfile, 'w') as output:
+> >                         process = subprocess.Popen([linux_bin] + params,
+> > +                                                  stdin=subprocess.PIPE,
+> >                                                    stdout=output,
+> > -                                                  stderr=subprocess.STDOUT)
+> > +                                                  stderr=subprocess.STDOUT,
+> > +                                                  text=True)
+> >                         process.wait(timeout)
+> >
+> >  def get_kconfig_path(build_dir) -> str:
+> > @@ -123,10 +267,17 @@ def get_outfile_path(build_dir) -> str:
+> >  class LinuxSourceTree(object):
+> >         """Represents a Linux kernel source tree with KUnit tests."""
+> >
+> > -       def __init__(self, build_dir: str, load_config=True, kunitconfig_path='') -> None:
+> > +       def __init__(self, build_dir: str, load_config=True, kunitconfig_path='', arch=None, cross_compile=None) -> None:
+> >                 signal.signal(signal.SIGINT, self.signal_handler)
+> > -
+> > -               self._ops = LinuxSourceTreeOperations()
+> > +               self._ops = None
+> > +               if arch is None or arch == 'um':
+> > +                       self._arch = 'um'
+> > +                       self._ops = LinuxSourceTreeOperationsUml()
+> 
+> Again, we should probably pass cross_compile through here.
+
+Yep. Will do.
+
+[...]
