@@ -2,39 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8527A37447D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 May 2021 19:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3B537466E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 May 2021 19:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236123AbhEEQ57 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 May 2021 12:57:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43374 "EHLO mail.kernel.org"
+        id S237729AbhEERSY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 May 2021 13:18:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236868AbhEEQzB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 May 2021 12:55:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7EFA861992;
-        Wed,  5 May 2021 16:38:42 +0000 (UTC)
+        id S236683AbhEEQ6J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 5 May 2021 12:58:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A056619A8;
+        Wed,  5 May 2021 16:39:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232723;
-        bh=sZURDu140O4z/6zp/lezuwLrla+Z+0BMu7Yr4aR4Sfc=;
+        s=k20201202; t=1620232776;
+        bh=hRkWyVwECxJrACDvgrt+TQxmgiORLhFnvePP7UIObDw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GTaxlvMiGXygUiNFIQ/xe/1pDgfgGD3Ikpj62yq5xqNC/s681M/THiin5LxZjX4/G
-         /h36mg+kXz8WWH64prhscYl8rg59uS3E+vnWw9f1qSeL2M+5jC5awLEaKuZwfGUO22
-         wFFhbN4hRceFcdznEO+yoXBBY7mJD8n3gVc6aapA9PZqBXYNQbewKX8RD895XXNMh5
-         SbIJm7hPAo2/BrWEZdTXPjb+0VAyMUV2ofBbvEkGyebsRigQiKJHUjmOWFpPC5oB1n
-         BI+VLbl0oJi948dXdF7Pam2mnNefuXysq1faI+iR6ONfvj1O1G73CrPcBToV6fKZcV
-         I6sSOdSDqzOCQ==
+        b=duiIkXNocQ8r9Q3vXPxll2yqda78pkZT/zdGzcOuEC5TepxFeCXY4hw42iZT6Rto2
+         93jN9BGiqHpAcVmQBvg/eVrKKQewLRgOS2byb4hmNaqe0Xwe/8xmGprtdRHaAjqdkY
+         5WhCx5UfO2JHszHAqsqtr6D+q2ECAr7TPmFT9SvEr62zGMlakGKZ9ndQiVAi9JOFCy
+         pA7L7BphYx69QnQDBEIusW6fcOL4Z30LfcCOlVsqpZ430C5kAgbTskeXinzwepe5Hs
+         RKqlgBDhRy8UE8scSpjuLmQJyETOVOwRkU1zvFKl0KrnqssRPZDWxHd8kyXPFnU/Vt
+         bGsHa59o3KTIw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Petr Machata <petrm@nvidia.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 78/85] selftests: mlxsw: Fix mausezahn invocation in ERSPAN scale test
-Date:   Wed,  5 May 2021 12:36:41 -0400
-Message-Id: <20210505163648.3462507-78-sashal@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.4 27/46] selftests: Set CC to clang in lib.mk if LLVM is set
+Date:   Wed,  5 May 2021 12:38:37 -0400
+Message-Id: <20210505163856.3463279-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210505163648.3462507-1-sashal@kernel.org>
-References: <20210505163648.3462507-1-sashal@kernel.org>
+In-Reply-To: <20210505163856.3463279-1-sashal@kernel.org>
+References: <20210505163856.3463279-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,89 +44,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Petr Machata <petrm@nvidia.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit 1233898ab758cbcf5f6fea10b8dd16a0b2c24fab ]
+[ Upstream commit 26e6dd1072763cd5696b75994c03982dde952ad9 ]
 
-The mirror_gre_scale test creates as many ERSPAN sessions as the underlying
-chip supports, and tests that they all work. In order to determine that it
-issues a stream of ICMP packets and checks if they are mirrored as
-expected.
+selftests/bpf/Makefile includes lib.mk. With the following command
+  make -j60 LLVM=1 LLVM_IAS=1  <=== compile kernel
+  make -j60 -C tools/testing/selftests/bpf LLVM=1 LLVM_IAS=1 V=1
+some files are still compiled with gcc. This patch
+fixed lib.mk issue which sets CC to gcc in all cases.
 
-However, the mausezahn invocation missed the -6 flag to identify the use of
-IPv6 protocol, and was sending ICMP messages over IPv6, as opposed to
-ICMP6. It also didn't pass an explicit source IP address, which apparently
-worked at some point in the past, but does not anymore.
-
-To fix these issues, extend the function mirror_test() in mirror_lib by
-detecting the IPv6 protocol addresses, and using a different ICMP scheme.
-Fix __mirror_gre_test() in the selftest itself to pass a source IP address.
-
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20210413153413.3027426-1-yhs@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../drivers/net/mlxsw/mirror_gre_scale.sh     |  3 ++-
- .../selftests/net/forwarding/mirror_lib.sh    | 19 +++++++++++++++++--
- 2 files changed, 19 insertions(+), 3 deletions(-)
+ tools/testing/selftests/lib.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/mirror_gre_scale.sh b/tools/testing/selftests/drivers/net/mlxsw/mirror_gre_scale.sh
-index 6f3a70df63bc..e00435753008 100644
---- a/tools/testing/selftests/drivers/net/mlxsw/mirror_gre_scale.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/mirror_gre_scale.sh
-@@ -120,12 +120,13 @@ __mirror_gre_test()
- 	sleep 5
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 3ed0134a764d..67386aa3f31d 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -1,6 +1,10 @@
+ # This mimics the top-level Makefile. We do it explicitly here so that this
+ # Makefile can operate with or without the kbuild infrastructure.
++ifneq ($(LLVM),)
++CC := clang
++else
+ CC := $(CROSS_COMPILE)gcc
++endif
  
- 	for ((i = 0; i < count; ++i)); do
-+		local sip=$(mirror_gre_ipv6_addr 1 $i)::1
- 		local dip=$(mirror_gre_ipv6_addr 1 $i)::2
- 		local htun=h3-gt6-$i
- 		local message
- 
- 		icmp6_capture_install $htun
--		mirror_test v$h1 "" $dip $htun 100 10
-+		mirror_test v$h1 $sip $dip $htun 100 10
- 		icmp6_capture_uninstall $htun
- 	done
- }
-diff --git a/tools/testing/selftests/net/forwarding/mirror_lib.sh b/tools/testing/selftests/net/forwarding/mirror_lib.sh
-index 13db1cb50e57..6406cd76a19d 100644
---- a/tools/testing/selftests/net/forwarding/mirror_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_lib.sh
-@@ -20,6 +20,13 @@ mirror_uninstall()
- 	tc filter del dev $swp1 $direction pref 1000
- }
- 
-+is_ipv6()
-+{
-+	local addr=$1; shift
-+
-+	[[ -z ${addr//[0-9a-fA-F:]/} ]]
-+}
-+
- mirror_test()
- {
- 	local vrf_name=$1; shift
-@@ -29,9 +36,17 @@ mirror_test()
- 	local pref=$1; shift
- 	local expect=$1; shift
- 
-+	if is_ipv6 $dip; then
-+		local proto=-6
-+		local type="icmp6 type=128" # Echo request.
-+	else
-+		local proto=
-+		local type="icmp echoreq"
-+	fi
-+
- 	local t0=$(tc_rule_stats_get $dev $pref)
--	$MZ $vrf_name ${sip:+-A $sip} -B $dip -a own -b bc -q \
--	    -c 10 -d 100msec -t icmp type=8
-+	$MZ $proto $vrf_name ${sip:+-A $sip} -B $dip -a own -b bc -q \
-+	    -c 10 -d 100msec -t $type
- 	sleep 0.5
- 	local t1=$(tc_rule_stats_get $dev $pref)
- 	local delta=$((t1 - t0))
+ ifeq (0,$(MAKELEVEL))
+     ifeq ($(OUTPUT),)
 -- 
 2.30.2
 
