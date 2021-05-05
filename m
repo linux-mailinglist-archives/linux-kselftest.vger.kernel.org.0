@@ -2,86 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F272373910
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 May 2021 13:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22066373B55
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 May 2021 14:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232613AbhEELLf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 May 2021 07:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S233004AbhEEMfJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 May 2021 08:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbhEELLe (ORCPT
+        with ESMTP id S232200AbhEEMfI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 May 2021 07:11:34 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701F1C061574;
-        Wed,  5 May 2021 04:10:26 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1leFPx-0002TT-22; Wed, 05 May 2021 13:10:13 +0200
-Date:   Wed, 5 May 2021 13:10:13 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
-Cc:     fw@strlen.de, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3] netfilter: nf_conntrack: Add conntrack helper for
- ESP/IPsec
-Message-ID: <20210505111013.GB12364@breakpoint.cc>
-References: <20210426123743.GB975@breakpoint.cc>
- <20210503010646.11111-1-Cole.Dishington@alliedtelesis.co.nz>
+        Wed, 5 May 2021 08:35:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57661C061574;
+        Wed,  5 May 2021 05:34:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=6nDsAgZyLnevi7PNrWtRehL0qNVNJeXiu/AjwzP/hUk=; b=O7jZ7bKH59HOcHeEyNTXh8RSfj
+        88AvWhK7SQ4O5d4bGiPLmvEQB2HI19SdqztgzDdK3mZ3wuw52rwJGJZsHl5VcWSQANqvUKg3UgMPl
+        dCWsPW/PwURSbV139Zan4c5cNQThZdkNcdvFE52oCiI1VLSEOW56vWlHhtmWbmuMXMIcdgQLjgTYt
+        jPOyze3oUKY05vcIpCPEXesuf46GtpoANYw2vYVn+Yg5RAgBcdAEnI/LFQM4fV7fZMesB/aVdnghR
+        ku/oVm2Pgipn+DFtm/4hPq8r5uZbMK3u2f24428SC9coFZ2YpSswu8t9BHpHGObzdF8b1fl5JiL0U
+        yA61Td/g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1leGgr-001CkZ-31; Wed, 05 May 2021 12:33:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 45319300103;
+        Wed,  5 May 2021 14:31:43 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0C245203E67FA; Wed,  5 May 2021 14:31:43 +0200 (CEST)
+Date:   Wed, 5 May 2021 14:31:42 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        kernel@collabora.com, krisman@collabora.com,
+        pgriffais@valvesoftware.com, z.figura12@gmail.com,
+        joel@joelfernandes.org, malteskarupke@fastmail.fm,
+        linux-api@vger.kernel.org, fweimer@redhat.com,
+        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
+        Peter Oskolkov <posk@posk.io>
+Subject: Re: [PATCH v3 00/13] Add futex2 syscalls
+Message-ID: <YJKQLkHuTH3EWJoR@hirez.programming.kicks-ass.net>
+References: <20210427231248.220501-1-andrealmeid@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210503010646.11111-1-Cole.Dishington@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210427231248.220501-1-andrealmeid@collabora.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Cole Dishington <Cole.Dishington@alliedtelesis.co.nz> wrote:
-> +/* esp hdr info to tuple */
-> +bool esp_pkt_to_tuple(const struct sk_buff *skb, unsigned int dataoff,
-> +		      struct net *net, struct nf_conntrack_tuple *tuple)
-> +{
-[..]
+On Tue, Apr 27, 2021 at 08:12:35PM -0300, André Almeida wrote:
+> Hi,
+> 
+> This patch series introduces the futex2 syscalls.
 
-> +	tuple->dst.u.esp.id = esp_entry->esp_id;
-> +	tuple->src.u.esp.id = esp_entry->esp_id;
-> +	return true;
-> +}
+I still utterly detest that this adds a second hash-table for no
+descernable reason.
 
-Did not consider this before, and doesn't matter if we'd follow this
-approach or expectation-based solution:
+The new syscall interface does not depend on that in any way, you
+previously implemented the multi-wait thing in the current futex code.
 
-Do we need to be mindful about hole-punching?
-
-The above will automatically treat the incoming (never-seen-before)
-ESP packet as being part of the outgoing one, i.e. this will match
-ESTABLISHED rule, not NEW.
-
-With expectation based approach, this will auto-match a RELATED rule.
-
-With normal expectations as used by helpers (ftp, sip and so on),
-we nowadays don't do such auto-accept schemes anymore but instead
-require explicit configuation, e.g. something like
-
-iptables -t raw -p tcp -A PREROUTING -s $allowed  -d $ftpserver -j CT --helper "ftp"
-
-... to make it explicit that the kernel may automatically permit
-incoming connection requests to $allowed from $ftpserver.
-
-Do we need to worry about this for ESP too?
-
-If the expectation-based route is taken, another patch could be piled on
-top that adds a fake ESP helper, whose only function is to let
-esp_pkt_to_tuple() check if the 'outgoing/seen-before' ESP connection
-has been configured with the "esp" helper, and then allow the expectation
-(or, not allow it in case the existing esp ct doesn't have the esp helper).
+Like I said last time; I'm okay with the new interface, but I don't see
+why you need to reimplement the insides, that's all pointless code
+duplication.
