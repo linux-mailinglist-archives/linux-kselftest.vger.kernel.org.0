@@ -2,181 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D709374F16
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 May 2021 07:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 703323755E4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 May 2021 16:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbhEFF4y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 May 2021 01:56:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47104 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232985AbhEFF4l (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 May 2021 01:56:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D1D261176;
-        Thu,  6 May 2021 05:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620280544;
-        bh=b+2RfTUiONjTPWj2RWgXPoWQTd6b2XSJBDS+ELenGm8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ki9gJgbSxz1VITZYQEehYLrGZiuk919hoLmGzFaLib9jhJVeN1TGNFk4jxlx3xdhN
-         gytHdKTbNLnjUPbKkN2eiFUB4r6u1Dvsoc4ZD6YMRiAZ/Btg7s6cdA1RUdV+uGOC3V
-         UTUINEZYoBcp0OZUO7VHpAq5rdXzHSMB+R78Ghr1TPQ2l6PptGBbbOSHL3XFpZXDvX
-         3jl07s5BNDhy+aQrs5ZQ/xPngPRdomFEI+62RP5HOtfXIQ7a9bJfBzMelfuTVKUDfG
-         0HOwPFxk0F2TmdkD7Ygb7KBAql7ExiVhN2No7O2fSD1ikKC4ngb+6YAUU2NMW+IYHT
-         HHY7zGuvLE+gA==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-sgx@vger.kernel.org, dave.hansen@intel.com,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests/sgx: Report kselftest results
-Date:   Thu,  6 May 2021 08:55:37 +0300
-Message-Id: <20210506055537.132199-2-jarkko@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210506055537.132199-1-jarkko@kernel.org>
-References: <20210506055537.132199-1-jarkko@kernel.org>
+        id S234919AbhEFOtr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 May 2021 10:49:47 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39838 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234759AbhEFOtq (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 6 May 2021 10:49:46 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 13DDA1F439BE
+Subject: Re: [PATCH v3 00/13] Add futex2 syscalls
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        kernel@collabora.com, krisman@collabora.com,
+        pgriffais@valvesoftware.com, z.figura12@gmail.com,
+        joel@joelfernandes.org, malteskarupke@fastmail.fm,
+        linux-api@vger.kernel.org, fweimer@redhat.com,
+        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
+        Peter Oskolkov <posk@posk.io>
+References: <20210427231248.220501-1-andrealmeid@collabora.com>
+ <YJKQLkHuTH3EWJoR@hirez.programming.kicks-ass.net>
+ <87bl9pi7if.ffs@nanos.tec.linutronix.de>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+Message-ID: <36e6951e-e7a9-5e82-200e-17668f02447f@collabora.com>
+Date:   Thu, 6 May 2021 11:48:36 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
+In-Reply-To: <87bl9pi7if.ffs@nanos.tec.linutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use ksft API documented in tools/testing/selftests/kselftest.h to count
-succeeded and failed tests and print all the debug output with
-ksft_print_msg(), as advised by the documentation.
+Hi Thomas, Peter,
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
+Às 11:23 de 05/05/21, Thomas Gleixner escreveu:
+> On Wed, May 05 2021 at 14:31, Peter Zijlstra wrote:
+> 
+>> On Tue, Apr 27, 2021 at 08:12:35PM -0300, André Almeida wrote:
+>>> Hi,
+>>>
+>>> This patch series introduces the futex2 syscalls.
+>>
+>> I still utterly detest that this adds a second hash-table for no
+>> descernable reason.
+>>
+>> The new syscall interface does not depend on that in any way, you
+>> previously implemented the multi-wait thing in the current futex code.
+>>
+>> Like I said last time; I'm okay with the new interface, but I don't see
+>> why you need to reimplement the insides, that's all pointless code
+>> duplication.
+> 
+> The real question is whether we really need to model all of this along
+> the existing futex functionality. I wouldn't mind a new infrastructure
+> which addresses all the other known issues of futexes and makes the
+> overall design less horrible than what we have now.
+> 
 
-v2:
-* Add the missing string argument for the test case to
-  ksft_test_result_pass() and ksft_test_result_fail() calls.
+Thank you for the feedback. I think we are completing another full 
+circle on the proposals. I've proposed a futex2 interface that would use 
+the current futex infrastructure[0], but my understanding is that this 
+is discouraged given it needs to do big changes in the current futex 
+code. Given that, I proceeded with developing a new code for futex2, 
+taking in consideration those new use cases (waitv, NUMA, sizes) and 
+known issues.
 
- tools/testing/selftests/sgx/main.c | 48 +++++++++++++++++-------------
- 1 file changed, 27 insertions(+), 21 deletions(-)
+As you know, my original goal with this work is to have a native and 
+efficient way to wait on multiple objects. Right now, we've proposed it 
+in three different ways, but so far none had much success in being 
+merged. Of course, I want to take the approach that better fits the 
+community goals, as this patchset suggests - a work that goes away 
+further than just implementing a multi-wait feature. But for the benefit 
+of not walking in circles, what we need back is a clear direction, in 
+order to proceed that.
 
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 43da68388e25..d61db69f65c6 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -20,6 +20,8 @@
- #include "main.h"
- #include "../kselftest.h"
- 
-+#define NR_KSELFTESTS 3
-+
- static const uint64_t MAGIC = 0x1122334455667788ULL;
- vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
- 
-@@ -107,34 +109,35 @@ static Elf64_Sym *vdso_symtab_get(struct vdso_symtab *symtab, const char *name)
- 	return NULL;
- }
- 
--bool report_results(struct sgx_enclave_run *run, int ret, uint64_t result,
--		  const char *test)
-+bool update_ksft(struct sgx_enclave_run *run, int ret, uint64_t result, const char *test)
- {
- 	bool valid = true;
- 
- 	if (ret) {
--		printf("FAIL: %s() returned: %d\n", test, ret);
-+		ksft_print_msg("%s: ret = %d\n", test, ret);
- 		valid = false;
- 	}
- 
- 	if (run->function != EEXIT) {
--		printf("FAIL: %s() function, expected: %u, got: %u\n", test, EEXIT,
--		       run->function);
-+		ksft_print_msg("%s: function, expected: %u, got: %u\n", test, EEXIT, run->function);
- 		valid = false;
- 	}
- 
- 	if (result != MAGIC) {
--		printf("FAIL: %s(), expected: 0x%lx, got: 0x%lx\n", test, MAGIC,
--		       result);
-+		ksft_print_msg("%s: expected: 0x%lx, got: 0x%lx\n", test, MAGIC, result);
- 		valid = false;
- 	}
- 
- 	if (run->user_data) {
--		printf("FAIL: %s() user data, expected: 0x0, got: 0x%llx\n",
--		       test, run->user_data);
-+		ksft_print_msg("%s: user data, expected: 0x0, got: 0x%llx\n", test, run->user_data);
- 		valid = false;
- 	}
- 
-+	if (valid)
-+		ksft_test_result_pass("%s", test);
-+	else
-+		ksft_test_result_fail("%s", test);
-+
- 	return valid;
- }
- 
-@@ -156,6 +159,9 @@ int main(int argc, char *argv[])
- 	void *addr;
- 	int ret;
- 
-+	ksft_print_header();
-+	ksft_set_plan(NR_KSELFTESTS);
-+
- 	memset(&run, 0, sizeof(run));
- 
- 	if (!encl_load("test_encl.elf", &encl)) {
-@@ -178,8 +184,8 @@ int main(int argc, char *argv[])
- 		addr = mmap((void *)encl.encl_base + seg->offset, seg->size,
- 			    seg->prot, MAP_SHARED | MAP_FIXED, encl.fd, 0);
- 		if (addr == MAP_FAILED) {
--			perror("mmap() segment failed");
--			exit(KSFT_FAIL);
-+			ksft_print_msg("mmap() segment: %s", strerror(errno));
-+			goto err;
- 		}
- 	}
- 
-@@ -200,32 +206,32 @@ int main(int argc, char *argv[])
- 
- 	vdso_sgx_enter_enclave = addr + sgx_enter_enclave_sym->st_value;
- 
-+	/* 1: unclobbered vDSO */
- 	ret = sgx_enter_enclave((void *)&MAGIC, &result, 0, EENTER,
--					    NULL, NULL, &run);
--	if (!report_results(&run, ret, result, "sgx_enter_enclave_unclobbered"))
-+				NULL, NULL, &run);
-+	if (!update_ksft(&run, ret, result, "unclobbered"))
- 		goto err;
- 
--
--	/* Invoke the vDSO directly. */
-+	/* 2: clobbered vDSO */
- 	result = 0;
- 	ret = vdso_sgx_enter_enclave((unsigned long)&MAGIC, (unsigned long)&result,
- 				     0, EENTER, 0, 0, &run);
--	if (!report_results(&run, ret, result, "sgx_enter_enclave"))
-+	if (!update_ksft(&run, ret, result, "sgx_enter_enclave"))
- 		goto err;
- 
--	/* And with an exit handler. */
-+	/* 3: clobbered vDSO with a callback. */
- 	run.user_handler = (__u64)user_handler;
- 	run.user_data = 0xdeadbeef;
-+
- 	ret = vdso_sgx_enter_enclave((unsigned long)&MAGIC, (unsigned long)&result,
- 				     0, EENTER, 0, 0, &run);
--	if (!report_results(&run, ret, result, "user_handler"))
-+	if (!update_ksft(&run, ret, result, "user_handler"))
- 		goto err;
- 
--	printf("SUCCESS\n");
- 	encl_delete(&encl);
--	exit(KSFT_PASS);
-+	ksft_exit_pass();
- 
- err:
- 	encl_delete(&encl);
--	exit(KSFT_FAIL);
-+	ksft_exit_fail();
- }
--- 
-2.31.1
+> But that needs input from futex users (libraries and other horrible
+> wrappers) to figure out what they really need, hate, like or do not care
+> about.
+> 
 
+I think it's clear the use case for "wait on multiple" as a way to 
+emulate WinAPI and for Linux native loads like game engines is valid. 
+We have been running it in the field with success for the past year or 
+so. I'm also working with userspace communities to get a better sense of 
+how this and other features would work in the real world. You can read 
+an example of that effort with Chromium developers at [1], and there are 
+more to come.
+
+Maybe support for multiple futexes and futex2 are disjoint things? The 
+multi-wait can be achieved through a (somewhat) simple implementation, 
+on the old interface or in a new one, while for futex2 we are still 
+unsure about how it should look like and its blocking this feature.
+
+> Without that we are bound to pile more crap on the existing pile of
+> horrors forever.
+> 
+> Thanks,
+> 
+>          tglx
+> 
+
+Thanks,
+	André
+
+[0] 
+https://lore.kernel.org/lkml/20200612185122.327860-2-andrealmeid@collabora.com/
+[1] https://groups.google.com/a/chromium.org/g/chromium-dev/c/5hpH3ckr6_Y
