@@ -2,160 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45724374F14
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 May 2021 07:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D709374F16
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 May 2021 07:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbhEFF4j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 May 2021 01:56:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47032 "EHLO mail.kernel.org"
+        id S233007AbhEFF4y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 May 2021 01:56:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47104 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232985AbhEFF4j (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 May 2021 01:56:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5DC061176;
-        Thu,  6 May 2021 05:55:40 +0000 (UTC)
+        id S232985AbhEFF4l (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 6 May 2021 01:56:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D1D261176;
+        Thu,  6 May 2021 05:55:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620280541;
-        bh=r/f6HR9ysli6NCcEi1eXOMOSqjPye+kqEX8LgIuGMi0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UnYNpmq7UCbmkwA/82qaRJhRQPWBVTITREVcvFLofpzOpG7YDk/ITZaUzAn/1bELA
-         /XSH9caxaeZNwypbkRss4kaaCUb8XyOM7wtQR04JyNyYVRnOu1+JjylzK9Fbk41fUP
-         x7v9SDbflOXNShRmIBSU7fnxg2NTokejO3Abfr0w21GAGACJLvLF5OUTM0NRj8doAM
-         24ToMPJ0mSCc/wZ2CyAYCHvXtVFnjg4KcYrH7K+sdAwAYTkEQf4R2YpVSvuV13Y1L0
-         PN61ZJ2ftm/qJFpAOYiIQ2KW+/rjWX+loMBRIT5fFTImDwXNkGmBo++6oQccV3TjbA
-         x37ksqrfZ1siQ==
+        s=k20201202; t=1620280544;
+        bh=b+2RfTUiONjTPWj2RWgXPoWQTd6b2XSJBDS+ELenGm8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ki9gJgbSxz1VITZYQEehYLrGZiuk919hoLmGzFaLib9jhJVeN1TGNFk4jxlx3xdhN
+         gytHdKTbNLnjUPbKkN2eiFUB4r6u1Dvsoc4ZD6YMRiAZ/Btg7s6cdA1RUdV+uGOC3V
+         UTUINEZYoBcp0OZUO7VHpAq5rdXzHSMB+R78Ghr1TPQ2l6PptGBbbOSHL3XFpZXDvX
+         3jl07s5BNDhy+aQrs5ZQ/xPngPRdomFEI+62RP5HOtfXIQ7a9bJfBzMelfuTVKUDfG
+         0HOwPFxk0F2TmdkD7Ygb7KBAql7ExiVhN2No7O2fSD1ikKC4ngb+6YAUU2NMW+IYHT
+         HHY7zGuvLE+gA==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     linux-sgx@vger.kernel.org, dave.hansen@intel.com,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] selftests/sgx: Rename 'eenter' and 'sgx_call_vdso'
-Date:   Thu,  6 May 2021 08:55:36 +0300
-Message-Id: <20210506055537.132199-1-jarkko@kernel.org>
+Subject: [PATCH v2 2/2] selftests/sgx: Report kselftest results
+Date:   Thu,  6 May 2021 08:55:37 +0300
+Message-Id: <20210506055537.132199-2-jarkko@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210506055537.132199-1-jarkko@kernel.org>
+References: <20210506055537.132199-1-jarkko@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rename symbols for better clarity:
-
-* 'eenter' -> 'vdso_sgx_enter_enclave'
-* 'sgx_call_vdso' -> 'sgx_enter_enclave'
+Use ksft API documented in tools/testing/selftests/kselftest.h to count
+succeeded and failed tests and print all the debug output with
+ksft_print_msg(), as advised by the documentation.
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
 
 v2:
-Refined the renames just a bit.
+* Add the missing string argument for the test case to
+  ksft_test_result_pass() and ksft_test_result_fail() calls.
 
- tools/testing/selftests/sgx/call.S |  6 +++---
- tools/testing/selftests/sgx/main.c | 25 +++++++++++++------------
- tools/testing/selftests/sgx/main.h |  4 ++--
- 3 files changed, 18 insertions(+), 17 deletions(-)
+ tools/testing/selftests/sgx/main.c | 48 +++++++++++++++++-------------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
 
-diff --git a/tools/testing/selftests/sgx/call.S b/tools/testing/selftests/sgx/call.S
-index 4ecadc7490f4..b09a25890f3b 100644
---- a/tools/testing/selftests/sgx/call.S
-+++ b/tools/testing/selftests/sgx/call.S
-@@ -5,8 +5,8 @@
- 
- 	.text
- 
--	.global sgx_call_vdso
--sgx_call_vdso:
-+	.global sgx_enter_enclave
-+sgx_enter_enclave:
- 	.cfi_startproc
- 	push	%r15
- 	.cfi_adjust_cfa_offset	8
-@@ -27,7 +27,7 @@ sgx_call_vdso:
- 	.cfi_adjust_cfa_offset	8
- 	push	0x38(%rsp)
- 	.cfi_adjust_cfa_offset	8
--	call	*eenter(%rip)
-+	call	*vdso_sgx_enter_enclave(%rip)
- 	add	$0x10, %rsp
- 	.cfi_adjust_cfa_offset	-0x10
- 	pop	%rbx
 diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index d304a4044eb9..43da68388e25 100644
+index 43da68388e25..d61db69f65c6 100644
 --- a/tools/testing/selftests/sgx/main.c
 +++ b/tools/testing/selftests/sgx/main.c
-@@ -21,7 +21,7 @@
+@@ -20,6 +20,8 @@
+ #include "main.h"
  #include "../kselftest.h"
  
++#define NR_KSELFTESTS 3
++
  static const uint64_t MAGIC = 0x1122334455667788ULL;
--vdso_sgx_enter_enclave_t eenter;
-+vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
+ vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
  
- struct vdso_symtab {
- 	Elf64_Sym *elf_symtab;
-@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
+@@ -107,34 +109,35 @@ static Elf64_Sym *vdso_symtab_get(struct vdso_symtab *symtab, const char *name)
+ 	return NULL;
+ }
+ 
+-bool report_results(struct sgx_enclave_run *run, int ret, uint64_t result,
+-		  const char *test)
++bool update_ksft(struct sgx_enclave_run *run, int ret, uint64_t result, const char *test)
  {
- 	struct sgx_enclave_run run;
- 	struct vdso_symtab symtab;
--	Elf64_Sym *eenter_sym;
-+	Elf64_Sym *sgx_enter_enclave_sym;
- 	uint64_t result = 0;
- 	struct encl encl;
- 	unsigned int i;
-@@ -194,29 +194,30 @@ int main(int argc, char *argv[])
- 	if (!vdso_get_symtab(addr, &symtab))
+ 	bool valid = true;
+ 
+ 	if (ret) {
+-		printf("FAIL: %s() returned: %d\n", test, ret);
++		ksft_print_msg("%s: ret = %d\n", test, ret);
+ 		valid = false;
+ 	}
+ 
+ 	if (run->function != EEXIT) {
+-		printf("FAIL: %s() function, expected: %u, got: %u\n", test, EEXIT,
+-		       run->function);
++		ksft_print_msg("%s: function, expected: %u, got: %u\n", test, EEXIT, run->function);
+ 		valid = false;
+ 	}
+ 
+ 	if (result != MAGIC) {
+-		printf("FAIL: %s(), expected: 0x%lx, got: 0x%lx\n", test, MAGIC,
+-		       result);
++		ksft_print_msg("%s: expected: 0x%lx, got: 0x%lx\n", test, MAGIC, result);
+ 		valid = false;
+ 	}
+ 
+ 	if (run->user_data) {
+-		printf("FAIL: %s() user data, expected: 0x0, got: 0x%llx\n",
+-		       test, run->user_data);
++		ksft_print_msg("%s: user data, expected: 0x0, got: 0x%llx\n", test, run->user_data);
+ 		valid = false;
+ 	}
+ 
++	if (valid)
++		ksft_test_result_pass("%s", test);
++	else
++		ksft_test_result_fail("%s", test);
++
+ 	return valid;
+ }
+ 
+@@ -156,6 +159,9 @@ int main(int argc, char *argv[])
+ 	void *addr;
+ 	int ret;
+ 
++	ksft_print_header();
++	ksft_set_plan(NR_KSELFTESTS);
++
+ 	memset(&run, 0, sizeof(run));
+ 
+ 	if (!encl_load("test_encl.elf", &encl)) {
+@@ -178,8 +184,8 @@ int main(int argc, char *argv[])
+ 		addr = mmap((void *)encl.encl_base + seg->offset, seg->size,
+ 			    seg->prot, MAP_SHARED | MAP_FIXED, encl.fd, 0);
+ 		if (addr == MAP_FAILED) {
+-			perror("mmap() segment failed");
+-			exit(KSFT_FAIL);
++			ksft_print_msg("mmap() segment: %s", strerror(errno));
++			goto err;
+ 		}
+ 	}
+ 
+@@ -200,32 +206,32 @@ int main(int argc, char *argv[])
+ 
+ 	vdso_sgx_enter_enclave = addr + sgx_enter_enclave_sym->st_value;
+ 
++	/* 1: unclobbered vDSO */
+ 	ret = sgx_enter_enclave((void *)&MAGIC, &result, 0, EENTER,
+-					    NULL, NULL, &run);
+-	if (!report_results(&run, ret, result, "sgx_enter_enclave_unclobbered"))
++				NULL, NULL, &run);
++	if (!update_ksft(&run, ret, result, "unclobbered"))
  		goto err;
  
--	eenter_sym = vdso_symtab_get(&symtab, "__vdso_sgx_enter_enclave");
--	if (!eenter_sym)
-+	sgx_enter_enclave_sym = vdso_symtab_get(&symtab, "__vdso_sgx_enter_enclave");
-+	if (!sgx_enter_enclave_sym)
- 		goto err;
- 
--	eenter = addr + eenter_sym->st_value;
-+	vdso_sgx_enter_enclave = addr + sgx_enter_enclave_sym->st_value;
- 
--	ret = sgx_call_vdso((void *)&MAGIC, &result, 0, EENTER, NULL, NULL, &run);
--	if (!report_results(&run, ret, result, "sgx_call_vdso"))
-+	ret = sgx_enter_enclave((void *)&MAGIC, &result, 0, EENTER,
-+					    NULL, NULL, &run);
-+	if (!report_results(&run, ret, result, "sgx_enter_enclave_unclobbered"))
- 		goto err;
- 
- 
- 	/* Invoke the vDSO directly. */
+-
+-	/* Invoke the vDSO directly. */
++	/* 2: clobbered vDSO */
  	result = 0;
--	ret = eenter((unsigned long)&MAGIC, (unsigned long)&result, 0, EENTER,
--		     0, 0, &run);
--	if (!report_results(&run, ret, result, "eenter"))
-+	ret = vdso_sgx_enter_enclave((unsigned long)&MAGIC, (unsigned long)&result,
-+				     0, EENTER, 0, 0, &run);
-+	if (!report_results(&run, ret, result, "sgx_enter_enclave"))
+ 	ret = vdso_sgx_enter_enclave((unsigned long)&MAGIC, (unsigned long)&result,
+ 				     0, EENTER, 0, 0, &run);
+-	if (!report_results(&run, ret, result, "sgx_enter_enclave"))
++	if (!update_ksft(&run, ret, result, "sgx_enter_enclave"))
  		goto err;
  
- 	/* And with an exit handler. */
+-	/* And with an exit handler. */
++	/* 3: clobbered vDSO with a callback. */
  	run.user_handler = (__u64)user_handler;
  	run.user_data = 0xdeadbeef;
--	ret = eenter((unsigned long)&MAGIC, (unsigned long)&result, 0, EENTER,
--		     0, 0, &run);
-+	ret = vdso_sgx_enter_enclave((unsigned long)&MAGIC, (unsigned long)&result,
-+				     0, EENTER, 0, 0, &run);
- 	if (!report_results(&run, ret, result, "user_handler"))
++
+ 	ret = vdso_sgx_enter_enclave((unsigned long)&MAGIC, (unsigned long)&result,
+ 				     0, EENTER, 0, 0, &run);
+-	if (!report_results(&run, ret, result, "user_handler"))
++	if (!update_ksft(&run, ret, result, "user_handler"))
  		goto err;
  
-diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
-index 67211a708f04..68672fd86cf9 100644
---- a/tools/testing/selftests/sgx/main.h
-+++ b/tools/testing/selftests/sgx/main.h
-@@ -35,7 +35,7 @@ bool encl_load(const char *path, struct encl *encl);
- bool encl_measure(struct encl *encl);
- bool encl_build(struct encl *encl);
+-	printf("SUCCESS\n");
+ 	encl_delete(&encl);
+-	exit(KSFT_PASS);
++	ksft_exit_pass();
  
--int sgx_call_vdso(void *rdi, void *rsi, long rdx, u32 function, void *r8, void *r9,
--		  struct sgx_enclave_run *run);
-+int sgx_enter_enclave(void *rdi, void *rsi, long rdx, u32 function, void *r8, void *r9,
-+		      struct sgx_enclave_run *run);
- 
- #endif /* MAIN_H */
+ err:
+ 	encl_delete(&encl);
+-	exit(KSFT_FAIL);
++	ksft_exit_fail();
+ }
 -- 
 2.31.1
 
