@@ -2,281 +2,286 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC4F375A67
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 May 2021 20:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601A0375CAC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 May 2021 23:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbhEFSty (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 May 2021 14:49:54 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:23448 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229622AbhEFStw (ORCPT
+        id S230056AbhEFVOR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 May 2021 17:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229852AbhEFVOR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 May 2021 14:49:52 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 146Ie0Id095816;
-        Thu, 6 May 2021 14:48:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=Wc+kGeasxC6SCjHD/hF7VUIpoQ6yJFeE+vXN7W7+C4U=;
- b=OTVCDM3WySurOF5XXn57WUpqZhxVqXaTB8D+to5XbmiwW+4XK39ESsbHdU0eKsg4gHg5
- M9m1v87wap5KMdARxbTYfS1Vkb6dmoqLJm45GOW5vi6sAw+ClYZG/Ukudm5sDTA9NOFH
- lAGH29vry4j7aTa16opQjvhkXs8HZHCle5EwO6S4TO/+JIue4T7X3+GuQjZGl4wGF28a
- Dpn1ZEybliVEIcSb0RpYDt8VtfWlWeVPFwKY1OJGaRu12yLUqdQe6uSGPBNEsPdcxhr7
- j8DvjnPv68EtoQJ8p+h5nrehmQKUKBRYJFWRnD+iSaZEYAdVycCRCmbjkhKSILB2deGB Nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38cmsfa5we-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 May 2021 14:48:05 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 146IeELI097074;
-        Thu, 6 May 2021 14:48:04 -0400
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38cmsfa5vr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 May 2021 14:48:04 -0400
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 146IcEn9017016;
-        Thu, 6 May 2021 18:48:03 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma01dal.us.ibm.com with ESMTP id 38bee1150t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 May 2021 18:48:03 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 146Im26m21758272
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 May 2021 18:48:02 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41B3C78068;
-        Thu,  6 May 2021 18:48:02 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55FB77805F;
-        Thu,  6 May 2021 18:47:49 +0000 (GMT)
-Received: from jarvis (unknown [9.80.192.238])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  6 May 2021 18:47:49 +0000 (GMT)
-Message-ID: <9e1953a1412fad06a9f7988a280d2d9a74ab0464.camel@linux.ibm.com>
-Subject: Re: [PATCH v18 0/9] mm: introduce memfd_secret system call to
- create "secret" memory areas
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
+        Thu, 6 May 2021 17:14:17 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D780FC061763
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 May 2021 14:13:17 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id f8so999554qth.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 May 2021 14:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=RIxjuE33E7abAYMCMrXM50GaBY0vVKTUwZ41pzyN8mw=;
+        b=vReVRGzSSRnZQlAPvJ2DacbKod0eIA0ssz5lX+asfZZg6uy3eRr+wGUPBBqAHJIQie
+         7ks2vWl/MUqITz5IsQH2dmW6V7jIG+xy/KYRnDq/QNf5XD3FjECe8zSe4KORTYSJ2ZRq
+         Llp0gaWSoZB0Z9R0UjG9PaV6HmFCU9z2N+d4e0DrOVZFEbRzhcqtkzvqqxPk2JbRpzPh
+         nFjXOgcyLy2612p+uKpG7QWQjPtu0reqF4HU+lwDhPW4sctgmt0ZDT9NBRi3t7eIuB+z
+         8wJd3IX/SreTsc0cVpAqH9PrASzE1K4IuF8Pv9krQAqA6pyfvz0iEgwHwh0x0njngTn3
+         2sBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=RIxjuE33E7abAYMCMrXM50GaBY0vVKTUwZ41pzyN8mw=;
+        b=Uyek5j6khCRwb86oxaYNM6cGtQGvDQERzyBIc97g2gbvQjdIkwwIwXwVVN+qKpxZNw
+         I/gFOJt4o/E2sYtH7zeYtZd1R8PEnpYMUooexT/oDWGV138GzD/nDnDq5iP/jGctU/rC
+         JMXB79GhJz76H3OmtzlEMz2ZmScs1wPrj9DUZR9F+HyG5WV06RXWxwJy2bIF18mJHdOh
+         efy6RWUK/jhN381VT+A4YcwVa39Vqt0+N6GchJOPm2BQe4czEFUI36GXG77ivBloU03G
+         M34f8NKNNfBkPFa+940R8b6vZZk6MARgWBwh+iuIbubr1aVRyn8D4QIxLQueqTVen5xd
+         rMvg==
+X-Gm-Message-State: AOAM530Tt5cNJOCXM4X+QiWh/fbbIUvGM7uMFMwPPYOYPdq7FSSKxgSv
+        Ue/y7ADerrRxjzmk17KLJZX7Rw==
+X-Google-Smtp-Source: ABdhPJwFMLMm7IMnquula3QCavOTg+gg74rWfhuq1EJmCOuYsiMfW5eCmRctYncEQYduQsFmbTASgA==
+X-Received: by 2002:a05:622a:3cc:: with SMTP id k12mr6387909qtx.233.1620335596632;
+        Thu, 06 May 2021 14:13:16 -0700 (PDT)
+Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id t203sm3062531qke.83.2021.05.06.14.13.13
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Thu, 06 May 2021 14:13:15 -0700 (PDT)
+Date:   Thu, 6 May 2021 14:12:59 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@eggly.anvils
+To:     Axel Rasmussen <axelrasmussen@google.com>
+cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
         Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org
-Date:   Thu, 06 May 2021 11:47:47 -0700
-In-Reply-To: <202105060916.ECDEC21@keescook>
-References: <20210303162209.8609-1-rppt@kernel.org>
-         <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
-         <de27bfae0f4fdcbb0bb4ad17ec5aeffcd774c44b.camel@linux.ibm.com>
-         <202105060916.ECDEC21@keescook>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        Brian Geffon <bgeffon@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v6 06/10] userfaultfd/shmem: modify shmem_mfill_atomic_pte
+ to use install_pte()
+In-Reply-To: <20210503180737.2487560-7-axelrasmussen@google.com>
+Message-ID: <alpine.LSU.2.11.2105061407330.699@eggly.anvils>
+References: <20210503180737.2487560-1-axelrasmussen@google.com> <20210503180737.2487560-7-axelrasmussen@google.com>
+User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: g0-aeVw8NpL0zpJxkftnXh3fKMLJvIyG
-X-Proofpoint-ORIG-GUID: QDTWMRO_ZYIJvGBc0eZdMSgIeAAZWI1o
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-06_10:2021-05-06,2021-05-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 clxscore=1015
- adultscore=0 mlxscore=0 bulkscore=0 impostorscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2105060127
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2021-05-06 at 10:33 -0700, Kees Cook wrote:
-> On Thu, May 06, 2021 at 08:26:41AM -0700, James Bottomley wrote:
-[...]
-> >    1. Memory safety for user space code.  Once the secret memory is
-> >       allocated, the user can't accidentally pass it into the
-> > kernel to be
-> >       transmitted somewhere.
+On Mon, 3 May 2021, Axel Rasmussen wrote:
+
+> In a previous commit, we added the mfill_atomic_install_pte() helper.
+> This helper does the job of setting up PTEs for an existing page, to map
+> it into a given VMA. It deals with both the anon and shmem cases, as
+> well as the shared and private cases.
 > 
-> In my first read through, I didn't see how cross-userspace operations
-> were blocked, but it looks like it's the various gup paths where
-> {vma,page}_is_secretmem() is called. (Thank you for the self-test!
-> That helped me follow along.) I think this access pattern should be
-> more clearly spelled out in the cover later (i.e. "This will block
-> things like process_vm_readv()").
-
-I'm sure Mike can add it.
-
-> I like the results (inaccessible outside the process), though I
-> suspect this will absolutely melt gdb or other ptracers that try to
-> see into the memory.
-
-I wouldn't say "melt" ... one of the Demos we did a FOSDEM was using
-gdb/ptrace to extract secrets and then showing it couldn't be done if
-secret memory was used.  You can still trace the execution of the
-process (and thus you could extract the secret as it's processed in
-registers, for instance) but you just can't extract the actual secret
-memory contents ... that's a fairly limited and well defined
-restriction.
-
->  Don't get me wrong, I'm a big fan of such concepts[0], but I see
-> nothing in the cover letter about it (e.g. the effects on "ptrace" or
-> "gdb" are not mentioned.)
-
-Sure, but we thought "secret" covered it.  It wouldn't be secret if
-gdb/ptrace from another process could see it.
-
-> There is also a risk here of this becoming a forensics nightmare:
-> userspace malware will just download their entire executable region
-> into a memfd_secret region. Can we, perhaps, disallow mmap/mprotect
-> with PROT_EXEC when vma_is_secretmem()? The OpenSSL example, for
-> example, certainly doesn't need PROT_EXEC.
-
-I think disallowing PROT_EXEC is a great enhancement.
-
-> What's happening with O_CLOEXEC in this code? I don't see that
-> mentioned in the cover letter either. Why is it disallowed? That
-> seems a strange limitation for something trying to avoid leaking
-> secrets into other processes.
-
-I actually thought we forced it, so I'll let Mike address this.  I
-think allowing it is great, so the secret memory isn't inherited by
-children, but I can see use cases where a process would want its child
-to inherit the secrets.
-
-> And just so I'm sure I understand: if a vma_is_secretmem() check is
-> missed in future mm code evolutions, it seems there is nothing to
-> block the kernel from accessing the contents directly through
-> copy_from_user() via the userspace virtual address, yes?
-
-Technically no because copy_from_user goes via the userspace page
-tables which do have access.
-
-> >    2. It also serves as a basis for context protection of virtual
-> >       machines, but other groups are working on this aspect, and it
-> > is
-> >       broadly similar to the secret exfiltration from the kernel
-> > problem.
-> > 
-> > > Is this intended to protect keys/etc after the attacker has
-> > > gained the ability to run arbitrary kernel-mode code?  If so,
-> > > that seems optimistic, doesn't it?
-> > 
-> > Not exactly: there are many types of kernel attack, but mostly the
-> > attacker either manages to effect a privilege escalation to root or
-> > gets the ability to run a ROP gadget.  The object of this code is
-> > to be completely secure against root trying to extract the secret
-> > (some what similar to the lockdown idea), thus defeating privilege
-> > escalation and to provide "sufficient" protection against ROP
-> > gadgets.
-> > 
-> > The ROP gadget thing needs more explanation: the usual defeatist
-> > approach is to say that once the attacker gains the stack, they can
-> > do anything because they can find enough ROP gadgets to be turing
-> > complete.  However, in the real world, given the kernel stack size
-> > limit and address space layout randomization making finding gadgets
-> > really hard, usually the attacker gets one or at most two gadgets
-> > to string together.  Not having any in-kernel primitive for
-> > accessing secret memory means the one gadget ROP attack can't
-> > work.  Since the only way to access secret memory is to reconstruct
-> > the missing mapping entry, the attacker has to recover the physical
-> > page and insert a PTE pointing to it in the kernel and then
-> > retrieve the contents.  That takes at least three gadgets which is
-> > a level of difficulty beyond most standard attacks.
+> In other words, shmem_mfill_atomic_pte() duplicates a case it already
+> handles. So, expose it, and let shmem_mfill_atomic_pte() use it
+> directly, to reduce code duplication.
 > 
-> As for protecting against exploited kernel flaws I also see benefits
-> here. While the kernel is already blocked from directly reading
-> contents from userspace virtual addresses (i.e. SMAP), this feature
-> does help by blocking the kernel from directly reading contents via
-> the direct map alias. (i.e. this feature is a specialized version of
-> XPFO[1], which tried to do this for ALL user memory.) So in that
-> regard, yes, this has value in the sense that to perform
-> exfiltration, an attacker would need a significant level of control
-> over kernel execution or over page table contents.
+> This requires that we refactor shmem_mfill_atomic_pte() a bit:
 > 
-> Sufficient control over PTE allocation and positioning is possible
-> without kernel execution control[3], and "only" having an arbitrary
-> write primitive can lead to direct PTE control. Because of this, it
-> would be nice to have page tables strongly protected[2] in the
-> kernel. They remain a viable "data only" attack given a sufficiently
-> "capable" write flaw.
-
-Right, but this is on the radar of several people and when fixed will
-strengthen the value of secret memory.
-
-> I would argue that page table entries are a more important asset to
-> protect than userspace secrets, but given the difficulties with XPFO
-> and the not-yet-available PKS I can understand starting here. It
-> does, absolutely, narrow the ways exploits must be written to
-> exfiltrate secret contents. (We are starting to now constrict[4] many
-> attack methods into attacking the page table itself, which is good in
-> the sense that protecting page tables will be a big win, and bad in
-> the sense that focusing attack research on page tables means we're
-> going to see some very powerful attacks.)
+> Instead of doing accounting (shmem_recalc_inode() et al) part-way
+> through the PTE setup, do it afterward. This frees up
+> mfill_atomic_install_pte() from having to care about this accounting,
+> and means we don't need to e.g. shmem_uncharge() in the error path.
 > 
-> > > I think that a very complete description of the threats which
-> > > this feature addresses would be helpful.  
-> > 
-> > It's designed to protect against three different threats:
-> > 
-> >    1. Detection of user secret memory mismanagement
+> A side effect is this switches shmem_mfill_atomic_pte() to use
+> lru_cache_add_inactive_or_unevictable() instead of just lru_cache_add().
+> This wrapper does some extra accounting in an exceptional case, if
+> appropriate, so it's actually the more correct thing to use.
 > 
-> I would say "cross-process secret userspace memory exposures" (via a
-> number of common interfaces by blocking it at the GUP level).
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+
+Acked-by: Hugh Dickins <hughd@google.com>
+
+And thanks for doing those late mcopy->mfill renamings,
+I think those represent Andrea's intent better.
+
+As far as I'm concerned, this series is now ripe for picking
+into mmotm (bearing in mind the dependencies you noted in 00/10):
+thank you Axel.
+
+> ---
+>  include/linux/userfaultfd_k.h |  5 +++
+>  mm/shmem.c                    | 58 ++++++++---------------------------
+>  mm/userfaultfd.c              | 17 ++++------
+>  3 files changed, 23 insertions(+), 57 deletions(-)
 > 
-> >    2. significant protection against privilege escalation
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index 794d1538b8ba..331d2ccf0bcc 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -53,6 +53,11 @@ enum mcopy_atomic_mode {
+>  	MCOPY_ATOMIC_CONTINUE,
+>  };
+>  
+> +extern int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> +				    struct vm_area_struct *dst_vma,
+> +				    unsigned long dst_addr, struct page *page,
+> +				    bool newly_allocated, bool wp_copy);
+> +
+>  extern ssize_t mcopy_atomic(struct mm_struct *dst_mm, unsigned long dst_start,
+>  			    unsigned long src_start, unsigned long len,
+>  			    bool *mmap_changing, __u64 mode);
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index e361f1d81c8d..2e9f56c83489 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2378,14 +2378,11 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+>  	struct address_space *mapping = inode->i_mapping;
+>  	gfp_t gfp = mapping_gfp_mask(mapping);
+>  	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
+> -	spinlock_t *ptl;
+>  	void *page_kaddr;
+>  	struct page *page;
+> -	pte_t _dst_pte, *dst_pte;
+>  	int ret;
+>  	pgoff_t max_off;
+>  
+> -	ret = -ENOMEM;
+>  	if (!shmem_inode_acct_block(inode, 1)) {
+>  		/*
+>  		 * We may have got a page, returned -ENOENT triggering a retry,
+> @@ -2396,10 +2393,11 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+>  			put_page(*pagep);
+>  			*pagep = NULL;
+>  		}
+> -		goto out;
+> +		return -ENOMEM;
+>  	}
+>  
+>  	if (!*pagep) {
+> +		ret = -ENOMEM;
+>  		page = shmem_alloc_page(gfp, info, pgoff);
+>  		if (!page)
+>  			goto out_unacct_blocks;
+> @@ -2414,9 +2412,9 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+>  			/* fallback to copy_from_user outside mmap_lock */
+>  			if (unlikely(ret)) {
+>  				*pagep = page;
+> -				shmem_inode_unacct_blocks(inode, 1);
+> +				ret = -ENOENT;
+>  				/* don't free the page */
+> -				return -ENOENT;
+> +				goto out_unacct_blocks;
+>  			}
+>  		} else {		/* ZEROPAGE */
+>  			clear_highpage(page);
+> @@ -2442,32 +2440,10 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+>  	if (ret)
+>  		goto out_release;
+>  
+> -	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
+> -	if (dst_vma->vm_flags & VM_WRITE)
+> -		_dst_pte = pte_mkwrite(pte_mkdirty(_dst_pte));
+> -	else {
+> -		/*
+> -		 * We don't set the pte dirty if the vma has no
+> -		 * VM_WRITE permission, so mark the page dirty or it
+> -		 * could be freed from under us. We could do it
+> -		 * unconditionally before unlock_page(), but doing it
+> -		 * only if VM_WRITE is not set is faster.
+> -		 */
+> -		set_page_dirty(page);
+> -	}
+> -
+> -	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+> -
+> -	ret = -EFAULT;
+> -	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -	if (unlikely(pgoff >= max_off))
+> -		goto out_release_unlock;
+> -
+> -	ret = -EEXIST;
+> -	if (!pte_none(*dst_pte))
+> -		goto out_release_unlock;
+> -
+> -	lru_cache_add(page);
+> +	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+> +				       page, true, false);
+> +	if (ret)
+> +		goto out_delete_from_cache;
+>  
+>  	spin_lock_irq(&info->lock);
+>  	info->alloced++;
+> @@ -2475,27 +2451,17 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+>  	shmem_recalc_inode(inode);
+>  	spin_unlock_irq(&info->lock);
+>  
+> -	inc_mm_counter(dst_mm, mm_counter_file(page));
+> -	page_add_file_rmap(page, false);
+> -	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+> -
+> -	/* No need to invalidate - it was non-present before */
+> -	update_mmu_cache(dst_vma, dst_addr, dst_pte);
+> -	pte_unmap_unlock(dst_pte, ptl);
+> +	SetPageDirty(page);
+>  	unlock_page(page);
+> -	ret = 0;
+> -out:
+> -	return ret;
+> -out_release_unlock:
+> -	pte_unmap_unlock(dst_pte, ptl);
+> -	ClearPageDirty(page);
+> +	return 0;
+> +out_delete_from_cache:
+>  	delete_from_page_cache(page);
+>  out_release:
+>  	unlock_page(page);
+>  	put_page(page);
+>  out_unacct_blocks:
+>  	shmem_inode_unacct_blocks(inode, 1);
+> -	goto out;
+> +	return ret;
+>  }
+>  #endif /* CONFIG_USERFAULTFD */
+>  
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index d1ac73a0d2a9..5508f7d9e2dc 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -51,18 +51,13 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
+>  /*
+>   * Install PTEs, to map dst_addr (within dst_vma) to page.
+>   *
+> - * This function handles MCOPY_ATOMIC_CONTINUE (which is always file-backed),
+> - * whether or not dst_vma is VM_SHARED. It also handles the more general
+> - * MCOPY_ATOMIC_NORMAL case, when dst_vma is *not* VM_SHARED (it may be file
+> - * backed, or not).
+> - *
+> - * Note that MCOPY_ATOMIC_NORMAL for a VM_SHARED dst_vma is handled by
+> - * shmem_mcopy_atomic_pte instead.
+> + * This function handles both MCOPY_ATOMIC_NORMAL and _CONTINUE for both shmem
+> + * and anon, and for both shared and private VMAs.
+>   */
+> -static int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> -				    struct vm_area_struct *dst_vma,
+> -				    unsigned long dst_addr, struct page *page,
+> -				    bool newly_allocated, bool wp_copy)
+> +int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> +			     struct vm_area_struct *dst_vma,
+> +			     unsigned long dst_addr, struct page *page,
+> +			     bool newly_allocated, bool wp_copy)
+>  {
+>  	int ret;
+>  	pte_t _dst_pte, *dst_pte;
+> -- 
+> 2.31.1.527.g47e6f16901-goog
 > 
-> I don't see how this series protects against privilege escalation.
-> (It protects against exfiltration.) Maybe you mean include this in
-> the first bullet point (i.e. "cross-process secret userspace memory
-> exposures, even in the face of privileged processes")?
-
-It doesn't prevent privilege escalation from happening in the first
-place, but once the escalation has happened it protects against
-exfiltration by the newly minted root attacker.
-
-> >    3. enhanced protection (in conjunction with all the other in-
-> > kernel
-> >       attack prevention systems) against ROP attacks.
 > 
-> Same here, I don't see it preventing ROP, but I see it making
-> "simple" ROP insufficient to perform exfiltration.
-
-Right, that's why I call it "enhanced protection".  With ROP the design
-goal is to take exfiltration beyond the simple, and require increasing
-complexity in the attack ... the usual security whack-a-mole approach
-... in the hope that script kiddies get bored by the level of
-difficulty and move on to something easier.
-
-James
-
-
