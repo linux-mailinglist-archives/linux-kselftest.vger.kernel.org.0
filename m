@@ -2,89 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B10376782
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 May 2021 17:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E543768C1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 May 2021 18:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237757AbhEGPFc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 May 2021 11:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234841AbhEGPF2 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 May 2021 11:05:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A78C061574;
-        Fri,  7 May 2021 08:04:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fRqBvN0tx2pJaoUlzcO69LtYKZ2yqF996XdsgiyBnas=; b=vaCd2p/D451W+krKP3Hm+Mbqfr
-        M8QcUhbPPqPhLegCFXy/cxzLW7FvZbb6uNxUkrkGKI7XjV3rn1ZAHfUBFG0w/Gcd1Y0HXH+I+0tsZ
-        X5OIkmdSb3DENIfibsKFsOFwf+J99y1XPqyblM2DtI5EMz6S+PaSg2Gnd8QEkW1EprcE5IyDWWb6H
-        XccLGtI0WGlOs3TxB5jzm8biFUFGO1u++Fy5mXwuv4p8ZE02GLqDy0C+/fvdeiHDl1AhGyFKWfXC8
-        WRULaO5OwTroeiZB1MTX6BJLmVDaSGw7qazPs7fahImlS4WfUKCD7jeGmPMUmeQ9MZT53HIVPhRiY
-        pkdu3BuQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lf1z6-003Gsj-Mp; Fri, 07 May 2021 15:01:57 +0000
-Date:   Fri, 7 May 2021 16:01:44 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH v3 2/2] secretmem: optimize page_is_secretmem()
-Message-ID: <YJVWWFrvTzC2M0ba@casper.infradead.org>
-References: <20210420150049.14031-1-rppt@kernel.org>
- <20210420150049.14031-3-rppt@kernel.org>
+        id S238168AbhEGQ26 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 May 2021 12:28:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51460 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238165AbhEGQ25 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 7 May 2021 12:28:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 431046144F;
+        Fri,  7 May 2021 16:27:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620404877;
+        bh=REJqg1qmerOA6xM2S/Usce+IfSnkSoFTT7GLQSzUHDQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h/8xdMJU55n9fB+GVn0WNMV/YsFg30CITx+PGvQ7ET+Aaqz5CPi3bh1dq/Q/1Idrj
+         TzjwmMoHgWIvSJo4vdaAZDEIO35F0hv7pD4DnitJ4Tro9dQml66D9XMHiF9ORIa7V6
+         q65EGimaaakr1lSRXhzYgBo7O9kgvEAkSw02dxuLAoWXSrsqWAUsZA4MVGB9CCyon4
+         amml+T0jw0kRAOGbK+sQjE2CjzEht8B68kDNCkegYZUF09BYjov718wklF4MEPXS8c
+         yyxSe/AuDgeOixs+OmOnKQ/KK507j3xaWg8oH8cm9/MytEPEDtlozgMS3HOSfmA6iw
+         idqC3E9V//yQQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH] kselftest/arm64: Add missing stddef.h include to BTI tests
+Date:   Fri,  7 May 2021 17:25:42 +0100
+Message-Id: <20210507162542.23149-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210420150049.14031-3-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+X-Patch-Hashes: v=1; h=sha256; i=tNwPEhIm1HRME5IVKyaCqC9DfDsvT/iTsijMJWpIfic=; m=W4vhnkryA0sQApJwzE3QMdBuNUFTrQKaqaGjQU1Q8x8=; p=mvWMt0niUw+nSHbTu29m+7/mDB4yF+ZBiZ0BdcqDy30=; g=e596d82f6e5648149eb861dd5656a07f45f1ecc0
+X-Patch-Sig: m=pgp; i=broonie@kernel.org; s=0xC3F436CA30F5D8EB; b=iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCVadcACgkQJNaLcl1Uh9D58wf/Wvz F/9k2Ifls3Y5BjJXhHBbXceXaQ/xXyVSrV5w3gGgFNmntXmOaXe3YQqwjPdEbChpv9FoTAFJVaHkx dDzwcKFwZz5KmsdboyKUtpj5tD4zmYSpreESd6Bx4y/U//nC+cMJh2Y5dmflp3gDD6Lxrrp65C0SY xZFg/QP/yn7DqvBybvTE6lYQrdSmFUvv19zcpewuXLYhUFNC9wBzLdx9XJfLRGe1qtxg8RCEUEhSf AzAeZl3cTRc5wVmAj3pQacRzMYOCQxX0ByaOSuQ4sDqEYFMit8ZgCwQA7OD6IWaehBtR/Ah7DMmYh BTya9rbAOa33jCQyktAa9LBpqHDAuFw==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 20, 2021 at 06:00:49PM +0300, Mike Rapoport wrote:
-> +	mapping = (struct address_space *)
-> +		((unsigned long)page->mapping & ~PAGE_MAPPING_FLAGS);
-> +
-> +	if (mapping != page->mapping)
-> +		return false;
-> +
-> +	return page->mapping->a_ops == &secretmem_aops;
+Explicitly include stddef.h when building the BTI tests so that we have
+a definition of NULL, with at least some toolchains this is not done
+implicitly by anything else:
 
-... why do you go back to page->mapping here?
+test.c: In function ‘start’:
+test.c:214:25: error: ‘NULL’ undeclared (first use in this function)
+  214 |  sigaction(SIGILL, &sa, NULL);
+      |                         ^~~~
+test.c:20:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
 
-	return mapping->a_ops == &secretmem_aops
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/bti/test.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/arm64/bti/test.c b/tools/testing/selftests/arm64/bti/test.c
+index 656b04976ccc..67b77ab83c20 100644
+--- a/tools/testing/selftests/arm64/bti/test.c
++++ b/tools/testing/selftests/arm64/bti/test.c
+@@ -6,6 +6,7 @@
+ 
+ #include "system.h"
+ 
++#include <stddef.h>
+ #include <linux/errno.h>
+ #include <linux/auxvec.h>
+ #include <linux/signal.h>
+-- 
+2.20.1
+
