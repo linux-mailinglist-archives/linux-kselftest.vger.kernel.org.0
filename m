@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9746D37611A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 May 2021 09:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91000376121
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 May 2021 09:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbhEGH0q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 May 2021 03:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        id S235309AbhEGH3Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 May 2021 03:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235276AbhEGH0p (ORCPT
+        with ESMTP id S235313AbhEGH3X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 May 2021 03:26:45 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32FEC061761
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 May 2021 00:25:44 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id n2so12077934ejy.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 May 2021 00:25:44 -0700 (PDT)
+        Fri, 7 May 2021 03:29:23 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4560EC061574
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 May 2021 00:28:23 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id j26so5368693edf.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 May 2021 00:28:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eTcOiJuUBe4mwErRjR9sk/Dc+yGEFwaWB4ssf73sgvI=;
-        b=SrVWIbP2AUGIHpQoE5kpkyBzA8SAVtCVKnIgW34Ds8KCO5uqfbMI7yjAm5hWES23b2
-         Yz1iZPCrCSrugSkoibyQ2++4q5cBe52pVGr/qRa7SKeE/hIrseHXUj7APD0aW4+E/npV
-         bJepwV8ztZhu/TRjbd9SYhDHChguZiINkL1G1WxtAqX4BFdkLpvi5t4zSbaP9kPOlU9w
-         jVwHqmo2YziO3XdxAezNS62/ft1yM5AtRt123yE+4IxulhQt4DLYVuWLqbT2neL4p3Uo
-         Gn70glTXdFKL5P038nLTPFZYIj0qZ5EFQBwIdqsopfIddNEbudpWJSX2KmIws5akSewY
-         y00Q==
+        bh=9gIRV9p376yzYOkVLAM08wQ8Qd0j1vezQFGSOL7bIPg=;
+        b=Hjd19bs6E8MXnI2GtquNirlemBMll7SfU+KUqj54EJK5w37nAxnhCMFhAU0QjzzNoE
+         duT+zjhLzfKaEZDv675QrmotFHyCF6J+Tozi17yt843ctjlkPn7hU2tN+wIS16lBxcIr
+         IkFu9uQr9Pq59OCHVRCJi4W2C/GrIypg1xnDOmzKmtAejc1/RSaedabcgFh20MMtNYGG
+         905XfNEhy8VrqasgkNYZEMQ2vFR/jyc8ffJ1XX+bDu3kZ+Bjrhibb+R646oTOIB3OBIS
+         /szeb0hvpqHZpS2wO4YbdMankOLRRO6pAzzxgFuC1sArBHkx/a0VvIHjK9PmAfPzecg0
+         8pOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eTcOiJuUBe4mwErRjR9sk/Dc+yGEFwaWB4ssf73sgvI=;
-        b=lAoppJHzKRg36ZYaWPVMdKHmSzp/gDTMCarXMpywcnqUCNtnUQizODsDrNam6rvh2M
-         OqDtw5VPkFuDAhQepVOVfwihjqrAICoNa2gVLmvdMcAV3wtokxap50yUlSnt/Sel8NWM
-         6ZEejCFoD2jHZAutNKpCzApm2s7OPy+SozxkL3bj7+sbs4bW3a7w2/hpF4og9Epj78pL
-         Xtn8ai67QSQ6F4m8iE6Jb3MhNfd1tBrWfhgkidQPPoQCWgCrgop91wvoHtMAAzjRo8Ug
-         C176RQDYzDBX0GpOPBPlq4uZ3m2P7TpS+gXpDkkYoSDqPWZ5AdJ7b7fj3G7Tbp0IjvR9
-         CEfA==
-X-Gm-Message-State: AOAM531jg9d1hXJxTkxsYcjAKnOpxsxoek7v3cWAXIuDKYZOSNth9NS4
-        j43/HW0ycCE6WXlZkwTBnnrQV3gIBGzYfsGvdW9jCw==
-X-Google-Smtp-Source: ABdhPJyu8GA+H4PSMjHEiEswlBTm9mTDBQOIbjb/Cdl4U1P8ljwsaYvPMqaWo60UhqJEfuu3YqDlY6D194iK/XP86Qg=
-X-Received: by 2002:a17:906:d0c8:: with SMTP id bq8mr8247577ejb.423.1620372343322;
- Fri, 07 May 2021 00:25:43 -0700 (PDT)
+        bh=9gIRV9p376yzYOkVLAM08wQ8Qd0j1vezQFGSOL7bIPg=;
+        b=iNmuKZHwnopsWRMVox4qLSZcIbQtUoJ/zJqv5qbyU7N54F20rmriNAB6KeyKa99Boa
+         iGabz1M/RsciRmdhJ0+k9UcT37V4y0EfDKacm1hRTVTo/yH4L3TXV0UOwMz5cYfZSOhQ
+         HRD2dgunZ5+p4T4WOICBBTXHTnNTErg5ch61LcTBYYzbK8sreWpOkxEQYvr3ZbHpB3jk
+         l0Z8Ypm/Hiax9KR1gA4mYiM2DNOF6eMAuQJDM5c8Yg5Qx60+Ue4xC/bUH8p1Kx+W34ZW
+         zlRmy6az/AHSBVhptAbELgqEP9B3J3/y86Wd3a8Cm6dKpL/KpZu1apF/L3/S3vjs5lTk
+         SiDg==
+X-Gm-Message-State: AOAM531w89BmzEVTm3XIEJy5Rwnt3+TmxpyZMnsHmFHPAOzkO6FWCE4w
+        n6Tg7mgrxcHbiyHbldm8doeKZzdCL4mTbcn+Tv28vA==
+X-Google-Smtp-Source: ABdhPJyc6YmfDBFmiWx6v1sbxsopbrXCkiZ3HrnWCEtm5TDo18dpNiu7ml4MOzzRESfE6dwE3J43g7IaikoUdxPWAGU=
+X-Received: by 2002:aa7:c382:: with SMTP id k2mr9947529edq.189.1620372501833;
+ Fri, 07 May 2021 00:28:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210507050908.1008686-1-davidgow@google.com>
-In-Reply-To: <20210507050908.1008686-1-davidgow@google.com>
+References: <20210507050908.1008686-1-davidgow@google.com> <20210507050908.1008686-2-davidgow@google.com>
+In-Reply-To: <20210507050908.1008686-2-davidgow@google.com>
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 7 May 2021 00:25:32 -0700
-Message-ID: <CAGS_qxoqt3ui13HKNv4iQkOB2Bo1m189sRngR3EzOOHM2jnY-A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: Do not typecheck binary assertions
+Date:   Fri, 7 May 2021 00:28:10 -0700
+Message-ID: <CAGS_qxqOCUAKx7+0DBnsThVWskqPejq6oHzr4F+nvJALU+F1zw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kunit: Assign strings to 'const char*' in STREQ assertions
 To:     David Gow <davidgow@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -65,97 +65,94 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Thu, May 6, 2021 at 10:09 PM David Gow <davidgow@google.com> wrote:
 >
-> The use of typecheck() in KUNIT_EXPECT_EQ() and friends is causing more
-> problems than I think it's worth. Things like enums need to have their
-> values explicitly cast, and literals all need to be very precisely typed
-> for the code to compile.
+> Currently, the KUNIT_EXPECT_STREQ() and related macros assign both
+> string arguments to variables of their own type (via typeof()). This
+> seems to be to prevent the macro argument from being evaluated multiple
+> times.
 >
-> While typechecking does have its uses, the additional overhead of having
-> lots of needless casts -- combined with the awkward error messages which
-> don't mention which types are involved -- makes tests less readable and
-> more difficult to write.
+> However, yhis doesn't work if one of these is a fixed-length character
+nit: if you ever send a v2 of this patch, s/yhis/this
+
+> array, rather than a character pointer, as (for example) char[16] will
+> always allocate a new string.
 >
-> By removing the typecheck() call, the two arguments still need to be of
-> compatible types, but don't need to be of exactly the same time, which
-> seems a less confusing and more useful compromise.
+> By always using 'const char*' (the type strcmp expects), we're always
+> just taking a pointer to the string, which works even with character
+> arrays.
 >
 > Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> I appreciate that this is probably a bit controversial (and, indeed, I
-> was a bit hesitant about sending it out myself), but after sitting on it
-> for a few days, I still think this is probably an improvement overall.
-
-I'm in favor.
-The absolute worst part of the status quo is that the types involved
-might not get shown at all in the GCC error output!
-It's an incredible pain and probably has wasted a good deal of other
-people's time as well.
-(Maybe clang is better in this regard).
-
-Here's a few examples where things get a bit weird:
-    KUNIT_EXPECT_EQ(test, 1 + 1, 2.5);
-     Expected 1 + 1 == 2.5, but
-         1 + 1 == 2
-         2.5 == 2
-
-Along similar lines:
-  KUNIT_EXPECT_EQ(test, 0xffffffff, ~0);
-  KUNIT_EXPECT_EQ(test, 0xffffffffffffffff, ~0);
-  KUNIT_EXPECT_EQ(test, 0xfffffffffffffffe, ~1);
-  KUNIT_EXPECT_EQ(test, 0xfffffffe, ~0); //fails
-The failure message on the last might make one wonder how the first ones worked.
-    Expected 0xfffffffe == ~0, but
-         0xfffffffe == 4294967294
-         ~0 == -1
-
-Explanation: when evaluating the assertion, we compare __left/__right
-directly which maintain their types.
-But struct kunit_binary_assert stores them as `long long`, hence the
-truncation of 2.5 to 2.
-
-I was nervous about ~0, as it should be an int, i.e. this passes:
-  KUNIT_EXPECT_EQ(test, sizeof(~0), sizeof(int))
-But it all works as expected, e.g. we don't have implicit narrowing
-going on and causing us to say that 0xfffffffffffffffe = 0.
-
-
-Stuff like
-  KUNIT_EXPECT_EQ(test, 0, NULL);
-will compile, but with warnings
-../include/kunit/test.h:805:15: warning: comparison between pointer and integer
-  805 |         left, ==, right,          \
-      |               ^~
-
-So I generally think that we can rely on compiler warnings to protect
-us from some misuse.
 
 Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
+I'm very happy to see this patch.
+This makes code that looks obviously correct actually work.
 
->
-> The second patch does fix what I think is an actual bug, though, so even
-> if this isn't determined to be a good idea, it (or some equivalent)
-> should probably go through.
->
-> Cheers,
-> -- David
->
->  include/kunit/test.h | 1 -
->  1 file changed, 1 deletion(-)
+Somewhat tangential: there are several casts that are no longer needed
+after this in the docs.
+I think the following gets rid of all of them. Should it perhaps go in
+a chain with this patch?
+I.e. if the first one is too controversial and we want to go ahead
+split this patch off from it.
+
+diff --git a/Documentation/dev-tools/kunit/usage.rst
+b/Documentation/dev-tools/kunit/usage.rst
+index 650f99590df5..756747417a19 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -465,10 +465,9 @@ fictitious example for ``sha1sum(1)``
+
+ .. code-block:: c
+
+-       /* Note: the cast is to satisfy overly strict type-checking. */
+        #define TEST_SHA1(in, want) \
+                sha1sum(in, out); \
+-               KUNIT_EXPECT_STREQ_MSG(test, (char *)out, want,
+"sha1sum(%s)", in);
++               KUNIT_EXPECT_STREQ_MSG(test, out, want, "sha1sum(%s)", in);
+
+        char out[40];
+        TEST_SHA1("hello world",  "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed");
+@@ -507,7 +506,7 @@ In some cases, it can be helpful to write a
+*table-driven test* instead, e.g.
+        };
+        for (i = 0; i < ARRAY_SIZE(cases); ++i) {
+                sha1sum(cases[i].str, out);
+-               KUNIT_EXPECT_STREQ_MSG(test, (char *)out, cases[i].sha1,
++               KUNIT_EXPECT_STREQ_MSG(test, out, cases[i].sha1,
+                                      "sha1sum(%s)", cases[i].str);
+        }
+
+@@ -568,7 +567,7 @@ Reusing the same ``cases`` array from above, we
+can write the test as a
+                struct sha1_test_case *test_param = (struct
+sha1_test_case *)(test->param_value);
+
+                sha1sum(test_param->str, out);
+-               KUNIT_EXPECT_STREQ_MSG(test, (char *)out, test_param->sha1,
++               KUNIT_EXPECT_STREQ_MSG(test, out, test_param->sha1,
+                                      "sha1sum(%s)", test_param->str);
+
+        }
+
+> ---
+>  include/kunit/test.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
 > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 49601c4b98b8..4c56ffcb7403 100644
+> index 4c56ffcb7403..b68c61348121 100644
 > --- a/include/kunit/test.h
 > +++ b/include/kunit/test.h
-> @@ -775,7 +775,6 @@ void kunit_do_assertion(struct kunit *test,
+> @@ -1128,8 +1128,8 @@ do {                                                                             \
+>                                    fmt,                                        \
+>                                    ...)                                        \
 >  do {                                                                          \
->         typeof(left) __left = (left);                                          \
->         typeof(right) __right = (right);                                       \
-> -       ((void)__typecheck(__left, __right));                                  \
+> -       typeof(left) __left = (left);                                          \
+> -       typeof(right) __right = (right);                                       \
+> +       const char *__left = (left);                                           \
+> +       const char *__right = (right);                                 \
 >                                                                                \
 >         KUNIT_ASSERTION(test,                                                  \
->                         __left op __right,                                     \
+>                         strcmp(__left, __right) op 0,                          \
 > --
 > 2.31.1.607.g51e8a6a459-goog
 >
