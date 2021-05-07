@@ -2,256 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1F337622F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 May 2021 10:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B10376782
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 May 2021 17:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236392AbhEGIhJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 May 2021 04:37:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35292 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236347AbhEGIhF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 May 2021 04:37:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 023D760FDC;
-        Fri,  7 May 2021 08:36:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620376565;
-        bh=I+qN+0aqIyLTx4KBomCn8E0G7kBDY8z+bAk62yK5pIY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cmH+prl+5ntKjNuny4tzsesY56MjuDqD0wKQ1rjtaes53SQhgF800YP0AVyUiT7Yt
-         Jp2T92BQC2mOp5TgfXyZ/0gaqDB33GejHBJ2QN4k7B+AKYG+9xuKyQ3KtY3Pblaxvo
-         Naz79bv9DOeJAnvyHZy04hMTMGKFBFNUiSJ2ZSksmqDuPwhnYxwJf1lw05hyD2YEk/
-         VdMH5adblafLzNAuDyUYEOHN1jLKRxLCh4M8lARvYktOAr6S0y9czGCSveyeczB9VF
-         6uGoVGHTeamNxM0BeAU+YhngPkAuFKlsdn2v8DMkl8+kedighCLbg1qazytO2ikQgz
-         GRqGHiEhbhpxA==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-sgx@vger.kernel.org, dave.hansen@intel.com,
-        Jarkko Sakkinen <jarkko@kernel.org>,
+        id S237757AbhEGPFc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 May 2021 11:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234841AbhEGPF2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 7 May 2021 11:05:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A78C061574;
+        Fri,  7 May 2021 08:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fRqBvN0tx2pJaoUlzcO69LtYKZ2yqF996XdsgiyBnas=; b=vaCd2p/D451W+krKP3Hm+Mbqfr
+        M8QcUhbPPqPhLegCFXy/cxzLW7FvZbb6uNxUkrkGKI7XjV3rn1ZAHfUBFG0w/Gcd1Y0HXH+I+0tsZ
+        X5OIkmdSb3DENIfibsKFsOFwf+J99y1XPqyblM2DtI5EMz6S+PaSg2Gnd8QEkW1EprcE5IyDWWb6H
+        XccLGtI0WGlOs3TxB5jzm8biFUFGO1u++Fy5mXwuv4p8ZE02GLqDy0C+/fvdeiHDl1AhGyFKWfXC8
+        WRULaO5OwTroeiZB1MTX6BJLmVDaSGw7qazPs7fahImlS4WfUKCD7jeGmPMUmeQ9MZT53HIVPhRiY
+        pkdu3BuQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lf1z6-003Gsj-Mp; Fri, 07 May 2021 15:01:57 +0000
+Date:   Fri, 7 May 2021 16:01:44 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] selftests/sgx: Migrate to kselftest harness
-Date:   Fri,  7 May 2021 11:35:52 +0300
-Message-Id: <20210507083552.6832-2-jarkko@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210507083552.6832-1-jarkko@kernel.org>
-References: <20210507083552.6832-1-jarkko@kernel.org>
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH v3 2/2] secretmem: optimize page_is_secretmem()
+Message-ID: <YJVWWFrvTzC2M0ba@casper.infradead.org>
+References: <20210420150049.14031-1-rppt@kernel.org>
+ <20210420150049.14031-3-rppt@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210420150049.14031-3-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Migrate to kselftest harness so that the kselftest framework can probably
-count and report passed and failed tests.
+On Tue, Apr 20, 2021 at 06:00:49PM +0300, Mike Rapoport wrote:
+> +	mapping = (struct address_space *)
+> +		((unsigned long)page->mapping & ~PAGE_MAPPING_FLAGS);
+> +
+> +	if (mapping != page->mapping)
+> +		return false;
+> +
+> +	return page->mapping->a_ops == &secretmem_aops;
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
+... why do you go back to page->mapping here?
 
-v3:
-* Use helper macros.
-v2:
-* Add the missing string argument to ksft_test_result_pass() and
-  ksft_test_result_fail() calls.
-
- tools/testing/selftests/sgx/main.c | 120 +++++++++++++++++------------
- 1 file changed, 71 insertions(+), 49 deletions(-)
-
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 43da68388e25..4622dedcd290 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -18,7 +18,7 @@
- #include <sys/auxv.h>
- #include "defines.h"
- #include "main.h"
--#include "../kselftest.h"
-+#include "../kselftest_harness.h"
- 
- static const uint64_t MAGIC = 0x1122334455667788ULL;
- vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
-@@ -107,31 +107,27 @@ static Elf64_Sym *vdso_symtab_get(struct vdso_symtab *symtab, const char *name)
- 	return NULL;
- }
- 
--bool report_results(struct sgx_enclave_run *run, int ret, uint64_t result,
--		  const char *test)
-+bool is_test_passed(struct sgx_enclave_run *run, int ret, uint64_t result)
- {
- 	bool valid = true;
- 
- 	if (ret) {
--		printf("FAIL: %s() returned: %d\n", test, ret);
-+		ksft_print_msg("ret = %d\n", ret);
- 		valid = false;
- 	}
- 
- 	if (run->function != EEXIT) {
--		printf("FAIL: %s() function, expected: %u, got: %u\n", test, EEXIT,
--		       run->function);
-+		ksft_print_msg("run->function: expected: %u, got: %u\n", EEXIT, run->function);
- 		valid = false;
- 	}
- 
- 	if (result != MAGIC) {
--		printf("FAIL: %s(), expected: 0x%lx, got: 0x%lx\n", test, MAGIC,
--		       result);
-+		ksft_print_msg("result: expected: 0x%lx, got: 0x%lx\n", MAGIC, result);
- 		valid = false;
- 	}
- 
- 	if (run->user_data) {
--		printf("FAIL: %s() user data, expected: 0x0, got: 0x%llx\n",
--		       test, run->user_data);
-+		ksft_print_msg("run->user_data:expected: 0x0, got: 0x%llx\n", run->user_data);
- 		valid = false;
- 	}
- 
-@@ -145,47 +141,42 @@ static int user_handler(long rdi, long rsi, long rdx, long ursp, long r8, long r
- 	return 0;
- }
- 
--int main(int argc, char *argv[])
-+FIXTURE(enclave) {
-+	struct encl encl;
-+};
-+
-+FIXTURE_SETUP(enclave)
- {
--	struct sgx_enclave_run run;
-+	Elf64_Sym *sgx_enter_enclave_sym = NULL;
- 	struct vdso_symtab symtab;
--	Elf64_Sym *sgx_enter_enclave_sym;
--	uint64_t result = 0;
--	struct encl encl;
- 	unsigned int i;
- 	void *addr;
--	int ret;
- 
--	memset(&run, 0, sizeof(run));
--
--	if (!encl_load("test_encl.elf", &encl)) {
--		encl_delete(&encl);
-+	if (!encl_load("test_encl.elf", &self->encl)) {
-+		encl_delete(&self->encl);
- 		ksft_exit_skip("cannot load enclaves\n");
- 	}
- 
--	if (!encl_measure(&encl))
-+	if (!encl_measure(&self->encl))
- 		goto err;
- 
--	if (!encl_build(&encl))
-+	if (!encl_build(&self->encl))
- 		goto err;
- 
- 	/*
- 	 * An enclave consumer only must do this.
- 	 */
--	for (i = 0; i < encl.nr_segments; i++) {
--		struct encl_segment *seg = &encl.segment_tbl[i];
-+	for (i = 0; i < self->encl.nr_segments; i++) {
-+		struct encl_segment *seg = &self->encl.segment_tbl[i];
- 
--		addr = mmap((void *)encl.encl_base + seg->offset, seg->size,
--			    seg->prot, MAP_SHARED | MAP_FIXED, encl.fd, 0);
-+		addr = mmap((void *)self->encl.encl_base + seg->offset, seg->size,
-+			    seg->prot, MAP_SHARED | MAP_FIXED, self->encl.fd, 0);
- 		if (addr == MAP_FAILED) {
--			perror("mmap() segment failed");
--			exit(KSFT_FAIL);
-+			ksft_print_msg("mmap() segment: %s", strerror(errno));
-+			goto err;
- 		}
- 	}
- 
--	memset(&run, 0, sizeof(run));
--	run.tcs = encl.encl_base;
--
- 	/* Get vDSO base address */
- 	addr = (void *)getauxval(AT_SYSINFO_EHDR);
- 	if (!addr)
-@@ -200,32 +191,63 @@ int main(int argc, char *argv[])
- 
- 	vdso_sgx_enter_enclave = addr + sgx_enter_enclave_sym->st_value;
- 
--	ret = sgx_enter_enclave((void *)&MAGIC, &result, 0, EENTER,
--					    NULL, NULL, &run);
--	if (!report_results(&run, ret, result, "sgx_enter_enclave_unclobbered"))
--		goto err;
-+err:
-+	if (!sgx_enter_enclave_sym)
-+		encl_delete(&self->encl);
-+
-+	ASSERT_NE(sgx_enter_enclave_sym, NULL);
-+}
-+
-+FIXTURE_TEARDOWN(enclave)
-+{
-+	encl_delete(&self->encl);
-+	vdso_sgx_enter_enclave = NULL;
-+}
-+
-+
-+TEST_F(enclave, unclobbered_vdso)
-+{
-+	struct sgx_enclave_run run;
-+	uint64_t result = 0;
-+	int ret;
-+
-+	memset(&run, 0, sizeof(run));
-+
-+	ret = sgx_enter_enclave((void *)&MAGIC, &result, 0, EENTER, NULL, NULL, &run);
- 
-+	ASSERT_EQ(true, is_test_passed(&run, ret, result));
-+}
-+
-+TEST_F(enclave, clobbered_vdso)
-+{
-+	struct sgx_enclave_run run;
-+	uint64_t result = 0;
-+	int ret;
-+
-+	memset(&run, 0, sizeof(run));
- 
--	/* Invoke the vDSO directly. */
--	result = 0;
- 	ret = vdso_sgx_enter_enclave((unsigned long)&MAGIC, (unsigned long)&result,
- 				     0, EENTER, 0, 0, &run);
--	if (!report_results(&run, ret, result, "sgx_enter_enclave"))
--		goto err;
- 
--	/* And with an exit handler. */
-+
-+	ASSERT_EQ(true, is_test_passed(&run, ret, result));
-+}
-+
-+TEST_F(enclave, clobbered_vdso_and_user_function)
-+{
-+	struct sgx_enclave_run run;
-+	uint64_t result = 0;
-+	int ret;
-+
-+	memset(&run, 0, sizeof(run));
-+
- 	run.user_handler = (__u64)user_handler;
- 	run.user_data = 0xdeadbeef;
-+
- 	ret = vdso_sgx_enter_enclave((unsigned long)&MAGIC, (unsigned long)&result,
- 				     0, EENTER, 0, 0, &run);
--	if (!report_results(&run, ret, result, "user_handler"))
--		goto err;
- 
--	printf("SUCCESS\n");
--	encl_delete(&encl);
--	exit(KSFT_PASS);
--
--err:
--	encl_delete(&encl);
--	exit(KSFT_FAIL);
-+	ASSERT_EQ(true, is_test_passed(&run, ret, result));
- }
-+
-+TEST_HARNESS_MAIN
--- 
-2.31.1
-
+	return mapping->a_ops == &secretmem_aops
