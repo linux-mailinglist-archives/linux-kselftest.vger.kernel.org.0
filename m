@@ -2,72 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E543768C1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 May 2021 18:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19429376B03
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 May 2021 22:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238168AbhEGQ26 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 May 2021 12:28:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51460 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238165AbhEGQ25 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 May 2021 12:28:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 431046144F;
-        Fri,  7 May 2021 16:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620404877;
-        bh=REJqg1qmerOA6xM2S/Usce+IfSnkSoFTT7GLQSzUHDQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=h/8xdMJU55n9fB+GVn0WNMV/YsFg30CITx+PGvQ7ET+Aaqz5CPi3bh1dq/Q/1Idrj
-         TzjwmMoHgWIvSJo4vdaAZDEIO35F0hv7pD4DnitJ4Tro9dQml66D9XMHiF9ORIa7V6
-         q65EGimaaakr1lSRXhzYgBo7O9kgvEAkSw02dxuLAoWXSrsqWAUsZA4MVGB9CCyon4
-         amml+T0jw0kRAOGbK+sQjE2CjzEht8B68kDNCkegYZUF09BYjov718wklF4MEPXS8c
-         yyxSe/AuDgeOixs+OmOnKQ/KK507j3xaWg8oH8cm9/MytEPEDtlozgMS3HOSfmA6iw
-         idqC3E9V//yQQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH] kselftest/arm64: Add missing stddef.h include to BTI tests
-Date:   Fri,  7 May 2021 17:25:42 +0100
-Message-Id: <20210507162542.23149-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        id S230114AbhEGUG2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 May 2021 16:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230096AbhEGUG1 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 7 May 2021 16:06:27 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0B7C061761
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 May 2021 13:05:24 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id q2so8598777pfh.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 May 2021 13:05:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c3juDObqVzsjpQ4zt+KRVnMaIqtk76tzs1eXGfnrfq0=;
+        b=FqxuI7G4lXRX59JzUWXtHjI8iQkPShk8Z9b5qVLOOQTKRkJJVOSKDxSKCaiK5vMORh
+         5E7bzyvNmy2OKHKKEpIVkjxi0I9yNEYuMvobYYLlvn1+EUmrmvOi45s7Otq2Wnjw2CFR
+         lQ5ZUBZvYJPnGH1bvPaqEW5vOXIAAhArW5+S+oSH4603z+3lViWx1mgQWPdBtSv223uf
+         3ProgKg0seuTL7ZpI0eRv1cEom3fx2mUQe2bWucvPpMTyJwqnBgVDchau2mnHWjQ1RU8
+         3Q0774OP9a2CS103Y6+0MBQ02OXsUOjW/6qwkqXoDFNWZagNjp6UN1L9xOd2qGvx2pgF
+         Hv2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c3juDObqVzsjpQ4zt+KRVnMaIqtk76tzs1eXGfnrfq0=;
+        b=sHfDfVze/hqjx95oVbEhcL5kpLcrca8gsDo1WTcbU9c67pt7FCSlQ4hnZaJADYGgen
+         TwO3UCarCZngcWJEooy9rZzxZHDxwIXCiU7kL+Nj02Pfly4XocyByWvdhb4dBQck6kqJ
+         PyKlLj5fL0ii+hDkupdSVFziYgYEDvFqJieW4vMvPmE2Cd4wSPtQFn92pms66Me+Z54G
+         cY8p1AY6KkoH8YDV0a7CB6GndlCQwwG+aw+/WKyK3rRa8muyEKKBfsZjksFS/q4W3Tx3
+         fZDSxRA/MEzaEnE04s58LaeKtkDLoER1xTPXX93/W8vSJwzlcFfkE88RV1yHq5OIw6s6
+         h2tg==
+X-Gm-Message-State: AOAM531DgW7Jt12fjHkvIYCkeMwflqsJZCb5ls4gzoZaZg52kwUtjNfv
+        g+GCHBgHVTFMjPgDgrcKqA0JcpdmttE0THLnjBAFpQ==
+X-Google-Smtp-Source: ABdhPJxbbTlEFkChr0nHAB3mp77sGw2yE5ONf0urDq7scY1p99hozFwPpv481/wBo3CN8/V3MuRITc5PKYMM00W7RIk=
+X-Received: by 2002:a63:cc11:: with SMTP id x17mr11645132pgf.159.1620417923430;
+ Fri, 07 May 2021 13:05:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=tNwPEhIm1HRME5IVKyaCqC9DfDsvT/iTsijMJWpIfic=; m=W4vhnkryA0sQApJwzE3QMdBuNUFTrQKaqaGjQU1Q8x8=; p=mvWMt0niUw+nSHbTu29m+7/mDB4yF+ZBiZ0BdcqDy30=; g=e596d82f6e5648149eb861dd5656a07f45f1ecc0
-X-Patch-Sig: m=pgp; i=broonie@kernel.org; s=0xC3F436CA30F5D8EB; b=iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCVadcACgkQJNaLcl1Uh9D58wf/Wvz F/9k2Ifls3Y5BjJXhHBbXceXaQ/xXyVSrV5w3gGgFNmntXmOaXe3YQqwjPdEbChpv9FoTAFJVaHkx dDzwcKFwZz5KmsdboyKUtpj5tD4zmYSpreESd6Bx4y/U//nC+cMJh2Y5dmflp3gDD6Lxrrp65C0SY xZFg/QP/yn7DqvBybvTE6lYQrdSmFUvv19zcpewuXLYhUFNC9wBzLdx9XJfLRGe1qtxg8RCEUEhSf AzAeZl3cTRc5wVmAj3pQacRzMYOCQxX0ByaOSuQ4sDqEYFMit8ZgCwQA7OD6IWaehBtR/Ah7DMmYh BTya9rbAOa33jCQyktAa9LBpqHDAuFw==
-Content-Transfer-Encoding: 8bit
+References: <20210507050908.1008686-1-davidgow@google.com>
+In-Reply-To: <20210507050908.1008686-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 7 May 2021 13:05:12 -0700
+Message-ID: <CAFd5g44bot7S-Ya7s7QxnKfXHcy8WxUcNPsZuw_qWMaAQbqLCg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: Do not typecheck binary assertions
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Explicitly include stddef.h when building the BTI tests so that we have
-a definition of NULL, with at least some toolchains this is not done
-implicitly by anything else:
+On Thu, May 6, 2021 at 10:09 PM David Gow <davidgow@google.com> wrote:
+>
+> The use of typecheck() in KUNIT_EXPECT_EQ() and friends is causing more
+> problems than I think it's worth. Things like enums need to have their
+> values explicitly cast, and literals all need to be very precisely typed
+> for the code to compile.
 
-test.c: In function ‘start’:
-test.c:214:25: error: ‘NULL’ undeclared (first use in this function)
-  214 |  sigaction(SIGILL, &sa, NULL);
-      |                         ^~~~
-test.c:20:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+nit: I have not had the typecheck() call prevent any code from
+compiling, just generating warnings. I guess you can have a build set
+to cause any warning to be promoted to an error; still, I think this
+statement is misleading.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/bti/test.c | 1 +
- 1 file changed, 1 insertion(+)
+> While typechecking does have its uses, the additional overhead of having
+> lots of needless casts -- combined with the awkward error messages which
+> don't mention which types are involved -- makes tests less readable and
+> more difficult to write.
+>
+> By removing the typecheck() call, the two arguments still need to be of
+> compatible types, but don't need to be of exactly the same time, which
+> seems a less confusing and more useful compromise.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-diff --git a/tools/testing/selftests/arm64/bti/test.c b/tools/testing/selftests/arm64/bti/test.c
-index 656b04976ccc..67b77ab83c20 100644
---- a/tools/testing/selftests/arm64/bti/test.c
-+++ b/tools/testing/selftests/arm64/bti/test.c
-@@ -6,6 +6,7 @@
- 
- #include "system.h"
- 
-+#include <stddef.h>
- #include <linux/errno.h>
- #include <linux/auxvec.h>
- #include <linux/signal.h>
--- 
-2.20.1
+Looks good to me.
 
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+
+> ---
+>
+> I appreciate that this is probably a bit controversial (and, indeed, I
+> was a bit hesitant about sending it out myself), but after sitting on it
+> for a few days, I still think this is probably an improvement overall.
+>
+> The second patch does fix what I think is an actual bug, though, so even
+> if this isn't determined to be a good idea, it (or some equivalent)
+> should probably go through.
+
+I don't remember being a huge fan of the typecheck when it was asked
+for either. I think I am a little bit more indifferent than you;
+nevertheless, I support this change.
