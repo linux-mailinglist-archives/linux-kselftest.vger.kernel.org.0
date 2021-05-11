@@ -2,106 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 107D737AEA8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 May 2021 20:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCCB37AF3A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 May 2021 21:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbhEKSua (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 May 2021 14:50:30 -0400
-Received: from mga03.intel.com ([134.134.136.65]:20626 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231329AbhEKSua (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 May 2021 14:50:30 -0400
-IronPort-SDR: 5bG1xV5MADV8x2fP2KvTY9zC/JLlmH2mwLspO9zXTNLTuiyTr4YXbGDoUKpNu0LKaL/haL6DZO
- PqqPNywr1nLQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="199571726"
-X-IronPort-AV: E=Sophos;i="5.82,291,1613462400"; 
-   d="scan'208";a="199571726"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 11:49:21 -0700
-IronPort-SDR: g/6HA7HGuYOFSjH5GwqUBU8S4ZvI4u5siKlRB6H26tK+Qfw8nB3CX8va/wYyVzHH/647v+GHP5
- g33RV0hl2iyg==
-X-IronPort-AV: E=Sophos;i="5.82,291,1613462400"; 
-   d="scan'208";a="537140914"
-Received: from unknown (HELO [10.251.0.45]) ([10.251.0.45])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 11:49:21 -0700
-Subject: Re: [PATCH v4 1/2] selftests/sgx: Rename 'eenter' and 'sgx_call_vdso'
-To:     Jarkko Sakkinen <jarkko@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        reinette.chatre@intel.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210508035648.18176-1-jarkko@kernel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <4b8d9604-8d35-eefe-41cb-511b92a3f086@intel.com>
-Date:   Tue, 11 May 2021 11:49:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231808AbhEKTTb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 May 2021 15:19:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26467 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232255AbhEKTTa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 May 2021 15:19:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1620760703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ASevTwJo9RjR5FJ3MgTE2V9jTzfajAcmo8SCFELc9CM=;
+        b=Nx2xAwqzq44Vge4wnkw/5dpF33QMxAJACXpAzv65fbXwyEGYJK0xgdzgxS+zltAtaKUgdg
+        FzhTkOlgjtU8k0xujMd433xgX30cCu0RF6d6HAf345K2Wd9Td0Rv+NkzipvDTGtnOJ7KWL
+        5DQLJyFJmlDIsv0sD9hAFTjmUzC7CTU=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-322-OJJezCcbPzCXev92aqVfDg-1; Tue, 11 May 2021 15:18:19 -0400
+X-MC-Unique: OJJezCcbPzCXev92aqVfDg-1
+Received: by mail-ej1-f69.google.com with SMTP id h9-20020a1709063c09b0290393e97fec0fso6355797ejg.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 May 2021 12:18:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ASevTwJo9RjR5FJ3MgTE2V9jTzfajAcmo8SCFELc9CM=;
+        b=GDrt6fHcOj16r7xHzcfTHd4je+Jsf28ObkGsrZe/GxGZ0IpO6Il7+uHcJv2cZsexD8
+         cfREYjSUV4QEU+h83/bLv85IF/74oqh85SRgxULrrjf4ix2MIYJG/x8KJIvYuA4n7pw/
+         hmhg6wZl8DURIwLUqr5vcK9gT/T34QzzSPH4wTlE5QbiPTC9hMSwTz5AU4dLGAeF5KEE
+         VWYXIvwpRIIekgXoLUT+ZMJL8IZKRBJWhDPa0wURlK7PI8oHueWGbajVCYK2mJCeqZSX
+         DRoRkrVh8Wm+bZp/7PSyBOddXeptogSfKbhP+9ZWx8tDDE7SsWEyjt4Vy8u2ajCpKuwt
+         Za8g==
+X-Gm-Message-State: AOAM533vc8oKiL52ivcyDeK4rw7EXOOMGjjHTN7ai2/8iw2XqT2/rlR4
+        AS2ZG3TC9rKQHfGeVfc7fVUwkWsJ/TG0g0HLI3dV37qBRgbTJxAX1vPw/kqNmHO7qEBqz02Mxce
+        qFKMEBeLSmgPSukYemaoYv16R/ehd
+X-Received: by 2002:a50:f41a:: with SMTP id r26mr38166510edm.339.1620760698617;
+        Tue, 11 May 2021 12:18:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwEgndHOF+FNcJBpFdohiUsrh2jxtvw70fQLY6ZJfG5npvkMy2xKCx4y7FbS6l4FDVEiMNZgw==
+X-Received: by 2002:a50:f41a:: with SMTP id r26mr38166482edm.339.1620760698379;
+        Tue, 11 May 2021 12:18:18 -0700 (PDT)
+Received: from gator (cst2-174-132.cust.vodafone.cz. [31.30.174.132])
+        by smtp.gmail.com with ESMTPSA id h4sm13971430edv.97.2021.05.11.12.18.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 May 2021 12:18:18 -0700 (PDT)
+Date:   Tue, 11 May 2021 21:18:16 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Zhenzhong Duan <zhenzhong.duan@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org
+Subject: Re: [PATCH] selftests: kvm: make allocation of extra memory take
+ effect
+Message-ID: <20210511191816.v3zoukkq7la5a4pw@gator>
+References: <20210512043107.30076-1-zhenzhong.duan@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210508035648.18176-1-jarkko@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210512043107.30076-1-zhenzhong.duan@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/7/21 8:56 PM, Jarkko Sakkinen wrote:
-> Rename symbols for better clarity:
+On Wed, May 12, 2021 at 12:31:06PM +0800, Zhenzhong Duan wrote:
+> The extra memory pages is missed to be allocated during VM creating.
+> perf_test_util and kvm_page_table_test use it to alloc extra memory
+> currently.
 > 
-> * 'eenter' -> 'vdso_sgx_enter_enclave'
-> * 'sgx_call_vdso' -> 'sgx_enter_enclave'
+> Fix it by adding extra_mem_pages to the total memory calculation before
+> allocate.
+> 
+> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+> ---
+>  tools/testing/selftests/kvm/lib/kvm_util.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index fc83f6c5902d..159f4d62241d 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -295,7 +295,7 @@ struct kvm_vm *vm_create_with_vcpus(enum vm_guest_mode mode, uint32_t nr_vcpus,
+>  	 */
+>  	uint64_t vcpu_pages = (DEFAULT_STACK_PGS + num_percpu_pages) * nr_vcpus;
+>  	uint64_t extra_pg_pages = (extra_mem_pages + vcpu_pages) / PTES_PER_MIN_PAGE * 2;
+> -	uint64_t pages = DEFAULT_GUEST_PHY_PAGES + vcpu_pages + extra_pg_pages;
+> +	uint64_t pages = DEFAULT_GUEST_PHY_PAGES + extra_mem_pages + vcpu_pages + extra_pg_pages;
+>  	struct kvm_vm *vm;
+>  	int i;
+>  
+> -- 
+> 2.25.1
+>
 
-Another sentence or two here would do wonders:
+Reviewed-by: Andrew Jones <drjones@redhat.com>
 
-'eenter' might be confused for directly calling ENCLU[EENTER].  It does
-not.  It calls into the VDSO, which actually has the EENTER instruction.
+Thanks,
+drew
 
-'sgx_call_vdso' is *only* used for entering the enclave.  It's not some
-generic SGX call into the VDSO.
-
-Make the naming reflect that.
-
-Right?
