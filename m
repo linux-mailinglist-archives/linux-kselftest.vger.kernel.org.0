@@ -2,95 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B045E37BA93
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 May 2021 12:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B37337BF60
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 May 2021 16:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbhELKcB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 May 2021 06:32:01 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50264 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230149AbhELKbN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 May 2021 06:31:13 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 5181CB0BD;
-        Wed, 12 May 2021 10:30:04 +0000 (UTC)
-Subject: Re: [PATCH v5 2/3] mm/slub, kunit: add a KUnit test for SLUB
- debugging functionality
-To:     Marco Elver <elver@google.com>, Oliver Glitta <glittao@gmail.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Daniel Latypov <dlatypov@google.com>
-References: <20210511150734.3492-1-glittao@gmail.com>
- <20210511150734.3492-2-glittao@gmail.com>
- <CANpmjNNnS5FgPnNkGWG2ae_ybsr=Wa_bzNba7RruOM+1kgOzfw@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Message-ID: <99d79722-ea94-7775-8ac2-5957b42060b2@suse.cz>
-Date:   Wed, 12 May 2021 12:30:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S230405AbhELOIP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 May 2021 10:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230292AbhELOIO (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 May 2021 10:08:14 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540F9C061574;
+        Wed, 12 May 2021 07:07:05 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id gx5so35140381ejb.11;
+        Wed, 12 May 2021 07:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=N5LF26CKutDtZq53l+W30hpY63jIDvW7jhu+eoEl2ew=;
+        b=ZnhUVQ9JVwJAKPCJ5gOrkoLqfQ5MdoigO+F6uo0DG1I9ymh1HS+pCVo1dSSSGX8JWB
+         HLl0O2B7u3WlbEaa6gzPEwsdFCXnxkzmmk3lQWz2zwOpoLtZAUmYTxlikPejW9WF/3T1
+         sv1JWJQrEq7y2g/DgStmhN0YE4IIlIOS7Q9jD+3H8l42GXiwqRKi+hh/6iQ4SG+3RUDX
+         unHt0FwgOo+gw9KducW7162dUZjoMWrxdJbxQSv7OAA9c6iAVNVoBUtbLPEwBsajfdFM
+         tt4Nt2OdewldT99E9o3c6neqIYwfRzmlU9T3Pu8FdrWsMTpnIo0csYxwJ/JIF2lee1WX
+         elrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=N5LF26CKutDtZq53l+W30hpY63jIDvW7jhu+eoEl2ew=;
+        b=S28Ocsxw3cG6936eimng867f1aSULyBcbzWkyvgS9VIsKm7ASkKsGAuA+lBJCCqNi+
+         +96y3AIs7wYacdv5/F77Q20zJy4ve2zKb3mIab1pcmF7EWUQoIoK6Rzk6svRXjHFGD2O
+         H+15bsS77VyUGWnfCPrl3Y5ZOp67KCd/RVusVpBVZ2Ngo1nfWYjoRg5s0frfM2hDVQ8L
+         rXbtT3Hm5soHqBz9rKiJpaIk8Lo5wP+/sxWKWWlgYyJmQURN/IkK7HyliiLclXW3P/JT
+         iLlRawQOTecp8SoNX3psxfPx7kG/jo6TNKrZBm78sNkok+BoIN5SSuyLhKdHWqWMHU0U
+         ohXQ==
+X-Gm-Message-State: AOAM532+TNOP4ty4u0WtzWJeLIsxNY2muo8sdBXAgjL3WKpl1tu5S4pE
+        tK+ZThHuezbysEhCQ+mG4Cg=
+X-Google-Smtp-Source: ABdhPJwH/iByVw+CnvRUG344WyGXRKSmDNAzfjpygkxFPPv9BlK0j9qfLnEWcMifHUCH8SNO/5GqbQ==
+X-Received: by 2002:a17:907:990f:: with SMTP id ka15mr30608107ejc.132.1620828420320;
+        Wed, 12 May 2021 07:07:00 -0700 (PDT)
+Received: from localhost.localdomain (ispc-static-34.84-47-111.telekom.sk. [84.47.111.34])
+        by smtp.gmail.com with ESMTPSA id k5sm20022874edk.46.2021.05.12.07.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 May 2021 07:06:58 -0700 (PDT)
+From:   glittao@gmail.com
+To:     brendanhiggins@google.com, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, vbabka@suse.cz
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-mm@kvack.org, elver@google.com,
+        dlatypov@google.com, Oliver Glitta <glittao@gmail.com>
+Subject: [PATCH] mm/slub, kunit: add a KUnit test for SLUB debugging functionality-fix
+Date:   Wed, 12 May 2021 16:06:56 +0200
+Message-Id: <20210512140656.12083-1-glittao@gmail.com>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a5
+In-Reply-To: <20210511150734.3492-2-glittao@gmail.com>
+References: <20210511150734.3492-2-glittao@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CANpmjNNnS5FgPnNkGWG2ae_ybsr=Wa_bzNba7RruOM+1kgOzfw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/11/21 5:16 PM, Marco Elver wrote:
-> On Tue, 11 May 2021 at 17:07, <glittao@gmail.com> wrote:
->> From: Oliver Glitta <glittao@gmail.com>
->>
->> SLUB has resiliency_test() function which is hidden behind #ifdef
->> SLUB_RESILIENCY_TEST that is not part of Kconfig, so nobody
->> runs it. KUnit should be a proper replacement for it.
->>
->> Try changing byte in redzone after allocation and changing
->> pointer to next free node, first byte, 50th byte and redzone
->> byte. Check if validation finds errors.
->>
->> There are several differences from the original resiliency test:
->> Tests create own caches with known state instead of corrupting
->> shared kmalloc caches.
->>
->> The corruption of freepointer uses correct offset, the original
->> resiliency test got broken with freepointer changes.
->>
->> Scratch changing random byte test, because it does not have
->> meaning in this form where we need deterministic results.
->>
->> Add new option CONFIG_SLUB_KUNIT_TEST in Kconfig.
->> Tests next_pointer, first_word and clobber_50th_byte do not run
->> with KASAN option on. Because the test deliberately modifies non-allocated
->> objects.
->>
->> Use kunit_resource to count errors in cache and silence bug reports.
->> Count error whenever slab_bug() or slab_fix() is called or when
->> the count of pages is wrong.
->>
->> Signed-off-by: Oliver Glitta <glittao@gmail.com>
+From: Oliver Glitta <glittao@gmail.com>
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Remove unused function test_exit(), from SLUB KUnit test.
 
-> I think I had already reviewed v4, and the changes here are fine:
-> 
-> Reviewed-by: Marco Elver <elver@google.com>
-> 
-> Others who had reviewed/acked v4, probably need to re-ack/review.
-> Note, I think if you addressed the comments and didn't change much
-> else, you can typically carry the acks/reviews, unless the other
-> person changed their mind explicitly.
+Reported-by: Marco Elver <elver@google.com>
+Signed-off-by: Oliver Glitta <glittao@gmail.com>
+---
+ lib/slub_kunit.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-FTR, besides me and Marco, v4 had also:
+diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
+index f28965f64ef6..8662dc6cb509 100644
+--- a/lib/slub_kunit.c
++++ b/lib/slub_kunit.c
+@@ -129,8 +129,6 @@ static int test_init(struct kunit *test)
+ 	return 0;
+ }
+ 
+-static void test_exit(struct kunit *test) {}
+-
+ static struct kunit_case test_cases[] = {
+ 	KUNIT_CASE(test_clobber_zone),
+ 
+@@ -147,7 +145,6 @@ static struct kunit_case test_cases[] = {
+ static struct kunit_suite test_suite = {
+ 	.name = "slub_test",
+ 	.init = test_init,
+-	.exit = test_exit,
+ 	.test_cases = test_cases,
+ };
+ kunit_test_suite(test_suite);
+-- 
+2.31.1.272.g89b43f80a5
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
