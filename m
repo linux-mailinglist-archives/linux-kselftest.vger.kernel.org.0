@@ -2,84 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE6337A3FC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 May 2021 11:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523E637A6AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 May 2021 14:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbhEKJs7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 May 2021 05:48:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55622 "EHLO mail.kernel.org"
+        id S231544AbhEKMbf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 May 2021 08:31:35 -0400
+Received: from mga14.intel.com ([192.55.52.115]:23526 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230434AbhEKJs7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 May 2021 05:48:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B8D7F61621;
-        Tue, 11 May 2021 09:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620726473;
-        bh=xYgRdmVqmN+Qwy470JI7HiWW0iQYsCOHangiosFnU/4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YISHGm7jPoPIEH8aOWfK0E3VYmra2q6AcdXhV3HdCs9bReM8puaPPfBOmfNimhjO5
-         5TP5fSjuQHjADaB0Czo6gtkPtKC0VPW+rr0oZkJuRThHK7lZztwQhn0DbeawxT/Q17
-         Uy/9ky4+JTExTXKTZ+DRNwil8q53v+HV7leHf+GvvfHfYqppACOl/GvTwjxm426w+K
-         dNqfFZhswZjRKF4MWgy86qovtvTb1AGKv6asmT1tWG6cSaV2/1FnRLoBM64lxq2yne
-         veV3V+ULtk6DVX2PZ353KOLm9FPE9tGuKhiPj5vtZuUcg915O8s3/jdG9K0pW92Xv4
-         bGIzTf7iaQjPA==
-Date:   Tue, 11 May 2021 12:47:45 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH resend v2 3/5] MAINTAINERS: add
- tools/testing/selftests/vm/ to MEMORY MANAGEMENT
-Message-ID: <YJpSwfKo4PSb14U6@kernel.org>
-References: <20210511081534.3507-1-david@redhat.com>
- <20210511081534.3507-4-david@redhat.com>
+        id S231432AbhEKMbf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 May 2021 08:31:35 -0400
+IronPort-SDR: ZMp9bP8vZBOS/6OitNw0BHzbQoZBmM0F6hUTnPgbkYLOAfoot52Cemoku/6oR18g88W7twWrBp
+ 5W4H+qJRh4Sg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9980"; a="199108941"
+X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
+   d="scan'208";a="199108941"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 05:30:26 -0700
+IronPort-SDR: iZsLdeOIW/rdw0bWGu15JHNiN+raV5v41OwxlkIvP9QvlOABntQoU6krP2S5Held2csza33y9g
+ 18uqcib9GL6g==
+X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
+   d="scan'208";a="436634130"
+Received: from duan-client-optiplex-7080.bj.intel.com ([10.238.156.114])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 05:30:24 -0700
+From:   Zhenzhong Duan <zhenzhong.duan@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        pbonzini@redhat.com, shuah@kernel.org,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>
+Subject: [PATCH] selftests: kvm: make allocation of extra memory take effect
+Date:   Wed, 12 May 2021 12:31:06 +0800
+Message-Id: <20210512043107.30076-1-zhenzhong.duan@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210511081534.3507-4-david@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 11, 2021 at 10:15:32AM +0200, David Hildenbrand wrote:
-> MEMORY MANAGEMENT seems to be a good fit.
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+The extra memory pages is missed to be allocated during VM creating.
+perf_test_util and kvm_page_table_test use it to alloc extra memory
+currently.
 
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Fix it by adding extra_mem_pages to the total memory calculation before
+allocate.
 
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9450e052f1b1..cd267d218e08 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11566,6 +11566,7 @@ F:	include/linux/mm.h
->  F:	include/linux/mmzone.h
->  F:	include/linux/vmalloc.h
->  F:	mm/
-> +F:	tools/testing/selftests/vm/
->  
->  MEMORY TECHNOLOGY DEVICES (MTD)
->  M:	Miquel Raynal <miquel.raynal@bootlin.com>
-> -- 
-> 2.30.2
-> 
-> 
+Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+---
+ tools/testing/selftests/kvm/lib/kvm_util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index fc83f6c5902d..159f4d62241d 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -295,7 +295,7 @@ struct kvm_vm *vm_create_with_vcpus(enum vm_guest_mode mode, uint32_t nr_vcpus,
+ 	 */
+ 	uint64_t vcpu_pages = (DEFAULT_STACK_PGS + num_percpu_pages) * nr_vcpus;
+ 	uint64_t extra_pg_pages = (extra_mem_pages + vcpu_pages) / PTES_PER_MIN_PAGE * 2;
+-	uint64_t pages = DEFAULT_GUEST_PHY_PAGES + vcpu_pages + extra_pg_pages;
++	uint64_t pages = DEFAULT_GUEST_PHY_PAGES + extra_mem_pages + vcpu_pages + extra_pg_pages;
+ 	struct kvm_vm *vm;
+ 	int i;
+ 
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+
