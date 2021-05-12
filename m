@@ -2,99 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E17037EE50
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 00:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75ABE37EF43
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 01:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346640AbhELV1u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 May 2021 17:27:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50420 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378924AbhELTSQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 May 2021 15:18:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CE320613EE;
-        Wed, 12 May 2021 19:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620847027;
-        bh=vTMq9ZCTPIJ2uJNu6RKADW8q+ip6eYhDylHbUOhPidI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K6cT6CSJOQNJOETbfQE6pjZBxVxmXOXSfuDkf+uIg0ynziDtiz5AR/Bi+dWbvdgKM
-         TlLTBDOlGsLhuEXrjMI5OGAiBGLA+03EUBgW6OWt8u5WvhD8b+Q561uD1tHe08gGNg
-         17lO0zpEbF8uJatw+Po4g1kk5dZ/XnGbgix3cGE/4yt8f1/YxDyJf/5fRAGP+rpU0I
-         oWIbteN8CDdzpgBpmFB5g6CvHcwEZotsOXsIFD8bgZr+R4TXybQjnLKQZZoPgRzsFn
-         tGhrD67DHuY+zs7pou38CP8VP5K2cq+NVIBDo3QX/dLaYByi9IwcFyfJcIn+x823Bi
-         3wJvsw7MdIbYA==
-Date:   Wed, 12 May 2021 22:17:04 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] selftests/sgx: Migrate to kselftest harness
-Message-ID: <YJwpsEJVQ1joWgX3@kernel.org>
-References: <20210508035648.18176-1-jarkko@kernel.org>
- <20210508035648.18176-2-jarkko@kernel.org>
- <960f1cd8-d805-8ed8-6af0-eed1f49e3c65@intel.com>
- <YJsrDc34d2vbc+At@kernel.org>
- <0b68cf8e-994d-3c85-cb93-5701722d9336@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0b68cf8e-994d-3c85-cb93-5701722d9336@intel.com>
+        id S237088AbhELXB0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 May 2021 19:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1388294AbhELVtR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 May 2021 17:49:17 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6F7C06124F
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 May 2021 14:45:06 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id 76-20020a62164f0000b029027f27f50e56so15832025pfw.16
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 May 2021 14:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=5jUpkIWfMaq5Jmoaunq8eRpC3Xi5xzv1ZG/MFZDMBzk=;
+        b=WGvG1+DLOaYsWwslzcFaBddiYRxp0XLqVYB2uArPgDzBleiI+uU3cDpZD1xK69YsJ1
+         VY7xsOG//Dm7VOkj9PySP6eJvXdk66vQgdIaBXmFdzqhqDRnRDJ4ZteE1Q5Jkioj0Eyy
+         Z4+DzQ36g5xqcpcc6bJb4Dwzj6ERvA9KCFrl6ETG1oxasRhdbscS7A3TMKEjJQxObA7L
+         k0esfRk4vbESKv1UUlqYB8b4fRIuJFTme0t/PZ27GsZJZU4umFYYr53CGFaI9ZhkaS07
+         CwZpz4xwZD3+xTAgBF7COPrLiUOF/gBc2jcwD3zczjVHVubH6LLTCDntZF3i6NRIe95G
+         zGug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=5jUpkIWfMaq5Jmoaunq8eRpC3Xi5xzv1ZG/MFZDMBzk=;
+        b=TpGxo2Y+N3bQ9yHIQwWaMXzcZlvi818IxKGxqY1ZV5SjQCk80leosbosdBdfM00MU0
+         yZEU663ObqEu29Nz7b5+b0FAwulrX+MtCsLPiIw9d6qNuZmmcCbLow0IFC0AQs8nkdQ1
+         Ck/hAQYbQ6H3rylaiT6AMdC9kf2dtV4UJkVRD87VrcMtVoN4vykyAx+KyT31GlDoSK95
+         +U12Dr9mpzOHb25eDV9x4O3hAWRARvxQDqde/OS7OUmfovoXoXNwEaGhozZK5KbdSuf5
+         6EhnUE5dfcUFV1LJydL5UpoSMlS5i9FbIQICjfxKiwIohhovY40GcbU86duPqc3+e17I
+         jziQ==
+X-Gm-Message-State: AOAM530W2IPIWA7O07Vcz/sv+DwtjZxwaRT4dei5lG2yvPkCTgj7b2GX
+        Wi6X5pg7MfheTqQfzdFt79CA+YKuqbH9nv7kemaO
+X-Google-Smtp-Source: ABdhPJznlwzFf+8b63G8BSVyi6fcbSnTpML8PUgB8sdorKJKvZseAtm8CUY4Wm7UAnSfjya00Qx++cbvuCwwU2jBGzQo
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:29e5:10fc:1128:b0c0])
+ (user=axelrasmussen job=sendgmr) by 2002:a17:902:7488:b029:ef:838a:3071 with
+ SMTP id h8-20020a1709027488b02900ef838a3071mr4687161pll.61.1620855905759;
+ Wed, 12 May 2021 14:45:05 -0700 (PDT)
+Date:   Wed, 12 May 2021 14:44:57 -0700
+Message-Id: <20210512214502.2047008-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
+Subject: [PATCH 0/5] KVM: selftests: exercise userfaultfd minor faults
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Aaron Lewis <aaronlewis@google.com>,
+        Alexander Graf <graf@amazon.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Gardon <bgardon@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jacob Xu <jacobhxu@google.com>,
+        Makarand Sonare <makarandsonare@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Yanan Wang <wangyanan55@huawei.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 12, 2021 at 08:56:03AM -0700, Reinette Chatre wrote:
-> Hi Jarkko,
-> 
-> On 5/11/2021 6:10 PM, Jarkko Sakkinen wrote:
-> > On Tue, May 11, 2021 at 11:42:49AM -0700, Reinette Chatre wrote:
-> > > Hi Jarkko,
-> > > 
-> > > On 5/7/2021 8:56 PM, Jarkko Sakkinen wrote:
-> > > > Migrate to kselftest harness. Use a fixture test with enclave initialized
-> > > > and de-initialized for each of the existing three tests, in other words:
-> > > > 
-> > > > 1. One FIXTURE() for managing the enclave life-cycle.
-> > > > 2. Three TEST_F()'s, one for each test case.
-> > > 
-> > > These changes make it easier to add tests and I think it is a valuable
-> > > addition.
-> > > 
-> > > > 
-> > > > This gives a leaps better reporting than before. Here's an example
-> > > > transcript:
-> > > > 
-> > > > TAP version 13
-> > > > 1..3
-> > > > 0x0000000000000000 0x0000000000002000 0x03
-> > > > 0x0000000000002000 0x0000000000001000 0x05
-> > > > 0x0000000000003000 0x0000000000003000 0x03
-> > > > ok 1 enclave.unclobbered_vdso
-> > > > 0x0000000000000000 0x0000000000002000 0x03
-> > > > 0x0000000000002000 0x0000000000001000 0x05
-> > > > 0x0000000000003000 0x0000000000003000 0x03
-> > > > ok 2 enclave.clobbered_vdso
-> > > > 0x0000000000000000 0x0000000000002000 0x03
-> > > > 0x0000000000002000 0x0000000000001000 0x05
-> > > > 0x0000000000003000 0x0000000000003000 0x03
-> > > > ok 3 enclave.clobbered_vdso_and_user_function
-> > > > 
-> > > 
-> > > The output claims to conform to TAP13 but it does not seem as though all of
-> > > the output conforms to TAP13. I assume such output would confuse automated
-> > > systems.
-> > 
-> > You mean
-> > 
-> > 0x0000000000000000 0x0000000000002000 0x03
-> > 0x0000000000002000 0x0000000000001000 0x05
-> > 0x0000000000003000 0x0000000000003000 0x03
-> > 
-> > ?
-> 
-> Yes
+Base
+====
 
-Thanks, just sanity checking :-)
+These patches are based upon Andrew Morton's v5.13-rc1-mmots-2021-05-10-22-15
+tag. This is because this series depends on:
 
-/Jarkko
+- UFFD minor fault support for hugetlbfs (in v5.13-rc1) [1]
+- UFFD minor fault support for shmem (in Andrew's tree) [2]
+
+[1] https://lore.kernel.org/linux-fsdevel/20210301222728.176417-1-axelrasmussen@google.com/
+[2] https://lore.kernel.org/patchwork/cover/1420967/
+
+Overview
+========
+
+Minor fault handling is a new userfaultfd feature whose goal is generally to
+improve performance. In particular, it is intended for use with demand paging.
+There are more details in the cover letters for this new feature (linked above),
+but at a high level the idea is that we think of these three phases of live
+migration of a VM:
+
+1. Precopy, where we copy "some" pages from the source to the target, while the
+   VM is still running on the source machine.
+2. Blackout, where execution stops on the source, and begins on the target.
+3. Postcopy, where the VM is running on the target, some pages are already up
+   to date, and others are not (because they weren't copied, or were modified
+   after being copied).
+
+During postcopy, the first time the guest touches memory, we intercept a minor
+fault. Userspace checks whether or not the page is already up to date. If
+needed, we copy the final version of the page from the soure machine. This
+could be done with RDMA for example, to do it truly in place / with no copying.
+At this point, all that's left is to setup PTEs for the guest: so we issue
+UFFDIO_CONTINUE. No copying or page allocation needed.
+
+Because of this use case, it's useful to exercise this as part of the demand
+paging test. It lets us ensure the use case works correctly end-to-end, and also
+gives us an in-tree way to profile the end-to-end flow for future performance
+improvements.
+
+Axel Rasmussen (5):
+  KVM: selftests: allow different backing memory types for demand paging
+  KVM: selftests: add shmem backing source type
+  KVM: selftests: create alias mappings when using shared memory
+  KVM: selftests: allow using UFFD minor faults for demand paging
+  KVM: selftests: add shared hugetlbfs backing source type
+
+ .../selftests/kvm/demand_paging_test.c        | 146 +++++++++++++-----
+ .../testing/selftests/kvm/include/kvm_util.h  |   1 +
+ .../testing/selftests/kvm/include/test_util.h |  11 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  79 +++++++++-
+ .../selftests/kvm/lib/kvm_util_internal.h     |   2 +
+ tools/testing/selftests/kvm/lib/test_util.c   |  46 ++++--
+ 6 files changed, 222 insertions(+), 63 deletions(-)
+
+--
+2.31.1.607.g51e8a6a459-goog
+
