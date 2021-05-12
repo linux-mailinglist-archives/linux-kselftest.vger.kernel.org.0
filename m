@@ -2,102 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B37337BF60
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 May 2021 16:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBE237C9C3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 May 2021 18:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbhELOIP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 May 2021 10:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbhELOIO (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 May 2021 10:08:14 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540F9C061574;
-        Wed, 12 May 2021 07:07:05 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gx5so35140381ejb.11;
-        Wed, 12 May 2021 07:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=N5LF26CKutDtZq53l+W30hpY63jIDvW7jhu+eoEl2ew=;
-        b=ZnhUVQ9JVwJAKPCJ5gOrkoLqfQ5MdoigO+F6uo0DG1I9ymh1HS+pCVo1dSSSGX8JWB
-         HLl0O2B7u3WlbEaa6gzPEwsdFCXnxkzmmk3lQWz2zwOpoLtZAUmYTxlikPejW9WF/3T1
-         sv1JWJQrEq7y2g/DgStmhN0YE4IIlIOS7Q9jD+3H8l42GXiwqRKi+hh/6iQ4SG+3RUDX
-         unHt0FwgOo+gw9KducW7162dUZjoMWrxdJbxQSv7OAA9c6iAVNVoBUtbLPEwBsajfdFM
-         tt4Nt2OdewldT99E9o3c6neqIYwfRzmlU9T3Pu8FdrWsMTpnIo0csYxwJ/JIF2lee1WX
-         elrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=N5LF26CKutDtZq53l+W30hpY63jIDvW7jhu+eoEl2ew=;
-        b=S28Ocsxw3cG6936eimng867f1aSULyBcbzWkyvgS9VIsKm7ASkKsGAuA+lBJCCqNi+
-         +96y3AIs7wYacdv5/F77Q20zJy4ve2zKb3mIab1pcmF7EWUQoIoK6Rzk6svRXjHFGD2O
-         H+15bsS77VyUGWnfCPrl3Y5ZOp67KCd/RVusVpBVZ2Ngo1nfWYjoRg5s0frfM2hDVQ8L
-         rXbtT3Hm5soHqBz9rKiJpaIk8Lo5wP+/sxWKWWlgYyJmQURN/IkK7HyliiLclXW3P/JT
-         iLlRawQOTecp8SoNX3psxfPx7kG/jo6TNKrZBm78sNkok+BoIN5SSuyLhKdHWqWMHU0U
-         ohXQ==
-X-Gm-Message-State: AOAM532+TNOP4ty4u0WtzWJeLIsxNY2muo8sdBXAgjL3WKpl1tu5S4pE
-        tK+ZThHuezbysEhCQ+mG4Cg=
-X-Google-Smtp-Source: ABdhPJwH/iByVw+CnvRUG344WyGXRKSmDNAzfjpygkxFPPv9BlK0j9qfLnEWcMifHUCH8SNO/5GqbQ==
-X-Received: by 2002:a17:907:990f:: with SMTP id ka15mr30608107ejc.132.1620828420320;
-        Wed, 12 May 2021 07:07:00 -0700 (PDT)
-Received: from localhost.localdomain (ispc-static-34.84-47-111.telekom.sk. [84.47.111.34])
-        by smtp.gmail.com with ESMTPSA id k5sm20022874edk.46.2021.05.12.07.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 May 2021 07:06:58 -0700 (PDT)
-From:   glittao@gmail.com
-To:     brendanhiggins@google.com, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, vbabka@suse.cz
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-mm@kvack.org, elver@google.com,
-        dlatypov@google.com, Oliver Glitta <glittao@gmail.com>
-Subject: [PATCH] mm/slub, kunit: add a KUnit test for SLUB debugging functionality-fix
-Date:   Wed, 12 May 2021 16:06:56 +0200
-Message-Id: <20210512140656.12083-1-glittao@gmail.com>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a5
-In-Reply-To: <20210511150734.3492-2-glittao@gmail.com>
-References: <20210511150734.3492-2-glittao@gmail.com>
+        id S234104AbhELQVL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 May 2021 12:21:11 -0400
+Received: from mga11.intel.com ([192.55.52.93]:17410 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238059AbhELP5O (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 May 2021 11:57:14 -0400
+IronPort-SDR: 7+Axw4a2GdTdJZYGr5p+xK+EevTTfQcb2LyJ34mdjWtG82rszEa9lKmLiCK/oMKVeRgKQvmVdi
+ Hmv7vfvJGpeA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9982"; a="196646154"
+X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
+   d="scan'208";a="196646154"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 08:56:05 -0700
+IronPort-SDR: UWeTj3jQdhWF1YEWQNpBm0lw4wCt6SSJLjjdVbtjgKaH+1h5T0zsfunZVjXASgzqZfYXdSAkpD
+ 6nq/IoMY81KA==
+X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
+   d="scan'208";a="392799988"
+Received: from rchatre-mobl3.amr.corp.intel.com (HELO [10.251.0.238]) ([10.251.0.238])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 08:56:04 -0700
+Subject: Re: [PATCH v4 2/2] selftests/sgx: Migrate to kselftest harness
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-sgx@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210508035648.18176-1-jarkko@kernel.org>
+ <20210508035648.18176-2-jarkko@kernel.org>
+ <960f1cd8-d805-8ed8-6af0-eed1f49e3c65@intel.com>
+ <YJsrDc34d2vbc+At@kernel.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+Message-ID: <0b68cf8e-994d-3c85-cb93-5701722d9336@intel.com>
+Date:   Wed, 12 May 2021 08:56:03 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YJsrDc34d2vbc+At@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Oliver Glitta <glittao@gmail.com>
+Hi Jarkko,
 
-Remove unused function test_exit(), from SLUB KUnit test.
+On 5/11/2021 6:10 PM, Jarkko Sakkinen wrote:
+> On Tue, May 11, 2021 at 11:42:49AM -0700, Reinette Chatre wrote:
+>> Hi Jarkko,
+>>
+>> On 5/7/2021 8:56 PM, Jarkko Sakkinen wrote:
+>>> Migrate to kselftest harness. Use a fixture test with enclave initialized
+>>> and de-initialized for each of the existing three tests, in other words:
+>>>
+>>> 1. One FIXTURE() for managing the enclave life-cycle.
+>>> 2. Three TEST_F()'s, one for each test case.
+>>
+>> These changes make it easier to add tests and I think it is a valuable
+>> addition.
+>>
+>>>
+>>> This gives a leaps better reporting than before. Here's an example
+>>> transcript:
+>>>
+>>> TAP version 13
+>>> 1..3
+>>> 0x0000000000000000 0x0000000000002000 0x03
+>>> 0x0000000000002000 0x0000000000001000 0x05
+>>> 0x0000000000003000 0x0000000000003000 0x03
+>>> ok 1 enclave.unclobbered_vdso
+>>> 0x0000000000000000 0x0000000000002000 0x03
+>>> 0x0000000000002000 0x0000000000001000 0x05
+>>> 0x0000000000003000 0x0000000000003000 0x03
+>>> ok 2 enclave.clobbered_vdso
+>>> 0x0000000000000000 0x0000000000002000 0x03
+>>> 0x0000000000002000 0x0000000000001000 0x05
+>>> 0x0000000000003000 0x0000000000003000 0x03
+>>> ok 3 enclave.clobbered_vdso_and_user_function
+>>>
+>>
+>> The output claims to conform to TAP13 but it does not seem as though all of
+>> the output conforms to TAP13. I assume such output would confuse automated
+>> systems.
+> 
+> You mean
+> 
+> 0x0000000000000000 0x0000000000002000 0x03
+> 0x0000000000002000 0x0000000000001000 0x05
+> 0x0000000000003000 0x0000000000003000 0x03
+> 
+> ?
 
-Reported-by: Marco Elver <elver@google.com>
-Signed-off-by: Oliver Glitta <glittao@gmail.com>
----
- lib/slub_kunit.c | 3 ---
- 1 file changed, 3 deletions(-)
+Yes
 
-diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-index f28965f64ef6..8662dc6cb509 100644
---- a/lib/slub_kunit.c
-+++ b/lib/slub_kunit.c
-@@ -129,8 +129,6 @@ static int test_init(struct kunit *test)
- 	return 0;
- }
- 
--static void test_exit(struct kunit *test) {}
--
- static struct kunit_case test_cases[] = {
- 	KUNIT_CASE(test_clobber_zone),
- 
-@@ -147,7 +145,6 @@ static struct kunit_case test_cases[] = {
- static struct kunit_suite test_suite = {
- 	.name = "slub_test",
- 	.init = test_init,
--	.exit = test_exit,
- 	.test_cases = test_cases,
- };
- kunit_test_suite(test_suite);
--- 
-2.31.1.272.g89b43f80a5
-
+Reinette
