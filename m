@@ -2,74 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C42537FE3B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 21:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E03B37FE3E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 21:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbhEMThd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 May 2021 15:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        id S231520AbhEMThe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 May 2021 15:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbhEMTh2 (ORCPT
+        with ESMTP id S231179AbhEMTh3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 May 2021 15:37:28 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ED7C06175F
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:17 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id a198-20020a3766cf0000b0290320e7711ebdso4432966qkc.22
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:17 -0700 (PDT)
+        Thu, 13 May 2021 15:37:29 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FB7C06138D
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:19 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id c15-20020a25a28f0000b02904f8c4864c90so18833535ybi.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=nAjJNcbSrTVyC9xT3GK+BCC2nCovQf7Djw6rij3xpcY=;
-        b=s2dk81EXLTewrXFgaIJ5Gft88QlFAOU8CxoluJsEKYnDIBm61BF58bUGSWxlTI8GFl
-         e6zr5JpAjJRPsoc1fz7cYeFO7+1PDaOYhriqamRkG0sAx8fLZ/R9U0zuVegE2tANSMsy
-         pBwk+Wagwh+5Z9owKl6esNIyD8BAMkHnREIxkPjjCtxZIrjz643cHruLPORYTAufSJYE
-         cL9dFjHxrBZRI2b9Us8Yo0wzro7aIWWBo3XfeIl2Nr9O1LpMoni3hitD36aY8kBV0i/A
-         0c7sbTP4mTa5Khn5JZSExU/HHZTZrQJ9cqvM5bicYteKNMTs21UJ6XxVb6UK0bKWAkGK
-         iDGA==
+        bh=Pnc5KHobM9DAhbBV5Sa6uLIgYm7GRUmsgARd8oXUtk4=;
+        b=qdj8z0tyEapRCEHGj+KqH2QK8fxUKn095Z0UBOLAKAgycVvBiBNVt2kKMcJWcvk/cQ
+         wK0mHvVQb2X6oSreOivh0vEomGETKVOHSufNjH7VGxNjQdSWPGwavzmcmPsIksEN0G0W
+         hP/6gu0onwU9JCa10hobeWljzWfrZUk8EdxSo560sTdlefkm2oJ5/nPOVC6onKi2Hzdt
+         jpZUNhLDPHsyKKodSZ0kveeWiwUU50nyttaA5W1WxoehIkq8rBockN2XRP23bmfpK/iK
+         J0DGje01/GBKdppsjXnrDivp5UePhi2kdqiqxy7alTou8wAldXYekxZSjAB7EocsJ6m1
+         XYJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=nAjJNcbSrTVyC9xT3GK+BCC2nCovQf7Djw6rij3xpcY=;
-        b=ZuDXo2TjNEHB84lWR9QnwpegCXqoLPxSsb/sNQ8nUVh4uY38AtMUdYcyCOWRcc7ziE
-         rVMsQEiQ9iFvEL3Jvr8I3V9j8EzfmOOi+ezv4l3cKKByE5/Dt0m8QUbtVTYL3us+M9Zd
-         OA3x5FwXIlWuwQlu4FzqQBSFMrgjtkGfZIMqTiKHqfGitOaovZaFI4EJGyrrokplQj6E
-         +UsnO/xUiSonL+Bem03QTfCjkzu9cqA/0Y5BejoJRm6dd2zayH1CxUNhJY4NEDic7JLy
-         aJ8FXJxb6quOzshQ396tuKsdPT44UCPvP9PgU59q9HXshy8kTjsGJwnSkF2qL5zuP4JL
-         FEKA==
-X-Gm-Message-State: AOAM531x2yzuB/6kE+7g/Ufu6xLj7pSnLtoPQxQe4h2Qy39paVg5br+v
-        K6+jqYKsBYCFy9IS5aaamqz89VjWng2HKQ==
-X-Google-Smtp-Source: ABdhPJzJ2d6Iu+sR/OhwWPYcm/MzemxmYk0K+r/k0ipSW6kbqovaeEikkCXVyDONkFAbwjHR29Up7djv3tRhsw==
+        bh=Pnc5KHobM9DAhbBV5Sa6uLIgYm7GRUmsgARd8oXUtk4=;
+        b=VDdp93/Hr9fuDcWbgtUH8LEh4W/Y+gTFT1oKNQjMCVvOx+nrQxqTWTDTt+zgw4N4yN
+         JL5SJ47RksbMGUNP85FC6vntsl2smKlwtDu/ee68WMaHUcO0xyEt74ujJ+W0bDR7Hylt
+         UAGSUp0X/pCmcItD4EVvk+ClXb7gyUwXurCHFepifqXHH+0mxEXr8UprKGl7JeP16c9G
+         2mZGEyYIwXUb4vHDhxBgk2YqJrO3+HTYUY2vV62oNHZ00cytkrQ4k4rVfYpNPWVxU1+n
+         fS7qhSVpa7RKKwVxpkNRyeN0YN70G119jJYbM5v0nwyqJWmh9se+F4kOKUrVmI/x17BA
+         RYMw==
+X-Gm-Message-State: AOAM530PAmPl7XdYhCuv6xKQ/t09J/VlnwcKTyVERZFjQB00JvV/1kJX
+        XM3J09aw+6Yo/WkF0GmciYkyihbtMLrcGQ==
+X-Google-Smtp-Source: ABdhPJx51srw5OAx9CYuU/ovSs3B51DS0yWNunkqHF3XEGT1k2yqzFkADqVwrM7QxX7nv8tG8T89tJDKhPATYA==
 X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:5f61:8ca4:879b:809e])
- (user=davidgow job=sendgmr) by 2002:a05:6214:d4c:: with SMTP id
- 12mr32562970qvr.2.1620934576937; Thu, 13 May 2021 12:36:16 -0700 (PDT)
-Date:   Thu, 13 May 2021 12:32:02 -0700
+ (user=davidgow job=sendgmr) by 2002:a25:4fc4:: with SMTP id
+ d187mr58699374ybb.245.1620934578714; Thu, 13 May 2021 12:36:18 -0700 (PDT)
+Date:   Thu, 13 May 2021 12:32:03 -0700
 In-Reply-To: <20210513193204.816681-1-davidgow@google.com>
-Message-Id: <20210513193204.816681-8-davidgow@google.com>
+Message-Id: <20210513193204.816681-9-davidgow@google.com>
 Mime-Version: 1.0
 References: <20210513193204.816681-1-davidgow@google.com>
 X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
-Subject: [PATCH v2 08/10] kernel/sysctl-test: Remove some casts which are
+Subject: [PATCH v2 09/10] apparmor: test: Remove some casts which are
  no-longer required
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Daniel Latypov <dlatypov@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
 Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
+        linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 With some of the stricter type checking in KUnit's EXPECT macros
-removed, several casts in sysctl-test are no longer required.
+removed, several casts in policy_unpack_test are no longer required.
 
 Remove the unnecessary casts, making the conditions clearer.
 
@@ -80,109 +80,65 @@ first couple of patches in this series, it's otherwise independent from
 the others. I think this makes the test more readable, but if you
 particularly dislike it, I'm happy to drop it.
 
- kernel/sysctl-test.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ security/apparmor/policy_unpack_test.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/sysctl-test.c b/kernel/sysctl-test.c
-index ccb78509f1a8..664ded05dd7a 100644
---- a/kernel/sysctl-test.c
-+++ b/kernel/sysctl-test.c
-@@ -49,7 +49,7 @@ static void sysctl_test_api_dointvec_null_tbl_data(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&null_data_table,
- 					       KUNIT_PROC_READ, buffer, &len,
- 					       &pos));
--	KUNIT_EXPECT_EQ(test, (size_t)0, len);
-+	KUNIT_EXPECT_EQ(test, 0, len);
+diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
+index 533137f45361..03f78a41ef79 100644
+--- a/security/apparmor/policy_unpack_test.c
++++ b/security/apparmor/policy_unpack_test.c
+@@ -177,7 +177,7 @@ static void policy_unpack_test_unpack_array_out_of_bounds(struct kunit *test)
  
- 	/*
- 	 * See above.
-@@ -58,7 +58,7 @@ static void sysctl_test_api_dointvec_null_tbl_data(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&null_data_table,
- 					       KUNIT_PROC_WRITE, buffer, &len,
- 					       &pos));
--	KUNIT_EXPECT_EQ(test, (size_t)0, len);
-+	KUNIT_EXPECT_EQ(test, 0, len);
+ 	array_size = unpack_array(puf->e, name);
+ 
+-	KUNIT_EXPECT_EQ(test, array_size, (u16)0);
++	KUNIT_EXPECT_EQ(test, array_size, 0);
+ 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
+ 		puf->e->start + TEST_NAMED_ARRAY_BUF_OFFSET);
+ }
+@@ -313,7 +313,7 @@ static void policy_unpack_test_unpack_strdup_out_of_bounds(struct kunit *test)
+ 	size = unpack_strdup(puf->e, &string, TEST_STRING_NAME);
+ 
+ 	KUNIT_EXPECT_EQ(test, size, 0);
+-	KUNIT_EXPECT_PTR_EQ(test, string, (char *)NULL);
++	KUNIT_EXPECT_PTR_EQ(test, string, NULL);
+ 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, start);
  }
  
- /*
-@@ -95,7 +95,7 @@ static void sysctl_test_api_dointvec_table_maxlen_unset(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&data_maxlen_unset_table,
- 					       KUNIT_PROC_READ, buffer, &len,
- 					       &pos));
--	KUNIT_EXPECT_EQ(test, (size_t)0, len);
-+	KUNIT_EXPECT_EQ(test, 0, len);
+@@ -391,10 +391,10 @@ static void policy_unpack_test_unpack_u16_chunk_basic(struct kunit *test)
  
- 	/*
- 	 * See previous comment.
-@@ -104,7 +104,7 @@ static void sysctl_test_api_dointvec_table_maxlen_unset(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&data_maxlen_unset_table,
- 					       KUNIT_PROC_WRITE, buffer, &len,
- 					       &pos));
--	KUNIT_EXPECT_EQ(test, (size_t)0, len);
-+	KUNIT_EXPECT_EQ(test, 0, len);
+ 	size = unpack_u16_chunk(puf->e, &chunk);
+ 
+-	KUNIT_EXPECT_PTR_EQ(test, (void *)chunk,
++	KUNIT_EXPECT_PTR_EQ(test, chunk,
+ 			    puf->e->start + TEST_U16_OFFSET + 2);
+-	KUNIT_EXPECT_EQ(test, size, (size_t)TEST_U16_DATA);
+-	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, (void *)(chunk + TEST_U16_DATA));
++	KUNIT_EXPECT_EQ(test, size, TEST_U16_DATA);
++	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, (chunk + TEST_U16_DATA));
  }
  
- /*
-@@ -135,11 +135,11 @@ static void sysctl_test_api_dointvec_table_len_is_zero(struct kunit *test)
+ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
+@@ -408,8 +408,8 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
  
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, KUNIT_PROC_READ, buffer,
- 					       &len, &pos));
--	KUNIT_EXPECT_EQ(test, (size_t)0, len);
-+	KUNIT_EXPECT_EQ(test, 0, len);
+ 	size = unpack_u16_chunk(puf->e, &chunk);
  
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, KUNIT_PROC_WRITE, buffer,
- 					       &len, &pos));
--	KUNIT_EXPECT_EQ(test, (size_t)0, len);
-+	KUNIT_EXPECT_EQ(test, 0, len);
+-	KUNIT_EXPECT_EQ(test, size, (size_t)0);
+-	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
++	KUNIT_EXPECT_EQ(test, size, 0);
++	KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
+ 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
  }
  
- /*
-@@ -174,7 +174,7 @@ static void sysctl_test_api_dointvec_table_read_but_position_set(
+@@ -430,8 +430,8 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_2(
  
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, KUNIT_PROC_READ, buffer,
- 					       &len, &pos));
--	KUNIT_EXPECT_EQ(test, (size_t)0, len);
-+	KUNIT_EXPECT_EQ(test, 0, len);
- }
+ 	size = unpack_u16_chunk(puf->e, &chunk);
  
- /*
-@@ -203,7 +203,7 @@ static void sysctl_test_dointvec_read_happy_single_positive(struct kunit *test)
- 
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, KUNIT_PROC_READ,
- 					       user_buffer, &len, &pos));
--	KUNIT_ASSERT_EQ(test, (size_t)3, len);
-+	KUNIT_ASSERT_EQ(test, 3, len);
- 	buffer[len] = '\0';
- 	/* And we read 13 back out. */
- 	KUNIT_EXPECT_STREQ(test, "13\n", buffer);
-@@ -233,9 +233,9 @@ static void sysctl_test_dointvec_read_happy_single_negative(struct kunit *test)
- 
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, KUNIT_PROC_READ,
- 					       user_buffer, &len, &pos));
--	KUNIT_ASSERT_EQ(test, (size_t)4, len);
-+	KUNIT_ASSERT_EQ(test, 4, len);
- 	buffer[len] = '\0';
--	KUNIT_EXPECT_STREQ(test, "-16\n", (char *)buffer);
-+	KUNIT_EXPECT_STREQ(test, "-16\n", buffer);
- }
- 
- /*
-@@ -265,7 +265,7 @@ static void sysctl_test_dointvec_write_happy_single_positive(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, KUNIT_PROC_WRITE,
- 					       user_buffer, &len, &pos));
- 	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
--	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, (size_t)pos);
-+	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
- 	KUNIT_EXPECT_EQ(test, 9, *((int *)table.data));
- }
- 
-@@ -295,7 +295,7 @@ static void sysctl_test_dointvec_write_happy_single_negative(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, KUNIT_PROC_WRITE,
- 					       user_buffer, &len, &pos));
- 	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
--	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, (size_t)pos);
-+	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
- 	KUNIT_EXPECT_EQ(test, -9, *((int *)table.data));
+-	KUNIT_EXPECT_EQ(test, size, (size_t)0);
+-	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
++	KUNIT_EXPECT_EQ(test, size, 0);
++	KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
+ 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
  }
  
 -- 
