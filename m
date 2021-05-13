@@ -2,258 +2,282 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F0E37FF73
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 22:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD61C37FF80
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 22:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbhEMUtl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 May 2021 16:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S231159AbhEMU4W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 May 2021 16:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbhEMUtj (ORCPT
+        with ESMTP id S233190AbhEMU4V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 May 2021 16:49:39 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BDCC06174A
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 13:48:29 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id u133so3774071wmg.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 13:48:29 -0700 (PDT)
+        Thu, 13 May 2021 16:56:21 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B216C061756
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 13:55:11 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id x2so40288111lff.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 13:55:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=dGB51QrtZPdSxwxWBoGg4WEVZZlkiB0hLTHFQQSVKgw=;
-        b=KQWMq1IP3OP2LY2wCYR9fJWa7W2Qy4qETloqS25tPcBiaqyvBBvNJebqlMWRJ21mAd
-         mOJ6dnl85TULZhCwrIxtrph11kQ0dB1+UoNwqZhYwEo1xxpSB3apZUlS/DrhXjJ9jYCw
-         VigbGH9yTCH+kmCKd/CMaYkquhzqXHiZC/r2BbM2f5jN8zDNiOyN4ncHqME4Zvb6pvMC
-         NNclnZCrbnL9U3iDV7AM81S0vOquzgy4v01wkGyc2MKm2osJ45Lgd6tA9LBJH4ToOxOh
-         h7jjyEWxW1Ewc8HBEeoeHReunSrl/XT6DLQPiifOIQKUkVUnQZWgwU2Tvb3PEHa2pbRS
-         Lcng==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=M44SO0uoSJzYJ9SKzXZE5cFr5EetjPFOZBrp4CQPL5w=;
+        b=PhSHGSOBlih6yPBEhHUaleoS71804WhKJeBbmw/azmuVp7qr5wIHjWJQdDNoTYP6ES
+         jVMwzSz0lIVr6qH+VTlu0rCsoO/lSEzLEc7prCOBAZBLvPYE+b5eIvPs6axElwH7wwdz
+         KznZq5JE5fQCqCwkWToJWj67kJz9k/pprOznw2UpmZ0VTB1RWGmmjJyDc7MLzhuKZo3b
+         n6GhpFNoVpDyMESqR/DU4AV/FTzfGsLNkq22i2T7Kd3EAGVQcNnyabhFQfNrR+qfGBLI
+         XHUkSWzpwbmIqOXiWzMQWGSbv8S4rLmVMPnnZWpFWaJpjM1WjWQZI+xjkYchuDrmterL
+         KngQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dGB51QrtZPdSxwxWBoGg4WEVZZlkiB0hLTHFQQSVKgw=;
-        b=WJJVaKanOv99b9e+uusKpXto1/mAUHF3dhtKiSNBVvjCquBs0IbXvHcYBqlDAip7qn
-         tb1ZaejjbDQfV7LOmqHd5B8YjuCI4v/C0rPuIKrxXrP6FXUEtXBigR8V3qMDgV3zbNNY
-         2nDFEm+IGAyfmszULk+qjNx2rqODIf7GXaUJqVSy+z7kcZXQPSY9cdLlv+G0Jcs0KErY
-         fAjCg2UHkdwSYeBjBeMaxTg1E/t9zsbSkuqY2sd6qcVpwY7R231o1prvw4/aoEFvHYBx
-         cdUGPX4s8bkBP9uSl1wgkxBIQXe6q1zrewJnCNAJknOSGW28k6++TwZ7P5++WmJneUF9
-         IINw==
-X-Gm-Message-State: AOAM531pLiveVBSzEcpD6/mvgEfXHQ9ayrYQSXoY9Z1BGoak19lC+Mgk
-        UzyUowPm+oLO3h7RrCJbRD8AiYrcT7FwMyKHR4E8xQ==
-X-Google-Smtp-Source: ABdhPJzhMmofqv5D6fbTvQQIsmKkUQpAal/lQr9yE9lxDr8GDIVFmRxBmI2vC6RCs5aNycBLcNTATF4eRiPKPMaSUv0=
-X-Received: by 2002:a1c:cc17:: with SMTP id h23mr26925463wmb.129.1620938907795;
- Thu, 13 May 2021 13:48:27 -0700 (PDT)
+         :message-id:subject:to;
+        bh=M44SO0uoSJzYJ9SKzXZE5cFr5EetjPFOZBrp4CQPL5w=;
+        b=g4nIRsOLB3qWQ5ONIY49fOX/mUlTHOHXOJcdkwnl5yifxh71RDmrcqJTvmdutpN/Ig
+         VcM1AoTt0srdl3+spTM3Q4cUXxbzCaYXJ6Q9erHChOpm81+fJj0DzKur0SpOthXEURkq
+         e6kbqYp/VfefJwCBE2iX2rYu3nMfYnYs0EHpr491Q9NVJMcA4hzkBwyxK3T+7bu92SFL
+         M1jkOXNjvk6R86uVlVDgFeK49sePY2RVK3i4LT/1rXOv4bRwzDDK0ANGfSoWqIUHSEg6
+         D2ckbIW6QourmUaVfECkQ43PtRyQmVWjFQnnxcjmDus3J2nWHL4i+j8OHpj+oCJqseXV
+         ugMA==
+X-Gm-Message-State: AOAM530HMk5u4yj6CCX8u8IqAqADB1fxrn9e2o6LgQNvaDOI3NJlNBnV
+        YcCualSSbV9jQxCnNGjcVgFxqminFxEcK8j5FNZzZn967MITug==
+X-Google-Smtp-Source: ABdhPJyX5A/VpufagSakFYoUDLT0y4b4CvhLDrQ3z6CCbpAwFCgSpn5i0qXkWkmj3c4f4asiDH02UQ1NeFZxRX3mF+w=
+X-Received: by 2002:a05:6512:1116:: with SMTP id l22mr30043183lfg.473.1620939309295;
+ Thu, 13 May 2021 13:55:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210513200350.854429-1-davidgow@google.com> <CAGS_qxoOM_STeiDQSdrYu6_5upOMMeBcg8NXjZuKCJ=rc=7Vag@mail.gmail.com>
-In-Reply-To: <CAGS_qxoOM_STeiDQSdrYu6_5upOMMeBcg8NXjZuKCJ=rc=7Vag@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 14 May 2021 04:48:16 +0800
-Message-ID: <CABVgOSmi01-DpECo0AYSGJWMbPTEHzhA4pRG-vSimfMsF_xpFw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Add gnu_printf specifiers
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20210423181727.596466-1-jingzhangos@google.com> <20210423181727.596466-4-jingzhangos@google.com>
+In-Reply-To: <20210423181727.596466-4-jingzhangos@google.com>
+From:   Jing Zhang <jingzhangos@google.com>
+Date:   Thu, 13 May 2021 15:54:57 -0500
+Message-ID: <CAAdAUth3LyNH2OJG7sKyWieB80WPUXsMe=uskxYG_jPyxM8GrA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] KVM: stats: Add documentation for statistics data
+ binary interface
+To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 14, 2021 at 4:25 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Fri, Apr 23, 2021 at 1:17 PM Jing Zhang <jingzhangos@google.com> wrote:
 >
-> On Thu, May 13, 2021 at 1:03 PM 'David Gow' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > Some KUnit functions use variable arguments to implement a printf-like
-> > format string. Use the __printf() attribute to let the compiler warn if
-> > invalid format strings are passed in.
-> >
-> > If the kernel is build with W=3D1, it complained about the lack of thes=
-e
-> > specifiers, e.g.:
-> > ../lib/kunit/test.c:72:2: warning: function =E2=80=98kunit_log_append=
-=E2=80=99 might be a candidate for =E2=80=98gnu_printf=E2=80=99 format attr=
-ibute [-Wsuggest-attribute=3Dformat]
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
+> Signed-off-by: Jing Zhang <jingzhangos@google.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 171 +++++++++++++++++++++++++++++++++
+>  1 file changed, 171 insertions(+)
 >
-> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 8d614a577e43..faceadc2bd66 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5021,6 +5021,169 @@ see KVM_XEN_VCPU_SET_ATTR above.
+>  The KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADJUST type may not be used
+>  with the KVM_XEN_VCPU_GET_ATTR ioctl.
 >
-> As noted below, these additions don't really do anything.
-> Unfortunately, they just make compiler warnings noisier in the case of
-> kunit_log_append().
->
-> But if this silences a W=3D1 warning, then we should probably add them in=
-.
-> I guess it also serves as documentation that we're using the same
-> standard format specifiers and not something custom, which is nice.
->
+> +4.130 KVM_STATS_GETFD
+> +---------------------
+> +
+> +:Capability: KVM_CAP_STATS_BINARY_FD
+> +:Architectures: all
+> +:Type: vm ioctl, vcpu ioctl
+> +:Parameters: none
+> +:Returns: statistics file descriptor on success, < 0 on error
+> +
+> +Errors:
+> +
+> +  ======     ======================================================
+> +  ENOMEM     if the fd could not be created due to lack of memory
+> +  EMFILE     if the number of opened files exceeds the limit
+> +  ======     ======================================================
+> +
+> +The file descriptor can be used to read VM/vCPU statistics data in binary
+> +format. The file data is organized into three blocks as below:
+> ++-------------+
+> +|   Header    |
+> ++-------------+
+> +| Descriptors |
+> ++-------------+
+> +| Stats Data  |
+> ++-------------+
+> +
+> +The Header block is always at the start of the file. It is only needed to be
+> +read one time after a system boot.
+> +It is in the form of ``struct kvm_stats_header`` as below::
+> +
+> +       #define KVM_STATS_ID_MAXLEN             64
+> +
+> +       struct kvm_stats_header {
+> +               char id[KVM_STATS_ID_MAXLEN];
+> +               __u32 name_size;
+> +               __u32 count;
+> +               __u32 desc_offset;
+> +               __u32 data_offset;
+> +       };
+> +
+> +The ``id`` field is identification for the corresponding KVM statistics. For
+> +KVM statistics, it is in the form of "kvm-{kvm pid}", like "kvm-12345". For
+> +VCPU statistics, it is in the form of "kvm-{kvm pid}/vcpu-{vcpu id}", like
+> +"kvm-12345/vcpu-12".
+> +
+> +The ``name_size`` field is the size (byte) of the statistics name string
+> +(including trailing '\0') appended to the end of every statistics descriptor.
+> +
+> +The ``count`` field is the number of statistics.
+> +
+> +The ``desc_offset`` field is the offset of the Descriptors block from the start
+> +of the file indicated by the file descriptor.
+> +
+> +The ``data_offset`` field is the offset of the Stats Data block from the start
+> +of the file indicated by the file descriptor.
+> +
+> +The Descriptors block is only needed to be read once after a system boot. It is
+> +an array of ``struct kvm_stats_desc`` as below::
+> +
+> +       #define KVM_STATS_TYPE_SHIFT            0
+> +       #define KVM_STATS_TYPE_MASK             (0xF << KVM_STATS_TYPE_SHIFT)
+> +       #define KVM_STATS_TYPE_CUMULATIVE       (0x0 << KVM_STATS_TYPE_SHIFT)
+> +       #define KVM_STATS_TYPE_INSTANT          (0x1 << KVM_STATS_TYPE_SHIFT)
+> +       #define KVM_STATS_TYPE_MAX              KVM_STATS_TYPE_INSTANT
+> +
+> +       #define KVM_STATS_UNIT_SHIFT            4
+> +       #define KVM_STATS_UNIT_MASK             (0xF << KVM_STATS_UNIT_SHIFT)
+> +       #define KVM_STATS_UNIT_NONE             (0x0 << KVM_STATS_UNIT_SHIFT)
+> +       #define KVM_STATS_UNIT_BYTES            (0x1 << KVM_STATS_UNIT_SHIFT)
+> +       #define KVM_STATS_UNIT_SECONDS          (0x2 << KVM_STATS_UNIT_SHIFT)
+> +       #define KVM_STATS_UNIT_CYCLES           (0x3 << KVM_STATS_UNIT_SHIFT)
+> +       #define KVM_STATS_UNIT_MAX              KVM_STATS_UNIT_CYCLES
+> +
+> +       #define KVM_STATS_SCALE_SHIFT           8
+> +       #define KVM_STATS_SCALE_MASK            (0xF << KVM_STATS_SCALE_SHIFT)
+> +       #define KVM_STATS_SCALE_POW10           (0x0 << KVM_STATS_SCALE_SHIFT)
+> +       #define KVM_STATS_SCALE_POW2            (0x1 << KVM_STATS_SCALE_SHIFT)
+> +       #define KVM_STATS_SCALE_MAX             KVM_STATS_SCALE_POW2
+> +
 
-Yeah: I did this to get rid of the W=3D1 warnings. I don't know if
-there's a way of doing this which would be less verbose: I do think
-that the format checking is worthwhile in general, even if we're
-hitting a few nasty cases where things are nested in macros.
-
-
-> > ---
-> >  include/kunit/test.h      | 2 +-
-> >  lib/kunit/string-stream.h | 6 +++---
-> >  2 files changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index 49601c4b98b8..af2e386b867c 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -610,7 +610,7 @@ static inline void *kunit_kzalloc(struct kunit *tes=
-t, size_t size, gfp_t gfp)
-> >
-> >  void kunit_cleanup(struct kunit *test);
-> >
-> > -void kunit_log_append(char *log, const char *fmt, ...);
-> > +void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+> +       struct kvm_stats_desc {
+> +               __u32 flags;
+> +               __s16 exponent;
+> +               __u16 size;
+> +               __u32 unused1;
+> +               __u32 unused2;
+> +               __u8 name[0];
+Should be "char name[0]" as defined in include/uapi/linux/kvm.h.
+> +       };
+> +
+> +The ``flags`` field contains the type and unit of the statistics data described
+> +by this descriptor. The following flags are supported:
+> +  * ``KVM_STATS_TYPE_CUMULATIVE``
+> +    The statistics data is cumulative. The value of data can only be increased.
+> +    Most of the counters used in KVM are of this type.
+> +    The corresponding ``count`` filed for this type is always 1.
+> +  * ``KVM_STATS_TYPE_INSTANT``
+> +    The statistics data is instantaneous. Its value can be increased or
+> +    decreased. This type is usually used as a measurement of some resources,
+> +    like the number of dirty pages, the number of large pages, etc.
+> +    The corresponding ``count`` field for this type is always 1.
+> +  * ``KVM_STATS_UNIT_NONE``
+> +    There is no unit for the value of statistics data. This usually means that
+> +    the value is a simple counter of an event.
+> +  * ``KVM_STATS_UNIT_BYTES``
+> +    It indicates that the statistics data is used to measure memory size, in the
+> +    unit of Byte, KiByte, MiByte, GiByte, etc. The unit of the data is
+> +    determined by the ``exponent`` field in the descriptor. The
+> +    ``KVM_STATS_SCALE_POW2`` flag is valid in this case. The unit of the data is
+> +    determined by ``pow(2, exponent)``. For example, if value is 10,
+> +    ``exponent`` is 20, which means the unit of statistics data is MiByte, we
+> +    can get the statistics data in the unit of Byte by
+> +    ``value * pow(2, exponent) = 10 * pow(2, 20) = 10 MiByte`` which is
+> +    10 * 1024 * 1024 Bytes.
+> +  * ``KVM_STATS_UNIT_SECONDS``
+> +    It indicates that the statistics data is used to measure time/latency, in
+> +    the unit of nanosecond, microsecond, millisecond and second. The unit of the
+> +    data is determined by the ``exponent`` field in the descriptor. The
+> +    ``KVM_STATS_SCALE_POW10`` flag is valid in this case. The unit of the data
+> +    is determined by ``pow(10, exponent)``. For example, if value is 2000000,
+> +    ``exponent`` is -6, which means the unit of statistics data is microsecond,
+> +    we can get the statistics data in the unit of second by
+> +    ``value * pow(10, exponent) = 2000000 * pow(10, -6) = 2 seconds``.
+> +  * ``KVM_STATS_UNIT_CYCLES``
+> +    It indicates that the statistics data is used to measure CPU clock cycles.
+> +    The ``KVM_STATS_SCALE_POW10`` flag is valid in this case. For example, if
+> +    value is 200, ``exponent`` is 4, we can get the number of CPU clock cycles
+> +    by ``value * pow(10, exponent) = 200 * pow(10, 4) = 2000000``.
+> +
+> +The ``exponent`` field is the scale of corresponding statistics data. It has two
+> +values as follows:
+> +  * ``KVM_STATS_SCALE_POW10``
+> +    The scale is based on power of 10. It is used for measurement of time and
+> +    CPU clock cycles.
+> +  * ``KVM_STATS_SCALE_POW2``
+> +    The scale is based on power of 2. It is used for measurement of memory size.
+> +
+> +The ``size`` field is the number of values of this statistics data. It is in the
+> +unit of ``unsigned long`` for VCPU or ``__u64`` for VM.
+> +
+> +The ``unused1`` and ``unused2`` fields are reserved for future
+> +support for other types of statistics data, like log/linear histogram.
+> +
+> +The ``name`` field points to the name string of the statistics data. The name
+> +string starts at the end of ``struct kvm_stats_desc``.
+> +The maximum length (including trailing '\0') is indicated by ``name_size``
+> +in ``struct kvm_stats_header``.
+> +
+> +The Stats Data block contains an array of data values of type ``struct
+> +kvm_vm_stats_data`` or ``struct kvm_vcpu_stats_data``. It would be read by
+> +user space periodically to pull statistics data.
+> +The order of data value in Stats Data block is the same as the order of
+> +descriptors in Descriptors block.
+> +  * Statistics data for VM::
+> +
+> +       struct kvm_vm_stats_data {
+> +               unsigned long value[0];
+> +       };
+> +
+> +  * Statistics data for VCPU::
+> +
+> +       struct kvm_vcpu_stats_data {
+> +               __u64 value[0];
+> +       };
+> +
+>  5. The kvm_run structure
+>  ========================
 >
-> Before this patch:
-> ../lib/kunit/kunit-example-test.c: In function =E2=80=98example_simple_te=
-st=E2=80=99:
-> ../include/linux/kern_levels.h:5:18: warning: format =E2=80=98%s=E2=80=99=
- expects
-> argument of type =E2=80=98char *=E2=80=99, but argument 3 has type =E2=80=
-=98int=E2=80=99 [-Wformat=3D]
->     5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
->       |                  ^~~~~~
-> ../include/kunit/test.h:622:10: note: in definition of macro =E2=80=98kun=
-it_log=E2=80=99
->   622 |   printk(lvl fmt, ##__VA_ARGS__);    \
->       |          ^~~
-> ../include/kunit/test.h:641:2: note: in expansion of macro =E2=80=98kunit=
-_printk=E2=80=99
->   641 |  kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
->       |  ^~~~~~~~~~~~
-> ../include/linux/kern_levels.h:14:19: note: in expansion of macro =E2=80=
-=98KERN_SOH=E2=80=99
->    14 | #define KERN_INFO KERN_SOH "6" /* informational */
->       |                   ^~~~~~~~
-> ../include/kunit/test.h:641:15: note: in expansion of macro =E2=80=98KERN=
-_INFO=E2=80=99
->   641 |  kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
->       |               ^~~~~~~~~
-> ../lib/kunit/kunit-example-test.c:23:2: note: in expansion of macro =E2=
-=80=98kunit_info=E2=80=99
->    23 |  kunit_info(test, "invalid: %s", 42);
+> @@ -6888,3 +7051,11 @@ depends on the individual hypercall.
+>  Right now, the only bit that can be set is bit 12, corresponding to
+>  KVM_HC_PAGE_ENC_STATUS.  The hypercall returns ENOSYS if bit 12 is not
+>  set or KVM_CAP_EXIT_HYPERCALL is not enabled.
+> +
+> +8.33 KVM_CAP_STATS_BINARY_FD
+> +----------------------------
+> +
+> +:Architectures: all
+> +
+> +This capability indicates the feature that user space can create get a file
+> +descriptor for every VM and VCPU to read statistics data in binary format.
+> --
+> 2.31.1.498.g6c1eba8ee3d-goog
 >
-> After this patch, it gets noisier:
-> In file included from ../lib/kunit/kunit-example-test.c:9:
-> ../lib/kunit/kunit-example-test.c: In function =E2=80=98example_simple_te=
-st=E2=80=99:
-> ../include/linux/kern_levels.h:5:18: warning: format =E2=80=98%s=E2=80=99=
- expects
-> argument of type =E2=80=98char *=E2=80=99, but argument 3 has type =E2=80=
-=98int=E2=80=99 [-Wformat=3D]
->     5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
->       |                  ^~~~~~
-> ../include/kunit/test.h:622:10: note: in definition of macro =E2=80=98kun=
-it_log=E2=80=99
->   622 |   printk(lvl fmt, ##__VA_ARGS__);    \
->       |          ^~~
-> ../include/kunit/test.h:641:2: note: in expansion of macro =E2=80=98kunit=
-_printk=E2=80=99
->   641 |  kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
->       |  ^~~~~~~~~~~~
-> ../include/linux/kern_levels.h:14:19: note: in expansion of macro =E2=80=
-=98KERN_SOH=E2=80=99
->    14 | #define KERN_INFO KERN_SOH "6" /* informational */
->       |                   ^~~~~~~~
-> ../include/kunit/test.h:641:15: note: in expansion of macro =E2=80=98KERN=
-_INFO=E2=80=99
->   641 |  kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
->       |               ^~~~~~~~~
-> ../lib/kunit/kunit-example-test.c:23:2: note: in expansion of macro =E2=
-=80=98kunit_info=E2=80=99
->    23 |  kunit_info(test, "invalid: %s", 42);
->       |  ^~~~~~~~~~
-> ../include/kunit/test.h:105:31: warning: format =E2=80=98%s=E2=80=99 expe=
-cts argument
-> of type =E2=80=98char *=E2=80=99, but argument 4 has type =E2=80=98int=E2=
-=80=99 [-Wformat=3D]
->   105 | #define KUNIT_SUBTEST_INDENT  "    "
->       |                               ^~~~~~
-> ../include/kunit/test.h:623:42: note: in definition of macro =E2=80=98kun=
-it_log=E2=80=99
->   623 |   kunit_log_append((test_or_suite)->log, fmt "\n", \
->       |                                          ^~~
-> ../include/kunit/test.h:628:23: note: in expansion of macro
-> =E2=80=98KUNIT_SUBTEST_INDENT=E2=80=99
->   628 |  kunit_log(lvl, test, KUNIT_SUBTEST_INDENT "# %s: " fmt,  \
->       |                       ^~~~~~~~~~~~~~~~~~~~
-> ../include/kunit/test.h:641:2: note: in expansion of macro =E2=80=98kunit=
-_printk=E2=80=99
->   641 |  kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
->       |  ^~~~~~~~~~~~
-> ../lib/kunit/kunit-example-test.c:23:2: note: in expansion of macro =E2=
-=80=98kunit_info=E2=80=99
->    23 |  kunit_info(test, "invalid: %s", 42);
->       |  ^~~~~~~~~~
->
->
-
-Yeah: that is pretty ugly. TBH, it was pretty ugly beforehand, and
-this does make it worse. I guess that's the price we pay for having so
-many nested macros, as well.
-Personally, I suspect this is still worth it to get rid of the
-compiler warnings, but only just.
-
-> >
-> >  /*
-> >   * printk and log to per-test or per-suite log buffer.  Logging only d=
-one
-> > diff --git a/lib/kunit/string-stream.h b/lib/kunit/string-stream.h
-> > index fe98a00b75a9..5e94b623454f 100644
-> > --- a/lib/kunit/string-stream.h
-> > +++ b/lib/kunit/string-stream.h
-> > @@ -35,9 +35,9 @@ struct string_stream *alloc_string_stream(struct kuni=
-t *test, gfp_t gfp);
-> >  int __printf(2, 3) string_stream_add(struct string_stream *stream,
-> >                                      const char *fmt, ...);
-> >
-> > -int string_stream_vadd(struct string_stream *stream,
-> > -                      const char *fmt,
-> > -                      va_list args);
-> > +int __printf(2, 0) string_stream_vadd(struct string_stream *stream,
-> > +                                     const char *fmt,
-> > +                                     va_list args);
->
-> This is never called with a literal `fmt` string.
-> It's currently only ever called through the _add variant, which does
-> have __printf(2,3).
->
-> So this can't catch any mistakes currently.
-> And I think it's hard to imagine we'd ever pass in a literal format
-> string w/ a va_list.
->
-
-Yeah: I was tempted to leave this one out, but it was triggering
-warnings with the "you should use __printf()" heuristic. In fact, it
-had two warnings.
-The __printf() specifier documentation does specifically call out
-cases where a va_list is passed in as a case to use '0' for the
-positional argument, but only the format string is checked for
-validity: there's no typechecking.
-
-> >
-> >  char *string_stream_get_string(struct string_stream *stream);
-> >
-> > --
-> > 2.31.1.751.gd2f1c929bd-goog
-> >
-> > --
-> > You received this message because you are subscribed to the Google Grou=
-ps "KUnit Development" group.
-> > To unsubscribe from this group and stop receiving emails from it, send =
-an email to kunit-dev+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/ms=
-gid/kunit-dev/20210513200350.854429-1-davidgow%40google.com.
