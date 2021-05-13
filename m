@@ -2,73 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC7A37FE35
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 21:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8E937FE3C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 21:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbhEMTh1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 May 2021 15:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S231267AbhEMThc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 May 2021 15:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbhEMThW (ORCPT
+        with ESMTP id S231254AbhEMTh1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 May 2021 15:37:22 -0400
+        Thu, 13 May 2021 15:37:27 -0400
 Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D00C06174A
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:12 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id y18-20020a0cd9920000b02901c32e3e18f7so22117563qvj.15
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7B4C061763
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:13 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id r11-20020a0cb28b0000b02901c87a178503so22071897qve.22
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=2O58jXnETdEbs4jVdtA0T0Vt+DD9mkqY3jDs31OqI1U=;
-        b=L5x5B79nG2yasENXeTN12F+UXiA4asq5ViYFWln7Wgad3Qkt8PMuW0BkX6fQT1iubG
-         m9RbbydDyHxnzAJAJfxhxTv/Wv37BxU2F027eoJ/Otf2yzK1UlCglgzuHY/R/caTg7QO
-         MkaiEaxFUk+D3r1/29ZVFB9ZL3LmyMHVew6pygLP8K/tlw4F7sWUWFAEaoE6c6GwgWj3
-         ZAUVPawjvZsNk8frXZM0ti9Atnsvl1T1wcWQ1huhkVKmoXNCFnSZ8/rWjT1MNx0Y+EtH
-         f1qN97pMU0vdzxIJ3eWXRTYCC+lodWI8DLV6bs5VWTHLxvGIyuM6jkuH7FFk/5DStlUT
-         S7KQ==
+        bh=mKHn5nW8hMSnIzbkNUA9bgAI/5jrfrz+RnfoZbF6j1k=;
+        b=NxbyH77uCpX5jHPLaIxntl4MMEN72o3nW4IkVxd/s3G+RDesqezz14zIzof8/hNPe5
+         bs0sPo+sfbA/DkdAe5qwND2yDe8Q64E5hUI4+AlxryJRLiGkfRkjlkEyaeLS0d71adGe
+         EqppPm6oUyDCv9k3uQh/y6lgpmsdCDlIbWeyBJwuntF8gv+cgoXCeMogRGjMI3rhvHiU
+         idKnSaGs+vEa/rnr4VhDzukE8dvmoHkR0nl+RncsQ8iu8K1NZakuYD3gCSj7JWp3xwB/
+         9z6F4Y/tGgPWGTtRj7Gf2L8/2hhiBm1mowzmxrLDhi1u0Lyaki06ZcxNxWrNj5V5IMuB
+         4KtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=2O58jXnETdEbs4jVdtA0T0Vt+DD9mkqY3jDs31OqI1U=;
-        b=tyNoPU00mrnvbj9sR1z5lqGLaUTM4QXZBluGywi6bDS051S6ok+vxsQP/Uex48NJm5
-         nzssbdunabuLDEVgt9nmt3HEx5zZ8Mxk0PXx9kDapJY8buLTjDM2N+k/Ff4JtFL/5cuu
-         oNNqaHFrogn7ifYyGaoa+428YTR421W/Uz27WvSg+g8VOe7X3CYl4KpXHgVdzeDMWxeB
-         JhpWNjSRudo6EraVHWe2WgSPxaKjYjfVxf9N1m1M3Fi4dhhTf8fUMORFmmbTJ7NtBOw4
-         BUc+qTEOM6fkXQCC0yz/JhBV6SVWx0G5gLQ09AbXGByzWCep6ZZji1vEPbpUHSQyXmR/
-         E04A==
-X-Gm-Message-State: AOAM531GoRfbsZUcEugJGG5kGkWxzEHE/0ay1tVI3OdS4mrzLNf5gicu
-        4ZzLAQRz6Wv2ktUXuqcV/olIFBg3He95vg==
-X-Google-Smtp-Source: ABdhPJxNmOIByMOB6nwOsj8kvWrsLHtfRYpnAZL03VNkudsSypOoG1v/BHcAY8WJYP4Ng/S5PKoPTpK8/01asA==
+        bh=mKHn5nW8hMSnIzbkNUA9bgAI/5jrfrz+RnfoZbF6j1k=;
+        b=cOjbtAvgHgc6cwGz7CMxDOxjhWY0NWNWvupQx5iZxBzLzg8tY4RBdeSnvsQKxDl67b
+         Mc3wsk3L7SC3I23gG+rrZqVIxN/sP0RvrGRWXzLQ643HeJLfUBDfLZseLyXC6oNNzRde
+         HDNtEmiTvotGQk43U42hPZo1tyWCRc1tIBzHzYTFmNcgMYroj/jg0KEoZ8d0mhc6n75L
+         eiiM3xFIDW/5E4lJgACB4GlVK1t9hfWkWtq7fCTzig5TPmiIZA/18a1wI22V7tuVtQHo
+         TFO2L6ffwh+84UWdE+eNf4FSh6uAiflFqIYBQzD+YnRlpkj4Xhp5Rm4VLa76gT98Q1ph
+         xVHw==
+X-Gm-Message-State: AOAM532NdaPF5j6gxw8YErxFHrYwfW0NRJuSDBxihhM/cD5y0HIHNmEz
+        1IR00zibBdcpcOKBxxX8xMrVNnXsSAhKVA==
+X-Google-Smtp-Source: ABdhPJzOzRUMhMpdqg5s7k2XyPDWGEgOheQSp/nxRF00tQp7xZJniBllI4qoqrF0m6c5fppZqVcMeF2SI9GnNQ==
 X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:5f61:8ca4:879b:809e])
- (user=davidgow job=sendgmr) by 2002:a05:6214:951:: with SMTP id
- dn17mr42776333qvb.27.1620934571219; Thu, 13 May 2021 12:36:11 -0700 (PDT)
-Date:   Thu, 13 May 2021 12:31:59 -0700
+ (user=davidgow job=sendgmr) by 2002:a05:6214:373:: with SMTP id
+ t19mr9320953qvu.45.1620934573116; Thu, 13 May 2021 12:36:13 -0700 (PDT)
+Date:   Thu, 13 May 2021 12:32:00 -0700
 In-Reply-To: <20210513193204.816681-1-davidgow@google.com>
-Message-Id: <20210513193204.816681-5-davidgow@google.com>
+Message-Id: <20210513193204.816681-6-davidgow@google.com>
 Mime-Version: 1.0
 References: <20210513193204.816681-1-davidgow@google.com>
 X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
-Subject: [PATCH v2 05/10] iio: Remove a cast in iio-test-format which is no
- longer required
+Subject: [PATCH v2 06/10] mmc: sdhci-of-aspeed: Remove some unnecessary casts
+ from KUnit tests
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Daniel Latypov <dlatypov@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
+        Andrew Jeffery <andrew@aj.id.au>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joel Stanley <joel@jms.id.au>
 Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KUnit's EXPECT macros no longer typecheck as stringently, so casting the
-result of strcmp() is now unnecessary.
+With KUnit's EXPECT macros no longer typechecking arguments as strictly,
+get rid of a number of now unnecessary casts.
 
 Signed-off-by: David Gow <davidgow@google.com>
 ---
@@ -77,21 +80,75 @@ first couple of patches in this series, it's otherwise independent from
 the others. I think this makes the test more readable, but if you
 particularly dislike it, I'm happy to drop it.
 
- drivers/iio/test/iio-test-format.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/host/sdhci-of-aspeed-test.c | 34 ++++++++++++-------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/iio/test/iio-test-format.c b/drivers/iio/test/iio-test-format.c
-index 55a0cfe9181d..f1e951eddb43 100644
---- a/drivers/iio/test/iio-test-format.c
-+++ b/drivers/iio/test/iio-test-format.c
-@@ -8,7 +8,7 @@
- #include <linux/iio/iio.h>
+diff --git a/drivers/mmc/host/sdhci-of-aspeed-test.c b/drivers/mmc/host/sdhci-of-aspeed-test.c
+index bb67d159b7d8..1ed4f86291f2 100644
+--- a/drivers/mmc/host/sdhci-of-aspeed-test.c
++++ b/drivers/mmc/host/sdhci-of-aspeed-test.c
+@@ -26,23 +26,23 @@ static void aspeed_sdhci_phase_ddr52(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, 15,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 25));
  
- #define IIO_TEST_FORMAT_EXPECT_EQ(_test, _buf, _ret, _val) do { \
--		KUNIT_EXPECT_EQ(_test, (int)strlen(_buf), _ret); \
-+		KUNIT_EXPECT_EQ(_test, strlen(_buf), _ret); \
- 		KUNIT_EXPECT_STREQ(_test, (_buf), (_val)); \
- 	} while (0)
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 0,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 0,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 180));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 0,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 0,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 181));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 182));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 183));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 2,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 2,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 184));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 3,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 3,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 185));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 14,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 14,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 203));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 204));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 205));
+ }
+ 
+@@ -67,21 +67,21 @@ static void aspeed_sdhci_phase_hs200(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, 15,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 96));
+ 
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 180));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 185));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 186));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 187));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 14,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 14,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 269));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 270));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 271));
+-	KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
++	KUNIT_EXPECT_EQ(test, ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
+ 			aspeed_sdhci_phase_to_tap(NULL, rate, 276));
+ }
  
 -- 
 2.31.1.751.gd2f1c929bd-goog
