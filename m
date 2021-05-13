@@ -2,56 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E32737FFE3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 23:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB7D37FFF1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 May 2021 00:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbhEMVrm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 May 2021 17:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S230268AbhEMWEQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 May 2021 18:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233575AbhEMVrm (ORCPT
+        with ESMTP id S230214AbhEMWEQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 May 2021 17:47:42 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE20C061756
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 14:46:31 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id z24so26354539ioj.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 14:46:31 -0700 (PDT)
+        Thu, 13 May 2021 18:04:16 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BB1C061574
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 15:03:06 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id a11so26368764ioo.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 15:03:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PJaJODXKMxjVlXSx3cQ/3A1Pv1xFsKF6bksiX7iej1w=;
-        b=J1DE9syfxUpi567p+3iZMa59SpwJFqHrKG4xgw70Iqd/MDnKI+O6GFSeSsyyYr2CZD
-         S93zeGFmXMaKr/PGheaB1+3NsWiCFwWzQgcr64QvRJlyr1x5BZPO3UlIQko4/Rikt7Im
-         BfU18WHoZH2Q+Il+1T0NCbEB1DtkvDzykoE4WvExCQOIMoONp2MA0WhPHE8LexDl0/Pp
-         BCnZ3P8X+w6B2zHdnyVyHrCidJBQU75TIqXvLuuWQ8xPzf2UxqUuT0m/BRqFoDO1wI4W
-         SSBhwMc9xcIlMAFU4fVo6wtUrsRvOuJg63gxvWjP6bhMpolytl7HEkUyzaARZCvJsPuz
-         3JrQ==
+        bh=T/ZWfzVFcxgYSarPowOvBUX0uVefuthIIQJ8YRw+u1E=;
+        b=SEnnq54LGYEDzdIATveL857bcri0Ioy5Q+U/lfOeOH9dSYnNYa74k2y62SW45oazHA
+         kB/x3qXa0x8MPi7UQ+D31bFmlOSaWl9d/1Mm844HEJbuiQoXUbVymjAkucZ+nkXDjHqA
+         bxWbaYl78xIQdSKNy9OQp7f7BZ1jlF8JkQDJxclKDzawo8iPljCMz6vLWDGkYW5OkS1c
+         buM4bXPIajmE69xuKEGLZTDjbAt3dUGF7YERXq9q5BxMh7jYJYuSgTzLE0MAH5AXISDc
+         3GO2n9YyFwtiCO2atxl/MMmyYmJyGv2ot9mRWegQWj7fbto/WdIsg4sCLAshTm6FDykU
+         kzvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PJaJODXKMxjVlXSx3cQ/3A1Pv1xFsKF6bksiX7iej1w=;
-        b=MBYE7Fb6md27SjQQG9bBY8frfL+fnbyGmJsiFDbOYDpQLhTmjBnlurWjkjv9cGlmRF
-         CqfvALMtSOvaGBAWpjUf1Jkl0P8ah1MB+Zyq1gMn5G5SuqfMkG8xbgr7JkQID8hSRUkq
-         AgWqV5pa2SccFxAjav/TjjYTcg10nZUr88vOCgslK4cycK77RsuAQ4FzKe1aTt0ZzQx0
-         iiGPtEkXujQ4d7NwBf/hvHV0xbSuSTxz+c/gNyTM9inqwrTEc2waTInDG+hKcQVT0lui
-         FSqEuiNA/6mdio12K3Tu1EEsUPcMNK934RPfKrJ62MjcGlEYnPG7aWgV/TXDIyeAZ77S
-         IV0Q==
-X-Gm-Message-State: AOAM532PJ9C39WLYca/KFcyWoQ7tBb4ZLoN2xsrKtiQiFQFwGgjwCHGY
-        6svUReN8TGoqNqODWFuc8kydaKu0tJVXBAgv8Hh4Vw==
-X-Google-Smtp-Source: ABdhPJwHA1X23SBWLtydFi8RhMZdCdRgnlBgyMvFBLLoxcobU7j8cKcQ4rtLggmO4DJgEyaXmrgj0a+5UVDJXYBK6d8=
-X-Received: by 2002:a02:b057:: with SMTP id q23mr18067476jah.25.1620942391036;
- Thu, 13 May 2021 14:46:31 -0700 (PDT)
+        bh=T/ZWfzVFcxgYSarPowOvBUX0uVefuthIIQJ8YRw+u1E=;
+        b=k4jvV1I9QGMOtLtk2lEdFMQNH5rqIJcWHL1NQvVYkQw7upoRqHmK3fIhH9UoXdm8LJ
+         cO5GmiTlxm/Tz804j6vT/rjxxd5asnLVJPjYneBTl5g4GFrLOqSyGDhVIXU41ei55zhc
+         DztaZz1p0t9J01DZToguwVlTd3AXdlPzb1phLz//dsdpCXgemPHWdt24iprNFdyVu859
+         S2wYJUl+o8zJgIISkoz44gMAyBpq5elYBs7gRqG0TaWPvdhQjjKGLaW3VtM54lWJl70H
+         t9wpYXX1Gn/0fTli9I9yIAItwpR4F67bSSyMiIxjFMHlBBKjmzcBYMunXXfOSPoB3mYj
+         /yew==
+X-Gm-Message-State: AOAM533IjkZbtrOmjlr+npVzir8xR8pzrapTsicS+Fo6CPVcZ0P5Pbfg
+        FgQAlBzdV45oiO0IomVgrcIWTBCFPeEz8pNdjr0VFQ==
+X-Google-Smtp-Source: ABdhPJwFSeuV8HG27grrM0xnFPqsKC+UL3zivh2UTRi7VTA0Fg/WDh6PBYorrZ3JqFuXwg4z7RX+/y4VIXWMYWs8vOI=
+X-Received: by 2002:a6b:b409:: with SMTP id d9mr31259682iof.57.1620943385135;
+ Thu, 13 May 2021 15:03:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210512214502.2047008-1-axelrasmussen@google.com> <20210512214502.2047008-3-axelrasmussen@google.com>
-In-Reply-To: <20210512214502.2047008-3-axelrasmussen@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Thu, 13 May 2021 14:46:20 -0700
-Message-ID: <CANgfPd_th954ugsyEDj-hHjpeeo0_ho+ALF4puiDh1RNpDHqyg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] KVM: selftests: add shmem backing source type
-To:     Axel Rasmussen <axelrasmussen@google.com>
+References: <20210512214502.2047008-1-axelrasmussen@google.com>
+ <20210512214502.2047008-2-axelrasmussen@google.com> <CANgfPd8u0=_yZpkvsw-CqP_iWKbj0XQOnJCaNu4GSoFkqLpzDQ@mail.gmail.com>
+In-Reply-To: <CANgfPd8u0=_yZpkvsw-CqP_iWKbj0XQOnJCaNu4GSoFkqLpzDQ@mail.gmail.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 13 May 2021 15:02:28 -0700
+Message-ID: <CAJHvVchQUz9VnpSsh_3jJ7o6qKMF0-NWhw42E7tO8m6+R9Uf8g@mail.gmail.com>
+Subject: Re: [PATCH 1/5] KVM: selftests: allow different backing memory types
+ for demand paging
+To:     Ben Gardon <bgardon@google.com>
 Cc:     Aaron Lewis <aaronlewis@google.com>,
         Alexander Graf <graf@amazon.com>,
         Andrew Jones <drjones@redhat.com>,
@@ -71,189 +73,159 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 12, 2021 at 2:45 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
+On Thu, May 13, 2021 at 2:32 PM Ben Gardon <bgardon@google.com> wrote:
 >
-> This lets us run the demand paging test on top of a shmem-backed area.
-> In follow-up commits, we'll 1) leverage this new capability to create an
-> alias mapping, and then 2) use the alias mapping to exercise UFFD minor
-> faults.
+> On Wed, May 12, 2021 at 2:45 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
+> >
+> > Add an argument which lets us specify a different backing memory type
+> > for the test. The default is just to use anonymous, matching existing
+> > behavior (if the argument is omitted).
+> >
+> > This is in preparation for testing UFFD minor faults. For that, we need
+> > to use a new backing memory type which is setup with MAP_SHARED.
+> >
+> > This notably requires one other change. Perhaps counter-intuitively,
+> > perf_test_args.host_page_size is the host's *native* page size, not the
+> > size of the pages the host is using to back the guest. This means, if we
+> > try to run the test with e.g. VM_MEM_SRC_ANONYMOUS_HUGETLB, we'll try to
+> > do demand paging with 4k pages instead of 2M hugepages.
 >
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->  .../testing/selftests/kvm/include/test_util.h |  1 +
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 24 ++++++++---
->  tools/testing/selftests/kvm/lib/test_util.c   | 40 +++++++++++--------
->  3 files changed, 44 insertions(+), 21 deletions(-)
+> Would it make sense to factor this change out into another commit
+> preceding this one? Perhaps only worth it if you send a v2.
 >
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> index fade3130eb01..7377f00469ef 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -84,6 +84,7 @@ enum vm_mem_backing_src_type {
->         VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB,
->         VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB,
->         VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
-> +       VM_MEM_SRC_SHMEM,
->         NUM_SRC_TYPES,
->  };
->
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index fc83f6c5902d..6fbe124e0e16 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -663,8 +663,8 @@ int kvm_memcmp_hva_gva(void *hva, struct kvm_vm *vm, vm_vaddr_t gva, size_t len)
->   *
->   * Input Args:
->   *   vm - Virtual Machine
-> - *   backing_src - Storage source for this region.
-> - *                 NULL to use anonymous memory.
-> + *   src_type - Storage source for this region.
-> + *              NULL to use anonymous memory.
+> When you say "we'll try to do demand paging with 4k pages instead of
+> 2M hugepages," what would that mean? Would we only copy 4k worth of
+> the contents of the 2M page in, leading to the guest seeing bad
+> memory? Do we have the capability to do demand paging at a smaller
+> granularity than the backing page size with UFFD?
 
-It would probably make sense to separate this rename out into a separate commit.
+Basically I think the existing behavior is to always use 4k - so we
+UFFDIO_COPY that size at a time.
 
->   *   guest_paddr - Starting guest physical address
->   *   slot - KVM region slot
->   *   npages - Number of physical pages
-> @@ -755,11 +755,25 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->         if (alignment > 1)
->                 region->mmap_size += alignment;
->
-> +       region->fd = -1;
-> +       if (src_type == VM_MEM_SRC_SHMEM) {
-> +               region->fd = memfd_create("kvm_selftest", MFD_CLOEXEC);
-> +               TEST_ASSERT(region->fd != -1,
-> +                           "memfd_create failed, errno: %i", errno);
-> +
-> +               ret = ftruncate(region->fd, region->mmap_size);
-> +               TEST_ASSERT(ret == 0, "ftruncate failed, errno: %i", errno);
-> +
-> +               ret = fallocate(region->fd,
-> +                               FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0,
-> +                               region->mmap_size);
-> +               TEST_ASSERT(ret == 0, "fallocate failed, errno: %i", errno);
-> +       }
-> +
->         region->mmap_start = mmap(NULL, region->mmap_size,
->                                   PROT_READ | PROT_WRITE,
-> -                                 MAP_PRIVATE | MAP_ANONYMOUS
-> -                                 | vm_mem_backing_src_alias(src_type)->flag,
-> -                                 -1, 0);
-> +                                 vm_mem_backing_src_alias(src_type)->flag,
-> +                                 region->fd, 0);
->         TEST_ASSERT(region->mmap_start != MAP_FAILED,
->                     "test_malloc failed, mmap_start: %p errno: %i",
->                     region->mmap_start, errno);
-> diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-> index 63d2bc7d757b..c7a265da5090 100644
-> --- a/tools/testing/selftests/kvm/lib/test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/test_util.c
-> @@ -168,70 +168,77 @@ size_t get_def_hugetlb_pagesz(void)
->
->  const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
->  {
-> +       static const int anon_flags = MAP_PRIVATE | MAP_ANONYMOUS;
-> +       static const int anon_huge_flags = anon_flags | MAP_HUGETLB;
-> +
->         static const struct vm_mem_backing_src_alias aliases[] = {
->                 [VM_MEM_SRC_ANONYMOUS] = {
->                         .name = "anonymous",
-> -                       .flag = 0,
-> +                       .flag = anon_flags,
+This is totally fine for anonymous, or even for THPs. But, once we're
+using hugetlbfs, the UFFDIO_COPY ioctl will just fail unless we do 2M
+(or some multiple thereof) at a time. If memory serves it returns
+-EINVAL in this case.
 
-You could also do this refactoring in a separate commit, which would
-make the change to support shmem quite small.
+It wouldn't be so much trouble to factor it out, so just let me know
+what is preferred. For now, I'll do it if a v2 is needed for other
+reasons.
 
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_THP] = {
->                         .name = "anonymous_thp",
-> -                       .flag = 0,
-> +                       .flag = anon_flags,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB] = {
->                         .name = "anonymous_hugetlb",
-> -                       .flag = MAP_HUGETLB,
-> +                       .flag = anon_huge_flags,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_16KB] = {
->                         .name = "anonymous_hugetlb_16kb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_16KB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_16KB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_64KB] = {
->                         .name = "anonymous_hugetlb_64kb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_64KB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_64KB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_512KB] = {
->                         .name = "anonymous_hugetlb_512kb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_512KB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_512KB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_1MB] = {
->                         .name = "anonymous_hugetlb_1mb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_1MB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_1MB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB] = {
->                         .name = "anonymous_hugetlb_2mb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_2MB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_2MB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_8MB] = {
->                         .name = "anonymous_hugetlb_8mb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_8MB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_8MB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_16MB] = {
->                         .name = "anonymous_hugetlb_16mb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_16MB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_16MB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_32MB] = {
->                         .name = "anonymous_hugetlb_32mb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_32MB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_32MB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_256MB] = {
->                         .name = "anonymous_hugetlb_256mb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_256MB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_256MB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_512MB] = {
->                         .name = "anonymous_hugetlb_512mb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_512MB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_512MB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB] = {
->                         .name = "anonymous_hugetlb_1gb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_1GB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_1GB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB] = {
->                         .name = "anonymous_hugetlb_2gb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_2GB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_2GB,
->                 },
->                 [VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB] = {
->                         .name = "anonymous_hugetlb_16gb",
-> -                       .flag = MAP_HUGETLB | MAP_HUGE_16GB,
-> +                       .flag = anon_huge_flags | MAP_HUGE_16GB,
-> +               },
-> +               [VM_MEM_SRC_SHMEM] = {
-> +                       .name = "shmem",
-> +                       .flag = MAP_SHARED,
->                 },
->         };
->         _Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
-> @@ -250,6 +257,7 @@ size_t get_backing_src_pagesz(uint32_t i)
 >
->         switch (i) {
->         case VM_MEM_SRC_ANONYMOUS:
-> +       case VM_MEM_SRC_SHMEM:
->                 return getpagesize();
->         case VM_MEM_SRC_ANONYMOUS_THP:
->                 return get_trans_hugepagesz();
-> --
-> 2.31.1.607.g51e8a6a459-goog
+> Otherwise this patch looks reasonable to me. I'll try to review the
+> rest of your patches today / Monday.
 >
+> >
+> > So, convert everything to use a new demand_paging_size, computed based
+> > on the backing memory type.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >  .../selftests/kvm/demand_paging_test.c        | 24 +++++++++++++------
+> >  1 file changed, 17 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> > index 5f7a229c3af1..10c7ba76a9c6 100644
+> > --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> > +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> > @@ -38,6 +38,7 @@
+> >
+> >  static int nr_vcpus = 1;
+> >  static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
+> > +static size_t demand_paging_size;
+> >  static char *guest_data_prototype;
+> >
+> >  static void *vcpu_worker(void *data)
+> > @@ -83,7 +84,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
+> >
+> >         copy.src = (uint64_t)guest_data_prototype;
+> >         copy.dst = addr;
+> > -       copy.len = perf_test_args.host_page_size;
+> > +       copy.len = demand_paging_size;
+> >         copy.mode = 0;
+> >
+> >         clock_gettime(CLOCK_MONOTONIC, &start);
+> > @@ -100,7 +101,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
+> >         PER_PAGE_DEBUG("UFFDIO_COPY %d \t%ld ns\n", tid,
+> >                        timespec_to_ns(ts_diff));
+> >         PER_PAGE_DEBUG("Paged in %ld bytes at 0x%lx from thread %d\n",
+> > -                      perf_test_args.host_page_size, addr, tid);
+> > +                      demand_paging_size, addr, tid);
+> >
+> >         return 0;
+> >  }
+> > @@ -250,6 +251,7 @@ static int setup_demand_paging(struct kvm_vm *vm,
+> >  struct test_params {
+> >         bool use_uffd;
+> >         useconds_t uffd_delay;
+> > +       enum vm_mem_backing_src_type src_type;
+> >         bool partition_vcpu_memory_access;
+> >  };
+> >
+> > @@ -267,14 +269,16 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> >         int r;
+> >
+> >         vm = perf_test_create_vm(mode, nr_vcpus, guest_percpu_mem_size,
+> > -                                VM_MEM_SRC_ANONYMOUS);
+> > +                                p->src_type);
+> >
+> >         perf_test_args.wr_fract = 1;
+> >
+> > -       guest_data_prototype = malloc(perf_test_args.host_page_size);
+> > +       demand_paging_size = get_backing_src_pagesz(p->src_type);
+> > +
+> > +       guest_data_prototype = malloc(demand_paging_size);
+> >         TEST_ASSERT(guest_data_prototype,
+> >                     "Failed to allocate buffer for guest data pattern");
+> > -       memset(guest_data_prototype, 0xAB, perf_test_args.host_page_size);
+> > +       memset(guest_data_prototype, 0xAB, demand_paging_size);
+> >
+> >         vcpu_threads = malloc(nr_vcpus * sizeof(*vcpu_threads));
+> >         TEST_ASSERT(vcpu_threads, "Memory allocation failed");
+> > @@ -388,7 +392,7 @@ static void help(char *name)
+> >  {
+> >         puts("");
+> >         printf("usage: %s [-h] [-m mode] [-u] [-d uffd_delay_usec]\n"
+> > -              "          [-b memory] [-v vcpus] [-o]\n", name);
+> > +              "          [-b memory] [-t type] [-v vcpus] [-o]\n", name);
+> >         guest_modes_help();
+> >         printf(" -u: use User Fault FD to handle vCPU page\n"
+> >                "     faults.\n");
+> > @@ -398,6 +402,8 @@ static void help(char *name)
+> >         printf(" -b: specify the size of the memory region which should be\n"
+> >                "     demand paged by each vCPU. e.g. 10M or 3G.\n"
+> >                "     Default: 1G\n");
+> > +       printf(" -t: The type of backing memory to use. Default: anonymous\n");
+> > +       backing_src_help();
+> >         printf(" -v: specify the number of vCPUs to run.\n");
+> >         printf(" -o: Overlap guest memory accesses instead of partitioning\n"
+> >                "     them into a separate region of memory for each vCPU.\n");
+> > @@ -409,13 +415,14 @@ int main(int argc, char *argv[])
+> >  {
+> >         int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
+> >         struct test_params p = {
+> > +               .src_type = VM_MEM_SRC_ANONYMOUS,
+> >                 .partition_vcpu_memory_access = true,
+> >         };
+> >         int opt;
+> >
+> >         guest_modes_append_default();
+> >
+> > -       while ((opt = getopt(argc, argv, "hm:ud:b:v:o")) != -1) {
+> > +       while ((opt = getopt(argc, argv, "hm:ud:b:t:v:o")) != -1) {
+> >                 switch (opt) {
+> >                 case 'm':
+> >                         guest_modes_cmdline(optarg);
+> > @@ -430,6 +437,9 @@ int main(int argc, char *argv[])
+> >                 case 'b':
+> >                         guest_percpu_mem_size = parse_size(optarg);
+> >                         break;
+> > +               case 't':
+> > +                       p.src_type = parse_backing_src_type(optarg);
+> > +                       break;
+> >                 case 'v':
+> >                         nr_vcpus = atoi(optarg);
+> >                         TEST_ASSERT(nr_vcpus > 0 && nr_vcpus <= max_vcpus,
+> > --
+> > 2.31.1.607.g51e8a6a459-goog
+> >
