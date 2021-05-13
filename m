@@ -2,149 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53FD537F479
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 10:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024F937F4BD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 11:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbhEMIzn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 May 2021 04:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbhEMIzi (ORCPT
+        id S231688AbhEMJTo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 May 2021 05:19:44 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:26314 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230343AbhEMJTo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 May 2021 04:55:38 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C7DC061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 01:54:25 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id h9so800515oih.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 01:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jG12S413O8fUiJ8iykc3p7wvxXhef9ESdPVA0acK7/k=;
-        b=NDyBX09Om2k3j1J6yBIltr0QKv4OUv8wA0NvZw9OdVOa8L4npbuGF1BDzMwBnDlcFZ
-         Emb2fYN5KnXR76wk9o6ekppMI2W02qXSielDjKiz5A9HWTDAsqY6IEUj/iq1zYpf0ZuO
-         HT7HGrSG+U6CkeBqg9IRNWEKaqFdWKFZIpdNq7Kv/osIe24YLUttO+KE6LIq8rZHo+AQ
-         V3c7QCOxyC8eAMi4Tx9XCh5dlaFDBoKvcv9OUpZnPFUeK7A1Ip4XFavPbBrEfCv3AIjT
-         CUoMXrjvc51Y6VaEUD3KTznAsmgh+J5UGPXOrcs+8MGp9Lhca21EuNpoigsG1En/TsSS
-         6LHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jG12S413O8fUiJ8iykc3p7wvxXhef9ESdPVA0acK7/k=;
-        b=jgbi/L3N1NYQXD+3gC7bg5fJUblVWHom+Y+4V6A+pBe2y92W4VlR0Ao4hKvJTbPNeN
-         +/eY63Ns7Fctzw81nHfCR8R7u1wXLHRk2ebUQz512DkEhM4leLTOBVnKf8C6MnpYE24a
-         DCSey50eS/rCewUf6N40zvuKDCWvYvH1UXoLqfmxkJsAUyN0+ksBXvDK+H9+QBxPQDzD
-         dF/pTN4HULY9ZnLCCu1uBWNAB38w2fyieS+/9SxFj4du6+EVmJhtKKRnv7S4rESKq2MG
-         I7xQi3bpJRhVzRZCZPQuM56FYwslnyyZXQ2zAPw4QruzXnJRfVaYvXw9G+bPQqfurFkI
-         b6Jg==
-X-Gm-Message-State: AOAM531C8Sb0zwdpM4S4F6W5XemtS33rpLAzEGDjln4JFMix8T8bSoqq
-        NHyi7haw2hin4kBD1BY1PEFz0jfgEw0hbRC2PAcZ9w==
-X-Google-Smtp-Source: ABdhPJzHbpIRee5o3M7Noz/2xtZ/nvLm3qNZBmwciNfe+ShxEPtJ4vKwUXcLPEDWB5FuedQBvKHbHbp+yAy/eLxI/jI=
-X-Received: by 2002:aca:bb06:: with SMTP id l6mr29564018oif.121.1620896064734;
- Thu, 13 May 2021 01:54:24 -0700 (PDT)
+        Thu, 13 May 2021 05:19:44 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14D93TOl155080;
+        Thu, 13 May 2021 05:18:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=HUS1vgx07XFhtJ9A6JVfYYAErRkCgsTiRdZOybD0PJY=;
+ b=kfa3qdPlVe7c7AqvQpyeIbxi9FkJNIO6yeSpxr8pAD1jlPs9rxpBJ8XwIEMKkX+ungWt
+ gsRPX/dwtdjKCPTOq6Fzko8fh0fEks5R7u+OzT94nWgvd8ex7XhxcAMyrnWE9quWtD6R
+ dNYtpceS3jWS7B1LLg3uJ2/DatdUMMhSkzyM5h32m0NYu6wB2Mg0BcWZQYqA4UhdPDCd
+ t8Axn9jfboUSBXuG3oY8pY51I7gFOBJUMpU2fEyYJiG07p7SJymdZXlKq6NxO/9ho+l6
+ PSm+9A70s8EQ6ZiWTDrb/Mw+QLxaY7ZfggmJOldgMHyxnG4r7yBg6A6HM8u/vf1we7Pb hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38h0g01cu8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 May 2021 05:18:28 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 14D942ZD157343;
+        Thu, 13 May 2021 05:18:28 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38h0g01ctg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 May 2021 05:18:28 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14D9FRJF020038;
+        Thu, 13 May 2021 09:18:26 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 38dj98amtr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 May 2021 09:18:26 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14D9INne36634894
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 May 2021 09:18:23 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 76E2F11C05C;
+        Thu, 13 May 2021 09:18:23 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E2F811C052;
+        Thu, 13 May 2021 09:18:21 +0000 (GMT)
+Received: from [9.85.73.125] (unknown [9.85.73.125])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 13 May 2021 09:18:20 +0000 (GMT)
+Subject: Re: [PATCH v5 0/2] CPU-Idle latency selftest framework
+To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, shuah@kernel.org,
+        dsmythies@telus.net, dedekind1@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        pratik.r.sampat@gmail.com
+References: <20210430082804.38018-1-psampat@linux.ibm.com>
+From:   Pratik Sampat <psampat@linux.ibm.com>
+Message-ID: <7324c475-6f33-b075-03ce-2f32f4bf15ff@linux.ibm.com>
+Date:   Thu, 13 May 2021 14:48:19 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+In-Reply-To: <20210430082804.38018-1-psampat@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AMKV4YYSYdT3xgfWl8PKX2n6Jzw2S_bx
+X-Proofpoint-ORIG-GUID: fS_ihhVuGaLAae26maEGYuRN-2iKy-gn
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 1 URL was un-rewritten
 MIME-Version: 1.0
-References: <20210511150734.3492-1-glittao@gmail.com> <20210511150734.3492-2-glittao@gmail.com>
- <20210512214440.e2cb47f751137db9802da62e@linux-foundation.org>
-In-Reply-To: <20210512214440.e2cb47f751137db9802da62e@linux-foundation.org>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 13 May 2021 10:54:13 +0200
-Message-ID: <CANpmjNPWh0CB7VvuHVZs_dsGYqifPSZ17RChHvmGC6m8wd1Zfg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] mm/slub, kunit: add a KUnit test for SLUB
- debugging functionality
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Oliver Glitta <glittao@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-13_04:2021-05-12,2021-05-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ adultscore=0 spamscore=0 impostorscore=0 suspectscore=0 mlxlogscore=999
+ phishscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2105130070
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 13 May 2021 at 06:44, Andrew Morton <akpm@linux-foundation.org> wrote:
-> On Tue, 11 May 2021 17:07:33 +0200 glittao@gmail.com wrote:
-> > From: Oliver Glitta <glittao@gmail.com>
-> >
-> > SLUB has resiliency_test() function which is hidden behind #ifdef
-> > SLUB_RESILIENCY_TEST that is not part of Kconfig, so nobody
-> > runs it. KUnit should be a proper replacement for it.
-> >
-> > Try changing byte in redzone after allocation and changing
-> > pointer to next free node, first byte, 50th byte and redzone
-> > byte. Check if validation finds errors.
-> >
-> > There are several differences from the original resiliency test:
-> > Tests create own caches with known state instead of corrupting
-> > shared kmalloc caches.
-> >
-> > The corruption of freepointer uses correct offset, the original
-> > resiliency test got broken with freepointer changes.
-> >
-> > Scratch changing random byte test, because it does not have
-> > meaning in this form where we need deterministic results.
-> >
-> > Add new option CONFIG_SLUB_KUNIT_TEST in Kconfig.
-> > Tests next_pointer, first_word and clobber_50th_byte do not run
-> > with KASAN option on. Because the test deliberately modifies non-allocated
-> > objects.
-> >
-> > Use kunit_resource to count errors in cache and silence bug reports.
-> > Count error whenever slab_bug() or slab_fix() is called or when
-> > the count of pages is wrong.
-> >
-> > ...
-> >
-> >  lib/slub_kunit.c  | 155 ++++++++++++++++++++++++++++++++++++++++++++++
-> >  mm/slab.h         |   1 +
-> >  mm/slub.c         |  46 +++++++++++++-
-> >  5 files changed, 212 insertions(+), 3 deletions(-)
-> >  create mode 100644 lib/slub_kunit.c
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 678c13967580..7723f58a9394 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -2429,6 +2429,18 @@ config BITS_TEST
-> >
-> >         If unsure, say N.
-> >
-> > +config SLUB_KUNIT_TEST
-> > +     tristate "KUnit test for SLUB cache error detection" if !KUNIT_ALL_TESTS
->
-> This means it can be compiled as a kernel module.  Did you runtime test the
-> code as a module?
->
-> ERROR: modpost: "kasan_enable_current" [lib/slub_kunit.ko] undefined!
-> ERROR: modpost: "kasan_disable_current" [lib/slub_kunit.ko] undefined!
->
-> --- a/mm/kasan/common.c~a
-> +++ a/mm/kasan/common.c
-> @@ -51,11 +51,14 @@ void kasan_enable_current(void)
->  {
->         current->kasan_depth++;
->  }
-> +EXPORT_SYMBOL(kasan_enable_current);
->
->  void kasan_disable_current(void)
->  {
->         current->kasan_depth--;
->  }
-> +EXPORT_SYMBOL(kasan_disable_current);
-> +
->  #endif /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
->
->  void __kasan_unpoison_range(const void *address, size_t size)
-> _
+Hi @Rafael and @Shuah,
 
-Acked-by: Marco Elver <elver@google.com>
+Gentle ping.
+
+Is there any feedback on this patch-set?
+
+Quick summary and history:
+1. The patchset introduces a kernel module and a bash selftest driver to
+    estimate wakeup latency caused by entering idle states
+2. The patchset has seemed to provide useful feedback on latency of idle 
+states
+    on the IBM POWER architecture
+3. It also seems to also be providing desirable results on Intel 
+machines with
+    the IPI mechanism (Timer tests are optional here due to some Intel
+    processors having a pre-wakeup feature and may not tend to actual idle
+    latency) as reviewed by Doug Smythies.
+    Intel numbers for reference: https://lkml.org/lkml/2021/4/13/785
+
+--
+Thanks
+Pratik
+
+On 30/04/21 1:58 pm, Pratik R. Sampat wrote:
+> Changelog RFC v4 --> PATCH v5:
+> 1. Added a CPU online check prior to parsing the CPU topology to avoid
+>     parsing topologies for CPUs unavailable for the latency test
+> 2. Added comment describing the selftest in cpuidle.sh
+>
+> As I have made changes to cpuidle.sh's working, hence dropping
+> "Reviewed-by" from Doug Smythies for the second patch, while retaining
+> it for the first patch.
+>
+> RFC v4: https://lkml.org/lkml/2021/4/12/99
+> ---
+> A kernel module + userspace driver to estimate the wakeup latency
+> caused by going into stop states. The motivation behind this program is
+> to find significant deviations behind advertised latency and residency
+> values.
+>
+> The patchset measures latencies for two kinds of events. IPIs and Timers
+> As this is a software-only mechanism, there will additional latencies of
+> the kernel-firmware-hardware interactions. To account for that, the
+> program also measures a baseline latency on a 100 percent loaded CPU
+> and the latencies achieved must be in view relative to that.
+>
+> To achieve this, we introduce a kernel module and expose its control
+> knobs through the debugfs interface that the selftests can engage with.
+>
+> The kernel module provides the following interfaces within
+> /sys/kernel/debug/latency_test/ for,
+>
+> IPI test:
+>      ipi_cpu_dest = Destination CPU for the IPI
+>      ipi_cpu_src = Origin of the IPI
+>      ipi_latency_ns = Measured latency time in ns
+> Timeout test:
+>      timeout_cpu_src = CPU on which the timer to be queued
+>      timeout_expected_ns = Timer duration
+>      timeout_diff_ns = Difference of actual duration vs expected timer
+>
+> Sample output on a POWER9 system is as follows:
+> # --IPI Latency Test---
+> # Baseline Average IPI latency(ns): 3114
+> # Observed Average IPI latency(ns) - State0: 3265
+> # Observed Average IPI latency(ns) - State1: 3507
+> # Observed Average IPI latency(ns) - State2: 3739
+> # Observed Average IPI latency(ns) - State3: 3807
+> # Observed Average IPI latency(ns) - State4: 17070
+> # Observed Average IPI latency(ns) - State5: 1038174
+> # Observed Average IPI latency(ns) - State6: 1068784
+> #
+> # --Timeout Latency Test--
+> # Baseline Average timeout diff(ns): 1420
+> # Observed Average timeout diff(ns) - State0: 1640
+> # Observed Average timeout diff(ns) - State1: 1764
+> # Observed Average timeout diff(ns) - State2: 1715
+> # Observed Average timeout diff(ns) - State3: 1845
+> # Observed Average timeout diff(ns) - State4: 16581
+> # Observed Average timeout diff(ns) - State5: 939977
+> # Observed Average timeout diff(ns) - State6: 1073024
+>
+>
+> Things to keep in mind:
+>
+> 1. This kernel module + bash driver does not guarantee idleness on a
+>     core when the IPI and the Timer is armed. It only invokes sleep and
+>     hopes that the core is idle once the IPI/Timer is invoked onto it.
+>     Hence this program must be run on a completely idle system for best
+>     results
+>
+> 2. Even on a completely idle system, there maybe book-keeping tasks or
+>     jitter tasks that can run on the core we want idle. This can create
+>     outliers in the latency measurement. Thankfully, these outliers
+>     should be large enough to easily weed them out.
+>
+> 3. A userspace only selftest variant was also sent out as RFC based on
+>     suggestions over the previous patchset to simply the kernel
+>     complexeity. However, a userspace only approach had more noise in
+>     the latency measurement due to userspace-kernel interactions
+>     which led to run to run variance and a lesser accurate test.
+>     Another downside of the nature of a userspace program is that it
+>     takes orders of magnitude longer to complete a full system test
+>     compared to the kernel framework.
+>     RFC patch: https://lkml.org/lkml/2020/9/2/356
+>
+> 4. For Intel Systems, the Timer based latencies don't exactly give out
+>     the measure of idle latencies. This is because of a hardware
+>     optimization mechanism that pre-arms a CPU when a timer is set to
+>     wakeup. That doesn't make this metric useless for Intel systems,
+>     it just means that is measuring IPI/Timer responding latency rather
+>     than idle wakeup latencies.
+>     (Source: https://lkml.org/lkml/2020/9/2/610)
+>     For solution to this problem, a hardware based latency analyzer is
+>     devised by Artem Bityutskiy from Intel.
+>     https://youtu.be/Opk92aQyvt0?t=8266
+>     https://intel.github.io/wult/
+>
+> Pratik R. Sampat (2):
+>    cpuidle: Extract IPI based and timer based wakeup latency from idle
+>      states
+>    selftest/cpuidle: Add support for cpuidle latency measurement
+>
+>   drivers/cpuidle/Makefile                   |   1 +
+>   drivers/cpuidle/test-cpuidle_latency.c     | 157 ++++++++
+>   lib/Kconfig.debug                          |  10 +
+>   tools/testing/selftests/Makefile           |   1 +
+>   tools/testing/selftests/cpuidle/Makefile   |   6 +
+>   tools/testing/selftests/cpuidle/cpuidle.sh | 414 +++++++++++++++++++++
+>   tools/testing/selftests/cpuidle/settings   |   2 +
+>   7 files changed, 591 insertions(+)
+>   create mode 100644 drivers/cpuidle/test-cpuidle_latency.c
+>   create mode 100644 tools/testing/selftests/cpuidle/Makefile
+>   create mode 100755 tools/testing/selftests/cpuidle/cpuidle.sh
+>   create mode 100644 tools/testing/selftests/cpuidle/settings
+>
+
