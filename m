@@ -2,58 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB7D37FFF1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 May 2021 00:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0899B38006A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 May 2021 00:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbhEMWEQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 May 2021 18:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S233730AbhEMWfk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 May 2021 18:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbhEMWEQ (ORCPT
+        with ESMTP id S233657AbhEMWf0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 May 2021 18:04:16 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BB1C061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 15:03:06 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id a11so26368764ioo.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 15:03:06 -0700 (PDT)
+        Thu, 13 May 2021 18:35:26 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6CFC06138C
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 15:34:09 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id o9so19178141ilh.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 15:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=T/ZWfzVFcxgYSarPowOvBUX0uVefuthIIQJ8YRw+u1E=;
-        b=SEnnq54LGYEDzdIATveL857bcri0Ioy5Q+U/lfOeOH9dSYnNYa74k2y62SW45oazHA
-         kB/x3qXa0x8MPi7UQ+D31bFmlOSaWl9d/1Mm844HEJbuiQoXUbVymjAkucZ+nkXDjHqA
-         bxWbaYl78xIQdSKNy9OQp7f7BZ1jlF8JkQDJxclKDzawo8iPljCMz6vLWDGkYW5OkS1c
-         buM4bXPIajmE69xuKEGLZTDjbAt3dUGF7YERXq9q5BxMh7jYJYuSgTzLE0MAH5AXISDc
-         3GO2n9YyFwtiCO2atxl/MMmyYmJyGv2ot9mRWegQWj7fbto/WdIsg4sCLAshTm6FDykU
-         kzvw==
+        bh=c8bhFuOKPloIYByahwHFPWgdmRy0Ur+KOze97z1EzA0=;
+        b=iQT7fUSjjkfA0Y/arLSkMA8VtoCxAmrQNAbRo05lrk8GrcQ4uFWjZgG8YdpwKq0ET8
+         wpthMbxKqa4X10x2vA+MQoydIYL1lkvxj1WzZ97mamD1dhde8dR9QQSpwqPWuLwGjY4R
+         fZM8lMwSNcNG3RIqhnOKM7gElhOgslMaKQ9cO0QcXgatiOiK6txOfI02+ziSFMT6rhP5
+         qqhhbxr8PoJ9dcX+mvpQsZvOxRqzuvPJX/KU7RUFAZD/l8VV2QNHOGFe3Zi1eXZH/NRv
+         F90HXjtqSQYfBHcS46F+HBJlugCcRcewa9hjd3I0RZoKj5P+TXZGSmIfZ8MEkquFUu4x
+         ypmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=T/ZWfzVFcxgYSarPowOvBUX0uVefuthIIQJ8YRw+u1E=;
-        b=k4jvV1I9QGMOtLtk2lEdFMQNH5rqIJcWHL1NQvVYkQw7upoRqHmK3fIhH9UoXdm8LJ
-         cO5GmiTlxm/Tz804j6vT/rjxxd5asnLVJPjYneBTl5g4GFrLOqSyGDhVIXU41ei55zhc
-         DztaZz1p0t9J01DZToguwVlTd3AXdlPzb1phLz//dsdpCXgemPHWdt24iprNFdyVu859
-         S2wYJUl+o8zJgIISkoz44gMAyBpq5elYBs7gRqG0TaWPvdhQjjKGLaW3VtM54lWJl70H
-         t9wpYXX1Gn/0fTli9I9yIAItwpR4F67bSSyMiIxjFMHlBBKjmzcBYMunXXfOSPoB3mYj
-         /yew==
-X-Gm-Message-State: AOAM533IjkZbtrOmjlr+npVzir8xR8pzrapTsicS+Fo6CPVcZ0P5Pbfg
-        FgQAlBzdV45oiO0IomVgrcIWTBCFPeEz8pNdjr0VFQ==
-X-Google-Smtp-Source: ABdhPJwFSeuV8HG27grrM0xnFPqsKC+UL3zivh2UTRi7VTA0Fg/WDh6PBYorrZ3JqFuXwg4z7RX+/y4VIXWMYWs8vOI=
-X-Received: by 2002:a6b:b409:: with SMTP id d9mr31259682iof.57.1620943385135;
- Thu, 13 May 2021 15:03:05 -0700 (PDT)
+        bh=c8bhFuOKPloIYByahwHFPWgdmRy0Ur+KOze97z1EzA0=;
+        b=gXb20PYT9uZqkY//VnI1D7VDaPazY+tlieEUpRJpvEs26Wcum1dwozTYqMIuCurbFU
+         Wqjo+UbNTk4STyBQpu5Z74eYEVxbjXjQsEkq4MF/xWwNnI/lm6mARGF57j7OWUSDyrxp
+         lJ7cr6zR0tcs7nFZ6BK1VtENWIF5A013rXcsLPx0kugHfVETWpNv6I/DwjhKLHNBYEc/
+         cqSvOC5mv0fTTMQUXEJpOkBg88sTk8YT461NPjh2yNGUYsw7JhoO4y2U2IEg+ndoLDR8
+         wWl/LXUckolTwCwy1161H5KZaWbf8Mvqi4HP6ctOYsxXwv88h4Z8HcrsZL5AN58IfdcP
+         D0UA==
+X-Gm-Message-State: AOAM531plfKaAT3xtyHFE1uKNHGoUfMA25dgO2SEJvbL9UWAtB/vhHxZ
+        2R93cQ43jI+uouDc26oizkz94WGuBz0Jdw4nk9gGug==
+X-Google-Smtp-Source: ABdhPJwavDpIShEpPQaY3KOf9GpUa8lYR73uNHBcU0Gl+rAsejweOnelYA5pihcsuee289UCspem5+8RWG0EU1BR3k4=
+X-Received: by 2002:a05:6e02:1a49:: with SMTP id u9mr40315598ilv.306.1620945248421;
+ Thu, 13 May 2021 15:34:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210512214502.2047008-1-axelrasmussen@google.com>
- <20210512214502.2047008-2-axelrasmussen@google.com> <CANgfPd8u0=_yZpkvsw-CqP_iWKbj0XQOnJCaNu4GSoFkqLpzDQ@mail.gmail.com>
-In-Reply-To: <CANgfPd8u0=_yZpkvsw-CqP_iWKbj0XQOnJCaNu4GSoFkqLpzDQ@mail.gmail.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 13 May 2021 15:02:28 -0700
-Message-ID: <CAJHvVchQUz9VnpSsh_3jJ7o6qKMF0-NWhw42E7tO8m6+R9Uf8g@mail.gmail.com>
-Subject: Re: [PATCH 1/5] KVM: selftests: allow different backing memory types
- for demand paging
-To:     Ben Gardon <bgardon@google.com>
+References: <20210512214502.2047008-1-axelrasmussen@google.com> <20210512214502.2047008-4-axelrasmussen@google.com>
+In-Reply-To: <20210512214502.2047008-4-axelrasmussen@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 13 May 2021 15:33:57 -0700
+Message-ID: <CANgfPd915=4=dYmxh=qn6Cu75S4uHL753h_x3JHG-mFyO0dggg@mail.gmail.com>
+Subject: Re: [PATCH 3/5] KVM: selftests: create alias mappings when using
+ shared memory
+To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Aaron Lewis <aaronlewis@google.com>,
         Alexander Graf <graf@amazon.com>,
         Andrew Jones <drjones@redhat.com>,
@@ -73,159 +72,134 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 13, 2021 at 2:32 PM Ben Gardon <bgardon@google.com> wrote:
+On Wed, May 12, 2021 at 2:45 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
 >
-> On Wed, May 12, 2021 at 2:45 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
-> >
-> > Add an argument which lets us specify a different backing memory type
-> > for the test. The default is just to use anonymous, matching existing
-> > behavior (if the argument is omitted).
-> >
-> > This is in preparation for testing UFFD minor faults. For that, we need
-> > to use a new backing memory type which is setup with MAP_SHARED.
-> >
-> > This notably requires one other change. Perhaps counter-intuitively,
-> > perf_test_args.host_page_size is the host's *native* page size, not the
-> > size of the pages the host is using to back the guest. This means, if we
-> > try to run the test with e.g. VM_MEM_SRC_ANONYMOUS_HUGETLB, we'll try to
-> > do demand paging with 4k pages instead of 2M hugepages.
+> When a memory region is added with a src_type specifying that it should
+> use some kind of shared memory, also create an alias mapping to the same
+> underlying physical pages.
 >
-> Would it make sense to factor this change out into another commit
-> preceding this one? Perhaps only worth it if you send a v2.
+> And, add an API so tests can get access to these alias addresses.
+> Basically, for a guest physical address, let us look up the analogous
+> host *alias* address.
 >
-> When you say "we'll try to do demand paging with 4k pages instead of
-> 2M hugepages," what would that mean? Would we only copy 4k worth of
-> the contents of the 2M page in, leading to the guest seeing bad
-> memory? Do we have the capability to do demand paging at a smaller
-> granularity than the backing page size with UFFD?
+> In a future commit, we'll modify the demand paging test to take
+> advantage of this to exercise UFFD minor faults. The idea is, we
+> pre-fault the underlying pages *via the alias*. When the *guest*
+> faults, it gets a "minor" fault (PTEs don't exist yet, but a page is
+> already in the page cache). Then, the userfaultfd theads can handle the
+> fault: they could potentially modify the underlying memory *via the
+> alias* if they wanted to, and then they install the PTEs and let the
+> guest carry on via a UFFDIO_CONTINUE ioctl.
+>
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-Basically I think the existing behavior is to always use 4k - so we
-UFFDIO_COPY that size at a time.
+Reviewed-by: Ben Gardon <bgardon@google.com>
 
-This is totally fine for anonymous, or even for THPs. But, once we're
-using hugetlbfs, the UFFDIO_COPY ioctl will just fail unless we do 2M
-(or some multiple thereof) at a time. If memory serves it returns
--EINVAL in this case.
-
-It wouldn't be so much trouble to factor it out, so just let me know
-what is preferred. For now, I'll do it if a v2 is needed for other
-reasons.
-
+> ---
+>  .../testing/selftests/kvm/include/kvm_util.h  |  1 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 50 +++++++++++++++++++
+>  .../selftests/kvm/lib/kvm_util_internal.h     |  2 +
+>  3 files changed, 53 insertions(+)
 >
-> Otherwise this patch looks reasonable to me. I'll try to review the
-> rest of your patches today / Monday.
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index a8f022794ce3..0624f25a6803 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -146,6 +146,7 @@ void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+>  void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa);
+>  void *addr_gva2hva(struct kvm_vm *vm, vm_vaddr_t gva);
+>  vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva);
+> +void *addr_gpa2alias(struct kvm_vm *vm, vm_paddr_t gpa);
 >
-> >
-> > So, convert everything to use a new demand_paging_size, computed based
-> > on the backing memory type.
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > ---
-> >  .../selftests/kvm/demand_paging_test.c        | 24 +++++++++++++------
-> >  1 file changed, 17 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> > index 5f7a229c3af1..10c7ba76a9c6 100644
-> > --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> > +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> > @@ -38,6 +38,7 @@
-> >
-> >  static int nr_vcpus = 1;
-> >  static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
-> > +static size_t demand_paging_size;
-> >  static char *guest_data_prototype;
-> >
-> >  static void *vcpu_worker(void *data)
-> > @@ -83,7 +84,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
-> >
-> >         copy.src = (uint64_t)guest_data_prototype;
-> >         copy.dst = addr;
-> > -       copy.len = perf_test_args.host_page_size;
-> > +       copy.len = demand_paging_size;
-> >         copy.mode = 0;
-> >
-> >         clock_gettime(CLOCK_MONOTONIC, &start);
-> > @@ -100,7 +101,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
-> >         PER_PAGE_DEBUG("UFFDIO_COPY %d \t%ld ns\n", tid,
-> >                        timespec_to_ns(ts_diff));
-> >         PER_PAGE_DEBUG("Paged in %ld bytes at 0x%lx from thread %d\n",
-> > -                      perf_test_args.host_page_size, addr, tid);
-> > +                      demand_paging_size, addr, tid);
-> >
-> >         return 0;
-> >  }
-> > @@ -250,6 +251,7 @@ static int setup_demand_paging(struct kvm_vm *vm,
-> >  struct test_params {
-> >         bool use_uffd;
-> >         useconds_t uffd_delay;
-> > +       enum vm_mem_backing_src_type src_type;
-> >         bool partition_vcpu_memory_access;
-> >  };
-> >
-> > @@ -267,14 +269,16 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >         int r;
-> >
-> >         vm = perf_test_create_vm(mode, nr_vcpus, guest_percpu_mem_size,
-> > -                                VM_MEM_SRC_ANONYMOUS);
-> > +                                p->src_type);
-> >
-> >         perf_test_args.wr_fract = 1;
-> >
-> > -       guest_data_prototype = malloc(perf_test_args.host_page_size);
-> > +       demand_paging_size = get_backing_src_pagesz(p->src_type);
-> > +
-> > +       guest_data_prototype = malloc(demand_paging_size);
-> >         TEST_ASSERT(guest_data_prototype,
-> >                     "Failed to allocate buffer for guest data pattern");
-> > -       memset(guest_data_prototype, 0xAB, perf_test_args.host_page_size);
-> > +       memset(guest_data_prototype, 0xAB, demand_paging_size);
-> >
-> >         vcpu_threads = malloc(nr_vcpus * sizeof(*vcpu_threads));
-> >         TEST_ASSERT(vcpu_threads, "Memory allocation failed");
-> > @@ -388,7 +392,7 @@ static void help(char *name)
-> >  {
-> >         puts("");
-> >         printf("usage: %s [-h] [-m mode] [-u] [-d uffd_delay_usec]\n"
-> > -              "          [-b memory] [-v vcpus] [-o]\n", name);
-> > +              "          [-b memory] [-t type] [-v vcpus] [-o]\n", name);
-> >         guest_modes_help();
-> >         printf(" -u: use User Fault FD to handle vCPU page\n"
-> >                "     faults.\n");
-> > @@ -398,6 +402,8 @@ static void help(char *name)
-> >         printf(" -b: specify the size of the memory region which should be\n"
-> >                "     demand paged by each vCPU. e.g. 10M or 3G.\n"
-> >                "     Default: 1G\n");
-> > +       printf(" -t: The type of backing memory to use. Default: anonymous\n");
-> > +       backing_src_help();
-> >         printf(" -v: specify the number of vCPUs to run.\n");
-> >         printf(" -o: Overlap guest memory accesses instead of partitioning\n"
-> >                "     them into a separate region of memory for each vCPU.\n");
-> > @@ -409,13 +415,14 @@ int main(int argc, char *argv[])
-> >  {
-> >         int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
-> >         struct test_params p = {
-> > +               .src_type = VM_MEM_SRC_ANONYMOUS,
-> >                 .partition_vcpu_memory_access = true,
-> >         };
-> >         int opt;
-> >
-> >         guest_modes_append_default();
-> >
-> > -       while ((opt = getopt(argc, argv, "hm:ud:b:v:o")) != -1) {
-> > +       while ((opt = getopt(argc, argv, "hm:ud:b:t:v:o")) != -1) {
-> >                 switch (opt) {
-> >                 case 'm':
-> >                         guest_modes_cmdline(optarg);
-> > @@ -430,6 +437,9 @@ int main(int argc, char *argv[])
-> >                 case 'b':
-> >                         guest_percpu_mem_size = parse_size(optarg);
-> >                         break;
-> > +               case 't':
-> > +                       p.src_type = parse_backing_src_type(optarg);
-> > +                       break;
-> >                 case 'v':
-> >                         nr_vcpus = atoi(optarg);
-> >                         TEST_ASSERT(nr_vcpus > 0 && nr_vcpus <= max_vcpus,
-> > --
-> > 2.31.1.607.g51e8a6a459-goog
-> >
+>  /*
+>   * Address Guest Virtual to Guest Physical
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 6fbe124e0e16..838d58633f7e 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -809,6 +809,19 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>
+>         /* Add to linked-list of memory regions. */
+>         list_add(&region->list, &vm->userspace_mem_regions);
+> +
+> +       /* If shared memory, create an alias. */
+> +       if (region->fd >= 0) {
+> +               region->mmap_alias = mmap(NULL, region->mmap_size,
+> +                                         PROT_READ | PROT_WRITE,
+> +                                         vm_mem_backing_src_alias(src_type)->flag,
+> +                                         region->fd, 0);
+> +               TEST_ASSERT(region->mmap_alias != MAP_FAILED,
+> +                           "mmap of alias failed, errno: %i", errno);
+> +
+> +               /* Align host alias address */
+> +               region->host_alias = align(region->mmap_alias, alignment);
+> +       }
+>  }
+>
+>  /*
+> @@ -1237,6 +1250,43 @@ vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva)
+>         return -1;
+>  }
+>
+> +/*
+> + * Address VM physical to Host Virtual *alias*.
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   gpa - VM physical address
+> + *
+> + * Output Args: None
+> + *
+> + * Return:
+> + *   Equivalent address within the host virtual *alias* area, or NULL
+> + *   (without failing the test) if the guest memory is not shared (so
+> + *   no alias exists).
+> + *
+> + * When vm_create() and related functions are called with a shared memory
+> + * src_type, we also create a writable, shared alias mapping of the
+> + * underlying guest memory. This allows the host to manipulate guest memory,
+> + * e.g. to implement demand paging.
+
+I would amend this to: "This allows the host to manipulate guest
+memory without mapping that memory in the guest's address space," or
+something to that effect.
+
+> + */
+> +void *addr_gpa2alias(struct kvm_vm *vm, vm_paddr_t gpa)
+> +{
+> +       struct userspace_mem_region *region;
+> +
+> +       list_for_each_entry(region, &vm->userspace_mem_regions, list) {
+> +               if (!region->host_alias)
+> +                       continue;
+> +
+> +               if ((gpa >= region->region.guest_phys_addr)
+> +                       && (gpa <= (region->region.guest_phys_addr
+> +                               + region->region.memory_size - 1)))
+> +                       return (void *) ((uintptr_t) region->host_alias
+> +                               + (gpa - region->region.guest_phys_addr));
+> +       }
+> +
+> +       return NULL;
+> +}
+> +
+>  /*
+>   * VM Create IRQ Chip
+>   *
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util_internal.h b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
+> index 91ce1b5d480b..a25af33d4a9c 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util_internal.h
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
+> @@ -16,7 +16,9 @@ struct userspace_mem_region {
+>         int fd;
+>         off_t offset;
+>         void *host_mem;
+> +       void *host_alias;
+>         void *mmap_start;
+> +       void *mmap_alias;
+>         size_t mmap_size;
+>         struct list_head list;
+>  };
+> --
+> 2.31.1.607.g51e8a6a459-goog
+>
