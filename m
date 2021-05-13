@@ -2,107 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDE537FE26
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 21:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A5637FE30
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 May 2021 21:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbhEMTdb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 May 2021 15:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S230448AbhEMThS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 May 2021 15:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbhEMTda (ORCPT
+        with ESMTP id S230401AbhEMThS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 May 2021 15:33:30 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C833C061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:32:20 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id l8-20020a25b3080000b02904f8bd69022dso19623525ybj.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:32:20 -0700 (PDT)
+        Thu, 13 May 2021 15:37:18 -0400
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2B3C061574
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:07 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id b24-20020a0cb3d80000b02901e78b82d74aso12041417qvf.20
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 May 2021 12:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=UG4DRgps52OAiZfNV/lZ0BYy7DJApRr1J3Fdn5d6SOI=;
-        b=KANv2qwDOqKW0FC+g0njej0NjGjlVChYKPW+DOiX8ImpyDmo766P3ods4/mfOwqaeJ
-         vbHDPPbMvoDYgPtvU0yATr6ch9bkAJRJBTGUs4igfyUqf5gqzTBr/cH/YAlkY74ba/Y0
-         v/GhIXmawVuEqtVKXwR0aCbzf+aKZUZhm4uq8GMykVh5J7UnUx2rNkR4Ao5adLYj26ib
-         TWUJl5qiBiysxUuo7H3ic1mKteW1ZnLVo35yYFJvALSI1xnkGO3xt+e3tWdG9jg0+iaf
-         M0mZGEpPAdkr2geDb+Y1TyfloZhrANyQCPriODVViZZvEBawEosodTwMzOJpKtH2tB9+
-         HJkQ==
+        bh=BiTwevY2BijktUFqvfOK9eJ6VmJRYnptZuS8mDsZYKo=;
+        b=LasTf1nY4+b5yUEfOYSE5Kj0qvBWH1MILz6JaDyx+q45/xfqv50Ku6rV8lP2Cci/mt
+         5xCaADseUt1Sv6TJOa1pyB0U4fZyJUjItpSzpEhJJY/pKRwPYHLQkPypJnUrOxBwkxjl
+         oMHIWw/ZZRw2KyiOs8R/h/D7wgbtc3dM5zuMVg5hDI7XnHCj0dwLXzPoMNfiCswGfqJS
+         7R4qEYcoDvgvAcL9yBNg76nYlyZ9k46xRtr0LrHyyqcBm78F4mgFRg0XX1j0PHnPoahV
+         be6PMEuT48BtaRvQzuTFVtqRdjPP37Idayy4h/C5p+j/YR74fYwG5Yx4jOWDqbsQfaxL
+         jRQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=UG4DRgps52OAiZfNV/lZ0BYy7DJApRr1J3Fdn5d6SOI=;
-        b=oR4hH2d/YFQ28dxhvteogKsuMbuQpGRsptv5ZbWjkJJWQSg5kAX5zfAENKtKtBGk03
-         H9t1H8U+Qf8kJSpkdFueEXmXOALatw4EkcRhFOoTqiBH8Ko+lEMGrPe8Ssub6L8J5lhy
-         Gd6FP6vVrFCkntxlnn8MUahPYZPBg1+BzTg5pgtblEpdWjhV8pX9GkuW/bnI5UAWBYL7
-         JHHMhDgt6+/RnaJg8ASY72qxf4xwCJwL1MNb+dP0jB4poiocnl6sNUGY5doll0gW6Trh
-         IwZMj/NbxN3O1fDV1vHh7NhQYMwGOywqw5Xo6JF0L2zdAvIboubDRnErBAwUhyrJ1KoH
-         lCGQ==
-X-Gm-Message-State: AOAM53305aJvCqR6mq+pT+lV3t+d7x7+6+R9UVKGSTIIMo6tzVSYpB4R
-        vjE+CUsr52XNwm72o7cqeM9VnB3pKlzZaQ==
-X-Google-Smtp-Source: ABdhPJyulUyLZhj+uB13ai/E+4hJ6nrll6+iCFLMp64vZXUvfU/8xlLalxrIG2KVD4MuXQ+3dfaKzBBAb3Qj1A==
+        bh=BiTwevY2BijktUFqvfOK9eJ6VmJRYnptZuS8mDsZYKo=;
+        b=jnSrJBwCcAu/BFZSkHaBVGKrt7LRtRJxU5ZfVe9dmfCrlSoic+oJGD/9EgHDjTVrLN
+         ZYnMH3u/SEHuYNSinuheQEs7CXZlQB5RpuZFyr0XONRyghcLl181ZjGNn3rsgu+Zenhp
+         Ed3Z8kaZVtC27W56OTiBEA5gfTq934rZRWB07yez9czuBnxqIwVZJzjjRCSPsU62bkL3
+         aASpuxjdnYOfrERaVQMDt/pEJZfPqhFHpflCNVyJ9kZEw6LdSwzV0BrJpE5bBN/ezdmN
+         Tf/MfohinKEoNHBfxVs+X7KduL3/W7YGcumEe1b4OwgExbiISjMEJzyZwHq7fr7T/5Wp
+         12aA==
+X-Gm-Message-State: AOAM533bOJZ7W6YbGXrBfuwVxWnZJhuE467icB64kBG87uw6IHvU6DlV
+        alxiUzqbjshMIumekue7Qh9sV5QvfB01LQ==
+X-Google-Smtp-Source: ABdhPJyR64VzZ5dzEuRrPPWp50TK6bKpzKa8OAJQymtp2HWAudczxHJpzY45ad+idq1r8zu7myy7Tbr1YTO3bw==
 X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:5f61:8ca4:879b:809e])
- (user=davidgow job=sendgmr) by 2002:a25:74d3:: with SMTP id
- p202mr37721158ybc.38.1620934339592; Thu, 13 May 2021 12:32:19 -0700 (PDT)
-Date:   Thu, 13 May 2021 12:31:56 -0700
+ (user=davidgow job=sendgmr) by 2002:ad4:5ae6:: with SMTP id
+ c6mr3662248qvh.42.1620934567050; Thu, 13 May 2021 12:36:07 -0700 (PDT)
+Date:   Thu, 13 May 2021 12:31:57 -0700
 In-Reply-To: <20210513193204.816681-1-davidgow@google.com>
-Message-Id: <20210513193204.816681-2-davidgow@google.com>
+Message-Id: <20210513193204.816681-3-davidgow@google.com>
 Mime-Version: 1.0
 References: <20210513193204.816681-1-davidgow@google.com>
 X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
-Subject: [PATCH v2 02/10] kunit: Assign strings to 'const char*' in STREQ assertions
+Subject: [PATCH v2 03/10] Documentation: kunit: Clean up some string casts in examples
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Daniel Latypov <dlatypov@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>
 Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, the KUNIT_EXPECT_STREQ() and related macros assign both
-string arguments to variables of their own type (via typeof()). This
-seems to be to prevent the macro argument from being evaluated multiple
-times.
-
-However, this doesn't work if one of these is a fixed-length character
-array, rather than a character pointer, as (for example) char[16] will
-always allocate a new string.
-
-By always using 'const char*' (the type strcmp expects), we're always
-just taking a pointer to the string, which works even with character
-arrays.
+As the type checking is no longer excessively strict, get rid of the
+unsightly (char*) casts -- and comment discussing them -- from the KUnit
+usage page.
 
 Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- include/kunit/test.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/dev-tools/kunit/usage.rst | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20210507050908.1008686-2-davidgow@google.com/
-- Fix a typo in the description ('yhis' -> 'this').
-
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 4c56ffcb7403..b68c61348121 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -1128,8 +1128,8 @@ do {									       \
- 				   fmt,					       \
- 				   ...)					       \
- do {									       \
--	typeof(left) __left = (left);					       \
--	typeof(right) __right = (right);				       \
-+	const char *__left = (left);					       \
-+	const char *__right = (right);				       \
- 									       \
- 	KUNIT_ASSERTION(test,						       \
- 			strcmp(__left, __right) op 0,			       \
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 650f99590df5..756747417a19 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -465,10 +465,9 @@ fictitious example for ``sha1sum(1)``
+ 
+ .. code-block:: c
+ 
+-	/* Note: the cast is to satisfy overly strict type-checking. */
+ 	#define TEST_SHA1(in, want) \
+ 		sha1sum(in, out); \
+-		KUNIT_EXPECT_STREQ_MSG(test, (char *)out, want, "sha1sum(%s)", in);
++		KUNIT_EXPECT_STREQ_MSG(test, out, want, "sha1sum(%s)", in);
+ 
+ 	char out[40];
+ 	TEST_SHA1("hello world",  "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed");
+@@ -507,7 +506,7 @@ In some cases, it can be helpful to write a *table-driven test* instead, e.g.
+ 	};
+ 	for (i = 0; i < ARRAY_SIZE(cases); ++i) {
+ 		sha1sum(cases[i].str, out);
+-		KUNIT_EXPECT_STREQ_MSG(test, (char *)out, cases[i].sha1,
++		KUNIT_EXPECT_STREQ_MSG(test, out, cases[i].sha1,
+ 		                      "sha1sum(%s)", cases[i].str);
+ 	}
+ 
+@@ -568,7 +567,7 @@ Reusing the same ``cases`` array from above, we can write the test as a
+ 		struct sha1_test_case *test_param = (struct sha1_test_case *)(test->param_value);
+ 
+ 		sha1sum(test_param->str, out);
+-		KUNIT_EXPECT_STREQ_MSG(test, (char *)out, test_param->sha1,
++		KUNIT_EXPECT_STREQ_MSG(test, out, test_param->sha1,
+ 				      "sha1sum(%s)", test_param->str);
+ 	}
+ 
 -- 
 2.31.1.751.gd2f1c929bd-goog
 
