@@ -2,60 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE913805CC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 May 2021 11:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E16C380617
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 May 2021 11:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbhENJFj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 May 2021 05:05:39 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:35415 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbhENJFi (ORCPT
+        id S232178AbhENJXN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 May 2021 05:23:13 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:3688 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232163AbhENJXM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 May 2021 05:05:38 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <colin.king@canonical.com>)
-        id 1lhTk3-0003mo-GR; Fri, 14 May 2021 09:04:19 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Hyser <chris.hyser@oracle.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] kselftest: Fix spelling mistake "hiearchy" -> "hierarchy"
-Date:   Fri, 14 May 2021 10:04:19 +0100
-Message-Id: <20210514090419.7792-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 14 May 2021 05:23:12 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FhNJP6t6dz1BLWN;
+        Fri, 14 May 2021 17:19:17 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.498.0; Fri, 14 May 2021
+ 17:21:58 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC:     <ckennelly@google.com>, <akpm@linux-foundation.org>
+Subject: [PATCH -next] tools/testing/selftests/exec: fix link error
+Date:   Fri, 14 May 2021 17:24:22 +0800
+Message-ID: <20210514092422.2367367-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Fix the link error by adding '-static':
 
-There is a spelling mistake in a message. Fix it.
+gcc -Wall  -Wl,-z,max-page-size=0x1000 -pie load_address.c -o /home/yang/linux/tools/testing/selftests/exec/load_address_4096
+/usr/bin/ld: /tmp/ccopEGun.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `stderr@@GLIBC_2.17' which may bind externally can not be used when making a shared object; recompile with -fPIC
+/usr/bin/ld: /tmp/ccopEGun.o(.text+0x158): unresolvable R_AARCH64_ADR_PREL_PG_HI21 relocation against symbol `stderr@@GLIBC_2.17'
+/usr/bin/ld: final link failed: bad value
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:25: tools/testing/selftests/exec/load_address_4096] Error 1
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Fixes: 206e22f01941 ("tools/testing/selftests: add self-test for verifying load alignment")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- tools/testing/selftests/sched/cs_prctl_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/exec/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-index 63fe6521c56d..cf9ca10b876c 100644
---- a/tools/testing/selftests/sched/cs_prctl_test.c
-+++ b/tools/testing/selftests/sched/cs_prctl_test.c
-@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
- 	if (setpgid(0, 0) != 0)
- 		handle_error("process group");
- 
--	printf("\n## Create a thread/process/process group hiearchy\n");
-+	printf("\n## Create a thread/process/process group hierarchy\n");
- 	create_processes(num_processes, num_threads, procs);
- 	disp_processes(num_processes, procs);
- 	validate(get_cs_cookie(0) == 0);
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index cf69b2fcce59..dd61118df66e 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -28,8 +28,8 @@ $(OUTPUT)/execveat.denatured: $(OUTPUT)/execveat
+ 	cp $< $@
+ 	chmod -x $@
+ $(OUTPUT)/load_address_4096: load_address.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000 -pie $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000 -pie -static $< -o $@
+ $(OUTPUT)/load_address_2097152: load_address.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x200000 -pie $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x200000 -pie -static $< -o $@
+ $(OUTPUT)/load_address_16777216: load_address.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000000 -pie $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000000 -pie -static $< -o $@
 -- 
-2.30.2
+2.25.1
 
