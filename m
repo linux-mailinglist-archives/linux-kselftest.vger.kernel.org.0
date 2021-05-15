@@ -2,258 +2,260 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A723811AB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 May 2021 22:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9F73816AC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 May 2021 09:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233398AbhENUVy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 May 2021 16:21:54 -0400
-Received: from mga14.intel.com ([192.55.52.115]:16073 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233028AbhENUVw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 May 2021 16:21:52 -0400
-IronPort-SDR: Qu3mheomfwnO2BGcGmhC9gEs6SCutxOf36Y+rLelUDponityOvyTj5BaFn8HwH18TTrJfGYyUt
- fl2NZBrGPMeA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9984"; a="199921594"
-X-IronPort-AV: E=Sophos;i="5.82,300,1613462400"; 
-   d="scan'208";a="199921594"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2021 13:20:37 -0700
-IronPort-SDR: MjA9L+QCKBblRHPeAED79usTmz3wz+ESaOPB52gdmKCkObI/tOqCBP5pdO9FGsO7QRSXPK4cpC
- b/ILTC1ODd+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,300,1613462400"; 
-   d="scan'208";a="438147183"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by orsmga008.jf.intel.com with ESMTP; 14 May 2021 13:20:37 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     tglx@linutronix.de, mingo@kernel.org, bp@suse.de, luto@kernel.org,
-        x86@kernel.org, herbert@gondor.apana.org.au
-Cc:     dan.j.williams@intel.com, dave.hansen@intel.com,
-        ravi.v.shankar@intel.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chang.seok.bae@intel.com,
-        linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH v2 07/11] selftests/x86: Test Key Locker internal key maintenance
-Date:   Fri, 14 May 2021 13:15:04 -0700
-Message-Id: <20210514201508.27967-8-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210514201508.27967-1-chang.seok.bae@intel.com>
-References: <20210514201508.27967-1-chang.seok.bae@intel.com>
+        id S233755AbhEOH7e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 15 May 2021 03:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233640AbhEOH7d (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 15 May 2021 03:59:33 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E8DC061756
+        for <linux-kselftest@vger.kernel.org>; Sat, 15 May 2021 00:58:20 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id f6-20020a1c1f060000b0290175ca89f698so20708wmf.5
+        for <linux-kselftest@vger.kernel.org>; Sat, 15 May 2021 00:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SL2vqvXzqdCjd9kP5QudZx9jKMtEwDxxzaTafMUA1n4=;
+        b=uYcfChCCOqtOqkH7/k7AjJdN7pC2S1+0KKfrd+K75UZwJYdYQGdF4zdEPKOVV61T8f
+         PeMJ8j8G2BqNYV2vsbivb9FAneH5ujAYAHrVCcnOrMBHXr/NMQRAD7TfGST32hiaJ/rV
+         nVncuvvoc7Bj6eFvPvFkVgf1RH9zM6k7+jTR0tCHN3hVfMBri3xOMSL4Ch0GfhgJNPNk
+         UxSI3RdwPCOkOI76MijdEg5iFTeZpSIIZsn3mkTiCme+BULRCzajeYo04gwdSG/FllhB
+         hgKAGENYi50ma7lyT4KVVvHHJ1wIufRtbLw9eOJoWpV8wNaoMC0iqrc8H+/Ex9iaUOOP
+         x7TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SL2vqvXzqdCjd9kP5QudZx9jKMtEwDxxzaTafMUA1n4=;
+        b=XRvg+j2DGeW23/n24spZQrl6cf5lh/ax3OgzpeKByprQRCUtiiwC71Zi4wdq7caxcP
+         yihkOzvBmdW4EDddKiT2j1840ajIt2H8XdqXUwAITC+t5lNGqIP9HM9FB0z80bAakEHP
+         2FH+HFo0lG3TieJ91o3GEt0dc+Xs3DAvAE2nzV/sh40BIcNur3SYN3OloKnd8D8VIEr3
+         XkEOI7fRCrM5W891vveeY5Bsi8PRQ0yYZDa2CwjCQXvr+UAB79CDFjKcaH1j7FPizM/H
+         vpzbPXb2gOCGmuAqnUitmWh9X93idZDVH1aMRAS2POmFzCS6UchlnZk9X2+MsIHu6fgy
+         XwKA==
+X-Gm-Message-State: AOAM53266zFCs7cThNxQdiZbHavshpmjfdH66apCl6I4He4vlLKHmw9b
+        si0h/lm25Vg3W8ioVlmUCms0LOwbDXPtuWsJL9mMXg9W9I35+w==
+X-Google-Smtp-Source: ABdhPJxZSjlEs4lhOYcHSFP7XeWXGYCEwWe+6Moyq+QxDgwX95Df9Ate+/s2uq7owzYjUJZ5YoV5U+mypVQs+z+Vz/s=
+X-Received: by 2002:a05:600c:218d:: with SMTP id e13mr13326454wme.151.1621065499581;
+ Sat, 15 May 2021 00:58:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210507213110.155492-1-brendanhiggins@google.com> <20210507213110.155492-2-brendanhiggins@google.com>
+In-Reply-To: <20210507213110.155492-2-brendanhiggins@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 15 May 2021 15:58:08 +0800
+Message-ID: <CABVgOS=3ToE-w8PT_p_xqxqs4AR_a4u4LwFAFE-TrMtEEySG=A@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] kunit: Add 'kunit_shutdown' option
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000046e3af05c259b9f0"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test validates the internal key to be the same in all CPUs.
+--00000000000046e3af05c259b9f0
+Content-Type: text/plain; charset="UTF-8"
 
-It performs the validation again with the Suspend-To-RAM (ACPI S3) state.
+On Sat, May 8, 2021 at 5:31 AM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> From: David Gow <davidgow@google.com>
+>
+> Add a new kernel command-line option, 'kunit_shutdown', which allows the
+> user to specify that the kernel poweroff, halt, or reboot after
+> completing all KUnit tests; this is very handy for running KUnit tests
+> on UML or a VM so that the UML/VM process exits cleanly immediately
+> after running all tests without needing a special initramfs.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> Tested-By: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
-Changes from RFC v1:
-* Commented the binutils version number for ENCODEKEY128 (Peter Zijlstra)
----
- tools/testing/selftests/x86/Makefile    |   2 +-
- tools/testing/selftests/x86/keylocker.c | 177 ++++++++++++++++++++++++
- 2 files changed, 178 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/keylocker.c
+Obviously I'm okay with this change, but I did find a minor whitespace
+nitpick below.
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 333980375bc7..09237cc84108 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore
-+			syscall_arg_fault fsgsbase_restore keylocker
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/keylocker.c b/tools/testing/selftests/x86/keylocker.c
-new file mode 100644
-index 000000000000..78bbb7939b1a
---- /dev/null
-+++ b/tools/testing/selftests/x86/keylocker.c
-@@ -0,0 +1,177 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * keylocker.c, validate the internal key management.
-+ */
-+#undef _GNU_SOURCE
-+#define _GNU_SOURCE 1
-+
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <err.h>
-+#include <sched.h>
-+#include <setjmp.h>
-+#include <signal.h>
-+#include <unistd.h>
-+
-+#define HANDLE_SIZE	48
-+
-+static bool keylocker_disabled;
-+
-+/* Encode a 128-bit key to a 384-bit handle */
-+static inline void __encode_key(char *handle)
-+{
-+	static const unsigned char aeskey[] = { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38,
-+						0x71, 0x77, 0x74, 0x69, 0x6f, 0x6b, 0x6c, 0x78 };
-+
-+	asm volatile ("movdqu %0, %%xmm0" : : "m" (*aeskey) :);
-+
-+	/* Set no restriction to the handle */
-+	asm volatile ("mov $0, %%eax" :);
-+
-+	/* ENCODEKEY128 %EAX (supported by binutils >= 2.36) */
-+	asm volatile (".byte 0xf3, 0xf, 0x38, 0xfa, 0xc0");
-+
-+	asm volatile ("movdqu %%xmm0, %0; movdqu %%xmm1, %1; movdqu %%xmm2, %2;"
-+		      : "=m" (handle[0]), "=m" (handle[0x10]), "=m" (handle[0x20]));
-+}
-+
-+static jmp_buf jmpbuf;
-+
-+static void handle_sigill(int sig, siginfo_t *si, void *ctx_void)
-+{
-+	keylocker_disabled = true;
-+	siglongjmp(jmpbuf, 1);
-+}
-+
-+static bool encode_key(char *handle)
-+{
-+	bool success = true;
-+	struct sigaction sa;
-+	int ret;
-+
-+	memset(&sa, 0, sizeof(sa));
-+
-+	/* Set signal handler */
-+	sa.sa_flags = SA_SIGINFO;
-+	sa.sa_sigaction = handle_sigill;
-+	sigemptyset(&sa.sa_mask);
-+	ret = sigaction(SIGILL, &sa, 0);
-+	if (ret)
-+		err(1, "sigaction");
-+
-+	if (sigsetjmp(jmpbuf, 1))
-+		success = false;
-+	else
-+		__encode_key(handle);
-+
-+	/* Clear signal handler */
-+	sa.sa_flags = 0;
-+	sa.sa_sigaction = NULL;
-+	sa.sa_handler = SIG_DFL;
-+	sigemptyset(&sa.sa_mask);
-+	ret = sigaction(SIGILL, &sa, 0);
-+	if (ret)
-+		err(1, "sigaction");
-+
-+	return success;
-+}
-+
-+/*
-+ * Test if the internal key is the same in all the CPUs:
-+ *
-+ * Since the value is not readable, compare the encoded output of a AES key
-+ * between CPUs.
-+ */
-+
-+static int nerrs;
-+
-+static unsigned char cpu0_handle[HANDLE_SIZE] = { 0 };
-+
-+static void test_internal_key(bool slept, long cpus)
-+{
-+	int cpu, errs;
-+
-+	printf("Test the internal key consistency between CPUs\n");
-+
-+	for (cpu = 0, errs = 0; cpu < cpus; cpu++) {
-+		char handle[HANDLE_SIZE] = { 0 };
-+		cpu_set_t mask;
-+		bool success;
-+
-+		CPU_ZERO(&mask);
-+		CPU_SET(cpu, &mask);
-+		sched_setaffinity(0, sizeof(cpu_set_t), &mask);
-+
-+		success = encode_key(handle);
-+		if (!success) {
-+			/* The encode should success after the S3 sleep */
-+			if (slept)
-+				errs++;
-+			printf("[%s]\tKey Locker disabled at CPU%d\n",
-+			       slept ? "FAIL" : "NOTE", cpu);
-+			continue;
-+		}
-+
-+		if (cpu == 0 && !slept) {
-+			/* Record the first handle value as reference */
-+			memcpy(cpu0_handle, handle, HANDLE_SIZE);
-+		} else if (memcmp(cpu0_handle, handle, HANDLE_SIZE)) {
-+			printf("[FAIL]\tMismatched internal key at CPU%d\n",
-+			       cpu);
-+			errs++;
-+		}
-+	}
-+
-+	if (errs == 0 && !keylocker_disabled)
-+		printf("[OK]\tAll the internal keys are the same\n");
-+	else
-+		nerrs += errs;
-+}
-+
-+static void switch_to_sleep(bool *slept)
-+{
-+	ssize_t bytes;
-+	int fd;
-+
-+	printf("Transition to Suspend-To-RAM state\n");
-+
-+	fd = open("/sys/power/mem_sleep", O_RDWR);
-+	if (fd < 0)
-+		err(1, "Open /sys/power/mem_sleep");
-+
-+	bytes = write(fd, "deep", strlen("deep"));
-+	if (bytes != strlen("deep"))
-+		err(1, "Write /sys/power/mem_sleep");
-+	close(fd);
-+
-+	fd = open("/sys/power/state", O_RDWR);
-+	if (fd < 0)
-+		err(1, "Open /sys/power/state");
-+
-+	bytes = write(fd, "mem", strlen("mem"));
-+	if (bytes != strlen("mem"))
-+		err(1, "Write /sys/power/state");
-+	close(fd);
-+
-+	printf("Wake up from Suspend-To-RAM state\n");
-+	*slept = true;
-+}
-+
-+int main(void)
-+{
-+	bool slept = false;
-+	long cpus;
-+
-+	cpus = sysconf(_SC_NPROCESSORS_ONLN);
-+	printf("%ld CPUs in the system\n", cpus);
-+
-+	test_internal_key(slept, cpus);
-+	if (keylocker_disabled)
-+		return nerrs ? 1 : 0;
-+
-+	switch_to_sleep(&slept);
-+	test_internal_key(slept, cpus);
-+	return nerrs ? 1 : 0;
-+}
--- 
-2.17.1
+>  lib/kunit/executor.c                | 20 ++++++++++++++++++++
+>  tools/testing/kunit/kunit_kernel.py |  2 +-
+>  tools/testing/kunit/kunit_parser.py |  2 +-
+>  3 files changed, 22 insertions(+), 2 deletions(-)
+>
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> index 15832ed446685..7db619624437c 100644
+> --- a/lib/kunit/executor.c
+> +++ b/lib/kunit/executor.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+> +#include <linux/reboot.h>
+>  #include <kunit/test.h>
+>  #include <linux/glob.h>
+>  #include <linux/moduleparam.h>
+> @@ -18,6 +19,9 @@ module_param(filter_glob, charp, 0);
+>  MODULE_PARM_DESC(filter_glob,
+>                 "Filter which KUnit test suites run at boot-time, e.g. list*");
+>
+> +static char *kunit_shutdown;
+> +core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
+> +
+>  static struct kunit_suite * const *
+>  kunit_filter_subsuite(struct kunit_suite * const * const subsuite)
+>  {
+> @@ -82,6 +86,20 @@ static struct suite_set kunit_filter_suites(void)
+>         return filtered;
+>  }
+>
+> +static void kunit_handle_shutdown(void)
+> +{
+> +       if (!kunit_shutdown)
+> +               return;
+> +
+> +       if (!strcmp(kunit_shutdown, "poweroff"))
+> +               kernel_power_off();
+> +       else if (!strcmp(kunit_shutdown, "halt"))
+> +               kernel_halt();
+> +       else if (!strcmp(kunit_shutdown, "reboot"))
+> +               kernel_restart(NULL);
+> +
+> +}
+> +
+>  static void kunit_print_tap_header(struct suite_set *suite_set)
+>  {
+>         struct kunit_suite * const * const *suites, * const *subsuite;
+> @@ -112,6 +130,8 @@ int kunit_run_all_tests(void)
+>                 kfree(suite_set.start);
+>         }
+>
+> +       kunit_handle_shutdown();
+> +
+>         return 0;
+>  }
+>
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 89a7d4024e878..e22ade9d91ad5 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -208,7 +208,7 @@ class LinuxSourceTree(object):
+>         def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
+>                 if not args:
+>                         args = []
+> -               args.extend(['mem=1G', 'console=tty'])
+> +               args.extend(['mem=1G', 'console=tty','kunit_shutdown=halt'])
+Nit: space here between 'console=tty', and 'kunit_shutdown=halt'.
 
+
+>                 if filter_glob:
+>                         args.append('kunit.filter_glob='+filter_glob)
+>                 self._ops.linux_bin(args, timeout, build_dir)
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index e8bcc139702e2..8d8d4d70b39dd 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -49,7 +49,7 @@ class TestStatus(Enum):
+>
+>  kunit_start_re = re.compile(r'TAP version [0-9]+$')
+>  kunit_end_re = re.compile('(List of all partitions:|'
+> -                         'Kernel panic - not syncing: VFS:)')
+> +                         'Kernel panic - not syncing: VFS:|reboot: System halted)')
+>
+>  def isolate_kunit_output(kernel_output) -> Iterator[str]:
+>         started = False
+> --
+> 2.31.1.607.g51e8a6a459-goog
+>
+
+--00000000000046e3af05c259b9f0
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnAYJKoZIhvcNAQcCoIIPjTCCD4kCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz2MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+ILbFHw0h01NI0v+AeczGMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwgZoGCCsGAQUF
+BwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9nc2F0
+bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNv
+bS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouseLHIb
+0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vY2Ev
+Z3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCNr3LBERPjVctGdVEb
+/hN6/N6F2eUWxZLSUbuV7fOle0OvI8xz2AUBrOYQLp94ox9LqmsATKPsBl2uiktsvfs/AXNMcmOz
+qsWHzfqp4XlvNgQsC/UyUMWxZoEyTDfTSat09yQjkFJ7viwzrqqscmTx5oTZz8TPRt0mbxwx3qry
+wDzYxadSUQXNpNnfi0FBDYUUfuCLFWPsPsAXmgh483u0RbNik9OY/ozNq1Gvg/U0jQOlJf2IiKbE
+kUL5Vq8gDDu6bETx5bHmRmSjHhwo7eVbxywczpzdFsU3dauZ3BzqhLy2pRGGzZybSH/3mf7o9y15
+gmRHE7WzPLrsULHG/TM8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xv
+YmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAyMDIw
+AhABm/kO+4pd09krN7Fjk8ypMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB5j5li
+TSYzMqxVRnyFvHZkg/R4+g5YVXPnETZiA4RyfDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwG
+CSqGSIb3DQEJBTEPFw0yMTA1MTUwNzU4MTlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEq
+MAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqG
+SIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEADu6p9jMgHkqpMJdw1K54ONWR
+/C6KGOTzrWTLGD1B2r0P28GCzCHBRL8MzM5aENGnVA48XPgJJZZw2YfIuz5QmpAOSJRqMhYin/Tb
+8KFxJ3B4WYmvxGAwnllHRKknE42KcCI3UWvdhdP1Ihf2jFSfPX/M26S0DRFocfegSejtEI+kBdUO
+crRYM3T+vlGTYHKd4upcCBey6wEX7oIW6r/bFztv0m3J30GfCheEJGdr/fT7tH40l8VVOXjhIOLG
+KaW4XqI6xjtHAGJPCR1rDNr2f5k1a9VZ+pirZ+NUgP5qsACcyvzW5ZuXhn4DQBNAJlLhPKfTObYq
+ww0+Vtbk5FO9HQ==
+--00000000000046e3af05c259b9f0--
