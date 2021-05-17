@@ -2,655 +2,392 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF43386DC7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 01:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC31386DEB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 01:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344516AbhEQXkz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 May 2021 19:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S1344645AbhEQXw5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 May 2021 19:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237188AbhEQXky (ORCPT
+        with ESMTP id S239081AbhEQXw5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 May 2021 19:40:54 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D94C06175F
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 May 2021 16:39:37 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id o8so9358312ljp.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 May 2021 16:39:37 -0700 (PDT)
+        Mon, 17 May 2021 19:52:57 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A601C061756
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 May 2021 16:51:40 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e14so7529825ils.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 May 2021 16:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0ygWKXeL4seTklUDb/QgMfOqOMd/0jB/DOCQb4M3H6Y=;
-        b=sT5OKvf98hK4gT1Fx2oniDk4x006SGwRhmtetO04kX1LC1AV9BhPgnk3RhGwPXPrky
-         HcgjCn0PX163Ay8pqJvOkRiYovkDAXEglgo3qG/FsRGmAV7ffV2CMtWCuAk9Je+vXI3X
-         Dlb3rV1Zu0hQS9BD5P+FwuCkJ45w0MX3I4NCi730l93eVGZb43GnOaay5LXxQ44g0mYh
-         xc+LOVHpdrKRv6LgUphlKlbfF9F9BgllWlNdusfMXo6fyiSMxAvDnzI0Ker1ryz6322d
-         GIqBJrWvtqckzrcjWsaxYfCZGImsg9UMFrHdd7jRiqlkgV8Esmc/IWK4sprESeFLbNrB
-         Jrwg==
+        bh=y+YiKpIXzIpDVyJC4NldUMZBwXLo+6dDm4EaQY5Cc04=;
+        b=p4haCn5TT/IsAqP8RJjQKGgGlpz8PfWDOtdEKoD/12uagP3I3Z9yuEJcezzI61rbBT
+         Q4s/5wRRxxO/jgAikAAQQg8RL9tQpLHfJPAiLYjA4SCzr8I0IbP7Ww3bz2uwDF/27K3x
+         XOcFncKpl2tfjfbmj+C1x+XmHXTZsoGRre6hilQXc0J8BqTMbrXz7vTXgXHW1YXwoElx
+         ZlMVAg8Aj7S1XwZcEbRlIj6D4Xu0/A96IhIXIs17d64v2aO7BJaYqSBEnRHRg4HVl1WZ
+         yzVNGOYsIq6zicKR4+w1t8VuMX7eKTFgw8j8h8WgqOXmswBTA+a8nzb96U9LmWBEubOr
+         a+Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0ygWKXeL4seTklUDb/QgMfOqOMd/0jB/DOCQb4M3H6Y=;
-        b=BHljuNe+JF3skm5xtYDyqy28GN6a66fypnUOmOoaul4IgScm9cR1hWg/eKuJUooWQd
-         jZbSSJ2r4RBvc/nI9MOSg9Kmfae9qH16RHN97jPo22UQUQh6EvsRmSk6zNOA/WVtmANR
-         +iDsbDro+WhgRoBAACmBkClayorbPFqo70MhBSXA5+5lM1sjfwr3SYIISCG72qyvKCFZ
-         tLVgnKHqdnjFHVjBRYrrHdGs4fAh57+aWUCingRSWdUuNfeuSpPGtXNRMvXswE+SP+Sa
-         VAIoqrcRKYeIlbdGgspffFJQ++zPxTyLIfl09IgvlW9mwLTGRTMedTsq1EU6Oxj3mrDB
-         S+bw==
-X-Gm-Message-State: AOAM530HdO3spGvK7xKz1/tmOdD9Oqh+5c/3yknmF+ATt/r92y9/5VQe
-        G/3WhwUU3zy9NIYlevk4QqJVj3iP7rU6AjNXf+Jyxg==
-X-Google-Smtp-Source: ABdhPJykJBrMDRiHsNf7xfQ2Rs56oQyhOiM8mouc01moKi6Q0TrPsqkYLfdk1y+NeRUVew406qwhAztQOr23Rx8Qbl8=
-X-Received: by 2002:a2e:9dc1:: with SMTP id x1mr867215ljj.492.1621294775641;
- Mon, 17 May 2021 16:39:35 -0700 (PDT)
+        bh=y+YiKpIXzIpDVyJC4NldUMZBwXLo+6dDm4EaQY5Cc04=;
+        b=b8Wzt5tTekHk2gCMY8+pQP3hnLTqzMDgtcWb8W3S1sj3UZXO5l9KHjZ3D8DAqMr/B2
+         92XP4IIP0vz1vXHelBu2SjJs2kd7ylxuzbcAclJavGOPfA3CFw8tjwcKtPjtcM2FLy9+
+         MO0bXv7KQrTIe2KCtJnN0qhWk8oRSRcrNenHdTjTiUj3y5eUyuCqeHa0VLPSQ4eDlCYU
+         9BHTX5V6vG6HaDgXQrsTAAm482FxAxIwCXBdGLyAf/yyfs5Lsj1MBp6/JFrjLJv+s5e3
+         ZYaVACKh9M1hATz/t/CbX9uv+2vEyGk5IB+/Eavq/ePMa8ENigjreBs439s3kg1md3Bm
+         JE/g==
+X-Gm-Message-State: AOAM531vBPCC8mDr7SE7B+o+Oux7UlZcCq9Iyr+vcycVl/nZw84UxtiK
+        PvI/tS4kq3Ey7MgDizVVfXvgnkdGn3OxekdDxgq3+w==
+X-Google-Smtp-Source: ABdhPJxPbgXdH/PL2M1TVOHFQ3ZKDhcLnL+maWXEPgiZ226LFSmBobRkl40wng44SwbTh1aCymbTP5qAcqVwuQ8U0ug=
+X-Received: by 2002:a05:6e02:1a49:: with SMTP id u9mr1941934ilv.306.1621295499328;
+ Mon, 17 May 2021 16:51:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210517145314.157626-1-jingzhangos@google.com> <20210517145314.157626-2-jingzhangos@google.com>
-In-Reply-To: <20210517145314.157626-2-jingzhangos@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 17 May 2021 16:39:08 -0700
-Message-ID: <CALzav=dGT7B7FWw_d5v3QaJxgfp6TZv7E4fdchG_7LKh+C17gg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] KVM: stats: Separate common stats from
- architecture specific ones
-To:     Jing Zhang <jingzhangos@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
+References: <20210512214502.2047008-1-axelrasmussen@google.com> <20210512214502.2047008-5-axelrasmussen@google.com>
+In-Reply-To: <20210512214502.2047008-5-axelrasmussen@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 17 May 2021 16:51:28 -0700
+Message-ID: <CANgfPd8Z0coniYhVNr1WR0Odob+aT10rqJWYKkzAqeP78Rczag@mail.gmail.com>
+Subject: Re: [PATCH 4/5] KVM: selftests: allow using UFFD minor faults for
+ demand paging
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Aaron Lewis <aaronlewis@google.com>,
+        Alexander Graf <graf@amazon.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jacob Xu <jacobhxu@google.com>,
+        Makarand Sonare <makarandsonare@google.com>,
         Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Yanan Wang <wangyanan55@huawei.com>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 17, 2021 at 9:24 AM Jing Zhang <jingzhangos@google.com> wrote:
+On Wed, May 12, 2021 at 2:45 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
 >
-> Put all common statistics in a separate structure to ease
-> statistics handling for the incoming new statistics API.
+> UFFD handling of MINOR faults is a new feature whose use case is to
+> speed up demand paging (compared to MISSING faults). So, it's
+> interesting to let this selftest exercise this new mode.
 >
-> No functional change intended.
+> Modify the demand paging test to have the option of using UFFD minor
+> faults, as opposed to missing faults. Now, when turning on userfaultfd
+> with '-u', the desired mode has to be specified ("MISSING" or "MINOR").
 >
-> Signed-off-by: Jing Zhang <jingzhangos@google.com>
+> If we're in minor mode, before registering, prefault via the *alias*.
+> This way, the guest will trigger minor faults, instead of missing
+> faults, and we can UFFDIO_CONTINUE to resolve them.
+>
+> Modify the page fault handler function to use the right ioctl depending
+> on the mode we're running in. In MINOR mode, use UFFDIO_CONTINUE.
+>
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 > ---
->  arch/arm64/include/asm/kvm_host.h   |  9 ++-------
->  arch/arm64/kvm/guest.c              | 12 ++++++------
->  arch/mips/include/asm/kvm_host.h    |  9 ++-------
->  arch/mips/kvm/mips.c                | 12 ++++++------
->  arch/powerpc/include/asm/kvm_host.h |  9 ++-------
->  arch/powerpc/kvm/book3s.c           | 12 ++++++------
->  arch/powerpc/kvm/book3s_hv.c        | 12 ++++++------
->  arch/powerpc/kvm/book3s_pr.c        |  2 +-
->  arch/powerpc/kvm/book3s_pr_papr.c   |  2 +-
->  arch/powerpc/kvm/booke.c            | 14 +++++++-------
->  arch/s390/include/asm/kvm_host.h    |  9 ++-------
->  arch/s390/kvm/kvm-s390.c            | 12 ++++++------
->  arch/x86/include/asm/kvm_host.h     |  9 ++-------
->  arch/x86/kvm/x86.c                  | 14 +++++++-------
->  include/linux/kvm_host.h            |  9 +++++++--
->  include/linux/kvm_types.h           | 12 ++++++++++++
->  virt/kvm/kvm_main.c                 | 14 +++++++-------
->  17 files changed, 82 insertions(+), 90 deletions(-)
+>  .../selftests/kvm/demand_paging_test.c        | 124 ++++++++++++------
+>  1 file changed, 87 insertions(+), 37 deletions(-)
 >
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 7cd7d5c8c4bc..f3ad7a20b0af 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -556,16 +556,11 @@ static inline bool __vcpu_write_sys_reg_to_cpu(u64 val, int reg)
+> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> index 10c7ba76a9c6..ff29aaea3120 100644
+> --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> @@ -72,33 +72,57 @@ static void *vcpu_worker(void *data)
+>         return NULL;
 >  }
 >
->  struct kvm_vm_stat {
-> -       ulong remote_tlb_flush;
-> +       struct kvm_vm_stat_common common;
->  };
+> -static int handle_uffd_page_request(int uffd, uint64_t addr)
+> +static int handle_uffd_page_request(int uffd_mode, int uffd, uint64_t addr)
+>  {
+> -       pid_t tid;
+> +       const char *ioctl_name;
+> +       pid_t tid = syscall(__NR_gettid);
+>         struct timespec start;
+>         struct timespec ts_diff;
+> -       struct uffdio_copy copy;
+>         int r;
 >
->  struct kvm_vcpu_stat {
-> -       u64 halt_successful_poll;
-> -       u64 halt_attempted_poll;
-> -       u64 halt_poll_success_ns;
-> -       u64 halt_poll_fail_ns;
-> -       u64 halt_poll_invalid;
-> -       u64 halt_wakeup;
-> +       struct kvm_vcpu_stat_common common;
->         u64 hvc_exit_stat;
->         u64 wfe_exit_stat;
->         u64 wfi_exit_stat;
-> diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-> index 5cb4a1cd5603..0e41331b0911 100644
-> --- a/arch/arm64/kvm/guest.c
-> +++ b/arch/arm64/kvm/guest.c
-> @@ -29,18 +29,18 @@
->  #include "trace.h"
+> -       tid = syscall(__NR_gettid);
+> +       if (uffd_mode == UFFDIO_REGISTER_MODE_MISSING) {
+> +               struct uffdio_copy copy;
 >
->  struct kvm_stats_debugfs_item debugfs_entries[] = {
-> -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
-> -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
-> -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
-> -       VCPU_STAT("halt_wakeup", halt_wakeup),
-> +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
-> +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
-> +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
-> +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
-
-nit: I may be alone in this but I find using the  the following more readable:
-
-        VCPU_STAT("halt_wakeup", common.halt_wakeup),
-
->         VCPU_STAT("hvc_exit_stat", hvc_exit_stat),
->         VCPU_STAT("wfe_exit_stat", wfe_exit_stat),
->         VCPU_STAT("wfi_exit_stat", wfi_exit_stat),
->         VCPU_STAT("mmio_exit_user", mmio_exit_user),
->         VCPU_STAT("mmio_exit_kernel", mmio_exit_kernel),
->         VCPU_STAT("exits", exits),
-> -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
-> -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
-> +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
-> +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
->         { NULL }
->  };
+> -       copy.src = (uint64_t)guest_data_prototype;
+> -       copy.dst = addr;
+> -       copy.len = demand_paging_size;
+> -       copy.mode = 0;
+> +               ioctl_name = "UFFDIO_COPY";
 >
-> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
-> index fca4547d580f..6f610fbcd8d1 100644
-> --- a/arch/mips/include/asm/kvm_host.h
-> +++ b/arch/mips/include/asm/kvm_host.h
-> @@ -109,10 +109,11 @@ static inline bool kvm_is_error_hva(unsigned long addr)
+> -       clock_gettime(CLOCK_MONOTONIC, &start);
+> +               copy.src = (uint64_t)guest_data_prototype;
+> +               copy.dst = addr;
+> +               copy.len = demand_paging_size;
+> +               copy.mode = 0;
+>
+> -       r = ioctl(uffd, UFFDIO_COPY, &copy);
+> -       if (r == -1) {
+> -               pr_info("Failed Paged in 0x%lx from thread %d with errno: %d\n",
+> -                       addr, tid, errno);
+> -               return r;
+> -       }
+> +               clock_gettime(CLOCK_MONOTONIC, &start);
+
+Nit: It'd probably be fine to factor the timing calls out of the if
+statement to deduplicate.
+
+>
+> -       ts_diff = timespec_elapsed(start);
+> +               r = ioctl(uffd, UFFDIO_COPY, &copy);
+> +               if (r == -1) {
+> +                       pr_info("Failed UFFDIO_COPY in 0x%lx from thread %d with errno: %d\n",
+> +                               addr, tid, errno);
+> +                       return r;
+> +               }
+> +
+> +               ts_diff = timespec_elapsed(start);
+> +       } else if (uffd_mode == UFFDIO_REGISTER_MODE_MINOR) {
+> +               struct uffdio_continue cont = {0};
+> +
+> +               ioctl_name = "UFFDIO_CONTINUE";
+> +
+> +               cont.range.start = addr;
+> +               cont.range.len = demand_paging_size;
+> +
+> +               clock_gettime(CLOCK_MONOTONIC, &start);
+> +
+> +               r = ioctl(uffd, UFFDIO_CONTINUE, &cont);
+> +               if (r == -1) {
+> +                       pr_info("Failed UFFDIO_CONTINUE in 0x%lx from thread %d with errno: %d\n",
+> +                               addr, tid, errno);
+> +                       return r;
+> +               }
+>
+> -       PER_PAGE_DEBUG("UFFDIO_COPY %d \t%ld ns\n", tid,
+> +               ts_diff = timespec_elapsed(start);
+> +       } else {
+> +               TEST_FAIL("Invalid uffd mode %d", uffd_mode);
+> +       }
+> +
+> +       PER_PAGE_DEBUG("%s %d \t%ld ns\n", ioctl_name, tid,
+>                        timespec_to_ns(ts_diff));
+
+As far as I can see this is the only use of ioctl_name and it's not
+going to change in a test run, so it might make sense to not print the
+ioctl name here and just do it once somewhere else.
+
+>         PER_PAGE_DEBUG("Paged in %ld bytes at 0x%lx from thread %d\n",
+>                        demand_paging_size, addr, tid);
+> @@ -109,6 +133,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
+>  bool quit_uffd_thread;
+>
+>  struct uffd_handler_args {
+> +       int uffd_mode;
+>         int uffd;
+>         int pipefd;
+>         useconds_t delay;
+> @@ -170,7 +195,7 @@ static void *uffd_handler_thread_fn(void *arg)
+>                 if (r == -1) {
+>                         if (errno == EAGAIN)
+>                                 continue;
+> -                       pr_info("Read of uffd gor errno %d", errno);
+> +                       pr_info("Read of uffd got errno %d\n", errno);
+
+If you end up doing some kind of cleanups patch, it might be worth
+moving this in there.
+
+>                         return NULL;
+>                 }
+>
+> @@ -185,7 +210,7 @@ static void *uffd_handler_thread_fn(void *arg)
+>                 if (delay)
+>                         usleep(delay);
+>                 addr =  msg.arg.pagefault.address;
+> -               r = handle_uffd_page_request(uffd, addr);
+> +               r = handle_uffd_page_request(uffd_args->uffd_mode, uffd, addr);
+>                 if (r < 0)
+>                         return NULL;
+>                 pages++;
+> @@ -201,17 +226,32 @@ static void *uffd_handler_thread_fn(void *arg)
+>
+>  static int setup_demand_paging(struct kvm_vm *vm,
+>                                pthread_t *uffd_handler_thread, int pipefd,
+> +                              int uffd_mode,
+>                                useconds_t uffd_delay,
+>                                struct uffd_handler_args *uffd_args,
+> -                              void *hva, uint64_t len)
+> +                              void *hva, void *alias, uint64_t len)
+>  {
+>         int uffd;
+>         struct uffdio_api uffdio_api;
+>         struct uffdio_register uffdio_register;
+> +       uint64_t expected_ioctls = ((uint64_t) 1) << _UFFDIO_COPY;
+> +
+> +       /* In order to get minor faults, prefault via the alias. */
+> +       if (uffd_mode == UFFDIO_REGISTER_MODE_MINOR) {
+> +               size_t p;
+> +
+> +               expected_ioctls = ((uint64_t) 1) << _UFFDIO_CONTINUE;
+> +
+> +               TEST_ASSERT(alias != NULL, "Alias required for minor faults");
+> +               for (p = 0; p < (len / demand_paging_size); ++p) {
+> +                       memcpy(alias + (p * demand_paging_size),
+> +                              guest_data_prototype, demand_paging_size);
+> +               }
+> +       }
+>
+>         uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+>         if (uffd == -1) {
+> -               pr_info("uffd creation failed\n");
+> +               pr_info("uffd creation failed, errno: %d\n", errno);
+>                 return -1;
+>         }
+
+Huh, I wonder why I put all these return -1 statements in here. The
+caller just does exit(-r) if r < 0. Seems like these could all just be
+converted to TEST_ASSERTs.
+
+>
+> @@ -224,18 +264,18 @@ static int setup_demand_paging(struct kvm_vm *vm,
+>
+>         uffdio_register.range.start = (uint64_t)hva;
+>         uffdio_register.range.len = len;
+> -       uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+> +       uffdio_register.mode = uffd_mode;
+>         if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1) {
+>                 pr_info("ioctl uffdio_register failed\n");
+>                 return -1;
+>         }
+>
+> -       if ((uffdio_register.ioctls & UFFD_API_RANGE_IOCTLS) !=
+> -                       UFFD_API_RANGE_IOCTLS) {
+> -               pr_info("unexpected userfaultfd ioctl set\n");
+> +       if ((uffdio_register.ioctls & expected_ioctls) != expected_ioctls) {
+> +               pr_info("missing userfaultfd ioctls\n");
+>                 return -1;
+>         }
+>
+> +       uffd_args->uffd_mode = uffd_mode;
+>         uffd_args->uffd = uffd;
+>         uffd_args->pipefd = pipefd;
+>         uffd_args->delay = uffd_delay;
+> @@ -249,7 +289,7 @@ static int setup_demand_paging(struct kvm_vm *vm,
 >  }
 >
->  struct kvm_vm_stat {
-> -       ulong remote_tlb_flush;
-> +       struct kvm_vm_stat_common common;
->  };
+>  struct test_params {
+> -       bool use_uffd;
+> +       int uffd_mode;
+>         useconds_t uffd_delay;
+>         enum vm_mem_backing_src_type src_type;
+>         bool partition_vcpu_memory_access;
+> @@ -286,7 +326,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>         perf_test_setup_vcpus(vm, nr_vcpus, guest_percpu_mem_size,
+>                               p->partition_vcpu_memory_access);
 >
->  struct kvm_vcpu_stat {
-> +       struct kvm_vcpu_stat_common common;
->         u64 wait_exits;
->         u64 cache_exits;
->         u64 signal_exits;
-> @@ -142,12 +143,6 @@ struct kvm_vcpu_stat {
->  #ifdef CONFIG_CPU_LOONGSON64
->         u64 vz_cpucfg_exits;
->  #endif
-> -       u64 halt_successful_poll;
-> -       u64 halt_attempted_poll;
-> -       u64 halt_poll_success_ns;
-> -       u64 halt_poll_fail_ns;
-> -       u64 halt_poll_invalid;
-> -       u64 halt_wakeup;
->  };
+> -       if (p->use_uffd) {
+> +       if (p->uffd_mode) {
+>                 uffd_handler_threads =
+>                         malloc(nr_vcpus * sizeof(*uffd_handler_threads));
+>                 TEST_ASSERT(uffd_handler_threads, "Memory allocation failed");
+> @@ -300,6 +340,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>                 for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+>                         vm_paddr_t vcpu_gpa;
+>                         void *vcpu_hva;
+> +                       void *vcpu_alias;
+>                         uint64_t vcpu_mem_size;
 >
->  struct kvm_arch_memory_slot {
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index 4d4af97dcc88..f4fc60c05e9c 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -68,12 +68,12 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
->  #ifdef CONFIG_CPU_LOONGSON64
->         VCPU_STAT("vz_cpucfg", vz_cpucfg_exits),
->  #endif
-> -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
-> -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
-> -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
-> -       VCPU_STAT("halt_wakeup", halt_wakeup),
-> -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
-> -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
-> +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
-> +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
-> +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
-> +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
-> +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
-> +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
->         {NULL}
->  };
 >
-> diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
-> index 1e83359f286b..473d9d0804ff 100644
-> --- a/arch/powerpc/include/asm/kvm_host.h
-> +++ b/arch/powerpc/include/asm/kvm_host.h
-> @@ -80,12 +80,13 @@ struct kvmppc_book3s_shadow_vcpu;
->  struct kvm_nested_guest;
+> @@ -314,8 +355,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>                         PER_VCPU_DEBUG("Added VCPU %d with test mem gpa [%lx, %lx)\n",
+>                                        vcpu_id, vcpu_gpa, vcpu_gpa + vcpu_mem_size);
 >
->  struct kvm_vm_stat {
-> -       ulong remote_tlb_flush;
-> +       struct kvm_vm_stat_common common;
->         ulong num_2M_pages;
->         ulong num_1G_pages;
->  };
+> -                       /* Cache the HVA pointer of the region */
+> +                       /* Cache the host addresses of the region */
+>                         vcpu_hva = addr_gpa2hva(vm, vcpu_gpa);
+> +                       vcpu_alias = addr_gpa2alias(vm, vcpu_gpa);
 >
->  struct kvm_vcpu_stat {
-> +       struct kvm_vcpu_stat_common common;
->         u64 sum_exits;
->         u64 mmio_exits;
->         u64 signal_exits;
-> @@ -101,14 +102,8 @@ struct kvm_vcpu_stat {
->         u64 emulated_inst_exits;
->         u64 dec_exits;
->         u64 ext_intr_exits;
-> -       u64 halt_poll_success_ns;
-> -       u64 halt_poll_fail_ns;
->         u64 halt_wait_ns;
-> -       u64 halt_successful_poll;
-> -       u64 halt_attempted_poll;
->         u64 halt_successful_wait;
-> -       u64 halt_poll_invalid;
-> -       u64 halt_wakeup;
->         u64 dbell_exits;
->         u64 gdbell_exits;
->         u64 ld;
-> diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
-> index 2b691f4d1f26..bd3a10e1fdaf 100644
-> --- a/arch/powerpc/kvm/book3s.c
-> +++ b/arch/powerpc/kvm/book3s.c
-> @@ -47,14 +47,14 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
->         VCPU_STAT("dec", dec_exits),
->         VCPU_STAT("ext_intr", ext_intr_exits),
->         VCPU_STAT("queue_intr", queue_intr),
-> -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
-> -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
-> +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
-> +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
->         VCPU_STAT("halt_wait_ns", halt_wait_ns),
-> -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
-> -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
-> +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
-> +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
->         VCPU_STAT("halt_successful_wait", halt_successful_wait),
-> -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
-> -       VCPU_STAT("halt_wakeup", halt_wakeup),
-> +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
-> +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
->         VCPU_STAT("pf_storage", pf_storage),
->         VCPU_STAT("sp_storage", sp_storage),
->         VCPU_STAT("pf_instruc", pf_instruc),
-> diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-> index 28a80d240b76..58e187e03c52 100644
-> --- a/arch/powerpc/kvm/book3s_hv.c
-> +++ b/arch/powerpc/kvm/book3s_hv.c
-> @@ -236,7 +236,7 @@ static void kvmppc_fast_vcpu_kick_hv(struct kvm_vcpu *vcpu)
+>                         /*
+>                          * Set up user fault fd to handle demand paging
+> @@ -327,9 +369,10 @@ static void run_test(enum vm_guest_mode mode, void *arg)
 >
->         waitp = kvm_arch_vcpu_get_wait(vcpu);
->         if (rcuwait_wake_up(waitp))
-> -               ++vcpu->stat.halt_wakeup;
-> +               ++vcpu->stat.common.halt_wakeup;
+>                         r = setup_demand_paging(vm,
+>                                                 &uffd_handler_threads[vcpu_id],
+> -                                               pipefds[vcpu_id * 2],
+> +                                               pipefds[vcpu_id * 2], p->uffd_mode,
+>                                                 p->uffd_delay, &uffd_args[vcpu_id],
+> -                                               vcpu_hva, vcpu_mem_size);
+> +                                               vcpu_hva, vcpu_alias,
+> +                                               vcpu_mem_size);
+>                         if (r < 0)
+>                                 exit(-r);
+>                 }
+> @@ -359,7 +402,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
 >
->         cpu = READ_ONCE(vcpu->arch.thread_cpu);
->         if (cpu >= 0 && kvmppc_ipi_thread(cpu))
-> @@ -3925,7 +3925,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
->         cur = start_poll = ktime_get();
->         if (vc->halt_poll_ns) {
->                 ktime_t stop = ktime_add_ns(start_poll, vc->halt_poll_ns);
-> -               ++vc->runner->stat.halt_attempted_poll;
-> +               ++vc->runner->stat.common.halt_attempted_poll;
+>         pr_info("All vCPU threads joined\n");
 >
->                 vc->vcore_state = VCORE_POLLING;
->                 spin_unlock(&vc->lock);
-> @@ -3942,7 +3942,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
->                 vc->vcore_state = VCORE_INACTIVE;
+> -       if (p->use_uffd) {
+> +       if (p->uffd_mode) {
+>                 char c;
 >
->                 if (!do_sleep) {
-> -                       ++vc->runner->stat.halt_successful_poll;
-> +                       ++vc->runner->stat.common.halt_successful_poll;
->                         goto out;
+>                 /* Tell the user fault fd handler threads to quit */
+> @@ -381,7 +424,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>
+>         free(guest_data_prototype);
+>         free(vcpu_threads);
+> -       if (p->use_uffd) {
+> +       if (p->uffd_mode) {
+>                 free(uffd_handler_threads);
+>                 free(uffd_args);
+>                 free(pipefds);
+> @@ -391,11 +434,11 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>  static void help(char *name)
+>  {
+>         puts("");
+> -       printf("usage: %s [-h] [-m mode] [-u] [-d uffd_delay_usec]\n"
+> +       printf("usage: %s [-h] [-m mode] [-u mode] [-d uffd_delay_usec]\n"
+>                "          [-b memory] [-t type] [-v vcpus] [-o]\n", name);
+>         guest_modes_help();
+> -       printf(" -u: use User Fault FD to handle vCPU page\n"
+> -              "     faults.\n");
+> +       printf(" -u: use userfaultfd to handle vCPU page faults. Mode is a\n"
+> +              "     UFFD registration mode: 'MISSING' or 'MINOR'.\n");
+>         printf(" -d: add a delay in usec to the User Fault\n"
+>                "     FD handler to simulate demand paging\n"
+>                "     overheads. Ignored without -u.\n");
+> @@ -422,13 +465,17 @@ int main(int argc, char *argv[])
+>
+>         guest_modes_append_default();
+>
+> -       while ((opt = getopt(argc, argv, "hm:ud:b:t:v:o")) != -1) {
+> +       while ((opt = getopt(argc, argv, "hm:u:d:b:t:v:o")) != -1) {
+>                 switch (opt) {
+>                 case 'm':
+>                         guest_modes_cmdline(optarg);
+>                         break;
+>                 case 'u':
+> -                       p.use_uffd = true;
+> +                       if (!strcmp("MISSING", optarg))
+> +                               p.uffd_mode = UFFDIO_REGISTER_MODE_MISSING;
+> +                       else if (!strcmp("MINOR", optarg))
+> +                               p.uffd_mode = UFFDIO_REGISTER_MODE_MINOR;
+> +                       TEST_ASSERT(p.uffd_mode, "UFFD mode must be 'MISSING' or 'MINOR'.");
+>                         break;
+>                 case 'd':
+>                         p.uffd_delay = strtoul(optarg, NULL, 0);
+> @@ -455,6 +502,9 @@ int main(int argc, char *argv[])
 >                 }
 >         }
-> @@ -3954,7 +3954,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
->                 do_sleep = 0;
->                 /* If we polled, count this as a successful poll */
->                 if (vc->halt_poll_ns)
-> -                       ++vc->runner->stat.halt_successful_poll;
-> +                       ++vc->runner->stat.common.halt_successful_poll;
->                 goto out;
->         }
 >
-> @@ -3981,13 +3981,13 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
->                         ktime_to_ns(cur) - ktime_to_ns(start_wait);
->                 /* Attribute failed poll time */
->                 if (vc->halt_poll_ns)
-> -                       vc->runner->stat.halt_poll_fail_ns +=
-> +                       vc->runner->stat.common.halt_poll_fail_ns +=
->                                 ktime_to_ns(start_wait) -
->                                 ktime_to_ns(start_poll);
->         } else {
->                 /* Attribute successful poll time */
->                 if (vc->halt_poll_ns)
-> -                       vc->runner->stat.halt_poll_success_ns +=
-> +                       vc->runner->stat.common.halt_poll_success_ns +=
->                                 ktime_to_ns(cur) -
->                                 ktime_to_ns(start_poll);
->         }
-> diff --git a/arch/powerpc/kvm/book3s_pr.c b/arch/powerpc/kvm/book3s_pr.c
-> index d7733b07f489..214caa9d9675 100644
-> --- a/arch/powerpc/kvm/book3s_pr.c
-> +++ b/arch/powerpc/kvm/book3s_pr.c
-> @@ -493,7 +493,7 @@ static void kvmppc_set_msr_pr(struct kvm_vcpu *vcpu, u64 msr)
->                 if (!vcpu->arch.pending_exceptions) {
->                         kvm_vcpu_block(vcpu);
->                         kvm_clear_request(KVM_REQ_UNHALT, vcpu);
-> -                       vcpu->stat.halt_wakeup++;
-> +                       vcpu->stat.common.halt_wakeup++;
->
->                         /* Unset POW bit after we woke up */
->                         msr &= ~MSR_POW;
-> diff --git a/arch/powerpc/kvm/book3s_pr_papr.c b/arch/powerpc/kvm/book3s_pr_papr.c
-> index 031c8015864a..9384625c8051 100644
-> --- a/arch/powerpc/kvm/book3s_pr_papr.c
-> +++ b/arch/powerpc/kvm/book3s_pr_papr.c
-> @@ -378,7 +378,7 @@ int kvmppc_h_pr(struct kvm_vcpu *vcpu, unsigned long cmd)
->                 kvmppc_set_msr_fast(vcpu, kvmppc_get_msr(vcpu) | MSR_EE);
->                 kvm_vcpu_block(vcpu);
->                 kvm_clear_request(KVM_REQ_UNHALT, vcpu);
-> -               vcpu->stat.halt_wakeup++;
-> +               vcpu->stat.common.halt_wakeup++;
->                 return EMULATE_DONE;
->         case H_LOGICAL_CI_LOAD:
->                 return kvmppc_h_pr_logical_ci_load(vcpu);
-> diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
-> index 7d5fe43f85c4..07fdd7a1254a 100644
-> --- a/arch/powerpc/kvm/booke.c
-> +++ b/arch/powerpc/kvm/booke.c
-> @@ -49,15 +49,15 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
->         VCPU_STAT("inst_emu", emulated_inst_exits),
->         VCPU_STAT("dec", dec_exits),
->         VCPU_STAT("ext_intr", ext_intr_exits),
-> -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
-> -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
-> -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
-> -       VCPU_STAT("halt_wakeup", halt_wakeup),
-> +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
-> +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
-> +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
-> +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
->         VCPU_STAT("doorbell", dbell_exits),
->         VCPU_STAT("guest doorbell", gdbell_exits),
-> -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
-> -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
-> -       VM_STAT("remote_tlb_flush", remote_tlb_flush),
-> +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
-> +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
-> +       VM_STAT_COM("remote_tlb_flush", remote_tlb_flush),
->         { NULL }
->  };
->
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index 8925f3969478..57a20897f3db 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -361,6 +361,7 @@ struct sie_page {
->  };
->
->  struct kvm_vcpu_stat {
-> +       struct kvm_vcpu_stat_common common;
->         u64 exit_userspace;
->         u64 exit_null;
->         u64 exit_external_request;
-> @@ -370,13 +371,7 @@ struct kvm_vcpu_stat {
->         u64 exit_validity;
->         u64 exit_instruction;
->         u64 exit_pei;
-> -       u64 halt_successful_poll;
-> -       u64 halt_attempted_poll;
-> -       u64 halt_poll_invalid;
->         u64 halt_no_poll_steal;
-> -       u64 halt_wakeup;
-> -       u64 halt_poll_success_ns;
-> -       u64 halt_poll_fail_ns;
->         u64 instruction_lctl;
->         u64 instruction_lctlg;
->         u64 instruction_stctl;
-> @@ -755,12 +750,12 @@ struct kvm_vcpu_arch {
->  };
->
->  struct kvm_vm_stat {
-> +       struct kvm_vm_stat_common common;
->         u64 inject_io;
->         u64 inject_float_mchk;
->         u64 inject_pfault_done;
->         u64 inject_service_signal;
->         u64 inject_virtio;
-> -       u64 remote_tlb_flush;
->  };
->
->  struct kvm_arch_memory_slot {
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 1296fc10f80c..d6bf3372bb10 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -72,13 +72,13 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
->         VCPU_STAT("exit_program_interruption", exit_program_interruption),
->         VCPU_STAT("exit_instr_and_program_int", exit_instr_and_program),
->         VCPU_STAT("exit_operation_exception", exit_operation_exception),
-> -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
-> -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
-> -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
-> +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
-> +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
-> +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
->         VCPU_STAT("halt_no_poll_steal", halt_no_poll_steal),
-> -       VCPU_STAT("halt_wakeup", halt_wakeup),
-> -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
-> -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
-> +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
-> +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
-> +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
->         VCPU_STAT("instruction_lctlg", instruction_lctlg),
->         VCPU_STAT("instruction_lctl", instruction_lctl),
->         VCPU_STAT("instruction_stctl", instruction_stctl),
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 55efbacfc244..5bfd6893fbf6 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1127,6 +1127,7 @@ struct kvm_arch {
->  };
->
->  struct kvm_vm_stat {
-> +       struct kvm_vm_stat_common common;
->         ulong mmu_shadow_zapped;
->         ulong mmu_pte_write;
->         ulong mmu_pde_zapped;
-> @@ -1134,13 +1135,13 @@ struct kvm_vm_stat {
->         ulong mmu_recycled;
->         ulong mmu_cache_miss;
->         ulong mmu_unsync;
-> -       ulong remote_tlb_flush;
->         ulong lpages;
->         ulong nx_lpage_splits;
->         ulong max_mmu_page_hash_collisions;
->  };
->
->  struct kvm_vcpu_stat {
-> +       struct kvm_vcpu_stat_common common;
->         u64 pf_fixed;
->         u64 pf_guest;
->         u64 tlb_flush;
-> @@ -1154,10 +1155,6 @@ struct kvm_vcpu_stat {
->         u64 nmi_window_exits;
->         u64 l1d_flush;
->         u64 halt_exits;
-> -       u64 halt_successful_poll;
-> -       u64 halt_attempted_poll;
-> -       u64 halt_poll_invalid;
-> -       u64 halt_wakeup;
->         u64 request_irq_exits;
->         u64 irq_exits;
->         u64 host_state_reload;
-> @@ -1168,8 +1165,6 @@ struct kvm_vcpu_stat {
->         u64 irq_injections;
->         u64 nmi_injections;
->         u64 req_event;
-> -       u64 halt_poll_success_ns;
-> -       u64 halt_poll_fail_ns;
->         u64 nested_run;
->         u64 directed_yield_attempted;
->         u64 directed_yield_successful;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 9b6bca616929..9a93d80caff6 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -226,10 +226,10 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
->         VCPU_STAT("irq_window", irq_window_exits),
->         VCPU_STAT("nmi_window", nmi_window_exits),
->         VCPU_STAT("halt_exits", halt_exits),
-> -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
-> -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
-> -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
-> -       VCPU_STAT("halt_wakeup", halt_wakeup),
-> +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
-> +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
-> +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
-> +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
->         VCPU_STAT("hypercalls", hypercalls),
->         VCPU_STAT("request_irq", request_irq_exits),
->         VCPU_STAT("irq_exits", irq_exits),
-> @@ -241,8 +241,8 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
->         VCPU_STAT("nmi_injections", nmi_injections),
->         VCPU_STAT("req_event", req_event),
->         VCPU_STAT("l1d_flush", l1d_flush),
-> -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
-> -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
-> +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
-> +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
->         VCPU_STAT("nested_run", nested_run),
->         VCPU_STAT("directed_yield_attempted", directed_yield_attempted),
->         VCPU_STAT("directed_yield_successful", directed_yield_successful),
-> @@ -253,7 +253,7 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
->         VM_STAT("mmu_recycled", mmu_recycled),
->         VM_STAT("mmu_cache_miss", mmu_cache_miss),
->         VM_STAT("mmu_unsync", mmu_unsync),
-> -       VM_STAT("remote_tlb_flush", remote_tlb_flush),
-> +       VM_STAT_COM("remote_tlb_flush", remote_tlb_flush),
->         VM_STAT("largepages", lpages, .mode = 0444),
->         VM_STAT("nx_largepages_splitted", nx_lpage_splits, .mode = 0444),
->         VM_STAT("max_mmu_page_hash_collisions", max_mmu_page_hash_collisions),
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 2f34487e21f2..97700e41db3b 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1243,10 +1243,15 @@ struct kvm_stats_debugfs_item {
->  #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
->         ((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
->
-> -#define VM_STAT(n, x, ...)                                                     \
-> +#define VM_STAT(n, x, ...)                                                    \
->         { n, offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__ }
-> -#define VCPU_STAT(n, x, ...)                                                   \
-> +#define VCPU_STAT(n, x, ...)                                                  \
->         { n, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__ }
-> +#define VM_STAT_COM(n, x, ...)                                                \
-> +       { n, offsetof(struct kvm, stat.common.x), KVM_STAT_VM, ## __VA_ARGS__ }
-> +#define VCPU_STAT_COM(n, x, ...)                                              \
-> +       { n, offsetof(struct kvm_vcpu, stat.common.x),                         \
-> +         KVM_STAT_VCPU, ## __VA_ARGS__ }
->
->  extern struct kvm_stats_debugfs_item debugfs_entries[];
->  extern struct dentry *kvm_debugfs_dir;
-> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-> index a7580f69dda0..87eb05ad678b 100644
-> --- a/include/linux/kvm_types.h
-> +++ b/include/linux/kvm_types.h
-> @@ -76,5 +76,17 @@ struct kvm_mmu_memory_cache {
->  };
->  #endif
->
-> +struct kvm_vm_stat_common {
-> +       ulong remote_tlb_flush;
-> +};
+> +       TEST_ASSERT(p.uffd_mode != UFFDIO_REGISTER_MODE_MINOR || p.src_type == VM_MEM_SRC_SHMEM,
+> +                   "userfaultfd MINOR mode requires shared memory; pick a different -t");
 > +
-> +struct kvm_vcpu_stat_common {
-> +       u64 halt_successful_poll;
-> +       u64 halt_attempted_poll;
-> +       u64 halt_poll_invalid;
-> +       u64 halt_wakeup;
-> +       u64 halt_poll_success_ns;
-> +       u64 halt_poll_fail_ns;
-> +};
-
-Putting a "_common" struct here is the opposite of the pattern than
-what KVM uses for struct kvm and struct kvm_vcpu. What are your
-thoughts on inverting it so the common stats go in struct
-kvm_{vcpu,vm}_stat and the arch-specific stats go in a arch-specific
-struct kvm_{vcpu,vm}_stat_arch?
-
-I imagine this may result in more churn in this patch since there are
-more arch-specific stats than there are common stats, but would result
-in a more consistent struct layout.
-
-
+>         for_each_guest_mode(run_test, &p);
 >
->  #endif /* __KVM_TYPES_H__ */
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 6b4feb92dc79..34a4cf265297 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -330,7 +330,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
->          */
->         if (!kvm_arch_flush_remote_tlb(kvm)
->             || kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH))
-> -               ++kvm->stat.remote_tlb_flush;
-> +               ++kvm->stat.common.remote_tlb_flush;
->         cmpxchg(&kvm->tlbs_dirty, dirty_count, 0);
->  }
->  EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
-> @@ -2940,9 +2940,9 @@ static inline void
->  update_halt_poll_stats(struct kvm_vcpu *vcpu, u64 poll_ns, bool waited)
->  {
->         if (waited)
-> -               vcpu->stat.halt_poll_fail_ns += poll_ns;
-> +               vcpu->stat.common.halt_poll_fail_ns += poll_ns;
->         else
-> -               vcpu->stat.halt_poll_success_ns += poll_ns;
-> +               vcpu->stat.common.halt_poll_success_ns += poll_ns;
->  }
->
->  /*
-> @@ -2960,16 +2960,16 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
->         if (vcpu->halt_poll_ns && !kvm_arch_no_poll(vcpu)) {
->                 ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
->
-> -               ++vcpu->stat.halt_attempted_poll;
-> +               ++vcpu->stat.common.halt_attempted_poll;
->                 do {
->                         /*
->                          * This sets KVM_REQ_UNHALT if an interrupt
->                          * arrives.
->                          */
->                         if (kvm_vcpu_check_block(vcpu) < 0) {
-> -                               ++vcpu->stat.halt_successful_poll;
-> +                               ++vcpu->stat.common.halt_successful_poll;
->                                 if (!vcpu_valid_wakeup(vcpu))
-> -                                       ++vcpu->stat.halt_poll_invalid;
-> +                                       ++vcpu->stat.common.halt_poll_invalid;
->                                 goto out;
->                         }
->                         poll_end = cur = ktime_get();
-> @@ -3027,7 +3027,7 @@ bool kvm_vcpu_wake_up(struct kvm_vcpu *vcpu)
->         waitp = kvm_arch_vcpu_get_wait(vcpu);
->         if (rcuwait_wake_up(waitp)) {
->                 WRITE_ONCE(vcpu->ready, true);
-> -               ++vcpu->stat.halt_wakeup;
-> +               ++vcpu->stat.common.halt_wakeup;
->                 return true;
->         }
->
+>         return 0;
 > --
-> 2.31.1.751.gd2f1c929bd-goog
+> 2.31.1.607.g51e8a6a459-goog
 >
