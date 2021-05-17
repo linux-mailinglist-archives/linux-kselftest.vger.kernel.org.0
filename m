@@ -2,110 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5CC3824CA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 May 2021 08:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9484382541
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 May 2021 09:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbhEQGyC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 May 2021 02:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbhEQGyB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 May 2021 02:54:01 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50675C061573;
-        Sun, 16 May 2021 23:52:44 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id s19so2029727pfe.8;
-        Sun, 16 May 2021 23:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TVCa0hmWpkwkTGf73se5+D4y141i/19PSQZ8UiPfJ/M=;
-        b=TBdGyzMMDwvS5OT7Z4XISKlDvgSrLrXHy7AEAMRlN7N53TRxqZ8SmA1rjvZOQ9HjIY
-         Z/f3nskWkuSAT3v4GxOB7UoJg0QfhCQqilS84jBGtFRaWVsbiPl+kdlrhV6oSHD06UD+
-         UAwny6YZKU/GBQtCP7a94a+6dirUHQIjA5f04MLcAhdQY/0VDgBvWPPVdpipKwx8GgPy
-         DdNV5gTsn2ADCGAXCBBgS7sQat2JwDKzh4QtVo23Mafz9nNjQWIy3GuIe/04RACHjTIW
-         JphqH/IQDEI4FdWD0Su6SK+EE2yGuV7Q2IRV/oSdHmRfe8S/EmBr0rRbp1RYN1Ho1zvN
-         c2QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TVCa0hmWpkwkTGf73se5+D4y141i/19PSQZ8UiPfJ/M=;
-        b=EKfpQ2XwvjZoSjX89C+NMb2Hkgx8lsidbawkgcka+QCW7tpCdq9WNYCphdDcXrQ8Jn
-         qMmyoH11NyYLm5Yb8Z1eS9NdAKg9y420WjDMX9lHTmmqDJxB6Vf+Lq6R5zeLODkJT6Nd
-         CRpmOjd3oQ4l5EEnrIGIOCoqqXBszHFXshZL9oMJRYD70FfSPKs/4LlVN1gkCKQLeSU2
-         EOLMdJQpfHqaugqtL2j/+Sf2QP1FiGhC3QByTjB+9YaJHp/5XrhW0/m0qNuGtJ7CSmns
-         VMZbYqPmi5015bwC022X0PmQmfvfzqt/31YAK/QCmZcAIlLfRvmkUEskwWM2b6OIxE+D
-         jtcg==
-X-Gm-Message-State: AOAM533p4OQntpa5ShT9xTI16AgP3Ffijw0OtHM4ZuaNF7271T9eI1P8
-        hkGDCn5JqJae9FsnCw6KftRkxcxP13Rw0xOJgUJb01ZrJcQ=
-X-Google-Smtp-Source: ABdhPJwMADGLeEf9tXmzQvLIhEr3xBv/TW6mJJf01CNg1gixRSdcTSdJdaSZFmwQ8feMaCA6OgY/h0kLAleKAko67Vk=
-X-Received: by 2002:a63:4145:: with SMTP id o66mr36934761pga.4.1621234363775;
- Sun, 16 May 2021 23:52:43 -0700 (PDT)
+        id S235235AbhEQHYo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 May 2021 03:24:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54224 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230339AbhEQHYn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 17 May 2021 03:24:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E2C3611BF;
+        Mon, 17 May 2021 07:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621236207;
+        bh=amReGMStusi8xn7FAECc6Whc3fPD7LuG3b6+xADdY7M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tdRnG7f8obysw+K28IshiY9r+18IQ1tTvDIIZzARqpPv8mn+ML38PW74E0CX/ofM1
+         lH6pTkkY5oaht2o74BmWs/L5cRTvCHKxgeuP4jlFuWVFCF97iHrjOxSm63DzM1+DLM
+         1Lt2mIb6RklOXBbNwT8EFBOEFDI0quAKtHVOhSk40zR+fT+bXp9P4dQI/i7dt6KsqW
+         i1EeofYd4+AfTy3Bm/k+ha4JFLM3skrOayJ1PRDU9e6OwKoW/gcpiHeHcQCbsChuuw
+         eqw8dBOD6kfdNYVMzKFpdKGTDDpXVdsVBQ+yiaI5bgEAr6nOfPYGv21bcodQb5kVaQ
+         lUziwbXpWVN1w==
+Date:   Mon, 17 May 2021 10:23:09 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v19 5/8] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <YKIZ3Zfai00A2O15@kernel.org>
+References: <20210513184734.29317-1-rppt@kernel.org>
+ <20210513184734.29317-6-rppt@kernel.org>
+ <ea1ddcfa-f52d-9a7d-cb7b-8502b38a90da@redhat.com>
 MIME-Version: 1.0
-References: <20210513193204.816681-1-davidgow@google.com> <20210513193204.816681-10-davidgow@google.com>
-In-Reply-To: <20210513193204.816681-10-davidgow@google.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 17 May 2021 09:52:27 +0300
-Message-ID: <CAHp75VcJ0tJw_FuNWoFWuNBsE5H4CiLUT6RsUtLwk-S7JW-vnA@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] lib/cmdline_kunit: Remove a cast which are
- no-longer required
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea1ddcfa-f52d-9a7d-cb7b-8502b38a90da@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 14, 2021 at 2:32 AM David Gow <davidgow@google.com> wrote:
->
-> With some of the stricter type checking in KUnit's EXPECT macros
-> removed, a cast in cmdline_kunit is no longer required.
->
-> Remove the unnecessary cast, using NULL instead of (int *) to make it
-> clearer.
+On Fri, May 14, 2021 at 10:50:55AM +0200, David Hildenbrand wrote:
+> On 13.05.21 20:47, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > Removing of the pages from the direct map may cause its fragmentation
+> > on architectures that use large pages to map the physical memory
+> > which affects the system performance. However, the original Kconfig
+> > text for CONFIG_DIRECT_GBPAGES said that gigabyte pages in the direct
+> > map "... can improve the kernel's performance a tiny bit ..." (commit
+> > 00d1c5e05736 ("x86: add gbpages switches")) and the recent report [1]
+> > showed that "... although 1G mappings are a good default choice,
+> > there is no compelling evidence that it must be the only choice".
+> > Hence, it is sufficient to have secretmem disabled by default with
+> > the ability of a system administrator to enable it at boot time.
+> 
+> Maybe add a link to the Intel performance evaluation.
+ 
+" ... the recent report [1]" and the link below.
+ 
+> > Pages in the secretmem regions are unevictable and unmovable to
+> > avoid accidental exposure of the sensitive data via swap or during
+> > page migration.
+ 
+...
 
-Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > A page that was a part of the secret memory area is cleared when it
+> > is freed to ensure the data is not exposed to the next user of that
+> > page.
+> 
+> You could skip that with init_on_free (and eventually also with
+> init_on_alloc) set to avoid double clearing.
 
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
-> This should be a no-op functionality wise, and while it depends on the
-> first couple of patches in this series, it's otherwise independent from
-> the others. I think this makes the test more readable, but if you
-> particularly dislike it, I'm happy to drop it.
->
->  lib/cmdline_kunit.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/cmdline_kunit.c b/lib/cmdline_kunit.c
-> index 018bfc8113c4..a72a2c16066e 100644
-> --- a/lib/cmdline_kunit.c
-> +++ b/lib/cmdline_kunit.c
-> @@ -124,7 +124,7 @@ static void cmdline_do_one_range_test(struct kunit *test, const char *in,
->                             n, e[0], r[0]);
->
->         p = memchr_inv(&r[1], 0, sizeof(r) - sizeof(r[0]));
-> -       KUNIT_EXPECT_PTR_EQ_MSG(test, p, (int *)0, "in test %u at %u out of bound", n, p - r);
-> +       KUNIT_EXPECT_PTR_EQ_MSG(test, p, NULL, "in test %u at %u out of bound", n, p - r);
->  }
->
->  static void cmdline_test_range(struct kunit *test)
-> --
-> 2.31.1.751.gd2f1c929bd-goog
->
+Right, but for now I'd prefer to keep this explicit in the secretmem
+implementation. We may add the check for init_on_free/init_on_alloc later
+on.
 
+
+> > [1]
+> > https://lore.kernel.org/linux-mm/213b4567-46ce-f116-9cdf-bbd0c884eb3c@linux.intel.com/
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Sincerely yours,
+Mike.
