@@ -2,136 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 359443880EA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 22:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3F0388128
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 22:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351983AbhERUIh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 May 2021 16:08:37 -0400
-Received: from mga17.intel.com ([192.55.52.151]:15798 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232377AbhERUIg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 May 2021 16:08:36 -0400
-IronPort-SDR: 28vornXhaiRvCI6fNyQbmQzCB5gLsLlgEvpTe1Zcm72MMAWryOcHtjNqV1L9NUItrMUAg2SYwN
- TNi4TAUAfhqw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9988"; a="181086085"
-X-IronPort-AV: E=Sophos;i="5.82,310,1613462400"; 
-   d="scan'208";a="181086085"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2021 13:07:18 -0700
-IronPort-SDR: 8q7naH9q2EARr2Rc3CCYtIkYtCRSsVB8z+M4OQIkW3EPg5koHNgJqDne4Wg2bQpZ9IoJgUaNbo
- q6Cri0sDs4vQ==
-X-IronPort-AV: E=Sophos;i="5.82,310,1613462400"; 
-   d="scan'208";a="439268002"
-Received: from rchatre-mobl3.amr.corp.intel.com (HELO [10.212.164.215]) ([10.212.164.215])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2021 13:07:17 -0700
-Subject: Re: [PATCH v5 2/2] selftests/sgx: Migrate to kselftest harness
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20210512215323.420639-1-jarkko@kernel.org>
- <20210512215323.420639-2-jarkko@kernel.org>
- <3b920525-694c-a8e4-93f5-7b1a3f9ad009@intel.com>
- <YKP+CavM21klDHH8@kernel.org> <YKQcH2/5ENIp2Bps@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-Message-ID: <16d7588e-a44c-90c1-44be-3a9cca1dc913@intel.com>
-Date:   Tue, 18 May 2021 13:07:16 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S235491AbhERUPm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 May 2021 16:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233233AbhERUPl (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 18 May 2021 16:15:41 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C286C06175F
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 13:14:23 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id h11so10236346ili.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 13:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q4yq51jnaEpYr1mj0fdxPgkJkvktEB+YhgPxv+OfCmw=;
+        b=COBfj+yqn2cS8Ym0dqgASbW+HUjnOLPy5U98goZImLjM3xShmgB6PjyuJCSolRztsm
+         YIjhfiDQj3XRsSB9L28XRiyypiYbKdCKBWrxNWrYUeFQBhKXlKxd+OsytjtDbExd9SgT
+         ODpHkO0BV6ljthw0txMNb0dcHYRwccT4RbnVBzBSVXYUQ5r++jizmqUdaHM3CmFxvokN
+         oKLd412RlkLmkNh4s8klfYezkgrcsfu88Z410A9SKFeEkCCvhkXJsm5cC5u1J9Gca+75
+         +QoCHeTGY8Q5Kw2uziZshbiA0QKZrccoauzWs9yDs7Yx9Eirtu7cX05fHHLXHuGX6BTi
+         k2hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q4yq51jnaEpYr1mj0fdxPgkJkvktEB+YhgPxv+OfCmw=;
+        b=j11J95XFBs9rSESwEAYFKy3c6b3w70nbBD0ZJobaYzEOa14IUbiQ1KxeylPQqZ1TLW
+         cRSdC4z7oU9da3XMm9hgpIuu7lXrqGNkEFo7ITuDiZxbO6rHShRSsA6jZ48ecewUyYTc
+         cqxi08mlCD/jA32GVk1vzY8cT2liGXfzq+NRIqEiC1Yv8xWNNme1vJgZXmzI0ATLLagx
+         7aWc6yXAqSvw9GjDZkNl+EV8In334MKBtxpoWDWvJHlvo8SkKwLSs3zDhc6axoIruJoH
+         c+puRmu+gvXrYBJbcNYNP1OxXREeKt80yHb7JGlYnDn1q5b6XVGMbSYFiQNJQv/jlAaO
+         zm1w==
+X-Gm-Message-State: AOAM533uu6MJLLBizc8Hz00WFL2nFzM9eRyM4/u3idgcJIRyHbmuZelU
+        afv7XLoWAW2w41j0y1Z9NGhlzEM+kMMlhXaM19XMhQ==
+X-Google-Smtp-Source: ABdhPJxrjMOgYuGI3QB3Hok+i4wUTYOykWv7xKKNSDHGVr9kw4mfNthVU3hj/29JzT3vfqyIJytLQopfuffFVIPqoUg=
+X-Received: by 2002:a05:6e02:b2c:: with SMTP id e12mr6432139ilu.136.1621368862619;
+ Tue, 18 May 2021 13:14:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YKQcH2/5ENIp2Bps@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210518035825.1885357-1-davidgow@google.com>
+In-Reply-To: <20210518035825.1885357-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 18 May 2021 13:14:11 -0700
+Message-ID: <CAGS_qxoAvQpX=Q4dZe6Rynfwmete6Vek5u9VYud8zLtqonGF8w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: arch/um/configs: Enable KUNIT_ALL_TESTS by default
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <shuah@kernel.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-um@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jarkko,
+On Mon, May 17, 2021 at 8:58 PM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> Make the default .kunitconfig (specified in
+> arch/um/configs/kunit_defconfig) specify CONFIG_KUNIT_ALL_TESTS by
+> default. KUNIT_ALL_TESTS runs all tests which have satisfied
+> dependencies in the current .config (which would be the architecture
+> defconfig).
+>
+> Currently, the default .kunitconfig enables only the example tests and
+> KUnit's own tests. While this does provide a good example of what a
+> .kunitconfig for running a few individual tests should look like, it
+> does mean that kunit_tool runs a pretty paltry collection of tests by
+> default.
 
-On 5/18/2021 12:57 PM, Jarkko Sakkinen wrote:
-> On Tue, May 18, 2021 at 08:49:00PM +0300, Jarkko Sakkinen wrote:
->> On Mon, May 17, 2021 at 10:03:42AM -0700, Reinette Chatre wrote:
->>> Hi Jarkko,
->>>
->>> On 5/12/2021 2:53 PM, Jarkko Sakkinen wrote:
->>>> Migrate to kselftest harness. Use a fixture test with enclave initialized
->>>> and de-initialized for each of the existing three tests, in other words:
->>>>
->>>> 1. One FIXTURE() for managing the enclave life-cycle.
->>>> 2. Three TEST_F()'s, one for each test case.
->>>>
->>>> This gives a leaps better reporting than before. Here's an example
->>>> transcript:
->>>>
->>>> TAP version 13
->>>> 1..3
->>>>
->>>> ok 1 enclave.unclobbered_vdso
->>>>
->>>> ok 2 enclave.clobbered_vdso
->>>>
->>>> ok 3 enclave.clobbered_vdso_and_user_function
->>>>
->>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>> ---
->>>>
->>>> v5:
->>>> * Use TH_LOG() for printing enclave address ranges instead of printf(),
->>>>     based on Reinette's remark.
->>>
->>> Thank you for considering my feedback. The motivation for my comment was to
->>> consider how this test output will be parsed. If these tests will have their
->>> output parsed by automated systems then it needs to conform to the TAP13
->>> format as supported by kselftest.
->>>
->>> In your latest version the output printed during a successful test has been
->>> changed, using TH_LOG() as you noted. From what I can tell this is the only
->>> output addressed - failing tests continue to print error messages (perror,
->>> fprintf) without consideration of how they will be parsed. My apologies, I
->>> am not a kselftest expert to know what the best way for this integration is.
->>>
->>> Reinette
->>
->> It's a valid question, yes.
->>
->> The problem is that only main.c can use kselftest macros because
->> kselftest_harness.h pulls
->>
->> static int test_harness_run(int __attribute__((unused)) argc,
->> 			    char __attribute__((unused)) **argv)
->>
->> which will not end up having a call site (because there's no
->> "TEST_HARNESS_MAIN").
->>
->> The whole logging thing in kselftest harness is a bit ambiguous.
->> Namely:
->>
->> 1. There's a macro TH_LOG() defined in kselftest_harness.h, which
->>     "internally" uses fprintf().
->> 2. There's an inline function ksft_print_msg() in kselftest.h
->>     using vsprintf().
->>
->> To add to that, kselftest_harness.h internally prints by using
->> ksft_print_msg(), and provides TH_LOG(), which does not use
->> ksft_print_msg().
->>
->> I don't really get the logic in all this.
-> 
-> I tried to split TH_LOG() as separate entity but it's not possible, as the
-> macros access a static variable called '_metadata'.
-> 
-> I'm not exactly sure how to proceed from this, if we want to make logging
-> consistent.
-> 
-> I would personally suggest to leave the error messages intact in load.c,
-> because there is no way to make them consistent, except by removing them.
+From the perspective of someone trying out KUnit for the first time,
+I'd personally
+* try out `kunit.py run`
+* then maybe grep for a test/suite name that sounds interesting.
+
+So I'm strongly in favor of the default running a wider variety of tests.
+The build and execution time is still very quick, so no complaints there.
+
+I also think this makes the set of (most of) the existing tests more
+discoverable then grepping around for #include <kunit/test.h> or
+similar indicators.
+
+But I'm also biased in that I like seeing larger numbers of tests.
+
+>
+> A default run of ./tools/testing/kunit/kunit.py run now runs 70 tests
+> instead of 14.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+
+Acked-by: Daniel Latypov <dlatypov@google.com>
+
+> ---
+>  arch/um/configs/kunit_defconfig | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/arch/um/configs/kunit_defconfig b/arch/um/configs/kunit_defconfig
+> index 9235b7d42d38..becf3432a375 100644
+> --- a/arch/um/configs/kunit_defconfig
+> +++ b/arch/um/configs/kunit_defconfig
+> @@ -1,3 +1,2 @@
+>  CONFIG_KUNIT=y
+> -CONFIG_KUNIT_TEST=y
+> -CONFIG_KUNIT_EXAMPLE_TEST=y
+
+I think it's maybe still useful to have an example of selecting a specific test.
+I'd lean towards keeping one or both of these.
+
+KUNIT_TEST might not be as clear as KUNIT_EXAMPLE_TEST, so I'd lean
+towards keeping that one, if we don't want both.
 
 
-It is not clear to me why ksft_print_msg() cannot be used but an 
-alternative to it may be to just prefix all existing diagnostic messages 
-with "# ".
-
-Reinette
-
+> +CONFIG_KUNIT_ALL_TESTS=y
+> --
+> 2.31.1.751.gd2f1c929bd-goog
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20210518035825.1885357-1-davidgow%40google.com.
