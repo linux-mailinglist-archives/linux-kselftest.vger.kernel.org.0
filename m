@@ -2,172 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB6D3881D7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 23:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D8A3881F0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 23:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352372AbhERVKO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 May 2021 17:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        id S236571AbhERVQf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 May 2021 17:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352353AbhERVKO (ORCPT
+        with ESMTP id S236293AbhERVQf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 May 2021 17:10:14 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C46C061573
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:08:54 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q15so7888004pgg.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:08:54 -0700 (PDT)
+        Tue, 18 May 2021 17:16:35 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D099C06175F
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:15:17 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id lx17-20020a17090b4b11b029015f3b32b8dbso527244pjb.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:15:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=As0TR/yrddFM+orjwRplkKxLfSr+Fk7q/h0XC1AzLtU=;
-        b=SvwzTowIitwxvlrfLXr6aaY35NEVx+e4ZfdwpbvQqWQdmZ0XmlFt4r+/OwDLTS3ixV
-         4wir8x9ffSORCYmQSTBh35Mr+Qsifb7N41JJ/dIEjnjKdm7XS5Esz/34a9wzjdGcq8rA
-         ZOjh9tRx/+ICsSvVjOEyCmN60meCbf9/4nftAwx16J5LtG+nI1MC/8eAr9jValMZ4Ben
-         pJy2JPrYvMu5Owg1PZPhSNvgkH8wahfVcXIYvean300D4R8rtqP2JLNUVEIOIIgS6kxy
-         LCV5r1bnfaROwMeBA0ubkfoASHAsNeYb1lVwUkuwvlCgdLFi5txlR8QtXguIShxEvhym
-         Dtdw==
+        bh=C43/i5T89+Z7YHAazX11QPS1qt3iN5sh35aKnQ1xBXc=;
+        b=L3SbeGKHfRXdqFWSY/DjtKEhkdISuPfaf1/glYzvtU6a0s3YUDaXW/V2vSONOb9az5
+         ar6USRpYYzyUHUvBCVpIXy01hUckq3toF9CEzNTqevyNlVn0oaKwy04ztEZY9s9KVohr
+         c+L2SCmGjU987rGITNpj8OFctyth8m4DBrzM3AjVvqKnRJPj2ePJv+ZquXgm75JlYm4s
+         xYwZ0mmw3xwdp9IRqnb/g9tzuw3sTUp3KaPMDh8Yr02zbRwiXCDLS4ztVL9K85hvh+b5
+         sgBK4fQ1EYBraCdirQ1/Cag9AIQBaI4q1QZ3yzlJnPRibfQ1zVbGu/aRSkArBtdmT2v4
+         xsWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=As0TR/yrddFM+orjwRplkKxLfSr+Fk7q/h0XC1AzLtU=;
-        b=B4H7qBWnT+vlxafDv/8X/pITpZ02Fx5fB76h0jmAirj7GyGFVa7hZBBy6quUXC5kdB
-         aoPscNc6+P/YW9UnybTDelqKpU5NECF55FZ2JJIlOhbqsuKJKLs/7v7bqAcWpv61L3Kx
-         19z+KkIbVIBOYgfd/mgFUO9wp+h6LrUsCG91MreWXTeq7pDLBEIYBANlvfvBbgB5CQHk
-         UmWzjKWYG8ek3w5Dvgk2fGQJVGT0oH8e6u651QSGIgWQGmp2eXnK2U9aNlWqPPz2tUs5
-         6NgFSDDbyBiJ7ai4+9IhrGuf1BSdWZgLHHceQ6aPAryXqDb6U6UmVVS2b6UzwG3nSprT
-         oUqg==
-X-Gm-Message-State: AOAM532CH18ymQqyw4tezU/qvy/5t6W32EPy2VhkQnO+zX5ts4nksCNi
-        DKrUzo8m5Hg9qVdD+6/HUJtvdoHgvGDDdyWByUwlV7/pMlg=
-X-Google-Smtp-Source: ABdhPJxEv3mBiNJh/sZOxRSO7B98DsBg99cnL4KK2eBVH/QpazNym6OY2FqZTZLs1pbrnb7Nn95OTGD6A7d++rxBq5Q=
-X-Received: by 2002:a63:cc11:: with SMTP id x17mr7059732pgf.159.1621372134140;
- Tue, 18 May 2021 14:08:54 -0700 (PDT)
+        bh=C43/i5T89+Z7YHAazX11QPS1qt3iN5sh35aKnQ1xBXc=;
+        b=b2QPFCmZEGaubhd39VHnTnXyjvPtBYKZ4oNYNRJBbV3YiO9NPf8g9kLzQlNGfqwjTS
+         TOLcd6Q7/C5gsv3/PzwnFW6U+qJyDRL7AXwJ5EFr1j9veSG1sPh03eT8fT9UqOzpA7p/
+         hh9JzyZj6UVUwJfvzAXBsmZgstPTfisEfUMPJTDgZhlaxU+tI7giOMkwhd7EQ8Lb8x2J
+         Mh+srh243xCe/qkMABSzyNF7JOgETyS/SBGVKhGQqaBLQ++7ziqlnhIKQwaVOAt8R5WY
+         qX/pMyyDQk76jE6CP6lHDCyTNYUwzihqlsVmISr7degsY7qzWrI15z6+tLcz5drXB8A0
+         OGJQ==
+X-Gm-Message-State: AOAM5325Yx0wAB5pQQIhReQMQoOzleAf4rTMc1X5UcB3Ud14Qh8/5Oif
+        YoxFoTWUPvLwRVYMWShf55OTObiGbwp3RNKLFrNbtg==
+X-Google-Smtp-Source: ABdhPJyoobLYnIWbWswtFV+hnCncsmdZCqoP03K67oJ14BVc7qPq4WxTKk04oRtwVQhRoxIz0t3Q99bKTrl82//++vs=
+X-Received: by 2002:a17:90a:7306:: with SMTP id m6mr7191995pjk.217.1621372516465;
+ Tue, 18 May 2021 14:15:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210507213110.155492-1-brendanhiggins@google.com>
- <20210507213110.155492-5-brendanhiggins@google.com> <CABVgOSnnb=LB2hQOVqarDd3Tv17f7JHHomvSfWeQaFSsH1PD2g@mail.gmail.com>
-In-Reply-To: <CABVgOSnnb=LB2hQOVqarDd3Tv17f7JHHomvSfWeQaFSsH1PD2g@mail.gmail.com>
+References: <20210518035825.1885357-1-davidgow@google.com>
+In-Reply-To: <20210518035825.1885357-1-davidgow@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 18 May 2021 14:08:43 -0700
-Message-ID: <CAFd5g47dqGin2QO_RLZKu93rt_j0xv7Dg1KTCrgYi7bVoaEjKg@mail.gmail.com>
-Subject: Re: [PATCH v1 4/4] Documentation: kunit: document support for QEMU in kunit_tool
+Date:   Tue, 18 May 2021 14:15:05 -0700
+Message-ID: <CAFd5g47kTYkUudpOTFW6k24yJWzgBQ63-ycksOYhqkhAW2P8kQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: arch/um/configs: Enable KUNIT_ALL_TESTS by default
 To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
+Cc:     Shuah Khan <shuah@kernel.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>
+        linux-um <linux-um@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 15, 2021 at 1:01 AM David Gow <davidgow@google.com> wrote:
+On Mon, May 17, 2021 at 8:58 PM David Gow <davidgow@google.com> wrote:
 >
-> On Sat, May 8, 2021 at 5:31 AM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > Document QEMU support, what it does, and how to use it in kunit_tool.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > ---
+> Make the default .kunitconfig (specified in
+> arch/um/configs/kunit_defconfig) specify CONFIG_KUNIT_ALL_TESTS by
+> default. KUNIT_ALL_TESTS runs all tests which have satisfied
+> dependencies in the current .config (which would be the architecture
+> defconfig).
 >
-> This is a good start, and probably meets the minimum requirements, but
-> I do have a number of comments and suggestions below.
+> Currently, the default .kunitconfig enables only the example tests and
+> KUnit's own tests. While this does provide a good example of what a
+> .kunitconfig for running a few individual tests should look like, it
+> does mean that kunit_tool runs a pretty paltry collection of tests by
+> default.
 >
-> Cheers,
-> -- David
+> A default run of ./tools/testing/kunit/kunit.py run now runs 70 tests
+> instead of 14.
 >
-> >  Documentation/dev-tools/kunit/usage.rst | 37 +++++++++++++++++++++----
-> >  1 file changed, 31 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> > index 650f99590df57..b74bd7c87cc20 100644
-> > --- a/Documentation/dev-tools/kunit/usage.rst
-> > +++ b/Documentation/dev-tools/kunit/usage.rst
-> > @@ -612,14 +612,39 @@ only things to be aware of when doing so.
-> >  The biggest impediment will likely be that certain KUnit features and
-> >  infrastructure may not support your target environment. For example, at this
-> >  time the KUnit Wrapper (``tools/testing/kunit/kunit.py``) does not work outside
-> > -of UML. Unfortunately, there is no way around this. Using UML (or even just a
-> > -particular architecture) allows us to make a lot of assumptions that make it
-> > -possible to do things which might otherwise be impossible.
-> > +of UML and QEMU. Unfortunately, there is no way around this. Using UML and QEMU
-> > +(or even just a particular architecture) allows us to make a lot of assumptions
-> > +that make it possible to do things which might otherwise be impossible.
->
-> This is a bit more awkward now, and I don't think gives quite the
-> right impression. Particularly the "Unfortunately, there is no way
-> around this." bit: there's no fundamental reason that someone couldn't
-> implement support for some other emulator (or even a setup which
-> pushed to real hardware and read results over serial), it'd just take
-> a bit of work to implement (like this patch series has done for qemu).
->
-> Personally, I think it'd be easiest to simplify this section and say
-> that kunit_tool currently only fully supports some architectures, via
-> UML and QEMU.
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Cool, I will fix that in the next revision.
+I am totally on board with what you want to do here, but I have one
+minor issue below.
 
-> >
-> >  Nevertheless, all core KUnit framework features are fully supported on all
-> > -architectures, and using them is straightforward: all you need to do is to take
-> > -your kunitconfig, your Kconfig options for the tests you would like to run, and
-> > -merge them into whatever config your are using for your platform. That's it!
-> > +architectures, and using them is straightforward: Most popular architectures
-> > +are supported directly in the KUnit Wrapper via QEMU.  Currently, supported
-> > +architectures on QEMU include:
-> > +
-> > +*   i386
-> > +*   x86_64
-> > +*   arm
-> > +*   arm64
-> > +*   alpha
-> > +*   powerpc
-> > +*   riscv
-> > +*   s390
-> > +*   sparc
-> > +
-> > +In order to run KUnit tests on one of these architectures via QEMU with the
-> > +KUnit wrapper, all you need to do is specify the flags ``--arch`` and
-> > +``--cross_compile`` when invoking the KUnit Wrapper. For example, we could run
-> > +the default KUnit tests on ARM in the following manner (assuming we have an ARM
-> > +toolchain installed):
-> > +
-> > +.. code-block:: bash
-> > +
-> > +       tools/testing/kunit/kunit.py run --timeout=60 --jobs=12 --arch=arm --cross_compile=arm-linux-gnueabihf-
-> > +
->
-> Is it worth also documenting the --qemu_config option here?
-> (Particularly given the restriction on its path?) Or is that something
-> best added to the kunit_tool page?
->
-> That being said, changes to the kunit_tool page are probably worth
-> adding as a section in the updated page:
-> https://patchwork.kernel.org/project/linux-kselftest/patch/20210417034553.1048895-1-davidgow@google.com/
->
-> At the very least, it'd be nice to have the new QEMU-related options
-> documented there.
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-Probably a good idea. However, I will ask Shuah to pick up the
-Documentation changes before I document the new options to avoid
-conflicts.
+> ---
+>  arch/um/configs/kunit_defconfig | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/arch/um/configs/kunit_defconfig b/arch/um/configs/kunit_defconfig
+> index 9235b7d42d38..becf3432a375 100644
+> --- a/arch/um/configs/kunit_defconfig
+> +++ b/arch/um/configs/kunit_defconfig
 
-> > +Alternatively, if you want to run your tests on real hardware or in some other
-> > +emulation environment, all you need to do is to take your kunitconfig, your
-> > +Kconfig options for the tests you would like to run, and merge them into
-> > +whatever config your are using for your platform. That's it!
-> >
-> >  For example, let's say you have the following kunitconfig:
-> >
-> > --
-> > 2.31.1.607.g51e8a6a459-goog
-> >
+Could we also apply this to
+tools/testing/kunit/configs/all_tests.config ? The contents of the
+file are identical, and I think are supposed to be for the same
+purpose.
+
+> @@ -1,3 +1,2 @@
+>  CONFIG_KUNIT=y
+> -CONFIG_KUNIT_TEST=y
+> -CONFIG_KUNIT_EXAMPLE_TEST=y
+> +CONFIG_KUNIT_ALL_TESTS=y
+> --
+> 2.31.1.751.gd2f1c929bd-goog
+>
