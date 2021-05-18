@@ -2,59 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1FE387613
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 12:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251EC387661
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 12:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348343AbhERKIL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 May 2021 06:08:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46759 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348337AbhERKIG (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 May 2021 06:08:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621332407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dFkmeu2athwSt2LK0RUUi/E/grHFe/dKRRuvCpK8qJo=;
-        b=DvVzlLIiJep/n8KFdyk90AQKKEfVlBjAvuImkvRCnAa+n4SDjle9QfWbVVpmdRDeLPBv2f
-        j0na5zyruwqd0Wm5AYftDDxCVuAB07sAUHDMgs96LVcZ5ESuaDymKgn/uuwpLF6lKa0GSA
-        svnPAxFEKZ30Cr8VG6jmjfXjxMmsgcE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-87--Tdn5UwpPwihEEhZg_18vg-1; Tue, 18 May 2021 06:06:46 -0400
-X-MC-Unique: -Tdn5UwpPwihEEhZg_18vg-1
-Received: by mail-wm1-f72.google.com with SMTP id l185-20020a1c25c20000b029014b0624775eso376925wml.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 03:06:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=dFkmeu2athwSt2LK0RUUi/E/grHFe/dKRRuvCpK8qJo=;
-        b=BvRVzBRhITx0pb+QwmnXioW+JNdeDDu9B9qmUVD9Ke+GiKSTFolECx2QkAQdLHjkSB
-         cjnTbqoL90u4qm7Mu+/+4M/bQdf97EoENufwwN1ZS6puGb21l/WbQTsxGVh2QwwVAFLe
-         HDZUoEINUpY1xNnLayJ5u69Z8eE/7gGrhVCHhk0cyUTnHKHlq85GccMfexg4QrndIBfA
-         bM0F/wFGb66gF+ZsjfjxNSfvsPSV5uvDnptRY5e6n+0RiHY84Ngu3o5CVKsX26MZ9zDd
-         ANOUsy9j2Iq6IBNdusS5VJ7GTxPfSAqt28eBSPkQxmjju8KK88AgSV/6OZxt/XPkMyu7
-         eZEw==
-X-Gm-Message-State: AOAM533WVyuPQ5xyxfi8hXmzbt51NePvs9E0QGiJa5feEY3BvlU5pXaU
-        KfE7FbYjhRCFsmaNXfisCkyRbVn45nLso9IFNGGnF6gXlaPVhuC3Pvdkifv4mSYZyY78lmMrRUb
-        4BE/cFCrW1ysXQPK4ZH3U+rRPRGbn
-X-Received: by 2002:a05:6000:1ac5:: with SMTP id i5mr5879830wry.6.1621332405357;
-        Tue, 18 May 2021 03:06:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwiVxI2VqHM3UC3HkCv7YVP9ChZhf/paSvmhTbK/1R/b2aClM7EAkaKYj9OwIH5AzvG3tEX6Q==
-X-Received: by 2002:a05:6000:1ac5:: with SMTP id i5mr5879787wry.6.1621332405164;
-        Tue, 18 May 2021 03:06:45 -0700 (PDT)
-Received: from [192.168.3.132] (p5b0c64fd.dip0.t-ipconnect.de. [91.12.100.253])
-        by smtp.gmail.com with ESMTPSA id f14sm8395872wry.40.2021.05.18.03.06.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 May 2021 03:06:44 -0700 (PDT)
-Subject: Re: [PATCH v19 5/8] mm: introduce memfd_secret system call to create
- "secret" memory areas
-To:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>
+        id S241678AbhERKZz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 May 2021 06:25:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:48128 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239674AbhERKZy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 18 May 2021 06:25:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F83E1FB;
+        Tue, 18 May 2021 03:24:36 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [10.57.6.226])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A1EB3F719;
+        Tue, 18 May 2021 03:24:27 -0700 (PDT)
+Date:   Tue, 18 May 2021 11:24:24 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
@@ -63,6 +28,7 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Hagen Paul Pfeifer <hagen@jauu.net>,
@@ -72,7 +38,7 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         "Kirill A. Shutemov" <kirill@shutemov.name>,
         Matthew Wilcox <willy@infradead.org>,
         Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -92,56 +58,169 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org
+Subject: Re: [PATCH v19 6/8] PM: hibernate: disable when there are active
+ secretmem users
+Message-ID: <20210518102424.GD82842@C02TD0UTHF1T.local>
 References: <20210513184734.29317-1-rppt@kernel.org>
- <20210513184734.29317-6-rppt@kernel.org>
- <b625c5d7-bfcc-9e95-1f79-fc8b61498049@redhat.com>
- <YKDJ1L7XpJRQgSch@kernel.org> <YKOP5x8PPbqzcsdK@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Message-ID: <8e114f09-60e4-2343-1c42-1beaf540c150@redhat.com>
-Date:   Tue, 18 May 2021 12:06:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ <20210513184734.29317-7-rppt@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <YKOP5x8PPbqzcsdK@dhcp22.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210513184734.29317-7-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 18.05.21 11:59, Michal Hocko wrote:
-> On Sun 16-05-21 10:29:24, Mike Rapoport wrote:
->> On Fri, May 14, 2021 at 11:25:43AM +0200, David Hildenbrand wrote:
-> [...]
->>>> +		if (!page)
->>>> +			return VM_FAULT_OOM;
->>>> +
->>>> +		err = set_direct_map_invalid_noflush(page, 1);
->>>> +		if (err) {
->>>> +			put_page(page);
->>>> +			return vmf_error(err);
->>>
->>> Would we want to translate that to a proper VM_FAULT_..., which would most
->>> probably be VM_FAULT_OOM when we fail to allocate a pagetable?
->>
->> That's what vmf_error does, it translates -ESOMETHING to VM_FAULT_XYZ.
+On Thu, May 13, 2021 at 09:47:32PM +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> I haven't read through the rest but this has just caught my attention.
-> Is it really reasonable to trigger the oom killer when you cannot
-> invalidate the direct mapping. From a quick look at the code it is quite
-> unlikely to se ENOMEM from that path (it allocates small pages) but this
-> can become quite sublte over time. Shouldn't this simply SIGBUS if it
-> cannot manipulate the direct mapping regardless of the underlying reason
-> for that?
+> It is unsafe to allow saving of secretmem areas to the hibernation
+> snapshot as they would be visible after the resume and this essentially
+> will defeat the purpose of secret memory mappings.
 > 
+> Prevent hibernation whenever there are active secret memory users.
 
-OTOH, it means our kernel zones are depleted, so we'd better reclaim 
-somehow ...
+Have we thought about how this is going to work in practice, e.g. on
+mobile systems? It seems to me that there are a variety of common
+applications which might want to use this which people don't expect to
+inhibit hibernate (e.g. authentication agents, web browsers).
 
--- 
+Are we happy to say that any userspace application can incidentally
+inhibit hibernate?
+
 Thanks,
+Mark.
 
-David / dhildenb
-
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Christopher Lameter <cl@linux.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Elena Reshetova <elena.reshetova@intel.com>
+> Cc: Hagen Paul Pfeifer <hagen@jauu.net>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: James Bottomley <jejb@linux.ibm.com>
+> Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Roman Gushchin <guro@fb.com>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Tycho Andersen <tycho@tycho.ws>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+>  include/linux/secretmem.h |  6 ++++++
+>  kernel/power/hibernate.c  |  5 ++++-
+>  mm/secretmem.c            | 15 +++++++++++++++
+>  3 files changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/secretmem.h b/include/linux/secretmem.h
+> index e617b4afcc62..21c3771e6a56 100644
+> --- a/include/linux/secretmem.h
+> +++ b/include/linux/secretmem.h
+> @@ -30,6 +30,7 @@ static inline bool page_is_secretmem(struct page *page)
+>  }
+>  
+>  bool vma_is_secretmem(struct vm_area_struct *vma);
+> +bool secretmem_active(void);
+>  
+>  #else
+>  
+> @@ -43,6 +44,11 @@ static inline bool page_is_secretmem(struct page *page)
+>  	return false;
+>  }
+>  
+> +static inline bool secretmem_active(void)
+> +{
+> +	return false;
+> +}
+> +
+>  #endif /* CONFIG_SECRETMEM */
+>  
+>  #endif /* _LINUX_SECRETMEM_H */
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index da0b41914177..559acef3fddb 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -31,6 +31,7 @@
+>  #include <linux/genhd.h>
+>  #include <linux/ktime.h>
+>  #include <linux/security.h>
+> +#include <linux/secretmem.h>
+>  #include <trace/events/power.h>
+>  
+>  #include "power.h"
+> @@ -81,7 +82,9 @@ void hibernate_release(void)
+>  
+>  bool hibernation_available(void)
+>  {
+> -	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
+> +	return nohibernate == 0 &&
+> +		!security_locked_down(LOCKDOWN_HIBERNATION) &&
+> +		!secretmem_active();
+>  }
+>  
+>  /**
+> diff --git a/mm/secretmem.c b/mm/secretmem.c
+> index 1ae50089adf1..7c2499e4de22 100644
+> --- a/mm/secretmem.c
+> +++ b/mm/secretmem.c
+> @@ -40,6 +40,13 @@ module_param_named(enable, secretmem_enable, bool, 0400);
+>  MODULE_PARM_DESC(secretmem_enable,
+>  		 "Enable secretmem and memfd_secret(2) system call");
+>  
+> +static atomic_t secretmem_users;
+> +
+> +bool secretmem_active(void)
+> +{
+> +	return !!atomic_read(&secretmem_users);
+> +}
+> +
+>  static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+>  {
+>  	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+> @@ -94,6 +101,12 @@ static const struct vm_operations_struct secretmem_vm_ops = {
+>  	.fault = secretmem_fault,
+>  };
+>  
+> +static int secretmem_release(struct inode *inode, struct file *file)
+> +{
+> +	atomic_dec(&secretmem_users);
+> +	return 0;
+> +}
+> +
+>  static int secretmem_mmap(struct file *file, struct vm_area_struct *vma)
+>  {
+>  	unsigned long len = vma->vm_end - vma->vm_start;
+> @@ -116,6 +129,7 @@ bool vma_is_secretmem(struct vm_area_struct *vma)
+>  }
+>  
+>  static const struct file_operations secretmem_fops = {
+> +	.release	= secretmem_release,
+>  	.mmap		= secretmem_mmap,
+>  };
+>  
+> @@ -202,6 +216,7 @@ SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
+>  	file->f_flags |= O_LARGEFILE;
+>  
+>  	fd_install(fd, file);
+> +	atomic_inc(&secretmem_users);
+>  	return fd;
+>  
+>  err_put_fd:
+> -- 
+> 2.28.0
+> 
