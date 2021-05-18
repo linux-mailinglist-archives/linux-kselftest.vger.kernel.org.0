@@ -2,111 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D8A3881F0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 23:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA0E38821C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 23:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236571AbhERVQf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 May 2021 17:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
+        id S236786AbhERVaU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 May 2021 17:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236293AbhERVQf (ORCPT
+        with ESMTP id S229982AbhERVaU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 May 2021 17:16:35 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D099C06175F
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:15:17 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id lx17-20020a17090b4b11b029015f3b32b8dbso527244pjb.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:15:17 -0700 (PDT)
+        Tue, 18 May 2021 17:30:20 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39829C06175F
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:29:02 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id b13so4653440pfv.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=C43/i5T89+Z7YHAazX11QPS1qt3iN5sh35aKnQ1xBXc=;
-        b=L3SbeGKHfRXdqFWSY/DjtKEhkdISuPfaf1/glYzvtU6a0s3YUDaXW/V2vSONOb9az5
-         ar6USRpYYzyUHUvBCVpIXy01hUckq3toF9CEzNTqevyNlVn0oaKwy04ztEZY9s9KVohr
-         c+L2SCmGjU987rGITNpj8OFctyth8m4DBrzM3AjVvqKnRJPj2ePJv+ZquXgm75JlYm4s
-         xYwZ0mmw3xwdp9IRqnb/g9tzuw3sTUp3KaPMDh8Yr02zbRwiXCDLS4ztVL9K85hvh+b5
-         sgBK4fQ1EYBraCdirQ1/Cag9AIQBaI4q1QZ3yzlJnPRibfQ1zVbGu/aRSkArBtdmT2v4
-         xsWw==
+        bh=JYR9eU6zjqRdk1UGxgennD6RvKzci+hwvzZHKh2keKU=;
+        b=Ln6aUylj3ah1PbOD8LF6vxSm5v/O4RV049EXKgCKSDEdCW7TEJ3kJRQhdFIt5OSEt1
+         mAjC7CKrLPGMVIIsbcO068gUVZUmwjzWmJ1M3zSuyf3Tx0SUM5Om0mxyRQxv2aRFaXAg
+         iGUScRO0EImJEJF6EkuWsLpwBKUHRTPWzy8D0wLmcBcz/YhB3tBE/wkoF1yRaD85oPQ5
+         ccrBQ94YQ8sfKf0KaNDmbFaVPpw58nIA3PDesn06Wl4Ohy9zRHcQzDxY72Ip6Wpund3Y
+         oJXvUeMp7izYv4VT6iylvVjCfjEK5wBFcRvBDVftAZzCHKJf9fgIKzuqAHJpD2weod4a
+         XO+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=C43/i5T89+Z7YHAazX11QPS1qt3iN5sh35aKnQ1xBXc=;
-        b=b2QPFCmZEGaubhd39VHnTnXyjvPtBYKZ4oNYNRJBbV3YiO9NPf8g9kLzQlNGfqwjTS
-         TOLcd6Q7/C5gsv3/PzwnFW6U+qJyDRL7AXwJ5EFr1j9veSG1sPh03eT8fT9UqOzpA7p/
-         hh9JzyZj6UVUwJfvzAXBsmZgstPTfisEfUMPJTDgZhlaxU+tI7giOMkwhd7EQ8Lb8x2J
-         Mh+srh243xCe/qkMABSzyNF7JOgETyS/SBGVKhGQqaBLQ++7ziqlnhIKQwaVOAt8R5WY
-         qX/pMyyDQk76jE6CP6lHDCyTNYUwzihqlsVmISr7degsY7qzWrI15z6+tLcz5drXB8A0
-         OGJQ==
-X-Gm-Message-State: AOAM5325Yx0wAB5pQQIhReQMQoOzleAf4rTMc1X5UcB3Ud14Qh8/5Oif
-        YoxFoTWUPvLwRVYMWShf55OTObiGbwp3RNKLFrNbtg==
-X-Google-Smtp-Source: ABdhPJyoobLYnIWbWswtFV+hnCncsmdZCqoP03K67oJ14BVc7qPq4WxTKk04oRtwVQhRoxIz0t3Q99bKTrl82//++vs=
-X-Received: by 2002:a17:90a:7306:: with SMTP id m6mr7191995pjk.217.1621372516465;
- Tue, 18 May 2021 14:15:16 -0700 (PDT)
+        bh=JYR9eU6zjqRdk1UGxgennD6RvKzci+hwvzZHKh2keKU=;
+        b=msw6g2dwdwKzp8EAD1Aad8tIuJdgrOAhLJWJHCJW8pzswKqiNTxlIXeMDrnFQ89yNW
+         ZNptf2XYneRkXJu8K3iLbkLFHU0nL3fupCeAprOLPcETWxz++V1chgllmqRoMqTr85eH
+         7Ou1Q17Y7jKcxAa3LLmldS5cBT49dh6owRldaXSLYS1a+HFfmTXyCK0rKa4GNOqpcdZj
+         Vcrp656710Op2lnryV7Y2U0skV0G9f3tbLRYys0A0JBvCMWHvqxTxKkuyDOuYusVTRhx
+         FcfBKIuDluqlX3ASj65b/mbkkAfRifunLNxEa11fnZD/lotv40jVwGX6+39gmsmW6fBy
+         6NWg==
+X-Gm-Message-State: AOAM532T1zbJUGpD6sFkUYGrsu5DbgyAgYz/Z1RrQGFDV0vHrk21ZEo4
+        qsaPtyMMHDuvze8R/xnrrTRVWW2WKAhM7BkLhRbaIw==
+X-Google-Smtp-Source: ABdhPJyv6bKTO8t8pYTtHQJqfJlht9WR9p64GGgwanjqkbWmKlY4s/vF0xxy3EUgh4bWQ6/U92TWqNF6HTX4pf540I8=
+X-Received: by 2002:a63:e30d:: with SMTP id f13mr7202766pgh.201.1621373341191;
+ Tue, 18 May 2021 14:29:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210518035825.1885357-1-davidgow@google.com>
-In-Reply-To: <20210518035825.1885357-1-davidgow@google.com>
+References: <20210511220515.4140742-1-dlatypov@google.com>
+In-Reply-To: <20210511220515.4140742-1-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 18 May 2021 14:15:05 -0700
-Message-ID: <CAFd5g47kTYkUudpOTFW6k24yJWzgBQ63-ycksOYhqkhAW2P8kQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: arch/um/configs: Enable KUNIT_ALL_TESTS by default
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
+Date:   Tue, 18 May 2021 14:28:50 -0700
+Message-ID: <CAFd5g45j=_20YRU85bv3Vg4z2DDha=kqQJh-g4tcmjzaMhtv2g@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/test: convert test_overflow.c to use KUnit
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 17, 2021 at 8:58 PM David Gow <davidgow@google.com> wrote:
+On Tue, May 11, 2021 at 3:05 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Make the default .kunitconfig (specified in
-> arch/um/configs/kunit_defconfig) specify CONFIG_KUNIT_ALL_TESTS by
-> default. KUNIT_ALL_TESTS runs all tests which have satisfied
-> dependencies in the current .config (which would be the architecture
-> defconfig).
+> This largely consists of:
+> * replacing `err |= test_func(...)` calls with `test_func(test, ...)`.
+> * changing pr_warn to KUNIT_*_MSG() macros to mark the failed test
+> while printing a diagnostic message
+> * dropping __init as there are concerns of this causing issues w/ KUnit
+> when running on some other arches.
 >
-> Currently, the default .kunitconfig enables only the example tests and
-> KUnit's own tests. While this does provide a good example of what a
-> .kunitconfig for running a few individual tests should look like, it
-> does mean that kunit_tool runs a pretty paltry collection of tests by
-> default.
+> With the exception of now needing to set CONFIG_KUNIT=y, the test can
+> still be run as before, at boot time or as a test module.
+> But now the output of the test will be TAP (Test Anything Protocol),
+> the format used by kselftest instead of just warnings and printing
+> "FAIL!" , see [1].
 >
-> A default run of ./tools/testing/kunit/kunit.py run now runs 70 tests
-> instead of 14.
+> But now the test can also be run more quickly via kunit.py
 >
-> Signed-off-by: David Gow <davidgow@google.com>
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
+> CONFIG_KUNIT=y
+> CONFIG_TEST_OVERFLOW=y
+> EOF
+>
+> Note: after a mrproper this took
+> > Elapsed time: 38.683s total, 3.598s configuring, 32.141s building, 0.000s running
+>
+> (Normally would be less clunky as you wouldn't use a heredoc).
+>
+> [1] Here's an example failure message after tweaking the test array:
+>   TAP version 14
+>   1..1
+>       # Subtest: lib_overflow
+>       1..10
+>       # test_u8_overflow: u8 : 18 arithmetic tests
+>       # test_u8_overflow: EXPECTATION FAILED at lib/test_overflow.c:251
+>       Expected _got == p->sum, but
+>           _got == 0
+>           p->sum == 1
+>   wrong result for 0 + 0 (type u8)
+>   ...
+>       not ok 1 - test_u8_overflow
+>       # test_s8_overflow: s8 : 19 arithmetic tests
+>       ok 2 - test_s8_overflow
+>   ...
+>       # test_overflow_shift: ok: (s32)(0 << 31) == 0
+>       # test_overflow_shift: ok: (s64)(0 << 63) == 0
+>       ok 9 - test_overflow_shift
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Tested-by: David Gow <davidgow@google.com>
 
-I am totally on board with what you want to do here, but I have one
-minor issue below.
+Looks good to me.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-
-> ---
->  arch/um/configs/kunit_defconfig | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/um/configs/kunit_defconfig b/arch/um/configs/kunit_defconfig
-> index 9235b7d42d38..becf3432a375 100644
-> --- a/arch/um/configs/kunit_defconfig
-> +++ b/arch/um/configs/kunit_defconfig
-
-Could we also apply this to
-tools/testing/kunit/configs/all_tests.config ? The contents of the
-file are identical, and I think are supposed to be for the same
-purpose.
-
-> @@ -1,3 +1,2 @@
->  CONFIG_KUNIT=y
-> -CONFIG_KUNIT_TEST=y
-> -CONFIG_KUNIT_EXAMPLE_TEST=y
-> +CONFIG_KUNIT_ALL_TESTS=y
-> --
-> 2.31.1.751.gd2f1c929bd-goog
->
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
