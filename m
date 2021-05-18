@@ -2,117 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA0E38821C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 23:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347213882BC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 May 2021 00:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbhERVaU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 May 2021 17:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S1352753AbhERWaw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 May 2021 18:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbhERVaU (ORCPT
+        with ESMTP id S1352746AbhERWau (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 May 2021 17:30:20 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39829C06175F
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:29:02 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id b13so4653440pfv.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 14:29:02 -0700 (PDT)
+        Tue, 18 May 2021 18:30:50 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D05C061573
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 15:29:31 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id n10so11074528ion.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 15:29:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JYR9eU6zjqRdk1UGxgennD6RvKzci+hwvzZHKh2keKU=;
-        b=Ln6aUylj3ah1PbOD8LF6vxSm5v/O4RV049EXKgCKSDEdCW7TEJ3kJRQhdFIt5OSEt1
-         mAjC7CKrLPGMVIIsbcO068gUVZUmwjzWmJ1M3zSuyf3Tx0SUM5Om0mxyRQxv2aRFaXAg
-         iGUScRO0EImJEJF6EkuWsLpwBKUHRTPWzy8D0wLmcBcz/YhB3tBE/wkoF1yRaD85oPQ5
-         ccrBQ94YQ8sfKf0KaNDmbFaVPpw58nIA3PDesn06Wl4Ohy9zRHcQzDxY72Ip6Wpund3Y
-         oJXvUeMp7izYv4VT6iylvVjCfjEK5wBFcRvBDVftAZzCHKJf9fgIKzuqAHJpD2weod4a
-         XO+Q==
+        bh=sJSTAKCZ+krTWG3lgInmgl4vdo4n0Oih7NdB8EZOroE=;
+        b=jbuHe9+Qf8UciW37lf7ZswZs7ReoWXczX04sFI1v7v+3FEj4I+EoN+d69cBUfvxZL2
+         pppqzzmCpxde7Hh+QW7SdZ1jnX4IX5TcXLfsMzhVJOrTYHglNNe+YSCOyZrx8IZeqH1D
+         IXg0zl7mwhjrFeuEQYeofug0VDMviAXFvR3ZUcYWSeo/1nefLar6o+c5Cb94aEOmOEE9
+         MQy8UMokWYa8Fi1ImWSqAGd0WJbpPO0JSFgRT6Jmr+Nw5hnSuXw/G4l0obG05YIbnKtn
+         XjsnCgoHUZulXA1LHNcZ3wLelpQCj9ucW4gS+3QoYK/5Ibly+MvFuRT9L+37QjSIjH/f
+         tnGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JYR9eU6zjqRdk1UGxgennD6RvKzci+hwvzZHKh2keKU=;
-        b=msw6g2dwdwKzp8EAD1Aad8tIuJdgrOAhLJWJHCJW8pzswKqiNTxlIXeMDrnFQ89yNW
-         ZNptf2XYneRkXJu8K3iLbkLFHU0nL3fupCeAprOLPcETWxz++V1chgllmqRoMqTr85eH
-         7Ou1Q17Y7jKcxAa3LLmldS5cBT49dh6owRldaXSLYS1a+HFfmTXyCK0rKa4GNOqpcdZj
-         Vcrp656710Op2lnryV7Y2U0skV0G9f3tbLRYys0A0JBvCMWHvqxTxKkuyDOuYusVTRhx
-         FcfBKIuDluqlX3ASj65b/mbkkAfRifunLNxEa11fnZD/lotv40jVwGX6+39gmsmW6fBy
-         6NWg==
-X-Gm-Message-State: AOAM532T1zbJUGpD6sFkUYGrsu5DbgyAgYz/Z1RrQGFDV0vHrk21ZEo4
-        qsaPtyMMHDuvze8R/xnrrTRVWW2WKAhM7BkLhRbaIw==
-X-Google-Smtp-Source: ABdhPJyv6bKTO8t8pYTtHQJqfJlht9WR9p64GGgwanjqkbWmKlY4s/vF0xxy3EUgh4bWQ6/U92TWqNF6HTX4pf540I8=
-X-Received: by 2002:a63:e30d:: with SMTP id f13mr7202766pgh.201.1621373341191;
- Tue, 18 May 2021 14:29:01 -0700 (PDT)
+        bh=sJSTAKCZ+krTWG3lgInmgl4vdo4n0Oih7NdB8EZOroE=;
+        b=Tb1uKlCDOiL4CkrhP9vZ5Jp5Th1fDzZ7+/W0S2p+FCKjvlN++59/mx+rSEhFxojvmd
+         bGtuIlJyHa8n+cMkKzmZB0LwWI5hnh8KoQzyYfbbhzIbEd3xIPrfUncijrGX7x2uQD/O
+         X8fnE6izbtOK71YUSPphN/yMMxko7syV1dNZf0SWkJ3lSyPvSGFTGFCUgLAhS4GEGWpT
+         bSBZYuBrk6bSK/EWXpPNC6O/d3nCcnk6ggoSpPW1RBy21c/lTuSVK3MTGrEhARPxYviN
+         bBWFdIXWSxGQSEdV2zgf81XapPQTdW9yl4SB8jciE1oudVXPxFKiF+xLgVSvvhua9TzX
+         uRow==
+X-Gm-Message-State: AOAM532Spp2L9As4DuAe2fw3cSvfK0lQ013YJhRLIS3dWXp9OMMpPdbW
+        WSV9IDc4CJ//Dc1rzfN4KNNsu0cAV07IDN2Sps8i7g==
+X-Google-Smtp-Source: ABdhPJxg1XeLxXOYntitmR4NlPBu0nqJwFp2PCXTohQRhknrcmZuOxJxUcxf72xJjinay2qMPf2wVkwu5qRUYJyu2as=
+X-Received: by 2002:a05:6602:446:: with SMTP id e6mr6560189iov.20.1621376969710;
+ Tue, 18 May 2021 15:29:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210511220515.4140742-1-dlatypov@google.com>
-In-Reply-To: <20210511220515.4140742-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 18 May 2021 14:28:50 -0700
-Message-ID: <CAFd5g45j=_20YRU85bv3Vg4z2DDha=kqQJh-g4tcmjzaMhtv2g@mail.gmail.com>
-Subject: Re: [PATCH v2] lib/test: convert test_overflow.c to use KUnit
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210427225244.4326-1-axelrasmussen@google.com>
+ <20210427225244.4326-10-axelrasmussen@google.com> <YKQqKrl+/cQ1utrb@t490s>
+In-Reply-To: <YKQqKrl+/cQ1utrb@t490s>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Tue, 18 May 2021 15:28:52 -0700
+Message-ID: <CAJHvVch3SZ80yt+FnK5M=m4haJ-pFZqvMtGVYHnw9rs1pBkNcw@mail.gmail.com>
+Subject: Re: [PATCH v5 09/10] userfaultfd/selftests: reinitialize test context
+ in each test
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        Brian Geffon <bgeffon@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 11, 2021 at 3:05 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> This largely consists of:
-> * replacing `err |= test_func(...)` calls with `test_func(test, ...)`.
-> * changing pr_warn to KUNIT_*_MSG() macros to mark the failed test
-> while printing a diagnostic message
-> * dropping __init as there are concerns of this causing issues w/ KUnit
-> when running on some other arches.
->
-> With the exception of now needing to set CONFIG_KUNIT=y, the test can
-> still be run as before, at boot time or as a test module.
-> But now the output of the test will be TAP (Test Anything Protocol),
-> the format used by kselftest instead of just warnings and printing
-> "FAIL!" , see [1].
->
-> But now the test can also be run more quickly via kunit.py
->
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
-> CONFIG_KUNIT=y
-> CONFIG_TEST_OVERFLOW=y
-> EOF
->
-> Note: after a mrproper this took
-> > Elapsed time: 38.683s total, 3.598s configuring, 32.141s building, 0.000s running
->
-> (Normally would be less clunky as you wouldn't use a heredoc).
->
-> [1] Here's an example failure message after tweaking the test array:
->   TAP version 14
->   1..1
->       # Subtest: lib_overflow
->       1..10
->       # test_u8_overflow: u8 : 18 arithmetic tests
->       # test_u8_overflow: EXPECTATION FAILED at lib/test_overflow.c:251
->       Expected _got == p->sum, but
->           _got == 0
->           p->sum == 1
->   wrong result for 0 + 0 (type u8)
->   ...
->       not ok 1 - test_u8_overflow
->       # test_s8_overflow: s8 : 19 arithmetic tests
->       ok 2 - test_s8_overflow
->   ...
->       # test_overflow_shift: ok: (s32)(0 << 31) == 0
->       # test_overflow_shift: ok: (s64)(0 << 63) == 0
->       ok 9 - test_overflow_shift
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Tested-by: David Gow <davidgow@google.com>
+I suppose it will be squashed anyway, but in case it's useful feel free to add:
 
-Looks good to me.
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
+Thanks for catching this, Peter!
+
+On Tue, May 18, 2021 at 1:57 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Tue, Apr 27, 2021 at 03:52:43PM -0700, Axel Rasmussen wrote:
+> > Currently, the context (fds, mmap-ed areas, etc.) are global. Each test
+> > mutates this state in some way, in some cases really "clobbering it"
+> > (e.g., the events test mremap-ing area_dst over the top of area_src, or
+> > the minor faults tests overwriting the count_verify values in the test
+> > areas). We run the tests in a particular order, each test is careful to
+> > make the right assumptions about its starting state, etc.
+> >
+> > But, this is fragile. It's better for a test's success or failure to not
+> > depend on what some other prior test case did to the global state.
+> >
+> > To that end, clear and reinitialize the test context at the start of
+> > each test case, so whatever prior test cases did doesn't affect future
+> > tests.
+> >
+> > This is particularly relevant to this series because the events test's
+> > mremap of area_dst screws up assumptions the minor fault test was
+> > relying on. This wasn't a problem for hugetlb, as we don't mremap in
+> > that case.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+>
+> Hi, Andrew,
+>
+> There's a conflict on the uffd test case with v5.13-rc1-mmots-2021-05-13-17-23
+> between this patch and the uffd pagemap series, so I think we may need to queue
+> another fixup patch (to be squashed into this patch of Axel's) which is
+> attached.
+>
+> Thanks,
+>
+> --
+> Peter Xu
