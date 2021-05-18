@@ -2,123 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE073880DA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 21:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EF338810B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 May 2021 22:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245553AbhERT6l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 May 2021 15:58:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48052 "EHLO mail.kernel.org"
+        id S1352130AbhERUKv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 May 2021 16:10:51 -0400
+Received: from mga12.intel.com ([192.55.52.136]:15754 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239073AbhERT6k (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 May 2021 15:58:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3AD5F61285;
-        Tue, 18 May 2021 19:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621367841;
-        bh=W7vLOdSKLFgEV5k0jhtQlIFKhbJ5L0R4LHTEFOdxSEU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QB4owFZkV2aDv2Fu2AUqXpp1mPGhL+DBAl+X9CUe2kA9z7gV73+vpOSALb+GFc/uY
-         yYqrltR7+tl/2QJpbWuQ0i/fmZJr/KumoCq+MbADkLC03y8qCvMgYcManl5tMO+qlG
-         Z6eICpd3qq24t7KPwZa/FDikKy/5Ni3gryIdCHKeRFHH7izT3K5Mue1sd/4BDVa1uK
-         VgyyOWf/i0TUZA2dAnsMaK4QH5hIfDn2/Yh0DHQ3jkMVkpXUv5Q6wIbvHPRNqhTBoy
-         noUU97EU5lAfRE30LqZW7OPkkXq2R4rEYXUpCvO+XNyfVzbsHJicWS/xRgvOcPdk2n
-         lNIOvIJLs1Zsg==
-Date:   Tue, 18 May 2021 22:57:19 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] selftests/sgx: Migrate to kselftest harness
-Message-ID: <YKQcH2/5ENIp2Bps@kernel.org>
-References: <20210512215323.420639-1-jarkko@kernel.org>
- <20210512215323.420639-2-jarkko@kernel.org>
- <3b920525-694c-a8e4-93f5-7b1a3f9ad009@intel.com>
- <YKP+CavM21klDHH8@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YKP+CavM21klDHH8@kernel.org>
+        id S1352102AbhERUKi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 18 May 2021 16:10:38 -0400
+IronPort-SDR: 9huY8Zvhy3/tNAuN0Xvs7GxnmAKbc86oZWERgTVi/cAiv5XJOIaTDJ9qpvaD0H+gCR26ipN6i1
+ H0mdmVOf+WVg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9988"; a="180411924"
+X-IronPort-AV: E=Sophos;i="5.82,310,1613462400"; 
+   d="scan'208";a="180411924"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2021 13:08:53 -0700
+IronPort-SDR: aZ787fBbkXxSb4U7Oa4YD08Hm9TwIROW959K/6dLV698am9hcH/Qk2KQ9hc0lCgizyNLYwkgB4
+ A5SOkI+YMC9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,310,1613462400"; 
+   d="scan'208";a="394993623"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by orsmga006.jf.intel.com with ESMTP; 18 May 2021 13:08:53 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
+        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
+        carlos@redhat.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
+Subject: [PATCH v9 4/6] selftest/sigaltstack: Use the AT_MINSIGSTKSZ aux vector if available
+Date:   Tue, 18 May 2021 13:03:18 -0700
+Message-Id: <20210518200320.17239-5-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210518200320.17239-1-chang.seok.bae@intel.com>
+References: <20210518200320.17239-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 18, 2021 at 08:49:00PM +0300, Jarkko Sakkinen wrote:
-> On Mon, May 17, 2021 at 10:03:42AM -0700, Reinette Chatre wrote:
-> > Hi Jarkko,
-> > 
-> > On 5/12/2021 2:53 PM, Jarkko Sakkinen wrote:
-> > > Migrate to kselftest harness. Use a fixture test with enclave initialized
-> > > and de-initialized for each of the existing three tests, in other words:
-> > > 
-> > > 1. One FIXTURE() for managing the enclave life-cycle.
-> > > 2. Three TEST_F()'s, one for each test case.
-> > > 
-> > > This gives a leaps better reporting than before. Here's an example
-> > > transcript:
-> > > 
-> > > TAP version 13
-> > > 1..3
-> > > 
-> > > ok 1 enclave.unclobbered_vdso
-> > > 
-> > > ok 2 enclave.clobbered_vdso
-> > > 
-> > > ok 3 enclave.clobbered_vdso_and_user_function
-> > > 
-> > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > ---
-> > > 
-> > > v5:
-> > > * Use TH_LOG() for printing enclave address ranges instead of printf(),
-> > >    based on Reinette's remark.
-> > 
-> > Thank you for considering my feedback. The motivation for my comment was to
-> > consider how this test output will be parsed. If these tests will have their
-> > output parsed by automated systems then it needs to conform to the TAP13
-> > format as supported by kselftest.
-> > 
-> > In your latest version the output printed during a successful test has been
-> > changed, using TH_LOG() as you noted. From what I can tell this is the only
-> > output addressed - failing tests continue to print error messages (perror,
-> > fprintf) without consideration of how they will be parsed. My apologies, I
-> > am not a kselftest expert to know what the best way for this integration is.
-> > 
-> > Reinette
-> 
-> It's a valid question, yes.
-> 
-> The problem is that only main.c can use kselftest macros because
-> kselftest_harness.h pulls 
-> 
-> static int test_harness_run(int __attribute__((unused)) argc,
-> 			    char __attribute__((unused)) **argv)
-> 
-> which will not end up having a call site (because there's no
-> "TEST_HARNESS_MAIN").
-> 
-> The whole logging thing in kselftest harness is a bit ambiguous.
-> Namely:
-> 
-> 1. There's a macro TH_LOG() defined in kselftest_harness.h, which
->    "internally" uses fprintf().
-> 2. There's an inline function ksft_print_msg() in kselftest.h
->    using vsprintf().
-> 
-> To add to that, kselftest_harness.h internally prints by using
-> ksft_print_msg(), and provides TH_LOG(), which does not use
-> ksft_print_msg().
-> 
-> I don't really get the logic in all this.
+The SIGSTKSZ constant may not represent enough stack size in some
+architectures as the hardware state size grows.
 
-I tried to split TH_LOG() as separate entity but it's not possible, as the
-macros access a static variable called '_metadata'.
+Use getauxval(AT_MINSIGSTKSZ) to increase the stack size.
 
-I'm not exactly sure how to proceed from this, if we want to make logging
-consistent.
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes from v5:
+* Added as a new patch.
+---
+ tools/testing/selftests/sigaltstack/sas.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-I would personally suggest to leave the error messages intact in load.c,
-because there is no way to make them consistent, except by removing them.
+diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
+index 8934a3766d20..c53b070755b6 100644
+--- a/tools/testing/selftests/sigaltstack/sas.c
++++ b/tools/testing/selftests/sigaltstack/sas.c
+@@ -17,6 +17,7 @@
+ #include <string.h>
+ #include <assert.h>
+ #include <errno.h>
++#include <sys/auxv.h>
+ 
+ #include "../kselftest.h"
+ 
+@@ -24,6 +25,11 @@
+ #define SS_AUTODISARM  (1U << 31)
+ #endif
+ 
++#ifndef AT_MINSIGSTKSZ
++#define AT_MINSIGSTKSZ	51
++#endif
++
++static unsigned int stack_size;
+ static void *sstack, *ustack;
+ static ucontext_t uc, sc;
+ static const char *msg = "[OK]\tStack preserved";
+@@ -47,7 +53,7 @@ void my_usr1(int sig, siginfo_t *si, void *u)
+ #endif
+ 
+ 	if (sp < (unsigned long)sstack ||
+-			sp >= (unsigned long)sstack + SIGSTKSZ) {
++			sp >= (unsigned long)sstack + stack_size) {
+ 		ksft_exit_fail_msg("SP is not on sigaltstack\n");
+ 	}
+ 	/* put some data on stack. other sighandler will try to overwrite it */
+@@ -108,6 +114,10 @@ int main(void)
+ 	stack_t stk;
+ 	int err;
+ 
++	/* Make sure more than the required minimum. */
++	stack_size = getauxval(AT_MINSIGSTKSZ) + SIGSTKSZ;
++	ksft_print_msg("[NOTE]\tthe stack size is %lu\n", stack_size);
++
+ 	ksft_print_header();
+ 	ksft_set_plan(3);
+ 
+@@ -117,7 +127,7 @@ int main(void)
+ 	sigaction(SIGUSR1, &act, NULL);
+ 	act.sa_sigaction = my_usr2;
+ 	sigaction(SIGUSR2, &act, NULL);
+-	sstack = mmap(NULL, SIGSTKSZ, PROT_READ | PROT_WRITE,
++	sstack = mmap(NULL, stack_size, PROT_READ | PROT_WRITE,
+ 		      MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+ 	if (sstack == MAP_FAILED) {
+ 		ksft_exit_fail_msg("mmap() - %s\n", strerror(errno));
+@@ -139,7 +149,7 @@ int main(void)
+ 	}
+ 
+ 	stk.ss_sp = sstack;
+-	stk.ss_size = SIGSTKSZ;
++	stk.ss_size = stack_size;
+ 	stk.ss_flags = SS_ONSTACK | SS_AUTODISARM;
+ 	err = sigaltstack(&stk, NULL);
+ 	if (err) {
+@@ -161,7 +171,7 @@ int main(void)
+ 		}
+ 	}
+ 
+-	ustack = mmap(NULL, SIGSTKSZ, PROT_READ | PROT_WRITE,
++	ustack = mmap(NULL, stack_size, PROT_READ | PROT_WRITE,
+ 		      MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+ 	if (ustack == MAP_FAILED) {
+ 		ksft_exit_fail_msg("mmap() - %s\n", strerror(errno));
+@@ -170,7 +180,7 @@ int main(void)
+ 	getcontext(&uc);
+ 	uc.uc_link = NULL;
+ 	uc.uc_stack.ss_sp = ustack;
+-	uc.uc_stack.ss_size = SIGSTKSZ;
++	uc.uc_stack.ss_size = stack_size;
+ 	makecontext(&uc, switch_fn, 0);
+ 	raise(SIGUSR1);
+ 
+-- 
+2.17.1
 
-/Jarkko
