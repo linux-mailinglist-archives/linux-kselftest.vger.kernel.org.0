@@ -2,451 +2,639 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2201389974
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 May 2021 00:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A934638997F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 May 2021 00:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbhESWri (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 May 2021 18:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
+        id S229465AbhESWzs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 May 2021 18:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbhESWri (ORCPT
+        with ESMTP id S229681AbhESWzs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 May 2021 18:47:38 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8007C06175F
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:46:17 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id k132so1064545iof.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:46:17 -0700 (PDT)
+        Wed, 19 May 2021 18:55:48 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80935C061761
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:54:26 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id r5so21500046lfr.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kaZvs44f9LdUeTBO7ubqTc/0m6N4WK+KhqPPWVqkHq0=;
-        b=gdpX3Ml4J3iKyD7UeOT7J6HjxTMEwk4t49N0R+0ygfH71Q6xK2C54oVgJIwq2Yfk7J
-         Zcb0dV9PDwH49kzyWmSCXylVr36xX1dmISbb1E6GKt/kfvU3dkltmGENysOtCHw+FDSZ
-         bbfQ3iORAYb3B110Q223uWbCwuYIsTtT4HryijnJ5lb2swF/HPOJjJsupCnDS+rUXXAO
-         0u3+PIrnECw389nd4H9myxosdV5lon6SjEiHb5wP8Pg5V5EROGXtH7Rz75QjlTu/2Ig1
-         Oe8NmloJlyLaV+eb8Yavk5eSwC1OtPuhQvG7hETs8+XDwW+dXfeOt/1xRdn3T/8Ym1LB
-         nE7w==
+        bh=j4/IHRYphRuyHwICOr0FPw8LbvUrmNcsstR+k2KnV8A=;
+        b=edqauAGzZ4x8/L8BP0rwIlvGDNKeFyvCzqJrSFqx1eiB5X3e9X288N2BkhJZqxXrMK
+         U6f113cbP534fi+PD95/jQGPGrqXCLSa/QfbBLO05aOPheBwjW3CjkMWHhTsrA/SwORb
+         O1x6yq0Km1eVSaPJZ82v478WgHWLcUCxWiucBFdl+8ivlILdgkHr3xeHcODckeG/7ME1
+         emc8vD1AisytMO7piMqBxAAdiqj4gql1+fj+g3J7DsGDwsWrMkv0S36ktzn2CMpBbseb
+         63R+O86Pkmd3occqZLtSwzxSwXw5Rl1flGs0Cxisd5SWHBVNRYh/QT4el9YouCTc+hzT
+         JCCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kaZvs44f9LdUeTBO7ubqTc/0m6N4WK+KhqPPWVqkHq0=;
-        b=hfb/cToasuDzC1CzlqDJ3h+z/ZFBsyXySpfqEqyfRsbQpr/UYvSnfv77SoLQjtC6Ur
-         5m9gK1BlI4TBBL/Ch/LOMC9xYwI4UnWuvu6gCfRFqaJp+5jS+L8j+UbDsCLUikICHXX9
-         vGJyr/FDIB+lZ0mFn+kYbkfjCQDKIkOzZ+Sfu2IRYoAuChup5N5+E9vJd0MWEO6S1Upu
-         nDGky1dhqVAbHkLaQ21cJ3fP9NdQdmgAHreo1qBF3jteKflpcrq4DtH3PyCOUUA4dXTc
-         irq8VBIq5iF+RVtCSiYztGtfHcwggy4waQ/0C6WdJoLkQA8io0h8M1jRd5QAS3kVTMrr
-         o2BA==
-X-Gm-Message-State: AOAM533oiRoTBZfMHAQICeilCFPO8UZnm7lV4HFuGJPFqA9G+SiomQtT
-        hyU2P5QR5GQRk5oSWG/IHZvbvn5q30zG+azISw2QJg==
-X-Google-Smtp-Source: ABdhPJx0ibYvNR5zDkHTj55LSlXiUC5MqC/YCfZ2cMcpewaM0jPGPcPuADYK5tVgyP+yffxaEA7dqL+EDFGw9MdGkoU=
-X-Received: by 2002:a05:6638:76d:: with SMTP id y13mr1872964jad.25.1621464376804;
- Wed, 19 May 2021 15:46:16 -0700 (PDT)
+        bh=j4/IHRYphRuyHwICOr0FPw8LbvUrmNcsstR+k2KnV8A=;
+        b=uPMjhL9QaA8DLOXD0HKn2Fi5R6qqZTLBncbBTV4GDwsatpzrCh52Re6p4Ik9hhcdqZ
+         wMEuv8W76RQ9BmoSlLmgr4apq9/MGv4fPqVHQfpOiHyIkUmAl/X13my0CtR00csh6/9+
+         /ko4JrwwYW6XzHaiSuHEKiiIGd4J63TdjDJUdTaqNheFrGTyCOE7g865JtG4T7/eRYOB
+         xphM8RcGiN7wIudCy5VwKdeLeT4SML14zntcQ5CrxWJYxoSUoXfLIb2feQ6foMk7REBb
+         TNBDlukbR1zE7Kr4YDLvdQuAOrwg1L0DqemrfXmqAyoKSEVBlu4dihVEiKMkSVVGgSQ6
+         BBLg==
+X-Gm-Message-State: AOAM531MMSGN2zZxC2LKKRSRSJ1nLBinN/y5ZF2KCXXG7bu7r/cjfuV2
+        0VNVcj8KxAUtM8HRSWKwjjsysQ1/NImLJ6CjveB2BA==
+X-Google-Smtp-Source: ABdhPJwY/1pvrBT9AX0NMjBq9w8QAZ9BqZBuLracCuyT+SN07Vg9qcCfcBkGyWSrHXk8GUxDmOwFhoCTbR3/V01w1Ps=
+X-Received: by 2002:ac2:4919:: with SMTP id n25mr1240432lfi.646.1621464864363;
+ Wed, 19 May 2021 15:54:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210519210437.1688484-1-jthoughton@google.com> <20210519210437.1688484-2-jthoughton@google.com>
-In-Reply-To: <20210519210437.1688484-2-jthoughton@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Wed, 19 May 2021 15:46:06 -0700
-Message-ID: <CANgfPd8oS7WJq9gbhK7rV3562KQM8xGXG981m=gq84dfcitYUA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Add UFFD_FEATURE_SIGBUS page-in tests
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+References: <20210517145314.157626-1-jingzhangos@google.com>
+ <20210517145314.157626-5-jingzhangos@google.com> <YKWKbfXwVx0+G0OX@google.com>
+In-Reply-To: <YKWKbfXwVx0+G0OX@google.com>
+From:   Jing Zhang <jingzhangos@google.com>
+Date:   Wed, 19 May 2021 17:54:12 -0500
+Message-ID: <CAAdAUtgkVOjpJFxaizD_z82UXDeAGbRM0MPkLFUOGHSm+8TLDw@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] KVM: selftests: Add selftest for KVM statistics
+ data binary interface
+To:     Ricardo Koller <ricarkol@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Jue Wang <juew@google.com>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 19, 2021 at 2:04 PM James Houghton <jthoughton@google.com> wrote:
->
-> This exercises the KVM userfaultfd SIGBUS path to perform page-ins.
-> This patch is based on Axel Rasmussen's patches that enable testing with
-> HugeTLBFS:
-> (https://lore.kernel.org/patchwork/patch/1432055/).
->
-> This allows me to easily verify that the KVM patch does indeed work for
-> anonymous, shmem-backed, and hugetlbfs-backed pages.
->
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> ---
->  .../selftests/kvm/demand_paging_test.c        | 193 +++++++++++++-----
+Hi Ricardo,
 
-If you'd be willing to split this patch up into a few smaller patches,
-I'd find it much easier to review.
-Thank you for updating this test with your SIGBUS patch.
+On Wed, May 19, 2021 at 5:00 PM Ricardo Koller <ricarkol@google.com> wrote:
+>
+> On Mon, May 17, 2021 at 02:53:14PM +0000, Jing Zhang wrote:
+> > Add selftest to check KVM stats descriptors validity.
+> >
+> > Signed-off-by: Jing Zhang <jingzhangos@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/.gitignore        |   1 +
+> >  tools/testing/selftests/kvm/Makefile          |   3 +
+> >  .../testing/selftests/kvm/include/kvm_util.h  |   3 +
+> >  .../selftests/kvm/kvm_bin_form_stats.c        | 379 ++++++++++++++++++
+> >  tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
+> >  5 files changed, 398 insertions(+)
+> >  create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
+> >
+> > diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> > index bd83158e0e0b..35796667c944 100644
+> > --- a/tools/testing/selftests/kvm/.gitignore
+> > +++ b/tools/testing/selftests/kvm/.gitignore
+> > @@ -43,3 +43,4 @@
+> >  /memslot_modification_stress_test
+> >  /set_memory_region_test
+> >  /steal_time
+> > +/kvm_bin_form_stats
+> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> > index e439d027939d..2984c86c848a 100644
+> > --- a/tools/testing/selftests/kvm/Makefile
+> > +++ b/tools/testing/selftests/kvm/Makefile
+> > @@ -76,6 +76,7 @@ TEST_GEN_PROGS_x86_64 += kvm_page_table_test
+> >  TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
+> >  TEST_GEN_PROGS_x86_64 += set_memory_region_test
+> >  TEST_GEN_PROGS_x86_64 += steal_time
+> > +TEST_GEN_PROGS_x86_64 += kvm_bin_form_stats
+> >
+> >  TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
+> >  TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list-sve
+> > @@ -87,6 +88,7 @@ TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+> >  TEST_GEN_PROGS_aarch64 += kvm_page_table_test
+> >  TEST_GEN_PROGS_aarch64 += set_memory_region_test
+> >  TEST_GEN_PROGS_aarch64 += steal_time
+> > +TEST_GEN_PROGS_aarch64 += kvm_bin_form_stats
+> >
+> >  TEST_GEN_PROGS_s390x = s390x/memop
+> >  TEST_GEN_PROGS_s390x += s390x/resets
+> > @@ -96,6 +98,7 @@ TEST_GEN_PROGS_s390x += dirty_log_test
+> >  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+> >  TEST_GEN_PROGS_s390x += kvm_page_table_test
+> >  TEST_GEN_PROGS_s390x += set_memory_region_test
+> > +TEST_GEN_PROGS_s390x += kvm_bin_form_stats
+> >
+> >  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
+> >  LIBKVM += $(LIBKVM_$(UNAME_M))
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> > index a8f022794ce3..ee01a67022d9 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> > @@ -387,4 +387,7 @@ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc);
+> >  #define GUEST_ASSERT_4(_condition, arg1, arg2, arg3, arg4) \
+> >       __GUEST_ASSERT((_condition), 4, (arg1), (arg2), (arg3), (arg4))
+> >
+> > +int vm_get_statsfd(struct kvm_vm *vm);
+> > +int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid);
+> > +
+> >  #endif /* SELFTEST_KVM_UTIL_H */
+> > diff --git a/tools/testing/selftests/kvm/kvm_bin_form_stats.c b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
+> > new file mode 100644
+> > index 000000000000..dae44397d0f4
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
+> > @@ -0,0 +1,379 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * kvm_bin_form_stats
+> > + *
+> > + * Copyright (C) 2021, Google LLC.
+> > + *
+> > + * Test the fd-based interface for KVM statistics.
+> > + */
+> > +
+> > +#define _GNU_SOURCE /* for program_invocation_short_name */
+> > +#include <fcntl.h>
+> > +#include <stdio.h>
+> > +#include <stdlib.h>
+> > +#include <string.h>
+> > +#include <errno.h>
+> > +
+> > +#include "test_util.h"
+> > +
+> > +#include "kvm_util.h"
+> > +#include "asm/kvm.h"
+> > +#include "linux/kvm.h"
+> > +
+> > +int vm_stats_test(struct kvm_vm *vm)
+> > +{
+> > +     ssize_t ret;
+> > +     int i, stats_fd, err = -1;
+> > +     size_t size_desc, size_data = 0;
+> > +     struct kvm_stats_header header;
+> > +     struct kvm_stats_desc *stats_desc, *pdesc;
+> > +     struct kvm_vm_stats_data *stats_data;
+> > +
+> > +     /* Get fd for VM stats */
+> > +     stats_fd = vm_get_statsfd(vm);
+> > +     if (stats_fd < 0) {
+> > +             perror("Get VM stats fd");
+> > +             return err;
+> > +     }
+>
+> It seems that the only difference between vm_stats_test and
+> vcpu_stats_test is what function to use for getting the fd.  If that's
+> the case, it might be better to move all the checks to a common
+> function.
+>
+Sure, will do that.
+> > +     /* Read kvm vm stats header */
+> > +     ret = read(stats_fd, &header, sizeof(header));
+> > +     if (ret != sizeof(header)) {
+> > +             perror("Read VM stats header");
+> > +             goto out_close_fd;
+> > +     }
+> > +     size_desc = sizeof(*stats_desc) + header.name_size;
+> > +     /* Check id string in header, that should start with "kvm" */
+> > +     if (strncmp(header.id, "kvm", 3) ||
+> > +                     strlen(header.id) >= KVM_STATS_ID_MAXLEN) {
+> > +             printf("Invalid KVM VM stats type!\n");
+> > +             goto out_close_fd;
+> > +     }
+> > +     /* Sanity check for other fields in header */
+> > +     if (header.count == 0) {
+> > +             err = 0;
+> > +             goto out_close_fd;
+> > +     }
+>
+> As mentioned by David, it would be better to replace the checks with
+> TEST_ASSERT's. Most other selftests rely on TEST_ASSERT.
+>
+Will do.
+> > +     /* Check overlap */
+> > +     if (header.desc_offset == 0 || header.data_offset == 0 ||
+> > +                     header.desc_offset < sizeof(header) ||
+> > +                     header.data_offset < sizeof(header)) {
+> > +             printf("Invalid offset fields in header!\n");
+> > +             goto out_close_fd;
+> > +     }
+> > +     if (header.desc_offset < header.data_offset &&
+> > +                     (header.desc_offset + size_desc * header.count >
+> > +                     header.data_offset)) {
+>
+> Could you make the check more strict?
+>
+> TEST_ASSERT(header.desc_offset + size_desc * header.count == header.data_offset,
+>         "The data block should be at the end of the descriptor block.");
+>
+We can't do stricter checks like this. Only the header block is
+enforced to be at offset 0.
+The descriptor block and data block are not enforced to be adjacent,
+they can be at any
+offset theoretically. That's why we have the desc_offset and data_offset fields.
+> > +             printf("VM Descriptor block is overlapped with data block!\n");
+> > +             goto out_close_fd;
+> > +     }
+> > +
+> > +     /* Allocate memory for stats descriptors */
+> > +     stats_desc = calloc(header.count, size_desc);
+> > +     if (!stats_desc) {
+> > +             perror("Allocate memory for VM stats descriptors");
+> > +             goto out_close_fd;
+> > +     }
+> > +     /* Read kvm vm stats descriptors */
+> > +     ret = pread(stats_fd, stats_desc,
+> > +                     size_desc * header.count, header.desc_offset);
+>
+> You could stress kvm_vm_stats_read() more by calling pread for more
+> offsets. For example, for every descriptor:
+>
+>         pread(..., header.desc_offset + i * size_desc)
+>
+> I realize that the typical usage will be to read once for all
+> descriptors. But kvm_vm_stats_read (and kvm_vcpu_stats_read) need to
+> handle any offset, and doing so seems to be quite complicated.
+>
+> Actually, you could stress kvm_vm_stats_read() even more by calling it
+> for _every_ possible offset (and eventually invalid offsets and sizes).
+> One easier way to check this is by calling read all descriptors into
+> some reference buffer using a single pread, and then call it for all
+> offsets while comparing against the reference buf.
+>
+Yes, the kvm_{vm,vcpu}_stats_read support read at any offset.
+It is a good idea to do stress read and invalid offset read.
+Will add those tests.
+> > +     if (ret != size_desc * header.count) {
+> > +             perror("Read KVM VM stats descriptors");
+> > +             goto out_free_desc;
+> > +     }
+> > +     /* Sanity check for fields in descriptors */
+> > +     for (i = 0; i < header.count; ++i) {
+> > +             pdesc = (void *)stats_desc + i * size_desc;
+>
+> cast to (struct kvm_stats_desc *)
+>
+> > +             /* Check type,unit,scale boundaries */
+> > +             if ((pdesc->flags & KVM_STATS_TYPE_MASK) > KVM_STATS_TYPE_MAX) {
+> > +                     printf("Unknown KVM stats type!\n");
+> > +                     goto out_free_desc;
+> > +             }
+> > +             if ((pdesc->flags & KVM_STATS_UNIT_MASK) > KVM_STATS_UNIT_MAX) {
+> > +                     printf("Unknown KVM stats unit!\n");
+> > +                     goto out_free_desc;
+> > +             }
+> > +             if ((pdesc->flags & KVM_STATS_SCALE_MASK) >
+> > +                             KVM_STATS_SCALE_MAX) {
+> > +                     printf("Unknown KVM stats scale!\n");
+> > +                     goto out_free_desc;
+> > +             }
+> > +             /* Check exponent for stats unit
+> > +              * Exponent for counter should be greater than or equal to 0
+> > +              * Exponent for unit bytes should be greater than or equal to 0
+> > +              * Exponent for unit seconds should be less than or equal to 0
+> > +              * Exponent for unit clock cycles should be greater than or
+> > +              * equal to 0
+> > +              */
+> > +             switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
+> > +             case KVM_STATS_UNIT_NONE:
+> > +             case KVM_STATS_UNIT_BYTES:
+> > +             case KVM_STATS_UNIT_CYCLES:
+> > +                     if (pdesc->exponent < 0) {
+> > +                             printf("Unsupported KVM stats unit!\n");
+> > +                             goto out_free_desc;
+> > +                     }
+> > +                     break;
+> > +             case KVM_STATS_UNIT_SECONDS:
+> > +                     if (pdesc->exponent > 0) {
+> > +                             printf("Unsupported KVM stats unit!\n");
+> > +                             goto out_free_desc;
+> > +                     }
+> > +                     break;
+>
+>                 default:
+>                         TEST_FAIL("Unexpected unit ...");
+>
+Will do. thanks.
+> > +             }
+> > +             /* Check name string */
+> > +             if (strlen(pdesc->name) >= header.name_size) {
+> > +                     printf("KVM stats name(%s) too long!\n", pdesc->name);
+> > +                     goto out_free_desc;
+> > +             }
+>
+> Tighter check:
+>
+> TEST_ASSERT(header.name_size > 0 &&
+>         strlen(pdesc->name) + 1 == header.name_size);
+>
+The length of name string can be any number less than header.name_size.
+We can't add this kind of check here.
+> > +             /* Check size field, which should not be zero */
+> > +             if (pdesc->size == 0) {
+> > +                     printf("KVM descriptor(%s) with size of 0!\n",
+> > +                                     pdesc->name);
+> > +                     goto out_free_desc;
+> > +             }
+> > +             size_data += pdesc->size * sizeof(stats_data->value[0]);
+> > +     }
+> > +     /* Check overlap */
+> > +     if (header.data_offset < header.desc_offset &&
+> > +             header.data_offset + size_data > header.desc_offset) {
+> > +             printf("Data block is overlapped with Descriptor block!\n");
+> > +             goto out_free_desc;
+> > +     }
+>
+> This won't be needed if you use the suggested TEST_ASSERT (the other
+> overlap check).
+>
+> > +     /* Check validity of all stats data size */
+> > +     if (size_data < header.count * sizeof(stats_data->value[0])) {
+> > +             printf("Data size is not correct!\n");
+> > +             goto out_free_desc;
+> > +     }
+>
+> Tighter check:
+>
+> TEST_ASSERT(size_data == header.count * stats_data->value[0]);
+>
+Will do this.
+> > +
+> > +     /* Allocate memory for stats data */
+> > +     stats_data = malloc(size_data);
+> > +     if (!stats_data) {
+> > +             perror("Allocate memory for VM stats data");
+> > +             goto out_free_desc;
+> > +     }
+> > +     /* Read kvm vm stats data */
+> > +     ret = pread(stats_fd, stats_data, size_data, header.data_offset);
+> > +     if (ret != size_data) {
+> > +             perror("Read KVM VM stats data");
+> > +             goto out_free_data;
+> > +     }
+> > +
+> > +     err = 0;
+> > +out_free_data:
+> > +     free(stats_data);
+> > +out_free_desc:
+> > +     free(stats_desc);
+> > +out_close_fd:
+> > +     close(stats_fd);
+> > +     return err;
+> > +}
+> > +
+> > +int vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
+> > +{
+> > +     ssize_t ret;
+> > +     int i, stats_fd, err = -1;
+> > +     size_t size_desc, size_data = 0;
+> > +     struct kvm_stats_header header;
+> > +     struct kvm_stats_desc *stats_desc, *pdesc;
+> > +     struct kvm_vcpu_stats_data *stats_data;
+> > +
+> > +     /* Get fd for VCPU stats */
+> > +     stats_fd = vcpu_get_statsfd(vm, vcpu_id);
+> > +     if (stats_fd < 0) {
+> > +             perror("Get VCPU stats fd");
+> > +             return err;
+> > +     }
+> > +     /* Read kvm vcpu stats header */
+> > +     ret = read(stats_fd, &header, sizeof(header));
+> > +     if (ret != sizeof(header)) {
+> > +             perror("Read VCPU stats header");
+> > +             goto out_close_fd;
+> > +     }
+> > +     size_desc = sizeof(*stats_desc) + header.name_size;
+> > +     /* Check id string in header, that should start with "kvm" */
+> > +     if (strncmp(header.id, "kvm", 3) ||
+> > +                     strlen(header.id) >= KVM_STATS_ID_MAXLEN) {
+> > +             printf("Invalid KVM VCPU stats type!\n");
+> > +             goto out_close_fd;
+> > +     }
+> > +     /* Sanity check for other fields in header */
+> > +     if (header.count == 0) {
+> > +             err = 0;
+> > +             goto out_close_fd;
+> > +     }
+> > +     /* Check overlap */
+> > +     if (header.desc_offset == 0 || header.data_offset == 0 ||
+> > +                     header.desc_offset < sizeof(header) ||
+> > +                     header.data_offset < sizeof(header)) {
+> > +             printf("Invalid offset fields in header!\n");
+> > +             goto out_close_fd;
+> > +     }
+> > +     if (header.desc_offset < header.data_offset &&
+> > +                     (header.desc_offset + size_desc * header.count >
+> > +                     header.data_offset)) {
+> > +             printf("VCPU Descriptor block is overlapped with data block!\n");
+> > +             goto out_close_fd;
+> > +     }
+>
+> Same as above (tighter check).
+>
+> > +
+> > +     /* Allocate memory for stats descriptors */
+> > +     stats_desc = calloc(header.count, size_desc);
+> > +     if (!stats_desc) {
+> > +             perror("Allocate memory for VCPU stats descriptors");
+> > +             goto out_close_fd;
+> > +     }
+> > +     /* Read kvm vcpu stats descriptors */
+> > +     ret = pread(stats_fd, stats_desc,
+> > +                     size_desc * header.count, header.desc_offset);
+> > +     if (ret != size_desc * header.count) {
+> > +             perror("Read KVM VCPU stats descriptors");
+> > +             goto out_free_desc;
+> > +     }
+> > +     /* Sanity check for fields in descriptors */
+> > +     for (i = 0; i < header.count; ++i) {
+> > +             pdesc = (void *)stats_desc + i * size_desc;
+> > +             /* Check boundaries */
+> > +             if ((pdesc->flags & KVM_STATS_TYPE_MASK) > KVM_STATS_TYPE_MAX) {
+> > +                     printf("Unknown KVM stats type!\n");
+> > +                     goto out_free_desc;
+> > +             }
+> > +             if ((pdesc->flags & KVM_STATS_UNIT_MASK) > KVM_STATS_UNIT_MAX) {
+> > +                     printf("Unknown KVM stats unit!\n");
+> > +                     goto out_free_desc;
+> > +             }
+> > +             if ((pdesc->flags & KVM_STATS_SCALE_MASK) >
+> > +                             KVM_STATS_SCALE_MAX) {
+> > +                     printf("Unknown KVM stats scale!\n");
+> > +                     goto out_free_desc;
+> > +             }
+> > +             /* Check exponent for stats unit
+> > +              * Exponent for counter should be greater than or equal to 0
+> > +              * Exponent for unit bytes should be greater than or equal to 0
+> > +              * Exponent for unit seconds should be less than or equal to 0
+> > +              * Exponent for unit clock cycles should be greater than or
+> > +              * equal to 0
+> > +              */
+> > +             switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
+> > +             case KVM_STATS_UNIT_NONE:
+> > +             case KVM_STATS_UNIT_BYTES:
+> > +             case KVM_STATS_UNIT_CYCLES:
+> > +                     if (pdesc->exponent < 0) {
+> > +                             printf("Unsupported KVM stats unit!\n");
+> > +                             goto out_free_desc;
+> > +                     }
+> > +                     break;
+> > +             case KVM_STATS_UNIT_SECONDS:
+> > +                     if (pdesc->exponent > 0) {
+> > +                             printf("Unsupported KVM stats unit!\n");
+> > +                             goto out_free_desc;
+> > +                     }
+> > +                     break;
+> > +             }
+> > +             /* Check name string */
+> > +             if (strlen(pdesc->name) >= header.name_size) {
+> > +                     printf("KVM stats name(%s) too long!\n", pdesc->name);
+> > +                     goto out_free_desc;
+> > +             }
+> > +             /* Check size field, which should not be zero */
+> > +             if (pdesc->size == 0) {
+> > +                     printf("KVM descriptor(%s) with size of 0!\n",
+> > +                                     pdesc->name);
+> > +                     goto out_free_desc;
+> > +             }
+> > +             size_data += pdesc->size * sizeof(stats_data->value[0]);
+> > +     }
+> > +     /* Check overlap */
+> > +     if (header.data_offset < header.desc_offset &&
+> > +             header.data_offset + size_data > header.desc_offset) {
+> > +             printf("Data block is overlapped with Descriptor block!\n");
+> > +             goto out_free_desc;
+> > +     }
+> > +     /* Check validity of all stats data size */
+> > +     if (size_data < header.count * sizeof(stats_data->value[0])) {
+> > +             printf("Data size is not correct!\n");
+> > +             goto out_free_desc;
+> > +     }
+> > +
+> > +     /* Allocate memory for stats data */
+> > +     stats_data = malloc(size_data);
+> > +     if (!stats_data) {
+> > +             perror("Allocate memory for VCPU stats data");
+> > +             goto out_free_desc;
+> > +     }
+> > +     /* Read kvm vcpu stats data */
+> > +     ret = pread(stats_fd, stats_data, size_data, header.data_offset);
+> > +     if (ret != size_data) {
+> > +             perror("Read KVM VCPU stats data");
+> > +             goto out_free_data;
+> > +     }
+> > +
+> > +     err = 0;
+> > +out_free_data:
+> > +     free(stats_data);
+> > +out_free_desc:
+> > +     free(stats_desc);
+> > +out_close_fd:
+> > +     close(stats_fd);
+> > +     return err;
+> > +}
+> > +
+> > +/*
+> > + * Usage: kvm_bin_form_stats [#vm] [#vcpu]
+> > + * The first parameter #vm set the number of VMs being created.
+> > + * The second parameter #vcpu set the number of VCPUs being created.
+> > + * By default, 1 VM and 1 VCPU for the VM would be created for testing.
+> > + */
+> > +
+> > +int main(int argc, char *argv[])
+> > +{
+> > +     int max_vm = 1, max_vcpu = 1, ret, i, j, err = -1;
+> > +     struct kvm_vm **vms;
+> > +
+> > +     /* Get the number of VMs and VCPUs that would be created for testing. */
+> > +     if (argc > 1) {
+> > +             max_vm = strtol(argv[1], NULL, 0);
+> > +             if (max_vm <= 0)
+> > +                     max_vm = 1;
+> > +     }
+> > +     if (argc > 2) {
+> > +             max_vcpu = strtol(argv[2], NULL, 0);
+> > +             if (max_vcpu <= 0)
+> > +                     max_vcpu = 1;
+> > +     }
+> > +
+> > +     /* Check the extension for binary stats */
+> > +     ret = kvm_check_cap(KVM_CAP_STATS_BINARY_FD);
+> > +     if (ret < 0) {
+> > +             printf("Binary form statistics interface is not supported!\n");
+> > +             return err;
+> > +     }
+> > +
+> > +     /* Create VMs and VCPUs */
+> > +     vms = malloc(sizeof(vms[0]) * max_vm);
+> > +     if (!vms) {
+> > +             perror("Allocate memory for storing VM pointers");
+> > +             return err;
+> > +     }
+> > +     for (i = 0; i < max_vm; ++i) {
+> > +             vms[i] = vm_create(VM_MODE_DEFAULT,
+> > +                             DEFAULT_GUEST_PHY_PAGES, O_RDWR);
+> > +             for (j = 0; j < max_vcpu; ++j)
+> > +                     vm_vcpu_add(vms[i], j);
+> > +     }
+> > +
+> > +     /* Check stats read for every VM and VCPU */
+> > +     for (i = 0; i < max_vm; ++i) {
+> > +             if (vm_stats_test(vms[i]))
+> > +                     goto out_free_vm;
+> > +             for (j = 0; j < max_vcpu; ++j) {
+> > +                     if (vcpu_stats_test(vms[i], j))
+> > +                             goto out_free_vm;
+> > +             }
+> > +     }
+> > +
+> > +     err = 0;
+> > +out_free_vm:
+> > +     for (i = 0; i < max_vm; ++i)
+> > +             kvm_vm_free(vms[i]);
+> > +     free(vms);
+> > +     return err;
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > index fc83f6c5902d..d9e0b2c8b906 100644
+> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > @@ -2090,3 +2090,15 @@ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size)
+> >       n = DIV_ROUND_UP(size, vm_guest_mode_params[mode].page_size);
+> >       return vm_adjust_num_guest_pages(mode, n);
+> >  }
+> > +
+> > +int vm_get_statsfd(struct kvm_vm *vm)
+> > +{
+> > +     return ioctl(vm->fd, KVM_STATS_GETFD, NULL);
+> > +}
+> > +
+> > +int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid)
+> > +{
+> > +     struct vcpu *vcpu = vcpu_find(vm, vcpuid);
+> > +
+> > +     return ioctl(vcpu->fd, KVM_STATS_GETFD, NULL);
+> > +}
+> > --
+> > 2.31.1.751.gd2f1c929bd-goog
+> >
+> > _______________________________________________
+> > kvmarm mailing list
+> > kvmarm@lists.cs.columbia.edu
+> > https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
 
->  1 file changed, 138 insertions(+), 55 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> index 60d9b5223b9d..fe5f6fdf4b28 100644
-> --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> @@ -10,6 +10,7 @@
->  #define _GNU_SOURCE /* for pipe2 */
->
->  #include <inttypes.h>
-> +#include <stdatomic.h>
->  #include <stdint.h>
->  #include <stdio.h>
->  #include <stdlib.h>
-> @@ -17,6 +18,7 @@
->  #include <poll.h>
->  #include <pthread.h>
->  #include <linux/userfaultfd.h>
-> +#include <signal.h>
->  #include <sys/syscall.h>
->
->  #include "kvm_util.h"
-> @@ -43,37 +45,25 @@ static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
->  static size_t demand_paging_size;
->  static char *guest_data_prototype;
->
-> -static void *vcpu_worker(void *data)
-> -{
-> -       int ret;
-> -       struct perf_test_vcpu_args *vcpu_args = (struct perf_test_vcpu_args *)data;
-> -       int vcpu_id = vcpu_args->vcpu_id;
-> -       struct kvm_vm *vm = perf_test_args.vm;
-> -       struct kvm_run *run;
-> -       struct timespec start;
-> -       struct timespec ts_diff;
-> -
-> -       vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
-> -       run = vcpu_state(vm, vcpu_id);
-> -
-> -       clock_gettime(CLOCK_MONOTONIC, &start);
-> -
-> -       /* Let the guest access its memory */
-> -       ret = _vcpu_run(vm, vcpu_id);
-> -       TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-> -       if (get_ucall(vm, vcpu_id, NULL) != UCALL_SYNC) {
-> -               TEST_ASSERT(false,
-> -                           "Invalid guest sync status: exit_reason=%s\n",
-> -                           exit_reason_str(run->exit_reason));
-> -       }
-> +__thread uint64_t sigbus_address;
-> +__thread atomic_bool sigbus_pending_fault;
->
-> -       ts_diff = timespec_elapsed(start);
-> -       PER_VCPU_DEBUG("vCPU %d execution time: %ld.%.9lds\n", vcpu_id,
-> -                      ts_diff.tv_sec, ts_diff.tv_nsec);
-> +static void handle_uffd_sigbus(int signum, siginfo_t *info, void *ctx)
-> +{
-> +       // Round down address.
-> +       uint64_t mask = ~(demand_paging_size - 1);
->
-> -       return NULL;
-> +       sigbus_address = (unsigned long long)(info->si_addr) & mask;
-> +       atomic_store_explicit(&sigbus_pending_fault, true, memory_order_release);
->  }
->
-> +struct vcpu_worker_args {
-> +       struct perf_test_vcpu_args *vcpu_args;
-> +       int uffd;
-> +       int uffd_mode;
-> +       bool use_uffd_sigbus;
-> +};
-> +
->  static int handle_uffd_page_request(int uffd_mode, int uffd, uint64_t addr)
->  {
->         pid_t tid = syscall(__NR_gettid);
-> @@ -123,6 +113,53 @@ static int handle_uffd_page_request(int uffd_mode, int uffd, uint64_t addr)
->         return 0;
->  }
->
-> +static void *vcpu_worker(void *data)
-> +{
-> +       int ret;
-> +       struct vcpu_worker_args *vcpu_worker_args =
-> +           (struct vcpu_worker_args *)data;
-> +       struct perf_test_vcpu_args *vcpu_args = vcpu_worker_args->vcpu_args;
-> +       int vcpu_id = vcpu_args->vcpu_id;
-> +       struct kvm_vm *vm = perf_test_args.vm;
-> +       struct kvm_run *run;
-> +       struct timespec start;
-> +       struct timespec ts_diff;
-> +
-> +       vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
-> +       run = vcpu_state(vm, vcpu_id);
-> +
-> +       clock_gettime(CLOCK_MONOTONIC, &start);
-> +
-> +       /* Let the guest access its memory */
-> +       for (;;) {
-> +               ret = _vcpu_run(vm, vcpu_id);
-> +               if (vcpu_worker_args->use_uffd_sigbus &&
-> +                   atomic_load_explicit(&sigbus_pending_fault,
-> +                                        memory_order_acquire)) {
-> +                       int r = handle_uffd_page_request(
-> +                                       vcpu_worker_args->uffd_mode,
-> +                                       vcpu_worker_args->uffd, sigbus_address);
-> +                       TEST_ASSERT(r == 0, "handle_uffd_page_request failed");
-> +                       atomic_store_explicit(&sigbus_pending_fault, false,
-> +                                             memory_order_relaxed);
-> +               } else
-> +                       break;
-> +       }
-> +
-> +       TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-> +       if (get_ucall(vm, vcpu_id, NULL) != UCALL_SYNC) {
-> +               TEST_ASSERT(false,
-> +                           "Invalid guest sync status: exit_reason=%s\n",
-> +                           exit_reason_str(run->exit_reason));
-> +       }
-> +
-> +       ts_diff = timespec_elapsed(start);
-> +       PER_VCPU_DEBUG("vCPU %d execution time: %ld.%.9lds\n", vcpu_id,
-> +                      ts_diff.tv_sec, ts_diff.tv_nsec);
-> +
-> +       return NULL;
-> +}
-> +
->  bool quit_uffd_thread;
->
->  struct uffd_handler_args {
-> @@ -217,11 +254,8 @@ static void *uffd_handler_thread_fn(void *arg)
->         return NULL;
->  }
->
-> -static void setup_demand_paging(struct kvm_vm *vm,
-> -                               pthread_t *uffd_handler_thread, int pipefd,
-> -                               int uffd_mode, useconds_t uffd_delay,
-> -                               struct uffd_handler_args *uffd_args,
-> -                               void *hva, void *alias, uint64_t len)
-> +static int create_userfaultfd(int uffd_mode, bool use_uffd_sigbus,
-> +                             void *hva, void *alias, uint64_t len)
->  {
->         bool is_minor = (uffd_mode == UFFDIO_REGISTER_MODE_MINOR);
->         int uffd;
-> @@ -250,7 +284,7 @@ static void setup_demand_paging(struct kvm_vm *vm,
->         TEST_ASSERT(uffd >= 0, "uffd creation failed, errno: %d", errno);
->
->         uffdio_api.api = UFFD_API;
-> -       uffdio_api.features = 0;
-> +       uffdio_api.features = use_uffd_sigbus ? UFFD_FEATURE_SIGBUS : 0;
->         TEST_ASSERT(ioctl(uffd, UFFDIO_API, &uffdio_api) != -1,
->                     "ioctl UFFDIO_API failed: %" PRIu64,
->                     (uint64_t)uffdio_api.api);
-> @@ -263,19 +297,29 @@ static void setup_demand_paging(struct kvm_vm *vm,
->         TEST_ASSERT((uffdio_register.ioctls & expected_ioctls) ==
->                     expected_ioctls, "missing userfaultfd ioctls");
->
-> +       return uffd;
-> +}
-> +
-> +static void start_uffd_thread(pthread_t *uffd_handler_thread, int *pipefds,
-> +                             int uffd, int uffd_mode, useconds_t uffd_delay,
-> +                             struct uffd_handler_args *uffd_args)
-> +{
-> +       int r;
-> +
-> +       r = pipe2(pipefds, O_CLOEXEC | O_NONBLOCK);
-> +       TEST_ASSERT(!r, "Failed to set up pipefd");
-> +
->         uffd_args->uffd_mode = uffd_mode;
->         uffd_args->uffd = uffd;
-> -       uffd_args->pipefd = pipefd;
-> +       uffd_args->pipefd = pipefds[0];
->         uffd_args->delay = uffd_delay;
->         pthread_create(uffd_handler_thread, NULL, uffd_handler_thread_fn,
->                        uffd_args);
-> -
-> -       PER_VCPU_DEBUG("Created uffd thread for HVA range [%p, %p)\n",
-> -                      hva, hva + len);
->  }
->
->  struct test_params {
->         int uffd_mode;
-> +       bool use_uffd_sigbus;
->         useconds_t uffd_delay;
->         enum vm_mem_backing_src_type src_type;
->         bool partition_vcpu_memory_access;
-> @@ -286,6 +330,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->         struct test_params *p = arg;
->         pthread_t *vcpu_threads;
->         pthread_t *uffd_handler_threads = NULL;
-> +       struct vcpu_worker_args *vcpu_worker_args = NULL;
->         struct uffd_handler_args *uffd_args = NULL;
->         struct timespec start;
->         struct timespec ts_diff;
-> @@ -293,6 +338,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->         struct kvm_vm *vm;
->         int vcpu_id;
->         int r;
-> +       bool uffd_threads_needed;
->
->         vm = perf_test_create_vm(mode, nr_vcpus, guest_percpu_mem_size,
->                                  p->src_type);
-> @@ -309,10 +355,16 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->         vcpu_threads = malloc(nr_vcpus * sizeof(*vcpu_threads));
->         TEST_ASSERT(vcpu_threads, "Memory allocation failed");
->
-> +       vcpu_worker_args = malloc(nr_vcpus * sizeof(*vcpu_worker_args));
-> +       TEST_ASSERT(vcpu_worker_args, "Memory allocation failed");
-> +
->         perf_test_setup_vcpus(vm, nr_vcpus, guest_percpu_mem_size,
->                               p->partition_vcpu_memory_access);
->
-> -       if (p->uffd_mode) {
-> +       uffd_threads_needed = p->uffd_mode && !p->use_uffd_sigbus;
-> +       if (uffd_threads_needed) {
-> +               // Handler threads are not necessary when using
-> +               // UFFD_FEATURE_SIGBUS.
->                 uffd_handler_threads =
->                         malloc(nr_vcpus * sizeof(*uffd_handler_threads));
->                 TEST_ASSERT(uffd_handler_threads, "Memory allocation failed");
-> @@ -322,6 +374,21 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->
->                 pipefds = malloc(sizeof(int) * nr_vcpus * 2);
->                 TEST_ASSERT(pipefds, "Unable to allocate memory for pipefd");
-> +       }
-> +
-> +       if (p->use_uffd_sigbus) {
-> +               struct sigaction action;
-> +
-> +               memset(&action, 0, sizeof(action));
-> +               action.sa_sigaction = handle_uffd_sigbus;
-> +               action.sa_flags = SA_SIGINFO;
-> +               if (sigaction(SIGBUS, &action, NULL) < 0) {
-> +                       perror("Failed to set sigaction");
-> +                       return;
-> +               }
-> +       }
-> +
-> +       if (p->uffd_mode) {
->
->                 for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
->                         vm_paddr_t vcpu_gpa;
-> @@ -329,7 +396,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->                         void *vcpu_alias;
->                         uint64_t vcpu_mem_size;
->
-> -
->                         if (p->partition_vcpu_memory_access) {
->                                 vcpu_gpa = guest_test_phys_mem +
->                                            (vcpu_id * guest_percpu_mem_size);
-> @@ -339,7 +405,8 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->                                 vcpu_mem_size = guest_percpu_mem_size * nr_vcpus;
->                         }
->                         PER_VCPU_DEBUG("Added VCPU %d with test mem gpa [%lx, %lx)\n",
-> -                                      vcpu_id, vcpu_gpa, vcpu_gpa + vcpu_mem_size);
-> +                                      vcpu_id, vcpu_gpa,
-> +                                      vcpu_gpa + vcpu_mem_size);
->
->                         /* Cache the host addresses of the region */
->                         vcpu_hva = addr_gpa2hva(vm, vcpu_gpa);
-> @@ -349,28 +416,39 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->                          * Set up user fault fd to handle demand paging
->                          * requests.
->                          */
-> -                       r = pipe2(&pipefds[vcpu_id * 2],
-> -                                 O_CLOEXEC | O_NONBLOCK);
-> -                       TEST_ASSERT(!r, "Failed to set up pipefd");
-> -
-> -                       setup_demand_paging(vm, &uffd_handler_threads[vcpu_id],
-> -                                           pipefds[vcpu_id * 2], p->uffd_mode,
-> -                                           p->uffd_delay, &uffd_args[vcpu_id],
-> -                                           vcpu_hva, vcpu_alias,
-> -                                           vcpu_mem_size);
-> +                       r = create_userfaultfd(p->uffd_mode, p->use_uffd_sigbus,
-> +                                              vcpu_hva, vcpu_alias,
-> +                                              vcpu_mem_size);
-> +                       if (r < 0)
-> +                               exit(-r);
-> +
-> +                       if (uffd_threads_needed) {
-> +                               start_uffd_thread(&uffd_handler_threads[vcpu_id],
-> +                                                 &pipefds[vcpu_id * 2],
-> +                                                 r, p->uffd_mode, p->uffd_delay,
-> +                                                 &uffd_args[vcpu_id]);
-> +                               PER_VCPU_DEBUG("Created uffd thread for HVA range [%p, %p)\n",
-> +                                              vcpu_hva, vcpu_hva + vcpu_mem_size);
-> +                       }
-> +
-> +                       vcpu_worker_args[vcpu_id].uffd = r;
->                 }
->         }
->
->         /* Export the shared variables to the guest */
->         sync_global_to_guest(vm, perf_test_args);
->
-> -       pr_info("Finished creating vCPUs and starting uffd threads\n");
-> +       pr_info("Finished creating vCPUs\n");
->
->         clock_gettime(CLOCK_MONOTONIC, &start);
->
->         for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
-> +               vcpu_worker_args[vcpu_id].vcpu_args =
-> +                               &perf_test_args.vcpu_args[vcpu_id];
-> +               vcpu_worker_args[vcpu_id].use_uffd_sigbus = p->use_uffd_sigbus;
-> +               vcpu_worker_args[vcpu_id].uffd_mode = p->uffd_mode;
->                 pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
-> -                              &perf_test_args.vcpu_args[vcpu_id]);
-> +                              &vcpu_worker_args[vcpu_id]);
->         }
->
->         pr_info("Started all vCPUs\n");
-> @@ -385,7 +463,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->
->         pr_info("All vCPU threads joined\n");
->
-> -       if (p->uffd_mode) {
-> +       if (uffd_threads_needed) {
->                 char c;
->
->                 /* Tell the user fault fd handler threads to quit */
-> @@ -407,7 +485,8 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->
->         free(guest_data_prototype);
->         free(vcpu_threads);
-> -       if (p->uffd_mode) {
-> +       free(vcpu_worker_args);
-> +       if (uffd_threads_needed) {
->                 free(uffd_handler_threads);
->                 free(uffd_args);
->                 free(pipefds);
-> @@ -417,11 +496,12 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  static void help(char *name)
->  {
->         puts("");
-> -       printf("usage: %s [-h] [-m mode] [-u mode] [-d uffd_delay_usec]\n"
-> +       printf("usage: %s [-h] [-m mode] [-u mode] [-s] [-d uffd_delay_usec]\n"
->                "          [-b memory] [-t type] [-v vcpus] [-o]\n", name);
->         guest_modes_help();
->         printf(" -u: use userfaultfd to handle vCPU page faults. Mode is a\n"
->                "     UFFD registration mode: 'MISSING' or 'MINOR'.\n");
-> +       printf(" -s: use UFFD_FEATURE_SIGBUS to perform page-ins.\n");
->         printf(" -d: add a delay in usec to the User Fault\n"
->                "     FD handler to simulate demand paging\n"
->                "     overheads. Ignored without -u.\n");
-> @@ -448,7 +528,7 @@ int main(int argc, char *argv[])
->
->         guest_modes_append_default();
->
-> -       while ((opt = getopt(argc, argv, "hm:u:d:b:t:v:o")) != -1) {
-> +       while ((opt = getopt(argc, argv, "hm:u:sd:b:t:v:o")) != -1) {
->                 switch (opt) {
->                 case 'm':
->                         guest_modes_cmdline(optarg);
-> @@ -460,6 +540,9 @@ int main(int argc, char *argv[])
->                                 p.uffd_mode = UFFDIO_REGISTER_MODE_MINOR;
->                         TEST_ASSERT(p.uffd_mode, "UFFD mode must be 'MISSING' or 'MINOR'.");
->                         break;
-> +               case 's':
-> +                       p.use_uffd_sigbus = true;
-> +                       break;
->                 case 'd':
->                         p.uffd_delay = strtoul(optarg, NULL, 0);
->                         TEST_ASSERT(p.uffd_delay >= 0, "A negative UFFD delay is not supported.");
-> --
-> 2.31.1.751.gd2f1c929bd-goog
->
+Thanks,
+Jing
