@@ -2,293 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CF43896BF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 May 2021 21:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A202138975A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 May 2021 22:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbhESTb5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 May 2021 15:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        id S232521AbhESUFJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 May 2021 16:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbhESTbz (ORCPT
+        with ESMTP id S232411AbhESUFJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 May 2021 15:31:55 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7DEC06138E
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 12:30:34 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id c15so16902044ljr.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 12:30:34 -0700 (PDT)
+        Wed, 19 May 2021 16:05:09 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680BFC061761
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 13:03:48 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id u7-20020a259b470000b02904dca50820c2so19421404ybo.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 13:03:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PGDO8fbc/TF+sFisRne/2XCCw74JXT4LwjRMRFualWE=;
-        b=fwQ4F6zK+R/uSAi1p/ou7pQoKsrBbw7/cBP4fUy3DMZ6Va72N1TjdKSCv4dyIRR89a
-         JgZRUiaS1MqjHFeRjGSJ20PZQ1kL1yv3vD2G4z85s5ra40p0FvHVzslzutWbHY3nTwDl
-         Aez0VkOOwOOEhQOwpuLQPmA2By94mk20jT7DDGyb89qgaTqajWG+7xbdlQEWr5yBXTUF
-         V5E5Uvb8o6RXS9Jnrk5/HCGvcoglrHLVWEpGKvvLFwr3zzYtfnjCk+bct7mVEQExkxpf
-         +KXUQ9nZlPWO+rUIdZJaTCD8N3F4OdRjsthyHsS/19QPSOB7sgq/XtLxp7USutiXlB/q
-         5ePg==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=TRzyq4oNy0xbwezI+8cBZnf/nTLSb+t8cRqYWcWY/Eg=;
+        b=CxvtArSRKX6OIHDHNbloVqlUItuDs1pUVWO461kxImFFcH32VxsUk8wQRTWZwQ6azV
+         xH9kIDgHSGkmKm3QMzYT8uD5SUun0xyFySIS+XdVS0A3rqkbCqR3aWZIGyOmeKCdjjEj
+         ZC2H/hOoPa5G7ZMVYY0Ra3jjN+vFL3opMB+3VKbRuP9Um+YHZNcNdhuIUS/xWwqbJH+i
+         jXPI/8k+0f6H7op/p+Aa0EWorl/GZObZys8KJJnM7xcqT6q9C+QoQGA3cOfd6VG2rF60
+         ETVQ91+uqYc3SF2jfC1c2q0N8ia/NuFB3pTg7Cf2b5wJCmdp2TJch+OuowdqLY9nCkD2
+         dOmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PGDO8fbc/TF+sFisRne/2XCCw74JXT4LwjRMRFualWE=;
-        b=gDDi2jEuxjK6AqU7WNHFHsefE14DVd/wJvik/72yLn8sUpoqPsv2SqGZI4zYLfBTni
-         mTgjsoknH3Lk5QPoHizbfqwuFmIJlqZfIJk3+Di0gme4P8m3zGesrQojpcnYz5KO1Tuv
-         s5YKddvBZAFDfra48uK0N5Q2SFbOLXWO5paA04+nhdqB3NCg5LXM1l4ybWD4zy5Uc7cR
-         pjHTFs2bhfW9282I7Ku62+7a0pjU770hEZbi+dCkLJm+1rQd3IW0hHy63jGeTQabJTV8
-         4zbQeEoNn6T/EmtA28w+pwZ2M9CWfJ2QboV0gJVHRHUOo6fpoKxPbP8hekMnS92ouX7u
-         RX/Q==
-X-Gm-Message-State: AOAM532rMNPaUkAiAkPXfnu5jAAQMvEMmzJieGRjeygJCgbjPsO0IccV
-        pPG56Io6eIibXnEwtK1646yjevcZjd4pmzAkq/7p4g==
-X-Google-Smtp-Source: ABdhPJyo8bC6y6UGVRkW7FKBnZdE79ScL53BuoAInE7OdE0IuW8eo+EcgjcmmECo9buX4YKaW5GFnqbkZ5ZQQil/rm0=
-X-Received: by 2002:a2e:87ce:: with SMTP id v14mr546211ljj.28.1621452632154;
- Wed, 19 May 2021 12:30:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210517145314.157626-1-jingzhangos@google.com>
- <20210517145314.157626-4-jingzhangos@google.com> <CALzav=chQrg=8krzt_aNuUfKW39SADUr-7C=i1iJSvEU5P=P0Q@mail.gmail.com>
-In-Reply-To: <CALzav=chQrg=8krzt_aNuUfKW39SADUr-7C=i1iJSvEU5P=P0Q@mail.gmail.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Wed, 19 May 2021 14:30:20 -0500
-Message-ID: <CAAdAUthScueaWbkTTAxKTSDb4MbjDonm0LpMZVp5N8DaO6ENnA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/4] KVM: stats: Add documentation for statistics data
- binary interface
-To:     David Matlack <dmatlack@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=TRzyq4oNy0xbwezI+8cBZnf/nTLSb+t8cRqYWcWY/Eg=;
+        b=nQEG/aaV4w/p0BNTWvqHHMtu3l0F0cXIcAOl/iaGJadq9KDjEvMg55DDLmtaPFxlG3
+         0lTHLWdyPWN0pUMMJJxVFdJ0MAt5SKF+0/k6hTaSd2MttpeAfga2uTOSq4Xb8UGQsbhh
+         6nHQw789cGX7XGdMg+Z/BD+MX1becl6nwbajnGXLOoRe333iCaGyyCTXEcTdqR+tsqBj
+         IYhckZ/sXrte27cI1+0zKlis2+apXjnS7Fzi/BWqGyurWy9fWDi0NzaKm0eOGiGNHI1A
+         yZGCP6eFdv7W1fLRZbai3R0EjbxuYg9GJixu9RG9e3SVd+G/5QHFrp81Cj6KSEtVn6W4
+         u66g==
+X-Gm-Message-State: AOAM530lLbbbqS817G5pcYrgNeDmYWFLAOFBz7oFMdp8n2vqViJB9sq3
+        CUdTfttwMOChBjSoOUlAsvb0E5TBqGnOKepH0L82
+X-Google-Smtp-Source: ABdhPJyFo1HijtaGGGcxKGVnq1SWKSvHoMWpsxuc+TwmN6hh5Zag+cdBMzwAriowHUIKTHlRVkauQ7YZIi2LKSLHBpWj
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:7eb5:10bb:834a:d5ec])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:8205:: with SMTP id
+ q5mr1802119ybk.170.1621454627516; Wed, 19 May 2021 13:03:47 -0700 (PDT)
+Date:   Wed, 19 May 2021 13:03:29 -0700
+Message-Id: <20210519200339.829146-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
+Subject: [PATCH v2 00/10] KVM: selftests: exercise userfaultfd minor faults
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Aaron Lewis <aaronlewis@google.com>,
+        Alexander Graf <graf@amazon.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Gardon <bgardon@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jacob Xu <jacobhxu@google.com>,
+        Makarand Sonare <makarandsonare@google.com>,
         Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Yanan Wang <wangyanan55@huawei.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David,
+Base
+====
 
-On Wed, May 19, 2021 at 12:02 PM David Matlack <dmatlack@google.com> wrote:
->
-> On Mon, May 17, 2021 at 9:25 AM Jing Zhang <jingzhangos@google.com> wrote:
-> >
-> > Update KVM API documentation for binary statistics.
-> >
-> > Signed-off-by: Jing Zhang <jingzhangos@google.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst | 171 +++++++++++++++++++++++++++++++++
-> >  1 file changed, 171 insertions(+)
-> >
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> > index 7fcb2fd38f42..9a6aa9770dfd 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -5034,6 +5034,169 @@ see KVM_XEN_VCPU_SET_ATTR above.
-> >  The KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADJUST type may not be used
-> >  with the KVM_XEN_VCPU_GET_ATTR ioctl.
-> >
-> > +4.130 KVM_STATS_GETFD
-> > +---------------------
-> > +
-> > +:Capability: KVM_CAP_STATS_BINARY_FD
-> > +:Architectures: all
-> > +:Type: vm ioctl, vcpu ioctl
-> > +:Parameters: none
-> > +:Returns: statistics file descriptor on success, < 0 on error
-> > +
-> > +Errors:
-> > +
-> > +  ======     ======================================================
-> > +  ENOMEM     if the fd could not be created due to lack of memory
-> > +  EMFILE     if the number of opened files exceeds the limit
-> > +  ======     ======================================================
-> > +
-> > +The file descriptor can be used to read VM/vCPU statistics data in binary
-> > +format. The file data is organized into three blocks as below:
-> > ++-------------+
-> > +|   Header    |
-> > ++-------------+
-> > +| Descriptors |
-> > ++-------------+
-> > +| Stats Data  |
-> > ++-------------+
-> > +
-> > +The Header block is always at the start of the file. It is only needed to be
-> > +read one time after a system boot.
-> > +It is in the form of ``struct kvm_stats_header`` as below::
-> > +
-> > +       #define KVM_STATS_ID_MAXLEN             64
-> > +
-> > +       struct kvm_stats_header {
-> > +               char id[KVM_STATS_ID_MAXLEN];
-> > +               __u32 name_size;
-> > +               __u32 count;
-> > +               __u32 desc_offset;
-> > +               __u32 data_offset;
-> > +       };
-> > +
-> > +The ``id`` field is identification for the corresponding KVM statistics. For
-> > +KVM statistics, it is in the form of "kvm-{kvm pid}", like "kvm-12345". For
-> > +VCPU statistics, it is in the form of "kvm-{kvm pid}/vcpu-{vcpu id}", like
-> > +"kvm-12345/vcpu-12".
-> > +
-> > +The ``name_size`` field is the size (byte) of the statistics name string
-> > +(including trailing '\0') appended to the end of every statistics descriptor.
-> > +
-> > +The ``count`` field is the number of statistics.
-> > +
-> > +The ``desc_offset`` field is the offset of the Descriptors block from the start
-> > +of the file indicated by the file descriptor.
-> > +
-> > +The ``data_offset`` field is the offset of the Stats Data block from the start
-> > +of the file indicated by the file descriptor.
-> > +
-> > +The Descriptors block is only needed to be read once after a system boot. It is
-> > +an array of ``struct kvm_stats_desc`` as below::
-> > +
-> > +       #define KVM_STATS_TYPE_SHIFT            0
-> > +       #define KVM_STATS_TYPE_MASK             (0xF << KVM_STATS_TYPE_SHIFT)
-> > +       #define KVM_STATS_TYPE_CUMULATIVE       (0x0 << KVM_STATS_TYPE_SHIFT)
-> > +       #define KVM_STATS_TYPE_INSTANT          (0x1 << KVM_STATS_TYPE_SHIFT)
-> > +       #define KVM_STATS_TYPE_MAX              KVM_STATS_TYPE_INSTANT
-> > +
-> > +       #define KVM_STATS_UNIT_SHIFT            4
-> > +       #define KVM_STATS_UNIT_MASK             (0xF << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_NONE             (0x0 << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_BYTES            (0x1 << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_SECONDS          (0x2 << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_CYCLES           (0x3 << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_MAX              KVM_STATS_UNIT_CYCLES
-> > +
-> > +       #define KVM_STATS_SCALE_SHIFT           8
-> > +       #define KVM_STATS_SCALE_MASK            (0xF << KVM_STATS_SCALE_SHIFT)
-> > +       #define KVM_STATS_SCALE_POW10           (0x0 << KVM_STATS_SCALE_SHIFT)
-> > +       #define KVM_STATS_SCALE_POW2            (0x1 << KVM_STATS_SCALE_SHIFT)
-> > +       #define KVM_STATS_SCALE_MAX             KVM_STATS_SCALE_POW2
-> > +
-> > +       struct kvm_stats_desc {
-> > +               __u32 flags;
-> > +               __s16 exponent;
-> > +               __u16 size;
-> > +               __u32 unused1;
-> > +               __u32 unused2;
-> > +               char name[0];
-> > +       };
-> > +
-> > +The ``flags`` field contains the type and unit of the statistics data described
-> > +by this descriptor. The following flags are supported:
-> > +  * ``KVM_STATS_TYPE_CUMULATIVE``
-> > +    The statistics data is cumulative. The value of data can only be increased.
-> > +    Most of the counters used in KVM are of this type.
-> > +    The corresponding ``count`` filed for this type is always 1.
-> > +  * ``KVM_STATS_TYPE_INSTANT``
-> > +    The statistics data is instantaneous. Its value can be increased or
-> > +    decreased. This type is usually used as a measurement of some resources,
-> > +    like the number of dirty pages, the number of large pages, etc.
-> > +    The corresponding ``count`` field for this type is always 1.
-> > +  * ``KVM_STATS_UNIT_NONE``
-> > +    There is no unit for the value of statistics data. This usually means that
-> > +    the value is a simple counter of an event.
-> > +  * ``KVM_STATS_UNIT_BYTES``
-> > +    It indicates that the statistics data is used to measure memory size, in the
-> > +    unit of Byte, KiByte, MiByte, GiByte, etc. The unit of the data is
-> > +    determined by the ``exponent`` field in the descriptor. The
-> > +    ``KVM_STATS_SCALE_POW2`` flag is valid in this case. The unit of the data is
-> > +    determined by ``pow(2, exponent)``. For example, if value is 10,
-> > +    ``exponent`` is 20, which means the unit of statistics data is MiByte, we
-> > +    can get the statistics data in the unit of Byte by
-> > +    ``value * pow(2, exponent) = 10 * pow(2, 20) = 10 MiByte`` which is
-> > +    10 * 1024 * 1024 Bytes.
-> > +  * ``KVM_STATS_UNIT_SECONDS``
-> > +    It indicates that the statistics data is used to measure time/latency, in
-> > +    the unit of nanosecond, microsecond, millisecond and second. The unit of the
-> > +    data is determined by the ``exponent`` field in the descriptor. The
-> > +    ``KVM_STATS_SCALE_POW10`` flag is valid in this case. The unit of the data
-> > +    is determined by ``pow(10, exponent)``. For example, if value is 2000000,
-> > +    ``exponent`` is -6, which means the unit of statistics data is microsecond,
-> > +    we can get the statistics data in the unit of second by
-> > +    ``value * pow(10, exponent) = 2000000 * pow(10, -6) = 2 seconds``.
-> > +  * ``KVM_STATS_UNIT_CYCLES``
-> > +    It indicates that the statistics data is used to measure CPU clock cycles.
-> > +    The ``KVM_STATS_SCALE_POW10`` flag is valid in this case. For example, if
-> > +    value is 200, ``exponent`` is 4, we can get the number of CPU clock cycles
-> > +    by ``value * pow(10, exponent) = 200 * pow(10, 4) = 2000000``.
-> > +
-> > +The ``exponent`` field is the scale of corresponding statistics data. It has two
-> > +values as follows:
-> > +  * ``KVM_STATS_SCALE_POW10``
-> > +    The scale is based on power of 10. It is used for measurement of time and
-> > +    CPU clock cycles.
-> > +  * ``KVM_STATS_SCALE_POW2``
-> > +    The scale is based on power of 2. It is used for measurement of memory size.
-> > +
-> > +The ``size`` field is the number of values of this statistics data. It is in the
-> > +unit of ``unsigned long`` for VCPU or ``__u64`` for VM.
->
-> Note it is the reverse in the implementation.
-Will fix this. Thanks.
->
-> > +
-> > +The ``unused1`` and ``unused2`` fields are reserved for future
-> > +support for other types of statistics data, like log/linear histogram.
-> > +
-> > +The ``name`` field points to the name string of the statistics data. The name
-> > +string starts at the end of ``struct kvm_stats_desc``.
-> > +The maximum length (including trailing '\0') is indicated by ``name_size``
-> > +in ``struct kvm_stats_header``.
-> > +
-> > +The Stats Data block contains an array of data values of type ``struct
-> > +kvm_vm_stats_data`` or ``struct kvm_vcpu_stats_data``. It would be read by
-> > +user space periodically to pull statistics data.
-> > +The order of data value in Stats Data block is the same as the order of
-> > +descriptors in Descriptors block.
-> > +  * Statistics data for VM::
-> > +
-> > +       struct kvm_vm_stats_data {
-> > +               unsigned long value[0];
-> > +       };
-> > +
-> > +  * Statistics data for VCPU::
-> > +
-> > +       struct kvm_vcpu_stats_data {
-> > +               __u64 value[0];
-> > +       };
-> > +
-> >  5. The kvm_run structure
-> >  ========================
-> >
-> > @@ -6891,3 +7054,11 @@ This capability is always enabled.
-> >  This capability indicates that the KVM virtual PTP service is
-> >  supported in the host. A VMM can check whether the service is
-> >  available to the guest on migration.
-> > +
-> > +8.33 KVM_CAP_STATS_BINARY_FD
-> > +----------------------------
-> > +
-> > +:Architectures: all
-> > +
-> > +This capability indicates the feature that user space can create get a file
-> > +descriptor for every VM and VCPU to read statistics data in binary format.
-> > --
-> > 2.31.1.751.gd2f1c929bd-goog
-> >
+These patches are based upon Andrew Morton's v5.13-rc1-mmots-2021-05-13-17-23
+tag. This is because this series depends on:
+
+- UFFD minor fault support for hugetlbfs (in v5.13-rc1) [1]
+- UFFD minor fault support for shmem (in Andrew's tree) [2]
+
+[1] https://lore.kernel.org/linux-fsdevel/20210301222728.176417-1-axelrasmussen@google.com/
+[2] https://lore.kernel.org/patchwork/cover/1420967/
+
+Changelog
+=========
+
+v1->v2:
+- Picked up Reviewed-by's.
+- Change backing_src_is_shared() to check the flags, instead of the type. This
+  makes it robust to adding new backing source types in the future.
+- Add another commit which refactors setup_demand_paging() error handling.
+- Print UFFD ioctl type once in setup_demand_paging, instead of on every page-in
+  operation.
+- Expand comment on why we use MFD_HUGETLB instead of MAP_HUGETLB.
+- Reworded comment on addr_gpa2alias.
+- Moved demand_paging_test.c timing calls outside of the if (), deduplicating
+  them.
+- Split trivial comment / logging fixups into a separate commit.
+- Add another commit which prints a clarifying message on test skip.
+- Split the commit allowing backing src_type to be modified in two.
+- Split the commit adding the shmem backing type in two.
+- Rebased onto v5.13-rc1-mmots-2021-05-13-17-23.
+
+Overview
+========
+
+Minor fault handling is a new userfaultfd feature whose goal is generally to
+improve performance. In particular, it is intended for use with demand paging.
+There are more details in the cover letters for this new feature (linked above),
+but at a high level the idea is that we think of these three phases of live
+migration of a VM:
+
+1. Precopy, where we copy "some" pages from the source to the target, while the
+   VM is still running on the source machine.
+2. Blackout, where execution stops on the source, and begins on the target.
+3. Postcopy, where the VM is running on the target, some pages are already up
+   to date, and others are not (because they weren't copied, or were modified
+   after being copied).
+
+During postcopy, the first time the guest touches memory, we intercept a minor
+fault. Userspace checks whether or not the page is already up to date. If
+needed, we copy the final version of the page from the soure machine. This
+could be done with RDMA for example, to do it truly in place / with no copying.
+At this point, all that's left is to setup PTEs for the guest: so we issue
+UFFDIO_CONTINUE. No copying or page allocation needed.
+
+Because of this use case, it's useful to exercise this as part of the demand
+paging test. It lets us ensure the use case works correctly end-to-end, and also
+gives us an in-tree way to profile the end-to-end flow for future performance
+improvements.
+
+Axel Rasmussen (10):
+  KVM: selftests: trivial comment/logging fixes
+  KVM: selftests: simplify setup_demand_paging error handling
+  KVM: selftests: print a message when skipping KVM tests
+  KVM: selftests: compute correct demand paging size
+  KVM: selftests: allow different backing source types
+  KVM: selftests: refactor vm_mem_backing_src_type flags
+  KVM: selftests: add shmem backing source type
+  KVM: selftests: create alias mappings when using shared memory
+  KVM: selftests: allow using UFFD minor faults for demand paging
+  KVM: selftests: add shared hugetlbfs backing source type
+
+ .../selftests/kvm/demand_paging_test.c        | 175 +++++++++++-------
+ .../testing/selftests/kvm/include/kvm_util.h  |   1 +
+ .../testing/selftests/kvm/include/test_util.h |  12 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  84 ++++++++-
+ .../selftests/kvm/lib/kvm_util_internal.h     |   2 +
+ tools/testing/selftests/kvm/lib/test_util.c   |  51 +++--
+ 6 files changed, 238 insertions(+), 87 deletions(-)
+
+--
+2.31.1.751.gd2f1c929bd-goog
+
