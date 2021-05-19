@@ -2,56 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF9B38993C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 May 2021 00:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0953E38993E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 May 2021 00:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbhESWY0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 May 2021 18:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S229955AbhESWZW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 May 2021 18:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbhESWYZ (ORCPT
+        with ESMTP id S229734AbhESWZV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 May 2021 18:24:25 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5435EC06175F
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:23:04 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id m1so11847542ilg.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:23:04 -0700 (PDT)
+        Wed, 19 May 2021 18:25:21 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8B3C061760
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:24:00 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id t11so14581676iol.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:24:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jigGkZnQgSorV8Mg2Cjdnn0fCjUWDFqzgL3jWN5co0M=;
-        b=Z6+XBUdlLWB1ipUyyhhi144nue+BGQmkOw8zGgLR850hWI8A+CNd/bbwDXNJUXeehC
-         cqwVdvJV/z8aeZ2gax/xc50dtiy7b22d+axbvN8U3cVCQCpoo+zRPz8afSqhMOFhHFu/
-         DbSGfGzD/BJntFBwfkjn1iehKlaVkVTKCgh7vUrsh0aZF6q4OOkSGtQFtFVEs/h+3Zbk
-         dCwUwwUVw7VScgBJSgywiigY3CBdB8uJ76CantEW8yfLf+lAe4FgocsRPdXgQysp53Rp
-         tyCXjei7LLFVPW5lbAWqu66l9dJ0wcV2pjpgZ8jwtuwYFWHeyEXViGKxQ8iFHkq+QIlR
-         OZcw==
+        bh=Rx88tQCGOYDOoqf7VThCQ35Bbq6JUkOg6xay93bQ/Kw=;
+        b=cJtsAIQZTYB8JoeFmcaGZ/bFe0qN7YpY0zWnmqZxm/fcSJsCbDpYZ/XWiiLdDT5uKF
+         Ne4jDon7qeLtRdpXjMMvc739xZhmuiu89fQtnXT6wuAlsf4FY7EQrC58GQCFgv69IRz9
+         KKROjdz+cb7D/GzNvjHnp/vC6P+hZAxGx2UmSWUBVTzfHX4QLTbqGvtIa2BL4kHUmD+J
+         +eKK7pMHTGWfF46J26oIgrQ0qNrrH8fzUXcsBZeNK0iJofJl11mpUfGX4yYwLrcaqIh7
+         g4MoWKy7ohVlfyeYda+uyOfvXbcYqN8HcCQUOx4OK/St8oYthwgtO0BoYrZgHoaD9SSD
+         T3GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jigGkZnQgSorV8Mg2Cjdnn0fCjUWDFqzgL3jWN5co0M=;
-        b=aGAZygSfJBzqZxLR8tK/a4ephkxqrtIOYR1tR9E3upiAKcl1Mq/mMeO/sdxSR4okUZ
-         /djKTiIT8Kx+YRZetLoeDsa9XsMvuZwza828lmBucFo5atLn2eT/kOpNU4xuYIj/15BL
-         cBoN+mcupiKXFARkBgLeMI52RxrteGmge738fuDuM0zuoeAvyWgEbR1g9Loj3elJbTqX
-         +umcv0/b8Q+zgHzyMCIQoXM10c8cO/jlT7heYRK56in6sx6q1YJpOhsTUD2oahSV6Dgq
-         BW47JdbwhgGoOJkHH4PN33Dev94GeGFwTy+UWXZ1rDQMAvkdzBSdFXy7uQMSolyAWyd6
-         HK8g==
-X-Gm-Message-State: AOAM530piiyZH9TKr6tna+KPS5cQ5qZWUxhjgxJEInHzwMh5CqDnR4qu
-        OCqZDlSwVh5AeTvtM7u+scPRHpCW5Cwzqblmh0coaA==
-X-Google-Smtp-Source: ABdhPJyzAvav949t4t1dqRxImvWLHNk+KnfNQNliKkI/l0/PpRi8FRrO9MEAZYkerhf6uEjacwyts5pOP/C01Gy+7lY=
-X-Received: by 2002:a05:6e02:13ec:: with SMTP id w12mr1605327ilj.285.1621462983465;
- Wed, 19 May 2021 15:23:03 -0700 (PDT)
+        bh=Rx88tQCGOYDOoqf7VThCQ35Bbq6JUkOg6xay93bQ/Kw=;
+        b=kgRaQWcn9ZwGHBTgraU/013JrUfFvQiCLBoTYy+mjkcPNsjk/0sjXZxypKTwl2AnSP
+         jgFZhj3m6O7cdxGKhhfdoChmAoz53y3x1Dt0zmwM1ilXgyeObja7JrUP1Qz5/45u1SMG
+         1h3hkNNH0mXYo5DoHWM5CvR0I2fhiniMU1rlNsgCTnstGfcBy1xCOivIc9r/X+4vr108
+         /4B/TewqXpKsywxzab5Ifj12dVRROUEqkPawAHDO8Qfvrzm5UNewjoUhLVAY1SpKNrzZ
+         HilrJtC7W9bHrxLSWMVa2MbvoKLApOgwy8tnT1D51FGlLb+cBFzIYjeR2tAYS4wFPu6d
+         R3NQ==
+X-Gm-Message-State: AOAM532pKGQIo2I/FSALdiImim5JmnYfil3v8Q0wVbHCu7g/FW64a5i6
+        V/LpJvoqaJ/SD7jSepFOzWdcDokFSOnebLlWdGZ7Mg==
+X-Google-Smtp-Source: ABdhPJwB07EuXP9IYQmcXFl+VPdTAyhI/bnkPf9ED6KUVfUM8W7xcExjG7mz8GGf9CQIdJd8bSFBIlAyCytCSAH4MqM=
+X-Received: by 2002:a05:6602:3427:: with SMTP id n39mr2079015ioz.157.1621463039499;
+ Wed, 19 May 2021 15:23:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210519200339.829146-1-axelrasmussen@google.com> <20210519200339.829146-11-axelrasmussen@google.com>
-In-Reply-To: <20210519200339.829146-11-axelrasmussen@google.com>
+References: <20210519200339.829146-1-axelrasmussen@google.com>
+ <20210519200339.829146-3-axelrasmussen@google.com> <CANgfPd-dF+vWafBC5DsNhf5C0M12+LxRQLhsBM=CzOKTsep+og@mail.gmail.com>
+ <CAJHvVcizVoAs+-wOXeO7bc=8c2G3oEC4KSVyPm5E9Z6YMCsvaw@mail.gmail.com>
+In-Reply-To: <CAJHvVcizVoAs+-wOXeO7bc=8c2G3oEC4KSVyPm5E9Z6YMCsvaw@mail.gmail.com>
 From:   Ben Gardon <bgardon@google.com>
-Date:   Wed, 19 May 2021 15:22:52 -0700
-Message-ID: <CANgfPd9EfARN3eo1SuNfvkAsY+wVh=PoJZUy6r4=S1XLib6OGA@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] KVM: selftests: add shared hugetlbfs backing
- source type
+Date:   Wed, 19 May 2021 15:23:49 -0700
+Message-ID: <CANgfPd-GzkFFps4+zRCy6bUn5zA8UTBw97wAvAMkOdKKfxYQEA@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] KVM: selftests: simplify setup_demand_paging
+ error handling
 To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Aaron Lewis <aaronlewis@google.com>,
         Alexander Graf <graf@amazon.com>,
@@ -72,123 +74,138 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 19, 2021 at 1:04 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
+On Wed, May 19, 2021 at 3:14 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
 >
-> This lets us run the demand paging test on top of a shared
-> hugetlbfs-backed area. The "shared" is key, as this allows us to
-> exercise userfaultfd minor faults on hugetlbfs.
->
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> On Wed, May 19, 2021 at 2:45 PM Ben Gardon <bgardon@google.com> wrote:
+> >
+> > On Wed, May 19, 2021 at 1:03 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
+> > >
+> > > A small cleanup. Our caller writes:
+> > >
+> > >   r = setup_demand_paging(...);
+> > >   if (r < 0) exit(-r);
+> > >
+> > > Since we're just going to exit anyway, instead of returning an error we
+> > > can just re-use TEST_ASSERT. This makes the caller simpler, as well as
+> > > the function itself - no need to write our branches, etc.
+> > >
+> > > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
 Reviewed-by: Ben Gardon <bgardon@google.com>
 
-> ---
->  tools/testing/selftests/kvm/demand_paging_test.c |  6 ++++--
->  tools/testing/selftests/kvm/include/test_util.h  | 11 +++++++++++
->  tools/testing/selftests/kvm/lib/kvm_util.c       |  9 +++++++--
->  tools/testing/selftests/kvm/lib/test_util.c      | 11 +++++++++++
->  4 files changed, 33 insertions(+), 4 deletions(-)
+> > > ---
+> > >  .../selftests/kvm/demand_paging_test.c        | 51 +++++++------------
+> > >  1 file changed, 19 insertions(+), 32 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> > > index 9398ba6ef023..601a1df24dd2 100644
+> > > --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> > > +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> > > @@ -9,6 +9,8 @@
+> > >
+> > >  #define _GNU_SOURCE /* for pipe2 */
+> > >
+> > > +#include <inttypes.h>
+> > > +#include <stdint.h>
+> >
+> > Why do the includes need to change in this commit? Is it for the PRIu64 below?
 >
-> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> index df7190261923..60d9b5223b9d 100644
-> --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> @@ -485,8 +485,10 @@ int main(int argc, char *argv[])
->                 }
->         }
+> Right, I didn't actually try compiling without these, but inttypes.h
+> defines PRIu64 and stdint.h defines uint64_t. In general I tend to
+> prefer including things like this because we're using their
+> definitions directly, even if we might be picking them up transiently
+> some other way.
+
+Makes sense to me.
+
 >
-> -       TEST_ASSERT(p.uffd_mode != UFFDIO_REGISTER_MODE_MINOR || p.src_type == VM_MEM_SRC_SHMEM,
-> -                   "userfaultfd MINOR mode requires shared memory; pick a different -t");
-> +       if (p.uffd_mode == UFFDIO_REGISTER_MODE_MINOR &&
-> +           !backing_src_is_shared(p.src_type)) {
-> +               TEST_FAIL("userfaultfd MINOR mode requires shared memory; pick a different -t");
-> +       }
->
->         for_each_guest_mode(run_test, &p);
->
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> index 7377f00469ef..d79be15dd3d2 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -17,6 +17,7 @@
->  #include <errno.h>
->  #include <unistd.h>
->  #include <fcntl.h>
-> +#include <sys/mman.h>
->  #include "kselftest.h"
->
->  static inline int _no_printf(const char *format, ...) { return 0; }
-> @@ -85,6 +86,7 @@ enum vm_mem_backing_src_type {
->         VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB,
->         VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
->         VM_MEM_SRC_SHMEM,
-> +       VM_MEM_SRC_SHARED_HUGETLB,
->         NUM_SRC_TYPES,
->  };
->
-> @@ -101,4 +103,13 @@ size_t get_backing_src_pagesz(uint32_t i);
->  void backing_src_help(void);
->  enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
->
-> +/*
-> + * Whether or not the given source type is shared memory (as opposed to
-> + * anonymous).
-> + */
-> +static inline bool backing_src_is_shared(enum vm_mem_backing_src_type t)
-> +{
-> +       return vm_mem_backing_src_alias(t)->flag & MAP_SHARED;
-> +}
-> +
->  #endif /* SELFTEST_KVM_TEST_UTIL_H */
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 0b88d1bbc1e0..8373aec1fb02 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -758,8 +758,13 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->                 region->mmap_size += alignment;
->
->         region->fd = -1;
-> -       if (src_type == VM_MEM_SRC_SHMEM) {
-> -               region->fd = memfd_create("kvm_selftest", MFD_CLOEXEC);
-> +       if (backing_src_is_shared(src_type)) {
-> +               int memfd_flags = MFD_CLOEXEC;
-> +
-> +               if (src_type == VM_MEM_SRC_SHARED_HUGETLB)
-> +                       memfd_flags |= MFD_HUGETLB;
-> +
-> +               region->fd = memfd_create("kvm_selftest", memfd_flags);
->                 TEST_ASSERT(region->fd != -1,
->                             "memfd_create failed, errno: %i", errno);
->
-> diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-> index c7a265da5090..6ad6c8276b2e 100644
-> --- a/tools/testing/selftests/kvm/lib/test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/test_util.c
-> @@ -240,6 +240,16 @@ const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
->                         .name = "shmem",
->                         .flag = MAP_SHARED,
->                 },
-> +               [VM_MEM_SRC_SHARED_HUGETLB] = {
-> +                       .name = "shared_hugetlb",
-> +                       /*
-> +                        * No MAP_HUGETLB, we use MFD_HUGETLB instead. Since
-> +                        * we're using "file backed" memory, we need to specify
-> +                        * this when the FD is created, not when the area is
-> +                        * mapped.
-> +                        */
-> +                       .flag = MAP_SHARED,
-> +               },
->         };
->         _Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
->                        "Missing new backing src types?");
-> @@ -262,6 +272,7 @@ size_t get_backing_src_pagesz(uint32_t i)
->         case VM_MEM_SRC_ANONYMOUS_THP:
->                 return get_trans_hugepagesz();
->         case VM_MEM_SRC_ANONYMOUS_HUGETLB:
-> +       case VM_MEM_SRC_SHARED_HUGETLB:
->                 return get_def_hugetlb_pagesz();
->         default:
->                 return MAP_HUGE_PAGE_SIZE(flag);
-> --
-> 2.31.1.751.gd2f1c929bd-goog
->
+> >
+> > >  #include <stdio.h>
+> > >  #include <stdlib.h>
+> > >  #include <time.h>
+> > > @@ -198,42 +200,32 @@ static void *uffd_handler_thread_fn(void *arg)
+> > >         return NULL;
+> > >  }
+> > >
+> > > -static int setup_demand_paging(struct kvm_vm *vm,
+> > > -                              pthread_t *uffd_handler_thread, int pipefd,
+> > > -                              useconds_t uffd_delay,
+> > > -                              struct uffd_handler_args *uffd_args,
+> > > -                              void *hva, uint64_t len)
+> > > +static void setup_demand_paging(struct kvm_vm *vm,
+> > > +                               pthread_t *uffd_handler_thread, int pipefd,
+> > > +                               useconds_t uffd_delay,
+> > > +                               struct uffd_handler_args *uffd_args,
+> > > +                               void *hva, uint64_t len)
+> > >  {
+> > >         int uffd;
+> > >         struct uffdio_api uffdio_api;
+> > >         struct uffdio_register uffdio_register;
+> > >
+> > >         uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+> > > -       if (uffd == -1) {
+> > > -               pr_info("uffd creation failed\n");
+> > > -               return -1;
+> > > -       }
+> > > +       TEST_ASSERT(uffd >= 0, "uffd creation failed, errno: %d", errno);
+> > >
+> > >         uffdio_api.api = UFFD_API;
+> > >         uffdio_api.features = 0;
+> > > -       if (ioctl(uffd, UFFDIO_API, &uffdio_api) == -1) {
+> > > -               pr_info("ioctl uffdio_api failed\n");
+> > > -               return -1;
+> > > -       }
+> > > +       TEST_ASSERT(ioctl(uffd, UFFDIO_API, &uffdio_api) != -1,
+> > > +                   "ioctl UFFDIO_API failed: %" PRIu64,
+> > > +                   (uint64_t)uffdio_api.api);
+> > >
+> > >         uffdio_register.range.start = (uint64_t)hva;
+> > >         uffdio_register.range.len = len;
+> > >         uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+> > > -       if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1) {
+> > > -               pr_info("ioctl uffdio_register failed\n");
+> > > -               return -1;
+> > > -       }
+> > > -
+> > > -       if ((uffdio_register.ioctls & UFFD_API_RANGE_IOCTLS) !=
+> > > -                       UFFD_API_RANGE_IOCTLS) {
+> > > -               pr_info("unexpected userfaultfd ioctl set\n");
+> > > -               return -1;
+> > > -       }
+> > > +       TEST_ASSERT(ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) != -1,
+> > > +                   "ioctl UFFDIO_REGISTER failed");
+> > > +       TEST_ASSERT((uffdio_register.ioctls & UFFD_API_RANGE_IOCTLS) ==
+> > > +                   UFFD_API_RANGE_IOCTLS, "unexpected userfaultfd ioctl set");
+> > >
+> > >         uffd_args->uffd = uffd;
+> > >         uffd_args->pipefd = pipefd;
+> > > @@ -243,8 +235,6 @@ static int setup_demand_paging(struct kvm_vm *vm,
+> > >
+> > >         PER_VCPU_DEBUG("Created uffd thread for HVA range [%p, %p)\n",
+> > >                        hva, hva + len);
+> > > -
+> > > -       return 0;
+> > >  }
+> > >
+> > >  struct test_params {
+> > > @@ -321,13 +311,10 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> > >                                   O_CLOEXEC | O_NONBLOCK);
+> > >                         TEST_ASSERT(!r, "Failed to set up pipefd");
+> > >
+> > > -                       r = setup_demand_paging(vm,
+> > > -                                               &uffd_handler_threads[vcpu_id],
+> > > -                                               pipefds[vcpu_id * 2],
+> > > -                                               p->uffd_delay, &uffd_args[vcpu_id],
+> > > -                                               vcpu_hva, vcpu_mem_size);
+> > > -                       if (r < 0)
+> > > -                               exit(-r);
+> > > +                       setup_demand_paging(vm, &uffd_handler_threads[vcpu_id],
+> > > +                                           pipefds[vcpu_id * 2], p->uffd_delay,
+> > > +                                           &uffd_args[vcpu_id], vcpu_hva,
+> > > +                                           vcpu_mem_size);
+> > >                 }
+> > >         }
+> > >
+> > > --
+> > > 2.31.1.751.gd2f1c929bd-goog
+> > >
