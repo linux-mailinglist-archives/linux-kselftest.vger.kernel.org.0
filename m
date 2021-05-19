@@ -2,119 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 347213882BC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 May 2021 00:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECF73883DF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 May 2021 02:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352753AbhERWaw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 May 2021 18:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352746AbhERWau (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 May 2021 18:30:50 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D05C061573
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 15:29:31 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id n10so11074528ion.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 May 2021 15:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sJSTAKCZ+krTWG3lgInmgl4vdo4n0Oih7NdB8EZOroE=;
-        b=jbuHe9+Qf8UciW37lf7ZswZs7ReoWXczX04sFI1v7v+3FEj4I+EoN+d69cBUfvxZL2
-         pppqzzmCpxde7Hh+QW7SdZ1jnX4IX5TcXLfsMzhVJOrTYHglNNe+YSCOyZrx8IZeqH1D
-         IXg0zl7mwhjrFeuEQYeofug0VDMviAXFvR3ZUcYWSeo/1nefLar6o+c5Cb94aEOmOEE9
-         MQy8UMokWYa8Fi1ImWSqAGd0WJbpPO0JSFgRT6Jmr+Nw5hnSuXw/G4l0obG05YIbnKtn
-         XjsnCgoHUZulXA1LHNcZ3wLelpQCj9ucW4gS+3QoYK/5Ibly+MvFuRT9L+37QjSIjH/f
-         tnGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sJSTAKCZ+krTWG3lgInmgl4vdo4n0Oih7NdB8EZOroE=;
-        b=Tb1uKlCDOiL4CkrhP9vZ5Jp5Th1fDzZ7+/W0S2p+FCKjvlN++59/mx+rSEhFxojvmd
-         bGtuIlJyHa8n+cMkKzmZB0LwWI5hnh8KoQzyYfbbhzIbEd3xIPrfUncijrGX7x2uQD/O
-         X8fnE6izbtOK71YUSPphN/yMMxko7syV1dNZf0SWkJ3lSyPvSGFTGFCUgLAhS4GEGWpT
-         bSBZYuBrk6bSK/EWXpPNC6O/d3nCcnk6ggoSpPW1RBy21c/lTuSVK3MTGrEhARPxYviN
-         bBWFdIXWSxGQSEdV2zgf81XapPQTdW9yl4SB8jciE1oudVXPxFKiF+xLgVSvvhua9TzX
-         uRow==
-X-Gm-Message-State: AOAM532Spp2L9As4DuAe2fw3cSvfK0lQ013YJhRLIS3dWXp9OMMpPdbW
-        WSV9IDc4CJ//Dc1rzfN4KNNsu0cAV07IDN2Sps8i7g==
-X-Google-Smtp-Source: ABdhPJxg1XeLxXOYntitmR4NlPBu0nqJwFp2PCXTohQRhknrcmZuOxJxUcxf72xJjinay2qMPf2wVkwu5qRUYJyu2as=
-X-Received: by 2002:a05:6602:446:: with SMTP id e6mr6560189iov.20.1621376969710;
- Tue, 18 May 2021 15:29:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210427225244.4326-1-axelrasmussen@google.com>
- <20210427225244.4326-10-axelrasmussen@google.com> <YKQqKrl+/cQ1utrb@t490s>
-In-Reply-To: <YKQqKrl+/cQ1utrb@t490s>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 18 May 2021 15:28:52 -0700
-Message-ID: <CAJHvVch3SZ80yt+FnK5M=m4haJ-pFZqvMtGVYHnw9rs1pBkNcw@mail.gmail.com>
-Subject: Re: [PATCH v5 09/10] userfaultfd/selftests: reinitialize test context
- in each test
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wang Qing <wangqing@vivo.com>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        Brian Geffon <bgeffon@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S241012AbhESApo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 May 2021 20:45:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60578 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240106AbhESApn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 18 May 2021 20:45:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D59F6135B;
+        Wed, 19 May 2021 00:44:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1621385064;
+        bh=TaIIw0YYtenqp7/hfp+Brr2pi7x+J7tKiTwiGcf4BXo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OWqlmtzTKs7bvcu6OsrPtdFoycSizT0julGnQ1nL89UDOP47oOx68Qc7/VuYXRLHl
+         PNVwvj+VZTjuZY29zaA8iT4YqSTgqnpaEgh3VOC71g9NKcI8TaUUyHgG2IXdNHcZ/n
+         vJFCM+BcjPVeDtUlkhRioxH5rtQ7jgaUQXdaR9z4=
+Date:   Tue, 18 May 2021 17:44:22 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v20 4/7] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-Id: <20210518174422.399ad118a051fe4c5b11d7ba@linux-foundation.org>
+In-Reply-To: <20210518072034.31572-5-rppt@kernel.org>
+References: <20210518072034.31572-1-rppt@kernel.org>
+        <20210518072034.31572-5-rppt@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I suppose it will be squashed anyway, but in case it's useful feel free to add:
+On Tue, 18 May 2021 10:20:31 +0300 Mike Rapoport <rppt@kernel.org> wrote:
 
-Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Introduce "memfd_secret" system call with the ability to create memory
+> areas visible only in the context of the owning process and not mapped not
+> only to other processes but in the kernel page tables as well.
+> 
+> ...
+>
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -901,4 +901,9 @@ config KMAP_LOCAL
+>  # struct io_mapping based helper.  Selected by drivers that need them
+>  config IO_MAPPING
+>  	bool
+> +
+> +config SECRETMEM
+> +	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
+> +	select STRICT_DEVMEM
+> +
+>  endmenu
 
-Thanks for catching this, Peter!
+WARNING: unmet direct dependencies detected for STRICT_DEVMEM
+  Depends on [n]: MMU [=y] && DEVMEM [=n] && (ARCH_HAS_DEVMEM_IS_ALLOWED [=y] || GENERIC_LIB_DEVMEM_IS_ALLOWED [=n])
+  Selected by [y]:
+  - SECRETMEM [=y]
 
-On Tue, May 18, 2021 at 1:57 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Tue, Apr 27, 2021 at 03:52:43PM -0700, Axel Rasmussen wrote:
-> > Currently, the context (fds, mmap-ed areas, etc.) are global. Each test
-> > mutates this state in some way, in some cases really "clobbering it"
-> > (e.g., the events test mremap-ing area_dst over the top of area_src, or
-> > the minor faults tests overwriting the count_verify values in the test
-> > areas). We run the tests in a particular order, each test is careful to
-> > make the right assumptions about its starting state, etc.
-> >
-> > But, this is fragile. It's better for a test's success or failure to not
-> > depend on what some other prior test case did to the global state.
-> >
-> > To that end, clear and reinitialize the test context at the start of
-> > each test case, so whatever prior test cases did doesn't affect future
-> > tests.
-> >
-> > This is particularly relevant to this series because the events test's
-> > mremap of area_dst screws up assumptions the minor fault test was
-> > relying on. This wasn't a problem for hugetlb, as we don't mremap in
-> > that case.
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->
-> Hi, Andrew,
->
-> There's a conflict on the uffd test case with v5.13-rc1-mmots-2021-05-13-17-23
-> between this patch and the uffd pagemap series, so I think we may need to queue
-> another fixup patch (to be squashed into this patch of Axel's) which is
-> attached.
->
-> Thanks,
->
-> --
-> Peter Xu
+so I went back to the v19 version, with
+
+--- a/mm/Kconfig~mm-introduce-memfd_secret-system-call-to-create-secret-memory-areas-fix
++++ a/mm/Kconfig
+@@ -907,6 +907,5 @@ config IO_MAPPING
+ 
+ config SECRETMEM
+ 	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
+-	select STRICT_DEVMEM
+ 
+ endmenu
+_
+
