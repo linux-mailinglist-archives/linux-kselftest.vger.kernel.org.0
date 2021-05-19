@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2393898C2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 May 2021 23:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3C23898D7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 May 2021 23:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbhESVrN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 May 2021 17:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S229689AbhESVv1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 May 2021 17:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbhESVrN (ORCPT
+        with ESMTP id S229508AbhESVvZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 May 2021 17:47:13 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58786C061574
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 14:45:53 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id k4so9796934ili.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 14:45:53 -0700 (PDT)
+        Wed, 19 May 2021 17:51:25 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E6CC06175F
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 14:50:05 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id z1so13561075ils.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 14:50:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=n+MU5sQJyoUxoQR/RnPtWo1DwBMH6gtnYsN37Ax0beM=;
-        b=mBB+1FV4MtxiRwkKsGVfbsWWHrOfVTntJlUTN9QLTf0cSwRZbYx+7h3P6X8QYdpN8q
-         7MCCd8bs7mIuFt72Sk0WYO+mQtl7EX3g1hutzP7YrzBWI16poLAGSlY2Sy10GNTDMhUH
-         CSya8+hnrmxugrw+xoi7htTIgtRknQUluubWU5LrdLH/pJBHFAULg1EJpMIXbfo1gA66
-         +qiUZSo/q/WKEDMKXNMv9MROhXmHzRtHogMhehD9sr7BgLRuaJMNLtAJl2jAL3sAftFU
-         8680Qmhs7/Mny5vfG+ypQUIvMZgcYHIUADYFgHqpxb/fJlORQb/79jpooKWO0oSbMMDM
-         ENSQ==
+        bh=kTt2FiDL6jKQ9igVcItFQGplYD9kRNczxqmA7iZyLec=;
+        b=gMYMyF8xXR6YyM1Z1ZZZP1i6QZwNpTkUy9te3CL1Gi5sSyEohhxKoI1G7+Ky8Jo2Rp
+         P/hgqo+/iZD1JqtJ6h9pWNvL0OFIIjKGn11knm1c7NVUGiQxFpybt5/SoAzx+5FM0nKe
+         XSIwd7YCn7W8psxOVLwPq8nMDjJNDO6tilezs/YGIQI48Lnsjr/xrmfh7x/x2GSQPF7i
+         jx5w83ML6Y93JBQ2K+IaOHgFK0is81rYAuFPGE04HtsjdQu1laiqsDCAduSY6DXO+TFs
+         6GqBjbJunfoJ3tvy3WSsz0s8WMvIMOUGqMUidv6jkN/nw2RWGU7bWX7ibc+vQ9PjG1oW
+         5z4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=n+MU5sQJyoUxoQR/RnPtWo1DwBMH6gtnYsN37Ax0beM=;
-        b=bSCZioyW4B8xrEPIwd39dgbampWRQ+eYHINvwaNaLUhGyK8FE33EwNMRge4vMJmo6V
-         5JeZEMCiGCDpi1dTbCSrwfQOmuttgb8zMcbcYZ0b/NhMWho2MeAl97cRK27ZBvMJ9cOO
-         XTywqjK6Wn1odGrLvq2d56/b6efQHr/YtD0Y9CH/gnTNlxJlPYd6cWTgSO3QH2d7BePw
-         cDP+Ti5pmXxMl7kMGaRcvCGfSlpkjz8Lo/enAMa7z65a3TSvhLhyMyx2S3UFz0AB7er9
-         cJt8Y4PbISlxzE1IQIgjh7IrDbypANzwJElqBMr/sKY4A70xN3M1TNySZ19QOWuvvgWx
-         Us1A==
-X-Gm-Message-State: AOAM531xP3Nt+1i0YeQJAXR4hfWnbxWGrl1U2xOuIqiUTiwTR6HsKllL
-        W6vELFFIHdXRKSIAmuXZVLyPx+NipqMVR0nMluq/fQ==
-X-Google-Smtp-Source: ABdhPJwktiwv3aU3KIGOoAvcgktQDDuH4nFS8fhYrPFwZd7Y9gtC5QSUysygH3xucU9DUmNGWpTOWf5S7oPJkeW1Fa4=
-X-Received: by 2002:a05:6e02:13ec:: with SMTP id w12mr1414415ilj.285.1621460752580;
- Wed, 19 May 2021 14:45:52 -0700 (PDT)
+        bh=kTt2FiDL6jKQ9igVcItFQGplYD9kRNczxqmA7iZyLec=;
+        b=mjB6T8iiXYpLenGD9FJQxUvdNH5g0+/D2RGjwALmOCUDu30rG+NEncYB9HWsSJpzrg
+         iWxv96H5rf4vhEpobaz0wn2xvGPO73FlS7f9yWoBAm1uZ9ODR6Hwm5VSHP5QWugNXmp5
+         +ZzQIYjxsG8ovJbF+UnZ8rfJrC9ZFt6MVfeWv2kTcW6pHmsf3zBhdXH0V3x/7rwBZQyo
+         4jjYSwPf807U99jsXWi6FmoQ7t+NgvJbjaXIESgGKgEfkxXbMQjieVnwzS2FZAcpzPod
+         3U3dXhpYPWBIDQId6zTjE0IY/N4LkCw+QONwmmE079mkaH7xSRLziuapRN0CC68roffJ
+         bLNw==
+X-Gm-Message-State: AOAM532D5MgEY2V4vhrLhlzE0M2uCs4oNYZkAIlAf8vEnX8+he0r6FKy
+        dyTSSMEbucdtpRSjV3cmZK7+MzhPtriZkQjOTqbEgQ==
+X-Google-Smtp-Source: ABdhPJwe90hZ9J1kloXU7jdOjRgtGJojwAt07kMzSrx8/hbwmcpx8Zrj4eB4T4bkQGA0Sm+6lw03cJIxkobG3qqh9kw=
+X-Received: by 2002:a05:6e02:13ec:: with SMTP id w12mr1436148ilj.285.1621461004204;
+ Wed, 19 May 2021 14:50:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210519200339.829146-1-axelrasmussen@google.com> <20210519200339.829146-3-axelrasmussen@google.com>
-In-Reply-To: <20210519200339.829146-3-axelrasmussen@google.com>
+References: <20210519200339.829146-1-axelrasmussen@google.com> <20210519200339.829146-4-axelrasmussen@google.com>
+In-Reply-To: <20210519200339.829146-4-axelrasmussen@google.com>
 From:   Ben Gardon <bgardon@google.com>
-Date:   Wed, 19 May 2021 14:45:41 -0700
-Message-ID: <CANgfPd-dF+vWafBC5DsNhf5C0M12+LxRQLhsBM=CzOKTsep+og@mail.gmail.com>
-Subject: Re: [PATCH v2 02/10] KVM: selftests: simplify setup_demand_paging
- error handling
+Date:   Wed, 19 May 2021 14:49:53 -0700
+Message-ID: <CANgfPd_WV+8bAHucE=81eFTEEPv5Q-2ZjQ_beKhZyQnt4PX57Q@mail.gmail.com>
+Subject: Re: [PATCH v2 03/10] KVM: selftests: print a message when skipping
+ KVM tests
 To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Aaron Lewis <aaronlewis@google.com>,
         Alexander Graf <graf@amazon.com>,
@@ -74,119 +74,40 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Wed, May 19, 2021 at 1:03 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
 >
-> A small cleanup. Our caller writes:
->
->   r = setup_demand_paging(...);
->   if (r < 0) exit(-r);
->
-> Since we're just going to exit anyway, instead of returning an error we
-> can just re-use TEST_ASSERT. This makes the caller simpler, as well as
-> the function itself - no need to write our branches, etc.
+> Previously, if this check failed, we'd just exit quietly with no output.
+> This can be confusing, so print out a short message indicating why the
+> test is being skipped.
 >
 > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+
+Reviewed-by: Ben Gardon <bgardon@google.com>
+
 > ---
->  .../selftests/kvm/demand_paging_test.c        | 51 +++++++------------
->  1 file changed, 19 insertions(+), 32 deletions(-)
+>  tools/testing/selftests/kvm/lib/kvm_util.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> index 9398ba6ef023..601a1df24dd2 100644
-> --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> @@ -9,6 +9,8 @@
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index f05ca919cccb..0d6ddee429b9 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -53,8 +53,10 @@ int kvm_check_cap(long cap)
+>         int kvm_fd;
 >
->  #define _GNU_SOURCE /* for pipe2 */
->
-> +#include <inttypes.h>
-> +#include <stdint.h>
+>         kvm_fd = open(KVM_DEV_PATH, O_RDONLY);
+> -       if (kvm_fd < 0)
+> +       if (kvm_fd < 0) {
+> +               print_skip("KVM not available, errno: %d", errno);
+>                 exit(KSFT_SKIP);
+> +       }
 
-Why do the includes need to change in this commit? Is it for the PRIu64 below?
+This is a wonderful change. I believe this will only be hit if KVM is
+built as a module and that module has not yet been loaded, so this
+message could also suggest that the user check if the KVM / KVM
+arch/vendor specific module has been loaded.
 
->  #include <stdio.h>
->  #include <stdlib.h>
->  #include <time.h>
-> @@ -198,42 +200,32 @@ static void *uffd_handler_thread_fn(void *arg)
->         return NULL;
->  }
 >
-> -static int setup_demand_paging(struct kvm_vm *vm,
-> -                              pthread_t *uffd_handler_thread, int pipefd,
-> -                              useconds_t uffd_delay,
-> -                              struct uffd_handler_args *uffd_args,
-> -                              void *hva, uint64_t len)
-> +static void setup_demand_paging(struct kvm_vm *vm,
-> +                               pthread_t *uffd_handler_thread, int pipefd,
-> +                               useconds_t uffd_delay,
-> +                               struct uffd_handler_args *uffd_args,
-> +                               void *hva, uint64_t len)
->  {
->         int uffd;
->         struct uffdio_api uffdio_api;
->         struct uffdio_register uffdio_register;
->
->         uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-> -       if (uffd == -1) {
-> -               pr_info("uffd creation failed\n");
-> -               return -1;
-> -       }
-> +       TEST_ASSERT(uffd >= 0, "uffd creation failed, errno: %d", errno);
->
->         uffdio_api.api = UFFD_API;
->         uffdio_api.features = 0;
-> -       if (ioctl(uffd, UFFDIO_API, &uffdio_api) == -1) {
-> -               pr_info("ioctl uffdio_api failed\n");
-> -               return -1;
-> -       }
-> +       TEST_ASSERT(ioctl(uffd, UFFDIO_API, &uffdio_api) != -1,
-> +                   "ioctl UFFDIO_API failed: %" PRIu64,
-> +                   (uint64_t)uffdio_api.api);
->
->         uffdio_register.range.start = (uint64_t)hva;
->         uffdio_register.range.len = len;
->         uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-> -       if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1) {
-> -               pr_info("ioctl uffdio_register failed\n");
-> -               return -1;
-> -       }
-> -
-> -       if ((uffdio_register.ioctls & UFFD_API_RANGE_IOCTLS) !=
-> -                       UFFD_API_RANGE_IOCTLS) {
-> -               pr_info("unexpected userfaultfd ioctl set\n");
-> -               return -1;
-> -       }
-> +       TEST_ASSERT(ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) != -1,
-> +                   "ioctl UFFDIO_REGISTER failed");
-> +       TEST_ASSERT((uffdio_register.ioctls & UFFD_API_RANGE_IOCTLS) ==
-> +                   UFFD_API_RANGE_IOCTLS, "unexpected userfaultfd ioctl set");
->
->         uffd_args->uffd = uffd;
->         uffd_args->pipefd = pipefd;
-> @@ -243,8 +235,6 @@ static int setup_demand_paging(struct kvm_vm *vm,
->
->         PER_VCPU_DEBUG("Created uffd thread for HVA range [%p, %p)\n",
->                        hva, hva + len);
-> -
-> -       return 0;
->  }
->
->  struct test_params {
-> @@ -321,13 +311,10 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->                                   O_CLOEXEC | O_NONBLOCK);
->                         TEST_ASSERT(!r, "Failed to set up pipefd");
->
-> -                       r = setup_demand_paging(vm,
-> -                                               &uffd_handler_threads[vcpu_id],
-> -                                               pipefds[vcpu_id * 2],
-> -                                               p->uffd_delay, &uffd_args[vcpu_id],
-> -                                               vcpu_hva, vcpu_mem_size);
-> -                       if (r < 0)
-> -                               exit(-r);
-> +                       setup_demand_paging(vm, &uffd_handler_threads[vcpu_id],
-> +                                           pipefds[vcpu_id * 2], p->uffd_delay,
-> +                                           &uffd_args[vcpu_id], vcpu_hva,
-> +                                           vcpu_mem_size);
->                 }
->         }
->
+>         ret = ioctl(kvm_fd, KVM_CHECK_EXTENSION, cap);
+>         TEST_ASSERT(ret != -1, "KVM_CHECK_EXTENSION IOCTL failed,\n"
 > --
 > 2.31.1.751.gd2f1c929bd-goog
 >
