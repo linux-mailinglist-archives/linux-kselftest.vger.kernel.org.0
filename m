@@ -2,368 +2,446 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE47738995F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 May 2021 00:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F21389968
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 May 2021 00:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbhESWgZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 May 2021 18:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S229681AbhESWnI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 May 2021 18:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhESWgZ (ORCPT
+        with ESMTP id S229518AbhESWnH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 May 2021 18:36:25 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C644C06175F
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:35:05 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id h6so13568615ila.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:35:05 -0700 (PDT)
+        Wed, 19 May 2021 18:43:07 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27052C06175F
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:41:47 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id r4so13936813iol.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 15:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8taWKY5LgEYAKZy1/shzdKgVUl6wjUkkU8aHH9O6HjM=;
-        b=Pkw59cBUdOt2BsRLN3pKCcg0cRpOd8hDUQ5v3CIyWdCqMvo0HUogV6cjdSeKnwW/dp
-         cxXsLgWuCI3sCcPrSS4mYKbuvOEOvfBfw+JWKXOB6jAS3SBzlkod60U/H90QpU6BziD2
-         iRg28PHFzNMgcwvrpQivl4uqBj5PMnk//40bg1IkjU3H2iNq7bRO2iFvL8vfEexvEP9o
-         WdIzITvaxwdmoZaPvi4aDUDAVdBCseC9AF6SfWqtjDZZdsosKNRA11kmYiyTcEwPzjTT
-         /4t0VsK+hWn0F3a/5R3nB+jINDaFulLoCit1QFImFHc2NCjz6zXv14+z4BCvfrXkRgUz
-         cXNA==
+        bh=IcqtO1CtaLa8z6M5nlZ3QeZ3mf8zCX+YEJE4681MSBo=;
+        b=NodoC4zTGnAiwAF3uEmVQvvaexcnStLREQVJB3qJNnDUYvT3rKMA0pgONxHXz8DDO6
+         3TBkPh+BHW4bSnR6n7G4yH//13vcVA4ZRMPzY34OzffwDUfUz/Uww1elKu7gSvXaOQ2L
+         l5gt3JyUrEDJCEWg2MsAprINHnr2Wb+ywWUVV0rBSX58uwP2mK4UJvh4mo4fTG+D4NqH
+         WCZUg8TH0ALBA+iYEhWRnpeDIw0FnI5kdJrUW8h7dYCceDNWvdmxMpTgGe3gHqnjbaCg
+         QgW0FNY51fnx/+wET6bQS6Fw9CbwjT2pkjvUVWz3zc363JvMmmYpTkn7rWxRwiljHKmq
+         Izqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8taWKY5LgEYAKZy1/shzdKgVUl6wjUkkU8aHH9O6HjM=;
-        b=P9jod7a2l3fG3SrtHkC/rQ+izP+LZrlpMdmIH+klK3gCMB+1p0U74Do4n4y6zQ9eBS
-         ZvXuLTERAChf6/heprp9zqs0mC6Zh6Pi4S9xgaVTCQgJjfKzzclEAFRBUd/5/YluQ9do
-         NeIvpDvaude0IlvfsNL2M8uMtbINnEP3sDDNqJaRII+uBCU1xtQNywON3vofAiMh5Tw3
-         auNfdqh/QaSLUCpafWNOcXI4e6EoLYae4cd794SB8fxyNhQ4u+RA5Xwwz/YW1sRniGuv
-         vwUPtXR8ZHtLppHebxd8mNn0kPhsGhX0+587qhFFrGxtiVakNDr1IHFVz/hum2YDLH+A
-         QxTA==
-X-Gm-Message-State: AOAM53357FqNy5lUvgm7Ys3JCnAdtC6Lw6jfwYP6vkcEQAi0OkfD3kla
-        sKrBg5n3lRBs6eKVRSWDnURo+kKaTZcC3CROkAsN7w==
-X-Google-Smtp-Source: ABdhPJxLSIPs6OmtcLIIJUwUPBv+pyT0FSHXXjqDKhcwU578B0nnw+iM0scfKQJcUtHiIdMKau7x3aXjDCtKMEaDGjY=
-X-Received: by 2002:a92:dd04:: with SMTP id n4mr1648417ilm.165.1621463704103;
- Wed, 19 May 2021 15:35:04 -0700 (PDT)
+        bh=IcqtO1CtaLa8z6M5nlZ3QeZ3mf8zCX+YEJE4681MSBo=;
+        b=Bdo/nSjNLdWIqOWs4Q2TdhtFkseYH0HIAXawc6Tf91ClJZLBPuA44yJhVUW9WTB6j9
+         khpmkilSp7Re4xuWijgXCsIgONOhA2P+Ax15Wqivl+n3K6lx5+zDLoZw5kCJrepqEPWl
+         SQo0Ixjg66srv6eZKYpBkUVCaM09hO1K/WGDgvKZ0DoxHpoCStjULfOTPRN57S40Oirj
+         NH7nXBNdFPwfjzTlbbfrElkX/gfqt9IJRyxvFiO7QsNCTHVVoTZ6uSgeyXD8WECa1NNa
+         YHQwNmInLF3BuYXrvwc3Bb2Pz1pBsQ5YZ3MdYC9cxeN294ga4S6R1Y4Hth/ImDIvyQIa
+         4JYQ==
+X-Gm-Message-State: AOAM533KO1BOtYC2tv1hJqSx2KrzbgNiGdGpPYmrXyltB9dt19xPIJqB
+        w1AwOPUEwJlGi9CKru7Kkkdo3/VugRYQ0MCKuDq2xw==
+X-Google-Smtp-Source: ABdhPJw+Tk9z9xzuqkToRYpurmkITXR1SXjRytwROVwqp8ChOJMRcNFrbNj1pDokDuNoQWORMgwhdiDlzFB7HOqgmUU=
+X-Received: by 2002:a05:6638:124b:: with SMTP id o11mr1888715jas.4.1621464106191;
+ Wed, 19 May 2021 15:41:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210519200339.829146-1-axelrasmussen@google.com>
- <20210519200339.829146-10-axelrasmussen@google.com> <CANgfPd-O5aEvK74DSxkbJaTBv5gResLgvNSjpuzP+PJwifNmfQ@mail.gmail.com>
-In-Reply-To: <CANgfPd-O5aEvK74DSxkbJaTBv5gResLgvNSjpuzP+PJwifNmfQ@mail.gmail.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 19 May 2021 15:34:28 -0700
-Message-ID: <CAJHvVcgiRJrneUDbExckXgLmp6WaUmpXgeuUtMEWEBq4qtb9ZA@mail.gmail.com>
-Subject: Re: [PATCH v2 09/10] KVM: selftests: allow using UFFD minor faults
- for demand paging
-To:     Ben Gardon <bgardon@google.com>
-Cc:     Aaron Lewis <aaronlewis@google.com>,
-        Alexander Graf <graf@amazon.com>,
-        Andrew Jones <drjones@redhat.com>,
+References: <20210519210437.1688484-1-jthoughton@google.com>
+In-Reply-To: <20210519210437.1688484-1-jthoughton@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Wed, 19 May 2021 15:41:35 -0700
+Message-ID: <CANgfPd-=+-0+UzXD+zpqX50SGEi_wCLVJfsv63Rq9GYR+4-dCw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] KVM: Deliver VM fault signals to userspace
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Jacob Xu <jacobhxu@google.com>,
-        Makarand Sonare <makarandsonare@google.com>,
-        Oliver Upton <oupton@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Yanan Wang <wangyanan55@huawei.com>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Jue Wang <juew@google.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 19, 2021 at 3:21 PM Ben Gardon <bgardon@google.com> wrote:
+On Wed, May 19, 2021 at 2:04 PM James Houghton <jthoughton@google.com> wrote:
 >
-> On Wed, May 19, 2021 at 1:04 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
-> >
-> > UFFD handling of MINOR faults is a new feature whose use case is to
-> > speed up demand paging (compared to MISSING faults). So, it's
-> > interesting to let this selftest exercise this new mode.
-> >
-> > Modify the demand paging test to have the option of using UFFD minor
-> > faults, as opposed to missing faults. Now, when turning on userfaultfd
-> > with '-u', the desired mode has to be specified ("MISSING" or "MINOR").
-> >
-> > If we're in minor mode, before registering, prefault via the *alias*.
-> > This way, the guest will trigger minor faults, instead of missing
-> > faults, and we can UFFDIO_CONTINUE to resolve them.
-> >
-> > Modify the page fault handler function to use the right ioctl depending
-> > on the mode we're running in. In MINOR mode, use UFFDIO_CONTINUE.
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > ---
-> >  .../selftests/kvm/demand_paging_test.c        | 112 ++++++++++++------
-> >  1 file changed, 79 insertions(+), 33 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> > index 01890a7b0155..df7190261923 100644
-> > --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> > +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> > @@ -74,33 +74,48 @@ static void *vcpu_worker(void *data)
-> >         return NULL;
-> >  }
-> >
-> > -static int handle_uffd_page_request(int uffd, uint64_t addr)
-> > +static int handle_uffd_page_request(int uffd_mode, int uffd, uint64_t addr)
-> >  {
-> > -       pid_t tid;
-> > +       pid_t tid = syscall(__NR_gettid);
-> >         struct timespec start;
-> >         struct timespec ts_diff;
-> > -       struct uffdio_copy copy;
-> >         int r;
-> >
-> > -       tid = syscall(__NR_gettid);
-> > +       clock_gettime(CLOCK_MONOTONIC, &start);
-> >
-> > -       copy.src = (uint64_t)guest_data_prototype;
-> > -       copy.dst = addr;
-> > -       copy.len = demand_paging_size;
-> > -       copy.mode = 0;
-> > +       if (uffd_mode == UFFDIO_REGISTER_MODE_MISSING) {
-> > +               struct uffdio_copy copy;
-> >
-> > -       clock_gettime(CLOCK_MONOTONIC, &start);
-> > +               copy.src = (uint64_t)guest_data_prototype;
-> > +               copy.dst = addr;
-> > +               copy.len = demand_paging_size;
-> > +               copy.mode = 0;
-> > +
-> > +               r = ioctl(uffd, UFFDIO_COPY, &copy);
-> > +               if (r == -1) {
-> > +                       pr_info("Failed UFFDIO_COPY in 0x%lx from thread %d with errno: %d\n",
-> > +                               addr, tid, errno);
-> > +                       return r;
-> > +               }
-> > +       } else if (uffd_mode == UFFDIO_REGISTER_MODE_MINOR) {
-> > +               struct uffdio_continue cont = {0};
-> > +
-> > +               cont.range.start = addr;
-> > +               cont.range.len = demand_paging_size;
-> >
-> > -       r = ioctl(uffd, UFFDIO_COPY, &copy);
-> > -       if (r == -1) {
-> > -               pr_info("Failed Paged in 0x%lx from thread %d with errno: %d\n",
-> > -                       addr, tid, errno);
-> > -               return r;
-> > +               r = ioctl(uffd, UFFDIO_CONTINUE, &cont);
-> > +               if (r == -1) {
-> > +                       pr_info("Failed UFFDIO_CONTINUE in 0x%lx from thread %d with errno: %d\n",
-> > +                               addr, tid, errno);
-> > +                       return r;
-> > +               }
-> > +       } else {
-> > +               TEST_FAIL("Invalid uffd mode %d", uffd_mode);
-> >         }
-> >
-> >         ts_diff = timespec_elapsed(start);
-> >
-> > -       PER_PAGE_DEBUG("UFFDIO_COPY %d \t%ld ns\n", tid,
-> > +       PER_PAGE_DEBUG("UFFD page-in %d \t%ld ns\n", tid,
-> >                        timespec_to_ns(ts_diff));
-> >         PER_PAGE_DEBUG("Paged in %ld bytes at 0x%lx from thread %d\n",
-> >                        demand_paging_size, addr, tid);
-> > @@ -111,6 +126,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
-> >  bool quit_uffd_thread;
-> >
-> >  struct uffd_handler_args {
-> > +       int uffd_mode;
-> >         int uffd;
-> >         int pipefd;
-> >         useconds_t delay;
-> > @@ -187,7 +203,7 @@ static void *uffd_handler_thread_fn(void *arg)
-> >                 if (delay)
-> >                         usleep(delay);
-> >                 addr =  msg.arg.pagefault.address;
-> > -               r = handle_uffd_page_request(uffd, addr);
-> > +               r = handle_uffd_page_request(uffd_args->uffd_mode, uffd, addr);
-> >                 if (r < 0)
-> >                         return NULL;
-> >                 pages++;
-> > @@ -203,13 +219,32 @@ static void *uffd_handler_thread_fn(void *arg)
-> >
-> >  static void setup_demand_paging(struct kvm_vm *vm,
-> >                                 pthread_t *uffd_handler_thread, int pipefd,
-> > -                               useconds_t uffd_delay,
-> > +                               int uffd_mode, useconds_t uffd_delay,
-> >                                 struct uffd_handler_args *uffd_args,
-> > -                               void *hva, uint64_t len)
-> > +                               void *hva, void *alias, uint64_t len)
-> >  {
-> > +       bool is_minor = (uffd_mode == UFFDIO_REGISTER_MODE_MINOR);
-> >         int uffd;
-> >         struct uffdio_api uffdio_api;
-> >         struct uffdio_register uffdio_register;
-> > +       uint64_t expected_ioctls = ((uint64_t) 1) << _UFFDIO_COPY;
-> > +
-> > +       PER_PAGE_DEBUG("Userfaultfd %s mode, faults resolved with %s\n",
-> > +                      is_minor ? "MINOR" : "MISSING",
-> > +                      is_minor ? "UFFDIO_CONINUE" : "UFFDIO_COPY");
-> > +
-> > +       /* In order to get minor faults, prefault via the alias. */
-> > +       if (is_minor) {
-> > +               size_t p;
-> > +
-> > +               expected_ioctls = ((uint64_t) 1) << _UFFDIO_CONTINUE;
-> > +
-> > +               TEST_ASSERT(alias != NULL, "Alias required for minor faults");
-> > +               for (p = 0; p < (len / demand_paging_size); ++p) {
-> > +                       memcpy(alias + (p * demand_paging_size),
-> > +                              guest_data_prototype, demand_paging_size);
-> > +               }
-> > +       }
+> This patch has been written to support page-ins using userfaultfd's
+> SIGBUS feature.  When a userfaultfd is created with UFFD_FEATURE_SIGBUS,
+> `handle_userfault` will return VM_FAULT_SIGBUS instead of putting the
+> calling thread to sleep. Normal (non-guest) threads that access memory
+> that has been registered with a UFFD_FEATURE_SIGBUS userfaultfd receive
+> a SIGBUS.
 >
-> Would it be worth timing this operation? I think we'd need to know how
-> long we spent prefaulting the memory to really be able to compare UDDF
-> modes using this test.
+> When a vCPU gets an EPT page fault in a userfaultfd-registered region,
+> KVM calls into `handle_userfault` to resolve the page fault. With
+> UFFD_FEATURE_SIGBUS, VM_FAULT_SIGBUS is returned, but a SIGBUS is never
+> delivered to the userspace thread. This patch propagates the
+> VM_FAULT_SIGBUS error up to KVM, where we then send the signal.
+>
+> Upon receiving a VM_FAULT_SIGBUS, the KVM_RUN ioctl will exit to
+> userspace. This functionality already exists. This allows a hypervisor
+> to do page-ins with UFFD_FEATURE_SIGBUS:
+>
+> 1. Setup a SIGBUS handler to save the address of the SIGBUS (to a
+>    thread-local variable).
+> 2. Enter the guest.
+> 3. Immediately after KVM_RUN returns, check if the address has been set.
+> 4. If an address has been set, we exited due to a page fault that we can
+>    now handle.
+> 5. Userspace can do anything it wants to make the memory available,
+>    using MODE_NOWAKE for the UFFDIO memory installation ioctls.
+> 6. Re-enter the guest. If the memory still isn't ready, this process
+>    will repeat.
+>
+> This style of demand paging is significantly faster than the standard
+> poll/read/wake mechanism userfaultfd uses and completely bypasses the
+> userfaultfd waitq. For a single vCPU, page-in throughput increases by
+> about 3-4x.
 
-It's easy to time it and print out a value, so I'm happy to add it.
+Wow that's an awesome improvement! My impression is that the
+improvement is even more significant with more vCPUs because we avoid
+wait queue contention. Is that right?
 
-As for how useful it is, I'm not so sure. In general the way I think
-of it is, the prefaulting would happen during the precopy phase of
-live migration. During this phase, the VM is still running on the
-source machine, so the VM owner doesn't notice any performance
-degradation or slowness in this phase.
+How does this mode deal with situations where returning back to
+userspace isn't feasible? For example, if we're buried deep in some
+nested instruction emulation path, there may be no way to return back
+to userspace without creating unintended side effects. Do we have the
+facility to do a regular UFFD request in a case like that?
+
+As an aside, if you can think of a way to split this patch it would be
+easier to review. I realize most of the changes are propagating the
+fault_error parameter around though, so splitting the patch might not
+be easy.
 
 >
-> >
-> >         uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-> >         TEST_ASSERT(uffd >= 0, "uffd creation failed, errno: %d", errno);
-> > @@ -222,12 +257,13 @@ static void setup_demand_paging(struct kvm_vm *vm,
-> >
-> >         uffdio_register.range.start = (uint64_t)hva;
-> >         uffdio_register.range.len = len;
-> > -       uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-> > +       uffdio_register.mode = uffd_mode;
-> >         TEST_ASSERT(ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) != -1,
-> >                     "ioctl UFFDIO_REGISTER failed");
-> > -       TEST_ASSERT((uffdio_register.ioctls & UFFD_API_RANGE_IOCTLS) ==
-> > -                   UFFD_API_RANGE_IOCTLS, "unexpected userfaultfd ioctl set");
-> > +       TEST_ASSERT((uffdio_register.ioctls & expected_ioctls) ==
-> > +                   expected_ioctls, "missing userfaultfd ioctls");
-> >
-> > +       uffd_args->uffd_mode = uffd_mode;
-> >         uffd_args->uffd = uffd;
-> >         uffd_args->pipefd = pipefd;
-> >         uffd_args->delay = uffd_delay;
-> > @@ -239,7 +275,7 @@ static void setup_demand_paging(struct kvm_vm *vm,
-> >  }
-> >
-> >  struct test_params {
-> > -       bool use_uffd;
-> > +       int uffd_mode;
-> >         useconds_t uffd_delay;
-> >         enum vm_mem_backing_src_type src_type;
-> >         bool partition_vcpu_memory_access;
-> > @@ -276,7 +312,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >         perf_test_setup_vcpus(vm, nr_vcpus, guest_percpu_mem_size,
-> >                               p->partition_vcpu_memory_access);
-> >
-> > -       if (p->use_uffd) {
-> > +       if (p->uffd_mode) {
-> >                 uffd_handler_threads =
-> >                         malloc(nr_vcpus * sizeof(*uffd_handler_threads));
-> >                 TEST_ASSERT(uffd_handler_threads, "Memory allocation failed");
-> > @@ -290,6 +326,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >                 for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
-> >                         vm_paddr_t vcpu_gpa;
-> >                         void *vcpu_hva;
-> > +                       void *vcpu_alias;
-> >                         uint64_t vcpu_mem_size;
-> >
-> >
-> > @@ -304,8 +341,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >                         PER_VCPU_DEBUG("Added VCPU %d with test mem gpa [%lx, %lx)\n",
-> >                                        vcpu_id, vcpu_gpa, vcpu_gpa + vcpu_mem_size);
-> >
-> > -                       /* Cache the HVA pointer of the region */
-> > +                       /* Cache the host addresses of the region */
-> >                         vcpu_hva = addr_gpa2hva(vm, vcpu_gpa);
-> > +                       vcpu_alias = addr_gpa2alias(vm, vcpu_gpa);
-> >
-> >                         /*
-> >                          * Set up user fault fd to handle demand paging
-> > @@ -316,8 +354,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >                         TEST_ASSERT(!r, "Failed to set up pipefd");
-> >
-> >                         setup_demand_paging(vm, &uffd_handler_threads[vcpu_id],
-> > -                                           pipefds[vcpu_id * 2], p->uffd_delay,
-> > -                                           &uffd_args[vcpu_id], vcpu_hva,
-> > +                                           pipefds[vcpu_id * 2], p->uffd_mode,
-> > +                                           p->uffd_delay, &uffd_args[vcpu_id],
-> > +                                           vcpu_hva, vcpu_alias,
-> >                                             vcpu_mem_size);
-> >                 }
-> >         }
-> > @@ -346,7 +385,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >
-> >         pr_info("All vCPU threads joined\n");
-> >
-> > -       if (p->use_uffd) {
-> > +       if (p->uffd_mode) {
-> >                 char c;
-> >
-> >                 /* Tell the user fault fd handler threads to quit */
-> > @@ -368,7 +407,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >
-> >         free(guest_data_prototype);
-> >         free(vcpu_threads);
-> > -       if (p->use_uffd) {
-> > +       if (p->uffd_mode) {
-> >                 free(uffd_handler_threads);
-> >                 free(uffd_args);
-> >                 free(pipefds);
-> > @@ -378,11 +417,11 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >  static void help(char *name)
-> >  {
-> >         puts("");
-> > -       printf("usage: %s [-h] [-m mode] [-u] [-d uffd_delay_usec]\n"
-> > +       printf("usage: %s [-h] [-m mode] [-u mode] [-d uffd_delay_usec]\n"
+> Signed-off-by: James Houghton <jthoughton@google.com>
+> Suggested-by: Jue Wang <juew@google.com>
+> ---
+>  include/linux/hugetlb.h |  2 +-
+>  include/linux/mm.h      |  3 ++-
+>  mm/gup.c                | 57 +++++++++++++++++++++++++++--------------
+>  mm/hugetlb.c            |  5 +++-
+>  virt/kvm/kvm_main.c     | 30 +++++++++++++++++++++-
+>  5 files changed, 74 insertions(+), 23 deletions(-)
 >
-> NIT: maybe use uffd_mode or some word other than mode here to
-> disambiguate with -m
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index b92f25ccef58..a777fb254df0 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -119,7 +119,7 @@ int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *, struct vm_ar
+>  long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
+>                          struct page **, struct vm_area_struct **,
+>                          unsigned long *, unsigned long *, long, unsigned int,
+> -                        int *);
+> +                        int *, int *);
+>  void unmap_hugepage_range(struct vm_area_struct *,
+>                           unsigned long, unsigned long, struct page *);
+>  void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 322ec61d0da7..1dcd1ac81992 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1824,7 +1824,8 @@ long get_user_pages_locked(unsigned long start, unsigned long nr_pages,
+>  long pin_user_pages_locked(unsigned long start, unsigned long nr_pages,
+>                     unsigned int gup_flags, struct page **pages, int *locked);
+>  long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
+> -                   struct page **pages, unsigned int gup_flags);
+> +                   struct page **pages, unsigned int gup_flags,
+> +                   int *fault_error);
+>  long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
+>                     struct page **pages, unsigned int gup_flags);
 >
-> >                "          [-b memory] [-t type] [-v vcpus] [-o]\n", name);
-> >         guest_modes_help();
-> > -       printf(" -u: use User Fault FD to handle vCPU page\n"
-> > -              "     faults.\n");
-> > +       printf(" -u: use userfaultfd to handle vCPU page faults. Mode is a\n"
-> > +              "     UFFD registration mode: 'MISSING' or 'MINOR'.\n");
-> >         printf(" -d: add a delay in usec to the User Fault\n"
-> >                "     FD handler to simulate demand paging\n"
-> >                "     overheads. Ignored without -u.\n");
-> > @@ -409,13 +448,17 @@ int main(int argc, char *argv[])
-> >
-> >         guest_modes_append_default();
-> >
-> > -       while ((opt = getopt(argc, argv, "hm:ud:b:t:v:o")) != -1) {
-> > +       while ((opt = getopt(argc, argv, "hm:u:d:b:t:v:o")) != -1) {
-> >                 switch (opt) {
-> >                 case 'm':
-> >                         guest_modes_cmdline(optarg);
-> >                         break;
-> >                 case 'u':
-> > -                       p.use_uffd = true;
-> > +                       if (!strcmp("MISSING", optarg))
-> > +                               p.uffd_mode = UFFDIO_REGISTER_MODE_MISSING;
-> > +                       else if (!strcmp("MINOR", optarg))
-> > +                               p.uffd_mode = UFFDIO_REGISTER_MODE_MINOR;
-> > +                       TEST_ASSERT(p.uffd_mode, "UFFD mode must be 'MISSING' or 'MINOR'.");
-> >                         break;
-> >                 case 'd':
-> >                         p.uffd_delay = strtoul(optarg, NULL, 0);
-> > @@ -442,6 +485,9 @@ int main(int argc, char *argv[])
-> >                 }
-> >         }
-> >
-> > +       TEST_ASSERT(p.uffd_mode != UFFDIO_REGISTER_MODE_MINOR || p.src_type == VM_MEM_SRC_SHMEM,
-> > +                   "userfaultfd MINOR mode requires shared memory; pick a different -t");
-> > +
-> >         for_each_guest_mode(run_test, &p);
-> >
-> >         return 0;
-> > --
-> > 2.31.1.751.gd2f1c929bd-goog
-> >
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 0697134b6a12..ab55a67aef78 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -881,7 +881,8 @@ static int get_gate_page(struct mm_struct *mm, unsigned long address,
+>   * is, *@locked will be set to 0 and -EBUSY returned.
+>   */
+>  static int faultin_page(struct vm_area_struct *vma,
+> -               unsigned long address, unsigned int *flags, int *locked)
+> +               unsigned long address, unsigned int *flags, int *locked,
+> +               int *fault_error)
+>  {
+>         unsigned int fault_flags = 0;
+>         vm_fault_t ret;
+> @@ -906,6 +907,8 @@ static int faultin_page(struct vm_area_struct *vma,
+>         }
+>
+>         ret = handle_mm_fault(vma, address, fault_flags, NULL);
+> +       if (fault_error)
+> +               *fault_error = ret;
+>         if (ret & VM_FAULT_ERROR) {
+>                 int err = vm_fault_to_errno(ret, *flags);
+>
+> @@ -996,6 +999,8 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+>   * @vmas:      array of pointers to vmas corresponding to each page.
+>   *             Or NULL if the caller does not require them.
+>   * @locked:     whether we're still with the mmap_lock held
+> + * @fault_error: VM fault error from handle_mm_fault. NULL if the caller
+> + *             does not require this error.
+>   *
+>   * Returns either number of pages pinned (which may be less than the
+>   * number requested), or an error. Details about the return value:
+> @@ -1040,6 +1045,13 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+>   * when it's been released.  Otherwise, it must be held for either
+>   * reading or writing and will not be released.
+>   *
+> + * If @fault_error != NULL, __get_user_pages will return the VM fault error
+> + * from handle_mm_fault() in this argument in the event of a VM fault error.
+> + * On success (ret == nr_pages) fault_error is zero.
+> + * On failure (ret != nr_pages) fault_error may still be 0 if the error did
+> + * not originate from handle_mm_fault().
+> + *
+> + *
+>   * In most cases, get_user_pages or get_user_pages_fast should be used
+>   * instead of __get_user_pages. __get_user_pages should be used only if
+>   * you need some special @gup_flags.
+> @@ -1047,7 +1059,8 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+>  static long __get_user_pages(struct mm_struct *mm,
+>                 unsigned long start, unsigned long nr_pages,
+>                 unsigned int gup_flags, struct page **pages,
+> -               struct vm_area_struct **vmas, int *locked)
+> +               struct vm_area_struct **vmas, int *locked,
+> +               int *fault_error)
+>  {
+>         long ret = 0, i = 0;
+>         struct vm_area_struct *vma = NULL;
+> @@ -1097,7 +1110,7 @@ static long __get_user_pages(struct mm_struct *mm,
+>                         if (is_vm_hugetlb_page(vma)) {
+>                                 i = follow_hugetlb_page(mm, vma, pages, vmas,
+>                                                 &start, &nr_pages, i,
+> -                                               gup_flags, locked);
+> +                                               gup_flags, locked, fault_error);
+>                                 if (locked && *locked == 0) {
+>                                         /*
+>                                          * We've got a VM_FAULT_RETRY
+> @@ -1124,7 +1137,8 @@ static long __get_user_pages(struct mm_struct *mm,
+>
+>                 page = follow_page_mask(vma, start, foll_flags, &ctx);
+>                 if (!page) {
+> -                       ret = faultin_page(vma, start, &foll_flags, locked);
+> +                       ret = faultin_page(vma, start, &foll_flags, locked,
+> +                                          fault_error);
+>                         switch (ret) {
+>                         case 0:
+>                                 goto retry;
+> @@ -1280,7 +1294,8 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+>                                                 struct page **pages,
+>                                                 struct vm_area_struct **vmas,
+>                                                 int *locked,
+> -                                               unsigned int flags)
+> +                                               unsigned int flags,
+> +                                               int *fault_error)
+>  {
+>         long ret, pages_done;
+>         bool lock_dropped;
+> @@ -1311,7 +1326,7 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+>         lock_dropped = false;
+>         for (;;) {
+>                 ret = __get_user_pages(mm, start, nr_pages, flags, pages,
+> -                                      vmas, locked);
+> +                                      vmas, locked, fault_error);
+>                 if (!locked)
+>                         /* VM_FAULT_RETRY couldn't trigger, bypass */
+>                         return ret;
+> @@ -1371,7 +1386,7 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+>
+>                 *locked = 1;
+>                 ret = __get_user_pages(mm, start, 1, flags | FOLL_TRIED,
+> -                                      pages, NULL, locked);
+> +                                      pages, NULL, locked, fault_error);
+>                 if (!*locked) {
+>                         /* Continue to retry until we succeeded */
+>                         BUG_ON(ret != 0);
+> @@ -1458,7 +1473,7 @@ long populate_vma_page_range(struct vm_area_struct *vma,
+>          * not result in a stack expansion that recurses back here.
+>          */
+>         return __get_user_pages(mm, start, nr_pages, gup_flags,
+> -                               NULL, NULL, locked);
+> +                               NULL, NULL, locked, NULL);
+>  }
+>
+>  /*
+> @@ -1524,7 +1539,7 @@ int __mm_populate(unsigned long start, unsigned long len, int ignore_errors)
+>  static long __get_user_pages_locked(struct mm_struct *mm, unsigned long start,
+>                 unsigned long nr_pages, struct page **pages,
+>                 struct vm_area_struct **vmas, int *locked,
+> -               unsigned int foll_flags)
+> +               unsigned int foll_flags, int *fault_error)
+>  {
+>         struct vm_area_struct *vma;
+>         unsigned long vm_flags;
+> @@ -1590,7 +1605,8 @@ struct page *get_dump_page(unsigned long addr)
+>         if (mmap_read_lock_killable(mm))
+>                 return NULL;
+>         ret = __get_user_pages_locked(mm, addr, 1, &page, NULL, &locked,
+> -                                     FOLL_FORCE | FOLL_DUMP | FOLL_GET);
+> +                                     FOLL_FORCE | FOLL_DUMP | FOLL_GET,
+> +                                     NULL);
+>         if (locked)
+>                 mmap_read_unlock(mm);
+>
+> @@ -1704,11 +1720,11 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+>
+>         if (!(gup_flags & FOLL_LONGTERM))
+>                 return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
+> -                                              NULL, gup_flags);
+> +                                              NULL, gup_flags, NULL);
+>         flags = memalloc_pin_save();
+>         do {
+>                 rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
+> -                                            NULL, gup_flags);
+> +                                            NULL, gup_flags, NULL);
+>                 if (rc <= 0)
+>                         break;
+>                 rc = check_and_migrate_movable_pages(rc, pages, gup_flags);
+> @@ -1764,7 +1780,8 @@ static long __get_user_pages_remote(struct mm_struct *mm,
+>
+>         return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
+>                                        locked,
+> -                                      gup_flags | FOLL_TOUCH | FOLL_REMOTE);
+> +                                      gup_flags | FOLL_TOUCH | FOLL_REMOTE,
+> +                                      NULL);
+>  }
+>
+>  /**
+> @@ -1941,7 +1958,7 @@ long get_user_pages_locked(unsigned long start, unsigned long nr_pages,
+>
+>         return __get_user_pages_locked(current->mm, start, nr_pages,
+>                                        pages, NULL, locked,
+> -                                      gup_flags | FOLL_TOUCH);
+> +                                      gup_flags | FOLL_TOUCH, NULL);
+>  }
+>  EXPORT_SYMBOL(get_user_pages_locked);
+>
+> @@ -1961,7 +1978,8 @@ EXPORT_SYMBOL(get_user_pages_locked);
+>   * (e.g. FOLL_FORCE) are not required.
+>   */
+>  long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
+> -                            struct page **pages, unsigned int gup_flags)
+> +                            struct page **pages, unsigned int gup_flags,
+> +                            int *fault_error)
+>  {
+>         struct mm_struct *mm = current->mm;
+>         int locked = 1;
+> @@ -1978,7 +1996,8 @@ long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
+>
+>         mmap_read_lock(mm);
+>         ret = __get_user_pages_locked(mm, start, nr_pages, pages, NULL,
+> -                                     &locked, gup_flags | FOLL_TOUCH);
+> +                                     &locked, gup_flags | FOLL_TOUCH,
+> +                                     fault_error);
+>         if (locked)
+>                 mmap_read_unlock(mm);
+>         return ret;
+> @@ -2550,7 +2569,7 @@ static int __gup_longterm_unlocked(unsigned long start, int nr_pages,
+>                 mmap_read_unlock(current->mm);
+>         } else {
+>                 ret = get_user_pages_unlocked(start, nr_pages,
+> -                                             pages, gup_flags);
+> +                                             pages, gup_flags, NULL);
+>         }
+>
+>         return ret;
+> @@ -2880,7 +2899,7 @@ long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
+>                 return -EINVAL;
+>
+>         gup_flags |= FOLL_PIN;
+> -       return get_user_pages_unlocked(start, nr_pages, pages, gup_flags);
+> +       return get_user_pages_unlocked(start, nr_pages, pages, gup_flags, NULL);
+>  }
+>  EXPORT_SYMBOL(pin_user_pages_unlocked);
+>
+> @@ -2909,6 +2928,6 @@ long pin_user_pages_locked(unsigned long start, unsigned long nr_pages,
+>         gup_flags |= FOLL_PIN;
+>         return __get_user_pages_locked(current->mm, start, nr_pages,
+>                                        pages, NULL, locked,
+> -                                      gup_flags | FOLL_TOUCH);
+> +                                      gup_flags | FOLL_TOUCH, NULL);
+>  }
+>  EXPORT_SYMBOL(pin_user_pages_locked);
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 3db405dea3dc..889ac33d57d5 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5017,7 +5017,8 @@ static void record_subpages_vmas(struct page *page, struct vm_area_struct *vma,
+>  long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>                          struct page **pages, struct vm_area_struct **vmas,
+>                          unsigned long *position, unsigned long *nr_pages,
+> -                        long i, unsigned int flags, int *locked)
+> +                        long i, unsigned int flags, int *locked,
+> +                        int  *fault_error)
+>  {
+>         unsigned long pfn_offset;
+>         unsigned long vaddr = *position;
+> @@ -5103,6 +5104,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>                         }
+>                         ret = hugetlb_fault(mm, vma, vaddr, fault_flags);
+>                         if (ret & VM_FAULT_ERROR) {
+> +                               if (fault_error)
+> +                                       *fault_error = ret;
+>                                 err = vm_fault_to_errno(ret, flags);
+>                                 remainder = 0;
+>                                 break;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 2799c6660cce..0a20d926ae32 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2004,6 +2004,30 @@ static bool hva_to_pfn_fast(unsigned long addr, bool write_fault,
+>         return false;
+>  }
+>
+> +static void kvm_send_vm_fault_signal(int fault_error, int errno,
+> +                                    unsigned long address,
+> +                                    struct task_struct *tsk)
+> +{
+> +       kernel_siginfo_t info;
+> +
+> +       clear_siginfo(&info);
+> +
+> +       if (fault_error == VM_FAULT_SIGBUS)
+> +               info.si_signo = SIGBUS;
+> +       else if (fault_error == VM_FAULT_SIGSEGV)
+> +               info.si_signo = SIGSEGV;
+> +       else
+> +               // Other fault errors should not result in a signal.
+> +               return;
+> +
+> +       info.si_errno = errno;
+> +       info.si_code = BUS_ADRERR;
+> +       info.si_addr = (void __user *)address;
+> +       info.si_addr_lsb = PAGE_SHIFT;
+> +
+> +       send_sig_info(info.si_signo, &info, tsk);
+> +}
+> +
+>  /*
+>   * The slow path to get the pfn of the specified host virtual address,
+>   * 1 indicates success, -errno is returned if error is detected.
+> @@ -2014,6 +2038,7 @@ static int hva_to_pfn_slow(unsigned long addr, bool *async, bool write_fault,
+>         unsigned int flags = FOLL_HWPOISON;
+>         struct page *page;
+>         int npages = 0;
+> +       int fault_error;
+>
+>         might_sleep();
+>
+> @@ -2025,7 +2050,10 @@ static int hva_to_pfn_slow(unsigned long addr, bool *async, bool write_fault,
+>         if (async)
+>                 flags |= FOLL_NOWAIT;
+>
+> -       npages = get_user_pages_unlocked(addr, 1, &page, flags);
+> +       npages = get_user_pages_unlocked(addr, 1, &page, flags, &fault_error);
+> +       if (fault_error & VM_FAULT_ERROR)
+> +               kvm_send_vm_fault_signal(fault_error, npages, addr, current);
+> +
+>         if (npages != 1)
+>                 return npages;
+>
+> --
+> 2.31.1.751.gd2f1c929bd-goog
+>
