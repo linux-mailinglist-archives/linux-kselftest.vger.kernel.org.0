@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1774D38943D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 May 2021 18:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDD838944D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 May 2021 19:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355470AbhESQ7T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 May 2021 12:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S1355489AbhESRD7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 May 2021 13:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355419AbhESQ7T (ORCPT
+        with ESMTP id S1355494AbhESRDy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 May 2021 12:59:19 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CDCC061760
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 09:57:58 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id p20so16439333ljj.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 09:57:57 -0700 (PDT)
+        Wed, 19 May 2021 13:03:54 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC7AC061760
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 10:02:34 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id p20so16456015ljj.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 10:02:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nXnRBFRSdAWxCxN1vjVIJlzYFA0xQryLk10gJy9ij6Q=;
-        b=pS95ZLgayqQwxXeQu8ZyQ8ycWuDd16ElGeC0xgVYQUfHCnl9JqIwvNsLMVzYfpTn+u
-         4ylD5YuNNMfyuo+nPoA6mEIO3YGuJw8E4wG16u8d2PGReQu3zyMBFOG9ta3vUoParUt6
-         VBwXR6Hnm+iQwRnaU0ju2zrO6HTCf5g6XRrEE6GN7GeKRDvFqs8MA2sHf3MHccHnaFE6
-         ORhUxGYQAZe4Mt2I3W23avCfWFCIsSeLgpToUJu3q8FEeX7qIfxWlQVpVKoxLVNKcUB2
-         Ks0pVOb7sy0MIfXP21Iz0SORueBfNACFXhk9ZAJiTR3OgxcxbO7w5lPRXdyc8yjPaELJ
-         4K6Q==
+        bh=KYEHus9mFcMQyVLotJ3OZmJHh5tJfhq+Pwdg5CqpwgU=;
+        b=MMpYsiS99gN+THuy0lPQ/HUm+reH47/1KUPbzRS6M1wIQ7IGFnidDqSnmBFOpwehxx
+         nOsLeNITKnX4u3V494si+waOCpQ6ak4IgvNZohaOBKK2vNRN9oQFpRusdLGgZAK+3pX1
+         r6p3272/NVav87LVQr3PM+USPsFBYa6Epzbx7TqQGmohhgZu3yIXSi+TKrSNGsnGbj5u
+         1jQReEx5T5kARAdGGblKnlm6LtjQ0NdtiJRB+03xkQ/JylI3GbBUc/O1yp7EYhH1uBDR
+         Kghz3Z3pNfzQdC/oFbJKvMETH6zEH70zlVVaHs4MNH582a55c62CKnXGTYmzerq9dnxA
+         EnaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nXnRBFRSdAWxCxN1vjVIJlzYFA0xQryLk10gJy9ij6Q=;
-        b=C9Zuri+FWYj5yZvQTPh9mtZnhxtvWBLKUAxeki3WMKN5UJ7vreLvIVVvyTnti0wsG0
-         MDTjYQ3IvjjnreawCtziHTyrGJMoBllFzcUhtDn+VGWrvsSnQr1vXlqhEWyodwn5NxQf
-         46PL87/4c02rzPuqRFkAhYjZZLCMybl0aiqixBEz5ZRaYTaIGQBbG3kdR1X+uos72Gzn
-         gvbhQiUByDD4DPlO66hnMcAczaS9Qpap3jiu17cGcJA7WOQ7gFr70HVAJi6aTs+pd9wN
-         slOe4gggvDC6Ke7xUGZDsgu5NSy3J7w/UFtq/BpmIpiWxret1bGjmnRsIQupjZ/k5z3Y
-         s6SQ==
-X-Gm-Message-State: AOAM532WD1Eju4NGny9iuSZltTwBdxN+VPuEnarRuHoq61rz9nCe1IMR
-        qCoF10ViuYsvxbWHTd9hScyAGnt+l+OOgEp+rJURGg==
-X-Google-Smtp-Source: ABdhPJzI+2nDatir7SSjGH9vGdaZ94OaqoLrJ65pr7UMe9dwtydU4yzOQkWodFVnPMXpww81DjPTXpOxM5ET8qLqvAo=
-X-Received: by 2002:a2e:5d7:: with SMTP id 206mr151620ljf.448.1621443475884;
- Wed, 19 May 2021 09:57:55 -0700 (PDT)
+        bh=KYEHus9mFcMQyVLotJ3OZmJHh5tJfhq+Pwdg5CqpwgU=;
+        b=OHGChsXhWUfDQRK5lrLfkqYMViNbJ1NE2gh8nkbBjX4ztClJOtTgt5o3Pt3BO8psD/
+         pBhN5FIhpIIjm858m7xwrPSItA93qiEsQJd1Po1ACoQ/gkuBt2i44GMx2FHNpMIHzfkH
+         oBjp58G4mJQomdx7a2y9/OB4E+6mhwCkX7+0NVMUa4xwsBGiLpNOSpS/+8gQf7LO65ow
+         phho/xEfHe4Jp67Y49E8Qod5lIrvutfMvSm5aowgSCxHqVNBvupqcC2BbjD2RWVYudR7
+         dYsBBdDrOhJSHN+WREaERxEAyIc54k1JRV1Tpi9Bvil2vL9nR8LQQmLCVDe5iwsXzeEq
+         iSrA==
+X-Gm-Message-State: AOAM531GaqINQCR04w0sJd5a+GZeXx8cWAQUKTsq0pL8pzzuxGaKC3Qk
+        G3nOWoemp3qZ1JxC/QG2AfDqIFm7HfztgNpHECNtYg==
+X-Google-Smtp-Source: ABdhPJzkGyod4UFQTKgh6iVIzPSQBVQPqitmSo9L02VJ97UmqyTweH3QZUVF70Yb7cixe5VCZu2rOn3+5tapf4hpWdc=
+X-Received: by 2002:a2e:5c83:: with SMTP id q125mr121364ljb.447.1621443752367;
+ Wed, 19 May 2021 10:02:32 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210517145314.157626-1-jingzhangos@google.com> <20210517145314.157626-4-jingzhangos@google.com>
 In-Reply-To: <20210517145314.157626-4-jingzhangos@google.com>
 From:   David Matlack <dmatlack@google.com>
-Date:   Wed, 19 May 2021 09:57:29 -0700
-Message-ID: <CALzav=e9iLLzZyccXq6gTM0nv6n=6qEUO+VYQ-RzJ44tNK30NQ@mail.gmail.com>
+Date:   Wed, 19 May 2021 10:02:06 -0700
+Message-ID: <CALzav=chQrg=8krzt_aNuUfKW39SADUr-7C=i1iJSvEU5P=P0Q@mail.gmail.com>
 Subject: Re: [PATCH v5 3/4] KVM: stats: Add documentation for statistics data
  binary interface
 To:     Jing Zhang <jingzhangos@google.com>
@@ -130,11 +130,6 @@ On Mon, May 17, 2021 at 9:25 AM Jing Zhang <jingzhangos@google.com> wrote:
 > +
 > +The Header block is always at the start of the file. It is only needed to be
 > +read one time after a system boot.
-
-By system boot do you mean the host or the VM? If the host then it's
-probably just cleaner to omit that part entirely and just say "It is
-only needed to be read once.".
-
 > +It is in the form of ``struct kvm_stats_header`` as below::
 > +
 > +       #define KVM_STATS_ID_MAXLEN             64
@@ -149,9 +144,6 @@ only needed to be read once.".
 > +
 > +The ``id`` field is identification for the corresponding KVM statistics. For
 > +KVM statistics, it is in the form of "kvm-{kvm pid}", like "kvm-12345". For
-
-Should this say "For VM statistics, ..." instead?
-
 > +VCPU statistics, it is in the form of "kvm-{kvm pid}/vcpu-{vcpu id}", like
 > +"kvm-12345/vcpu-12".
 > +
@@ -167,15 +159,7 @@ Should this say "For VM statistics, ..." instead?
 > +of the file indicated by the file descriptor.
 > +
 > +The Descriptors block is only needed to be read once after a system boot. It is
-
-Ditto here about system boot.
-
 > +an array of ``struct kvm_stats_desc`` as below::
-
-Consider omitting these macros from the documentation, or moving them
-to later. Readers right here are expecting to see the struct
-kvm_stats_desc given the previous line.
-
 > +
 > +       #define KVM_STATS_TYPE_SHIFT            0
 > +       #define KVM_STATS_TYPE_MASK             (0xF << KVM_STATS_TYPE_SHIFT)
@@ -196,12 +180,6 @@ kvm_stats_desc given the previous line.
 > +       #define KVM_STATS_SCALE_POW10           (0x0 << KVM_STATS_SCALE_SHIFT)
 > +       #define KVM_STATS_SCALE_POW2            (0x1 << KVM_STATS_SCALE_SHIFT)
 > +       #define KVM_STATS_SCALE_MAX             KVM_STATS_SCALE_POW2
-
-Terminology nit: I think usually this part is called the "base". e.g.
-when you decompose a number X into N * B^E, B is the "base" and E is
-the "exponent". I see you're using "exponent" already but it might
-make sense to change "scale" to "base" throughout this series.
-
 > +
 > +       struct kvm_stats_desc {
 > +               __u32 flags;
@@ -214,21 +192,6 @@ make sense to change "scale" to "base" throughout this series.
 > +
 > +The ``flags`` field contains the type and unit of the statistics data described
 > +by this descriptor. The following flags are supported:
-
-nit: Suggest breaking this list out into separate lists so readers can
-differentiate between the type, unit, and scale. Something like:
-
-Bits 0-3 of ``flags`` encode the type:
-
-* ``KVM_STATS_TYPE_CUMULATIVE`` ...
-* ``KVM_STATS_TYPE_INSTANT`` ...
-
-Bits 4-7 of ``flags encode the unit:
-
-* ``KVM_STATS_UNIT_NONE`` ...
-...
-etc.
-
 > +  * ``KVM_STATS_TYPE_CUMULATIVE``
 > +    The statistics data is cumulative. The value of data can only be increased.
 > +    Most of the counters used in KVM are of this type.
@@ -269,21 +232,16 @@ etc.
 > +The ``exponent`` field is the scale of corresponding statistics data. It has two
 > +values as follows:
 > +  * ``KVM_STATS_SCALE_POW10``
-
-I thought the scale was encoded in ``flags`` not ``exponent``? Isn't
-the exponent the
-
 > +    The scale is based on power of 10. It is used for measurement of time and
 > +    CPU clock cycles.
 > +  * ``KVM_STATS_SCALE_POW2``
 > +    The scale is based on power of 2. It is used for measurement of memory size.
-
-It might be useful to give an example of how to use the exponent field
-in practice.
-
 > +
 > +The ``size`` field is the number of values of this statistics data. It is in the
 > +unit of ``unsigned long`` for VCPU or ``__u64`` for VM.
+
+Note it is the reverse in the implementation.
+
 > +
 > +The ``unused1`` and ``unused2`` fields are reserved for future
 > +support for other types of statistics data, like log/linear histogram.
