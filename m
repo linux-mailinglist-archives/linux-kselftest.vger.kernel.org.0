@@ -2,483 +2,469 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F83E38CE23
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 May 2021 21:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125C738CF71
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 May 2021 22:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239006AbhEUT1J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 May 2021 15:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S229708AbhEUU7E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 May 2021 16:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238069AbhEUT1I (ORCPT
+        with ESMTP id S229659AbhEUU7D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 May 2021 15:27:08 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CCCC0613ED
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 May 2021 12:25:45 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id t206so11702999wmf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 May 2021 12:25:45 -0700 (PDT)
+        Fri, 21 May 2021 16:59:03 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D443C0613ED
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 May 2021 13:57:39 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id g18so14120309pfr.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 May 2021 13:57:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ZmKT0YhdfiCbhIMkJqqedNQtjVqFwHlXAnvfxWPTnYA=;
-        b=nwnq2MGlFpDTOem8Gr4UzT1fxlIMiHyx1YWb9Mn7RQeD8AeyNPXfxeYbbgkIO5jdLb
-         scE9daEixHObaOAFycg3JipmowQrJva8yy0l7FHsTtq9NGwO5tLwOEpyVvrQDLn1XpI7
-         rCIX6KZvD0KD7/Fv8IJCpiH7+qzGmxAvuTsD3T4ezXUXsOlmoyTvJ0rCCQHl1tcVLExh
-         eTjidzQXu0e7sNj39cu+aLIoMOExQRWhSubQJMRk9mRqzvdHfFJgzTMzoLCYLUohOnrk
-         IZyIb7HoRXLIGY5GC6nvqmw44aTP3DHfqKhIic/6sM7nlAH/gsjVml+AjdHQ4txwkWu5
-         AEjQ==
+        bh=kkPdjm35hDZxcrkK9GJ+jftqINU4WgEPUSzkOsfGeVE=;
+        b=PvLCEIT5kZnZ1X1+moFDE18ipumIZcvdEqbTlzqtAUn+JdBjaJhxbOCV21+MDieqwo
+         czmP3YUa5ZNnBk/+VysRzu34vFK/JXHaqcS+zRZTAkk/ZGQsDCezIBH0tlAjoPQmIIPD
+         N1NRoe0mjK63AQqA1HNs4MckMmDbBMKVNiZR3ro3BVN8h5dRA0pu4MFHzSujTYwQPhx5
+         rirn9j2qwKC8oREOwVu0MkxvTsD93mZv2zckGXbxMp7EItJwhc1ao2xISyepyC5P4xw0
+         WAQ5ZHQtOlokD53E6UTkcb8nCGGXwjDCU6GBe6J0lvIXenWeqQeEch3YhjNOsanpXbiN
+         CNqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZmKT0YhdfiCbhIMkJqqedNQtjVqFwHlXAnvfxWPTnYA=;
-        b=ZfA0fdG1FQXT6kY1MSyqMDUYFdWxZdflu9l5Bf0tl16cAPkhKEFuY1xi4vKO2Spz1q
-         OgYkbtlkXav2j0Fhr9E4VjNpvpTsyKW/kRPj9VrxbBtVQBxdzQ/lO67EVi6MRggE0o4v
-         +QCkrQiujpko48E5Mz31mvYFJYlLTdM61npVbq9WU9DgFKYYSVN9XDyctCc8V92yFtfJ
-         s7zFa48M5WxJ/peDL1or0gtuMvFOy2Np6L+VWxR1U3jQUZG37IpT2El+lq8ai0Li0RJL
-         fOdTbYN0CfRRIrBL1uQaGoWn1RFaOYWPNW44kuJpkIAOvvQLuVPQ/F178CqnxdJZg3rn
-         orWA==
-X-Gm-Message-State: AOAM532rXE1x9KyXOjJRgdwkw5VRpUTKY6XfsEFPNNo72U0X75CVsLYv
-        wYN4skYDXQYYtCo+1yJvt5QVgUTymjtY5kwsEVOgPURpQYVddg==
-X-Google-Smtp-Source: ABdhPJyA4XzgeWdT0CnUGJLp35x2mUov9iR6ML98MEaq4lMOjnanr99XTJ+DoaGadxgsXaEnPK1YdUIyHGUnSJnRGw4=
-X-Received: by 2002:a1c:7313:: with SMTP id d19mr10163655wmb.14.1621625142938;
- Fri, 21 May 2021 12:25:42 -0700 (PDT)
+        bh=kkPdjm35hDZxcrkK9GJ+jftqINU4WgEPUSzkOsfGeVE=;
+        b=sBgcbE+svbd2PhQs/nEqVW7dEyPCRJavoOw/S+hTf1JYJGDoojBPubU+B6rsUBjPOj
+         LYCVaT17iCFu8l67WgejU0Bf0kfXUfTL6h4wt+1QTQJd4L9Nbk2zqAQgqq5farLMiDiZ
+         50LWw4zgku8xNgfOnI4oCGioRQjLrCfZ9U6DAJ6LWMFrvmj/aZL0k/bHaUYX5x5DtFoQ
+         043Bc2cgdQJMh5Pj7iJcBt420/LPCOzgU7eozJKdiRxzw92M9n5KHsUS+/cgd2uFN06O
+         sFubd/PBe9otXc8cxbWvSeKLW1ePKKMhnkv9s5SxkMUiW6lNs53pU6ev1UYweIb4WrV2
+         ojQA==
+X-Gm-Message-State: AOAM530o9pMlPlxCK7tXqneH1bYdE0/oW8P8805AqxJ4+nmIXcCkKJAM
+        g0fT2YW7QjJgvqW18Mxxi+Aba3iGU8/RQTtxsE9RNg==
+X-Google-Smtp-Source: ABdhPJwRfx5r/R/iPGbnRRaSZSdn3+n2js532Xgebo45zkuDDoYmHiBMk+2wKNRwIbb3GJ/wTSZI/eOMGRkcLDaIxk4=
+X-Received: by 2002:a05:6a00:224c:b029:28e:6004:d0a5 with SMTP id
+ i12-20020a056a00224cb029028e6004d0a5mr12133806pfu.1.1621630658450; Fri, 21
+ May 2021 13:57:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210519210437.1688484-1-jthoughton@google.com> <CANgfPd-=+-0+UzXD+zpqX50SGEi_wCLVJfsv63Rq9GYR+4-dCw@mail.gmail.com>
-In-Reply-To: <CANgfPd-=+-0+UzXD+zpqX50SGEi_wCLVJfsv63Rq9GYR+4-dCw@mail.gmail.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Fri, 21 May 2021 15:25:31 -0400
-Message-ID: <CADrL8HU4Yj_uAWKCLanUmQoDS6rsoo1GJiJhiCY=e0Lwm_zyiw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] KVM: Deliver VM fault signals to userspace
-To:     Ben Gardon <bgardon@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Jue Wang <juew@google.com>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
+References: <20210507213110.155492-1-brendanhiggins@google.com>
+ <20210507213110.155492-4-brendanhiggins@google.com> <CABVgOSmEe32_kT9TR0-H8biuWGc1Rexne86DgLxths+GUHHgig@mail.gmail.com>
+ <CABVgOS=W-UhLJ5siu2u=Nus6g2zMEHM6c9ck2DHbHr0e5uCqSQ@mail.gmail.com>
+ <CAFd5g46kOy=JtNSX6nhMO6TdHK7sAZfvD=UqLpFDXPVFw4M4fA@mail.gmail.com> <CABVgOSkXYHs=xfg_sKsm8RzKB2JdnCatE2AViCh8DJ4po+C=3Q@mail.gmail.com>
+In-Reply-To: <CABVgOSkXYHs=xfg_sKsm8RzKB2JdnCatE2AViCh8DJ4po+C=3Q@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 21 May 2021 13:57:25 -0700
+Message-ID: <CAFd5g45Vj59kMihhCVdY0AHcxWXsMVpSuy8po7staSOWzyX2xw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/4] kunit: tool: add support for QEMU
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thanks Ben.
-
-First I'd like to clarify that the 3-4x speedup was measured without
-KVM (calling UFFDIO_COPY from the signal handler, not signal-safe);
-with KVM it drops to about a 30% improvement (single vCPU). This isn't
-that important though, as the real purpose of the change is to allow
-userfaultfd page-ins to scale better. To test scaling, I've updated
-the KVM demand paging self-test to fix the non-partitioned userfaultfd
-case (I will send this out when I send a new patchset that addresses
-your concerns). It turns out that we contend on the threads'
-sighand->siglock (because pthread_create uses CLONE_SIGHAND). Needless
-to say, I need to do more testing.
-
-Removing the siglock contention should lead to better page-in
-performance at scale, but this patch won't be useful unless I can
-actually demonstrate this. There are a few couple benefits I forgot to
-mention in the commit message.
-1. NUMA locality for page-in threads is much easier to maintain when
-using UFFD_FEATURE_SIGBUS.
-2. The number of threads that perform page-ins automatically scales
-with the number of vCPUs.
-
-Regarding situations where the kernel is unable to return to
-userspace: thanks for pointing this out. If we can solve the signal
-contention problems with this approach, page-ins this way might end up
-being quite desirable, but only if we can actually exit to userspace.
-So we could implement a SIGBUS-like userfaultfd feature, where it
-returns VM_FAULT_SIGBUS if it knows the caller is ready to handle it
-(i.e., in this patchset, if a caller has passed a non-NULL
-`fault_error` to get_user_pages), otherwise continue with the
-handle_userfault path and put the thread to sleep. I'll work on this.
-
-- James
-
-
-On Wed, May 19, 2021 at 6:41 PM Ben Gardon <bgardon@google.com> wrote:
+On Thu, May 20, 2021 at 8:53 PM David Gow <davidgow@google.com> wrote:
 >
-> On Wed, May 19, 2021 at 2:04 PM James Houghton <jthoughton@google.com> wrote:
+> On Wed, May 19, 2021 at 4:43 AM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
 > >
-> > This patch has been written to support page-ins using userfaultfd's
-> > SIGBUS feature.  When a userfaultfd is created with UFFD_FEATURE_SIGBUS,
-> > `handle_userfault` will return VM_FAULT_SIGBUS instead of putting the
-> > calling thread to sleep. Normal (non-guest) threads that access memory
-> > that has been registered with a UFFD_FEATURE_SIGBUS userfaultfd receive
-> > a SIGBUS.
+> > On Mon, May 17, 2021 at 8:01 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > On Sat, May 15, 2021 at 3:59 PM David Gow <davidgow@google.com> wrote:
+> > > >
+> > > > On Sat, May 8, 2021 at 5:31 AM Brendan Higgins
+> > > > <brendanhiggins@google.com> wrote:
+> > > > >
+> > > > > Add basic support to run QEMU via kunit_tool. Add support for i386,
+> > > > > x86_64, arm, arm64, and a bunch more.
+> > > > >
+> > > > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > > > > Tested-by: David Gow <davidgow@google.com>
+> > > > > ---
+> > > > >
+> > > > > Changes since last revision:
+> > > > >
+> > > > > - A number of minor obvious issues pointed out by David and Daniel.
+> > > > > - Added facility for merging Kconfigs at Daniel's suggestion.
+> > > > > - Broke out qemu_configs each into their own config file which is loaded
+> > > > >   dynamically - mostly at David's suggestion.
+> > > > >
+> > > > > ---
+> > > >
+> > > > This seems pretty good to me. I only have one real complaint --
+> > > > qemu_configs needing to be in a subdirectory of ./tools/testing/kunit
+> > > > -- but am able to tolerate that (even if I'd prefer not to have it) if
+> > > > it's documented properly.
+> > > >
+> > > > Otherwise, save for a couple of minor nitpicks, this seems good to go.
+> > > >
+> > > > Reviewed-by: David Gow <davidgow@google.com>
+> > > >
+> > > >
+> > >
+> > > One thing I forgot to mention is that I'm not 100% sure about the
+> > > Kconfig fragments being embedded in the qemu_configs. I still kind-of
+> > > prefer the idea of them being in separate config files. While I don't
 > >
-> > When a vCPU gets an EPT page fault in a userfaultfd-registered region,
-> > KVM calls into `handle_userfault` to resolve the page fault. With
-> > UFFD_FEATURE_SIGBUS, VM_FAULT_SIGBUS is returned, but a SIGBUS is never
-> > delivered to the userspace thread. This patch propagates the
-> > VM_FAULT_SIGBUS error up to KVM, where we then send the signal.
+> > I don't feel strongly either way, but I don't have a good idea on how
+> > to implement your idea well. How about we leave it for now, and if you
+> > decide you really want to do something about it, you can do it?
 > >
-> > Upon receiving a VM_FAULT_SIGBUS, the KVM_RUN ioctl will exit to
-> > userspace. This functionality already exists. This allows a hypervisor
-> > to do page-ins with UFFD_FEATURE_SIGBUS:
+> > > think this is necessarily a blocker, I did just realise that, by
+> > > default, kunit.py run --arch=<non-UM-arch> will pull its default
+> > > .kunitconfig from arch/um/configs/kunit_defconfig, which definitely
+> > > feels awkward when UML is not otherwise involved.
 > >
-> > 1. Setup a SIGBUS handler to save the address of the SIGBUS (to a
-> >    thread-local variable).
-> > 2. Enter the guest.
-> > 3. Immediately after KVM_RUN returns, check if the address has been set.
-> > 4. If an address has been set, we exited due to a page fault that we can
-> >    now handle.
-> > 5. Userspace can do anything it wants to make the memory available,
-> >    using MODE_NOWAKE for the UFFDIO memory installation ioctls.
-> > 6. Re-enter the guest. If the memory still isn't ready, this process
-> >    will repeat.
+> > Hmmm...this file is identical to
+> > tools/testing/kunit/configs/all_tests.config. Maybe we should just use
+> > that instead?
 > >
-> > This style of demand paging is significantly faster than the standard
-> > poll/read/wake mechanism userfaultfd uses and completely bypasses the
-> > userfaultfd waitq. For a single vCPU, page-in throughput increases by
-> > about 3-4x.
 >
-> Wow that's an awesome improvement! My impression is that the
-> improvement is even more significant with more vCPUs because we avoid
-> wait queue contention. Is that right?
+> That sounds like a better plan. It looks like all_tests.config isn't
+> used anywhere, anyway. I might rename it and replace the
+> arch/um/.../kunit_defconfig version in another patch, then.
 >
-> How does this mode deal with situations where returning back to
-> userspace isn't feasible? For example, if we're buried deep in some
-> nested instruction emulation path, there may be no way to return back
-> to userspace without creating unintended side effects. Do we have the
-> facility to do a regular UFFD request in a case like that?
+> > > Some further thoughts below (which range a bit from "practical
+> > > suggestion" to "overcomplicated ponderings", so don't feel the
+> > > pressure to take all of them).
+> > >
+> > > (...snip...)
+> > >
+> > > > > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> > > > > index e22ade9d91ad5..2bd196fd69e5c 100644
+> > > > > --- a/tools/testing/kunit/kunit_kernel.py
+> > > > > +++ b/tools/testing/kunit/kunit_kernel.py
+> > > > > @@ -6,23 +6,31 @@
+> > > > >  # Author: Felix Guo <felixguoxiuping@gmail.com>
+> > > > >  # Author: Brendan Higgins <brendanhiggins@google.com>
+> > > > >
+> > > > > +from __future__ import annotations
+> > > > > +import importlib.util
+> > > > >  import logging
+> > > > >  import subprocess
+> > > > >  import os
+> > > > >  import shutil
+> > > > >  import signal
+> > > > >  from typing import Iterator
+> > > > > +from typing import Optional
+> > > > >
+> > > > >  from contextlib import ExitStack
+> > > > >
+> > > > > +from collections import namedtuple
+> > > > > +
+> > > > >  import kunit_config
+> > > > >  import kunit_parser
+> > > > > +import qemu_config
+> > > > >
+> > > > >  KCONFIG_PATH = '.config'
+> > > > >  KUNITCONFIG_PATH = '.kunitconfig'
+> > > > >  DEFAULT_KUNITCONFIG_PATH = 'arch/um/configs/kunit_defconfig'
+> > >
+> > > This being in arch/um doesn't seem great if its being used for non-UML
+> > > builds. Is it worth either:
+> > > (a) moving this somewhere else (e.g., tools/testing/kunit/configs as
+> > > with the BROKEN_ALLCONFIG_PATH beflow), or
+> >
+> > How about we use: tools/testing/kunit/configs/all_tests.config ? The
+> > file is identical.
 >
-> As an aside, if you can think of a way to split this patch it would be
-> easier to review. I realize most of the changes are propagating the
-> fault_error parameter around though, so splitting the patch might not
-> be easy.
+> Yeah: I'm not thrilled with the name all_tests.config, but since it
+> doesn't appear to be being used anywhere, I might just rename it in
+> another patch.
 >
+> > > (b) giving each architecture its own kunit_defconfig, possibly in
+> > > place of the qemuconfig member of QemuArchParams
+> > >
+> > > I'm leaning towards (b), which solves two different sources of
+> > > ugliness in one go, though it would appear to have the downside that
+> > > the default .kunitconfig could end up being architecture specific,
+> > > which isn't great.
 > >
-> > Signed-off-by: James Houghton <jthoughton@google.com>
-> > Suggested-by: Jue Wang <juew@google.com>
-> > ---
-> >  include/linux/hugetlb.h |  2 +-
-> >  include/linux/mm.h      |  3 ++-
-> >  mm/gup.c                | 57 +++++++++++++++++++++++++++--------------
-> >  mm/hugetlb.c            |  5 +++-
-> >  virt/kvm/kvm_main.c     | 30 +++++++++++++++++++++-
-> >  5 files changed, 74 insertions(+), 23 deletions(-)
+> > Yeah, I am not a fan of trying to solve that problem in this patchset.
+> > This is sounding more and more like what should be follow-on work to
+> > me.
+>
+> Yeah, I'm not sure exactly what that should look like yet, anyway.
+>
+> Let's keep things as they are in this patch. I'll put a follow-up
+> patch to use all_tests.config rather than the arch/um one (possibly as
+> part of my "default to ALL_TESTS" patchset), and if we think of
+> something better that is more architecture specific, we'll do that.
+>
+> > > > >  BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
+> > > > >  OUTFILE_PATH = 'test.log'
+> > > > > +ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
+> > > > > +QEMU_CONFIGS_DIR = os.path.join(ABS_TOOL_PATH, 'qemu_configs')
+> > > > >
+> > >
+> > > (...snip...)
+> > >
+> > > > > diff --git a/tools/testing/kunit/qemu_config.py b/tools/testing/kunit/qemu_config.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..aff1fe0442dbc
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_config.py
+> > > > > @@ -0,0 +1,17 @@
+> > > > > +# SPDX-License-Identifier: GPL-2.0
+> > > > > +#
+> > > > > +# Collection of configs for building non-UML kernels and running them on QEMU.
+> > > > > +#
+> > > > > +# Copyright (C) 2021, Google LLC.
+> > > > > +# Author: Brendan Higgins <brendanhiggins@google.com>
+> > > > > +
+> > > > > +from collections import namedtuple
+> > > > > +
+> > > > > +
+> > > > > +QemuArchParams = namedtuple('QemuArchParams', ['linux_arch',
+> > > > > +                                              'qemuconfig',
+> > >
+> > > As mentioned, I'm not thrilled about keeping the Kconfig inline here,
+> > > and would kind-of prefer it to be in another file. I could live with
+> > > it if I have to, though. Regardless, 'qemuconfig' is not a
 > >
-> > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> > index b92f25ccef58..a777fb254df0 100644
-> > --- a/include/linux/hugetlb.h
-> > +++ b/include/linux/hugetlb.h
-> > @@ -119,7 +119,7 @@ int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *, struct vm_ar
-> >  long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
-> >                          struct page **, struct vm_area_struct **,
-> >                          unsigned long *, unsigned long *, long, unsigned int,
-> > -                        int *);
-> > +                        int *, int *);
-> >  void unmap_hugepage_range(struct vm_area_struct *,
-> >                           unsigned long, unsigned long, struct page *);
-> >  void __unmap_hugepage_range_final(struct mmu_gather *tlb,
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index 322ec61d0da7..1dcd1ac81992 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -1824,7 +1824,8 @@ long get_user_pages_locked(unsigned long start, unsigned long nr_pages,
-> >  long pin_user_pages_locked(unsigned long start, unsigned long nr_pages,
-> >                     unsigned int gup_flags, struct page **pages, int *locked);
-> >  long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-> > -                   struct page **pages, unsigned int gup_flags);
-> > +                   struct page **pages, unsigned int gup_flags,
-> > +                   int *fault_error);
-> >  long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-> >                     struct page **pages, unsigned int gup_flags);
+> > It will be fixed in the next revision.
 > >
-> > diff --git a/mm/gup.c b/mm/gup.c
-> > index 0697134b6a12..ab55a67aef78 100644
-> > --- a/mm/gup.c
-> > +++ b/mm/gup.c
-> > @@ -881,7 +881,8 @@ static int get_gate_page(struct mm_struct *mm, unsigned long address,
-> >   * is, *@locked will be set to 0 and -EBUSY returned.
-> >   */
-> >  static int faultin_page(struct vm_area_struct *vma,
-> > -               unsigned long address, unsigned int *flags, int *locked)
-> > +               unsigned long address, unsigned int *flags, int *locked,
-> > +               int *fault_error)
-> >  {
-> >         unsigned int fault_flags = 0;
-> >         vm_fault_t ret;
-> > @@ -906,6 +907,8 @@ static int faultin_page(struct vm_area_struct *vma,
-> >         }
+> > > super-descriptive name, particularly as it's not clear if this is
+> > > configuring QEMU (no, that's extra_qemu_params'), or configuring the
+> > > kernel for QEMU compatibility.
 > >
-> >         ret = handle_mm_fault(vma, address, fault_flags, NULL);
-> > +       if (fault_error)
-> > +               *fault_error = ret;
-> >         if (ret & VM_FAULT_ERROR) {
-> >                 int err = vm_fault_to_errno(ret, *flags);
+> > Any suggestions on a better name? qemu_build_config_path? These
+> > configs contain configs for configuring, building, and running kernels
+> > on QEMU.
+>
+> I don't think we need "qemu" in the name, as this is already part of
+> the QemuArchParams struct, and isn't a qemu config, but a kernel one.
+>
+> Something along the lines of "kernel_config" (or just "kconfig") maybe?
+
+Doh, I got lost at some point and in my last email I thought you were
+talking about the name QemuArchParams, not the qemuconfig field within
+that struct. Looking back it is entirely clear to me that that is what
+you were talking about, but for some reason I had a brainfart in my
+last response. So yes, your suggestion sounds very reasonable. Will
+fix.
+
+> > > > > +                                              'qemu_arch',
+> > > > > +                                              'kernel_path',
+> > > > > +                                              'kernel_command_line',
+> > > > > +                                              'extra_qemu_params'])
+> > > > > +
+> > > >
+> > > > Nit: newline at end of file.
+> > > >
+> > > >
+> > > >
+> > > > > diff --git a/tools/testing/kunit/qemu_configs/alpha.py b/tools/testing/kunit/qemu_configs/alpha.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..2cc64f848ca2c
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_configs/alpha.py
+> > > > > @@ -0,0 +1,10 @@
+> > > > > +from ..qemu_config import QemuArchParams
+> > > > > +
+> > > > > +QEMU_ARCH = QemuArchParams(linux_arch='alpha',
+> > > > > +                          qemuconfig='''
+> > > > > +CONFIG_SERIAL_8250=y
+> > > > > +CONFIG_SERIAL_8250_CONSOLE=y''',
+> > >
+> > > If these were in a separate file, they could be shared across alpha,
+> > > i386, x86_64, etc. Of course, that wouldn't gel well with putting them
+> > > in arch/.../config. If there were some way of listing multiple files,
+> > > it could form part of the config for several more architectures,
+> > > though that's probably overcomplicating things.
 > >
-> > @@ -996,6 +999,8 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
-> >   * @vmas:      array of pointers to vmas corresponding to each page.
-> >   *             Or NULL if the caller does not require them.
-> >   * @locked:     whether we're still with the mmap_lock held
-> > + * @fault_error: VM fault error from handle_mm_fault. NULL if the caller
-> > + *             does not require this error.
-> >   *
-> >   * Returns either number of pages pinned (which may be less than the
-> >   * number requested), or an error. Details about the return value:
-> > @@ -1040,6 +1045,13 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
-> >   * when it's been released.  Otherwise, it must be held for either
-> >   * reading or writing and will not be released.
-> >   *
-> > + * If @fault_error != NULL, __get_user_pages will return the VM fault error
-> > + * from handle_mm_fault() in this argument in the event of a VM fault error.
-> > + * On success (ret == nr_pages) fault_error is zero.
-> > + * On failure (ret != nr_pages) fault_error may still be 0 if the error did
-> > + * not originate from handle_mm_fault().
-> > + *
-> > + *
-> >   * In most cases, get_user_pages or get_user_pages_fast should be used
-> >   * instead of __get_user_pages. __get_user_pages should be used only if
-> >   * you need some special @gup_flags.
-> > @@ -1047,7 +1059,8 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
-> >  static long __get_user_pages(struct mm_struct *mm,
-> >                 unsigned long start, unsigned long nr_pages,
-> >                 unsigned int gup_flags, struct page **pages,
-> > -               struct vm_area_struct **vmas, int *locked)
-> > +               struct vm_area_struct **vmas, int *locked,
-> > +               int *fault_error)
-> >  {
-> >         long ret = 0, i = 0;
-> >         struct vm_area_struct *vma = NULL;
-> > @@ -1097,7 +1110,7 @@ static long __get_user_pages(struct mm_struct *mm,
-> >                         if (is_vm_hugetlb_page(vma)) {
-> >                                 i = follow_hugetlb_page(mm, vma, pages, vmas,
-> >                                                 &start, &nr_pages, i,
-> > -                                               gup_flags, locked);
-> > +                                               gup_flags, locked, fault_error);
-> >                                 if (locked && *locked == 0) {
-> >                                         /*
-> >                                          * We've got a VM_FAULT_RETRY
-> > @@ -1124,7 +1137,8 @@ static long __get_user_pages(struct mm_struct *mm,
+> > Yeah, like I said, I have sympathy for what you are saying here, but
+> > it really feels like something that can and should be addressed in
+> > follow on patches. We could totally address this issue later by
+> > expanding this field to take either a string containing a Kconfig, or
+> > a path to an external Kconfig; if we do so, it won't cause any
+> > migration issues in the future.
 > >
-> >                 page = follow_page_mask(vma, start, foll_flags, &ctx);
-> >                 if (!page) {
-> > -                       ret = faultin_page(vma, start, &foll_flags, locked);
-> > +                       ret = faultin_page(vma, start, &foll_flags, locked,
-> > +                                          fault_error);
-> >                         switch (ret) {
-> >                         case 0:
-> >                                 goto retry;
-> > @@ -1280,7 +1294,8 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
-> >                                                 struct page **pages,
-> >                                                 struct vm_area_struct **vmas,
-> >                                                 int *locked,
-> > -                                               unsigned int flags)
-> > +                                               unsigned int flags,
-> > +                                               int *fault_error)
-> >  {
-> >         long ret, pages_done;
-> >         bool lock_dropped;
-> > @@ -1311,7 +1326,7 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
-> >         lock_dropped = false;
-> >         for (;;) {
-> >                 ret = __get_user_pages(mm, start, nr_pages, flags, pages,
-> > -                                      vmas, locked);
-> > +                                      vmas, locked, fault_error);
-> >                 if (!locked)
-> >                         /* VM_FAULT_RETRY couldn't trigger, bypass */
-> >                         return ret;
-> > @@ -1371,7 +1386,7 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+>
+> Yeah: I think we can solve this if it actually becomes a problem. No
+> need to change anything here.
+>
+> > > > > +                          qemu_arch='alpha',
+> > > > > +                          kernel_path='arch/alpha/boot/vmlinux',
+> > > > > +                          kernel_command_line='console=ttyS0',
+> > > > > +                          extra_qemu_params=[''])
+> > > > > diff --git a/tools/testing/kunit/qemu_configs/arm.py b/tools/testing/kunit/qemu_configs/arm.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..29a043b0531a0
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_configs/arm.py
+> > > > > @@ -0,0 +1,13 @@
+> > > > > +from ..qemu_config import QemuArchParams
+> > > > > +
+> > > > > +QEMU_ARCH = QemuArchParams(linux_arch='arm',
+> > > > > +                          qemuconfig='''
+> > > > > +CONFIG_ARCH_VIRT=y
+> > > > > +CONFIG_SERIAL_AMBA_PL010=y
+> > > > > +CONFIG_SERIAL_AMBA_PL010_CONSOLE=y
+> > > > > +CONFIG_SERIAL_AMBA_PL011=y
+> > > > > +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+> > >
+> > > Similarly, if in a separate file and there were some multiple-file
+> > > mechanism, these could mostly be shared between arm & arm64 (ARCH_VIRT
+> > > being the only problem). Again, probably overcomplicating it at this
+> > > point though.
 > >
-> >                 *locked = 1;
-> >                 ret = __get_user_pages(mm, start, 1, flags | FOLL_TRIED,
-> > -                                      pages, NULL, locked);
-> > +                                      pages, NULL, locked, fault_error);
-> >                 if (!*locked) {
-> >                         /* Continue to retry until we succeeded */
-> >                         BUG_ON(ret != 0);
-> > @@ -1458,7 +1473,7 @@ long populate_vma_page_range(struct vm_area_struct *vma,
-> >          * not result in a stack expansion that recurses back here.
-> >          */
-> >         return __get_user_pages(mm, start, nr_pages, gup_flags,
-> > -                               NULL, NULL, locked);
-> > +                               NULL, NULL, locked, NULL);
-> >  }
+> > Right.
 > >
-> >  /*
-> > @@ -1524,7 +1539,7 @@ int __mm_populate(unsigned long start, unsigned long len, int ignore_errors)
-> >  static long __get_user_pages_locked(struct mm_struct *mm, unsigned long start,
-> >                 unsigned long nr_pages, struct page **pages,
-> >                 struct vm_area_struct **vmas, int *locked,
-> > -               unsigned int foll_flags)
-> > +               unsigned int foll_flags, int *fault_error)
-> >  {
-> >         struct vm_area_struct *vma;
-> >         unsigned long vm_flags;
-> > @@ -1590,7 +1605,8 @@ struct page *get_dump_page(unsigned long addr)
-> >         if (mmap_read_lock_killable(mm))
-> >                 return NULL;
-> >         ret = __get_user_pages_locked(mm, addr, 1, &page, NULL, &locked,
-> > -                                     FOLL_FORCE | FOLL_DUMP | FOLL_GET);
-> > +                                     FOLL_FORCE | FOLL_DUMP | FOLL_GET,
-> > +                                     NULL);
-> >         if (locked)
-> >                 mmap_read_unlock(mm);
-> >
-> > @@ -1704,11 +1720,11 @@ static long __gup_longterm_locked(struct mm_struct *mm,
-> >
-> >         if (!(gup_flags & FOLL_LONGTERM))
-> >                 return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
-> > -                                              NULL, gup_flags);
-> > +                                              NULL, gup_flags, NULL);
-> >         flags = memalloc_pin_save();
-> >         do {
-> >                 rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
-> > -                                            NULL, gup_flags);
-> > +                                            NULL, gup_flags, NULL);
-> >                 if (rc <= 0)
-> >                         break;
-> >                 rc = check_and_migrate_movable_pages(rc, pages, gup_flags);
-> > @@ -1764,7 +1780,8 @@ static long __get_user_pages_remote(struct mm_struct *mm,
-> >
-> >         return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
-> >                                        locked,
-> > -                                      gup_flags | FOLL_TOUCH | FOLL_REMOTE);
-> > +                                      gup_flags | FOLL_TOUCH | FOLL_REMOTE,
-> > +                                      NULL);
-> >  }
-> >
-> >  /**
-> > @@ -1941,7 +1958,7 @@ long get_user_pages_locked(unsigned long start, unsigned long nr_pages,
-> >
-> >         return __get_user_pages_locked(current->mm, start, nr_pages,
-> >                                        pages, NULL, locked,
-> > -                                      gup_flags | FOLL_TOUCH);
-> > +                                      gup_flags | FOLL_TOUCH, NULL);
-> >  }
-> >  EXPORT_SYMBOL(get_user_pages_locked);
-> >
-> > @@ -1961,7 +1978,8 @@ EXPORT_SYMBOL(get_user_pages_locked);
-> >   * (e.g. FOLL_FORCE) are not required.
-> >   */
-> >  long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-> > -                            struct page **pages, unsigned int gup_flags)
-> > +                            struct page **pages, unsigned int gup_flags,
-> > +                            int *fault_error)
-> >  {
-> >         struct mm_struct *mm = current->mm;
-> >         int locked = 1;
-> > @@ -1978,7 +1996,8 @@ long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-> >
-> >         mmap_read_lock(mm);
-> >         ret = __get_user_pages_locked(mm, start, nr_pages, pages, NULL,
-> > -                                     &locked, gup_flags | FOLL_TOUCH);
-> > +                                     &locked, gup_flags | FOLL_TOUCH,
-> > +                                     fault_error);
-> >         if (locked)
-> >                 mmap_read_unlock(mm);
-> >         return ret;
-> > @@ -2550,7 +2569,7 @@ static int __gup_longterm_unlocked(unsigned long start, int nr_pages,
-> >                 mmap_read_unlock(current->mm);
-> >         } else {
-> >                 ret = get_user_pages_unlocked(start, nr_pages,
-> > -                                             pages, gup_flags);
-> > +                                             pages, gup_flags, NULL);
-> >         }
-> >
-> >         return ret;
-> > @@ -2880,7 +2899,7 @@ long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-> >                 return -EINVAL;
-> >
-> >         gup_flags |= FOLL_PIN;
-> > -       return get_user_pages_unlocked(start, nr_pages, pages, gup_flags);
-> > +       return get_user_pages_unlocked(start, nr_pages, pages, gup_flags, NULL);
-> >  }
-> >  EXPORT_SYMBOL(pin_user_pages_unlocked);
-> >
-> > @@ -2909,6 +2928,6 @@ long pin_user_pages_locked(unsigned long start, unsigned long nr_pages,
-> >         gup_flags |= FOLL_PIN;
-> >         return __get_user_pages_locked(current->mm, start, nr_pages,
-> >                                        pages, NULL, locked,
-> > -                                      gup_flags | FOLL_TOUCH);
-> > +                                      gup_flags | FOLL_TOUCH, NULL);
-> >  }
-> >  EXPORT_SYMBOL(pin_user_pages_locked);
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index 3db405dea3dc..889ac33d57d5 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -5017,7 +5017,8 @@ static void record_subpages_vmas(struct page *page, struct vm_area_struct *vma,
-> >  long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
-> >                          struct page **pages, struct vm_area_struct **vmas,
-> >                          unsigned long *position, unsigned long *nr_pages,
-> > -                        long i, unsigned int flags, int *locked)
-> > +                        long i, unsigned int flags, int *locked,
-> > +                        int  *fault_error)
-> >  {
-> >         unsigned long pfn_offset;
-> >         unsigned long vaddr = *position;
-> > @@ -5103,6 +5104,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
-> >                         }
-> >                         ret = hugetlb_fault(mm, vma, vaddr, fault_flags);
-> >                         if (ret & VM_FAULT_ERROR) {
-> > +                               if (fault_error)
-> > +                                       *fault_error = ret;
-> >                                 err = vm_fault_to_errno(ret, flags);
-> >                                 remainder = 0;
-> >                                 break;
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 2799c6660cce..0a20d926ae32 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -2004,6 +2004,30 @@ static bool hva_to_pfn_fast(unsigned long addr, bool write_fault,
-> >         return false;
-> >  }
-> >
-> > +static void kvm_send_vm_fault_signal(int fault_error, int errno,
-> > +                                    unsigned long address,
-> > +                                    struct task_struct *tsk)
-> > +{
-> > +       kernel_siginfo_t info;
-> > +
-> > +       clear_siginfo(&info);
-> > +
-> > +       if (fault_error == VM_FAULT_SIGBUS)
-> > +               info.si_signo = SIGBUS;
-> > +       else if (fault_error == VM_FAULT_SIGSEGV)
-> > +               info.si_signo = SIGSEGV;
-> > +       else
-> > +               // Other fault errors should not result in a signal.
-> > +               return;
-> > +
-> > +       info.si_errno = errno;
-> > +       info.si_code = BUS_ADRERR;
-> > +       info.si_addr = (void __user *)address;
-> > +       info.si_addr_lsb = PAGE_SHIFT;
-> > +
-> > +       send_sig_info(info.si_signo, &info, tsk);
-> > +}
-> > +
-> >  /*
-> >   * The slow path to get the pfn of the specified host virtual address,
-> >   * 1 indicates success, -errno is returned if error is detected.
-> > @@ -2014,6 +2038,7 @@ static int hva_to_pfn_slow(unsigned long addr, bool *async, bool write_fault,
-> >         unsigned int flags = FOLL_HWPOISON;
-> >         struct page *page;
-> >         int npages = 0;
-> > +       int fault_error;
-> >
-> >         might_sleep();
-> >
-> > @@ -2025,7 +2050,10 @@ static int hva_to_pfn_slow(unsigned long addr, bool *async, bool write_fault,
-> >         if (async)
-> >                 flags |= FOLL_NOWAIT;
-> >
-> > -       npages = get_user_pages_unlocked(addr, 1, &page, flags);
-> > +       npages = get_user_pages_unlocked(addr, 1, &page, flags, &fault_error);
-> > +       if (fault_error & VM_FAULT_ERROR)
-> > +               kvm_send_vm_fault_signal(fault_error, npages, addr, current);
-> > +
-> >         if (npages != 1)
-> >                 return npages;
-> >
-> > --
-> > 2.31.1.751.gd2f1c929bd-goog
-> >
+> > > > > +                          qemu_arch='arm',
+> > > > > +                          kernel_path='arch/arm/boot/zImage',
+> > > > > +                          kernel_command_line='console=ttyAMA0',
+> > > > > +                          extra_qemu_params=['-machine virt'])
+> > > > > diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..1ba200bc99f0f
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_configs/arm64.py
+> > > > > @@ -0,0 +1,12 @@
+> > > > > +from ..qemu_config import QemuArchParams
+> > > > > +
+> > > > > +QEMU_ARCH = QemuArchParams(linux_arch='arm64',
+> > > > > +                          qemuconfig='''
+> > > > > +CONFIG_SERIAL_AMBA_PL010=y
+> > > > > +CONFIG_SERIAL_AMBA_PL010_CONSOLE=y
+> > > > > +CONFIG_SERIAL_AMBA_PL011=y
+> > > > > +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+> > > > > +                          qemu_arch='aarch64',
+> > > > > +                          kernel_path='arch/arm64/boot/Image.gz',
+> > > > > +                          kernel_command_line='console=ttyAMA0',
+> > > > > +                          extra_qemu_params=['-machine virt', '-cpu cortex-a57'])
+> > > > > diff --git a/tools/testing/kunit/qemu_configs/i386.py b/tools/testing/kunit/qemu_configs/i386.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..3998af306468e
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_configs/i386.py
+> > > > > @@ -0,0 +1,10 @@
+> > > > > +from ..qemu_config import QemuArchParams
+> > > > > +
+> > > > > +QEMU_ARCH = QemuArchParams(linux_arch='i386',
+> > > > > +                          qemuconfig='''
+> > > > > +CONFIG_SERIAL_8250=y
+> > > > > +CONFIG_SERIAL_8250_CONSOLE=y''',
+> > > > > +                          qemu_arch='x86_64',
+> > > > > +                          kernel_path='arch/x86/boot/bzImage',
+> > > > > +                          kernel_command_line='console=ttyS0',
+> > > > > +                          extra_qemu_params=[''])
+> > > > > diff --git a/tools/testing/kunit/qemu_configs/powerpc.py b/tools/testing/kunit/qemu_configs/powerpc.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..46292ce9e368e
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_configs/powerpc.py
+> > > > > @@ -0,0 +1,12 @@
+> > > > > +from ..qemu_config import QemuArchParams
+> > > > > +
+> > > > > +QEMU_ARCH = QemuArchParams(linux_arch='powerpc',
+> > > > > +                          qemuconfig='''
+> > > > > +CONFIG_PPC64=y
+> > > > > +CONFIG_SERIAL_8250=y
+> > > > > +CONFIG_SERIAL_8250_CONSOLE=y
+> > > > > +CONFIG_HVC_CONSOLE=y''',
+> > > > > +                          qemu_arch='ppc64',
+> > > > > +                          kernel_path='vmlinux',
+> > > > > +                          kernel_command_line='console=ttyS0',
+> > > > > +                          extra_qemu_params=['-M pseries', '-cpu power8'])
+> > > > > diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..de8c62d465723
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_configs/riscv.py
+> > > > > @@ -0,0 +1,31 @@
+> > > > > +from ..qemu_config import QemuArchParams
+> > > > > +import os
+> > > > > +import os.path
+> > > > > +import sys
+> > > > > +
+> > > > > +GITHUB_OPENSBI_URL = 'https://github.com/qemu/qemu/raw/master/pc-bios/opensbi-riscv64-generic-fw_dynamic.bin'
+> > > > > +OPENSBI_FILE = os.path.basename(GITHUB_OPENSBI_URL)
+> > > > > +
+> > > > > +if not os.path.isfile(OPENSBI_FILE):
+> > > > > +       print('\n\nOpenSBI file is not in the current working directory.\n'
+> > > > > +             'Would you like me to download it for you from:\n' + GITHUB_OPENSBI_URL + ' ?\n')
+> > > > > +       response = input('yes/[no]: ')
+> > > > > +       if response.strip() == 'yes':
+> > > > > +               os.system('wget ' + GITHUB_OPENSBI_URL)
+> > > > > +       else:
+> > > > > +               sys.exit()
+> > > > > +
+> > > > > +QEMU_ARCH = QemuArchParams(linux_arch='riscv',
+> > > > > +                          qemuconfig='''
+> > > > > +CONFIG_SOC_VIRT=y
+> > > > > +CONFIG_SERIAL_8250=y
+> > > > > +CONFIG_SERIAL_8250_CONSOLE=y
+> > > > > +CONFIG_SERIAL_OF_PLATFORM=y
+> > > > > +CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
+> > > > > +                          qemu_arch='riscv64',
+> > > > > +                          kernel_path='arch/riscv/boot/Image',
+> > > > > +                          kernel_command_line='console=ttyS0',
+> > > > > +                          extra_qemu_params=[
+> > > > > +                                          '-machine virt',
+> > > > > +                                          '-cpu rv64',
+> > > > > +                                          '-bios opensbi-riscv64-generic-fw_dynamic.bin'])
+> > > > > diff --git a/tools/testing/kunit/qemu_configs/s390.py b/tools/testing/kunit/qemu_configs/s390.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..04c90332f1098
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_configs/s390.py
+> > > > > @@ -0,0 +1,14 @@
+> > > > > +from ..qemu_config import QemuArchParams
+> > > > > +
+> > > > > +QEMU_ARCH = QemuArchParams(linux_arch='s390',
+> > > > > +                          qemuconfig='''
+> > > > > +CONFIG_EXPERT=y
+> > > > > +CONFIG_TUNE_ZEC12=y
+> > > > > +CONFIG_NUMA=y
+> > > > > +CONFIG_MODULES=y''',
+> > > > > +                          qemu_arch='s390x',
+> > > > > +                          kernel_path='arch/s390/boot/bzImage',
+> > > > > +                          kernel_command_line='console=ttyS0',
+> > > > > +                          extra_qemu_params=[
+> > > > > +                                          '-machine s390-ccw-virtio',
+> > > > > +                                          '-cpu qemu',])
+> > > > > diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/kunit/qemu_configs/sparc.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..f26b5f27cc5a1
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_configs/sparc.py
+> > > > > @@ -0,0 +1,10 @@
+> > > > > +from ..qemu_config import QemuArchParams
+> > > > > +
+> > > > > +QEMU_ARCH = QemuArchParams(linux_arch='sparc',
+> > > > > +                          qemuconfig='''
+> > > > > +CONFIG_SERIAL_8250=y
+> > > > > +CONFIG_SERIAL_8250_CONSOLE=y''',
+> > > > > +                          qemu_arch='sparc',
+> > > > > +                          kernel_path='arch/sparc/boot/zImage',
+> > > > > +                          kernel_command_line='console=ttyS0 mem=256M',
+> > > > > +                          extra_qemu_params=['-m 256'])
+> > > > > diff --git a/tools/testing/kunit/qemu_configs/x86_64.py b/tools/testing/kunit/qemu_configs/x86_64.py
+> > > > > new file mode 100644
+> > > > > index 0000000000000..bd5ab733b92ac
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/kunit/qemu_configs/x86_64.py
+> > > > > @@ -0,0 +1,10 @@
+> > > > > +from ..qemu_config import QemuArchParams
+> > > > > +
+> > > > > +QEMU_ARCH = QemuArchParams(linux_arch='x86_64',
+> > > > > +                          qemuconfig='''
+> > > > > +CONFIG_SERIAL_8250=y
+> > > > > +CONFIG_SERIAL_8250_CONSOLE=y''',
+> > > > > +                          qemu_arch='x86_64',
+> > > > > +                          kernel_path='arch/x86/boot/bzImage',
+> > > > > +                          kernel_command_line='console=ttyS0',
+> > > > > +                          extra_qemu_params=[''])
+> > > > > --
+> > > > > 2.31.1.607.g51e8a6a459-goog
+> > > > >
