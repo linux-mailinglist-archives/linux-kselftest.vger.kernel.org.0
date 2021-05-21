@@ -2,458 +2,334 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C5538BD0D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 May 2021 05:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD51138CC12
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 May 2021 19:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238501AbhEUDyu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 May 2021 23:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbhEUDyu (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 May 2021 23:54:50 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED838C061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 May 2021 20:53:27 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id s5-20020a7bc0c50000b0290147d0c21c51so6359959wmh.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 May 2021 20:53:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vu3cAoOOXkdy/nifDkPl5yqEA6hsBGm2eBrR68ih+uo=;
-        b=mMfJlFj89Oywa4zpcP7Y9aD2SFCfTwPYNn/q2uzB/NcvmJIQXcOch4UdDiQB9sc72z
-         lcFqOXi2nqyqdvyrvhLqvnoOytQqckce8dXvJiD7VDSY2+MADO3iMAO5ORsBQAHiRzDb
-         CiGkLrOf7Ec6apW5yPtjlW2axJVKZ5P8KA/W4fm2GNTSatWIubIqEVRnViwSgjqTS5+9
-         Dd3p2TN92p0Ka4lOFsOP3PG5mmjo3LJIDjQTHvoENaiq61AtVClZG6wXIs9pIb+8b/0N
-         rS7pTiPlocaB3cirWB9EgRo1wN9nUDW1c4xHfTqwmNZYgWufZxMY/bejtS1gRELpEEBs
-         vNAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vu3cAoOOXkdy/nifDkPl5yqEA6hsBGm2eBrR68ih+uo=;
-        b=JNvcV9HmrErSqlj3ZjwzV5QYEWzNbbbn/4z9ZXG5t1nwngE+LjIdubArQ1/2iQtrMA
-         pciqwITib1FTn0X8bW80m3btiOduWowRCpYYGKQwd6eoI+RW/8JKD2T2JgecBcWn+soX
-         vwakI8BXs0PT0zikpktE+/Q7VJheTvHC1xRjyUlFdasjs9nI68tESIxIp8Cos6ZRv3w+
-         kq4o5d19cCaeJt0pJAsYB0EWJTP9qU7sSzfSyOMz2TkEIlJ0RsqK8iwV/+BrKxXM6qEO
-         lPVJYlgKxe/xLHupJxZc0Hk9BwPm5/yzYTEk9iGRhrZ14q2SA457OixfmbZqOP9vo6pM
-         HQnA==
-X-Gm-Message-State: AOAM53376Wsernx0U2mZ1iXP8VAGGI2iaOVJew4qn7rFwwVXpUz8mLDE
-        e1JiuLzZ0EsoBsyVR5ip/YPOVwobUuN/BUtMXc4+yA==
-X-Google-Smtp-Source: ABdhPJwra0ETxpCsCm9V1aykhVhb0bOEx6fhn2vUKLoGsDgejo+vqnu+TdTA+7VgBMVerpf3xotDVD1JlaeOMoMuALM=
-X-Received: by 2002:a1c:b4c6:: with SMTP id d189mr6393483wmf.39.1621569206298;
- Thu, 20 May 2021 20:53:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210507213110.155492-1-brendanhiggins@google.com>
- <20210507213110.155492-4-brendanhiggins@google.com> <CABVgOSmEe32_kT9TR0-H8biuWGc1Rexne86DgLxths+GUHHgig@mail.gmail.com>
- <CABVgOS=W-UhLJ5siu2u=Nus6g2zMEHM6c9ck2DHbHr0e5uCqSQ@mail.gmail.com> <CAFd5g46kOy=JtNSX6nhMO6TdHK7sAZfvD=UqLpFDXPVFw4M4fA@mail.gmail.com>
-In-Reply-To: <CAFd5g46kOy=JtNSX6nhMO6TdHK7sAZfvD=UqLpFDXPVFw4M4fA@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 21 May 2021 11:53:14 +0800
-Message-ID: <CABVgOSkXYHs=xfg_sKsm8RzKB2JdnCatE2AViCh8DJ4po+C=3Q@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] kunit: tool: add support for QEMU
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S231411AbhEUR0m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 May 2021 13:26:42 -0400
+Received: from mout.gmx.net ([212.227.17.20]:38059 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230048AbhEUR0m (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 21 May 2021 13:26:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1621617872;
+        bh=u+DjcBUSFrMBsPRclxwqs6ADRrff0+A/rQb8jJJEJSw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=PV6PTX8RYvovA1ZVUXGtpujoNWgdjaCW+Klq46UytN6Zh/5HFSgXZnxn2naMF1vef
+         f5peRB00TNj84Xlmk26Zo22mf1reCujFKfjVula5QXWRD9nexMvrDwUuYgNKrDl1qn
+         /adeH0WKc+sRzgLcbZ00WzeY+dJ60K8ZpvzizoBI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([83.52.228.41]) by mail.gmx.net
+ (mrgmx105 [212.227.17.174]) with ESMTPSA (Nemesis) id
+ 1Mo6qp-1l7l8m3Dlz-00pbOV; Fri, 21 May 2021 19:24:31 +0200
+From:   John Wood <john.wood@gmx.com>
+To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>
+Cc:     John Wood <john.wood@gmx.com>, Andi Kleen <ak@linux.intel.com>,
+        valdis.kletnieks@vt.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: [PATCH v7 0/7] Fork brute force attack mitigation
+Date:   Fri, 21 May 2021 19:24:07 +0200
+Message-Id: <20210521172414.69456-1-john.wood@gmx.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:mCfhzEf/UclKJ0ujI32wnnFHL89X6cU+ChoOGytmN6KJ0pdPWIZ
+ xr+ecvHzj54L58p9VkKDQg+usxFokyLTfEmAQj3w6V3r0Bu3v7ZKHXGquwOee9ZiYiYluWC
+ g8vfRRgeUv8kBM4a+W0d9V6oFANLrLv5iXK30aVtCSwWV3E5W+ZPQ5a80S9ufZQCu3PYGGY
+ MUgeLU/DGiLsS3stdTMCQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dncgkbGSxBI=:39+/+gs4b80Q+b7WxdJEU0
+ zaxsFZjWbgM/ugl+3UzS499c40f6RUj6LaECXglW6J879ivgWkKeRP6OrJEXP61bxOaHmagBJ
+ QWxkJdZFwmE99aLDtN7OU9n2jT8AGhKWSLWn/j+waCbo3ssNyE97/TDFDOQ3N++psyjmfK5RS
+ bmbiGyys7pHTHVoCHev3Bxu098Mnp6d5WDON03NvF0tCm2na/zUrIUZkGZH/txJgeBgeG2eyX
+ Knp6QFdLoSTNykZuk2AvDIXObhkpVh4RkIxQlHdh5q0pBQssXo3jl2KlpzaUbhbBCP46dfmyw
+ Fbxp2MsKIfsNJAZ2ZSGavvG8yvbPeSX8JNTFyUF8jzSkfSZ/kUVvIDRrU5EWvktyxC7Zkzatv
+ 52dTG4VohxIeGT/5ZTtu3qe6FyYVMOwN+RYOe3WbQiLLzERVizsrosCaN9QOmF4mXZywl28HK
+ uqCHcfmqHTF8raHngeS5BoaQZZL82BFlzRRc4pc6+z8UkWk5t8BTQloi2rEFvHeCGK/u3y3VS
+ QMoPvKvZR/pc84P8BqSUbaEu1QLEBTIDFR0a7r8zcSyQ7n6ZkqeYVmfqiqtX4gzEvyS7BqXBI
+ +b0JuzAuS6KSULnEAeaMQSNxXgXdQKvX0fBhdL7LUAksEQE4kM7T+PFO6bJeJ7LOcHhUqrN4H
+ oyACzcXzVSX84/rBmgADqP6KwkAWee2hey06ffV72arNLqLtSvwLPW5XaZ8gX/z1kOL2P9Hue
+ iQywQ61Mm0FQtk10BZtiwE4htwHMtFIahzSicbYJ2e1gjW8kGjXKOb0TZ6GAuf/Kb32AG0WV5
+ kVNpUmcHmbiaEpa17RUJBlfISlR8wIIkhSsoCcM67k57W/pWVvmRKidJMZmwuTrTrhlmnNhNa
+ alcpVXpe3fbj3RF5ZcxcJMg4kPEjgci9l0zgPn8LJxPK6qO5vf+EAE7bFbTM9OE/jKkUpny+I
+ OkdIxTsAljphhTNpP6SLVyL3Ugm+sXTxKZ8lsPOG3Y7KDLFRmr0X/V/9g/sMrU1078HDc5OSv
+ aTTgHO7Gs9MphimTLI1ie1VK7cE4tO7CC6NcKeU4yUrIdtFP3rG8K728XeegdMkSq3fT51I25
+ QKcXz2Kotzdvd1yYCPJbwBbzNkijfEHYGE4
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 19, 2021 at 4:43 AM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Mon, May 17, 2021 at 8:01 PM David Gow <davidgow@google.com> wrote:
-> >
-> > On Sat, May 15, 2021 at 3:59 PM David Gow <davidgow@google.com> wrote:
-> > >
-> > > On Sat, May 8, 2021 at 5:31 AM Brendan Higgins
-> > > <brendanhiggins@google.com> wrote:
-> > > >
-> > > > Add basic support to run QEMU via kunit_tool. Add support for i386,
-> > > > x86_64, arm, arm64, and a bunch more.
-> > > >
-> > > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > > > Tested-by: David Gow <davidgow@google.com>
-> > > > ---
-> > > >
-> > > > Changes since last revision:
-> > > >
-> > > > - A number of minor obvious issues pointed out by David and Daniel.
-> > > > - Added facility for merging Kconfigs at Daniel's suggestion.
-> > > > - Broke out qemu_configs each into their own config file which is loaded
-> > > >   dynamically - mostly at David's suggestion.
-> > > >
-> > > > ---
-> > >
-> > > This seems pretty good to me. I only have one real complaint --
-> > > qemu_configs needing to be in a subdirectory of ./tools/testing/kunit
-> > > -- but am able to tolerate that (even if I'd prefer not to have it) if
-> > > it's documented properly.
-> > >
-> > > Otherwise, save for a couple of minor nitpicks, this seems good to go.
-> > >
-> > > Reviewed-by: David Gow <davidgow@google.com>
-> > >
-> > >
-> >
-> > One thing I forgot to mention is that I'm not 100% sure about the
-> > Kconfig fragments being embedded in the qemu_configs. I still kind-of
-> > prefer the idea of them being in separate config files. While I don't
->
-> I don't feel strongly either way, but I don't have a good idea on how
-> to implement your idea well. How about we leave it for now, and if you
-> decide you really want to do something about it, you can do it?
->
-> > think this is necessarily a blocker, I did just realise that, by
-> > default, kunit.py run --arch=<non-UM-arch> will pull its default
-> > .kunitconfig from arch/um/configs/kunit_defconfig, which definitely
-> > feels awkward when UML is not otherwise involved.
->
-> Hmmm...this file is identical to
-> tools/testing/kunit/configs/all_tests.config. Maybe we should just use
-> that instead?
->
+Attacks against vulnerable userspace applications with the purpose to brea=
+k
+ASLR or bypass canaries traditionally use some level of brute force with
+the help of the fork system call. This is possible since when creating a
+new process using fork its memory contents are the same as those of the
+parent process (the process that called the fork system call). So, the
+attacker can test the memory infinite times to find the correct memory
+values or the correct memory addresses without worrying about crashing the
+application.
 
-That sounds like a better plan. It looks like all_tests.config isn't
-used anywhere, anyway. I might rename it and replace the
-arch/um/.../kunit_defconfig version in another patch, then.
+Based on the above scenario it would be nice to have this detected and
+mitigated, and this is the goal of this patch serie. Specifically the
+following attacks are expected to be detected:
 
-> > Some further thoughts below (which range a bit from "practical
-> > suggestion" to "overcomplicated ponderings", so don't feel the
-> > pressure to take all of them).
-> >
-> > (...snip...)
-> >
-> > > > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> > > > index e22ade9d91ad5..2bd196fd69e5c 100644
-> > > > --- a/tools/testing/kunit/kunit_kernel.py
-> > > > +++ b/tools/testing/kunit/kunit_kernel.py
-> > > > @@ -6,23 +6,31 @@
-> > > >  # Author: Felix Guo <felixguoxiuping@gmail.com>
-> > > >  # Author: Brendan Higgins <brendanhiggins@google.com>
-> > > >
-> > > > +from __future__ import annotations
-> > > > +import importlib.util
-> > > >  import logging
-> > > >  import subprocess
-> > > >  import os
-> > > >  import shutil
-> > > >  import signal
-> > > >  from typing import Iterator
-> > > > +from typing import Optional
-> > > >
-> > > >  from contextlib import ExitStack
-> > > >
-> > > > +from collections import namedtuple
-> > > > +
-> > > >  import kunit_config
-> > > >  import kunit_parser
-> > > > +import qemu_config
-> > > >
-> > > >  KCONFIG_PATH = '.config'
-> > > >  KUNITCONFIG_PATH = '.kunitconfig'
-> > > >  DEFAULT_KUNITCONFIG_PATH = 'arch/um/configs/kunit_defconfig'
-> >
-> > This being in arch/um doesn't seem great if its being used for non-UML
-> > builds. Is it worth either:
-> > (a) moving this somewhere else (e.g., tools/testing/kunit/configs as
-> > with the BROKEN_ALLCONFIG_PATH beflow), or
->
-> How about we use: tools/testing/kunit/configs/all_tests.config ? The
-> file is identical.
+1.- Launching (fork()/exec()) a setuid/setgid process repeatedly until a
+    desirable memory layout is got (e.g. Stack Clash).
+2.- Connecting to an exec()ing network daemon (e.g. xinetd) repeatedly
+    until a desirable memory layout is got (e.g. what CTFs do for simple
+    network service).
+3.- Launching processes without exec() (e.g. Android Zygote) and exposing
+    state to attack a sibling.
+4.- Connecting to a fork()ing network daemon (e.g. apache) repeatedly unti=
+l
+    the previously shared memory layout of all the other children is
+    exposed (e.g. kind of related to HeartBleed).
 
-Yeah: I'm not thrilled with the name all_tests.config, but since it
-doesn't appear to be being used anywhere, I might just rename it in
-another patch.
+In each case, a privilege boundary has been crossed:
 
-> > (b) giving each architecture its own kunit_defconfig, possibly in
-> > place of the qemuconfig member of QemuArchParams
-> >
-> > I'm leaning towards (b), which solves two different sources of
-> > ugliness in one go, though it would appear to have the downside that
-> > the default .kunitconfig could end up being architecture specific,
-> > which isn't great.
->
-> Yeah, I am not a fan of trying to solve that problem in this patchset.
-> This is sounding more and more like what should be follow-on work to
-> me.
+Case 1: setuid/setgid process
+Case 2: network to local
+Case 3: privilege changes
+Case 4: network to local
 
-Yeah, I'm not sure exactly what that should look like yet, anyway.
+So, what will really be detected are fork/exec brute force attacks that
+cross any of the commented bounds.
 
-Let's keep things as they are in this patch. I'll put a follow-up
-patch to use all_tests.config rather than the arch/um one (possibly as
-part of my "default to ALL_TESTS" patchset), and if we think of
-something better that is more architecture specific, we'll do that.
+The implementation details and comparison against other existing
+implementations can be found in the "Documentation" patch.
 
-> > > >  BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
-> > > >  OUTFILE_PATH = 'test.log'
-> > > > +ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
-> > > > +QEMU_CONFIGS_DIR = os.path.join(ABS_TOOL_PATH, 'qemu_configs')
-> > > >
-> >
-> > (...snip...)
-> >
-> > > > diff --git a/tools/testing/kunit/qemu_config.py b/tools/testing/kunit/qemu_config.py
-> > > > new file mode 100644
-> > > > index 0000000000000..aff1fe0442dbc
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_config.py
-> > > > @@ -0,0 +1,17 @@
-> > > > +# SPDX-License-Identifier: GPL-2.0
-> > > > +#
-> > > > +# Collection of configs for building non-UML kernels and running them on QEMU.
-> > > > +#
-> > > > +# Copyright (C) 2021, Google LLC.
-> > > > +# Author: Brendan Higgins <brendanhiggins@google.com>
-> > > > +
-> > > > +from collections import namedtuple
-> > > > +
-> > > > +
-> > > > +QemuArchParams = namedtuple('QemuArchParams', ['linux_arch',
-> > > > +                                              'qemuconfig',
-> >
-> > As mentioned, I'm not thrilled about keeping the Kconfig inline here,
-> > and would kind-of prefer it to be in another file. I could live with
-> > it if I have to, though. Regardless, 'qemuconfig' is not a
->
-> It will be fixed in the next revision.
->
-> > super-descriptive name, particularly as it's not clear if this is
-> > configuring QEMU (no, that's extra_qemu_params'), or configuring the
-> > kernel for QEMU compatibility.
->
-> Any suggestions on a better name? qemu_build_config_path? These
-> configs contain configs for configuring, building, and running kernels
-> on QEMU.
+It is important to mention that this version has changed the method used t=
+o
+track the information related to the application crashes. Prior this
+version, a pointer per process (in the task_struct structure) held a
+reference to the shared statistical data. Or in other words, these stats
+were shared by all the fork hierarchy processes. But this has an important
+drawback: a brute force attack that happens through the execve system call
+losts the faults info since these statistics are freed when the fork
+hierarchy disappears. So, the solution adopted in the v6 version was to us=
+e
+an upper fork hierarchy to track the info for this attack type. But, as
+Valdis Kletnieks pointed out during this discussion [1], this method can
+be easily bypassed using a double exec (well, this was the method used in
+the kselftest to avoid the detection ;) ). So, in this version, to track
+all the statistical data (info related with application crashes), the
+extended attributes feature for the executable files are used. The xattr i=
+s
+also used to mark the executables as "not allowed" when an attack is
+detected. Then, the execve system call rely on this flag to avoid followin=
+g
+executions of this file.
 
-I don't think we need "qemu" in the name, as this is already part of
-the QemuArchParams struct, and isn't a qemu config, but a kernel one.
+[1] https://lore.kernel.org/kernelnewbies/20210330173459.GA3163@ubuntu/
 
-Something along the lines of "kernel_config" (or just "kconfig") maybe?
+Moreover, I think this solves another problem pointed out by Andi Kleen
+during the v5 review [2] related to the possibility that a supervisor
+respawns processes killed by the Brute LSM. He suggested adding some way s=
+o
+a supervisor can know that a process has been killed by Brute and then
+decide to respawn or not. So, now, the supervisor can read the brute xattr
+of one executable and know if it is blocked by Brute and why (using the
+statistical data).
 
-> > > > +                                              'qemu_arch',
-> > > > +                                              'kernel_path',
-> > > > +                                              'kernel_command_line',
-> > > > +                                              'extra_qemu_params'])
-> > > > +
-> > >
-> > > Nit: newline at end of file.
-> > >
-> > >
-> > >
-> > > > diff --git a/tools/testing/kunit/qemu_configs/alpha.py b/tools/testing/kunit/qemu_configs/alpha.py
-> > > > new file mode 100644
-> > > > index 0000000000000..2cc64f848ca2c
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_configs/alpha.py
-> > > > @@ -0,0 +1,10 @@
-> > > > +from ..qemu_config import QemuArchParams
-> > > > +
-> > > > +QEMU_ARCH = QemuArchParams(linux_arch='alpha',
-> > > > +                          qemuconfig='''
-> > > > +CONFIG_SERIAL_8250=y
-> > > > +CONFIG_SERIAL_8250_CONSOLE=y''',
-> >
-> > If these were in a separate file, they could be shared across alpha,
-> > i386, x86_64, etc. Of course, that wouldn't gel well with putting them
-> > in arch/.../config. If there were some way of listing multiple files,
-> > it could form part of the config for several more architectures,
-> > though that's probably overcomplicating things.
->
-> Yeah, like I said, I have sympathy for what you are saying here, but
-> it really feels like something that can and should be addressed in
-> follow on patches. We could totally address this issue later by
-> expanding this field to take either a string containing a Kconfig, or
-> a path to an external Kconfig; if we do so, it won't cause any
-> migration issues in the future.
->
+[2] https://lore.kernel.org/kernel-hardening/878s78dnrm.fsf@linux.intel.co=
+m/
 
-Yeah: I think we can solve this if it actually becomes a problem. No
-need to change anything here.
+Knowing all this information I will explain now the different patches:
 
-> > > > +                          qemu_arch='alpha',
-> > > > +                          kernel_path='arch/alpha/boot/vmlinux',
-> > > > +                          kernel_command_line='console=ttyS0',
-> > > > +                          extra_qemu_params=[''])
-> > > > diff --git a/tools/testing/kunit/qemu_configs/arm.py b/tools/testing/kunit/qemu_configs/arm.py
-> > > > new file mode 100644
-> > > > index 0000000000000..29a043b0531a0
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_configs/arm.py
-> > > > @@ -0,0 +1,13 @@
-> > > > +from ..qemu_config import QemuArchParams
-> > > > +
-> > > > +QEMU_ARCH = QemuArchParams(linux_arch='arm',
-> > > > +                          qemuconfig='''
-> > > > +CONFIG_ARCH_VIRT=y
-> > > > +CONFIG_SERIAL_AMBA_PL010=y
-> > > > +CONFIG_SERIAL_AMBA_PL010_CONSOLE=y
-> > > > +CONFIG_SERIAL_AMBA_PL011=y
-> > > > +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
-> >
-> > Similarly, if in a separate file and there were some multiple-file
-> > mechanism, these could mostly be shared between arm & arm64 (ARCH_VIRT
-> > being the only problem). Again, probably overcomplicating it at this
-> > point though.
->
-> Right.
->
-> > > > +                          qemu_arch='arm',
-> > > > +                          kernel_path='arch/arm/boot/zImage',
-> > > > +                          kernel_command_line='console=ttyAMA0',
-> > > > +                          extra_qemu_params=['-machine virt'])
-> > > > diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
-> > > > new file mode 100644
-> > > > index 0000000000000..1ba200bc99f0f
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_configs/arm64.py
-> > > > @@ -0,0 +1,12 @@
-> > > > +from ..qemu_config import QemuArchParams
-> > > > +
-> > > > +QEMU_ARCH = QemuArchParams(linux_arch='arm64',
-> > > > +                          qemuconfig='''
-> > > > +CONFIG_SERIAL_AMBA_PL010=y
-> > > > +CONFIG_SERIAL_AMBA_PL010_CONSOLE=y
-> > > > +CONFIG_SERIAL_AMBA_PL011=y
-> > > > +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
-> > > > +                          qemu_arch='aarch64',
-> > > > +                          kernel_path='arch/arm64/boot/Image.gz',
-> > > > +                          kernel_command_line='console=ttyAMA0',
-> > > > +                          extra_qemu_params=['-machine virt', '-cpu cortex-a57'])
-> > > > diff --git a/tools/testing/kunit/qemu_configs/i386.py b/tools/testing/kunit/qemu_configs/i386.py
-> > > > new file mode 100644
-> > > > index 0000000000000..3998af306468e
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_configs/i386.py
-> > > > @@ -0,0 +1,10 @@
-> > > > +from ..qemu_config import QemuArchParams
-> > > > +
-> > > > +QEMU_ARCH = QemuArchParams(linux_arch='i386',
-> > > > +                          qemuconfig='''
-> > > > +CONFIG_SERIAL_8250=y
-> > > > +CONFIG_SERIAL_8250_CONSOLE=y''',
-> > > > +                          qemu_arch='x86_64',
-> > > > +                          kernel_path='arch/x86/boot/bzImage',
-> > > > +                          kernel_command_line='console=ttyS0',
-> > > > +                          extra_qemu_params=[''])
-> > > > diff --git a/tools/testing/kunit/qemu_configs/powerpc.py b/tools/testing/kunit/qemu_configs/powerpc.py
-> > > > new file mode 100644
-> > > > index 0000000000000..46292ce9e368e
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_configs/powerpc.py
-> > > > @@ -0,0 +1,12 @@
-> > > > +from ..qemu_config import QemuArchParams
-> > > > +
-> > > > +QEMU_ARCH = QemuArchParams(linux_arch='powerpc',
-> > > > +                          qemuconfig='''
-> > > > +CONFIG_PPC64=y
-> > > > +CONFIG_SERIAL_8250=y
-> > > > +CONFIG_SERIAL_8250_CONSOLE=y
-> > > > +CONFIG_HVC_CONSOLE=y''',
-> > > > +                          qemu_arch='ppc64',
-> > > > +                          kernel_path='vmlinux',
-> > > > +                          kernel_command_line='console=ttyS0',
-> > > > +                          extra_qemu_params=['-M pseries', '-cpu power8'])
-> > > > diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
-> > > > new file mode 100644
-> > > > index 0000000000000..de8c62d465723
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_configs/riscv.py
-> > > > @@ -0,0 +1,31 @@
-> > > > +from ..qemu_config import QemuArchParams
-> > > > +import os
-> > > > +import os.path
-> > > > +import sys
-> > > > +
-> > > > +GITHUB_OPENSBI_URL = 'https://github.com/qemu/qemu/raw/master/pc-bios/opensbi-riscv64-generic-fw_dynamic.bin'
-> > > > +OPENSBI_FILE = os.path.basename(GITHUB_OPENSBI_URL)
-> > > > +
-> > > > +if not os.path.isfile(OPENSBI_FILE):
-> > > > +       print('\n\nOpenSBI file is not in the current working directory.\n'
-> > > > +             'Would you like me to download it for you from:\n' + GITHUB_OPENSBI_URL + ' ?\n')
-> > > > +       response = input('yes/[no]: ')
-> > > > +       if response.strip() == 'yes':
-> > > > +               os.system('wget ' + GITHUB_OPENSBI_URL)
-> > > > +       else:
-> > > > +               sys.exit()
-> > > > +
-> > > > +QEMU_ARCH = QemuArchParams(linux_arch='riscv',
-> > > > +                          qemuconfig='''
-> > > > +CONFIG_SOC_VIRT=y
-> > > > +CONFIG_SERIAL_8250=y
-> > > > +CONFIG_SERIAL_8250_CONSOLE=y
-> > > > +CONFIG_SERIAL_OF_PLATFORM=y
-> > > > +CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
-> > > > +                          qemu_arch='riscv64',
-> > > > +                          kernel_path='arch/riscv/boot/Image',
-> > > > +                          kernel_command_line='console=ttyS0',
-> > > > +                          extra_qemu_params=[
-> > > > +                                          '-machine virt',
-> > > > +                                          '-cpu rv64',
-> > > > +                                          '-bios opensbi-riscv64-generic-fw_dynamic.bin'])
-> > > > diff --git a/tools/testing/kunit/qemu_configs/s390.py b/tools/testing/kunit/qemu_configs/s390.py
-> > > > new file mode 100644
-> > > > index 0000000000000..04c90332f1098
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_configs/s390.py
-> > > > @@ -0,0 +1,14 @@
-> > > > +from ..qemu_config import QemuArchParams
-> > > > +
-> > > > +QEMU_ARCH = QemuArchParams(linux_arch='s390',
-> > > > +                          qemuconfig='''
-> > > > +CONFIG_EXPERT=y
-> > > > +CONFIG_TUNE_ZEC12=y
-> > > > +CONFIG_NUMA=y
-> > > > +CONFIG_MODULES=y''',
-> > > > +                          qemu_arch='s390x',
-> > > > +                          kernel_path='arch/s390/boot/bzImage',
-> > > > +                          kernel_command_line='console=ttyS0',
-> > > > +                          extra_qemu_params=[
-> > > > +                                          '-machine s390-ccw-virtio',
-> > > > +                                          '-cpu qemu',])
-> > > > diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/kunit/qemu_configs/sparc.py
-> > > > new file mode 100644
-> > > > index 0000000000000..f26b5f27cc5a1
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_configs/sparc.py
-> > > > @@ -0,0 +1,10 @@
-> > > > +from ..qemu_config import QemuArchParams
-> > > > +
-> > > > +QEMU_ARCH = QemuArchParams(linux_arch='sparc',
-> > > > +                          qemuconfig='''
-> > > > +CONFIG_SERIAL_8250=y
-> > > > +CONFIG_SERIAL_8250_CONSOLE=y''',
-> > > > +                          qemu_arch='sparc',
-> > > > +                          kernel_path='arch/sparc/boot/zImage',
-> > > > +                          kernel_command_line='console=ttyS0 mem=256M',
-> > > > +                          extra_qemu_params=['-m 256'])
-> > > > diff --git a/tools/testing/kunit/qemu_configs/x86_64.py b/tools/testing/kunit/qemu_configs/x86_64.py
-> > > > new file mode 100644
-> > > > index 0000000000000..bd5ab733b92ac
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/kunit/qemu_configs/x86_64.py
-> > > > @@ -0,0 +1,10 @@
-> > > > +from ..qemu_config import QemuArchParams
-> > > > +
-> > > > +QEMU_ARCH = QemuArchParams(linux_arch='x86_64',
-> > > > +                          qemuconfig='''
-> > > > +CONFIG_SERIAL_8250=y
-> > > > +CONFIG_SERIAL_8250_CONSOLE=y''',
-> > > > +                          qemu_arch='x86_64',
-> > > > +                          kernel_path='arch/x86/boot/bzImage',
-> > > > +                          kernel_command_line='console=ttyS0',
-> > > > +                          extra_qemu_params=[''])
-> > > > --
-> > > > 2.31.1.607.g51e8a6a459-goog
-> > > >
+The 1/7 patch defines a new LSM hook to get the fatal signal of a task.
+This will be useful during the attack detection phase.
+
+The 2/7 patch defines a new LSM and the necessary sysctl attributes to fin=
+e
+tuning the attack detection.
+
+The 3/7 patch detects a fork/exec brute force attack and narrows the
+possible cases taken into account the privilege boundary crossing.
+
+The 4/7 patch mitigates a brute force attack.
+
+The 5/7 patch adds self-tests to validate the Brute LSM expectations.
+
+The 6/7 patch adds the documentation to explain this implementation.
+
+The 7/7 patch updates the maintainers file.
+
+This patch serie is a task of the KSPP [3] and can also be accessed from m=
+y
+github tree [4] in the "brute_v7" branch.
+
+[3] https://github.com/KSPP/linux/issues/39
+[4] https://github.com/johwood/linux/
+
+When I ran the "checkpatch" script I got the following errors, but I think
+they are false positives as I follow the same coding style for the others
+extended attributes suffixes.
+
+=2D-----------------------------------------------------------------------=
+----
+../patches/brute_v7/v7-0003-security-brute-Detect-a-brute-force-attack.pat=
+ch
+=2D-----------------------------------------------------------------------=
+----
+ERROR: Macros with complex values should be enclosed in parentheses
+89: FILE: include/uapi/linux/xattr.h:80:
++#define XATTR_NAME_BRUTE XATTR_SECURITY_PREFIX XATTR_BRUTE_SUFFIX
+
+=2D-----------------------------------------------------------------------=
+-----
+../patches/brute_v7/v7-0005-selftests-brute-Add-tests-for-the-Brute-LSM.pa=
+tch
+=2D-----------------------------------------------------------------------=
+-----
+ERROR: Macros with complex values should be enclosed in parentheses
+100: FILE: tools/testing/selftests/brute/rmxattr.c:18:
++#define XATTR_NAME_BRUTE XATTR_SECURITY_PREFIX XATTR_BRUTE_SUFFIX
+
+When I ran the "kernel-doc" script with the following parameters:
+
+./scripts/kernel-doc --none -v security/brute/brute.c
+
+I got the following warning:
+
+security/brute/brute.c:65: warning: contents before sections
+
+But I don't understand why it is complaining. Could it be a false positive=
+?
+
+The previous versions can be found in:
+
+RFC
+https://lore.kernel.org/kernel-hardening/20200910202107.3799376-1-keescook=
+@chromium.org/
+
+Version 2
+https://lore.kernel.org/kernel-hardening/20201025134540.3770-1-john.wood@g=
+mx.com/
+
+Version 3
+https://lore.kernel.org/lkml/20210221154919.68050-1-john.wood@gmx.com/
+
+Version 4
+https://lore.kernel.org/lkml/20210227150956.6022-1-john.wood@gmx.com/
+
+Version 5
+https://lore.kernel.org/kernel-hardening/20210227153013.6747-1-john.wood@g=
+mx.com/
+
+Version 6
+https://lore.kernel.org/kernel-hardening/20210307113031.11671-1-john.wood@=
+gmx.com/
+
+Changelog RFC -> v2
+=2D------------------
+- Rename this feature with a more suitable name (Jann Horn, Kees Cook).
+- Convert the code to an LSM (Kees Cook).
+- Add locking  to avoid data races (Jann Horn).
+- Add a new LSM hook to get the fatal signal of a task (Jann Horn, Kees
+  Cook).
+- Add the last crashes timestamps list to avoid false positives in the
+  attack detection (Jann Horn).
+- Use "period" instead of "rate" (Jann Horn).
+- Other minor changes suggested (Jann Horn, Kees Cook).
+
+Changelog v2 -> v3
+=2D-----------------
+- Compute the application crash period on an on-going basis (Kees Cook).
+- Detect a brute force attack through the execve system call (Kees Cook).
+- Detect an slow brute force attack (Randy Dunlap).
+- Fine tuning the detection taken into account privilege boundary crossing
+  (Kees Cook).
+- Taken into account only fatal signals delivered by the kernel (Kees
+  Cook).
+- Remove the sysctl attributes to fine tuning the detection (Kees Cook).
+- Remove the prctls to allow per process enabling/disabling (Kees Cook).
+- Improve the documentation (Kees Cook).
+- Fix some typos in the documentation (Randy Dunlap).
+- Add self-test to validate the expectations (Kees Cook).
+
+Changelog v3 -> v4
+=2D-----------------
+- Fix all the warnings shown by the tool "scripts/kernel-doc" (Randy
+  Dunlap).
+
+Changelog v4 -> v5
+=2D-----------------
+- Fix some typos (Randy Dunlap).
+
+Changelog v5 -> v6
+=2D-----------------
+- Fix a reported deadlock (kernel test robot).
+- Add high level details to the documentation (Andi Kleen).
+
+Changelog v6 -> v7
+=2D-----------------
+
+- Add the "Reviewed-by:" tag to the first patch.
+- Rearrange the brute LSM between lockdown and yama (Kees Cook).
+- Split subdir and obj in security/Makefile (Kees Cook).
+- Reduce the number of header files included (Kees Cook).
+- Print the pid when an attack is detected (Kees Cook).
+- Use the socket_accept LSM hook instead of socket_sock_rcv_skb hook to
+  avoid running a hook on every incoming network packet (Kees Cook).
+- Update the documentation and fix it to render it properly (Jonathan
+  Corbet).
+- Manage correctly an exec brute force attack avoiding the bypass (Valdis
+  Kletnieks).
+- Other minor changes and cleanups.
+
+Any constructive comments are welcome.
+Thanks in advance.
+
+John Wood (7):
+  security: Add LSM hook at the point where a task gets a fatal signal
+  security/brute: Define a LSM and add sysctl attributes
+  security/brute: Detect a brute force attack
+  security/brute: Mitigate a brute force attack
+  selftests/brute: Add tests for the Brute LSM
+  Documentation: Add documentation for the Brute LSM
+  MAINTAINERS: Add a new entry for the Brute LSM
+
+ Documentation/admin-guide/LSM/Brute.rst  | 334 +++++++++++
+ Documentation/admin-guide/LSM/index.rst  |   1 +
+ MAINTAINERS                              |   7 +
+ include/linux/lsm_hook_defs.h            |   1 +
+ include/linux/lsm_hooks.h                |   4 +
+ include/linux/security.h                 |   4 +
+ include/uapi/linux/xattr.h               |   3 +
+ kernel/signal.c                          |   1 +
+ security/Kconfig                         |  11 +-
+ security/Makefile                        |   2 +
+ security/brute/Kconfig                   |  15 +
+ security/brute/Makefile                  |   2 +
+ security/brute/brute.c                   | 716 +++++++++++++++++++++++
+ security/security.c                      |   5 +
+ tools/testing/selftests/Makefile         |   1 +
+ tools/testing/selftests/brute/.gitignore |   2 +
+ tools/testing/selftests/brute/Makefile   |   5 +
+ tools/testing/selftests/brute/config     |   1 +
+ tools/testing/selftests/brute/rmxattr.c  |  34 ++
+ tools/testing/selftests/brute/test.c     | 507 ++++++++++++++++
+ tools/testing/selftests/brute/test.sh    | 256 ++++++++
+ 21 files changed, 1907 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/admin-guide/LSM/Brute.rst
+ create mode 100644 security/brute/Kconfig
+ create mode 100644 security/brute/Makefile
+ create mode 100644 security/brute/brute.c
+ create mode 100644 tools/testing/selftests/brute/.gitignore
+ create mode 100644 tools/testing/selftests/brute/Makefile
+ create mode 100644 tools/testing/selftests/brute/config
+ create mode 100644 tools/testing/selftests/brute/rmxattr.c
+ create mode 100644 tools/testing/selftests/brute/test.c
+ create mode 100755 tools/testing/selftests/brute/test.sh
+
+=2D-
+2.25.1
+
