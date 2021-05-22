@@ -2,107 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3535A38D3B5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 May 2021 06:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4394138D3B8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 May 2021 06:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbhEVEoQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 22 May 2021 00:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34992 "EHLO
+        id S231381AbhEVEo2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 22 May 2021 00:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbhEVEoQ (ORCPT
+        with ESMTP id S231370AbhEVEo1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 22 May 2021 00:44:16 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BD8C061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 May 2021 21:42:52 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id p138-20020a2542900000b029051304a381d9so17806530yba.20
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 May 2021 21:42:52 -0700 (PDT)
+        Sat, 22 May 2021 00:44:27 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769AFC0613ED
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 May 2021 21:43:03 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id d63-20020a254f420000b02904f91ef33453so29904705ybb.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 May 2021 21:43:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=+mCKHQLNW0bmkhVlCsKZrExVqQxng7WsA9n/3Ys5BVQ=;
-        b=C5413F/lQS6sC2Bq71hJ5vmfehTB/Hkw2+Hegi0dATxWt0uIta2N9Q91/2q3RkxdnN
-         owErC93qkIHMo0hFx0FYqn8FvQnYQZPgl2T9B7uHwoXdoYmyiAOkXw8EDXuJRf/SVCtE
-         mk919RFkeWzYKg5CeI59P361gVsFJxJ5gCx1bX2rLwJJpZBo+O/2xqAUAntkHamULkOU
-         r07xp3WXWPfsR5Okx+BcxYqHuwIUaoCqUickUOJ6DeMkZumC7w2rL2JXRhN1U1DRB5g6
-         fAmwRodElUIptCDo4EYyDMKfF2J8VnmxwXKZyTi+/eLYbYf5/Qr5EvBkOO0hPhcKfngX
-         FNZw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=96Y9WwIc8kUkrmHkpaEi69xgiu/NxnCuPIF69L/93wQ=;
+        b=k6ehWr8LMhU+5n2P7IT0s/1qchLDyjWLrbHUKCJ2mvUhEQQ92Pc792SZsQ82MFA8TF
+         YRXHAheIyLyleKIrlXH4+LVOXLyBZkHAP879WZ4C3zCMsnVSGguCvMvIKuFZqQqFxaiW
+         iLVm2LwBMmcjrHkq6L3iUhqKOMNwJOtY6dsc10uSCVWcaqCKqhCaHbdus2kZpHXNcu71
+         6B4eWSZr8gcmROS4B95RIpjm3cTE2wAtR5a37ikta8OzWJyxw4Nn4djoAbJM95ZIlkz2
+         ebs57FJvGFxiXem+qvaeQ6+QOZ9GvVs0cWfCYEeJcPAo3Rh1OnK3jmzWFt+DkbCEpAQv
+         J+VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=+mCKHQLNW0bmkhVlCsKZrExVqQxng7WsA9n/3Ys5BVQ=;
-        b=k9oSGVamVDcRaazpBupvxWFSb5xNjah9Bf8bhY8QSgxq9WpilAfZhoIv8OritEKEPE
-         uhPI/vPK9y9liHM13RynZSWY2skqNsw4ne5y5g/+JHp1GkLK8dKgOsiboFzljR1oY5wM
-         m3zrhIDZgXP7xDocxeJW90uKq6x/6uA+8wbiRF+kbr6D71m8LKPiB9HezxNWwHfB/Ovu
-         +PeEoCBfIf9ZM+4ub2pbXjqmw4xCiLLZRnMQzowbwbQYxUlvlDSB/AjaFq7qW4KXOzUZ
-         XCwtAA6WMqOxO/cavczQMh3MNypPU7C4dMmquNt1IEG/FIDVD88HDVrcUd1aM0U6RKd8
-         Bq7w==
-X-Gm-Message-State: AOAM533/Hr1hjE41iTA8vrFFaz9ptuHnbu7j3Pwach/v7cgjK4U7HaXC
-        TkGf8CviGda+QLC1NWz91jsTB8sloMvslA==
-X-Google-Smtp-Source: ABdhPJzfVQ4bGR7OTvcE8Dh17iy4veOvxbsqhzIgR/I5HutN6ubTmWSCnoMOIHBoD5X6g9EsF1XLwZNY4VLhsQ==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=96Y9WwIc8kUkrmHkpaEi69xgiu/NxnCuPIF69L/93wQ=;
+        b=T65TWF4Awy5Ybr5qVYL5VzgP/yjoiMDRKWBeLfN4huTP+zNG2cWqMf0g/KBSYF/k4b
+         Xfq2duJphCGwk7YIL8LJylNzNrGdqvGdL0GOUawC9d2Swf975XFqrqhWkkq57WjqIiOe
+         btJRcU3ZBTCA7+6pzor3zm2z4W6jxxedBDxoiO3IlEB31B7WQijQ9iypi2dYJilM+4ox
+         2+/FQFX3zfypyNr/1yNyBs8q7SSxtnaY9QjWKD1gjES/kRGw1pwb3ThpOMcDTPHzen7B
+         8NVQ88hxa/16Hgkn/BjBjhwPdumAX009E70P0lVPw9u8IWX2t6cQajfjQBuxgmDgI/tp
+         MUJA==
+X-Gm-Message-State: AOAM533uqN+P3oiNkkAH+2kOgCjd9AcZyqYvE4o4TWPE6k+smt5nxOSn
+        joDZ4L4pGWdmAUfIjJObpvjLc7v39fwaTg==
+X-Google-Smtp-Source: ABdhPJwkDp3aKJw6lJxI1K/PlTb7DpOkyHUwuvuxtIIWZX/jOgZ3zzKysWewTVhNbZtuE5F9CTitZ4nawGS9OA==
 X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:74c:35f3:92d:b18a])
- (user=davidgow job=sendgmr) by 2002:a5b:d46:: with SMTP id
- f6mr14789792ybr.488.1621658571180; Fri, 21 May 2021 21:42:51 -0700 (PDT)
-Date:   Fri, 21 May 2021 21:42:39 -0700
-Message-Id: <20210522044241.2763088-1-davidgow@google.com>
+ (user=davidgow job=sendgmr) by 2002:a5b:5c3:: with SMTP id
+ w3mr21416475ybp.498.1621658582642; Fri, 21 May 2021 21:43:02 -0700 (PDT)
+Date:   Fri, 21 May 2021 21:42:40 -0700
+In-Reply-To: <20210522044241.2763088-1-davidgow@google.com>
+Message-Id: <20210522044241.2763088-2-davidgow@google.com>
 Mime-Version: 1.0
+References: <20210522044241.2763088-1-davidgow@google.com>
 X-Mailer: git-send-email 2.31.1.818.g46aad6cb9e-goog
-Subject: [PATCH v2 1/3] kunit: arch/um/configs: Enable KUNIT_ALL_TESTS by default
+Subject: [PATCH v2 2/3] kunit: Move default config from arch/um -> tools/testing/kunit
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>,
         Richard Weinberger <richard@nod.at>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Daniel Latypov <dlatypov@google.com>
+        Jonathan Corbet <corbet@lwn.net>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Make the default .kunitconfig (specified in
-arch/um/configs/kunit_defconfig) specify CONFIG_KUNIT_ALL_TESTS by
-default. KUNIT_ALL_TESTS runs all tests which have satisfied
-dependencies in the current .config (which would be the architecture
-defconfig).
+The default .kunitconfig file is currently kept in
+arch/um/configs/kunit_defconfig, but -- with the impending QEMU patch
+-- will no-longer be exclusively used for UML-based kernels.
 
-Currently, the default .kunitconfig enables only the example tests and
-KUnit's own tests. While this does provide a good example of what a
-.kunitconfig for running a few individual tests should look like, it
-does mean that kunit_tool runs a pretty paltry collection of tests by
-default.
+Move it alongside the other KUnit configs in
+tools/testing/kunit/configs, and give it a name which matches the
+existing all_tests.config and broken_on_uml.config files.
 
-The example tests' config entry (CONFIG_KUNIT_EXAMPLE_TEST=y) continues
-to be included -- despite now being redundant -- to provide an example
-of how tests are enabled when KUNIT_ALL_TESTS is disabled.
-
-A default run of ./tools/testing/kunit/kunit.py run now runs 70 tests
-instead of 14.
+Also update the Getting Started documentation to point to the new file.
 
 Signed-off-by: David Gow <davidgow@google.com>
-Acked-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 ---
+ Documentation/dev-tools/kunit/start.rst                         | 2 +-
+ .../testing/kunit/configs/default.config                        | 0
+ tools/testing/kunit/kunit_kernel.py                             | 2 +-
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+ rename arch/um/configs/kunit_defconfig => tools/testing/kunit/configs/default.config (100%)
 
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20210518035825.1885357-1-davidgow@google.com/
-- Keep the KUNIT_EXAMPLE_TEST entry as an example.
-- Move (in patches 2,3) kunit_defconfig to tools/testing/kunit/configs
-  and replace all_tests.config.
-
- arch/um/configs/kunit_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/um/configs/kunit_defconfig b/arch/um/configs/kunit_defconfig
-index 9235b7d42d38..e67af7b9f1bb 100644
---- a/arch/um/configs/kunit_defconfig
-+++ b/arch/um/configs/kunit_defconfig
-@@ -1,3 +1,3 @@
- CONFIG_KUNIT=y
--CONFIG_KUNIT_TEST=y
- CONFIG_KUNIT_EXAMPLE_TEST=y
-+CONFIG_KUNIT_ALL_TESTS=y
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index 0e65cabe08eb..5becb09b1751 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -36,7 +36,7 @@ A good starting point for a ``.kunitconfig`` is the KUnit defconfig:
+ .. code-block:: bash
+ 
+ 	cd $PATH_TO_LINUX_REPO
+-	cp arch/um/configs/kunit_defconfig .kunitconfig
++	cp tools/testing/kunit/configs/default.config .kunitconfig
+ 
+ You can then add any other Kconfig options you wish, e.g.:
+ 
+diff --git a/arch/um/configs/kunit_defconfig b/tools/testing/kunit/configs/default.config
+similarity index 100%
+rename from arch/um/configs/kunit_defconfig
+rename to tools/testing/kunit/configs/default.config
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 89a7d4024e87..5b57a43de33f 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -20,7 +20,7 @@ import kunit_parser
+ 
+ KCONFIG_PATH = '.config'
+ KUNITCONFIG_PATH = '.kunitconfig'
+-DEFAULT_KUNITCONFIG_PATH = 'arch/um/configs/kunit_defconfig'
++DEFAULT_KUNITCONFIG_PATH = 'tools/testing/kunit/configs/default.config'
+ BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
+ OUTFILE_PATH = 'test.log'
+ 
 -- 
 2.31.1.818.g46aad6cb9e-goog
 
