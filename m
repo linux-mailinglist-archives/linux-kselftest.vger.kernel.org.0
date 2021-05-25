@@ -2,515 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCC938FAC0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 May 2021 08:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E964B38FD09
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 May 2021 10:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbhEYGTV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 May 2021 02:19:21 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:41290 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbhEYGTU (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 May 2021 02:19:20 -0400
-Received: from mail-pj1-f71.google.com ([209.85.216.71])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1llQNx-0001Kv-9u
-        for linux-kselftest@vger.kernel.org; Tue, 25 May 2021 06:17:49 +0000
-Received: by mail-pj1-f71.google.com with SMTP id a11-20020a17090a70cbb029015d3e996884so15562254pjm.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 May 2021 23:17:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qw1SLvXATN0sxLuhrI4LR2ginWQAKnsg7wk+RJmDqfg=;
-        b=iLl1sqp7vfPF7ZY7fwJ2P3SyuS4kcyfQGGZUDNxM8y+SWrBowdsAeXgbq6g4jNruPc
-         2REBow/1h8yV0OeHF/6mGXosxSGgVkklegpVypeHCtc9fvjPL5DgWT0/FmfAGlQrzNmB
-         8OCdDvatCOLtGdvxvQoN3PTxHcW7OmbBpmjkx6Up1mODidcFolr0PtqzThpTbXYo0SOn
-         xtYD8mU8nu1srs+FlU8EUmSPUMBFd8MPKNx3clanB4ZIEjOMXVXWJxxw6QJNDVFs6YJI
-         akukcRmCJR15skI+FdT/b54C1JU7/p9yd7FLlqjzlVnfmNscOWxOy66jROxmVPYHhuEr
-         VMdg==
-X-Gm-Message-State: AOAM530qY6kcBicaHWDq+y0LLmYg4hH7oTgA99+wah7FFta4PRh771gN
-        cvsRB5zyfqLm9jXH/c1NUOMh91wTQAgMDGW7gs79OtW4mzSvGa2L4Ri96czOP2tR7/RbHa4N/14
-        O96Hnd/wPe8PjvlfQD8ldRoBAMYqGDrwaT8Ra+wL4H6LF
-X-Received: by 2002:a63:9d43:: with SMTP id i64mr17095623pgd.205.1621923467752;
-        Mon, 24 May 2021 23:17:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx/CCQzYh2BvPdc/hYR/n5nmn/7xpaclxqR3cHMFGrfVxlj2aTtONTss0SV2Yb8YrdlZVRyCQ==
-X-Received: by 2002:a63:9d43:: with SMTP id i64mr17095588pgd.205.1621923467374;
-        Mon, 24 May 2021 23:17:47 -0700 (PDT)
-Received: from localhost.localdomain (223-136-150-121.emome-ip.hinet.net. [223.136.150.121])
-        by smtp.gmail.com with ESMTPSA id a16sm12825183pfa.95.2021.05.24.23.17.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 May 2021 23:17:46 -0700 (PDT)
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     po-hsu.lin@canonical.com, shuah@kernel.org,
-        skhan@linuxfoundation.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, nikolay@nvidia.com,
-        gnault@redhat.com, vladimir.oltean@nxp.com, idosch@nvidia.com,
-        baowen.zheng@corigine.com, danieller@nvidia.com, petrm@nvidia.com
-Subject: [PATCH] selftests: Use kselftest skip code for skipped tests
-Date:   Tue, 25 May 2021 14:17:24 +0800
-Message-Id: <20210525061724.13526-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        id S231937AbhEYIok (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 May 2021 04:44:40 -0400
+Received: from mga01.intel.com ([192.55.52.88]:51742 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230108AbhEYIok (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 25 May 2021 04:44:40 -0400
+IronPort-SDR: a7/d8FUDVkd1MtduYcIkmDy6zIcJsMOg6Z6lUOjgY1nEO8WoUyXKv3oym3waVzM4FXDSox5EBa
+ no5EiUDQ/x7g==
+X-IronPort-AV: E=McAfee;i="6200,9189,9994"; a="223306480"
+X-IronPort-AV: E=Sophos;i="5.82,328,1613462400"; 
+   d="scan'208";a="223306480"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2021 01:43:10 -0700
+IronPort-SDR: 4MQZACW0Lt5lg00s/B20NSuk1yL0JkezDBXZz0BBbAXs1WKdICW4R29Ox4uZoUQIlBbQo61z1o
+ qIHIAydEjOWg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,328,1613462400"; 
+   d="scan'208";a="546485004"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga001.fm.intel.com with ESMTP; 25 May 2021 01:43:10 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Tue, 25 May 2021 01:43:09 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4
+ via Frontend Transport; Tue, 25 May 2021 01:43:09 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.4; Tue, 25 May 2021 01:43:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h4ekcMTARX28L9VKTk5uoK0cOqHe1Y0CyM7s6cLJQdS6qH41TQOyDXhyN/luNsAMGnxQOx5be2GAprCM2QWL7xKjNMhNKmSlxme9aj3vDcVL4Gx8/Zho63DN9+ns5OToxg4Bhgyy8ug2k2mfqZAhnAA4u4jRAss+pwXhlBqDYL+wVlHSUbKdS6aRlE7SxL0nRO5jExxNdcxsdQHmx4KKYSognaON71sinAhr1ymJsDgYITGqgZb6ogst+Pje1YzEaWvGScnYoPFaHDsTH7TMoE88dVZEqcbGTKZuBrkOI//LIYCMtV2NVBeXo+r/sHI22MpGR9H61+wplUuJykFzQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iFigB8bX2cUQpzNiVRw4Gq9UC8VMd0VpTtrbU4Kc/fQ=;
+ b=SG+Q7Lcxp1FgX8UDQ73ckfYlvzHop9kYgSrdBFVd8czfA2n/Bn9OLFoRmAGgM8O9HqsjaEIqL7GtHjcQ4QCYk/bO1/BxfasAssp5C+aj6a2fbtLm7SEkX7CgLxc2ZkR0PvLrCm8ETFBuBF1Zkjo0DWHk/9vGqAwt7k4n8WbF4LYjun46af4x68ZDQoP7knc7lDSgCqachMdnBgzk8Kf0FnJlPC7fpzeV0uSDIIsNs47TMhQqwh+6JIdla+pAdTSzdp0b0HibAZlKROxuS14UZi2DLf1rR9v00c8oGaODZHVyod4PbUCHDDkaC0MSFtrlcawfwMB+HS9sqO/eBxOahA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iFigB8bX2cUQpzNiVRw4Gq9UC8VMd0VpTtrbU4Kc/fQ=;
+ b=smRpMy0Q45iWz1OLWuLv4IDd92emidmY+fZd8E7cSRu0TD2F5hOk+2zvJgIB2XaylRoH1OfHegv4It51aFFKtUXX2goPaIoaUCh5Vimw0fBTt7da+eudLCrN61Ah7/mfe8bHR0JBGIg4O4SU53xe/n4gVU/ay5kbMcUJBBLaK8w=
+Received: from DM8PR11MB5670.namprd11.prod.outlook.com (2603:10b6:8:37::12) by
+ DM8PR11MB5639.namprd11.prod.outlook.com (2603:10b6:8:24::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4150.27; Tue, 25 May 2021 08:43:08 +0000
+Received: from DM8PR11MB5670.namprd11.prod.outlook.com
+ ([fe80::ccbb:37d7:aba8:2f8e]) by DM8PR11MB5670.namprd11.prod.outlook.com
+ ([fe80::ccbb:37d7:aba8:2f8e%8]) with mapi id 15.20.4150.027; Tue, 25 May 2021
+ 08:43:08 +0000
+From:   "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>
+Subject: RE: [PATCH] selftests: kvm: Fix a potential elf loading issue
+Thread-Topic: [PATCH] selftests: kvm: Fix a potential elf loading issue
+Thread-Index: AQHXRmF05PtyWFMmVEOiqNWnCg92Fqryo60AgAFSt1A=
+Date:   Tue, 25 May 2021 08:43:07 +0000
+Message-ID: <DM8PR11MB5670F958184509909A1876B892259@DM8PR11MB5670.namprd11.prod.outlook.com>
+References: <20210512043107.30076-1-zhenzhong.duan@intel.com>
+ <20210512043107.30076-2-zhenzhong.duan@intel.com>
+ <2b16869a-7518-529b-9cbe-fb2e5f61a6e9@redhat.com>
+In-Reply-To: <2b16869a-7518-529b-9cbe-fb2e5f61a6e9@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.5.1.3
+dlp-reaction: no-action
+authentication-results: redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [114.246.35.137]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9323a178-63e1-4ac9-3d8a-08d91f591ef2
+x-ms-traffictypediagnostic: DM8PR11MB5639:
+x-microsoft-antispam-prvs: <DM8PR11MB563984029D5B6B655D43C50A92259@DM8PR11MB5639.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ISjap+Xx+emmW10QkyGua/5ALG9+FHGdygitgkmk3tFxHJbgL3ZFDgDgxYG1/bgP3dTTgMsXJOTCjpusygjpb3w3yHTgbtK8tjdQNW6uqXkTZXHnyjA0alK0ms8VvnI1gD0+Ed+o3GziGuJ7y8dNCVzaqAk/x+SG6gtB8NQ/2i7/etA8wmBUw/RqLTC4PEGbmXdzDQzCxApCVYKy1Iz3a5R+S2MUXDYZQuE4mIAw7/l1FFObzO8VWknzESCVZjRLY1x4yrtRF9S7DL+sXmDOOKdo9Tn/U4xMNrQ6AsjWCedZSvpS8s1iC3nNVtqwGqL7BXn971MqaBLKPEnHykvECSuFb6WqyF+By63rwjWI6ZnHiuMPSBOL/HsKKC1vJ6K1D296Dg1YX3nBgdDPB4EKPNKq6p8UDhUDyIWwM1q6tCkBBWsIQjbYv8liOOReQii/J+p+Nu6pynnudv5WvItK7vzjRNxAvaRCelZ1AW5uqjSbcEvmq2akqCEeLAwdA+O2wZLYTtKvRBlK1RkDMNwrzR2MGhDucAI1kGc/+C9gntb5sjSUvo+qFcbZ5I2GP+9jKfkejcNWCsCN+rzAjxnS2SdDR63lhnIb2VAq9hW0xb8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5670.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(396003)(366004)(39860400002)(136003)(346002)(38100700002)(26005)(5660300002)(122000001)(8676002)(33656002)(86362001)(53546011)(8936002)(4326008)(7696005)(55016002)(186003)(9686003)(110136005)(83380400001)(54906003)(64756008)(66556008)(66476007)(66946007)(316002)(66446008)(76116006)(2906002)(478600001)(52536014)(6506007)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: H3M5tKgj6HEzXpMaQCbxhivFWjEqOzFsHIz2iuZxIiqo2cChNzZ+GjORVSYwHeT+jxtDLYQLKQNNfw6HHPVFTQcVBy5nPvLHzekbNJUZ6vrECEnVzfodbzVJPeSGt9SwiU2MpVYCTyYC6hOqh9AxNUvwzij0nbPEJPw90pbZqY0aIXwUxmkO4Ki3KRXlTR5kO2u/QvymXrHp+Yj3Z4dXp+Yuf+zSfzeRzkoU75AxI4lrd7c24vfch0iD7P5zXvN7jyUuf22jaAmoGKxcEY5UjIuxfWclNwyo6yU3iKVL0FW/V9bMxipYCZV3p6q352TGSpjV0MjkAikDc205rVpMfxYS7rg4pv9GgVRzOQXi4gIKpjZ8DIkY+VZUYCunKVCKQs0QzESb06PfUPv9wJTdUq8KSQIGz7F+scOHIQXM+awi5++UNb8zv6x/nzl+qKqGV/ZFNOuIeYu1K0l7Rypm6ErEq3yN7GDpTcgzLmXxFkOaMMASpDWC/p7S07zndS6eKi3I1UxZc5LajEV9Ds7TckikLiCgJvBawIr9PtziGhdVpKKp8yAljcehgLcrLtBw0w0PcRMr2/3sygvpoQ5xuKEr0+OKm+q8wBRvNr2cyo61sILYyT90aWgr/ftRxD7122VK9MnEACycHn1bYvwD8CXf9MrkqWaheaw9giiv5uD2Kd3/xr/iR0Juw15w7CG9eUYaiTWrBrLVaqcpAZiV2xE4Ngr2MEHpQYLMXW+U/WU=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5670.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9323a178-63e1-4ac9-3d8a-08d91f591ef2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 May 2021 08:43:08.0034
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2F1XyT6XBSCAJrhvqQbgMdikt6n+eSh0wjF36yUK88ml4BxBl6Rq2Wv+X/iYHroSnFFOzy/ZC0ooao5jLZ57eQdum4LXi2qs1DEoajexwkU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5639
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There are several test cases still using exit 0 when they need to be
-skipped. Use kselftest framework skip code instead so it can help us
-to distinguish the proper return status.
-
-Criterion to filter out what should be fixed in selftests directory:
-  grep -r "exit 0" -B1 | grep -i skip
-
-This change might cause some false-positives if people are running
-these test scripts directly and only checking their return codes,
-which will change from 0 to 4. However I think the impact should be
-small as most of our scripts here are already using this skip code.
-And there will be no such issue if running them with the kselftest
-framework.
-
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/bpf/test_bpftool_build.sh             | 5 ++++-
- tools/testing/selftests/bpf/test_xdp_meta.sh                  | 5 ++++-
- tools/testing/selftests/bpf/test_xdp_vlan.sh                  | 7 +++++--
- tools/testing/selftests/net/fcnal-test.sh                     | 5 ++++-
- tools/testing/selftests/net/fib_rule_tests.sh                 | 7 +++++--
- tools/testing/selftests/net/forwarding/lib.sh                 | 5 ++++-
- tools/testing/selftests/net/forwarding/router_mpath_nh.sh     | 5 ++++-
- tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh | 5 ++++-
- tools/testing/selftests/net/run_afpackettests                 | 5 ++++-
- tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh        | 9 ++++++---
- tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh        | 9 ++++++---
- tools/testing/selftests/net/unicast_extensions.sh             | 5 ++++-
- tools/testing/selftests/net/vrf_strict_mode_test.sh           | 9 ++++++---
- tools/testing/selftests/ptp/phc.sh                            | 7 +++++--
- tools/testing/selftests/vm/charge_reserved_hugetlb.sh         | 5 ++++-
- tools/testing/selftests/vm/hugetlb_reparenting_test.sh        | 5 ++++-
- 16 files changed, 73 insertions(+), 25 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_bpftool_build.sh b/tools/testing/selftests/bpf/test_bpftool_build.sh
-index ac349a5..b6fab1e 100755
---- a/tools/testing/selftests/bpf/test_bpftool_build.sh
-+++ b/tools/testing/selftests/bpf/test_bpftool_build.sh
-@@ -1,6 +1,9 @@
- #!/bin/bash
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- case $1 in
- 	-h|--help)
- 		echo -e "$0 [-j <n>]"
-@@ -22,7 +25,7 @@ KDIR_ROOT_DIR=$(realpath $PWD/$SCRIPT_REL_DIR/../../../../)
- cd $KDIR_ROOT_DIR
- if [ ! -e tools/bpf/bpftool/Makefile ]; then
- 	echo -e "skip:    bpftool files not found!\n"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- ERROR=0
-diff --git a/tools/testing/selftests/bpf/test_xdp_meta.sh b/tools/testing/selftests/bpf/test_xdp_meta.sh
-index 637fcf4..fd3f218 100755
---- a/tools/testing/selftests/bpf/test_xdp_meta.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_meta.sh
-@@ -1,5 +1,8 @@
- #!/bin/sh
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- cleanup()
- {
- 	if [ "$?" = "0" ]; then
-@@ -17,7 +20,7 @@ cleanup()
- ip link set dev lo xdp off 2>/dev/null > /dev/null
- if [ $? -ne 0 ];then
- 	echo "selftests: [SKIP] Could not run test without the ip xdp support"
--	exit 0
-+	exit $ksft_skip
- fi
- set -e
- 
-diff --git a/tools/testing/selftests/bpf/test_xdp_vlan.sh b/tools/testing/selftests/bpf/test_xdp_vlan.sh
-index bb8b0da..1aa7404 100755
---- a/tools/testing/selftests/bpf/test_xdp_vlan.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_vlan.sh
-@@ -2,6 +2,9 @@
- # SPDX-License-Identifier: GPL-2.0
- # Author: Jesper Dangaard Brouer <hawk@kernel.org>
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- # Allow wrapper scripts to name test
- if [ -z "$TESTNAME" ]; then
-     TESTNAME=xdp_vlan
-@@ -94,7 +97,7 @@ while true; do
- 	    -h | --help )
- 		usage;
- 		echo "selftests: $TESTNAME [SKIP] usage help info requested"
--		exit 0
-+		exit $ksft_skip
- 		;;
- 	    * )
- 		shift
-@@ -117,7 +120,7 @@ fi
- ip link set dev lo xdpgeneric off 2>/dev/null > /dev/null
- if [ $? -ne 0 ]; then
- 	echo "selftests: $TESTNAME [SKIP] need ip xdp support"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- # Interactive mode likely require us to cleanup netns
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index a8ad928..9074e25 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -37,6 +37,9 @@
- #
- # server / client nomenclature relative to ns-A
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- VERBOSE=0
- 
- NSA_DEV=eth1
-@@ -3946,7 +3949,7 @@ fi
- which nettest >/dev/null
- if [ $? -ne 0 ]; then
- 	echo "'nettest' command not found; skipping tests"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- declare -i nfail=0
-diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
-index a93e6b6..43ea840 100755
---- a/tools/testing/selftests/net/fib_rule_tests.sh
-+++ b/tools/testing/selftests/net/fib_rule_tests.sh
-@@ -3,6 +3,9 @@
- 
- # This test is for checking IPv4 and IPv6 FIB rules API
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- ret=0
- 
- PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
-@@ -238,12 +241,12 @@ run_fibrule_tests()
- 
- if [ "$(id -u)" -ne 0 ];then
- 	echo "SKIP: Need root privileges"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- if [ ! -x "$(command -v ip)" ]; then
- 	echo "SKIP: Could not run test without ip tool"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- # start clean
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 42e28c9..eed9f08 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -4,6 +4,9 @@
- ##############################################################################
- # Defines
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- # Can be overridden by the configuration file.
- PING=${PING:=ping}
- PING6=${PING6:=ping6}
-@@ -121,7 +124,7 @@ check_ethtool_lanes_support()
- 
- if [[ "$(id -u)" -ne 0 ]]; then
- 	echo "SKIP: need root privileges"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- if [[ "$CHECK_TC" = "yes" ]]; then
-diff --git a/tools/testing/selftests/net/forwarding/router_mpath_nh.sh b/tools/testing/selftests/net/forwarding/router_mpath_nh.sh
-index 76efb1f..bb7dc6d 100755
---- a/tools/testing/selftests/net/forwarding/router_mpath_nh.sh
-+++ b/tools/testing/selftests/net/forwarding/router_mpath_nh.sh
-@@ -1,6 +1,9 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- ALL_TESTS="
- 	ping_ipv4
- 	ping_ipv6
-@@ -411,7 +414,7 @@ ping_ipv6()
- ip nexthop ls >/dev/null 2>&1
- if [ $? -ne 0 ]; then
- 	echo "Nexthop objects not supported; skipping tests"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- trap cleanup EXIT
-diff --git a/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh b/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh
-index 4898dd4..e7bb976 100755
---- a/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh
-+++ b/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh
-@@ -1,6 +1,9 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- ALL_TESTS="
- 	ping_ipv4
- 	ping_ipv6
-@@ -386,7 +389,7 @@ ping_ipv6()
- ip nexthop ls >/dev/null 2>&1
- if [ $? -ne 0 ]; then
- 	echo "Nexthop objects not supported; skipping tests"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- trap cleanup EXIT
-diff --git a/tools/testing/selftests/net/run_afpackettests b/tools/testing/selftests/net/run_afpackettests
-index 8b42e8b..a59cb6a 100755
---- a/tools/testing/selftests/net/run_afpackettests
-+++ b/tools/testing/selftests/net/run_afpackettests
-@@ -1,9 +1,12 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- if [ $(id -u) != 0 ]; then
- 	echo $msg must be run as root >&2
--	exit 0
-+	exit $ksft_skip
- fi
- 
- ret=0
-diff --git a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-index ad7a9fc..1003119 100755
---- a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-@@ -163,6 +163,9 @@
- # +---------------------------------------------------+
- #
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- readonly LOCALSID_TABLE_ID=90
- readonly IPv6_RT_NETWORK=fd00
- readonly IPv4_HS_NETWORK=10.0.0
-@@ -464,18 +467,18 @@ host_vpn_isolation_tests()
- 
- if [ "$(id -u)" -ne 0 ];then
- 	echo "SKIP: Need root privileges"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- if [ ! -x "$(command -v ip)" ]; then
- 	echo "SKIP: Could not run test without ip tool"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- modprobe vrf &>/dev/null
- if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
-         echo "SKIP: vrf sysctl does not exist"
--        exit 0
-+        exit $ksft_skip
- fi
- 
- cleanup &>/dev/null
-diff --git a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-index 68708f5..b9b06ef 100755
---- a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-@@ -164,6 +164,9 @@
- # +---------------------------------------------------+
- #
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- readonly LOCALSID_TABLE_ID=90
- readonly IPv6_RT_NETWORK=fd00
- readonly IPv6_HS_NETWORK=cafe
-@@ -472,18 +475,18 @@ host_vpn_isolation_tests()
- 
- if [ "$(id -u)" -ne 0 ];then
- 	echo "SKIP: Need root privileges"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- if [ ! -x "$(command -v ip)" ]; then
- 	echo "SKIP: Could not run test without ip tool"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- modprobe vrf &>/dev/null
- if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
-         echo "SKIP: vrf sysctl does not exist"
--        exit 0
-+        exit $ksft_skip
- fi
- 
- cleanup &>/dev/null
-diff --git a/tools/testing/selftests/net/unicast_extensions.sh b/tools/testing/selftests/net/unicast_extensions.sh
-index dbf0421..728e4d5 100755
---- a/tools/testing/selftests/net/unicast_extensions.sh
-+++ b/tools/testing/selftests/net/unicast_extensions.sh
-@@ -28,12 +28,15 @@
- # These tests provide an easy way to flip the expected result of any
- # of these behaviors for testing kernel patches that change them.
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- # nettest can be run from PATH or from same directory as this selftest
- if ! which nettest >/dev/null; then
- 	PATH=$PWD:$PATH
- 	if ! which nettest >/dev/null; then
- 		echo "'nettest' command not found; skipping tests"
--		exit 0
-+		exit $ksft_skip
- 	fi
- fi
- 
-diff --git a/tools/testing/selftests/net/vrf_strict_mode_test.sh b/tools/testing/selftests/net/vrf_strict_mode_test.sh
-index 18b982d..865d53c 100755
---- a/tools/testing/selftests/net/vrf_strict_mode_test.sh
-+++ b/tools/testing/selftests/net/vrf_strict_mode_test.sh
-@@ -3,6 +3,9 @@
- 
- # This test is designed for testing the new VRF strict_mode functionality.
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- ret=0
- 
- # identifies the "init" network namespace which is often called root network
-@@ -371,18 +374,18 @@ vrf_strict_mode_check_support()
- 
- if [ "$(id -u)" -ne 0 ];then
- 	echo "SKIP: Need root privileges"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- if [ ! -x "$(command -v ip)" ]; then
- 	echo "SKIP: Could not run test without ip tool"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- modprobe vrf &>/dev/null
- if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
- 	echo "SKIP: vrf sysctl does not exist"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- cleanup &> /dev/null
-diff --git a/tools/testing/selftests/ptp/phc.sh b/tools/testing/selftests/ptp/phc.sh
-index ac6e5a6..ca3c844c 100755
---- a/tools/testing/selftests/ptp/phc.sh
-+++ b/tools/testing/selftests/ptp/phc.sh
-@@ -1,6 +1,9 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- ALL_TESTS="
- 	settime
- 	adjtime
-@@ -13,12 +16,12 @@ DEV=$1
- 
- if [[ "$(id -u)" -ne 0 ]]; then
- 	echo "SKIP: need root privileges"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- if [[ "$DEV" == "" ]]; then
- 	echo "SKIP: PTP device not provided"
--	exit 0
-+	exit $ksft_skip
- fi
- 
- require_command()
-diff --git a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
-index 18d3368..fe8fcfb 100644
---- a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
-+++ b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
-@@ -1,11 +1,14 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- set -e
- 
- if [[ $(id -u) -ne 0 ]]; then
-   echo "This test must be run as root. Skipping..."
--  exit 0
-+  exit $ksft_skip
- fi
- 
- fault_limit_file=limit_in_bytes
-diff --git a/tools/testing/selftests/vm/hugetlb_reparenting_test.sh b/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
-index d11d1fe..4a9a3af 100644
---- a/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
-+++ b/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
-@@ -1,11 +1,14 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- set -e
- 
- if [[ $(id -u) -ne 0 ]]; then
-   echo "This test must be run as root. Skipping..."
--  exit 0
-+  exit $ksft_skip
- fi
- 
- usage_file=usage_in_bytes
--- 
-2.7.4
-
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFBhb2xvIEJvbnppbmkgPHBi
+b256aW5pQHJlZGhhdC5jb20+DQo+IFNlbnQ6IE1vbmRheSwgTWF5IDI0LCAyMDIxIDg6MjggUE0N
+Cj4gVG86IER1YW4sIFpoZW56aG9uZyA8emhlbnpob25nLmR1YW5AaW50ZWwuY29tPjsgbGludXgt
+DQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtl
+cm5lbC5vcmc7IGt2bUB2Z2VyLmtlcm5lbC5vcmc7IHNodWFoQGtlcm5lbC5vcmcNCj4gU3ViamVj
+dDogUmU6IFtQQVRDSF0gc2VsZnRlc3RzOiBrdm06IEZpeCBhIHBvdGVudGlhbCBlbGYgbG9hZGlu
+ZyBpc3N1ZQ0KPiANCj4gT24gMTIvMDUvMjEgMDY6MzEsIFpoZW56aG9uZyBEdWFuIHdyb3RlOg0K
+PiA+IHZtX3ZhZGRyX2FsbG9jKCkgc2V0dXAgR1ZBIHRvIEdQQSBtYXBwaW5nIHBhZ2UgYnkgcGFn
+ZSwgdGhlbiBHUEEgbWF5DQo+ID4gbm90IGJlIGNvbnRpbnVvdXMgaWYgc2FtZSBtZW1zbG90IGlz
+IHVzZWQgZm9yIGRhdGEgYW5kIHBhZ2UgdGFibGUNCj4gYWxsb2NhdGlvbi4NCj4gPg0KPiA+IGt2
+bV92bV9lbGZfbG9hZCgpIGV4cGVjdHMgYSBjb250aW51b3VzIG1lbW9yeSBvZiBHUEEgb3IgZWxz
+ZSBpdCBuZWVkDQo+ID4gdG8gcmVhZCBmaWxlIGRhdGEgcGFnZSBieSBwYWdlLiBGaXggaXQgYnkg
+YWRkaW5nIGEgY2hlY2sgaW4NCj4gPiB2bV92YWRkcl9hbGxvYygpIHRvIGVuc3VyZSBtZW1vcnkg
+aXMgYWxsb2NhdGVkIGluIGEgd2hvbGUgaWYgc2FtZQ0KPiA+IG1lbXNsb3QgaXMgdXNlZCBmb3Ig
+ZGF0YSBhbmQgcGFnZSB0YWJsZS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFpoZW56aG9uZyBE
+dWFuIDx6aGVuemhvbmcuZHVhbkBpbnRlbC5jb20+DQo+ID4gLS0tDQo+IFdoeSBub3QgZG8NCj4g
+DQo+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vbGliL2t2bV91dGls
+LmMNCj4gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vbGliL2t2bV91dGlsLmMNCj4gaW5k
+ZXggNzQyNjE2M2Q0NDhhLi5mMzYyYTA2NmYzN2EgMTAwNjQ0DQo+IC0tLSBhL3Rvb2xzL3Rlc3Rp
+bmcvc2VsZnRlc3RzL2t2bS9saWIva3ZtX3V0aWwuYw0KPiArKysgYi90b29scy90ZXN0aW5nL3Nl
+bGZ0ZXN0cy9rdm0vbGliL2t2bV91dGlsLmMNCj4gQEAgLTExNzAsNiArMTE3MCw5IEBAIHZtX3Zh
+ZGRyX3Qgdm1fdmFkZHJfYWxsb2Moc3RydWN0IGt2bV92bSAqdm0sDQo+IHNpemVfdCBzeiwgdm1f
+dmFkZHJfdCB2YWRkcl9taW4sDQo+ICAgCXVpbnQ2NF90IHBhZ2VzID0gKHN6ID4+IHZtLT5wYWdl
+X3NoaWZ0KSArICgoc3ogJSB2bS0+cGFnZV9zaXplKSAhPSAwKTsNCj4gDQo+ICAgCXZpcnRfcGdk
+X2FsbG9jKHZtLCBwZ2RfbWVtc2xvdCk7DQo+ICsJdm1fcGFkZHJfdCBwYWRkciA9IHZtX3BoeV9w
+YWdlc19hbGxvYyh2bSwgcGFnZXMsDQo+ICsJCQkJCSAgICAgIEtWTV9VVElMX01JTl9QRk4gKiB2
+bS0NCj4gPnBhZ2Vfc2l6ZSwNCj4gKwkJCQkJICAgICAgZGF0YV9tZW1zbG90KTsNCj4gDQo+ICAg
+CS8qDQo+ICAgCSAqIEZpbmQgYW4gdW51c2VkIHJhbmdlIG9mIHZpcnR1YWwgcGFnZSBhZGRyZXNz
+ZXMgb2YgYXQgbGVhc3QgQEAgLQ0KPiAxMTc5LDExICsxMTgyLDcgQEAgdm1fdmFkZHJfdCB2bV92
+YWRkcl9hbGxvYyhzdHJ1Y3Qga3ZtX3ZtICp2bSwNCj4gc2l6ZV90IHN6LCB2bV92YWRkcl90IHZh
+ZGRyX21pbiwNCj4gDQo+ICAgCS8qIE1hcCB0aGUgdmlydHVhbCBwYWdlcy4gKi8NCj4gICAJZm9y
+ICh2bV92YWRkcl90IHZhZGRyID0gdmFkZHJfc3RhcnQ7IHBhZ2VzID4gMDsNCj4gLQkJcGFnZXMt
+LSwgdmFkZHIgKz0gdm0tPnBhZ2Vfc2l6ZSkgew0KPiAtCQl2bV9wYWRkcl90IHBhZGRyOw0KPiAt
+DQo+IC0JCXBhZGRyID0gdm1fcGh5X3BhZ2VfYWxsb2Modm0sDQo+IC0JCQkJS1ZNX1VUSUxfTUlO
+X1BGTiAqIHZtLT5wYWdlX3NpemUsDQo+IGRhdGFfbWVtc2xvdCk7DQo+ICsJCXBhZ2VzLS0sIHZh
+ZGRyICs9IHZtLT5wYWdlX3NpemUsIHBhZGRyICs9IHZtLT5wYWdlX3NpemUpIHsNCj4gDQo+ICAg
+CQl2aXJ0X3BnX21hcCh2bSwgdmFkZHIsIHBhZGRyLCBwZ2RfbWVtc2xvdCk7DQo+IA0KPiANCj4g
+aW5zdGVhZD8NCg0KWWVzLCB0aGlzIGlzIGJldHRlciwgdGhhbmtzIGZvciBmaXhpbmcuDQoNClJl
+Z2FyZHMNClpoZW56aG9uZw0K
