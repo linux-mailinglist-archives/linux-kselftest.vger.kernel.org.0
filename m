@@ -2,154 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E964B38FD09
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 May 2021 10:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CDD38FEF0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 May 2021 12:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbhEYIok (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 May 2021 04:44:40 -0400
-Received: from mga01.intel.com ([192.55.52.88]:51742 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230108AbhEYIok (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 May 2021 04:44:40 -0400
-IronPort-SDR: a7/d8FUDVkd1MtduYcIkmDy6zIcJsMOg6Z6lUOjgY1nEO8WoUyXKv3oym3waVzM4FXDSox5EBa
- no5EiUDQ/x7g==
-X-IronPort-AV: E=McAfee;i="6200,9189,9994"; a="223306480"
-X-IronPort-AV: E=Sophos;i="5.82,328,1613462400"; 
-   d="scan'208";a="223306480"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2021 01:43:10 -0700
-IronPort-SDR: 4MQZACW0Lt5lg00s/B20NSuk1yL0JkezDBXZz0BBbAXs1WKdICW4R29Ox4uZoUQIlBbQo61z1o
- qIHIAydEjOWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,328,1613462400"; 
-   d="scan'208";a="546485004"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 25 May 2021 01:43:10 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.4; Tue, 25 May 2021 01:43:09 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4
- via Frontend Transport; Tue, 25 May 2021 01:43:09 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.4; Tue, 25 May 2021 01:43:09 -0700
+        id S231347AbhEYKVv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 May 2021 06:21:51 -0400
+Received: from mail-bn8nam08on2079.outbound.protection.outlook.com ([40.107.100.79]:63521
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229597AbhEYKVu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 25 May 2021 06:21:50 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h4ekcMTARX28L9VKTk5uoK0cOqHe1Y0CyM7s6cLJQdS6qH41TQOyDXhyN/luNsAMGnxQOx5be2GAprCM2QWL7xKjNMhNKmSlxme9aj3vDcVL4Gx8/Zho63DN9+ns5OToxg4Bhgyy8ug2k2mfqZAhnAA4u4jRAss+pwXhlBqDYL+wVlHSUbKdS6aRlE7SxL0nRO5jExxNdcxsdQHmx4KKYSognaON71sinAhr1ymJsDgYITGqgZb6ogst+Pje1YzEaWvGScnYoPFaHDsTH7TMoE88dVZEqcbGTKZuBrkOI//LIYCMtV2NVBeXo+r/sHI22MpGR9H61+wplUuJykFzQg==
+ b=ld7yTabDpKR/9RYRCVS6abQMP4/DVllZTGJQ9AWic1rnbwkB0x66Xm987yp/n+W+u6RzNP6sOKzyrTSJhG9IKNRWg0eEc+5AKMzVP21g4A3eBQE+6He0qUS0Z+H69SAIgCykkInSiuXqYrpaGpDYjsOJOz6QO0HZTkBVDl3fwuSvHsdDZkRYsqXThSwQMHkvqgrct/VyzUJ23kD21g+loetsSg20qHmUm5UVh/0h3Xl/cg0ZIO0NiufI+uJvj4LXibHwFgDwbiQmX8/RvlREyIH04Fyx8z/5y3bsEm0vFggwhzkY0YK4v8JUOFmSZNPt/sT2Qq9jj1QQiGAo+oTNsg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iFigB8bX2cUQpzNiVRw4Gq9UC8VMd0VpTtrbU4Kc/fQ=;
- b=SG+Q7Lcxp1FgX8UDQ73ckfYlvzHop9kYgSrdBFVd8czfA2n/Bn9OLFoRmAGgM8O9HqsjaEIqL7GtHjcQ4QCYk/bO1/BxfasAssp5C+aj6a2fbtLm7SEkX7CgLxc2ZkR0PvLrCm8ETFBuBF1Zkjo0DWHk/9vGqAwt7k4n8WbF4LYjun46af4x68ZDQoP7knc7lDSgCqachMdnBgzk8Kf0FnJlPC7fpzeV0uSDIIsNs47TMhQqwh+6JIdla+pAdTSzdp0b0HibAZlKROxuS14UZi2DLf1rR9v00c8oGaODZHVyod4PbUCHDDkaC0MSFtrlcawfwMB+HS9sqO/eBxOahA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
+ bh=/uZjFDB/Wk4ILTn0pFImmwMyQXLl25vy1ZvK4G+SZsY=;
+ b=FNvFqQgHaV0CfNuWS9BRgC3mW4Hfl4OSBZTUDbkJwNlvIRhIcNgNtpWGVx6one1JlA5ghO2HQHr5Ew/Hp3Yw1oXO8a7G8h7mML6SDrBXJnHn1cSIDq7g8Inz34RauhEc55YcFFgGuUgk7FB7kOW4BW+cYRxCM7IvNv194Mr+PLblCbvSpj8rC74UIrKn5na8g2uidwwCeVl0MtKDA2jZsiyrMkgQfGYlC74gCnOjLhHPG11D3Cx3a44h6b6ftc1vp0alsSEBAJ3sTD0XLTPyaVZUcL0+CPo7OUxtI3dv2h6Y8/qnIqALnxAa4ZKCSkQbB1snjNWilcir/X530tfkLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iFigB8bX2cUQpzNiVRw4Gq9UC8VMd0VpTtrbU4Kc/fQ=;
- b=smRpMy0Q45iWz1OLWuLv4IDd92emidmY+fZd8E7cSRu0TD2F5hOk+2zvJgIB2XaylRoH1OfHegv4It51aFFKtUXX2goPaIoaUCh5Vimw0fBTt7da+eudLCrN61Ah7/mfe8bHR0JBGIg4O4SU53xe/n4gVU/ay5kbMcUJBBLaK8w=
-Received: from DM8PR11MB5670.namprd11.prod.outlook.com (2603:10b6:8:37::12) by
- DM8PR11MB5639.namprd11.prod.outlook.com (2603:10b6:8:24::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4150.27; Tue, 25 May 2021 08:43:08 +0000
-Received: from DM8PR11MB5670.namprd11.prod.outlook.com
- ([fe80::ccbb:37d7:aba8:2f8e]) by DM8PR11MB5670.namprd11.prod.outlook.com
- ([fe80::ccbb:37d7:aba8:2f8e%8]) with mapi id 15.20.4150.027; Tue, 25 May 2021
- 08:43:08 +0000
-From:   "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Subject: RE: [PATCH] selftests: kvm: Fix a potential elf loading issue
-Thread-Topic: [PATCH] selftests: kvm: Fix a potential elf loading issue
-Thread-Index: AQHXRmF05PtyWFMmVEOiqNWnCg92Fqryo60AgAFSt1A=
-Date:   Tue, 25 May 2021 08:43:07 +0000
-Message-ID: <DM8PR11MB5670F958184509909A1876B892259@DM8PR11MB5670.namprd11.prod.outlook.com>
-References: <20210512043107.30076-1-zhenzhong.duan@intel.com>
- <20210512043107.30076-2-zhenzhong.duan@intel.com>
- <2b16869a-7518-529b-9cbe-fb2e5f61a6e9@redhat.com>
-In-Reply-To: <2b16869a-7518-529b-9cbe-fb2e5f61a6e9@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.5.1.3
-dlp-reaction: no-action
-authentication-results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=intel.com;
-x-originating-ip: [114.246.35.137]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9323a178-63e1-4ac9-3d8a-08d91f591ef2
-x-ms-traffictypediagnostic: DM8PR11MB5639:
-x-microsoft-antispam-prvs: <DM8PR11MB563984029D5B6B655D43C50A92259@DM8PR11MB5639.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ISjap+Xx+emmW10QkyGua/5ALG9+FHGdygitgkmk3tFxHJbgL3ZFDgDgxYG1/bgP3dTTgMsXJOTCjpusygjpb3w3yHTgbtK8tjdQNW6uqXkTZXHnyjA0alK0ms8VvnI1gD0+Ed+o3GziGuJ7y8dNCVzaqAk/x+SG6gtB8NQ/2i7/etA8wmBUw/RqLTC4PEGbmXdzDQzCxApCVYKy1Iz3a5R+S2MUXDYZQuE4mIAw7/l1FFObzO8VWknzESCVZjRLY1x4yrtRF9S7DL+sXmDOOKdo9Tn/U4xMNrQ6AsjWCedZSvpS8s1iC3nNVtqwGqL7BXn971MqaBLKPEnHykvECSuFb6WqyF+By63rwjWI6ZnHiuMPSBOL/HsKKC1vJ6K1D296Dg1YX3nBgdDPB4EKPNKq6p8UDhUDyIWwM1q6tCkBBWsIQjbYv8liOOReQii/J+p+Nu6pynnudv5WvItK7vzjRNxAvaRCelZ1AW5uqjSbcEvmq2akqCEeLAwdA+O2wZLYTtKvRBlK1RkDMNwrzR2MGhDucAI1kGc/+C9gntb5sjSUvo+qFcbZ5I2GP+9jKfkejcNWCsCN+rzAjxnS2SdDR63lhnIb2VAq9hW0xb8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5670.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(396003)(366004)(39860400002)(136003)(346002)(38100700002)(26005)(5660300002)(122000001)(8676002)(33656002)(86362001)(53546011)(8936002)(4326008)(7696005)(55016002)(186003)(9686003)(110136005)(83380400001)(54906003)(64756008)(66556008)(66476007)(66946007)(316002)(66446008)(76116006)(2906002)(478600001)(52536014)(6506007)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: H3M5tKgj6HEzXpMaQCbxhivFWjEqOzFsHIz2iuZxIiqo2cChNzZ+GjORVSYwHeT+jxtDLYQLKQNNfw6HHPVFTQcVBy5nPvLHzekbNJUZ6vrECEnVzfodbzVJPeSGt9SwiU2MpVYCTyYC6hOqh9AxNUvwzij0nbPEJPw90pbZqY0aIXwUxmkO4Ki3KRXlTR5kO2u/QvymXrHp+Yj3Z4dXp+Yuf+zSfzeRzkoU75AxI4lrd7c24vfch0iD7P5zXvN7jyUuf22jaAmoGKxcEY5UjIuxfWclNwyo6yU3iKVL0FW/V9bMxipYCZV3p6q352TGSpjV0MjkAikDc205rVpMfxYS7rg4pv9GgVRzOQXi4gIKpjZ8DIkY+VZUYCunKVCKQs0QzESb06PfUPv9wJTdUq8KSQIGz7F+scOHIQXM+awi5++UNb8zv6x/nzl+qKqGV/ZFNOuIeYu1K0l7Rypm6ErEq3yN7GDpTcgzLmXxFkOaMMASpDWC/p7S07zndS6eKi3I1UxZc5LajEV9Ds7TckikLiCgJvBawIr9PtziGhdVpKKp8yAljcehgLcrLtBw0w0PcRMr2/3sygvpoQ5xuKEr0+OKm+q8wBRvNr2cyo61sILYyT90aWgr/ftRxD7122VK9MnEACycHn1bYvwD8CXf9MrkqWaheaw9giiv5uD2Kd3/xr/iR0Juw15w7CG9eUYaiTWrBrLVaqcpAZiV2xE4Ngr2MEHpQYLMXW+U/WU=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ bh=/uZjFDB/Wk4ILTn0pFImmwMyQXLl25vy1ZvK4G+SZsY=;
+ b=lAWW3p1CH8JD/j75hnm0GbM/f4ITJrNaxfGkGZ9/4MCxc1nLkI8DtLf3Fxdo11ENyDJ3FLeOBJzttm86T7LVP7roGZtMv1iI67Jv9RAtIGnRuq1U6Gk7S6KV1upVAU6UZhUfudh+ORJl7KLOWJBEkUTgKW3qXeTdLiTahxZOmb4QX0/7P1tpF0FM4AitL+Kh58hOsmLno0Knu34/AIu5XvJasLnFWsz198Y6GlQiyARedBVz/Wc1wijhteapmgB8s5QqoDzUHHfQeVUfP6y/sgRQkGkUHMi6/1nIs12lmzSZNp7ECgWVwlbY2w5VF5B3GxOIfX/SDhSmhlKNOxX+eg==
+Received: from BN0PR04CA0170.namprd04.prod.outlook.com (2603:10b6:408:eb::25)
+ by CY4PR12MB1510.namprd12.prod.outlook.com (2603:10b6:910:9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.27; Tue, 25 May
+ 2021 10:20:18 +0000
+Received: from BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:eb:cafe::79) by BN0PR04CA0170.outlook.office365.com
+ (2603:10b6:408:eb::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.24 via Frontend
+ Transport; Tue, 25 May 2021 10:20:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=pass action=none
+ header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ BN8NAM11FT032.mail.protection.outlook.com (10.13.177.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4129.25 via Frontend Transport; Tue, 25 May 2021 10:20:18 +0000
+Received: from yaviefel (172.20.145.6) by HQMAIL107.nvidia.com (172.20.187.13)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 25 May 2021 10:20:06
+ +0000
+References: <20210525061724.13526-1-po-hsu.lin@canonical.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+CC:     <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <shuah@kernel.org>, <skhan@linuxfoundation.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>, <kafai@fb.com>,
+        <songliubraving@fb.com>, <yhs@fb.com>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <hawk@kernel.org>, <nikolay@nvidia.com>, <gnault@redhat.com>,
+        <vladimir.oltean@nxp.com>, <idosch@nvidia.com>,
+        <baowen.zheng@corigine.com>, <danieller@nvidia.com>,
+        <petrm@nvidia.com>
+Subject: Re: [PATCH] selftests: Use kselftest skip code for skipped tests
+In-Reply-To: <20210525061724.13526-1-po-hsu.lin@canonical.com>
+Date:   Tue, 25 May 2021 12:20:04 +0200
+Message-ID: <87lf83cdyj.fsf@nvidia.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5670.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9323a178-63e1-4ac9-3d8a-08d91f591ef2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 May 2021 08:43:08.0034
+Content-Type: text/plain
+X-Originating-IP: [172.20.145.6]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ff606f4b-aed5-423b-3a3e-08d91f66b242
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1510:
+X-Microsoft-Antispam-PRVS: <CY4PR12MB15102F4E8B0E9FBA47D8EC21D6259@CY4PR12MB1510.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1013;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9ig+lNGve9ax08yKL9YWMDP4uu8NSb/mb2vwEnOlM1+yeMWk75xhWZ3stoIPY9kdmrYUw24zzu7lQC9l875ILH4uDojmZOvM3jWm/LQ0BNGaa9kVZOuMBzGD19/Wsb2szY65zx+S7J7r2u/ZYuiflFPWxlsri/vqSfU+Sysbu5A9i4Ju0CfgReNrW849PK/fnenmzeoBs1tfu2B4CY/MLnC/WeRtr5Ss0o9YqFFh5gFliz8D5cYlXumadwcobnGNL8D3bqs8UPre673SDBHCm7chriBu2pKfh8h4Li7k1wodLfPNsei3l6HTdGP2oySuruTPcKvqEh8s1ONIR07b0i+h9RJrKO10hKqVQznTzGt1KEQaANTJIRw8hmpTskQaI+99drtIadGWFT1XPOrN3xCR/7LBG9GYd9U4zkNVDawWb4+S4hLqGdB7CEZP37synvlOW9ZuHKU/AntmQnphBzlKjAk3f+4o/2eJWSNrY/PVBpjp7uWHjPqafqRwKcyBq2mz0aqEsFerqHcx8PZdApXMpWeKvlevvNC41g8LMyQJ/Oa0B4PdtOwOM0xmjC3hX1wtM4+MmCHPt+Cpx40bHcQSQCFkHVFWfHmtFGICvzl8kFTs+AaGIRDHrSoFf0J+wF/EFF7sytOcGJjJ+bvGm/K+8IxaMmPKGGdRoAkpO20=
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(39860400002)(376002)(396003)(136003)(346002)(46966006)(36840700001)(478600001)(7636003)(8676002)(82740400003)(26005)(5660300002)(2616005)(36860700001)(7416002)(316002)(36906005)(36756003)(336012)(54906003)(2906002)(4326008)(426003)(70206006)(8936002)(356005)(70586007)(186003)(66574015)(16526019)(107886003)(86362001)(6916009)(82310400003)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2021 10:20:18.5626
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2F1XyT6XBSCAJrhvqQbgMdikt6n+eSh0wjF36yUK88ml4BxBl6Rq2Wv+X/iYHroSnFFOzy/ZC0ooao5jLZ57eQdum4LXi2qs1DEoajexwkU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5639
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff606f4b-aed5-423b-3a3e-08d91f66b242
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1510
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFBhb2xvIEJvbnppbmkgPHBi
-b256aW5pQHJlZGhhdC5jb20+DQo+IFNlbnQ6IE1vbmRheSwgTWF5IDI0LCAyMDIxIDg6MjggUE0N
-Cj4gVG86IER1YW4sIFpoZW56aG9uZyA8emhlbnpob25nLmR1YW5AaW50ZWwuY29tPjsgbGludXgt
-DQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtl
-cm5lbC5vcmc7IGt2bUB2Z2VyLmtlcm5lbC5vcmc7IHNodWFoQGtlcm5lbC5vcmcNCj4gU3ViamVj
-dDogUmU6IFtQQVRDSF0gc2VsZnRlc3RzOiBrdm06IEZpeCBhIHBvdGVudGlhbCBlbGYgbG9hZGlu
-ZyBpc3N1ZQ0KPiANCj4gT24gMTIvMDUvMjEgMDY6MzEsIFpoZW56aG9uZyBEdWFuIHdyb3RlOg0K
-PiA+IHZtX3ZhZGRyX2FsbG9jKCkgc2V0dXAgR1ZBIHRvIEdQQSBtYXBwaW5nIHBhZ2UgYnkgcGFn
-ZSwgdGhlbiBHUEEgbWF5DQo+ID4gbm90IGJlIGNvbnRpbnVvdXMgaWYgc2FtZSBtZW1zbG90IGlz
-IHVzZWQgZm9yIGRhdGEgYW5kIHBhZ2UgdGFibGUNCj4gYWxsb2NhdGlvbi4NCj4gPg0KPiA+IGt2
-bV92bV9lbGZfbG9hZCgpIGV4cGVjdHMgYSBjb250aW51b3VzIG1lbW9yeSBvZiBHUEEgb3IgZWxz
-ZSBpdCBuZWVkDQo+ID4gdG8gcmVhZCBmaWxlIGRhdGEgcGFnZSBieSBwYWdlLiBGaXggaXQgYnkg
-YWRkaW5nIGEgY2hlY2sgaW4NCj4gPiB2bV92YWRkcl9hbGxvYygpIHRvIGVuc3VyZSBtZW1vcnkg
-aXMgYWxsb2NhdGVkIGluIGEgd2hvbGUgaWYgc2FtZQ0KPiA+IG1lbXNsb3QgaXMgdXNlZCBmb3Ig
-ZGF0YSBhbmQgcGFnZSB0YWJsZS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFpoZW56aG9uZyBE
-dWFuIDx6aGVuemhvbmcuZHVhbkBpbnRlbC5jb20+DQo+ID4gLS0tDQo+IFdoeSBub3QgZG8NCj4g
-DQo+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vbGliL2t2bV91dGls
-LmMNCj4gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vbGliL2t2bV91dGlsLmMNCj4gaW5k
-ZXggNzQyNjE2M2Q0NDhhLi5mMzYyYTA2NmYzN2EgMTAwNjQ0DQo+IC0tLSBhL3Rvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL2t2bS9saWIva3ZtX3V0aWwuYw0KPiArKysgYi90b29scy90ZXN0aW5nL3Nl
-bGZ0ZXN0cy9rdm0vbGliL2t2bV91dGlsLmMNCj4gQEAgLTExNzAsNiArMTE3MCw5IEBAIHZtX3Zh
-ZGRyX3Qgdm1fdmFkZHJfYWxsb2Moc3RydWN0IGt2bV92bSAqdm0sDQo+IHNpemVfdCBzeiwgdm1f
-dmFkZHJfdCB2YWRkcl9taW4sDQo+ICAgCXVpbnQ2NF90IHBhZ2VzID0gKHN6ID4+IHZtLT5wYWdl
-X3NoaWZ0KSArICgoc3ogJSB2bS0+cGFnZV9zaXplKSAhPSAwKTsNCj4gDQo+ICAgCXZpcnRfcGdk
-X2FsbG9jKHZtLCBwZ2RfbWVtc2xvdCk7DQo+ICsJdm1fcGFkZHJfdCBwYWRkciA9IHZtX3BoeV9w
-YWdlc19hbGxvYyh2bSwgcGFnZXMsDQo+ICsJCQkJCSAgICAgIEtWTV9VVElMX01JTl9QRk4gKiB2
-bS0NCj4gPnBhZ2Vfc2l6ZSwNCj4gKwkJCQkJICAgICAgZGF0YV9tZW1zbG90KTsNCj4gDQo+ICAg
-CS8qDQo+ICAgCSAqIEZpbmQgYW4gdW51c2VkIHJhbmdlIG9mIHZpcnR1YWwgcGFnZSBhZGRyZXNz
-ZXMgb2YgYXQgbGVhc3QgQEAgLQ0KPiAxMTc5LDExICsxMTgyLDcgQEAgdm1fdmFkZHJfdCB2bV92
-YWRkcl9hbGxvYyhzdHJ1Y3Qga3ZtX3ZtICp2bSwNCj4gc2l6ZV90IHN6LCB2bV92YWRkcl90IHZh
-ZGRyX21pbiwNCj4gDQo+ICAgCS8qIE1hcCB0aGUgdmlydHVhbCBwYWdlcy4gKi8NCj4gICAJZm9y
-ICh2bV92YWRkcl90IHZhZGRyID0gdmFkZHJfc3RhcnQ7IHBhZ2VzID4gMDsNCj4gLQkJcGFnZXMt
-LSwgdmFkZHIgKz0gdm0tPnBhZ2Vfc2l6ZSkgew0KPiAtCQl2bV9wYWRkcl90IHBhZGRyOw0KPiAt
-DQo+IC0JCXBhZGRyID0gdm1fcGh5X3BhZ2VfYWxsb2Modm0sDQo+IC0JCQkJS1ZNX1VUSUxfTUlO
-X1BGTiAqIHZtLT5wYWdlX3NpemUsDQo+IGRhdGFfbWVtc2xvdCk7DQo+ICsJCXBhZ2VzLS0sIHZh
-ZGRyICs9IHZtLT5wYWdlX3NpemUsIHBhZGRyICs9IHZtLT5wYWdlX3NpemUpIHsNCj4gDQo+ICAg
-CQl2aXJ0X3BnX21hcCh2bSwgdmFkZHIsIHBhZGRyLCBwZ2RfbWVtc2xvdCk7DQo+IA0KPiANCj4g
-aW5zdGVhZD8NCg0KWWVzLCB0aGlzIGlzIGJldHRlciwgdGhhbmtzIGZvciBmaXhpbmcuDQoNClJl
-Z2FyZHMNClpoZW56aG9uZw0K
+
+Po-Hsu Lin <po-hsu.lin@canonical.com> writes:
+
+> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+> index 42e28c9..eed9f08 100644
+> --- a/tools/testing/selftests/net/forwarding/lib.sh
+> +++ b/tools/testing/selftests/net/forwarding/lib.sh
+> @@ -4,6 +4,9 @@
+>  ##############################################################################
+>  # Defines
+>  
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=4
+> +
+>  # Can be overridden by the configuration file.
+>  PING=${PING:=ping}
+>  PING6=${PING6:=ping6}
+> @@ -121,7 +124,7 @@ check_ethtool_lanes_support()
+>  
+>  if [[ "$(id -u)" -ne 0 ]]; then
+>  	echo "SKIP: need root privileges"
+> -	exit 0
+> +	exit $ksft_skip
+>  fi
+>  
+>  if [[ "$CHECK_TC" = "yes" ]]; then
+> diff --git a/tools/testing/selftests/net/forwarding/router_mpath_nh.sh b/tools/testing/selftests/net/forwarding/router_mpath_nh.sh
+> index 76efb1f..bb7dc6d 100755
+> --- a/tools/testing/selftests/net/forwarding/router_mpath_nh.sh
+> +++ b/tools/testing/selftests/net/forwarding/router_mpath_nh.sh
+> @@ -1,6 +1,9 @@
+>  #!/bin/bash
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=4
+> +
+>  ALL_TESTS="
+>  	ping_ipv4
+>  	ping_ipv6
+> @@ -411,7 +414,7 @@ ping_ipv6()
+>  ip nexthop ls >/dev/null 2>&1
+>  if [ $? -ne 0 ]; then
+>  	echo "Nexthop objects not supported; skipping tests"
+> -	exit 0
+> +	exit $ksft_skip
+>  fi
+>  
+>  trap cleanup EXIT
+
+router_mpath_nh.sh sources lib.sh, which you changed above. This hunk
+should not be necessary.
+
+> diff --git a/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh b/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh
+> index 4898dd4..e7bb976 100755
+> --- a/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh
+> +++ b/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh
+> @@ -1,6 +1,9 @@
+>  #!/bin/bash
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=4
+> +
+>  ALL_TESTS="
+>  	ping_ipv4
+>  	ping_ipv6
+> @@ -386,7 +389,7 @@ ping_ipv6()
+>  ip nexthop ls >/dev/null 2>&1
+>  if [ $? -ne 0 ]; then
+>  	echo "Nexthop objects not supported; skipping tests"
+> -	exit 0
+> +	exit $ksft_skip
+>  fi
+>  
+>  trap cleanup EXIT
+
+Likewise.
+
+Unless I'm missing some indirect dependency, no other selftests in your
+patch have this problem.
