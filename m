@@ -2,399 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CAE38F0CD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 May 2021 18:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1DB38F713
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 May 2021 02:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236127AbhEXQGU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 May 2021 12:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
+        id S229540AbhEYAtP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 May 2021 20:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237233AbhEXQFO (ORCPT
+        with ESMTP id S229539AbhEYAtO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 May 2021 12:05:14 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B981C08C5D1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 May 2021 08:18:39 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id x4-20020aa794040000b02902e382051004so8929511pfo.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 May 2021 08:18:39 -0700 (PDT)
+        Mon, 24 May 2021 20:49:14 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB2AC061574
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 May 2021 17:47:46 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id ot16so13909554pjb.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 May 2021 17:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=UegFRYct3sLqT7pl1JEE19wyOxnWvgvclbZj0R5joEw=;
-        b=ApeANbFrUsOLWs657ASas6zyPJp3sMEzvjJ6diCCbgEJfKHg7jPnVB+X8KJ2K9wObp
-         Oym8WfmPp6FmRvXl4xxMWYVtbSqL9squwfQ6HIhTGK0jnMNLfMrM8u6nt5pw9xf8yqdJ
-         G5828StXxoL9CUmGGe7bZAS1YApU/djbLwlT2Eyc0UGxAtiF8ImhtB6lllo2NLlSBE2V
-         JhMajTpHchhM45gpFd/nKdBAcqThdLRRkXQYbL8RZYtJx53wS90JQ/i/lZEfusGswPXm
-         eVcNdKONN4zvjnR2fHra8MctvrdqUw85ivuIzEXFFbaXF85c8rkRgfxeC760gQzTbXEd
-         tPFQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aG1Rk5mQ6z7zKWiJZBw5W/DM6fEf1eH6Gw8m5QrPn6c=;
+        b=QR4dlJitbXI+n2SuQmeqvwhpZ4erLgtJeD+20fHpsj1zCrkgqD2kuysJABRminlNZL
+         uev+h8FUtyM45q2ptwZOu455Tesj7I56vZfSuzm967wdf45LH/1tgaltfMNi2FsV269g
+         zw8XAJpTnPBnZIlAkQD3IBRXkZHhM0BUs12D/m0Tsi341e29s/bu9aou+BqtNrjFKfQW
+         eG1dqNLJp/ftsBw+PoLSY7vLBHxEWxz+D6MswH/Zs8/DurU3sLs2rTkcEransI7uazP6
+         aR2NCvLo/rVuCdZzVAVClVTFT5V5g3+TU6m7CmPJM5AdCsEgxBOxBSWDc8wSNJAwC7Xo
+         A0Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=UegFRYct3sLqT7pl1JEE19wyOxnWvgvclbZj0R5joEw=;
-        b=SFqZDaiEmewc48UzTp4z2alxjs0fxIvnfWIE30PedAPb1raclXTXq4lJeJ1+rB2BFK
-         +OPobPPgLGaMxBmNYCE7rWDR7d5xakZjl+RpRAY9OsbrYV6YJSaW8mLngnRXF2OeGw+p
-         vHcP7WEdankTWi7CQCWhJDkbfdkY6n1ka4wouHtK4QHAz/6hCpCQMRM4hVXtHBB+L/zW
-         F2/VaVx+lejeKwmhfgIRCfyw758+rMx3oLSkNXerXTFHZV0E/z8ukzdh0wqqu01l+upX
-         HZjww6JE5Sdv4dUH5/4Ah4ouz8FTtlCw1TDB+hbFhJh7ceJ+HrzcOBCV1DdMw6sGCoLW
-         ZcXA==
-X-Gm-Message-State: AOAM5310IoWWS8zEqCfzyND5cOFWzRuNuTL8PGR6ej1nmx5Hm8h7vUnM
-        mNEonylres5B196X1cmDj2jZ2+g7xVcwIRcvbQ==
-X-Google-Smtp-Source: ABdhPJyU4RXPh5DqjZvaKB+BvjwGCDsf7NbHS3MikVnZnMV5T1gQ7C3fkbsfHjLDDoBtFaAUFlYadVoAgve8b/ej+w==
-X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
- (user=jingzhangos job=sendgmr) by 2002:a17:90a:ab0c:: with SMTP id
- m12mr25307556pjq.179.1621869518420; Mon, 24 May 2021 08:18:38 -0700 (PDT)
-Date:   Mon, 24 May 2021 15:18:28 +0000
-In-Reply-To: <20210524151828.4113777-1-jingzhangos@google.com>
-Message-Id: <20210524151828.4113777-5-jingzhangos@google.com>
-Mime-Version: 1.0
-References: <20210524151828.4113777-1-jingzhangos@google.com>
-X-Mailer: git-send-email 2.31.1.818.g46aad6cb9e-goog
-Subject: [PATCH v6 4/4] KVM: selftests: Add selftest for KVM statistics data
- binary interface
-From:   Jing Zhang <jingzhangos@google.com>
-To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aG1Rk5mQ6z7zKWiJZBw5W/DM6fEf1eH6Gw8m5QrPn6c=;
+        b=t+KQLw26iHiLVBBC7pte4MKZtj1QN1705CPaia+5JNaIpc6t7tvjTpxl+vhiB/d+tM
+         LIwnCG9WFdRSWzAUMkiyrYzLNKQsMZUGxakOF8kHfKivoPyGPOcEfv1MI60yaCCwHtbN
+         FFuswrvsokNhIkJVH7PTZaPBbn0xYC0Spx7O3YROTB2IAD/8XbhOc0L/oDpYPhUXif7q
+         uaqVOuOCG41V9w3DRlUdO0d3aNs8sblsigLjG356i2sjMth7pwCANE0tNV0bMW4RwEJH
+         2f08WOF7o8JNf1XCy8wjgnpau3Tl1t3c5+StJlHkzFs1Fhi/T1WscZOpoPk1KTmWeWah
+         OrJQ==
+X-Gm-Message-State: AOAM530Jggcl9ZlNj9KpBDKxjgZ50MW5HgKZMzeaaBlh8lXz4Umq5szr
+        245ICkyzGswKWuxGVYYjV/yKfQ==
+X-Google-Smtp-Source: ABdhPJx9VcemTXJxbYreb2y0AJZ0f7ed6bUubYmVR81BO/HH6rHyizGkROhdf+EjCPQ0jJkQr7K5XQ==
+X-Received: by 2002:a17:90a:7f81:: with SMTP id m1mr1881796pjl.23.1621903665386;
+        Mon, 24 May 2021 17:47:45 -0700 (PDT)
+Received: from google.com (240.111.247.35.bc.googleusercontent.com. [35.247.111.240])
+        by smtp.gmail.com with ESMTPSA id k7sm481354pjj.46.2021.05.24.17.47.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 May 2021 17:47:44 -0700 (PDT)
+Date:   Tue, 25 May 2021 00:47:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>
-Cc:     Jing Zhang <jingzhangos@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Shuah Khan <shuah@kernel.org>, Ben Gardon <bgardon@google.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Jue Wang <juew@google.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH 1/2] KVM: Deliver VM fault signals to userspace
+Message-ID: <YKxJLcg/WomPE422@google.com>
+References: <20210519210437.1688484-1-jthoughton@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210519210437.1688484-1-jthoughton@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add selftest to check KVM stats descriptors validity.
+On Wed, May 19, 2021, James Houghton wrote:
+> This patch has been written to support page-ins using userfaultfd's
+> SIGBUS feature.  When a userfaultfd is created with UFFD_FEATURE_SIGBUS,
+> `handle_userfault` will return VM_FAULT_SIGBUS instead of putting the
+> calling thread to sleep. Normal (non-guest) threads that access memory
+> that has been registered with a UFFD_FEATURE_SIGBUS userfaultfd receive
+> a SIGBUS.
+> 
+> When a vCPU gets an EPT page fault in a userfaultfd-registered region,
+> KVM calls into `handle_userfault` to resolve the page fault. With
+> UFFD_FEATURE_SIGBUS, VM_FAULT_SIGBUS is returned, but a SIGBUS is never
+> delivered to the userspace thread. This patch propagates the
+> VM_FAULT_SIGBUS error up to KVM, where we then send the signal.
+> 
+> Upon receiving a VM_FAULT_SIGBUS, the KVM_RUN ioctl will exit to
+> userspace. This functionality already exists.
 
-Reviewed-by: David Matlack <dmatlack@google.com>
-Reviewed-by: Ricardo Koller <ricarkol@google.com>
-Signed-off-by: Jing Zhang <jingzhangos@google.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   3 +
- .../testing/selftests/kvm/include/kvm_util.h  |   3 +
- .../selftests/kvm/kvm_bin_form_stats.c        | 216 ++++++++++++++++++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
- 5 files changed, 235 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
+I would strongly prefer to fix this in KVM by returning a KVM specific exit
+reason (instead of -EFAULT), with additional information provided in vcpu->run,
+e.g. address, etc...
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index bd83158e0e0b..35796667c944 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -43,3 +43,4 @@
- /memslot_modification_stress_test
- /set_memory_region_test
- /steal_time
-+/kvm_bin_form_stats
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index e439d027939d..2984c86c848a 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -76,6 +76,7 @@ TEST_GEN_PROGS_x86_64 += kvm_page_table_test
- TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
- TEST_GEN_PROGS_x86_64 += set_memory_region_test
- TEST_GEN_PROGS_x86_64 += steal_time
-+TEST_GEN_PROGS_x86_64 += kvm_bin_form_stats
- 
- TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
- TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list-sve
-@@ -87,6 +88,7 @@ TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
- TEST_GEN_PROGS_aarch64 += kvm_page_table_test
- TEST_GEN_PROGS_aarch64 += set_memory_region_test
- TEST_GEN_PROGS_aarch64 += steal_time
-+TEST_GEN_PROGS_aarch64 += kvm_bin_form_stats
- 
- TEST_GEN_PROGS_s390x = s390x/memop
- TEST_GEN_PROGS_s390x += s390x/resets
-@@ -96,6 +98,7 @@ TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
- TEST_GEN_PROGS_s390x += kvm_page_table_test
- TEST_GEN_PROGS_s390x += set_memory_region_test
-+TEST_GEN_PROGS_s390x += kvm_bin_form_stats
- 
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
- LIBKVM += $(LIBKVM_$(UNAME_M))
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index a8f022794ce3..ee01a67022d9 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -387,4 +387,7 @@ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc);
- #define GUEST_ASSERT_4(_condition, arg1, arg2, arg3, arg4) \
- 	__GUEST_ASSERT((_condition), 4, (arg1), (arg2), (arg3), (arg4))
- 
-+int vm_get_statsfd(struct kvm_vm *vm);
-+int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid);
-+
- #endif /* SELFTEST_KVM_UTIL_H */
-diff --git a/tools/testing/selftests/kvm/kvm_bin_form_stats.c b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
-new file mode 100644
-index 000000000000..09e12c5838af
---- /dev/null
-+++ b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
-@@ -0,0 +1,216 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * kvm_bin_form_stats
-+ *
-+ * Copyright (C) 2021, Google LLC.
-+ *
-+ * Test the fd-based interface for KVM statistics.
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <errno.h>
-+
-+#include "test_util.h"
-+
-+#include "kvm_util.h"
-+#include "asm/kvm.h"
-+#include "linux/kvm.h"
-+
-+int stats_test(int stats_fd, int size_stat)
-+{
-+	ssize_t ret;
-+	int i;
-+	size_t size_desc, size_data = 0;
-+	struct kvm_stats_header header;
-+	struct kvm_stats_desc *stats_desc, *pdesc;
-+	void *stats_data;
-+
-+	/* Read kvm stats header */
-+	ret = read(stats_fd, &header, sizeof(header));
-+	TEST_ASSERT(ret == sizeof(header), "Read stats header");
-+	size_desc = sizeof(*stats_desc) + header.name_size;
-+
-+	/* Check id string in header, that should start with "kvm" */
-+	TEST_ASSERT(!strncmp(header.id, "kvm", 3) &&
-+			strlen(header.id) < KVM_STATS_ID_MAXLEN,
-+			"Invalid KVM stats type");
-+
-+	/* Sanity check for other fields in header */
-+	if (header.count == 0)
-+		return 0;
-+	/* Check overlap */
-+	TEST_ASSERT(header.desc_offset > 0 && header.data_offset > 0
-+			&& header.desc_offset >= sizeof(header)
-+			&& header.data_offset >= sizeof(header),
-+			"Invalid offset fields in header");
-+	TEST_ASSERT(header.desc_offset > header.data_offset
-+			|| (header.desc_offset + size_desc * header.count <=
-+				header.data_offset),
-+			"Descriptor block is overlapped with data block");
-+
-+	/* Allocate memory for stats descriptors */
-+	stats_desc = calloc(header.count, size_desc);
-+	TEST_ASSERT(stats_desc, "Allocate memory for stats descriptors");
-+	/* Read kvm stats descriptors */
-+	ret = pread(stats_fd, stats_desc,
-+			size_desc * header.count, header.desc_offset);
-+	TEST_ASSERT(ret == size_desc * header.count,
-+			"Read KVM stats descriptors");
-+
-+	/* Sanity check for fields in descriptors */
-+	for (i = 0; i < header.count; ++i) {
-+		pdesc = (void *)stats_desc + i * size_desc;
-+		/* Check type,unit,base boundaries */
-+		TEST_ASSERT((pdesc->flags & KVM_STATS_TYPE_MASK)
-+				<= KVM_STATS_TYPE_MAX, "Unknown KVM stats type");
-+		TEST_ASSERT((pdesc->flags & KVM_STATS_UNIT_MASK)
-+				<= KVM_STATS_UNIT_MAX, "Unknown KVM stats unit");
-+		TEST_ASSERT((pdesc->flags & KVM_STATS_BASE_MASK)
-+				<= KVM_STATS_BASE_MAX, "Unknown KVM stats base");
-+		/* Check exponent for stats unit
-+		 * Exponent for counter should be greater than or equal to 0
-+		 * Exponent for unit bytes should be greater than or equal to 0
-+		 * Exponent for unit seconds should be less than or equal to 0
-+		 * Exponent for unit clock cycles should be greater than or
-+		 * equal to 0
-+		 */
-+		switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
-+		case KVM_STATS_UNIT_NONE:
-+		case KVM_STATS_UNIT_BYTES:
-+		case KVM_STATS_UNIT_CYCLES:
-+			TEST_ASSERT(pdesc->exponent >= 0,
-+					"Unsupported KVM stats unit");
-+			break;
-+		case KVM_STATS_UNIT_SECONDS:
-+			TEST_ASSERT(pdesc->exponent <= 0,
-+					"Unsupported KVM stats unit");
-+			break;
-+		}
-+		/* Check name string */
-+		TEST_ASSERT(strlen(pdesc->name) < header.name_size,
-+				"KVM stats name(%s) too long", pdesc->name);
-+		/* Check size field, which should not be zero */
-+		TEST_ASSERT(pdesc->size, "KVM descriptor(%s) with size of 0",
-+				pdesc->name);
-+		size_data += pdesc->size * size_stat;
-+	}
-+	/* Check overlap */
-+	TEST_ASSERT(header.data_offset >= header.desc_offset
-+			|| header.data_offset + size_data <= header.desc_offset,
-+			"Data block is overlapped with Descriptor block");
-+	/* Check validity of all stats data size */
-+	TEST_ASSERT(size_data >= header.count * size_stat,
-+			"Data size is not correct");
-+
-+	/* Allocate memory for stats data */
-+	stats_data = malloc(size_data);
-+	TEST_ASSERT(stats_data, "Allocate memory for stats data");
-+	/* Read kvm stats data as a bulk */
-+	ret = pread(stats_fd, stats_data, size_data, header.data_offset);
-+	TEST_ASSERT(ret == size_data, "Read KVM stats data");
-+	/* Read kvm stats data one by one */
-+	size_data = 0;
-+	for (i = 0; i < header.count; ++i) {
-+		pdesc = (void *)stats_desc + i * size_desc;
-+		ret = pread(stats_fd, stats_data, pdesc->size * size_stat,
-+				header.data_offset + size_data);
-+		TEST_ASSERT(ret == pdesc->size * size_stat,
-+				"Read data of KVM stats: %s", pdesc->name);
-+		size_data += pdesc->size * size_stat;
-+	}
-+
-+	free(stats_data);
-+	free(stats_desc);
-+	return 0;
-+}
-+
-+
-+int vm_stats_test(struct kvm_vm *vm)
-+{
-+	int stats_fd;
-+	struct kvm_vm_stats_data *stats_data;
-+
-+	/* Get fd for VM stats */
-+	stats_fd = vm_get_statsfd(vm);
-+	TEST_ASSERT(stats_fd >= 0, "Get VM stats fd");
-+
-+	stats_test(stats_fd, sizeof(stats_data->value[0]));
-+	close(stats_fd);
-+
-+	return 0;
-+}
-+
-+int vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
-+{
-+	int stats_fd;
-+	struct kvm_vcpu_stats_data *stats_data;
-+
-+	/* Get fd for VCPU stats */
-+	stats_fd = vcpu_get_statsfd(vm, vcpu_id);
-+	TEST_ASSERT(stats_fd >= 0, "Get VCPU stats fd");
-+
-+	stats_test(stats_fd, sizeof(stats_data->value[0]));
-+	close(stats_fd);
-+
-+	return 0;
-+}
-+
-+#define DEFAULT_NUM_VM		4
-+#define DEFAULT_NUM_VCPU	4
-+
-+/*
-+ * Usage: kvm_bin_form_stats [#vm] [#vcpu]
-+ * The first parameter #vm set the number of VMs being created.
-+ * The second parameter #vcpu set the number of VCPUs being created.
-+ * By default, DEFAULT_NUM_VM VM and DEFAULT_NUM_VCPU VCPU for the VM would be
-+ * created for testing.
-+ */
-+
-+int main(int argc, char *argv[])
-+{
-+	int max_vm = DEFAULT_NUM_VM, max_vcpu = DEFAULT_NUM_VCPU, ret, i, j;
-+	struct kvm_vm **vms;
-+
-+	/* Get the number of VMs and VCPUs that would be created for testing. */
-+	if (argc > 1) {
-+		max_vm = strtol(argv[1], NULL, 0);
-+		if (max_vm <= 0)
-+			max_vm = DEFAULT_NUM_VM;
-+	}
-+	if (argc > 2) {
-+		max_vcpu = strtol(argv[2], NULL, 0);
-+		if (max_vcpu <= 0)
-+			max_vcpu = DEFAULT_NUM_VCPU;
-+	}
-+
-+	/* Check the extension for binary stats */
-+	ret = kvm_check_cap(KVM_CAP_STATS_BINARY_FD);
-+	TEST_ASSERT(ret >= 0,
-+			"Binary form statistics interface is not supported");
-+
-+	/* Create VMs and VCPUs */
-+	vms = malloc(sizeof(vms[0]) * max_vm);
-+	TEST_ASSERT(vms, "Allocate memory for storing VM pointers");
-+	for (i = 0; i < max_vm; ++i) {
-+		vms[i] = vm_create(VM_MODE_DEFAULT,
-+				DEFAULT_GUEST_PHY_PAGES, O_RDWR);
-+		for (j = 0; j < max_vcpu; ++j)
-+			vm_vcpu_add(vms[i], j);
-+	}
-+
-+	/* Check stats read for every VM and VCPU */
-+	for (i = 0; i < max_vm; ++i) {
-+		vm_stats_test(vms[i]);
-+		for (j = 0; j < max_vcpu; ++j)
-+			vcpu_stats_test(vms[i], j);
-+	}
-+
-+	for (i = 0; i < max_vm; ++i)
-+		kvm_vm_free(vms[i]);
-+	free(vms);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index fc83f6c5902d..d9e0b2c8b906 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -2090,3 +2090,15 @@ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size)
- 	n = DIV_ROUND_UP(size, vm_guest_mode_params[mode].page_size);
- 	return vm_adjust_num_guest_pages(mode, n);
+VirtioFS has (had?) a similar problem with a file being truncated in the host
+and the guest being killed as a result due to KVM returning -EFAULT without any
+useful information[*].  That idea never got picked up, but I'm 99% certain the
+solution would provide exactly the functionality you want.
+
+[*] https://lkml.kernel.org/r/20200617230052.GB27751@linux.intel.com
+
+
+Handling this purely in KVM would have several advantages:
+
+  - No need to plumb @fault_error around mm/.  KVM might be able to fudge this
+    anyways by looking for -EFAULT, but then it would mess up SIGBUS vs SIGSEGV.
+
+  - KVM can provide more relevant information then the signal path, e.g. guest
+    RIP and GPA.  This probably isn't useful for your use case, but for debug
+    and other use cases it can be very helpful.
+
+  - The error and its info are synchronous and delivered together (on exit to
+    userspace), instead of being split across KVM and the signal handling.
+
+  - This behavior needs to be opt-in to avoid breaking KVM's (awful) ABI, but we
+    might be able to get away with squeezing the extra info into vcpu->run even
+    if userspace doesn't opt-in (though that doesn't mean userspace will do
+    anything with it).
+
+  - I hate signal handling (ok, not a legitimate reason).
+
+The big downside is that implementing the synchronous reporting would need to
+either be done for every KVM architecture, or would need to touch every arch if
+done generically.  I haven't looked at other architectures for this specific
+issue, so I don't know which of those routes would be least awful.
+
+A very incomplete patch for x86 would look something like:
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 0144c40d09c7..2d4d32425c49 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2875,8 +2875,11 @@ static void kvm_send_hwpoison_signal(unsigned long address, struct task_struct *
+        send_sig_mceerr(BUS_MCEERR_AR, (void __user *)address, PAGE_SHIFT, tsk);
  }
+ 
+-static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
++static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, hva_t hva,
++                              kvm_pfn_t pfn)
+ {
++       struct kvm_mem_fault_exit *fault = &vcpu->run->mem_fault;
 +
-+int vm_get_statsfd(struct kvm_vm *vm)
-+{
-+	return ioctl(vm->fd, KVM_STATS_GETFD, NULL);
-+}
+        /*
+         * Do not cache the mmio info caused by writing the readonly gfn
+         * into the spte otherwise read access on readonly gfn also can
+@@ -2886,25 +2889,32 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+                return RET_PF_EMULATE;
+ 
+        if (pfn == KVM_PFN_ERR_HWPOISON) {
+-               kvm_send_hwpoison_signal(kvm_vcpu_gfn_to_hva(vcpu, gfn), current);
++               kvm_send_hwpoison_signal(hva, current);
+                return RET_PF_RETRY;
+        }
+ 
++       fault->userspace_address = hva;
++       fault->guest_physical_address = gpa;
++       fault->guest_rip = kvm_rip_read(vcpu);
 +
-+int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid)
-+{
-+	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
++       if (vcpu->kvm->arch.mem_fault_reporting_enabled)
++               return KVM_EXIT_MEM_FAULT;
 +
-+	return ioctl(vcpu->fd, KVM_STATS_GETFD, NULL);
-+}
--- 
-2.31.1.818.g46aad6cb9e-goog
-
+        return -EFAULT;
+ }
+ 
+-static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, gva_t gva, gfn_t gfn,
+-                               kvm_pfn_t pfn, unsigned int access,
++static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, gva_t gva, gpa_t gpa,
++                               hva_t hva, kvm_pfn_t pfn, unsigned int access,
+                                int *ret_val)
+ {
+        /* The pfn is invalid, report the error! */
+        if (unlikely(is_error_pfn(pfn))) {
+-               *ret_val = kvm_handle_bad_page(vcpu, gfn, pfn);
++               *ret_val = kvm_handle_bad_page(vcpu, gpa, hva, pfn);
+                return true;
+        }
+ 
+        if (unlikely(is_noslot_pfn(pfn))) {
+-               vcpu_cache_mmio_info(vcpu, gva, gfn,
++               vcpu_cache_mmio_info(vcpu, gva, gpa >> PAGE_SHIFT,
+                                     access & shadow_mmio_access_mask);
+                /*
+                 * If MMIO caching is disabled, emulate immediately without
+@@ -3746,7 +3756,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
+                         write, &map_writable))
+                return RET_PF_RETRY;
+ 
+-       if (handle_abnormal_pfn(vcpu, is_tdp ? 0 : gpa, gfn, pfn, ACC_ALL, &r))
++       if (handle_abnormal_pfn(vcpu, is_tdp ? 0 : gpa, gpa, hva, pfn, ACC_ALL, &r))
+                return r;
+ 
+        r = RET_PF_RETRY;
