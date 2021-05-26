@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD65939157B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 May 2021 12:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A484391706
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 May 2021 14:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbhEZKzl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 May 2021 06:55:41 -0400
-Received: from mga09.intel.com ([134.134.136.24]:28059 "EHLO mga09.intel.com"
+        id S232896AbhEZMFf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 May 2021 08:05:35 -0400
+Received: from mga06.intel.com ([134.134.136.31]:36792 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234344AbhEZKz3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 May 2021 06:55:29 -0400
-IronPort-SDR: 8aw9uJJisN2GE2v/rIkuOcc3slZ++7bj32xO3jy//O4UMqBbWlL9k8a93OzBSf2G+3lMma/teI
- cETAw9PduzBA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9995"; a="202449225"
+        id S233074AbhEZMFV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 May 2021 08:05:21 -0400
+IronPort-SDR: DA28jg7fOLsg/sf1qSY/dk/F+sAGvKZPLaN36+bzcO4Zy+q070ESJdkroAh+IYfvqN4pczoCzD
+ XpSgNpMQAlyA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9995"; a="263651334"
 X-IronPort-AV: E=Sophos;i="5.82,331,1613462400"; 
-   d="gz'50?scan'50,208,50";a="202449225"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 03:53:46 -0700
-IronPort-SDR: 9AV9TtW0A11FEZqDItJO1Hpp0TbSL+AJWumKjlfSot/lGox9Gdw98Zhpitg0Rn7HXEXFisNJew
- +JsJfA9uJZog==
+   d="gz'50?scan'50,208,50";a="263651334"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 05:03:48 -0700
+IronPort-SDR: EWWWeNlyaKh5YVL7dzyR2fDvppHndNYN7ZFRON8r3i1AXRxER/rzr6ZRYXapYyjKV3Cxs8sJ5Y
+ brT39GpxxHYQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,331,1613462400"; 
-   d="gz'50?scan'50,208,50";a="409200972"
+   d="gz'50?scan'50,208,50";a="547170096"
 Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 26 May 2021 03:53:43 -0700
+  by orsmga004.jf.intel.com with ESMTP; 26 May 2021 05:03:45 -0700
 Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1llrAU-00027e-Ml; Wed, 26 May 2021 10:53:42 +0000
-Date:   Wed, 26 May 2021 18:52:48 +0800
+        id 1llsGG-00028u-QI; Wed, 26 May 2021 12:03:44 +0000
+Date:   Wed, 26 May 2021 20:03:27 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
@@ -39,10 +39,10 @@ Cc:     kbuild-all@lists.01.org, clang-built-linux@googlegroups.com,
         Marco Elver <elver@google.com>, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/3] kunit: Support skipped tests
-Message-ID: <202105261806.ViICDGnR-lkp@intel.com>
+Message-ID: <202105261906.HJdKMobu-lkp@intel.com>
 References: <20210526081112.3652290-1-davidgow@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="uAKRQypu60I7Lcqm"
+Content-Type: multipart/mixed; boundary="fUYQa+Pmc3FrFX/N"
 Content-Disposition: inline
 In-Reply-To: <20210526081112.3652290-1-davidgow@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
@@ -51,16 +51,16 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---uAKRQypu60I7Lcqm
+--fUYQa+Pmc3FrFX/N
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi David,
 
-I love your patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.13-rc3 next-20210526]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.13-rc3 next-20210526]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
@@ -84,9 +84,9 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> lib/kunit/kunit-test.c:458:2: warning: comparison of distinct pointer types ('typeof (__left) *' (aka 'enum kunit_status *') and 'typeof (__right) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+   lib/kunit/kunit-test.c:458:2: warning: comparison of distinct pointer types ('typeof (__left) *' (aka 'enum kunit_status *') and 'typeof (__right) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
            KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/kunit/test.h:1320:2: note: expanded from macro 'KUNIT_EXPECT_EQ'
@@ -107,7 +107,7 @@ All warnings (new ones prefixed by >>):
    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
            (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   lib/kunit/kunit-test.c:459:2: error: array initializer must be an initializer list or string literal
+>> lib/kunit/kunit-test.c:459:2: error: array initializer must be an initializer list or string literal
            KUNIT_EXPECT_STREQ(test, fake.status_comment, "");
            ^
    include/kunit/test.h:1502:2: note: expanded from macro 'KUNIT_EXPECT_STREQ'
@@ -140,7 +140,7 @@ All warnings (new ones prefixed by >>):
    1 warning and 2 errors generated.
 
 
-vim +458 lib/kunit/kunit-test.c
+vim +459 lib/kunit/kunit-test.c
 
    450	
    451	static void kunit_status_mark_skipped_test(struct kunit *test)
@@ -150,8 +150,8 @@ vim +458 lib/kunit/kunit-test.c
    455		kunit_init_test(&fake, "fake test", NULL);
    456	
    457		/* Before: Should be SUCCESS with no comment. */
- > 458		KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
-   459		KUNIT_EXPECT_STREQ(test, fake.status_comment, "");
+   458		KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
+ > 459		KUNIT_EXPECT_STREQ(test, fake.status_comment, "");
    460	
    461		/* Mark the test as skipped. */
    462		kunit_mark_skipped(&fake, "Accepts format string: %s", "YES");
@@ -166,12 +166,12 @@ vim +458 lib/kunit/kunit-test.c
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---uAKRQypu60I7Lcqm
+--fUYQa+Pmc3FrFX/N
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICOkhrmAAAy5jb25maWcAjDzLdts4svv+Cp30pmfRHT8ST/re4wVIghRaJMEApCx5w6PY
+H4sICMstrmAAAy5jb25maWcAjDzLdts4svv+Cp30pmfRHT8ST/re4wVIghRaJMEApCx5w6PY
 ctp3/MjIdk/n728VwAcAFpXxwrZQhXe9q6Cff/p5wd5enx93r/c3u4eH74uv+6f9Yfe6v13c
 3T/s/3eRyEUp6wVPRP0bIOf3T29/v//700V78WHx8bfT899Ofj3cnC9W+8PT/mERPz/d3X99
 gwHun59++vmnWJapyNo4btdcaSHLtuab+vLdzcPu6evir/3hBfAWOMpvJ4tfvt6//s/79/D7
@@ -882,4 +882,4 @@ cGveN+rlDBIdKchQCIQPno2hb8BCdrwZpVvbUjbFJonErFbrhbI68NtSdsBb80xx4siO08kA
 P7ufydskMrKmEp/AmV1kYGjQ0QZ7dFlzcTtHfwyo2B82DWK1pbNyQBD+SFla/h+R3Zr2flsC
 AA==
 
---uAKRQypu60I7Lcqm--
+--fUYQa+Pmc3FrFX/N--
