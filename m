@@ -2,19 +2,19 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1AF396608
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 May 2021 18:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15A039660C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 May 2021 18:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbhEaQzU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 May 2021 12:55:20 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40262 "EHLO
+        id S233724AbhEaQzq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 May 2021 12:55:46 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40274 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbhEaQxT (ORCPT
+        with ESMTP id S234084AbhEaQx1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 May 2021 12:53:19 -0400
+        Mon, 31 May 2021 12:53:27 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: tonyk)
-        with ESMTPSA id 9B9071F41FCD
+        with ESMTPSA id 5FBCE1F41FD2
 From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
@@ -24,9 +24,9 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
 Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
         shuah@kernel.org, dave@stgolabs.net,
         =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH 1/2] selftests: futex: Add futex wait test
-Date:   Mon, 31 May 2021 13:50:35 -0300
-Message-Id: <20210531165036.41468-2-andrealmeid@collabora.com>
+Subject: [PATCH 2/2] selftests: futex: Add futex compare requeue test
+Date:   Mon, 31 May 2021 13:50:36 -0300
+Message-Id: <20210531165036.41468-3-andrealmeid@collabora.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210531165036.41468-1-andrealmeid@collabora.com>
 References: <20210531165036.41468-1-andrealmeid@collabora.com>
@@ -37,55 +37,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There are three different strategies to uniquely identify a futex in the
-kernel:
- - Private futexes: uses the pointer to mm_struct and the page address
- - Shared futexes: checks if the page containing the address is a PageAnon:
-   - If it is, uses the same data as a private futexes
-   - If it isn't, uses an inode sequence number from struct inode and
-      the page's index
-
-Create a selftest to check those three paths and basic wait/wake
-mechanism.
+Add testing for futex_cmp_requeue(). The first test just requeue from one
+waiter to another one, and wake it. The second performs both wake and
+requeue, and we check return values to see if the operation
+woke/requeued the expected number of waiters.
 
 Signed-off-by: André Almeida <andrealmeid@collabora.com>
 ---
  .../selftests/futex/functional/.gitignore     |   1 +
  .../selftests/futex/functional/Makefile       |   3 +-
- .../selftests/futex/functional/futex_wait.c   | 171 ++++++++++++++++++
+ .../futex/functional/futex_requeue.c          | 136 ++++++++++++++++++
  .../testing/selftests/futex/functional/run.sh |   3 +
- 4 files changed, 177 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/futex/functional/futex_wait.c
+ 4 files changed, 142 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/futex/functional/futex_requeue.c
 
 diff --git a/tools/testing/selftests/futex/functional/.gitignore b/tools/testing/selftests/futex/functional/.gitignore
-index 0efcd494daab..bd24699bacc9 100644
+index bd24699bacc9..0e78b49d0f2f 100644
 --- a/tools/testing/selftests/futex/functional/.gitignore
 +++ b/tools/testing/selftests/futex/functional/.gitignore
-@@ -6,3 +6,4 @@ futex_wait_private_mapped_file
- futex_wait_timeout
+@@ -7,3 +7,4 @@ futex_wait_timeout
  futex_wait_uninitialized_heap
  futex_wait_wouldblock
-+futex_wait
+ futex_wait
++futex_requeue
 diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index 1d2b3b2a5b86..20a5b4a1bc87 100644
+index 20a5b4a1bc87..bd1fec59e010 100644
 --- a/tools/testing/selftests/futex/functional/Makefile
 +++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -15,7 +15,8 @@ TEST_GEN_FILES := \
- 	futex_requeue_pi_signal_restart \
+@@ -16,7 +16,8 @@ TEST_GEN_FILES := \
  	futex_requeue_pi_mismatched_ops \
  	futex_wait_uninitialized_heap \
--	futex_wait_private_mapped_file
-+	futex_wait_private_mapped_file \
-+	futex_wait
+ 	futex_wait_private_mapped_file \
+-	futex_wait
++	futex_wait \
++	futex_requeue
  
  TEST_PROGS := run.sh
  
-diff --git a/tools/testing/selftests/futex/functional/futex_wait.c b/tools/testing/selftests/futex/functional/futex_wait.c
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
 new file mode 100644
-index 000000000000..685140d9b93d
+index 000000000000..51485be6eb2f
 --- /dev/null
-+++ b/tools/testing/selftests/futex/functional/futex_wait.c
-@@ -0,0 +1,171 @@
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -0,0 +1,136 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * Copyright Collabora Ltd., 2021
@@ -94,18 +88,15 @@ index 000000000000..685140d9b93d
 + */
 +
 +#include <pthread.h>
-+#include <sys/shm.h>
-+#include <sys/mman.h>
-+#include <fcntl.h>
++#include <limits.h>
 +#include "logging.h"
 +#include "futextest.h"
 +
-+#define TEST_NAME "futex-wait"
++#define TEST_NAME "futex-requeue"
 +#define timeout_ns  30000000
 +#define WAKE_WAIT_US 10000
-+#define SHM_PATH "futex_shm_file"
 +
-+void *futex;
++volatile futex_t *f1;
 +
 +void usage(char *prog)
 +{
@@ -116,18 +107,14 @@ index 000000000000..685140d9b93d
 +	       VQUIET, VCRITICAL, VINFO);
 +}
 +
-+static void *waiterfn(void *arg)
++void *waiterfn(void *arg)
 +{
 +	struct timespec to;
-+	unsigned int flags = 0;
-+
-+	if (arg)
-+		flags = *((unsigned int *) arg);
 +
 +	to.tv_sec = 0;
 +	to.tv_nsec = timeout_ns;
 +
-+	if (futex_wait(futex, 0, &to, flags))
++	if (futex_wait(f1, *f1, &to, 0))
 +		printf("waiter failed errno %d\n", errno);
 +
 +	return NULL;
@@ -135,13 +122,13 @@ index 000000000000..685140d9b93d
 +
 +int main(int argc, char *argv[])
 +{
-+	int res, ret = RET_PASS, fd, c, shm_id;
-+	u_int32_t f_private = 0, *shared_data;
-+	unsigned int flags = FUTEX_PRIVATE_FLAG;
-+	pthread_t waiter;
-+	void *shm;
++	pthread_t waiter[10];
++	int res, ret = RET_PASS;
++	int c, i;
++	volatile futex_t _f1 = 0;
++	volatile futex_t f2 = 0;
 +
-+	futex = &f_private;
++	f1 = &_f1;
 +
 +	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
 +		switch (c) {
@@ -161,113 +148,85 @@ index 000000000000..685140d9b93d
 +	}
 +
 +	ksft_print_header();
-+	ksft_set_plan(3);
-+	ksft_print_msg("%s: Test futex_wait\n", basename(argv[0]));
++	ksft_set_plan(2);
++	ksft_print_msg("%s: Test futex_requeue\n",
++		       basename(argv[0]));
 +
-+	/* Testing a private futex */
-+	info("Calling private futex_wait on futex: %p\n", futex);
-+	if (pthread_create(&waiter, NULL, waiterfn, (void *) &flags))
++	/*
++	 * Requeue a waiter from f1 to f2, and wake f2.
++	 */
++	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
 +		error("pthread_create failed\n", errno);
 +
 +	usleep(WAKE_WAIT_US);
 +
-+	info("Calling private futex_wake on futex: %p\n", futex);
-+	res = futex_wake(futex, 1, FUTEX_PRIVATE_FLAG);
++	info("Requeuing 1 futex from f1 to f2\n");
++	res = futex_cmp_requeue(f1, 0, &f2, 0, 1, 0);
 +	if (res != 1) {
-+		ksft_test_result_fail("futex_wake private returned: %d %s\n",
-+				      errno, strerror(errno));
++		ksft_test_result_fail("futex_requeue simple returned: %d %s\n",
++				      res ? errno : res,
++				      res ? strerror(errno) : "");
++		ret = RET_FAIL;
++	}
++
++
++	info("Waking 1 futex at f2\n");
++	res = futex_wake(&f2, 1, 0);
++	if (res != 1) {
++		ksft_test_result_fail("futex_requeue simple returned: %d %s\n",
++				      res ? errno : res,
++				      res ? strerror(errno) : "");
 +		ret = RET_FAIL;
 +	} else {
-+		ksft_test_result_pass("futex_wake private succeeds\n");
++		ksft_test_result_pass("futex_requeue simple succeeds\n");
 +	}
 +
-+	/* Testing an anon page shared memory */
-+	shm_id = shmget(IPC_PRIVATE, 4096, IPC_CREAT | 0666);
-+	if (shm_id < 0) {
-+		perror("shmget");
-+		exit(1);
++
++	/*
++	 * Create 10 waiters at f1. At futex_requeue, wake 3 and requeue 7.
++	 * At futex_wake, wake INT_MAX (should be exactly 7).
++	 */
++	for (i = 0; i < 10; i++) {
++		if (pthread_create(&waiter[i], NULL, waiterfn, NULL))
++			error("pthread_create failed\n", errno);
 +	}
-+
-+	shared_data = shmat(shm_id, NULL, 0);
-+
-+	*shared_data = 0;
-+	futex = shared_data;
-+
-+	info("Calling shared (page anon) futex_wait on futex: %p\n", futex);
-+	if (pthread_create(&waiter, NULL, waiterfn, NULL))
-+		error("pthread_create failed\n", errno);
 +
 +	usleep(WAKE_WAIT_US);
 +
-+	info("Calling shared (page anon) futex_wake on futex: %p\n", futex);
-+	res = futex_wake(futex, 1, 0);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex_wake shared (page anon) returned: %d %s\n",
-+				      errno, strerror(errno));
++	info("Waking 3 futexes at f1 and requeuing 7 futexes from f1 to f2\n");
++	res = futex_cmp_requeue(f1, 0, &f2, 3, 7, 0);
++	if (res != 10) {
++		ksft_test_result_fail("futex_requeue many returned: %d %s\n",
++				      res ? errno : res,
++				      res ? strerror(errno) : "");
++		ret = RET_FAIL;
++	}
++
++	info("Waking INT_MAX futexes at f2\n");
++	res = futex_wake(&f2, INT_MAX, 0);
++	if (res != 7) {
++		ksft_test_result_fail("futex_requeue many returned: %d %s\n",
++				      res ? errno : res,
++				      res ? strerror(errno) : "");
 +		ret = RET_FAIL;
 +	} else {
-+		ksft_test_result_pass("futex_wake shared (page anon) succeeds\n");
++		ksft_test_result_pass("futex_requeue many succeeds\n");
 +	}
-+
-+
-+	/* Testing a file backed shared memory */
-+	fd = open(SHM_PATH, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-+	if (fd < 0) {
-+		perror("open");
-+		exit(1);
-+	}
-+
-+	if (ftruncate(fd, sizeof(f_private))) {
-+		perror("ftruncate");
-+		exit(1);
-+	}
-+
-+	shm = mmap(NULL, sizeof(f_private), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (shm == MAP_FAILED) {
-+		perror("mmap");
-+		exit(1);
-+	}
-+
-+	memcpy(shm, &f_private, sizeof(f_private));
-+
-+	futex = shm;
-+
-+	info("Calling shared (file backed) futex_wait on futex: %p\n", futex);
-+	if (pthread_create(&waiter, NULL, waiterfn, NULL))
-+		error("pthread_create failed\n", errno);
-+
-+	usleep(WAKE_WAIT_US);
-+
-+	info("Calling shared (file backed) futex_wake on futex: %p\n", futex);
-+	res = futex_wake(shm, 1, 0);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex_wake shared (file backed) returned: %d %s\n",
-+				      errno, strerror(errno));
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("futex_wake shared (file backed) succeeds\n");
-+	}
-+
-+	/* Freeing resources */
-+	shmdt(shared_data);
-+	munmap(shm, sizeof(f_private));
-+	remove(SHM_PATH);
-+	close(fd);
 +
 +	ksft_print_cnts();
 +	return ret;
 +}
 diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index 1acb6ace1680..d5e1430bcdca 100755
+index d5e1430bcdca..11a9d62290f5 100755
 --- a/tools/testing/selftests/futex/functional/run.sh
 +++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -73,3 +73,6 @@ echo
+@@ -76,3 +76,6 @@ echo
+ 
  echo
- ./futex_wait_uninitialized_heap $COLOR
- ./futex_wait_private_mapped_file $COLOR
+ ./futex_wait $COLOR
 +
 +echo
-+./futex_wait $COLOR
++./futex_requeue $COLOR
 -- 
 2.31.1
 
