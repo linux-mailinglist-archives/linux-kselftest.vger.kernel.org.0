@@ -2,87 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA203959EF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 May 2021 13:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1814B395A2F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 May 2021 14:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbhEaL6w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 May 2021 07:58:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57221 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231245AbhEaL6v (ORCPT
+        id S231437AbhEaMOt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 May 2021 08:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231327AbhEaMOs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 May 2021 07:58:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1622462231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZT6fgZcKFOOMcFjvD5ihvxXWLQMbqZ98vtTuBTita70=;
-        b=SNveE5mImqu612nBuegDe9ANLpcS0ikbHYT4zSHfwoopQCXQHcipudqxulr5amKpd9uSIP
-        GkA4qxAbzgSYdF37Z+PGaI0RtwGyDbTCbxiw364bqTTgrcfwwBN/suDDYH1jc0IPqiKlQy
-        E8nzlpDl1yBv2edO3UrRHP7lHKpylRE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-95-6u9wSQ3pP7ekVM1xxljC4A-1; Mon, 31 May 2021 07:57:09 -0400
-X-MC-Unique: 6u9wSQ3pP7ekVM1xxljC4A-1
-Received: by mail-wm1-f72.google.com with SMTP id v2-20020a7bcb420000b0290146b609814dso3025194wmj.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 May 2021 04:57:09 -0700 (PDT)
+        Mon, 31 May 2021 08:14:48 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83957C06174A
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 May 2021 05:13:07 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id v8so10974445qkv.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 May 2021 05:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mX6vpqpr3JLgxu1jEwCMQgMPdHWhzij0Fneqz5FAH9c=;
+        b=FT5P6jzsIGBxTh50FwxtMBBMcoExrJ12fQ5TLa93BPHFE8rdPR6U/L9ezueKmz7fSX
+         IjUYPSvZNCvYvEHWPZTfTWYQFx+rAu4yE3+cVd3f8CdkNsiSrEzF9fy5XK7DbTKNek05
+         8T5bjmjgwdgYw3qZiaBuyfvksJDtjBy5lCZaJ76SHh7dwiZ1CkHaVkIJAJh1dmUxy4xO
+         BqeYmPr64/khITOn/W9i7ARNQCp9g35Mb7JPlRUu9c7KJ2EpkowcI0b+Yf/aaGgqYfzX
+         dzX7whqSfMGe1qQdDB3YllMz8TfW6S6LylFoRJ+ikydwsPfY9PlVYAlqZPYHIbwnEoBR
+         A65Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZT6fgZcKFOOMcFjvD5ihvxXWLQMbqZ98vtTuBTita70=;
-        b=nIaveqTu2tJUujBX4qcpYD5t2BwAbXLq2LFdfYyD11pKuu1+vnfLkl4xRbma9QXawy
-         Wf3RDWwWpo/nf6lNkNQXLdrjTxADDm+6OLC6Yy11fQc672yzvNV50cyW3Z/KoX28lZKp
-         c8+BWVi+kuOYbFIsWu8mGHqM0Y6P4jAWB0t0ZwF3JEsbTe3rzvId0qGQgsT3bDGhprMR
-         YX5rgGzkgPD8X/B9MZwYtNU/O7xQq9gKsZYvNH0kIUfA/rKO2IlVmiGFdf78bMfD+kj2
-         memEtPebR6yMMHW71OfATtKqRgD5nrWM5s8bgThdZU9c7N3O6XOlXa25R4RvqdhfH7Id
-         azXg==
-X-Gm-Message-State: AOAM531Tc0VPv0wAeZBf6zpkuVQc7r6gxlUPZ0H8Ou2xn5cp5WyXGdKb
-        20T1z7dV+DIRR3Upki2vVnUVGGXTtjIUH8zSRoizkG+7hrBiw26vBIaaQYwAUtJ+sby8/g0qYfJ
-        VymFmof2bqEHPhiwNO46VhOd6s9Qj
-X-Received: by 2002:a5d:4fce:: with SMTP id h14mr9969890wrw.57.1622462228777;
-        Mon, 31 May 2021 04:57:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzSEh58VwJlBLxXhFjnTSTgxpD7e2IpB3ixQmKLeFGu/3RqcyG0ab9yK3/jUgFwDa97A0A0kg==
-X-Received: by 2002:a5d:4fce:: with SMTP id h14mr9969876wrw.57.1622462228607;
-        Mon, 31 May 2021 04:57:08 -0700 (PDT)
-Received: from localhost (net-188-218-12-178.cust.vodafonedsl.it. [188.218.12.178])
-        by smtp.gmail.com with ESMTPSA id l18sm16343013wrt.97.2021.05.31.04.57.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 May 2021 04:57:07 -0700 (PDT)
-Date:   Mon, 31 May 2021 13:57:07 +0200
-From:   Davide Caratti <dcaratti@redhat.com>
-To:     Boris Sukholitko <boris.sukholitko@broadcom.com>
-Cc:     netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mX6vpqpr3JLgxu1jEwCMQgMPdHWhzij0Fneqz5FAH9c=;
+        b=SymO2n4MxqyDjDo30NybnHkox3+lmz3mWQQo/EvckC8TBbLSyE88hVK+SMVtw9agpy
+         jN+zwkwyQsRvM70ukRNE9E6y1GAvHClCAaPxzbEYaY/upyX5n7NV/AV8CbZWo0WXOKZg
+         1V8QXi5/U10TwDYsGWvjWpfoG9L9YvV/lJFWS4t0HDfDre/jMfV9YjNG9XyVRV/nnUbF
+         t4i0JIGVwebyODYNVvZ23afNZjt2oMWuATHS6YguXjH6lr4mRPLwzJPKLa+SzuocfBGr
+         Am6DYTiHDviB2QixnqFdVljaAEztBy+l4NpQP7cs1c69IHV/voKJa8o2LZB4nxUx0gu4
+         Nx7w==
+X-Gm-Message-State: AOAM533bI34pmVe2ca7wmAz3un4o8JqwbOydiqDxDUF6YA/rq4ji+0P4
+        rPj7+oo6m8WIf+E6phbBYFgZkA==
+X-Google-Smtp-Source: ABdhPJzLbBjOLjfRjRGp4qrb0nKkpTdLK1WPh4CYmJ9ltPonzG40evaEQV5E30ZvHU0qPcpJ4eGe0A==
+X-Received: by 2002:a37:46cd:: with SMTP id t196mr16298837qka.305.1622463186703;
+        Mon, 31 May 2021 05:13:06 -0700 (PDT)
+Received: from [192.168.1.79] (bras-base-kntaon1617w-grc-28-184-148-47-211.dsl.bell.ca. [184.148.47.211])
+        by smtp.googlemail.com with ESMTPSA id p19sm8947842qki.119.2021.05.31.05.13.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 May 2021 05:13:06 -0700 (PDT)
+Subject: Re: [PATCH net-next v3 0/3] net/sched: act_vlan: Fix modify to allow
+ 0
+To:     Davide Caratti <dcaratti@redhat.com>,
+        Boris Sukholitko <boris.sukholitko@broadcom.com>
+Cc:     netdev@vger.kernel.org, Jiri Pirko <jiri@resnulli.us>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         linux-kselftest@vger.kernel.org, shuah@kernel.org,
         Ilya Lifshits <ilya.lifshits@broadcom.com>,
         Shmulik Ladkani <shmulik.ladkani@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH net-next v3 0/3] net/sched: act_vlan: Fix modify to allow
- 0
-Message-ID: <YLTPEzvYsUmxOIr9@dcaratti.users.ipa.redhat.com>
 References: <20210530114052.16483-1-boris.sukholitko@broadcom.com>
+ <YLTPEzvYsUmxOIr9@dcaratti.users.ipa.redhat.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Message-ID: <98780fe0-f34f-277a-f137-543f7ddd5d0c@mojatatu.com>
+Date:   Mon, 31 May 2021 08:13:05 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210530114052.16483-1-boris.sukholitko@broadcom.com>
+In-Reply-To: <YLTPEzvYsUmxOIr9@dcaratti.users.ipa.redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, May 30, 2021 at 02:40:49PM +0300, Boris Sukholitko wrote:
-> Currently vlan modification action checks existence of vlan priority by
-> comparing it to 0. Therefore it is impossible to modify existing vlan
-> tag to have priority 0.
+On 2021-05-31 7:57 a.m., Davide Caratti wrote:
+> On Sun, May 30, 2021 at 02:40:49PM +0300, Boris Sukholitko wrote:
+>> Currently vlan modification action checks existence of vlan priority by
+>> comparing it to 0. Therefore it is impossible to modify existing vlan
+>> tag to have priority 0.
+> 
+> hello Boris, thanks for following up!
+>   
+>> Change Log:
+>> v2 -> v3:
+>> - Push assumes that the priority is being set
+>> - tcf_vlan_get_fill_size accounts for priority existence
+> 
+> Reviewed-by: Davide Caratti <dcaratti@redhat.com>
+> 
 
-hello Boris, thanks for following up!
- 
-> Change Log:
-> v2 -> v3:
-> - Push assumes that the priority is being set
-> - tcf_vlan_get_fill_size accounts for priority existence
+Looks good to me as well. And thanks for adding the tests!
 
-Reviewed-by: Davide Caratti <dcaratti@redhat.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
+cheers,
+jamal
