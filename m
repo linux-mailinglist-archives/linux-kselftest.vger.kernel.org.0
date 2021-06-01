@@ -2,92 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 765AB396CBC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jun 2021 07:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCA039713D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jun 2021 12:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbhFAFXZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Jun 2021 01:23:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36928 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230170AbhFAFXT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Jun 2021 01:23:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B0E09610A8;
-        Tue,  1 Jun 2021 05:21:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622524898;
-        bh=VbY9+aw50Mw1X+tkAaC/07vtiyWYtYiNQpRbMuWfUGg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YEtKclukGUSHJ8R4id5+fqd/XKNBJbvlPJUhQljkaPpC9oM4Y1XE1N0aG8ylSGJFs
-         FoyvuEn6GP2E7Aromq2f4lJ77SQUsJlqaVWS69w3ptaMAbw//EWigvoLbIFk2Hk1/K
-         6k8UpCWoZlzNToU1+pGBFVR/Ibd20lo9NYIdcdrMpZx37gu9F689KHRnoxVkYGnj3K
-         EQfzTve7V95rZChn3S8kUM5SXK2YtxG4CSTnNOiZ9Rk1f2dkTyiXBkomFxbscfg2nS
-         mHRuShS7vhAmvM2QDGpbpkb8uRzvjQErlrFpnGrQVEJ07/6DxO/pdpw7w+2ZioXyXV
-         tMa/4MDmuhH7Q==
-Date:   Mon, 31 May 2021 22:21:36 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Boris Sukholitko <boris.sukholitko@broadcom.com>
-Cc:     netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        Ilya Lifshits <ilya.lifshits@broadcom.com>,
-        Shmulik Ladkani <shmulik.ladkani@gmail.com>,
-        Davide Caratti <dcaratti@redhat.com>
-Subject: Re: [PATCH net-next v3 2/3] net/sched: act_vlan: No dump for unset
- priority
-Message-ID: <20210531222136.26670598@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20210530114052.16483-3-boris.sukholitko@broadcom.com>
-References: <20210530114052.16483-1-boris.sukholitko@broadcom.com>
-        <20210530114052.16483-3-boris.sukholitko@broadcom.com>
+        id S231968AbhFAKSd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Jun 2021 06:18:33 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39572 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231228AbhFAKSc (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Jun 2021 06:18:32 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <colin.king@canonical.com>)
+        id 1lo1S4-0007H2-EC; Tue, 01 Jun 2021 10:16:48 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] KVM: selftests: Fix spelling mistake "UFFDIO_CONINUE" -> "UFFDIO_CONTINUE"
+Date:   Tue,  1 Jun 2021 11:16:48 +0100
+Message-Id: <20210601101648.8244-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 30 May 2021 14:40:51 +0300 Boris Sukholitko wrote:
-> diff --git a/net/sched/act_vlan.c b/net/sched/act_vlan.c
-> index a108469c664f..ccd1acfa4c55 100644
-> --- a/net/sched/act_vlan.c
-> +++ b/net/sched/act_vlan.c
-> @@ -307,8 +307,8 @@ static int tcf_vlan_dump(struct sk_buff *skb, struct tc_action *a,
->  	    (nla_put_u16(skb, TCA_VLAN_PUSH_VLAN_ID, p->tcfv_push_vid) ||
->  	     nla_put_be16(skb, TCA_VLAN_PUSH_VLAN_PROTOCOL,
->  			  p->tcfv_push_proto) ||
-> -	     (nla_put_u8(skb, TCA_VLAN_PUSH_VLAN_PRIORITY,
-> -					      p->tcfv_push_prio))))
-> +	     (p->tcfv_push_prio_exists &&
-> +	      nla_put_u8(skb, TCA_VLAN_PUSH_VLAN_PRIORITY, p->tcfv_push_prio))))
->  		goto nla_put_failure;
->  
->  	if (p->tcfv_action == TCA_VLAN_ACT_PUSH_ETH) {
-> @@ -362,10 +362,19 @@ static int tcf_vlan_search(struct net *net, struct tc_action **a, u32 index)
->  
->  static size_t tcf_vlan_get_fill_size(const struct tc_action *act)
->  {
-> -	return nla_total_size(sizeof(struct tc_vlan))
-> +	struct tcf_vlan *v = to_vlan(act);
-> +	struct tcf_vlan_params *p;
-> +	size_t ret = nla_total_size(sizeof(struct tc_vlan))
->  		+ nla_total_size(sizeof(u16)) /* TCA_VLAN_PUSH_VLAN_ID */
-> -		+ nla_total_size(sizeof(u16)) /* TCA_VLAN_PUSH_VLAN_PROTOCOL */
-> -		+ nla_total_size(sizeof(u8)); /* TCA_VLAN_PUSH_VLAN_PRIORITY */
-> +		+ nla_total_size(sizeof(u16)); /* TCA_VLAN_PUSH_VLAN_PROTOCOL */
-> +
-> +	spin_lock_bh(&v->tcf_lock);
-> +	p = rcu_dereference_protected(v->vlan_p, lockdep_is_held(&v->tcf_lock));
-> +	if (p->tcfv_push_prio_exists)
-> +		ret += nla_total_size(sizeof(u8)); /* TCA_VLAN_PUSH_VLAN_PRIORITY */
-> +	spin_unlock_bh(&v->tcf_lock);
+From: Colin Ian King <colin.king@canonical.com>
 
-This jumps out a little bit - if we need to take this lock to inspect
-tcf_vlan_params, then I infer its value may change. And if it may
-change what guarantees it doesn't change between calculating the skb
-length and dumping?
+There is a spelling mistake in a debug message. Fix it.
 
-It's common practice to calculate the max skb len required when
-attributes are this small.
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ tools/testing/selftests/kvm/demand_paging_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +	return ret;
->  }
+diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+index b74704305835..874dc8f7248f 100644
+--- a/tools/testing/selftests/kvm/demand_paging_test.c
++++ b/tools/testing/selftests/kvm/demand_paging_test.c
+@@ -230,7 +230,7 @@ static void setup_demand_paging(struct kvm_vm *vm,
+ 
+ 	PER_PAGE_DEBUG("Userfaultfd %s mode, faults resolved with %s\n",
+ 		       is_minor ? "MINOR" : "MISSING",
+-		       is_minor ? "UFFDIO_CONINUE" : "UFFDIO_COPY");
++		       is_minor ? "UFFDIO_CONTINUE" : "UFFDIO_COPY");
+ 
+ 	/* In order to get minor faults, prefault via the alias. */
+ 	if (is_minor) {
+-- 
+2.31.1
+
