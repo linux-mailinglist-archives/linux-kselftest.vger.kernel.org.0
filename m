@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A060439ACC8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jun 2021 23:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDB339ACCD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jun 2021 23:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbhFCV0u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Jun 2021 17:26:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39263 "EHLO
+        id S230286AbhFCV0w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Jun 2021 17:26:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29781 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230261AbhFCV0t (ORCPT
+        by vger.kernel.org with ESMTP id S230288AbhFCV0v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Jun 2021 17:26:49 -0400
+        Thu, 3 Jun 2021 17:26:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1622755503;
+        s=mimecast20190719; t=1622755506;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=thMjmtJh5+hm9zST5bagiDDjjocf7BWJz4f5zZJsM5c=;
-        b=SK7sjfMnj6SR4Aa2/ZUVTNrbJuxzQNoPbMv6PP7hOor9G8vMxyIKcQBBs+XGQ/CSoi98or
-        sPwZryTZRjfEWYmvh5EOP9tOl7p3b4mkIHVsVHHyJ2oIaWAi2sMLribYqlkEtTajLctFE/
-        eGcgUkJLBcFFFkmFP+W0RY2BKUBbwfs=
+        bh=AQptwpPftuvlepn0c//rvhF5er61at0BxM0RAxJWfRY=;
+        b=GUXXohO57oA9vFuy/PH+2LpUx90eZLZ1HgxS5DvW9Ami7Ga0rYcj/Fw8koMqmC/afSMwxf
+        9k8NuVRxGlS4RzWRWGm7cDbF2s5xgRM/8+NTS24jKgv76+yZCYjuDlqrJrGv2CkQ//PPhv
+        qwfRJ5bAwKuE4jKQnny6ev2CpvoQg3M=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-315-SmUDUhhCMpKbkpLm1y9EOg-1; Thu, 03 Jun 2021 17:25:00 -0400
-X-MC-Unique: SmUDUhhCMpKbkpLm1y9EOg-1
+ us-mta-462-W1aTJVnqMymYaNmlUbEitQ-1; Thu, 03 Jun 2021 17:25:04 -0400
+X-MC-Unique: W1aTJVnqMymYaNmlUbEitQ-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BA602107ACC7;
-        Thu,  3 Jun 2021 21:24:58 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4EB9A80ED96;
+        Thu,  3 Jun 2021 21:25:03 +0000 (UTC)
 Received: from llong.com (ovpn-116-222.rdu2.redhat.com [10.10.116.222])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 69AA460D06;
-        Thu,  3 Jun 2021 21:24:57 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DC5F2648A0;
+        Thu,  3 Jun 2021 21:24:58 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -43,9 +43,9 @@ Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH 4/5] cgroup/cpuset: Update description of cpuset.cpus.partition in cgroup-v2.rst
-Date:   Thu,  3 Jun 2021 17:24:15 -0400
-Message-Id: <20210603212416.25934-5-longman@redhat.com>
+Subject: [PATCH 5/5] kselftest/cgroup: Add cpuset v2 partition root state test
+Date:   Thu,  3 Jun 2021 17:24:16 -0400
+Message-Id: <20210603212416.25934-6-longman@redhat.com>
 In-Reply-To: <20210603212416.25934-1-longman@redhat.com>
 References: <20210603212416.25934-1-longman@redhat.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
@@ -53,66 +53,175 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Update Documentation/admin-guide/cgroup-v2.rst on the new "root-nolb"
-cpuset partition type as well as the ability to create non-top cpuset
-partition with no cpu allocated to it.
+Add a test script for exercising the cpuset v2 partition root state code.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- Documentation/admin-guide/cgroup-v2.rst | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+ tools/testing/selftests/cgroup/Makefile       |   2 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       | 141 ++++++++++++++++++
+ 2 files changed, 142 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index b1e81aa8598a..36a923cabeb0 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2010,8 +2010,9 @@ Cpuset Interface Files
- 	It accepts only the following input values when written to.
+diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+index f027d933595b..e8ff3ffc3a43 100644
+--- a/tools/testing/selftests/cgroup/Makefile
++++ b/tools/testing/selftests/cgroup/Makefile
+@@ -4,7 +4,7 @@ CFLAGS += -Wall -pthread
+ all:
  
- 	  ========	================================
--	  "root"	a partition root
--	  "member"	a non-root member of a partition
-+	  "member"	Non-root member of a partition
-+	  "root"	Partition root
-+	  "root-nolb"	Partition root with no load balancing
- 	  ========	================================
- 
- 	When set to be a partition root, the current cgroup is the
-@@ -2020,6 +2021,10 @@ Cpuset Interface Files
- 	partition roots themselves and their descendants.  The root
- 	cgroup is always a partition root.
- 
-+        With "root-nolb", the CPUs in that partition root will be in an
-+        isolated state with no load balancing by the scheduler.  Tasks in
-+        such a partition must be explicitly bind to each individual CPU.
+ TEST_FILES     := with_stress.sh
+-TEST_PROGS     := test_stress.sh
++TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
+ TEST_GEN_PROGS = test_memcontrol
+ TEST_GEN_PROGS += test_kmem
+ TEST_GEN_PROGS += test_core
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+new file mode 100755
+index 000000000000..6a9c02c301b5
+--- /dev/null
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -0,0 +1,141 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test for cpuset v2 partition root state (PRS)
++#
++# The sched verbose flag is set, if available, so that the console log
++# can be examined for the correct setting of scheduling domain.
++#
 +
- 	There are constraints on where a partition root can be set.
- 	It can only be set in a cgroup if all the following conditions
- 	are true.
-@@ -2038,9 +2043,12 @@ Cpuset Interface Files
- 	file cannot be reverted back to "member" if there are any child
- 	cgroups with cpuset enabled.
- 
--	A parent partition cannot distribute all its CPUs to its
--	child partitions.  There must be at least one cpu left in the
--	parent partition.
-+	A parent partition may distribute all its CPUs to its child
-+	partitions as long as it is not the root cgroup and there is no
-+	task directly associated with that parent partition.  Otherwise,
-+	there must be at least one cpu left in the parent partition.
-+	A new task cannot be moved to a partition root with no effective
-+	cpu.
- 
- 	Once becoming a partition root, changes to "cpuset.cpus" is
- 	generally allowed as long as the first condition above is true,
-@@ -2056,6 +2064,7 @@ Cpuset Interface Files
- 	  ==============	==============================
- 	  "member"		Non-root member of a partition
- 	  "root"		Partition root
-+	  "root-nolb"		Partition root with no load balancing
- 	  "root invalid"	Invalid partition root
- 	  ==============	==============================
- 
++skip_test() {
++	echo "$1"
++	echo "Test SKIPPED"
++	exit 0
++}
++
++[[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
++
++# Set sched verbose flag, if available
++[[ -d /sys/kernel/debug/sched ]] && echo Y > /sys/kernel/debug/sched/verbose
++
++# Find cgroup v2 mount point
++CGROUP2=$(mount | grep "^cgroup2" | awk -e '{print $3}')
++[[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
++
++CPUS=$(lscpu | grep "^CPU(s)" | sed -e "s/.*:[[:space:]]*//")
++[[ $CPUS -lt 4 ]] && skip_test "Test needs at least 4 cpus available!"
++
++cd $CGROUP2
++echo +cpuset > cgroup.subtree_control
++[[ -d test ]] || mkdir test
++cd test
++echo 2-3 > cpuset.cpus
++TYPE=$(cat cpuset.cpus.partition)
++[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
++
++console_msg()
++{
++	MSG=$1
++	echo "$MSG"
++	echo "" > /dev/console
++	echo "$MSG" > /dev/console
++	sleep 1
++}
++
++test_partition()
++{
++	EXPECTED_VAL=$1
++	echo $EXPECTED_VAL > cpuset.cpus.partition
++	[[ $? -eq 0 ]] || exit 1
++	ACTUAL_VAL=$(cat cpuset.cpus.partition)
++	[[ $ACTUAL_VAL != $EXPECTED_VAL ]] && {
++		echo "cpuset.cpus.partition: expect $EXPECTED_VAL, found $EXPECTED_VAL"
++		echo "Test FAILED"
++		exit 1
++	}
++}
++
++test_effective_cpus()
++{
++	EXPECTED_VAL=$1
++	ACTUAL_VAL=$(cat cpuset.cpus.effective)
++	[[ "$ACTUAL_VAL" != "$EXPECTED_VAL" ]] && {
++		echo "cpuset.cpus.effective: expect '$EXPECTED_VAL', found '$EXPECTED_VAL'"
++		echo "Test FAILED"
++		exit 1
++	}
++}
++
++# Adding current process to cgroup.procs as a test
++test_add_proc()
++{
++	OUTSTR="$1"
++	ERRMSG=$((echo $$ > cgroup.procs) |& cat)
++	echo $ERRMSG | grep -q "$OUTSTR"
++	[[ $? -ne 0 ]] && {
++		echo "cgroup.procs: expect '$OUTSTR', got '$ERRMSG'"
++		echo "Test FAILED"
++		exit 1
++	}
++	echo $$ > $CGROUP2/cgroup.procs	# Move out the task
++}
++
++#
++# Testing the new "root-nolb" partition root type
++#
++console_msg "Change from member to root"
++test_partition root
++
++console_msg "Change from root to root-nolb"
++test_partition root-nolb
++
++console_msg "Change from root-nolb to member"
++test_partition member
++
++console_msg "Change from member to root-nolb"
++test_partition root-nolb
++
++console_msg "Change from root-nolb to root"
++test_partition root
++
++console_msg "Change from root to member"
++test_partition member
++
++#
++# Testing partition root with no cpu
++#
++console_msg "Distribute all cpus to child partition"
++echo +cpuset > cgroup.subtree_control
++test_partition root
++
++mkdir t1
++cd t1
++echo 2-3 > cpuset.cpus
++test_partition root
++test_effective_cpus 2-3
++cd ..
++test_effective_cpus ""
++
++console_msg "Moving task to partition test"
++test_add_proc "No space left"
++cd t1
++test_add_proc ""
++cd ..
++
++console_msg "Shrink and expand child partition"
++cd t1
++echo 2 > cpuset.cpus
++cd ..
++test_effective_cpus 3
++cd t1
++echo 2-3 > cpuset.cpus
++cd ..
++test_effective_cpus ""
++
++# Cleaning up
++console_msg "Cleaning up"
++echo $$ > $CGROUP2/cgroup.procs
++[[ -d t1 ]] && rmdir t1
++cd ..
++rmdir test
++echo "Test PASSED"
 -- 
 2.18.1
 
