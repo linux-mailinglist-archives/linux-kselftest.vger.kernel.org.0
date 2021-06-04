@@ -2,226 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDB339ACCD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jun 2021 23:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF73E39B1AB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jun 2021 06:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbhFCV0w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Jun 2021 17:26:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29781 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230288AbhFCV0v (ORCPT
+        id S229800AbhFDEyj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Jun 2021 00:54:39 -0400
+Received: from mail-il1-f178.google.com ([209.85.166.178]:45693 "EHLO
+        mail-il1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229704AbhFDEyj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Jun 2021 17:26:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1622755506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=AQptwpPftuvlepn0c//rvhF5er61at0BxM0RAxJWfRY=;
-        b=GUXXohO57oA9vFuy/PH+2LpUx90eZLZ1HgxS5DvW9Ami7Ga0rYcj/Fw8koMqmC/afSMwxf
-        9k8NuVRxGlS4RzWRWGm7cDbF2s5xgRM/8+NTS24jKgv76+yZCYjuDlqrJrGv2CkQ//PPhv
-        qwfRJ5bAwKuE4jKQnny6ev2CpvoQg3M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-462-W1aTJVnqMymYaNmlUbEitQ-1; Thu, 03 Jun 2021 17:25:04 -0400
-X-MC-Unique: W1aTJVnqMymYaNmlUbEitQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4EB9A80ED96;
-        Thu,  3 Jun 2021 21:25:03 +0000 (UTC)
-Received: from llong.com (ovpn-116-222.rdu2.redhat.com [10.10.116.222])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DC5F2648A0;
-        Thu,  3 Jun 2021 21:24:58 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Fri, 4 Jun 2021 00:54:39 -0400
+Received: by mail-il1-f178.google.com with SMTP id b5so7679603ilc.12;
+        Thu, 03 Jun 2021 21:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1PgbPrY10zYsjifCFzWyh2BDHPVeu66kYt4xk+1XagA=;
+        b=BRFT0PFacapa79dgWyqVB1rrB4rCX8Hl4Jvwfuiik4wOdTQbuswOyQd3lyhUtIHA95
+         Jx7VbXc53nQfSF789Dj3KP3ekfgafPiF3LXWSR3RHbcAFkouBQ90k57rqEjvpjHNTAml
+         exhRmhEabKFIeAi/c0uebCRS9mqbDZgM1m1TG7dSOWQiJKgvTm23JzveZzHLvl8a6Iyy
+         GvJ/MtGTO+hTUTlDnvrLkzA9litdS5Nftaz25U1GIB8UCvepDI5ufPYCZcHoKkJjFCSw
+         g6t1zdEheCO/Xm7sICGnaUKQhil+VUxwPJpytk3FdvoN+Skb6Vxtu0Q9GN3SBsbh33+G
+         QVuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1PgbPrY10zYsjifCFzWyh2BDHPVeu66kYt4xk+1XagA=;
+        b=WPKG39T1KtPCX8tSiYQ/BupkbvQ1mGkgLr5DPxESgWiCCI41eqKOvo8FNs8HLmuDsp
+         lUS+1VK91MaY3afWYqg/m0V1Fv54fqjb9xNPtFgOdbMjkOfSMA/qxVr1H7pTuOeBikxp
+         W/R8ELd46e2KPReC/Q/NS1lzeVWmby9FT/KV2g3GGfTVyJw+4giYQgNgu1gcUALZkivg
+         +A82fMgWPbjv12w5gVz6a+/e43R5rv74LlsKxwLImnUk/85jDERx6ZEphLs0DZC1Jv1E
+         5fu9Jux7aEWPSy5BKQmzga/dqIvqkmI3TF75C7yxWDLvRanRqtT7NNLCp3aUXd0V4KHK
+         k6/Q==
+X-Gm-Message-State: AOAM533ULToNXVvXw4wqqkopw19caf+RdUebEV+8cLQ2qiWuaS9Kn+v8
+        FvmDPknWCrDrp5SWGVxg5vQ=
+X-Google-Smtp-Source: ABdhPJy3sgFV/xsccZqhNRUor2dII2d6E1DIQNG12H/xDoszibp8FHPgZBX0ThCCy6cLblI5uHY9AA==
+X-Received: by 2002:a05:6e02:10d4:: with SMTP id s20mr2397773ilj.37.1622782303991;
+        Thu, 03 Jun 2021 21:51:43 -0700 (PDT)
+Received: from ?IPv6:2606:3280:8:e29:2093:3298:f887:8ed6? ([2606:3280:8:e29:2093:3298:f887:8ed6])
+        by smtp.googlemail.com with ESMTPSA id s23sm2762345iol.49.2021.06.03.21.51.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Jun 2021 21:51:43 -0700 (PDT)
+Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH 5/5] kselftest/cgroup: Add cpuset v2 partition root state test
-Date:   Thu,  3 Jun 2021 17:24:16 -0400
-Message-Id: <20210603212416.25934-6-longman@redhat.com>
-In-Reply-To: <20210603212416.25934-1-longman@redhat.com>
-References: <20210603212416.25934-1-longman@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     kernel@collabora.com, krisman@collabora.com,
+        pgriffais@valvesoftware.com, joel@joelfernandes.org,
+        malteskarupke@fastmail.fm, linux-api@vger.kernel.org,
+        fweimer@redhat.com, libc-alpha@sourceware.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org, acme@kernel.org,
+        corbet@lwn.net, Peter Oskolkov <posk@posk.io>,
+        Andrey Semashev <andrey.semashev@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+References: <20210603195924.361327-1-andrealmeid@collabora.com>
+From:   Zebediah Figura <z.figura12@gmail.com>
+Message-ID: <dab34fd2-b494-8686-bcd7-68beeba4f386@gmail.com>
+Date:   Thu, 3 Jun 2021 23:51:41 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210603195924.361327-1-andrealmeid@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test script for exercising the cpuset v2 partition root state code.
+On 6/3/21 2:59 PM, André Almeida wrote:
+>   ** The wait on multiple problem
+> 
+>   The use case lies in the Wine implementation of the Windows NT interface
+>   WaitMultipleObjects. This Windows API function allows a thread to sleep
+>   waiting on the first of a set of event sources (mutexes, timers, signal,
+>   console input, etc) to signal.  Considering this is a primitive
+>   synchronization operation for Windows applications, being able to quickly
+>   signal events on the producer side, and quickly go to sleep on the
+>   consumer side is essential for good performance of those running over Wine.
+> 
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/Makefile       |   2 +-
- .../selftests/cgroup/test_cpuset_prs.sh       | 141 ++++++++++++++++++
- 2 files changed, 142 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
+I know this is part of the cover letter, but I really do want to clarify 
+that this isn't really accurate. The use case that this is referring to 
+is not "the Wine implementation of WaitForMultipleObjects", it is an 
+out-of-tree implementation of WaitForMultipleObjects that provides 
+improved performance compared to the in-tree implementation.
 
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index f027d933595b..e8ff3ffc3a43 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -4,7 +4,7 @@ CFLAGS += -Wall -pthread
- all:
- 
- TEST_FILES     := with_stress.sh
--TEST_PROGS     := test_stress.sh
-+TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
- TEST_GEN_PROGS = test_memcontrol
- TEST_GEN_PROGS += test_kmem
- TEST_GEN_PROGS += test_core
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-new file mode 100755
-index 000000000000..6a9c02c301b5
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -0,0 +1,141 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test for cpuset v2 partition root state (PRS)
-+#
-+# The sched verbose flag is set, if available, so that the console log
-+# can be examined for the correct setting of scheduling domain.
-+#
-+
-+skip_test() {
-+	echo "$1"
-+	echo "Test SKIPPED"
-+	exit 0
-+}
-+
-+[[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
-+
-+# Set sched verbose flag, if available
-+[[ -d /sys/kernel/debug/sched ]] && echo Y > /sys/kernel/debug/sched/verbose
-+
-+# Find cgroup v2 mount point
-+CGROUP2=$(mount | grep "^cgroup2" | awk -e '{print $3}')
-+[[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
-+
-+CPUS=$(lscpu | grep "^CPU(s)" | sed -e "s/.*:[[:space:]]*//")
-+[[ $CPUS -lt 4 ]] && skip_test "Test needs at least 4 cpus available!"
-+
-+cd $CGROUP2
-+echo +cpuset > cgroup.subtree_control
-+[[ -d test ]] || mkdir test
-+cd test
-+echo 2-3 > cpuset.cpus
-+TYPE=$(cat cpuset.cpus.partition)
-+[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
-+
-+console_msg()
-+{
-+	MSG=$1
-+	echo "$MSG"
-+	echo "" > /dev/console
-+	echo "$MSG" > /dev/console
-+	sleep 1
-+}
-+
-+test_partition()
-+{
-+	EXPECTED_VAL=$1
-+	echo $EXPECTED_VAL > cpuset.cpus.partition
-+	[[ $? -eq 0 ]] || exit 1
-+	ACTUAL_VAL=$(cat cpuset.cpus.partition)
-+	[[ $ACTUAL_VAL != $EXPECTED_VAL ]] && {
-+		echo "cpuset.cpus.partition: expect $EXPECTED_VAL, found $EXPECTED_VAL"
-+		echo "Test FAILED"
-+		exit 1
-+	}
-+}
-+
-+test_effective_cpus()
-+{
-+	EXPECTED_VAL=$1
-+	ACTUAL_VAL=$(cat cpuset.cpus.effective)
-+	[[ "$ACTUAL_VAL" != "$EXPECTED_VAL" ]] && {
-+		echo "cpuset.cpus.effective: expect '$EXPECTED_VAL', found '$EXPECTED_VAL'"
-+		echo "Test FAILED"
-+		exit 1
-+	}
-+}
-+
-+# Adding current process to cgroup.procs as a test
-+test_add_proc()
-+{
-+	OUTSTR="$1"
-+	ERRMSG=$((echo $$ > cgroup.procs) |& cat)
-+	echo $ERRMSG | grep -q "$OUTSTR"
-+	[[ $? -ne 0 ]] && {
-+		echo "cgroup.procs: expect '$OUTSTR', got '$ERRMSG'"
-+		echo "Test FAILED"
-+		exit 1
-+	}
-+	echo $$ > $CGROUP2/cgroup.procs	# Move out the task
-+}
-+
-+#
-+# Testing the new "root-nolb" partition root type
-+#
-+console_msg "Change from member to root"
-+test_partition root
-+
-+console_msg "Change from root to root-nolb"
-+test_partition root-nolb
-+
-+console_msg "Change from root-nolb to member"
-+test_partition member
-+
-+console_msg "Change from member to root-nolb"
-+test_partition root-nolb
-+
-+console_msg "Change from root-nolb to root"
-+test_partition root
-+
-+console_msg "Change from root to member"
-+test_partition member
-+
-+#
-+# Testing partition root with no cpu
-+#
-+console_msg "Distribute all cpus to child partition"
-+echo +cpuset > cgroup.subtree_control
-+test_partition root
-+
-+mkdir t1
-+cd t1
-+echo 2-3 > cpuset.cpus
-+test_partition root
-+test_effective_cpus 2-3
-+cd ..
-+test_effective_cpus ""
-+
-+console_msg "Moving task to partition test"
-+test_add_proc "No space left"
-+cd t1
-+test_add_proc ""
-+cd ..
-+
-+console_msg "Shrink and expand child partition"
-+cd t1
-+echo 2 > cpuset.cpus
-+cd ..
-+test_effective_cpus 3
-+cd t1
-+echo 2-3 > cpuset.cpus
-+cd ..
-+test_effective_cpus ""
-+
-+# Cleaning up
-+console_msg "Cleaning up"
-+echo $$ > $CGROUP2/cgroup.procs
-+[[ -d t1 ]] && rmdir t1
-+cd ..
-+rmdir test
-+echo "Test PASSED"
--- 
-2.18.1
+This is especially salient because:
 
+(1) this out-of-tree implementation is only in a small handful of cases 
+any more performant than a different out-of-tree implementation which 
+uses eventfd and poll() instead;
+
+(2) these implementations will remain out-of-tree due to compatibility 
+and robustness problems;
+
+(3) I believe there is potential for an upstreamable implementation 
+which does not rely on futex or futex2.
