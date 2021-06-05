@@ -2,227 +2,380 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9A339C965
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 17:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE1039C99C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 17:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbhFEPNx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Jun 2021 11:13:53 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:37381 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbhFEPNv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Jun 2021 11:13:51 -0400
-Received: (Authenticated sender: n@nfraprado.net)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 8D0E020002;
-        Sat,  5 Jun 2021 15:11:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nfraprado.net;
-        s=gm1; t=1622905920;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vv4/s0oEatJqm6xOhfhv4SCtKvstG4qCMEYIIpldPy0=;
-        b=c3g7o4uEF0JTLo7vMH1ksgmeTVLRz9pP7cqUyB/h+W5DpIymRZemkGu49jcerS4uE/XJQf
-        trJLU85vbJBVfZWGFuOsMTCnYVhfSXPxbndF40vAAuKJ0CB9s0KsBjrJ/9zkVZxSK1kZX7
-        WPbrr1BsDbMi3udCw9RD6VTWhB3rbd/s8FPEH1mqg/QoOWJo+2T2Gjzqe5dJfYUoJ5uWJi
-        mYxE058i/H4Cq0cW3G8Q81eikJU5bVOUF0NbPJeQ/P3UbZMAhOkhJpLRUvntlO2RvnJ5ez
-        x1AXAnbGKQtYTh67G2z/msrTC09lBJ7xVdF4ukLxuwInJgcg+Ro9QEyCJg7rbQ==
-Date:   Sat, 5 Jun 2021 12:11:09 -0300
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <n@nfraprado.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        coresight@lists.linaro.org, devicetree@vger.kernel.org,
-        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
-Message-ID: <20210605151109.axm3wzbcstsyxczp@notapiano>
-References: <cover.1622898327.git.mchehab+huawei@kernel.org>
+        id S229978AbhFEPu7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Jun 2021 11:50:59 -0400
+Received: from mout.gmx.net ([212.227.15.15]:57561 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229933AbhFEPu7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 5 Jun 2021 11:50:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1622908090;
+        bh=NR7CetDZEJKb4urZklHxpJH9CQk1kXh04lqUmzV2VFQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Z14fX/BDAt8rlYVCQ2W1JNECZ3Nbr3z0zf696jh81htz40qSfRY0BFqa+OTqs6UQc
+         hvOtA2fzDnez1/y9ZLgQArJDKGPCzM/rXnk57dikoUY9XQfyIovRJX/elMzmWInjJv
+         6DwSejwqkhFwEpT48eX/PirFuddTqMi8EzKAWEEU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([83.52.228.41]) by mail.gmx.net
+ (mrgmx005 [212.227.17.184]) with ESMTPSA (Nemesis) id
+ 1M3DJv-1loAYJ1jtF-003cjU; Sat, 05 Jun 2021 17:48:10 +0200
+From:   John Wood <john.wood@gmx.com>
+To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     John Wood <john.wood@gmx.com>, Andi Kleen <ak@linux.intel.com>,
+        valdis.kletnieks@vt.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: [PATCH v8 2/8] security/brute: Define a LSM and add sysctl attributes
+Date:   Sat,  5 Jun 2021 17:03:59 +0200
+Message-Id: <20210605150405.6936-3-john.wood@gmx.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210605150405.6936-1-john.wood@gmx.com>
+References: <20210605150405.6936-1-john.wood@gmx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1622898327.git.mchehab+huawei@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:JXaQJfGTcSR0lvHjmBWsXjH1ZKVaVjnn0UvOhP+EbAQRPkBCgI1
+ DA5IRh+UNu+/Foy/9XrfO0tedY3Jna3eK8GYRvg5YfgDHkZ7aOB3/f0QHPN7+Xwm1B4ggPX
+ oF4zge1gUtstoNA8epEYi/+IrvFgxXlA4pXzn/AIm0P9Bl8GLGwwVUWvJtu5nqZzbSYriSE
+ +2Dl2rhtjTEbB952r9mdQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cIMC9mC3TMU=:NSGpjSHDR71UOOzUcq+D8h
+ Fvx5o+hh92fPHWJCoZImAzaaAYFpFyeKLItdngS+TtLrwYzlxS5ehrb0bG2LB3XMbKLFnv5PN
+ 86dABR0nSTk4K5FhenkeF1vC+e3YB0zPVW1D8a/L+MHgpcaFAukMHa6/Xd2qZ0s9gumf5ig2E
+ aFn+4Pm19jsGKmko6OkS6LGmhJC2VwimAPKxzREORk+DP38nR0F2i6aSoNNFomvi4iu/JQ8af
+ AX2dWNn34sgzR2i0YxwZ8uhnXaJFeeh2SQBf/NxU2HXBG7glOAXU7S56KabsefLvuNI6AI63h
+ u8ZvIvGsTYpnMB7VhiuhMn+ASse+6vwL256Z2pVvJvpwkdl5wnbwPT5L72/3x0aNS9ovS6zW3
+ Cn2SFf63wFtkEnZRqiALV/MjmUNCYwFrP8wnIXLprTMCV8tXD3EfpRKBf6GtJ0v7O6Kpx+4if
+ Al0gDypbLmy17cwltnXRkgQEvbwRew2GjgCsc+KDzHnOXtgn7XT6AvWkyVR9McpKuk9fFIvXQ
+ Owgbv6OroIa/dya2wgqLir3LJlYDY30Rs7z+U5ppuHxm7P49ZPyAwGDaQOaS9KPyPVrhuSkzt
+ smBNh4Nr7Kb6gwyJwXSKj4jcZEWLR8pvUlUSgqFXv4jOWL4paYEf4STwbgo0cQ1/wq8PTN3Aj
+ 2OItlA9Enz/vdLPDvU1gO3EQeGyvTtm/nMU2IbvVh/sl6/7rHzOIej1+Lr9FCEklzzvlsCr7t
+ K5tXszJ84GAtLCxVMORdG4gBi2cCfPWZB5SrByb9lRO7AD7DSAnk+JU3dTuzRbhar1mgxlCJR
+ FoXUuG/OzuXs20SRiZBnSKPHTfMnHtTs+0eGJ8/w+B717zAQUWyZgp+3UQPyyyC5IsxT9JmCZ
+ Tac1sRS76dMFqsIBzpvBcsvW4PkMoodb47xx67mLHqQk4K5xH7wb2X0HhoUmB4EmASOkhAN+i
+ VgySvfPQLrQ+gYDr9NYu++wjRGK1Pjtld6lDxH5TCy7H0iY4WOaGoIGjpn1exHdSn9Ux3Zh/Z
+ 0TF1EvxFSXr8CfmUXLr2i92Ix//Yxg/C/pof6d9SQ+neM6joiowcHIDTaW6ibQ9qZnkcDdkZy
+ 4MJn6crPtaslDjYPO3bcXnVV5uPB8XftL+X
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mauro,
+Add a new Kconfig file to define a menu entry under "Security options"
+to enable the "Fork brute force attack detection and mitigation"
+feature.
 
-On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
-> As discussed at:
-> 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
-> 
-> It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
-> automarkup.py extension should handle it automatically, on most cases.
-> 
-> There are a couple of exceptions to this rule:
-> 
-> 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
-> 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
-> 
-> It should also be noticed that automarkup.py has currently an issue:
-> if one use a markup like:
-> 
-> 	Documentation/dev-tools/kunit/api/test.rst
-> 	  - documents all of the standard testing API excluding mocking
-> 	    or mocking related features.
-> 
-> or, even:
-> 
-> 	Documentation/dev-tools/kunit/api/test.rst
-> 	    documents all of the standard testing API excluding mocking
-> 	    or mocking related features.
-> 	
-> The automarkup.py will simply ignore it. Not sure why. This patch series
-> avoid the above patterns (which is present only on 4 files), but it would be
-> nice to have a followup patch fixing the issue at automarkup.py.
+The detection of a brute force attack can be based on the number of
+faults per application and its crash rate.
 
-What I think is happening here is that we're using rST's syntax for definition
-lists [1]. automarkup.py ignores literal nodes, and perhaps a definition is
-considered a literal by Sphinx. Adding a blank line after the Documentation/...
-or removing the additional indentation makes it work, like you did in your
-2nd and 3rd patch, since then it's not a definition anymore, although then the
-visual output is different as well.
+There are two types of brute force attacks that can be detected. The
+first one is a slow brute force attack that is detected if the maximum
+number of faults per fork hierarchy is reached. The second type is a
+fast brute force attack that is detected if the application crash period
+falls below a certain threshold.
 
-I'm not sure this is something we need to fix. Does it make sense to use
-definition lists for links like that? If it does, I guess one option would be to
-whitelist definition lists so they aren't ignored by automarkup, but I feel
-this could get ugly really quickly.
+The application crash period must be a value that is not prone to change
+due to spurious data and follows the real crash period. So, to compute
+it, the exponential moving average (EMA) will be used.
 
-FWIW note that it's also possible to use relative paths to docs with automarkup.
+This kind of average defines a weight (between 0 and 1) for the new
+value to add and applies the remainder of the weight to the current
+average value. This way, some spurious data will not excessively modify
+the average and only if the new values are persistent, the moving
+average will tend towards them.
 
-Thanks,
-Nícolas
+Mathematically the application crash period's EMA can be expressed as
+follows:
 
-[1] https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#definition-lists
+period_ema =3D period * weight + period_ema * (1 - weight)
 
-> 
-> On this series:
-> 
-> Patch 1 manually adjust the references inside driver-api/pm/devices.rst,
-> as there it uses :file:`foo` to refer to some Documentation/ files;
-> 
-> Patch 2 converts a table at Documentation/dev-tools/kunit/api/index.rst
-> into a list, carefully avoiding the 
-> 
-> Patch 3 converts the cross-references at the media documentation, also
-> avoiding the automarkup.py bug;
-> 
-> Patches 4-34 convert the other occurrences via a replace script. They were
-> manually edited, in order to honour 80-columns where possible.
-> 
-> I did a diff between the Sphinx 2.4.4 output before and after this patch
-> series in order to double-check that all converted Documentation/ 
-> references will produce <a href=<foo>.rst>foo title</a> tags.
-> 
-> Mauro Carvalho Chehab (34):
->   docs: devices.rst: better reference documentation docs
->   docs: dev-tools: kunit: don't use a table for docs name
->   media: docs: */media/index.rst: don't use ReST doc:`foo`
->   media: userspace-api: avoid using ReST :doc:`foo` markup
->   media: driver-api: drivers: avoid using ReST :doc:`foo` markup
->   media: admin-guide: avoid using ReST :doc:`foo` markup
->   docs: admin-guide: pm: avoid using ReSt :doc:`foo` markup
->   docs: admin-guide: hw-vuln: avoid using ReST :doc:`foo` markup
->   docs: admin-guide: sysctl: avoid using ReST :doc:`foo` markup
->   docs: block: biodoc.rst: avoid using ReSt :doc:`foo` markup
->   docs: bpf: bpf_lsm.rst: avoid using ReSt :doc:`foo` markup
->   docs: core-api: avoid using ReSt :doc:`foo` markup
->   docs: dev-tools: testing-overview.rst: avoid using ReSt :doc:`foo`
->     markup
->   docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
->   docs: devicetree: bindings: submitting-patches.rst: avoid using ReSt
->     :doc:`foo` markup
->   docs: doc-guide: avoid using ReSt :doc:`foo` markup
->   docs: driver-api: avoid using ReSt :doc:`foo` markup
->   docs: driver-api: gpio: using-gpio.rst: avoid using ReSt :doc:`foo`
->     markup
->   docs: driver-api: surface_aggregator: avoid using ReSt :doc:`foo`
->     markup
->   docs: driver-api: usb: avoid using ReSt :doc:`foo` markup
->   docs: firmware-guide: acpi: avoid using ReSt :doc:`foo` markup
->   docs: hwmon: adm1177.rst: avoid using ReSt :doc:`foo` markup
->   docs: i2c: avoid using ReSt :doc:`foo` markup
->   docs: kernel-hacking: hacking.rst: avoid using ReSt :doc:`foo` markup
->   docs: networking: devlink: avoid using ReSt :doc:`foo` markup
->   docs: PCI: endpoint: pci-endpoint-cfs.rst: avoid using ReSt :doc:`foo`
->     markup
->   docs: PCI: pci.rst: avoid using ReSt :doc:`foo` markup
->   docs: process: submitting-patches.rst: avoid using ReSt :doc:`foo`
->     markup
->   docs: security: landlock.rst: avoid using ReSt :doc:`foo` markup
->   docs: trace: coresight: coresight.rst: avoid using ReSt :doc:`foo`
->     markup
->   docs: trace: ftrace.rst: avoid using ReSt :doc:`foo` markup
->   docs: userspace-api: landlock.rst: avoid using ReSt :doc:`foo` markup
->   docs: virt: kvm: s390-pv-boot.rst: avoid using ReSt :doc:`foo` markup
->   docs: x86: avoid using ReSt :doc:`foo` markup
-> 
->  .../PCI/endpoint/pci-endpoint-cfs.rst         |  2 +-
->  Documentation/PCI/pci.rst                     |  6 +--
->  .../special-register-buffer-data-sampling.rst |  3 +-
->  Documentation/admin-guide/media/bt8xx.rst     | 15 ++++----
->  Documentation/admin-guide/media/bttv.rst      | 21 ++++++-----
->  Documentation/admin-guide/media/index.rst     | 12 +++---
->  Documentation/admin-guide/media/saa7134.rst   |  3 +-
->  Documentation/admin-guide/pm/intel_idle.rst   | 16 +++++---
->  Documentation/admin-guide/pm/intel_pstate.rst |  9 +++--
->  Documentation/admin-guide/sysctl/abi.rst      |  2 +-
->  Documentation/admin-guide/sysctl/kernel.rst   | 37 ++++++++++---------
->  Documentation/block/biodoc.rst                |  2 +-
->  Documentation/bpf/bpf_lsm.rst                 | 13 ++++---
->  .../core-api/bus-virt-phys-mapping.rst        |  2 +-
->  Documentation/core-api/dma-api.rst            |  5 ++-
->  Documentation/core-api/dma-isa-lpc.rst        |  2 +-
->  Documentation/core-api/index.rst              |  4 +-
->  Documentation/dev-tools/kunit/api/index.rst   |  8 ++--
->  Documentation/dev-tools/kunit/faq.rst         |  2 +-
->  Documentation/dev-tools/kunit/index.rst       | 14 +++----
->  Documentation/dev-tools/kunit/start.rst       |  6 +--
->  Documentation/dev-tools/kunit/tips.rst        |  5 ++-
->  Documentation/dev-tools/kunit/usage.rst       |  8 ++--
->  Documentation/dev-tools/testing-overview.rst  | 16 ++++----
->  .../bindings/submitting-patches.rst           | 11 +++---
->  Documentation/doc-guide/contributing.rst      |  8 ++--
->  Documentation/driver-api/gpio/using-gpio.rst  |  4 +-
->  Documentation/driver-api/ioctl.rst            |  2 +-
->  .../driver-api/media/drivers/bttv-devel.rst   |  2 +-
->  Documentation/driver-api/media/index.rst      | 10 +++--
->  Documentation/driver-api/pm/devices.rst       |  8 ++--
->  .../surface_aggregator/clients/index.rst      |  3 +-
->  .../surface_aggregator/internal.rst           | 15 ++++----
->  .../surface_aggregator/overview.rst           |  6 ++-
->  Documentation/driver-api/usb/dma.rst          |  6 +--
->  .../acpi/dsd/data-node-references.rst         |  3 +-
->  .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
->  .../firmware-guide/acpi/enumeration.rst       |  7 ++--
->  Documentation/hwmon/adm1177.rst               |  3 +-
->  Documentation/i2c/instantiating-devices.rst   |  2 +-
->  Documentation/i2c/old-module-parameters.rst   |  3 +-
->  Documentation/i2c/smbus-protocol.rst          |  4 +-
->  Documentation/kernel-hacking/hacking.rst      |  4 +-
->  .../networking/devlink/devlink-region.rst     |  2 +-
->  .../networking/devlink/devlink-trap.rst       |  4 +-
->  Documentation/process/submitting-patches.rst  | 32 ++++++++--------
->  Documentation/security/landlock.rst           |  3 +-
->  Documentation/trace/coresight/coresight.rst   |  8 ++--
->  Documentation/trace/ftrace.rst                |  2 +-
->  Documentation/userspace-api/landlock.rst      | 11 +++---
->  .../userspace-api/media/glossary.rst          |  2 +-
->  Documentation/userspace-api/media/index.rst   | 12 +++---
->  Documentation/virt/kvm/s390-pv-boot.rst       |  2 +-
->  Documentation/x86/boot.rst                    |  4 +-
->  Documentation/x86/mtrr.rst                    |  2 +-
->  55 files changed, 217 insertions(+), 183 deletions(-)
-> 
-> -- 
-> 2.31.1
-> 
-> 
+Moreover, it is important to note that a minimum number of faults is
+needed to guarantee a trend in the crash period when the EMA is used.
+
+So, based on all the previous information define a LSM with five sysctl
+attributes that will be used to fine tune the attack detection.
+
+ema_weight_numerator
+ema_weight_denominator
+max_faults
+min_faults
+crash_period_threshold
+
+This patch is a previous step on the way to fine tune the attack
+detection.
+
+Signed-off-by: John Wood <john.wood@gmx.com>
+=2D--
+ security/Kconfig        |  11 +--
+ security/Makefile       |   2 +
+ security/brute/Kconfig  |  14 ++++
+ security/brute/Makefile |   2 +
+ security/brute/brute.c  | 147 ++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 171 insertions(+), 5 deletions(-)
+ create mode 100644 security/brute/Kconfig
+ create mode 100644 security/brute/Makefile
+ create mode 100644 security/brute/brute.c
+
+diff --git a/security/Kconfig b/security/Kconfig
+index 0ced7fd33e4d..2df1727f2c2c 100644
+=2D-- a/security/Kconfig
++++ b/security/Kconfig
+@@ -241,6 +241,7 @@ source "security/lockdown/Kconfig"
+ source "security/landlock/Kconfig"
+
+ source "security/integrity/Kconfig"
++source "security/brute/Kconfig"
+
+ choice
+ 	prompt "First legacy 'major LSM' to be initialized"
+@@ -278,11 +279,11 @@ endchoice
+
+ config LSM
+ 	string "Ordered list of enabled LSMs"
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinu=
+x,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,sel=
+inux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" =
+if DEFAULT_SECURITY_TOMOYO
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFA=
+ULT_SECURITY_DAC
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smac=
+k,tomoyo,apparmor,bpf"
++	default "landlock,lockdown,brute,yama,loadpin,safesetid,integrity,smack,=
+selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
++	default "landlock,lockdown,brute,yama,loadpin,safesetid,integrity,apparm=
+or,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
++	default "landlock,lockdown,brute,yama,loadpin,safesetid,integrity,tomoyo=
+,bpf" if DEFAULT_SECURITY_TOMOYO
++	default "landlock,lockdown,brute,yama,loadpin,safesetid,integrity,bpf" i=
+f DEFAULT_SECURITY_DAC
++	default "landlock,lockdown,brute,yama,loadpin,safesetid,integrity,selinu=
+x,smack,tomoyo,apparmor,bpf"
+ 	help
+ 	  A comma-separated list of LSMs, in initialization order.
+ 	  Any LSMs left off this list will be ignored. This can be
+diff --git a/security/Makefile b/security/Makefile
+index 47e432900e24..94d325256413 100644
+=2D-- a/security/Makefile
++++ b/security/Makefile
+@@ -14,6 +14,7 @@ subdir-$(CONFIG_SECURITY_SAFESETID)    +=3D safesetid
+ subdir-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+=3D lockdown
+ subdir-$(CONFIG_BPF_LSM)		+=3D bpf
+ subdir-$(CONFIG_SECURITY_LANDLOCK)	+=3D landlock
++subdir-$(CONFIG_SECURITY_FORK_BRUTE)	+=3D brute
+
+ # always enable default capabilities
+ obj-y					+=3D commoncap.o
+@@ -34,6 +35,7 @@ obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+=3D lockdown/
+ obj-$(CONFIG_CGROUPS)			+=3D device_cgroup.o
+ obj-$(CONFIG_BPF_LSM)			+=3D bpf/
+ obj-$(CONFIG_SECURITY_LANDLOCK)		+=3D landlock/
++obj-$(CONFIG_SECURITY_FORK_BRUTE)	+=3D brute/
+
+ # Object integrity file lists
+ subdir-$(CONFIG_INTEGRITY)		+=3D integrity
+diff --git a/security/brute/Kconfig b/security/brute/Kconfig
+new file mode 100644
+index 000000000000..5da314d221aa
+=2D-- /dev/null
++++ b/security/brute/Kconfig
+@@ -0,0 +1,14 @@
++# SPDX-License-Identifier: GPL-2.0
++config SECURITY_FORK_BRUTE
++	bool "Fork brute force attack detection and mitigation"
++	depends on SECURITY
++	help
++	  This is an LSM that stops any fork brute force attack against
++	  vulnerable userspace processes. The detection method is based on
++	  the application crash period and as a mitigation procedure all the
++	  offending tasks are killed. Also, the executable file involved in the
++	  attack will be marked as "not allowed" and new execve system calls
++	  using this file will fail. Like capabilities, this security module
++	  stacks with other LSMs.
++
++	  If you are unsure how to answer this question, answer N.
+diff --git a/security/brute/Makefile b/security/brute/Makefile
+new file mode 100644
+index 000000000000..d3f233a132a9
+=2D-- /dev/null
++++ b/security/brute/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_SECURITY_FORK_BRUTE) +=3D brute.o
+diff --git a/security/brute/brute.c b/security/brute/brute.c
+new file mode 100644
+index 000000000000..0edb89a58ab0
+=2D-- /dev/null
++++ b/security/brute/brute.c
+@@ -0,0 +1,147 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/lsm_hooks.h>
++#include <linux/sysctl.h>
++
++/**
++ * DOC: brute_ema_weight_numerator
++ *
++ * Weight's numerator of EMA.
++ */
++static unsigned int brute_ema_weight_numerator __read_mostly =3D 7;
++
++/**
++ * DOC: brute_ema_weight_denominator
++ *
++ * Weight's denominator of EMA.
++ */
++static unsigned int brute_ema_weight_denominator __read_mostly =3D 10;
++
++/**
++ * DOC: brute_max_faults
++ *
++ * Maximum number of faults.
++ *
++ * If a brute force attack is running slowly for a long time, the applica=
+tion
++ * crash period's EMA is not suitable for the detection. This type of att=
+ack
++ * must be detected using a maximum number of faults.
++ */
++static unsigned int brute_max_faults __read_mostly =3D 200;
++
++/**
++ * DOC: brute_min_faults
++ *
++ * Minimum number of faults.
++ *
++ * The application crash period's EMA cannot be used until a minimum numb=
+er of
++ * data has been applied to it. This constraint allows getting a trend wh=
+en this
++ * moving average is used.
++ */
++static unsigned int brute_min_faults __read_mostly =3D 5;
++
++/**
++ * DOC: brute_crash_period_threshold
++ *
++ * Application crash period threshold.
++ *
++ * A fast brute force attack is detected when the application crash perio=
+d falls
++ * below this threshold. The units are expressed in seconds.
++ */
++static unsigned int brute_crash_period_threshold __read_mostly =3D 30;
++
++#ifdef CONFIG_SYSCTL
++static unsigned int uint_max =3D UINT_MAX;
++#define SYSCTL_UINT_MAX (&uint_max)
++
++/*
++ * brute_sysctl_path - Sysctl attributes path.
++ */
++static struct ctl_path brute_sysctl_path[] =3D {
++	{ .procname =3D "kernel", },
++	{ .procname =3D "brute", },
++	{ }
++};
++
++/*
++ * brute_sysctl_table - Sysctl attributes.
++ */
++static struct ctl_table brute_sysctl_table[] =3D {
++	{
++		.procname	=3D "ema_weight_numerator",
++		.data		=3D &brute_ema_weight_numerator,
++		.maxlen		=3D sizeof(brute_ema_weight_numerator),
++		.mode		=3D 0644,
++		.proc_handler	=3D proc_douintvec_minmax,
++		.extra1		=3D SYSCTL_ZERO,
++		.extra2		=3D &brute_ema_weight_denominator,
++	},
++	{
++		.procname	=3D "ema_weight_denominator",
++		.data		=3D &brute_ema_weight_denominator,
++		.maxlen		=3D sizeof(brute_ema_weight_denominator),
++		.mode		=3D 0644,
++		.proc_handler	=3D proc_douintvec_minmax,
++		.extra1		=3D &brute_ema_weight_numerator,
++		.extra2		=3D SYSCTL_UINT_MAX,
++	},
++	{
++		.procname	=3D "max_faults",
++		.data		=3D &brute_max_faults,
++		.maxlen		=3D sizeof(brute_max_faults),
++		.mode		=3D 0644,
++		.proc_handler	=3D proc_douintvec_minmax,
++		.extra1		=3D &brute_min_faults,
++		.extra2		=3D SYSCTL_UINT_MAX,
++	},
++	{
++		.procname	=3D "min_faults",
++		.data		=3D &brute_min_faults,
++		.maxlen		=3D sizeof(brute_min_faults),
++		.mode		=3D 0644,
++		.proc_handler	=3D proc_douintvec_minmax,
++		.extra1		=3D SYSCTL_ONE,
++		.extra2		=3D &brute_max_faults,
++	},
++	{
++		.procname	=3D "crash_period_threshold",
++		.data		=3D &brute_crash_period_threshold,
++		.maxlen		=3D sizeof(brute_crash_period_threshold),
++		.mode		=3D 0644,
++		.proc_handler	=3D proc_douintvec_minmax,
++		.extra1		=3D SYSCTL_ONE,
++		.extra2		=3D SYSCTL_UINT_MAX,
++	},
++	{ }
++};
++
++/**
++ * brute_init_sysctl() - Initialize the sysctl interface.
++ */
++static void __init brute_init_sysctl(void)
++{
++	if (!register_sysctl_paths(brute_sysctl_path, brute_sysctl_table))
++		panic("sysctl registration failed\n");
++}
++
++#else
++static inline void brute_init_sysctl(void) { }
++#endif /* CONFIG_SYSCTL */
++
++/**
++ * brute_init() - Initialize the brute LSM.
++ *
++ * Return: Always returns zero.
++ */
++static int __init brute_init(void)
++{
++	pr_info("becoming mindful\n");
++	brute_init_sysctl();
++	return 0;
++}
++
++DEFINE_LSM(brute) =3D {
++	.name =3D KBUILD_MODNAME,
++	.init =3D brute_init,
++};
+=2D-
+2.25.1
+
