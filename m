@@ -2,132 +2,282 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6113A39CAA5
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 21:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F6139CB56
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 23:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbhFETKg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Jun 2021 15:10:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50012 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229994AbhFETKd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Jun 2021 15:10:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C76CD61073;
-        Sat,  5 Jun 2021 19:08:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622920125;
-        bh=tTJEbMfaqLm+MQIdZ6b17P+wEJbY3/9z+X1SQ27izYw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JkQm3FNW5iQVYmgT/Gt9sN9r1LoTem2cqXUl0EjU+fiv82NY1pLAYU3Bw6unpEki9
-         JXsjuSgQIFHSyh38wM93iu29TbJXvLcRhJNrLaI3uPlTWuv27IKsdkFioKL4INshFP
-         X6wWHZCeoF+O8iMlmhkcXx84GYrwHdtLzik9jQie2+N1FEL3MtfoR0dRqJZtRSpa3B
-         75ZFgP9ntAFhWGSiwsFlzS8kJV4vdjx4gNxci+2IKGEj7omJo8VOW1W/h4rNmExnEf
-         Cyd+38BTHzfhwZ6TVmr+dpfprstE/6hddhXmgX9dnEe4dYMoT8QPViKF/MrmqKI8pR
-         fNqEWypa3GLOg==
-Date:   Sat, 5 Jun 2021 21:08:36 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     "=?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <n@nfraprado.net>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        coresight@lists.linaro.org, devicetree@vger.kernel.org,
-        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
-Message-ID: <20210605210836.540577d4@coco.lan>
-In-Reply-To: <20210605151109.axm3wzbcstsyxczp@notapiano>
-References: <cover.1622898327.git.mchehab+huawei@kernel.org>
-        <20210605151109.axm3wzbcstsyxczp@notapiano>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S230078AbhFEVyQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Jun 2021 17:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229998AbhFEVyP (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 5 Jun 2021 17:54:15 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AE0C061767;
+        Sat,  5 Jun 2021 14:52:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 30D1C1F432FC
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
+        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
+        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Subject: [PATCH] lib: Convert UUID runtime test to KUnit
+Date:   Sat,  5 Jun 2021 18:52:15 -0300
+Message-Id: <20210605215215.171165-1-andrealmeid@collabora.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Em Sat, 5 Jun 2021 12:11:09 -0300
-N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
+Remove custom functions for testing and use KUnit framework. Test cases
+and test data remains the same.
 
-> Hi Mauro,
->=20
-> On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
-> > As discussed at:
-> > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
-> >=20
-> > It is better to avoid using :doc:`foo` to refer to Documentation/foo.rs=
-t, as the
-> > automarkup.py extension should handle it automatically, on most cases.
-> >=20
-> > There are a couple of exceptions to this rule:
-> >=20
-> > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
-> > 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
-> >=20
-> > It should also be noticed that automarkup.py has currently an issue:
-> > if one use a markup like:
-> >=20
-> > 	Documentation/dev-tools/kunit/api/test.rst
-> > 	  - documents all of the standard testing API excluding mocking
-> > 	    or mocking related features.
-> >=20
-> > or, even:
-> >=20
-> > 	Documentation/dev-tools/kunit/api/test.rst
-> > 	    documents all of the standard testing API excluding mocking
-> > 	    or mocking related features.
-> > =09
-> > The automarkup.py will simply ignore it. Not sure why. This patch series
-> > avoid the above patterns (which is present only on 4 files), but it wou=
-ld be
-> > nice to have a followup patch fixing the issue at automarkup.py. =20
->=20
-> What I think is happening here is that we're using rST's syntax for defin=
-ition
-> lists [1]. automarkup.py ignores literal nodes, and perhaps a definition =
-is
-> considered a literal by Sphinx. Adding a blank line after the Documentati=
-on/...
-> or removing the additional indentation makes it work, like you did in your
-> 2nd and 3rd patch, since then it's not a definition anymore, although the=
-n the
-> visual output is different as well.
+Signed-off-by: André Almeida <andrealmeid@collabora.com>
+---
+ lib/Kconfig.debug |  13 +++--
+ lib/Makefile      |   2 +-
+ lib/test_uuid.c   | 131 ++++++++++++++++++----------------------------
+ 3 files changed, 62 insertions(+), 84 deletions(-)
 
-A literal has a different output. I think that this is not the case, but I=
-=20
-didn't check the python code from docutils/Sphinx.
-=20
-> I'm not sure this is something we need to fix. Does it make sense to use
-> definition lists for links like that? If it does, I guess one option woul=
-d be to
-> whitelist definition lists so they aren't ignored by automarkup, but I fe=
-el
-> this could get ugly really quickly.
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 678c13967580..e8bd574d7a67 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2188,9 +2188,6 @@ config TEST_BITMAP
+ 
+ 	  If unsure, say N.
+ 
+-config TEST_UUID
+-	tristate "Test functions located in the uuid module at runtime"
+-
+ config TEST_XARRAY
+ 	tristate "Test the XArray code at runtime"
+ 
+@@ -2429,6 +2426,16 @@ config BITS_TEST
+ 
+ 	  If unsure, say N.
+ 
++config TEST_UUID
++	tristate "Unit test for UUID" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This builds the UUID unit test.
++	  Tests parsing functions for UUID/GUID strings.
++
++	  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index 2cc359ec1fdd..6ef3c614409d 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -85,7 +85,6 @@ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
+ obj-$(CONFIG_TEST_PRINTF) += test_printf.o
+ obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
+ obj-$(CONFIG_TEST_STRSCPY) += test_strscpy.o
+-obj-$(CONFIG_TEST_UUID) += test_uuid.o
+ obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
+ obj-$(CONFIG_TEST_PARMAN) += test_parman.o
+ obj-$(CONFIG_TEST_KMOD) += test_kmod.o
+@@ -354,5 +353,6 @@ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ obj-$(CONFIG_BITS_TEST) += test_bits.o
+ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
++obj-$(CONFIG_TEST_UUID) += test_uuid.o
+ 
+ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+diff --git a/lib/test_uuid.c b/lib/test_uuid.c
+index cd819c397dc7..45c919b0d724 100644
+--- a/lib/test_uuid.c
++++ b/lib/test_uuid.c
+@@ -1,21 +1,20 @@
++// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
+ /*
+- * Test cases for lib/uuid.c module.
++ * Unit tests for lib/uuid.c module.
++ *
++ * Copyright 2016 Andy Shevchenko <andriy.shevchenko@linux.intel.com>
++ * Copyright 2021 André Almeida <andrealmeid@riseup.net>
+  */
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/init.h>
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/string.h>
++#include <kunit/test.h>
+ #include <linux/uuid.h>
+ 
+-struct test_uuid_data {
++struct test_data {
+ 	const char *uuid;
+ 	guid_t le;
+ 	uuid_t be;
+ };
+ 
+-static const struct test_uuid_data test_uuid_test_data[] = {
++static const struct test_data correct_data[] = {
+ 	{
+ 		.uuid = "c33f4995-3701-450e-9fbf-206a2e98e576",
+ 		.le = GUID_INIT(0xc33f4995, 0x3701, 0x450e, 0x9f, 0xbf, 0x20, 0x6a, 0x2e, 0x98, 0xe5, 0x76),
+@@ -33,101 +32,73 @@ static const struct test_uuid_data test_uuid_test_data[] = {
+ 	},
+ };
+ 
+-static const char * const test_uuid_wrong_data[] = {
++static const char * const wrong_data[] = {
+ 	"c33f4995-3701-450e-9fbf206a2e98e576 ",	/* no hyphen(s) */
+ 	"64b4371c-77c1-48f9-8221-29f054XX023b",	/* invalid character(s) */
+ 	"0cb4ddff-a545-4401-9d06-688af53e",	/* not enough data */
+ };
+ 
+-static unsigned total_tests __initdata;
+-static unsigned failed_tests __initdata;
+-
+-static void __init test_uuid_failed(const char *prefix, bool wrong, bool be,
+-				    const char *data, const char *actual)
++static void uuid_correct_le(struct kunit *test)
+ {
+-	pr_err("%s test #%u %s %s data: '%s'\n",
+-	       prefix,
+-	       total_tests,
+-	       wrong ? "passed on wrong" : "failed on",
+-	       be ? "BE" : "LE",
+-	       data);
+-	if (actual && *actual)
+-		pr_err("%s test #%u actual data: '%s'\n",
+-		       prefix,
+-		       total_tests,
+-		       actual);
+-	failed_tests++;
++	guid_t le;
++	const struct test_data *data = (const struct test_data *)(test->param_value);
++
++	KUNIT_ASSERT_EQ(test, guid_parse(data->uuid, &le), 0);
++	KUNIT_EXPECT_TRUE(test, guid_equal(&data->le, &le));
+ }
+ 
+-static void __init test_uuid_test(const struct test_uuid_data *data)
++static void uuid_correct_be(struct kunit *test)
+ {
+-	guid_t le;
+ 	uuid_t be;
+-	char buf[48];
+-
+-	/* LE */
+-	total_tests++;
+-	if (guid_parse(data->uuid, &le))
+-		test_uuid_failed("conversion", false, false, data->uuid, NULL);
+-
+-	total_tests++;
+-	if (!guid_equal(&data->le, &le)) {
+-		sprintf(buf, "%pUl", &le);
+-		test_uuid_failed("cmp", false, false, data->uuid, buf);
+-	}
+-
+-	/* BE */
+-	total_tests++;
+-	if (uuid_parse(data->uuid, &be))
+-		test_uuid_failed("conversion", false, true, data->uuid, NULL);
+-
+-	total_tests++;
+-	if (!uuid_equal(&data->be, &be)) {
+-		sprintf(buf, "%pUb", &be);
+-		test_uuid_failed("cmp", false, true, data->uuid, buf);
+-	}
++	const struct test_data *data = (const struct test_data *)(test->param_value);
++
++	KUNIT_ASSERT_EQ(test, uuid_parse(data->uuid, &be), 0);
++	KUNIT_EXPECT_TRUE(test, uuid_equal(&data->be, &be));
+ }
+ 
+-static void __init test_uuid_wrong(const char *data)
++static void uuid_wrong_le(struct kunit *test)
+ {
+ 	guid_t le;
+-	uuid_t be;
+-
+-	/* LE */
+-	total_tests++;
+-	if (!guid_parse(data, &le))
+-		test_uuid_failed("negative", true, false, data, NULL);
++	const char *data = (const char *)(test->param_value);
+ 
+-	/* BE */
+-	total_tests++;
+-	if (!uuid_parse(data, &be))
+-		test_uuid_failed("negative", true, true, data, NULL);
++	KUNIT_ASSERT_NE(test, guid_parse(data, &le), 0);
+ }
+ 
+-static int __init test_uuid_init(void)
++static void uuid_wrong_be(struct kunit *test)
+ {
+-	unsigned int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(test_uuid_test_data); i++)
+-		test_uuid_test(&test_uuid_test_data[i]);
+-
+-	for (i = 0; i < ARRAY_SIZE(test_uuid_wrong_data); i++)
+-		test_uuid_wrong(test_uuid_wrong_data[i]);
++	uuid_t be;
++	const char *data = (const char *)(test->param_value);
+ 
+-	if (failed_tests == 0)
+-		pr_info("all %u tests passed\n", total_tests);
+-	else
+-		pr_err("failed %u out of %u tests\n", failed_tests, total_tests);
++	KUNIT_ASSERT_NE(test, uuid_parse(data, &be), 0);
++}
+ 
+-	return failed_tests ? -EINVAL : 0;
++static void case_to_desc_correct(const struct test_data *t, char *desc)
++{
++	strcpy(desc, t->uuid);
+ }
+-module_init(test_uuid_init);
+ 
+-static void __exit test_uuid_exit(void)
++KUNIT_ARRAY_PARAM(correct, correct_data, case_to_desc_correct);
++
++static void case_to_desc_wrong(const char * const *s, char *desc)
+ {
+-	/* do nothing */
++	strcpy(desc, *s);
+ }
+-module_exit(test_uuid_exit);
++
++KUNIT_ARRAY_PARAM(wrong, wrong_data, case_to_desc_wrong);
++
++static struct kunit_case uuid_test_cases[] = {
++	KUNIT_CASE_PARAM(uuid_correct_be, correct_gen_params),
++	KUNIT_CASE_PARAM(uuid_correct_le, correct_gen_params),
++	KUNIT_CASE_PARAM(uuid_wrong_be, wrong_gen_params),
++	KUNIT_CASE_PARAM(uuid_wrong_le, wrong_gen_params),
++	{}
++};
++
++static struct kunit_suite uuid_test_suite = {
++	.name = "uuid-test",
++	.test_cases = uuid_test_cases,
++};
++kunit_test_suite(uuid_test_suite);
+ 
+ MODULE_AUTHOR("Andy Shevchenko <andriy.shevchenko@linux.intel.com>");
+ MODULE_LICENSE("Dual BSD/GPL");
+-- 
+2.31.1
 
-Yes, we should avoid handling literal blocks, as this can be a nightmare.
-
-> FWIW note that it's also possible to use relative paths to docs with auto=
-markup.
-
-Not sure if you meant to say using something like ../driver-api/foo.rst.
-If so, relative paths are a problem, as it will pass unnoticed by this scri=
-pt:
-
-	./scripts/documentation-file-ref-check
-
-which is meant to warn when a file is moved to be elsewhere. Ok, it
-could be taught to use "../" to identify paths, but I suspect that this
-could lead to false positives, like here:
-
-	Documentation/usb/gadget-testing.rst:  # ln -s ../../uncompressed/u
-	Documentation/usb/gadget-testing.rst:  # cd ../../class/fs
-	Documentation/usb/gadget-testing.rst:  # ln -s ../../header/h
-
-If you meant, instead, :doc:`../foo`, this series address those too.
-
-Regards,
-Mauro
