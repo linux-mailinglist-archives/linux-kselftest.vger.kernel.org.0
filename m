@@ -2,160 +2,287 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7989739C9BA
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 18:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D2439C9DE
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 18:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbhFEQIe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Jun 2021 12:08:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55724 "EHLO mail.kernel.org"
+        id S229964AbhFEQee (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Jun 2021 12:34:34 -0400
+Received: from mout.gmx.net ([212.227.15.19]:53599 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229930AbhFEQIe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Jun 2021 12:08:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B71C6140B;
-        Sat,  5 Jun 2021 16:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622909206;
-        bh=16nOXmG0A75mh++Cnr2mQNH2BWxmrGJci/q8393J0ng=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LK6agVgfW6Qhhaok3/QYxQeDm6R58cHTjR2b+2WupbyIjNLutdiAi/+ao9tK9oRyS
-         Id6Bp0AiN6GzUYIW3iyYNDY4hnR5Sl1MOyvdQkCz2Jc9yGEDlr3/D1Q/HXxPnYo++G
-         qnxvY7WQ1gID49kKY5u/EYA5Rthl83Obs8Et4FLfz0oNAIQ6d8cTUGiUlH1P1BVLRm
-         z2wUB5Fb98LPnHFF2kLbXIQXXuz7rdS6van5rA2HxOrgwIApN/XYL3+u3zmIhNhVIo
-         Mytj/aJysUEd7AmjEKzIor8G9Z1mGaPLF+I0+Uev8/XysnOo4ARWjANsfwpGq3fKbt
-         kf6FBlVqFwNWQ==
-Date:   Sat, 5 Jun 2021 18:06:41 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 02/34] docs: dev-tools: kunit: don't use a table for
- docs name
-Message-ID: <20210605180641.67ed6831@coco.lan>
-In-Reply-To: <CABVgOSmheB_f5gNc_zyuDHrwdRs_x_osutorJbLUMGpRRU4nzA@mail.gmail.com>
-References: <cover.1622898327.git.mchehab+huawei@kernel.org>
-        <08ac283ac5bdc2664255a7ad34514e50d3ed85d8.1622898327.git.mchehab+huawei@kernel.org>
-        <CABVgOSmheB_f5gNc_zyuDHrwdRs_x_osutorJbLUMGpRRU4nzA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S229930AbhFEQee (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 5 Jun 2021 12:34:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1622910700;
+        bh=d0ThzL6H3ZgX1iy++Zve4fg1GWGCL9gUNpUEh/9SJtk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=BuDP4OKL2j+CO6onsweK/K1KkYYu7I/kH+jhZ5PntqQFdTIH5E8AtMJIcqgrDvBVP
+         VvU7zSrKp+ubV7jeVznxxj8uhJ95HiQNaUsJmFq1kZPdS58nh04QD77n1icWS+x4Co
+         ywVo6FBtmOUJHa0SRZK8zoeb6HPdd4rnxOvUy4E8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([83.52.228.41]) by mail.gmx.net
+ (mrgmx005 [212.227.17.184]) with ESMTPSA (Nemesis) id
+ 1MeU4s-1lHKJz3J9Y-00aT8a; Sat, 05 Jun 2021 18:31:40 +0200
+From:   John Wood <john.wood@gmx.com>
+To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     John Wood <john.wood@gmx.com>, Andi Kleen <ak@linux.intel.com>,
+        valdis.kletnieks@vt.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: [PATCH v8 4/8] security/brute: Mitigate a brute force attack
+Date:   Sat,  5 Jun 2021 17:04:01 +0200
+Message-Id: <20210605150405.6936-5-john.wood@gmx.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210605150405.6936-1-john.wood@gmx.com>
+References: <20210605150405.6936-1-john.wood@gmx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:eaoHbte0dcns/AzvPwU3vjWvzTt5OyHKFhMvw3CoF2yDAezUQXG
+ HNL+Dz0RMocznxqLc/uqoDMWEiwIy9oVQAmVywfZcYdM0FqRELNwtjOp3/3Ez4hQkjUTbBe
+ 3kE1mRljNdwia+or7ZFdi/nK+l1r97CttJ0H2x4emoeySF4meERwpAfOMWx4y+7eTpkASXL
+ asnTW9LUdyzRx3OBp+gpQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Me4GWsjU9Io=:avuErcXWGckyfqeykMNLff
+ v4oTeRj6F4cphQX08iNfKJbo7vA+WlE3ckHPPwaVQ6wN8qw+YEjPDb++wvEOD/tHdAo1MzILj
+ 2DexURIr+Sb2AOWd/fF2RJTFpZzdOXenT4cKFcpQwA2ihfzVOqd5g33IxkUO9S6Z84liq797Z
+ wIn+YwhKBnEUFgKUjn+WeBsDIBKB2zj3pcM3oJRI/OdsQVIqeYFmABL/ZLo6vH0yhJyLct1f/
+ /ZkKOAZzQfawoB8d6Ur6KdJUJMvb7gcuvsBooEnDiqvrMoL9GYA1oZoXuXbUUJc2zVjQgxSzJ
+ UzIe7Dh07sq9k3zh7ZTxw2gNIm7DNUZsKctYzHIwHtTPTFQBHW58tif6qwdeGwxKXcZvqH0J7
+ 48GVCvMUJrA8KAaGXLTvSgkRT4tGkJddivRbIxSrw/q9GNsuHYmzONOko9Lz//1Mq5JLdYp8t
+ YZ+qSODc7EIT2gnjhYMUCnN9OaEY9BzzZtQYUr5fK2QdeIovdOwpmJBdYopW9p5iL8gxj8PJx
+ UsCctXYdxfbDnS0qyqXs1lWA1tpePBa5sHFKEiC/eoc5J1fa70wo187nk3pZsWF9vi2ebtAbm
+ ttkry6c+SPJiTy4AKv9V6YnHW1O/1kWXzpIgm3007gmUVaxN7tqz0M3fzcWBptPKKlbuoPuuO
+ X5T+73RnwlcVvuV7DxpeVAxTtMKYfcvNNMZsVLCcpW+DTL0hgkMh8bxQxM6Cxj+MpHvkruRgh
+ Ur9pUukiUmy4UKsxoTkyGU5Tm7huEkMm0sN/ariuHZOwzfKsySy2E/2+XpW2tKqpU3wtSqDeP
+ RRJNC+GohDqsTbpHVrHOjGH5dfELUurgOoX89iPvA9FqW+H0/2moxpITU2zDam6oH1oriN6qG
+ bXbuPXLEqqhPt/dV+5/yzNzZfpHeH2NtoQzbAlrUVA7QRAhlQjPPltNDkntGt1oMRxzffpay5
+ 4GjXCHAjJhqv+7IpIPrG3j+NYvjYt/GWIAq3zz5r1M67nbvynw8pHL3LKnVVMY9fWIjdrHqd+
+ OqYMyUXnZnKywfcnKCAjX+3OeRGApG9iGv2Ju0y6hrZq9ZRzeA9aBpVCRON9jUrLAYC20rcQd
+ CfSeyyC/3WD+4GONhvNRIpyVK5RBzbR5TZk
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Em Sat, 5 Jun 2021 23:43:22 +0800
-David Gow <davidgow@google.com> escreveu:
+When a brute force attack is detected all the offending tasks involved
+in the attack must be killed. In other words, it is necessary to kill
+all the tasks that are executing the same file that is running during
+the brute force attack.
 
-> On Sat, Jun 5, 2021 at 9:18 PM Mauro Carvalho Chehab
-> <mchehab+huawei@kernel.org> wrote:
-> >
-> > We'll be replacing :doc:`foo` references to
-> > Documentation/foo.rst. Yet, here it happens inside a table.
-> > Doing a search-and-replace would break it.
-> >
-> > Yet, as there's no good reason to use a table there,
-> > let's just convert it into a list.
-> >
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > ---  
-> 
-> While I personally quite like the look of the table when rendered by
-> Sphinx, I think the list is much more readable as plain-text, so this
-> is okay by me.
-> 
-> That being said, a definition list[1] seems like it should be better
-> still, though I can't get it to work with the kernel's Sphinx
-> configuration, so let's stick with this for now. (Given we've only got
-> one page of documentation here, the whole thing doesn't matter much
-> anyway.)
+Also, to prevent the executable involved in the attack from being
+respawned by a supervisor, and thus prevent a brute force attack from
+being started again, test the "not_allowed" flag and avoid the file
+execution based on this.
 
-This works:
+Signed-off-by: John Wood <john.wood@gmx.com>
+=2D--
+ security/brute/brute.c | 113 +++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 102 insertions(+), 11 deletions(-)
 
-	foo
-		bar
+diff --git a/security/brute/brute.c b/security/brute/brute.c
+index 03bebfd1ed1f..4e0fd23990c8 100644
+=2D-- a/security/brute/brute.c
++++ b/security/brute/brute.c
+@@ -233,6 +233,88 @@ static inline void brute_print_attack_running(void)
+ 		current->comm);
+ }
 
-But automarkup.py currently ignores definition list syntaxes like:
++/**
++ * brute_print_file_not_allowed() - Warn about a file not allowed.
++ * @dentry: The dentry of the file not allowed.
++ */
++static void brute_print_file_not_allowed(struct dentry *dentry)
++{
++	char *buf, *path;
++
++	buf =3D __getname();
++	if (WARN_ON_ONCE(!buf))
++		return;
++
++	path =3D dentry_path_raw(dentry, buf, PATH_MAX);
++	if (WARN_ON_ONCE(IS_ERR(path)))
++		goto free;
++
++	pr_warn_ratelimited("%s not allowed\n", path);
++free:
++	__putname(buf);
++}
++
++/**
++ * brute_is_same_file() - Test if two files are the same.
++ * @file1: First file to compare. Cannot be NULL.
++ * @file2: Second file to compare. Cannot be NULL.
++ *
++ * Two files are the same if they have the same inode number and the same=
+ block
++ * device.
++ *
++ * Return: True if the two files are the same. False otherwise.
++ */
++static inline bool brute_is_same_file(const struct file *file1,
++				      const struct file *file2)
++{
++	struct inode *inode1 =3D file_inode(file1);
++	struct inode *inode2 =3D file_inode(file2);
++
++	return inode1->i_ino =3D=3D inode2->i_ino &&
++		inode1->i_sb->s_dev =3D=3D inode2->i_sb->s_dev;
++}
++
++/**
++ * brute_kill_offending_tasks() - Kill the offending tasks.
++ * @file: The file executed during a brute force attack. Cannot be NULL.
++ *
++ * When a brute force attack is detected all the offending tasks involved=
+ in the
++ * attack must be killed. In other words, it is necessary to kill all the=
+ tasks
++ * that are executing the same file that is running during the brute forc=
+e
++ * attack. Moreover, the processes that have the same group_leader that t=
+he
++ * current task must be avoided since they are in the path to be killed.
++ *
++ * The for_each_process loop is protected by the tasklist_lock acquired i=
+n read
++ * mode instead of rcu_read_lock to avoid that the newly created processe=
+s
++ * escape this RCU read lock.
++ */
++static void brute_kill_offending_tasks(const struct file *file)
++{
++	struct task_struct *task;
++	struct file *exe_file;
++	bool is_same_file;
++
++	read_lock(&tasklist_lock);
++	for_each_process(task) {
++		if (task->group_leader =3D=3D current->group_leader)
++			continue;
++
++		exe_file =3D get_task_exe_file(task);
++		if (!exe_file)
++			continue;
++
++		is_same_file =3D brute_is_same_file(exe_file, file);
++		fput(exe_file);
++		if (!is_same_file)
++			continue;
++
++		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_PID);
++		pr_warn_ratelimited("offending process %d [%s] killed\n",
++				    task->pid, task->comm);
++	}
++	read_unlock(&tasklist_lock);
++}
++
+ /**
+  * brute_get_xattr_stats() - Get the stats from an extended attribute.
+  * @dentry: The dentry of the file to get the extended attribute.
+@@ -295,6 +377,10 @@ static int brute_set_xattr_stats(struct dentry *dentr=
+y, struct inode *inode,
+  * created. This way, the scenario where an application has not crossed a=
+ny
+  * privilege boundary is avoided since the existence of the extended attr=
+ibute
+  * denotes the crossing of bounds.
++ *
++ * Also, do not update the statistics if the execution of the file is not
++ * allowed and kill all the offending tasks when a brute force attack is
++ * detected.
+  */
+ static void brute_update_xattr_stats(const struct file *file)
+ {
+@@ -306,7 +392,7 @@ static void brute_update_xattr_stats(const struct file=
+ *file)
+ 	inode_lock(inode);
+ 	rc =3D brute_get_xattr_stats(dentry, inode, &stats);
+ 	WARN_ON_ONCE(rc && rc !=3D -ENODATA);
+-	if (rc) {
++	if (rc || (!rc && stats.not_allowed)) {
+ 		inode_unlock(inode);
+ 		return;
+ 	}
+@@ -320,6 +406,9 @@ static void brute_update_xattr_stats(const struct file=
+ *file)
+ 	rc =3D brute_set_xattr_stats(dentry, inode, &stats);
+ 	WARN_ON_ONCE(rc);
+ 	inode_unlock(inode);
++
++	if (stats.not_allowed)
++		brute_kill_offending_tasks(file);
+ }
 
-	Documentation/dev-tools/kunit/api/test.rst
-	  documents all of the standard testing API excluding mocking
-	  or mocking related features.
+ /**
+@@ -433,21 +522,17 @@ static void brute_task_fatal_signal(const kernel_sig=
+info_t *siginfo)
+  * @bprm: Contains the linux_binprm structure.
+  * @file: Binary that will be executed without an interpreter.
+  *
+- * This hook is useful to mark that a privilege boundary (setuid/setgid p=
+rocess)
+- * has been crossed. This is done based on the "secureexec" flag.
++ * If there are statistics, test the "not_allowed" flag and avoid the fil=
+e
++ * execution based on this. Also, this hook is useful to mark that a priv=
+ilege
++ * boundary (setuid/setgid process) has been crossed. This is done based =
+on the
++ * "secureexec" flag.
+  *
+  * To be defensive return an error code if it is not possible to get or s=
+et the
+  * stats using an extended attribute since this blocks the execution of t=
+he
+  * file. This scenario is treated as an attack.
+  *
+- * It is important to note that here the brute_new_xattr_stats function c=
+ould be
+- * used with a previous test of the secureexec flag. However it is better=
+ to use
+- * the basic xattr functions since in a future commit a test if the execu=
+tion is
+- * allowed (via the brute_stats::not_allowed flag) will be necessary. Thi=
+s way,
+- * the stats of the file will be get only once.
+- *
+- * Return: An error code if it is not possible to get or set the statisti=
+cal
+- *         data. Zero otherwise.
++ * Return: -EPERM if the execution of the file is not allowed. An error c=
+ode if
++ *         it is not possible to get or set the statistical data. Zero ot=
+herwise.
+  */
+ static int brute_task_execve(struct linux_binprm *bprm, struct file *file=
+)
+ {
+@@ -461,6 +546,12 @@ static int brute_task_execve(struct linux_binprm *bpr=
+m, struct file *file)
+ 	if (WARN_ON_ONCE(rc && rc !=3D -ENODATA))
+ 		goto unlock;
 
-Not sure why, as the regex it uses should have caught it:
++	if (!rc && stats.not_allowed) {
++		brute_print_file_not_allowed(dentry);
++		rc =3D -EPERM;
++		goto unlock;
++	}
++
+ 	if (rc =3D=3D -ENODATA && bprm->secureexec) {
+ 		brute_reset_stats(&stats);
+ 		rc =3D brute_set_xattr_stats(dentry, inode, &stats);
+=2D-
+2.25.1
 
-    RE_doc = re.compile(r'(\bDocumentation/)?((\.\./)*[\w\-/]+)\.(rst|txt)')
-
-Which is parsed from this loop:
-
-    #
-    # This loop could eventually be improved on.  Someday maybe we
-    # want a proper tree traversal with a lot of awareness of which
-    # kinds of nodes to prune.  But this works well for now.
-    #
-    # The nodes.literal test catches ``literal text``, its purpose is to
-    # avoid adding cross-references to functions that have been explicitly
-    # marked with cc:func:.
-    #
-    for para in doctree.traverse(nodes.paragraph):
-        for node in para.traverse(nodes.Text):
-            if not isinstance(node.parent, nodes.literal):
-                node.parent.replace(node, markup_refs(name, app, node))
-
-Maybe definition list is outside "nodes.Text", but I'm not a Python
-expert, nor I know how Sphinx/docutils internally represents a definition 
-list. 
-
-So, the next best thing seems to be as proposed on this patch:
-
-	Documentation/dev-tools/kunit/api/test.rst
-
-	- documents all of the standard testing API excluding mocking
-	  or mocking related features.
-
-> Reviewed-by: David Gow <davidgow@google.com>
-
-Thanks!
-Mauro
-
-> 
-> Cheers,
-> -- David
-> 
-> [1] https://rest-sphinx-memo.readthedocs.io/en/latest/ReST.html#definition-list
-> 
-> 
-> >  Documentation/dev-tools/kunit/api/index.rst | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
-> > index 9b9bffe5d41a..b33ad72bcf0b 100644
-> > --- a/Documentation/dev-tools/kunit/api/index.rst
-> > +++ b/Documentation/dev-tools/kunit/api/index.rst
-> > @@ -10,7 +10,7 @@ API Reference
-> >  This section documents the KUnit kernel testing API. It is divided into the
-> >  following sections:
-> >
-> > -================================= ==============================================
-> > -:doc:`test`                       documents all of the standard testing API
-> > -                                  excluding mocking or mocking related features.
-> > -================================= ==============================================
-> > +Documentation/dev-tools/kunit/api/test.rst
-> > +
-> > + - documents all of the standard testing API excluding mocking
-> > +   or mocking related features.
-> > --
-> > 2.31.1
-> >
-> > --
-> > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/08ac283ac5bdc2664255a7ad34514e50d3ed85d8.1622898327.git.mchehab%2Bhuawei%40kernel.org.  
-
-
-
-Thanks,
-Mauro
