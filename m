@@ -2,181 +2,227 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B78D139C981
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 17:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9A339C965
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 17:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbhFEP3l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Jun 2021 11:29:41 -0400
-Received: from mout.gmx.net ([212.227.15.18]:42997 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229930AbhFEP3k (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Jun 2021 11:29:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1622906786;
-        bh=V+/W+fEoSiOjB3w8FDJE2wQ1DNe8mLPtzk6quPwutvo=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=iojLmS3oTN1DZsuRR/9kSaXZCGZfZFJdGoPfE4LYE35NzhqE+PH0i8QWuoSoO3ig4
-         0JngVPtJQX19ChfEqfqd/uYPbTfQMIgFOXT9yfcsDzgp5iQWkZ6M5rdwdgYtppmBQ+
-         AgsMyUCQsUzlrWcQ2uUUGoVQflciOPKlRo41cXxA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([83.52.228.41]) by mail.gmx.net
- (mrgmx005 [212.227.17.184]) with ESMTPSA (Nemesis) id
- 1MxUnz-1lQzxz0ynB-00xwA9; Sat, 05 Jun 2021 17:26:26 +0200
-From:   John Wood <john.wood@gmx.com>
-To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     John Wood <john.wood@gmx.com>, Andi Kleen <ak@linux.intel.com>,
-        valdis.kletnieks@vt.edu,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: [PATCH v8 1/8] security: Add LSM hook at the point where a task gets a fatal signal
-Date:   Sat,  5 Jun 2021 17:03:58 +0200
-Message-Id: <20210605150405.6936-2-john.wood@gmx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210605150405.6936-1-john.wood@gmx.com>
-References: <20210605150405.6936-1-john.wood@gmx.com>
+        id S230010AbhFEPNx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Jun 2021 11:13:53 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:37381 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229930AbhFEPNv (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 5 Jun 2021 11:13:51 -0400
+Received: (Authenticated sender: n@nfraprado.net)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 8D0E020002;
+        Sat,  5 Jun 2021 15:11:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nfraprado.net;
+        s=gm1; t=1622905920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vv4/s0oEatJqm6xOhfhv4SCtKvstG4qCMEYIIpldPy0=;
+        b=c3g7o4uEF0JTLo7vMH1ksgmeTVLRz9pP7cqUyB/h+W5DpIymRZemkGu49jcerS4uE/XJQf
+        trJLU85vbJBVfZWGFuOsMTCnYVhfSXPxbndF40vAAuKJ0CB9s0KsBjrJ/9zkVZxSK1kZX7
+        WPbrr1BsDbMi3udCw9RD6VTWhB3rbd/s8FPEH1mqg/QoOWJo+2T2Gjzqe5dJfYUoJ5uWJi
+        mYxE058i/H4Cq0cW3G8Q81eikJU5bVOUF0NbPJeQ/P3UbZMAhOkhJpLRUvntlO2RvnJ5ez
+        x1AXAnbGKQtYTh67G2z/msrTC09lBJ7xVdF4ukLxuwInJgcg+Ro9QEyCJg7rbQ==
+Date:   Sat, 5 Jun 2021 12:11:09 -0300
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <n@nfraprado.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
+Message-ID: <20210605151109.axm3wzbcstsyxczp@notapiano>
+References: <cover.1622898327.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:AXIG8C6g+ihrnMi0Z4HkpARpgiKyCwVIo4zDsrAYAVY7GlNoZU6
- 7O/98xMjJRXPp5Qat/wXAqITJjdc3Cg9KVDUkv9jMTAC4TmaJiwFSk+4T6TOSiObnjiNVug
- 5nZhRlb2yHN0s2og2Qe+i3xYhvcGTiItAt6TDApjVwCMOjKleIr60AAiwo95nL9p1fVQ/6I
- S8e6Adp97nN0pqVcqVFpQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+rmuCovomkA=:ToTPjaCqTPRANlpKwgY+BI
- Td9B1Od85sW7rN2BHlZx0S9yGMlNrRoNPYKw30EdwZpFQCw0MJ1R0CK7jNGYsnXyO/JWmtABx
- BP8IkODttWs14kSIcSCNKNy4q9JWsUjjZTaSYWrXwi64xsSYLhWaaddKFpk8MUuuvSv9uqJAX
- E/hUUtc0B9GArMYdIA78pHLTWuSIdCh8Q6yZFjSzqfSAR3zBStXRTFgc6GEb7llc9k4u8FD+R
- XtlGDWysWOLPvtgnghV5DjcNE6AUKsVR7/3NR/PDlkpUufHxi09Ppq7iL9YoFl0WE5upzqFIj
- q2ZzkVHB18mUQ06x7p6IFopYkvLGrVWFazETXmveEJbPqu/5Xu7Riy03cOUfz3v11HrIzMpMz
- +aIux0EuCwEfa60cVU4z8Nv7Zm4W7JsHaheyBhL6dxdOf/4gr4Hgajen8Eh3d8F6FbVSPOsxt
- s6Uybc/P9ER94vsN5/ev4rT+BM0jb2diW8cHTOUaV3rYTpxStwxWfbvo2PowP9gpvZVXNz+hx
- TSva2yUeepFKks37O8PHbO7IArxS+MAlRplA68Dn18k9iGuaEofOOzhOSpZcTTyMvillCS1iM
- xqv87MAi6Ut/ohkzwdAmStfNxUwBmvnY7nV9e8iChfcxFcplTo9Rx6RldUnyeSImra4jB7Vzx
- RpXyAAGqsDguITO8wNAo58W2qV5VbIh+W+g4Bv/8q+pxIopd3BEaf7KRG3D8XZq/xwcthsF6j
- wqyLd1NJlM3kM3uZl0ZVlHGMTBb4M37rkjQU5DqMJuu5YsZffDQO5e6ZNnBtcnt+pa8zge1yT
- auceOueO8F+cLAD8VsMsN/Y5wu6H3S0/kPvI24SydTLiJRY6XYuHqkDh2qVoyPCJnfkeGgDa7
- l+JKO2UYiadlnCcOEv/DRYUnCcD3MQAWGmIgoIUXbLesQfwXrIwoUVlqfxVLY+/2X5KxnltMR
- lU21EnKuEaYy41oQ7lvgOfWYYsSQ4i/w/egMQ05Hi30jVL3FoXlaWlI9UMRBTcs13VMp4M3JP
- cpn10EqaCybbccD3nURqqCVccxWiBfvbdBPp/8NvdtR7Uibubz38DMLWBhCZoPwm+Cn4J4NwY
- 1+oTCRz76ExaLmdSmDYJMKJUpA2ai+aDo4z
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1622898327.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a security hook that allows a LSM to be notified when a task gets a
-fatal signal. This patch is a previous step on the way to compute the
-task crash period by the "brute" LSM (linux security module to detect
-and mitigate fork brute force attack against vulnerable userspace
-processes).
+Hi Mauro,
 
-Signed-off-by: John Wood <john.wood@gmx.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-=2D--
- include/linux/lsm_hook_defs.h | 1 +
- include/linux/lsm_hooks.h     | 4 ++++
- include/linux/security.h      | 4 ++++
- kernel/signal.c               | 1 +
- security/security.c           | 5 +++++
- 5 files changed, 15 insertions(+)
+On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
+> As discussed at:
+> 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+> 
+> It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
+> automarkup.py extension should handle it automatically, on most cases.
+> 
+> There are a couple of exceptions to this rule:
+> 
+> 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+> 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+> 
+> It should also be noticed that automarkup.py has currently an issue:
+> if one use a markup like:
+> 
+> 	Documentation/dev-tools/kunit/api/test.rst
+> 	  - documents all of the standard testing API excluding mocking
+> 	    or mocking related features.
+> 
+> or, even:
+> 
+> 	Documentation/dev-tools/kunit/api/test.rst
+> 	    documents all of the standard testing API excluding mocking
+> 	    or mocking related features.
+> 	
+> The automarkup.py will simply ignore it. Not sure why. This patch series
+> avoid the above patterns (which is present only on 4 files), but it would be
+> nice to have a followup patch fixing the issue at automarkup.py.
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 04c01794de83..e28468e84300 100644
-=2D-- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -225,6 +225,7 @@ LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigne=
-d long arg2,
- 	 unsigned long arg3, unsigned long arg4, unsigned long arg5)
- LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
- 	 struct inode *inode)
-+LSM_HOOK(void, LSM_RET_VOID, task_fatal_signal, const kernel_siginfo_t *s=
-iginfo)
- LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
- LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
- 	 u32 *secid)
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 5c4c5c0602cb..fc8bef0f15d9 100644
-=2D-- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -799,6 +799,10 @@
-  *	security attributes, e.g. for /proc/pid inodes.
-  *	@p contains the task_struct for the task.
-  *	@inode contains the inode structure for the inode.
-+ * @task_fatal_signal:
-+ *	This hook allows security modules to be notified when a task gets a
-+ *	fatal signal.
-+ *	@siginfo contains the signal information.
-  *
-  * Security hooks for Netlink messaging.
-  *
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 06f7c50ce77f..609c76c6c764 100644
-=2D-- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -433,6 +433,7 @@ int security_task_kill(struct task_struct *p, struct k=
-ernel_siginfo *info,
- int security_task_prctl(int option, unsigned long arg2, unsigned long arg=
-3,
- 			unsigned long arg4, unsigned long arg5);
- void security_task_to_inode(struct task_struct *p, struct inode *inode);
-+void security_task_fatal_signal(const kernel_siginfo_t *siginfo);
- int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
- void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
- int security_msg_msg_alloc(struct msg_msg *msg);
-@@ -1183,6 +1184,9 @@ static inline int security_task_prctl(int option, un=
-signed long arg2,
- static inline void security_task_to_inode(struct task_struct *p, struct i=
-node *inode)
- { }
+What I think is happening here is that we're using rST's syntax for definition
+lists [1]. automarkup.py ignores literal nodes, and perhaps a definition is
+considered a literal by Sphinx. Adding a blank line after the Documentation/...
+or removing the additional indentation makes it work, like you did in your
+2nd and 3rd patch, since then it's not a definition anymore, although then the
+visual output is different as well.
 
-+static inline void security_task_fatal_signal(const kernel_siginfo_t *sig=
-info)
-+{ }
-+
- static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
- 					  short flag)
- {
-diff --git a/kernel/signal.c b/kernel/signal.c
-index f7c6ffcbd044..4380763b3d8d 100644
-=2D-- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2804,6 +2804,7 @@ bool get_signal(struct ksignal *ksig)
- 		/*
- 		 * Anything else is fatal, maybe with a core dump.
- 		 */
-+		security_task_fatal_signal(&ksig->info);
- 		current->flags |=3D PF_SIGNALED;
+I'm not sure this is something we need to fix. Does it make sense to use
+definition lists for links like that? If it does, I guess one option would be to
+whitelist definition lists so they aren't ignored by automarkup, but I feel
+this could get ugly really quickly.
 
- 		if (sig_kernel_coredump(signr)) {
-diff --git a/security/security.c b/security/security.c
-index b38155b2de83..208e3e7d4284 100644
-=2D-- a/security/security.c
-+++ b/security/security.c
-@@ -1891,6 +1891,11 @@ void security_task_to_inode(struct task_struct *p, =
-struct inode *inode)
- 	call_void_hook(task_to_inode, p, inode);
- }
+FWIW note that it's also possible to use relative paths to docs with automarkup.
 
-+void security_task_fatal_signal(const kernel_siginfo_t *siginfo)
-+{
-+	call_void_hook(task_fatal_signal, siginfo);
-+}
-+
- int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
- {
- 	return call_int_hook(ipc_permission, 0, ipcp, flag);
-=2D-
-2.25.1
+Thanks,
+Nícolas
 
+[1] https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#definition-lists
+
+> 
+> On this series:
+> 
+> Patch 1 manually adjust the references inside driver-api/pm/devices.rst,
+> as there it uses :file:`foo` to refer to some Documentation/ files;
+> 
+> Patch 2 converts a table at Documentation/dev-tools/kunit/api/index.rst
+> into a list, carefully avoiding the 
+> 
+> Patch 3 converts the cross-references at the media documentation, also
+> avoiding the automarkup.py bug;
+> 
+> Patches 4-34 convert the other occurrences via a replace script. They were
+> manually edited, in order to honour 80-columns where possible.
+> 
+> I did a diff between the Sphinx 2.4.4 output before and after this patch
+> series in order to double-check that all converted Documentation/ 
+> references will produce <a href=<foo>.rst>foo title</a> tags.
+> 
+> Mauro Carvalho Chehab (34):
+>   docs: devices.rst: better reference documentation docs
+>   docs: dev-tools: kunit: don't use a table for docs name
+>   media: docs: */media/index.rst: don't use ReST doc:`foo`
+>   media: userspace-api: avoid using ReST :doc:`foo` markup
+>   media: driver-api: drivers: avoid using ReST :doc:`foo` markup
+>   media: admin-guide: avoid using ReST :doc:`foo` markup
+>   docs: admin-guide: pm: avoid using ReSt :doc:`foo` markup
+>   docs: admin-guide: hw-vuln: avoid using ReST :doc:`foo` markup
+>   docs: admin-guide: sysctl: avoid using ReST :doc:`foo` markup
+>   docs: block: biodoc.rst: avoid using ReSt :doc:`foo` markup
+>   docs: bpf: bpf_lsm.rst: avoid using ReSt :doc:`foo` markup
+>   docs: core-api: avoid using ReSt :doc:`foo` markup
+>   docs: dev-tools: testing-overview.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
+>   docs: devicetree: bindings: submitting-patches.rst: avoid using ReSt
+>     :doc:`foo` markup
+>   docs: doc-guide: avoid using ReSt :doc:`foo` markup
+>   docs: driver-api: avoid using ReSt :doc:`foo` markup
+>   docs: driver-api: gpio: using-gpio.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: driver-api: surface_aggregator: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: driver-api: usb: avoid using ReSt :doc:`foo` markup
+>   docs: firmware-guide: acpi: avoid using ReSt :doc:`foo` markup
+>   docs: hwmon: adm1177.rst: avoid using ReSt :doc:`foo` markup
+>   docs: i2c: avoid using ReSt :doc:`foo` markup
+>   docs: kernel-hacking: hacking.rst: avoid using ReSt :doc:`foo` markup
+>   docs: networking: devlink: avoid using ReSt :doc:`foo` markup
+>   docs: PCI: endpoint: pci-endpoint-cfs.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: PCI: pci.rst: avoid using ReSt :doc:`foo` markup
+>   docs: process: submitting-patches.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: security: landlock.rst: avoid using ReSt :doc:`foo` markup
+>   docs: trace: coresight: coresight.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: trace: ftrace.rst: avoid using ReSt :doc:`foo` markup
+>   docs: userspace-api: landlock.rst: avoid using ReSt :doc:`foo` markup
+>   docs: virt: kvm: s390-pv-boot.rst: avoid using ReSt :doc:`foo` markup
+>   docs: x86: avoid using ReSt :doc:`foo` markup
+> 
+>  .../PCI/endpoint/pci-endpoint-cfs.rst         |  2 +-
+>  Documentation/PCI/pci.rst                     |  6 +--
+>  .../special-register-buffer-data-sampling.rst |  3 +-
+>  Documentation/admin-guide/media/bt8xx.rst     | 15 ++++----
+>  Documentation/admin-guide/media/bttv.rst      | 21 ++++++-----
+>  Documentation/admin-guide/media/index.rst     | 12 +++---
+>  Documentation/admin-guide/media/saa7134.rst   |  3 +-
+>  Documentation/admin-guide/pm/intel_idle.rst   | 16 +++++---
+>  Documentation/admin-guide/pm/intel_pstate.rst |  9 +++--
+>  Documentation/admin-guide/sysctl/abi.rst      |  2 +-
+>  Documentation/admin-guide/sysctl/kernel.rst   | 37 ++++++++++---------
+>  Documentation/block/biodoc.rst                |  2 +-
+>  Documentation/bpf/bpf_lsm.rst                 | 13 ++++---
+>  .../core-api/bus-virt-phys-mapping.rst        |  2 +-
+>  Documentation/core-api/dma-api.rst            |  5 ++-
+>  Documentation/core-api/dma-isa-lpc.rst        |  2 +-
+>  Documentation/core-api/index.rst              |  4 +-
+>  Documentation/dev-tools/kunit/api/index.rst   |  8 ++--
+>  Documentation/dev-tools/kunit/faq.rst         |  2 +-
+>  Documentation/dev-tools/kunit/index.rst       | 14 +++----
+>  Documentation/dev-tools/kunit/start.rst       |  6 +--
+>  Documentation/dev-tools/kunit/tips.rst        |  5 ++-
+>  Documentation/dev-tools/kunit/usage.rst       |  8 ++--
+>  Documentation/dev-tools/testing-overview.rst  | 16 ++++----
+>  .../bindings/submitting-patches.rst           | 11 +++---
+>  Documentation/doc-guide/contributing.rst      |  8 ++--
+>  Documentation/driver-api/gpio/using-gpio.rst  |  4 +-
+>  Documentation/driver-api/ioctl.rst            |  2 +-
+>  .../driver-api/media/drivers/bttv-devel.rst   |  2 +-
+>  Documentation/driver-api/media/index.rst      | 10 +++--
+>  Documentation/driver-api/pm/devices.rst       |  8 ++--
+>  .../surface_aggregator/clients/index.rst      |  3 +-
+>  .../surface_aggregator/internal.rst           | 15 ++++----
+>  .../surface_aggregator/overview.rst           |  6 ++-
+>  Documentation/driver-api/usb/dma.rst          |  6 +--
+>  .../acpi/dsd/data-node-references.rst         |  3 +-
+>  .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
+>  .../firmware-guide/acpi/enumeration.rst       |  7 ++--
+>  Documentation/hwmon/adm1177.rst               |  3 +-
+>  Documentation/i2c/instantiating-devices.rst   |  2 +-
+>  Documentation/i2c/old-module-parameters.rst   |  3 +-
+>  Documentation/i2c/smbus-protocol.rst          |  4 +-
+>  Documentation/kernel-hacking/hacking.rst      |  4 +-
+>  .../networking/devlink/devlink-region.rst     |  2 +-
+>  .../networking/devlink/devlink-trap.rst       |  4 +-
+>  Documentation/process/submitting-patches.rst  | 32 ++++++++--------
+>  Documentation/security/landlock.rst           |  3 +-
+>  Documentation/trace/coresight/coresight.rst   |  8 ++--
+>  Documentation/trace/ftrace.rst                |  2 +-
+>  Documentation/userspace-api/landlock.rst      | 11 +++---
+>  .../userspace-api/media/glossary.rst          |  2 +-
+>  Documentation/userspace-api/media/index.rst   | 12 +++---
+>  Documentation/virt/kvm/s390-pv-boot.rst       |  2 +-
+>  Documentation/x86/boot.rst                    |  4 +-
+>  Documentation/x86/mtrr.rst                    |  2 +-
+>  55 files changed, 217 insertions(+), 183 deletions(-)
+> 
+> -- 
+> 2.31.1
+> 
+> 
