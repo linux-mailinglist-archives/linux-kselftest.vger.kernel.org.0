@@ -2,52 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B2839C991
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 17:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1698F39C992
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 17:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbhFEPqg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Jun 2021 11:46:36 -0400
-Received: from mail-wm1-f45.google.com ([209.85.128.45]:36446 "EHLO
-        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbhFEPqf (ORCPT
+        id S229957AbhFEPqm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Jun 2021 11:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229930AbhFEPqm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Jun 2021 11:46:35 -0400
-Received: by mail-wm1-f45.google.com with SMTP id n17-20020a7bc5d10000b0290169edfadac9so9675688wmk.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 05 Jun 2021 08:44:34 -0700 (PDT)
+        Sat, 5 Jun 2021 11:46:42 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BA4C061766
+        for <linux-kselftest@vger.kernel.org>; Sat,  5 Jun 2021 08:44:54 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id q5so12322023wrm.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 05 Jun 2021 08:44:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=clvSa+JvU6uBZ+o4YWIoUVY1T/E/2QPROQXufQI5L34=;
-        b=T0g+7NMfdg+/GWUIM/XuSqgrwASyZbRCGDGVNvTo3QwR7HHSOvoJeV5wwnhAYyEu8p
-         lNCqV8yQ7QZXDNGNVrsstpm1xDzeS/IWZMneJbjVR+IHlGfredBoI6hFBgUpSnP1+rcw
-         lPRPTiKnOkt32MhcYup1zoHo6FabIXls9uVdcH8vAJ++OGYRgSsDqb5sCZYbbDgOHYI6
-         h1BMPdgCtpaVHpGaoFHrUaKGqsD5sauVVUh/AxjDkxobKYd+46Q+iYA+e4fO2kSeqB1k
-         trU0dGYNFBnEOSl22Uu/TgW1U4k+IVbgIlUDqqcX5K/6JMdMM/BI2Kmydu2ehZunaF0u
-         ESWw==
+        bh=F2vsk87dnHMG/fs0zle4jjIj1AH9GGbHYe9vPgURJko=;
+        b=QgFDDpyjuTZpCoQhPJkqY6Qy4LZvRy5CZUvXYDXBs3mOW2Jq8HMpCrAsotCX7tMq6k
+         erw2zbGcuTyazUfRDSUnJwPAkTGtSPDR7Ii4UZWsar0AlOaleZidwvC0zbhGmWRRaAN4
+         SfGe9lI/gECLyNiwQM5zUEF6hS7m76XH24cPVsJuXdRRMRdCS6j6lvfIYDiUCIl30Ebg
+         t1sbJ2zKCFLxX+wbfk9hddxIma8Pkp6P6YzbqvYJc8AnHoDpaioKW2Efy3/W4S6+MS6s
+         ovgBqtkvyKypldHLmo7LnvRdgWIT6GEEhpoALagIRwH6iZYrGvdmZFU2SNzOdNKgbxEi
+         ZMDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=clvSa+JvU6uBZ+o4YWIoUVY1T/E/2QPROQXufQI5L34=;
-        b=ApqCgb5Snko0I3BoS4cYSbQl5ulbiagwDWw7DMh3lF+AB7M2SMYd+Oexmp3Nb7vKkr
-         IwucgFb7ccehLfNvHqN8np0WjPLmEHsxu5tXJxnfZChJ+h90aJW90R8GJse2vMaM4RHs
-         dj61JbxODchnFtxy5P6AtzbK4J0VQt7984EW+Z8XmA5HzsgoSqbThvbNSregs8dKwif7
-         c2EwW1invxJD1qrauCZ2a+Tz4Vhre4OD2189qGIm6xJk1Up5jwTJpEw0w6VBFdhoRp7+
-         nlgOHs+Zx2lIZdAogp7yIyGT9fObsT1Ey0bFvZG7fsbiYThH0GEdTL2Y/l94wri7Ia5w
-         yO6g==
-X-Gm-Message-State: AOAM530L/WE+qIe3aGjHXUJNwS18mE7v5HAeSUGdOpdeY+GdvARiyUTo
-        m8ze+85hXrevkKrbH/d8yAeY1alxMyJXthOBhPAvMg==
-X-Google-Smtp-Source: ABdhPJw4Dw/ErnZ+CAGXFG16Mr96Iq3PCkOCpBV8t6JOv8RyD39fk8GHFGJiW0cDt6C2hHns9FgdWJ5t4GAeTvXvhxo=
-X-Received: by 2002:a1c:1dd3:: with SMTP id d202mr8688712wmd.78.1622907813308;
- Sat, 05 Jun 2021 08:43:33 -0700 (PDT)
+        bh=F2vsk87dnHMG/fs0zle4jjIj1AH9GGbHYe9vPgURJko=;
+        b=AMKAwKoQlaL0asjU75EGtNQbEgh2wu7K+iApOzQhUoDIMKtocESZk4uQXr02B4FfaL
+         PPysJTHXkX1jWwPK2IaLaBTKkDrdSWUhMxAzOJ/OSelF7L8SdEe5mxVQkPSMLpc2Uc+c
+         KOzyXKOVtCkFbQMJ78pLrNx6bscrvEzd53ITbXMIseyVvNvvwZ+vmDfHe05oO1Xkp0Vc
+         PK/Wte3qXsCZLE7zScOaxXvx3egDuB/e3zXYIq2vrdBUof/36MNaLMwZN2ijGF+mgLpo
+         ZhKGcZndd3vuGMcgWSYT4RqFvgu1zvFnvIs87g/oifIZSSXM5s0HBZykst/eoYpU4aaw
+         yLbg==
+X-Gm-Message-State: AOAM532slhjpT2zNwjnyrDQVqgIjYIap8/nw2ywmyDk+bXTKn5iGa3bd
+        KkV1WcpxVe2ERsmX/sNflYRAvB5l46tC1EpbiEm4og==
+X-Google-Smtp-Source: ABdhPJz+T2a59gzdr7YO33fCHbpW2ZvzX9LJIXoodPk7PZ+jfi1TwptU2G+Om9koTBGRYlACSN2lnAtO9dy/2ZerJKs=
+X-Received: by 2002:adf:fe4a:: with SMTP id m10mr9110264wrs.332.1622907892696;
+ Sat, 05 Jun 2021 08:44:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1622898327.git.mchehab+huawei@kernel.org> <08ac283ac5bdc2664255a7ad34514e50d3ed85d8.1622898327.git.mchehab+huawei@kernel.org>
-In-Reply-To: <08ac283ac5bdc2664255a7ad34514e50d3ed85d8.1622898327.git.mchehab+huawei@kernel.org>
+References: <cover.1622898327.git.mchehab+huawei@kernel.org> <a3ad84108a5b254e545f88e58d411f5fe2e25c7e.1622898327.git.mchehab+huawei@kernel.org>
+In-Reply-To: <a3ad84108a5b254e545f88e58d411f5fe2e25c7e.1622898327.git.mchehab+huawei@kernel.org>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 5 Jun 2021 23:43:22 +0800
-Message-ID: <CABVgOSmheB_f5gNc_zyuDHrwdRs_x_osutorJbLUMGpRRU4nzA@mail.gmail.com>
-Subject: Re: [PATCH 02/34] docs: dev-tools: kunit: don't use a table for docs name
+Date:   Sat, 5 Jun 2021 23:44:41 +0800
+Message-ID: <CABVgOSnz_94ZO2Sa8Vf70eV_tf0gksDBUhZXYXX1VS=qFR=zPw@mail.gmail.com>
+Subject: Re: [PATCH 14/34] docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
 To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>,
@@ -64,57 +67,154 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 On Sat, Jun 5, 2021 at 9:18 PM Mauro Carvalho Chehab
 <mchehab+huawei@kernel.org> wrote:
 >
-> We'll be replacing :doc:`foo` references to
-> Documentation/foo.rst. Yet, here it happens inside a table.
-> Doing a search-and-replace would break it.
->
-> Yet, as there's no good reason to use a table there,
-> let's just convert it into a list.
+> The :doc:`foo` tag is auto-generated via automarkup.py.
+> So, use the filename at the sources, instead of :doc:`foo`.
 >
 > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 > ---
 
-While I personally quite like the look of the table when rendered by
-Sphinx, I think the list is much more readable as plain-text, so this
-is okay by me.
-
-That being said, a definition list[1] seems like it should be better
-still, though I can't get it to work with the kernel's Sphinx
-configuration, so let's stick with this for now. (Given we've only got
-one page of documentation here, the whole thing doesn't matter much
-anyway.)
+This is much better, thanks! Do note that there's a merge conflict
+(and another :doc:`` tag which needs updating) in the kunit-fixes
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit-fixes&id=11dbc62a73a7da9f3697e8ce83d07503c11dcabb
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
-[1] https://rest-sphinx-memo.readthedocs.io/en/latest/ReST.html#definition-list
 
 
->  Documentation/dev-tools/kunit/api/index.rst | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  Documentation/dev-tools/kunit/faq.rst   |  2 +-
+>  Documentation/dev-tools/kunit/index.rst | 14 +++++++-------
+>  Documentation/dev-tools/kunit/start.rst |  6 +++---
+>  Documentation/dev-tools/kunit/tips.rst  |  5 +++--
+>  Documentation/dev-tools/kunit/usage.rst |  8 +++++---
+>  5 files changed, 19 insertions(+), 16 deletions(-)
 >
-> diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
-> index 9b9bffe5d41a..b33ad72bcf0b 100644
-> --- a/Documentation/dev-tools/kunit/api/index.rst
-> +++ b/Documentation/dev-tools/kunit/api/index.rst
-> @@ -10,7 +10,7 @@ API Reference
->  This section documents the KUnit kernel testing API. It is divided into the
->  following sections:
+> diff --git a/Documentation/dev-tools/kunit/faq.rst b/Documentation/dev-tools/kunit/faq.rst
+> index 8d5029ad210a..5c6555d020f3 100644
+> --- a/Documentation/dev-tools/kunit/faq.rst
+> +++ b/Documentation/dev-tools/kunit/faq.rst
+> @@ -97,7 +97,7 @@ things to try.
+>     modules will automatically execute associated tests when loaded. Test results
+>     can be collected from ``/sys/kernel/debug/kunit/<test suite>/results``, and
+>     can be parsed with ``kunit.py parse``. For more details, see "KUnit on
+> -   non-UML architectures" in :doc:`usage`.
+> +   non-UML architectures" in Documentation/dev-tools/kunit/usage.rst.
 >
-> -================================= ==============================================
-> -:doc:`test`                       documents all of the standard testing API
-> -                                  excluding mocking or mocking related features.
-> -================================= ==============================================
-> +Documentation/dev-tools/kunit/api/test.rst
-> +
-> + - documents all of the standard testing API excluding mocking
-> +   or mocking related features.
+>  If none of the above tricks help, you are always welcome to email any issues to
+>  kunit-dev@googlegroups.com.
+> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+> index 848478838347..25d92a9a05ea 100644
+> --- a/Documentation/dev-tools/kunit/index.rst
+> +++ b/Documentation/dev-tools/kunit/index.rst
+> @@ -36,7 +36,7 @@ To make running these tests (and reading the results) easier, KUnit offers
+>  results. This provides a quick way of running KUnit tests during development,
+>  without requiring a virtual machine or separate hardware.
+>
+> -Get started now: :doc:`start`
+> +Get started now: Documentation/dev-tools/kunit/start.rst
+>
+>  Why KUnit?
+>  ==========
+> @@ -88,9 +88,9 @@ it takes to read their test log?
+>  How do I use it?
+>  ================
+>
+> -*   :doc:`start` - for new users of KUnit
+> -*   :doc:`tips` - for short examples of best practices
+> -*   :doc:`usage` - for a more detailed explanation of KUnit features
+> -*   :doc:`api/index` - for the list of KUnit APIs used for testing
+> -*   :doc:`kunit-tool` - for more information on the kunit_tool helper script
+> -*   :doc:`faq` - for answers to some common questions about KUnit
+> +*   Documentation/dev-tools/kunit/start.rst - for new users of KUnit
+> +*   Documentation/dev-tools/kunit/tips.rst - for short examples of best practices
+> +*   Documentation/dev-tools/kunit/usage.rst - for a more detailed explanation of KUnit features
+> +*   Documentation/dev-tools/kunit/api/index.rst - for the list of KUnit APIs used for testing
+> +*   Documentation/dev-tools/kunit/kunit-tool.rst - for more information on the kunit_tool helper script
+> +*   Documentation/dev-tools/kunit/faq.rst - for answers to some common questions about KUnit
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> index 0e65cabe08eb..ee21e482a0de 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -21,7 +21,7 @@ The wrapper can be run with:
+>         ./tools/testing/kunit/kunit.py run
+>
+>  For more information on this wrapper (also called kunit_tool) check out the
+> -:doc:`kunit-tool` page.
+> +Documentation/dev-tools/kunit/kunit-tool.rst page.
+>
+>  Creating a .kunitconfig
+>  -----------------------
+> @@ -234,7 +234,7 @@ Congrats! You just wrote your first KUnit test!
+>
+>  Next Steps
+>  ==========
+> -*   Check out the :doc:`tips` page for tips on
+> +*   Check out the Documentation/dev-tools/kunit/tips.rst page for tips on
+>      writing idiomatic KUnit tests.
+> -*   Optional: see the :doc:`usage` page for a more
+> +*   Optional: see the Documentation/dev-tools/kunit/usage.rst page for a more
+>      in-depth explanation of KUnit.
+> diff --git a/Documentation/dev-tools/kunit/tips.rst b/Documentation/dev-tools/kunit/tips.rst
+> index 8d8c238f7f79..492d2ded2f5a 100644
+> --- a/Documentation/dev-tools/kunit/tips.rst
+> +++ b/Documentation/dev-tools/kunit/tips.rst
+> @@ -125,7 +125,8 @@ Here's a slightly in-depth example of how one could implement "mocking":
+>
+>
+>  Note: here we're able to get away with using ``test->priv``, but if you wanted
+> -something more flexible you could use a named ``kunit_resource``, see :doc:`api/test`.
+> +something more flexible you could use a named ``kunit_resource``, see
+> +Documentation/dev-tools/kunit/api/test.rst.
+>
+>  Failing the current test
+>  ------------------------
+> @@ -185,5 +186,5 @@ Alternatively, one can take full control over the error message by using ``KUNIT
+>
+>  Next Steps
+>  ==========
+> -*   Optional: see the :doc:`usage` page for a more
+> +*   Optional: see the Documentation/dev-tools/kunit/usage.rst page for a more
+>      in-depth explanation of KUnit.
+> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+> index 650f99590df5..3ee7ab91f712 100644
+> --- a/Documentation/dev-tools/kunit/usage.rst
+> +++ b/Documentation/dev-tools/kunit/usage.rst
+> @@ -10,7 +10,7 @@ understand it. This guide assumes a working knowledge of the Linux kernel and
+>  some basic knowledge of testing.
+>
+>  For a high level introduction to KUnit, including setting up KUnit for your
+> -project, see :doc:`start`.
+> +project, see Documentation/dev-tools/kunit/start.rst.
+>
+>  Organization of this document
+>  =============================
+> @@ -99,7 +99,8 @@ violated; however, the test will continue running, potentially trying other
+>  expectations until the test case ends or is otherwise terminated. This is as
+>  opposed to *assertions* which are discussed later.
+>
+> -To learn about more expectations supported by KUnit, see :doc:`api/test`.
+> +To learn about more expectations supported by KUnit, see
+> +Documentation/dev-tools/kunit/api/test.rst.
+>
+>  .. note::
+>     A single test case should be pretty short, pretty easy to understand,
+> @@ -216,7 +217,8 @@ test suite in a special linker section so that it can be run by KUnit either
+>  after late_init, or when the test module is loaded (depending on whether the
+>  test was built in or not).
+>
+> -For more information on these types of things see the :doc:`api/test`.
+> +For more information on these types of things see the
+> +Documentation/dev-tools/kunit/api/test.rst.
+>
+>  Common Patterns
+>  ===============
 > --
 > 2.31.1
 >
 > --
 > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/08ac283ac5bdc2664255a7ad34514e50d3ed85d8.1622898327.git.mchehab%2Bhuawei%40kernel.org.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/a3ad84108a5b254e545f88e58d411f5fe2e25c7e.1622898327.git.mchehab%2Bhuawei%40kernel.org.
