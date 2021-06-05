@@ -2,330 +2,559 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B411339C4B9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 03:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE29F39C545
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Jun 2021 04:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbhFEBLr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Jun 2021 21:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbhFEBLr (ORCPT
+        id S230468AbhFECxU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Jun 2021 22:53:20 -0400
+Received: from mail-yb1-f172.google.com ([209.85.219.172]:33781 "EHLO
+        mail-yb1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230169AbhFECxU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Jun 2021 21:11:47 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E233C061766;
-        Fri,  4 Jun 2021 18:09:51 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id m13-20020a17090b068db02901656cc93a75so8380038pjz.3;
-        Fri, 04 Jun 2021 18:09:51 -0700 (PDT)
+        Fri, 4 Jun 2021 22:53:20 -0400
+Received: by mail-yb1-f172.google.com with SMTP id f84so16466466ybg.0;
+        Fri, 04 Jun 2021 19:51:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=+ymcPBkFzODnVXwuUwD5PtjbB+QQ9q8/HCoXcbiRNhs=;
-        b=J79OZPj1yrF4atqaUyHZvNrQpi7R8arRnaxWxYWRcs8cvvkYluOFGH3cVhQb4u/fFB
-         /JANEX5qjMf5WpmmaYiI6N4T0ww7ToXIllFLSTzWLeSgMWjZnFl62FJff//Mf9kp67rG
-         O64lpPtVIfSgmnP7iCcBRq9HVygJBYdjsJ0Y3MF1Ikr/D1otLP5Wm8qZ7r0CQyyFmotI
-         7TocXIb6c5JGvejbCcNs+OO8BJ10zQk78J5GwuD/+UIfu7qJBLM6pJzVFviTgdpNy5xI
-         V58VYaz8xvJ/vfeHblpPGzEdDpYG3h9UCn2LojjqgllRriWA30Acii79itxjEt8gAqhV
-         8SUg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0hYX+6HpwYRLBNWPsV5sxWxfLC9QpEMY3Fh+1yVFR3w=;
+        b=UP0zp4J/OzxSbXR5i5L+h5s9e+ZVyYJ+lw8IOKs/KpB3kTtsAkrjHOxAQXfzUprrFK
+         WDFkuMeRqJ7Q247W3EwxRY1QK8zDg7VMWxQtlv4e6tXxGONlCnhF3cvnPyOmJRZzf8HV
+         BR0hBSAb1YWhnLL5KAPlp8bTty2kMOqA4sHVqVg/lOixHVj9WJNoMRkWyK1NXzN58iZf
+         93zHe2+FoV/tYbXTni6n6mvs4TaAivF0spVuSGcoffEyp4aIfdL2362AEf1J1JFdX+UI
+         iLjazUQLWZ284cMrCLq27ARmALwalYDTrrGxyhcAVRKfafsHeiqDtwe5U73ds+13mdvC
+         Qe/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=+ymcPBkFzODnVXwuUwD5PtjbB+QQ9q8/HCoXcbiRNhs=;
-        b=h5FS9lXqa6QySGn7+ebHBjXXjojepOr2WWi86qapUODZay7TYn65FubxuGeRgde2l+
-         4U1fSLcc7SesKsIX/xcUOJNAsP1JO77BieQOztTe1Y5AwzmbXooMa7xqyeLrIjb035Qh
-         xChXiHbGvcG+ndeXnny6yHRuYQz00y4WZh0bTPHj8YeNWOOpHAtEBlzriPRC7/W/1ivv
-         KMJfr2LOkbz7PhaYPjarODqLxXK+DuQls8/90i3iyFl5Vq1H6Ihh0MChofOsDd/ubQT3
-         woWlfd72+QMCXUrUWRNfUiMipAHCucTGt5qqKbG5/z0rZn6KvAsWe3fUepWP0IqchxRg
-         x85g==
-X-Gm-Message-State: AOAM530iyIZrbNPznb9C1jBVvO6Si/H8kJzRVWx0RDyGsOA5nsoNpII4
-        3UJZtf5frDUuUnthiehG1xZEHfNeZtU=
-X-Google-Smtp-Source: ABdhPJyB3RkL7XEtTxQkrqNjWJLnPnWa4hmpCz+oxnl97Ql7j+jLd33lGAKu1ki14J3yzUZiH+IRmg==
-X-Received: by 2002:a17:90b:33d1:: with SMTP id lk17mr7759723pjb.154.1622855390928;
-        Fri, 04 Jun 2021 18:09:50 -0700 (PDT)
-Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
-        by smtp.gmail.com with ESMTPSA id s9sm2607668pfm.120.2021.06.04.18.09.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 18:09:50 -0700 (PDT)
-Date:   Sat, 05 Jun 2021 11:09:45 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
-To:     =?iso-8859-1?b?QW5kcuk=?= Almeida <andrealmeid@collabora.com>
-Cc:     acme@kernel.org, Andrey Semashev <andrey.semashev@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        corbet@lwn.net, Davidlohr Bueso <dave@stgolabs.net>,
-        Darren Hart <dvhart@infradead.org>, fweimer@redhat.com,
-        joel@joelfernandes.org, kernel@collabora.com,
-        krisman@collabora.com, libc-alpha@sourceware.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, malteskarupke@fastmail.fm,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        pgriffais@valvesoftware.com, Peter Oskolkov <posk@posk.io>,
-        Steven Rostedt <rostedt@goodmis.org>, shuah@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, z.figura12@gmail.com
-References: <20210603195924.361327-1-andrealmeid@collabora.com>
-        <1622799088.hsuspipe84.astroid@bobo.none>
-        <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
-In-Reply-To: <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0hYX+6HpwYRLBNWPsV5sxWxfLC9QpEMY3Fh+1yVFR3w=;
+        b=dn1hTqvkWxCScmFlQnLrTS204NGKN5/fr4BvR8MjRfLaWNHmNBGLfGvL7A5Vyeirqo
+         cjcrrTq2UkbmdzIRiLOuWxGLXrxoxQw9iXQlA4YNjv5gTs8SqqssCM05Uvm9g919C/K+
+         4oWq3NPMh+Ha7bA0Ms7+WQ9SnSQqWO0IbpWEGew/yiK26t0wy1tCamXwO3e/2XvbRpAg
+         kh/rpwX2KJGj2jIXQTmvUaCsLeye9Gh9R8jIGUrz0eol69M+WDwbJeo5+l6hVJdQAQLg
+         p1ZlsE/nxJjmdM6ViiPB7Auss5rMPuRHHquF/wqcnmDzxHuTRofkW/CSo24ZauIkh2rP
+         BnZA==
+X-Gm-Message-State: AOAM530R6AQo0d6du0FrYSF0obVB53ESIiizrUfhSmjvE19prJf7YW2Y
+        v0iVXfy8qtKJNuGagtFzsTb8H7ZMnJ/EXIgO9wg=
+X-Google-Smtp-Source: ABdhPJwX+rzB6J1wsG+3/7kkYLlbOf83gienRlRx4GnyTLTD5wELbVLx0rPXr8TXddMRUV9JRUX2FODhCmfp/yYX3w4=
+X-Received: by 2002:a25:ba06:: with SMTP id t6mr8865985ybg.459.1622861418815;
+ Fri, 04 Jun 2021 19:50:18 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <1622853816.mokf23xgnt.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <1622558220-2849-1-git-send-email-alan.maguire@oracle.com> <1622558220-2849-3-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1622558220-2849-3-git-send-email-alan.maguire@oracle.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 4 Jun 2021 19:50:07 -0700
+Message-ID: <CAEf4BzY8KTxsuKMb+CtU5xMftf+kmy6dpCAYSwCmmdmCeU=ONg@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 2/2] selftests/bpf: add dump type data tests
+ to btf dump tests
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Bill Wendling <morbo@google.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Excerpts from Andr=C3=A9 Almeida's message of June 5, 2021 6:01 am:
-> =C3=80s 08:36 de 04/06/21, Nicholas Piggin escreveu:
->> Excerpts from Andr=C3=A9 Almeida's message of June 4, 2021 5:59 am:
->>> Hi,
->>>
->>> This patch series introduces the futex2 syscalls.
->>>
->>> * What happened to the current futex()?
->>>
->>> For some years now, developers have been trying to add new features to
->>> futex, but maintainers have been reluctant to accept then, given the
->>> multiplexed interface full of legacy features and tricky to do big
->>> changes. Some problems that people tried to address with patchsets are:
->>> NUMA-awareness[0], smaller sized futexes[1], wait on multiple futexes[2=
-].
->>> NUMA, for instance, just doesn't fit the current API in a reasonable
->>> way. Considering that, it's not possible to merge new features into the
->>> current futex.
->>>
->>>  ** The NUMA problem
->>>
->>>  At the current implementation, all futex kernel side infrastructure is
->>>  stored on a single node. Given that, all futex() calls issued by
->>>  processors that aren't located on that node will have a memory access
->>>  penalty when doing it.
->>>
->>>  ** The 32bit sized futex problem
->>>
->>>  Futexes are used to implement atomic operations in userspace.
->>>  Supporting 8, 16, 32 and 64 bit sized futexes allows user libraries to
->>>  implement all those sizes in a performant way. Thanks Boost devs for
->>>  feedback: https://lists.boost.org/Archives/boost/2021/05/251508.php
->>>
->>>  Embedded systems or anything with memory constrains could benefit of
->>>  using smaller sizes for the futex userspace integer.
->>>
->>>  ** The wait on multiple problem
->>>
->>>  The use case lies in the Wine implementation of the Windows NT interfa=
-ce
->>>  WaitMultipleObjects. This Windows API function allows a thread to slee=
-p
->>>  waiting on the first of a set of event sources (mutexes, timers, signa=
-l,
->>>  console input, etc) to signal.  Considering this is a primitive
->>>  synchronization operation for Windows applications, being able to quic=
-kly
->>>  signal events on the producer side, and quickly go to sleep on the
->>>  consumer side is essential for good performance of those running over =
-Wine.
->>>
->>> [0] https://lore.kernel.org/lkml/20160505204230.932454245@linutronix.de=
-/
->>> [1] https://lore.kernel.org/lkml/20191221155659.3159-2-malteskarupke@we=
-b.de/
->>> [2] https://lore.kernel.org/lkml/20200213214525.183689-1-andrealmeid@co=
-llabora.com/
->>>
->>> * The solution
->>>
->>> As proposed by Peter Zijlstra and Florian Weimer[3], a new interface
->>> is required to solve this, which must be designed with those features i=
-n
->>> mind. futex2() is that interface. As opposed to the current multiplexed
->>> interface, the new one should have one syscall per operation. This will
->>> allow the maintainability of the API if it gets extended, and will help
->>> users with type checking of arguments.
->>>
->>> In particular, the new interface is extended to support the ability to
->>> wait on any of a list of futexes at a time, which could be seen as a
->>> vectored extension of the FUTEX_WAIT semantics.
->>>
->>> [3] https://lore.kernel.org/lkml/20200303120050.GC2596@hirez.programmin=
-g.kicks-ass.net/
->>>
->>> * The interface
->>>
->>> The new interface can be seen in details in the following patches, but
->>> this is a high level summary of what the interface can do:
->>>
->>>  - Supports wake/wait semantics, as in futex()
->>>  - Supports requeue operations, similarly as FUTEX_CMP_REQUEUE, but wit=
-h
->>>    individual flags for each address
->>>  - Supports waiting for a vector of futexes, using a new syscall named
->>>    futex_waitv()
->>>  - Supports variable sized futexes (8bits, 16bits, 32bits and 64bits)
->>>  - Supports NUMA-awareness operations, where the user can specify on
->>>    which memory node would like to operate
->>=20
->> A few comments.
->>=20
->> - Do you need a syscall for wait and for waitv, or can wait just be a
->> degenerate case of waitv (which could use the stack variable)?  I guess
->> it does save the user access unlock.
->>=20
->=20
-> Yes. waitv with one element has a overhead compared to wait, given the
-> extra user_copy(). Given that waiting on a single futex is the common
-> case, I think it's worth to have it.
+On Tue, Jun 1, 2021 at 7:37 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> Test various type data dumping operations by comparing expected
+> format with the dumped string; an snprintf-style printf function
+> is used to record the string dumped.  Also verify overflow handling
+> where the data passed does not cover the full size of a type,
+> such as would occur if a tracer has a portion of the 8k
+> "struct task_struct".
+>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/btf_dump.c | 638 ++++++++++++++++++++++
+>  1 file changed, 638 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> index 1b90e68..b78c308 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> @@ -232,6 +232,642 @@ void test_btf_dump_incremental(void)
+>         btf__free(btf);
+>  }
+>
+> +#define STRSIZE                                4096
+> +
+> +void btf_dump_snprintf(void *ctx, const char *fmt, va_list args)
 
-Okay.
+static
 
->> - Did you consider a wakev interface? An example is a read-write mutex=20
->> which has read-blocking futexes split (e.g., per-node) for scalability=20
->> then the writer may unlock and wake all readers with one call. We=20
->> actually have some scalability challenges of this nature with certain=20
->> large database programs.
->>=20
->=20
-> Not really, I haven't heard any use case for that until now. It should
-> be easy to implement it, though, and I think you have an interesting use
-> case here. Could you point me some of those database programs?
+> +{
+> +       char *s = ctx, new[STRSIZE];
+> +
+> +       vsnprintf(new, STRSIZE, fmt, args);
+> +       strncat(s, new, STRSIZE);
+> +}
+> +
+> +/* skip "enum "/"struct " prefixes */
+> +#define SKIP_PREFIX(_typestr, _prefix)                                 \
+> +       do {                                                            \
+> +               if (strncmp(_typestr, _prefix, strlen(_prefix)) == 0)   \
+> +                       _typestr += strlen(_prefix) + 1;                \
+> +       } while (0)
+> +
+> +int btf_dump_data(struct btf *btf, struct btf_dump *d,
+> +                 char *name, __u64 flags, void *ptr,
+> +                 size_t ptrsize, char *str, const char *expectedval)
 
-Not source code unfortunately. I know that's not a very good answer, but=20
-they are far ahead of what most open source apps are doing scalability=20
-wise today, and they end up rolling their own complex locking. Hopefully
-the example I give is simple enough to understand.
+static
 
->=20
->> - Great to see 64-bit support in, it is helpful to do some interesting=20
->> things with locks without hacks (e.g., putting an address in the lock=20
->> word).
->>=20
->> - Are we really keen on squashing node ID into flags in this day and age=
-?
->> I guess okay but seems like it would be nice to allow a bit more space
->> in general for the operations. I don't want to turn it into a whole big
->> multiplexing nightmare again with lots of such flags, or propose
->> complexity with no code behind it, but I think we need a bit of leeway
->> for unforeseen locking innovations to be added carefully. The pthread
->> locking today is still fairly primitive really, I don't think we know
->> what will work best for the next 10 years.
->=20
-> In the interface that I'd proposed, the node ID isn't part of the flags.
-> You have a flag FUTEX_FLAG_NUMA, and when that is used, you pass in
-> `void *uaddr` a pointer to a `struct futex_numa { int value, int hint
-> }`, where hint should be the node ID you would like to work on, and
-> value is just the userspace futex. This is documented in more details in
-> patch 7 "docs: locking: futex2: Add documentation".
->=20
-> If you have any feedback about how this NUMA interface looks like, I
-> would like to hear.
->=20
-> Also, did something in my writing indicated that the node ID would be
-> part of the flags? I'll improve this it if so.
+naming nit: expected_val is much easier to read than expected_val,
+same for ptrsize vs ptr_size; I'm also totally fine with shorter names
+using common abbreviations (exp_val, ptr_sz, etc).
 
-Oh I did miss this, thank you. No it wasn't your writing, I think it was=20
-me trying to read through a lot of messages and got confused with some
-earlier conversations.
+> +{
+> +       DECLARE_LIBBPF_OPTS(btf_dump_type_data_opts, opts);
+> +       int ret = 0, cmp;
+> +       size_t typesize;
+> +       __s32 type_id;
+> +
+> +       if (flags & BTF_F_COMPACT)
+> +               opts.compact = true;
+> +       if (flags & BTF_F_NONAME)
+> +               opts.skip_names = true;
+> +       if (flags & BTF_F_ZERO)
+> +               opts.emit_zeroes = true;
 
-I'll look a bit more at the NUMA interface.
+nothing wrong with this, but just as an FYI, you could have combined
+that with DECLARE_LIBBPF_OPTS above:
 
->=20
->>=20
->> One scalability issue we are starting to hit and will only get worse is=20
->> futex queue spinlock contention. Perhaps this is better addressed in=20
->> userspace but the kernel could play a part so I like to leave some doors
->> open. One example is that the wait (or wake) side may like to depend not
->> just on the memory value, but on the success of a cmpxchg to avoid=20
->> unqueueing and queueing spuriously, which increases lock contention but
->> also ends up putting the poor task on the back of the list -- yes RT
->> priorities can help the realtime case, but non-RT cases can get bad
->> outlier latencies if lock stealing is allowed (which can be very good
->> for performance).
->>=20
->=20
-> Sorry, I'm not sure what do you mean here. Are you proposing to have a
-> cmpxchg in kernel side, so the lock would be taken by the kernel, and
-> not by the userspace like it's now?
+DECLARE_LIBBPF_OPTS(btf_dump_type_data_opts, opts,
+    .compact = flags & BTF_F_COMPACT,
+    .skip_names = flags & BTF_F_NONAME,
+    .emit_zeroes = flags & BTF_F_ZERO,
+);
 
-Yes. Only in slow paths, of course, to reduce starvation / erratic
-latencies and spurious wait queue manipulations.
+> +       SKIP_PREFIX(name, "enum");
+> +       SKIP_PREFIX(name, "struct");
+> +       SKIP_PREFIX(name, "union");
+> +       type_id = btf__find_by_name(btf, name);
+> +       if (CHECK(type_id <= 0, "find type id",
+> +                 "no '%s' in BTF: %d\n", name, type_id)) {
 
-Actually one other scalability thing while I remember it:
+see all the variations of ASSERT_XXX() macros, they are shorter, have
+more natural checks and they output argument values automatically if
+condition doesn't hold. So this one would be
 
-futex_wait currently requires that the lock word is tested under the=20
-queue spin lock (to avoid consuming a wakeup). The problem with this is=20
-that the lock word can be a very hot cache line if you have a lot of
-concurrency, so accessing it under the queue lock can increase queue
-lock hold time.
+if (!ASSERT_GT(type_id, 0, "type_id")) {
+    err = -ENOENT;
+    goto err;
+}
 
-I would prefer if the new API was relaxed to avoid this restriction
-(e.g., any wait call may consume a wakeup so it's up to userspace to
-avoid that if it is a problem).
+> +               ret = -ENOENT;
+> +               goto err;
+> +       }
+> +       typesize = btf__resolve_size(btf, type_id);
+> +       str[0] = '\0';
+> +       ret = btf_dump__dump_type_data(d, type_id, ptr, ptrsize, &opts);
+> +       if (typesize <= ptrsize) {
+> +               if (CHECK(ret != typesize, "btf_dump__dump_type_data",
+> +                         "failed/unexpected typesize: %d\n", ret))
+> +                       goto err;
+> +       } else {
+> +               if (CHECK(ret != -E2BIG, "btf_dump__dump_type_data -E2BIG",
+> +                         "failed to return -E2BIG: %d\n", ret))
+> +                       goto err;
+> +               ret = 0;
+> +       }
+> +
+> +       cmp = strcmp(str, expectedval);
+> +       if (CHECK(cmp, "ensure expected/actual match",
+> +                 "'%s' does not match expected '%s': %d\n",
+> +                 str, expectedval, cmp))
+> +               ret = -EFAULT;
 
->> - The private global futex hash table sucks for various reasons, and
->> having 128 waiters per thread makes it orders of magnitude easier for
->> userspace to DoS stuff with hash collisions. NUMA doesn't fix that, the
->> per process hashing that Thomas suggested does fix the DoS but the
->> non-deterministic hash collisions still seem to be a problem for real
->> time response, and at the other end of the scale some apps (certain=20
->> databases, etc) can have ten thousand futex waiters at once so birthday
->> paradox can also lead to guaranteed (low level) variable beahviour=20
->> within a single process.
->>=20
->> I know the kernel in general is not very robust against this kind of=20
->> DoS/nondeterminism, but it's a bit sad to introduce new APIs with the=20
->> problem still there. Yes we could address it later, but I think it's=20
->> better done first because the solution might influence what the best=20
->> syscall API is.
->>=20
->> For example the idea of using the address as the handle for the wait=20
->> queue _and_ the value is very convenient but hashing is annoying for
->> all the above reasons and the shared wait queue case is pretty clunky.=20
->> It's also constraining in some corner cases to have the wait queue=20
->> associated with the address 1:1. For example a type of NUMA mutex might=20
->> want to have per-node waitqueues associated with a lock word, and wake
->> local node waiters 99% of the time. Not trivial to do with futexes and
->> seems to at least require bouncing of more cache lines, possibly more
->> atomics, etc.
->>=20
->> Could anything else be done?
->=20
-> I wasn't aware that userspace doing DoS is something to be concerned
-> from the kernel point of view. Is this scenario considering a malicious
-> actor? If so, there are plenty of resources to be denied, so not sure
-> how futex could be protected of this. Or is this just a program that
-> uses tons of futexes?
+here ASSERT_STREQ() is useful
 
-Both really. AFAIKS one of the efforts that prompted the futex=20
-modernisation work was the RT latency issues from Thomas in 2016 when=20
-the per process table was proposed.
+> +err:
+> +       if (ret < 0)
+> +               btf_dump__free(d);
+> +       return ret;
+> +}
+> +
+> +#define TEST_BTF_DUMP_DATA(_b, _d, _str, _type, _flags, _expected, ...)        \
+> +       do {                                                            \
+> +               char __ptrtype[64] = #_type;                            \
+> +               char *_ptrtype = (char *)__ptrtype;                     \
+> +               _type _ptrdata = __VA_ARGS__;                           \
+> +               void *_ptr = &_ptrdata;                                 \
+> +               int _err;                                               \
+> +                                                                       \
+> +               _err = btf_dump_data(_b, _d, _ptrtype, _flags, _ptr,    \
+> +                                    sizeof(_type), _str, _expected);   \
+> +               if (_err < 0)                                           \
+> +                       return _err;                                    \
+> +       } while (0)
+> +
+> +/* Use where expected data string matches its stringified declaration */
+> +#define TEST_BTF_DUMP_DATA_C(_b, _d, _str, _type, _flags, ...)         \
+> +       TEST_BTF_DUMP_DATA(_b, _d, _str, _type, _flags,                 \
+> +                          "(" #_type ")" #__VA_ARGS__, __VA_ARGS__)
+> +
+> +/* overflow test; pass typesize < expected type size, ensure E2BIG returned */
+> +#define TEST_BTF_DUMP_DATA_OVER(_b, _d, _str, _type, _typesize, _expected, ...)\
+> +       do {                                                            \
+> +               char __ptrtype[64] = #_type;                            \
+> +               char *_ptrtype = (char *)__ptrtype;                     \
+> +               _type _ptrdata = __VA_ARGS__;                           \
+> +               void *_ptr = &_ptrdata;                                 \
+> +               int _err;                                               \
+> +                                                                       \
+> +               _err = btf_dump_data(_b, _d, _ptrtype, 0, _ptr,         \
+> +                                    _typesize, _str, _expected);       \
+> +               if (_err < 0)                                           \
+> +                       return _err;                                    \
+> +       } while (0)
+> +
+> +#define TEST_BTF_DUMP_VAR(_b, _d, _str, _var, _type, _flags, _expected, ...) \
+> +       do {                                                            \
+> +               _type _ptrdata = __VA_ARGS__;                           \
+> +               void *_ptr = &_ptrdata;                                 \
+> +               int _err;                                               \
+> +                                                                       \
+> +               _err = btf_dump_data(_b, _d, _var, _flags, _ptr,        \
+> +                                    sizeof(_type), _str, _expected);   \
+> +               if (_err < 0)                                           \
+> +                       return _err;                                    \
+> +       } while (0)
+> +
+> +int test_btf_dump_int_data(struct btf *btf, struct btf_dump *d, char *str)
 
+static here and in a bunch of places below
 
->> I'll be burned at the stake for suggesting it but it would be great if=20
->> we could use file descriptors. At least for the shared futex, maybe=20
->> private could use a per-process futex allocator. It solves all of the
->> above, although I'm sure has many of its own problem. It may not play
->> so nicely with the pthread mutex API because of the whole static
->> initialiser problem, but the first futex proposal did use fds. But it's
->> an example of an alternate API.
->>=20
->=20
-> FDs and futex doesn't play well, because for futex_wait() you need to
-> tell the kernel the expected value in the futex address to avoid
-> sleeping in a free lock. FD operations (poll, select) don't have this
-> `value` argument, so they could sleep forever, but I'm not sure if you
-> had taken this in consideration.
+> +{
+> +       /* simple int */
+> +       TEST_BTF_DUMP_DATA_C(btf, d, str, int, BTF_F_COMPACT, 1234);
+> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT | BTF_F_NONAME,
+> +                          "1234", 1234);
+> +       TEST_BTF_DUMP_DATA(btf, d, str, int, 0, "(int)1234\n", 1234);
 
-I had. The futex wait API would take a fd additional. The only=20
-difference is the waitqueue that is used when a sleep or wake is=20
-required is derived from the fd, not from an address.
+do you think it's a good idea to append \n? it seems so simple for
+user to do that, if necessary; on the other hand, if user doesn't want
+it, they would need to do strlen() and overwriting last character,
+which seems like a hassle
 
-I think the bigger sticking points would be if it's too heavyweight an=20
-object to use (which could be somewhat mitigated with a simpler ida
-allocator although that's difficult to do with shared), and whether libc
-could sanely use them due to the static initialiser problem of pthread
-mutexes.
+> +
+> +       /* zero value should be printed at toplevel */
+> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT, "(int)0", 0);
+> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT | BTF_F_NONAME,
+> +                          "0", 0);
+> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT | BTF_F_ZERO,
+> +                          "(int)0", 0);
+> +       TEST_BTF_DUMP_DATA(btf, d, str, int,
+> +                          BTF_F_COMPACT | BTF_F_NONAME | BTF_F_ZERO,
+> +                          "0", 0);
+> +       TEST_BTF_DUMP_DATA_C(btf, d, str, int, BTF_F_COMPACT, -4567);
+> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT | BTF_F_NONAME,
+> +                          "-4567", -4567);
+> +       TEST_BTF_DUMP_DATA(btf, d, str, int, 0, "(int)-4567\n", -4567);
+> +
+> +       TEST_BTF_DUMP_DATA_OVER(btf, d, str, int, sizeof(int)-1, "", 1);
+> +
+> +       return 0;
+> +}
+> +
+> +/* since the kernel does not likely have any float types in its BTF, we
+> + * will need to add some of various sizes.
+> + */
+> +#define TEST_ADD_FLOAT(_btf, _name, _sz)                               \
+> +       do {                                                            \
+> +               int _err;                                               \
+> +                                                                       \
+> +               _err = btf__add_float(_btf, _name, _sz);                \
+> +               if (CHECK(_err < 0, "btf__add_float",                   \
+> +                         "could not add float of size %d: %d",         \
+> +                         _sz, _err))                                   \
+> +                       return _err;                                    \
+> +       } while (0)
+> +
+> +#define TEST_DUMP_FLOAT(_b, _d, _str, _type, _flags, _data, _sz,       \
+> +                       _expectedval)                                   \
+> +       do {                                                            \
+> +               int _err;                                               \
+> +                                                                       \
+> +               _err = btf_dump_data(_b, _d, _type, _flags,             \
+> +                                    _data, _sz, _str, _expectedval);   \
+> +               if (CHECK(_err < 0, "btf_dump float",                   \
+> +                         "could not dump float data: %d\n", _err))     \
+> +                       return _err;                                    \
+> +       } while (0)
+> +
+> +int test_btf_dump_float_data(struct btf *btf, struct btf_dump *d, char *str)
+> +{
+> +       float t1 = 1.234567;
+> +       float t2 = -1.234567;
+> +       float t3 = 0.0;
+> +       double t4 = 5.678912;
+> +       double t5 = -5.678912;
+> +       double t6 = 0.0;
+> +       long double t7 = 9.876543;
+> +       long double t8 = -9.876543;
+> +       long double t9 = 0.0;
+> +
+> +       TEST_ADD_FLOAT(btf, "test_float", 4);
 
-Thanks,
-Nick
+I don't get this love for macros. It makes debugging experience much
+harder. It makes following the code harder. It doesn't save much
+typing at all. TEST_BTF_DUMP_DATA at least adds some convenience, but
+TEST_ADD_FLOAT and TEST_DUMP_FLOAT are completely useless, see below.
+
+> +       TEST_DUMP_FLOAT(btf, d, str, "test_float", 0, &t1, 4,
+> +                       "(test_float)1.234567\n");
+> +       TEST_DUMP_FLOAT(btf, d, str, "test_float", 0, &t2, 4,
+> +                       "(test_float)-1.234567\n");
+> +       TEST_DUMP_FLOAT(btf, d, str, "test_float", 0, &t3, 4,
+> +                       "(test_float)0.000000\n");
+
+ASSERT_OK(btf_dump_data(btf, d, "test_float", 0, &t1, 4, str,
+"(test_float)1.234567\n"));
+ASSERT_OK(btf_dump_data(btf, d, "test_float", 0, &t2, 4, str,
+"(test_float)-1.234567\n"));
+ASSERT_OK(btf_dump_data(btf, d, "test_float", 0, &t3, 4, str,
+"(test_float)0.000000\n"));
+
+It even saved some lines of code.
+
+> +
+> +       TEST_ADD_FLOAT(btf, "test_double", 8);
+> +       TEST_DUMP_FLOAT(btf, d, str, "test_double", 0, &t4, 8,
+> +                       "(test_double)5.678912\n");
+> +       TEST_DUMP_FLOAT(btf, d, str, "test_double", 0, &t5, 8,
+> +                       "(test_double)-5.678912\n");
+> +       TEST_DUMP_FLOAT(btf, d, str, "test_double", 0, &t6, 8,
+> +                       "(test_double)0.000000\n");
+> +
+
+[...]
+
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum,
+> +                          BTF_F_COMPACT | BTF_F_NONAME,
+> +                          "{}",
+> +                          { .name_off = 0, .val = 0,});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, 0,
+> +                          "(struct btf_enum){\n}\n",
+> +                          { .name_off = 0, .val = 0,});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum,
+> +                          BTF_F_COMPACT | BTF_F_ZERO,
+> +                          "(struct btf_enum){.name_off = (__u32)0,.val = (__s32)0,}",
+> +                          { .name_off = 0, .val = 0,});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum,
+> +                          BTF_F_ZERO,
+> +                          "(struct btf_enum){\n\t.name_off = (__u32)0,\n\t.val = (__s32)0,\n}\n",
+
+while for primitive types and enums above are expected strings are
+pretty easy to follow, for structs it starts to break apart. For
+instance, I find
+
+"(struct btf_enum){\
+        .name_off = (__u32)0,\
+        .val = (__s32)0,\
+}\
+",
+
+much more legible (I can mentally ignore \ at the end quite easily).
+This single line \n\t stuff just gets messier for bigger structs.
+
+> +                          { .name_off = 0, .val = 0,});
+> +
+> +       /* struct with pointers */
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, BTF_F_COMPACT,
+> +                          "(struct list_head){.next = (struct list_head *)0x1,}",
+> +                          { .next = (struct list_head *)1 });
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, 0,
+> +                          "(struct list_head){\n\t.next = (struct list_head *)0x1,\n}\n",
+> +                          { .next = (struct list_head *)1 });
+> +       /* NULL pointer should not be displayed */
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, BTF_F_COMPACT,
+> +                          "(struct list_head){}",
+> +                          { .next = (struct list_head *)0 });
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, 0,
+> +                          "(struct list_head){\n}\n",
+> +                          { .next = (struct list_head *)0 });
+> +
+> +       /* struct with function pointers */
+> +       type_id = btf__find_by_name(btf, "file_operations");
+> +       if (CHECK(type_id <= 0, "find type id",
+> +                 "no 'struct file_operations' in BTF: %d\n", type_id))
+> +               return -ENOENT;
+> +       typesize = btf__resolve_size(btf, type_id);
+> +       str[0] = '\0';
+> +
+> +       ret = btf_dump__dump_type_data(d, type_id, fops, typesize, &opts);
+> +       if (CHECK(ret != typesize,
+> +                 "dump file_operations is successful",
+> +                 "unexpected return value dumping file_operations '%s': %d\n",
+> +                 str, ret))
+> +               return -EINVAL;
+> +
+> +       cmpstr = "(struct file_operations){\n\t.owner = (struct module *)0xffffffffffffffff,\n\t.llseek = (loff_t(*)(struct file *, loff_t, int))0xffffffffffffffff,";
+> +       cmp = strncmp(str, cmpstr, strlen(cmpstr));
+> +       if (CHECK(cmp != 0, "check file_operations dump",
+> +                 "file_operations '%s' did not match expected\n",
+
+cmpstr logging is missing here. But I also think it's not the first
+time there was a need to validate only portiong of string equality, so
+I wonder if we should just add ASSERT_STRNEQ(actual, expected, len)
+variant, it should be trivial to add.
+
+> +                 str))
+> +               return -EINVAL;
+> +
+> +       /* struct with char array */
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, BTF_F_COMPACT,
+> +                          "(struct bpf_prog_info){.name = (char[])['f','o','o',],}",
+> +                          { .name = "foo",});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info,
+> +                          BTF_F_COMPACT | BTF_F_NONAME,
+> +                          "{['f','o','o',],}",
+> +                          {.name = "foo",});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, 0,
+> +                          "(struct bpf_prog_info){\n\t.name = (char[])[\n\t\t'f',\n\t\t\'o',\n\t\t'o',\n\t],\n}\n",
+> +                          {.name = "foo",});
+> +       /* leading null char means do not display string */
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, BTF_F_COMPACT,
+> +                          "(struct bpf_prog_info){}",
+> +                          {.name = {'\0', 'f', 'o', 'o'}});
+> +       /* handle non-printable characters */
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, BTF_F_COMPACT,
+> +                          "(struct bpf_prog_info){.name = (char[])[1,2,3,],}",
+> +                          { .name = {1, 2, 3, 0}});
+> +
+> +       /* struct with non-char array */
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, BTF_F_COMPACT,
+> +                          "(struct __sk_buff){.cb = (__u32[])[1,2,3,4,5,],}",
+> +                          { .cb = {1, 2, 3, 4, 5,},});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff,
+> +                          BTF_F_COMPACT | BTF_F_NONAME,
+> +                          "{[1,2,3,4,5,],}",
+> +                          { .cb = { 1, 2, 3, 4, 5},});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, 0,
+> +                          "(struct __sk_buff){\n\t.cb = (__u32[])[\n\t\t1,\n\t\t2,\n\t\t3,\n\t\t4,\n\t\t5,\n\t],\n}\n",
+
+As you can see above in my example patch, emit_type_decl would emit
+this array type as __u32[5]. I think drgn that was used as an
+inspiration for this format also does that. So I think it's good to
+stick to __u32[5] here.
+
+> +                          { .cb = { 1, 2, 3, 4, 5},});
+> +       /* For non-char, arrays, show non-zero values only */
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, BTF_F_COMPACT,
+> +                          "(struct __sk_buff){.cb = (__u32[])[0,0,1,0,0,],}",
+> +                          { .cb = { 0, 0, 1, 0, 0},});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, 0,
+> +                          "(struct __sk_buff){\n\t.cb = (__u32[])[\n\t\t0,\n\t\t0,\n\t\t1,\n\t\t0,\n\t\t0,\n\t],\n}\n",
+> +                          { .cb = { 0, 0, 1, 0, 0},});
+> +
+> +       /* struct with bitfields */
+> +       TEST_BTF_DUMP_DATA_C(btf, d, str, struct bpf_insn, BTF_F_COMPACT,
+> +               {.code = (__u8)1,.dst_reg = (__u8)0x2,.src_reg = (__u8)0x3,.off = (__s16)4,.imm = (__s32)5,});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_insn,
+> +                          BTF_F_COMPACT | BTF_F_NONAME,
+> +                          "{1,0x2,0x3,4,5,}",
+> +                          { .code = 1, .dst_reg = 0x2, .src_reg = 0x3, .off = 4,
+> +                            .imm = 5,});
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_insn, 0,
+> +                          "(struct bpf_insn){\n\t.code = (__u8)1,\n\t.dst_reg = (__u8)0x2,\n\t.src_reg = (__u8)0x3,\n\t.off = (__s16)4,\n\t.imm = (__s32)5,\n}\n",
+> +                          {.code = 1, .dst_reg = 2, .src_reg = 3, .off = 4, .imm = 5});
+> +
+> +       /* zeroed bitfields should not be displayed */
+> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_insn, BTF_F_COMPACT,
+> +                          "(struct bpf_insn){.dst_reg = (__u8)0x1,}",
+> +                          { .code = 0, .dst_reg = 1});
+> +
+> +       /* struct with enum bitfield */
+> +       type_id = btf__find_by_name(btf, "nft_cmp_expr");
+
+This nft_cmp_expr breaks our CI ([0]) because we don't build kernels
+with CONFIG_NF_TABLES=y. Can you please find some other struct that
+would be in a core kernel configuration? If not, you can just do the
+same trick as with floats and generate your own struct with bitfields.
+
+  [0] https://travis-ci.com/github/kernel-patches/bpf/builds/227876698
+
+> +       if (CHECK(type_id <= 0, "find nft_cmp_expr",
+> +                 "no 'struct nft_cmp_expr' in BTF: %d\n", type_id))
+> +               return -ENOENT;
+> +       typesize = btf__resolve_size(btf, type_id);
+> +       str[0] = '\0';
+> +
+
+[...]
+
+> +void test_btf_dump_data(void)
+> +{
+> +       struct btf *btf = libbpf_find_kernel_btf();
+> +       char str[STRSIZE];
+> +       struct btf_dump_opts opts = { .ctx = str };
+> +       struct btf_dump *d;
+> +
+> +       if (CHECK(!btf, "get kernel BTF", "no kernel BTF found"))
+> +               return;
+> +
+> +       d = btf_dump__new(btf, NULL, &opts, btf_dump_snprintf);
+> +
+> +       if (CHECK(!d, "new dump", "could not create BTF dump"))
+> +               return;
+> +
+> +       /* Verify type display for various types. */
+> +       if (test_btf_dump_int_data(btf, d, str))
+> +               return;
+> +       if (test_btf_dump_float_data(btf, d, str))
+> +               return;
+> +       if (test_btf_dump_char_data(btf, d, str))
+> +               return;
+> +       if (test_btf_dump_typedef_data(btf, d, str))
+> +               return;
+> +       if (test_btf_dump_enum_data(btf, d, str))
+> +               return;
+> +       if (test_btf_dump_struct_data(btf, d, str))
+> +               return;
+> +       if (test_btf_dump_var_data(btf, d, str))
+> +               return;
+
+it would be more convenient for each of those to be a subtest, and
+there is no need to exit early if one of them fails, so don't return
+early.
+
+> +       btf_dump__free(d);
+> +       btf__free(btf);
+> +
+> +       /* verify datasec display */
+> +       if (test_btf_dump_datasec_data(str))
+> +               return;
+> +
+> +}
+> +
+>  void test_btf_dump() {
+>         int i;
+>
+> @@ -245,4 +881,6 @@ void test_btf_dump() {
+>         }
+>         if (test__start_subtest("btf_dump: incremental"))
+>                 test_btf_dump_incremental();
+> +       if (test__start_subtest("btf_dump: data"))
+
+so instead of testing subtest name here, just do it for every
+test_btf_dump_*_data above
+
+> +               test_btf_dump_data();
+>  }
+> --
+> 1.8.3.1
+>
