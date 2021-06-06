@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C15D039D0E2
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Jun 2021 21:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8041A39D0F4
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Jun 2021 21:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbhFFTPl convert rfc822-to-8bit (ORCPT
+        id S229894AbhFFTVf convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 6 Jun 2021 15:15:41 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:55108 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbhFFTOi (ORCPT
+        Sun, 6 Jun 2021 15:21:35 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:50320 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229573AbhFFTVf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 6 Jun 2021 15:14:38 -0400
+        Sun, 6 Jun 2021 15:21:35 -0400
 Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
         (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CF06921A83;
-        Sun,  6 Jun 2021 19:12:44 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6B96A1FDC5;
+        Sun,  6 Jun 2021 19:19:43 +0000 (UTC)
 Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id A8D70118DD;
-        Sun,  6 Jun 2021 19:12:39 +0000 (UTC)
+        by imap.suse.de (Postfix) with ESMTP id EF78F118DD;
+        Sun,  6 Jun 2021 19:19:37 +0000 (UTC)
 Received: from director2.suse.de ([192.168.254.72])
         by imap3-int with ESMTPSA
-        id 1dwyHycevWBQXAAALh3uQQ
-        (envelope-from <dave@stgolabs.net>); Sun, 06 Jun 2021 19:12:39 +0000
-Date:   Sun, 6 Jun 2021 12:12:33 -0700
+        id sZX8LckfvWBBXgAALh3uQQ
+        (envelope-from <dave@stgolabs.net>); Sun, 06 Jun 2021 19:19:37 +0000
+Date:   Sun, 6 Jun 2021 12:19:32 -0700
 From:   Davidlohr Bueso <dave@stgolabs.net>
 To:     =?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@collabora.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
@@ -42,381 +42,259 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
         Peter Oskolkov <posk@posk.io>,
         Andrey Semashev <andrey.semashev@gmail.com>,
-        torvalds@linux-foundation.org
-Subject: Re: [PATCH v4 05/15] futex2: Implement support for different futex
- sizes
-Message-ID: <20210606191233.asjaichvylpryser@offworld>
-References: <20210603195924.361327-1-andrealmeid@collabora.com>
- <20210603195924.361327-6-andrealmeid@collabora.com>
+        mtk.manpages@gmail.com
+Message-ID: <20210606191932.osytlsvsnks2cxwa@offworld>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20210603195924.361327-6-andrealmeid@collabora.com>
 User-Agent: NeoMutt/20201120
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Bcc:
+Subject: Re: [PATCH v4 07/15] docs: locking: futex2: Add documentation
+Reply-To:
+In-Reply-To: <20210603195924.361327-8-andrealmeid@collabora.com>
+
 On Thu, 03 Jun 2021, Andrï¿½ Almeida wrote:
 
->Implement support for 8, 16 and 64 bit futexes, along with the existing
->32 bit support. Userspace should use flags to specify in the syscall
->the size of the *uaddr they are operating on.
->
->Variable sized futexes are useful for implementing atomic primitives in
->userspace in an efficient manner. 64bit sized futexes are also
->particularly useful when userspace stores information to be used in an
->atomic fashion on the futex value, given more room for flexibility.
+>Add a new documentation file specifying both userspace API and internal
+>implementation details of futex2 syscalls.
 
-Note that at least in the past, Linus has been vehemently against 64-bit
-futexes.
-
-Basically this additional data, like for implementing read/write locks,
-does not need to be in the futex atomic wait/wake parts. You can instead
-split the userspace lock into two adjacent 32-bit words and do 64-bit
-atomic ops on it.
-
-Of course, this is a new interface altogether, so this time it might
-be fair game.
+I think equally important would be to provide a manpage for each new
+syscall you are introducing, and keep mkt in the loop as in the past he
+extensively documented and improved futex manpages, and overall has a
+lot of experience with dealing with kernel interfaces.
 
 Thanks,
 Davidlohr
 
 >
->Overlapping futexes are not allowed, so userspace can't wait and wake on
->the same memory address if the are using different sizes.
->
 >Signed-off-by: André Almeida <andrealmeid@collabora.com>
 >---
-> include/uapi/linux/futex.h |   3 +
-> kernel/futex2.c            | 124 ++++++++++++++++++++++++-------------
-> 2 files changed, 84 insertions(+), 43 deletions(-)
+> Documentation/locking/futex2.rst | 198 +++++++++++++++++++++++++++++++
+> Documentation/locking/index.rst  |   1 +
+> 2 files changed, 199 insertions(+)
+> create mode 100644 Documentation/locking/futex2.rst
 >
->diff --git a/include/uapi/linux/futex.h b/include/uapi/linux/futex.h
->index 06ea9bdfa69e..5786270b0c75 100644
->--- a/include/uapi/linux/futex.h
->+++ b/include/uapi/linux/futex.h
->@@ -42,7 +42,10 @@
->					 FUTEX_PRIVATE_FLAG)
->
-> /* Size argument to futex2 syscall */
->+#define FUTEX_8		0
->+#define FUTEX_16	1
-> #define FUTEX_32	2
->+#define FUTEX_64	3
->
-> #define FUTEX_SIZE_MASK	0x3
->
->diff --git a/kernel/futex2.c b/kernel/futex2.c
->index 012d7f7fc17a..1e97e5f2e793 100644
->--- a/kernel/futex2.c
->+++ b/kernel/futex2.c
->@@ -89,9 +89,11 @@ struct futex_bucket {
-> #define FUTEXV_WAITER_MASK (FUTEX_SIZE_MASK | FUTEX_SHARED_FLAG)
->
-> #define is_object_shared ((futexv->objects[i].flags & FUTEX_SHARED_FLAG) ? true : false)
->+#define object_size (futexv->objects[i].flags & FUTEX_SIZE_MASK)
->
->-#define FUT_OFF_INODE    1 /* We set bit 0 if key has a reference on inode */
->-#define FUT_OFF_MMSHARED 2 /* We set bit 1 if key has a reference on mm */
->+#define FUT_OFF_INODE    PAGE_SIZE
->+#define FUT_OFF_MMSHARED (PAGE_SIZE << 1)
->+#define FUT_OFF_SIZE     1
->
-> static struct futex_bucket *futex_table;
-> static unsigned int futex2_hashsize;
->@@ -321,6 +323,7 @@ static int futex_get_shared_key(uintptr_t address, struct mm_struct *mm,
->  * @uaddr:   futex user address
->  * @key:     data that uniquely identifies a futex
->  * @shared:  is this a shared futex?
->+ * @flags:   flags for the size
->  *
->  * For private futexes, each uaddr will be unique for a given mm_struct, and it
->  * won't be freed for the life time of the process. For shared futexes, check
->@@ -330,21 +333,41 @@ static int futex_get_shared_key(uintptr_t address, struct mm_struct *mm,
->  */
-> static struct futex_bucket *futex_get_bucket(void __user *uaddr,
->					     struct futex_key *key,
->-					     bool shared)
->+					     bool shared, unsigned int flags)
-> {
->	uintptr_t address = (uintptr_t)uaddr;
->	u32 hash_key;
->
->+	size_t size;
+>diff --git a/Documentation/locking/futex2.rst b/Documentation/locking/futex2.rst
+>new file mode 100644
+>index 000000000000..2f74d7c97a55
+>--- /dev/null
+>+++ b/Documentation/locking/futex2.rst
+>@@ -0,0 +1,198 @@
+>+.. SPDX-License-Identifier: GPL-2.0
 >+
->+	switch (flags) {
->+	case FUTEX_8:
->+		size = sizeof(u8);
->+		break;
->+	case FUTEX_16:
->+		size = sizeof(u16);
->+		break;
->+	case FUTEX_32:
->+		size = sizeof(u32);
->+		break;
->+	case FUTEX_64:
->+		size = sizeof(u64);
->+		break;
->+	default:
->+		return ERR_PTR(-EINVAL);
->+	}
+>+======
+>+futex2
+>+======
 >+
->	/* Checking if uaddr is valid and accessible */
->-	if (unlikely(!IS_ALIGNED(address, sizeof(u32))))
->+	if (unlikely(!IS_ALIGNED(address, size)))
->		return ERR_PTR(-EINVAL);
->-	if (unlikely(!access_ok(uaddr, sizeof(u32))))
->+	if (unlikely(!access_ok(uaddr, size)))
->		return ERR_PTR(-EFAULT);
->
->	key->offset = address % PAGE_SIZE;
->	address -= key->offset;
->	key->pointer = (u64)address;
->	key->index = (unsigned long)current->mm;
->+	key->offset |= FUT_OFF_SIZE << (size - sizeof(u8));
->
->	if (shared)
->		futex_get_shared_key(address, current->mm, key);
->@@ -358,18 +381,39 @@ static struct futex_bucket *futex_get_bucket(void __user *uaddr,
->
-> /**
->  * futex_get_user - Get the userspace value on this address
->- * @uval:  variable to store the value
->- * @uaddr: userspace address
->+ * @uval:	variable to store the value
->+ * @uaddr:	userspace address
->+ * @pagefault:	true if pagefault should be disabled
->+ * @flags:	flags for the size
->  *
->  * Check the comment at futex_enqueue() for more information.
->  */
->-static int futex_get_user(u32 *uval, u32 __user *uaddr)
->+static int futex_get_user(u64 *uval, void __user *uaddr, unsigned int flags, bool pagefault)
-> {
->	int ret;
->
->-	pagefault_disable();
->-	ret = __get_user(*uval, uaddr);
->-	pagefault_enable();
->+	if (pagefault)
->+		pagefault_disable();
+>+:Author: André Almeida <andrealmeid@collabora.com>
 >+
->+	switch (flags) {
->+	case FUTEX_8:
->+		ret = __get_user(*uval, (u8 __user *)uaddr);
->+		break;
->+	case FUTEX_16:
->+		ret = __get_user(*uval, (u16 __user *)uaddr);
->+		break;
->+	case FUTEX_32:
->+		ret = __get_user(*uval, (u32 __user *)uaddr);
->+		break;
->+	case FUTEX_64:
->+		ret = __get_user(*uval, (u64 __user *)uaddr);
->+		break;
->+	default:
->+		BUG();
->+	}
+>+futex, or fast user mutex, is a set of syscalls to allow userspace to create
+>+performant synchronization mechanisms, such as mutexes, semaphores and
+>+conditional variables in userspace. C standard libraries, like glibc, uses it
+>+as a means to implement more high level interfaces like pthreads.
 >+
->+	if (pagefault)
->+		pagefault_enable();
+>+The interface
+>+=============
+>+
+>+uAPI functions
+>+--------------
+>+
+>+.. kernel-doc:: kernel/futex2.c
+>+   :identifiers: sys_futex_wait sys_futex_wake sys_futex_waitv sys_futex_requeue
+>+
+>+uAPI structures
+>+---------------
+>+
+>+.. kernel-doc:: include/uapi/linux/futex.h
+>+
+>+The ``flag`` argument
+>+---------------------
+>+
+>+The flag is used to specify the size of the futex word
+>+(FUTEX_[8, 16, 32, 64]). It's mandatory to define one, since there's no
+>+default size.
+>+
+>+By default, the timeout uses a monotonic clock, but can be used as a realtime
+>+one by using the FUTEX_REALTIME_CLOCK flag.
+>+
+>+By default, futexes are of the private type, that means that this user address
+>+will be accessed by threads that share the same memory region. This allows for
+>+some internal optimizations, so they are faster. However, if the address needs
+>+to be shared with different processes (like using ``mmap()`` or ``shm()``), they
+>+need to be defined as shared and the flag FUTEX_SHARED_FLAG is used to set that.
+>+
+>+By default, the operation has no NUMA-awareness, meaning that the user can't
+>+choose the memory node where the kernel side futex data will be stored. The
+>+user can choose the node where it wants to operate by setting the
+>+FUTEX_NUMA_FLAG and using the following structure (where X can be 8, 16, 32 or
+>+64)::
+>+
+>+ struct futexX_numa {
+>+         __uX value;
+>+         __sX hint;
+>+ };
+>+
+>+This structure should be passed at the ``void *uaddr`` of futex functions. The
+>+address of the structure will be used to be waited on/waken on, and the
+>+``value`` will be compared to ``val`` as usual. The ``hint`` member is used to
+>+define which node the futex will use. When waiting, the futex will be
+>+registered on a kernel-side table stored on that node; when waking, the futex
+>+will be searched for on that given table. That means that there's no redundancy
+>+between tables, and the wrong ``hint`` value will lead to undesired behavior.
+>+Userspace is responsible for dealing with node migrations issues that may
+>+occur. ``hint`` can range from [0, MAX_NUMA_NODES), for specifying a node, or
+>+-1, to use the same node the current process is using.
+>+
+>+When not using FUTEX_NUMA_FLAG on a NUMA system, the futex will be stored on a
+>+global table on allocated on the first node.
+>+
+>+The ``timo`` argument
+>+---------------------
+>+
+>+As per the Y2038 work done in the kernel, new interfaces shouldn't add timeout
+>+options known to be buggy. Given that, ``timo`` should be a 64-bit timeout at
+>+all platforms, using an absolute timeout value.
+>+
+>+Implementation
+>+==============
+>+
+>+The internal implementation follows a similar design to the original futex.
+>+Given that we want to replicate the same external behavior of current futex,
+>+this should be somewhat expected.
+>+
+>+Waiting
+>+-------
+>+
+>+For the wait operations, they are all treated as if you want to wait on N
+>+futexes, so the path for futex_wait and futex_waitv is the basically the same.
+>+For both syscalls, the first step is to prepare an internal list for the list
+>+of futexes to wait for (using struct futexv_head). For futex_wait() calls, this
+>+list will have a single object.
+>+
+>+We have a hash table, where waiters register themselves before sleeping. Then
+>+the wake function checks this table looking for waiters at uaddr.  The hash
+>+bucket to be used is determined by a struct futex_key, that stores information
+>+to uniquely identify an address from a given process. Given the huge address
+>+space, there'll be hash collisions, so we store information to be later used on
+>+collision treatment.
+>+
+>+First, for every futex we want to wait on, we check if (``*uaddr == val``).
+>+This check is done holding the bucket lock, so we are correctly serialized with
+>+any futex_wake() calls. If any waiter fails the check above, we dequeue all
+>+futexes. The check (``*uaddr == val``) can fail for two reasons:
+>+
+>+- The values are different, and we return -EAGAIN. However, if while
+>+  dequeueing we found that some futexes were awakened, we prioritize this
+>+  and return success.
+>+
+>+- When trying to access the user address, we do so with page faults
+>+  disabled because we are holding a bucket's spin lock (and can't sleep
+>+  while holding a spin lock). If there's an error, it might be a page
+>+  fault, or an invalid address. We release the lock, dequeue everyone
+>+  (because it's illegal to sleep while there are futexes enqueued, we
+>+  could lose wakeups) and try again with page fault enabled. If we
+>+  succeed, this means that the address is valid, but we need to do
+>+  all the work again. For serialization reasons, we need to have the
+>+  spin lock when getting the user value. Additionally, for shared
+>+  futexes, we also need to recalculate the hash, since the underlying
+>+  mapping mechanisms could have changed when dealing with page fault.
+>+  If, even with page fault enabled, we can't access the address, it
+>+  means it's an invalid user address, and we return -EFAULT. For this
+>+  case, we prioritize the error, even if some futexes were awaken.
+>+
+>+If the check is OK, they are enqueued on a linked list in our bucket, and
+>+proceed to the next one. If all waiters succeed, we put the thread to sleep
+>+until a futex_wake() call, timeout expires or we get a signal. After waking up,
+>+we dequeue everyone, and check if some futex was awakened. This dequeue is done
+>+by iteratively walking at each element of struct futex_head list.
+>+
+>+All enqueuing/dequeuing operations requires to hold the bucket lock, to avoid
+>+racing while modifying the list.
+>+
+>+Waking
+>+------
+>+
+>+We get the bucket that's storing the waiters at uaddr, and wake the required
+>+number of waiters, checking for hash collision.
+>+
+>+There's an optimization that makes futex_wake() not take the bucket lock if
+>+there's no one to be woken on that bucket. It checks an atomic counter that each
+>+bucket has, if it says 0, then the syscall exits. In order for this to work, the
+>+waiter thread increases it before taking the lock, so the wake thread will
+>+correctly see that there's someone waiting and will continue the path to take
+>+the bucket lock. To get the correct serialization, the waiter issues a memory
+>+barrier after increasing the bucket counter and the waker issues a memory
+>+barrier before checking it.
+>+
+>+Requeuing
+>+---------
+>+
+>+The requeue path first checks for each struct futex_requeue and their flags.
+>+Then, it will compare the expected value with the one at uaddr1::uaddr.
+>+Following the same serialization explained at Waking_, we increase the atomic
+>+counter for the bucket of uaddr2 before taking the lock. We need to have both
+>+buckets locks at same time so we don't race with other futex operation. To
+>+ensure the locks are taken in the same order for all threads (and thus avoiding
+>+deadlocks), every requeue operation takes the "smaller" bucket first, when
+>+comparing both addresses.
+>+
+>+If the compare with user value succeeds, we proceed by waking ``nr_wake``
+>+futexes, and then requeuing ``nr_requeue`` from bucket of uaddr1 to the uaddr2.
+>+This consists in a simple list deletion/addition and replacing the old futex key
+>+with the new one.
+>+
+>+Futex keys
+>+----------
+>+
+>+There are two types of futexes: private and shared ones. The private are futexes
+>+meant to be used by threads that share the same memory space, are easier to be
+>+uniquely identified and thus can have some performance optimization. The
+>+elements for identifying one are: the start address of the page where the
+>+address is, the address offset within the page and the current->mm pointer.
+>+
+>+Now, for uniquely identifying a shared futex:
+>+
+>+- If the page containing the user address is an anonymous page, we can
+>+  just use the same data used for private futexes (the start address of
+>+  the page, the address offset within the page and the current->mm
+>+  pointer); that will be enough for uniquely identifying such futex. We
+>+  also set one bit at the key to differentiate if a private futex is
+>+  used on the same address (mixing shared and private calls does not
+>+  work).
+>+
+>+- If the page is file-backed, current->mm maybe isn't the same one for
+>+  every user of this futex, so we need to use other data: the
+>+  page->index, a UUID for the struct inode and the offset within the
+>+  page.
+>+
+>+Note that members of futex_key don't have any particular meaning after they
+>+are part of the struct - they are just bytes to identify a futex.  Given that,
+>+we don't need to use a particular name or type that matches the original data,
+>+we only need to care about the bitsize of each component and make both private
+>+and shared fit in the same memory space.
+>+
+>+Source code documentation
+>+=========================
+>+
+>+.. kernel-doc:: kernel/futex2.c
+>+   :no-identifiers: sys_futex_wait sys_futex_wake sys_futex_waitv sys_futex_requeue
+>diff --git a/Documentation/locking/index.rst b/Documentation/locking/index.rst
+>index 7003bd5aeff4..9bf03c7fa1ec 100644
+>--- a/Documentation/locking/index.rst
+>+++ b/Documentation/locking/index.rst
+>@@ -24,6 +24,7 @@ locking
+>     percpu-rw-semaphore
+>     robust-futexes
+>     robust-futex-ABI
+>+    futex2
 >
->	return ret;
-> }
->@@ -484,8 +528,8 @@ static int futex_enqueue(struct futex_waiter_head *futexv, unsigned int nr_futex
->			 int *awakened)
-> {
->	int i, ret;
->-	u32 uval, val;
->-	u32 __user *uaddr;
->+	u64 uval, val;
->+	void __user *uaddr;
->	bool retry = false;
->	struct futex_bucket *bucket;
+> .. only::  subproject and html
 >
->@@ -493,13 +537,14 @@ static int futex_enqueue(struct futex_waiter_head *futexv, unsigned int nr_futex
->	set_current_state(TASK_INTERRUPTIBLE);
->
->	for (i = 0; i < nr_futexes; i++) {
->-		uaddr = (u32 __user *)futexv->objects[i].uaddr;
->-		val = (u32)futexv->objects[i].val;
->+		uaddr = futexv->objects[i].uaddr;
->+		val = (u64)futexv->objects[i].val;
->
->		if (is_object_shared && retry) {
->			struct futex_bucket *tmp =
->				futex_get_bucket((void __user *)uaddr,
->-						 &futexv->objects[i].key, true);
->+						 &futexv->objects[i].key, true,
->+						 object_size);
->			if (IS_ERR(tmp)) {
->				__set_current_state(TASK_RUNNING);
->				futex_dequeue_multiple(futexv, i);
->@@ -513,7 +558,7 @@ static int futex_enqueue(struct futex_waiter_head *futexv, unsigned int nr_futex
->		bucket_inc_waiters(bucket);
->		spin_lock(&bucket->lock);
->
->-		ret = futex_get_user(&uval, uaddr);
->+		ret = futex_get_user(&uval, uaddr, object_size, true);
->
->		if (unlikely(ret)) {
->			spin_unlock(&bucket->lock);
->@@ -525,7 +570,7 @@ static int futex_enqueue(struct futex_waiter_head *futexv, unsigned int nr_futex
->			if (*awakened >= 0)
->				return 1;
->
->-			if (__get_user(uval, uaddr))
->+			if (futex_get_user(&uval, uaddr, object_size, false))
->				return -EFAULT;
->
->			retry = true;
->@@ -656,9 +701,6 @@ static long ksys_futex_wait(void __user *uaddr, u64 val, unsigned int flags,
->	if (flags & ~FUTEX2_MASK)
->		return -EINVAL;
->
->-	if (size != FUTEX_32)
->-		return -EINVAL;
->-
->	futexv = &wait_single.futexv;
->	futexv->task = current;
->	futexv->hint = false;
->@@ -667,12 +709,13 @@ static long ksys_futex_wait(void __user *uaddr, u64 val, unsigned int flags,
->	waiter->index = 0;
->	waiter->val = val;
->	waiter->uaddr = uaddr;
->+	waiter->flags = flags;
->	memset(&wait_single.waiter.key, 0, sizeof(struct futex_key));
->
->	INIT_LIST_HEAD(&waiter->list);
->
->	/* Get an unlocked hash bucket */
->-	waiter->bucket = futex_get_bucket(uaddr, &waiter->key, shared);
->+	waiter->bucket = futex_get_bucket(uaddr, &waiter->key, shared, size);
->	if (IS_ERR(waiter->bucket))
->		return PTR_ERR(waiter->bucket);
->
->@@ -728,8 +771,7 @@ static int compat_futex_parse_waitv(struct futex_waiter_head *futexv,
->		if (copy_from_user(&waitv, &uwaitv[i], sizeof(waitv)))
->			return -EFAULT;
->
->-		if ((waitv.flags & ~FUTEXV_WAITER_MASK) ||
->-		    (waitv.flags & FUTEX_SIZE_MASK) != FUTEX_32)
->+		if (waitv.flags & ~FUTEXV_WAITER_MASK)
->			return -EINVAL;
->
->		futexv->objects[i].key.pointer = 0;
->@@ -740,7 +782,7 @@ static int compat_futex_parse_waitv(struct futex_waiter_head *futexv,
->
->		bucket = futex_get_bucket(compat_ptr(waitv.uaddr),
->					  &futexv->objects[i].key,
->-					  is_object_shared);
->+					  is_object_shared, object_size);
->
->		if (IS_ERR(bucket))
->			return PTR_ERR(bucket);
->@@ -805,8 +847,7 @@ static int futex_parse_waitv(struct futex_waiter_head *futexv,
->		if (copy_from_user(&waitv, &uwaitv[i], sizeof(waitv)))
->			return -EFAULT;
->
->-		if ((waitv.flags & ~FUTEXV_WAITER_MASK) ||
->-		    (waitv.flags & FUTEX_SIZE_MASK) != FUTEX_32)
->+		if (waitv.flags & ~FUTEXV_WAITER_MASK)
->			return -EINVAL;
->
->		futexv->objects[i].key.pointer = 0;
->@@ -816,7 +857,7 @@ static int futex_parse_waitv(struct futex_waiter_head *futexv,
->		futexv->objects[i].index  = i;
->
->		bucket = futex_get_bucket(waitv.uaddr, &futexv->objects[i].key,
->-					  is_object_shared);
->+					  is_object_shared, object_size);
->
->		if (IS_ERR(bucket))
->			return PTR_ERR(bucket);
->@@ -947,10 +988,7 @@ SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
->	if (flags & ~FUTEX2_MASK)
->		return -EINVAL;
->
->-	if (size != FUTEX_32)
->-		return -EINVAL;
->-
->-	bucket = futex_get_bucket(uaddr, &waiter.key, shared);
->+	bucket = futex_get_bucket(uaddr, &waiter.key, shared, size);
->	if (IS_ERR(bucket))
->		return PTR_ERR(bucket);
->
->@@ -987,28 +1025,30 @@ static inline int __futex_requeue(struct futex_requeue rq1,
->	bool retry = false;
->	struct futex_bucket *b1, *b2;
->	DEFINE_WAKE_Q(wake_q);
->-	u32 uval;
->+	u64 uval;
->	int ret;
->	bool shared1 = (rq1.flags  & FUTEX_SHARED_FLAG) ? true : false;
->	bool shared2 = (rq2.flags  & FUTEX_SHARED_FLAG) ? true : false;
->+	unsigned int size1 = (rq1.flags  & FUTEX_SIZE_MASK);
->+	unsigned int size2 = (rq2.flags  & FUTEX_SIZE_MASK);
->
->-	b1 = futex_get_bucket(rq1.uaddr, &w1.key, shared1);
->+	b1 = futex_get_bucket(rq1.uaddr, &w1.key, shared1, size1);
->	if (IS_ERR(b1))
->		return PTR_ERR(b1);
->
->-	b2 = futex_get_bucket(rq2.uaddr, &w2.key, shared2);
->+	b2 = futex_get_bucket(rq2.uaddr, &w2.key, shared2, size2);
->	if (IS_ERR(b2))
->		return PTR_ERR(b2);
->
-> retry:
->	if (shared1 && retry) {
->-		b1 = futex_get_bucket(rq1.uaddr, &w1.key, shared1);
->+		b1 = futex_get_bucket(rq1.uaddr, &w1.key, shared1, size1);
->		if (IS_ERR(b1))
->			return PTR_ERR(b1);
->	}
->
->	if (shared2 && retry) {
->-		b2 = futex_get_bucket(rq2.uaddr, &w2.key, shared2);
->+		b2 = futex_get_bucket(rq2.uaddr, &w2.key, shared2, size2);
->		if (IS_ERR(b2))
->			return PTR_ERR(b2);
->	}
->@@ -1027,11 +1067,11 @@ static inline int __futex_requeue(struct futex_requeue rq1,
->		spin_lock_nested(&b1->lock, SINGLE_DEPTH_NESTING);
->	}
->
->-	ret = futex_get_user(&uval, rq1.uaddr);
->+	ret = futex_get_user(&uval, rq1.uaddr, size1, true);
->
->	if (unlikely(ret)) {
->		futex_double_unlock(b1, b2);
->-		if (__get_user(uval, (u32 __user *)rq1.uaddr))
->+		if (futex_get_user(&uval, rq1.uaddr, size1, false))
->			return -EFAULT;
->
->		bucket_dec_waiters(b2);
->@@ -1088,8 +1128,7 @@ static int compat_futex_parse_requeue(struct futex_requeue *rq,
->	if (copy_from_user(&tmp, uaddr, sizeof(tmp)))
->		return -EFAULT;
->
->-	if (tmp.flags & ~FUTEXV_WAITER_MASK ||
->-	    (tmp.flags & FUTEX_SIZE_MASK) != FUTEX_32)
->+	if (tmp.flags & ~FUTEXV_WAITER_MASK)
->		return -EINVAL;
->
->	rq->uaddr = compat_ptr(tmp.uaddr);
->@@ -1134,8 +1173,7 @@ static int futex_parse_requeue(struct futex_requeue *rq,
->	if (copy_from_user(rq, uaddr, sizeof(*rq)))
->		return -EFAULT;
->
->-	if (rq->flags & ~FUTEXV_WAITER_MASK ||
->-	    (rq->flags & FUTEX_SIZE_MASK) != FUTEX_32)
->+	if (rq->flags & ~FUTEXV_WAITER_MASK)
->		return -EINVAL;
->
->	return 0;
 >--
 >2.31.1
 >
