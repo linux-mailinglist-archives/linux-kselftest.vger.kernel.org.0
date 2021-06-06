@@ -2,21 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE7639D02C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Jun 2021 19:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0286439D032
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Jun 2021 19:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbhFFRUu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 6 Jun 2021 13:20:50 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57324 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbhFFRUt (ORCPT
+        id S229573AbhFFRec (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 6 Jun 2021 13:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229445AbhFFReb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 6 Jun 2021 13:20:49 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id B92351F42052
+        Sun, 6 Jun 2021 13:34:31 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DB3C061766;
+        Sun,  6 Jun 2021 10:32:25 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id m13-20020a17090b068db02901656cc93a75so10450769pjz.3;
+        Sun, 06 Jun 2021 10:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cRPepCTS6zgzWUNR1A/pDqzrNSJcYoBgYKnfTBAwU2s=;
+        b=eK2nRLBec2pVJQtCqMIfpIsU5SSncVBjK+jLTXHp5xYRkEVTtNKpwDgS+iYIEtp81w
+         ynNFxNCRfEu4qARTV9AT3t/YWnMVtkS5lGmAQ4a4Elzl8EJJ09RrTsCkGP2T0EUPlIrU
+         8oVewjsqYChLPlG2WjRfk3L7Mv5ZvtTQlC8kgtkoQ2KvME3vxb/UsfGmkVh88OzWONCq
+         X5scpsLAFx6mcfCPjSMydB8IcoameDS0OTh2vdwHOR/dEVU0FmCrCIr/T7Qler96onLK
+         WNtBpioomzFtdibwJpGimt3dPWZQGo4nCdrASq85D6VtRjuyQyw6NN5g27gSHYojvkSQ
+         T3OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cRPepCTS6zgzWUNR1A/pDqzrNSJcYoBgYKnfTBAwU2s=;
+        b=XxA8iflt5c1EUXGr0HYTII90GzPOfw2Y/jFNZlOxuaNpk387aKiDoVcY8O5VIBrNyZ
+         k95n4MAUGXSleMG2E/4aJfdPcezxM/sZgiu6G1WYflQSlVygLJiNWGjWZfuz67k7ajyv
+         Aiwvp2HnDchTtjXtBWc+z777/eUUQoXxoom3ZYByxZvH9ZFVne+8+4y7OK5p3SZiXcc7
+         TRVwCz36b3qUgSwq5ILhvft9r6MwMjG7CHBSzNSxDNONcNtrLOFoN6Br8pW5wiEkmo5g
+         ICbAwasu+z5RFVwjFgby+6xyZBcTsxw/HmPfFJ58q5MR3SeQAlf0WorTzWF++zsidnxv
+         AMtg==
+X-Gm-Message-State: AOAM530hZk67XMZ9tVuOMgSfM8Ba3R1QE5Onak++ZEazU2mgDx2S6/Ky
+        NYOxggEf4hlUVjl4IxayP9BHd/S6N5PE6m5VeyQ=
+X-Google-Smtp-Source: ABdhPJxsq0mOS1qpRZ81nJSUUUuAwLr8X8jQ+tah7IjEZ35KbttqRrCVBgqRcV8rQPTXSP5G0lqQ4yDRSt84sp8bb7w=
+X-Received: by 2002:a17:90a:80c5:: with SMTP id k5mr28576767pjw.129.1623000744412;
+ Sun, 06 Jun 2021 10:32:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210605215215.171165-1-andrealmeid@collabora.com>
+In-Reply-To: <20210605215215.171165-1-andrealmeid@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 6 Jun 2021 20:32:08 +0300
+Message-ID: <CAHp75VcM_ikg26cs724rsTBz1Vc6HVcycQShWRtq_viFrX0AYw@mail.gmail.com>
 Subject: Re: [PATCH] lib: Convert UUID runtime test to KUnit
-To:     David Gow <davidgow@google.com>
+To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -27,54 +62,21 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
         nfraprado@collabora.com, leandro.ribeiro@collabora.com,
         Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com
-References: <20210605215215.171165-1-andrealmeid@collabora.com>
- <CABVgOS=QMTjFEPqgBab27sTRdnW6PLG_bcD20ui_nC2wK_GAPA@mail.gmail.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-Message-ID: <afc18aea-cdca-5768-bbb1-32b6ee637c97@collabora.com>
-Date:   Sun, 6 Jun 2021 14:18:48 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
-MIME-Version: 1.0
-In-Reply-To: <CABVgOS=QMTjFEPqgBab27sTRdnW6PLG_bcD20ui_nC2wK_GAPA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Às 21:54 de 05/06/21, David Gow escreveu:
-> On Sun, Jun 6, 2021 at 5:52 AM André Almeida <andrealmeid@collabora.com> wrote:
->>
->> Remove custom functions for testing and use KUnit framework. Test cases
->> and test data remains the same.
->>
->> Signed-off-by: André Almeida <andrealmeid@collabora.com>
->> ---
-> 
-> Thanks! It's always exciting to see more tests using KUnit.
-> 
-> Note that the names here (filename, suite name, and Kconfig entry
-> name) don't match what we usually recommend for KUnit tests:
-> https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html
-> 
-> Given that this is an existing test, it is definitely okay to keep the
-> old names if you think it'd break something, but if there's no issue
-> it may be worth renaming them. The test suite name (which is new
-> anyway) ideally shouldn't end in "-test": just "uuid" is best.
-> 
-> I know there are quite a few existing tests which don't adhere to
-> these perfectly yet, but ideally new ones will if it's convenient.
-> 
-> Otherwise, this looks great. I've run it here, and it worked well and
-> picked up on any deliberate errors I introduced.
-> 
-> So this is
-> Tested-by: David Gow <davidgow@google.com>
+On Sun, Jun 6, 2021 at 12:53 AM Andr=C3=A9 Almeida <andrealmeid@collabora.c=
+om> wrote:
+>
+> Remove custom functions for testing and use KUnit framework. Test cases
+> and test data remains the same.
 
-Thank you for the feedback :) I'll submit a v2 applying your suggestions.
+Can you provide the output in OK and non-OK runs before and after your patc=
+h?
 
-> 
-> Cheers,
-> -- David
-> 
+--=20
+With Best Regards,
+Andy Shevchenko
