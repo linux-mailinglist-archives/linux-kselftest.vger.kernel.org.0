@@ -2,300 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8875539D0FE
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Jun 2021 21:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D01439D213
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jun 2021 00:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbhFFTZ7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 6 Jun 2021 15:25:59 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:55404 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbhFFTZ6 (ORCPT
+        id S231243AbhFFWzL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 6 Jun 2021 18:55:11 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:53791 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230368AbhFFWzK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 6 Jun 2021 15:25:58 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E5E3421A4B;
-        Sun,  6 Jun 2021 19:24:06 +0000 (UTC)
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id 01BAF118DD;
-        Sun,  6 Jun 2021 19:24:01 +0000 (UTC)
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id ukBFLdEgvWCcXwAALh3uQQ
-        (envelope-from <dave@stgolabs.net>); Sun, 06 Jun 2021 19:24:01 +0000
-Date:   Sun, 6 Jun 2021 12:23:56 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        kernel@collabora.com, krisman@collabora.com,
-        pgriffais@valvesoftware.com, z.figura12@gmail.com,
-        joel@joelfernandes.org, malteskarupke@fastmail.fm,
-        linux-api@vger.kernel.org, fweimer@redhat.com,
-        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
-        Peter Oskolkov <posk@posk.io>,
-        Andrey Semashev <andrey.semashev@gmail.com>,
-        mtk.manpages@gmail.com
-Subject: Re: [PATCH v4 07/15] docs: locking: futex2: Add documentation
-Message-ID: <20210606192356.4sjhhowa45bo6g4j@offworld>
-65;5803;1cTo: =?utf-8?B?QW5kcsOvwr8=?= =?utf-8?B?wr0=?= Almeida
- <andrealmeid@collabora.com>
-References: <20210603195924.361327-1-andrealmeid@collabora.com>
- <20210603195924.361327-8-andrealmeid@collabora.com>
+        Sun, 6 Jun 2021 18:55:10 -0400
+Received: (Authenticated sender: n@nfraprado.net)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 861051BF203;
+        Sun,  6 Jun 2021 22:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nfraprado.net;
+        s=gm1; t=1623019997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LEITmbgA+ypfFiT6sDRv13/uCob4oKC9Sq9src0AzZE=;
+        b=chA+i0RmfXwj/WF8vUQcsG8LWn2bONkphlI9FxGByy3xXZzQ3/zHKFPGJxmKXuKUW335J7
+        jYK4CRJ9+UN7xZA7RoqojnjXZW+0cqiNSJEER76idFul1Hmyyid+LU7eBwqw4Yf6VUnAAy
+        EO/oCOnOkrJSrla2lWMUer63YFPTS6rPVGC6R5VJrg9wTSN5B9e0Ariq05tQnFO7ePJjQo
+        bl4pkIEG3/A5X1Ubh0QT5mRcrGJQ8WehYjr1NfQyPqrYiwulB4ynbpB9vRe3MCb4L15B0r
+        jLNt083VPjq8mnz5SK6VyymWvFVmHAPrKBJPANhNFdLyuGqe1sYaP2/+H+QnUQ==
+Date:   Sun, 6 Jun 2021 19:52:25 -0300
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <n@nfraprado.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
+Message-ID: <20210606225225.fz4dsyz6im4bqena@notapiano>
+References: <cover.1622898327.git.mchehab+huawei@kernel.org>
+ <20210605151109.axm3wzbcstsyxczp@notapiano>
+ <20210605210836.540577d4@coco.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20210603195924.361327-8-andrealmeid@collabora.com>
-User-Agent: NeoMutt/20201120
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210605210836.540577d4@coco.lan>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 03 Jun 2021, Andrï¿½ Almeida wrote:
+On Sat, Jun 05, 2021 at 09:08:36PM +0200, Mauro Carvalho Chehab wrote:
+> Em Sat, 5 Jun 2021 12:11:09 -0300
+> Nícolas F. R. A. Prado <n@nfraprado.net> escreveu:
+> 
+> > Hi Mauro,
+> > 
+> > On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
+> > > As discussed at:
+> > > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+> > > 
+> > > It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
+> > > automarkup.py extension should handle it automatically, on most cases.
+> > > 
+> > > There are a couple of exceptions to this rule:
+> > > 
+> > > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+> > > 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+> > > 
+> > > It should also be noticed that automarkup.py has currently an issue:
+> > > if one use a markup like:
+> > > 
+> > > 	Documentation/dev-tools/kunit/api/test.rst
+> > > 	  - documents all of the standard testing API excluding mocking
+> > > 	    or mocking related features.
+> > > 
+> > > or, even:
+> > > 
+> > > 	Documentation/dev-tools/kunit/api/test.rst
+> > > 	    documents all of the standard testing API excluding mocking
+> > > 	    or mocking related features.
+> > > 	
+> > > The automarkup.py will simply ignore it. Not sure why. This patch series
+> > > avoid the above patterns (which is present only on 4 files), but it would be
+> > > nice to have a followup patch fixing the issue at automarkup.py.  
+> > 
+> > What I think is happening here is that we're using rST's syntax for definition
+> > lists [1]. automarkup.py ignores literal nodes, and perhaps a definition is
+> > considered a literal by Sphinx. Adding a blank line after the Documentation/...
+> > or removing the additional indentation makes it work, like you did in your
+> > 2nd and 3rd patch, since then it's not a definition anymore, although then the
+> > visual output is different as well.
+> 
+> A literal has a different output. I think that this is not the case, but I 
+> didn't check the python code from docutils/Sphinx.
 
->Add a new documentation file specifying both userspace API and internal
->implementation details of futex2 syscalls.
+Okay, I went in deeper to understand the issue and indeed it wasn't what I
+thought. The reason definitions are ignored by automarkup.py is because the main
+loop iterates only over nodes that are of type paragraph:
 
-I think equally important would be to provide a manpage for each new
-syscall you are introducing, and keep mkt in the loop as in the past he
-extensively documented and improved futex manpages, and overall has a
-lot of experience with dealing with kernel interfaces.
+    for para in doctree.traverse(nodes.paragraph):
+        for node in para.traverse(nodes.Text):
+            if not isinstance(node.parent, nodes.literal):
+                node.parent.replace(node, markup_refs(name, app, node))
+
+And inspecting the HTML output from your example, the definition name is inside
+a <dt> tag, and it doesn't have a <p> inside. So in summary, automarkup.py will
+only work on elements which are inside a <p> in the output.
+
+Only applying the automarkup inside paragraphs seems like a good decision (which
+covers text in lists and tables as well), so unless there are other types of
+elements without paragraphs where automarkup should work, I think we should just
+avoid using definition lists pointing to documents like that.
+
+>  
+> > I'm not sure this is something we need to fix. Does it make sense to use
+> > definition lists for links like that? If it does, I guess one option would be to
+> > whitelist definition lists so they aren't ignored by automarkup, but I feel
+> > this could get ugly really quickly.
+> 
+> Yes, we should avoid handling literal blocks, as this can be a nightmare.
+> 
+> > FWIW note that it's also possible to use relative paths to docs with automarkup.
+> 
+> Not sure if you meant to say using something like ../driver-api/foo.rst.
+> If so, relative paths are a problem, as it will pass unnoticed by this script:
+> 
+> 	./scripts/documentation-file-ref-check
+> 
+> which is meant to warn when a file is moved to be elsewhere. Ok, it
+> could be taught to use "../" to identify paths, but I suspect that this
+> could lead to false positives, like here:
+> 
+> 	Documentation/usb/gadget-testing.rst:  # ln -s ../../uncompressed/u
+> 	Documentation/usb/gadget-testing.rst:  # cd ../../class/fs
+> 	Documentation/usb/gadget-testing.rst:  # ln -s ../../header/h
+
+Yes, that's what I meant. 
+
+Ok, that makes sense. Although after automarkup.py starts printing warnings on
+missing references to files (which is a patch I still need to resend), it would
+work out-of-the-box with relative paths. automarkup wouldn't face that false
+positives issue since it ignores literal blocks, which isn't as easy for a
+standalone script. But that's still in the future, we can discuss what to do
+then after it is implemented, so full paths seem better for now.
 
 Thanks,
-Davidlohr
+Nícolas
 
->
->Signed-off-by: André Almeida <andrealmeid@collabora.com>
->---
-> Documentation/locking/futex2.rst | 198 +++++++++++++++++++++++++++++++
-> Documentation/locking/index.rst  |   1 +
-> 2 files changed, 199 insertions(+)
-> create mode 100644 Documentation/locking/futex2.rst
->
->diff --git a/Documentation/locking/futex2.rst b/Documentation/locking/futex2.rst
->new file mode 100644
->index 000000000000..2f74d7c97a55
->--- /dev/null
->+++ b/Documentation/locking/futex2.rst
->@@ -0,0 +1,198 @@
->+.. SPDX-License-Identifier: GPL-2.0
->+
->+======
->+futex2
->+======
->+
->+:Author: André Almeida <andrealmeid@collabora.com>
->+
->+futex, or fast user mutex, is a set of syscalls to allow userspace to create
->+performant synchronization mechanisms, such as mutexes, semaphores and
->+conditional variables in userspace. C standard libraries, like glibc, uses it
->+as a means to implement more high level interfaces like pthreads.
->+
->+The interface
->+=============
->+
->+uAPI functions
->+--------------
->+
->+.. kernel-doc:: kernel/futex2.c
->+   :identifiers: sys_futex_wait sys_futex_wake sys_futex_waitv sys_futex_requeue
->+
->+uAPI structures
->+---------------
->+
->+.. kernel-doc:: include/uapi/linux/futex.h
->+
->+The ``flag`` argument
->+---------------------
->+
->+The flag is used to specify the size of the futex word
->+(FUTEX_[8, 16, 32, 64]). It's mandatory to define one, since there's no
->+default size.
->+
->+By default, the timeout uses a monotonic clock, but can be used as a realtime
->+one by using the FUTEX_REALTIME_CLOCK flag.
->+
->+By default, futexes are of the private type, that means that this user address
->+will be accessed by threads that share the same memory region. This allows for
->+some internal optimizations, so they are faster. However, if the address needs
->+to be shared with different processes (like using ``mmap()`` or ``shm()``), they
->+need to be defined as shared and the flag FUTEX_SHARED_FLAG is used to set that.
->+
->+By default, the operation has no NUMA-awareness, meaning that the user can't
->+choose the memory node where the kernel side futex data will be stored. The
->+user can choose the node where it wants to operate by setting the
->+FUTEX_NUMA_FLAG and using the following structure (where X can be 8, 16, 32 or
->+64)::
->+
->+ struct futexX_numa {
->+         __uX value;
->+         __sX hint;
->+ };
->+
->+This structure should be passed at the ``void *uaddr`` of futex functions. The
->+address of the structure will be used to be waited on/waken on, and the
->+``value`` will be compared to ``val`` as usual. The ``hint`` member is used to
->+define which node the futex will use. When waiting, the futex will be
->+registered on a kernel-side table stored on that node; when waking, the futex
->+will be searched for on that given table. That means that there's no redundancy
->+between tables, and the wrong ``hint`` value will lead to undesired behavior.
->+Userspace is responsible for dealing with node migrations issues that may
->+occur. ``hint`` can range from [0, MAX_NUMA_NODES), for specifying a node, or
->+-1, to use the same node the current process is using.
->+
->+When not using FUTEX_NUMA_FLAG on a NUMA system, the futex will be stored on a
->+global table on allocated on the first node.
->+
->+The ``timo`` argument
->+---------------------
->+
->+As per the Y2038 work done in the kernel, new interfaces shouldn't add timeout
->+options known to be buggy. Given that, ``timo`` should be a 64-bit timeout at
->+all platforms, using an absolute timeout value.
->+
->+Implementation
->+==============
->+
->+The internal implementation follows a similar design to the original futex.
->+Given that we want to replicate the same external behavior of current futex,
->+this should be somewhat expected.
->+
->+Waiting
->+-------
->+
->+For the wait operations, they are all treated as if you want to wait on N
->+futexes, so the path for futex_wait and futex_waitv is the basically the same.
->+For both syscalls, the first step is to prepare an internal list for the list
->+of futexes to wait for (using struct futexv_head). For futex_wait() calls, this
->+list will have a single object.
->+
->+We have a hash table, where waiters register themselves before sleeping. Then
->+the wake function checks this table looking for waiters at uaddr.  The hash
->+bucket to be used is determined by a struct futex_key, that stores information
->+to uniquely identify an address from a given process. Given the huge address
->+space, there'll be hash collisions, so we store information to be later used on
->+collision treatment.
->+
->+First, for every futex we want to wait on, we check if (``*uaddr == val``).
->+This check is done holding the bucket lock, so we are correctly serialized with
->+any futex_wake() calls. If any waiter fails the check above, we dequeue all
->+futexes. The check (``*uaddr == val``) can fail for two reasons:
->+
->+- The values are different, and we return -EAGAIN. However, if while
->+  dequeueing we found that some futexes were awakened, we prioritize this
->+  and return success.
->+
->+- When trying to access the user address, we do so with page faults
->+  disabled because we are holding a bucket's spin lock (and can't sleep
->+  while holding a spin lock). If there's an error, it might be a page
->+  fault, or an invalid address. We release the lock, dequeue everyone
->+  (because it's illegal to sleep while there are futexes enqueued, we
->+  could lose wakeups) and try again with page fault enabled. If we
->+  succeed, this means that the address is valid, but we need to do
->+  all the work again. For serialization reasons, we need to have the
->+  spin lock when getting the user value. Additionally, for shared
->+  futexes, we also need to recalculate the hash, since the underlying
->+  mapping mechanisms could have changed when dealing with page fault.
->+  If, even with page fault enabled, we can't access the address, it
->+  means it's an invalid user address, and we return -EFAULT. For this
->+  case, we prioritize the error, even if some futexes were awaken.
->+
->+If the check is OK, they are enqueued on a linked list in our bucket, and
->+proceed to the next one. If all waiters succeed, we put the thread to sleep
->+until a futex_wake() call, timeout expires or we get a signal. After waking up,
->+we dequeue everyone, and check if some futex was awakened. This dequeue is done
->+by iteratively walking at each element of struct futex_head list.
->+
->+All enqueuing/dequeuing operations requires to hold the bucket lock, to avoid
->+racing while modifying the list.
->+
->+Waking
->+------
->+
->+We get the bucket that's storing the waiters at uaddr, and wake the required
->+number of waiters, checking for hash collision.
->+
->+There's an optimization that makes futex_wake() not take the bucket lock if
->+there's no one to be woken on that bucket. It checks an atomic counter that each
->+bucket has, if it says 0, then the syscall exits. In order for this to work, the
->+waiter thread increases it before taking the lock, so the wake thread will
->+correctly see that there's someone waiting and will continue the path to take
->+the bucket lock. To get the correct serialization, the waiter issues a memory
->+barrier after increasing the bucket counter and the waker issues a memory
->+barrier before checking it.
->+
->+Requeuing
->+---------
->+
->+The requeue path first checks for each struct futex_requeue and their flags.
->+Then, it will compare the expected value with the one at uaddr1::uaddr.
->+Following the same serialization explained at Waking_, we increase the atomic
->+counter for the bucket of uaddr2 before taking the lock. We need to have both
->+buckets locks at same time so we don't race with other futex operation. To
->+ensure the locks are taken in the same order for all threads (and thus avoiding
->+deadlocks), every requeue operation takes the "smaller" bucket first, when
->+comparing both addresses.
->+
->+If the compare with user value succeeds, we proceed by waking ``nr_wake``
->+futexes, and then requeuing ``nr_requeue`` from bucket of uaddr1 to the uaddr2.
->+This consists in a simple list deletion/addition and replacing the old futex key
->+with the new one.
->+
->+Futex keys
->+----------
->+
->+There are two types of futexes: private and shared ones. The private are futexes
->+meant to be used by threads that share the same memory space, are easier to be
->+uniquely identified and thus can have some performance optimization. The
->+elements for identifying one are: the start address of the page where the
->+address is, the address offset within the page and the current->mm pointer.
->+
->+Now, for uniquely identifying a shared futex:
->+
->+- If the page containing the user address is an anonymous page, we can
->+  just use the same data used for private futexes (the start address of
->+  the page, the address offset within the page and the current->mm
->+  pointer); that will be enough for uniquely identifying such futex. We
->+  also set one bit at the key to differentiate if a private futex is
->+  used on the same address (mixing shared and private calls does not
->+  work).
->+
->+- If the page is file-backed, current->mm maybe isn't the same one for
->+  every user of this futex, so we need to use other data: the
->+  page->index, a UUID for the struct inode and the offset within the
->+  page.
->+
->+Note that members of futex_key don't have any particular meaning after they
->+are part of the struct - they are just bytes to identify a futex.  Given that,
->+we don't need to use a particular name or type that matches the original data,
->+we only need to care about the bitsize of each component and make both private
->+and shared fit in the same memory space.
->+
->+Source code documentation
->+=========================
->+
->+.. kernel-doc:: kernel/futex2.c
->+   :no-identifiers: sys_futex_wait sys_futex_wake sys_futex_waitv sys_futex_requeue
->diff --git a/Documentation/locking/index.rst b/Documentation/locking/index.rst
->index 7003bd5aeff4..9bf03c7fa1ec 100644
->--- a/Documentation/locking/index.rst
->+++ b/Documentation/locking/index.rst
->@@ -24,6 +24,7 @@ locking
->     percpu-rw-semaphore
->     robust-futexes
->     robust-futex-ABI
->+    futex2
->
-> .. only::  subproject and html
->
->--
->2.31.1
->
+> 
+> If you meant, instead, :doc:`../foo`, this series address those too.
+> 
+> Regards,
+> Mauro
