@@ -2,97 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D628C39CBF7
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Jun 2021 02:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DA539CEBD
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Jun 2021 13:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbhFFA50 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Jun 2021 20:57:26 -0400
-Received: from mail-wm1-f41.google.com ([209.85.128.41]:43776 "EHLO
-        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbhFFA50 (ORCPT
+        id S230112AbhFFMAi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 6 Jun 2021 08:00:38 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:35417 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229776AbhFFMAh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Jun 2021 20:57:26 -0400
-Received: by mail-wm1-f41.google.com with SMTP id 3-20020a05600c0243b029019f2f9b2b8aso7761183wmj.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 05 Jun 2021 17:55:25 -0700 (PDT)
+        Sun, 6 Jun 2021 08:00:37 -0400
+Received: by mail-pg1-f173.google.com with SMTP id o9so8806155pgd.2;
+        Sun, 06 Jun 2021 04:58:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3DxaiNSkw+eA+wXHpN2KP+oFrvWPJdQHdeQTKj9QQeM=;
-        b=lUQyRaiq4AaXZaYWlH94S6Gn12mM38lNqlot8GXQItBQd53hfwyniIc3wxruyGl52c
-         qPJLxMg+MoWiZ5jxmbF5hdBJ0Wvgggv/tFbZ+2Fn4ANbufSO58IbuYYcDgbbe4vDDX2P
-         kbnBXtL3XwrbRdOHZJ8gHyqoVnMFfhcrCBGcPNdw/n8FjfvikX4oKWGwKskfOUwe8WBe
-         eY4ffJ10mJ1mC6rgIn2BQTY+jdFPgpnyGZQWMUXuIdqBH1ZwekIsaGPm6I/c2ARSmmIZ
-         4dV9ZkZ4E37cKxXXaN+tJdcdKMDDzKGC8Qadioa+J6X17wG7PJv+GhknTR8sHhSoIzcO
-         GPRw==
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=aPhZd0Ev1Ws/GdwHl8PJdNKfaX6hJwWh4xylt4wxRXc=;
+        b=Na4D8qBD3WbOV8ekMSlAia9NMbFTdGHAa+HvQcwfTucGT2H9caXMMBLm45GJVXA1vj
+         G58hHRdJjm3gE6MOFk8AlnVMZFnByfSnycUTus1HZCpCh7TG562tLypVdKCdYnLqhQ0Z
+         lGEkMsFs8z8c8c7iUSbEP4QAyaLB8cNC4Caf3GsuT2RalMCmOndS7N6eS0t4uhsvuKCm
+         Gbl0pv49bjReRXrkgcyuKAwHgTjkjWAY4Z6jsDCSfQVeFkDFW2zA2r42UT3goB1bxP5D
+         hwOmQNKFIOYlS33hyLIFQhyxNfdzfIbdLbarBDKrNVUf4qMBRsS+59ZxsePGIITCSwyX
+         1z0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3DxaiNSkw+eA+wXHpN2KP+oFrvWPJdQHdeQTKj9QQeM=;
-        b=n5zPQW839BMLbCDI2aoXiBprrvAr150Q9n3lVi1SXl7mF3EO95Hft5f6L6aOfeYCoJ
-         HmGHfP9ESpFehGfoVQ0eNZ222SeabZxpfiMRJ+07HLxJ6U7HF4LtH5F7tYAz9jMXBDpt
-         3dTbiroO0UMkZ8VmCdozrJndjUA0cBBqy33uuvyzysD7oLebxHo5LU04zZMc0zy90LPH
-         gt0x3E1ijAKuA+UnFwGwLODeAKwx1TVwojPXY0sonTc7Om/isy/SLVRkMpPAa7ni/lk9
-         qnYgo6D3rQiEEyyOvxSfYJQwLSSX5Ox7u2sGFKhA44/EFpkJN26/UUOR/Wrejc0Ur8Ze
-         /N2w==
-X-Gm-Message-State: AOAM532iYQUk5ZIQ4OWa4BDPLhMMuR70Yik2eDlAZMjM2RYkeQXMjUBS
-        HB/6MBlu7tLKun6VO1gqZ8Jread5UDtarlNI/ybdxA==
-X-Google-Smtp-Source: ABdhPJxW3B5oI9ev63JTOffeqEWrYZWrYU5sFyNrebXusVFcqbrVZAViyfqSDs3CtmbFkC5ZdBVCMuWtumEoQzrBCjQ=
-X-Received: by 2002:a7b:c44f:: with SMTP id l15mr10268090wmi.151.1622940864731;
- Sat, 05 Jun 2021 17:54:24 -0700 (PDT)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=aPhZd0Ev1Ws/GdwHl8PJdNKfaX6hJwWh4xylt4wxRXc=;
+        b=aZ5RXldlpTWUe3thjCbMeg1qpZjOL8SC1NVhhDq9EOlqkKCJWahy761subSfJKj3rN
+         lvpb3EFtY4KoNEkT/b40Kk/ed6ejtZ9GZDevqUvKpj/A/tr6YFGgDADhXeCSFOCiN9Mf
+         vjPsl2Mze3AuAQ5NB6SC3/dd2iURxXmEgz9L7A+/eqssY1VrOKfv8T9FCgtxMKi1luOl
+         n5Enu9qg5VUZ07lM2YfuGEjgVNF5tCGY4187/gkHGjXjmTe1zOHYuzxaCOpwuTnUbOJr
+         FIXRE6erFYVhipq4XqQMl7bpzzr4VPliiEX5dX10pMbjmOsBw7M6460UnsfIxg6JSA+d
+         edyg==
+X-Gm-Message-State: AOAM530xwfDFIkzzKmfpv0y+vCHM3svnniDrfbneWJxnDGQdyTqhr1NR
+        +LSjHOvYZRHuPd0SpAwMKro=
+X-Google-Smtp-Source: ABdhPJy1errmzyynWPa3ewKLZyjUWzm63irnwwd8zEtqQmGGqnOkU/D4lBRwVA3CX9TPyUVedCULLw==
+X-Received: by 2002:a05:6a00:810:b029:2ec:3b54:6a89 with SMTP id m16-20020a056a000810b02902ec3b546a89mr13064663pfk.0.1622980654096;
+        Sun, 06 Jun 2021 04:57:34 -0700 (PDT)
+Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
+        by smtp.gmail.com with ESMTPSA id s33sm5306006pfw.150.2021.06.06.04.57.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Jun 2021 04:57:33 -0700 (PDT)
+Date:   Sun, 06 Jun 2021 21:57:27 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
+To:     =?iso-8859-1?b?QW5kcuk=?= Almeida <andrealmeid@collabora.com>,
+        Andrey Semashev <andrey.semashev@gmail.com>
+Cc:     acme@kernel.org, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        corbet@lwn.net, Davidlohr Bueso <dave@stgolabs.net>,
+        Darren Hart <dvhart@infradead.org>, fweimer@redhat.com,
+        joel@joelfernandes.org, kernel@collabora.com,
+        krisman@collabora.com, libc-alpha@sourceware.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, malteskarupke@fastmail.fm,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        pgriffais@valvesoftware.com, Peter Oskolkov <posk@posk.io>,
+        Steven Rostedt <rostedt@goodmis.org>, shuah@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, z.figura12@gmail.com
+References: <20210603195924.361327-1-andrealmeid@collabora.com>
+        <1622799088.hsuspipe84.astroid@bobo.none>
+        <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
+        <1622853816.mokf23xgnt.astroid@bobo.none>
+        <6d8e3bb4-0cef-b991-9a16-1f03d10f131d@gmail.com>
+In-Reply-To: <6d8e3bb4-0cef-b991-9a16-1f03d10f131d@gmail.com>
 MIME-Version: 1.0
-References: <20210605215215.171165-1-andrealmeid@collabora.com>
-In-Reply-To: <20210605215215.171165-1-andrealmeid@collabora.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sun, 6 Jun 2021 08:54:13 +0800
-Message-ID: <CABVgOS=QMTjFEPqgBab27sTRdnW6PLG_bcD20ui_nC2wK_GAPA@mail.gmail.com>
-Subject: Re: [PATCH] lib: Convert UUID runtime test to KUnit
-To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
-        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
-        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1622980258.cfsuodze38.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jun 6, 2021 at 5:52 AM Andr=C3=A9 Almeida <andrealmeid@collabora.co=
-m> wrote:
->
-> Remove custom functions for testing and use KUnit framework. Test cases
-> and test data remains the same.
->
-> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@collabora.com>
-> ---
+Excerpts from Andrey Semashev's message of June 5, 2021 6:56 pm:
+> On 6/5/21 4:09 AM, Nicholas Piggin wrote:
+>> Excerpts from Andr=C3=A9 Almeida's message of June 5, 2021 6:01 am:
+>>> =C3=80s 08:36 de 04/06/21, Nicholas Piggin escreveu:
+>>=20
+>>>> I'll be burned at the stake for suggesting it but it would be great if
+>>>> we could use file descriptors. At least for the shared futex, maybe
+>>>> private could use a per-process futex allocator. It solves all of the
+>>>> above, although I'm sure has many of its own problem. It may not play
+>>>> so nicely with the pthread mutex API because of the whole static
+>>>> initialiser problem, but the first futex proposal did use fds. But it'=
+s
+>>>> an example of an alternate API.
+>>>>
+>>>
+>>> FDs and futex doesn't play well, because for futex_wait() you need to
+>>> tell the kernel the expected value in the futex address to avoid
+>>> sleeping in a free lock. FD operations (poll, select) don't have this
+>>> `value` argument, so they could sleep forever, but I'm not sure if you
+>>> had taken this in consideration.
+>>=20
+>> I had. The futex wait API would take a fd additional. The only
+>> difference is the waitqueue that is used when a sleep or wake is
+>> required is derived from the fd, not from an address.
+>>=20
+>> I think the bigger sticking points would be if it's too heavyweight an
+>> object to use (which could be somewhat mitigated with a simpler ida
+>> allocator although that's difficult to do with shared), and whether libc
+>> could sanely use them due to the static initialiser problem of pthread
+>> mutexes.
+>=20
+> The static initialization feature is not the only benefit of the current=20
+> futex design, and probably not the most important one. You can work=20
+> around the static initialization in userspace, e.g. by initializing fd=20
+> to an invalid value and creating a valid fd upon the first use. Although=20
+> that would still incur a performance penalty and add a new source of=20
+> failure.
 
-Thanks! It's always exciting to see more tests using KUnit.
+Sounds like a serious problem, but maybe it isn't. On the other hand,
+maybe we don't have to support pthread mutexes as they are anyway=20
+because futex already does that fairly well.
 
-Note that the names here (filename, suite name, and Kconfig entry
-name) don't match what we usually recommend for KUnit tests:
-https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html
+> What is more important is that waiting on fd always requires a kernel=20
+> call. This will be terrible for performance of uncontended locks, which=20
+> is the majority of time.
 
-Given that this is an existing test, it is definitely okay to keep the
-old names if you think it'd break something, but if there's no issue
-it may be worth renaming them. The test suite name (which is new
-anyway) ideally shouldn't end in "-test": just "uuid" is best.
+No. As I said just before, it would be the same except the waitqueue is=20
+derived from fd rather than address.
 
-I know there are quite a few existing tests which don't adhere to
-these perfectly yet, but ideally new ones will if it's convenient.
+>=20
+> Another important point is that a futex that is not being waited on=20
+> consumes zero kernel resources while fd is a limited resource even when=20
+> not used. You can have millions futexes in userspace and you are=20
+> guaranteed not to exhaust any limit as long as you have memory. That is=20
+> an important feature, and the current userspace is relying on it by=20
+> assuming that creating mutexes and condition variables is cheap.
 
-Otherwise, this looks great. I've run it here, and it worked well and
-picked up on any deliberate errors I introduced.
+Is it an important feture? Would 1 byte of kernel memory per uncontended=20
+futex be okay? 10? 100?
 
-So this is
-Tested-by: David Gow <davidgow@google.com>
+I do see it's very nice the current design that requires no=20
+initialization for uncontended, I'm just asking questions to get an idea=20
+of what constraints we're working with. We have a pretty good API=20
+already which can support unlimited uncontended futexes, so I'm=20
+wondering do we really need another very very similar API that doesn't
+fix the really difficult problems of the existing one?
 
-Cheers,
--- David
+Thanks,
+Nick
+
+> Having futex fd would be useful in some cases to be able to integrate=20
+> futexes with IO. I did have use cases where I would have liked to have=20
+> FUTEX_FD in the past. These cases arise when you already have a thread=20
+> that operates on fds and you want to avoid having a separate thread that=20
+> blocks on futexes in a similar fashion. But, IMO, that should be an=20
+> optional opt-in feature. By far, not every futex needs to have an fd.=20
+> For just waiting on multiple futexes, the native support that futex2=20
+> provides is superior.
+>=20
+> PS: I'm not asking FUTEX_FD to be implemented as part of futex2 API.=20
+> futex2 would be great even without it.
