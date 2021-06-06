@@ -2,32 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8041A39D0F4
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Jun 2021 21:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8875539D0FE
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Jun 2021 21:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbhFFTVf convert rfc822-to-8bit (ORCPT
+        id S230158AbhFFTZ7 convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 6 Jun 2021 15:21:35 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:50320 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbhFFTVf (ORCPT
+        Sun, 6 Jun 2021 15:25:59 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:55404 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229764AbhFFTZ6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 6 Jun 2021 15:21:35 -0400
+        Sun, 6 Jun 2021 15:25:58 -0400
 Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
         (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6B96A1FDC5;
-        Sun,  6 Jun 2021 19:19:43 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E5E3421A4B;
+        Sun,  6 Jun 2021 19:24:06 +0000 (UTC)
 Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id EF78F118DD;
-        Sun,  6 Jun 2021 19:19:37 +0000 (UTC)
+        by imap.suse.de (Postfix) with ESMTP id 01BAF118DD;
+        Sun,  6 Jun 2021 19:24:01 +0000 (UTC)
 Received: from director2.suse.de ([192.168.254.72])
         by imap3-int with ESMTPSA
-        id sZX8LckfvWBBXgAALh3uQQ
-        (envelope-from <dave@stgolabs.net>); Sun, 06 Jun 2021 19:19:37 +0000
-Date:   Sun, 6 Jun 2021 12:19:32 -0700
+        id ukBFLdEgvWCcXwAALh3uQQ
+        (envelope-from <dave@stgolabs.net>); Sun, 06 Jun 2021 19:24:01 +0000
+Date:   Sun, 6 Jun 2021 12:23:56 -0700
 From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     =?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@collabora.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -43,20 +42,22 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Peter Oskolkov <posk@posk.io>,
         Andrey Semashev <andrey.semashev@gmail.com>,
         mtk.manpages@gmail.com
-Message-ID: <20210606191932.osytlsvsnks2cxwa@offworld>
+Subject: Re: [PATCH v4 07/15] docs: locking: futex2: Add documentation
+Message-ID: <20210606192356.4sjhhowa45bo6g4j@offworld>
+65;5803;1cTo: =?utf-8?B?QW5kcsOvwr8=?= =?utf-8?B?wr0=?= Almeida
+ <andrealmeid@collabora.com>
+References: <20210603195924.361327-1-andrealmeid@collabora.com>
+ <20210603195924.361327-8-andrealmeid@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20210603195924.361327-8-andrealmeid@collabora.com>
 User-Agent: NeoMutt/20201120
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
-
-Bcc:
-Subject: Re: [PATCH v4 07/15] docs: locking: futex2: Add documentation
-Reply-To:
-In-Reply-To: <20210603195924.361327-8-andrealmeid@collabora.com>
 
 On Thu, 03 Jun 2021, Andr� Almeida wrote:
 
