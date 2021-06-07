@@ -2,48 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 231B639E0FD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jun 2021 17:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9792239E167
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jun 2021 18:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbhFGPnO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Jun 2021 11:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
+        id S231423AbhFGQEO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Jun 2021 12:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbhFGPnB (ORCPT
+        with ESMTP id S231393AbhFGQEM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Jun 2021 11:43:01 -0400
+        Mon, 7 Jun 2021 12:04:12 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F40C061283;
-        Mon,  7 Jun 2021 08:41:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F49C061766;
+        Mon,  7 Jun 2021 09:02:21 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: tonyk)
-        with ESMTPSA id 4532A1F4156E
-Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     acme@kernel.org, Andrey Semashev <andrey.semashev@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        corbet@lwn.net, Davidlohr Bueso <dave@stgolabs.net>,
-        Darren Hart <dvhart@infradead.org>, fweimer@redhat.com,
-        joel@joelfernandes.org, kernel@collabora.com,
-        krisman@collabora.com, libc-alpha@sourceware.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, malteskarupke@fastmail.fm,
+        with ESMTPSA id 639201F422F2
+Subject: Re:
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        pgriffais@valvesoftware.com, Peter Oskolkov <posk@posk.io>,
-        Steven Rostedt <rostedt@goodmis.org>, shuah@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, z.figura12@gmail.com
-References: <20210603195924.361327-1-andrealmeid@collabora.com>
- <1622799088.hsuspipe84.astroid@bobo.none>
- <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
- <1622853816.mokf23xgnt.astroid@bobo.none>
+        Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        kernel@collabora.com, krisman@collabora.com,
+        pgriffais@valvesoftware.com, z.figura12@gmail.com,
+        joel@joelfernandes.org, malteskarupke@fastmail.fm,
+        linux-api@vger.kernel.org, fweimer@redhat.com,
+        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
+        Peter Oskolkov <posk@posk.io>,
+        Andrey Semashev <andrey.semashev@gmail.com>,
+        mtk.manpages@gmail.com
+References: <20210606191932.osytlsvsnks2cxwa@offworld>
 From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-Message-ID: <22137ccd-c5e6-9fcc-a176-789558e9ab1e@collabora.com>
-Date:   Mon, 7 Jun 2021 12:40:54 -0300
+Message-ID: <ed1ab464-7362-e1ee-fe3d-d0b1b910b81a@collabora.com>
+Date:   Mon, 7 Jun 2021 13:02:10 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.2
 MIME-Version: 1.0
-In-Reply-To: <1622853816.mokf23xgnt.astroid@bobo.none>
+In-Reply-To: <20210606191932.osytlsvsnks2cxwa@offworld>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -51,199 +50,323 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Às 22:09 de 04/06/21, Nicholas Piggin escreveu:
-> Excerpts from André Almeida's message of June 5, 2021 6:01 am:
->> Às 08:36 de 04/06/21, Nicholas Piggin escreveu:
->>> Excerpts from André Almeida's message of June 4, 2021 5:59 am:
->>> - Did you consider a wakev interface? An example is a read-write mutex 
->>> which has read-blocking futexes split (e.g., per-node) for scalability 
->>> then the writer may unlock and wake all readers with one call. We 
->>> actually have some scalability challenges of this nature with certain 
->>> large database programs.
->>>
->>
->> Not really, I haven't heard any use case for that until now. It should
->> be easy to implement it, though, and I think you have an interesting use
->> case here. Could you point me some of those database programs?
+Às 16:19 de 06/06/21, Davidlohr Bueso escreveu:
+> Bcc:
+> Subject: Re: [PATCH v4 07/15] docs: locking: futex2: Add documentation
+> Reply-To:
+> In-Reply-To: <20210603195924.361327-8-andrealmeid@collabora.com>
 > 
-> Not source code unfortunately. I know that's not a very good answer, but 
-> they are far ahead of what most open source apps are doing scalability 
-> wise today, and they end up rolling their own complex locking. Hopefully
-> the example I give is simple enough to understand.
+> On Thu, 03 Jun 2021, Andrï¿½ Almeida wrote:
 > 
-
-I see, that's makes things a bit harder. I understood the use case and
-the wakev can be implemented without affecting the rest of API, so I
-think I'll get back to it later, for now.
-
->>>
->>> - Are we really keen on squashing node ID into flags in this day and age?
->>> I guess okay but seems like it would be nice to allow a bit more space
->>> in general for the operations. I don't want to turn it into a whole big
->>> multiplexing nightmare again with lots of such flags, or propose
->>> complexity with no code behind it, but I think we need a bit of leeway
->>> for unforeseen locking innovations to be added carefully. The pthread
->>> locking today is still fairly primitive really, I don't think we know
->>> what will work best for the next 10 years.
->>
->> In the interface that I'd proposed, the node ID isn't part of the flags.
->> You have a flag FUTEX_FLAG_NUMA, and when that is used, you pass in
->> `void *uaddr` a pointer to a `struct futex_numa { int value, int hint
->> }`, where hint should be the node ID you would like to work on, and
->> value is just the userspace futex. This is documented in more details in
->> patch 7 "docs: locking: futex2: Add documentation".
->>
->> If you have any feedback about how this NUMA interface looks like, I
->> would like to hear.
->>
->> Also, did something in my writing indicated that the node ID would be
->> part of the flags? I'll improve this it if so.
+>> Add a new documentation file specifying both userspace API and internal
+>> implementation details of futex2 syscalls.
 > 
-> Oh I did miss this, thank you. No it wasn't your writing, I think it was 
-> me trying to read through a lot of messages and got confused with some
-> earlier conversations.
-> 
-> I'll look a bit more at the NUMA interface.
-> 
+> I think equally important would be to provide a manpage for each new
+> syscall you are introducing, and keep mkt in the loop as in the past he
+> extensively documented and improved futex manpages, and overall has a
+> lot of experience with dealing with kernel interfaces.
 
-Thanks!
+Right, I'll add the man pages in a future version and make sure to have
+mkt in the loop, thanks for the tip.
 
->>
->>>
->>> One scalability issue we are starting to hit and will only get worse is 
->>> futex queue spinlock contention. Perhaps this is better addressed in 
->>> userspace but the kernel could play a part so I like to leave some doors
->>> open. One example is that the wait (or wake) side may like to depend not
->>> just on the memory value, but on the success of a cmpxchg to avoid 
->>> unqueueing and queueing spuriously, which increases lock contention but
->>> also ends up putting the poor task on the back of the list -- yes RT
->>> priorities can help the realtime case, but non-RT cases can get bad
->>> outlier latencies if lock stealing is allowed (which can be very good
->>> for performance).
->>>
->>
->> Sorry, I'm not sure what do you mean here. Are you proposing to have a
->> cmpxchg in kernel side, so the lock would be taken by the kernel, and
->> not by the userspace like it's now?
-> 
-> Yes. Only in slow paths, of course, to reduce starvation / erratic
-> latencies and spurious wait queue manipulations.
-
-Right, so if we need to go into the kernel to do the cmpxchg, we can't
-take a free lock without a syscall, and this goes against the futex
-semantics, the "strength" of this interface is to not require context
-switch in uncontended cases.
-
-Is not a bad thing itself to go into the kernel to get a lock, other
-operating systems do that and if the kernel has more knowledge about who
-has the lock, it can even make some smart decisions. But this is not
-futex, this probably belongs to another interface (that's probably
-slower in the common case than futex).
-
-> 
-> Actually one other scalability thing while I remember it:
-> 
-> futex_wait currently requires that the lock word is tested under the 
-> queue spin lock (to avoid consuming a wakeup). The problem with this is 
-> that the lock word can be a very hot cache line if you have a lot of
-> concurrency, so accessing it under the queue lock can increase queue
-> lock hold time.
-> 
-> I would prefer if the new API was relaxed to avoid this restriction
-> (e.g., any wait call may consume a wakeup so it's up to userspace to
-> avoid that if it is a problem).
-
-Maybe I'm wrong, but AFAIK the goal of checking the lock word inside the
-spin lock is to avoid sleeping forever (in other words, wrongly assuming
-that the lock is taken and missing a wakeup call), not to avoid
-consuming wakeups. Or at least this is my interpretation of this long
-comment in futex.c:
-
-https://elixir.bootlin.com/linux/v5.12.9/source/kernel/futex.c#L51
-
-So removing this requirement of checking the futex word with the lock
-taken could led to undesirable behavior.
-
-> 
->>> - The private global futex hash table sucks for various reasons, and
->>> having 128 waiters per thread makes it orders of magnitude easier for
->>> userspace to DoS stuff with hash collisions. NUMA doesn't fix that, the
->>> per process hashing that Thomas suggested does fix the DoS but the
->>> non-deterministic hash collisions still seem to be a problem for real
->>> time response, and at the other end of the scale some apps (certain 
->>> databases, etc) can have ten thousand futex waiters at once so birthday
->>> paradox can also lead to guaranteed (low level) variable beahviour 
->>> within a single process.
->>>
->>> I know the kernel in general is not very robust against this kind of 
->>> DoS/nondeterminism, but it's a bit sad to introduce new APIs with the 
->>> problem still there. Yes we could address it later, but I think it's 
->>> better done first because the solution might influence what the best 
->>> syscall API is.
->>>
->>> For example the idea of using the address as the handle for the wait 
->>> queue _and_ the value is very convenient but hashing is annoying for
->>> all the above reasons and the shared wait queue case is pretty clunky. 
->>> It's also constraining in some corner cases to have the wait queue 
->>> associated with the address 1:1. For example a type of NUMA mutex might 
->>> want to have per-node waitqueues associated with a lock word, and wake
->>> local node waiters 99% of the time. Not trivial to do with futexes and
->>> seems to at least require bouncing of more cache lines, possibly more
->>> atomics, etc.
->>>
->>> Could anything else be done?
->>
->> I wasn't aware that userspace doing DoS is something to be concerned
->> from the kernel point of view. Is this scenario considering a malicious
->> actor? If so, there are plenty of resources to be denied, so not sure
->> how futex could be protected of this. Or is this just a program that
->> uses tons of futexes?
-> 
-> Both really. AFAIKS one of the efforts that prompted the futex 
-> modernisation work was the RT latency issues from Thomas in 2016 when 
-> the per process table was proposed.
-> 
-
-When I first read Thomas proposal for per table process, I thought that
-the main goal there was to solve NUMA locality issues, not RT latency,
-but I think you are right. However, re-reading the thread at [0], it
-seems that the RT problems where not completely solved in that
-interface, maybe the people involved with that patchset can help to shed
-some light on it.
-
-Otherwise, this same proposal could be integrated in futex2, given that
-we would only need to provide to userland some extra flags and add some
-`if`s around the hash table code (in a very similar way the NUMA code
-will be implemented in futex2).
-
-[0] https://lore.kernel.org/lkml/20160505204230.932454245@linutronix.de/
-
-> 
->>> I'll be burned at the stake for suggesting it but it would be great if 
->>> we could use file descriptors. At least for the shared futex, maybe 
->>> private could use a per-process futex allocator. It solves all of the
->>> above, although I'm sure has many of its own problem. It may not play
->>> so nicely with the pthread mutex API because of the whole static
->>> initialiser problem, but the first futex proposal did use fds. But it's
->>> an example of an alternate API.
->>>
->>
->> FDs and futex doesn't play well, because for futex_wait() you need to
->> tell the kernel the expected value in the futex address to avoid
->> sleeping in a free lock. FD operations (poll, select) don't have this
->> `value` argument, so they could sleep forever, but I'm not sure if you
->> had taken this in consideration.
-> 
-> I had. The futex wait API would take a fd additional. The only 
-> difference is the waitqueue that is used when a sleep or wake is 
-> required is derived from the fd, not from an address.
-> 
-> I think the bigger sticking points would be if it's too heavyweight an 
-> object to use (which could be somewhat mitigated with a simpler ida
-> allocator although that's difficult to do with shared), and whether libc
-> could sanely use them due to the static initialiser problem of pthread
-> mutexes.
 > 
 > Thanks,
-> Nick
+> Davidlohr
 > 
+>>
+>> Signed-off-by: André Almeida <andrealmeid@collabora.com>
+>> ---
+>> Documentation/locking/futex2.rst | 198 +++++++++++++++++++++++++++++++
+>> Documentation/locking/index.rst  |   1 +
+>> 2 files changed, 199 insertions(+)
+>> create mode 100644 Documentation/locking/futex2.rst
+>>
+>> diff --git a/Documentation/locking/futex2.rst
+>> b/Documentation/locking/futex2.rst
+>> new file mode 100644
+>> index 000000000000..2f74d7c97a55
+>> --- /dev/null
+>> +++ b/Documentation/locking/futex2.rst
+>> @@ -0,0 +1,198 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +======
+>> +futex2
+>> +======
+>> +
+>> +:Author: André Almeida <andrealmeid@collabora.com>
+>> +
+>> +futex, or fast user mutex, is a set of syscalls to allow userspace to
+>> create
+>> +performant synchronization mechanisms, such as mutexes, semaphores and
+>> +conditional variables in userspace. C standard libraries, like glibc,
+>> uses it
+>> +as a means to implement more high level interfaces like pthreads.
+>> +
+>> +The interface
+>> +=============
+>> +
+>> +uAPI functions
+>> +--------------
+>> +
+>> +.. kernel-doc:: kernel/futex2.c
+>> +   :identifiers: sys_futex_wait sys_futex_wake sys_futex_waitv
+>> sys_futex_requeue
+>> +
+>> +uAPI structures
+>> +---------------
+>> +
+>> +.. kernel-doc:: include/uapi/linux/futex.h
+>> +
+>> +The ``flag`` argument
+>> +---------------------
+>> +
+>> +The flag is used to specify the size of the futex word
+>> +(FUTEX_[8, 16, 32, 64]). It's mandatory to define one, since there's no
+>> +default size.
+>> +
+>> +By default, the timeout uses a monotonic clock, but can be used as a
+>> realtime
+>> +one by using the FUTEX_REALTIME_CLOCK flag.
+>> +
+>> +By default, futexes are of the private type, that means that this
+>> user address
+>> +will be accessed by threads that share the same memory region. This
+>> allows for
+>> +some internal optimizations, so they are faster. However, if the
+>> address needs
+>> +to be shared with different processes (like using ``mmap()`` or
+>> ``shm()``), they
+>> +need to be defined as shared and the flag FUTEX_SHARED_FLAG is used
+>> to set that.
+>> +
+>> +By default, the operation has no NUMA-awareness, meaning that the
+>> user can't
+>> +choose the memory node where the kernel side futex data will be
+>> stored. The
+>> +user can choose the node where it wants to operate by setting the
+>> +FUTEX_NUMA_FLAG and using the following structure (where X can be 8,
+>> 16, 32 or
+>> +64)::
+>> +
+>> + struct futexX_numa {
+>> +         __uX value;
+>> +         __sX hint;
+>> + };
+>> +
+>> +This structure should be passed at the ``void *uaddr`` of futex
+>> functions. The
+>> +address of the structure will be used to be waited on/waken on, and the
+>> +``value`` will be compared to ``val`` as usual. The ``hint`` member
+>> is used to
+>> +define which node the futex will use. When waiting, the futex will be
+>> +registered on a kernel-side table stored on that node; when waking,
+>> the futex
+>> +will be searched for on that given table. That means that there's no
+>> redundancy
+>> +between tables, and the wrong ``hint`` value will lead to undesired
+>> behavior.
+>> +Userspace is responsible for dealing with node migrations issues that
+>> may
+>> +occur. ``hint`` can range from [0, MAX_NUMA_NODES), for specifying a
+>> node, or
+>> +-1, to use the same node the current process is using.
+>> +
+>> +When not using FUTEX_NUMA_FLAG on a NUMA system, the futex will be
+>> stored on a
+>> +global table on allocated on the first node.
+>> +
+>> +The ``timo`` argument
+>> +---------------------
+>> +
+>> +As per the Y2038 work done in the kernel, new interfaces shouldn't
+>> add timeout
+>> +options known to be buggy. Given that, ``timo`` should be a 64-bit
+>> timeout at
+>> +all platforms, using an absolute timeout value.
+>> +
+>> +Implementation
+>> +==============
+>> +
+>> +The internal implementation follows a similar design to the original
+>> futex.
+>> +Given that we want to replicate the same external behavior of current
+>> futex,
+>> +this should be somewhat expected.
+>> +
+>> +Waiting
+>> +-------
+>> +
+>> +For the wait operations, they are all treated as if you want to wait
+>> on N
+>> +futexes, so the path for futex_wait and futex_waitv is the basically
+>> the same.
+>> +For both syscalls, the first step is to prepare an internal list for
+>> the list
+>> +of futexes to wait for (using struct futexv_head). For futex_wait()
+>> calls, this
+>> +list will have a single object.
+>> +
+>> +We have a hash table, where waiters register themselves before
+>> sleeping. Then
+>> +the wake function checks this table looking for waiters at uaddr. 
+>> The hash
+>> +bucket to be used is determined by a struct futex_key, that stores
+>> information
+>> +to uniquely identify an address from a given process. Given the huge
+>> address
+>> +space, there'll be hash collisions, so we store information to be
+>> later used on
+>> +collision treatment.
+>> +
+>> +First, for every futex we want to wait on, we check if (``*uaddr ==
+>> val``).
+>> +This check is done holding the bucket lock, so we are correctly
+>> serialized with
+>> +any futex_wake() calls. If any waiter fails the check above, we
+>> dequeue all
+>> +futexes. The check (``*uaddr == val``) can fail for two reasons:
+>> +
+>> +- The values are different, and we return -EAGAIN. However, if while
+>> +  dequeueing we found that some futexes were awakened, we prioritize
+>> this
+>> +  and return success.
+>> +
+>> +- When trying to access the user address, we do so with page faults
+>> +  disabled because we are holding a bucket's spin lock (and can't sleep
+>> +  while holding a spin lock). If there's an error, it might be a page
+>> +  fault, or an invalid address. We release the lock, dequeue everyone
+>> +  (because it's illegal to sleep while there are futexes enqueued, we
+>> +  could lose wakeups) and try again with page fault enabled. If we
+>> +  succeed, this means that the address is valid, but we need to do
+>> +  all the work again. For serialization reasons, we need to have the
+>> +  spin lock when getting the user value. Additionally, for shared
+>> +  futexes, we also need to recalculate the hash, since the underlying
+>> +  mapping mechanisms could have changed when dealing with page fault.
+>> +  If, even with page fault enabled, we can't access the address, it
+>> +  means it's an invalid user address, and we return -EFAULT. For this
+>> +  case, we prioritize the error, even if some futexes were awaken.
+>> +
+>> +If the check is OK, they are enqueued on a linked list in our bucket,
+>> and
+>> +proceed to the next one. If all waiters succeed, we put the thread to
+>> sleep
+>> +until a futex_wake() call, timeout expires or we get a signal. After
+>> waking up,
+>> +we dequeue everyone, and check if some futex was awakened. This
+>> dequeue is done
+>> +by iteratively walking at each element of struct futex_head list.
+>> +
+>> +All enqueuing/dequeuing operations requires to hold the bucket lock,
+>> to avoid
+>> +racing while modifying the list.
+>> +
+>> +Waking
+>> +------
+>> +
+>> +We get the bucket that's storing the waiters at uaddr, and wake the
+>> required
+>> +number of waiters, checking for hash collision.
+>> +
+>> +There's an optimization that makes futex_wake() not take the bucket
+>> lock if
+>> +there's no one to be woken on that bucket. It checks an atomic
+>> counter that each
+>> +bucket has, if it says 0, then the syscall exits. In order for this
+>> to work, the
+>> +waiter thread increases it before taking the lock, so the wake thread
+>> will
+>> +correctly see that there's someone waiting and will continue the path
+>> to take
+>> +the bucket lock. To get the correct serialization, the waiter issues
+>> a memory
+>> +barrier after increasing the bucket counter and the waker issues a
+>> memory
+>> +barrier before checking it.
+>> +
+>> +Requeuing
+>> +---------
+>> +
+>> +The requeue path first checks for each struct futex_requeue and their
+>> flags.
+>> +Then, it will compare the expected value with the one at uaddr1::uaddr.
+>> +Following the same serialization explained at Waking_, we increase
+>> the atomic
+>> +counter for the bucket of uaddr2 before taking the lock. We need to
+>> have both
+>> +buckets locks at same time so we don't race with other futex
+>> operation. To
+>> +ensure the locks are taken in the same order for all threads (and
+>> thus avoiding
+>> +deadlocks), every requeue operation takes the "smaller" bucket first,
+>> when
+>> +comparing both addresses.
+>> +
+>> +If the compare with user value succeeds, we proceed by waking
+>> ``nr_wake``
+>> +futexes, and then requeuing ``nr_requeue`` from bucket of uaddr1 to
+>> the uaddr2.
+>> +This consists in a simple list deletion/addition and replacing the
+>> old futex key
+>> +with the new one.
+>> +
+>> +Futex keys
+>> +----------
+>> +
+>> +There are two types of futexes: private and shared ones. The private
+>> are futexes
+>> +meant to be used by threads that share the same memory space, are
+>> easier to be
+>> +uniquely identified and thus can have some performance optimization. The
+>> +elements for identifying one are: the start address of the page where
+>> the
+>> +address is, the address offset within the page and the current->mm
+>> pointer.
+>> +
+>> +Now, for uniquely identifying a shared futex:
+>> +
+>> +- If the page containing the user address is an anonymous page, we can
+>> +  just use the same data used for private futexes (the start address of
+>> +  the page, the address offset within the page and the current->mm
+>> +  pointer); that will be enough for uniquely identifying such futex. We
+>> +  also set one bit at the key to differentiate if a private futex is
+>> +  used on the same address (mixing shared and private calls does not
+>> +  work).
+>> +
+>> +- If the page is file-backed, current->mm maybe isn't the same one for
+>> +  every user of this futex, so we need to use other data: the
+>> +  page->index, a UUID for the struct inode and the offset within the
+>> +  page.
+>> +
+>> +Note that members of futex_key don't have any particular meaning
+>> after they
+>> +are part of the struct - they are just bytes to identify a futex. 
+>> Given that,
+>> +we don't need to use a particular name or type that matches the
+>> original data,
+>> +we only need to care about the bitsize of each component and make
+>> both private
+>> +and shared fit in the same memory space.
+>> +
+>> +Source code documentation
+>> +=========================
+>> +
+>> +.. kernel-doc:: kernel/futex2.c
+>> +   :no-identifiers: sys_futex_wait sys_futex_wake sys_futex_waitv
+>> sys_futex_requeue
+>> diff --git a/Documentation/locking/index.rst
+>> b/Documentation/locking/index.rst
+>> index 7003bd5aeff4..9bf03c7fa1ec 100644
+>> --- a/Documentation/locking/index.rst
+>> +++ b/Documentation/locking/index.rst
+>> @@ -24,6 +24,7 @@ locking
+>>     percpu-rw-semaphore
+>>     robust-futexes
+>>     robust-futex-ABI
+>> +    futex2
+>>
+>> .. only::  subproject and html
+>>
+>> -- 
+>> 2.31.1
+>>
