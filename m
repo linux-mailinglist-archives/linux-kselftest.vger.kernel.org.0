@@ -2,126 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 095EC39F800
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 15:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DC139F8B8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 16:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbhFHNnO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Jun 2021 09:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S233180AbhFHOQr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Jun 2021 10:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbhFHNnL (ORCPT
+        with ESMTP id S233158AbhFHOQr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Jun 2021 09:43:11 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4066AC061574;
-        Tue,  8 Jun 2021 06:41:11 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id r198so28819593lff.11;
-        Tue, 08 Jun 2021 06:41:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8CP8awcg95oWuVc3U+udiIOQfXQwkD1ELykPoeSDRf0=;
-        b=iJPUF2zRKrL8aPbnq6ruVV7uDa2MAPDQ71g9cFK6NodFwJHSxT0o3hecmaPpudVxod
-         r8galZFH0J98fnH+ymQDnhT3nnESaD7oxf6oLPHGC1N42ffQeogmS4PKE5oKcvZ77Not
-         OmBNYipVRrD2IZcWzBoEgHL+cATFntc0NFLtV5I7Boag5rW+tc0fnvAK5iuTu9miHIff
-         ieOVD/5njM7BzHWHQHXNFYwNoVFAOO5joQfIUFXOHvoVMxFwD2tFujpalxMwhd/42O2B
-         sFYKNfz1dniBt59rXk9hFauVvFLqlUg8kdoX9Q1hBYgBeHOQclht6iyXAPFgYtBVgD9p
-         3yFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8CP8awcg95oWuVc3U+udiIOQfXQwkD1ELykPoeSDRf0=;
-        b=Fz5Nh3C+X/wjOSca+eZgAtSiNvxEMChl0uBfgNieDK9KX+ztAHc24P/zGVLBFPBuVo
-         UdFqYLcNE0TLvj0Y4equj219XY8V/Eub6BCxQgXa77MtXP82SKxt8oNQnkJwUZKz913A
-         ZQV2EKtA8qYrNdvYDlRVf/45Le0+KAVz/AGURFcQw1tnI7hXo4lZquK5fb2AIcMVmef+
-         OPD8kTeB4kKkdpufeLmkgqMAIRGWG5E/XhE+ums6J4eJKqqorRB2ZPO5+DmFqbgU1lEp
-         HpcLvU6Pwh9zcoa3FGlGCvTe8gqf3We8YP8JtqpNlhpr/tCBm2xrDC+vnJsa0whsq7dM
-         n8fA==
-X-Gm-Message-State: AOAM533/FnvpalD4Yfqyf81d4AV5DUw5cgZ5i0PC0SA0mIZspfg6+Mgl
-        dB5xhiNcTQ4bvBdcLHzankM=
-X-Google-Smtp-Source: ABdhPJxyRgGCXscqZPEqdY3tizyXXZkHxIfRc0pL2h7PfHdsBirtbLZ3f0h4iLxhxFKq/sAN9wN8SQ==
-X-Received: by 2002:ac2:5084:: with SMTP id f4mr15801044lfm.466.1623159669392;
-        Tue, 08 Jun 2021 06:41:09 -0700 (PDT)
-Received: from [192.168.1.2] (broadband-5-228-51-184.ip.moscow.rt.ru. [5.228.51.184])
-        by smtp.gmail.com with ESMTPSA id h4sm494809ljk.4.2021.06.08.06.41.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jun 2021 06:41:08 -0700 (PDT)
+        Tue, 8 Jun 2021 10:16:47 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAC9C061574;
+        Tue,  8 Jun 2021 07:14:54 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 4ABA81F42B4F
 Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        acme@kernel.org, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        corbet@lwn.net, Davidlohr Bueso <dave@stgolabs.net>,
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>, acme@kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        corbet@lwn.net, Andrey Semashev <andrey.semashev@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
         Darren Hart <dvhart@infradead.org>, fweimer@redhat.com,
         joel@joelfernandes.org, kernel@collabora.com,
         krisman@collabora.com, libc-alpha@sourceware.org,
         linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, malteskarupke@fastmail.fm,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        pgriffais@valvesoftware.com, Peter Oskolkov <posk@posk.io>,
+        Ingo Molnar <mingo@redhat.com>, pgriffais@valvesoftware.com,
+        Peter Oskolkov <posk@posk.io>,
         Steven Rostedt <rostedt@goodmis.org>, shuah@kernel.org,
         Thomas Gleixner <tglx@linutronix.de>, z.figura12@gmail.com
-References: <1622853816.mokf23xgnt.astroid@bobo.none>
+References: <20210603195924.361327-1-andrealmeid@collabora.com>
+ <1622799088.hsuspipe84.astroid@bobo.none>
+ <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
+ <1622853816.mokf23xgnt.astroid@bobo.none>
  <6d8e3bb4-0cef-b991-9a16-1f03d10f131d@gmail.com>
  <1622980258.cfsuodze38.astroid@bobo.none>
  <c6d86db8-4f63-6c57-9a67-6268da266afe@gmail.com>
  <1623114630.pc8fq7r5y9.astroid@bobo.none>
  <b3488d1b-a4ff-8791-d960-a5f7ae2ea8b3@gmail.com> <YL9Q2tKLZP6GKbHW@kroah.com>
- <8fa8b7fd-58ae-9467-138d-4ff4f32f68f7@gmail.com> <YL9kApyE6FbG/hru@kroah.com>
- <3fca0afa-d9db-a176-aad1-ff7db21ba4a2@gmail.com> <YL9wROdz4y/pETA1@kroah.com>
-From:   Andrey Semashev <andrey.semashev@gmail.com>
-Message-ID: <edc30790-e29c-723c-50c8-61e258c6508b@gmail.com>
-Date:   Tue, 8 Jun 2021 16:41:07 +0300
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+Message-ID: <1983f58b-6bb2-5f47-3cb2-647bb81b6ed2@collabora.com>
+Date:   Tue, 8 Jun 2021 11:14:41 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-In-Reply-To: <YL9wROdz4y/pETA1@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <YL9Q2tKLZP6GKbHW@kroah.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/8/21 4:27 PM, Greg KH wrote:
-> On Tue, Jun 08, 2021 at 04:18:42PM +0300, Andrey Semashev wrote:
->> On 6/8/21 3:35 PM, Greg KH wrote:
->>> On Tue, Jun 08, 2021 at 03:06:48PM +0300, Andrey Semashev wrote:
->>>> On 6/8/21 2:13 PM, Greg KH wrote:
+Hi Greg,
+
+Às 08:13 de 08/06/21, Greg KH escreveu:
+> On Tue, Jun 08, 2021 at 02:03:50PM +0300, Andrey Semashev wrote:
+>> On 6/8/21 4:25 AM, Nicholas Piggin wrote:
 >>>
->>>>> So what's keeping the futex2 code from doing all that futex1 does so
->>>>> that the futex1 code can be deleted internally?
->>>>
->>>> I think, André will answer this, but my guess is, as stated above, this is a
->>>> lot of work and time while the intermediate version is already useful.
->>>
->>> useful to who?  I still do not understand what users will be needing
->>> this.  All I can tell is a single userspace program wants to use it, and
->>> that is a fork from the real project it was based on and that the
->>> maintainers have no plan to merge it back.
->>>
->>> So who does need/want this?
+>>> Are shared pthread mutexes using existing pthread APIs that are today
+>>> implemented okay with futex1 system call a good reason to constrain
+>>> futex2 I wonder? Or do we have an opportunity to make a bigger change
+>>> to the API so it suffers less from non deterministic latency (for
+>>> example)?
 >>
->> I mentioned C++ std::atomic and Boost.Atomic before. Those need variable
->> sized futexes.
+>> If futex2 is not able to cover futex1 use cases then it cannot be viewed as
+>> a replacement. In the long term this means futex1 cannot be deprecated and
+>> has to be maintained. My impression was that futex1 was basically
+>> unmaintainable(*) and futex2 was an evolution of futex1 so that users of
+>> futex1 could migrate relatively easily and futex1 eventually removed. Maybe
+>> my impression was wrong, but I would like to see futex2 as a replacement and
+>> extension of futex1, so the latter can be deprecated at some point.
 > 
-> And has anyone converted them to use this new api to see if it works
-> well or not?
+> You can never delete a kernel system call, so even if you "deprecate"
+> it, it still needs to be supported for forever.
 > 
-> As was pointed out to me numerous times when I tried to propose
-> readfile(), you need a real user that can show and prove it is needed
-> before we can take new syscalls, especially complex beasts like this
-> one.
+> Best of all would be if internally your "futex2" code would replace the
+> "futex1" code so that there is no two different code bases.  That would
+> be the only sane way forward, having 2 code bases to work with is just
+> insane.
+> 
+>> (*) I use "unmaintainable" in a broad sense here. It exists and works in
+>> newer kernel versions and may receive code changes that are necessary to
+>> keep it working, but maintainers refuse any extensions or modifications of
+>> the code, mostly because of its complexity.
+> 
+> Adding additional complexity for no good reason is not a good idea,
+> especially if you are asking others to maintain and support that
+> complexity.  Would you want to have to do that work?
+> 
+> So what's keeping the futex2 code from doing all that futex1 does so
+> that the futex1 code can be deleted internally?
+> 
 
-André has mentioned that he tested the patch set with patched Wine and 
-glibc.
+My very first submission of futex2[0] was just an overlay on top of
+futex.c, I didn't get much feedback at that time, but I think this is
+what you and Peter are thinking of?
 
-I didn't patch Boost.Atomic or std::atomic, but it doesn't look to be 
-problematic. The only difference it would make there is to enable 
-futex2-based implementation for multiple atomic sizes and set up flags 
-to indicate the futex size, instead of only enabling futex-based 
-implementation for 32-bit atomics.
+After that, last year at Plumbers' RT MC, I presented a talk called
+"futex2: A New Interface" and my conclusion after the discussion on this
+talk + responses I got from my FUTEX_WAIT_MULTIPLE patchset[1] was that
+this work couldn't be done at futex.c, given how fragile things are
+there. futex.c would be "feature freeze" and no new major changes would
+happen there.
+
+This is the context where this new futex2 code base comes from. So,
+which one is it? Happy to go either way but I'm getting conflicting
+messages here.
+
+Thanks,
+	André
+
+[0]
+https://lore.kernel.org/lkml/20200612185122.327860-2-andrealmeid@collabora.com/
+
+[1]
+https://lore.kernel.org/lkml/20200213214525.183689-1-andrealmeid@collabora.com/
+
+> thanks,
+> 
+> greg k-h
+> 
