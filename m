@@ -2,58 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2581839EB52
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 03:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CD039EB7E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 03:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbhFHB1f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Jun 2021 21:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbhFHB1e (ORCPT
+        id S230314AbhFHBeo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Jun 2021 21:34:44 -0400
+Received: from mail-pl1-f170.google.com ([209.85.214.170]:46684 "EHLO
+        mail-pl1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230239AbhFHBeo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Jun 2021 21:27:34 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C63C061574;
-        Mon,  7 Jun 2021 18:25:28 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id ei4so10914437pjb.3;
-        Mon, 07 Jun 2021 18:25:28 -0700 (PDT)
+        Mon, 7 Jun 2021 21:34:44 -0400
+Received: by mail-pl1-f170.google.com with SMTP id e1so9721199pld.13;
+        Mon, 07 Jun 2021 18:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:subject:to:cc:references:in-reply-to:mime-version
          :message-id:content-transfer-encoding;
-        bh=9or9kWeQKVtCH1EkhikcuqwJeODMnwDBrNDPM5zN6nU=;
-        b=FU2f2964xr/SgPnmutRsW6uD26YSGVNtLh9+uxsZO/AfzPvIjiC8uJ9ZZoC+5Y8+GJ
-         lC0enHqvNWQ2iU+TWuzaMlWTEO2gpkdu6gqV7atUVyigpChnNs4b1iF64OYcY+VxWvPe
-         9R/wY7B5JXubweemSLcHlVUMiydHC/eXj6U13s65RJhLguObeVQXadeNmZp6kFB1aMw7
-         MiqCiYDuifvX6rhXvKJRKoJnM0QjvfdwwwEDcRYamiricKMzUdOkf4Kb4KSbP/pLVG6+
-         WQRZCJJUROcwcGGvAqyAGbrn/clMPck8rfXiWBDN4RJ2sANJYhCHtk+vxsXBS9og8VM1
-         x2cw==
+        bh=+55IUd9faOKlON3AM50/e4sWS1IOtqct+NHUgj6zP5Y=;
+        b=I7bynfKgdnBBLvd44eWXaXAGwhr85IJOcgyVPQPxuwzs7bS01hJQT07cImT7sge5FL
+         4Yuzb5Jqjvnnt0YXkfj5f1r7wreeQLA33OcE9Z1kjnt6jCr43m35D87oAzIJEcaDcDA6
+         wEdukHDSDYIW8PbPkLDPnY5PVoIxA6NDBiF70iL6E06XzIlgwgB89AHt+LWixYqImZhI
+         DsMJth2vZ7iYoTCUFNRkn7GtYKgm1RT+OdoblchvleVlsUOxHWQU8FKoWYhZQ6+fFEgD
+         KxmpCODf0y2bUOu8LHdJTLyVhRjx6Df44WOnCiu6K71ggkwawRMSHH3PA8bnLL3hnkfP
+         m2jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
          :mime-version:message-id:content-transfer-encoding;
-        bh=9or9kWeQKVtCH1EkhikcuqwJeODMnwDBrNDPM5zN6nU=;
-        b=ZKNFLmJUUjpYWAyM4Z1fsC5GrDSlfaOC7jY0pOik1Zeeoc1iuIIk82EOW0Iv/eQicK
-         SETSlxUYSb0bVxSF3NlSkcreTLTEzXjuLwKk3S4FS4J77MR7xoqdTw6tEG9evFQYuNkZ
-         6o/o9m5/1b8y9uvzQFJHqMZa+lQrM2kX5qVQXyGj5+DpqK80fDnsn5F/C2AUmgelH7aQ
-         HKSPhNXhUoovSfleUVGlKwaHG0Ir/EYbf6P21JqNrYTZ+P4WESRdqI3IVQnxcu1j6ptK
-         1G5EV11QrdykHdmc7PCpJwkQYNihqNPwLsExOSp8QKDQN+fUHgq+cpmx3uMpmw0g/4L/
-         ld/g==
-X-Gm-Message-State: AOAM533pKn6Jw/joKduXJf3ROG4fEOtPv7NsJi4vUtpgcK0VhgKOImIJ
-        pRx0Bdqkbc986RHBEFjNVK4=
-X-Google-Smtp-Source: ABdhPJxQ3AWTk/Bqmrt5PUVUAJ7rGKI8NLaqvgU/Pd/kVL8WtarQF9ZlwxF3SWMyS1qxGLYZrKWOfg==
-X-Received: by 2002:a17:90a:3484:: with SMTP id p4mr23645127pjb.2.1623115528135;
-        Mon, 07 Jun 2021 18:25:28 -0700 (PDT)
+        bh=+55IUd9faOKlON3AM50/e4sWS1IOtqct+NHUgj6zP5Y=;
+        b=E0XrtCeHaBfrwFnbdc8PZwSh1ETJZaCkHm8e8wf/5TxvBptpMy19mhNcEvekWeWy0i
+         ZvbCqle5PzZpsejVnbREVeGJTvm2vtYakTIKKnVRqX7H5Ze75VgkwkqEQFK9fzQljDkS
+         AQ/aeZMPGO7qdhsJKrpCv0zujdAEHH6c6m2GZ+fpb8aaaDiVE77QpQ34HXdWZtpsX0q+
+         C2G77f7ogUxEBOnT8nW7TLTa5D2iDBCm7f/r9AI+WphfiWnChNg0VoJQCtPwmdHjkqDg
+         MW57JkUaA4NWwwYLn1VbN8yfQas+v/9+EZm64yge3de2hxFkVc9tO9kHQVfX6HB52YD0
+         Ubpw==
+X-Gm-Message-State: AOAM533zVShJmOmlz+NgOgvzOiZ7huVRDqB/PunifPcTQMO+k11zdRVJ
+        0T/T5j8An2RrkvF41DtC8/Q=
+X-Google-Smtp-Source: ABdhPJxzNenfqYzlLHZ5eirHgCFBB0+W/ItTE79oTbZKdGJR5F6Mvr6idXXOeD337msTBG0bKOxBqg==
+X-Received: by 2002:a17:90a:4298:: with SMTP id p24mr2064361pjg.144.1623115898512;
+        Mon, 07 Jun 2021 18:31:38 -0700 (PDT)
 Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
-        by smtp.gmail.com with ESMTPSA id 11sm9506927pge.57.2021.06.07.18.25.26
+        by smtp.gmail.com with ESMTPSA id e17sm9043906pfi.131.2021.06.07.18.31.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 18:25:27 -0700 (PDT)
-Date:   Tue, 08 Jun 2021 11:25:22 +1000
+        Mon, 07 Jun 2021 18:31:38 -0700 (PDT)
+Date:   Tue, 08 Jun 2021 11:31:32 +1000
 From:   Nicholas Piggin <npiggin@gmail.com>
 Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
-To:     =?iso-8859-1?b?QW5kcuk=?= Almeida <andrealmeid@collabora.com>,
-        Andrey Semashev <andrey.semashev@gmail.com>
-Cc:     acme@kernel.org, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+To:     =?iso-8859-1?b?QW5kcuk=?= Almeida <andrealmeid@collabora.com>
+Cc:     acme@kernel.org, Andrey Semashev <andrey.semashev@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         corbet@lwn.net, Davidlohr Bueso <dave@stgolabs.net>,
         Darren Hart <dvhart@infradead.org>, fweimer@redhat.com,
         joel@joelfernandes.org, kernel@collabora.com,
@@ -69,147 +66,218 @@ References: <20210603195924.361327-1-andrealmeid@collabora.com>
         <1622799088.hsuspipe84.astroid@bobo.none>
         <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
         <1622853816.mokf23xgnt.astroid@bobo.none>
-        <6d8e3bb4-0cef-b991-9a16-1f03d10f131d@gmail.com>
-        <1622980258.cfsuodze38.astroid@bobo.none>
-        <c6d86db8-4f63-6c57-9a67-6268da266afe@gmail.com>
-In-Reply-To: <c6d86db8-4f63-6c57-9a67-6268da266afe@gmail.com>
+        <22137ccd-c5e6-9fcc-a176-789558e9ab1e@collabora.com>
+In-Reply-To: <22137ccd-c5e6-9fcc-a176-789558e9ab1e@collabora.com>
 MIME-Version: 1.0
-Message-Id: <1623114630.pc8fq7r5y9.astroid@bobo.none>
+Message-Id: <1623115538.zsqgffieb0.astroid@bobo.none>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Excerpts from Andrey Semashev's message of June 6, 2021 11:15 pm:
-> On 6/6/21 2:57 PM, Nicholas Piggin wrote:
->> Excerpts from Andrey Semashev's message of June 5, 2021 6:56 pm:
->>> On 6/5/21 4:09 AM, Nicholas Piggin wrote:
->>>> Excerpts from Andr=C3=A9 Almeida's message of June 5, 2021 6:01 am:
->>>>> =C3=80s 08:36 de 04/06/21, Nicholas Piggin escreveu:
+Excerpts from Andr=C3=A9 Almeida's message of June 8, 2021 1:40 am:
+> =C3=80s 22:09 de 04/06/21, Nicholas Piggin escreveu:
+>> Excerpts from Andr=C3=A9 Almeida's message of June 5, 2021 6:01 am:
+>>> =C3=80s 08:36 de 04/06/21, Nicholas Piggin escreveu:
+>>>> Excerpts from Andr=C3=A9 Almeida's message of June 4, 2021 5:59 am:
+>>>> - Did you consider a wakev interface? An example is a read-write mutex=
+=20
+>>>> which has read-blocking futexes split (e.g., per-node) for scalability=
+=20
+>>>> then the writer may unlock and wake all readers with one call. We=20
+>>>> actually have some scalability challenges of this nature with certain=20
+>>>> large database programs.
 >>>>
->>>>>> I'll be burned at the stake for suggesting it but it would be great =
-if
->>>>>> we could use file descriptors. At least for the shared futex, maybe
->>>>>> private could use a per-process futex allocator. It solves all of th=
-e
->>>>>> above, although I'm sure has many of its own problem. It may not pla=
-y
->>>>>> so nicely with the pthread mutex API because of the whole static
->>>>>> initialiser problem, but the first futex proposal did use fds. But i=
-t's
->>>>>> an example of an alternate API.
->>>>>>
->>>>>
->>>>> FDs and futex doesn't play well, because for futex_wait() you need to
->>>>> tell the kernel the expected value in the futex address to avoid
->>>>> sleeping in a free lock. FD operations (poll, select) don't have this
->>>>> `value` argument, so they could sleep forever, but I'm not sure if yo=
-u
->>>>> had taken this in consideration.
->>>>
->>>> I had. The futex wait API would take a fd additional. The only
->>>> difference is the waitqueue that is used when a sleep or wake is
->>>> required is derived from the fd, not from an address.
->>>>
->>>> I think the bigger sticking points would be if it's too heavyweight an
->>>> object to use (which could be somewhat mitigated with a simpler ida
->>>> allocator although that's difficult to do with shared), and whether li=
-bc
->>>> could sanely use them due to the static initialiser problem of pthread
->>>> mutexes.
 >>>
->>> The static initialization feature is not the only benefit of the curren=
+>>> Not really, I haven't heard any use case for that until now. It should
+>>> be easy to implement it, though, and I think you have an interesting us=
+e
+>>> case here. Could you point me some of those database programs?
+>>=20
+>> Not source code unfortunately. I know that's not a very good answer, but=
+=20
+>> they are far ahead of what most open source apps are doing scalability=20
+>> wise today, and they end up rolling their own complex locking. Hopefully
+>> the example I give is simple enough to understand.
+>>=20
+>=20
+> I see, that's makes things a bit harder. I understood the use case and
+> the wakev can be implemented without affecting the rest of API, so I
+> think I'll get back to it later, for now.
+
+Yeah that's fine.
+
+>>>> - Are we really keen on squashing node ID into flags in this day and a=
+ge?
+>>>> I guess okay but seems like it would be nice to allow a bit more space
+>>>> in general for the operations. I don't want to turn it into a whole bi=
+g
+>>>> multiplexing nightmare again with lots of such flags, or propose
+>>>> complexity with no code behind it, but I think we need a bit of leeway
+>>>> for unforeseen locking innovations to be added carefully. The pthread
+>>>> locking today is still fairly primitive really, I don't think we know
+>>>> what will work best for the next 10 years.
+>>>
+>>> In the interface that I'd proposed, the node ID isn't part of the flags=
+.
+>>> You have a flag FUTEX_FLAG_NUMA, and when that is used, you pass in
+>>> `void *uaddr` a pointer to a `struct futex_numa { int value, int hint
+>>> }`, where hint should be the node ID you would like to work on, and
+>>> value is just the userspace futex. This is documented in more details i=
+n
+>>> patch 7 "docs: locking: futex2: Add documentation".
+>>>
+>>> If you have any feedback about how this NUMA interface looks like, I
+>>> would like to hear.
+>>>
+>>> Also, did something in my writing indicated that the node ID would be
+>>> part of the flags? I'll improve this it if so.
+>>=20
+>> Oh I did miss this, thank you. No it wasn't your writing, I think it was=
+=20
+>> me trying to read through a lot of messages and got confused with some
+>> earlier conversations.
+>>=20
+>> I'll look a bit more at the NUMA interface.
+>>=20
+>=20
+> Thanks!
+>=20
+>>>
+>>>>
+>>>> One scalability issue we are starting to hit and will only get worse i=
+s=20
+>>>> futex queue spinlock contention. Perhaps this is better addressed in=20
+>>>> userspace but the kernel could play a part so I like to leave some doo=
+rs
+>>>> open. One example is that the wait (or wake) side may like to depend n=
+ot
+>>>> just on the memory value, but on the success of a cmpxchg to avoid=20
+>>>> unqueueing and queueing spuriously, which increases lock contention bu=
 t
->>> futex design, and probably not the most important one. You can work
->>> around the static initialization in userspace, e.g. by initializing fd
->>> to an invalid value and creating a valid fd upon the first use. Althoug=
-h
->>> that would still incur a performance penalty and add a new source of
->>> failure.
+>>>> also ends up putting the poor task on the back of the list -- yes RT
+>>>> priorities can help the realtime case, but non-RT cases can get bad
+>>>> outlier latencies if lock stealing is allowed (which can be very good
+>>>> for performance).
+>>>>
+>>>
+>>> Sorry, I'm not sure what do you mean here. Are you proposing to have a
+>>> cmpxchg in kernel side, so the lock would be taken by the kernel, and
+>>> not by the userspace like it's now?
 >>=20
->> Sounds like a serious problem, but maybe it isn't. On the other hand,
->> maybe we don't have to support pthread mutexes as they are anyway
->> because futex already does that fairly well.
->>=20
->>> What is more important is that waiting on fd always requires a kernel
->>> call. This will be terrible for performance of uncontended locks, which
->>> is the majority of time.
->>=20
->> No. As I said just before, it would be the same except the waitqueue is
->> derived from fd rather than address.
+>> Yes. Only in slow paths, of course, to reduce starvation / erratic
+>> latencies and spurious wait queue manipulations.
 >=20
-> Sorry, in that case I'm not sure I understand how that would work. You=20
-> do need to allocate a fd, do you?
+> Right, so if we need to go into the kernel to do the cmpxchg, we can't
+> take a free lock without a syscall,
 
-Yes. As I said, imagine a futex_wait API that also takes a fd. The
-wait queue is derived from that fd rather than the hash table.
+Yes you can.
 
->>> Another important point is that a futex that is not being waited on
->>> consumes zero kernel resources while fd is a limited resource even when
->>> not used. You can have millions futexes in userspace and you are
->>> guaranteed not to exhaust any limit as long as you have memory. That is
->>> an important feature, and the current userspace is relying on it by
->>> assuming that creating mutexes and condition variables is cheap.
->>=20
->> Is it an important feture? Would 1 byte of kernel memory per uncontended
->> futex be okay? 10? 100?
->>=20
->> I do see it's very nice the current design that requires no
->> initialization for uncontended, I'm just asking questions to get an idea
->> of what constraints we're working with. We have a pretty good API
->> already which can support unlimited uncontended futexes, so I'm
->> wondering do we really need another very very similar API that doesn't
->> fix the really difficult problems of the existing one?
+> and this goes against the futex
+> semantics, the "strength" of this interface is to not require context
+> switch in uncontended cases.
 >=20
-> It does provide the very much needed features that are missing in the=20
-> current futex. Namely, more futex sizes and wait for multiple. So the=20
-> argument of "why have two similar APIs" is not quite fair. It would be,=20
-> if there was feature parity with futex.
+> Is not a bad thing itself to go into the kernel to get a lock, other
+> operating systems do that and if the kernel has more knowledge about who
+> has the lock, it can even make some smart decisions. But this is not
+> futex, this probably belongs to another interface (that's probably
+> slower in the common case than futex).
+>=20
+>>=20
+>> Actually one other scalability thing while I remember it:
+>>=20
+>> futex_wait currently requires that the lock word is tested under the=20
+>> queue spin lock (to avoid consuming a wakeup). The problem with this is=20
+>> that the lock word can be a very hot cache line if you have a lot of
+>> concurrency, so accessing it under the queue lock can increase queue
+>> lock hold time.
+>>=20
+>> I would prefer if the new API was relaxed to avoid this restriction
+>> (e.g., any wait call may consume a wakeup so it's up to userspace to
+>> avoid that if it is a problem).
+>=20
+> Maybe I'm wrong, but AFAIK the goal of checking the lock word inside the
+> spin lock is to avoid sleeping forever (in other words, wrongly assuming
+> that the lock is taken and missing a wakeup call), not to avoid
+> consuming wakeups. Or at least this is my interpretation of this long
+> comment in futex.c:
+>=20
+> https://elixir.bootlin.com/linux/v5.12.9/source/kernel/futex.c#L51
+>=20
+> So removing this requirement of checking the futex word with the lock
+> taken could led to undesirable behavior.
 
-It does provide some extra features sure, with some straightforward=20
-extension of the existing API. The really interesting or tricky part of
-the API is left unchanged though.
-
-My line of thinking is that while we're changing the API anyway, we=20
-should see if it can be changed to help those other problems too.
-
-> I believe, the low cost of a futex is an important feature, and was one=20
-> of the reasons for its original design and introduction.
-
-It is of course. The first futex proposal did use fds, interestingly.
-I didn't look back further into the libc side of that thing, but maybe
-I should.
-
-> Otherwise we=20
-> would be using eventfds in mutexes.
-
-I don't think so, not even if eventfd came before the futex syscall.
+No, there are two requirements. Obviously you need to avoid the missed
+wakeup at minimum. You don't need to check under the lock unless you
+want to avoid consuming an extra wakeup though (it can possibly be done
+in more complex ways like you detect if you took a wakeup and if so then
+look at the queue and see if you can pass it on, or have some extra flag
+to signal you are ready for wake up, but those all seem more complex and
+fragile and possibly have weird corner cases, better to just set out=20
+that userspace should deal with it).
 
 >=20
-> One other feature that I didn't mention earlier and which follows from=20
-> its "address in memory" design is the ability to use futexes in=20
-> process-shared memory. This is important for process-shared pthread=20
-> components, too, but has its own value even without this, if you use=20
-> futexes directly. With fds, you can't place the fd in a shared memory=20
-> since every process needs to have its own fd referring to the same=20
-> kernel object, and passing fds cannot be done without a UNIX socket.=20
-> This is incompatible with pthreads API design and would require=20
-> non-trivial design changes to the applications using futexes directly.
+>>=20
+>>>> - The private global futex hash table sucks for various reasons, and
+>>>> having 128 waiters per thread makes it orders of magnitude easier for
+>>>> userspace to DoS stuff with hash collisions. NUMA doesn't fix that, th=
+e
+>>>> per process hashing that Thomas suggested does fix the DoS but the
+>>>> non-deterministic hash collisions still seem to be a problem for real
+>>>> time response, and at the other end of the scale some apps (certain=20
+>>>> databases, etc) can have ten thousand futex waiters at once so birthda=
+y
+>>>> paradox can also lead to guaranteed (low level) variable beahviour=20
+>>>> within a single process.
+>>>>
+>>>> I know the kernel in general is not very robust against this kind of=20
+>>>> DoS/nondeterminism, but it's a bit sad to introduce new APIs with the=20
+>>>> problem still there. Yes we could address it later, but I think it's=20
+>>>> better done first because the solution might influence what the best=20
+>>>> syscall API is.
+>>>>
+>>>> For example the idea of using the address as the handle for the wait=20
+>>>> queue _and_ the value is very convenient but hashing is annoying for
+>>>> all the above reasons and the shared wait queue case is pretty clunky.=
+=20
+>>>> It's also constraining in some corner cases to have the wait queue=20
+>>>> associated with the address 1:1. For example a type of NUMA mutex migh=
+t=20
+>>>> want to have per-node waitqueues associated with a lock word, and wake
+>>>> local node waiters 99% of the time. Not trivial to do with futexes and
+>>>> seems to at least require bouncing of more cache lines, possibly more
+>>>> atomics, etc.
+>>>>
+>>>> Could anything else be done?
+>>>
+>>> I wasn't aware that userspace doing DoS is something to be concerned
+>>> from the kernel point of view. Is this scenario considering a malicious
+>>> actor? If so, there are plenty of resources to be denied, so not sure
+>>> how futex could be protected of this. Or is this just a program that
+>>> uses tons of futexes?
+>>=20
+>> Both really. AFAIKS one of the efforts that prompted the futex=20
+>> modernisation work was the RT latency issues from Thomas in 2016 when=20
+>> the per process table was proposed.
+>>=20
 >=20
+> When I first read Thomas proposal for per table process, I thought that
+> the main goal there was to solve NUMA locality issues, not RT latency,
+> but I think you are right. However, re-reading the thread at [0], it
+> seems that the RT problems where not completely solved in that
+> interface, maybe the people involved with that patchset can help to shed
+> some light on it.
+>=20
+> Otherwise, this same proposal could be integrated in futex2, given that
+> we would only need to provide to userland some extra flags and add some
+> `if`s around the hash table code (in a very similar way the NUMA code
+> will be implemented in futex2).
+>=20
+> [0] https://lore.kernel.org/lkml/20160505204230.932454245@linutronix.de/
 
-That may be true. file is a natural object to share such a resource, but=20
-the means to share the fd is not so easy. OTOH you could also use a=20
-syscall to open the same file and get a new fd.
-
-Are shared pthread mutexes using existing pthread APIs that are today
-implemented okay with futex1 system call a good reason to constrain=20
-futex2 I wonder? Or do we have an opportunity to make a bigger change
-to the API so it suffers less from non deterministic latency (for
-example)?
-
-I don't want to limit it to just files vs addresses, fds was an example=20
-of something that could solve some of the problems.
+Right. The accidental collisions within a process (or=20
+accidental/deliberate collisions with shared futex) problems remain.
 
 Thanks,
 Nick
