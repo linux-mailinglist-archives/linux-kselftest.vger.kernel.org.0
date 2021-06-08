@@ -2,167 +2,447 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A780539EDCB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 06:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DA339EEF7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 08:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbhFHEso (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Jun 2021 00:48:44 -0400
-Received: from mail-pf1-f171.google.com ([209.85.210.171]:44898 "EHLO
-        mail-pf1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbhFHEso (ORCPT
+        id S230160AbhFHGvw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Jun 2021 02:51:52 -0400
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:50747 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229518AbhFHGvw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Jun 2021 00:48:44 -0400
-Received: by mail-pf1-f171.google.com with SMTP id u18so14754462pfk.11;
-        Mon, 07 Jun 2021 21:46:37 -0700 (PDT)
+        Tue, 8 Jun 2021 02:51:52 -0400
+Received: by mail-qk1-f201.google.com with SMTP id n3-20020a378b030000b02903a624ca95adso14400397qkd.17
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Jun 2021 23:50:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=shODUYCaNFDiwECqxn3wjQe6HiQJ4Xmfy6/QLkqCTj0=;
-        b=QKOwrNn5pHgz+CO/6OengGsrAXQu/41qkmyIy8Sd4hqTRJb4WyhwEPIyJ7KTeTmb1f
-         tgGNdpezdeaUWAjRN4ouV90wX8AMl2hAztyIV5KFLK4IGrHYPrKWrYApmg/RKq4LkHEw
-         g+s1z4Crgb2ovl3x+duG0KHMz/JjHdsF1cXufhJWPzRVyFmi7vsGUnrb+k4jlh0VnLOC
-         IAhLhXzgNEhXfuNpfQsNhHHwQnEVQ864qDtVc6WR06mA+9XNkZ/WP4wZbWPcB//HaMtp
-         ndreGPmkrEsvkXquouv4PHE7iSKTL5xWlQ+SeuX5PqRh+LfPz/Dr0v6MTgRRhv74iqfV
-         UEEA==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=4Q0vdJD3xSDrw7jBCjQdQ1kdDB8dxVr9sanRFt/oBzQ=;
+        b=rPvoh9zDE+GYk3GgGo25LX6Moo42CL/AR/I2QZnldueu3A/ZH4QM1a8WfDPfXWEzAt
+         IF17iJonFvNTilyRrqA5rrMIOrUlLmWWyI57cC5b7J75iUAL1rG3X9T4h+IBDrsD+zCa
+         FGNPwxSFcOLdE1eKZdxOKlASOG7P9xMlZywRXET7ihYOLXKCgV1TNbI2P4Tn5D7nD/N5
+         bRn4rB5Fuk2jCB8qW96sG4VE2rELnrMnEy1Gt9jy+fwh/UMmkDRdMO07jh8LwT8EA+FP
+         THZt1lws8PmY5dhqalpofBztNYYGrGd/zFV82SiTTkh4tP8Vbxkih3NesaOhGhA5cqEg
+         kMjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=shODUYCaNFDiwECqxn3wjQe6HiQJ4Xmfy6/QLkqCTj0=;
-        b=CavkB6x5CjO1QgkL5oEN6n3/ra33YMsN7d1R9MzMX6/tUa+VPxG4hY7s1mHkeECXsk
-         Ghh+Ldgp/FHAHyXgRa5L6RkA/no+ZbNQ/C9mLZmmTKpQpIQNN71aK2TC641UplRk4Vd5
-         NKRTcQYdSYfFBC8EipWIteGth1HD1/9HAtAsVPdKFuDQwzPBRfX60w3Az5rWvBYVjXLF
-         exz+oRsD8a4vtt6pQWtcfT2TkiidM7ymsnF5QqdE4jHiSnp5CtOrbyg2UvxcPlR0nFgo
-         fwd1NNuxzNkFCtoCqqt/OZITe+WMyD1OVvutSyVg7cMZUQVs9707QwgeMFArCwQeMe99
-         NWzQ==
-X-Gm-Message-State: AOAM5304L/ePaelDu6dZRh4tJuUInO0tdoXlqcdiBohY5X28Zfv2FvDy
-        mClo95CAyzP4GoPFXHs0O5M=
-X-Google-Smtp-Source: ABdhPJzo/Il7mH42sxJ9pqb+2MljKEc8Fi+ttQDpWQawgD1x5JDzvIavvyCaTIekl88MdUSoxOAf3g==
-X-Received: by 2002:a62:60c4:0:b029:2ca:ebf7:cd0d with SMTP id u187-20020a6260c40000b02902caebf7cd0dmr20270348pfb.71.1623127536730;
-        Mon, 07 Jun 2021 21:45:36 -0700 (PDT)
-Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
-        by smtp.gmail.com with ESMTPSA id v11sm950423pju.27.2021.06.07.21.45.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 21:45:36 -0700 (PDT)
-Date:   Tue, 08 Jun 2021 14:45:31 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
-To:     =?iso-8859-1?b?QW5kcu+/vQ==?= Almeida <andrealmeid@collabora.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     acme@kernel.org, Andrey Semashev <andrey.semashev@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        corbet@lwn.net, Darren Hart <dvhart@infradead.org>,
-        fweimer@redhat.com, joel@joelfernandes.org, kernel@collabora.com,
-        krisman@collabora.com, libc-alpha@sourceware.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, malteskarupke@fastmail.fm,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        pgriffais@valvesoftware.com, Peter Oskolkov <posk@posk.io>,
-        Steven Rostedt <rostedt@goodmis.org>, shuah@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, z.figura12@gmail.com
-References: <20210603195924.361327-1-andrealmeid@collabora.com>
-        <1622799088.hsuspipe84.astroid@bobo.none>
-        <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
-        <1622853816.mokf23xgnt.astroid@bobo.none>
-        <22137ccd-c5e6-9fcc-a176-789558e9ab1e@collabora.com>
-        <20210608023302.34yzrm5ktf3qvxhq@offworld>
-In-Reply-To: <20210608023302.34yzrm5ktf3qvxhq@offworld>
-MIME-Version: 1.0
-Message-Id: <1623125574.l2jo2w0x2v.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=4Q0vdJD3xSDrw7jBCjQdQ1kdDB8dxVr9sanRFt/oBzQ=;
+        b=KMK+zwsWVslUgibn+BkgQHcWt/kTtBzwA4V4l4utjtDGTnO2WGKewphnLPOubo3BjW
+         uQdWnSL+GnXI1rD/9DXhgzI3we9isY9/gb74ZzKQO4x+f+T4D5FPOI3tRZ64Jfymr07g
+         IT5Ygu0qWO3r2m0y70yF7O5rO1q6hR++bYDVGEaHuSsGYqdbQ/B8qwDHzJ5feMjQdYZP
+         HNrXWy3Hu46Jzh0s4DrLIsjppg1sDch1bEqJt6kFLbdR80dLKnBUwaA6wsf/nvQfGwwb
+         aUBOYEtg4VetbNltSDZ8L12CM5rh+s4RDeVdF7c/nHTZj56BKgLJmjx1g4BR6gJi3Qsj
+         vR/A==
+X-Gm-Message-State: AOAM532tv5k+307cc9kTCiJs6A3qqRV0Ntn3E3o7QmBWrc4lyk+TVn+7
+        MnQVlu6zg8RO0hIheY3TGxzo5AjvhNcTpg==
+X-Google-Smtp-Source: ABdhPJy0aWlclHWwyGb3ZbevbW85vYPusifkje9UZ08qRqdBTQrnjw+cWX12iOYItmq/UGav9DTpt1uV8yfWTw==
+X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:868:b4e3:8c14:177d])
+ (user=davidgow job=sendgmr) by 2002:a05:6214:e82:: with SMTP id
+ hf2mr22071495qvb.22.1623134939870; Mon, 07 Jun 2021 23:48:59 -0700 (PDT)
+Date:   Mon,  7 Jun 2021 23:48:52 -0700
+Message-Id: <20210608064852.609327-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
+Subject: [PATCH v3 1/4] kunit: Support skipped tests
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Cc:     David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Marco Elver <elver@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Excerpts from Davidlohr Bueso's message of June 8, 2021 12:33 pm:
-> On Mon, 07 Jun 2021, Andr=C3=AF=C2=BF=C2=BD Almeida wrote:
->=20
->>=C3=80s 22:09 de 04/06/21, Nicholas Piggin escreveu:
->>> Actually one other scalability thing while I remember it:
->>>
->>> futex_wait currently requires that the lock word is tested under the
->>> queue spin lock (to avoid consuming a wakeup). The problem with this is
->>> that the lock word can be a very hot cache line if you have a lot of
->>> concurrency, so accessing it under the queue lock can increase queue
->>> lock hold time.
->>>
->>> I would prefer if the new API was relaxed to avoid this restriction
->>> (e.g., any wait call may consume a wakeup so it's up to userspace to
->>> avoid that if it is a problem).
->>
->>Maybe I'm wrong, but AFAIK the goal of checking the lock word inside the
->>spin lock is to avoid sleeping forever (in other words, wrongly assuming
->>that the lock is taken and missing a wakeup call), not to avoid
->>consuming wakeups. Or at least this is my interpretation of this long
->>comment in futex.c:
->>
->>https://elixir.bootlin.com/linux/v5.12.9/source/kernel/futex.c#L51
->=20
-> I think what Nick is referring to is that futex_wait() could return 0
-> instead of EAGAIN upon a uval !=3D val condition if the check is done
-> without the hb lock. The value could have changed between when userspace
-> did the condition check and called into futex(2) to block in the slowpath=
-.
+The kunit_mark_skipped() macro marks the current test as "skipped", with
+the provided reason. The kunit_skip() macro will mark the test as
+skipped, and abort the test.
 
-I just mean the check could be done after queueing ourselves on the wait=20
-queue (and unlocking the waitqueue lock, not checking while holding the
-lock). That is the standard pattern used everywhere else by the kernel:
+The TAP specification supports this "SKIP directive" as a comment after
+the "ok" / "not ok" for a test. See the "Directives" section of the TAP
+spec for details:
+https://testanything.org/tap-specification.html#directives
 
-  prepare_to_wait() /* -> lock; add_wait_queue; unlock; */
-  check_again();
-  schedule();
+The 'success' field for KUnit tests is replaced with a kunit_status
+enum, which can be SUCCESS, FAILURE, or SKIPPED, combined with a
+'status_comment' containing information on why a test was skipped.
 
-It can still return EAGAIN if there is a reasonable use for it, but I'd
-be wary about user code that cares about this -- it's racy you could=20
-arrive right before the value changes or right after it changes, so any
-user code checking this I would be suspicious of (I'm willing to see a
-use case that really cares).
+A new 'kunit_status' test suite is added to test this.
 
->=20
-> But such spurious scenarios should be pretty rare, and while I agree that
-> the cacheline can be hot, I'm not sure how much of a performance issue th=
-is
-> really is(?),
+Signed-off-by: David Gow <davidgow@google.com>
+Tested-by: Marco Elver <elver@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
 
-It's not a spurious anything. The problem is the contention on the
-lock word cacheline means it can take a relatively long time just to perfor=
-m
-that one load instruction. Mandating that it must be done while holding the
-lock translates to increased lock hold times.
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20210528075932.347154-1-davidgow@google.com/
+- Make the length of the status comment a #define
+- Fixed a build issue where debugfs was still using the old
+  kunit_status_to_string() function name.
 
-This matters particularly in situations that have lock stealing,=20
-optimistic spinning, reader-writer locks or more exotic kind of things=20
-that allow some common types of critical section to go through while others
-are blocking. And partiuclarly when such things hash collide on other
-futexes that share the same hash lock.
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20210526081112.3652290-1-davidgow@google.com/
+- Renamed kunit_status_to_string() to kunit_status_to_ok_not_ok
+- Fixed incorrect printing of status comments on non-skipped tests.
 
-> compared to other issues, certainly not to govern futex2
-> design. Changing such semantics would be a _huge_ difference between fute=
-x1
-> and futex2.
 
-futex1 behaviour should not govern futex2 design. That's the only nice=20
-thing you get with an API change, so we should take full advantage of=20
-it. I'm not saying make changes for no reason, but I gave a reason, so=20
-that should be countered with a better reason to not change.
+ include/kunit/test.h   | 73 ++++++++++++++++++++++++++++++++++++++----
+ lib/kunit/debugfs.c    |  2 +-
+ lib/kunit/kunit-test.c | 42 +++++++++++++++++++++++-
+ lib/kunit/test.c       | 51 +++++++++++++++++------------
+ 4 files changed, 140 insertions(+), 28 deletions(-)
 
-Thanks,
-Nick
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index b68c61348121..fb481696c587 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -97,6 +97,9 @@ struct kunit;
+ /* Maximum size of parameter description string. */
+ #define KUNIT_PARAM_DESC_SIZE 128
+ 
++/* Maximum size of a status comment. */
++#define KUNIT_STATUS_COMMENT_SIZE 256
++
+ /*
+  * TAP specifies subtest stream indentation of 4 spaces, 8 spaces for a
+  * sub-subtest.  See the "Subtests" section in
+@@ -105,6 +108,18 @@ struct kunit;
+ #define KUNIT_SUBTEST_INDENT		"    "
+ #define KUNIT_SUBSUBTEST_INDENT		"        "
+ 
++/**
++ * enum kunit_status - Type of result for a test or test suite
++ * @KUNIT_SUCCESS: Denotes the test suite has not failed nor been skipped
++ * @KUNIT_FAILURE: Denotes the test has failed.
++ * @KUNIT_SKIPPED: Denotes the test has been skipped.
++ */
++enum kunit_status {
++	KUNIT_SUCCESS,
++	KUNIT_FAILURE,
++	KUNIT_SKIPPED,
++};
++
+ /**
+  * struct kunit_case - represents an individual test case.
+  *
+@@ -148,13 +163,20 @@ struct kunit_case {
+ 	const void* (*generate_params)(const void *prev, char *desc);
+ 
+ 	/* private: internal use only. */
+-	bool success;
++	enum kunit_status status;
+ 	char *log;
+ };
+ 
+-static inline char *kunit_status_to_string(bool status)
++static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
+ {
+-	return status ? "ok" : "not ok";
++	switch (status) {
++	case KUNIT_SKIPPED:
++	case KUNIT_SUCCESS:
++		return "ok";
++	case KUNIT_FAILURE:
++		return "not ok";
++	}
++	return "invalid";
+ }
+ 
+ /**
+@@ -212,6 +234,7 @@ struct kunit_suite {
+ 	struct kunit_case *test_cases;
+ 
+ 	/* private: internal use only */
++	char status_comment[KUNIT_STATUS_COMMENT_SIZE];
+ 	struct dentry *debugfs;
+ 	char *log;
+ };
+@@ -245,19 +268,21 @@ struct kunit {
+ 	 * be read after the test case finishes once all threads associated
+ 	 * with the test case have terminated.
+ 	 */
+-	bool success; /* Read only after test_case finishes! */
+ 	spinlock_t lock; /* Guards all mutable test state. */
++	enum kunit_status status; /* Read only after test_case finishes! */
+ 	/*
+ 	 * Because resources is a list that may be updated multiple times (with
+ 	 * new resources) from any thread associated with a test case, we must
+ 	 * protect it with some type of lock.
+ 	 */
+ 	struct list_head resources; /* Protected by lock. */
++
++	char status_comment[KUNIT_STATUS_COMMENT_SIZE];
+ };
+ 
+ static inline void kunit_set_failure(struct kunit *test)
+ {
+-	WRITE_ONCE(test->success, false);
++	WRITE_ONCE(test->status, KUNIT_FAILURE);
+ }
+ 
+ void kunit_init_test(struct kunit *test, const char *name, char *log);
+@@ -348,7 +373,7 @@ static inline int kunit_run_all_tests(void)
+ #define kunit_suite_for_each_test_case(suite, test_case)		\
+ 	for (test_case = suite->test_cases; test_case->run_case; test_case++)
+ 
+-bool kunit_suite_has_succeeded(struct kunit_suite *suite);
++enum kunit_status kunit_suite_has_succeeded(struct kunit_suite *suite);
+ 
+ /*
+  * Like kunit_alloc_resource() below, but returns the struct kunit_resource
+@@ -612,6 +637,42 @@ void kunit_cleanup(struct kunit *test);
+ 
+ void kunit_log_append(char *log, const char *fmt, ...);
+ 
++/**
++ * kunit_mark_skipped() - Marks @test_or_suite as skipped
++ *
++ * @test_or_suite: The test context object.
++ * @fmt:  A printk() style format string.
++ *
++ * Marks the test as skipped. @fmt is given output as the test status
++ * comment, typically the reason the test was skipped.
++ *
++ * Test execution continues after kunit_mark_skipped() is called.
++ */
++#define kunit_mark_skipped(test_or_suite, fmt, ...)			\
++	do {								\
++		WRITE_ONCE((test_or_suite)->status, KUNIT_SKIPPED);	\
++		scnprintf((test_or_suite)->status_comment,		\
++			  KUNIT_STATUS_COMMENT_SIZE,			\
++			  fmt, ##__VA_ARGS__);				\
++	} while (0)
++
++/**
++ * kunit_skip() - Marks @test_or_suite as skipped
++ *
++ * @test_or_suite: The test context object.
++ * @fmt:  A printk() style format string.
++ *
++ * Skips the test. @fmt is given output as the test status
++ * comment, typically the reason the test was skipped.
++ *
++ * Test execution is halted after kunit_skip() is called.
++ */
++#define kunit_skip(test_or_suite, fmt, ...)				\
++	do {								\
++		kunit_mark_skipped((test_or_suite), fmt, ##__VA_ARGS__);\
++		kunit_try_catch_throw(&((test_or_suite)->try_catch));	\
++	} while (0)
++
+ /*
+  * printk and log to per-test or per-suite log buffer.  Logging only done
+  * if CONFIG_KUNIT_DEBUGFS is 'y'; if it is 'n', no log is allocated/used.
+diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+index 9214c493d8b7..b71db0abc12b 100644
+--- a/lib/kunit/debugfs.c
++++ b/lib/kunit/debugfs.c
+@@ -64,7 +64,7 @@ static int debugfs_print_results(struct seq_file *seq, void *v)
+ 		debugfs_print_result(seq, suite, test_case);
+ 
+ 	seq_printf(seq, "%s %d - %s\n",
+-		   kunit_status_to_string(success), 1, suite->name);
++		   kunit_status_to_ok_not_ok(success), 1, suite->name);
+ 	return 0;
+ }
+ 
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index 69f902440a0e..d69efcbed624 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -437,7 +437,47 @@ static void kunit_log_test(struct kunit *test)
+ #endif
+ }
+ 
++static void kunit_status_set_failure_test(struct kunit *test)
++{
++	struct kunit fake;
++
++	kunit_init_test(&fake, "fake test", NULL);
++
++	KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_SUCCESS);
++	kunit_set_failure(&fake);
++	KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAILURE);
++}
++
++static void kunit_status_mark_skipped_test(struct kunit *test)
++{
++	struct kunit fake;
++
++	kunit_init_test(&fake, "fake test", NULL);
++
++	/* Before: Should be SUCCESS with no comment. */
++	KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
++	KUNIT_EXPECT_STREQ(test, fake.status_comment, "");
++
++	/* Mark the test as skipped. */
++	kunit_mark_skipped(&fake, "Accepts format string: %s", "YES");
++
++	/* After: Should be SKIPPED with our comment. */
++	KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_SKIPPED);
++	KUNIT_EXPECT_STREQ(test, fake.status_comment, "Accepts format string: YES");
++}
++
++static struct kunit_case kunit_status_test_cases[] = {
++	KUNIT_CASE(kunit_status_set_failure_test),
++	KUNIT_CASE(kunit_status_mark_skipped_test),
++	{}
++};
++
++static struct kunit_suite kunit_status_test_suite = {
++	.name = "kunit_status",
++	.test_cases = kunit_status_test_cases,
++};
++
+ kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
+-		  &kunit_log_test_suite);
++		  &kunit_log_test_suite, &kunit_status_test_suite);
+ 
+ MODULE_LICENSE("GPL v2");
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 2f6cc0123232..8ce0c8fddb96 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -98,12 +98,14 @@ static void kunit_print_subtest_start(struct kunit_suite *suite)
+ 
+ static void kunit_print_ok_not_ok(void *test_or_suite,
+ 				  bool is_test,
+-				  bool is_ok,
++				  enum kunit_status status,
+ 				  size_t test_number,
+-				  const char *description)
++				  const char *description,
++				  const char *directive)
+ {
+ 	struct kunit_suite *suite = is_test ? NULL : test_or_suite;
+ 	struct kunit *test = is_test ? test_or_suite : NULL;
++	const char *directive_header = (status == KUNIT_SKIPPED) ? " # SKIP " : "";
+ 
+ 	/*
+ 	 * We do not log the test suite results as doing so would
+@@ -114,25 +116,31 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
+ 	 * representation.
+ 	 */
+ 	if (suite)
+-		pr_info("%s %zd - %s\n",
+-			kunit_status_to_string(is_ok),
+-			test_number, description);
++		pr_info("%s %zd - %s%s%s\n",
++			kunit_status_to_ok_not_ok(status),
++			test_number, description, directive_header,
++			(status == KUNIT_SKIPPED) ? directive : "");
+ 	else
+-		kunit_log(KERN_INFO, test, KUNIT_SUBTEST_INDENT "%s %zd - %s",
+-			  kunit_status_to_string(is_ok),
+-			  test_number, description);
++		kunit_log(KERN_INFO, test,
++			  KUNIT_SUBTEST_INDENT "%s %zd - %s%s%s",
++			  kunit_status_to_ok_not_ok(status),
++			  test_number, description, directive_header,
++			  (status == KUNIT_SKIPPED) ? directive : "");
+ }
+ 
+-bool kunit_suite_has_succeeded(struct kunit_suite *suite)
++enum kunit_status kunit_suite_has_succeeded(struct kunit_suite *suite)
+ {
+ 	const struct kunit_case *test_case;
++	enum kunit_status status = KUNIT_SKIPPED;
+ 
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+-		if (!test_case->success)
+-			return false;
++		if (test_case->status == KUNIT_FAILURE)
++			return KUNIT_FAILURE;
++		else if (test_case->status == KUNIT_SUCCESS)
++			status = KUNIT_SUCCESS;
+ 	}
+ 
+-	return true;
++	return status;
+ }
+ EXPORT_SYMBOL_GPL(kunit_suite_has_succeeded);
+ 
+@@ -143,7 +151,8 @@ static void kunit_print_subtest_end(struct kunit_suite *suite)
+ 	kunit_print_ok_not_ok((void *)suite, false,
+ 			      kunit_suite_has_succeeded(suite),
+ 			      kunit_suite_counter++,
+-			      suite->name);
++			      suite->name,
++			      suite->status_comment);
+ }
+ 
+ unsigned int kunit_test_case_num(struct kunit_suite *suite,
+@@ -252,7 +261,8 @@ void kunit_init_test(struct kunit *test, const char *name, char *log)
+ 	test->log = log;
+ 	if (test->log)
+ 		test->log[0] = '\0';
+-	test->success = true;
++	test->status = KUNIT_SUCCESS;
++	test->status_comment[0] = '\0';
+ }
+ EXPORT_SYMBOL_GPL(kunit_init_test);
+ 
+@@ -376,7 +386,8 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	context.test_case = test_case;
+ 	kunit_try_catch_run(try_catch, &context);
+ 
+-	test_case->success = test->success;
++	test_case->status = test->status;
++
+ }
+ 
+ int kunit_run_tests(struct kunit_suite *suite)
+@@ -388,7 +399,6 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+ 		struct kunit test = { .param_value = NULL, .param_index = 0 };
+-		bool test_success = true;
+ 
+ 		if (test_case->generate_params) {
+ 			/* Get initial param. */
+@@ -398,7 +408,6 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 
+ 		do {
+ 			kunit_run_case_catch_errors(suite, test_case, &test);
+-			test_success &= test_case->success;
+ 
+ 			if (test_case->generate_params) {
+ 				if (param_desc[0] == '\0') {
+@@ -410,7 +419,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 					  KUNIT_SUBTEST_INDENT
+ 					  "# %s: %s %d - %s",
+ 					  test_case->name,
+-					  kunit_status_to_string(test.success),
++					  kunit_status_to_ok_not_ok(test.status),
+ 					  test.param_index + 1, param_desc);
+ 
+ 				/* Get next param. */
+@@ -420,9 +429,10 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 			}
+ 		} while (test.param_value);
+ 
+-		kunit_print_ok_not_ok(&test, true, test_success,
++		kunit_print_ok_not_ok(&test, true, test_case->status,
+ 				      kunit_test_case_num(suite, test_case),
+-				      test_case->name);
++				      test_case->name,
++				      test.status_comment);
+ 	}
+ 
+ 	kunit_print_subtest_end(suite);
+@@ -434,6 +444,7 @@ EXPORT_SYMBOL_GPL(kunit_run_tests);
+ static void kunit_init_suite(struct kunit_suite *suite)
+ {
+ 	kunit_debugfs_create_suite(suite);
++	suite->status_comment[0] = '\0';
+ }
+ 
+ int __kunit_test_suites_init(struct kunit_suite * const * const suites)
+-- 
+2.32.0.rc1.229.g3e70b5a671-goog
 
->=20
-> At least compared, for example, to the hb collisions serializing independ=
-ent
-> futexes, affecting both performance and determinism. And I agree that a n=
-ew
-> interface should address this problem - albeit most of the workloads I ha=
-ve
-> seen in production use but a handful of futexes and larger thread counts.
-> One thing that crossed my mind (but have not actually sat down to look at=
-)
-> would be to use rlhastables for the dynamic resizing, but of course that =
-would
-> probably add a decent amount of overhead to the simple hashing we current=
-ly have.
