@@ -2,369 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8737939EB2E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 03:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2581839EB52
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 03:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbhFHBFY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Jun 2021 21:05:24 -0400
-Received: from mail-lj1-f173.google.com ([209.85.208.173]:39581 "EHLO
-        mail-lj1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbhFHBFX (ORCPT
+        id S230426AbhFHB1f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Jun 2021 21:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230209AbhFHB1e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Jun 2021 21:05:23 -0400
-Received: by mail-lj1-f173.google.com with SMTP id c11so24687387ljd.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Jun 2021 18:03:18 -0700 (PDT)
+        Mon, 7 Jun 2021 21:27:34 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C63C061574;
+        Mon,  7 Jun 2021 18:25:28 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id ei4so10914437pjb.3;
+        Mon, 07 Jun 2021 18:25:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5//JaUfOBX14+dgOWBv13EyWt9MqvlvNFYYREoGDBIk=;
-        b=MPc+PvrCmdlzhm+SAZu/oyMk07hbqpRZTLDa28l8bngJbe7aWhTF0XwYsdVl8Vm8pO
-         Z7dIWhZcuJz7uoK6p3KdtDgHy3khmfDGqUsZ65XDV1bh02D6PQBlC/t+t4kU07ERUAZr
-         0xpJLGOt0grVrVbyo19CzZLwswonoBoDCaYV+Y/ghc/ijTpEeyTTlzt96hh2PBzJXs/6
-         dkJiI+AzvBiEeY2WnehvcuLAMR9lk2hzRyScMf2uhZ2GXuctBCscoZTNDBcKD5eg/XjU
-         HCo6qJNLnF2xHfQLAojA3XWaqlqm2ze/b4sLyGRu2furjpXaT7ARRPuCasU2ZZSPQA/S
-         52bQ==
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=9or9kWeQKVtCH1EkhikcuqwJeODMnwDBrNDPM5zN6nU=;
+        b=FU2f2964xr/SgPnmutRsW6uD26YSGVNtLh9+uxsZO/AfzPvIjiC8uJ9ZZoC+5Y8+GJ
+         lC0enHqvNWQ2iU+TWuzaMlWTEO2gpkdu6gqV7atUVyigpChnNs4b1iF64OYcY+VxWvPe
+         9R/wY7B5JXubweemSLcHlVUMiydHC/eXj6U13s65RJhLguObeVQXadeNmZp6kFB1aMw7
+         MiqCiYDuifvX6rhXvKJRKoJnM0QjvfdwwwEDcRYamiricKMzUdOkf4Kb4KSbP/pLVG6+
+         WQRZCJJUROcwcGGvAqyAGbrn/clMPck8rfXiWBDN4RJ2sANJYhCHtk+vxsXBS9og8VM1
+         x2cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5//JaUfOBX14+dgOWBv13EyWt9MqvlvNFYYREoGDBIk=;
-        b=H+cCoG6jSabjn8Fc94ORLUWu1ETrITgIqL7OHiYXAVbwPA52Lgv9hui1ARSorGxn7V
-         7gu7oKbVY92oWCT+4WlqIiMjsOeeP7/6rUpFXtwroXOv29oeyMTzhepoIt8ByKn/oxOC
-         X7Z5eqB52fGEZTYsmXm8snu/xroubYjAxEkA4CHYNmx8Ql5YV5b1NnAiIRJzbG7tWlI8
-         uWW9y7G0Gdxav5GuZfMl/SdT/wt1XdUh05ePiwCSTg6eWPC1Y+eniR4LVcNlDjmPhR8s
-         +UOlr8ugmILqDTpY8Y/T77GuZ8QFKQECbjs6iCVW/ZJRs8CCjFtzbbOihC6Bf4BegZBO
-         08lg==
-X-Gm-Message-State: AOAM532+cSQafVDqxzZw31u0aec4YpNUQRXceG2dc/WZSNfkSTjpMzXD
-        6zd/lSioWTGRyFFxILpWedMHAEslOUx51cAIB/Irnw==
-X-Google-Smtp-Source: ABdhPJwtAnVFUfmlRsI5GZAF/YZeE0NxPIIDqWwmyw5vqjnlHPZ0IgJR4g0KPh7f/sZR67V8zlRsiN/ztcR8O/uLbbM=
-X-Received: by 2002:a2e:8ec2:: with SMTP id e2mr15688040ljl.446.1623114138007;
- Mon, 07 Jun 2021 18:02:18 -0700 (PDT)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=9or9kWeQKVtCH1EkhikcuqwJeODMnwDBrNDPM5zN6nU=;
+        b=ZKNFLmJUUjpYWAyM4Z1fsC5GrDSlfaOC7jY0pOik1Zeeoc1iuIIk82EOW0Iv/eQicK
+         SETSlxUYSb0bVxSF3NlSkcreTLTEzXjuLwKk3S4FS4J77MR7xoqdTw6tEG9evFQYuNkZ
+         6o/o9m5/1b8y9uvzQFJHqMZa+lQrM2kX5qVQXyGj5+DpqK80fDnsn5F/C2AUmgelH7aQ
+         HKSPhNXhUoovSfleUVGlKwaHG0Ir/EYbf6P21JqNrYTZ+P4WESRdqI3IVQnxcu1j6ptK
+         1G5EV11QrdykHdmc7PCpJwkQYNihqNPwLsExOSp8QKDQN+fUHgq+cpmx3uMpmw0g/4L/
+         ld/g==
+X-Gm-Message-State: AOAM533pKn6Jw/joKduXJf3ROG4fEOtPv7NsJi4vUtpgcK0VhgKOImIJ
+        pRx0Bdqkbc986RHBEFjNVK4=
+X-Google-Smtp-Source: ABdhPJxQ3AWTk/Bqmrt5PUVUAJ7rGKI8NLaqvgU/Pd/kVL8WtarQF9ZlwxF3SWMyS1qxGLYZrKWOfg==
+X-Received: by 2002:a17:90a:3484:: with SMTP id p4mr23645127pjb.2.1623115528135;
+        Mon, 07 Jun 2021 18:25:28 -0700 (PDT)
+Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
+        by smtp.gmail.com with ESMTPSA id 11sm9506927pge.57.2021.06.07.18.25.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 18:25:27 -0700 (PDT)
+Date:   Tue, 08 Jun 2021 11:25:22 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
+To:     =?iso-8859-1?b?QW5kcuk=?= Almeida <andrealmeid@collabora.com>,
+        Andrey Semashev <andrey.semashev@gmail.com>
+Cc:     acme@kernel.org, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        corbet@lwn.net, Davidlohr Bueso <dave@stgolabs.net>,
+        Darren Hart <dvhart@infradead.org>, fweimer@redhat.com,
+        joel@joelfernandes.org, kernel@collabora.com,
+        krisman@collabora.com, libc-alpha@sourceware.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, malteskarupke@fastmail.fm,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        pgriffais@valvesoftware.com, Peter Oskolkov <posk@posk.io>,
+        Steven Rostedt <rostedt@goodmis.org>, shuah@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, z.figura12@gmail.com
+References: <20210603195924.361327-1-andrealmeid@collabora.com>
+        <1622799088.hsuspipe84.astroid@bobo.none>
+        <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
+        <1622853816.mokf23xgnt.astroid@bobo.none>
+        <6d8e3bb4-0cef-b991-9a16-1f03d10f131d@gmail.com>
+        <1622980258.cfsuodze38.astroid@bobo.none>
+        <c6d86db8-4f63-6c57-9a67-6268da266afe@gmail.com>
+In-Reply-To: <c6d86db8-4f63-6c57-9a67-6268da266afe@gmail.com>
 MIME-Version: 1.0
-References: <20210605215215.171165-1-andrealmeid@collabora.com>
-In-Reply-To: <20210605215215.171165-1-andrealmeid@collabora.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 7 Jun 2021 18:02:05 -0700
-Message-ID: <CAGS_qxoMZXLQDeyqF2C3U5VMgJFwWejsQSg9s4s0S0-X7YTWyA@mail.gmail.com>
-Subject: Re: [PATCH] lib: Convert UUID runtime test to KUnit
-To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
-        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
-        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1623114630.pc8fq7r5y9.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jun 5, 2021 at 2:52 PM Andr=C3=A9 Almeida <andrealmeid@collabora.co=
-m> wrote:
->
-> Remove custom functions for testing and use KUnit framework. Test cases
-> and test data remains the same.
->
-> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@collabora.com>
-> ---
->  lib/Kconfig.debug |  13 +++--
->  lib/Makefile      |   2 +-
->  lib/test_uuid.c   | 131 ++++++++++++++++++----------------------------
->  3 files changed, 62 insertions(+), 84 deletions(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 678c13967580..e8bd574d7a67 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2188,9 +2188,6 @@ config TEST_BITMAP
->
->           If unsure, say N.
->
-> -config TEST_UUID
-> -       tristate "Test functions located in the uuid module at runtime"
-> -
->  config TEST_XARRAY
->         tristate "Test the XArray code at runtime"
->
-> @@ -2429,6 +2426,16 @@ config BITS_TEST
->
->           If unsure, say N.
->
-> +config TEST_UUID
-> +       tristate "Unit test for UUID" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This builds the UUID unit test.
-> +         Tests parsing functions for UUID/GUID strings.
-> +
-> +         If unsure, say N.
-> +
+Excerpts from Andrey Semashev's message of June 6, 2021 11:15 pm:
+> On 6/6/21 2:57 PM, Nicholas Piggin wrote:
+>> Excerpts from Andrey Semashev's message of June 5, 2021 6:56 pm:
+>>> On 6/5/21 4:09 AM, Nicholas Piggin wrote:
+>>>> Excerpts from Andr=C3=A9 Almeida's message of June 5, 2021 6:01 am:
+>>>>> =C3=80s 08:36 de 04/06/21, Nicholas Piggin escreveu:
+>>>>
+>>>>>> I'll be burned at the stake for suggesting it but it would be great =
+if
+>>>>>> we could use file descriptors. At least for the shared futex, maybe
+>>>>>> private could use a per-process futex allocator. It solves all of th=
+e
+>>>>>> above, although I'm sure has many of its own problem. It may not pla=
+y
+>>>>>> so nicely with the pthread mutex API because of the whole static
+>>>>>> initialiser problem, but the first futex proposal did use fds. But i=
+t's
+>>>>>> an example of an alternate API.
+>>>>>>
+>>>>>
+>>>>> FDs and futex doesn't play well, because for futex_wait() you need to
+>>>>> tell the kernel the expected value in the futex address to avoid
+>>>>> sleeping in a free lock. FD operations (poll, select) don't have this
+>>>>> `value` argument, so they could sleep forever, but I'm not sure if yo=
+u
+>>>>> had taken this in consideration.
+>>>>
+>>>> I had. The futex wait API would take a fd additional. The only
+>>>> difference is the waitqueue that is used when a sleep or wake is
+>>>> required is derived from the fd, not from an address.
+>>>>
+>>>> I think the bigger sticking points would be if it's too heavyweight an
+>>>> object to use (which could be somewhat mitigated with a simpler ida
+>>>> allocator although that's difficult to do with shared), and whether li=
+bc
+>>>> could sanely use them due to the static initialiser problem of pthread
+>>>> mutexes.
+>>>
+>>> The static initialization feature is not the only benefit of the curren=
+t
+>>> futex design, and probably not the most important one. You can work
+>>> around the static initialization in userspace, e.g. by initializing fd
+>>> to an invalid value and creating a valid fd upon the first use. Althoug=
+h
+>>> that would still incur a performance penalty and add a new source of
+>>> failure.
+>>=20
+>> Sounds like a serious problem, but maybe it isn't. On the other hand,
+>> maybe we don't have to support pthread mutexes as they are anyway
+>> because futex already does that fairly well.
+>>=20
+>>> What is more important is that waiting on fd always requires a kernel
+>>> call. This will be terrible for performance of uncontended locks, which
+>>> is the majority of time.
+>>=20
+>> No. As I said just before, it would be the same except the waitqueue is
+>> derived from fd rather than address.
+>=20
+> Sorry, in that case I'm not sure I understand how that would work. You=20
+> do need to allocate a fd, do you?
 
-Random question: this moves the config option down.
-Is the intent to keep all the KUnit-based tests together?
+Yes. As I said, imagine a futex_wait API that also takes a fd. The
+wait queue is derived from that fd rather than the hash table.
 
-I personally think it would be fine to leave it where it was, makes
-`git blame` a bit more useful.
+>>> Another important point is that a futex that is not being waited on
+>>> consumes zero kernel resources while fd is a limited resource even when
+>>> not used. You can have millions futexes in userspace and you are
+>>> guaranteed not to exhaust any limit as long as you have memory. That is
+>>> an important feature, and the current userspace is relying on it by
+>>> assuming that creating mutexes and condition variables is cheap.
+>>=20
+>> Is it an important feture? Would 1 byte of kernel memory per uncontended
+>> futex be okay? 10? 100?
+>>=20
+>> I do see it's very nice the current design that requires no
+>> initialization for uncontended, I'm just asking questions to get an idea
+>> of what constraints we're working with. We have a pretty good API
+>> already which can support unlimited uncontended futexes, so I'm
+>> wondering do we really need another very very similar API that doesn't
+>> fix the really difficult problems of the existing one?
+>=20
+> It does provide the very much needed features that are missing in the=20
+> current futex. Namely, more futex sizes and wait for multiple. So the=20
+> argument of "why have two similar APIs" is not quite fair. It would be,=20
+> if there was feature parity with futex.
 
->  config TEST_UDELAY
->         tristate "udelay test driver"
->         help
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 2cc359ec1fdd..6ef3c614409d 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -85,7 +85,6 @@ obj-$(CONFIG_TEST_STATIC_KEYS) +=3D test_static_key_bas=
-e.o
->  obj-$(CONFIG_TEST_PRINTF) +=3D test_printf.o
->  obj-$(CONFIG_TEST_BITMAP) +=3D test_bitmap.o
->  obj-$(CONFIG_TEST_STRSCPY) +=3D test_strscpy.o
-> -obj-$(CONFIG_TEST_UUID) +=3D test_uuid.o
->  obj-$(CONFIG_TEST_XARRAY) +=3D test_xarray.o
->  obj-$(CONFIG_TEST_PARMAN) +=3D test_parman.o
->  obj-$(CONFIG_TEST_KMOD) +=3D test_kmod.o
-> @@ -354,5 +353,6 @@ obj-$(CONFIG_LIST_KUNIT_TEST) +=3D list-test.o
->  obj-$(CONFIG_LINEAR_RANGES_TEST) +=3D test_linear_ranges.o
->  obj-$(CONFIG_BITS_TEST) +=3D test_bits.o
->  obj-$(CONFIG_CMDLINE_KUNIT_TEST) +=3D cmdline_kunit.o
-> +obj-$(CONFIG_TEST_UUID) +=3D test_uuid.o
->
->  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) +=3D devmem_is_allowed.o
-> diff --git a/lib/test_uuid.c b/lib/test_uuid.c
-> index cd819c397dc7..45c919b0d724 100644
-> --- a/lib/test_uuid.c
-> +++ b/lib/test_uuid.c
-> @@ -1,21 +1,20 @@
-> +// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
->  /*
-> - * Test cases for lib/uuid.c module.
-> + * Unit tests for lib/uuid.c module.
-> + *
-> + * Copyright 2016 Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> + * Copyright 2021 Andr=C3=A9 Almeida <andrealmeid@riseup.net>
->   */
-> -#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> -
-> -#include <linux/init.h>
-> -#include <linux/kernel.h>
-> -#include <linux/module.h>
-> -#include <linux/string.h>
-> +#include <kunit/test.h>
->  #include <linux/uuid.h>
->
-> -struct test_uuid_data {
-> +struct test_data {
->         const char *uuid;
->         guid_t le;
->         uuid_t be;
->  };
->
-> -static const struct test_uuid_data test_uuid_test_data[] =3D {
-> +static const struct test_data correct_data[] =3D {
->         {
->                 .uuid =3D "c33f4995-3701-450e-9fbf-206a2e98e576",
->                 .le =3D GUID_INIT(0xc33f4995, 0x3701, 0x450e, 0x9f, 0xbf,=
- 0x20, 0x6a, 0x2e, 0x98, 0xe5, 0x76),
-> @@ -33,101 +32,73 @@ static const struct test_uuid_data test_uuid_test_da=
-ta[] =3D {
->         },
->  };
->
-> -static const char * const test_uuid_wrong_data[] =3D {
-> +static const char * const wrong_data[] =3D {
->         "c33f4995-3701-450e-9fbf206a2e98e576 ", /* no hyphen(s) */
->         "64b4371c-77c1-48f9-8221-29f054XX023b", /* invalid character(s) *=
-/
->         "0cb4ddff-a545-4401-9d06-688af53e",     /* not enough data */
->  };
->
-> -static unsigned total_tests __initdata;
-> -static unsigned failed_tests __initdata;
-> -
-> -static void __init test_uuid_failed(const char *prefix, bool wrong, bool=
- be,
-> -                                   const char *data, const char *actual)
-> +static void uuid_correct_le(struct kunit *test)
->  {
-> -       pr_err("%s test #%u %s %s data: '%s'\n",
-> -              prefix,
-> -              total_tests,
-> -              wrong ? "passed on wrong" : "failed on",
-> -              be ? "BE" : "LE",
-> -              data);
-> -       if (actual && *actual)
-> -               pr_err("%s test #%u actual data: '%s'\n",
-> -                      prefix,
-> -                      total_tests,
-> -                      actual);
-> -       failed_tests++;
-> +       guid_t le;
-> +       const struct test_data *data =3D (const struct test_data *)(test-=
->param_value);
-> +
-> +       KUNIT_ASSERT_EQ(test, guid_parse(data->uuid, &le), 0);
-> +       KUNIT_EXPECT_TRUE(test, guid_equal(&data->le, &le));
->  }
->
-> -static void __init test_uuid_test(const struct test_uuid_data *data)
-> +static void uuid_correct_be(struct kunit *test)
->  {
-> -       guid_t le;
->         uuid_t be;
-> -       char buf[48];
-> -
-> -       /* LE */
-> -       total_tests++;
-> -       if (guid_parse(data->uuid, &le))
-> -               test_uuid_failed("conversion", false, false, data->uuid, =
-NULL);
-> -
-> -       total_tests++;
-> -       if (!guid_equal(&data->le, &le)) {
-> -               sprintf(buf, "%pUl", &le);
-> -               test_uuid_failed("cmp", false, false, data->uuid, buf);
-> -       }
-> -
-> -       /* BE */
-> -       total_tests++;
-> -       if (uuid_parse(data->uuid, &be))
-> -               test_uuid_failed("conversion", false, true, data->uuid, N=
-ULL);
-> -
-> -       total_tests++;
-> -       if (!uuid_equal(&data->be, &be)) {
-> -               sprintf(buf, "%pUb", &be);
-> -               test_uuid_failed("cmp", false, true, data->uuid, buf);
-> -       }
-> +       const struct test_data *data =3D (const struct test_data *)(test-=
->param_value);
-> +
+It does provide some extra features sure, with some straightforward=20
+extension of the existing API. The really interesting or tricky part of
+the API is left unchanged though.
 
-> +       KUNIT_ASSERT_EQ(test, uuid_parse(data->uuid, &be), 0);
-> +       KUNIT_EXPECT_TRUE(test, uuid_equal(&data->be, &be));
+My line of thinking is that while we're changing the API anyway, we=20
+should see if it can be changed to help those other problems too.
 
+> I believe, the low cost of a futex is an important feature, and was one=20
+> of the reasons for its original design and introduction.
 
-You could make use of the _MSG variants, fyi.
-See https://www.kernel.org/doc/html/latest/dev-tools/kunit/tips.html#custom=
-izing-error-messages
+It is of course. The first futex proposal did use fds, interestingly.
+I didn't look back further into the libc side of that thing, but maybe
+I should.
 
-I'd actually written up a version of this patch but never ended up
-sending it out.
-(I prefer how you've more properly split up the test cases and used
-parameterized testing.)
+> Otherwise we=20
+> would be using eventfds in mutexes.
 
-Here's how I'd converted the test case using those _MSG variants:
-        /* LE */
-        KUNIT_EXPECT_FALSE_MSG(test, guid_parse(data->uuid, &le),
-                               "LE: failed to parse '%s'", data->uuid);
+I don't think so, not even if eventfd came before the futex syscall.
 
-        KUNIT_EXPECT_TRUE_MSG(test, guid_equal(&data->le, &le),
-                "LE: '%s' should be equal to %pUl", data->uuid, &le);
+>=20
+> One other feature that I didn't mention earlier and which follows from=20
+> its "address in memory" design is the ability to use futexes in=20
+> process-shared memory. This is important for process-shared pthread=20
+> components, too, but has its own value even without this, if you use=20
+> futexes directly. With fds, you can't place the fd in a shared memory=20
+> since every process needs to have its own fd referring to the same=20
+> kernel object, and passing fds cannot be done without a UNIX socket.=20
+> This is incompatible with pthreads API design and would require=20
+> non-trivial design changes to the applications using futexes directly.
+>=20
 
-        /* BE */
-        KUNIT_EXPECT_FALSE_MSG(test, uuid_parse(data->uuid, &be),
-                               "BE: failed to parse '%s'", data->uuid);
+That may be true. file is a natural object to share such a resource, but=20
+the means to share the fd is not so easy. OTOH you could also use a=20
+syscall to open the same file and get a new fd.
 
-        KUNIT_EXPECT_TRUE_MSG(test, uuid_equal(&data->be, &be),
-                "BE: '%s' should be equal to %pUl", data->uuid, &be);
+Are shared pthread mutexes using existing pthread APIs that are today
+implemented okay with futex1 system call a good reason to constrain=20
+futex2 I wonder? Or do we have an opportunity to make a bigger change
+to the API so it suffers less from non deterministic latency (for
+example)?
 
-Example failure output:
-          # test_uuid: EXPECTATION FAILED at lib/test_uuid.c:77
-          Expected uuid_equal(&data->be, &be) to be true, but is false
+I don't want to limit it to just files vs addresses, fds was an example=20
+of something that could solve some of the problems.
 
-      BE: 'c33f4995-3701-450e-9fbf-206a2e98e576' should be equal to
-95493fc3-0137-0e45-9fbf-206a2e98e576
-          not ok 1 - test_uuid
-
-
->  }
->
-> -static void __init test_uuid_wrong(const char *data)
-> +static void uuid_wrong_le(struct kunit *test)
->  {
->         guid_t le;
-> -       uuid_t be;
-> -
-> -       /* LE */
-> -       total_tests++;
-> -       if (!guid_parse(data, &le))
-> -               test_uuid_failed("negative", true, false, data, NULL);
-> +       const char *data =3D (const char *)(test->param_value);
->
-> -       /* BE */
-> -       total_tests++;
-> -       if (!uuid_parse(data, &be))
-> -               test_uuid_failed("negative", true, true, data, NULL);
-> +       KUNIT_ASSERT_NE(test, guid_parse(data, &le), 0);
->  }
->
-> -static int __init test_uuid_init(void)
-> +static void uuid_wrong_be(struct kunit *test)
->  {
-> -       unsigned int i;
-> -
-> -       for (i =3D 0; i < ARRAY_SIZE(test_uuid_test_data); i++)
-> -               test_uuid_test(&test_uuid_test_data[i]);
-> -
-> -       for (i =3D 0; i < ARRAY_SIZE(test_uuid_wrong_data); i++)
-> -               test_uuid_wrong(test_uuid_wrong_data[i]);
-> +       uuid_t be;
-> +       const char *data =3D (const char *)(test->param_value);
->
-> -       if (failed_tests =3D=3D 0)
-> -               pr_info("all %u tests passed\n", total_tests);
-> -       else
-> -               pr_err("failed %u out of %u tests\n", failed_tests, total=
-_tests);
-> +       KUNIT_ASSERT_NE(test, uuid_parse(data, &be), 0);
-> +}
->
-> -       return failed_tests ? -EINVAL : 0;
-> +static void case_to_desc_correct(const struct test_data *t, char *desc)
-> +{
-> +       strcpy(desc, t->uuid);
->  }
-> -module_init(test_uuid_init);
->
-> -static void __exit test_uuid_exit(void)
-> +KUNIT_ARRAY_PARAM(correct, correct_data, case_to_desc_correct);
-> +
-> +static void case_to_desc_wrong(const char * const *s, char *desc)
->  {
-> -       /* do nothing */
-> +       strcpy(desc, *s);
->  }
-> -module_exit(test_uuid_exit);
-> +
-> +KUNIT_ARRAY_PARAM(wrong, wrong_data, case_to_desc_wrong);
-> +
-> +static struct kunit_case uuid_test_cases[] =3D {
-> +       KUNIT_CASE_PARAM(uuid_correct_be, correct_gen_params),
-> +       KUNIT_CASE_PARAM(uuid_correct_le, correct_gen_params),
-> +       KUNIT_CASE_PARAM(uuid_wrong_be, wrong_gen_params),
-> +       KUNIT_CASE_PARAM(uuid_wrong_le, wrong_gen_params),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite uuid_test_suite =3D {
-> +       .name =3D "uuid-test",
-> +       .test_cases =3D uuid_test_cases,
-> +};
-> +kunit_test_suite(uuid_test_suite);
->
->  MODULE_AUTHOR("Andy Shevchenko <andriy.shevchenko@linux.intel.com>");
->  MODULE_LICENSE("Dual BSD/GPL");
-> --
-> 2.31.1
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/20210605215215.171165-1-andrealmeid%40collabora.com.
+Thanks,
+Nick
