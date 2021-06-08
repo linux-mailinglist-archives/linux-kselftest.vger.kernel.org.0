@@ -2,45 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2330239F9C1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 16:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2776B39F9E1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 17:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbhFHO7w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Jun 2021 10:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S233732AbhFHPGY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Jun 2021 11:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbhFHO7v (ORCPT
+        with ESMTP id S233712AbhFHPGX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Jun 2021 10:59:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB10C061574;
-        Tue,  8 Jun 2021 07:57:58 -0700 (PDT)
-Date:   Tue, 8 Jun 2021 16:57:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1623164277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ql/uLWG2lo9gEF4nTk83lBLHHLk6fJHDMYjvgA8J/vk=;
-        b=fQ3d4QOWLRsfZDlGVxrfxRBRd9mHeTn4TTW/ZANS6O/KFU2bl/Vn0QaBfWQPvNRo9TtxkC
-        Oriqf/aQRIgIh4GGSf5WNN0pSg77AOBCkI0snkotHNPkfc/iQXBdYpicEIjCHbB2oj8EE/
-        9hM3XijwSPhvjG+EhbuAS3wQlGXm/vVKOVLPm8isoSgI9UINLldQCozSg90HRXsKRk5xgB
-        yjVXQh+4+MF0aZAsxJrXuI9/hw9FHmo2PfnrnYRCuy9aJzrgEBGpsFkKCJXkE5PGSPNJTL
-        U6Nc1NZPjje/BeXMzaBkukOV825/dOqBbXn/5maDiXiJnQZAbpuH6Ge9iuhM+A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1623164277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ql/uLWG2lo9gEF4nTk83lBLHHLk6fJHDMYjvgA8J/vk=;
-        b=VNLABMwUSUAtpxajK8YAQCkD+8Z3/1DdJdtzdvYOFLXDS8Tka6SQ9E3jrfhl2K2QcYg1b/
-        HUUoy/O9CfF8GEAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+        Tue, 8 Jun 2021 11:06:23 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF57DC061574;
+        Tue,  8 Jun 2021 08:04:30 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 91A511F42CA8
+Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@collabora.com>,
-        Nicholas Piggin <npiggin@gmail.com>, acme@kernel.org,
+Cc:     Nicholas Piggin <npiggin@gmail.com>, acme@kernel.org,
         Andrey Semashev <andrey.semashev@gmail.com>, corbet@lwn.net,
         Davidlohr Bueso <dave@stgolabs.net>,
         Darren Hart <dvhart@infradead.org>, fweimer@redhat.com,
@@ -51,9 +31,8 @@ Cc:     =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@collabora.com>,
         Ingo Molnar <mingo@redhat.com>, pgriffais@valvesoftware.com,
         Peter Oskolkov <posk@posk.io>,
         Steven Rostedt <rostedt@goodmis.org>, shuah@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, z.figura12@gmail.com
-Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
-Message-ID: <20210608145755.pwfhqrqdqft47nbw@linutronix.de>
+        Thomas Gleixner <tglx@linutronix.de>, z.figura12@gmail.com,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 References: <20210603195924.361327-1-andrealmeid@collabora.com>
  <1622799088.hsuspipe84.astroid@bobo.none>
  <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
@@ -61,57 +40,94 @@ References: <20210603195924.361327-1-andrealmeid@collabora.com>
  <22137ccd-c5e6-9fcc-a176-789558e9ab1e@collabora.com>
  <20210608122622.oxf662ruaawrtyrd@linutronix.de>
  <YL99cR0H+7xgU8L1@hirez.programming.kicks-ass.net>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+Message-ID: <7ab1a38e-5ba6-843d-9fa8-7480914c3d15@collabora.com>
+Date:   Tue, 8 Jun 2021 12:04:18 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 In-Reply-To: <YL99cR0H+7xgU8L1@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2021-06-08 16:23:45 [+0200], Peter Zijlstra wrote:
+Às 11:23 de 08/06/21, Peter Zijlstra escreveu:
+> On Tue, Jun 08, 2021 at 02:26:22PM +0200, Sebastian Andrzej Siewior wrote:
+>> On 2021-06-07 12:40:54 [-0300], André Almeida wrote:
+>>>
+>>> When I first read Thomas proposal for per table process, I thought that
+>>> the main goal there was to solve NUMA locality issues, not RT latency,
+>>> but I think you are right. However, re-reading the thread at [0], it
+>>> seems that the RT problems where not completely solved in that
+>>> interface, maybe the people involved with that patchset can help to shed
+>>> some light on it.
+>>>
+>>> Otherwise, this same proposal could be integrated in futex2, given that
+>>> we would only need to provide to userland some extra flags and add some
+>>> `if`s around the hash table code (in a very similar way the NUMA code
+>>> will be implemented in futex2).
+>>
+>> There are slides at [0] describing some attempts and the kernel tree [1]
+>> from that time.
+>>
+>> The process-table solves the problem to some degree that two random
+>> process don't collide on the same hash bucket. But as Peter Zijlstra
+>> pointed out back then two threads from the same task could collide on
+>> the same hash bucket (and with ASLR not always). So the collision is
+>> there but limited and this was not perfect.
+>>
+>> All the attempts with API extensions didn't go well because glibc did
+>> not want to change a bit. This starts with a mutex that has a static
+>> initializer which has to work (I don't remember why the first
+>> pthread_mutex_lock() could not fail with -ENOMEM but there was
+>> something) and ends with glibc's struct mutex which is full and has no
+>> room for additional data storage.
+>>
+>> The additional data in user's struct mutex + init would have the benefit
+>> that instead uaddr (which is hashed for the in-kernel lookup) a cookie
+>> could be used for the hash-less lookup (and NUMA pointer where memory
+>> should be stored).
+>>
+>> So. We couldn't change a thing back then so nothing did happen. We
+>> didn't want to create a new interface and a library implementing it plus
+>> all the functionality around it (like pthread_cond, phtread_barrier, …).
+>> Not to mention that if glibc continues to use the "old" locking
+>> internally then the application is still affected by the hash-collision
+>> locking (or the NUMA problem) should it block on the lock.
+> 
 > There's more futex users than glibc, and some of them are really hurting
 > because of the NUMA issue. Oracle used to (I've no idea what they do or
 > do not do these days) use sysvsem because the futex hash table was a
 > massive bottleneck for them.
->=20
+> 
 > And as Nick said, other vendors are having the same problems.
 
-I just wanted to do a brief summary of last events. The implementation
-tglx did with the cookie resulting in a quick lookup did not have any
-downsides except that the user-API had to change glibc couldn't. So if
-we are back to square one why not start with that.
+Since we're talking about NUMA, which userspace communities would be
+able to provide feedback about the futex2() NUMA-aware feature, to check
+if this interface would help solving those issues?
 
+> 
 > And if you don't extend the futex to store the nid you put the waiter in
 > (see all the problems above) you will have to do wakeups on all nodes,
 > which is both slower than it is today, and scales possibly even worse.
->=20
+> 
 > The whole numa-aware qspinlock saga is in part because of futex.
-
-sure.
-
+> 
+> 
 > That said; if we're going to do the whole futex-vector thing, we really
 > do need a new interface, because the futex multiplex monster is about to
 > crumble (see the fun wrt timeouts for example).
-
-This might have been a series of unfortunate events leading to this. The
-sad part is that glibc has a comment that the kernel does not support
-this and nobody bother to change it (until recently).
-
+> 
 > And if we're going to do a new interface, we ought to make one that can
 > solve all these problems. Now, ideally glibc will bring forth some
 > opinions, but if they don't want to play, we'll go back to the good old
 > days of non-standard locking libraries.. we're halfway there already due
 > to glibc not wanting to break with POSIX were we know POSIX was just
 > dead wrong broken.
->=20
+> 
 > See: https://github.com/dvhart/librtpi
-
-I'm aware of that, I hacked on it, too :) This was the unfortunate
-result of a ~8y old bug which was not fixed instead and part of the code
-was rewritten and a bit-spinlock was added in user-land. You may
-remember the discussion regarding spins in userland=E2=80=A6
-That said, REQUEUE_PI is no longer used by glibc.
-
-Sebastian
+> 
+> 
