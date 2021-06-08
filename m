@@ -2,29 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0CE39F6D8
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 14:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A505839F7A1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jun 2021 15:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbhFHMhK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Jun 2021 08:37:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41128 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232299AbhFHMhK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Jun 2021 08:37:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 76D8661287;
-        Tue,  8 Jun 2021 12:35:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623155717;
-        bh=lwdEMXKgFqTlkSr7IAuLTjahUJnEjsEmeso5SigE+EU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1dpSB8VCDGZO6vMLNJ7gFQSL3ip0u5W0q98wZMDQF7NdV/tlYB3d5ELQ8S0r/HN1U
-         i84kLXEuntDYUcqGkMiWltpY2DQhLCXqYgMdXra4tlQ76fiB5NP9kI7XVhwhxn8Fhh
-         ESkoXYjWgz8r3PMAXonf4EWA5OLc3xH2hh4QAWRU=
-Date:   Tue, 8 Jun 2021 14:35:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrey Semashev <andrey.semashev@gmail.com>
+        id S232918AbhFHNVm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Jun 2021 09:21:42 -0400
+Received: from mail-lf1-f44.google.com ([209.85.167.44]:40600 "EHLO
+        mail-lf1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232933AbhFHNVi (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 8 Jun 2021 09:21:38 -0400
+Received: by mail-lf1-f44.google.com with SMTP id w33so32070137lfu.7;
+        Tue, 08 Jun 2021 06:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tZorGvclpOPbhfWPZaOjzmooZyvoUCWVkBUywkX8hVE=;
+        b=cLdowKF6nDP8aESrogQtYZIP99vozu+I/mrGv+bjQWoL4XeTfzPCyPxxfYcHFoLheU
+         ClGPeL2b1yOrtqC38+ICGLUYst1T2ZSjR62PHgjdWVVb6FP9WcJhRu5oZLRdpkrMzi5o
+         KzA94JoXvAc+PIk0j6f8R8lmkYZ0CcuRM5JxB4qZzCpgJOpYap39A/LKTnzG3basoQVC
+         5joO48T897mkCFrGx6SRJPgdVivp44ADgbApejeAJkKOz3edbc/J4Z52eAjbVgr/UUDq
+         TeCsrwSuperGlYQlGd2bxSaJ07NfbyNTOe0Ld/iigTDOLYVde09+NSrAYpJv7W9qAgen
+         ZQcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tZorGvclpOPbhfWPZaOjzmooZyvoUCWVkBUywkX8hVE=;
+        b=KkAURT8QxJ9e4pV2Z0OAqOoa2e22FppsS3EkA0XrCsKAeZkdYi1bIIZBT87ZUoA03F
+         6mk8B+7XimTqzCOBce2544D7Qwn73NjoCXX5Ej7RDwCm66w/EbhQHuAB/guyKgl1n0qT
+         kvLs8yiPLYIa5BfpzPoSgMscLtlazza5oTWl5iblunhlfWd0AQL6Svn6JWGnIqDfEp5s
+         Z5DYazDjsS4Va0V62jmYy5edcAh031wPn+aaS7Krq60o01TeqgjAVAJ+C41J0lAOKyRF
+         59kSi8vn31aIhGDwB2Oj0z8zZ0N2VNc1l0H78IGnhufyQvcj8Th3B9UC3MSzTjS16jTd
+         j8iA==
+X-Gm-Message-State: AOAM532l9pRREK1XukrAa9PGUmuKGPu+bMBDX3TbkdEAREL4CCJ2mmt2
+        X5ny6KrcGpbfxOZ5eIWaz8Y=
+X-Google-Smtp-Source: ABdhPJwrZLqSS8selXX297l/UST/YtonGUnayP2LjZk04lHR17IUaOnVAsD5CaOitjDBhBs2FLhF9Q==
+X-Received: by 2002:ac2:47f7:: with SMTP id b23mr15844488lfp.522.1623158324713;
+        Tue, 08 Jun 2021 06:18:44 -0700 (PDT)
+Received: from [192.168.1.2] (broadband-5-228-51-184.ip.moscow.rt.ru. [5.228.51.184])
+        by smtp.gmail.com with ESMTPSA id t12sm1160270ljk.116.2021.06.08.06.18.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jun 2021 06:18:43 -0700 (PDT)
+Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
         acme@kernel.org, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         corbet@lwn.net, Davidlohr Bueso <dave@stgolabs.net>,
         Darren Hart <dvhart@infradead.org>, fweimer@redhat.com,
@@ -37,8 +62,6 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         pgriffais@valvesoftware.com, Peter Oskolkov <posk@posk.io>,
         Steven Rostedt <rostedt@goodmis.org>, shuah@kernel.org,
         Thomas Gleixner <tglx@linutronix.de>, z.figura12@gmail.com
-Subject: Re: [PATCH v4 00/15] Add futex2 syscalls
-Message-ID: <YL9kApyE6FbG/hru@kroah.com>
 References: <1622799088.hsuspipe84.astroid@bobo.none>
  <fb85fb20-5421-b095-e68b-955afa105467@collabora.com>
  <1622853816.mokf23xgnt.astroid@bobo.none>
@@ -46,72 +69,60 @@ References: <1622799088.hsuspipe84.astroid@bobo.none>
  <1622980258.cfsuodze38.astroid@bobo.none>
  <c6d86db8-4f63-6c57-9a67-6268da266afe@gmail.com>
  <1623114630.pc8fq7r5y9.astroid@bobo.none>
- <b3488d1b-a4ff-8791-d960-a5f7ae2ea8b3@gmail.com>
- <YL9Q2tKLZP6GKbHW@kroah.com>
- <8fa8b7fd-58ae-9467-138d-4ff4f32f68f7@gmail.com>
+ <b3488d1b-a4ff-8791-d960-a5f7ae2ea8b3@gmail.com> <YL9Q2tKLZP6GKbHW@kroah.com>
+ <8fa8b7fd-58ae-9467-138d-4ff4f32f68f7@gmail.com> <YL9kApyE6FbG/hru@kroah.com>
+From:   Andrey Semashev <andrey.semashev@gmail.com>
+Message-ID: <3fca0afa-d9db-a176-aad1-ff7db21ba4a2@gmail.com>
+Date:   Tue, 8 Jun 2021 16:18:42 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <YL9kApyE6FbG/hru@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8fa8b7fd-58ae-9467-138d-4ff4f32f68f7@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 03:06:48PM +0300, Andrey Semashev wrote:
-> On 6/8/21 2:13 PM, Greg KH wrote:
-> > On Tue, Jun 08, 2021 at 02:03:50PM +0300, Andrey Semashev wrote:
-> > > On 6/8/21 4:25 AM, Nicholas Piggin wrote:
-> > > > 
-> > > > Are shared pthread mutexes using existing pthread APIs that are today
-> > > > implemented okay with futex1 system call a good reason to constrain
-> > > > futex2 I wonder? Or do we have an opportunity to make a bigger change
-> > > > to the API so it suffers less from non deterministic latency (for
-> > > > example)?
-> > > 
-> > > If futex2 is not able to cover futex1 use cases then it cannot be viewed as
-> > > a replacement. In the long term this means futex1 cannot be deprecated and
-> > > has to be maintained. My impression was that futex1 was basically
-> > > unmaintainable(*) and futex2 was an evolution of futex1 so that users of
-> > > futex1 could migrate relatively easily and futex1 eventually removed. Maybe
-> > > my impression was wrong, but I would like to see futex2 as a replacement and
-> > > extension of futex1, so the latter can be deprecated at some point.
-> > 
-> > You can never delete a kernel system call, so even if you "deprecate"
-> > it, it still needs to be supported for forever.
+On 6/8/21 3:35 PM, Greg KH wrote:
+> On Tue, Jun 08, 2021 at 03:06:48PM +0300, Andrey Semashev wrote:
+>> On 6/8/21 2:13 PM, Greg KH wrote:
 > 
-> If I'm not mistaken, some syscalls were dropped from kernel in the past,
-> after it was established they are no longer used. So it is not impossible,
-> though might be more difficult specifically with futex.
+>>> So what's keeping the futex2 code from doing all that futex1 does so
+>>> that the futex1 code can be deleted internally?
+>>
+>> I think, AndrÃ© will answer this, but my guess is, as stated above, this is a
+>> lot of work and time while the intermediate version is already useful.
 > 
-> > Best of all would be if internally your "futex2" code would replace the
-> > "futex1" code so that there is no two different code bases.  That would
-> > be the only sane way forward, having 2 code bases to work with is just
-> > insane.
+> useful to who?  I still do not understand what users will be needing
+> this.  All I can tell is a single userspace program wants to use it, and
+> that is a fork from the real project it was based on and that the
+> maintainers have no plan to merge it back.
 > 
-> Yes, implementing futex1 in terms of futex2 internally is a possible way
-> forward. Though I'm not sure it is reasonable to require that to be done in
-> the initial futex2 submission. This requires all of the futex1 functionality
-> to implemented in futex2 from the start, which I think is too much to ask.
-> Even with some futex1 features missing, futex2 would be already very much
-> useful to users, and it is easier to implement the missing bits
-> incrementally over time.
+> So who does need/want this?
 
-Then do it the other way around, as Peter points out.
+I mentioned C++ std::atomic and Boost.Atomic before. Those need variable 
+sized futexes.
 
-> > So what's keeping the futex2 code from doing all that futex1 does so
-> > that the futex1 code can be deleted internally?
-> 
-> I think, André will answer this, but my guess is, as stated above, this is a
-> lot of work and time while the intermediate version is already useful.
+The project you mention is probably Wine and its derivatives. Those need 
+variable sized futexes and "wait for multiple" operation. I'm not sure 
+about the "no plan to merge it back" part, I probably missed it in an 
+earlier discussion. There are multiple different patches and versions 
+out there, and I don't know which one it refers to. But WaitOnAddress 
+and WaitForMultipleObjects APIs are very important and I would assume 
+Wine wants to emulate those with best efficiency.
 
-useful to who?  I still do not understand what users will be needing
-this.  All I can tell is a single userspace program wants to use it, and
-that is a fork from the real project it was based on and that the
-maintainers have no plan to merge it back.
+I have a media processing engine application that needs 64-bit futexes 
+would benefit from a "wait for multiple" function. Its source code is 
+not open currently, so I'm not sure if you can count it as a valid user.
 
-So who does need/want this?
+There is a generic std::lock algorithm in C++ and an equivalent in 
+Boost.Thread that is supposed to lock multiple lockables (a mutex-like 
+object). Those could benefit from the "wait for multiple" function in 
+some cases, e.g. when the objects are actually futex-based mutexes, and 
+the function can access the internal futex. I'm not saying this will 
+definitely be implemented, it just looks like a possible optimization to me.
 
-thanks,
-
-greg k-h
+I think someone mentioned databases earlier in the discussion, but I 
+don't know the details. I hope someone will be able to expand.
