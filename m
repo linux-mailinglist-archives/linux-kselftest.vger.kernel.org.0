@@ -2,104 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 700F93A2FB4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 17:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2EC3A3074
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 18:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbhFJPrh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Jun 2021 11:47:37 -0400
-Received: from mga17.intel.com ([192.55.52.151]:16588 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231807AbhFJPrU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Jun 2021 11:47:20 -0400
-IronPort-SDR: O7e/JxYBl9Pm+wqz/L0jWtfSn3T+8o8bvRYldbVfzjnyQjSw9QuTxF31zowcwZLIjAlFr0aK2g
- 5B1yQfGg4g9A==
-X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="185697739"
-X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
-   d="scan'208";a="185697739"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 08:45:24 -0700
-IronPort-SDR: BVf/NabkpGQFZsvA5q89bpS44643qaJLx1GuC6GwdB8BnFl3CXT9XJ6McQ3vOYuOPUmdI+KR3X
- iXnQvGCou3pQ==
-X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
-   d="scan'208";a="450419341"
-Received: from rpshah-mobl1.amr.corp.intel.com (HELO [10.255.230.181]) ([10.255.230.181])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 08:45:23 -0700
-Subject: Re: [PATCH v8 1/5] selftests/sgx: Rename 'eenter' and 'sgx_call_vdso'
-To:     Jarkko Sakkinen <jarkko@kernel.org>, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20210610083021.392269-1-jarkko@kernel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <b5e06639-8bf4-c267-0aa7-b6c110767edc@intel.com>
-Date:   Thu, 10 Jun 2021 08:45:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230355AbhFJQZV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Jun 2021 12:25:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:21009 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230344AbhFJQZU (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Jun 2021 12:25:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623342204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xaDYl3mAKqwxB1xdG6u3uJxh4rz2ERkYQsFm9BataQM=;
+        b=RcUaiJYaTmpDK2vFq31FTH8lpVUFoRXy8gGjrzhYHUkPDcOXv1l6Fuix/xerJJyovJx2IG
+        9NNyjZSp/iG8n/nmwrus2FM7E+HUqNIQSWILsCjk+8pO4nR6XwE0ULebAPBJJc/HIutIrn
+        SY3rnmLjpr1flQOijzm2KYGqV2/AtHA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-449-jyEQcK_JOoyZdEADJ2_iBQ-1; Thu, 10 Jun 2021 12:23:22 -0400
+X-MC-Unique: jyEQcK_JOoyZdEADJ2_iBQ-1
+Received: by mail-wm1-f70.google.com with SMTP id 18-20020a05600c0252b029019a0ce35d36so4092768wmj.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 09:23:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xaDYl3mAKqwxB1xdG6u3uJxh4rz2ERkYQsFm9BataQM=;
+        b=gx6x6bNT1x9plQ1NtzaevjNp15nzsHmLmsgT4e14UJ2Q64LKaKlN+laXRlqneemlcQ
+         xwcC/SJQ174fcyJZye+IAN+w68zDtr4CcpiFaz/Px6twTiElT1kIJP6nEvThd9Bgu0Sk
+         o0q1f8mV5xvYj4NIS9w+w/I36chj/oj1pWJ/76ew6Ak3uCo/QISUOqLQJbL1IVfYgL3h
+         NobOWIG6ezb4iu6eZ3WYwOjEMrI1dyw0sO44UO7y9a4lYiDdvamh/IlcqiOmmOj4Gwsq
+         CGzATgdfzakHcXsCViL6pVzdWrNPYRSXwsxKr4CMKYO0Whb2MvhnM1KzRzCIr4Qi9W3w
+         imPA==
+X-Gm-Message-State: AOAM532cTgVfdWzNfPHqneTBmDc4PrVvhCvGI4Bn1BnQdcP4CvWuaVcU
+        AA1XsWhf4fpNAiccWtE7SR6SWfv3ayM+L/gvVv5FFW3QeHgvAc/XPxoZScz9SK+4j4TND6oFmm7
+        bCXlcwEgdG6KrFdX7LR02A2cWxiI8
+X-Received: by 2002:adf:de91:: with SMTP id w17mr6484919wrl.352.1623342201701;
+        Thu, 10 Jun 2021 09:23:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzimm0IhzRGX0own3XmAQS7AEY/ooW0Iee1AKpx0NvxC3qE+jaJNCMXAZvHTl29Jx/k7NJRTg==
+X-Received: by 2002:adf:de91:: with SMTP id w17mr6484880wrl.352.1623342201486;
+        Thu, 10 Jun 2021 09:23:21 -0700 (PDT)
+Received: from ?IPv6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.gmail.com with ESMTPSA id o9sm3760703wri.68.2021.06.10.09.23.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Jun 2021 09:23:20 -0700 (PDT)
+Subject: Re: [PATCH v7 2/4] KVM: stats: Add fd-based API to read binary stats
+ data
+To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>
+References: <20210603211426.790093-1-jingzhangos@google.com>
+ <20210603211426.790093-3-jingzhangos@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <e3b2b3ab-88a2-827c-7775-10be63158ff3@redhat.com>
+Date:   Thu, 10 Jun 2021 18:23:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <20210610083021.392269-1-jarkko@kernel.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210603211426.790093-3-jingzhangos@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/10/21 1:30 AM, Jarkko Sakkinen wrote:
-> Rename symbols for better clarity:
-> 
-> * 'eenter' might be confused for directly calling ENCLU[EENTER].  It does
->   not.  It calls into the VDSO, which actually has the EENTER instruction.
-> * 'sgx_call_vdso' is *only* used for entering the enclave.  It's not some
->   generic SGX call into the VDSO.
-> 
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+On 03/06/21 23:14, Jing Zhang wrote:
+> +#define DEFINE_VM_STATS_DESC(...) {					       \
+> +	STATS_DESC_COUNTER("remote_tlb_flush"),				       \
+> +	## __VA_ARGS__							       \
+> +}
+> +
+> +#define DEFINE_VCPU_STATS_DESC(...) {					       \
+> +	STATS_DESC_COUNTER("halt_successful_poll"),			       \
+> +	STATS_DESC_COUNTER("halt_attempted_poll"),			       \
+> +	STATS_DESC_COUNTER("halt_poll_invalid"),			       \
+> +	STATS_DESC_COUNTER("halt_wakeup"),				       \
+> +	STATS_DESC_TIME_NSEC("halt_poll_success_ns"),			       \
+> +	STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),			       \
+> +	## __VA_ARGS__							       \
 
-These all look fine to me.  Feel free to add my ack on them.
+Let's instead put this (note it's without braces) in macros like these
 
-Since these are pure x86 selftests and the initial code went through the
-x86 maintainers, should these got through them as well?  Or, since this
-is only selftest code, should Shuah pick them up?
+#define KVM_GENERIC_VM_STATS()							\
+	STATS_DESC_COUNTER("remote_tlb_flush"),
+
+#define KVM_GENERIC_VCPU_STATS(...)						\
+	STATS_DESC_COUNTER("halt_successful_poll"),				\
+	STATS_DESC_COUNTER("halt_attempted_poll"),				\
+	STATS_DESC_COUNTER("halt_poll_invalid"),				\
+	STATS_DESC_COUNTER("halt_wakeup"),					\
+	STATS_DESC_TIME_NSEC("halt_poll_success_ns"),				\
+	STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),
+
+and it can be used in the arch files.  In fact it can even be added in patch 1 and
+switched to STATS_DESC_* here.
+
+Paolo
+
