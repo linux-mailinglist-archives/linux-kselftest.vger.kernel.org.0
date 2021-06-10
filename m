@@ -2,134 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2EC3A3074
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 18:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC883A30DA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 18:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbhFJQZV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Jun 2021 12:25:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:21009 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230344AbhFJQZU (ORCPT
+        id S231309AbhFJQmQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Jun 2021 12:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230396AbhFJQmP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Jun 2021 12:25:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623342204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xaDYl3mAKqwxB1xdG6u3uJxh4rz2ERkYQsFm9BataQM=;
-        b=RcUaiJYaTmpDK2vFq31FTH8lpVUFoRXy8gGjrzhYHUkPDcOXv1l6Fuix/xerJJyovJx2IG
-        9NNyjZSp/iG8n/nmwrus2FM7E+HUqNIQSWILsCjk+8pO4nR6XwE0ULebAPBJJc/HIutIrn
-        SY3rnmLjpr1flQOijzm2KYGqV2/AtHA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-449-jyEQcK_JOoyZdEADJ2_iBQ-1; Thu, 10 Jun 2021 12:23:22 -0400
-X-MC-Unique: jyEQcK_JOoyZdEADJ2_iBQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 18-20020a05600c0252b029019a0ce35d36so4092768wmj.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 09:23:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xaDYl3mAKqwxB1xdG6u3uJxh4rz2ERkYQsFm9BataQM=;
-        b=gx6x6bNT1x9plQ1NtzaevjNp15nzsHmLmsgT4e14UJ2Q64LKaKlN+laXRlqneemlcQ
-         xwcC/SJQ174fcyJZye+IAN+w68zDtr4CcpiFaz/Px6twTiElT1kIJP6nEvThd9Bgu0Sk
-         o0q1f8mV5xvYj4NIS9w+w/I36chj/oj1pWJ/76ew6Ak3uCo/QISUOqLQJbL1IVfYgL3h
-         NobOWIG6ezb4iu6eZ3WYwOjEMrI1dyw0sO44UO7y9a4lYiDdvamh/IlcqiOmmOj4Gwsq
-         CGzATgdfzakHcXsCViL6pVzdWrNPYRSXwsxKr4CMKYO0Whb2MvhnM1KzRzCIr4Qi9W3w
-         imPA==
-X-Gm-Message-State: AOAM532cTgVfdWzNfPHqneTBmDc4PrVvhCvGI4Bn1BnQdcP4CvWuaVcU
-        AA1XsWhf4fpNAiccWtE7SR6SWfv3ayM+L/gvVv5FFW3QeHgvAc/XPxoZScz9SK+4j4TND6oFmm7
-        bCXlcwEgdG6KrFdX7LR02A2cWxiI8
-X-Received: by 2002:adf:de91:: with SMTP id w17mr6484919wrl.352.1623342201701;
-        Thu, 10 Jun 2021 09:23:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzimm0IhzRGX0own3XmAQS7AEY/ooW0Iee1AKpx0NvxC3qE+jaJNCMXAZvHTl29Jx/k7NJRTg==
-X-Received: by 2002:adf:de91:: with SMTP id w17mr6484880wrl.352.1623342201486;
-        Thu, 10 Jun 2021 09:23:21 -0700 (PDT)
-Received: from ?IPv6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.gmail.com with ESMTPSA id o9sm3760703wri.68.2021.06.10.09.23.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Jun 2021 09:23:20 -0700 (PDT)
-Subject: Re: [PATCH v7 2/4] KVM: stats: Add fd-based API to read binary stats
- data
-To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
-        KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>
-References: <20210603211426.790093-1-jingzhangos@google.com>
- <20210603211426.790093-3-jingzhangos@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <e3b2b3ab-88a2-827c-7775-10be63158ff3@redhat.com>
-Date:   Thu, 10 Jun 2021 18:23:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 10 Jun 2021 12:42:15 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD80C061760;
+        Thu, 10 Jun 2021 09:40:18 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 2BFA91F43F31
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
+        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
+        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        tales.aparecida@gmail.com,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Subject: [PATCH v3 0/1] lib: Convert UUID runtime test to KUnit
+Date:   Thu, 10 Jun 2021 13:39:58 -0300
+Message-Id: <20210610163959.71634-1-andrealmeid@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20210603211426.790093-3-jingzhangos@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03/06/21 23:14, Jing Zhang wrote:
-> +#define DEFINE_VM_STATS_DESC(...) {					       \
-> +	STATS_DESC_COUNTER("remote_tlb_flush"),				       \
-> +	## __VA_ARGS__							       \
-> +}
-> +
-> +#define DEFINE_VCPU_STATS_DESC(...) {					       \
-> +	STATS_DESC_COUNTER("halt_successful_poll"),			       \
-> +	STATS_DESC_COUNTER("halt_attempted_poll"),			       \
-> +	STATS_DESC_COUNTER("halt_poll_invalid"),			       \
-> +	STATS_DESC_COUNTER("halt_wakeup"),				       \
-> +	STATS_DESC_TIME_NSEC("halt_poll_success_ns"),			       \
-> +	STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),			       \
-> +	## __VA_ARGS__							       \
+Hi,
 
-Let's instead put this (note it's without braces) in macros like these
+This patch converts existing UUID runtime test to use KUnit framework.
 
-#define KVM_GENERIC_VM_STATS()							\
-	STATS_DESC_COUNTER("remote_tlb_flush"),
+Below, there's a comparison between the old output format and the new
+one. Keep in mind that even if KUnit seems very verbose, this is the
+corner case where _every_ test has failed.
 
-#define KVM_GENERIC_VCPU_STATS(...)						\
-	STATS_DESC_COUNTER("halt_successful_poll"),				\
-	STATS_DESC_COUNTER("halt_attempted_poll"),				\
-	STATS_DESC_COUNTER("halt_poll_invalid"),				\
-	STATS_DESC_COUNTER("halt_wakeup"),					\
-	STATS_DESC_TIME_NSEC("halt_poll_success_ns"),				\
-	STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),
+* This is how the current output looks like in success:
 
-and it can be used in the arch files.  In fact it can even be added in patch 1 and
-switched to STATS_DESC_* here.
+  test_uuid: all 18 tests passed
 
-Paolo
+* And when it fails:
+
+  test_uuid: conversion test #1 failed on LE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: cmp test #2 failed on LE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: cmp test #2 actual data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: conversion test #3 failed on BE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: cmp test #4 failed on BE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: cmp test #4 actual data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: conversion test #5 failed on LE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: cmp test #6 failed on LE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: cmp test #6 actual data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: conversion test #7 failed on BE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: cmp test #8 failed on BE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: cmp test #8 actual data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: conversion test #9 failed on LE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: cmp test #10 failed on LE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: cmp test #10 actual data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: conversion test #11 failed on BE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: cmp test #12 failed on BE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: cmp test #12 actual data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: negative test #13 passed on wrong LE data: 'c33f4995-3701-450e-9fbf206a2e98e576 '
+  test_uuid: negative test #14 passed on wrong BE data: 'c33f4995-3701-450e-9fbf206a2e98e576 '
+  test_uuid: negative test #15 passed on wrong LE data: '64b4371c-77c1-48f9-8221-29f054XX023b'
+  test_uuid: negative test #16 passed on wrong BE data: '64b4371c-77c1-48f9-8221-29f054XX023b'
+  test_uuid: negative test #17 passed on wrong LE data: '0cb4ddff-a545-4401-9d06-688af53e'
+  test_uuid: negative test #18 passed on wrong BE data: '0cb4ddff-a545-4401-9d06-688af53e'
+  test_uuid: failed 18 out of 18 tests
+
+
+* Now, here's how it looks like with KUnit:
+
+  ======== [PASSED] uuid ========
+  [PASSED] uuid_correct_be
+  [PASSED] uuid_correct_le
+  [PASSED] uuid_wrong_be
+  [PASSED] uuid_wrong_le
+
+* And if every test fail with KUnit:
+
+  ======== [FAILED] uuid ========
+  [FAILED] uuid_correct_be
+      # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+      Expected uuid_parse(data->uuid, &be) == 1, but
+          uuid_parse(data->uuid, &be) == 0
+  
+  failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
+      # uuid_correct_be: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
+      # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+      Expected uuid_parse(data->uuid, &be) == 1, but
+          uuid_parse(data->uuid, &be) == 0
+  
+  failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
+      # uuid_correct_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
+      # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+      Expected uuid_parse(data->uuid, &be) == 1, but
+          uuid_parse(data->uuid, &be) == 0
+  
+  failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
+      # uuid_correct_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
+      not ok 1 - uuid_correct_be
+  
+  [FAILED] uuid_correct_le
+      # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+      Expected guid_parse(data->uuid, &le) == 1, but
+          guid_parse(data->uuid, &le) == 0
+  
+  failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
+      # uuid_correct_le: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
+      # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+      Expected guid_parse(data->uuid, &le) == 1, but
+          guid_parse(data->uuid, &le) == 0
+  
+  failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
+      # uuid_correct_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
+      # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+      Expected guid_parse(data->uuid, &le) == 1, but
+          guid_parse(data->uuid, &le) == 0
+  
+  failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
+      # uuid_correct_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
+      not ok 2 - uuid_correct_le
+  
+  [FAILED] uuid_wrong_be
+      # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
+      Expected uuid_parse(*data, &be) == 0, but
+          uuid_parse(*data, &be) == -22
+  
+  parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
+      # uuid_wrong_be: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+      # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
+      Expected uuid_parse(*data, &be) == 0, but
+          uuid_parse(*data, &be) == -22
+  
+  parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
+      # uuid_wrong_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+      # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
+      Expected uuid_parse(*data, &be) == 0, but
+          uuid_parse(*data, &be) == -22
+  
+  parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
+      # uuid_wrong_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+      not ok 3 - uuid_wrong_be
+  
+  [FAILED] uuid_wrong_le
+      # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
+      Expected guid_parse(*data, &le) == 0, but
+          guid_parse(*data, &le) == -22
+  
+  parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
+      # uuid_wrong_le: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+      # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
+      Expected guid_parse(*data, &le) == 0, but
+          guid_parse(*data, &le) == -22
+  
+  parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
+      # uuid_wrong_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+      # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
+      Expected guid_parse(*data, &le) == 0, but
+          guid_parse(*data, &le) == -22
+  
+  parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
+      # uuid_wrong_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+      not ok 4 - uuid_wrong_le
+
+Changes from v2:
+ - Clarify in commit message the new test cases setup
+v2: https://lore.kernel.org/lkml/20210609233730.164082-1-andrealmeid@collabora.com/
+
+Changes from v1:
+ - Test suite name: uuid_test -> uuid
+ - Config name: TEST_UUID -> UUID_KUNIT_TEST
+ - Config entry in the Kconfig file left where it is
+ - Converted tests to use _MSG variant
+v1: https://lore.kernel.org/lkml/20210605215215.171165-1-andrealmeid@collabora.com/
+
+André Almeida (1):
+  lib: Convert UUID runtime test to KUnit
+
+ lib/Kconfig.debug |  11 +++-
+ lib/Makefile      |   2 +-
+ lib/test_uuid.c   | 137 +++++++++++++++++++---------------------------
+ 3 files changed, 67 insertions(+), 83 deletions(-)
+
+-- 
+2.31.1
 
