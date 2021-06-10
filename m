@@ -2,107 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACACD3A2DF4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 16:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700F93A2FB4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 17:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbhFJOWF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Jun 2021 10:22:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59365 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230084AbhFJOWE (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Jun 2021 10:22:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623334808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vPeoXcqrS3MIzkBmzsxPXiPd+AVSGxxS032+qPVyFQc=;
-        b=emwIM/5iNbNCcmHaQEBEDcWF9j0q9PbgJ2scksJl8AP2hIwiJXsr5a1fgZ/gOVpbKi3HLT
-        tr0PtQKUnVim3KhT5uMHI2LcX35at2feqN8cokcSBn60UXZA+eT545fZmp/+1An/Di/Rre
-        OHCBIlm1sE8hizWIFcq62TO8YddCVTI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-59-4Iz9mnYoM26GMVnPmhD8sw-1; Thu, 10 Jun 2021 10:20:06 -0400
-X-MC-Unique: 4Iz9mnYoM26GMVnPmhD8sw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EB3378030A0;
-        Thu, 10 Jun 2021 14:20:01 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.8.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 95DAB60C5E;
-        Thu, 10 Jun 2021 14:19:49 +0000 (UTC)
-Date:   Thu, 10 Jun 2021 10:19:47 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [PATCH 0/5] cgroup/cpuset: Enable cpuset partition with no load
- balancing
-Message-ID: <YMIfg0Aa2HZQPEy+@lorien.usersys.redhat.com>
-References: <20210603212416.25934-1-longman@redhat.com>
+        id S231867AbhFJPrh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Jun 2021 11:47:37 -0400
+Received: from mga17.intel.com ([192.55.52.151]:16588 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231807AbhFJPrU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Jun 2021 11:47:20 -0400
+IronPort-SDR: O7e/JxYBl9Pm+wqz/L0jWtfSn3T+8o8bvRYldbVfzjnyQjSw9QuTxF31zowcwZLIjAlFr0aK2g
+ 5B1yQfGg4g9A==
+X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="185697739"
+X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
+   d="scan'208";a="185697739"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 08:45:24 -0700
+IronPort-SDR: BVf/NabkpGQFZsvA5q89bpS44643qaJLx1GuC6GwdB8BnFl3CXT9XJ6McQ3vOYuOPUmdI+KR3X
+ iXnQvGCou3pQ==
+X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
+   d="scan'208";a="450419341"
+Received: from rpshah-mobl1.amr.corp.intel.com (HELO [10.255.230.181]) ([10.255.230.181])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 08:45:23 -0700
+Subject: Re: [PATCH v8 1/5] selftests/sgx: Rename 'eenter' and 'sgx_call_vdso'
+To:     Jarkko Sakkinen <jarkko@kernel.org>, shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20210610083021.392269-1-jarkko@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <b5e06639-8bf4-c267-0aa7-b6c110767edc@intel.com>
+Date:   Thu, 10 Jun 2021 08:45:21 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210603212416.25934-1-longman@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <20210610083021.392269-1-jarkko@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Waiman,
-
-On Thu, Jun 03, 2021 at 05:24:11PM -0400 Waiman Long wrote:
-> This patchset makes the following two major changes to the cpuset v2 code:
+On 6/10/21 1:30 AM, Jarkko Sakkinen wrote:
+> Rename symbols for better clarity:
 > 
->  Patch 2: Add a new partition state "root-nolb" to create a partition
->  root with load balancing disabled. This is for handling intermitten
->  workloads that have a strict low latency requirement.
+> * 'eenter' might be confused for directly calling ENCLU[EENTER].  It does
+>   not.  It calls into the VDSO, which actually has the EENTER instruction.
+> * 'sgx_call_vdso' is *only* used for entering the enclave.  It's not some
+>   generic SGX call into the VDSO.
 > 
->  Patch 3: Allow partition roots that are not the top cpuset to distribute
->  all its cpus to child partitions as long as there is no task associated
->  with that partition root. This allows more flexibility for middleware
->  to manage multiple partitions.
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Thanks!  This looks like it will be a usable replacement for the functionality
-lost when SD_LOAD_BALANCE went away.
+These all look fine to me.  Feel free to add my ack on them.
 
-
-Cheers,
-Phil
-
-> 
-> Patch 4 updates the cgroup-v2.rst file accordingly. Patch 5 adds a test
-> to test the new cpuset partition code.
-> 
-> Waiman Long (5):
->   cgroup/cpuset: Don't call validate_change() for some flag changes
->   cgroup/cpuset: Add new cpus.partition type with no load balancing
->   cgroup/cpuset: Allow non-top parent partition root to distribute out
->     all CPUs
->   cgroup/cpuset: Update description of cpuset.cpus.partition in
->     cgroup-v2.rst
->   kselftest/cgroup: Add cpuset v2 partition root state test
-> 
->  Documentation/admin-guide/cgroup-v2.rst       |  19 ++-
->  kernel/cgroup/cpuset.c                        | 124 +++++++++++----
->  tools/testing/selftests/cgroup/Makefile       |   2 +-
->  .../selftests/cgroup/test_cpuset_prs.sh       | 141 ++++++++++++++++++
->  4 files changed, 247 insertions(+), 39 deletions(-)
->  create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> 
-> -- 
-> 2.18.1
-> 
-
--- 
-
+Since these are pure x86 selftests and the initial code went through the
+x86 maintainers, should these got through them as well?  Or, since this
+is only selftest code, should Shuah pick them up?
