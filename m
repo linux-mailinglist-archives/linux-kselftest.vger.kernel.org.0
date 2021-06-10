@@ -2,228 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0653A2802
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 11:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D79DF3A2A93
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 13:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbhFJJQI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Jun 2021 05:16:08 -0400
-Received: from mga18.intel.com ([134.134.136.126]:54770 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230201AbhFJJQH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Jun 2021 05:16:07 -0400
-IronPort-SDR: Ayf+1JNF8Lva0pZXNgcoX/dFJYxc1b9m11XptDAjMpRdppyKP1pyknaxpu5GG3oYBdBfrb7ty+
- xgvx53N8D0iA==
-X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="192577962"
-X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
-   d="scan'208";a="192577962"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 02:14:05 -0700
-IronPort-SDR: p5N3I7jmtnH/kcXT1MOWh1aqoleSR/qsHi/7TQBhDm0AQjy48YaIOzGpWAztUj5A1WpfYpEgpb
- LprCGKIcsX0Q==
-X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
-   d="scan'208";a="402797595"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 02:14:01 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lrGlC-0015yn-Cy; Thu, 10 Jun 2021 12:13:58 +0300
-Date:   Thu, 10 Jun 2021 12:13:58 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
-        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
-        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, tales.aparecida@gmail.com
-Subject: Re: [PATCH v2 0/1] lib: Convert UUID runtime test to KUnit
-Message-ID: <YMHX1mKuqoRCiHAF@smile.fi.intel.com>
-References: <20210609233730.164082-1-andrealmeid@collabora.com>
+        id S230201AbhFJLs2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Jun 2021 07:48:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22856 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230175AbhFJLs2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Jun 2021 07:48:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623325591;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I/8j+wnWnTfb6LCWk89bGRuT4Gfnv7Lqnj2YgU0Psg0=;
+        b=gxihVAZCwsSLdpifmb2EVMLUuCYfHtYznmgyH0PwTBSUvNuRG8UG1AQg2zWWUbmF+rYTK5
+        OCmNDo+Bx7BQ6oLKLmALXTxlHd6wV4scKVFzcRFhD4fBstjcvaHWOWzbWAZDk76uHPMiGp
+        KipevKOZDnw4dejnCQSxg4DGQkBHERU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-46-vM_WgdGQNKe-w2kNLVSf2A-1; Thu, 10 Jun 2021 07:46:30 -0400
+X-MC-Unique: vM_WgdGQNKe-w2kNLVSf2A-1
+Received: by mail-wr1-f69.google.com with SMTP id e11-20020a056000178bb0290119c11bd29eso784757wrg.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 04:46:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=I/8j+wnWnTfb6LCWk89bGRuT4Gfnv7Lqnj2YgU0Psg0=;
+        b=Rp/xxdQtQB6x3K5Vne8j0V911BlfLOwEM/N8BgHPNkHWBQ68E01M75mVpwHaSZyyPT
+         drJQ1Dp4QZfBuce7BIM+fOtGMUr2BfM+gawEEndowSp/e3pom7eQb65aAegWMeslVYWs
+         MIWn0S+n1O4ypNvFjVGpgxBAGblnAZEvQx24L54KhOVQBPbwCCRvnvV4AuyUv2sIgbBq
+         mGuGfm+7thU+mJqXtSkKBhd6cdXLVsl9KLw9sIJkI3uk6vIPVbXgeUyVw+akc396/2PT
+         bpqlyfYhuHmXZAs56nNQvwll5g7N/WjX3uUCI5bXHyA0pLQ/Y7B8LHVFVPh/fRagAZrO
+         h5Pw==
+X-Gm-Message-State: AOAM531/zFMLqMGVOpGX5v3QvDCPfkEizj1iuAP2DlolVAFRPvehxr0h
+        xPM+mxqZM6A84jAvlR2za692fFlyQ05ESwCLzqdPYOTnevbvBB/sn9Pny2oDld2B9PPsBSdIeek
+        +RF93+pBWQxwV3gBLPIWW80K6lunX
+X-Received: by 2002:a5d:48c6:: with SMTP id p6mr4963275wrs.45.1623325589181;
+        Thu, 10 Jun 2021 04:46:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzAY/peyXscV9r/3ZUt4QDtJlFNFailIfzbp8EjaoRTUVSlJrRv2T10doUS2XUyySbuumKZAg==
+X-Received: by 2002:a5d:48c6:: with SMTP id p6mr4963260wrs.45.1623325588983;
+        Thu, 10 Jun 2021 04:46:28 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.gmail.com with ESMTPSA id w23sm9281904wmi.0.2021.06.10.04.46.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Jun 2021 04:46:28 -0700 (PDT)
+Subject: Re: [PATCH] KVM: selftests: Fix compiling errors when initializing
+ the static structure
+To:     Yanan Wang <wangyanan55@huawei.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Andrew Jones <drjones@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yuzenghui@huawei.com,
+        wanghaibin.wang@huawei.com
+References: <20210610085418.35544-1-wangyanan55@huawei.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <43c197da-0ff7-5b95-0778-e5b19fa4f942@redhat.com>
+Date:   Thu, 10 Jun 2021 13:46:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210609233730.164082-1-andrealmeid@collabora.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210610085418.35544-1-wangyanan55@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 08:37:29PM -0300, André Almeida wrote:
-> Hi,
+On 10/06/21 10:54, Yanan Wang wrote:
+> Errors like below were produced from test_util.c when compiling the KVM
+> selftests on my local platform.
 > 
-> This patch converts existing UUID runtime test to use KUnit framework.
+> lib/test_util.c: In function 'vm_mem_backing_src_alias':
+> lib/test_util.c:177:12: error: initializer element is not constant
+>      .flag = anon_flags,
+>              ^~~~~~~~~~
+> lib/test_util.c:177:12: note: (near initialization for 'aliases[0].flag')
 > 
-> Below, there's a comparison between the old output format and the new
-> one. Keep in mind that even if KUnit seems very verbose, this is the
-> corner case where _every_ test has failed.
+> The reason is that we are using non-const expressions to initialize the
+> static structure, which will probably trigger a compiling error/warning
+> on stricter GCC versions. Fix it by converting the two const variables
+> "anon_flags" and "anon_huge_flags" into more stable macros.
 > 
-> * This is how the current output looks like in success:
+> Fixes: b3784bc28ccc0 ("KVM: selftests: refactor vm_mem_backing_src_type flags")
+> Reported-by: Zenghui Yu <yuzenghui@huawei.com>
+> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+> ---
+>   tools/testing/selftests/kvm/lib/test_util.c | 38 ++++++++++-----------
+>   1 file changed, 19 insertions(+), 19 deletions(-)
 > 
->   test_uuid: all 18 tests passed
-> 
-> * And when it fails:
-> 
->   test_uuid: conversion test #1 failed on LE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: cmp test #2 failed on LE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: cmp test #2 actual data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: conversion test #3 failed on BE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: cmp test #4 failed on BE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: cmp test #4 actual data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: conversion test #5 failed on LE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: cmp test #6 failed on LE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: cmp test #6 actual data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: conversion test #7 failed on BE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: cmp test #8 failed on BE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: cmp test #8 actual data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: conversion test #9 failed on LE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: cmp test #10 failed on LE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: cmp test #10 actual data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: conversion test #11 failed on BE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: cmp test #12 failed on BE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: cmp test #12 actual data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: negative test #13 passed on wrong LE data: 'c33f4995-3701-450e-9fbf206a2e98e576 '
->   test_uuid: negative test #14 passed on wrong BE data: 'c33f4995-3701-450e-9fbf206a2e98e576 '
->   test_uuid: negative test #15 passed on wrong LE data: '64b4371c-77c1-48f9-8221-29f054XX023b'
->   test_uuid: negative test #16 passed on wrong BE data: '64b4371c-77c1-48f9-8221-29f054XX023b'
->   test_uuid: negative test #17 passed on wrong LE data: '0cb4ddff-a545-4401-9d06-688af53e'
->   test_uuid: negative test #18 passed on wrong BE data: '0cb4ddff-a545-4401-9d06-688af53e'
->   test_uuid: failed 18 out of 18 tests
-> 
-> 
-> * Now, here's how it looks like with KUnit:
-> 
->   ======== [PASSED] uuid ========
->   [PASSED] uuid_correct_be
->   [PASSED] uuid_correct_le
->   [PASSED] uuid_wrong_be
->   [PASSED] uuid_wrong_le
-> 
-> * And if every test fail with KUnit:
-> 
->   ======== [FAILED] uuid ========
->   [FAILED] uuid_correct_be
->       # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
->       Expected uuid_parse(data->uuid, &be) == 1, but
->           uuid_parse(data->uuid, &be) == 0
+> diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+> index 6ad6c8276b2e..af1031fed97f 100644
+> --- a/tools/testing/selftests/kvm/lib/test_util.c
+> +++ b/tools/testing/selftests/kvm/lib/test_util.c
+> @@ -166,75 +166,75 @@ size_t get_def_hugetlb_pagesz(void)
+>   	return 0;
+>   }
 >   
->   failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
->       # uuid_correct_be: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
->       # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
->       Expected uuid_parse(data->uuid, &be) == 1, but
->           uuid_parse(data->uuid, &be) == 0
->   
->   failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
->       # uuid_correct_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
->       # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
->       Expected uuid_parse(data->uuid, &be) == 1, but
->           uuid_parse(data->uuid, &be) == 0
->   
->   failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
->       # uuid_correct_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
->       not ok 1 - uuid_correct_be
->   
->   [FAILED] uuid_correct_le
->       # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
->       Expected guid_parse(data->uuid, &le) == 1, but
->           guid_parse(data->uuid, &le) == 0
->   
->   failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
->       # uuid_correct_le: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
->       # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
->       Expected guid_parse(data->uuid, &le) == 1, but
->           guid_parse(data->uuid, &le) == 0
->   
->   failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
->       # uuid_correct_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
->       # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
->       Expected guid_parse(data->uuid, &le) == 1, but
->           guid_parse(data->uuid, &le) == 0
->   
->   failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
->       # uuid_correct_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
->       not ok 2 - uuid_correct_le
->   
->   [FAILED] uuid_wrong_be
->       # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
->       Expected uuid_parse(*data, &be) == 0, but
->           uuid_parse(*data, &be) == -22
->   
->   parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
->       # uuid_wrong_be: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
->       # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
->       Expected uuid_parse(*data, &be) == 0, but
->           uuid_parse(*data, &be) == -22
->   
->   parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
->       # uuid_wrong_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
->       # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
->       Expected uuid_parse(*data, &be) == 0, but
->           uuid_parse(*data, &be) == -22
->   
->   parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
->       # uuid_wrong_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
->       not ok 3 - uuid_wrong_be
->   
->   [FAILED] uuid_wrong_le
->       # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
->       Expected guid_parse(*data, &le) == 0, but
->           guid_parse(*data, &le) == -22
->   
->   parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
->       # uuid_wrong_le: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
->       # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
->       Expected guid_parse(*data, &le) == 0, but
->           guid_parse(*data, &le) == -22
->   
->   parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
->       # uuid_wrong_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
->       # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
->       Expected guid_parse(*data, &le) == 0, but
->           guid_parse(*data, &le) == -22
->   
->   parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
->       # uuid_wrong_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
->       not ok 4 - uuid_wrong_le
-
-Thanks!
-
-It's not your fault but I think we need to defer this until KUnit gains support
-of the run statistics. My guts telling me if we allow more and more conversions
-like this the point will vanish and nobody will care.
-
-I like the code, but I can give my tag after KUnit prints some kind of this:
-
- * This is how the current output looks like in success:
-
-   test_uuid: all 18 tests passed
-
- * And when it fails:
-
-   test_uuid: failed 18 out of 18 tests
-
-> Changes from v1:
->  - Test suite name: uuid_test -> uuid
->  - Config name: TEST_UUID -> UUID_KUNIT_TEST
->  - Config entry in the Kconfig file left where it is
->  - Converted tests to use _MSG variant
-> 
-> André Almeida (1):
->   lib: Convert UUID runtime test to KUnit
-> 
->  lib/Kconfig.debug |  11 +++-
->  lib/Makefile      |   2 +-
->  lib/test_uuid.c   | 137 +++++++++++++++++++---------------------------
->  3 files changed, 67 insertions(+), 83 deletions(-)
-> 
-> -- 
-> 2.31.1
+> +#define ANON_FLAGS	(MAP_PRIVATE | MAP_ANONYMOUS)
+> +#define ANON_HUGE_FLAGS	(ANON_FLAGS | MAP_HUGETLB)
+> +
+>   const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
+>   {
+> -	static const int anon_flags = MAP_PRIVATE | MAP_ANONYMOUS;
+> -	static const int anon_huge_flags = anon_flags | MAP_HUGETLB;
+> -
+>   	static const struct vm_mem_backing_src_alias aliases[] = {
+>   		[VM_MEM_SRC_ANONYMOUS] = {
+>   			.name = "anonymous",
+> -			.flag = anon_flags,
+> +			.flag = ANON_FLAGS,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_THP] = {
+>   			.name = "anonymous_thp",
+> -			.flag = anon_flags,
+> +			.flag = ANON_FLAGS,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB] = {
+>   			.name = "anonymous_hugetlb",
+> -			.flag = anon_huge_flags,
+> +			.flag = ANON_HUGE_FLAGS,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16KB] = {
+>   			.name = "anonymous_hugetlb_16kb",
+> -			.flag = anon_huge_flags | MAP_HUGE_16KB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_16KB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_64KB] = {
+>   			.name = "anonymous_hugetlb_64kb",
+> -			.flag = anon_huge_flags | MAP_HUGE_64KB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_64KB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_512KB] = {
+>   			.name = "anonymous_hugetlb_512kb",
+> -			.flag = anon_huge_flags | MAP_HUGE_512KB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_512KB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_1MB] = {
+>   			.name = "anonymous_hugetlb_1mb",
+> -			.flag = anon_huge_flags | MAP_HUGE_1MB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_1MB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB] = {
+>   			.name = "anonymous_hugetlb_2mb",
+> -			.flag = anon_huge_flags | MAP_HUGE_2MB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_2MB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_8MB] = {
+>   			.name = "anonymous_hugetlb_8mb",
+> -			.flag = anon_huge_flags | MAP_HUGE_8MB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_8MB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16MB] = {
+>   			.name = "anonymous_hugetlb_16mb",
+> -			.flag = anon_huge_flags | MAP_HUGE_16MB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_16MB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_32MB] = {
+>   			.name = "anonymous_hugetlb_32mb",
+> -			.flag = anon_huge_flags | MAP_HUGE_32MB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_32MB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_256MB] = {
+>   			.name = "anonymous_hugetlb_256mb",
+> -			.flag = anon_huge_flags | MAP_HUGE_256MB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_256MB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_512MB] = {
+>   			.name = "anonymous_hugetlb_512mb",
+> -			.flag = anon_huge_flags | MAP_HUGE_512MB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_512MB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB] = {
+>   			.name = "anonymous_hugetlb_1gb",
+> -			.flag = anon_huge_flags | MAP_HUGE_1GB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_1GB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB] = {
+>   			.name = "anonymous_hugetlb_2gb",
+> -			.flag = anon_huge_flags | MAP_HUGE_2GB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_2GB,
+>   		},
+>   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB] = {
+>   			.name = "anonymous_hugetlb_16gb",
+> -			.flag = anon_huge_flags | MAP_HUGE_16GB,
+> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_16GB,
+>   		},
+>   		[VM_MEM_SRC_SHMEM] = {
+>   			.name = "shmem",
 > 
 
--- 
-With Best Regards,
-Andy Shevchenko
+Queued, thanks.
 
+Paolo
 
