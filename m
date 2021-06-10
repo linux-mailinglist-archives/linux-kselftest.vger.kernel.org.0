@@ -2,204 +2,323 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D79DF3A2A93
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 13:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F993A2ACF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 13:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbhFJLs2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Jun 2021 07:48:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22856 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230175AbhFJLs2 (ORCPT
+        id S230084AbhFJLzf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Jun 2021 07:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230113AbhFJLze (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Jun 2021 07:48:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623325591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I/8j+wnWnTfb6LCWk89bGRuT4Gfnv7Lqnj2YgU0Psg0=;
-        b=gxihVAZCwsSLdpifmb2EVMLUuCYfHtYznmgyH0PwTBSUvNuRG8UG1AQg2zWWUbmF+rYTK5
-        OCmNDo+Bx7BQ6oLKLmALXTxlHd6wV4scKVFzcRFhD4fBstjcvaHWOWzbWAZDk76uHPMiGp
-        KipevKOZDnw4dejnCQSxg4DGQkBHERU=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-46-vM_WgdGQNKe-w2kNLVSf2A-1; Thu, 10 Jun 2021 07:46:30 -0400
-X-MC-Unique: vM_WgdGQNKe-w2kNLVSf2A-1
-Received: by mail-wr1-f69.google.com with SMTP id e11-20020a056000178bb0290119c11bd29eso784757wrg.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 04:46:30 -0700 (PDT)
+        Thu, 10 Jun 2021 07:55:34 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C79AC061760
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 04:53:28 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id b145-20020a1c80970000b029019c8c824054so6354094wmd.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 04:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Eq0t+BbPZXalrNecB2UGQAWr22SKkUMPp3zNFgboMxg=;
+        b=SWP2nzuU3Iwl7GwTXjT7Eg6/XQ/xx2HwKHxn+zwHLLlnJT/t9Y4/2qqqZrwhdXIuMh
+         GLPED/Zx4uDmqctc7nJYo/tAUReUz0LTfVwN39iB89rtwdMUDilAs5Oi+cSb2kjAIEAD
+         j4j8hTq2OUNW1OfKUGbQImx7H+YjrJYMaU16NlTfsfO2BRADh7JcCVhvNkmT5WbgAywr
+         Vbvl4gDMFUAP+G51prn886Oq0NVGMR5Rm/Qju4bY0NYlMFsUdHM9Bh5w5BvKmG2J5o6t
+         mUcsoREqe6YyeB5PXrfSXIPHOnGGflTzFI3/9O/hDopg8H1ZQ5f4rUde3vjYBbJe9SQ0
+         wR9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=I/8j+wnWnTfb6LCWk89bGRuT4Gfnv7Lqnj2YgU0Psg0=;
-        b=Rp/xxdQtQB6x3K5Vne8j0V911BlfLOwEM/N8BgHPNkHWBQ68E01M75mVpwHaSZyyPT
-         drJQ1Dp4QZfBuce7BIM+fOtGMUr2BfM+gawEEndowSp/e3pom7eQb65aAegWMeslVYWs
-         MIWn0S+n1O4ypNvFjVGpgxBAGblnAZEvQx24L54KhOVQBPbwCCRvnvV4AuyUv2sIgbBq
-         mGuGfm+7thU+mJqXtSkKBhd6cdXLVsl9KLw9sIJkI3uk6vIPVbXgeUyVw+akc396/2PT
-         bpqlyfYhuHmXZAs56nNQvwll5g7N/WjX3uUCI5bXHyA0pLQ/Y7B8LHVFVPh/fRagAZrO
-         h5Pw==
-X-Gm-Message-State: AOAM531/zFMLqMGVOpGX5v3QvDCPfkEizj1iuAP2DlolVAFRPvehxr0h
-        xPM+mxqZM6A84jAvlR2za692fFlyQ05ESwCLzqdPYOTnevbvBB/sn9Pny2oDld2B9PPsBSdIeek
-        +RF93+pBWQxwV3gBLPIWW80K6lunX
-X-Received: by 2002:a5d:48c6:: with SMTP id p6mr4963275wrs.45.1623325589181;
-        Thu, 10 Jun 2021 04:46:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzAY/peyXscV9r/3ZUt4QDtJlFNFailIfzbp8EjaoRTUVSlJrRv2T10doUS2XUyySbuumKZAg==
-X-Received: by 2002:a5d:48c6:: with SMTP id p6mr4963260wrs.45.1623325588983;
-        Thu, 10 Jun 2021 04:46:28 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.gmail.com with ESMTPSA id w23sm9281904wmi.0.2021.06.10.04.46.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Jun 2021 04:46:28 -0700 (PDT)
-Subject: Re: [PATCH] KVM: selftests: Fix compiling errors when initializing
- the static structure
-To:     Yanan Wang <wangyanan55@huawei.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Andrew Jones <drjones@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yuzenghui@huawei.com,
-        wanghaibin.wang@huawei.com
-References: <20210610085418.35544-1-wangyanan55@huawei.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <43c197da-0ff7-5b95-0778-e5b19fa4f942@redhat.com>
-Date:   Thu, 10 Jun 2021 13:46:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Eq0t+BbPZXalrNecB2UGQAWr22SKkUMPp3zNFgboMxg=;
+        b=nD9xPGR3pEWXsxNEFTBCDnjVlUrU40u6cI3uDsK9dP8oUnstWatXdRG6I0xCjg+NYt
+         qu/5oSaywh8tnO/PzUinLEBMjfde+Jrffv7AzeLAEcvbj+l4w9f/KVmvOKgyjy9bkwzd
+         Xtw7tI25KFghT0ygLwfyhwlEF9Z7TYsJGNc7GZHJ3z7QNPlEANk1+UDfvwxRwahaDmrR
+         PJlpFLP1rcF1YCJPJ/CPPdgf/kvvc6bkImlKcYKBdic4637sGku7eEL+Y3OF9aveDDsy
+         D3iOnr0H1lydtesHirlqSvdW9dGVs5tNmBIOofUr0UrrUNdcvylKHEvwdDroB5HkBcWj
+         L9Yw==
+X-Gm-Message-State: AOAM532Yax4EjcnhxI5xTtZWxSFnmf1qX7YqlC1e/mo9OuqlySJzqcfF
+        wsw+tMs+0iufxdwyh5usvznZIelZ8gIDDplkToUj2OzHx34w2mJH
+X-Google-Smtp-Source: ABdhPJy4j69xxBPqsrbnXCVu7/eWO0Do2HxE/drcDQIi6n9DWcqbRh4Y9PbOF3guYx6kj4PpjOkPF7aXpab6wN1N98c=
+X-Received: by 2002:a7b:c44f:: with SMTP id l15mr14839106wmi.151.1623326006488;
+ Thu, 10 Jun 2021 04:53:26 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210610085418.35544-1-wangyanan55@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210609233730.164082-1-andrealmeid@collabora.com> <YMHX1mKuqoRCiHAF@smile.fi.intel.com>
+In-Reply-To: <YMHX1mKuqoRCiHAF@smile.fi.intel.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 10 Jun 2021 19:53:14 +0800
+Message-ID: <CABVgOS=5xkYKD18YfU++u8snpUnL2s=V6bK1e4qc_jTmAuazkw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/1] lib: Convert UUID runtime test to KUnit
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
+        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
+        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com,
+        Daniel Latypov <dlatypov@google.com>, tales.aparecida@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/06/21 10:54, Yanan Wang wrote:
-> Errors like below were produced from test_util.c when compiling the KVM
-> selftests on my local platform.
-> 
-> lib/test_util.c: In function 'vm_mem_backing_src_alias':
-> lib/test_util.c:177:12: error: initializer element is not constant
->      .flag = anon_flags,
->              ^~~~~~~~~~
-> lib/test_util.c:177:12: note: (near initialization for 'aliases[0].flag')
-> 
-> The reason is that we are using non-const expressions to initialize the
-> static structure, which will probably trigger a compiling error/warning
-> on stricter GCC versions. Fix it by converting the two const variables
-> "anon_flags" and "anon_huge_flags" into more stable macros.
-> 
-> Fixes: b3784bc28ccc0 ("KVM: selftests: refactor vm_mem_backing_src_type flags")
-> Reported-by: Zenghui Yu <yuzenghui@huawei.com>
-> Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-> ---
->   tools/testing/selftests/kvm/lib/test_util.c | 38 ++++++++++-----------
->   1 file changed, 19 insertions(+), 19 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-> index 6ad6c8276b2e..af1031fed97f 100644
-> --- a/tools/testing/selftests/kvm/lib/test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/test_util.c
-> @@ -166,75 +166,75 @@ size_t get_def_hugetlb_pagesz(void)
->   	return 0;
->   }
->   
-> +#define ANON_FLAGS	(MAP_PRIVATE | MAP_ANONYMOUS)
-> +#define ANON_HUGE_FLAGS	(ANON_FLAGS | MAP_HUGETLB)
-> +
->   const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
->   {
-> -	static const int anon_flags = MAP_PRIVATE | MAP_ANONYMOUS;
-> -	static const int anon_huge_flags = anon_flags | MAP_HUGETLB;
-> -
->   	static const struct vm_mem_backing_src_alias aliases[] = {
->   		[VM_MEM_SRC_ANONYMOUS] = {
->   			.name = "anonymous",
-> -			.flag = anon_flags,
-> +			.flag = ANON_FLAGS,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_THP] = {
->   			.name = "anonymous_thp",
-> -			.flag = anon_flags,
-> +			.flag = ANON_FLAGS,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB] = {
->   			.name = "anonymous_hugetlb",
-> -			.flag = anon_huge_flags,
-> +			.flag = ANON_HUGE_FLAGS,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16KB] = {
->   			.name = "anonymous_hugetlb_16kb",
-> -			.flag = anon_huge_flags | MAP_HUGE_16KB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_16KB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_64KB] = {
->   			.name = "anonymous_hugetlb_64kb",
-> -			.flag = anon_huge_flags | MAP_HUGE_64KB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_64KB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_512KB] = {
->   			.name = "anonymous_hugetlb_512kb",
-> -			.flag = anon_huge_flags | MAP_HUGE_512KB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_512KB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_1MB] = {
->   			.name = "anonymous_hugetlb_1mb",
-> -			.flag = anon_huge_flags | MAP_HUGE_1MB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_1MB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB] = {
->   			.name = "anonymous_hugetlb_2mb",
-> -			.flag = anon_huge_flags | MAP_HUGE_2MB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_2MB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_8MB] = {
->   			.name = "anonymous_hugetlb_8mb",
-> -			.flag = anon_huge_flags | MAP_HUGE_8MB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_8MB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16MB] = {
->   			.name = "anonymous_hugetlb_16mb",
-> -			.flag = anon_huge_flags | MAP_HUGE_16MB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_16MB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_32MB] = {
->   			.name = "anonymous_hugetlb_32mb",
-> -			.flag = anon_huge_flags | MAP_HUGE_32MB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_32MB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_256MB] = {
->   			.name = "anonymous_hugetlb_256mb",
-> -			.flag = anon_huge_flags | MAP_HUGE_256MB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_256MB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_512MB] = {
->   			.name = "anonymous_hugetlb_512mb",
-> -			.flag = anon_huge_flags | MAP_HUGE_512MB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_512MB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB] = {
->   			.name = "anonymous_hugetlb_1gb",
-> -			.flag = anon_huge_flags | MAP_HUGE_1GB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_1GB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB] = {
->   			.name = "anonymous_hugetlb_2gb",
-> -			.flag = anon_huge_flags | MAP_HUGE_2GB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_2GB,
->   		},
->   		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB] = {
->   			.name = "anonymous_hugetlb_16gb",
-> -			.flag = anon_huge_flags | MAP_HUGE_16GB,
-> +			.flag = ANON_HUGE_FLAGS | MAP_HUGE_16GB,
->   		},
->   		[VM_MEM_SRC_SHMEM] = {
->   			.name = "shmem",
-> 
+On Thu, Jun 10, 2021 at 5:14 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Wed, Jun 09, 2021 at 08:37:29PM -0300, Andr=C3=A9 Almeida wrote:
+> > Hi,
+> >
+> > This patch converts existing UUID runtime test to use KUnit framework.
+> >
+> > Below, there's a comparison between the old output format and the new
+> > one. Keep in mind that even if KUnit seems very verbose, this is the
+> > corner case where _every_ test has failed.
+> >
+> > * This is how the current output looks like in success:
+> >
+> >   test_uuid: all 18 tests passed
+> >
+> > * And when it fails:
+> >
+> >   test_uuid: conversion test #1 failed on LE data: 'c33f4995-3701-450e-=
+9fbf-206a2e98e576'
+> >   test_uuid: cmp test #2 failed on LE data: 'c33f4995-3701-450e-9fbf-20=
+6a2e98e576'
+> >   test_uuid: cmp test #2 actual data: 'c33f4995-3701-450e-9fbf-206a2e98=
+e576'
+> >   test_uuid: conversion test #3 failed on BE data: 'c33f4995-3701-450e-=
+9fbf-206a2e98e576'
+> >   test_uuid: cmp test #4 failed on BE data: 'c33f4995-3701-450e-9fbf-20=
+6a2e98e576'
+> >   test_uuid: cmp test #4 actual data: 'c33f4995-3701-450e-9fbf-206a2e98=
+e576'
+> >   test_uuid: conversion test #5 failed on LE data: '64b4371c-77c1-48f9-=
+8221-29f054fc023b'
+> >   test_uuid: cmp test #6 failed on LE data: '64b4371c-77c1-48f9-8221-29=
+f054fc023b'
+> >   test_uuid: cmp test #6 actual data: '64b4371c-77c1-48f9-8221-29f054fc=
+023b'
+> >   test_uuid: conversion test #7 failed on BE data: '64b4371c-77c1-48f9-=
+8221-29f054fc023b'
+> >   test_uuid: cmp test #8 failed on BE data: '64b4371c-77c1-48f9-8221-29=
+f054fc023b'
+> >   test_uuid: cmp test #8 actual data: '64b4371c-77c1-48f9-8221-29f054fc=
+023b'
+> >   test_uuid: conversion test #9 failed on LE data: '0cb4ddff-a545-4401-=
+9d06-688af53e7f84'
+> >   test_uuid: cmp test #10 failed on LE data: '0cb4ddff-a545-4401-9d06-6=
+88af53e7f84'
+> >   test_uuid: cmp test #10 actual data: '0cb4ddff-a545-4401-9d06-688af53=
+e7f84'
+> >   test_uuid: conversion test #11 failed on BE data: '0cb4ddff-a545-4401=
+-9d06-688af53e7f84'
+> >   test_uuid: cmp test #12 failed on BE data: '0cb4ddff-a545-4401-9d06-6=
+88af53e7f84'
+> >   test_uuid: cmp test #12 actual data: '0cb4ddff-a545-4401-9d06-688af53=
+e7f84'
+> >   test_uuid: negative test #13 passed on wrong LE data: 'c33f4995-3701-=
+450e-9fbf206a2e98e576 '
+> >   test_uuid: negative test #14 passed on wrong BE data: 'c33f4995-3701-=
+450e-9fbf206a2e98e576 '
+> >   test_uuid: negative test #15 passed on wrong LE data: '64b4371c-77c1-=
+48f9-8221-29f054XX023b'
+> >   test_uuid: negative test #16 passed on wrong BE data: '64b4371c-77c1-=
+48f9-8221-29f054XX023b'
+> >   test_uuid: negative test #17 passed on wrong LE data: '0cb4ddff-a545-=
+4401-9d06-688af53e'
+> >   test_uuid: negative test #18 passed on wrong BE data: '0cb4ddff-a545-=
+4401-9d06-688af53e'
+> >   test_uuid: failed 18 out of 18 tests
+> >
+> >
+> > * Now, here's how it looks like with KUnit:
+> >
+> >   =3D=3D=3D=3D=3D=3D=3D=3D [PASSED] uuid =3D=3D=3D=3D=3D=3D=3D=3D
+> >   [PASSED] uuid_correct_be
+> >   [PASSED] uuid_correct_le
+> >   [PASSED] uuid_wrong_be
+> >   [PASSED] uuid_wrong_le
+> >
+> > * And if every test fail with KUnit:
+> >
+> >   =3D=3D=3D=3D=3D=3D=3D=3D [FAILED] uuid =3D=3D=3D=3D=3D=3D=3D=3D
+> >   [FAILED] uuid_correct_be
+> >       # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+> >       Expected uuid_parse(data->uuid, &be) =3D=3D 1, but
+> >           uuid_parse(data->uuid, &be) =3D=3D 0
+> >
+> >   failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
+> >       # uuid_correct_be: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e57=
+6
+> >       # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+> >       Expected uuid_parse(data->uuid, &be) =3D=3D 1, but
+> >           uuid_parse(data->uuid, &be) =3D=3D 0
+> >
+> >   failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
+> >       # uuid_correct_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023=
+b
+> >       # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+> >       Expected uuid_parse(data->uuid, &be) =3D=3D 1, but
+> >           uuid_parse(data->uuid, &be) =3D=3D 0
+> >
+> >   failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
+> >       # uuid_correct_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f8=
+4
+> >       not ok 1 - uuid_correct_be
+> >
+> >   [FAILED] uuid_correct_le
+> >       # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+> >       Expected guid_parse(data->uuid, &le) =3D=3D 1, but
+> >           guid_parse(data->uuid, &le) =3D=3D 0
+> >
+> >   failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
+> >       # uuid_correct_le: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e57=
+6
+> >       # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+> >       Expected guid_parse(data->uuid, &le) =3D=3D 1, but
+> >           guid_parse(data->uuid, &le) =3D=3D 0
+> >
+> >   failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
+> >       # uuid_correct_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023=
+b
+> >       # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+> >       Expected guid_parse(data->uuid, &le) =3D=3D 1, but
+> >           guid_parse(data->uuid, &le) =3D=3D 0
+> >
+> >   failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
+> >       # uuid_correct_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f8=
+4
+> >       not ok 2 - uuid_correct_le
+> >
+> >   [FAILED] uuid_wrong_be
+> >       # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
+> >       Expected uuid_parse(*data, &be) =3D=3D 0, but
+> >           uuid_parse(*data, &be) =3D=3D -22
+> >
+> >   parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
+> >       # uuid_wrong_be: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+> >       # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
+> >       Expected uuid_parse(*data, &be) =3D=3D 0, but
+> >           uuid_parse(*data, &be) =3D=3D -22
+> >
+> >   parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
+> >       # uuid_wrong_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+> >       # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
+> >       Expected uuid_parse(*data, &be) =3D=3D 0, but
+> >           uuid_parse(*data, &be) =3D=3D -22
+> >
+> >   parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
+> >       # uuid_wrong_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+> >       not ok 3 - uuid_wrong_be
+> >
+> >   [FAILED] uuid_wrong_le
+> >       # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
+> >       Expected guid_parse(*data, &le) =3D=3D 0, but
+> >           guid_parse(*data, &le) =3D=3D -22
+> >
+> >   parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
+> >       # uuid_wrong_le: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+> >       # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
+> >       Expected guid_parse(*data, &le) =3D=3D 0, but
+> >           guid_parse(*data, &le) =3D=3D -22
+> >
+> >   parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
+> >       # uuid_wrong_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+> >       # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
+> >       Expected guid_parse(*data, &le) =3D=3D 0, but
+> >           guid_parse(*data, &le) =3D=3D -22
+> >
+> >   parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
+> >       # uuid_wrong_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+> >       not ok 4 - uuid_wrong_le
 
-Queued, thanks.
+Note that this output is from the kunit_tool script, which parses the
+test output.
+It does include a summary line:
+[04:41:01] Testing complete. 4 tests run. 0 failed. 0 crashed.
 
-Paolo
+Note that this does only count the number of "tests" run --- the
+individual UUIDs are parameters to the same test, so aren't counted
+independently by the wrapper at the moment.
 
+That being said, the raw output looks like this (all tests passed):
+TAP version 14
+1..1
+   # Subtest: uuid
+   1..4
+   # uuid_correct_be: ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
+   # uuid_correct_be: ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
+   # uuid_correct_be: ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
+   ok 1 - uuid_correct_be
+   # uuid_correct_le: ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
+   # uuid_correct_le: ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
+   # uuid_correct_le: ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
+   ok 2 - uuid_correct_le
+   # uuid_wrong_be: ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+   # uuid_wrong_be: ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+   # uuid_wrong_be: ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+   ok 3 - uuid_wrong_be
+   # uuid_wrong_le: ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+   # uuid_wrong_le: ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+   # uuid_wrong_le: ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+   ok 4 - uuid_wrong_le
+ok 1 - uuid
+
+A test which failed could look like this:
+    # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+   Expected guid_parse(data->uuid, &le) =3D=3D 0, but
+       guid_parse(data->uuid, &le) =3D=3D -22
+
+failed to parse 'c33f499x5-3701-450e-9fbf-206a2e98e576'
+   # uuid_correct_le: not ok 1 - c33f499x5-3701-450e-9fbf-206a2e98e576
+   # uuid_correct_le: ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
+   # uuid_correct_le: ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
+   not ok 2 - uuid_correct_le
+
+>
+> Thanks!
+>
+> It's not your fault but I think we need to defer this until KUnit gains s=
+upport
+> of the run statistics. My guts telling me if we allow more and more conve=
+rsions
+> like this the point will vanish and nobody will care.
+
+Did the test statistics patch we sent out before meet your expectations?
+https://patchwork.kernel.org/project/linux-kselftest/patch/20201211072319.5=
+33803-1-davidgow@google.com/
+
+If so, we can tidy it up and try to push it through straight away, we
+were just waiting for a review from someone who wanted the feature.
+
+
+> I like the code, but I can give my tag after KUnit prints some kind of th=
+is:
+>
+>  * This is how the current output looks like in success:
+>
+>    test_uuid: all 18 tests passed
+>
+>  * And when it fails:
+>
+>    test_uuid: failed 18 out of 18 tests
+>
+
+There are some small restrictions on the exact format KUnit can use
+for this if we want to continue to match the (K)TAP specification
+which is being adopted by kselftest. The patch linked above should
+give something formatted like:
+
+# test_uuid: (0 / 4) tests failed (0 / 12 test parameters)
+
+Would that work for you?
+
+Cheers,
+-- David
