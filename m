@@ -2,288 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5091A3A30DE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 18:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732E23A311E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 18:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbhFJQmW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Jun 2021 12:42:22 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:58612 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbhFJQmS (ORCPT
+        id S231849AbhFJQo4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Jun 2021 12:44:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58653 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231891AbhFJQoK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Jun 2021 12:42:18 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 998EE1F43F42
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
-        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
-        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        tales.aparecida@gmail.com,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH v3 1/1] lib: Convert UUID runtime test to KUnit
-Date:   Thu, 10 Jun 2021 13:39:59 -0300
-Message-Id: <20210610163959.71634-2-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210610163959.71634-1-andrealmeid@collabora.com>
-References: <20210610163959.71634-1-andrealmeid@collabora.com>
+        Thu, 10 Jun 2021 12:44:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623343333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FTYsk+3ZrtMDgibB9knYQRxYmGEpuIUf1VdElxSCW6k=;
+        b=JZtwbgDmHT/FTNTZJCcT8RvVUwUvL1ch/XoOfaTT5YSWlnoR8brWPAePJ78jjfnpek3A1E
+        Wybf4xrnxK4hwoxiyrrgQxWv2NhVPNWtLbA09vFtYsoS6zUVIfe6Ff3R8qzZQL5T4AL2j8
+        CTtREtQcBcHgn5jznOl47kYzrJ9HnWM=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-304-rYKF1HBMN6qcCtrg9ag-Lg-1; Thu, 10 Jun 2021 12:42:10 -0400
+X-MC-Unique: rYKF1HBMN6qcCtrg9ag-Lg-1
+Received: by mail-wr1-f71.google.com with SMTP id z4-20020adfe5440000b0290114f89c9931so1219829wrm.17
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 09:42:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FTYsk+3ZrtMDgibB9knYQRxYmGEpuIUf1VdElxSCW6k=;
+        b=tIunGLPvtz73q1Ev2FSGgUhgFwyicDrrLfopwIV8phO/7JqI7n3HwEqQsyW3spuR/Z
+         RD3tOWw2nit03G/LXYzHPCbXtB2vGVp5/vhiEAOG+4dj48SHfAmYMghUBSr/ylK0F42/
+         CbfhokmWV6Yyi7sJO0vMb+oYNStELMPKA+bUsbG+ILc27kBfBi/MJITf5WE1V4ZGKxBK
+         TXcpvtEn20ULFAHsVYjx96YwteahqvBU9lY6oZyRk+0BkRl/kl2JK6NRp5mIylsrL7f2
+         kB3t3aID3ANrusgeDRu+VftwSSEs5vTT7OqhZtjcbsdaeNo+7F8JlvhPg99dNNCdhiuT
+         Acbg==
+X-Gm-Message-State: AOAM5328lDpeM7nXd5GiwBENZ0t2XfqLLKXyTSvxw6pKGuzWePT/HpjC
+        4mqzTGrf/aig16K8J7ywVxsG9yVqEVkUnIR61KvHYpWtyZObwt8rapb9HLdxtbAQsbE9LzbhutT
+        TzyG33UQ6/HS56s1/yt387n59fse7
+X-Received: by 2002:adf:ab49:: with SMTP id r9mr6556016wrc.237.1623343329056;
+        Thu, 10 Jun 2021 09:42:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwT8GKTcc6CtIM2Omfzfm3HSpY3IDEVA0VZ0HkqF8YvTQlmVrTL+SEqxKoSDnFCTA+GbV+zog==
+X-Received: by 2002:adf:ab49:: with SMTP id r9mr6556002wrc.237.1623343328880;
+        Thu, 10 Jun 2021 09:42:08 -0700 (PDT)
+Received: from ?IPv6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.gmail.com with ESMTPSA id f13sm4050941wrt.86.2021.06.10.09.42.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Jun 2021 09:42:08 -0700 (PDT)
+To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>
+References: <20210603211426.790093-1-jingzhangos@google.com>
+ <20210603211426.790093-3-jingzhangos@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v7 2/4] KVM: stats: Add fd-based API to read binary stats
+ data
+Message-ID: <345170fd-636c-f1be-7dc3-69467e51d872@redhat.com>
+Date:   Thu, 10 Jun 2021 18:42:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20210603211426.790093-3-jingzhangos@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove custom functions for testing and use KUnit framework. Keep the
-tested functions and test data the same.
+On 03/06/21 23:14, Jing Zhang wrote:
+> +struct _kvm_stats_header {
+> +	__u32 name_size;
+> +	__u32 count;
+> +	__u32 desc_offset;
+> +	__u32 data_offset;
+> +};
+> +
 
-Current test threat (g/u)uid_parse and (g/u)uid_equal as different test
-cases. Make both functions being part of the same test case, given the
-dependency regarding their results. This reduces the tests cases from 6
-cases to 4, while keeping the test coverage the same. Given that we have
-3 strings for each test case, current test output notifies 18 tests
-results, and the KUnit output announces 12 results.
+Keeping this struct in sync with kvm_stats_header is a bit messy.  If 
+you move the id at the end of the header, however, you can use the same 
+trick with the zero-sized array that you used for _kvm_stats_desc.
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
----
- lib/Kconfig.debug |  11 +++-
- lib/Makefile      |   2 +-
- lib/test_uuid.c   | 137 +++++++++++++++++++---------------------------
- 3 files changed, 67 insertions(+), 83 deletions(-)
+> +struct kvm_vm_stats_data {
+> +	unsigned long value[0];
+> +};
+> +
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 678c13967580..1d879197f303 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2188,8 +2188,15 @@ config TEST_BITMAP
- 
- 	  If unsure, say N.
- 
--config TEST_UUID
--	tristate "Test functions located in the uuid module at runtime"
-+config UUID_KUNIT_TEST
-+	tristate "Unit test for UUID" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the UUID unit test.
-+	  Tests parsing functions for UUID/GUID strings.
-+
-+	  If unsure, say N.
- 
- config TEST_XARRAY
- 	tristate "Test the XArray code at runtime"
-diff --git a/lib/Makefile b/lib/Makefile
-index 2cc359ec1fdd..cc19048961c0 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -85,7 +85,6 @@ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
- obj-$(CONFIG_TEST_PRINTF) += test_printf.o
- obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
- obj-$(CONFIG_TEST_STRSCPY) += test_strscpy.o
--obj-$(CONFIG_TEST_UUID) += test_uuid.o
- obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
- obj-$(CONFIG_TEST_PARMAN) += test_parman.o
- obj-$(CONFIG_TEST_KMOD) += test_kmod.o
-@@ -354,5 +353,6 @@ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
- obj-$(CONFIG_BITS_TEST) += test_bits.o
- obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-+obj-$(CONFIG_UUID_KUNIT_TEST) += test_uuid.o
- 
- obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
-diff --git a/lib/test_uuid.c b/lib/test_uuid.c
-index cd819c397dc7..65394ec5501e 100644
---- a/lib/test_uuid.c
-+++ b/lib/test_uuid.c
-@@ -1,21 +1,20 @@
-+// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
- /*
-- * Test cases for lib/uuid.c module.
-+ * Unit tests for lib/uuid.c module.
-+ *
-+ * Copyright 2016 Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+ * Copyright 2021 André Almeida <andrealmeid@riseup.net>
-  */
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
--#include <linux/init.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/string.h>
-+#include <kunit/test.h>
- #include <linux/uuid.h>
- 
--struct test_uuid_data {
-+struct test_data {
- 	const char *uuid;
- 	guid_t le;
- 	uuid_t be;
- };
- 
--static const struct test_uuid_data test_uuid_test_data[] = {
-+static const struct test_data correct_data[] = {
- 	{
- 		.uuid = "c33f4995-3701-450e-9fbf-206a2e98e576",
- 		.le = GUID_INIT(0xc33f4995, 0x3701, 0x450e, 0x9f, 0xbf, 0x20, 0x6a, 0x2e, 0x98, 0xe5, 0x76),
-@@ -33,101 +32,79 @@ static const struct test_uuid_data test_uuid_test_data[] = {
- 	},
- };
- 
--static const char * const test_uuid_wrong_data[] = {
-+static const char * const wrong_data[] = {
- 	"c33f4995-3701-450e-9fbf206a2e98e576 ",	/* no hyphen(s) */
- 	"64b4371c-77c1-48f9-8221-29f054XX023b",	/* invalid character(s) */
- 	"0cb4ddff-a545-4401-9d06-688af53e",	/* not enough data */
- };
- 
--static unsigned total_tests __initdata;
--static unsigned failed_tests __initdata;
--
--static void __init test_uuid_failed(const char *prefix, bool wrong, bool be,
--				    const char *data, const char *actual)
-+static void uuid_correct_le(struct kunit *test)
- {
--	pr_err("%s test #%u %s %s data: '%s'\n",
--	       prefix,
--	       total_tests,
--	       wrong ? "passed on wrong" : "failed on",
--	       be ? "BE" : "LE",
--	       data);
--	if (actual && *actual)
--		pr_err("%s test #%u actual data: '%s'\n",
--		       prefix,
--		       total_tests,
--		       actual);
--	failed_tests++;
-+	guid_t le;
-+	const struct test_data *data = (const struct test_data *)(test->param_value);
-+
-+	KUNIT_ASSERT_EQ_MSG(test, guid_parse(data->uuid, &le), 0,
-+			    "failed to parse '%s'", data->uuid);
-+	KUNIT_EXPECT_TRUE_MSG(test, guid_equal(&data->le, &le),
-+			      "'%s' should be equal to %pUl", data->uuid, &le);
- }
- 
--static void __init test_uuid_test(const struct test_uuid_data *data)
-+static void uuid_correct_be(struct kunit *test)
- {
--	guid_t le;
- 	uuid_t be;
--	char buf[48];
--
--	/* LE */
--	total_tests++;
--	if (guid_parse(data->uuid, &le))
--		test_uuid_failed("conversion", false, false, data->uuid, NULL);
--
--	total_tests++;
--	if (!guid_equal(&data->le, &le)) {
--		sprintf(buf, "%pUl", &le);
--		test_uuid_failed("cmp", false, false, data->uuid, buf);
--	}
--
--	/* BE */
--	total_tests++;
--	if (uuid_parse(data->uuid, &be))
--		test_uuid_failed("conversion", false, true, data->uuid, NULL);
--
--	total_tests++;
--	if (!uuid_equal(&data->be, &be)) {
--		sprintf(buf, "%pUb", &be);
--		test_uuid_failed("cmp", false, true, data->uuid, buf);
--	}
-+	const struct test_data *data = (const struct test_data *)(test->param_value);
-+
-+	KUNIT_ASSERT_EQ_MSG(test, uuid_parse(data->uuid, &be), 0,
-+			    "failed to parse '%s'", data->uuid);
-+	KUNIT_EXPECT_TRUE_MSG(test, uuid_equal(&data->be, &be),
-+			      "'%s' should be equal to %pUl", data->uuid, &be);
- }
- 
--static void __init test_uuid_wrong(const char *data)
-+static void uuid_wrong_le(struct kunit *test)
- {
- 	guid_t le;
--	uuid_t be;
--
--	/* LE */
--	total_tests++;
--	if (!guid_parse(data, &le))
--		test_uuid_failed("negative", true, false, data, NULL);
-+	const char **data = (const char **)(test->param_value);
- 
--	/* BE */
--	total_tests++;
--	if (!uuid_parse(data, &be))
--		test_uuid_failed("negative", true, true, data, NULL);
-+	KUNIT_ASSERT_NE_MSG(test, guid_parse(*data, &le), 0,
-+			    "parsing of '%s' should've failed", *data);
- }
- 
--static int __init test_uuid_init(void)
-+static void uuid_wrong_be(struct kunit *test)
- {
--	unsigned int i;
--
--	for (i = 0; i < ARRAY_SIZE(test_uuid_test_data); i++)
--		test_uuid_test(&test_uuid_test_data[i]);
--
--	for (i = 0; i < ARRAY_SIZE(test_uuid_wrong_data); i++)
--		test_uuid_wrong(test_uuid_wrong_data[i]);
-+	uuid_t be;
-+	const char **data = (const char **)(test->param_value);
- 
--	if (failed_tests == 0)
--		pr_info("all %u tests passed\n", total_tests);
--	else
--		pr_err("failed %u out of %u tests\n", failed_tests, total_tests);
-+	KUNIT_ASSERT_NE_MSG(test, uuid_parse(*data, &be), 0,
-+			    "parsing of '%s' should've failed", *data);
-+}
- 
--	return failed_tests ? -EINVAL : 0;
-+static void case_to_desc_correct(const struct test_data *t, char *desc)
-+{
-+	strcpy(desc, t->uuid);
- }
--module_init(test_uuid_init);
- 
--static void __exit test_uuid_exit(void)
-+KUNIT_ARRAY_PARAM(correct, correct_data, case_to_desc_correct);
-+
-+static void case_to_desc_wrong(const char * const *s, char *desc)
- {
--	/* do nothing */
-+	strcpy(desc, *s);
- }
--module_exit(test_uuid_exit);
-+
-+KUNIT_ARRAY_PARAM(wrong, wrong_data, case_to_desc_wrong);
-+
-+static struct kunit_case uuid_test_cases[] = {
-+	KUNIT_CASE_PARAM(uuid_correct_be, correct_gen_params),
-+	KUNIT_CASE_PARAM(uuid_correct_le, correct_gen_params),
-+	KUNIT_CASE_PARAM(uuid_wrong_be, wrong_gen_params),
-+	KUNIT_CASE_PARAM(uuid_wrong_le, wrong_gen_params),
-+	{}
-+};
-+
-+static struct kunit_suite uuid_test_suite = {
-+	.name = "uuid",
-+	.test_cases = uuid_test_cases,
-+};
-+kunit_test_suite(uuid_test_suite);
- 
- MODULE_AUTHOR("Andy Shevchenko <andriy.shevchenko@linux.intel.com>");
- MODULE_LICENSE("Dual BSD/GPL");
--- 
-2.32.0
+I posted the patch to switch the VM statistics to 64-bit; you can rebase 
+on top of it.
+
+> +#define KVM_GET_STATS_FD  _IOR(KVMIO,  0xcc, struct kvm_stats_header)
+
+This should be _IO(KVMIO, 0xcc) since it does not have an argument.
+
+> +#define STATS_DESC(stat, type, unit, scale, exp)			       \
+> +	{								       \
+> +		{							       \
+> +			.flags = type | unit | scale,			       \
+> +			.exponent = exp,				       \
+> +			.size = 1					       \
+> +		},							       \
+> +		.name = stat,						       \
+
+Here you can use
+
+	type | BUILD_BUG_ON_ZERO(type & ~KVM_STATS_TYPE_MASK) |
+	unit | BUILD_BUG_ON_ZERO(unit & ~KVM_STATS_UNIT_MASK) |
+	scale | BUILD_BUG_ON_ZERO(scale & ~KVM_STATS_SCALE_MASK) |
+
+to get a little bit of type checking.
+
+Paolo
 
