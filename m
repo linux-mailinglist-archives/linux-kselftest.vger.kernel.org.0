@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 677C93A2709
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 10:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D863A270A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jun 2021 10:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbhFJIcb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Jun 2021 04:32:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53980 "EHLO mail.kernel.org"
+        id S230252AbhFJIce (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Jun 2021 04:32:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54066 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230144AbhFJIc3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Jun 2021 04:32:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C68A6613F5;
-        Thu, 10 Jun 2021 08:30:32 +0000 (UTC)
+        id S230241AbhFJIcb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Jun 2021 04:32:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 572E3613E7;
+        Thu, 10 Jun 2021 08:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623313833;
-        bh=DL/k3s8vUW6PwKHS5SFkQoOjuaQwVeGOqUP3a+TVVvI=;
+        s=k20201202; t=1623313835;
+        bh=x8L2XbT7UeF/YX+xMXCb8IgKRZGfTLgzOlAx/pbaHjc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q3dG/lI7pRMGURzmskBoqL5Ihpq1Hys8EJVXft6sffjdZa3WUL34DXcn/0Q24A7al
-         DUZL8V3Fl9sq24kfgIBOb2Hx5twGDR5AkuYcYfHpT8AQbgXLn4EgGaFUjwTPotvbIh
-         WGUVUzpc54e6qCh7iUb2dTzldLexc7cJQo9VlnkYY0E+siQkANJmLuANTS+XrByqde
-         LILOPhjl53HAXujmfQKc4hYAtGTud9DtnN9AUjRirB+vEvOuiK5l0Xd0y+u8u/BL+p
-         ercdfmvik/vX+f4zdUFsWVRj/wXU4y25B6x7W1veMbbEUquRdioV+OeVySsGWem+wO
-         jWFVgichzZvJA==
+        b=dbHFvJAu+5bqyUdSvaH7thgy4D9ZlZbi69IEkoAc6dhDAMTRU3PVxhjSrL9iOArXS
+         dekLPr9ez9u1lkLzkORFOgqkOiYNhEcc580XaEQTrkTVihlG6Bfc2KVkuYbZs//iw4
+         Mq6XfwESpbbh4hun25piK1YyOqXXG7BI6do+DOakDIIstnCj4DIKKm7BqpCbus1IYe
+         pi1zmqPtZL58gjn9gQnyonBtTh3+R3fDt0MrAd7oYwOhv9YJGBnuHIslo14tCGoQsI
+         nOaDmUWeRBai3PMB3A7O69on85xfrOoDqo/zCQIjPIZP1/fJ00/rgHTItMRMBTanfG
+         tGwcbcOrKA9iA==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     shuah@kernel.org
 Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
@@ -30,9 +30,9 @@ Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v8 3/5] selftests/sgx: Dump enclave memory map
-Date:   Thu, 10 Jun 2021 11:30:19 +0300
-Message-Id: <20210610083021.392269-3-jarkko@kernel.org>
+Subject: [PATCH v8 4/5] selftests/sgx: Add EXPECT_EEXIT() macro
+Date:   Thu, 10 Jun 2021 11:30:20 +0300
+Message-Id: <20210610083021.392269-4-jarkko@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210610083021.392269-1-jarkko@kernel.org>
 References: <20210610083021.392269-1-jarkko@kernel.org>
@@ -42,48 +42,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Often, it's useful to check whether /proc/self/maps looks sane when
-dealing with memory mapped objects, especially when they are JIT'ish
-dynamically constructed objects. Therefore, dump "/dev/sgx_enclave"
-matching lines from the memory map in FIXTURE_SETUP().
+Add EXPECT_EEXIT() macro, which will conditionally print the exception
+information, in addition to
+
+  EXPECT_EQ(self->run.function, EEXIT);
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- tools/testing/selftests/sgx/main.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ tools/testing/selftests/sgx/main.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 6da19b6bf287..14030f8b85ff 100644
+index 14030f8b85ff..bcd0257f48e0 100644
 --- a/tools/testing/selftests/sgx/main.c
 +++ b/tools/testing/selftests/sgx/main.c
-@@ -117,6 +117,8 @@ FIXTURE_SETUP(enclave)
- 	Elf64_Sym *sgx_enter_enclave_sym = NULL;
- 	struct vdso_symtab symtab;
- 	struct encl_segment *seg;
-+	char maps_line[256];
-+	FILE *maps_file;
- 	unsigned int i;
- 	void *addr;
+@@ -205,6 +205,14 @@ FIXTURE_TEARDOWN(enclave)
+ 		ret; \
+ 	})
  
-@@ -167,6 +169,18 @@ FIXTURE_SETUP(enclave)
- 	memset(&self->run, 0, sizeof(self->run));
- 	self->run.tcs = self->encl.encl_base;
++#define EXPECT_EEXIT(run) \
++	do { \
++		EXPECT_EQ((run)->function, EEXIT); \
++		if ((run)->function != EEXIT) \
++			TH_LOG("0x%02x 0x%02x 0x%016llx", (run)->exception_vector, \
++			       (run)->exception_error_code, (run)->exception_addr); \
++	} while (0)
++
+ TEST_F(enclave, unclobbered_vdso)
+ {
+ 	uint64_t result = 0;
+@@ -212,7 +220,7 @@ TEST_F(enclave, unclobbered_vdso)
+ 	EXPECT_EQ(ENCL_CALL(&MAGIC, &result, &self->run, false), 0);
  
-+	maps_file = fopen("/proc/self/maps", "r");
-+	if (maps_file != NULL)  {
-+		while (fgets(maps_line, sizeof(maps_line), maps_file) != NULL) {
-+			maps_line[strlen(maps_line) - 1] = '\0';
-+
-+			if (strstr(maps_line, "/dev/sgx_enclave"))
-+				TH_LOG("%s", maps_line);
-+		}
-+
-+		fclose(maps_file);
-+	}
-+
- err:
- 	if (!sgx_enter_enclave_sym)
- 		encl_delete(&self->encl);
+ 	EXPECT_EQ(result, MAGIC);
+-	EXPECT_EQ(self->run.function, EEXIT);
++	EXPECT_EEXIT(&self->run);
+ 	EXPECT_EQ(self->run.user_data, 0);
+ }
+ 
+@@ -223,7 +231,7 @@ TEST_F(enclave, clobbered_vdso)
+ 	EXPECT_EQ(ENCL_CALL(&MAGIC, &result, &self->run, true), 0);
+ 
+ 	EXPECT_EQ(result, MAGIC);
+-	EXPECT_EQ(self->run.function, EEXIT);
++	EXPECT_EEXIT(&self->run);
+ 	EXPECT_EQ(self->run.user_data, 0);
+ }
+ 
+@@ -245,7 +253,7 @@ TEST_F(enclave, clobbered_vdso_and_user_function)
+ 	EXPECT_EQ(ENCL_CALL(&MAGIC, &result, &self->run, true), 0);
+ 
+ 	EXPECT_EQ(result, MAGIC);
+-	EXPECT_EQ(self->run.function, EEXIT);
++	EXPECT_EEXIT(&self->run);
+ 	EXPECT_EQ(self->run.user_data, 0);
+ }
+ 
 -- 
 2.31.1
 
