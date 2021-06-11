@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC5C3A4257
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 14:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1241F3A425A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 14:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbhFKMtb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Jun 2021 08:49:31 -0400
-Received: from mail-qv1-f74.google.com ([209.85.219.74]:57275 "EHLO
-        mail-qv1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbhFKMta (ORCPT
+        id S231689AbhFKMtd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Jun 2021 08:49:33 -0400
+Received: from mail-yb1-f202.google.com ([209.85.219.202]:57262 "EHLO
+        mail-yb1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231672AbhFKMtc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Jun 2021 08:49:30 -0400
-Received: by mail-qv1-f74.google.com with SMTP id n4-20020ad44a240000b029021cbf9668daso22332874qvz.23
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jun 2021 05:47:32 -0700 (PDT)
+        Fri, 11 Jun 2021 08:49:32 -0400
+Received: by mail-yb1-f202.google.com with SMTP id m205-20020a25d4d60000b029052a8de1fe41so3826493ybf.23
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jun 2021 05:47:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=vStJSCCy/8hKNuR4UL6jvbaoNJGwF3optLjr0NSWPv4=;
-        b=OWhkQ9sylK5MwBRRQxC7N4CoE3JFDP/u2EBngkOJLLjJbueSAg3isPn0vkSAfkvI3y
-         kZDUPO/amUiJqCDfPm5RmUVxV5E6AHgPRB27NZddAlKXIKksNFan9E7lXz9qlX+GQMwZ
-         zoWaNzGkpdy3PkvfX+tDDiN4vdW10i7AucrPxqrFPsXwzwykBxBxRLX1pO7uQ4OgmF6n
-         TKyJye/ImTXpz8SVgTEmsCpTAF3F9VNTvMHsHSrLWF8x3swcop5XgCtvRGbUNikJ/gcu
-         Bwcksovaucj5Qj74VW4oQcoVHqw/G4aFpTiI0DXjn86+/20aufVPeONQ+HRSHCMvTxdT
-         A6OA==
+        bh=vxIxoURJWoIGi4x2QXm7JVqo//h/j8t0E4RvDHudu70=;
+        b=qniHIVQAEKYoC4Vgf/QN2x9HcZjyMcYNRQLn6znAAKqoGHDklxa/QpXalKV+y9wVma
+         PiltmZwbslVx/QuEO4a018RqF1JT/G4ck40FEIyek9MGh00g6MKHET6IdI8skn4TH43I
+         Im3DXDml2yN5eY1Gc1xtWZKll1xOUvrMXG8V3y9DbTn/BRr0o5KQn6SY8myBvaU6xiIp
+         jJfJiWwG34o9dD8qB4OdMwiKbNuRtx0AaWhvK35+OjxT/nH0MFBNAkV0uo3jQ1IyRyDr
+         +hVtv56P/knTsQpRI+gYogrNJf3+fyk9c9ToRbjSvAkBrzPJlf+tUEmjLcidM9T1bLrg
+         XP0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=vStJSCCy/8hKNuR4UL6jvbaoNJGwF3optLjr0NSWPv4=;
-        b=cvPR9lSuNpXyiA9VtRrViJby63gLLGbp4hFlWwKwoqeJGGHp3iwHHyrga07Nk0zk/V
-         WrTAX7Iy2ED22FTilzJXOh/PpXKn1nI2OYmuwrIrj8Vl6hxgwT+AAmmq9SMLf6JlIUCC
-         WkmD67hbCod4Foqm7qN2FBrlcjTMsMbrBGbTnQbItkAUx7N3LZheQSWXh5vCi64/PJcv
-         wSq2ljwAluX4zhqWzmYXmLegADcmWWPAkUqywn69eUPOBLz+1X1YioYt5xIrgbSUGHzW
-         L//0DS3tZyjgUcFAgwWuVq509XcrkLVWAzRQsoPBFqYg9slgwaCxngL+gmZAKyA4Hy5S
-         xrOg==
-X-Gm-Message-State: AOAM532ElVX2zY9KLoapNDv4179Mg+I1eeHaDLZsD765cw4UeovrMxOs
-        KcxsXwPWiMD9eDOM4PIYUEMVshBUK4RYQ+uhgg==
-X-Google-Smtp-Source: ABdhPJwtdxCpJMN5/JNK03EXS+ID0+gg6Rk4Cgbkywic0ue2zGwqD8Ohv/RBE7nt7MVTFGWnZKP5O5ElVOnZE8qcaQ==
+        bh=vxIxoURJWoIGi4x2QXm7JVqo//h/j8t0E4RvDHudu70=;
+        b=c2ulg5n/ax3PdwAMvFfBKw46tHAub+6uDUdWwjCjMhfnRvHaL+2dmzfWKWF9oZGFk8
+         fLzulDavrenga9KHDyYRAeRwOV/WloYRFvtI+nNfbH+sIepydpWvPdRiCSufiENhE+4j
+         unEAUIZbMqvnvXKtNeOh8l2CXa4JSK09ZYJRxZryaQ16gM/fuggAzOwUJGNy9i7C4FO1
+         o59WWsDkcBIYBtV3AZ3xdHGHZCnOfrBTntphjUsveeWlBjIjL9Xi3pq7l9mYkcIYk7DV
+         1TCojRtUS0ExnoC4wjz+22d17jLGr7qYo8rIipAt0vvDohRleLQcXZmgxtXu+2jVhqgu
+         B4qA==
+X-Gm-Message-State: AOAM531Yt1Tg7jLZIr7jC2vs3JzEVriIqGcqzaVPb+rqvrwhvj0z/cz1
+        etKpRa2MCZ8X3Hqb1l4kOHVthkuyeU7ccth2qw==
+X-Google-Smtp-Source: ABdhPJxZcXqdDsIf6sK0+mPqvjRrSzaRK8AMKGcLW4eBgIx2IsLznTilI0qgnj8/NBdVVvE5LCONL7kjVtjDcNCfog==
 X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
- (user=jingzhangos job=sendgmr) by 2002:a05:6214:1c0d:: with SMTP id
- u13mr4595363qvc.49.1623415592336; Fri, 11 Jun 2021 05:46:32 -0700 (PDT)
-Date:   Fri, 11 Jun 2021 12:46:23 +0000
+ (user=jingzhangos job=sendgmr) by 2002:a25:5f09:: with SMTP id
+ t9mr5262136ybb.7.1623415594070; Fri, 11 Jun 2021 05:46:34 -0700 (PDT)
+Date:   Fri, 11 Jun 2021 12:46:24 +0000
 In-Reply-To: <20210611124624.1404010-1-jingzhangos@google.com>
-Message-Id: <20210611124624.1404010-4-jingzhangos@google.com>
+Message-Id: <20210611124624.1404010-5-jingzhangos@google.com>
 Mime-Version: 1.0
 References: <20210611124624.1404010-1-jingzhangos@google.com>
 X-Mailer: git-send-email 2.32.0.272.g935e593368-goog
-Subject: [PATCH v8 3/4] KVM: stats: Add documentation for statistics data
+Subject: [PATCH v8 4/4] KVM: selftests: Add selftest for KVM statistics data
  binary interface
 From:   Jing Zhang <jingzhangos@google.com>
 To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
@@ -87,212 +87,314 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Update KVM API documentation for binary statistics.
+Add selftest to check KVM stats descriptors validity.
 
 Reviewed-by: David Matlack <dmatlack@google.com>
 Reviewed-by: Ricardo Koller <ricarkol@google.com>
 Reviewed-by: Krish Sadhukhan <krish.sadhukhan@oracle.com>
 Signed-off-by: Jing Zhang <jingzhangos@google.com>
 ---
- Documentation/virt/kvm/api.rst | 174 ++++++++++++++++++++++++++++++++-
- 1 file changed, 173 insertions(+), 1 deletion(-)
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   3 +
+ .../selftests/kvm/kvm_binary_stats_test.c     | 218 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
+ 5 files changed, 237 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/kvm_binary_stats_test.c
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index cded99561adf..4ccad2e449e2 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -5034,7 +5034,6 @@ see KVM_XEN_VCPU_SET_ATTR above.
- The KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADJUST type may not be used
- with the KVM_XEN_VCPU_GET_ATTR ioctl.
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index e0e14150744e..ebe81d67c738 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -46,3 +46,4 @@
+ /memslot_perf_test
+ /set_memory_region_test
+ /steal_time
++/kvm_binary_stats_test
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 61e2accd080d..8e4eaf8cdc06 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -79,6 +79,7 @@ TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
+ TEST_GEN_PROGS_x86_64 += memslot_perf_test
+ TEST_GEN_PROGS_x86_64 += set_memory_region_test
+ TEST_GEN_PROGS_x86_64 += steal_time
++TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
  
--
- 4.131 KVM_GET_SREGS2
- ------------------
+ TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
+ TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list-sve
+@@ -90,6 +91,7 @@ TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+ TEST_GEN_PROGS_aarch64 += kvm_page_table_test
+ TEST_GEN_PROGS_aarch64 += set_memory_region_test
+ TEST_GEN_PROGS_aarch64 += steal_time
++TEST_GEN_PROGS_aarch64 += kvm_binary_stats_test
  
-@@ -5081,6 +5080,171 @@ Writes special registers into the vcpu.
- See KVM_GET_SREGS2 for the data structures.
- This ioctl (when supported) replaces the KVM_SET_SREGS.
+ TEST_GEN_PROGS_s390x = s390x/memop
+ TEST_GEN_PROGS_s390x += s390x/resets
+@@ -99,6 +101,7 @@ TEST_GEN_PROGS_s390x += dirty_log_test
+ TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+ TEST_GEN_PROGS_s390x += kvm_page_table_test
+ TEST_GEN_PROGS_s390x += set_memory_region_test
++TEST_GEN_PROGS_s390x += kvm_binary_stats_test
  
-+4.133 KVM_GET_STATS_FD
-+---------------------
-+
-+:Capability: KVM_CAP_STATS_BINARY_FD
-+:Architectures: all
-+:Type: vm ioctl, vcpu ioctl
-+:Parameters: none
-+:Returns: statistics file descriptor on success, < 0 on error
-+
-+Errors:
-+
-+  ======     ======================================================
-+  ENOMEM     if the fd could not be created due to lack of memory
-+  EMFILE     if the number of opened files exceeds the limit
-+  ======     ======================================================
-+
-+The file descriptor can be used to read VM/vCPU statistics data in binary
-+format. The file data is organized into three blocks as below:
-++-------------+
-+|   Header    |
-++-------------+
-+| Descriptors |
-++-------------+
-+| Stats Data  |
-++-------------+
-+
-+The Header block is always at the start of the file. It is only needed to be
-+read one time for the lifetime of the file descriptor.
-+It is in the form of ``struct kvm_stats_header`` as below::
-+
-+	#define KVM_STATS_ID_MAXLEN		64
-+
-+	struct kvm_stats_header {
-+		__u32 name_size;
-+		__u32 count;
-+		__u32 desc_offset;
-+		__u32 data_offset;
-+		char id[0];
-+	};
-+
-+The ``id`` field is identification for the corresponding KVM statistics. For
-+VM statistics, it is in the form of "kvm-{kvm pid}", like "kvm-12345". For
-+VCPU statistics, it is in the form of "kvm-{kvm pid}/vcpu-{vcpu id}", like
-+"kvm-12345/vcpu-12".
-+
-+The ``name_size`` field is the size (byte) of the statistics name string
-+(including trailing '\0') appended to the end of every statistics descriptor.
-+
-+The ``count`` field is the number of statistics.
-+
-+The ``desc_offset`` field is the offset of the Descriptors block from the start
-+of the file indicated by the file descriptor.
-+
-+The ``data_offset`` field is the offset of the Stats Data block from the start
-+of the file indicated by the file descriptor.
-+
-+The Descriptors block is only needed to be read once for the lifetime of the
-+file descriptor. It is an array of ``struct kvm_stats_desc`` as shown in
-+below code block::
-+
-+	#define KVM_STATS_TYPE_SHIFT		0
-+	#define KVM_STATS_TYPE_MASK		(0xF << KVM_STATS_TYPE_SHIFT)
-+	#define KVM_STATS_TYPE_CUMULATIVE	(0x0 << KVM_STATS_TYPE_SHIFT)
-+	#define KVM_STATS_TYPE_INSTANT		(0x1 << KVM_STATS_TYPE_SHIFT)
-+	#define KVM_STATS_TYPE_MAX		KVM_STATS_TYPE_INSTANT
-+
-+	#define KVM_STATS_UNIT_SHIFT		4
-+	#define KVM_STATS_UNIT_MASK		(0xF << KVM_STATS_UNIT_SHIFT)
-+	#define KVM_STATS_UNIT_NONE		(0x0 << KVM_STATS_UNIT_SHIFT)
-+	#define KVM_STATS_UNIT_BYTES		(0x1 << KVM_STATS_UNIT_SHIFT)
-+	#define KVM_STATS_UNIT_SECONDS		(0x2 << KVM_STATS_UNIT_SHIFT)
-+	#define KVM_STATS_UNIT_CYCLES		(0x3 << KVM_STATS_UNIT_SHIFT)
-+	#define KVM_STATS_UNIT_MAX		KVM_STATS_UNIT_CYCLES
-+
-+	#define KVM_STATS_BASE_SHIFT		8
-+	#define KVM_STATS_BASE_MASK		(0xF << KVM_STATS_BASE_SHIFT)
-+	#define KVM_STATS_BASE_POW10		(0x0 << KVM_STATS_BASE_SHIFT)
-+	#define KVM_STATS_BASE_POW2		(0x1 << KVM_STATS_BASE_SHIFT)
-+	#define KVM_STATS_BASE_MAX		KVM_STATS_BASE_POW2
-+
-+	struct kvm_stats_desc {
-+		__u32 flags;
-+		__s16 exponent;
-+		__u16 size;
-+		__u32 unused1;
-+		__u32 unused2;
-+		char name[0];
-+	};
-+
-+The ``flags`` field contains the type and unit of the statistics data described
-+by this descriptor. The following flags are supported:
-+
-+Bits 0-3 of ``flags`` encode the type:
-+  * ``KVM_STATS_TYPE_CUMULATIVE``
-+    The statistics data is cumulative. The value of data can only be increased.
-+    Most of the counters used in KVM are of this type.
-+    The corresponding ``count`` filed for this type is always 1.
-+  * ``KVM_STATS_TYPE_INSTANT``
-+    The statistics data is instantaneous. Its value can be increased or
-+    decreased. This type is usually used as a measurement of some resources,
-+    like the number of dirty pages, the number of large pages, etc.
-+    The corresponding ``count`` field for this type is always 1.
-+
-+Bits 4-7 of ``flags`` encode the unit:
-+  * ``KVM_STATS_UNIT_NONE``
-+    There is no unit for the value of statistics data. This usually means that
-+    the value is a simple counter of an event.
-+  * ``KVM_STATS_UNIT_BYTES``
-+    It indicates that the statistics data is used to measure memory size, in the
-+    unit of Byte, KiByte, MiByte, GiByte, etc. The unit of the data is
-+    determined by the ``exponent`` field in the descriptor. The
-+    ``KVM_STATS_BASE_POW2`` flag is valid in this case. The unit of the data is
-+    determined by ``pow(2, exponent)``. For example, if value is 10,
-+    ``exponent`` is 20, which means the unit of statistics data is MiByte, we
-+    can get the statistics data in the unit of Byte by
-+    ``value * pow(2, exponent) = 10 * pow(2, 20) = 10 MiByte`` which is
-+    10 * 1024 * 1024 Bytes.
-+  * ``KVM_STATS_UNIT_SECONDS``
-+    It indicates that the statistics data is used to measure time/latency, in
-+    the unit of nanosecond, microsecond, millisecond and second. The unit of the
-+    data is determined by the ``exponent`` field in the descriptor. The
-+    ``KVM_STATS_BASE_POW10`` flag is valid in this case. The unit of the data
-+    is determined by ``pow(10, exponent)``. For example, if value is 2000000,
-+    ``exponent`` is -6, which means the unit of statistics data is microsecond,
-+    we can get the statistics data in the unit of second by
-+    ``value * pow(10, exponent) = 2000000 * pow(10, -6) = 2 seconds``.
-+  * ``KVM_STATS_UNIT_CYCLES``
-+    It indicates that the statistics data is used to measure CPU clock cycles.
-+    The ``KVM_STATS_BASE_POW10`` flag is valid in this case. For example, if
-+    value is 200, ``exponent`` is 4, we can get the number of CPU clock cycles
-+    by ``value * pow(10, exponent) = 200 * pow(10, 4) = 2000000``.
-+
-+Bits 7-11 of ``flags`` encode the base:
-+  * ``KVM_STATS_BASE_POW10``
-+    The scale is based on power of 10. It is used for measurement of time and
-+    CPU clock cycles.
-+  * ``KVM_STATS_BASE_POW2``
-+    The scale is based on power of 2. It is used for measurement of memory size.
-+
-+The ``exponent`` field is the scale of corresponding statistics data. For
-+example, if the unit is ``KVM_STATS_UNIT_BYTES``, the base is
-+``KVM_STATS_BASE_POW2``, the ``exponent`` is 10, then we know that the real
-+unit of the statistics data is KBytes a.k.a pow(2, 10) = 1024 bytes.
-+
-+The ``size`` field is the number of values of this statistics data. It is in the
-+unit of ``unsigned long`` for VM or ``__u64`` for VCPU.
-+
-+The ``unused1`` and ``unused2`` fields are reserved for future
-+support for other types of statistics data, like log/linear histogram.
-+
-+The ``name`` field points to the name string of the statistics data. The name
-+string starts at the end of ``struct kvm_stats_desc``.
-+The maximum length (including trailing '\0') is indicated by ``name_size``
-+in ``struct kvm_stats_header``.
-+
-+The Stats Data block contains an array of data values of type ``struct
-+kvm_vm_stats_data`` or ``struct kvm_vcpu_stats_data``. It would be read by
-+user space periodically to pull statistics data.
-+The order of data value in Stats Data block is the same as the order of
-+descriptors in Descriptors block.
-+  * Statistics data for VM/VCPU::
-+
-+	struct kvm_stats_data {
-+		__u64 value[0];
-+	};
+ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
+ LIBKVM += $(LIBKVM_$(UNAME_M))
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index 35739567189e..558b450f3d7c 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -391,4 +391,7 @@ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc);
+ #define GUEST_ASSERT_4(_condition, arg1, arg2, arg3, arg4) \
+ 	__GUEST_ASSERT((_condition), 4, (arg1), (arg2), (arg3), (arg4))
  
- 5. The kvm_run structure
- ========================
-@@ -6950,3 +7114,11 @@ guest according to the bits Hyper-V CPUID feature leaves. Otherwise, all
- currently implmented Hyper-V features are provided unconditionally when
- Hyper-V identification is set in the HYPERV_CPUID_INTERFACE (0x40000001)
- leaf.
++int vm_get_stats_fd(struct kvm_vm *vm);
++int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
 +
-+8.34 KVM_CAP_STATS_BINARY_FD
-+----------------------------
+ #endif /* SELFTEST_KVM_UTIL_H */
+diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+new file mode 100644
+index 000000000000..d85859a6815a
+--- /dev/null
++++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+@@ -0,0 +1,218 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * kvm_binary_stats_test
++ *
++ * Copyright (C) 2021, Google LLC.
++ *
++ * Test the fd-based interface for KVM statistics.
++ */
 +
-+:Architectures: all
++#define _GNU_SOURCE /* for program_invocation_short_name */
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <errno.h>
 +
-+This capability indicates the feature that user space can create get a file
-+descriptor for every VM and VCPU to read statistics data in binary format.
++#include "test_util.h"
++
++#include "kvm_util.h"
++#include "asm/kvm.h"
++#include "linux/kvm.h"
++
++static void stats_test(int stats_fd)
++{
++	ssize_t ret;
++	int i;
++	size_t size_desc, size_data = 0;
++	struct kvm_stats_header *header;
++	struct kvm_stats_desc *stats_desc, *pdesc;
++	struct kvm_stats_data *stats_data;
++	size_t size_header = sizeof(*header) + KVM_STATS_ID_MAXLEN;
++
++	/* Read kvm stats header */
++	header = malloc(size_header);
++	TEST_ASSERT(header, "Allocate memory for stats header");
++
++	ret = read(stats_fd, header, size_header);
++	TEST_ASSERT(ret == size_header, "Read stats header");
++	size_desc = sizeof(*stats_desc) + header->name_size;
++
++	/* Check id string in header, that should start with "kvm" */
++	TEST_ASSERT(!strncmp(header->id, "kvm", 3) &&
++			strlen(header->id) < KVM_STATS_ID_MAXLEN,
++			"Invalid KVM stats type, id: %s", header->id);
++
++	/* Sanity check for other fields in header */
++	if (header->count == 0) {
++		printf("No KVM stats defined!");
++		return;
++	}
++	/* Check overlap */
++	TEST_ASSERT(header->desc_offset > 0 && header->data_offset > 0
++			&& header->desc_offset >= size_header
++			&& header->data_offset >= size_header,
++			"Invalid offset fields in header");
++	TEST_ASSERT(header->desc_offset > header->data_offset
++			|| (header->desc_offset + size_desc * header->count <=
++				header->data_offset),
++			"Descriptor block is overlapped with data block");
++
++	/* Allocate memory for stats descriptors */
++	stats_desc = calloc(header->count, size_desc);
++	TEST_ASSERT(stats_desc, "Allocate memory for stats descriptors");
++	/* Read kvm stats descriptors */
++	ret = pread(stats_fd, stats_desc,
++			size_desc * header->count, header->desc_offset);
++	TEST_ASSERT(ret == size_desc * header->count,
++			"Read KVM stats descriptors");
++
++	/* Sanity check for fields in descriptors */
++	for (i = 0; i < header->count; ++i) {
++		pdesc = (void *)stats_desc + i * size_desc;
++		/* Check type,unit,base boundaries */
++		TEST_ASSERT((pdesc->flags & KVM_STATS_TYPE_MASK)
++				<= KVM_STATS_TYPE_MAX, "Unknown KVM stats type");
++		TEST_ASSERT((pdesc->flags & KVM_STATS_UNIT_MASK)
++				<= KVM_STATS_UNIT_MAX, "Unknown KVM stats unit");
++		TEST_ASSERT((pdesc->flags & KVM_STATS_BASE_MASK)
++				<= KVM_STATS_BASE_MAX, "Unknown KVM stats base");
++		/* Check exponent for stats unit
++		 * Exponent for counter should be greater than or equal to 0
++		 * Exponent for unit bytes should be greater than or equal to 0
++		 * Exponent for unit seconds should be less than or equal to 0
++		 * Exponent for unit clock cycles should be greater than or
++		 * equal to 0
++		 */
++		switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
++		case KVM_STATS_UNIT_NONE:
++		case KVM_STATS_UNIT_BYTES:
++		case KVM_STATS_UNIT_CYCLES:
++			TEST_ASSERT(pdesc->exponent >= 0,
++					"Unsupported KVM stats unit");
++			break;
++		case KVM_STATS_UNIT_SECONDS:
++			TEST_ASSERT(pdesc->exponent <= 0,
++					"Unsupported KVM stats unit");
++			break;
++		}
++		/* Check name string */
++		TEST_ASSERT(strlen(pdesc->name) < header->name_size,
++				"KVM stats name(%s) too long", pdesc->name);
++		/* Check size field, which should not be zero */
++		TEST_ASSERT(pdesc->size, "KVM descriptor(%s) with size of 0",
++				pdesc->name);
++		size_data += pdesc->size * sizeof(stats_data->value[0]);
++	}
++	/* Check overlap */
++	TEST_ASSERT(header->data_offset >= header->desc_offset
++			|| header->data_offset + size_data <= header->desc_offset,
++			"Data block is overlapped with Descriptor block");
++	/* Check validity of all stats data size */
++	TEST_ASSERT(size_data >= header->count * sizeof(stats_data->value[0]),
++			"Data size is not correct");
++
++	/* Allocate memory for stats data */
++	stats_data = malloc(size_data);
++	TEST_ASSERT(stats_data, "Allocate memory for stats data");
++	/* Read kvm stats data as a bulk */
++	ret = pread(stats_fd, stats_data, size_data, header->data_offset);
++	TEST_ASSERT(ret == size_data, "Read KVM stats data");
++	/* Read kvm stats data one by one */
++	size_data = 0;
++	for (i = 0; i < header->count; ++i) {
++		pdesc = (void *)stats_desc + i * size_desc;
++		ret = pread(stats_fd, stats_data,
++				pdesc->size * sizeof(stats_data->value[0]),
++				header->data_offset + size_data);
++		TEST_ASSERT(ret == pdesc->size * sizeof(stats_data->value[0]),
++				"Read data of KVM stats: %s", pdesc->name);
++		size_data += pdesc->size * sizeof(stats_data->value[0]);
++	}
++
++	free(stats_data);
++	free(stats_desc);
++}
++
++
++static void vm_stats_test(struct kvm_vm *vm)
++{
++	int stats_fd;
++
++	/* Get fd for VM stats */
++	stats_fd = vm_get_stats_fd(vm);
++	TEST_ASSERT(stats_fd >= 0, "Get VM stats fd");
++
++	stats_test(stats_fd);
++	close(stats_fd);
++	TEST_ASSERT(fcntl(stats_fd, F_GETFD) == -1, "Stats fd not freed");
++}
++
++static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
++{
++	int stats_fd;
++
++	/* Get fd for VCPU stats */
++	stats_fd = vcpu_get_stats_fd(vm, vcpu_id);
++	TEST_ASSERT(stats_fd >= 0, "Get VCPU stats fd");
++
++	stats_test(stats_fd);
++	close(stats_fd);
++	TEST_ASSERT(fcntl(stats_fd, F_GETFD) == -1, "Stats fd not freed");
++}
++
++#define DEFAULT_NUM_VM		4
++#define DEFAULT_NUM_VCPU	4
++
++/*
++ * Usage: kvm_bin_form_stats [#vm] [#vcpu]
++ * The first parameter #vm set the number of VMs being created.
++ * The second parameter #vcpu set the number of VCPUs being created.
++ * By default, DEFAULT_NUM_VM VM and DEFAULT_NUM_VCPU VCPU for the VM would be
++ * created for testing.
++ */
++
++int main(int argc, char *argv[])
++{
++	int max_vm = DEFAULT_NUM_VM, max_vcpu = DEFAULT_NUM_VCPU, ret, i, j;
++	struct kvm_vm **vms;
++
++	/* Get the number of VMs and VCPUs that would be created for testing. */
++	if (argc > 1) {
++		max_vm = strtol(argv[1], NULL, 0);
++		if (max_vm <= 0)
++			max_vm = DEFAULT_NUM_VM;
++	}
++	if (argc > 2) {
++		max_vcpu = strtol(argv[2], NULL, 0);
++		if (max_vcpu <= 0)
++			max_vcpu = DEFAULT_NUM_VCPU;
++	}
++
++	/* Check the extension for binary stats */
++	ret = kvm_check_cap(KVM_CAP_BINARY_STATS_FD);
++	TEST_ASSERT(ret >= 0,
++			"Binary form statistics interface is not supported");
++
++	/* Create VMs and VCPUs */
++	vms = malloc(sizeof(vms[0]) * max_vm);
++	TEST_ASSERT(vms, "Allocate memory for storing VM pointers");
++	for (i = 0; i < max_vm; ++i) {
++		vms[i] = vm_create(VM_MODE_DEFAULT,
++				DEFAULT_GUEST_PHY_PAGES, O_RDWR);
++		for (j = 0; j < max_vcpu; ++j)
++			vm_vcpu_add(vms[i], j);
++	}
++
++	/* Check stats read for every VM and VCPU */
++	for (i = 0; i < max_vm; ++i) {
++		vm_stats_test(vms[i]);
++		for (j = 0; j < max_vcpu; ++j)
++			vcpu_stats_test(vms[i], j);
++	}
++
++	for (i = 0; i < max_vm; ++i)
++		kvm_vm_free(vms[i]);
++	free(vms);
++	return 0;
++}
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 5c70596dd1b9..83c02cb0ae1e 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -2286,3 +2286,15 @@ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size)
+ 	n = DIV_ROUND_UP(size, vm_guest_mode_params[mode].page_size);
+ 	return vm_adjust_num_guest_pages(mode, n);
+ }
++
++int vm_get_stats_fd(struct kvm_vm *vm)
++{
++	return ioctl(vm->fd, KVM_GET_STATS_FD, NULL);
++}
++
++int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid)
++{
++	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
++
++	return ioctl(vcpu->fd, KVM_GET_STATS_FD, NULL);
++}
 -- 
 2.32.0.272.g935e593368-goog
 
