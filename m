@@ -2,61 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 674963A3C73
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 08:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56673A3C78
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 08:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbhFKHAD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Jun 2021 03:00:03 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1164 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229530AbhFKHAC (ORCPT
+        id S231175AbhFKHAT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Jun 2021 03:00:19 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14114 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229530AbhFKHAS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Jun 2021 03:00:02 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15B6YtBQ080598;
-        Fri, 11 Jun 2021 02:57:28 -0400
+        Fri, 11 Jun 2021 03:00:18 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15B6hnSF160505;
+        Fri, 11 Jun 2021 02:57:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=x2xZ8XW9WOlZgpL4aLbZYg/Ju2cVBYzwiLpywQISssA=;
- b=Jao9RDxibOOCkpgwk1W1fIzhpbkPyTfHJB5ql7F0L6x0KgEKJsNocQWwtFvh3m27qYxr
- gtdyCo/2HTMz1nCv3MgEvN728epbiu71Dv9OcZL4HMCSm5tU6vlm0emUm0TO2l2DKllO
- 0ZKKkbV2N2IFoDLSxaYnbCe8Vl7n+4RzPBnYtdyBVEUIWzjPf0PApJJ8QPvvwXWfSmMd
- gjG/8ectYTd2wcYUJjs2Wd9ZrIIICyfzFTdptBUoQvu4b+g6IlvkWyRT5Hk6sUPNc/no
- h1/idS3znYORahlfyCRQf/tMpVwNtalshpNp5gvo1NaI93JFDLPLbImKuhOS5Zt9jHr3 5Q== 
+ bh=Q7L47XkGmd3EQRTmBLFuBW/JXWBMmM6uIfl8/qaWHv4=;
+ b=L413Q8CEx0qYjcm/ZqkKZ1npxM5hVDQrytYw8If/gfFR8fp5Hu00yZRCGurAbFcshys8
+ 4YUDIdzNSYk+uE1vFGZl7GMmkAqgIMKaBOYoj1prva4KF2g5d9RAVX7aIaXNLHeqeDkC
+ I/OLHutS0/g6UJUHJKkvg2L5i63UA6EAUKVhlyy2PV6Gs0Np0zl9Vcigu525VPGU+JWI
+ Qs44dRvYEuPsNbBq4tcCyO18O6DkjqO5RYtTW7miF2oVBfLJO8dqQOoZcFcFfcO662M8
+ t4lu7annM0cv3VFhBSQhPsZMLm9cNbGC8raQF55ZW3A1zn3jeffz2B9rkKTwO4Y4R+NC Dw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3942ch92v4-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3942tngafk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Jun 2021 02:57:27 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15B6lIHj122714;
-        Fri, 11 Jun 2021 02:57:26 -0400
+        Fri, 11 Jun 2021 02:57:47 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15B6ivae162310;
+        Fri, 11 Jun 2021 02:57:45 -0400
 Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3942ch92tm-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3942tngaeg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Jun 2021 02:57:26 -0400
+        Fri, 11 Jun 2021 02:57:44 -0400
 Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15B6qTPE007568;
-        Fri, 11 Jun 2021 06:57:22 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma02fra.de.ibm.com with ESMTP id 392e798uvh-1
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15B6qTPF007568;
+        Fri, 11 Jun 2021 06:57:41 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma02fra.de.ibm.com with ESMTP id 392e798uvj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Jun 2021 06:57:22 +0000
+        Fri, 11 Jun 2021 06:57:40 +0000
 Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15B6vJBO12517788
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15B6vbcb23986500
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Jun 2021 06:57:19 GMT
+        Fri, 11 Jun 2021 06:57:37 GMT
 Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3EB2E42063;
-        Fri, 11 Jun 2021 06:57:19 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 59F4D42057;
+        Fri, 11 Jun 2021 06:57:37 +0000 (GMT)
 Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EEABD4205F;
-        Fri, 11 Jun 2021 06:57:17 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 247E54203F;
+        Fri, 11 Jun 2021 06:57:36 +0000 (GMT)
 Received: from oc7455500831.ibm.com (unknown [9.171.35.90])
         by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Jun 2021 06:57:17 +0000 (GMT)
-Subject: Re: [PATCH v7 1/4] KVM: stats: Separate generic stats from
- architecture specific ones
+        Fri, 11 Jun 2021 06:57:36 +0000 (GMT)
+Subject: Re: [PATCH v7 0/4] KVM statistics data fd-based binary interface
 To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
         KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
@@ -88,64 +87,45 @@ To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
         Ricardo Koller <ricarkol@google.com>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>
 References: <20210603211426.790093-1-jingzhangos@google.com>
- <20210603211426.790093-2-jingzhangos@google.com>
 From:   Christian Borntraeger <borntraeger@de.ibm.com>
-Message-ID: <03f3fa03-6f61-7864-4867-3dc332a9d6f3@de.ibm.com>
-Date:   Fri, 11 Jun 2021 08:57:17 +0200
+Message-ID: <4b44c5a7-21c0-73c0-bb03-21806c83b4ae@de.ibm.com>
+Date:   Fri, 11 Jun 2021 08:57:35 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210603211426.790093-2-jingzhangos@google.com>
+In-Reply-To: <20210603211426.790093-1-jingzhangos@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: d3UCT33oCNg1P-mCe7sviD_VHD-SZPdw
-X-Proofpoint-GUID: MYLFLX6kyCj9CQSWdCtzS3DAmN7ceq-J
+X-Proofpoint-GUID: 3nPH9d0sfzXdCyauOtQpJin_ezbLkxQ6
+X-Proofpoint-ORIG-GUID: Lx_aqrjS4hfktpRYirL7zS_P9KjzfTJ_
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-06-11_01:2021-06-11,2021-06-11 signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxscore=0 adultscore=0 malwarescore=0 spamscore=0
- bulkscore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0
- impostorscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2106110042
+ bulkscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
+ spamscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106110042
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-
 On 03.06.21 23:14, Jing Zhang wrote:
-> Put all generic statistics in a separate structure to ease
-> statistics handling for the incoming new statistics API.
-> 
-> No functional change intended.
-> 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> Reviewed-by: Ricardo Koller <ricarkol@google.com>
-> Signed-off-by: Jing Zhang <jingzhangos@google.com>
-[...]
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index 8925f3969478..9b4473f76e56 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-[...]
-> @@ -755,12 +750,12 @@ struct kvm_vcpu_arch {
->   };
->   
->   struct kvm_vm_stat {
-> +	struct kvm_vm_stat_generic generic;
+> This patchset provides a file descriptor for every VM and VCPU to read
+> KVM statistics data in binary format.
+> It is meant to provide a lightweight, flexible, scalable and efficient
+> lock-free solution for user space telemetry applications to pull the
+> statistics data periodically for large scale systems. The pulling
+> frequency could be as high as a few times per second.
+> In this patchset, every statistics data are treated to have some
+> attributes as below:
+>    * architecture dependent or generic
+>    * VM statistics data or VCPU statistics data
 
-s390 does not have remote_tlb_flush. I guess this does not hurt?
+Are the debugfs things good enough, or do we want to also add the same
+ioctl for the /dev/kvm to get the global counters as well, e.g. for
+tools like kvm_stat?
 
->   	u64 inject_io;
->   	u64 inject_float_mchk;
->   	u64 inject_pfault_done;
->   	u64 inject_service_signal;
->   	u64 inject_virtio;
-> -	u64 remote_tlb_flush;
->   };
-[...]
-> +struct kvm_vm_stat_generic {
-> +	ulong remote_tlb_flush;
-> +};
+
