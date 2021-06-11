@@ -2,102 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B003A4B05
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jun 2021 00:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE053A4B16
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jun 2021 01:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbhFKWuo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Jun 2021 18:50:44 -0400
-Received: from mail-io1-f47.google.com ([209.85.166.47]:34379 "EHLO
-        mail-io1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbhFKWun (ORCPT
+        id S230303AbhFKXRc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Jun 2021 19:17:32 -0400
+Received: from mail-wm1-f52.google.com ([209.85.128.52]:44949 "EHLO
+        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230297AbhFKXRc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Jun 2021 18:50:43 -0400
-Received: by mail-io1-f47.google.com with SMTP id 5so32829141ioe.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jun 2021 15:48:31 -0700 (PDT)
+        Fri, 11 Jun 2021 19:17:32 -0400
+Received: by mail-wm1-f52.google.com with SMTP id m41-20020a05600c3b29b02901b9e5d74f02so6382518wms.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jun 2021 16:15:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rQPaBTxH6zmCmow24Ez/25u3aT/BbkT5Z3FMYjKkQD4=;
-        b=foHbHgWLRUOeDdrUUtQo5W+xDkKSaogccxeI9Y3GB8DlJwljzOJ+Lg597umTqeTMTb
-         fY8gJ47PnGJQo/RVPEvNf5PdZaDGNecOGl19KtekqED2TDtZX43KUTLiorhzUp/6lBt2
-         oz5w8QecWW942LM1RxHrObEkHehi60fovjjJM=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x77VeL0664QNf/49UZ4vs2zjAoFI8RzH88arzAm1WBg=;
+        b=C+cg6tjcLIGs07jTA8L3RATTcy9xTkno6wuXHN/tEV5WHsbRj1s9WQvvXQUjUk9EsL
+         xzpaoZiiOIOAe5X5ZeBytD45YPzPMYh8m3UyfOBXKQKO//jH8AtE0rrS1kV2Wyx9LMTt
+         YBKwsuuzJnkq4KLb3E/KFTJhS5Ehfec3CAUaBwJoFl+ph5oW0QMif2qrL+B69E0WUUpg
+         Wd6E4nXa6PBpsaD8vezPRZqOLtcBoCZWUiK/v9N2/Au3atPcm8Im25qvuv653Eo6aYGF
+         gwQ2hw55AKiLkkr0Is3c58QZGvzuduCb8V0hOrVkkfp52E2O7dqfgmSGQwAqdA0WBKXw
+         NWrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rQPaBTxH6zmCmow24Ez/25u3aT/BbkT5Z3FMYjKkQD4=;
-        b=czdw8dQ3JHp2DdvabiZmubfLY+fgfkCBXF9hCSbZOp3TrC42QX0/j55rdAo39tFdRX
-         gYzpwNJX6Ttf0Nw86/hUt9BO5ErMm4ng+9D6mWHDIGOPTQdgxiQPE7pw5J6PnpgHosrJ
-         CU0DSBsxPtdExcJxgbBS/RqhRWuMaZzCcA3H6cHZ+opyRzlo4YsrxxsxbBW1NGpnF5iX
-         MmyRrwcbjTz+YeVSewhWMSSgz8LHOWpKPcHOjYMSmbYMh1aGMfOTqGnB/D/fVL+g3rh6
-         2IorldbOfUSdXd0h+QREc1RaE7r0PZjMAgDttX+GR2mwLG8B4Zfh0ONiQbn4SD1sjmsp
-         cq+Q==
-X-Gm-Message-State: AOAM532TVWebRECt5JrBp3jOqQLQKt0Tfx2TJvDoSRll1MHgJH7TQWok
-        6pSDyRXBrllReWaKVP1WmnWDpQ==
-X-Google-Smtp-Source: ABdhPJzYhIxyLeAPQfmBQvodXCR2Xj9xHbnPvzsaxcBbNu4D4KPVCTAAKGS5ajq24bteysnPjY0wXg==
-X-Received: by 2002:a5d:9c88:: with SMTP id p8mr5082265iop.31.1623451651344;
-        Fri, 11 Jun 2021 15:47:31 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id y17sm4160145ilb.60.2021.06.11.15.47.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Jun 2021 15:47:31 -0700 (PDT)
-Subject: Re: [PATCH v8 1/5] selftests/sgx: Rename 'eenter' and 'sgx_call_vdso'
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210610083021.392269-1-jarkko@kernel.org>
- <b5e06639-8bf4-c267-0aa7-b6c110767edc@intel.com>
- <8d071d3f-604f-1876-05bb-91568dd3c563@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <6378d2a9-9f55-18f8-ce46-7ea954ac159c@linuxfoundation.org>
-Date:   Fri, 11 Jun 2021 16:47:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x77VeL0664QNf/49UZ4vs2zjAoFI8RzH88arzAm1WBg=;
+        b=U/YOW1171242wsmraSM6XIgqvjaWy25Cn4nNX4Sv8JwD63zx350q3rDbxF45AvLw0t
+         ZI8RMR6qm7KBcb8jbs+TsXqx7gSQaCIexnITAWyL1kmL2BbexCshOtu/jIU7s0urEuOh
+         1+t8HUO+6uuikjnjPZwFaD4ylurdpuIHAryVcIkbZKx9SKJDE5wc4iV+dUSETzB5Hbrd
+         UsBCwG6nrZ7tcAe6+3E3ABhY/ysMoJRlom3piAHrNxyT0pv+lBsg9VpE4BOxiYSWcqp5
+         +Cr9k9R48E4E51BOQdi479YPlOaJzT0ml6x0uakQRgMCDBJbE67koN2giPRrmTsKzGKv
+         iUew==
+X-Gm-Message-State: AOAM530ZfKwMqRfiOi7JYtlzFjUkpGiaE3g81tB1yejPkd8c2A9SKT/D
+        9K/D7nMEaOVmNvb6QiattO24pWx4CyMQe3mIMG8ffA==
+X-Google-Smtp-Source: ABdhPJxTpSvCcBLIeAN3y050nO91jX9/Kp1Hx26Jp+Q+MTBTtVldNR5uQc11vPgC4guGCwDoDwTGVSfShBdjLW6wynY=
+X-Received: by 2002:a05:600c:17d7:: with SMTP id y23mr5279112wmo.123.1623453273156;
+ Fri, 11 Jun 2021 16:14:33 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <8d071d3f-604f-1876-05bb-91568dd3c563@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210611035725.1248874-1-davidgow@google.com> <CAFd5g44hC9XM2EcphwTNF5Vcz6v3kZg-ZFJwyj610ty6688OSQ@mail.gmail.com>
+In-Reply-To: <CAFd5g44hC9XM2EcphwTNF5Vcz6v3kZg-ZFJwyj610ty6688OSQ@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 12 Jun 2021 07:14:21 +0800
+Message-ID: <CABVgOSnaUsJaTO+6AvRL5fx_xhv=mbDB9CStxVYwr45HZVkGAg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Fix result propagation for parameterised tests
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/11/21 11:35 AM, Shuah Khan wrote:
-> On 6/10/21 9:45 AM, Dave Hansen wrote:
->> On 6/10/21 1:30 AM, Jarkko Sakkinen wrote:
->>> Rename symbols for better clarity:
->>>
->>> * 'eenter' might be confused for directly calling ENCLU[EENTER].  It 
->>> does
->>>    not.  It calls into the VDSO, which actually has the EENTER 
->>> instruction.
->>> * 'sgx_call_vdso' is *only* used for entering the enclave.  It's not 
->>> some
->>>    generic SGX call into the VDSO.
->>>
->>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->>
->> These all look fine to me.  Feel free to add my ack on them.
->>
->> Since these are pure x86 selftests and the initial code went through the
->> x86 maintainers, should these got through them as well?  Or, since this
->> is only selftest code, should Shuah pick them up?
->>
-> 
-> I will queue these up for 5.14-rc1
-> 
+On Sat, Jun 12, 2021 at 4:26 AM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> On Thu, Jun 10, 2021 at 8:57 PM David Gow <davidgow@google.com> wrote:
+> >
+> > When one parameter of a parameterised test failed, its failure would be
+> > propagated to the overall test, but not to the suite result (unless it
+> > was the last parameter).
+> >
+> > This is because test_case->success was being reset to the test->success
+> > result after each parameter was used, so a failing test's result would
+> > be overwritten by a non-failing result. The overall test result was
+> > handled in a third variable, test_result, but this was disacarded after
+> > the status line was printed.
+>
+> nit: s/disacarded/discarded/g
+>
+> > Instead, just propagate the result after each parameter run.
+> >
+> > Signed-off-by: David Gow <davidgow@google.com>
+> > Fixes: fadb08e7c750 ("kunit: Support for Parameterized Testing")
+>
+> I tried to reproduce the problem described and was unable to. Anyway,
+> from the code it definitely looks like there is a bug like you
+> describe. And it definitely looks like your change should fix it.
 
-I almost applied these. Does this require root access, if so,
-please add logic to skip the test if non-root user runs it.
+I was able to reproduce this again myself. Note that the kunit_tool
+wrapper does its own result propagation which doesn't have a similar
+bug, so you won't see the issue in its parsed results. (Using the
+--raw_output flag does show it, though).
 
-Please check for code paths that require root access and skip
-the tests.
+Here's the output from a patched UUID suite, which deliberately fails
+the first parameter of the first two tests and passes the other
+parameters and tests, which exhibits the issue:
 
-thanks,
--- Shuah
+TAP version 14
+1..1
+   # Subtest: uuid
+   1..4
+   # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+   Expected uuid_parse(data->uuid, &be) == 0, but
+       uuid_parse(data->uuid, &be) == -22
+
+failed to parse 'c33fx4995-3701-450e-9fbf-206a2e98e576'
+   # uuid_correct_be: not ok 1 - c33fx4995-3701-450e-9fbf-206a2e98e576
+   # uuid_correct_be: ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
+   # uuid_correct_be: ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
+   not ok 1 - uuid_correct_be
+   # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+   Expected guid_parse(data->uuid, &le) == 0, but
+       guid_parse(data->uuid, &le) == -22
+
+failed to parse 'c33fx4995-3701-450e-9fbf-206a2e98e576'
+   # uuid_correct_le: not ok 1 - c33fx4995-3701-450e-9fbf-206a2e98e576
+   # uuid_correct_le: ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
+   # uuid_correct_le: ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
+   not ok 2 - uuid_correct_le
+   # uuid_wrong_be: ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+   # uuid_wrong_be: ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+   # uuid_wrong_be: ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+   ok 3 - uuid_wrong_be
+   # uuid_wrong_le: ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+   # uuid_wrong_le: ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+   # uuid_wrong_le: ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+   ok 4 - uuid_wrong_le
+ok 1 - uuid
+
+
+Note the "not ok 1 - uuid_correct_be" line, yet it ending in "ok 1 - uuid".
+
+>
+> Anyway, I tried testing your fix, but given I was unable to reproduce
+> the failure, I am not super confident in my testing. Still,
+>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
