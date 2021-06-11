@@ -2,297 +2,592 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDB13A422B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 14:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0683A4229
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 14:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbhFKMoQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Jun 2021 08:44:16 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51932 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231272AbhFKMoP (ORCPT
+        id S231437AbhFKMoO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Jun 2021 08:44:14 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22278 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231274AbhFKMoL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Jun 2021 08:44:15 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15BCXbCi013278;
-        Fri, 11 Jun 2021 08:42:10 -0400
+        Fri, 11 Jun 2021 08:44:11 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15BCXCs2161363;
+        Fri, 11 Jun 2021 08:42:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
  date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=JhedSqjiHJno7nFv+Mq6xGFzMxPYJSPj48RO97RHbFM=;
- b=lwXL1U1RJxTNN7wpeg8jseEM5Zrm11Rbk1tXTzjC++mH9GH92khEHrkzEjx8hok/WQmV
- UH1ZRiPGUTU98FwhHHkYSksIb06ib6WUe56hRfeBz5a8BY/lprDK6PuXVX17ikM5lapF
- G0XK0RS9aAkIK5l1tyVJW4jLK/G/Ku1NzIIPaGVIx05YROkX4vnnDLvUu/qKpJCWZqrV
- d955k0Iz8Xu3lyA505w0AEUIl2tVDjn4c+YAofxa7cSbItwlrGz4wkWsMPvlSUfFSdVj
- G35EFtjbeL8Txrk7MupFd4Qt+8a2xqSHhw2crhCYK+x1M2kg69L4JhxCUK6E/xLdD2x1 Uw== 
+ bh=ErDpu6qFyoOHGIhMeE8dLUL3Jh7OLsiS943qMfLbBr8=;
+ b=KFgrGC8PrJCLLWqRtzUc9sMDnIL67Ob2sU7tb6uBqQEUBqRnlzZAlggUAji2wSnWoTGn
+ AjsnaGCqHbHgnGpn03luGIBgAeRiHwbLaw+S6VXej1QJHSFptohvxGv5xvm+ydWRGcR1
+ O+JkPy5bCOdiWdpiz3JbAzS8f3ilubvRc/FnWZWp86Q1tyCtbBlA2l2IhVXK9b0qaaB+
+ b8xChkYwD0Y2HRHMzeH2Ys5rxCDLBnKMEdqmmN3TnlBCuJ1N8wyanCeUP8wJuJaszSml
+ HP3LMM3Ghoalf8F4D4PrQ8LUtY7MM7kWLcq8xPveA6f4da9OGWfaU1G4jGWsckj2Aj/+ bw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3947pcgq04-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39457f59yc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Jun 2021 08:42:10 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15BCY43W016082;
-        Fri, 11 Jun 2021 08:42:10 -0400
+        Fri, 11 Jun 2021 08:42:06 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15BCXrS0164161;
+        Fri, 11 Jun 2021 08:42:05 -0400
 Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3947pcgpy4-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39457f59x7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Jun 2021 08:42:09 -0400
+        Fri, 11 Jun 2021 08:42:05 -0400
 Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15BCWbUQ004792;
-        Fri, 11 Jun 2021 12:42:07 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3900w8becw-1
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15BCWvEo004854;
+        Fri, 11 Jun 2021 12:42:04 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3900w8becy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Jun 2021 12:42:07 +0000
+        Fri, 11 Jun 2021 12:42:03 +0000
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15BCf7fR35652026
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15BCg1uQ28639498
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Jun 2021 12:41:07 GMT
+        Fri, 11 Jun 2021 12:42:01 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F36252067;
-        Fri, 11 Jun 2021 12:41:59 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id A23CA52050;
+        Fri, 11 Jun 2021 12:42:01 +0000 (GMT)
 Received: from pratiks-thinkpad.in.ibm.com (unknown [9.85.83.107])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 982735205A;
-        Fri, 11 Jun 2021 12:41:57 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id CD2C25204F;
+        Fri, 11 Jun 2021 12:41:59 +0000 (GMT)
 From:   "Pratik R. Sampat" <psampat@linux.ibm.com>
 To:     mpe@ellerman.id.au, shuah@kernel.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
         psampat@linux.ibm.com, pratik.r.sampat@gmail.com
-Subject: [RFC 1/2] powerpc/cpuidle: Extract IPI based and timer based wakeup latency from idle states
-Date:   Fri, 11 Jun 2021 18:11:53 +0530
-Message-Id: <20210611124154.56427-2-psampat@linux.ibm.com>
+Subject: [RFC 2/2] powerpc/selftest: Add support for cpuidle latency measurement
+Date:   Fri, 11 Jun 2021 18:11:54 +0530
+Message-Id: <20210611124154.56427-3-psampat@linux.ibm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210611124154.56427-1-psampat@linux.ibm.com>
 References: <20210611124154.56427-1-psampat@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4rLkOiwQ1o7QlAmkhVGHrnTpQtroRNa1
-X-Proofpoint-ORIG-GUID: -FGEv8xzENIjBrC_GDqSohzEYwtQ_UsR
+X-Proofpoint-GUID: wY7oG4CVDe1zknoZWTl8xzJAoQqqpae2
+X-Proofpoint-ORIG-GUID: fZJEnuJb8bInLdbCaUJSfxOJN58NchOR
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-06-11_05:2021-06-11,2021-06-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 phishscore=0 malwarescore=0 bulkscore=0 spamscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1015 suspectscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2104190000 definitions=main-2106110080
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce a mechanism to fire directed IPIs from a specified source CPU
-to a specified target CPU and measure the difference in time incurred on
-wakeup.
+The cpuidle latency selftest provides support to systematically extract,
+analyse and present IPI and timer based wakeup latencies for each CPU
+and each idle state available on the system.
 
-Also, introduce a mechanism to queue a HR timer on a specified CPU and
-subsequently measure the time taken to wakeup the CPU.
+The selftest leverages test-cpuidle_latency module's debugfs interface
+to interact and extract latency information from the kernel.
 
-Finally define a simple debugfs interface to control the knobs to fire
-the IPI and Timer events on specified CPU and view their incurred idle
-wakeup latencies.
+The selftest inserts the module if already not inserted, disables all
+the idle states and enables them one by one testing the following:
+1. Keeping source CPU constant, iterate through all the CPUS measuring
+  IPI latency for baseline (CPU is busy with cat /dev/random > /dev/null
+  workload) and then when the CPU is allowed to be at rest
+2. Iterating through all the CPUs, sending expected timer durations to
+  be equivalent to the residency of the deepest idle state enabled
+  and extracting the difference in time between the time of wakeup and
+  the expected timer duration
+
+To run this test specifically:
+$ sudo make -C tools/testing/selftests \
+  TARGETS="powerpc/cpuidle_latency" run_tests
+
+There are a few optional arguments too that the script can take
+        [-h <help>]
+        [-m <location of the module>]
+        [-o <location of the output>]
+        [-v <verbose> (run on all cpus)]
+Default Output location in:
+tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.log
+
+To run the test without re-compiling:
+$ cd tools/testing/selftest/powerpc/cpuidle_latency/
+$ sudo ./cpuidle_latency.sh
 
 Signed-off-by: Pratik R. Sampat <psampat@linux.ibm.com>
 ---
- arch/powerpc/kernel/Makefile               |   1 +
- arch/powerpc/kernel/test-cpuidle_latency.c | 157 +++++++++++++++++++++
- lib/Kconfig.debug                          |  10 ++
- 3 files changed, 168 insertions(+)
- create mode 100644 arch/powerpc/kernel/test-cpuidle_latency.c
+ tools/testing/selftests/powerpc/Makefile      |   1 +
+ .../powerpc/cpuidle_latency/.gitignore        |   2 +
+ .../powerpc/cpuidle_latency/Makefile          |   6 +
+ .../cpuidle_latency/cpuidle_latency.sh        | 419 ++++++++++++++++++
+ .../powerpc/cpuidle_latency/settings          |   1 +
+ 5 files changed, 429 insertions(+)
+ create mode 100644 tools/testing/selftests/powerpc/cpuidle_latency/.gitignore
+ create mode 100644 tools/testing/selftests/powerpc/cpuidle_latency/Makefile
+ create mode 100755 tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh
+ create mode 100644 tools/testing/selftests/powerpc/cpuidle_latency/settings
 
-diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-index f66b63e81c3b..56e36e797dd4 100644
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -56,6 +56,7 @@ obj-$(CONFIG_PPC_WATCHDOG)	+= watchdog.o
- obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
- obj-$(CONFIG_PPC_DAWR)		+= dawr.o
- obj-$(CONFIG_PPC_BOOK3S_64)	+= cpu_setup_ppc970.o cpu_setup_pa6t.o
-+obj-$(CONFIG_IDLE_LATENCY_SELFTEST)	  += test-cpuidle_latency.o
- obj-$(CONFIG_PPC_BOOK3S_64)	+= cpu_setup_power.o
- obj-$(CONFIG_PPC_BOOK3S_64)	+= mce.o mce_power.o
- obj-$(CONFIG_PPC_BOOK3E_64)	+= exceptions-64e.o idle_book3e.o
-diff --git a/arch/powerpc/kernel/test-cpuidle_latency.c b/arch/powerpc/kernel/test-cpuidle_latency.c
+diff --git a/tools/testing/selftests/powerpc/Makefile b/tools/testing/selftests/powerpc/Makefile
+index 0830e63818c1..71ce6fff867d 100644
+--- a/tools/testing/selftests/powerpc/Makefile
++++ b/tools/testing/selftests/powerpc/Makefile
+@@ -17,6 +17,7 @@ SUB_DIRS = alignment		\
+ 	   benchmarks		\
+ 	   cache_shape		\
+ 	   copyloops		\
++	   cpuidle_latency	\
+ 	   dscr			\
+ 	   mm			\
+ 	   nx-gzip		\
+diff --git a/tools/testing/selftests/powerpc/cpuidle_latency/.gitignore b/tools/testing/selftests/powerpc/cpuidle_latency/.gitignore
 new file mode 100644
-index 000000000000..f138011ac225
+index 000000000000..987f8852dc59
 --- /dev/null
-+++ b/arch/powerpc/kernel/test-cpuidle_latency.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module-based API test facility for cpuidle latency using IPIs and timers
-+ */
++++ b/tools/testing/selftests/powerpc/cpuidle_latency/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++cpuidle_latency.log
+diff --git a/tools/testing/selftests/powerpc/cpuidle_latency/Makefile b/tools/testing/selftests/powerpc/cpuidle_latency/Makefile
+new file mode 100644
+index 000000000000..04492b6d2582
+--- /dev/null
++++ b/tools/testing/selftests/powerpc/cpuidle_latency/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0
++all:
 +
-+#include <linux/debugfs.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
++TEST_PROGS := cpuidle_latency.sh
 +
-+/*
-+ * IPI based wakeup latencies
-+ * Measure time taken for a CPU to wakeup on a IPI sent from another CPU
-+ * The latency measured also includes the latency of sending the IPI
-+ */
-+struct latency {
-+	unsigned int src_cpu;
-+	unsigned int dest_cpu;
-+	ktime_t time_start;
-+	ktime_t time_end;
-+	u64 latency_ns;
-+} ipi_wakeup;
++include ../../lib.mk
+diff --git a/tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh b/tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh
+new file mode 100755
+index 000000000000..6b55167de488
+--- /dev/null
++++ b/tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh
+@@ -0,0 +1,419 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# CPU-Idle latency selftest provides support to systematically extract,
++# analyse and present IPI and timer based wakeup latencies for each CPU
++# and each idle state available on the system by leveraging the
++# test-cpuidle_latency module
++#
++# Author: Pratik R. Sampat <psampat@linux.ibm.com>
 +
-+static void measure_latency(void *info)
++LOG=cpuidle_latency.log
++MODULE=/lib/modules/$(uname -r)/kernel/arch/powerpc/kernel/test-cpuidle_latency.ko
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++VERBOSE=0
++
++DISABLE=1
++ENABLE=0
++
++helpme()
 +{
-+	struct latency *v;
-+	ktime_t time_diff;
-+
-+	v = (struct latency *)info;
-+	v->time_end = ktime_get();
-+	time_diff = ktime_sub(v->time_end, v->time_start);
-+	v->latency_ns = ktime_to_ns(time_diff);
++	printf "Usage: $0 [-h] [-todg args]
++	[-h <help>]
++	[-m <location of the module>]
++	[-o <location of the output>]
++	[-v <verbose>]
++	\n"
++	exit 2
 +}
 +
-+void run_smp_call_function_test(unsigned int cpu)
++parse_arguments()
 +{
-+	ipi_wakeup.src_cpu = smp_processor_id();
-+	ipi_wakeup.dest_cpu = cpu;
-+	ipi_wakeup.time_start = ktime_get();
-+	smp_call_function_single(cpu, measure_latency, &ipi_wakeup, 1);
++	while getopts ht:m:o:vt:it: arg
++	do
++		case $arg in
++			h) # --help
++				helpme
++				;;
++			m) # --mod-file
++				MODULE=$OPTARG
++				;;
++			o) # output log files
++				LOG=$OPTARG
++				;;
++			v) # Verbose mode - all threads of the CPU
++				VERBOSE=1
++				;;
++			\?)
++				helpme
++				;;
++		esac
++	done
 +}
 +
-+/*
-+ * Timer based wakeup latencies
-+ * Measure time taken for a CPU to wakeup on a timer being armed and fired
-+ */
-+struct timer_data {
-+	unsigned int src_cpu;
-+	u64 timeout;
-+	ktime_t time_start;
-+	ktime_t time_end;
-+	struct hrtimer timer;
-+	u64 timeout_diff_ns;
-+} timer_wakeup;
-+
-+static enum hrtimer_restart timer_called(struct hrtimer *hrtimer)
++ins_mod()
 +{
-+	struct timer_data *w;
-+	ktime_t time_diff;
-+
-+	w = container_of(hrtimer, struct timer_data, timer);
-+	w->time_end = ktime_get();
-+
-+	time_diff = ktime_sub(w->time_end, w->time_start);
-+	time_diff = ktime_sub(time_diff, ns_to_ktime(w->timeout));
-+	w->timeout_diff_ns = ktime_to_ns(time_diff);
-+	return HRTIMER_NORESTART;
++	debugfs_file=/sys/kernel/debug/latency_test/ipi_latency_ns
++	# Check if the module is already loaded
++	if [ -f "$debugfs_file" ]; then
++		printf "Module already loaded\n\n"
++		return 0
++	fi
++	# Try to load the module
++	if [ ! -f "$MODULE" ]; then
++		printf "$MODULE module does not exist. Exitting\n"
++		exit $ksft_skip
++	fi
++	printf "Inserting $MODULE module\n\n"
++	insmod $MODULE
++	if [ $? != 0 ]; then
++		printf "Insmod $MODULE failed\n"
++		exit $ksft_skip
++	fi
 +}
 +
-+static void run_timer_test(unsigned int ns)
++compute_average()
 +{
-+	hrtimer_init(&timer_wakeup.timer, CLOCK_MONOTONIC,
-+		     HRTIMER_MODE_REL);
-+	timer_wakeup.timer.function = timer_called;
-+	timer_wakeup.src_cpu = smp_processor_id();
-+	timer_wakeup.timeout = ns;
-+	timer_wakeup.time_start = ktime_get();
-+
-+	hrtimer_start(&timer_wakeup.timer, ns_to_ktime(ns),
-+		      HRTIMER_MODE_REL_PINNED);
++	arr=("$@")
++	sum=0
++	size=${#arr[@]}
++	if [ $size == 0 ]; then
++		avg=0
++		return 1
++	fi
++	for i in "${arr[@]}"
++	do
++		sum=$((sum + i))
++	done
++	avg=$((sum/size))
 +}
 +
-+static struct dentry *dir;
-+
-+static int cpu_read_op(void *data, u64 *dest_cpu)
++cpu_is_online()
 +{
-+	*dest_cpu = ipi_wakeup.dest_cpu;
-+	return 0;
++	cpu=$1
++	if [ ! -f "/sys/devices/system/cpu/cpu$cpu/online" ]; then
++		echo 1
++		return
++	fi
++	status=$(cat /sys/devices/system/cpu/cpu$cpu/online)
++	echo $status
 +}
 +
-+static int cpu_write_op(void *data, u64 value)
++# Perform operation on each CPU for the given state
++# $1 - Operation: enable (0) / disable (1)
++# $2 - State to enable
++op_state()
 +{
-+	run_smp_call_function_test(value);
-+	return 0;
-+}
-+DEFINE_SIMPLE_ATTRIBUTE(ipi_ops, cpu_read_op, cpu_write_op, "%llu\n");
-+
-+static int timeout_read_op(void *data, u64 *timeout)
-+{
-+	*timeout = timer_wakeup.timeout;
-+	return 0;
-+}
-+
-+static int timeout_write_op(void *data, u64 value)
-+{
-+	run_timer_test(value);
-+	return 0;
-+}
-+DEFINE_SIMPLE_ATTRIBUTE(timeout_ops, timeout_read_op, timeout_write_op, "%llu\n");
-+
-+static int __init latency_init(void)
-+{
-+	struct dentry *temp;
-+
-+	dir = debugfs_create_dir("latency_test", 0);
-+	if (!dir) {
-+		pr_alert("latency_test: failed to create /sys/kernel/debug/latency_test\n");
-+		return -1;
-+	}
-+	temp = debugfs_create_file("ipi_cpu_dest",
-+				   0666,
-+				   dir,
-+				   NULL,
-+				   &ipi_ops);
-+	if (!temp) {
-+		pr_alert("latency_test: failed to create /sys/kernel/debug/ipi_cpu_dest\n");
-+		return -1;
-+	}
-+	debugfs_create_u64("ipi_latency_ns", 0444, dir, &ipi_wakeup.latency_ns);
-+	debugfs_create_u32("ipi_cpu_src", 0444, dir, &ipi_wakeup.src_cpu);
-+
-+	temp = debugfs_create_file("timeout_expected_ns",
-+				   0666,
-+				   dir,
-+				   NULL,
-+				   &timeout_ops);
-+	if (!temp) {
-+		pr_alert("latency_test: failed to create /sys/kernel/debug/timeout_expected_ns\n");
-+		return -1;
-+	}
-+	debugfs_create_u64("timeout_diff_ns", 0444, dir, &timer_wakeup.timeout_diff_ns);
-+	debugfs_create_u32("timeout_cpu_src", 0444, dir, &timer_wakeup.src_cpu);
-+	pr_info("Latency Test module loaded\n");
-+	return 0;
++	for ((cpu=0; cpu<NUM_CPUS; cpu++))
++	do
++		local cpu_status=$(cpu_is_online $cpu)
++		if [ $cpu_status == 0 ]; then
++			continue
++		fi
++		echo $1 > /sys/devices/system/cpu/cpu$cpu/cpuidle/state$2/disable
++	done
 +}
 +
-+static void __exit latency_cleanup(void)
++cpuidle_enable_state()
 +{
-+	pr_info("Cleaning up Latency Test module.\n");
-+	debugfs_remove_recursive(dir);
++	state=$1
++	op_state $ENABLE $state
 +}
 +
-+module_init(latency_init);
-+module_exit(latency_cleanup);
++cpuidle_disable_state()
++{
++	state=$1
++	op_state $DISABLE $state
++}
 +
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("IBM Corporation");
-+MODULE_DESCRIPTION("Measuring idle latency for IPIs and Timers");
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 417c3d3e521b..70264687e0c2 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1513,6 +1513,16 @@ config DEBUG_KOBJECT
- 	  If you say Y here, some extra kobject debugging messages will be sent
- 	  to the syslog.
- 
-+config IDLE_LATENCY_SELFTEST
-+	tristate "Cpuidle latency selftests"
-+	depends on CPU_IDLE
-+	help
-+	  This option provides a kernel module that runs tests using the IPI and
-+	  timers to measure latency.
++# Enable/Disable all stop states for all CPUs
++# $1 - Operation: enable (0) / disable (1)
++op_cpuidle()
++{
++	for ((state=0; state<NUM_STATES; state++))
++	do
++		op_state $1 $state
++	done
++}
 +
-+	  Say M if you want these self tests to build as a module.
-+	  Say N if you are unsure.
++extract_state_information()
++{
++	for ((state=0; state<NUM_STATES; state++))
++	do
++		state_name=$(cat /sys/devices/system/cpu/cpu0/cpuidle/state$state/name)
++		state_name_arr+=($state_name)
++	done
++}
 +
- config DEBUG_KOBJECT_RELEASE
- 	bool "kobject release debugging"
- 	depends on DEBUG_OBJECTS_TIMERS
++# Extract latency in microseconds and convert to nanoseconds
++extract_latency()
++{
++	for ((state=0; state<NUM_STATES; state++))
++	do
++		latency=$(($(cat /sys/devices/system/cpu/cpu0/cpuidle/state$state/latency) * 1000))
++		latency_arr+=($latency)
++	done
++}
++
++# Simple linear search in an array
++# $1 - Element to search for
++# $2 - Array
++element_in()
++{
++	local item="$1"
++	shift
++	for element in "$@";
++	do
++		if [ "$element" == "$item" ]; then
++			return 0
++		fi
++	done
++	return 1
++}
++
++# Parse and return a cpuset with ","(individual) and "-" (range) of CPUs
++# $1 - cpuset string
++parse_cpuset()
++{
++	echo $1 | awk '/-/{for (i=$1; i<=$2; i++)printf "%s%s",i,ORS;next} 1' RS=, FS=-
++}
++
++extract_core_information()
++{
++	declare -a thread_arr
++	for ((cpu=0; cpu<NUM_CPUS; cpu++))
++	do
++		local cpu_status=$(cpu_is_online $cpu)
++		if [ $cpu_status == 0 ]; then
++			continue
++		fi
++
++		siblings=$(cat /sys/devices/system/cpu/cpu$cpu/topology/thread_siblings_list)
++		sib_arr=()
++		for c in $(parse_cpuset $siblings)
++		do
++			sib_arr+=($c)
++		done
++
++		if [ $VERBOSE == 1 ]; then
++			core_arr+=($cpu)
++			for thread in "${sib_arr[@]}"
++			do
++				if [ $cpu == 0 ]; then
++					first_core_arr+=($thread)
++				fi
++			done
++			continue
++		fi
++
++		element_in "${sib_arr[0]}" "${thread_arr[@]}"
++		if [ $? == 0 ]; then
++			continue
++		fi
++		core_arr+=(${sib_arr[0]})
++
++		for thread in "${sib_arr[@]}"
++		do
++			thread_arr+=($thread)
++			if [ $cpu == 0 ]; then
++				first_core_arr+=($thread)
++			fi
++		done
++	done
++}
++
++# Run the IPI test
++# $1 run for baseline - busy cpu or regular environment
++# $2 destination cpu
++ipi_test_once()
++{
++	dest_cpu=$2
++	if [ "$1" = "baseline" ]; then
++		# Keep the CPU busy
++		taskset -c $dest_cpu cat /dev/random > /dev/null &
++		task_pid=$!
++		# Wait for the workload to achieve 100% CPU usage
++		sleep 1
++	fi
++	taskset 0x1 echo $dest_cpu > /sys/kernel/debug/latency_test/ipi_cpu_dest
++	ipi_latency=$(cat /sys/kernel/debug/latency_test/ipi_latency_ns)
++	src_cpu=$(cat /sys/kernel/debug/latency_test/ipi_cpu_src)
++	if [ "$1" = "baseline" ]; then
++		kill $task_pid
++		wait $task_pid 2>/dev/null
++	fi
++}
++
++# Incrementally Enable idle states one by one and compute the latency
++run_ipi_tests()
++{
++	extract_latency
++	# Disable idle states for CPUs
++	op_cpuidle $DISABLE
++
++	declare -a avg_arr
++	echo -e "--IPI Latency Test---" | tee -a $LOG
++
++	echo -e "--Baseline IPI Latency measurement: CPU Busy--" >> $LOG
++	printf "%s %10s %12s\n" "SRC_CPU" "DEST_CPU" "IPI_Latency(ns)" >> $LOG
++	for cpu in "${core_arr[@]}"
++	do
++		local cpu_status=$(cpu_is_online $cpu)
++		if [ $cpu_status == 0 ]; then
++			continue
++		fi
++		ipi_test_once "baseline" $cpu
++		printf "%-3s %10s %12s\n" $src_cpu $cpu $ipi_latency >> $LOG
++		# Skip computing latency average from the source CPU to avoid bias
++		element_in "$cpu" "${first_core_arr[@]}"
++		if [ $? == 0 ]; then
++			continue
++		fi
++		avg_arr+=($ipi_latency)
++	done
++	compute_average "${avg_arr[@]}"
++	echo -e "Baseline Avg IPI latency(ns): $avg" | tee -a $LOG
++
++	for ((state=0; state<NUM_STATES; state++))
++	do
++		unset avg_arr
++		echo -e "---Enabling state: ${state_name_arr[$state]}---" >> $LOG
++		cpuidle_enable_state $state
++		printf "%s %10s %12s\n" "SRC_CPU" "DEST_CPU" "IPI_Latency(ns)" >> $LOG
++		for cpu in "${core_arr[@]}"
++		do
++			local cpu_status=$(cpu_is_online $cpu)
++			if [ $cpu_status == 0 ]; then
++				continue
++			fi
++			# Running IPI test and logging results
++			sleep 1
++			ipi_test_once "test" $cpu
++			printf "%-3s %10s %12s\n" $src_cpu $cpu $ipi_latency >> $LOG
++			# Skip computing latency average from the source CPU to avoid bias
++			element_in "$cpu" "${first_core_arr[@]}"
++			if [ $? == 0 ]; then
++				continue
++			fi
++			avg_arr+=($ipi_latency)
++		done
++		compute_average "${avg_arr[@]}"
++		echo -e "Expected IPI latency(ns): ${latency_arr[$state]}" >> $LOG
++		echo -e "Observed Avg IPI latency(ns) - State ${state_name_arr[$state]}: $avg" | tee -a $LOG
++		cpuidle_disable_state $state
++	done
++}
++
++# Extract the residency in microseconds and convert to nanoseconds.
++# Add 200 ns so that the timer stays for a little longer than the residency
++extract_residency()
++{
++	for ((state=0; state<NUM_STATES; state++))
++	do
++		residency=$(($(cat /sys/devices/system/cpu/cpu0/cpuidle/state$state/residency) * 1000 + 200))
++		residency_arr+=($residency)
++	done
++}
++
++# Run the Timeout test
++# $1 run for baseline - busy cpu or regular environment
++# $2 destination cpu
++# $3 timeout
++timeout_test_once()
++{
++	dest_cpu=$2
++	if [ "$1" = "baseline" ]; then
++		# Keep the CPU busy
++		taskset -c $dest_cpu cat /dev/random > /dev/null &
++		task_pid=$!
++		# Wait for the workload to achieve 100% CPU usage
++		sleep 1
++	fi
++	taskset -c $dest_cpu echo $3 > /sys/kernel/debug/latency_test/timeout_expected_ns
++	# Wait for the result to populate
++	sleep 0.1
++	timeout_diff=$(cat /sys/kernel/debug/latency_test/timeout_diff_ns)
++	src_cpu=$(cat /sys/kernel/debug/latency_test/timeout_cpu_src)
++	if [ "$1" = "baseline" ]; then
++		kill $task_pid
++		wait $task_pid 2>/dev/null
++	fi
++}
++
++run_timeout_tests()
++{
++	extract_residency
++	# Disable idle states for all CPUs
++	op_cpuidle $DISABLE
++
++	declare -a avg_arr
++	echo -e "\n--Timeout Latency Test--" | tee -a $LOG
++
++	echo -e "--Baseline Timeout Latency measurement: CPU Busy--" >> $LOG
++	printf "%s %10s %10s\n" "Wakeup_src" "Baseline_delay(ns)">> $LOG
++	for cpu in "${core_arr[@]}"
++	do
++		local cpu_status=$(cpu_is_online $cpu)
++		if [ $cpu_status == 0 ]; then
++			continue
++		fi
++		timeout_test_once "baseline" $cpu 1000000
++		printf "%-3s %13s\n" $src_cpu $timeout_diff >> $LOG
++		avg_arr+=($timeout_diff)
++	done
++	compute_average "${avg_arr[@]}"
++	echo -e "Baseline Avg timeout diff(ns): $avg" | tee -a $LOG
++
++	for ((state=0; state<NUM_STATES; state++))
++	do
++		unset avg_arr
++		echo -e "---Enabling state: ${state_name_arr[$state]}---" >> $LOG
++		cpuidle_enable_state $state
++		printf "%s %10s %10s\n" "Wakeup_src" "Baseline_delay(ns)" "Delay(ns)" >> $LOG
++		for cpu in "${core_arr[@]}"
++		do
++			local cpu_status=$(cpu_is_online $cpu)
++			if [ $cpu_status == 0 ]; then
++				continue
++			fi
++			timeout_test_once "test" $cpu 1000000
++			printf "%-3s %13s %18s\n" $src_cpu $baseline_timeout_diff $timeout_diff >> $LOG
++			avg_arr+=($timeout_diff)
++		done
++		compute_average "${avg_arr[@]}"
++		echo -e "Expected timeout(ns): ${residency_arr[$state]}" >> $LOG
++		echo -e "Observed Avg timeout diff(ns) - State ${state_name_arr[$state]}: $avg" | tee -a $LOG
++		cpuidle_disable_state $state
++	done
++}
++
++declare -a residency_arr
++declare -a latency_arr
++declare -a core_arr
++declare -a first_core_arr
++declare -a state_name_arr
++
++parse_arguments $@
++
++rm -f $LOG
++touch $LOG
++NUM_CPUS=$(nproc --all)
++NUM_STATES=$(ls -1 /sys/devices/system/cpu/cpu0/cpuidle/ | wc -l)
++
++extract_core_information
++extract_state_information
++
++ins_mod $MODULE
++
++run_ipi_tests
++run_timeout_tests
++
++# Enable all idle states for all CPUs
++op_cpuidle $ENABLE
++printf "Removing $MODULE module\n"
++printf "Full Output logged at: $LOG\n"
++rmmod $MODULE
++
+diff --git a/tools/testing/selftests/powerpc/cpuidle_latency/settings b/tools/testing/selftests/powerpc/cpuidle_latency/settings
+new file mode 100644
+index 000000000000..e7b9417537fb
+--- /dev/null
++++ b/tools/testing/selftests/powerpc/cpuidle_latency/settings
+@@ -0,0 +1 @@
++timeout=0
 -- 
 2.17.1
 
