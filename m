@@ -2,592 +2,197 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0683A4229
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 14:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F88F3A423F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 14:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbhFKMoO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Jun 2021 08:44:14 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22278 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231274AbhFKMoL (ORCPT
+        id S231483AbhFKMs0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Jun 2021 08:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231514AbhFKMs0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Jun 2021 08:44:11 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15BCXCs2161363;
-        Fri, 11 Jun 2021 08:42:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
- date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=ErDpu6qFyoOHGIhMeE8dLUL3Jh7OLsiS943qMfLbBr8=;
- b=KFgrGC8PrJCLLWqRtzUc9sMDnIL67Ob2sU7tb6uBqQEUBqRnlzZAlggUAji2wSnWoTGn
- AjsnaGCqHbHgnGpn03luGIBgAeRiHwbLaw+S6VXej1QJHSFptohvxGv5xvm+ydWRGcR1
- O+JkPy5bCOdiWdpiz3JbAzS8f3ilubvRc/FnWZWp86Q1tyCtbBlA2l2IhVXK9b0qaaB+
- b8xChkYwD0Y2HRHMzeH2Ys5rxCDLBnKMEdqmmN3TnlBCuJ1N8wyanCeUP8wJuJaszSml
- HP3LMM3Ghoalf8F4D4PrQ8LUtY7MM7kWLcq8xPveA6f4da9OGWfaU1G4jGWsckj2Aj/+ bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39457f59yc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Jun 2021 08:42:06 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15BCXrS0164161;
-        Fri, 11 Jun 2021 08:42:05 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39457f59x7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Jun 2021 08:42:05 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15BCWvEo004854;
-        Fri, 11 Jun 2021 12:42:04 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3900w8becy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Jun 2021 12:42:03 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15BCg1uQ28639498
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Jun 2021 12:42:01 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A23CA52050;
-        Fri, 11 Jun 2021 12:42:01 +0000 (GMT)
-Received: from pratiks-thinkpad.in.ibm.com (unknown [9.85.83.107])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id CD2C25204F;
-        Fri, 11 Jun 2021 12:41:59 +0000 (GMT)
-From:   "Pratik R. Sampat" <psampat@linux.ibm.com>
-To:     mpe@ellerman.id.au, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        psampat@linux.ibm.com, pratik.r.sampat@gmail.com
-Subject: [RFC 2/2] powerpc/selftest: Add support for cpuidle latency measurement
-Date:   Fri, 11 Jun 2021 18:11:54 +0530
-Message-Id: <20210611124154.56427-3-psampat@linux.ibm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210611124154.56427-1-psampat@linux.ibm.com>
-References: <20210611124154.56427-1-psampat@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wY7oG4CVDe1zknoZWTl8xzJAoQqqpae2
-X-Proofpoint-ORIG-GUID: fZJEnuJb8bInLdbCaUJSfxOJN58NchOR
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-11_05:2021-06-11,2021-06-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 bulkscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- mlxlogscore=999 priorityscore=1501 clxscore=1015 suspectscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106110080
+        Fri, 11 Jun 2021 08:48:26 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20752C0617AF
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jun 2021 05:46:28 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id a17-20020a5b09110000b0290547160c87c9so3822134ybq.19
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jun 2021 05:46:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Ho/DEjMpdsHHhO7ht7jErSM7pqZQLsxy56J3r0tZ1qE=;
+        b=cY6xspWCN3ZaaYXM2Ylh4WKJo59wK1Ly33TcOY+3M6Zi//nTLuq/QAZjvo2PIMvC4N
+         3IKL0DcWTtBorei00eie7b/qgiKmHMhjTHMq866EvA1B4apLtxkWBP+3phdpGylTUffS
+         s7vqWklPC/XXdtB6kXD4I+tqXW8GXgZKZNwUgCLKKLwiljS2EUae2hdO6PDtnYqw3yrp
+         pYWWvlKZxPWUwbEI1QJ1w7eTriwzt73EwF/sjwjurbLX4dPl7d1axOqSsbtdYfwXBFks
+         WgUVwpQwiPecLRR1z41kwXcxVz5YV8uAgzpM3aaW9dUxqCfWQsRL0K5aKQZsWcnwQ5xe
+         tGnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Ho/DEjMpdsHHhO7ht7jErSM7pqZQLsxy56J3r0tZ1qE=;
+        b=sWLZin8OI1/cfPMqvRm7J3f82IZmWneeTmDfWj2DQb1LiEMnw1Sz5TDA4szz07F7lM
+         eINg8xBpQfVpsuOAfocaQbFQnFvQCHqSKcnir6jfkzrRBh61+luT5Nn07mLndx9N4cLt
+         c9T9WdlR3AeUWSwj+Uvganje7ghUA4NFuXVCvDTPjZSrx8+1ur/xLXMF/S9FdSwTr3c1
+         7DnHJYVNTCMXWS3gwLwQQtwX6GEHM8uknDdfhLq+R/BJTbzqFnlkAX75oOw90aRkzdie
+         0gy60rjlNfbEBtOpMoL1AB5eF8Y1wqxkCHW6lcpfnKoZxBWOEnJEtr2UHh9P0NmJmZK1
+         rqww==
+X-Gm-Message-State: AOAM533RaJnmLqi2V8RlW1Hp+iDi0f1kc+dEqDxCAwm6oiaxOpt5i40R
+        wbEQuGgaCxGnP5s6KkHPeTbq9jRMWHN25VZH0Q==
+X-Google-Smtp-Source: ABdhPJzRhxBOlm8NTEnDLbnoLqOCGcumkeszvV0W9YOxF2xohXqVg3ILFvB2MHjyLkfdCks/mKyw0ADUTsT+pcLFoQ==
+X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
+ (user=jingzhangos job=sendgmr) by 2002:a25:ba06:: with SMTP id
+ t6mr5422206ybg.459.1623415587231; Fri, 11 Jun 2021 05:46:27 -0700 (PDT)
+Date:   Fri, 11 Jun 2021 12:46:20 +0000
+Message-Id: <20210611124624.1404010-1-jingzhangos@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.272.g935e593368-goog
+Subject: [PATCH v8 0/4] KVM statistics data fd-based binary interface
+From:   Jing Zhang <jingzhangos@google.com>
+To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>
+Cc:     Jing Zhang <jingzhangos@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The cpuidle latency selftest provides support to systematically extract,
-analyse and present IPI and timer based wakeup latencies for each CPU
-and each idle state available on the system.
+This patchset provides a file descriptor for every VM and VCPU to read
+KVM statistics data in binary format.
+It is meant to provide a lightweight, flexible, scalable and efficient
+lock-free solution for user space telemetry applications to pull the
+statistics data periodically for large scale systems. The pulling
+frequency could be as high as a few times per second.
+In this patchset, every statistics data are treated to have some
+attributes as below:
+  * architecture dependent or generic
+  * VM statistics data or VCPU statistics data
+  * type: cumulative, instantaneous,
+  * unit: none for simple counter, nanosecond, microsecond,
+    millisecond, second, Byte, KiByte, MiByte, GiByte. Clock Cycles
+Since no lock/synchronization is used, the consistency between all
+the statistics data is not guaranteed. That means not all statistics
+data are read out at the exact same time, since the statistics date
+are still being updated by KVM subsystems while they are read out.
 
-The selftest leverages test-cpuidle_latency module's debugfs interface
-to interact and extract latency information from the kernel.
-
-The selftest inserts the module if already not inserted, disables all
-the idle states and enables them one by one testing the following:
-1. Keeping source CPU constant, iterate through all the CPUS measuring
-  IPI latency for baseline (CPU is busy with cat /dev/random > /dev/null
-  workload) and then when the CPU is allowed to be at rest
-2. Iterating through all the CPUs, sending expected timer durations to
-  be equivalent to the residency of the deepest idle state enabled
-  and extracting the difference in time between the time of wakeup and
-  the expected timer duration
-
-To run this test specifically:
-$ sudo make -C tools/testing/selftests \
-  TARGETS="powerpc/cpuidle_latency" run_tests
-
-There are a few optional arguments too that the script can take
-        [-h <help>]
-        [-m <location of the module>]
-        [-o <location of the output>]
-        [-v <verbose> (run on all cpus)]
-Default Output location in:
-tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.log
-
-To run the test without re-compiling:
-$ cd tools/testing/selftest/powerpc/cpuidle_latency/
-$ sudo ./cpuidle_latency.sh
-
-Signed-off-by: Pratik R. Sampat <psampat@linux.ibm.com>
 ---
- tools/testing/selftests/powerpc/Makefile      |   1 +
- .../powerpc/cpuidle_latency/.gitignore        |   2 +
- .../powerpc/cpuidle_latency/Makefile          |   6 +
- .../cpuidle_latency/cpuidle_latency.sh        | 419 ++++++++++++++++++
- .../powerpc/cpuidle_latency/settings          |   1 +
- 5 files changed, 429 insertions(+)
- create mode 100644 tools/testing/selftests/powerpc/cpuidle_latency/.gitignore
- create mode 100644 tools/testing/selftests/powerpc/cpuidle_latency/Makefile
- create mode 100755 tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh
- create mode 100644 tools/testing/selftests/powerpc/cpuidle_latency/settings
 
-diff --git a/tools/testing/selftests/powerpc/Makefile b/tools/testing/selftests/powerpc/Makefile
-index 0830e63818c1..71ce6fff867d 100644
---- a/tools/testing/selftests/powerpc/Makefile
-+++ b/tools/testing/selftests/powerpc/Makefile
-@@ -17,6 +17,7 @@ SUB_DIRS = alignment		\
- 	   benchmarks		\
- 	   cache_shape		\
- 	   copyloops		\
-+	   cpuidle_latency	\
- 	   dscr			\
- 	   mm			\
- 	   nx-gzip		\
-diff --git a/tools/testing/selftests/powerpc/cpuidle_latency/.gitignore b/tools/testing/selftests/powerpc/cpuidle_latency/.gitignore
-new file mode 100644
-index 000000000000..987f8852dc59
---- /dev/null
-+++ b/tools/testing/selftests/powerpc/cpuidle_latency/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+cpuidle_latency.log
-diff --git a/tools/testing/selftests/powerpc/cpuidle_latency/Makefile b/tools/testing/selftests/powerpc/cpuidle_latency/Makefile
-new file mode 100644
-index 000000000000..04492b6d2582
---- /dev/null
-+++ b/tools/testing/selftests/powerpc/cpuidle_latency/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+all:
-+
-+TEST_PROGS := cpuidle_latency.sh
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh b/tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh
-new file mode 100755
-index 000000000000..6b55167de488
---- /dev/null
-+++ b/tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh
-@@ -0,0 +1,419 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# CPU-Idle latency selftest provides support to systematically extract,
-+# analyse and present IPI and timer based wakeup latencies for each CPU
-+# and each idle state available on the system by leveraging the
-+# test-cpuidle_latency module
-+#
-+# Author: Pratik R. Sampat <psampat@linux.ibm.com>
-+
-+LOG=cpuidle_latency.log
-+MODULE=/lib/modules/$(uname -r)/kernel/arch/powerpc/kernel/test-cpuidle_latency.ko
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+VERBOSE=0
-+
-+DISABLE=1
-+ENABLE=0
-+
-+helpme()
-+{
-+	printf "Usage: $0 [-h] [-todg args]
-+	[-h <help>]
-+	[-m <location of the module>]
-+	[-o <location of the output>]
-+	[-v <verbose>]
-+	\n"
-+	exit 2
-+}
-+
-+parse_arguments()
-+{
-+	while getopts ht:m:o:vt:it: arg
-+	do
-+		case $arg in
-+			h) # --help
-+				helpme
-+				;;
-+			m) # --mod-file
-+				MODULE=$OPTARG
-+				;;
-+			o) # output log files
-+				LOG=$OPTARG
-+				;;
-+			v) # Verbose mode - all threads of the CPU
-+				VERBOSE=1
-+				;;
-+			\?)
-+				helpme
-+				;;
-+		esac
-+	done
-+}
-+
-+ins_mod()
-+{
-+	debugfs_file=/sys/kernel/debug/latency_test/ipi_latency_ns
-+	# Check if the module is already loaded
-+	if [ -f "$debugfs_file" ]; then
-+		printf "Module already loaded\n\n"
-+		return 0
-+	fi
-+	# Try to load the module
-+	if [ ! -f "$MODULE" ]; then
-+		printf "$MODULE module does not exist. Exitting\n"
-+		exit $ksft_skip
-+	fi
-+	printf "Inserting $MODULE module\n\n"
-+	insmod $MODULE
-+	if [ $? != 0 ]; then
-+		printf "Insmod $MODULE failed\n"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+compute_average()
-+{
-+	arr=("$@")
-+	sum=0
-+	size=${#arr[@]}
-+	if [ $size == 0 ]; then
-+		avg=0
-+		return 1
-+	fi
-+	for i in "${arr[@]}"
-+	do
-+		sum=$((sum + i))
-+	done
-+	avg=$((sum/size))
-+}
-+
-+cpu_is_online()
-+{
-+	cpu=$1
-+	if [ ! -f "/sys/devices/system/cpu/cpu$cpu/online" ]; then
-+		echo 1
-+		return
-+	fi
-+	status=$(cat /sys/devices/system/cpu/cpu$cpu/online)
-+	echo $status
-+}
-+
-+# Perform operation on each CPU for the given state
-+# $1 - Operation: enable (0) / disable (1)
-+# $2 - State to enable
-+op_state()
-+{
-+	for ((cpu=0; cpu<NUM_CPUS; cpu++))
-+	do
-+		local cpu_status=$(cpu_is_online $cpu)
-+		if [ $cpu_status == 0 ]; then
-+			continue
-+		fi
-+		echo $1 > /sys/devices/system/cpu/cpu$cpu/cpuidle/state$2/disable
-+	done
-+}
-+
-+cpuidle_enable_state()
-+{
-+	state=$1
-+	op_state $ENABLE $state
-+}
-+
-+cpuidle_disable_state()
-+{
-+	state=$1
-+	op_state $DISABLE $state
-+}
-+
-+# Enable/Disable all stop states for all CPUs
-+# $1 - Operation: enable (0) / disable (1)
-+op_cpuidle()
-+{
-+	for ((state=0; state<NUM_STATES; state++))
-+	do
-+		op_state $1 $state
-+	done
-+}
-+
-+extract_state_information()
-+{
-+	for ((state=0; state<NUM_STATES; state++))
-+	do
-+		state_name=$(cat /sys/devices/system/cpu/cpu0/cpuidle/state$state/name)
-+		state_name_arr+=($state_name)
-+	done
-+}
-+
-+# Extract latency in microseconds and convert to nanoseconds
-+extract_latency()
-+{
-+	for ((state=0; state<NUM_STATES; state++))
-+	do
-+		latency=$(($(cat /sys/devices/system/cpu/cpu0/cpuidle/state$state/latency) * 1000))
-+		latency_arr+=($latency)
-+	done
-+}
-+
-+# Simple linear search in an array
-+# $1 - Element to search for
-+# $2 - Array
-+element_in()
-+{
-+	local item="$1"
-+	shift
-+	for element in "$@";
-+	do
-+		if [ "$element" == "$item" ]; then
-+			return 0
-+		fi
-+	done
-+	return 1
-+}
-+
-+# Parse and return a cpuset with ","(individual) and "-" (range) of CPUs
-+# $1 - cpuset string
-+parse_cpuset()
-+{
-+	echo $1 | awk '/-/{for (i=$1; i<=$2; i++)printf "%s%s",i,ORS;next} 1' RS=, FS=-
-+}
-+
-+extract_core_information()
-+{
-+	declare -a thread_arr
-+	for ((cpu=0; cpu<NUM_CPUS; cpu++))
-+	do
-+		local cpu_status=$(cpu_is_online $cpu)
-+		if [ $cpu_status == 0 ]; then
-+			continue
-+		fi
-+
-+		siblings=$(cat /sys/devices/system/cpu/cpu$cpu/topology/thread_siblings_list)
-+		sib_arr=()
-+		for c in $(parse_cpuset $siblings)
-+		do
-+			sib_arr+=($c)
-+		done
-+
-+		if [ $VERBOSE == 1 ]; then
-+			core_arr+=($cpu)
-+			for thread in "${sib_arr[@]}"
-+			do
-+				if [ $cpu == 0 ]; then
-+					first_core_arr+=($thread)
-+				fi
-+			done
-+			continue
-+		fi
-+
-+		element_in "${sib_arr[0]}" "${thread_arr[@]}"
-+		if [ $? == 0 ]; then
-+			continue
-+		fi
-+		core_arr+=(${sib_arr[0]})
-+
-+		for thread in "${sib_arr[@]}"
-+		do
-+			thread_arr+=($thread)
-+			if [ $cpu == 0 ]; then
-+				first_core_arr+=($thread)
-+			fi
-+		done
-+	done
-+}
-+
-+# Run the IPI test
-+# $1 run for baseline - busy cpu or regular environment
-+# $2 destination cpu
-+ipi_test_once()
-+{
-+	dest_cpu=$2
-+	if [ "$1" = "baseline" ]; then
-+		# Keep the CPU busy
-+		taskset -c $dest_cpu cat /dev/random > /dev/null &
-+		task_pid=$!
-+		# Wait for the workload to achieve 100% CPU usage
-+		sleep 1
-+	fi
-+	taskset 0x1 echo $dest_cpu > /sys/kernel/debug/latency_test/ipi_cpu_dest
-+	ipi_latency=$(cat /sys/kernel/debug/latency_test/ipi_latency_ns)
-+	src_cpu=$(cat /sys/kernel/debug/latency_test/ipi_cpu_src)
-+	if [ "$1" = "baseline" ]; then
-+		kill $task_pid
-+		wait $task_pid 2>/dev/null
-+	fi
-+}
-+
-+# Incrementally Enable idle states one by one and compute the latency
-+run_ipi_tests()
-+{
-+	extract_latency
-+	# Disable idle states for CPUs
-+	op_cpuidle $DISABLE
-+
-+	declare -a avg_arr
-+	echo -e "--IPI Latency Test---" | tee -a $LOG
-+
-+	echo -e "--Baseline IPI Latency measurement: CPU Busy--" >> $LOG
-+	printf "%s %10s %12s\n" "SRC_CPU" "DEST_CPU" "IPI_Latency(ns)" >> $LOG
-+	for cpu in "${core_arr[@]}"
-+	do
-+		local cpu_status=$(cpu_is_online $cpu)
-+		if [ $cpu_status == 0 ]; then
-+			continue
-+		fi
-+		ipi_test_once "baseline" $cpu
-+		printf "%-3s %10s %12s\n" $src_cpu $cpu $ipi_latency >> $LOG
-+		# Skip computing latency average from the source CPU to avoid bias
-+		element_in "$cpu" "${first_core_arr[@]}"
-+		if [ $? == 0 ]; then
-+			continue
-+		fi
-+		avg_arr+=($ipi_latency)
-+	done
-+	compute_average "${avg_arr[@]}"
-+	echo -e "Baseline Avg IPI latency(ns): $avg" | tee -a $LOG
-+
-+	for ((state=0; state<NUM_STATES; state++))
-+	do
-+		unset avg_arr
-+		echo -e "---Enabling state: ${state_name_arr[$state]}---" >> $LOG
-+		cpuidle_enable_state $state
-+		printf "%s %10s %12s\n" "SRC_CPU" "DEST_CPU" "IPI_Latency(ns)" >> $LOG
-+		for cpu in "${core_arr[@]}"
-+		do
-+			local cpu_status=$(cpu_is_online $cpu)
-+			if [ $cpu_status == 0 ]; then
-+				continue
-+			fi
-+			# Running IPI test and logging results
-+			sleep 1
-+			ipi_test_once "test" $cpu
-+			printf "%-3s %10s %12s\n" $src_cpu $cpu $ipi_latency >> $LOG
-+			# Skip computing latency average from the source CPU to avoid bias
-+			element_in "$cpu" "${first_core_arr[@]}"
-+			if [ $? == 0 ]; then
-+				continue
-+			fi
-+			avg_arr+=($ipi_latency)
-+		done
-+		compute_average "${avg_arr[@]}"
-+		echo -e "Expected IPI latency(ns): ${latency_arr[$state]}" >> $LOG
-+		echo -e "Observed Avg IPI latency(ns) - State ${state_name_arr[$state]}: $avg" | tee -a $LOG
-+		cpuidle_disable_state $state
-+	done
-+}
-+
-+# Extract the residency in microseconds and convert to nanoseconds.
-+# Add 200 ns so that the timer stays for a little longer than the residency
-+extract_residency()
-+{
-+	for ((state=0; state<NUM_STATES; state++))
-+	do
-+		residency=$(($(cat /sys/devices/system/cpu/cpu0/cpuidle/state$state/residency) * 1000 + 200))
-+		residency_arr+=($residency)
-+	done
-+}
-+
-+# Run the Timeout test
-+# $1 run for baseline - busy cpu or regular environment
-+# $2 destination cpu
-+# $3 timeout
-+timeout_test_once()
-+{
-+	dest_cpu=$2
-+	if [ "$1" = "baseline" ]; then
-+		# Keep the CPU busy
-+		taskset -c $dest_cpu cat /dev/random > /dev/null &
-+		task_pid=$!
-+		# Wait for the workload to achieve 100% CPU usage
-+		sleep 1
-+	fi
-+	taskset -c $dest_cpu echo $3 > /sys/kernel/debug/latency_test/timeout_expected_ns
-+	# Wait for the result to populate
-+	sleep 0.1
-+	timeout_diff=$(cat /sys/kernel/debug/latency_test/timeout_diff_ns)
-+	src_cpu=$(cat /sys/kernel/debug/latency_test/timeout_cpu_src)
-+	if [ "$1" = "baseline" ]; then
-+		kill $task_pid
-+		wait $task_pid 2>/dev/null
-+	fi
-+}
-+
-+run_timeout_tests()
-+{
-+	extract_residency
-+	# Disable idle states for all CPUs
-+	op_cpuidle $DISABLE
-+
-+	declare -a avg_arr
-+	echo -e "\n--Timeout Latency Test--" | tee -a $LOG
-+
-+	echo -e "--Baseline Timeout Latency measurement: CPU Busy--" >> $LOG
-+	printf "%s %10s %10s\n" "Wakeup_src" "Baseline_delay(ns)">> $LOG
-+	for cpu in "${core_arr[@]}"
-+	do
-+		local cpu_status=$(cpu_is_online $cpu)
-+		if [ $cpu_status == 0 ]; then
-+			continue
-+		fi
-+		timeout_test_once "baseline" $cpu 1000000
-+		printf "%-3s %13s\n" $src_cpu $timeout_diff >> $LOG
-+		avg_arr+=($timeout_diff)
-+	done
-+	compute_average "${avg_arr[@]}"
-+	echo -e "Baseline Avg timeout diff(ns): $avg" | tee -a $LOG
-+
-+	for ((state=0; state<NUM_STATES; state++))
-+	do
-+		unset avg_arr
-+		echo -e "---Enabling state: ${state_name_arr[$state]}---" >> $LOG
-+		cpuidle_enable_state $state
-+		printf "%s %10s %10s\n" "Wakeup_src" "Baseline_delay(ns)" "Delay(ns)" >> $LOG
-+		for cpu in "${core_arr[@]}"
-+		do
-+			local cpu_status=$(cpu_is_online $cpu)
-+			if [ $cpu_status == 0 ]; then
-+				continue
-+			fi
-+			timeout_test_once "test" $cpu 1000000
-+			printf "%-3s %13s %18s\n" $src_cpu $baseline_timeout_diff $timeout_diff >> $LOG
-+			avg_arr+=($timeout_diff)
-+		done
-+		compute_average "${avg_arr[@]}"
-+		echo -e "Expected timeout(ns): ${residency_arr[$state]}" >> $LOG
-+		echo -e "Observed Avg timeout diff(ns) - State ${state_name_arr[$state]}: $avg" | tee -a $LOG
-+		cpuidle_disable_state $state
-+	done
-+}
-+
-+declare -a residency_arr
-+declare -a latency_arr
-+declare -a core_arr
-+declare -a first_core_arr
-+declare -a state_name_arr
-+
-+parse_arguments $@
-+
-+rm -f $LOG
-+touch $LOG
-+NUM_CPUS=$(nproc --all)
-+NUM_STATES=$(ls -1 /sys/devices/system/cpu/cpu0/cpuidle/ | wc -l)
-+
-+extract_core_information
-+extract_state_information
-+
-+ins_mod $MODULE
-+
-+run_ipi_tests
-+run_timeout_tests
-+
-+# Enable all idle states for all CPUs
-+op_cpuidle $ENABLE
-+printf "Removing $MODULE module\n"
-+printf "Full Output logged at: $LOG\n"
-+rmmod $MODULE
-+
-diff --git a/tools/testing/selftests/powerpc/cpuidle_latency/settings b/tools/testing/selftests/powerpc/cpuidle_latency/settings
-new file mode 100644
-index 000000000000..e7b9417537fb
---- /dev/null
-+++ b/tools/testing/selftests/powerpc/cpuidle_latency/settings
-@@ -0,0 +1 @@
-+timeout=0
+* v7-> v8
+  - Rebase to kvm/queue, commit c1dc20e254b4 ("KVM: switch per-VM
+  stats to u64")
+  - Revise code to reflect the per-VM stats type from ulong to u64
+  - Addressed some other nits
+
+* v6 -> v7
+  - Improve file descriptor allocation function by Krish suggestion
+  - Use "generic stats" instead of "common stats" as Krish suggested
+  - Addressed some other nits from Krish and David Matlack
+
+* v5 -> v6
+  - Use designated initializers for STATS_DESC
+  - Change KVM_STATS_SCALE... to KVM_STATS_BASE...
+  - Use a common function for kvm_[vm|vcpu]_stats_read
+  - Fix some documentation errors/missings
+  - Use TEST_ASSERT in selftest
+  - Use a common function for [vm|vcpu]_stats_test in selftest
+
+* v4 -> v5
+  - Rebase to kvm/queue, commit a4345a7cecfb ("Merge tag
+    'kvmarm-fixes-5.13-1'")
+  - Change maximum stats name length to 48
+  - Replace VM_STATS_COMMON/VCPU_STATS_COMMON macros with stats
+    descriptor definition macros.
+  - Fixed some errors/warnings reported by checkpatch.pl
+
+* v3 -> v4
+  - Rebase to kvm/queue, commit 9f242010c3b4 ("KVM: avoid "deadlock"
+    between install_new_memslots and MMU notifier")
+  - Use C-stype comments in the whole patch
+  - Fix wrong count for x86 VCPU stats descriptors
+  - Fix KVM stats data size counting and validity check in selftest
+
+* v2 -> v3
+  - Rebase to kvm/queue, commit edf408f5257b ("KVM: avoid "deadlock"
+    between install_new_memslots and MMU notifier")
+  - Resolve some nitpicks about format
+
+* v1 -> v2
+  - Use ARRAY_SIZE to count the number of stats descriptors
+  - Fix missing `size` field initialization in macro STATS_DESC
+
+[1] https://lore.kernel.org/kvm/20210402224359.2297157-1-jingzhangos@google.com
+[2] https://lore.kernel.org/kvm/20210415151741.1607806-1-jingzhangos@google.com
+[3] https://lore.kernel.org/kvm/20210423181727.596466-1-jingzhangos@google.com
+[4] https://lore.kernel.org/kvm/20210429203740.1935629-1-jingzhangos@google.com
+[5] https://lore.kernel.org/kvm/20210517145314.157626-1-jingzhangos@google.com
+[6] https://lore.kernel.org/kvm/20210524151828.4113777-1-jingzhangos@google.com
+[7] https://lore.kernel.org/kvm/20210603211426.790093-1-jingzhangos@google.com
+
+---
+
+Jing Zhang (4):
+  KVM: stats: Separate generic stats from architecture specific ones
+  KVM: stats: Add fd-based API to read binary stats data
+  KVM: stats: Add documentation for statistics data binary interface
+  KVM: selftests: Add selftest for KVM statistics data binary interface
+
+ Documentation/virt/kvm/api.rst                | 174 +++++++++++++-
+ arch/arm64/include/asm/kvm_host.h             |   9 +-
+ arch/arm64/kvm/guest.c                        |  46 +++-
+ arch/mips/include/asm/kvm_host.h              |   9 +-
+ arch/mips/kvm/mips.c                          |  71 +++++-
+ arch/powerpc/include/asm/kvm_host.h           |   9 +-
+ arch/powerpc/kvm/book3s.c                     |  72 +++++-
+ arch/powerpc/kvm/book3s_hv.c                  |  12 +-
+ arch/powerpc/kvm/book3s_pr.c                  |   2 +-
+ arch/powerpc/kvm/book3s_pr_papr.c             |   2 +-
+ arch/powerpc/kvm/booke.c                      |  67 +++++-
+ arch/s390/include/asm/kvm_host.h              |   9 +-
+ arch/s390/kvm/kvm-s390.c                      | 137 ++++++++++-
+ arch/x86/include/asm/kvm_host.h               |   9 +-
+ arch/x86/kvm/x86.c                            |  75 +++++-
+ include/linux/kvm_host.h                      | 138 ++++++++++-
+ include/linux/kvm_types.h                     |  12 +
+ include/uapi/linux/kvm.h                      |  46 ++++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   3 +
+ .../selftests/kvm/kvm_binary_stats_test.c     | 218 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
+ virt/kvm/kvm_main.c                           | 157 ++++++++++++-
+ 24 files changed, 1202 insertions(+), 91 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_binary_stats_test.c
+
+
+base-commit: c1dc20e254b421a2463da7f053b37d822788224a
 -- 
-2.17.1
+2.32.0.272.g935e593368-goog
 
