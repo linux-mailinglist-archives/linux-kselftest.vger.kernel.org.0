@@ -2,133 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E44BF3A375D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 00:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AEAC3A3A9A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 05:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhFJWuI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Jun 2021 18:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
+        id S230392AbhFKD7k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Jun 2021 23:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbhFJWuH (ORCPT
+        with ESMTP id S230329AbhFKD7j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Jun 2021 18:50:07 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1595CC0617A6
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 15:47:57 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id m21so5632188lfg.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 15:47:56 -0700 (PDT)
+        Thu, 10 Jun 2021 23:59:39 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42531C0617AD
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 20:57:31 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id c15-20020ae9e20f0000b02903aafa8c83e7so6315514qkc.21
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jun 2021 20:57:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NB6oruf2NY8GhkThmLRjR9OK5AwQwpQtqUKMMQIim6Q=;
-        b=RlAcwFqFOmgURmrxCa/W36B7QDS48JsLtq3ukyvETwbEWY9n6kYR15OJLR1+m/Ayoa
-         IFOPgRn+MWHaHRxfzFfw8YKkIIgs2ZCGs14vP+ZHoxKKjXRv9KyIxggliDfqvjBIjYCq
-         V94EObt9JIV8pROJEKleOqvY3Lp4pDZx/7FjYYuWinqlm2/1Nytb+dPDD+hsW55nAX2C
-         NGH7VQWOTOBEWWcYPh7P7p/+0rXPvWK0nt69u5R3R8eLlCTBAmYqdMr2C3ARulRpzg4R
-         8Q+QNXpBn09jeaY6tlsnVHADHx9NQbdhTP8oD+yYICZdPO5DY7zVDUU7MeMZbXvDgcyf
-         zO/g==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=4GJ6IQLArclcwrRp6TrE2/aP5eBvoi7bbacXvoz3dt8=;
+        b=I8xBmcKhwP67CQoV9rW3B7jJIyWVaJ1NyNdUC9QsrlnXdBx+gKJEzXobNOD+Flxinr
+         7hUrzlZDRP45ccJtA/djL/cCjb9qs1vUPkhavpe6nY9frEDYw7ce/DBAKjaKItUW0GGj
+         4H6vKoQ2VJ7QyGzv2eWNxTjITKzJ2JxojstZWUBm8dsX65zEGCyt19vsy8Bv0Y9vBXuR
+         L8RCBHfbHmYHik4xLi44wczupoWToOIBAfXgIssDcrQp/G688LVwaHHYET607PzIxEt+
+         Vz/v7FCknOYOAvdwHoI4RYj+ZwpopGmTKUvcYyCfnbj9d+sBLK2iqxSE5OymrQvdgFl6
+         niaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NB6oruf2NY8GhkThmLRjR9OK5AwQwpQtqUKMMQIim6Q=;
-        b=OXMU05a2pvSnBKD8/M2MDSLqk2LsgmTDU5SyLW6LvcU5nQgdMv2sMqQUrEA606fucZ
-         7LQpy42vHY6XhKzkmYy1lgSoZEnmrYnXYI/lCMPEIRf5+VRGZvRa/S/vGxS/W1k8nn74
-         12lvPG4gLXERMFWQcuIDOA5Adyj0+pXBDVEqD/phoiJQsKb/S1E1KOwemV84kDM2SCTY
-         I0xNH5Qkmn5rQBkJ4amRh3CcVeOOmiFSQA5jyKyvFi1kb3UYCg81Q0UKlgN0UvFKnAhf
-         DcIxavLtODb6JDZFFvGl0EnOvePsRYMxy+V6y80z9hPOzzxGp8rERTIxcwKW5qmKtIuy
-         7hyA==
-X-Gm-Message-State: AOAM532oU4zoF8AqxiBhz+XXV/Di340ChloNsk+4R8ng4lF9a/9lC2wy
-        CmUEBJN3VCuKyweSR+xlRZ72+PAX1Hmbwc4A/LbHyg==
-X-Google-Smtp-Source: ABdhPJwpq8QDGCaA9l+lT37FAjCpuN+L2RrV3HuGV2JBb0AyojuY/TbuPJ2PuprqJ9F9pWJFYjBYz3jwM7wdjjpecmI=
-X-Received: by 2002:a05:6512:39ca:: with SMTP id k10mr657852lfu.473.1623365274281;
- Thu, 10 Jun 2021 15:47:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210603211426.790093-1-jingzhangos@google.com>
- <20210603211426.790093-3-jingzhangos@google.com> <e3b2b3ab-88a2-827c-7775-10be63158ff3@redhat.com>
-In-Reply-To: <e3b2b3ab-88a2-827c-7775-10be63158ff3@redhat.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Thu, 10 Jun 2021 17:47:41 -0500
-Message-ID: <CAAdAUtjAuDdyBz7qd7UE0WuY77US-bhY1-jA9E11ddhZ0=gw6g@mail.gmail.com>
-Subject: Re: [PATCH v7 2/4] KVM: stats: Add fd-based API to read binary stats data
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=4GJ6IQLArclcwrRp6TrE2/aP5eBvoi7bbacXvoz3dt8=;
+        b=GK9FegxvI5zXNLovAdig8LADunFk/sR3Sl4m2mHwGJ/EloRqDhVA8OTzbLnu50UeqS
+         JZPAbfAaDttU0DXcKQtyPVVBsqp3ZjdWgs0qBCa6bH6KQpsOtjVjstL4AFSTx3BgaDvx
+         t462dQm3BBXNBWqtqpJEoOTxxIndFdiDCcSgo93zTDMakj/6rwo+45syjhbWFlJHXPNk
+         eW61j0EIA0j5hkJ61wl/Ozfpm/Knjm7kQJDrOXi01L5/x0OPXppt5ISmalSkJnDzJPAK
+         gwoTYb/pM22SbOnQHk+qcVm2ImUOCYHgnmaxbRADVt4O/5p+7hfHV+miR0rvFNZHL7uL
+         YI1g==
+X-Gm-Message-State: AOAM530+WlkmZARHS6yYZpuozWdwIPQHeZY6sZwYXJmyg3GCvhifOahm
+        /71hdnKtU20hdrBAJ0RzcWj5bKWKb0ThoQ==
+X-Google-Smtp-Source: ABdhPJzdVH92RATcdT7fOiewtiBgUGSJ1fLrTKX68+rIrCDdqAsJLud11BTxpEdnpv78xw7ttXzORFT4sgwYDQ==
+X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:b697:a576:a25f:5b1e])
+ (user=davidgow job=sendgmr) by 2002:a0c:f982:: with SMTP id
+ t2mr2921181qvn.28.1623383850258; Thu, 10 Jun 2021 20:57:30 -0700 (PDT)
+Date:   Thu, 10 Jun 2021 20:57:25 -0700
+Message-Id: <20210611035725.1248874-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.272.g935e593368-goog
+Subject: [PATCH] kunit: Fix result propagation for parameterised tests
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Arpitha Raghunandan <98.arpi@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Paolo,
+When one parameter of a parameterised test failed, its failure would be
+propagated to the overall test, but not to the suite result (unless it
+was the last parameter).
 
-On Thu, Jun 10, 2021 at 11:23 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 03/06/21 23:14, Jing Zhang wrote:
-> > +#define DEFINE_VM_STATS_DESC(...) {                                         \
-> > +     STATS_DESC_COUNTER("remote_tlb_flush"),                                \
-> > +     ## __VA_ARGS__                                                         \
-> > +}
-> > +
-> > +#define DEFINE_VCPU_STATS_DESC(...) {                                               \
-> > +     STATS_DESC_COUNTER("halt_successful_poll"),                            \
-> > +     STATS_DESC_COUNTER("halt_attempted_poll"),                             \
-> > +     STATS_DESC_COUNTER("halt_poll_invalid"),                               \
-> > +     STATS_DESC_COUNTER("halt_wakeup"),                                     \
-> > +     STATS_DESC_TIME_NSEC("halt_poll_success_ns"),                          \
-> > +     STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),                             \
-> > +     ## __VA_ARGS__                                                         \
->
-> Let's instead put this (note it's without braces) in macros like these
->
-> #define KVM_GENERIC_VM_STATS()                                                  \
->         STATS_DESC_COUNTER("remote_tlb_flush"),
->
-> #define KVM_GENERIC_VCPU_STATS(...)                                             \
->         STATS_DESC_COUNTER("halt_successful_poll"),                             \
->         STATS_DESC_COUNTER("halt_attempted_poll"),                              \
->         STATS_DESC_COUNTER("halt_poll_invalid"),                                \
->         STATS_DESC_COUNTER("halt_wakeup"),                                      \
->         STATS_DESC_TIME_NSEC("halt_poll_success_ns"),                           \
->         STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),
->
-> and it can be used in the arch files.  In fact it can even be added in patch 1 and
-> switched to STATS_DESC_* here.
->
-> Paolo
->
-I just remember that the reason I used braces is due to following
-error from checkpatch.pl:
-ERROR: Macros with complex values should be enclosed in parentheses
+This is because test_case->success was being reset to the test->success
+result after each parameter was used, so a failing test's result would
+be overwritten by a non-failing result. The overall test result was
+handled in a third variable, test_result, but this was disacarded after
+the status line was printed.
 
-So, just keep it as it is?
+Instead, just propagate the result after each parameter run.
 
-Thanks,
-Jing
+Signed-off-by: David Gow <davidgow@google.com>
+Fixes: fadb08e7c750 ("kunit: Support for Parameterized Testing")
+---
+
+This is fixing quite a serious bug where some test suites would appear
+to succeed even if some of their component tests failed. It'd be nice to
+get this into kunit-fixes ASAP.
+
+(This will require a rework of some of the skip tests work, for which
+I'll send out a new version soon.)
+
+Cheers,
+-- David
+
+ lib/kunit/test.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 2f6cc0123232..17973a4a44c2 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -376,7 +376,7 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	context.test_case = test_case;
+ 	kunit_try_catch_run(try_catch, &context);
+ 
+-	test_case->success = test->success;
++	test_case->success &= test->success;
+ }
+ 
+ int kunit_run_tests(struct kunit_suite *suite)
+@@ -388,7 +388,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+ 		struct kunit test = { .param_value = NULL, .param_index = 0 };
+-		bool test_success = true;
++		test_case->success = true;
+ 
+ 		if (test_case->generate_params) {
+ 			/* Get initial param. */
+@@ -398,7 +398,6 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 
+ 		do {
+ 			kunit_run_case_catch_errors(suite, test_case, &test);
+-			test_success &= test_case->success;
+ 
+ 			if (test_case->generate_params) {
+ 				if (param_desc[0] == '\0') {
+@@ -420,7 +419,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 			}
+ 		} while (test.param_value);
+ 
+-		kunit_print_ok_not_ok(&test, true, test_success,
++		kunit_print_ok_not_ok(&test, true, test_case->success,
+ 				      kunit_test_case_num(suite, test_case),
+ 				      test_case->name);
+ 	}
+-- 
+2.32.0.272.g935e593368-goog
+
