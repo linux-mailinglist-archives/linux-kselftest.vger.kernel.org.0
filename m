@@ -2,71 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C933A3FA1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 11:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B484E3A4015
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jun 2021 12:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbhFKJ5d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Jun 2021 05:57:33 -0400
-Received: from mga09.intel.com ([134.134.136.24]:17450 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229633AbhFKJ5c (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Jun 2021 05:57:32 -0400
-IronPort-SDR: VtVoc5iLZKz0CK2XAjM2ytr9skreuYSnr6KE3Zhgf4QbqvQReK6FzK5IBpeNjp1ZDrietAwYhV
- WRgJDkd/xnJQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="205455825"
-X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="205455825"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 02:55:32 -0700
-IronPort-SDR: zQiO9KYtol5E/fgSyNcc7ANqdkyiVXaJgjmcQuhtPZEO8lTdqK/E21ixW/LrjKQA7pZGOIVNLH
- CLSxhkuyOuhQ==
-X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="552648386"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 02:55:28 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lrdsr-001TgV-PV; Fri, 11 Jun 2021 12:55:25 +0300
-Date:   Fri, 11 Jun 2021 12:55:25 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
-        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
-        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, tales.aparecida@gmail.com
-Subject: Re: [PATCH v3 0/1] lib: Convert UUID runtime test to KUnit
-Message-ID: <YMMzDUVOlJcw63lf@smile.fi.intel.com>
-References: <20210610163959.71634-1-andrealmeid@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210610163959.71634-1-andrealmeid@collabora.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S229480AbhFKKU5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Jun 2021 06:20:57 -0400
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:49825 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231590AbhFKKU5 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 11 Jun 2021 06:20:57 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Uc2YYhU_1623406719;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Uc2YYhU_1623406719)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 11 Jun 2021 18:18:58 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH v2] selftests/x86/syscall: use ARRAY_SIZE for msbs
+Date:   Fri, 11 Jun 2021 18:18:34 +0800
+Message-Id: <1623406714-52873-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 01:39:58PM -0300, André Almeida wrote:
-> Hi,
-> 
-> This patch converts existing UUID runtime test to use KUnit framework.
-> 
-> Below, there's a comparison between the old output format and the new
-> one. Keep in mind that even if KUnit seems very verbose, this is the
-> corner case where _every_ test has failed.
+Use ARRAY_SIZE instead of dividing sizeof array with sizeof an
+element.
 
-Btw, do we have test coverage statistics?
+Clean up the following coccicheck warning:
 
-I mean since we reduced 18 test cases to 12, do we still have the same / better
-test coverage?
+./tools/testing/selftests/x86/syscall_numbering.c:316:35-36: WARNING:
+Use ARRAY_SIZE.
 
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+Changes in v2:
+  -Add ARRAY_SIZE definition.
+
+ tools/testing/selftests/x86/syscall_numbering.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/x86/syscall_numbering.c b/tools/testing/selftests/x86/syscall_numbering.c
+index 9915917..ef30218 100644
+--- a/tools/testing/selftests/x86/syscall_numbering.c
++++ b/tools/testing/selftests/x86/syscall_numbering.c
+@@ -40,6 +40,7 @@
+ #define X32_WRITEV	516
+ 
+ #define X32_BIT 0x40000000
++#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+ 
+ static int nullfd = -1;		/* File descriptor for /dev/null */
+ static bool with_x32;		/* x32 supported on this kernel? */
+@@ -313,7 +314,7 @@ static void test_syscall_numbering(void)
+ 	 * The MSB is supposed to be ignored, so we loop over a few
+ 	 * to test that out.
+ 	 */
+-	for (size_t i = 0; i < sizeof(msbs)/sizeof(msbs[0]); i++) {
++	for (size_t i = 0; i < ARRAY_SIZE(msbs); i++) {
+ 		int msb = msbs[i];
+ 		run("Checking system calls with msb = %d (0x%x)\n",
+ 		    msb, msb);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+1.8.3.1
 
