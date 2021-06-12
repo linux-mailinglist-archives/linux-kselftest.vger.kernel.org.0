@@ -2,109 +2,251 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7731D3A5068
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jun 2021 21:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2B23A515F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Jun 2021 01:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbhFLTts (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 12 Jun 2021 15:49:48 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:58004 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbhFLTts (ORCPT
+        id S230136AbhFLXYe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 12 Jun 2021 19:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229777AbhFLXYe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 12 Jun 2021 15:49:48 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1ls9bd-00B7yK-Dq; Sat, 12 Jun 2021 13:47:45 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=email.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1ls9ba-00839m-4V; Sat, 12 Jun 2021 13:47:44 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Bernd Edlinger <bernd.edlinger@hotmail.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Charles Haithcock <chaithco@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        YiFei Zhu <yifeifz2@illinois.edu>,
-        Adrian Reber <areber@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-fsdevel\@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-References: <AM8PR10MB4708AFBD838138A84CE89EF8E4359@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-        <20210610143642.e4535dbdc0db0b1bd3ee5367@linux-foundation.org>
-Date:   Sat, 12 Jun 2021 14:44:05 -0500
-In-Reply-To: <20210610143642.e4535dbdc0db0b1bd3ee5367@linux-foundation.org>
-        (Andrew Morton's message of "Thu, 10 Jun 2021 14:36:42 -0700")
-Message-ID: <87eed6zx4q.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1ls9ba-00839m-4V;;;mid=<87eed6zx4q.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+Lb/nnF3A2u0YB7jYNPcnJEbfzC5VPB3M=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Andrew Morton <akpm@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 2478 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 11 (0.5%), b_tie_ro: 10 (0.4%), parse: 1.04
-        (0.0%), extract_message_metadata: 20 (0.8%), get_uri_detail_list: 1.00
-        (0.0%), tests_pri_-1000: 18 (0.7%), tests_pri_-950: 1.29 (0.1%),
-        tests_pri_-900: 1.11 (0.0%), tests_pri_-90: 2229 (89.9%), check_bayes:
-        2217 (89.5%), b_tokenize: 7 (0.3%), b_tok_get_all: 6 (0.3%),
-        b_comp_prob: 2.2 (0.1%), b_tok_touch_all: 2197 (88.7%), b_finish: 1.18
-        (0.0%), tests_pri_0: 181 (7.3%), check_dkim_signature: 0.54 (0.0%),
-        check_dkim_adsp: 3.0 (0.1%), poll_dns_idle: 1.15 (0.0%), tests_pri_10:
-        3.0 (0.1%), tests_pri_500: 9 (0.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCHv8] exec: Fix dead-lock in de_thread with ptrace_attach
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+        Sat, 12 Jun 2021 19:24:34 -0400
+X-Greylist: delayed 92 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Jun 2021 16:22:33 PDT
+Received: from forwardcorp1j.mail.yandex.net (forwardcorp1j.mail.yandex.net [IPv6:2a02:6b8:0:1619::183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BA4C061574
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Jun 2021 16:22:33 -0700 (PDT)
+Received: from vla1-fdfb804fb3f3.qloud-c.yandex.net (vla1-fdfb804fb3f3.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:3199:0:640:fdfb:804f])
+        by forwardcorp1j.mail.yandex.net (Yandex) with ESMTP id 9E8212E131C;
+        Sun, 13 Jun 2021 02:20:58 +0300 (MSK)
+Received: from vla5-d6d5ce7a4718.qloud-c.yandex.net (vla5-d6d5ce7a4718.qloud-c.yandex.net [2a02:6b8:c18:341e:0:640:d6d5:ce7a])
+        by vla1-fdfb804fb3f3.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id jSwUFIDoiG-Kw103prR;
+        Sun, 13 Jun 2021 02:20:58 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1623540058; bh=QVmH0vG3ut7uHTVd6NJfI4q7ACcQ76InMyG+bHNDI4w=;
+        h=Message-Id:Date:Subject:To:From:Cc;
+        b=ABoQFJsncN6kdvpw0YPzw2adWPunjppdyu6/NzGcTOnAqk8aO38z0QkduBZuZNbn/
+         tZMI4MU+QHoQFPiZ+LADznPsR8WiOeAXrAyDo75qofcEmuzYvFIqhSGHxWh4UAWnOu
+         dymO+xKcf061GsP+KyHpKg8DDeQaas5hv2k4A0+c=
+Authentication-Results: vla1-fdfb804fb3f3.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+Received: from ov.vla.yp-c.yandex.net (ov.vla.yp-c.yandex.net [2a02:6b8:c0f:1a86:0:696:9377:0])
+        by vla5-d6d5ce7a4718.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id iFFaKTA8EI-Kw2q07Le;
+        Sun, 13 Jun 2021 02:20:58 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   Alexander Ovechkin <ovov@yandex-team.ru>
+To:     linux-kselftest@vger.kernel.org
+Cc:     shuah@kernel.org, laoar.shao@gmail.com, guro@fb.com,
+        dmtrmonakhov@yandex-team.ru
+Subject: [PATCH] selftests: cgroup: add stale mem protection values test
+Date:   Sun, 13 Jun 2021 02:20:01 +0300
+Message-Id: <20210612232001.11399-1-ovov@yandex-team.ru>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Andrew Morton <akpm@linux-foundation.org> writes:
+Add test case that reproduces premature oom caused by usage of stale
+mem protection. Usage of stale mem protection could lead to throttle
+of reclaim in target memcg and thus could trigger OOM.
 
-> On Thu, 10 Jun 2021 09:31:42 +0200 Bernd Edlinger <bernd.edlinger@hotmail.de> wrote:
->
->> This introduces signal->unsafe_execve_in_progress,
->> which is used to fix the case when at least one of the
->> sibling threads is traced, and therefore the trace
->> process may dead-lock in ptrace_attach, but de_thread
->> will need to wait for the tracer to continue execution.
->
-> Deadlocks are serious.  Is this exploitable by unprivileged userspace?
+This bug was fixed in 22f7496f0b90 ("mm, memcg: avoid stale protection
+values when cgroup is above protection").
 
-The processes are killable so I don't think this is the serious in the
-way you mean.  In fact Linus has already said that it is not a deadlock.
+Signed-off-by: Alexander Ovechkin <ovov@yandex-team.ru>
+---
+ tools/testing/selftests/cgroup/cgroup_util.c  | 21 ++--
+ tools/testing/selftests/cgroup/cgroup_util.h  |  1 +
+ .../selftests/cgroup/test_memcontrol.c        | 96 +++++++++++++++++++
+ 3 files changed, 111 insertions(+), 7 deletions(-)
 
-Eric
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 027014662fb2..b4e90fe56c11 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -12,6 +12,7 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
++#include <sys/mman.h>
+ #include <unistd.h>
+ 
+ #include "cgroup_util.h"
+@@ -456,22 +457,28 @@ int get_temp_fd(void)
+ 	return open(".", O_TMPFILE | O_RDWR | O_EXCL);
+ }
+ 
++int touch_file(int fd, size_t size, off_t offset) {
++	char *buf;
++
++	buf = mmap(0, size, PROT_READ, MAP_SHARED | MAP_POPULATE, fd, offset);
++	if (!buf)
++		return -1;
++	munmap(buf, size);
++	return 0;
++}
++
+ int alloc_pagecache(int fd, size_t size)
+ {
+-	char buf[PAGE_SIZE];
+ 	struct stat st;
+-	int i;
+ 
+ 	if (fstat(fd, &st))
+ 		goto cleanup;
+ 
+-	size += st.st_size;
+-
+-	if (ftruncate(fd, size))
++	if (ftruncate(fd, st.st_size + size))
+ 		goto cleanup;
+ 
+-	for (i = 0; i < size; i += sizeof(buf))
+-		read(fd, buf, sizeof(buf));
++	if (touch_file(fd, size, st.st_size))
++		goto cleanup;
+ 
+ 	return 0;
+ 
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
+index 5a1305dd1f0b..c9f3af07d969 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/cgroup_util.h
+@@ -42,6 +42,7 @@ extern int cg_run_nowait(const char *cgroup,
+ 			 int (*fn)(const char *cgroup, void *arg),
+ 			 void *arg);
+ extern int get_temp_fd(void);
++extern int touch_file(int fd, size_t size, off_t offset);
+ extern int alloc_pagecache(int fd, size_t size);
+ extern int alloc_anon(const char *cgroup, void *arg);
+ extern int is_swap_enabled(void);
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index c19a97dd02d4..63b0b4403f4d 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -20,6 +20,7 @@
+ #include "../kselftest.h"
+ #include "cgroup_util.h"
+ 
++
+ /*
+  * This test creates two nested cgroups with and without enabling
+  * the memory controller.
+@@ -579,6 +580,24 @@ static int alloc_pagecache_max_30M(const char *cgroup, void *arg)
+ 
+ }
+ 
++static int touch_pagecache(const char *cgroup, void *arg) {
++	int fd = (long)arg;
++	struct stat st;
++
++	if (fstat(fd, &st))
++		return -1;
++
++	return touch_file(fd, st.st_size, 0);
++}
++
++static int alloc_pagecache_300M(const char *cgroup, void *arg)
++{
++	int fd = (long)arg;
++
++	return alloc_pagecache(fd, MB(300));
++}
++
++
+ /*
+  * This test checks that memory.high limits the amount of
+  * memory which can be consumed by either anonymous memory
+@@ -1169,6 +1188,82 @@ static int test_memcg_oom_group_score_events(const char *root)
+ 	return ret;
+ }
+ 
++/* 
++ * First, this test creates the following hierarchy: 
++ * A   memory.low = 200M, memory.max = 200M
++ * A/B memory.low = 200M, memory.max = 200M
++ * A/C memory.low = 200M, memory.max = 200M
++ *
++ * Then it triggers relaim in A, by allocating A/B and A/C
++ * pagecaches. During this reclaim elow values of A/B and A/C are
++ * filled.  
++ * Then it lowers limits for A/C to create memory pressure
++ * and trigger reclaim in A/C. Usage of elow value assigned during
++ * previous step as memory protection will lead with high probabilty
++ * to OOM.
++ */
++static int test_memcg_stale_protection_oom(const char *root) {
++	int i;
++	int fd = -1;
++	char *memcgs[3] = {0};
++	const int memcgs_count = sizeof(memcgs)/sizeof(memcgs[0]);
++	int ret = -1;
++	char *low1 = "200M", *low2 = "100M";
++
++	for (i = 0; i < memcgs_count; ++i) {
++		char name[] = "memcg_test_\0";
++		name[sizeof(name)-2] = '0' + i;
++		memcgs[i] = cg_name(memcgs[0] ? : root, name);
++		if (!memcgs[i])
++			goto cleanup;
++		if (cg_create(memcgs[i]))
++			goto cleanup;
++	}
++
++	if (cg_write(memcgs[0], "cgroup.subtree_control", "+memory"))
++		goto cleanup;
++
++	for (i = 0; i < memcgs_count; ++i) {
++		if (cg_write(memcgs[i], "memory.max", low1)) {
++			goto cleanup;
++		}
++		if (cg_write(memcgs[i], "memory.low", low1)) {
++			goto cleanup;
++		}
++	}
++
++	fd = get_temp_fd();
++	if (fd < 0)
++		goto cleanup;
++
++	if (cg_run(memcgs[1], alloc_pagecache_300M, (void*)(long)fd)) {
++		goto cleanup;
++	}
++	if (cg_run(memcgs[2], touch_pagecache, (void*)(long)fd)) {
++		goto cleanup;
++	}
++
++	if (cg_write(memcgs[2], "memory.max", low2))
++		goto cleanup;
++	if (cg_write(memcgs[2], "memory.low", low2))
++		goto cleanup;
++	if (cg_run(memcgs[2], touch_pagecache, (void*)(long)fd))
++		goto cleanup;
++
++	ret = 0;
++cleanup:
++	for (i = memcgs_count; i > 0; --i) {
++		if (memcgs[i - 1]) {
++			cg_destroy(memcgs[i - 1]);
++			free(memcgs[i - 1]);
++		}
++	}
++
++	if (fd >= 0)
++		close(fd);
++	return ret;
++}
++
+ 
+ #define T(x) { x, #x }
+ struct memcg_test {
+@@ -1187,6 +1282,7 @@ struct memcg_test {
+ 	T(test_memcg_oom_group_leaf_events),
+ 	T(test_memcg_oom_group_parent_events),
+ 	T(test_memcg_oom_group_score_events),
++	T(test_memcg_stale_protection_oom),
+ };
+ #undef T
+ 
+-- 
+2.17.1
+
