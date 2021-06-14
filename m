@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE983A6749
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jun 2021 15:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18A13A674F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jun 2021 15:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbhFNNDo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Jun 2021 09:03:44 -0400
+        id S232992AbhFNNDs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Jun 2021 09:03:48 -0400
 Received: from mail-eopbgr50111.outbound.protection.outlook.com ([40.107.5.111]:61697
         "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233304AbhFNNDn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Jun 2021 09:03:43 -0400
+        id S233450AbhFNNDq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 14 Jun 2021 09:03:46 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EhQCrE5XiGpox3fWMP2GzKGzqmSBn2e4SwhgWURbMBdCjdG/nlgbIA7EFaWgnNBD7wGhGeri2Y8O0L4TppgljgPAl0VtlhRSZUK/6KcDAs33fYVuJvuHSGzKKuYudLwAIr5/FZp9JG/LjtJbwi3okw2iqVtuqHz8YzlJd9Ej0pytaIujgZLoyxbHUKbDONiGVbXE45dAkNPMQ4K/u8nRF6WjhmgMgPxzVvVi1RLuCw6YZ10SyJIywFZ97Br6O1rBlfWd1RSz2iUGAjSbFhrMB1FSxxCwa1Kq0mQxuJ2ZTNkb5BCZPCQZ1qInrd/ejMGo1vIxo6d9VgubS9TboBNSEQ==
+ b=f1eh4xN/GT87IU/t7iZ0uUI0Ai8ti8UD7kTYNX2DwvDucZOgc8UMY8Zaetubmm0ecAoIiw8vou99MYJyDTlrZFcinOWiEe1gn2O7qd0lh+ZexIsdlpYMM09vNpDHfwCdDPTCMr/5ayv9vUqtSPDituUG5SNg5uDi4naVVyDyvtg8sxM8fgIOaY9xxWgfW7JdoUup4an05Ig08zLcmw6zzajHaivc/KVTnFOXTQoMOeGb7AudXEBkkIcSWoJUFkkZyLeI0wd0Byxoo5N1Iyp+lopGMheLbuTX8mJ6iuMpeM5pxA5IWYyUV441dF8dIs5CtU84FskzYB8EKafBk9mblA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I2lDWVe+IBUBCHeJ9EXu1ejzqvj+f0xU5dG3BVwHa/g=;
- b=iVvPzRukXkDZ0zH2l3l+lvIC7qQotrYSHqlz2yUsui/rgLZ/oyQF4CijBX8z8P/Tcv6aNENvss0VBG+RJqF3LjheTv7pikjgssNLZVjO+85kCCacdZFXa/8U5QDXK1BGZdZQSJjFx9d4h3WFuTy1IyMJ+v1zoJWIZkdeFVOAqwXfINIuOsRMNbm2HqVr+KILEDtRacD0t3YbyYCMyudUHeTxy3N1GAXwot8VUgWLY+tvldzjupAuwPu5Ze3+FXbMhuzocRjq17O3y+UbpzWdrxC2w6KtlDRqJJVJM03JPz+pz5/nTZPd0puwNTQM/26vAPEJ8T2FivIN+b8nP/do8A==
+ bh=wFxkSwjoKn1xfp5wQEgW+LqTGwSJ4sBvfTsa35Bqq48=;
+ b=PcgmBDk0gt4m9MYPjxuAuWadSfzlTWMwuGpIigA7xZh726kgAqHIOByL3NXr1P/zL3tU2Mp1KDctSbBz5ckgDMahjiVOw676PTFsXikJLL0spxw10vxcHY091FysdPhgbcQR9Icf46yA6cHEbpFHL3ozt6diccRyyXKhMdTkOUhlHuWGSZcGdNYd//gyYKGB1zKSRj9Eu5XBNPJr6ESeBM18oIqXwSuzRN703TX/z1lNXYm0+p8rbXMJvWuXMu8egHFF3wt91drq7oZdyQAZ8VIQ9Ywbr0VxU+e4WUw1N1SjEbEkJdF8J5UDoyw8GW2HKqRBFGkVyOHDRcuAbJCMHg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
  dkim=pass header.d=plvision.eu; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I2lDWVe+IBUBCHeJ9EXu1ejzqvj+f0xU5dG3BVwHa/g=;
- b=Xfd8I6X/cIlDvkj46/8agEp3+bIM/2c4cxmiK7UrmgEveLRkMU5nvRJnUL3jDt03Lxn0k1GY86liKeje8MbWRMqtM1cCjkbEd9EAQDCLEbgkti+lNfTepzKbXf7OreOlaKW35+P7mVLS+KHdQVZE/LZj06TMtQ4ZkuO8o/4Y51s=
+ bh=wFxkSwjoKn1xfp5wQEgW+LqTGwSJ4sBvfTsa35Bqq48=;
+ b=lONHFy5u/MXAipcRH+1pNc3pEiiCujBdSCwd0y9qJ+bxV+KJJJDLYuRd3tB8j6hxtoYtBtyAjdb7EaL921siRVUut0M1Yy/NwSa4aPh+RNHVT/9GKukb/rwMZjLkcJrEJ/fHoPgTUceJNMLCi+DjM0pOCpCVndP0VU6j1V3IlCo=
 Authentication-Results: plvision.eu; dkim=none (message not signed)
  header.d=none;plvision.eu; dmarc=none action=none header.from=plvision.eu;
 Received: from AM0P190MB0738.EURP190.PROD.OUTLOOK.COM (2603:10a6:208:19b::9)
  by AM9P190MB1396.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:3b6::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.22; Mon, 14 Jun
- 2021 13:01:37 +0000
+ 2021 13:01:40 +0000
 Received: from AM0P190MB0738.EURP190.PROD.OUTLOOK.COM
  ([fe80::d018:6384:155:a2fe]) by AM0P190MB0738.EURP190.PROD.OUTLOOK.COM
  ([fe80::d018:6384:155:a2fe%9]) with mapi id 15.20.4219.025; Mon, 14 Jun 2021
- 13:01:37 +0000
+ 13:01:40 +0000
 From:   Oleksandr Mazur <oleksandr.mazur@plvision.eu>
 To:     oleksandr.mazur@plvision.eu, jiri@nvidia.com, davem@davemloft.net,
         kuba@kernel.org, Shuah Khan <shuah@kernel.org>
@@ -45,9 +45,9 @@ Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Vadym Kochan <vadym.kochan@plvision.eu>, andrew@lunn.ch,
         nikolay@nvidia.com, idosch@idosch.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2 2/7] testing: selftests: net: forwarding: add devlink-required functionality to test (hard) dropped stats field
-Date:   Mon, 14 Jun 2021 16:01:13 +0300
-Message-Id: <20210614130118.20395-3-oleksandr.mazur@plvision.eu>
+Subject: [PATCH net-next v2 4/7] testing: selftests: drivers: net: netdevsim: devlink: add test case for hard drop statistics
+Date:   Mon, 14 Jun 2021 16:01:15 +0300
+Message-Id: <20210614130118.20395-5-oleksandr.mazur@plvision.eu>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210614130118.20395-1-oleksandr.mazur@plvision.eu>
 References: <20210614130118.20395-1-oleksandr.mazur@plvision.eu>
@@ -58,108 +58,85 @@ X-ClientProxiedBy: AM0PR06CA0140.eurprd06.prod.outlook.com
  (2603:10a6:208:19b::9)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from omazur.x.ow.s (217.20.186.93) by AM0PR06CA0140.eurprd06.prod.outlook.com (2603:10a6:208:ab::45) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.21 via Frontend Transport; Mon, 14 Jun 2021 13:01:37 +0000
+Received: from omazur.x.ow.s (217.20.186.93) by AM0PR06CA0140.eurprd06.prod.outlook.com (2603:10a6:208:ab::45) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.21 via Frontend Transport; Mon, 14 Jun 2021 13:01:39 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ec4e8530-b0e2-45cc-5ac0-08d92f348b7c
+X-MS-Office365-Filtering-Correlation-Id: 4956b812-4000-4fa9-f2f9-08d92f348d1a
 X-MS-TrafficTypeDiagnostic: AM9P190MB1396:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM9P190MB1396D5C1556B8A121B83675EE4319@AM9P190MB1396.EURP190.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:431;
+X-Microsoft-Antispam-PRVS: <AM9P190MB13969EF671421BB4DDF823D2E4319@AM9P190MB1396.EURP190.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:179;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zu3wNOjUkIFcTtyS7WQrbF5yISPsjQU0I6cPPpOvAyF5m3uJQOX4+/phBVOZkhFzeYa+SHhrV9UO0WlYi7W/bZKv01Odcl3V2j/DGtnFz87CzHngeuPNwus/AyKrttly7Nq4REU2u68tcOqoxEPElRy4dqSrk14q2dryUrtYzcwepEPZBCYArsSeM/ZHB0YEHznKs12RekTRqjJ0u8dg3HS3upQxxJZFSHflM1FpT5yt4aOsfr251a5FJV2J6LLPns9lhZY25EB7nzuqO7RKrDa4JGwB8vjFQx+Q6ntfxYeELvewEzzabA+Ok7T9zFPvVOHpEc6tecdX8v73KffpwiiFiv47JJ1SgxY4PWR639oQxUaPCigeQ/EHIBiutm9jAcpfxt19mg0eosx8Xn/1dd4DndvtmhHiCKF1SMiJyQJk9St9JAMvX2uYsvtQ4ZlqFARwPzkm1udorM9MM5IyBJRPPBmv8woQhemt4gahC2jsvAODMMY/uu8Yf1QTK5KFUAr9RO94zNLZ9vpbSpNImKzTlAABjObbJNqXHhsu4Y2Qr2ChlO9vOWUG2GpPhnEC8bdmGPY8IVKwuXjs4hBPahPo8yAKjC3g6ptP8HujA/hGbL2yvD0An66bM8pZnNcNMG+nEdYiRFtvMhWQ+KcVZgcj4Yv4DC+HoHDd/rFJsPE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P190MB0738.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(366004)(396003)(376002)(136003)(39830400003)(346002)(6486002)(7416002)(66556008)(16526019)(186003)(83380400001)(66946007)(956004)(66476007)(2616005)(316002)(86362001)(26005)(8936002)(4326008)(8676002)(478600001)(2906002)(44832011)(38350700002)(36756003)(6512007)(6916009)(5660300002)(52116002)(6666004)(6506007)(1076003)(38100700002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: ALYqXfYKGu8KzjRGp6VkBkcFqxzWjkoPrOY7nv+kQ6/bG6U7OoVJMP2hCHVASA6zQmHglHo/Bv88Mr7HlLx+ttHjEDnaMOXr5KBawNoCQoe0bBsJJRXTJQ7iUi2PTo9yypgsRXytZK+PAwO63HrAm9amL7mTDblXsIrzXtspXZ6t4KEDzNv45wtWLVyXgGXV2RvLkN9xI+LN2Wyx0Pox4CUASasPy6s6Rl3X1YWlmj4boJ10HjVxXyEnTKMMrzziTF9Meqy5mKJxOu3PrY8Q56jCd4uCWM6k+zbxNQlGbGR/r4MFqVva/flw3ADfA9tSenG65KWN+lTr1NXK5FG1j2fPax1YxoWtG2HG0apGOXNkMZtV/fWZ1UCNzoS8ngvTP0lOcOvUlQz86GkUKJbCDLNMx6MpPAgGxCKgrC8hsVe1ZDm7EektbN4tzAH29JcZYqyL/1iGMDPPhrGrfTLWlo+nJDKixAoOOfGMWn7sECdsG5/GZZuPgglkF5TFK9DXbsF6c6FdbrsX6K0NnvmJSFOIhQKsg6wfoxGtM2QDqSOI/Lslh/NNxuwqtKdyxPHzAbq9wU6qZYlgQN2/WWJm9bUczuCDa6zaQKxj/39xa5T9duwXDipfMX94pEnyK5TNqsVBlYuRPM9Q3eUFzgNpQ7V7xMYDxMiIMrHpUoM1pVY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P190MB0738.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(366004)(396003)(376002)(136003)(39830400003)(346002)(6486002)(7416002)(66556008)(16526019)(186003)(66946007)(956004)(66476007)(2616005)(316002)(86362001)(26005)(8936002)(4326008)(8676002)(478600001)(2906002)(44832011)(38350700002)(36756003)(6512007)(6916009)(5660300002)(52116002)(6666004)(6506007)(1076003)(38100700002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mTCl8sd2PYLEkaVaN70P5sRD/3OoLIoElvLrprMd0AotKGjfuOGQGFjNj1mV?=
- =?us-ascii?Q?HUVEmKDl/4oLJKe2T+UiIFck2Spyb5/Ve8wY3n2BvZnknnd07rTwYe4bPT8Q?=
- =?us-ascii?Q?h7LDwMTaIrwdfoupTb6ctsJJ+j7PagJ1xoDciCI221Kaqh3ufiS0Zonbg89E?=
- =?us-ascii?Q?6Dg/k5KjangXUSHxbWlm8u4UgkIayHAv1RHeUdfviifcWLRZr4m/UDIaRZXo?=
- =?us-ascii?Q?15cvYZPMMovJGVrjpav06h2uRixOoaF4K0P80Q6eX3YMHkOVeMSYpStL+aSS?=
- =?us-ascii?Q?jH6vrBB5arhJRqZTa09Y2yiHAnLvuSTQycXRDepV23ViRhea1ZOSF9vQ2fU6?=
- =?us-ascii?Q?29wmNdpGNDJbuPIEYWjrBTo1ULb9ORGSk9876EltbZqku2XqVajjDtRShKup?=
- =?us-ascii?Q?MQg/A22HzLZ6C8oKGd5G8zXd/jUKENBre0uESUTH6lfhXu65elBW9T5wTRU9?=
- =?us-ascii?Q?MQDZ1XhOxvalr57Hxm8IhctZijr7p6xUkVtzayUloSja2xd+cdsHWNJVeL0g?=
- =?us-ascii?Q?4OPSxppBmzLkiPNicKt41DWU93AAx5ki5rfvuCXBs9E9bnpwMRSdC1X/Ap/w?=
- =?us-ascii?Q?Iwne+zho8wlfWiocLjUGmtkv0Ub6YbYITXa5sxVjoNpzq1j3MyCY4Ecy5NNk?=
- =?us-ascii?Q?yCw8eZoQRF0W9k4ySMOJRWym9e92LetCbbpKjAs6DnG51GZBUFMTghnF5z5i?=
- =?us-ascii?Q?9gVcoCz4ivZxdQiP/yqWAWPjw1QdCmGhzsdFIgW7Kp5U4UQzr4m+rjQ1k2dA?=
- =?us-ascii?Q?ms2uornRCk1RuB/4v3Q/Ly6gOxDmLI9ssUi5eYYW1FLHDeMRQILEON0cb8M+?=
- =?us-ascii?Q?WMBM7tWpWyJLpTe1AZfxMIrz0ShAy+zuOs7afWwxNtoQm805SUmEXV9xZ0Ws?=
- =?us-ascii?Q?bwjYcPW0vBhWhTUTe0jzgEp0DmaNu9zIBopDRGlYGICHMMGKIDC37UybEpef?=
- =?us-ascii?Q?as+VYDBeCbBx+AxEVYHXSNPm0bIJ/cVBcYj/SeIL20RGbgNXhuwE7QmSFRzH?=
- =?us-ascii?Q?4nUEBEj5aPvs70VcVhKOwytxyl2wK00/aemVdeCKTZi/ffWMycmFshto3NPh?=
- =?us-ascii?Q?pgUxtc/KO8qcUOC+4KOuixQDynlUSakwx9e0tU5MDMQdEZuid0CJ2grs5Lrs?=
- =?us-ascii?Q?NNRbaZaD1pAJTYRhfInQ5jBIOu6gzwfVP7AKCARcYKnyrnvMd5SmdEmfn0XD?=
- =?us-ascii?Q?4funr02Nsukgu6d35AdnSIc/H/G70Sdy6aTtet0jMFA0pzzbVbNsF0eJVZSe?=
- =?us-ascii?Q?KhfgmiCfGRdVnuVNJb0yE4gy4/T/tb/ee1G0n0maAN7sUcjguhdTdLWFqbIx?=
- =?us-ascii?Q?GCDyZSNC6SEZk7NLOtKBVNi2?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Xp/+zWMe3Md5n4vaK6MrFdI16c/ydjNnMlkOU0G/8btjQWPewV8jMU2v2ssR?=
+ =?us-ascii?Q?nYQ7byxyaou5uqlHRdsWMwLpJWUc1ph3qqD0bqosDPZM7/8Q42UGoKXdquLq?=
+ =?us-ascii?Q?nBZV9CPaWMnHhkcO/CDPLfmGOsgrysQUBV9vEd1cFkNIVyzB8eIH/3zi8VkX?=
+ =?us-ascii?Q?ypbkkI57iKp9HwpKnLpcSmFNsxR2rHTBJC5EZH0WsMzQ4PlCh3VTr1Kf6hp8?=
+ =?us-ascii?Q?liQLGkoKJ9bycXepL74pLgRhUC6/4rX2Ko9phv+ndR+Ksz05aujp2n3BX2rY?=
+ =?us-ascii?Q?hYXWKOITR6SCmFUqHioJuFiqzIgoxqc6AzHyvF380qwQ0x9wfwvqLK54Lnuv?=
+ =?us-ascii?Q?Dou1O3LWV9vEFZ/S6Ck8k1bSKk+N9GmiMGMTfAb/1Zfg6CW2lf4ikdL3+1bu?=
+ =?us-ascii?Q?NSslM+L4pYWiqqjHN18z6GgqjiX/9YFsCWVOgpwUPqr6pUxsvn7wMSdEyz1x?=
+ =?us-ascii?Q?3ZBJLYxjvUWJ9p5ZdzgD3O+zZQhxHF3xJI5LAgP+vGT9iGyK8iL4SdcEWgoQ?=
+ =?us-ascii?Q?rURWBIhyT0jInM1dUOk7e7sO2jDhnH4tZq81fkLB8Pe2NEwIweZXlJBkwLoB?=
+ =?us-ascii?Q?e2VtdR8dro8Xw/9cCJK15BGUy40bBUImoyxeB8dcl4rlC+irVlJWbnisquZ+?=
+ =?us-ascii?Q?nPdq7SNxgy8AV3a0lwlvokT1qwAXnY9UXsJzcEDTvXetNiols6wPV65YR2V7?=
+ =?us-ascii?Q?XlyPdRAjxq6eLlOpRShmR9N1m4l7UnomvmcLRvSCuczVsCyb/GdD36YDXnBX?=
+ =?us-ascii?Q?3ZyeK0Vd21JyAj7YzPlVk7KMBToPjfqhIN5HXjWcwB3Ybv/uISGhBZI7hMDT?=
+ =?us-ascii?Q?lCOTuF4xm7lbR0LMM1zfWnOuGijswFY4bHEy7APAwc6KX1KidwfPmqJOFgG4?=
+ =?us-ascii?Q?XMdRtANO7+dfkXg7YY+9N0sA3+cUI2XFzzHdPEqui+kJL1EyhuOGffA0dWRt?=
+ =?us-ascii?Q?YnthRq9r6ty+yMJaP6USQl/Kh0KdY1Y1muhO2ev6TnpuWodlVW7k6ZfbkKKE?=
+ =?us-ascii?Q?/9JbOFxh41nCe4DLg2bjWQmLmQWnmx0u8ixv8p8bBVFFtdfRCAtheAlOSrW8?=
+ =?us-ascii?Q?ydKXnYFHGNhR5Nq6r3ReTVoNfxhJBzRe/C/siXPqjgrcYo/yLfFnA4wE/ydl?=
+ =?us-ascii?Q?yjfuYA9AOZ5pqtCURP86dJ8La7v8VzUTls8jHqHEn6lDcyJ1Cncg1oAxbbOl?=
+ =?us-ascii?Q?G6+k8kM4val3unj+G46cR/S42nZZIgg8xSStfMA5m+eaMlOCtFakisEgJ0g2?=
+ =?us-ascii?Q?R68WoQkBe6go3ES9Kxzjmxmr/QimvsoYJslg4pxspu6ThsGVw+eh+ETT0+f0?=
+ =?us-ascii?Q?jSQnQlBQ7+8TnHbKunMr83Tt?=
 X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec4e8530-b0e2-45cc-5ac0-08d92f348b7c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4956b812-4000-4fa9-f2f9-08d92f348d1a
 X-MS-Exchange-CrossTenant-AuthSource: AM0P190MB0738.EURP190.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2021 13:01:37.6664
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2021 13:01:40.4203
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BZIgbvAWLUPrjIBXi5ttDZtpfqf+QHLlKBIX7BJh4P5OrbNLM7LapK3yjaHSW5g/ocfExbBFPI25nM2FOIsuNFkCzh0NEQsceKLXh6q7YlU=
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hn+Y1CoC72HSwe8SFpeGeHmd92pKO86DCVpxLn0uz+UzH9qmjxDiyN+zvh5fE/3ri4JayA/2M3MxREOPtLhsxmxun2FgjOqy27HE4RCmXgE=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9P190MB1396
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add devlink_trap_drop_packets_get function, as well as test that are
-used to verify devlink (hard) dropped stats functionality works.
+Add hard drop counter check testcase, to make sure netdevsim driver
+properly handles the devlink hard drop counters get/set callbacks.
 
 Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
 ---
- .../selftests/net/forwarding/devlink_lib.sh   | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ .../selftests/drivers/net/netdevsim/devlink_trap.sh    | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/testing/selftests/net/forwarding/devlink_lib.sh b/tools/testing/selftests/net/forwarding/devlink_lib.sh
-index 39fb9b8e7b58..13d3d4428a32 100644
---- a/tools/testing/selftests/net/forwarding/devlink_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/devlink_lib.sh
-@@ -324,6 +324,14 @@ devlink_trap_rx_bytes_get()
- 		| jq '.[][][]["stats"]["rx"]["bytes"]'
- }
- 
-+devlink_trap_drop_packets_get()
-+{
-+	local trap_name=$1; shift
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/devlink_trap.sh b/tools/testing/selftests/drivers/net/netdevsim/devlink_trap.sh
+index 6165901a1cf3..109900c817be 100755
+--- a/tools/testing/selftests/drivers/net/netdevsim/devlink_trap.sh
++++ b/tools/testing/selftests/drivers/net/netdevsim/devlink_trap.sh
+@@ -165,6 +165,16 @@ trap_stats_test()
+ 			devlink_trap_action_set $trap_name "drop"
+ 			devlink_trap_stats_idle_test $trap_name
+ 			check_err $? "Stats of trap $trap_name not idle when action is drop"
 +
-+	devlink -js trap show $DEVLINK_DEV trap $trap_name \
-+		| jq '.[][][]["stats"]["rx"]["dropped"]'
-+}
++			echo "y"> $DEBUGFS_DIR/fail_trap_drop_counter_get
++			devlink -s trap show $DEVLINK_DEV trap $trap_name &> /dev/null
++			check_fail $? "Managed to read trap (hard dropped) statistics when should not"
++			echo "n"> $DEBUGFS_DIR/fail_trap_drop_counter_get
++			devlink -s trap show $DEVLINK_DEV trap $trap_name &> /dev/null
++			check_err $? "Did not manage to read trap (hard dropped) statistics when should"
 +
- devlink_trap_stats_idle_test()
- {
- 	local trap_name=$1; shift
-@@ -345,6 +353,24 @@ devlink_trap_stats_idle_test()
- 	fi
- }
- 
-+devlink_trap_drop_stats_idle_test()
-+{
-+	local trap_name=$1; shift
-+	local t0_packets t0_bytes
-+
-+	t0_packets=$(devlink_trap_drop_packets_get $trap_name)
-+
-+	sleep 1
-+
-+	t1_packets=$(devlink_trap_drop_packets_get $trap_name)
-+
-+	if [[ $t0_packets -eq $t1_packets ]]; then
-+		return 0
-+	else
-+		return 1
-+	fi
-+}
-+
- devlink_traps_enable_all()
- {
- 	local trap_name
++			devlink_trap_drop_stats_idle_test $trap_name
++			check_fail $? "Drop stats of trap $trap_name idle when should not"
+ 		else
+ 			devlink_trap_stats_idle_test $trap_name
+ 			check_fail $? "Stats of non-drop trap $trap_name idle when should not"
 -- 
 2.17.1
 
