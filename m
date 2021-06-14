@@ -2,327 +2,417 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB763A6797
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jun 2021 15:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940443A6C3D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jun 2021 18:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbhFNNVc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Jun 2021 09:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbhFNNVc (ORCPT
+        id S234943AbhFNQpI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Jun 2021 12:45:08 -0400
+Received: from out02.mta.xmission.com ([166.70.13.232]:59634 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235101AbhFNQoj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Jun 2021 09:21:32 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1A9C061574
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Jun 2021 06:19:16 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id l4so7609546ljg.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Jun 2021 06:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SlrMZ4dwNYn/ZEK4g9WD4YfB6VDpQni4QzxQiKRf/5Q=;
-        b=gh7ZHmgp265oLvqqvEuLJMVmvQevoPFQYJEVz2YVfV5rF6AdX2tw6jbNEyS9oqKRSf
-         DAx+vZXJhN/8jPsH/6U6X1SHanCm+jfDrIeBc1o8E8aQQQSxVmU2xY3GPqZE4mmxuReZ
-         yoL53V/auJl3zr/qpV3vTIW1ZlJtBIo6klS3ENQmrCRyzcZ7DgtdViGDKol1+CCpGt5v
-         +QzHDIswq8gySkr9V0UTt8mJQGebnGJoBv6QtLSL310Z1WgMp4TVwXluXh+BImTXkE9r
-         a0esStXpOWg89hsIjzwLBFORuqbw9IbHNItbUfapkBY22xJK4iU0NZHsjoPgyf6WoLEG
-         4kXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SlrMZ4dwNYn/ZEK4g9WD4YfB6VDpQni4QzxQiKRf/5Q=;
-        b=Hhtixo0F5wThOmdDWufJz/qoc54krKs3M3YgdBj8DARxeg/ZDvK2Uacw4chtgkr/vq
-         ze398qO1f/1c+Q35zixbsaBdeATTaD3BWn/asodeV7Pr2OCws8bftYJQdhbaHF523FdN
-         w6rcpKdBJKvLFFnUwVQNLUHY9wHb7fL+1K601ec3NvrTmjJlxr/KyCT/OgLPFI/9D3FJ
-         HCzLjojMww9VyOuBpjOLSPZEmQYWocVvwWnvtj9s49/nyaaHIQk4Mf2Qxm0GEApeXb28
-         rfB3I47tBPRT98glUkI5RfFXJhJlJ9fzl/ajdepMtGaB0Y99wdhvZVrSK4UcwkpwPi27
-         EWmA==
-X-Gm-Message-State: AOAM531RBOG0DX6i5MOlWM/FSDJbcyunDNf/w3MtdZslPCBZ9mYu4blS
-        cqdiSYXchXGgEmLW3bT8Eq5TTG62vXUBTz3jBvMcEg==
-X-Google-Smtp-Source: ABdhPJxLFgBwZYSWOFz+YE4WYc05v7MCMMRXGHJiA9VktBcIbsNdxJoFsu9oGwcnR++LD4Yxu0mR/mu0bpUhJ9OAcdA=
-X-Received: by 2002:a05:651c:d7:: with SMTP id 23mr13784560ljr.207.1623676754764;
- Mon, 14 Jun 2021 06:19:14 -0700 (PDT)
+        Mon, 14 Jun 2021 12:44:39 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1lspfU-00D7FK-2k; Mon, 14 Jun 2021 10:42:32 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=email.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1lspfS-00BjnG-Lx; Mon, 14 Jun 2021 10:42:31 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Charles Haithcock <chaithco@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Adrian Reber <areber@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        "linux-fsdevel\@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        "stable\@vger.kernel.org" <stable@vger.kernel.org>
+References: <AM8PR10MB4708AFBD838138A84CE89EF8E4359@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+        <20210610143642.e4535dbdc0db0b1bd3ee5367@linux-foundation.org>
+        <AM8PR10MB470896FBC519ABCC20486958E4349@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+Date:   Mon, 14 Jun 2021 11:42:22 -0500
+In-Reply-To: <AM8PR10MB470896FBC519ABCC20486958E4349@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+        (Bernd Edlinger's message of "Fri, 11 Jun 2021 17:55:09 +0200")
+Message-ID: <877diwtn2p.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20210603211426.790093-1-jingzhangos@google.com>
- <20210603211426.790093-4-jingzhangos@google.com> <CA+EHjTxeZOAPA9w6UJe7rW+-UdznrEsNmomWodZDN3DLgLoJKA@mail.gmail.com>
-In-Reply-To: <CA+EHjTxeZOAPA9w6UJe7rW+-UdznrEsNmomWodZDN3DLgLoJKA@mail.gmail.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Mon, 14 Jun 2021 08:19:02 -0500
-Message-ID: <CAAdAUtiVcUqix3W7YZ5HU6VjWwkZEsgWFJ=4S2xeyWHLn8Q5zA@mail.gmail.com>
-Subject: Re: [PATCH v7 3/4] KVM: stats: Add documentation for statistics data
- binary interface
-To:     Fuad Tabba <tabba@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-XM-SPF: eid=1lspfS-00BjnG-Lx;;;mid=<877diwtn2p.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18+eJbPqFmFNte+/KoFQcpQyH7Zbs4+NIM=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa05.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.7 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMSubLong,
+        XM_B_Investor,XM_B_SpammyWords autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.0 XM_B_Investor BODY: Commonly used business phishing phrases
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa05 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Bernd Edlinger <bernd.edlinger@hotmail.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 784 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 10 (1.2%), b_tie_ro: 8 (1.1%), parse: 1.36 (0.2%),
+         extract_message_metadata: 15 (2.0%), get_uri_detail_list: 6 (0.7%),
+        tests_pri_-1000: 7 (0.9%), tests_pri_-950: 1.24 (0.2%),
+        tests_pri_-900: 1.02 (0.1%), tests_pri_-90: 161 (20.6%), check_bayes:
+        150 (19.1%), b_tokenize: 22 (2.8%), b_tok_get_all: 16 (2.0%),
+        b_comp_prob: 4.7 (0.6%), b_tok_touch_all: 103 (13.1%), b_finish: 0.99
+        (0.1%), tests_pri_0: 575 (73.4%), check_dkim_signature: 0.73 (0.1%),
+        check_dkim_adsp: 2.8 (0.4%), poll_dns_idle: 0.67 (0.1%), tests_pri_10:
+        1.80 (0.2%), tests_pri_500: 6 (0.8%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v9] exec: Fix dead-lock in de_thread with ptrace_attach
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Fuad,
+Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
 
-On Mon, Jun 14, 2021 at 2:57 AM Fuad Tabba <tabba@google.com> wrote:
+> This introduces signal->unsafe_execve_in_progress,
+> which is used to fix the case when at least one of the
+> sibling threads is traced, and therefore the trace
+> process may dead-lock in ptrace_attach, but de_thread
+> will need to wait for the tracer to continue execution.
+
+Userspace processes hang waiting for each other.  Not a proper kernel
+deadlock.  Annoying but not horrible.  Definitely worth fixing if we can.
+
+> The solution is to detect this situation and allow
+> ptrace_attach to continue, while de_thread() is still
+> waiting for traced zombies to be eventually released.
+> When the current thread changed the ptrace status from
+> non-traced to traced, we can simply abort the whole
+> execve and restart it by returning -ERESTARTSYS.
+> This needs to be done before changing the thread leader,
+> because the PTRACE_EVENT_EXEC needs to know the old
+> thread pid.
+
+Except you are not detecting this situation.  Testing for t->ptrace
+finds tasks that have completed their ptrace attach and no longer need
+the cred_gaurd_mutex.
+
+You almost discover the related problem that involves PTRACE_EVENT_EXEC.
+
+It will probably help to have a full description of all of the
+processes and states involved in the hang in your description
+so you can show how your proposed change avoids the problem.
+
+> Although it is technically after the point of no return,
+> we just have to reset bprm->point_of_no_return here,
+> since at this time only the other threads have received
+> a fatal signal, not the current thread.
+
+No.  If you have killed other threads we are most definitely past the
+point where it is at all reasonable to return to userspace.
+Perfunctorily killing other threads may leave them with locks held and
+who knows what other problems.  Certainly it leaves the application
+unable to process a failure from exec and continue on.
+
+> From the user's point of view the whole execve was
+> simply delayed until after the ptrace_attach.
+
+Conceptually I like what you are trying to detect and do.
+However your description unfortunately does not match the code.
+
+If you can find a test for another process waiting to ptrace_attach
+one of our threads before we enter into de_thread that would be a
+reasonable time to do something, and would potentially make a nice
+fix.
+
+
+Eric
+
+> Other threads die quickly since the cred_guard_mutex
+> is released, but a deadly signal is already pending.
+> In case the mutex_lock_killable misses the signal,
+> ->unsafe_execve_in_progress makes sure they release
+> the mutex immediately and return with -ERESTARTNOINTR.
 >
-> Hi Jing,
+> This means there is no API change, unlike the previous
+> version of this patch which was discussed here:
 >
+> https://lore.kernel.org/lkml/b6537ae6-31b1-5c50-f32b-8b8332ace882@hotmail.de/
 >
-> On Thu, Jun 3, 2021 at 10:14 PM Jing Zhang <jingzhangos@google.com> wrote:
-> >
-> > Update KVM API documentation for binary statistics.
-> >
-> > Reviewed-by: David Matlack <dmatlack@google.com>
-> > Reviewed-by: Ricardo Koller <ricarkol@google.com>
-> > Signed-off-by: Jing Zhang <jingzhangos@google.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst | 180 +++++++++++++++++++++++++++++++++
-> >  1 file changed, 180 insertions(+)
-> >
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> > index 7fcb2fd38f42..550bfbdf611b 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -5034,6 +5034,178 @@ see KVM_XEN_VCPU_SET_ATTR above.
-> >  The KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADJUST type may not be used
-> >  with the KVM_XEN_VCPU_GET_ATTR ioctl.
-> >
-> > +4.130 KVM_GET_STATS_FD
-> > +---------------------
+> See tools/testing/selftests/ptrace/vmaccess.c
+> for a test case that gets fixed by this change.
 >
-> nit: missing one - (to match the subtitle length)
+> Note that since the test case was originally designed to
+> test the ptrace_attach returning an error in this situation,
+> the test expectation needed to be adjusted, to allow the
+> API to succeed at the first attempt.
 >
-> > +
-> > +:Capability: KVM_CAP_STATS_BINARY_FD
-> > +:Architectures: all
-> > +:Type: vm ioctl, vcpu ioctl
-> > +:Parameters: none
-> > +:Returns: statistics file descriptor on success, < 0 on error
-> > +
-> > +Errors:
-> > +
-> > +  ======     ======================================================
-> > +  ENOMEM     if the fd could not be created due to lack of memory
-> > +  EMFILE     if the number of opened files exceeds the limit
-> > +  ======     ======================================================
-> > +
-> > +The file descriptor can be used to read VM/vCPU statistics data in binary
-> > +format. The file data is organized into three blocks as below:
-> > ++-------------+
-> > +|   Header    |
-> > ++-------------+
-> > +| Descriptors |
-> > ++-------------+
-> > +| Stats Data  |
-> > ++-------------+
-> > +
-> > +The Header block is always at the start of the file. It is only needed to be
-> > +read one time for the lifetime of the file descriptor.
-> > +It is in the form of ``struct kvm_stats_header`` as below::
-> > +
-> > +       #define KVM_STATS_ID_MAXLEN             64
-> > +
-> > +       struct kvm_stats_header {
-> > +               char id[KVM_STATS_ID_MAXLEN];
-> > +               __u32 name_size;
-> > +               __u32 count;
-> > +               __u32 desc_offset;
-> > +               __u32 data_offset;
-> > +       };
-> > +
-> > +The ``id`` field is identification for the corresponding KVM statistics. For
-> > +VM statistics, it is in the form of "kvm-{kvm pid}", like "kvm-12345". For
-> > +VCPU statistics, it is in the form of "kvm-{kvm pid}/vcpu-{vcpu id}", like
-> > +"kvm-12345/vcpu-12".
-> > +
-> > +The ``name_size`` field is the size (byte) of the statistics name string
-> > +(including trailing '\0') appended to the end of every statistics descriptor.
-> > +
-> > +The ``count`` field is the number of statistics.
-> > +
-> > +The ``desc_offset`` field is the offset of the Descriptors block from the start
-> > +of the file indicated by the file descriptor.
-> > +
-> > +The ``data_offset`` field is the offset of the Stats Data block from the start
-> > +of the file indicated by the file descriptor.
-> > +
-> > +The Descriptors block is only needed to be read once for the lifetime of the
-> > +file descriptor. It is an array of ``struct kvm_stats_desc`` as shown in
-> > +below code block::
-> > +
-> > +       #define KVM_STATS_TYPE_SHIFT            0
-> > +       #define KVM_STATS_TYPE_MASK             (0xF << KVM_STATS_TYPE_SHIFT)
-> > +       #define KVM_STATS_TYPE_CUMULATIVE       (0x0 << KVM_STATS_TYPE_SHIFT)
-> > +       #define KVM_STATS_TYPE_INSTANT          (0x1 << KVM_STATS_TYPE_SHIFT)
-> > +       #define KVM_STATS_TYPE_MAX              KVM_STATS_TYPE_INSTANT
-> > +
-> > +       #define KVM_STATS_UNIT_SHIFT            4
-> > +       #define KVM_STATS_UNIT_MASK             (0xF << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_NONE             (0x0 << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_BYTES            (0x1 << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_SECONDS          (0x2 << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_CYCLES           (0x3 << KVM_STATS_UNIT_SHIFT)
-> > +       #define KVM_STATS_UNIT_MAX              KVM_STATS_UNIT_CYCLES
-> > +
-> > +       #define KVM_STATS_BASE_SHIFT            8
-> > +       #define KVM_STATS_BASE_MASK             (0xF << KVM_STATS_BASE_SHIFT)
-> > +       #define KVM_STATS_BASE_POW10            (0x0 << KVM_STATS_BASE_SHIFT)
-> > +       #define KVM_STATS_BASE_POW2             (0x1 << KVM_STATS_BASE_SHIFT)
-> > +       #define KVM_STATS_BASE_MAX              KVM_STATS_BASE_POW2
-> > +
-> > +       struct kvm_stats_desc {
-> > +               __u32 flags;
-> > +               __s16 exponent;
-> > +               __u16 size;
-> > +               __u32 unused1;
-> > +               __u32 unused2;
-> > +               char name[0];
-> > +       };
-> > +
-> > +The ``flags`` field contains the type and unit of the statistics data described
-> > +by this descriptor. The following flags are supported:
-> > +
-> > +Bits 0-3 of ``flags`` encode the type:
-> > +  * ``KVM_STATS_TYPE_CUMULATIVE``
-> > +    The statistics data is cumulative. The value of data can only be increased.
-> > +    Most of the counters used in KVM are of this type.
-> > +    The corresponding ``count`` filed for this type is always 1.
+> Signed-off-by: Bernd Edlinger <bernd.edlinger@hotmail.de>
+> ---
+>  fs/exec.c                                 | 37 +++++++++++++++++++++++++++++--
+>  fs/proc/base.c                            |  6 +++++
+>  include/linux/sched/signal.h              | 13 +++++++++++
+>  kernel/ptrace.c                           |  9 ++++++++
+>  kernel/seccomp.c                          | 12 +++++++---
+>  tools/testing/selftests/ptrace/vmaccess.c | 25 ++++++++++++++-------
+>  6 files changed, 89 insertions(+), 13 deletions(-)
 >
-> filed -> field
->
-> > +  * ``KVM_STATS_TYPE_INSTANT``
-> > +    The statistics data is instantaneous. Its value can be increased or
-> > +    decreased. This type is usually used as a measurement of some resources,
-> > +    like the number of dirty pages, the number of large pages, etc.
-> > +    The corresponding ``count`` field for this type is always 1.
-> > +
-> > +Bits 4-7 of ``flags`` encode the unit:
-> > +  * ``KVM_STATS_UNIT_NONE``
-> > +    There is no unit for the value of statistics data. This usually means that
-> > +    the value is a simple counter of an event.
-> > +  * ``KVM_STATS_UNIT_BYTES``
-> > +    It indicates that the statistics data is used to measure memory size, in the
-> > +    unit of Byte, KiByte, MiByte, GiByte, etc. The unit of the data is
-> > +    determined by the ``exponent`` field in the descriptor. The
-> > +    ``KVM_STATS_BASE_POW2`` flag is valid in this case. The unit of the data is
-> > +    determined by ``pow(2, exponent)``. For example, if value is 10,
-> > +    ``exponent`` is 20, which means the unit of statistics data is MiByte, we
-> > +    can get the statistics data in the unit of Byte by
-> > +    ``value * pow(2, exponent) = 10 * pow(2, 20) = 10 MiByte`` which is
-> > +    10 * 1024 * 1024 Bytes.
-> > +  * ``KVM_STATS_UNIT_SECONDS``
-> > +    It indicates that the statistics data is used to measure time/latency, in
-> > +    the unit of nanosecond, microsecond, millisecond and second. The unit of the
-> > +    data is determined by the ``exponent`` field in the descriptor. The
-> > +    ``KVM_STATS_BASE_POW10`` flag is valid in this case. The unit of the data
-> > +    is determined by ``pow(10, exponent)``. For example, if value is 2000000,
-> > +    ``exponent`` is -6, which means the unit of statistics data is microsecond,
-> > +    we can get the statistics data in the unit of second by
-> > +    ``value * pow(10, exponent) = 2000000 * pow(10, -6) = 2 seconds``.
-> > +  * ``KVM_STATS_UNIT_CYCLES``
-> > +    It indicates that the statistics data is used to measure CPU clock cycles.
-> > +    The ``KVM_STATS_BASE_POW10`` flag is valid in this case. For example, if
-> > +    value is 200, ``exponent`` is 4, we can get the number of CPU clock cycles
-> > +    by ``value * pow(10, exponent) = 200 * pow(10, 4) = 2000000``.
-> > +
-> > +Bits 7-11 of ``flags`` encode the base:
->
-> Bits 8-11
->
-> > +  * ``KVM_STATS_BASE_POW10``
-> > +    The scale is based on power of 10. It is used for measurement of time and
-> > +    CPU clock cycles.
-> > +  * ``KVM_STATS_BASE_POW2``
-> > +    The scale is based on power of 2. It is used for measurement of memory size.
-> > +
-> > +The ``exponent`` field is the scale of corresponding statistics data. For
-> > +example, if the unit is ``KVM_STATS_UNIT_BYTES``, the base is
-> > +``KVM_STATS_BASE_POW2``, the ``exponent`` is 10, then we know that the real
-> > +unit of the statistics data is KBytes a.k.a pow(2, 10) = 1024 bytes.
-> > +
-> > +The ``size`` field is the number of values of this statistics data. It is in the
-> > +unit of ``unsigned long`` for VM or ``__u64`` for VCPU.
-> > +
-> > +The ``unused1`` and ``unused2`` fields are reserved for future
-> > +support for other types of statistics data, like log/linear histogram.
-> > +
-> > +The ``name`` field points to the name string of the statistics data. The name
-> > +string starts at the end of ``struct kvm_stats_desc``.
-> > +The maximum length (including trailing '\0') is indicated by ``name_size``
-> > +in ``struct kvm_stats_header``.
-> > +
-> > +The Stats Data block contains an array of data values of type ``struct
-> > +kvm_vm_stats_data`` or ``struct kvm_vcpu_stats_data``. It would be read by
-> > +user space periodically to pull statistics data.
-> > +The order of data value in Stats Data block is the same as the order of
-> > +descriptors in Descriptors block.
-> > +  * Statistics data for VM::
-> > +
-> > +       struct kvm_vm_stats_data {
-> > +               unsigned long value[0];
-> > +       };
-> > +
-> > +  * Statistics data for VCPU::
-> > +
-> > +       struct kvm_vcpu_stats_data {
-> > +               __u64 value[0];
-> > +       };
-> > +
-> >  5. The kvm_run structure
-> >  ========================
-> >
-> > @@ -6891,3 +7063,11 @@ This capability is always enabled.
-> >  This capability indicates that the KVM virtual PTP service is
-> >  supported in the host. A VMM can check whether the service is
-> >  available to the guest on migration.
-> > +
-> > +8.33 KVM_CAP_STATS_BINARY_FD
-> > +----------------------------
-> > +
-> > +:Architectures: all
-> > +
-> > +This capability indicates the feature that user space can create get a file
-> > +descriptor for every VM and VCPU to read statistics data in binary format.
->
-> nit: user space -> userspace (it's spelled that way throughout this document)
->
-> Cheers,
-> /fuad
->
-> > --
-> > 2.32.0.rc1.229.g3e70b5a671-goog
-> >
-> > _______________________________________________
-> > kvmarm mailing list
-> > kvmarm@lists.cs.columbia.edu
-> > https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
-Thanks for the review!
-Jing
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 8344fba..c7b1926 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1040,6 +1040,8 @@ static int de_thread(struct task_struct *tsk)
+>  	struct signal_struct *sig = tsk->signal;
+>  	struct sighand_struct *oldsighand = tsk->sighand;
+>  	spinlock_t *lock = &oldsighand->siglock;
+> +	unsigned int prev_ptrace = tsk->ptrace;
+> +	struct task_struct *t = tsk;
+>  
+>  	if (thread_group_empty(tsk))
+>  		goto no_thread_group;
+> @@ -1062,6 +1064,17 @@ static int de_thread(struct task_struct *tsk)
+>  	if (!thread_group_leader(tsk))
+>  		sig->notify_count--;
+>  
+> +	while_each_thread(tsk, t) {
+> +		if (unlikely(t->ptrace) && t != tsk->group_leader)
+> +			sig->unsafe_execve_in_progress = true;
+> +	}
+> +
+> +	if (unlikely(sig->unsafe_execve_in_progress)) {
+> +		spin_unlock_irq(lock);
+> +		mutex_unlock(&sig->cred_guard_mutex);
+> +		spin_lock_irq(lock);
+> +	}
+> +
+>  	while (sig->notify_count) {
+>  		__set_current_state(TASK_KILLABLE);
+>  		spin_unlock_irq(lock);
+> @@ -1072,6 +1085,17 @@ static int de_thread(struct task_struct *tsk)
+>  	}
+>  	spin_unlock_irq(lock);
+>  
+> +	if (unlikely(sig->unsafe_execve_in_progress)) {
+> +		if (mutex_lock_killable(&sig->cred_guard_mutex))
+> +			goto killed;
+> +		sig->unsafe_execve_in_progress = false;
+> +		if (!prev_ptrace && tsk->ptrace) {
+> +			sig->group_exit_task = NULL;
+> +			sig->notify_count = 0;
+> +			return -ERESTARTSYS;
+> +		}
+> +	}
+> +
+>  	/*
+>  	 * At this point all other threads have exited, all we have to
+>  	 * do is to wait for the thread group leader to become inactive,
+> @@ -1255,8 +1279,11 @@ int begin_new_exec(struct linux_binprm * bprm)
+>  	 * Make this the only thread in the thread group.
+>  	 */
+>  	retval = de_thread(me);
+> -	if (retval)
+> +	if (retval) {
+> +		if (retval == -ERESTARTSYS)
+> +			bprm->point_of_no_return = false;
+>  		goto out;
+> +	}
+>  
+>  	/*
+>  	 * Cancel any io_uring activity across execve
+> @@ -1466,6 +1493,11 @@ static int prepare_bprm_creds(struct linux_binprm *bprm)
+>  	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
+>  		return -ERESTARTNOINTR;
+>  
+> +	if (unlikely(current->signal->unsafe_execve_in_progress)) {
+> +		mutex_unlock(&current->signal->cred_guard_mutex);
+> +		return -ERESTARTNOINTR;
+> +	}
+> +
+>  	bprm->cred = prepare_exec_creds();
+>  	if (likely(bprm->cred))
+>  		return 0;
+> @@ -1482,7 +1514,8 @@ static void free_bprm(struct linux_binprm *bprm)
+>  	}
+>  	free_arg_pages(bprm);
+>  	if (bprm->cred) {
+> -		mutex_unlock(&current->signal->cred_guard_mutex);
+> +		if (!current->signal->unsafe_execve_in_progress)
+> +			mutex_unlock(&current->signal->cred_guard_mutex);
+>  		abort_creds(bprm->cred);
+>  	}
+>  	if (bprm->file) {
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index 3851bfc..3b2a55c 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -2739,6 +2739,12 @@ static ssize_t proc_pid_attr_write(struct file * file, const char __user * buf,
+>  	if (rv < 0)
+>  		goto out_free;
+>  
+> +	if (unlikely(current->signal->unsafe_execve_in_progress)) {
+> +		mutex_unlock(&current->signal->cred_guard_mutex);
+> +		rv = -ERESTARTNOINTR;
+> +		goto out_free;
+> +	}
+> +
+>  	rv = security_setprocattr(PROC_I(inode)->op.lsm,
+>  				  file->f_path.dentry->d_name.name, page,
+>  				  count);
+> diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+> index 3f6a0fc..220a083 100644
+> --- a/include/linux/sched/signal.h
+> +++ b/include/linux/sched/signal.h
+> @@ -214,6 +214,17 @@ struct signal_struct {
+>  #endif
+>  
+>  	/*
+> +	 * Set while execve is executing but is *not* holding
+> +	 * cred_guard_mutex to avoid possible dead-locks.
+> +	 * The cred_guard_mutex is released *after* de_thread() has
+> +	 * called zap_other_threads(), therefore a fatal signal is
+> +	 * guaranteed to be already pending in the unlikely event, that
+> +	 * current->signal->unsafe_execve_in_progress happens to be
+> +	 * true after the cred_guard_mutex was acquired.
+> +	 */
+> +	bool unsafe_execve_in_progress;
+> +
+> +	/*
+>  	 * Thread is the potential origin of an oom condition; kill first on
+>  	 * oom
+>  	 */
+> @@ -227,6 +238,8 @@ struct signal_struct {
+>  	struct mutex cred_guard_mutex;	/* guard against foreign influences on
+>  					 * credential calculations
+>  					 * (notably. ptrace)
+> +					 * Held while execve runs, except when
+> +					 * a sibling thread is being traced.
+>  					 * Deprecated do not use in new code.
+>  					 * Use exec_update_lock instead.
+>  					 */
+> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+> index 61db50f..0cbc1eb 100644
+> --- a/kernel/ptrace.c
+> +++ b/kernel/ptrace.c
+> @@ -468,6 +468,14 @@ static int ptrace_traceme(void)
+>  {
+>  	int ret = -EPERM;
+>  
+> +	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
+> +		return -ERESTARTNOINTR;
+> +
+> +	if (unlikely(current->signal->unsafe_execve_in_progress)) {
+> +		mutex_unlock(&current->signal->cred_guard_mutex);
+> +		return -ERESTARTNOINTR;
+> +	}
+> +
+>  	write_lock_irq(&tasklist_lock);
+>  	/* Are we already being traced? */
+>  	if (!current->ptrace) {
+> @@ -483,6 +491,7 @@ static int ptrace_traceme(void)
+>  		}
+>  	}
+>  	write_unlock_irq(&tasklist_lock);
+> +	mutex_unlock(&current->signal->cred_guard_mutex);
+>  
+>  	return ret;
+>  }
+> diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+> index 1d60fc2..b1389ee 100644
+> --- a/kernel/seccomp.c
+> +++ b/kernel/seccomp.c
+> @@ -1824,9 +1824,15 @@ static long seccomp_set_mode_filter(unsigned int flags,
+>  	 * Make sure we cannot change seccomp or nnp state via TSYNC
+>  	 * while another thread is in the middle of calling exec.
+>  	 */
+> -	if (flags & SECCOMP_FILTER_FLAG_TSYNC &&
+> -	    mutex_lock_killable(&current->signal->cred_guard_mutex))
+> -		goto out_put_fd;
+> +	if (flags & SECCOMP_FILTER_FLAG_TSYNC) {
+> +		if (mutex_lock_killable(&current->signal->cred_guard_mutex))
+> +			goto out_put_fd;
+> +
+> +		if (unlikely(current->signal->unsafe_execve_in_progress)) {
+> +			mutex_unlock(&current->signal->cred_guard_mutex);
+> +			goto out_put_fd;
+> +		}
+> +	}
+>  
+>  	spin_lock_irq(&current->sighand->siglock);
+>  
+> diff --git a/tools/testing/selftests/ptrace/vmaccess.c b/tools/testing/selftests/ptrace/vmaccess.c
+> index 4db327b..c7c2242 100644
+> --- a/tools/testing/selftests/ptrace/vmaccess.c
+> +++ b/tools/testing/selftests/ptrace/vmaccess.c
+> @@ -39,8 +39,15 @@ static void *thread(void *arg)
+>  	f = open(mm, O_RDONLY);
+>  	ASSERT_GE(f, 0);
+>  	close(f);
+> -	f = kill(pid, SIGCONT);
+> -	ASSERT_EQ(f, 0);
+> +	f = waitpid(-1, NULL, 0);
+> +	ASSERT_NE(f, -1);
+> +	ASSERT_NE(f, 0);
+> +	ASSERT_NE(f, pid);
+> +	f = waitpid(-1, NULL, 0);
+> +	ASSERT_EQ(f, pid);
+> +	f = waitpid(-1, NULL, 0);
+> +	ASSERT_EQ(f, -1);
+> +	ASSERT_EQ(errno, ECHILD);
+>  }
+>  
+>  TEST(attach)
+> @@ -57,22 +64,24 @@ static void *thread(void *arg)
+>  
+>  	sleep(1);
+>  	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
+> -	ASSERT_EQ(errno, EAGAIN);
+> -	ASSERT_EQ(k, -1);
+> +	ASSERT_EQ(k, 0);
+>  	k = waitpid(-1, &s, WNOHANG);
+>  	ASSERT_NE(k, -1);
+>  	ASSERT_NE(k, 0);
+>  	ASSERT_NE(k, pid);
+>  	ASSERT_EQ(WIFEXITED(s), 1);
+>  	ASSERT_EQ(WEXITSTATUS(s), 0);
+> -	sleep(1);
+> -	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
+> -	ASSERT_EQ(k, 0);
+>  	k = waitpid(-1, &s, 0);
+>  	ASSERT_EQ(k, pid);
+>  	ASSERT_EQ(WIFSTOPPED(s), 1);
+>  	ASSERT_EQ(WSTOPSIG(s), SIGSTOP);
+> -	k = ptrace(PTRACE_DETACH, pid, 0L, 0L);
+> +	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
+> +	ASSERT_EQ(k, 0);
+> +	k = waitpid(-1, &s, 0);
+> +	ASSERT_EQ(k, pid);
+> +	ASSERT_EQ(WIFSTOPPED(s), 1);
+> +	ASSERT_EQ(WSTOPSIG(s), SIGTRAP);
+> +	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
+>  	ASSERT_EQ(k, 0);
+>  	k = waitpid(-1, &s, 0);
+>  	ASSERT_EQ(k, pid);
