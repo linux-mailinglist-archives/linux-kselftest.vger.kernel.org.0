@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9873A7EAB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 15:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A108B3A7EDB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 15:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbhFONJr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Jun 2021 09:09:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34080 "EHLO mail.kernel.org"
+        id S230225AbhFONQH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Jun 2021 09:16:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51284 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229977AbhFONJr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Jun 2021 09:09:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36DEB6146D;
-        Tue, 15 Jun 2021 13:07:42 +0000 (UTC)
+        id S230120AbhFONQG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 15 Jun 2021 09:16:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F150A6109D;
+        Tue, 15 Jun 2021 13:14:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623762462;
-        bh=sYX3ZPx6IeNrw8KHZ2uYVId5UWZzrYfAFih38ALGU/s=;
+        s=k20201202; t=1623762842;
+        bh=N25V56ZNFxMcTgXxICE35+kBB2VSHlw2jmt7OjHwc6k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ec7KJe9PlXKis266j1A0M4xixXj7bJmv5Ji9Gae4zI2c+jzcvM32UWG9DkBY3WzTz
-         Kba+gr0dp9WkfkysxK42o8xNWxCDzyVHcz65MIG3Cu+xHSuux2vGSWpAX/EiMTn+Ob
-         H5WxsmdVR9oNgNeTEFi7jpP7CNz02/1zCKa3o/bB3tFJUJFbfW0pxd/eBBcQ+1BuEU
-         u9moZR0qbmMBDmRm8UHo4uHM/gF8EYsiGOHd1wcKxCLnKn+i3qIDcj09S61AC+N0fP
-         G8Y9vBuV2wGmcQITeE05HrEMDuOqJ4A4cuhr4kVOFQ8aut/M+pSZkQrwUC/ipv1uty
-         KE1a7z4Xh1flg==
-Date:   Tue, 15 Jun 2021 16:07:40 +0300
+        b=KbV8j2HcS4zNvTLQHaYKQNi4f6OmU5HjkPocRoHwm7Y87mSizgoJ+e2CcWKqhAe8q
+         QrSiznHrSV4d3m0AHJLfMXKYx4iwotB2dGDJgSwtG0gvgi4RrF5F7Qoi87CMxzcggN
+         zIB9Ijnx29/Ajwet9Em8dfS7xYQSD+7WBVb++oEZopEregQdX0mqx+zb99toqk5JMR
+         jz7d8LmQI/LEPn04xX+6yKP26qRKphKdMfyMM7yPTWwskdiHgbfNLg6oEPkf99sFWs
+         FH//FF0qucptTJSmDlzFEciqAcYPe8KuOwC+bLKeXI/wYvCscvhdVdpAB51dAeuviT
+         L4ewkJDbCgv1A==
+Date:   Tue, 15 Jun 2021 16:13:59 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Shuah Khan <skhan@linuxfoundation.org>
 Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
@@ -31,72 +31,105 @@ Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 3/5] selftests/sgx: Dump enclave memory map
-Message-ID: <20210615130740.3axsxi2m2ozqfofm@kernel.org>
+Subject: Re: [PATCH v8 5/5] selftests/sgx: Refine the test enclave to have
+ storage
+Message-ID: <20210615131359.zrfvi36sjdpxghzl@kernel.org>
 References: <20210610083021.392269-1-jarkko@kernel.org>
- <20210610083021.392269-3-jarkko@kernel.org>
- <bb39b6af-5921-64e8-793b-5ef4b150153e@linuxfoundation.org>
- <20210612042723.vp26eafhyzrv7t66@kernel.org>
- <c18409da-dd2b-c813-d7dd-bad81db102bd@linuxfoundation.org>
+ <20210610083021.392269-5-jarkko@kernel.org>
+ <b1bf69f5-e203-d69e-d15d-3fb5e98b63dd@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c18409da-dd2b-c813-d7dd-bad81db102bd@linuxfoundation.org>
+In-Reply-To: <b1bf69f5-e203-d69e-d15d-3fb5e98b63dd@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 14, 2021 at 10:45:43AM -0600, Shuah Khan wrote:
-> On 6/11/21 10:27 PM, Jarkko Sakkinen wrote:
-> > On Fri, Jun 11, 2021 at 04:45:19PM -0600, Shuah Khan wrote:
-> > > On 6/10/21 2:30 AM, Jarkko Sakkinen wrote:
-> > > > Often, it's useful to check whether /proc/self/maps looks sane when
-> > > > dealing with memory mapped objects, especially when they are JIT'ish
-> > > > dynamically constructed objects. Therefore, dump "/dev/sgx_enclave"
-> > > > matching lines from the memory map in FIXTURE_SETUP().
-> > > > 
-> > > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > ---
-> > > >    tools/testing/selftests/sgx/main.c | 14 ++++++++++++++
-> > > >    1 file changed, 14 insertions(+)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> > > > index 6da19b6bf287..14030f8b85ff 100644
-> > > > --- a/tools/testing/selftests/sgx/main.c
-> > > > +++ b/tools/testing/selftests/sgx/main.c
-> > > > @@ -117,6 +117,8 @@ FIXTURE_SETUP(enclave)
-> > > >    	Elf64_Sym *sgx_enter_enclave_sym = NULL;
-> > > >    	struct vdso_symtab symtab;
-> > > >    	struct encl_segment *seg;
-> > > > +	char maps_line[256];
-> > > > +	FILE *maps_file;
-> > > >    	unsigned int i;
-> > > >    	void *addr;
-> > > > @@ -167,6 +169,18 @@ FIXTURE_SETUP(enclave)
-> > > >    	memset(&self->run, 0, sizeof(self->run));
-> > > >    	self->run.tcs = self->encl.encl_base;
-> > > > +	maps_file = fopen("/proc/self/maps", "r");
-> > > 
-> > > I almost applied these. Does this require root access, if so,
-> > > please add logic to skip the test if non-root user runs it.
-> > > 
-> > > Same comments for all other paths that might require root access.
+On Mon, Jun 14, 2021 at 02:16:15PM -0600, Shuah Khan wrote:
+> On 6/10/21 2:30 AM, Jarkko Sakkinen wrote:
+> > Extend the enclave to have two operations: ENCL_OP_PUT and ENCL_OP_GET.
+> > ENCL_OP_PUT stores value inside the enclave address space and
+> > ENCL_OP_GET reads it. The internal buffer can be later extended to be
+> > variable size, and allow reclaimer tests.
 > > 
-> > As Dave stated, it does not. A process can inspect its own state
-> > through /proc/self path. E.g. Chrome web browser uses /proc/self/exe
-> > to initialize multiple instances of itself for browser tabs...
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >   tools/testing/selftests/sgx/defines.h     | 10 ++++
+> >   tools/testing/selftests/sgx/main.c        | 57 ++++++++++++++++++-----
+> >   tools/testing/selftests/sgx/test_encl.c   | 19 +++++++-
+> >   tools/testing/selftests/sgx/test_encl.lds |  3 +-
+> >   4 files changed, 74 insertions(+), 15 deletions(-)
 > > 
 > 
-> Ah yes. I missed the self part. Thanks for clarifying.
+> Test output before applying the series:
 > 
-> > As far as other things go, this patch set does not bind to any other
-> > new OS resources.
-> > 
+> TAP version 13
+> 1..1
+> # selftests: sgx: test_sgx
+> # Unable to open /dev/sgx_enclave: No such file or directory
+> # 1..0 # SKIP cannot load enclaves
+> ok 1 selftests: sgx: test_sgx # SKIP
 > 
-> Thank you. I will apply these for 5.14-rc1.
+> Test output after applying second patch
+> 
+> selftests/sgx: Migrate to kselftest harness
+> 
+> Output changes to the following. It doesn't look like the second
+> patch adds any new tests. What is the point in running the tests
+> that fail if /dev/sgx_enclave is missing.
+> 
+> Unfortunately this series doesn't have a cover letter that explains
+> what this series is doing. I don't like the fact that the test
+> output and behavior changes when migrating the test to kselftest
+> harness. Shouldn't the output stay the same as in skip the tests
+> if /dev/sgx_enclave fails.
 
-Thank you!
+I get what you are saying but actually I do not know how with
+fixtures I can skip "the rest" when FIXTURE_SETUP() fails.
 
+The reason for the output below is that with fixtures for all
+tests enclave is initialized for each test case. And it kind of
+makes sense because all tests start from the clean expected
+state.
+
+I don't how to do that with zero change in the output.
+
+The reason to do this change is to make it easy to add more tests,
+and return correct status codes to the framework.
+
+> TAP version 13
+> 1..1
+> # selftests: sgx: test_sgx
+> # TAP version 13
+> # 1..3
+> # # Starting 3 tests from 2 test cases.
+> # #  RUN           enclave.unclobbered_vdso ...
+> # Unable to open /dev/sgx_enclave: No such file or directory
+> # ok 2 # SKIP cannot load enclaves
+> # # Planned tests != run tests (3 != 1)
+> # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+> # # unclobbered_vdso: Test failed at step #4
+> # #          FAIL  enclave.unclobbered_vdso
+> # not ok 1 enclave.unclobbered_vdso
+> # #  RUN           enclave.clobbered_vdso ...
+> # Unable to open /dev/sgx_enclave: No such file or directory
+> # ok 3 # SKIP cannot load enclaves
+> # # Planned tests != run tests (3 != 2)
+> # # Totals: pass:0 fail:1 xfail:0 xpass:0 skip:1 error:0
+> # # clobbered_vdso: Test failed at step #4
+> # #          FAIL  enclave.clobbered_vdso
+> # not ok 2 enclave.clobbered_vdso
+> # #  RUN           enclave.clobbered_vdso_and_user_function ...
+> # Unable to open /dev/sgx_enclave: No such file or directory
+> # ok 4 # SKIP cannot load enclaves
+> # # Totals: pass:0 fail:2 xfail:0 xpass:0 skip:1 error:0
+> # # clobbered_vdso_and_user_function: Test failed at step #4
+> # #          FAIL  enclave.clobbered_vdso_and_user_function
+> # not ok 3 enclave.clobbered_vdso_and_user_function
+> # # FAILED: 0 / 3 tests passed.
+> # # Totals: pass:0 fail:3 xfail:0 xpass:0 skip:0 error:0
+> not ok 1 selftests: sgx: test_sgx # exit=1
+> 
 > thanks,
 > -- Shuah
 
