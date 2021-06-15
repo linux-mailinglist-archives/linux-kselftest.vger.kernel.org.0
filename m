@@ -2,59 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9A53A779E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 09:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452183A788A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 09:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbhFOHIz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Jun 2021 03:08:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55255 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230238AbhFOHIy (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Jun 2021 03:08:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623740809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1bptQkqZVqAajaLHu25xIp56mYAPhq5K+DznNXOGR0E=;
-        b=ih96Qtb+AugWtRO4zjNU0hlO0tGSglXwuR1o6G2h/++c+KLXiodeJ2qfomtOc/fKAqWgHl
-        Vkjc8gMaggYDZv1q2aHNPa5RQs5se8q6vW8dGMdEt8UscyCLg0k6RgAuxAf7yRIdw35csR
-        Bacjc9b6YQT8TPpEAPyB7Ewrb7XFN4k=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-569-64hfK2AMNQmkO7u1xNiZiw-1; Tue, 15 Jun 2021 03:06:48 -0400
-X-MC-Unique: 64hfK2AMNQmkO7u1xNiZiw-1
-Received: by mail-ed1-f71.google.com with SMTP id v12-20020aa7dbcc0000b029038fc8e57037so3433587edt.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Jun 2021 00:06:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1bptQkqZVqAajaLHu25xIp56mYAPhq5K+DznNXOGR0E=;
-        b=bRq3eirUAGmLfJtmqPv6MZiJD0La5xEGLuoD7Nhd7hFnwTeuDgcpfQBQghWEztJfSV
-         Hq4vXmEfzAVLA6j6eFdaaShWBt+WUFjkwXGgX0S3tk0+oqu79E5Q1Nqkjy5yKs8e7E2I
-         JQXdVc5+weeDIunUn/ekbqPD40cx2b+4VRAyczs/X7eXlX4C9uvaN4xpvpkJF1EkuHMW
-         ISxK6C8obVO1hWj9Cfr9wwcyNU3xrSdm2alAf0ykhMK6n2hpNuhL5uq+n+Mim/wkBvWI
-         XVRRR4YFYBAhoW7P1Cwr3rt+bFsk1j2v1wPm4twu9W70RxFyEjeN92exlyUiEPaZZIZH
-         HflA==
-X-Gm-Message-State: AOAM533qwGIRsM8woRbE69K9vVmM8Ukrzpz8001iQ+K4rm3mCrAcQdEf
-        GzeQZY6p6z3KDemwUZEuQseFNOyKtZoids+bqM303nrnROyX1fZ607pkyvP1n5MiiDhKKenb20V
-        VoPotQu2z813P8rVAcu8wi9Pv/xGd
-X-Received: by 2002:a05:6402:1e8b:: with SMTP id f11mr21756470edf.86.1623740807165;
-        Tue, 15 Jun 2021 00:06:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzjr2XSQSGkPxI3dJja1mbqx7MqydkJIqxXPBC64kHnxRq+99yMj0rlssdO/n6Q7TVjtTbx4g==
-X-Received: by 2002:a05:6402:1e8b:: with SMTP id f11mr21756454edf.86.1623740806968;
-        Tue, 15 Jun 2021 00:06:46 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.gmail.com with ESMTPSA id d4sm9179485ejo.98.2021.06.15.00.06.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Jun 2021 00:06:46 -0700 (PDT)
-To:     Leon Romanovsky <leon@kernel.org>,
-        Jing Zhang <jingzhangos@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        id S230443AbhFOHzi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Jun 2021 03:55:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60000 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230196AbhFOHzi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 15 Jun 2021 03:55:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4086B60E09;
+        Tue, 15 Jun 2021 07:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623743613;
+        bh=vDFtBhlYLrwtZnXOmkUZxpC5WdGn3oEPAkfut4CQqlM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k5TCBQVSBuiL6rRGP41YwOT3DJImXi6Z1ty8MpV5XWkPGRguUfc9uqH2nPdbuWVKF
+         nvKqUgp1gYQEozxBTNl+B8OwZn6E0A0Azee9sgNbBFp5f2BF9MrCeazfECaTgWqA9R
+         IbVaQdoTKURDMZqti9x/Eraat8P4E50XDSuVD+MuJCPgtp9VnY24fi2kAu85igKzhD
+         0A1BkJXNkIQZLCyCOJWVgqoq+ZvwfFA4F+e8cmCvtDh1bylcfCG/QNJysbdmDUL8NF
+         wKqmAxU0QdRufELcUgnOVFU0l12rQxTX29JTQBnJJY+L0yB5UefYMAD5OIhB88ScBU
+         CFl88in6YsOAw==
+Date:   Tue, 15 Jun 2021 10:53:30 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
         KVMPPC <kvm-ppc@vger.kernel.org>,
         LinuxS390 <linux-s390@vger.kernel.org>,
@@ -84,39 +57,50 @@ Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         Ricardo Koller <ricarkol@google.com>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>,
         Fuad Tabba <tabba@google.com>
+Subject: Re: [PATCH v9 0/5] KVM statistics data fd-based binary interface
+Message-ID: <YMhcek2cIu3Oz5Ek@unreal>
 References: <20210614212155.1670777-1-jingzhangos@google.com>
  <YMg5xPbmK3myjIX8@unreal>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v9 0/5] KVM statistics data fd-based binary interface
-Message-ID: <15875c41-e1e7-3bf2-a85c-21384684d279@redhat.com>
-Date:   Tue, 15 Jun 2021 09:06:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ <15875c41-e1e7-3bf2-a85c-21384684d279@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YMg5xPbmK3myjIX8@unreal>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15875c41-e1e7-3bf2-a85c-21384684d279@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 15/06/21 07:25, Leon Romanovsky wrote:
-> Sorry for my naive questions, but how does telemetry get statistics
-> for hypervisors? Why is KVM different from hypervisors or NIC's statistics
-> or any other high speed devices (RDMA) that generate tons of data?
+On Tue, Jun 15, 2021 at 09:06:43AM +0200, Paolo Bonzini wrote:
+> On 15/06/21 07:25, Leon Romanovsky wrote:
+> > Sorry for my naive questions, but how does telemetry get statistics
+> > for hypervisors? Why is KVM different from hypervisors or NIC's statistics
+> > or any other high speed devices (RDMA) that generate tons of data?
+> 
+> Right now, the only way is debugfs but it's slow, and it's disabled when
+> using lockdown mode; this series is a way to fix this.
+> 
+> I sense that there is another question in there; are you wondering if
+> another mechanism should be used, for example netlink?  The main issue there
+> is how to identify a VM, since KVM file descriptors don't have a name.
+> Using a pid works (sort of) for debugfs, but pids are not appropriate for a
+> stable API.  Using a file descriptor as in this series requires
+> collaboration from the userspace program; howver, once the file descriptor
+> has been transmitted via SCM_RIGHTS, telemetry can read it forever without
+> further IPC, and there is proper privilege separation.
 
-Right now, the only way is debugfs but it's slow, and it's disabled when 
-using lockdown mode; this series is a way to fix this.
+Yeah, sorry for mixing different questions into one.
 
-I sense that there is another question in there; are you wondering if 
-another mechanism should be used, for example netlink?  The main issue 
-there is how to identify a VM, since KVM file descriptors don't have a 
-name.  Using a pid works (sort of) for debugfs, but pids are not 
-appropriate for a stable API.  Using a file descriptor as in this series 
-requires collaboration from the userspace program; howver, once the file 
-descriptor has been transmitted via SCM_RIGHTS, telemetry can read it 
-forever without further IPC, and there is proper privilege separation.
+So the answer to the question "why KVM is different" is that it doesn't
+have any stable identification except file descriptor. While hypervisors
+have stable names, NICs and RDMA devices have interface indexes e.t.c.
+Did I get it right?
 
-Paolo
+And this was second part of my question, the first part was my attempt to
+get on answer why current statistics like process info (/proc/xxx/*), NICs
+(netlink) and RDMA (sysfs) are not using binary format.
 
+Thanks
+
+> 
+> Paolo
+> 
