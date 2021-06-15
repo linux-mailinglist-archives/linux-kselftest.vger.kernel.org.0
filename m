@@ -2,200 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 418263A8B11
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 23:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14F33A8B76
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 23:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbhFOV3G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Jun 2021 17:29:06 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:45444 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbhFOV3E (ORCPT
+        id S230045AbhFOV5c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Jun 2021 17:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229782AbhFOV5c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Jun 2021 17:29:04 -0400
-Received: from [50.53.41.238] (helo=[192.168.192.153])
-        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <john.johansen@canonical.com>)
-        id 1ltGaH-0004Xa-Cn; Tue, 15 Jun 2021 21:26:57 +0000
-Subject: Re: [PATCH v2 09/10] apparmor: test: Remove some casts which are
- no-longer required
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20210513193204.816681-1-davidgow@google.com>
- <20210513193204.816681-9-davidgow@google.com>
-From:   John Johansen <john.johansen@canonical.com>
-Autocrypt: addr=john.johansen@canonical.com; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkU1bXJQb0JFQURB
- azE5UHNnVmdCS2tJbW1SMmlzUFE2bzdLSmhUVEtqSmR3VmJrV1NuTm4rbzZVcDVrCm5LUDFm
- NDlFQlFsY2VXZzF5cC9Od2JSOGFkK2VTRU8vdW1hL0srUHFXdkJwdEtDOVNXRDk3Rkc0dUI0
- L2Nhb20KTEVVOTdzTFFNdG52R1dkeHJ4VlJHTTRhbnpXWU1neno1VFptSWlWVFo0M091NVZw
- YVMxVnoxWlN4UDNoL3hLTgpaci9UY1c1V1FhaTh1M1BXVm5ia2poU1pQSHYxQmdoTjY5cXhF
- UG9tckpCbTFnbXR4M1ppVm1GWGx1d1RtVGdKCk9rcEZvbDduYkowaWxuWUhyQTdTWDNDdFIx
- dXBlVXBNYS9XSWFuVk85NldkVGpISElhNDNmYmhtUXViZTR0eFMKM0ZjUUxPSlZxUXN4NmxF
- OUI3cUFwcG05aFExMHFQV3dkZlB5LyswVzZBV3ROdTVBU2lHVkNJbld6bDJIQnFZZAovWmxs
- OTN6VXErTklvQ244c0RBTTlpSCt3dGFHRGNKeXdJR0luK2VkS050SzcyQU1nQ2hUZy9qMVpv
- V0g2WmVXClBqdVVmdWJWelp0bzFGTW9HSi9TRjRNbWRRRzFpUU50ZjRzRlpiRWdYdXk5Y0dp
- MmJvbUYwenZ5QkpTQU5weGwKS05CRFlLek42S3owOUhVQWtqbEZNTmdvbUwvY2pxZ0FCdEF4
- NTlMK2RWSVpmYUYyODFwSWNVWnp3dmg1K0pvRwplT1c1dUJTTWJFN0wzOG5zem9veWtJSjVY
- ckFjaGtKeE5mejdrK0ZuUWVLRWtOekVkMkxXYzNRRjRCUVpZUlQ2ClBISGdhM1JneWtXNSsx
- d1RNcUpJTGRtdGFQYlhyRjNGdm5WMExSUGN2NHhLeDdCM2ZHbTd5Z2Rvb3dBUkFRQUIKdEIx
- S2IyaHVJRXB2YUdGdWMyVnVJRHhxYjJodVFHcHFiWGd1Ym1WMFBva0NPZ1FUQVFvQUpBSWJB
- d1VMQ1FnSApBd1VWQ2drSUN3VVdBZ01CQUFJZUFRSVhnQVVDVG8wWVZ3SVpBUUFLQ1JBRkx6
- WndHTlhEMkx4SkQvOVRKWkNwCndsbmNUZ1llcmFFTWVEZmtXdjhjMUlzTTFqMEFtRTRWdEwr
- ZkU3ODBaVlA5Z2tqZ2tkWVN4dDdlY0VUUFRLTWEKWlNpc3JsMVJ3cVUwb29nWGRYUVNweHJH
- SDAxaWN1LzJuMGpjWVNxWUtnZ1B4eTc4QkdzMkxacTRYUGZKVFptSApaR25YR3EvZURyL21T
- bmowYWF2QkptTVo2amJpUHo2eUh0QllQWjlmZG84YnRjendQNDFZZVdvSXUyNi84SUk2CmYw
- WG0zVkM1b0FhOHY3UmQrUldaYThUTXdsaHpIRXh4ZWwzanRJN0l6ek9zbm1FOS84RG0wQVJE
- NWlUTENYd1IKMWN3SS9KOUJGL1MxWHY4UE4xaHVUM0l0Q05kYXRncDh6cW9Ka2dQVmptdnlM
- NjRRM2ZFa1liZkhPV3NhYmE5LwprQVZ0Qk56OVJURmg3SUhEZkVDVmFUb3VqQmQ3QnRQcXIr
- cUlqV0ZhZEpEM0k1ZUxDVkp2VnJyb2xyQ0FUbEZ0Ck4zWWtRczZKbjFBaUlWSVUzYkhSOEdq
- ZXZnejVMbDZTQ0dIZ1Jya3lScG5TWWFVL3VMZ24zN042QVl4aS9RQUwKK2J5M0N5RUZManpX
- QUV2eVE4YnEzSXVjbjdKRWJoUy9KLy9kVXFMb2VVZjh0c0dpMDB6bXJJVFpZZUZZQVJoUQpN
- dHNmaXpJclZEdHoxaVBmL1pNcDVnUkJuaXlqcFhuMTMxY20zTTNndjZIclFzQUdubjhBSnJ1
- OEdEaTVYSllJCmNvLzEreC9xRWlOMm5DbGFBT3BiaHpOMmVVdlBEWTVXMHEzYkEvWnAybWZH
- NTJ2YlJJK3RRMEJyMUhkL3ZzbnQKVUhPOTAzbU1aZXAyTnpOM0JaNXFFdlB2RzRyVzVacTJE
- cHliV2JRclNtOW9iaUJLYjJoaGJuTmxiaUE4YW05bwpiaTVxYjJoaGJuTmxia0JqWVc1dmJt
- bGpZV3d1WTI5dFBva0NOd1FUQVFvQUlRVUNUbzBYV2dJYkF3VUxDUWdICkF3VVZDZ2tJQ3dV
- V0FnTUJBQUllQVFJWGdBQUtDUkFGTHpad0dOWEQySXRNRC85anliYzg3ZE00dUFIazZ5Tk0K
- TjBZL0JGbW10VFdWc09CaHFPbm9iNGkzOEJyRE8yQzFoUUNQQ1FlNExMczEvNHB0ZW92UXQ4
- QjJGeXJQVmp3Zwo3alpUSE5LNzRyNmxDQ1Z4eDN5dTFCN1U5UG80VlRrY3NsVmIxL3FtV3V4
- OFhXY040eXZrVHFsTCtHeHB5Sm45CjlaWmZmWEpjNk9oNlRtT2ZiS0d2TXV1djVhclNJQTNK
- SEZMZjlhTHZadEExaXNKVXI3cFM5YXBnOXVUVUdVcDcKd2ZWMFdUNlQzZUczbXRVVTJ1cDVK
- VjQ4NTBMMDVqSFM2dVdpZS9ZK3lmSk9iaXlyeE4vNlpxVzVHb25oTEJxLwptc3pjVjV2QlQz
- QkRWZTNSdkY2WGRNOU9oUG4xK1k4MXg1NCt2UTExM044aUx3RjdHR2ExNFp5SVZBTlpEMEkw
- CkhqUnZhMmsvUnFJUlR6S3l1UEg1cGtsY0tIVlBFRk1tT3pNVCtGT294Tmp2Uys3K3dHMktN
- RFlFbUhQcjFQSkIKWlNaZUh6SzE5dGZhbFBNcHBGeGkrc3lZTGFnTjBtQjdKSFF3WTdjclV1
- T0RoeWNxNjBZVnoxdGFFeWd1M1l2MgoyL0kxRUNHSHZLSEc2d2M5MG80M0MvZWxIRUNYbkVo
- N3RLcGxEY3BJQytPQ21NeEtIaFI0NitYY1p2Z3c0RGdiCjdjYTgzZVFSM0NHODlMdlFwVzJM
- TEtFRUJEajdoWmhrTGJra1BSWm0zdzhKWTQ0YXc4VnRneFdkblNFTUNMeEwKSU9OaDZ1Wjcv
- L0RZVnRjSWFNSllrZWJhWnRHZENwMElnVVpiMjQvVmR2WkNZYk82MkhrLzNWbzFuWHdIVUVz
- Mwo2RC92MWJUMFJaRmk2OUxnc0NjT2N4NGdZTGtDRFFST1pxejZBUkFBb3F3NmtrQmhXeU0x
- ZnZnYW1BVmplWjZuCktFZm5SV2JrQzk0TDFFc0pMdXAzV2IyWDBBQk5PSFNrYlNENHBBdUMy
- dEtGL0VHQnQ1Q1A3UWRWS1JHY1F6QWQKNmIyYzFJZHk5Ukx3Nnc0Z2krbm4vZDFQbTFra1lo
- a1NpNXpXYUlnMG01UlFVaytFbDh6a2Y1dGNFLzFOMFo1TwpLMkpoandGdTViWDBhMGw0Y0ZH
- V1ZRRWNpVk1ES1J0eE1qRXRrM1N4RmFsbTZaZFEycHAyODIyY2xucTR6WjltCld1MWQyd2F4
- aXorYjVJYTR3ZURZYTduNDFVUmNCRVViSkFnbmljSmtKdENUd3lJeElXMktuVnlPcmp2a1F6
- SUIKdmFQMEZkUDJ2dlpvUE1kbENJek9sSWtQTGd4RTBJV3VlVFhlQkpoTnMwMXBiOGJMcW1U
- SU1sdTRMdkJFTEEvdgplaWFqajVzOHk1NDJIL2FIc2ZCZjRNUVVoSHhPL0JaVjdoMDZLU1Vm
- SWFZN09nQWdLdUdOQjNVaWFJVVM1K2E5CmduRU9RTER4S1J5L2E3UTF2OVMrTnZ4KzdqOGlI
- M2prUUpoeFQ2WkJoWkdSeDBna0gzVCtGMG5ORG01TmFKVXMKYXN3Z0pycUZaa1VHZDJNcm0x
- cW5Ld1hpQXQ4U0ljRU5kcTMzUjBLS0tSQzgwWGd3ajhKbjMwdlhMU0crTk8xRwpIMFVNY0F4
- TXd5L3B2azZMVTVKR2paUjczSjVVTFZoSDRNTGJEZ2dEM21QYWlHOCtmb3RUckpVUHFxaGc5
- aHlVCkVQcFlHN3NxdDc0WG43OStDRVpjakxIenlsNnZBRkUyVzBreGxMdFF0VVpVSE8zNmFm
- RnY4cUdwTzNacVB2akIKVXVhdFhGNnR2VVFDd2YzSDZYTUFFUUVBQVlrQ0h3UVlBUW9BQ1FV
- Q1RtYXMrZ0liREFBS0NSQUZMelp3R05YRAoyRC9YRC8wZGRNLzRhaTFiK1RsMWp6bkthalgz
- a0crTWVFWWVJNGY0MHZjbzNyT0xyblJHRk9jYnl5ZlZGNjlNCktlcGllNE93b0kxamNUVTBB
- RGVjbmJXbkROSHByMFNjenhCTXJvM2Juckxoc212anVuVFlJdnNzQlp0QjRhVkoKanVMSUxQ
- VWxuaEZxYTdmYlZxMFpRamJpVi9ydDJqQkVOZG05cGJKWjZHam5wWUljQWJQQ0NhL2ZmTDQv
- U1FSUwpZSFhvaEdpaVM0eTVqQlRtSzVsdGZld0xPdzAyZmtleEgrSUpGcnJHQlhEU2c2bjJT
- Z3hubisrTkYzNGZYY205CnBpYXczbUtzSUNtKzBoZE5oNGFmR1o2SVdWOFBHMnRlb29WRHA0
- ZFlpaCsreFgvWFM4ekJDYzFPOXc0bnpsUDIKZ0t6bHFTV2JoaVdwaWZSSkJGYTRXdEFlSlRk
- WFlkMzdqL0JJNFJXV2hueXc3YUFQTkdqMzN5dEdITlVmNlJvMgovanRqNHRGMXkvUUZYcWpK
- Ry93R2pwZHRSZmJ0VWpxTEhJc3ZmUE5OSnEvOTU4cDc0bmRBQ2lkbFdTSHpqK09wCjI2S3Bi
- Rm5td05PMHBzaVVzbmh2SEZ3UE8vdkFibDNSc1I1KzBSbytodnMyY0VtUXV2OXIvYkRsQ2Zw
- enAydDMKY0srcmh4VXFpc094OERaZnoxQm5rYW9DUkZidnZ2ays3TC9mb21QbnRHUGtxSmNp
- WUU4VEdIa1p3MWhPa3UrNApPb00yR0I1bkVEbGorMlRGL2pMUStFaXBYOVBrUEpZdnhmUmxD
- NmRLOFBLS2ZYOUtkZm1BSWNnSGZuVjFqU24rCjh5SDJkakJQdEtpcVcwSjY5YUlzeXg3aVYv
- MDNwYVBDakpoN1hxOXZBenlkTjVVL1VBPT0KPTZQL2IKLS0tLS1FTkQgUEdQIFBVQkxJQyBL
- RVkgQkxPQ0stLS0tLQo=
-Organization: Canonical
-Message-ID: <7a81c546-e4c5-dc7c-1853-ec4ae4600102@canonical.com>
-Date:   Tue, 15 Jun 2021 14:26:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 15 Jun 2021 17:57:32 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C59C061574
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Jun 2021 14:55:27 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id w14so521869ilv.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Jun 2021 14:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=gGlMil9gXKdK98e+z/3//0TEFr3A94FGVQzcCF7IEdg=;
+        b=E4n+xiU6XmWOto6x2oSKuUqg2Y3hZugY9I+InERxKH2yDgoypfGzeYm/zUcDsuVgGv
+         YAgCOFaxAKVvwJo2xWx8EwQ6T775mKH02/W8MY7JdDXMymNvvl34Lqdv2k6eWwKNmpJ2
+         hKHQxlHRfGZvDh+wZ6DNEw551U1ZdDPC3mXY4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gGlMil9gXKdK98e+z/3//0TEFr3A94FGVQzcCF7IEdg=;
+        b=umJgkE2ePU2fyq/KZItzkg6Y9JlbgP1ZqRfQh0LUn0z4xTtA/6ZMH2wlwmx9cFbrri
+         0nawU332+GF7VVM6Xkxw+LX16AGKXqEbLKFVBLKcOWqIHvhJiioinTySHTGjdhN5JTbW
+         FGX8LHAPHMHmXAD/qpluIP8ofdKG7GSqIgIKcXmdmsZiRSl/fpzKi9RPwbYnx4Fz4dUR
+         iNcwsQw5DcNJqQqYgjyw+arMmbSx9/Qh8gy/i6kCy+Auqgu5FOzZ/47s80f9fWWL24ov
+         nxtJes0XCPMwD42CdljTpLX0f8LLcpo7m/cyRhzixw0AexGQ/PH8ePbneHOGwXrNqrrN
+         Tbqw==
+X-Gm-Message-State: AOAM533/gX5hNfpLqiFG5BH3vjFZH2z9JPvdRQRBj1jhZfGoKvMdQ3CE
+        5SRS6S1nZbPD+0gv1F5nYouErQ==
+X-Google-Smtp-Source: ABdhPJw0IoVMLrcQF6VHs508bDV1rbR9v5A1SXOl7hjsDfXWcFRqvfFr0np1QIn9PrKEnOo0RQ9C6Q==
+X-Received: by 2002:a05:6e02:11b1:: with SMTP id 17mr1027938ilj.225.1623794127136;
+        Tue, 15 Jun 2021 14:55:27 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id k10sm161902ion.38.2021.06.15.14.55.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jun 2021 14:55:26 -0700 (PDT)
+Subject: Re: [PATCH v8 5/5] selftests/sgx: Refine the test enclave to have
+ storage
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-sgx@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210610083021.392269-1-jarkko@kernel.org>
+ <20210610083021.392269-5-jarkko@kernel.org>
+ <b1bf69f5-e203-d69e-d15d-3fb5e98b63dd@linuxfoundation.org>
+ <20210615131359.zrfvi36sjdpxghzl@kernel.org>
+ <20210615131553.5y3jssldqc3sv2ge@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <adcc7797-db49-4dbc-ef87-5c12ad1d6a44@linuxfoundation.org>
+Date:   Tue, 15 Jun 2021 15:55:25 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210513193204.816681-9-davidgow@google.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210615131553.5y3jssldqc3sv2ge@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/13/21 12:32 PM, David Gow wrote:
-> With some of the stricter type checking in KUnit's EXPECT macros
-> removed, several casts in policy_unpack_test are no longer required.
-> 
-> Remove the unnecessary casts, making the conditions clearer.
-> 
-> Signed-off-by: David Gow <davidgow@google.com>
+On 6/15/21 7:15 AM, Jarkko Sakkinen wrote:
+> On Tue, Jun 15, 2021 at 04:14:02PM +0300, Jarkko Sakkinen wrote:
+>> On Mon, Jun 14, 2021 at 02:16:15PM -0600, Shuah Khan wrote:
+>>> On 6/10/21 2:30 AM, Jarkko Sakkinen wrote:
+>>>> Extend the enclave to have two operations: ENCL_OP_PUT and ENCL_OP_GET.
+>>>> ENCL_OP_PUT stores value inside the enclave address space and
+>>>> ENCL_OP_GET reads it. The internal buffer can be later extended to be
+>>>> variable size, and allow reclaimer tests.
+>>>>
+>>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>>> ---
+>>>>    tools/testing/selftests/sgx/defines.h     | 10 ++++
+>>>>    tools/testing/selftests/sgx/main.c        | 57 ++++++++++++++++++-----
+>>>>    tools/testing/selftests/sgx/test_encl.c   | 19 +++++++-
+>>>>    tools/testing/selftests/sgx/test_encl.lds |  3 +-
+>>>>    4 files changed, 74 insertions(+), 15 deletions(-)
+>>>>
+>>>
+>>> Test output before applying the series:
+>>>
+>>> TAP version 13
+>>> 1..1
+>>> # selftests: sgx: test_sgx
+>>> # Unable to open /dev/sgx_enclave: No such file or directory
+>>> # 1..0 # SKIP cannot load enclaves
+>>> ok 1 selftests: sgx: test_sgx # SKIP
+>>>
+>>> Test output after applying second patch
+>>>
+>>> selftests/sgx: Migrate to kselftest harness
+>>>
+>>> Output changes to the following. It doesn't look like the second
+>>> patch adds any new tests. What is the point in running the tests
+>>> that fail if /dev/sgx_enclave is missing.
+>>>
+>>> Unfortunately this series doesn't have a cover letter that explains
+>>> what this series is doing. I don't like the fact that the test
+>>> output and behavior changes when migrating the test to kselftest
+>>> harness. Shouldn't the output stay the same as in skip the tests
+>>> if /dev/sgx_enclave fails.
+>>
+>> I get what you are saying but actually I do not know how with
+>> fixtures I can skip "the rest" when FIXTURE_SETUP() fails.
+>>
+>> The reason for the output below is that with fixtures for all
+>> tests enclave is initialized for each test case. And it kind of
+>> makes sense because all tests start from the clean expected
+>> state.
+>>
+>> I don't how to do that with zero change in the output.
+>>
 
-Acked-by: John Johansen <john.johansen@canonical.com>
+Yeah. I took a look at the FIXTURE. Doesn't look like it is possible.
 
-I have pulled this into the apparmor tree
-
-> ---
-> This should be a no-op functionality wise, and while it depends on the
-> first couple of patches in this series, it's otherwise independent from
-> the others. I think this makes the test more readable, but if you
-> particularly dislike it, I'm happy to drop it.
+>> The reason to do this change is to make it easy to add more tests,
+>> and return correct status codes to the framework.
 > 
->  security/apparmor/policy_unpack_test.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
-> index 533137f45361..03f78a41ef79 100644
-> --- a/security/apparmor/policy_unpack_test.c
-> +++ b/security/apparmor/policy_unpack_test.c
-> @@ -177,7 +177,7 @@ static void policy_unpack_test_unpack_array_out_of_bounds(struct kunit *test)
->  
->  	array_size = unpack_array(puf->e, name);
->  
-> -	KUNIT_EXPECT_EQ(test, array_size, (u16)0);
-> +	KUNIT_EXPECT_EQ(test, array_size, 0);
->  	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
->  		puf->e->start + TEST_NAMED_ARRAY_BUF_OFFSET);
->  }
-> @@ -313,7 +313,7 @@ static void policy_unpack_test_unpack_strdup_out_of_bounds(struct kunit *test)
->  	size = unpack_strdup(puf->e, &string, TEST_STRING_NAME);
->  
->  	KUNIT_EXPECT_EQ(test, size, 0);
-> -	KUNIT_EXPECT_PTR_EQ(test, string, (char *)NULL);
-> +	KUNIT_EXPECT_PTR_EQ(test, string, NULL);
->  	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, start);
->  }
->  
-> @@ -391,10 +391,10 @@ static void policy_unpack_test_unpack_u16_chunk_basic(struct kunit *test)
->  
->  	size = unpack_u16_chunk(puf->e, &chunk);
->  
-> -	KUNIT_EXPECT_PTR_EQ(test, (void *)chunk,
-> +	KUNIT_EXPECT_PTR_EQ(test, chunk,
->  			    puf->e->start + TEST_U16_OFFSET + 2);
-> -	KUNIT_EXPECT_EQ(test, size, (size_t)TEST_U16_DATA);
-> -	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, (void *)(chunk + TEST_U16_DATA));
-> +	KUNIT_EXPECT_EQ(test, size, TEST_U16_DATA);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, (chunk + TEST_U16_DATA));
->  }
->  
->  static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
-> @@ -408,8 +408,8 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
->  
->  	size = unpack_u16_chunk(puf->e, &chunk);
->  
-> -	KUNIT_EXPECT_EQ(test, size, (size_t)0);
-> -	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
-> +	KUNIT_EXPECT_EQ(test, size, 0);
-> +	KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
->  	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
->  }
->  
-> @@ -430,8 +430,8 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_2(
->  
->  	size = unpack_u16_chunk(puf->e, &chunk);
->  
-> -	KUNIT_EXPECT_EQ(test, size, (size_t)0);
-> -	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
-> +	KUNIT_EXPECT_EQ(test, size, 0);
-> +	KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
->  	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
->  }
->  
+> To add: everything I did I based purely to the existing kernel
+> documentation, following the examples on how to use fixture.
 > 
 
+I will pick these up and will add a note to the last commit that
+output changes, so test rings that run kselftest are aware of the
+change.
+
+thanks,
+-- Shuah
