@@ -2,58 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D7D3A78AE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 10:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25EC13A792B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 10:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbhFOIF6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Jun 2021 04:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbhFOIF5 (ORCPT
+        id S231168AbhFOIkF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Jun 2021 04:40:05 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:44815 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230332AbhFOIkD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Jun 2021 04:05:57 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DD0C0617AF
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Jun 2021 01:03:52 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id w22-20020a0568304116b02904060c6415c7so11138011ott.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Jun 2021 01:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2CSh1z7Vp1/cJggYoB1jYFqsZlnKuhPcaTsNgRYwVSI=;
-        b=O8yz83yvBRCtMVSzbGCfMg/eHcmAvfvQZTkOIrDmMi4Ya9lSWjT7L4v+4BdKPCHAr7
-         o8i/5oXrv/AX3rVcPJxU+O2mwmLoFJX9GDiqaz5HSgNfEsgXYCPNJcP9FgE7IRuDoNkx
-         tFHDu7d25Ci7vkTPCNOjJ0ZeoYPOGokqwLAGhgNmbyNuAeTPp5zd/L63WYBxn4HYzh91
-         dRMVX09ftVaQWQV+pkiXcPlwECefKY/kQlEEaHx+kpinhn6YKL1DlJZq56FcetiW7RNx
-         Kb+r7EfzgK//Y13xIojAuhb9Q27hA0AvG7oieQon3sgYE3dxk47SHgpgdFK6ACeBafwq
-         FXKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2CSh1z7Vp1/cJggYoB1jYFqsZlnKuhPcaTsNgRYwVSI=;
-        b=LGKQtJNKkFt7/YDq6po3EjJhI8HR8XOPKSgjsF/CBoxjNHO1aSCitEZjqG0zUzuSOV
-         GdkhUJ9g7G8T8oNyOCU1NEyW2y1/aRBFgBtMDgXqsFrwqfFQQrc3HkVBhStHp5IQP8IF
-         +5D5SscgXN+pq3Ydgmw8IWr45x7gmkWvLRTKtNGn9cTSo11g2E+s4bvpebmCVQwrExMH
-         x0QntRn7O9PLxY86rpF2cPqniuL+M60w8+bEYR+nlq/WbyivYNv00rnjpvUFaQ093dkM
-         +6eRWznh8ltbC4PvTZzENJbtfpwI3ydrkCDs1Epq2DfQtloJMEf3jO3lKVYSJdKz6KPG
-         5F8w==
-X-Gm-Message-State: AOAM530aMTNVsr1Qfx0RkYBntOFmRhrHSiazwkwnM0+IpJ3MyTeHdWMD
-        WAdT9Q1FgyydSYiAyn8E7igKuSFcpjniHhyYFx36sQ==
-X-Google-Smtp-Source: ABdhPJw2enLCtbwE/790AuD9R9YvbkgrP2ijrQxAzA0UdoAox+QIbPoUXnczIrY5AxRCozcc/VKv6rYEd/Kk/Su7FrA=
-X-Received: by 2002:a05:6830:1002:: with SMTP id a2mr16213078otp.144.1623744231983;
- Tue, 15 Jun 2021 01:03:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210614212155.1670777-1-jingzhangos@google.com> <20210614212155.1670777-5-jingzhangos@google.com>
-In-Reply-To: <20210614212155.1670777-5-jingzhangos@google.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Tue, 15 Jun 2021 09:03:15 +0100
-Message-ID: <CA+EHjTybjrYL5KUJebmjvj_R5yULDxXsiPzn6f5f-y5HzQqM6A@mail.gmail.com>
-Subject: Re: [PATCH v9 4/5] KVM: selftests: Add selftest for KVM statistics
- data binary interface
-To:     Jing Zhang <jingzhangos@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        Tue, 15 Jun 2021 04:40:03 -0400
+Received: from [192.168.1.155] ([95.115.9.120]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MYcy3-1lpPX61RGl-00VeCh; Tue, 15 Jun 2021 10:37:39 +0200
+Subject: Re: [PATCH v9 0/5] KVM statistics data fd-based binary interface
+To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
         KVMPPC <kvm-ppc@vger.kernel.org>,
         LinuxS390 <linux-s390@vger.kernel.org>,
@@ -82,96 +46,101 @@ Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>,
         David Matlack <dmatlack@google.com>,
         Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+References: <20210614212155.1670777-1-jingzhangos@google.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Message-ID: <b86aa6df-5fd7-d705-1688-4d325df6f7d9@metux.net>
+Date:   Tue, 15 Jun 2021 10:37:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210614212155.1670777-1-jingzhangos@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: tl
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:Vod45xLxHxZ5p8qYKvuWym3LEAiarmlv0Xbt34OpNBV9uy1sBdE
+ IRftON+oudc8QVSK3OpycOl49aHJfySAgkANRqrTI39LcdQIXpjA7mxltjpeNzUcQSldpbN
+ 9MatQnRvvRMJJ8elPHcd2BkxKXtnpLxALuiGllUwQeIJ/pSfjl/1Ju+2MmxGm86GlBu1W06
+ ZMtU7WHK45h2IdXcp/e8g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+53FXRRHLqc=:mz+uz7bhnpeydAZf0N2025
+ PzwGuvUWyPVQfHIrPDNsiRUyENR8k8pU+IrQTGZS1wnh9dAW8iuHrnc1m2pJ3oMjaQSkDQfYE
+ CitMcMEor434oAPJQjN+scqfRgySjAt2AMJpYyCkXEnjuNLL435UQVMezynLHSeRwuZ3mbYhv
+ wwNIBxhtwjP7SVCR9sHWQMJzG+1zH/4+qxGxAb9sDf80fkBI07uRQz5xuvmLVq7WGoWF74/Us
+ BQiBgnydw4wY4V1J5Y5yEAwuoKhnbDEyPZHgJvQT1w1FMWuELbaEz6VH6F+SXOPaAlywjQe7q
+ WGTk8EjDeLtaCIS9fu2JoA0zWjjS4a4EEo684bMWJScBce+ezZ/9MV7YfgKmdb16Tr0FIJWya
+ +bz0ZJ5j2y6JQlx5SiGGMEUCnQUBNS7Fm5VA0Sa3ZK1jXEY5/DPcdideck40Dn+2OPAZuXtU9
+ ESR5huX3pYZYRU/wFSEiLE4jZIbf867UrKIgkQCDL+90WY3iyjt/tICjAmssa+jDfqp5+UZuZ
+ 2L9tw9OzjAAntKVmcEinnI=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jing,
+On 14.06.21 23:21, Jing Zhang wrote:
 
-> +int main(int argc, char *argv[])
-> +{
-> +       int max_vm = DEFAULT_NUM_VM, max_vcpu = DEFAULT_NUM_VCPU, ret, i, j;
-> +       struct kvm_vm **vms;
-> +
-> +       /* Get the number of VMs and VCPUs that would be created for testing. */
-> +       if (argc > 1) {
-> +               max_vm = strtol(argv[1], NULL, 0);
-> +               if (max_vm <= 0)
-> +                       max_vm = DEFAULT_NUM_VM;
-> +       }
-> +       if (argc > 2) {
-> +               max_vcpu = strtol(argv[2], NULL, 0);
-> +               if (max_vcpu <= 0)
-> +                       max_vcpu = DEFAULT_NUM_VCPU;
-> +       }
-> +
-> +       /* Check the extension for binary stats */
-> +       ret = kvm_check_cap(KVM_CAP_BINARY_STATS_FD);
-> +       TEST_ASSERT(ret >= 0,
-> +                       "Binary form statistics interface is not supported");
+Hi,
 
-kvm_check_cap returns the value of KVM_CHECK_EXTENSION, which is 0 if
-unsupported (-ERROR on an error). The assertion should be for ret > 0.
+> This patchset provides a file descriptor for every VM and VCPU to read
+> KVM statistics data in binary format.
 
-Made that change locally, and tested it with various configurations
-(vhe, nvhe), as well as kernel versions (with and without
-KVM_CAP_BINARY_STATS_FD), and it passes (or fails as expected).
-Without that fix and with a kernel that doesn't support
-KVM_CAP_BINARY_STATS_FD, it passes that assertion, but fails later at
-vcpu_stats_test().
+I've missed the discussions of previous versions, so please forgive my
+stupid questions:
 
-With that fixed:
-Tested-by: Fuad Tabba <tabba@google.com> #arm64
+* why is it binary instead of text ? is it so very high volume that
+   it really matters ?
+* how will possible future extensions of the telemetry packets work ?
+* aren't there other means to get this fd instead of an ioctl() on the
+   VM fd ? something more from the outside (eg. sysfs/procfs)
+* how will that relate to other hypervisors ?
 
-Cheers,
-/fuad
+Some notes from the operating perspective:
+
+In typical datacenters we've got various monitoring tools that are able
+to catch up lots of data from different sources (especially files). If
+an operator e.g. is interested in something in happening in some file
+(e.g. in /proc of /sys), it's quite trivial - just configure yet another
+probe (maybe some regex for parsing) and done. Automatically fed in his
+$monitoring_solution (e.g. nagios, ELK, Splunk, whatsnot)
+
+With your approach, it's not that simple: now the operator needs to
+create (and deploy and manage) a separate agent that somehow receives
+that fd from the VMM, reads and parses that specific binary stream
+and finally pushes it into the monitoring infrastructure. Or the VMM
+writes it into some file, where some monitoring agent can pick it up.
+In any case, not actually trivial from ops perspective.
+
+In general I tend to like the fd approach (even though I don't like
+ioctls very much - I'd rather like to have it more Plan9-like ;-)).
+But it has the drawback of acquiring those fd's by separate processes
+isn't entirely easy and needs a lot of coordinated interaction.
+
+That issue would be much easier if we had the ability to publish
+existing fd's into the file system (like Plan9's srvfs does), but we
+don't have that yet. (actually, I've hacked up some srvfs for Linux,
+but ... well ... it's just a hack, nowhere near to production).
+
+Why not putting this into sysfs ?
+
+I see two options:
+
+a) if it's really kvm-specific (and no chance of using the same
+    interface for other hypervisors), we could put it under the
+    kvm device (/sys/class/misc/kvm).
+
+b) have a generic VMM stats interface that theroretically could work
+    with any hypervisor.
 
 
-> +
-> +       /* Create VMs and VCPUs */
-> +       vms = malloc(sizeof(vms[0]) * max_vm);
-> +       TEST_ASSERT(vms, "Allocate memory for storing VM pointers");
-> +       for (i = 0; i < max_vm; ++i) {
-> +               vms[i] = vm_create(VM_MODE_DEFAULT,
-> +                               DEFAULT_GUEST_PHY_PAGES, O_RDWR);
-> +               for (j = 0; j < max_vcpu; ++j)
-> +                       vm_vcpu_add(vms[i], j);
-> +       }
-> +
-> +       /* Check stats read for every VM and VCPU */
-> +       for (i = 0; i < max_vm; ++i) {
-> +               vm_stats_test(vms[i]);
-> +               for (j = 0; j < max_vcpu; ++j)
-> +                       vcpu_stats_test(vms[i], j);
-> +       }
-> +
-> +       for (i = 0; i < max_vm; ++i)
-> +               kvm_vm_free(vms[i]);
-> +       free(vms);
-> +       return 0;
-> +}
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 5c70596dd1b9..83c02cb0ae1e 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -2286,3 +2286,15 @@ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size)
->         n = DIV_ROUND_UP(size, vm_guest_mode_params[mode].page_size);
->         return vm_adjust_num_guest_pages(mode, n);
->  }
-> +
-> +int vm_get_stats_fd(struct kvm_vm *vm)
-> +{
-> +       return ioctl(vm->fd, KVM_GET_STATS_FD, NULL);
-> +}
-> +
-> +int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid)
-> +{
-> +       struct vcpu *vcpu = vcpu_find(vm, vcpuid);
-> +
-> +       return ioctl(vcpu->fd, KVM_GET_STATS_FD, NULL);
-> +}
-> --
-> 2.32.0.272.g935e593368-goog
->
+
+--mtx
+
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
