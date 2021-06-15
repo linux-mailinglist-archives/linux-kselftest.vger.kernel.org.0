@@ -2,36 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 452183A788A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 09:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D7D3A78AE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jun 2021 10:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbhFOHzi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Jun 2021 03:55:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60000 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230196AbhFOHzi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Jun 2021 03:55:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4086B60E09;
-        Tue, 15 Jun 2021 07:53:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623743613;
-        bh=vDFtBhlYLrwtZnXOmkUZxpC5WdGn3oEPAkfut4CQqlM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k5TCBQVSBuiL6rRGP41YwOT3DJImXi6Z1ty8MpV5XWkPGRguUfc9uqH2nPdbuWVKF
-         nvKqUgp1gYQEozxBTNl+B8OwZn6E0A0Azee9sgNbBFp5f2BF9MrCeazfECaTgWqA9R
-         IbVaQdoTKURDMZqti9x/Eraat8P4E50XDSuVD+MuJCPgtp9VnY24fi2kAu85igKzhD
-         0A1BkJXNkIQZLCyCOJWVgqoq+ZvwfFA4F+e8cmCvtDh1bylcfCG/QNJysbdmDUL8NF
-         wKqmAxU0QdRufELcUgnOVFU0l12rQxTX29JTQBnJJY+L0yB5UefYMAD5OIhB88ScBU
-         CFl88in6YsOAw==
-Date:   Tue, 15 Jun 2021 10:53:30 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
-        KVMARM <kvmarm@lists.cs.columbia.edu>,
+        id S230389AbhFOIF6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Jun 2021 04:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230358AbhFOIF5 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 15 Jun 2021 04:05:57 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DD0C0617AF
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Jun 2021 01:03:52 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id w22-20020a0568304116b02904060c6415c7so11138011ott.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Jun 2021 01:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2CSh1z7Vp1/cJggYoB1jYFqsZlnKuhPcaTsNgRYwVSI=;
+        b=O8yz83yvBRCtMVSzbGCfMg/eHcmAvfvQZTkOIrDmMi4Ya9lSWjT7L4v+4BdKPCHAr7
+         o8i/5oXrv/AX3rVcPJxU+O2mwmLoFJX9GDiqaz5HSgNfEsgXYCPNJcP9FgE7IRuDoNkx
+         tFHDu7d25Ci7vkTPCNOjJ0ZeoYPOGokqwLAGhgNmbyNuAeTPp5zd/L63WYBxn4HYzh91
+         dRMVX09ftVaQWQV+pkiXcPlwECefKY/kQlEEaHx+kpinhn6YKL1DlJZq56FcetiW7RNx
+         Kb+r7EfzgK//Y13xIojAuhb9Q27hA0AvG7oieQon3sgYE3dxk47SHgpgdFK6ACeBafwq
+         FXKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2CSh1z7Vp1/cJggYoB1jYFqsZlnKuhPcaTsNgRYwVSI=;
+        b=LGKQtJNKkFt7/YDq6po3EjJhI8HR8XOPKSgjsF/CBoxjNHO1aSCitEZjqG0zUzuSOV
+         GdkhUJ9g7G8T8oNyOCU1NEyW2y1/aRBFgBtMDgXqsFrwqfFQQrc3HkVBhStHp5IQP8IF
+         +5D5SscgXN+pq3Ydgmw8IWr45x7gmkWvLRTKtNGn9cTSo11g2E+s4bvpebmCVQwrExMH
+         x0QntRn7O9PLxY86rpF2cPqniuL+M60w8+bEYR+nlq/WbyivYNv00rnjpvUFaQ093dkM
+         +6eRWznh8ltbC4PvTZzENJbtfpwI3ydrkCDs1Epq2DfQtloJMEf3jO3lKVYSJdKz6KPG
+         5F8w==
+X-Gm-Message-State: AOAM530aMTNVsr1Qfx0RkYBntOFmRhrHSiazwkwnM0+IpJ3MyTeHdWMD
+        WAdT9Q1FgyydSYiAyn8E7igKuSFcpjniHhyYFx36sQ==
+X-Google-Smtp-Source: ABdhPJw2enLCtbwE/790AuD9R9YvbkgrP2ijrQxAzA0UdoAox+QIbPoUXnczIrY5AxRCozcc/VKv6rYEd/Kk/Su7FrA=
+X-Received: by 2002:a05:6830:1002:: with SMTP id a2mr16213078otp.144.1623744231983;
+ Tue, 15 Jun 2021 01:03:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210614212155.1670777-1-jingzhangos@google.com> <20210614212155.1670777-5-jingzhangos@google.com>
+In-Reply-To: <20210614212155.1670777-5-jingzhangos@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Tue, 15 Jun 2021 09:03:15 +0100
+Message-ID: <CA+EHjTybjrYL5KUJebmjvj_R5yULDxXsiPzn6f5f-y5HzQqM6A@mail.gmail.com>
+Subject: Re: [PATCH v9 4/5] KVM: selftests: Add selftest for KVM statistics
+ data binary interface
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
         KVMPPC <kvm-ppc@vger.kernel.org>,
         LinuxS390 <linux-s390@vger.kernel.org>,
         Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
         James Morse <james.morse@arm.com>,
         Julien Thierry <julien.thierry.kdev@gmail.com>,
@@ -55,52 +82,96 @@ Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>,
         David Matlack <dmatlack@google.com>,
         Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Fuad Tabba <tabba@google.com>
-Subject: Re: [PATCH v9 0/5] KVM statistics data fd-based binary interface
-Message-ID: <YMhcek2cIu3Oz5Ek@unreal>
-References: <20210614212155.1670777-1-jingzhangos@google.com>
- <YMg5xPbmK3myjIX8@unreal>
- <15875c41-e1e7-3bf2-a85c-21384684d279@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <15875c41-e1e7-3bf2-a85c-21384684d279@redhat.com>
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 09:06:43AM +0200, Paolo Bonzini wrote:
-> On 15/06/21 07:25, Leon Romanovsky wrote:
-> > Sorry for my naive questions, but how does telemetry get statistics
-> > for hypervisors? Why is KVM different from hypervisors or NIC's statistics
-> > or any other high speed devices (RDMA) that generate tons of data?
-> 
-> Right now, the only way is debugfs but it's slow, and it's disabled when
-> using lockdown mode; this series is a way to fix this.
-> 
-> I sense that there is another question in there; are you wondering if
-> another mechanism should be used, for example netlink?  The main issue there
-> is how to identify a VM, since KVM file descriptors don't have a name.
-> Using a pid works (sort of) for debugfs, but pids are not appropriate for a
-> stable API.  Using a file descriptor as in this series requires
-> collaboration from the userspace program; howver, once the file descriptor
-> has been transmitted via SCM_RIGHTS, telemetry can read it forever without
-> further IPC, and there is proper privilege separation.
+Hi Jing,
 
-Yeah, sorry for mixing different questions into one.
+> +int main(int argc, char *argv[])
+> +{
+> +       int max_vm = DEFAULT_NUM_VM, max_vcpu = DEFAULT_NUM_VCPU, ret, i, j;
+> +       struct kvm_vm **vms;
+> +
+> +       /* Get the number of VMs and VCPUs that would be created for testing. */
+> +       if (argc > 1) {
+> +               max_vm = strtol(argv[1], NULL, 0);
+> +               if (max_vm <= 0)
+> +                       max_vm = DEFAULT_NUM_VM;
+> +       }
+> +       if (argc > 2) {
+> +               max_vcpu = strtol(argv[2], NULL, 0);
+> +               if (max_vcpu <= 0)
+> +                       max_vcpu = DEFAULT_NUM_VCPU;
+> +       }
+> +
+> +       /* Check the extension for binary stats */
+> +       ret = kvm_check_cap(KVM_CAP_BINARY_STATS_FD);
+> +       TEST_ASSERT(ret >= 0,
+> +                       "Binary form statistics interface is not supported");
 
-So the answer to the question "why KVM is different" is that it doesn't
-have any stable identification except file descriptor. While hypervisors
-have stable names, NICs and RDMA devices have interface indexes e.t.c.
-Did I get it right?
+kvm_check_cap returns the value of KVM_CHECK_EXTENSION, which is 0 if
+unsupported (-ERROR on an error). The assertion should be for ret > 0.
 
-And this was second part of my question, the first part was my attempt to
-get on answer why current statistics like process info (/proc/xxx/*), NICs
-(netlink) and RDMA (sysfs) are not using binary format.
+Made that change locally, and tested it with various configurations
+(vhe, nvhe), as well as kernel versions (with and without
+KVM_CAP_BINARY_STATS_FD), and it passes (or fails as expected).
+Without that fix and with a kernel that doesn't support
+KVM_CAP_BINARY_STATS_FD, it passes that assertion, but fails later at
+vcpu_stats_test().
 
-Thanks
+With that fixed:
+Tested-by: Fuad Tabba <tabba@google.com> #arm64
 
-> 
-> Paolo
-> 
+Cheers,
+/fuad
+
+
+> +
+> +       /* Create VMs and VCPUs */
+> +       vms = malloc(sizeof(vms[0]) * max_vm);
+> +       TEST_ASSERT(vms, "Allocate memory for storing VM pointers");
+> +       for (i = 0; i < max_vm; ++i) {
+> +               vms[i] = vm_create(VM_MODE_DEFAULT,
+> +                               DEFAULT_GUEST_PHY_PAGES, O_RDWR);
+> +               for (j = 0; j < max_vcpu; ++j)
+> +                       vm_vcpu_add(vms[i], j);
+> +       }
+> +
+> +       /* Check stats read for every VM and VCPU */
+> +       for (i = 0; i < max_vm; ++i) {
+> +               vm_stats_test(vms[i]);
+> +               for (j = 0; j < max_vcpu; ++j)
+> +                       vcpu_stats_test(vms[i], j);
+> +       }
+> +
+> +       for (i = 0; i < max_vm; ++i)
+> +               kvm_vm_free(vms[i]);
+> +       free(vms);
+> +       return 0;
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 5c70596dd1b9..83c02cb0ae1e 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -2286,3 +2286,15 @@ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size)
+>         n = DIV_ROUND_UP(size, vm_guest_mode_params[mode].page_size);
+>         return vm_adjust_num_guest_pages(mode, n);
+>  }
+> +
+> +int vm_get_stats_fd(struct kvm_vm *vm)
+> +{
+> +       return ioctl(vm->fd, KVM_GET_STATS_FD, NULL);
+> +}
+> +
+> +int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid)
+> +{
+> +       struct vcpu *vcpu = vcpu_find(vm, vcpuid);
+> +
+> +       return ioctl(vcpu->fd, KVM_GET_STATS_FD, NULL);
+> +}
+> --
+> 2.32.0.272.g935e593368-goog
+>
