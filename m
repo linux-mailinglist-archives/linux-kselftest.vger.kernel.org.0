@@ -2,95 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B50563AA56C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 22:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE27C3AA579
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 22:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbhFPUln (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Jun 2021 16:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
+        id S233637AbhFPUnf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Jun 2021 16:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233560AbhFPUln (ORCPT
+        with ESMTP id S233629AbhFPUne (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Jun 2021 16:41:43 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B87AC061574;
-        Wed, 16 Jun 2021 13:39:35 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id r20so2980549qtp.3;
-        Wed, 16 Jun 2021 13:39:35 -0700 (PDT)
+        Wed, 16 Jun 2021 16:43:34 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD354C061574
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 13:41:27 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id x21-20020a17090aa395b029016e25313bfcso2509434pjp.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 13:41:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=w2FBfLaBcwWiXuuQkiw+TKxNhLLyk0+UoFjg+2c9KWs=;
-        b=BqBhOjMwogf4k3blz8IAL4WznI6LikA5MM6wtvdt54OjlMTQ/hGLAM476ovh8+O353
-         rcDqAUKKfNsblRHU2SVTlhQwfloN8u0hu+w0LiTH+Tia01Gkw4fSBkLWyNLyJfM+n4oL
-         fXL0blwAjsHNAx6D/kmfSebvzy5pTvr1zwUiheCDJmbSiGGiavFdxKJDZQb2GMcmyVEc
-         h8SWGqakfPRb8QUBkKTK0rTCq6vaXPkrjWvudCqX3OWKPJI6qJuX/Rxo093xzbXye5yS
-         RKxsZlzvsABLEIvIVTqJl2q95sY12+mQpCfVtM2pTFJww7wQiU6JQYLFu8KjPFsnsSjE
-         L2bA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EaW36aS0LZ9CAqId572i5w3m3upUdOksh819Ks70U0g=;
+        b=lMJtojEXFzt+xeR14MF92js03x8z8Q7rWqizAgoanKuYcxI3FVwwsbPUKWwOnTVVKh
+         YUJ5YMf89NH+2+hF7ZF+Td8mszi+lksmv/LLh35uVLY+Ap+kHOmhC71YVdxwxYzI0+Z9
+         j1Rc+OSNBJ2jHCso1S0HuUJuh4dad6v4RnQ6xTGQHwLtmJYfsITGdPn5F4/qvfZ5Yci5
+         3ILL7yqWytCA5W9Yo6DiAN0cOsEImijO9cnsHUWs4WDL5Q34tjawkDeMC/GzCEOMByHF
+         qvf69GzpIAXtEF2o7MFhn5Jeu6FsaVIPvvS0SZGhBkQrUzIB3wEtB51Vq86+RTGMucfK
+         fnaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=w2FBfLaBcwWiXuuQkiw+TKxNhLLyk0+UoFjg+2c9KWs=;
-        b=eTjR2sN/Xbmf4MQEYkoqFoAWY+kZBD8SYs5J/Bd7IZmHt41wpCjx+wIIfQPvnFqPpn
-         4npSVYCvkRxPqRakWjXfDT1nU1OXCpAyfVrOf6N3yv5v8YPVDoOGBv3nBpx3TRv2dzI+
-         6OQ2y8pNzT/so4qaJM7GqCp9QJk24jTomSqGJx2q2GlKO+SLI7Lsr5FaBHUOsytipH2D
-         ZY/XwQ/Awgt1enOyi4IqQ2+9OK8AuoNM6X1UgAZztIKCAIs1Isj7kQaGdnS5WuEdVXRP
-         W8EPX6fjre8vMA8YJBAuYFj1Lcn1c91NRFCzmIoWXfMg2AOmdboyxSlRs6GfYMuR64Hh
-         t6fw==
-X-Gm-Message-State: AOAM5300R12YjE54WaL2nN+Q5oNGpN8+Ss/Oy3kp8Cu/GnSIzEiJvoSL
-        ABf3N/3QwjO83EitQrnymcI=
-X-Google-Smtp-Source: ABdhPJyfuhLloMr2jD5atgcSjc7s9SBwOGa3zson1CdRWwIRQt+pLlNuk+DW2fOkVzkB46PeGLmTMw==
-X-Received: by 2002:ac8:1285:: with SMTP id y5mr1712954qti.322.1623875974081;
-        Wed, 16 Jun 2021 13:39:34 -0700 (PDT)
-Received: from localhost ([199.192.137.73])
-        by smtp.gmail.com with ESMTPSA id k9sm1693776qtq.30.2021.06.16.13.39.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 13:39:33 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 16 Jun 2021 16:39:32 -0400
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [PATCH 1/5] cgroup/cpuset: Don't call validate_change() for some
- flag changes
-Message-ID: <YMphhLAzmRRyD+cm@slm.duckdns.org>
-References: <20210603212416.25934-1-longman@redhat.com>
- <20210603212416.25934-2-longman@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EaW36aS0LZ9CAqId572i5w3m3upUdOksh819Ks70U0g=;
+        b=Ny73KY89cJ+eRcZ5fWMefESb1QsHuDaylvG9tKBLWHkoEBP7IByuiO7HFKEVFyYRJ6
+         ZmP9NDRDVWvX0gW0EFp1qCoxj/egLHSYsFY8Jvoa5nJzlJPQsjwi14Wjy1YKfGrFEUSf
+         95X8KgnpnnNd5jdcc5NfS1jRBjc7EMgTjPm259OdjY2wSSk7RUHqH+TOHcY4NNzn7jaa
+         4891JQjp+JIt0pZ5X+U0DLCQUC/TASVRBpUJMkNvbfHJalLZLAbVZOfyaB2l48s0hP4K
+         QOf+RjkccZmqAd+6PgqwFAlPL5GQsoTqMEW6hMzM0q9TH8c+XRP++Hqot+73SnzqpKer
+         NyPw==
+X-Gm-Message-State: AOAM531X5POUaDcGwP87dQR3cjHCtpTIy8rBsaiQf+NXYtyPvuz5JHnr
+        H1F0hoJuiGXn+lmZ+J5OX20MYj+s7Uf0ka0EwJYRrg==
+X-Google-Smtp-Source: ABdhPJx/UgOcFxUlYkmPEi5myAegdBUbKzdywmlbCw8qICwsGbIH9vkSLK1wT1Io4bXPG25WLwso7akMudlNBaq/M9c=
+X-Received: by 2002:a17:902:d3c3:b029:101:af83:cb1f with SMTP id
+ w3-20020a170902d3c3b0290101af83cb1fmr1319442plb.80.1623876087067; Wed, 16 Jun
+ 2021 13:41:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210603212416.25934-2-longman@redhat.com>
+References: <20210522044241.2763088-1-davidgow@google.com> <20210522044241.2763088-3-davidgow@google.com>
+In-Reply-To: <20210522044241.2763088-3-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 16 Jun 2021 13:41:16 -0700
+Message-ID: <CAFd5g46jOwV5iZretZEHOuxTbSvNxan-VSiN7genAXkhgbksAg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] kunit: Remove the unused all_tests.config
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On Fri, May 21, 2021 at 9:43 PM David Gow <davidgow@google.com> wrote:
+>
+> This isn't used anywhere. While it's possible that people were manually
+> referencing it, the new default config (in default.config in the same
+> path) provides equivalent functionality.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-On Thu, Jun 03, 2021 at 05:24:12PM -0400, Waiman Long wrote:
-> The update_flag() is called with one flag bit change and without change
-> in the various cpumasks in the cpuset. Moreover, not all changes in the
-> flag bits are validated in validate_change().  In particular, the load
-> balance flag and the two spread flags are not checked there. So there
-> is no point in calling validate_change() if those flag bits change.
-
-The fact that it's escaping validation conditionally from caller side is
-bothersome given that the idea is to have self-contained verifier to ensure
-correctness. I'd prefer to make the validation more complete and optimized
-(ie. detect or keep track of what changed) if really necessary rather than
-escaping partially because certain conditions aren't checked.
-
-Thanks.
-
--- 
-tejun
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
