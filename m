@@ -2,138 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DF43AA5FD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 23:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BDA3AA628
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 23:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbhFPVQ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Jun 2021 17:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233836AbhFPVQ7 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Jun 2021 17:16:59 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAC5C06175F
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 14:14:52 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id b9so3599217ilr.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 14:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KrgNeqOkkTdrdhyBNpvQQtJWwQhENKuchQIrlwc8tKU=;
-        b=VTnq7Vu75liFI6CjS2vIrPQEgig1ZNxDf7DqxLSiWCUxYi0F13HDRuE2xGx5stP5gW
-         yAt5D/Ngu6g8QwNOfRqvZ/9Rx0lIdhhstl1SdBsCLQF8vYf33Wzruaitg1Y1eq6c5lEU
-         3F9g0GgDFNGaw5WqMNh5/1zGt8Nv5xKTl8lnzo5XZJSgZt1cLIAefRY+qS5JKguPXBrQ
-         vsVs7pdngLs0Mn37ZLFGQutv407cS6nl9VL6C4sJua0auZKLcRCtf6zEJdGMetruzcFT
-         IGVRcIGAKb7ZMllJX56B3RA47EZBgJVgdNzN/C8IC5u2+mQ0SApuJVCKqE5mPND0M12M
-         Vwyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KrgNeqOkkTdrdhyBNpvQQtJWwQhENKuchQIrlwc8tKU=;
-        b=qYD0kxkjbXx5KRtACz6cVlkdqVlHlGfxnBp/8OLPrz9HVwnvssIkfTlxWYIoj9onDZ
-         jV3pE3kc4O2CC8bVra5I0wjNJuELN10g/r1+lXm3Mi6lpHaAfKreXU4rLNZ2OCjRHs5w
-         6GEbqlBMPl/vD0+rGAe+fyqttLridGCTDGaRzcSIwyHKunSMLOPxF+2aqsM+K18HFZpt
-         Ai98RmsQ7tqh+0PG1J1Dv+Mky5lW//gXHqs1X+JqLRh9tuCYR+tVKpy3PpqXRf3KjDbG
-         hENZ9g2bgkDgfygOjjiE7fnX4KjlwYAL1o6xxaoeSBPX7eTAk/aOTXNQPEYxWN8HLHxS
-         n3ww==
-X-Gm-Message-State: AOAM530X59luIQkgbjHgNjkGMO6qkVJe6oOFauuGnu9p6ObPoRMeJmm4
-        NHiMIx3aIQmEvRl7wNDLnzdAshk5hXpL2M2plHr7ww==
-X-Google-Smtp-Source: ABdhPJzBIFKAF+xNj5SDh7qIzqW0EpoayuskAnuji6/AJpRQguVmEePBJyn4LKGht+WbpEtvejSOIs12FZyQlzXRQjQ=
-X-Received: by 2002:a05:6e02:5aa:: with SMTP id k10mr1130180ils.136.1623878091970;
- Wed, 16 Jun 2021 14:14:51 -0700 (PDT)
+        id S234071AbhFPVdg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Jun 2021 17:33:36 -0400
+Received: from mail-db8eur06olkn2034.outbound.protection.outlook.com ([40.92.51.34]:60256
+        "EHLO EUR06-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232410AbhFPVde (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Jun 2021 17:33:34 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dYHHBajI0LSr2LBgufZhUC/vNB3DvE9ckgtOpt6YP59j4ULYw9e9sPYkFJYnV7JhqlF2Q0exz8pziq/0b+9anne3ljwx4T1pVlOGa0FluPQpT9+ZfZAgV1d1wNdrZLFm1G6JDiefUAlz2VOshlKskB0XerB81UIu3pjss3TTvGj69LIFxRuvN21p+aJxlAQ/0xrFeopuFRJpzIdQvozpzjKoypySdtv7yeLrZJ3E47fVoOahBdfKKGOZAogGsXoHkQpIwZljPXxD9MW7VC9urbBcSeXIdq8u4oB2xpLY9xyhUxlrIib+AuHMbtX633FqoExszT6WBPjeKreHnrO4iA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6OiBt5WPmN65/yHVDTAS/BOGqi0vas4pYU36+sKsOVE=;
+ b=JUHTTKRNr09e6LSnUv9PtERnxlxuGjNybRL/qcT+S+xk5lnYr3TOv4faws2buqFyOXrt3k8puzczDnijLZvu07iUdVL+FBh5hfeDVBYGtBbF46VFdXOdqTMxXZS5Il/MPXLv2dCfrS+zchIpsmncYG3bc6VxbOdS+fbwCnX63q4zoXyXoBIAdEC3MjU11gqopKQaDsPdhflLMUB9F4g1Y8CefM3NBlN1R29S+r/dmDZPGYYstiAaFlstiRanEJcz2CxbgjZd0noIaphYEetjKNKLNVOwPk34w1o+q1+0ogKriYg5JPfb28inoIfak3npYyohagOTyS5MYg78RlEl1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from VI1EUR06FT054.eop-eur06.prod.protection.outlook.com
+ (2a01:111:e400:fc37::4d) by
+ VI1EUR06HT037.eop-eur06.prod.protection.outlook.com (2a01:111:e400:fc37::277)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.21; Wed, 16 Jun
+ 2021 21:31:24 +0000
+Received: from AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM
+ (2a01:111:e400:fc37::43) by VI1EUR06FT054.mail.protection.outlook.com
+ (2a01:111:e400:fc37::124) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.16 via Frontend
+ Transport; Wed, 16 Jun 2021 21:31:24 +0000
+X-IncomingTopHeaderMarker: OriginalChecksum:74E8CFE3640342A36002F32EFAEBB16B1439925A473632195C6EDC67495A610E;UpperCasedChecksum:EC30D31AE0D8A0AEAD4832465CB5FC280963AD82C831B29186E94B3D5B7BD8DC;SizeAsReceived:9085;Count:48
+Received: from AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e5e5:7b7a:5ea5:c75a]) by AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e5e5:7b7a:5ea5:c75a%9]) with mapi id 15.20.4242.018; Wed, 16 Jun 2021
+ 21:31:24 +0000
+Subject: Re: [PATCH v9] exec: Fix dead-lock in de_thread with ptrace_attach
+From:   Bernd Edlinger <bernd.edlinger@hotmail.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Charles Haithcock <chaithco@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Adrian Reber <areber@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <AM8PR10MB4708AFBD838138A84CE89EF8E4359@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <20210610143642.e4535dbdc0db0b1bd3ee5367@linux-foundation.org>
+ <AM8PR10MB470896FBC519ABCC20486958E4349@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <877diwtn2p.fsf@disp2133>
+ <AS8PR10MB47120E7A195A593C1377172CE4309@AS8PR10MB4712.EURPRD10.PROD.OUTLOOK.COM>
+Message-ID: <AM8PR10MB47083E11E2B39ACBDF396954E40F9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+Date:   Wed, 16 Jun 2021 23:31:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+In-Reply-To: <AS8PR10MB47120E7A195A593C1377172CE4309@AS8PR10MB4712.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TMN:  [Noi30EIOejGx4oUQ+wSn5IR4epgRC91o]
+X-ClientProxiedBy: PR0P264CA0284.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:100:1::32) To AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:364::23)
+X-Microsoft-Original-Message-ID: <7b679873-c316-8f32-a036-45a6b8ff6cd1@hotmail.de>
 MIME-Version: 1.0
-References: <20210616094033.18246-1-sj38.park@gmail.com>
-In-Reply-To: <20210616094033.18246-1-sj38.park@gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 16 Jun 2021 14:14:40 -0700
-Message-ID: <CAGS_qxo4L+Z=Z4ZRQ+z6BP2A6v2two5WyjMmLfTE0a=e0y1OAg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Assert version requirement
-To:     SeongJae Park <sj38.park@gmail.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SeongJae Park <sjpark@amazon.de>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.1.101] (84.57.55.161) by PR0P264CA0284.FRAP264.PROD.OUTLOOK.COM (2603:10a6:100:1::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.15 via Frontend Transport; Wed, 16 Jun 2021 21:31:22 +0000
+X-MS-PublicTrafficType: Email
+X-IncomingHeaderCount: 48
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-Correlation-Id: 899d0f65-4211-48db-52fd-08d9310e171b
+X-MS-TrafficTypeDiagnostic: VI1EUR06HT037:
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0qYhOcXxL25xssPzTEkg7zuJNIrpK35tZcQKD6d/4EotD12nVVthK+k6ykqGqFuSxl8jJ1hmjc6TUX1bjJNOzRK6TqfnP9EsT4IDsTAWUAzUvrA2Raw+JzxmA262EKQi4b8QiEcq/7Udjae4L1EbgbFvtPT4pPvrXrZ99JUpMIbNu7e5IXYoFKP6Lq4I8D66ueR/kvspNAAaYQjwFhvXNBDaKCvyggr3dvxJ/KWX5/h5k3IME5Uubn1D1Nyhj0Z8xXjnKgfS7saSgmUObwl5e9v3H+MlQmtqim+xrM+P1gCnR1ag7uH47VvqI+z/Km/MJZa/3oXcN3c37VA7VWGQ2wwUNdfzXObCa6ONtV52+MOQt/YMV2O8M3Bpysu2Z9AQmfXWTkSfhcFrulpGEiPFxg==
+X-MS-Exchange-AntiSpam-MessageData: wib9er4KNmhj+EgjicKEzPzI7+UGHCY+4J3jFmvqeWcnn/GevAfEnbSWNXdKOPqU9wNLSBNwmWapDr++2d5Oc4/zBtDV4p6gmRmI8Dma5CYdcU/eOvcM9bemPijTTNx78231wF0AfIWFm6/Ssn7kWg==
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 899d0f65-4211-48db-52fd-08d9310e171b
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2021 21:31:24.0777
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR06FT054.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1EUR06HT037
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 2:40 AM SeongJae Park <sj38.park@gmail.com> wrote:
->
-> From: SeongJae Park <sjpark@amazon.de>
->
-> Commit 87c9c1631788 ("kunit: tool: add support for QEMU") on the 'next'
-> tree adds 'from __future__ import annotations' in 'kunit_kernel.py'.
-> Because it is supported on only >=3.7 Python, people using older Python
-> will get below error:
+On 6/15/21 4:26 PM, Bernd Edlinger wrote:
+> Thanks for your review.
+> 
+> On 6/14/21 6:42 PM, Eric W. Biederman wrote:
+>> Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
+>>
+>>> This introduces signal->unsafe_execve_in_progress,
+>>> which is used to fix the case when at least one of the
+>>> sibling threads is traced, and therefore the trace
+>>> process may dead-lock in ptrace_attach, but de_thread
+>>> will need to wait for the tracer to continue execution.
+>>
+>> Userspace processes hang waiting for each other.  Not a proper kernel
+>> deadlock.  Annoying but not horrible.  Definitely worth fixing if we can.
+>>
+> 
+> I wonder if I am used a wrong term in the title.
+> Do you have a suggestion for better wording?
+> 
+>>> The solution is to detect this situation and allow
+>>> ptrace_attach to continue, while de_thread() is still
+>>> waiting for traced zombies to be eventually released.
+>>> When the current thread changed the ptrace status from
+>>> non-traced to traced, we can simply abort the whole
+>>> execve and restart it by returning -ERESTARTSYS.
+>>> This needs to be done before changing the thread leader,
+>>> because the PTRACE_EVENT_EXEC needs to know the old
+>>> thread pid.
+>>
+>> Except you are not detecting this situation.  Testing for t->ptrace
+>> finds tasks that have completed their ptrace attach and no longer need
+>> the cred_gaurd_mutex.
+>>
+> 
+> The first phase of de_thread needs co-operation from a user task,
+> if and only if any task t except the thread leader has t->ptrace.
+> Taking tasks from RUNNING->EXIT_ZOMBIE only needs co-operation from kernel code,
 
-Ah, we had been fine with just using 3.6 before this (and could have
-dropped down to 3.5 with a few lines changed).
 
-But 3.7 came out initially in 2018*, so I assume we're probably fine
-to rely on that in kunit tool.
-*https://www.python.org/downloads/release/python-370/
+Aehm, sorry, that is not correct, what I said here.
 
->
->     Traceback (most recent call last):
->       File "./tools/testing/kunit/kunit.py", line 20, in <module>
->         import kunit_kernel
->       File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 9
->         from __future__ import annotations
->         ^
->     SyntaxError: future feature annotations is not defined
->
-> This commit adds a version assertion in 'kunit.py', so that people get
-> more explicit error message like below:
->
->    Traceback (most recent call last):
->       File "./tools/testing/kunit/kunit.py", line 15, in <module>
->         assert sys.version_info >= (3, 7)
->     AssertionError
->
-> Signed-off-by: SeongJae Park <sjpark@amazon.de>
+I totally overlooked ptrace(PTRACE_SEIZE, pid, 0L, PTRACE_O_TRACEEXIT)
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
+and unfortunately this also prevents even the thread leader to enter the
+EXIT_ZOMBIE state because do_exit does:
 
-> ---
->  tools/testing/kunit/kunit.py | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index be8d8d4a4e08..748d88178506 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -12,6 +12,8 @@ import sys
->  import os
->  import time
->
-> +assert sys.version_info >= (3, 7)
+        ptrace_event(PTRACE_EVENT_EXIT, code);
 
-Do we perhaps want
-  assert sys.version_info >= (3, 7), "Python version is too old"
+unfortunately this sends an event to the tracer, and waits not only for
+the tracer to call waitpid, but also needs a PTRACE_CONT before do_exit
+can call exit_notify which does tsk->exit_state = EXIT_ZOMBIE.
 
-Then the error message would be
-  Traceback (most recent call last):
-    File "./tools/testing/kunit/kunit.py", line 15, in <module>
-      assert sys.version_info >= (3, 7), "Python version is too old"
-  AssertionError: Python version is too old
+So unfortunately this breaks my patch, so I have to withdraw it for now,
+since I see no way how to fix it.
 
-I assume kernel devs know some Python, but not necessarily that
-sys.version_info == "my python version"
+I will clean-up my previous patch which changes the ptrace API to return
+an error if an unsafe execve is detected, and send it to this list.
 
-> +
->  from collections import namedtuple
->  from enum import Enum, auto
->
-> --
-> 2.17.1
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20210616094033.18246-1-sj38.park%40gmail.com.
+
+Thanks
+Bernd.
