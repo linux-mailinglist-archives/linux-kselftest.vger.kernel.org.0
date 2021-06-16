@@ -2,123 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A643AA5D0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 22:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DF43AA5FD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 23:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbhFPVBg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Jun 2021 17:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S233911AbhFPVQ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Jun 2021 17:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233824AbhFPVBf (ORCPT
+        with ESMTP id S233836AbhFPVQ7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Jun 2021 17:01:35 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5DAC061574
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 13:59:29 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id h12so3229748pfe.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 13:59:29 -0700 (PDT)
+        Wed, 16 Jun 2021 17:16:59 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAC5C06175F
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 14:14:52 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id b9so3599217ilr.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 14:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NxTx9dcN8kshXBEYUvRxmk5CMBPREQ9LTGjLkVS+6m8=;
-        b=XSRKjVo8Azlog98paZINOAdn6bOlODpJpRI653o306QtfNPOx4l2/WQSfD5y9wR2BH
-         SQHhuwknCv8x8CcTKk4CDzgYlKoguOL9XSk67LHxzMHxBHgSdolWSYCIPGSeHX2ZhncL
-         8sWtQHwjHJc4Idj7Yktb8SbVHCB3LtBMDvHTLPAFJQOxTUqH3If1mEDCBSIxKtyf4TWx
-         et6uc8yGbCb7939Xa/7yup5CBc5cPmehbEmh+jH1HOWp7LYBIdAgyPm3I4s118lnbVVF
-         mK/rmKWoV1GzT1l49/B9/rAve3E658CnS0Q9c1sbilmZkKC70QxWUwlcIaotqBtlfaLw
-         j51w==
+        bh=KrgNeqOkkTdrdhyBNpvQQtJWwQhENKuchQIrlwc8tKU=;
+        b=VTnq7Vu75liFI6CjS2vIrPQEgig1ZNxDf7DqxLSiWCUxYi0F13HDRuE2xGx5stP5gW
+         yAt5D/Ngu6g8QwNOfRqvZ/9Rx0lIdhhstl1SdBsCLQF8vYf33Wzruaitg1Y1eq6c5lEU
+         3F9g0GgDFNGaw5WqMNh5/1zGt8Nv5xKTl8lnzo5XZJSgZt1cLIAefRY+qS5JKguPXBrQ
+         vsVs7pdngLs0Mn37ZLFGQutv407cS6nl9VL6C4sJua0auZKLcRCtf6zEJdGMetruzcFT
+         IGVRcIGAKb7ZMllJX56B3RA47EZBgJVgdNzN/C8IC5u2+mQ0SApuJVCKqE5mPND0M12M
+         Vwyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NxTx9dcN8kshXBEYUvRxmk5CMBPREQ9LTGjLkVS+6m8=;
-        b=HMWvKhCLT5Cw+ydw09/itNSOkoFvw5YriBSOq17GKfgOcAX7CCC2U6TUIked4hdhG9
-         xBvG9r2QdYnyMEPGIn856VUysJrylJZ06QWfxGEjnEnGdLoqU5k31um72u/eJxRHvUgy
-         BbGFu3EjmnVlq3fNb8pEjOAJvgMDUhW6yfjRYDyNWvNHnO4v+TXA23wncF93+46j7HXe
-         gP7tq29Bi2ELoJ9b4c1ed5JkO5P/EQ1w/IYP0dyRp/5f6ywm9uWdMwcGzOPhKozPTat0
-         Z3Z2VXbPrt5gd+rqUMp7kmaBSQJDtWv+U/ANnOyH/Hp2n5dedEkfiUPHPkoxhxxj5SAu
-         0lUg==
-X-Gm-Message-State: AOAM533Ap6w1SdSEf5KFCiAtYC4RWFS7slzH2YigPSI3XLZkTp7Ipkv2
-        iSO7HBHgOoaIQpIYnMYHLczkPiuVwlbzNPrUsUGjVA==
-X-Google-Smtp-Source: ABdhPJwSThC+/qok3aXEqXStN1VNr+fxljFRSu7PHdimacng7JYiDo3UBp9kQp5ePEZKUkVoJ8AIVWdeWxnySfHZQOI=
-X-Received: by 2002:a63:d0d:: with SMTP id c13mr1570973pgl.384.1623877168348;
- Wed, 16 Jun 2021 13:59:28 -0700 (PDT)
+        bh=KrgNeqOkkTdrdhyBNpvQQtJWwQhENKuchQIrlwc8tKU=;
+        b=qYD0kxkjbXx5KRtACz6cVlkdqVlHlGfxnBp/8OLPrz9HVwnvssIkfTlxWYIoj9onDZ
+         jV3pE3kc4O2CC8bVra5I0wjNJuELN10g/r1+lXm3Mi6lpHaAfKreXU4rLNZ2OCjRHs5w
+         6GEbqlBMPl/vD0+rGAe+fyqttLridGCTDGaRzcSIwyHKunSMLOPxF+2aqsM+K18HFZpt
+         Ai98RmsQ7tqh+0PG1J1Dv+Mky5lW//gXHqs1X+JqLRh9tuCYR+tVKpy3PpqXRf3KjDbG
+         hENZ9g2bgkDgfygOjjiE7fnX4KjlwYAL1o6xxaoeSBPX7eTAk/aOTXNQPEYxWN8HLHxS
+         n3ww==
+X-Gm-Message-State: AOAM530X59luIQkgbjHgNjkGMO6qkVJe6oOFauuGnu9p6ObPoRMeJmm4
+        NHiMIx3aIQmEvRl7wNDLnzdAshk5hXpL2M2plHr7ww==
+X-Google-Smtp-Source: ABdhPJzBIFKAF+xNj5SDh7qIzqW0EpoayuskAnuji6/AJpRQguVmEePBJyn4LKGht+WbpEtvejSOIs12FZyQlzXRQjQ=
+X-Received: by 2002:a05:6e02:5aa:: with SMTP id k10mr1130180ils.136.1623878091970;
+ Wed, 16 Jun 2021 14:14:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210526082217.333194-1-dlatypov@google.com>
-In-Reply-To: <20210526082217.333194-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 16 Jun 2021 13:59:17 -0700
-Message-ID: <CAFd5g47WXzmhxsySFmykVQ=XHe2jx0svqcAXpMgYhR5fpTPNPw@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: tool: internal refactor of parser input handling
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+References: <20210616094033.18246-1-sj38.park@gmail.com>
+In-Reply-To: <20210616094033.18246-1-sj38.park@gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 16 Jun 2021 14:14:40 -0700
+Message-ID: <CAGS_qxo4L+Z=Z4ZRQ+z6BP2A6v2two5WyjMmLfTE0a=e0y1OAg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Assert version requirement
+To:     SeongJae Park <sj38.park@gmail.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sjpark@amazon.de>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 26, 2021 at 1:22 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Wed, Jun 16, 2021 at 2:40 AM SeongJae Park <sj38.park@gmail.com> wrote:
 >
-> Note: this does not change the parser behavior at all (except for making
-> one error message more useful). This is just an internal refactor.
+> From: SeongJae Park <sjpark@amazon.de>
 >
-> The TAP output parser currently operates over a List[str].
-> This works, but we only ever need to be able to "peek" at the current
-> line and the ability to "pop" it off.
->
-> Also, using a List means we need to wait for all the output before we
-> can start parsing. While this is not an issue for most tests which are
-> really lightweight, we do have some longer (~5 minutes) tests.
->
-> This patch introduces an LineStream wrapper class that
-> * Exposes a peek()/pop() interface instead of manipulating an array
->   * this allows us to more easily add debugging code [1]
-> * Can consume an input from a generator
->   * we can now parse results as tests are running (the parser code
->   currently doesn't print until the end, so no impact yet).
-> * Tracks the current line number to print better error messages
-> * Would allow us to add additional features more easily, e.g. storing
->   N previous lines so we can print out invalid lines in context, etc.
->
-> [1] The parsing logic is currently quite fragile.
-> E.g. it'll often say the kernel "CRASHED" if there's something slightly
-> wrong with the output format. When debugging a test that had some memory
-> corruption issues, it resulted in very misleading errors from the parser.
->
-> Now we could easily add this to trace all the lines consumed and why
-> +import inspect
-> ...
->         def pop(self) -> str:
->                 n = self._next
-> +               print(f'popping {n[0]}: {n[1].ljust(40, " ")}| caller={inspect.stack()[1].function}')
->
-> Example output:
-> popping 77: TAP version 14                          | caller=parse_tap_header
-> popping 78: 1..1                                    | caller=parse_test_plan
-> popping 79:     # Subtest: kunit_executor_test      | caller=parse_subtest_header
-> popping 80:     1..2                                | caller=parse_subtest_plan
-> popping 81:     ok 1 - parse_filter_test            | caller=parse_ok_not_ok_test_case
-> popping 82:     ok 2 - filter_subsuite_test         | caller=parse_ok_not_ok_test_case
-> popping 83: ok 1 - kunit_executor_test              | caller=parse_ok_not_ok_test_suite
->
-> If we introduce an invalid line, we can see the parser go down the wrong path:
-> popping 77: TAP version 14                          | caller=parse_tap_header
-> popping 78: 1..1                                    | caller=parse_test_plan
-> popping 79:     # Subtest: kunit_executor_test      | caller=parse_subtest_header
-> popping 80:     1..2                                | caller=parse_subtest_plan
-> popping 81:     1..2 # this is invalid!             | caller=parse_ok_not_ok_test_case
-> popping 82:     ok 1 - parse_filter_test            | caller=parse_ok_not_ok_test_case
-> popping 83:     ok 2 - filter_subsuite_test         | caller=parse_ok_not_ok_test_case
-> popping 84: ok 1 - kunit_executor_test              | caller=parse_ok_not_ok_test_case
-> [ERROR] ran out of lines before end token
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+> Commit 87c9c1631788 ("kunit: tool: add support for QEMU") on the 'next'
+> tree adds 'from __future__ import annotations' in 'kunit_kernel.py'.
+> Because it is supported on only >=3.7 Python, people using older Python
+> will get below error:
 
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
+Ah, we had been fine with just using 3.6 before this (and could have
+dropped down to 3.5 with a few lines changed).
+
+But 3.7 came out initially in 2018*, so I assume we're probably fine
+to rely on that in kunit tool.
+*https://www.python.org/downloads/release/python-370/
+
+>
+>     Traceback (most recent call last):
+>       File "./tools/testing/kunit/kunit.py", line 20, in <module>
+>         import kunit_kernel
+>       File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 9
+>         from __future__ import annotations
+>         ^
+>     SyntaxError: future feature annotations is not defined
+>
+> This commit adds a version assertion in 'kunit.py', so that people get
+> more explicit error message like below:
+>
+>    Traceback (most recent call last):
+>       File "./tools/testing/kunit/kunit.py", line 15, in <module>
+>         assert sys.version_info >= (3, 7)
+>     AssertionError
+>
+> Signed-off-by: SeongJae Park <sjpark@amazon.de>
+
+Acked-by: Daniel Latypov <dlatypov@google.com>
+
+> ---
+>  tools/testing/kunit/kunit.py | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index be8d8d4a4e08..748d88178506 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -12,6 +12,8 @@ import sys
+>  import os
+>  import time
+>
+> +assert sys.version_info >= (3, 7)
+
+Do we perhaps want
+  assert sys.version_info >= (3, 7), "Python version is too old"
+
+Then the error message would be
+  Traceback (most recent call last):
+    File "./tools/testing/kunit/kunit.py", line 15, in <module>
+      assert sys.version_info >= (3, 7), "Python version is too old"
+  AssertionError: Python version is too old
+
+I assume kernel devs know some Python, but not necessarily that
+sys.version_info == "my python version"
+
+> +
+>  from collections import namedtuple
+>  from enum import Enum, auto
+>
+> --
+> 2.17.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20210616094033.18246-1-sj38.park%40gmail.com.
