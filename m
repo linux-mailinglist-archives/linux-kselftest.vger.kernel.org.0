@@ -2,75 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE27C3AA579
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 22:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858343AA58E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 22:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbhFPUnf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Jun 2021 16:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
+        id S233681AbhFPUtt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Jun 2021 16:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbhFPUne (ORCPT
+        with ESMTP id S233632AbhFPUtt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Jun 2021 16:43:34 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD354C061574
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 13:41:27 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id x21-20020a17090aa395b029016e25313bfcso2509434pjp.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 13:41:27 -0700 (PDT)
+        Wed, 16 Jun 2021 16:49:49 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF28FC061574;
+        Wed, 16 Jun 2021 13:47:42 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id f70so853015qke.13;
+        Wed, 16 Jun 2021 13:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EaW36aS0LZ9CAqId572i5w3m3upUdOksh819Ks70U0g=;
-        b=lMJtojEXFzt+xeR14MF92js03x8z8Q7rWqizAgoanKuYcxI3FVwwsbPUKWwOnTVVKh
-         YUJ5YMf89NH+2+hF7ZF+Td8mszi+lksmv/LLh35uVLY+Ap+kHOmhC71YVdxwxYzI0+Z9
-         j1Rc+OSNBJ2jHCso1S0HuUJuh4dad6v4RnQ6xTGQHwLtmJYfsITGdPn5F4/qvfZ5Yci5
-         3ILL7yqWytCA5W9Yo6DiAN0cOsEImijO9cnsHUWs4WDL5Q34tjawkDeMC/GzCEOMByHF
-         qvf69GzpIAXtEF2o7MFhn5Jeu6FsaVIPvvS0SZGhBkQrUzIB3wEtB51Vq86+RTGMucfK
-         fnaA==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hsHB5m77MIVRrUwCHcRGhZDai+vzsMMYW8wAwWykDx0=;
+        b=CeHzZu1qNvVzLHiwRr09PcbJ2FXOFkn3h4H4zk5Lr4sOgvjZTBM1CbbnsmSyjAgpcd
+         HIYQNcZdYumMOPW7O5/hMqw6lqFgw57+yAL7bm2+CXXEQszbcZSdOQ2qhHB4wC0f7iv9
+         Zh2hOG3W6RF8Lw8MCCoQQfi/VYZOMbhTwpMDxVp/hhqaILJnn96p/AULQOeyibkUQfwg
+         QyS5MfUD/H6vyfOFJHvQRWNxfZEdq5nT4XPhsQ7PGmQALBer36I0gtBtaCyg8pnfv4Z6
+         O4J7sl4DtmofagCfny86mI1bvuutN1bmqWA7/KXBzvWNBnQu4DCrYIV8w74+iVBWe5QZ
+         fdrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EaW36aS0LZ9CAqId572i5w3m3upUdOksh819Ks70U0g=;
-        b=Ny73KY89cJ+eRcZ5fWMefESb1QsHuDaylvG9tKBLWHkoEBP7IByuiO7HFKEVFyYRJ6
-         ZmP9NDRDVWvX0gW0EFp1qCoxj/egLHSYsFY8Jvoa5nJzlJPQsjwi14Wjy1YKfGrFEUSf
-         95X8KgnpnnNd5jdcc5NfS1jRBjc7EMgTjPm259OdjY2wSSk7RUHqH+TOHcY4NNzn7jaa
-         4891JQjp+JIt0pZ5X+U0DLCQUC/TASVRBpUJMkNvbfHJalLZLAbVZOfyaB2l48s0hP4K
-         QOf+RjkccZmqAd+6PgqwFAlPL5GQsoTqMEW6hMzM0q9TH8c+XRP++Hqot+73SnzqpKer
-         NyPw==
-X-Gm-Message-State: AOAM531X5POUaDcGwP87dQR3cjHCtpTIy8rBsaiQf+NXYtyPvuz5JHnr
-        H1F0hoJuiGXn+lmZ+J5OX20MYj+s7Uf0ka0EwJYRrg==
-X-Google-Smtp-Source: ABdhPJx/UgOcFxUlYkmPEi5myAegdBUbKzdywmlbCw8qICwsGbIH9vkSLK1wT1Io4bXPG25WLwso7akMudlNBaq/M9c=
-X-Received: by 2002:a17:902:d3c3:b029:101:af83:cb1f with SMTP id
- w3-20020a170902d3c3b0290101af83cb1fmr1319442plb.80.1623876087067; Wed, 16 Jun
- 2021 13:41:27 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=hsHB5m77MIVRrUwCHcRGhZDai+vzsMMYW8wAwWykDx0=;
+        b=DcaMOOsXXngZVEwzEF10GcMISeN7d0riNrDIFUNy/JNiHMtdAslGO6uwg8kh0q7L8K
+         fa3tdQRdvaKFrivVH4sD2XF9qyjhbFTta7AvYhzizE436d7b3jAIMxBmtGmxcTTUN/RJ
+         KD6V6Am3eEmrXmX0r5IFGC4i0eu6Q+C2uTAJ9cSm2zu5Tlvy0Qu2Vnx9kROZE7rKmV72
+         MSRS0m51+AZ96tQoH5iSNMGkCjLhWyTstVRorhJVTTZ6nsMGTeo5UNHCpBXSrdkEq6BI
+         WxTTa07Fmtgif8EMBg2Cd9xamC97kFK34t8xlGhu60xDYUCR2FeY8yeZNOjZSM/M20Jo
+         q/Zw==
+X-Gm-Message-State: AOAM533BQSSYXp2nXDAITGxGLdhmCyrPhZKPIUZmh1b8qfocka6s95gC
+        /jJFM5ONFF9qnA5F1NIyJLmpBJ7aHbxtfw==
+X-Google-Smtp-Source: ABdhPJw+685aFCRA1rly0WpaManCHavhY0sH+eDHQwYOJrI81s/7oP9RN6MJfpOFw+wC8Qm5YVIcRg==
+X-Received: by 2002:ae9:efd5:: with SMTP id d204mr220095qkg.415.1623876461964;
+        Wed, 16 Jun 2021 13:47:41 -0700 (PDT)
+Received: from localhost ([199.192.137.73])
+        by smtp.gmail.com with ESMTPSA id a5sm306072qkd.93.2021.06.16.13.47.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Jun 2021 13:47:41 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 16 Jun 2021 16:47:40 -0400
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: Re: [PATCH 2/5] cgroup/cpuset: Add new cpus.partition type with no
+ load balancing
+Message-ID: <YMpjbCWpSDIz4bHt@slm.duckdns.org>
+References: <20210603212416.25934-1-longman@redhat.com>
+ <20210603212416.25934-3-longman@redhat.com>
 MIME-Version: 1.0
-References: <20210522044241.2763088-1-davidgow@google.com> <20210522044241.2763088-3-davidgow@google.com>
-In-Reply-To: <20210522044241.2763088-3-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 16 Jun 2021 13:41:16 -0700
-Message-ID: <CAFd5g46jOwV5iZretZEHOuxTbSvNxan-VSiN7genAXkhgbksAg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] kunit: Remove the unused all_tests.config
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210603212416.25934-3-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 21, 2021 at 9:43 PM David Gow <davidgow@google.com> wrote:
->
-> This isn't used anywhere. While it's possible that people were manually
-> referencing it, the new default config (in default.config in the same
-> path) provides equivalent functionality.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+Hello,
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Generally looks fine to me.
+
+On Thu, Jun 03, 2021 at 05:24:13PM -0400, Waiman Long wrote:
+> @@ -1984,12 +1987,31 @@ static int update_prstate(struct cpuset *cs, int val)
+>  			goto out;
+>  
+>  		err = update_parent_subparts_cpumask(cs, partcmd_enable,
+> -						     NULL, &tmp);
+> +						     NULL, &tmpmask);
+> +
+>  		if (err) {
+>  			update_flag(CS_CPU_EXCLUSIVE, cs, 0);
+>  			goto out;
+> +		} else if (new_prs == PRS_ENABLED_NOLB) {
+> +			/*
+> +			 * Disable the load balance flag should not return an
+
+                                 ^ing
+
+and "else if" after "if (err) goto out" block is weird. The two conditions
+don't need to be tied together.
+
+> @@ -2518,6 +2547,9 @@ static int sched_partition_show(struct seq_file *seq, void *v)
+>  	case PRS_ENABLED:
+>  		seq_puts(seq, "root\n");
+>  		break;
+> +	case PRS_ENABLED_NOLB:
+> +		seq_puts(seq, "root-nolb\n");
+> +		break;
+>  	case PRS_DISABLED:
+>  		seq_puts(seq, "member\n");
+>  		break;
+> @@ -2544,6 +2576,8 @@ static ssize_t sched_partition_write(struct kernfs_open_file *of, char *buf,
+>  		val = PRS_ENABLED;
+>  	else if (!strcmp(buf, "member"))
+>  		val = PRS_DISABLED;
+> +	else if (!strcmp(buf, "root-nolb"))
+> +		val = PRS_ENABLED_NOLB;
+>  	else
+>  		return -EINVAL;
+
+I wonder whether there's a better name than "root-nolb" because nolb isn't
+the most readable and we are using space as the delimiter for other names.
+Would something like "isolated" work?
+
+Thanks.
+
+-- 
+tejun
