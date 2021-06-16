@@ -2,69 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F803A9D02
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 16:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F5A3A9E50
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jun 2021 16:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbhFPOKm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Jun 2021 10:10:42 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3251 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbhFPOKm (ORCPT
+        id S234291AbhFPO7h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Jun 2021 10:59:37 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:44526 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234242AbhFPO7h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Jun 2021 10:10:42 -0400
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4G4msp663Fz6JBQF;
-        Wed, 16 Jun 2021 21:55:26 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 16 Jun 2021 16:08:34 +0200
-Received: from localhost (10.52.123.249) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 16 Jun
- 2021 15:08:33 +0100
-Date:   Wed, 16 Jun 2021 15:08:26 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-CC:     David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK\" <linux-kselftest@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-iio@vger.kernel.org"@domain.invalid
-Subject: Re: [PATCH v2 05/10] iio: Remove a cast in iio-test-format which is
- no longer required
-Message-ID: <20210616150826.00001cd7@Huawei.com>
-In-Reply-To: <CAFd5g44Eboz-=6LFQJ93sPVt53GQ60MGBUPyacKUj=0cFTJr0A@mail.gmail.com>
-References: <20210513193204.816681-1-davidgow@google.com>
-        <20210513193204.816681-5-davidgow@google.com>
-        <CAFd5g44Eboz-=6LFQJ93sPVt53GQ60MGBUPyacKUj=0cFTJr0A@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
+        Wed, 16 Jun 2021 10:59:37 -0400
+Received: from mail-ej1-f71.google.com ([209.85.218.71])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <andrea.righi@canonical.com>)
+        id 1ltWyw-0004dL-C7
+        for linux-kselftest@vger.kernel.org; Wed, 16 Jun 2021 14:57:30 +0000
+Received: by mail-ej1-f71.google.com with SMTP id m16-20020a1709066d10b029047b77529dc3so199566ejr.16
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 07:57:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=8a4xq8lMfa/LYfpYCOAoKmUJPps9DKcxfcjZnPhoHfw=;
+        b=TawFILXZmIId/LE/6BLhXJdmlBFx5i93qisk4pM0axGISrWLojoHij/2InCi6Gk1o2
+         ZuZB2kociHvAwsFU5u1QJjmDnFdj+33J4lLUVAbogMfpaZzJ0AxqBxGllNwICzKu+S9j
+         veO6sJpf8Hspkod56L3bVNIpAGoErXUC3+x5qKZhZgGukBLWpCUDKsuTbPtRquPaqR4v
+         TZ5oWykzbwDyKyMtBQJkuMj8M5xQe9lD+iBVogQTaoXRZoEp02fYr2WU7nfOfSB+PZbU
+         SiqoF/5H5Hm3/Dh5vT4b6xZUJ98hYLpZ7tvufn1bQWBzsSQr1fTs3XYXfW9lGueh6U8c
+         wBEw==
+X-Gm-Message-State: AOAM530kdqv+R23/JN39ZUrY0LA98Szt69HstF64wmZ8ImEALSCzqlTw
+        7xewgj2h/a89ohFL1gDPc6jLNYc/+mGpLqyPs07jd5fDMfOiCye0etr/0JS0XCTOiogwVa5jA6B
+        5dys8VjwMldJmwd6eb9N2TWMJGavvIHerLZtZWnLihkavtg==
+X-Received: by 2002:a05:6402:40cc:: with SMTP id z12mr9324edb.202.1623855449144;
+        Wed, 16 Jun 2021 07:57:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx0x+c1CqYwSTRfdh/qpSq2BG+BtPzscae96/sH0AdsUtHuvEFm+xaOmkVdZvXxu0t3A449FA==
+X-Received: by 2002:a05:6402:40cc:: with SMTP id z12mr9305edb.202.1623855448906;
+        Wed, 16 Jun 2021 07:57:28 -0700 (PDT)
+Received: from localhost (host-79-46-128-215.retail.telecomitalia.it. [79.46.128.215])
+        by smtp.gmail.com with ESMTPSA id p13sm1777726ejr.87.2021.06.16.07.57.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Jun 2021 07:57:28 -0700 (PDT)
+Date:   Wed, 16 Jun 2021 16:57:27 +0200
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: net: use bash to run udpgro_fwd test case
+Message-ID: <YMoRV6IOOVhS3nEi@xps-13-7390>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.123.249]
-X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 15 Jun 2021 13:14:44 -0700
-Brendan Higgins <brendanhiggins@google.com> wrote:
+udpgro_fwd.sh contains many bash specific operators ("[[", "local -r"),
+but it's using /bin/sh; in some distro /bin/sh is mapped to /bin/dash,
+that doesn't support such operators.
 
-> On Thu, May 13, 2021 at 12:36 PM David Gow <davidgow@google.com> wrote:
-> >
-> > KUnit's EXPECT macros no longer typecheck as stringently, so casting the
-> > result of strcmp() is now unnecessary.
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>  
-> 
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Force the test to use /bin/bash explicitly and prevent false positive
+test failures.
 
-Seems sensible
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ tools/testing/selftests/net/udpgro_fwd.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+diff --git a/tools/testing/selftests/net/udpgro_fwd.sh b/tools/testing/selftests/net/udpgro_fwd.sh
+index a8fa64136282..7f26591f236b 100755
+--- a/tools/testing/selftests/net/udpgro_fwd.sh
++++ b/tools/testing/selftests/net/udpgro_fwd.sh
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ readonly BASE="ns-$(mktemp -u XXXXXX)"
+-- 
+2.31.1
+
