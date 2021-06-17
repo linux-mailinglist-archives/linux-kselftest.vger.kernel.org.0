@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1E83AB6F7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jun 2021 17:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014DD3AB74E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jun 2021 17:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbhFQPLu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Jun 2021 11:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S233168AbhFQPWu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Jun 2021 11:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbhFQPLt (ORCPT
+        with ESMTP id S233130AbhFQPWu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Jun 2021 11:11:49 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28D5C06175F
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 08:09:40 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id j2so11096287lfg.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 08:09:40 -0700 (PDT)
+        Thu, 17 Jun 2021 11:22:50 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9428DC061768
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 08:20:41 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id p17so11167486lfc.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 08:20:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xXZRhEcd2Cbrj/tVl2ryBxrcp7ZNIEiNaJWzDG2F5Kg=;
-        b=TqWgVeNXToRFcCgGFrlG52MtXOvoEpEgH+psGbhdraIxWdvhr8qhRpfWoVKcSxORjB
-         B831vy6R7RTZzs2nM/KQJ71iM9aVLCvGMf20DJUF4AiJWHbwKHIT31rxxZUeXh2p2oRt
-         XL4KPiTOT9hbUZgUJfDFuKG7oGbFDKYHU8SCBYWaX0RmwnVcF135fDTnUplDx6/kg56A
-         WtUBi4LRlBK+S9bbzajtt7FAUOTE3fofCi+CtbjwZsPln+zjbIngScXUpHx9H35LbAYv
-         yhbCZ2245i7w4fll7tlZ0JTQLXy7oTYwQOusiRyXIwwEXch8Jc2WjtK44ttM+hrJsoLv
-         Zk4w==
+        bh=5nxSzCxRIGKeYpvFJwHnokf+lsLXzTQKnVZehNuKBfY=;
+        b=v73zJk16lVzUG7QbbkRkacwK3TUPJGuBDYnlw6a7OPjaXiFoy/Tg1SF7o+pP2VkjgQ
+         GCw+WkjfIQ3l6iS90jFkDddYRWl54Fy+YMR/OLBaPnT1q7EH0oEDgCPwHFRf8oPp7gGh
+         W7Ec4TAFYCyuNTidERQalF9VJ9rhnKCIZeBncU5P/7WoHZpOenVDVwlRJezyVC2NtJ6Y
+         vboZ+Jh+7e1OhUpnKBfhBMPZL2co2cGDoDioEPRVmBRw4+jEILLh2FWrKa/OxCOxZ34S
+         /rw7UTqce3bTc65+uzu2YO9pLXUzTgYikYTMftRKjr074dSbh8dedXtXArBgTf7VXUpm
+         YOvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xXZRhEcd2Cbrj/tVl2ryBxrcp7ZNIEiNaJWzDG2F5Kg=;
-        b=EqdkWr+ZfpJ2bJesB2k2qPfZsp/Lh+V9g95OlNcjU8LVinb3O42ccXokyblRicT4xd
-         IKIIfbySFPxLmiIli61gQwRU8+SSAg9koZHYYt9Kmf7nSXfAA9L8FlevHMIblwxJFy0s
-         GrRfWZC9ITWeYU/v6zPVLfQTxC7KIh92QfXX+ziVx64j7p/5U8hllw2qzLa/IWlrqIq9
-         zG0wJPFT9FtLbPv6vhhow+RlUKvXcrNfs7qcpM/nkxo0e0eCJphwQq4fv3TYa2sk1KlC
-         +4N8Si4UarHQm8Az0OCEcbUfCHcPfc7Mj/7mcyRVBrVV6L1KSqCPqFXqwhDQ+8v3NezY
-         /txQ==
-X-Gm-Message-State: AOAM531Is1QzVtpG8iIoBA0Ffiu+nPROS4kBwq8dWIam47hVZev1WzJN
-        2owB77qjdyGiqwlHKAfJxa/S51gBSFMb52srDO/eCA==
-X-Google-Smtp-Source: ABdhPJzAyrQsMnAqbBOEYMZVZQD5qO0SZlAXpM63+DpcX+GVx2elMNK7wl3R9skQOGetSMH5r+n7sJJM07csoEf6gTw=
-X-Received: by 2002:a05:6512:33c4:: with SMTP id d4mr4587741lfg.536.1623942578963;
- Thu, 17 Jun 2021 08:09:38 -0700 (PDT)
+        bh=5nxSzCxRIGKeYpvFJwHnokf+lsLXzTQKnVZehNuKBfY=;
+        b=a7ngNb3rnfm9lYjDcL9KO2wqatMXK/s7eHSPX1zPVjAk2OLlOB3jqaK4HFAMaR50jU
+         x/OtdLSPcjUTlyVVNX0G3TSOPUXFNvUDjSQlc4DP4omo1k19XyoW0x3MG6oEp6O8e7Iy
+         Y8vrTWN4cIGBN6P6Mbx/qTwgMfmSyvPWuUXQd74U07kYVZyMd8nwQGDwcC+o8peFopqW
+         IQE3ObX/pPevJtBz0Ep1pegysjT2f+9WIDGk7MRrrufCADzhUGLn2yn31ayhp7DgDK7Q
+         +Nmwb+Mk1d9sNEWn5Tn0BMru/d0L5MVLh41mpVi8FyKsrEJKPDRKlEtiLEsqYFKnuAqx
+         tvFQ==
+X-Gm-Message-State: AOAM532B6mNUH4b2U5uXJF1mnFgNE2a4YAjr2ipvpbFiljR2P3F4nLsQ
+        cgwX+07ZaBCqEA2N6Ygfjk5m2WGVyGnvAfN7i0sxI+lv0F0=
+X-Google-Smtp-Source: ABdhPJxKKizWi/fGNn+9wpt69Ewj2CzuOybJdiyg4e/t3EuxZUFb779j6T3WEp//mVN3Ae7BamP0hcGF5jtDYBl/+0Y=
+X-Received: by 2002:a05:6512:3ea:: with SMTP id n10mr4392667lfq.178.1623943239558;
+ Thu, 17 Jun 2021 08:20:39 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210617044146.2667540-1-jingzhangos@google.com>
- <20210617044146.2667540-4-jingzhangos@google.com> <YMrjKhV8TNwmRtf6@kroah.com>
-In-Reply-To: <YMrjKhV8TNwmRtf6@kroah.com>
+ <20210617044146.2667540-4-jingzhangos@google.com> <YMrkGZzPrt0jA1iP@kroah.com>
+In-Reply-To: <YMrkGZzPrt0jA1iP@kroah.com>
 From:   Jing Zhang <jingzhangos@google.com>
-Date:   Thu, 17 Jun 2021 10:09:27 -0500
-Message-ID: <CAAdAUtiySqu6VKpK2LDnG5S0m9tRKjrKSu5BWoFurkhWay4yCg@mail.gmail.com>
+Date:   Thu, 17 Jun 2021 10:20:27 -0500
+Message-ID: <CAAdAUtik0Yw+4=4Ld-DJSokNzvdpa-tsxkqAdBCAb-C=uS0-sA@mail.gmail.com>
 Subject: Re: [PATCH v10 3/5] KVM: stats: Add documentation for binary
  statistics interface
 To:     Greg KH <gregkh@linuxfoundation.org>
@@ -92,7 +92,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi Greg,
 
-On Thu, Jun 17, 2021 at 12:52 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Thu, Jun 17, 2021 at 12:56 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
 > On Thu, Jun 17, 2021 at 04:41:44AM +0000, Jing Zhang wrote:
 > > +     struct kvm_stats_desc {
@@ -103,19 +103,39 @@ On Thu, Jun 17, 2021 at 12:52 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 > > +             __u32 unused;
 > > +             char name[0];
 > > +     };
-> > +
-> > +The ``flags`` field contains the type and unit of the statistics data described
-> > +by this descriptor. The following flags are supported:
-> > +
-> > +Bits 0-3 of ``flags`` encode the type:
 >
 > <snip>
 >
-> As flags is a bit field, what is the endian of it?  Native or LE or BE?
-> I'm guessing "cpu native", but you should be explicit as userspace will
-> have to deal with this somehow.
-Sure, will add clarification for endianness.
+> > +The ``unused`` fields are reserved for future support for other types of
+> > +statistics data, like log/linear histogram.
 >
+> you HAVE to set unused to 0 for now, otherwise userspace does not know
+> it is unused, right?  And then, really it is "used", so why not just say
+> that now?  It's tricky, but you have to get this right now otherwise you
+> can never use it in the future.
+>
+Sure, will do that.
+> > +The ``name`` field points to the name string of the statistics data. The name
+>
+> It is not a pointer, it is the data itself.
+>
+Will fix it.
+> > +string starts at the end of ``struct kvm_stats_desc``.
+> > +The maximum length (including trailing '\0') is indicated by ``name_size``
+> > +in ``struct kvm_stats_header``.
+>
+> I thought we were replacing [0] arrays with [], are you sure you should
+> be declaring this as [0]?  Same for all structures in this document (and
+> code).
+>
+The reason to declare it as [0] is to have the flexibility to change the maximum
+length of KVM stats name. For now, the max len is  defined as 48, which can
+be read from the header. Then the userspace can get the length of descriptor by
+adding sizeof(struct_kvm_stats_desc) + 48. Whenever the max len is changed
+in KVM, the userspace would not have to update code to reflect that.
+However, if we are OK to restrict the maximum KVM stats' length to 48
+(or any other
+number), we can just declear it with [] instead of [0].
 > thanks,
 >
 > greg k-h
