@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B61BA3AAB6F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jun 2021 07:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949D03AAB7B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jun 2021 07:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbhFQFyy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Jun 2021 01:54:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45984 "EHLO mail.kernel.org"
+        id S229671AbhFQF6x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Jun 2021 01:58:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49340 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229872AbhFQFyy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Jun 2021 01:54:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D64E2613B9;
-        Thu, 17 Jun 2021 05:52:44 +0000 (UTC)
+        id S229515AbhFQF6w (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 17 Jun 2021 01:58:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BFE4F61075;
+        Thu, 17 Jun 2021 05:56:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623909165;
-        bh=9KBrT/ACir1e2NYW19fTACFyvfP46/nEtRjOwC4TLa4=;
+        s=korg; t=1623909405;
+        bh=vOtZNKgdXLXqvbCCw4+EXSMYJqOfs4O96QCwxuzPKbo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=COom/knVjERjbeaSc0vj31xh3o+QfjpOZPlnEyVZZiSgaA48LCYLRHSJNDuspnqSm
-         OYdExBPFwSSgDLjQJU4SsiypobFhY6HpllEsKce76jnk7CA6aM1vqUkjLASrpLt0it
-         J+4u3QGq+mzIXOigYYBf5VO+NGVjNWZ7L62J3+DE=
-Date:   Thu, 17 Jun 2021 07:52:42 +0200
+        b=qNELfefjOAmF72RgUFSYDo4Z5fFYlxjRbHuar95j+JUZJM3ZgjfoCqhN7zHBh1NLu
+         O5paI6p4ir9l5NxuT9uUonZlFMa504HLp2Gt6iLpKk+tjloFIl0Z6DA+5I2MLbsQOw
+         5SPL6v8y5Mhw6ZNQKl/x8pba97RTapGJ/iGkIKCs=
+Date:   Thu, 17 Jun 2021 07:56:41 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Jing Zhang <jingzhangos@google.com>
 Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
@@ -56,7 +56,7 @@ Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         Fuad Tabba <tabba@google.com>
 Subject: Re: [PATCH v10 3/5] KVM: stats: Add documentation for binary
  statistics interface
-Message-ID: <YMrjKhV8TNwmRtf6@kroah.com>
+Message-ID: <YMrkGZzPrt0jA1iP@kroah.com>
 References: <20210617044146.2667540-1-jingzhangos@google.com>
  <20210617044146.2667540-4-jingzhangos@google.com>
 MIME-Version: 1.0
@@ -76,17 +76,28 @@ On Thu, Jun 17, 2021 at 04:41:44AM +0000, Jing Zhang wrote:
 > +		__u32 unused;
 > +		char name[0];
 > +	};
-> +
-> +The ``flags`` field contains the type and unit of the statistics data described
-> +by this descriptor. The following flags are supported:
-> +
-> +Bits 0-3 of ``flags`` encode the type:
 
 <snip>
 
-As flags is a bit field, what is the endian of it?  Native or LE or BE?
-I'm guessing "cpu native", but you should be explicit as userspace will
-have to deal with this somehow.
+> +The ``unused`` fields are reserved for future support for other types of
+> +statistics data, like log/linear histogram.
+
+you HAVE to set unused to 0 for now, otherwise userspace does not know
+it is unused, right?  And then, really it is "used", so why not just say
+that now?  It's tricky, but you have to get this right now otherwise you
+can never use it in the future.
+
+> +The ``name`` field points to the name string of the statistics data. The name
+
+It is not a pointer, it is the data itself.
+
+> +string starts at the end of ``struct kvm_stats_desc``.
+> +The maximum length (including trailing '\0') is indicated by ``name_size``
+> +in ``struct kvm_stats_header``.
+
+I thought we were replacing [0] arrays with [], are you sure you should
+be declaring this as [0]?  Same for all structures in this document (and
+code).
 
 thanks,
 
