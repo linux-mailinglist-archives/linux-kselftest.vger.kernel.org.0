@@ -2,114 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCF23ABBC8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jun 2021 20:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809623ABCDD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jun 2021 21:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbhFQSaC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Jun 2021 14:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
+        id S233614AbhFQThE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Jun 2021 15:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbhFQSaB (ORCPT
+        with ESMTP id S233602AbhFQThA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Jun 2021 14:30:01 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACA6C061574;
-        Thu, 17 Jun 2021 11:27:52 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id g20so11678669ejt.0;
-        Thu, 17 Jun 2021 11:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=z9dDka7WqooF8QCzzctsFQ5AKA9e87F9WYFEk1ZSQcs=;
-        b=AyaTj1aLjzpje1OtpqcJshH5hFvoLUhyOYXtR59yQuHG27PVY7Rd7fRhPV1SqeOEvF
-         W4iuM/Sc7iDgwNK4ExCcYGQzPYwi5JEGEvgpVh9TBrkdMDHekt6NxEaaUvJpqAyV3HE9
-         jhUOEdDntyO7yrxvC1JFGSt/m6hmeCN2UejRfoPxewkZzN8M3ukSsdx/1FaSPV4h7Ny/
-         y1k/KRm+W3/G7kCbJCGsq0DcEOReF6xsxVsbIFT9ZkuE00w0r+d2nHyEGRuv+xvL5QL5
-         40Nnt9eMlxJACYj3NaH/2iqCEsmYX/cKKOvqFA+Xhxq0HnhEHPE3wV3MjneUxti535ml
-         whYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=z9dDka7WqooF8QCzzctsFQ5AKA9e87F9WYFEk1ZSQcs=;
-        b=o8FsTaq/8fg/UgFn3di1CRhnuV9ZbwxggglU8Doxf4/rk3SBv4sDIRezljxDfpgogH
-         V5V0dTgEwzf3k2n6N8a2nZ7Tg1zChAdb5uvNA0GIKJqdWv7tTKwjuf3KYt53je+zLX6H
-         zY3oUCB+7BjA9xcOsdjCjxKAxzTZpObdzZQRPE67Qmybu14Lg9iR0Pa8o+gWrNFwKiCV
-         lXebQ4qYKcSolCi+uEcq1oXIAI7/SYuKLrb/NtC5BW3LBNfICBwFl3Lp+12tyTQ+osv9
-         FJo8TMq3+nRUAElXZN305hkImIq4JfBHHSTmDVI945cqSJ/8I6TcKUf9NumDCUBkIv8F
-         0fuw==
-X-Gm-Message-State: AOAM5339AUGfpgpjyxca7Sgq+FeAjCSR/2Y/QyLAFBiLQAoJH/3+PSS2
-        5acaQkUw2TSEtYe8e16ksrQm7Gi1FYw=
-X-Google-Smtp-Source: ABdhPJypw9hZOdaqWcpGkUc3xFICl20D/p5X8o0IST2ZLxYVKIwHB4cA0WK4vA9Y4STPcKtfNnxTzA==
-X-Received: by 2002:a05:6402:1355:: with SMTP id y21mr1917680edw.136.1623954471027;
-        Thu, 17 Jun 2021 11:27:51 -0700 (PDT)
-Received: from localhost ([185.246.22.209])
-        by smtp.gmail.com with ESMTPSA id r23sm34618edy.13.2021.06.17.11.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 11:27:50 -0700 (PDT)
-Date:   Thu, 17 Jun 2021 20:27:45 +0200
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Yangbo Lu <yangbo.lu@nxp.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rui Sousa <rui.sousa@nxp.com>,
-        Sebastien Laveze <sebastien.laveze@nxp.com>
-Subject: Re: [net-next, v3, 02/10] ptp: support ptp physical/virtual clocks
- conversion
-Message-ID: <20210617182745.GC4770@localhost>
-References: <20210615094517.48752-1-yangbo.lu@nxp.com>
- <20210615094517.48752-3-yangbo.lu@nxp.com>
+        Thu, 17 Jun 2021 15:37:00 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88C0C061760;
+        Thu, 17 Jun 2021 12:34:52 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d:444a:d152:279d:1dbb])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 575109A9;
+        Thu, 17 Jun 2021 19:34:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 575109A9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1623958492; bh=+FDoO5Ud1J1Le00Bv1li2JtQlBXuIq31yl6Euxvq5DY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WFVCsFOWoCuezpcMYNJux/MpMipcxgURDCD8bYWZE9oLP+hr0mD3Xe38qE9GlyEG0
+         Gvrmx/6wpMEfLebKYi5ENC4W6D93n0xRBg4JlAiYuguUJCOVH/Sbcc177/pSJ8RwAv
+         E3cpiJ8f45knZ8aT0CWWOFnt77L2ugwWqu5L+OOgLyx51xHGn3IAS67BR8sCqbaa3c
+         mtDp3qgRj9rdXizONDhH6eODDD62j+YLkABCJo+Le9e7A3x1Cf3PulnTM6CCGerVdL
+         zkkQaP8VaQg+H9hspqZZVENcEXMVI3DpUgxhieXkAlC9hiz9xqv97/sk0QsDqKlaZS
+         9w1F6+Gt7q8cA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v2 00/29] docs: avoid using ReST :doc:`foo` tag
+In-Reply-To: <cover.1623824363.git.mchehab+huawei@kernel.org>
+References: <cover.1623824363.git.mchehab+huawei@kernel.org>
+Date:   Thu, 17 Jun 2021 13:34:51 -0600
+Message-ID: <87pmwkthd0.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210615094517.48752-3-yangbo.lu@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 05:45:09PM +0800, Yangbo Lu wrote:
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
 
-> diff --git a/drivers/ptp/ptp_private.h b/drivers/ptp/ptp_private.h
-> index 3f388d63904c..6949afc9d733 100644
-> --- a/drivers/ptp/ptp_private.h
-> +++ b/drivers/ptp/ptp_private.h
-> @@ -46,6 +46,9 @@ struct ptp_clock {
->  	const struct attribute_group *pin_attr_groups[2];
->  	struct kthread_worker *kworker;
->  	struct kthread_delayed_work aux_work;
-> +	u8 n_vclocks;
+> (Maintainers bcc, to avoid too many recipient troubles)
+>
+> As discussed at:
+> 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+>
+> It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
+> automarkup.py extension should handle it automatically, on most cases.
 
-Hm, type is u8, but ...
+I've applied the set, thanks.
 
-> +	struct mutex n_vclocks_mux; /* protect concurrent n_vclocks access */
-> +	bool vclock_flag;
->  };
->  
-
->  #define info_to_vclock(d) container_of((d), struct ptp_vclock, info)
-> diff --git a/include/uapi/linux/ptp_clock.h b/include/uapi/linux/ptp_clock.h
-> index 1d108d597f66..4b933dc1b81b 100644
-> --- a/include/uapi/linux/ptp_clock.h
-> +++ b/include/uapi/linux/ptp_clock.h
-> @@ -69,6 +69,11 @@
->   */
->  #define PTP_PEROUT_V1_VALID_FLAGS	(0)
->  
-> +/*
-> + * Max number of PTP virtual clocks per PTP physical clock
-> + */
-> +#define PTP_MAX_VCLOCKS			20
-
-Only 20 clocks are allowed?  Why?
-
-Thanks,
-Richard
+jon
