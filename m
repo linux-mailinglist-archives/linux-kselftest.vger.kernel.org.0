@@ -2,61 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C96693AACE9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jun 2021 09:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DA53AAD78
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jun 2021 09:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbhFQHFz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Jun 2021 03:05:55 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:45215 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229580AbhFQHFy (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Jun 2021 03:05:54 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 477165804CA;
-        Thu, 17 Jun 2021 03:03:46 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 17 Jun 2021 03:03:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=bHJT5oI183t6jXiLX3QAsM6ZuOC
-        /RnAjhVkdaNoMjms=; b=tNE1qdbTe2Iwk79XEmxLKNQf/ULyBRs71UgcvFxUPws
-        /UOhvLwidIeXxlIssIen9uT+20PVORO+X+Xftl6QQsh/Qq03jAFW6CAhEUX05vv+
-        /2ktx/H0Q80COXId5hOFulpBxdXVCx+PiQZ5+Vv1VCCat9WNJpywo/v9MOgsQQrU
-        dp/bDGiT5lMYInMG1NPsEsKJe1bc95oYES8TsfSwAGWrwVXcgS2oO1Bg5C2olSxe
-        QncDeB9Xa0Z6uv38Q30vFFnWV9ps++M7v5mRgD328yjY/YB5nPLq/vrLaf7yMPnn
-        Fz+MfbFTfpjwp9koJfvdOt+DiElCaEtiomO8I+lq6bQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=bHJT5o
-        I183t6jXiLX3QAsM6ZuOC/RnAjhVkdaNoMjms=; b=AMnxMQ0MQLmH+F4tyjDGo5
-        tqoJYLL3+fnBDD8a3zA+iMmAOJQPH2s4vdbvcF2fntElefcnM1M1DCo1RQdwVqrr
-        noleuZOcVZpgQqJbPUy7u7Imsg3gggcEPGeC/RF0SJ0dhyiO9rEfGiiUQ7KOnJti
-        9XWRQDLK6LBzMdHPrrpr/ek7HEfydxfWW6mi+fFvQz3hLj7KSByizRYeRJg+9ptB
-        GKE223xx1moa/6rL98j4OOOk1xByNrVnPFYsaTkDhWrag4sU3fTwxPY0IbVmeOZe
-        6DfWnJXuyjNlqyKynjhusDUByZgytQMRAN0ZdJrej4wgj4xaptYP8vKpalfFpBuA
-        ==
-X-ME-Sender: <xms:0PPKYJb4cPZMmeNkJS6hNkBCYqaAXTY8FDRKVyAUWZfO9tFMGaxB4Q>
-    <xme:0PPKYAa4rvMOF7kvq4LAPcqOpUFWbZJkRgfeb2sfhJolxArQjeL1JixLjilzjBTbo
-    fuDVcX5epR6dA>
-X-ME-Received: <xmr:0PPKYL8WoovLaP38NszhOiKK_7Zqlk7gUkvybi-NzcLHKDu5v_tDTHlNxbbyZAoN5_el6eq44Qr1kHTADaDun43-iiwScCrJ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeeftddguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:0PPKYHq1avN6BNEi8vANMkXkqGdQtWEjShfRtV0HMbZf6_OqzR_F1A>
-    <xmx:0PPKYEqlNtjyglw52nt_5dKHSTkxKGSQDE69euR7foPlqrSwmgIdMg>
-    <xmx:0PPKYNR44zTgO-kpi3UXJ09C5vcWGpVR0mD0YOBytqO5JzNHBAtFDg>
-    <xmx:0vPKYHAHy81HipZYNm0Q2g22K9_KDTebTao77ccsKsEu5mpjCw5S-Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Jun 2021 03:03:44 -0400 (EDT)
-Date:   Thu, 17 Jun 2021 09:03:41 +0200
-From:   Greg KH <greg@kroah.com>
+        id S229848AbhFQH0j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Jun 2021 03:26:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50350 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229580AbhFQH0i (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 17 Jun 2021 03:26:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B5C0A61241;
+        Thu, 17 Jun 2021 07:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623914671;
+        bh=kNxTxEwPcYv3NN2DfpZ8GnBN8QRikI5mGsAdJMShdj8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vmjn0HbF4vDkLycAFVfFgocX33s32jQVUNaGP0J3DSVKZAgg2IaQrobYDvDawDma7
+         x3ikJMr5SuhJwFPLP6HEpPDeER5nEM2UPQEAeKtSe//vF6YDonr90WBlk5yNgc90ZN
+         Ffb7TLPNWmUzQseIO/Xbs7cENsIfzLUJos/2MPo0=
+Date:   Thu, 17 Jun 2021 09:24:28 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Jing Zhang <jingzhangos@google.com>
 Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
@@ -91,7 +56,7 @@ Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         Fuad Tabba <tabba@google.com>
 Subject: Re: [PATCH v10 2/5] KVM: stats: Add fd-based API to read binary
  stats data
-Message-ID: <YMrzzYEkDQNCpnP7@kroah.com>
+Message-ID: <YMr4rArKvj3obDEM@kroah.com>
 References: <20210617044146.2667540-1-jingzhangos@google.com>
  <20210617044146.2667540-3-jingzhangos@google.com>
 MIME-Version: 1.0
@@ -105,65 +70,102 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 On Thu, Jun 17, 2021 at 04:41:43AM +0000, Jing Zhang wrote:
 > Provides a file descriptor per VM to read VM stats info/data.
 > Provides a file descriptor per vCPU to read vCPU stats info/data.
-> 
-> The KVM stats now is only accessible by debugfs, which has some
-> shortcomings this change are supposed to fix:
-> 1. Debugfs is not a stable interface for production and it is
->    disabled when kernel Lockdown mode is enabled.
 
-debugfs _could_ be a stable interface if you want it to be and make that
-rule for your subsystem.  Disabling it for lockdown mode is a different
-issue, and that is a system-wide-policy-decision, not a debugfs-specific
-thing.
+Shouldn't this be two separate patches, one for each thing as these are
+two different features being added?
 
-> 2. Debugfs is organized as "one value per file", it is good for
->    debugging, but not supposed to be used for production.
+Anyway, an implementation question for both of these:
 
-debugfs IS NOT one-value-per-file, you can do whatever you want in
-there.  sysfs IS one-value-per-file, do not get the two confused there.
-
-> 3. Debugfs read/clear in KVM are protected by the global kvm_lock.
-
-That's your implementation issue, not a debugfs issue.
-
-The only "rule" in debugfs is:
-	There are no rules.
-
-So while your subsystem might have issues with using debugfs for
-statistics like this, that's not debugfs's fault, that's how you want to
-use the debugfs files for your subsystem.
-
-> Besides that, there are some other benefits with this change:
-> 1. All KVM VM/VCPU stats can be read out in a bulk by one copy
->    to userspace.
-> 2. A schema is used to describe KVM statistics. From userspace's
->    perspective, the KVM statistics are self-describing.
-> 3. Fd-based solution provides the possibility that a telemetry can
->    read KVM stats in a less privileged situation.
-
-"possiblity"?  Does this work or not?  Have you tested it?
-
-> +static ssize_t kvm_vm_stats_read(struct file *file, char __user *user_buffer,
-> +			      size_t size, loff_t *offset)
+> +static ssize_t kvm_stats_read(struct _kvm_stats_header *header,
+> +		struct _kvm_stats_desc *desc, void *stats, size_t size_stats,
+> +		char __user *user_buffer, size_t size, loff_t *offset)
 > +{
-> +	struct kvm *kvm = file->private_data;
+> +	ssize_t copylen, len, remain = size;
+
+You are "burying" the fact that remain is initialized here, not nice, I
+totally missed it when reading this the first time.
+
+This should be:
+	ssize_t copylen;
+	ssize_t len;
+	ssize_t remain = size;
+to be obvious.
+
+Remember you will be looking at this code for the next 20 years, make it
+easy to read.
+
+> +	size_t size_header, size_desc;
+> +	loff_t pos = *offset;
+> +	char __user *dest = user_buffer;
+> +	void *src;
 > +
-> +	snprintf(&kvm_vm_stats_header.id[0], sizeof(kvm_vm_stats_header.id),
-> +			"kvm-%d", task_pid_nr(current));
+> +	size_header = sizeof(*header);
+> +	size_desc = header->header.count * sizeof(*desc);
+> +
+> +	len = size_header + size_desc + size_stats - pos;
+> +	len = min(len, remain);
+> +	if (len <= 0)
+> +		return 0;
+> +	remain = len;
+> +
+> +	/* Copy kvm stats header */
+> +	copylen = size_header - pos;
+> +	copylen = min(copylen, remain);
+> +	if (copylen > 0) {
+> +		src = (void *)header + pos;
+> +		if (copy_to_user(dest, src, copylen))
+> +			return -EFAULT;
+> +		remain -= copylen;
+> +		pos += copylen;
+> +		dest += copylen;
+> +	}
 
-Why do you write to this static variable for EVERY read?  Shouldn't you
-just do it once at open?  How can it change?
+I thought you said that you would not provide the header for each read,
+if you keep reading from the fd.  It looks like you are adding it here
+to each read, or is there some "magic" with pos happening here that I do
+not understand?
 
-Wait, it's a single shared variable, what happens when multiple tasks
-open this thing and read from it?  You race between writing to this
-variable here and then:
+And if there is "magic" with pos, you should document it as it's not
+very obvious :)
 
-> +	return kvm_stats_read(&kvm_vm_stats_header, &kvm_vm_stats_desc[0],
-> +		&kvm->stat, sizeof(kvm->stat), user_buffer, size, offset);
+> +	/* Copy kvm stats descriptors */
+> +	copylen = header->header.desc_offset + size_desc - pos;
+> +	copylen = min(copylen, remain);
+> +	if (copylen > 0) {
+> +		src = (void *)desc + pos - header->header.desc_offset;
+> +		if (copy_to_user(dest, src, copylen))
+> +			return -EFAULT;
+> +		remain -= copylen;
+> +		pos += copylen;
+> +		dest += copylen;
+> +	}
+> +	/* Copy kvm stats values */
 
-Accessing it here.
+New lines between code blocks of doing things?
 
-So how is this really working?
+And again, why copy the decriptor again?  or is it being skipped
+somehow?  Ah, I think I see how it's being skipped, if I look really
+closely.  But again, it's not obvious, and I could be wrong.  Please
+document this REALLY well.
+
+Write code for the developer first, compiler second.  Again, you are
+going to be maintaining it for 20+ years, think of your future self...
+
+
+> +	copylen = header->header.data_offset + size_stats - pos;
+> +	copylen = min(copylen, remain);
+> +	if (copylen > 0) {
+> +		src = stats + pos - header->header.data_offset;
+> +		if (copy_to_user(dest, src, copylen))
+> +			return -EFAULT;
+> +		remain -= copylen;
+> +		pos += copylen;
+> +		dest += copylen;
+> +	}
+> +
+> +	*offset = pos;
+> +	return len;
+> +}
 
 thanks,
 
