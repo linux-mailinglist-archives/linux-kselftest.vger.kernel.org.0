@@ -2,63 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 660C13ACB63
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jun 2021 14:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156153ACBA6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jun 2021 15:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbhFRMzn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Jun 2021 08:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
+        id S232359AbhFRNFN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Jun 2021 09:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbhFRMzm (ORCPT
+        with ESMTP id S232298AbhFRNFM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Jun 2021 08:55:42 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6EDC061768
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 05:53:33 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id d2so13878028ljj.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 05:53:33 -0700 (PDT)
+        Fri, 18 Jun 2021 09:05:12 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDC1C06175F
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 06:03:03 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id c11so13925533ljd.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 06:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dWVXxgAlLJQwG/+nBdkNxeMlnnFAIi5ArzaoyPaxm/8=;
-        b=L86hZTuhzSqmB3lhNADSJ5B4ukqBLqQTpJa4OIJP0gCWv0U8PkSMYl5wgqAmcPF16o
-         bGGTC3yOOWXQeg02RCSjQo91Q/G1hvw5LWuf4DaJpSEWtGU0nuAX0S7YyDIan1OjZP3e
-         QQksemCviavqYm1qUc66K/o2+o/k5bhzLQdprzWx63qMWP9OU19dlTGhUlRbrZCDmBZO
-         Jw5AzEzvQw1MhPtWpz68szEeOuaTYxWRU+ovE4XbvLgYANCaaOiEh3gmlhkEYakpSa9Q
-         GuwHF+2C7dFpoURxpIP/dN0D0qFI0foe8iYVYGtJExUPXP0xucoTh+9JfpvSPEoBMLWn
-         gPnQ==
+        bh=sEclsuEWMpJAtZre1q7afze1RnKMopUqEN3Jq0eFLJo=;
+        b=vWbKHgBItt8O7lINA7KgYjqeNkMrhXk8Vo4/mwzHt+XzDHF8TwoTLudfyISLKu6e4E
+         crEoUad+aXxFkZUoUzykuOPLXpriwUyBVa9xD/29tvlKgKsc5veLSdSs0P8uStI83p6J
+         IOpxlJyoPzpIyURxXbWjcWr7jsnP6TrgAuFYCQuahJJpg/9IjrJXQVaGo6+I35vTmLQW
+         2hHg/yrkx6UZ8hw+T45mpqVwes2HiyNqHTDc9ltDAtxIZ2oThwvBodTxWmAlYDJZ39oe
+         zQ0v1ar5jAXbN2cs6bmCH09I7Amcqg8oZDxc1oLafArpZfJzE/dmGXxUQRHSEt4uGj35
+         EDYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dWVXxgAlLJQwG/+nBdkNxeMlnnFAIi5ArzaoyPaxm/8=;
-        b=KBDJgYk7TlU8gwR75FNvnS4CnMklRoleHAOtw9Z3KZoPUK/Gvfey+DJQrZ+zNJYXwk
-         1FZHIWNgJ/CCyChyI6NJO9Qo9yZ3fkKA7B0kTalIhSuZ7PXR5RluaWX6gZ4cOw4c9XN3
-         h1Yu8J62wDpiWXoIaZfEMMkSJMv/SZbPBBQeqBlX2H6Jk+4gX4DbqEFzqf2UhE/3LwFu
-         LnPGFPuFQJgP1sRAtmL2oBoyGpCQBduXna3zynkLir0OgzqwZfrhueopBRhfWfC6gjay
-         hMaH5GcOFnSzAjAGz9TAAtcsVfTeEYBY0ATpnT9gTJE6LdjD9yVICi6mSURFztI49Yc6
-         MIxg==
-X-Gm-Message-State: AOAM533Y954Bo+2XLdPfgo/hFVdpV0baXsCst8bhL++lo51Qtagm8S/S
-        XCN4I0WOo73DE/fkhY35hu+O39d/RxI6+hdoJwLOFg==
-X-Google-Smtp-Source: ABdhPJz174WfL0ctG8A7aAAyek5EQOs9lcsrVwrYiCMiolJT0pTpKD8pbuDQEyl0wcqBTg98AJfaToqrZ1fTGN2tjfI=
-X-Received: by 2002:a05:651c:54a:: with SMTP id q10mr1486427ljp.216.1624020810989;
- Fri, 18 Jun 2021 05:53:30 -0700 (PDT)
+        bh=sEclsuEWMpJAtZre1q7afze1RnKMopUqEN3Jq0eFLJo=;
+        b=piOi3YEFmP+Rd0faI+HgklSYwIFpocHnpZTNtRDPxhPkIF3PUQHNVfqGa39RDqqhiC
+         HVHGjgz6TsvbRmLgvcX2KaC0UbT1skGCd9FeD49BSbFuq8IGcH02IC/QzffqJUQGluRf
+         8kMcpmjNQbI6LrtM4xSC9VwhlZ6OOwB+0whChXAh67ONK6UOKQq63VbMbetZftqj7Z4W
+         rOuakaptoP1s+VFsJSztUWmQY3Cfc6gB/A+ZF3Q1fRsbaKtivLu9x+o8QWY6g7Va1nM8
+         4S+vp73HF1VGjqlf79ut5ZSsF3WCnG9bfueePibkopRd15cXAsgqVNzuLSZFwrqk1W9P
+         UjvQ==
+X-Gm-Message-State: AOAM532mnWF4SdYV3s0xigYrUvpw6PzII12sPWj78pQnH4FE9btLBK48
+        FI7V2+kuhrRxtYJArBVGO8ocG7QQUIgbJ4ImmnzJHw==
+X-Google-Smtp-Source: ABdhPJwYJQdcIEytkrMx0Wz3wvyodJYH5zp4XXjs8/9Vx6hj1aP7xcJZkVdJWvuJ4nqyknxb0IdsL0leVGFcKnX9GTM=
+X-Received: by 2002:a05:651c:150a:: with SMTP id e10mr9521276ljf.215.1624021379799;
+ Fri, 18 Jun 2021 06:02:59 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210618044819.3690166-1-jingzhangos@google.com>
  <20210618044819.3690166-3-jingzhangos@google.com> <YMxEqvKyGnZinMOS@kroah.com>
-In-Reply-To: <YMxEqvKyGnZinMOS@kroah.com>
+ <f2616b8e-0cf8-570f-4bd3-7ef5cbcb37b0@gnu.org> <YMxYC8syYRBhbBAq@kroah.com>
+In-Reply-To: <YMxYC8syYRBhbBAq@kroah.com>
 From:   Jing Zhang <jingzhangos@google.com>
-Date:   Fri, 18 Jun 2021 07:53:19 -0500
-Message-ID: <CAAdAUtiQYdciOwPF49b1bbpMAgUFfe7vNqCKcCHKP4D7+S9dMw@mail.gmail.com>
+Date:   Fri, 18 Jun 2021 08:02:48 -0500
+Message-ID: <CAAdAUticeB2Rr8g5eywPvHGGYfsXV=mNA4mNbd4thAae9zbXWA@mail.gmail.com>
 Subject: Re: [PATCH v11 2/7] KVM: stats: Add fd-based API to read binary stats data
 To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+Cc:     Paolo Bonzini <bonzini@gnu.org>, KVM <kvm@vger.kernel.org>,
+        KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
         KVMPPC <kvm-ppc@vger.kernel.org>,
         LinuxS390 <linux-s390@vger.kernel.org>,
         Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
         James Morse <james.morse@arm.com>,
         Julien Thierry <julien.thierry.kdev@gmail.com>,
@@ -89,380 +90,109 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 18, 2021 at 2:01 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Fri, Jun 18, 2021 at 3:23 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> On Fri, Jun 18, 2021 at 04:48:14AM +0000, Jing Zhang wrote:
-> > This commit defines the API for userspace and prepare the common
-> > functionalities to support per VM/VCPU binary stats data readings.
+> On Fri, Jun 18, 2021 at 10:02:57AM +0200, Paolo Bonzini wrote:
+> > On 18/06/21 09:00, Greg KH wrote:
+> > > > +struct kvm_stats_header {
+> > > > + __u32 name_size;
+> > > > + __u32 count;
+> > > > + __u32 desc_offset;
+> > > > + __u32 data_offset;
+> > > > + char id[];
+> > > > +};
+> > >
+> > > You mentioned before that the size of this really is the size of the
+> > > structure + KVM_STATS_ID_MAXLEN, right?  Or is it - KVM_STATS_ID_MAXLEN?
+> > >
+> > > If so, why not put that value explicitly in:
+> > >     char id[THE_REST_OF_THE_HEADER_SPACE];
+> > >
+> > > As this is not a variable header size at all, and you can not change it
+> > > going forward, so the variable length array here feels disingenuous.
 > >
-> > The KVM stats now is only accessible by debugfs, which has some
-> > shortcomings this change series are supposed to fix:
-> > 1. The current debugfs stats solution in KVM could be disabled
-> >    when kernel Lockdown mode is enabled, which is a potential
-> >    rick for production.
-> > 2. The current debugfs stats solution in KVM is organized as "one
-> >    stats per file", it is good for debugging, but not efficient
-> >    for production.
-> > 3. The stats read/clear in current debugfs solution in KVM are
-> >    protected by the global kvm_lock.
-> >
-> > Besides that, there are some other benefits with this change:
-> > 1. All KVM VM/VCPU stats can be read out in a bulk by one copy
-> >    to userspace.
-> > 2. A schema is used to describe KVM statistics. From userspace's
-> >    perspective, the KVM statistics are self-describing.
-> > 3. With the fd-based solution, a separate telemetry would be able
-> >    to read KVM stats in a less privileged environment.
-> > 4. After the initial setup by reading in stats descriptors, a
-> >    telemetry only needs to read the stats data itself, no more
-> >    parsing or setup is needed.
-> >
-> > Reviewed-by: David Matlack <dmatlack@google.com>
-> > Reviewed-by: Ricardo Koller <ricarkol@google.com>
-> > Reviewed-by: Krish Sadhukhan <krish.sadhukhan@oracle.com>
-> > Reviewed-by: Fuad Tabba <tabba@google.com>
-> > Tested-by: Fuad Tabba <tabba@google.com> #arm64
-> > Signed-off-by: Jing Zhang <jingzhangos@google.com>
-> > ---
-> >  arch/arm64/kvm/Makefile   |   2 +-
-> >  arch/mips/kvm/Makefile    |   2 +-
-> >  arch/powerpc/kvm/Makefile |   2 +-
-> >  arch/s390/kvm/Makefile    |   3 +-
-> >  arch/x86/kvm/Makefile     |   2 +-
-> >  include/linux/kvm_host.h  | 145 ++++++++++++++++++++++++++++++++++++++
-> >  include/uapi/linux/kvm.h  |  42 +++++++++++
-> >  virt/kvm/binary_stats.c   | 130 ++++++++++++++++++++++++++++++++++
-> >  8 files changed, 323 insertions(+), 5 deletions(-)
-> >  create mode 100644 virt/kvm/binary_stats.c
-> >
-> > diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
-> > index 589921392cb1..989bb5dad2c8 100644
-> > --- a/arch/arm64/kvm/Makefile
-> > +++ b/arch/arm64/kvm/Makefile
-> > @@ -11,7 +11,7 @@ obj-$(CONFIG_KVM) += kvm.o
-> >  obj-$(CONFIG_KVM) += hyp/
-> >
-> >  kvm-y := $(KVM)/kvm_main.o $(KVM)/coalesced_mmio.o $(KVM)/eventfd.o \
-> > -      $(KVM)/vfio.o $(KVM)/irqchip.o \
-> > +      $(KVM)/vfio.o $(KVM)/irqchip.o $(KVM)/binary_stats.o \
-> >        arm.o mmu.o mmio.o psci.o perf.o hypercalls.o pvtime.o \
-> >        inject_fault.o va_layout.o handle_exit.o \
-> >        guest.o debug.o reset.o sys_regs.o \
-> > diff --git a/arch/mips/kvm/Makefile b/arch/mips/kvm/Makefile
-> > index 30cc060857c7..c67250a956b8 100644
-> > --- a/arch/mips/kvm/Makefile
-> > +++ b/arch/mips/kvm/Makefile
-> > @@ -2,7 +2,7 @@
-> >  # Makefile for KVM support for MIPS
-> >  #
-> >
-> > -common-objs-y = $(addprefix ../../../virt/kvm/, kvm_main.o coalesced_mmio.o eventfd.o)
-> > +common-objs-y = $(addprefix ../../../virt/kvm/, kvm_main.o coalesced_mmio.o eventfd.o binary_stats.o)
-> >
-> >  EXTRA_CFLAGS += -Ivirt/kvm -Iarch/mips/kvm
-> >
-> > diff --git a/arch/powerpc/kvm/Makefile b/arch/powerpc/kvm/Makefile
-> > index 2bfeaa13befb..b347d043b932 100644
-> > --- a/arch/powerpc/kvm/Makefile
-> > +++ b/arch/powerpc/kvm/Makefile
-> > @@ -6,7 +6,7 @@
-> >  ccflags-y := -Ivirt/kvm -Iarch/powerpc/kvm
-> >  KVM := ../../../virt/kvm
-> >
-> > -common-objs-y = $(KVM)/kvm_main.o $(KVM)/eventfd.o
-> > +common-objs-y = $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o
-> >  common-objs-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
-> >  common-objs-$(CONFIG_KVM_MMIO) += $(KVM)/coalesced_mmio.o
-> >
-> > diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
-> > index 12decca22e7c..b3aaadc60ead 100644
-> > --- a/arch/s390/kvm/Makefile
-> > +++ b/arch/s390/kvm/Makefile
-> > @@ -4,7 +4,8 @@
-> >  # Copyright IBM Corp. 2008
-> >
-> >  KVM := ../../../virt/kvm
-> > -common-objs = $(KVM)/kvm_main.o $(KVM)/eventfd.o  $(KVM)/async_pf.o $(KVM)/irqchip.o $(KVM)/vfio.o
-> > +common-objs = $(KVM)/kvm_main.o $(KVM)/eventfd.o  $(KVM)/async_pf.o \
-> > +           $(KVM)/irqchip.o $(KVM)/vfio.o $(KVM)/binary_stats.o
-> >
-> >  ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
-> >
-> > diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-> > index 83331376b779..75dfd27b6e8a 100644
-> > --- a/arch/x86/kvm/Makefile
-> > +++ b/arch/x86/kvm/Makefile
-> > @@ -11,7 +11,7 @@ KVM := ../../../virt/kvm
-> >
-> >  kvm-y                        += $(KVM)/kvm_main.o $(KVM)/coalesced_mmio.o \
-> >                               $(KVM)/eventfd.o $(KVM)/irqchip.o $(KVM)/vfio.o \
-> > -                             $(KVM)/dirty_ring.o
-> > +                             $(KVM)/dirty_ring.o $(KVM)/binary_stats.o
-> >  kvm-$(CONFIG_KVM_ASYNC_PF)   += $(KVM)/async_pf.o
-> >
-> >  kvm-y                        += x86.o emulate.o i8259.o irq.o lapic.o \
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index 5a31e0696360..2f0d12064ae7 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -1272,6 +1272,12 @@ struct kvm_stats_debugfs_item {
-> >       int mode;
-> >  };
-> >
-> > +#define KVM_STATS_NAME_LEN   48
-> > +struct _kvm_stats_desc {
-> > +     struct kvm_stats_desc desc;
-> > +     char name[KVM_STATS_NAME_LEN];
-> > +};
-> > +
-> >  #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
-> >       ((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
-> >
-> > @@ -1285,8 +1291,147 @@ struct kvm_stats_debugfs_item {
-> >       { n, offsetof(struct kvm_vcpu, stat.generic.x),                        \
-> >         KVM_STAT_VCPU, ## __VA_ARGS__ }
-> >
-> > +#define STATS_DESC_COMMON(type, unit, base, exp)                            \
-> > +     .flags = type | unit | base |                                          \
-> > +         BUILD_BUG_ON_ZERO(type & ~KVM_STATS_TYPE_MASK) |                   \
-> > +         BUILD_BUG_ON_ZERO(unit & ~KVM_STATS_UNIT_MASK) |                   \
-> > +         BUILD_BUG_ON_ZERO(base & ~KVM_STATS_BASE_MASK),                    \
-> > +     .exponent = exp,                                                       \
-> > +     .size = 1
-> > +
-> > +#define VM_GENERIC_STATS_DESC(stat, type, unit, base, exp)                  \
-> > +     {                                                                      \
-> > +             {                                                              \
-> > +                     STATS_DESC_COMMON(type, unit, base, exp),              \
-> > +                     .offset = offsetof(struct kvm_vm_stat, generic.stat)   \
-> > +             },                                                             \
-> > +             .name = #stat,                                                 \
-> > +     }
-> > +#define VCPU_GENERIC_STATS_DESC(stat, type, unit, base, exp)                \
-> > +     {                                                                      \
-> > +             {                                                              \
-> > +                     STATS_DESC_COMMON(type, unit, base, exp),              \
-> > +                     .offset = offsetof(struct kvm_vcpu_stat, generic.stat) \
-> > +             },                                                             \
-> > +             .name = #stat,                                                 \
-> > +     }
-> > +#define VM_STATS_DESC(stat, type, unit, base, exp)                          \
-> > +     {                                                                      \
-> > +             {                                                              \
-> > +                     STATS_DESC_COMMON(type, unit, base, exp),              \
-> > +                     .offset = offsetof(struct kvm_vm_stat, stat)           \
-> > +             },                                                             \
-> > +             .name = #stat,                                                 \
-> > +     }
-> > +#define VCPU_STATS_DESC(stat, type, unit, base, exp)                        \
-> > +     {                                                                      \
-> > +             {                                                              \
-> > +                     STATS_DESC_COMMON(type, unit, base, exp),              \
-> > +                     .offset = offsetof(struct kvm_vcpu_stat, stat)         \
-> > +             },                                                             \
-> > +             .name = #stat,                                                 \
-> > +     }
-> > +/* SCOPE: VM, VM_GENERIC, VCPU, VCPU_GENERIC */
-> > +#define STATS_DESC(SCOPE, stat, type, unit, base, exp)                              \
-> > +     SCOPE##_STATS_DESC(stat, type, unit, base, exp)
-> > +
-> > +#define STATS_DESC_CUMULATIVE(SCOPE, name, unit, base, exponent)            \
-> > +     STATS_DESC(SCOPE, name, KVM_STATS_TYPE_CUMULATIVE,                     \
-> > +                   unit, base, exponent)
-> > +#define STATS_DESC_INSTANT(SCOPE, name, unit, base, exponent)                       \
-> > +     STATS_DESC(SCOPE, name, KVM_STATS_TYPE_INSTANT, unit, base, exponent)  \
-> > +
-> > +/* Cumulative counter */
-> > +#define STATS_DESC_COUNTER(SCOPE, name)                                             \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_NONE,                \
-> > +             KVM_STATS_BASE_POW10, 0)
-> > +/* Instantaneous counter */
-> > +#define STATS_DESC_ICOUNTER(SCOPE, name)                                    \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_NONE,                   \
-> > +             KVM_STATS_BASE_POW10, 0)
-> > +
-> > +/* Cumulative clock cycles */
-> > +#define STATS_DESC_CYCLE(SCOPE, name)                                               \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_CYCLES,              \
-> > +             KVM_STATS_BASE_POW10, 0)
-> > +/* Instantaneous clock cycles */
-> > +#define STATS_DESC_ICYCLE(SCOPE, name)                                              \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_CYCLES,                 \
-> > +             KVM_STATS_BASE_POW10, 0)
-> > +
-> > +/* Cumulative memory size in Byte */
-> > +#define STATS_DESC_SIZE_BYTE(SCOPE, name)                                   \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_BYTES,               \
-> > +             KVM_STATS_BASE_POW2, 0)
-> > +/* Cumulative memory size in KiByte */
-> > +#define STATS_DESC_SIZE_KBYTE(SCOPE, name)                                  \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_BYTES,               \
-> > +             KVM_STATS_BASE_POW2, 10)
-> > +/* Cumulative memory size in MiByte */
-> > +#define STATS_DESC_SIZE_MBYTE(SCOPE, name)                                  \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_BYTES,               \
-> > +             KVM_STATS_BASE_POW2, 20)
-> > +/* Cumulative memory size in GiByte */
-> > +#define STATS_DESC_SIZE_GBYTE(SCOPE, name)                                  \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_BYTES,               \
-> > +             KVM_STATS_BASE_POW2, 30)
-> > +
-> > +/* Instantaneous memory size in Byte */
-> > +#define STATS_DESC_ISIZE_BYTE(SCOPE, name)                                  \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_BYTES,                  \
-> > +             KVM_STATS_BASE_POW2, 0)
-> > +/* Instantaneous memory size in KiByte */
-> > +#define STATS_DESC_ISIZE_KBYTE(SCOPE, name)                                 \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_BYTES,                  \
-> > +             KVM_STATS_BASE_POW2, 10)
-> > +/* Instantaneous memory size in MiByte */
-> > +#define STATS_DESC_ISIZE_MBYTE(SCOPE, name)                                 \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_BYTES,                  \
-> > +             KVM_STATS_BASE_POW2, 20)
-> > +/* Instantaneous memory size in GiByte */
-> > +#define STATS_DESC_ISIZE_GBYTE(SCOPE, name)                                 \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_BYTES,                  \
-> > +             KVM_STATS_BASE_POW2, 30)
-> > +
-> > +/* Cumulative time in second */
-> > +#define STATS_DESC_TIME_SEC(SCOPE, name)                                    \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_SECONDS,             \
-> > +             KVM_STATS_BASE_POW10, 0)
-> > +/* Cumulative time in millisecond */
-> > +#define STATS_DESC_TIME_MSEC(SCOPE, name)                                   \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_SECONDS,             \
-> > +             KVM_STATS_BASE_POW10, -3)
-> > +/* Cumulative time in microsecond */
-> > +#define STATS_DESC_TIME_USEC(SCOPE, name)                                   \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_SECONDS,             \
-> > +             KVM_STATS_BASE_POW10, -6)
-> > +/* Cumulative time in nanosecond */
-> > +#define STATS_DESC_TIME_NSEC(SCOPE, name)                                   \
-> > +     STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_SECONDS,             \
-> > +             KVM_STATS_BASE_POW10, -9)
-> > +
-> > +/* Instantaneous time in second */
-> > +#define STATS_DESC_ITIME_SEC(SCOPE, name)                                   \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_SECONDS,                \
-> > +             KVM_STATS_BASE_POW10, 0)
-> > +/* Instantaneous time in millisecond */
-> > +#define STATS_DESC_ITIME_MSEC(SCOPE, name)                                  \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_SECONDS,                \
-> > +             KVM_STATS_BASE_POW10, -3)
-> > +/* Instantaneous time in microsecond */
-> > +#define STATS_DESC_ITIME_USEC(SCOPE, name)                                  \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_SECONDS,                \
-> > +             KVM_STATS_BASE_POW10, -6)
-> > +/* Instantaneous time in nanosecond */
-> > +#define STATS_DESC_ITIME_NSEC(SCOPE, name)                                  \
-> > +     STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_SECONDS,                \
-> > +             KVM_STATS_BASE_POW10, -9)
-> > +
-> >  extern struct kvm_stats_debugfs_item debugfs_entries[];
-> >  extern struct dentry *kvm_debugfs_dir;
-> > +ssize_t kvm_stats_read(char *id, struct kvm_stats_header *header,
-> > +             struct _kvm_stats_desc *desc, void *stats, size_t size_stats,
-> > +             char __user *user_buffer, size_t size, loff_t *offset);
-> >
-> >  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
-> >  static inline int mmu_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index 9febe1412f7a..ab73e905105c 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -1086,6 +1086,7 @@ struct kvm_ppc_resize_hpt {
-> >  #define KVM_CAP_HYPERV_ENFORCE_CPUID 199
-> >  #define KVM_CAP_SREGS2 200
-> >  #define KVM_CAP_EXIT_HYPERCALL 201
-> > +#define KVM_CAP_BINARY_STATS_FD 202
-> >
-> >  #ifdef KVM_CAP_IRQ_ROUTING
-> >
-> > @@ -1905,4 +1906,45 @@ struct kvm_dirty_gfn {
-> >  #define KVM_BUS_LOCK_DETECTION_OFF             (1 << 0)
-> >  #define KVM_BUS_LOCK_DETECTION_EXIT            (1 << 1)
-> >
-> > +#define KVM_STATS_ID_MAXLEN          64
-> > +
-> > +struct kvm_stats_header {
-> > +     __u32 name_size;
-> > +     __u32 count;
-> > +     __u32 desc_offset;
-> > +     __u32 data_offset;
-> > +     char id[];
-> > +};
+> > It can change; the header goes up to desc_offset.  Let's rename desc_offset
+> > to header_size.
 >
-> You mentioned before that the size of this really is the size of the
-> structure + KVM_STATS_ID_MAXLEN, right?  Or is it - KVM_STATS_ID_MAXLEN?
+> "Traditionally" the first field of a variable length structure like this
+> has the size.  So maybe this needs to be:
 >
-> If so, why not put that value explicitly in:
->         char id[THE_REST_OF_THE_HEADER_SPACE];
+> struct kvm_stats_header {
+>         __u32 header_size;
+>         __u32 name_size;
+>         __u32 num_desc;
+>         __u32 desc_offset;
+>         __u32 data_offset;
+>         char id[];
+> };
 >
-> As this is not a variable header size at all, and you can not change it
-> going forward, so the variable length array here feels disingenuous.
-The size of header is not supposed to change, it is sizeof(struct
-kvm_stats_header) +
-KVM_STATS_ID_MAXLEN. Userspace needs this when reading the header.
-Sorry for the confusion, will make that clear.
-
-The reason char id[] is used instead of char id[KVM_STATS_ID_MAXLEN] is because
-the header is only defined (and can be const as you mentioned) for
-every architecture, but
-the id string is different for every VM and VCPU. The content of the
-header is combined
-on-the-fly in the kvm_stats_read function.
-If we use id[KVM_STATS_ID_MAXLEN] here, then we will waste some memory in every
-header definition.
-Another option is to define another internal header structure without
-id[] field, which can be
-used to define the const part of header for every architecture. But
-that will have two structures
-for the same header, we need to make sure these two structures are the
-same except the id[]
-field.
-
-So, Greg, Paolo, What do you think? Which solution should we choose
-from 3 options?
+> I just guessed at what "count" is as I do not remember at the moment,
+> but obviously "count" wasn't descriptive :)
+>
+> Wait, what is "name_size" here for?
+>
+> > > > +struct kvm_stats_desc {
+> > > > + __u32 flags;
+> > > > + __s16 exponent;
+> > > > + __u16 size;
+> > > > + __u32 offset;
+> > > > + __u32 unused;
+> > > > + char name[];
+> > > > +};
+> > >
+> > > What is the max length of name?
+> >
+> > It's name_size in the header.
+>
+> So it's specified in the _previous_ header?  That feels wrong, shouldn't
+> this descriptor define what is in it?
+>
+> I'm not trying to nit-pick here, I'm actually confused now.  Structures
+> that contain "headers" should have in those headers at least two things:
+>         - declare the size of themselves if they are variable length
+>         - declare offsets to other structures
+>
+> Don't put a size in this header for the size of a later structure,
+> that's just extra complexity that is not needed.
+>
+> Think of this as a stream of bytes across the wire like a hardware
+> descriptor.  We have loads of experience dealing with this with
+> protocols like USB and Greybus and PCI and the like.  Let's learn from
+> those experiences and not try to mess things up where we don't need to
+> :)
 >
 >
+The name_size in the header is necessary for userspace to discover the
+length of a descriptor of a KVM statistics, since the size of name[] in every
+descriptor could be different (increased) in future versions.
+One thing worth mentioning is that, for every file content, there is only one
+header, but many descriptors, that's why it makes sense to have the size of
+name[] in the header instead of in the descriptor. We don't want every
+descriptor contain the same duplicated information.
+> >
+> > > Why aren't these structures defined here in kerneldoc so that we can
+> > > understand them better?  Putting them in a .rst file guarantees they
+> > > will get out of sync, and you can always directly import the kerneldoc
+> > > into the .rst file.
+> >
+> > This is a problem in general with Documentation/virt/kvm/api.rst.  The file
+> > is organized to match the kerneldoc structs to the ioctl that they are used
+> > for, and sometimes a ioctl includes different structs for each architecture.
+> >
+> > It is probably possible to do it using :identifiers: and/or :doc:, but it
+> > would require running scripts/kernel-doc on the uAPI headers dozens of
+> > times.  That is quite expensive at 0.3s each run, but that's what you get
+> > with Perl (gcc -fsyntax-only is 20 times faster).
 >
-> > +
-> > +#define KVM_STATS_TYPE_SHIFT         0
-> > +#define KVM_STATS_TYPE_MASK          (0xF << KVM_STATS_TYPE_SHIFT)
-> > +#define KVM_STATS_TYPE_CUMULATIVE    (0x0 << KVM_STATS_TYPE_SHIFT)
-> > +#define KVM_STATS_TYPE_INSTANT               (0x1 << KVM_STATS_TYPE_SHIFT)
-> > +#define KVM_STATS_TYPE_MAX           KVM_STATS_TYPE_INSTANT
-> > +
-> > +#define KVM_STATS_UNIT_SHIFT         4
-> > +#define KVM_STATS_UNIT_MASK          (0xF << KVM_STATS_UNIT_SHIFT)
-> > +#define KVM_STATS_UNIT_NONE          (0x0 << KVM_STATS_UNIT_SHIFT)
-> > +#define KVM_STATS_UNIT_BYTES         (0x1 << KVM_STATS_UNIT_SHIFT)
-> > +#define KVM_STATS_UNIT_SECONDS               (0x2 << KVM_STATS_UNIT_SHIFT)
-> > +#define KVM_STATS_UNIT_CYCLES                (0x3 << KVM_STATS_UNIT_SHIFT)
-> > +#define KVM_STATS_UNIT_MAX           KVM_STATS_UNIT_CYCLES
-> > +
-> > +#define KVM_STATS_BASE_SHIFT         8
-> > +#define KVM_STATS_BASE_MASK          (0xF << KVM_STATS_BASE_SHIFT)
-> > +#define KVM_STATS_BASE_POW10         (0x0 << KVM_STATS_BASE_SHIFT)
-> > +#define KVM_STATS_BASE_POW2          (0x1 << KVM_STATS_BASE_SHIFT)
-> > +#define KVM_STATS_BASE_MAX           KVM_STATS_BASE_POW2
-> > +
-> > +struct kvm_stats_desc {
-> > +     __u32 flags;
-> > +     __s16 exponent;
-> > +     __u16 size;
-> > +     __u32 offset;
-> > +     __u32 unused;
-> > +     char name[];
-> > +};
+> Is that what v4l and drm do today?  That's still safer and more
+> "obvious" than trying to keep two different files in sync which, as I
+> well know, almost impossible to do well over the _years_ in which you
+> will have to maintain these files.
 >
-> What is the max length of name?
->
-As Paolo mentioned, it is read from the header.
-> Why aren't these structures defined here in kerneldoc so that we can
-> understand them better?  Putting them in a .rst file guarantees they
-> will get out of sync, and you can always directly import the kerneldoc
-> into the .rst file.
+> Let's make it easier for everyone, put it only in one place and if
+> people want to see the documentation, they can generate it (it's
+> auto-generated on kernel.org anyway), no need to worry about multiple
+> passes or not.
 >
 > thanks,
 >
