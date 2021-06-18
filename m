@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 362E93AC27D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jun 2021 06:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBFF3AC282
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jun 2021 06:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbhFREug (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Jun 2021 00:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
+        id S232238AbhFREui (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Jun 2021 00:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232152AbhFREuf (ORCPT
+        with ESMTP id S232180AbhFREuh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Jun 2021 00:50:35 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6600C061760
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 21:48:26 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id n3-20020a0cee630000b029020e62abfcbdso4481313qvs.16
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 21:48:26 -0700 (PDT)
+        Fri, 18 Jun 2021 00:50:37 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F90DC061768
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 21:48:28 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id o11-20020a62f90b0000b02902db3045f898so5029699pfh.23
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 21:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=bukdbRwMUSJYHcfC0g5wV3cuLtFARFPXL+QCNZB9HkI=;
-        b=CFIxFC8Oo2hPcZjkU9vJdCcHlw1+GBkT1jqMwRNMaeEWeprKouL+E4o8Rm5l4I95G1
-         I63xtcgDcDDmuw7WBl11o+R2N+5KK3XvWpah/ymAhHoNrLpwViq2ugHpadtTquQj3a1n
-         doNT1IuSTXnWmYWhMniDcF8M4oURlwNNpP9MS1qlevmMlm6cceO6181J6BbtD448Sj61
-         OWWcqFQO1xEVHLSmQgN6VmNNuFlkw80nSLn75kwG5BM3ofZgyE8Rmo5DgMci3uDhy6DN
-         EDoK+n0kalckG7cbr81VtAuITJtoyrnii3sIV6rnWiboMXNN5n9qaa/ma76FAfLEpG5u
-         8Q+w==
+        bh=CFVi+z2mf3tcxTeka+vBro0+oe+hOysH+c9hAxWeWVo=;
+        b=uRdhHd2FJhXPtnC9SbU3cRty3cjlLGihohwmzpC8mfQiDCWNjubCtj07F8KNToIH89
+         Xu/36HI8KutWUOwe8vargnHjr5+Jd1S/z/Z478njl3rG8rRx051N8QyeQi/RKq15FAiv
+         KPa/6RvX/VOo1AvLrsLnfGyuIddRw5+dGNwvl+cyulVAQA34FSCsDoOmePyBNPOAR9FL
+         7+2lpLInWWX4NbjXSomOXA4hu9lgDJBT0PlS2XlmLvA9AzqEj5cZElKgOgavPPyl8FAe
+         3vPrPHHssp1SnkkMnK5Uq1fI8inE/X5row9Ny9Sk1Wf9I93rxqRVScGDyP2T85FvRQyH
+         Jevw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=bukdbRwMUSJYHcfC0g5wV3cuLtFARFPXL+QCNZB9HkI=;
-        b=Xjw0xE4qykfEtm04C0vxprZjAxjEGAwU8bNdaDFqAcPhMN6YCH//Xa+KefyYj36gJB
-         9XUnaAtcSOfoUoOlyG6qpXusga3w75Dz1T+NPD8xPO+/+EGAN7NbAFR+F+5MACMjQMZ6
-         z+MU41Hx+FhDPZkn19rwLuYht67U0FURQ1n99+wSzhMlFfrsYWMTmYmsqCPmPkMs+t5N
-         qXz0iMHp7S6IfNYgt9MnhnvXXkWPyPpBAD0kDttB0Ce0Wk7FMAhHz3C3pHuyk8+4zct9
-         edPQUWUyvV1ETk4w5n/eg1e1JFKRIB9QkeyNBXwoDEa95pgtoFlQaetsNyCkM/FM0UZ1
-         U0MA==
-X-Gm-Message-State: AOAM531+4lQt3Wd5m5aEkl/NutS730WHDz4tMnX6zvIbP5stAmXbaXc0
-        SLeabUQAq/PGWY75d3usFUx7RIK69qUPyQtqjw==
-X-Google-Smtp-Source: ABdhPJyyvmsW4L+DE66or+qFi6wsVVa2Blu1YmDiv7brHn1sfgvN1q4iXv46oIKGWEOjUuv9N1i8y9sA/mBvjQmVdA==
+        bh=CFVi+z2mf3tcxTeka+vBro0+oe+hOysH+c9hAxWeWVo=;
+        b=HiyWzq6iCgF77wY4FTnSQ9omLejQCWCZhwmpEJsicxW13KdCIXmCHsbIqKH1FrRvND
+         7JvlQM+eXWvvcjVf/bYfz/e+9SfvujUlY9sSvk0K/MC7waldXGAQexbCaVadeEqQ15RC
+         HjRG2Y1Ln0AUyL/ti903HlFGjZ+HKqEqNV4aibX+nwFlxjnNlVNZ2o6aUrPiUvdgzFLP
+         3U/OLgoktg9ybIQNakiFw2Zp79CiP08csWEpc5wnvzws0YT80Jv8DFGyIDWzeNZmJ94k
+         FZbD1BldFzBlSDml19RpwiDNErCSPWbLmYuQdwYV+qLN6DokU62zo8jNOqsDeOVEks43
+         0zhA==
+X-Gm-Message-State: AOAM531CkzrN41C34tL2y6lasXFyXceTxkqspRY9pOqiyWSY+94AWOcH
+        TIeNZXZpKKlVxQHJVvSN2xPt15mUWiDjqXzESw==
+X-Google-Smtp-Source: ABdhPJysMqXUJAzO1vOoSFxrn6Aqqbe6XuMMmvJplKcRhx9s+1fOYKylH+vH6p4FZQqqeG12u8KOOqP753MAiOVEjA==
 X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
- (user=jingzhangos job=sendgmr) by 2002:a0c:f850:: with SMTP id
- g16mr3696140qvo.26.1623991705965; Thu, 17 Jun 2021 21:48:25 -0700 (PDT)
-Date:   Fri, 18 Jun 2021 04:48:14 +0000
+ (user=jingzhangos job=sendgmr) by 2002:a17:902:7601:b029:108:8f75:915b with
+ SMTP id k1-20020a1709027601b02901088f75915bmr2976682pll.71.1623991707762;
+ Thu, 17 Jun 2021 21:48:27 -0700 (PDT)
+Date:   Fri, 18 Jun 2021 04:48:15 +0000
 In-Reply-To: <20210618044819.3690166-1-jingzhangos@google.com>
-Message-Id: <20210618044819.3690166-3-jingzhangos@google.com>
+Message-Id: <20210618044819.3690166-4-jingzhangos@google.com>
 Mime-Version: 1.0
 References: <20210618044819.3690166-1-jingzhangos@google.com>
 X-Mailer: git-send-email 2.32.0.288.g62a8d224e6-goog
-Subject: [PATCH v11 2/7] KVM: stats: Add fd-based API to read binary stats data
+Subject: [PATCH v11 3/7] KVM: stats: Support binary stats retrieval for a VM
 From:   Jing Zhang <jingzhangos@google.com>
 To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
@@ -91,30 +92,10 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This commit defines the API for userspace and prepare the common
-functionalities to support per VM/VCPU binary stats data readings.
-
-The KVM stats now is only accessible by debugfs, which has some
-shortcomings this change series are supposed to fix:
-1. The current debugfs stats solution in KVM could be disabled
-   when kernel Lockdown mode is enabled, which is a potential
-   rick for production.
-2. The current debugfs stats solution in KVM is organized as "one
-   stats per file", it is good for debugging, but not efficient
-   for production.
-3. The stats read/clear in current debugfs solution in KVM are
-   protected by the global kvm_lock.
-
-Besides that, there are some other benefits with this change:
-1. All KVM VM/VCPU stats can be read out in a bulk by one copy
-   to userspace.
-2. A schema is used to describe KVM statistics. From userspace's
-   perspective, the KVM statistics are self-describing.
-3. With the fd-based solution, a separate telemetry would be able
-   to read KVM stats in a less privileged environment.
-4. After the initial setup by reading in stats descriptors, a
-   telemetry only needs to read the stats data itself, no more
-   parsing or setup is needed.
+Add a VM ioctl to get a statistics file descriptor by which a read
+functionality is provided for userspace to read out VM stats header,
+descriptors and data.
+Define VM statistics descriptors and header for all architectures.
 
 Reviewed-by: David Matlack <dmatlack@google.com>
 Reviewed-by: Ricardo Koller <ricarkol@google.com>
@@ -123,442 +104,275 @@ Reviewed-by: Fuad Tabba <tabba@google.com>
 Tested-by: Fuad Tabba <tabba@google.com> #arm64
 Signed-off-by: Jing Zhang <jingzhangos@google.com>
 ---
- arch/arm64/kvm/Makefile   |   2 +-
- arch/mips/kvm/Makefile    |   2 +-
- arch/powerpc/kvm/Makefile |   2 +-
- arch/s390/kvm/Makefile    |   3 +-
- arch/x86/kvm/Makefile     |   2 +-
- include/linux/kvm_host.h  | 145 ++++++++++++++++++++++++++++++++++++++
- include/uapi/linux/kvm.h  |  42 +++++++++++
- virt/kvm/binary_stats.c   | 130 ++++++++++++++++++++++++++++++++++
- 8 files changed, 323 insertions(+), 5 deletions(-)
- create mode 100644 virt/kvm/binary_stats.c
+ arch/arm64/kvm/guest.c    | 14 +++++++++++++
+ arch/mips/kvm/mips.c      | 14 +++++++++++++
+ arch/powerpc/kvm/book3s.c | 16 +++++++++++++++
+ arch/powerpc/kvm/booke.c  | 16 +++++++++++++++
+ arch/s390/kvm/kvm-s390.c  | 19 +++++++++++++++++
+ arch/x86/kvm/x86.c        | 24 ++++++++++++++++++++++
+ include/linux/kvm_host.h  |  6 ++++++
+ virt/kvm/kvm_main.c       | 43 +++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 152 insertions(+)
 
-diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
-index 589921392cb1..989bb5dad2c8 100644
---- a/arch/arm64/kvm/Makefile
-+++ b/arch/arm64/kvm/Makefile
-@@ -11,7 +11,7 @@ obj-$(CONFIG_KVM) += kvm.o
- obj-$(CONFIG_KVM) += hyp/
+diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+index 4962331d01e6..f456d1defe2b 100644
+--- a/arch/arm64/kvm/guest.c
++++ b/arch/arm64/kvm/guest.c
+@@ -28,6 +28,20 @@
  
- kvm-y := $(KVM)/kvm_main.o $(KVM)/coalesced_mmio.o $(KVM)/eventfd.o \
--	 $(KVM)/vfio.o $(KVM)/irqchip.o \
-+	 $(KVM)/vfio.o $(KVM)/irqchip.o $(KVM)/binary_stats.o \
- 	 arm.o mmu.o mmio.o psci.o perf.o hypercalls.o pvtime.o \
- 	 inject_fault.o va_layout.o handle_exit.o \
- 	 guest.o debug.o reset.o sys_regs.o \
-diff --git a/arch/mips/kvm/Makefile b/arch/mips/kvm/Makefile
-index 30cc060857c7..c67250a956b8 100644
---- a/arch/mips/kvm/Makefile
-+++ b/arch/mips/kvm/Makefile
-@@ -2,7 +2,7 @@
- # Makefile for KVM support for MIPS
- #
+ #include "trace.h"
  
--common-objs-y = $(addprefix ../../../virt/kvm/, kvm_main.o coalesced_mmio.o eventfd.o)
-+common-objs-y = $(addprefix ../../../virt/kvm/, kvm_main.o coalesced_mmio.o eventfd.o binary_stats.o)
- 
- EXTRA_CFLAGS += -Ivirt/kvm -Iarch/mips/kvm
- 
-diff --git a/arch/powerpc/kvm/Makefile b/arch/powerpc/kvm/Makefile
-index 2bfeaa13befb..b347d043b932 100644
---- a/arch/powerpc/kvm/Makefile
-+++ b/arch/powerpc/kvm/Makefile
-@@ -6,7 +6,7 @@
- ccflags-y := -Ivirt/kvm -Iarch/powerpc/kvm
- KVM := ../../../virt/kvm
- 
--common-objs-y = $(KVM)/kvm_main.o $(KVM)/eventfd.o
-+common-objs-y = $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o
- common-objs-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
- common-objs-$(CONFIG_KVM_MMIO) += $(KVM)/coalesced_mmio.o
- 
-diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
-index 12decca22e7c..b3aaadc60ead 100644
---- a/arch/s390/kvm/Makefile
-+++ b/arch/s390/kvm/Makefile
-@@ -4,7 +4,8 @@
- # Copyright IBM Corp. 2008
- 
- KVM := ../../../virt/kvm
--common-objs = $(KVM)/kvm_main.o $(KVM)/eventfd.o  $(KVM)/async_pf.o $(KVM)/irqchip.o $(KVM)/vfio.o
-+common-objs = $(KVM)/kvm_main.o $(KVM)/eventfd.o  $(KVM)/async_pf.o \
-+	      $(KVM)/irqchip.o $(KVM)/vfio.o $(KVM)/binary_stats.o
- 
- ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
- 
-diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-index 83331376b779..75dfd27b6e8a 100644
---- a/arch/x86/kvm/Makefile
-+++ b/arch/x86/kvm/Makefile
-@@ -11,7 +11,7 @@ KVM := ../../../virt/kvm
- 
- kvm-y			+= $(KVM)/kvm_main.o $(KVM)/coalesced_mmio.o \
- 				$(KVM)/eventfd.o $(KVM)/irqchip.o $(KVM)/vfio.o \
--				$(KVM)/dirty_ring.o
-+				$(KVM)/dirty_ring.o $(KVM)/binary_stats.o
- kvm-$(CONFIG_KVM_ASYNC_PF)	+= $(KVM)/async_pf.o
- 
- kvm-y			+= x86.o emulate.o i8259.o irq.o lapic.o \
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 5a31e0696360..2f0d12064ae7 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1272,6 +1272,12 @@ struct kvm_stats_debugfs_item {
- 	int mode;
- };
- 
-+#define KVM_STATS_NAME_LEN	48
-+struct _kvm_stats_desc {
-+	struct kvm_stats_desc desc;
-+	char name[KVM_STATS_NAME_LEN];
++struct _kvm_stats_desc kvm_vm_stats_desc[] = {
++	KVM_GENERIC_VM_STATS()
++};
++static_assert(ARRAY_SIZE(kvm_vm_stats_desc) ==
++		sizeof(struct kvm_vm_stat) / sizeof(u64));
++
++struct kvm_stats_header kvm_vm_stats_header = {
++	.name_size = KVM_STATS_NAME_LEN,
++	.count = ARRAY_SIZE(kvm_vm_stats_desc),
++	.desc_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN,
++	.data_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN +
++		       sizeof(kvm_vm_stats_desc),
 +};
 +
- #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
- 	((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
+ 	VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
+diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+index ff205b35719b..a1c6b9c5a4ae 100644
+--- a/arch/mips/kvm/mips.c
++++ b/arch/mips/kvm/mips.c
+@@ -38,6 +38,20 @@
+ #define VECTORSPACING 0x100	/* for EI/VI mode */
+ #endif
  
-@@ -1285,8 +1291,147 @@ struct kvm_stats_debugfs_item {
- 	{ n, offsetof(struct kvm_vcpu, stat.generic.x),			       \
- 	  KVM_STAT_VCPU, ## __VA_ARGS__ }
++struct _kvm_stats_desc kvm_vm_stats_desc[] = {
++	KVM_GENERIC_VM_STATS()
++};
++static_assert(ARRAY_SIZE(kvm_vm_stats_desc) ==
++		sizeof(struct kvm_vm_stat) / sizeof(u64));
++
++struct kvm_stats_header kvm_vm_stats_header = {
++	.name_size = KVM_STATS_NAME_LEN,
++	.count = ARRAY_SIZE(kvm_vm_stats_desc),
++	.desc_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN,
++	.data_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN +
++		       sizeof(kvm_vm_stats_desc),
++};
++
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("wait", wait_exits),
+ 	VCPU_STAT("cache", cache_exits),
+diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+index 92cdb4175945..d3dfdddb4f7d 100644
+--- a/arch/powerpc/kvm/book3s.c
++++ b/arch/powerpc/kvm/book3s.c
+@@ -38,6 +38,22 @@
  
-+#define STATS_DESC_COMMON(type, unit, base, exp)			       \
-+	.flags = type | unit | base |					       \
-+	    BUILD_BUG_ON_ZERO(type & ~KVM_STATS_TYPE_MASK) |		       \
-+	    BUILD_BUG_ON_ZERO(unit & ~KVM_STATS_UNIT_MASK) |		       \
-+	    BUILD_BUG_ON_ZERO(base & ~KVM_STATS_BASE_MASK),		       \
-+	.exponent = exp,						       \
-+	.size = 1
+ /* #define EXIT_DEBUG */
+ 
++struct _kvm_stats_desc kvm_vm_stats_desc[] = {
++	KVM_GENERIC_VM_STATS(),
++	STATS_DESC_ICOUNTER(VM, num_2M_pages),
++	STATS_DESC_ICOUNTER(VM, num_1G_pages)
++};
++static_assert(ARRAY_SIZE(kvm_vm_stats_desc) ==
++		sizeof(struct kvm_vm_stat) / sizeof(u64));
 +
-+#define VM_GENERIC_STATS_DESC(stat, type, unit, base, exp)		       \
-+	{								       \
-+		{							       \
-+			STATS_DESC_COMMON(type, unit, base, exp),	       \
-+			.offset = offsetof(struct kvm_vm_stat, generic.stat)   \
-+		},							       \
-+		.name = #stat,						       \
-+	}
-+#define VCPU_GENERIC_STATS_DESC(stat, type, unit, base, exp)		       \
-+	{								       \
-+		{							       \
-+			STATS_DESC_COMMON(type, unit, base, exp),	       \
-+			.offset = offsetof(struct kvm_vcpu_stat, generic.stat) \
-+		},							       \
-+		.name = #stat,						       \
-+	}
-+#define VM_STATS_DESC(stat, type, unit, base, exp)			       \
-+	{								       \
-+		{							       \
-+			STATS_DESC_COMMON(type, unit, base, exp),	       \
-+			.offset = offsetof(struct kvm_vm_stat, stat)	       \
-+		},							       \
-+		.name = #stat,						       \
-+	}
-+#define VCPU_STATS_DESC(stat, type, unit, base, exp)			       \
-+	{								       \
-+		{							       \
-+			STATS_DESC_COMMON(type, unit, base, exp),	       \
-+			.offset = offsetof(struct kvm_vcpu_stat, stat)	       \
-+		},							       \
-+		.name = #stat,						       \
-+	}
-+/* SCOPE: VM, VM_GENERIC, VCPU, VCPU_GENERIC */
-+#define STATS_DESC(SCOPE, stat, type, unit, base, exp)			       \
-+	SCOPE##_STATS_DESC(stat, type, unit, base, exp)
++struct kvm_stats_header kvm_vm_stats_header = {
++	.name_size = KVM_STATS_NAME_LEN,
++	.count = ARRAY_SIZE(kvm_vm_stats_desc),
++	.desc_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN,
++	.data_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN +
++		       sizeof(kvm_vm_stats_desc),
++};
 +
-+#define STATS_DESC_CUMULATIVE(SCOPE, name, unit, base, exponent)	       \
-+	STATS_DESC(SCOPE, name, KVM_STATS_TYPE_CUMULATIVE,		       \
-+		      unit, base, exponent)
-+#define STATS_DESC_INSTANT(SCOPE, name, unit, base, exponent)		       \
-+	STATS_DESC(SCOPE, name, KVM_STATS_TYPE_INSTANT, unit, base, exponent)  \
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("exits", sum_exits),
+ 	VCPU_STAT("mmio", mmio_exits),
+diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
+index 80d3b39aa7ac..4e4a58b19487 100644
+--- a/arch/powerpc/kvm/booke.c
++++ b/arch/powerpc/kvm/booke.c
+@@ -36,6 +36,22 @@
+ 
+ unsigned long kvmppc_booke_handlers;
+ 
++struct _kvm_stats_desc kvm_vm_stats_desc[] = {
++	KVM_GENERIC_VM_STATS(),
++	STATS_DESC_ICOUNTER(VM, num_2M_pages),
++	STATS_DESC_ICOUNTER(VM, num_1G_pages)
++};
++static_assert(ARRAY_SIZE(kvm_vm_stats_desc) ==
++		sizeof(struct kvm_vm_stat) / sizeof(u64));
 +
-+/* Cumulative counter */
-+#define STATS_DESC_COUNTER(SCOPE, name)					       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_NONE,		       \
-+		KVM_STATS_BASE_POW10, 0)
-+/* Instantaneous counter */
-+#define STATS_DESC_ICOUNTER(SCOPE, name)				       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_NONE,		       \
-+		KVM_STATS_BASE_POW10, 0)
++struct kvm_stats_header kvm_vm_stats_header = {
++	.name_size = KVM_STATS_NAME_LEN,
++	.count = ARRAY_SIZE(kvm_vm_stats_desc),
++	.desc_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN,
++	.data_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN +
++		       sizeof(kvm_vm_stats_desc),
++};
 +
-+/* Cumulative clock cycles */
-+#define STATS_DESC_CYCLE(SCOPE, name)					       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_CYCLES,	       \
-+		KVM_STATS_BASE_POW10, 0)
-+/* Instantaneous clock cycles */
-+#define STATS_DESC_ICYCLE(SCOPE, name)					       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_CYCLES,		       \
-+		KVM_STATS_BASE_POW10, 0)
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("mmio", mmio_exits),
+ 	VCPU_STAT("sig", signal_exits),
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index e8bc7cd06794..89c0a2722183 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -58,6 +58,25 @@
+ #define VCPU_IRQS_MAX_BUF (sizeof(struct kvm_s390_irq) * \
+ 			   (KVM_MAX_VCPUS + LOCAL_IRQS))
+ 
++struct _kvm_stats_desc kvm_vm_stats_desc[] = {
++	KVM_GENERIC_VM_STATS(),
++	STATS_DESC_COUNTER(VM, inject_io),
++	STATS_DESC_COUNTER(VM, inject_float_mchk),
++	STATS_DESC_COUNTER(VM, inject_pfault_done),
++	STATS_DESC_COUNTER(VM, inject_service_signal),
++	STATS_DESC_COUNTER(VM, inject_virtio)
++};
++static_assert(ARRAY_SIZE(kvm_vm_stats_desc) ==
++		sizeof(struct kvm_vm_stat) / sizeof(u64));
 +
-+/* Cumulative memory size in Byte */
-+#define STATS_DESC_SIZE_BYTE(SCOPE, name)				       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_BYTES,	       \
-+		KVM_STATS_BASE_POW2, 0)
-+/* Cumulative memory size in KiByte */
-+#define STATS_DESC_SIZE_KBYTE(SCOPE, name)				       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_BYTES,	       \
-+		KVM_STATS_BASE_POW2, 10)
-+/* Cumulative memory size in MiByte */
-+#define STATS_DESC_SIZE_MBYTE(SCOPE, name)				       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_BYTES,	       \
-+		KVM_STATS_BASE_POW2, 20)
-+/* Cumulative memory size in GiByte */
-+#define STATS_DESC_SIZE_GBYTE(SCOPE, name)				       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_BYTES,	       \
-+		KVM_STATS_BASE_POW2, 30)
++struct kvm_stats_header kvm_vm_stats_header = {
++	.name_size = KVM_STATS_NAME_LEN,
++	.count = ARRAY_SIZE(kvm_vm_stats_desc),
++	.desc_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN,
++	.data_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN +
++		       sizeof(kvm_vm_stats_desc),
++};
 +
-+/* Instantaneous memory size in Byte */
-+#define STATS_DESC_ISIZE_BYTE(SCOPE, name)				       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_BYTES,		       \
-+		KVM_STATS_BASE_POW2, 0)
-+/* Instantaneous memory size in KiByte */
-+#define STATS_DESC_ISIZE_KBYTE(SCOPE, name)				       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_BYTES,		       \
-+		KVM_STATS_BASE_POW2, 10)
-+/* Instantaneous memory size in MiByte */
-+#define STATS_DESC_ISIZE_MBYTE(SCOPE, name)				       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_BYTES,		       \
-+		KVM_STATS_BASE_POW2, 20)
-+/* Instantaneous memory size in GiByte */
-+#define STATS_DESC_ISIZE_GBYTE(SCOPE, name)				       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_BYTES,		       \
-+		KVM_STATS_BASE_POW2, 30)
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("userspace_handled", exit_userspace),
+ 	VCPU_STAT("exit_null", exit_null),
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 157212157aee..a461d9d79865 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -223,6 +223,30 @@ EXPORT_SYMBOL_GPL(host_xss);
+ u64 __read_mostly supported_xss;
+ EXPORT_SYMBOL_GPL(supported_xss);
+ 
++struct _kvm_stats_desc kvm_vm_stats_desc[] = {
++	KVM_GENERIC_VM_STATS(),
++	STATS_DESC_COUNTER(VM, mmu_shadow_zapped),
++	STATS_DESC_COUNTER(VM, mmu_pte_write),
++	STATS_DESC_COUNTER(VM, mmu_pde_zapped),
++	STATS_DESC_COUNTER(VM, mmu_flooded),
++	STATS_DESC_COUNTER(VM, mmu_recycled),
++	STATS_DESC_COUNTER(VM, mmu_cache_miss),
++	STATS_DESC_ICOUNTER(VM, mmu_unsync),
++	STATS_DESC_ICOUNTER(VM, lpages),
++	STATS_DESC_ICOUNTER(VM, nx_lpage_splits),
++	STATS_DESC_ICOUNTER(VM, max_mmu_page_hash_collisions)
++};
++static_assert(ARRAY_SIZE(kvm_vm_stats_desc) ==
++		sizeof(struct kvm_vm_stat) / sizeof(u64));
 +
-+/* Cumulative time in second */
-+#define STATS_DESC_TIME_SEC(SCOPE, name)				       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_SECONDS,	       \
-+		KVM_STATS_BASE_POW10, 0)
-+/* Cumulative time in millisecond */
-+#define STATS_DESC_TIME_MSEC(SCOPE, name)				       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_SECONDS,	       \
-+		KVM_STATS_BASE_POW10, -3)
-+/* Cumulative time in microsecond */
-+#define STATS_DESC_TIME_USEC(SCOPE, name)				       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_SECONDS,	       \
-+		KVM_STATS_BASE_POW10, -6)
-+/* Cumulative time in nanosecond */
-+#define STATS_DESC_TIME_NSEC(SCOPE, name)				       \
-+	STATS_DESC_CUMULATIVE(SCOPE, name, KVM_STATS_UNIT_SECONDS,	       \
-+		KVM_STATS_BASE_POW10, -9)
++struct kvm_stats_header kvm_vm_stats_header = {
++		.name_size = KVM_STATS_NAME_LEN,
++		.count = ARRAY_SIZE(kvm_vm_stats_desc),
++		.desc_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN,
++		.data_offset = sizeof(struct kvm_stats_header) + KVM_STATS_ID_MAXLEN +
++			       sizeof(kvm_vm_stats_desc),
++};
 +
-+/* Instantaneous time in second */
-+#define STATS_DESC_ITIME_SEC(SCOPE, name)				       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_BASE_POW10, 0)
-+/* Instantaneous time in millisecond */
-+#define STATS_DESC_ITIME_MSEC(SCOPE, name)				       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_BASE_POW10, -3)
-+/* Instantaneous time in microsecond */
-+#define STATS_DESC_ITIME_USEC(SCOPE, name)				       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_BASE_POW10, -6)
-+/* Instantaneous time in nanosecond */
-+#define STATS_DESC_ITIME_NSEC(SCOPE, name)				       \
-+	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_BASE_POW10, -9)
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("pf_fixed", pf_fixed),
+ 	VCPU_STAT("pf_guest", pf_guest),
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 2f0d12064ae7..4c73bc761f96 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -599,6 +599,7 @@ struct kvm {
+ #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
+ 	struct notifier_block pm_notifier;
+ #endif
++	char stats_id[KVM_STATS_ID_MAXLEN];
+ };
+ 
+ #define kvm_err(fmt, ...) \
+@@ -1427,11 +1428,16 @@ struct _kvm_stats_desc {
+ 	STATS_DESC_INSTANT(SCOPE, name, KVM_STATS_UNIT_SECONDS,		       \
+ 		KVM_STATS_BASE_POW10, -9)
+ 
++#define KVM_GENERIC_VM_STATS()						       \
++	STATS_DESC_COUNTER(VM_GENERIC, remote_tlb_flush)
 +
  extern struct kvm_stats_debugfs_item debugfs_entries[];
  extern struct dentry *kvm_debugfs_dir;
-+ssize_t kvm_stats_read(char *id, struct kvm_stats_header *header,
-+		struct _kvm_stats_desc *desc, void *stats, size_t size_stats,
-+		char __user *user_buffer, size_t size, loff_t *offset);
+ ssize_t kvm_stats_read(char *id, struct kvm_stats_header *header,
+ 		struct _kvm_stats_desc *desc, void *stats, size_t size_stats,
+ 		char __user *user_buffer, size_t size, loff_t *offset);
++extern struct kvm_stats_header kvm_vm_stats_header;
++extern struct _kvm_stats_desc kvm_vm_stats_desc[];
  
  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
  static inline int mmu_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 9febe1412f7a..ab73e905105c 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1086,6 +1086,7 @@ struct kvm_ppc_resize_hpt {
- #define KVM_CAP_HYPERV_ENFORCE_CPUID 199
- #define KVM_CAP_SREGS2 200
- #define KVM_CAP_EXIT_HYPERCALL 201
-+#define KVM_CAP_BINARY_STATS_FD 202
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index cec986487b30..cf0d487272b9 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -4055,6 +4055,46 @@ static int kvm_vm_ioctl_enable_cap_generic(struct kvm *kvm,
+ 	}
+ }
  
- #ifdef KVM_CAP_IRQ_ROUTING
- 
-@@ -1905,4 +1906,45 @@ struct kvm_dirty_gfn {
- #define KVM_BUS_LOCK_DETECTION_OFF             (1 << 0)
- #define KVM_BUS_LOCK_DETECTION_EXIT            (1 << 1)
- 
-+#define KVM_STATS_ID_MAXLEN		64
-+
-+struct kvm_stats_header {
-+	__u32 name_size;
-+	__u32 count;
-+	__u32 desc_offset;
-+	__u32 data_offset;
-+	char id[];
-+};
-+
-+#define KVM_STATS_TYPE_SHIFT		0
-+#define KVM_STATS_TYPE_MASK		(0xF << KVM_STATS_TYPE_SHIFT)
-+#define KVM_STATS_TYPE_CUMULATIVE	(0x0 << KVM_STATS_TYPE_SHIFT)
-+#define KVM_STATS_TYPE_INSTANT		(0x1 << KVM_STATS_TYPE_SHIFT)
-+#define KVM_STATS_TYPE_MAX		KVM_STATS_TYPE_INSTANT
-+
-+#define KVM_STATS_UNIT_SHIFT		4
-+#define KVM_STATS_UNIT_MASK		(0xF << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_NONE		(0x0 << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_BYTES		(0x1 << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_SECONDS		(0x2 << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_CYCLES		(0x3 << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_MAX		KVM_STATS_UNIT_CYCLES
-+
-+#define KVM_STATS_BASE_SHIFT		8
-+#define KVM_STATS_BASE_MASK		(0xF << KVM_STATS_BASE_SHIFT)
-+#define KVM_STATS_BASE_POW10		(0x0 << KVM_STATS_BASE_SHIFT)
-+#define KVM_STATS_BASE_POW2		(0x1 << KVM_STATS_BASE_SHIFT)
-+#define KVM_STATS_BASE_MAX		KVM_STATS_BASE_POW2
-+
-+struct kvm_stats_desc {
-+	__u32 flags;
-+	__s16 exponent;
-+	__u16 size;
-+	__u32 offset;
-+	__u32 unused;
-+	char name[];
-+};
-+
-+#define KVM_GET_STATS_FD  _IO(KVMIO,  0xce)
-+
- #endif /* __LINUX_KVM_H */
-diff --git a/virt/kvm/binary_stats.c b/virt/kvm/binary_stats.c
-new file mode 100644
-index 000000000000..1517e91d295b
---- /dev/null
-+++ b/virt/kvm/binary_stats.c
-@@ -0,0 +1,130 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * KVM binary statistics interface implementation
-+ *
-+ * Copyright 2021 Google LLC
-+ */
-+
-+#include <linux/kvm_host.h>
-+#include <linux/kvm.h>
-+#include <linux/errno.h>
-+#include <linux/uaccess.h>
-+
-+/*
-+ * Common vm/vcpu stats read function to userspace.
-+ * @id: identification string of the stats
-+ * @header: stats header for a vm or a vcpu
-+ * @desc: start address of an array of stats descriptors for a vm or a vcpu
-+ * @stats: start address of stats data block for a vm or a vcpu
-+ * @size_stats: the size of stats data block pointed by @stats
-+ * @user_buffer: start address of userspace buffer
-+ * @size: requested read size from userspace
-+ * @offset: the start position from which the content will be read for the
-+ *          corresponding vm or vcp file descriptor
-+ *
-+ * The file content of a vm/vcpu file descriptor is now defined as below:
-+ * +-------------+
-+ * |   Header    |
-+ * +-------------+
-+ * | Descriptors |
-+ * +-------------+
-+ * | Stats Data  |
-+ * +-------------+
-+ * Although this function allows userspace to read any amount of data (as long
-+ * as in the limit) from any position, the typical usage would follow below
-+ * steps:
-+ * 1. Read header from offset 0. Get the offset of descriptors and stats data
-+ *    and some other necessary information. This is a one-time work for the
-+ *    lifecycle of the corresponding vm/vcpu stats fd.
-+ * 2. Read descriptors from its offset and discover all the stats by parsing
-+ *    descriptors. This is a one-time work for the lifecycle of the
-+ *    corresponding vm/vcpu stats fd.
-+ * 3. Periodically read stats data from its offset.
-+ */
-+ssize_t kvm_stats_read(char *id, struct kvm_stats_header *header,
-+		struct _kvm_stats_desc *desc, void *stats, size_t size_stats,
-+		char __user *user_buffer, size_t size, loff_t *offset)
++static ssize_t kvm_vm_stats_read(struct file *file, char __user *user_buffer,
++			      size_t size, loff_t *offset)
 +{
-+	ssize_t len;
-+	ssize_t copylen;
-+	ssize_t remain = size;
-+	size_t size_desc;
-+	size_t size_header;
-+	void *src;
-+	loff_t pos = *offset;
-+	char __user *dest = user_buffer;
++	struct kvm *kvm = file->private_data;
 +
-+	size_header = sizeof(*header);
-+	size_desc = header->count * sizeof(*desc);
-+
-+	len = KVM_STATS_ID_MAXLEN + size_header + size_desc + size_stats - pos;
-+	len = min(len, remain);
-+	if (len <= 0)
-+		return 0;
-+	remain = len;
-+
-+	/* Copy kvm stats header.
-+	 * The header is the first block of content userspace usually read out.
-+	 * The pos is 0 and the copylen and remain would be the size of header.
-+	 * The copy of the header would be skipped if offset is larger than the
-+	 * size of header. That usually happens when userspace reads stats
-+	 * descriptors and stats data.
-+	 */
-+	copylen = size_header - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)header + pos;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+
-+	/* Copy kvm stats header id string.
-+	 * The id string is unique for every vm/vcpu, which is stored in kvm
-+	 * and kvm_vcpu structure.
-+	 */
-+	copylen = size_header + KVM_STATS_ID_MAXLEN - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = id + pos - size_header;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+
-+	/* Copy kvm stats descriptors.
-+	 * The descriptors copy would be skipped in the typical case that
-+	 * userspace periodically read stats data, since the pos would be
-+	 * greater than the end address of descriptors
-+	 * (header->header.desc_offset + size_desc) causing copylen <= 0.
-+	 */
-+	copylen = header->desc_offset + size_desc - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)desc + pos - header->desc_offset;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+
-+	/* Copy kvm stats values */
-+	copylen = header->data_offset + size_stats - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = stats + pos - header->data_offset;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+
-+	*offset = pos;
-+	return len;
++	return kvm_stats_read(kvm->stats_id, &kvm_vm_stats_header,
++				&kvm_vm_stats_desc[0], &kvm->stat,
++				sizeof(kvm->stat), user_buffer, size, offset);
 +}
++
++static const struct file_operations kvm_vm_stats_fops = {
++	.read = kvm_vm_stats_read,
++	.llseek = noop_llseek,
++};
++
++static int kvm_vm_ioctl_get_stats_fd(struct kvm *kvm)
++{
++	int fd;
++	struct file *file;
++
++	fd = get_unused_fd_flags(O_CLOEXEC);
++	if (fd < 0)
++		return fd;
++
++	file = anon_inode_getfile("kvm-vm-stats",
++			&kvm_vm_stats_fops, kvm, O_RDONLY);
++	if (IS_ERR(file)) {
++		put_unused_fd(fd);
++		return PTR_ERR(file);
++	}
++	file->f_mode |= FMODE_PREAD;
++	fd_install(fd, file);
++
++	/* Fill the stats id string */
++	snprintf(kvm->stats_id, sizeof(kvm->stats_id),
++			"kvm-%d", task_pid_nr(current));
++
++	return fd;
++}
++
+ static long kvm_vm_ioctl(struct file *filp,
+ 			   unsigned int ioctl, unsigned long arg)
+ {
+@@ -4237,6 +4277,9 @@ static long kvm_vm_ioctl(struct file *filp,
+ 	case KVM_RESET_DIRTY_RINGS:
+ 		r = kvm_vm_ioctl_reset_dirty_pages(kvm);
+ 		break;
++	case KVM_GET_STATS_FD:
++		r = kvm_vm_ioctl_get_stats_fd(kvm);
++		break;
+ 	default:
+ 		r = kvm_arch_vm_ioctl(filp, ioctl, arg);
+ 	}
 -- 
 2.32.0.288.g62a8d224e6-goog
 
