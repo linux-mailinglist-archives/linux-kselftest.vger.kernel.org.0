@@ -2,73 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C568D3AD24B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jun 2021 20:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B813AD2CD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jun 2021 21:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234540AbhFRSmP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Jun 2021 14:42:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53038 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231756AbhFRSmO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Jun 2021 14:42:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1241D613E2;
-        Fri, 18 Jun 2021 18:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624041605;
-        bh=96/QUeZIvhZBsbi6iS5CCzH6fFpQyEwQzqI2QAcyNNM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IzfBz8XNoTu21NHARdpp4M80vPmngzraqAADTzj4hmV8hQNtP+B+ds4nuUc6udlRL
-         neTlosGwdG3NDwKwuxL2GxA2zXNOOd0RrT911S5HNkJHf1kLi3ulSk0sL7WuSUT9ZV
-         NM+7zModa5IHAkPWlD8m4yPi2QKgY2EFgNBlus/GcX8Bn4nNBiYsXXBfJlZk4k0760
-         zoUy/yQ3K//EhVFeCaqcZ/1rIHv7a40XvcbAR3Dt3t91/Tkd8abtSkmzCyhg9RCe1m
-         NXrL7IhZyQ9Usk6MUbtyWh1wfsdD0LLMolpU1IB1jz8fLUV8/jW47jMVFRx/1czUhG
-         kF7xYcTWv7VrA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0512560CE2;
-        Fri, 18 Jun 2021 18:40:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S233006AbhFRTcM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Jun 2021 15:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232152AbhFRTcL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 18 Jun 2021 15:32:11 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C022C061574;
+        Fri, 18 Jun 2021 12:30:01 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id E9D041F44CE8
+Subject: Re: [PATCH] selftests/lkdtm: Use /bin/sh not $SHELL
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
+Cc:     stable@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210617231027.3908585-1-keescook@chromium.org>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+Message-ID: <57775fe8-d9c2-4004-b8c5-0247faf33aa4@collabora.com>
+Date:   Fri, 18 Jun 2021 20:29:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next v1 0/2] seg6: add support for SRv6 End.DT46 Behavior
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162404160501.23407.2102812799058333171.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Jun 2021 18:40:05 +0000
-References: <20210617171645.7970-1-andrea.mayer@uniroma2.it>
-In-Reply-To: <20210617171645.7970-1-andrea.mayer@uniroma2.it>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        stefano.salsano@uniroma2.it, paolo.lungaroni@uniroma2.it,
-        ahabdels.dev@gmail.com
+In-Reply-To: <20210617231027.3908585-1-keescook@chromium.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On 18/06/2021 00:10, Kees Cook wrote:
+> Some environments (e.g. kerneci.org) do not set $SHELL for their test
+> environment. There's no need to use $SHELL here anyway, so just replace
+> it with hard-coded /bin/sh instead. Without this, the LKDTM tests would
+> never actually run on kerneci.org.
 
-This series was applied to netdev/net-next.git (refs/heads/master):
+There's a bit more to it...  The lkdtm tests make use of the
+process substitution feature with the <() syntax which is
+specific to Bash.  The tests run by KernelCI use Debian, where
+/bin/sh points to /bin/dash by default which doesn't support this
+feature.  So one way to fix it would be:
 
-On Thu, 17 Jun 2021 19:16:43 +0200 you wrote:
-> SRv6 End.DT46 Behavior is defined in the IETF RFC 8986 [1] along with SRv6
-> End.DT4 and End.DT6 Behaviors.
+  (/bin/bash -c 'cat <(echo '"$test"') >'"$TRIGGER")
+
+However, this might break others' workflows.
+
+In fact the LAVA jobs run by KernelCI do define the $SHELL
+environment variable except it's defined to be /bin/sh - and that
+means /bin/dash gets called and we're back to the issue explained
+above.
+
+I've manually run a modified test job which defines
+SHELL=/bin/bash and that works:
+
+  https://lava.collabora.co.uk/scheduler/job/4055547#L2835
+
+So to avoid hitting the same issue in other places, as it seems
+like there is an implicit dependency on Bash, we can just change
+KernelCI kselftest jobs to always export SHELL=/bin/bash.
+
+I suppose an even better fix would be to use standard shell
+features that would work with any /bin/sh implementation, but
+this is there to kill the sub-shell rather than the main script
+process so I'm not entirely sure if we can easily do that
+differently.  Maybe we can pipe the output to cat rather than the
+substitution syntax, e.g.:
+
+  (/bin/sh -c '(echo '"$test"') | cat >'"$TRIGGER") || true
+
+
+So I think the "safest" solution is to not change the kselftest
+script and export SHELL=/bin/bash in the KernelCI jobs.  If the
+pipe approach is good enough at catching signals then it could be
+done on top of this patch as it's standard and should work with
+any /bin/sh implementation.  What do you think?
+
+Thanks,
+Guillaume
+
+
+> Fixes: 46d1a0f03d66 ("selftests/lkdtm: Add tests for LKDTM targets")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  tools/testing/selftests/lkdtm/run.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> The proposed End.DT46 implementation is meant to support the decapsulation
-> of both IPv4 and IPv6 traffic coming from a *single* SRv6 tunnel.
-> The SRv6 End.DT46 Behavior greatly simplifies the setup and operations of
-> SRv6 VPNs in the Linux kernel.
+> diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
+> index bb7a1775307b..968ff3cf5667 100755
+> --- a/tools/testing/selftests/lkdtm/run.sh
+> +++ b/tools/testing/selftests/lkdtm/run.sh
+> @@ -79,7 +79,7 @@ dmesg > "$DMESG"
+>  # Most shells yell about signals and we're expecting the "cat" process
+>  # to usually be killed by the kernel. So we have to run it in a sub-shell
+>  # and silence errors.
+> -($SHELL -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
+> +(/bin/sh -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
+>  
+>  # Record and dump the results
+>  dmesg | comm --nocheck-order -13 "$DMESG" - > "$LOG" || true
 > 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v1,1/2] seg6: add support for SRv6 End.DT46 Behavior
-    https://git.kernel.org/netdev/net-next/c/8b532109bf88
-  - [net-next,v1,2/2] selftests: seg6: add selftest for SRv6 End.DT46 Behavior
-    https://git.kernel.org/netdev/net-next/c/03a0b567a03d
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
 
