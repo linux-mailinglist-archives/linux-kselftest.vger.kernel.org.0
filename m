@@ -2,185 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48ECA3AD4D7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jun 2021 00:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D533AD4C6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jun 2021 00:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234869AbhFRWMS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Jun 2021 18:12:18 -0400
-Received: from novek.ru ([213.148.174.62]:34992 "EHLO novek.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234752AbhFRWMR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Jun 2021 18:12:17 -0400
-X-Greylist: delayed 439 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Jun 2021 18:12:16 EDT
-Received: from [192.168.0.18] (unknown [37.228.234.253])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by novek.ru (Postfix) with ESMTPSA id 8AABE503BBB;
-        Sat, 19 Jun 2021 01:01:14 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru 8AABE503BBB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
-        t=1624053676; bh=Or5GERcBLdJFGD7tDZ2zg/P5FsNM2mzNL1Ozt3PriIA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=biCGIiz6vz7PDRSKjt8amwyM2+n/iYJ6p//P4UNuQmtNQ6eDTN4uti+RFru0JAzQu
-         GkRULpXZyKSyYOHfHMRXxS56LRD9zRR27TxVQX/FrYpFEYY9kBfNQbBWuzIUFzzr5Z
-         oci+376Si08YIFOljsDWYZHkORgvHxg4Ae7Q9/hE=
-Subject: Re: [PATCH net 2/2] selftests: tls: fix chacha+bidir tests
-To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-References: <20210618202504.1435179-1-kuba@kernel.org>
- <20210618202504.1435179-2-kuba@kernel.org>
-From:   Vadim Fedorenko <vfedorenko@novek.ru>
-Message-ID: <2ab110a6-a2a0-c5c7-29e5-ed38fb438176@novek.ru>
-Date:   Fri, 18 Jun 2021 23:03:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S233715AbhFRWGe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Jun 2021 18:06:34 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39934 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234045AbhFRWGa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 18 Jun 2021 18:06:30 -0400
+Received: from mail-oi1-f197.google.com ([209.85.167.197])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <seth.forshee@canonical.com>)
+        id 1luMb5-0006CP-1O
+        for linux-kselftest@vger.kernel.org; Fri, 18 Jun 2021 22:04:19 +0000
+Received: by mail-oi1-f197.google.com with SMTP id a8-20020aca1a080000b029021d9ff07a80so3418332oia.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 15:04:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aq0a1ZzhEowcsGM4Ha6B4ggHKmP/83PVuQLh/mwbb0s=;
+        b=HL+igfelift04B5KORtHy1McYv0K9se2EQ4C3lGsMf47v7OvMibCNxGSAu9cg2S8Ut
+         l7YbsPWlT+pElEf3hLyTJmczBadWNCAaP4eAclqG4W+AJhIpzqRNg+ikN1ag9WRY9SOB
+         likVDFfvxq7LrsxwQEXrnJTd2qGrGLJorh1eB0xMdVKFKc41fDoAw2/qrOuB+9qvWbHa
+         sal2TjkfxoksFBTQJJx+ykDSSFLHlAhQ+OrHnHegxm9KjC3Q5pjHbN7OkwaHt4JH3QhJ
+         URWbbTk0ZinndZ73SZ+usHQnJFGBi5h2MwqdUKi2OF9NKFGChdnlV5N2WZ9uJ1HcOqux
+         PJ6Q==
+X-Gm-Message-State: AOAM530k78eSxFzrpRHHMdcrLrDmY/p52Al2NLFoenN7E3QI/iXGLx/S
+        1L2/37C9ig9wMHryZyLD8zt4lgy7dhk4vaIP70w7Sv4E2jPpCI3ntrSpwFC+Dq8nBD80q8Cs5bm
+        laONgNIeNbDeJk5Mk5LEQ2FhiJMQWW4bik9et4hPgOhk/zA==
+X-Received: by 2002:a05:6830:1bcb:: with SMTP id v11mr11602653ota.251.1624053858035;
+        Fri, 18 Jun 2021 15:04:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz1bahtyGa53x41WidzwyFgCcVxW+PsY5lEFKzqLLxQJsRyXgTP+B21L5nf31XFlHQryWU42Q==
+X-Received: by 2002:a05:6830:1bcb:: with SMTP id v11mr11602630ota.251.1624053857818;
+        Fri, 18 Jun 2021 15:04:17 -0700 (PDT)
+Received: from localhost ([2605:a601:ac0f:820:44f9:bfd8:94bd:f2e3])
+        by smtp.gmail.com with ESMTPSA id y13sm2355582ots.47.2021.06.18.15.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Jun 2021 15:04:17 -0700 (PDT)
+Date:   Fri, 18 Jun 2021 17:04:16 -0500
+From:   Seth Forshee <seth.forshee@canonical.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/tls: don't change cipher type in bidirectional
+ test
+Message-ID: <YM0YYNrkihtExlTR@ubuntu-x1>
+References: <20210618204532.257773-1-seth.forshee@canonical.com>
+ <20210618144149.35192fcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-In-Reply-To: <20210618202504.1435179-2-kuba@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED,NICE_REPLY_A
-        autolearn=ham autolearn_force=no version=3.4.1
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on gate.novek.ru
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210618144149.35192fcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 18.06.2021 21:25, Jakub Kicinski wrote:
-> ChaCha support did not adjust the bidirectional test.
-> We need to set up KTLS in reverse direction correctly,
-> otherwise these two cases will fail:
+On Fri, Jun 18, 2021 at 02:41:49PM -0700, Jakub Kicinski wrote:
+> On Fri, 18 Jun 2021 15:45:32 -0500 Seth Forshee wrote:
+> > The bidirectional test attempts to change the cipher to
+> > TLS_CIPHER_AES_GCM_128. The test fixture setup will have already set
+> > the cipher to be tested, and if it was different than the one set by
+> > the bidir test setsockopt() will fail on account of having different
+> > ciphers for rx and tx, causing the test to fail.
 > 
->    tls.12_chacha.bidir
->    tls.13_chacha.bidir
-> 
-> Fixes: 4f336e88a870 ("selftests/tls: add CHACHA20-POLY1305 to tls selftests")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->   tools/testing/selftests/net/tls.c | 67 ++++++++++++++++++-------------
->   1 file changed, 39 insertions(+), 28 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-> index 58fea6eb588d..112d41d01b12 100644
-> --- a/tools/testing/selftests/net/tls.c
-> +++ b/tools/testing/selftests/net/tls.c
-> @@ -25,6 +25,35 @@
->   #define TLS_PAYLOAD_MAX_LEN 16384
->   #define SOL_TLS 282
->   
-> +struct tls_crypto_info_keys {
-> +	union {
-> +		struct tls12_crypto_info_aes_gcm_128 aes128;
-> +		struct tls12_crypto_info_chacha20_poly1305 chacha20;
-> +	};
-> +	size_t len;
-> +};
-> +
-> +static void tls_crypto_info_init(uint16_t tls_version, uint16_t cipher_type,
-> +				 struct tls_crypto_info_keys *tls12)
-> +{
-> +	memset(tls12, 0, sizeof(*tls12));
-> +
-> +	switch (cipher_type) {
-> +	case TLS_CIPHER_CHACHA20_POLY1305:
-> +		tls12->len = sizeof(struct tls12_crypto_info_chacha20_poly1305);
-> +		tls12->chacha20.info.version = tls_version;
-> +		tls12->chacha20.info.cipher_type = cipher_type;
-> +		break;
-> +	case TLS_CIPHER_AES_GCM_128:
-> +		tls12->len = sizeof(struct tls12_crypto_info_aes_gcm_128);
-> +		tls12->aes128.info.version = tls_version;
-> +		tls12->aes128.info.cipher_type = cipher_type;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +}
-> +
->   static void memrnd(void *s, size_t n)
->   {
->   	int *dword = s;
-> @@ -145,33 +174,16 @@ FIXTURE_VARIANT_ADD(tls, 13_chacha)
->   
->   FIXTURE_SETUP(tls)
->   {
-> -	union {
-> -		struct tls12_crypto_info_aes_gcm_128 aes128;
-> -		struct tls12_crypto_info_chacha20_poly1305 chacha20;
-> -	} tls12;
-> +	struct tls_crypto_info_keys tls12;
->   	struct sockaddr_in addr;
->   	socklen_t len;
->   	int sfd, ret;
-> -	size_t tls12_sz;
->   
->   	self->notls = false;
->   	len = sizeof(addr);
->   
-> -	memset(&tls12, 0, sizeof(tls12));
-> -	switch (variant->cipher_type) {
-> -	case TLS_CIPHER_CHACHA20_POLY1305:
-> -		tls12_sz = sizeof(struct tls12_crypto_info_chacha20_poly1305);
-> -		tls12.chacha20.info.version = variant->tls_version;
-> -		tls12.chacha20.info.cipher_type = variant->cipher_type;
-> -		break;
-> -	case TLS_CIPHER_AES_GCM_128:
-> -		tls12_sz = sizeof(struct tls12_crypto_info_aes_gcm_128);
-> -		tls12.aes128.info.version = variant->tls_version;
-> -		tls12.aes128.info.cipher_type = variant->cipher_type;
-> -		break;
-> -	default:
-> -		tls12_sz = 0;
-> -	}
-> +	tls_crypto_info_init(variant->tls_version, variant->cipher_type,
-> +			     &tls12);
->   
->   	addr.sin_family = AF_INET;
->   	addr.sin_addr.s_addr = htonl(INADDR_ANY);
-> @@ -199,7 +211,7 @@ FIXTURE_SETUP(tls)
->   
->   	if (!self->notls) {
->   		ret = setsockopt(self->fd, SOL_TLS, TLS_TX, &tls12,
-> -				 tls12_sz);
-> +				 tls12.len);
->   		ASSERT_EQ(ret, 0);
->   	}
->   
-> @@ -212,7 +224,7 @@ FIXTURE_SETUP(tls)
->   		ASSERT_EQ(ret, 0);
->   
->   		ret = setsockopt(self->cfd, SOL_TLS, TLS_RX, &tls12,
-> -				 tls12_sz);
-> +				 tls12.len);
->   		ASSERT_EQ(ret, 0);
->   	}
->   
-> @@ -854,18 +866,17 @@ TEST_F(tls, bidir)
->   	int ret;
->   
->   	if (!self->notls) {
-> -		struct tls12_crypto_info_aes_gcm_128 tls12;
-> +		struct tls_crypto_info_keys tls12;
->   
-> -		memset(&tls12, 0, sizeof(tls12));
-> -		tls12.info.version = variant->tls_version;
-> -		tls12.info.cipher_type = TLS_CIPHER_AES_GCM_128;
-> +		tls_crypto_info_init(variant->tls_version, variant->cipher_type,
-> +				     &tls12);
->   
->   		ret = setsockopt(self->fd, SOL_TLS, TLS_RX, &tls12,
-> -				 sizeof(tls12));
-> +				 tls12.len);
->   		ASSERT_EQ(ret, 0);
->   
->   		ret = setsockopt(self->cfd, SOL_TLS, TLS_TX, &tls12,
-> -				 sizeof(tls12));
-> +				 tls12.len);
->   		ASSERT_EQ(ret, 0);
->   	}
->   
-> 
+> It's setting it up in the opposite direction, TLS is uni-directional.
+> I've posted this earlier:
 
-Acked-by: Vadim Fedorenko <vfedorenko@novek.ru>
+Ah, so it is, I missed that detail.
 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20210618202504.1435179-2-kuba@kernel.org/
+> 
+> Sorry for not CCing you.
+
+No worries.
+
+Thanks,
+Seth
