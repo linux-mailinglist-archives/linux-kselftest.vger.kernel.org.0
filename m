@@ -2,53 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C27173AC270
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jun 2021 06:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39ED53AC278
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jun 2021 06:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbhFREuc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Jun 2021 00:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
+        id S231925AbhFREue (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Jun 2021 00:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbhFREub (ORCPT
+        with ESMTP id S232094AbhFREud (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Jun 2021 00:50:31 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D823C061760
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 21:48:23 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id p17-20020a056a000b51b02902f9e70d70ecso5043974pfo.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 21:48:23 -0700 (PDT)
+        Fri, 18 Jun 2021 00:50:33 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD54C0617A6
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 21:48:24 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id u12-20020a17090abb0cb029016ee12ec9a1so4693125pjr.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 21:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=aX5vzwr4uX568u1A1NtAetcO8H5b06l0VkOaAxAnVkA=;
-        b=tGukxaCQCc4unz3T4o+1k0603INSgUYlITVDfwwxW++mV230YThTVX3uCxQj4LPeyV
-         3tm06/AS0y5aN6UK0EwyOKWiRohe3ONlbCdGuGqjcnREBxpAyAv8DP0+F+cY7XOqaHw1
-         7k42a9bIJ1Fee1o5+wigkWZooFIb0jYeG+XGss6wAugAWZPyeo+HUsDOauBm1Il8f4P+
-         FUNhuo9ZSeAvtjf3L27zPcNWsbbSlPmt9h1IwZZLoRPjynf6iBgu9eEBGxffroGj9/RG
-         XBHxo7/gRpWxb9UUjGtV/B2xSoT61OqmSFGwBrpukiIJqlz67koILyqmP2Y/FucTrV86
-         8J6Q==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=M78Z4OClBf/fnakq+ndoN1fDUyTSsxV3xBryMm0NkH4=;
+        b=lsSVDTY715cWnGuJy/0cPOG81wOjFxN16yyukBHIyODjjkT+IKISfK1Jzs+P5l0OKn
+         pkfRvavWPNO/Y3k3r20x0MAldD3hvLvF/nNX0dfqy46MGPQXzn1yGp0yITTaT1U+/yOv
+         I+6bM848FT6mehsghgc1KJgEK3JNqwxpG6bqpEaCPODfz7+jxnmunHpOktvB91YcQv2h
+         Z228t9Fho6l+1yfLF9WejQe5ZvNDB2z3QnLUVMQ96DU9u9bICOtTLrQ+/y0mnUkPj2KS
+         bG3OOhPmHHEVX4g7N5y+/zTCrezjEL0uKtB2J8+SkoavCswBZaKSJMeQAdpbPcIWB39E
+         S63g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=aX5vzwr4uX568u1A1NtAetcO8H5b06l0VkOaAxAnVkA=;
-        b=bU/nQdG7uy5+F7pfXtjCxno+HS6n6zNGovPeShHKNJ1rBGF4pezB7FmYd8lPHRCE8b
-         FJqW+4xz7xMy0g0wZGKmGylZlsyE5Isv63MRSSy7B9QyHJ8NDO3SHDmMp/Lx2fdhn+CC
-         99YHlwcMcjuQtL+3W2MlY7x5gsRNFpsONRaiZ7TtFugUMKsZ6EjgPqOLCLCTdJo6z92h
-         HrRVTzxzFtt0L/9xoiYa64drjzdRHyo2zqTWMR+JSXPoy0kcedTF7lPePLvq9lD9z9EJ
-         pS7pVHAscENaKUFaeWXXtY9NJl8jtgKizpp8/b2l7FlQ1amWx4IIByEsb+HWVh0ZcOmt
-         Em8g==
-X-Gm-Message-State: AOAM530knvT//zoROql41AgIroGrHXpuEjwvBzxyVFxREYnRlPxek3sZ
-        ni8fr9Hw48EJs90txqoLUFskOkt02bx3xLRphA==
-X-Google-Smtp-Source: ABdhPJxEgFkmUsrAiGXTKrRezE/MFsoflpuzIyEmccg4HBROR6o6jTNfQuRly6Y0jXP9sNzdKcJFCvKFqlwREyAfag==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=M78Z4OClBf/fnakq+ndoN1fDUyTSsxV3xBryMm0NkH4=;
+        b=CG2szUppx52Mioml5zQRcmKFL7Dx3c0UthyVaInjXc26ChQhcal59vDVP0mJc79gS7
+         JVavwUf4LbsZtD3ZDl1u8gmZr3L3ZktDOJ1MWRrGOAryj4USxVI77uwjuea3DINoURJq
+         uFvXETzYuBYOqhtjQ0FwqvBkYY0l559+fNGuwW4QS5wIyPuh+k+N9fC8hApc6RftaX6B
+         0Qhlz2ytlWsUhgW88TcSUZ1+JsPItqWmdbxJ13rkMcW45H7L3xInzC8+tw7TwPnV6wqJ
+         5KA7MuIM9xtd+9DLisodYEeKZTlG286UmrvUEMIMXxAyQOcSqqfYqZn6GCtnaw6tHTEa
+         Jm1w==
+X-Gm-Message-State: AOAM530MGHMRTN/4BKAyGG8gOK6bJe+cElogtOsDC5GzPXq+YHZPUOA7
+        uWMk6y+LbOmMHa0d7xGnB9g6ckut24B8sidOVg==
+X-Google-Smtp-Source: ABdhPJxyVm+ovrgjMcPxdWWbLo35II5wsTvLr4/At8GwcihqwpZ5mOra0XXOLByHb+p6QL0C2854yd29PotGfWitIg==
 X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
- (user=jingzhangos job=sendgmr) by 2002:a17:903:31c9:b029:ed:6f56:9d1e with
- SMTP id v9-20020a17090331c9b02900ed6f569d1emr2993605ple.46.1623991702352;
- Thu, 17 Jun 2021 21:48:22 -0700 (PDT)
-Date:   Fri, 18 Jun 2021 04:48:12 +0000
-Message-Id: <20210618044819.3690166-1-jingzhangos@google.com>
+ (user=jingzhangos job=sendgmr) by 2002:a05:6a00:18a7:b029:2f2:b099:7b1a with
+ SMTP id x39-20020a056a0018a7b02902f2b0997b1amr3157380pfh.59.1623991704125;
+ Thu, 17 Jun 2021 21:48:24 -0700 (PDT)
+Date:   Fri, 18 Jun 2021 04:48:13 +0000
+In-Reply-To: <20210618044819.3690166-1-jingzhangos@google.com>
+Message-Id: <20210618044819.3690166-2-jingzhangos@google.com>
 Mime-Version: 1.0
+References: <20210618044819.3690166-1-jingzhangos@google.com>
 X-Mailer: git-send-email 2.32.0.288.g62a8d224e6-goog
-Subject: [PATCH v11 0/7] KVM statistics data fd-based binary interface
+Subject: [PATCH v11 1/7] KVM: stats: Separate generic stats from architecture
+ specific ones
 From:   Jing Zhang <jingzhangos@google.com>
 To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
@@ -88,157 +93,558 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patchset provides a file descriptor for every VM and VCPU to read
-KVM statistics data in binary format.
-It is meant to provide a lightweight, flexible, scalable and efficient
-lock-free solution for user space telemetry applications to pull the
-statistics data periodically for large scale systems. The pulling
-frequency could be as high as a few times per second.
-In this patchset, every statistics data are treated to have some
-attributes as below:
-  * architecture dependent or generic
-  * VM statistics data or VCPU statistics data
-  * type: cumulative, instantaneous, peak
-  * unit: none for simple counter, nanosecond, microsecond,
-    millisecond, second, Byte, KiByte, MiByte, GiByte, Clock Cycles
-Since no lock/synchronization is used, the consistency between all
-the statistics data is not guaranteed. That means not all statistics
-data are read out at the exact same time, since the statistics data
-are still being updated by KVM subsystems while they are read out.
+Put all generic statistics in a separate structure to ease
+statistics handling for the incoming new statistics API.
+Generic KVM stats are those collected in architecture
+independent code or those supported by all architectures.
 
+No functional change intended.
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+Reviewed-by: Ricardo Koller <ricarkol@google.com>
+Reviewed-by: Krish Sadhukhan <krish.sadhukhan@oracle.com>
+Signed-off-by: Jing Zhang <jingzhangos@google.com>
 ---
+ arch/arm64/include/asm/kvm_host.h   |  9 ++-------
+ arch/arm64/kvm/guest.c              | 12 ++++++------
+ arch/mips/include/asm/kvm_host.h    |  9 ++-------
+ arch/mips/kvm/mips.c                | 12 ++++++------
+ arch/powerpc/include/asm/kvm_host.h |  9 ++-------
+ arch/powerpc/kvm/book3s.c           | 12 ++++++------
+ arch/powerpc/kvm/book3s_hv.c        | 12 ++++++------
+ arch/powerpc/kvm/book3s_pr.c        |  2 +-
+ arch/powerpc/kvm/book3s_pr_papr.c   |  2 +-
+ arch/powerpc/kvm/booke.c            | 14 +++++++-------
+ arch/s390/include/asm/kvm_host.h    |  9 ++-------
+ arch/s390/kvm/kvm-s390.c            | 12 ++++++------
+ arch/x86/include/asm/kvm_host.h     |  9 ++-------
+ arch/x86/kvm/x86.c                  | 14 +++++++-------
+ include/linux/kvm_host.h            |  9 +++++++--
+ include/linux/kvm_types.h           | 12 ++++++++++++
+ virt/kvm/kvm_main.c                 | 14 +++++++-------
+ 17 files changed, 82 insertions(+), 90 deletions(-)
 
-* v10 -> v11
-  - Rebase to kvm/queue, commit f1b832550832
-    (KVM: x86/mmu: Fix TDP MMU page table level)
-  - Separate binary stats implementation commit
-  - Use flexible length array member field in API structure instead of
-    zero-length array member field
-  - Move major binary stats reading function in a separate source file
-  - Move stats id string into vm/vcpu structures
-  - Add some detailed comments and update commit messages
-  - Addressed some other review comments from Greg K.H. and Paolo.
-
-* v9 -> v10
-  - Relocate vcpu stat in vcpu's slab's usercopy region
-  - Fix test issue for capability checking
-  - Update commit message to explain why/how we need to add this new
-    API for KVM statistics
-
-* v8 -> v9
-  - Rebase to commit 8331a2bc0898
-    (KVM: X86: Introduce KVM_HC_MAP_GPA_RANGE hypercall)
-  - Reduce code duplication between binary and debugfs interface
-  - Add field "offset" in stats descriptor to let us define stats
-    descriptors in any order (not necessary in the order of stats
-    defined in vm/vcpu stats structures)
-  - Add static check to make sure the number of stats descriptors
-    is the same as the number of stats defined in vm/vcpu stats
-    structures
-  - Fix missing/mismatched stats descriptor definition caused by
-    rebase
-
-* v7 -> v8
-  - Rebase to kvm/queue, commit c1dc20e254b4 ("KVM: switch per-VM
-  stats to u64")
-  - Revise code to reflect the per-VM stats type from ulong to u64
-  - Addressed some other nits
-
-* v6 -> v7
-  - Improve file descriptor allocation function by Krish suggestion
-  - Use "generic stats" instead of "common stats" as Krish suggested
-  - Addressed some other nits from Krish and David Matlack
-
-* v5 -> v6
-  - Use designated initializers for STATS_DESC
-  - Change KVM_STATS_SCALE... to KVM_STATS_BASE...
-  - Use a common function for kvm_[vm|vcpu]_stats_read
-  - Fix some documentation errors/missings
-  - Use TEST_ASSERT in selftest
-  - Use a common function for [vm|vcpu]_stats_test in selftest
-
-* v4 -> v5
-  - Rebase to kvm/queue, commit a4345a7cecfb ("Merge tag
-    'kvmarm-fixes-5.13-1'")
-  - Change maximum stats name length to 48
-  - Replace VM_STATS_COMMON/VCPU_STATS_COMMON macros with stats
-    descriptor definition macros.
-  - Fixed some errors/warnings reported by checkpatch.pl
-
-* v3 -> v4
-  - Rebase to kvm/queue, commit 9f242010c3b4 ("KVM: avoid "deadlock"
-    between install_new_memslots and MMU notifier")
-  - Use C-stype comments in the whole patch
-  - Fix wrong count for x86 VCPU stats descriptors
-  - Fix KVM stats data size counting and validity check in selftest
-
-* v2 -> v3
-  - Rebase to kvm/queue, commit edf408f5257b ("KVM: avoid "deadlock"
-    between install_new_memslots and MMU notifier")
-  - Resolve some nitpicks about format
-
-* v1 -> v2
-  - Use ARRAY_SIZE to count the number of stats descriptors
-  - Fix missing `size` field initialization in macro STATS_DESC
-
-[1] https://lore.kernel.org/kvm/20210402224359.2297157-1-jingzhangos@google.com
-[2] https://lore.kernel.org/kvm/20210415151741.1607806-1-jingzhangos@google.com
-[3] https://lore.kernel.org/kvm/20210423181727.596466-1-jingzhangos@google.com
-[4] https://lore.kernel.org/kvm/20210429203740.1935629-1-jingzhangos@google.com
-[5] https://lore.kernel.org/kvm/20210517145314.157626-1-jingzhangos@google.com
-[6] https://lore.kernel.org/kvm/20210524151828.4113777-1-jingzhangos@google.com
-[7] https://lore.kernel.org/kvm/20210603211426.790093-1-jingzhangos@google.com
-[8] https://lore.kernel.org/kvm/20210611124624.1404010-1-jingzhangos@google.com
-[9] https://lore.kernel.org/kvm/20210614212155.1670777-1-jingzhangos@google.com
-[10] https://lore.kernel.org/kvm/20210617044146.2667540-1-jingzhangos@google.com
-
----
-
-Jing Zhang (7):
-  KVM: stats: Separate generic stats from architecture specific ones
-  KVM: stats: Add fd-based API to read binary stats data
-  KVM: stats: Support binary stats retrieval for a VM
-  KVM: stats: Support binary stats retrieval for a VCPU
-  KVM: stats: Add documentation for binary statistics interface
-  KVM: selftests: Add selftest for KVM statistics data binary interface
-  KVM: stats: Remove code duplication for binary and debugfs stats
-
- Documentation/virt/kvm/api.rst                | 176 +++++++++++++-
- arch/arm64/include/asm/kvm_host.h             |   9 +-
- arch/arm64/kvm/Makefile                       |   2 +-
- arch/arm64/kvm/guest.c                        |  46 ++--
- arch/mips/include/asm/kvm_host.h              |   9 +-
- arch/mips/kvm/Makefile                        |   2 +-
- arch/mips/kvm/mips.c                          |  88 ++++---
- arch/powerpc/include/asm/kvm_host.h           |   9 +-
- arch/powerpc/kvm/Makefile                     |   2 +-
- arch/powerpc/kvm/book3s.c                     |  89 ++++---
- arch/powerpc/kvm/book3s_hv.c                  |  12 +-
- arch/powerpc/kvm/book3s_pr.c                  |   2 +-
- arch/powerpc/kvm/book3s_pr_papr.c             |   2 +-
- arch/powerpc/kvm/booke.c                      |  74 ++++--
- arch/s390/include/asm/kvm_host.h              |   9 +-
- arch/s390/kvm/Makefile                        |   3 +-
- arch/s390/kvm/kvm-s390.c                      | 230 ++++++++++--------
- arch/x86/include/asm/kvm_host.h               |   9 +-
- arch/x86/kvm/Makefile                         |   2 +-
- arch/x86/kvm/x86.c                            | 107 ++++----
- include/linux/kvm_host.h                      | 182 ++++++++++++--
- include/linux/kvm_types.h                     |  12 +
- include/uapi/linux/kvm.h                      |  44 ++++
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   3 +
- .../testing/selftests/kvm/include/kvm_util.h  |   3 +
- .../selftests/kvm/kvm_binary_stats_test.c     | 225 +++++++++++++++++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
- virt/kvm/binary_stats.c                       | 130 ++++++++++
- virt/kvm/kvm_main.c                           | 218 ++++++++++++++---
- 30 files changed, 1355 insertions(+), 357 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/kvm_binary_stats_test.c
- create mode 100644 virt/kvm/binary_stats.c
-
-
-base-commit: f1b8325508327a302f1d5cd8a4bf51e2c9c72fa9
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index d56f365b38a8..5a2c82f63baa 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -556,16 +556,11 @@ static inline bool __vcpu_write_sys_reg_to_cpu(u64 val, int reg)
+ }
+ 
+ struct kvm_vm_stat {
+-	u64 remote_tlb_flush;
++	struct kvm_vm_stat_generic generic;
+ };
+ 
+ struct kvm_vcpu_stat {
+-	u64 halt_successful_poll;
+-	u64 halt_attempted_poll;
+-	u64 halt_poll_success_ns;
+-	u64 halt_poll_fail_ns;
+-	u64 halt_poll_invalid;
+-	u64 halt_wakeup;
++	struct kvm_vcpu_stat_generic generic;
+ 	u64 hvc_exit_stat;
+ 	u64 wfe_exit_stat;
+ 	u64 wfi_exit_stat;
+diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+index 5cb4a1cd5603..4962331d01e6 100644
+--- a/arch/arm64/kvm/guest.c
++++ b/arch/arm64/kvm/guest.c
+@@ -29,18 +29,18 @@
+ #include "trace.h"
+ 
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
++	VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
++	VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
++	VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
++	VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
+ 	VCPU_STAT("hvc_exit_stat", hvc_exit_stat),
+ 	VCPU_STAT("wfe_exit_stat", wfe_exit_stat),
+ 	VCPU_STAT("wfi_exit_stat", wfi_exit_stat),
+ 	VCPU_STAT("mmio_exit_user", mmio_exit_user),
+ 	VCPU_STAT("mmio_exit_kernel", mmio_exit_kernel),
+ 	VCPU_STAT("exits", exits),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
++	VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
++	VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
+ 	{ NULL }
+ };
+ 
+diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+index 4245c082095f..696f6b009377 100644
+--- a/arch/mips/include/asm/kvm_host.h
++++ b/arch/mips/include/asm/kvm_host.h
+@@ -109,10 +109,11 @@ static inline bool kvm_is_error_hva(unsigned long addr)
+ }
+ 
+ struct kvm_vm_stat {
+-	u64 remote_tlb_flush;
++	struct kvm_vm_stat_generic generic;
+ };
+ 
+ struct kvm_vcpu_stat {
++	struct kvm_vcpu_stat_generic generic;
+ 	u64 wait_exits;
+ 	u64 cache_exits;
+ 	u64 signal_exits;
+@@ -142,12 +143,6 @@ struct kvm_vcpu_stat {
+ #ifdef CONFIG_CPU_LOONGSON64
+ 	u64 vz_cpucfg_exits;
+ #endif
+-	u64 halt_successful_poll;
+-	u64 halt_attempted_poll;
+-	u64 halt_poll_success_ns;
+-	u64 halt_poll_fail_ns;
+-	u64 halt_poll_invalid;
+-	u64 halt_wakeup;
+ };
+ 
+ struct kvm_arch_memory_slot {
+diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+index 4d4af97dcc88..ff205b35719b 100644
+--- a/arch/mips/kvm/mips.c
++++ b/arch/mips/kvm/mips.c
+@@ -68,12 +68,12 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ #ifdef CONFIG_CPU_LOONGSON64
+ 	VCPU_STAT("vz_cpucfg", vz_cpucfg_exits),
+ #endif
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
++	VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
++	VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
++	VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
++	VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
++	VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
++	VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
+ 	{NULL}
+ };
+ 
+diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
+index ae3d4af61b66..80cfe4f42894 100644
+--- a/arch/powerpc/include/asm/kvm_host.h
++++ b/arch/powerpc/include/asm/kvm_host.h
+@@ -81,12 +81,13 @@ struct kvmppc_book3s_shadow_vcpu;
+ struct kvm_nested_guest;
+ 
+ struct kvm_vm_stat {
+-	u64 remote_tlb_flush;
++	struct kvm_vm_stat_generic generic;
+ 	u64 num_2M_pages;
+ 	u64 num_1G_pages;
+ };
+ 
+ struct kvm_vcpu_stat {
++	struct kvm_vcpu_stat_generic generic;
+ 	u64 sum_exits;
+ 	u64 mmio_exits;
+ 	u64 signal_exits;
+@@ -102,14 +103,8 @@ struct kvm_vcpu_stat {
+ 	u64 emulated_inst_exits;
+ 	u64 dec_exits;
+ 	u64 ext_intr_exits;
+-	u64 halt_poll_success_ns;
+-	u64 halt_poll_fail_ns;
+ 	u64 halt_wait_ns;
+-	u64 halt_successful_poll;
+-	u64 halt_attempted_poll;
+ 	u64 halt_successful_wait;
+-	u64 halt_poll_invalid;
+-	u64 halt_wakeup;
+ 	u64 dbell_exits;
+ 	u64 gdbell_exits;
+ 	u64 ld;
+diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+index 2b691f4d1f26..92cdb4175945 100644
+--- a/arch/powerpc/kvm/book3s.c
++++ b/arch/powerpc/kvm/book3s.c
+@@ -47,14 +47,14 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("dec", dec_exits),
+ 	VCPU_STAT("ext_intr", ext_intr_exits),
+ 	VCPU_STAT("queue_intr", queue_intr),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
++	VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
++	VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
+ 	VCPU_STAT("halt_wait_ns", halt_wait_ns),
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
++	VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
++	VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
+ 	VCPU_STAT("halt_successful_wait", halt_successful_wait),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
++	VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
++	VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
+ 	VCPU_STAT("pf_storage", pf_storage),
+ 	VCPU_STAT("sp_storage", sp_storage),
+ 	VCPU_STAT("pf_instruc", pf_instruc),
+diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+index 7360350e66ff..b3506c35a46b 100644
+--- a/arch/powerpc/kvm/book3s_hv.c
++++ b/arch/powerpc/kvm/book3s_hv.c
+@@ -236,7 +236,7 @@ static void kvmppc_fast_vcpu_kick_hv(struct kvm_vcpu *vcpu)
+ 
+ 	waitp = kvm_arch_vcpu_get_wait(vcpu);
+ 	if (rcuwait_wake_up(waitp))
+-		++vcpu->stat.halt_wakeup;
++		++vcpu->stat.generic.halt_wakeup;
+ 
+ 	cpu = READ_ONCE(vcpu->arch.thread_cpu);
+ 	if (cpu >= 0 && kvmppc_ipi_thread(cpu))
+@@ -3925,7 +3925,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
+ 	cur = start_poll = ktime_get();
+ 	if (vc->halt_poll_ns) {
+ 		ktime_t stop = ktime_add_ns(start_poll, vc->halt_poll_ns);
+-		++vc->runner->stat.halt_attempted_poll;
++		++vc->runner->stat.generic.halt_attempted_poll;
+ 
+ 		vc->vcore_state = VCORE_POLLING;
+ 		spin_unlock(&vc->lock);
+@@ -3942,7 +3942,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
+ 		vc->vcore_state = VCORE_INACTIVE;
+ 
+ 		if (!do_sleep) {
+-			++vc->runner->stat.halt_successful_poll;
++			++vc->runner->stat.generic.halt_successful_poll;
+ 			goto out;
+ 		}
+ 	}
+@@ -3954,7 +3954,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
+ 		do_sleep = 0;
+ 		/* If we polled, count this as a successful poll */
+ 		if (vc->halt_poll_ns)
+-			++vc->runner->stat.halt_successful_poll;
++			++vc->runner->stat.generic.halt_successful_poll;
+ 		goto out;
+ 	}
+ 
+@@ -3981,13 +3981,13 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
+ 			ktime_to_ns(cur) - ktime_to_ns(start_wait);
+ 		/* Attribute failed poll time */
+ 		if (vc->halt_poll_ns)
+-			vc->runner->stat.halt_poll_fail_ns +=
++			vc->runner->stat.generic.halt_poll_fail_ns +=
+ 				ktime_to_ns(start_wait) -
+ 				ktime_to_ns(start_poll);
+ 	} else {
+ 		/* Attribute successful poll time */
+ 		if (vc->halt_poll_ns)
+-			vc->runner->stat.halt_poll_success_ns +=
++			vc->runner->stat.generic.halt_poll_success_ns +=
+ 				ktime_to_ns(cur) -
+ 				ktime_to_ns(start_poll);
+ 	}
+diff --git a/arch/powerpc/kvm/book3s_pr.c b/arch/powerpc/kvm/book3s_pr.c
+index d7733b07f489..71bcb0140461 100644
+--- a/arch/powerpc/kvm/book3s_pr.c
++++ b/arch/powerpc/kvm/book3s_pr.c
+@@ -493,7 +493,7 @@ static void kvmppc_set_msr_pr(struct kvm_vcpu *vcpu, u64 msr)
+ 		if (!vcpu->arch.pending_exceptions) {
+ 			kvm_vcpu_block(vcpu);
+ 			kvm_clear_request(KVM_REQ_UNHALT, vcpu);
+-			vcpu->stat.halt_wakeup++;
++			vcpu->stat.generic.halt_wakeup++;
+ 
+ 			/* Unset POW bit after we woke up */
+ 			msr &= ~MSR_POW;
+diff --git a/arch/powerpc/kvm/book3s_pr_papr.c b/arch/powerpc/kvm/book3s_pr_papr.c
+index 031c8015864a..ac14239f3424 100644
+--- a/arch/powerpc/kvm/book3s_pr_papr.c
++++ b/arch/powerpc/kvm/book3s_pr_papr.c
+@@ -378,7 +378,7 @@ int kvmppc_h_pr(struct kvm_vcpu *vcpu, unsigned long cmd)
+ 		kvmppc_set_msr_fast(vcpu, kvmppc_get_msr(vcpu) | MSR_EE);
+ 		kvm_vcpu_block(vcpu);
+ 		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
+-		vcpu->stat.halt_wakeup++;
++		vcpu->stat.generic.halt_wakeup++;
+ 		return EMULATE_DONE;
+ 	case H_LOGICAL_CI_LOAD:
+ 		return kvmppc_h_pr_logical_ci_load(vcpu);
+diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
+index 7d5fe43f85c4..80d3b39aa7ac 100644
+--- a/arch/powerpc/kvm/booke.c
++++ b/arch/powerpc/kvm/booke.c
+@@ -49,15 +49,15 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("inst_emu", emulated_inst_exits),
+ 	VCPU_STAT("dec", dec_exits),
+ 	VCPU_STAT("ext_intr", ext_intr_exits),
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
++	VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
++	VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
++	VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
++	VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
+ 	VCPU_STAT("doorbell", dbell_exits),
+ 	VCPU_STAT("guest doorbell", gdbell_exits),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+-	VM_STAT("remote_tlb_flush", remote_tlb_flush),
++	VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
++	VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
++	VM_STAT_GENERIC("remote_tlb_flush", remote_tlb_flush),
+ 	{ NULL }
+ };
+ 
+diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+index 8925f3969478..9b4473f76e56 100644
+--- a/arch/s390/include/asm/kvm_host.h
++++ b/arch/s390/include/asm/kvm_host.h
+@@ -361,6 +361,7 @@ struct sie_page {
+ };
+ 
+ struct kvm_vcpu_stat {
++	struct kvm_vcpu_stat_generic generic;
+ 	u64 exit_userspace;
+ 	u64 exit_null;
+ 	u64 exit_external_request;
+@@ -370,13 +371,7 @@ struct kvm_vcpu_stat {
+ 	u64 exit_validity;
+ 	u64 exit_instruction;
+ 	u64 exit_pei;
+-	u64 halt_successful_poll;
+-	u64 halt_attempted_poll;
+-	u64 halt_poll_invalid;
+ 	u64 halt_no_poll_steal;
+-	u64 halt_wakeup;
+-	u64 halt_poll_success_ns;
+-	u64 halt_poll_fail_ns;
+ 	u64 instruction_lctl;
+ 	u64 instruction_lctlg;
+ 	u64 instruction_stctl;
+@@ -755,12 +750,12 @@ struct kvm_vcpu_arch {
+ };
+ 
+ struct kvm_vm_stat {
++	struct kvm_vm_stat_generic generic;
+ 	u64 inject_io;
+ 	u64 inject_float_mchk;
+ 	u64 inject_pfault_done;
+ 	u64 inject_service_signal;
+ 	u64 inject_virtio;
+-	u64 remote_tlb_flush;
+ };
+ 
+ struct kvm_arch_memory_slot {
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 1296fc10f80c..e8bc7cd06794 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -72,13 +72,13 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("exit_program_interruption", exit_program_interruption),
+ 	VCPU_STAT("exit_instr_and_program_int", exit_instr_and_program),
+ 	VCPU_STAT("exit_operation_exception", exit_operation_exception),
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
++	VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
++	VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
++	VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
+ 	VCPU_STAT("halt_no_poll_steal", halt_no_poll_steal),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
++	VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
++	VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
++	VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
+ 	VCPU_STAT("instruction_lctlg", instruction_lctlg),
+ 	VCPU_STAT("instruction_lctl", instruction_lctl),
+ 	VCPU_STAT("instruction_stctl", instruction_stctl),
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index e11d64aa0bcd..408051552121 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1160,6 +1160,7 @@ struct kvm_arch {
+ };
+ 
+ struct kvm_vm_stat {
++	struct kvm_vm_stat_generic generic;
+ 	u64 mmu_shadow_zapped;
+ 	u64 mmu_pte_write;
+ 	u64 mmu_pde_zapped;
+@@ -1167,13 +1168,13 @@ struct kvm_vm_stat {
+ 	u64 mmu_recycled;
+ 	u64 mmu_cache_miss;
+ 	u64 mmu_unsync;
+-	u64 remote_tlb_flush;
+ 	u64 lpages;
+ 	u64 nx_lpage_splits;
+ 	u64 max_mmu_page_hash_collisions;
+ };
+ 
+ struct kvm_vcpu_stat {
++	struct kvm_vcpu_stat_generic generic;
+ 	u64 pf_fixed;
+ 	u64 pf_guest;
+ 	u64 tlb_flush;
+@@ -1187,10 +1188,6 @@ struct kvm_vcpu_stat {
+ 	u64 nmi_window_exits;
+ 	u64 l1d_flush;
+ 	u64 halt_exits;
+-	u64 halt_successful_poll;
+-	u64 halt_attempted_poll;
+-	u64 halt_poll_invalid;
+-	u64 halt_wakeup;
+ 	u64 request_irq_exits;
+ 	u64 irq_exits;
+ 	u64 host_state_reload;
+@@ -1201,8 +1198,6 @@ struct kvm_vcpu_stat {
+ 	u64 irq_injections;
+ 	u64 nmi_injections;
+ 	u64 req_event;
+-	u64 halt_poll_success_ns;
+-	u64 halt_poll_fail_ns;
+ 	u64 nested_run;
+ 	u64 directed_yield_attempted;
+ 	u64 directed_yield_successful;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 8b898ec8d349..157212157aee 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -235,10 +235,10 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("irq_window", irq_window_exits),
+ 	VCPU_STAT("nmi_window", nmi_window_exits),
+ 	VCPU_STAT("halt_exits", halt_exits),
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
++	VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
++	VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
++	VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
++	VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
+ 	VCPU_STAT("hypercalls", hypercalls),
+ 	VCPU_STAT("request_irq", request_irq_exits),
+ 	VCPU_STAT("irq_exits", irq_exits),
+@@ -250,8 +250,8 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VCPU_STAT("nmi_injections", nmi_injections),
+ 	VCPU_STAT("req_event", req_event),
+ 	VCPU_STAT("l1d_flush", l1d_flush),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
++	VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
++	VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
+ 	VCPU_STAT("nested_run", nested_run),
+ 	VCPU_STAT("directed_yield_attempted", directed_yield_attempted),
+ 	VCPU_STAT("directed_yield_successful", directed_yield_successful),
+@@ -263,7 +263,7 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+ 	VM_STAT("mmu_recycled", mmu_recycled),
+ 	VM_STAT("mmu_cache_miss", mmu_cache_miss),
+ 	VM_STAT("mmu_unsync", mmu_unsync),
+-	VM_STAT("remote_tlb_flush", remote_tlb_flush),
++	VM_STAT_GENERIC("remote_tlb_flush", remote_tlb_flush),
+ 	VM_STAT("largepages", lpages, .mode = 0444),
+ 	VM_STAT("nx_largepages_splitted", nx_lpage_splits, .mode = 0444),
+ 	VM_STAT("max_mmu_page_hash_collisions", max_mmu_page_hash_collisions),
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 37cbb56ccd09..5a31e0696360 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1275,10 +1275,15 @@ struct kvm_stats_debugfs_item {
+ #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
+ 	((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
+ 
+-#define VM_STAT(n, x, ...) 							\
++#define VM_STAT(n, x, ...)						       \
+ 	{ n, offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__ }
+-#define VCPU_STAT(n, x, ...)							\
++#define VCPU_STAT(n, x, ...)						       \
+ 	{ n, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__ }
++#define VM_STAT_GENERIC(n, x, ...)					       \
++	{ n, offsetof(struct kvm, stat.generic.x), KVM_STAT_VM, ## __VA_ARGS__ }
++#define VCPU_STAT_GENERIC(n, x, ...)					       \
++	{ n, offsetof(struct kvm_vcpu, stat.generic.x),			       \
++	  KVM_STAT_VCPU, ## __VA_ARGS__ }
+ 
+ extern struct kvm_stats_debugfs_item debugfs_entries[];
+ extern struct dentry *kvm_debugfs_dir;
+diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+index a7580f69dda0..48db778291b7 100644
+--- a/include/linux/kvm_types.h
++++ b/include/linux/kvm_types.h
+@@ -76,5 +76,17 @@ struct kvm_mmu_memory_cache {
+ };
+ #endif
+ 
++struct kvm_vm_stat_generic {
++	u64 remote_tlb_flush;
++};
++
++struct kvm_vcpu_stat_generic {
++	u64 halt_successful_poll;
++	u64 halt_attempted_poll;
++	u64 halt_poll_invalid;
++	u64 halt_wakeup;
++	u64 halt_poll_success_ns;
++	u64 halt_poll_fail_ns;
++};
+ 
+ #endif /* __KVM_TYPES_H__ */
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index ed4d1581d502..cec986487b30 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -332,7 +332,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+ 	 */
+ 	if (!kvm_arch_flush_remote_tlb(kvm)
+ 	    || kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH))
+-		++kvm->stat.remote_tlb_flush;
++		++kvm->stat.generic.remote_tlb_flush;
+ 	cmpxchg(&kvm->tlbs_dirty, dirty_count, 0);
+ }
+ EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
+@@ -3029,9 +3029,9 @@ static inline void
+ update_halt_poll_stats(struct kvm_vcpu *vcpu, u64 poll_ns, bool waited)
+ {
+ 	if (waited)
+-		vcpu->stat.halt_poll_fail_ns += poll_ns;
++		vcpu->stat.generic.halt_poll_fail_ns += poll_ns;
+ 	else
+-		vcpu->stat.halt_poll_success_ns += poll_ns;
++		vcpu->stat.generic.halt_poll_success_ns += poll_ns;
+ }
+ 
+ /*
+@@ -3049,16 +3049,16 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+ 	if (vcpu->halt_poll_ns && !kvm_arch_no_poll(vcpu)) {
+ 		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
+ 
+-		++vcpu->stat.halt_attempted_poll;
++		++vcpu->stat.generic.halt_attempted_poll;
+ 		do {
+ 			/*
+ 			 * This sets KVM_REQ_UNHALT if an interrupt
+ 			 * arrives.
+ 			 */
+ 			if (kvm_vcpu_check_block(vcpu) < 0) {
+-				++vcpu->stat.halt_successful_poll;
++				++vcpu->stat.generic.halt_successful_poll;
+ 				if (!vcpu_valid_wakeup(vcpu))
+-					++vcpu->stat.halt_poll_invalid;
++					++vcpu->stat.generic.halt_poll_invalid;
+ 				goto out;
+ 			}
+ 			poll_end = cur = ktime_get();
+@@ -3115,7 +3115,7 @@ bool kvm_vcpu_wake_up(struct kvm_vcpu *vcpu)
+ 	waitp = kvm_arch_vcpu_get_wait(vcpu);
+ 	if (rcuwait_wake_up(waitp)) {
+ 		WRITE_ONCE(vcpu->ready, true);
+-		++vcpu->stat.halt_wakeup;
++		++vcpu->stat.generic.halt_wakeup;
+ 		return true;
+ 	}
+ 
 -- 
 2.32.0.288.g62a8d224e6-goog
 
