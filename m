@@ -2,108 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E013AD536
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jun 2021 00:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4853AD6E1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jun 2021 04:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbhFRWdi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Jun 2021 18:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
+        id S235594AbhFSDAs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Jun 2021 23:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbhFRWdh (ORCPT
+        with ESMTP id S234263AbhFSDAs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Jun 2021 18:33:37 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFA6C061574;
-        Fri, 18 Jun 2021 15:31:27 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id g12so8758507qtb.2;
-        Fri, 18 Jun 2021 15:31:27 -0700 (PDT)
+        Fri, 18 Jun 2021 23:00:48 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3637DC061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 19:58:37 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id i34so3766956pgl.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 19:58:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3hKwBiwkFtX8Quhcjsyp4PHnp2ob2D51MYzkaHMQegg=;
-        b=qnGWS66cjqd6rNhCqCBrV8KmXirBAx3VifmQ4MnoxQo4dPVXQEfP9yTZGa1WZHiJpZ
-         91kwPkjVGRSPIuk3F381E3fNTk9ltpGb4et8x8siPTifgy0PJT8/tnlIFdlG0h/1dXOL
-         8DWXya5D92ebT/ThQtygKGSf2SBd8haJGUCTQDw5SEqkiDp6dNYza4bQorCur7FL1maj
-         cewrabaTR3mVAWIGxX1vY3zDkqkWN/IJNOVq7sbR7RlgIGb8f7iR8BVDiIINAKEmrEwL
-         NNWR6rDKMinIgc8OfTWP002DlTcZtuRhAqcAYdu+Ur4UhwLoZhw7hPdIdT73ZdhyNpyx
-         O+Ow==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HbU9xu9H0S4Zp4/r0rFgl+fi72yv0penQhl6VWi1XNU=;
+        b=k93wQuuBxI/sMtxZrxrmp9tJ2kGwsdy4oLt5kcRif7GvZRi3rblvIkADOO+jtur7ph
+         IfUajvTk9AGEzP30fz+vdlULuEk9gOdEBrQPYhhZtbnDAnkH2jNV6/rrG3HMgqpHqG8C
+         +XVb7shFVf5/zHiMLtCYHAkosTvrZggLPRkYk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3hKwBiwkFtX8Quhcjsyp4PHnp2ob2D51MYzkaHMQegg=;
-        b=F9SqMeIsVkC2kuRLKW7z3d3W8WEpEtzkbPnd9tZyBNStUbPmgYi/XOzEuNz1XJE7m6
-         yqNr/MUV5qqjf8YgzZ11RJkTkm2txmmH1I6QQtZKXebfE3f/0gpcBhQylzu3xVKTbgcx
-         3tZwOTnwzBa/u4bnoj2z9HjRSajgAZMCEmnRH7AtV6kU4gOMRGStbBHnX9Sz4eaG5cnc
-         fv0ZYg3jhWl8OEvkBPsIRleOqZmCKc1tBtSNj74WtjxM3rcsoNZnC+cdjWkHQYo6eEqP
-         o8UCKiknL/71Y5ZuNd6v564MYHrkinMZf92pzedTIFbj4jyVtpa74Babj1zRJtIjh5c2
-         SmeQ==
-X-Gm-Message-State: AOAM530oKYUphT1dsQpknn68PxKYHt6e6UW+Ly+GijsSYe7jlLu3U2lt
-        n39tWDq6AS7fMSAtAGDxav0=
-X-Google-Smtp-Source: ABdhPJypzDrCnYiXRpijNJ6cfKxcSk4IskDJYkDufgt5VSNVdFBJ87VeepJhtqeypZUCvfghlNA1uA==
-X-Received: by 2002:ac8:4e29:: with SMTP id d9mr13230533qtw.136.1624055486314;
-        Fri, 18 Jun 2021 15:31:26 -0700 (PDT)
-Received: from localhost ([207.98.216.60])
-        by smtp.gmail.com with ESMTPSA id o14sm3269929qtx.62.2021.06.18.15.31.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HbU9xu9H0S4Zp4/r0rFgl+fi72yv0penQhl6VWi1XNU=;
+        b=N52jiZYu7x7JKKyokPkXDOq1secl0eIOWSNzJaZ8TpbrtIFDqIM180W91DhTFF0FBZ
+         lth8redlAWEiTYjbB6hOFEi+M35RXjdI3ERhYIbKIqyg0w+eDh7K3wATMjKpm1YiVpfS
+         nWb+itpFhK9ODIPjX85caDjI+ukkrT2P4Owyn8i042W2CJ0ATiayXjtG67CgMqDb8fLD
+         9EMjDtgyQ6NHE9Eoc81938V4RNtkbw002DhLHsQnnSmiZevRMDOt29yRbdjd9sDRXFg4
+         cOXRbNOWT3wVSWhpedYa88hPDUf1T1BjxbF4psoyUYb6Lmi/79d+uPW1FhWC8r6aHUBK
+         ndYA==
+X-Gm-Message-State: AOAM533iqAuFUNw5Z8fwaQkZQdIhla6icYiFnuYO1IEiMpkwdG0FlHT6
+        6DS+zW+Tdpkf+1ahAzIcZBp+8w==
+X-Google-Smtp-Source: ABdhPJyFqwJvi3zXG5gdWVDVkUwCru/35AquIu/0x+0F4XVjJOu3a6JE1G1Sjq7nMbZX6fGU42QA8A==
+X-Received: by 2002:a63:5a4b:: with SMTP id k11mr12899821pgm.289.1624071516653;
+        Fri, 18 Jun 2021 19:58:36 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i6sm11282648pgg.50.2021.06.18.19.58.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jun 2021 15:31:25 -0700 (PDT)
-Date:   Fri, 18 Jun 2021 15:31:24 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>, Jiri Olsa <jolsa@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Yury Norov <ynorov@caviumnetworks.com>
-Subject: Re: [PATCH v1 1/1] tools: Rename bitmap_alloc() to bitmap_zalloc()
-Message-ID: <YM0evEbGPG9J73sU@yury-ThinkPad>
-References: <20210618143854.62967-1-andriy.shevchenko@linux.intel.com>
- <YMz80O2mkEWyl2Xx@yury-ThinkPad>
- <CAHp75Veti-7h=BoH9ZXXPMS1e8gq3rb19QS4TAB1J33GTdLKRg@mail.gmail.com>
+        Fri, 18 Jun 2021 19:58:36 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        stable@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
+Date:   Fri, 18 Jun 2021 19:58:34 -0700
+Message-Id: <20210619025834.2505201-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Veti-7h=BoH9ZXXPMS1e8gq3rb19QS4TAB1J33GTdLKRg@mail.gmail.com>
+X-Patch-Hashes: v=1; h=sha256; g=abaacaeb40d19df3f0123ca96cc8242ca6e3268c; i=lfnT3xbl3M4bSoo3fY1JvS2JIxARVoZVIzxV1pBNVzw=; m=cu0dPMI36VjT72aoOxoHuPRqB3LHPSjswDa6MCN+MZc=; p=qUkO+dFY9Yp/ywFt5TFJleapjrvJYshagfpYradjlMA=
+X-Patch-Sig: m=pgp; i=keescook@chromium.org; s=0x0x8972F4DFDC6DC026; b=iQIzBAABCgAdFiEEpcP2jyKd1g9yPm4TiXL039xtwCYFAmDNXVkACgkQiXL039xtwCbq4g//dCV QHTL1nxrCKGLO65q5B3wUQ4hi8m7xJAECFT7za5dDw2MvlhH6RTZCotulF0nW7g+78Wl1GqDMJh54 9tQhmyyI/WZH82ab6ck/eTB/TZaWQXLhxnp5h9Y/yv+lpKM26fr6OQzeORwb7FbRMKx9Szxw4MVkg 5SzE0iNSFV6pnMHZZCGuGpPO+CIfLaynmvLlYOhUboaWkCFb3tzmVF5HR557XqEeTWnJitzKK9T16 Soc/6JvKuLiwAhHeW1UgU9fyb5Vj2wnjGQAoP7olpYU0Ry7aRBeMEajhSarHaLOq397zW+SqeNBVU SE3jQLpfNbGykVNd2DeKDdrZBYFLwJY5Z8nc5iCTjR0t+unvyYzI+EGNlhR6tKiuVZbRMa01sOz/U rYgEp0W43irDWvlRDUe+Gx8teTo3eMDk6DkX6I34j9UCqnJcRT65+uXWLqsakdWDxAXr1pmvoh3M8 0RGcNnHogNPddCI6aO5O7BwWFtOmLRygepsKk9afxTxgKeOKhpIDFaPHuNuXidfzqehuYg3NqCBhR GhWXI2/xOlXMAYmIIXzN0RDTgzxsVLd8EFfJQ2UWGOHUAcXHNgcOdVXlRMYpoaPVPmt8oDLA1qss9 7czBiL8tB4Gp12mRjiKKDcBET7eqsCizJZsgJKhjMVcnHmF4GAOdoeDC6uUGFDjg=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jun 19, 2021 at 12:36:44AM +0300, Andy Shevchenko wrote:
-> On Fri, Jun 18, 2021 at 11:11 PM Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > On Fri, Jun 18, 2021 at 05:38:54PM +0300, Andy Shevchenko wrote:
-> > > Rename bitmap_alloc() to bitmap_zalloc() in tools to follow new coming
-> > > bitmap API extension in kernel.
-> >
-> > Can you please tell more about the new coming extensions?
-> 
-> Ah, this is outdated text. It was about the time when bitmap_*alloc()
-> was introduced in the kernel.
-> 
-> > Anyways,
-> > Acked-by: Yury Norov <ynorov@caviumnetworks.com>
-> >
-> > All bitmap patches together can be found here:
-> > https://github.com/norov/linux/commits/bm-f1
-> 
-> Should I resend with that fixed (I have also noticed that your address
-> in Suggested-by is outdated)?
+Some environments do not set $SHELL when running tests. There's no need
+to use $SHELL here anyway, so just replace it with hard-coded path
+instead. Additionally avoid using bash-isms in the command, so that
+regular /bin/sh can be used.
 
-Yes. Please use
+Suggested-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+Fixes: 46d1a0f03d66 ("selftests/lkdtm: Add tests for LKDTM targets")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/lkdtm/run.sh | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Suggested-by: Yury Norov <yury.norov@gmail.com>
-Acked-by: Yury Norov <yury.norov@gmail.com>
+diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
+index bb7a1775307b..0f9f22ac004b 100755
+--- a/tools/testing/selftests/lkdtm/run.sh
++++ b/tools/testing/selftests/lkdtm/run.sh
+@@ -78,8 +78,9 @@ dmesg > "$DMESG"
+ 
+ # Most shells yell about signals and we're expecting the "cat" process
+ # to usually be killed by the kernel. So we have to run it in a sub-shell
+-# and silence errors.
+-($SHELL -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
++# to avoid terminating this script. Leave stderr alone, just in case
++# something _else_ happens.
++(/bin/sh -c '(echo '"$test"') | cat >'"$TRIGGER") || true
+ 
+ # Record and dump the results
+ dmesg | comm --nocheck-order -13 "$DMESG" - > "$LOG" || true
+-- 
+2.25.1
+
