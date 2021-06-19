@@ -2,121 +2,262 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5681A3AD6E8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jun 2021 05:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039563AD79D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jun 2021 06:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235608AbhFSDE6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Jun 2021 23:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
+        id S229521AbhFSEIi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Jun 2021 00:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235580AbhFSDE5 (ORCPT
+        with ESMTP id S229460AbhFSEIh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Jun 2021 23:04:57 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDC7C061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 20:02:46 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id m15-20020a17090a5a4fb029016f385ffad0so4182307pji.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 20:02:46 -0700 (PDT)
+        Sat, 19 Jun 2021 00:08:37 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6978CC061574;
+        Fri, 18 Jun 2021 21:06:26 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id h22-20020a05600c3516b02901a826f84095so6832056wmq.5;
+        Fri, 18 Jun 2021 21:06:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AL3IkUbQ1a/LRO+FbqYHn+oMeAp1U0V5I8weht9YTe0=;
-        b=k53RtsI3wnZQDyMBB2CG0HfKnm17M/4fp/pxu553QmY3YKnUokW0BYYV2B/y43PAYi
-         tsF8RSy9K9cPND3oMbY//QXYo86K/BfFm6Ux4OofTfucse1uj+WWaogWNVYFgcXwFt08
-         BNSO1bFyyIhOdbD6j6MMJsA3VUDL87xawV8SE=
+         :content-disposition:in-reply-to:user-agent;
+        bh=qvEO8E6NHwX0FfMs44sHJphC7boBDEt00ZHjlzvaAEg=;
+        b=HocuyXyE9kRnYXv9Ihz5eB8BLMzaKII7lfDtSXTYbJH3695KJdRGpE5u00Mz8pQgVI
+         41TPTyn0fH46h4UhPClEQZ26Kl2UiiY93g5QCmDUVh+0xFxifyiAmMry9xCmE+Ce2bfc
+         lpIkxVEExtzswTXw6Z3fTbwWFXvUu+uBqlFsncaZ4HgdbDHOIxRWyQkqB2W9K3S1Q4EE
+         Rs+JeqUibK7LBCbWvhLwjxqu9g0DLVa6wnPXWbRSIte9W6MlcIv8k8EZt1t1pjZtI9r9
+         P/pAhUD83LWo5Darhn7ZObozoatkxrDzT8VM/9rn5wFGStKYQyvflmSR9a/As3JVFR/4
+         Xh0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AL3IkUbQ1a/LRO+FbqYHn+oMeAp1U0V5I8weht9YTe0=;
-        b=Uo2d/oxkIkzTkpNPb0FmCMMfguwBXpnjdVLHfxQZrctG4MwFx9gsZac8FRVHuW50OH
-         TFQyS0PRb3rUYozY7JtQZvEyGubVtuI58MJqr94aHbDHqq97ldu3HsuueqnHjd99QD4K
-         iJRRZV4NOLQ04SOeDQQMukAFBhNCGsxkxSRN/S2235q0u/BDgZ8YXhGOey4AIDrAy0PJ
-         ANrhWHQZUESiPZo4ibN7RUCKzBxs2aHSDbg/wSHgZT3oIsHO4HbSa8ylePT6eqwobhxc
-         tStrI44ZlbhJqi8MsNpKiodzvKdMj5q9CSQl69kQ7g4IE7TfeTUaOul9lonhx6JE9zZq
-         sXzA==
-X-Gm-Message-State: AOAM533KUllc+v+8x6eeWoCEmRl24FxxCEtyuPuTNXkPWOSV1qdVXHvp
-        6BBHJAaBZvf/6ik0Y4Af0T117Q==
-X-Google-Smtp-Source: ABdhPJy6MS0K3mHCnNh+tPj7v6JRbScEU8fnlcCNFoGwViNFPru2h4JAlYS997Vfx/7JHe0RA8woxw==
-X-Received: by 2002:a17:90a:14e5:: with SMTP id k92mr13697656pja.149.1624071765805;
-        Fri, 18 Jun 2021 20:02:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h28sm9512020pfr.10.2021.06.18.20.02.44
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qvEO8E6NHwX0FfMs44sHJphC7boBDEt00ZHjlzvaAEg=;
+        b=QXdmzhG6tpHqo5KUAAv4jBj0IJGdi9Ze9cxqO2CddyzZQ8k3YB55WM5+SrDSe3N297
+         DEJI7jDBvh8cMS3eesHA6rjZHu/UzzLTujO0H907iB41MZACC6FtK/jorptnSIo2cvHM
+         AsUOlKfFb3z+dZ1su5zGUuz4cnPnSjjZZHhr2zSQQeHYtkmiP00/UgzT4L8Zmnse1UIM
+         xtoe8HIzDs7ClRbCXfRaFobeiFALsQ7J1jGqq7/lv2wH4do1QOSTK4XiV+rJGh+AyRan
+         lSsqksuWbWHFzVOCl3I7TBYKiziVKl2qocyNuOy8ewpwQJaK9VX+8QoEerU1v/aXzov2
+         EAMg==
+X-Gm-Message-State: AOAM533g+BWU2a45bO5OBcI32OvgjoVEE6CBhi0dufIaBDsfCi1Fr6fM
+        lF85la9F9PugnYSk8KyZ7Bk=
+X-Google-Smtp-Source: ABdhPJwk1fLZvfe/2S+r8w08v9/BV34y1966ujYFJ0sBhh+r9mg7mUBvUUIzYSom77l4NNfWn/tr2g==
+X-Received: by 2002:a05:600c:2150:: with SMTP id v16mr12490051wml.170.1624075584860;
+        Fri, 18 Jun 2021 21:06:24 -0700 (PDT)
+Received: from localhost (195-70-108-137.stat.salzburg-online.at. [195.70.108.137])
+        by smtp.gmail.com with ESMTPSA id m5sm10364796wmg.32.2021.06.18.21.06.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jun 2021 20:02:45 -0700 (PDT)
-Date:   Fri, 18 Jun 2021 20:02:44 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>, stable@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/lkdtm: Use /bin/sh not $SHELL
-Message-ID: <202106182000.D49612B26F@keescook>
-References: <20210617231027.3908585-1-keescook@chromium.org>
- <57775fe8-d9c2-4004-b8c5-0247faf33aa4@collabora.com>
+        Fri, 18 Jun 2021 21:06:24 -0700 (PDT)
+Date:   Sat, 19 Jun 2021 06:06:23 +0200
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Yangbo Lu <yangbo.lu@nxp.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Rui Sousa <rui.sousa@nxp.com>,
+        Sebastien Laveze <sebastien.laveze@nxp.com>
+Subject: Re: [net-next, v3, 02/10] ptp: support ptp physical/virtual clocks
+ conversion
+Message-ID: <20210619040623.GA14326@localhost>
+References: <20210615094517.48752-1-yangbo.lu@nxp.com>
+ <20210615094517.48752-3-yangbo.lu@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <57775fe8-d9c2-4004-b8c5-0247faf33aa4@collabora.com>
+In-Reply-To: <20210615094517.48752-3-yangbo.lu@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 18, 2021 at 08:29:57PM +0100, Guillaume Tucker wrote:
-> There's a bit more to it...  The lkdtm tests make use of the
-> process substitution feature with the <() syntax which is
-> specific to Bash.  The tests run by KernelCI use Debian, where
-> /bin/sh points to /bin/dash by default which doesn't support this
-> feature.  So one way to fix it would be:
-> 
->   (/bin/bash -c 'cat <(echo '"$test"') >'"$TRIGGER")
+On Tue, Jun 15, 2021 at 05:45:09PM +0800, Yangbo Lu wrote:
 
-Argh. I always forget that <() is a bash-ism. Thank you for tracking
-this down!
+> diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
+> index a780435331c8..78414b3e16dd 100644
+> --- a/drivers/ptp/ptp_clock.c
+> +++ b/drivers/ptp/ptp_clock.c
+> @@ -76,6 +76,11 @@ static int ptp_clock_settime(struct posix_clock *pc, const struct timespec64 *tp
+>  {
+>  	struct ptp_clock *ptp = container_of(pc, struct ptp_clock, clock);
+>  
+> +	if (ptp_guaranteed_pclock(ptp)) {
 
-> However, this might break others' workflows.
-> 
-> In fact the LAVA jobs run by KernelCI do define the $SHELL
-> environment variable except it's defined to be /bin/sh - and that
-> means /bin/dash gets called and we're back to the issue explained
-> above.
-> 
-> I've manually run a modified test job which defines
-> SHELL=/bin/bash and that works:
-> 
->   https://lava.collabora.co.uk/scheduler/job/4055547#L2835
+Can we please invent a more descriptive name for this method?
+The word "guaranteed" suggests much more.
 
-Yay!!
+> +		pr_err("ptp: virtual clock in use, guarantee physical clock free running\n");
 
-> So to avoid hitting the same issue in other places, as it seems
-> like there is an implicit dependency on Bash, we can just change
-> KernelCI kselftest jobs to always export SHELL=/bin/bash.
-> 
-> I suppose an even better fix would be to use standard shell
-> features that would work with any /bin/sh implementation, but
-> this is there to kill the sub-shell rather than the main script
-> process so I'm not entirely sure if we can easily do that
-> differently.  Maybe we can pipe the output to cat rather than the
-> substitution syntax, e.g.:
-> 
->   (/bin/sh -c '(echo '"$test"') | cat >'"$TRIGGER") || true
+This is good:           ^^^^^^^^^^^^^^^^^^^^^^^^^
+You can drop this part:                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Yeah, this is the right fix. There's no reason anything should depend
-on bash; I was just not thinking when I wrote this originally. :)
+So, please rename ptp_guaranteed_pclock() to ptp_vclock_in_use();
 
-> So I think the "safest" solution is to not change the kselftest
-> script and export SHELL=/bin/bash in the KernelCI jobs.  If the
-> pipe approach is good enough at catching signals then it could be
-> done on top of this patch as it's standard and should work with
-> any /bin/sh implementation.  What do you think?
+> +		return -EBUSY;
+> +	}
+> +
+>  	return  ptp->info->settime64(ptp->info, tp);
+>  }
 
-If you set SHELL=/bin/bash for now, the lkdtm tests should work as they
-are, and once the v2 patch lands, they'll continue to work, and
-SHELL=/bin/bash can be removed.
 
-Thank you so much!
+> diff --git a/drivers/ptp/ptp_private.h b/drivers/ptp/ptp_private.h
+> index 3f388d63904c..6949afc9d733 100644
+> --- a/drivers/ptp/ptp_private.h
+> +++ b/drivers/ptp/ptp_private.h
+> @@ -46,6 +46,9 @@ struct ptp_clock {
+>  	const struct attribute_group *pin_attr_groups[2];
+>  	struct kthread_worker *kworker;
+>  	struct kthread_delayed_work aux_work;
+> +	u8 n_vclocks;
 
--Kees
+Why not use "unsigned int" type?  I don't see a need to set an artificial limit.
 
--- 
-Kees Cook
+> +	struct mutex n_vclocks_mux; /* protect concurrent n_vclocks access */
+> +	bool vclock_flag;
+
+"flag" is vague.  How about "is_virtual_clock" instead?
+
+>  };
+>  
+>  #define info_to_vclock(d) container_of((d), struct ptp_vclock, info)
+> @@ -75,6 +78,18 @@ static inline int queue_cnt(struct timestamp_event_queue *q)
+>  	return cnt < 0 ? PTP_MAX_TIMESTAMPS + cnt : cnt;
+>  }
+>  
+> +/*
+> + * Guarantee physical clock to stay free running, if ptp virtual clocks
+> + * on it are in use.
+> + */
+> +static inline bool ptp_guaranteed_pclock(struct ptp_clock *ptp)
+> +{
+> +	if (!ptp->vclock_flag && ptp->n_vclocks)
+
+Need to take mutex for n_vclocks to prevent load tearing.
+
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+>  /*
+>   * see ptp_chardev.c
+>   */
+
+> @@ -148,6 +149,90 @@ static ssize_t pps_enable_store(struct device *dev,
+>  }
+>  static DEVICE_ATTR(pps_enable, 0220, NULL, pps_enable_store);
+>  
+> +static int unregister_vclock(struct device *dev, void *data)
+> +{
+> +	struct ptp_clock *ptp = dev_get_drvdata(dev);
+> +	struct ptp_clock_info *info = ptp->info;
+> +	struct ptp_vclock *vclock;
+> +	u8 *num = data;
+> +
+> +	vclock = info_to_vclock(info);
+> +	dev_info(dev->parent, "delete virtual clock ptp%d\n",
+> +		 vclock->clock->index);
+> +
+> +	ptp_vclock_unregister(vclock);
+> +	(*num)--;
+> +
+> +	/* For break. Not error. */
+> +	if (*num == 0)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t n_vclocks_show(struct device *dev,
+> +			      struct device_attribute *attr, char *page)
+> +{
+> +	struct ptp_clock *ptp = dev_get_drvdata(dev);
+> +
+> +	return snprintf(page, PAGE_SIZE-1, "%d\n", ptp->n_vclocks);
+
+Take mutex.
+
+> +}
+> +
+> +static ssize_t n_vclocks_store(struct device *dev,
+> +			       struct device_attribute *attr,
+> +			       const char *buf, size_t count)
+> +{
+> +	struct ptp_clock *ptp = dev_get_drvdata(dev);
+> +	struct ptp_vclock *vclock;
+> +	int err = -EINVAL;
+> +	u8 num, i;
+> +
+> +	if (kstrtou8(buf, 0, &num))
+> +		goto out;
+> +
+> +	if (num > PTP_MAX_VCLOCKS) {
+> +		dev_err(dev, "max value is %d\n", PTP_MAX_VCLOCKS);
+> +		goto out;
+> +	}
+> +
+> +	if (mutex_lock_interruptible(&ptp->n_vclocks_mux))
+> +		return -ERESTARTSYS;
+> +
+> +	/* Need to create more vclocks */
+> +	if (num > ptp->n_vclocks) {
+> +		for (i = 0; i < num - ptp->n_vclocks; i++) {
+> +			vclock = ptp_vclock_register(ptp);
+> +			if (!vclock) {
+> +				mutex_unlock(&ptp->n_vclocks_mux);
+> +				goto out;
+> +			}
+> +
+> +			dev_info(dev, "new virtual clock ptp%d\n",
+> +				 vclock->clock->index);
+> +		}
+> +	}
+> +
+> +	/* Need to delete vclocks */
+> +	if (num < ptp->n_vclocks) {
+> +		i = ptp->n_vclocks - num;
+> +		device_for_each_child_reverse(dev, &i,
+> +					      unregister_vclock);
+> +	}
+> +
+> +	if (num == 0)
+> +		dev_info(dev, "only physical clock in use now\n");
+> +	else
+> +		dev_info(dev, "guarantee physical clock free running\n");
+> +
+> +	ptp->n_vclocks = num;
+> +	mutex_unlock(&ptp->n_vclocks_mux);
+> +
+> +	return count;
+> +out:
+> +	return err;
+> +}
+> +static DEVICE_ATTR_RW(n_vclocks);
+> +
+>  static struct attribute *ptp_attrs[] = {
+>  	&dev_attr_clock_name.attr,
+>  
+
+
+> diff --git a/include/uapi/linux/ptp_clock.h b/include/uapi/linux/ptp_clock.h
+> index 1d108d597f66..4b933dc1b81b 100644
+> --- a/include/uapi/linux/ptp_clock.h
+> +++ b/include/uapi/linux/ptp_clock.h
+> @@ -69,6 +69,11 @@
+>   */
+>  #define PTP_PEROUT_V1_VALID_FLAGS	(0)
+>  
+> +/*
+> + * Max number of PTP virtual clocks per PTP physical clock
+> + */
+> +#define PTP_MAX_VCLOCKS			20
+
+Why limit this to twenty clocks?
+
+Thanks,
+Richard
