@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B59463AF335
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jun 2021 19:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835183AF391
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jun 2021 20:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233364AbhFUSAH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Jun 2021 14:00:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39596 "EHLO mail.kernel.org"
+        id S233122AbhFUSCR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Jun 2021 14:02:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45462 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232119AbhFUR6F (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Jun 2021 13:58:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2224E613C3;
-        Mon, 21 Jun 2021 17:53:43 +0000 (UTC)
+        id S233599AbhFUSAQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 21 Jun 2021 14:00:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 18235613E2;
+        Mon, 21 Jun 2021 17:54:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624298023;
-        bh=R0eM+JPuOKwgSKHHLCwyDIqz+/QuEff9VtRTavBuU+k=;
+        s=k20201202; t=1624298077;
+        bh=6iiuKRkQlu1TIpuawsmuLZUAgfxWm/ksDT6yIMSfJ4E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T3QoVgE0RUDRvoIgX47Er+4lqxLW7kRbr89y083JX2O6JGUS7g33IL/LyWnIoyTaV
-         lI9ka0UrDqYqYHhx0bag8akFZtJHuubmV9kWXy+SB17y4wtqyiBHkak5SuvvMrNtfC
-         nr3bsh+LvUSS/iNKx76rPubFU52OHCbbscqR2OJ2AJiiFs+wntdSeUPk+cqvL588AH
-         q/I08pDal8ThU8MyLdbB28WEvxobVN8s8A4fEWbTexq9rlvaxTc5++ZnmaIyw9Jxkr
-         irbivBSo7x4Xp+nl1VD8otXH222V4nOMsoI6lPLv+3vOsHLThm38i7sUofqhnfRP/Z
-         RsYLECNe0FRcA==
+        b=TXWzKeqijkw5psYBNA7WC7w8XpNdWbuA+/x19kgIwQhtl8pUXUHZ1BfKXQ+FoiEJ2
+         MM++DO6T1cCk1eXNiuWHsH1fSqmVmWbIIiUgmfphfwj7bMfJuTfLfULRuo7xjMwLPv
+         xOyNuJzBXxY0+TlntaSajZSOqvoKuycuaZSs13+130yfypHvcoRZUESa7Uwk61oJ4J
+         lpmD6Wy0q35hV+uvz6PPVTZV8qbBBjVNdwi0HPbooUkAAmgASboBUYUU3UQsgnql10
+         MN1KLeTz7sc16vqlHLqv+vZQ5YJLrlsa2W10nYZ7Kv5j1ADVdDHccyzRoADsAoNkvM
+         IUbAxWo7HhIRg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Fuad Tabba <tabba@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 28/35] KVM: selftests: Fix kvm_check_cap() assertion
-Date:   Mon, 21 Jun 2021 13:52:53 -0400
-Message-Id: <20210621175300.735437-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 21/26] KVM: selftests: Fix kvm_check_cap() assertion
+Date:   Mon, 21 Jun 2021 13:53:54 -0400
+Message-Id: <20210621175400.735800-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210621175300.735437-1-sashal@kernel.org>
-References: <20210621175300.735437-1-sashal@kernel.org>
+In-Reply-To: <20210621175400.735800-1-sashal@kernel.org>
+References: <20210621175400.735800-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,10 +58,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 126c6727a6b0..49805fd16fdf 100644
+index 41cf45416060..38de88e5ffbb 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -55,7 +55,7 @@ int kvm_check_cap(long cap)
+@@ -54,7 +54,7 @@ int kvm_check_cap(long cap)
  		exit(KSFT_SKIP);
  
  	ret = ioctl(kvm_fd, KVM_CHECK_EXTENSION, cap);
