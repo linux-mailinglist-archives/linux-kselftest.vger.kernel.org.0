@@ -2,106 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE6E3AF5CE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jun 2021 21:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B443AF5F9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jun 2021 21:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbhFUTIw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Jun 2021 15:08:52 -0400
-Received: from mga17.intel.com ([192.55.52.151]:60414 "EHLO mga17.intel.com"
+        id S229940AbhFUTWW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Jun 2021 15:22:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50262 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229897AbhFUTIw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Jun 2021 15:08:52 -0400
-IronPort-SDR: cXHMRXQz4mGFt8clh0K/+U60tuEvJGnG9o8q3y2PDpQeeAg/J21wpyRflPDzQwN1gIFu7q8Bjq
- gvhORtvMmfcg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10022"; a="187293641"
-X-IronPort-AV: E=Sophos;i="5.83,289,1616482800"; 
-   d="scan'208";a="187293641"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2021 12:06:37 -0700
-IronPort-SDR: z75lA64KpVlDa81rKjUVEAaNoYT9JJwKTUEy4mZGDOJKS4BvtY3G4Ps0S59j1/vwGbGelPPs2N
- 16KUGjrgClIw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,289,1616482800"; 
-   d="scan'208";a="405721024"
-Received: from viggo.jf.intel.com (HELO localhost.localdomain) ([10.54.77.144])
-  by orsmga006.jf.intel.com with ESMTP; 21 Jun 2021 12:06:36 -0700
-Subject: [PATCH] selftests/sgx: remove checks for file execute permissions
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        tim.gardner@canonical.com, jarkko@kernel.org,
-        reinette.chatre@intel.com, shuah@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-Date:   Mon, 21 Jun 2021 12:05:56 -0700
-Message-Id: <20210621190556.4B5DCBB1@viggo.jf.intel.com>
+        id S231490AbhFUTWT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 21 Jun 2021 15:22:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 0981861356;
+        Mon, 21 Jun 2021 19:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624303205;
+        bh=b44G8g9bppS0Gm+biXLIchdUB72Mnr2l2IiVtQxeM4c=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=H9y6LGw86g+ozrHUZgBPcsHzqcC8NJHAQvgznIS0XT3SWOI1uKFlLRQ8AgRgxW3Ph
+         6dTSyWh0btyDDEfiFPMNOZ8oCqJana5wmaOR5t/IEF4KOZhreU+aygSzSjhwg1YYx0
+         1Hor3wlfKfkG0w8HV2PH5BKpImc40qUNajISRnRUb23CimNFfmopafaGIZowlOFYf+
+         71rc5BEzObMGqXcMDU8dXAq+EVZA1YtFSKCvCycFnA461OUEqrqk1+8nxIHO9EAf3y
+         xVr1Yu7RpX5LJJEjFzOu0c+yMaL7JFawUi1355bXxS+rgBQyEupIZ3iNfThP/Zp0xq
+         n5TuCxCG5YxsQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F336A60A37;
+        Mon, 21 Jun 2021 19:20:04 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/2] selftests: tls: clean up uninitialized warnings
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162430320499.6988.9835964890406190142.git-patchwork-notify@kernel.org>
+Date:   Mon, 21 Jun 2021 19:20:04 +0000
+References: <20210618202504.1435179-1-kuba@kernel.org>
+In-Reply-To: <20210618202504.1435179-1-kuba@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        vfedorenko@novek.ru
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hello:
 
-The SGX selftests can fail for a bunch of non-obvious reasons
-like 'noexec' permissions on /dev (which is the default *EVERYWHERE*
-it seems).
+This series was applied to netdev/net-next.git (refs/heads/master):
 
-A new test mistakenly also looked for +x permission on the
-/dev/sgx_enclave.  File execute permissions really only apply to
-the ability of execve() to work on a file, *NOT* on the ability
-for an application to map the file with PROT_EXEC.  SGX needs to
-mmap(PROT_EXEC), but doesn't need to execve() the device file.
+On Fri, 18 Jun 2021 13:25:03 -0700 you wrote:
+> A bunch of tests uses uninitialized stack memory as random
+> data to send. This is harmless but generates compiler warnings.
+> Explicitly init the buffers with random data.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+>  tools/testing/selftests/net/tls.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 
-Remove the check.
+Here is the summary with links:
+  - [net,1/2] selftests: tls: clean up uninitialized warnings
+    https://git.kernel.org/netdev/net-next/c/baa00119d69e
+  - [net,2/2] selftests: tls: fix chacha+bidir tests
+    https://git.kernel.org/netdev/net-next/c/291c53e4dacd
 
-Fixes: 4284f7acb78b ("selftests/sgx: Improve error detection and messages")
-Reported-by: Tim Gardner <tim.gardner@canonical.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-sgx@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
----
 
- b/tools/testing/selftests/sgx/load.c |   16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
-
-diff -puN tools/testing/selftests/sgx/load.c~sgx-no-file-exec tools/testing/selftests/sgx/load.c
---- a/tools/testing/selftests/sgx/load.c~sgx-no-file-exec	2021-06-21 11:48:25.226294281 -0700
-+++ b/tools/testing/selftests/sgx/load.c	2021-06-21 12:03:28.023292029 -0700
-@@ -150,16 +150,6 @@ bool encl_load(const char *path, struct
- 		goto err;
- 	}
- 
--	/*
--	 * This just checks if the /dev file has these permission
--	 * bits set.  It does not check that the current user is
--	 * the owner or in the owning group.
--	 */
--	if (!(sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))) {
--		fprintf(stderr, "no execute permissions on device file %s\n", device_path);
--		goto err;
--	}
--
- 	ptr = mmap(NULL, PAGE_SIZE, PROT_READ, MAP_SHARED, fd, 0);
- 	if (ptr == (void *)-1) {
- 		perror("mmap for read");
-@@ -169,13 +159,13 @@ bool encl_load(const char *path, struct
- 
- #define ERR_MSG \
- "mmap() succeeded for PROT_READ, but failed for PROT_EXEC.\n" \
--" Check that current user has execute permissions on %s and \n" \
--" that /dev does not have noexec set: mount | grep \"/dev .*noexec\"\n" \
-+" Check that /dev does not have noexec set:\n" \
-+" \tmount | grep \"/dev .*noexec\"\n" \
- " If so, remount it executable: mount -o remount,exec /dev\n\n"
- 
- 	ptr = mmap(NULL, PAGE_SIZE, PROT_EXEC, MAP_SHARED, fd, 0);
- 	if (ptr == (void *)-1) {
--		fprintf(stderr, ERR_MSG, device_path);
-+		fprintf(stderr, ERR_MSG);
- 		goto err;
- 	}
- 	munmap(ptr, PAGE_SIZE);
-_
