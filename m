@@ -2,113 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372E63AF993
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Jun 2021 01:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D543AFC77
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Jun 2021 07:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbhFUXlS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Jun 2021 19:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbhFUXlR (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Jun 2021 19:41:17 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98780C061760
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Jun 2021 16:39:01 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id f30so32992952lfj.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Jun 2021 16:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LKCX3YjuqUNoE4+roGGfm8o2np78e+Xfu61B4cA+uJI=;
-        b=QFcnGtA3VrPeLLWUQicj9F1i0h1b/5RybgGRdCxbzFL8QhdCFvqX8VwhHYX5q3Pqkr
-         5doeAmEDeGxRt76VeDSVeTUadqoTA9u5/6KTlXOqcOXjJSNpNfPijSSqRT/k13mRT82w
-         BkMfCbkNJslkTjpro+DkmBk3PjS4Hn6PXERxRUa93acO7MAGSIQkTHpMNoCVbbitEC/G
-         3z40+VkdiWaBHfrDy1AVZ8PQ02ycaq32fh4zmxddeYVhD6TbyPzafSla/8UwQq8SJUic
-         P+LJtxgksTY14V5S67BoAcB1O0z9RiIOsr1CYCnuSPJgiazaQKBcf7ytjA/ktHEpP3jT
-         SeQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LKCX3YjuqUNoE4+roGGfm8o2np78e+Xfu61B4cA+uJI=;
-        b=fVBo0wh4Ycc2JxDkCKdWEfl7mwv+945G2a81//mdvnRV9cX4Iaey+vsfwsxaz0fz6G
-         nuR6Vib6YtAOIXt1+uJd4ZJIt/Okr3fueEMcBzMrWkpaCpZoLVi6S0Va5S0m4gZ2UgMo
-         MzoOS99VT/RTdE3tBL16i2oJpJTLgvzrxJgjgJzudL6mj9UZWOyEqO4rsp5zls+lyj77
-         15unhnJdi4OTgvXcY9oAFF8bSVh4iYUVrNS58SV2O15865AjK8G2IOySl+KsKGib8I8x
-         rby+DipFbxkhLhGtfYFT+f0Y0PheRd3ClJNjT0J4kQdSNXdU8C0FT0xZJD96VWVfpxD+
-         xqeA==
-X-Gm-Message-State: AOAM5326+uydS9RERgiuw1RveK4qEt0x2lyG2LO3EhsC9k2AqAwnBza5
-        X+G0tXmYmii7bXukTxq5nk26XYcd8tcN4Hm1vLqbMg==
-X-Google-Smtp-Source: ABdhPJyDQGI0gLkASAQSuSpsPjVvNlP9W768H8z16TiAXAgKg2wBct7k8/lWvgPo4urmgneuo0U07ygTChCL7ubyJYY=
-X-Received: by 2002:a05:6512:33c4:: with SMTP id d4mr592219lfg.536.1624318739777;
- Mon, 21 Jun 2021 16:38:59 -0700 (PDT)
+        id S229818AbhFVFMm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Jun 2021 01:12:42 -0400
+Received: from mail-db8eur05olkn2078.outbound.protection.outlook.com ([40.92.89.78]:59488
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229612AbhFVFMl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 22 Jun 2021 01:12:41 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AXZI9ho9qUs64NR1vVgGmXuexs6joaIyMG7qV0bJYm3xXjIGxElQOVkT3TW8egupEz9qyZNq7YVaW3NtN7Py33TsZWuImFfTo9NYyiSZrlUL/Vtw6Nrg2P4oRfllDEudARXFOjnJa+nOraKMj3ZUPhRlM1lNrIwsMiiGMBC9PiijytczfhBui1q0hNuMllo+gXstSSOY/HFv/Vs18IqqmPixSFTxVNdS8Lz7z4JDmiMHbHvTlh/dMwZwT6szXHLtk/c0iSRF1Eo/kKXAqhviyNftkvE4+Dm1/dQniL1YSELVFU50+toU/aXBmHyeFfkrDfskbx7nRX8QlqTLAOwHCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OytysZu5Z+aAyVrvNx45JXK3NgpiH3c7LaspZb446DE=;
+ b=O5yS3lV3zMwJan5ca6+EGAiolc8iQVciKp8zezB3LlOQXzecxGfA2K0Vq0bSOX5n0uwlpAK4ZCxSX8CuM4NBjLQLp9QExwKWiBwrXiuSJmPghmvQCpDME0GLKS0lJKteoyxxNqFlc5qPogM0ZjX/rhHSkujVhnen1fWH1Lfdaeiqq6oYQBfWEjrcZk1sz+ACQ0U0hCYiCmYTpjR9UJJWK9pAnX16gh4Zw12aj8S98yTgvnqAQqLLydBIQXUo/w1vb1mVG8ecVASccpJBzpPCEwgfkCXXA71MSljZXKvdO1pH1EDrDTaCCK4yo5P4bIFTi6hdhMPBdoUacszVTMOnGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from VI1EUR05FT027.eop-eur05.prod.protection.outlook.com
+ (2a01:111:e400:fc12::53) by
+ VI1EUR05HT195.eop-eur05.prod.protection.outlook.com (2a01:111:e400:fc12::477)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.16; Tue, 22 Jun
+ 2021 05:10:23 +0000
+Received: from DB9PR10MB4713.EURPRD10.PROD.OUTLOOK.COM
+ (2a01:111:e400:fc12::50) by VI1EUR05FT027.mail.protection.outlook.com
+ (2a01:111:e400:fc12::209) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.16 via Frontend
+ Transport; Tue, 22 Jun 2021 05:10:23 +0000
+X-IncomingTopHeaderMarker: OriginalChecksum:B537D4C97917BF2D244BB724943815E82B1AEEF575C68F9AF35558D8BDE4A370;UpperCasedChecksum:8A41EBD09CC0797627FAAAB4435C4EE97BB48E6D8EF9E472ADD79745FFA31102;SizeAsReceived:9154;Count:48
+Received: from DB9PR10MB4713.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2515:5d6d:6f1e:c41]) by DB9PR10MB4713.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2515:5d6d:6f1e:c41%9]) with mapi id 15.20.4242.023; Tue, 22 Jun 2021
+ 05:10:23 +0000
+Subject: Re: [PATCH v9] exec: Fix dead-lock in de_thread with ptrace_attach
+From:   Bernd Edlinger <bernd.edlinger@hotmail.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Charles Haithcock <chaithco@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Adrian Reber <areber@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <AM8PR10MB4708AFBD838138A84CE89EF8E4359@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <20210610143642.e4535dbdc0db0b1bd3ee5367@linux-foundation.org>
+ <AM8PR10MB470896FBC519ABCC20486958E4349@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <877diwtn2p.fsf@disp2133>
+ <AS8PR10MB47120E7A195A593C1377172CE4309@AS8PR10MB4712.EURPRD10.PROD.OUTLOOK.COM>
+ <AM8PR10MB47083E11E2B39ACBDF396954E40F9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+Message-ID: <DB9PR10MB47134C036A2DADB4FD53F16AE4099@DB9PR10MB4713.EURPRD10.PROD.OUTLOOK.COM>
+Date:   Tue, 22 Jun 2021 07:10:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+In-Reply-To: <AM8PR10MB47083E11E2B39ACBDF396954E40F9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TMN:  [TxNR3A2P2Z/6GxfqYbv4g+YO6Wi2Feae]
+X-ClientProxiedBy: AM0PR03CA0041.eurprd03.prod.outlook.com (2603:10a6:208::18)
+ To DB9PR10MB4713.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:261::7)
+X-Microsoft-Original-Message-ID: <b1ada4a0-0049-5c68-95cc-dfecf375f8b5@hotmail.de>
 MIME-Version: 1.0
-References: <20210618222709.1858088-1-jingzhangos@google.com>
- <20210618222709.1858088-3-jingzhangos@google.com> <0cde024e-a234-9a10-5157-d17ba423939e@redhat.com>
- <CAAdAUtiL6DwJDWLLmUqct6B6n7Zaa2DyPhpwKZKb=cpRH+8+vQ@mail.gmail.com>
- <aa1d0bd9-55cf-161a-5af9-f5abde807353@redhat.com> <CAAdAUti1MreOnAXtA+jBEaq+AixmqvBEByi9G4EgDpfu63spHA@mail.gmail.com>
- <c639c557-0e16-6938-2da5-46400ee2dd14@redhat.com>
-In-Reply-To: <c639c557-0e16-6938-2da5-46400ee2dd14@redhat.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Mon, 21 Jun 2021 18:38:49 -0500
-Message-ID: <CAAdAUtgXAedsXf_1Mjp+mBNkZkHg9feirMpUYQFrYhQ=8vVFcg@mail.gmail.com>
-Subject: Re: [PATCH v12 2/7] KVM: stats: Add fd-based API to read binary stats data
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Fuad Tabba <tabba@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.1.101] (84.57.55.161) by AM0PR03CA0041.eurprd03.prod.outlook.com (2603:10a6:208::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.18 via Frontend Transport; Tue, 22 Jun 2021 05:10:21 +0000
+X-MS-PublicTrafficType: Email
+X-IncomingHeaderCount: 48
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-Correlation-Id: 4ad1ba75-b682-4dc8-342f-08d9353c09aa
+X-MS-TrafficTypeDiagnostic: VI1EUR05HT195:
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zAoo1wxbIIjfe65ebFtY0zAwStnVsPPv9dyjR4DuitYbast8b9HhnBW0MkrW9VhJxgVpf1PXQ0MoO3RX4OgWvxGX0k3J680FjnZF9UqNFUpwlHYnP1Cj8kPHc2WQRrocjLq692ATI9ugvTspVIg3irRvch0PkML8b8+ATXYuVw8U/AcF0uwTnqR6cXNQPGW+MZ4fIUc+q0C5lXix7huWHFW47+RD41tmNOUWg0krSJ7iPrCwVIh4JuDBhs4cgeBtVLiQCiZFxBkAPxuCpvOzQXk5IxH651+vDxkgJQEK/hfLnxeF+MHe1U0WjbdVuz2opl+GeYVqy+T+I61nEtYy+Jpz4HB+jV9VnbuE6cgoyi3mTChOhuJPVzkmvOSyez7y
+X-MS-Exchange-AntiSpam-MessageData: A3X7cpQWT6cBhyeqhn3Dmulejl3u5+AFz1qRhWpA7d9HqqNcjwA4lJbpd6HWGLDS/dmYsodexAv4UpWZuMzUBdzGRGAhnlxBDT/iEnDi9Fteg2lP0pZp6okpt+ysTc7UHK/II4GTdlltIW+Ifotouw==
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ad1ba75-b682-4dc8-342f-08d9353c09aa
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2021 05:10:23.1093
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR05FT027.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1EUR05HT195
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 6:35 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 22/06/21 00:58, Jing Zhang wrote:
-> >> Pass it as an argument?
-> > The num_desc can only be initialized in the same file that defines the
-> > descriptor array.
-> > Looks like we have to have a global variable to save that. The
-> > solution would be similar
-> > to have a statically defined header for each arch.
-> > So, keep the header structure for each arch?
->
-> Oh, sorry.  I missed that there's only one call to kvm_stats_read and
-> it's in common code.  The remaining comments are small enough that I can
-> apply them myself.  Thanks!
->
-> Paolo
->
-Cool! Thanks, Paolo.
+On 6/16/21 11:31 PM, Bernd Edlinger wrote:
+> On 6/15/21 4:26 PM, Bernd Edlinger wrote:
+>> The first phase of de_thread needs co-operation from a user task,
+>> if and only if any task t except the thread leader has t->ptrace.
+>> Taking tasks from RUNNING->EXIT_ZOMBIE only needs co-operation from kernel code,
+> 
+> 
+> Aehm, sorry, that is not correct, what I said here.
+> 
+> I totally overlooked ptrace(PTRACE_SEIZE, pid, 0L, PTRACE_O_TRACEEXIT)
+> 
+> and unfortunately this also prevents even the thread leader to enter the
+> EXIT_ZOMBIE state because do_exit does:
+> 
+>         ptrace_event(PTRACE_EVENT_EXIT, code);
+> 
+> unfortunately this sends an event to the tracer, and waits not only for
+> the tracer to call waitpid, but also needs a PTRACE_CONT before do_exit
+> can call exit_notify which does tsk->exit_state = EXIT_ZOMBIE.
+> 
 
-Jing
+P.S:
+
+I think there is something really odd in ptrace_stop().
+
+If it is intentional (which I believe to be the case) to wait here after a
+SIGKILL until the process enters the exit_state == EXIT_ZOMBIE, then aborting the
+pending ptrace_stop() via sigkill_pending() is questionable, especially because
+arch_ptrace_stop_needed() is defined as (0) in most architectures, only sparc and
+ia64 do something here.
+
+static void ptrace_stop(int exit_code, int why, int clear_code, kernel_siginfo_t *info)
+        __releases(&current->sighand->siglock)
+        __acquires(&current->sighand->siglock)
+{
+        bool gstop_done = false;
+
+        if (arch_ptrace_stop_needed(exit_code, info)) {
+                /*
+                 * The arch code has something special to do before a
+                 * ptrace stop.  This is allowed to block, e.g. for faults
+                 * on user stack pages.  We can't keep the siglock while
+                 * calling arch_ptrace_stop, so we must release it now.
+                 * To preserve proper semantics, we must do this before
+                 * any signal bookkeeping like checking group_stop_count.
+                 * Meanwhile, a SIGKILL could come in before we retake the
+                 * siglock.  That must prevent us from sleeping in TASK_TRACED.
+                 * So after regaining the lock, we must check for SIGKILL.
+                 */
+                spin_unlock_irq(&current->sighand->siglock);
+                arch_ptrace_stop(exit_code, info);
+                spin_lock_irq(&current->sighand->siglock);
+                if (sigkill_pending(current))
+                        return;
+        }
+
+        set_special_state(TASK_TRACED);
+
+After this point there is no sigkill_pending() or fatal_signal_pending(), just
+a single freezable_schedule() which explains why this can even wait with a fatal
+signal pending.  But if the code executes the if block above the sigkill can
+only be ignored if it happens immediately before the set_special_state(TASK_TRACED).
+
+What do you think?
+
+
+Bernd.
