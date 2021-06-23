@@ -2,214 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6A03B10D1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jun 2021 01:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE5F3B145C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jun 2021 09:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbhFVX5w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Jun 2021 19:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbhFVX5w (ORCPT
+        id S229964AbhFWHGy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Jun 2021 03:06:54 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:49225 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229958AbhFWHGx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Jun 2021 19:57:52 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB4C061756
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Jun 2021 16:55:35 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id o5so1223190iob.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Jun 2021 16:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KUWFjpT6YBkCLpvFT4HlZ6tYk9tWHjZGUxJiYySq8UQ=;
-        b=tJW+1cmKXb+HRi7bCn0UUwncLAc6B7cb2Rw5rhQqmAzgfCl2EiZOlnMpxyOkTiBdGr
-         UGvkc+bRKGT3mGJCwHtxTk7bsFGCpC8dWzHobRvz4ot4LrCTweU8HXsK1bHpzrHjzlQQ
-         4hGtBH1007HFOjQKfB2GCO5aTSWJdk55eZ1DT0JxIqQsiemxl2YSYA9p8pk7UXPT4qiR
-         rpxMqUJSC8HdayjX2whg8n5stLkBzEiEGN9wOQqkoj70sfy30WriYATJGGWMfNLJLRAK
-         JkhaGRBVGJt6ER19bkkB++FkbRTo665/fpLZpgig0fifr8eu3TkL/ZsbDV3M4BNEId9r
-         /INg==
+        Wed, 23 Jun 2021 03:06:53 -0400
+Received: from mail-wm1-f71.google.com ([209.85.128.71])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lvww7-0000ep-AI
+        for linux-kselftest@vger.kernel.org; Wed, 23 Jun 2021 07:04:35 +0000
+Received: by mail-wm1-f71.google.com with SMTP id l9-20020a05600c1d09b02901dc060832e2so222705wms.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 00:04:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KUWFjpT6YBkCLpvFT4HlZ6tYk9tWHjZGUxJiYySq8UQ=;
-        b=JQ9ry4zNpZwP/JP84GD46SUxWJP6vZTE+plqw9lLv9Unc3ei9hj993NjS/t2otq6Dd
-         T/rUqsdfboC2MBr+lRDroq9YxYtgGEODw8CMoM+IchivYFGKrTXOdjP4417Y5osuJcKB
-         RyDKMFMYDWdle1YE0hQ0YEMPqIQFDdIpU0pRYyM0YZAgyReRE/kv6WASBHndMlO8PX87
-         BE0c/lXpEzx25tBe/4XZX7j2ND6NwSsjDnN3j0ibddF2CGT90sU5z5X+bMLf8gjY+YWg
-         MjDQkBba+EItwWL5bVxB/5PGrEPGC5d+ho7FHWSV5Ww9myKER/T4LNL06CB38TOBSwOU
-         zz8A==
-X-Gm-Message-State: AOAM530NgpR27qFeFAVdVmRRyrT5FaaGX41SUtUX8HRb/FYYdJMsn8HD
-        TgzmZ4PgJ+ll5UrvGJZyxSSraoTg/TPnsQA4Iv8sKg==
-X-Google-Smtp-Source: ABdhPJw754OL9sHKekBMhtUG4nG4roseEc/8AHs1V3pNEL5tlhRzCdZMjH0uDo5MWjBzZHWtyVfKT4mWfhWspHUUnrI=
-X-Received: by 2002:a05:6638:110e:: with SMTP id n14mr6247711jal.4.1624406133636;
- Tue, 22 Jun 2021 16:55:33 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AH2QL7P4i7gFaUF/ZBeQ7+HlAe6BdfHUYWj4tEHBDgw=;
+        b=f0vgS2vnORWpMdIWe189JZkHHOY6bk8YIvCX13QLfKXHYlhj8F9eKgtWpVKHzgrIuy
+         j+zBjgsZacEJXAo0DSut5mDMLP4i5BvTbScF0OogrmQ/bhabGFGdyiTiP9+Aq5lgF7qt
+         SC0PG9w+Q9VsX2QkOrUMx7J8HH+Fcgj2yQ5Mr5YDFEv4GGXeNlSJb6xeSGerC+gOiq3m
+         HNvYGX2cew3fvek2cAOaE0dh3gycNyXIVBIQSZUBLtsP0LStODkE5I34TyPG/LxlVHmD
+         cT8ircj5rWXWdgQHfGDlg2Bun1wZZ8dDVYopj4kQZYiBaHyiHKFFbP8E24a9RtsxLlgs
+         dH5A==
+X-Gm-Message-State: AOAM5307YFas8ZgdnLdwH59NxH04CnDo8AtDdu/0Tnij8BOSCzPg7Bqt
+        l+wbcyf1jlUF6CFKpO/MpK6yGdMaPxls0aOKrvnfDKsZ2Nh3y9Fc9HRpkcSSfX0/qjMpMMeTpYT
+        dUB04e5sQ67ndwkPdyQNrYNarkFit+nbD/+zwVuBUh5wCQA==
+X-Received: by 2002:a5d:504e:: with SMTP id h14mr5042408wrt.273.1624431875015;
+        Wed, 23 Jun 2021 00:04:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxMQOpl/2xpkgmzgfvqKIMaW6DBY/obT/oN1U9kV+oY949g+Ewlk2Di9BxmoeJI0KvBPAIhAw==
+X-Received: by 2002:a5d:504e:: with SMTP id h14mr5042389wrt.273.1624431874854;
+        Wed, 23 Jun 2021 00:04:34 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id q19sm4529407wmc.44.2021.06.23.00.04.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jun 2021 00:04:34 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: fix event-no-pid on 1-core machine
+Date:   Wed, 23 Jun 2021 09:04:31 +0200
+Message-Id: <20210623070431.16592-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20210617073937.16281-1-sjpark@amazon.de> <20210617074638.16583-1-sjpark@amazon.de>
- <CAGS_qxofnnP7Ju15iaZ_Szr+aqmHNxU51Kiv723bkd8w9g+Jkg@mail.gmail.com>
-In-Reply-To: <CAGS_qxofnnP7Ju15iaZ_Szr+aqmHNxU51Kiv723bkd8w9g+Jkg@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 22 Jun 2021 16:55:21 -0700
-Message-ID: <CAGS_qxoPq1f+dcaf43xyjbDhW-ASG3gZez-b0Pv_s17JU3hePw@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: tool: Assert the version requirement
-To:     SeongJae Park <sj38.park@gmail.com>
-Cc:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        SeongJae Park <sjpark@amazon.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 4:28 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Thu, Jun 17, 2021 at 12:46 AM SeongJae Park <sj38.park@gmail.com> wrote:
-> >
-> > Commit 87c9c1631788 ("kunit: tool: add support for QEMU") on the 'next'
-> > tree adds 'from __future__ import annotations' in 'kunit_kernel.py'.
-> > Because it is supported on only >=3.7 Python, people using older Python
-> > will get below error:
-> >
-> >     Traceback (most recent call last):
-> >       File "./tools/testing/kunit/kunit.py", line 20, in <module>
-> >         import kunit_kernel
-> >       File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 9
-> >         from __future__ import annotations
->
-> Chatted offline with David about this.
-> He was thinking if we could instead drop the minimal version back to 3.6.
->
-> I think we can do so, see below.
-> Perhaps we should drop the import and then chain this patch on top of
-> that, specifying a minimum version of 3.6?
+When running event-no-pid test on a small machines (e.g. cloud 1-core
+instance), other events might not happen:
 
-Actually, now I've gotten python3.6 installed on my machine, I see we
-have another issue.
+    + cat trace
+    + cnt=0
+    + [ 0 -eq 0 ]
+    + fail No other events were recorded
+    [15] event tracing - restricts events based on pid notrace filtering [FAIL]
 
-We pass text=true to subprocess.
-That didn't exist back in 3.6, see
-https://docs.python.org/3.6/library/subprocess.html
+Schedule a simple sleep task to be sure that some other process events
+get recorder.
 
-We can workaround that, but there's more chance of subtle bugs that
-I'd rather we don't touch it.
+Fixes: ebed9628f5c2 ("selftests/ftrace: Add test to test new set_event_notrace_pid file")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ .../testing/selftests/ftrace/test.d/event/event-no-pid.tc  | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
->
-> Checking out https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit-fixes
->
-> The offending "annotations" import is related to type annotations.
-> Specifically https://www.python.org/dev/peps/pep-0563/
->
-> So let's see how the two most popular typecheckers fare.
->
-> pytype is happy with or without import.
-> mypy has the same issues with or without the import.
->
-> $ mypy tools/testing/kunit/*.py
-> tools/testing/kunit/kunit_kernel.py:227: error: Item "_Loader" of
-> "Optional[_Loader]" has no attribute "exec_module"
-> tools/testing/kunit/kunit_kernel.py:227: error: Item "None" of
-> "Optional[_Loader]" has no attribute "exec_module"
-> tools/testing/kunit/kunit_kernel.py:228: error: Module has no
-> attribute "QEMU_ARCH"
-> tools/testing/kunit/kunit_kernel.py:229: error: Module has no
-> attribute "QEMU_ARCH"
->
-> So clearly it's not doing anything for them.
->
-> Taking a look over 87c9c1631788 ("kunit: tool: add support for QEMU")
-> next then...
-> I don't see anything that would warrant the import, so we should
-> probably drop it.
+diff --git a/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
+index e6eb78f0b954..9933ed24f901 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
+@@ -57,6 +57,10 @@ enable_events() {
+     echo 1 > tracing_on
+ }
+ 
++other_task() {
++    sleep .001 || usleep 1 || sleep 1
++}
++
+ echo 0 > options/event-fork
+ 
+ do_reset
+@@ -94,6 +98,9 @@ child=$!
+ echo "child = $child"
+ wait $child
+ 
++# Be sure some other events will happen for small systems (e.g. 1 core)
++other_task
++
+ echo 0 > tracing_on
+ 
+ cnt=`count_pid $mypid`
+-- 
+2.27.0
 
-Also, using 3.6 now I have it installed, I found what it was added for.
-But it doesn't need to be there.
-
-This patch drops it and makes things work, afaict:
-diff --git a/tools/testing/kunit/kunit_kernel.py
-b/tools/testing/kunit/kunit_kernel.py
-index e1951fa60027..5987d5b1b874 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -6,15 +6,13 @@
- # Author: Felix Guo <felixguoxiuping@gmail.com>
- # Author: Brendan Higgins <brendanhiggins@google.com>
-
--from __future__ import annotations
- import importlib.util
- import logging
- import subprocess
- import os
- import shutil
- import signal
--from typing import Iterator
--from typing import Optional
-+from typing import Iterator, Optional, Tuple
-
- from contextlib import ExitStack
-
-@@ -208,7 +206,7 @@ def get_source_tree_ops(arch: str, cross_compile:
-Optional[str]) -> LinuxSourceT
-                raise ConfigError(arch + ' is not a valid arch')
-
- def get_source_tree_ops_from_qemu_config(config_path: str,
--                                        cross_compile: Optional[str]) -> tuple[
-+                                        cross_compile: Optional[str]) -> Tuple[
-                                                         str,
-LinuxSourceTreeOperations]:
-        # The module name/path has very little to do with where the actual file
-        # exists (I learned this through experimentation and could not find it
-
->
-> In that case, the minimum supported version should drop back down to 3.6.
-> We use enum.auto, which is from 3.6
-> https://docs.python.org/3/library/enum.html#enum.auto
->
-> We could consider stopping using that, and I think we might be then
-> 3.5-compatible.
-> Maybe we have a chain of 3 patches then, drop the import, drop auto,
-> and then add in a >=3.5 version check?
->
-> >         ^
-> >     SyntaxError: future feature annotations is not defined
-> >
-> > This commit adds a version assertion in 'kunit.py', so that people get
-> > more explicit error message like below:
-> >
-> >     Traceback (most recent call last):
-> >       File "./tools/testing/kunit/kunit.py", line 15, in <module>
-> >         assert sys.version_info >= (3, 7), "Python version is too old"
-> >     AssertionError: Python version is too old
-> >
-> > Signed-off-by: SeongJae Park <sjpark@amazon.de>
-> > Acked-by: Daniel Latypov <dlatypov@google.com>
-
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-
-As mentioned above, we do actually need 3.7, and not just for the extra import.
-Now I know that, I feel more strongly that this patch should go in, as-is.
-
-> > ---
-> >
-> > Changes from v1
-> > - Add assertion failure message (Daniel Latypov)
-> > - Add Acked-by: Daniel Latypov <dlatypov@google.com>
-> >
-> >  tools/testing/kunit/kunit.py | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> > index be8d8d4a4e08..6276ce0c0196 100755
-> > --- a/tools/testing/kunit/kunit.py
-> > +++ b/tools/testing/kunit/kunit.py
-> > @@ -12,6 +12,8 @@ import sys
-> >  import os
-> >  import time
-> >
-> > +assert sys.version_info >= (3, 7), "Python version is too old"
-> > +
-> >  from collections import namedtuple
-> >  from enum import Enum, auto
-> >
-> > --
-> > 2.17.1
-> >
