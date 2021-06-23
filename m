@@ -2,91 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1373B1C84
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jun 2021 16:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253D43B1CB1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jun 2021 16:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbhFWOcq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Jun 2021 10:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S231262AbhFWOka (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Jun 2021 10:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbhFWOcp (ORCPT
+        with ESMTP id S230430AbhFWOk3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Jun 2021 10:32:45 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13CBC06175F
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 07:30:27 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id g21so747103pfc.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 07:30:27 -0700 (PDT)
+        Wed, 23 Jun 2021 10:40:29 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F33CC061756
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 07:38:12 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id bb20so1615964pjb.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 07:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=WKMVzZz8u7uLBmWomdYlr+oMy96WS6tUJGPPtCZ0D60=;
-        b=eYVZTdGsyVwQA4kGhfrZ47tU/XyD6Gdfb5Rx3FV6lq4wWZL1YRspeUnNTaN16uOM/5
-         PiZwMKxRT8JUaXAUA/B6aFfoWoCGBSxCgq9OBk8jcWvqbh7VlX3w1dMY1/ykca4/GhDN
-         OY8g353DIBKO8cvg/x7Zg5+Dnx1v8r30cn340=
+        bh=gYsWzSIHMSc6Tk2EhcHMeSwtIxBEj34qEnDzw9ljN3s=;
+        b=On69jlBS8D8eW015oMkd5PZ2WcwQmLiyjgNGu9DtIfKZV0aMLPx3I4ItRey5K6mYDV
+         xwOnvhsLXMLHTs9uOgjKZM+AAmcRCcNUyOXkhDaasZ4vUbuQUC2Y+tJOn+sxQ6ANsmda
+         fPYT2eyPvHfGHH1cz0BDu0FYRr7cNEsZ9OeAs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=WKMVzZz8u7uLBmWomdYlr+oMy96WS6tUJGPPtCZ0D60=;
-        b=nfQXl720CJlVOyeGKKUGmuK1yaCgBQqsIOhtsLo1GZzxIxxDSdTVuEDpWUhJScDj1N
-         wdEFxgyR1nXUjXgJECLjW9HX5ruwnehyJC+GR5MLWI3Ie2lFLk7F+mk96wbhrS05OG8F
-         MX8R/zF3SB5C9pxhjmcCYeci+5fW9SVH3i3Mc59wlr+d0EmU+qS14vVLIGKYxKOPEpy1
-         eUF7I357gRNbzfeynTF4lvEbqdSL7YZN4oBv3r7uCrrNWATEeUF0ju23YYwADQEQFKDF
-         M0gjPyG8bO9aexTDSFUYV+LI9Z42cfe10lSoMgwjlDfSYdJOevwIFnzay7ae6f7qYWNM
-         z2wQ==
-X-Gm-Message-State: AOAM531Qg+UwZXgxCsVdR2Brf31RdsQf/7RSb0EkXoOHFSFOKN6eE0bK
-        eraXwZm6cRW5XZgz5ucoLvFj0g==
-X-Google-Smtp-Source: ABdhPJzBNh/oD3wHuk2SjWKRS7Sjx1wJamx3k/4NZa6pNlIIEJ2pDtPK2Km1/JZKZW6Ey9ydWdubmQ==
-X-Received: by 2002:a63:8241:: with SMTP id w62mr4176796pgd.343.1624458627555;
-        Wed, 23 Jun 2021 07:30:27 -0700 (PDT)
+        bh=gYsWzSIHMSc6Tk2EhcHMeSwtIxBEj34qEnDzw9ljN3s=;
+        b=Ammk28I5gNn/nUnYj7OWXIAin5/u8dZ7GhHBgw0ZVXsfbHZd5sXql7h8rWoSqhHmlc
+         mSfsoLZUyG/BD7P6303pBT1T6sgJ7zDrM/D1N1cnMQlJCFRd7eY8eqkkFI5DyeZ7L3Ng
+         OtJjqFS4MG4FwtQWVD892hHBv2AHWO94xGiFLYe6lIYNCBedkMa5OeUanB2dy3L/voSI
+         ujLAr+K/naUKREiKvd5jd/MDF7h72itMEuF3UIeuhxEmBD/N9ibLbIQ2MhhOthA+6a3I
+         8nN4Y/b3dAXZTyeKezHgFpo+vO9NSRCGNlOv9V/CRa2wB/RxO28yJauuPRJYc8gR18a3
+         LtOQ==
+X-Gm-Message-State: AOAM530gl5aStUcEkDR/3Pr6qeIzOKUiLMbpRiFpIvT2O4O69JNCpRy6
+        PCvKL37SrC6Rmp0vvreBQcZntzkoZy2Kwc+E
+X-Google-Smtp-Source: ABdhPJyPZywy459VJObSw/vvdeHF8Qv736PYSJ4zEvgpg+nRYBaYdVTNJsDR2tMXD8cxy2Ug8yvQ9w==
+X-Received: by 2002:a17:902:db07:b029:125:765c:75e1 with SMTP id m7-20020a170902db07b0290125765c75e1mr9852plx.9.1624459092040;
+        Wed, 23 Jun 2021 07:38:12 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q4sm158954pgg.0.2021.06.23.07.30.26
+        by smtp.gmail.com with ESMTPSA id i125sm186361pfc.7.2021.06.23.07.38.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jun 2021 07:30:27 -0700 (PDT)
-Date:   Wed, 23 Jun 2021 07:30:26 -0700
+        Wed, 23 Jun 2021 07:38:11 -0700 (PDT)
+Date:   Wed, 23 Jun 2021 07:38:10 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        Shuah Khan <shuah@kernel.org>, stable@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [selftests/lkdtm]  84d8cf25b0:
- kernel_BUG_at_drivers/misc/lkdtm/bugs.c
-Message-ID: <202106230728.4844CE5@keescook>
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>, stable@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
+Message-ID: <202106230734.78A239D@keescook>
 References: <20210619025834.2505201-1-keescook@chromium.org>
- <20210623143549.GA25993@xsang-OptiPlex-9020>
+ <e958209b-8621-57ca-01d6-2e76b05dab4c@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210623143549.GA25993@xsang-OptiPlex-9020>
+In-Reply-To: <e958209b-8621-57ca-01d6-2e76b05dab4c@collabora.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 23, 2021 at 10:35:50PM +0800, kernel test robot wrote:
+On Wed, Jun 23, 2021 at 01:39:57PM +0100, Guillaume Tucker wrote:
+> On 19/06/2021 03:58, Kees Cook wrote:
+> > Some environments do not set $SHELL when running tests. There's no need
+> > to use $SHELL here anyway, so just replace it with hard-coded path
+> > instead. Additionally avoid using bash-isms in the command, so that
+> > regular /bin/sh can be used.
+> > 
+> > Suggested-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> > Fixes: 46d1a0f03d66 ("selftests/lkdtm: Add tests for LKDTM targets")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > 
 > 
-> Greeting,
+> Tested-by: "kernelci.org bot" <bot@kernelci.org> 
 > 
-> FYI, we noticed the following commit (built with gcc-9):
 > 
-> commit: 84d8cf25b0f80da0ac229214864654a7662ec7e4 ("[PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL")
-> url: https://github.com/0day-ci/linux/commits/Kees-Cook/selftests-lkdtm-Use-bin-sh-not-SHELL/20210619-105959
-> base: https://git.kernel.org/cgit/linux/kernel/git/shuah/linux-kselftest.git next
+> Sample staging results with this patch applied on top of
+> next-20210622:
 > 
-> in testcase: kernel-selftests
-> version: kernel-selftests-x86_64-f8879e85-1_20210618
-> with following parameters:
+> https://staging.kernelci.org/test/plan/id/60d2dbdc3cfb88da0924bf41/
 > 
-> 	group: lkdtm
-> 	ucode: 0xe2
+> Full log:
+> 
+> https://storage.staging.kernelci.org/kernelci/staging-next/staging-next-20210623.0/x86_64/x86_64_defconfig+x86-chromebook+kselftest/clang-13/lab-collabora/kselftest-lkdtm-asus-C523NA-A20057-coral.html
 
-Heh. Yes, this is working as intended. :) Most of the lkdtm tests will
-trigger Oopses, and this is by design: it is checking that the kernel
-catches bad conditions and freaks out appropriately.
+Awesome! This looks great. :)
+
+What's needed to build these kernels will different CONFIGs? I see a
+bunch of things (commonly found in distro kernels) that are not set:
+
+CONFIG_SLAB_FREELIST_HARDENED=y
+CONFIG_FORTIFY_SOURCE=y
+CONFIG_HARDENED_USERCOPY=y
+# CONFIG_HARDENED_USERCOPY_FALLBACK is not set
+
+Should I add these to the kselftest "config" file for LKDTM?
+
+Thanks again for the help with this!
 
 -Kees
 
