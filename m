@@ -2,207 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C98F53B21EF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jun 2021 22:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFD33B23A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jun 2021 00:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbhFWUmN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Jun 2021 16:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
+        id S229844AbhFWWtH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Jun 2021 18:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbhFWUmJ (ORCPT
+        with ESMTP id S229726AbhFWWtH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Jun 2021 16:42:09 -0400
+        Wed, 23 Jun 2021 18:49:07 -0400
 Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B38C061787
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 13:39:51 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id v13so1780126ple.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 13:39:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7796FC061574
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 15:46:48 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id h1so1934853plt.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 15:46:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9CbW/Yfm4YOVx5TLgcAG255DFJHXdYOCCgKp2CMgl9c=;
-        b=dunBoi+rvP55ibjO4aMmp3PEcqi6plGzD3RKUIy2JY6icM4NLoCwMdjkH3bSpJGEZL
-         rXBy87J/BsJRIb8BKC6N9nIa5pdSEtVsj9Jt2Eu2c7ibgdf7VysPOSGq2GGofBeJdmkV
-         iHok836cmLjkdFjQnvhcnR9i+SLiV5yPdY7UI=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8fAh4y0OB0EQHzmH30AhixLLr6acGSavXwUpuUJpLnM=;
+        b=iQSYf2Ji1gQzTW1DUhkt++SYi4wMGXiE/j2gPcKWSSCpt60rrrH8tpnKOQ0TMUyNYd
+         bF/8h2JGWRl78uOUwAU/3HQa3U7BSwTxH9J8b6g4Fo3m2YDBcw5UebKn+MuvQnpitYET
+         +UtODHFed+1v20RqHIbAOeKryMpu1wbaCfqOw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9CbW/Yfm4YOVx5TLgcAG255DFJHXdYOCCgKp2CMgl9c=;
-        b=gLj3SvH/Sz/1sOafc0qdqv5FdBp1FxCxPQCtj9U6qyor4i32Q6+238QZjG91PEae+F
-         le8x1fZIMaBEkuBvcpNZmNV/DveXnOXQY8iieUWSZjruevUWY/cpNNY0jlDSsmiRxA5Q
-         bomunswmE/PQwNGwtAE50eITrRqeI2MyaRwywYw5ZAXXIfDIkcSMRMb1miqmM8zd5BDK
-         Xe9XofrkSff547eCCX5h0nVdGHF1HfQGjR7kgpzQwtLzHb4mxbCWtl2QinFtT4Gjs0kp
-         hO2JUNSJgk34FJ+4meFjGjDZiNp374CsU8/eJNpBwfFjtjbQujXXpIRX/4z3Nn16vSCi
-         Ub1A==
-X-Gm-Message-State: AOAM530ddXuMOySH3kRMa3vVXFNB2dtEtTPaX3JBmKumb2prq70yzOcG
-        gTmGWwKXnivLoB0aDdF0Sg0O4KruGlBlRA==
-X-Google-Smtp-Source: ABdhPJwt4bDW3fWxEAD6L43dOhtIQeD8GcbmXS575cFZ1n3sB6Aw0rEr0X01RYvfSmd5imUhk+B7Xw==
-X-Received: by 2002:a17:90a:4410:: with SMTP id s16mr1427889pjg.25.1624480791179;
-        Wed, 23 Jun 2021 13:39:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8fAh4y0OB0EQHzmH30AhixLLr6acGSavXwUpuUJpLnM=;
+        b=RrSENYBDuIY5GY8B7CjMYiddsDSGzz6oZ71qWthfiyf0hfJLwItHPabNyMLbfvF3bQ
+         YsH1V9yhaoWI2FtV4r9l5IBEx4ndoWR1beBOBMOI50rEqqZiM1Rc2BfucSeK6jqneLHw
+         mtWr3q8QnUSR1YoF1aT6L9Kf0deZSvbJKGnM3uqe5kZ16P/K7nj/vLZv8SeGho0hbfq2
+         bejG2i31ZMu9UHnRJ7n4mxFN3+YoXOa25jjfK5Z81q72k5bYhA83bCFAt0w2ZVAWEIsN
+         dDjLD+4r35/VpAsqRk+I0oV+wJ3vPJx8Xq7D/j7ioUbyrOH4NKfYYeyZ7Mz/5TggwzFl
+         EePw==
+X-Gm-Message-State: AOAM531EAkaRwE9C0Pf2Ls9izQaWV6yOYO63Excr1Rdm3fWTaWPmNJ7K
+        to9SKSEX+3jaLGtWa1CMz2yWYw==
+X-Google-Smtp-Source: ABdhPJzy25leCoGZ4NdFhG2H5wygYPxzyBacPc567UpFgXJlT7k0vpTYbb62nDZiabtSUq35+B9GuA==
+X-Received: by 2002:a17:902:fe0a:b029:11d:81c9:3adf with SMTP id g10-20020a170902fe0ab029011d81c93adfmr1559888plj.0.1624488408037;
+        Wed, 23 Jun 2021 15:46:48 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u1sm630574pfu.160.2021.06.23.13.39.47
+        by smtp.gmail.com with ESMTPSA id u9sm130456pgp.90.2021.06.23.15.46.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jun 2021 13:39:48 -0700 (PDT)
+        Wed, 23 Jun 2021 15:46:47 -0700 (PDT)
+Date:   Wed, 23 Jun 2021 15:46:46 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        kernelci@groups.io, linux-kselftest@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 9/9] lkdtm/heap: Add init_on_alloc tests
-Date:   Wed, 23 Jun 2021 13:39:36 -0700
-Message-Id: <20210623203936.3151093-10-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210623203936.3151093-1-keescook@chromium.org>
-References: <20210623203936.3151093-1-keescook@chromium.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Guillaume Tucker' <guillaume.tucker@collabora.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
+Message-ID: <202106231231.9B858B95A@keescook>
+References: <20210619025834.2505201-1-keescook@chromium.org>
+ <e958209b-8621-57ca-01d6-2e76b05dab4c@collabora.com>
+ <42f26361db6f481e980ac349bf0079ef@AcuMS.aculab.com>
+ <202106230917.FE2F587@keescook>
+ <76a575d1364a47458d27c76c65b673b6@AcuMS.aculab.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4448; h=from:subject; bh=kzB2kajsXBcnoqdrRcymGnm8fdce7wFUEweva8HvKLM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBg05wH5VR4lDW7Qn91KFyY0Hf6dSvabN6SXZM7fu6f PsdQeJCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYNOcBwAKCRCJcvTf3G3AJrtiEA CoREcu/vUQ2ed0GVO1Y3dypJDMih0UI4I5eduqeIitcrzItlcyUt0VyMnXcja+eI5KhvKJre/DEV6N JAmsX7/8fMHcIlJvDAVMxb5mzgFTyAQcwIOMVW9W+3r+UUHZS6kGdX0In5GjM0oGTDphSkDw7LVQbY wxTSCuoFvaX6JGRwtwTKCmf0yOxkYuSUmjJHP3vbzw8rycqrSTvpffy2vHVdG5lfncP2QvUbJhkroR YqXt+Y08bdkpdIS99ztaIPadsdcCWvdRG1KoGTSmnFHwfm11MhRoZPD2AzUKCn99c2adU25UgJoQQu IfWiqZ/0JUuO4YJACqa63gUv3lttKXM6Y0RLOyzPSZrdfG6fMJRbyK2BDNNBneDaeJOogvG+FWcLkT yX9ISCyG4xyhfgsPYQ37Dzftv2T9rWsCzn6IQbFefHbwjFbUTlG27if6rc8uiaQbPCh7g50faN26Kq OSqEkA5KwA251CpX+KiNd2JlxtXfTFtnSQKbVawsGGExVvDlLeuE+uZU9gps0EYtL4Rx8vGAiCMyOM 7kaI1WNW2RzpRc+2bK5fHt8rVn0HI3LFcHoX2pTX1ee//VbjPmF4EWsZsI7fVrgoTto7tM+Z+mOTU4 aF8WROfsOAjSNjtvkwi9P3oHmKdtILwXEN+5HFG/zWLAj0/J+i31bg6ZSiig==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <76a575d1364a47458d27c76c65b673b6@AcuMS.aculab.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add SLAB and page allocator tests for init_on_alloc. Testing for
-init_on_free was already happening via the poisoning tests.
+On Wed, Jun 23, 2021 at 04:27:47PM +0000, David Laight wrote:
+> From: Kees Cook
+> > Sent: 23 June 2021 17:19
+> > 
+> > On Wed, Jun 23, 2021 at 01:43:04PM +0000, David Laight wrote:
+> > > From: Guillaume Tucker
+> > > > Sent: 23 June 2021 13:40
+> > > ...
+> > > > > diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
+> > > > > index bb7a1775307b..0f9f22ac004b 100755
+> > > > > --- a/tools/testing/selftests/lkdtm/run.sh
+> > > > > +++ b/tools/testing/selftests/lkdtm/run.sh
+> > > > > @@ -78,8 +78,9 @@ dmesg > "$DMESG"
+> > > > >
+> > > > >  # Most shells yell about signals and we're expecting the "cat" process
+> > > > >  # to usually be killed by the kernel. So we have to run it in a sub-shell
+> > > > > -# and silence errors.
+> > > > > -($SHELL -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
+> > > > > +# to avoid terminating this script. Leave stderr alone, just in case
+> > > > > +# something _else_ happens.
+> > > > > +(/bin/sh -c '(echo '"$test"') | cat >'"$TRIGGER") || true
+> > >
+> > > I was having trouble parsing that command - and I'm good
+> > > at shell scripts.
+> > > I think the extra subshell the 'echo' is in doesn't help.
+> > > In fact, is either subshell needed?
+> > > Surely:
+> > > /bin/sh -c "echo '$test' | cat >$trigger" || true
+> > > will work just as well?
+> > 
+> > Ah yeah, and I just tested it to double check, it can be even simpler:
+> > 
+> > echo "$test" | /bin/sh -c "cat >$TRIGGER" || true
+> 
+> You can probably even do:
+> 
+> echo "$test" | /bin/sh -c cat >$TRIGGER || true
+> 
+> (moving the redirect to the outer shell).
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/misc/lkdtm/core.c               |  2 +
- drivers/misc/lkdtm/heap.c               | 65 +++++++++++++++++++++++++
- drivers/misc/lkdtm/lkdtm.h              |  2 +
- tools/testing/selftests/lkdtm/config    |  1 +
- tools/testing/selftests/lkdtm/tests.txt |  2 +
- 5 files changed, 72 insertions(+)
+Actually, it looks like the "write" is already happening in the exec'd
+process, so this can just be:
 
-diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-index c185ae4719c3..9dda87c6b54a 100644
---- a/drivers/misc/lkdtm/core.c
-+++ b/drivers/misc/lkdtm/core.c
-@@ -127,6 +127,8 @@ static const struct crashtype crashtypes[] = {
- 	CRASHTYPE(READ_AFTER_FREE),
- 	CRASHTYPE(WRITE_BUDDY_AFTER_FREE),
- 	CRASHTYPE(READ_BUDDY_AFTER_FREE),
-+	CRASHTYPE(SLAB_INIT_ON_ALLOC),
-+	CRASHTYPE(BUDDY_INIT_ON_ALLOC),
- 	CRASHTYPE(SLAB_FREE_DOUBLE),
- 	CRASHTYPE(SLAB_FREE_CROSS),
- 	CRASHTYPE(SLAB_FREE_PAGE),
-diff --git a/drivers/misc/lkdtm/heap.c b/drivers/misc/lkdtm/heap.c
-index a3bb0577ed8b..3d9aae5821a0 100644
---- a/drivers/misc/lkdtm/heap.c
-+++ b/drivers/misc/lkdtm/heap.c
-@@ -174,6 +174,71 @@ void lkdtm_READ_BUDDY_AFTER_FREE(void)
- 	kfree(val);
- }
- 
-+void lkdtm_SLAB_INIT_ON_ALLOC(void)
-+{
-+	u8 *first;
-+	u8 *val;
-+
-+	first = kmalloc(512, GFP_KERNEL);
-+	if (!first) {
-+		pr_info("Unable to allocate 512 bytes the first time.\n");
-+		return;
-+	}
-+
-+	memset(first, 0xAB, 512);
-+	kfree(first);
-+
-+	val = kmalloc(512, GFP_KERNEL);
-+	if (!val) {
-+		pr_info("Unable to allocate 512 bytes the second time.\n");
-+		return;
-+	}
-+	if (val != first) {
-+		pr_warn("Reallocation missed clobbered memory.\n");
-+	}
-+
-+	if (memchr(val, 0xAB, 512) == NULL) {
-+		pr_info("Memory appears initialized (%x, no earlier values)\n", *val);
-+	} else {
-+		pr_err("FAIL: Slab was not initialized\n");
-+		pr_expected_config_param(CONFIG_INIT_ON_ALLOC_DEFAULT_ON, "init_on_alloc");
-+	}
-+	kfree(val);
-+}
-+
-+void lkdtm_BUDDY_INIT_ON_ALLOC(void)
-+{
-+	u8 *first;
-+	u8 *val;
-+
-+	first = (u8 *)__get_free_page(GFP_KERNEL);
-+	if (!first) {
-+		pr_info("Unable to allocate first free page\n");
-+		return;
-+	}
-+
-+	memset(first, 0xAB, PAGE_SIZE);
-+	free_page((unsigned long)first);
-+
-+	val = (u8 *)__get_free_page(GFP_KERNEL);
-+	if (!val) {
-+		pr_info("Unable to allocate second free page\n");
-+		return;
-+	}
-+
-+	if (val != first) {
-+		pr_warn("Reallocation missed clobbered memory.\n");
-+	}
-+
-+	if (memchr(val, 0xAB, PAGE_SIZE) == NULL) {
-+		pr_info("Memory appears initialized (%x, no earlier values)\n", *val);
-+	} else {
-+		pr_err("FAIL: Slab was not initialized\n");
-+		pr_expected_config_param(CONFIG_INIT_ON_ALLOC_DEFAULT_ON, "init_on_alloc");
-+	}
-+	free_page((unsigned long)val);
-+}
-+
- void lkdtm_SLAB_FREE_DOUBLE(void)
- {
- 	int *val;
-diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-index e491bc571808..6a30b60519f3 100644
---- a/drivers/misc/lkdtm/lkdtm.h
-+++ b/drivers/misc/lkdtm/lkdtm.h
-@@ -86,6 +86,8 @@ void lkdtm_WRITE_AFTER_FREE(void);
- void lkdtm_READ_AFTER_FREE(void);
- void lkdtm_WRITE_BUDDY_AFTER_FREE(void);
- void lkdtm_READ_BUDDY_AFTER_FREE(void);
-+void lkdtm_SLAB_INIT_ON_ALLOC(void);
-+void lkdtm_BUDDY_INIT_ON_ALLOC(void);
- void lkdtm_SLAB_FREE_DOUBLE(void);
- void lkdtm_SLAB_FREE_CROSS(void);
- void lkdtm_SLAB_FREE_PAGE(void);
-diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-index 849799bcfa95..013446e87f1f 100644
---- a/tools/testing/selftests/lkdtm/config
-+++ b/tools/testing/selftests/lkdtm/config
-@@ -5,3 +5,4 @@ CONFIG_FORTIFY_SOURCE=y
- CONFIG_HARDENED_USERCOPY=y
- # CONFIG_HARDENED_USERCOPY_FALLBACK is not set
- CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
-+CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index 30080cc15623..846cfd508d3c 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -21,6 +21,8 @@ VMALLOC_LINEAR_OVERFLOW
- READ_AFTER_FREE call trace:|Memory correctly poisoned
- #WRITE_BUDDY_AFTER_FREE Corrupts memory on failure
- READ_BUDDY_AFTER_FREE call trace:|Memory correctly poisoned
-+SLAB_INIT_ON_ALLOC Memory appears initialized
-+BUDDY_INIT_ON_ALLOC Memory appears initialized
- SLAB_FREE_DOUBLE
- SLAB_FREE_CROSS
- SLAB_FREE_PAGE
+echo "$test" | cat >$TRIGGER || true
+
+But it still can't be:
+
+echo "$test" >$TRIGGER
+
+which is what I had over-engineered a solution to. :)
+
 -- 
-2.30.2
-
+Kees Cook
