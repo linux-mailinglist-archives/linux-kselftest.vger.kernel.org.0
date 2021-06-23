@@ -2,116 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D225B3B1B5A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jun 2021 15:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A8E3B1B60
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jun 2021 15:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbhFWNoK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Jun 2021 09:44:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45876 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230061AbhFWNoJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Jun 2021 09:44:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C12CF61076;
-        Wed, 23 Jun 2021 13:41:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624455712;
-        bh=ahAIQzGeIV5bSA+izmWMgZyiMYHJ37sy5dm5nG35WsY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q2fs3xfj1k5ez23+zg+C8YgfDHiuth2aI+p7UqiOQwWK2sSAqUXxaqnpFRxiPL+Vu
-         yrIX6Ii4gw63FUm9vIRgoLmKYmuxHFoLda7MqkRAbTnqhzc8v3FehQkcyzXhtl1rlC
-         Vbk1eDjCtC15gwnY0osT+KmneZmHey/NlU4Kb5RG3t5fnUlFwxQ9Ybknkx4qBd74jn
-         BLx467xAqWjRurwe/dOHVwf+46JGH25SbcJFgG0mKWWOQWaCgqezEYEFGPFPTNi4X1
-         zIvAmd7tAe+ovpIG9dYW6RilEpCxGJiBD3U9PxvlYX2rh7w/At/AArTHZ1JuWpbVh6
-         867z2BiQTgPkQ==
-Date:   Wed, 23 Jun 2021 16:41:50 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        tim.gardner@canonical.com, reinette.chatre@intel.com,
-        shuah@kernel.org, linux-sgx@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/sgx: remove checks for file execute permissions
-Message-ID: <20210623134150.j4qjhcepmtohsxdo@kernel.org>
-References: <20210621190556.4B5DCBB1@viggo.jf.intel.com>
+        id S230499AbhFWNp0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Jun 2021 09:45:26 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:56324 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230182AbhFWNpZ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 23 Jun 2021 09:45:25 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-263-si2JVMyPPtOU_tjpJ7Q3cw-1; Wed, 23 Jun 2021 14:43:05 +0100
+X-MC-Unique: si2JVMyPPtOU_tjpJ7Q3cw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 23 Jun
+ 2021 14:43:04 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.018; Wed, 23 Jun 2021 14:43:04 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guillaume Tucker' <guillaume.tucker@collabora.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
+Thread-Topic: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
+Thread-Index: AQHXaCznpjkpNTpwjEW+kA8o/GdKZashmKhg
+Date:   Wed, 23 Jun 2021 13:43:04 +0000
+Message-ID: <42f26361db6f481e980ac349bf0079ef@AcuMS.aculab.com>
+References: <20210619025834.2505201-1-keescook@chromium.org>
+ <e958209b-8621-57ca-01d6-2e76b05dab4c@collabora.com>
+In-Reply-To: <e958209b-8621-57ca-01d6-2e76b05dab4c@collabora.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210621190556.4B5DCBB1@viggo.jf.intel.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 12:05:56PM -0700, Dave Hansen wrote:
-> 
-> The SGX selftests can fail for a bunch of non-obvious reasons
-> like 'noexec' permissions on /dev (which is the default *EVERYWHERE*
-> it seems).
-> 
-> A new test mistakenly also looked for +x permission on the
-> /dev/sgx_enclave.  File execute permissions really only apply to
-> the ability of execve() to work on a file, *NOT* on the ability
-> for an application to map the file with PROT_EXEC.  SGX needs to
-> mmap(PROT_EXEC), but doesn't need to execve() the device file.
-> 
-> Remove the check.
-> 
-> Fixes: 4284f7acb78b ("selftests/sgx: Improve error detection and messages")
-> Reported-by: Tim Gardner <tim.gardner@canonical.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Reinette Chatre <reinette.chatre@intel.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-sgx@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> ---
-> 
->  b/tools/testing/selftests/sgx/load.c |   16 +++-------------
->  1 file changed, 3 insertions(+), 13 deletions(-)
-> 
-> diff -puN tools/testing/selftests/sgx/load.c~sgx-no-file-exec tools/testing/selftests/sgx/load.c
-> --- a/tools/testing/selftests/sgx/load.c~sgx-no-file-exec	2021-06-21 11:48:25.226294281 -0700
-> +++ b/tools/testing/selftests/sgx/load.c	2021-06-21 12:03:28.023292029 -0700
-> @@ -150,16 +150,6 @@ bool encl_load(const char *path, struct
->  		goto err;
->  	}
->  
-> -	/*
-> -	 * This just checks if the /dev file has these permission
-> -	 * bits set.  It does not check that the current user is
-> -	 * the owner or in the owning group.
-> -	 */
-> -	if (!(sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))) {
-> -		fprintf(stderr, "no execute permissions on device file %s\n", device_path);
-> -		goto err;
-> -	}
-> -
->  	ptr = mmap(NULL, PAGE_SIZE, PROT_READ, MAP_SHARED, fd, 0);
->  	if (ptr == (void *)-1) {
->  		perror("mmap for read");
-> @@ -169,13 +159,13 @@ bool encl_load(const char *path, struct
->  
->  #define ERR_MSG \
->  "mmap() succeeded for PROT_READ, but failed for PROT_EXEC.\n" \
-> -" Check that current user has execute permissions on %s and \n" \
-> -" that /dev does not have noexec set: mount | grep \"/dev .*noexec\"\n" \
-> +" Check that /dev does not have noexec set:\n" \
-> +" \tmount | grep \"/dev .*noexec\"\n" \
->  " If so, remount it executable: mount -o remount,exec /dev\n\n"
->  
->  	ptr = mmap(NULL, PAGE_SIZE, PROT_EXEC, MAP_SHARED, fd, 0);
->  	if (ptr == (void *)-1) {
-> -		fprintf(stderr, ERR_MSG, device_path);
-> +		fprintf(stderr, ERR_MSG);
->  		goto err;
->  	}
->  	munmap(ptr, PAGE_SIZE);
-> _
-> 
+RnJvbTogR3VpbGxhdW1lIFR1Y2tlcg0KPiBTZW50OiAyMyBKdW5lIDIwMjEgMTM6NDANCi4uLg0K
+PiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9sa2R0bS9ydW4uc2ggYi90
+b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9sa2R0bS9ydW4uc2gNCj4gPiBpbmRleCBiYjdhMTc3NTMw
+N2IuLjBmOWYyMmFjMDA0YiAxMDA3NTUNCj4gPiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
+cy9sa2R0bS9ydW4uc2gNCj4gPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9sa2R0bS9y
+dW4uc2gNCj4gPiBAQCAtNzgsOCArNzgsOSBAQCBkbWVzZyA+ICIkRE1FU0ciDQo+ID4NCj4gPiAg
+IyBNb3N0IHNoZWxscyB5ZWxsIGFib3V0IHNpZ25hbHMgYW5kIHdlJ3JlIGV4cGVjdGluZyB0aGUg
+ImNhdCIgcHJvY2Vzcw0KPiA+ICAjIHRvIHVzdWFsbHkgYmUga2lsbGVkIGJ5IHRoZSBrZXJuZWwu
+IFNvIHdlIGhhdmUgdG8gcnVuIGl0IGluIGEgc3ViLXNoZWxsDQo+ID4gLSMgYW5kIHNpbGVuY2Ug
+ZXJyb3JzLg0KPiA+IC0oJFNIRUxMIC1jICdjYXQgPChlY2hvICciJHRlc3QiJykgPiciJFRSSUdH
+RVIiIDI+L2Rldi9udWxsKSB8fCB0cnVlDQo+ID4gKyMgdG8gYXZvaWQgdGVybWluYXRpbmcgdGhp
+cyBzY3JpcHQuIExlYXZlIHN0ZGVyciBhbG9uZSwganVzdCBpbiBjYXNlDQo+ID4gKyMgc29tZXRo
+aW5nIF9lbHNlXyBoYXBwZW5zLg0KPiA+ICsoL2Jpbi9zaCAtYyAnKGVjaG8gJyIkdGVzdCInKSB8
+IGNhdCA+JyIkVFJJR0dFUiIpIHx8IHRydWUNCg0KSSB3YXMgaGF2aW5nIHRyb3VibGUgcGFyc2lu
+ZyB0aGF0IGNvbW1hbmQgLSBhbmQgSSdtIGdvb2QNCmF0IHNoZWxsIHNjcmlwdHMuDQpJIHRoaW5r
+IHRoZSBleHRyYSBzdWJzaGVsbCB0aGUgJ2VjaG8nIGlzIGluIGRvZXNuJ3QgaGVscC4NCkluIGZh
+Y3QsIGlzIGVpdGhlciBzdWJzaGVsbCBuZWVkZWQ/DQpTdXJlbHk6DQovYmluL3NoIC1jICJlY2hv
+ICckdGVzdCcgfCBjYXQgPiR0cmlnZ2VyIiB8fCB0cnVlDQp3aWxsIHdvcmsganVzdCBhcyB3ZWxs
+Pw0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
+YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
+Tm86IDEzOTczODYgKFdhbGVzKQ0K
 
-
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-/Jarkko
