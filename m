@@ -2,77 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A8E3B1B60
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jun 2021 15:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343663B1B69
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jun 2021 15:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbhFWNp0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Jun 2021 09:45:26 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:56324 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230182AbhFWNpZ (ORCPT
+        id S230427AbhFWNpm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Jun 2021 09:45:42 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:59881 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231187AbhFWNpk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Jun 2021 09:45:25 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-263-si2JVMyPPtOU_tjpJ7Q3cw-1; Wed, 23 Jun 2021 14:43:05 +0100
-X-MC-Unique: si2JVMyPPtOU_tjpJ7Q3cw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 23 Jun
- 2021 14:43:04 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.018; Wed, 23 Jun 2021 14:43:04 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Guillaume Tucker' <guillaume.tucker@collabora.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
-Thread-Topic: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
-Thread-Index: AQHXaCznpjkpNTpwjEW+kA8o/GdKZashmKhg
-Date:   Wed, 23 Jun 2021 13:43:04 +0000
-Message-ID: <42f26361db6f481e980ac349bf0079ef@AcuMS.aculab.com>
-References: <20210619025834.2505201-1-keescook@chromium.org>
- <e958209b-8621-57ca-01d6-2e76b05dab4c@collabora.com>
-In-Reply-To: <e958209b-8621-57ca-01d6-2e76b05dab4c@collabora.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 23 Jun 2021 09:45:40 -0400
+Received: from mail-wr1-f71.google.com ([209.85.221.71])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lw3A1-0007JS-PJ
+        for linux-kselftest@vger.kernel.org; Wed, 23 Jun 2021 13:43:21 +0000
+Received: by mail-wr1-f71.google.com with SMTP id t10-20020a5d49ca0000b029011a61d5c96bso1088960wrs.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 06:43:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yubxi2qbuY0f26nH+TCC7V2Gu19HEDSoQcEIu557Wn0=;
+        b=huE2xvvxixJ1tUAWJZb2gh0oluIYyl2yFeraRFAtNO4ZkL5pITICHmtA7GkZohxCd3
+         //pWk6E+JaELV00NqkCYbBQoMl3FVy72nIqoShYaQWF92B0DDJIw9iFOaHkGntNsMX7L
+         WsE0KsMrrLFMmrH9Th0jY/6BxnmiWCEe7Bj8S5PfgA3AOWSuZHUMub4lTBB+Q6jlw4w+
+         tJXMPBsU6LPEEw7yi8/CaxhLbd5K6qok6bUF5O08puByFbX0U3PmpHSZFme8jFhQkhWY
+         JWqtnw7kAxRVMyxx0vG8XvfBmpKhK1kNzXBCv5IqqZixeiRVsHFfZ3fvLZlPfZ3DhuSK
+         9zVQ==
+X-Gm-Message-State: AOAM533sQ25MaOO70nR8j49z05irjt/XH1hMt9Tolsm273CboYCHpM0X
+        3WQteCht2HVslT6dcj2vYKtGG68MzxvjnUzMAGr/7O0zt1QZRq4HG9m3n/JdkZgNrvI1CpK3TkV
+        9w9nO+I+rZknVMx0LrW4TSQXE1XOfdNeqLBYbJaWsvy9SoA==
+X-Received: by 2002:a7b:c1ce:: with SMTP id a14mr10758138wmj.72.1624455801592;
+        Wed, 23 Jun 2021 06:43:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxNOn5MnmPCceGWkw5/wLdC+SG1xM2rIUPM/8N6mKYN/v/4zXCzfb61gwE5zQeig6N4a7DZEA==
+X-Received: by 2002:a7b:c1ce:: with SMTP id a14mr10758116wmj.72.1624455801401;
+        Wed, 23 Jun 2021 06:43:21 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id w13sm94341wrc.31.2021.06.23.06.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jun 2021 06:43:21 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/ftrace: fix event-no-pid on 1-core machine
+Date:   Wed, 23 Jun 2021 15:43:15 +0200
+Message-Id: <20210623134315.77472-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-RnJvbTogR3VpbGxhdW1lIFR1Y2tlcg0KPiBTZW50OiAyMyBKdW5lIDIwMjEgMTM6NDANCi4uLg0K
-PiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9sa2R0bS9ydW4uc2ggYi90
-b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9sa2R0bS9ydW4uc2gNCj4gPiBpbmRleCBiYjdhMTc3NTMw
-N2IuLjBmOWYyMmFjMDA0YiAxMDA3NTUNCj4gPiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cy9sa2R0bS9ydW4uc2gNCj4gPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9sa2R0bS9y
-dW4uc2gNCj4gPiBAQCAtNzgsOCArNzgsOSBAQCBkbWVzZyA+ICIkRE1FU0ciDQo+ID4NCj4gPiAg
-IyBNb3N0IHNoZWxscyB5ZWxsIGFib3V0IHNpZ25hbHMgYW5kIHdlJ3JlIGV4cGVjdGluZyB0aGUg
-ImNhdCIgcHJvY2Vzcw0KPiA+ICAjIHRvIHVzdWFsbHkgYmUga2lsbGVkIGJ5IHRoZSBrZXJuZWwu
-IFNvIHdlIGhhdmUgdG8gcnVuIGl0IGluIGEgc3ViLXNoZWxsDQo+ID4gLSMgYW5kIHNpbGVuY2Ug
-ZXJyb3JzLg0KPiA+IC0oJFNIRUxMIC1jICdjYXQgPChlY2hvICciJHRlc3QiJykgPiciJFRSSUdH
-RVIiIDI+L2Rldi9udWxsKSB8fCB0cnVlDQo+ID4gKyMgdG8gYXZvaWQgdGVybWluYXRpbmcgdGhp
-cyBzY3JpcHQuIExlYXZlIHN0ZGVyciBhbG9uZSwganVzdCBpbiBjYXNlDQo+ID4gKyMgc29tZXRo
-aW5nIF9lbHNlXyBoYXBwZW5zLg0KPiA+ICsoL2Jpbi9zaCAtYyAnKGVjaG8gJyIkdGVzdCInKSB8
-IGNhdCA+JyIkVFJJR0dFUiIpIHx8IHRydWUNCg0KSSB3YXMgaGF2aW5nIHRyb3VibGUgcGFyc2lu
-ZyB0aGF0IGNvbW1hbmQgLSBhbmQgSSdtIGdvb2QNCmF0IHNoZWxsIHNjcmlwdHMuDQpJIHRoaW5r
-IHRoZSBleHRyYSBzdWJzaGVsbCB0aGUgJ2VjaG8nIGlzIGluIGRvZXNuJ3QgaGVscC4NCkluIGZh
-Y3QsIGlzIGVpdGhlciBzdWJzaGVsbCBuZWVkZWQ/DQpTdXJlbHk6DQovYmluL3NoIC1jICJlY2hv
-ICckdGVzdCcgfCBjYXQgPiR0cmlnZ2VyIiB8fCB0cnVlDQp3aWxsIHdvcmsganVzdCBhcyB3ZWxs
-Pw0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
-YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
-Tm86IDEzOTczODYgKFdhbGVzKQ0K
+When running event-no-pid test on small machines (e.g. cloud 1-core
+instance), other events might not happen:
+
+    + cat trace
+    + cnt=0
+    + [ 0 -eq 0 ]
+    + fail No other events were recorded
+    [15] event tracing - restricts events based on pid notrace filtering [FAIL]
+
+Schedule a simple sleep task to be sure that some other process events
+get recorded.
+
+Fixes: ebed9628f5c2 ("selftests/ftrace: Add test to test new set_event_notrace_pid file")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+
+---
+
+Changes since v1:
+1. Correct spelling in commit msg.
+2. Add Steven's ack.
+---
+ .../testing/selftests/ftrace/test.d/event/event-no-pid.tc  | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
+index e6eb78f0b954..9933ed24f901 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
+@@ -57,6 +57,10 @@ enable_events() {
+     echo 1 > tracing_on
+ }
+ 
++other_task() {
++    sleep .001 || usleep 1 || sleep 1
++}
++
+ echo 0 > options/event-fork
+ 
+ do_reset
+@@ -94,6 +98,9 @@ child=$!
+ echo "child = $child"
+ wait $child
+ 
++# Be sure some other events will happen for small systems (e.g. 1 core)
++other_task
++
+ echo 0 > tracing_on
+ 
+ cnt=`count_pid $mypid`
+-- 
+2.27.0
 
