@@ -2,144 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDE83B2F65
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jun 2021 14:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3763B2FD7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jun 2021 15:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbhFXMyE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Jun 2021 08:54:04 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:52992 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbhFXMyD (ORCPT
+        id S230257AbhFXNPT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Jun 2021 09:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230249AbhFXNPT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Jun 2021 08:54:03 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C59AA1FD35;
-        Thu, 24 Jun 2021 12:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1624539102; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OStIT+/k9HjAMVEft/RiVSrSrqRUKVMppJc/bLZhAsc=;
-        b=h1TVxq0gwwlLbYqvb8tWbr/SwshfATjxvexZQDFL2biMzuzXxMfRnglO5nSJ12QdFh3lZZ
-        FArNIcJjJMRUX5Blw8IDk3onyywNZfB2DYPVTIBceONow2v4WnuszUCeCPzCtPz99jrNKs
-        yidy5cAz7L/uV6PBm7+zmb9Z1OtOTTM=
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id 68DE211A97;
-        Thu, 24 Jun 2021 12:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1624539102; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OStIT+/k9HjAMVEft/RiVSrSrqRUKVMppJc/bLZhAsc=;
-        b=h1TVxq0gwwlLbYqvb8tWbr/SwshfATjxvexZQDFL2biMzuzXxMfRnglO5nSJ12QdFh3lZZ
-        FArNIcJjJMRUX5Blw8IDk3onyywNZfB2DYPVTIBceONow2v4WnuszUCeCPzCtPz99jrNKs
-        yidy5cAz7L/uV6PBm7+zmb9Z1OtOTTM=
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id p7OQGN5/1GAWSQAALh3uQQ
-        (envelope-from <mkoutny@suse.com>); Thu, 24 Jun 2021 12:51:42 +0000
-Date:   Thu, 24 Jun 2021 14:51:41 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>
-Subject: Re: [PATCH v2 3/6] cgroup/cpuset: Add a new isolated cpus.partition
- type
-Message-ID: <YNR/3fydXvAi3OsN@blackbook>
-References: <20210621184924.27493-1-longman@redhat.com>
- <20210621184924.27493-4-longman@redhat.com>
+        Thu, 24 Jun 2021 09:15:19 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F22C061756
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jun 2021 06:13:00 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id w23-20020a9d5a970000b02903d0ef989477so5484160oth.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jun 2021 06:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4SF5a3kJdcjfWJZpedrg2y4hs9MoI05TwLUsIxF/D4Q=;
+        b=ZhRieZYzvRBPi0/6nnXVxybiLtozerYBMutruvdWEpnOZeSZ9wHm5HTX21AScLl+n0
+         Ak4LZ9jAEfp+CxLL0jBRqFjUMi/OTQsg45Sam4dO1r+eoHHVvBpMOaLzeKQZtaHRKzdE
+         a8lEbNeg/RE8B19zl1lxQBjkYBDAeyaG5ZZZY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4SF5a3kJdcjfWJZpedrg2y4hs9MoI05TwLUsIxF/D4Q=;
+        b=ZA8nMAtZYGJ6X1G+8fxMaE9RO8eiCVa1zchvUAaqNIhHqv0dnroQCGIXQbeyh0Unon
+         q+sWU/lVaj7quPtq8vJWy0qB2F2C6LvPFQyd+Pohyjb+koJnv83wqiY8rLc8hd38vmfQ
+         n/6SMgxZ/2ddv2RSn64Cr3o2ZSX5ISu9EvjKpRNMh3LpHV9ONd8/7FoHtLm48Z1N+O1i
+         rWFZm8b1EF/H8tAZjZhCUFV9fZ547af2QK6dVpRqgDsyY35QURspbVASa7mt6zPQQ0qo
+         or759bF9L6IUnOTdXAxxj3qEEmrYDR8qGZAINKr0MBILO1KOT7VkkgbQcUcG6Cc+d+tc
+         6aJw==
+X-Gm-Message-State: AOAM531cp5Cslv9nNWKkVmlQyOkIC1E5BeIpunpIqlI3ARmj/l+h+fC5
+        N08Naza1lFQy141DHiuZKGIZFQ==
+X-Google-Smtp-Source: ABdhPJxaH3NzKbqaBGkp4qCphwU/Avg8Jw0NOxVdPCxyIoNq2eACWJ7Mpdr/7V6l8+X4pmqjj3rVyQ==
+X-Received: by 2002:a9d:1444:: with SMTP id h62mr4687643oth.166.1624540379798;
+        Thu, 24 Jun 2021 06:12:59 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id s2sm581628ooa.39.2021.06.24.06.12.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Jun 2021 06:12:59 -0700 (PDT)
+Subject: Re: [PATCH kunit-next] thunderbolt: test: Reinstate a few casts of
+ bitfields
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210624084823.15031-1-davidgow@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <50840b08-5735-f63b-91b7-a7117a25d3da@linuxfoundation.org>
+Date:   Thu, 24 Jun 2021 07:12:58 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7y/hTF6KceCxU12n"
-Content-Disposition: inline
-In-Reply-To: <20210621184924.27493-4-longman@redhat.com>
+In-Reply-To: <20210624084823.15031-1-davidgow@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 6/24/21 2:48 AM, David Gow wrote:
+> Partially revert "thunderbolt: test: Remove some casts which are no
+> longer required". It turns out that typeof() doesn't support bitfields,
+> so these still need to be cast to the appropriate enum.
+> 
+> The only mention of typeof() and bitfields I can find is in the proposal
+> to standardise them:
+> http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2619.htm
+> 
+> This was caught by the kernel test robot:
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/FDKBHAV7QNLNFU5NBI2RKV56DWDSOLGM/
+> 
+> Fixes: 	8f0877c26e ("thunderbolt: test: Remove some casts which are no longer required")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+> 
+> Whoops: I didn't notice this was broken earlier. If it's easier to just
+> revert the broken patch, that's fine, too.
+> 
 
---7y/hTF6KceCxU12n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for fixing this quickly. I will apply this on top of the broken 
+patch.
 
-Hello.
-
-On Mon, Jun 21, 2021 at 02:49:21PM -0400, Waiman Long <longman@redhat.com> =
-wrote:
->     cgroup/cpuset: Add a new isolated cpus.partition type
->=20
->     Cpuset v1 uses the sched_load_balance control file to determine if lo=
-ad
->     balancing should be enabled.  Cpuset v2 gets rid of sched_load_balance
->     as its use may require disabling load balancing at cgroup root.
->=20
->     For workloads that require very low latency like DPDK, the latency
->     jitters caused by periodic load balancing may exceed the desired
->     latency limit.
->=20
->     When cpuset v2 is in use, the only way to avoid this latency cost is =
-to
->     use the "isolcpus=3D" kernel boot option to isolate a set of CPUs. Af=
-ter
->     the kernel boot, however, there is no way to add or remove CPUs from
->     this isolated set. For workloads that are more dynamic in nature, that
->     means users have to provision enough CPUs for the worst case situation
->     resulting in excess idle CPUs.
->=20
->     To address this issue for cpuset v2, a new cpuset.cpus.partition type
->     "isolated" is added which allows the creation of a cpuset partition
->     without load balancing. This will allow system administrators to
->     dynamically adjust the size of isolated partition to the current need
->     of the workload without rebooting the system.
-
-I like this work.
-Would it be worth generalizing the API to be on par with what isolcpus=3D
-can configure? (I.e. not only load balancing but the other dimensions of
-isolation (like the flags nohz and managed_irq now).)
-
-I don't know if all such behaviors could be implemented dynamically
-(likely not easy) but the API could initially implement just what you do
-here with the "isolated" partition type.
-
-The variant I'm thinking of would keep just the "root" and "member"
-partitions type and the "root" type could be additionally configured via
-cpuset.cpus.partition.flags (for example).
-
-WDYT?
-
-Michal
-
---7y/hTF6KceCxU12n
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEEoQaUCWq8F2Id1tNia1+riC5qSgFAmDUf9gACgkQia1+riC5
-qSgrew/9Hq4FG5rOCmGFt93pb5UT4E9slWA9EWdsCCpq97TsB9YXl8KsEYana9aP
-4ZCRW2ySHqn0LpjKlgbYruhXX9IICNAOr6KHHKW8RgKTPnBHsXpwuhQhDJdDLQ54
-U1DGX+WfTTuTFM8dO2VJcdSHl3c/7xxr1L5rp9Z3Soetzp219w6p/SE3WDZYW1Q1
-ur+Yq/Fjl6x8YU/7U1c18sHP1H7xTw9yC94NxZ/gwhyJzxxR8LDWTvTr9ZJcN2qP
-ywzJbuhH6dcZrAJUYbR990SryS1mDDD8nZx5iZJC005oR4m5Ce7kahU/lmv5Oe0n
-TCgPjA0idwjXED3pCeARRVdl6nuFmi+hXO9SV9HpLwoDVTWF2F2g6wb49g2tkIwK
-0BNtpYv2F0Mg0hmY3wCJH5IDBMkJemNgCUj+SRlwngJgYRbNcUvLmCloapbFLsC+
-3JziiJqkeOhlAIfpMYHsEXV0OHDkYLuHsf5cZ/We2qFoY955niGZti9EE+rMfh0V
-DNMwk7vmSSCffEFOzwP0cwGiyF6AC83JgX3eEpPAfArt+4CReEYi6r0gmdD8VYUG
-8ezyxEa9/zVgARjzB5U7/7r2OSquhmEg/uKhRs/XqeFP53MyAaJnPWIEXehyIsXL
-SgRvceYyw+U0Pvm/oYplJF8VLNIadWNzMOK9yqQCnNx6y9ogShU=
-=SVZh
------END PGP SIGNATURE-----
-
---7y/hTF6KceCxU12n--
+thanks,
+-- Shuah
