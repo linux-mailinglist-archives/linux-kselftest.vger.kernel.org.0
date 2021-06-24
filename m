@@ -2,69 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B793B246B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jun 2021 03:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197773B2874
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jun 2021 09:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbhFXBSC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Jun 2021 21:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbhFXBSA (ORCPT
+        id S231480AbhFXHXi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Jun 2021 03:23:38 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:57939 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231434AbhFXHXh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Jun 2021 21:18:00 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C713C061756
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 18:15:41 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id i68so10283945qke.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 18:15:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SSznIYuUIEIg18+gmsygBYi+KltByHCz7GU6WI6nBac=;
-        b=txFyfJ5/DW0i4SGxftKHN04CwP97k+fmZpcAXBx/jym/HwOvOlm8W5eVO80X1YOkVn
-         M63T/lUA7Zbbevynupldarpdv6g5enybV5Aa/lcn7cZN5KloBEYmlXa2zgSopt7CUxDk
-         /VTLOJDYxLi84EtZyPZozqQmv7WXtBhuhFfoOIY7yB9g6wWVW61pri8h0xvS0vm5UHYT
-         pEWbyyCKf2xpX8hG6Cubmx3s8tpPi5hPglaj/rmTD2rAV9hx7oiJUXcw0VuD7C9a/vZn
-         W4cMbiOB3rYudFh0TuIeMxuTTRmDbwKL065iM9BUUh4wJPi9iXpQsNCgkgMh9grSXoom
-         RuwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SSznIYuUIEIg18+gmsygBYi+KltByHCz7GU6WI6nBac=;
-        b=ZdVgMbaXMkNsbvddZlX0X7yXW/1SALkz6dBbYpBBWZLKlxSIZPTfAFqENtu3cxIHvE
-         pEsVjsBTQhaQzlx79w6X3VpPtFyowpFeeGZLZm/7Sd6TE2MRJ0Q/chKhZr11nYLNwTfp
-         p9YvIzKqFPBQYYhJjzFAvpoCGR7xDqEFW21aVdWn37cj9ArdfmBdYYzrz5+UBhsiAurb
-         KZ0UAK+0KYcDOGzsSru7Exn62GMHa/q4yVwQJ04wg3SFy6MHKgOZeQ5nCnnr22Xbcnz5
-         Zvs7rRENF0MaHNisjffXi0c1dv6k7E2ILJFVvHJ3LFijLW/QGn1RnO7UWJnR1QQDMQtK
-         QJEQ==
-X-Gm-Message-State: AOAM5319uC+4Brwz/DTFrAPUfcHRshL/75bom3Pc7YBdGW5OY+fPTwGX
-        aTm6+AUG/w/4yORPhVT/AlVkmHZy5JIEx5+78aI=
-X-Google-Smtp-Source: ABdhPJxb5FmavU4cSN7eBGpCMok2tLtT5I6dBQ13jcEtxm++blo2D6gF9JeS8t5ki5f1+5FhI6Im1PR/TlhiRWeoUpA=
-X-Received: by 2002:a25:8b03:: with SMTP id i3mr1421660ybl.367.1624497340273;
- Wed, 23 Jun 2021 18:15:40 -0700 (PDT)
+        Thu, 24 Jun 2021 03:23:37 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mtapsc-5-gGbqqVa_MamySoR60Cs1mA-1; Thu, 24 Jun 2021 08:21:16 +0100
+X-MC-Unique: gGbqqVa_MamySoR60Cs1mA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 24 Jun
+ 2021 08:21:15 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.018; Thu, 24 Jun 2021 08:21:15 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kees Cook' <keescook@chromium.org>
+CC:     'Guillaume Tucker' <guillaume.tucker@collabora.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
+Thread-Topic: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
+Thread-Index: AQHXaCznpjkpNTpwjEW+kA8o/GdKZashmKhggAAdGgCAABKuUIAAWbwAgACepjA=
+Date:   Thu, 24 Jun 2021 07:21:15 +0000
+Message-ID: <a05d4cd3366e4047ba42663738e12198@AcuMS.aculab.com>
+References: <20210619025834.2505201-1-keescook@chromium.org>
+ <e958209b-8621-57ca-01d6-2e76b05dab4c@collabora.com>
+ <42f26361db6f481e980ac349bf0079ef@AcuMS.aculab.com>
+ <202106230917.FE2F587@keescook>
+ <76a575d1364a47458d27c76c65b673b6@AcuMS.aculab.com>
+ <202106231231.9B858B95A@keescook>
+In-Reply-To: <202106231231.9B858B95A@keescook>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Received: by 2002:a05:7010:538b:b029:be:70bc:78af with HTTP; Wed, 23 Jun 2021
- 18:15:40 -0700 (PDT)
-Reply-To: johnzengo45@gmail.com
-From:   John Zengo <johnzengo1234@gmail.com>
-Date:   Wed, 23 Jun 2021 18:15:40 -0700
-Message-ID: <CA+6mZBywV6QZ4SWSMz9drzwA3K69Fb381S2aVvK8T3qVNe3+pA@mail.gmail.com>
-Subject: Compliment of the season
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
--- 
-Compliment of the season
+From: Kees Cook
+> Sent: 23 June 2021 23:47
+> 
+> On Wed, Jun 23, 2021 at 04:27:47PM +0000, David Laight wrote:
+...
+> > You can probably even do:
+> >
+> > echo "$test" | /bin/sh -c cat >$TRIGGER || true
+> >
+> > (moving the redirect to the outer shell).
+> 
+> Actually, it looks like the "write" is already happening in the exec'd
+> process, so this can just be:
+> 
+> echo "$test" | cat >$TRIGGER || true
+> 
+> But it still can't be:
+> 
+> echo "$test" >$TRIGGER
+> 
+> which is what I had over-engineered a solution to. :)
 
-Greetings from Mr John Zengo i have something to discuss with you and
-it is very important and urgent.please feel free to reach me on my
-e-mail Address( johnzengo45@gmail.com)
-for further clarifications
+That one fails because echo is the shell builtin.
+But:
+	/bin/echo "$test" >$TRIGGER
+should be fine.
 
-yours sincerely
+Quite where the original came from I not sure I want to find out.
 
-John Zengo
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
