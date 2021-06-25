@@ -2,39 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BDF3B47AC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jun 2021 18:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C80C3B47A9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jun 2021 18:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbhFYQ7E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Jun 2021 12:59:04 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3308 "EHLO
+        id S230108AbhFYQ7C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Jun 2021 12:59:02 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3309 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbhFYQ67 (ORCPT
+        with ESMTP id S229697AbhFYQ7A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Jun 2021 12:58:59 -0400
+        Fri, 25 Jun 2021 12:59:00 -0400
 Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GBNDy142vz6G8m4;
-        Sat, 26 Jun 2021 00:46:26 +0800 (CST)
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GBNJ13yfbz6G7xF;
+        Sat, 26 Jun 2021 00:49:05 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 25 Jun 2021 18:56:35 +0200
+ 15.1.2176.2; Fri, 25 Jun 2021 18:56:36 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>
 CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        <selinux@vger.kernel.org>,
-        Prakhar Srivastava <prsriva02@gmail.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Subject: [RFC][PATCH 01/12] ima: Add digest, algo, measured parameters to ima_measure_critical_data()
-Date:   Fri, 25 Jun 2021 18:56:03 +0200
-Message-ID: <20210625165614.2284243-2-roberto.sassu@huawei.com>
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 02/12] digest_lists: Overview
+Date:   Fri, 25 Jun 2021 18:56:04 +0200
+Message-ID: <20210625165614.2284243-3-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210625165614.2284243-1-roberto.sassu@huawei.com>
 References: <20210625165614.2284243-1-roberto.sassu@huawei.com>
@@ -49,269 +43,278 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ima_measure_critical_data() allows any caller in the kernel to provide a
-buffer, so that is measured by IMA if an appropriate policy is set. Some
-information that could be useful to the callers are the digest of the
-buffer included in the new measurement entry, the digest algorithm and
-whether the buffer was measured.
-
-This patch modifies the definition of ima_measure_critical_data() to
-include three new parameters: digest, algo and measured. If they are NULL,
-the function behaves as before and just measures the buffer, if requested
-with the IMA policy. Otherwise, it also writes the digest, algorithm and
-whether the buffer is measured to the provided pointers.
-
-If the pointers are not NULL, the digest is calculated also if there is no
-matching rule in the IMA policy.
+This patch adds an overview of Huawei Digest Lists to
+Documentation/security/digest_lists.rst.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc: selinux@vger.kernel.org
-Cc: Prakhar Srivastava <prsriva02@gmail.com>
-Cc: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Cc: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 ---
- include/linux/ima.h                          |  8 +++--
- security/integrity/ima/ima.h                 |  3 +-
- security/integrity/ima/ima_appraise.c        |  3 +-
- security/integrity/ima/ima_asymmetric_keys.c |  3 +-
- security/integrity/ima/ima_init.c            |  3 +-
- security/integrity/ima/ima_main.c            | 32 ++++++++++++++++----
- security/integrity/ima/ima_queue_keys.c      |  2 +-
- security/selinux/ima.c                       |  5 +--
- 8 files changed, 44 insertions(+), 15 deletions(-)
+ Documentation/security/digest_lists.rst | 228 ++++++++++++++++++++++++
+ Documentation/security/index.rst        |   1 +
+ MAINTAINERS                             |   7 +
+ 3 files changed, 236 insertions(+)
+ create mode 100644 Documentation/security/digest_lists.rst
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 61d5723ec303..f7fd931456c7 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -11,6 +11,7 @@
- #include <linux/fs.h>
- #include <linux/security.h>
- #include <linux/kexec.h>
-+#include <crypto/hash_info.h>
- struct linux_binprm;
- 
- #ifdef CONFIG_IMA
-@@ -36,7 +37,8 @@ extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
- extern void ima_measure_critical_data(const char *event_label,
- 				      const char *event_name,
- 				      const void *buf, size_t buf_len,
--				      bool hash);
-+				      bool hash, u8 *digest,
-+				      enum hash_algo *algo, bool *measured);
- 
- #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
- extern void ima_appraise_parse_cmdline(void);
-@@ -140,7 +142,9 @@ static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {
- static inline void ima_measure_critical_data(const char *event_label,
- 					     const char *event_name,
- 					     const void *buf, size_t buf_len,
--					     bool hash) {}
-+					     bool hash, u8 *digest,
-+					     enum hash_algo *algo,
-+					     bool *measured) {}
- 
- #endif /* CONFIG_IMA */
- 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index f0e448ed1f9f..fff31065d600 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -268,7 +268,8 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
- 				struct inode *inode, const void *buf, int size,
- 				const char *eventname, enum ima_hooks func,
- 				int pcr, const char *func_data,
--				bool buf_hash);
-+				bool buf_hash, u8 *digest, enum hash_algo *algo,
-+				bool *measured);
- void ima_audit_measurement(struct integrity_iint_cache *iint,
- 			   const unsigned char *filename);
- int ima_alloc_init_template(struct ima_event_data *event_data,
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index ef9dcfce45d4..3fcbf1bfa449 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -357,7 +357,8 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
- 		if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
- 			process_buffer_measurement(&init_user_ns, NULL, digest, digestsize,
- 						   "blacklisted-hash", NONE,
--						   pcr, NULL, false);
-+						   pcr, NULL, false, NULL, NULL,
-+						   NULL);
- 	}
- 
- 	return rc;
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-index c985418698a4..4370bf7b8866 100644
---- a/security/integrity/ima/ima_asymmetric_keys.c
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -62,5 +62,6 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
- 	 */
- 	process_buffer_measurement(&init_user_ns, NULL, payload, payload_len,
- 				   keyring->description, KEY_CHECK, 0,
--				   keyring->description, false);
-+				   keyring->description, false, NULL, NULL,
-+				   NULL);
- }
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 5076a7d9d23e..a4dcd15187a8 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -154,7 +154,8 @@ int __init ima_init(void)
- 	ima_init_key_queue();
- 
- 	ima_measure_critical_data("kernel_info", "kernel_version",
--				  UTS_RELEASE, strlen(UTS_RELEASE), false);
-+				  UTS_RELEASE, strlen(UTS_RELEASE), false, NULL,
-+				  NULL, NULL);
- 
- 	return rc;
- }
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 287b90509006..04d1aed5adae 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -833,6 +833,9 @@ int ima_post_load_data(char *buf, loff_t size,
-  * @pcr: pcr to extend the measurement
-  * @func_data: func specific data, may be NULL
-  * @buf_hash: measure buffer data hash
-+ * @digest: buffer digest will be written to
-+ * @algo: digest algorithm
-+ * @measured: whether the buffer has been measured by IMA
-  *
-  * Based on policy, either the buffer data or buffer data hash is measured
-  */
-@@ -840,7 +843,8 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
- 				struct inode *inode, const void *buf, int size,
- 				const char *eventname, enum ima_hooks func,
- 				int pcr, const char *func_data,
--				bool buf_hash)
-+				bool buf_hash, u8 *digest, enum hash_algo *algo,
-+				bool *measured)
- {
- 	int ret = 0;
- 	const char *audit_cause = "ENOMEM";
-@@ -861,7 +865,7 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
- 	int action = 0;
- 	u32 secid;
- 
--	if (!ima_policy_flag)
-+	if (!ima_policy_flag && (!digest || !algo || !measured))
- 		return;
- 
- 	template = ima_template_desc_buf();
-@@ -883,7 +887,7 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
- 		action = ima_get_action(mnt_userns, inode, current_cred(),
- 					secid, 0, func, &pcr, &template,
- 					func_data);
--		if (!(action & IMA_MEASURE))
-+		if (!(action & IMA_MEASURE) && (!digest || !algo || !measured))
- 			return;
- 	}
- 
-@@ -914,6 +918,15 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
- 		event_data.buf_len = digest_hash_len;
- 	}
- 
-+	if (digest && algo) {
-+		memcpy(digest, iint.ima_hash->digest,
-+		       hash_digest_size[ima_hash_algo]);
-+		*algo = ima_hash_algo;
-+	}
+diff --git a/Documentation/security/digest_lists.rst b/Documentation/security/digest_lists.rst
+new file mode 100644
+index 000000000000..8980be7836f8
+--- /dev/null
++++ b/Documentation/security/digest_lists.rst
+@@ -0,0 +1,228 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+	if (!(action & IMA_MEASURE))
-+		return;
++===================
++Huawei Digest Lists
++===================
 +
- 	ret = ima_alloc_init_template(&event_data, &entry, template);
- 	if (ret < 0) {
- 		audit_cause = "alloc_entry";
-@@ -924,8 +937,11 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
- 	if (ret < 0) {
- 		audit_cause = "store_entry";
- 		ima_free_template_entry(entry);
-+		goto out;
- 	}
++Introduction
++============
++
++Huawei Digest Lists is a simple in kernel database for storing file and
++metadata digests and for reporting to its users (e.g. Integrity Measurement
++Architecture or IMA) whether the digests are in the database or not. The
++choice of placing it in the kernel and not in a user space process is
++explained later in the Security Assumptions section.
++
++The database is populated by directly uploading the so called digest lists,
++a set of digests concatenated together and preceded by a header including
++information about them (e.g. whether the file or metadata with a given
++digest is immutable or not). Digest lists are stored in the kernel memory
++as they are, the kernel just builds indexes to easily lookup digests.
++
++The kernel supports only one digest list format called ``compact``. However,
++alternative formats (e.g. the RPM header) can be supported through a user
++space parser that, by invoking the appropriate library (more can be added),
++converts the original digest list to the compact format and uploads it to
++the kernel.
++
++The database keeps track of whether digest lists have been processed in
++some way (e.g. measured or appraised by IMA). This is important for example
++for remote attestation, so that remote verifiers understand what has been
++loaded in the database.
++
++It is a transactional database, i.e. it has the ability to roll back to the
++beginning of the transaction if an error occurred during the addition of a
++digest list (the deletion operation always succeeds). This capability has
++been tested with an ad-hoc fault injection mechanism capable of simulating
++failures during the operations.
++
++Finally, the database exposes to user space, through securityfs, the digest
++lists currently loaded, the number of digests added, a query interface and
++an interface to set digest list labels.
++
++
++Binary Integrity
++----------------
++
++Integrity is a fundamental security property in information systems.
++Integrity could be described as the condition in which a generic
++component is just after it has been released by the entity that created it.
++
++One way to check whether a component is in this condition (called binary
++integrity) is to calculate its digest and to compare it with a reference
++value (i.e. the digest calculated in controlled conditions, when the
++component is released).
++
++IMA, a software part of the integrity subsystem, can perform such
++evaluation and execute different actions:
++
++- store the digest in an integrity-protected measurement list, so that it
++  can be sent to a remote verifier for analysis;
++- compare the calculated digest with a reference value (usually protected
++  with a signature) and deny operations if the file is found corrupted;
++- store the digest in the system log.
++
++
++Contribution
++------------
++
++Huawei Digest Lists facilitates the provisioning of reference values for
++system and application files from software vendors, to the kernel.
++
++Possible sources for digest lists are:
++
++- RPM headers;
++- Debian repository metadata.
++
++These sources are already usable without any modification required for
++Linux vendors.
++
++If digest list sources are signed (usually they are, like the ones above),
++remote verifiers could identify their provenance, or Linux vendors could
++prevent the loading of unsigned ones or those signed with an untrusted key.
++
++
++Possible Usages
++---------------
++
++Provisioned reference values can be used (e.g. by IMA) to make
++integrity-related decisions (allow list or deny list).
++
++Possible usages for IMA are:
++
++- avoid recording measurement of files whose digest is found in the
++  pre-provisioned reference values:
++
++  - reduces the number of TPM operations (PCR extend);
++  - could make a TPM PCR predictable, as the PCR would not be affected by
++    the temporal sequence of executions if binaries are known
++    (no measurement);
++
++- exclusively grant access to files whose digest is found in the
++  pre-provisioned reference values:
++
++  - faster verification time (fewer signature verifications);
++  - no need to generate a signature for every file.
++
++
++Security Assumptions
++--------------------
++
++Since digest lists are stored in the kernel memory, they are no susceptible
++to attacks by user space processes.
++
++A locked-down kernel, that accepts only verified kernel modules, will allow
++digest lists to be added or deleted only though a well-defined and
++monitored interface. In this situation, the root user is assumed to be
++untrusted, i.e. it cannot subvert without being detected the mandatory
++policy stating which files are accessible by the system.
++
++Adoption
++--------
++
++A former version of Huawei Digest Lists is used in the following OSes:
++
++- openEuler 20.09
++  https://github.com/openeuler-mirror/kernel/tree/openEuler-20.09
++
++- openEuler 21.03
++  https://github.com/openeuler-mirror/kernel/tree/openEuler-21.03
++
++Originally, Huawei Digest Lists was part of IMA. In this version,
++it has been redesigned as a standalone module with an API that makes
++its functionality accessible by IMA and, eventually, other subsystems.
++
++User Space Support
++------------------
++
++Digest lists can be generated and managed with ``digest-list-tools``:
++
++https://github.com/openeuler-mirror/digest-list-tools
++
++It includes two main applications:
++
++- ``gen_digest_lists``: generates digest lists from files in the
++  filesystem or from the RPM database (more digest list sources can be
++  supported);
++- ``manage_digest_lists``: converts and uploads digest lists to the
++  kernel.
++
++
++Simple Usage Example
++--------------------
++
++1. Digest list generation (RPM headers and their signature are copied to
++   the specified directory):
++
++.. code-block:: bash
++
++ # mkdir /etc/digest_lists
++ # gen_digest_lists -t file -f rpm+db -d /etc/digest_lists -o add
++
++
++2. Digest list upload with the user space parser:
++
++.. code-block:: bash
++
++ # manage_digest_lists -p add-digest -d /etc/digest_lists
++
++3. First digest list query:
++
++.. code-block:: bash
++
++ # echo sha256-$(sha256sum /bin/cat) > /sys/kernel/security/integrity/digest_lists/digest_query
++ # cat /sys/kernel/security/integrity/digest_lists/digest_query
++   sha256-[...]-0-file_list-rpm-coreutils-8.32-18.fc33.x86_64 (actions: 0): version: 1, algo: sha256, type: 2, modifiers: 1, count: 106, datalen: 3392
++
++4. Second digest list query:
++
++.. code-block:: bash
++
++ # echo sha256-$(sha256sum /bin/zip) > /sys/kernel/security/integrity/digest_lists/digest_query
++ # cat /sys/kernel/security/integrity/digest_lists/digest_query
++   sha256-[...]-0-file_list-rpm-zip-3.0-27.fc33.x86_64 (actions: 0): version: 1, algo: sha256, type: 2, modifiers: 1, count: 4, datalen: 128
++
++
++Architecture
++============
++
++This section introduces the high level architecture.
++
++::
++
++ 5. add/delete from hash table and add refs to digest list
++        +---------------------------------------------+
++        |                            +-----+   +-------------+         +--+
++        |                            | key |-->| digest refs |-->...-->|  |
++        V                            +-----+   +-------------+         +--+
++ +-------------+                     +-----+   +-------------+
++ | digest list |                     | key |-->| digest refs |
++ |  (compact)  |                     +-----+   +-------------+
++ +-------------+                     +-----+   +-------------+
++        ^ 4. copy to                 | key |-->| digest refs |
++        |    kernel memory           +-----+   +-------------+ kernel space
++ --------------------------------------------------------------------------
++        ^                                          ^             user space
++        |<----------------+       3b. upload       |
++ +-------------+   +------------+                  | 6. query digest
++ | digest list |   | user space | 2b. convert
++ |  (compact)  |   |   parser   |
++ +-------------+   +------------+
++ 1a. upload               ^       1b. read
++                          |
++                   +------------+
++                   | RPM header |
++                   +------------+
++
++
++As mentioned before, digest lists can be uploaded directly if they are in
++the compact format (step 1a) or can be uploaded indirectly by the user
++space parser if they are in an alternative format (steps 1b-3b).
++
++During upload, the kernel makes a copy of the digest list to the kernel
++memory (step 4), and creates the necessary structures to index the digests
++(hash table and an array of digest list references to locate the digests in
++the digest list) (step 5).
++
++Finally, digests can be searched from user space through a securityfs file
++(step 6) or by the kernel itself.
+diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
+index 16335de04e8c..80877b520403 100644
+--- a/Documentation/security/index.rst
++++ b/Documentation/security/index.rst
+@@ -17,3 +17,4 @@ Security Documentation
+    tpm/index
+    digsig
+    landlock
++   digest_lists
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8c5ee008301a..cba3d82fee43 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8381,6 +8381,13 @@ W:	http://www.st.com/
+ F:	Documentation/devicetree/bindings/iio/humidity/st,hts221.yaml
+ F:	drivers/iio/humidity/hts221*
  
-+	if (measured)
-+		*measured = true;
- out:
- 	if (ret < 0)
- 		integrity_audit_message(AUDIT_INTEGRITY_PCR, NULL, eventname,
-@@ -956,7 +972,7 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
- 
- 	process_buffer_measurement(file_mnt_user_ns(f.file), file_inode(f.file),
- 				   buf, size, "kexec-cmdline", KEXEC_CMDLINE, 0,
--				   NULL, false);
-+				   NULL, false, NULL, NULL, NULL);
- 	fdput(f);
- }
- 
-@@ -967,6 +983,9 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
-  * @buf: pointer to buffer data
-  * @buf_len: length of buffer data (in bytes)
-  * @hash: measure buffer data hash
-+ * @digest: buffer digest will be written to
-+ * @algo: digest algorithm
-+ * @measured: whether the buffer has been measured by IMA
-  *
-  * Measure data critical to the integrity of the kernel into the IMA log
-  * and extend the pcr.  Examples of critical data could be various data
-@@ -976,14 +995,15 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
- void ima_measure_critical_data(const char *event_label,
- 			       const char *event_name,
- 			       const void *buf, size_t buf_len,
--			       bool hash)
-+			       bool hash, u8 *digest, enum hash_algo *algo,
-+			       bool *measured)
- {
- 	if (!event_name || !event_label || !buf || !buf_len)
- 		return;
- 
- 	process_buffer_measurement(&init_user_ns, NULL, buf, buf_len, event_name,
- 				   CRITICAL_DATA, 0, event_label,
--				   hash);
-+				   hash, digest, algo, measured);
- }
- 
- static int __init init_ima(void)
-diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
-index 979ef6c71f3d..97ed974651fd 100644
---- a/security/integrity/ima/ima_queue_keys.c
-+++ b/security/integrity/ima/ima_queue_keys.c
-@@ -165,7 +165,7 @@ void ima_process_queued_keys(void)
- 						   entry->keyring_name,
- 						   KEY_CHECK, 0,
- 						   entry->keyring_name,
--						   false);
-+						   false, NULL, NULL, NULL);
- 		list_del(&entry->list);
- 		ima_free_key_entry(entry);
- 	}
-diff --git a/security/selinux/ima.c b/security/selinux/ima.c
-index 34d421861bfc..af1016dbb5aa 100644
---- a/security/selinux/ima.c
-+++ b/security/selinux/ima.c
-@@ -86,7 +86,8 @@ void selinux_ima_measure_state_locked(struct selinux_state *state)
- 	}
- 
- 	ima_measure_critical_data("selinux", "selinux-state",
--				  state_str, strlen(state_str), false);
-+				  state_str, strlen(state_str), false, NULL,
-+				  NULL, NULL);
- 
- 	kfree(state_str);
- 
-@@ -103,7 +104,7 @@ void selinux_ima_measure_state_locked(struct selinux_state *state)
- 	}
- 
- 	ima_measure_critical_data("selinux", "selinux-policy-hash",
--				  policy, policy_len, true);
-+				  policy, policy_len, true, NULL, NULL, NULL);
- 
- 	vfree(policy);
- }
++HUAWEI DIGEST LISTS
++M:	Roberto Sassu <roberto.sassu@huawei.com>
++L:	linux-integrity@vger.kernel.org
++S:	Supported
++T:	git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
++F:	Documentation/security/digest_lists.rst
++
+ HUAWEI ETHERNET DRIVER
+ M:	Bin Luo <luobin9@huawei.com>
+ L:	netdev@vger.kernel.org
 -- 
 2.25.1
 
