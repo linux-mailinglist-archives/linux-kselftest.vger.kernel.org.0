@@ -2,52 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5983B3CDD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jun 2021 08:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E1D3B3CDF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jun 2021 08:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbhFYHAk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Jun 2021 03:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S229884AbhFYHAp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Jun 2021 03:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbhFYHAj (ORCPT
+        with ESMTP id S229881AbhFYHAn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Jun 2021 03:00:39 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567ABC061756
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jun 2021 23:58:19 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id j190-20020a253cc70000b029054c72781aa2so2973811yba.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jun 2021 23:58:19 -0700 (PDT)
+        Fri, 25 Jun 2021 03:00:43 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4E7C061574
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jun 2021 23:58:23 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id l132-20020a25258a0000b029054fc079d46eso2998324ybl.20
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jun 2021 23:58:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Y5FeZEl0guKdTjMazpitcLsdsajY6QwdwKyHdSQHIdw=;
-        b=IyuYstBR5G7wc8T0BLFCfZ3Yxi4sUywu1jCR+Str0nxSveZixfwyr8IQAeXgRwUcZU
-         KyLfE8O56Rn7Is/mb28cWWQqD01/2oXpuepTNvHya0HotHntayydsnCldYiWqorZVipb
-         1eWEBtNWNn8O1qLInfxy9OBY1sMEj4FNaBX6NCmOSV6kFzIFsgh3ozP4dW576nBCuAP/
-         bLNdw6U2HLkgB5a36j3ZZH1JWzYcaQTnI52TN+rwjzVoQzC55GS2aK7/NDPhRJtxN7LW
-         nr526GVnpHZa8VUmdvMhzPRkVa9rKuBXrp61QfYcwgqdqsUJqzDcLkOn6+2VWGSvZ7JV
-         iSFA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=sT+c813HHmm0185Q/IxRevZGTihou63ahO6DGTxCJdw=;
+        b=mE9xVW4RWRv8B7mn1exqKDfYLl+RFvNlr1iNXcqeIPaYAojma+lA17QqWpic2NV+Y0
+         2iZru0fsgoDvshpyqVFyExcbu0qHqtn38wwdzBQb4uHtrS6X4bSy8Os/pMFPR9ICR+MO
+         doTpds1GEDlnGx9OmlooJda0kwCMo+uKzZ0/OF/zyCaU/uBik9mXN275+goAnWpW7ZN1
+         kYJ2px7MpmzwC0fwwImHOObGB6lt+DwaIyKn39Zt5Lmu+BpH3vQv2RKdgFgfp7ePSVmk
+         66Cirie47RimesBICB3G6NlY+YH58lh4kaNrGgOxhrk/vR3zC00/Ayc4fjlKDYN/s5vW
+         mqmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Y5FeZEl0guKdTjMazpitcLsdsajY6QwdwKyHdSQHIdw=;
-        b=DCXYQdO6lo/OeEEY099YXVfvWYZzVr7eatsCCMCakgBj9SX772rK3RQTAek7pPvYDD
-         xjLOX6gtSrMfICa2/sEvbik+QWP7ZAIqlmOQDUmr32ASDWHLZ55ArdYuebMOgei3ocjY
-         G97q+yXY1SccWlynzVeJGgRlp1jyImvkQXvBr52aC+mZ8+bhuzbuwLncTknLVZmapdeA
-         JCN5sTYCSRwU5GcG3cg+uBAeBRynPpzxkVHff567vTf4yRQn2Itti9NM5GxsLsJIMrOV
-         kx+ZU+FY/XT7cJCCu9gzP2MHzh3cc2g67pfO70FyYQdk8hfzcRF5wBBAtiJF9bs0U3bp
-         lMXg==
-X-Gm-Message-State: AOAM532jvWa2xlGDFDTEY7DbBMVvAkQ9YVFTEJMUExhZDeibrnOxgpbb
-        97HaXCETRTxHa4n6u0mu8WsNk8jgcyCJhw==
-X-Google-Smtp-Source: ABdhPJwizet+h3u7Jq4bhwh8Szv0h6TL+cRgiBSvd0f4Ym8ASiE0vwYZotZ3wS8bUswu6N3p93eUNk0ZhcfBsg==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=sT+c813HHmm0185Q/IxRevZGTihou63ahO6DGTxCJdw=;
+        b=dpZQ2f0cJYM7VVi22jowj2QQwJfd/tfthuaebk83dT9XWYxHkK8NRuKwidv0fqeCE1
+         clhKL7nsk0iZ67+j04wf48wD1AWd+rLrFECfQvvckvRabN7qk5Wjy40yt3m5os1shugS
+         hvIyB3XZeabHo6kqzu2iNyFfbVfOZhJm/1WlCVCd2SEpCSf/XyIci4juqUvSGFIBECa7
+         3gTU7rqDNkoIUCa3hytJqw/zjaQ8EG+6f6+smYTzVnHCygG09MHqUEKN5vBqJovHI406
+         O0fHy75cG1rctSBEqKNKN/Xix0kZVu5++hGBRnv3bPI3frMqEcxF8UgD3TWlFJM3uBz9
+         +LuQ==
+X-Gm-Message-State: AOAM531hFbNh4olD8IVQutfR3SKdpisSOuQjqnCuqnMvzRsL0LJGmmxC
+        ViPe+l+WdBFdGaGiNOVZDOu02UHUrnLgIw==
+X-Google-Smtp-Source: ABdhPJzucZpPE+gAlNRpvXf4jrPS9PRMMqWLON0qYC3AGkHCkX4qwcyc3H6k6qRHlk1dsOPhJFe5Q7jgGN+KPw==
 X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:bd17:f9ad:979a:a3a9])
- (user=davidgow job=sendgmr) by 2002:a25:2155:: with SMTP id
- h82mr9573464ybh.56.1624604298512; Thu, 24 Jun 2021 23:58:18 -0700 (PDT)
-Date:   Thu, 24 Jun 2021 23:58:12 -0700
-Message-Id: <20210625065815.322131-1-davidgow@google.com>
+ (user=davidgow job=sendgmr) by 2002:a25:8003:: with SMTP id
+ m3mr10151110ybk.30.1624604302809; Thu, 24 Jun 2021 23:58:22 -0700 (PDT)
+Date:   Thu, 24 Jun 2021 23:58:13 -0700
+In-Reply-To: <20210625065815.322131-1-davidgow@google.com>
+Message-Id: <20210625065815.322131-2-davidgow@google.com>
 Mime-Version: 1.0
+References: <20210625065815.322131-1-davidgow@google.com>
 X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
-Subject: [PATCH kunit-fixes v5 1/4] kunit: Support skipped tests
+Subject: [PATCH kunit-fixes v5 2/4] kunit: tool: Support skipped tests in kunit_tool
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Alan Maguire <alan.maguire@oracle.com>
@@ -61,398 +65,288 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kunit_mark_skipped() macro marks the current test as "skipped", with
-the provided reason. The kunit_skip() macro will mark the test as
-skipped, and abort the test.
+Add support for the SKIP directive to kunit_tool's TAP parser.
 
-The TAP specification supports this "SKIP directive" as a comment after
-the "ok" / "not ok" for a test. See the "Directives" section of the TAP
-spec for details:
-https://testanything.org/tap-specification.html#directives
+Skipped tests now show up as such in the printed summary. The number of
+skipped tests is counted, and if all tests in a suite are skipped, the
+suite is also marked as skipped. Otherwise, skipped tests do affect the
+suite result.
 
-The 'success' field for KUnit tests is replaced with a kunit_status
-enum, which can be SUCCESS, FAILURE, or SKIPPED, combined with a
-'status_comment' containing information on why a test was skipped.
-
-A new 'kunit_status' test suite is added to test this.
+Example output:
+[00:22:34] ======== [SKIPPED] example_skip ========
+[00:22:34] [SKIPPED] example_skip_test # SKIP this test should be skipped
+[00:22:34] [SKIPPED] example_mark_skipped_test # SKIP this test should be skipped
+[00:22:34] ============================================================
+[00:22:34] Testing complete. 2 tests run. 0 failed. 0 crashed. 2 skipped.
 
 Signed-off-by: David Gow <davidgow@google.com>
-Tested-by: Marco Elver <elver@google.com>
 Reviewed-by: Daniel Latypov <dlatypov@google.com>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 ---
 
 Changes since v4:
-https://lore.kernel.org/linux-kselftest/20210611070802.1318911-1-davidgow@google.com/
-- Rebase on top of kselftest/kunit-fixes as of 2021-06-25
-  - This is as of commit c1610aae49 ("kunit: tool: internal refactor of parser input handling")
+https://lore.kernel.org/linux-kselftest/20210611070802.1318911-2-davidgow@google.com/
+- Rebased on top of kselftest/kunit-fixes as of c1610aae49 ("kunit: tool: internal refactor of parser input handling")
+  - There were a couple of conflicts with that patch in kunit_parser.py, which have been resolved.
 
-Changes since v3:
-https://lore.kernel.org/linux-kselftest/20210608064852.609327-1-davidgow@google.com/
-- Rebase on top of (and adapt) the fix for parameterised test result
-  propagation:
-  - https://lore.kernel.org/linux-kselftest/20210611035725.1248874-1-davidgow@google.com/
+No changes since v3:
+https://lore.kernel.org/linux-kselftest/20210608065052.610009-1-davidgow@google.com/
 
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20210528075932.347154-1-davidgow@google.com/
-- Make the length of the status comment a #define
-- Fixed a build issue where debugfs was still using the old
-  kunit_status_to_string() function name.
+No changes since v2:
+https://lore.kernel.org/linux-kselftest/20210528075932.347154-2-davidgow@google.com/
 
 Changes since v1:
-https://lore.kernel.org/linux-kselftest/20210526081112.3652290-1-davidgow@google.com/
-- Renamed kunit_status_to_string() to kunit_status_to_ok_not_ok
-- Fixed incorrect printing of status comments on non-skipped tests.
+https://lore.kernel.org/linux-kselftest/20210526081112.3652290-2-davidgow@google.com/
+- Include missing test logs for kunit_tool_test
+- Encapsulate test counts in a class (Thanks Daniel Latypov)
+  - Fix a type hinting issue in the process
 
 
- include/kunit/test.h   | 73 ++++++++++++++++++++++++++++++++++++++----
- lib/kunit/debugfs.c    |  2 +-
- lib/kunit/kunit-test.c | 42 +++++++++++++++++++++++-
- lib/kunit/test.c       | 54 ++++++++++++++++++++-----------
- 4 files changed, 144 insertions(+), 27 deletions(-)
+ tools/testing/kunit/kunit_parser.py           | 77 +++++++++++++------
+ tools/testing/kunit/kunit_tool_test.py        | 22 ++++++
+ .../kunit/test_data/test_skip_all_tests.log   | 15 ++++
+ .../kunit/test_data/test_skip_tests.log       | 15 ++++
+ 4 files changed, 105 insertions(+), 24 deletions(-)
+ create mode 100644 tools/testing/kunit/test_data/test_skip_all_tests.log
+ create mode 100644 tools/testing/kunit/test_data/test_skip_tests.log
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index e79ac81f5fca..35b0aed9b739 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -97,6 +97,9 @@ struct kunit;
- /* Maximum size of parameter description string. */
- #define KUNIT_PARAM_DESC_SIZE 128
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 2b7dbba4fb7f..c3c524b79db8 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -43,6 +43,7 @@ class TestCase(object):
+ class TestStatus(Enum):
+ 	SUCCESS = auto()
+ 	FAILURE = auto()
++	SKIPPED = auto()
+ 	TEST_CRASHED = auto()
+ 	NO_TESTS = auto()
+ 	FAILURE_TO_PARSE_TESTS = auto()
+@@ -149,6 +150,8 @@ def save_non_diagnostic(lines: LineStream, test_case: TestCase) -> None:
  
-+/* Maximum size of a status comment. */
-+#define KUNIT_STATUS_COMMENT_SIZE 256
+ OkNotOkResult = namedtuple('OkNotOkResult', ['is_ok','description', 'text'])
+ 
++OK_NOT_OK_SKIP = re.compile(r'^[\s]*(ok|not ok) [0-9]+ - (.*) # SKIP(.*)$')
 +
- /*
-  * TAP specifies subtest stream indentation of 4 spaces, 8 spaces for a
-  * sub-subtest.  See the "Subtests" section in
-@@ -105,6 +108,18 @@ struct kunit;
- #define KUNIT_SUBTEST_INDENT		"    "
- #define KUNIT_SUBSUBTEST_INDENT		"        "
+ OK_NOT_OK_SUBTEST = re.compile(r'^[\s]+(ok|not ok) [0-9]+ - (.*)$')
  
-+/**
-+ * enum kunit_status - Type of result for a test or test suite
-+ * @KUNIT_SUCCESS: Denotes the test suite has not failed nor been skipped
-+ * @KUNIT_FAILURE: Denotes the test has failed.
-+ * @KUNIT_SKIPPED: Denotes the test has been skipped.
-+ */
-+enum kunit_status {
-+	KUNIT_SUCCESS,
-+	KUNIT_FAILURE,
-+	KUNIT_SKIPPED,
-+};
+ OK_NOT_OK_MODULE = re.compile(r'^(ok|not ok) ([0-9]+) - (.*)$')
+@@ -166,6 +169,10 @@ def parse_ok_not_ok_test_case(lines: LineStream, test_case: TestCase) -> bool:
+ 	if match:
+ 		test_case.log.append(lines.pop())
+ 		test_case.name = match.group(2)
++		skip_match = OK_NOT_OK_SKIP.match(line)
++		if skip_match:
++			test_case.status = TestStatus.SKIPPED
++			return True
+ 		if test_case.status == TestStatus.TEST_CRASHED:
+ 			return True
+ 		if match.group(1) == 'ok':
+@@ -229,16 +236,16 @@ def parse_subtest_plan(lines: LineStream) -> Optional[int]:
+ 		return None
+ 
+ def max_status(left: TestStatus, right: TestStatus) -> TestStatus:
+-	if left == TestStatus.TEST_CRASHED or right == TestStatus.TEST_CRASHED:
++	if left == right:
++		return left
++	elif left == TestStatus.TEST_CRASHED or right == TestStatus.TEST_CRASHED:
+ 		return TestStatus.TEST_CRASHED
+ 	elif left == TestStatus.FAILURE or right == TestStatus.FAILURE:
+ 		return TestStatus.FAILURE
+-	elif left != TestStatus.SUCCESS:
+-		return left
+-	elif right != TestStatus.SUCCESS:
++	elif left == TestStatus.SKIPPED:
+ 		return right
+ 	else:
+-		return TestStatus.SUCCESS
++		return left
+ 
+ def parse_ok_not_ok_test_suite(lines: LineStream,
+ 			       test_suite: TestSuite,
+@@ -255,6 +262,9 @@ def parse_ok_not_ok_test_suite(lines: LineStream,
+ 			test_suite.status = TestStatus.SUCCESS
+ 		else:
+ 			test_suite.status = TestStatus.FAILURE
++		skip_match = OK_NOT_OK_SKIP.match(line)
++		if skip_match:
++			test_suite.status = TestStatus.SKIPPED
+ 		suite_index = int(match.group(2))
+ 		if suite_index != expected_suite_index:
+ 			print_with_timestamp(
+@@ -265,8 +275,8 @@ def parse_ok_not_ok_test_suite(lines: LineStream,
+ 	else:
+ 		return False
+ 
+-def bubble_up_errors(statuses: Iterable[TestStatus]) -> TestStatus:
+-	return reduce(max_status, statuses, TestStatus.SUCCESS)
++def bubble_up_errors(status_list: Iterable[TestStatus]) -> TestStatus:
++	return reduce(max_status, status_list, TestStatus.SKIPPED)
+ 
+ def bubble_up_test_case_errors(test_suite: TestSuite) -> TestStatus:
+ 	max_test_case_status = bubble_up_errors(x.status for x in test_suite.cases)
+@@ -352,37 +362,53 @@ def parse_test_result(lines: LineStream) -> TestResult:
+ 	else:
+ 		return TestResult(TestStatus.NO_TESTS, [], lines)
+ 
+-def print_and_count_results(test_result: TestResult) -> Tuple[int, int, int]:
+-	total_tests = 0
+-	failed_tests = 0
+-	crashed_tests = 0
++class TestCounts:
++	passed: int
++	failed: int
++	crashed: int
++	skipped: int
 +
- /**
-  * struct kunit_case - represents an individual test case.
-  *
-@@ -148,13 +163,20 @@ struct kunit_case {
- 	const void* (*generate_params)(const void *prev, char *desc);
- 
- 	/* private: internal use only. */
--	bool success;
-+	enum kunit_status status;
- 	char *log;
- };
- 
--static inline char *kunit_status_to_string(bool status)
-+static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
- {
--	return status ? "ok" : "not ok";
-+	switch (status) {
-+	case KUNIT_SKIPPED:
-+	case KUNIT_SUCCESS:
-+		return "ok";
-+	case KUNIT_FAILURE:
-+		return "not ok";
-+	}
-+	return "invalid";
- }
- 
- /**
-@@ -212,6 +234,7 @@ struct kunit_suite {
- 	struct kunit_case *test_cases;
- 
- 	/* private: internal use only */
-+	char status_comment[KUNIT_STATUS_COMMENT_SIZE];
- 	struct dentry *debugfs;
- 	char *log;
- };
-@@ -245,19 +268,21 @@ struct kunit {
- 	 * be read after the test case finishes once all threads associated
- 	 * with the test case have terminated.
- 	 */
--	bool success; /* Read only after test_case finishes! */
- 	spinlock_t lock; /* Guards all mutable test state. */
-+	enum kunit_status status; /* Read only after test_case finishes! */
- 	/*
- 	 * Because resources is a list that may be updated multiple times (with
- 	 * new resources) from any thread associated with a test case, we must
- 	 * protect it with some type of lock.
- 	 */
- 	struct list_head resources; /* Protected by lock. */
++	def __init__(self):
++		self.passed = 0
++		self.failed = 0
++		self.crashed = 0
++		self.skipped = 0
 +
-+	char status_comment[KUNIT_STATUS_COMMENT_SIZE];
- };
- 
- static inline void kunit_set_failure(struct kunit *test)
- {
--	WRITE_ONCE(test->success, false);
-+	WRITE_ONCE(test->status, KUNIT_FAILURE);
- }
- 
- void kunit_init_test(struct kunit *test, const char *name, char *log);
-@@ -348,7 +373,7 @@ static inline int kunit_run_all_tests(void)
- #define kunit_suite_for_each_test_case(suite, test_case)		\
- 	for (test_case = suite->test_cases; test_case->run_case; test_case++)
- 
--bool kunit_suite_has_succeeded(struct kunit_suite *suite);
-+enum kunit_status kunit_suite_has_succeeded(struct kunit_suite *suite);
- 
- /*
-  * Like kunit_alloc_resource() below, but returns the struct kunit_resource
-@@ -640,6 +665,42 @@ void kunit_cleanup(struct kunit *test);
- 
- void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
- 
-+/**
-+ * kunit_mark_skipped() - Marks @test_or_suite as skipped
-+ *
-+ * @test_or_suite: The test context object.
-+ * @fmt:  A printk() style format string.
-+ *
-+ * Marks the test as skipped. @fmt is given output as the test status
-+ * comment, typically the reason the test was skipped.
-+ *
-+ * Test execution continues after kunit_mark_skipped() is called.
-+ */
-+#define kunit_mark_skipped(test_or_suite, fmt, ...)			\
-+	do {								\
-+		WRITE_ONCE((test_or_suite)->status, KUNIT_SKIPPED);	\
-+		scnprintf((test_or_suite)->status_comment,		\
-+			  KUNIT_STATUS_COMMENT_SIZE,			\
-+			  fmt, ##__VA_ARGS__);				\
-+	} while (0)
++	def total(self) -> int:
++		return self.passed + self.failed + self.crashed + self.skipped
 +
-+/**
-+ * kunit_skip() - Marks @test_or_suite as skipped
-+ *
-+ * @test_or_suite: The test context object.
-+ * @fmt:  A printk() style format string.
-+ *
-+ * Skips the test. @fmt is given output as the test status
-+ * comment, typically the reason the test was skipped.
-+ *
-+ * Test execution is halted after kunit_skip() is called.
-+ */
-+#define kunit_skip(test_or_suite, fmt, ...)				\
-+	do {								\
-+		kunit_mark_skipped((test_or_suite), fmt, ##__VA_ARGS__);\
-+		kunit_try_catch_throw(&((test_or_suite)->try_catch));	\
-+	} while (0)
++def print_and_count_results(test_result: TestResult) -> TestCounts:
++	counts = TestCounts()
+ 	for test_suite in test_result.suites:
+ 		if test_suite.status == TestStatus.SUCCESS:
+ 			print_suite_divider(green('[PASSED] ') + test_suite.name)
++		elif test_suite.status == TestStatus.SKIPPED:
++			print_suite_divider(yellow('[SKIPPED] ') + test_suite.name)
+ 		elif test_suite.status == TestStatus.TEST_CRASHED:
+ 			print_suite_divider(red('[CRASHED] ' + test_suite.name))
+ 		else:
+ 			print_suite_divider(red('[FAILED] ') + test_suite.name)
+ 		for test_case in test_suite.cases:
+-			total_tests += 1
+ 			if test_case.status == TestStatus.SUCCESS:
++				counts.passed += 1
+ 				print_with_timestamp(green('[PASSED] ') + test_case.name)
++			elif test_case.status == TestStatus.SKIPPED:
++				counts.skipped += 1
++				print_with_timestamp(yellow('[SKIPPED] ') + test_case.name)
+ 			elif test_case.status == TestStatus.TEST_CRASHED:
+-				crashed_tests += 1
++				counts.crashed += 1
+ 				print_with_timestamp(red('[CRASHED] ' + test_case.name))
+ 				print_log(map(yellow, test_case.log))
+ 				print_with_timestamp('')
+ 			else:
+-				failed_tests += 1
++				counts.failed += 1
+ 				print_with_timestamp(red('[FAILED] ') + test_case.name)
+ 				print_log(map(yellow, test_case.log))
+ 				print_with_timestamp('')
+-	return total_tests, failed_tests, crashed_tests
++	return counts
+ 
+ def parse_run_tests(kernel_output: Iterable[str]) -> TestResult:
+-	total_tests = 0
+-	failed_tests = 0
+-	crashed_tests = 0
++	counts = TestCounts()
+ 	lines = extract_tap_lines(kernel_output)
+ 	test_result = parse_test_result(lines)
+ 	if test_result.status == TestStatus.NO_TESTS:
+@@ -390,12 +416,15 @@ def parse_run_tests(kernel_output: Iterable[str]) -> TestResult:
+ 	elif test_result.status == TestStatus.FAILURE_TO_PARSE_TESTS:
+ 		print(red('[ERROR] ') + yellow('could not parse test results!'))
+ 	else:
+-		(total_tests,
+-		 failed_tests,
+-		 crashed_tests) = print_and_count_results(test_result)
++		counts = print_and_count_results(test_result)
+ 	print_with_timestamp(DIVIDER)
+-	fmt = green if test_result.status == TestStatus.SUCCESS else red
++	if test_result.status == TestStatus.SUCCESS:
++		fmt = green
++	elif test_result.status == TestStatus.SKIPPED:
++		fmt = yellow
++	else:
++		fmt =red
+ 	print_with_timestamp(
+-		fmt('Testing complete. %d tests run. %d failed. %d crashed.' %
+-		    (total_tests, failed_tests, crashed_tests)))
++		fmt('Testing complete. %d tests run. %d failed. %d crashed. %d skipped.' %
++		    (counts.total(), counts.failed, counts.crashed, counts.skipped)))
+ 	return test_result
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 40ff281140d1..bdae0e5f6197 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -185,6 +185,28 @@ class KUnitParserTest(unittest.TestCase):
+ 			kunit_parser.TestStatus.TEST_CRASHED,
+ 			result.status)
+ 
++	def test_skipped_test(self):
++		skipped_log = test_data_path('test_skip_tests.log')
++		file = open(skipped_log)
++		result = kunit_parser.parse_run_tests(file.readlines())
 +
- /*
-  * printk and log to per-test or per-suite log buffer.  Logging only done
-  * if CONFIG_KUNIT_DEBUGFS is 'y'; if it is 'n', no log is allocated/used.
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index 9214c493d8b7..b71db0abc12b 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -64,7 +64,7 @@ static int debugfs_print_results(struct seq_file *seq, void *v)
- 		debugfs_print_result(seq, suite, test_case);
- 
- 	seq_printf(seq, "%s %d - %s\n",
--		   kunit_status_to_string(success), 1, suite->name);
-+		   kunit_status_to_ok_not_ok(success), 1, suite->name);
- 	return 0;
- }
- 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 69f902440a0e..d69efcbed624 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -437,7 +437,47 @@ static void kunit_log_test(struct kunit *test)
- #endif
- }
- 
-+static void kunit_status_set_failure_test(struct kunit *test)
-+{
-+	struct kunit fake;
++		# A skipped test does not fail the whole suite.
++		self.assertEqual(
++			kunit_parser.TestStatus.SUCCESS,
++			result.status)
++		file.close()
 +
-+	kunit_init_test(&fake, "fake test", NULL);
++	def test_skipped_all_tests(self):
++		skipped_log = test_data_path('test_skip_all_tests.log')
++		file = open(skipped_log)
++		result = kunit_parser.parse_run_tests(file.readlines())
 +
-+	KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_SUCCESS);
-+	kunit_set_failure(&fake);
-+	KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAILURE);
-+}
++		self.assertEqual(
++			kunit_parser.TestStatus.SKIPPED,
++			result.status)
++		file.close()
 +
-+static void kunit_status_mark_skipped_test(struct kunit *test)
-+{
-+	struct kunit fake;
 +
-+	kunit_init_test(&fake, "fake test", NULL);
-+
-+	/* Before: Should be SUCCESS with no comment. */
-+	KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
-+	KUNIT_EXPECT_STREQ(test, fake.status_comment, "");
-+
-+	/* Mark the test as skipped. */
-+	kunit_mark_skipped(&fake, "Accepts format string: %s", "YES");
-+
-+	/* After: Should be SKIPPED with our comment. */
-+	KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_SKIPPED);
-+	KUNIT_EXPECT_STREQ(test, fake.status_comment, "Accepts format string: YES");
-+}
-+
-+static struct kunit_case kunit_status_test_cases[] = {
-+	KUNIT_CASE(kunit_status_set_failure_test),
-+	KUNIT_CASE(kunit_status_mark_skipped_test),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_status_test_suite = {
-+	.name = "kunit_status",
-+	.test_cases = kunit_status_test_cases,
-+};
-+
- kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
--		  &kunit_log_test_suite);
-+		  &kunit_log_test_suite, &kunit_status_test_suite);
- 
- MODULE_LICENSE("GPL v2");
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 06f6cff2c0e7..b3d0c8e4e339 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -98,12 +98,14 @@ static void kunit_print_subtest_start(struct kunit_suite *suite)
- 
- static void kunit_print_ok_not_ok(void *test_or_suite,
- 				  bool is_test,
--				  bool is_ok,
-+				  enum kunit_status status,
- 				  size_t test_number,
--				  const char *description)
-+				  const char *description,
-+				  const char *directive)
- {
- 	struct kunit_suite *suite = is_test ? NULL : test_or_suite;
- 	struct kunit *test = is_test ? test_or_suite : NULL;
-+	const char *directive_header = (status == KUNIT_SKIPPED) ? " # SKIP " : "";
- 
- 	/*
- 	 * We do not log the test suite results as doing so would
-@@ -114,25 +116,31 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
- 	 * representation.
- 	 */
- 	if (suite)
--		pr_info("%s %zd - %s\n",
--			kunit_status_to_string(is_ok),
--			test_number, description);
-+		pr_info("%s %zd - %s%s%s\n",
-+			kunit_status_to_ok_not_ok(status),
-+			test_number, description, directive_header,
-+			(status == KUNIT_SKIPPED) ? directive : "");
- 	else
--		kunit_log(KERN_INFO, test, KUNIT_SUBTEST_INDENT "%s %zd - %s",
--			  kunit_status_to_string(is_ok),
--			  test_number, description);
-+		kunit_log(KERN_INFO, test,
-+			  KUNIT_SUBTEST_INDENT "%s %zd - %s%s%s",
-+			  kunit_status_to_ok_not_ok(status),
-+			  test_number, description, directive_header,
-+			  (status == KUNIT_SKIPPED) ? directive : "");
- }
- 
--bool kunit_suite_has_succeeded(struct kunit_suite *suite)
-+enum kunit_status kunit_suite_has_succeeded(struct kunit_suite *suite)
- {
- 	const struct kunit_case *test_case;
-+	enum kunit_status status = KUNIT_SKIPPED;
- 
- 	kunit_suite_for_each_test_case(suite, test_case) {
--		if (!test_case->success)
--			return false;
-+		if (test_case->status == KUNIT_FAILURE)
-+			return KUNIT_FAILURE;
-+		else if (test_case->status == KUNIT_SUCCESS)
-+			status = KUNIT_SUCCESS;
- 	}
- 
--	return true;
-+	return status;
- }
- EXPORT_SYMBOL_GPL(kunit_suite_has_succeeded);
- 
-@@ -143,7 +151,8 @@ static void kunit_print_subtest_end(struct kunit_suite *suite)
- 	kunit_print_ok_not_ok((void *)suite, false,
- 			      kunit_suite_has_succeeded(suite),
- 			      kunit_suite_counter++,
--			      suite->name);
-+			      suite->name,
-+			      suite->status_comment);
- }
- 
- unsigned int kunit_test_case_num(struct kunit_suite *suite,
-@@ -252,7 +261,8 @@ void kunit_init_test(struct kunit *test, const char *name, char *log)
- 	test->log = log;
- 	if (test->log)
- 		test->log[0] = '\0';
--	test->success = true;
-+	test->status = KUNIT_SUCCESS;
-+	test->status_comment[0] = '\0';
- }
- EXPORT_SYMBOL_GPL(kunit_init_test);
- 
-@@ -376,7 +386,11 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
- 	context.test_case = test_case;
- 	kunit_try_catch_run(try_catch, &context);
- 
--	test_case->success &= test->success;
-+	/* Propagate the parameter result to the test case. */
-+	if (test->status == KUNIT_FAILURE)
-+		test_case->status = KUNIT_FAILURE;
-+	else if (test_case->status != KUNIT_FAILURE && test->status == KUNIT_SUCCESS)
-+		test_case->status = KUNIT_SUCCESS;
- }
- 
- int kunit_run_tests(struct kunit_suite *suite)
-@@ -388,7 +402,7 @@ int kunit_run_tests(struct kunit_suite *suite)
- 
- 	kunit_suite_for_each_test_case(suite, test_case) {
- 		struct kunit test = { .param_value = NULL, .param_index = 0 };
--		test_case->success = true;
-+		test_case->status = KUNIT_SKIPPED;
- 
- 		if (test_case->generate_params) {
- 			/* Get initial param. */
-@@ -409,7 +423,7 @@ int kunit_run_tests(struct kunit_suite *suite)
- 					  KUNIT_SUBTEST_INDENT
- 					  "# %s: %s %d - %s",
- 					  test_case->name,
--					  kunit_status_to_string(test.success),
-+					  kunit_status_to_ok_not_ok(test.status),
- 					  test.param_index + 1, param_desc);
- 
- 				/* Get next param. */
-@@ -419,9 +433,10 @@ int kunit_run_tests(struct kunit_suite *suite)
- 			}
- 		} while (test.param_value);
- 
--		kunit_print_ok_not_ok(&test, true, test_case->success,
-+		kunit_print_ok_not_ok(&test, true, test_case->status,
- 				      kunit_test_case_num(suite, test_case),
--				      test_case->name);
-+				      test_case->name,
-+				      test.status_comment);
- 	}
- 
- 	kunit_print_subtest_end(suite);
-@@ -433,6 +448,7 @@ EXPORT_SYMBOL_GPL(kunit_run_tests);
- static void kunit_init_suite(struct kunit_suite *suite)
- {
- 	kunit_debugfs_create_suite(suite);
-+	suite->status_comment[0] = '\0';
- }
- 
- int __kunit_test_suites_init(struct kunit_suite * const * const suites)
+ 	def test_ignores_prefix_printk_time(self):
+ 		prefix_log = test_data_path('test_config_printk_time.log')
+ 		with open(prefix_log) as file:
+diff --git a/tools/testing/kunit/test_data/test_skip_all_tests.log b/tools/testing/kunit/test_data/test_skip_all_tests.log
+new file mode 100644
+index 000000000000..2ea6e6d14fff
+--- /dev/null
++++ b/tools/testing/kunit/test_data/test_skip_all_tests.log
+@@ -0,0 +1,15 @@
++TAP version 14
++1..2
++    # Subtest: string-stream-test
++    1..3
++    ok 1 - string_stream_test_empty_on_creation # SKIP all tests skipped
++    ok 2 - string_stream_test_not_empty_after_add # SKIP all tests skipped
++    ok 3 - string_stream_test_get_string # SKIP all tests skipped
++ok 1 - string-stream-test # SKIP
++    # Subtest: example
++    1..2
++    # example_simple_test: initializing
++    ok 1 - example_simple_test # SKIP all tests skipped
++    # example_skip_test: initializing
++    ok 2 - example_skip_test # SKIP this test should be skipped
++ok 2 - example # SKIP
+diff --git a/tools/testing/kunit/test_data/test_skip_tests.log b/tools/testing/kunit/test_data/test_skip_tests.log
+new file mode 100644
+index 000000000000..79b326e31274
+--- /dev/null
++++ b/tools/testing/kunit/test_data/test_skip_tests.log
+@@ -0,0 +1,15 @@
++TAP version 14
++1..2
++    # Subtest: string-stream-test
++    1..3
++    ok 1 - string_stream_test_empty_on_creation
++    ok 2 - string_stream_test_not_empty_after_add
++    ok 3 - string_stream_test_get_string
++ok 1 - string-stream-test
++    # Subtest: example
++    1..2
++    # example_simple_test: initializing
++    ok 1 - example_simple_test
++    # example_skip_test: initializing
++    ok 2 - example_skip_test # SKIP this test should be skipped
++ok 2 - example
 -- 
 2.32.0.93.g670b81a890-goog
 
