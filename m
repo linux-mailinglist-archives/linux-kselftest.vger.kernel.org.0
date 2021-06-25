@@ -2,245 +2,567 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D5A3B3D64
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jun 2021 09:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556FE3B3DB5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jun 2021 09:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbhFYHdA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Jun 2021 03:33:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38596 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229721AbhFYHdA (ORCPT
+        id S229721AbhFYHnO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Jun 2021 03:43:14 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:11094 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229454AbhFYHnM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Jun 2021 03:33:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624606239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xKK7eRDQG8UvZ5Oc1h4Ez07d1ItOKlaqb/2D9MQmVZg=;
-        b=B2mav+43OnW6Ls92qdULP44ZIb4eH2lvBgoMy/fJ3Fgpm5s61vdJxZK2cVFLqwS2s3pBDF
-        gkbCrNNWOXK6oobO7jDBsQhWfzfxfPhOErITaRCm62TsCQMic+OJU6uI8s9MVTu/SV3PRy
-        lqtLfpOrWJBzAEKz3s4Xu8DgfkORGUk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-445-5Km4viOHPDKUZqG5maUzsg-1; Fri, 25 Jun 2021 03:30:37 -0400
-X-MC-Unique: 5Km4viOHPDKUZqG5maUzsg-1
-Received: by mail-wm1-f70.google.com with SMTP id t187-20020a1cc3c40000b02901e46e4d52c0so2737248wmf.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jun 2021 00:30:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xKK7eRDQG8UvZ5Oc1h4Ez07d1ItOKlaqb/2D9MQmVZg=;
-        b=o1cCnqvixZ6ZFrgTJYYLmyy0Sn1r+N47cftNGbBWW9ZAXTWiZotzdcfb1RmGZTJwXT
-         nqUq+bwuZ+ndWzfCHMsjQKLuUrGGyWOxKT3MwIxvKvZLR/t3m3EsViDIjrej2+pSC2pF
-         YRAyi9zPhTqMAcvM6ugv6JBgzeSEPV5NoADJCJfxaVz6VYY6/NhcnLexBX1TTDHmSQQF
-         /HSxTd+Ef7cpG0tf9/Fdi+ATt/IYvTw47Rk8TL7iu77vGw1dI3cbm66AnVK98Sle7Ibj
-         H+E2MBusvOJRSuB92uVBq/FmJdQ6H4onoIWLyG30rZR2aUXMo2xD4yCMv1ypMFNLZMo5
-         43KQ==
-X-Gm-Message-State: AOAM533UdrdlRRYyVCoEOdtkFvWNrDQD6McGB3sNI+5L2eB3jk0YNbl7
-        McAq0qNmMno7llKX/OcvBW3pDdDp84Ojr/iIvdeJ9vSKZxLFsYN5kEzQbXaijAd6KinXkuIb7Uq
-        4bE7rDG8XA6bxjmhQwJ0l1dS28djz
-X-Received: by 2002:a5d:488a:: with SMTP id g10mr9127102wrq.180.1624606236837;
-        Fri, 25 Jun 2021 00:30:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxChax3iiltDo2FH1RlQu7D+c01evM49Qx+uLUiAexGJ9cd0DZ2+IV6/hqze/k243BsL1jmEA==
-X-Received: by 2002:a5d:488a:: with SMTP id g10mr9127084wrq.180.1624606236654;
-        Fri, 25 Jun 2021 00:30:36 -0700 (PDT)
-Received: from redhat.com ([77.124.79.210])
-        by smtp.gmail.com with ESMTPSA id d15sm5375468wrb.42.2021.06.25.00.30.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Jun 2021 00:30:35 -0700 (PDT)
-Date:   Fri, 25 Jun 2021 03:30:32 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, jasowang@redhat.com,
-        brouer@redhat.com, paulmck@kernel.org, peterz@infradead.org,
-        will@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linuxarm@openeuler.org
-Subject: Re: [PATCH net-next v2 2/2] ptr_ring: make __ptr_ring_empty()
- checking more reliable
-Message-ID: <20210625032508-mutt-send-email-mst@kernel.org>
+        Fri, 25 Jun 2021 03:43:12 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GB83t4Cb8zZjc3;
+        Fri, 25 Jun 2021 15:37:46 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 25 Jun 2021 15:40:48 +0800
+Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Fri, 25 Jun
+ 2021 15:40:48 +0800
+Subject: Re: [PATCH net-next v2 1/2] selftests/ptr_ring: add benchmark
+ application for ptr_ring
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <jasowang@redhat.com>,
+        <brouer@redhat.com>, <paulmck@kernel.org>, <peterz@infradead.org>,
+        <will@kernel.org>, <shuah@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
 References: <1624591136-6647-1-git-send-email-linyunsheng@huawei.com>
- <1624591136-6647-3-git-send-email-linyunsheng@huawei.com>
- <20210625022128-mutt-send-email-mst@kernel.org>
- <c6975b2d-2b4a-5b3f-418c-1a59607b9864@huawei.com>
+ <1624591136-6647-2-git-send-email-linyunsheng@huawei.com>
+ <20210625023308-mutt-send-email-mst@kernel.org>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <9078c923-237f-db46-73a2-97ffd8e229ac@huawei.com>
+Date:   Fri, 25 Jun 2021 15:40:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c6975b2d-2b4a-5b3f-418c-1a59607b9864@huawei.com>
+In-Reply-To: <20210625023308-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme719-chm.china.huawei.com (10.1.199.115) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 03:21:33PM +0800, Yunsheng Lin wrote:
-> On 2021/6/25 14:32, Michael S. Tsirkin wrote:
-> > On Fri, Jun 25, 2021 at 11:18:56AM +0800, Yunsheng Lin wrote:
-> >> Currently r->queue[] is cleared after r->consumer_head is moved
-> >> forward, which makes the __ptr_ring_empty() checking called in
-> >> page_pool_refill_alloc_cache() unreliable if the checking is done
-> >> after the r->queue clearing and before the consumer_head moving
-> >> forward.
-> > 
-> > 
-> > Well the documentation for __ptr_ring_empty clearly states is
-> > is not guaranteed to be reliable.
+On 2021/6/25 14:37, Michael S. Tsirkin wrote:
+> On Fri, Jun 25, 2021 at 11:18:55AM +0800, Yunsheng Lin wrote:
+>> Currently ptr_ring selftest is embedded within the virtio
+>> selftest, which involves some specific virtio operation,
+>> such as notifying and kicking.
+>>
+>> As ptr_ring has been used by various subsystems, it deserves
+>> it's owner's selftest in order to benchmark different usecase
+>> of ptr_ring, such as page pool and pfifo_fast qdisc.
+>>
+>> So add a simple application to benchmark ptr_ring performance.
+>> Currently two test mode is supported:
+>> Mode 0: Both enqueuing and dequeuing is done in a single thread,
+>>         it is called simple test mode in the test app.
+>> Mode 1: Enqueuing and dequeuing is done in different thread
+>>         concurrently, also known as SPSC(single-producer/
+>>         single-consumer) test.
+>>
+>> The multi-producer/single-consumer test for pfifo_fast case is
+>> not added yet, which can be added if using CAS atomic operation
+>> to enable lockless multi-producer is proved to be better than
+>> using r->producer_lock.
+>>
+>> Only supported on x86 and arm64 for now.
+>>
+>> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+>> ---
+>>  MAINTAINERS                                      |   5 +
+>>  tools/testing/selftests/ptr_ring/Makefile        |   6 +
+>>  tools/testing/selftests/ptr_ring/ptr_ring_test.c | 249 +++++++++++++++++++++++
+>>  tools/testing/selftests/ptr_ring/ptr_ring_test.h | 150 ++++++++++++++
+>>  4 files changed, 410 insertions(+)
+>>  create mode 100644 tools/testing/selftests/ptr_ring/Makefile
+>>  create mode 100644 tools/testing/selftests/ptr_ring/ptr_ring_test.c
+>>  create mode 100644 tools/testing/selftests/ptr_ring/ptr_ring_test.h
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index cc375fd..1227022 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -14847,6 +14847,11 @@ F:	drivers/net/phy/dp83640*
+>>  F:	drivers/ptp/*
+>>  F:	include/linux/ptp_cl*
+>>  
+>> +PTR RING BENCHMARK
+>> +M:	Yunsheng Lin <linyunsheng@huawei.com>
+>> +L:	netdev@vger.kernel.org
+>> +F:	tools/testing/selftests/ptr_ring/
+>> +
+>>  PTRACE SUPPORT
+>>  M:	Oleg Nesterov <oleg@redhat.com>
+>>  S:	Maintained
+>> diff --git a/tools/testing/selftests/ptr_ring/Makefile b/tools/testing/selftests/ptr_ring/Makefile
+>> new file mode 100644
+>> index 0000000..346dea9
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/ptr_ring/Makefile
+>> @@ -0,0 +1,6 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +LDLIBS = -lpthread
+>> +
+>> +TEST_GEN_PROGS := ptr_ring_test
+>> +
+>> +include ../lib.mk
+>> diff --git a/tools/testing/selftests/ptr_ring/ptr_ring_test.c b/tools/testing/selftests/ptr_ring/ptr_ring_test.c
+>> new file mode 100644
+>> index 0000000..4f32d3d
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/ptr_ring/ptr_ring_test.c
+>> @@ -0,0 +1,249 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
 > 
-> Yes, this patch does not make __ptr_ring_empty() strictly reliable
-> without taking the r->consumer_lock, as the disscuission in [1].
-> 
-> 1. https://patchwork.kernel.org/project/netdevbpf/patch/1622032173-11883-1-git-send-email-linyunsheng@huawei.com/#24207011
-> 
-> > 
-> >  *
-> >  * NB: This is only safe to call if ring is never resized.
-> >  *
-> >  * However, if some other CPU consumes ring entries at the same time, the value
-> >  * returned is not guaranteed to be correct.
-> >  *
-> >  * In this case - to avoid incorrectly detecting the ring
-> >  * as empty - the CPU consuming the ring entries is responsible
-> >  * for either consuming all ring entries until the ring is empty,
-> >  * or synchronizing with some other CPU and causing it to
-> >  * re-test __ptr_ring_empty and/or consume the ring enteries
-> >  * after the synchronization point.
-> >  *
-> > 
-> > Is it then the case that page_pool_refill_alloc_cache violates
-> > this requirement? How?
-> 
-> As my understanding:
-> page_pool_refill_alloc_cache() uses __ptr_ring_empty() to avoid
-> taking r->consumer_lock, when the above data race happens, it will
-> exit out and allocate page from the page allocator instead of reusing
-> the page in ptr_ring, which *may* not be happening if __ptr_ring_empty()
-> is more reliable.
+> Can we keep this GPL-2.0-or-later same as ptr ring itself?
+> Encourages reuse ...
 
-Question is how do we know it's more reliable?
-It would be nice if we did actually made it more reliable,
-as it is we are just shifting races around.
-
-
-> > 
-> > It looks like you are trying to make the guarantee stronger and ensure
-> > no false positives.
-> > 
-> > If yes please document this as such, update the comment so all
-> > code can be evaluated with the eye towards whether the new stronger
-> > guarantee is maintained. In particular I think I see at least one
-> > issue with this immediately.
-> > 
-> > 
-> >> Move the r->queue[] clearing after consumer_head moving forward
-> >> to make __ptr_ring_empty() checking more reliable.
-> >>
-> >> As a side effect of above change, a consumer_head checking is
-> >> avoided for the likely case, and it has noticeable performance
-> >> improvement when it is tested using the ptr_ring_test selftest
-> >> added in the previous patch.
-> >>
-> >> Using "taskset -c 1 ./ptr_ring_test -s 1000 -m 0 -N 100000000"
-> >> to test the case of single thread doing both the enqueuing and
-> >> dequeuing:
-> >>
-> >>  arch     unpatched           patched       delta
-> >> arm64      4648 ms            4464 ms       +3.9%
-> >>  X86       2562 ms            2401 ms       +6.2%
-> >>
-> >> Using "taskset -c 1-2 ./ptr_ring_test -s 1000 -m 1 -N 100000000"
-> >> to test the case of one thread doing enqueuing and another thread
-> >> doing dequeuing concurrently, also known as single-producer/single-
-> >> consumer:
-> >>
-> >>  arch      unpatched             patched         delta
-> >> arm64   3624 ms + 3624 ms   3462 ms + 3462 ms    +4.4%
-> >>  x86    2758 ms + 2758 ms   2547 ms + 2547 ms    +7.6%
-> >>
-> >> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-> >> ---
-> >> V2: Add performance data.
-> >> ---
-> >>  include/linux/ptr_ring.h | 25 ++++++++++++++++---------
-> >>  1 file changed, 16 insertions(+), 9 deletions(-)
-> >>
-> >> diff --git a/include/linux/ptr_ring.h b/include/linux/ptr_ring.h
-> >> index 808f9d3..db9c282 100644
-> >> --- a/include/linux/ptr_ring.h
-> >> +++ b/include/linux/ptr_ring.h
-> >> @@ -261,8 +261,7 @@ static inline void __ptr_ring_discard_one(struct ptr_ring *r)
-> >>  	/* Note: we must keep consumer_head valid at all times for __ptr_ring_empty
-> >>  	 * to work correctly.
-> >>  	 */
-> >> -	int consumer_head = r->consumer_head;
-> >> -	int head = consumer_head++;
-> >> +	int consumer_head = r->consumer_head + 1;
-> >>  
-> >>  	/* Once we have processed enough entries invalidate them in
-> >>  	 * the ring all at once so producer can reuse their space in the ring.
-> >> @@ -271,19 +270,27 @@ static inline void __ptr_ring_discard_one(struct ptr_ring *r)
-> >>  	 */
-> >>  	if (unlikely(consumer_head - r->consumer_tail >= r->batch ||
-> >>  		     consumer_head >= r->size)) {
-> >> +		int tail = r->consumer_tail;
-> >> +
-> >> +		if (unlikely(consumer_head >= r->size)) {
-> >> +			r->consumer_tail = 0;
-> >> +			WRITE_ONCE(r->consumer_head, 0);
-> >> +		} else {
-> >> +			r->consumer_tail = consumer_head;
-> >> +			WRITE_ONCE(r->consumer_head, consumer_head);
-> >> +		}
-> >> +
-> >>  		/* Zero out entries in the reverse order: this way we touch the
-> >>  		 * cache line that producer might currently be reading the last;
-> >>  		 * producer won't make progress and touch other cache lines
-> >>  		 * besides the first one until we write out all entries.
-> >>  		 */
-> >> -		while (likely(head >= r->consumer_tail))
-> >> -			r->queue[head--] = NULL;
-> >> -		r->consumer_tail = consumer_head;
-> >> -	}
-> >> -	if (unlikely(consumer_head >= r->size)) {
-> >> -		consumer_head = 0;
-> >> -		r->consumer_tail = 0;
-> >> +		while (likely(--consumer_head >= tail))
-> >> +			r->queue[consumer_head] = NULL;
-> >> +
-> >> +		return;
-> > 
-> > 
-> > So if now we need this to be reliable then
-> > we also need smp_wmb before writing r->queue[consumer_head],
-> > there could be other gotchas.
-> 
-> Yes, This patch does not make it strictly reliable.
-> T think I could mention that in the commit log?
-
-OK so it's not that it makes it more reliable - this patch simply makes
-a possible false positive less likely while making  a false negative
-more likely. Our assumption is that a false negative is cheaper then?
-
-How do we know that it is?
-
-And even if we prove the ptr_ring itself is faster now,
-how do we know what affects callers in a better way a
-false positive or a false negative?
-
-I would rather we worked on actually making it reliable
-e.g. if we can guarantee no false positives, that would be
-a net win.
+Ok.
 
 > 
-> > 
-> >>  	}
-> >> +
-> >>  	/* matching READ_ONCE in __ptr_ring_empty for lockless tests */
-> >>  	WRITE_ONCE(r->consumer_head, consumer_head);
-> >>  }
-> >> -- 
-> >> 2.7.4
-> > 
-> > 
-> > .
-> > 
+>> +/*
+>> + * Copyright (C) 2021 HiSilicon Limited.
+>> + */
+>> +
+>> +#include <stdio.h>
+>> +#include <stdlib.h>
+>> +#include <unistd.h>
+>> +#include <string.h>
+>> +#include <errno.h>
+>> +#include <sys/time.h>
+>> +#include <malloc.h>
+>> +#include <assert.h>
+>> +#include <stdbool.h>
+>> +#include <pthread.h>
+>> +
+>> +#include "ptr_ring_test.h"
+>> +#include "../../../../include/linux/ptr_ring.h"
+>> +
+>> +#define MIN_RING_SIZE	2
+>> +#define MAX_RING_SIZE	10000000
+>> +
+>> +static struct ptr_ring ring ____cacheline_aligned_in_smp;
+>> +
+>> +struct worker_info {
+>> +	pthread_t tid;
+>> +	int test_count;
+>> +	bool error;
+>> +	long duration_us;
+>> +};
+>> +
+>> +static void *produce_worker(void *arg)
+>> +{
+>> +	struct worker_info *info = arg;
+>> +	struct timeval start, end;
+>> +	unsigned long i = 0;
+>> +	long sec, us;
+>> +	int ret;
+>> +
+>> +	gettimeofday(&start, NULL);
+>> +
+>> +	while (++i <= info->test_count) {
+>> +		while (__ptr_ring_full(&ring))
+>> +			cpu_relax();
+>> +
+>> +		ret = __ptr_ring_produce(&ring, (void *)i);
+>> +		if (ret) {
+>> +			fprintf(stderr, "produce failed: %d\n", ret);
+>> +			info->error = true;
+>> +			return NULL;
+>> +		}
+>> +	}
+>> +
+>> +	gettimeofday(&end, NULL);
+>> +
+>> +	sec = (end.tv_sec - start.tv_sec);
+>> +	us = ((sec * 1000000) + end.tv_usec) - (start.tv_usec);
+>> +	info->duration_us = us;
+>> +	info->error = false;
+>> +
+>> +	return NULL;
+>> +}
+> 
+> perf does all of this and more. Let's not reinvent the wheel - just run
+> the test.
+
+You are suggesting to use perf stat + "test cmd" and remove
+the above timestamp sampling, right?
+
+> 
+>> +
+>> +static void *consume_worker(void *arg)
+>> +{
+>> +	struct worker_info *info = arg;
+>> +	struct timeval start, end;
+>> +	unsigned long i = 0;
+>> +	long sec, us;
+>> +	int *ptr;
+>> +
+>> +	gettimeofday(&start, NULL);
+>> +
+>> +	while (++i <= info->test_count) {
+>> +		while (__ptr_ring_empty(&ring))
+>> +			cpu_relax();
+>> +
+>> +		ptr = __ptr_ring_consume(&ring);
+>> +		if ((unsigned long)ptr != i) {
+>> +			fprintf(stderr, "consumer failed, ptr: %lu, i: %lu\n",
+>> +				(unsigned long)ptr, i);
+>> +			info->error = true;
+>> +			return NULL;
+>> +		}
+>> +	}
+>> +
+>> +	gettimeofday(&end, NULL);
+>> +
+>> +	if (!__ptr_ring_empty(&ring)) {
+>> +		fprintf(stderr, "ring should be empty, test failed\n");
+>> +		info->error = true;
+>> +		return NULL;
+>> +	}
+>> +
+>> +	sec = (end.tv_sec - start.tv_sec);
+>> +	us = ((sec * 1000000) + end.tv_usec) - (start.tv_usec);
+>> +	info->duration_us = us;
+>> +	info->error = false;
+>> +	return NULL;
+>> +}
+>> +
+>> +/* test case for single producer single consumer */
+>> +static void spsc_test(int size, int count)
+>> +{
+>> +	struct worker_info producer, consumer;
+>> +	pthread_attr_t attr;
+>> +	void *res;
+>> +	int ret;
+>> +
+>> +	ret = ptr_ring_init(&ring, size, 0);
+>> +	if (ret) {
+>> +		fprintf(stderr, "init failed: %d\n", ret);
+>> +		return;
+>> +	}
+>> +
+>> +	producer.test_count = count;
+>> +	consumer.test_count = count;
+>> +
+>> +	ret = pthread_attr_init(&attr);
+>> +	if (ret) {
+>> +		fprintf(stderr, "pthread attr init failed: %d\n", ret);
+>> +		goto out;
+>> +	}
+>> +
+>> +	ret = pthread_create(&producer.tid, &attr,
+>> +			     produce_worker, &producer);
+>> +	if (ret) {
+>> +		fprintf(stderr, "create producer thread failed: %d\n", ret);
+>> +		goto out;
+>> +	}
+>> +
+>> +	ret = pthread_create(&consumer.tid, &attr,
+>> +			     consume_worker, &consumer);
+>> +	if (ret) {
+>> +		fprintf(stderr, "create consumer thread failed: %d\n", ret);
+>> +		goto out;
+>> +	}
+>> +
+>> +	ret = pthread_join(producer.tid, &res);
+>> +	if (ret) {
+>> +		fprintf(stderr, "join producer thread failed: %d\n", ret);
+>> +		goto out;
+>> +	}
+>> +
+>> +	ret = pthread_join(consumer.tid, &res);
+>> +	if (ret) {
+>> +		fprintf(stderr, "join consumer thread failed: %d\n", ret);
+>> +		goto out;
+>> +	}
+>> +
+>> +	if (producer.error || consumer.error) {
+>> +		fprintf(stderr, "spsc test failed\n");
+>> +		goto out;
+>> +	}
+>> +
+>> +	printf("ptr_ring(size:%d) perf spsc test for %d times, took %ld us + %ld us\n",
+>> +	       size, count, producer.duration_us, consumer.duration_us);
+>> +out:
+>> +	ptr_ring_cleanup(&ring, NULL);
+>> +}
+>> +
+>> +static void simple_test(int size, int count)
+>> +{
+>> +	struct timeval start, end;
+>> +	long sec, us;
+>> +	int i = 0;
+>> +	int *ptr;
+>> +	int ret;
+>> +
+>> +	ret = ptr_ring_init(&ring, size, 0);
+>> +	if (ret) {
+>> +		fprintf(stderr, "init failed: %d\n", ret);
+>> +		return;
+>> +	}
+>> +
+>> +	gettimeofday(&start, NULL);
+>> +
+>> +	while (++i <= count) {
+>> +		ret = __ptr_ring_produce(&ring, &count);
+>> +		if (ret) {
+>> +			fprintf(stderr, "produce failed: %d\n", ret);
+>> +			goto out;
+>> +		}
+>> +
+>> +		ptr = __ptr_ring_consume(&ring);
+>> +		if (ptr != &count)  {
+>> +			fprintf(stderr, "consume failed: %p\n", ptr);
+>> +			goto out;
+>> +		}
+>> +	}
+>> +
+>> +	gettimeofday(&end, NULL);
+>> +	sec = (end.tv_sec - start.tv_sec);
+>> +	us = ((sec * 1000000) + end.tv_usec) - (start.tv_usec);
+>> +	printf("ptr_ring(size:%d) perf simple test for %d times, took %ld us\n",
+>> +	       size, count, us);
+>> +
+>> +out:
+>> +	ptr_ring_cleanup(&ring, NULL);
+>> +}
+>> +
+>> +int main(int argc, char *argv[])
+>> +{
+>> +	int count = 1000000;
+>> +	int size = 1000;
+>> +	int mode = 0;
+>> +	int opt;
+>> +
+>> +	while ((opt = getopt(argc, argv, "N:s:m:")) != -1) {
+>> +		switch (opt) {
+>> +		case 'N':
+>> +			count = atoi(optarg);
+>> +			break;
+>> +		case 's':
+>> +			size = atoi(optarg);
+>> +			break;
+>> +		case 'm':
+>> +			mode = atoi(optarg);
+>> +			break;
+>> +		default:
+>> +			return -1;
+>> +		}
+>> +	}
+>> +
+>> +	if (count <= 0) {
+>> +		fprintf(stderr, "invalid test count, must be > 0\n");
+>> +		return -1;
+>> +	}
+>> +
+>> +	if (size < MIN_RING_SIZE || size > MAX_RING_SIZE) {
+>> +		fprintf(stderr, "invalid ring size, must be in %d-%d\n",
+>> +			MIN_RING_SIZE, MAX_RING_SIZE);
+>> +		return -1;
+>> +	}
+>> +
+>> +	switch (mode) {
+>> +	case 0:
+>> +		simple_test(size, count);
+>> +		break;
+>> +	case 1:
+>> +		spsc_test(size, count);
+>> +		break;
+>> +	default:
+>> +		fprintf(stderr, "invalid test mode\n");
+>> +		return -1;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> diff --git a/tools/testing/selftests/ptr_ring/ptr_ring_test.h b/tools/testing/selftests/ptr_ring/ptr_ring_test.h
+>> new file mode 100644
+>> index 0000000..6bf2494
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/ptr_ring/ptr_ring_test.h
+>> @@ -0,0 +1,150 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> 
+> We already have hacks like this in the virtio test.
+> Let's refactor not duplicate please.
+
+Yes, I took most of below from virtio test.
+But I am not sure I understand what you meant by refactoring.
+Are you suggesting to use function from standard C library
+instead of using the below "#if defined" hack?
+
+I am not sure if all of the below function has a similiar
+one in standard C library.
+
+Would you be more specific about what does refactoring
+mean?
+
+> 
+> 
+>> +
+>> +#ifndef _TEST_PTR_RING_IMPL_H
+>> +#define _TEST_PTR_RING_IMPL_H
+>> +
+>> +#if defined(__x86_64__) || defined(__i386__)
+>> +static inline void cpu_relax(void)
+>> +{
+>> +	asm volatile ("rep; nop" ::: "memory");
+>> +}
+>> +#elif defined(__aarch64__)
+>> +static inline void cpu_relax(void)
+>> +{
+>> +	asm volatile("yield" ::: "memory");
+>> +}
+>> +#else
+>> +#define cpu_relax() assert(0)
+>> +#endif
+>> +
+>> +static inline void barrier(void)
+>> +{
+>> +	asm volatile("" ::: "memory");
+>> +}
+>> +
+>> +/*
+>> + * This abuses the atomic builtins for thread fences, and
+>> + * adds a compiler barrier.
+>> + */
+>> +#define smp_release() do { \
+>> +	barrier(); \
+>> +	__atomic_thread_fence(__ATOMIC_RELEASE); \
+>> +} while (0)
+>> +
+>> +#define smp_acquire() do { \
+>> +	__atomic_thread_fence(__ATOMIC_ACQUIRE); \
+>> +	barrier(); \
+>> +} while (0)
+>> +
+>> +#if defined(__i386__) || defined(__x86_64__)
+>> +#define smp_wmb()		barrier()
+>> +#else
+>> +#define smp_wmb()		smp_release()
+>> +#endif
+>> +
+>> +#define READ_ONCE(x)		(*(volatile typeof(x) *)&(x))
+>> +#define WRITE_ONCE(x, val)	((*(volatile typeof(x) *)&(x)) = (val))
+>> +#define SMP_CACHE_BYTES		64
+>> +#define cache_line_size		SMP_CACHE_BYTES
+>> +#define unlikely(x)		(__builtin_expect(!!(x), 0))
+>> +#define likely(x)		(__builtin_expect(!!(x), 1))
+>> +#define ALIGN(x, a)		(((x) + (a) - 1) / (a) * (a))
+>> +#define SIZE_MAX		(~(size_t)0)
+>> +#define KMALLOC_MAX_SIZE	SIZE_MAX
+>> +#define spinlock_t		pthread_spinlock_t
+>> +#define gfp_t			int
+>> +#define __GFP_ZERO		0x1
+>> +
+>> +#define ____cacheline_aligned_in_smp __attribute__((aligned(SMP_CACHE_BYTES)))
+>> +
+>> +static void *kmalloc(unsigned int size, gfp_t gfp)
+>> +{
+>> +	void *p;
+>> +
+>> +	p = memalign(64, size);
+>> +	if (!p)
+>> +		return p;
+>> +
+>> +	if (gfp & __GFP_ZERO)
+>> +		memset(p, 0, size);
+>> +
+>> +	return p;
+>> +}
+>> +
+>> +static inline void *kzalloc(unsigned int size, gfp_t flags)
+>> +{
+>> +	return kmalloc(size, flags | __GFP_ZERO);
+>> +}
+>> +
+>> +static inline void *kmalloc_array(size_t n, size_t size, gfp_t flags)
+>> +{
+>> +	if (size != 0 && n > SIZE_MAX / size)
+>> +		return NULL;
+>> +	return kmalloc(n * size, flags);
+>> +}
+>> +
+>> +static inline void *kcalloc(size_t n, size_t size, gfp_t flags)
+>> +{
+>> +	return kmalloc_array(n, size, flags | __GFP_ZERO);
+>> +}
+>> +
+>> +static void kfree(void *p)
+>> +{
+>> +	free(p);
+>> +}
+>> +
+>> +#define kvmalloc_array		kmalloc_array
+>> +#define kvfree			kfree
+>> +
+>> +static void spin_lock_init(spinlock_t *lock)
+>> +{
+>> +	int r = pthread_spin_init(lock, 0);
+>> +
+>> +	assert(!r);
+>> +}
+>> +
+>> +static void spin_lock(spinlock_t *lock)
+>> +{
+>> +	int ret = pthread_spin_lock(lock);
+>> +
+>> +	assert(!ret);
+>> +}
+>> +
+>> +static void spin_unlock(spinlock_t *lock)
+>> +{
+>> +	int ret = pthread_spin_unlock(lock);
+>> +
+>> +	assert(!ret);
+>> +}
+>> +
+>> +static void spin_lock_bh(spinlock_t *lock)
+>> +{
+>> +	spin_lock(lock);
+>> +}
+>> +
+>> +static void spin_unlock_bh(spinlock_t *lock)
+>> +{
+>> +	spin_unlock(lock);
+>> +}
+>> +
+>> +static void spin_lock_irq(spinlock_t *lock)
+>> +{
+>> +	spin_lock(lock);
+>> +}
+>> +
+>> +static void spin_unlock_irq(spinlock_t *lock)
+>> +{
+>> +	spin_unlock(lock);
+>> +}
+>> +
+>> +static void spin_lock_irqsave(spinlock_t *lock, unsigned long f)
+>> +{
+>> +	spin_lock(lock);
+>> +}
+>> +
+>> +static void spin_unlock_irqrestore(spinlock_t *lock, unsigned long f)
+>> +{
+>> +	spin_unlock(lock);
+>> +}
+>> +
+>> +#endif
+>> -- 
+>> 2.7.4
+> 
+> 
+> .
+> 
 
