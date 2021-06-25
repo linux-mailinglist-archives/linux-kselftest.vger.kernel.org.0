@@ -2,142 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840DC3B482E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jun 2021 19:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BA03B48C1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jun 2021 20:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbhFYR1T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Jun 2021 13:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbhFYR1S (ORCPT
+        id S229697AbhFYS3b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Jun 2021 14:29:31 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41388 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229531AbhFYS3a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Jun 2021 13:27:18 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3D6C061766
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jun 2021 10:24:58 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id s19so13361449ioc.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jun 2021 10:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LHVmYb7qh3Gk1c+JxsgnaWrjMoM5mdAbEnRvagWc1KA=;
-        b=Vn6YZq1cCY8udPYJU/K7YC2O0uC6ZOyupMUqjLfo2UpZFbFSiYYmfiGSa6ZqnHujxj
-         BgM9v2i47yquTml742aY3dJI4Vs1knz2wQhGyE9zf52unG7g+npayk8DEcDBT+kUq35c
-         1sRVRMw4h0hDZbWhsBR8tLXecirUHAikuY7Ps=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LHVmYb7qh3Gk1c+JxsgnaWrjMoM5mdAbEnRvagWc1KA=;
-        b=DNVqbeTg2pdOLRxLo8OuXZ8/QQIMvMKCCScrAR6XXAm53KXiF06cOKfOzjB07QyHaN
-         77XF5lFvpseayYocKcolkaqtef0J340wCd3GResnHqbR5fRWn05M1twaQp6P9VqPw7+Q
-         WrnilJSPGac8dX8H8tadHaSJ1kFvoVk5n2UlAZ44vVv7DLnvV+r0fkG11RgELXR6vf6F
-         jrKXhek6kUybwzSacVDjUBQBaIVg8Yk53mqMrThZjjpMSN5wNeXKK+CETcOxB5tz/PEP
-         E64kLIAsUDM40mtdGTjf3Dzq4G8mfhEOUsZTpfMc/8LihN/3vCq/NJvVMFZ1dgGvtdHW
-         auTw==
-X-Gm-Message-State: AOAM533VSvFpX7nwQ8gSDtOmBv95VQUVtawwGn+mRwD+vJqNTO1FJJyf
-        98lhMFZmhG5rTGQ21BZfoBSfBw==
-X-Google-Smtp-Source: ABdhPJxLsh8wAcDMpoCUmXN/zrDNKEJlixdqAZQjj3+dTefpBtHhGQ3rKeWoiaeCyxMvY3i9x3JtkA==
-X-Received: by 2002:a02:a99e:: with SMTP id q30mr10393187jam.69.1624641897011;
-        Fri, 25 Jun 2021 10:24:57 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id m184sm3600828ioa.17.2021.06.25.10.24.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jun 2021 10:24:56 -0700 (PDT)
-Subject: Re: [PATCH] kunit: Fix merge issue in suite filtering test
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210625111603.358518-1-davidgow@google.com>
- <99c2564c-4175-7e3e-84c3-3bcb6d4f9d58@linuxfoundation.org>
- <CAGS_qxqCBZy+b1-pFc4Eh9AExc7XRkB2LZ2b776bX=oY2C4qfw@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ec43df62-36dd-03b5-0a8c-8387938f83fc@linuxfoundation.org>
-Date:   Fri, 25 Jun 2021 11:24:55 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <CAGS_qxqCBZy+b1-pFc4Eh9AExc7XRkB2LZ2b776bX=oY2C4qfw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Fri, 25 Jun 2021 14:29:30 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15PIHfKK066681;
+        Fri, 25 Jun 2021 14:27:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=j+O/cYCsFsuCEcRnngzouHlCzfCZ1Z52WLywB4Dg6VI=;
+ b=pujvexLTn5Z1jhQ38Nusv+0EOCH7mHFlyG01EJymf+fIp/YPPSC+aEINwop0eDx7NJI5
+ vkU1o16IvxqasSu0w5mawTkG0zF3jLd1krbGWkEE52Iqax14cE5VU+E24q1vr7HL/xyG
+ MUNXohU0nPvGTtkKcA+9G5QsOydBK8vZsddOXfG6R1KRcQiPHi1o4/fnv3e596mFaHU5
+ 0R1Ld9FA8cG+0qL3Xm3+K0EchhpuBS/SH2Nx9fBQrUWtDzUDZuXf7LBriBJ/NyKeZHzq
+ 6KWJicseC/6G12IskZrnQm8JoQ66iBPLgaDAV+pXR6i8e/05AZSkFEH3MXeYQeHPJKNl 7A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39dma009dr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Jun 2021 14:27:05 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15PIHr5G067038;
+        Fri, 25 Jun 2021 14:27:04 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39dma009cm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Jun 2021 14:27:04 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15PIIHHi004448;
+        Fri, 25 Jun 2021 18:27:02 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3997uhb5n3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Jun 2021 18:27:02 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15PIQxO429295034
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Jun 2021 18:27:00 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE8DBAE058;
+        Fri, 25 Jun 2021 18:26:59 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 09F8CAE053;
+        Fri, 25 Jun 2021 18:26:57 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.9.226])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 25 Jun 2021 18:26:56 +0000 (GMT)
+Message-ID: <25951cc27ce8a42893e98f9ea442296ae04b6988.camel@linux.ibm.com>
+Subject: Re: [RFC][PATCH 01/12] ima: Add digest, algo, measured parameters
+ to ima_measure_critical_data()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        selinux@vger.kernel.org, Prakhar Srivastava <prsriva02@gmail.com>,
+        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Date:   Fri, 25 Jun 2021 14:26:55 -0400
+In-Reply-To: <20210625165614.2284243-2-roberto.sassu@huawei.com>
+References: <20210625165614.2284243-1-roberto.sassu@huawei.com>
+         <20210625165614.2284243-2-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 42B1uptXA-wFAtKBlzryfp64uWpnOmi4
+X-Proofpoint-GUID: ta77Re1fJ_j3pnVE_gpDpee0U3H_Snnk
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-25_07:2021-06-25,2021-06-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 clxscore=1011 spamscore=0 phishscore=0
+ mlxlogscore=999 priorityscore=1501 impostorscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106250105
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/25/21 11:08 AM, Daniel Latypov wrote:
-> On Fri, Jun 25, 2021 at 9:11 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 6/25/21 5:16 AM, David Gow wrote:
->>> There were a couple of errors introuced when
->>> "kunit: add unit test for filtering suites by names"[1] was merged in
->>> c9d80ffc5a.
->>>
->>> An erroneous '+' was introduced in executor.c, and the executor_test.c
->>> file went missing. This causes the kernel to fail to compile if
->>> CONFIG_KUNIT is enabled, as reported in [2,3].
->>>
->>> As with the original, I've tested by running just the new tests using
->>> itself:
->>> $ ./tools/testing/kunit/kunit.py run '*exec*'
->>>
->>> [1]: https://lore.kernel.org/linux-kselftest/20210421020427.2384721-1-dlatypov@google.com/
->>> [2]: https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/6IKQX5JXZF7I3NFH4IAWUMHXEQSCPNDP/
->>> [3]: https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/EKY7ZH5YDCCTSJF2G7XFPMGIXQSUVD3Y/
->>>
->>> Fixes: c9d80ffc5a ("kunit: add unit test for filtering suites by names")
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: David Gow <davidgow@google.com>
->>> ---
->>>
->>> This is another fix for the kunit-fixes branch, where there seems to
->>> have been an issue merging the "kunit: add unit test for filtering
->>> suites by names" patch here:
->>> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit-fixes&id=c9d80ffc5a0a30955de0b8c5c46a05906d417800
->>>
->>> Again, feel free to squash this into the original patch if that works
->>> better.
->>>
->>
->> Thank you. My bad. Applied to kunit-fixes now.
+On Fri, 2021-06-25 at 18:56 +0200, Roberto Sassu wrote:
+> ima_measure_critical_data() allows any caller in the kernel to provide a
+> buffer, so that is measured by IMA if an appropriate policy is set. Some
+> information that could be useful to the callers are the digest of the
+> buffer included in the new measurement entry, the digest algorithm and
+> whether the buffer was measured.
 > 
-> Hmm, it looks like executor_test.c might not have made it into kunit-fixes.
-> I believe this is the applied version of this patch:
+> This patch modifies the definition of ima_measure_critical_data() to
+> include three new parameters: digest, algo and measured. If they are NULL,
+> the function behaves as before and just measures the buffer, if requested
+> with the IMA policy. Otherwise, it also writes the digest, algorithm and
+> whether the buffer is measured to the provided pointers.
 > 
-> $ git show d833ce7480864d4d7eb2dbb04320858be3578b2a --stat
-> commit d833ce7480864d4d7eb2dbb04320858be3578b2a
-> Author: David Gow <davidgow@google.com>
-> Date:   Fri Jun 25 04:16:03 2021 -0700
-> 
->      kunit: Fix merge issue in suite filtering test
-> ...
->   lib/kunit/executor.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> The result looks like this:
-> $ ./tools/testing/kunit/kunit.py run
-> ...
-> $ make ARCH=um --jobs=8 O=.kunit
-> ERROR:root:../lib/kunit/executor.c:140:10: fatal error:
-> executor_test.c: No such file or directory
->    140 | #include "executor_test.c"
->        |          ^~~~~~~~~~~~~~~~~
-> 
-> 
-> I just `git am` or something just really doesn't like executor_test.c :)
-> 
->
+> If the pointers are not NULL, the digest is calculated also if there is no
+> matching rule in the IMA policy.
 
-My mistake it looks like in merging the patch. I had to fix merge
-conflicts and made a mistake. I will fix it now.
-
-Odd that my local compile didn't catch the problem. I used the
-tools/testing/kunit/kunit.py build
+As much as possible, let's not define additional
+ima_measure_critical_data() arguments.  Probably the only new variable
+really need is "digest".  The hash algorithm doesn't change.  How about
+defining and exporting a new function to return the system defined
+ima_hash_algo.  In terms of failure, have ima_measure_critical_data()
+return errno.
 
 thanks,
--- Shuah
+
+Mimi
+
