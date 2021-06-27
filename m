@@ -2,144 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A62F83B5249
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Jun 2021 08:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363293B52E0
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Jun 2021 12:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbhF0GMB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Jun 2021 02:12:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22567 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229519AbhF0GMA (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Jun 2021 02:12:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624774176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xjHjwF63ZoQwHIadC5M6yX3Nr9jz7iaPsOhpdvmf+n0=;
-        b=J6cGJCZD7ACnG0ZvrNt7oTVr6XhVPKY1riVf1E3dYwYigKz5RPhYtXI2j4yYyUtoQ/EdMn
-        w8vZW+r6HGypPUXIJ3H9pAA2/ZyCuBKVibdhUchWIY8QsEpNK7EcVzgU8eR2Mys0FEAOsB
-        GA4t+lj6kH5YpJwm+Qm/zqiCs6ufTjw=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-96-dC6RL_ktNBew17MHx0z3AA-1; Sun, 27 Jun 2021 02:09:35 -0400
-X-MC-Unique: dC6RL_ktNBew17MHx0z3AA-1
-Received: by mail-wm1-f71.google.com with SMTP id b11-20020a1ce40b0000b02901e5309e25ebso5528480wmh.9
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Jun 2021 23:09:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=xjHjwF63ZoQwHIadC5M6yX3Nr9jz7iaPsOhpdvmf+n0=;
-        b=JAU/YoVkD9FZ71/yOoxExO5yNTiVSNMr6/NuNstAHxOR3g6EaVgB3ZjB18RnECAEP6
-         OpQxCHMS3SyHiC+isbySvQVQczDjYcvZu3+awnR4N+KynEcpf7fDKpJ9mWHztZA02fhr
-         ynyDb1rbbuU8uFsf2vYdE95sDcM3TEoNIlk96rZRMd+wd+5lnjWzt/Bt/Dmy4fnrIJ07
-         nVNdgCtmoWwcUTR/4XfJhIxXXUBekdMErB8t5QpCo6nU4mbb5c2ZsWGfyG8n9c2ZGs1/
-         VGAJmTSupG4cnjZ3EikAkteVIDlK81wBefHz4Ia7v/9CUHnMQlp/jGwYO8KHtFLxF6RR
-         3LtQ==
-X-Gm-Message-State: AOAM533ENgot4VLbzlrh4idp+9o5ZyUi2pjgQj+v79XVEuebshd2jX6s
-        ADgcdhE46jn7ygDvmI04xCDJ//otyX/k2/q0d5rZ63H4ev//1NKhJu6IaZElqv4v7bl7e5ntidn
-        XZzlFD8MOQgvxgx0pwd5FdRI9fcoM
-X-Received: by 2002:a1c:f314:: with SMTP id q20mr19827794wmq.154.1624774174022;
-        Sat, 26 Jun 2021 23:09:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyCwSkKSHaIrM4c2Dqi4H0HPnoa0ASoFbW0sX1z8cD7D60tAy63K3+RMc/z4JA5ZLb3KEW1yg==
-X-Received: by 2002:a1c:f314:: with SMTP id q20mr19827782wmq.154.1624774173810;
-        Sat, 26 Jun 2021 23:09:33 -0700 (PDT)
-Received: from redhat.com ([77.126.198.14])
-        by smtp.gmail.com with ESMTPSA id f22sm9635976wmb.46.2021.06.26.23.09.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Jun 2021 23:09:33 -0700 (PDT)
-Date:   Sun, 27 Jun 2021 02:09:29 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     Jason Wang <jasowang@redhat.com>, davem@davemloft.net,
-        kuba@kernel.org, brouer@redhat.com, paulmck@kernel.org,
-        peterz@infradead.org, will@kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linuxarm@openeuler.org
-Subject: Re: [PATCH net-next v2 1/2] selftests/ptr_ring: add benchmark
- application for ptr_ring
-Message-ID: <20210627020746-mutt-send-email-mst@kernel.org>
-References: <1624591136-6647-1-git-send-email-linyunsheng@huawei.com>
- <1624591136-6647-2-git-send-email-linyunsheng@huawei.com>
- <ff47ed0b-332d-2772-d6e1-8277ac602c8c@redhat.com>
- <3ba4a6f1-2e1e-8c1a-6f47-5d182f05d1cd@huawei.com>
+        id S230019AbhF0K4O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Jun 2021 06:56:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53394 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229526AbhF0K4O (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 27 Jun 2021 06:56:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0698F619CD;
+        Sun, 27 Jun 2021 10:53:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1624791229;
+        bh=+34VPgiMBz1koI+NKofcB6T7PqC9IC9eLfw6ueg4J6c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JRUXKeioHl34Q+YdKZwYw/6xzHioPuX8tGf2OvPaRX54BZ+06Z0WT0eAYz9JwV0/m
+         XzhxBftOnG8RXVhF0bk015aTyFOa7qZapOh8CugPpgSxqOcq+OzxM9Mum6+Lr6+zOD
+         yclvSSE6t34/s77/tveE7Tpt3P4a8/YUucBeALaU=
+Date:   Sun, 27 Jun 2021 12:53:47 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH 03/12] digest_lists: Basic definitions
+Message-ID: <YNhYu3BXh7f9GkVk@kroah.com>
+References: <20210625165614.2284243-1-roberto.sassu@huawei.com>
+ <20210625165614.2284243-4-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3ba4a6f1-2e1e-8c1a-6f47-5d182f05d1cd@huawei.com>
+In-Reply-To: <20210625165614.2284243-4-roberto.sassu@huawei.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 11:52:16AM +0800, Yunsheng Lin wrote:
-> On 2021/6/25 11:36, Jason Wang wrote:
-> > 
-> > 在 2021/6/25 上午11:18, Yunsheng Lin 写道:
-> >> Currently ptr_ring selftest is embedded within the virtio
-> >> selftest, which involves some specific virtio operation,
-> >> such as notifying and kicking.
-> >>
-> >> As ptr_ring has been used by various subsystems, it deserves
-> >> it's owner's selftest in order to benchmark different usecase
-> >> of ptr_ring, such as page pool and pfifo_fast qdisc.
-> >>
-> >> So add a simple application to benchmark ptr_ring performance.
-> >> Currently two test mode is supported:
-> >> Mode 0: Both enqueuing and dequeuing is done in a single thread,
-> >>          it is called simple test mode in the test app.
-> >> Mode 1: Enqueuing and dequeuing is done in different thread
-> >>          concurrently, also known as SPSC(single-producer/
-> >>          single-consumer) test.
-> >>
-> >> The multi-producer/single-consumer test for pfifo_fast case is
-> >> not added yet, which can be added if using CAS atomic operation
-> >> to enable lockless multi-producer is proved to be better than
-> >> using r->producer_lock.
-> >>
-> >> Only supported on x86 and arm64 for now.
-> >>
-> >> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-> >> ---
-> >>   MAINTAINERS                                      |   5 +
-> >>   tools/testing/selftests/ptr_ring/Makefile        |   6 +
-> >>   tools/testing/selftests/ptr_ring/ptr_ring_test.c | 249 +++++++++++++++++++++++
-> >>   tools/testing/selftests/ptr_ring/ptr_ring_test.h | 150 ++++++++++++++
-> >>   4 files changed, 410 insertions(+)
-> > 
-> > 
-> > Why can't you simply reuse tools/virtio/ringtest?
-> 
-> The main reason is stated in the commit log:
-> "Currently ptr_ring selftest is embedded within the virtio
-> selftest, which involves some specific virtio operation,
-> such as notifying and kicking.
-> 
-> As ptr_ring has been used by various subsystems, it deserves
-> it's owner's selftest in order to benchmark different usecase
-> of ptr_ring, such as page pool and pfifo_fast qdisc."
-> 
-> More specificly in tools/virtio/ringtest/main.c and
-> tools/virtio/ringtest/ptr_ring.c, there are a lot of operation
-> related to virtio usecase, such as start_guest(), start_host(),
-> poll_used(), notify() or kick() ....., so it makes more sense
-> to add a generic selftest for ptr ring as it is not only used
-> by virtio now.
+On Fri, Jun 25, 2021 at 06:56:05PM +0200, Roberto Sassu wrote:
+> --- /dev/null
+> +++ b/include/uapi/linux/digest_lists.h
+> @@ -0,0 +1,43 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/*
+> + * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * This program is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU General Public License as
+> + * published by the Free Software Foundation, version 2 of the
+> + * License.
 
+As you already have the SPDX line up there, you do not need this
+paragraph.  Please remove it from all of the new files you have added in
+this series.
 
-Okay that answers why you didn't just run main.c
-but why not add a new test under tools/virtio/ringtest/
-reusing the rest of infrastructure that you currently copied?
+> + *
+> + * File: digest_lists.h
 
-> 
-> > 
-> > Thanks
-> > 
-> > 
-> > .
-> > 
+We know the filename, no need to have it here again.
 
+> + *      Digest list definitions exported to user space.
+
+Now this is what probably needs more information...
+
+> + */
+> +
+> +#ifndef _UAPI__LINUX_DIGEST_LISTS_H
+> +#define _UAPI__LINUX_DIGEST_LISTS_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/hash_info.h>
+> +
+> +enum compact_types { COMPACT_KEY, COMPACT_PARSER, COMPACT_FILE,
+> +		     COMPACT_METADATA, COMPACT_DIGEST_LIST, COMPACT__LAST };
+> +
+> +enum compact_modifiers { COMPACT_MOD_IMMUTABLE, COMPACT_MOD__LAST };
+> +
+> +enum compact_actions { COMPACT_ACTION_IMA_MEASURED,
+> +		       COMPACT_ACTION_IMA_APPRAISED,
+> +		       COMPACT_ACTION_IMA_APPRAISED_DIGSIG,
+> +		       COMPACT_ACTION__LAST };
+> +
+> +enum ops { DIGEST_LIST_ADD, DIGEST_LIST_DEL, DIGEST_LIST_OP__LAST };
+> +
+
+For enums you export to userspace, you need to specify the values so
+that all compilers get them right.
+
+> +struct compact_list_hdr {
+> +	__u8 version;
+
+You should never need a version, that way lies madness.
+
+> +	__u8 _reserved;
+
+You better be testing this for 0, right?
+
+> +	__le16 type;
+> +	__le16 modifiers;
+> +	__le16 algo;
+> +	__le32 count;
+> +	__le32 datalen;
+
+Why are user/kernel apis specified in little endian format?  Why would
+that matter?  Shouldn't they just be "native" endian?
+
+thanks,
+
+greg k-h
