@@ -2,99 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EC43B5AAA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Jun 2021 10:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355D43B5B38
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Jun 2021 11:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbhF1Itl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Jun 2021 04:49:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34164 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231683AbhF1Itk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Jun 2021 04:49:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 357A36108B;
-        Mon, 28 Jun 2021 08:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1624870035;
-        bh=fwqDYD3WVqhCOOp5GXfpIJP5FpsuNHICvD28AiRGpmU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xToNot36Z0FTctWX4O4yKCtB4CNUuLiel82y2cNUAPBd6LtSAfAv7o+SOHFB/E0DP
-         Cy134+nqFVHFGGmMopVowg+kj/577kRoRXbmzjqW6NFUbkkpZVUQAx4sz3xrNQIBgV
-         jDuqrDTeuMcxiGKjE8dqmQ3Yp1DdTTB3+sqcMfxE=
-Date:   Mon, 28 Jun 2021 10:47:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        id S232520AbhF1J3e convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Jun 2021 05:29:34 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3324 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232501AbhF1J3d (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 28 Jun 2021 05:29:33 -0400
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GD26l1Nm7z6N4hT;
+        Mon, 28 Jun 2021 17:16:47 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 28 Jun 2021 11:27:05 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Mon, 28 Jun 2021 11:27:05 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC][PATCH 04/12] digest_lists: Objects
-Message-ID: <YNmMkUwaPj0Xgh2r@kroah.com>
+Subject: RE: [RFC][PATCH 03/12] digest_lists: Basic definitions
+Thread-Topic: [RFC][PATCH 03/12] digest_lists: Basic definitions
+Thread-Index: AQHXaeMP1hrQEcpfKUiTvUrYdI7FlqsnkBuAgAGHhID//+c5gIAAIpgw
+Date:   Mon, 28 Jun 2021 09:27:05 +0000
+Message-ID: <4acc7e8f15834b83b310b9e2ff9ba3d2@huawei.com>
 References: <20210625165614.2284243-1-roberto.sassu@huawei.com>
- <20210625165614.2284243-5-roberto.sassu@huawei.com>
- <YNhZTR5VSin7ABZP@kroah.com>
- <22fff08f1a70460da814d3f21b497f8b@huawei.com>
+ <20210625165614.2284243-4-roberto.sassu@huawei.com>
+ <YNhYu3BXh7f9GkVk@kroah.com> <860717cce60f47abb3c9dc3c1bd32ab7@huawei.com>
+ <YNmMX4EODT0c4zqk@kroah.com>
+In-Reply-To: <YNmMX4EODT0c4zqk@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22fff08f1a70460da814d3f21b497f8b@huawei.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 28, 2021 at 08:14:41AM +0000, Roberto Sassu wrote:
-> > From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> > Sent: Sunday, June 27, 2021 12:56 PM
-> > On Fri, Jun 25, 2021 at 06:56:06PM +0200, Roberto Sassu wrote:
-> > > +++ b/security/integrity/digest_lists/digest_lists.h
-> > > @@ -0,0 +1,117 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/*
-> > > + * Copyright (C) 2005,2006,2007,2008 IBM Corporation
-> > > + * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
-> > > + *
-> > > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > > + *
-> > > + * This program is free software; you can redistribute it and/or
-> > > + * modify it under the terms of the GNU General Public License as
-> > > + * published by the Free Software Foundation, version 2 of the
-> > > + * License.
-> > > + *
-> > > + * File: digest_lists.h
-> > > + *      Unexported definitions for digest lists.
-> > 
-> > Unexported to whom?
+> From: Greg KH [mailto:gregkh@linuxfoundation.org]
+> Sent: Monday, June 28, 2021 10:46 AM
+> On Mon, Jun 28, 2021 at 08:30:32AM +0000, Roberto Sassu wrote:
+> > > > +struct compact_list_hdr {
+> > > > +	__u8 version;
+> > >
+> > > You should never need a version, that way lies madness.
+> >
+> > We wanted to have a way to switch to a new format, if necessary.
 > 
-> Hi Greg
+> Then just add a new ioctl if you need that in the future, no need to try
+> to cram it into this one.
+
+Given that digest lists are generated elsewhere, it would be still
+unclear when the ioctl() would be issued. Maybe the kernel needs
+to parse both v1 and v2 digest lists (I expect that v1 cannot be easily
+converted to v2, if they are signed).
+
+ It would be also unpractical if digest lists are loaded at kernel
+initialization time (I didn't send the patch yet).
+
+> > > > +	__le16 type;
+> > > > +	__le16 modifiers;
+> > > > +	__le16 algo;
+> > > > +	__le32 count;
+> > > > +	__le32 datalen;
+> > >
+> > > Why are user/kernel apis specified in little endian format?  Why would
+> > > that matter?  Shouldn't they just be "native" endian?
+> >
+> > I thought this would make it clear that the kernel always expects the
+> > digest lists to be in little endian.
 > 
-> I meant not placed in include/linux.
+> Why would a big endian system expect the data from userspace to be in
+> little endian?  Shouldn't this always just be "native" endian given that
+> this is not something that is being sent to hardware?
 
-That's obvious based on the location of the file :)
+The digest list might come from a system with different endianness.
 
-> > > +
-> > > +static inline struct compact_list_hdr *get_hdr(
-> > > +					struct digest_list_item *digest_list,
-> > > +					loff_t hdr_offset)
-> > > +{
-> > > +	return (struct compact_list_hdr *)(digest_list->buf + hdr_offset);
-> > > +}
-> > 
-> > pointer math feels rough, are you shure you want to do this this way?
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
+
+> thanks,
 > 
-> Maybe, I could change digest_list_item_ref to:
-> 
-> struct digest_list_item_ref {
-> 	struct digest_list_item *digest_list;
-> 	u8 *digest;
-> 	struct compact_list_hdr *hdr;
-> };
-> 
-> where digest and hdr are calculated in the same way.
-
-That works better, no need to do pointer math if you do not have to.
-
-thanks,
-
-greg k-h
+> greg k-h
