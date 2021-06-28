@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5523F3B5AA3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Jun 2021 10:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EC43B5AAA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Jun 2021 10:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbhF1Isv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Jun 2021 04:48:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33418 "EHLO mail.kernel.org"
+        id S232353AbhF1Itl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Jun 2021 04:49:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34164 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232412AbhF1Isv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Jun 2021 04:48:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 202066108B;
-        Mon, 28 Jun 2021 08:46:24 +0000 (UTC)
+        id S231683AbhF1Itk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 28 Jun 2021 04:49:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 357A36108B;
+        Mon, 28 Jun 2021 08:47:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1624869985;
-        bh=9+S3F7N7khxscRTbbj60Z7nXQGu4ulqBkmJG0nAyrE4=;
+        s=korg; t=1624870035;
+        bh=fwqDYD3WVqhCOOp5GXfpIJP5FpsuNHICvD28AiRGpmU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RQik9Y9Z6+t4k6qUbWXRP77n1bPcxiX/kInnghlhn6vP+QnzAhD/nKAAwNwYnnDwP
-         KiPR3HOFy5LKe70/jSLCBUsf9pml+uJ4c3Mun86HUonl4j3boM6eGudz3ZadjDM3UD
-         c+PxJvjQg9w7tgd/zIt8AJ7CccCt2uZTNxTbO8hQ=
-Date:   Mon, 28 Jun 2021 10:46:23 +0200
+        b=xToNot36Z0FTctWX4O4yKCtB4CNUuLiel82y2cNUAPBd6LtSAfAv7o+SOHFB/E0DP
+         Cy134+nqFVHFGGmMopVowg+kj/577kRoRXbmzjqW6NFUbkkpZVUQAx4sz3xrNQIBgV
+         jDuqrDTeuMcxiGKjE8dqmQ3Yp1DdTTB3+sqcMfxE=
+Date:   Mon, 28 Jun 2021 10:47:13 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Roberto Sassu <roberto.sassu@huawei.com>
 Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
@@ -30,46 +30,70 @@ Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC][PATCH 03/12] digest_lists: Basic definitions
-Message-ID: <YNmMX4EODT0c4zqk@kroah.com>
+Subject: Re: [RFC][PATCH 04/12] digest_lists: Objects
+Message-ID: <YNmMkUwaPj0Xgh2r@kroah.com>
 References: <20210625165614.2284243-1-roberto.sassu@huawei.com>
- <20210625165614.2284243-4-roberto.sassu@huawei.com>
- <YNhYu3BXh7f9GkVk@kroah.com>
- <860717cce60f47abb3c9dc3c1bd32ab7@huawei.com>
+ <20210625165614.2284243-5-roberto.sassu@huawei.com>
+ <YNhZTR5VSin7ABZP@kroah.com>
+ <22fff08f1a70460da814d3f21b497f8b@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <860717cce60f47abb3c9dc3c1bd32ab7@huawei.com>
+In-Reply-To: <22fff08f1a70460da814d3f21b497f8b@huawei.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 28, 2021 at 08:30:32AM +0000, Roberto Sassu wrote:
-> > > +struct compact_list_hdr {
-> > > +	__u8 version;
+On Mon, Jun 28, 2021 at 08:14:41AM +0000, Roberto Sassu wrote:
+> > From: Greg KH [mailto:gregkh@linuxfoundation.org]
+> > Sent: Sunday, June 27, 2021 12:56 PM
+> > On Fri, Jun 25, 2021 at 06:56:06PM +0200, Roberto Sassu wrote:
+> > > +++ b/security/integrity/digest_lists/digest_lists.h
+> > > @@ -0,0 +1,117 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +/*
+> > > + * Copyright (C) 2005,2006,2007,2008 IBM Corporation
+> > > + * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
+> > > + *
+> > > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> > > + *
+> > > + * This program is free software; you can redistribute it and/or
+> > > + * modify it under the terms of the GNU General Public License as
+> > > + * published by the Free Software Foundation, version 2 of the
+> > > + * License.
+> > > + *
+> > > + * File: digest_lists.h
+> > > + *      Unexported definitions for digest lists.
 > > 
-> > You should never need a version, that way lies madness.
+> > Unexported to whom?
 > 
-> We wanted to have a way to switch to a new format, if necessary.
+> Hi Greg
+> 
+> I meant not placed in include/linux.
 
-Then just add a new ioctl if you need that in the future, no need to try
-to cram it into this one.
+That's obvious based on the location of the file :)
 
-> > > +	__le16 type;
-> > > +	__le16 modifiers;
-> > > +	__le16 algo;
-> > > +	__le32 count;
-> > > +	__le32 datalen;
+> > > +
+> > > +static inline struct compact_list_hdr *get_hdr(
+> > > +					struct digest_list_item *digest_list,
+> > > +					loff_t hdr_offset)
+> > > +{
+> > > +	return (struct compact_list_hdr *)(digest_list->buf + hdr_offset);
+> > > +}
 > > 
-> > Why are user/kernel apis specified in little endian format?  Why would
-> > that matter?  Shouldn't they just be "native" endian?
+> > pointer math feels rough, are you shure you want to do this this way?
 > 
-> I thought this would make it clear that the kernel always expects the
-> digest lists to be in little endian.
+> Maybe, I could change digest_list_item_ref to:
+> 
+> struct digest_list_item_ref {
+> 	struct digest_list_item *digest_list;
+> 	u8 *digest;
+> 	struct compact_list_hdr *hdr;
+> };
+> 
+> where digest and hdr are calculated in the same way.
 
-Why would a big endian system expect the data from userspace to be in
-little endian?  Shouldn't this always just be "native" endian given that
-this is not something that is being sent to hardware?
+That works better, no need to do pointer math if you do not have to.
 
 thanks,
 
