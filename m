@@ -2,67 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A86A23B545E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Jun 2021 18:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150913B56D6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Jun 2021 03:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbhF0QjG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Jun 2021 12:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbhF0QjG (ORCPT
+        id S231706AbhF1Boe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Jun 2021 21:44:34 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:5802 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231678AbhF1Boe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Jun 2021 12:39:06 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C191C061767
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Jun 2021 09:36:42 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id df12so21609670edb.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Jun 2021 09:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xLGoQIPZIFDXjr1i49vy3wnndvak3AtM/1fURFoYTto=;
-        b=TRzVylrRNx9iFuuXsJwS+vIe/9I32MEUVqszGII8D3CWeBjA0DB4W2fRTcmb3/zzMd
-         86aZhZxiPJNboe7y4bsh66XFS1uDlQEczrHcRt3XLbQzcaYlaN/2k9nNwF27CKQYkBeO
-         rf1XtHYsoM1XO0wyzH5A40eCAkQnuUACcoARFhWlEV1HEG4Nk5oDD1F+Q/0HV480aqVV
-         Ciie4m4VGu5vl1eWigwzaf8i2N0nWDyydG8qqp7p0VIqm2EMhUpdWeTU8RXKEdJiAM+C
-         od+3EmG5yJ3/2/wl+oqkqclt3YIVsMsIp6Q+/FlZU7ISgVCfgqIAX/MlBwPnOyaAWewS
-         74uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xLGoQIPZIFDXjr1i49vy3wnndvak3AtM/1fURFoYTto=;
-        b=f3UTsnjCHXFxeM6BwmXi4KzqNWDxZGvE5fMazntavgppcI2/kjcAHC4rHjKF/Ef47q
-         9jXhLO2h2r5EtikDe9b7SM2jEs/tgfdtJepsGUa14JOE4Yqy0S+fHWMC1RNNMwLJU0Hw
-         xqQDztAByxaCqjLvFA7+4n6rBo1JFj1UhN79fPmbmD9agkT78/PgFBRySzilDVAEHdxo
-         NQRS95KoDIFg5JpaGwfWBL8/uBRjBjevzXk2jm5/TNluXufROOekPMMjylN8r2oOARfK
-         twlXttInXUm0DH8gUHVRbib+KrXztA9JQboZ5KmCfEBW/nt3fscumgwEEhBLYrLpEXLp
-         L2ZA==
-X-Gm-Message-State: AOAM53251AcRM9tU5+KF+OKCpECCcdnFpo1u0+fUMpc8l4a/Vu4pnr8L
-        gnYhDQLs15rirDYmrq3rsfMyDDYIxIslEAU0JvQ=
-X-Google-Smtp-Source: ABdhPJxtJ7Bfx1hKsVrAbwfjueJM6Ea3A1tgQJh0DbsamPsUUOmcBmrsQYjcDzDGkeMWdB8PGfzfbzC3RtyTQHbH4P0=
-X-Received: by 2002:a05:6402:2551:: with SMTP id l17mr27643970edb.15.1624811800790;
- Sun, 27 Jun 2021 09:36:40 -0700 (PDT)
+        Sun, 27 Jun 2021 21:44:34 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GCqw246HfzXk6j;
+        Mon, 28 Jun 2021 09:36:50 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 28 Jun 2021 09:42:07 +0800
+Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Mon, 28 Jun
+ 2021 09:42:06 +0800
+Subject: Re: [PATCH net-next v2 1/2] selftests/ptr_ring: add benchmark
+ application for ptr_ring
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+CC:     Jason Wang <jasowang@redhat.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <brouer@redhat.com>, <paulmck@kernel.org>,
+        <peterz@infradead.org>, <will@kernel.org>, <shuah@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
+References: <1624591136-6647-1-git-send-email-linyunsheng@huawei.com>
+ <1624591136-6647-2-git-send-email-linyunsheng@huawei.com>
+ <ff47ed0b-332d-2772-d6e1-8277ac602c8c@redhat.com>
+ <3ba4a6f1-2e1e-8c1a-6f47-5d182f05d1cd@huawei.com>
+ <20210627020746-mutt-send-email-mst@kernel.org>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <684b4448-6102-dd62-d3e5-97170468683d@huawei.com>
+Date:   Mon, 28 Jun 2021 09:42:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Received: by 2002:a17:907:2626:b029:49f:88b9:f1e4 with HTTP; Sun, 27 Jun 2021
- 09:36:40 -0700 (PDT)
-Reply-To: Bill.Chantal.Lawrence20@europe.com
-From:   "Mrs. bill Chantal" <zasdeghyuik@gmail.com>
-Date:   Sun, 27 Jun 2021 16:36:40 +0000
-Message-ID: <CAN3i71h0KCvzjw4Xx6fAOOqpUFQS8j5k-B41xrhMJSBJJ7MYcg@mail.gmail.com>
-Subject: ATM VISA CARD COMPENSATED
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210627020746-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme718-chm.china.huawei.com (10.1.199.114) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dear Friend
+On 2021/6/27 14:09, Michael S. Tsirkin wrote:
+> On Fri, Jun 25, 2021 at 11:52:16AM +0800, Yunsheng Lin wrote:
+>> On 2021/6/25 11:36, Jason Wang wrote:
+>>>
+>>> 在 2021/6/25 上午11:18, Yunsheng Lin 写道:
+>>>> Currently ptr_ring selftest is embedded within the virtio
+>>>> selftest, which involves some specific virtio operation,
+>>>> such as notifying and kicking.
+>>>>
+>>>> As ptr_ring has been used by various subsystems, it deserves
+>>>> it's owner's selftest in order to benchmark different usecase
+>>>> of ptr_ring, such as page pool and pfifo_fast qdisc.
+>>>>
+>>>> So add a simple application to benchmark ptr_ring performance.
+>>>> Currently two test mode is supported:
+>>>> Mode 0: Both enqueuing and dequeuing is done in a single thread,
+>>>>          it is called simple test mode in the test app.
+>>>> Mode 1: Enqueuing and dequeuing is done in different thread
+>>>>          concurrently, also known as SPSC(single-producer/
+>>>>          single-consumer) test.
+>>>>
+>>>> The multi-producer/single-consumer test for pfifo_fast case is
+>>>> not added yet, which can be added if using CAS atomic operation
+>>>> to enable lockless multi-producer is proved to be better than
+>>>> using r->producer_lock.
+>>>>
+>>>> Only supported on x86 and arm64 for now.
+>>>>
+>>>> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+>>>> ---
+>>>>   MAINTAINERS                                      |   5 +
+>>>>   tools/testing/selftests/ptr_ring/Makefile        |   6 +
+>>>>   tools/testing/selftests/ptr_ring/ptr_ring_test.c | 249 +++++++++++++++++++++++
+>>>>   tools/testing/selftests/ptr_ring/ptr_ring_test.h | 150 ++++++++++++++
+>>>>   4 files changed, 410 insertions(+)
+>>>
+>>>
+>>> Why can't you simply reuse tools/virtio/ringtest?
+>>
+>> The main reason is stated in the commit log:
+>> "Currently ptr_ring selftest is embedded within the virtio
+>> selftest, which involves some specific virtio operation,
+>> such as notifying and kicking.
+>>
+>> As ptr_ring has been used by various subsystems, it deserves
+>> it's owner's selftest in order to benchmark different usecase
+>> of ptr_ring, such as page pool and pfifo_fast qdisc."
+>>
+>> More specificly in tools/virtio/ringtest/main.c and
+>> tools/virtio/ringtest/ptr_ring.c, there are a lot of operation
+>> related to virtio usecase, such as start_guest(), start_host(),
+>> poll_used(), notify() or kick() ....., so it makes more sense
+>> to add a generic selftest for ptr ring as it is not only used
+>> by virtio now.
+> 
+> 
+> Okay that answers why you didn't just run main.c
+> but why not add a new test under tools/virtio/ringtest/
+> reusing the rest of infrastructure that you currently copied?
 
-You have been compensated with the sum of 4.4 million dollars in this
-united nation the payment will be Issue into atm visa card and send to
-you from the Santander bank we need your address passport and your
-whatsapp number.
-Thanks
+Actually, my first attempt was to reuse the infrastructure in
+tools/virtio/ or tools/virtio/ringtest/, and neither of them
+was able to be compiled in the latest kernel.
 
-Mrs. bill Chantal
+And then I read through the code to try fixing the compile error,
+I found that the testcase under tools/virtio/ is coupled deeply
+to virtio as explained above, which was difficult to read for
+someone who is not fimiliar with virtio.
+
+So I searched for how testing is supposed to be added in the kernel,
+it seems it is more common to add the testing in tools/testing or
+tools/testing/selftest, and ptr ring is not only used by virtio now,
+so it seems more appropriate to add a sperate testing for virtio by
+instinct.
+
+Most of tools/virtio/ is to do testing related to virtio testing, IMHO,
+most of them are better to be in tools/testing/selftest. Even if most of
+virtio testing is moved to tools/testing/selftest, I think it makes more
+sense to decouple the virtio testing to ptr_ring testing too if we can
+find some mechanism to share the abstract infrastructure in ptr_ring_test.h
+for both virtio and ptr_ring testing.
+
+
+> 
+>>
+>>>
+>>> Thanks
+>>>
+>>>
+>>> .
+>>>
+> 
+> 
+> .
+> 
+
