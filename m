@@ -2,70 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BCF3B7A8E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jun 2021 00:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB403B7AA0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jun 2021 01:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235511AbhF2XAO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Jun 2021 19:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
+        id S233916AbhF2XQQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Jun 2021 19:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbhF2XAN (ORCPT
+        with ESMTP id S233329AbhF2XQP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Jun 2021 19:00:13 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D8BC061760
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Jun 2021 15:57:44 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id g7so1057533wri.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Jun 2021 15:57:44 -0700 (PDT)
+        Tue, 29 Jun 2021 19:16:15 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62C3C061760
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Jun 2021 16:13:47 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id v5so914405ilo.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Jun 2021 16:13:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1GwQpra/KQPWoCRAlFJjNi7iu4asJcHcBwiuJivAnGg=;
-        b=eybKy6mFLIkvxYvPi3HSPRLHk8vvbO3rJF8/y+e3qIj8eqA4TOoGdARSmk4UUeXubi
-         +5geT31XcpCN6AYcy8zCjo6A8nIxbeRym/2Dat7lpZ1KYcwnFF31qlyd22WX/okciPk/
-         eCFZX5P97jM5tnCQvBB4Vy9N+KlwdYDeV04pSdDKuqj+wvySmky02g2kDCXP6ZYqb3c7
-         yVAbePkZLZUhCtJSO3smJe/ETf3esXY17/iCJiIVPItyGv3TM8eR+EsE2pVEn9iL0pH0
-         2e+CnwU2QR7JWImhnMp1MuIfMZs3/KljJYaFSzOQIqlYQ3PHObNTU/v4pjXtZem66nWK
-         qlEg==
+        bh=tiobBDIQld9dYsgkm0AZ3GKWgOyeCJkyHrH4ASDqKKs=;
+        b=r3SFSKaUJ+xM0Jzgxudbu7aSagqo6b9gN7Boc+4lvfnCFoyrgGX5cIMGS8x+KtHtJV
+         zAIBOboZ/tpZU2Zob57pPW8b+PoZuFs7+4xsxSTkFrTftwa1r6+RnVDbuuaZxC3dka9X
+         7ZTJrHCL9D2Q2oWpG2Z8gczU+TPB6sNKYbyEEo2xffnYUt17Ln7Ai2to8WuTdkgGkRb3
+         HF7zXaqFIE7IbZlFag3MxzBcTyuQ2WBrOAf2fX6PUmIU6ZSZxDwjGi2VWQX4b58K8p+6
+         YQA/xZo3vCoWN9f+QpSdORN0UhOuJBfjNPWletbaDpH8b83S2yHPlbgZDKEocwflaJzY
+         aXPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1GwQpra/KQPWoCRAlFJjNi7iu4asJcHcBwiuJivAnGg=;
-        b=KPyiow8VVcv1xPMPgaGzpoT9SHvl2seXjqyXka462Ty78dxbF5YCeMVl3tNuareQsC
-         7fW2TA7O4z5UHttYeNOOCMhEK3GP+NTfy77c0C0l6Zobl9rqZtPo6w5bK1PfZumxJj9m
-         MPGH24Vb1sAB7OUSDVtf5DfMKKJiM9Zl2uL34cGW0l4A+fH7sJmvvOjNcMaXCNNmrf+x
-         6vSnq5QQJGbEbCN/+5gfPWWTclH074nw31N6PkJIEVC6LdIxOsrt8JyuqsCNMBNMd8Lw
-         Nl21UFrrt3MMaB2egtDsRLIcX4dmOYkjtyUR+rfig27/BmuME6CsqiB3XnztNBbrqtYg
-         GgBQ==
-X-Gm-Message-State: AOAM530nyKexskY55VWmDnH9gNqEPKU0zOYkWyrAQWzInn7O9FrHgqYx
-        FZl0oNFpLCrQ6eBFLNNdxgJeSXpba6UiVASRM7tm9g==
-X-Google-Smtp-Source: ABdhPJzcStTNFn7PT9mdM/fs5L78Ch+MJXH77W9tD6W0B/zz8w+bfFdJPTKdUblctuomZhn/o6934pltS/EiokPbr9Q=
-X-Received: by 2002:a5d:4103:: with SMTP id l3mr18118189wrp.102.1625007463255;
- Tue, 29 Jun 2021 15:57:43 -0700 (PDT)
+        bh=tiobBDIQld9dYsgkm0AZ3GKWgOyeCJkyHrH4ASDqKKs=;
+        b=TCFjnRIwlItPpww5YHvl/IwxF93ZTdSdtDAO4eq9cHN1vxa5kht0uEGJp1DFeE9Kc+
+         /TLh7sx8LioFpbBuwygE2eKOGge+ulLJJ/abmD+u5IlL+b3fpcvPqT0tpOURuMjrwGHF
+         e4KI3Vd96RBpDt4qWczDVrL7u3wm7zbRpx5f1adBnhifj2nrYspwoTfV0B+h8xAyPE1r
+         SzKt1pkYlXkAKgl+6mdtjorHE2tktAcFJfxqNmuWIFi4bRVcztV3UA7ZIhRnvnCSt2KT
+         Tv2ECUiFkgKsHxJFWmBnBhFJSpXdZbSzVfX7w37N0it3kp7S/RQrbeNIp6qaFUeSPnPn
+         APcg==
+X-Gm-Message-State: AOAM531wuJW2od6royvO4QZo9hSzba1rf+HS5i4RyYoPct/RO7EvkWMi
+        Ew9bTbdLqk0GH1hb9uPa6vm+R3TTXx5d0CVwznliSg==
+X-Google-Smtp-Source: ABdhPJy5Bm3pG2e1+1hqMJQzY6xlJP2gjDA8cjgszq9Jt6mGe8ljIjXt86IF2hDqP/zP7MCQ89xG5dYCdiinLeYq8oA=
+X-Received: by 2002:a92:2a0a:: with SMTP id r10mr24263642ile.274.1625008426775;
+ Tue, 29 Jun 2021 16:13:46 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210629223541.1512296-1-rmoar@google.com>
 In-Reply-To: <20210629223541.1512296-1-rmoar@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 30 Jun 2021 06:57:31 +0800
-Message-ID: <CABVgOSn3T1qYkDkzOYEOyZ3StPU0nprKrSwOynBF4=JScsN1pg@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 29 Jun 2021 16:13:35 -0700
+Message-ID: <CAGS_qxpbVZQva0bGPyGkWQccqoPXu-fCi5Jk4=tgFUEPsXgBFw@mail.gmail.com>
 Subject: Re: [PATCH] kunit: tool: Fix error messages for cases of no tests and
  wrong TAP header
 To:     Rae Moar <rmoar@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     brendanhiggins@google.com, davidgow@google.com, shuah@kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 6:36 AM Rae Moar <rmoar@google.com> wrote:
+On Tue, Jun 29, 2021 at 3:36 PM Rae Moar <rmoar@google.com> wrote:
 >
 > In the case of the TAP output having an incorrect header format, the
 > parser used to output an error message of 'no tests run!'. Additionally,
@@ -74,21 +70,41 @@ On Wed, Jun 30, 2021 at 6:36 AM Rae Moar <rmoar@google.com> wrote:
 > results!'.  This patch corrects the error messages for these two cases
 > by switching the original outputted error messages and correcting the
 > tests in kunit_toot_test.py.
+
+You might want to include an example like this in your commit description:
+
+Before:
+$ ./tools/testing/kunit/kunit.py parse /dev/null
+[ERROR] no tests run!
+...
+
+After:
+$ ./tools/testing/kunit/kunit.py parse /dev/null
+[ERROR] could not parse test results!
+...
+
+We could also include an example with a header but 0 tests, but I
+think /dev/null illustrates this enough.
+But if we wanted to:
+
+Before:
+$ echo -e 'TAP version 14\n1..0' | ./tools/testing/kunit/kunit.py parse
+[ERROR] could not parse test results!
+
+After:
+$ echo -e 'TAP version 14\n1..0' | ./tools/testing/kunit/kunit.py parse
+[ERROR] no tests run!
+
+
 >
 > Signed-off-by: Rae Moar <rmoar@google.com>
+
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+
+Looks good to me.
+One minor nit/request about the new test log we've added.
+
 > ---
-
-These error messages make a lot more sense, thank you!
-
-With this patch, we can close
-https://bugzilla.kernel.org/show_bug.cgi?id=207923
-
-This is
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
 >  tools/testing/kunit/kunit_parser.py           |  6 +-
 >  tools/testing/kunit/kunit_tool_test.py        | 16 +++-
 >  ...is_test_passed-no_tests_run_no_header.log} |  0
@@ -166,6 +182,19 @@ Cheers,
 > index 000000000000..18215b236783
 > --- /dev/null
 > +++ b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_with_header.log
+
+Can we truncate this log down to a smaller one w/ just the essential bits?
+I don't know that printing out lines about Brendan's workstation is
+necessarily relevant to the test :)
+
+The main part we need is
+
++TAP version 14
++1..0
+
+I know this is just copying from what we had before in the "no_header"
+version, but it feels a bit excessive to have all this.
+
 > @@ -0,0 +1,77 @@
 > +Core dump limits :
 > +       soft - 0
