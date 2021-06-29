@@ -2,73 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6E23B6B4D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jun 2021 01:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3A63B6BC6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jun 2021 02:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236778AbhF1XWd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Jun 2021 19:22:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44348 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234600AbhF1XW3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Jun 2021 19:22:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3076F61CEF;
-        Mon, 28 Jun 2021 23:20:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624922403;
-        bh=Wu4jGFGnjl1kHgKvmAaQnp8dHjqb9QvVqHRMyqg/JUg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=i7UJWgqxpDpRyocAWcdLuvPm7bBUR6tb+KqbmYVZT/36AGXlsTuJg7yax2jCYzVkx
-         AG3B5lcgvM5qvsa/Up23ec+63SodGKFl0ZA7uVZtpx6KUWZWbCoRQCOpc2UY30CmrU
-         Mk3EJm2o/60ZmTsdWvhtg++5FdjvRsHgp/uhRCH2TpnPqAO/BJT8K9OJwS5QcUQXwB
-         71ZTQIpipmYXSUOe7o3GNryRqDOhFHeZKQ4u5HkTsltuxIHvnrXWD2z09014/KwzKd
-         jrKaUL9ERwQjfeaL1MlyJhSAu/KU010dMzOFmehya/YF1vYlMk6zypUtT9/YG6GM6Z
-         oKDqNetGFae3g==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 1F84460A56;
-        Mon, 28 Jun 2021 23:20:03 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: net: devlink_port_split: check devlink returned an
- element before dereferencing it
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162492240312.3183.18165138324418989489.git-patchwork-notify@kernel.org>
-Date:   Mon, 28 Jun 2021 23:20:03 +0000
-References: <20210628145424.69146-1-paolo.pisati@canonical.com>
-In-Reply-To: <20210628145424.69146-1-paolo.pisati@canonical.com>
-To:     Paolo Pisati <paolo.pisati@canonical.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S231960AbhF2Alo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Jun 2021 20:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230086AbhF2Alo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 28 Jun 2021 20:41:44 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78C9C061760
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Jun 2021 17:39:17 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id l16-20020a25cc100000b0290558245b7eabso6587610ybf.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Jun 2021 17:39:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ErXbW4kB5vis3JG9x6sbxAOmYtyXBZy8W86kw16tbmI=;
+        b=WgX7wxhJwSBDTQCu8F9t7asAkjuBaVwiPI/jD8di+K0yMvaaDWERtQT5L1HmRyKtBc
+         2BffaNKaGsLLDeFPPIHVosSOuKtkPWmBwjwF7OfvkTgTx/k59VXsrocZMfPVSRl4ZvhU
+         w462kyqNSYAGlkOasKgJwp7IHLG+YgACgys7aQQfElBEkZeIrni7ToVmgVxR/VjlO0NU
+         CJYGHIL3E+yLSG/MiH7BMDjEsERKlzHKaVCLJjzYC741muqyTrxq6++kluHP640hlxAs
+         t/926NdnqaBQ2rfxgYf11+J7q4aneBilbasuxhj70QlqwcAij19PeiFRSwRe+J0HsC+C
+         6rEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ErXbW4kB5vis3JG9x6sbxAOmYtyXBZy8W86kw16tbmI=;
+        b=r8WPRiyxjiwd3cT1dZmtmqZZnMEP5olbR+N4DDin1c60S+Q6RROBo/S4Wk7vtuQLoq
+         4I5GJAAeYoIXvEsjkEObZXzjufxUEuV7knMub8mGMolzMLxwVE1Zxne8ahpA6HYQEtQV
+         kRfnqlBJUxwM53yeTe86PXDggLYtY+1j2P27NImZOobgA1g5osM/2vXmDqwljBhbksEN
+         qyzNzlIYAlYuqEOvPbRiMNex0CG0jqX4hew1wVfWKN8qvUVUNsD/V62UQxtc5t0WDVDC
+         2iOvUXUDaSHfiB8dLTR8WtI6nOD957lDGtjzNbrJvU0PnFugsVpOKosBoQGOvynsVoyj
+         MKLg==
+X-Gm-Message-State: AOAM533l+yTgwzUqKBKadk2t9L0maMDBLfjNK4mk+WlLG4E/2OAWuaoT
+        63Ua2UoM9lgiuodA0Vkdz+DO7l9kJ/Akzw==
+X-Google-Smtp-Source: ABdhPJxr2X2R0XQhfO9qiqp9FUNGr7U3VdSeJ1hPG6jj4F+OJ+ZqAG168XWd7aeb2P78V1lW+8CcLSDcc3d0vQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a805:ee32:b96e:716e])
+ (user=dlatypov job=sendgmr) by 2002:a25:1455:: with SMTP id
+ 82mr34670239ybu.403.1624927156815; Mon, 28 Jun 2021 17:39:16 -0700 (PDT)
+Date:   Mon, 28 Jun 2021 17:39:08 -0700
+Message-Id: <20210629003908.1848782-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
+Subject: [PATCH v2] kunit: tool: remove unnecessary "annotations" import
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+The import was working around the fact "tuple[T]" was used instead of
+typing.Tuple[T].
 
-This patch was applied to netdev/net.git (refs/heads/master):
+Convert it to use typing.Tuple to be consistent with how the rest of the
+code is annotated.
 
-On Mon, 28 Jun 2021 16:54:24 +0200 you wrote:
-> And thus avoid a Python stacktrace:
-> 
-> ~/linux/tools/testing/selftests/net$ ./devlink_port_split.py
-> Traceback (most recent call last):
->   File "/home/linux/tools/testing/selftests/net/./devlink_port_split.py",
-> line 277, in <module> main()
->   File "/home/linux/tools/testing/selftests/net/./devlink_port_split.py",
-> line 242, in main
->     dev = list(devs.keys())[0]
-> IndexError: list index out of range
-> 
-> [...]
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v1 -> v2: fix typos in commit message.
+---
+ tools/testing/kunit/kunit_kernel.py | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Here is the summary with links:
-  - selftests: net: devlink_port_split: check devlink returned an element before dereferencing it
-    https://git.kernel.org/netdev/net/c/a118ff661889
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 90bc007f1f93..2c6f916ccbaf 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -6,15 +6,13 @@
+ # Author: Felix Guo <felixguoxiuping@gmail.com>
+ # Author: Brendan Higgins <brendanhiggins@google.com>
+ 
+-from __future__ import annotations
+ import importlib.util
+ import logging
+ import subprocess
+ import os
+ import shutil
+ import signal
+-from typing import Iterator
+-from typing import Optional
++from typing import Iterator, Optional, Tuple
+ 
+ from contextlib import ExitStack
+ 
+@@ -208,7 +206,7 @@ def get_source_tree_ops(arch: str, cross_compile: Optional[str]) -> LinuxSourceT
+ 		raise ConfigError(arch + ' is not a valid arch')
+ 
+ def get_source_tree_ops_from_qemu_config(config_path: str,
+-					 cross_compile: Optional[str]) -> tuple[
++					 cross_compile: Optional[str]) -> Tuple[
+ 							 str, LinuxSourceTreeOperations]:
+ 	# The module name/path has very little to do with where the actual file
+ 	# exists (I learned this through experimentation and could not find it
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+base-commit: 1d71307a6f94df3750f8f884545a769e227172fe
+-- 
+2.32.0.93.g670b81a890-goog
 
