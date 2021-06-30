@@ -2,77 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2C03B8594
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jun 2021 16:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC8D3B89AA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jun 2021 22:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235316AbhF3PAL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Jun 2021 11:00:11 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:38806 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235177AbhF3PAK (ORCPT
+        id S235085AbhF3UYl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Jun 2021 16:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235082AbhF3UYk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Jun 2021 11:00:10 -0400
-Received: from 1.general.ppisati.uk.vpn ([10.172.193.134] helo=canonical.com)
-        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <paolo.pisati@canonical.com>)
-        id 1lybem-0007i0-Qi; Wed, 30 Jun 2021 14:57:40 +0000
-From:   Paolo Pisati <paolo.pisati@canonical.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: memory-hotplug: avoid spamming logs with dump_page(), ratio limit hot-remove error test
-Date:   Wed, 30 Jun 2021 16:57:40 +0200
-Message-Id: <20210630145740.54614-1-paolo.pisati@canonical.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 30 Jun 2021 16:24:40 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289C9C061756;
+        Wed, 30 Jun 2021 13:22:11 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id c11so5049231ljd.6;
+        Wed, 30 Jun 2021 13:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=asiPWTg/9LdxIDMuM03tyPCc7XSGdVqNFdWPqsCB8Y4=;
+        b=TZqkgdXmmTyR0b6OjQEVeOUjuaXgNAAoq96Q/gm8nNxGOWW0PhwtOUzAYnAX2BUpfa
+         OFiBla7yFtrSwSyEH3liO1Fhzaxj6m1NBzxQvC0hfbvLhqbBxaFq1EcITTqJ2Vcl2LyD
+         mEfS+sTGb6FqmSyWNbtnAPnDQ2Tx4E+/zGIfeJys5LOdazyALBixZqssnn2NEz0yAnEj
+         Sn+t7x+drRE64ig/NHWbbycCUDXVV2iK9daURwdUZsuuIqN+88sWjPiA5zozm47CUlH5
+         gpZKs3Ne5g+MsuHyXvqMpVLnV3TvWnhgd4yYGXeuA2FVA392TJC/q3xi0dM9GQ51Dwb0
+         kYGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=asiPWTg/9LdxIDMuM03tyPCc7XSGdVqNFdWPqsCB8Y4=;
+        b=I0JPBENz9TPTZmf/IkY5/iu/xWBYTSIgpQxE/s3XGgb4mHJcYAThuW1hju4JaOEgDR
+         Qd5JotT1Bwh0ijVB64QHXft/yE1xvXvUsuypBbotvKTESiiHolC61Qx76YITkRtpEVap
+         AzFbrkV0LY40V0gxIJn0wRccgkWdkq7WD5oUeYtS6ya7nKtJ+ATE9I2BmPEHPqpCVjIO
+         QsU3/QYgwi5lDXWELTNx/JWhiMv0zdXmB8bvWvFWqT7Z5lyWqvwO3zeHzukNp8s/QHrW
+         aUktlKS3C4p4Qg3LYxoexUM8HAW3EkjOaE+uYMMNBbqhsLaR87fF3oMh4CkMayGhSDft
+         paiw==
+X-Gm-Message-State: AOAM532uTjr0PDH0gjLpjmhRuX0SNtragF+zE5gbOfmIOSN29EINOXRY
+        0cYuoHiV+XEPimwIN9ShuN8=
+X-Google-Smtp-Source: ABdhPJxsz4WexCal2555CfKKJjXEIfGhb9O5Owy3jWZ0R9LZNS6i8u6iWiEm3qc7l7HemyZD8UxUzg==
+X-Received: by 2002:a2e:5848:: with SMTP id x8mr3618338ljd.191.1625084529507;
+        Wed, 30 Jun 2021 13:22:09 -0700 (PDT)
+Received: from asus ([37.151.208.206])
+        by smtp.gmail.com with ESMTPSA id l10sm306117ljg.81.2021.06.30.13.22.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Jun 2021 13:22:08 -0700 (PDT)
+Date:   Thu, 1 Jul 2021 02:22:06 +0600
+From:   Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
+To:     shuah@kernel.org, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, tyhicks@linux.microsoft.com,
+        pasha.tatashin@soleen.com
+Subject: [PATCH 0/1] add KSM selftests
+Message-ID: <cover.1625083828.git.zhansayabagdaulet@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-While the offline memory test obey ratio limit, the same test with error
-injection does not and tries to offline all the hotpluggable memory, spamming
-system logs with hundreds of thousands of dump_page() entries, slowing system
-down (to the point the test itself timeout and gets terminated) and excessive fs
-occupation:
+As a part of the Outreachy internship project, add unit tests for Kernel
+Samepage Merging. More tests to be added later; they would focus on
+unmerging, handling zero pages and pages in different NUMA nodes.
 
-...
-[ 9784.393354] page:c00c0000007d1b40 refcount:3 mapcount:0 mapping:c0000001fc03e950 index:0xe7b
-[ 9784.393355] def_blk_aops
-[ 9784.393356] flags: 0x3ffff800002062(referenced|active|workingset|private)
-[ 9784.393358] raw: 003ffff800002062 c0000001b9343a68 c0000001b9343a68 c0000001fc03e950
-[ 9784.393359] raw: 0000000000000e7b c000000006607b18 00000003ffffffff c00000000490d000
-[ 9784.393359] page dumped because: migration failure
-[ 9784.393360] page->mem_cgroup:c00000000490d000
-[ 9784.393416] migrating pfn 1f46d failed ret:1
-...
+Zhansaya Bagdauletkyzy (1):
+  selftests: vm: add KSM tests
 
-$ grep "page dumped because: migration failure" /var/log/kern.log | wc -l
-2405558
+ tools/testing/selftests/vm/.gitignore     |   1 +
+ tools/testing/selftests/vm/Makefile       |   1 +
+ tools/testing/selftests/vm/ksm_tests.c    | 289 ++++++++++++++++++++++
+ tools/testing/selftests/vm/run_vmtests.sh |  16 ++
+ 4 files changed, 307 insertions(+)
+ create mode 100644 tools/testing/selftests/vm/ksm_tests.c
 
-$ ls -la /var/log/kern.log
--rw-r----- 1 syslog adm 2256109539 Jun 30 14:19 /var/log/kern.log
-
-Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
----
- tools/testing/selftests/memory-hotplug/mem-on-off-test.sh | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-index b37585e6aa38..46a97f318f58 100755
---- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-+++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-@@ -282,7 +282,9 @@ done
- #
- echo $error > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
- for memory in `hotpluggable_online_memory`; do
--	offline_memory_expect_fail $memory
-+	if [ $((RANDOM % 100)) -lt $ratio ]; then
-+		offline_memory_expect_fail $memory
-+	fi
- done
- 
- echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
 -- 
-2.30.2
+2.25.1
 
