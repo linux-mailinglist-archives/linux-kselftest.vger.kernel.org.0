@@ -2,169 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 658893B827B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jun 2021 14:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2C03B8594
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jun 2021 16:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234761AbhF3MyY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Jun 2021 08:54:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28082 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234792AbhF3MyX (ORCPT
+        id S235316AbhF3PAL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Jun 2021 11:00:11 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:38806 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235177AbhF3PAK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Jun 2021 08:54:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625057514;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=84cTndThNFAP1cz9xpPfYSoGM0TMxENWRGeocdlBP7E=;
-        b=c6VvIsAQSFA9kXlZs29RM0gR3Rv33R7Po+Ou3Yp1irEQk5qi0P/A6ksfvqpjPB+sFn+xJl
-        G1iYilMpgAmVaVPgl+n2H4uk38k+6DVT707eWM6GEbBIWbqOYJ6Hoe/J7lbD8B/zYmesmP
-        I8ehniI+idtB7p/3TuAG4DcOECrHb4U=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-276-JtgVSbWpONygIzVwXgGLsg-1; Wed, 30 Jun 2021 08:51:52 -0400
-X-MC-Unique: JtgVSbWpONygIzVwXgGLsg-1
-Received: by mail-wr1-f72.google.com with SMTP id g4-20020a5d64e40000b029012469ad3be8so931503wri.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Jun 2021 05:51:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=84cTndThNFAP1cz9xpPfYSoGM0TMxENWRGeocdlBP7E=;
-        b=uAmCe8qttEENVMDnzOqPY9gbn3pmAFUDkfY6v+DNF2kQqhoTKx0Cn5b11borgHAqxI
-         hIFxCngctPf+lIDMSkk2bNpvlwRL3iGFh7W7IDoNe4n02v3I9yLdh6uP//yzj7+JacdU
-         IkXLG18SIjv9mu8eW6iRKPKMobFTV/kTfHlMB8MDxY/B86IUEThh1O21e9U8oze9f8nN
-         TtupBJ9alhqb26OLhwxBWiS5l0TPjqJwK5rblMpUP0gRMrYrlmoGIprRntAH+08jMxcM
-         qMAzwipE1vY/yFPiePVFH7U8nfQbBkHdizhGeAqo4Wo4YqrpyB41oHTgy6UHgnxPjqNH
-         rbqA==
-X-Gm-Message-State: AOAM533j/hsk9WYrlp7CpvrF3cF4x+taZiokNK0KVxLdRYdI8cX5J2dR
-        HhaIPnX605XeVLYdR2H1hDBmx/xXucFOnAQtUz3HUpGN1/tab0im4MJmPmdrP2kUOyvqrqp0ES0
-        rm7prEnoL3zVcSJcxPjli9y6OrBM+
-X-Received: by 2002:a05:600c:2243:: with SMTP id a3mr4509986wmm.86.1625057511797;
-        Wed, 30 Jun 2021 05:51:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwJtHA1JpXRvoSoeZX/KpRktkcHYi/igAmdcBzVYumDkUdf7bojHz46vt8JXkhH0vapodEjcA==
-X-Received: by 2002:a05:600c:2243:: with SMTP id a3mr4509967wmm.86.1625057511624;
-        Wed, 30 Jun 2021 05:51:51 -0700 (PDT)
-Received: from pc-23.home (2a01cb058d44a7001b6d03f4d258668b.ipv6.abo.wanadoo.fr. [2a01:cb05:8d44:a700:1b6d:3f4:d258:668b])
-        by smtp.gmail.com with ESMTPSA id n8sm21822762wrt.95.2021.06.30.05.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Jun 2021 05:51:51 -0700 (PDT)
-Date:   Wed, 30 Jun 2021 14:51:49 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, David Ahern <dsahern@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 4/4] selftests: forwarding: Test redirecting vxlan
- and bareudp packets to Ethernet
-Message-ID: <340d1bce299c23e3f7e97d8b71b0f38a2ce0a7e3.1625056665.git.gnault@redhat.com>
-References: <cover.1625056665.git.gnault@redhat.com>
+        Wed, 30 Jun 2021 11:00:10 -0400
+Received: from 1.general.ppisati.uk.vpn ([10.172.193.134] helo=canonical.com)
+        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <paolo.pisati@canonical.com>)
+        id 1lybem-0007i0-Qi; Wed, 30 Jun 2021 14:57:40 +0000
+From:   Paolo Pisati <paolo.pisati@canonical.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: memory-hotplug: avoid spamming logs with dump_page(), ratio limit hot-remove error test
+Date:   Wed, 30 Jun 2021 16:57:40 +0200
+Message-Id: <20210630145740.54614-1-paolo.pisati@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1625056665.git.gnault@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add selftests for the following commit:
-  * 99c8719b7981 ("bareudp: allow redirecting bareudp packets to eth
-    devices").
-(no commit for VXLAN-GPE, which has always worked in this configuration).
+While the offline memory test obey ratio limit, the same test with error
+injection does not and tries to offline all the hotpluggable memory, spamming
+system logs with hundreds of thousands of dump_page() entries, slowing system
+down (to the point the test itself timeout and gets terminated) and excessive fs
+occupation:
 
-Only test collect-md mode as both bareudp and vxlan-gpe devices don't
-currently implement classical mode.
+...
+[ 9784.393354] page:c00c0000007d1b40 refcount:3 mapcount:0 mapping:c0000001fc03e950 index:0xe7b
+[ 9784.393355] def_blk_aops
+[ 9784.393356] flags: 0x3ffff800002062(referenced|active|workingset|private)
+[ 9784.393358] raw: 003ffff800002062 c0000001b9343a68 c0000001b9343a68 c0000001fc03e950
+[ 9784.393359] raw: 0000000000000e7b c000000006607b18 00000003ffffffff c00000000490d000
+[ 9784.393359] page dumped because: migration failure
+[ 9784.393360] page->mem_cgroup:c00000000490d000
+[ 9784.393416] migrating pfn 1f46d failed ret:1
+...
 
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
+$ grep "page dumped because: migration failure" /var/log/kern.log | wc -l
+2405558
+
+$ ls -la /var/log/kern.log
+-rw-r----- 1 syslog adm 2256109539 Jun 30 14:19 /var/log/kern.log
+
+Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
 ---
- tools/testing/selftests/net/forwarding/config |  2 +
- .../net/forwarding/tc_redirect_l2l3.sh        | 55 +++++++++++++++++++
- 2 files changed, 57 insertions(+)
+ tools/testing/selftests/memory-hotplug/mem-on-off-test.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/config b/tools/testing/selftests/net/forwarding/config
-index 5d3ab2b63c53..ec49660ee808 100644
---- a/tools/testing/selftests/net/forwarding/config
-+++ b/tools/testing/selftests/net/forwarding/config
-@@ -21,3 +21,5 @@ CONFIG_NET_IPIP=m
- CONFIG_IPV6_SIT=m
- CONFIG_IPV6_GRE=m
- CONFIG_IPV6_TUNNEL=m
-+CONFIG_VXLAN=m
-+CONFIG_BAREUDP=m
-diff --git a/tools/testing/selftests/net/forwarding/tc_redirect_l2l3.sh b/tools/testing/selftests/net/forwarding/tc_redirect_l2l3.sh
-index 207b92775a6c..db8ccef9a334 100755
---- a/tools/testing/selftests/net/forwarding/tc_redirect_l2l3.sh
-+++ b/tools/testing/selftests/net/forwarding/tc_redirect_l2l3.sh
-@@ -27,6 +27,8 @@ ALL_TESTS="
- 	redir_sit
- 	redir_ip6gre
- 	redir_ip6tnl
-+	redir_vxlan_gpe
-+	redir_bareudp
- "
+diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+index b37585e6aa38..46a97f318f58 100755
+--- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
++++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+@@ -282,7 +282,9 @@ done
+ #
+ echo $error > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
+ for memory in `hotpluggable_online_memory`; do
+-	offline_memory_expect_fail $memory
++	if [ $((RANDOM % 100)) -lt $ratio ]; then
++		offline_memory_expect_fail $memory
++	fi
+ done
  
- NUM_NETIFS=0
-@@ -354,6 +356,59 @@ redir_ip6tnl()
- 	cleanup_tunnel
- }
- 
-+redir_vxlan_gpe()
-+{
-+	local IP
-+
-+	# As of Linux 5.13, VXLAN-GPE only supports collect-md mode
-+	for UNDERLAY_IPVERS in 4 6; do
-+		IP="IPv${UNDERLAY_IPVERS}"
-+
-+		setup_tunnel "${IP}" "collect_md" "vxlan" "gpe external" "id 10"
-+		ping_test ipv4 "VXLAN-GPE, external mode: ${IP} / UDP / VXLAN-GPE / IPv4"
-+		ping_test ipv6 "VXLAN-GPE, external mode: ${IP} / UDP / VXLAN-GPE / IPv6"
-+		ping_test ipv4-mpls "VXLAN-GPE, external mode: ${IP} / UDP / VXLAN-GPE / MPLS / IPv4"
-+		ping_test ipv6-mpls "VXLAN-GPE, external mode: ${IP} / UDP / VXLAN-GPE / MPLS / IPv6"
-+		cleanup_tunnel
-+	done
-+}
-+
-+redir_bareudp()
-+{
-+	local IP
-+
-+	# As of Linux 5.13, Bareudp only supports collect-md mode
-+	for UNDERLAY_IPVERS in 4 6; do
-+		IP="IPv${UNDERLAY_IPVERS}"
-+
-+		# IPv4 overlay
-+		setup_tunnel "${IP}" "collect_md" "bareudp" \
-+			"dstport 6635 ethertype ipv4"
-+		ping_test ipv4 "Bareudp, external mode: ${IP} / UDP / IPv4"
-+		cleanup_tunnel
-+
-+		# IPv6 overlay
-+		setup_tunnel "${IP}" "collect_md" "bareudp" \
-+			"dstport 6635 ethertype ipv6"
-+		ping_test ipv6 "Bareudp, external mode: ${IP} / UDP / IPv6"
-+		cleanup_tunnel
-+
-+		# Combined IPv4/IPv6 overlay (multiproto mode)
-+		setup_tunnel "${IP}" "collect_md" "bareudp" \
-+			"dstport 6635 ethertype ipv4 multiproto"
-+		ping_test ipv4 "Bareudp, external mode: ${IP} / UDP / IPv4 (multiproto)"
-+		ping_test ipv6 "Bareudp, external mode: ${IP} / UDP / IPv6 (multiproto)"
-+		cleanup_tunnel
-+
-+		# MPLS overlay
-+		setup_tunnel "${IP}" "collect_md" "bareudp" \
-+			"dstport 6635 ethertype mpls_uc"
-+		ping_test ipv4-mpls "Bareudp, external mode: ${IP} / UDP / MPLS / IPv4"
-+		ping_test ipv6-mpls "Bareudp, external mode: ${IP} / UDP / MPLS / IPv6"
-+		cleanup_tunnel
-+	done
-+}
-+
- exit_cleanup()
- {
- 	if [ "${TESTS_COMPLETED}" = "no" ]; then
+ echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
 -- 
-2.21.3
+2.30.2
 
