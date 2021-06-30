@@ -2,96 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FD73B8A8D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jul 2021 00:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DB43B8AAD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jul 2021 00:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbhF3WlH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Jun 2021 18:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbhF3WlH (ORCPT
+        id S232971AbhF3XA6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Jun 2021 19:00:58 -0400
+Received: from smtp-190f.mail.infomaniak.ch ([185.125.25.15]:53243 "EHLO
+        smtp-190f.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232604AbhF3XA6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Jun 2021 18:41:07 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C482C061756
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Jun 2021 15:38:37 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id k16so5088434ios.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Jun 2021 15:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=J0KcyP9kWSbHZOqf7CgSrcSkkm0ZOyi4lXE41TUYIZw=;
-        b=Zfgu8DrevHifNYP3W1Cre/OGpvVJDBEk4Tg2f2nxGhWfA/fj6xlUAlUfP0NeFMAY0g
-         h6kwwky8Oq709nGOmP5LQ3UpR2ckCHphhiYpAzpWYi1yZMw3huIAD0MPG4cZ+l/nvxDm
-         p9zDZ2RSY1ofgzcWCNl1Dp3TbyU6cWMpTr4qQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J0KcyP9kWSbHZOqf7CgSrcSkkm0ZOyi4lXE41TUYIZw=;
-        b=e+yyphVjE9yTbjvMxGo5D851vkJX65XWOhoXwVwNxmXIXkvVvx3zZdnj3QzT8h8KqH
-         l37fawOWzPpAs9JE6MlSwy2zEnyxmS95KW4vsPO4qz72WPuF+2f7FsXEP7qQorsPkUYM
-         33hS6DS/EUzgVYwULeR4AnB/Y6YFVEo15KFg9b8aaTA+I+Bq9KzGANKqBtmuNKVP9kXm
-         DUayhNB6LdrJ1SCVmMK+lIBC5eVfp3u6z3fawilaT7zyt3l/YEwmhLXW3o0XW2yGGEWo
-         KWZWnUPR9IRw57Wa77+p3/Y+CVIAJpKno8yFbj4d4N+2TwG5Jk6jknCILLqMPDRx5hIE
-         fjsA==
-X-Gm-Message-State: AOAM530V7E1lf2x+ulmhQKIzoQUj0NZVkpXGHJYO4qfo2LfPjN4NOa95
-        /QrwIy0YWK+YwNpopMAJbBudxg==
-X-Google-Smtp-Source: ABdhPJyslW27x7gNEJe8OJzWZ10kqum6Rl5lmZ0D743CPeAJk6yKqXTwGhuVr0yiAJw+JiDx9UK+kA==
-X-Received: by 2002:a05:6638:190e:: with SMTP id p14mr10671785jal.70.1625092716906;
-        Wed, 30 Jun 2021 15:38:36 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id j25sm13240348iog.47.2021.06.30.15.38.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Jun 2021 15:38:36 -0700 (PDT)
-Subject: Re: [PATCH] kselftest/kselftest_harness.h: do not redefine ARRAY_SIZE
-To:     Peter Oskolkov <posk@google.com>, Peter Oskolkov <posk@posk.io>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-References: <20210625224902.1222942-1-posk@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <a4664b42-19cf-cac7-fd3e-38d93bb894d4@linuxfoundation.org>
-Date:   Wed, 30 Jun 2021 16:38:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Wed, 30 Jun 2021 19:00:58 -0400
+X-Greylist: delayed 545 seconds by postgrey-1.27 at vger.kernel.org; Wed, 30 Jun 2021 19:00:57 EDT
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4GFc3M5JwzzMqHN1;
+        Thu,  1 Jul 2021 00:49:19 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4GFc3L6dnnzlh8mg;
+        Thu,  1 Jul 2021 00:49:18 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        James Morris <jmorris@namei.org>,
+        Serge Hallyn <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v1 0/4] Landlock filesystem caching
+Date:   Thu,  1 Jul 2021 00:48:52 +0200
+Message-Id: <20210630224856.1313928-1-mic@digikod.net>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20210625224902.1222942-1-posk@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/25/21 4:49 PM, Peter Oskolkov wrote:
-> Macro ARRAY_SIZE is defined in tools/include/linux/kernel.h, so
-> if both headers are included there is a warning.
-> 
-> Signed-off-by: Peter Oskolkov <posk@google.com>
-> ---
->   tools/testing/selftests/kselftest_harness.h | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index ae0f0f33b2a6..75164e23f036 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -671,7 +671,9 @@
->   #define EXPECT_STRNE(expected, seen) \
->   	__EXPECT_STR(expected, seen, !=, 0)
->   
-> +#ifndef ARRAY_SIZE
->   #define ARRAY_SIZE(a)	(sizeof(a) / sizeof(a[0]))
-> +#endif
->   
->   /* Support an optional handler after and ASSERT_* or EXPECT_*.  The approach is
->    * not thread-safe, but it should be fine in most sane test scenarios.
-> 
+Hi,
 
-Thank you for the patch. This will be queued for rc2 after the merge
-window closes.
+The goal of this patch series is to reduce the performance impact of
+walking through a lot of files while being landlocked.  Indeed, because
+of the unprivileged nature of Landlock, each file access implies to
+check access granted to each directory of the path, which slows down
+open time.
 
-thanks,
--- Shuah
+Currently, openat(2) calls spend more than 22% of their time in
+hook_file_open().  The performance impact for a common worth case
+scenario is significantly reduced thanks to this patch series,
+theoretically going from O(n) with n as the depth of a path, to O(1)
+(cf. benchmarks in the caching patch).
+
+This series adds a new security hook (resolve_path_at) and uses it to
+implement access caching in Landlock.  I'm planning to build on top of
+that for other improvements (using task's working directory and task's
+root directory) but that will require other hook changes.
+
+This new hook is also a first step to be able to securely restrict file
+descriptors used for path resolution (e.g. dirfd in openat2).
+
+Caching may be difficult to get right especially for security checks.  I
+extended the current tests and I'm still working on new ones.  If you
+have test/attack scenarios, please share them.  I would really
+appreciate constructive reviews for these critical changes.  This series
+can be applied on top of v5.13 .
+
+Regards,
+
+Mickaël Salaün (4):
+  fs,security: Add resolve_path_at() hook
+  landlock: Add filesystem rule caching
+  selftests/landlock: Work in a temporary directory
+  selftests/landlock: Check all possible intermediate directories
+
+ fs/namei.c                                 |   9 +
+ include/linux/lsm_hook_defs.h              |   2 +
+ include/linux/lsm_hooks.h                  |   8 +
+ include/linux/security.h                   |   9 +
+ security/landlock/cache.h                  |  77 +++++++
+ security/landlock/cred.c                   |  15 +-
+ security/landlock/cred.h                   |  20 +-
+ security/landlock/fs.c                     | 224 +++++++++++++++++++--
+ security/landlock/fs.h                     |  29 +++
+ security/landlock/setup.c                  |   2 +
+ security/security.c                        |   6 +
+ tools/testing/selftests/landlock/fs_test.c | 205 ++++++++++++++-----
+ 12 files changed, 544 insertions(+), 62 deletions(-)
+ create mode 100644 security/landlock/cache.h
+
+
+base-commit: 62fb9874f5da54fdb243003b386128037319b219
+-- 
+2.32.0
+
