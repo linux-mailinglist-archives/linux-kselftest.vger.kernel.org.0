@@ -2,182 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CD93B8D7C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jul 2021 07:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E89C3B919C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jul 2021 14:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbhGAFtW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Jul 2021 01:49:22 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:57009 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229777AbhGAFtV (ORCPT
+        id S236457AbhGAM3y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Jul 2021 08:29:54 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:9333 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236424AbhGAM3w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Jul 2021 01:49:21 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 4F0523200914;
-        Thu,  1 Jul 2021 01:46:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 01 Jul 2021 01:46:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=2R5Ejh
-        vo7xrZ1UcgrwCjSHU0obIANFpgAR/43OEHuRI=; b=So7uwteeBfZq8oFMkbv3VE
-        3Yg3nxvJeVSlSKSuUFYQ99vyi2bmnVsQVAJOrFJpzhjwR6hzX4lCus1MMTlh4lK2
-        G1SgO6NmaUCTLi057NQ9MbVL4fY7LGelcskp4r7FLLdsZkvEZnYSflrg8aTs/h4w
-        DHmTuhqb6A1e+/QvWGz+uKQ3T0wMApnFqPhD93HU2xGLLXBZZEqWH15A0D2wSpaX
-        cGJm7plxhxz8ITAYLsRmEWZgWQJcdkPeh18/wIUrtNcmFY/QdyojHYaczDe0WPzR
-        bX/QVsiJfSW2sdL5VonjqFAJt/P78dNphiqW1kZQtI55CdIs6RBT2XNv286lrOwQ
-        ==
-X-ME-Sender: <xms:ylbdYLOdFbxpSsRgkZS2X_H_hqdFiQr2_HKVgzXUvFvGe0UFltkzzg>
-    <xme:ylbdYF8T3WPxVmVve1GMzdA5--YJ14xapwNKUM1MYXVACQrVR-z1YGExOUXOHEgZt
-    yRkDvoZ1QAHs8A>
-X-ME-Received: <xmr:ylbdYKTxfFmxCT_HL5f7UTdV31EdU10eGUb5kc1VOewNaFW9eE8U-Ae-ox7Uf8pmJ6u6N4RFh1EhVaKoJ9ZA1NV30glI9g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeeihedgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
-    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:ylbdYPumX5uu9il_gNIDhcGn35DwZP7Rk99M5zzruhNLNXL4DPidoQ>
-    <xmx:ylbdYDdfZ-38LklA5avrWDjLD2tGsOa20VD3RIxnzwDDVo6Od4RsIA>
-    <xmx:ylbdYL2QKe6HrJ9g9GfiohjqCn2ziW1pdFIyRHG35K-8BausVUbSzw>
-    <xmx:ylbdYK7vITnO-eFx1voJeB3S-ylq4cf-T4iVIa6cqZIr6O0YiAHysw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jul 2021 01:46:49 -0400 (EDT)
-Date:   Thu, 1 Jul 2021 08:46:46 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        David Ahern <dsahern@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/4] selftests: forwarding: Test redirecting gre
- or ipip packets to Ethernet
-Message-ID: <YN1Wxm0mOFFhbuTl@shredder>
-References: <cover.1625056665.git.gnault@redhat.com>
- <0a4e63cd3cde3c71cfc422a7f0f5e9bc76c0c1f5.1625056665.git.gnault@redhat.com>
+        Thu, 1 Jul 2021 08:29:52 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4GFy6F1zwPz74K4;
+        Thu,  1 Jul 2021 20:23:01 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 1 Jul 2021 20:27:14 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 1 Jul 2021 20:27:14 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <jasowang@redhat.com>,
+        <mst@redhat.com>
+CC:     <brouer@redhat.com>, <paulmck@kernel.org>, <peterz@infradead.org>,
+        <will@kernel.org>, <shuah@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
+Subject: [PATCH net-next v3 0/3] add benchmark selftest and optimization for ptr_ring
+Date:   Thu, 1 Jul 2021 20:26:39 +0800
+Message-ID: <1625142402-64945-1-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0a4e63cd3cde3c71cfc422a7f0f5e9bc76c0c1f5.1625056665.git.gnault@redhat.com>
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 02:51:38PM +0200, Guillaume Nault wrote:
-> diff --git a/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh b/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh
-> new file mode 100644
-> index 000000000000..4c0bf2d7328a
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh
-> @@ -0,0 +1,267 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# A chain of 4 nodes connected with veth pairs.
-> +# Each node lives in its own network namespace.
+Patch 1: add a selftest app to benchmark the performance
+         of ptr_ring.
+Patch 2: move r->queue[] clearing after r->consumer_head
+         updating.
+Patch 3: add barrier to ensure the visiblity of r->queue[].
 
-Hi,
+V3: add patch 3 and address most of Michael's comment.
+V2: add patch 1 and add performance data for patch 2.
 
-The tests under tools/testing/selftests/net/forwarding/ are meant to use
-VRFs as lightweight namespaces. This allows us to run the tests on both
-physical switches with loopback cables and veth pairs, thereby
-validating both the hardware and software datapaths.
+---
+Performance raw data using "perf stat -r" cmd, comparison
+is also done in patch 2/3.
+ptr_ring_test_org: patch 1
+ptr_ring_test_opt1: patch 1 + patch 2
+ptr_ring_test_opt2: patch 1 + patch 2 + patch 3
 
-See tools/testing/selftests/net/forwarding/README
 
-If the tests cannot be converted to VRFs, then I suggest moving them to
-tools/testing/selftests/net/
+x86_64(as there is other workload in the x86_64 system, so
+run 1000 times to get more accurate result):
 
-> +# Each veth interface has an IPv4 and an IPv6 address. A host route provides
-> +# connectivity to the adjacent node. This base network only allows nodes to
-> +# communicate with their immediate neighbours.
-> +#
-> +# The two nodes at the extremities of the chain also have 4 host IPs on their
-> +# loopback device:
-> +#   * An IPv4 address, routed as is to the adjacent router.
-> +#   * An IPv4 address, routed over MPLS to the adjacent router.
-> +#   * An IPv6 address, routed as is to the adjacent router.
-> +#   * An IPv6 address, routed over MPLS to the adjacent router.
-> +#
-> +# This topology doesn't define how RTA and RTB handle these packets: users of
-> +# this script are responsible for the plumbing between RTA and RTB.
-> +#
-> +# As each veth connects two different namespaces, their MAC and IP addresses
-> +# are defined depending on the local and remote namespaces. For example
-> +# veth-h1-rta, which sits in H1 and links to RTA, has MAC address
-> +# 00:00:5e:00:53:1a, IPv4 192.0.2.0x1a and IPv6 2001:db8::1a, where "1a" means
-> +# that it's in H1 and links to RTA (the rest of each address is always built
-> +# from a IANA documentation prefix).
-> +#
-> +# Routed addresses in H1 and H2 on the other hand encode the routing type (with
-> +# or without MPLS encapsulation) and the namespace the address resides in. For
-> +# example H2 has 198.51.100.2 and 2001:db8::1:2, that are routed as is through
-> +# RTB. It also has 198.51.100.0x12 and 2001:db8::1:12, that are routed through
-> +# RTB with MPLS encapsulation.
-> +#
-> +# For clarity, the prefixes used for host IPs are different from the ones used
-> +# on the veths.
-> +#
-> +# The MPLS labels follow a similar principle: the first digit represents the
-> +# IP version of the encapsulated packet ("4" for IPv4, "6" for IPv6), the
-> +# second digit represents the destination host ("1" for H1, "2" for H2).
-> +#
-> +# +----------------------------------------------------+
-> +# |                    Host 1 (H1)                     |
-> +# |                                                    |
-> +# |   lo                                               |
-> +# |     198.51.100.1    (for plain IPv4)               |
-> +# |     2001:db8::1:1   (for plain IPv6)               |
-> +# |     198.51.100.0x11 (for IPv4 over MPLS, label 42) |
-> +# |     2001:db8::1:11  (for IPv6 over MPLS, label 62) |
-> +# |                                                    |
-> +# | + veth-h1-rta                                      |
-> +# | |   192.0.2.0x1a                                   |
-> +# | |   2001:db8::1a                                   |
-> +# +-|--------------------------------------------------+
-> +#   |
-> +# +-|--------------------+
-> +# | |  Router A (RTA)    |
-> +# | |                    |
-> +# | + veth-rta-h1        |
-> +# |     192.0.2.0xa1     |
-> +# |     2001:db8::a1     |
-> +# |                      |
-> +# | + veth-rta-rtb       |
-> +# | |   192.0.2.0xab     |
-> +# | |   2001:db8::ab     |
-> +# +-|--------------------+
-> +#   |
-> +# +-|--------------------+
-> +# | |  Router B (RTB)    |
-> +# | |                    |
-> +# | + veth-rtb-rta       |
-> +# |     192.0.2.0xba     |
-> +# |     2001:db8::ba     |
-> +# |                      |
-> +# | + veth-rtb-h2        |
-> +# | |   192.0.2.0xb2     |
-> +# | |   2001:db8::b2     |
-> +# +-|--------------------+
-> +#   |
-> +# +-|--------------------------------------------------+
-> +# | |                  Host 2 (H2)                     |
-> +# | |                                                  |
-> +# | + veth-h2-rtb                                      |
-> +# |     192.0.2.0x2b                                   |
-> +# |     2001:db8::2b                                   |
-> +# |                                                    |
-> +# |   lo                                               |
-> +# |     198.51.100.2    (for plain IPv4)               |
-> +# |     2001:db8::1:2   (for plain IPv6)               |
-> +# |     198.51.100.0x12 (for IPv4 over MPLS, label 41) |
-> +# |     2001:db8::1:12  (for IPv6 over MPLS, label 61) |
-> +# +----------------------------------------------------+
-> +#
-> +# This topology can be used for testing different routing or switching
-> +# scenarios, as H1 and H2 are pre-configured for sending different kinds of
-> +# packets (IPv4, IPv6, with or without MPLS encapsulation), which RTA and RTB
-> +# can easily match and process according to the forwarding mechanism to test.
+Performance counter stats for './ptr_ring_test_org -s 1000 -m 1 -N 100000000' (1000 runs):
+
+          5,291.83 msec task-clock                #    1.994 CPUs utilized            ( +-  0.41% )
+               690      context-switches          #    0.130 K/sec                    ( +-  3.65% )
+                 8      cpu-migrations            #    0.002 K/sec                    ( +-  5.70% )
+               291      page-faults               #    0.055 K/sec                    ( +-  0.05% )
+    12,660,040,758      cycles                    #    2.392 GHz                      ( +-  0.41% )
+    24,202,160,722      instructions              #    1.91  insn per cycle           ( +-  0.06% )
+     3,559,123,597      branches                  #  672.569 M/sec                    ( +-  0.07% )
+         8,009,010      branch-misses             #    0.23% of all branches          ( +-  0.11% )
+
+            2.6538 +- 0.0109 seconds time elapsed  ( +-  0.41% )
+
+ Performance counter stats for './ptr_ring_test_opt1 -s 1000 -m 1 -N 100000000' (1000 runs):
+
+          5,064.95 msec task-clock                #    1.992 CPUs utilized            ( +-  0.55% )
+               668      context-switches          #    0.132 K/sec                    ( +-  4.20% )
+                 9      cpu-migrations            #    0.002 K/sec                    ( +-  4.45% )
+               291      page-faults               #    0.057 K/sec                    ( +-  0.06% )
+    12,117,262,182      cycles                    #    2.392 GHz                      ( +-  0.55% )
+    22,586,035,716      instructions              #    1.86  insn per cycle           ( +-  0.08% )
+     3,404,652,345      branches                  #  672.199 M/sec                    ( +-  0.10% )
+         7,864,190      branch-misses             #    0.23% of all branches          ( +-  0.16% )
+
+            2.5422 +- 0.0142 seconds time elapsed  ( +-  0.56% )
+
+ Performance counter stats for './ptr_ring_test_opt2 -s 1000 -m 1 -N 100000000' (1000 runs):
+
+          5,105.33 msec task-clock                #    1.995 CPUs utilized            ( +-  0.47% )
+               589      context-switches          #    0.115 K/sec                    ( +-  4.24% )
+                11      cpu-migrations            #    0.002 K/sec                    ( +-  4.24% )
+               292      page-faults               #    0.057 K/sec                    ( +-  0.04% )
+    12,214,160,307      cycles                    #    2.392 GHz                      ( +-  0.47% )
+    22,756,292,370      instructions              #    1.86  insn per cycle           ( +-  0.10% )
+     3,429,218,233      branches                  #  671.694 M/sec                    ( +-  0.12% )
+         7,921,984      branch-misses             #    0.23% of all branches          ( +-  0.15% )
+
+            2.5587 +- 0.0122 seconds time elapsed  ( +-  0.47% )
+
+
+-------------------------------------------------------------------------------------------------
+arm64(using taskset to avoid the numa effects):
+
+Performance counter stats for 'taskset -c 0-1 ./ptr_ring_test_org -s 1000 -m 1 -N 100000000' (100 runs):
+
+           4172.83 msec task-clock                #    1.999 CPUs utilized            ( +-  0.01% )
+                54      context-switches          #    0.013 K/sec                    ( +-  0.29% )
+                 1      cpu-migrations            #    0.000 K/sec
+               115      page-faults               #    0.028 K/sec                    ( +-  0.16% )
+       10848085945      cycles                    #    2.600 GHz                      ( +-  0.01% )
+       25808501369      instructions              #    2.38  insn per cycle           ( +-  0.00% )
+   <not supported>      branches
+          11190266      branch-misses                                                 ( +-  0.02% )
+
+          2.087205 +- 0.000130 seconds time elapsed  ( +-  0.01% )
+
+
+ Performance counter stats for 'taskset -c 0-1 ./ptr_ring_test_opt1 -s 1000 -m 1 -N 100000000' (100 runs):
+
+           3774.91 msec task-clock                #    1.999 CPUs utilized            ( +-  0.03% )
+                50      context-switches          #    0.013 K/sec                    ( +-  0.36% )
+                 1      cpu-migrations            #    0.000 K/sec
+               114      page-faults               #    0.030 K/sec                    ( +-  0.15% )
+        9813658996      cycles                    #    2.600 GHz                      ( +-  0.03% )
+       23920189000      instructions              #    2.44  insn per cycle           ( +-  0.01% )
+   <not supported>      branches
+          10018927      branch-misses                                                 ( +-  0.04% )
+
+          1.888224 +- 0.000541 seconds time elapsed  ( +-  0.03% )
+
+ Performance counter stats for 'taskset -c 0-1 ./ptr_ring_test_opt2 -s 1000 -m 1 -N 100000000' (100 runs):
+
+           3785.79 msec task-clock                #    1.999 CPUs utilized            ( +-  0.03% )
+                49      context-switches          #    0.013 K/sec                    ( +-  0.32% )
+                 1      cpu-migrations            #    0.000 K/sec
+               114      page-faults               #    0.030 K/sec                    ( +-  0.15% )
+        9842067534      cycles                    #    2.600 GHz                      ( +-  0.03% )
+       24074397270      instructions              #    2.45  insn per cycle           ( +-  0.01% )
+   <not supported>      branches
+          10091918      branch-misses                                                 ( +-  0.04% )
+
+          1.893673 +- 0.000508 seconds time elapsed  ( +-  0.03% )
+
+Yunsheng Lin (3):
+  selftests/ptr_ring: add benchmark application for ptr_ring
+  ptr_ring: move r->queue[] clearing after r->consumer_head updating
+  ptr_ring: add barrier to ensure the visiblity of r->queue[]
+
+ MAINTAINERS                                      |   5 +
+ include/linux/ptr_ring.h                         |  52 ++++--
+ tools/testing/selftests/ptr_ring/Makefile        |   6 +
+ tools/testing/selftests/ptr_ring/ptr_ring_test.c | 224 +++++++++++++++++++++++
+ tools/testing/selftests/ptr_ring/ptr_ring_test.h | 130 +++++++++++++
+ 5 files changed, 399 insertions(+), 18 deletions(-)
+ create mode 100644 tools/testing/selftests/ptr_ring/Makefile
+ create mode 100644 tools/testing/selftests/ptr_ring/ptr_ring_test.c
+ create mode 100644 tools/testing/selftests/ptr_ring/ptr_ring_test.h
+
+-- 
+2.7.4
+
