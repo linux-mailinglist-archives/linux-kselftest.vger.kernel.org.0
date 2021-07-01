@@ -2,203 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B993B8B6C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jul 2021 02:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CD93B8D7C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jul 2021 07:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238275AbhGAAvD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Jun 2021 20:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236734AbhGAAvC (ORCPT
+        id S233294AbhGAFtW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Jul 2021 01:49:22 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:57009 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229777AbhGAFtV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Jun 2021 20:51:02 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BE2C0617A8
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Jun 2021 17:48:32 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id l5so5422983iok.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Jun 2021 17:48:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Im56R+xnJFTq67zDpPu8OMBxlFOXYPorOH2M+pwneH4=;
-        b=C5xLGf6ismCiaFckX0nYu3DqRVtYlqpRwBlrq/2xI3EQGuT1jMNM/jlPs+WAq/ulQS
-         vuuznC27es660FdPk91EvNcs391xSGxuj9wVPBPtdCdH+L0+bSkyuVNcZpdKTPy6Crfb
-         NyScKCxQpNNk0f/iuiow7A2L1EWWfGBVNHgJ6mPKgFr6HcXUZMiFLt20gCvXplTRIWT4
-         +2MTs40XiK7rIMekol9kBz0Emh/Fngc9WLwofSlzRdo5JJ6mu3TqVnRi0IZJsxXrGZ+L
-         pMew2JUOKKcJY78riSZjb/SXRT2ReFMVqcP2SKltfQwDm7hAU3GMD3nIUlQHXfS2e1HW
-         jAGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Im56R+xnJFTq67zDpPu8OMBxlFOXYPorOH2M+pwneH4=;
-        b=EIbXa1QAMDbQZ6RJFpxsEWaf2Z5lsxbKws4fJoF9zGuIOKguswEsSeC9fw4z0J1kW1
-         PfcDwZX0yHT0OHeHpXe8PCwCCZNXBjw2w900p6HidFu+yk+ohQnvmSYbjooFNbv5eJd7
-         notSDX/k9YIrQlK8UwmDe/lTWdRgL6eaxMmZsdZwSZCGQ9YCQAqEqN0JFIYS1Be0ifZA
-         24ffe5gvrYJebaDFtRTJJf4wM//lUEOLuLSwOTWhzD80ZyzaT0cSrbQzV+xcrxQEDic7
-         0t9cKKOISiUZbQVBGnSJg6bEDN2Yb3i+x39bSnk+8oJM0COpJv+YO58utqZz2CKZdAgb
-         +rzg==
-X-Gm-Message-State: AOAM5338rqZM8rf05rDPlWYfeKq7YI0CW+lUFR5F0RjV+dIIUA0I4bm4
-        Ka+IKyUdqxfakdIqlA3V+vpycwlqg3U8ElTChYo3UA==
-X-Google-Smtp-Source: ABdhPJzOEzBpNjZv/g4VmVSqHwkVl5/bEWCM9dsuEtah+TtfbszV5NSbcI8TPnxExdY5dIbQlDmzDzjNbCKNH74f0Nc=
-X-Received: by 2002:a6b:cf12:: with SMTP id o18mr10063502ioa.86.1625100511733;
- Wed, 30 Jun 2021 17:48:31 -0700 (PDT)
+        Thu, 1 Jul 2021 01:49:21 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 4F0523200914;
+        Thu,  1 Jul 2021 01:46:51 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 01 Jul 2021 01:46:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=2R5Ejh
+        vo7xrZ1UcgrwCjSHU0obIANFpgAR/43OEHuRI=; b=So7uwteeBfZq8oFMkbv3VE
+        3Yg3nxvJeVSlSKSuUFYQ99vyi2bmnVsQVAJOrFJpzhjwR6hzX4lCus1MMTlh4lK2
+        G1SgO6NmaUCTLi057NQ9MbVL4fY7LGelcskp4r7FLLdsZkvEZnYSflrg8aTs/h4w
+        DHmTuhqb6A1e+/QvWGz+uKQ3T0wMApnFqPhD93HU2xGLLXBZZEqWH15A0D2wSpaX
+        cGJm7plxhxz8ITAYLsRmEWZgWQJcdkPeh18/wIUrtNcmFY/QdyojHYaczDe0WPzR
+        bX/QVsiJfSW2sdL5VonjqFAJt/P78dNphiqW1kZQtI55CdIs6RBT2XNv286lrOwQ
+        ==
+X-ME-Sender: <xms:ylbdYLOdFbxpSsRgkZS2X_H_hqdFiQr2_HKVgzXUvFvGe0UFltkzzg>
+    <xme:ylbdYF8T3WPxVmVve1GMzdA5--YJ14xapwNKUM1MYXVACQrVR-z1YGExOUXOHEgZt
+    yRkDvoZ1QAHs8A>
+X-ME-Received: <xmr:ylbdYKTxfFmxCT_HL5f7UTdV31EdU10eGUb5kc1VOewNaFW9eE8U-Ae-ox7Uf8pmJ6u6N4RFh1EhVaKoJ9ZA1NV30glI9g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeeihedgleejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
+    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:ylbdYPumX5uu9il_gNIDhcGn35DwZP7Rk99M5zzruhNLNXL4DPidoQ>
+    <xmx:ylbdYDdfZ-38LklA5avrWDjLD2tGsOa20VD3RIxnzwDDVo6Od4RsIA>
+    <xmx:ylbdYL2QKe6HrJ9g9GfiohjqCn2ziW1pdFIyRHG35K-8BausVUbSzw>
+    <xmx:ylbdYK7vITnO-eFx1voJeB3S-ylq4cf-T4iVIa6cqZIr6O0YiAHysw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 1 Jul 2021 01:46:49 -0400 (EDT)
+Date:   Thu, 1 Jul 2021 08:46:46 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        David Ahern <dsahern@gmail.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/4] selftests: forwarding: Test redirecting gre
+ or ipip packets to Ethernet
+Message-ID: <YN1Wxm0mOFFhbuTl@shredder>
+References: <cover.1625056665.git.gnault@redhat.com>
+ <0a4e63cd3cde3c71cfc422a7f0f5e9bc76c0c1f5.1625056665.git.gnault@redhat.com>
 MIME-Version: 1.0
-References: <20210630233950.1638536-1-rmoar@google.com>
-In-Reply-To: <20210630233950.1638536-1-rmoar@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 30 Jun 2021 17:48:20 -0700
-Message-ID: <CAGS_qxoGAw8sSHQDS-xR6M6ocJYY5DTbtHLebsdFE41K1euPNg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Fix error messages for cases of no tests and
- wrong TAP header
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com, shuah@kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a4e63cd3cde3c71cfc422a7f0f5e9bc76c0c1f5.1625056665.git.gnault@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 4:40 PM Rae Moar <rmoar@google.com> wrote:
->
-> This patch addresses misleading error messages reported by kunit_tool in
-> two cases. First, in the case of TAP output having an incorrect header
-> format or missing a header, the parser used to output an error message of
-> 'no tests run!'. Now the parser outputs an error message of 'could not
-> parse test results!'.
->
-> As an example:
->
-> Before:
-> $ ./tools/testing/kunit/kunit.py parse /dev/null
-> [ERROR] no tests run!
-> ...
->
-> After:
-> $ ./tools/testing/kunit/kunit.py parse /dev/null
-> [ERROR] could not parse test results!
-> ...
->
-> Second, in the case of TAP output with the correct header but no
-> tests, the parser used to output an error message of 'could not parse
-> test results!'. Now the parser outputs an error message of 'no tests
-> run!'.
->
-> As an example:
->
-> Before:
-> $ echo -e 'TAP version 14\n1..0' | ./tools/testing/kunit/kunit.py parse
-> [ERROR] could not parse test results!
->
-> After:
-> $ echo -e 'TAP version 14\n1..0' | ./tools/testing/kunit/kunit.py parse
-> [ERROR] no tests run!
->
-> Additionally, this patch also corrects the tests in kunit_tool_test.py
-> and adds a test to check the error in the case of TAP output with the
-> correct header but no tests (the log for this test was simplified from
-> the first version of this patch).
-
-Just as a note: usually people will mention changes between versions
-of a patch series just above the diffstat.
-Picking a random example from linux-kselftest:
-https://lore.kernel.org/linux-kselftest/20210630081202.4423-7-yangbo.lu@nxp.com/
-
-Note the extra "---" above those change notes, just like above the diffstat.
-
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-
-Thanks! Looks good to me.
-
-Just a note to others, this is a v2 of
-https://lore.kernel.org/linux-kselftest/20210629223541.1512296-1-rmoar@google.com/
-
-> ---
->  tools/testing/kunit/kunit_parser.py              |  6 ++++--
->  tools/testing/kunit/kunit_tool_test.py           | 16 +++++++++++++---
->  ...st_is_test_passed-no_tests_run_no_header.log} |  0
->  ...t_is_test_passed-no_tests_run_with_header.log |  2 ++
->  4 files changed, 19 insertions(+), 5 deletions(-)
->  rename tools/testing/kunit/test_data/{test_is_test_passed-no_tests_run.log => test_is_test_passed-no_tests_run_no_header.log} (100%)
->  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_with_header.log
->
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index c3c524b79db8..b88db3f51dc5 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -338,9 +338,11 @@ def bubble_up_suite_errors(test_suites: Iterable[TestSuite]) -> TestStatus:
->  def parse_test_result(lines: LineStream) -> TestResult:
->         consume_non_diagnostic(lines)
->         if not lines or not parse_tap_header(lines):
-> -               return TestResult(TestStatus.NO_TESTS, [], lines)
-> +               return TestResult(TestStatus.FAILURE_TO_PARSE_TESTS, [], lines)
->         expected_test_suite_num = parse_test_plan(lines)
-> -       if not expected_test_suite_num:
-> +       if expected_test_suite_num == 0:
-> +               return TestResult(TestStatus.NO_TESTS, [], lines)
-> +       elif expected_test_suite_num is None:
->                 return TestResult(TestStatus.FAILURE_TO_PARSE_TESTS, [], lines)
->         test_suites = []
->         for i in range(1, expected_test_suite_num + 1):
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index bdae0e5f6197..75045aa0f8a1 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -157,8 +157,18 @@ class KUnitParserTest(unittest.TestCase):
->                         kunit_parser.TestStatus.FAILURE,
->                         result.status)
->
-> +       def test_no_header(self):
-> +               empty_log = test_data_path('test_is_test_passed-no_tests_run_no_header.log')
-> +               with open(empty_log) as file:
-> +                       result = kunit_parser.parse_run_tests(
-> +                               kunit_parser.extract_tap_lines(file.readlines()))
-> +               self.assertEqual(0, len(result.suites))
-> +               self.assertEqual(
-> +                       kunit_parser.TestStatus.FAILURE_TO_PARSE_TESTS,
-> +                       result.status)
-> +
->         def test_no_tests(self):
-> -               empty_log = test_data_path('test_is_test_passed-no_tests_run.log')
-> +               empty_log = test_data_path('test_is_test_passed-no_tests_run_with_header.log')
->                 with open(empty_log) as file:
->                         result = kunit_parser.parse_run_tests(
->                                 kunit_parser.extract_tap_lines(file.readlines()))
-> @@ -173,7 +183,7 @@ class KUnitParserTest(unittest.TestCase):
->                 with open(crash_log) as file:
->                         result = kunit_parser.parse_run_tests(
->                                 kunit_parser.extract_tap_lines(file.readlines()))
-> -               print_mock.assert_any_call(StrContains('no tests run!'))
-> +               print_mock.assert_any_call(StrContains('could not parse test results!'))
->                 print_mock.stop()
->                 file.close()
->
-> @@ -309,7 +319,7 @@ class KUnitJsonTest(unittest.TestCase):
->                         result["sub_groups"][1]["test_cases"][0])
->
->         def test_no_tests_json(self):
-> -               result = self._json_for('test_is_test_passed-no_tests_run.log')
-> +               result = self._json_for('test_is_test_passed-no_tests_run_with_header.log')
->                 self.assertEqual(0, len(result['sub_groups']))
->
->  class StrContains(str):
-> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run.log b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_no_header.log
-> similarity index 100%
-> rename from tools/testing/kunit/test_data/test_is_test_passed-no_tests_run.log
-> rename to tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_no_header.log
-> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_with_header.log b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_with_header.log
+On Wed, Jun 30, 2021 at 02:51:38PM +0200, Guillaume Nault wrote:
+> diff --git a/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh b/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh
 > new file mode 100644
-> index 000000000000..5f48ee659d40
+> index 000000000000..4c0bf2d7328a
 > --- /dev/null
-> +++ b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_with_header.log
-> @@ -0,0 +1,2 @@
-> +TAP version 14
-> +1..0
-> --
-> 2.32.0.93.g670b81a890-goog
->
+> +++ b/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh
+> @@ -0,0 +1,267 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +# A chain of 4 nodes connected with veth pairs.
+> +# Each node lives in its own network namespace.
+
+Hi,
+
+The tests under tools/testing/selftests/net/forwarding/ are meant to use
+VRFs as lightweight namespaces. This allows us to run the tests on both
+physical switches with loopback cables and veth pairs, thereby
+validating both the hardware and software datapaths.
+
+See tools/testing/selftests/net/forwarding/README
+
+If the tests cannot be converted to VRFs, then I suggest moving them to
+tools/testing/selftests/net/
+
+> +# Each veth interface has an IPv4 and an IPv6 address. A host route provides
+> +# connectivity to the adjacent node. This base network only allows nodes to
+> +# communicate with their immediate neighbours.
+> +#
+> +# The two nodes at the extremities of the chain also have 4 host IPs on their
+> +# loopback device:
+> +#   * An IPv4 address, routed as is to the adjacent router.
+> +#   * An IPv4 address, routed over MPLS to the adjacent router.
+> +#   * An IPv6 address, routed as is to the adjacent router.
+> +#   * An IPv6 address, routed over MPLS to the adjacent router.
+> +#
+> +# This topology doesn't define how RTA and RTB handle these packets: users of
+> +# this script are responsible for the plumbing between RTA and RTB.
+> +#
+> +# As each veth connects two different namespaces, their MAC and IP addresses
+> +# are defined depending on the local and remote namespaces. For example
+> +# veth-h1-rta, which sits in H1 and links to RTA, has MAC address
+> +# 00:00:5e:00:53:1a, IPv4 192.0.2.0x1a and IPv6 2001:db8::1a, where "1a" means
+> +# that it's in H1 and links to RTA (the rest of each address is always built
+> +# from a IANA documentation prefix).
+> +#
+> +# Routed addresses in H1 and H2 on the other hand encode the routing type (with
+> +# or without MPLS encapsulation) and the namespace the address resides in. For
+> +# example H2 has 198.51.100.2 and 2001:db8::1:2, that are routed as is through
+> +# RTB. It also has 198.51.100.0x12 and 2001:db8::1:12, that are routed through
+> +# RTB with MPLS encapsulation.
+> +#
+> +# For clarity, the prefixes used for host IPs are different from the ones used
+> +# on the veths.
+> +#
+> +# The MPLS labels follow a similar principle: the first digit represents the
+> +# IP version of the encapsulated packet ("4" for IPv4, "6" for IPv6), the
+> +# second digit represents the destination host ("1" for H1, "2" for H2).
+> +#
+> +# +----------------------------------------------------+
+> +# |                    Host 1 (H1)                     |
+> +# |                                                    |
+> +# |   lo                                               |
+> +# |     198.51.100.1    (for plain IPv4)               |
+> +# |     2001:db8::1:1   (for plain IPv6)               |
+> +# |     198.51.100.0x11 (for IPv4 over MPLS, label 42) |
+> +# |     2001:db8::1:11  (for IPv6 over MPLS, label 62) |
+> +# |                                                    |
+> +# | + veth-h1-rta                                      |
+> +# | |   192.0.2.0x1a                                   |
+> +# | |   2001:db8::1a                                   |
+> +# +-|--------------------------------------------------+
+> +#   |
+> +# +-|--------------------+
+> +# | |  Router A (RTA)    |
+> +# | |                    |
+> +# | + veth-rta-h1        |
+> +# |     192.0.2.0xa1     |
+> +# |     2001:db8::a1     |
+> +# |                      |
+> +# | + veth-rta-rtb       |
+> +# | |   192.0.2.0xab     |
+> +# | |   2001:db8::ab     |
+> +# +-|--------------------+
+> +#   |
+> +# +-|--------------------+
+> +# | |  Router B (RTB)    |
+> +# | |                    |
+> +# | + veth-rtb-rta       |
+> +# |     192.0.2.0xba     |
+> +# |     2001:db8::ba     |
+> +# |                      |
+> +# | + veth-rtb-h2        |
+> +# | |   192.0.2.0xb2     |
+> +# | |   2001:db8::b2     |
+> +# +-|--------------------+
+> +#   |
+> +# +-|--------------------------------------------------+
+> +# | |                  Host 2 (H2)                     |
+> +# | |                                                  |
+> +# | + veth-h2-rtb                                      |
+> +# |     192.0.2.0x2b                                   |
+> +# |     2001:db8::2b                                   |
+> +# |                                                    |
+> +# |   lo                                               |
+> +# |     198.51.100.2    (for plain IPv4)               |
+> +# |     2001:db8::1:2   (for plain IPv6)               |
+> +# |     198.51.100.0x12 (for IPv4 over MPLS, label 41) |
+> +# |     2001:db8::1:12  (for IPv6 over MPLS, label 61) |
+> +# +----------------------------------------------------+
+> +#
+> +# This topology can be used for testing different routing or switching
+> +# scenarios, as H1 and H2 are pre-configured for sending different kinds of
+> +# packets (IPv4, IPv6, with or without MPLS encapsulation), which RTA and RTB
+> +# can easily match and process according to the forwarding mechanism to test.
