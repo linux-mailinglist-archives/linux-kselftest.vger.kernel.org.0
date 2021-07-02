@@ -2,107 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BA53B9DA1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jul 2021 10:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB65B3B9DAE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jul 2021 10:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbhGBIn0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jul 2021 04:43:26 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:9444 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbhGBIn0 (ORCPT
+        id S230256AbhGBIsy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jul 2021 04:48:54 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:13052 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230166AbhGBIsy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jul 2021 04:43:26 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GGT3r3MkHzZpPK;
-        Fri,  2 Jul 2021 16:37:44 +0800 (CST)
+        Fri, 2 Jul 2021 04:48:54 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GGTB815PLzZkn2;
+        Fri,  2 Jul 2021 16:43:12 +0800 (CST)
 Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 2 Jul 2021 16:40:48 +0800
+ 15.1.2176.2; Fri, 2 Jul 2021 16:46:20 +0800
 Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
  (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Fri, 2 Jul 2021
- 16:40:48 +0800
-Subject: Re: [Linuxarm] Re: [PATCH net-next v3 2/3] ptr_ring: move r->queue[]
- clearing after r->consumer_head updating
-To:     Jason Wang <jasowang@redhat.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <mst@redhat.com>
-CC:     <brouer@redhat.com>, <paulmck@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>, <shuah@kernel.org>,
+ 16:46:19 +0800
+Subject: Re: [PATCH net-next v3 1/3] selftests/ptr_ring: add benchmark
+ application for ptr_ring
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+CC:     Jason Wang <jasowang@redhat.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <brouer@redhat.com>, <paulmck@kernel.org>,
+        <peterz@infradead.org>, <will@kernel.org>, <shuah@kernel.org>,
         <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
 References: <1625142402-64945-1-git-send-email-linyunsheng@huawei.com>
- <1625142402-64945-3-git-send-email-linyunsheng@huawei.com>
- <230f0b91-fe92-c53f-4df0-ec36c7c6e223@redhat.com>
+ <1625142402-64945-2-git-send-email-linyunsheng@huawei.com>
+ <e1ec4577-a48f-ff56-b766-1445c2501b9f@redhat.com>
+ <91bcade8-f034-4bc7-f329-d5e1849867e7@huawei.com>
+ <20210702042838-mutt-send-email-mst@kernel.org>
 From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <00b5d5d6-a5ee-94c3-1c9b-81fd32e5d9e2@huawei.com>
-Date:   Fri, 2 Jul 2021 16:40:47 +0800
+Message-ID: <661a84bc-e7c5-bc21-25ac-75a68efa79ca@huawei.com>
+Date:   Fri, 2 Jul 2021 16:46:19 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
  Thunderbird/52.2.0
 MIME-Version: 1.0
-In-Reply-To: <230f0b91-fe92-c53f-4df0-ec36c7c6e223@redhat.com>
+In-Reply-To: <20210702042838-mutt-send-email-mst@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme718-chm.china.huawei.com (10.1.199.114) To
+X-ClientProxiedBy: dggeme709-chm.china.huawei.com (10.1.199.105) To
  dggpemm500005.china.huawei.com (7.185.36.74)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2021/7/2 14:45, Jason Wang wrote:
-> 
-> 在 2021/7/1 下午8:26, Yunsheng Lin 写道:
->> Currently r->queue[] clearing is done before r->consumer_head
->> updating, which makes the __ptr_ring_empty() returning false
->> positive result(the ring is non-empty, but __ptr_ring_empty()
->> suggest that it is empty) if the checking is done after the
->> r->queue clearing and before the consumer_head moving forward.
+On 2021/7/2 16:30, Michael S. Tsirkin wrote:
+> On Fri, Jul 02, 2021 at 04:17:17PM +0800, Yunsheng Lin wrote:
+>>> Let's reuse ptr_ring.c in tools/virtio/ringtest. Nothing virt specific there.
 >>
->> Move the r->queue[] clearing after consumer_head moving forward
->> to avoid the above case.
+>> It *does* have some virtio specific at the end of ptr_ring.c.
+>> It can be argued that the ptr_ring.c in tools/virtio/ringtest
+>> could be refactored to remove the function related to virtio.
 >>
->> As a side effect of above change, a consumer_head checking is
->> avoided for the likely case, and it has noticeable performance
->> improvement when it is tested using the ptr_ring_test selftest
->> added in the previous patch.
->>
->> Tested using the "perf stat -r 1000 ./ptr_ring_test -s 1000 -m 1
->> -N 100000000", comparing the elapsed time:
->>
->>   arch     unpatched           patched       improvement
->> arm64    2.087205 sec       1.888224 sec      +9.5%
->>   X86      2.6538 sec         2.5422 sec       +4.2%
+>> But as mentioned in the previous disscusion [1], the tools/virtio/
+>> seems to have compile error in the latest kernel, it does not seems
+>> right to reuse that.
+>> And most of testcase in tools/virtio/ seems
+>> better be in tools/virtio/ringtest instead，so until the testcase
+>> in tools/virtio/ is compile-error-free and moved to tools/testing/
+>> selftests/, it seems better not to reuse it for now.
 > 
 > 
-> I think we need the number of real workloads here.
+> That's a great reason to reuse - so tools/virtio/ stays working.
+> Please just fix that.
 
-As it is a low optimization, and overhead of enqueuing
-and dequeuing is small for any real workloads, so the
-performance improvement could be buried in deviation.
-And that is why the ptr_ring_test is added, the about
-10% improvement for arm64 seems big, but note that it
-is tested using the taskset to avoid the numa effects
-for arm64.
+I understand that you guys like to see a working testcase of virtio.
+I would love to do that if I have the time and knowledge of virtio,
+But I do not think I have the time and I am familiar enough with
+virtio to fix that now.
 
-Anyway, here is the performance data for pktgen in
-queue_xmit mode + dummy netdev with pfifo_fast(which
-uses ptr_ring too), which is not obvious to the above
-data:
-
- threads    unpatched        unpatched        delta
-    1       3.21Mpps         3.23Mpps         +0.6%
-    2       5.56Mpps         3.59Mpps         +0.5%
-    4       5.58Mpps         5.61Mpps         +0.5%
-    8       2.76Mpps         2.75Mpps         -0.3%
-   16       2.23Mpps         2.22Mpps         -0.4%
 
 > 
-> Thanks
-> 
-> 
->>
->> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-
