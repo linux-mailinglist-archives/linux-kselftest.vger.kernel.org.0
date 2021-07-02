@@ -2,102 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67983BA25A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jul 2021 16:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8113BA26F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jul 2021 17:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbhGBOvI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jul 2021 10:51:08 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:36469 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbhGBOvH (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jul 2021 10:51:07 -0400
-Received: from mail-ej1-f69.google.com ([209.85.218.69])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lzKT5-0002z3-16
-        for linux-kselftest@vger.kernel.org; Fri, 02 Jul 2021 14:48:35 +0000
-Received: by mail-ej1-f69.google.com with SMTP id gz14-20020a170907a04eb02904d8b261b40bso210473ejc.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jul 2021 07:48:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=E3fm4PSTtOv+VeUKIOpm5uwdfF3VUPJyTCLKCZ6r/jg=;
-        b=KbH9kRYAHKLZhcXq/ENRoHJaAvhks4IcOCNC3jaJKHZCyw+i27ahTcx8qfGehqkwL5
-         DCj3D1d6JY9Bp1yPYjGwSyXEiXEW+6VhFUsadbcDRUDze6/Raij8r8LUwMmBY9Q2E7nb
-         oLE+w2EkOiMGmcgoYOxYUto9HnOp7Q+vXhyL7JuzD0e14FuurGJo3dLKWJI0MFePmT0n
-         488iZYMpgBRpY990FETDO54MvcLLrR6NmIjGeYeS2pBUp9PEdj4LMynseKEpk3TlvYiQ
-         0SZIZmoWThuEW91rvL2wl6nwlEXaDy+junm1DN9KcdQrmuySsxGYNlyt/ooccv2w0SPE
-         PhQw==
-X-Gm-Message-State: AOAM530q/97T0KIpdyCLhrHGo6Rpw2gRFdqgKAKFmVnVkso7fn4CwkXq
-        b9f7qIDKpNBVNveAZ9n8WhcWVb0sl5US/NeoPmF4bZ8blfg2o4UK7X6mxipsspblAYqH++6EW4N
-        zbE6BGLNRDofI7qvDWvww0gMqqKHQPn3ibQMhRjBv9M+Fjg==
-X-Received: by 2002:a17:907:3faa:: with SMTP id hr42mr60774ejc.129.1625237313610;
-        Fri, 02 Jul 2021 07:48:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw1rEKL5Sk3ceYHgC0DEX16Oa7GmwYVxNFSfGc1NYAIUVgHauj+BPRu6HmN+WHkoay4zgEsQg==
-X-Received: by 2002:a17:907:3faa:: with SMTP id hr42mr60765ejc.129.1625237313487;
-        Fri, 02 Jul 2021 07:48:33 -0700 (PDT)
-Received: from [192.168.1.115] (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
-        by smtp.gmail.com with ESMTPSA id k21sm1438873edr.90.2021.07.02.07.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jul 2021 07:48:32 -0700 (PDT)
-Subject: Re: [PATCH] selftests: memory-hotplug: avoid spamming logs with
- dump_page(), ratio limit hot-remove error test
-To:     Paolo Pisati <paolo.pisati@canonical.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210630145740.54614-1-paolo.pisati@canonical.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <1881c379-d752-6850-1a1a-fd217eb4a661@canonical.com>
-Date:   Fri, 2 Jul 2021 16:48:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232516AbhGBPEN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jul 2021 11:04:13 -0400
+Received: from mout.gmx.net ([212.227.17.22]:45667 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231991AbhGBPEM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Jul 2021 11:04:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1625238017;
+        bh=zidR5285gxvu2arbyxmhDqg6e5LTCzi9fQLp50nBsWk=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=DuwxOwI7319Lhx+I9Dc37PZMe6AbuRiW2QGky5FKmFl1Xg9YxF2MVb5pznrGmPGSG
+         jDEfrCCNH/5D0owzJ+rQfsut4w+8PVHn04RN3vsa/vy15PQMMDwtv0vo+XZM4BbQRQ
+         BbuJ3M+fhEcG2fy8ysO3Su1QGNK3ABFykt/t90p8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ubuntu ([83.52.228.41]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MxDkm-1l29Sj2INE-00xaUC; Fri, 02
+ Jul 2021 17:00:17 +0200
+Date:   Fri, 2 Jul 2021 16:59:54 +0200
+From:   John Wood <john.wood@gmx.com>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     John Wood <john.wood@gmx.com>, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Arnd Bergmann <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>,
+        valdis.kletnieks@vt.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: Re: [PATCH v8 3/8] security/brute: Detect a brute force attack
+Message-ID: <20210702145954.GA4513@ubuntu>
+References: <20210701234807.50453-1-alobakin@pm.me>
 MIME-Version: 1.0
-In-Reply-To: <20210630145740.54614-1-paolo.pisati@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210701234807.50453-1-alobakin@pm.me>
+X-Provags-ID: V03:K1:dlN1ofh6LpaEb5MwTI60oBZZOzpxRydjUFLx8+d3q3xlDqOLQ/g
+ AseUQcRVOSgw+y90S5R3RUUGkX4oXSPdXODz7muskTdGNG4XTvD+dI31GrvERxszJqmj3O+
+ NGR5HMBSM0ueD0/qczK9UGA5RkFsMcK72AJTDElYA0GJzeW/4Rjit8KMkEtMMq+A508WvZ1
+ 9CbOiefkEzVVJqbrQIGyQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9i/ZvK/cQjw=:a39Z0eLmluy9VDDGJKeaLg
+ TvSqt9FDYwL9BX/25PlbGRXeBfVdd3fgvyeCfs3Cp+XW92EKF2euJ/2+8TNV7UogXY/OPVI6H
+ FiS43ZCv15Ssd8V0eSkpzvQ5M7jHPHu341L84wtUpSzP0G21MSQnvItwJXbGogBsXNar813oT
+ SUjE4WB1mmj64Lhvz5tEcgxk09x+e3yVDtMStATKQafRV93kysgYntaYek7y+rvnVs+Jz9cho
+ 6ftPnQa7oB+fiBrMlvv18UPBM7FYSf5xmj0eyeAcUEngS6J9NnI7vje+YtPv01oFwp53wRMo7
+ Ui1yNLxR6D8tkXq4NAl9MqRVsX0/VbkYgti+7sEL7SXbC8sVtjhNTkCafaP8hGK6fDHserJxV
+ 6MwKbHRunfIlcT6k/5PukZ7cCcG/lwCBLu1BsGz7mJ/H2qiTr9btN92/xs1280gM/u4bTToHc
+ NugNiuR3cZ786M2B2/Qgy6SkwwlRn5b8nIZhWGt30TwI+FU2acVkPZZMqBL7krRB2ftGc32yg
+ 7qv+UruXZ9hYUEi9NSWXhlv0enDJDSEaFoMuU3WCSKx/hmRDlhI66InBaQMe0FQa8svHAzLFb
+ MK7kCn3InBuncnfy+7rF6WUovWzYH51ZqwRXwND50Rbd2KoPpM1AxqVEgql8erI+4ixdfGjSE
+ PrB7w+qQCOLJoT6NtZm5wi7RwlrDounjK5jV1+HzoIXxDcJhS1wpkpT6Bjl1YwB0mrvrtJykq
+ yc1ExbKWcfNOpVAOiDjblN+wy5gHGKO/aFv+OsZ+RKgENsFFnR/QsUU3bqkuvHtb7u+UEIJxd
+ 2HQJgnYxNvMR42G6Q8uozh9FR4jXey86VfhsQO/grEelJeTnD+rtyRXSvQxEysyvT1sSqvDKq
+ lG1OOsPrGn5mwDQHGHrbZWaqXGfVuCM2SqplAnLo0N2FVoAWq8XZEBa0dW5WNW33PEheDT9L1
+ J04TS0Npus+qiII4tcAjQEdRAVaaxJAvqNL9m5HkkZd57G3s8GNl7Wx73D26baD632LFja3Z+
+ Ou5+ote2Rp99OhcFduh5OZLItt1JTTby/dwq6pvw7wAYOSQTUoAtVx4/cNM6tHxSm40iEhx/B
+ CPtyjW63bPVQErsJmi9gsJiBsN5L7c5lBy1
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 30/06/2021 16:57, Paolo Pisati wrote:
-> While the offline memory test obey ratio limit, the same test with error
-> injection does not and tries to offline all the hotpluggable memory, spamming
-> system logs with hundreds of thousands of dump_page() entries, slowing system
-> down (to the point the test itself timeout and gets terminated) and excessive fs
-> occupation:
-> 
-> ...
-> [ 9784.393354] page:c00c0000007d1b40 refcount:3 mapcount:0 mapping:c0000001fc03e950 index:0xe7b
-> [ 9784.393355] def_blk_aops
-> [ 9784.393356] flags: 0x3ffff800002062(referenced|active|workingset|private)
-> [ 9784.393358] raw: 003ffff800002062 c0000001b9343a68 c0000001b9343a68 c0000001fc03e950
-> [ 9784.393359] raw: 0000000000000e7b c000000006607b18 00000003ffffffff c00000000490d000
-> [ 9784.393359] page dumped because: migration failure
-> [ 9784.393360] page->mem_cgroup:c00000000490d000
-> [ 9784.393416] migrating pfn 1f46d failed ret:1
-> ...
-> 
-> $ grep "page dumped because: migration failure" /var/log/kern.log | wc -l
-> 2405558
-> 
-> $ ls -la /var/log/kern.log
-> -rw-r----- 1 syslog adm 2256109539 Jun 30 14:19 /var/log/kern.log
+Hi,
 
-Makes sense to me and looks better choice than to disable the test
-completely (as other choice...).
+On Thu, Jul 01, 2021 at 11:55:14PM +0000, Alexander Lobakin wrote:
+> Hi,
+>
+> From: John Wood <john.wood@gmx.com>
+> Date: Sat, 5 Jun 2021 17:04:00 +0200
+>
+> > +static int brute_task_execve(struct linux_binprm *bprm, struct file *=
+file)
+> > +{
+> > +	struct dentry *dentry =3D file_dentry(bprm->file);
+> > +	struct inode *inode =3D file_inode(bprm->file);
+> > +	struct brute_stats stats;
+> > +	int rc;
+> > +
+> > +	inode_lock(inode);
+> > +	rc =3D brute_get_xattr_stats(dentry, inode, &stats);
+> > +	if (WARN_ON_ONCE(rc && rc !=3D -ENODATA))
+> > +		goto unlock;
+>
+> I think I caught a problem here. Have you tested this with
+> initramfs?
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+No, it has not been tested with initramfs :(
 
-> 
-> Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
-> ---
->  tools/testing/selftests/memory-hotplug/mem-on-off-test.sh | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-Best regards,
-Krzysztof
+> According to init/do_mount.c's
+> init_rootfs()/rootfs_init_fs_context(), when `root=3D` cmdline
+> parameter is not empty, kernel creates rootfs of type ramfs
+> (tmpfs otherwise).
+> The thing about ramfs is that it doesn't support xattrs.
+
+It is a known issue that systems without xattr support are not
+suitable for Brute (there are a note in the documentation).
+However, the purpose is not to panic the system :(
+
+> I'm running this v8 on a regular PC with initramfs and having
+> `root=3D` in cmdline, and Brute doesn't allow the kernel to run
+> any init processes (/init, /sbin/init, ...) with err =3D=3D -95
+> (-EOPNOTSUPP) -- I'm getting a
+>
+> WARNING: CPU: 0 PID: 173 at brute_task_execve+0x15d/0x200
+> <snip>
+> Failed to execute /init (error -95)
+>
+> and so on (and a panic at the end).
+>
+> If I omit `root=3D` from cmdline, then the kernel runs init process
+> just fine -- I guess because initramfs is then placed inside tmpfs
+> with xattr support.
+>
+> As for me, this ramfs/tmpfs selection based on `root=3D` presence
+> is ridiculous and I don't see or know any reasons behind that.
+> But that's another story, and ramfs might be not the only one
+> system without xattr support.
+> I think Brute should have a fallback here, e.g. it could simply
+> ignore files from xattr-incapable filesystems instead of such
+> WARNING splats and stuff.
+
+Ok, it seems reasonable to me: if the file system doesn't support
+xattr, but Brute is enabled, Brute will do nothing and the system
+will work normally.
+
+I will work on it for the next version.
+Thanks for the feedback.
+
+John Wood
