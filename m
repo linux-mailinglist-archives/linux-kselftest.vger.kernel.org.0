@@ -2,124 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7C93BA20F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jul 2021 16:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67983BA25A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jul 2021 16:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbhGBOV3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jul 2021 10:21:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59992 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232835AbhGBOV2 (ORCPT
+        id S231927AbhGBOvI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jul 2021 10:51:08 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:36469 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232381AbhGBOvH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jul 2021 10:21:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625235536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7Tmnk6NTqIwQaw9HO12m6EJuJudAO8fFlW1SWYpJaZU=;
-        b=UObia4gWuxmNFTkchUrywcFcQbJuUW4XDuRHzmX/2V5wUqeXUzkSfSHhxwuSVIKkLMk7Sc
-        zK33mL+C5DmYb3QrPYBYEErTbWsrEqpafMSyd7H9g1g5KS6UVWBXvOt+hkztBjabwYSReR
-        BSw9KmZfSCY4DOHgtvyr+j2MEwJ1rhU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-465-VjUVCsp4OYOXpcgJud6odw-1; Fri, 02 Jul 2021 10:18:55 -0400
-X-MC-Unique: VjUVCsp4OYOXpcgJud6odw-1
-Received: by mail-wm1-f71.google.com with SMTP id u64-20020a1cdd430000b02901ed0109da5fso6312599wmg.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jul 2021 07:18:54 -0700 (PDT)
+        Fri, 2 Jul 2021 10:51:07 -0400
+Received: from mail-ej1-f69.google.com ([209.85.218.69])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lzKT5-0002z3-16
+        for linux-kselftest@vger.kernel.org; Fri, 02 Jul 2021 14:48:35 +0000
+Received: by mail-ej1-f69.google.com with SMTP id gz14-20020a170907a04eb02904d8b261b40bso210473ejc.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jul 2021 07:48:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7Tmnk6NTqIwQaw9HO12m6EJuJudAO8fFlW1SWYpJaZU=;
-        b=jhdsXm6PRstDFliwigRi0393nklSKQlawDTzu2cc3Td5kv/TgA8j+eaJNnAQOqYt2r
-         AyjVWsU9gLzCYtG7KxIcC6sKHytmClaz45hfw9yKGjoV2xFUJm1i+npspcgkIm1ZPeOO
-         1nCiy+9I4ateW+kODcdIB0yk+AN6f7lV6nJ9BEgBS4h8sGVo6QTXHawVImfWigiQLBYK
-         GNA9Pmi7xchbUiATfELVM09fKvXnZVFZMYmuYSKdOM08sUxB6Y2/MFxtse4PMbLHYFxe
-         Fudru/hZKlPEM9PJFM3z6WHynerwV2t6KdVLluPkv+Q+H52P7HLcfKgT9VkNAc8hwMEK
-         9Omg==
-X-Gm-Message-State: AOAM530XnR4/mDm1MZqJZojFlrdzCFUC7Cb62Wp5eCURu6OyrkHYfc9H
-        QlVi1Y8o6LPMI8MFkNs8/jVCpGiSqWM3CUZAsY2xzcj96cpA13N/Ff1s8qKqEtaB9ql5TUXRdfm
-        Iox07nMMeSBglZ1s3LM4wfCZVZr+N
-X-Received: by 2002:a5d:6cca:: with SMTP id c10mr6354684wrc.166.1625235533951;
-        Fri, 02 Jul 2021 07:18:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwOrt5j3Tz6hpHgUZechMmvug4vqpFGOeg7tNyylDFDYJIBJWiPhZTe1usBN5qw3c9nmrTYww==
-X-Received: by 2002:a5d:6cca:: with SMTP id c10mr6354671wrc.166.1625235533812;
-        Fri, 02 Jul 2021 07:18:53 -0700 (PDT)
-Received: from redhat.com ([2.55.4.39])
-        by smtp.gmail.com with ESMTPSA id w13sm3653960wrl.47.2021.07.02.07.18.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jul 2021 07:18:41 -0700 (PDT)
-Date:   Fri, 2 Jul 2021 10:18:37 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     Jason Wang <jasowang@redhat.com>, davem@davemloft.net,
-        kuba@kernel.org, brouer@redhat.com, paulmck@kernel.org,
-        peterz@infradead.org, will@kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linuxarm@openeuler.org
-Subject: Re: [PATCH net-next v3 1/3] selftests/ptr_ring: add benchmark
- application for ptr_ring
-Message-ID: <20210702101730-mutt-send-email-mst@kernel.org>
-References: <1625142402-64945-1-git-send-email-linyunsheng@huawei.com>
- <1625142402-64945-2-git-send-email-linyunsheng@huawei.com>
- <e1ec4577-a48f-ff56-b766-1445c2501b9f@redhat.com>
- <91bcade8-f034-4bc7-f329-d5e1849867e7@huawei.com>
- <20210702042838-mutt-send-email-mst@kernel.org>
- <661a84bc-e7c5-bc21-25ac-75a68efa79ca@huawei.com>
- <1fed53f1-f882-ca67-8876-ca6702dcd9cd@redhat.com>
- <06f0dc67-d614-30d3-6dcc-f2446cb6030b@huawei.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=E3fm4PSTtOv+VeUKIOpm5uwdfF3VUPJyTCLKCZ6r/jg=;
+        b=KbH9kRYAHKLZhcXq/ENRoHJaAvhks4IcOCNC3jaJKHZCyw+i27ahTcx8qfGehqkwL5
+         DCj3D1d6JY9Bp1yPYjGwSyXEiXEW+6VhFUsadbcDRUDze6/Raij8r8LUwMmBY9Q2E7nb
+         oLE+w2EkOiMGmcgoYOxYUto9HnOp7Q+vXhyL7JuzD0e14FuurGJo3dLKWJI0MFePmT0n
+         488iZYMpgBRpY990FETDO54MvcLLrR6NmIjGeYeS2pBUp9PEdj4LMynseKEpk3TlvYiQ
+         0SZIZmoWThuEW91rvL2wl6nwlEXaDy+junm1DN9KcdQrmuySsxGYNlyt/ooccv2w0SPE
+         PhQw==
+X-Gm-Message-State: AOAM530q/97T0KIpdyCLhrHGo6Rpw2gRFdqgKAKFmVnVkso7fn4CwkXq
+        b9f7qIDKpNBVNveAZ9n8WhcWVb0sl5US/NeoPmF4bZ8blfg2o4UK7X6mxipsspblAYqH++6EW4N
+        zbE6BGLNRDofI7qvDWvww0gMqqKHQPn3ibQMhRjBv9M+Fjg==
+X-Received: by 2002:a17:907:3faa:: with SMTP id hr42mr60774ejc.129.1625237313610;
+        Fri, 02 Jul 2021 07:48:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw1rEKL5Sk3ceYHgC0DEX16Oa7GmwYVxNFSfGc1NYAIUVgHauj+BPRu6HmN+WHkoay4zgEsQg==
+X-Received: by 2002:a17:907:3faa:: with SMTP id hr42mr60765ejc.129.1625237313487;
+        Fri, 02 Jul 2021 07:48:33 -0700 (PDT)
+Received: from [192.168.1.115] (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id k21sm1438873edr.90.2021.07.02.07.48.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jul 2021 07:48:32 -0700 (PDT)
+Subject: Re: [PATCH] selftests: memory-hotplug: avoid spamming logs with
+ dump_page(), ratio limit hot-remove error test
+To:     Paolo Pisati <paolo.pisati@canonical.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210630145740.54614-1-paolo.pisati@canonical.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <1881c379-d752-6850-1a1a-fd217eb4a661@canonical.com>
+Date:   Fri, 2 Jul 2021 16:48:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06f0dc67-d614-30d3-6dcc-f2446cb6030b@huawei.com>
+In-Reply-To: <20210630145740.54614-1-paolo.pisati@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 02, 2021 at 05:54:42PM +0800, Yunsheng Lin wrote:
-> On 2021/7/2 17:04, Jason Wang wrote:
-> > 
+On 30/06/2021 16:57, Paolo Pisati wrote:
+> While the offline memory test obey ratio limit, the same test with error
+> injection does not and tries to offline all the hotpluggable memory, spamming
+> system logs with hundreds of thousands of dump_page() entries, slowing system
+> down (to the point the test itself timeout and gets terminated) and excessive fs
+> occupation:
 > 
-> [...]
+> ...
+> [ 9784.393354] page:c00c0000007d1b40 refcount:3 mapcount:0 mapping:c0000001fc03e950 index:0xe7b
+> [ 9784.393355] def_blk_aops
+> [ 9784.393356] flags: 0x3ffff800002062(referenced|active|workingset|private)
+> [ 9784.393358] raw: 003ffff800002062 c0000001b9343a68 c0000001b9343a68 c0000001fc03e950
+> [ 9784.393359] raw: 0000000000000e7b c000000006607b18 00000003ffffffff c00000000490d000
+> [ 9784.393359] page dumped because: migration failure
+> [ 9784.393360] page->mem_cgroup:c00000000490d000
+> [ 9784.393416] migrating pfn 1f46d failed ret:1
+> ...
 > 
-> > 
-> > 
-> >> I understand that you guys like to see a working testcase of virtio.
-> >> I would love to do that if I have the time and knowledge of virtio,
-> >> But I do not think I have the time and I am familiar enough with
-> >> virtio to fix that now.
-> > 
-> > 
-> > So ringtest is used for bench-marking the ring performance for different format. Virtio is only one of the supported ring format, ptr ring is another. Wrappers were used to reuse the same test logic.
-> > 
-> > Though you may see host/guest in the test, it's in fact done via two processes.
-> > 
-> > We need figure out:
-> > 
-> > 1) why the current ringtest.c does not fit for your requirement (it has SPSC test)
+> $ grep "page dumped because: migration failure" /var/log/kern.log | wc -l
+> 2405558
 > 
-> There is MPSC case used by pfifo_fast, it make more sense to use a separate selftest
-> for ptr_ring as ptr_ring has been used by various subsystems.
-> 
-> 
-> > 2) why can't we tweak the ptr_ring.c to be used by both ring_test and your benchmark
-> 
-> Actually that is what I do in this patch, move the specific part related to ptr_ring
-> to ptr_ring_test.h. When the virtio testing is refactored to work, it can reuse the
-> abstract layer in ptr_ring_test.h too.
+> $ ls -la /var/log/kern.log
+> -rw-r----- 1 syslog adm 2256109539 Jun 30 14:19 /var/log/kern.log
 
-Sounds good. But that refactoring will be up to you as a contributor.
+Makes sense to me and looks better choice than to disable the test
+completely (as other choice...).
 
-> > 
-> > If neither of the above work, we can invent new ptr_ring infrastructure under tests/
-> > 
-> > Thanks
-> > 
-> > 
-> >>
-> >>
-> > 
-> > .
-> > 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
+> 
+> Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
+> ---
+>  tools/testing/selftests/memory-hotplug/mem-on-off-test.sh | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+Best regards,
+Krzysztof
