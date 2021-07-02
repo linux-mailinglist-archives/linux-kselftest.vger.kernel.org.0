@@ -2,186 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F723B9D6E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jul 2021 10:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CB93B9D8C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jul 2021 10:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbhGBITx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jul 2021 04:19:53 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:10237 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbhGBITx (ORCPT
+        id S230243AbhGBId1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jul 2021 04:33:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27664 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229519AbhGBId0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jul 2021 04:19:53 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GGSV43NdSz1BPTq;
-        Fri,  2 Jul 2021 16:11:56 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 2 Jul 2021 16:17:18 +0800
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Fri, 2 Jul 2021
- 16:17:18 +0800
+        Fri, 2 Jul 2021 04:33:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625214654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ebqrOg7XijUonFvzMVuLSVbgtaPdYEqUj8mLxx77yyo=;
+        b=gYqBAmEJ1MxYRjABYjxST3xWZGGGZK2clHZIRECjMo69cGRyGq4FW2wNVLjyXJe6PXQYAP
+        gA/33rRJ/yiQYmJwoAo2Y1X6fNXE7h6ngPSNLJIPeYWzncXVkUQHgHZX2rvl4PEQaMXhVL
+        mDDTLH76QGpJXalZK1Vg1fzIZ+ZDxp8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-282-XvFPiOnHM3qE07vA4BCepA-1; Fri, 02 Jul 2021 04:30:53 -0400
+X-MC-Unique: XvFPiOnHM3qE07vA4BCepA-1
+Received: by mail-wm1-f70.google.com with SMTP id z127-20020a1c7e850000b02901e46e4d52c0so5950520wmc.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jul 2021 01:30:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ebqrOg7XijUonFvzMVuLSVbgtaPdYEqUj8mLxx77yyo=;
+        b=b6WzWpubYlrJibt1U8XyDxovDN5gmrr7pj/yDoae4ZY2h71Vl7pEkQlXVwDGdQzM9K
+         nqic3UuBkuuYeYKMShjl/J1njP9h46jPCxhflF+oeX1UEMSMjz7sxzKv3xzqzPys/9Co
+         VBurel4NKedKIwaXvBL2DmoORwy3FkY97AkNRdurp5cDF+DO4FIWbCh+ouKwU3Ih1sTl
+         k6uC7M5LW6hxfq8q3NCDPgZTODIDZuiHK6uHAYDsQGMVK5YpL0JlJfGKlVBneOJ5sp9c
+         3HI8kuy06wZsPHzgyvsFpTuyBVor7QW6TR85R0auWax/vSo0mHawwHeQqXTSvcXqd4SV
+         glCw==
+X-Gm-Message-State: AOAM530VorFJPyqDjnS2SQhYs9LqyxadUOyzxhTtr1j8UCZzwIZP/upR
+        0RzB3Njtq+qhOk4K8WjshrdypsCJ2YavtdGV6TsANq50jSLE+1XYtpLyIaKdd3mZWlcoSGqGqjY
+        p0pM7DSbV2MH6+xBTb4tO1a6lVTsV
+X-Received: by 2002:adf:e6c4:: with SMTP id y4mr1967231wrm.4.1625214652708;
+        Fri, 02 Jul 2021 01:30:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx8uIwBip3ssxhZ0C7gznIuoJUVg/I2BZmKaIPk2T4beqCdTMa/NQLxn0hIFA0PybOGMb40GA==
+X-Received: by 2002:adf:e6c4:: with SMTP id y4mr1967207wrm.4.1625214652525;
+        Fri, 02 Jul 2021 01:30:52 -0700 (PDT)
+Received: from redhat.com ([2.55.143.136])
+        by smtp.gmail.com with ESMTPSA id k6sm897496wrx.41.2021.07.02.01.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jul 2021 01:30:51 -0700 (PDT)
+Date:   Fri, 2 Jul 2021 04:30:46 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Jason Wang <jasowang@redhat.com>, davem@davemloft.net,
+        kuba@kernel.org, brouer@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, will@kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linuxarm@openeuler.org
 Subject: Re: [PATCH net-next v3 1/3] selftests/ptr_ring: add benchmark
  application for ptr_ring
-To:     Jason Wang <jasowang@redhat.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <mst@redhat.com>
-CC:     <brouer@redhat.com>, <paulmck@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>, <shuah@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
+Message-ID: <20210702042838-mutt-send-email-mst@kernel.org>
 References: <1625142402-64945-1-git-send-email-linyunsheng@huawei.com>
  <1625142402-64945-2-git-send-email-linyunsheng@huawei.com>
  <e1ec4577-a48f-ff56-b766-1445c2501b9f@redhat.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <91bcade8-f034-4bc7-f329-d5e1849867e7@huawei.com>
-Date:   Fri, 2 Jul 2021 16:17:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+ <91bcade8-f034-4bc7-f329-d5e1849867e7@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <e1ec4577-a48f-ff56-b766-1445c2501b9f@redhat.com>
-Content-Type: text/plain; charset="gbk"
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme716-chm.china.huawei.com (10.1.199.112) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+In-Reply-To: <91bcade8-f034-4bc7-f329-d5e1849867e7@huawei.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2021/7/2 14:43, Jason Wang wrote:
+On Fri, Jul 02, 2021 at 04:17:17PM +0800, Yunsheng Lin wrote:
+> > Let's reuse ptr_ring.c in tools/virtio/ringtest. Nothing virt specific there.
 > 
-> ÔÚ 2021/7/1 ÏÂÎç8:26, Yunsheng Lin Ð´µÀ:
->> Currently ptr_ring selftest is embedded within the virtio
->> selftest, which involves some specific virtio operation,
->> such as notifying and kicking.
->>
->> As ptr_ring has been used by various subsystems, it deserves
->> it's owner selftest in order to benchmark different usecase
->> of ptr_ring, such as page pool and pfifo_fast qdisc.
->>
->> So add a simple application to benchmark ptr_ring performance.
->> Currently two test mode is supported:
->> Mode 0: Both producing and consuming is done in a single thread,
->>          it is called simple test mode in the test app.
->> Mode 1: Producing and consuming is done in different thread
->>          concurrently, also known as SPSC(single-producer/
->>          single-consumer) test.
->>
->> The multi-producer/single-consumer test for pfifo_fast case is
->> not added yet, which can be added if using CAS atomic operation
->> to enable lockless multi-producer is proved to be better than
->> using r->producer_lock.
->>
->> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
->> ---
->> V3: Remove timestamp sampling, use standard C library as much
->>      as possible.
-
-[...]
-
->> +static void *produce_worker(void *arg)
->> +{
->> +    struct worker_info *info = arg;
->> +    unsigned long i = 0;
->> +    int ret;
->> +
->> +    while (++i <= info->test_count) {
->> +        while (__ptr_ring_full(&ring))
->> +            cpu_relax();
->> +
->> +        ret = __ptr_ring_produce(&ring, (void *)i);
->> +        if (ret) {
->> +            fprintf(stderr, "produce failed: %d\n", ret);
->> +            info->error = true;
->> +            return NULL;
->> +        }
->> +    }
->> +
->> +    info->error = false;
->> +
->> +    return NULL;
->> +}
->> +
->> +static void *consume_worker(void *arg)
->> +{
->> +    struct worker_info *info = arg;
->> +    unsigned long i = 0;
->> +    int *ptr;
->> +
->> +    while (++i <= info->test_count) {
->> +        while (__ptr_ring_empty(&ring))
->> +            cpu_relax();
+> It *does* have some virtio specific at the end of ptr_ring.c.
+> It can be argued that the ptr_ring.c in tools/virtio/ringtest
+> could be refactored to remove the function related to virtio.
 > 
-> 
-> Any reason for not simply use __ptr_ring_consume() here?
+> But as mentioned in the previous disscusion [1], the tools/virtio/
+> seems to have compile error in the latest kernel, it does not seems
+> right to reuse that.
+> And most of testcase in tools/virtio/ seems
+> better be in tools/virtio/ringtest insteadï¼Œso until the testcase
+> in tools/virtio/ is compile-error-free and moved to tools/testing/
+> selftests/, it seems better not to reuse it for now.
 
-No particular reason, just to make sure the ring is
-non-empty before doing the enqueuing, we could check
-if the __ptr_ring_consume() return NULL to decide
-the if the ring is empty. Using __ptr_ring_consume()
-here enable testing the correctness and performance of
-__ptr_ring_consume() too.
 
-> 
-> 
->> +
->> +        ptr = __ptr_ring_consume(&ring);
->> +        if ((unsigned long)ptr != i) {
->> +            fprintf(stderr, "consumer failed, ptr: %lu, i: %lu\n",
->> +                (unsigned long)ptr, i);
->> +            info->error = true;
->> +            return NULL;
->> +        }
->> +    }
->> +
->> +    if (!__ptr_ring_empty(&ring)) {
->> +        fprintf(stderr, "ring should be empty, test failed\n");
->> +        info->error = true;
->> +        return NULL;
->> +    }
->> +
->> +    info->error = false;
->> +    return NULL;
->> +}
->> +
+That's a great reason to reuse - so tools/virtio/ stays working.
+Please just fix that.
 
-[...]
+-- 
+MST
 
->> +
->> +    return 0;
->> +}
->> diff --git a/tools/testing/selftests/ptr_ring/ptr_ring_test.h b/tools/testing/selftests/ptr_ring/ptr_ring_test.h
->> new file mode 100644
->> index 0000000..32bfefb
->> --- /dev/null
->> +++ b/tools/testing/selftests/ptr_ring/ptr_ring_test.h
-> 
-> 
-> Let's reuse ptr_ring.c in tools/virtio/ringtest. Nothing virt specific there.
-
-It *does* have some virtio specific at the end of ptr_ring.c.
-It can be argued that the ptr_ring.c in tools/virtio/ringtest
-could be refactored to remove the function related to virtio.
-
-But as mentioned in the previous disscusion [1], the tools/virtio/
-seems to have compile error in the latest kernel, it does not seems
-right to reuse that. And most of testcase in tools/virtio/ seems
-better be in tools/virtio/ringtest instead£¬so until the testcase
-in tools/virtio/ is compile-error-free and moved to tools/testing/
-selftests/, it seems better not to reuse it for now.
-
-1. https://patchwork.kernel.org/project/netdevbpf/patch/1624591136-6647-2-git-send-email-linyunsheng@huawei.com/#24278945
-
-> 
-> Thanks
-> 
-
-[...]
-
-> 
-> .
-> 
