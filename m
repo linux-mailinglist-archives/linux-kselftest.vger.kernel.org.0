@@ -2,108 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EA83BA84C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jul 2021 13:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98813BA948
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jul 2021 17:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbhGCLDn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 3 Jul 2021 07:03:43 -0400
-Received: from mout.gmx.net ([212.227.17.21]:53219 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230114AbhGCLDm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Jul 2021 07:03:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1625309984;
-        bh=x6a2MKj2i7ny1X6EqqStry+6FExFMd0ABQRz2nQeLYo=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Wiw7YHneNAj0vRJgTC3prnFX86jII+xEDVN++I+m01JfvLFWKYMxNJThVpPmfNaMr
-         0l1XkxxecRdMGd/ExVwB/L5tXY2XP/EGhE0aQbXZspLThbZgfj0sACe7WncRlHxXDF
-         B6jPov8MEaN5iDIh2XMcRMHpdZpAmshp2gYuSPWM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ubuntu ([83.52.228.41]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MC34X-1luSIn2S7R-00CSAc; Sat, 03
- Jul 2021 12:59:44 +0200
-Date:   Sat, 3 Jul 2021 12:59:28 +0200
-From:   John Wood <john.wood@gmx.com>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     John Wood <john.wood@gmx.com>, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>,
-        valdis.kletnieks@vt.edu,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v8 3/8] security/brute: Detect a brute force attack
-Message-ID: <20210703105928.GA2830@ubuntu>
-References: <20210701234807.50453-1-alobakin@pm.me>
- <20210702145954.GA4513@ubuntu>
- <20210702170101.16116-1-alobakin@pm.me>
+        id S229900AbhGCPyn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 3 Jul 2021 11:54:43 -0400
+Received: from mail-pf1-f181.google.com ([209.85.210.181]:46823 "EHLO
+        mail-pf1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229881AbhGCPym (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 3 Jul 2021 11:54:42 -0400
+Received: by mail-pf1-f181.google.com with SMTP id x16so11990242pfa.13;
+        Sat, 03 Jul 2021 08:52:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oo68TW9DgSUVOHXfjGhn1pVruxN7Vi+rmUDrhhmjqGk=;
+        b=EH8V3/YM0SnJpG0fLy5DmjYGhNALu42bFAcPrPvKDA3Db0zke1FFC7HjRo9WFUBL9y
+         pIBHJ0GGw8Vqtnmr0FrIqrCNjOVELXNeC1kEqnkY6yoHtohKAerIP9UN7zshO/sAPjGk
+         nrkNYLVtkfZCZ2uCUXZxFwWf2ptTPfxfhHjCYA3QYfn0Z2/ECyZOlEeBWOO308TJEngg
+         VK1iQb/q/YPYQp+nIKUZMFjoV2WS4sKHspKiyAzc9PQNY7nVO8my9pKIvC5QbijSwMvA
+         EdPPpxGV/VV+GvC1ZF9timCzMGRlnBBr8BIGSkl0u+CioEWBz0Y5aqihuA3i3nxEZApe
+         z4tw==
+X-Gm-Message-State: AOAM531yILSUYM4RvYfNP1+Du5ruAlqZPGUwgBq/gfApSetCpBrivFoi
+        CTal8ZkdSBGkjK8GxcJWHrY=
+X-Google-Smtp-Source: ABdhPJzNQPqKxMr/ILmboBMmzzhwe5Iy9/IlxGyDLKQ7tIKIQSWt/+iFKroY2npLRCWtlYdU1xJ6gQ==
+X-Received: by 2002:a63:af53:: with SMTP id s19mr4398378pgo.147.1625327528575;
+        Sat, 03 Jul 2021 08:52:08 -0700 (PDT)
+Received: from garbanzo ([191.96.121.144])
+        by smtp.gmail.com with ESMTPSA id p24sm7520656pfh.17.2021.07.03.08.52.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Jul 2021 08:52:07 -0700 (PDT)
+Date:   Sat, 3 Jul 2021 08:52:03 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     tj@kernel.org, shuah@kernel.org, akpm@linux-foundation.org,
+        Richard Fontana <fontana@sharpeleven.org>, rafael@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        andriin@fb.com, daniel@iogearbox.net, atenart@kernel.org,
+        alobakin@pm.me, weiwan@google.com, ap420073@gmail.com,
+        jeyu@kernel.org, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, minchan@kernel.org,
+        axboe@kernel.dk, mbenes@suse.com, jpoimboe@redhat.com,
+        tglx@linutronix.de, keescook@chromium.org, jikos@kernel.org,
+        rostedt@goodmis.org, peterz@infradead.org,
+        linux-block@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] selftests: add tests_sysfs module
+Message-ID: <20210703155203.uvxcolrddswecco6@garbanzo>
+References: <20210702050543.2693141-1-mcgrof@kernel.org>
+ <20210702050543.2693141-2-mcgrof@kernel.org>
+ <YN6iSKCetBrk2y8V@kroah.com>
+ <20210702190230.r46bck4vib7u3qo6@garbanzo>
+ <YN/rtmZbd6velB1L@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210702170101.16116-1-alobakin@pm.me>
-X-Provags-ID: V03:K1:IYa/f7HkDU74IlmbpIDqxZ4UnHLocuh2xK/SRcmGwjgHVE0HPwO
- uvk+ZKPo3XYM/EQ0BhfLQneFfb/z4C4sbQPYymJxVpCLHfTj4keZV746Dag/i+ohT+Tx1/V
- AzMPePnTmSZE/IiVBtMBldhthrEDhpmLHPUvlxEw3x6L7ewUJ/S8yXJnOJgUuMKIApCRwsB
- 4agKpfVPAEAY+DauJZ2HA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DDK8tn1k2vk=:EF86SSfY5Vi1KOs8AADY/a
- 3Cq2nb4xqxxZWH6qOL0VjCqZO9d4DZ7Xx/yAQlHXGZaBU+BQ//fuZI6ljkHqeWhwUkyLivscc
- qJgrFJ313EhAax10IlN6i1M2HXjw7HFxHekHYXtWwHUYHiWGVHeFwp3HWdCHEbX21FM/z6bXL
- zbscFiWSbWbcUUPbI4VBKkn12UFjq4r/w+sJ3Wkjny6xTDMx8wbkpoSBxAt0PC2QPFtFZPuM2
- sSm+saVCm0M1Eiqc9eizWMW64iyInEgBFtl/OJgcUzWq32x9bffwJ2rRgCSnXY24TrNgA0eo9
- JuqFZjKk3zr/20QNa8alL/Szxz+uUm5vc26NKd1EUyj67cJ+MxBKjcZfRJ4UMeSWIz2rK2H/Y
- uNP6v0PiZxFM2+MrI8UWw4WB74DT8jySibpghnRylZJs0Zpxj488MnwjJpEcugPNQyH6TkvoV
- XyV+/H9qAca+7u803Q3j9Vd/CFiLjyg7/nNcVpWALQe2Yu6R/6OE8VjwSTFFj37xS7ZDhtQ29
- xdJuoIZO7calbQyUhmUsCL2R38DX+T5ozjbZMc9nKiaTIWhqS70cw/HDnyAi+SYt+STd8Dc3h
- xeIMzJmj5dh47yDhj3YDLxvhLR1toQzatbzLPCnFzt8FflC/wTt5aLeCUlhgUjQXmEqCPKtKb
- 7klmaSE/q595gmB8f2vi9R2LVvqG1UnyniXMCPW8nK0M0fLu4A45lUI3YpltthQPiHyO6nFKq
- Q/EeJiCLhjlyXwrEVTEE0KXA0n7zeYn6YN8h+xbC5dVYHOuiyi/eHBVur9KI9YV8lvxIYngGL
- VhgBJG4qW9KikFkNqMW1vmycs/t4n3KK0LaIZ0mIWF9WbTi7L5Vmd5EddLHnus9fnZQ9uUMcJ
- Knw313I1cIzVHCWrbb2vGYEOmMWa+3833cxeeRkazB2b9GD8HV4otN6tlw0/5zPjSVSoNlDhn
- Vevn56H0Y2whovHFCeakw8UqVk0gBkGsJSAMKzdVigvQcZYJ1B2lvCBf4/KiJYCrBwLPc0M/t
- CVgINq6H165/dOQ56gS1Fn1YxsFGT8XM0HMzCXZPplvjeA2uDcschlVNk3gPtiXpax5kZoD76
- SG2hbzUGdtKbMfttCXBP3mz/FXlbgtHans7
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YN/rtmZbd6velB1L@kroah.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Sat, Jul 03, 2021 at 06:46:46AM +0200, Greg KH wrote:
+> On Fri, Jul 02, 2021 at 12:02:30PM -0700, Luis Chamberlain wrote:
+> > On Fri, Jul 02, 2021 at 07:21:12AM +0200, Greg KH wrote:
+> > > On Thu, Jul 01, 2021 at 10:05:40PM -0700, Luis Chamberlain wrote:
+> > > > @@ -0,0 +1,953 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > > +/*
+> > > > + * sysfs test driver
+> > > > + *
+> > > > + * Copyright (C) 2021 Luis Chamberlain <mcgrof@kernel.org>
+> > > > + *
+> > > > + * This program is free software; you can redistribute it and/or modify it
+> > > > + * under the terms of the GNU General Public License as published by the Free
+> > > > + * Software Foundation; either version 2 of the License, or at your option any
+> > > > + * later version; or, when distributed separately from the Linux kernel or
+> > > > + * when incorporated into other software packages, subject to the following
+> > > > + * license:
+> > > 
+> > > This boilerplate should not be here, only the spdx line is needed.
+> > 
+> > As per Documentation/process/license-rules.rst we use the SPDX license
+> > tag for the license that applies but it also states about dual
+> > licensing:
+> > 
+> > "Aside from that, individual files can be provided under a dual license,         
+> > e.g. one of the compatible GPL variants and alternatively under a               
+> > permissive license like BSD, MIT etc."
+> > 
+> > Let me know if things should change somehow here to clarify this better.
+> 
+> The spdx line is not matching the actual license for the file, which is
+> wrong.
 
-On Fri, Jul 02, 2021 at 05:08:09PM +0000, Alexander Lobakin wrote:
->
-> On the other hand, it leaves a potentional window for attackers to
-> perform brute force from xattr-incapable filesystems. So at the end
-> of the day I think that the current implementation (a strong
-> rejection of such filesystems) is way more secure than having
-> a fallback I proposed.
+We don't have spdx license tag yet for copyleft-next, and although
+when using dual gplv2 or copyleft-next gplv2 applies I did fail to see
+can use spdx for dual licensing such as:
 
-I've been thinking more about this: that the Brute LSM depends on xattr
-support and I don't like this part. I want that brute force attacks can
-be detected and mitigated on every system (with minimal dependencies).
-So, now I am working in a solution without this drawback. I have some
-ideas but I need to work on it.
+# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
 
-> I'm planning to make a patch which will eliminate such weird rootfs
-> type selection and just always use more feature-rich tmpfs if it's
-> compiled in. So, as an alternative, you could add it to your series
-> as a preparatory change and just add a Kconfig dependency on
-> CONFIG_TMPFS && CONFIG_TMPFS_XATTR to CONFIG_SECURITY_FORK_BRUTE
-> without messing with any fallbacks at all.
-> What do you think?
+> And "copyright-left" is not a valid license according to our list of
+> valid licenses in the LICENSES directory, so please do not add it to
+> kernel code when it is obviously not needed.
 
-Great. But I hope this patch will not be necessary for Brute LSM :)
+You mean copyleft-next. Yes I'd have to add that. Given that we already
+have two test drivers with that license I'll go ahead and add that.
 
-Thanks,
-John Wood
+> And given that this is directly interacting with sysfs, which is
+> GPLv2-only, trying to claim a different license on the code that tests
+> it is going to be a total mess for any lawyer who wants to look into
+> this.  Just keep it simple please.
+
+The faul injection code I added follows the exact license for sysfs. The
+only interaction with the test_sysfs and sysfs is an exported symbol
+for a completion structure. The other dual gpl OR copyleft-next test
+drivers already present in the kernel also use exported symbols too, so
+I see nothing new here.
+
+  Luis
