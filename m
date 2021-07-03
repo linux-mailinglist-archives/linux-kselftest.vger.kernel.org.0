@@ -2,93 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4979B3BA9D2
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jul 2021 19:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC7F3BACFE
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jul 2021 14:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhGCRbI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 3 Jul 2021 13:31:08 -0400
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:35700 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbhGCRbI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Jul 2021 13:31:08 -0400
-Received: by mail-pf1-f180.google.com with SMTP id d12so12297404pfj.2;
-        Sat, 03 Jul 2021 10:28:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7sn0DaF0wG+Fr83pUGydCXmzXu/QrmNbieyqr+LtNIk=;
-        b=BCCPtNJ0r9rUm6ZIN2VuSfi7nmPHYezpyhMUnAXf6S9t3LDmvPgSqLMxq/JMRAA9F8
-         p9woqOOP4p1QMur3fxX55F46f9aWK6WpjH+zzCoK19Vp0PSkep3Ov8cxHv7RFbVBVQI5
-         8O2AF3C7o4eFq2T7e8+yLuYzolQNin0SKR2nQpVmusv2frVoggKKHecyZ4ooo4deUk6k
-         w84nheywT8JAwTtNqBLlhIBS6OWhpaCD1ocDUyTfTMXxhEpdSqK+ZizzdMC27xuQvlrI
-         jJdrVOlKNkOSIbxKx+K/atPlXMh6OFbAkhzayBKtdWHzxdqbL/q/ULZ//vLlQXgV+MLv
-         AKMg==
-X-Gm-Message-State: AOAM532uTAE9VTc3ipjHrCakhf4s8xBho85X9nF/m6G75Zc5ZcvhfwMh
-        mFw5kWEmy8Hke+L0EKEl1AE=
-X-Google-Smtp-Source: ABdhPJwpBwVgMVFUlKeUzC8YjLnXIsiJyQ7Ci+G35ZeDdoHdddvA/2DxRCxjRnoeP/CSWGkc4KpReA==
-X-Received: by 2002:a65:4985:: with SMTP id r5mr6198260pgs.122.1625333313358;
-        Sat, 03 Jul 2021 10:28:33 -0700 (PDT)
-Received: from garbanzo ([191.96.121.144])
-        by smtp.gmail.com with ESMTPSA id z9sm7321452pfa.2.2021.07.03.10.28.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jul 2021 10:28:32 -0700 (PDT)
-Date:   Sat, 3 Jul 2021 10:28:28 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     tj@kernel.org, shuah@kernel.org, akpm@linux-foundation.org,
-        rafael@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, andriin@fb.com, daniel@iogearbox.net,
-        atenart@kernel.org, alobakin@pm.me, weiwan@google.com,
-        ap420073@gmail.com, jeyu@kernel.org, ngupta@vflare.org,
-        sergey.senozhatsky.work@gmail.com, minchan@kernel.org,
-        axboe@kernel.dk, mbenes@suse.com, jpoimboe@redhat.com,
-        tglx@linutronix.de, keescook@chromium.org, jikos@kernel.org,
-        rostedt@goodmis.org, peterz@infradead.org,
-        linux-block@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] test_sysfs: demonstrate deadlock fix
-Message-ID: <20210703172828.jphifwobf3syirzi@garbanzo>
-References: <20210703004632.621662-1-mcgrof@kernel.org>
- <20210703004632.621662-5-mcgrof@kernel.org>
- <YN/sar6nGeSCn89/@kroah.com>
+        id S229510AbhGDMNV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 4 Jul 2021 08:13:21 -0400
+Received: from mail.slpost.lk ([203.94.75.238]:47760 "EHLO slpost.lk"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229530AbhGDMNU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 4 Jul 2021 08:13:20 -0400
+X-Greylist: delayed 28158 seconds by postgrey-1.27 at vger.kernel.org; Sun, 04 Jul 2021 08:13:12 EDT
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by slpost.lk (Postfix) with ESMTP id AF636EA8E39;
+        Sat,  3 Jul 2021 21:01:00 +0530 (IST)
+X-Virus-Scanned: amavisd-new at slpost.lk
+Received: from slpost.lk ([127.0.0.1])
+        by localhost (slpost.lk [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id rKepYC78W5ey; Sat,  3 Jul 2021 21:01:00 +0530 (IST)
+Received: from slpost.lk (slpost.lk [192.168.1.246])
+        by slpost.lk (Postfix) with ESMTP id 5AEEFEA8E26;
+        Sat,  3 Jul 2021 21:00:57 +0530 (IST)
+Date:   Sat, 03 Jul 2021 21:00:57 +0530 (IST)
+From:   ANTONY BLINKEN <ds.gqn@slpost.lk>
+Reply-To: ANTONY BLINKEN <info@ablinken.us>
+Subject: =?utf-8?B?7LC46rOgIDog64u57Iug7J2AIOuvuOq1rSDrs7Xqtozsl5Ag7ISg7KCV65CY7JeI7Iq164uI64ukLg==?=
+Message-ID: <5ec98c18-4829-49ac-b5dc-522d85cf0c79@slpost.lk>
+In-Reply-To: <5be7c833-5047-49bd-950a-efaed02221eb@slpost.lk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YN/sar6nGeSCn89/@kroah.com>
+X-Originating-IP: [192.168.1.253]
+X-Mailer: Zimbra 7.1.2_GA_3268 (ZimbraWebClient - FF3.0 (Win)/7.1.2_GA_3268)
+To:     undisclosed-recipients:;
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 03, 2021 at 06:49:46AM +0200, Greg KH wrote:
-> On Fri, Jul 02, 2021 at 05:46:32PM -0700, Luis Chamberlain wrote:
-> > +#define MODULE_DEVICE_ATTR_FUNC_STORE(_name) \
-> > +static ssize_t module_ ## _name ## _store(struct device *dev, \
-> > +				   struct device_attribute *attr, \
-> > +				   const char *buf, size_t len) \
-> > +{ \
-> > +	ssize_t __ret; \
-> > +	if (!try_module_get(THIS_MODULE)) \
-> > +		return -ENODEV; \
-> > +	__ret = _name ## _store(dev, attr, buf, len); \
-> > +	module_put(THIS_MODULE); \
-> > +	return __ret; \
-> > +}
-> 
-> As I have pointed out before, doing try_module_get(THIS_MODULE) is racy
-> and should not be added back to the kernel tree.  We got rid of many
-> instances of this "bad pattern" over the years, please do not encourage
-> it to be added back as others will somehow think that it correct code.
-
-It is noted this is used in lieu of any agreed upon solution to
-*demonstrate* how this at least does fix it. In this case (and in the
-generic solution I also had suggested for kernfs a while ago), if the
-try fails, we give up. If it succeeds, we now know we can rely on the
-device pointer. If the refcount succeeds, can the module still not
-be present? Is try_module_get() racy in that way? In what way is it
-racy and where is this documented? Do we have a selftest to prove the
-race?
-
-  Luis
-
+7LaV7ZWY7ZWp64uI64ukIQogCuuvuOq1rSDrs7Xqtowg7ZSE66Gc6re4656o7JeQ7IScIOy0nSAk
+IDUsMDAwLDAwMC4wMOydhOuwm+ydhCDsiJgg7J6I64+E66GdIOq3gO2VmOydmCDsnbTrqZTsnbwg
+7KO87IaM66W8IO2Gte2VtCDqt4DtlZjqsIAg7ISg7KCV65CY7JeI7J2M7J2EIOyVjOugpCDrk5zr
+pqzqsozrkJjslrQg6riw7IGY6rKMIOyDneqwge2VqeuLiOuLpC4g7LC47KGwIOuyiO2YuOuKlCAo
+VS5TLUxPVFRPLTU1Nzk1KeyeheuLiOuLpC4KCuuqqOuToCDsiJjtmJzsnpDripQg7J247YSw64S3
+7J2EIO2Gte2VtCA1IOyynOunjCDqsJzsnZgg7J2066mU7J28IOyjvOyGjOuhnCDsnpHshLHrkJwg
+6riA66Gc67KMIOustOyekeychCDthrXtlakg7Iuc7Iqk7YWc7J2EIO2Gte2VtCDshKDsoJXrkJjs
+l4jsnLzrqbAsIO2WieyatOydmCDri7nssqjsnpDripQg7Yuw7LyT7J2EIOq1rOunpO2VmOqxsOuC
+mOydtCDrs7Xqtowg7ZSE66Gc6re4656o7JeQ7IScIOuLueyyqOydhCDsi6Dssq3tlaAg7ZWE7JqU
+6rCAIOyXhuyKteuLiOuLpC4g6reA7ZWY7J2YIOydtOumhOqzvCDqsJnsnYAg7KCE7LK0IOyEuOu2
+gCDsoJXrs7Trpbwg7KCE64us7ZWY7Iut7Iuc7JikIDog7KCE7ZmUIOuyiO2YuCA6IOuCmOydtCA6
+IOyEseuzhCA6IOyjvOyGjCDrsI8g6reA7ZWY7J2YIO2MjOydvCDssLjsobAsIOuLueyyqOq4iCDs
+p4Drtogg7LKY66asIOuwjyDsp4DrtoguCgrshLjrtoAg7KCV67O066W8IOuLpOydjCDso7zshozr
+oZwg67O064K07KO87Iut7Iuc7JikLgrri7Tri7nsnpAgOiBXYWxseSBBZGV5ZW1vIOyUqC4KPT09
+IOyerOustOu2gCDssKjqtIAgPT09CuydtOuplOydvCA6IGluZm9AZHN0d2FsbHkudXMK7KCE7ZmU
+IDogKzEgKDQwNSkgNjg5LTc3MjYKCuq3gO2VmOydmCDsnbTrqZTsnbzsnbQg7J6t7Yyf7J2EIO2a
+jeuTne2WiOyKteuLiOuLpC4g64uk7IucIO2VnCDrsogg7LaV7ZWY65Oc66a964uI64ukLgogCuq3
+gO2VmOydmCDshJzruYTsiqQsCkFudG9ueSBCbGlua2VuICjrr7jqta0g6rWt66y0IOyepeq0gCkK
+66+46rWtIOuzteq2jCDstInsp4TsnpAuIMKpIDIwMjEuCioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKgrssLjqs6AgOiDqt4DtlZjsnZgg7J247YSw64S3IOyEnOu5hOyKpCDsoJzqs7Ug7JeF
+7LK06rCAIOq1rO2YhCDtlZwg7KCc7ZWcIOyCrO2VreycvOuhnCDsnbjtlbQg7Iqk7Yy4IC8g64yA
+65+JIO2PtOuNlOyXkOydtCDrqZTsi5zsp4Drpbwg7IiY7IugIO2VnCDqsr3smrAsIOuLueyCrCAo
+67O16raMIO2MgCnripQg6reA7ZWY6rCAIOynhOygleycvOuhnCDsspjrpqwg7ZWgIOqyg+ydhCDs
+tInqtaztlanri4jri6QuIOuvuOq1rSDrs7Xqtowg7LaU7LKo7JeQIOuNlCDrp47snbQg7LC47Jes
+7ZWY66Ck66m0IHd3dy5sb3R0ZXJ5dXNhLmNvbeydhCDrsKnrrLjtlZjsi63si5zsmKQu
