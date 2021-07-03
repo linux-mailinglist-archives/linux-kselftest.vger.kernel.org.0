@@ -2,60 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E61A93BA493
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jul 2021 22:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5063BA678
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jul 2021 02:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbhGBUQO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jul 2021 16:16:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39682 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230116AbhGBUQO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jul 2021 16:16:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 6CCD361411;
-        Fri,  2 Jul 2021 20:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625256821;
-        bh=XL9X1e8EwMMbHJIDKpf8Sr9cnB8yO1NXl9uBqok0bfg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=oP6RaKo00TO9K1T1VSLb01VfWpGlcCw7K04EIZBAKIbZ9Dq3A8mK534pRbmC90eze
-         VVSfsvNR3SASCwN7EdTC+t8kuQDBb4wmf+eHszpIzI8CjU6tvd6/RRmC6LYl8byM3f
-         YzIyT6aDZM7yeCIr8HG3EJ1GcUxuLay7oa4Br8nlclBUlHmDXoydJww7ySrDCytBon
-         C/sdhcgdYu42o5wEOJ+PfMpF3s1SwdlfSL+Jrq3ZUvQBafRsNfD1ZQC10uYL157bKe
-         TwvvkHBaWYombit4AISHCAV8jgs/Fuq1sbblSet4NgubqBg24ocHijxnZEcJApIIsP
-         Zt40QJCC2imLw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6792460283;
-        Fri,  2 Jul 2021 20:13:41 +0000 (UTC)
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.14-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <933f7ca8-71ae-6af3-64bb-b43795a98290@linuxfoundation.org>
-References: <933f7ca8-71ae-6af3-64bb-b43795a98290@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <933f7ca8-71ae-6af3-64bb-b43795a98290@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.14-rc1
-X-PR-Tracked-Commit-Id: 4896df9d53ae5521f3ce83751e828ad70bc65c80
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 35e43538af8fd2cb39d58caca1134a87db173f75
-Message-Id: <162525682141.6172.662590435660832075.pr-tracker-bot@kernel.org>
-Date:   Fri, 02 Jul 2021 20:13:41 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+        id S230095AbhGCAtL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jul 2021 20:49:11 -0400
+Received: from mail-pf1-f176.google.com ([209.85.210.176]:33634 "EHLO
+        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230017AbhGCAtL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Jul 2021 20:49:11 -0400
+Received: by mail-pf1-f176.google.com with SMTP id s14so10773390pfg.0;
+        Fri, 02 Jul 2021 17:46:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2kl9UtuLXwqigXL0z/0Ce1Bg3PqN6wXeWZxwKnEIWoE=;
+        b=BPZ81H9+/ugQyisrsbjJllDnnoVOcWEpRFGxzrUevq6dCeyEsjGzxq6m0UDjqc1qVj
+         zpsvH61SLm9URpFXuirfZ8zyE7U/DN0MOIAQ5Unhh6uKN6Ig4WX8Gw278uUnE5kbUOUI
+         Om+b3mb+uZw+5LFMdywQphF2NCy4baIj5S6DhcpAjRUcw2TviFQmDG9u5skRpMZoHXkX
+         dwWtlyID4LRQPSf2EKsEx+ynZMjxDpjIXhF/28DEC1D/ek6kAaJRlrqUWab1z2A3yLiG
+         cQf+D1G7tRqtfHJPHpc+REyt65JsOveka5Ca9PXlgidhFjNbFwXJcyHavLk1O7Q1sM1X
+         GrQw==
+X-Gm-Message-State: AOAM532bBHTIQho+EMRZMtnqSDKh2V0UyG+MPyREYR7iLjEG1xgaWMgu
+        4IrDARMLE8KaWpqOhRdISxU=
+X-Google-Smtp-Source: ABdhPJwGJju08VhRuXSU6vHnaEQqhLvLgMpIjXX58qMb53c2M1AVO015kQMXy6Yi1waWrN3B2dyxKQ==
+X-Received: by 2002:a62:9290:0:b029:318:a43b:e99 with SMTP id o138-20020a6292900000b0290318a43b0e99mr1385332pfd.6.1625273197181;
+        Fri, 02 Jul 2021 17:46:37 -0700 (PDT)
+Received: from localhost ([191.96.121.144])
+        by smtp.gmail.com with ESMTPSA id y16sm4801730pfe.70.2021.07.02.17.46.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jul 2021 17:46:36 -0700 (PDT)
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     gregkh@linuxfoundation.org, tj@kernel.org, shuah@kernel.org,
+        akpm@linux-foundation.org, rafael@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, ast@kernel.org, andriin@fb.com,
+        daniel@iogearbox.net, atenart@kernel.org, alobakin@pm.me,
+        weiwan@google.com, ap420073@gmail.com
+Cc:     jeyu@kernel.org, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, minchan@kernel.org,
+        mcgrof@kernel.org, axboe@kernel.dk, mbenes@suse.com,
+        jpoimboe@redhat.com, tglx@linutronix.de, keescook@chromium.org,
+        jikos@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
+        linux-block@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] selftests: add a new test driver for sysfs
+Date:   Fri,  2 Jul 2021 17:46:28 -0700
+Message-Id: <20210703004632.621662-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Fri, 2 Jul 2021 11:44:55 -0600:
+This v2 rebases onto the latest linux-next tag, next-20210701. A few
+changes were needed, namely:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.14-rc1
+  1) changes kernfs_init_failure_injection() to return int instead
+     of void. On the latest linux-next we have a new static build
+     check for this, so this mistake was captured when building.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/35e43538af8fd2cb39d58caca1134a87db173f75
+  2) I made kernfs_init_failure_injection static
 
-Thank you!
+  3) lib/test_sysfs.c moved to the new blk_alloc_disk() added by
+     Christoph as direct queue allocation is no longer supported,
+     ie, blk_alloc_queue() is no longer exported. This work was
+     done by Christoph in preparation to help make add_disk*()
+     callers eventually return an error code and make the error
+     handling much saner. Because of this same change
+     blk_cleanup_queue() is no longer needed so we embrace
+     the shiny new blk_cleanup_disk().
+
+I've put this up on my linux-next git tree [0] under the branch
+named 20210701-sysfs-fix-races-v2.
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20210701-sysfs-fix-races-v2
+
+Luis Chamberlain (4):
+  selftests: add tests_sysfs module
+  kernfs: add initial failure injection support
+  test_sysfs: add support to use kernfs failure injection
+  test_sysfs: demonstrate deadlock fix
+
+ .../fault-injection/fault-injection.rst       |   22 +
+ MAINTAINERS                                   |    9 +-
+ fs/kernfs/Makefile                            |    1 +
+ fs/kernfs/failure-injection.c                 |   83 +
+ fs/kernfs/file.c                              |   13 +
+ fs/kernfs/kernfs-internal.h                   |   72 +
+ include/linux/kernfs.h                        |    5 +
+ lib/Kconfig.debug                             |   23 +
+ lib/Makefile                                  |    1 +
+ lib/test_sysfs.c                              | 1027 ++++++++++++
+ tools/testing/selftests/sysfs/Makefile        |   12 +
+ tools/testing/selftests/sysfs/config          |    5 +
+ tools/testing/selftests/sysfs/sysfs.sh        | 1376 +++++++++++++++++
+ 13 files changed, 2648 insertions(+), 1 deletion(-)
+ create mode 100644 fs/kernfs/failure-injection.c
+ create mode 100644 lib/test_sysfs.c
+ create mode 100644 tools/testing/selftests/sysfs/Makefile
+ create mode 100644 tools/testing/selftests/sysfs/config
+ create mode 100755 tools/testing/selftests/sysfs/sysfs.sh
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.27.0
+
