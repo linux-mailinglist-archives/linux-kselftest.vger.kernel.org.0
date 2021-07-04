@@ -2,107 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D604A3BAD1B
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jul 2021 15:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7895F3BAD49
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jul 2021 16:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbhGDNgL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 4 Jul 2021 09:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbhGDNgL (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 4 Jul 2021 09:36:11 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AEDC061574;
-        Sun,  4 Jul 2021 06:33:36 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id y2so846535pff.11;
-        Sun, 04 Jul 2021 06:33:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kmTHLKYe7uN/HHD833T9elNqKTkZ445a6iSqpPqctYI=;
-        b=WmkvO46u0eH3efciHLO00/eGk4YxD9EiZzsUVUhJi+zF8htkowH3u5rWRteWzW4Y4O
-         jLaRbQh4E0O3kR1mumNtQwRngGslHtSFT56Rr/R0ONOJ5rhgle3ELXnK+JA4jO3xjEUV
-         wPLaGLpRCRKr8l5Wjkp4tUAxCyFvIKOovMWjhVVHqNNP8nOg6xrE1/9ZanwGPygtZ5N/
-         GzCH3wpclWgXN0b5hPSdK0GDumopXYYo52AQCIhHsxJMNTiQrWUBBA3ObMqBfzMyJlDb
-         PRn09Wb2d6UL83vIg/04RuMIkW7R/JjB3nbJUvC2amWsSYKPPyiBQHYIEIDbFi2XRCut
-         rcrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kmTHLKYe7uN/HHD833T9elNqKTkZ445a6iSqpPqctYI=;
-        b=Iezc0F36b4gWW+UjKncmf9+Ak6shMdhQ92kfbCqC3qeqwxzPU1p+TARdLRKm1smwfz
-         Qo/3gm3ywm3SXegt0cCDGgIwYKBr5kxiK2tRL6Wa8NgDrC8CdMoLBCnMkSdvGzAU/DQp
-         GdpQAoT/ZPIycZT33YSveLZLIlEcefB6+1+0Ba7F/Fx0Stss7Fssw+fCUORz8R14FLgb
-         t5Tenb5HvXRFkxtzX4oH/aLTxmPlc+1GRWV/A49/habApvKs8kixjIYijbJDRDnjnOA7
-         PVlyoPTc6vTr7DkwLgLWlSRcSw58eIsnH5BOraI1CpAjY3Fwb06h24I0mCNqZSqrgx8J
-         5A/g==
-X-Gm-Message-State: AOAM530yO6SaW46Mj0Dk0Gbh13LGSJkDwPMmE2X88rhxXI0BAU0JIQBA
-        Ol2FO5jU7kjwQ46tsx2lEh0kgp3YqrI=
-X-Google-Smtp-Source: ABdhPJz0udZB2GaWgVkA667w2T9OAr9Ou+h7u+QEeVNoOzuY405q+y4T4O+jlAoQ/+l/JVCs+Y5cgg==
-X-Received: by 2002:a63:5912:: with SMTP id n18mr10513858pgb.108.1625405615365;
-        Sun, 04 Jul 2021 06:33:35 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:645:c000:35:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id e1sm9572761pfd.16.2021.07.04.06.33.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jul 2021 06:33:34 -0700 (PDT)
-Date:   Sun, 4 Jul 2021 06:33:31 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Yangbo Lu <yangbo.lu@nxp.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        id S229557AbhGDOFT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 4 Jul 2021 10:05:19 -0400
+Received: from mout.gmx.net ([212.227.17.22]:51737 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229492AbhGDOFT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 4 Jul 2021 10:05:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1625407285;
+        bh=qCFNx0oWRTXt6mjRNsgYCCM5WwpT+/4HKI7MSDuJJGE=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=GklD0Tma/lx/2AV87ghdg/Qze0ZAKuGkX3qFSJVk1o/IAwlMlnA3M/WPBzBILFQ60
+         C1yaHfqDLcvlOWqERXxDmrixxX7IdAyTEOuIMsHVKAIAkcHmuP2maVvWg7S2usjrCj
+         SBz7OW0ip3Ekvys5cp49IWRkdbd4IZp4BUgIUXPo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ubuntu ([83.52.228.41]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MOREc-1lqjIh1CsY-00Pvaw; Sun, 04
+ Jul 2021 16:01:25 +0200
+Date:   Sun, 4 Jul 2021 16:01:08 +0200
+From:   John Wood <john.wood@gmx.com>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     John Wood <john.wood@gmx.com>, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         Shuah Khan <shuah@kernel.org>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rui Sousa <rui.sousa@nxp.com>,
-        Sebastien Laveze <sebastien.laveze@nxp.com>
-Subject: Re: [net-next, v5, 08/11] net: sock: extend SO_TIMESTAMPING for PHC
- binding
-Message-ID: <20210704133331.GA4268@hoboy.vegasvil.org>
-References: <20210630081202.4423-1-yangbo.lu@nxp.com>
- <20210630081202.4423-9-yangbo.lu@nxp.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Arnd Bergmann <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>,
+        valdis.kletnieks@vt.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: Re: [PATCH v8 3/8] security/brute: Detect a brute force attack
+Message-ID: <20210704140108.GA2742@ubuntu>
+References: <20210701234807.50453-1-alobakin@pm.me>
+ <20210702145954.GA4513@ubuntu>
+ <20210702170101.16116-1-alobakin@pm.me>
+ <20210703105928.GA2830@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210630081202.4423-9-yangbo.lu@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210703105928.GA2830@ubuntu>
+X-Provags-ID: V03:K1:Zlv/I3jSwhQHOVW60yI8jrDAcYgbYRJ0DR/nPSVeP8thlzpNyfP
+ Iy4q/M6ejxhwDhZ87s3DfnCTgkAHBDLbzMX83gQOaCGeWDPFYHbSWc85q8H4B1p3bXLckjH
+ c0BJ7pVpncMao1CZjr+hoU910ZdvL1AqNB1/t+dmP8YygFdNwosY681NLG+78hFRzCXk+OU
+ edDRLEmHS5NdCtwr4DiGg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Xu4NXV3hBGY=:9VsIzecylfJIkNr7kTE/xd
+ ffa1w/cSXPBVUdHerWPnISoMh/XoptArz8co14byqOziF831kzJj5nZ0fqnysCK1knBArVSy9
+ nJjYWf9H8MFohHQreGRWofJmr+quGvrdv4PspoXMpZ55zWoqDS1cx/hdkEPja9U1FGP0jTNbq
+ F1FB23qrEMmaZjzdp5hb47mkVcuD3c+XgJFre2T9ecG9VQ1BGQHLfj7RKDlc6kgG46ziYRVbj
+ +j2R5Rz9beIJowdvTFsCc7Gpxu6zHpcaQnbggqAVj8dVAGJAawmEsSEvnuEMgQVY3OlBRDbKQ
+ sahHpkKLopj+42BewBHYOQfAWC7jnHHkPVJX0ebUoePyw+X/TxJMpB5172IJMerGm6fFt2rKj
+ uV/q2xtXoQnWQCyLtiemxIi+r+8zVa5HKMJCjMq+HBgh2Gy1L5WXTSSg411UL+xcJMjiSP1vy
+ IwGaAB7CalqbdNFQA6x39qteGEZvMckOJK1LatX5Gr5nKsLVcH2TdpnFqVCe/kO1zMUPwBRQo
+ bMlYCnMorKCthiiRbEfJ/QV+GsbbmwXB54JiD+uDgrlRQvCIx7iB1hisDMktSPGaDxtXWHhgc
+ +E7Kj6yjWk6j6B/CVdBKcv8Se1229GE3CpMMSZZQoB93OuYdiRJMCd1CAN/WSe+6ap5lapb20
+ n/JshVmBqy3Kfli935tFYBShyVW1fi1gPOFtcYkmbU83m3D66n74PgduHWWG++ucFfchYF/OD
+ wxIdKMSOfy/cER6z5IbzstOTJTr19zJUJugflt4bVjC1XORzWH3ZUBN6rY744cJRk7yaAMB72
+ tXFj68NKVbRGN/qD15QyYGhZiCyLP9gsaEwibZxiP72wCYuPp/DSOZcSFSLgKbJKJbfQRXwrz
+ N8KRvHz3PlzzWepKE1jLm2wl6reYqaCCUgodX4rrm5qEhz7t2tMRoNBoSV7QhvClXN/p2enTv
+ a0UIHvFDqstk0cHFyNhqrj4SDal/dIwQccXgNVznb+TX3Oj7Uc64rawV1TqpZUEO4FlVuG2Ai
+ DT8WAFrJrQ/4XHfCqkM19Rc6Q7UFg0O77mph7SYJ+ixe7DcHrTQY/RjgcCx/e9gtIeZoU1pdM
+ PH5NRowdVQ6az2dzeSJ9Bc+HKoQBGly9Alu
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 04:11:59PM +0800, Yangbo Lu wrote:
-> Since PTP virtual clock support is added, there can be
-> several PTP virtual clocks based on one PTP physical
-> clock for timestamping.
-> 
-> This patch is to extend SO_TIMESTAMPING API to support
-> PHC (PTP Hardware Clock) binding by adding a new flag
-> SOF_TIMESTAMPING_BIND_PHC. When PTP virtual clocks are
-> in use, user space can configure to bind one for
-> timestamping, but PTP physical clock is not supported
-> and not needed to bind.
+On Sat, Jul 03, 2021 at 12:59:28PM +0200, John Wood wrote:
+> Hi,
+>
+> On Fri, Jul 02, 2021 at 05:08:09PM +0000, Alexander Lobakin wrote:
+> >
+> > On the other hand, it leaves a potentional window for attackers to
+> > perform brute force from xattr-incapable filesystems. So at the end
+> > of the day I think that the current implementation (a strong
+> > rejection of such filesystems) is way more secure than having
+> > a fallback I proposed.
+>
+> I've been thinking more about this: that the Brute LSM depends on xattr
+> support and I don't like this part. I want that brute force attacks can
+> be detected and mitigated on every system (with minimal dependencies).
+> So, now I am working in a solution without this drawback. I have some
+> ideas but I need to work on it.
 
-Would it not be better to simply bind automatically?
+I have been coding and testing a bit my ideas but:
 
-Like this pseudo code:
+Trying to track the applications faults info using kernel memory ends up
+in an easy to abuse system (denied of service due to large amount of memor=
+y
+in use) :(
 
-	if (hw_timestamping_requested() && interface_is_vclock()) {
-		bind_vclock();
-	}
+So, I continue with the v8 idea: xattr to track application crashes info.
 
-It would be great to avoid forcing user space to use a new option.
+> > I'm planning to make a patch which will eliminate such weird rootfs
+> > type selection and just always use more feature-rich tmpfs if it's
+> > compiled in. So, as an alternative, you could add it to your series
+> > as a preparatory change and just add a Kconfig dependency on
+> > CONFIG_TMPFS && CONFIG_TMPFS_XATTR to CONFIG_SECURITY_FORK_BRUTE
+> > without messing with any fallbacks at all.
+> > What do you think?
+>
+> Great. But I hope this patch will not be necessary for Brute LSM :)
 
-Especially because NOT setting the option makes no sense.  Or maybe
-there is a use case for omitting the option?
-
-
-Thoughts?
+My words are no longer valid ;)
 
 Thanks,
-Richard
+John Wood
