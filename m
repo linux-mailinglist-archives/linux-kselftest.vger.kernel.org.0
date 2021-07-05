@@ -2,101 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4E53BBC5D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jul 2021 13:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5275C3BBD1F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jul 2021 14:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbhGELtY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jul 2021 07:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbhGELtX (ORCPT
+        id S231265AbhGEMzL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Jul 2021 08:55:11 -0400
+Received: from mail1.protonmail.ch ([185.70.40.18]:25902 "EHLO
+        mail1.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230456AbhGEMzL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jul 2021 07:49:23 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BAFC061574
-        for <linux-kselftest@vger.kernel.org>; Mon,  5 Jul 2021 04:46:46 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:fd03:2275:4427:8d01])
-        by andre.telenet-ops.be with bizsmtp
-        id RPmb2500X2pudom01PmbuC; Mon, 05 Jul 2021 13:46:37 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1m0N3a-006xe5-TO; Mon, 05 Jul 2021 13:46:34 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1m0N3a-006IPl-Ha; Mon, 05 Jul 2021 13:46:34 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Trent Piepho <tpiepho@gmail.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mon, 5 Jul 2021 08:55:11 -0400
+Date:   Mon, 05 Jul 2021 12:52:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1625489553; bh=dq32cO+ZKMc2KufqrF4+FnLvbFSGJWzWZn6wbfbMESE=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=NsJzHSo68u3RONXSa1dsHMZ0kieV61sNhU2UxI7md1kCzE+xhhP+TgNVVpxDRdRQb
+         Sn3LLQT//Pmu3Ib0/flMZLDnR1bLKSB+7xpaeoo4JVSm14ld2ueHbTXw/Xt77Pel75
+         8i/oU66Blr2WCYv2KvXa31TJpaWuOv7TIpwxjmZqASWU1VVdbLLzZAAXD3edz9Evi/
+         j8DcH69GHS2ETAUUOXgVEEiT0ikHTY1FdFGNuOaEWHBrjsr3DT4ki70+lfwMuOiPt3
+         DVKHAEGwM9c9yY7xz9u1iKDGIagPe2Kb/ly9UAoWpctS+tNYsNKPEl1pLRosWbX28a
+         nKzSr5FL3ojLw==
+To:     John Wood <john.wood@gmx.com>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Arnd Bergmann <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>,
+        valdis.kletnieks@vt.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] math: Make RATIONAL tristate
-Date:   Mon,  5 Jul 2021 13:46:33 +0200
-Message-Id: <20210705114633.1500710-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH v8 3/8] security/brute: Detect a brute force attack
+Message-ID: <20210705124446.45320-1-alobakin@pm.me>
+In-Reply-To: <20210704140108.GA2742@ubuntu>
+References: <20210701234807.50453-1-alobakin@pm.me> <20210702145954.GA4513@ubuntu> <20210702170101.16116-1-alobakin@pm.me> <20210703105928.GA2830@ubuntu> <20210704140108.GA2742@ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-All but one symbols that select RATIONAL are tristate, but RATIONAL
-itself is bool.  Change it to tristate, so the rational fractions
-support code can be modular if no builtin code relies on it.
+From: John Wood <john.wood@gmx.com>
+Date: Sun, 4 Jul 2021 16:01:08 +0200
 
-While at it, add support for compile-testing and provide a help text.
+> On Sat, Jul 03, 2021 at 12:59:28PM +0200, John Wood wrote:
+> > Hi,
+> >
+> > On Fri, Jul 02, 2021 at 05:08:09PM +0000, Alexander Lobakin wrote:
+> > >
+> > > On the other hand, it leaves a potentional window for attackers to
+> > > perform brute force from xattr-incapable filesystems. So at the end
+> > > of the day I think that the current implementation (a strong
+> > > rejection of such filesystems) is way more secure than having
+> > > a fallback I proposed.
+> >
+> > I've been thinking more about this: that the Brute LSM depends on xattr
+> > support and I don't like this part. I want that brute force attacks can
+> > be detected and mitigated on every system (with minimal dependencies).
+> > So, now I am working in a solution without this drawback. I have some
+> > ideas but I need to work on it.
+>
+> I have been coding and testing a bit my ideas but:
+>
+> Trying to track the applications faults info using kernel memory ends up
+> in an easy to abuse system (denied of service due to large amount of memo=
+r=3D
+> y
+> in use) :(
+>
+> So, I continue with the v8 idea: xattr to track application crashes info.
+>
+> > > I'm planning to make a patch which will eliminate such weird rootfs
+> > > type selection and just always use more feature-rich tmpfs if it's
+> > > compiled in. So, as an alternative, you could add it to your series
+> > > as a preparatory change and just add a Kconfig dependency on
+> > > CONFIG_TMPFS && CONFIG_TMPFS_XATTR to CONFIG_SECURITY_FORK_BRUTE
+> > > without messing with any fallbacks at all.
+> > > What do you think?
+> >
+> > Great. But I hope this patch will not be necessary for Brute LSM :)
+>
+> My words are no longer valid ;)
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
-Exposed by commit b6c75c4afceb8bc0 ("lib/math/rational: add Kunit test
-cases") and CONFIG_KUNIT_ALL_TESTS=m.
+Ok, so here's the patch that prefers tmpfs for rootfs over ramfs
+if it's built-in (which is true for 99% of systems): [0]
 
-I'm not so happy RATIONAL_KUNIT_TEST selects RATIONAL, as test code
-should depend on the presence of the feature to test.  Else enabling
-a test may add unneeded code to a production kernel.
-Perhaps the "if COMPILE_TEST" should be dropped, making RATIONAL
-visible, so RATIONAL_KUNIT_TEST can depend on RATIONAL instead?
----
- lib/math/Kconfig    | 5 ++++-
- lib/math/rational.c | 3 +++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+For now it hasn't been reviewed by anyone yet, will see. I'm running
+my system with this patch for several days already and there were no
+issues with rootfs or Brute so far.
 
-diff --git a/lib/math/Kconfig b/lib/math/Kconfig
-index f19bc9734fa7cc4b..14def252ea7db6e0 100644
---- a/lib/math/Kconfig
-+++ b/lib/math/Kconfig
-@@ -14,4 +14,7 @@ config PRIME_NUMBERS
- 	  If unsure, say N.
- 
- config RATIONAL
--	bool
-+	tristate "Rational fractions support" if COMPILE_TEST
-+	help
-+	  This option provides support for rational fractions.
-+	  This symbol should be selected automatically by drivers that need it.
-diff --git a/lib/math/rational.c b/lib/math/rational.c
-index c0ab51d8fbb98d17..ec59d426ea638b0f 100644
---- a/lib/math/rational.c
-+++ b/lib/math/rational.c
-@@ -13,6 +13,7 @@
- #include <linux/export.h>
- #include <linux/minmax.h>
- #include <linux/limits.h>
-+#include <linux/module.h>
- 
- /*
-  * calculate best rational approximation for a given fraction
-@@ -106,3 +107,5 @@ void rational_best_approximation(
- }
- 
- EXPORT_SYMBOL(rational_best_approximation);
-+
-+MODULE_LICENSE("GPL v2");
--- 
-2.25.1
+[0] https://lore.kernel.org/lkml/20210702233727.21301-1-alobakin@pm.me/
+
+> Thanks,
+> John Wood
+
+Thanks,
+Al
 
