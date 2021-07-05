@@ -2,40 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3FD3BBE4B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jul 2021 16:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537463BBE4D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jul 2021 16:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbhGEOjk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jul 2021 10:39:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43860 "EHLO mail.kernel.org"
+        id S231542AbhGEOjm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Jul 2021 10:39:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43972 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231511AbhGEOjj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jul 2021 10:39:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E817C61955;
-        Mon,  5 Jul 2021 14:37:01 +0000 (UTC)
+        id S231539AbhGEOjm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 5 Jul 2021 10:39:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8FCBD6195A;
+        Mon,  5 Jul 2021 14:37:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625495822;
-        bh=cRp9ny7eyKyuD0MO2TdfPzp9DciYKWy2hpAippP5l1M=;
+        s=k20201202; t=1625495825;
+        bh=4dKc/HZAppIt8IkwQuN2ogmAZCk+GY5EwArJF9/nIh4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MOvW33LflC0rIYgHmOKdap42/n3ieZr2zx1FGV6tPK4wS1ToslmmoOSRAeAiLYTqj
-         s61uoiZIoM6fV7JOOZqWp86ArFS5j4cjh/07Pc8qMPlZIWlk0JRiLOde8vAs9b7Ykn
-         T1I/NHvENc89Kh7lrIcJ2T8DffQrWo29D5VLelHWR/Q2+O0J/9ZM1NTScectOaPmjr
-         i2mXZ7kx2l/EtFJ2e+vkI0getpG5qGH+M7ah4g4cGooaD/JvPwjxZXvkVmXafA0MyH
-         5aculBgEFThJM+h/eow70W1cALwszuKJHSFjnN2+sUKtRu8aMqX9QE3k04PZESQfUd
-         6Tu3vtkn+J8sw==
+        b=tQiBodzzT8uc6DFESjHyHpRlZ0UwxQLH+GyBaxMCT97GQGiEXMRBrT008nNlX+pqt
+         OtepsbvOGaa8LUu9b/9t5aer9IBgNV6C7MiHNYnXSNb+ZXS2MrpzOI3BV96X6aT0+L
+         usKDl62RNuZo1j6XgPmwk14ipFIA0Q0O4v9ErLhGl4IBDbbMBd8kAQyaih2NTUQqnc
+         3jKkJMSfTLwfrTqCWonNCWog+3KyBGDZtLFFCT+HHhlxl26xZwdOVoO7+LxzR2npIU
+         +0rl4+ksS6BIC/TPzgFMnFrALCLEDk/wigx7j2RaLwxKh5RecmRHy7e1CWvdx05sdK
+         b8kRfr9Tgejqw==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
         Borislav Petkov <bp@alien8.de>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Borislav Petkov <bp@suse.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] selftests/sgx: Fix Q1 and Q2 calculation in sigstruct.c
-Date:   Mon,  5 Jul 2021 17:36:50 +0300
-Message-Id: <20210705143652.116125-3-jarkko@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 3/4] selftests/sgx: Assign source for each segment
+Date:   Mon,  5 Jul 2021 17:36:51 +0300
+Message-Id: <20210705143652.116125-4-jarkko@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210705143652.116125-1-jarkko@kernel.org>
 References: <20210705143652.116125-1-jarkko@kernel.org>
@@ -45,118 +43,89 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Define source per segment so that enclave pages can be added from different
+sources, e.g. anonymous VMA for zero pages. In other words, add 'src' field
+to struct encl_segment, and assign it to 'encl->src' for pages inherited
+from the enclave binary.
 
-Q1 and Q2 are numbers with *maximum* length of 384 bytes. If the calculated
-length of Q1 and Q2 is less than 384 bytes, things will go wrong.
-
-E.g. if Q2 is 383 bytes, then
-
-1. The bytes of q2 are copied to sigstruct->q2 in calc_q1q2().
-2. The entire sigstruct->q2 is reversed, which results it being
-   256 * Q2, given that the last byte of sigstruct->q2 is added
-   to before the bytes given by calc_q1q2().
-
-Either change in key or measurement can trigger the bug. E.g. an unmeasured
-heap could cause a devastating change in Q1 or Q2.
-
-Reverse exactly the bytes of Q1 and Q2 in calc_q1q2() before returning to
-the caller.
-
-Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
-Link: https://lore.kernel.org/linux-sgx/20210301051836.30738-1-tianjia.zhang@linux.alibaba.com/
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
-The original patch did a bad job explaining the code change but it
-turned out making sense. I wrote a new description.
+ tools/testing/selftests/sgx/load.c      | 5 +++--
+ tools/testing/selftests/sgx/main.h      | 1 +
+ tools/testing/selftests/sgx/sigstruct.c | 8 ++++----
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-v3:
-- Adjusted the fixes tag to refer to the correct commit
-
-v2:
-- Added a fixes tag.
-
- tools/testing/selftests/sgx/sigstruct.c | 41 +++++++++++++------------
- 1 file changed, 21 insertions(+), 20 deletions(-)
-
-diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-index dee7a3d6c5a5..92bbc5a15c39 100644
---- a/tools/testing/selftests/sgx/sigstruct.c
-+++ b/tools/testing/selftests/sgx/sigstruct.c
-@@ -55,10 +55,27 @@ static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
- 	return true;
- }
+diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+index 00928be57fc4..9946fab2a3d6 100644
+--- a/tools/testing/selftests/sgx/load.c
++++ b/tools/testing/selftests/sgx/load.c
+@@ -107,7 +107,7 @@ static bool encl_ioc_add_pages(struct encl *encl, struct encl_segment *seg)
+ 	memset(&secinfo, 0, sizeof(secinfo));
+ 	secinfo.flags = seg->flags;
  
-+static void reverse_bytes(void *data, int length)
-+{
-+	int i = 0;
-+	int j = length - 1;
-+	uint8_t temp;
-+	uint8_t *ptr = data;
-+
-+	while (i < j) {
-+		temp = ptr[i];
-+		ptr[i] = ptr[j];
-+		ptr[j] = temp;
-+		i++;
-+		j--;
-+	}
-+}
-+
- static bool calc_q1q2(const uint8_t *s, const uint8_t *m, uint8_t *q1,
- 		      uint8_t *q2)
- {
- 	struct q1q2_ctx ctx;
-+	int len;
+-	ioc.src = (uint64_t)encl->src + seg->offset;
++	ioc.src = (uint64_t)seg->src;
+ 	ioc.offset = seg->offset;
+ 	ioc.length = seg->size;
+ 	ioc.secinfo = (unsigned long)&secinfo;
+@@ -226,6 +226,7 @@ bool encl_load(const char *path, struct encl *encl)
  
- 	if (!alloc_q1q2_ctx(s, m, &ctx)) {
- 		fprintf(stderr, "Not enough memory for Q1Q2 calculation\n");
-@@ -89,8 +106,10 @@ static bool calc_q1q2(const uint8_t *s, const uint8_t *m, uint8_t *q1,
- 		goto out;
+ 		if (j == 0) {
+ 			src_offset = phdr->p_offset & PAGE_MASK;
++			encl->src = encl->bin + src_offset;
+ 
+ 			seg->prot = PROT_READ | PROT_WRITE;
+ 			seg->flags = SGX_PAGE_TYPE_TCS << 8;
+@@ -238,13 +239,13 @@ bool encl_load(const char *path, struct encl *encl)
+ 
+ 		seg->offset = (phdr->p_offset & PAGE_MASK) - src_offset;
+ 		seg->size = (phdr->p_filesz + PAGE_SIZE - 1) & PAGE_MASK;
++		seg->src = encl->src + seg->offset;
+ 
+ 		j++;
  	}
  
--	BN_bn2bin(ctx.q1, q1);
--	BN_bn2bin(ctx.q2, q2);
-+	len = BN_bn2bin(ctx.q1, q1);
-+	reverse_bytes(q1, len);
-+	len = BN_bn2bin(ctx.q2, q2);
-+	reverse_bytes(q2, len);
+ 	assert(j == encl->nr_segments);
  
- 	free_q1q2_ctx(&ctx);
- 	return true;
-@@ -152,22 +171,6 @@ static RSA *gen_sign_key(void)
- 	return key;
- }
+-	encl->src = encl->bin + src_offset;
+ 	encl->src_size = encl->segment_tbl[j - 1].offset +
+ 			 encl->segment_tbl[j - 1].size;
  
--static void reverse_bytes(void *data, int length)
--{
--	int i = 0;
--	int j = length - 1;
--	uint8_t temp;
--	uint8_t *ptr = data;
--
--	while (i < j) {
--		temp = ptr[i];
--		ptr[i] = ptr[j];
--		ptr[j] = temp;
--		i++;
--		j--;
--	}
--}
--
- enum mrtags {
- 	MRECREATE = 0x0045544145524345,
- 	MREADD = 0x0000000044444145,
-@@ -367,8 +370,6 @@ bool encl_measure(struct encl *encl)
- 	/* BE -> LE */
- 	reverse_bytes(sigstruct->signature, SGX_MODULUS_SIZE);
- 	reverse_bytes(sigstruct->modulus, SGX_MODULUS_SIZE);
--	reverse_bytes(sigstruct->q1, SGX_MODULUS_SIZE);
--	reverse_bytes(sigstruct->q2, SGX_MODULUS_SIZE);
+diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
+index 68672fd86cf9..452d11dc4889 100644
+--- a/tools/testing/selftests/sgx/main.h
++++ b/tools/testing/selftests/sgx/main.h
+@@ -7,6 +7,7 @@
+ #define MAIN_H
  
- 	EVP_MD_CTX_destroy(ctx);
- 	RSA_free(key);
+ struct encl_segment {
++	void *src;
+ 	off_t offset;
+ 	size_t size;
+ 	unsigned int prot;
+diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+index 92bbc5a15c39..202a96fd81bf 100644
+--- a/tools/testing/selftests/sgx/sigstruct.c
++++ b/tools/testing/selftests/sgx/sigstruct.c
+@@ -289,14 +289,14 @@ static bool mrenclave_eextend(EVP_MD_CTX *ctx, uint64_t offset,
+ static bool mrenclave_segment(EVP_MD_CTX *ctx, struct encl *encl,
+ 			      struct encl_segment *seg)
+ {
+-	uint64_t end = seg->offset + seg->size;
++	uint64_t end = seg->size;
+ 	uint64_t offset;
+ 
+-	for (offset = seg->offset; offset < end; offset += PAGE_SIZE) {
+-		if (!mrenclave_eadd(ctx, offset, seg->flags))
++	for (offset = 0; offset < end; offset += PAGE_SIZE) {
++		if (!mrenclave_eadd(ctx, seg->offset + offset, seg->flags))
+ 			return false;
+ 
+-		if (!mrenclave_eextend(ctx, offset, encl->src + offset))
++		if (!mrenclave_eextend(ctx, seg->offset + offset, seg->src + offset))
+ 			return false;
+ 	}
+ 
 -- 
 2.32.0
 
