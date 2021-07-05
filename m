@@ -2,80 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA353BAECB
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jul 2021 22:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597A83BB4F7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jul 2021 03:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbhGDU2u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 4 Jul 2021 16:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbhGDU2u (ORCPT
+        id S229715AbhGEBqY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 4 Jul 2021 21:46:24 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:10247 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229681AbhGEBqY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 4 Jul 2021 16:28:50 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D1BC061765
-        for <linux-kselftest@vger.kernel.org>; Sun,  4 Jul 2021 13:26:13 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id v14so3042061lfb.4
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Jul 2021 13:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sharpeleven-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wlUnqqhwGO2ss5CdIs4O+XCoeOXjYNdtyzXcVD3xri0=;
-        b=XgKgDo6l95RCCdzJlIBW/z4zT5vKBNadDp8QG5dOQjynV0boSEhPF0UrBcurESS5Wq
-         /X3IB2crM3pzM5qfh/JLt+LNIAQNGZOMOC1Od+DhnZkYZ3wkdAeL57Miz81y/A7ou/wE
-         8MyBDCwpg0p25eCclaO0UhbvyN9T1LkQkUyBhVPYJUt5hoirEt8SS237XRHjNCoH4Szp
-         Hon7C3jCttNWS6nbQZLsGHQYqLs5odKq/iJYB7y4q+gSWHqsjMSN5xzTktuJ7EVEmOHn
-         aDJJDUpRAk9siQDdYqLCtQoa2OMuBs1VVvZORi0nEdwEZSOnVWEqmgJpLjiDjnWyB5yP
-         XyxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wlUnqqhwGO2ss5CdIs4O+XCoeOXjYNdtyzXcVD3xri0=;
-        b=nNaYFtKM86FL1gfYTasr1EhmG9+GtFR38MsEvRvh48HBkOOn5nniI8Zq+IjQr4w/UX
-         Ho2wKiSuQYNS7rnVk5LZdce+r/06ZhzWgyyVbGfl6xL/+Q2It1k+VhYjUqPpTlxtMwWW
-         fSpxdGOR54/sJs7JvoL8C7yxjxAaZqdiU3XzWkYtafpCccAT4MlkgiUNpaeOYlNLYr79
-         rMFCTNdsVHWlq3TMeBngHyRZ5Vxm0lLTeXnt4DkpiddByhMRtWCwiXa8LNYHeVrPQLz7
-         qnxEQMOO6EPd+04ePDldvJ85JcUfCZZPIcJq09+iwhX2lcNL5AgcTWjktdQH7dWnRqBF
-         MAZg==
-X-Gm-Message-State: AOAM530aZ+jOqposrHvkpV5WWnoHpAaHnZoFxmovPTMfbE35fnDsyjys
-        tGELm88fGbtpd+811uwQU74S434vGlqlnCN3GtpGYJPZQoz4EAtq
-X-Google-Smtp-Source: ABdhPJzT4kCTCfR+J5F2nu+OMI1Ah16dq9+EEowoXNfH4FF0nxjuR02KGz8ayP4IUw9c584xVK5UlyqW6aRMgEVaF1E=
-X-Received: by 2002:ac2:55a7:: with SMTP id y7mr7943415lfg.179.1625430371579;
- Sun, 04 Jul 2021 13:26:11 -0700 (PDT)
+        Sun, 4 Jul 2021 21:46:24 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GJ7cY09tlz1CFLb;
+        Mon,  5 Jul 2021 09:38:21 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 5 Jul 2021 09:43:46 +0800
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Mon, 5 Jul 2021
+ 09:43:46 +0800
+Subject: Re: Re: [PATCH net-next v3 1/3] selftests/ptr_ring: add benchmark
+ application for ptr_ring
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+CC:     Jason Wang <jasowang@redhat.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <brouer@redhat.com>, <paulmck@kernel.org>,
+        <peterz@infradead.org>, <will@kernel.org>, <shuah@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
+References: <1625142402-64945-1-git-send-email-linyunsheng@huawei.com>
+ <1625142402-64945-2-git-send-email-linyunsheng@huawei.com>
+ <e1ec4577-a48f-ff56-b766-1445c2501b9f@redhat.com>
+ <91bcade8-f034-4bc7-f329-d5e1849867e7@huawei.com>
+ <20210702042838-mutt-send-email-mst@kernel.org>
+ <661a84bc-e7c5-bc21-25ac-75a68efa79ca@huawei.com>
+ <1fed53f1-f882-ca67-8876-ca6702dcd9cd@redhat.com>
+ <06f0dc67-d614-30d3-6dcc-f2446cb6030b@huawei.com>
+ <20210702101730-mutt-send-email-mst@kernel.org>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <6e070501-204b-dc3e-60fb-4134ebdab206@huawei.com>
+Date:   Mon, 5 Jul 2021 09:43:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-References: <20210702050543.2693141-1-mcgrof@kernel.org> <20210702050543.2693141-2-mcgrof@kernel.org>
- <YN6iSKCetBrk2y8V@kroah.com> <20210702190230.r46bck4vib7u3qo6@garbanzo>
- <YN/rtmZbd6velB1L@kroah.com> <20210703155203.uvxcolrddswecco6@garbanzo>
-In-Reply-To: <20210703155203.uvxcolrddswecco6@garbanzo>
-From:   Richard Fontana <fontana@sharpeleven.org>
-Date:   Sun, 4 Jul 2021 16:26:00 -0400
-Message-ID: <CAGT84B1fdypvndxk97wS59=5VgQ80LhWxxs_Yx33169P9WvKZg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] selftests: add tests_sysfs module
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, tj@kernel.org,
-        shuah@kernel.org, akpm@linux-foundation.org, rafael@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        andriin@fb.com, daniel@iogearbox.net, atenart@kernel.org,
-        alobakin@pm.me, weiwan@google.com, ap420073@gmail.com,
-        jeyu@kernel.org, ngupta@vflare.org,
-        sergey.senozhatsky.work@gmail.com, minchan@kernel.org,
-        axboe@kernel.dk, mbenes@suse.com, jpoimboe@redhat.com,
-        tglx@linutronix.de, keescook@chromium.org, jikos@kernel.org,
-        rostedt@goodmis.org, peterz@infradead.org,
-        linux-block@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210702101730-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme709-chm.china.huawei.com (10.1.199.105) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
- On Sat, Jul 3, 2021 at 11:52 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+On 2021/7/2 22:18, Michael S. Tsirkin wrote:
+> On Fri, Jul 02, 2021 at 05:54:42PM +0800, Yunsheng Lin wrote:
+>> On 2021/7/2 17:04, Jason Wang wrote:
+>>>
+>>
+>> [...]
+>>
+>>>
+>>>
+>>>> I understand that you guys like to see a working testcase of virtio.
+>>>> I would love to do that if I have the time and knowledge of virtio,
+>>>> But I do not think I have the time and I am familiar enough with
+>>>> virtio to fix that now.
+>>>
+>>>
+>>> So ringtest is used for bench-marking the ring performance for different format. Virtio is only one of the supported ring format, ptr ring is another. Wrappers were used to reuse the same test logic.
+>>>
+>>> Though you may see host/guest in the test, it's in fact done via two processes.
+>>>
+>>> We need figure out:
+>>>
+>>> 1) why the current ringtest.c does not fit for your requirement (it has SPSC test)
+>>
+>> There is MPSC case used by pfifo_fast, it make more sense to use a separate selftest
+>> for ptr_ring as ptr_ring has been used by various subsystems.
+>>
+>>
+>>> 2) why can't we tweak the ptr_ring.c to be used by both ring_test and your benchmark
+>>
+>> Actually that is what I do in this patch, move the specific part related to ptr_ring
+>> to ptr_ring_test.h. When the virtio testing is refactored to work, it can reuse the
+>> abstract layer in ptr_ring_test.h too.
+> 
+> Sounds good. But that refactoring will be up to you as a contributor.
+
+It seems that tools/include/* have a lot of portability infrastructure for building
+kernel code from userspace, will try to refactor the ptr_ring.h to use the portability
+infrastructure in tools/include/* when building ptr_ring.h from userspace.
+
 >
-> We don't have spdx license tag yet for copyleft-next,
-
-https://spdx.org/licenses/copyleft-next-0.3.0.html
-https://spdx.org/licenses/copyleft-next-0.3.1.html
-
-Richard
