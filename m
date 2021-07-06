@@ -2,73 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F05D53BC373
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jul 2021 22:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AD73BC6FC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jul 2021 09:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbhGEUoC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jul 2021 16:44:02 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:41036 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229565AbhGEUoC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jul 2021 16:44:02 -0400
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4GJczS3zWxzF4R3;
-        Mon,  5 Jul 2021 13:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1625517684; bh=mcP7GTpYcz8gmBbWbpvz4LK4ISwqUY32oQ05EIYlUTE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FcmBYEUFmYm1CfJn9KOawK/oIT++e3Gz/fJPg88bIFUD6NAB+9lE1JF7J3RAs9pt8
-         nTdbHjUz9zrBkzv/O/0APCRUjXZb3ctftZGnK7KnrvVWoaJqKOfl8XntTiCTz1/06i
-         nUNrgyMCKSx3P/xkZEdoH3urkifZot+iUg27ltkA=
-X-Riseup-User-ID: 414D7E3800BEA5DF5307659E7A87786B63EA8D06309EF7B01B0F89D74CDBD157
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4GJczP5rZkz5vY5;
-        Mon,  5 Jul 2021 13:41:21 -0700 (PDT)
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@riseup.net>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>
-Cc:     kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, ~lkcamp/discussion@lists.sr.ht,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <n@nfraprado.net>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Leandro Ribeiro <leandrohr@riseup.net>,
-        kernel-usp@googlegroups.com
-Subject: KUnit Hackathon
-Message-ID: <83ff3ed3-e004-29b2-b23c-a2ba4d5a3f7f@riseup.net>
-Date:   Mon, 5 Jul 2021 17:41:19 -0300
+        id S230164AbhGFHRZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jul 2021 03:17:25 -0400
+Received: from mail-vs1-f50.google.com ([209.85.217.50]:44916 "EHLO
+        mail-vs1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230138AbhGFHRZ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 6 Jul 2021 03:17:25 -0400
+Received: by mail-vs1-f50.google.com with SMTP id o12so315089vsr.11;
+        Tue, 06 Jul 2021 00:14:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hTMRldGz8RN6GdcUqOfOAyODqtBNTkUTJPVSR996zFY=;
+        b=t6dLtHaK4HZquC1/EAK6Qc4MnTOvtvEgphRBP7gWABM8JbDW1EFwWtSFhryAFouorq
+         /GGELy2rHBjsY267PZ2nwzSxX7Laqn+Q8ptElQS1Xd7FMvzGXuCQQOag2MEhgPC1Z6nR
+         SlW/Hiy36KqzLRPmuwRnfmAxmDWcyalWZ7ALSuJg5q3YN4ej3FFyBx67FcNdvLNnasJP
+         aXHfBjhY7vg72nxeu2twfxD3+F5L3Y9BGzcCwGeiF3HMxelhlNazZITGOi4BulnRREqI
+         ENR4M5eeByOPizECQHAJpLNuVlKcc6MYGbtOU84tu0jeWvag7tiNoXC2T/lVYPUQr8+N
+         V8iQ==
+X-Gm-Message-State: AOAM531dvlytkCNuL3w93Pzl4vMzRAXsXIxCXIytmumIPK8bCl9fMSLW
+        gBKTf76ihFfQ8vHf54oHJlFIqnVdSk1igiKV1n4=
+X-Google-Smtp-Source: ABdhPJzFH7L46qe+Zc2K3BEQAmfa8UbDuGihEqiGJmyL9FDnJPn6BVWv2sI9g2V+e4yxbLX8lHz4Qo6KyX5iFqsdftg=
+X-Received: by 2002:a67:770d:: with SMTP id s13mr13037763vsc.40.1625555686463;
+ Tue, 06 Jul 2021 00:14:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210705114633.1500710-1-geert@linux-m68k.org> <YOMc2PZTur+qyhH9@smile.fi.intel.com>
+In-Reply-To: <YOMc2PZTur+qyhH9@smile.fi.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 6 Jul 2021 09:14:35 +0200
+Message-ID: <CAMuHMdWeRyK3iq7DNaw81OJvT6YwX8Eem1nrYfV9DzX10Xcomw@mail.gmail.com>
+Subject: Re: [PATCH] math: Make RATIONAL tristate
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Trent Piepho <tpiepho@gmail.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+Hi Andy,
 
-We belong to two student groups, FLUSP [1] and LKCAMP [2], both of which
-are focused on sharing kernel and free software development knowledge
-and experience with fellow free software developers and newcomers.
+On Mon, Jul 5, 2021 at 4:53 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Mon, Jul 05, 2021 at 01:46:33PM +0200, Geert Uytterhoeven wrote:
+> > All but one symbols that select RATIONAL are tristate, but RATIONAL
+> > itself is bool.  Change it to tristate, so the rational fractions
+> > support code can be modular if no builtin code relies on it.
+> >
+> > While at it, add support for compile-testing and provide a help text.
+>
+> ...
+>
+> > Exposed by commit b6c75c4afceb8bc0 ("lib/math/rational: add Kunit test
+> > cases") and CONFIG_KUNIT_ALL_TESTS=m.
+> >
+> > I'm not so happy RATIONAL_KUNIT_TEST selects RATIONAL, as test code
+> > should depend on the presence of the feature to test.  Else enabling
+> > a test may add unneeded code to a production kernel.
+> > Perhaps the "if COMPILE_TEST" should be dropped, making RATIONAL
+> > visible, so RATIONAL_KUNIT_TEST can depend on RATIONAL instead?
+>
+> ...
+>
+> > +     tristate "Rational fractions support" if COMPILE_TEST
+>
+> Making it tristate is okay, but visible (even for COMPILE_TEST)... why?
+> Just on purpose to be dependent on for test case? I understand your
+> justification above, but it will bring all hidden symbols to be unhidden
+> (due to test cases) and this is not the right thing to do in my opinion.
 
-As part of our efforts, we'll be organizing a KUnit hackathon in the
-next Saturday (July 10), where we intend to help newcomers convert
-existing runtime tests (the ones found at lib/) to KUnit and maybe
-create new ones. Depending on the number of attendees, a high volume of
-patches may be sent throughout the day. We will do our best to review
-all patches before they go to the kernel mailing lists hoping to avoid
-wasting your time with minor patching issues.
+OK.  Will drop in v2.
 
-So we wanted to let you know of all this beforehand and give you the
-time to send any suggestions or comments on all this. For instance, we
-may ask people to add a special tag to their patches so you may batch
-review them all at a later time if you wish.
+> Why not to complain to KUnit people to fix their infra to avoid tests that
+> tries non-selected feature(s)?
 
-Anyhow, we'd really appreciate having your opinion on this.
-Thanks!
+I guess the audience is listening...
 
-[1] - https://flusp.ime.usp.br/
-[2] - https://lkcamp.dev/
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
