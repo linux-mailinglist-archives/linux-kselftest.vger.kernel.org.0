@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5083BD0B5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jul 2021 13:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436623BD0CC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jul 2021 13:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbhGFLg1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jul 2021 07:36:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35428 "EHLO mail.kernel.org"
+        id S237705AbhGFLgw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jul 2021 07:36:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47620 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234734AbhGFL2d (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:28:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9381961D76;
-        Tue,  6 Jul 2021 11:20:16 +0000 (UTC)
+        id S236488AbhGFLf2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:35:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5D6F561E36;
+        Tue,  6 Jul 2021 11:23:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570417;
-        bh=KbOjLmQKIvqAb446ria5iDg2+gk0WS2ruQ9pR6jeksI=;
+        s=k20201202; t=1625570618;
+        bh=zsY48qFw8ymrMeZel0vvj8wQaPvNdXU9ZoRorx8BPeU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wjt7MScuR0rdGR/6x7h/wEXl2zabjYPceJRWxr+H/OANPqX9/jFJetx+lXD7DJXs0
-         zxWK3l29vNx/6K67bdUMaRqVl0tej3W1bOo91SP9FJn4Ds+T36PXqotc+D9QsLFC4m
-         BoN42ILPYHb25etbvsLb7h1/02ZCO7zcTrWeeCd2GkZs/bgKEotfZD33CU8vXsm83F
-         AXfPM1Jbi10QYz+5vXsxk2NvMmcYv7a45Kk9cvKubSTQom2nTcIi1EiTy8I7yINH9S
-         nD5lpUWLdhNjFNOz3Vqhe5w+ZTvDR2OwsGxtw96NK+oqGVMsmjyA5JSdGq/GDaH852
-         0XzGrWAN+dR+g==
+        b=P3SyQvuliCewA6drG66hnBcwQwKwJSo4zLanVnVt/b0OIIKMcYA8tOUF4LcG2RHma
+         CxIhBs+AhQxbgXohQlU+IMjgU6JW+B2lls8dvcK/beaN74k5zG6gTFyj3mBsd4IyWa
+         6Y4jFWnbFkVhRVl5p/cPqgaMqirg2uz66GNQ5u/v1WqAvpcI48rr2RS51XveobsZXF
+         Pw9Ry+jXSAYdrCDQp+D7qeWJjT1acH0BpupI/nLRyolPDBf7hey0xrOeR6g1hShM0X
+         lMCUgBpam7m4BgdeE3ja0ToLU0zo6QUFRp8xC+YHiJbp4D/75/AT0sJWc2JbJTZI9/
+         ecbklVM/WRWUw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Amit Cohen <amcohen@nvidia.com>, Petr Machata <petrm@nvidia.com>,
@@ -30,12 +30,12 @@ Cc:     Amit Cohen <amcohen@nvidia.com>, Petr Machata <petrm@nvidia.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 082/160] selftests: Clean forgotten resources as part of cleanup()
-Date:   Tue,  6 Jul 2021 07:17:08 -0400
-Message-Id: <20210706111827.2060499-82-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 073/137] selftests: Clean forgotten resources as part of cleanup()
+Date:   Tue,  6 Jul 2021 07:20:59 -0400
+Message-Id: <20210706112203.2062605-73-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210706111827.2060499-1-sashal@kernel.org>
-References: <20210706111827.2060499-1-sashal@kernel.org>
+In-Reply-To: <20210706112203.2062605-1-sashal@kernel.org>
+References: <20210706112203.2062605-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  6 files changed, 14 insertions(+)
 
 diff --git a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_drops.sh b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_drops.sh
-index 4029833f7e27..160891dcb4bc 100755
+index f5abb1ebd392..269b2680611b 100755
 --- a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_drops.sh
 +++ b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_drops.sh
-@@ -109,6 +109,9 @@ router_destroy()
+@@ -108,6 +108,9 @@ router_destroy()
  	__addr_add_del $rp1 del 192.0.2.2/24 2001:db8:1::2/64
  
  	tc qdisc del dev $rp2 clsact
