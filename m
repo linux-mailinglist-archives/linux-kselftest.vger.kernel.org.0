@@ -2,69 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B133BDA57
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jul 2021 17:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F74C3BDD50
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jul 2021 20:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbhGFPl4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jul 2021 11:41:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54102 "EHLO mail.kernel.org"
+        id S231208AbhGFShh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jul 2021 14:37:37 -0400
+Received: from mga09.intel.com ([134.134.136.24]:26101 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231689AbhGFPl4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jul 2021 11:41:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D213A61A46;
-        Tue,  6 Jul 2021 15:39:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1625585956;
-        bh=C5TxgHCUYQtTJww8peg9FcreqZqhtW6SRaHn8e3V6C4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mgRXkAjuhq1sIVlATFBGyh4eVjNQp3T6DS7kumrou9plECr7EY38lMfhS8MQXeAHH
-         Vuh2+69g5Id8P4HBnB+K5eTMb9Ef3wSr6W++W2J2OzdWdTIw6hekSIlYWsYKDrz/9A
-         bfenmJkU0frmxzIyk0Ybbf/dCNgnVwiJohbU30+4=
-Date:   Tue, 6 Jul 2021 17:39:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
+        id S231172AbhGFShh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 6 Jul 2021 14:37:37 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10037"; a="209130117"
+X-IronPort-AV: E=Sophos;i="5.83,329,1616482800"; 
+   d="scan'208";a="209130117"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 11:34:56 -0700
+X-IronPort-AV: E=Sophos;i="5.83,329,1616482800"; 
+   d="scan'208";a="481695884"
+Received: from rchatre-mobl3.amr.corp.intel.com (HELO [10.212.213.166]) ([10.212.213.166])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 11:34:55 -0700
+Subject: Re: [PATCH 4/4] selftests/sgx: Trigger the reclaimer and #PF handler
+To:     Jarkko Sakkinen <jarkko@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
         Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/4] x86/sgx: Add sgx_nr_all_pages to the debugfs
-Message-ID: <YOR5Ia4XnZhiDNQX@kroah.com>
+        linux-kernel@vger.kernel.org
 References: <20210705143652.116125-1-jarkko@kernel.org>
- <20210705143652.116125-2-jarkko@kernel.org>
- <b8a31e6e-90e8-f93f-e6b2-e72801fb31e4@intel.com>
+ <20210705143652.116125-5-jarkko@kernel.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+Message-ID: <715ed555-5044-6fee-1d09-1c4cfa827af3@intel.com>
+Date:   Tue, 6 Jul 2021 11:34:54 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b8a31e6e-90e8-f93f-e6b2-e72801fb31e4@intel.com>
+In-Reply-To: <20210705143652.116125-5-jarkko@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 06, 2021 at 07:56:40AM -0700, Dave Hansen wrote:
-> On 7/5/21 7:36 AM, Jarkko Sakkinen wrote:
-> > Create /sys/kernel/debug/x86/sgx_nr_all_pages, which reports total
-> > number of EPC pages available in the system.
-> Could we flesh this out a bit, please?
-> 
-> What's the value here when userspace could just re-enumerate the EPC
-> size from CPUID?
-> 
-> I'd really appreciate if we could draw parallels between these additions
-> to the "SGX VM" and their analogs in the "core VM".  In this case, I
-> think the closest analog is probably "MemTotal" in /proc/meminfo.
-> 
-> Second, how is this going to be used?
-> 
-> Third, is this going to be the ABI forever?
+Hi Jarkko,
 
-debugfs is never a stable abi.  If it is being used as such, then the
-kernel code is wrong.  This better just be debugging stuff only.
+On 7/5/2021 7:36 AM, Jarkko Sakkinen wrote:
+> Create a heap for the test enclave, which has the same size as all
+> available Enclave Page Cache (EPC) pages in the system. This will guarantee
+> that all test_encl.elf pages *and* SGX Enclave Control Structure (SECS)
+> have been swapped out by the page reclaimer during the load time. Actually,
+> this adds a bit more stress than that since part of the EPC gets reserved
+> for the Version Array (VA) pages.
+> 
+> For each test, the page fault handler gets triggered in two occasions:
+> 
+> - When SGX_IOC_ENCLAVE_INIT is performed, SECS gets swapped in by the
+>    page fault handler.
+> - During the execution, each page that is referenced gets swapped in
+>    by the page fault handler.
+> 
 
-thanks,
+If I understand this correctly, all EPC pages are now being consumed 
+during fixture setup and thus every SGX test, no matter how big or 
+small, now becomes a stress test of the reclaimer instead of there being 
+a unique reclaimer test. Since an enclave is set up and torn down for 
+every test this seems like a significant addition. It also seems like 
+this would impact future tests of dynamic page addition where not all 
+scenarios could be tested with all EPC pages already consumed.
 
-greg k-h
+Reinette
