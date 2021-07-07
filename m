@@ -2,166 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8E03BE348
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jul 2021 08:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3313BE56B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jul 2021 11:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbhGGGv6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jul 2021 02:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbhGGGv6 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jul 2021 02:51:58 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBEEC061574
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jul 2021 23:49:17 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id v3so1677591ioq.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jul 2021 23:49:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=a7uL/oPB5i1I9w73FKJk3bpkvp5li9awT1HJMZPU03I=;
-        b=vmD7bYT0oe73Px04GkCXnIyNIMn0dhgylqiIkNb3qhA4li9/SrsbPFq/0G3y7gvG5Q
-         cJmD8GRMe0ptE+ikXJtA226NywNPosf9s+a3BmLWBBVlPqDYY2toYdNmYZHDP+BAMznA
-         +j8d0cGZD0wxYaqxVC3qKC3l4QzVrfp5JG0GV1oDIssj+FjHql1wpaFPDbdHtDEhjNi0
-         5pWdAuPm7ej6JQHrHwDPjJ3QRJOJDbXExDOZ8z2uwya0g3gyRXfsn1h1KntxT6w9F9In
-         v0gMEsPewL8ZoHeYNzyM8yUtknEyJStXQEnmGag243tCCSV2MOzYwvsR7QRXfKVSmfaB
-         HSBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=a7uL/oPB5i1I9w73FKJk3bpkvp5li9awT1HJMZPU03I=;
-        b=jf/0o3GfBNG+32FGUhjVL/Pj2hRLD6BgauxPjtc5tOkDff2jGdc54KPKTj/BEaYLvn
-         Uu4ItlGPYjjNPrE/uqaJU0UNdn2xsSpwNYj3WMBXLgiIELhzRKkFUa9rptRkHK/NEGMc
-         7oZn/qkLLEo+MLoagc4wZWUzyHL5qOPHJhnq+qJbRcXukU3OGjRTlLGgGNKtijDBuApH
-         PcbxlkezfrMpy9JuZC1Anv27dRnenSWNwZ+suZ3TkbIw2mMuildwjyZjmIBk2yNLa9sZ
-         pg8byqpkArMUVrL4hVFCWB42Nxn6vu1irnJfxF2EQJ7XAM4UdxbOzDMOmYDF3zy2ceXE
-         xemQ==
-X-Gm-Message-State: AOAM533p78efySOyQokCVVBildMJNEbmqzOspbLGFYygBj5bE3B0Ptxq
-        RwkcFRP7q7TN3A3VMSqIznzyxsCbGvmayc1AfyoxrQ==
-X-Google-Smtp-Source: ABdhPJwD87oxc0ENnJs8s+5fKQASkfDEvEaKfTIeeIz+p2xjqv13d9bXWVcuDURWEiy+bcjb0ffqW3cM7ZmTnopR8vo=
-X-Received: by 2002:a02:2b27:: with SMTP id h39mr20704167jaa.62.1625640553951;
- Tue, 06 Jul 2021 23:49:13 -0700 (PDT)
+        id S231144AbhGGJUT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jul 2021 05:20:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48608 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230166AbhGGJUS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 7 Jul 2021 05:20:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 746DA61CB9;
+        Wed,  7 Jul 2021 09:17:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625649459;
+        bh=Hs06sVQKYjVO+YnaiWfyv/Cxu/1sf138i7r7Y5bwk5w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PloM3b8JEWOD92WjjhSxjU4JfWwnVXFdOaOQzKPKpv4vr1MvTlZpQQmphfCUHYb/J
+         E2nFHUzbqyX5MYr+0eU6iz8JO721cZ+pXWyViekcIxyoLAkl4QD1DH47idabUCvu91
+         ks3HLhmZjTSRPQxeRDLVSVl+Pvo/xfFtRVtgdYyayiz+Cl5kwp9tDjFMfe9TWZQnLK
+         jlUmDVCLM5KT9hxYu7DDUD1azW5fSyNOs22oH7AzdIRGZbxgOzZFpPXVy9R57cPMGo
+         uZVJI9SkqAu+AX0VSOI6cLpuWWxPFIUIOHacb6OEX2l/A6AVHvhSYEakOLsphBDBqj
+         ZkWhTpMeCzP9Q==
+Date:   Wed, 7 Jul 2021 12:17:36 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-sgx@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] selftests/sgx: Trigger the reclaimer and #PF handler
+Message-ID: <20210707091736.6wzemgmtzuegk3uf@kernel.org>
+References: <20210705143652.116125-1-jarkko@kernel.org>
+ <20210705143652.116125-5-jarkko@kernel.org>
+ <715ed555-5044-6fee-1d09-1c4cfa827af3@intel.com>
+ <20210706235016.uucukyrr3ckk57pi@kernel.org>
+ <16505466-e001-c4b0-ec41-5384ddcf194b@intel.com>
 MIME-Version: 1.0
-References: <83ff3ed3-e004-29b2-b23c-a2ba4d5a3f7f@riseup.net>
-In-Reply-To: <83ff3ed3-e004-29b2-b23c-a2ba4d5a3f7f@riseup.net>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 6 Jul 2021 23:48:44 -0700
-Message-ID: <CAGS_qxojszgM19u=3HLwFgKX5bm5KhywvsSunuBAt5RtR+GyxQ@mail.gmail.com>
-Subject: Re: KUnit Hackathon
-To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, ~lkcamp/discussion@lists.sr.ht,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <n@nfraprado.net>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Leandro Ribeiro <leandrohr@riseup.net>,
-        kernel-usp@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <16505466-e001-c4b0-ec41-5384ddcf194b@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 5, 2021 at 1:41 PM Andr=C3=A9 Almeida <andrealmeid@riseup.net> =
-wrote:
->
-> Hello,
->
-> We belong to two student groups, FLUSP [1] and LKCAMP [2], both of which
-> are focused on sharing kernel and free software development knowledge
-> and experience with fellow free software developers and newcomers.
->
-> As part of our efforts, we'll be organizing a KUnit hackathon in the
-> next Saturday (July 10), where we intend to help newcomers convert
-> existing runtime tests (the ones found at lib/) to KUnit and maybe
-> create new ones. Depending on the number of attendees, a high volume of
-> patches may be sent throughout the day. We will do our best to review
-> all patches before they go to the kernel mailing lists hoping to avoid
-> wasting your time with minor patching issues.
+On Tue, Jul 06, 2021 at 05:10:38PM -0700, Reinette Chatre wrote:
+> Hi Jarkko,
+> 
+> On 7/6/2021 4:50 PM, Jarkko Sakkinen wrote:
+> > On Tue, Jul 06, 2021 at 11:34:54AM -0700, Reinette Chatre wrote:
+> > > Hi Jarkko,
+> > > 
+> > > On 7/5/2021 7:36 AM, Jarkko Sakkinen wrote:
+> > > > Create a heap for the test enclave, which has the same size as all
+> > > > available Enclave Page Cache (EPC) pages in the system. This will guarantee
+> > > > that all test_encl.elf pages *and* SGX Enclave Control Structure (SECS)
+> > > > have been swapped out by the page reclaimer during the load time. Actually,
+> > > > this adds a bit more stress than that since part of the EPC gets reserved
+> > > > for the Version Array (VA) pages.
+> > > > 
+> > > > For each test, the page fault handler gets triggered in two occasions:
+> > > > 
+> > > > - When SGX_IOC_ENCLAVE_INIT is performed, SECS gets swapped in by the
+> > > >     page fault handler.
+> > > > - During the execution, each page that is referenced gets swapped in
+> > > >     by the page fault handler.
+> > > > 
+> > > 
+> > > If I understand this correctly, all EPC pages are now being consumed during
+> > > fixture setup and thus every SGX test, no matter how big or small, now
+> > > becomes a stress test of the reclaimer instead of there being a unique
+> > > reclaimer test. Since an enclave is set up and torn down for every test this
+> > > seems like a significant addition. It also seems like this would impact
+> > > future tests of dynamic page addition where not all scenarios could be
+> > > tested with all EPC pages already consumed.
+> > > 
+> > > Reinette
+> > 
+> > Re-initializing the test enclave is mandatory thing to do for all tests
+> > because it has an internals state.
+> > 
+> 
+> Right, but not all tests require the same enclave. In kselftest terminology
+> I think you are attempting to force all tests to depend on the same test
+> fixture. Is it not possible to have a separate "reclaimer" test fixture that
+> would build an enclave with a large heap and then have reclaimer tests that
+> exercise it by being tests that are specific to this "reclaimer fixture"?
+> 
+> Reinette
 
-That sounds great!
+Why add that complexity?
 
->
-> So we wanted to let you know of all this beforehand and give you the
-> time to send any suggestions or comments on all this. For instance, we
-
-Some random, unorganized thoughts:
-* I (as a kernel newbie) found the ownership of tests under lib/ to be
-a bit unclear.
-
-* Make sure to base on 5.14, there's some new features that could be of use
-  * QEMU support in kunit.py: it's no longer as big of a deal if we
-can't get tests running under UML. Brendan's made it fairly easy to
-run tests in an x86 VM.
-  * Skipped tests support: can now mark a test skipped. Some of the
-lib/ tests could benefit, e.g. test_hash.c
-  * another lib/ test conversion just landed in 5.14, [1], along with
-kunit_kcalloc/kunit_malloc_array() helpers
-  * Documentation/dev-tools/kunit/running_tips.rst - has instructions
-for how to generate code coverage reports using UML/kunit.py
-    * This seems like it could be useful... [2]
-
-* I feel that the hackathon will surface a number of feature requests
-for KUnit. Some patches might be blocked on these features (like your
-uuid patch).
-  * Might be good to track these as they come up and note which
-patches are blocked.
-
-* Should we make a decision beforehand wrt renaming test files and
-kconfig options to match the style guide? In the most recent
-conversion [1], I left them as-is. The answer depends on the test
-owner, but we should probably be consistent with what we do in the
-v1's at least.
-
-* I assume test modules used in selftests (test_bitmap, test_printf,
-etc.) should remain untouched for now ?
-  * KUnit does *not* return a non-zero exit code when you modprobe the
-test, as the userspace part of those tests assumes.
-  * We could write a wrapper like kselftest/module.sh, but for KUnit
-test modules, but this extra in-flight patch would become a dependency
-for maybe multiple other conversions.
-  * I'd like it if we had ^ eventually, but I don't know how others
-feel about that.
-
-* I had some small patches for converting test_min_heap.c and
-test_sort.c that I should get around to sending out.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?id=3Debd09577be6c15ee2d343cf60e5bb819946a5ee8
-[2] I currently see
-  Overall coverage rate:
-  lines......: 16.4% (20034 of 122481 lines)
-  functions..: 18.1% (2032 of 11205 functions)
-with the following kunitconfig
-  CONFIG_KUNIT=3Dy
-  CONFIG_KUNIT_ALL_TESTS=3Dy
-  CONFIG_DEBUG_KERNEL=3Dy
-  CONFIG_DEBUG_INFO=3Dy
-  CONFIG_GCOV=3Dy
-
-This might be a neat way to motivate participants by showing #s going up.
-Note: I'm more interested in the # of covered functions than anything else.
-The %s are nice to look at, but not that useful since we're only
-compiling a small fraction of kernel code.
-
-> may ask people to add a special tag to their patches so you may batch
-> review them all at a later time if you wish.
->
-> Anyhow, we'd really appreciate having your opinion on this.
-> Thanks!
->
-> [1] - https://flusp.ime.usp.br/
-> [2] - https://lkcamp.dev/
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/83ff3ed3-e004-29b2-b23c-a2ba4d5a3f7f%40riseup.net.
+/Jarkko
