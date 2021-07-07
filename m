@@ -2,355 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9BC3BE198
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jul 2021 05:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8E03BE348
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jul 2021 08:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbhGGDye (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jul 2021 23:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        id S230299AbhGGGv6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jul 2021 02:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbhGGDyd (ORCPT
+        with ESMTP id S230263AbhGGGv6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jul 2021 23:54:33 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16A9C061574;
-        Tue,  6 Jul 2021 20:51:52 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id b13so1041394ybk.4;
-        Tue, 06 Jul 2021 20:51:52 -0700 (PDT)
+        Wed, 7 Jul 2021 02:51:58 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBEEC061574
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jul 2021 23:49:17 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id v3so1677591ioq.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jul 2021 23:49:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P6a8rgfJKPttoVRxkbkWBVfvazQk9uZY1QQSe7LxrWU=;
-        b=nwZpQ6EfkGairAflr/PxoQ0bY+kWyCtH+8+PAPchVlJJLWwcn2WnXy+8RD0E4wdoW3
-         v3M2+ZgJ6s/4ab6HJXTio36eb/BF/ypCt3wVxd9m+FCeGN/8eMmmxHebGeyQ43R0Y9A9
-         9X4nkCCeykj4WRnLU/m1pMZE4w3uS2xkxiWgQkQF/+vzhdm5dE2FEUThROLAksYVy0wd
-         DY7S+XyczT8QYeUGIv4R7GTiEihAIMUQ1E2W3Wwih5by6tD/Fj8i+ryq04xGo8U8x98x
-         4+cJwtovJwgQf8ItAWxYDo6SZEqASeuA34RiqxD53lhCnAsYpxnomAddoodWmF+vg2hY
-         dYkw==
+         :cc:content-transfer-encoding;
+        bh=a7uL/oPB5i1I9w73FKJk3bpkvp5li9awT1HJMZPU03I=;
+        b=vmD7bYT0oe73Px04GkCXnIyNIMn0dhgylqiIkNb3qhA4li9/SrsbPFq/0G3y7gvG5Q
+         cJmD8GRMe0ptE+ikXJtA226NywNPosf9s+a3BmLWBBVlPqDYY2toYdNmYZHDP+BAMznA
+         +j8d0cGZD0wxYaqxVC3qKC3l4QzVrfp5JG0GV1oDIssj+FjHql1wpaFPDbdHtDEhjNi0
+         5pWdAuPm7ej6JQHrHwDPjJ3QRJOJDbXExDOZ8z2uwya0g3gyRXfsn1h1KntxT6w9F9In
+         v0gMEsPewL8ZoHeYNzyM8yUtknEyJStXQEnmGag243tCCSV2MOzYwvsR7QRXfKVSmfaB
+         HSBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P6a8rgfJKPttoVRxkbkWBVfvazQk9uZY1QQSe7LxrWU=;
-        b=nQjTOjJeI0aqhd9yN3sAFep/xwHSj90+MvgYHTcQMkGWH3etO+QmDHZrwIVArf6ayG
-         xb8eRDhnhJkxjyejBsCEiO/agjT2GEchfIElUaD2RjhfCsFL7T5qcArCbBV0j8lMOsnO
-         atxKUBiZo0U5MVPd+ULQb9PcFdZ49sVs5kS20giuV6Hyts4Eug/FeJshVFyvXywVjWYw
-         i/X/qqkGCACEdzC2Cb8zalyuwHMVk3bUKFjqFtOOYqg0ml1NTT1CCfXa+RrwB3juXgSi
-         5BJv1UkSUafkMiWTWFyCtgYA2E9dlQNItoW12jQHgcM6kCSg2xZEfrbngrT4pIFDrtLs
-         JUzA==
-X-Gm-Message-State: AOAM533JpbLJ4u+aiqnCAAOUHrARs3bXoykX3drIJf/efbJnrowvr0Fm
-        6rdlvB0niFY7LzhYLME/0Zu1pH95vS9CSI8wkBY=
-X-Google-Smtp-Source: ABdhPJyve9Zsvj3pMxTVK3Q+WZmQ6XHjCfbM48O8Aa18N4ePvXC33w+XvkWuEjXBJR4ZZRpE2urMT5WOrLYs4uYqo3I=
-X-Received: by 2002:a25:d349:: with SMTP id e70mr29007752ybf.510.1625629911939;
- Tue, 06 Jul 2021 20:51:51 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=a7uL/oPB5i1I9w73FKJk3bpkvp5li9awT1HJMZPU03I=;
+        b=jf/0o3GfBNG+32FGUhjVL/Pj2hRLD6BgauxPjtc5tOkDff2jGdc54KPKTj/BEaYLvn
+         Uu4ItlGPYjjNPrE/uqaJU0UNdn2xsSpwNYj3WMBXLgiIELhzRKkFUa9rptRkHK/NEGMc
+         7oZn/qkLLEo+MLoagc4wZWUzyHL5qOPHJhnq+qJbRcXukU3OGjRTlLGgGNKtijDBuApH
+         PcbxlkezfrMpy9JuZC1Anv27dRnenSWNwZ+suZ3TkbIw2mMuildwjyZjmIBk2yNLa9sZ
+         pg8byqpkArMUVrL4hVFCWB42Nxn6vu1irnJfxF2EQJ7XAM4UdxbOzDMOmYDF3zy2ceXE
+         xemQ==
+X-Gm-Message-State: AOAM533p78efySOyQokCVVBildMJNEbmqzOspbLGFYygBj5bE3B0Ptxq
+        RwkcFRP7q7TN3A3VMSqIznzyxsCbGvmayc1AfyoxrQ==
+X-Google-Smtp-Source: ABdhPJwD87oxc0ENnJs8s+5fKQASkfDEvEaKfTIeeIz+p2xjqv13d9bXWVcuDURWEiy+bcjb0ffqW3cM7ZmTnopR8vo=
+X-Received: by 2002:a02:2b27:: with SMTP id h39mr20704167jaa.62.1625640553951;
+ Tue, 06 Jul 2021 23:49:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <1624092968-5598-1-git-send-email-alan.maguire@oracle.com> <1624092968-5598-4-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1624092968-5598-4-git-send-email-alan.maguire@oracle.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 6 Jul 2021 20:51:41 -0700
-Message-ID: <CAEf4BzZuCffvY-Ac7KYG1Qm0cyUuDB9wE3jqv0MG5+TRV_H5Bg@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 3/3] selftests/bpf: add dump type data tests
- to btf dump tests
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Bill Wendling <morbo@google.com>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+References: <83ff3ed3-e004-29b2-b23c-a2ba4d5a3f7f@riseup.net>
+In-Reply-To: <83ff3ed3-e004-29b2-b23c-a2ba4d5a3f7f@riseup.net>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 6 Jul 2021 23:48:44 -0700
+Message-ID: <CAGS_qxojszgM19u=3HLwFgKX5bm5KhywvsSunuBAt5RtR+GyxQ@mail.gmail.com>
+Subject: Re: KUnit Hackathon
+To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>, ~lkcamp/discussion@lists.sr.ht,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <n@nfraprado.net>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        Leandro Ribeiro <leandrohr@riseup.net>,
+        kernel-usp@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jun 19, 2021 at 1:56 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+On Mon, Jul 5, 2021 at 1:41 PM Andr=C3=A9 Almeida <andrealmeid@riseup.net> =
+wrote:
 >
-> Test various type data dumping operations by comparing expected
-> format with the dumped string; an snprintf-style printf function
-> is used to record the string dumped.  Also verify overflow handling
-> where the data passed does not cover the full size of a type,
-> such as would occur if a tracer has a portion of the 8k
-> "struct task_struct".
+> Hello,
 >
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/btf_dump.c | 644 ++++++++++++++++++++++
->  1 file changed, 644 insertions(+)
+> We belong to two student groups, FLUSP [1] and LKCAMP [2], both of which
+> are focused on sharing kernel and free software development knowledge
+> and experience with fellow free software developers and newcomers.
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> index 1b90e68..c894201 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> @@ -232,7 +232,621 @@ void test_btf_dump_incremental(void)
->         btf__free(btf);
->  }
+> As part of our efforts, we'll be organizing a KUnit hackathon in the
+> next Saturday (July 10), where we intend to help newcomers convert
+> existing runtime tests (the ones found at lib/) to KUnit and maybe
+> create new ones. Depending on the number of attendees, a high volume of
+> patches may be sent throughout the day. We will do our best to review
+> all patches before they go to the kernel mailing lists hoping to avoid
+> wasting your time with minor patching issues.
+
+That sounds great!
+
 >
-> +#define STRSIZE                                4096
-> +
-> +static void btf_dump_snprintf(void *ctx, const char *fmt, va_list args)
-> +{
-> +       char *s = ctx, new[STRSIZE];
-> +
-> +       vsnprintf(new, STRSIZE, fmt, args);
-> +       strncat(s, new, STRSIZE);
+> So we wanted to let you know of all this beforehand and give you the
+> time to send any suggestions or comments on all this. For instance, we
 
-this can cause stack corruption, because strncat doesn't take into
-account the length of string in s and might copy all STRSIZE bytes
-from new. What you want here is actually strlcat() variant, but I'm
-not sure it's available in Linux glibc. Instead, you have to pass
-STRSIZE - strlen(s) - 1 to strncat.
+Some random, unorganized thoughts:
+* I (as a kernel newbie) found the ownership of tests under lib/ to be
+a bit unclear.
 
-> +}
-> +
-> +/* skip "enum "/"struct " prefixes */
-> +#define SKIP_PREFIX(_typestr, _prefix)                                 \
-> +       do {                                                            \
-> +               if (strncmp(_typestr, _prefix, strlen(_prefix)) == 0)   \
-> +                       _typestr += strlen(_prefix) + 1;                \
+* Make sure to base on 5.14, there's some new features that could be of use
+  * QEMU support in kunit.py: it's no longer as big of a deal if we
+can't get tests running under UML. Brendan's made it fairly easy to
+run tests in an x86 VM.
+  * Skipped tests support: can now mark a test skipped. Some of the
+lib/ tests could benefit, e.g. test_hash.c
+  * another lib/ test conversion just landed in 5.14, [1], along with
+kunit_kcalloc/kunit_malloc_array() helpers
+  * Documentation/dev-tools/kunit/running_tips.rst - has instructions
+for how to generate code coverage reports using UML/kunit.py
+    * This seems like it could be useful... [2]
 
-If you expect "enum " or "struct " (not, say, "enum/"), then the test
-should just pass that in explicitly instead of SKIP_PREFIX silently
-ignoring an extra *any* character.
+* I feel that the hackathon will surface a number of feature requests
+for KUnit. Some patches might be blocked on these features (like your
+uuid patch).
+  * Might be good to track these as they come up and note which
+patches are blocked.
 
+* Should we make a decision beforehand wrt renaming test files and
+kconfig options to match the style guide? In the most recent
+conversion [1], I left them as-is. The answer depends on the test
+owner, but we should probably be consistent with what we do in the
+v1's at least.
 
-> +       } while (0)
-> +
+* I assume test modules used in selftests (test_bitmap, test_printf,
+etc.) should remain untouched for now ?
+  * KUnit does *not* return a non-zero exit code when you modprobe the
+test, as the userspace part of those tests assumes.
+  * We could write a wrapper like kselftest/module.sh, but for KUnit
+test modules, but this extra in-flight patch would become a dependency
+for maybe multiple other conversions.
+  * I'd like it if we had ^ eventually, but I don't know how others
+feel about that.
 
-[...]
+* I had some small patches for converting test_min_heap.c and
+test_sort.c that I should get around to sending out.
 
-> +/* overflow test; pass typesize < expected type size, ensure E2BIG returned */
-> +#define TEST_BTF_DUMP_DATA_OVER(_b, _d, _str, _type, _type_sz, _expected, ...)\
-> +       do {                                                            \
-> +               char __ptrtype[64] = #_type;                            \
-> +               char *_ptrtype = (char *)__ptrtype;                     \
-> +               _type _ptrdata = __VA_ARGS__;                           \
-> +               void *_ptr = &_ptrdata;                                 \
-> +               int _err;                                               \
-> +                                                                       \
-> +               _err = btf_dump_data(_b, _d, _ptrtype, 0, _ptr,         \
-> +                                    _type_sz, _str, _expected);        \
-> +               if (_err < 0)                                           \
-> +                       return;                                         \
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?id=3Debd09577be6c15ee2d343cf60e5bb819946a5ee8
+[2] I currently see
+  Overall coverage rate:
+  lines......: 16.4% (20034 of 122481 lines)
+  functions..: 18.1% (2032 of 11205 functions)
+with the following kunitconfig
+  CONFIG_KUNIT=3Dy
+  CONFIG_KUNIT_ALL_TESTS=3Dy
+  CONFIG_DEBUG_KERNEL=3Dy
+  CONFIG_DEBUG_INFO=3Dy
+  CONFIG_GCOV=3Dy
 
-don't return, let all the validation run. It's better to see all the
-failures than fix one by one, recompile, rerun, then fix another one.
-Same for TEST_BTF_DUMP_DATA above.
+This might be a neat way to motivate participants by showing #s going up.
+Note: I'm more interested in the # of covered functions than anything else.
+The %s are nice to look at, but not that useful since we're only
+compiling a small fraction of kernel code.
 
-> +       } while (0)
-> +
-> +#define TEST_BTF_DUMP_VAR(_b, _d, _str, _var, _type, _flags, _expected, ...) \
-> +       do {                                                            \
-> +               _type _ptrdata = __VA_ARGS__;                           \
-> +               void *_ptr = &_ptrdata;                                 \
-> +               int _err;                                               \
-> +                                                                       \
-> +               _err = btf_dump_data(_b, _d, _var, _flags, _ptr,        \
-> +                                    sizeof(_type), _str, _expected);   \
-> +               if (_err < 0)                                           \
-> +                       return;                                         \
-
-same, don't return early
-
-> +       } while (0)
-> +
-> +static void test_btf_dump_int_data(struct btf *btf, struct btf_dump *d,
-> +                                  char *str)
-> +{
-> +       /* simple int */
-> +       TEST_BTF_DUMP_DATA_C(btf, d, str, int, BTF_F_COMPACT, 1234);
-> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT | BTF_F_NONAME,
-> +                          "1234", 1234);
-> +       TEST_BTF_DUMP_DATA(btf, d, str, int, 0, "(int)1234", 1234);
-> +
-> +       /* zero value should be printed at toplevel */
-> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT, "(int)0", 0);
-> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT | BTF_F_NONAME,
-> +                          "0", 0);
-> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT | BTF_F_ZERO,
-> +                          "(int)0", 0);
-> +       TEST_BTF_DUMP_DATA(btf, d, str, int,
-> +                          BTF_F_COMPACT | BTF_F_NONAME | BTF_F_ZERO,
-> +                          "0", 0);
-> +       TEST_BTF_DUMP_DATA_C(btf, d, str, int, BTF_F_COMPACT, -4567);
-> +       TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_COMPACT | BTF_F_NONAME,
-> +                          "-4567", -4567);
-> +       TEST_BTF_DUMP_DATA(btf, d, str, int, 0, "(int)-4567", -4567);
-> +
-> +       TEST_BTF_DUMP_DATA_OVER(btf, d, str, int, sizeof(int)-1, "", 1);
-
-all of these validations are independent of each other, so there is no
-need to return early if any one fails (see above)
-
-> +}
-> +
-> +static void test_btf_dump_float_data(struct btf *btf, struct btf_dump *d,
-> +                                    char *str)
-> +{
-> +       float t1 = 1.234567;
-> +       float t2 = -1.234567;
-> +       float t3 = 0.0;
-> +       double t4 = 5.678912;
-> +       double t5 = -5.678912;
-> +       double t6 = 0.0;
-> +       long double t7 = 9.876543;
-> +       long double t8 = -9.876543;
-> +       long double t9 = 0.0;
-> +
-> +       /* since the kernel does not likely have any float types in its BTF, we
-> +        * will need to add some of various sizes.
-> +        */
-> +
-> +       if (!ASSERT_GT(btf__add_float(btf, "test_float", 4), 0, "add float"))
-> +               return;
-> +       if (!ASSERT_OK(btf_dump_data(btf, d, "test_float", 0, &t1, 4, str,
-> +                                    "(test_float)1.234567"), "dump float"))
-> +               return;
-> +
-> +       if (!ASSERT_OK(btf_dump_data(btf, d, "test_float", 0, &t2, 4, str,
-> +                                    "(test_float)-1.234567"), "dump float"))
-> +               return;
-> +       if (!ASSERT_OK(btf_dump_data(btf, d, "test_float", 0, &t3, 4, str,
-> +                                    "(test_float)0.000000"), "dump float"))
-> +               return;
-> +
-> +       if (!ASSERT_GT(btf__add_float(btf, "test_double", 8), 0, "add_double"))
-> +               return;
-> +       if (!ASSERT_OK(btf_dump_data(btf, d, "test_double", 0, &t4, 8, str,
-> +                                    "(test_double)5.678912"), "dump double"))
-> +               return;
-> +       if (!ASSERT_OK(btf_dump_data(btf, d, "test_double", 0, &t5, 8, str,
-> +                                    "(test_double)-5.678912"), "dump double"))
-> +               return;
-> +       if (!ASSERT_OK(btf_dump_data(btf, d, "test_double", 0, &t6, 8, str,
-> +                                    "(test_double)0.000000"), "dump double"))
-> +               return;
-> +
-> +       if (!ASSERT_GT(btf__add_float(btf, "test_long_double", 16), 0,
-> +                      "add_long_double"))
-> +               return;
-> +       if (!ASSERT_OK(btf_dump_data(btf, d, "test_long_double", 0, &t7, 16,
-> +                                    str, "(test_long_double)9.876543"),
-> +                                    "dump long_double"))
-> +               return;
-> +       if (!ASSERT_OK(btf_dump_data(btf, d, "test_long_double", 0, &t8, 16,
-> +                                    str, "(test_long_double)-9.876543"),
-> +                                    "dump long_double"))
-> +               return;
-> +       ASSERT_OK(btf_dump_data(btf, d, "test_long_double", 0, &t9, 16,
-> +                               str, "(test_long_double)0.000000"),
-> +                               "dump long_double");
-
-same, don't return, just have a list of assertions
-
-> +}
-> +
-
-[...]
-
-> +                          { .next = (struct list_head *)1 });
-> +       /* NULL pointer should not be displayed */
-> +       TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, BTF_F_COMPACT,
-> +                          "(struct list_head){}",
-> +                          { .next = (struct list_head *)0 });
-> +       TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, 0,
-> +"(struct list_head){\n"
-> +"}",
-> +                          { .next = (struct list_head *)0 });
-> +
-> +       /* struct with function pointers */
-> +       type_id = btf__find_by_name(btf, "file_operations");
-> +       if (CHECK(type_id <= 0, "find type id",
-
-some more CHECK leftovers, please switch all CHECKs to ASSERT_xxx
-
-> +                 "no 'struct file_operations' in BTF: %d\n", type_id))
-> +               return;
-> +       type_sz = btf__resolve_size(btf, type_id);
-> +       str[0] = '\0';
-> +
-> +       ret = btf_dump__dump_type_data(d, type_id, fops, type_sz, &opts);
-> +       if (CHECK(ret != type_sz,
-> +                 "dump file_operations is successful",
-> +                 "unexpected return value dumping file_operations '%s': %d\n",
-> +                 str, ret))
-> +               return;
-> +
-> +       cmpstr =
-> +"(struct file_operations){\n"
-> +"      .owner = (struct module *)0xffffffffffffffff,\n"
-> +"      .llseek = (loff_t (*)(struct file *, loff_t, int))0xffffffffffffffff,";
-> +
-> +       if (!ASSERT_STRNEQ(str, cmpstr, strlen(cmpstr), "file_operations"))
-> +               return;
-
-same as above, even if this fails, we can still run all the other
-validations safely
-
-> +
-> +       /* struct with char array */
-> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, BTF_F_COMPACT,
-> +                          "(struct bpf_prog_info){.name = (char[16])['f','o','o',],}",
-> +                          { .name = "foo",});
-> +       TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info,
-> +                          BTF_F_COMPACT | BTF_F_NONAME,
-> +                          "{['f','o','o',],}",
-> +                          {.name = "foo",});
-
-[...]
-
->  void test_btf_dump() {
-> +       char str[STRSIZE];
-> +       struct btf_dump_opts opts = { .ctx = str };
-> +       struct btf_dump *d;
-> +       struct btf *btf;
->         int i;
+> may ask people to add a special tag to their patches so you may batch
+> review them all at a later time if you wish.
 >
->         for (i = 0; i < ARRAY_SIZE(btf_dump_test_cases); i++) {
-> @@ -245,4 +859,34 @@ void test_btf_dump() {
->         }
->         if (test__start_subtest("btf_dump: incremental"))
->                 test_btf_dump_incremental();
-> +
-> +       btf = libbpf_find_kernel_btf();
-> +       if (CHECK(!btf, "get kernel BTF", "no kernel BTF found"))
-> +               return;
-> +
-> +       d = btf_dump__new(btf, NULL, &opts, btf_dump_snprintf);
-> +
-> +       if (CHECK(!d, "new dump", "could not create BTF dump"))
-> +               return;
-
-goto clean and free dumper and btf?
-
-> +
-> +       /* Verify type display for various types. */
-> +       if (test__start_subtest("btf_dump: int_data"))
-> +               test_btf_dump_int_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: float_data"))
-> +               test_btf_dump_float_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: char_data"))
-> +               test_btf_dump_char_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: typedef_data"))
-> +               test_btf_dump_typedef_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: enum_data"))
-> +               test_btf_dump_enum_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: struct_data"))
-> +               test_btf_dump_struct_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: var_data"))
-> +               test_btf_dump_var_data(btf, d, str);
-> +       btf_dump__free(d);
-> +       btf__free(btf);
-> +
-> +       if (test__start_subtest("btf_dump: datasec_data"))
-> +               test_btf_dump_datasec_data(str);
->  }
+> Anyhow, we'd really appreciate having your opinion on this.
+> Thanks!
+>
+> [1] - https://flusp.ime.usp.br/
+> [2] - https://lkcamp.dev/
+>
 > --
-> 1.8.3.1
->
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kunit-dev/83ff3ed3-e004-29b2-b23c-a2ba4d5a3f7f%40riseup.net.
