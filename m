@@ -2,88 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 905593BDFE2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jul 2021 01:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F073BE015
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jul 2021 02:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbhGFXy7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jul 2021 19:54:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50744 "EHLO mail.kernel.org"
+        id S229873AbhGGAN3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jul 2021 20:13:29 -0400
+Received: from mga11.intel.com ([192.55.52.93]:26019 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229986AbhGFXy7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jul 2021 19:54:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 91B3F61C1E;
-        Tue,  6 Jul 2021 23:52:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625615540;
-        bh=pvy0OPqS/Ta1U4D+VI4UxmGLp8LJAq/PH3Q3HZqVzN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PiXx+uhwWkplQzsxsJyNpzYNiITUxIR5arH4ptWSUzZjg9V98YnF9yTYEDmPg1hvr
-         t9ewtEZ11Axikj4R+2Z4tIr8MoYJMxvX91uGTsn/tnueES3DOpfEMfk+liC983yJM3
-         8fRSYIZaRJLEITWamcI8wIQkbsNQiasqpsnwBzQhRuv9LHDNaWuelNeTvZFPiBv0dR
-         DTtehpC8i6eNWUKzdrau6cDBgGr5IuElTVYBNkmBFo8hOAw5GDSxsZk/1arL40zXUV
-         hRok1UYaF89u90bdJmTVAnSKnhX2f5wU/05ZpVa1NiZItINih42yL6vU7TEvUarPSH
-         5Wo6zdz9ltYgw==
-Date:   Wed, 7 Jul 2021 02:52:17 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
+        id S229834AbhGGAN3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 6 Jul 2021 20:13:29 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10037"; a="206204168"
+X-IronPort-AV: E=Sophos;i="5.83,330,1616482800"; 
+   d="scan'208";a="206204168"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 17:10:40 -0700
+X-IronPort-AV: E=Sophos;i="5.83,330,1616482800"; 
+   d="scan'208";a="457255424"
+Received: from rchatre-mobl3.amr.corp.intel.com (HELO [10.252.132.138]) ([10.252.132.138])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2021 17:10:39 -0700
+Subject: Re: [PATCH 4/4] selftests/sgx: Trigger the reclaimer and #PF handler
+To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-sgx@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        linux-sgx@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Borislav Petkov <bp@suse.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] selftests/sgx: Fix Q1 and Q2 calculation in
- sigstruct.c
-Message-ID: <20210706235217.6mre4arpgfsrdxm4@kernel.org>
+        linux-kernel@vger.kernel.org
 References: <20210705143652.116125-1-jarkko@kernel.org>
- <20210705143652.116125-3-jarkko@kernel.org>
- <4303b822-5861-ba2c-f620-0e752e499329@intel.com>
+ <20210705143652.116125-5-jarkko@kernel.org>
+ <715ed555-5044-6fee-1d09-1c4cfa827af3@intel.com>
+ <20210706235016.uucukyrr3ckk57pi@kernel.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+Message-ID: <16505466-e001-c4b0-ec41-5384ddcf194b@intel.com>
+Date:   Tue, 6 Jul 2021 17:10:38 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4303b822-5861-ba2c-f620-0e752e499329@intel.com>
+In-Reply-To: <20210706235016.uucukyrr3ckk57pi@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 06, 2021 at 01:53:20PM -0700, Dave Hansen wrote:
-> On 7/5/21 7:36 AM, Jarkko Sakkinen wrote:
-> > From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> > 
-> > Q1 and Q2 are numbers with *maximum* length of 384 bytes. If the calculated
-> > length of Q1 and Q2 is less than 384 bytes, things will go wrong.
-> > 
-> > E.g. if Q2 is 383 bytes, then
-> > 
-> > 1. The bytes of q2 are copied to sigstruct->q2 in calc_q1q2().
-> > 2. The entire sigstruct->q2 is reversed, which results it being
-> >    256 * Q2, given that the last byte of sigstruct->q2 is added
-> >    to before the bytes given by calc_q1q2().
-> > 
-> > Either change in key or measurement can trigger the bug. E.g. an unmeasured
-> > heap could cause a devastating change in Q1 or Q2.
-> > 
-> > Reverse exactly the bytes of Q1 and Q2 in calc_q1q2() before returning to
-> > the caller.
-> > 
-> > Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
-> > Link: https://lore.kernel.org/linux-sgx/20210301051836.30738-1-tianjia.zhang@linux.alibaba.com/
-> > Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> This looks fine, but can I suggest a Subject: tweak?
-> 
-> 	selftests/sgx: Fix calculations for sub-maximum field sizes
+Hi Jarkko,
 
-WFM
-
+On 7/6/2021 4:50 PM, Jarkko Sakkinen wrote:
+> On Tue, Jul 06, 2021 at 11:34:54AM -0700, Reinette Chatre wrote:
+>> Hi Jarkko,
+>>
+>> On 7/5/2021 7:36 AM, Jarkko Sakkinen wrote:
+>>> Create a heap for the test enclave, which has the same size as all
+>>> available Enclave Page Cache (EPC) pages in the system. This will guarantee
+>>> that all test_encl.elf pages *and* SGX Enclave Control Structure (SECS)
+>>> have been swapped out by the page reclaimer during the load time. Actually,
+>>> this adds a bit more stress than that since part of the EPC gets reserved
+>>> for the Version Array (VA) pages.
+>>>
+>>> For each test, the page fault handler gets triggered in two occasions:
+>>>
+>>> - When SGX_IOC_ENCLAVE_INIT is performed, SECS gets swapped in by the
+>>>     page fault handler.
+>>> - During the execution, each page that is referenced gets swapped in
+>>>     by the page fault handler.
+>>>
+>>
+>> If I understand this correctly, all EPC pages are now being consumed during
+>> fixture setup and thus every SGX test, no matter how big or small, now
+>> becomes a stress test of the reclaimer instead of there being a unique
+>> reclaimer test. Since an enclave is set up and torn down for every test this
+>> seems like a significant addition. It also seems like this would impact
+>> future tests of dynamic page addition where not all scenarios could be
+>> tested with all EPC pages already consumed.
+>>
+>> Reinette
 > 
-> In any case:
+> Re-initializing the test enclave is mandatory thing to do for all tests
+> because it has an internals state.
 > 
-> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
 
-Thank you.
+Right, but not all tests require the same enclave. In kselftest 
+terminology I think you are attempting to force all tests to depend on 
+the same test fixture. Is it not possible to have a separate "reclaimer" 
+test fixture that would build an enclave with a large heap and then have 
+reclaimer tests that exercise it by being tests that are specific to 
+this "reclaimer fixture"?
 
-/Jarkko
+Reinette
