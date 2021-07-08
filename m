@@ -2,89 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3883BF153
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jul 2021 23:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EF53BF2CD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jul 2021 02:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbhGGVWv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jul 2021 17:22:51 -0400
-Received: from mga11.intel.com ([192.55.52.93]:19647 "EHLO mga11.intel.com"
+        id S230093AbhGHAZ4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jul 2021 20:25:56 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:56494 "EHLO mx1.riseup.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232433AbhGGVWv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jul 2021 17:22:51 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10037"; a="206372563"
-X-IronPort-AV: E=Sophos;i="5.84,221,1620716400"; 
-   d="scan'208";a="206372563"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2021 14:20:10 -0700
-X-IronPort-AV: E=Sophos;i="5.84,221,1620716400"; 
-   d="scan'208";a="457633159"
-Received: from lpbeverl-mobl.amr.corp.intel.com (HELO [10.212.176.148]) ([10.212.176.148])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2021 14:20:09 -0700
-Subject: Re: [PATCH 4/4] selftests/sgx: Trigger the reclaimer and #PF handler
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-sgx@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20210705143652.116125-1-jarkko@kernel.org>
- <20210705143652.116125-5-jarkko@kernel.org>
- <715ed555-5044-6fee-1d09-1c4cfa827af3@intel.com>
- <20210706235016.uucukyrr3ckk57pi@kernel.org>
- <16505466-e001-c4b0-ec41-5384ddcf194b@intel.com>
- <20210707091736.6wzemgmtzuegk3uf@kernel.org>
- <10664754-7e53-d9d1-f00c-f9dbd4a2d877@intel.com>
- <20210707205019.6jy64s4uqcw65q4h@kernel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzShEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gPGRhdmVAc3I3MS5uZXQ+wsF7BBMBAgAlAhsDBgsJCAcDAgYVCAIJ
- CgsEFgIDAQIeAQIXgAUCTo3k0QIZAQAKCRBoNZUwcMmSsMO2D/421Xg8pimb9mPzM5N7khT0
- 2MCnaGssU1T59YPE25kYdx2HntwdO0JA27Wn9xx5zYijOe6B21ufrvsyv42auCO85+oFJWfE
- K2R/IpLle09GDx5tcEmMAHX6KSxpHmGuJmUPibHVbfep2aCh9lKaDqQR07gXXWK5/yU1Dx0r
- VVFRaHTasp9fZ9AmY4K9/BSA3VkQ8v3OrxNty3OdsrmTTzO91YszpdbjjEFZK53zXy6tUD2d
- e1i0kBBS6NLAAsqEtneplz88T/v7MpLmpY30N9gQU3QyRC50jJ7LU9RazMjUQY1WohVsR56d
- ORqFxS8ChhyJs7BI34vQusYHDTp6PnZHUppb9WIzjeWlC7Jc8lSBDlEWodmqQQgp5+6AfhTD
- kDv1a+W5+ncq+Uo63WHRiCPuyt4di4/0zo28RVcjtzlGBZtmz2EIC3vUfmoZbO/Gn6EKbYAn
- rzz3iU/JWV8DwQ+sZSGu0HmvYMt6t5SmqWQo/hyHtA7uF5Wxtu1lCgolSQw4t49ZuOyOnQi5
- f8R3nE7lpVCSF1TT+h8kMvFPv3VG7KunyjHr3sEptYxQs4VRxqeirSuyBv1TyxT+LdTm6j4a
- mulOWf+YtFRAgIYyyN5YOepDEBv4LUM8Tz98lZiNMlFyRMNrsLV6Pv6SxhrMxbT6TNVS5D+6
- UorTLotDZKp5+M7BTQRUY85qARAAsgMW71BIXRgxjYNCYQ3Xs8k3TfAvQRbHccky50h99TUY
- sqdULbsb3KhmY29raw1bgmyM0a4DGS1YKN7qazCDsdQlxIJp9t2YYdBKXVRzPCCsfWe1dK/q
- 66UVhRPP8EGZ4CmFYuPTxqGY+dGRInxCeap/xzbKdvmPm01Iw3YFjAE4PQ4hTMr/H76KoDbD
- cq62U50oKC83ca/PRRh2QqEqACvIH4BR7jueAZSPEDnzwxvVgzyeuhwqHY05QRK/wsKuhq7s
- UuYtmN92Fasbxbw2tbVLZfoidklikvZAmotg0dwcFTjSRGEg0Gr3p/xBzJWNavFZZ95Rj7Et
- db0lCt0HDSY5q4GMR+SrFbH+jzUY/ZqfGdZCBqo0cdPPp58krVgtIGR+ja2Mkva6ah94/oQN
- lnCOw3udS+Eb/aRcM6detZr7XOngvxsWolBrhwTQFT9D2NH6ryAuvKd6yyAFt3/e7r+HHtkU
- kOy27D7IpjngqP+b4EumELI/NxPgIqT69PQmo9IZaI/oRaKorYnDaZrMXViqDrFdD37XELwQ
- gmLoSm2VfbOYY7fap/AhPOgOYOSqg3/Nxcapv71yoBzRRxOc4FxmZ65mn+q3rEM27yRztBW9
- AnCKIc66T2i92HqXCw6AgoBJRjBkI3QnEkPgohQkZdAb8o9WGVKpfmZKbYBo4pEAEQEAAcLB
- XwQYAQIACQUCVGPOagIbDAAKCRBoNZUwcMmSsJeCEACCh7P/aaOLKWQxcnw47p4phIVR6pVL
- e4IEdR7Jf7ZL00s3vKSNT+nRqdl1ugJx9Ymsp8kXKMk9GSfmZpuMQB9c6io1qZc6nW/3TtvK
- pNGz7KPPtaDzvKA4S5tfrWPnDr7n15AU5vsIZvgMjU42gkbemkjJwP0B1RkifIK60yQqAAlT
- YZ14P0dIPdIPIlfEPiAWcg5BtLQU4Wg3cNQdpWrCJ1E3m/RIlXy/2Y3YOVVohfSy+4kvvYU3
- lXUdPb04UPw4VWwjcVZPg7cgR7Izion61bGHqVqURgSALt2yvHl7cr68NYoFkzbNsGsye9ft
- M9ozM23JSgMkRylPSXTeh5JIK9pz2+etco3AfLCKtaRVysjvpysukmWMTrx8QnI5Nn5MOlJj
- 1Ov4/50JY9pXzgIDVSrgy6LYSMc4vKZ3QfCY7ipLRORyalFDF3j5AGCMRENJjHPD6O7bl3Xo
- 4DzMID+8eucbXxKiNEbs21IqBZbbKdY1GkcEGTE7AnkA3Y6YB7I/j9mQ3hCgm5muJuhM/2Fr
- OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
- ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
- z5cecg==
-Message-ID: <15d563b8-ad41-76c4-a645-ac5c739d6cce@intel.com>
-Date:   Wed, 7 Jul 2021 14:20:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230019AbhGHAZ4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 7 Jul 2021 20:25:56 -0400
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4GKxpW2Z8mzDqnG;
+        Wed,  7 Jul 2021 17:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1625703795; bh=pvt2GmZluGo+Vd3qf4sFKFHEiik1KEJHbeFnIzmGrkM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ozKuyFK+anmeJciSG5eLbJbnpliiHUYLQ2oolHxgqlNjJmHLeqFRMHFG9EweGD8ea
+         pSMKFGPJPpO/5vICTNQEFvjqosy47eX9j1KuunEQbzvxQ2j3Qb7tWCbS9Jq2X0ouBg
+         XZvThdPybymiL1KfYD87Lr/VUk82Y17Ibvz4fZls=
+X-Riseup-User-ID: 26D00A07A8C4611893A4A0F0AD48FF6F6F3136CB4F00FEA64C6A8EE3AE4C6F23
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4GKxpS2lfLz5vbC;
+        Wed,  7 Jul 2021 17:23:12 -0700 (PDT)
+Subject: Re: KUnit Hackathon
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, ~lkcamp/discussion@lists.sr.ht,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <n@nfraprado.net>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        Leandro Ribeiro <leandrohr@riseup.net>,
+        kernel-usp@googlegroups.com
+References: <83ff3ed3-e004-29b2-b23c-a2ba4d5a3f7f@riseup.net>
+ <CAGS_qxojszgM19u=3HLwFgKX5bm5KhywvsSunuBAt5RtR+GyxQ@mail.gmail.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@riseup.net>
+Message-ID: <ac99a1ca-ed9d-78e7-ad71-ac3c1219b2fe@riseup.net>
+Date:   Wed, 7 Jul 2021 21:23:10 -0300
 MIME-Version: 1.0
-In-Reply-To: <20210707205019.6jy64s4uqcw65q4h@kernel.org>
+In-Reply-To: <CAGS_qxojszgM19u=3HLwFgKX5bm5KhywvsSunuBAt5RtR+GyxQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -92,25 +51,129 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/7/21 1:50 PM, Jarkko Sakkinen wrote:
-> There is consistent known behaviour how reclaimer and also the page fault
-> are exercised for each test. I think that is what matters most right now
-> that the basic behaviour of both the page reclaimer and page fault handler
-> gets exercised.
+Hi Daniel,
 
-There's also a lot of value to ensuring that tests can run _quickly_.
-If you have a test that fails one out of a million executions, it's a
-lot easier find and debug if it takes 1 ms versus 10 seconds.
+Às 03:48 de 07/07/21, Daniel Latypov escreveu:
+> On Mon, Jul 5, 2021 at 1:41 PM André Almeida <andrealmeid@riseup.net> wrote:
+>>
+>> Hello,
+>>
+>> We belong to two student groups, FLUSP [1] and LKCAMP [2], both of which
+>> are focused on sharing kernel and free software development knowledge
+>> and experience with fellow free software developers and newcomers.
+>>
+>> As part of our efforts, we'll be organizing a KUnit hackathon in the
+>> next Saturday (July 10), where we intend to help newcomers convert
+>> existing runtime tests (the ones found at lib/) to KUnit and maybe
+>> create new ones. Depending on the number of attendees, a high volume of
+>> patches may be sent throughout the day. We will do our best to review
+>> all patches before they go to the kernel mailing lists hoping to avoid
+>> wasting your time with minor patching issues.
+> 
+> That sounds great!
+> 
 
-In other words, I think I'd prefer if we run two enclaves in each
-execution of the selftest.  One can be as small as possible.  The other
-can be the reclaim-triggering one.
+:)
 
-That's good both for test coverage, and it makes it a *bit* more
-straightforward to hack out the reclaim test if you need things to run
-faster.
+>>
+>> So we wanted to let you know of all this beforehand and give you the
+>> time to send any suggestions or comments on all this. For instance, we
+> 
+> Some random, unorganized thoughts:
+> * I (as a kernel newbie) found the ownership of tests under lib/ to be
+> a bit unclear.
+> 
 
-The pkeys selftest isn't a bad example here either.  It has a couple of
-different "malloc()" options: THP, hugetlbfs, small-page mmap(), and a
-bunch of tests it runs on each type.  As we add more SGX tests, we might
-end up with "do reclaim" just being an option we pass.
+Indeed, but we found that tests under lib/ are the easiest ones to
+convert, given that they deal with more "generic" programming aspects,
+like linked lists and sort, and doesn't requires subsystem specific
+knowledge.
+
+> * Make sure to base on 5.14, there's some new features that could be of use
+>   * QEMU support in kunit.py: it's no longer as big of a deal if we
+> can't get tests running under UML. Brendan's made it fairly easy to
+> run tests in an x86 VM.
+>   * Skipped tests support: can now mark a test skipped. Some of the
+> lib/ tests could benefit, e.g. test_hash.c
+>   * another lib/ test conversion just landed in 5.14, [1], along with
+> kunit_kcalloc/kunit_malloc_array() helpers
+>   * Documentation/dev-tools/kunit/running_tips.rst - has instructions
+> for how to generate code coverage reports using UML/kunit.py
+>     * This seems like it could be useful... [2]
+> 
+
+Thanks for those info! I wasn't aware of those features.
+
+> * I feel that the hackathon will surface a number of feature requests
+> for KUnit. Some patches might be blocked on these features (like your
+> uuid patch).
+>   * Might be good to track these as they come up and note which
+> patches are blocked.
+> 
+
+Good suggestion, I'll try to track this.
+
+> * Should we make a decision beforehand wrt renaming test files and
+> kconfig options to match the style guide? In the most recent
+> conversion [1], I left them as-is. The answer depends on the test
+> owner, but we should probably be consistent with what we do in the
+> v1's at least.
+> 
+
+I believe that to left as-is is easier, and we will suggest people to do
+that.
+
+> * I assume test modules used in selftests (test_bitmap, test_printf,
+> etc.) should remain untouched for now ?
+>   * KUnit does *not* return a non-zero exit code when you modprobe the
+> test, as the userspace part of those tests assumes.
+>   * We could write a wrapper like kselftest/module.sh, but for KUnit
+> test modules, but this extra in-flight patch would become a dependency
+> for maybe multiple other conversions.
+>   * I'd like it if we had ^ eventually, but I don't know how others
+> feel about that.
+> 
+
+Yeah, I don't think we would be able to deal with all of this in this
+hackathon, so we won't touch those tests for now.
+
+> * I had some small patches for converting test_min_heap.c and
+> test_sort.c that I should get around to sending out.
+> 
+
+So this means that we shouldn't convert them, right?
+
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ebd09577be6c15ee2d343cf60e5bb819946a5ee8
+> [2] I currently see
+>   Overall coverage rate:
+>   lines......: 16.4% (20034 of 122481 lines)
+>   functions..: 18.1% (2032 of 11205 functions)
+> with the following kunitconfig
+>   CONFIG_KUNIT=y
+>   CONFIG_KUNIT_ALL_TESTS=y
+>   CONFIG_DEBUG_KERNEL=y
+>   CONFIG_DEBUG_INFO=y
+>   CONFIG_GCOV=y
+> 
+> This might be a neat way to motivate participants by showing #s going up.
+> Note: I'm more interested in the # of covered functions than anything else.
+> The %s are nice to look at, but not that useful since we're only
+> compiling a small fraction of kernel code.
+
+Cool! In the end of the hackathon we will compare the numbers to see how
+much we were able to do in the event.
+
+> 
+>> may ask people to add a special tag to their patches so you may batch
+>> review them all at a later time if you wish.
+>>
+>> Anyhow, we'd really appreciate having your opinion on this.
+>> Thanks!
+>>
+>> [1] - https://flusp.ime.usp.br/
+>> [2] - https://lkcamp.dev/
+>>
+>> --
+>> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+>> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/83ff3ed3-e004-29b2-b23c-a2ba4d5a3f7f%40riseup.net.
