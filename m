@@ -2,27 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E47D3C160B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jul 2021 17:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F493C17AA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jul 2021 19:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbhGHPfR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jul 2021 11:35:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52086 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231845AbhGHPfR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jul 2021 11:35:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5144261625;
-        Thu,  8 Jul 2021 15:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1625758354;
-        bh=d6hWipfI0BuFnl9dNbp+8qC1wTQ3teMKHa503AJAlPY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cyoPKYxVRv1vMNWTVMHiXStGDPwfMWCQUl0LQlzTfhD9fJVXWEe2h6Gh/IyAnqNqK
-         6/4A3b9p2HRqQpAFeeHmBrtWA2anQIIdI7Mbl6he9LgjdLXHEqtvjbr8CY/saQYxMD
-         xc67nH26ld32JoOgouZj5VRCew1Q0ka+n1C180PA=
-Date:   Thu, 8 Jul 2021 17:32:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Bradley M. Kuhn" <bkuhn@ebb.org>
+        id S229566AbhGHRES (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jul 2021 13:04:18 -0400
+Received: from smtprelay0024.hostedemail.com ([216.40.44.24]:41150 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229469AbhGHRES (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 8 Jul 2021 13:04:18 -0400
+X-Greylist: delayed 315 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 13:04:18 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave06.hostedemail.com (Postfix) with ESMTP id 968388122D47;
+        Thu,  8 Jul 2021 16:56:21 +0000 (UTC)
+Received: from omf18.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 14E3F1846F773;
+        Thu,  8 Jul 2021 16:56:20 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 332772EBFC6;
+        Thu,  8 Jul 2021 16:56:08 +0000 (UTC)
+Message-ID: <d538c07ccb0176fe7c715bf4cb3b48d84b378c52.camel@perches.com>
+Subject: Re: [PATCH 0/2] LICENSES: add and use copyleft-next-0.3.1
+From:   Joe Perches <joe@perches.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "Bradley M. Kuhn" <bkuhn@ebb.org>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>, tglx@linutronix.de,
         akpm@linux-foundation.org, shuah@kernel.org, rafael@kernel.org,
         rgoldwyn@suse.com, kuno@frob.nl, fontana@sharpeleven.org,
@@ -37,44 +40,53 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>, tglx@linutronix.de,
         peterz@infradead.org, linux-block@vger.kernel.org,
         linux-spdx@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, copyleft-next@lists.fedorahosted.org
-Subject: Re: [PATCH 0/2] LICENSES: add and use copyleft-next-0.3.1
-Message-ID: <YOcakETswyEN58j6@kroah.com>
+Date:   Thu, 08 Jul 2021 09:56:05 -0700
+In-Reply-To: <YOcakETswyEN58j6@kroah.com>
 References: <20210707184310.3624761-1-mcgrof@kernel.org>
- <YOaZohB/2Z3x5grc@kroah.com>
- <YOcSwXkpzAFGucXM@ebb.org>
+         <YOaZohB/2Z3x5grc@kroah.com> <YOcSwXkpzAFGucXM@ebb.org>
+         <YOcakETswyEN58j6@kroah.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YOcSwXkpzAFGucXM@ebb.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.40
+X-Stat-Signature: 475dg3wxf8bgjys8z5wo7iib4gfsknho
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 332772EBFC6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19kIzUQ5SAeC/3sY9lA0yTN+vDwkbWjZK8=
+X-HE-Tag: 1625763368-322840
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 08, 2021 at 07:59:13AM -0700, Bradley M. Kuhn wrote:
-> Greg KH wrote:
-> > Any chance you wish to just change the license of these files, given that
-> > you are the only one that has tried to use it for kernel code?
+On Thu, 2021-07-08 at 17:32 +0200, Greg KH wrote:
+> On Thu, Jul 08, 2021 at 07:59:13AM -0700, Bradley M. Kuhn wrote:
+> > Greg KH wrote:
+> > > Any chance you wish to just change the license of these files, given that
+> > > you are the only one that has tried to use it for kernel code?
+> > 
+> > There is a lot of dual-licensed (GPLv2-only|{2,3}-Clause-BSD) code already in
+> > Linux.  Many corporate copyright holders have well documented strong reasons
+> > for wanting that.  (Those policy goals and the analysis behind them, I find
+> > problematic and sometimes outright wrong, but nonetheless it's their right to
+> > license their copyrights that way, and the license *is* GPLv2-only
+> > compatible, as is Luis'!).
+> > 
+> > I assume that you're not asking those companies to relicense to pure
+> > GPLv2-only.
 > 
-> There is a lot of dual-licensed (GPLv2-only|{2,3}-Clause-BSD) code already in
-> Linux.  Many corporate copyright holders have well documented strong reasons
-> for wanting that.  (Those policy goals and the analysis behind them, I find
-> problematic and sometimes outright wrong, but nonetheless it's their right to
-> license their copyrights that way, and the license *is* GPLv2-only
-> compatible, as is Luis'!).
+> On the contrary, I have stated in public many times to companies that
+> try to add dual-licensed new kernel code that they should only do so if
+> they provide a really good reason, and pushed back on them numerous
+> times.  See the mailing list archives for details if you care.
 > 
-> I assume that you're not asking those companies to relicense to pure
-> GPLv2-only.
+> So yes, I am asking them, this is not anything new.
+> 
+> Let's keep it simple please, and not add new licenses for no real good
+> reason if at all possible.
 
-On the contrary, I have stated in public many times to companies that
-try to add dual-licensed new kernel code that they should only do so if
-they provide a really good reason, and pushed back on them numerous
-times.  See the mailing list archives for details if you care.
+You can ask but it's the submitter's choice to license their code
+however they desire.
 
-So yes, I am asking them, this is not anything new.
 
-Let's keep it simple please, and not add new licenses for no real good
-reason if at all possible.
-
-thanks,
-
-greg k-h
