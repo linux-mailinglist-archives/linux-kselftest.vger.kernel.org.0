@@ -2,103 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD643BF482
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jul 2021 06:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B043BF574
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jul 2021 08:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbhGHEVX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jul 2021 00:21:23 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:56181 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbhGHEVW (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jul 2021 00:21:22 -0400
-Received: from mail-pf1-f199.google.com ([209.85.210.199])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1m1LUm-0004aS-2b
-        for linux-kselftest@vger.kernel.org; Thu, 08 Jul 2021 04:18:40 +0000
-Received: by mail-pf1-f199.google.com with SMTP id y1-20020a056a001801b029031e97eab9e5so2953516pfa.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jul 2021 21:18:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4G9i8vQWT5nXUI2uXZLc2Au8KV/9r+vg878BWJ9X0yw=;
-        b=Gs4vzxLY1bTjKklG5gH/qk1ZYbtKt4QNEZTfgwlgiA7AQ3vkbXcxPBXQ5P3arOBLkI
-         fAYHMTkD7ajLtd4SrNk3Ne3wpp4qqUrafSE30N1F4uctg8DCmJh8NuT4WLUk7Z1Oyraz
-         hQI7ACO1cziuQpPvVPu58l3BbSzb3PHYoKLRumcKp9B8eJroqQFs+dMYcGv9M0UXKcDX
-         A/WbTJ3CNN7N3tqti9Yks/tbH1knYLQfZvGEwCc211MoeoLh59OOVuhIKBU1vM0EG7r/
-         K6XDwYySgdvoGTFY5COyedwmi8p/JnOah5+0V9MsW1QLI8dE64STUkh85JFhkh+Xcrxj
-         jSTg==
-X-Gm-Message-State: AOAM5330RJxqBqjfEdMGfLZIFdc2+Jkurtb/cFDJve2TSVHFkmCf7Kid
-        7jkVUNELzwDJMCOtbWf9KWwBqTiHwKxvNlK2jjfJ+e1vSFZ73QzR1qVnN3bnGXVHt16lnPKvsoY
-        WHrC4O+g3wQvXT+rbcnrK6+1hVGyXGVwh1CUAdZ4ssoivCKUSGzJCFVsxSPWh
-X-Received: by 2002:a65:6659:: with SMTP id z25mr29667135pgv.291.1625717918564;
-        Wed, 07 Jul 2021 21:18:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy73Par1gV7DO9u9OB55lNW9eOWHyS+LnBRXdrclf95y+wZHPdXg7cl+6HhiGgE6qOgbxg95hFBfk9zlpCAcZY=
-X-Received: by 2002:a65:6659:: with SMTP id z25mr29667086pgv.291.1625717918266;
- Wed, 07 Jul 2021 21:18:38 -0700 (PDT)
+        id S229647AbhGHGZL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jul 2021 02:25:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46642 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229608AbhGHGZL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 8 Jul 2021 02:25:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 37C1C619A2;
+        Thu,  8 Jul 2021 06:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1625725349;
+        bh=W+h53mGiLZxvSfW/R9vFvStJYN2jtiMhpMbQkQuKTNE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RX848RGN2A6K5cMjfq7qqzvTetkvK7075GR33IAIWa9IYNaK281/hTyNaG/3WzGxH
+         z8w8fz8a5y/j8M3IZMx9PZFDQolcZSzQ31OMRDhCLjWZKZM6sox5aCW3bTywOAPjhh
+         pkOBlXEdg9o8eIKwPahTZ6S0u84i8uo47KbrhKa8=
+Date:   Thu, 8 Jul 2021 08:22:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     tglx@linutronix.de, akpm@linux-foundation.org, shuah@kernel.org,
+        rafael@kernel.org, rgoldwyn@suse.com, kuno@frob.nl,
+        fontana@sharpeleven.org, Ciaran.Farrell@suse.com,
+        Christopher.DeNicolo@suse.com, hch@lst.de, corbet@lwn.net,
+        linux@leemhuis.info, ast@kernel.org, andriin@fb.com,
+        daniel@iogearbox.net, atenart@kernel.org, alobakin@pm.me,
+        weiwan@google.com, ap420073@gmail.com, tj@kernel.org,
+        jeyu@kernel.org, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, minchan@kernel.org,
+        axboe@kernel.dk, mbenes@suse.com, jpoimboe@redhat.com,
+        keescook@chromium.org, jikos@kernel.org, rostedt@goodmis.org,
+        peterz@infradead.org, linux-block@vger.kernel.org,
+        linux-spdx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, copyleft-next@lists.fedorahosted.org
+Subject: Re: [PATCH 0/2] LICENSES: add and use copyleft-next-0.3.1
+Message-ID: <YOaZohB/2Z3x5grc@kroah.com>
+References: <20210707184310.3624761-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-References: <20210525113316.25416-1-po-hsu.lin@canonical.com> <87y2c1swnz.fsf@nvidia.com>
-In-Reply-To: <87y2c1swnz.fsf@nvidia.com>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Thu, 8 Jul 2021 12:18:26 +0800
-Message-ID: <CAMy_GT_4dqEuSfUGND9GTBxGORcwf480-a46Z=J736YHo2RkDA@mail.gmail.com>
-Subject: Re: [PATCHv2] selftests: Use kselftest skip code for skipped tests
-To:     linux-kselftest@vger.kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        ast@kernel.org, Petr Machata <petrm@nvidia.com>,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, hawk@kernel.org,
-        nikolay@nvidia.com, gnault@redhat.com, vladimir.oltean@nxp.com,
-        idosch@nvidia.com, baowen.zheng@corigine.com, danieller@nvidia.com,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210707184310.3624761-1-mcgrof@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 26, 2021 at 4:54 PM Petr Machata <petrm@nvidia.com> wrote:
->
->
-> Po-Hsu Lin <po-hsu.lin@canonical.com> writes:
->
-> > There are several test cases still using exit 0 when they need to be
-> > skipped. Use kselftest framework skip code instead so it can help us
-> > to distinguish the proper return status.
-> >
-> > Criterion to filter out what should be fixed in selftests directory:
-> >   grep -r "exit 0" -B1 | grep -i skip
-> >
-> > This change might cause some false-positives if people are running
-> > these test scripts directly and only checking their return codes,
-> > which will change from 0 to 4. However I think the impact should be
-> > small as most of our scripts here are already using this skip code.
-> > And there will be no such issue if running them with the kselftest
-> > framework.
-> >
-> > V2: router_mpath_nh.sh and outer_mpath_nh_res.sh sources lib.sh,
-> > there is no need to assign ksft_skip value in these two.
-> >
-> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
->
-> I want to note that defining ksft_skip=4 in every test separately is the
-> current practice. I agree with Willem (in a parallel thread) that this
-> stuff should live in a library of its own, but there is none currently.
-> When there is, it looks like the conversion would be mechanical.
->
-> Which is to say, IMHO this patch makes sense on its own as an
-> incremental improvement.
->
-> Reviewed-by: Petr Machata <petrm@nvidia.com>
+On Wed, Jul 07, 2021 at 11:43:08AM -0700, Luis Chamberlain wrote:
+> This adds the copyleft-next-0.3.1 SPDX tag and replaces existing
+> boilerplate with the tag.
+> 
+> Luis Chamberlain (2):
+>   LICENSES: Add the copyleft-next-0.3.1 license
+>   testing: use the copyleft-next-0.3.1 SPDX tag
+> 
+>  LICENSES/dual/copyleft-next-0.3.1        | 237 +++++++++++++++++++++++
+>  lib/test_kmod.c                          |  12 +-
+>  lib/test_sysctl.c                        |  12 +-
+>  tools/testing/selftests/kmod/kmod.sh     |  13 +-
+>  tools/testing/selftests/sysctl/sysctl.sh |  12 +-
 
-Hello folks,
-any other comment on this patch? Or if I should break this down to
-smaller patches for different suites in kselftests?
-Thanks!
-PHLin
+As we only have 4 usages of this license in the tree, we have the
+opportunity to actually remove it and keep the list of licenses that we
+use in the kernel source smaller.
+
+Any chance you wish to just change the license of these files, given
+that you are the only one that has tried to use it for kernel code?
+
+As a follow-up to this, I do not want to see your "test_sysfs.c" module
+as a dual-licensed file, as that makes no sense whatsoever.  It is
+directly testing GPL-v2-only code, so the attempt to dual license it
+makes no sense to me.  How could anyone take that code and do anything
+with it under the copyleft-next license only?  And where would that
+happen?
+
+I understand the appeal of copyleft-next in that it resolves many of the
+"grey" areas around gplv2, but given that no one is rushing to advise us
+to relicense all of the kernel with this thing, there is no need to
+encourage the spread of it given the added complexity and confusion that
+adding another license to our mix can only cause.
+
+So please, no, I don't want to see new licenses added to the tree, if
+anything we should be trimming them down to be less as it makes things
+simpler and more obvious.
+
+thanks,
+
+greg k-h
