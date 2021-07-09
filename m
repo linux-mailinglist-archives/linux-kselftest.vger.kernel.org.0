@@ -2,149 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 466763C1C8E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jul 2021 02:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE773C1F67
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jul 2021 08:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbhGIARw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jul 2021 20:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbhGIARt (ORCPT
+        id S230121AbhGIGll (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Jul 2021 02:41:41 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:6782 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229954AbhGIGlk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jul 2021 20:17:49 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE64EC061760;
-        Thu,  8 Jul 2021 17:15:06 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id AD5281F41E36
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     kernel@collabora.com, krisman@collabora.com,
-        pgriffais@valvesoftware.com, z.figura12@gmail.com,
-        joel@joelfernandes.org, malteskarupke@fastmail.fm,
-        linux-api@vger.kernel.org, fweimer@redhat.com,
-        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
-        Peter Oskolkov <posk@posk.io>,
-        Andrey Semashev <andrey.semashev@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH v5 11/11] kernel: Enable waitpid() for futex2
-Date:   Thu,  8 Jul 2021 21:13:28 -0300
-Message-Id: <20210709001328.329716-12-andrealmeid@collabora.com>
+        Fri, 9 Jul 2021 02:41:40 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GLjz74D3DzXr5K;
+        Fri,  9 Jul 2021 14:33:23 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 9 Jul 2021 14:38:52 +0800
+Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
+ (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Fri, 9 Jul 2021
+ 14:38:52 +0800
+From:   Chen Lifu <chenlifu@huawei.com>
+To:     <pbonzini@redhat.com>, <shuah@kernel.org>, <bgardon@google.com>,
+        <wangyanan55@huawei.com>, <axelrasmussen@google.com>,
+        <drjones@redhat.com>, <chenlifu@huawei.com>, <seanjc@google.com>,
+        <vkuznets@redhat.com>, <dwmw@amazon.co.uk>,
+        <joao.m.martins@oracle.com>, <yangyingliang@huawei.com>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next 1/2] selftests: Fix vm_handle_exception undefined error
+Date:   Fri, 9 Jul 2021 14:37:40 +0800
+Message-ID: <20210709063741.355325-1-chenlifu@huawei.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210709001328.329716-1-andrealmeid@collabora.com>
-References: <20210709001328.329716-1-andrealmeid@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.174.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To make pthreads works as expected if they are using futex2, wake
-clear_child_tid with futex2 as well. This is make applications that uses
-waitpid() (and clone(CLONE_CHILD_SETTID)) wake while waiting for the
-child to terminate. Given that apps should not mix futex() and futex2(),
-any correct app will trigger a harmless noop wakeup on the interface
-that it isn't using.
+Compile setftests on x86_64 occurs following error:
+make -C tools/testing/selftests
+...
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
+x86_64/hyperv_features.c:618:2: warning: implicit declaration of function ‘vm_handle_exception’ [-Wimplicit-function-declaration]
+  618 |  vm_handle_exception(vm, GP_VECTOR, guest_gp_handler);
+/usr/bin/ld: /tmp/cclOnpml.o: in function `main':
+tools/testing/selftests/kvm/x86_64/hyperv_features.c:618: undefined reference to `vm_handle_exception'
+collect2: error: ld returned 1 exit status
+
+The reason is that commit b78f4a596692 ("KVM: selftests: Rename vm_handle_exception")
+renamed "vm_handle_exception" function to "vm_install_exception_handler" function.
+
+Fix it by replacing "vm_handle_exception" with "vm_install_exception_handler"
+in corresponding selftests files.
+
+Signed-off-by: Chen Lifu <chenlifu@huawei.com>
 ---
+ tools/testing/selftests/kvm/x86_64/hyperv_features.c | 2 +-
+ tools/testing/selftests/kvm/x86_64/mmu_role_test.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This commit is here for the intend to show what we need to do in order
-to get a full NPTL working on top of futex2. It should be merged after
-we talk to glibc folks on the details around the futex_wait() side. For
-instance, we could use this as an opportunity to use private futexes or
-8bit sized futexes, but both sides need to use the exactly same flags.
----
- include/linux/syscalls.h |  2 ++
- kernel/fork.c            |  2 ++
- kernel/futex2.c          | 30 ++++++++++++++++++------------
- 3 files changed, 22 insertions(+), 12 deletions(-)
-
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index b9c2874410d0..85b5a501fb96 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1315,6 +1315,8 @@ int ksys_ipc(unsigned int call, int first, unsigned long second,
- 	unsigned long third, void __user * ptr, long fifth);
- int compat_ksys_ipc(u32 call, int first, int second,
- 	u32 third, u32 ptr, u32 fifth);
-+long ksys_futex_wake(void __user *uaddr, unsigned int nr_wake,
-+		     unsigned int flags);
+diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+index 42bd658f52a8..af27c7e829c1 100644
+--- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
++++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+@@ -615,7 +615,7 @@ int main(void)
  
- /*
-  * The following kernel syscall equivalents are just wrappers to fs-internal
-diff --git a/kernel/fork.c b/kernel/fork.c
-index b4386ff6a641..f3f98e197fb6 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1328,6 +1328,8 @@ static void mm_release(struct task_struct *tsk, struct mm_struct *mm)
- 			put_user(0, tsk->clear_child_tid);
- 			do_futex(tsk->clear_child_tid, FUTEX_WAKE,
- 					1, NULL, NULL, 0, 0);
-+			ksys_futex_wake(tsk->clear_child_tid, 1,
-+					FUTEX_32 | FUTEX_SHARED_FLAG);
- 		}
- 		tsk->clear_child_tid = NULL;
- 	}
-diff --git a/kernel/futex2.c b/kernel/futex2.c
-index 4f6d099badec..2ca2f40fcdd2 100644
---- a/kernel/futex2.c
-+++ b/kernel/futex2.c
-@@ -420,18 +420,8 @@ COMPAT_SYSCALL_DEFINE4(futex_wait, void __user *, uaddr, compat_u64, val,
- }
- #endif
+ 	vm_init_descriptor_tables(vm);
+ 	vcpu_init_descriptor_tables(vm, VCPU_ID);
+-	vm_handle_exception(vm, GP_VECTOR, guest_gp_handler);
++	vm_install_exception_handler(vm, GP_VECTOR, guest_gp_handler);
  
--/**
-- * sys_futex_wake - Wake a number of futexes waiting on an address
-- * @uaddr:   Address of futex to be woken up
-- * @nr_wake: Number of futexes waiting in uaddr to be woken up
-- * @flags:   Flags for size and shared
-- *
-- * Wake `nr_wake` threads waiting at uaddr.
-- *
-- * Returns the number of woken threads on success, error code otherwise.
-- */
--SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
--		unsigned int, flags)
-+long ksys_futex_wake(void __user *uaddr, unsigned int nr_wake,
-+		     unsigned int flags)
- {
- 	unsigned int size = flags & FUTEX_SIZE_MASK, futex_flags = 0;
+ 	pr_info("Testing access to Hyper-V specific MSRs\n");
+ 	guest_test_msrs_access(vm, addr_gva2hva(vm, msr_gva),
+diff --git a/tools/testing/selftests/kvm/x86_64/mmu_role_test.c b/tools/testing/selftests/kvm/x86_64/mmu_role_test.c
+index 523371cf8e8f..da2325fcad87 100644
+--- a/tools/testing/selftests/kvm/x86_64/mmu_role_test.c
++++ b/tools/testing/selftests/kvm/x86_64/mmu_role_test.c
+@@ -71,7 +71,7 @@ static void mmu_role_test(u32 *cpuid_reg, u32 evil_cpuid_val)
+ 	/* Set up a #PF handler to eat the RSVD #PF and signal all done! */
+ 	vm_init_descriptor_tables(vm);
+ 	vcpu_init_descriptor_tables(vm, VCPU_ID);
+-	vm_handle_exception(vm, PF_VECTOR, guest_pf_handler);
++	vm_install_exception_handler(vm, PF_VECTOR, guest_pf_handler);
  
-@@ -447,6 +437,22 @@ SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
- 	return futex_wake(uaddr, futex_flags, nr_wake, FUTEX_BITSET_MATCH_ANY);
- }
- 
-+/**
-+ * sys_futex_wake - Wake a number of futexes waiting on an address
-+ * @uaddr:   Address of futex to be woken up
-+ * @nr_wake: Number of futexes waiting in uaddr to be woken up
-+ * @flags:   Flags for size and shared
-+ *
-+ * Wake `nr_wake` threads waiting at uaddr.
-+ *
-+ * Returns the number of woken threads on success, error code otherwise.
-+ */
-+SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
-+		unsigned int, flags)
-+{
-+	return ksys_futex_wake(uaddr, nr_wake, flags);
-+}
-+
- #ifdef CONFIG_COMPAT
- static int compat_futex_parse_requeue(struct compat_futex_requeue __user *rq,
- 				      void __user **uaddr, unsigned int *flags)
+ 	r = _vcpu_run(vm, VCPU_ID);
+ 	TEST_ASSERT(r == 0, "vcpu_run failed: %d\n", r);
 -- 
 2.32.0
 
