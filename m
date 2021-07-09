@@ -2,109 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F8A3C2770
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jul 2021 18:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4803E3C2776
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jul 2021 18:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbhGIQYU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Jul 2021 12:24:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59266 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229506AbhGIQYU (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Jul 2021 12:24:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625847696;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qCqb8bTRGuT8LGCi+wzELAIbJWNbd2rPSZggl5JyHx0=;
-        b=UEEyUab+eGNfPXEQ7Ja2nmf/Z/AV6fyBW2qGqFaD+p4YsN5mSzqyeWrduEGpDM6vQ6Szrv
-        CEN+OAcXrjKnhIQgeMhCYRGi6krdXgfz2BiVSBMfzJeNlBTOseWrNtk963IAp4yYnkdXRD
-        9bvp7Jf+K2c0hhdKQWsC3owqKhzQ2uU=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-489-vdzo0eytPoqrRC7teUQjdw-1; Fri, 09 Jul 2021 12:21:35 -0400
-X-MC-Unique: vdzo0eytPoqrRC7teUQjdw-1
-Received: by mail-wr1-f70.google.com with SMTP id u13-20020a5d6dad0000b029012e76845945so3143728wrs.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jul 2021 09:21:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qCqb8bTRGuT8LGCi+wzELAIbJWNbd2rPSZggl5JyHx0=;
-        b=P++O+89Ci5SGg3952XdRhAOS3RMHTcX9M9E8UJhjv0Oee3vq95sERAJWlvHLi8KT3P
-         HK7zNDNA0I65x/VHNo8HX2FLWwUq/rRrg2yTYC5yaVaIgYxrOvagvnz+fp8afjCamHA6
-         ocSf4ycIhlJYyd/cfQ/vWjVukkhS6gHSTkD5cizFTUEzFTrhChyNKDArUVeYFpMX++Fd
-         V8fcP8UuzPqB42fVkQKnqf5EsK2hCWcKk44WeQihU5c9ataegx5kRDUiB2Ekw4JerMTz
-         poPBwJeb0Il9O0dtTfv503cJpM40MHQVBCIjN+KIqfysR9o7hrbQkzI8GL5TauklV5gY
-         vrwQ==
-X-Gm-Message-State: AOAM531CMu4iYjy4xpn4xk2mjVYaGchIuzuLGCbWUT68a5V9Z7yoc38Y
-        w0NGB4shV87nCRQgwez7oYjvQuJMYUDzj2EFhQPCDQRkJ+WCo82+YDEu8QIAqGmsOVyMnUYLJ0Q
-        hL3ZjvW+fNzafpEZRY6yj4s6/4qhL
-X-Received: by 2002:a5d:48ce:: with SMTP id p14mr43466903wrs.170.1625847694132;
-        Fri, 09 Jul 2021 09:21:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJye42yT/aBj7wlNzCf44RwRUaVOBD9mUJ/ZZ0FDTF/Ti6W/DoEv+IapeCfhWJ7go9gkzn1itA==
-X-Received: by 2002:a5d:48ce:: with SMTP id p14mr43466885wrs.170.1625847693993;
-        Fri, 09 Jul 2021 09:21:33 -0700 (PDT)
-Received: from pc-23.home (2a01cb058d44a7001b6d03f4d258668b.ipv6.abo.wanadoo.fr. [2a01:cb05:8d44:a700:1b6d:3f4:d258:668b])
-        by smtp.gmail.com with ESMTPSA id s13sm1600606wrm.13.2021.07.09.09.21.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 09:21:33 -0700 (PDT)
-Date:   Fri, 9 Jul 2021 18:21:23 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     David Ahern <dsahern@gmail.com>
-Cc:     Ido Schimmel <idosch@idosch.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/4] selftests: forwarding: Test redirecting gre
- or ipip packets to Ethernet
-Message-ID: <20210709162123.GB19430@pc-23.home>
-References: <cover.1625056665.git.gnault@redhat.com>
- <0a4e63cd3cde3c71cfc422a7f0f5e9bc76c0c1f5.1625056665.git.gnault@redhat.com>
- <YN1Wxm0mOFFhbuTl@shredder>
- <20210701145943.GA3933@pc-32.home>
- <1932a3af-2fdd-229a-e5f5-6b1ef95361e1@gmail.com>
- <20210706190253.GA23236@pc-32.home>
- <391b6a56-b7e0-867c-617e-a05afec50b24@gmail.com>
+        id S229503AbhGIQZd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Jul 2021 12:25:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56560 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229491AbhGIQZd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 9 Jul 2021 12:25:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5CDA261153;
+        Fri,  9 Jul 2021 16:22:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625847769;
+        bh=kxyDYP6A8O10FtJkUZON8yJOupFKIyAhOIelmPtwv5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bZeKzIiYXEGbK0b9C6iTSp+7gymmyaIyPpTJr+lJkFub5wqx75idU9eUzfu+AEgr8
+         +9onnivkg8BXgiatHW9u5VvmG7gIikAMaENxrGV5Qm+KgeG3PvNy5Za6UdoVX90h//
+         9W+qlDq/Kf+nnYgJwbyxZ7NmXZUZctfErCrsPkLkbo4NwFyFkzisCfZ/v3vwFLR+AD
+         KrsQCi1sJf8fIk+kRe/zgTVlVHeftuzfGB14jEQNEdrgBfT7dEFLDT/IzIa831iykg
+         hvPVEX+slJhPXeXdQqHgxAFr8dgVoZe8kB1YCid7b8DkE6Qi+ZOWDputyWTvcQC9uu
+         bkoqM+CaGnN8Q==
+Date:   Fri, 9 Jul 2021 19:22:47 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-sgx@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] selftests/sgx: Trigger the reclaimer and #PF handler
+Message-ID: <20210709162247.d5ggqgpqpu2drp6o@kernel.org>
+References: <20210705143652.116125-1-jarkko@kernel.org>
+ <20210705143652.116125-5-jarkko@kernel.org>
+ <715ed555-5044-6fee-1d09-1c4cfa827af3@intel.com>
+ <20210706235016.uucukyrr3ckk57pi@kernel.org>
+ <16505466-e001-c4b0-ec41-5384ddcf194b@intel.com>
+ <20210707091736.6wzemgmtzuegk3uf@kernel.org>
+ <10664754-7e53-d9d1-f00c-f9dbd4a2d877@intel.com>
+ <20210707205019.6jy64s4uqcw65q4h@kernel.org>
+ <64b1cac8-75b9-8549-8499-60b4d72cf9ef@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <391b6a56-b7e0-867c-617e-a05afec50b24@gmail.com>
+In-Reply-To: <64b1cac8-75b9-8549-8499-60b4d72cf9ef@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 07, 2021 at 07:50:38PM -0600, David Ahern wrote:
-> On 7/6/21 1:02 PM, Guillaume Nault wrote:
-> > --- a/drivers/net/vxlan.c
-> > +++ b/drivers/net/vxlan.c
-> > @@ -3767,8 +3767,7 @@ static int vxlan_config_validate(struct net *src_net, struct vxlan_config *conf,
-> >  		    (conf->flags & (VXLAN_F_RCV_FLAGS | VXLAN_F_IPV6)))
-> >  			continue;
-> >  
-> > -		if ((conf->flags & VXLAN_F_IPV6_LINKLOCAL) &&
-> > -		    tmp->cfg.remote_ifindex != conf->remote_ifindex)
-> > +		if (tmp->cfg.remote_ifindex != conf->remote_ifindex)
-> >  			continue;
-> >  
-> >  		NL_SET_ERR_MSG(extack,
+On Wed, Jul 07, 2021 at 02:20:04PM -0700, Reinette Chatre wrote:
+> Hi Jarkko,
 > 
-> Looking at the vxlan driver and that restriction is unnecessary. While
-> IPv6 LLA requires a device index, allowing separate LINK attributes is a
-> legit use case - as VRF shows.
+> On 7/7/2021 1:50 PM, Jarkko Sakkinen wrote:
+> > On Wed, Jul 07, 2021 at 08:02:42AM -0700, Reinette Chatre wrote:
+> > > Hi Jarkko,
+> > > 
+> > > On 7/7/2021 2:17 AM, Jarkko Sakkinen wrote:
+> > > > On Tue, Jul 06, 2021 at 05:10:38PM -0700, Reinette Chatre wrote:
+> > > > > Hi Jarkko,
+> > > > > 
+> > > > > On 7/6/2021 4:50 PM, Jarkko Sakkinen wrote:
+> > > > > > On Tue, Jul 06, 2021 at 11:34:54AM -0700, Reinette Chatre wrote:
+> > > > > > > Hi Jarkko,
+> > > > > > > 
+> > > > > > > On 7/5/2021 7:36 AM, Jarkko Sakkinen wrote:
+> > > > > > > > Create a heap for the test enclave, which has the same size as all
+> > > > > > > > available Enclave Page Cache (EPC) pages in the system. This will guarantee
+> > > > > > > > that all test_encl.elf pages *and* SGX Enclave Control Structure (SECS)
+> > > > > > > > have been swapped out by the page reclaimer during the load time. Actually,
+> > > > > > > > this adds a bit more stress than that since part of the EPC gets reserved
+> > > > > > > > for the Version Array (VA) pages.
+> > > > > > > > 
+> > > > > > > > For each test, the page fault handler gets triggered in two occasions:
+> > > > > > > > 
+> > > > > > > > - When SGX_IOC_ENCLAVE_INIT is performed, SECS gets swapped in by the
+> > > > > > > >       page fault handler.
+> > > > > > > > - During the execution, each page that is referenced gets swapped in
+> > > > > > > >       by the page fault handler.
+> > > > > > > > 
+> > > > > > > 
+> > > > > > > If I understand this correctly, all EPC pages are now being consumed during
+> > > > > > > fixture setup and thus every SGX test, no matter how big or small, now
+> > > > > > > becomes a stress test of the reclaimer instead of there being a unique
+> > > > > > > reclaimer test. Since an enclave is set up and torn down for every test this
+> > > > > > > seems like a significant addition. It also seems like this would impact
+> > > > > > > future tests of dynamic page addition where not all scenarios could be
+> > > > > > > tested with all EPC pages already consumed.
+> > > > > > > 
+> > > > > > > Reinette
+> > > > > > 
+> > > > > > Re-initializing the test enclave is mandatory thing to do for all tests
+> > > > > > because it has an internals state.
+> > > > > > 
+> > > > > 
+> > > > > Right, but not all tests require the same enclave. In kselftest terminology
+> > > > > I think you are attempting to force all tests to depend on the same test
+> > > > > fixture. Is it not possible to have a separate "reclaimer" test fixture that
+> > > > > would build an enclave with a large heap and then have reclaimer tests that
+> > > > > exercise it by being tests that are specific to this "reclaimer fixture"?
+> > > > > 
+> > > > > Reinette
+> > > > 
+> > > > Why add that complexity?
+> > > > 
+> > > 
+> > > With this change every test is turned into a pseudo reclaimer test without
+> > > there being any explicit testing (with pass/fail criteria) of reclaimer
+> > > behavior. This is an expensive addition and reduces the scenarios that the
+> > > tests can exercise.
+> > > 
+> > > Reinette
+> > 
+> > There is consistent known behaviour how reclaimer and also the page fault
+> > are exercised for each test. I think that is what matters most right now
+> > that the basic behaviour of both the page reclaimer and page fault handler
+> > gets exercised.
+> 
+> I believe the basic behavior of page fault handler is currently exercised in
+> each test, this is required.
 
-I believe there's more to do than just my quick hack patch. At least
-vxlan_vs_find_vni() probably needs to be modified too. At which point
-VXLAN_F_IPV6_LINKLOCAL would become essentially unused and should be
-removed.
+This not true. The current test does not exercise ELDU code path.
 
-> Do you want to send a formal patch to fix this one since you have it
-> diagnosed?
+> 
+> > 
+> > I don't understand the real-world gain of doing something factors more
+> > complex than necessary at a particular point of time,  when you don't
+> > really need to hang yourself into it forever.
+> 
+> Your argument about "hang yourself into it forever" can go both ways - why
+> should all tests now unnecessarily consume the entire EPC forever?
+> 
+> If I understand correctly adding a separate reclaimer test is not complex
+> but would require refactoring code.
 
-I'll work on that after net-next reopens. I might try to make bareudp
-compatible with VRF too, if time allows. If I get at least VXLAN and
-bareudp to work in a multi-VRF setup, then I'll rebase the selftests on
-the VRF infrastructure (and just remove the tests for tunnels still
-incompatible with this setup).
+What does it matter anyway if code nees to be refactored?
 
+> > This patch does increase the coverage in a deterministic manner to the code
+> > paths that were not previously exercised, i.e. we know the code paths, and
+> > could even calculate the exact number of times that they are triggered. And
+> > without doing anything obscure. That's what matters to me.
+> 
+> On the contrary this is indeed obfuscating the SGX tests: if an issue shows
+> up in the reclaimer then all tests would fail. If there is a unique
+> reclaimer test then that would help point to where the issue may be.
+
+I tend to disagree this. I'll add a separate reclaimer test if I need
+to test something that this does not scale. It's an iterative process.
+
+/Jarkko
