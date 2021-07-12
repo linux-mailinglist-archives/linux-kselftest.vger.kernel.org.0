@@ -2,24 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 323A83C4B07
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jul 2021 12:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD663C4F80
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jul 2021 12:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239435AbhGLGzY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Jul 2021 02:55:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49944 "EHLO mail.kernel.org"
+        id S241881AbhGLH0H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Jul 2021 03:26:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240000AbhGLGub (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jul 2021 02:50:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 31C3E60233;
-        Mon, 12 Jul 2021 06:47:23 +0000 (UTC)
+        id S1343855AbhGLHYW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Jul 2021 03:24:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D30D661404;
+        Mon, 12 Jul 2021 07:21:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626072444;
+        s=korg; t=1626074477;
         bh=DUgcB785XMcpeEq5Yt6WrbqQKAkHFMhqCwGsYbSv/5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BQRXBj3FTYXNydEAHs68LElIsLjrHSvPXUPXm496EB3gRTCibYAjCOciOUNIK7FDJ
-         ICwlQ9g5wKtjGYTYj4JGpO+j5I6NRnFY08w9C/rNaqmcKxCBjwq1b6U6yKL3izz10b
-         68YdZDGly74u9/v3hhNXdKhORhqBlgImmh+g07DI=
+        b=QpNaDoHxGVSTdPcnP1QZ9Xgj/BG/oGLNAwW1i5ID9Eg5u4RcpRVI/9r3zr0ldoJe9
+         6pGcOxDzaXACdV79bUqSw4iZsVmdmO75MzVRIuSRWKc1XhfYAqET8zihddcP51SepG
+         Zo9vbDmL5ZOVpHFIsc/ehxpAKJep4wN/8Lw9zoWQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -28,12 +28,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 499/593] selftests: splice: Adjust for handler fallback removal
-Date:   Mon, 12 Jul 2021 08:10:59 +0200
-Message-Id: <20210712060946.416271738@linuxfoundation.org>
+Subject: [PATCH 5.12 594/700] selftests: splice: Adjust for handler fallback removal
+Date:   Mon, 12 Jul 2021 08:11:17 +0200
+Message-Id: <20210712061039.156072267@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210712060843.180606720@linuxfoundation.org>
-References: <20210712060843.180606720@linuxfoundation.org>
+In-Reply-To: <20210712060924.797321836@linuxfoundation.org>
+References: <20210712060924.797321836@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
