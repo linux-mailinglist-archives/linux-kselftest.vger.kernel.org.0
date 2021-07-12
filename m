@@ -2,35 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE953C55C0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jul 2021 12:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493CB3C55C3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jul 2021 12:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344755AbhGLILw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Jul 2021 04:11:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55946 "EHLO mail.kernel.org"
+        id S1344853AbhGLIL4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Jul 2021 04:11:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55666 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353516AbhGLICa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jul 2021 04:02:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F7E661C2A;
-        Mon, 12 Jul 2021 07:55:26 +0000 (UTC)
+        id S1353963AbhGLIDV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Jul 2021 04:03:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A91186145F;
+        Mon, 12 Jul 2021 07:59:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626076526;
-        bh=DUgcB785XMcpeEq5Yt6WrbqQKAkHFMhqCwGsYbSv/5w=;
+        s=korg; t=1626076746;
+        bh=K4wRohg7cY/fwn6n+fzVhzRCpLnCNoam6p2AAXfp8ZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j1JcJUUppr/RVlqpnOfe9P7XznUTQqUi48uoe52fe1H/TgAiuFXnaaHeKMJK/J8FG
-         IPVuPSxTkfi1WgKgPmo7Bj3bVBmIbjFrnHnmkuP8lBrR9FnG7gLmXgHFMJa+dEy6UE
-         cCCeX/2KEBkFHurA4zASY1nas+8jGAzghDUTw+1E=
+        b=bkelOGapWnxDZUpdX52bYw8RL2PSK1na2+2kEFXbpzsKHN1SXh1v59jYF1G0m2Cx0
+         GEDrHHV5my8xcHBxKKTrUG3gl27QACQEi6JC77hrwGY97NtohRFU2O7u01wjRv7ZfI
+         q9/KMzUW8nHozXocJzSJ9MzJ1ww0wYyTa5QR0pB8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <rong.a.chen@intel.com>,
-        Christoph Hellwig <hch@lst.de>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Tim Gardner <tim.gardner@canonical.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>, linux-sgx@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.13 681/800] selftests: splice: Adjust for handler fallback removal
-Date:   Mon, 12 Jul 2021 08:11:44 +0200
-Message-Id: <20210712061039.314181276@linuxfoundation.org>
+Subject: [PATCH 5.13 749/800] selftests/sgx: remove checks for file execute permissions
+Date:   Mon, 12 Jul 2021 08:12:52 +0200
+Message-Id: <20210712061046.497212718@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210712060912.995381202@linuxfoundation.org>
 References: <20210712060912.995381202@linuxfoundation.org>
@@ -42,186 +45,78 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Dave Hansen <dave.hansen@linux.intel.com>
 
-[ Upstream commit 6daf076b717d189f4d02a303d45edd5732341ec1 ]
+[ Upstream commit 4896df9d53ae5521f3ce83751e828ad70bc65c80 ]
 
-Some pseudo-filesystems do not have an explicit splice fops since adding
-commit 36e2c7421f02 ("fs: don't allow splice read/write without explicit ops"),
-and now will reject attempts to use splice() in those filesystem paths.
+The SGX selftests can fail for a bunch of non-obvious reasons
+like 'noexec' permissions on /dev (which is the default *EVERYWHERE*
+it seems).
 
-Reported-by: kernel test robot <rong.a.chen@intel.com>
-Link: https://lore.kernel.org/lkml/202009181443.C2179FB@keescook/
-Fixes: 36e2c7421f02 ("fs: don't allow splice read/write without explicit ops")
-Cc: Christoph Hellwig <hch@lst.de>
+A new test mistakenly also looked for +x permission on the
+/dev/sgx_enclave.  File execute permissions really only apply to
+the ability of execve() to work on a file, *NOT* on the ability
+for an application to map the file with PROT_EXEC.  SGX needs to
+mmap(PROT_EXEC), but doesn't need to execve() the device file.
+
+Remove the check.
+
+Fixes: 4284f7acb78b ("selftests/sgx: Improve error detection and messages")
+Reported-by: Tim Gardner <tim.gardner@canonical.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Reinette Chatre <reinette.chatre@intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-sgx@vger.kernel.org
 Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Cc: linux-kernel@vger.kernel.org
+Tested-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/splice/short_splice_read.sh     | 119 ++++++++++++++----
- 1 file changed, 98 insertions(+), 21 deletions(-)
+ tools/testing/selftests/sgx/load.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/splice/short_splice_read.sh b/tools/testing/selftests/splice/short_splice_read.sh
-index 7810d3589d9a..22b6c8910b18 100755
---- a/tools/testing/selftests/splice/short_splice_read.sh
-+++ b/tools/testing/selftests/splice/short_splice_read.sh
-@@ -1,21 +1,87 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
-+#
-+# Test for mishandling of splice() on pseudofilesystems, which should catch
-+# bugs like 11990a5bd7e5 ("module: Correctly truncate sysfs sections output")
-+#
-+# Since splice fallback was removed as part of the set_fs() rework, many of these
-+# tests expect to fail now. See https://lore.kernel.org/lkml/202009181443.C2179FB@keescook/
- set -e
+diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+index f441ac34b4d4..bae78c3263d9 100644
+--- a/tools/testing/selftests/sgx/load.c
++++ b/tools/testing/selftests/sgx/load.c
+@@ -150,16 +150,6 @@ bool encl_load(const char *path, struct encl *encl)
+ 		goto err;
+ 	}
  
-+DIR=$(dirname "$0")
-+
- ret=0
+-	/*
+-	 * This just checks if the /dev file has these permission
+-	 * bits set.  It does not check that the current user is
+-	 * the owner or in the owning group.
+-	 */
+-	if (!(sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))) {
+-		fprintf(stderr, "no execute permissions on device file %s\n", device_path);
+-		goto err;
+-	}
+-
+ 	ptr = mmap(NULL, PAGE_SIZE, PROT_READ, MAP_SHARED, fd, 0);
+ 	if (ptr == (void *)-1) {
+ 		perror("mmap for read");
+@@ -169,13 +159,13 @@ bool encl_load(const char *path, struct encl *encl)
  
-+expect_success()
-+{
-+	title="$1"
-+	shift
-+
-+	echo "" >&2
-+	echo "$title ..." >&2
-+
-+	set +e
-+	"$@"
-+	rc=$?
-+	set -e
-+
-+	case "$rc" in
-+	0)
-+		echo "ok: $title succeeded" >&2
-+		;;
-+	1)
-+		echo "FAIL: $title should work" >&2
-+		ret=$(( ret + 1 ))
-+		;;
-+	*)
-+		echo "FAIL: something else went wrong" >&2
-+		ret=$(( ret + 1 ))
-+		;;
-+	esac
-+}
-+
-+expect_failure()
-+{
-+	title="$1"
-+	shift
-+
-+	echo "" >&2
-+	echo "$title ..." >&2
-+
-+	set +e
-+	"$@"
-+	rc=$?
-+	set -e
-+
-+	case "$rc" in
-+	0)
-+		echo "FAIL: $title unexpectedly worked" >&2
-+		ret=$(( ret + 1 ))
-+		;;
-+	1)
-+		echo "ok: $title correctly failed" >&2
-+		;;
-+	*)
-+		echo "FAIL: something else went wrong" >&2
-+		ret=$(( ret + 1 ))
-+		;;
-+	esac
-+}
-+
- do_splice()
- {
- 	filename="$1"
- 	bytes="$2"
- 	expected="$3"
-+	report="$4"
+ #define ERR_MSG \
+ "mmap() succeeded for PROT_READ, but failed for PROT_EXEC.\n" \
+-" Check that current user has execute permissions on %s and \n" \
+-" that /dev does not have noexec set: mount | grep \"/dev .*noexec\"\n" \
++" Check that /dev does not have noexec set:\n" \
++" \tmount | grep \"/dev .*noexec\"\n" \
+ " If so, remount it executable: mount -o remount,exec /dev\n\n"
  
--	out=$(./splice_read "$filename" "$bytes" | cat)
-+	out=$("$DIR"/splice_read "$filename" "$bytes" | cat)
- 	if [ "$out" = "$expected" ] ; then
--		echo "ok: $filename $bytes"
-+		echo "      matched $report" >&2
-+		return 0
- 	else
--		echo "FAIL: $filename $bytes"
--		ret=1
-+		echo "      no match: '$out' vs $report" >&2
-+		return 1
- 	fi
- }
- 
-@@ -23,34 +89,45 @@ test_splice()
- {
- 	filename="$1"
- 
-+	echo "  checking $filename ..." >&2
-+
- 	full=$(cat "$filename")
-+	rc=$?
-+	if [ $rc -ne 0 ] ; then
-+		return 2
-+	fi
-+
- 	two=$(echo "$full" | grep -m1 . | cut -c-2)
- 
- 	# Make sure full splice has the same contents as a standard read.
--	do_splice "$filename" 4096 "$full"
-+	echo "    splicing 4096 bytes ..." >&2
-+	if ! do_splice "$filename" 4096 "$full" "full read" ; then
-+		return 1
-+	fi
- 
- 	# Make sure a partial splice see the first two characters.
--	do_splice "$filename" 2 "$two"
-+	echo "    splicing 2 bytes ..." >&2
-+	if ! do_splice "$filename" 2 "$two" "'$two'" ; then
-+		return 1
-+	fi
-+
-+	return 0
- }
- 
--# proc_single_open(), seq_read()
--test_splice /proc/$$/limits
--# special open, seq_read()
--test_splice /proc/$$/comm
-+### /proc/$pid/ has no splice interface; these should all fail.
-+expect_failure "proc_single_open(), seq_read() splice" test_splice /proc/$$/limits
-+expect_failure "special open(), seq_read() splice" test_splice /proc/$$/comm
- 
--# proc_handler, proc_dointvec_minmax
--test_splice /proc/sys/fs/nr_open
--# proc_handler, proc_dostring
--test_splice /proc/sys/kernel/modprobe
--# proc_handler, special read
--test_splice /proc/sys/kernel/version
-+### /proc/sys/ has a splice interface; these should all succeed.
-+expect_success "proc_handler: proc_dointvec_minmax() splice" test_splice /proc/sys/fs/nr_open
-+expect_success "proc_handler: proc_dostring() splice" test_splice /proc/sys/kernel/modprobe
-+expect_success "proc_handler: special read splice" test_splice /proc/sys/kernel/version
- 
-+### /sys/ has no splice interface; these should all fail.
- if ! [ -d /sys/module/test_module/sections ] ; then
--	modprobe test_module
-+	expect_success "test_module kernel module load" modprobe test_module
- fi
--# kernfs, attr
--test_splice /sys/module/test_module/coresize
--# kernfs, binattr
--test_splice /sys/module/test_module/sections/.init.text
-+expect_failure "kernfs attr splice" test_splice /sys/module/test_module/coresize
-+expect_failure "kernfs binattr splice" test_splice /sys/module/test_module/sections/.init.text
- 
- exit $ret
+ 	ptr = mmap(NULL, PAGE_SIZE, PROT_EXEC, MAP_SHARED, fd, 0);
+ 	if (ptr == (void *)-1) {
+-		fprintf(stderr, ERR_MSG, device_path);
++		fprintf(stderr, ERR_MSG);
+ 		goto err;
+ 	}
+ 	munmap(ptr, PAGE_SIZE);
 -- 
 2.30.2
 
