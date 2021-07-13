@@ -2,33 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 825A63C6FA7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jul 2021 13:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19A13C7037
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jul 2021 14:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235875AbhGMLZ4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jul 2021 07:25:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49190 "EHLO mail.kernel.org"
+        id S236107AbhGMMXE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Jul 2021 08:23:04 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:51340 "EHLO deadmen.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235881AbhGMLZz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jul 2021 07:25:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C3D966117A;
-        Tue, 13 Jul 2021 11:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626175384;
-        bh=Aae1Qk7FDHxDqCGXiyf7ZTDCvIv9/biiOfm0a9nKJLc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qsivhSf/eXgBzA3V5pV8jl3cs0+TKjdEJl3F/882r9uc0MpHVbf4q2AhlBXYEqfJt
-         8Vwd/Mreg1/FRkqj4xTkRbQra3RJEjeVutP0dhSkgD4zANW5171+Xrq4iU+DoWQpnv
-         qg0YaE6hvhQuoCd5zoLqL+dLdFpwHFerqDn7he+I=
-Date:   Tue, 13 Jul 2021 13:23:01 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        id S235968AbhGMMXD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Jul 2021 08:23:03 -0400
+Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
+        by deadmen.hmeau.com with esmtp (Exim 4.92 #5 (Debian))
+        id 1m3HOM-00054s-Lp; Tue, 13 Jul 2021 20:20:02 +0800
+Received: from herbert by gondobar with local (Exim 4.92)
+        (envelope-from <herbert@gondor.apana.org.au>)
+        id 1m3HO5-0006IH-0H; Tue, 13 Jul 2021 20:19:45 +0800
+Date:   Tue, 13 Jul 2021 20:19:45 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Alexey Dobriyan <adobriyan@gmail.com>,
         Miguel Ojeda <ojeda@kernel.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
@@ -51,48 +48,35 @@ Cc:     Brendan Higgins <brendanhiggins@google.com>,
         linux@rasmusvillemoes.dk
 Subject: Re: [PATCH v1 3/3] kernel.h: Split out container_of() and
  typeof_memeber() macros
-Message-ID: <YO13lSUdPfNGOnC3@kroah.com>
+Message-ID: <20210713121944.GA24157@gondor.apana.org.au>
 References: <20210713084541.7958-1-andriy.shevchenko@linux.intel.com>
  <20210713084541.7958-3-andriy.shevchenko@linux.intel.com>
  <YO1s+rHEqC9RjMva@kroah.com>
  <YO12ARa3i1TprGnJ@smile.fi.intel.com>
+ <YO13lSUdPfNGOnC3@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YO12ARa3i1TprGnJ@smile.fi.intel.com>
+In-Reply-To: <YO13lSUdPfNGOnC3@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 13, 2021 at 02:16:17PM +0300, Andy Shevchenko wrote:
-> On Tue, Jul 13, 2021 at 12:37:46PM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Jul 13, 2021 at 11:45:41AM +0300, Andy Shevchenko wrote:
-> > > kernel.h is being used as a dump for all kinds of stuff for a long time.
-> > > Here is the attempt cleaning it up by splitting out container_of() and
-> > > typeof_memeber() macros.
-> > 
-> > That feels messy, why?
-> 
-> Because the headers in the kernel are messy.
+On Tue, Jul 13, 2021 at 01:23:01PM +0200, Greg Kroah-Hartman wrote:
+>
+> Life is messy and can not easily be partitioned into tiny pieces.  That
+> way usually ends up being even messier in the end...
 
-Life is messy and can not easily be partitioned into tiny pieces.  That
-way usually ends up being even messier in the end...
+One advantage is less chance of header loops which very often
+involve kernel.h and one of the most common reasons for other
+header files to include kernel.h is to access container_of.
 
-> > Reading one .h file for these common
-> > macros/defines is fine, why are container_of and typeof somehow
-> > deserving of their own .h files?
-> 
-> It's explained here. There are tons of drivers that includes kernel.h for only
-> a few or even solely for container_of() macro.
+However, I don't see much point in touching *.c files that include
+kernel.h.
 
-And why is that really a problem?  kernel.h is in the cache and I would
-be amazed if splitting this out actually made anything build faster.
-
-> > What speedups are you seeing by
-> > splitting this up?
-> 
-> C preprocessing.
-
-Numbers please.
-
-greg k-h
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
