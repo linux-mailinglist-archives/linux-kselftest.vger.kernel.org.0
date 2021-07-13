@@ -2,42 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF643C719E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jul 2021 15:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A993C7687
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jul 2021 20:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbhGMOBW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jul 2021 10:01:22 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:47612 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236720AbhGMOBV (ORCPT
+        id S229944AbhGMSmZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Jul 2021 14:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229500AbhGMSmY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jul 2021 10:01:21 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-285-sJWatQGHMAyOI0dV9jVZtg-1; Tue, 13 Jul 2021 14:58:28 +0100
-X-MC-Unique: sJWatQGHMAyOI0dV9jVZtg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.18; Tue, 13 Jul 2021 14:58:26 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.018; Tue, 13 Jul 2021 14:58:26 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andy.shevchenko@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tue, 13 Jul 2021 14:42:24 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D84C0613DD;
+        Tue, 13 Jul 2021 11:39:33 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id z11so6723450iow.0;
+        Tue, 13 Jul 2021 11:39:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dvhTzTGuwGaxvYP49OCa62HCoxmtDuXHty07kjzc4tQ=;
+        b=p6lH0Pf9OmSWBFQl92qBpyl7xdKbccrbq7NjhAgHC62ORJ3ULLCws7qTa69osGy8iu
+         s/K9I8Olglp/uwNswevPsbwUoNKYGTVFwQ+BbwK5YiQLlybmy/HbOb+XM63SYyINJfoh
+         vXPWhKbLoGArVyOXDMl+JEjtzN2zz32Tb6pEdD/Tz6JhE1kbmLFysAK346kieRxVHq7D
+         9gksqPeVhIfxmvr22kO529va1RrB8yYhQU1ia2PpHj+q5kEmdAiBWCmLNU7hzm7QJZBZ
+         645Oyk+6vnYwhZfydXCzUMjRrM1DbqfO1IakvrKXyR76lPNF5ttk2Rz7bLRJyLZh5ICI
+         Elfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dvhTzTGuwGaxvYP49OCa62HCoxmtDuXHty07kjzc4tQ=;
+        b=psIPaC5HMH+bO4rfXClXinEbSVeeRPhtNblbG0+AUzsHmITwOk5a3pJwl+YrPJXwmE
+         qn7FKoocU6VnFkbqoX1TGSkvzO0OB5PiHGFcjLcEVCSnAUWPGxXeG+GVVGUhK3FDk6ep
+         Wj280F1v/HWm5L89ZPVjNoe1+SmkOiYMQ9iRSHL3/x1JCIS3+txHRDAh8ebecDlSNVDA
+         pUne4TE9kGk1tVws9hzn+Zrc0W9lAMJyuEZjljrrUDAvVuKv1vgqDsZtsnTtcuzQtnAA
+         /JEemOVjxc2+MJL0mT9H2auzNLHB7NrxCfX4RWoBmRgA7ACdOlpPQPG5bivoZ4UbxX7B
+         YRbw==
+X-Gm-Message-State: AOAM530AWa6hI+73szbKsC1MfqVKGhqKKdchlLoWEJBqdX4SJ29Lc3tG
+        jBQC35IyxIBgwE0zYIRTm9Z5q0D2x7LG6lE0UuU=
+X-Google-Smtp-Source: ABdhPJwpTjUp3UniqBaKrgdpc+yOJB6FaS6hkA5OBwgCiueGrCrCf7PVlzeQETyowNt2XoKgBr9TdfK/YQqEyQIzWmA=
+X-Received: by 2002:a02:2b21:: with SMTP id h33mr5075656jaa.31.1626201573037;
+ Tue, 13 Jul 2021 11:39:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210713084541.7958-1-andriy.shevchenko@linux.intel.com>
+ <20210713084541.7958-3-andriy.shevchenko@linux.intel.com> <YO1s+rHEqC9RjMva@kroah.com>
+ <YO12ARa3i1TprGnJ@smile.fi.intel.com> <YO13lSUdPfNGOnC3@kroah.com>
+In-Reply-To: <YO13lSUdPfNGOnC3@kroah.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 13 Jul 2021 20:39:22 +0200
+Message-ID: <CANiq72=vs8-88h3Z+BON=qA4CZQ1pS1nggnCFHDEHYyG+Y+3JQ@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] kernel.h: Split out container_of() and
+ typeof_memeber() macros
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Brendan Higgins <brendanhiggins@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Alexey Dobriyan" <adobriyan@gmail.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
         Miguel Ojeda <ojeda@kernel.org>,
-        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
@@ -46,9 +76,9 @@ CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
@@ -56,54 +86,24 @@ CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Jonathan Cameron <jic23@kernel.org>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: RE: [PATCH v1 3/3] kernel.h: Split out container_of() and
- typeof_memeber() macros
-Thread-Topic: [PATCH v1 3/3] kernel.h: Split out container_of() and
- typeof_memeber() macros
-Thread-Index: AQHXd+UckMMEGGzpqkiHoJNy6jDReatA637g
-Date:   Tue, 13 Jul 2021 13:58:25 +0000
-Message-ID: <8a81e53ed3fb4f92878cd7f0d2552861@AcuMS.aculab.com>
-References: <20210713084541.7958-1-andriy.shevchenko@linux.intel.com>
- <20210713084541.7958-3-andriy.shevchenko@linux.intel.com>
- <YO1s+rHEqC9RjMva@kroah.com> <YO12ARa3i1TprGnJ@smile.fi.intel.com>
- <YO13lSUdPfNGOnC3@kroah.com> <20210713121944.GA24157@gondor.apana.org.au>
- <CAHp75VfGd6VYyCjbqxO91B4RyyYuNQd_XKJA=yLMWJpa7-Yi9Q@mail.gmail.com>
-In-Reply-To: <CAHp75VfGd6VYyCjbqxO91B4RyyYuNQd_XKJA=yLMWJpa7-Yi9Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PiBUaGUgd2hvbGUgaWRlYSBjYW1lIHdoZW4gZGlzY3Vzc2luZyBkcml2ZXJzLCBlc3AuIElJTyBv
-bmVzLiBUaGV5IG9mdGVuDQo+IGFyZSB1c2luZyBBUlJBWV9TSVpFKCkgKyBjb250YWluZXJfb2Yo
-KS4ga2VybmVsLmggaXMgYSBiaWcgb3ZlcmtpbGwNCj4gdGhlcmUuDQoNCkl0IHByb2JhYmx5IG1h
-a2VzIG5vIGRpZmZlcmVuY2UuDQpFdmVuIGFwcGFyZW50bHkgdHJpdmlhbCBpbmNsdWRlcyBwdWxs
-IGluIG1vc3Qgb2YgdGhlIHdvcmxkLg0KDQpJIG1hbmFnZWQgdG8gZ2V0IGEgY29tcGlsZSBlcnJv
-ciBmcm9tIG9uZSBvZiB0aGUgZGVmaW5lcw0KaW4gc3lzL2lvY3RsLmggLSB0aGUgaW5jbHVkZSBz
-ZXF1ZW5jZSB0aGUgY29tcGlsZXIgZ2F2ZQ0KbWUgd2FzIGFib3V0IDIwIGRlZXAuDQpJJ3ZlIGZv
-cmdvdHRlbiB3aGVyZSBpdCBzdGFydGVkLCBidXQgaXQgbWVhbmRlcmVkIHRocm91Z2gNCnNvbWUg
-YXJjaC94ODYgZGlyZWN0b3JpZXMuDQoNCkkgc3VzcGVjdCB0aGF0IHNvbWUgZmlsZXMgaGF2ZSBh
-ICNpbmNsdWRlIHdoZXJlIGp1c3QgYQ0KJ3N0cnVjdCBmb28nIHdvdWxkIHN1ZmZpY2UuDQoNClRo
-ZXJlIHdpbGwgYWxzbyBiZSAuaCBmaWxlcyB3aGljaCBpbmNsdWRlIGJvdGggdGhlICdwdWJsaWMn
-DQppbnRlcmZhY2UgYW5kICdwcml2YXRlJyBkZWZpbml0aW9ucy4NClNvbWV0aW1lcyBzcGxpdHRp
-bmcgdGhvc2UgY2FuIHJlZHVjZSB0aGUgbnVtYmVyIG9mIGluY2x1ZGVzLg0KVGhpcyBpcyBtb3N0
-IG5vdGljZWFibGUgY29tcGlsaW5nIHRyaXZpYWwgZHJpdmVycy4NCg0KVGhlIG90aGVyIHdheSB0
-byBzcGVlZCB1cCBjb21waWxhdGlvbnMgaXMgdG8gcmVkdWNlIHRoZSAtSQ0KcGF0aCBsaXN0IHRv
-IHRoZSBjb21waWxlci4NClRoaXMgaXMgcGFydGljdWxhcmx5IHNpZ25pZmljYW50IGlmIGNvbXBp
-bGluZyBvdmVyIE5GUy4NCihXZWxsIE5GUyBtaWdodCBoYXZlIGNoYW5nZWQsIGJ1dC4uLikNCg0K
-CURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBN
-b3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAx
-Mzk3Mzg2IChXYWxlcykNCg==
+On Tue, Jul 13, 2021 at 1:23 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> Life is messy and can not easily be partitioned into tiny pieces.  That
+> way usually ends up being even messier in the end...
 
+I agree measurements would be ideal.
+
+Having said that, even if it makes no performance difference, I think
+it is reasonable to split things (within reason) and makes a bunch of
+other things easier, plus sometimes one can enforce particular
+conventions in the separate header (like I did when introducing
+`compiler_attributes.h`).
+
+Cheers,
+Miguel
