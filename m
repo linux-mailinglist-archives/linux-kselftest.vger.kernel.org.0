@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A64813C9420
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jul 2021 00:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0436B3C9446
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jul 2021 01:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237376AbhGNXAp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Jul 2021 19:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        id S236439AbhGNXSI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Jul 2021 19:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234988AbhGNXAp (ORCPT
+        with ESMTP id S229928AbhGNXSI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jul 2021 19:00:45 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C4CC06175F
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jul 2021 15:57:51 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id h7-20020a5b0a870000b029054c59edf217so4894246ybq.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jul 2021 15:57:51 -0700 (PDT)
+        Wed, 14 Jul 2021 19:18:08 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737D0C061760
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jul 2021 16:15:14 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id x5-20020a0569021025b029055b9b68cd3eso4951127ybt.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jul 2021 16:15:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=tbdzyFamT8pQc1mVhk+2w4TImGXTQGfmsYo5ttrPBMU=;
-        b=dE4Ts12Dib3b6drnj9ehCuKIL5IDPt2R/QW/Y5We/zaTkYzbjMcXxdPeM5xLYulvCV
-         zxk2pC5zASse0Z193x4YZWlnJYWxB1Dq36jJm5EMiceaZr7pZPpkLcfSbSTXi8Aqfoy0
-         EMVxXwqrWnC/FzxnwhNHtfCRxbPMZMkJ7QcIFKgnCoH02TVhr3nq1f8TmT/ITZGopuAv
-         6jaDx01EAEf8LAU9EOAkTLrCHCM69Jf4ZXcZNXMB4vGD3utoAdeLGDfNUII9wIxxb235
-         YKXoyBi9q9CXr8a0CpAQtc2SE3bptrRpTTZeEUf+xZPXR+ozOdrQXl+ZqqCLzKCZSGpL
-         AgKg==
+        bh=DqMZpra5Z3HRb0F6ypU+rLLPpHVX8T6pVPn9AM2au8E=;
+        b=ofaJESsl8XfjG0V8ICG0P2YoedRTAkO26xasRPXkDyVVOt7Dw1IxYMkY32FsVtu1iu
+         XzTV3h8H1rSzW8FOJKuYVjyGyyzvKa5kBX2vwMlhGcneIVOSpIBLldJ1udHVWTVh8FpH
+         snmFEJqDfRJ7/wT8OhdRhbV/eUZkVlhLXbcNlWCRy4/apFPpB5O3q+LVHUHRSEH7AkjE
+         MaAn1XGaqgCgF9VXQg2xF8V5jVCkcb4Yyptj3YiLKhxdqVo7/BGc4Qn6PRa6No1aaTPI
+         CvgGbDr2Jd2CNdY4flP1utFxoRtfK/T39+60I3v9Idy9H5QtPo2Rlm5tXAQT75f1i9w/
+         W0fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=tbdzyFamT8pQc1mVhk+2w4TImGXTQGfmsYo5ttrPBMU=;
-        b=FOGCfwBza+4h6pAujojhsnOx3N9T1CdIySj3KK6g6zcPNGCPaCxSZZz05y/FBfLtcd
-         csmrBf6eXZZXds7dY8ucjH8KRqmLScHe9STik4IT6xy2FSfRHGrWmYAZ++QznaDN/IfV
-         BVVxKJ5djzctYJ/2ISinTawPVgZBnSj1liS8N8WUnZK51iOuVWiH0wWfAWRaJfuFW4J7
-         ZLF8Ip89cNP6tWyr0My2UirMPkf2cQ8ciKoSJnMGUp6OhphQp/0lsTzwSDWllVmbwWRT
-         rcqn9zIGyDGb6VccRvZZDvEouhKhWA5FDFEbakiwfGNbIZD7SAtLyp9ah51Kls/zYauC
-         +3HA==
-X-Gm-Message-State: AOAM5333D/QL6L27Gj1bjOx3D+Isthd7WBFapD8EdmgqdzqJSaNDG5Ky
-        OZk89Ed3P2ExXXrYTk0cTy236nYw/iFjgw==
-X-Google-Smtp-Source: ABdhPJzRF6rMCOf3MuTpQGBRvbBUQggRO29Fofpahr0ehl5/h1cybvz/6F+1V5BLmDeEp5ZCo/oyZYukCfVwrg==
+        bh=DqMZpra5Z3HRb0F6ypU+rLLPpHVX8T6pVPn9AM2au8E=;
+        b=nU+OqDQ8Zao0uVgD0Ma4EhoIHwq/mlAPpQGdIziYMAsd4DIzR+/JL0DhAqDeo0SaL2
+         fB6+CzWTWfaB+R9uOtCOk7NgBsFzRg0E064l9cZuMcSr0dOmz6woLMKdpCfBbTL3miIO
+         PEMacM9hrNax+mkEDsAqK/bxrzhsXgXWD+IlXV8KzXgCAF2pJu073YrJCXab2eHMOJh7
+         n5ncOrPlCId9xI9zU/FVkbaR8u4uMh3hl5XZC+ITzGxY2/ScmpAoDfBeQXatP20c5x/e
+         l1BdY100bDyUXEE+b8xz6kcXipk1wQcE9U6cAYJGSyDC2Ar9UF9F9pB5Hj2DdL/oLG8N
+         K9aQ==
+X-Gm-Message-State: AOAM533ZOpMOQpmM/KrpB5/jEzaSuApqSAu1inf19D8hokGq5EDjnsPk
+        YCHneyKwLeaFTBN0kVU6ZIDANGEK7V9R4A==
+X-Google-Smtp-Source: ABdhPJybk3UBrBC4rqlu/dHMP0SAAnOatz0g3pgP+dArk5BZpKumON9gUEfZhyQh+y2i8wrYJhFSV2UqkgpSxA==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1109:2a1e:ff11:1796])
- (user=dlatypov job=sendgmr) by 2002:a25:e803:: with SMTP id
- k3mr460065ybd.268.1626303471176; Wed, 14 Jul 2021 15:57:51 -0700 (PDT)
-Date:   Wed, 14 Jul 2021 15:57:41 -0700
-Message-Id: <20210714225741.882178-1-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:a25:68ce:: with SMTP id
+ d197mr500955ybc.317.1626304513677; Wed, 14 Jul 2021 16:15:13 -0700 (PDT)
+Date:   Wed, 14 Jul 2021 16:15:06 -0700
+Message-Id: <20210714231506.886386-1-dlatypov@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
-Subject: [PATCH] kunit: tool: add --kernel_args to allow setting module params
+Subject: [PATCH v2] kunit: tool: add --kernel_args to allow setting module params
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -74,12 +74,15 @@ Testing complete. 2 tests run. 0 failed. 0 crashed. 0 skipped.
 
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
+v1 -> v2:
+s/kernel_arg/kernel_args in documentation
+---
  Documentation/dev-tools/kunit/running_tips.rst | 10 ++++++++++
  tools/testing/kunit/kunit.py                   | 16 ++++++++++++----
  2 files changed, 22 insertions(+), 4 deletions(-)
 
 diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
-index 7d99386cf94a..bc37a2ad1598 100644
+index 7d99386cf94a..ebaaa2764207 100644
 --- a/Documentation/dev-tools/kunit/running_tips.rst
 +++ b/Documentation/dev-tools/kunit/running_tips.rst
 @@ -80,6 +80,16 @@ file ``.kunitconfig``, you can just pass in the dir, e.g.
@@ -89,11 +92,11 @@ index 7d99386cf94a..bc37a2ad1598 100644
 +Setting kernel commandline parameters
 +-------------------------------------
 +
-+You can use ``--kernel_arg`` to pass arbitrary kernel arguments, e.g.
++You can use ``--kernel_args`` to pass arbitrary kernel arguments, e.g.
 +
 +.. code-block:: bash
 +
-+	$ ./tools/testing/kunit/kunit.py run --kernel_arg=param=42 --kernel_arg=param2=false
++	$ ./tools/testing/kunit/kunit.py run --kernel_args=param=42 --kernel_args=param2=false
 +
 +
  Generating code coverage reports under UML
