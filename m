@@ -2,130 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B5F3CB275
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jul 2021 08:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570023CB98B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jul 2021 17:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234964AbhGPG1l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Jul 2021 02:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S239803AbhGPPVi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Jul 2021 11:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbhGPG1l (ORCPT
+        with ESMTP id S233094AbhGPPVi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Jul 2021 02:27:41 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08586C06175F;
-        Thu, 15 Jul 2021 23:24:47 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id p22so13140524yba.7;
-        Thu, 15 Jul 2021 23:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7nfECmLZFfHRGZDsMw/ZPjNyNfs5aoz82O3YRn+SIQ8=;
-        b=J+IIvgAh7LguO7P4v1V9ISSphaHuWk0RI0A7G3iqNmsUgtrrTRLs+pRy0m3tyHM/hj
-         k/L5Lh/0WQM/b7HEU3sERdIU33uPjjtdvKMWLVfc7FONmG0n9gZbs1Qj9SBLarytfyqv
-         t/si0Z2fWO9OBVK8NiZ7eIZQYODUoRaXDHdby+jYgaUULG+ti+oy+1dor1SIf56Imm4r
-         lkd09jFUiRImmDAGhgm45IFSKvauxG4bw0i4VxE1sZlF6LKQmCa52+pM+6SKY9CWUekW
-         I5PZ8MS0KYrsHLrqXc35jTg4I2etmI+D5g35XA83nB0zJL6BtLopcsdK3Hnp6o+Q1uEU
-         ELKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7nfECmLZFfHRGZDsMw/ZPjNyNfs5aoz82O3YRn+SIQ8=;
-        b=GBLbYz7HLdxOWVlhhbRXR/t2sxzoV8E8JmyTGeyAg2OBavOL69+AwA/+Qfbr8pDFco
-         +RjA0SZ/6Xy97xEE82kJ4X3hISw3We/NUT9CjRMvorJt/KG/huEJlIode1V+fUeSyyj7
-         322pVOh8HaXQybgPt0dPuZkY0nni4HnU3h8A59WtaNw8IYTY7h0ZNCwgnLol2MW1HPr+
-         JCkuLJGfuZ3CtYiRXXUKN4YIbLBiYyqdJ5YrUfPSUvJB70JMNeRt2M5aEQBlfdgLWtGV
-         JKokVP5rJsgGoxaRk+msMboRo781FQQG8ILWBl+hGPYa4zlZo+0fR4vQqJ/sWlPDGlaZ
-         Ee6Q==
-X-Gm-Message-State: AOAM530spH6NJEbhYAcV6XTX8vWC7poUYCAg5Ss7fsUASWsYm6Wraz5H
-        USkh2pSuA2YuOaDhvMtH2pc7+K6Frj+Fp0ApaaM=
-X-Google-Smtp-Source: ABdhPJwVP9vmiOx97YfEbiQ+U9eLEVtRRhfIEstXpRfsJzRcqcufYlairRueZniEa8JvRbl/0jZD02whUq7o4caEc90=
-X-Received: by 2002:a25:b741:: with SMTP id e1mr10850768ybm.347.1626416686326;
- Thu, 15 Jul 2021 23:24:46 -0700 (PDT)
+        Fri, 16 Jul 2021 11:21:38 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E62C06175F;
+        Fri, 16 Jul 2021 08:18:42 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1m4Pbl-0004ys-49; Fri, 16 Jul 2021 17:18:33 +0200
+Date:   Fri, 16 Jul 2021 17:18:33 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+Cc:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
+        davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
+        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
+        Blair Steven <blair.steven@alliedtelesis.co.nz>
+Subject: Re: [PATCH 2/3] net: netfilter: Add RFC-7597 Section 5.1 PSID support
+Message-ID: <20210716151833.GD9904@breakpoint.cc>
+References: <20210705103959.GG18022@breakpoint.cc>
+ <20210716002742.31078-1-Cole.Dishington@alliedtelesis.co.nz>
+ <20210716002742.31078-3-Cole.Dishington@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <1626362126-27775-1-git-send-email-alan.maguire@oracle.com> <1626362126-27775-4-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1626362126-27775-4-git-send-email-alan.maguire@oracle.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 15 Jul 2021 23:24:35 -0700
-Message-ID: <CAEf4Bzap=EHCRXwePxU+sW94DGFFOLqBnwtJyqhnFJ+s86D4qQ@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/3] selftests/bpf: add dump type data tests
- to btf dump tests
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Bill Wendling <morbo@google.com>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210716002742.31078-3-Cole.Dishington@alliedtelesis.co.nz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 15, 2021 at 8:16 AM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> Test various type data dumping operations by comparing expected
-> format with the dumped string; an snprintf-style printf function
-> is used to record the string dumped.  Also verify overflow handling
-> where the data passed does not cover the full size of a type,
-> such as would occur if a tracer has a portion of the 8k
-> "struct task_struct".
->
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/btf_dump.c | 600 ++++++++++++++++++++++
->  1 file changed, 600 insertions(+)
->
-
-[...]
-
-> @@ -245,4 +815,34 @@ void test_btf_dump() {
->         }
->         if (test__start_subtest("btf_dump: incremental"))
->                 test_btf_dump_incremental();
+Cole Dishington <Cole.Dishington@alliedtelesis.co.nz> wrote:
+> diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+> index 7de595ead06a..4a9448684504 100644
+> --- a/net/netfilter/nf_nat_core.c
+> +++ b/net/netfilter/nf_nat_core.c
+> @@ -195,13 +195,36 @@ static bool nf_nat_inet_in_range(const struct nf_conntrack_tuple *t,
+>  static bool l4proto_in_range(const struct nf_conntrack_tuple *tuple,
+>  			     enum nf_nat_manip_type maniptype,
+>  			     const union nf_conntrack_man_proto *min,
+> -			     const union nf_conntrack_man_proto *max)
+> +			     const union nf_conntrack_man_proto *max,
+> +			     const union nf_conntrack_man_proto *base,
+> +			     bool is_psid)
+>  {
+>  	__be16 port;
+> +	u16 psid, psid_mask, offset_mask;
 > +
-> +       btf = libbpf_find_kernel_btf();
-> +       if (!ASSERT_NEQ(btf, NULL, "no kernel BTF found"))
-> +               return;
+> +	/* In this case we are in PSID mode, avoid checking all ranges by computing bitmasks */
+> +	if (is_psid) {
+> +		u16 power_j = ntohs(max->all) - ntohs(min->all) + 1;
+> +		u32 offset = ntohs(base->all);
+> +		u16 power_a;
 > +
-> +       d = btf_dump__new(btf, NULL, &opts, btf_dump_snprintf);
+> +		if (offset == 0)
+> +			offset = 1 << 16;
 > +
-> +       if (!ASSERT_NEQ(d, NULL, "could not create BTF dump"))
+> +		power_a = (1 << 16) / offset;
 
-better use ASSERT_OK_PTR() for this, I'll adjust when applying
+Since the dividie is only needed nat setup and not for each packet I
+think its ok.
 
+> +	if (range->flags & NF_NAT_RANGE_PSID) {
+> +		u16 base = ntohs(range->base_proto.all);
+> +		u16 min =  ntohs(range->min_proto.all);
+> +		u16 off = 0;
+> +
+> +		/* If offset=0, port range is in one contiguous block */
+> +		if (base)
+> +			off = prandom_u32() % (((1 << 16) / base) - 1);
 
-> +               return;
-> +
-> +       /* Verify type display for various types. */
-> +       if (test__start_subtest("btf_dump: int_data"))
-> +               test_btf_dump_int_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: float_data"))
-> +               test_btf_dump_float_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: char_data"))
-> +               test_btf_dump_char_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: typedef_data"))
-> +               test_btf_dump_typedef_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: enum_data"))
-> +               test_btf_dump_enum_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: struct_data"))
-> +               test_btf_dump_struct_data(btf, d, str);
-> +       if (test__start_subtest("btf_dump: var_data"))
-> +               test_btf_dump_var_data(btf, d, str);
-> +       btf_dump__free(d);
-> +       btf__free(btf);
-> +
-> +       if (test__start_subtest("btf_dump: datasec_data"))
-> +               test_btf_dump_datasec_data(str);
->  }
-> --
-> 1.8.3.1
->
+Bases 32769 > gives 0 for the modulo value, so perhaps compute that
+independently.
+
+You could reject > 32769 in the iptables checkentry target.
+
+Also, base of 21846 and above always give 0 result (% 1).
+
+I don't know psid well enough to give a recommendation here.
+
+If such inputs are nonsensical, just reject it when userspace asks for
+this and add a 
+
+if (WARN_ON_ONCE(base > bogus))
+	return NF_DROP;
+
+with s small coment explaining that xtables is supposed to not provide
+such value.
+
+Other than this I think its ok.
+
+I still dislike the 'bool is_psid' in the nat core, but I can't find
+a better solution.
