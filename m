@@ -2,115 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F4A3CC042
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Jul 2021 02:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5B63CC3F4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Jul 2021 17:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbhGQAlo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Jul 2021 20:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S234527AbhGQPFZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 17 Jul 2021 11:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbhGQAlo (ORCPT
+        with ESMTP id S234461AbhGQPFY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Jul 2021 20:41:44 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B936FC06175F;
-        Fri, 16 Jul 2021 17:38:47 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id p22so17644141yba.7;
-        Fri, 16 Jul 2021 17:38:47 -0700 (PDT)
+        Sat, 17 Jul 2021 11:05:24 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF1AC061762
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Jul 2021 08:02:27 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id a5-20020a7bc1c50000b02901e3bbe0939bso7649212wmj.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Jul 2021 08:02:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qKGW0l32ov6Qx3nXhQmv4CGkVBvPl3fyq9GCbjnP0/Q=;
-        b=hhhP6dsNV5ZEKIrH/JpKnBVZs9oOFCZW/NB/DI9j7K9/rD1a8g7ZiofB+X+4RT6mSh
-         NXpQkGSv8qpF4Et3FoM7Vdv738Jy6LfVRxotaBLE+Ui9Ni+JpPU2FU+BSAThwnHVv2Iw
-         nQA7b4cbjSKYnxVXZKoIP/qnqONr+d4uVd+bPSbvlAAFJGo7iEJN44S2954YOQ2tGE7s
-         R6f35pxQzyF/JdwUDWnOkg7MUTr+jPQBArG57isbnjlpBVDD1EpUuSDR4pdTIJfehuzr
-         FfzPzcLpatVd0YjLHxD7zkY3BTPqmutq/Ockiv92NxAPS5ZCx77bWyjq6RvP5u5whJ/g
-         ol+A==
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fg1LMtio76TZBE+V6rtOm0zM6x8DkN+VarQiinH1Wgc=;
+        b=faMTee1KLLK/gxHwB6xs8Qh7MSM+lyJqIllmAQzXHU9Rj+GaxvQ7gRItAlALDTfjbA
+         U0LnhQZa9JnvVjfYEy0PDJ+3g736Bg58SGI88j3BPbsy64ZE7OZGlOlBmtGxEGKvxt9m
+         wt1fBxB6f6nA/Hw1OfSj8WRTm/xjb2gIxTo8bAizXtnvhS9w/LZvcVStZsbpGJzE35M8
+         X4H3gr3kPfYMSyVfMmha2c4pyVmM5LFl/tvJHlvfy+ohnIaiPN7WKPwlXD6GTvObQi8w
+         yIUue95attXaHLhM5C0eGA7JFSY6NhbHLvuds0JDHwEaqiJHiz/UT1zhsB929cTP648H
+         xMMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qKGW0l32ov6Qx3nXhQmv4CGkVBvPl3fyq9GCbjnP0/Q=;
-        b=JF0ReQ08D+wNq1rvBQKV8XUpzgBYCuz4/2eOqT+cVXRRXjR1sr/t1DQzKPqonMADL4
-         S+7Cgcz+HqW3Bzu46L5k+mW9OTrke6T5Tq9Ekk7octr1//OLc3AsogPBQ6SDyunIYSqg
-         n2apAJlsQuzOkloyokEwFQLJjIAaskW4wPSuRo7hkNED0/Hsyd36JjJIQj04X+gEpSyv
-         GHCwhCI9/BGr/Tc2XXFEScmGq6S/cLp9uNr/T5ejbwwDsiRQNMmk7T17jjITaUiA9ye6
-         Q8qdkQyF3Bcu1po9nA9527aW4rAr4/M+iZuEcwQ4IPu0Wq0M0etLJjaPS9JuaoOkwCWk
-         EYRQ==
-X-Gm-Message-State: AOAM532zQprSqj9MQOK41VYCsI9AQNnVowO+nom8M21cEurxoRBdZt1W
-        K2K6h/NN31DP8qKewSREtzyso/hHFYYdyaykZz8=
-X-Google-Smtp-Source: ABdhPJyrHI4fO7K3ahDDb2pptRxXBudXKwfV2ntU1n8rcTkwMbG5BiRXZVKCrkzXEGoLcr0tl2psO3GrAssblQEBtvs=
-X-Received: by 2002:a25:1455:: with SMTP id 82mr16229676ybu.403.1626482327090;
- Fri, 16 Jul 2021 17:38:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fg1LMtio76TZBE+V6rtOm0zM6x8DkN+VarQiinH1Wgc=;
+        b=dQLQOr8iS6NmmEqf23b9OgOVPG2wOdZ87ANs49lw5ZJpNc7mAYCX6gB5sFqtJrgVDm
+         C8yL1yulGtIjwMkk7kTpcY/iL7HKg8aR9QGQ/qkUvpKBWMNB04cmFNHHuhuo1iOmnm1h
+         SPOU/PdBybViRTmEvharfGFkCF682Qw7QKL+IgokeRZFi54Fd9bhZx2Cc2QlL+f5tSRc
+         zEgfgyZfHc+oNC4FamIjG+KNHXzHCZ4EiSZWiF+GM/Uk74xd0/wA7Htcl6QJJPYJhUWx
+         MnORtPTEqeZ4e0zntxIzpcOqTXqS4KLfhHW58F26XTejy+J4dPhKHR9JIOX2t6eayFwP
+         foRA==
+X-Gm-Message-State: AOAM530z5BTxf7rPJ/mUa8UyvOPhK6ZAFfwGgOhuUgVHKu8eAvpYKJ8k
+        pRiu7lltLeev/lhrDoB06ILOHg==
+X-Google-Smtp-Source: ABdhPJzLE5PXsOdOG8/1nr+hubuiJIXWEW65BpE2t6FhngSXXLcApOIg0N3U6iYgEW844BU8Q8MWpA==
+X-Received: by 2002:a7b:c955:: with SMTP id i21mr22579994wml.147.1626534145832;
+        Sat, 17 Jul 2021 08:02:25 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id v9sm11372463wml.36.2021.07.17.08.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jul 2021 08:02:25 -0700 (PDT)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Dmitry Safonov <dima@arista.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        YueHaibing <yuehaibing@huawei.com>, netdev@vger.kernel.org,
+        stable@kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] xfrm/compat: Fix xfrm_spdattr_type_t copying
+Date:   Sat, 17 Jul 2021 16:02:20 +0100
+Message-Id: <20210717150222.416329-1-dima@arista.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <1626475617-25984-1-git-send-email-alan.maguire@oracle.com> <CAEf4BzbCYhJnvrEOvbYt3vbhr23BytbfDPkc=GUgkzneVJVJMQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzbCYhJnvrEOvbYt3vbhr23BytbfDPkc=GUgkzneVJVJMQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 16 Jul 2021 17:38:36 -0700
-Message-ID: <CAEf4BzYYeaB2jJTHP+gwgFvNpdrrbgrK5akmetBP7YHTMtz0VQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/3] libbpf: BTF typed dump cleanups
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Bill Wendling <morbo@google.com>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 16, 2021 at 5:32 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Jul 16, 2021 at 3:47 PM Alan Maguire <alan.maguire@oracle.com> wrote:
-> >
-> > Fix issues with libbpf BTF typed dump code.  Patch 1 addresses handling
-> > of unaligned data. Patch 2 fixes issues Andrii noticed when compiling
-> > on ppc64le.  Patch 3 simplifies typed dump by getting rid of allocation
-> > of dump data structure which tracks dump state etc.
-> >
-> > Changes since v1:
-> >
-> >  - Andrii suggested using a function instead of a macro for checking
-> >    alignment of data, and pointed out that we need to consider dump
-> >    ptr size versus native pointer size (patch 1)
-> >
-> > Alan Maguire (3):
-> >   libbpf: clarify/fix unaligned data issues for btf typed dump
-> >   libbpf: fix compilation errors on ppc64le for btf dump typed data
-> >   libbpf: btf typed dump does not need to allocate dump data
-> >
-> >  tools/lib/bpf/btf_dump.c | 39 ++++++++++++++++++++++++++++++---------
-> >  1 file changed, 30 insertions(+), 9 deletions(-)
-> >
-> > --
-> > 1.8.3.1
-> >
->
-> Thank you for the quick follow up. But see all the comments I left and
+Here is the fix for both 32=>64 and 64=>32 bit translators and a
+selftest that reproduced the issue.
 
-One more thing. Please do reply to the rest of my questions and
-concerns on the original patch set. You tend to just address most of
-the feedback in the next revision, but I'd appreciate it if you could
-reply at least with a simple "ok" or more elaborate answer where
-warranted. It makes the code reviewing process a bit easier.
+Big thanks to YueHaibing for fuzzing and reporting the issue,
+I really appreciate it!
 
-There are still big-endian concerns and an error propagation question
-at least that you haven't addressed neither in the follow up patches
-nor in an email reply. Please do so, preferably both.
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: YueHaibing <yuehaibing@huawei.com>
+Cc: netdev@vger.kernel.org
 
-> the fix ups I had to do. Just because the changes are small doesn't
-> mean you should get sloppy about making them. Please be a bit more
-> thorough in future patches.
->
-> Applied to bpf-next.
+Dmitry Safonov (2):
+  net/xfrm/compat: Copy xfrm_spdattr_type_t atributes
+  selftests/net/ipsec: Add test for xfrm_spdattr_type_t
+
+ net/xfrm/xfrm_compat.c              |  49 ++++++++-
+ tools/testing/selftests/net/ipsec.c | 165 +++++++++++++++++++++++++++-
+ 2 files changed, 207 insertions(+), 7 deletions(-)
+
+
+base-commit: e73f0f0ee7541171d89f2e2491130c7771ba58d3
+-- 
+2.32.0
+
