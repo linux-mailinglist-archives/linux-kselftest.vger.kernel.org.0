@@ -2,179 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D8E3CF054
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jul 2021 01:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2C63CF058
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jul 2021 01:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243117AbhGSXNd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Jul 2021 19:13:33 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:40062 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1388661AbhGSVBV (ORCPT
+        id S243439AbhGSXN6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Jul 2021 19:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1441829AbhGSWN7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Jul 2021 17:01:21 -0400
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16JLa53e004803;
-        Mon, 19 Jul 2021 21:41:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2021-07-09;
- bh=8xrimcTTRuln132ZrcTynjBrAaSInFN/hHcnv7+/BYA=;
- b=v8NAr6qyreGCjZOgf5xjAlGdbZhrRtrxq5fUUHGxQe+0GvL8cICJ/pGkbNX0eW6hkk06
- NF5V+cXT0aospVHU9FkkVlEZajI6Rfs+psQubxsbzLDpFIA3NoHcFNCMQHLyf4zyR89q
- PWvj/Kr2dL3KjmSNTvCfMoQ2O62DGIaKZsjiBqR39c+lIYMfK2bn37qUteqzDLFa6M0R
- 0syK5MjJZuu/2k3ZBK3EdC20q1bOz8dlO49AWArQHvXaigu/uANapFbcYh5CwUnSFwUD
- MgvjTqqK1DiamQAMxorh1PMTg1vrQvrQGVR72hpJoxtFoQ18IoHE8ulErPyBeG7oh0M0 Pw== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2020-01-29;
- bh=8xrimcTTRuln132ZrcTynjBrAaSInFN/hHcnv7+/BYA=;
- b=znhbimJFWnVgr0ABJB+vD3U73jouIQ76qeIxjvNPtz5VEbf1bjlAwO9u8U9o48HLFtws
- 33Xsi3OktjAPerxKQlpvGMQg+TykobJ6q+VIxf0ppsnCtZaGRQ8jII6Jd9B7K+3eTeHw
- p3nh3N82DRBCdQWHb0CX/O+1UFpA9fGAEpM/SIVvHAdA2LI1qKp4IL/cMLcA6zx/aD+9
- DUmUnQM6k+bOzaSJw3S5KTWHyI0ehVuLcsXnw3dm8h5V54a61TtfUvEA6jCETV9XZj8Y
- 2ZcH2qQX5OQrJrmN7z0KFJ8Be3QimPdNxeSEoDG2rF5K8uZf1qbD1Jv94eBca7MC5Rct Pg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39w9hfs67g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Jul 2021 21:41:43 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16JLeRKG085203;
-        Mon, 19 Jul 2021 21:41:42 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
-        by userp3030.oracle.com with ESMTP id 39umaxsucp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Jul 2021 21:41:42 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bxwykeUvF8wbtl5rnizaOGkKPgoaWjTDfyeJAU4dC5GYUrApT1rvs42it1wqWhgMvSNqCVfVw4MfaAKOob9UM8QYeo/0jJhJTKGZnzX9apLNoDA23vvv1rP5bmoOZax2dpg308ToYDgCsRBQu5SIXm0+oNQP+Zo2AuiDFe146EF1Qo4MLD7jCb8PhAxGOFM9tkRV6gtMfcQdDoltnOONakJegCP9NcIVbDP6LjVVbpHwR+zeWtM6nqd3GJHeYSjTJhwNxZfDyj8Mew19awEdo9X+ULhGIYPBif6ZYYNiUeZo774p8lNXz23zDNuDXP40BfMx+mCSnUwii6R6fF2elw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8xrimcTTRuln132ZrcTynjBrAaSInFN/hHcnv7+/BYA=;
- b=SfB6ke7fPAsjDGxXjBycrOGqwAXv97h28UqQctlzvkK5KNFCFjdplzrdnqBs9Vg15YdLOiFxfxIxlQorQyaUfO4AtF0OQR+aPDw+POA+cEZ3tP0705Jn8M6W70qhkZGRIyW68Hg2+2gGTCaR8qQ9o/Dy/u790BemhXIdmxgTQkwMGKVNbtpJ7+Tlw2wjcMznOF+b6jZw9yZTwUXXun4vxmuoGOqwhNuJFtdT2aG/FG5x5VHP+7fQOgLAo1NIPSEan/eA0Ip4V8jC65Spg00sm1iyesIfiUKc0mObyNZOXUhehr5KtzoiD1Zk+r4CAoYW9x/JgZdJakKPVSMiiyop2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 19 Jul 2021 18:13:59 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E84DC0613E2;
+        Mon, 19 Jul 2021 15:38:44 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id i18so30064313yba.13;
+        Mon, 19 Jul 2021 15:38:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8xrimcTTRuln132ZrcTynjBrAaSInFN/hHcnv7+/BYA=;
- b=ptkcdPFDYJJK+cyJ+lG5IqMIQszqtONSbO97hn/KI9pS8sC1CQwVWtwpr3uDNxdVqyR84VobBiQG+qi6RQkuMQfVFvTGRX0Q8aYEh+KtZ++LPT8sllgjGZHjSRUug2Kpuoztm3UFcO//5bJoyFWRvHnF1L8/puJMmRrhE3dn0gE=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by MN2PR10MB3312.namprd10.prod.outlook.com (2603:10b6:208:126::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.24; Mon, 19 Jul
- 2021 21:41:40 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::39e8:94ec:fc2d:5a56]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::39e8:94ec:fc2d:5a56%9]) with mapi id 15.20.4331.033; Mon, 19 Jul 2021
- 21:41:40 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
-        shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf-next 3/3] libbpf: propagate errors when retrieving enum value for typed data display
-Date:   Mon, 19 Jul 2021 22:41:29 +0100
-Message-Id: <1626730889-5658-4-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1626730889-5658-1-git-send-email-alan.maguire@oracle.com>
-References: <1626730889-5658-1-git-send-email-alan.maguire@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: DU2PR04CA0278.eurprd04.prod.outlook.com
- (2603:10a6:10:28c::13) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u/XSG6dq9OeEcEy+GhvGwryPQ+F5MJvOFL55kd1WEkw=;
+        b=OS5ilh6+BPNDLSzV/Axz463Dm0cYBb8ezVU2yJDdLZuOWEkaH0olJ2N9c9A0key2Jk
+         uRPhKz2eu4J+4aSDOX/CFoswVemidnU+FCyuQQWcA+U18H8rtl1QTT8/5LjUoMAX4y2p
+         Dn1S+dc4fS9NSMGaWeu7o2ww+7l/Rqj+nn1QLflS5bbRnQKzVJ2OJxFZ++OQ51CP9Zb8
+         eBhAbudEcs+6n9pB5pkdYNkdX8VY1V6W1FuHOrBoIId/qgK5a5Mij9yK/9SlZUDH75Rv
+         Ps1rofSa4yTPl6qQgQgC/+kiCQBgoAzWih8oMu1MKhezwN9DRv2wCfkID9riQQqv98RJ
+         PHrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u/XSG6dq9OeEcEy+GhvGwryPQ+F5MJvOFL55kd1WEkw=;
+        b=l66/grW5pm6OT6wYhYcc+AZVgUBqKxhloGqO3O83Wg7IDKi+R00MhmZmdeTWrerreP
+         r5tzyi/NrZcv7iQeePecyGU+FKanp6BSQGUOXGqLpxOJaBaG7HJf166txSNgT48Wiq+c
+         4I4+B78DyGkThq2EvEZXpv5AmUNKfV1K/kDAb8WBZu3LZls7xcVkJFeviBUEaNCFbnif
+         Ck2hB44xU5xbVgQmvZj0xqp7Z3V59g2V6ZtwFBPkxmk9h1hP8FvmQt6gXnkFqAKyJFvC
+         JOw+DFab9BZBsqWT+SFU0urcsFveFWUhO1ddZjglS7MkbxOZyJNzcfNdeYY/kGqkWbtA
+         7oDA==
+X-Gm-Message-State: AOAM533YN0MMdqXF9SrDqCZNKHow0dqk/ObzxgWBIUjoHO51x+/aOK2+
+        RMvpWtZla/2tdsVzPOWgZxgGZxnXvlmRhz+3XLA=
+X-Google-Smtp-Source: ABdhPJxvL0X9TE5c2NqGpr/D3oSc9/WcqLpQuNzoTbeV3CrU803dXo3/4+cHEe/IAXT6uwR3bcTrtErUiiYaxs6BQME=
+X-Received: by 2002:a25:1ec4:: with SMTP id e187mr33893473ybe.425.1626734323512;
+ Mon, 19 Jul 2021 15:38:43 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (95.45.14.174) by DU2PR04CA0278.eurprd04.prod.outlook.com (2603:10a6:10:28c::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Mon, 19 Jul 2021 21:41:38 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 608e8286-9d9f-4ca1-d13b-08d94afdfe3a
-X-MS-TrafficTypeDiagnostic: MN2PR10MB3312:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MN2PR10MB33125D8910482F4D6FCE9B31EFE19@MN2PR10MB3312.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eVUFpObVsEEJZvtU+wvE10BakUp5CHmxUfhRECYuZreTvtVBvykOKED6tvYiBYLB0uwUEzPN+NXb9X7r1KU0aYFTemV69I848I3DYItRbMk9dNreQqTT/LQ9xBA/nu7WEA4U/JwPfWRUrKD6X+QC75UjGWM6jORBpVNkCkG4lJY3iLYlGVJrISCR216ibjk+wyTO8IqiMV0O6iY+dJs1pgJ2XfJjWCIGn8s5mO9VM/7LTQf7yHKujbSCu81mE0/AWX/KhUtqrGNiJ0PjqUzVApfd/iorkKHXShkrBk+h4yegcsaF7wXqZcm/ejedYNMN1EBNNJ3kZ5yLmhmz4f0/slwZBNC8wgnCzV31wKV7WlKvpLD4i3GlJBjX03atTWg6Ecq8AjddjwV77iWLbCHwg8iG4TBCSB0HXleokb7pij33ThLYY5Bzw+NCufhObQ/M5QS2TcM4PGMA8GjRormw/BcIcfHqchvlh/uiEu9g7p3ezsPGUx8CMIeoBl4j60O6qJRR4zmydbUV5lsKGxrg/ZQibFZUpNMjwmaIPwyZgcaSEXvJVQzDi4fak03mvFXxyw1zX2LDVLWVCQu2i4oDgW+rpwA9kWPuekmbxCuoR/xdFG7oHAl+2bETOSQtEZAgg69z6+ylvjPpWH7Ky3ac3bgyzzixlXNwtqa9RIXCQw/qKdf4UrUzn1THO26pXCOtUKUnk6sT4jngi47UjXp2aQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(508600001)(316002)(2616005)(956004)(83380400001)(36756003)(6506007)(4744005)(186003)(44832011)(38100700002)(107886003)(38350700002)(86362001)(6486002)(8936002)(66476007)(8676002)(6666004)(5660300002)(4326008)(2906002)(52116002)(7416002)(66946007)(26005)(66556008)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?f0CuuSZhG/Sebtq6+hbehAVs5oSLaWnYManvVWNbLomU/HD1OK/hbWEtLCxc?=
- =?us-ascii?Q?G1J55hvV6WP5K02xDewzisCZYIVGB262HDIAj7hTbWblWksBVgyppDchoM67?=
- =?us-ascii?Q?MP74/aGGpR0Jy03TIeImxJem9mGfIQQyFyGxLgCysDrscY8YwMJlELsXqr4U?=
- =?us-ascii?Q?QPre1L4U3oiIp85mJwU1lBqKN4UBQajkHF9eb1p+AK360xa5ziYZ9f997usi?=
- =?us-ascii?Q?RL6buriRKnFrk8tmLqneYJcFKoFyhYBorG+ORyYMmaL12fJS5BlgzsPEXfRo?=
- =?us-ascii?Q?h2Np9pPFpTDkPSudCmmL9gmpIw2etJ7eOTBz3NcVzi08FGc12XWMKLuz6Xay?=
- =?us-ascii?Q?GjkjS+1szDKLXsI2Jtj8fPd7KRV/rvxYfnxoDFmTKnBNEhgqYu9yucj0aApv?=
- =?us-ascii?Q?K7uM4ZT7fjk4lurz35t4H6/hJz5At21e6p1/ZGvFOywwRIV817pL4iF6hzeN?=
- =?us-ascii?Q?858espGq+hFzw5XvY2td3E5q/KCW63k6vjqIi4E8+u0A2dcDq0vG4HwE0axo?=
- =?us-ascii?Q?t3DkD2FGfUTEbkN+8JaJoyR9MXnselcc3Z7XpYHPegt+fd9jwgP7WQkOPYsc?=
- =?us-ascii?Q?623/0Oqm0g7vo1c8QitbpcuVRw9cnNGUECV7+fcAj8UIpSwa7z4Kt/O2KfnX?=
- =?us-ascii?Q?D0g/lyvmOFu4n9AfwaHP0XUybKC6G5LZJqVM2nsBZC0PBPUucxiQUHc1OJFJ?=
- =?us-ascii?Q?TodqSKMTzL2qAZ60rsJnZ3pOo4SYfPDocjpNhx6nkod6FVJ92cSisvXXxMuL?=
- =?us-ascii?Q?krJI9PDmGZGvaNdP/L5i83RkKEmdwq4bGOhAPvu+sh3KMfovqLJUruYbPJMx?=
- =?us-ascii?Q?sBBguxttTtKLMJP+CV/qUU/+9xDPFKKto1OGrPl5Lw3+L0HhOaVO/a6IqWLt?=
- =?us-ascii?Q?81Si4W+dYFotaXVaP31/P9dTcUos3y8RzDF0yQctq9anCmGzX7F+0Xop4fap?=
- =?us-ascii?Q?6hy7pE70BaQBAT0ySwJdt0wk3ABt/RRdC9Er605vST2DfroUmnYtGtjjEJUS?=
- =?us-ascii?Q?hAH/ZNGzMpmam3heDnspb/MPYOzCEiA4NUiVUpYwpNOxIxKvAQyzPqNYoWPG?=
- =?us-ascii?Q?yMvwMy8eotJQ73ALuo3/e/H2wFfpGwGPEP8fSd00pXSknq697jQeAZYhqPbe?=
- =?us-ascii?Q?PeNU1M28JV2ke9n2QxhXClkNUnePGqDZWyo6vjwgQehGZm7KU2LoSGs3Bc8f?=
- =?us-ascii?Q?f7djtIFNUYQLGObnH3/Yy0wtAC+nxfBycOKmzlg/9vhTF68W8zktCJ273Ia8?=
- =?us-ascii?Q?pzg5NOH5q3VaatWWzyeE+p0kctUJlJyLt3bTk2kXApeCD+AiEralfL33dX7O?=
- =?us-ascii?Q?dRJS1DYGylfHvYerMyRFsMM3?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 608e8286-9d9f-4ca1-d13b-08d94afdfe3a
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2021 21:41:40.3359
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hkR+qvCcSJPPT+7nzPDE1ZHjE7oLsLS7oLyLga9KETitO3ZqP753Mx9vueOXUDKdxrsBJMq5Us86HNrKY9/aSA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3312
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10050 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 spamscore=0
- mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107190124
-X-Proofpoint-GUID: Xwqm6b2cdEiW7LDKG--FzN6ETrYVR0wi
-X-Proofpoint-ORIG-GUID: Xwqm6b2cdEiW7LDKG--FzN6ETrYVR0wi
+References: <1626730889-5658-1-git-send-email-alan.maguire@oracle.com> <1626730889-5658-2-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1626730889-5658-2-git-send-email-alan.maguire@oracle.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 19 Jul 2021 15:38:32 -0700
+Message-ID: <CAEf4BzYUf_zgmJQ_3z=oYAiGOypYsAhvoaePQMB34P==4EOLbg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] libbpf: avoid use of __int128 in typed dump display
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Bill Wendling <morbo@google.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When retrieving the enum value associated with typed data during
-"is data zero?" checking in btf_dump_type_data_check_zero(), the
-return value of btf_dump_get_enum_value() is not passed to the caller
-if the function returns a non-zero (error) value.  Currently, 0
-is returned if the function returns an error.  We should instead
-propagate the error to the caller.
+On Mon, Jul 19, 2021 at 2:41 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> __int128 is not supported for some 32-bit platforms (arm and i386).
+> __int128 was used in carrying out computations on bitfields which
+> aid display, but the same calculations could be done with __u64
+> with the small effect of not supporting 128-bit bitfields.
+>
+> With these changes, a big-endian issue with casting 128-bit integers
+> to 64-bit for enum bitfields is solved also, as we now use 64-bit
+> integers for bitfield calculations.
+>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/lib/bpf/btf_dump.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Changes look good to me, thanks. But they didn't appear in patchworks
+yet so I can't easily test and apply them. It might be because of
+patchworks delay or due to a very long CC list. Try trimming the cc
+list down and re-submit?
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 4a25512..ddc900b 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -2145,8 +2145,9 @@ static int btf_dump_type_data_check_zero(struct btf_dump *d,
- 		return -ENODATA;
- 	}
- 	case BTF_KIND_ENUM:
--		if (btf_dump_get_enum_value(d, t, data, id, &value))
--			return 0;
-+		err = btf_dump_get_enum_value(d, t, data, id, &value);
-+		if (err)
-+			return err;
- 		if (value == 0)
- 			return -ENODATA;
- 		return 0;
--- 
-1.8.3.1
+Also, while I agree that supporting 128-bit bitfields isn't important,
+I wonder if we should warn/error on that (instead of shifting by
+negative amount and reporting some garbage value), what do you think?
+Is there one place in the code where we can error out early if the
+type actually has bitfield with > 64 bits? I'd prefer to keep
+btf_dump_bitfield_get_data() itself non-failing though.
 
+
+>  tools/lib/bpf/btf_dump.c | 62 +++++++++++++++++++++++++++---------------------
+>  1 file changed, 35 insertions(+), 27 deletions(-)
+>
+
+[...]
