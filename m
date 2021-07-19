@@ -2,348 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA013CF05B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jul 2021 01:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECBE3CF04D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jul 2021 01:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234588AbhGSXNl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Jul 2021 19:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388727AbhGSVBc (ORCPT
+        id S240068AbhGSXMq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Jul 2021 19:12:46 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:34208 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1388649AbhGSVBV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Jul 2021 17:01:32 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94C9C0613E4
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Jul 2021 14:39:21 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id z9so21677759iob.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Jul 2021 14:39:21 -0700 (PDT)
+        Mon, 19 Jul 2021 17:01:21 -0400
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16JLa5uU004799;
+        Mon, 19 Jul 2021 21:41:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=corp-2021-07-09; bh=45zME6t38Eq/k1Tof9zkIRVj5xrSgYApl7a7+3UheF4=;
+ b=yUKYLzrmfQFGywdeKca4UUw1kJ44boQHzRlw6L+sOdRn1Cu0SxEpJRkjHJLPabH6srFd
+ W7grhe5fyckRveZY7MVTn44t4k5ZHdel+zflp8KPQovLnk+e9IfgQiDFV7AHruoZnU1/
+ /BVFRnQ6Do++iVoK80Vh77KRgpkmPnhu+BiXWIMXHRx7LaaDYI0vD4hVl86Pki1rBG4j
+ Thm+GJm8BkTLLVVipQ8mLb26D7B4jlVRxkD+YVG3xHYSFBMYVw0ocEHq39hhaSzTQNyn
+ O4imzfriKaEMJapz9wjxb2m9gfrmzZSuY5TvPfRmcCe04eexG06/LJU2XSgrqxawHmvA ew== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=corp-2020-01-29; bh=45zME6t38Eq/k1Tof9zkIRVj5xrSgYApl7a7+3UheF4=;
+ b=VGFGJr8aH9Kuao+uX1/sz0k0OH8GSkGVt/4vu5+MPbQ/00hHjXE7qMouokVwy4FnfxbU
+ AI4syFuagpYSGYvl2jG7oFlGVH+HzkXFIPii3O+WNIhphuZiC+4JEeBtcr89H8avHO/H
+ MrcFmXEzZll7MHpTzOulOxK76fof7kXANimQt35Mh5uKwCZ0KI88mhvgYKYYdC12qpnH
+ LPGvKtSV5Ejioghtmuv50gTlxsdMCgsac9djor3exHgZ9rVI4SjQElBfHZYPsbeSjJ5m
+ IRduwJ6tfbVfkUiACbmlfz/Q+q8T1gBi5LA97KvFEw+5RsPL3VosjvXvGPQgwyEMW29/ uA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 39w9hfs67e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Jul 2021 21:41:38 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16JLeFJr112838;
+        Mon, 19 Jul 2021 21:41:37 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
+        by userp3020.oracle.com with ESMTP id 39v8yth85k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Jul 2021 21:41:37 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TmbHmKylNj6uHV88wQj/FsO8m42svBpDWDxxmYMvAnB2T47D1pjpri68DyfK4TsUUXLb6NdQCAKNqa0m1KMpz441XcFtrpuf8CI03AoThaBinDguzGk6EA1yBnHp/SK/qN1qoDCwFYAAgk+pwTfv4YXnMyrT4gtFhT4iWmYJTmemmVJ8o7s9n3/Z3NO4S1AZmSGJIuS1EjIjB8R8/ndCenk+scE3azFdFcWOPVLlZFMe9+k9UyuUtxZDe7xfsIGZRRoNkXZMBdlPXKzagNyY9MlTi5QQfjJ1i8Xme4QH0lPbF9A4+BhXKakFO3Q9uiOH3B2lBOTk4yC33w9TnsCKKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=45zME6t38Eq/k1Tof9zkIRVj5xrSgYApl7a7+3UheF4=;
+ b=BOHHScV2FGHdVW6H4A+OAX3nIY0d51NlgToXsy8hogVOBr6p45s8dUgo6zp7y1tttjiUjgWQfeoSItSybYr6L/qnRZvFkcVIZk2b6W2RLblZBrBZzDdWL0V/d3RK3hwYqdQRgmxAzYWdQ+09vcwDVxgAzqevVgRA8miBya5TTMZcn+IJO1lIB7m8tOv9tgqSIQdW7t6JjluLwfg7OeSXuT5hFyCemjKqsJXYjwdEj2R03RIajGcy6B5zJ87lZdJZyh+wRv2A07hCoi7pd29+ooVzORmpuE8d0B8RhRdN96WSUXA7cuTug48eYhWUVtqlUCje2aid+xNVjlbNadE97g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N1XYgnjzAg7DsLLuF7dQCiT5m3Bavug3Psl0UPr+yEg=;
-        b=UEg+So4FaqHi/jiXjQuX7UuaQIbgfx5inmQtjzkmaXb0tgxJOeziM5NOB1IV2N96C7
-         qX//djAlTA1lH1a5IpoEH3mclT8wTVWBorTh0Fe+rOZQa3OyS040Kud+2ukKoWAHuPK8
-         gozw9+qTLpGo0qqRlfKRWS7GftetXnAFNZcNwBjZLLfVplhBb/YBebj5ioLySp+PjKTs
-         qus4Z/ogyUJU1UIuM4ePCQkRCgfvUb4RHC/tnLvLZolgGCpdBiN8IJ1RUi1ke/njL0Hb
-         HIp+Y7OZv983qM7+A8ZEFWbZjG09ucogp5WPenxHWnqFaXpktyen3zFtmWabF1jnu9UV
-         USkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N1XYgnjzAg7DsLLuF7dQCiT5m3Bavug3Psl0UPr+yEg=;
-        b=q38rkaMMQama+BiIuK08Hgh35l57QsGAFJhGjdDcevmOrQy2XVU1GGU1rhhA9xYBVS
-         qEZ+u+vic6nePREtmz8MFz9FQJDTMWRcok83vqQoT+BJnz+bCFdi6sDG3bCrujbOFVN/
-         hDoV7/KWpzNQKtfW9cVGTkZj5FfHlKwf+RTw5QtTnHSfEugTuDjHULBj1TbrnbU8YrpZ
-         jkv1zc0q/Gn8G88jJ7pCNjxdoIUvK4bosi8O+YW7r8m3xImSllDVOOvkH9oOJTvFQjQV
-         VV8qiQz+S3aFNkmIsqtcmG3cHaLdmGXF5uRFJrdF4k9yicdQyjoGCbCK6Cbv5/KuDcBj
-         +V2A==
-X-Gm-Message-State: AOAM530u1SAJltYmmE9iTrSbyPZnwCuiv4VBTuNjLRIeiIXebozWO5lR
-        eiZn4wbJQkleUoYfk492OCBLfD9YfymC2S+jGMHY2w==
-X-Google-Smtp-Source: ABdhPJyV7nALZ5qlmA5O7ExjBPmPeEzyK4jcz5FkMMrZc+upG4Pw+hFnULCUup7+k5Ss+7tOz6YEnH/rkit1xge3dY4=
-X-Received: by 2002:a02:cab9:: with SMTP id e25mr15438249jap.25.1626730760955;
- Mon, 19 Jul 2021 14:39:20 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=45zME6t38Eq/k1Tof9zkIRVj5xrSgYApl7a7+3UheF4=;
+ b=O7SA0yt42adOsXgc8ZZgvuYcOQ7yyHwmRvLnzBgujBIVjZLhFHZbGnYkxL9CHRSfRKoDjZ3lLsP0Dbzhil2PKMgUi0wgqIAxiE/ZJ0j2eMwtg8mMF4y97glDsQdeyakasqkfZxaBx8zVKNYB5q68Kr0Ew9aBGdhLA0UX9B16rQc=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by MN2PR10MB3614.namprd10.prod.outlook.com (2603:10b6:208:111::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.23; Mon, 19 Jul
+ 2021 21:41:35 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::39e8:94ec:fc2d:5a56]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::39e8:94ec:fc2d:5a56%9]) with mapi id 15.20.4331.033; Mon, 19 Jul 2021
+ 21:41:35 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
+        shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH bpf-next 0/3] libbpf: btf typed data dumping fixes (__int128 usage, error propagation)
+Date:   Mon, 19 Jul 2021 22:41:26 +0100
+Message-Id: <1626730889-5658-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: DU2PR04CA0278.eurprd04.prod.outlook.com
+ (2603:10a6:10:28c::13) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 MIME-Version: 1.0
-References: <20210719212302.167186-1-dlatypov@google.com>
-In-Reply-To: <20210719212302.167186-1-dlatypov@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 19 Jul 2021 14:39:03 -0700
-Message-ID: <CAGS_qxrX-+9AKOXz39xfsd+gY5cMZaJYo14WWc4T1ObqsA2dJQ@mail.gmail.com>
-Subject: Re: [PATCH] lib/test: convert test_min_heap.c to use KUnit
-To:     irogers@google.com
-Cc:     peterz@infradead.org, brendanhiggins@google.com,
-        davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (95.45.14.174) by DU2PR04CA0278.eurprd04.prod.outlook.com (2603:10a6:10:28c::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Mon, 19 Jul 2021 21:41:33 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 180a276e-eb28-4bfb-143a-08d94afdfb1d
+X-MS-TrafficTypeDiagnostic: MN2PR10MB3614:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MN2PR10MB3614180C373ED7501C4DB3C7EFE19@MN2PR10MB3614.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xoVgjEVXkATHOohGe2XSD3CtbUaVRACgjm1MSrCc3WNNE1PqlhB0Lx7n7UhXZpZaJfn0Gcis+us1F2DyzkH3ofMa6ljuCXZcUs2SLWAFoyblwhnnF/WU6+AoYS17nu36C14ct27nUyryqgcLepuoV8fQW4lsgNmPSnPdmuMvsGWDgQwOcb/qsop5YmN5j+KWEGmu3Mzv0XTS0aqo8TYKQWXjk+I60TYkvUepA1lPxppN59eZILlqnkqhVO8zNifKUac06LPcCXIS7YKx0Uaiz8j47EWSun1f2mSW6CUPMTFZ+hSkrgfVgoionqI1OQRvxV2rZJVsDyWW4qcwdgLu0GnYpQdehCHuEKIySKx3WpCE7SXSC6CPwAX2x1cxYPzm07bYkXh7dbu+PZCNuDFKTJUJXj5X66ZowJtRJnFJ1j5tQ4XwDlt+/++enjE6/m3C9/DZupJ6UttO6yJthGcDaZ5N0HYpiXmy1FES0oBlZBS10S80H56LnQvb1u6OJFLwb8UXU3EPCxGjyDTBqAFrWhtV2A7l8zY9pGx0/f5Co+FMVPyPREJqjf1GKm2nm2rEYOGc9OoicEXjFMUXvB53XP0/C+h5/4/nWZbNhIpP2BHhj34993fVlsE9fr5dyAPylMMu/UBKUUIVA7Chn1nL812T+82MbXucFxJ+QRh2G7NaHxmoa4g+R4wqLM4Go1PE4LlMz9EhyPthVcwROsyf4teNkdChWNNvGi9Mv8G+/lho/sGbuHJt0CyZBBPCNbQeD/xkZNUvJrV5TtQFt4HjeyaKU9EwGOg/UHOqvjdmJ/4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(346002)(376002)(366004)(396003)(136003)(6486002)(478600001)(316002)(107886003)(52116002)(4326008)(966005)(8936002)(38350700002)(38100700002)(6506007)(8676002)(44832011)(26005)(66556008)(86362001)(66476007)(7416002)(956004)(2616005)(83380400001)(36756003)(66946007)(6512007)(2906002)(186003)(5660300002)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lBV7+hj4sV/OBgLsFkhMKqNY0ECKAOTGyAryDedfWjlyxxYv+9gzN3dIX+Hi?=
+ =?us-ascii?Q?aeuu8LTQqOo0igXJElgJvRJp367Nlf34r9FLeGkgOX/+q2GmR5lLlybWZfUX?=
+ =?us-ascii?Q?vHO7d23GLrBPX728y+mlHcvolf8kmxioS5Tl4jWxnEcsYhv/a48ZmAc1idiZ?=
+ =?us-ascii?Q?rFvKxRkpLykEzkE+uuBSowoTG+5xXjH+CDDxu3AXWNJI2ajv1uenUR9f5sYX?=
+ =?us-ascii?Q?bnegDuCbsd/M07G0JoHclDv5PYV94UDVNhk2d4BLupFsxQHHR7m7ZD/W9zXv?=
+ =?us-ascii?Q?NuarGZpO84L/CGoC5x0XsoR9u0X/8gAwRoDYYEdnPX5IoU1hX9um8Q40NVDk?=
+ =?us-ascii?Q?IEceIAOS4kgvVHA7e57adTQ+pVQGypw6U6KWO3L4R00WFBPaJ9O1QS4hyEc0?=
+ =?us-ascii?Q?ErFKrYc4Vwt4f22/wm+ISyqGyXyMz2eShg2s7lIV4nWVS3jZQHsYmQDGVKvF?=
+ =?us-ascii?Q?dX8tlz31cpeKwlqGbcqbU8E71P3qhk1pvIuhnhyusq+4RzK6PQj1ej+SUsyy?=
+ =?us-ascii?Q?mbyFWSEtLDhtIkWZY7M2Tl5H7BJ0xPFnYuA7dMfd7SzZYebjnmOi8OgYRKxX?=
+ =?us-ascii?Q?ThSp1koPDP9uYLFs6Swo55ziR03TZGH/DJLSf90wIXTjay16lz6GpqcZFq0a?=
+ =?us-ascii?Q?1L9vc8PR77HIuiDxscH1rGDz1bHnirr77HKZvIS18uVsQxGIuscAH1KjLKCN?=
+ =?us-ascii?Q?bctl75/WV3X+uTzlMasCO4bTZFPOLmWrFPLUIksP8z9SfFc2Qn7cMoNkRk1r?=
+ =?us-ascii?Q?3TBoOFRsNl03Ap/+njuacEvSf3iYpzSbtdGHfy6qZncXZ0epnUR9bdZIT5AG?=
+ =?us-ascii?Q?kAnSxo21Va1Mfh1RZ4J5AZVRphcyeiPWwVensMM2nXwsCLYbX9+s/kw02Qho?=
+ =?us-ascii?Q?MYRnOFsrqy2msJnJY6BOFuSk2hUoyURdAW6uUyR07W+0mE+hsSkKIg/4xCk4?=
+ =?us-ascii?Q?Wa/QYeieWAOwbkMtuexSgfXZHJ1SgTATUgSFF12GM3Ig5degc/VTl531Vd1R?=
+ =?us-ascii?Q?B0WnZvfcOFu3axJ+KweBHWLBZYf5BQe6TTgoTLEgSkAHy1d6VlVIKIbA7SVj?=
+ =?us-ascii?Q?4XhuOKa1jir3kuNW1c/V/at68sWEoRhzw367I6WZd5irD6aLOTv6WvS6dZpX?=
+ =?us-ascii?Q?rrkc8Ani3+LAv5LlnYQoZ28DnZtXIhcUPJiJclOKcGC7oAHN4X8NHExw6ap3?=
+ =?us-ascii?Q?7Pck8UX8m9rS/fuF6Lwy1b5q8rVz8iJEQphVYbnYaAk9WTnC9zYj6wOYObeO?=
+ =?us-ascii?Q?2puSU0DzQNOu+EjrdAXR6gOru8vNe7pc/4g+HKAhAXiyoyvfKCipHiU3JiU8?=
+ =?us-ascii?Q?q95e7WIIXm/ci+zVYWNAlLPD?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 180a276e-eb28-4bfb-143a-08d94afdfb1d
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2021 21:41:35.1446
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ztC0ADBECf+bvQl/uzIW5WrNMJQWaypEjnLftlmSj5clLDMp96ZUok+vr/gqRkju3ac8S6m4a4drwtsNHOpIuw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3614
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10050 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 malwarescore=0
+ adultscore=0 phishscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2107190124
+X-Proofpoint-GUID: bfNNAkuFhYX2czUsCMyID7MSd0gvgFan
+X-Proofpoint-ORIG-GUID: bfNNAkuFhYX2czUsCMyID7MSd0gvgFan
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 19, 2021 at 2:23 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> We leave the file names and Kconfig option unchanged for now to minimize
-> disruption.
+This series aims to resolve further issues with the BTF typed data
+dumping interfaces in libbpf.
 
-Oh, I missed that there was an equivalent patch before
-https://lore.kernel.org/linux-kselftest/20201015170217.291916-1-vitor@massaru.org/
+Compilation failures with use of __int128 on 32-bit platforms were
+reported [1].  As a result, the use of __int128 in libbpf typed data
+dumping is replaced with __u64 usage for bitfield manipulations.
+In the case of 128-bit integer values, they are simply split into
+two 64-bit hex values for display (patch 1).
 
-The main difference is the fact this doesn't change Kconfig options or
-module names and the test case organization.
-The other had test cases for each of the 3 ops, but added "true/false"
-instead of the more human readable "min/max".
-This change just has "test_min_heap" and "test_max_heap" test cases.
+Tests are added for __int128 display in patch 2, using conditional
+compilation to avoid problems with a lack of __int128 support.
 
->
-> So functionally, this just means that the test output will be slightly
-> changed and it'll now depend on CONFIG_KUNIT=y/m.
->
-> It'll still run at boot time and can still be built as a loadable
-> module, but it can now be run a bit more easily via:
-> $ ./tools/testing/kunit/kunit.py run
->
-> By default, the above command will run with CONFIG_KUNIT_ALL_TESTS=y.
-> Users could run this test individually via something like:
->
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
-> CONFIG_KUNIT=y
-> CONFIG_TEST_MIN_HEAP=y
-> EOF
->
-> Example output:
-> [14:57:54] ============================================================
-> [14:57:54] ======== [PASSED] lib_minmax_heap ========
-> [14:57:54] [PASSED] test_min_heap
-> [14:57:54] [PASSED] test_max_heap
-> [14:57:54] ============================================================
-> [14:57:54] Testing complete. 2 tests run. 0 failed. 0 crashed. 0 skipped.
-> [14:57:54] Elapsed time: 39.696s total, 0.001s configuring, 36.705s building, 0.000s running
->
-> Note: this is the time it took after a `make mrproper`.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
->  lib/Kconfig.debug   |   5 ++-
->  lib/test_min_heap.c | 102 ++++++++++++++++++++------------------------
->  2 files changed, 49 insertions(+), 58 deletions(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 831212722924..36e9529ede65 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2068,8 +2068,9 @@ config TEST_LIST_SORT
->           If unsure, say N.
->
->  config TEST_MIN_HEAP
-> -       tristate "Min heap test"
-> -       depends on DEBUG_KERNEL || m
-> +       tristate "Min heap test" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
->         help
->           Enable this to turn on min heap function tests. This test is
->           executed only once during system boot (so affects only boot time),
-> diff --git a/lib/test_min_heap.c b/lib/test_min_heap.c
-> index d19c8080fd4d..c0f1ef78c08e 100644
-> --- a/lib/test_min_heap.c
-> +++ b/lib/test_min_heap.c
-> @@ -1,27 +1,27 @@
->  // SPDX-License-Identifier: GPL-2.0-only
-> -#define pr_fmt(fmt) "min_heap_test: " fmt
-> -
->  /*
->   * Test cases for the min max heap.
->   */
->
-> +#include <kunit/test.h>
-> +
->  #include <linux/log2.h>
->  #include <linux/min_heap.h>
->  #include <linux/module.h>
->  #include <linux/printk.h>
->  #include <linux/random.h>
->
-> -static __init bool less_than(const void *lhs, const void *rhs)
-> +static bool less_than(const void *lhs, const void *rhs)
->  {
->         return *(int *)lhs < *(int *)rhs;
->  }
->
-> -static __init bool greater_than(const void *lhs, const void *rhs)
-> +static bool greater_than(const void *lhs, const void *rhs)
->  {
->         return *(int *)lhs > *(int *)rhs;
->  }
->
-> -static __init void swap_ints(void *lhs, void *rhs)
-> +static void swap_ints(void *lhs, void *rhs)
->  {
->         int temp = *(int *)lhs;
->
-> @@ -29,37 +29,27 @@ static __init void swap_ints(void *lhs, void *rhs)
->         *(int *)rhs = temp;
->  }
->
-> -static __init int pop_verify_heap(bool min_heap,
-> -                               struct min_heap *heap,
-> -                               const struct min_heap_callbacks *funcs)
-> +static void pop_verify_heap(struct kunit *test, bool min_heap,
-> +                           struct min_heap *heap,
-> +                           const struct min_heap_callbacks *funcs)
->  {
->         int *values = heap->data;
-> -       int err = 0;
->         int last;
->
->         last = values[0];
->         min_heap_pop(heap, funcs);
->         while (heap->nr > 0) {
->                 if (min_heap) {
-> -                       if (last > values[0]) {
-> -                               pr_err("error: expected %d <= %d\n", last,
-> -                                       values[0]);
-> -                               err++;
-> -                       }
-> +                       KUNIT_EXPECT_LE(test, last, values[0]);
->                 } else {
-> -                       if (last < values[0]) {
-> -                               pr_err("error: expected %d >= %d\n", last,
-> -                                       values[0]);
-> -                               err++;
-> -                       }
-> +                       KUNIT_EXPECT_GE(test, last, values[0]);
->                 }
->                 last = values[0];
->                 min_heap_pop(heap, funcs);
->         }
-> -       return err;
->  }
->
-> -static __init int test_heapify_all(bool min_heap)
-> +static void test_heapify_all(struct kunit *test, bool min_heap)
->  {
->         int values[] = { 3, 1, 2, 4, 0x8000000, 0x7FFFFFF, 0,
->                          -3, -1, -2, -4, 0x8000000, 0x7FFFFFF };
-> @@ -73,11 +63,11 @@ static __init int test_heapify_all(bool min_heap)
->                 .less = min_heap ? less_than : greater_than,
->                 .swp = swap_ints,
->         };
-> -       int i, err;
-> +       int i;
->
->         /* Test with known set of values. */
->         min_heapify_all(&heap, &funcs);
-> -       err = pop_verify_heap(min_heap, &heap, &funcs);
-> +       pop_verify_heap(test, min_heap, &heap, &funcs);
->
->
->         /* Test with randomly generated values. */
-> @@ -86,12 +76,10 @@ static __init int test_heapify_all(bool min_heap)
->                 values[i] = get_random_int();
->
->         min_heapify_all(&heap, &funcs);
-> -       err += pop_verify_heap(min_heap, &heap, &funcs);
-> -
-> -       return err;
-> +       pop_verify_heap(test, min_heap, &heap, &funcs);
->  }
->
-> -static __init int test_heap_push(bool min_heap)
-> +static void test_heap_push(struct kunit *test, bool min_heap)
->  {
->         const int data[] = { 3, 1, 2, 4, 0x80000000, 0x7FFFFFFF, 0,
->                              -3, -1, -2, -4, 0x80000000, 0x7FFFFFFF };
-> @@ -106,25 +94,23 @@ static __init int test_heap_push(bool min_heap)
->                 .less = min_heap ? less_than : greater_than,
->                 .swp = swap_ints,
->         };
-> -       int i, temp, err;
-> +       int i, temp;
->
->         /* Test with known set of values copied from data. */
->         for (i = 0; i < ARRAY_SIZE(data); i++)
->                 min_heap_push(&heap, &data[i], &funcs);
->
-> -       err = pop_verify_heap(min_heap, &heap, &funcs);
-> +       pop_verify_heap(test, min_heap, &heap, &funcs);
->
->         /* Test with randomly generated values. */
->         while (heap.nr < heap.size) {
->                 temp = get_random_int();
->                 min_heap_push(&heap, &temp, &funcs);
->         }
-> -       err += pop_verify_heap(min_heap, &heap, &funcs);
-> -
-> -       return err;
-> +       pop_verify_heap(test, min_heap, &heap, &funcs);
->  }
->
-> -static __init int test_heap_pop_push(bool min_heap)
-> +static void test_heap_pop_push(struct kunit *test, bool min_heap)
->  {
->         const int data[] = { 3, 1, 2, 4, 0x80000000, 0x7FFFFFFF, 0,
->                              -3, -1, -2, -4, 0x80000000, 0x7FFFFFFF };
-> @@ -139,7 +125,7 @@ static __init int test_heap_pop_push(bool min_heap)
->                 .less = min_heap ? less_than : greater_than,
->                 .swp = swap_ints,
->         };
-> -       int i, temp, err;
-> +       int i, temp;
->
->         /* Fill values with data to pop and replace. */
->         temp = min_heap ? 0x80000000 : 0x7FFFFFFF;
-> @@ -150,7 +136,7 @@ static __init int test_heap_pop_push(bool min_heap)
->         for (i = 0; i < ARRAY_SIZE(data); i++)
->                 min_heap_pop_push(&heap, &data[i], &funcs);
->
-> -       err = pop_verify_heap(min_heap, &heap, &funcs);
-> +       pop_verify_heap(test, min_heap, &heap, &funcs);
->
->         heap.nr = 0;
->         for (i = 0; i < ARRAY_SIZE(data); i++)
-> @@ -161,34 +147,38 @@ static __init int test_heap_pop_push(bool min_heap)
->                 temp = get_random_int();
->                 min_heap_pop_push(&heap, &temp, &funcs);
->         }
-> -       err += pop_verify_heap(min_heap, &heap, &funcs);
-> +       pop_verify_heap(test, min_heap, &heap, &funcs);
-> +}
->
-> -       return err;
-> +static void test_heap(struct kunit *test, bool min_heap)
-> +{
-> +       test_heapify_all(test, min_heap);
-> +       test_heap_push(test, min_heap);
-> +       test_heap_pop_push(test, min_heap);
->  }
->
-> -static int __init test_min_heap_init(void)
-> +static void test_min_heap(struct kunit *test)
->  {
-> -       int err = 0;
-> -
-> -       err += test_heapify_all(true);
-> -       err += test_heapify_all(false);
-> -       err += test_heap_push(true);
-> -       err += test_heap_push(false);
-> -       err += test_heap_pop_push(true);
-> -       err += test_heap_pop_push(false);
-> -       if (err) {
-> -               pr_err("test failed with %d errors\n", err);
-> -               return -EINVAL;
-> -       }
-> -       pr_info("test passed\n");
-> -       return 0;
-> +       test_heap(test, true);
->  }
-> -module_init(test_min_heap_init);
->
-> -static void __exit test_min_heap_exit(void)
-> +static void test_max_heap(struct kunit *test)
->  {
-> -       /* do nothing */
-> +       test_heap(test, false);
->  }
-> -module_exit(test_min_heap_exit);
-> +
-> +static struct kunit_case __refdata minmax_heap_test_cases[] = {
-> +       KUNIT_CASE(test_min_heap),
-> +       KUNIT_CASE(test_max_heap),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite minmax_heap_test_suite = {
-> +       .name = "lib_minmax_heap",
-> +       .test_cases = minmax_heap_test_cases,
-> +};
-> +
-> +kunit_test_suites(&minmax_heap_test_suite);
-> +
->
->  MODULE_LICENSE("GPL");
->
-> base-commit: 2734d6c1b1a089fb593ef6a23d4b70903526fe0c
-> --
-> 2.32.0.402.g57bb445576-goog
->
+Patch 3 resolves an issue Andrii noted about error propagation
+when handling enum data display.
+
+More followup work is required to ensure multi-dimensional char array
+display works correctly.
+
+[1] https://lore.kernel.org/bpf/1626362126-27775-1-git-send-email-alan.maguire@oracle.com/T/#mc2cb023acfd6c3cd0b661e385787b76bb757430d
+
+Alan Maguire (3):
+  libbpf: avoid use of __int128 in typed dump display
+  selftests/bpf: add __int128-specific tests for typed data dump
+  libbpf: propagate errors when retrieving enum value for typed data
+    display
+
+ tools/lib/bpf/btf_dump.c                          | 67 +++++++++++++----------
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 17 ++++++
+ 2 files changed, 55 insertions(+), 29 deletions(-)
+
+-- 
+1.8.3.1
+
