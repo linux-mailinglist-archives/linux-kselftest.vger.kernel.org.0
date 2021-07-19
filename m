@@ -2,289 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 304883CC6EB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jul 2021 01:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571E53CCBF2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jul 2021 03:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbhGQXvQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 17 Jul 2021 19:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
+        id S234124AbhGSBZF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 18 Jul 2021 21:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbhGQXvQ (ORCPT
+        with ESMTP id S234116AbhGSBZD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 17 Jul 2021 19:51:16 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37C9C061762;
-        Sat, 17 Jul 2021 16:48:18 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 8A7D41F42DE5
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
-        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
-        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        tales.aparecida@gmail.com,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH v5 1/1] lib: Convert UUID runtime test to KUnit
-Date:   Sat, 17 Jul 2021 20:47:58 -0300
-Message-Id: <20210717234758.46598-2-andrealmeid@collabora.com>
+        Sun, 18 Jul 2021 21:25:03 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734F3C061765
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Jul 2021 18:22:04 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B9A29891AC;
+        Mon, 19 Jul 2021 13:21:59 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1626657719;
+        bh=tugs+RN3zWERTiSWA0QB9e8+5bb3s257u6SSDPeBovM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=XBFlKluL3HusTey4mkHDNVU8iSaVaSCoR/FGZ9HS3+mxgUMXDlNY3Aq4cYHPFFf8n
+         ArsSa6/EejoIdZtWWbxCG3dA/dudRAg2luZYNGsjUqar6NxcK2GuYGbWa1zH++wEwh
+         xM+BtM6CuMzcNnQuVGg5QmDx2zPajJR56/5E9VCiqiGBzlqWC/jVnggk+0DNnQLEqL
+         SsnGCw1x9Clnquob+IisgEZJZHE0yhbsvr8RBBgHyDewym3FyG4+VgZ6ex4ZIX0UTe
+         6qXJKh1xgmqdPKNshl3yxC53Pm9Fm5vkSVu+tzskkS+DhmzcbG/b1AjvOnK5AKUH+x
+         EmIgnmQ4xCZnA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60f4d3b70000>; Mon, 19 Jul 2021 13:21:59 +1200
+Received: from coled-dl.ws.atlnz.lc (coled-dl.ws.atlnz.lc [10.33.25.26])
+        by pat.atlnz.lc (Postfix) with ESMTP id 5FBE213EE1E;
+        Mon, 19 Jul 2021 13:21:59 +1200 (NZST)
+Received: by coled-dl.ws.atlnz.lc (Postfix, from userid 1801)
+        id 577CC2428CC; Mon, 19 Jul 2021 13:21:59 +1200 (NZST)
+From:   Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+To:     pablo@netfilter.org
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        kuba@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>,
+        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
+        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
+        Blair Steven <blair.steven@alliedtelesis.co.nz>
+Subject: [PATCH 2/3] net: netfilter: Add RFC-7597 Section 5.1 PSID support
+Date:   Mon, 19 Jul 2021 13:21:50 +1200
+Message-Id: <20210719012151.28324-1-Cole.Dishington@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210717234758.46598-1-andrealmeid@collabora.com>
-References: <20210717234758.46598-1-andrealmeid@collabora.com>
+In-Reply-To: <20210716151833.GD9904@breakpoint.cc>
+References: <20210716151833.GD9904@breakpoint.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Sr3uF8G0 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=e_q4qTt1xDgA:10 a=xOT0nC9th1TpZTiSAT0A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove custom functions for testing and use KUnit framework. Keep the
-tested functions and test data the same.
+Adds support for masquerading into a smaller subset of ports -
+defined by the PSID values from RFC-7597 Section 5.1. This is part of
+the support for MAP-E and Lightweight 4over6, which allows multiple
+devices to share an IPv4 address by splitting the L4 port / id into
+ranges.
 
-Current test threat (g/u)uid_parse and (g/u)uid_equal as different test
-cases. Make both functions being part of the same test case, given the
-dependency regarding their results. This reduces the tests cases from 6
-cases to 4, while keeping the test coverage the same. Given that we have
-3 strings for each test case, current test output notifies 18 tests
-results, and the KUnit output announces 12 results.
-
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
+Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
 ---
- lib/Kconfig.debug |   8 ++-
- lib/Makefile      |   2 +-
- lib/test_uuid.c   | 137 +++++++++++++++++++---------------------------
- 3 files changed, 64 insertions(+), 83 deletions(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 7937265ef879..3e5dd91cdee3 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2084,8 +2084,12 @@ config TEST_BITMAP
- 
- 	  If unsure, say N.
- 
--config TEST_UUID
--	tristate "Test functions located in the uuid module at runtime"
-+config UUID_KUNIT_TEST
-+	tristate "Unit test for UUID" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Tests parsing functions for UUID/GUID strings.
- 
- config TEST_XARRAY
- 	tristate "Test the XArray code at runtime"
-diff --git a/lib/Makefile b/lib/Makefile
-index afeff05fa8c5..54ed92172963 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -87,7 +87,6 @@ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
- obj-$(CONFIG_TEST_PRINTF) += test_printf.o
- obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
- obj-$(CONFIG_TEST_STRSCPY) += test_strscpy.o
--obj-$(CONFIG_TEST_UUID) += test_uuid.o
- obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
- obj-$(CONFIG_TEST_PARMAN) += test_parman.o
- obj-$(CONFIG_TEST_KMOD) += test_kmod.o
-@@ -354,5 +353,6 @@ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
- obj-$(CONFIG_BITS_TEST) += test_bits.o
- obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-+obj-$(CONFIG_UUID_KUNIT_TEST) += test_uuid.o
- 
- obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
-diff --git a/lib/test_uuid.c b/lib/test_uuid.c
-index cd819c397dc7..30f350301e6d 100644
---- a/lib/test_uuid.c
-+++ b/lib/test_uuid.c
-@@ -1,21 +1,20 @@
-+// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
- /*
-- * Test cases for lib/uuid.c module.
-+ * Unit tests for lib/uuid.c module.
-+ *
-+ * Copyright 2016 Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+ * Copyright 2021 André Almeida <andrealmeid@riseup.net>
-  */
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
--#include <linux/init.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/string.h>
-+#include <kunit/test.h>
- #include <linux/uuid.h>
- 
--struct test_uuid_data {
-+struct test_data {
- 	const char *uuid;
- 	guid_t le;
- 	uuid_t be;
- };
- 
--static const struct test_uuid_data test_uuid_test_data[] = {
-+static const struct test_data correct_data[] = {
- 	{
- 		.uuid = "c33f4995-3701-450e-9fbf-206a2e98e576",
- 		.le = GUID_INIT(0xc33f4995, 0x3701, 0x450e, 0x9f, 0xbf, 0x20, 0x6a, 0x2e, 0x98, 0xe5, 0x76),
-@@ -33,101 +32,79 @@ static const struct test_uuid_data test_uuid_test_data[] = {
- 	},
- };
- 
--static const char * const test_uuid_wrong_data[] = {
-+static const char * const wrong_data[] = {
- 	"c33f4995-3701-450e-9fbf206a2e98e576 ",	/* no hyphen(s) */
- 	"64b4371c-77c1-48f9-8221-29f054XX023b",	/* invalid character(s) */
- 	"0cb4ddff-a545-4401-9d06-688af53e",	/* not enough data */
- };
- 
--static unsigned total_tests __initdata;
--static unsigned failed_tests __initdata;
--
--static void __init test_uuid_failed(const char *prefix, bool wrong, bool be,
--				    const char *data, const char *actual)
-+static void uuid_correct_le(struct kunit *test)
+Notes:
+    Thanks for time reviewing!
+   =20
+    Changes in v5:
+    - Add WARN_ON_ONCE for invalid value of range->base.
+
+ net/netfilter/nf_nat_core.c       | 39 +++++++++++++++++++++++++++----
+ net/netfilter/nf_nat_masquerade.c | 27 +++++++++++++++++++--
+ 2 files changed, 60 insertions(+), 6 deletions(-)
+
+diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+index 7de595ead06a..4a9448684504 100644
+--- a/net/netfilter/nf_nat_core.c
++++ b/net/netfilter/nf_nat_core.c
+@@ -195,13 +195,36 @@ static bool nf_nat_inet_in_range(const struct nf_co=
+nntrack_tuple *t,
+ static bool l4proto_in_range(const struct nf_conntrack_tuple *tuple,
+ 			     enum nf_nat_manip_type maniptype,
+ 			     const union nf_conntrack_man_proto *min,
+-			     const union nf_conntrack_man_proto *max)
++			     const union nf_conntrack_man_proto *max,
++			     const union nf_conntrack_man_proto *base,
++			     bool is_psid)
  {
--	pr_err("%s test #%u %s %s data: '%s'\n",
--	       prefix,
--	       total_tests,
--	       wrong ? "passed on wrong" : "failed on",
--	       be ? "BE" : "LE",
--	       data);
--	if (actual && *actual)
--		pr_err("%s test #%u actual data: '%s'\n",
--		       prefix,
--		       total_tests,
--		       actual);
--	failed_tests++;
-+	guid_t le;
-+	const struct test_data *data = test->param_value;
+ 	__be16 port;
++	u16 psid, psid_mask, offset_mask;
 +
-+	KUNIT_ASSERT_EQ_MSG(test, guid_parse(data->uuid, &le), 0,
-+			    "failed to parse '%s'", data->uuid);
-+	KUNIT_EXPECT_TRUE_MSG(test, guid_equal(&data->le, &le),
-+			      "'%s' should be equal to %pUl", data->uuid, &le);
++	/* In this case we are in PSID mode, avoid checking all ranges by compu=
+ting bitmasks */
++	if (is_psid) {
++		u16 power_j =3D ntohs(max->all) - ntohs(min->all) + 1;
++		u32 offset =3D ntohs(base->all);
++		u16 power_a;
++
++		if (offset =3D=3D 0)
++			offset =3D 1 << 16;
++
++		power_a =3D (1 << 16) / offset;
++		offset_mask =3D (power_a - 1) * offset;
++		psid_mask =3D ((offset / power_j) << 1) - 1;
++		psid =3D ntohs(min->all) & psid_mask;
++	}
+=20
+ 	switch (tuple->dst.protonum) {
+ 	case IPPROTO_ICMP:
+ 	case IPPROTO_ICMPV6:
++		if (is_psid) {
++			return (offset_mask =3D=3D 0 ||
++				(ntohs(tuple->src.u.icmp.id) & offset_mask) !=3D 0) &&
++				((ntohs(tuple->src.u.icmp.id) & psid_mask) =3D=3D psid);
++		}
+ 		return ntohs(tuple->src.u.icmp.id) >=3D ntohs(min->icmp.id) &&
+ 		       ntohs(tuple->src.u.icmp.id) <=3D ntohs(max->icmp.id);
+ 	case IPPROTO_GRE: /* all fall though */
+@@ -215,6 +238,10 @@ static bool l4proto_in_range(const struct nf_conntra=
+ck_tuple *tuple,
+ 		else
+ 			port =3D tuple->dst.u.all;
+=20
++		if (is_psid) {
++			return (offset_mask =3D=3D 0 || (ntohs(port) & offset_mask) !=3D 0) &=
+&
++				((ntohs(port) & psid_mask) =3D=3D psid);
++		}
+ 		return ntohs(port) >=3D ntohs(min->all) &&
+ 		       ntohs(port) <=3D ntohs(max->all);
+ 	default:
+@@ -239,7 +266,8 @@ static int in_range(const struct nf_conntrack_tuple *=
+tuple,
+ 		return 1;
+=20
+ 	return l4proto_in_range(tuple, NF_NAT_MANIP_SRC,
+-				&range->min_proto, &range->max_proto);
++				&range->min_proto, &range->max_proto, &range->base_proto,
++				range->flags & NF_NAT_RANGE_PSID);
  }
- 
--static void __init test_uuid_test(const struct test_uuid_data *data)
-+static void uuid_correct_be(struct kunit *test)
- {
--	guid_t le;
- 	uuid_t be;
--	char buf[48];
--
--	/* LE */
--	total_tests++;
--	if (guid_parse(data->uuid, &le))
--		test_uuid_failed("conversion", false, false, data->uuid, NULL);
--
--	total_tests++;
--	if (!guid_equal(&data->le, &le)) {
--		sprintf(buf, "%pUl", &le);
--		test_uuid_failed("cmp", false, false, data->uuid, buf);
--	}
--
--	/* BE */
--	total_tests++;
--	if (uuid_parse(data->uuid, &be))
--		test_uuid_failed("conversion", false, true, data->uuid, NULL);
--
--	total_tests++;
--	if (!uuid_equal(&data->be, &be)) {
--		sprintf(buf, "%pUb", &be);
--		test_uuid_failed("cmp", false, true, data->uuid, buf);
--	}
-+	const struct test_data *data = test->param_value;
+=20
+ static inline int
+@@ -532,8 +560,11 @@ get_unique_tuple(struct nf_conntrack_tuple *tuple,
+ 		if (range->flags & NF_NAT_RANGE_PROTO_SPECIFIED) {
+ 			if (!(range->flags & NF_NAT_RANGE_PROTO_OFFSET) &&
+ 			    l4proto_in_range(tuple, maniptype,
+-			          &range->min_proto,
+-			          &range->max_proto) &&
++				  &range->min_proto,
++				  &range->max_proto,
++				  &range->base_proto,
++				  range->flags &
++				  NF_NAT_RANGE_PSID) &&
+ 			    (range->min_proto.all =3D=3D range->max_proto.all ||
+ 			     !nf_nat_used_tuple(tuple, ct)))
+ 				return;
+diff --git a/net/netfilter/nf_nat_masquerade.c b/net/netfilter/nf_nat_mas=
+querade.c
+index 8e8a65d46345..dea6106f1699 100644
+--- a/net/netfilter/nf_nat_masquerade.c
++++ b/net/netfilter/nf_nat_masquerade.c
+@@ -55,8 +55,31 @@ nf_nat_masquerade_ipv4(struct sk_buff *skb, unsigned i=
+nt hooknum,
+ 	newrange.flags       =3D range->flags | NF_NAT_RANGE_MAP_IPS;
+ 	newrange.min_addr.ip =3D newsrc;
+ 	newrange.max_addr.ip =3D newsrc;
+-	newrange.min_proto   =3D range->min_proto;
+-	newrange.max_proto   =3D range->max_proto;
 +
-+	KUNIT_ASSERT_EQ_MSG(test, uuid_parse(data->uuid, &be), 0,
-+			    "failed to parse '%s'", data->uuid);
-+	KUNIT_EXPECT_TRUE_MSG(test, uuid_equal(&data->be, &be),
-+			      "'%s' should be equal to %pUl", data->uuid, &be);
- }
- 
--static void __init test_uuid_wrong(const char *data)
-+static void uuid_wrong_le(struct kunit *test)
- {
- 	guid_t le;
--	uuid_t be;
--
--	/* LE */
--	total_tests++;
--	if (!guid_parse(data, &le))
--		test_uuid_failed("negative", true, false, data, NULL);
-+	const char * const *data = test->param_value;
- 
--	/* BE */
--	total_tests++;
--	if (!uuid_parse(data, &be))
--		test_uuid_failed("negative", true, true, data, NULL);
-+	KUNIT_ASSERT_NE_MSG(test, guid_parse(*data, &le), 0,
-+			    "parsing of '%s' should've failed", *data);
- }
- 
--static int __init test_uuid_init(void)
-+static void uuid_wrong_be(struct kunit *test)
- {
--	unsigned int i;
--
--	for (i = 0; i < ARRAY_SIZE(test_uuid_test_data); i++)
--		test_uuid_test(&test_uuid_test_data[i]);
--
--	for (i = 0; i < ARRAY_SIZE(test_uuid_wrong_data); i++)
--		test_uuid_wrong(test_uuid_wrong_data[i]);
-+	uuid_t be;
-+	const char * const *data = test->param_value;
- 
--	if (failed_tests == 0)
--		pr_info("all %u tests passed\n", total_tests);
--	else
--		pr_err("failed %u out of %u tests\n", failed_tests, total_tests);
-+	KUNIT_ASSERT_NE_MSG(test, uuid_parse(*data, &be), 0,
-+			    "parsing of '%s' should've failed", *data);
-+}
- 
--	return failed_tests ? -EINVAL : 0;
-+static void case_to_desc_correct(const struct test_data *t, char *desc)
-+{
-+	strcpy(desc, t->uuid);
- }
--module_init(test_uuid_init);
- 
--static void __exit test_uuid_exit(void)
-+KUNIT_ARRAY_PARAM(correct, correct_data, case_to_desc_correct);
++	if (range->flags & NF_NAT_RANGE_PSID) {
++		u16 base =3D ntohs(range->base_proto.all);
++		u16 min =3D  ntohs(range->min_proto.all);
++		u16 off =3D 0;
 +
-+static void case_to_desc_wrong(const char * const *s, char *desc)
- {
--	/* do nothing */
-+	strcpy(desc, *s);
- }
--module_exit(test_uuid_exit);
++		/* xtables should stop base > 2^15 by enforcement of
++		 * 0 <=3D offset_len < 16 argument, with offset_len=3D0
++		 * as a special case inwhich base=3D0.
++		 */
++		if (WARN_ON_ONCE(base > (1 << 15)))
++			return NF_DROP;
 +
-+KUNIT_ARRAY_PARAM(wrong, wrong_data, case_to_desc_wrong);
++		/* If offset=3D0, port range is in one contiguous block */
++		if (base)
++			off =3D prandom_u32() % (((1 << 16) / base) - 1);
 +
-+static struct kunit_case uuid_test_cases[] = {
-+	KUNIT_CASE_PARAM(uuid_correct_be, correct_gen_params),
-+	KUNIT_CASE_PARAM(uuid_correct_le, correct_gen_params),
-+	KUNIT_CASE_PARAM(uuid_wrong_be, wrong_gen_params),
-+	KUNIT_CASE_PARAM(uuid_wrong_le, wrong_gen_params),
-+	{}
-+};
-+
-+static struct kunit_suite uuid_test_suite = {
-+	.name = "uuid",
-+	.test_cases = uuid_test_cases,
-+};
-+kunit_test_suite(uuid_test_suite);
- 
- MODULE_AUTHOR("Andy Shevchenko <andriy.shevchenko@linux.intel.com>");
- MODULE_LICENSE("Dual BSD/GPL");
--- 
++		newrange.min_proto.all   =3D htons(min + base * off);
++		newrange.max_proto.all   =3D htons(ntohs(newrange.min_proto.all) + nto=
+hs(range->max_proto.all) - min);
++		newrange.base_proto      =3D range->base_proto;
++		newrange.flags           =3D newrange.flags | NF_NAT_RANGE_PROTO_SPECI=
+FIED;
++	} else {
++		newrange.min_proto       =3D range->min_proto;
++		newrange.max_proto       =3D range->max_proto;
++	}
+=20
+ 	/* Hand modified range to generic setup. */
+ 	return nf_nat_setup_info(ct, &newrange, NF_NAT_MANIP_SRC);
+--=20
 2.32.0
 
