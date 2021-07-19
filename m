@@ -2,214 +2,221 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 571E53CCBF2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jul 2021 03:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365EE3CD46F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jul 2021 14:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234124AbhGSBZF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 18 Jul 2021 21:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S236877AbhGSLb2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Jul 2021 07:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234116AbhGSBZD (ORCPT
+        with ESMTP id S236592AbhGSLb1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 18 Jul 2021 21:25:03 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734F3C061765
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Jul 2021 18:22:04 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B9A29891AC;
-        Mon, 19 Jul 2021 13:21:59 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1626657719;
-        bh=tugs+RN3zWERTiSWA0QB9e8+5bb3s257u6SSDPeBovM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=XBFlKluL3HusTey4mkHDNVU8iSaVaSCoR/FGZ9HS3+mxgUMXDlNY3Aq4cYHPFFf8n
-         ArsSa6/EejoIdZtWWbxCG3dA/dudRAg2luZYNGsjUqar6NxcK2GuYGbWa1zH++wEwh
-         xM+BtM6CuMzcNnQuVGg5QmDx2zPajJR56/5E9VCiqiGBzlqWC/jVnggk+0DNnQLEqL
-         SsnGCw1x9Clnquob+IisgEZJZHE0yhbsvr8RBBgHyDewym3FyG4+VgZ6ex4ZIX0UTe
-         6qXJKh1xgmqdPKNshl3yxC53Pm9Fm5vkSVu+tzskkS+DhmzcbG/b1AjvOnK5AKUH+x
-         EmIgnmQ4xCZnA==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B60f4d3b70000>; Mon, 19 Jul 2021 13:21:59 +1200
-Received: from coled-dl.ws.atlnz.lc (coled-dl.ws.atlnz.lc [10.33.25.26])
-        by pat.atlnz.lc (Postfix) with ESMTP id 5FBE213EE1E;
-        Mon, 19 Jul 2021 13:21:59 +1200 (NZST)
-Received: by coled-dl.ws.atlnz.lc (Postfix, from userid 1801)
-        id 577CC2428CC; Mon, 19 Jul 2021 13:21:59 +1200 (NZST)
-From:   Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
-To:     pablo@netfilter.org
-Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
-        kuba@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>,
-        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
-        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
-        Blair Steven <blair.steven@alliedtelesis.co.nz>
-Subject: [PATCH 2/3] net: netfilter: Add RFC-7597 Section 5.1 PSID support
-Date:   Mon, 19 Jul 2021 13:21:50 +1200
-Message-Id: <20210719012151.28324-1-Cole.Dishington@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210716151833.GD9904@breakpoint.cc>
-References: <20210716151833.GD9904@breakpoint.cc>
+        Mon, 19 Jul 2021 07:31:27 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A55C061762
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Jul 2021 04:27:03 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id v1so23603472edt.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Jul 2021 05:12:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/UU/c96xB2XnsKcImXrMAG0NX8G+S47OMuRsfPPQPuI=;
+        b=CK1gkwphNUpnV7qz0pEiNQPARKls7lgV4k0YhHtRviZNNNf9pduPYAm6rasO2Z4JYq
+         yCfq8C7eKnhN+sLicDffhTPpp6ANXP4DqCoi59AQthWxFpsbTPcmXNQxiSf4zkbTW0pW
+         K3aY/qy6QxN6TUQ+ylVmRuiz2j60u5w0PKO//4WhJzkw8/BP/YMkgXaltIlAxAr5v94A
+         fKQ0wT14If3pjD//EisFpRLYUCGqpzt6ZOREOCfMTFpNyAAbyVqgTwrKeuMjTSC4anJJ
+         Vb2nRPBLSF9PjEe+M0s5mDp+DlyqqAgbMhs3l4NUalgsijVHBhCBnMXqQ6NfFE39Zzyf
+         K6dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/UU/c96xB2XnsKcImXrMAG0NX8G+S47OMuRsfPPQPuI=;
+        b=p6tw30tIcoE729kG/1v+N3tWeZ1DrnAkfFhat6hyYspMic8RSFEom/LLTGaOW8i9VG
+         AUdvvEx7opT4KLHeJ5O2QkfCXrDOssgez5H5MmeoxHEpppkGSRSlAbovFf78BrgpWXQA
+         Dnus5ZmNg5UU4cTECTqHzmB7lLcCkjaiHLpXUoFhkHm2Oj9onG5SwH5iUI1+Fc0E1jJM
+         lb+hYX5AbjwCvCZEz617WDE4pIARjm/87SvacW+d/wQCj7rNUmKaT9yqXjoJPG/QxN/F
+         /nIqoHCbLjubwsosQSUTJlWczjynFFT7K/K4Fqdh58v1PW+nIUXNyl6fQqylbajwqELE
+         aGGQ==
+X-Gm-Message-State: AOAM531sdg3mkg6kdTiAdgetBiwRQNT9W8IfGkgTLpveNr7uK5hfjuGd
+        CLUOI+GeXlOiidrac1dO1b4nLpyB2yCAgsJbjhYTjg==
+X-Google-Smtp-Source: ABdhPJxzmls3MdY2v2rmmBRiXXunC11WlDfin6gHks3OmV5v5L2L+bdoxTg7/Z6IALIyVbWP7RXCTZMIZTIgJWrEzIY=
+X-Received: by 2002:a05:6402:152:: with SMTP id s18mr33808453edu.221.1626696725478;
+ Mon, 19 Jul 2021 05:12:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Sr3uF8G0 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=e_q4qTt1xDgA:10 a=xOT0nC9th1TpZTiSAT0A:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+References: <1626362126-27775-1-git-send-email-alan.maguire@oracle.com> <1626362126-27775-2-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1626362126-27775-2-git-send-email-alan.maguire@oracle.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 19 Jul 2021 17:41:53 +0530
+Message-ID: <CA+G9fYtqga+zMop8Ae3+fa1ENP2T8fwfFfwWmvfRWZSYB7cPDw@mail.gmail.com>
+Subject: Re: [PATCH v6 bpf-next 1/3] libbpf: BTF dumper support for typed data
+To:     Alan Maguire <alan.maguire@oracle.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adds support for masquerading into a smaller subset of ports -
-defined by the PSID values from RFC-7597 Section 5.1. This is part of
-the support for MAP-E and Lightweight 4over6, which allows multiple
-devices to share an IPv4 address by splitting the L4 port / id into
-ranges.
+On Thu, 15 Jul 2021 at 20:46, Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> Add a BTF dumper for typed data, so that the user can dump a typed
+> version of the data provided.
+>
+> The API is
+>
+> int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
+>                              void *data, size_t data_sz,
+>                              const struct btf_dump_type_data_opts *opts);
+>
+> ...where the id is the BTF id of the data pointed to by the "void *"
+> argument; for example the BTF id of "struct sk_buff" for a
+> "struct skb *" data pointer.  Options supported are
+>
+>  - a starting indent level (indent_lvl)
+>  - a user-specified indent string which will be printed once per
+>    indent level; if NULL, tab is chosen but any string <= 32 chars
+>    can be provided.
+>  - a set of boolean options to control dump display, similar to those
+>    used for BPF helper bpf_snprintf_btf().  Options are
+>         - compact : omit newlines and other indentation
+>         - skip_names: omit member names
+>         - emit_zeroes: show zero-value members
+>
+> Default output format is identical to that dumped by bpf_snprintf_btf(),
+> for example a "struct sk_buff" representation would look like this:
+>
+> struct sk_buff){
+>         (union){
+>                 (struct){
+>                         .next = (struct sk_buff *)0xffffffffffffffff,
+>                         .prev = (struct sk_buff *)0xffffffffffffffff,
+>                 (union){
+>                         .dev = (struct net_device *)0xffffffffffffffff,
+>                         .dev_scratch = (long unsigned int)18446744073709551615,
+>                 },
+>         },
+> ...
+>
+> If the data structure is larger than the *data_sz*
+> number of bytes that are available in *data*, as much
+> of the data as possible will be dumped and -E2BIG will
+> be returned.  This is useful as tracers will sometimes
+> not be able to capture all of the data associated with
+> a type; for example a "struct task_struct" is ~16k.
+> Being able to specify that only a subset is available is
+> important for such cases.  On success, the amount of data
+> dumped is returned.
+>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/lib/bpf/btf.h      |  19 ++
+>  tools/lib/bpf/btf_dump.c | 819 ++++++++++++++++++++++++++++++++++++++++++++++-
+>  tools/lib/bpf/libbpf.map |   1 +
+>  3 files changed, 834 insertions(+), 5 deletions(-)
 
-Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
-Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
-Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
-Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
-Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
-Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
----
+<trim>
 
-Notes:
-    Thanks for time reviewing!
-   =20
-    Changes in v5:
-    - Add WARN_ON_ONCE for invalid value of range->base.
+> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+> index 5dc6b517..929cf93 100644
+> --- a/tools/lib/bpf/btf_dump.c
+> +++ b/tools/lib/bpf/btf_dump.c
 
- net/netfilter/nf_nat_core.c       | 39 +++++++++++++++++++++++++++----
- net/netfilter/nf_nat_masquerade.c | 27 +++++++++++++++++++--
- 2 files changed, 60 insertions(+), 6 deletions(-)
 
-diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
-index 7de595ead06a..4a9448684504 100644
---- a/net/netfilter/nf_nat_core.c
-+++ b/net/netfilter/nf_nat_core.c
-@@ -195,13 +195,36 @@ static bool nf_nat_inet_in_range(const struct nf_co=
-nntrack_tuple *t,
- static bool l4proto_in_range(const struct nf_conntrack_tuple *tuple,
- 			     enum nf_nat_manip_type maniptype,
- 			     const union nf_conntrack_man_proto *min,
--			     const union nf_conntrack_man_proto *max)
-+			     const union nf_conntrack_man_proto *max,
-+			     const union nf_conntrack_man_proto *base,
-+			     bool is_psid)
- {
- 	__be16 port;
-+	u16 psid, psid_mask, offset_mask;
-+
-+	/* In this case we are in PSID mode, avoid checking all ranges by compu=
-ting bitmasks */
-+	if (is_psid) {
-+		u16 power_j =3D ntohs(max->all) - ntohs(min->all) + 1;
-+		u32 offset =3D ntohs(base->all);
-+		u16 power_a;
-+
-+		if (offset =3D=3D 0)
-+			offset =3D 1 << 16;
-+
-+		power_a =3D (1 << 16) / offset;
-+		offset_mask =3D (power_a - 1) * offset;
-+		psid_mask =3D ((offset / power_j) << 1) - 1;
-+		psid =3D ntohs(min->all) & psid_mask;
-+	}
-=20
- 	switch (tuple->dst.protonum) {
- 	case IPPROTO_ICMP:
- 	case IPPROTO_ICMPV6:
-+		if (is_psid) {
-+			return (offset_mask =3D=3D 0 ||
-+				(ntohs(tuple->src.u.icmp.id) & offset_mask) !=3D 0) &&
-+				((ntohs(tuple->src.u.icmp.id) & psid_mask) =3D=3D psid);
-+		}
- 		return ntohs(tuple->src.u.icmp.id) >=3D ntohs(min->icmp.id) &&
- 		       ntohs(tuple->src.u.icmp.id) <=3D ntohs(max->icmp.id);
- 	case IPPROTO_GRE: /* all fall though */
-@@ -215,6 +238,10 @@ static bool l4proto_in_range(const struct nf_conntra=
-ck_tuple *tuple,
- 		else
- 			port =3D tuple->dst.u.all;
-=20
-+		if (is_psid) {
-+			return (offset_mask =3D=3D 0 || (ntohs(port) & offset_mask) !=3D 0) &=
-&
-+				((ntohs(port) & psid_mask) =3D=3D psid);
-+		}
- 		return ntohs(port) >=3D ntohs(min->all) &&
- 		       ntohs(port) <=3D ntohs(max->all);
- 	default:
-@@ -239,7 +266,8 @@ static int in_range(const struct nf_conntrack_tuple *=
-tuple,
- 		return 1;
-=20
- 	return l4proto_in_range(tuple, NF_NAT_MANIP_SRC,
--				&range->min_proto, &range->max_proto);
-+				&range->min_proto, &range->max_proto, &range->base_proto,
-+				range->flags & NF_NAT_RANGE_PSID);
- }
-=20
- static inline int
-@@ -532,8 +560,11 @@ get_unique_tuple(struct nf_conntrack_tuple *tuple,
- 		if (range->flags & NF_NAT_RANGE_PROTO_SPECIFIED) {
- 			if (!(range->flags & NF_NAT_RANGE_PROTO_OFFSET) &&
- 			    l4proto_in_range(tuple, maniptype,
--			          &range->min_proto,
--			          &range->max_proto) &&
-+				  &range->min_proto,
-+				  &range->max_proto,
-+				  &range->base_proto,
-+				  range->flags &
-+				  NF_NAT_RANGE_PSID) &&
- 			    (range->min_proto.all =3D=3D range->max_proto.all ||
- 			     !nf_nat_used_tuple(tuple, ct)))
- 				return;
-diff --git a/net/netfilter/nf_nat_masquerade.c b/net/netfilter/nf_nat_mas=
-querade.c
-index 8e8a65d46345..dea6106f1699 100644
---- a/net/netfilter/nf_nat_masquerade.c
-+++ b/net/netfilter/nf_nat_masquerade.c
-@@ -55,8 +55,31 @@ nf_nat_masquerade_ipv4(struct sk_buff *skb, unsigned i=
-nt hooknum,
- 	newrange.flags       =3D range->flags | NF_NAT_RANGE_MAP_IPS;
- 	newrange.min_addr.ip =3D newsrc;
- 	newrange.max_addr.ip =3D newsrc;
--	newrange.min_proto   =3D range->min_proto;
--	newrange.max_proto   =3D range->max_proto;
-+
-+	if (range->flags & NF_NAT_RANGE_PSID) {
-+		u16 base =3D ntohs(range->base_proto.all);
-+		u16 min =3D  ntohs(range->min_proto.all);
-+		u16 off =3D 0;
-+
-+		/* xtables should stop base > 2^15 by enforcement of
-+		 * 0 <=3D offset_len < 16 argument, with offset_len=3D0
-+		 * as a special case inwhich base=3D0.
-+		 */
-+		if (WARN_ON_ONCE(base > (1 << 15)))
-+			return NF_DROP;
-+
-+		/* If offset=3D0, port range is in one contiguous block */
-+		if (base)
-+			off =3D prandom_u32() % (((1 << 16) / base) - 1);
-+
-+		newrange.min_proto.all   =3D htons(min + base * off);
-+		newrange.max_proto.all   =3D htons(ntohs(newrange.min_proto.all) + nto=
-hs(range->max_proto.all) - min);
-+		newrange.base_proto      =3D range->base_proto;
-+		newrange.flags           =3D newrange.flags | NF_NAT_RANGE_PROTO_SPECI=
-FIED;
-+	} else {
-+		newrange.min_proto       =3D range->min_proto;
-+		newrange.max_proto       =3D range->max_proto;
-+	}
-=20
- 	/* Hand modified range to generic setup. */
- 	return nf_nat_setup_info(ct, &newrange, NF_NAT_MANIP_SRC);
---=20
-2.32.0
+Following perf build errors noticed on i386 and arm 32-bit architectures on
+linux next 20210719 tag with gcc-11.
 
+metadata:
+--------------
+   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+   git_short_log: 08076eab6fef ( Add linux-next specific files for 20210719 )
+   toolchain: gcc-11
+   target_arch: arm and i386
+
+
+> +static void btf_dump_int128(struct btf_dump *d,
+> +                           const struct btf_type *t,
+> +                           const void *data)
+> +{
+> +       __int128 num = *(__int128 *)data;
+
+
+btf_dump.c: In function 'btf_dump_int128':
+btf_dump.c:1559:9: error: expected expression before '__int128'
+ 1559 |         __int128 num = *(__int128 *)data;
+      |         ^~~~~~~~
+btf_dump.c:1561:14: error: 'num' undeclared (first use in this function)
+ 1561 |         if ((num >> 64) == 0)
+      |              ^~~
+btf_dump.c:1561:14: note: each undeclared identifier is reported only
+once for each function it appears in
+btf_dump.c: At top level:
+btf_dump.c:1568:17: error: '__int128' is not supported on this target
+ 1568 | static unsigned __int128 btf_dump_bitfield_get_data(struct btf_dump *d,
+      |                 ^~~~~~~~
+btf_dump.c: In function 'btf_dump_bitfield_get_data':
+btf_dump.c:1576:18: error: '__int128' is not supported on this target
+ 1576 |         unsigned __int128 num = 0, ret;
+      |                  ^~~~~~~~
+btf_dump.c: In function 'btf_dump_bitfield_check_zero':
+btf_dump.c:1608:9: error: expected expression before '__int128'
+ 1608 |         __int128 check_num;
+      |         ^~~~~~~~
+btf_dump.c:1610:9: error: 'check_num' undeclared (first use in this function)
+ 1610 |         check_num = btf_dump_bitfield_get_data(d, t, data,
+bits_offset, bit_sz);
+      |         ^~~~~~~~~
+btf_dump.c: In function 'btf_dump_bitfield_data':
+btf_dump.c:1622:18: error: '__int128' is not supported on this target
+ 1622 |         unsigned __int128 print_num;
+      |                  ^~~~~~~~
+btf_dump.c: In function 'btf_dump_dump_type_data':
+btf_dump.c:2212:34: error: '__int128' is not supported on this target
+ 2212 |                         unsigned __int128 print_num;
+      |                                  ^~~~~~~~
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+reference build link,
+build: https://builds.tuxbuild.com/1vWeCpIox9EoV35c80bwOvU9nbb/
+config: https://builds.tuxbuild.com/1vWeCpIox9EoV35c80bwOvU9nbb/config
+
+
+steps to reproduce:
+---------------------
+# TuxMake is a command line tool and Python library that provides
+# portable and repeatable Linux kernel builds across a variety of
+# architectures, toolchains, kernel configurations, and make targets.
+#
+# TuxMake supports the concept of runtimes.
+# See https://docs.tuxmake.org/runtimes/, for that to work it requires
+# that you install podman or docker on your system.
+#
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+
+
+tuxmake --runtime podman --target-arch arm --toolchain gcc-11
+--kconfig defconfig --kconfig-add
+https://builds.tuxbuild.com/1vWeCpIox9EoV35c80bwOvU9nbb/config
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
