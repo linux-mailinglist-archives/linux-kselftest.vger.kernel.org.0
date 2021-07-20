@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5E23CFC30
+	by mail.lfdr.de (Postfix) with ESMTP id A69503CFC31
 	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jul 2021 16:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239833AbhGTNqL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Jul 2021 09:46:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22559 "EHLO
+        id S239856AbhGTNqN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Jul 2021 09:46:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38388 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240052AbhGTNjs (ORCPT
+        by vger.kernel.org with ESMTP id S240059AbhGTNjs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 20 Jul 2021 09:39:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626790822;
+        s=mimecast20190719; t=1626790824;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=HnHnB+rHkpfXclwaG6mW8kEj4fMYZUnHJrCjI3fhKPQ=;
-        b=hZM88r2DXeF1qXdJL3sH2UjvNXo7dlvhQR2UApyUIvG8DQlddEMFFmdAdA1IUjBzurv5YD
-        /kjq84vtfEhzYtenyNKqq5NM95PxDl1doQdrKvG6DmgwlXO20+GL3Scaxb7PKC/bnumuLt
-        XktaEUe8h6s7+SGyi1UHJXmObsNCo+0=
+        bh=3Bali8rkEps7iXEarLyy6nashKZ29ZfCD2TM56N0zaI=;
+        b=UeqpbPbIEHellL/03s8fftVFyl566k8MIj3razfuOnav/buEEJ55N67ZfeuFh4V9h3UwDh
+        L6lHify7thkhG53LzEj8gvxSPzd74bNHMpUbICV3yrRGv3x03bIQFdsMy/zIFdFampdHaA
+        9hh8gI0oSd9T+odh8lLh7l5rbb1Mv0A=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-592-aWvaNLbPNRCwTtiixgJHuw-1; Tue, 20 Jul 2021 10:20:21 -0400
-X-MC-Unique: aWvaNLbPNRCwTtiixgJHuw-1
+ us-mta-90-0sglr9-zOWS3UqbaUwzhmg-1; Tue, 20 Jul 2021 10:20:23 -0400
+X-MC-Unique: 0sglr9-zOWS3UqbaUwzhmg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 31E1291275;
-        Tue, 20 Jul 2021 14:20:19 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1BFEB1084F4C;
+        Tue, 20 Jul 2021 14:20:21 +0000 (UTC)
 Received: from llong.com (ovpn-116-153.rdu2.redhat.com [10.10.116.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6CAB7369A;
-        Tue, 20 Jul 2021 14:20:04 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 586A8369A;
+        Tue, 20 Jul 2021 14:20:19 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -46,9 +46,9 @@ Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
         Marcelo Tosatti <mtosatti@redhat.com>,
         =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v3 7/9] cgroup/cpuset: Allow non-top parent partition root to distribute out all CPUs
-Date:   Tue, 20 Jul 2021 10:18:32 -0400
-Message-Id: <20210720141834.10624-8-longman@redhat.com>
+Subject: [PATCH v3 8/9] cgroup/cpuset: Update description of cpuset.cpus.partition in cgroup-v2.rst
+Date:   Tue, 20 Jul 2021 10:18:33 -0400
+Message-Id: <20210720141834.10624-9-longman@redhat.com>
 In-Reply-To: <20210720141834.10624-1-longman@redhat.com>
 References: <20210720141834.10624-1-longman@redhat.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
@@ -56,226 +56,148 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, a parent partition root cannot distribute all its CPUs to
-child partition roots with no CPUs left. However in some use cases,
-a management application may want to create a parent partition root as
-a management unit with no task associated with it and has all its CPUs
-distributed to various child partition roots dynamically according to
-their needs. Leaving a cpu in the parent partition root in such a case is
-now a waste.
-
-To accommodate such use cases, a parent partition root can now have
-all its CPUs distributed to its child partition roots as long as:
- 1) it is not the top cpuset; and
- 2) there is no task directly associated with the parent.
-
-Once an empty parent partition root is formed, no new task can be moved
-into it.
+Update Documentation/admin-guide/cgroup-v2.rst on the newly introduced
+"isolated" cpuset partition type as well as the ability to create
+non-top cpuset partition with no cpu allocated to it.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 90 +++++++++++++++++++++++++++++-------------
- 1 file changed, 63 insertions(+), 27 deletions(-)
+ Documentation/admin-guide/cgroup-v2.rst | 94 +++++++++++++++----------
+ 1 file changed, 58 insertions(+), 36 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 60562346ecc1..d4d0c091a0d3 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -284,6 +284,11 @@ static inline void notify_partition_change(struct cpuset *cs,
- 	cgroup_file_notify(&cs->partition_file);
- }
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 5c7377b5bd3e..2e101a353ab1 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2080,8 +2080,9 @@ Cpuset Interface Files
+ 	It accepts only the following input values when written to.
  
-+static inline int cpuset_has_tasks(const struct cpuset *cs)
-+{
-+	return cs->css.cgroup->nr_populated_csets;
-+}
+ 	  ========	================================
+-	  "root"	a partition root
+-	  "member"	a non-root member of a partition
++	  "member"	Non-root member of a partition
++	  "root"	Partition root
++	  "isolated"	Partition root without load balancing
+ 	  ========	================================
+ 
+ 	When set to be a partition root, the current cgroup is the
+@@ -2090,9 +2091,14 @@ Cpuset Interface Files
+ 	partition roots themselves and their descendants.  The root
+ 	cgroup is always a partition root.
+ 
+-	There are constraints on where a partition root can be set.
+-	It can only be set in a cgroup if all the following conditions
+-	are true.
++	When set to "isolated", the CPUs in that partition root will
++	be in an isolated state without any load balancing from the
++	scheduler.  Tasks in such a partition must be explicitly bound
++	to each individual CPU.
 +
- static struct cpuset top_cpuset = {
- 	.flags = ((1 << CS_ONLINE) | (1 << CS_CPU_EXCLUSIVE) |
- 		  (1 << CS_MEM_EXCLUSIVE)),
-@@ -1191,22 +1196,32 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 	if ((cmd != partcmd_update) && css_has_online_children(&cpuset->css))
- 		return -EBUSY;
++	There are constraints on where a partition root can be set
++	("root" or "isolated").  It can only be set in a cgroup if all
++	the following conditions are true.
  
--	/*
--	 * Enabling partition root is not allowed if not all the CPUs
--	 * can be granted from parent's effective_cpus or at least one
--	 * CPU will be left after that.
--	 */
--	if ((cmd == partcmd_enable) &&
--	   (!cpumask_subset(cpuset->cpus_allowed, parent->effective_cpus) ||
--	     cpumask_equal(cpuset->cpus_allowed, parent->effective_cpus)))
--		return -EINVAL;
+ 	1) The "cpuset.cpus" is not empty and the list of CPUs are
+ 	   exclusive, i.e. they are not shared by any of its siblings.
+@@ -2103,51 +2109,67 @@ Cpuset Interface Files
+ 	   eliminating corner cases that have to be handled if such a
+ 	   condition is allowed.
+ 
+-	Setting it to partition root will take the CPUs away from the
+-	effective CPUs of the parent cgroup.  Once it is set, this
++	Setting it to a partition root will take the CPUs away from
++	the effective CPUs of the parent cgroup.  Once it is set, this
+ 	file cannot be reverted back to "member" if there are any child
+ 	cgroups with cpuset enabled.
+ 
+-	A parent partition cannot distribute all its CPUs to its
+-	child partitions.  There must be at least one cpu left in the
+-	parent partition.
++	A parent partition may distribute all its CPUs to its child
++	partitions as long as it is not the root cgroup and there is no
++	task directly associated with that parent partition.  Otherwise,
++	there must be at least one cpu left in the parent partition.
++	A new task cannot be moved to a partition root with no effective
++	cpu.
++
++	Once becoming a partition root, changes to "cpuset.cpus"
++	is generally allowed as long as the first condition above
++	(cpu exclusivity rule) is true.  Other constraints for this
++	operation are as follows.
+ 
+-	Once becoming a partition root, changes to "cpuset.cpus" is
+-	generally allowed as long as the first condition above is true,
+-	the change will not take away all the CPUs from the parent
+-	partition and the new "cpuset.cpus" value is a superset of its
+-	children's "cpuset.cpus" values.
++	1) Any newly added CPUs must be a subset of the parent's
++	   "cpuset.cpus.effective".
++	2) Taking away all the CPUs from the parent's "cpuset.cpus.effective"
++	   is only allowed if there is no task associated with the
++	   parent partition.
++	3) Deletion of CPUs that have been distributed to child partition
++	   roots are not allowed.
+ 
+ 	Sometimes, external factors like changes to ancestors'
+ 	"cpuset.cpus" or cpu hotplug can cause the state of the partition
+-	root to change.  On read, the "cpuset.sched.partition" file
+-	can show the following values.
++	root to change.  On read, the "cpuset.cpus.partition" file can
++	show the following values.
+ 
+ 	  ==============	==============================
+ 	  "member"		Non-root member of a partition
+ 	  "root"		Partition root
++	  "isolated"		Partition root without load balancing
+ 	  "root invalid"	Invalid partition root
+ 	  ==============	==============================
+ 
+-	It is a partition root if the first 2 partition root conditions
+-	above are true and at least one CPU from "cpuset.cpus" is
+-	granted by the parent cgroup.
 -
- 	/*
- 	 * A cpumask update cannot make parent's effective_cpus become empty.
- 	 */
- 	adding = deleting = false;
- 	old_prs = new_prs = cpuset->partition_root_state;
- 	if (cmd == partcmd_enable) {
-+		bool parent_is_top_cpuset = !parent_cs(parent);
-+		bool no_cpu_in_parent = cpumask_equal(cpuset->cpus_allowed,
-+						      parent->effective_cpus);
-+		/*
-+		 * Enabling partition root is not allowed if not all the CPUs
-+		 * can be granted from parent's effective_cpus. If the parent
-+		 * is the top cpuset, at least one CPU must be left after that.
-+		 */
-+		if (!cpumask_subset(cpuset->cpus_allowed, parent->effective_cpus) ||
-+		    (parent_is_top_cpuset && no_cpu_in_parent))
-+			return -EINVAL;
+-	A partition root can become invalid if none of CPUs requested
+-	in "cpuset.cpus" can be granted by the parent cgroup or the
+-	parent cgroup is no longer a partition root itself.  In this
+-	case, it is not a real partition even though the restriction
+-	of the first partition root condition above will still apply.
+-	The cpu affinity of all the tasks in the cgroup will then be
+-	associated with CPUs in the nearest ancestor partition.
+-
+-	An invalid partition root can be transitioned back to a
+-	real partition root if at least one of the requested CPUs
+-	can now be granted by its parent.  In this case, the cpu
+-	affinity of all the tasks in the formerly invalid partition
+-	will be associated to the CPUs of the newly formed partition.
+-	Changing the partition state of an invalid partition root to
+-	"member" is always allowed even if child cpusets are present.
++	A partition root becomes invalid if all the CPUs requested in
++	"cpuset.cpus" become unavailable.  This can happen if all the
++	CPUs have been offlined, or the state of an ancestor partition
++	root become invalid.  In this case, it is not a real partition
++	even though the restriction of the cpu exclusivity rule will
++	still apply.  The cpu affinity of all the tasks in the cgroup
++	will then be associated with CPUs in the nearest ancestor
++	partition.
 +
-+		/*
-+		 * A non-top parent can be left with no CPU as long as there
-+		 * is no task directly associated with the parent. For such
-+		 * a parent, no new task can be moved into it.
-+		 */
-+		if (no_cpu_in_parent && cpuset_has_tasks(parent))
-+			return -EINVAL;
++	In the special case of a parent partition competing with a child
++	partition for the only CPU left, the parent partition wins and
++	the child partition becomes invalid.
 +
- 		cpumask_copy(tmp->addmask, cpuset->cpus_allowed);
- 		adding = true;
- 	} else if (cmd == partcmd_disable) {
-@@ -1237,9 +1252,10 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 		adding = cpumask_andnot(tmp->addmask, tmp->addmask,
- 					parent->subparts_cpus);
- 		/*
--		 * Return error if parent's effective_cpus could become empty.
-+		 * Return error if parent's effective_cpus could become empty
-+		 * and there are tasks in the parent.
- 		 */
--		if (adding &&
-+		if (adding && cpuset_has_tasks(parent) &&
- 		    cpumask_equal(parent->effective_cpus, tmp->addmask)) {
- 			if (!deleting)
- 				return -EINVAL;
-@@ -1255,12 +1271,13 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 		}
- 
- 		/*
--		 * Return error if effective_cpus becomes empty or any CPU
--		 * distributed to child partitions is deleted.
-+		 * Return error if effective_cpus becomes empty with tasks
-+		 * or any CPU distributed to child partitions is deleted.
- 		 */
- 		if (deleting &&
- 		   (cpumask_intersects(tmp->delmask, cpuset->subparts_cpus) ||
--		    cpumask_equal(tmp->delmask, cpuset->effective_cpus)))
-+		   (cpumask_equal(tmp->delmask, cpuset->effective_cpus) &&
-+		    cpuset_has_tasks(cpuset))))
- 			return -EBUSY;
- 	} else {
- 		/*
-@@ -1281,7 +1298,8 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 				     parent->effective_cpus);
- 		part_error = (is_partition_root(cpuset) &&
- 			      !parent->nr_subparts_cpus) ||
--			     cpumask_equal(tmp->addmask, parent->effective_cpus);
-+			     (cpumask_equal(tmp->addmask, parent->effective_cpus) &&
-+			      cpuset_has_tasks(parent));
- 	}
- 
- 	if (cmd == partcmd_update) {
-@@ -1388,9 +1406,15 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 
- 		/*
- 		 * If it becomes empty, inherit the effective mask of the
--		 * parent, which is guaranteed to have some CPUs.
-+		 * parent, which is guaranteed to have some CPUs unless
-+		 * it is a partition root that has explicitly distributed
-+		 * out all its CPUs.
- 		 */
- 		if (is_in_v2_mode() && cpumask_empty(tmp->new_cpus)) {
-+			if (is_partition_root(cp) &&
-+			    cpumask_equal(cp->cpus_allowed, cp->subparts_cpus))
-+				goto update_parent_subparts;
++	An invalid partition root can be transitioned back to a real
++	partition root if at least one of the requested CPUs become
++	available again. In this case, the cpu affinity of all the tasks
++	in the formerly invalid partition will be associated to the CPUs
++	of the newly formed partition.	Changing the partition state of
++	an invalid partition root to "member" is always allowed even if
++	child cpusets are present. However changing a partition root back
++	to member will not be allowed if child partitions are present.
 +
- 			cpumask_copy(tmp->new_cpus, parent->effective_cpus);
- 			if (!cp->use_parent_ecpus) {
- 				cp->use_parent_ecpus = true;
-@@ -1412,6 +1436,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 			continue;
- 		}
++	Poll and inotify events are triggered when transition to or
++	from invalid partition root happens.
  
-+update_parent_subparts:
- 		/*
- 		 * update_parent_subparts_cpumask() should have been called
- 		 * for cs already in update_cpumask(). We should also call
-@@ -1482,7 +1507,8 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 			 */
- 			cpumask_andnot(cp->effective_cpus, cp->effective_cpus,
- 				       cp->subparts_cpus);
--			WARN_ON_ONCE(cpumask_empty(cp->effective_cpus));
-+			WARN_ON_ONCE(cpumask_empty(cp->effective_cpus) &&
-+				     cpuset_has_tasks(cp));
- 		}
  
- 		if (new_prs != old_prs)
-@@ -1816,7 +1842,7 @@ static void update_nodemasks_hier(struct cpuset *cs, nodemask_t *new_mems)
- 		cp->effective_mems = *new_mems;
- 		spin_unlock_irq(&callback_lock);
- 
--		WARN_ON(!is_in_v2_mode() &&
-+		WARN_ON_ONCE(!is_in_v2_mode() &&
- 			!nodes_equal(cp->mems_allowed, cp->effective_mems));
- 
- 		update_tasks_nodemask(cp);
-@@ -2231,6 +2257,13 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 	    (cpumask_empty(cs->cpus_allowed) || nodes_empty(cs->mems_allowed)))
- 		goto out_unlock;
- 
-+	/*
-+	 * On default hierarchy, task cannot be moved to a cpuset with empty
-+	 * effective cpus.
-+	 */
-+	if (is_in_v2_mode() && cpumask_empty(cs->effective_cpus))
-+		goto out_unlock;
-+
- 	cgroup_taskset_for_each(task, css, tset) {
- 		ret = task_can_attach(task, cs->cpus_allowed);
- 		if (ret)
-@@ -3098,7 +3131,8 @@ hotplug_update_tasks(struct cpuset *cs,
- 		     struct cpumask *new_cpus, nodemask_t *new_mems,
- 		     bool cpus_updated, bool mems_updated)
- {
--	if (cpumask_empty(new_cpus))
-+	/* A partition root is allowed to have empty effective cpus */
-+	if (cpumask_empty(new_cpus) && !is_partition_root(cs))
- 		cpumask_copy(new_cpus, parent_cs(cs)->effective_cpus);
- 	if (nodes_empty(*new_mems))
- 		*new_mems = parent_cs(cs)->effective_mems;
-@@ -3167,22 +3201,24 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 
- 	/*
- 	 * In the unlikely event that a partition root has empty
--	 * effective_cpus, we will have to force any child partitions,
--	 * if present, to become invalid by setting nr_subparts_cpus to 0
--	 * without causing itself to become invalid.
-+	 * effective_cpus with tasks, we will have to force any child
-+	 * partitions, if present, to become invalid by setting
-+	 * nr_subparts_cpus to 0 without causing itself to become invalid.
- 	 */
- 	if (is_partition_root(cs) && cs->nr_subparts_cpus &&
--	    cpumask_empty(&new_cpus)) {
-+	    cpumask_empty(&new_cpus) && cpuset_has_tasks(cs)) {
- 		cs->nr_subparts_cpus = 0;
- 		cpumask_clear(cs->subparts_cpus);
- 		compute_effective_cpumask(&new_cpus, cs, parent);
- 	}
- 
- 	/*
--	 * If empty effective_cpus or zero nr_subparts_cpus or its parent
--	 * becomes erroneous, we have to transition it to the erroneous state.
-+	 * If empty effective_cpus with tasks or zero nr_subparts_cpus or
-+	 * its parent becomes erroneous, we have to transition it to the
-+	 * erroneous state.
- 	 */
--	if (is_partition_root(cs) && (cpumask_empty(&new_cpus) ||
-+	if (is_partition_root(cs) &&
-+	   ((cpumask_empty(&new_cpus) && cpuset_has_tasks(cs)) ||
- 	    (parent->partition_root_state == PRS_ERROR) ||
- 	    !parent->nr_subparts_cpus)) {
- 		int old_prs;
+ Device controller
 -- 
 2.18.1
 
