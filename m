@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26B33CFC20
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jul 2021 16:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E823CFC22
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jul 2021 16:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239710AbhGTNp7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Jul 2021 09:45:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57662 "EHLO
+        id S238922AbhGTNqE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Jul 2021 09:46:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53740 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231713AbhGTNjI (ORCPT
+        by vger.kernel.org with ESMTP id S239787AbhGTNjK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Jul 2021 09:39:08 -0400
+        Tue, 20 Jul 2021 09:39:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626790786;
+        s=mimecast20190719; t=1626790788;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=9rN1rhrGAmjoIQEBqysfuy+nlrq3d0bQU+TwRDEyQg8=;
-        b=CT03EPUkcRdm2P927PpjLzAk0pDmDITlge8hqyqH1up9UT5cFxZrkizZa7iVutRjIUfNEc
-        2J7/9nix70TkdzZUZQ0YVpbLOhfoLyt5bXBF5wKiagx+rghS48W8Onq8ROKJoEX61IJFYf
-        hiXYTEx6WLzWhH7jPiJFuFBfZBDIepw=
+        bh=TB0+2ckjUrwSxwX0c/mMZfMQH7v5b2QE7Wq//06xzH0=;
+        b=hnNE4IqLyj5YUemS6cRWxVarFdS7W+7EPZHLti+27j1/edgkIpj9tR2Gjy0kGEURaDv86b
+        9Uh4+rG6yOyrtdEwsRxotLKhJWyo4MGBZZu7zq9rOZKQ4cNJr78rELMZzI4fKc9RRpm0I9
+        QWG37MDZqMge9E8abZcnJ8GPgW8IF9o=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-31-VPuCQdTBMcyJW2NPAdD-bA-1; Tue, 20 Jul 2021 10:19:43 -0400
-X-MC-Unique: VPuCQdTBMcyJW2NPAdD-bA-1
+ us-mta-418-WujaTHGHP0eImPyl6Z3_gQ-1; Tue, 20 Jul 2021 10:19:47 -0400
+X-MC-Unique: WujaTHGHP0eImPyl6Z3_gQ-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 94E4480365C;
-        Tue, 20 Jul 2021 14:19:40 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CB651100C660;
+        Tue, 20 Jul 2021 14:19:45 +0000 (UTC)
 Received: from llong.com (ovpn-116-153.rdu2.redhat.com [10.10.116.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C8C9269FAD;
-        Tue, 20 Jul 2021 14:19:36 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BAE5E369A;
+        Tue, 20 Jul 2021 14:19:40 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -46,9 +46,9 @@ Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
         Marcelo Tosatti <mtosatti@redhat.com>,
         =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v3 1/9] cgroup/cpuset: Miscellaneous code cleanup
-Date:   Tue, 20 Jul 2021 10:18:26 -0400
-Message-Id: <20210720141834.10624-2-longman@redhat.com>
+Subject: [PATCH v3 2/9] cgroup/cpuset: Fix a partition bug with hotplug
+Date:   Tue, 20 Jul 2021 10:18:27 -0400
+Message-Id: <20210720141834.10624-3-longman@redhat.com>
 In-Reply-To: <20210720141834.10624-1-longman@redhat.com>
 References: <20210720141834.10624-1-longman@redhat.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
@@ -56,144 +56,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use more descriptive variable names for update_prstate(), remove
-unnecessary code and fix some typos. There is no functional change.
+In cpuset_hotplug_workfn(), the detection of whether the cpu list
+has been changed is done by comparing the effective cpus of the top
+cpuset with the cpu_active_mask. However, in the rare case that just
+all the CPUs in the subparts_cpus are offlined, the detection fails
+and the partition states are not updated correctly. Fix it by forcing
+the cpus_updated flag to true in this particular case.
 
+Fixes: 4b842da276a8 ("cpuset: Make CPU hotplug work with partition")
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 40 +++++++++++++++++++---------------------
- 1 file changed, 19 insertions(+), 21 deletions(-)
+ kernel/cgroup/cpuset.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index adb5190c4429..f5fef5516d99 100644
+index f5fef5516d99..b00982e6f6d8 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -1114,7 +1114,7 @@ enum subparts_cmd {
-  * cpus_allowed can be granted or an error code will be returned.
-  *
-  * For partcmd_disable, the cpuset is being transofrmed from a partition
-- * root back to a non-partition root. any CPUs in cpus_allowed that are in
-+ * root back to a non-partition root. Any CPUs in cpus_allowed that are in
-  * parent's subparts_cpus will be taken away from that cpumask and put back
-  * into parent's effective_cpus. 0 should always be returned.
-  *
-@@ -1225,7 +1225,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 		/*
- 		 * partcmd_update w/o newmask:
- 		 *
--		 * addmask = cpus_allowed & parent->effectiveb_cpus
-+		 * addmask = cpus_allowed & parent->effective_cpus
- 		 *
- 		 * Note that parent's subparts_cpus may have been
- 		 * pre-shrunk in case there is a change in the cpu list.
-@@ -1365,12 +1365,12 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 			case PRS_DISABLED:
- 				/*
- 				 * If parent is not a partition root or an
--				 * invalid partition root, clear the state
--				 * state and the CS_CPU_EXCLUSIVE flag.
-+				 * invalid partition root, clear its state
-+				 * and its CS_CPU_EXCLUSIVE flag.
- 				 */
- 				WARN_ON_ONCE(cp->partition_root_state
- 					     != PRS_ERROR);
--				cp->partition_root_state = 0;
-+				cp->partition_root_state = PRS_DISABLED;
+@@ -3166,6 +3166,13 @@ static void cpuset_hotplug_workfn(struct work_struct *work)
+ 	cpus_updated = !cpumask_equal(top_cpuset.effective_cpus, &new_cpus);
+ 	mems_updated = !nodes_equal(top_cpuset.effective_mems, new_mems);
  
- 				/*
- 				 * clear_bit() is an atomic operation and
-@@ -1937,30 +1937,28 @@ static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
- 
- /*
-  * update_prstate - update partititon_root_state
-- * cs:	the cpuset to update
-- * val: 0 - disabled, 1 - enabled
-+ * cs: the cpuset to update
-+ * new_prs: new partition root state
-  *
-  * Call with cpuset_mutex held.
-  */
--static int update_prstate(struct cpuset *cs, int val)
-+static int update_prstate(struct cpuset *cs, int new_prs)
- {
- 	int err;
- 	struct cpuset *parent = parent_cs(cs);
--	struct tmpmasks tmp;
-+	struct tmpmasks tmpmask;
- 
--	if ((val != 0) && (val != 1))
--		return -EINVAL;
--	if (val == cs->partition_root_state)
-+	if (new_prs == cs->partition_root_state)
- 		return 0;
- 
- 	/*
- 	 * Cannot force a partial or invalid partition root to a full
- 	 * partition root.
- 	 */
--	if (val && cs->partition_root_state)
-+	if (new_prs && (cs->partition_root_state < 0))
- 		return -EINVAL;
- 
--	if (alloc_cpumasks(NULL, &tmp))
-+	if (alloc_cpumasks(NULL, &tmpmask))
- 		return -ENOMEM;
- 
- 	err = -EINVAL;
-@@ -1978,7 +1976,7 @@ static int update_prstate(struct cpuset *cs, int val)
- 			goto out;
- 
- 		err = update_parent_subparts_cpumask(cs, partcmd_enable,
--						     NULL, &tmp);
-+						     NULL, &tmpmask);
- 		if (err) {
- 			update_flag(CS_CPU_EXCLUSIVE, cs, 0);
- 			goto out;
-@@ -1990,18 +1988,18 @@ static int update_prstate(struct cpuset *cs, int val)
- 		 * CS_CPU_EXCLUSIVE bit.
- 		 */
- 		if (cs->partition_root_state == PRS_ERROR) {
--			cs->partition_root_state = 0;
-+			cs->partition_root_state = PRS_DISABLED;
- 			update_flag(CS_CPU_EXCLUSIVE, cs, 0);
- 			err = 0;
- 			goto out;
- 		}
- 
- 		err = update_parent_subparts_cpumask(cs, partcmd_disable,
--						     NULL, &tmp);
-+						     NULL, &tmpmask);
- 		if (err)
- 			goto out;
- 
--		cs->partition_root_state = 0;
-+		cs->partition_root_state = PRS_DISABLED;
- 
- 		/* Turning off CS_CPU_EXCLUSIVE will not return error */
- 		update_flag(CS_CPU_EXCLUSIVE, cs, 0);
-@@ -2015,11 +2013,11 @@ static int update_prstate(struct cpuset *cs, int val)
- 		update_tasks_cpumask(parent);
- 
- 	if (parent->child_ecpus_count)
--		update_sibling_cpumasks(parent, cs, &tmp);
-+		update_sibling_cpumasks(parent, cs, &tmpmask);
- 
- 	rebuild_sched_domains_locked();
- out:
--	free_cpumasks(NULL, &tmp);
-+	free_cpumasks(NULL, &tmpmask);
- 	return err;
- }
- 
-@@ -3060,7 +3058,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 		goto retry;
- 	}
- 
--	parent =  parent_cs(cs);
-+	parent = parent_cs(cs);
- 	compute_effective_cpumask(&new_cpus, cs, parent);
- 	nodes_and(new_mems, cs->mems_allowed, parent->effective_mems);
- 
++	/*
++	 * In the rare case that hotplug removes just all the cpus in
++	 * subparts_cpus, we assumed that cpus are updated.
++	 */
++	if (!cpus_updated && top_cpuset.nr_subparts_cpus)
++		cpus_updated = true;
++
+ 	/* synchronize cpus_allowed to cpu_active_mask */
+ 	if (cpus_updated) {
+ 		spin_lock_irq(&callback_lock);
 -- 
 2.18.1
 
