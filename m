@@ -2,75 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 863663D216B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jul 2021 11:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311783D2D3E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jul 2021 22:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbhGVJRJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jul 2021 05:17:09 -0400
-Received: from mailout1.secunet.com ([62.96.220.44]:50110 "EHLO
-        mailout1.secunet.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbhGVJRE (ORCPT
+        id S230504AbhGVT3E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jul 2021 15:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230451AbhGVT3C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jul 2021 05:17:04 -0400
-X-Greylist: delayed 537 seconds by postgrey-1.27 at vger.kernel.org; Thu, 22 Jul 2021 05:17:04 EDT
-Received: from cas-essen-02.secunet.de (unknown [10.53.40.202])
-        by mailout1.secunet.com (Postfix) with ESMTP id 0890080005A;
-        Thu, 22 Jul 2021 11:48:41 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-02.secunet.de (10.53.40.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 22 Jul 2021 11:48:40 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 22 Jul
- 2021 11:48:40 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 3C7333180B27; Thu, 22 Jul 2021 11:48:40 +0200 (CEST)
-Date:   Thu, 22 Jul 2021 11:48:40 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Dmitry Safonov <dima@arista.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>, <netdev@vger.kernel.org>,
-        <stable@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 0/2] xfrm/compat: Fix xfrm_spdattr_type_t copying
-Message-ID: <20210722094840.GD893739@gauss3.secunet.de>
-References: <20210717150222.416329-1-dima@arista.com>
+        Thu, 22 Jul 2021 15:29:02 -0400
+Received: from 68-252-206-104.staticrdns.eonix.net (unknown [IPv6:2607:ff28:b005:2a:ec52:75ff:fe50:d321])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E586C06175F;
+        Thu, 22 Jul 2021 13:09:36 -0700 (PDT)
+Received: from User (localhost [IPv6:::1])
+        by 68-252-206-104.staticrdns.eonix.net (Postfix) with SMTP id D84C38F1F50;
+        Mon, 19 Jul 2021 22:13:39 -0400 (EDT)
+Reply-To: <mrs_hannah@rediffmail.com>
+From:   "Mrs. Hajia Hannah Ahmed" <info@247vidz.com>
+Subject: Re: I WANT TO INVESTMENT IN YOUR COUNTRY?
+Date:   Tue, 20 Jul 2021 05:13:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210717150222.416329-1-dima@arista.com>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20210720021340.D84C38F1F50@68-252-206-104.staticrdns.eonix.net>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 17, 2021 at 04:02:20PM +0100, Dmitry Safonov wrote:
-> Here is the fix for both 32=>64 and 64=>32 bit translators and a
-> selftest that reproduced the issue.
-> 
-> Big thanks to YueHaibing for fuzzing and reporting the issue,
-> I really appreciate it!
-> 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> Cc: YueHaibing <yuehaibing@huawei.com>
-> Cc: netdev@vger.kernel.org
-> 
-> Dmitry Safonov (2):
->   net/xfrm/compat: Copy xfrm_spdattr_type_t atributes
->   selftests/net/ipsec: Add test for xfrm_spdattr_type_t
-> 
->  net/xfrm/xfrm_compat.c              |  49 ++++++++-
->  tools/testing/selftests/net/ipsec.c | 165 +++++++++++++++++++++++++++-
->  2 files changed, 207 insertions(+), 7 deletions(-)
-
-Series applied, thanks Dmitry!
+Attn:
+ 
+I am Mrs. Hajia Hannah Ahmed I am a Widow and member of the contract award committee and 14 project allocation manager, of the Department of Minerals and Natural Resources in Syria;
+ 
+Due to the war in Syria, I am in search of an agent or company to assist me to invest my fund  (USD$35Million) and subsequent investment in properties in your country. You will be required to. If you decide to render your service to me in this regard, 30% of the total sum of USD$35M will be given to you for your service. 
+ 
+Yours Faithfully,
+Mrs. Hajia Hannah Ahmed
