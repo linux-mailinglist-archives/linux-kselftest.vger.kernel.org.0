@@ -2,88 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B70A93D0E2A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jul 2021 13:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017533D1769
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jul 2021 22:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238087AbhGULNE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jul 2021 07:13:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49394 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238005AbhGUKxW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jul 2021 06:53:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 28D6E60FD7;
-        Wed, 21 Jul 2021 11:33:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626867236;
-        bh=7HTyWj6nkF3axfBN153vLEf4PrH4qOV+zCpywxp9zmo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=htZHXhbgPf1QP2E2Rzp3rRqF0Sod5ysFc38xW1gQQzlxuhDIzq5aqnExEqs53bJ0B
-         Wu7soDgPaVgyw3Xzz9jsNbLpA91aOnVGBzPHXtegXNJp/jjZ5GuctnQ2/0IpmUZb4F
-         POFf+6LOy8OYm0LCn73tPB+EIaUnyEXWX++pAWms=
-Date:   Wed, 21 Jul 2021 13:33:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     tj@kernel.org, shuah@kernel.org, akpm@linux-foundation.org,
-        rafael@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, andriin@fb.com, daniel@iogearbox.net,
-        atenart@kernel.org, alobakin@pm.me, weiwan@google.com,
-        ap420073@gmail.com, jeyu@kernel.org, ngupta@vflare.org,
-        sergey.senozhatsky.work@gmail.com, minchan@kernel.org,
-        axboe@kernel.dk, mbenes@suse.com, jpoimboe@redhat.com,
-        tglx@linutronix.de, keescook@chromium.org, jikos@kernel.org,
-        rostedt@goodmis.org, peterz@infradead.org,
-        linux-block@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] test_sysfs: demonstrate deadlock fix
-Message-ID: <YPgGIncQxcD2frBY@kroah.com>
-References: <20210703004632.621662-1-mcgrof@kernel.org>
- <20210703004632.621662-5-mcgrof@kernel.org>
- <YN/sar6nGeSCn89/@kroah.com>
- <20210703172828.jphifwobf3syirzi@garbanzo>
+        id S239911AbhGUTMc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jul 2021 15:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238276AbhGUTM2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 21 Jul 2021 15:12:28 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F00C0613C1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jul 2021 12:53:04 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id h1so1624532plf.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jul 2021 12:53:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=NRbb2WhKrno0rg5XVu8dJTfW7QbPPoDT9nWYWG2fU04=;
+        b=Zzrk729wAqGilC6KYU+4BZArciy7pZDSM7C98suRTP+rY1Alunx9WnXRn1ijGDQ4qr
+         ORSJ7IVuNgMtRsVkn04q55/yvSTa7X01QoLAWnpIJpg8dfg+lE5QCkLBhIqXTRXv+BtA
+         SzPMcvWsnCsHNt0YZrk+Q93X7z49RBVnGOY2fkMVZvRxdfdOX2k5fPDoIqkq8xYagxjI
+         C54roWj4UlWVOXdGMYAsZXKG+PxU7cJqVYKu11pJ6mUyB4M9xQXYjz0Gc1lp38PBUhtq
+         ZRR8g4ICOc1Eb6j+hzuFH8Dww/4DhZHjQ4RriyZHvAnQLpcc0nrO//XZ/pxl0g7D4sic
+         U7oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NRbb2WhKrno0rg5XVu8dJTfW7QbPPoDT9nWYWG2fU04=;
+        b=eW4Oy8mIwBnWVUiEbtWuW9HyrK3Zwrx21Hql+5+3OJJMaq7y0QzBBJmr9NLqmzq8KA
+         LJCETIICy+J/zvWgBt7oLC1qcCuNUg/1g1fOiz6E1QA9+PL0Z3Uc/FVyjxAB24tAcKeb
+         98QUbz7btcrLkbfgrRPg8yTtmoTnpIIqep0TysGZk48ZDr3sDsleZvwbXNpYjFHtvChN
+         uwlAAVMKk+yCi2E+2a3PsvpVDiYnN9RcVgSv4J/B8zvTxY3UGk42h80R6Ecy12EFgf0Q
+         6GhDDCDObWwB6x0OGk4DWZ1uS12HAomWAl1jYlirtnho180LjskKSSVgMJJ8mqY6m+Im
+         JWTw==
+X-Gm-Message-State: AOAM531+QYf4q+bJCXRqZ21Lh7cMxDo1PfktsNuFeH8vqXqqRecWKlqr
+        sRf+n1CmkStlJykegTMksEO5GCo6wjzrV/xh2nHHxw==
+X-Google-Smtp-Source: ABdhPJzH4d3B0PuFlBwcr6uSCwfZe56uh2y9B0upxapM08pQm8+CliBNhuJMlpm2Fa1l2Iaihfu25JZva1y+Y9BG7ng=
+X-Received: by 2002:a65:6a01:: with SMTP id m1mr38108609pgu.201.1626897183577;
+ Wed, 21 Jul 2021 12:53:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210703172828.jphifwobf3syirzi@garbanzo>
+References: <20210717234758.46598-1-andrealmeid@collabora.com> <20210717234758.46598-2-andrealmeid@collabora.com>
+In-Reply-To: <20210717234758.46598-2-andrealmeid@collabora.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 21 Jul 2021 12:52:52 -0700
+Message-ID: <CAFd5g47nOfQ506ZyivLy2U1FkrnNhuDxUr0wUyN=F700mw+N8A@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] lib: Convert UUID runtime test to KUnit
+To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Shuah Khan <shuah@kernel.org>,
+        ~lkcamp/patches@lists.sr.ht, nfraprado@collabora.com,
+        leandro.ribeiro@collabora.com,
+        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, tales.aparecida@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 03, 2021 at 10:28:28AM -0700, Luis Chamberlain wrote:
-> On Sat, Jul 03, 2021 at 06:49:46AM +0200, Greg KH wrote:
-> > On Fri, Jul 02, 2021 at 05:46:32PM -0700, Luis Chamberlain wrote:
-> > > +#define MODULE_DEVICE_ATTR_FUNC_STORE(_name) \
-> > > +static ssize_t module_ ## _name ## _store(struct device *dev, \
-> > > +				   struct device_attribute *attr, \
-> > > +				   const char *buf, size_t len) \
-> > > +{ \
-> > > +	ssize_t __ret; \
-> > > +	if (!try_module_get(THIS_MODULE)) \
-> > > +		return -ENODEV; \
-> > > +	__ret = _name ## _store(dev, attr, buf, len); \
-> > > +	module_put(THIS_MODULE); \
-> > > +	return __ret; \
-> > > +}
-> > 
-> > As I have pointed out before, doing try_module_get(THIS_MODULE) is racy
-> > and should not be added back to the kernel tree.  We got rid of many
-> > instances of this "bad pattern" over the years, please do not encourage
-> > it to be added back as others will somehow think that it correct code.
-> 
-> It is noted this is used in lieu of any agreed upon solution to
-> *demonstrate* how this at least does fix it. In this case (and in the
-> generic solution I also had suggested for kernfs a while ago), if the
-> try fails, we give up. If it succeeds, we now know we can rely on the
-> device pointer. If the refcount succeeds, can the module still not
-> be present? Is try_module_get() racy in that way? In what way is it
-> racy and where is this documented? Do we have a selftest to prove the
-> race?
+On Sat, Jul 17, 2021 at 4:48 PM Andr=C3=A9 Almeida <andrealmeid@collabora.c=
+om> wrote:
+>
+> Remove custom functions for testing and use KUnit framework. Keep the
+> tested functions and test data the same.
+>
+> Current test threat (g/u)uid_parse and (g/u)uid_equal as different test
+> cases. Make both functions being part of the same test case, given the
+> dependency regarding their results. This reduces the tests cases from 6
+> cases to 4, while keeping the test coverage the same. Given that we have
+> 3 strings for each test case, current test output notifies 18 tests
+> results, and the KUnit output announces 12 results.
+>
+> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@collabora.com>
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-As I say in the other email where you tried to add this, think about
-what happens if the module is removed _right before_ you make this call.
+I don't think I have anything to add that hasn't already been said.
+Nevertheless, this looks good to me.
 
-Or a few instructions before that.  The race is still there, this fixes
-nothing except make the window smaller.
-
-thanks,
-
-greg k-h
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
