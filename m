@@ -2,45 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 311783D2D3E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jul 2021 22:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B725E3D2FC5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jul 2021 00:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbhGVT3E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jul 2021 15:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbhGVT3C (ORCPT
+        id S232397AbhGVVig (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jul 2021 17:38:36 -0400
+Received: from mail-pl1-f171.google.com ([209.85.214.171]:39742 "EHLO
+        mail-pl1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232375AbhGVVif (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jul 2021 15:29:02 -0400
-Received: from 68-252-206-104.staticrdns.eonix.net (unknown [IPv6:2607:ff28:b005:2a:ec52:75ff:fe50:d321])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E586C06175F;
-        Thu, 22 Jul 2021 13:09:36 -0700 (PDT)
-Received: from User (localhost [IPv6:::1])
-        by 68-252-206-104.staticrdns.eonix.net (Postfix) with SMTP id D84C38F1F50;
-        Mon, 19 Jul 2021 22:13:39 -0400 (EDT)
-Reply-To: <mrs_hannah@rediffmail.com>
-From:   "Mrs. Hajia Hannah Ahmed" <info@247vidz.com>
-Subject: Re: I WANT TO INVESTMENT IN YOUR COUNTRY?
-Date:   Tue, 20 Jul 2021 05:13:12 -0700
+        Thu, 22 Jul 2021 17:38:35 -0400
+Received: by mail-pl1-f171.google.com with SMTP id e5so996870pla.6;
+        Thu, 22 Jul 2021 15:19:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lWYwLLr1F+wEohZcNxTrxT9x/1X4krqlfhkjTKwn5LU=;
+        b=Zw5P5x4B2pcmiuvW4R7oJVCjTwx72gcEgkCCMUOy5gKQ80kuskDFmKGvfeUGP/6Ufx
+         P+odj9q3IHgbF16n45gtEGoLT7M6u0EibME0h7ty7yyUL533IY3mkojcsNjNyvM/suKQ
+         VIr3AxPM0YMMMNLDZR4R76d30xvukAiArdGkS3p1HO5ZcOMYQ4MMvHtAUx2oLhfx6P4k
+         b2Nl/XnTW/jlgmryoZ1NctDWkRNTuAXy/ehpZzc3BSX04PxFzIJ0pfAxyR8b/oaUuU6l
+         /wr8GC5wvRQqcH06ZdoDCIIPvIvSiG3hH61mKzVpbwNudIlmerO0eVLrLOFN4m6FmeUY
+         xkoQ==
+X-Gm-Message-State: AOAM530Sv1GhZQIjLRz8FKGpKUZkRUA856e6HXyucw/tLsX9gRK8p47t
+        F3FiVPZEKXiNdP2oC2ORq3A=
+X-Google-Smtp-Source: ABdhPJyUsy0ro4YtJRuFm4vTMWqvS3mmCKFzmHMvFVjaECINrpaZu6M8QdvGu3PqOECaJ4mkPhFXWg==
+X-Received: by 2002:a63:449:: with SMTP id 70mr2067429pge.174.1626992349448;
+        Thu, 22 Jul 2021 15:19:09 -0700 (PDT)
+Received: from localhost ([191.96.121.239])
+        by smtp.gmail.com with ESMTPSA id q31sm8997884pjh.13.2021.07.22.15.19.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jul 2021 15:19:08 -0700 (PDT)
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     gregkh@linuxfoundation.org, tj@kernel.org, shuah@kernel.org,
+        akpm@linux-foundation.org, rafael@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, ast@kernel.org, andriin@fb.com,
+        daniel@iogearbox.net, atenart@kernel.org, alobakin@pm.me,
+        weiwan@google.com, ap420073@gmail.com
+Cc:     jeyu@kernel.org, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, minchan@kernel.org,
+        mcgrof@kernel.org, axboe@kernel.dk, mbenes@suse.com,
+        jpoimboe@redhat.com, tglx@linutronix.de, keescook@chromium.org,
+        jikos@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
+        linux-block@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kernel/module: add documentation for try_module_get()
+Date:   Thu, 22 Jul 2021 15:19:05 -0700
+Message-Id: <20210722221905.1718213-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20210720021340.D84C38F1F50@68-252-206-104.staticrdns.eonix.net>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Attn:
+There is quite a bit of tribal knowledge around proper use of
+try_module_get() and that it must be used only in a context which
+can ensure the module won't be gone during the operation. Document
+this little bit of tribal knowledge.
+
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ kernel/module.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/kernel/module.c b/kernel/module.c
+index ed13917ea5f3..0d609647a54d 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -1066,6 +1066,28 @@ void __module_get(struct module *module)
+ }
+ EXPORT_SYMBOL(__module_get);
  
-I am Mrs. Hajia Hannah Ahmed I am a Widow and member of the contract award committee and 14 project allocation manager, of the Department of Minerals and Natural Resources in Syria;
- 
-Due to the war in Syria, I am in search of an agent or company to assist me to invest my fund  (USD$35Million) and subsequent investment in properties in your country. You will be required to. If you decide to render your service to me in this regard, 30% of the total sum of USD$35M will be given to you for your service. 
- 
-Yours Faithfully,
-Mrs. Hajia Hannah Ahmed
++/**
++ * try_module_get - yields to module removal and bumps reference count otherwise
++ * @module: the module we should check for
++ *
++ * This can be used to check if userspace has requested to remove a module,
++ * and if so let the caller give up. Otherwise it takes a reference count to
++ * ensure a request from userspace to remove the module cannot happen.
++ *
++ * Care must be taken to ensure the module cannot be removed during
++ * try_module_get(). This can be done by having another entity other than the
++ * module itself increment the module reference count, or through some other
++ * means which gaurantees the module could not be removed during an operation.
++ * An example of this later case is using this call in a sysfs file which the
++ * module created. The sysfs store / read file operation is ensured to exist
++ * and still be present by kernfs's active reference. If a sysfs file operation
++ * is being run, the module which created it must still exist as the module is
++ * in charge of removal of the sysfs file.
++ *
++ * The real value to try_module_get() is the module_is_live() check which
++ * ensures this the caller of try_module_get() can yields to userspace module
++ * removal requests and fail whatever it was about to process.
++ */
+ bool try_module_get(struct module *module)
+ {
+ 	bool ret = true;
+-- 
+2.30.2
+
