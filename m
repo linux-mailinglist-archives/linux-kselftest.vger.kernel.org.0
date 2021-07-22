@@ -2,71 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 853273D1ECA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jul 2021 09:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 863663D216B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jul 2021 11:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbhGVGhZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jul 2021 02:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbhGVGhY (ORCPT
+        id S231585AbhGVJRJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jul 2021 05:17:09 -0400
+Received: from mailout1.secunet.com ([62.96.220.44]:50110 "EHLO
+        mailout1.secunet.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231564AbhGVJRE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jul 2021 02:37:24 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315B7C061575;
-        Thu, 22 Jul 2021 00:18:00 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1m6Sxq-0000W6-JX; Thu, 22 Jul 2021 09:17:50 +0200
-Date:   Thu, 22 Jul 2021 09:17:50 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
-Cc:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
-        davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
-        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
-        Blair Steven <blair.steven@alliedtelesis.co.nz>
-Subject: Re: [PATCH 2/3] net: netfilter: Add RFC-7597 Section 5.1 PSID support
-Message-ID: <20210722071750.GG9904@breakpoint.cc>
-References: <20210716151833.GD9904@breakpoint.cc>
- <20210719012151.28324-1-Cole.Dishington@alliedtelesis.co.nz>
+        Thu, 22 Jul 2021 05:17:04 -0400
+X-Greylist: delayed 537 seconds by postgrey-1.27 at vger.kernel.org; Thu, 22 Jul 2021 05:17:04 EDT
+Received: from cas-essen-02.secunet.de (unknown [10.53.40.202])
+        by mailout1.secunet.com (Postfix) with ESMTP id 0890080005A;
+        Thu, 22 Jul 2021 11:48:41 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-02.secunet.de (10.53.40.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 22 Jul 2021 11:48:40 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 22 Jul
+ 2021 11:48:40 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 3C7333180B27; Thu, 22 Jul 2021 11:48:40 +0200 (CEST)
+Date:   Thu, 22 Jul 2021 11:48:40 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Dmitry Safonov <dima@arista.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jakub Kicinski <kuba@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>, <netdev@vger.kernel.org>,
+        <stable@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 0/2] xfrm/compat: Fix xfrm_spdattr_type_t copying
+Message-ID: <20210722094840.GD893739@gauss3.secunet.de>
+References: <20210717150222.416329-1-dima@arista.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20210719012151.28324-1-Cole.Dishington@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210717150222.416329-1-dima@arista.com>
+X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Cole Dishington <Cole.Dishington@alliedtelesis.co.nz> wrote:
-> Adds support for masquerading into a smaller subset of ports -
-> defined by the PSID values from RFC-7597 Section 5.1. This is part of
-> the support for MAP-E and Lightweight 4over6, which allows multiple
-> devices to share an IPv4 address by splitting the L4 port / id into
-> ranges.
+On Sat, Jul 17, 2021 at 04:02:20PM +0100, Dmitry Safonov wrote:
+> Here is the fix for both 32=>64 and 64=>32 bit translators and a
+> selftest that reproduced the issue.
 > 
-> Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
-> Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
-> Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
-> Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
-> Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
-> Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
-> ---
-> +
-> +	/* In this case we are in PSID mode, avoid checking all ranges by computing bitmasks */
-> +	if (is_psid) {
-> +		u16 power_j = ntohs(max->all) - ntohs(min->all) + 1;
+> Big thanks to YueHaibing for fuzzing and reporting the issue,
+> I really appreciate it!
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Steffen Klassert <steffen.klassert@secunet.com>
+> Cc: YueHaibing <yuehaibing@huawei.com>
+> Cc: netdev@vger.kernel.org
+> 
+> Dmitry Safonov (2):
+>   net/xfrm/compat: Copy xfrm_spdattr_type_t atributes
+>   selftests/net/ipsec: Add test for xfrm_spdattr_type_t
+> 
+>  net/xfrm/xfrm_compat.c              |  49 ++++++++-
+>  tools/testing/selftests/net/ipsec.c | 165 +++++++++++++++++++++++++++-
+>  2 files changed, 207 insertions(+), 7 deletions(-)
 
-I think this needs to be 'u32 power_j' to prevent overflow of
-65535 + 1 -> 0.
-
-> +		if (base)
-> +			off = prandom_u32() % (((1 << 16) / base) - 1);
-
-I think this can use prandom_u32_max(((1 << 16) / base) - 1).
-
-I have no other comments.  Other kernel patches LGTM.
+Series applied, thanks Dmitry!
