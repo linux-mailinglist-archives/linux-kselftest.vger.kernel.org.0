@@ -2,131 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C9C3D1A5D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jul 2021 01:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853273D1ECA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jul 2021 09:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbhGUWmR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jul 2021 18:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
+        id S229955AbhGVGhZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jul 2021 02:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbhGUWmR (ORCPT
+        with ESMTP id S229547AbhGVGhY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jul 2021 18:42:17 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FA9C061575;
-        Wed, 21 Jul 2021 16:22:53 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id j7so3072844qtj.6;
-        Wed, 21 Jul 2021 16:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pozbzGVzs8EDjWr/Isfr8VZlmmrHC7hULWqF8mz9+Xo=;
-        b=azUZRQH7bhfATqyNF86v4JQHKEKaObrAlMHQ8FX5Ck2jdYXcCdz11mIJ05zSiFFoq3
-         S7ZuuR5mAXoEo8j58afrfe9sge5kCcc+A5F/KRDViziVUsKPDDwt6N5MLJwhngsy2hpn
-         9L4Ot5h46sqVeVPk9iclYmhev4QnIV4Lq219+uPYRhpqrG5XOFEcfYu6Ep6qynefk+L/
-         1wHRhrBfELR7kd2GMGVl4Ay1P6p+SrpN5ZwtQ5INx1qCX4QDLN0ZIht1kAwbSn77AR1w
-         E7jIQiSPsbgrtZj8fO5zlLfpuNFslZJNxtlEs4IVJ1jcDBmAnmBtvs7OBadcb0Nrm6fs
-         mkTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pozbzGVzs8EDjWr/Isfr8VZlmmrHC7hULWqF8mz9+Xo=;
-        b=mC+QFgL6xm9ZnN93VhBLT3ufQuZrYKX5AyiAV+RLW4v9GkRLys/2+bntQeIFa1K1dI
-         IkiEokhLOors6aLl8yxDDS3aTuhdagFPSNERGMWEH4nYVAObf1WyCTSe73kfC7noi9On
-         UnpYA0HN2VfYws65AryMtgY1RvyIYXQSldZpBtDk549OQH+k+vUYGN/aIYFa3Jn9/O1q
-         mpRI4YfMpNzYBituQeyOGTLcll3oOYs8JwvINkWc9ejI/yoR3q+EhmEaTctje2BxcxBK
-         q4r4OvbzgGG43FHyEFQvvYEZHRGThoVgUQStl8Na9f+INIdTMezBYYqsOtqSmv25UtwR
-         TXrg==
-X-Gm-Message-State: AOAM533bPZslqzqw0YN3WVjGF42I9tz8iWeaIVG8vv80+xhYwS9jiWRP
-        BTLyUErqWd7nAHt8K6d/1A==
-X-Google-Smtp-Source: ABdhPJzQ8SJgmO30XBcBnvfbnsCN4ckh2jCVvOvrbZ4ELmKOrnjoJ5I8BNDeE6oJE2rPVdbt5w2Ofg==
-X-Received: by 2002:a05:622a:1342:: with SMTP id w2mr33443452qtk.310.1626909772739;
-        Wed, 21 Jul 2021 16:22:52 -0700 (PDT)
-Received: from bytedance.attlocal.net (ec2-52-52-7-82.us-west-1.compute.amazonaws.com. [52.52.7.82])
-        by smtp.gmail.com with ESMTPSA id k9sm6531563qti.88.2021.07.21.16.22.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jul 2021 16:22:52 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH net-next 2/2] tc-testing: Add control-plane selftest for skbmod SKBMOD_F_ECN option
-Date:   Wed, 21 Jul 2021 16:22:44 -0700
-Message-Id: <21ca3638f09c55d0e1deb439f82a1124aff80144.1626899889.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <f5c5a81d6674a8f4838684ac52ed66da83f92499.1626899889.git.peilin.ye@bytedance.com>
-References: <f5c5a81d6674a8f4838684ac52ed66da83f92499.1626899889.git.peilin.ye@bytedance.com>
+        Thu, 22 Jul 2021 02:37:24 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315B7C061575;
+        Thu, 22 Jul 2021 00:18:00 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1m6Sxq-0000W6-JX; Thu, 22 Jul 2021 09:17:50 +0200
+Date:   Thu, 22 Jul 2021 09:17:50 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+Cc:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
+        davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
+        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
+        Blair Steven <blair.steven@alliedtelesis.co.nz>
+Subject: Re: [PATCH 2/3] net: netfilter: Add RFC-7597 Section 5.1 PSID support
+Message-ID: <20210722071750.GG9904@breakpoint.cc>
+References: <20210716151833.GD9904@breakpoint.cc>
+ <20210719012151.28324-1-Cole.Dishington@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210719012151.28324-1-Cole.Dishington@alliedtelesis.co.nz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+Cole Dishington <Cole.Dishington@alliedtelesis.co.nz> wrote:
+> Adds support for masquerading into a smaller subset of ports -
+> defined by the PSID values from RFC-7597 Section 5.1. This is part of
+> the support for MAP-E and Lightweight 4over6, which allows multiple
+> devices to share an IPv4 address by splitting the L4 port / id into
+> ranges.
+> 
+> Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+> Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+> Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+> Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+> Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
+> Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+> ---
+> +
+> +	/* In this case we are in PSID mode, avoid checking all ranges by computing bitmasks */
+> +	if (is_psid) {
+> +		u16 power_j = ntohs(max->all) - ntohs(min->all) + 1;
 
-Recently we added a new option, SKBMOD_F_ECN, to tc-skbmod(8).  Add a
-control-plane selftest for it.
+I think this needs to be 'u32 power_j' to prevent overflow of
+65535 + 1 -> 0.
 
-Depends on kernel patch "net/sched: act_skbmod: Add SKBMOD_F_ECN option
-support", as well as iproute2 patch "tc/skbmod: Introduce SKBMOD_F_ECN
-option".
+> +		if (base)
+> +			off = prandom_u32() % (((1 << 16) / base) - 1);
 
-Reviewed-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-Hi all,
+I think this can use prandom_u32_max(((1 << 16) / base) - 1).
 
-The corresponding iproute2-next patch is here:
-https://lore.kernel.org/netdev/20210721232053.39077-1-yepeilin.cs@gmail.com/
-
-Thanks,
-Peilin Ye
-
- .../tc-testing/tc-tests/actions/skbmod.json   | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/skbmod.json b/tools/testing/selftests/tc-testing/tc-tests/actions/skbmod.json
-index 6eb4c4f97060..742f2290973e 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/skbmod.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/skbmod.json
-@@ -417,5 +417,29 @@
-         "teardown": [
-             "$TC actions flush action skbmod"
-         ]
-+    },
-+    {
-+        "id": "fe09",
-+        "name": "Add skbmod action to mark ECN bits",
-+        "category": [
-+            "actions",
-+            "skbmod"
-+        ],
-+        "setup": [
-+            [
-+                "$TC actions flush action skbmod",
-+                0,
-+                1,
-+                255
-+            ]
-+        ],
-+        "cmdUnderTest": "$TC actions add action skbmod ecn",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC actions get action skbmod index 1",
-+        "matchPattern": "action order [0-9]*: skbmod pipe ecn",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC actions flush action skbmod"
-+        ]
-     }
- ]
--- 
-2.20.1
-
+I have no other comments.  Other kernel patches LGTM.
