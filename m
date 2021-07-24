@@ -2,134 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3DA3D4124
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jul 2021 21:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC1B3D478E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Jul 2021 14:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbhGWTMh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Jul 2021 15:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbhGWTMg (ORCPT
+        id S233651AbhGXLep convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 24 Jul 2021 07:34:45 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:24305 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231938AbhGXLeo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Jul 2021 15:12:36 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3470C061757
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jul 2021 12:53:08 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id d10so2585399ils.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jul 2021 12:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WyoEwHnKGH7mDIf/X1k+fNngkECDQL+TuqJrMYUO1bE=;
-        b=J+DClaB2GhxOmF3mOWGmx0CyyTx0NYaFU/djLERSc6MD6pNa/oda8sxnLTTW40bWzI
-         XP/LywH9I+3PhChS6JW1ypXgX6PolOk4H+glyI1PajwSzcAE3pslRmTOK5Fi2uvbHpnB
-         ehKy+V/kCBaV9AcRHgUuzX0sgnSBMP+ogAdc4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WyoEwHnKGH7mDIf/X1k+fNngkECDQL+TuqJrMYUO1bE=;
-        b=IvMy7+q57SC2nGg7jg48J4oXuUJPU2uo4o/HASmbBXdlBVy5jS/8V2qH+iPg/X+ZwZ
-         J3rQz1ihjO3Dn57+dw02m2L//VtOqiOUUxV6wOeIWqwuMLGAVf4KQFjv67HrKMbhMTQk
-         rXT8FIq3q5owHGEuRXB11c25JqS6k+65ysOdMk09YF2/qEezypYYPE2wPYvKdfNcYsSw
-         da/mVcpfpsEf9o42wnvTqdcltmmZBaehyX2J8p2LThBAol3//FYRAhnmr03x+aMDDYRl
-         sumokkDA+JA8h4DqTgYFEKfC9c1tRHykfXPUQ4ZLpXO1fmwHSc7+rzOBNYXqQhptyzSp
-         L8mA==
-X-Gm-Message-State: AOAM530JJ6JESvMvHyz0VI8Zz4wASyeCob/1KfVV8GxiZ3D387zBe4Qz
-        LQpNfdkRag7JNPuhCbTpDC8xjg==
-X-Google-Smtp-Source: ABdhPJwwQNksgKngs+yqWz7rFffKFNrfmaYy4udoxC9PAS7TNy2cALYC75+HK6O9GxAK0Ea7IgjGsg==
-X-Received: by 2002:a05:6e02:1c0b:: with SMTP id l11mr4555920ilh.126.1627069988053;
-        Fri, 23 Jul 2021 12:53:08 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id t1sm16925109ilf.34.2021.07.23.12.53.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jul 2021 12:53:07 -0700 (PDT)
-Subject: Re: [PATCH v2] selftests/sgx: Fix Q1 and Q2 calculation in
- sigstruct.c
-To:     Jarkko Sakkinen <jarkko@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210705050922.63710-1-jarkko@kernel.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <be6227d1-728a-c658-f962-380c28afc926@linuxfoundation.org>
-Date:   Fri, 23 Jul 2021 13:53:06 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Sat, 24 Jul 2021 07:34:44 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-184-PbhWv6FXOqCKOHTvwAuzBw-1; Sat, 24 Jul 2021 13:15:13 +0100
+X-MC-Unique: PbhWv6FXOqCKOHTvwAuzBw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.23; Sat, 24 Jul 2021 13:15:10 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.023; Sat, 24 Jul 2021 13:15:10 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Luis Chamberlain' <mcgrof@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andriin@fb.com" <andriin@fb.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "atenart@kernel.org" <atenart@kernel.org>,
+        "alobakin@pm.me" <alobakin@pm.me>,
+        "weiwan@google.com" <weiwan@google.com>,
+        "ap420073@gmail.com" <ap420073@gmail.com>
+CC:     "jeyu@kernel.org" <jeyu@kernel.org>,
+        "ngupta@vflare.org" <ngupta@vflare.org>,
+        "sergey.senozhatsky.work@gmail.com" 
+        <sergey.senozhatsky.work@gmail.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "mbenes@suse.com" <mbenes@suse.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "jikos@kernel.org" <jikos@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] kernel/module: add documentation for try_module_get()
+Thread-Topic: [PATCH] kernel/module: add documentation for try_module_get()
+Thread-Index: AQHXf0eaxD6lEmY4bU6QViNa8xuU1KtSAuiA
+Date:   Sat, 24 Jul 2021 12:15:10 +0000
+Message-ID: <dbf27fa2f8864e1d91f7015249b1a5f1@AcuMS.aculab.com>
+References: <20210722221905.1718213-1-mcgrof@kernel.org>
+In-Reply-To: <20210722221905.1718213-1-mcgrof@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-In-Reply-To: <20210705050922.63710-1-jarkko@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/4/21 11:09 PM, Jarkko Sakkinen wrote:
-> From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+From: Luis Chamberlain
+> Sent: 22 July 2021 23:19
 > 
-> Q1 and Q2 are numbers with *maximum* length of 384 bytes. If the calculated
-> length of Q1 and Q2 is less than 384 bytes, things will go wrong.
+> There is quite a bit of tribal knowledge around proper use of
+> try_module_get() and that it must be used only in a context which
+> can ensure the module won't be gone during the operation. Document
+> this little bit of tribal knowledge.
 > 
-> E.g. if Q2 is 383 bytes, then
-> 
-> 1. The bytes of q2 are copied to sigstruct->q2 in calc_q1q2().
-> 2. The entire sigstruct->q2 is reversed, which results it being
->     256 * Q2, given that the last byte of sigstruct->q2 is added
->     to before the bytes given by calc_q1q2().
-> 
-> Either change in key or measurement can trigger the bug. E.g. an unmeasured
-> heap could cause a devastating change in Q1 or Q2.
-> 
-> Reverse exactly the bytes of Q1 and Q2 in calc_q1q2() before returning to
-> the caller.
-> 
-> Fixes: dedde2634570 ("selftests/sgx: Trigger the reclaimer in the selftests")
-> Link: https://lore.kernel.org/linux-sgx/20210301051836.30738-1-tianjia.zhang@linux.alibaba.com/
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> The original patch did a bad job explaining the code change but it
-> turned out making sense. I wrote a new description.
-> 
-> v2:
-> - Added a fixes tag.
->   tools/testing/selftests/sgx/sigstruct.c | 41 +++++++++++++------------
->   1 file changed, 21 insertions(+), 20 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-> index dee7a3d6c5a5..92bbc5a15c39 100644
-> --- a/tools/testing/selftests/sgx/sigstruct.c
-> +++ b/tools/testing/selftests/sgx/sigstruct.c
-> @@ -55,10 +55,27 @@ static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
->   	return true;
->   }
->   
-> +static void reverse_bytes(void *data, int length)
-> +{
-> +	int i = 0;
-> +	int j = length - 1;
-> +	uint8_t temp;
-> +	uint8_t *ptr = data;
-> +
-> +	while (i < j) {
-> +		temp = ptr[i];
-> +		ptr[i] = ptr[j];
-> +		ptr[j] = temp;
-> +		i++;
-> +		j--;
-> +	}
-> +}
+...
 
-I was just about apply this one and noticed this reverse_bytes().
-Aren't there byteswap functions you could call instead of writing
-your own?
+Some typos.
 
-thanks,
--- Shuah
+> +/**
+> + * try_module_get - yields to module removal and bumps reference count otherwise
+> + * @module: the module we should check for
+> + *
+> + * This can be used to check if userspace has requested to remove a module,
+                                                           a module be removed
+> + * and if so let the caller give up. Otherwise it takes a reference count to
+> + * ensure a request from userspace to remove the module cannot happen.
+> + *
+> + * Care must be taken to ensure the module cannot be removed during
+> + * try_module_get(). This can be done by having another entity other than the
+> + * module itself increment the module reference count, or through some other
+> + * means which gaurantees the module could not be removed during an operation.
+                  guarantees
+> + * An example of this later case is using this call in a sysfs file which the
+> + * module created. The sysfs store / read file operation is ensured to exist
+                                                            ^^^^^^^^^^^^^^^^^^^
+Not sure what that is supposed to mean.
+> + * and still be present by kernfs's active reference. If a sysfs file operation
+> + * is being run, the module which created it must still exist as the module is
+> + * in charge of removal of the sysfs file.
+> + *
+> + * The real value to try_module_get() is the module_is_live() check which
+> + * ensures this the caller of try_module_get() can yields to userspace module
+> + * removal requests and fail whatever it was about to process.
+> + */
+
+But is the comment even right?
+I think you need to consider when try_module_get() can actually fail.
+I believe the following is right.
+The caller has to have valid module reference and module unload
+must actually be in progress - ie the ref count is zero and
+there are no active IO operations.
+
+The module's unload function must (eventually) invalidate the
+caller's module reference to stop try_module_get() being called
+with a (very) stale pointer.
+
+So there is a potentially horrid race:
+The module unload is going to do:
+	driver_data->module_ref = 0;
+and elsewhere there'll be:
+	ref = driver_data->module_ref;
+	if (!ref || !try_module_get(ref))
+		return -error;
+
+You have to have try_module_get() to allow the module unload
+function to sleep.
+But the above code still needs a driver lock to ensure the
+unload code doesn't race with the try_module_get() and the
+'ref' be invalidated before try_module_get() looks at it.
+(eg if an interrupt defers processing.)
+
+So there can be no 'yielding'.
+
+I'm pretty much certain try_module_get(THIS_MODULE) is pretty
+much never going to fail.
+(It is mostly needed to give a worker thread a reference.)
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
