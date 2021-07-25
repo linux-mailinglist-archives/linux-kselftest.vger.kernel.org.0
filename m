@@ -2,158 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC1B3D478E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Jul 2021 14:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2A83D50A3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jul 2021 01:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbhGXLep convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 24 Jul 2021 07:34:45 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:24305 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231938AbhGXLeo (ORCPT
+        id S231192AbhGYWsc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 25 Jul 2021 18:48:32 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:58277 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229547AbhGYWsb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 24 Jul 2021 07:34:44 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-184-PbhWv6FXOqCKOHTvwAuzBw-1; Sat, 24 Jul 2021 13:15:13 +0100
-X-MC-Unique: PbhWv6FXOqCKOHTvwAuzBw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.23; Sat, 24 Jul 2021 13:15:10 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.023; Sat, 24 Jul 2021 13:15:10 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Luis Chamberlain' <mcgrof@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andriin@fb.com" <andriin@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "atenart@kernel.org" <atenart@kernel.org>,
-        "alobakin@pm.me" <alobakin@pm.me>,
-        "weiwan@google.com" <weiwan@google.com>,
-        "ap420073@gmail.com" <ap420073@gmail.com>
-CC:     "jeyu@kernel.org" <jeyu@kernel.org>,
-        "ngupta@vflare.org" <ngupta@vflare.org>,
-        "sergey.senozhatsky.work@gmail.com" 
-        <sergey.senozhatsky.work@gmail.com>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "mbenes@suse.com" <mbenes@suse.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] kernel/module: add documentation for try_module_get()
-Thread-Topic: [PATCH] kernel/module: add documentation for try_module_get()
-Thread-Index: AQHXf0eaxD6lEmY4bU6QViNa8xuU1KtSAuiA
-Date:   Sat, 24 Jul 2021 12:15:10 +0000
-Message-ID: <dbf27fa2f8864e1d91f7015249b1a5f1@AcuMS.aculab.com>
-References: <20210722221905.1718213-1-mcgrof@kernel.org>
-In-Reply-To: <20210722221905.1718213-1-mcgrof@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sun, 25 Jul 2021 18:48:31 -0400
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7D6258365A;
+        Mon, 26 Jul 2021 11:28:59 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1627255739;
+        bh=UvzX0Q6INANcNn41JhJ2142wxQNEFgj9Cm7uo/Z3HQA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=g6HonNKcejxIaReksnZphRpN9G7AumH0PjsCSG1wNqPcGi162UAnmdDVqXQah+83M
+         b5MyfrT0WzG53UcgveP6LFd5h2dmYSFVUai8XpVOGv05TrLcTkYuuGYiBS056q0L7R
+         MhjjDaIxsLwcw3UP66HfQM3KpKhRovNpO2ctfzqNCtk7i4cF22z6zNCg/VGnFo7XIc
+         47WSOzfALGLE4q9w6CdzXWZ7hoUcmzbeLUiYMf6wNcbaE8yoLAZRzkjwfvPZi/PGLu
+         6D+g3QCqn0HC1So2OYWtq+OVe7uH9HdRHM+nJgojFAyH9/o/DK+sxg/y6V70whVovM
+         RVx7noAtqV/YA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60fdf3ba0000>; Mon, 26 Jul 2021 11:28:58 +1200
+Received: from coled-dl.ws.atlnz.lc (coled-dl.ws.atlnz.lc [10.33.25.26])
+        by pat.atlnz.lc (Postfix) with ESMTP id D2CE013EE4B;
+        Mon, 26 Jul 2021 11:28:58 +1200 (NZST)
+Received: by coled-dl.ws.atlnz.lc (Postfix, from userid 1801)
+        id C98DA24296F; Mon, 26 Jul 2021 11:28:58 +1200 (NZST)
+From:   Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+To:     pablo@netfilter.org
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        kuba@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>,
+        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
+        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
+        Blair Steven <blair.steven@alliedtelesis.co.nz>
+Subject: [PATCH 2/3] net: netfilter: Add RFC-7597 Section 5.1 PSID support
+Date:   Mon, 26 Jul 2021 11:28:40 +1200
+Message-Id: <20210725232840.30565-1-Cole.Dishington@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210722071750.GG9904@breakpoint.cc>
+References: <20210722071750.GG9904@breakpoint.cc>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=dvql9Go4 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=e_q4qTt1xDgA:10 a=xOT0nC9th1TpZTiSAT0A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Luis Chamberlain
-> Sent: 22 July 2021 23:19
-> 
-> There is quite a bit of tribal knowledge around proper use of
-> try_module_get() and that it must be used only in a context which
-> can ensure the module won't be gone during the operation. Document
-> this little bit of tribal knowledge.
-> 
-...
+Adds support for masquerading into a smaller subset of ports -
+defined by the PSID values from RFC-7597 Section 5.1. This is part of
+the support for MAP-E and Lightweight 4over6, which allows multiple
+devices to share an IPv4 address by splitting the L4 port / id into
+ranges.
 
-Some typos.
+Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
+Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+---
 
-> +/**
-> + * try_module_get - yields to module removal and bumps reference count otherwise
-> + * @module: the module we should check for
-> + *
-> + * This can be used to check if userspace has requested to remove a module,
-                                                           a module be removed
-> + * and if so let the caller give up. Otherwise it takes a reference count to
-> + * ensure a request from userspace to remove the module cannot happen.
-> + *
-> + * Care must be taken to ensure the module cannot be removed during
-> + * try_module_get(). This can be done by having another entity other than the
-> + * module itself increment the module reference count, or through some other
-> + * means which gaurantees the module could not be removed during an operation.
-                  guarantees
-> + * An example of this later case is using this call in a sysfs file which the
-> + * module created. The sysfs store / read file operation is ensured to exist
-                                                            ^^^^^^^^^^^^^^^^^^^
-Not sure what that is supposed to mean.
-> + * and still be present by kernfs's active reference. If a sysfs file operation
-> + * is being run, the module which created it must still exist as the module is
-> + * in charge of removal of the sysfs file.
-> + *
-> + * The real value to try_module_get() is the module_is_live() check which
-> + * ensures this the caller of try_module_get() can yields to userspace module
-> + * removal requests and fail whatever it was about to process.
-> + */
+Notes:
+    Thanks for your time reviewing!
+   =20
+    Changes in v6:
+    - Use prandom_u32_max() rather than prandom_u32() % max for generatin=
+g PSID sub-range offset.
+    - Use u32 for power_j for the case of a=3D0,psid_len=3D0.
 
-But is the comment even right?
-I think you need to consider when try_module_get() can actually fail.
-I believe the following is right.
-The caller has to have valid module reference and module unload
-must actually be in progress - ie the ref count is zero and
-there are no active IO operations.
+ net/netfilter/nf_nat_core.c       | 39 +++++++++++++++++++++++++++----
+ net/netfilter/nf_nat_masquerade.c | 27 +++++++++++++++++++--
+ 2 files changed, 60 insertions(+), 6 deletions(-)
 
-The module's unload function must (eventually) invalidate the
-caller's module reference to stop try_module_get() being called
-with a (very) stale pointer.
-
-So there is a potentially horrid race:
-The module unload is going to do:
-	driver_data->module_ref = 0;
-and elsewhere there'll be:
-	ref = driver_data->module_ref;
-	if (!ref || !try_module_get(ref))
-		return -error;
-
-You have to have try_module_get() to allow the module unload
-function to sleep.
-But the above code still needs a driver lock to ensure the
-unload code doesn't race with the try_module_get() and the
-'ref' be invalidated before try_module_get() looks at it.
-(eg if an interrupt defers processing.)
-
-So there can be no 'yielding'.
-
-I'm pretty much certain try_module_get(THIS_MODULE) is pretty
-much never going to fail.
-(It is mostly needed to give a worker thread a reference.)
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+index 7de595ead06a..f07a3473aab5 100644
+--- a/net/netfilter/nf_nat_core.c
++++ b/net/netfilter/nf_nat_core.c
+@@ -195,13 +195,36 @@ static bool nf_nat_inet_in_range(const struct nf_co=
+nntrack_tuple *t,
+ static bool l4proto_in_range(const struct nf_conntrack_tuple *tuple,
+ 			     enum nf_nat_manip_type maniptype,
+ 			     const union nf_conntrack_man_proto *min,
+-			     const union nf_conntrack_man_proto *max)
++			     const union nf_conntrack_man_proto *max,
++			     const union nf_conntrack_man_proto *base,
++			     bool is_psid)
+ {
+ 	__be16 port;
++	u16 psid, psid_mask, offset_mask;
++
++	/* In this case we are in PSID mode, avoid checking all ranges by compu=
+ting bitmasks */
++	if (is_psid) {
++		u32 power_j =3D ntohs(max->all) - ntohs(min->all) + 1;
++		u32 offset =3D ntohs(base->all);
++		u16 power_a;
++
++		if (offset =3D=3D 0)
++			offset =3D 1 << 16;
++
++		power_a =3D (1 << 16) / offset;
++		offset_mask =3D (power_a - 1) * offset;
++		psid_mask =3D ((offset / power_j) << 1) - 1;
++		psid =3D ntohs(min->all) & psid_mask;
++	}
+=20
+ 	switch (tuple->dst.protonum) {
+ 	case IPPROTO_ICMP:
+ 	case IPPROTO_ICMPV6:
++		if (is_psid) {
++			return (offset_mask =3D=3D 0 ||
++				(ntohs(tuple->src.u.icmp.id) & offset_mask) !=3D 0) &&
++				((ntohs(tuple->src.u.icmp.id) & psid_mask) =3D=3D psid);
++		}
+ 		return ntohs(tuple->src.u.icmp.id) >=3D ntohs(min->icmp.id) &&
+ 		       ntohs(tuple->src.u.icmp.id) <=3D ntohs(max->icmp.id);
+ 	case IPPROTO_GRE: /* all fall though */
+@@ -215,6 +238,10 @@ static bool l4proto_in_range(const struct nf_conntra=
+ck_tuple *tuple,
+ 		else
+ 			port =3D tuple->dst.u.all;
+=20
++		if (is_psid) {
++			return (offset_mask =3D=3D 0 || (ntohs(port) & offset_mask) !=3D 0) &=
+&
++				((ntohs(port) & psid_mask) =3D=3D psid);
++		}
+ 		return ntohs(port) >=3D ntohs(min->all) &&
+ 		       ntohs(port) <=3D ntohs(max->all);
+ 	default:
+@@ -239,7 +266,8 @@ static int in_range(const struct nf_conntrack_tuple *=
+tuple,
+ 		return 1;
+=20
+ 	return l4proto_in_range(tuple, NF_NAT_MANIP_SRC,
+-				&range->min_proto, &range->max_proto);
++				&range->min_proto, &range->max_proto, &range->base_proto,
++				range->flags & NF_NAT_RANGE_PSID);
+ }
+=20
+ static inline int
+@@ -532,8 +560,11 @@ get_unique_tuple(struct nf_conntrack_tuple *tuple,
+ 		if (range->flags & NF_NAT_RANGE_PROTO_SPECIFIED) {
+ 			if (!(range->flags & NF_NAT_RANGE_PROTO_OFFSET) &&
+ 			    l4proto_in_range(tuple, maniptype,
+-			          &range->min_proto,
+-			          &range->max_proto) &&
++				  &range->min_proto,
++				  &range->max_proto,
++				  &range->base_proto,
++				  range->flags &
++				  NF_NAT_RANGE_PSID) &&
+ 			    (range->min_proto.all =3D=3D range->max_proto.all ||
+ 			     !nf_nat_used_tuple(tuple, ct)))
+ 				return;
+diff --git a/net/netfilter/nf_nat_masquerade.c b/net/netfilter/nf_nat_mas=
+querade.c
+index 8e8a65d46345..19a4754cda76 100644
+--- a/net/netfilter/nf_nat_masquerade.c
++++ b/net/netfilter/nf_nat_masquerade.c
+@@ -55,8 +55,31 @@ nf_nat_masquerade_ipv4(struct sk_buff *skb, unsigned i=
+nt hooknum,
+ 	newrange.flags       =3D range->flags | NF_NAT_RANGE_MAP_IPS;
+ 	newrange.min_addr.ip =3D newsrc;
+ 	newrange.max_addr.ip =3D newsrc;
+-	newrange.min_proto   =3D range->min_proto;
+-	newrange.max_proto   =3D range->max_proto;
++
++	if (range->flags & NF_NAT_RANGE_PSID) {
++		u16 base =3D ntohs(range->base_proto.all);
++		u16 min =3D  ntohs(range->min_proto.all);
++		u16 off =3D 0;
++
++		/* xtables should stop base > 2^15 by enforcement of
++		 * 0 <=3D offset_len < 16 argument, with offset_len=3D0
++		 * as a special case inwhich base=3D0.
++		 */
++		if (WARN_ON_ONCE(base > (1 << 15)))
++			return NF_DROP;
++
++		/* If offset=3D0, port range is in one contiguous block */
++		if (base)
++			off =3D prandom_u32_max(((1 << 16) / base) - 1);
++
++		newrange.min_proto.all   =3D htons(min + base * off);
++		newrange.max_proto.all   =3D htons(ntohs(newrange.min_proto.all) + nto=
+hs(range->max_proto.all) - min);
++		newrange.base_proto      =3D range->base_proto;
++		newrange.flags           =3D newrange.flags | NF_NAT_RANGE_PROTO_SPECI=
+FIED;
++	} else {
++		newrange.min_proto       =3D range->min_proto;
++		newrange.max_proto       =3D range->max_proto;
++	}
+=20
+ 	/* Hand modified range to generic setup. */
+ 	return nf_nat_setup_info(ct, &newrange, NF_NAT_MANIP_SRC);
+--=20
+2.32.0
 
