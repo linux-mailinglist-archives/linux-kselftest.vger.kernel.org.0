@@ -2,62 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E693D66DE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jul 2021 20:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328A33D697E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 00:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbhGZSCp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Jul 2021 14:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S233671AbhGZVpy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Jul 2021 17:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbhGZSCp (ORCPT
+        with ESMTP id S233643AbhGZVpx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jul 2021 14:02:45 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BB2C061764
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 11:43:13 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id e7-20020a17090301c7b029012b411f5cbaso9673268plh.20
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 11:43:13 -0700 (PDT)
+        Mon, 26 Jul 2021 17:45:53 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55304C061760
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 15:26:21 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id c16so7846567plh.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 15:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=XF70JHPJp7a/I5hV/lLoxb2ss5wp1yJ7Rni1BB5YkuI=;
-        b=fl9wff8XwRNg/uSrTucLMcQ1EIffjQmDBkhzRWf2F39kJ3PtcBzHVDnSwEu610JWOj
-         vDDzIl3NVRKmI+SagJNZvWFrx/NHPAcvgAgjSlyUJkIhhMqqB7ZaQGR5wgLqRzPWUOtQ
-         CrBfWsuq+iUQbgUeBRH+spfiBxwPuIDVyjEGqywpeXTR0XwqAiw5v5e0Hsr0O0TOt90I
-         FNAOzr76IJgFACQ4/2onwCu3h4d0X8RfRG0Rzuyb8ec1PAhXI65vp4UyyasPAoRNMRNA
-         tf2sihDm18LlG5c7S+LWiMW1tPoXbJUGuOimjiTaSQlND8lbwrm4peILK2uUGZVbMrig
-         u91A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/+BJHwQCEyZHcaZdbprSZPe+y/dzPxjT0mqjzI4mft8=;
+        b=XOJ4As13Ddv1Zv4Si7aLITV2FNguggs9creN7NCAOdJd2JF1ie5suTQ4egOzyTjaIa
+         Hl03gr+MUKSixpTDfESt41Oa3w7ZSO8SE1bBV5CEJDM9XXjwljH1ju+CukWQI2QA+Szp
+         0QMWPQfGn4fOJmzugVf6Q+dDjuIuqolyhzxS37dqEhZsAYP9qCoX2VTwT3U6bbV8dghG
+         EYr4ojU2daMUKvsrk+/UqV2Pl+kEr97qTAubdYzr2+WOKVxn1hGHlcrAvY53oJi3DKz+
+         E6qODtV39JkV9ddgkitlEIWvlby+eNxoMft+bxN0OGC7YUwNi9UnWmIn+ZTeLNJK0vuz
+         mq5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=XF70JHPJp7a/I5hV/lLoxb2ss5wp1yJ7Rni1BB5YkuI=;
-        b=cOG6jgFtf0by1KpSvu1Aeb05NGxr8sIkxUQF34xwMbTSFKFT86IAHGk+deEfUws0hJ
-         tGRhpxMLr8ofjTBJUTreii3pfDs5sYkMlqnKtnlOjWxBHtlhnQxmxl5NqjHqRaTIs5/6
-         hnb5OtOpa/utQFwEb7FHRDAVfFqJ5zmL5rRGsu9ASqYX7LsJfQxlPJV/BJgnjSd7M981
-         oS36ZmcF8z5uuW+uyZTPsLTjjfKSdbrEy7Mlhau6KNzaeXRQJnUKSaLiipSz6k07AcVF
-         bJ48EMssPu11+OA10/zAjUcv9MThpL0myDfFaatP/qQy6EfeGYI9GD0kiUWVA8Ic8Qdw
-         DNfg==
-X-Gm-Message-State: AOAM530i9swaenF2N9ZGMN44zyRAHUU9u6Naqz2+tgxFNPLKwMP3y/GQ
-        jtQuUfpDsZwEc1BLnVqiJcnJzB7CnWVT5KOdIhkmhXGAxKQ0KTiRIjsCR5pSuKp6sLHYOrGf0v8
-        YStCA/Y3yTJ89SyktuL3zYnLKnS2ZI2a1m+S9Jk6VfW0vu1YlvF1GeOuKpjuQl4iL/kcpIahveT
-        L40L8EWwvO
-X-Google-Smtp-Source: ABdhPJwD54DFHUzSMFi1ewJOA/7zcOWx5lvV1gpfOgcfctHkwZqodsvS+CF51Ahwf3jD9026wZ2Ji+fcp/GaQQxD
-X-Received: from nehir.kir.corp.google.com ([2620:15c:29:204:e222:115f:790c:cd0f])
- (user=erdemaktas job=sendgmr) by 2002:a62:36c5:0:b029:32b:83fa:3a3e with SMTP
- id d188-20020a6236c50000b029032b83fa3a3emr19403121pfa.52.1627324993074; Mon,
- 26 Jul 2021 11:43:13 -0700 (PDT)
-Date:   Mon, 26 Jul 2021 11:37:57 -0700
-In-Reply-To: <20210726183816.1343022-1-erdemaktas@google.com>
-Message-Id: <20210726183816.1343022-5-erdemaktas@google.com>
-Mime-Version: 1.0
-References: <20210726183816.1343022-1-erdemaktas@google.com>
-X-Mailer: git-send-email 2.32.0.432.gabb21c7263-goog
-Subject: [RFC PATCH 4/4] KVM: selftest: Adding test case for TDX port IO
-From:   Erdem Aktas <erdemaktas@google.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/+BJHwQCEyZHcaZdbprSZPe+y/dzPxjT0mqjzI4mft8=;
+        b=jN6ZQlZ9xA3wQlGvioNEeSnt4wlhdxGfBbUNfsq5OyI1IGoH9jjfxiRLsJkocNqvSL
+         v4bZEikcRpP8fHPB74SF9rmWb+1o8dCKNRAdAyNETf+QvzngJkBgvG48/Ir+e7YmUr8v
+         YvbcWilx3p8diBtLVkLXpKgAnJQFTp6uEB090irHC6Bg4D0ii//mrB6EvZqq8RsDiepE
+         PZs2SZCG+qcG9Xtl9WQ3dvCmiXi1ySs8khqzzKmtYX9xKXNf+8cyw8Slug9635KtQri6
+         o5lOx+kEDNmDM7ECcLwQa7ewMYB0Z1oTt9ADudH1V4toTmfQeHd9czDPQAZvc/6HxGTm
+         /S2Q==
+X-Gm-Message-State: AOAM5312vw6/+WnVnQHgWOMO4ioUiHVd901+J0/X8pp4wdNg/QZZzC4+
+        unNNy+LXA+TXxQKqUx9tqvgTVQ==
+X-Google-Smtp-Source: ABdhPJw/Gh8+1NKDnRtUWhULZWuiVZb6OyXZ9UngoYoN+DX3SJ++9aiaqB5a3wtleH0WP6vP5l1VFQ==
+X-Received: by 2002:aa7:9e5c:0:b029:32b:4e2a:e549 with SMTP id z28-20020aa79e5c0000b029032b4e2ae549mr20136064pfq.68.1627338380586;
+        Mon, 26 Jul 2021 15:26:20 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id h9sm597057pjk.56.2021.07.26.15.26.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jul 2021 15:26:19 -0700 (PDT)
+Date:   Mon, 26 Jul 2021 22:26:16 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Erdem Aktas <erdemaktas@google.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
         Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
         Sagi Shahar <sagis@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -65,162 +60,122 @@ Cc:     erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
         Andrew Jones <drjones@redhat.com>,
         Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
         Ricardo Koller <ricarkol@google.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>,
-        Jim Mattson <jmattson@google.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Yanan Wang <wangyanan55@huawei.com>,
         Aaron Lewis <aaronlewis@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Oliver Upton <oupton@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
-        Yanan Wang <wangyanan55@huawei.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>,
         "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        David Matlack <dmatlack@google.com>,
         Like Xu <like.xu@linux.intel.com>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RFC PATCH 1/4] KVM: selftests: Add support for creating
+ non-default type VMs
+Message-ID: <YP82iIe3vM/+fRAh@google.com>
+References: <20210726183816.1343022-1-erdemaktas@google.com>
+ <20210726183816.1343022-2-erdemaktas@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210726183816.1343022-2-erdemaktas@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Verifies TDVMCALL<INSTRUCTION.IO> READ and WRITE operations.
+On Mon, Jul 26, 2021 at 11:37:54AM -0700, Erdem Aktas wrote:
+> Currently vm_create function only creates KVM_X86_LEGACY_VM type VMs.
+> Changing the vm_create function to accept type parameter to create
+> new VM types.
+> 
+> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Peter Gonda <pgonda@google.com>
+> Reviewed-by: Marc Orr <marcorr@google.com>
+> Reviewed-by: Sagi Shahar <sagis@google.com>
 
-Signed-off-by: Erdem Aktas <erdemaktas@google.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Peter Gonda <pgonda@google.com>
-Reviewed-by: Marc Orr <marcorr@google.com>
-Reviewed-by: Sagi Shahar <sagis@google.com>
----
- .../selftests/kvm/x86_64/tdx_vm_tests.c       | 107 ++++++++++++++++++
- 1 file changed, 107 insertions(+)
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-index da7ea67b1..7b0b4b378 100644
---- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-+++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-@@ -88,6 +88,112 @@ void  verify_td_lifecycle(void)
- 	kvm_vm_free(vm);
- 	printf("\t ... PASSED\n");
- }
-+
-+/*
-+ * Verifies IO functionality by writing a |value| to a predefined port.
-+ * Verifies that the read value is |value| + 1 from the same port.
-+ * If all the tests are passed then write a value to port TDX_TEST_PORT
-+ */
-+TDX_GUEST_FUNCTION(guest_io_exit)
-+{
-+	uint64_t data_out, data_in, delta;
-+
-+	data_out = 0xAB;
-+	tdvmcall_io(TDX_TEST_PORT, 1, 1, &data_out);
-+	tdvmcall_io(TDX_TEST_PORT, 1, 0, &data_in);
-+	delta = data_in - data_out - 1;
-+	tdvmcall_io(TDX_TEST_PORT, 1, 1, &delta);
-+}
-+
-+void  verify_td_ioexit(void)
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_run *run;
-+	uint32_t port_data;
-+
-+	printf("Verifying TD IO Exit:\n");
-+	/* Create a TD VM with no memory.*/
-+	vm = __vm_create(VM_MODE_DEFAULT, 0, O_RDWR, KVM_X86_TDX_VM);
-+
-+	/* Allocate TD guest memory and initialize the TD.*/
-+	initialize_td(vm);
-+
-+	/* Initialize the TD vcpu and copy the test code to the guest memory.*/
-+	vm_vcpu_add_tdx(vm, 0);
-+
-+	/* Setup and initialize VM memory */
-+	prepare_source_image(vm, guest_io_exit,
-+			     TDX_FUNCTION_SIZE(guest_io_exit), 0);
-+	finalize_td_memory(vm);
-+
-+	run = vcpu_state(vm, 0);
-+
-+	/* Wait for guest to do a IO write */
-+	vcpu_run(vm, 0);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+		    "Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
-+
-+	TEST_ASSERT((run->exit_reason == KVM_EXIT_IO)
-+		    && (run->io.port == TDX_TEST_PORT)
-+		    && (run->io.size == 1)
-+		    && (run->io.direction == 1),
-+		    "Got an unexpected IO exit values: %u (%s) %d %d %d\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason),
-+		    run->io.port, run->io.size, run->io.direction);
-+	port_data = *(uint8_t *)((void *)run + run->io.data_offset);
-+
-+	printf("\t ... IO WRITE: OK\n");
-+	/*
-+	 * Wait for the guest to do a IO read. Provide the previos written data
-+	 * + 1 back to the guest
-+	 */
-+	vcpu_run(vm, 0);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+		    "Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
-+
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO &&
-+		    run->io.port == TDX_TEST_PORT &&
-+		    run->io.size == 1 &&
-+		    run->io.direction == 0,
-+		    "Got an unexpected IO exit values: %u (%s) %d %d %d\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason),
-+		    run->io.port, run->io.size, run->io.direction);
-+	*(uint8_t *)((void *)run + run->io.data_offset) = port_data + 1;
-+
-+	printf("\t ... IO READ: OK\n");
-+	/*
-+	 * Wait for the guest to do a IO write to the TDX_TEST_PORT with the
-+	 * value of 0. Any value other than 0 means, the guest has not able to
-+	 * read/write values correctly.
-+	 */
-+	vcpu_run(vm, 0);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+		    "KVM_EXIT_IO is expected but got an exit_reason: %u (%s)\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
-+
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO &&
-+		    run->io.port == TDX_TEST_PORT &&
-+		    run->io.size == 1 &&
-+		    run->io.direction == 1 &&
-+		    *(uint32_t *)((void *)run + run->io.data_offset) == 0,
-+		    "Got an unexpected IO exit values: %u (%s) %d %d %d %d\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason),
-+		    run->io.port, run->io.size, run->io.direction,
-+		    *(uint32_t *)((void *)run + run->io.data_offset));
-+
-+	printf("\t ... IO verify read/write values: OK\n");
-+	kvm_vm_free(vm);
-+	printf("\t ... PASSED\n");
-+}
-+
- int main(int argc, char **argv)
- {
- 	if (!is_tdx_enabled()) {
-@@ -97,6 +203,7 @@ int main(int argc, char **argv)
- 	}
- 
- 	run_in_new_process(&verify_td_lifecycle);
-+	run_in_new_process(&verify_td_ioexit);
- 
- 	return 0;
- }
--- 
-2.32.0.432.gabb21c7263-goog
+(aside from the nit below)
 
+> ---
+>  .../testing/selftests/kvm/include/kvm_util.h  |  1 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 29 +++++++++++++++++--
+>  2 files changed, 27 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index d53bfadd2..c63df42d6 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -88,6 +88,7 @@ int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
+>  void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
+>  
+>  struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
+> +struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm, int type);
+
+nit: Consider using a more readable function name such as
+vm_create_with_type().
+
+>  void kvm_vm_free(struct kvm_vm *vmp);
+>  void kvm_vm_restart(struct kvm_vm *vmp, int perm);
+>  void kvm_vm_release(struct kvm_vm *vmp);
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index e5fbf16f7..70caa3882 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -180,13 +180,36 @@ _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params)
+>   * Return:
+>   *   Pointer to opaque structure that describes the created VM.
+>   *
+> - * Creates a VM with the mode specified by mode (e.g. VM_MODE_P52V48_4K).
+> + * Wrapper VM Create function to create a VM with default type (0).
+> + */
+> +struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
+> +{
+> +	return __vm_create(mode, phy_pages, perm, 0);
+> +}
+> +
+> +/*
+> + * VM Create with a custom type
+> + *
+> + * Input Args:
+> + *   mode - VM Mode (e.g. VM_MODE_P52V48_4K)
+> + *   phy_pages - Physical memory pages
+> + *   perm - permission
+> + *   type - VM type
+> + *
+> + * Output Args: None
+> + *
+> + * Return:
+> + *   Pointer to opaque structure that describes the created VM.
+> + *
+> + * Creates a VM with the mode specified by mode (e.g. VM_MODE_P52V48_4K) and the
+> + * type specified in type (e.g. KVM_X86_LEGACY_VM, KVM_X86_TDX_VM ...).
+>   * When phy_pages is non-zero, a memory region of phy_pages physical pages
+>   * is created and mapped starting at guest physical address 0.  The file
+>   * descriptor to control the created VM is created with the permissions
+>   * given by perm (e.g. O_RDWR).
+>   */
+> -struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
+> +struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint64_t phy_pages,
+> +			    int perm, int type)
+>  {
+>  	struct kvm_vm *vm;
+>  
+> @@ -200,7 +223,7 @@ struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
+>  	INIT_LIST_HEAD(&vm->userspace_mem_regions);
+>  
+>  	vm->mode = mode;
+> -	vm->type = 0;
+> +	vm->type = type;
+>  
+>  	vm->pa_bits = vm_guest_mode_params[mode].pa_bits;
+>  	vm->va_bits = vm_guest_mode_params[mode].va_bits;
+> -- 
+> 2.32.0.432.gabb21c7263-goog
+> 
