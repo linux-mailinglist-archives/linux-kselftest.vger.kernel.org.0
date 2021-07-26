@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3ED3D64BF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jul 2021 18:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92F23D64C1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jul 2021 18:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232286AbhGZQBG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Jul 2021 12:01:06 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3489 "EHLO
+        id S232726AbhGZQBK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Jul 2021 12:01:10 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3490 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239965AbhGZP7F (ORCPT
+        with ESMTP id S239967AbhGZP7F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 26 Jul 2021 11:59:05 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GYQM445Tcz6L9PW;
-        Tue, 27 Jul 2021 00:27:44 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GYQQ80yMKz6G9Ny;
+        Tue, 27 Jul 2021 00:30:24 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 26 Jul 2021 18:39:30 +0200
+ 15.1.2176.2; Mon, 26 Jul 2021 18:39:31 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
         <mchehab+huawei@kernel.org>
@@ -27,9 +27,9 @@ CC:     <linux-integrity@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v2 05/12] diglim: Parser
-Date:   Mon, 26 Jul 2021 18:36:53 +0200
-Message-ID: <20210726163700.2092768-6-roberto.sassu@huawei.com>
+Subject: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add, digest_list_del
+Date:   Mon, 26 Jul 2021 18:36:54 +0200
+Message-ID: <20210726163700.2092768-7-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210726163700.2092768-1-roberto.sassu@huawei.com>
 References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
@@ -44,383 +44,357 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce the necessary functions to parse a digest list and to execute the
-requested operation.
+Introduce <securityfs>/integrity/diglim/digest_list_add, which can be used
+to upload a digest list and add the digests to the hash table; passed data
+are interpreted as file path if the first byte is / or as the digest list
+itself otherwise. ima_measure_critical_data() is called to calculate the
+digest of the digest list and eventually, if an appropriate rule is set in
+the IMA policy, to measure it.
 
-The main function is digest_list_parse(), which coordinates the various
-steps required to add or delete a digest list, and has the logic to roll
-back when one of the steps fails.
-
-A more detailed description about the steps can be found in
-Documentation/security/diglim/implementation.rst
+Also introduce <securityfs>/integrity/diglim/digest_list_del, which can be
+used to upload a digest list and delete the digests from the hash table;
+data are interpreted in the same way as described for digest_list_add.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- .../security/diglim/implementation.rst        |  35 +++
+ .../security/diglim/implementation.rst        |   9 +
  MAINTAINERS                                   |   1 +
+ include/linux/kernel_read_file.h              |   1 +
  security/integrity/diglim/Makefile            |   2 +-
- security/integrity/diglim/diglim.h            |   3 +
- security/integrity/diglim/parser.c            | 274 ++++++++++++++++++
- 5 files changed, 314 insertions(+), 1 deletion(-)
- create mode 100644 security/integrity/diglim/parser.c
+ security/integrity/diglim/diglim.h            |   2 +
+ security/integrity/diglim/fs.c                | 239 ++++++++++++++++++
+ security/integrity/integrity.h                |   4 +
+ 7 files changed, 257 insertions(+), 1 deletion(-)
+ create mode 100644 security/integrity/diglim/fs.c
 
 diff --git a/Documentation/security/diglim/implementation.rst b/Documentation/security/diglim/implementation.rst
-index 54af23b2f5f1..9d679567a037 100644
+index 9d679567a037..fc0cd8810a80 100644
 --- a/Documentation/security/diglim/implementation.rst
 +++ b/Documentation/security/diglim/implementation.rst
-@@ -209,3 +209,38 @@ This section introduces the methods requires to manage the three objects
- defined.
+@@ -244,3 +244,12 @@ back when one of the steps fails.
  
- .. kernel-doc:: security/integrity/diglim/methods.c
+ #. digest_list_parse() deletes the struct digest_list_item on unsuccessful
+    add or successful delete.
 +
 +
-+Parser
-+------
++Interfaces
++----------
 +
-+This section introduces the necessary functions to parse a digest list and
-+to execute the requested operation.
++This section introduces the interfaces in
++``<securityfs>/integrity/diglim`` necessary to interact with DIGLIM.
 +
-+.. kernel-doc:: security/integrity/diglim/parser.c
-+
-+The main function is digest_list_parse(), which coordinates the various
-+steps required to add or delete a digest list, and has the logic to roll
-+back when one of the steps fails.
-+
-+#. Calls digest_list_validate() to validate the passed buffer containing
-+   the digest list to ensure that the format is correct.
-+
-+#. Calls get_digest_list() to create a new digest_list_item for the add
-+   operation, or to retrieve the existing one for the delete operation.
-+   get_digest_list() refuses to add digest lists that were previously
-+   added and to delete digest lists that weren't previously added. Also,
-+   get_digest_list() refuses to delete digest lists if there are actions
-+   done at addition time that are not currently being performed (it would
-+   guarantee that also deletion is notified to remote verifiers).
-+
-+#. Calls _digest_list_parse() which takes the created/retrieved
-+   struct digest_list_item and adds or delete the digests included in the
-+   digest list.
-+
-+#. If an error occurred, performs a rollback to the previous state, by
-+   calling _digest_list_parse() with the opposite operation and the buffer
-+   size at the time the error occurred.
-+
-+#. digest_list_parse() deletes the struct digest_list_item on unsuccessful
-+   add or successful delete.
++.. kernel-doc:: security/integrity/diglim/fs.c
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 9e085a36654a..77c3613c600a 100644
+index 77c3613c600a..0672128fae7f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -5465,6 +5465,7 @@ F:	include/linux/diglim.h
+@@ -5464,6 +5464,7 @@ F:	Documentation/security/diglim/introduction.rst
+ F:	include/linux/diglim.h
  F:	include/uapi/linux/diglim.h
  F:	security/integrity/diglim/diglim.h
++F:	security/integrity/diglim/fs.c
  F:	security/integrity/diglim/methods.c
-+F:	security/integrity/diglim/parser.c
+ F:	security/integrity/diglim/parser.c
  
- DIOLAN U2C-12 I2C DRIVER
- M:	Guenter Roeck <linux@roeck-us.net>
+diff --git a/include/linux/kernel_read_file.h b/include/linux/kernel_read_file.h
+index 575ffa1031d3..636ecdfdc616 100644
+--- a/include/linux/kernel_read_file.h
++++ b/include/linux/kernel_read_file.h
+@@ -14,6 +14,7 @@
+ 	id(KEXEC_INITRAMFS, kexec-initramfs)	\
+ 	id(POLICY, security-policy)		\
+ 	id(X509_CERTIFICATE, x509-certificate)	\
++	id(DIGEST_LIST, digest-list)	\
+ 	id(MAX_ID, )
+ 
+ #define __fid_enumify(ENUM, dummy) READING_ ## ENUM,
 diff --git a/security/integrity/diglim/Makefile b/security/integrity/diglim/Makefile
-index b761ed8cfb3e..34e4e154fff3 100644
+index 34e4e154fff3..ac345afdf5dd 100644
 --- a/security/integrity/diglim/Makefile
 +++ b/security/integrity/diglim/Makefile
 @@ -5,4 +5,4 @@
  
  obj-$(CONFIG_DIGLIM) += diglim.o
  
--diglim-y := methods.o
-+diglim-y := methods.o parser.o
+-diglim-y := methods.o parser.o
++diglim-y := methods.o parser.o fs.o
 diff --git a/security/integrity/diglim/diglim.h b/security/integrity/diglim/diglim.h
-index 25851e7d4906..3adc218a0325 100644
+index 3adc218a0325..819703175eda 100644
 --- a/security/integrity/diglim/diglim.h
 +++ b/security/integrity/diglim/diglim.h
-@@ -149,4 +149,7 @@ struct digest_item *digest_list_add(u8 *digest, enum hash_algo algo,
- 				    const char *label);
- void digest_list_del(u8 *digest, enum hash_algo algo, u8 actions,
- 		     struct digest_list_item *digest_list);
+@@ -22,6 +22,8 @@
+ #include <linux/hash_info.h>
+ #include <linux/diglim.h>
+ 
++#include "../integrity.h"
 +
-+int digest_list_parse(loff_t size, void *buf, enum ops op, u8 actions,
-+		      u8 *digest, enum hash_algo algo, const char *label);
- #endif /*__DIGLIM_INTERNAL_H*/
-diff --git a/security/integrity/diglim/parser.c b/security/integrity/diglim/parser.c
+ #define MAX_DIGEST_SIZE 64
+ #define HASH_BITS 10
+ #define DIGLIM_HTABLE_SIZE (1 << HASH_BITS)
+diff --git a/security/integrity/diglim/fs.c b/security/integrity/diglim/fs.c
 new file mode 100644
-index 000000000000..89a48945b460
+index 000000000000..07a0d75a0e33
 --- /dev/null
-+++ b/security/integrity/diglim/parser.c
-@@ -0,0 +1,274 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/security/integrity/diglim/fs.c
+@@ -0,0 +1,239 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2005,2006,2007,2008 IBM Corporation
 + * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Functions to parse digest lists.
++ * Functions for the interfaces exposed in securityfs.
 + */
 +
++#include <linux/fcntl.h>
++#include <linux/kernel_read_file.h>
++#include <linux/slab.h>
++#include <linux/init.h>
++#include <linux/seq_file.h>
++#include <linux/rculist.h>
++#include <linux/rcupdate.h>
++#include <linux/parser.h>
 +#include <linux/vmalloc.h>
-+#include <linux/module.h>
++#include <linux/namei.h>
++#include <linux/ima.h>
 +
 +#include "diglim.h"
-+#include "../integrity.h"
 +
++#define MAX_DIGEST_LIST_SIZE (64 * 1024 * 1024 - 1)
++
++static struct dentry *diglim_dir;
 +/**
-+ * digest_list_validate - validate format of digest list
-+ * @size: buffer size
-+ * @buf: buffer containing the digest list
++ * DOC: digest_list_add
 + *
-+ * This function validates the format of the passed digest list.
++ * digest_list_add can be used to upload a digest list and add the digests
++ * to the hash table; passed data are interpreted as file path if the first
++ * byte is ``/`` or as the digest list itself otherwise.
 + *
-+ * Return: 0 if the digest list was successfully validated, -EINVAL otherwise.
++ * ima_measure_critical_data() is called to calculate the digest of the
++ * digest list and eventually, if an appropriate rule is set in the IMA
++ * policy, to measure it.
 + */
-+static int digest_list_validate(loff_t size, void *buf)
++static struct dentry *digest_list_add_dentry;
++/**
++ * DOC: digest_list_del
++ *
++ * digest_list_del can be used to upload a digest list and delete the
++ * digests from the hash table; data are interpreted in the same way as
++ * described for digest_list_add.
++ */
++static struct dentry *digest_list_del_dentry;
++char digest_label[NAME_MAX + 1];
++
++/*
++ * digest_list_read: read and parse the digest list from the path
++ */
++static ssize_t digest_list_read(char *path, enum ops op)
 +{
-+	void *bufp = buf, *bufendp = buf + size;
-+	struct compact_list_hdr *hdr;
-+	size_t digest_len;
++	void *data = NULL;
++	char *datap;
++	size_t size;
++	u8 actions = 0;
++	struct file *file;
++	char event_name[NAME_MAX + 9 + 1];
++	u8 digest[IMA_MAX_DIGEST_SIZE] = { 0 };
++	enum hash_algo algo;
++	int rc, pathlen = strlen(path);
 +
-+	while (bufp < bufendp) {
-+		if (bufp + sizeof(*hdr) > bufendp) {
-+			pr_err("invalid data\n");
-+			return -EINVAL;
-+		}
++	/* Remove \n. */
++	datap = path;
++	strsep(&datap, "\n");
 +
-+		hdr = bufp;
-+
-+		if (hdr->version != 1) {
-+			pr_err("unsupported version\n");
-+			return -EINVAL;
-+		}
-+
-+		if (hdr->_reserved != 0) {
-+			pr_err("unexpected value for _reserved field\n");
-+			return -EINVAL;
-+		}
-+
-+		hdr->type = le16_to_cpu(hdr->type);
-+		hdr->modifiers = le16_to_cpu(hdr->modifiers);
-+		hdr->algo = le16_to_cpu(hdr->algo);
-+		hdr->count = le32_to_cpu(hdr->count);
-+		hdr->datalen = le32_to_cpu(hdr->datalen);
-+
-+		if (hdr->algo >= HASH_ALGO__LAST) {
-+			pr_err("invalid hash algorithm\n");
-+			return -EINVAL;
-+		}
-+
-+		digest_len = hash_digest_size[hdr->algo];
-+
-+		if (hdr->type >= COMPACT__LAST ||
-+		    hdr->type == COMPACT_DIGEST_LIST) {
-+			pr_err("invalid type %d\n", hdr->type);
-+			return -EINVAL;
-+		}
-+
-+		bufp += sizeof(*hdr);
-+
-+		if (hdr->datalen != hdr->count * digest_len ||
-+		    bufp + hdr->datalen > bufendp) {
-+			pr_err("invalid data\n");
-+			return -EINVAL;
-+		}
-+
-+		bufp += hdr->count * digest_len;
++	file = filp_open(path, O_RDONLY, 0);
++	if (IS_ERR(file)) {
++		pr_err("unable to open file: %s (%ld)", path, PTR_ERR(file));
++		return PTR_ERR(file);
 +	}
++
++	rc = kernel_read_file(file, 0, &data, INT_MAX, NULL,
++			      READING_DIGEST_LIST);
++	if (rc < 0) {
++		pr_err("unable to read file: %s (%d)", path, rc);
++		goto out;
++	}
++
++	size = rc;
++
++	snprintf(event_name, sizeof(event_name), "%s_file_%s",
++		 op == DIGEST_LIST_ADD ? "add" : "del",
++		 file_dentry(file)->d_name.name);
++
++	rc = ima_measure_critical_data("diglim", event_name, data, size, false,
++				       digest, sizeof(digest));
++	if (rc < 0 && rc != -EEXIST)
++		goto out_vfree;
++
++	algo = ima_get_current_hash_algo();
++
++	if (!rc || rc == -EEXIST)
++		actions |= (1 << COMPACT_ACTION_IMA_MEASURED);
++
++	rc = digest_list_parse(size, data, op, actions, digest, algo, "");
++	if (rc < 0)
++		pr_err("unable to upload digest list %s (%d)\n", path, rc);
++out_vfree:
++	vfree(data);
++out:
++	fput(file);
++
++	if (rc < 0)
++		return rc;
++
++	return pathlen;
++}
++
++/*
++ * digest_list_write: write the digest list path or the digest list itself
++ */
++static ssize_t digest_list_write(struct file *file, const char __user *buf,
++				 size_t datalen, loff_t *ppos)
++{
++	char *data;
++	ssize_t result;
++	enum ops op = DIGEST_LIST_ADD;
++	struct dentry *dentry = file_dentry(file);
++	u8 digest[IMA_MAX_DIGEST_SIZE];
++	char event_name[NAME_MAX + 11 + 1];
++	enum hash_algo algo;
++	u8 actions = 0;
++
++	/* No partial writes. */
++	result = -EINVAL;
++	if (*ppos != 0)
++		goto out;
++
++	result = -EFBIG;
++	if (datalen > MAX_DIGEST_LIST_SIZE)
++		goto out;
++
++	data = memdup_user_nul(buf, datalen);
++	if (IS_ERR(data)) {
++		result = PTR_ERR(data);
++		goto out;
++	}
++
++	if (dentry == digest_list_del_dentry)
++		op = DIGEST_LIST_DEL;
++
++	result = -EPERM;
++
++	if (data[0] == '/') {
++		result = digest_list_read(data, op);
++	} else {
++		snprintf(event_name, sizeof(event_name), "%s_buffer_%s",
++			 op == DIGEST_LIST_ADD ? "add" : "del", digest_label);
++
++		result = ima_measure_critical_data("diglim", event_name, data,
++						   datalen, false, digest,
++						   sizeof(digest));
++		if (result < 0 && result != -EEXIST) {
++			pr_err("failed to measure buffer digest (%ld)\n",
++			       result);
++			goto out_kfree;
++		}
++
++		algo = ima_get_current_hash_algo();
++
++		if (!result || result == -EEXIST)
++			actions |= (1 << COMPACT_ACTION_IMA_MEASURED);
++
++		result = digest_list_parse(datalen, data, op, actions, digest,
++					   algo, "");
++		if (result != datalen) {
++			pr_err("unable to upload generated digest list\n");
++			result = -EINVAL;
++		}
++	}
++out_kfree:
++	kfree(data);
++out:
++	return result;
++}
++
++static unsigned long flags;
++
++/*
++ * digest_list_open: sequentialize access to the add/del files
++ */
++static int digest_list_open(struct inode *inode, struct file *filp)
++{
++	if ((filp->f_flags & O_ACCMODE) != O_WRONLY)
++		return -EACCES;
++
++	if (test_and_set_bit(0, &flags))
++		return -EBUSY;
 +
 +	return 0;
 +}
 +
-+/**
-+ * _digest_list_parse - parse digest list and add/delete digests
-+ * @size: buffer size
-+ * @buf: buffer containing the digest list
-+ * @op: operation to be performed
-+ * @digest_list: digest list digests being added/deleted belong to
-+ *
-+ * This function parses the digest list and adds or delete the digests in the
-+ * found digest blocks.
-+ *
-+ * Return: the buffer size if all digests were successfully added or deleted,
-+ * the size of the already parsed buffer on error.
++/*
++ * digest_list_release - release the add/del files
 + */
-+static int _digest_list_parse(loff_t size, void *buf, enum ops op,
-+			      struct digest_list_item *digest_list)
++static int digest_list_release(struct inode *inode, struct file *file)
 +{
-+	void *bufp = buf, *bufendp = buf + size;
-+	struct compact_list_hdr *hdr;
-+	struct digest_item *d = ERR_PTR(-EINVAL);
-+	size_t digest_len;
-+	int i;
-+
-+	while (bufp < bufendp) {
-+		if (bufp + sizeof(*hdr) > bufendp)
-+			break;
-+
-+		hdr = bufp;
-+		bufp += sizeof(*hdr);
-+
-+		digest_len = hash_digest_size[hdr->algo];
-+
-+		for (i = 0; i < hdr->count && bufp + digest_len <= bufendp;
-+		     i++, bufp += digest_len) {
-+			switch (op) {
-+			case DIGEST_LIST_ADD:
-+				d = digest_add(bufp, hdr->algo, hdr->type,
-+					       digest_list, bufp - buf,
-+					       (void *)hdr - buf);
-+				if (IS_ERR(d)) {
-+					pr_err(
-+					    "failed to add a digest from %s\n",
-+					    digest_list->label);
-+					goto out;
-+				}
-+
-+				break;
-+			case DIGEST_LIST_DEL:
-+				digest_del(bufp, hdr->algo, hdr->type,
-+					   digest_list, bufp - buf,
-+					   (void *)hdr - buf);
-+				break;
-+			default:
-+				break;
-+			}
-+		}
-+	}
-+out:
-+	return bufp - buf;
++	clear_bit(0, &flags);
++	return 0;
 +}
 +
-+/**
-+ * get_digest_list - get the digest list extracted digests will be associated to
-+ * @size: buffer size
-+ * @buf: buffer containing the digest list
-+ * @op: digest list operation
-+ * @actions: actions performed on the digest list being processed
-+ * @digest: digest of the digest list
-+ * @algo: digest algorithm
-+ * @label: label to identify the digest list (e.g. file name)
-+ *
-+ * This function retrieves the digest list item for the passed digest and
-+ * algorithm. If it is not found at addition time, this function creates a new
-+ * one.
-+ *
-+ * This function prevents the imbalance of digests (references left after
-+ * delete) by ensuring that only digest lists that were previously added can be
-+ * deleted.
-+ *
-+ * This function also ensures that the actions done at the time of addition are
-+ * also performed at the time of deletion (it would guarantee that also deletion
-+ * is notified to remote verifiers).
-+ *
-+ * Return: the retrieved/created digest list item on success, an error pointer
-+ * otherwise.
-+ */
-+static struct digest_list_item *get_digest_list(loff_t size, void *buf,
-+						enum ops op, u8 actions,
-+						u8 *digest, enum hash_algo algo,
-+						const char *label)
++static const struct file_operations digest_list_upload_ops = {
++	.open = digest_list_open,
++	.write = digest_list_write,
++	.read = seq_read,
++	.release = digest_list_release,
++	.llseek = generic_file_llseek,
++};
++
++static int __init diglim_fs_init(void)
 +{
-+	struct digest_item *d;
-+	struct digest_list_item *digest_list;
-+	int digest_len = hash_digest_size[algo];
++	diglim_dir = securityfs_create_dir("diglim", integrity_dir);
++	if (IS_ERR(diglim_dir))
++		return -1;
 +
-+	switch (op) {
-+	case DIGEST_LIST_ADD:
-+		/* Add digest list to be associated to each digest. */
-+		d = digest_list_add(digest, algo, size, buf, actions, label);
-+		if (IS_ERR(d))
-+			return (void *)d;
-+
-+		digest_list = list_first_entry(&d->refs,
-+				struct digest_list_item_ref, list)->digest_list;
-+		break;
-+	case DIGEST_LIST_DEL:
-+		/* Lookup digest list to delete the references. */
-+		d = __digest_lookup(digest, algo, COMPACT_DIGEST_LIST, NULL,
-+				    NULL);
-+		if (!d) {
-+			print_hex_dump(KERN_ERR,
-+				       "digest list digest not found: ",
-+				       DUMP_PREFIX_NONE, digest_len, 1, digest,
-+				       digest_len, true);
-+			return ERR_PTR(-ENOENT);
-+		}
-+
-+		digest_list = list_first_entry(&d->refs,
-+				struct digest_list_item_ref, list)->digest_list;
-+
-+		/*
-+		 * Reject deletion if there are actions done at addition time
-+		 * that are currently not being performed.
-+		 */
-+		if ((digest_list->actions & actions) != digest_list->actions) {
-+			pr_err("missing actions, add: %d, del: %d\n",
-+			       digest_list->actions, actions);
-+			return ERR_PTR(-EPERM);
-+		}
-+
-+		break;
-+	default:
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	return digest_list;
-+}
-+
-+/**
-+ * digest_list_parse - parse a digest list
-+ * @size: buffer size
-+ * @buf: buffer containing the digest list
-+ * @op: digest list operation
-+ * @actions: actions performed on the digest list being processed
-+ * @digest: digest of the digest list
-+ * @algo: digest algorithm
-+ * @label: label to identify the digest list (e.g. file name)
-+ *
-+ * This function parses the passed digest list and executed the requested
-+ * operation. If the operation cannot be successfully executed, this function
-+ * performs a rollback to the previous state.
-+ *
-+ * Return: the buffer size on success, a negative value otherwise.
-+ */
-+int digest_list_parse(loff_t size, void *buf, enum ops op, u8 actions,
-+		      u8 *digest, enum hash_algo algo, const char *label)
-+{
-+	struct digest_list_item *digest_list;
-+	enum ops rollback_op = (op == DIGEST_LIST_ADD) ?
-+			       DIGEST_LIST_DEL : DIGEST_LIST_ADD;
-+	int ret, rollback_size;
-+
-+	ret = digest_list_validate(size, buf);
-+	if (ret < 0)
-+		return ret;
-+
-+	digest_list = get_digest_list(size, buf, op, actions, digest, algo,
-+				      label);
-+	if (IS_ERR(digest_list))
-+		return PTR_ERR(digest_list);
-+
-+	ret = _digest_list_parse(size, buf, op, digest_list);
-+	if (ret < 0)
++	digest_list_add_dentry = securityfs_create_file("digest_list_add", 0200,
++						diglim_dir, NULL,
++						&digest_list_upload_ops);
++	if (IS_ERR(digest_list_add_dentry))
 +		goto out;
 +
-+	if (ret != size) {
-+		rollback_size = ret;
++	digest_list_del_dentry = securityfs_create_file("digest_list_del", 0200,
++						diglim_dir, NULL,
++						&digest_list_upload_ops);
++	if (IS_ERR(digest_list_del_dentry))
++		goto out;
 +
-+		ret = _digest_list_parse(rollback_size, buf, rollback_op,
-+					 digest_list);
-+		if (ret != rollback_size)
-+			pr_err("rollback failed\n");
-+
-+		ret = -EINVAL;
-+	}
++	return 0;
 +out:
-+	/* Delete digest list on unsuccessful add or successful delete. */
-+	if ((op == DIGEST_LIST_ADD && ret < 0) ||
-+	    (op == DIGEST_LIST_DEL && ret == size))
-+		digest_list_del(digest, algo, actions, digest_list);
-+
-+	return ret;
++	securityfs_remove(digest_list_del_dentry);
++	securityfs_remove(digest_list_add_dentry);
++	securityfs_remove(diglim_dir);
++	return -1;
 +}
++
++late_initcall(diglim_fs_init);
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 547425c20e11..ac45e1599c2d 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -6,6 +6,9 @@
+  * Mimi Zohar <zohar@us.ibm.com>
+  */
+ 
++#ifndef __INTEGRITY_H
++#define __INTEGRITY_H
++
+ #ifdef pr_fmt
+ #undef pr_fmt
+ #endif
+@@ -283,3 +286,4 @@ static inline void __init add_to_platform_keyring(const char *source,
+ {
+ }
+ #endif
++#endif /*__INTEGRITY_H*/
 -- 
 2.25.1
 
