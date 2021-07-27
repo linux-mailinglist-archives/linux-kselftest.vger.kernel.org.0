@@ -2,98 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACB23D6A1A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 01:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8651A3D6ACE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 02:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbhGZWhA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Jul 2021 18:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S234193AbhGZXdV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Jul 2021 19:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233380AbhGZWg7 (ORCPT
+        with ESMTP id S233770AbhGZXdU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jul 2021 18:36:59 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234D7C061757;
-        Mon, 26 Jul 2021 16:17:27 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id f13so3072129plj.2;
-        Mon, 26 Jul 2021 16:17:27 -0700 (PDT)
+        Mon, 26 Jul 2021 19:33:20 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20EAC061757
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 17:13:47 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id ca5so2916395pjb.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 17:13:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lYRTOLatMvzufkXYQLuONyMUV7E9MEoEnSQSV7vItG4=;
-        b=ukt/FXGXZhngCDB8sCyEf8mY2XOXpjHXXQIWNQOJlP53/6jrTbcUh985qo1v5ojigo
-         3X014eLreM03cB0ysU3KMUG+Mujsn1Y5DgdC7zaLa6Mj+96YbVkESdw0dznKrXX8aAAB
-         JzxRFhIYGNXGW6Elo8T/XVcPTKI3RNb06IWRonV6/phiMiu426AlLqdMwIzErsjRxgBT
-         9PDSoWdAI7XhvD9sjaSWVcSOOYyzSXgo15dZL+J9vA9qYQHRantJ/QVMil6id/u/lYsj
-         2OvKahQUOiSKhFobibcUh7jJDSQjT0M3N/b+QpSGjOb7LYEAKBT3j04vt8UMOwXl5flu
-         qX2A==
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y1ObdeHfUvaGE6OdEsaKDeYTqGoMK1JQpRZjmzTf8+Q=;
+        b=EiNoQ8au0i56j/OiC+h66C4LOENB6lLHoY6Tm8yue/H/qoswbC6dKNJ77idpBeV8iQ
+         35xrZltDlaMstieVOVl8wLThjrBrbc2Odmgi7+wJSA/26s+/Chgn5b1i8HvCFPWjQom4
+         CtvR/92QaJVL4NvG1g3u4u81wCcomKzu+TeUgAeUk14X9V8zerbio60aojUPcwbKKUni
+         jjvdqGD92cW9Y+aNlCOpuHc9zkpwIQN1NufpJufg8mTi6zGXvE1uPnaVYyU84nOS7u3L
+         hSGqzI+Ikts6bLugoEfHGjibClLib7ukJY9abVKDIWruv6TpNNRvk8e2qyAPF5T2EXEg
+         1Llg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=lYRTOLatMvzufkXYQLuONyMUV7E9MEoEnSQSV7vItG4=;
-        b=fBhALFhYDRVnX3tfUAg+Hn8Uv4sv584l0jtzOGexn1SWTjLBO0pwdIV1TS4pR1lJNg
-         9vaBF1khPNg9Wg4Q3gomFh/FIsE9SBLmlsBTAsW7XNwU8un8prohm8k+UXNnnuJULco+
-         izuxDjLcN5lR+WnWnX9G3LKIW0H1C5pXiQkQTvlo7vPpRZc1MRjUQFoJ3qUrUI8S2t4Z
-         cHkimxrA2XD/qB0oTTu+sTDHDQL5qEGb/2zpUsWYtBsMVUw9otxTSK90F1lLvTcHdBQq
-         17xLpkjnUf4po7iYdIM7JMFVf0HAj6sV1parnBpsoDZqjGCuRGt61BJUsTBocmCbTnt1
-         /ZGg==
-X-Gm-Message-State: AOAM532SPtSgU5lbF7gvFJ4+x9ZZoSdpGqUTEKULFO355WDBH5nG9To9
-        C1DpDaGf7owUBi0YPE4OS6I=
-X-Google-Smtp-Source: ABdhPJylm4SuAyERe/WNahzmUsTKLPhhKxWy0KJ+V8r7sfNaUo+0j+eGAxsTxir0Wd6WWFKmQLZj5Q==
-X-Received: by 2002:a17:902:d2d1:b029:12b:adaa:e443 with SMTP id n17-20020a170902d2d1b029012badaae443mr16243294plc.1.1627341446473;
-        Mon, 26 Jul 2021 16:17:26 -0700 (PDT)
-Received: from localhost (udp264798uds.hawaiiantel.net. [72.253.242.87])
-        by smtp.gmail.com with ESMTPSA id l2sm1106807pfc.157.2021.07.26.16.17.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y1ObdeHfUvaGE6OdEsaKDeYTqGoMK1JQpRZjmzTf8+Q=;
+        b=FTMxCBU3VZi6Xqij7bM6o8qafTvaFzB+XXYhTWnOf+bQdRtr2aGV4MlaFnFwHRW4D+
+         uPUVAw5FdXNJ1P1iMZjp/JcLwNqo3En306SkcTTTfFJZgUJXTVYxLGdTq0uozJG41eMT
+         R92dtfjPmRfvDPJxY7vYja5nHWHEBeG99n66oYC8bSfG5jCWbVyZYa5+HD/k7KUDp/DB
+         8bB/12HHT8FFwg+4KSsTgCly+tJ2+46YqZYe+KSBS+JmAsm9kYL94WaIsrMrZ5Relemw
+         5sCNGfJW5YTwtBlUf5M+CkApxDNADFm08PXNqNxEESkAQUBG0maOiIkFum8JhqR4tGK3
+         k/zw==
+X-Gm-Message-State: AOAM531dcvoVQyZ1wIec856JVOTVmFQmRbJ0tJEWB/EsVhEMXjJJu+7N
+        6Env9jRmmUK5WmyND4S4phg/qQ==
+X-Google-Smtp-Source: ABdhPJwOj7fy0Q+JX+8pFaI6/DxyXuSVyM0/beMbaLW4FHceDUnotQA8TT4Py/PMs8u7ivXD+bojPg==
+X-Received: by 2002:a63:da0a:: with SMTP id c10mr20686628pgh.255.1627344827333;
+        Mon, 26 Jul 2021 17:13:47 -0700 (PDT)
+Received: from ip-10-124-121-13.byted.org (ec2-54-241-92-238.us-west-1.compute.amazonaws.com. [54.241.92.238])
+        by smtp.gmail.com with ESMTPSA id k1sm1079452pga.70.2021.07.26.17.13.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 16:17:26 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 26 Jul 2021 13:17:24 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v3 0/9] cgroup/cpuset: Add new cpuset partition type &
- empty effecitve cpus
-Message-ID: <YP9ChFvrGrDMGzbe@slm.duckdns.org>
-References: <20210720141834.10624-1-longman@redhat.com>
+        Mon, 26 Jul 2021 17:13:46 -0700 (PDT)
+From:   Jiang Wang <jiang.wang@bytedance.com>
+To:     netdev@vger.kernel.org
+Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
+        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v1 0/5] sockmap: add sockmap support for unix stream socket
+Date:   Tue, 27 Jul 2021 00:12:47 +0000
+Message-Id: <20210727001252.1287673-1-jiang.wang@bytedance.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210720141834.10624-1-longman@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+This patch series add support for unix stream type
+for sockmap. Sockmap already supports TCP, UDP,
+unix dgram types. The unix stream support is similar
+to unix dgram.
 
-On Tue, Jul 20, 2021 at 10:18:25AM -0400, Waiman Long wrote:
-> v3:
->  - Add two new patches (patches 2 & 3) to fix bugs found during the
->    testing process.
->  - Add a new patch to enable inotify event notification when partition
->    become invalid.
->  - Add a test to test event notification when partition become invalid.
+Also add selftests for unix stream type in sockmap tests.
 
-I applied parts of the series. I think there was a bit of miscommunication.
-I meant that we should use the invalid state as the only way to indicate
-errors as long as the error state is something which can be reached through
-hot unplug or other uncontrollable changes, and require users to monitor the
-state transitions for confirmation and error handling.
 
-Thanks.
+Jiang Wang (5):
+  af_unix: add read_sock for stream socket types
+  af_unix: add unix_stream_proto for sockmap
+  selftest/bpf: add tests for sockmap with unix stream type.
+  selftest/bpf: change udp to inet in some function names
+  selftest/bpf: add new tests in sockmap for unix stream to tcp.
+
+ include/net/af_unix.h                         |  8 +-
+ net/core/sock_map.c                           |  8 +-
+ net/unix/af_unix.c                            | 89 ++++++++++++++++--
+ net/unix/unix_bpf.c                           | 93 ++++++++++++++-----
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 48 ++++++----
+ 5 files changed, 194 insertions(+), 52 deletions(-)
 
 -- 
-tejun
+2.20.1
+
