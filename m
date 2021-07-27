@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8F03D7B40
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 18:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559F93D7B49
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 18:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbhG0Qm0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jul 2021 12:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
+        id S229532AbhG0Qos (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jul 2021 12:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbhG0QmZ (ORCPT
+        with ESMTP id S229497AbhG0Qor (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jul 2021 12:42:25 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9327C061757;
-        Tue, 27 Jul 2021 09:42:24 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id y9so16758772iox.2;
-        Tue, 27 Jul 2021 09:42:24 -0700 (PDT)
+        Tue, 27 Jul 2021 12:44:47 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549D6C061757;
+        Tue, 27 Jul 2021 09:44:47 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id r5so12623330ilc.13;
+        Tue, 27 Jul 2021 09:44:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:message-id:in-reply-to:references:subject
          :mime-version:content-transfer-encoding;
-        bh=o2UvT8aQhtWQSR6jhzOVWd+D4SmSCYYiKL0dOOfbtLs=;
-        b=U1ylzphfRoSvwENd7+o6+SoSDD1mkb//a3DcRDVLq/V+GFiSD5QBI5YvVFnDEG05b7
-         aQqMC2jQxKyjiGjYK+V1gygSthuhzofjer8qvKH3G0mEUVYzPmRZycuAVk7Qlq8f4tHQ
-         0cxuZe2fy3XLXqr0/PEcyOJmDXsMwKgdoMXYbNHYBPOm78cvqUz9LQqb36dx61gQJgTa
-         QxefeIzPup+bOAp+9EZ+3SUfXH9bWvtswcoJSUoos6dT6hafNgXo+zkYim57pWdhiup+
-         qh3vcmqu9eGMHmwbIPW+uK8jkZTbAJGQrlgqZWpRQDGqFQQvlT60rz0UCH3vCy1LT9aZ
-         Hp4g==
+        bh=BvrzG36ChjqdI1mBcdVAUx0c9Flro67CHWXou2boJx8=;
+        b=flkcstSnmU3+g4LFWjHn8qFjIv/X3ZxUQM2dD7gxinKVSDAj0x5CKUmTVnzqdMarJK
+         BelZnl1T7Hc+SGaR4ngNNXkEhfhbeXuVS3b5UkqhZ/UbtTm6V8uSDpbSm3L39D2J5Dmm
+         BPH4naJHzfk4rbJWCWx2fLWHDxqYW1DrHqocenbHzfRRYHWiJJyCluGAm5bmvhoGpxeg
+         sVR1APjnGt41qt8/CWWbb/XJrlQ8tAPuoamKlhsJeq/fcEqtj+zKZypBjlJKWW08z0e4
+         4Owu0sBi3H9TBwmtm9JVKQUTDqROiz7+qAOg3O/SL0k7uKkOOfyBLoNbk1eIIgEwHCps
+         BPVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
          :references:subject:mime-version:content-transfer-encoding;
-        bh=o2UvT8aQhtWQSR6jhzOVWd+D4SmSCYYiKL0dOOfbtLs=;
-        b=nJxitRN40dMu+UQZyVofkFfMnFpgmLrCdbEtJz0EjezXrgQEGIA24TrTHtyMCGGt9X
-         kHFWXhLm4yTn3RfiTK0Kwnr+Ga2bO4a1THAzqm4HiLzbbl/B2MZuC+wpa+wKYFPYQOUh
-         sUS27E/dLWCnfPOMPzyGYOeE9oX0PGepmCOQhbKnEJAw4flteVoSiYwCE1kv1n73s4CQ
-         pcJAoM7K/oT8IoqtAYOJ6RbTLRWVp+pWv0wrOir0Mnuu1yZ1Jihxpeg4R/dTeQ8FjZm4
-         3Gb9s0eCkx19lQ7IofmRyy4EcQzsF3mdsu6SgNEcrdingN9WYkDJQ7rz4rLNOMWQGpmM
-         iQlg==
-X-Gm-Message-State: AOAM530Qd4FjFlSUzvrgmZPokKW1VnoljjalYxiHjVLWwpy1AEfZuYiT
-        uYIaLJ7aULeB4DsJn9z0PvY=
-X-Google-Smtp-Source: ABdhPJxOfS0ijhDAmi2X9frbbhv6lYByns2QZJiJLGsPdBwZRhd5uA1e9sQSrSM8wV5m5qGoj/z/MQ==
-X-Received: by 2002:a5e:8c07:: with SMTP id n7mr19805209ioj.26.1627404144447;
-        Tue, 27 Jul 2021 09:42:24 -0700 (PDT)
+        bh=BvrzG36ChjqdI1mBcdVAUx0c9Flro67CHWXou2boJx8=;
+        b=Q1Inmg0EEssm+cHzIUHIlp2RL8DQ/EPknx3IwrHkUDQ5A9FoNoVMaignEo10D2pZVK
+         GQ/DMw+ac/ZztPQncT6A4JSOhU0bfMSdfEnOUxWwqSixIKJQ3TVSyUC8ngPPRXBYZKV8
+         Qdrg+WI2nyj/Q/CgltLMLCVeGbn7ceh48bLO8rbB7BIQcKYdJzxdYZsU4f+UWIJRzgbY
+         rfhRd1r1Uklgz+mBuaQEAav+S2zN5PSQV1wzXFPuhiS3ZX/yzbxTi370hlAeYE4xW3wr
+         9de4pVmm8ctBpqJhv6UeZ/sh19JZDmcnwR8wJAiLeFt0XG2H+PYJWh0+8s6BNKHqThC6
+         oelw==
+X-Gm-Message-State: AOAM532I1rTbu5Zdxb2ic1KvmeP/sLemqzUyp6O7fl3DQiS94/Ne2iRS
+        q5ANuMtZQiZkbFS6rbgkdz0=
+X-Google-Smtp-Source: ABdhPJzAz6jZxBMAOCZv3pkubN8WpBbEXJFCnaIuil/qj1GuSVGdlE/EKRPYoTVlAShA+8jrRjexhA==
+X-Received: by 2002:a05:6e02:f53:: with SMTP id y19mr18509086ilj.181.1627404286880;
+        Tue, 27 Jul 2021 09:44:46 -0700 (PDT)
 Received: from localhost ([172.243.157.240])
-        by smtp.gmail.com with ESMTPSA id s195sm431357ios.38.2021.07.27.09.42.22
+        by smtp.gmail.com with ESMTPSA id c7sm2070738ile.69.2021.07.27.09.44.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jul 2021 09:42:24 -0700 (PDT)
-Date:   Tue, 27 Jul 2021 09:42:17 -0700
+        Tue, 27 Jul 2021 09:44:46 -0700 (PDT)
+Date:   Tue, 27 Jul 2021 09:44:39 -0700
 From:   John Fastabend <john.fastabend@gmail.com>
 To:     Jiang Wang <jiang.wang@bytedance.com>, netdev@vger.kernel.org
 Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
@@ -67,12 +67,11 @@ Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Message-ID: <61003769e2879_199a4120894@john-XPS-13-9370.notmuch>
-In-Reply-To: <20210727001252.1287673-6-jiang.wang@bytedance.com>
+Message-ID: <610037f7c0ff5_199a41208c8@john-XPS-13-9370.notmuch>
+In-Reply-To: <20210727001252.1287673-1-jiang.wang@bytedance.com>
 References: <20210727001252.1287673-1-jiang.wang@bytedance.com>
- <20210727001252.1287673-6-jiang.wang@bytedance.com>
-Subject: RE: [PATCH bpf-next v1 5/5] selftest/bpf: add new tests in sockmap
- for unix stream to tcp.
+Subject: RE: [PATCH bpf-next v1 0/5] sockmap: add sockmap support for unix
+ stream socket
 Mime-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
@@ -82,11 +81,13 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Jiang Wang wrote:
-> Add two new test cases in sockmap tests, where unix stream is
-> redirected to tcp and vice versa.
+> This patch series add support for unix stream type
+> for sockmap. Sockmap already supports TCP, UDP,
+> unix dgram types. The unix stream support is similar
+> to unix dgram.
 > 
-> Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
-> Reviewed-by: Cong Wang <cong.wang@bytedance.com>.
-> ---
+> Also add selftests for unix stream type in sockmap tests.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+Overall looks good to me. Couple comments on 2/5 and we should get Cong's
+fix in before merging this. Its nice this fell in without requiring larger
+changes in ./net/core/*.c code.
