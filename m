@@ -2,128 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2833D7C84
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 19:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1913D7D31
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 20:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbhG0Rqu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jul 2021 13:46:50 -0400
-Received: from mga06.intel.com ([134.134.136.31]:1323 "EHLO mga06.intel.com"
+        id S230054AbhG0SMX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jul 2021 14:12:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55044 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229537AbhG0Rqu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jul 2021 13:46:50 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10058"; a="273575855"
-X-IronPort-AV: E=Sophos;i="5.84,274,1620716400"; 
-   d="scan'208";a="273575855"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2021 10:46:49 -0700
-X-IronPort-AV: E=Sophos;i="5.84,274,1620716400"; 
-   d="scan'208";a="475118404"
-Received: from jwalenza-mobl1.amr.corp.intel.com (HELO [10.209.110.245]) ([10.209.110.245])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2021 10:46:48 -0700
-Subject: Re: [RFC PATCH v1 0/2] Introduce XSAVE/XRSTOR self-test
-To:     Pengfei Xu <pengfei.xu@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Heng Su <heng.su@intel.com>, Yu Yu-cheng <yu-cheng.yu@intel.com>,
-        Yu Fenghua <fenghua.yu@intel.com>,
-        Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>
-References: <cover.1627355565.git.pengfei.xu@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <af8e6de6-c428-d3f9-9abf-f8bd5cc95838@intel.com>
-Date:   Tue, 27 Jul 2021 10:46:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229801AbhG0SMX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 27 Jul 2021 14:12:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AB2D36056B;
+        Tue, 27 Jul 2021 18:12:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627409543;
+        bh=7RcIOsMhPqCjVMlALQAqOfz8y3JOmozD0Sg4zco0w48=;
+        h=From:To:Cc:Subject:Date:From;
+        b=s4ylFIWP1fqekNBfyvC46mDuYk8Nj6IiiRGTsM/dVIkHDgSgSgKEcUblW+pPgWfSr
+         aiIWdqOw0wpkOnSB9Kh3UthshXsK9QrZkGJoyV4OHYNbTi6Kl4npnowfmoaVzh0/VJ
+         95JkClrQB7FoK62jqAvKs8wd5JBqpCdqOK6AHddnxpU1cFYuGyRuSc4sDZDtCJVOPP
+         q6EqPyfWWr8xIduJ9eIUUioscck0cXwqLs4NJKpjwKdDsrThwEYVxhIHwKCZwyYp5e
+         DzcJGsJiQhDMUYDSh+SJY3dUwIjdtAGzTs+hTAEHoT1RporeRgA5l6XI3rcFrte3Gw
+         Owid66HH10qfQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Dave Martin <Dave.Martin@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 0/3] kselftest/arm64: Vector length configuration tests
+Date:   Tue, 27 Jul 2021 19:06:46 +0100
+Message-Id: <20210727180649.12943-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <cover.1627355565.git.pengfei.xu@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2117; h=from:subject; bh=7RcIOsMhPqCjVMlALQAqOfz8y3JOmozD0Sg4zco0w48=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhAEs1hXZZGYAYENQPTGZoDCZyuj19iYSp4ALg7M0g YZNRH5SJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYQBLNQAKCRAk1otyXVSH0BqEB/ 4gHO01LY2Gi9kS1gGWGTkv/t9Wy/X33yQ7ozp/TEsIOkFQI9vhrGv7LCBtRezubElV8D0neescaBK/ iuPaVZKhxqJkouaR1Y1PFyVmif4kKUAXvDikVcJdZYsMsJPCwnUfMOWDHvz3BYrKPMLziYahCGpEhe muQbJORnLcPwbFGfR9IdAcyqJs1a7LTq6oum4QtoTpXsH0FTRW5zLrwtWiA86scQkdF2CYVDM87Mjg E8sDviLlSV6Tzh2rWJs2gPNuC5WUtWt/TANizgnlDExb0p+JJ74eKswCoxwdD//HWoaH4B0IcDWjOh EAL1YDEDvzuOLwWjxryOks5k+hDz68
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/26/21 8:34 PM, Pengfei Xu wrote:
-> The XSAVE feature set supports the saving and restoring of state components
-> such as FPU, which is used for process context switching.
+Currently we don't have full automated tests for the vector length
+configuation ABIs offered for SVE, we have a helper binary for setting
+the vector length which can be used for manual tests and we use the
+prctl() interface to enumerate the vector lengths but don't actually
+verify that the vector lengths enumerated were set.
 
-This sentence is really awkward.  It reads at first as saying that the
-FPU is used for context switching.  Can you rephrase.
+This patch series provides a small helper which allows us to get the
+currently configured vector length using the RDVL instruction via either
+a library call or stdout of a process and then uses this to both add
+verification of enumerated vector lengths to our existing tests and also
+add a new test program which exercises both the prctl() and sysfs
+interfaces.
 
-> In order to ensure that XSAVE works correctly, add XSAVE basic test for
-> XSAVE architecture functionality.
+In preparation for the forthcomng support for the Scalable Matrix
+Extension (SME) [1] which introduces a new vector length managed via a
+very similar hardware interface the helper and new test program are
+parameterised with the goal of allowing reuse for SME.
 
-This sentence needs to be start on the same line as the previous one,
-*or* be in a new paragraph.  Please rewrap it.
+[1] https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/scalable-matrix-extension-armv9-a-architecture
 
-> This patch set tests XSAVE/XRSTOR instructions on x86 platforms and verify if
-> the XSAVE/XRSTOR works correctly during signal handling.
+Mark Brown (3):
+  kselftest/arm64: Provide a helper binary and "library" for SVE RDVL
+  kselftest/arm64: Validate vector lengths are set in sve-probe-vls
+  kselftest/arm64: Add tests for SVE vector configuration
 
-This reads to me like you are going to test the XSAVE/XRSTOR
-instructions *in* a signal handler, instead of testing the XSAVE/XRSTOR
-instructions that the kernel uses at signal entry/exit.
+ tools/testing/selftests/arm64/fp/.gitignore   |   2 +
+ tools/testing/selftests/arm64/fp/Makefile     |  11 +-
+ tools/testing/selftests/arm64/fp/rdvl-sve.c   |  14 +
+ tools/testing/selftests/arm64/fp/rdvl.S       |   9 +
+ tools/testing/selftests/arm64/fp/rdvl.h       |   8 +
+ .../selftests/arm64/fp/sve-probe-vls.c        |   5 +
+ tools/testing/selftests/arm64/fp/vec-syscfg.c | 578 ++++++++++++++++++
+ 7 files changed, 624 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/arm64/fp/rdvl-sve.c
+ create mode 100644 tools/testing/selftests/arm64/fp/rdvl.S
+ create mode 100644 tools/testing/selftests/arm64/fp/rdvl.h
+ create mode 100644 tools/testing/selftests/arm64/fp/vec-syscfg.c
 
-Also, the kernel does *NOT* *USE* XSAVE/XRSTOR in many cases to
-save/restore signal state.  The changelog could be read as implying that
-it does.
 
-> Cases such as signal handling, process creation, other xstate(except FPU)
-> tests for XSAVE check, etc. will be added to the Linux kernel self-test.
-> If appropriate, it is even planned to add the [1] mentioned XSAVE issues
-> reproduce and some XSAVE anomaly tests to the kernel self-test.
+base-commit: ff1176468d368232b684f75e82563369208bc371
+-- 
+2.20.1
 
-This is not clear whether it is talking about *this* series int he
-future tense (will be added) or whether it is talking about future *work*.
-
-Maybe something like this:
-
-	This series introduces only the most basic XSAVE tests.  In the
-	future, the intention is to continue expanding the scope of
-	these selftests to include more kernel XSAVE-related
-	functionality and XSAVE-managed features like AMX and shadow
-	stacks.
