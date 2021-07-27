@@ -2,119 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC493D6C61
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 05:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D7F3D6CD9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 05:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234699AbhG0CcC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Jul 2021 22:32:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44654 "EHLO mail.kernel.org"
+        id S234920AbhG0Cyz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Jul 2021 22:54:55 -0400
+Received: from mga18.intel.com ([134.134.136.126]:58530 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234422AbhG0CcC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jul 2021 22:32:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C728160FF4;
-        Tue, 27 Jul 2021 03:12:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627355550;
-        bh=byJUzmas4bh9ocUTUqQ3pGJIs/Wyhxir7SmarkwejNE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b1eh/9iTqMQ/kk0G/DkQOprlmWqOxRA9cL0zaKqHq/Kda7JxuusEznA/OZtph6Flq
-         460LpqjN8rehK7qEOvFHfP2Yj5gAKzIcxFrNECEaVhwySvVxCa7+i0DXura37+uRL8
-         uXh1/IR6C/xeDBe4pfXghM0FVmFY4GZrirJqHIytRsIrFUBTfo/MaqdJi47TCkZp2+
-         PNzLa4gpXYojn0b84lGyhsNSGpQwlxcgsvmwKMPsanltQVvmfcvy3pXmBrCx5gB5Fr
-         Q8QErSe72StMxcAUs6w1OcmfT3IW/3YXJxaCIovXz36P0vJnHDugqDAvgsVhk3NGHS
-         8lHuimkLrfzjA==
-Date:   Tue, 27 Jul 2021 06:12:27 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-sgx@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/sgx: Fix Q1 and Q2 calculation in
- sigstruct.c
-Message-ID: <20210727031227.tx2gqx2qg3mg4522@kernel.org>
-References: <20210705050922.63710-1-jarkko@kernel.org>
- <be6227d1-728a-c658-f962-380c28afc926@linuxfoundation.org>
+        id S234422AbhG0Cyz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 26 Jul 2021 22:54:55 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10057"; a="199586971"
+X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
+   d="scan'208";a="199586971"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2021 20:35:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
+   d="scan'208";a="505307685"
+Received: from fedora29.sh.intel.com ([10.239.182.87])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Jul 2021 20:35:20 -0700
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
+        Yu Yu-cheng <yu-cheng.yu@intel.com>,
+        Yu Fenghua <fenghua.yu@intel.com>,
+        Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>
+Subject: [RFC PATCH v1 0/2] Introduce XSAVE/XRSTOR self-test
+Date:   Tue, 27 Jul 2021 11:34:42 +0800
+Message-Id: <cover.1627355565.git.pengfei.xu@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be6227d1-728a-c658-f962-380c28afc926@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 23, 2021 at 01:53:06PM -0600, Shuah Khan wrote:
-> On 7/4/21 11:09 PM, Jarkko Sakkinen wrote:
-> > From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> > 
-> > Q1 and Q2 are numbers with *maximum* length of 384 bytes. If the calculated
-> > length of Q1 and Q2 is less than 384 bytes, things will go wrong.
-> > 
-> > E.g. if Q2 is 383 bytes, then
-> > 
-> > 1. The bytes of q2 are copied to sigstruct->q2 in calc_q1q2().
-> > 2. The entire sigstruct->q2 is reversed, which results it being
-> >     256 * Q2, given that the last byte of sigstruct->q2 is added
-> >     to before the bytes given by calc_q1q2().
-> > 
-> > Either change in key or measurement can trigger the bug. E.g. an unmeasured
-> > heap could cause a devastating change in Q1 or Q2.
-> > 
-> > Reverse exactly the bytes of Q1 and Q2 in calc_q1q2() before returning to
-> > the caller.
-> > 
-> > Fixes: dedde2634570 ("selftests/sgx: Trigger the reclaimer in the selftests")
-> > Link: https://lore.kernel.org/linux-sgx/20210301051836.30738-1-tianjia.zhang@linux.alibaba.com/
-> > Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> > The original patch did a bad job explaining the code change but it
-> > turned out making sense. I wrote a new description.
-> > 
-> > v2:
-> > - Added a fixes tag.
-> >   tools/testing/selftests/sgx/sigstruct.c | 41 +++++++++++++------------
-> >   1 file changed, 21 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-> > index dee7a3d6c5a5..92bbc5a15c39 100644
-> > --- a/tools/testing/selftests/sgx/sigstruct.c
-> > +++ b/tools/testing/selftests/sgx/sigstruct.c
-> > @@ -55,10 +55,27 @@ static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
-> >   	return true;
-> >   }
-> > +static void reverse_bytes(void *data, int length)
-> > +{
-> > +	int i = 0;
-> > +	int j = length - 1;
-> > +	uint8_t temp;
-> > +	uint8_t *ptr = data;
-> > +
-> > +	while (i < j) {
-> > +		temp = ptr[i];
-> > +		ptr[i] = ptr[j];
-> > +		ptr[j] = temp;
-> > +		i++;
-> > +		j--;
-> > +	}
-> > +}
-> 
-> I was just about apply this one and noticed this reverse_bytes().
-> Aren't there byteswap functions you could call instead of writing
-> your own?
+The XSAVE feature set supports the saving and restoring of state components
+such as FPU, which is used for process context switching.
+In order to ensure that XSAVE works correctly, add XSAVE basic test for
+XSAVE architecture functionality.
 
-Sorry for latency, just came from two week leave.
+This patch set tests XSAVE/XRSTOR instructions on x86 platforms and verify if
+the XSAVE/XRSTOR works correctly during signal handling.
 
-glibc does provide bswap for 16, 32, 64 bit numbers but nothing better.
- 
-I have no idea if libssl has such function. Since the test code already
-uses this function, and it works, and it's not a newly added function in
-this patch, I would consider keeping it.
- 
-> thanks,
-> -- Shuah
+Cases such as signal handling, process creation, other xstate(except FPU)
+tests for XSAVE check, etc. will be added to the Linux kernel self-test.
+If appropriate, it is even planned to add the [1] mentioned XSAVE issues
+reproduce and some XSAVE anomaly tests to the kernel self-test.
 
-/Jarkko
+[1]: https://lore.kernel.org/lkml/0000000000004c453905c30f8334@google.com/
+
+Pengfei Xu (2):
+  selftests/xsave: test basic XSAVE architecture functionality
+  selftests/xsave: add xsave test during signal handling
+
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/xsave/.gitignore      |   3 +
+ tools/testing/selftests/xsave/Makefile        |   6 +
+ tools/testing/selftests/xsave/xsave_common.h  | 246 ++++++++++++++++++
+ .../selftests/xsave/xsave_instruction.c       |  83 ++++++
+ .../selftests/xsave/xsave_signal_handle.c     | 184 +++++++++++++
+ 6 files changed, 523 insertions(+)
+ create mode 100644 tools/testing/selftests/xsave/.gitignore
+ create mode 100644 tools/testing/selftests/xsave/Makefile
+ create mode 100644 tools/testing/selftests/xsave/xsave_common.h
+ create mode 100644 tools/testing/selftests/xsave/xsave_instruction.c
+ create mode 100644 tools/testing/selftests/xsave/xsave_signal_handle.c
+
+-- 
+2.20.1
+
