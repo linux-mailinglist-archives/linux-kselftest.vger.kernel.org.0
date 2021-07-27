@@ -2,170 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA943D7F8E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 22:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFD93D810C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 23:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbhG0Uyr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jul 2021 16:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbhG0Uyq (ORCPT
+        id S231666AbhG0VOc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jul 2021 17:14:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47215 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232140AbhG0VOb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jul 2021 16:54:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD19C061757;
-        Tue, 27 Jul 2021 13:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MBrBM2hWSSFJKN0za7twq1O9odGp29rpAsJCQ0flnEg=; b=vbm6nTwMY9s5EUFtqtEUpQ/fdO
-        50MABQ301exgOgwuy15+9Q0GSyqRn0P9WyXq5dgm2UR5LQ9oawo84jeNCDARuh7gqA7/kIsfVwZ73
-        ZYkRar/zbKmHnkPbEEyxUFqcFfsDmyeBkLKnkz8ht4sVpncWYKo3NkdeUVxF0Fz2fUpoNpDnewUmt
-        ZaoB4iQDKLUkDBsTQ147poEW4F2OUO8D0QqX237/WXVQIGMPbEH1nx9r9T7x6Z7x8T65eC6kDN9a5
-        pwi+7X4ZTm0BP/7oQ4gXfpaAaQWl8gJ8z4VwJOMmcN94TpvWy6sUw/Ijrg/lf0b3lDG0ruSOvP9fY
-        BYWrgWAg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m8U5l-00GHkQ-28; Tue, 27 Jul 2021 20:54:21 +0000
-Date:   Tue, 27 Jul 2021 13:54:21 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andriin@fb.com" <andriin@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "atenart@kernel.org" <atenart@kernel.org>,
-        "alobakin@pm.me" <alobakin@pm.me>,
-        "weiwan@google.com" <weiwan@google.com>,
-        "ap420073@gmail.com" <ap420073@gmail.com>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "ngupta@vflare.org" <ngupta@vflare.org>,
-        "sergey.senozhatsky.work@gmail.com" 
-        <sergey.senozhatsky.work@gmail.com>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "mbenes@suse.com" <mbenes@suse.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        Hannes Reinecke <hare@suse.de>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kernel/module: add documentation for try_module_get()
-Message-ID: <YQByfUaDaXCUqrlo@bombadil.infradead.org>
-References: <20210722221905.1718213-1-mcgrof@kernel.org>
- <dbf27fa2f8864e1d91f7015249b1a5f1@AcuMS.aculab.com>
- <YQBCvKgH481C7o1c@bombadil.infradead.org>
- <YQBGemOIF4sp/ges@kroah.com>
- <YQBN2/K4Ne5orgzS@bombadil.infradead.org>
- <YQBSutZfhqfTzKQa@kroah.com>
+        Tue, 27 Jul 2021 17:14:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627420471;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HTTYyPAE0g/if8d0gvKRc9AYw/duV58RDsVIEQdGHsg=;
+        b=MmkBaBOuV1AUKpXcAGXaLo/TeoW4gQqCDymf0l637stY7WqPGA86SYbuh+wtcQ7hpYt7MT
+        hUTp6iLOSanU7p/9clCUsJ64XRMc4aaHAO4uHlGU6ffxKiELIorxd9ypOLe7sYtp8sfOpx
+        n04zqWTT+p13i3Tbjb2ksU5G5lD4PYQ=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-574-aBTB7hVeOfWBWBp75FxQbg-1; Tue, 27 Jul 2021 17:14:29 -0400
+X-MC-Unique: aBTB7hVeOfWBWBp75FxQbg-1
+Received: by mail-qv1-f70.google.com with SMTP id r14-20020a0c8d0e0000b02902e82df307f0so534362qvb.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jul 2021 14:14:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=HTTYyPAE0g/if8d0gvKRc9AYw/duV58RDsVIEQdGHsg=;
+        b=K4u26JQdIBdEkRRBGhnHevFzzp792G+6ZqbsOiuwTrxuKl9VKmuMnY4I2tlM8HzDAH
+         YEPIhZHISY4c9SjZ3TZ0KkrvZBTpYzyQCColEyr3a7UxFTQNsHvd/upCe9BmVcsBgibK
+         QR3vkZIMsf/tpdpNSWR1+vgD0tPUd9QFOPW8qd48snWKRPCw5TvM5fgHpGF+etCeM1ho
+         fL5ZvKQBk8RGO2/kYvpbgihO32GprhXZBq4opZSwwWIzBbwWsdHYvBF9l3vYEfBLWBaQ
+         FmJCbGwLIo2U2TkghMZEQnlhqPwI3KNF7J3mxyFiUenvkiq7grWgGQ1lfbrNLeyoLrS5
+         Y2+Q==
+X-Gm-Message-State: AOAM533t+R7r/4JCM9c11q/R8UNC0eWUXwvsxlCDOBkJ6YvBY+wFZNw3
+        bQGcap+lHWQJjHYxgCtYS0Xl8oq8hHbOCB9gXW9rt2If2wcZXUyz9InQLThljhIWt2c58KfFT/p
+        m9QBzn/wnGw0rIHZoZeGYlnxNMlqy
+X-Received: by 2002:ae9:f30e:: with SMTP id p14mr4710204qkg.412.1627420469420;
+        Tue, 27 Jul 2021 14:14:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz21PRLExOooxNoN1eIO3l2I/Tqj7X6DVLfqcyC+i2GacI9azNipKAbtqXgsR/XOpGArUqZBQ==
+X-Received: by 2002:ae9:f30e:: with SMTP id p14mr4710180qkg.412.1627420469234;
+        Tue, 27 Jul 2021 14:14:29 -0700 (PDT)
+Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
+        by smtp.gmail.com with ESMTPSA id p22sm1908465qtq.64.2021.07.27.14.14.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jul 2021 14:14:28 -0700 (PDT)
+From:   Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3 0/9] cgroup/cpuset: Add new cpuset partition type &
+ empty effecitve cpus
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20210720141834.10624-1-longman@redhat.com>
+ <YP9ChFvrGrDMGzbe@slm.duckdns.org>
+Message-ID: <b2f49b2e-d5a4-1504-bd0c-0bd82943d855@redhat.com>
+Date:   Tue, 27 Jul 2021 17:14:27 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YQBSutZfhqfTzKQa@kroah.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <YP9ChFvrGrDMGzbe@slm.duckdns.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 08:38:50PM +0200, gregkh@linuxfoundation.org wrote:
-> On Tue, Jul 27, 2021 at 11:18:03AM -0700, Luis Chamberlain wrote:
-> > On Tue, Jul 27, 2021 at 07:46:34PM +0200, gregkh@linuxfoundation.org wrote:
-> > > On Tue, Jul 27, 2021 at 10:30:36AM -0700, Luis Chamberlain wrote:
-> > > > On Sat, Jul 24, 2021 at 12:15:10PM +0000, David Laight wrote:
-> > > > > From: Luis Chamberlain
-> > > > > > Sent: 22 July 2021 23:19
-> > > > The sysfs store / read file operations are gauranteed to exist using
-> > > > kernfs's active reference (see kernfs_active()).
-> > > 
-> > > But that has nothing to do with module reference counts.  kernfs knows
-> > > nothing about modules.
-> > 
-> > Yes but we are talking about sysfs files which the module creates. So
-> > but inference again, an active reference protects a module.
-> 
-> What active reference? 
+On 7/26/21 7:17 PM, Tejun Heo wrote:
+> Hello,
+>
+> On Tue, Jul 20, 2021 at 10:18:25AM -0400, Waiman Long wrote:
+>> v3:
+>>   - Add two new patches (patches 2 & 3) to fix bugs found during the
+>>     testing process.
+>>   - Add a new patch to enable inotify event notification when partition
+>>     become invalid.
+>>   - Add a test to test event notification when partition become invalid.
+> I applied parts of the series. I think there was a bit of miscommunication.
+> I meant that we should use the invalid state as the only way to indicate
+> errors as long as the error state is something which can be reached through
+> hot unplug or other uncontrollable changes, and require users to monitor the
+> state transitions for confirmation and error handling.
 
-kernfs_active()
+Yes, that is the point of adding the event notification patch.
 
-> > > > In fact, this documentation patch was motivated by my own solution to a
-> > > > possible deadlock when sysfs is used. Using the same example above, if
-> > > > the same sysfs file uses *any* lock, which is *also* used on the exit
-> > > > routine, you can easily trigger a deadlock. This can happen for example
-> > > > by the lock being obtained by the removal routine, then the sysfs file
-> > > > gets called, waits for the lock to complete, then the module's exit
-> > > > routine starts cleaning up and removing sysfs files, but we won't be
-> > > > able to remove the sysfs file (due to kernefs active reference) until
-> > > > the sysfs file complets, but it cannot complete because the lock is
-> > > > already held.
-> > > > 
-> > > > Yes, this is a generic problem. Yes I have proof [0]. Yes, a generic
-> > > > solution has been proposed [1], and because Greg is not convinced and I
-> > > > need to move on with life, I am suggesting a temporary driver specific
-> > > > solution (to which Greg is still NACK'ing, without even proposing any
-> > > > alternatives) [2].
-> > > > 
-> > > > [0] https://lkml.kernel.org/r/20210703004632.621662-5-mcgrof@kernel.org
-> > > > [1] https://lkml.kernel.org/r/20210401235925.GR4332@42.do-not-panic.com 
-> > > > [2] https://lkml.kernel.org/r/20210723174919.ka3tzyre432uilf7@garbanzo
-> > > 
-> > > My problem with your proposed solution is that it is still racy, you can
-> > > not increment your own module reference count from 0 -> 1 and expect it
-> > > to work properly.  You need external code to do that somewhere.
-> > 
-> > You are not providing *any* proof for this.
-> 
-> I did provide proof of that.  Here it is again.
+In the current code, direct write to cpuset.cpus.partition are strictly 
+controlled and invalid transitions are rejected. However, changes to 
+cpuset.cpus that do not break the cpu exclusivity rule or cpu hot plug 
+may cause a partition to changed to invalid. What is currently done in 
+this patchset is to add extra guards to reject those cpuset.cpus change 
+that cause the partition to become invalid since changes that break cpu 
+exclusivity rule will be rejected anyway. I can leave out those extra 
+guards and allow those invalid cpuset.cpus change to go forward and 
+change the partition to invalid instead if this is what you want.
 
-<irrelevant example> 
+However, if we have a complicated partition setup with multiple child 
+partitions. Invalid cpuset.cpus change in a parent partition will cause 
+all the child partitions to become invalid too. That is the scenario 
+that I don't want to happen inadvertently. Alternatively, we can 
+restrict those invalid changes if a child partition exist and let it 
+pass through and make it invalid if it is a standalone partition.
 
-sysfs files are safe to use try_module_get() because once they are
-active a removal of the file cannot happen, and so removal will wait.
+Please let me know which approach do you want me to take.
 
-> > And even so, I believe I have clarified as best as possible how a
-> > kernfs active reference implicitly protects the module when we are
-> > talking about sysfs files.
-> 
-> I do not see any link anywhere between kernfs and modules, what am I
-> missing?  Pointers to lines of code would be appreciated.
+Cheers,
+Longman
 
-I provided a selftests with error injections inserted all over
-kernfs_fop_write_iter(). Please study that and my error injection
-code.
 
-> > > Now trying to tie sysfs files to the modules that own them would be
-> > > nice, but as we have seen, that way lies way too many kernel changes,
-> > > right?
-> > 
-> > It's not a one-liner fix. Yes.
-> > 
-> > > Hm, maybe.  Did we think about this from the kobj_attribute level?  If
-> > > we use the "wrapper" logic there and the use of the macros we already
-> > > have for attributes, we might be able to get the module pointer directly
-> > > "for free".
-> > >
-> > > Did we try that?
-> > 
-> > That was my hope. I tried that first. Last year in November I determined
-> > kernfs is kobject stupid. But more importantly *neither* are struct device
-> > specific, so neither of them have semantics for modules or even devices.
-> 
-> But what about at the kobject level?
 
-kernfs is kobject stupid.
-
-> I will try to look at that this week, can't promise anything...
-
-  Luis
