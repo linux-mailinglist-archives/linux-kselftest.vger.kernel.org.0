@@ -2,96 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D29243D747B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 13:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC11A3D78B4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 16:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbhG0Lmo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jul 2021 07:42:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48246 "EHLO mail.kernel.org"
+        id S236897AbhG0Onh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jul 2021 10:43:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236087AbhG0Lmn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jul 2021 07:42:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8FF6A61A0C;
-        Tue, 27 Jul 2021 11:42:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627386164;
-        bh=kScULZZCypjcOHNbhOUj9pQys0yWEAROn9wACbjozIw=;
+        id S236901AbhG0Ong (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 27 Jul 2021 10:43:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DB7AF61AFA;
+        Tue, 27 Jul 2021 14:43:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627397015;
+        bh=qFd46qxbPifoDl2lqdkdIoc082Sb+xM4m6IGi89yhls=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m8JyQpsRV2qnrTyHfpCN4LeYJtuQKD2lVoLcORs/LIL6Zlfk+9kyrUWwpYLWVH0zC
-         da4SkWCfx1FBjXO9GP9sD5YcX7dwO7+aUAGptdmkKD+iau4FPQXrDqvZf/7/iOvINL
-         hPupBomYDitrlzXqSt4tgqqnLYI2Tt1erZZv5dqLFsX+/sdb2DjELZQk74bMom9TdJ
-         KcCDDCgKTvR9Q4BGNqRgLcv7FjGJG7qUC0JwTdOpDa+T3RxkWbzRnt7Z2YLV8sSelE
-         imLHD8oRPKROL+Ha8NMd192W7plhwgLNv5bQ8qDVMtz8sREeVIktU/vSiCj03Wb9u+
-         uv+1mXNkUEojg==
-Date:   Tue, 27 Jul 2021 13:42:41 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v3 6/9] cgroup/cpuset: Add a new isolated cpus.partition
- type
-Message-ID: <20210727114241.GA283787@lothringen>
-References: <20210720141834.10624-1-longman@redhat.com>
- <20210720141834.10624-7-longman@redhat.com>
+        b=TrvS+IYAOcf97227HS/Q9Iyyf5tkB/2yfsFhEMFuAHFI+ixOqywfPd1Vtsw7VHIlz
+         Py9PO/aNn53s3JvmhPUP/2gg1AZnjSk9FtIyjPIofOOeG8VjoUKk5dhJJN3poBzHaD
+         QolSTbbnuqdSmXgCoQGWapojJbW6nNLPzsbhfdfo=
+Date:   Tue, 27 Jul 2021 16:43:33 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     zohar@linux.ibm.com, mchehab+huawei@kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH v2 02/12] diglim: Basic definitions
+Message-ID: <YQAblc+UuMq68jxu@kroah.com>
+References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
+ <20210726163700.2092768-3-roberto.sassu@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210720141834.10624-7-longman@redhat.com>
+In-Reply-To: <20210726163700.2092768-3-roberto.sassu@huawei.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 20, 2021 at 10:18:31AM -0400, Waiman Long wrote:
-> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=TBD
-> 
-> commit 994fb794cb252edd124a46ca0994e37a4726a100
-> Author: Waiman Long <longman@redhat.com>
-> Date:   Sat, 19 Jun 2021 13:28:19 -0400
-> 
->     cgroup/cpuset: Add a new isolated cpus.partition type
-> 
->     Cpuset v1 uses the sched_load_balance control file to determine if load
->     balancing should be enabled.  Cpuset v2 gets rid of sched_load_balance
->     as its use may require disabling load balancing at cgroup root.
-> 
->     For workloads that require very low latency like DPDK, the latency
->     jitters caused by periodic load balancing may exceed the desired
->     latency limit.
-> 
->     When cpuset v2 is in use, the only way to avoid this latency cost is to
->     use the "isolcpus=" kernel boot option to isolate a set of CPUs. After
->     the kernel boot, however, there is no way to add or remove CPUs from
->     this isolated set. For workloads that are more dynamic in nature, that
->     means users have to provision enough CPUs for the worst case situation
->     resulting in excess idle CPUs.
-> 
->     To address this issue for cpuset v2, a new cpuset.cpus.partition type
->     "isolated" is added which allows the creation of a cpuset partition
->     without load balancing. This will allow system administrators to
->     dynamically adjust the size of isolated partition to the current need
->     of the workload without rebooting the system.
-> 
->     Signed-off-by: Waiman Long <longman@redhat.com>
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+On Mon, Jul 26, 2021 at 06:36:50PM +0200, Roberto Sassu wrote:
+> --- /dev/null
+> +++ b/include/uapi/linux/diglim.h
+> @@ -0,0 +1,51 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/*
+> + * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * DIGLIM definitions exported to user space, useful for generating digest
+> + * lists.
+> + */
+> +
+> +#ifndef _UAPI__LINUX_DIGLIM_H
+> +#define _UAPI__LINUX_DIGLIM_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/hash_info.h>
+> +
+> +enum compact_types { COMPACT_KEY, COMPACT_PARSER, COMPACT_FILE,
+> +		     COMPACT_METADATA, COMPACT_DIGEST_LIST, COMPACT__LAST };
+> +
+> +enum compact_modifiers { COMPACT_MOD_IMMUTABLE, COMPACT_MOD__LAST };
+> +
+> +enum compact_actions { COMPACT_ACTION_IMA_MEASURED,
+> +		       COMPACT_ACTION_IMA_APPRAISED,
+> +		       COMPACT_ACTION_IMA_APPRAISED_DIGSIG,
+> +		       COMPACT_ACTION__LAST };
+> +
+> +enum ops { DIGEST_LIST_ADD, DIGEST_LIST_DEL, DIGEST_LIST_OP__LAST };
+> +
+> +/**
+> + * struct compact_list_hdr - header of the following concatenated digests
+> + * @version: version of the digest list
+> + * @_reserved: field reserved for future use
+> + * @type: type of digest list among enum compact_types
+> + * @modifiers: additional attributes among (1 << enum compact_modifiers)
 
-Nice! And while we are adding a new ABI, can we take advantage of that and
-add a specific semantic that if a new isolated partition matches a subset of
-"isolcpus=", it automatically maps to it. This means that any further
-modification to that isolated partition will also modify the associated
-isolcpus= subset.
+I do not understand this description, what does it mean?
 
-Or to summarize, when we create a new isolated partition, remove the associated
-CPUs from isolcpus= ?
+> + * @algo: digest algorithm
 
-Thanks.
+Is this also a #define or an enum?  Where is the list of them?
+
+> + * @count: number of digests
+> + * @datalen: length of concatenated digests
+
+Where does this count and length come into play as nothing else is in
+this structure?
+
+> + *
+> + * A digest list is a set of blocks composed by struct compact_list_hdr and
+> + * the following concatenated digests.
+> + */
+> +struct compact_list_hdr {
+> +	__u8 version;
+> +	__u8 _reserved;
+
+You MUST check this for 0 today, and document it above.  If not, you can
+never use it in the future.
+
+> +	__le16 type;
+> +	__le16 modifiers;
+> +	__le16 algo;
+> +	__le32 count;
+> +	__le32 datalen;
+> +} __packed;
+> +#endif /*_UAPI__LINUX_DIGLIM_H*/
+> -- 
+> 2.25.1
+> 
