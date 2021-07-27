@@ -2,196 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2409A3D7C80
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 19:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2833D7C84
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 19:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbhG0Rqi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jul 2021 13:46:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41646 "EHLO mail.kernel.org"
+        id S230013AbhG0Rqu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jul 2021 13:46:50 -0400
+Received: from mga06.intel.com ([134.134.136.31]:1323 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229537AbhG0Rqi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jul 2021 13:46:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B6ED600CD;
-        Tue, 27 Jul 2021 17:46:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1627407997;
-        bh=61WP7sTHf9hJXo6/rhHJJ+FalSyl8a6PLnkyICqc7gY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r6JmRD0TedkjEmt/7YO1QNJMBHdfGzRTSmiPZaBZd6khBrvLXabTgchwBkZpQvW0N
-         OCGKiELYfXkSFUdXM68M7daWva4VrPp57U4JopCHl43FxNB+5K7czmnsoe3L9bq9Vs
-         QsTQUzBJq3Y1iPM3Ebzl/LTSllyYf1PZRv5yfBgY=
-Date:   Tue, 27 Jul 2021 19:46:34 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andriin@fb.com" <andriin@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "atenart@kernel.org" <atenart@kernel.org>,
-        "alobakin@pm.me" <alobakin@pm.me>,
-        "weiwan@google.com" <weiwan@google.com>,
-        "ap420073@gmail.com" <ap420073@gmail.com>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "ngupta@vflare.org" <ngupta@vflare.org>,
-        "sergey.senozhatsky.work@gmail.com" 
-        <sergey.senozhatsky.work@gmail.com>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "mbenes@suse.com" <mbenes@suse.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        Hannes Reinecke <hare@suse.de>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kernel/module: add documentation for try_module_get()
-Message-ID: <YQBGemOIF4sp/ges@kroah.com>
-References: <20210722221905.1718213-1-mcgrof@kernel.org>
- <dbf27fa2f8864e1d91f7015249b1a5f1@AcuMS.aculab.com>
- <YQBCvKgH481C7o1c@bombadil.infradead.org>
+        id S229537AbhG0Rqu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 27 Jul 2021 13:46:50 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10058"; a="273575855"
+X-IronPort-AV: E=Sophos;i="5.84,274,1620716400"; 
+   d="scan'208";a="273575855"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2021 10:46:49 -0700
+X-IronPort-AV: E=Sophos;i="5.84,274,1620716400"; 
+   d="scan'208";a="475118404"
+Received: from jwalenza-mobl1.amr.corp.intel.com (HELO [10.209.110.245]) ([10.209.110.245])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2021 10:46:48 -0700
+Subject: Re: [RFC PATCH v1 0/2] Introduce XSAVE/XRSTOR self-test
+To:     Pengfei Xu <pengfei.xu@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Heng Su <heng.su@intel.com>, Yu Yu-cheng <yu-cheng.yu@intel.com>,
+        Yu Fenghua <fenghua.yu@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>
+References: <cover.1627355565.git.pengfei.xu@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <af8e6de6-c428-d3f9-9abf-f8bd5cc95838@intel.com>
+Date:   Tue, 27 Jul 2021 10:46:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YQBCvKgH481C7o1c@bombadil.infradead.org>
+In-Reply-To: <cover.1627355565.git.pengfei.xu@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 10:30:36AM -0700, Luis Chamberlain wrote:
-> On Sat, Jul 24, 2021 at 12:15:10PM +0000, David Laight wrote:
-> > From: Luis Chamberlain
-> > > Sent: 22 July 2021 23:19
-> > > 
-> > > There is quite a bit of tribal knowledge around proper use of
-> > > try_module_get() and that it must be used only in a context which
-> > > can ensure the module won't be gone during the operation. Document
-> > > this little bit of tribal knowledge.
-> > > 
-> > ...
-> > 
-> > Some typos.
-> > 
-> > > +/**
-> > > + * try_module_get - yields to module removal and bumps reference count otherwise
-> > > + * @module: the module we should check for
-> > > + *
-> > > + * This can be used to check if userspace has requested to remove a module,
-> >                                                            a module be removed
-> > > + * and if so let the caller give up. Otherwise it takes a reference count to
-> > > + * ensure a request from userspace to remove the module cannot happen.
-> > > + *
-> > > + * Care must be taken to ensure the module cannot be removed during
-> > > + * try_module_get(). This can be done by having another entity other than the
-> > > + * module itself increment the module reference count, or through some other
-> > > + * means which gaurantees the module could not be removed during an operation.
-> >                   guarantees
-> > > + * An example of this later case is using this call in a sysfs file which the
-> > > + * module created. The sysfs store / read file operation is ensured to exist
-> >                                                             ^^^^^^^^^^^^^^^^^^^
-> > Not sure what that is supposed to mean.
-> 
-> I'll clarify further. How about:
-> 
-> The sysfs store / read file operations are gauranteed to exist using
-> kernfs's active reference (see kernfs_active()).
+On 7/26/21 8:34 PM, Pengfei Xu wrote:
+> The XSAVE feature set supports the saving and restoring of state components
+> such as FPU, which is used for process context switching.
 
-But that has nothing to do with module reference counts.  kernfs knows
-nothing about modules.
+This sentence is really awkward.  It reads at first as saying that the
+FPU is used for context switching.  Can you rephrase.
 
-> > So there is a potentially horrid race:
-> > The module unload is going to do:
-> > 	driver_data->module_ref = 0;
-> > and elsewhere there'll be:
-> > 	ref = driver_data->module_ref;
-> > 	if (!ref || !try_module_get(ref))
-> > 		return -error;
-> > 
-> > You have to have try_module_get() to allow the module unload
-> > function to sleep.
-> > But the above code still needs a driver lock to ensure the
-> > unload code doesn't race with the try_module_get() and the
-> > 'ref' be invalidated before try_module_get() looks at it.
-> > (eg if an interrupt defers processing.)
-> > 
-> > So there can be no 'yielding'.
-> 
-> Oh but there is. Consider access to a random sysfs file 'add_new_device'
-> which takes as input a name, for driver foo, and so foo's
-> add_new_foobar_device(name="bar") is called. Unless sysfs file
-> "yields" by using try_module_get() before trying to add a new
-> foo device called "bar", it will essentially be racing with the
-> exit routine of module foo, and depending on how locking is implemented
-> (most drivers get it wrong), this easily leads to crashes.
-> 
-> In fact, this documentation patch was motivated by my own solution to a
-> possible deadlock when sysfs is used. Using the same example above, if
-> the same sysfs file uses *any* lock, which is *also* used on the exit
-> routine, you can easily trigger a deadlock. This can happen for example
-> by the lock being obtained by the removal routine, then the sysfs file
-> gets called, waits for the lock to complete, then the module's exit
-> routine starts cleaning up and removing sysfs files, but we won't be
-> able to remove the sysfs file (due to kernefs active reference) until
-> the sysfs file complets, but it cannot complete because the lock is
-> already held.
-> 
-> Yes, this is a generic problem. Yes I have proof [0]. Yes, a generic
-> solution has been proposed [1], and because Greg is not convinced and I
-> need to move on with life, I am suggesting a temporary driver specific
-> solution (to which Greg is still NACK'ing, without even proposing any
-> alternatives) [2].
-> 
-> [0] https://lkml.kernel.org/r/20210703004632.621662-5-mcgrof@kernel.org
-> [1] https://lkml.kernel.org/r/20210401235925.GR4332@42.do-not-panic.com 
-> [2] https://lkml.kernel.org/r/20210723174919.ka3tzyre432uilf7@garbanzo
+> In order to ensure that XSAVE works correctly, add XSAVE basic test for
+> XSAVE architecture functionality.
 
-My problem with your proposed solution is that it is still racy, you can
-not increment your own module reference count from 0 -> 1 and expect it
-to work properly.  You need external code to do that somewhere.
+This sentence needs to be start on the same line as the previous one,
+*or* be in a new paragraph.  Please rewrap it.
 
-Now trying to tie sysfs files to the modules that own them would be
-nice, but as we have seen, that way lies way too many kernel changes,
-right?
+> This patch set tests XSAVE/XRSTOR instructions on x86 platforms and verify if
+> the XSAVE/XRSTOR works correctly during signal handling.
 
-Hm, maybe.  Did we think about this from the kobj_attribute level?  If
-we use the "wrapper" logic there and the use of the macros we already
-have for attributes, we might be able to get the module pointer directly
-"for free".
+This reads to me like you are going to test the XSAVE/XRSTOR
+instructions *in* a signal handler, instead of testing the XSAVE/XRSTOR
+instructions that the kernel uses at signal entry/exit.
 
-Did we try that?  this thread has been going on for so long I can't
-remember anymore...
+Also, the kernel does *NOT* *USE* XSAVE/XRSTOR in many cases to
+save/restore signal state.  The changelog could be read as implying that
+it does.
 
-> > I'm pretty much certain try_module_get(THIS_MODULE) is pretty
-> > much never going to fail.
-> 
-> It would have to take something very asynchronous and detached from
-> the module to run. But the only thing I can think now, is something
-> takes a module pointer right before after try_stop_module() and then
-> a piece of code in between try_stop_module() and free_module()
-> asynchronously tries to run something with that pointer.
-> 
-> In the end I can only think of buggy code. Perhaps the more type of
-> common issue could be code which purposely leave module pointers around
-> with the intent of cleaning up using a module removal notifier event and
-> that for some stupid reason runs something asynchronously with that
-> pointer.
-> 
-> > (It is mostly needed to give a worker thread a reference.)
-> 
-> Greg, do you have a real world example which demonstrates the race
-> better? Or perhaps a selftest? Or a kunit test?
+> Cases such as signal handling, process creation, other xstate(except FPU)
+> tests for XSAVE check, etc. will be added to the Linux kernel self-test.
+> If appropriate, it is even planned to add the [1] mentioned XSAVE issues
+> reproduce and some XSAVE anomaly tests to the kernel self-test.
 
-Hah, nice try :)
+This is not clear whether it is talking about *this* series int he
+future tense (will be added) or whether it is talking about future *work*.
 
-greg k-h
+Maybe something like this:
+
+	This series introduces only the most basic XSAVE tests.  In the
+	future, the intention is to continue expanding the scope of
+	these selftests to include more kernel XSAVE-related
+	functionality and XSAVE-managed features like AMX and shadow
+	stacks.
