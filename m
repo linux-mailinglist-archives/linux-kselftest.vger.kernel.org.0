@@ -2,154 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FC33D7F72
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 22:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA943D7F8E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jul 2021 22:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbhG0Urv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jul 2021 16:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
+        id S231784AbhG0Uyr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jul 2021 16:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbhG0Uru (ORCPT
+        with ESMTP id S231516AbhG0Uyq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jul 2021 16:47:50 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47814C061764
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jul 2021 13:47:49 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id e2-20020a17090a4a02b029016f3020d867so994581pjh.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jul 2021 13:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ulRmjv7IfUJ8xaaiDrXlOeC6Qs3mklI7DmEPnQK7Q1c=;
-        b=XI0IetnWWZ05LKL4Vf7VF6An6gIrdn84rTLduJk6E7XiDLeFpI2dvQpog5YotjB5vF
-         33JF5enpnAiBF3abXhAOY8Xk7Zzu2BOHGCQ2BGIpkMDko6ykK+nCmJL3cwdHsNipk+2m
-         sXJUAG5rGui9Q4ZPkGou6Tf4hRT4Z2yNrv4Pyn/ZesdHL/s6sicXx5g9giJv7+NJrp0r
-         +JqW5N61bZuOtJ57mSESUYOYfgvAgrTl6sRQu0GiPf/1sEH4UWLVzueIp5LEIWDRvKuu
-         A9GQgjeurX6r4Zy/ivFaTftawHeEeoYUJvESKj/dNfOFdXtxQLItyiTwcH9PHGc8xd/j
-         bXQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ulRmjv7IfUJ8xaaiDrXlOeC6Qs3mklI7DmEPnQK7Q1c=;
-        b=rCXI3nkRSSZeH8yFU0vvxuLFEK6ZBK/I7PJGsv+DgEJYCwhpIA7JW9fj4aTfEwk0ga
-         DeIzgpnJX4XrG22YwLLwEXXZE1VWtT1n0vhRdlm8d3NT+R0ix3oHWi1OdAa0qzhhv30K
-         YrWa7DLIgYKpDeAbTPuqTuXQfyaVGWe/ocay8fikYdwL2S1KkSRve0cX3D1jc+389rBf
-         Dn0wgrVXWM1u/5xlahcSRoDIuW6pcvZTBRMBiVV12OfrQveTtnTdVY1iQyC5LhOOFXYX
-         57cZ5MXNHRBarSDHxJzeKrjTDtjWSxIisA9qVuF0c6VfFsvf4Io0pV2x0unw2C05rzS+
-         qvVQ==
-X-Gm-Message-State: AOAM532l0Ac1OUyC3QFeE8X8Vi4sfusZm6ysNFUbGHXyUvVN8eALIoMO
-        /YiON4vQisWT9Y4kiXdEFue8UXkV0aXFfQ==
-X-Google-Smtp-Source: ABdhPJwrUkS53JCh0qWbCYkGs1YKZKK6uB6gcZSywe1TXZiEKau8wexD8v/NG6WZwZx/OO+ppXUDUw==
-X-Received: by 2002:aa7:80d9:0:b029:2ed:49fa:6dc5 with SMTP id a25-20020aa780d90000b02902ed49fa6dc5mr24606114pfn.3.1627418868558;
-        Tue, 27 Jul 2021 13:47:48 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b18sm3563591pji.39.2021.07.27.13.47.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jul 2021 13:47:48 -0700 (PDT)
-Date:   Tue, 27 Jul 2021 20:47:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Erdem Aktas <erdemaktas@google.com>,
-        linux-kselftest@vger.kernel.org, Peter Gonda <pgonda@google.com>,
-        Marc Orr <marcorr@google.com>, Sagi Shahar <sagis@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Yanan Wang <wangyanan55@huawei.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        Like Xu <like.xu@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>
-Subject: Re: [RFC PATCH 1/4] KVM: selftests: Add support for creating
- non-default type VMs
-Message-ID: <YQBw8BIcCAq5ybHr@google.com>
-References: <20210726183816.1343022-1-erdemaktas@google.com>
- <20210726183816.1343022-2-erdemaktas@google.com>
- <YP82iIe3vM/+fRAh@google.com>
+        Tue, 27 Jul 2021 16:54:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD19C061757;
+        Tue, 27 Jul 2021 13:54:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MBrBM2hWSSFJKN0za7twq1O9odGp29rpAsJCQ0flnEg=; b=vbm6nTwMY9s5EUFtqtEUpQ/fdO
+        50MABQ301exgOgwuy15+9Q0GSyqRn0P9WyXq5dgm2UR5LQ9oawo84jeNCDARuh7gqA7/kIsfVwZ73
+        ZYkRar/zbKmHnkPbEEyxUFqcFfsDmyeBkLKnkz8ht4sVpncWYKo3NkdeUVxF0Fz2fUpoNpDnewUmt
+        ZaoB4iQDKLUkDBsTQ147poEW4F2OUO8D0QqX237/WXVQIGMPbEH1nx9r9T7x6Z7x8T65eC6kDN9a5
+        pwi+7X4ZTm0BP/7oQ4gXfpaAaQWl8gJ8z4VwJOMmcN94TpvWy6sUw/Ijrg/lf0b3lDG0ruSOvP9fY
+        BYWrgWAg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m8U5l-00GHkQ-28; Tue, 27 Jul 2021 20:54:21 +0000
+Date:   Tue, 27 Jul 2021 13:54:21 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andriin@fb.com" <andriin@fb.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "atenart@kernel.org" <atenart@kernel.org>,
+        "alobakin@pm.me" <alobakin@pm.me>,
+        "weiwan@google.com" <weiwan@google.com>,
+        "ap420073@gmail.com" <ap420073@gmail.com>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "ngupta@vflare.org" <ngupta@vflare.org>,
+        "sergey.senozhatsky.work@gmail.com" 
+        <sergey.senozhatsky.work@gmail.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "mbenes@suse.com" <mbenes@suse.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "jikos@kernel.org" <jikos@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] kernel/module: add documentation for try_module_get()
+Message-ID: <YQByfUaDaXCUqrlo@bombadil.infradead.org>
+References: <20210722221905.1718213-1-mcgrof@kernel.org>
+ <dbf27fa2f8864e1d91f7015249b1a5f1@AcuMS.aculab.com>
+ <YQBCvKgH481C7o1c@bombadil.infradead.org>
+ <YQBGemOIF4sp/ges@kroah.com>
+ <YQBN2/K4Ne5orgzS@bombadil.infradead.org>
+ <YQBSutZfhqfTzKQa@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YP82iIe3vM/+fRAh@google.com>
+In-Reply-To: <YQBSutZfhqfTzKQa@kroah.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 26, 2021, David Matlack wrote:
-> On Mon, Jul 26, 2021 at 11:37:54AM -0700, Erdem Aktas wrote:
-> > Currently vm_create function only creates KVM_X86_LEGACY_VM type VMs.
-> > Changing the vm_create function to accept type parameter to create
-> > new VM types.
+On Tue, Jul 27, 2021 at 08:38:50PM +0200, gregkh@linuxfoundation.org wrote:
+> On Tue, Jul 27, 2021 at 11:18:03AM -0700, Luis Chamberlain wrote:
+> > On Tue, Jul 27, 2021 at 07:46:34PM +0200, gregkh@linuxfoundation.org wrote:
+> > > On Tue, Jul 27, 2021 at 10:30:36AM -0700, Luis Chamberlain wrote:
+> > > > On Sat, Jul 24, 2021 at 12:15:10PM +0000, David Laight wrote:
+> > > > > From: Luis Chamberlain
+> > > > > > Sent: 22 July 2021 23:19
+> > > > The sysfs store / read file operations are gauranteed to exist using
+> > > > kernfs's active reference (see kernfs_active()).
+> > > 
+> > > But that has nothing to do with module reference counts.  kernfs knows
+> > > nothing about modules.
 > > 
-> > Signed-off-by: Erdem Aktas <erdemaktas@google.com>
-> > Reviewed-by: Sean Christopherson <seanjc@google.com>
-
-*-by tags should not be added unless explicitly provided.  IIRC, our internal
-gerrit will convert +1 to Reviewed-by, but I don't think that's the case here.
-This applies to all patches in this series.
-
-See "Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:" in
-Documentation/process/submitting-patches.rst for more info.
-
-> > Reviewed-by: Peter Gonda <pgonda@google.com>
-> > Reviewed-by: Marc Orr <marcorr@google.com>
-> > Reviewed-by: Sagi Shahar <sagis@google.com>
+> > Yes but we are talking about sysfs files which the module creates. So
+> > but inference again, an active reference protects a module.
 > 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> 
-> (aside from the nit below)
-> 
-> > ---
-> >  .../testing/selftests/kvm/include/kvm_util.h  |  1 +
-> >  tools/testing/selftests/kvm/lib/kvm_util.c    | 29 +++++++++++++++++--
-> >  2 files changed, 27 insertions(+), 3 deletions(-)
+> What active reference? 
+
+kernfs_active()
+
+> > > > In fact, this documentation patch was motivated by my own solution to a
+> > > > possible deadlock when sysfs is used. Using the same example above, if
+> > > > the same sysfs file uses *any* lock, which is *also* used on the exit
+> > > > routine, you can easily trigger a deadlock. This can happen for example
+> > > > by the lock being obtained by the removal routine, then the sysfs file
+> > > > gets called, waits for the lock to complete, then the module's exit
+> > > > routine starts cleaning up and removing sysfs files, but we won't be
+> > > > able to remove the sysfs file (due to kernefs active reference) until
+> > > > the sysfs file complets, but it cannot complete because the lock is
+> > > > already held.
+> > > > 
+> > > > Yes, this is a generic problem. Yes I have proof [0]. Yes, a generic
+> > > > solution has been proposed [1], and because Greg is not convinced and I
+> > > > need to move on with life, I am suggesting a temporary driver specific
+> > > > solution (to which Greg is still NACK'ing, without even proposing any
+> > > > alternatives) [2].
+> > > > 
+> > > > [0] https://lkml.kernel.org/r/20210703004632.621662-5-mcgrof@kernel.org
+> > > > [1] https://lkml.kernel.org/r/20210401235925.GR4332@42.do-not-panic.com 
+> > > > [2] https://lkml.kernel.org/r/20210723174919.ka3tzyre432uilf7@garbanzo
+> > > 
+> > > My problem with your proposed solution is that it is still racy, you can
+> > > not increment your own module reference count from 0 -> 1 and expect it
+> > > to work properly.  You need external code to do that somewhere.
 > > 
-> > diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> > index d53bfadd2..c63df42d6 100644
-> > --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> > +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> > @@ -88,6 +88,7 @@ int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
-> >  void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
-> >  
-> >  struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
-> > +struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm, int type);
+> > You are not providing *any* proof for this.
 > 
-> nit: Consider using a more readable function name such as
-> vm_create_with_type().
+> I did provide proof of that.  Here it is again.
 
-Ha!  This is why I don't like doing internal reviews :-D
+<irrelevant example> 
 
-Erdem originally had vm_create_type(), I suggested __vm_create() as the double
-underscore scheme is more common in the kernel for cases where there's a default
-wrapper and an inner helper that implements the full API.
+sysfs files are safe to use try_module_get() because once they are
+active a removal of the file cannot happen, and so removal will wait.
 
-Convention aside, the argument againsts ...with_type() are that it doesn't scale,
-e.g. if someone adds another parameter parameter for which vm_create() provides a
-default, and it doesn't self-document the relationship between vm_create() and
-the inner helper, e.g. by convention, based on names alone I know that vm_create()
-likely is a wrapper around __vm_create().
+> > And even so, I believe I have clarified as best as possible how a
+> > kernfs active reference implicitly protects the module when we are
+> > talking about sysfs files.
+> 
+> I do not see any link anywhere between kernfs and modules, what am I
+> missing?  Pointers to lines of code would be appreciated.
 
-Compare that with the existing
+I provided a selftests with error injections inserted all over
+kernfs_fop_write_iter(). Please study that and my error injection
+code.
 
-  vm_create_default_with_vcpus()
-  vm_create_default()
-  vm_create_with_vcpus()
-  vm_create()
+> > > Now trying to tie sysfs files to the modules that own them would be
+> > > nice, but as we have seen, that way lies way too many kernel changes,
+> > > right?
+> > 
+> > It's not a one-liner fix. Yes.
+> > 
+> > > Hm, maybe.  Did we think about this from the kobj_attribute level?  If
+> > > we use the "wrapper" logic there and the use of the macros we already
+> > > have for attributes, we might be able to get the module pointer directly
+> > > "for free".
+> > >
+> > > Did we try that?
+> > 
+> > That was my hope. I tried that first. Last year in November I determined
+> > kernfs is kobject stupid. But more importantly *neither* are struct device
+> > specific, so neither of them have semantics for modules or even devices.
+> 
+> But what about at the kobject level?
 
-where the relationship between all the helpers is not immediately clear, and
-vm_create_with_vcpus() is a misnomer because it does much more than call vm_create()
-and instantiate vCPUs, e.g. it also instantiates the IRQ chip and loads the test
-into guest memory.
+kernfs is kobject stupid.
+
+> I will try to look at that this week, can't promise anything...
+
+  Luis
