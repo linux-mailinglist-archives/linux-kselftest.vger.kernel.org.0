@@ -2,123 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6103D8A41
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 11:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97113D8AFA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 11:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbhG1JGq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jul 2021 05:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbhG1JGq (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jul 2021 05:06:46 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9F7C061757;
-        Wed, 28 Jul 2021 02:06:45 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1m8fWN-00060Q-S5; Wed, 28 Jul 2021 11:06:35 +0200
-Date:   Wed, 28 Jul 2021 11:06:35 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
-Cc:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
-        davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
-        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
-        Blair Steven <blair.steven@alliedtelesis.co.nz>
-Subject: Re: [PATCH] net: netfilter: Fix port selection of FTP for
- NF_NAT_RANGE_PROTO_SPECIFIED
-Message-ID: <20210728090635.GB15121@breakpoint.cc>
-References: <20210728032134.21983-1-Cole.Dishington@alliedtelesis.co.nz>
+        id S235421AbhG1JnG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jul 2021 05:43:06 -0400
+Received: from foss.arm.com ([217.140.110.172]:54042 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231408AbhG1JnF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 28 Jul 2021 05:43:05 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 012271FB;
+        Wed, 28 Jul 2021 02:43:04 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 19AA13F73D;
+        Wed, 28 Jul 2021 02:43:02 -0700 (PDT)
+Date:   Wed, 28 Jul 2021 10:41:30 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] kselftest/arm64: Provide a helper binary and
+ "library" for SVE RDVL
+Message-ID: <20210728094117.GA1724@arm.com>
+References: <20210727180649.12943-1-broonie@kernel.org>
+ <20210727180649.12943-2-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20210728032134.21983-1-Cole.Dishington@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210727180649.12943-2-broonie@kernel.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Cole Dishington <Cole.Dishington@alliedtelesis.co.nz> wrote:
-> FTP port selection ignores specified port ranges (with iptables
-> masquerade --to-ports) when creating an expectation, based on
-> FTP commands PORT or PASV, for the data connection.
+On Tue, Jul 27, 2021 at 07:06:47PM +0100, Mark Brown wrote:
+> SVE provides an instruction RDVL which reports the currently configured
+> vector length. In order to validate that our vector length configuration
+> interfaces are working correctly without having to build the C code for
+> our test programs with SVE enabled provide a trivial assembly library
+> with a C callable function that executes RDVL. Since these interfaces
+> also control behaviour on exec*() provide a trivial wrapper program which
+> reports the currently configured vector length on stdout, tests can use
+> this to verify that behaviour on exec*() is as expected.
 > 
-> Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
-> Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
-> Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
-> Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
-> Co-developed-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
-> Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
-> Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+> In preparation for providing similar helper functionality for SME, the
+> Scalable Matrix Extension, which allows separately configured vector
+> lengths to be read back both the assembler function and wrapper binary
+> have SVE included in their name.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
+>  tools/testing/selftests/arm64/fp/.gitignore |  1 +
+>  tools/testing/selftests/arm64/fp/Makefile   |  6 +++++-
+>  tools/testing/selftests/arm64/fp/rdvl-sve.c | 14 ++++++++++++++
+>  tools/testing/selftests/arm64/fp/rdvl.S     |  9 +++++++++
+>  tools/testing/selftests/arm64/fp/rdvl.h     |  8 ++++++++
+>  5 files changed, 37 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/arm64/fp/rdvl-sve.c
+>  create mode 100644 tools/testing/selftests/arm64/fp/rdvl.S
+>  create mode 100644 tools/testing/selftests/arm64/fp/rdvl.h
 > 
-> Notes:
->     Currently with iptables -t nat -j MASQUERADE -p tcp --to-ports 10000-10005,
->     creating a passive ftp connection from a client will result in the control
->     connection being within the specified port range but the data connection being
->     outside of the range. This patch fixes this behaviour to have both connections
->     be in the specified range.
-> 
->  include/net/netfilter/nf_conntrack.h |  3 +++
->  net/netfilter/nf_nat_core.c          | 10 ++++++----
->  net/netfilter/nf_nat_ftp.c           | 26 ++++++++++++--------------
->  net/netfilter/nf_nat_helper.c        | 12 ++++++++----
->  4 files changed, 29 insertions(+), 22 deletions(-)
-> 
-> diff --git a/include/net/netfilter/nf_conntrack.h b/include/net/netfilter/nf_conntrack.h
-> index cc663c68ddc4..b98d5d04c7ab 100644
-> --- a/include/net/netfilter/nf_conntrack.h
-> +++ b/include/net/netfilter/nf_conntrack.h
-> @@ -24,6 +24,8 @@
+> diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
+> index d66f76d2a650..6b53a7b60fee 100644
+> --- a/tools/testing/selftests/arm64/fp/.gitignore
+> +++ b/tools/testing/selftests/arm64/fp/.gitignore
+> @@ -1,4 +1,5 @@
+>  fpsimd-test
+> +rdvl-sve
+>  sve-probe-vls
+>  sve-ptrace
+>  sve-test
+> diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
+> index a57009d3a0dc..ed62e7003b96 100644
+> --- a/tools/testing/selftests/arm64/fp/Makefile
+> +++ b/tools/testing/selftests/arm64/fp/Makefile
+> @@ -2,12 +2,16 @@
 >  
->  #include <net/netfilter/nf_conntrack_tuple.h>
+>  CFLAGS += -I../../../../../usr/include/
+>  TEST_GEN_PROGS := sve-ptrace sve-probe-vls
+> -TEST_PROGS_EXTENDED := fpsimd-test fpsimd-stress sve-test sve-stress vlset
+> +TEST_PROGS_EXTENDED := fpsimd-test fpsimd-stress \
+> +	rdvl-sve \
+> +	sve-test sve-stress \
+> +	vlset
 >  
-> +#include <uapi/linux/netfilter/nf_nat.h>
+>  all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
+>  
+>  fpsimd-test: fpsimd-test.o
+>  	$(CC) -nostdlib $^ -o $@
+> +rdvl-sve: rdvl-sve.o rdvl.o
+>  sve-ptrace: sve-ptrace.o sve-ptrace-asm.o
+>  sve-probe-vls: sve-probe-vls.o
+>  sve-test: sve-test.o
+> diff --git a/tools/testing/selftests/arm64/fp/rdvl-sve.c b/tools/testing/selftests/arm64/fp/rdvl-sve.c
+> new file mode 100644
+> index 000000000000..7f8a13a18f5d
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/fp/rdvl-sve.c
+> @@ -0,0 +1,14 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +
->  struct nf_ct_udp {
->  	unsigned long	stream_ts;
->  };
-> @@ -99,6 +101,7 @@ struct nf_conn {
->  
->  #if IS_ENABLED(CONFIG_NF_NAT)
->  	struct hlist_node	nat_bysource;
-> +	struct nf_nat_range2 range;
->  #endif
+> +#include <stdio.h>
+> +
+> +#include "rdvl.h"
+> +
+> +int main(void)
+> +{
+> +	int vl = rdvl_sve();
+> +
+> +	printf("%d\n", vl);
+> +
+> +	return 0;
+> +}
+> diff --git a/tools/testing/selftests/arm64/fp/rdvl.S b/tools/testing/selftests/arm64/fp/rdvl.S
+> new file mode 100644
+> index 000000000000..6e76dd720b87
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/fp/rdvl.S
+> @@ -0,0 +1,9 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +// Copyright (C) 2021 ARM Limited.
+> +
+> +.arch_extension sve
+> +
+> +.globl rdvl_sve
+> +rdvl_sve:
+> +	rdvl	x0, #1
+> +	ret
 
-Thats almost a 20% size increase of this structure.
+This works, but can we use an ACLE intrinsic for this?  I'm pretty GCC
+and LLVM have been up to date with that stuff for some time, though
+you'd have to check with the compiler folks.
 
-Could you try to rework it based on this?
-diff --git a/include/net/netfilter/nf_nat.h b/include/net/netfilter/nf_nat.h
---- a/include/net/netfilter/nf_nat.h
-+++ b/include/net/netfilter/nf_nat.h
-@@ -27,12 +27,18 @@ union nf_conntrack_nat_help {
- #endif
- };
- 
-+struct nf_conn_nat_range_info {
-+	union nf_conntrack_man_proto	min_proto;
-+	union nf_conntrack_man_proto	max_proto;
-+};
-+
- /* The structure embedded in the conntrack structure. */
- struct nf_conn_nat {
- 	union nf_conntrack_nat_help help;
- #if IS_ENABLED(CONFIG_NF_NAT_MASQUERADE)
- 	int masq_index;
- #endif
-+	struct nf_conn_nat_range_info range_info;
- };
- 
- /* Set up the info structure to map into this range. */
+Alternatively:
 
-... and then store the range min/max proto iff nf_nat_setup_info had
-NF_NAT_RANGE_PROTO_SPECIFIED flag set.
+static int rvdl_sve(void)
+{
+	int vl;
 
-I don't think there is a need to keep the information in nf_conn.
+	asm ("rvdl %0, #1" : "=r" (vl));
 
+	return vl;
+}
+
+would also work.
+
+&rdvl_sve would not be the same in different translation units, but I
+don't think the tests care about that(?)
+
+[...]
+
+Cheers
+---Dave
