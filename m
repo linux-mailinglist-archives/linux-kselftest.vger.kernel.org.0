@@ -2,128 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F613D89BE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 10:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6103D8A41
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 11:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235286AbhG1I2T convert rfc822-to-8bit (ORCPT
+        id S231465AbhG1JGq convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jul 2021 04:28:19 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:20133 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234495AbhG1I2S (ORCPT
+        Wed, 28 Jul 2021 05:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230520AbhG1JGq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jul 2021 04:28:18 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-11-xmCxCxZxO7ayZHiHESiNOw-1; Wed, 28 Jul 2021 09:28:14 +0100
-X-MC-Unique: xmCxCxZxO7ayZHiHESiNOw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.23; Wed, 28 Jul 2021 09:28:11 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.023; Wed, 28 Jul 2021 09:28:11 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Luis Chamberlain' <mcgrof@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "tj@kernel.org" <tj@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andriin@fb.com" <andriin@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "atenart@kernel.org" <atenart@kernel.org>,
-        "alobakin@pm.me" <alobakin@pm.me>,
-        "weiwan@google.com" <weiwan@google.com>,
-        "ap420073@gmail.com" <ap420073@gmail.com>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "ngupta@vflare.org" <ngupta@vflare.org>,
-        "sergey.senozhatsky.work@gmail.com" 
-        <sergey.senozhatsky.work@gmail.com>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "mbenes@suse.com" <mbenes@suse.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        "Hannes Reinecke" <hare@suse.de>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] kernel/module: add documentation for try_module_get()
-Thread-Topic: [PATCH] kernel/module: add documentation for try_module_get()
-Thread-Index: AQHXf0eaxD6lEmY4bU6QViNa8xuU1KtSAuiAgAVRuyeAALu/4A==
-Date:   Wed, 28 Jul 2021 08:28:11 +0000
-Message-ID: <6054c136290346d581e276abbb2e3ff1@AcuMS.aculab.com>
-References: <20210722221905.1718213-1-mcgrof@kernel.org>
- <dbf27fa2f8864e1d91f7015249b1a5f1@AcuMS.aculab.com>
- <YQBCvKgH481C7o1c@bombadil.infradead.org> <YQBGemOIF4sp/ges@kroah.com>
- <YQBN2/K4Ne5orgzS@bombadil.infradead.org> <YQBSutZfhqfTzKQa@kroah.com>
- <YQByfUaDaXCUqrlo@bombadil.infradead.org>
-In-Reply-To: <YQByfUaDaXCUqrlo@bombadil.infradead.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 28 Jul 2021 05:06:46 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9F7C061757;
+        Wed, 28 Jul 2021 02:06:45 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1m8fWN-00060Q-S5; Wed, 28 Jul 2021 11:06:35 +0200
+Date:   Wed, 28 Jul 2021 11:06:35 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+Cc:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
+        davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
+        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
+        Blair Steven <blair.steven@alliedtelesis.co.nz>
+Subject: Re: [PATCH] net: netfilter: Fix port selection of FTP for
+ NF_NAT_RANGE_PROTO_SPECIFIED
+Message-ID: <20210728090635.GB15121@breakpoint.cc>
+References: <20210728032134.21983-1-Cole.Dishington@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20210728032134.21983-1-Cole.Dishington@alliedtelesis.co.nz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-...
-> sysfs files are safe to use try_module_get() because once they are
-> active a removal of the file cannot happen, and so removal will wait.
+Cole Dishington <Cole.Dishington@alliedtelesis.co.nz> wrote:
+> FTP port selection ignores specified port ranges (with iptables
+> masquerade --to-ports) when creating an expectation, based on
+> FTP commands PORT or PASV, for the data connection.
+> 
+> Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+> Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+> Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+> Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+> Co-developed-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
+> Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
+> Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Currently with iptables -t nat -j MASQUERADE -p tcp --to-ports 10000-10005,
+>     creating a passive ftp connection from a client will result in the control
+>     connection being within the specified port range but the data connection being
+>     outside of the range. This patch fixes this behaviour to have both connections
+>     be in the specified range.
+> 
+>  include/net/netfilter/nf_conntrack.h |  3 +++
+>  net/netfilter/nf_nat_core.c          | 10 ++++++----
+>  net/netfilter/nf_nat_ftp.c           | 26 ++++++++++++--------------
+>  net/netfilter/nf_nat_helper.c        | 12 ++++++++----
+>  4 files changed, 29 insertions(+), 22 deletions(-)
+> 
+> diff --git a/include/net/netfilter/nf_conntrack.h b/include/net/netfilter/nf_conntrack.h
+> index cc663c68ddc4..b98d5d04c7ab 100644
+> --- a/include/net/netfilter/nf_conntrack.h
+> +++ b/include/net/netfilter/nf_conntrack.h
+> @@ -24,6 +24,8 @@
+>  
+>  #include <net/netfilter/nf_conntrack_tuple.h>
+>  
+> +#include <uapi/linux/netfilter/nf_nat.h>
+> +
+>  struct nf_ct_udp {
+>  	unsigned long	stream_ts;
+>  };
+> @@ -99,6 +101,7 @@ struct nf_conn {
+>  
+>  #if IS_ENABLED(CONFIG_NF_NAT)
+>  	struct hlist_node	nat_bysource;
+> +	struct nf_nat_range2 range;
+>  #endif
 
-I doubt it.
+Thats almost a 20% size increase of this structure.
 
-If the module_remove() function removes sysfs nodes then (something
-like) this has to happen.
+Could you try to rework it based on this?
+diff --git a/include/net/netfilter/nf_nat.h b/include/net/netfilter/nf_nat.h
+--- a/include/net/netfilter/nf_nat.h
++++ b/include/net/netfilter/nf_nat.h
+@@ -27,12 +27,18 @@ union nf_conntrack_nat_help {
+ #endif
+ };
+ 
++struct nf_conn_nat_range_info {
++	union nf_conntrack_man_proto	min_proto;
++	union nf_conntrack_man_proto	max_proto;
++};
++
+ /* The structure embedded in the conntrack structure. */
+ struct nf_conn_nat {
+ 	union nf_conntrack_nat_help help;
+ #if IS_ENABLED(CONFIG_NF_NAT_MASQUERADE)
+ 	int masq_index;
+ #endif
++	struct nf_conn_nat_range_info range_info;
+ };
+ 
+ /* Set up the info structure to map into this range. */
 
-1) rmmod (or similar) tries to remove the module.
-2) The reference count is zero so the remove is allowed.
-3) Something tries to access a sysfs node in the module.
-3a) If sysfs knew the nodes were in a module it could use
-    try_module_get() to ensure the module wasn't being unloaded.
-    Failure would cause the sysfs access to fail.
-    But I'm not sure it does, and in any case it doesn't help.
-3b) The sysfs thread calls into the module code and waits on a mutex.
-3c) The rmmod thread gets around to calling into sysfs to remove the nodes.
+... and then store the range min/max proto iff nf_nat_setup_info had
+NF_NAT_RANGE_PROTO_SPECIFIED flag set.
 
-At this point we hit the standard 'deregistering a callback' issue.
-Exactly the same issue affects removal of per-device sysfs node
-from a driver's .remove function.
-
-Typically this is solved by making the deregister routing sleep
-until all the callbacks have completed.
-
-So this would require functions like SYSFS_REMOVE_GROUP() and
-hwmon_device_unregister() to be allowed to sleep and not be
-called with any locks (of any kind) held that the callback
-functions acquire.
-
-The module reference count is irrelevant.
-
-	David
-
-    
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+I don't think there is a need to keep the information in nf_conn.
 
