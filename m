@@ -2,172 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 334573D8868
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 08:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687243D88BA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 09:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbhG1G7O convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jul 2021 02:59:14 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3508 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbhG1G7J (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jul 2021 02:59:09 -0400
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GZPRP379rz6J6fY;
-        Wed, 28 Jul 2021 14:49:53 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 28 Jul 2021 08:59:06 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Wed, 28 Jul 2021 08:59:06 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC][PATCH v2 02/12] diglim: Basic definitions
-Thread-Topic: [RFC][PATCH v2 02/12] diglim: Basic definitions
-Thread-Index: AQHXgjyicwJtnSjv/UmZEg8zsJLYTqtWxYuAgAAn86D//+j9AIAAI3yw///kswCAARiZMA==
-Date:   Wed, 28 Jul 2021 06:59:06 +0000
-Message-ID: <41b1a66980a04b638bad8ae333e6415a@huawei.com>
-References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
- <20210726163700.2092768-3-roberto.sassu@huawei.com>
- <YQAblc+UuMq68jxu@kroah.com> <e87ba6f452254067a5eb6d58937d65d1@huawei.com>
- <YQApyqP7J/8GpItS@kroah.com> <4746947088404edaa31594fb095a6e46@huawei.com>
- <YQAwqGOEkmDzZ9MJ@kroah.com>
-In-Reply-To: <YQAwqGOEkmDzZ9MJ@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S233303AbhG1HTY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jul 2021 03:19:24 -0400
+Received: from mga07.intel.com ([134.134.136.100]:59815 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233209AbhG1HTX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 28 Jul 2021 03:19:23 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10058"; a="276384402"
+X-IronPort-AV: E=Sophos;i="5.84,275,1620716400"; 
+   d="scan'208";a="276384402"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 00:19:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,275,1620716400"; 
+   d="scan'208";a="663199615"
+Received: from fedora29.sh.intel.com ([10.239.182.87])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Jul 2021 00:19:13 -0700
+Date:   Wed, 28 Jul 2021 15:18:35 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Heng Su <heng.su@intel.com>,
+        Yu Yu-cheng <yu-cheng.yu@intel.com>,
+        Yu Fenghua <fenghua.yu@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>
+Subject: Re: [RFC PATCH v1 0/2] Introduce XSAVE/XRSTOR self-test
+Message-ID: <20210728071835.GA12735@fedora29.sh.intel.com>
+References: <cover.1627355565.git.pengfei.xu@intel.com>
+ <af8e6de6-c428-d3f9-9abf-f8bd5cc95838@intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <af8e6de6-c428-d3f9-9abf-f8bd5cc95838@intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> Sent: Tuesday, July 27, 2021 6:13 PM
-> On Tue, Jul 27, 2021 at 04:09:37PM +0000, Roberto Sassu wrote:
-> > > From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> > > Sent: Tuesday, July 27, 2021 5:44 PM
-> > > On Tue, Jul 27, 2021 at 03:35:16PM +0000, Roberto Sassu wrote:
-> > > > > From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> > > > > Sent: Tuesday, July 27, 2021 4:44 PM
-> > > > > On Mon, Jul 26, 2021 at 06:36:50PM +0200, Roberto Sassu wrote:
-> > > > > > --- /dev/null
-> > > > > > +++ b/include/uapi/linux/diglim.h
-> > > > > > @@ -0,0 +1,51 @@
-> > > > > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > > > > > +/*
-> > > > > > + * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
-> > > > > > + *
-> > > > > > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > + *
-> > > > > > + * DIGLIM definitions exported to user space, useful for generating
-> > > digest
-> > > > > > + * lists.
-> > > > > > + */
-> > > > > > +
-> > > > > > +#ifndef _UAPI__LINUX_DIGLIM_H
-> > > > > > +#define _UAPI__LINUX_DIGLIM_H
-> > > > > > +
-> > > > > > +#include <linux/types.h>
-> > > > > > +#include <linux/hash_info.h>
-> > > > > > +
-> > > > > > +enum compact_types { COMPACT_KEY, COMPACT_PARSER,
-> > > > > COMPACT_FILE,
-> > > > > > +		     COMPACT_METADATA, COMPACT_DIGEST_LIST,
-> > > > > COMPACT__LAST };
-> > > > > > +
-> > > > > > +enum compact_modifiers { COMPACT_MOD_IMMUTABLE,
-> > > > > COMPACT_MOD__LAST };
-> > > > > > +
-> > > > > > +enum compact_actions { COMPACT_ACTION_IMA_MEASURED,
-> > > > > > +		       COMPACT_ACTION_IMA_APPRAISED,
-> > > > > > +		       COMPACT_ACTION_IMA_APPRAISED_DIGSIG,
-> > > > > > +		       COMPACT_ACTION__LAST };
-> > > > > > +
-> > > > > > +enum ops { DIGEST_LIST_ADD, DIGEST_LIST_DEL,
-> > > DIGEST_LIST_OP__LAST };
-> > > > > > +
-> > > > > > +/**
-> > > > > > + * struct compact_list_hdr - header of the following concatenated
-> > > digests
-> > > > > > + * @version: version of the digest list
-> > > > > > + * @_reserved: field reserved for future use
-> > > > > > + * @type: type of digest list among enum compact_types
-> > > > > > + * @modifiers: additional attributes among (1 << enum
-> > > compact_modifiers)
-> > > > >
-> > > > > I do not understand this description, what does it mean?
-> > > >
-> > > > Hi Greg
-> > > >
-> > > > yes, it is not very clear.
-> > > >
-> > > > @modifiers is a bitmask where each bit corresponds to a different
-> > > > attribute. enum compact_modifiers defines which bit position is
-> > > > assigned to each attribute.
-> > >
-> > > Watch out with endian issues and bitmasks...  Anyway, please document
-> > > this.
-> > >
-> > > >
-> > > > > > + * @algo: digest algorithm
-> > > > >
-> > > > > Is this also a #define or an enum?  Where is the list of them?
-> > > >
-> > > > @algo is an enum defined in include/uapi/linux/hash_info.h.
-> > >
-> > > Please say that.
-> > >
-> > > > > > + * @count: number of digests
-> > > > > > + * @datalen: length of concatenated digests
-> > > > >
-> > > > > Where does this count and length come into play as nothing else is in
-> > > > > this structure?
-> > > >
-> > > > Each digest list must begin with this structure. From it, the parser knows
-> > > > how much data it should expect afterwards. After the data, there could
-> be
-> > > > another or more blocks of this structure and following data.
-> > >
-> > > Ah, that was not obvious at all :)
-> > >
-> > > Why do you not have a __u8 data[]; type field as the last one here for
-> > > that memory so you can access it easier?
-> >
-> > After the digest list is parsed, I'm accessing the digest with the offset from
-> > the beginning of the digest list. If the offset was relative to the header, it
-> could
-> > have been useful. I could add the new field, but I'm afraid of the
-> incompatibility
-> > with existing tools that we have.
+Hi Dave,
+  Thanks for comments!
+
+On 2021-07-27 at 10:46:45 -0700, Dave Hansen wrote:
+> On 7/26/21 8:34 PM, Pengfei Xu wrote:
+> > The XSAVE feature set supports the saving and restoring of state components
+> > such as FPU, which is used for process context switching.
 > 
-> What tools?  This isn't a feature in the kernel yet, so we have no
-> legacy to support, right?
-
-Yes, right. We shouldn't be limited by previously written code.
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
-
-> thanks,
+> This sentence is really awkward.  It reads at first as saying that the
+> FPU is used for context switching.  Can you rephrase.
 > 
-> greg k-h
+  Thanks for advice, I will update it as below if it's appropriate:
+"
+The XSAVE feature set supports the saving and restoring of state components,
+which is used for process context switching. The state components include
+x87 state for FPU execution environment, SSE state, AVX state and so on.
+"
+
+> > In order to ensure that XSAVE works correctly, add XSAVE basic test for
+> > XSAVE architecture functionality.
+> 
+> This sentence needs to be start on the same line as the previous one,
+> *or* be in a new paragraph.  Please rewrap it.
+> 
+  Will rewrap it.
+
+> > This patch set tests XSAVE/XRSTOR instructions on x86 platforms and verify if
+> > the XSAVE/XRSTOR works correctly during signal handling.
+> 
+> This reads to me like you are going to test the XSAVE/XRSTOR
+> instructions *in* a signal handler, instead of testing the XSAVE/XRSTOR
+> instructions that the kernel uses at signal entry/exit.
+> 
+> Also, the kernel does *NOT* *USE* XSAVE/XRSTOR in many cases to
+> save/restore signal state.  The changelog could be read as implying that
+> it does.
+> 
+  Yes, how about updating it as below:
+"
+This patch set tests and verifies the basic functions of XSAVE/XRSTOR in
+user space; during and after signal processing on the x86 platform, the
+XSAVE contents of the process should not be changed.
+"
+
+> > Cases such as signal handling, process creation, other xstate(except FPU)
+> > tests for XSAVE check, etc. will be added to the Linux kernel self-test.
+> > If appropriate, it is even planned to add the [1] mentioned XSAVE issues
+> > reproduce and some XSAVE anomaly tests to the kernel self-test.
+> 
+> This is not clear whether it is talking about *this* series int he
+> future tense (will be added) or whether it is talking about future *work*.
+> 
+> Maybe something like this:
+> 
+> 	This series introduces only the most basic XSAVE tests.  In the
+> 	future, the intention is to continue expanding the scope of
+> 	these selftests to include more kernel XSAVE-related
+> 	functionality and XSAVE-managed features like AMX and shadow
+> 	stacks.
+Thanks for advice, will update it.
+
+-Pengfei
+BR.
