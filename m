@@ -2,113 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 637013D8578
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 03:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9604F3D85C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 04:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbhG1Bhx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jul 2021 21:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        id S233345AbhG1CH5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jul 2021 22:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbhG1Bhw (ORCPT
+        with ESMTP id S233260AbhG1CH4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jul 2021 21:37:52 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB200C061757
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jul 2021 18:37:50 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id f18-20020a05600c4e92b0290253c32620e7so2932161wmq.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jul 2021 18:37:50 -0700 (PDT)
+        Tue, 27 Jul 2021 22:07:56 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2BBC061757;
+        Tue, 27 Jul 2021 19:07:54 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id c16so831100plh.7;
+        Tue, 27 Jul 2021 19:07:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=dNawNorpn3/ehRW9KZSQYGcu+t9pcL5tKP9IjSkZ/ic=;
-        b=cIFaLdm5pLV2s8UfdlKSzTILToy3SXyMJYCr43IQZLoLGD6voXarNaaAobYCR0NSto
-         6UVYPaoKMp0/tVjgzo7d1I552/CEwGhM1jaOcC7tZZS8fZa1q8RalmdMk7ksBt7mE3hZ
-         8xv7yF3sgQjarEmBeuyXeMMHN/8DcYIWknYI8xH6ATt/lS9UIVgwjAxvgn7MsVhogBQs
-         Kq8RgoQmmjDa3Cg+eAgtzOTvRpLRxLco+HtiorB5OeVpry1fVLDeWeokbXNB5yFZe4ga
-         /kyGLrCMEuvbKrla/IbGr3VsF19dcsSaojASfm53Y5bUSQYPT9eVZYjhEsJrSODZRsSS
-         NWbg==
+         :cc;
+        bh=5mXMjFPqPwFYqgDq1yqkwzfqi2rFOlo0l2pItgAk0Ng=;
+        b=MdLIJXGQlUxFzYCyWYJRYBGi5eFuhpyYUtSmbbHTYV0IubJLEhICHBM+kQKOXcugaS
+         rJ9zFAFusLuHPGz0dHF7l0j2NLF4Tdp94IEiZ+ScPhrudkWYpe5h/luZzzMe8u/Z5z8k
+         fbnOmWmLitck4SSADPA3zeAKpb1To3Dkh1lpqX7Do1J0ogQFyQ+RTI2cEYjSpVW/j0l/
+         AdcBV7tT3LtcPNTM1HAhRQexmT0lrP/nplvwD+IcPjgksZ2QTOBvo9eZ7AEhx00LU4gL
+         6uJ9XsJoTBUJIxZ8IUyru8zMxCu8ka3soqsZVflM3U5Ek+J3Js1HiMz6e51zqoIWHY4f
+         Df/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dNawNorpn3/ehRW9KZSQYGcu+t9pcL5tKP9IjSkZ/ic=;
-        b=ErBXELlrYzJ2jF7u+wEU9L6Qa9oLuOG7zlDHcJH9FsJnEVKS1H8pH3K/P/KH5orqci
-         HWQFs8XUJv/o5eUUlIKxd2hFA9FGKzxWo7DXg8D57e4bkxma9NicI+U+D71IL1tfD1fi
-         nOw8R1QQ6t9tsr5ATezzdk5oSUDJ4DYWKaQJaojYhatEkPowRBFWeSU66AVFmXRlnWNk
-         HCgyEExz7RHFZejQLGnCC0fPlUFDT/zf+hM1zB70+bI0TxepRG6BTFiJi8ehPvLEV/5G
-         yD1F/2nidU8oufQEbzv+YYTVW8QwxEA/RAYtc2vbhoMZJAqZ6z3vEcEIIAmoII/ctwox
-         C/nQ==
-X-Gm-Message-State: AOAM53056uEISUfSARuf6bMNXglwMxtMCOCkDo5k/cgsSvS5xkZPs8hC
-        Owx4YFK6En+aCzJ2yD40wqMwKRjvG8k6eozWFD3wNA==
-X-Google-Smtp-Source: ABdhPJyWfMUtr8sZgDmkqE6QprjlNcFVWYt6wQrjN3jdJ8XBOZoJjOjEpYzrry7Ibz2p3AZXcOwnI6IB8yXnuJQiPPE=
-X-Received: by 2002:a1c:1dcf:: with SMTP id d198mr6723188wmd.103.1627436269179;
- Tue, 27 Jul 2021 18:37:49 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=5mXMjFPqPwFYqgDq1yqkwzfqi2rFOlo0l2pItgAk0Ng=;
+        b=Uyhtp7dl23z09JC1aAF9mB+4SXMVRLYVNgdx+VyVCBt4fG3P49Yq/J/S9SV54qJWHR
+         OCkwXRv95mo8cc0c1qHuAEbTNR/RQ+D+XChVpPvO+smQLK0X+bT2pKbYR11IXyykFH4G
+         O2Dqrxp07wm/8rMYCTgkjxNwL75jr6GLMYNrCzMFKZhF2pEx+wB67gD70hM8K1TQVVk5
+         6ly+lepe9GMZlpH0c/ESHbX5GuIjFOBqBHEZTr2A/rwfQiogmgFRGYdLNNOPONER0RUR
+         Ky4lTFctjfZGkIlSAvgnSd0OjsE1RyVQGPs1/2ZJJwfF97DHjhOELqmhamgPFkoezzg9
+         muKw==
+X-Gm-Message-State: AOAM532mWKtk/eHMdKvJfGb9vveUYFwR1RtyL/0N0rDMaj5wj9pWdbe6
+        NQWaua52OpAJHKgh8luOkTNHzQitXoWX5Z+sGVU=
+X-Google-Smtp-Source: ABdhPJyPZXkdPgV465qK/iIZ6+cZ7aKV9G8U3swzQ+rDg0M1oNPMtKGj9dHG7T6zOPdzBZ+62F6s1uiYRvC544TCAm0=
+X-Received: by 2002:a05:6a00:26e5:b029:330:be3:cacd with SMTP id
+ p37-20020a056a0026e5b02903300be3cacdmr25949003pfw.78.1627438074471; Tue, 27
+ Jul 2021 19:07:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210727225847.22185-1-jjoseaquiless@gmail.com>
-In-Reply-To: <20210727225847.22185-1-jjoseaquiless@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 28 Jul 2021 09:37:38 +0800
-Message-ID: <CABVgOSkT5_R3jWLnwftGHHWQKaPOMySXWhCx_=SCK6BKX4w_qw@mail.gmail.com>
-Subject: Re: [PATCH] lib: use of kunit in test_parman.c
-To:     =?UTF-8?Q?Jos=C3=A9_Aquiles_Guedes_de_Rezende?= 
-        <jjoseaquiless@gmail.com>
-Cc:     Jiri Pirko <jiri@nvidia.com>, Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, ~lkcamp/patches@lists.sr.ht,
-        Matheus Henrique de Souza Silva 
-        <matheushenriquedesouzasilva@protonmail.com>
+References: <20210727001252.1287673-1-jiang.wang@bytedance.com>
+ <20210727001252.1287673-3-jiang.wang@bytedance.com> <6100363add8a9_199a412089@john-XPS-13-9370.notmuch>
+In-Reply-To: <6100363add8a9_199a412089@john-XPS-13-9370.notmuch>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Tue, 27 Jul 2021 19:07:43 -0700
+Message-ID: <CAM_iQpVedTzRbf-bC7WuGMFYF=qnUxbnUdqJ9+FaxrTAn5DkTw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/5] af_unix: add unix_stream_proto for sockmap
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Jiang Wang <jiang.wang@bytedance.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        "Cong Wang ." <cong.wang@bytedance.com>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 7:04 AM Jos=C3=A9 Aquiles Guedes de Rezende
-<jjoseaquiless@gmail.com> wrote:
->
-> Convert the parman test module to use the KUnit test framework.
-> This makes thetest clearer by leveraging KUnit's assertion macros
-> and test case definitions,as well as helps standardize on a testing frame=
-work.
->
-> Co-developed-by: Matheus Henrique de Souza Silva <matheushenriquedesouzas=
-ilva@protonmail.com>
-> Signed-off-by: Matheus Henrique de Souza Silva <matheushenriquedesouzasil=
-va@protonmail.com>
-> Signed-off-by: Jos=C3=A9 Aquiles Guedes de Rezende <jjoseaquiless@gmail.c=
-om>
-> ---
+On Tue, Jul 27, 2021 at 9:37 AM John Fastabend <john.fastabend@gmail.com> wrote:
+> Do we really need an unhash hook for unix_stream? I'm doing some testing
+> now to pull it out of TCP side as well. It seems to be an artifact of old
+> code that is no longer necessary. On TCP side at least just using close()
+> looks to be enough now.
 
-Thanks for porting this! A few more notes from the KUnit side.
+How do you handle the disconnection from remote without ->unhash()?
 
->  lib/test_parman.c | 145 +++++++++++++++++++---------------------------
->  1 file changed, 60 insertions(+), 85 deletions(-)
+For all stream sockets, we still only allow established sockets to stay
+in sockmap, which means we have to remove it if it is disconnected
+or closed.
 
-This seems to be missing changes to lib/Kconfig.debug: you'll want to
-modify the TEST_PARMAN config item to
-- depend on KUNIT
-- only appear if !KUNIT_ALL_TESTS
-- default KUNIT_ALL_TESTS
+But it seems Jiang forgot to call ->unhash() when disconnecting.
 
-It might also be nice to:
-- select PARMAN (it's otherwise extremely unlikely a config will
-actually pick up the test)
-- maybe rename TEST_PARMAN to PARMAN_KUNIT_TEST (this is optional,
-since this is a port of an existing test, but does make it clearer, so
-it really depends on what existing usage looks like)
-
->
-> diff --git a/lib/test_parman.c b/lib/test_parman.c
-> index 35e32243693c..bd5010f0a412 100644
-> --- a/lib/test_parman.c
-> +++ b/lib/test_parman.c
-
-The rest of this looks okay to me, but you should check out Daniel's
-comments in his email, too.
-
-Cheers,
--- David
+Thanks.
