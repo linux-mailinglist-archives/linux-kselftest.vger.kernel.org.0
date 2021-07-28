@@ -2,93 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9604F3D85C8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 04:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1B33D860D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 05:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233345AbhG1CH5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jul 2021 22:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233260AbhG1CH4 (ORCPT
+        id S234451AbhG1DVw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jul 2021 23:21:52 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:35617 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234336AbhG1DVv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jul 2021 22:07:56 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2BBC061757;
-        Tue, 27 Jul 2021 19:07:54 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id c16so831100plh.7;
-        Tue, 27 Jul 2021 19:07:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5mXMjFPqPwFYqgDq1yqkwzfqi2rFOlo0l2pItgAk0Ng=;
-        b=MdLIJXGQlUxFzYCyWYJRYBGi5eFuhpyYUtSmbbHTYV0IubJLEhICHBM+kQKOXcugaS
-         rJ9zFAFusLuHPGz0dHF7l0j2NLF4Tdp94IEiZ+ScPhrudkWYpe5h/luZzzMe8u/Z5z8k
-         fbnOmWmLitck4SSADPA3zeAKpb1To3Dkh1lpqX7Do1J0ogQFyQ+RTI2cEYjSpVW/j0l/
-         AdcBV7tT3LtcPNTM1HAhRQexmT0lrP/nplvwD+IcPjgksZ2QTOBvo9eZ7AEhx00LU4gL
-         6uJ9XsJoTBUJIxZ8IUyru8zMxCu8ka3soqsZVflM3U5Ek+J3Js1HiMz6e51zqoIWHY4f
-         Df/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5mXMjFPqPwFYqgDq1yqkwzfqi2rFOlo0l2pItgAk0Ng=;
-        b=Uyhtp7dl23z09JC1aAF9mB+4SXMVRLYVNgdx+VyVCBt4fG3P49Yq/J/S9SV54qJWHR
-         OCkwXRv95mo8cc0c1qHuAEbTNR/RQ+D+XChVpPvO+smQLK0X+bT2pKbYR11IXyykFH4G
-         O2Dqrxp07wm/8rMYCTgkjxNwL75jr6GLMYNrCzMFKZhF2pEx+wB67gD70hM8K1TQVVk5
-         6ly+lepe9GMZlpH0c/ESHbX5GuIjFOBqBHEZTr2A/rwfQiogmgFRGYdLNNOPONER0RUR
-         Ky4lTFctjfZGkIlSAvgnSd0OjsE1RyVQGPs1/2ZJJwfF97DHjhOELqmhamgPFkoezzg9
-         muKw==
-X-Gm-Message-State: AOAM532mWKtk/eHMdKvJfGb9vveUYFwR1RtyL/0N0rDMaj5wj9pWdbe6
-        NQWaua52OpAJHKgh8luOkTNHzQitXoWX5Z+sGVU=
-X-Google-Smtp-Source: ABdhPJyPZXkdPgV465qK/iIZ6+cZ7aKV9G8U3swzQ+rDg0M1oNPMtKGj9dHG7T6zOPdzBZ+62F6s1uiYRvC544TCAm0=
-X-Received: by 2002:a05:6a00:26e5:b029:330:be3:cacd with SMTP id
- p37-20020a056a0026e5b02903300be3cacdmr25949003pfw.78.1627438074471; Tue, 27
- Jul 2021 19:07:54 -0700 (PDT)
+        Tue, 27 Jul 2021 23:21:51 -0400
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 099AC806B5;
+        Wed, 28 Jul 2021 15:21:47 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1627442507;
+        bh=M/uPIgLF8tGUDD98okYzFS0J2waYirdjuMamUxcRp6E=;
+        h=From:To:Cc:Subject:Date;
+        b=ONzu72LUqpwksenWFVsO3wIbxCOyMM/hjKOAVDPE2Z5AUzReRX0+3H5Qa1YR7b+G2
+         478Tn+Asr/9LcZJId2Fbntfq3/qUoa92tSqkDR3ZvleEepRPZU4C9k77XOMX8tHpz7
+         PpioyciwIq4UupPxFmqdtFkDhVIHG+uI++LOs32S/YihB5/sR4cR+fmbhO8Jw7DKGi
+         O5e6b5Xx8M/hpaiSWYIqALVIxvCGLABPUrDzuHuThVrykidB14sLFpiv/fkoB5dYrR
+         XdfkVqXNO4efLeRmSBWGPhId1plFaJ+vKYPJis/blF3f+Oanei4gG5GiECdXmkWQT0
+         wEsuGeCVWWmeg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6100cd4a0000>; Wed, 28 Jul 2021 15:21:46 +1200
+Received: from coled-dl.ws.atlnz.lc (coled-dl.ws.atlnz.lc [10.33.25.26])
+        by pat.atlnz.lc (Postfix) with ESMTP id C311913EE48;
+        Wed, 28 Jul 2021 15:21:46 +1200 (NZST)
+Received: by coled-dl.ws.atlnz.lc (Postfix, from userid 1801)
+        id BCC55241AD5; Wed, 28 Jul 2021 15:21:46 +1200 (NZST)
+From:   Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+To:     pablo@netfilter.org
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        kuba@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>,
+        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
+        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
+        Blair Steven <blair.steven@alliedtelesis.co.nz>
+Subject: [PATCH] net: netfilter: Fix port selection of FTP for NF_NAT_RANGE_PROTO_SPECIFIED
+Date:   Wed, 28 Jul 2021 15:21:34 +1200
+Message-Id: <20210728032134.21983-1-Cole.Dishington@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20210727001252.1287673-1-jiang.wang@bytedance.com>
- <20210727001252.1287673-3-jiang.wang@bytedance.com> <6100363add8a9_199a412089@john-XPS-13-9370.notmuch>
-In-Reply-To: <6100363add8a9_199a412089@john-XPS-13-9370.notmuch>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Tue, 27 Jul 2021 19:07:43 -0700
-Message-ID: <CAM_iQpVedTzRbf-bC7WuGMFYF=qnUxbnUdqJ9+FaxrTAn5DkTw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 2/5] af_unix: add unix_stream_proto for sockmap
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Jiang Wang <jiang.wang@bytedance.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        "Cong Wang ." <cong.wang@bytedance.com>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=dvql9Go4 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=e_q4qTt1xDgA:10 a=xOT0nC9th1TpZTiSAT0A:9 a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 9:37 AM John Fastabend <john.fastabend@gmail.com> wrote:
-> Do we really need an unhash hook for unix_stream? I'm doing some testing
-> now to pull it out of TCP side as well. It seems to be an artifact of old
-> code that is no longer necessary. On TCP side at least just using close()
-> looks to be enough now.
+FTP port selection ignores specified port ranges (with iptables
+masquerade --to-ports) when creating an expectation, based on
+FTP commands PORT or PASV, for the data connection.
 
-How do you handle the disconnection from remote without ->unhash()?
+Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+Co-developed-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
+Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
+Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+---
 
-For all stream sockets, we still only allow established sockets to stay
-in sockmap, which means we have to remove it if it is disconnected
-or closed.
+Notes:
+    Currently with iptables -t nat -j MASQUERADE -p tcp --to-ports 10000-=
+10005,
+    creating a passive ftp connection from a client will result in the co=
+ntrol
+    connection being within the specified port range but the data connect=
+ion being
+    outside of the range. This patch fixes this behaviour to have both co=
+nnections
+    be in the specified range.
 
-But it seems Jiang forgot to call ->unhash() when disconnecting.
+ include/net/netfilter/nf_conntrack.h |  3 +++
+ net/netfilter/nf_nat_core.c          | 10 ++++++----
+ net/netfilter/nf_nat_ftp.c           | 26 ++++++++++++--------------
+ net/netfilter/nf_nat_helper.c        | 12 ++++++++----
+ 4 files changed, 29 insertions(+), 22 deletions(-)
 
-Thanks.
+diff --git a/include/net/netfilter/nf_conntrack.h b/include/net/netfilter=
+/nf_conntrack.h
+index cc663c68ddc4..b98d5d04c7ab 100644
+--- a/include/net/netfilter/nf_conntrack.h
++++ b/include/net/netfilter/nf_conntrack.h
+@@ -24,6 +24,8 @@
+=20
+ #include <net/netfilter/nf_conntrack_tuple.h>
+=20
++#include <uapi/linux/netfilter/nf_nat.h>
++
+ struct nf_ct_udp {
+ 	unsigned long	stream_ts;
+ };
+@@ -99,6 +101,7 @@ struct nf_conn {
+=20
+ #if IS_ENABLED(CONFIG_NF_NAT)
+ 	struct hlist_node	nat_bysource;
++	struct nf_nat_range2 range;
+ #endif
+ 	/* all members below initialized via memset */
+ 	struct { } __nfct_init_offset;
+diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+index 7de595ead06a..4772c8457ef2 100644
+--- a/net/netfilter/nf_nat_core.c
++++ b/net/netfilter/nf_nat_core.c
+@@ -360,10 +360,10 @@ find_best_ips_proto(const struct nf_conntrack_zone =
+*zone,
+  *
+  * Per-protocol part of tuple is initialized to the incoming packet.
+  */
+-static void nf_nat_l4proto_unique_tuple(struct nf_conntrack_tuple *tuple=
+,
+-					const struct nf_nat_range2 *range,
+-					enum nf_nat_manip_type maniptype,
+-					const struct nf_conn *ct)
++void nf_nat_l4proto_unique_tuple(struct nf_conntrack_tuple *tuple,
++				 const struct nf_nat_range2 *range,
++				 enum nf_nat_manip_type maniptype,
++				 const struct nf_conn *ct)
+ {
+ 	unsigned int range_size, min, max, i, attempts;
+ 	__be16 *keyptr;
+@@ -586,6 +586,8 @@ nf_nat_setup_info(struct nf_conn *ct,
+ 			   &ct->tuplehash[IP_CT_DIR_REPLY].tuple);
+=20
+ 	get_unique_tuple(&new_tuple, &curr_tuple, range, ct, maniptype);
++	if (range)
++		ct->range =3D *range;
+=20
+ 	if (!nf_ct_tuple_equal(&new_tuple, &curr_tuple)) {
+ 		struct nf_conntrack_tuple reply;
+diff --git a/net/netfilter/nf_nat_ftp.c b/net/netfilter/nf_nat_ftp.c
+index aace6768a64e..6794aa77162b 100644
+--- a/net/netfilter/nf_nat_ftp.c
++++ b/net/netfilter/nf_nat_ftp.c
+@@ -17,6 +17,10 @@
+ #include <net/netfilter/nf_conntrack_helper.h>
+ #include <net/netfilter/nf_conntrack_expect.h>
+ #include <linux/netfilter/nf_conntrack_ftp.h>
++void nf_nat_l4proto_unique_tuple(struct nf_conntrack_tuple *tuple,
++				 const struct nf_nat_range2 *range,
++				 enum nf_nat_manip_type maniptype,
++				 const struct nf_conn *ct);
+=20
+ #define NAT_HELPER_NAME "ftp"
+=20
+@@ -74,6 +78,7 @@ static unsigned int nf_nat_ftp(struct sk_buff *skb,
+ 	struct nf_conn *ct =3D exp->master;
+ 	char buffer[sizeof("|1||65535|") + INET6_ADDRSTRLEN];
+ 	unsigned int buflen;
++	int ret;
+=20
+ 	pr_debug("type %i, off %u len %u\n", type, matchoff, matchlen);
+=20
+@@ -86,21 +91,14 @@ static unsigned int nf_nat_ftp(struct sk_buff *skb,
+ 	 * this one. */
+ 	exp->expectfn =3D nf_nat_follow_master;
+=20
+-	/* Try to get same port: if not, try to change it. */
+-	for (port =3D ntohs(exp->saved_proto.tcp.port); port !=3D 0; port++) {
+-		int ret;
+-
+-		exp->tuple.dst.u.tcp.port =3D htons(port);
+-		ret =3D nf_ct_expect_related(exp, 0);
+-		if (ret =3D=3D 0)
+-			break;
+-		else if (ret !=3D -EBUSY) {
+-			port =3D 0;
+-			break;
+-		}
+-	}
++	/* Find a port that matches the NAT rule */
++	nf_nat_l4proto_unique_tuple(&exp->tuple, &ct->range,
++				    dir ? NF_NAT_MANIP_SRC : NF_NAT_MANIP_DST,
++				    ct);
++	port =3D ntohs(exp->tuple.dst.u.tcp.port);
++	ret =3D nf_ct_expect_related(exp, 0);
+=20
+-	if (port =3D=3D 0) {
++	if ((ret !=3D 0 && ret !=3D -EBUSY) || port =3D=3D 0) {
+ 		nf_ct_helper_log(skb, ct, "all ports in use");
+ 		return NF_DROP;
+ 	}
+diff --git a/net/netfilter/nf_nat_helper.c b/net/netfilter/nf_nat_helper.=
+c
+index a263505455fc..912bf50be58a 100644
+--- a/net/netfilter/nf_nat_helper.c
++++ b/net/netfilter/nf_nat_helper.c
+@@ -184,10 +184,14 @@ void nf_nat_follow_master(struct nf_conn *ct,
+ 	/* This must be a fresh one. */
+ 	BUG_ON(ct->status & IPS_NAT_DONE_MASK);
+=20
+-	/* Change src to where master sends to */
+-	range.flags =3D NF_NAT_RANGE_MAP_IPS;
+-	range.min_addr =3D range.max_addr
+-		=3D ct->master->tuplehash[!exp->dir].tuple.dst.u3;
++	if (exp->master && !exp->dir) {
++		range =3D exp->master->range;
++	} else {
++		/* Change src to where master sends to */
++		range.flags =3D NF_NAT_RANGE_MAP_IPS;
++		range.min_addr =3D ct->master->tuplehash[!exp->dir].tuple.dst.u3;
++		range.max_addr =3D ct->master->tuplehash[!exp->dir].tuple.dst.u3;
++	}
+ 	nf_nat_setup_info(ct, &range, NF_NAT_MANIP_SRC);
+=20
+ 	/* For DST manip, map port here to where it's expected. */
+--=20
+2.32.0
+
