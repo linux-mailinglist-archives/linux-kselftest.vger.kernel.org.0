@@ -2,233 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA7E3D8E54
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 14:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD5F3D8E68
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 14:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236108AbhG1Mye convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jul 2021 08:54:34 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3515 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbhG1Myd (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jul 2021 08:54:33 -0400
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GZYKS2dZZz6DJHd;
-        Wed, 28 Jul 2021 20:45:16 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 28 Jul 2021 14:54:30 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Wed, 28 Jul 2021 14:54:30 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC][PATCH v2 11/12] diglim: Remote Attestation
-Thread-Topic: [RFC][PATCH v2 11/12] diglim: Remote Attestation
-Thread-Index: AQHXgjz9ODHmd+8DTkOcoAaHmj57yatYN3AAgAAjKjA=
-Date:   Wed, 28 Jul 2021 12:54:30 +0000
-Message-ID: <3ed8744299814d238c73d26a9fb9f745@huawei.com>
-References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
-        <20210726163700.2092768-12-roberto.sassu@huawei.com>
- <20210728144728.62ace280@sal.lan>
-In-Reply-To: <20210728144728.62ace280@sal.lan>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S235105AbhG1M7b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jul 2021 08:59:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52976 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235204AbhG1M7a (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 28 Jul 2021 08:59:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1A31160C41;
+        Wed, 28 Jul 2021 12:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627477168;
+        bh=kLFFdjELukIaCubYfUjFa4qu5HNl/EGTInlrOnGO7a0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FSX9k0Zc6ABD8PEYvyi5FC/VCcTp9fnpsFz7HsuT8svvT/2J6AF3luJQAvErJM287
+         rO4zDTU6vaFzqwH3McaDFNILvRB9cCqFKSZSEDGKgvWCLBz6xhlgzCQPUbbD/3CyFL
+         m+lTvq1v3jdA94xRF5NBA1AzPfT/RmG/PHw3A5LCr1uedBz38xUYS9PIAIkAQ/E9ja
+         VTr2mCe5FrJP058xIINod/t5E5B2DRtuD94zmCevayG2iazBc2bTVIwDj8l7SQNojL
+         U3PqbJH/LHkaZuFTWzMM5l58j78kGD9B3LqAUjA6Za2qeIHulhC8GZtcKcLh4c4gri
+         0VqbuIvDZ4Sgg==
+Date:   Wed, 28 Jul 2021 13:59:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] kselftest/arm64: Add tests for SVE vector
+ configuration
+Message-ID: <20210728125918.GD4670@sirena.org.uk>
+References: <20210727180649.12943-1-broonie@kernel.org>
+ <20210727180649.12943-4-broonie@kernel.org>
+ <20210728094158.GC1724@arm.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dKeYJkA19bNVVKdr"
+Content-Disposition: inline
+In-Reply-To: <20210728094158.GC1724@arm.com>
+X-Cookie: Vini, vidi, Linux!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Mauro Carvalho Chehab [mailto:mchehab+huawei@kernel.org]
-> Sent: Wednesday, July 28, 2021 2:47 PM
-> Em Mon, 26 Jul 2021 18:36:59 +0200
-> Roberto Sassu <roberto.sassu@huawei.com> escreveu:
-> 
-> > Add more information about remote attestation with IMA and DIGLIM in
-> > Documentation/security/diglim/remote_attestation.rst.
-> >
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  Documentation/security/diglim/index.rst       |  1 +
-> >  .../security/diglim/remote_attestation.rst    | 87 +++++++++++++++++++
-> >  MAINTAINERS                                   |  1 +
-> >  3 files changed, 89 insertions(+)
-> >  create mode 100644 Documentation/security/diglim/remote_attestation.rst
-> >
-> > diff --git a/Documentation/security/diglim/index.rst
-> b/Documentation/security/diglim/index.rst
-> > index 4771134c2f0d..0f28c5ad71c0 100644
-> > --- a/Documentation/security/diglim/index.rst
-> > +++ b/Documentation/security/diglim/index.rst
-> > @@ -10,3 +10,4 @@ Digest Lists Integrity Module (DIGLIM)
-> >     introduction
-> >     architecture
-> >     implementation
-> > +   remote_attestation
-> > diff --git a/Documentation/security/diglim/remote_attestation.rst
-> b/Documentation/security/diglim/remote_attestation.rst
-> > new file mode 100644
-> > index 000000000000..83fd7581c460
-> > --- /dev/null
-> > +++ b/Documentation/security/diglim/remote_attestation.rst
-> > @@ -0,0 +1,87 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +Remote Attestation
-> > +==================
-> > +
-> > +When a digest list is added or deleted through the ``digest_list_add`` or
-> > +``digest_list_del`` interfaces, its buffer is sent to the IMA function
-> > +``ima_measure_critical_data()``. The primary reason for it is to calculate
-> > +the buffer digest, so that the digest list itself is searchable in the hash
-> > +table.
-> > +
-> > +``ima_measure_critical_data()`` can be also used to create a new
-> > +measurement entry each time this function is called, if there is an
-> > +appropriate rule in the IMA policy. Given that this function is called
-> > +during an addition or deletion of a digest list, a remote verifier can
-> > +infer from the measurement list precise information about what has been
-> > +uploaded to the kernel.
-> > +
-> > +To enable this functionality, the following rule must be added to the IMA
-> > +policy:
-> > +
-> > +::
-> 
-> As commented on other patches at this series, you can merge :: at the
-> previous text line, e. g.:
-> 
-> 	policy::
-> 
-> does the same as:
-> 
-> 	policy:
-> 
-> 	::
-> 
-> but it is nicer for text-only readers, IMO.
 
-Ok, will change in the next version of the patch set.
+--dKeYJkA19bNVVKdr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks
+On Wed, Jul 28, 2021 at 10:41:58AM +0100, Dave Martin wrote:
+> On Tue, Jul 27, 2021 at 07:06:49PM +0100, Mark Brown wrote:
 
-Roberto
+> > We provide interfaces for configuring the SVE vector length seen by
+> > processes using prctl and also via /proc for configuring the default
+> > values. Provide tests that exercise all these interfaces and verify that
+> > they take effect as expected, though at present no test fully enumerates
+> > all the possible vector lengths.
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
+> Does "at present" mean that this test doesn't do it either?
 
-> > +
-> > + measure func=CRITICAL_DATA label=diglim
-> > +
-> > +
-> > +When a file is uploaded, the workflow and the resulting IMA measurement
-> > +list are:
-> > +
-> > +.. code-block:: bash
-> > +
-> > + # echo $PWD/0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_list_add
-> > + # echo $PWD/0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_list_del
-> > + # cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements
-> > + ...
-> > + 10 <template digest> ima-buf sha256:<buffer digest> add_file_0-file_list-
-> compact-cat <buffer>
-> > + 10 <template digest> ima-buf sha256:<buffer digest> del_file_0-file_list-
-> compact-cat <buffer>
-> > +
-> > +When a buffer is uploaded, the workflow and the resulting IMA
-> measurement
-> > +list are:
-> > +
-> > +.. code-block:: bash
-> > +
-> > + # echo 0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_label
-> > + # cat 0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_list_add
-> > + # echo 0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_label
-> > + # cat 0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_list_del
-> > + # cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements
-> > + ...
-> > + 10 <template digest> ima-buf sha256:<buffer digest> add_buffer_0-
-> file_list-compact-cat <buffer>
-> > + 10 <template digest> ima-buf sha256:<buffer digest> del_buffer_0-file_list-
-> compact-cat <buffer>
-> > +
-> > +In the second case, the digest list label must be set explicitly, as the
-> > +kernel cannot determine it by itself (in the first case it is derived from
-> > +the name of the file uploaded).
-> > +
-> > +The confirmation that the digest list has been processed by IMA can be
-> > +obtained by reading the ASCII representation of the digest list:
-> > +
-> > +.. code-block:: bash
-> > +
-> > + # cat /sys/kernel/security/integrity/diglim/digest_lists_loaded/sha256-
-> <digest list digest>-0-file_list-compact-cat.ascii
-> > + actions: 1, version: 1, algo: sha256, type: 2, modifiers: 1, count: 1, datalen:
-> 32
-> > +
-> 87e5bd81850e11eeec2d3bb696b626b2a7f45673241cbbd64769c83580432869
-> > +
-> > +In this output, ``actions`` is set to 1
-> (``COMPACT_ACTION_IMA_MEASURED``
-> > +bit set).
-> > +
-> > +
-> > +DIGLIM guarantees that the information reported in the IMA measurement
-> list
-> > +is complete. If digest list loading is not recorded, digest query results
-> > +are ignored by IMA. If the addition was recorded, deletion can be
-> performed
-> > +only if also the deletion is recorded. This can be seen in the following
-> > +sequence of commands:
-> > +
-> > +.. code-block:: bash
-> > +
-> > + # echo 0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_label
-> > + # cat 0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_list_add
-> > + # echo 0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_label
-> > + # /tmp/cat 0-file_list-compact-cat >
-> /sys/kernel/security/integrity/diglim/digest_list_del
-> > + diglim: actions mismatch, add: 1, del: 0
-> > + diglim: unable to upload generated digest list
-> > + /tmp/cat: write error: Invalid argument
-> > +
-> > +Digest list measurement is avoided with the execution of ``/tmp/cat``, for
-> > +which a dont_measure rule was previously added in the IMA policy.
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 0672128fae7f..a7c502685109 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -5461,6 +5461,7 @@ F:
-> 	Documentation/security/diglim/architecture.rst
-> >  F:	Documentation/security/diglim/implementation.rst
-> >  F:	Documentation/security/diglim/index.rst
-> >  F:	Documentation/security/diglim/introduction.rst
-> > +F:	Documentation/security/diglim/remote_attestation.rst
-> >  F:	include/linux/diglim.h
-> >  F:	include/uapi/linux/diglim.h
-> >  F:	security/integrity/diglim/diglim.h
+> (It doesn't seem to try every VL, unless I've missed something?  Is this
+> planned?)
+
+Nothing currently does it, and nor does this patch.  Planned is a strong
+term but yes, ideally we should probe all the VLs.
+
+> > +#include <stddef.h>
+> > +#include <stdio.h>
+> > +#include <stdlib.h>
+>=20
+> Not used? ^
+
+We call exit() which is declared in stdlib.h.
+
+> > +#define MIN_VL 16
+
+> <asm/sigcontext.h> has SVE_MIN_VL.  Maybe we can use that everywhere
+> these days?
+
+I partly wanted the vector type neutral name, and I'm considering
+modifying the sysfs ABI file to define 0 as a valid vector length for
+consistency with accepting -1 as the maximum since SME doesn't have any
+architected guarantees as to which particular vector lengths are defined.
+
+> > +/* Verify that we can write a minimum value and have it take effect */
+> > +void proc_write_min(struct vec_data *data)
+
+> Could be proc_write_check_min() (though the "check" is a bit more
+> redundant here; from "write" it's clear that this function actually
+> does something nontrivial).
+
+TBH I'm not sure people will be excssively confused by the idea that a
+test would validate the values it was trying to read or write were
+accurate.
+
+> > +/* Can we read back a VL from prctl? */
+>=20
+> It's certainly possible.
+
+The comment is describing what the test is verifying.
+
+> Since this would test different kernel paths from getting the child
+> itself to do RVDL / PR_SVE_GET_VL, it would be a different test though.
+> I think this diff is still good, but beefing up the ptrace tests to do
+> the appropriate checks would be good too (if we don't have that already).
+
+Yes, the ptrace stuff could have a bit more coverage.
+
+> > +	proc_write_min,
+> > +	proc_write_max,
+
+> Can we also check what happens when writing unsupported values here?
+
+We could.
+
+> If this patch is more about establishing the framework, these could be
+> TODOs for now.
+
+It definitely feels like something we can do incrementally.
+
+> Can we be a good citizen and restore sve_default_vector_length to its
+> original value?
+
+We do that in the tests that fiddle with the default vector length, it
+seems useful to keep it at a value different from min and max as much as
+possible to increase the chance that we notice a failure to set things.
+
+> Also, we should probably disable the default vector length writing tests
+> if not running with EUID=3D=3D0.  Verifying that writing the default vect=
+or
+
+kselftest in general isn't going to have a great time run as non-root
+but yes, it wouldn't hurt to check.
+
+> length fails when non-root would be worth testing.  If running as root,
+> a temporary seteuid(nobody_uid) could be used for that.
+
+This feels like another thing that could be done incrementally.
+
+--dKeYJkA19bNVVKdr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEBVKUACgkQJNaLcl1U
+h9D4lgf+OuvtDdSuhqqxyHhSgte5eo1LcTo/lCNNzyOvTopZ3+onG5rRMG+kEWCD
+VgseWb7YWUgN0uFhwaEtwG7bSBP3q2f0/YGGYxpkeMZSl85Btx1v5Mb1vlY3q67f
+ehB/B2DbGTPY5qKxTYv/SYjY28kpU8eGokIkCCqV7Q2SeJOBDE5xmkH0Sk/bOC/1
+zsCuJbuIWHoKZP/Gf4SLDpoM8sQgRuIzzbLbsIg6MkXQkYY8djCuKEjcJC/CX9eN
+4O6Om4x3jWvpIq7vMS176SsqqMOcVK93aAjqY7e60tKX7+cpF3nSkQjuxDqS4GkR
+teAUGYwCJQ/kJEJLCuU+yMe1rL/4PA==
+=vdbo
+-----END PGP SIGNATURE-----
+
+--dKeYJkA19bNVVKdr--
