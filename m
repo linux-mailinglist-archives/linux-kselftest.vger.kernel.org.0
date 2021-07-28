@@ -2,253 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD72B3D8CC5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 13:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4623D8CD6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 13:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236059AbhG1LbK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jul 2021 07:31:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37610 "EHLO mail.kernel.org"
+        id S234759AbhG1LhF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jul 2021 07:37:05 -0400
+Received: from foss.arm.com ([217.140.110.172]:55398 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234517AbhG1LbJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jul 2021 07:31:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C8BB960724;
-        Wed, 28 Jul 2021 11:31:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627471868;
-        bh=GrTwMapp7eNH+1uVmCWGuecyOBz6cQ7nTF/0BCD/PFg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bNOYbnfQHcgpwd2cb+INWPFsKF6j5ddWbkqduDV+sfL5Mo1TcWRcdZq5Q0qdEQkeQ
-         MTjv7RKzZnYD/DaG7NhfiV02mjHtek9OEp8IjuhnC8jQwApDf99enFN35c8wpRRk/c
-         Nn5GiEPD7Btb81RTR98NZPn7cKCrw6ydvR2SjFDYc73B9EwM3eYsnUGaBaAhkxx5WA
-         BDk+1OcUckNp5Oal/UPuRB3yW/7QrP6PRW12aKIrjQpQXIA/kNhWk9R4dxZT2y+XT+
-         hDsywHF4PXdRaoyTJenNhODSrnh+MldMYYmotT9xfrzsd9prcHZKyK5Pf64dLiTjQh
-         3ZqCO0ft6hHkw==
-Date:   Wed, 28 Jul 2021 13:31:02 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC][PATCH v2 02/12] diglim: Basic definitions
-Message-ID: <20210728133102.339c7b8e@coco.lan>
-In-Reply-To: <20210726163700.2092768-3-roberto.sassu@huawei.com>
-References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
-        <20210726163700.2092768-3-roberto.sassu@huawei.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        id S233394AbhG1LhF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 28 Jul 2021 07:37:05 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A600131B;
+        Wed, 28 Jul 2021 04:37:03 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE36F3F66F;
+        Wed, 28 Jul 2021 04:37:02 -0700 (PDT)
+Date:   Wed, 28 Jul 2021 12:35:42 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] kselftest/arm64: Validate vector lengths are set
+ in sve-probe-vls
+Message-ID: <20210728113542.GE1724@arm.com>
+References: <20210727180649.12943-1-broonie@kernel.org>
+ <20210727180649.12943-3-broonie@kernel.org>
+ <20210728094151.GB1724@arm.com>
+ <20210728110701.GC4670@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210728110701.GC4670@sirena.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Em Mon, 26 Jul 2021 18:36:50 +0200
-Roberto Sassu <roberto.sassu@huawei.com> escreveu:
-
-> Introduce the basic definitions, exported to user space, to use digest
-> lists. The definitions, added to include/uapi/linux/diglim.h, are
-> documented in Documentation/security/diglim/implementation.rst.
+On Wed, Jul 28, 2021 at 12:07:01PM +0100, Mark Brown wrote:
+> On Wed, Jul 28, 2021 at 10:41:51AM +0100, Dave Martin wrote:
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  .../security/diglim/implementation.rst        | 97 +++++++++++++++++++
->  Documentation/security/diglim/index.rst       |  1 +
->  MAINTAINERS                                   |  2 +
->  include/uapi/linux/diglim.h                   | 51 ++++++++++
->  4 files changed, 151 insertions(+)
->  create mode 100644 Documentation/security/diglim/implementation.rst
->  create mode 100644 include/uapi/linux/diglim.h
+> > This test was originally a diagnostic tool, so the way VLs are probed
+> > aims to be efficient, rather than being defensive against the kernel
+> > doing weird stuff.
 > 
-> diff --git a/Documentation/security/diglim/implementation.rst b/Documentation/security/diglim/implementation.rst
-> new file mode 100644
-> index 000000000000..59a180b3bb3f
-> --- /dev/null
-> +++ b/Documentation/security/diglim/implementation.rst
-> @@ -0,0 +1,97 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Implementation
-> +==============
-> +
-> +This section describes the implementation of DIGLIM.
-> +
-> +
-> +Basic Definitions
-> +-----------------
-> +
-> +This section introduces the basic definitions required to use DIGLIM.
-> +
-> +
-> +Compact Digest List Format
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +.. kernel-doc:: include/uapi/linux/diglim.h
-> +   :identifiers: compact_list_hdr
-> +
-> +Compact Types
-> +.............
-> +
-> +Digests can be of different types:
-> +
-> +- ``COMPACT_PARSER``: digests of executables which are given the ability to
-> +  parse digest lists not in the compact format and to upload to the kernel
-> +  the digest list converted to the compact format;
-> +- ``COMPACT_FILE``: digests of regular files;
-> +- ``COMPACT_METADATA``: digests of file metadata (e.g. the digest
-> +  calculated by EVM to verify a portable signature);
-> +- ``COMPACT_DIGEST_LIST``: digests of digest lists (only used internally by
-> +  the kernel).
-> +
-> +Different users of DIGLIM might query digests with different compact types.
-> +For example, IMA would be interested in COMPACT_FILE, as it deals with
-> +regular files, while EVM would be interested in COMPACT_METADATA, as it
-> +verifies file metadata.
-> +
-> +
-> +Compact Modifiers
-> +.................
-> +
-> +Digests can also have specific attributes called modifiers (bit position):
-> +
-> +- ``COMPACT_MOD_IMMUTABLE``: file content or metadata should not be
-> +  modifiable.
-> +
-> +IMA might use this information to deny open for writing, or EVM to deny
-> +setxattr operations.
-> +
-> +
-> +Actions
-> +.......
-> +
-> +This section defines a set of possible actions that have been executed on
-> +the digest lists (bit position):
-> +
-> +- ``COMPACT_ACTION_IMA_MEASURED``: the digest list has been measured by
-> +  IMA;
-> +- ``COMPACT_ACTION_IMA_APPRAISED``: the digest list has been successfully
-> +  appraised by IMA;
-> +- ``COMPACT_ACTION_IMA_APPRAISED_DIGSIG``: the digest list has been
-> +  successfully appraised by IMA by verifying a digital signature.
-> +
-> +This information might help users of DIGLIM to decide whether to use the
-> +result of a queried digest.
-> +
-> +For example, if a digest belongs to a digest list that was not measured
-> +before, IMA should ignore the result of the query, as the measurement list
-> +sent to remote verifiers would lack which digests have been uploaded to the
-> +kernel.
-> +
-> +
-> +Compact Digest List Example
-> +...........................
-> +
-> +::
-> +
-> + version: 1, type: 2, modifiers: 0 algo: 4, count: 3, datalen: 96
-> + <SHA256 digest1><SHA256 digest2><SHA256 digest3>
-> + version: 1, type: 3, modifiers: 1 algo: 6, count: 2, datalen: 128
-> + <SHA512 digest1><SHA512 digest2>
-> +
-> +This digest list consists of two blocks. The first block contains three
-> +SHA256 digests of regular files. The second block contains two SHA512
-> +digests of immutable metadata.
-> +
-> +
-> +Compact Digest List Operations
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +Finally, this section defines the possible operations that can be performed
-> +with digest lists:
-> +
-> +- ``DIGEST_LIST_ADD``: the digest list is being added;
-> +- ``DIGEST_LIST_DEL``: the digest list is being deleted.
-> diff --git a/Documentation/security/diglim/index.rst b/Documentation/security/diglim/index.rst
-> index 0fc5ab019bc0..4771134c2f0d 100644
-> --- a/Documentation/security/diglim/index.rst
-> +++ b/Documentation/security/diglim/index.rst
-> @@ -9,3 +9,4 @@ Digest Lists Integrity Module (DIGLIM)
->  
->     introduction
->     architecture
-> +   implementation
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c914dadd7e65..f61f5239468a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5458,8 +5458,10 @@ L:	linux-integrity@vger.kernel.org
->  S:	Supported
->  T:	git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
->  F:	Documentation/security/diglim/architecture.rst
-> +F:	Documentation/security/diglim/implementation.rst
->  F:	Documentation/security/diglim/index.rst
->  F:	Documentation/security/diglim/introduction.rst
-> +F:	include/uapi/linux/diglim.h
->  
->  DIOLAN U2C-12 I2C DRIVER
->  M:	Guenter Roeck <linux@roeck-us.net>
-> diff --git a/include/uapi/linux/diglim.h b/include/uapi/linux/diglim.h
-> new file mode 100644
-> index 000000000000..8a33d1f0fefb
-> --- /dev/null
-> +++ b/include/uapi/linux/diglim.h
-> @@ -0,0 +1,51 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/*
-> + * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> + *
-> + * DIGLIM definitions exported to user space, useful for generating digest
-> + * lists.
-> + */
-> +
-> +#ifndef _UAPI__LINUX_DIGLIM_H
-> +#define _UAPI__LINUX_DIGLIM_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/hash_info.h>
-> +
-> +enum compact_types { COMPACT_KEY, COMPACT_PARSER, COMPACT_FILE,
-> +		     COMPACT_METADATA, COMPACT_DIGEST_LIST, COMPACT__LAST };
-> +
-> +enum compact_modifiers { COMPACT_MOD_IMMUTABLE, COMPACT_MOD__LAST };
-> +
-> +enum compact_actions { COMPACT_ACTION_IMA_MEASURED,
-> +		       COMPACT_ACTION_IMA_APPRAISED,
-> +		       COMPACT_ACTION_IMA_APPRAISED_DIGSIG,
-> +		       COMPACT_ACTION__LAST };
-> +
-> +enum ops { DIGEST_LIST_ADD, DIGEST_LIST_DEL, DIGEST_LIST_OP__LAST };
-> +
-> +/**
-> + * struct compact_list_hdr - header of the following concatenated digests
-> + * @version: version of the digest list
-> + * @_reserved: field reserved for future use
-> + * @type: type of digest list among enum compact_types
-> + * @modifiers: additional attributes among (1 << enum compact_modifiers)
-> + * @algo: digest algorithm
-> + * @count: number of digests
-> + * @datalen: length of concatenated digests
-> + *
-> + * A digest list is a set of blocks composed by struct compact_list_hdr and
-> + * the following concatenated digests.
-> + */
-> +struct compact_list_hdr {
-> +	__u8 version;
-> +	__u8 _reserved;
-> +	__le16 type;
-> +	__le16 modifiers;
-> +	__le16 algo;
-> +	__le32 count;
-> +	__le32 datalen;
-> +} __packed;
-> +#endif /*_UAPI__LINUX_DIGLIM_H*/
+> Yeah, the whole probing thing doesn't really fit into kselftest's idea
+> of what a test is - I just put this in here since it seemed like a cheap
+> extra validation that we could add in with little bother rather than
+> because it's a complete and thorough validation of every possible thing
+> that could go wrong.  I'd be just as happy to not modify this at all but
+> since it does try the intermediate VLs it didn't seem like a terrible
+> idea to throw in some validation while we're at it.
+> 
+> > If the kernel returns a vl > than the one we tried to set, we'll end
+> > up in an infinite loop because of the way the loop deliberately uses the
+> > kernel's return value to skip unsupported VLs.  So, it might be better
+> > to probe every single architecturally possible VL and sanity check
+> > everything instead.
+> 
+> Yup, that'd obviously be a complete rewrite though.  We'd not only need
+> to probe every possible vector length, but also validate that any
+> unsupported vector lengths report the expected vector length instead
+> when we try them.
 
-Besides Greg's notes, I'm wondering why to enforce a particular
-endness here. I mean, this is uAPI. I would expect it to use the
-CPU endianness instead, in order to avoid uneeded conversions.
+Fair enough, but is it worth dropping a comment in to clarify what this
+does and doesn't test?  This could be an area for future improvement.
 
-Thanks,
-Mauro
+> > > +		if (rdvl_sve() != vl)
+> > > +			ksft_exit_fail_msg("Set VL %d, RDVL %d\n",
+> > > +					   vl, rdvl_sve());
+> 
+> > If this fails, the VL vl wasn't "Set" at all.  I found this a bit
+> > confusing from just looking at this hunk.
+> 
+> > Can we write something like "PR_SVE_SET_VL reports VL %d, RDVL %d"?
+> 
+> Sure.
+> 
+> > I'm not sure of the correct option for forcing SVE off against the
+> > compiler default -- check with the tools folks.  If there isn't a
+> > proper way to do this, it's a toolchain defect so we should flag it up,
+> > but -mgeneral-regs-only might work for us even though it's a bit of a
+> > sledgehammer.
+> 
+> -march should do the trick (if it doesn't the base kernel already has
+> issues).  This is a separate issue that affects all the arm64 selftests
+> I think.
+
+OK, if there's already precedent then I guess we can go with that.
+
+Cheers
+---Dave
