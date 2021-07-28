@@ -2,207 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D09793D92C0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 18:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BE23D92CA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 18:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237392AbhG1QIG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jul 2021 12:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237804AbhG1QH1 (ORCPT
+        id S229806AbhG1QJG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jul 2021 12:09:06 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:42516 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229843AbhG1QJF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jul 2021 12:07:27 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38430C061764
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jul 2021 09:07:25 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id k1so3216051plt.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jul 2021 09:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B9f6uyUz014fnggzO8Lz7MpHz0USkcYzM/T+4Ea78YM=;
-        b=UU5KdHZMP9IBGOyfkQN4ImyUxqovhAimR6tPwqXnZG0/QBAtlYgm5bNzO/2W3e3Mm4
-         o0ygSHzBIDMjtiuybMD47c94ckdLt4Dok/gkm32senPg5kCn0K9ZpDerrYWDfsHo4UPn
-         r/CkGC3O0SYBwaldA9baaB+4/0xzxd6cuB8kfc2kHexu53l5XLxuEM9Tm00EYYo8rfRg
-         4lsoaTnwx+e1oSMKMkOF3a5o45XXbDIJ0sgfDtR/zjYrkrwEqzGkdK4vk83uYig5GmLa
-         BwVF8M8KEfUf9nBZFdTP78JGEDhYKce4ojgcs/nGBODMepMkcO/UqD79xte6Glxl3Err
-         dWfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B9f6uyUz014fnggzO8Lz7MpHz0USkcYzM/T+4Ea78YM=;
-        b=TR8mb9JLLRYXoCi0Xi+oEwKjWIYcRAtqKBGa+GA5jusO2E7OuW2huah5oNQo36K6Qm
-         FJHowC9TihFVFJ0xK8bTj4ADP89E0IdeqiDNgxKHpHKuoOF9bj/+EJWZ/vjAneP63NUr
-         vvdgt01HgKEhjcKp6JXcbfwBm5hP5ThI9feYAnHn+vvF53T2zjORCULRJ5qRuy9WDnYj
-         F0O6h8P0wpu4St1DvIY1AWWf8KiovHKOmfIT2jQoGjYeGWcalzbTxQ7C7daw3zcY8wVF
-         OrRDm1mYZ8wCvxt6+aOIe+xRn7MrF1MPvFolx/PpAgZs4qpWzH9ktX7rT7gIJVxjYXp4
-         4C0Q==
-X-Gm-Message-State: AOAM532I63CNOq/G3Y9dOG9kpVcAQDH0CI0tbWiEKbca0FPjGWvdu5BK
-        MUetm4edU+aosWxwWSUl2OMEcg==
-X-Google-Smtp-Source: ABdhPJyqhBT8FeAgjWJJ7ruwe46Q1IYbCWhTolNxYnN/jxsLiNOLefPNDqxF2KFRU35oEYxZ5FBXew==
-X-Received: by 2002:a63:593:: with SMTP id 141mr494827pgf.133.1627488444252;
-        Wed, 28 Jul 2021 09:07:24 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id c2sm165230pgh.82.2021.07.28.09.07.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 09:07:23 -0700 (PDT)
-Date:   Wed, 28 Jul 2021 16:07:19 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Erdem Aktas <erdemaktas@google.com>,
-        linux-kselftest@vger.kernel.org, Peter Gonda <pgonda@google.com>,
-        Marc Orr <marcorr@google.com>, Sagi Shahar <sagis@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Yanan Wang <wangyanan55@huawei.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        Like Xu <like.xu@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>
-Subject: Re: [RFC PATCH 1/4] KVM: selftests: Add support for creating
- non-default type VMs
-Message-ID: <YQGAtxWqBhBUYWBN@google.com>
-References: <20210726183816.1343022-1-erdemaktas@google.com>
- <20210726183816.1343022-2-erdemaktas@google.com>
- <YP82iIe3vM/+fRAh@google.com>
- <YQBw8BIcCAq5ybHr@google.com>
+        Wed, 28 Jul 2021 12:09:05 -0400
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 63D321FFF2;
+        Wed, 28 Jul 2021 16:09:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1627488542; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V8WnBgopJa2lvYyrEcrAnfZx6ZFCWG157aEnC0Y6NwA=;
+        b=XGstFWI8zd51oMVV0Rhav655K/8yZmB7A4B4T+F5pJlClVmdjDnW5BP0Fqrw/uWBQbPqO8
+        CSumfaEsmAzaM0iivIaFbkPbHEBF9CTHxwORQ4FXKdf3yDtydPCCFBJgGx26BuLMPczxQu
+        /zhArJcocOT3a64BzFiasgfYE/BEtsA=
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 3113B13AAE;
+        Wed, 28 Jul 2021 16:09:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id MJ1fCx6BAWE0GwAAGKfGzw
+        (envelope-from <mkoutny@suse.com>); Wed, 28 Jul 2021 16:09:02 +0000
+Date:   Wed, 28 Jul 2021 18:09:00 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v3 6/9] cgroup/cpuset: Add a new isolated cpus.partition
+ type
+Message-ID: <20210728160900.GA8905@blackbody.suse.cz>
+References: <20210720141834.10624-1-longman@redhat.com>
+ <20210720141834.10624-7-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Dxnq1zWXvFF0Q93v"
 Content-Disposition: inline
-In-Reply-To: <YQBw8BIcCAq5ybHr@google.com>
+In-Reply-To: <20210720141834.10624-7-longman@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 08:47:44PM +0000, Sean Christopherson wrote:
-> On Mon, Jul 26, 2021, David Matlack wrote:
-> > On Mon, Jul 26, 2021 at 11:37:54AM -0700, Erdem Aktas wrote:
-> > > Currently vm_create function only creates KVM_X86_LEGACY_VM type VMs.
-> > > Changing the vm_create function to accept type parameter to create
-> > > new VM types.
-> > > 
-> > > Signed-off-by: Erdem Aktas <erdemaktas@google.com>
-> > > Reviewed-by: Sean Christopherson <seanjc@google.com>
-> 
-> *-by tags should not be added unless explicitly provided.  IIRC, our internal
-> gerrit will convert +1 to Reviewed-by, but I don't think that's the case here.
-> This applies to all patches in this series.
-> 
-> See "Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:" in
-> Documentation/process/submitting-patches.rst for more info.
-> 
-> > > Reviewed-by: Peter Gonda <pgonda@google.com>
-> > > Reviewed-by: Marc Orr <marcorr@google.com>
-> > > Reviewed-by: Sagi Shahar <sagis@google.com>
-> > 
-> > Reviewed-by: David Matlack <dmatlack@google.com>
-> > 
-> > (aside from the nit below)
-> > 
-> > > ---
-> > >  .../testing/selftests/kvm/include/kvm_util.h  |  1 +
-> > >  tools/testing/selftests/kvm/lib/kvm_util.c    | 29 +++++++++++++++++--
-> > >  2 files changed, 27 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> > > index d53bfadd2..c63df42d6 100644
-> > > --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> > > +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> > > @@ -88,6 +88,7 @@ int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
-> > >  void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
-> > >  
-> > >  struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
-> > > +struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm, int type);
-> > 
-> > nit: Consider using a more readable function name such as
-> > vm_create_with_type().
-> 
-> Ha!  This is why I don't like doing internal reviews :-D
 
-+1 :)
+--Dxnq1zWXvFF0Q93v
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> Erdem originally had vm_create_type(), I suggested __vm_create() as the double
-> underscore scheme is more common in the kernel for cases where there's a default
-> wrapper and an inner helper that implements the full API.
-> 
-> Convention aside, the argument againsts ...with_type() are that it doesn't scale,
-> e.g. if someone adds another parameter parameter for which vm_create() provides a
-> default, and it doesn't self-document the relationship between vm_create() and
-> the inner helper, e.g. by convention, based on names alone I know that vm_create()
-> likely is a wrapper around __vm_create().
+Hello Waiman.
 
-True, although with __vm_create() is not solving the scalability
-problem, it's just preventing scaling altogether (you can only have 1
-wrapper function, vm_create). So if any caller wants to override one of
-the defaults they have to override all of them.
+On Tue, Jul 20, 2021 at 10:18:31AM -0400, Waiman Long <longman@redhat.com> wrote:
+> @@ -2026,6 +2036,22 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+> [...]
+> +	} else if (old_prs && new_prs) {
 
-I agree with you though in this case: __vm_create() is a better choice
-(especially given the existence of vm_create_with_vcpus).
+If an isolated root partition becomes invalid (new_prs == PRS_ERROR)...
 
-A better option than both (but would involve more work) would be to
-create an options struct with all optional arguments. Unfortunately C
-makes working with options structs a bit clumsy. But it's something to
-consider as the number of options passed to __vm_create increases.
+> +		/*
+> +		 * A change in load balance state only, no change in cpumasks.
+> +		 */
+> +		update_flag(CS_SCHED_LOAD_BALANCE, cs, (new_prs != PRS_ISOLATED));
 
-For example:
+...this seems to erase information about CS_SCHED_LOAD_BALANCE zeroness.
 
-struct vm_options {
-        enum vm_guest_mode mode;
-        uint64_t phy_pages;
-        int perm;
-        int type;
-};
+IOW, if there's an isolated partition that becomes invalid and later
+valid again (a cpu is (re)added), it will be a normal root partition
+without the requested isolation, which is IMO undesired.
 
-struct kvm_vm *vm_create(const struct vm_options *options)
-{
-        ...
-}
+I may have overlooked something in broader context but it seems to me
+the invalidity should be saved independently of the root/isolated type.
 
-static const struct vm_options default_vm_options = {
-  .mode = VM_MODE_DEFAULT,
-  .phy_pages = DEFAULT_GUEST_PHY_PAGES,
-  .perm = O_RDWR,
-  .type = DEFAULT_VM_TYPE,
-};
+Regards,
+Michal
 
-/* Create a VM with default options. */
-vm = create_vm(&default_vm_options);
 
-/* Create a VM with TDX enabled. */
-struct vm_options options = default_vm_options;
-options.type = VM_TYPE_TDX;
-vm = create_vm(&options);
+--Dxnq1zWXvFF0Q93v
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-(I'm sure I ham-fisted the const stuff but you get the idea.)
+-----BEGIN PGP SIGNATURE-----
 
-I'm toying with introducing an options struct to perf_test_util as well
-so this is very top of mind.
+iQIzBAEBCAAdFiEEEoQaUCWq8F2Id1tNia1+riC5qSgFAmEBgRgACgkQia1+riC5
+qSgO0Q//QBaFMt0GNk3zGOjGT2DTaib+z3zKvfq4mFSgCEx1VORHT4EnrEH7NOES
+zoqFY30U5Cgi/9JO655nCgAJKeG/hwdxvbOcztKOAkzQFi3ts0KxGRQufwf+ajkt
+n0Xi5Eb8XOzHA+q2QQFiTttopulxIVe2qt6FXtVsl2MVr3W0rZq5mJ0BQbTdfN8r
+I3QPoCIpgy1+4JLgBIWr4nFAn16TpfxBFzAkTpidXLarNhp7vzbqUuEsuBXIhJ2w
+dQtFunPBdOsdAVMC4WnCwxDt2XFiRpteY8j0ZOK6R1eGEdMbNagqTwN+ShlWYsT4
+ymBZLfS1z3B9wXIJvzVFwimjMIQI6z7JrDfCnm6qGdCkxnLq6RSqpmqobF+liQU0
+44HaXSoEM+rNI+Ss9tbF9URJEKDKwACtGozM257YAB4Vo/zteIKRVsL8WBWfRuB9
+qELxjaR3uAGQ4i3UgpXxxph98pNBxxOM39iEU+3L6e0d/VO+/Yt0cnscLPJwIxbt
+JybmN1c9a7bn3asILIX2hAxPcn3csQV3enWsVx8ARZcV3kMne7eRGTTQshZ1W56o
+XektiwwjgzDtwQdO5Fv7wQGp352ikUorXU35JP+f8gqb8f4HPtgIf2AUBxisT/oa
+zqBTCXZGwBWOSDleRR4/UvafoT4HVD8DaDw740LYDpdffOT3HyI=
+=ZMPH
+-----END PGP SIGNATURE-----
 
-> 
-> Compare that with the existing
-> 
->   vm_create_default_with_vcpus()
->   vm_create_default()
->   vm_create_with_vcpus()
->   vm_create()
-> 
-> where the relationship between all the helpers is not immediately clear, and
-> vm_create_with_vcpus() is a misnomer because it does much more than call vm_create()
-> and instantiate vCPUs, e.g. it also instantiates the IRQ chip and loads the test
-> into guest memory.
+--Dxnq1zWXvFF0Q93v--
