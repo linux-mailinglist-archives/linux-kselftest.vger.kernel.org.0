@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC49E3D8E20
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 14:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9363D8E2B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 14:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235797AbhG1Mpi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jul 2021 08:45:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45646 "EHLO mail.kernel.org"
+        id S235159AbhG1Mrf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jul 2021 08:47:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234966AbhG1Mph (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jul 2021 08:45:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F324060F9E;
-        Wed, 28 Jul 2021 12:45:32 +0000 (UTC)
+        id S234759AbhG1Mrf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 28 Jul 2021 08:47:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C1B360FC0;
+        Wed, 28 Jul 2021 12:47:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627476336;
-        bh=si2ClFifESL47uxR4OasyzchtN6biah0h6QTPkfLJiw=;
+        s=k20201202; t=1627476453;
+        bh=bjFjDZ8cI3IDSCqI1y0kJWa2EkidjrwuaHkeMMXdfSY=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UtqTA7p3Am3N4eyS/WIO1mryqqlA8ouWeM+poYxw1k6Z23BS7DniKOeXzXNoBNDT4
-         dCtakWGs6lTJTccjnqk0UlKY5Bx6D+5AkvFOHrLEuOHhuMEn+AAZSIw2b+RwKacAbi
-         vBDHCV510nR4TfSovCN8v4QEatcH97LgM/Zzp+MpziwUegI5twjEYUI2tlfM1kO00t
-         5OrioISdBb5pKZpFFlzne8sQIZW2p67kPSN8w1Qw7vEdVCBPZly7RONI6Ke5SeCg4j
-         TwZcQ3zE2WKxHDZpwMrJdsvK9ImZ4T1ZgemA4h9YbQRUBxWp0J3eRt1mSPB1MQvPru
-         r+cfoU29AGSWQ==
-Date:   Wed, 28 Jul 2021 14:45:29 +0200
+        b=CVvrUhOMARYWM5FAHXn4pAOCHUx80b85xBrVxz8ZYhhHKaobXdpz8jeT8t/kFbjCI
+         PNw4coTw9niEVPvy25NbvwINd8CvS1n6IshhNxw+7pbCyGzCYzhdP5AulUFTUujNMV
+         9N3WpXnRCjr4/k5HDh/p6UjDgHIzvoqVxy7+ifdKrDYPJ0ifnuSx42tWB/L9JQyCD1
+         LWMzbCoyMMRQCjT4D/1rPCXn0uqRJtxuXto7ebNbAJtO1s2hQvD9LLixhDTm/IlC1y
+         92KaPD9glDdgpuAd+zcFjG5DjIbIAplRA6LkV/p+oNvAQPOMENHWP7SPoshVqT33x3
+         YXHlVrN7OpPhA==
+Date:   Wed, 28 Jul 2021 14:47:28 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Roberto Sassu <roberto.sassu@huawei.com>
 Cc:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
         <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>
-Subject: Re: [RFC][PATCH v2 10/12] diglim: Interfaces - digests_count
-Message-ID: <20210728144529.756dfc94@sal.lan>
-In-Reply-To: <20210726163700.2092768-11-roberto.sassu@huawei.com>
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC][PATCH v2 11/12] diglim: Remote Attestation
+Message-ID: <20210728144728.62ace280@sal.lan>
+In-Reply-To: <20210726163700.2092768-12-roberto.sassu@huawei.com>
 References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
-        <20210726163700.2092768-11-roberto.sassu@huawei.com>
+        <20210726163700.2092768-12-roberto.sassu@huawei.com>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -44,105 +44,145 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Em Mon, 26 Jul 2021 18:36:58 +0200
+Em Mon, 26 Jul 2021 18:36:59 +0200
 Roberto Sassu <roberto.sassu@huawei.com> escreveu:
 
-> Introduce the digests_count interface, which shows the current number of
-> digests stored in the hash table by type.
+> Add more information about remote attestation with IMA and DIGLIM in
+> Documentation/security/diglim/remote_attestation.rst.
 > 
-> Reported-by: kernel test robot <lkp@intel.com> (frame size warning)
 > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Patches 7 to 10 also LGTM.
-
 > ---
->  security/integrity/diglim/fs.c | 48 ++++++++++++++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
+>  Documentation/security/diglim/index.rst       |  1 +
+>  .../security/diglim/remote_attestation.rst    | 87 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  3 files changed, 89 insertions(+)
+>  create mode 100644 Documentation/security/diglim/remote_attestation.rst
 > 
-> diff --git a/security/integrity/diglim/fs.c b/security/integrity/diglim/fs.c
-> index f1c1fc56448a..3b1d9616cb62 100644
-> --- a/security/integrity/diglim/fs.c
-> +++ b/security/integrity/diglim/fs.c
-> @@ -23,6 +23,7 @@
->  #include "diglim.h"
->  
->  #define MAX_DIGEST_LIST_SIZE (64 * 1024 * 1024 - 1)
-> +#define TMPBUF_SIZE 512
->  
->  static struct dentry *diglim_dir;
->  /**
-> @@ -36,6 +37,13 @@ static struct dentry *diglim_dir;
->   * removed.
->   */
->  static struct dentry *digest_lists_loaded_dir;
-> +/**
-> + * DOC: digests_count
-> + *
-> + * digests_count shows the current number of digests stored in the hash
-> + * table by type.
-> + */
-> +static struct dentry *digests_count;
->  /**
->   * DOC: digest_label
->   *
-> @@ -73,6 +81,39 @@ static struct dentry *digest_list_del_dentry;
->  char digest_query[CRYPTO_MAX_ALG_NAME + 1 + IMA_MAX_DIGEST_SIZE * 2 + 1];
->  char digest_label[NAME_MAX + 1];
->  
-> +static char *types_str[COMPACT__LAST] = {
-> +	[COMPACT_PARSER] = "Parser",
-> +	[COMPACT_FILE] = "File",
-> +	[COMPACT_METADATA] = "Metadata",
-> +	[COMPACT_DIGEST_LIST] = "Digest list",
-> +};
+> diff --git a/Documentation/security/diglim/index.rst b/Documentation/security/diglim/index.rst
+> index 4771134c2f0d..0f28c5ad71c0 100644
+> --- a/Documentation/security/diglim/index.rst
+> +++ b/Documentation/security/diglim/index.rst
+> @@ -10,3 +10,4 @@ Digest Lists Integrity Module (DIGLIM)
+>     introduction
+>     architecture
+>     implementation
+> +   remote_attestation
+> diff --git a/Documentation/security/diglim/remote_attestation.rst b/Documentation/security/diglim/remote_attestation.rst
+> new file mode 100644
+> index 000000000000..83fd7581c460
+> --- /dev/null
+> +++ b/Documentation/security/diglim/remote_attestation.rst
+> @@ -0,0 +1,87 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +static ssize_t diglim_show_htable_len(struct file *filp, char __user *buf,
-> +				      size_t count, loff_t *ppos)
-> +{
-> +	char *tmpbuf;
-> +	ssize_t ret, len = 0;
-> +	int i;
+> +Remote Attestation
+> +==================
 > +
-> +	tmpbuf = kmalloc(TMPBUF_SIZE, GFP_KERNEL);
-> +	if (!tmpbuf)
-> +		return -ENOMEM;
+> +When a digest list is added or deleted through the ``digest_list_add`` or
+> +``digest_list_del`` interfaces, its buffer is sent to the IMA function
+> +``ima_measure_critical_data()``. The primary reason for it is to calculate
+> +the buffer digest, so that the digest list itself is searchable in the hash
+> +table.
 > +
-> +	for (i = COMPACT_PARSER; i < COMPACT__LAST; i++)
-> +		len += scnprintf(tmpbuf + len, TMPBUF_SIZE - len,
-> +				 "%s digests: %lu\n", types_str[i],
-> +				 htable[i].len);
+> +``ima_measure_critical_data()`` can be also used to create a new
+> +measurement entry each time this function is called, if there is an
+> +appropriate rule in the IMA policy. Given that this function is called
+> +during an addition or deletion of a digest list, a remote verifier can
+> +infer from the measurement list precise information about what has been
+> +uploaded to the kernel.
 > +
-> +	ret = simple_read_from_buffer(buf, count, ppos, tmpbuf, len);
-> +	kfree(tmpbuf);
-> +	return ret;
-> +}
+> +To enable this functionality, the following rule must be added to the IMA
+> +policy:
 > +
-> +static const struct file_operations htable_len_ops = {
-> +	.read = diglim_show_htable_len,
-> +	.llseek = generic_file_llseek,
-> +};
+> +::
+
+As commented on other patches at this series, you can merge :: at the
+previous text line, e. g.:
+
+	policy::
+
+does the same as:
+
+	policy:
+
+	::
+
+but it is nicer for text-only readers, IMO.
+
 > +
->  static int parse_digest_list_filename(const char *digest_list_filename,
->  				      u8 *digest, enum hash_algo *algo)
->  {
-> @@ -696,6 +737,12 @@ static int __init diglim_fs_init(void)
->  	if (IS_ERR(digest_lists_loaded_dir))
->  		goto out;
->  
-> +	digests_count = securityfs_create_file("digests_count", 0440,
-> +					       diglim_dir, NULL,
-> +					       &htable_len_ops);
-> +	if (IS_ERR(digests_count))
-> +		goto out;
+> + measure func=CRITICAL_DATA label=diglim
 > +
->  	digest_list_add_dentry = securityfs_create_file("digest_list_add", 0200,
->  						diglim_dir, NULL,
->  						&digest_list_upload_ops);
-> @@ -726,6 +773,7 @@ static int __init diglim_fs_init(void)
->  	securityfs_remove(digest_label_dentry);
->  	securityfs_remove(digest_list_del_dentry);
->  	securityfs_remove(digest_list_add_dentry);
-> +	securityfs_remove(digests_count);
->  	securityfs_remove(digest_lists_loaded_dir);
->  	securityfs_remove(diglim_dir);
->  	return -1;
+> +
+> +When a file is uploaded, the workflow and the resulting IMA measurement
+> +list are:
+> +
+> +.. code-block:: bash
+> +
+> + # echo $PWD/0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_list_add
+> + # echo $PWD/0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_list_del
+> + # cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements
+> + ...
+> + 10 <template digest> ima-buf sha256:<buffer digest> add_file_0-file_list-compact-cat <buffer>
+> + 10 <template digest> ima-buf sha256:<buffer digest> del_file_0-file_list-compact-cat <buffer>
+> +
+> +When a buffer is uploaded, the workflow and the resulting IMA measurement
+> +list are:
+> +
+> +.. code-block:: bash
+> +
+> + # echo 0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_label
+> + # cat 0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_list_add
+> + # echo 0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_label
+> + # cat 0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_list_del
+> + # cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements
+> + ...
+> + 10 <template digest> ima-buf sha256:<buffer digest> add_buffer_0-file_list-compact-cat <buffer>
+> + 10 <template digest> ima-buf sha256:<buffer digest> del_buffer_0-file_list-compact-cat <buffer>
+> +
+> +In the second case, the digest list label must be set explicitly, as the
+> +kernel cannot determine it by itself (in the first case it is derived from
+> +the name of the file uploaded).
+> +
+> +The confirmation that the digest list has been processed by IMA can be
+> +obtained by reading the ASCII representation of the digest list:
+> +
+> +.. code-block:: bash
+> +
+> + # cat /sys/kernel/security/integrity/diglim/digest_lists_loaded/sha256-<digest list digest>-0-file_list-compact-cat.ascii
+> + actions: 1, version: 1, algo: sha256, type: 2, modifiers: 1, count: 1, datalen: 32
+> + 87e5bd81850e11eeec2d3bb696b626b2a7f45673241cbbd64769c83580432869
+> +
+> +In this output, ``actions`` is set to 1 (``COMPACT_ACTION_IMA_MEASURED``
+> +bit set).
+> +
+> +
+> +DIGLIM guarantees that the information reported in the IMA measurement list
+> +is complete. If digest list loading is not recorded, digest query results
+> +are ignored by IMA. If the addition was recorded, deletion can be performed
+> +only if also the deletion is recorded. This can be seen in the following
+> +sequence of commands:
+> +
+> +.. code-block:: bash
+> +
+> + # echo 0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_label
+> + # cat 0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_list_add
+> + # echo 0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_label
+> + # /tmp/cat 0-file_list-compact-cat > /sys/kernel/security/integrity/diglim/digest_list_del
+> + diglim: actions mismatch, add: 1, del: 0
+> + diglim: unable to upload generated digest list
+> + /tmp/cat: write error: Invalid argument
+> +
+> +Digest list measurement is avoided with the execution of ``/tmp/cat``, for
+> +which a dont_measure rule was previously added in the IMA policy.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0672128fae7f..a7c502685109 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5461,6 +5461,7 @@ F:	Documentation/security/diglim/architecture.rst
+>  F:	Documentation/security/diglim/implementation.rst
+>  F:	Documentation/security/diglim/index.rst
+>  F:	Documentation/security/diglim/introduction.rst
+> +F:	Documentation/security/diglim/remote_attestation.rst
+>  F:	include/linux/diglim.h
+>  F:	include/uapi/linux/diglim.h
+>  F:	security/integrity/diglim/diglim.h
