@@ -2,435 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7326B3D8462
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 02:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969B33D856F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jul 2021 03:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbhG1AEW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jul 2021 20:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        id S234277AbhG1BeH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jul 2021 21:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbhG1AEW (ORCPT
+        with ESMTP id S232926AbhG1BeH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jul 2021 20:04:22 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A197BC061764
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jul 2021 17:04:21 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id h14so520371lfv.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jul 2021 17:04:21 -0700 (PDT)
+        Tue, 27 Jul 2021 21:34:07 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFC4C061757;
+        Tue, 27 Jul 2021 18:34:05 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id w10so272822qtj.3;
+        Tue, 27 Jul 2021 18:34:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6NKXH5NngvCX3SrO3Bblljes2ppPfbzXTrrGLcmdq3g=;
-        b=IezXySxWf0nj30KrwBtXngbmO/DQBfeuIXvfSyeskecCbN2I9yfATgtMFa9mX9WMnw
-         tKfUl42EyXLt0sMmwqF+QngWwHQsU19wy7y0Q6MbY6AkbpbJG4uSBt1hfB+8d+bRERaW
-         NZIexiKBxMWiByltxu0/umFdLvNffIwFqXG0TPmDc/XEIAKgCQmWpKxLAXO6U8Q/ElGs
-         Icux3kIR5HYvbWNKVSfYL7xphmdXeTZ8ksaimksTrTNlEeJ1pJk6ZC8UVXTWR4NLHVQR
-         neRHoPL0IrtaHzpnGOmf0g/tyb9VYC05StdqT5Ct9nOH3P5HfNXv0HdiHDW2xbb0C1No
-         +t8A==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ESeIPTS91F+xbzWWUrKYtYdUuWj/eolcxwSojut3luM=;
+        b=G2TUjLjc0k83E9TVyRVmaRadsAn7Z8GEiOcjHLnLA0Frqk8DfTnwMEhc+ziwiXkj1S
+         eZEZaFVelfaK0J4qjW9gAPtkRM5j1Ay6onxio9CQ80kuyfMzbwLiDHCbWxSAxgna8Z7/
+         xMDP2G0GM2QH6s80y83cPiFt5ED2mm8RfYvNuL7hJImg1m0R54RIzJ1wTx5Fj4pYkBBx
+         zBy2IR/lxtS9wsDX1rnHJDMvN5euXKZcWHFU9PHc/VJugX29+hTxjCXMxelWgixdq1GC
+         kF7+jEXxcxpfT7Izt+RuXjxZHDO1k2PxO/S9T13wozIYVLL4HvwvPn0uCkrFmLJZb48z
+         IQrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6NKXH5NngvCX3SrO3Bblljes2ppPfbzXTrrGLcmdq3g=;
-        b=LZSmP/hLjEMdjzpLwBjuhWqpZAnI510mps1Xy6TlKqAII/ktAt5K3Wq3odiPD6qjLN
-         JXoENqP/0zuNqTw9Fh5jE3OX2MHEt3LF0h2dvs2pY12zXhmXCxgjlhlLkQul6QfY1WKj
-         lQZZhggvzZq+5c9Q20ifiro8UxknvkFIKU1iXowW9GqU9ptVbE70Few+L0abf2fTr9yo
-         M+UXKP8AL9ZKwMMhKAcGM74h2zbQtYk0Mj3hfzYACFocpT1hRPaRS+2vsRcfal1kAhnA
-         Ey+VVN4/Ho1Va4Yfumw9tBDp9RrAVzBHHVhrfa7cSeXVfoX+hiyVc+ygrIJwmXF+4HRZ
-         Ts4g==
-X-Gm-Message-State: AOAM530yx6Y2+K+uM84L8SvL+9btd7vhQihzhNZH+V9JGOk5JttN33dB
-        xH34U/vKmza2eBkmDss78tKApeqW2SXeAxV27t6Bfg==
-X-Google-Smtp-Source: ABdhPJyYupcpD2ZIPSN4FWysxPzhN1P73ZtKWB4Ad+7+7c5fwinREQG+3iU73LlNO6OON2SOBSJpiX2kbW6wqwY6/Yc=
-X-Received: by 2002:a05:6512:744:: with SMTP id c4mr17839175lfs.596.1627430659494;
- Tue, 27 Jul 2021 17:04:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ESeIPTS91F+xbzWWUrKYtYdUuWj/eolcxwSojut3luM=;
+        b=KHo0MtGupeu15fF3F68Mr7hUr1gedzlcXkthTPHP9X11tG5yC5Ln0hZxYBKPHYOP9T
+         0kNdQrcfE++XayHOCYuSUImWMYa1J4Z62mDLG25oz1mSKLnuJ/KhZ20f8ZN23GSVY221
+         Gg0xb6x0QjPqz/JC71+3WZS1mviXkOLoiM9bmnTtNsodsBeCXvpO1ukfcoh6F2SqwH2m
+         N9qmprrwH5EFl7Qzs2dH29mlN562xl90MtStEadC+Iexo7dq2zK0Rgk0EZ05gN+vwbD4
+         XTnYJhbFnCAP4EOtMlj0KDlOcB2b4doXbWVTkzqdJA5i4CkMunh5HtneTnXTsaOU9bIb
+         zAiA==
+X-Gm-Message-State: AOAM5306Uw9dI2BPTUFPPe32kzNF66Li4jZrnMbJSXOCFY8FK0z6p0J0
+        c1fbKFAkJN2mlyGeP6mKJw==
+X-Google-Smtp-Source: ABdhPJx0thwuLZ4+tvyoLjwt6F5ZXn3u9dYqRc8BI2cGH8+FphyWyuGgMH5h9+9N8jfd0tYxRzGXdQ==
+X-Received: by 2002:ac8:110e:: with SMTP id c14mr22267122qtj.76.1627436044968;
+        Tue, 27 Jul 2021 18:34:04 -0700 (PDT)
+Received: from bytedance.attlocal.net (ec2-52-52-7-82.us-west-1.compute.amazonaws.com. [52.52.7.82])
+        by smtp.gmail.com with ESMTPSA id n5sm2741054qkp.116.2021.07.27.18.34.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jul 2021 18:34:04 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH RESEND net-next 2/2] tc-testing: Add control-plane selftest for skbmod SKBMOD_F_ECN option
+Date:   Tue, 27 Jul 2021 18:33:40 -0700
+Message-Id: <1a2701d93dece40f515a869362be63ae03abbe93.1627434177.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <f5bd3c60662ec0982cccd8951990796b87d1f985.1627434177.git.peilin.ye@bytedance.com>
+References: <f5bd3c60662ec0982cccd8951990796b87d1f985.1627434177.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
-References: <20210727225847.22185-1-jjoseaquiless@gmail.com>
-In-Reply-To: <20210727225847.22185-1-jjoseaquiless@gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 27 Jul 2021 17:04:08 -0700
-Message-ID: <CAGS_qxr2yZmcZRGF3qg9eSqOAwCj3+CD4Gyc8cgTXydRToDckw@mail.gmail.com>
-Subject: Re: [PATCH] lib: use of kunit in test_parman.c
-To:     =?UTF-8?Q?Jos=C3=A9_Aquiles_Guedes_de_Rezende?= 
-        <jjoseaquiless@gmail.com>
-Cc:     Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, brendanhiggins@google.com,
-        davidgow@google.com, linux-kselftest@vger.kernel.org,
-        ~lkcamp/patches@lists.sr.ht,
-        Matheus Henrique de Souza Silva 
-        <matheushenriquedesouzasilva@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 4:04 PM Jos=C3=A9 Aquiles Guedes de Rezende
-<jjoseaquiless@gmail.com> wrote:
->
-> Convert the parman test module to use the KUnit test framework.
-> This makes thetest clearer by leveraging KUnit's assertion macros
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-nit: s/thetest/the test
+Recently we added a new option, SKBMOD_F_ECN, to tc-skbmod(8).  Add a
+control-plane selftest for it.
 
-> and test case definitions,as well as helps standardize on a testing frame=
-work.
->
-> Co-developed-by: Matheus Henrique de Souza Silva <matheushenriquedesouzas=
-ilva@protonmail.com>
-> Signed-off-by: Matheus Henrique de Souza Silva <matheushenriquedesouzasil=
-va@protonmail.com>
-> Signed-off-by: Jos=C3=A9 Aquiles Guedes de Rezende <jjoseaquiless@gmail.c=
-om>
+Depends on kernel patch "net/sched: act_skbmod: Add SKBMOD_F_ECN option
+support", as well as iproute2 patch "tc/skbmod: Introduce SKBMOD_F_ECN
+option".
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Cong Wang <cong.wang@bytedance.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+ .../tc-testing/tc-tests/actions/skbmod.json   | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-I just briefly looked over the usage of KUnit a bit and left some suggestio=
-ns.
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/skbmod.json b/tools/testing/selftests/tc-testing/tc-tests/actions/skbmod.json
+index 6eb4c4f97060..742f2290973e 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/actions/skbmod.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/actions/skbmod.json
+@@ -417,5 +417,29 @@
+         "teardown": [
+             "$TC actions flush action skbmod"
+         ]
++    },
++    {
++        "id": "fe09",
++        "name": "Add skbmod action to mark ECN bits",
++        "category": [
++            "actions",
++            "skbmod"
++        ],
++        "setup": [
++            [
++                "$TC actions flush action skbmod",
++                0,
++                1,
++                255
++            ]
++        ],
++        "cmdUnderTest": "$TC actions add action skbmod ecn",
++        "expExitCode": "0",
++        "verifyCmd": "$TC actions get action skbmod index 1",
++        "matchPattern": "action order [0-9]*: skbmod pipe ecn",
++        "matchCount": "1",
++        "teardown": [
++            "$TC actions flush action skbmod"
++        ]
+     }
+ ]
+-- 
+2.20.1
 
-It's nice to see the use of current->kunit_test in an ops struct.
-I wrote that up as a potential use case in commit 359a376081d4
-("kunit: support failure from dynamic analysis tools"), and I think
-this is the first example of it being used as such :)
-
-> ---
->  lib/test_parman.c | 145 +++++++++++++++++++---------------------------
->  1 file changed, 60 insertions(+), 85 deletions(-)
->
-> diff --git a/lib/test_parman.c b/lib/test_parman.c
-> index 35e32243693c..bd5010f0a412 100644
-> --- a/lib/test_parman.c
-> +++ b/lib/test_parman.c
-> @@ -41,6 +41,8 @@
->  #include <linux/err.h>
->  #include <linux/random.h>
->  #include <linux/parman.h>
-> +#include <linux/sched.h>
-> +#include <kunit/test.h>
->
->  #define TEST_PARMAN_PRIO_SHIFT 7 /* defines number of prios for testing =
-*/
->  #define TEST_PARMAN_PRIO_COUNT BIT(TEST_PARMAN_PRIO_SHIFT)
-> @@ -91,12 +93,14 @@ struct test_parman {
->
->  static int test_parman_resize(void *priv, unsigned long new_count)
->  {
-> +       struct kunit *test =3D current->kunit_test;
->         struct test_parman *test_parman =3D priv;
->         struct test_parman_item **prio_array;
->         unsigned long old_count;
->
->         prio_array =3D krealloc(test_parman->prio_array,
->                               ITEM_PTRS_SIZE(new_count), GFP_KERNEL);
-> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test, prio_array);
->         if (new_count =3D=3D 0)
->                 return 0;
->         if (!prio_array)
-> @@ -214,42 +218,39 @@ static void test_parman_items_fini(struct test_parm=
-an *test_parman)
->         }
->  }
->
-> -static struct test_parman *test_parman_create(const struct parman_ops *o=
-ps)
-> +static int test_parman_create(struct kunit *test)
->  {
->         struct test_parman *test_parman;
->         int err;
->
-> -       test_parman =3D kzalloc(sizeof(*test_parman), GFP_KERNEL);
-> -       if (!test_parman)
-> -               return ERR_PTR(-ENOMEM);
-> +       test_parman =3D kunit_kzalloc(test, sizeof(*test_parman), GFP_KER=
-NEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_parman);
-> +
->         err =3D test_parman_resize(test_parman, TEST_PARMAN_BASE_COUNT);
-
-Would it be clearer to do
-
-KUNIT_ASSERT_EQ(test, 0, test_parman_resize(test_parman,
-TEST_PARMAN_BASE_COUNT));
-
-or change the line below to:
-
-KUNIT_ASSERT_EQ_MSG(test, err, 0, "test_parman_resize failed");
-
-Otherwise, if the test fails there, the error message isn't too clear.
-
-> -       if (err)
-> -               goto err_resize;
-> -       test_parman->parman =3D parman_create(ops, test_parman);
-> -       if (!test_parman->parman) {
-> -               err =3D -ENOMEM;
-> -               goto err_parman_create;
-> -       }
-> +       KUNIT_ASSERT_EQ(test, err, 0);
-> +
-> +       test_parman->parman =3D parman_create(&test_parman_lsort_ops, tes=
-t_parman);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_parman->parman);
-
-Hmm, this won't call `test_parman_resize(test_parman, 0)` on error
-like it did before.
-
-Unfortunately, KUnit is a bit clunky for cases like this right now,
-where there's cleanups that need to happen but aren't handle already
-by the resource API (the underlying thing behind kunit_kzalloc that
-frees the mem).
-
-We could do something like
-
-if (IS_ERR_OR_NULL(test_parman->parman)) {
-  // we can use KUNIT_FAIL to just directly fail the test, or use the
-assert macro for the autogenerated failure message
-  KUNIT_FAIL(test, "....") / KUNIT_EXPECT_NOT_ERR_OR_NULL(test, ...);
-  goto err_parman_create;
-}
-
-
-> +
->         test_parman_rnd_init(test_parman);
->         test_parman_prios_init(test_parman);
->         test_parman_items_init(test_parman);
->         test_parman->run_budget =3D TEST_PARMAN_RUN_BUDGET;
-> -       return test_parman;
-> -
-> -err_parman_create:
-> -       test_parman_resize(test_parman, 0);
-> -err_resize:
-> -       kfree(test_parman);
-> -       return ERR_PTR(err);
-> +       test->priv =3D test_parman;
-> +       return 0;
->  }
->
-> -static void test_parman_destroy(struct test_parman *test_parman)
-> +static void test_parman_destroy(struct kunit *test)
->  {
-> +       struct test_parman *test_parman =3D test->priv;
-> +
-> +       if (!test_parman)
-> +               return;
->         test_parman_items_fini(test_parman);
->         test_parman_prios_fini(test_parman);
->         parman_destroy(test_parman->parman);
->         test_parman_resize(test_parman, 0);
-> -       kfree(test_parman);
-> +       kunit_kfree(test, test_parman);
-
-This works as-is, but FYI, it isn't necessary as we've used
-kunit_kzalloc() to allocate it above.
-When the test exists, it'll automatically call this function, basically.
-
->  }
->
->  static bool test_parman_run_check_budgets(struct test_parman *test_parma=
-n)
-> @@ -265,8 +266,9 @@ static bool test_parman_run_check_budgets(struct test=
-_parman *test_parman)
->         return true;
->  }
->
-> -static int test_parman_run(struct test_parman *test_parman)
-> +static void test_parman_run(struct kunit *test)
->  {
-> +       struct test_parman *test_parman =3D test->priv;
->         unsigned int i =3D test_parman_rnd_get(test_parman);
->         int err;
->
-> @@ -281,8 +283,8 @@ static int test_parman_run(struct test_parman *test_p=
-arman)
->                         err =3D parman_item_add(test_parman->parman,
->                                               &item->prio->parman_prio,
->                                               &item->parman_item);
-> -                       if (err)
-> -                               return err;
-> +                       KUNIT_ASSERT_EQ(test, err, 0);
-
-Echoing my suggestion above, we can either do
-  KUNIT_ASSERT_EQ(test, 0, parman_item_add(...));
-or something like
-  KUNIT_ASSERT_EQ_MSG(test, err, 0, "parman_item_add failed")
-
-> +
->                         test_parman->prio_array[item->parman_item.index] =
-=3D item;
->                         test_parman->used_items++;
->                 } else {
-> @@ -294,22 +296,19 @@ static int test_parman_run(struct test_parman *test=
-_parman)
->                 }
->                 item->used =3D !item->used;
->         }
-> -       return 0;
->  }
->
-> -static int test_parman_check_array(struct test_parman *test_parman,
-> -                                  bool gaps_allowed)
-> +static void test_parman_check_array(struct kunit *test, bool gaps_allowe=
-d)
->  {
->         unsigned int last_unused_items =3D 0;
->         unsigned long last_priority =3D 0;
->         unsigned int used_items =3D 0;
->         int i;
-> +       struct test_parman *test_parman =3D test->priv;
->
-> -       if (test_parman->prio_array_limit < TEST_PARMAN_BASE_COUNT) {
-> -               pr_err("Array limit is lower than the base count (%lu < %=
-lu)\n",
-> -                      test_parman->prio_array_limit, TEST_PARMAN_BASE_CO=
-UNT);
-> -               return -EINVAL;
-> -       }
-> +       KUNIT_ASSERT_GE_MSG(test, test_parman->prio_array_limit, TEST_PAR=
-MAN_BASE_COUNT,
-> +               "Array limit is lower than the base count (%lu < %lu)\n",
-> +               test_parman->prio_array_limit, TEST_PARMAN_BASE_COUNT);
->
->         for (i =3D 0; i < test_parman->prio_array_limit; i++) {
->                 struct test_parman_item *item =3D test_parman->prio_array=
-[i];
-> @@ -318,77 +317,53 @@ static int test_parman_check_array(struct test_parm=
-an *test_parman,
->                         last_unused_items++;
->                         continue;
->                 }
-> -               if (last_unused_items && !gaps_allowed) {
-> -                       pr_err("Gap found in array even though they are f=
-orbidden\n");
-> -                       return -EINVAL;
-> -               }
-> +
-> +               KUNIT_ASSERT_FALSE_MSG(test, last_unused_items && !gaps_a=
-llowed,
-> +                       "Gap found in array even though they are forbidde=
-n\n");
-
-FYI, you don't need the \n for these.
-KUnit will put one automatically.
-
-Ditto for the other instances.
-
->
->                 last_unused_items =3D 0;
->                 used_items++;
->
-> -               if (item->prio->priority < last_priority) {
-> -                       pr_err("Item belongs under higher priority then t=
-he last one (current: %lu, previous: %lu)\n",
-> -                              item->prio->priority, last_priority);
-> -                       return -EINVAL;
-> -               }
-> -               last_priority =3D item->prio->priority;
-> +               KUNIT_ASSERT_GE_MSG(test, item->prio->priority, last_prio=
-rity,
-> +                       "Item belongs under higher priority then the last=
- one (current: %lu, previous: %lu)\n",
-> +                       item->prio->priority, last_priority);
->
-> -               if (item->parman_item.index !=3D i) {
-> -                       pr_err("Item has different index in compare to wh=
-ere it actually is (%lu !=3D %d)\n",
-> -                              item->parman_item.index, i);
-> -                       return -EINVAL;
-> -               }
-> -       }
-> +               last_priority =3D item->prio->priority;
->
-> -       if (used_items !=3D test_parman->used_items) {
-> -               pr_err("Number of used items in array does not match (%u =
-!=3D %u)\n",
-> -                      used_items, test_parman->used_items);
-> -               return -EINVAL;
-> -       }
-> +               KUNIT_ASSERT_EQ_MSG(test, item->parman_item.index, (unsig=
-ned long)i,
-> +                       "Item has different index in compare to where it =
-actually is (%lu !=3D %d)\n",
-> +                       item->parman_item.index, i);
-
-Note: the cast to `unsigned long` here shouldn't be necessary anymore,
-I don't think.
-See 6e62dfa6d14f ("kunit: Do not typecheck binary assertions").
-
-
->
-> -       if (last_unused_items >=3D TEST_PARMAN_RESIZE_STEP_COUNT) {
-> -               pr_err("Number of unused item at the end of array is bigg=
-er than resize step (%u >=3D %lu)\n",
-> -                      last_unused_items, TEST_PARMAN_RESIZE_STEP_COUNT);
-> -               return -EINVAL;
->         }
->
-> -       pr_info("Priority array check successful\n");
-> +       KUNIT_ASSERT_EQ_MSG(test, used_items, test_parman->used_items,
-> +               "Number of used items in array does not match (%u !=3D %u=
-)\n",
-> +               used_items, test_parman->used_items);
->
-> -       return 0;
-> +       KUNIT_ASSERT_LT_MSG(test, (unsigned long)last_unused_items, TEST_=
-PARMAN_RESIZE_STEP_COUNT,
-> +               "Number of unused item at the end of array is bigger than=
- resize step (%u >=3D %lu)\n",
-> +               last_unused_items, TEST_PARMAN_RESIZE_STEP_COUNT);
-
-ditto here, I think the casting can be dropped now.
-
-
->  }
->
-> -static int test_parman_lsort(void)
-> +static void test_parman_lsort(struct kunit *test)
->  {
-> -       struct test_parman *test_parman;
-> -       int err;
-> -
-> -       test_parman =3D test_parman_create(&test_parman_lsort_ops);
-> -       if (IS_ERR(test_parman))
-> -               return PTR_ERR(test_parman);
-> -
-> -       err =3D test_parman_run(test_parman);
-> -       if (err)
-> -               goto out;
-> -
-> -       err =3D test_parman_check_array(test_parman, false);
-> -       if (err)
-> -               goto out;
-> -out:
-> -       test_parman_destroy(test_parman);
-> -       return err;
-> +       test_parman_run(test);
-> +       test_parman_check_array(test, false);
->  }
->
-> -static int __init test_parman_init(void)
-> -{
-> -       return test_parman_lsort();
-> -}
-> +static struct kunit_case parman_test_case[] =3D {
-> +       KUNIT_CASE(test_parman_lsort),
-> +       {}
-> +};
->
-> -static void __exit test_parman_exit(void)
-> -{
-> -}
-> +static struct kunit_suite parman_test_suite =3D {
-> +       .name =3D "parman",
-> +       .init =3D test_parman_create,
-> +       .exit =3D test_parman_destroy,
-> +       .test_cases =3D parman_test_case,
-> +};
->
-> -module_init(test_parman_init);
-> -module_exit(test_parman_exit);
-> +kunit_test_suite(parman_test_suite);
->
->  MODULE_LICENSE("Dual BSD/GPL");
->  MODULE_AUTHOR("Jiri Pirko <jiri@mellanox.com>");
-> --
-> 2.32.0
->
