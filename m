@@ -2,102 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B974C3DAE51
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jul 2021 23:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA61C3DAE5D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jul 2021 23:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbhG2V13 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jul 2021 17:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S233372AbhG2VdS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jul 2021 17:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233967AbhG2V12 (ORCPT
+        with ESMTP id S231164AbhG2VdR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jul 2021 17:27:28 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ECAC061765;
-        Thu, 29 Jul 2021 14:27:24 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id c16so8514809plh.7;
-        Thu, 29 Jul 2021 14:27:24 -0700 (PDT)
+        Thu, 29 Jul 2021 17:33:17 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DD4C0613C1
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jul 2021 14:33:13 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id z6-20020a9d24860000b02904d14e47202cso7347601ota.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jul 2021 14:33:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CmUz25v47EVa8gRZMq5MLvl4L4iFYPzewIDb5rn7kIM=;
-        b=SORUYDWsPT1mdtbTKodQJcv9mUm1olu6HMr4QDAkVdC+quIpbsQcHkbJlqdK4TXOSL
-         MtWLhjVlUb1zReImAq0EdZTUjGgE//o1T+UnAHL5a9KIXw5s+qvWDL9LLWESASgQgkwj
-         Ir5R/rcLaHiqf5NzeCffZ/Gs5Ronm9P/VFKO+4HJH1GIoulmE5CUbEiO2RyQr3eO7Rn6
-         hEuLUZmW/0RrVUShatRfqHxBAmuqMJ8QQhzKOCcGc+zMDUw+lhDVTBVyNt/GLhPvLYim
-         7In52S/+PV5DBJG+c0dStIuFe+9NcCZ0h0MUP3YbZzbyzvjTxr1ugmv8arPjJiV41HBP
-         MzUg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lEEjIGqrAwlEg9/A9DVqKnjXFatmS0cjdnFYVuoLl9M=;
+        b=gyyKjARJRz6MHG75vLKxR8cad5Jeik/93GGjVzlZ9ehR/CY/aL2OGtiRyzNzlF4oxb
+         EMhubwnxwNUtbNXxneJ+rWwGNTsDoQMOHSrfaYt1oU1Iw71oDgcGd0hwiEOa9luZoCHU
+         TX0l13UtEyeUDKcpRtW+P3KdDMsv3+1VlPKqY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CmUz25v47EVa8gRZMq5MLvl4L4iFYPzewIDb5rn7kIM=;
-        b=RXKw8AHvbq3BrvZ5MUCC5iN0z8zLlAeP55BJXKhBBU+29xTw9uju5vSPppVs1wefcw
-         aWz9kuSmZuoq26B0R+cPk3Ba994IuiFyblpSXZQvMaMxEAMHP8PBXv2QkXhEHOVb8+cc
-         RJF2F+W1aHFmhFj4Cc9CmNAS5WQmfZenj5JLkrkCyZxpxghrHOBFcwRdbrHIWtKZAMH8
-         eIPEN7VYj+qzOSMoTf68k6ZBV51hm6fV9ta5E6501yUPMSmR2QnA2VjlSE6YiHxLlvUj
-         xv85CJ2ncSYq791rIXm5kU3feJa03nw8g8xq/gmgPTsiu/LpGKmY53S68+lMUTowmRtH
-         y+kw==
-X-Gm-Message-State: AOAM531+6vQ46NlP3im7tn60wK9lIZeXGJBPZIuTqEp3F4427j8uD4h2
-        IL4XzTn/TLLSZVwUs1FcFfVuPp6Fyws0q3t9Uvg=
-X-Google-Smtp-Source: ABdhPJzcwd8CEaU5dsVlvlXTZD3ucVxwPiCBIwPZZKnWXpoWb19DKemjYFPzIC1Px66OiyySjVG1CK1cfBOjKtHRZT8=
-X-Received: by 2002:a62:1609:0:b029:3ab:afdb:acf3 with SMTP id
- 9-20020a6216090000b02903abafdbacf3mr2117397pfw.43.1627594043670; Thu, 29 Jul
- 2021 14:27:23 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lEEjIGqrAwlEg9/A9DVqKnjXFatmS0cjdnFYVuoLl9M=;
+        b=gmqw6ZgmIr6wvxKEB3wEBo4m+gRUpzY6PJhefw2sx3i0vOKPdIIfHs+oetks2xgu57
+         cpdVAurJfkC5wQ/0IYO9p5vaoAubSMHbAH0p8cov9SjsGjTjtb/qomNFugoohzHcelE9
+         ffayR1huRnsd33rYeNwpb+UrjgUDhNEjAFnhbUFDgpqwcn0mhv4FsDOcZTi/OZBlM8KV
+         3Lb/FNldiiy3YKb9TDPKxa5vDZtUWa8gyNfyXI+LToFnkR9VueiPQTAb4+6AmzaDEvp4
+         htHMWhjxPHnaukNFluIbsp/mWIxvUBpPILrDBhEn7lh5MrAjVUakDmjptxYaWI0lRJwC
+         PmcQ==
+X-Gm-Message-State: AOAM533xdzYWg7LIj8nho1PMlfV05rszXe90Y2lsx2bazmDwKgN7UCXD
+        0XfD6FYr5m9yGqKVab7sOqzHbg==
+X-Google-Smtp-Source: ABdhPJzBUM0IApBM+MkILEdvwPyCZcRo9L0nVBzCJxQPUqNgKNNWwikItA8OR7pvRhvSyCEopKiTLg==
+X-Received: by 2002:a9d:2625:: with SMTP id a34mr4766424otb.77.1627594392289;
+        Thu, 29 Jul 2021 14:33:12 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id p4sm671399ooa.35.2021.07.29.14.33.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jul 2021 14:33:11 -0700 (PDT)
+Subject: Re: [PATCH v2] selftests/sgx: Fix Q1 and Q2 calculation in
+ sigstruct.c
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-sgx@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210705050922.63710-1-jarkko@kernel.org>
+ <be6227d1-728a-c658-f962-380c28afc926@linuxfoundation.org>
+ <20210727031227.tx2gqx2qg3mg4522@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c5491afc-2a7e-cb36-2a24-6dfa6b08b31a@linuxfoundation.org>
+Date:   Thu, 29 Jul 2021 15:33:10 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210727001252.1287673-1-jiang.wang@bytedance.com>
- <20210727001252.1287673-3-jiang.wang@bytedance.com> <6100363add8a9_199a412089@john-XPS-13-9370.notmuch>
- <CAM_iQpVedTzRbf-bC7WuGMFYF=qnUxbnUdqJ9+FaxrTAn5DkTw@mail.gmail.com> <6101a56bf2a11_1e1ff620813@john-XPS-13-9370.notmuch>
-In-Reply-To: <6101a56bf2a11_1e1ff620813@john-XPS-13-9370.notmuch>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Thu, 29 Jul 2021 14:27:12 -0700
-Message-ID: <CAM_iQpXiqhfL9M04x1hvJ_6zCCUoDAv1_ywysu=O7wnCUuJaTw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 2/5] af_unix: add unix_stream_proto for sockmap
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Jiang Wang <jiang.wang@bytedance.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        "Cong Wang ." <cong.wang@bytedance.com>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210727031227.tx2gqx2qg3mg4522@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 11:44 AM John Fastabend
-<john.fastabend@gmail.com> wrote:
->
-> Cong Wang wrote:
-> > On Tue, Jul 27, 2021 at 9:37 AM John Fastabend <john.fastabend@gmail.com> wrote:
-> > > Do we really need an unhash hook for unix_stream? I'm doing some testing
-> > > now to pull it out of TCP side as well. It seems to be an artifact of old
-> > > code that is no longer necessary. On TCP side at least just using close()
-> > > looks to be enough now.
-> >
-> > How do you handle the disconnection from remote without ->unhash()?
->
-> Would close() not work for stream/dgram sockets?
+On 7/26/21 9:12 PM, Jarkko Sakkinen wrote:
+> On Fri, Jul 23, 2021 at 01:53:06PM -0600, Shuah Khan wrote:
+>> On 7/4/21 11:09 PM, Jarkko Sakkinen wrote:
+>>> From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>>>
+>>> Q1 and Q2 are numbers with *maximum* length of 384 bytes. If the calculated
+>>> length of Q1 and Q2 is less than 384 bytes, things will go wrong.
+>>>
+>>> E.g. if Q2 is 383 bytes, then
+>>>
+>>> 1. The bytes of q2 are copied to sigstruct->q2 in calc_q1q2().
+>>> 2. The entire sigstruct->q2 is reversed, which results it being
+>>>      256 * Q2, given that the last byte of sigstruct->q2 is added
+>>>      to before the bytes given by calc_q1q2().
+>>>
+>>> Either change in key or measurement can trigger the bug. E.g. an unmeasured
+>>> heap could cause a devastating change in Q1 or Q2.
+>>>
+>>> Reverse exactly the bytes of Q1 and Q2 in calc_q1q2() before returning to
+>>> the caller.
+>>>
+>>> Fixes: dedde2634570 ("selftests/sgx: Trigger the reclaimer in the selftests")
+>>> Link: https://lore.kernel.org/linux-sgx/20210301051836.30738-1-tianjia.zhang@linux.alibaba.com/
+>>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>> ---
+>>> The original patch did a bad job explaining the code change but it
+>>> turned out making sense. I wrote a new description.
+>>>
+>>> v2:
+>>> - Added a fixes tag.
+>>>    tools/testing/selftests/sgx/sigstruct.c | 41 +++++++++++++------------
+>>>    1 file changed, 21 insertions(+), 20 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+>>> index dee7a3d6c5a5..92bbc5a15c39 100644
+>>> --- a/tools/testing/selftests/sgx/sigstruct.c
+>>> +++ b/tools/testing/selftests/sgx/sigstruct.c
+>>> @@ -55,10 +55,27 @@ static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
+>>>    	return true;
+>>>    }
+>>> +static void reverse_bytes(void *data, int length)
+>>> +{
+>>> +	int i = 0;
+>>> +	int j = length - 1;
+>>> +	uint8_t temp;
+>>> +	uint8_t *ptr = data;
+>>> +
+>>> +	while (i < j) {
+>>> +		temp = ptr[i];
+>>> +		ptr[i] = ptr[j];
+>>> +		ptr[j] = temp;
+>>> +		i++;
+>>> +		j--;
+>>> +	}
+>>> +}
+>>
+>> I was just about apply this one and noticed this reverse_bytes().
+>> Aren't there byteswap functions you could call instead of writing
+>> your own?
+> 
+> Sorry for latency, just came from two week leave.
+> 
+> glibc does provide bswap for 16, 32, 64 bit numbers but nothing better.
+>   
+> I have no idea if libssl has such function. Since the test code already
+> uses this function, and it works, and it's not a newly added function in
+> this patch, I would consider keeping it.
+>   
 
-close() is called when the local closes the sockets, but when the remote
-closes or disconnects it, unhash() is called. This is why TCP calls unhash()
-to remove the socket from established socket hash table. unhash() itself
-might not make much sense for AF_UNIX as it probably does not need a
-hash table to track established ones, however, the idea is the same, that
-is, we have to handle remote disconnections here.
+I will queue this up since it is fixing an important problem.
+Let's look into if this can be replaced with a lib call when
+you do cleanups perhaps for the next release.
 
-Thanks.
+thanks,
+-- Shuah
