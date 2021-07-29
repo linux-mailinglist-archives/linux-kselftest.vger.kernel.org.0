@@ -2,118 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E093DA1B6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jul 2021 13:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE643DA205
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jul 2021 13:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236520AbhG2LDh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jul 2021 07:03:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52954 "EHLO mail.kernel.org"
+        id S234595AbhG2LWb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jul 2021 07:22:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45678 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236430AbhG2LDh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jul 2021 07:03:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8081A60BD3;
-        Thu, 29 Jul 2021 11:03:33 +0000 (UTC)
+        id S231834AbhG2LWb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Jul 2021 07:22:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CD06E60E9B;
+        Thu, 29 Jul 2021 11:22:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627556614;
-        bh=uCbW9J3YqEIQSJj9wEXdcOHPabjCeLFizZzIoZQFBfg=;
+        s=k20201202; t=1627557748;
+        bh=FcuFb6wlftgSlWoSTOwAzofJHtrPrqyxkS6xE1qzB18=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SKygjhxSpGxVYxPyQT8pgYAj5pGx1nIbzlIHdu7B9Trjb3QHSwOaL+8n6erSy1qE8
-         QwzIK8PqMKm8mB3l4dYF/xwSkYjM2S2gyiPRuFV1H4LTpxRfZ/dm4UtX7Sd0SmtuiW
-         0axwvVBceoswzdjQm9BCZ51E4X6sN9W5mWYFKTVbfZ8TXvUOLuESoyOLQSGqavi7j6
-         219KxzvEYwR+NGJLwraQsdv1Rs+E9hjAYXGAEldiDRBIxdWtGfqINqe0ibgR6BFCX4
-         7WeToS/NGh84MK9S0t8xV8QixU+1N2j/FYfVo2tUDsvBx3AalVLDlMxFbSB4uYslAz
-         rLFvVKYv7AYpw==
-Date:   Thu, 29 Jul 2021 13:03:31 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Waiman Long <llong@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v3 6/9] cgroup/cpuset: Add a new isolated cpus.partition
- type
-Message-ID: <20210729110331.GC301667@lothringen>
-References: <20210720141834.10624-1-longman@redhat.com>
- <20210720141834.10624-7-longman@redhat.com>
- <20210727114241.GA283787@lothringen>
- <fe3d9fcb-c3af-9214-c69f-00ef36521c5c@redhat.com>
+        b=rgFR7CinLkyo9QZHPWgXRDYxvxgVlAX5ZnAvM7+uaERbBP/+0Nk8CrssxnHdA1GVO
+         VwPzF8ohmc5WNK1lLDaKooQnEdekJwXFyMN1B8QSl9xIYqaJWYWbsm0LG+ECjFSexT
+         fmpj4eHip0n/RahaZGTGviOFozrfTG5L9bm3NBReepiczNueyxMnBaKz3+QKlTA7gm
+         ojQqLoPoSVIxJ5YzUDIwAJepzu+yzqBxunjI8tHt7tqmLRRF+fDjmuF3Cj8jzhE/+F
+         cR5eG5G8O4FmTuMjLzYWeWJpSxXLwiauihbz2jf3/irj+s0XRPlTQarJRXvAAWwzcP
+         +1Pzq+//TjnDw==
+Date:   Thu, 29 Jul 2021 12:22:17 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] kselftest/arm64: Provide a helper binary and
+ "library" for SVE RDVL
+Message-ID: <20210729112217.GK4670@sirena.org.uk>
+References: <20210728163318.51492-1-broonie@kernel.org>
+ <20210728163318.51492-2-broonie@kernel.org>
+ <20210729095222.GH1724@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="J3rqiH0DIeiRD2zz"
 Content-Disposition: inline
-In-Reply-To: <fe3d9fcb-c3af-9214-c69f-00ef36521c5c@redhat.com>
+In-Reply-To: <20210729095222.GH1724@arm.com>
+X-Cookie: Vini, vidi, Linux!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 11:56:25AM -0400, Waiman Long wrote:
-> On 7/27/21 7:42 AM, Frederic Weisbecker wrote:
-> > On Tue, Jul 20, 2021 at 10:18:31AM -0400, Waiman Long wrote:
-> > > Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=TBD
-> > > 
-> > > commit 994fb794cb252edd124a46ca0994e37a4726a100
-> > > Author: Waiman Long <longman@redhat.com>
-> > > Date:   Sat, 19 Jun 2021 13:28:19 -0400
-> > > 
-> > >      cgroup/cpuset: Add a new isolated cpus.partition type
-> > > 
-> > >      Cpuset v1 uses the sched_load_balance control file to determine if load
-> > >      balancing should be enabled.  Cpuset v2 gets rid of sched_load_balance
-> > >      as its use may require disabling load balancing at cgroup root.
-> > > 
-> > >      For workloads that require very low latency like DPDK, the latency
-> > >      jitters caused by periodic load balancing may exceed the desired
-> > >      latency limit.
-> > > 
-> > >      When cpuset v2 is in use, the only way to avoid this latency cost is to
-> > >      use the "isolcpus=" kernel boot option to isolate a set of CPUs. After
-> > >      the kernel boot, however, there is no way to add or remove CPUs from
-> > >      this isolated set. For workloads that are more dynamic in nature, that
-> > >      means users have to provision enough CPUs for the worst case situation
-> > >      resulting in excess idle CPUs.
-> > > 
-> > >      To address this issue for cpuset v2, a new cpuset.cpus.partition type
-> > >      "isolated" is added which allows the creation of a cpuset partition
-> > >      without load balancing. This will allow system administrators to
-> > >      dynamically adjust the size of isolated partition to the current need
-> > >      of the workload without rebooting the system.
-> > > 
-> > >      Signed-off-by: Waiman Long <longman@redhat.com>
-> > > 
-> > > Signed-off-by: Waiman Long <longman@redhat.com>
-> > Nice! And while we are adding a new ABI, can we take advantage of that and
-> > add a specific semantic that if a new isolated partition matches a subset of
-> > "isolcpus=", it automatically maps to it. This means that any further
-> > modification to that isolated partition will also modify the associated
-> > isolcpus= subset.
-> > 
-> > Or to summarize, when we create a new isolated partition, remove the associated
-> > CPUs from isolcpus= ?
-> 
-> We can certainly do that as a follow-on.
 
-I'm just concerned that this feature gets merged before we add that new
-isolcpus= implicit mapping, which technically is a new ABI. Well I guess I
-should hurry up and try to propose a patchset quickly once I'm back from
-vacation :-)
+--J3rqiH0DIeiRD2zz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Thu, Jul 29, 2021 at 10:52:24AM +0100, Dave Martin wrote:
+> On Wed, Jul 28, 2021 at 05:33:15PM +0100, Mark Brown wrote:
 
+> > +	return 0;
 
-> Another idea that I have been
-> thinking about is to automatically generating a isolated partition under
-> root to match the given isolcpus parameter when the v2 filesystem is
-> mounted. That needs more experimentation and testing to verify that it can
-> work.
+> For consistency with the changes in vec-syscfg, we could use
+> EXIT_SUCCESS here.
 
-I thought about that too, mounting an "isolcpus" subdirectory withing the top
-cpuset but I was worried it could break userspace that wouldn't expect that new
-thing to show up.
+0 and EXIT_SUCCESS are defined as equivalent (though they need not be
+equal!) and 0 is much more idiomatic.
 
-Thanks.
+> Although it's hard to see what could go wrong I/O-wise that doesn't
+> involve vec-syscfg itself having gone wrong, it's probably good
+> practice to do the final error check:
+
+> 	if (ferror(stdout) || fclose(stdout))
+> 		return EXIT_FAILURE;
+
+> 	return EXIT_SUCCESS;
+
+> (In reality, people rarely seem to bother with this, so I'm not going
+> to lose sleep if we don't do it...)
+
+Yeah, I think this is one of those raising more questions than it
+answers kind of things.
+
+> > +.globl rdvl_sve
+
+> Should we stick a
+
+> 	.type rdvl_sve, @function
+
+> here?  This may avoid surprises with future toolchain behaviours.
+> Probably doesn't matter, but I have bad memories of Thumb-2...
+
+> Lacking this annotation is widespread though, as well as being de facto
+> standard before awkward architectures came along.
+
+Yeah, it doesn't seem to be in the slightest bit idiomatic for the arm64
+asm code the kernel has.  I don't know if you think it's worth adding
+that to SYM_FUNC_START now we have it though?
+
+> If the selftests have access to the ENTRY() macro we could use that, but
+> I'm guessing that isn't exported for userspace.
+
+We don't use that any more anyway, it's SYM_FUNC_START() and friends not
+that those are outside the kernel either.  We will have to do something
+like that if anyone starts building userspace with BTI though (or I
+might just shove a BTI C in there unconditionally, I'm sure we'll cope
+with the overhead on older systems).
+
+--J3rqiH0DIeiRD2zz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmECj2gACgkQJNaLcl1U
+h9A90wf/V5EUCOkVbK4/Pt1Gkd/v98yXPokeJTn6vhVPDVSOBo6QH2mv/LUQfRID
+mPJ3b4UXdi39JUOefgfn+4MZjQzPcZJUO3TI5Osny2BXPWj5Ii5L6aV75iOEInyg
+Dc6eY/Anr/KVQcnETSmKJXrS2ZNOY6H8ZDkQmz6mW0NPBoNL5h0rnEF4FTJhDnSw
+LrvmSLlNeqEVGF1f5OiH+AOR9uZNr9+6msOVoR1cqT/JZjVuZzAXHG9EUju4Krdl
+wdiAOagB0dPN/xq9mbyu6AgCqZQF3VCR4/C0VYeqNwXYjXwobrXGRaclQFC7y/Kk
+QqINh0AbZJYVbKT/0f2FIrGlO547QA==
+=xtv7
+-----END PGP SIGNATURE-----
+
+--J3rqiH0DIeiRD2zz--
