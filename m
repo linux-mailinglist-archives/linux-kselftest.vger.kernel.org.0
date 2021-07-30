@@ -2,146 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 722153DB076
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jul 2021 02:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74BC33DB07E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jul 2021 03:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbhG3A7i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jul 2021 20:59:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56932 "EHLO mail.kernel.org"
+        id S233104AbhG3BDf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jul 2021 21:03:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35564 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229667AbhG3A7h (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jul 2021 20:59:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0AB6760E09;
-        Fri, 30 Jul 2021 00:59:32 +0000 (UTC)
+        id S229667AbhG3BDe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Jul 2021 21:03:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F1CF960E09;
+        Fri, 30 Jul 2021 01:03:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627606774;
-        bh=8+euTn4InaeqMDkhh0bXAuD1Ybic5Zy4DtDSP99f8AA=;
+        s=k20201202; t=1627607010;
+        bh=AktQh6JLFUAYr6R5McfeUKBxwClypkgS4Rv7pzn41gU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gxFkZnL7XfdJg3BOkcIrvMx2qYOyoAttpNUrb96OgkH3vo0QBI3C4Ap/HykUcxRIv
-         7SQXHUu+4/svVmiWoWI3ngWSN9SFgvlICFyIFhBVyucLuX4zGbjVO58jJcCCSsrFEu
-         3bj2rd31NoCxwxLe+TWw+fkFtEfKoWC9SpB1rrAMqeYXi2HZFDyaXD4SDwKXbzSpnj
-         P8nK+9+OHyDuvcSnk0bXQeAnqb78x8UjgvS5h7UNZH33+hvyUyKrNqhe+8DsUDjjgf
-         rAAOftspQtou6gOxyT3sdrzxDHpo7LQPnVH9sSP4k4coyKTzfiI70sv97SL5F9+Wv2
-         H5XXqlT4TllPw==
-Date:   Fri, 30 Jul 2021 03:59:30 +0300
+        b=V6/q702zDk3sob+6PsfffOeGWNPRlBrkiJFEWgVjq9odapABAjC7T+FVFIF/I1biB
+         kXWQtjb5Aywpgnn/kdNs7Uj0xrFZ8PIaftrWAcJAvTs1YqC5ozBJQW8gux1iOqvjBg
+         GjYMj++8EKaNuACO801OUWQwgjN4aPKfldNGPkUFoguLJPHcOu5GaLx5CTkLFwQ3/3
+         AOq5No0m3DwPlKXRgzC5JuokITkX3uqHRYdBlBr+UYExX1Ej3WQ7MJHmvRHsbR45Gq
+         fDUol9tk/OWZ8xa5COAQ+O4x7TZGAZ1PZ/hSaigpeiPVuXipclcSDU7plp/B39auJX
+         knhcK8GQML/oA==
+Date:   Fri, 30 Jul 2021 04:03:27 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
 Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-sgx@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
         Borislav Petkov <bp@alien8.de>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] x86/sgx: Add /sys/kernel/debug/x86/sgx_total_mem
-Message-ID: <20210730005930.ew3evpnnlqcjtf26@kernel.org>
-References: <20210728225140.248408-1-jarkko@kernel.org>
- <20210728225140.248408-2-jarkko@kernel.org>
- <5d3614af-2393-6744-9d85-7001241ca76e@intel.com>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/sgx: Fix Q1 and Q2 calculation in
+ sigstruct.c
+Message-ID: <20210730010327.zp2amwhmfr5l3nc7@kernel.org>
+References: <20210705050922.63710-1-jarkko@kernel.org>
+ <be6227d1-728a-c658-f962-380c28afc926@linuxfoundation.org>
+ <20210727031227.tx2gqx2qg3mg4522@kernel.org>
+ <c5491afc-2a7e-cb36-2a24-6dfa6b08b31a@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5d3614af-2393-6744-9d85-7001241ca76e@intel.com>
+In-Reply-To: <c5491afc-2a7e-cb36-2a24-6dfa6b08b31a@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 09:27:41AM -0700, Dave Hansen wrote:
-> On 7/28/21 3:51 PM, Jarkko Sakkinen wrote:
-> > Create /sys/kernel/debug/x86/sgx_total_mem, after the driver is
-> > initialized, describing the total amount of SGX reserved memory (also known
-> > as Enclave Page Cache (EPC)) available in the system.
+On Thu, Jul 29, 2021 at 03:33:10PM -0600, Shuah Khan wrote:
+> On 7/26/21 9:12 PM, Jarkko Sakkinen wrote:
+> > On Fri, Jul 23, 2021 at 01:53:06PM -0600, Shuah Khan wrote:
+> > > On 7/4/21 11:09 PM, Jarkko Sakkinen wrote:
+> > > > From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> > > > 
+> > > > Q1 and Q2 are numbers with *maximum* length of 384 bytes. If the calculated
+> > > > length of Q1 and Q2 is less than 384 bytes, things will go wrong.
+> > > > 
+> > > > E.g. if Q2 is 383 bytes, then
+> > > > 
+> > > > 1. The bytes of q2 are copied to sigstruct->q2 in calc_q1q2().
+> > > > 2. The entire sigstruct->q2 is reversed, which results it being
+> > > >      256 * Q2, given that the last byte of sigstruct->q2 is added
+> > > >      to before the bytes given by calc_q1q2().
+> > > > 
+> > > > Either change in key or measurement can trigger the bug. E.g. an unmeasured
+> > > > heap could cause a devastating change in Q1 or Q2.
+> > > > 
+> > > > Reverse exactly the bytes of Q1 and Q2 in calc_q1q2() before returning to
+> > > > the caller.
+> > > > 
+> > > > Fixes: dedde2634570 ("selftests/sgx: Trigger the reclaimer in the selftests")
+> > > > Link: https://lore.kernel.org/linux-sgx/20210301051836.30738-1-tianjia.zhang@linux.alibaba.com/
+> > > > Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> > > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > ---
+> > > > The original patch did a bad job explaining the code change but it
+> > > > turned out making sense. I wrote a new description.
+> > > > 
+> > > > v2:
+> > > > - Added a fixes tag.
+> > > >    tools/testing/selftests/sgx/sigstruct.c | 41 +++++++++++++------------
+> > > >    1 file changed, 21 insertions(+), 20 deletions(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> > > > index dee7a3d6c5a5..92bbc5a15c39 100644
+> > > > --- a/tools/testing/selftests/sgx/sigstruct.c
+> > > > +++ b/tools/testing/selftests/sgx/sigstruct.c
+> > > > @@ -55,10 +55,27 @@ static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
+> > > >    	return true;
+> > > >    }
+> > > > +static void reverse_bytes(void *data, int length)
+> > > > +{
+> > > > +	int i = 0;
+> > > > +	int j = length - 1;
+> > > > +	uint8_t temp;
+> > > > +	uint8_t *ptr = data;
+> > > > +
+> > > > +	while (i < j) {
+> > > > +		temp = ptr[i];
+> > > > +		ptr[i] = ptr[j];
+> > > > +		ptr[j] = temp;
+> > > > +		i++;
+> > > > +		j--;
+> > > > +	}
+> > > > +}
+> > > 
+> > > I was just about apply this one and noticed this reverse_bytes().
+> > > Aren't there byteswap functions you could call instead of writing
+> > > your own?
 > > 
-> > This can be used to implement stress that trigger the page reclaimer, and
-> > it is probably useful information when admistering a system running
-> > enclaves anyhow.
-> 
-> How about this as a rewrite?
-> 
-> Just like normal memory, SGX memory can be overcommitted.  SGX has its
-> own reclaim mechanism which kicks in when physical SGX memory (Enclave
-> Page Cache / EPC) is exhausted.  That reclaim mechanism is relatively
-> rarely exercised and needs selftests to poke at it.
-> 
-> The amount of EPC on the system is determined by the BIOS and it varies
-> wildly between systems.  It can be dozens of MB on desktops, or many GB
-> on servers.
-> 
-> To run in a reasonable amount of time, the selftest needs to know how
-> much EPC there is in the system.
-> 
-> Introduce a new debugfs file to export that information.
-> 
-> > diff --git a/Documentation/x86/sgx.rst b/Documentation/x86/sgx.rst
-> > index dd0ac96ff9ef..15bb8f4e42af 100644
-> > --- a/Documentation/x86/sgx.rst
-> > +++ b/Documentation/x86/sgx.rst
-> > @@ -250,3 +250,9 @@ user wants to deploy SGX applications both on the host and in guests
-> >  on the same machine, the user should reserve enough EPC (by taking out
-> >  total virtual EPC size of all SGX VMs from the physical EPC size) for
-> >  host SGX applications so they can run with acceptable performance.
-> > +
-> > +SGX debugging
-> > +=============
-> > +
-> > +*/sys/kernel/debug/x86/sgx_total_mem* describes the total available
-> > +SGX mwemory available in the system.
-> 
-> 	^ memory
-> 
-> It would also be nice to say what the units are here, even if they are
-> bytes.
-> 
-> > diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-> > index 63d3de02bbcc..b65da19a53ee 100644
-> > --- a/arch/x86/kernel/cpu/sgx/main.c
-> > +++ b/arch/x86/kernel/cpu/sgx/main.c
-> > @@ -1,6 +1,7 @@
-> >  // SPDX-License-Identifier: GPL-2.0
-> >  /*  Copyright(c) 2016-20 Intel Corporation. */
-> >  
-> > +#include <linux/debugfs.h>
-> >  #include <linux/file.h>
-> >  #include <linux/freezer.h>
-> >  #include <linux/highmem.h>
-> > @@ -28,7 +29,10 @@ static DECLARE_WAIT_QUEUE_HEAD(ksgxd_waitq);
-> >  static LIST_HEAD(sgx_active_page_list);
-> >  static DEFINE_SPINLOCK(sgx_reclaimer_lock);
-> >  
-> > -/* The free page list lock protected variables prepend the lock. */
-> > +/* Total EPC memory available in bytes. */
-> > +static unsigned long sgx_total_mem;
-> > +
-> > +/* The number of free EPC pages in all nodes. */
-> >  static unsigned long sgx_nr_free_pages;
-> >  
-> >  /* Nodes with one or more EPC sections. */
-> > @@ -656,6 +660,8 @@ static bool __init sgx_setup_epc_section(u64 phys_addr, u64 size,
-> >  		list_add_tail(&section->pages[i].list, &sgx_dirty_page_list);
-> >  	}
-> >  
-> > +	sgx_total_mem += nr_pages * PAGE_SIZE;
-> > +
-> >  	return true;
-> >  }
-> >  
-> > @@ -823,6 +829,8 @@ static int __init sgx_init(void)
-> >  	if (sgx_vepc_init() && ret)
-> >  		goto err_provision;
-> >  
-> > +	debugfs_create_ulong("sgx_total_mem", 0444, arch_debugfs_dir, &sgx_total_mem);
-> > +
-> >  	return 0;
-> >  
-> >  err_provision:
+> > Sorry for latency, just came from two week leave.
 > > 
+> > glibc does provide bswap for 16, 32, 64 bit numbers but nothing better.
+> > I have no idea if libssl has such function. Since the test code already
+> > uses this function, and it works, and it's not a newly added function in
+> > this patch, I would consider keeping it.
 > 
-> Assuming the new changelog is adopted and typos fixed:
-> 
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+> I will queue this up since it is fixing an important problem.
+> Let's look into if this can be replaced with a lib call when
+> you do cleanups perhaps for the next release.
 
-Thanks, I'll commit these changes and include to the next version.
+Thank you.
 
 /Jarkko
