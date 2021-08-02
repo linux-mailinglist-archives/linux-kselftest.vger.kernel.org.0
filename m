@@ -2,271 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAD63DCF11
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 06:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFE33DCF5E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 06:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbhHBEBL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Aug 2021 00:01:11 -0400
-Received: from mga17.intel.com ([192.55.52.151]:8832 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231410AbhHBEBK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Aug 2021 00:01:10 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10063"; a="193660645"
-X-IronPort-AV: E=Sophos;i="5.84,287,1620716400"; 
-   d="scan'208";a="193660645"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2021 21:01:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,287,1620716400"; 
-   d="scan'208";a="668971411"
-Received: from fedora29.sh.intel.com ([10.239.182.87])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Aug 2021 21:00:59 -0700
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
-        Yu Yu-cheng <yu-cheng.yu@intel.com>,
-        Yu Fenghua <fenghua.yu@intel.com>,
-        Hansen Dave <dave.hansen@intel.com>,
-        Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>
-Subject: [RFC PATCH v2 2/2] selftests/xsave: add xsave test during and after signal handling
-Date:   Mon,  2 Aug 2021 12:00:04 +0800
-Message-Id: <672a1d26af50d7413d0cb02eb1685878ede0a535.1627457824.git.pengfei.xu@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1627457824.git.pengfei.xu@intel.com>
-References: <cover.1627457824.git.pengfei.xu@intel.com>
+        id S231707AbhHBEYX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Aug 2021 00:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231649AbhHBEYV (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 2 Aug 2021 00:24:21 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B56C061799
+        for <linux-kselftest@vger.kernel.org>; Sun,  1 Aug 2021 21:24:10 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id d6so15033542edt.7
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Aug 2021 21:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
+        b=FtyL1jenxhHoD0FEqr0JzEzar9WxjQ0aFEwPIjOui/KxHqjdRIaWw+qc9fVrqT7/Dn
+         Pnh35Va41LybAL6U8YkeIBgROe6j/64zDWESXr3a3yRfbQQPGRB9fNiPFd+zLtRJzUIN
+         QuzzTY5SkBKHMhw3aNm828s4szNx+qezVfjbXBb1AnLosRqM3hZLsmXFs11UFe9XwQd0
+         8wSmR+hXWoecdn7C1dRJ3raMOO2OzRp8To/v4OIIenhLUR2Xi2bEwQKHQsPiMZ9RJ/f/
+         /P5G34L+RYG0gvY4mQKUVcv9jgYngramQoP+XViWVUuAojxufRmPTkFAnPt7xVda61k1
+         G8fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
+        b=P4tipqdEmLz6HHzmYLs83Swh9ELUlzAzjehx3jFrSchBSC+8jBN+uogBpKXuKV75jX
+         qP1ecgBMrkIQxB6JzoxBq2wKhV9IUtsNsCWrNXLc0K1HgOYczTZAVo4wGHRK151wbfNU
+         WlaS+oX659SVNppj43RgMN8CXnPjj9KTYqdYENCIu6p5WGEZI68/T5s/VFCG7pJZtNQ5
+         wi7Hp/PdrGsnOmZthV/XxPBlZsmsCpVn6GP8gpkJ90nNxgUncDxkirm9I+JWFOw4fwpO
+         YozScIHiXiQ3VMKvFZzB4L94qYvZNRxTPQoObilCh8qyI32OXnheQxDur3gfySmtgnbU
+         OUfg==
+X-Gm-Message-State: AOAM533qbbPweTt8RUuWTu1Tzi3oG5cZi5RORN10ypaaMUgzxtjMFCOp
+        OntfffieIrzBlmG6T4vYAmkCYV1xe0iqQDDI2P8=
+X-Google-Smtp-Source: ABdhPJzys5yCwXnLOHH4NsCIcKA9f726GMnAOsN9NLlhSmyZNb7UhzU0IEwJ6FYKksyg3UeOKVwrbLA6pAJm2hMlOV0=
+X-Received: by 2002:aa7:c0d1:: with SMTP id j17mr16890014edp.217.1627878249276;
+ Sun, 01 Aug 2021 21:24:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:24:08
+ -0700 (PDT)
+Reply-To: ablahikazabl67@gmail.com
+From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
+Date:   Mon, 2 Aug 2021 05:24:08 +0100
+Message-ID: <CAKwBCXuzDf40zPCct3xg8L9LubxzXWgC230fQ80GXrmg_Yuttw@mail.gmail.com>
+Subject: More Authentic Information
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to ensure that process XSAVE content is not affected by signal
-handling, this case tests process XSAVE content should not change in nested
-signal handling, and the XSAVE content should same before and after signal
-handling.
-
-Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
----
- tools/testing/selftests/xsave/.gitignore      |   1 +
- tools/testing/selftests/xsave/Makefile        |   2 +-
- .../selftests/xsave/xsave_signal_handle.c     | 184 ++++++++++++++++++
- 3 files changed, 186 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/xsave/xsave_signal_handle.c
-
-diff --git a/tools/testing/selftests/xsave/.gitignore b/tools/testing/selftests/xsave/.gitignore
-index 00b9970360c4..b448d36186f3 100644
---- a/tools/testing/selftests/xsave/.gitignore
-+++ b/tools/testing/selftests/xsave/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- xsave_instruction
-+xsave_signal_handle
-diff --git a/tools/testing/selftests/xsave/Makefile b/tools/testing/selftests/xsave/Makefile
-index dafdb0abdeb3..fedae2778297 100644
---- a/tools/testing/selftests/xsave/Makefile
-+++ b/tools/testing/selftests/xsave/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- CFLAGS := -g -Wall -mxsave -O2
- 
--TEST_GEN_PROGS := xsave_instruction
-+TEST_GEN_PROGS := xsave_instruction xsave_signal_handle
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/xsave/xsave_signal_handle.c b/tools/testing/selftests/xsave/xsave_signal_handle.c
-new file mode 100644
-index 000000000000..0afcba3a1bd5
---- /dev/null
-+++ b/tools/testing/selftests/xsave/xsave_signal_handle.c
-@@ -0,0 +1,184 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * It's for xsave/xrstor during signal handling tests
-+ */
-+
-+#include <stdio.h>
-+#include <stdint.h>
-+#include <stdlib.h>
-+#include <x86intrin.h>
-+#include <string.h>
-+#include <signal.h>
-+#include <unistd.h>
-+#include <sched.h>
-+#include <sys/wait.h>
-+#include <time.h>
-+
-+#include "../kselftest.h"
-+#include "xsave_common.h"
-+
-+static unsigned char *xsave_buf0, *xsave_buf1, *xsave_buf2, *xsave_buf3;
-+static int result[2];
-+
-+static void change_fpu_content(uint32_t ui32_random, double flt)
-+{
-+	asm volatile ("fldl %0" : : "m" (flt));
-+	asm volatile ("vbroadcastss %0, %%ymm0" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm1" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm2" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm3" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm4" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm5" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm6" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm7" : : "m" (ui32_random));
-+	#ifndef __i386__
-+	asm volatile ("vbroadcastss %0, %%ymm8" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm9" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm10" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm11" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm12" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm13" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm14" : : "m" (ui32_random));
-+	asm volatile ("vbroadcastss %0, %%ymm15" : : "m" (ui32_random));
-+	#endif
-+}
-+
-+static void usr1_handler(int signum, siginfo_t *info, void *__ctxp)
-+{
-+	uint32_t ui32_random;
-+	double flt;
-+	int xsave_size;
-+	const char *test_name = "Child XSAVE should not change in nested signal";
-+
-+	ui32_random = rand();
-+	flt = ui32_random/10000.0;
-+	if (signum == SIGUSR1) {
-+		ksft_print_msg("SIGUSR1:0x%x changed fld:%f & ymm0-15:0x%x\n",
-+			SIGUSR1, flt, ui32_random);
-+		change_fpu_content(ui32_random, flt);
-+	}
-+	xsave_size = get_xsave_size();
-+	XSAVE(xsave_buf2, SAVE_MASK);
-+	raise(SIGUSR2);
-+	XSAVE(xsave_buf3, SAVE_MASK);
-+	result[0] = check_xsave_buf(xsave_buf2, xsave_buf2, xsave_size, test_name,
-+				NO_CHANGE);
-+}
-+
-+static void usr2_handler(int signum, siginfo_t *info, void *__ctxp)
-+{
-+	uint32_t ui32_random;
-+	double flt;
-+
-+	ui32_random = rand();
-+	flt = ui32_random/10000.0;
-+	if (signum == SIGUSR2) {
-+		ksft_print_msg("SIGUSR2:0x%x changed fld:%f & ymm0-15:0x%x\n",
-+			SIGUSR2, flt, ui32_random);
-+		change_fpu_content(ui32_random, flt);
-+	}
-+}
-+
-+static void set_signal_handle(void)
-+{
-+	struct sigaction sigact;
-+
-+	memset(&sigact, 0, sizeof(sigact));
-+	if (sigemptyset(&sigact.sa_mask))
-+		execution_failed("FAIL: sigemptyset error\n");
-+
-+	sigact.sa_flags = SA_SIGINFO;
-+
-+	sigact.sa_sigaction = usr1_handler;
-+	if (sigaction(SIGUSR1, &sigact, NULL))
-+		execution_failed("FAIL: SIGUSR1 handling failed\n");
-+
-+	sigact.sa_sigaction = usr2_handler;
-+	if (sigaction(SIGUSR2, &sigact, NULL))
-+		execution_failed("FAIL: SIGUSR2 handling failed\n");
-+}
-+
-+static void sig_handle_xsave_test(void)
-+{
-+	int i, loop_times = 100, xsave_size;
-+	const char *sig_test_name0 = "Child XSAVE was same in nested signal test";
-+	const char *sig_test_name1 = "Child XSAVE content was same after signal";
-+
-+	xsave_size = get_xsave_size();
-+	/* SDM XSAVE: misalignment to a 64-byte boundary will result in #GP */
-+	xsave_buf0 = aligned_alloc(64, xsave_size);
-+	if (!xsave_buf0)
-+		execution_failed("aligned_alloc xsave_buf0 failed\n");
-+	xsave_buf1 = aligned_alloc(64, xsave_size);
-+	if (!xsave_buf1)
-+		execution_failed("aligned_alloc xsave_buf1 failed\n");
-+	xsave_buf2 = aligned_alloc(64, xsave_size);
-+	if (!xsave_buf2)
-+		execution_failed("aligned_alloc xsave_buf2 failed\n");
-+	xsave_buf3 = aligned_alloc(64, xsave_size);
-+	if (!xsave_buf3)
-+		execution_failed("aligned_alloc xsave_buf3 failed\n");
-+
-+	srand(time(NULL));
-+	result[0] = RESULT_PASS;
-+	result[1] = RESULT_PASS;
-+
-+	XSAVE(xsave_buf0, SAVE_MASK);
-+	for (i = 1; i <= loop_times; i++) {
-+		raise(SIGUSR1);
-+		XSAVE(xsave_buf1, SAVE_MASK);
-+		result[1] = check_xsave_buf(xsave_buf0, xsave_buf1, xsave_size,
-+						sig_test_name1, NO_CHANGE);
-+		if (result[1] != RESULT_PASS)
-+			break;
-+	}
-+
-+	check_result(result[0], sig_test_name0);
-+	check_result(result[1], sig_test_name1);
-+}
-+
-+static void test_xsave_sig_handle(void)
-+{
-+	const char *test_name0 = "xsave in child nested signal handling test";
-+	const char *test_name1 = "xsave after child signal handling test";
-+	pid_t child;
-+	int status, fd[2], readbuf[2];
-+
-+	set_signal_handle();
-+
-+	/* Use pipe to transfer test result of child process to parent process */
-+	if (pipe(fd) < 0)
-+		execution_failed("FAIL: create pipe failed\n");
-+
-+	/* Use child process testing to avoid abnormal blocking the next test */
-+	child = fork();
-+	if (child < 0)
-+		execution_failed("FAIL: create child pid failed\n");
-+	else if	(child == 0) {
-+		populate_fpu_regs();
-+		sig_handle_xsave_test();
-+		close(fd[0]);
-+		write(fd[1], &result, sizeof(result));
-+	} else {
-+		if (waitpid(child, &status, 0) != child ||
-+			!WIFEXITED(status))
-+			execution_failed("FAIL: Child died unexpectedly\n");
-+		else {
-+			close(fd[1]);
-+			read(fd[0], &readbuf, sizeof(readbuf));
-+
-+			check_result(readbuf[0], test_name0);
-+			check_result(readbuf[1], test_name1);
-+		}
-+	}
-+}
-+
-+int main(void)
-+{
-+	ksft_print_header();
-+	ksft_set_plan(2);
-+
-+	test_xsave_sig_handle();
-+
-+	ksft_exit(!ksft_get_fail_cnt());
-+}
 -- 
-2.20.1
+Dear Partner,
 
+I am soliciting your partnership to relocate $12.5 Million to your
+country for investment on my behalf and you will be entitled to 30% of
+the sum once the transaction is successful made.
+
+Please indicate your genuine interest if you are capable so that i
+will send you the authentic details and documents of the transaction
+in awareness with some of my fellow Directors in the bank.
+
+If you are interested, here is my private Email address:
+(ablahikazabl67@gmail.com)
+For more authentic and legit information.
+
+
+Regards :  Abdoulahi Kazim
