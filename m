@@ -2,120 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4595D3DD1C5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 10:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D5A3DD27A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 11:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbhHBIOc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Aug 2021 04:14:32 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3544 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbhHBIOc (ORCPT
+        id S232814AbhHBJAc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Aug 2021 05:00:32 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57724 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233005AbhHBJAa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Aug 2021 04:14:32 -0400
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GdW4P1bP5z6F86J;
-        Mon,  2 Aug 2021 16:14:13 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Mon, 2 Aug 2021 10:14:20 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Mon, 2 Aug 2021 10:14:20 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Mon, 2 Aug 2021 05:00:30 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id 2CDAD1F423FC
+To:     "kernelci@groups.io" <kernelci@groups.io>
+Cc:     kernelci-members <kernelci-members@groups.io>,
+        automated-testing@lists.yoctoproject.org,
+        Collabora Kernel ML <kernel@collabora.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Igor Stoppa <igor.stoppa@huawei.com>
-Subject: RE: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
- digest_list_del
-Thread-Topic: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
- digest_list_del
-Thread-Index: AQHXgjzPxJ6WuoGgH0KyG3D/y7w0xqtaWSsAgADBDpCAAD+ygIAAIhjQ///1QYCAACKD8IAETzLw
-Date:   Mon, 2 Aug 2021 08:14:20 +0000
-Message-ID: <96c7cd3d19254e84a6cb45b2a940e944@huawei.com>
-References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
-         <20210726163700.2092768-7-roberto.sassu@huawei.com>
-         <c9dffd9d29df095660beaa631ff252c4b33629a0.camel@linux.ibm.com>
-         <ef7c85dcb096479e95c8c60ccda4d700@huawei.com>
-         <1ef95096bee13578b3f906dd9f708c6af9d6ff18.camel@linux.ibm.com>
-         <555bf01bee4b4ea7a9bee658366d535a@huawei.com>
- <2c731f07bd08f01f2a3e032814bc65ae9a8494ad.camel@linux.ibm.com>
- <bd0787e0ee4f47baa41abf47976e536c@huawei.com>
-In-Reply-To: <bd0787e0ee4f47baa41abf47976e536c@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Jesse Barnes <jsbarnes@google.com>,
+        Summer Wang <wangsummer@google.com>,
+        linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+Subject: KernelCI Hackfest #2 - Sept 6-10 2021
+Message-ID: <74f7b4cf-926f-d8bd-19c2-375cfe7a12b2@collabora.com>
+Date:   Mon, 2 Aug 2021 10:00:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
-> Sent: Friday, July 30, 2021 4:25 PM
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Friday, July 30, 2021 4:03 PM
-> > Hi Roberto,
-> >
-> > On Fri, 2021-07-30 at 13:16 +0000, Roberto Sassu wrote:
-> > > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > > > Sent: Friday, July 30, 2021 2:40 PM
-> >
-> > > > "critical data", in this context, should probably be used for verifying
-> > > > the in memory file digests and other state information haven't been
-> > > > compromised.
-> > >
-> > > Actually, this is what we are doing currently. To keep the
-> > > implementation simple, once the file or the buffer are uploaded
-> > > to the kernel, they will not be modified, just accessed through
-> > > the indexes.
-> >
-> > My main concern about digest lists is their integrity, from loading the
-> > digest lists to their being stored in memory.  A while back, there was
-> > some work on defining a write once memory allocator.  I don't recall
-> > whatever happened to it.  This would be a perfect usecase for that
-> > memory allocator.
-> 
-> Adding Igor in CC.
-> 
-> Regarding loading, everything uploaded to the kernel is carefully
-> evaluated. This should not be a concern. Regarding making them
-> read-only, probably if you can subvert digest lists you can also
-> remove the read-only protection (unless you use an hypervisor).
+The first KernelCI hackfest[1] early June was successful in getting
+a number of kernel developers to work alongside the core KernelCI
+team.  Test coverage was increased in particular with kselftest,
+LTP, KUnit and a new test suite for libcamera.  We're now improving
+documentation and tooling to make it easier for anyone to get
+started.  Find out more about KernelCI on https://kernelci.org.
 
-I briefly talked with Igor. He also agreed with that, and added that
-it could make it more difficult for an attacker to also disable the
-protection. However, he is not planning to submit an update soon,
-so I wouldn't consider this an option for now.
+The second hackfest is scheduled for the 6th-10th September.  It
+should be a good opportunity to start discussing and working on
+upstream kernel testing topics ahead of the Linux Plumbers
+Conference[2].
 
-Thanks
+Here's the project board where anyone can already add some ideas:
 
-Roberto
+  https://github.com/orgs/kernelci/projects/5
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
+There is no registration system, but please reply to this email or
+send a message on IRC (#kernelci libera.chat) or kernelci.slack.com
+if you would like to take part so you'll get email updates and
+invitations to the meetings and open hours sessions online.  You
+may just drop in and out at any point during the hackfest as you
+see fit.
 
-> Thanks
-> 
-> Roberto
-> 
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Li Peng, Li Jian, Shi Yanli
-> 
-> > thanks,
-> >
-> > Mimi
+The hackfest features:
 
+* Daily open hours online using Big Blue Button to discuss things
+  and get support from the KernelCI team
+
+* KernelCI team members available across most time zones to provide
+  quick feedback
+
+* A curated list of topics and a project board to help set
+  objectives and coordinate efforts between all contributors
+
+
+As always, KernelCI is at the service of the kernel community so
+please share any feedback you may have to help shape this upcoming
+hackfest in the best possible way.
+
+Thanks,
+Guillaume
+
+
+[1] https://foundation.kernelci.org/blog/2021/06/24/the-first-ever-kernelci-hackfest/
+[2] https://www.linuxplumbersconf.org/event/11/page/104-accepted-microconferences#cont-test
