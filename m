@@ -2,184 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 346953DE102
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 22:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AC23DE156
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 23:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbhHBUvI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Aug 2021 16:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
+        id S231910AbhHBVTg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Aug 2021 17:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbhHBUvI (ORCPT
+        with ESMTP id S231952AbhHBVTg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Aug 2021 16:51:08 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0F9C06175F;
-        Mon,  2 Aug 2021 13:50:58 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id w10so12598004qtj.3;
-        Mon, 02 Aug 2021 13:50:58 -0700 (PDT)
+        Mon, 2 Aug 2021 17:19:36 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C11C061760
+        for <linux-kselftest@vger.kernel.org>; Mon,  2 Aug 2021 14:19:26 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id i10so21203641pla.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Aug 2021 14:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cI3bAw8ypmiDHJdkJBXoE/YVWFtSuOmaJtoMVmodDns=;
-        b=df+Nxs07hhZVldp5Si0NYQLfbLRt8i7Mw869Pdb/LIBoaZNpqGq8RZMVNst6CzxuXJ
-         JPslwzdvx9RBZrHA8dcACcLvLu9/RpRXy2b+JIqBirQvw1vD2WWAZV4bDqyndC/qtLMK
-         dCgPmROybIJ8/5fX5kT1JwdMdj4yXELSJbs1Kdv+TBw+3x8M5ZtFrYVLIuccrRTYzT6e
-         wY3v0CTGnblF3pSsusQGAhXzqb2UwEatgSOY5S0q68UAf7nLoAFMXEW7RUTYA4GnW44F
-         vcRcmp6ZX9ljfSSuFzcaNl+MR+eiS8vwyGUyD2z9QV+SLJChADH6sdl//hA81A1VNSu9
-         kchA==
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aVBuXMfiCfWt5hdMv6zWGnMRg21pnjj7QA/tDQ0Y95Q=;
+        b=zKexeWwWDxfxwxGu+RH3nuqraBaI9t5GFDWnDdsIK9A8wW/PHdQCbYXtBS+bX3AXzy
+         UfeMiL8pZOQz8AvL8E5WZtzODhwG6dL9IN5ycqw6bPzBbpQMMvUhjGKqzemWKpg1eNVC
+         hEkqhLmPZFdpIiRREY8kIX1U0040YnX2NiW6Cyle1aASfV9rOuLJ6N+lYrUMKDgvxJjc
+         AZV5NnrKBOEQxG0aTMWQdMWIiVwSGKLdFis48uBClIFvUJRMStXKb9zGNWTRgzno4INn
+         x55npPu8PhasCvXe7BC5CLNaaY5YENt45917beKl7Prb7ulUg8l7dAAuC9IFrZYORFC2
+         rbvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cI3bAw8ypmiDHJdkJBXoE/YVWFtSuOmaJtoMVmodDns=;
-        b=ISWqBeC8QDlGTSPpQXK5U5ie//fD9g4jfbAnoRUeESguXvAm6acI3Gfy25gqR6VpRy
-         aG75DRFLSowMehE41TfX+wYiSdOnXXTBVbf+IF7dKns5q8u3bADkzDoQlpO+71bIgp4Y
-         cK4uQMkdWC1ZWcUlNXIWgEtCIUCVLt7M3lHJQZmeZRZDnD+D9cqDHb4FbojuVy5nekbH
-         QJbAxsyuww4yS+/2WcMqPkPBrj5Av7lVTojLR43KngsCiK869y1RcuSt5T822tVXfeND
-         AlpBDhGM8zU6nNplHhwAEMz1QcH1AasClaIPm/PcFtdEr+aU9nLusIoeExmLlz9by8XH
-         SYcg==
-X-Gm-Message-State: AOAM531wz/KWBBb34ThsiMNn8ZbnQzQSt+j411AbnIgsJ+UMp2tct1xc
-        h7bqDcHyaIai3j7wnfcfjg==
-X-Google-Smtp-Source: ABdhPJzTB7qbhI8W9WNQjiD8aM6UxJAT1AHXEltCXm7G9PSLr8Y4uZ8p0UFPfAtH0h0pG4HpimknGg==
-X-Received: by 2002:ac8:7e86:: with SMTP id w6mr16025808qtj.194.1627937457370;
-        Mon, 02 Aug 2021 13:50:57 -0700 (PDT)
-Received: from bytedance.attlocal.net (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
-        by smtp.gmail.com with ESMTPSA id f12sm6570944qke.37.2021.08.02.13.50.55
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aVBuXMfiCfWt5hdMv6zWGnMRg21pnjj7QA/tDQ0Y95Q=;
+        b=JVX0A0Ey9ayouBwdhpYM19mTg46bT+epOO8yet4fEYqK55Kme7W72f0qBvoArVusDu
+         CL68VsQoPlw7NyEVeDoHsB6WMdVzzzSKgiIOo0k1P8lkas7Cf2p+luityk2fWB9NWMbB
+         6OpTJjcGZalJz9TxpMhgs1sgBkI7i7QYkv65Od0hby27aN7YiMkOSxUk5UkzNNP5UvaZ
+         1ofYHmKIDeLrx/0zuGkVAHifwnO0QPXHpcAFND3NB+q31zDdxXe9+Bmr6TX+ebeZ/RXv
+         lmhByAGzTXkHVxSr594NqFfWz+nWyPY0/H7bZNaoo24bq+QW72yXLGphBE6kOXIhzqm1
+         0hHA==
+X-Gm-Message-State: AOAM530VrdszpqIzkSnDCyWBh8/RJDWjSBSax2D/cIkpGiF+wML4j/7q
+        mb6pXQXbglTQhEQLWJtjTjECTg==
+X-Google-Smtp-Source: ABdhPJw5iuEF1I72i2Wlv49CHbTsllBAXTkInZEfpNrpHZpI8JXJHhz5DJQpobzibHM+k05k7kX1AQ==
+X-Received: by 2002:a17:902:cec2:b029:12c:bef0:ec4b with SMTP id d2-20020a170902cec2b029012cbef0ec4bmr3661093plg.74.1627939165685;
+        Mon, 02 Aug 2021 14:19:25 -0700 (PDT)
+Received: from ip-10-124-121-13.byted.org (ec2-54-241-92-238.us-west-1.compute.amazonaws.com. [54.241.92.238])
+        by smtp.gmail.com with ESMTPSA id 10sm12949212pjc.41.2021.08.02.14.19.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Aug 2021 13:50:56 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
+        Mon, 02 Aug 2021 14:19:25 -0700 (PDT)
+From:   Jiang Wang <jiang.wang@bytedance.com>
+To:     netdev@vger.kernel.org
+Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
+        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH net-next 2/2] tc-testing/ingress: Add control-plane selftests for clsact egress mini-Qdisc option
-Date:   Mon,  2 Aug 2021 13:50:36 -0700
-Message-Id: <165f9fb53d04c62e11f87c98ee317fb9a5aaa277.1627936393.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1931ca440b47344fe357d5438aeab4b439943d10.1627936393.git.peilin.ye@bytedance.com>
-References: <1931ca440b47344fe357d5438aeab4b439943d10.1627936393.git.peilin.ye@bytedance.com>
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/5] sockmap: add sockmap support for unix stream socket
+Date:   Mon,  2 Aug 2021 21:19:04 +0000
+Message-Id: <20210802211912.116329-1-jiang.wang@bytedance.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+This patch series add support for unix stream type
+for sockmap. Sockmap already supports TCP, UDP,
+unix dgram types. The unix stream support is similar
+to unix dgram.
 
-Recently we added a new clsact egress mini-Qdisc option for sch_ingress.
-Add a few control-plane tdc.py selftests for it.
+Also add selftests for unix stream type in sockmap tests.
 
-Depends on kernel patch "net/sched: sch_ingress: Support clsact egress
-mini-Qdisc option", as well as iproute2 patch "tc/ingress: Introduce
-clsact egress mini-Qdisc option".
 
-Reviewed-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
- .../tc-testing/tc-tests/qdiscs/ingress.json   | 84 +++++++++++++++++++
- 1 file changed, 84 insertions(+)
+Jiang Wang (5):
+  af_unix: add read_sock for stream socket types
+  af_unix: add unix_stream_proto for sockmap
+  selftest/bpf: add tests for sockmap with unix stream type.
+  selftest/bpf: change udp to inet in some function names
+  selftest/bpf: add new tests in sockmap for unix stream to tcp.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ingress.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ingress.json
-index d99dba6e2b1a..2cde11b2ea9b 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ingress.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ingress.json
-@@ -98,5 +98,89 @@
-         "teardown": [
-             "$IP link del dev $DUMMY type dummy"
-         ]
-+    },
-+    {
-+        "id": "8e8c",
-+        "name": "Enable clsact egress mini-qdisc for ingress",
-+        "category": [
-+            "qdisc",
-+            "ingress"
-+        ],
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY ingress"
-+        ],
-+        "cmdUnderTest": "$TC qdisc change dev $DUMMY ingress clsact-on",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc ingress ffff:.*clsact",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "3a76",
-+        "name": "Disable clsact egress mini-qdisc for ingress",
-+        "category": [
-+            "qdisc",
-+            "ingress"
-+        ],
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY ingress",
-+            "$TC qdisc change dev $DUMMY ingress clsact-on"
-+        ],
-+        "cmdUnderTest": "$TC qdisc change dev $DUMMY ingress clsact-off",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc ingress ffff:.*clsact",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "7b2b",
-+        "name": "Enable clsact egress mini-qdisc for ingress twice",
-+        "category": [
-+            "qdisc",
-+            "ingress"
-+        ],
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY ingress",
-+            "$TC qdisc change dev $DUMMY ingress clsact-on"
-+        ],
-+        "cmdUnderTest": "$TC qdisc change dev $DUMMY ingress clsact-on",
-+        "expExitCode": "2",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc ingress ffff:.*clsact",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "05ab",
-+        "name": "Disable clsact egress mini-qdisc for ingress twice",
-+        "category": [
-+            "qdisc",
-+            "ingress"
-+        ],
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY ingress",
-+            "$TC qdisc change dev $DUMMY ingress clsact-on",
-+            "$TC qdisc change dev $DUMMY ingress clsact-off"
-+        ],
-+        "cmdUnderTest": "$TC qdisc change dev $DUMMY ingress clsact-off",
-+        "expExitCode": "2",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc ingress ffff:.*clsact",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-     }
- ]
+ include/net/af_unix.h                         |  8 +-
+ net/core/sock_map.c                           |  8 +-
+ net/unix/af_unix.c                            | 86 ++++++++++++++---
+ net/unix/unix_bpf.c                           | 96 ++++++++++++++-----
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 48 ++++++----
+ 5 files changed, 193 insertions(+), 53 deletions(-)
+
+v1 -> v2 :
+ - Call unhash in shutdown.
+ - Clean up unix_create1 a bit.
+ - Return -ENOTCONN if socket is not connected.
+
+v2 -> v3 :
+ - check for stream type in update_proto
+ - remove intermediate variable in __unix_stream_recvmsg
+ - fix compile warning in unix_stream_recvmsg
 -- 
 2.20.1
 
