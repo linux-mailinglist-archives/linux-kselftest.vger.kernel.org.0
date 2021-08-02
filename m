@@ -2,175 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA083DDC09
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 17:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160F13DDC98
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 17:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234839AbhHBPNC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Aug 2021 11:13:02 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3552 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234492AbhHBPNB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Aug 2021 11:13:01 -0400
-Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GdhMG52n0z6BB9y;
-        Mon,  2 Aug 2021 23:12:42 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 2 Aug 2021 17:12:49 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Mon, 2 Aug 2021 17:12:49 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
- digest_list_del
-Thread-Topic: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
- digest_list_del
-Thread-Index: AQHXgjzPxJ6WuoGgH0KyG3D/y7w0xqtaWSsAgADBDpCAAD+ygIAAIhjQgAS3MgCAACHtEA==
-Date:   Mon, 2 Aug 2021 15:12:49 +0000
-Message-ID: <1b853c35bb8c41c98c51af1116d5eac6@huawei.com>
-References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
-         <20210726163700.2092768-7-roberto.sassu@huawei.com>
-         <c9dffd9d29df095660beaa631ff252c4b33629a0.camel@linux.ibm.com>
-         <ef7c85dcb096479e95c8c60ccda4d700@huawei.com>
-         <1ef95096bee13578b3f906dd9f708c6af9d6ff18.camel@linux.ibm.com>
-         <555bf01bee4b4ea7a9bee658366d535a@huawei.com>
- <3e6a54d4be87a3eafc45c85d013250d17aa0835e.camel@linux.ibm.com>
-In-Reply-To: <3e6a54d4be87a3eafc45c85d013250d17aa0835e.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S234356AbhHBPht (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Aug 2021 11:37:49 -0400
+Received: from foss.arm.com ([217.140.110.172]:37718 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233939AbhHBPhs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 2 Aug 2021 11:37:48 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C144911D4;
+        Mon,  2 Aug 2021 08:37:38 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA19F3F66F;
+        Mon,  2 Aug 2021 08:37:37 -0700 (PDT)
+Date:   Mon, 2 Aug 2021 16:36:15 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] kselftest/arm64: Add tests for SVE vector
+ configuration
+Message-ID: <20210802153614.GC25258@arm.com>
+References: <20210729151518.46388-1-broonie@kernel.org>
+ <20210729151518.46388-4-broonie@kernel.org>
+ <20210729160642.GP1724@arm.com>
+ <20210729173411.GT4670@sirena.org.uk>
+ <20210802102517.GA25258@arm.com>
+ <20210802113330.GD4668@sirena.org.uk>
+ <20210802123749.GB25258@arm.com>
+ <20210802141939.GF4668@sirena.org.uk>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210802141939.GF4668@sirena.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> Sent: Monday, August 2, 2021 4:42 PM
-> Hi Roberto,
+On Mon, Aug 02, 2021 at 03:19:39PM +0100, Mark Brown wrote:
+> On Mon, Aug 02, 2021 at 01:37:50PM +0100, Dave Martin wrote:
+> > On Mon, Aug 02, 2021 at 12:33:30PM +0100, Mark Brown wrote:
 > 
-> On Fri, 2021-07-30 at 13:16 +0000, Roberto Sassu wrote:
+> > > That really doesn't seem like a good idea - it's just asking for
+> > > fragility if a signal gets delivered to the parent process or something.
+> > > Even if almost all the time there will only be one trip through the loop
+> > > we should still have the loop there for those few cases where it
+> > > triggers.
 > 
-> > The reason of storing the actions performed by IMA on the
-> > digest lists helps to determine for which purpose they can be
-> > used. If digest lists are used only for measurement purpose,
-> > it should be sufficient that digest lists are measured. The
-> > same applies for appraisal.
+> > This concern only applies when the program actually registers signal
+> > handlers.
 > 
-> Is that assumption correct?   How would you know if the digests lists
-> are only being used one way and not the other.  For example, assuming
-> that the digest lists are stored on protected media, the digest lists
-> could be measured, but would not necessarily be appraised.
-
-Hi Mimi
-
-the actions performed by IMA on the digest lists are recorded
-in the digest_list_item structure. These can be retrieved when
-IMA calls diglim_digest_get_info() (actually it is the OR of the
-actions for the digest lists that contain the digest passed as a
-query).
-
-At the moment, DIGLIM can only know whether a digest list
-has been measured or not (with the return value of
-ima_measure_critical_data()). In the next patch set, I add the
-changes to get the actions from the integrity_iint_cache().
-
-> > > Adding the kernel_read_file() "READING_DIGEST_LIST" support in IMA
-> does
-> > > not seem to be optional.  IMA would then be calculating the digest list
-> > > file hash twice, once in kernel_read_file() and then, again, in
-> > > ima_measure_critical_data().
-> >
-> > I didn't include also this part: I retrieve the integrity_iint_cache for
-> > the opened file descriptor and I get the flags from there. If the
-> > IMA_MEASURED flag is set, it is not necessary to call also
-> > ima_measure_critical_data().
+> > wait() can't return for any other reason, and it mustn't, precisely
+> > because historically software would have made this assumption.  This is
+> > one reason why wait3() etc. are separate functions.
 > 
-> Right, assuming the file is in policy, the digest would already be
-> stored in the iint cache.
+> That's great for the reader with a detailed knowledge of exactly what
+> error handling can be skipped and how standards conforming Linux is but
+> less good for the reader who is merely aware of best practices.  I am
+> not clear what the problem that is solved by removing the loop here is
+> TBH - to me it just makes it less obvious that we've handled everything.
+
+Ok, leave it as is then.
+
+(It would be good to collect some best-practice guidance on how to
+actually use syscalls, but that's clearly way out of scope here...)
+
+> > That aside though, can't we use popen(3)?
 > 
-> > > > > I understand that with your changes to ima_measure_critical_data(),
-> > > > > which are now in next-integrity-testing branch, allow IMA to calculate
-> > > > > the file data hash.
-> > > >
-> > > > Yes, correct. But actually there is another useful use case.
-> > > > If digest lists are not in the format supported by the kernel,
-> > > > the user space parser has to convert them before uploading
-> > > > them to the kernel.
-> > > >
-> > > > ima_measure_critical_data() would in this case measure
-> > > > the converted digest list (it is written directly, without
-> > > > sending the file path). It is easier to attest the result,
-> > > > instead of determining whether the user space parser
-> > > > produced the expected result (by checking the files it
-> > > > read).
-> > >
-> > > The application to properly convert the digest list file data into the
-> > > appropriate format would need to be trusted.  I'm concerned that not
-> > > requiring the converted data to be signed and the signature verified is
-> > > introducing a new integrity gap.  Perhaps between an LSM policy,
-> > > limiting which files may be read by the application, and an IMA policy,
-> > > requiring all files read by this application to be measured and the
-> > > signature verified, this integrity gap could be averted.
-> >
-> > It is the weakest point in the chain, yes. Relying on existing LSMs
-> > didn't seem to me a good idea, as:
-> > - a new policy must be installed
-> > - we must be sure that the policy is really enforced
-> > - we need to support different LSMs (SELinux for Fedora,
-> >   Apparmor for SUSE)
-> > - there might be no LSM we can rely on
-> >
-> > For these reasons, I developed a new LSM. Its purpose is to
-> > identify the user space parser and for each file it opens, ensure
-> > that the file has been measured or appraised by IMA. If one of
-> > these actions are missing, it will not be set in the digest list the
-> > user space parser uploads to the kernel (which means that IMA
-> > will ignore the digest list for that specific action).
+> > I tend to forget about popen because it is "boring" to use it, but it
+> > looks like it fits this case quite well.  Then it would be libc's
+> > problem how to fork and wait safely.
 > 
-> Properly identifying (all) user space parser(s) would be critical.  It
-> would be simpler and  safer to require the converted data be signed.
+> popen() appears to be break the _SET_VL_ONEXEC test.  Between a lack of
+> strace in my test filesystem and not spotting anything obvious in the
+> glibc sources I can't tell exactly where it's doing something different,
+> though it does feel like it should be a separate testcase if it's
+> anything interesting.  I do think there is value in having exactly
+> what's done to start the child process be clear in the test program, and
+> that coverage of anything interesting from popen() could be done
+> incrementally.
 
-I agree, it would be much easier. However, it would require changes
-to the building infrastructure of Linux distribution vendors, which
-might limit the applicability of DIGLIM.
+Ah, dang, popen() will run the target program via a shell, so there will
+actually be two fork-exec()s, with the VL being reset to default by the
+second exec.
 
-With the user space parser taking care of the conversion, distributions
-can do appraisal of executables and shared libraries with an update of:
-- the kernel: to add DIGLIM
-- dracut: to add required digest lists in the initial ram disk
-- rpm (plugin): to extract the RPM header and its signature and write
-  them to a file that is uploaded to the kernel by the user space parser
+Using PR_SET_SET_VL with popen() still makes sense, but if you want the
+target program to get the new VL (not just the shell) then you'd need
+PR_SVE_VL_INHERIT.  Then we would get confused later when trying to
+test the !PR_SVE_VL_INHERIT case.  The way to "fix" this would be to
+have the shell invoke something like vlset, but that will blur the test
+in a different way, adding even more confusion.
 
-I'm planning to append the signature at the end of the RPM header
-(and use appraise_type=modsig) to avoid the dependency on the
-'initramfs: add support for xattrs in the initial ram disk' patch set
-(which I might try to resume in the future).
+So Ack, we can't test all the variations using the popen() method, so we
+probably shouldn't use it here at all.  
 
-Thanks
+This is the kind of reason why I tend not to go for it, I guess --
+it looks convenient, but it's just that little bit overcooked as an API.
+*sigh*
 
-Roberto
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
+I'll review your final version of the series, but I guess we're all good.
 
-> thanks,
-> 
-> Mimi
-
+Cheers
+---Dave
