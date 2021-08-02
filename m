@@ -2,175 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4632E3DD10A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 09:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4595D3DD1C5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 10:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbhHBHOW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Aug 2021 03:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbhHBHOV (ORCPT
+        id S232670AbhHBIOc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Aug 2021 04:14:32 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3544 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232657AbhHBIOc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Aug 2021 03:14:21 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EBDC06175F;
-        Mon,  2 Aug 2021 00:14:12 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id j18-20020a17090aeb12b029017737e6c349so14868578pjz.0;
-        Mon, 02 Aug 2021 00:14:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oYGE701/ldiF9KITcm5HXRiWM/dLf2ZAwVce1ur94Jk=;
-        b=DIRDfI+J9salXANALN6k12/S6q39hYPOE12NNmePaVxc44rIbPEt3P9fkaPpOQbB/p
-         n1lhtrjyjBx1h4dApSOEFpEYm6jaGWMZmI+7u8GnCNldJNac6p4EuNwDN/E5XKWOKrD5
-         l7lswtEMlnKH3qo8qr+QohR9gO2+7UMglJuqFU2Qo1QacDlZO4w8gJgDD8GaqPK9qfL4
-         U/UGy6ldgTJDD5veSbeEeDCHmakmEBT0MWXykeBh1EHCTersBnBr0XMTqBLbxrcKTbEO
-         P9k4V2mRP9YWf1WqrghvuErISXE9SQTAN5SWDW6LuChTUN0H9gzMhWhBjhZos0A1x9MW
-         Qa/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oYGE701/ldiF9KITcm5HXRiWM/dLf2ZAwVce1ur94Jk=;
-        b=BDcj2N5CBJcRoFhrywFVW0oeMeRa51c7SYGMMUMZli6oZ9Hu7do0kxSEqsyDJI3ZJ2
-         8gxMayEIl7t7Qi6jnlZ/42y5TtPQEUZ1WmvgAJgMhFTgm57qgBYli5PAWVmO1HtXmwU5
-         68GC7J8Y4umthsxwc9wiUne0qJJuoAF4qe4C7L54zflD0po5ZQpEGDeDqSuJIJF7ZSFU
-         9m7DrDc6CG4zYFczX6mnf/F0xN7IDSLyZEQ+rFAZjjUTYIfmphmy228KLObnxgabOsZL
-         GiPiftN09KbPSVx1OwBj6YcX18GleTwtVkE1K0LZDv5idH8pJPrGKedyciep8wnwe+Vx
-         mBkg==
-X-Gm-Message-State: AOAM530LyMowo8yokRT/tOAoJcWWaKV+fw7mO+diggW6Nh2RdbPX6pEc
-        udtIGHL0zFoc5Odpsin9lLSIGRMJr1YycQ==
-X-Google-Smtp-Source: ABdhPJwsyeWiLLqfHUyWXSj4bhFKoFz5Dy8Kja7ki47VV1ZtfvLOUGmXFl7BnFo7/wRgnTIJvPCtMQ==
-X-Received: by 2002:a62:e90b:0:b029:30e:4530:8dca with SMTP id j11-20020a62e90b0000b029030e45308dcamr15418664pfh.17.1627888451608;
-        Mon, 02 Aug 2021 00:14:11 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 20sm10883973pfi.170.2021.08.02.00.14.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Aug 2021 00:14:11 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: zhang.yunkai@zte.com.cn
-To:     jasowang@redhat.com
-Cc:     john.stultz@linaro.org, tglx@linutronix.de, sboyd@kernel.org,
-        shuah@kernel.org, mst@redhat.com, zhang.yunkai@zte.com.cn,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] tools: remove unneeded semicolon
-Date:   Mon,  2 Aug 2021 00:14:49 -0700
-Message-Id: <20210802071449.588393-1-zhang.yunkai@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 2 Aug 2021 04:14:32 -0400
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GdW4P1bP5z6F86J;
+        Mon,  2 Aug 2021 16:14:13 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Mon, 2 Aug 2021 10:14:20 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Mon, 2 Aug 2021 10:14:20 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Igor Stoppa <igor.stoppa@huawei.com>
+Subject: RE: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
+ digest_list_del
+Thread-Topic: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
+ digest_list_del
+Thread-Index: AQHXgjzPxJ6WuoGgH0KyG3D/y7w0xqtaWSsAgADBDpCAAD+ygIAAIhjQ///1QYCAACKD8IAETzLw
+Date:   Mon, 2 Aug 2021 08:14:20 +0000
+Message-ID: <96c7cd3d19254e84a6cb45b2a940e944@huawei.com>
+References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
+         <20210726163700.2092768-7-roberto.sassu@huawei.com>
+         <c9dffd9d29df095660beaa631ff252c4b33629a0.camel@linux.ibm.com>
+         <ef7c85dcb096479e95c8c60ccda4d700@huawei.com>
+         <1ef95096bee13578b3f906dd9f708c6af9d6ff18.camel@linux.ibm.com>
+         <555bf01bee4b4ea7a9bee658366d535a@huawei.com>
+ <2c731f07bd08f01f2a3e032814bc65ae9a8494ad.camel@linux.ibm.com>
+ <bd0787e0ee4f47baa41abf47976e536c@huawei.com>
+In-Reply-To: <bd0787e0ee4f47baa41abf47976e536c@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+> From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
+> Sent: Friday, July 30, 2021 4:25 PM
+> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > Sent: Friday, July 30, 2021 4:03 PM
+> > Hi Roberto,
+> >
+> > On Fri, 2021-07-30 at 13:16 +0000, Roberto Sassu wrote:
+> > > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > > Sent: Friday, July 30, 2021 2:40 PM
+> >
+> > > > "critical data", in this context, should probably be used for verifying
+> > > > the in memory file digests and other state information haven't been
+> > > > compromised.
+> > >
+> > > Actually, this is what we are doing currently. To keep the
+> > > implementation simple, once the file or the buffer are uploaded
+> > > to the kernel, they will not be modified, just accessed through
+> > > the indexes.
+> >
+> > My main concern about digest lists is their integrity, from loading the
+> > digest lists to their being stored in memory.  A while back, there was
+> > some work on defining a write once memory allocator.  I don't recall
+> > whatever happened to it.  This would be a perfect usecase for that
+> > memory allocator.
+> 
+> Adding Igor in CC.
+> 
+> Regarding loading, everything uploaded to the kernel is carefully
+> evaluated. This should not be a concern. Regarding making them
+> read-only, probably if you can subvert digest lists you can also
+> remove the read-only protection (unless you use an hypervisor).
 
-Fix the following coccicheck REVIEW:
-./tools/testing/selftests/timers/inconsistency-check.c:75:2-3 REVIEW
-Unneeded semicolon
-./tools/testing/selftests/timers/set-timer-lat.c:83:2-3 REVIEW Unneeded
-semicolon
-./tools/virtio/virtio-trace/trace-agent-ctl.c:78:2-3 REVIEW Unneeded
-semicolon
-./tools/testing/selftests/timers/nanosleep.c:75:2-3 REVIEW Unneeded
-semicolon
-./tools/testing/selftests/timers/nsleep-lat.c:75:2-3 REVIEW Unneeded
-semicolon
-./tools/testing/selftests/timers/alarmtimer-suspend.c:82:2-3 REVIEW
-Unneeded semicolon
+I briefly talked with Igor. He also agreed with that, and added that
+it could make it more difficult for an attacker to also disable the
+protection. However, he is not planning to submit an update soon,
+so I wouldn't consider this an option for now.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
----
- tools/testing/selftests/timers/alarmtimer-suspend.c  | 2 +-
- tools/testing/selftests/timers/inconsistency-check.c | 2 +-
- tools/testing/selftests/timers/nanosleep.c           | 2 +-
- tools/testing/selftests/timers/nsleep-lat.c          | 2 +-
- tools/testing/selftests/timers/set-timer-lat.c       | 2 +-
- tools/virtio/virtio-trace/trace-agent-ctl.c          | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+Thanks
 
-diff --git a/tools/testing/selftests/timers/alarmtimer-suspend.c b/tools/testing/selftests/timers/alarmtimer-suspend.c
-index 4da09dbf83ba..54da4b088f4c 100644
---- a/tools/testing/selftests/timers/alarmtimer-suspend.c
-+++ b/tools/testing/selftests/timers/alarmtimer-suspend.c
-@@ -79,7 +79,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
-diff --git a/tools/testing/selftests/timers/inconsistency-check.c b/tools/testing/selftests/timers/inconsistency-check.c
-index 022d3ffe3fbf..e6756d9c60a7 100644
---- a/tools/testing/selftests/timers/inconsistency-check.c
-+++ b/tools/testing/selftests/timers/inconsistency-check.c
-@@ -72,7 +72,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
-diff --git a/tools/testing/selftests/timers/nanosleep.c b/tools/testing/selftests/timers/nanosleep.c
-index 71b5441c2fd9..433a09676aeb 100644
---- a/tools/testing/selftests/timers/nanosleep.c
-+++ b/tools/testing/selftests/timers/nanosleep.c
-@@ -72,7 +72,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
-diff --git a/tools/testing/selftests/timers/nsleep-lat.c b/tools/testing/selftests/timers/nsleep-lat.c
-index eb3e79ed7b4a..a7ca9825e106 100644
---- a/tools/testing/selftests/timers/nsleep-lat.c
-+++ b/tools/testing/selftests/timers/nsleep-lat.c
-@@ -72,7 +72,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
-diff --git a/tools/testing/selftests/timers/set-timer-lat.c b/tools/testing/selftests/timers/set-timer-lat.c
-index 50da45437daa..d60bbcad487f 100644
---- a/tools/testing/selftests/timers/set-timer-lat.c
-+++ b/tools/testing/selftests/timers/set-timer-lat.c
-@@ -80,7 +80,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
-diff --git a/tools/virtio/virtio-trace/trace-agent-ctl.c b/tools/virtio/virtio-trace/trace-agent-ctl.c
-index 73d253d4b559..39860be6e2d8 100644
---- a/tools/virtio/virtio-trace/trace-agent-ctl.c
-+++ b/tools/virtio/virtio-trace/trace-agent-ctl.c
-@@ -75,7 +75,7 @@ static int wait_order(int ctl_fd)
- 
- 		if (ret)
- 			break;
--	};
-+	}
- 
- 	return ret;
- 
--- 
-2.25.1
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
+
+> Thanks
+> 
+> Roberto
+> 
+> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> Managing Director: Li Peng, Li Jian, Shi Yanli
+> 
+> > thanks,
+> >
+> > Mimi
 
