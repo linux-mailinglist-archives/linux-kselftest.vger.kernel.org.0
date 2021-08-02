@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4EB3DDB48
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 16:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CC83DDBB8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Aug 2021 17:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbhHBOmr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Aug 2021 10:42:47 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47612 "EHLO
+        id S234227AbhHBPBo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Aug 2021 11:01:44 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:11714 "EHLO
         mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233925AbhHBOmq (ORCPT
+        by vger.kernel.org with ESMTP id S234211AbhHBPBn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Aug 2021 10:42:46 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 172EY0ek175070;
-        Mon, 2 Aug 2021 10:42:31 -0400
+        Mon, 2 Aug 2021 11:01:43 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 172EXhc2112433;
+        Mon, 2 Aug 2021 11:01:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=zGdVNd5qiQPcDVl6mMtFFxl5zES7mJ2fWwcpoYDbjYI=;
- b=Xmgi6/5nP2wKA75iFEg5HepcKfmEaXnHuXYSX/6O/kMoQM6iSd0eBGvxjNrnpdY5GiaI
- ShoEbWrNKRjDB/IBtrBroctogujun0iUGuYiVSPdix/Ethd+17dUDQOpvCV34HS5+23w
- TO9h/d3htxCJ60TiZenh56O84L8xV1td++C+FarQwM2Wz+YLUOfI5J39CHSIPtfLcywc
- UwImDknN0nlUhtYQoJlbnQ5WUlo5k8ljxphaQk9kAWACF0D8Dy40/9yk12PdIXE0Xl+A
- LOBTY6+msJZJaDG1CQKt25lbd1kAxQTNJYe0+UkuY2GchpzG2/JniB0S+R4FYYUNFtCa 8Q== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a5u8bpr7j-1
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=tU+Dh7yViSX+arhzY6wi+MNmaJDKyBkP/td5MGDEVQA=;
+ b=obypbEYMUT0DRZoROC89kxdOeObkAnvcqG63XXOsE5QUelM0USpAWZYourKAk4w8OoCS
+ WloHbDE/Q6Fv6BBsoaRbpl4AzDRUyvcaqd9ptQZAUJO91/qWk89FhFyWTmRH8GCB/dfR
+ z1Cu/S0Xw0b7uywJa4eqeLoZ/fskGddUWRFVcynQ5pyt0D4zm/OJAem2mAbh/XEG6xPF
+ K4uUsG4a9QG7znmL+belUJzAPg3MSoR2jB8QH6ZEOuNWXLrMSYu/9/xcQOZ/69DFnFv+
+ 2Pkv/KuMezmnQPYQMn7d6usr5gDo81CPDvctHymsqMl4Hn0YEIkYUu+7EcQ1V5HDTECM CA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a5s279fnf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Aug 2021 10:42:31 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 172EItAq007062;
-        Mon, 2 Aug 2021 14:42:29 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3a4x58mf0k-1
+        Mon, 02 Aug 2021 11:01:22 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 172ExBlB007905;
+        Mon, 2 Aug 2021 15:01:21 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3a4wshn1q8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Aug 2021 14:42:29 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 172EgRoK27066814
+        Mon, 02 Aug 2021 15:01:20 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 172EwRLH32113108
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 Aug 2021 14:42:27 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0F18CA4060;
-        Mon,  2 Aug 2021 14:42:27 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1ED9CA405B;
-        Mon,  2 Aug 2021 14:42:25 +0000 (GMT)
+        Mon, 2 Aug 2021 14:58:27 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 840DFA4072;
+        Mon,  2 Aug 2021 15:01:18 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8ABF9A407D;
+        Mon,  2 Aug 2021 15:01:16 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.118.203])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  2 Aug 2021 14:42:24 +0000 (GMT)
-Message-ID: <3e6a54d4be87a3eafc45c85d013250d17aa0835e.camel@linux.ibm.com>
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  2 Aug 2021 15:01:16 +0000 (GMT)
+Message-ID: <1efee8d7f62fb0e413f6e28d40af62610b8ce450.camel@linux.ibm.com>
 Subject: Re: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
  digest_list_del
 From:   Mimi Zohar <zohar@linux.ibm.com>
@@ -60,102 +60,80 @@ Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Mon, 02 Aug 2021 10:42:24 -0400
-In-Reply-To: <555bf01bee4b4ea7a9bee658366d535a@huawei.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Igor Stoppa <igor.stoppa@huawei.com>
+Date:   Mon, 02 Aug 2021 11:01:15 -0400
+In-Reply-To: <96c7cd3d19254e84a6cb45b2a940e944@huawei.com>
 References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
          <20210726163700.2092768-7-roberto.sassu@huawei.com>
          <c9dffd9d29df095660beaa631ff252c4b33629a0.camel@linux.ibm.com>
          <ef7c85dcb096479e95c8c60ccda4d700@huawei.com>
          <1ef95096bee13578b3f906dd9f708c6af9d6ff18.camel@linux.ibm.com>
          <555bf01bee4b4ea7a9bee658366d535a@huawei.com>
+         <2c731f07bd08f01f2a3e032814bc65ae9a8494ad.camel@linux.ibm.com>
+         <bd0787e0ee4f47baa41abf47976e536c@huawei.com>
+         <96c7cd3d19254e84a6cb45b2a940e944@huawei.com>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -2W2DK9FB2gKjhGHJSLsQWGmbfpdoMVt
-X-Proofpoint-GUID: -2W2DK9FB2gKjhGHJSLsQWGmbfpdoMVt
+X-Proofpoint-ORIG-GUID: ZQwL0SeAMMVVukqfkoWNXexSkUKdmvJ7
+X-Proofpoint-GUID: ZQwL0SeAMMVVukqfkoWNXexSkUKdmvJ7
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-02_05:2021-08-02,2021-08-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 spamscore=0 mlxscore=0 phishscore=0 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 adultscore=0 clxscore=1015
- malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 spamscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
+ lowpriorityscore=0 clxscore=1011 impostorscore=0 malwarescore=0
+ phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2107140000 definitions=main-2108020094
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Roberto,
-
-On Fri, 2021-07-30 at 13:16 +0000, Roberto Sassu wrote:
-
-> The reason of storing the actions performed by IMA on the
-> digest lists helps to determine for which purpose they can be
-> used. If digest lists are used only for measurement purpose,
-> it should be sufficient that digest lists are measured. The
-> same applies for appraisal.
-
-Is that assumption correct?   How would you know if the digests lists
-are only being used one way and not the other.  For example, assuming
-that the digest lists are stored on protected media, the digest lists
-could be measured, but would not necessarily be appraised.
-
-> > Adding the kernel_read_file() "READING_DIGEST_LIST" support in IMA does
-> > not seem to be optional.  IMA would then be calculating the digest list
-> > file hash twice, once in kernel_read_file() and then, again, in
-> > ima_measure_critical_data().
-> 
-> I didn't include also this part: I retrieve the integrity_iint_cache for
-> the opened file descriptor and I get the flags from there. If the
-> IMA_MEASURED flag is set, it is not necessary to call also
-> ima_measure_critical_data().
-
-Right, assuming the file is in policy, the digest would already be
-stored in the iint cache.
-
-> > > > I understand that with your changes to ima_measure_critical_data(),
-> > > > which are now in next-integrity-testing branch, allow IMA to calculate
-> > > > the file data hash.
+On Mon, 2021-08-02 at 08:14 +0000, Roberto Sassu wrote:
+> > From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
+> > Sent: Friday, July 30, 2021 4:25 PM
+> > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > Sent: Friday, July 30, 2021 4:03 PM
+> > > Hi Roberto,
 > > >
-> > > Yes, correct. But actually there is another useful use case.
-> > > If digest lists are not in the format supported by the kernel,
-> > > the user space parser has to convert them before uploading
-> > > them to the kernel.
+> > > On Fri, 2021-07-30 at 13:16 +0000, Roberto Sassu wrote:
+> > > > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > > > Sent: Friday, July 30, 2021 2:40 PM
 > > >
-> > > ima_measure_critical_data() would in this case measure
-> > > the converted digest list (it is written directly, without
-> > > sending the file path). It is easier to attest the result,
-> > > instead of determining whether the user space parser
-> > > produced the expected result (by checking the files it
-> > > read).
+> > > > > "critical data", in this context, should probably be used for verifying
+> > > > > the in memory file digests and other state information haven't been
+> > > > > compromised.
+> > > >
+> > > > Actually, this is what we are doing currently. To keep the
+> > > > implementation simple, once the file or the buffer are uploaded
+> > > > to the kernel, they will not be modified, just accessed through
+> > > > the indexes.
+> > >
+> > > My main concern about digest lists is their integrity, from loading the
+> > > digest lists to their being stored in memory.  A while back, there was
+> > > some work on defining a write once memory allocator.  I don't recall
+> > > whatever happened to it.  This would be a perfect usecase for that
+> > > memory allocator.
 > > 
-> > The application to properly convert the digest list file data into the
-> > appropriate format would need to be trusted.  I'm concerned that not
-> > requiring the converted data to be signed and the signature verified is
-> > introducing a new integrity gap.  Perhaps between an LSM policy,
-> > limiting which files may be read by the application, and an IMA policy,
-> > requiring all files read by this application to be measured and the
-> > signature verified, this integrity gap could be averted.
+> > Adding Igor in CC.
+> > 
+> > Regarding loading, everything uploaded to the kernel is carefully
+> > evaluated. This should not be a concern. Regarding making them
+> > read-only, probably if you can subvert digest lists you can also
+> > remove the read-only protection (unless you use an hypervisor).
 > 
-> It is the weakest point in the chain, yes. Relying on existing LSMs
-> didn't seem to me a good idea, as:
-> - a new policy must be installed
-> - we must be sure that the policy is really enforced
-> - we need to support different LSMs (SELinux for Fedora,
->   Apparmor for SUSE)
-> - there might be no LSM we can rely on
-> 
-> For these reasons, I developed a new LSM. Its purpose is to
-> identify the user space parser and for each file it opens, ensure
-> that the file has been measured or appraised by IMA. If one of
-> these actions are missing, it will not be set in the digest list the
-> user space parser uploads to the kernel (which means that IMA
-> will ignore the digest list for that specific action).
+> I briefly talked with Igor. He also agreed with that, and added that
+> it could make it more difficult for an attacker to also disable the
+> protection. However, he is not planning to submit an update soon,
+> so I wouldn't consider this an option for now.
 
-Properly identifying (all) user space parser(s) would be critical.  It
-would be simpler and  safer to require the converted data be signed.
+Hi Roberto, Greg,
+
+As long as others understand and agree to the risk, the IMA details can
+be worked out.
 
 thanks,
 
