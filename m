@@ -2,142 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 729793DEAE4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Aug 2021 12:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264ED3DEFB8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Aug 2021 16:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235404AbhHCK15 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Aug 2021 06:27:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:46778 "EHLO foss.arm.com"
+        id S236344AbhHCOHN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Aug 2021 10:07:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45892 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235383AbhHCK14 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Aug 2021 06:27:56 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7E4E106F;
-        Tue,  3 Aug 2021 03:27:44 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CA293F40C;
-        Tue,  3 Aug 2021 03:27:43 -0700 (PDT)
-Date:   Tue, 3 Aug 2021 11:26:21 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        id S236045AbhHCOHM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Aug 2021 10:07:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F005160F46;
+        Tue,  3 Aug 2021 14:07:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627999621;
+        bh=M6eorEJRReow7oVYrgE5jU5XJOAHXdHNNoKpQRlULRE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jj9UohuHMkpY2YuzWcCm18ZkyS8+wHhfQkt9zd5RHpS6+Ca945YOLDTKsP59GcQyh
+         Cro1y83ymFXq+eGbEoMZveg7RGjjPjm/gOtw974yMcLwfzv5hLE2QJO8SKfTNOL23G
+         IyjbixrB1jzrAR+N0OIjieTI7cnBwa6S+orWWUPnnSPjAiThesz3/NSQ7C+Bqd4RoZ
+         TywfUn1X17VfD1hsEJX5w6haDN2soEmSdeJHrFrwlKY45Mp1nwtgtO6+hINeibLrcr
+         Eb6YU0zNcBhKAK9q97tfi7Iwd4Wi+Vk8gWsyYYEj980tlsZzNN5sLfg4nkSyvsDbpp
+         sO+qPufZC4aKA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Dave Martin <Dave.Martin@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] kselftest/arm64: Add tests for SVE vector
- configuration
-Message-ID: <20210803102620.GF25258@arm.com>
-References: <20210729173713.4534-1-broonie@kernel.org>
- <20210729173713.4534-4-broonie@kernel.org>
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v5 0/4] kselftest/arm64: Vector length configuration tests
+Date:   Tue,  3 Aug 2021 15:04:46 +0100
+Message-Id: <20210803140450.46624-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210729173713.4534-4-broonie@kernel.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3273; h=from:subject; bh=M6eorEJRReow7oVYrgE5jU5XJOAHXdHNNoKpQRlULRE=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhCUz9m81xI/MAyY9c11vvl1WsDwoutDa5U0wj0Ugj qHtgx4eJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYQlM/QAKCRAk1otyXVSH0DqsB/ wKhj8OXiUP56nsNmDbO5uwduiMfZtG80/fXx5B+0Ol2wmjSiTVyfGVVEvZIOBAxXt2ShauV09qbabz 5EoEqRXFEQGhTqwWOgxfL5dx3Yi8bM2KAOyD9p1fS1GC27++TUphyPHj8/CcJxYNtcIXE19A5t3422 1aDrfJcFRpdM6m9Aqx1azFNhMTVLG+y/ZUHdEfSuueLkiQ5YmVwoSBrRttX6wdsxKkQvCAJnMhZBYm 3kQw8xKxTV3qicexm1ZCWjmAU8RIUwQB8cwU1Zc/AjdbxvNbfY4M2Scc+EtWmfs61OZeYZLgP1uM4m M+oWnLHwi8pIoCW/BQSsVUpU1gPkGA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 06:37:12PM +0100, Mark Brown wrote:
-> We provide interfaces for configuring the SVE vector length seen by
-> processes using prctl and also via /proc for configuring the default
-> values. Provide tests that exercise all these interfaces and verify that
-> they take effect as expected, though at present no test fully enumerates
-> all the possible vector lengths.
-> 
-> A subset of this is already tested via sve-probe-vls but the /proc
-> interfaces are not currently covered at all.
-> 
-> In preparation for the forthcoming support for SME, the Scalable Matrix
-> Extension, which has separately but similarly configured vector lengths
-> which we expect to offer similar userspace interfaces for, all the actual
-> files and prctls used are parameterised and we don't validate that the
-> architectural minimum vector length is the minimum we see.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  tools/testing/selftests/arm64/fp/.gitignore   |   1 +
->  tools/testing/selftests/arm64/fp/Makefile     |   3 +-
->  tools/testing/selftests/arm64/fp/vec-syscfg.c | 594 ++++++++++++++++++
->  3 files changed, 597 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/arm64/fp/vec-syscfg.c
+Currently we don't have full automated tests for the vector length
+configuation ABIs offered for SVE, we have a helper binary for setting
+the vector length which can be used for manual tests and we use the
+prctl() interface to enumerate the vector lengths but don't actually
+verify that the vector lengths enumerated were set.
 
-[...]
+This patch series provides a small helper which allows us to get the
+currently configured vector length using the RDVL instruction via either
+a library call or stdout of a process and then uses this to both add
+verification of enumerated vector lengths to our existing tests and also
+add a new test program which exercises both the prctl() and sysfs
+interfaces.
 
-> diff --git a/tools/testing/selftests/arm64/fp/vec-syscfg.c b/tools/testing/selftests/arm64/fp/vec-syscfg.c
-> new file mode 100644
-> index 000000000000..15fec1aaeec6
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/fp/vec-syscfg.c
+In preparation for the forthcomng support for the Scalable Matrix
+Extension (SME) [1] which introduces a new vector length managed via a
+very similar hardware interface the helper and new test program are
+parameterised with the goal of allowing reuse for SME.
 
-[...]
+[1] https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/scalable-matrix-extension-armv9-a-architecture
 
-> +static int stdio_read_integer(FILE *f, const char *what, int *val)
-> +{
-> +	int ret, n;
-> +
+v5:
+ - Fix a potentially uninialized variable case.
+ - Clarify an error message.
+ - Add TODO.
+v4:
+ - Fix fscanf() format string handling to properly confirm the newline.
+ - Pull fclose() out of stdio read helper.
+ - Change style of child monitoring loop.
+v3:
+ - Add BTI landing pads to the asm helper functions.
+ - Clean up pipes used to talk to children.
+ - Remove another unneeded include.
+ - Make functions in the main executable static.
+ - Match the newline when parsing vector length from the child.
+ - Factor out the fscanf() and fclose() from parsing integers from file
+   descriptors.
+ - getauxval() returns unsigned long.
+v2:
+ - Tweak log message on failure in sve-probe-vls.
+ - Stylistic changes in vec-syscfg.
+ - Flush stdout before forking in vec-syscfg.
+ - Use EXIT_FAILURE.
+ - Use fdopen() to get child output.
+ - Replace a bunch of UNIX API usage with stdio.
+ - Add a TODO list.
+ - Verify that we're root before testing writes to /proc.
 
-n needs to be initialised to 0, since fscanf won't touch it if there is
-a matching failure before it reaches the %n conversion.
+Mark Brown (4):
+  kselftest/arm64: Provide a helper binary and "library" for SVE RDVL
+  kselftest/arm64: Validate vector lengths are set in sve-probe-vls
+  kselftest/arm64: Add tests for SVE vector configuration
+  kselftest/arm64: Add a TODO list for floating point tests
 
-With that,
+ tools/testing/selftests/arm64/fp/.gitignore   |   2 +
+ tools/testing/selftests/arm64/fp/Makefile     |  11 +-
+ tools/testing/selftests/arm64/fp/TODO         |   4 +
+ tools/testing/selftests/arm64/fp/rdvl-sve.c   |  14 +
+ tools/testing/selftests/arm64/fp/rdvl.S       |  10 +
+ tools/testing/selftests/arm64/fp/rdvl.h       |   8 +
+ .../selftests/arm64/fp/sve-probe-vls.c        |   5 +
+ tools/testing/selftests/arm64/fp/vec-syscfg.c | 593 ++++++++++++++++++
+ 8 files changed, 644 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/arm64/fp/TODO
+ create mode 100644 tools/testing/selftests/arm64/fp/rdvl-sve.c
+ create mode 100644 tools/testing/selftests/arm64/fp/rdvl.S
+ create mode 100644 tools/testing/selftests/arm64/fp/rdvl.h
+ create mode 100644 tools/testing/selftests/arm64/fp/vec-syscfg.c
 
-Reviewed-by: Dave Martin <Dave.Martin@arm.com>
 
-(One minor coment below, but that's just in relation to a possibly
-future test.)
+base-commit: ff1176468d368232b684f75e82563369208bc371
+-- 
+2.20.1
 
-> +	ret = fscanf(f, "%d%*1[\n]%n", val, &n);
-> +	if (ret < 1 || n < 1) {
-> +		ksft_print_msg("%d %d %d\n", ret, n, *val);
-> +		ksft_print_msg("failed to parse VL from %s\n", what);
-> +		return -1;
-> +	}
-> +
-> +	return 0;
-> +}
-
-[...]
-
-> +/* If we didn't request it a new VL shouldn't affect the child */
-> +static void prctl_set_for_child(struct vec_data *data)
-> +{
-> +	int ret, child_vl;
-> +
-> +	if (data->min_vl == data->max_vl) {
-> +		ksft_test_result_skip("%s only one VL supported\n",
-> +				      data->name);
-> +		return;
-> +	}
-> +
-> +	ret = prctl(data->prctl_set, data->min_vl | PR_SVE_VL_INHERIT);
-> +	if (ret < 0) {
-> +		ksft_test_result_fail("%s prctl set failed for %d: %d (%s)\n",
-> +				      data->name, data->min_vl,
-> +				      errno, strerror(errno));
-> +		return;
-> +	}
-> +
-> +	/* The _INHERIT flag should be present when we read the VL */
-> +	ret = prctl(data->prctl_get);
-> +	if (ret == -1) {
-> +		ksft_test_result_fail("%s prctl() read failed: %d (%s)\n",
-> +				      data->name, errno, strerror(errno));
-> +		return;
-> +	}
-> +	if (!(ret & PR_SVE_VL_INHERIT)) {
-> +		ksft_test_result_fail("%s prctl() does not report _INHERIT\n",
-> +				      data->name);
-> +		return;
-> +	}
-
-It occurs to me that tt would make sense to test that the
-PR_SVE_VL_INHERIT flag (or lack thereof) does the right thing for
-further execs in the child.  If reposting, it could make sense to add
-this as a TODO, but don't sweat it otherwise.
-
-[...]
-
-Cheers
----Dave
