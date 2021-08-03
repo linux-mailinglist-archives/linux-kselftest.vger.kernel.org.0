@@ -2,68 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F3D3DEFBD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Aug 2021 16:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786773DF1C4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Aug 2021 17:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236523AbhHCOHX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Aug 2021 10:07:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46122 "EHLO mail.kernel.org"
+        id S236994AbhHCPrw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Aug 2021 11:47:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46184 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236514AbhHCOHX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Aug 2021 10:07:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C5096109F;
-        Tue,  3 Aug 2021 14:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627999632;
-        bh=ckFb0XkUcQ+z5yIZsL4be9ZuCeRo+R3uqsj85+boQZI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l34lfKH9fpS7PxH+XsgEEiZSM69TnHlXHEmQels620+55P7crJSJSBmKJt0fxPvv6
-         x5HNHdP4z0EU90kyml0QC19ta+Qjr96z/52kjE6O4dMD4WEvj+mEmwst+fMVoYmvSS
-         gn2RcqC2H09NoW2HnGWrCf751sfB3clyXkwMaYMVfGZ0954WFFIg4fZMex4qId9Rxj
-         L7By35MKljKwrMdJBqbauQm8BEsJAPRh+SZtgxz7fLbXbYp71BmjDJ47pci3NqLgzc
-         kIKCbAFYthSDoTzJp/gZVseF/1jzt1c/bXMyOOCFVRSNR25otZ7LyN8dvm7+MHxQlk
-         mc6XclNU/7J3Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Dave Martin <Dave.Martin@arm.com>,
+        id S236991AbhHCPrw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Aug 2021 11:47:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 101FE60F93;
+        Tue,  3 Aug 2021 15:47:39 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v5 4/4] kselftest/arm64: Add a TODO list for floating point tests
-Date:   Tue,  3 Aug 2021 15:04:50 +0100
-Message-Id: <20210803140450.46624-5-broonie@kernel.org>
+        Dave Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v5 0/4] kselftest/arm64: Vector length configuration tests
+Date:   Tue,  3 Aug 2021 16:47:33 +0100
+Message-Id: <162800564638.22044.15141225072637378536.b4-ty@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210803140450.46624-1-broonie@kernel.org>
 References: <20210803140450.46624-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=780; h=from:subject; bh=ckFb0XkUcQ+z5yIZsL4be9ZuCeRo+R3uqsj85+boQZI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhCU0A/AIZFwsJX5MFEL+yg9uGqFdyidL53LVC2BC0 pdprvxSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYQlNAAAKCRAk1otyXVSH0EUyB/ 9pxh8auFgRWSXooaQdP2MvpGhj+bj8THiDhmHxjEqAgMzegtJ9OoWQH3hgpH7IkXD15/uuRP8lutLn jICOYLzODPsC6HEyJMzOqCrsefLd/tsvKTLkukiJVfRWVin4fJVtfwvb/q5hb8UVl1o176rzSk3v9B tC9EIS3dFKXggIA6R1tM+CTzICjqWYq/uUKIsmHtqn0d7y4Ap0+O0BxHZCo2R4oNDAxQuCvk2CS7J+ C+muLcov3zYsjItV1sIV6EG7rxMrD+U7q3Kqzisn4O2SbV1fdosOUAN23C34xoqUzzpNPSTNPgmtCj ZVZoxNlQtLwap0fJ1IyJA5iAyNpuMl
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Write down some ideas for additional coverage for floating point in case
-someone feels inspired to look into them.
+On Tue, 3 Aug 2021 15:04:46 +0100, Mark Brown wrote:
+> Currently we don't have full automated tests for the vector length
+> configuation ABIs offered for SVE, we have a helper binary for setting
+> the vector length which can be used for manual tests and we use the
+> prctl() interface to enumerate the vector lengths but don't actually
+> verify that the vector lengths enumerated were set.
+> 
+> This patch series provides a small helper which allows us to get the
+> currently configured vector length using the RDVL instruction via either
+> a library call or stdout of a process and then uses this to both add
+> verification of enumerated vector lengths to our existing tests and also
+> add a new test program which exercises both the prctl() and sysfs
+> interfaces.
+> 
+> [...]
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Dave Martin <Dave.Martin@arm.com>
----
- tools/testing/selftests/arm64/fp/TODO | 4 ++++
- 1 file changed, 4 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/fp/TODO
+Applied to arm64 (for-next/kselftest), thanks!
 
-diff --git a/tools/testing/selftests/arm64/fp/TODO b/tools/testing/selftests/arm64/fp/TODO
-new file mode 100644
-index 000000000000..b6b7ebfcf362
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/TODO
-@@ -0,0 +1,4 @@
-+- Test unsupported values in the ABIs.
-+- More coverage for ptrace (eg, vector length conversions).
-+- Coverage for signals.
-+- Test PR_SVE_VL_INHERITY after a double fork.
+[1/4] kselftest/arm64: Provide a helper binary and "library" for SVE RDVL
+      https://git.kernel.org/arm64/c/7710861017ac
+[2/4] kselftest/arm64: Validate vector lengths are set in sve-probe-vls
+      https://git.kernel.org/arm64/c/b43ab36a6d86
+[3/4] kselftest/arm64: Add tests for SVE vector configuration
+      https://git.kernel.org/arm64/c/95cf3f23877b
+[4/4] kselftest/arm64: Add a TODO list for floating point tests
+      https://git.kernel.org/arm64/c/e96595c55d23
+
 -- 
-2.20.1
+Catalin
 
