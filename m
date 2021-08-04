@@ -2,304 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4743DFAE9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Aug 2021 07:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC963DFB52
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Aug 2021 08:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbhHDFIi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Aug 2021 01:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbhHDFIh (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Aug 2021 01:08:37 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEDFC0613D5
-        for <linux-kselftest@vger.kernel.org>; Tue,  3 Aug 2021 22:08:25 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id y10-20020a0cd98a0000b029032ca50bbea1so981900qvj.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Aug 2021 22:08:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=US53yUumKIui9w1wi7h47KWAiBIOlXWNaoToSkpc1pg=;
-        b=UfoVVUuES1P/lVZ9QL0hAzNDEYLDv8AIgZlWDbZCkThBbyrA0vWA7P+KJC2qcfBeab
-         hiJl6q2F0Za/8aWdXRVZHy2geMriNgg9zlBpg171+aVykSMALiUxNPREoINyV9f4NIMb
-         ujazt3kw344RDxLykZC6uOJUae5Vclh+crRcuCMF5YcSY1C/200iPw+rHn0oxV8pD3T9
-         Qr9nRFOdeYwWex0EuVtZ65gFiva3xViD78jd3m75/+s/CO/xN94pIEX2l+zb+l4jpY9m
-         7pPkpF75idk3DdBY6IQVDPPZ5yVrlJo2oHXRfmf/cVNL8qlbmLKbqkJkJCxmYv8nPmQv
-         pIyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=US53yUumKIui9w1wi7h47KWAiBIOlXWNaoToSkpc1pg=;
-        b=aLtaV4BMdy5x7Kxhuaoz1nIwDIQtGOQkNlgtYeqXC/9QgK+ph2Iie19uRCna0HhUtr
-         ySzhev4cxBz+aqOhCKnoK6DVVU8a/G99rx3S3Fzo6mYPfyWFj4EKi41nh5IwVrb4BS6d
-         kHyRd3/yKUOAJhShh/ATz65d2hTG2HTqGW8YWDIaauwRhfII6icGvVi7nDgJN8fpqOMz
-         C7iFVtPMW1Ami2CVghrIhOs6XFPxhpi6ZdrYwxAKxqjRzq7yugAKtxoYqZNnawvcHLXi
-         Whma5D7gLz73idyVS6sIEgEm0+lAHOAnMYB6q1TbUYkIEvO2APfjWSDRN/IrQFnyMTj3
-         19WA==
-X-Gm-Message-State: AOAM530PnX3ygIHU13xNYlaqOQxB+p5cyR574XOse9xVgFj0xNKNjcoM
-        fPO01eBktR9+lhj11PIxPj6iSXGG7v8eYQ==
-X-Google-Smtp-Source: ABdhPJwMf8PjpVbnV9c7rr8gDqcZbCB5yISn0C/o6Xq+r0xAaOQypE4amrtrxDVMZxvmVAsgy1+0J6be7po2JQ==
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:f5f1:74e0:8689:e610])
- (user=davidgow job=sendgmr) by 2002:a05:6214:2428:: with SMTP id
- gy8mr25480478qvb.49.1628053704859; Tue, 03 Aug 2021 22:08:24 -0700 (PDT)
-Date:   Tue,  3 Aug 2021 22:08:08 -0700
-Message-Id: <20210804050809.628266-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.32.0.554.ge1b32706d8-goog
-Subject: [PATCH v2] kunit: Print test statistics on failure
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S235511AbhHDGJr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Aug 2021 02:09:47 -0400
+Received: from mga11.intel.com ([192.55.52.93]:42718 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235499AbhHDGJq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Aug 2021 02:09:46 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="210744639"
+X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; 
+   d="scan'208";a="210744639"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 23:09:34 -0700
+X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; 
+   d="scan'208";a="511750613"
+Received: from xiaoyaol-mobl.ccr.corp.intel.com (HELO [10.239.13.122]) ([10.239.13.122])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 23:09:28 -0700
+Subject: Re: [RFC PATCH 1/4] KVM: selftests: Add support for creating
+ non-default type VMs
+To:     Erdem Aktas <erdemaktas@google.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Yanan Wang <wangyanan55@huawei.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        Like Xu <like.xu@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>
+References: <20210726183816.1343022-1-erdemaktas@google.com>
+ <20210726183816.1343022-2-erdemaktas@google.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+Message-ID: <e1651746-aa46-31e7-e1c0-99f3faaf1586@intel.com>
+Date:   Wed, 4 Aug 2021 14:09:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
+MIME-Version: 1.0
+In-Reply-To: <20210726183816.1343022-2-erdemaktas@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When a number of tests fail, it can be useful to get higher-level
-statistics of how many tests are failing (or how many parameters are
-failing in parameterised tests), and in what cases or suites. This is
-already done by some non-KUnit tests, so add support for automatically
-generating these for KUnit tests.
+On 7/27/2021 2:37 AM, Erdem Aktas wrote:
+> Currently vm_create function only creates KVM_X86_LEGACY_VM type VMs.
+> Changing the vm_create function to accept type parameter to create
+> new VM types.
+> 
+> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Peter Gonda <pgonda@google.com>
+> Reviewed-by: Marc Orr <marcorr@google.com>
+> Reviewed-by: Sagi Shahar <sagis@google.com>
+> ---
+>   .../testing/selftests/kvm/include/kvm_util.h  |  1 +
+>   tools/testing/selftests/kvm/lib/kvm_util.c    | 29 +++++++++++++++++--
+>   2 files changed, 27 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index d53bfadd2..c63df42d6 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -88,6 +88,7 @@ int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
+>   void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
+>   
+>   struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
+> +struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm, int type);
+>   void kvm_vm_free(struct kvm_vm *vmp);
+>   void kvm_vm_restart(struct kvm_vm *vmp, int perm);
+>   void kvm_vm_release(struct kvm_vm *vmp);
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index e5fbf16f7..70caa3882 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -180,13 +180,36 @@ _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params)
+>    * Return:
+>    *   Pointer to opaque structure that describes the created VM.
+>    *
+> - * Creates a VM with the mode specified by mode (e.g. VM_MODE_P52V48_4K).
+> + * Wrapper VM Create function to create a VM with default type (0).
 
-This change adds a 'kunit.stats_enabled' switch which has three values:
-- 0: No stats are printed (current behaviour)
-- 1: Stats are printed only for tests/suites with more than one
-     subtest (new default)
-- 2: Always print test statistics
+Can we pass KVM_X86_LEGACY_VM (whatever name when it's upstreamed) 
+instead of 0?
 
-For parameterised tests, the summary line looks as follows:
-"    # inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16"
-For test suites, there are two lines looking like this:
-"# ext4_inode_test: pass:1 fail:0 skip:0 total:1"
-"# Totals: pass:16 fail:0 skip:0 total:16"
+> + */
+> +struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
+> +{
+> +	return __vm_create(mode, phy_pages, perm, 0);
+> +}
+> +
 
-The first line gives the number of direct subtests, the second "Totals"
-line is the accumulated sum of all tests and test parameters.
-
-This format is based on the one used by kselftest[1].
-
-[1]: https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/kselftest.h#L109
-
-Signed-off-by: David Gow <davidgow@google.com>
----
-
-This is the long-awaited v2 of the test statistics patch:
-https://lore.kernel.org/linux-kselftest/20201211072319.533803-1-davidgow@google.com/
-
-It updates the patch to apply on current mainline kernels, takes skipped
-tests into account, changes the output format to better match what
-kselftest uses, and addresses some of the comments from v1.
-
-Please let me know what you think, in particular:
-- Is this sufficient to assuage any worries about porting tests to
-  KUnit?
-- Are we printing too many stats by default: for a lot of existing tests
-  many of them are useless. I'm particuarly curious about the separate
-  "Totals" line, versus the per-suite line -- is that useful? Should it
-  only be printed when the totals differ?
-- Is the output format sufficiently legible for people and/or tools
-  which may want to parse it?
-
-Cheers,
--- David
-
-Changelog:
-
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20201211072319.533803-1-davidgow@google.com/
-- Rework to use a new struct kunit_result_stats, with helper functions
-  for adding results, accumulating them over nested structures, etc.
-- Support skipped tests, report them separately from failures and
-  passes.
-- New output format to better match kselftest:
-  - "pass:n fail:n skip:n total:n"
-- Changes to stats_enabled parameter:
-  - Now a module parameter, with description
-  - Default "1" option now prints even when no tests fail.
-- Improved parser fix which doesn't break crashed test detection.
-
----
- lib/kunit/test.c                    | 109 ++++++++++++++++++++++++++++
- tools/testing/kunit/kunit_parser.py |   2 +-
- 2 files changed, 110 insertions(+), 1 deletion(-)
-
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index d79ecb86ea57..f246b847024e 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -10,6 +10,7 @@
- #include <kunit/test-bug.h>
- #include <linux/kernel.h>
- #include <linux/kref.h>
-+#include <linux/moduleparam.h>
- #include <linux/sched/debug.h>
- #include <linux/sched.h>
- 
-@@ -51,6 +52,51 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
- EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
- #endif
- 
-+/*
-+ * KUnit statistic mode:
-+ * 0 - disabled
-+ * 1 - only when there is more than one subtest
-+ * 2 - enabled
-+ */
-+static int kunit_stats_enabled = 1;
-+module_param_named(stats_enabled, kunit_stats_enabled, int, 0644);
-+MODULE_PARM_DESC(stats_enabled,
-+		  "Print test stats: never (0), only for multiple subtests (1), or always (2)");
-+
-+struct kunit_result_stats {
-+	unsigned long passed;
-+	unsigned long skipped;
-+	unsigned long failed;
-+	unsigned long total;
-+};
-+
-+static bool kunit_should_print_stats(struct kunit_result_stats stats)
-+{
-+	if (kunit_stats_enabled == 0)
-+		return false;
-+
-+	if (kunit_stats_enabled == 2)
-+		return true;
-+
-+	return (stats.total > 1);
-+}
-+
-+static void kunit_print_test_stats(struct kunit *test,
-+				   struct kunit_result_stats stats)
-+{
-+	if (!kunit_should_print_stats(stats))
-+		return;
-+
-+	kunit_log(KERN_INFO, test,
-+		  KUNIT_SUBTEST_INDENT
-+		  "# %s: pass:%lu fail:%lu skip:%lu total:%lu",
-+		  test->name,
-+		  stats.passed,
-+		  stats.failed,
-+		  stats.skipped,
-+		  stats.total);
-+}
-+
- /*
-  * Append formatted message to log, size of which is limited to
-  * KUNIT_LOG_SIZE bytes (including null terminating byte).
-@@ -393,15 +439,69 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
- 		test_case->status = KUNIT_SUCCESS;
- }
- 
-+static void kunit_print_suite_stats(struct kunit_suite *suite,
-+				    struct kunit_result_stats suite_stats,
-+				    struct kunit_result_stats param_stats)
-+{
-+	if (kunit_should_print_stats(suite_stats)) {
-+		kunit_log(KERN_INFO, suite,
-+			  "# %s: pass:%lu fail:%lu skip:%lu total:%lu",
-+			  suite->name,
-+			  suite_stats.passed,
-+			  suite_stats.failed,
-+			  suite_stats.skipped,
-+			  suite_stats.total);
-+	}
-+
-+	if (kunit_should_print_stats(param_stats)) {
-+		kunit_log(KERN_INFO, suite,
-+			  "# Totals: pass:%lu fail:%lu skip:%lu total:%lu",
-+			  param_stats.passed,
-+			  param_stats.failed,
-+			  param_stats.skipped,
-+			  param_stats.total);
-+	}
-+}
-+
-+static void kunit_update_stats(struct kunit_result_stats *stats,
-+			       enum kunit_status status)
-+{
-+	switch (status) {
-+	case KUNIT_SUCCESS:
-+		stats->passed++;
-+		break;
-+	case KUNIT_SKIPPED:
-+		stats->skipped++;
-+		break;
-+	case KUNIT_FAILURE:
-+		stats->failed++;
-+		break;
-+	}
-+
-+	stats->total++;
-+}
-+
-+static void kunit_accumulate_stats(struct kunit_result_stats *total,
-+				   struct kunit_result_stats add)
-+{
-+	total->passed += add.passed;
-+	total->skipped += add.skipped;
-+	total->failed += add.failed;
-+	total->total += add.total;
-+}
-+
- int kunit_run_tests(struct kunit_suite *suite)
- {
- 	char param_desc[KUNIT_PARAM_DESC_SIZE];
- 	struct kunit_case *test_case;
-+	struct kunit_result_stats suite_stats = { 0 };
-+	struct kunit_result_stats total_stats = { 0 };
- 
- 	kunit_print_subtest_start(suite);
- 
- 	kunit_suite_for_each_test_case(suite, test_case) {
- 		struct kunit test = { .param_value = NULL, .param_index = 0 };
-+		struct kunit_result_stats param_stats = { 0 };
- 		test_case->status = KUNIT_SKIPPED;
- 
- 		if (test_case->generate_params) {
-@@ -431,14 +531,23 @@ int kunit_run_tests(struct kunit_suite *suite)
- 				test.param_value = test_case->generate_params(test.param_value, param_desc);
- 				test.param_index++;
- 			}
-+
-+			kunit_update_stats(&param_stats, test.status);
-+
- 		} while (test.param_value);
- 
-+		kunit_print_test_stats(&test, param_stats);
-+
- 		kunit_print_ok_not_ok(&test, true, test_case->status,
- 				      kunit_test_case_num(suite, test_case),
- 				      test_case->name,
- 				      test.status_comment);
-+
-+		kunit_update_stats(&suite_stats, test_case->status);
-+		kunit_accumulate_stats(&total_stats, param_stats);
- 	}
- 
-+	kunit_print_suite_stats(suite, suite_stats, total_stats);
- 	kunit_print_subtest_end(suite);
- 
- 	return 0;
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index b88db3f51dc5..c699f778da06 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -137,7 +137,7 @@ def print_log(log) -> None:
- 	for m in log:
- 		print_with_timestamp(m)
- 
--TAP_ENTRIES = re.compile(r'^(TAP|[\s]*ok|[\s]*not ok|[\s]*[0-9]+\.\.[0-9]+|[\s]*#).*$')
-+TAP_ENTRIES = re.compile(r'^(TAP|[\s]*ok|[\s]*not ok|[\s]*[0-9]+\.\.[0-9]+|[\s]*# (Subtest:|.*: kunit test case crashed!)).*$')
- 
- def consume_non_diagnostic(lines: LineStream) -> None:
- 	while lines and not TAP_ENTRIES.match(lines.peek()):
--- 
-2.32.0.554.ge1b32706d8-goog
 
