@@ -2,155 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0586C3E1EE0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Aug 2021 00:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B473E1F92
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Aug 2021 01:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241705AbhHEWfy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Aug 2021 18:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
+        id S242522AbhHEXwH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Aug 2021 19:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241746AbhHEWfo (ORCPT
+        with ESMTP id S233076AbhHEXwH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Aug 2021 18:35:44 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8387C061799
-        for <linux-kselftest@vger.kernel.org>; Thu,  5 Aug 2021 15:35:29 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id a8so12488581pjk.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Aug 2021 15:35:29 -0700 (PDT)
+        Thu, 5 Aug 2021 19:52:07 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2FBC0613D5
+        for <linux-kselftest@vger.kernel.org>; Thu,  5 Aug 2021 16:51:52 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id o3-20020a2541030000b0290557cf3415f8so7898484yba.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Aug 2021 16:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9iqwgQUcM7kXjxKmNPoKYxMsXr+XLcOB8+pWCUZkNe8=;
-        b=KAkMYMuNhvbZA2iCgZEddbTrejl0xEpGZSkXpfQBGb/1/lYKz0GuhZCyFf3+H1n0bA
-         TAQnCcRFAk59TUWLrhXD+xAo9iZUYIhy9f0pj2l1fgPXW1lbjX/HepmeNUWO5vXUq+3m
-         2LB/zgQel3Yt+5RYecnR8uK9lfX5l0wQ9DITdvyuppXnwrsHOGZr1/38Q2AnzzCjf9Gx
-         J4Bb0aICxZQ4QUH8VTMGsfLprejlIvpCbKPFAz8BC8rwzJ7oGdSXIQ+lsKifmJOK9Q2c
-         S9q35vaOip7TKdawSrct3l2lOBTL0Hj/8HkPD3K2X/t1VTTiQ9f6GxAGNscvm6u0HjXV
-         Fkzw==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=g4VlaZaJqsE6T03DiXthF+BbWIcuoMN/330Q3/YZIio=;
+        b=KPZrnmtt/GX4apWQRm+0lWsBhov6eO/lA7Q1FFgtlVtXEtHmJW77OxmjJS2VbjPxaL
+         +oebQ+lpb9cVOtK6TQhRDZfwdrHVlOj2Vl0V2JAtMJXIFFfptVmGZN2h/ux2Kia0uCCZ
+         UGco7DkftL786h2DKl9BfYtap44yH3TQKZJ/V3mZTzERPkg6w8JrvQmE21PfO40AKOLM
+         KAZGs5JR3fKydzV4swwpzaW1E58OCFlC0lv2F2C66bP3g/RKOWTz+aRos5XQHMAwBAFl
+         3JCufPmY+MVK2UydOwiLW1ojRgvKHAyy4y7m0zcqz28sb+OaF4rSPGZdqo54YZVoWbJe
+         k5Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9iqwgQUcM7kXjxKmNPoKYxMsXr+XLcOB8+pWCUZkNe8=;
-        b=cX1r6UpqCivlxkVSHDkAJqCIaCHto2Y1QDZaokGj0fSdAWl4xlyaliU3H/JeE34bgz
-         h2IH8fY7TVtjpsqslG6Kv1+3mGx0jTgGi+KvVPkWQ49PWx4f55BBl8oCIpyvk8rkqVTX
-         Tkflp97e3cH6D1VYU0wVMKt4MyzCV7CBHIZkcChkpdV+FM5eGQPiP4shW/NTXr9TbO7g
-         XmJGR02Ssafv5MdcEDrUseD+VkDQWCEq4gvZCmldOjXMe/r+and3p0QgTvMmGl326D6Q
-         Q5JTkTHGP+4/K2A9ZnSszga6dM4lqHN3AhX3S3ADBNDXRay1yYe1nALYPMUnhPMs87TY
-         TDHQ==
-X-Gm-Message-State: AOAM531Xm5i02I5mp0nFlcXmK0Xfw3oypEYjybzyrLdFlH5bC1PTSD2f
-        LuL6ax7P+Gt6t09Ym9ZGUf2nAQ==
-X-Google-Smtp-Source: ABdhPJzW6GMV6BoC5T/W4tbrJ1yEdpKk8g9f0/Jwf/Eq01QTVqY9YkXfVCRs1xtX6tfdF8MQluGFOg==
-X-Received: by 2002:a17:902:b717:b029:11a:fae3:ba7c with SMTP id d23-20020a170902b717b029011afae3ba7cmr2734784pls.28.1628202929446;
-        Thu, 05 Aug 2021 15:35:29 -0700 (PDT)
-Received: from ip-10-124-121-13.byted.org (ec2-54-241-92-238.us-west-1.compute.amazonaws.com. [54.241.92.238])
-        by smtp.gmail.com with ESMTPSA id z8sm7931638pfa.113.2021.08.05.15.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Aug 2021 15:35:29 -0700 (PDT)
-From:   Jiang Wang <jiang.wang@bytedance.com>
-To:     netdev@vger.kernel.org
-Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
-        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 5/5] selftest/bpf: add new tests in sockmap for unix stream to tcp.
-Date:   Thu,  5 Aug 2021 22:34:42 +0000
-Message-Id: <20210805223445.624330-6-jiang.wang@bytedance.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210805223445.624330-1-jiang.wang@bytedance.com>
-References: <20210805223445.624330-1-jiang.wang@bytedance.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=g4VlaZaJqsE6T03DiXthF+BbWIcuoMN/330Q3/YZIio=;
+        b=dkrPLkFTdPb1o0MtBxlISIT/ggCAUVPvFbCWS5lezhACLyZq0gQPc9Ts+qZ0mY4SBb
+         Gyoe/YWQG/AU9sapEO8kbv4LZIszeqxqSESjq9K50X0yNbQ3Gle7u1by3DpOAiragweE
+         cd5lRvlNcHVqNjwS4/5dJUmQMJfqig+YtHrEw1wDETwfqNcfq4kRBwQ2yN5xGdCMB5DG
+         43jhPggA6kEPXH0pAHSmNsx/DY49/543RNtxdWCTzDGx0cCqWPnz9rE16+wKJ/0q4aQL
+         LNpnYlpK/olFdX3EMU7BloM35IoCqjrHS6DwGoiEZRqk8yOl4xm9snfyT7rBgl+B1aj+
+         LILw==
+X-Gm-Message-State: AOAM531aedUn0FZyYLXCmZVrfOfWojehGdhcKc815CnU6+jku3VSqnxN
+        5bShR5RyXYCxq4blCG50j0Be9vU3iR3ptA==
+X-Google-Smtp-Source: ABdhPJzsGmCDww09UKe4MBlzb8FwZh++khO8jLgyABH8pw2Fo0mG/OpYavE6lkB63cEvlNflqN6ccLeR27IGXg==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:ba4b:612a:402a:3fbd])
+ (user=dlatypov job=sendgmr) by 2002:a25:abcd:: with SMTP id
+ v71mr8942440ybi.499.1628207511613; Thu, 05 Aug 2021 16:51:51 -0700 (PDT)
+Date:   Thu,  5 Aug 2021 16:51:44 -0700
+Message-Id: <20210805235145.2528054-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.605.g8dce9f2422-goog
+Subject: [PATCH v2 1/2] kunit: tool: make --raw_output support only showing
+ kunit output
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add two new test cases in sockmap tests, where unix stream is
-redirected to tcp and vice versa.
+--raw_output is nice, but it would be nicer if could show only output
+after KUnit tests have started.
 
-Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
-Reviewed-by: Cong Wang <cong.wang@bytedance.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+So change the flag to allow specifying a string ('kunit').
+Make it so `--raw_output` alone will default to `--raw_output=all` and
+have the same original behavior.
+
+Drop the small kunit_parser.raw_output() function since it feels wrong
+to put it in "kunit_parser.py" when the point of it is to not parse
+anything.
+
+E.g.
+
+$ ./tools/testing/kunit/kunit.py run --raw_output=kunit
+...
+[15:24:07] Starting KUnit Kernel ...
+TAP version 14
+1..1
+    # Subtest: example
+    1..3
+    # example_simple_test: initializing
+    ok 1 - example_simple_test
+    # example_skip_test: initializing
+    # example_skip_test: You should not see a line below.
+    ok 2 - example_skip_test # SKIP this test should be skipped
+    # example_mark_skipped_test: initializing
+    # example_mark_skipped_test: You should see a line below.
+    # example_mark_skipped_test: You should see this line.
+    ok 3 - example_mark_skipped_test # SKIP this test should be skipped
+ok 1 - example
+[15:24:10] Elapsed time: 6.487s total, 0.001s configuring, 3.510s building, 0.000s running
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_listen.c    | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ Documentation/dev-tools/kunit/kunit-tool.rst |  9 ++++++---
+ tools/testing/kunit/kunit.py                 | 20 +++++++++++++++-----
+ tools/testing/kunit/kunit_parser.py          |  4 ----
+ tools/testing/kunit/kunit_tool_test.py       |  9 +++++++++
+ 4 files changed, 30 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 07ed8081f9ae..afa14fb66f08 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1884,7 +1884,7 @@ static void inet_unix_redir_to_connected(int family, int type, int sock_mapfd,
- 	xclose(p0);
- }
+diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
+index c7ff9afe407a..ae52e0f489f9 100644
+--- a/Documentation/dev-tools/kunit/kunit-tool.rst
++++ b/Documentation/dev-tools/kunit/kunit-tool.rst
+@@ -114,9 +114,12 @@ results in TAP format, you can pass the ``--raw_output`` argument.
  
--static void udp_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
-+static void inet_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 					    struct bpf_map *inner_map, int family)
- {
- 	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-@@ -1899,9 +1899,13 @@ static void udp_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 	skel->bss->test_ingress = false;
- 	inet_unix_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
- 				    REDIR_EGRESS);
-+	inet_unix_redir_to_connected(family, SOCK_STREAM, sock_map, verdict_map,
-+				    REDIR_EGRESS);
- 	skel->bss->test_ingress = true;
- 	inet_unix_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
- 				    REDIR_INGRESS);
-+	inet_unix_redir_to_connected(family, SOCK_STREAM, sock_map, verdict_map,
-+				    REDIR_INGRESS);
+ 	./tools/testing/kunit/kunit.py run --raw_output
  
- 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
- }
-@@ -1961,7 +1965,7 @@ static void unix_inet_redir_to_connected(int family, int type, int sock_mapfd,
+-.. note::
+-	The raw output from test runs may contain other, non-KUnit kernel log
+-	lines.
++The raw output from test runs may contain other, non-KUnit kernel log
++lines. You can see just KUnit output with ``--raw_output=kunit``:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run --raw_output=kunit
  
- }
+ If you have KUnit results in their raw TAP format, you can parse them and print
+ the human-readable summary with the ``parse`` command for kunit_tool. This
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 7174377c2172..5a931456e718 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -16,6 +16,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
  
--static void unix_udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
-+static void unix_inet_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 					    struct bpf_map *inner_map, int family)
- {
- 	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-@@ -1976,9 +1980,13 @@ static void unix_udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 	skel->bss->test_ingress = false;
- 	unix_inet_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
- 				     REDIR_EGRESS);
-+	unix_inet_redir_to_connected(family, SOCK_STREAM, sock_map, verdict_map,
-+				     REDIR_EGRESS);
- 	skel->bss->test_ingress = true;
- 	unix_inet_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
- 				     REDIR_INGRESS);
-+	unix_inet_redir_to_connected(family, SOCK_STREAM, sock_map, verdict_map,
-+				     REDIR_INGRESS);
+ from collections import namedtuple
+ from enum import Enum, auto
++from typing import Iterable
  
- 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
- }
-@@ -1994,8 +2002,8 @@ static void test_udp_unix_redir(struct test_sockmap_listen *skel, struct bpf_map
- 	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
- 	if (!test__start_subtest(s))
- 		return;
--	udp_unix_skb_redir_to_connected(skel, map, family);
--	unix_udp_skb_redir_to_connected(skel, map, family);
-+	inet_unix_skb_redir_to_connected(skel, map, family);
-+	unix_inet_skb_redir_to_connected(skel, map, family);
- }
+ import kunit_config
+ import kunit_json
+@@ -114,7 +115,16 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
+ 					      'Tests not Parsed.')
  
- static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
+ 	if request.raw_output:
+-		kunit_parser.raw_output(request.input_data)
++		output: Iterable[str] = request.input_data
++		if request.raw_output == 'all':
++			pass
++		elif request.raw_output == 'kunit':
++			output = kunit_parser.extract_tap_lines(output)
++		else:
++			print(f'Unknown --raw_output option "{request.raw_output}"', file=sys.stderr)
++		for line in output:
++			print(line.rstrip())
++
+ 	else:
+ 		test_result = kunit_parser.parse_run_tests(request.input_data)
+ 	parse_end = time.time()
+@@ -135,7 +145,6 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
+ 	return KunitResult(KunitStatus.SUCCESS, test_result,
+ 				parse_end - parse_start)
+ 
+-
+ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	      request: KunitRequest) -> KunitResult:
+ 	run_start = time.time()
+@@ -181,7 +190,7 @@ def add_common_opts(parser) -> None:
+ 	parser.add_argument('--build_dir',
+ 			    help='As in the make command, it specifies the build '
+ 			    'directory.',
+-                            type=str, default='.kunit', metavar='build_dir')
++			    type=str, default='.kunit', metavar='build_dir')
+ 	parser.add_argument('--make_options',
+ 			    help='X=Y make option, can be repeated.',
+ 			    action='append')
+@@ -246,8 +255,9 @@ def add_exec_opts(parser) -> None:
+ 			     action='append')
+ 
+ def add_parse_opts(parser) -> None:
+-	parser.add_argument('--raw_output', help='don\'t format output from kernel',
+-			    action='store_true')
++	parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
++			    'If set to --raw_output=kunit, filters to just KUnit output.',
++			    type=str, nargs='?', const='all', default=None)
+ 	parser.add_argument('--json',
+ 			    nargs='?',
+ 			    help='Stores test results in a JSON, and either '
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index b88db3f51dc5..84938fefbac0 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -106,10 +106,6 @@ def extract_tap_lines(kernel_output: Iterable[str]) -> LineStream:
+ 				yield line_num, line[prefix_len:]
+ 	return LineStream(lines=isolate_kunit_output(kernel_output))
+ 
+-def raw_output(kernel_output) -> None:
+-	for line in kernel_output:
+-		print(line.rstrip())
+-
+ DIVIDER = '=' * 60
+ 
+ RESET = '\033[0;0m'
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 628ab00f74bc..619c4554cbff 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -399,6 +399,15 @@ class KUnitMainTest(unittest.TestCase):
+ 			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
+ 			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
+ 
++	def test_run_raw_output_kunit(self):
++		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
++		kunit.main(['run', '--raw_output=kunit'], self.linux_source_mock)
++		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
++		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
++		for call in self.print_mock.call_args_list:
++			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
++			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
++
+ 	def test_exec_timeout(self):
+ 		timeout = 3453
+ 		kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
+
+base-commit: f684616e08e9cd9db3cd53fe2e068dfe02481657
 -- 
-2.20.1
+2.32.0.605.g8dce9f2422-goog
 
