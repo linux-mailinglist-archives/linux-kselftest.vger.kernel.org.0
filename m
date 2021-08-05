@@ -2,92 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0BD3E0E91
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Aug 2021 08:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAEB3E1207
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Aug 2021 12:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbhHEGwe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Aug 2021 02:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S240231AbhHEKHX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Aug 2021 06:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbhHEGwe (ORCPT
+        with ESMTP id S240239AbhHEKHQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Aug 2021 02:52:34 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C1CC0613C1;
-        Wed,  4 Aug 2021 23:52:19 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l19so6690011pjz.0;
-        Wed, 04 Aug 2021 23:52:19 -0700 (PDT)
+        Thu, 5 Aug 2021 06:07:16 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4205C0613D5
+        for <linux-kselftest@vger.kernel.org>; Thu,  5 Aug 2021 03:07:01 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id a93so8196219ybi.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Aug 2021 03:07:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GlmMJcvsNL7r2fqrc4Rymp5aSqY0XLGbpUjwdzjt8TE=;
-        b=s4jwRYLozfAWXk3CdFQRL+6GIY85SN+v/QOTmDuaxwPo39Q711NlDvjCbBcbulWsLj
-         7NiQhtHqqRRe29Xi1RBJD3UjJ5cbPyWJipn3Pwrny3d8dRd8MgVY3Qz61l6zSAGfDXOF
-         /ZLk+ROT9+dyKdzKgvCBvUCRWH0Mcq1LKoopZrMjXPrBpjxUJGfs+DBAhH7EWywMVeCQ
-         Otz9QF3U3tev21aAlCWh9wGLHsivMRe/DH4+Hhm+a+r2c7JoqeECGkq+L8o7WbZZyA1u
-         rfnqC/IEpAS5vpw7CnC9dXkUnoPKt+1uVlNb1Kaup8QZ+QNn7bFb5HQFLtUuklaLpDaK
-         v6jw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=IXiF0cE8iLdsKXBHXuqgd6kWlwigyuOCyyGf/zSHAKo=;
+        b=RALHIBumXAIP210kdFqsPohSaceKiknimXw7P5PgHb9BWhGBw9lYDqSqg5WneWdu15
+         rJPy0Ue8yfyG4siGP63kJwTBZBj0PWq8Y1Qnqz+4o+8EWn137KTyCSyyVC2Q8iVGynSS
+         bhS7U1PS+aDOUPBkD4G3xFkkqdC39UoM6FteZOv233GqMXB+8Dss0b9q+7gj+/Hxgdk2
+         WUe1ESYKnF/wmxG+tpcxwgOs9vCgJ2l1ZEfOf41l9gKdNtlkCjnpV3TM2vgGn3PUuLdR
+         hPKF45VPWkxH0lm365oeJSmn5+q8KP1ii4OTRurjciu6IoIULltcjaMQ8sAiYWdLwzBw
+         HClA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GlmMJcvsNL7r2fqrc4Rymp5aSqY0XLGbpUjwdzjt8TE=;
-        b=B2FWc82d+afgDFvjDtyfcB+hTZ0U0oNbBn0jDoejSsUbIX6fkx7XAVEr1sVXA971/K
-         rkM9OniYJeKdRp03hWFNVZgFWA14AF866miZn6V/1o8OGpQGqJLO6LVjqZ/LrAAmPAoI
-         qUBXxfgdxdL0S6Hl1JLjYBQZ98yIyh66UkR9J0tcd9BOUTiaez7VmjnDuGU5/zu6UrIl
-         HKvBxJT80tV8nzBqgyc+NZr7kWYuaYbLjBeV9vRrUyT1PN/nHyfMmm5OA+RkVdC3sSP4
-         q1RZCYVKfCGU2iTElczivQn/rNYixdQtacQLTRyfddU5Q3EG3AG3lMaLLKRRqH9m5oVh
-         EUBw==
-X-Gm-Message-State: AOAM530EAukknpg+NoL9xQceW6ZZvqOq6jxJQ3J3otWzAZdUwyNQEjCV
-        Tk7TOYjJtGm1Pdt3uGNnRCA=
-X-Google-Smtp-Source: ABdhPJyxRn4WdhDjQJdsYQc6bC6ojEMmWOv6W9V6kigMMmMlKBLxxYaU6M0/n8LxQ0lpTosPugc5vQ==
-X-Received: by 2002:aa7:8d10:0:b029:303:8d17:7b8d with SMTP id j16-20020aa78d100000b02903038d177b8dmr3690606pfe.26.1628146339294;
-        Wed, 04 Aug 2021 23:52:19 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i18sm6623194pgb.83.2021.08.04.23.52.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 23:52:18 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yong.yiran@zte.com.cn
-To:     mpe@ellerman.id.au
-Cc:     benh@kernel.crashing.org, paulus@samba.org, shuah@kernel.org,
-        yong.yiran@zte.com.cn, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] powerpc/tm: remove duplicate include in tm-poison.c
-Date:   Wed,  4 Aug 2021 23:52:55 -0700
-Message-Id: <20210805065255.628170-1-yong.yiran@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=IXiF0cE8iLdsKXBHXuqgd6kWlwigyuOCyyGf/zSHAKo=;
+        b=dMrm0uF7RyCD2sRHr4P6AA7m32ckVqH4FmRWW0n8ERsODf08tXYToqFkNzuaAtm5Tt
+         QIf41dOcVF1XqLmFKQwi5kBneF+Tub9z6IWfbaLEQ0+90dc6trRW4TwjIN9Fwrq0+9dP
+         b9IjykhMj97mTqoOfWfn8+dr7Ll7kUWDJE6s2u+vocLfd/S482bxIaGS9NouDxwRoKK1
+         2cve8yabPrA+ScdSUzqrqIl1btIxPYx0+nh7V3SZriwTrwoSN6NJ/zyPRxKE1r5ngAMl
+         4rMNMioU5HHJbZhNPnBSpb6eOZig+la3xpjOekbt1BixkyHElZnCn3h91gIriKrTPDKa
+         5RNg==
+X-Gm-Message-State: AOAM531f377oQMw1y9X5+5xK7pFWDnIckuKUNKsCje6zh53lCWDSzrEZ
+        tJY1b63WyDt/v4UcRCTq0wRyA2+dWz9/oNzaDNA=
+X-Google-Smtp-Source: ABdhPJxCSwVdvHgegcG4QDEpN8zNb5iPWAYCE1ryoSTidhfG8eSZ6oJpAYN4Z5/OvArf4AO+P0Eq0CrhZ0mIOidx3P4=
+X-Received: by 2002:a25:bc4c:: with SMTP id d12mr4886719ybk.105.1628158021140;
+ Thu, 05 Aug 2021 03:07:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7010:330b:b029:db:4f3a:6691 with HTTP; Thu, 5 Aug 2021
+ 03:07:00 -0700 (PDT)
+Reply-To: rihabmanyang07@yahoo.com
+From:   Rihab Manyang <diamakaire48@gmail.com>
+Date:   Thu, 5 Aug 2021 11:07:00 +0100
+Message-ID: <CAJq20OnbseQ=PUihcsromqPiKoQxPU3bUwyeL6MAVuzUUFCzvg@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: yong yiran <yong.yiran@zte.com.cn>
-
-'inttypes.h' included in 'tm-poison.c' is duplicated.
-Remove all but the first include of inttypes.h from tm-poison.c.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: yong yiran <yong.yiran@zte.com.cn>
----
- tools/testing/selftests/powerpc/tm/tm-poison.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/tools/testing/selftests/powerpc/tm/tm-poison.c b/tools/testing/selftests/powerpc/tm/tm-poison.c
-index 29e5f26af7b9..27c083a03d1f 100644
---- a/tools/testing/selftests/powerpc/tm/tm-poison.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-poison.c
-@@ -20,7 +20,6 @@
- #include <sched.h>
- #include <sys/types.h>
- #include <signal.h>
--#include <inttypes.h>
- 
- #include "tm.h"
- 
 -- 
-2.25.1
 
+Hello,
+
+i am trying to reach you hope this message get to
+you.from Rihab Manyang
