@@ -2,104 +2,222 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6794C3E1B08
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Aug 2021 20:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BE33E1B9A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Aug 2021 20:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbhHESPN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Aug 2021 14:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
+        id S241633AbhHESo4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Aug 2021 14:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbhHESPN (ORCPT
+        with ESMTP id S241635AbhHESoz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Aug 2021 14:15:13 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF875C061765
-        for <linux-kselftest@vger.kernel.org>; Thu,  5 Aug 2021 11:14:58 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id t7-20020a17090a5d87b029017807007f23so13648116pji.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Aug 2021 11:14:58 -0700 (PDT)
+        Thu, 5 Aug 2021 14:44:55 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED5FC0613D5
+        for <linux-kselftest@vger.kernel.org>; Thu,  5 Aug 2021 11:44:40 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id t9so12988226lfc.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Aug 2021 11:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uYldJwdsql0xBaO1sKZOJMQPzD9lyreF8UumtGeLwiM=;
-        b=QWKcGa6Bq0wgTfZN+2z+g7oAboQKIql9gyrBd+aax2vyJSxivlISSyMyuHoMd3c1Sc
-         o05wBdkEpym7arFZ2BcKYnd3ykim0MQJwXpSxGuoj63IGtw59qMi9R6+w9yV1O1lcQ4+
-         I8KsWJ95A+hJXyHdONBcAEe+WPGjIZ9dIXamG2sMqoSuU15hubVLoH7ymfHv2QXy4EZm
-         jMy51GoGt2Zcr6QffAPpyI2SwA2YHtMn7ff1uOfofZJZFwVtkwe0EurjBp9+E4WSf4WR
-         mFiNS4vEa6MaeBaJb6l6d9dlvYERr+7CI0ytK+uxFsMSqprJeBXb/0CIH73rIHiqEbDV
-         fHSQ==
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=INk3XSw8EkiiqWSqdb59L6OOJd8smcU62HiHOCZ/eNY=;
+        b=qMLBzO6WhhUWnOWwFvXaPVjifn5YOEjQwvC516itc7t6Mwr4H8VCjaT3jBqjzLeGhY
+         3CUPlSirGnmvkmFCbqVwxqZR+2pGt3y58ZpMSA1gvcFuDPQt/XlYrqC+fJEhGHuOvlbh
+         cn8SqEgzJN8b4Q31k84p4Znd3NPG42xgCQ2Jc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uYldJwdsql0xBaO1sKZOJMQPzD9lyreF8UumtGeLwiM=;
-        b=faJVhpXN7qDLKrH2sZSwe9lBbdQkIShEvoQB2p+v6GiQ/0SLg2lSZ9RspL1UqACTtK
-         is2zlKk64pCwnw7dBk0Q29Ff252kM9/EAZ3HTQe+ERbubzgw43g8LmMCY6K8mCj0IrCY
-         ktax8UfgwCX68VsQjBUbnjrDK70Ipx3ibOeRxi7+wvw3nCZa+mSVjO+wjcasuLLV4tBU
-         xmMImdAq5+f1EULj8jaR+83KLP3byrj1PtW4fRNw1FThjWf0iTgscxE9kb0yCC9JOyh0
-         BWxLwmBRBDOomhGEeyd/KczVGKWhUUI6G5P/fx6Udd0Kr5/AGgXKHVIVENY9j+qkawE7
-         8POA==
-X-Gm-Message-State: AOAM5319hzrqyBKwfH1/1ga53X6B43/zz3Xwvocn4RtJOZwNZSHAoR+7
-        55FWqwEKKuL+G/1mopNHcZM1+M8iVfHSZ/hot24X+45mS0q/bQ==
-X-Google-Smtp-Source: ABdhPJxi/GLd77d+bxDF94SYcXRVvNToYZiSJ9wBaBVpMqXd+INkyV8All4ZBD6lrWvOjHWkbM8U5nvy9WCVQHq/sUg=
-X-Received: by 2002:a17:902:8ec6:b029:12b:ab33:15d4 with SMTP id
- x6-20020a1709028ec6b029012bab3315d4mr5044138plo.80.1628187298193; Thu, 05 Aug
- 2021 11:14:58 -0700 (PDT)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=INk3XSw8EkiiqWSqdb59L6OOJd8smcU62HiHOCZ/eNY=;
+        b=WdzMjcroI6Cwg+IZC7ckNnPw3ihk2IEA0oFU986rREa0spr+DR5IN+q8OUvZBG/IFg
+         eSpstOWHLyifZX2my4CJu/1z4y/YcNsvl7noVgJq0UL1k7pb7+k+dPRWJguwlwmk5ER4
+         Ab9JwAflvG2Zd7LFxE7fus9iG6EWLY76kDui+HUYwGe7oXFGdrM2n9sD9jiyJPJXGdM2
+         JWPPhyt2QUDzZqNIrBCv2tu4ZcFrlTv24uglCnbwECk9AazoUFZGJhtmApini1NHpFk3
+         A1i8FelFRKAtjeDjYk7e1f9ab1A+Nh6IeQ0fqhhLSKKNk7meQouhTvdmFtit/g5TP0FP
+         VkgQ==
+X-Gm-Message-State: AOAM533RHWv8cttMXy8elRt5jz37I6BLhLrJznUKxI3ley3EwUExYm7y
+        kZPe21OEsH+dqwPwlFgQ3+YEkw==
+X-Google-Smtp-Source: ABdhPJzyPq0ysU2CTi312TtSkUo2U7Utcg5KrzfhL0ZenWSLzwonHZ35S8TOFPmBzOicf3YiKwRHlg==
+X-Received: by 2002:a05:6512:260e:: with SMTP id bt14mr4621782lfb.491.1628189079192;
+        Thu, 05 Aug 2021 11:44:39 -0700 (PDT)
+Received: from cloudflare.com (79.191.182.217.ipv4.supernova.orange.pl. [79.191.182.217])
+        by smtp.gmail.com with ESMTPSA id v16sm469447ljn.93.2021.08.05.11.44.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Aug 2021 11:44:38 -0700 (PDT)
+References: <20210805051340.3798543-1-jiang.wang@bytedance.com>
+ <20210805051340.3798543-3-jiang.wang@bytedance.com>
+User-agent: mu4e 1.1.0; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Jiang Wang <jiang.wang@bytedance.com>
+Cc:     netdev@vger.kernel.org, cong.wang@bytedance.com,
+        duanxiongchun@bytedance.com, xieyongji@bytedance.com,
+        chaiwen.cc@bytedance.com, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 2/5] af_unix: add unix_stream_proto for sockmap
+In-reply-to: <20210805051340.3798543-3-jiang.wang@bytedance.com>
+Date:   Thu, 05 Aug 2021 20:44:37 +0200
+Message-ID: <87y29fd94a.fsf@cloudflare.com>
 MIME-Version: 1.0
-References: <20210804050809.628266-1-davidgow@google.com>
-In-Reply-To: <20210804050809.628266-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 5 Aug 2021 11:14:47 -0700
-Message-ID: <CAFd5g44suSKUDXhAh6CNewGeg00BDJurYNMyY4vaAsaEZ1puWQ@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: Print test statistics on failure
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 3, 2021 at 10:08 PM David Gow <davidgow@google.com> wrote:
->
-> When a number of tests fail, it can be useful to get higher-level
-> statistics of how many tests are failing (or how many parameters are
-> failing in parameterised tests), and in what cases or suites. This is
-> already done by some non-KUnit tests, so add support for automatically
-> generating these for KUnit tests.
->
-> This change adds a 'kunit.stats_enabled' switch which has three values:
-> - 0: No stats are printed (current behaviour)
-> - 1: Stats are printed only for tests/suites with more than one
->      subtest (new default)
-> - 2: Always print test statistics
->
-> For parameterised tests, the summary line looks as follows:
-> "    # inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16"
-> For test suites, there are two lines looking like this:
-> "# ext4_inode_test: pass:1 fail:0 skip:0 total:1"
-> "# Totals: pass:16 fail:0 skip:0 total:16"
->
-> The first line gives the number of direct subtests, the second "Totals"
-> line is the accumulated sum of all tests and test parameters.
->
-> This format is based on the one used by kselftest[1].
->
-> [1]: https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/kselftest.h#L109
->
-> Signed-off-by: David Gow <davidgow@google.com>
+On Thu, Aug 05, 2021 at 07:13 AM CEST, Jiang Wang wrote:
 
-This looks great, David!
+[...]
 
-My only suggestion, can you maybe provide a sample of the TAP output
-with your change running on the thread? I think it looks great, but I
-imagine that it has the potential of being more interesting to people
-other than you, Daniel, and myself rather than the actual code change.
-(To be clear, I think the summary and the code both look good, IMO.)
+> --- a/net/unix/af_unix.c
+> +++ b/net/unix/af_unix.c
+> @@ -791,17 +791,35 @@ static void unix_close(struct sock *sk, long timeout)
+>  	 */
+>  }
+>
+> -struct proto unix_proto = {
+> -	.name			= "UNIX",
+> +static void unix_unhash(struct sock *sk)
+> +{
+> +	/* Nothing to do here, unix socket does not need a ->unhash().
+> +	 * This is merely for sockmap.
+> +	 */
+> +}
+> +
+> +struct proto unix_dgram_proto = {
+> +	.name			= "UNIX-DGRAM",
+> +	.owner			= THIS_MODULE,
+> +	.obj_size		= sizeof(struct unix_sock),
+> +	.close			= unix_close,
+> +#ifdef CONFIG_BPF_SYSCALL
+> +	.psock_update_sk_prot	= unix_dgram_bpf_update_proto,
+> +#endif
+> +};
+> +
+> +struct proto unix_stream_proto = {
+> +	.name			= "UNIX-STREAM",
+>  	.owner			= THIS_MODULE,
+>  	.obj_size		= sizeof(struct unix_sock),
+>  	.close			= unix_close,
+> +	.unhash			= unix_unhash,
+>  #ifdef CONFIG_BPF_SYSCALL
+> -	.psock_update_sk_prot	= unix_bpf_update_proto,
+> +	.psock_update_sk_prot	= unix_stream_bpf_update_proto,
+>  #endif
+>  };
+>
+> -static struct sock *unix_create1(struct net *net, struct socket *sock, int kern)
+> +static struct sock *unix_create1(struct net *net, struct socket *sock, int kern, int type)
+>  {
+>  	struct sock *sk = NULL;
+>  	struct unix_sock *u;
+> @@ -810,7 +828,11 @@ static struct sock *unix_create1(struct net *net, struct socket *sock, int kern)
+>  	if (atomic_long_read(&unix_nr_socks) > 2 * get_max_files())
+>  		goto out;
+>
+> -	sk = sk_alloc(net, PF_UNIX, GFP_KERNEL, &unix_proto, kern);
+> +	if (type == SOCK_STREAM)
+> +		sk = sk_alloc(net, PF_UNIX, GFP_KERNEL, &unix_stream_proto, kern);
+> +	else /*dgram and  seqpacket */
+> +		sk = sk_alloc(net, PF_UNIX, GFP_KERNEL, &unix_dgram_proto, kern);
+> +
+>  	if (!sk)
+>  		goto out;
+>
+> @@ -872,7 +894,7 @@ static int unix_create(struct net *net, struct socket *sock, int protocol,
+>  		return -ESOCKTNOSUPPORT;
+>  	}
+>
+> -	return unix_create1(net, sock, kern) ? 0 : -ENOMEM;
+> +	return unix_create1(net, sock, kern, sock->type) ? 0 : -ENOMEM;
+>  }
+>
+>  static int unix_release(struct socket *sock)
+> @@ -1286,7 +1308,7 @@ static int unix_stream_connect(struct socket *sock, struct sockaddr *uaddr,
+>  	err = -ENOMEM;
+>
+>  	/* create new sock for complete connection */
+> -	newsk = unix_create1(sock_net(sk), NULL, 0);
+> +	newsk = unix_create1(sock_net(sk), NULL, 0, sock->type);
+>  	if (newsk == NULL)
+>  		goto out;
+>
+> @@ -2261,7 +2283,7 @@ static int unix_dgram_recvmsg(struct socket *sock, struct msghdr *msg, size_t si
+>  	struct sock *sk = sock->sk;
+>
+>  #ifdef CONFIG_BPF_SYSCALL
+> -	if (sk->sk_prot != &unix_proto)
+> +	if (READ_ONCE(sk->sk_prot) != &unix_dgram_proto)
+>  		return sk->sk_prot->recvmsg(sk, msg, size, flags & MSG_DONTWAIT,
+>  					    flags & ~MSG_DONTWAIT, NULL);
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Notice we have two reads from sk->sk_prot here.  And the value
+sk->sk_prot holds might change between reads (that is when we remove the
+socket from sockmap). So we want to load it just once.
 
-Cheers!
+Otherwise, it seems possible that sk->sk_prot->recvmsg will be called,
+when sk->sk_prot == unix_proto. Which means sk->sk_prot->recvmsg is NULL.
+
+>  #endif
+> @@ -2580,6 +2602,20 @@ static int unix_stream_read_actor(struct sk_buff *skb,
+>  	return ret ?: chunk;
+>  }
+>
+> +int __unix_stream_recvmsg(struct sock *sk, struct msghdr *msg,
+> +			  size_t size, int flags)
+> +{
+> +	struct unix_stream_read_state state = {
+> +		.recv_actor = unix_stream_read_actor,
+> +		.socket = sk->sk_socket,
+> +		.msg = msg,
+> +		.size = size,
+> +		.flags = flags
+> +	};
+> +
+> +	return unix_stream_read_generic(&state, true);
+> +}
+> +
+>  static int unix_stream_recvmsg(struct socket *sock, struct msghdr *msg,
+>  			       size_t size, int flags)
+>  {
+> @@ -2591,6 +2627,12 @@ static int unix_stream_recvmsg(struct socket *sock, struct msghdr *msg,
+>  		.flags = flags
+>  	};
+>
+> +#ifdef CONFIG_BPF_SYSCALL
+> +	struct sock *sk = sock->sk;
+> +	if (sk->sk_prot != &unix_stream_proto)
+> +		return sk->sk_prot->recvmsg(sk, msg, size, flags & MSG_DONTWAIT,
+> +					    flags & ~MSG_DONTWAIT, NULL);
+
+Also needs READ_ONCE annotations.
+
+> +#endif
+>  	return unix_stream_read_generic(&state, true);
+>  }
+>
+> @@ -2652,6 +2694,7 @@ static int unix_shutdown(struct socket *sock, int mode)
+>
+>  		int peer_mode = 0;
+>
+> +		other->sk_prot->unhash(other);
+
+Here as well.
+
+>  		if (mode&RCV_SHUTDOWN)
+>  			peer_mode |= SEND_SHUTDOWN;
+>  		if (mode&SEND_SHUTDOWN)
+
+[...]
