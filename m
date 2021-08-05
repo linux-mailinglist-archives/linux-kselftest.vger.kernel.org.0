@@ -2,98 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E7B3E19BE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Aug 2021 18:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED58A3E19EA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Aug 2021 19:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbhHEQmP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Aug 2021 12:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbhHEQmO (ORCPT
+        id S236008AbhHERFE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Aug 2021 13:05:04 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3599 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235555AbhHERFD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Aug 2021 12:42:14 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB65C061765;
-        Thu,  5 Aug 2021 09:41:58 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id i10-20020a05600c354ab029025a0f317abfso6807097wmq.3;
-        Thu, 05 Aug 2021 09:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FPukj0sc+USjJnTorQ63Q8/krzolyQ2sY5zYNJxrZDo=;
-        b=WmBlcTbAHtBl+yyJN/NxbZVW2zlQ9P34ZkiJhQfLIovDVDrNm0RD+WDN9hi/8qqAN5
-         YPtCqYSFNjML8MCIZmmTetC/ISG8lRWojsdOc4oT23bgZQD6Lv6auIovuo8/sUj/TdqG
-         ntqt8btgZQhoyaLM9/s4jwS13pU1A9U81O4R34TwXDDKQ33SdbPmzo+1ScIFXZ8bnLEU
-         Nk9jGkMm9Y2xgmwtPuaG5S6uZ9Kd8TZ1IverZrYXnw4hsPNPokGdIrrfGEWelayQ3sSc
-         32eEq7Q25njbCi6dotbPkSI/gqAyG2qV2HmCA83K8DGN3YVkrivRREpJf2LBRO4PgC/x
-         UOfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FPukj0sc+USjJnTorQ63Q8/krzolyQ2sY5zYNJxrZDo=;
-        b=ADfGvyDWB42hhqFPikceWI+nknmpdne2bIAdZPdMuzAnYIYhEKeRP3gtA1tsiadmpG
-         to98q5Kq9LWL3vuJLhSNs5dWYyP+KBab02qUQi4cFf+m4koUaKoOZ0nPe1Xc2yzC/F6x
-         puoG8ni981yV6u5xoGpAK25E08Eg1+1LFEYht6OhmY1pwQmQZSYUmqXR7gjRuk5E5Z3G
-         IHPYoMfLE9oIh7xBEsk3D1O1Qi6m5xrcRyB3RIQFLOjBP68Jj8itHBzAwcXem5Ii8qnt
-         x8KwPkMCNtGtN4P+GAsokOq/tT48kaXLq1yuLDy618Z5goQaZr/nQrJJMediTmyxQvJY
-         Nk3w==
-X-Gm-Message-State: AOAM5328Oa+ppcXVqLxQPbE8Wck0H+ZTHRXGpkCs35nqSRdm1oz0+v1D
-        iuQXRja/QZtG2G8b8B1EuIs=
-X-Google-Smtp-Source: ABdhPJxjeciPuz3Y6G6V0UiOjBsGcL7vPRp1WDtha3ArtQVyYe7wjx7XSIEkPmhp1Oc+yA1lmv6PnQ==
-X-Received: by 2002:a7b:c939:: with SMTP id h25mr15605379wml.13.1628181716774;
-        Thu, 05 Aug 2021 09:41:56 -0700 (PDT)
-Received: from localhost.localdomain ([5.170.128.83])
-        by smtp.gmail.com with ESMTPSA id o17sm6755884wru.11.2021.08.05.09.41.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Aug 2021 09:41:56 -0700 (PDT)
-From:   Jose Blanquicet <blanquicet@gmail.com>
-X-Google-Original-From: Jose Blanquicet <josebl@microsoft.com>
-Cc:     blanquicet@gmail.com, Jose Blanquicet <josebl@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: Fix bpf-iter-tcp4 test to print correctly the dest IP
-Date:   Thu,  5 Aug 2021 18:40:36 +0200
-Message-Id: <20210805164044.527903-1-josebl@microsoft.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 5 Aug 2021 13:05:03 -0400
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GgZhv0sXbz6F83j;
+        Fri,  6 Aug 2021 01:04:31 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 5 Aug 2021 19:04:46 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Thu, 5 Aug 2021 19:04:46 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Subject: RE: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
+ digest_list_del
+Thread-Topic: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
+ digest_list_del
+Thread-Index: AQHXgjzPxJ6WuoGgH0KyG3D/y7w0xqtaWSsAgADBDpCAAD+ygIAAIhjQgAS3MgCAACHtEIAAD/DggASUtACAACrdwA==
+Date:   Thu, 5 Aug 2021 17:04:46 +0000
+Message-ID: <d6590f96cfbd4411a0ae6e8589216fe1@huawei.com>
+References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
+         <20210726163700.2092768-7-roberto.sassu@huawei.com>
+         <c9dffd9d29df095660beaa631ff252c4b33629a0.camel@linux.ibm.com>
+         <ef7c85dcb096479e95c8c60ccda4d700@huawei.com>
+         <1ef95096bee13578b3f906dd9f708c6af9d6ff18.camel@linux.ibm.com>
+         <555bf01bee4b4ea7a9bee658366d535a@huawei.com>
+         <3e6a54d4be87a3eafc45c85d013250d17aa0835e.camel@linux.ibm.com>
+          <f7adeb81bab24b689c3e1aa61d83c6f5@huawei.com>
+ <e886224b50195a2c1324c91b39514395e9780b06.camel@linux.ibm.com>
+In-Reply-To: <e886224b50195a2c1324c91b39514395e9780b06.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.87.18]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, this test is incorrectly printing the destination port
-in place of the destination IP.
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Thursday, August 5, 2021 5:38 PM
+> [Cc'ing Eric Snowberg]
+> 
+> Hi Roberto,
+> 
+> On Mon, 2021-08-02 at 16:54 +0000, Roberto Sassu wrote:
+> 
+> > > > Properly identifying (all) user space parser(s) would be critical.  It
+> > > > would be simpler and  safer to require the converted data be signed.
+> >
+> > When a process directly uploads a buffer to the kernel, the actions are
+> > added to a digest list depending on the result of ima_measure_critical_data()
+> > and from the actions attached to the process credentials and set by the
+> > new LSM.
+> >
+> > If a process fails the identification, the actions in the process credentials
+> > remain zero and the digest lists the process uploads will be ignored by IMA.
+> >
+> > The actions in the process credentials are set with the actions performed
+> > on the executable by IMA, only if the digest of the executable is found in
+> > a digest list and the digest list type is COMPACT_PARSER. The parser is
+> > statically linked.
+> >
+> > The digest list for the parser can be generated at the end of the
+> > building process and signed similarly to kernel modules (for SUSE,
+> > with pesign-obs-integration). This is the only exception to handle,
+> > other packages are not affected.
+> 
+> Ok, so to boot strap the set of permitted digest list parsers, the
+> digest list signature is an appended signature, generated by the build
+> process.  The key needed for verifying the signature would already be
+> loaded on the builtin keyring.
 
-Signed-off-by: Jose Blanquicet <josebl@microsoft.com>
----
- tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Mimi
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
-index 2e4775c35414..92267abb462f 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
-@@ -121,7 +121,7 @@ static int dump_tcp_sock(struct seq_file *seq, struct tcp_sock *tp,
- 	}
- 
- 	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
--		       seq_num, src, srcp, destp, destp);
-+		       seq_num, src, srcp, dest, destp);
- 	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d ",
- 		       state,
- 		       tp->write_seq - tp->snd_una, rx_queue,
--- 
-2.25.1
+yes. RPM headers will have an appended signature too, so that
+appraisal will work.
+
+> > After the parser has been identified, each file operation is monitored.
+> 
+> Does the new LSM need to monitor all file opens?
+
+I would say yes. In the threat model, root is untrusted and
+can potentially interfere with the conversion of the original
+digest lists. Other than monitoring file operations, I'm also
+denying ptraces on the parser. Hopefully this would be
+sufficient, but any suggestion is more than welcome.
+
+The good thing is that the policy of the new LSM is applied
+to the processes that are successfully identified as parser.
+Other processes are mostly unaffected.
+
+The only limitation the new LSM would introduce is that
+the files being used by the parser are write-locked until
+the parser releases them (if files are already opened for
+writing by other processes, the LSM would mark the parser
+as untrusted and will not apply any IMA actions to the digest
+lists the parser uploads).
+
+It is probably a good idea to send the patch, after I finish
+testing it. I will send also another patch for loading digest
+lists during kernel initialization (with the two new patches
+the non-IMA part would be complete).
+
+> > The LSM has to explicitly perform a second open to ensure that
+> > the file is measured/appraised before the integrity_iint_cache structure
+> > is retrieved (because IMA is called after all LSMs).
+> >
+> > If an action is missing from the integrity_iint_cache structure, it
+> > will be cleared by the LSM in the actions attached to the process
+> > credentials, and will not be added to the digest list being uploaded.
+> >
+> > > I agree, it would be much easier. However, it would require changes
+> > > to the building infrastructure of Linux distribution vendors, which
+> > > might limit the applicability of DIGLIM.
+> > >
+> 
+> I understand, but instead of the distros signing the compact digest
+> lists, with Eric's  "Enroll kernel keys thru MOK" patch set, the
+> customer/end user could have more control over which file digests are
+> permitted on a per system basis.
+
+Yes, generating custom digest lists is supported and needed if
+users want to run their own applications, when appraisal is
+enforced. But I like the idea that, if users simply want to just run
+anything the distribution provides, they have everything they
+need. Theoretically, users will be able to run appraisal in enforcing
+mode at the first boot after installation.
+
+Thanks
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
+
+> > > With the user space parser taking care of the conversion, distributions
+> > > can do appraisal of executables and shared libraries with an update of:
+> > > - the kernel: to add DIGLIM
+> > > - dracut: to add required digest lists in the initial ram disk
+> > > - rpm (plugin): to extract the RPM header and its signature and write
+> > >   them to a file that is uploaded to the kernel by the user space parser
+> > >
+> > > I'm planning to append the signature at the end of the RPM header
+> > > (and use appraise_type=modsig) to avoid the dependency on the
+> > > 'initramfs: add support for xattrs in the initial ram disk' patch set
+> > > (which I might try to resume in the future).
+> 
+> Based on your explanation above, I surmised as much.
+> 
+> thanks,
+> 
+> Mimi
 
