@@ -2,151 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41423E1FE2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Aug 2021 02:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4903E2842
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Aug 2021 12:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242709AbhHFARu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Aug 2021 20:17:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42026 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242720AbhHFARq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Aug 2021 20:17:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 01F0261165;
-        Fri,  6 Aug 2021 00:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628209051;
-        bh=pBCuRbKWqZ8VXzwKr9l8E31otOpcFW6kulIyrKJFcrw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jUehiHdmaPA4C/NIvnesCu3Gp1aHv1JldJmON5ZbydPiryo2C0/M4F9mXoZ3gEo6s
-         cAnvPkoulXUt9/KztN3VtMTPQuiSfcUaljmN+fldTXWjZQxAIvHYy0/EAwodIB+ohR
-         568lNt2P2jEaLHttaQTLAniDS3vdCnJ23XCqLwItr7jQI0M1fQjfJ/64HP6KQojTPQ
-         0fxpoZZ9c+dvPukzXjpZAB52Pq65YC21VZydGYOdmIvXQK/KObB3XsXkELCyVEk4TY
-         QZvAa8ApLED7U8ZK90plKM4F9Q8U3+6dOAAgV06f5teBRFisUhW8JXjBIGRAdlgKvA
-         IyF1ONYzhfyKQ==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 8/8] selftests/sgx: Add a new kselftest: unclobbered_vdso_oversubscribed
-Date:   Fri,  6 Aug 2021 03:17:04 +0300
-Message-Id: <20210806001704.667889-9-jarkko@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210806001704.667889-1-jarkko@kernel.org>
-References: <20210806001704.667889-1-jarkko@kernel.org>
+        id S244840AbhHFKKt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Aug 2021 06:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244803AbhHFKKs (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Aug 2021 06:10:48 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BE9C061798;
+        Fri,  6 Aug 2021 03:10:33 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id p38so16996009lfa.0;
+        Fri, 06 Aug 2021 03:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=Cg4WXIsZYnbUd442Oahs9GZTt+sKbIJi8MwnGCykt+Q=;
+        b=XPqTayydqB7XeIci2sFJG36nePUJsDxmFlECE42HuKuMz35087FwU3R8m2z8rbyHs1
+         yLyT/0OI0INIF1Uc6JL7iSxDCeWL+dueJp7+GHhHXzbKMHuFFIjqcOPu2zPH4uHF4Ju5
+         WNI+8pQFlUjJ4HxxVXKVQKCPTK3IS450KPaJHEXptdTMUWGp4hFb9TN/ttNHUJ5aDApl
+         jB3vzdjkd8ltExrmJyZ5NTh2KjNWzshLkWd+0Iv+79fPSKwMaenJAmnUHXVL+JFe0bxQ
+         luKyJiMbTVcWvpRPloQMQB775StJgoBumr4jQP60ZUVVy64EbQBgP0oZDnBNJQs6p3SK
+         xXqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Cg4WXIsZYnbUd442Oahs9GZTt+sKbIJi8MwnGCykt+Q=;
+        b=iQpDvyHFRW3OaqZ3/kId5zezvOYofWBM55qP+nPoyRAo3rdIyweMhZWljt+T7DQF0o
+         4w7PRrs0onPOoUv1/vb5mCG9EAVRQDfs+3HagPTE51yqJoCpYA7Z7rFZIQUURGhtGPtW
+         YoD0CdVujqT+CqdTjpcjk0nJ+DVbGf+tmEC9GEJOD1wsCrYrkfcg7x9IC6jlBuJraCos
+         YZLJgciucWi2X2jo7VBowmkwk+w/qDsPWUrXVE9SDTGyCvr7moL9JL7rrDwjHnR/u2ak
+         GC/zo7BoQiyWgEcTM9bevaxGLMSGCQpm4Mq6rrSNHp27FKIfBDoQtvJaO7Rpc3O/kmfY
+         fGYg==
+X-Gm-Message-State: AOAM5339+H4iXywIjWIcNyXmDNmz7wxqkkex7NijUk3D0Xsgexrdd3/k
+        y7BexOxTeTG0AFmzhzsmapg=
+X-Google-Smtp-Source: ABdhPJyvIQJSwcNKYPOAlz/6bQ9oXP1Rr6I9mtMx2ZN31ncfx4sv/abaI1tq6YjaNJ2Sr/ZX44IAkw==
+X-Received: by 2002:a05:6512:131d:: with SMTP id x29mr7572790lfu.655.1628244631438;
+        Fri, 06 Aug 2021 03:10:31 -0700 (PDT)
+Received: from asus ([93.95.240.58])
+        by smtp.gmail.com with ESMTPSA id s12sm640722ljg.60.2021.08.06.03.10.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Aug 2021 03:10:30 -0700 (PDT)
+Date:   Fri, 6 Aug 2021 16:10:26 +0600
+From:   Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
+To:     akpm@linux-foundation.org, shuah@kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tyhicks@linux.microsoft.com,
+        pasha.tatashin@soleen.com
+Subject: [PATCH v2 0/2] add KSM performance tests
+Message-ID: <cover.1628199399.git.zhansayabagdaulet@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a variation of the unclobbered_vdso test.
+Extend KSM self tests with a performance benchmark. These tests are not
+part of regular regression testing, as they are mainly intended to be
+used by developers making changes to the memory management subsystem.
+This patchset is a respin of the previous series:
+https://lore.kernel.org/lkml/cover.1627828548.git.zhansayabagdaulet@gmail.com/
 
-In the new test, create a heap for the test enclave, which has the same
-size as all available Enclave Page Cache (EPC) pages in the system. This
-will guarantee that all test_encl.elf pages *and* SGX Enclave Control
-Structure (SECS) have been swapped out by the page reclaimer during the
-load time..
+Zhansaya Bagdauletkyzy (2):
+  selftests: vm: add KSM merging time test
+  selftests: vm: add COW time test for KSM pages
 
-This test will trigger both the page reclaimer and the page fault handler.
-The page reclaimer triggered, while the heap is being created during the
-load time. The page fault handler is triggered for all the required pages,
-while the test case is executing.
+v1 -> v2:
+ - replace MB with MiB
+ - address COW test review comments
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- tools/testing/selftests/sgx/main.c | 62 ++++++++++++++++++++++++++++++
- tools/testing/selftests/sgx/main.h |  1 +
- 2 files changed, 63 insertions(+)
+ tools/testing/selftests/vm/ksm_tests.c | 152 ++++++++++++++++++++++++-
+ 1 file changed, 148 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index f219768b4e9a..3be34c3db74a 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -246,6 +246,68 @@ TEST_F(enclave, unclobbered_vdso)
- 	EXPECT_EQ(self->run.user_data, 0);
- }
- 
-+static bool sysfs_get_ulong(const char *path, unsigned long *value)
-+{
-+	struct stat sbuf;
-+	char buf[128];
-+	ssize_t ret;
-+	int fd;
-+
-+	ret = stat(path, &sbuf);
-+	if (ret)
-+		return false;
-+
-+	fd = open(path, O_RDONLY);
-+	if (fd < 0)
-+		return false;
-+
-+	ret = read(fd, buf, sizeof(buf));
-+	if (ret < 0) {
-+		close(fd);
-+		return false;
-+	}
-+
-+	errno = 0;
-+	*value = strtoul(buf, NULL, 0);
-+
-+	close(fd);
-+
-+	return errno ? false : true;
-+}
-+
-+TEST_F(enclave, unclobbered_vdso_oversubscribed)
-+{
-+	unsigned long total_mem;
-+	struct encl_op op;
-+
-+	if (!sysfs_get_ulong(SGX_TOTAL_MEM_PATH, &total_mem))
-+		ASSERT_TRUE(false);
-+
-+	if (!setup_test_encl(total_mem, &self->encl, _metadata))
-+		ASSERT_TRUE(false);
-+
-+	memset(&self->run, 0, sizeof(self->run));
-+	self->run.tcs = self->encl.encl_base;
-+
-+	op.type = ENCL_OP_PUT;
-+	op.buffer = MAGIC;
-+
-+	EXPECT_EQ(ENCL_CALL(&op, &self->run, false), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+	op.type = ENCL_OP_GET;
-+	op.buffer = 0;
-+
-+	EXPECT_EQ(ENCL_CALL(&op, &self->run, false), 0);
-+
-+	EXPECT_EQ(op.buffer, MAGIC);
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+}
-+
- TEST_F(enclave, clobbered_vdso)
- {
- 	struct encl_op op;
-diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
-index b45c52ec7ab3..dd7767364107 100644
---- a/tools/testing/selftests/sgx/main.h
-+++ b/tools/testing/selftests/sgx/main.h
-@@ -7,6 +7,7 @@
- #define MAIN_H
- 
- #define ENCL_HEAP_SIZE_DEFAULT	4096
-+#define SGX_TOTAL_MEM_PATH	"/sys/kernel/debug/x86/sgx_total_mem"
- 
- struct encl_segment {
- 	void *src;
 -- 
-2.32.0
+2.25.1
 
