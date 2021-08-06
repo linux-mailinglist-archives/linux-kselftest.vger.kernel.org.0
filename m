@@ -2,60 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 329243E2981
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Aug 2021 13:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273653E2D77
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Aug 2021 17:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245465AbhHFLZG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Aug 2021 07:25:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46928 "EHLO mail.kernel.org"
+        id S244211AbhHFPUV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Aug 2021 11:20:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47128 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245456AbhHFLZF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Aug 2021 07:25:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A0BD660EE8;
-        Fri,  6 Aug 2021 11:24:49 +0000 (UTC)
+        id S232021AbhHFPUV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Aug 2021 11:20:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 9494A61158;
+        Fri,  6 Aug 2021 15:20:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628249090;
-        bh=SHO6K0c5BYBCASZfdWQKTPTx1AGWXZ8zD6+WFz4xq0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V7e/njGXRMlFQptqYHsVgoYhAlhC6pXGNLyaRpFOi5X/mYp3Wp/GxK1pcKWAqJ5Zp
-         2HFwhFTmZhsT9SPcrbKStaZ11EZTpzgqT83CpwZ8Rk1HLVs+gdKGMDeFRTzwPkvwa0
-         VonvEZC6g7F8dDRAAY6Fin15KHy6h+IXI42apvkP8YdqAaui2ryvcbBy8EAstee+04
-         WfeqHtmyNnGbYx59znSLpIMClf/x+pr6VcqvusKEhrTjjV496p3G78wzxmz7OWHUtR
-         SwEB/m/pxkCjiVElFxCvbKg61hKFybIQKQYRRbikPAhwavS2VHkocQuZEodh+Quxac
-         vaKXYjqYnsB6g==
-Date:   Fri, 6 Aug 2021 14:24:46 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 6/8] selftests/sgx: Encpsulate the test enclave
- creation
-Message-ID: <20210806112446.vfw3azdp6uh54plg@kernel.org>
-References: <20210806001704.667889-1-jarkko@kernel.org>
- <20210806001704.667889-7-jarkko@kernel.org>
+        s=k20201202; t=1628263205;
+        bh=IPKWHVxV4eUP5gcHwLrCCBj608XC+BTjwspjjQ+mcLE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ekJZh7RWhlOZuZUUQ4w6/J3DiHxUa7iPMRHtSZ/dhY2CH1zBa5HdUgg1H0FT3T9Ik
+         RJGys5ik7M/xZKkmUVm1leE+yNA6ngkIBf3mO/7oGNDi+7NDbn46oglf/x0Knx1Gw/
+         YYtqqrT8377Gyjv6LAO0U7JkrUcDvgdddLUBWGEQ8MzwFyuDDGqdKuStVMjjmcw9j/
+         cFpDQCfUKvyxJ3gNNnedC46PbRMd2Vu1wjuRLasNRuWDKizn+4Wvct+t9W2qzfJnq9
+         wPpS2KJKvm5x2yfONPMW2b6NNT38zAmIyb0yj69xf3o9yoCf3w7MERySzdLtT9p80C
+         uLsBlFs3cx9Dw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 85683609F1;
+        Fri,  6 Aug 2021 15:20:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210806001704.667889-7-jarkko@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests/bpf: Fix bpf-iter-tcp4 test to print correctly the
+ dest IP
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162826320554.23389.17105281898176827643.git-patchwork-notify@kernel.org>
+Date:   Fri, 06 Aug 2021 15:20:05 +0000
+References: <20210805164044.527903-1-josebl@microsoft.com>
+In-Reply-To: <20210805164044.527903-1-josebl@microsoft.com>
+To:     Jose Blanquicet <blanquicet@gmail.com>
+Cc:     josebl@microsoft.com, shuah@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, revest@chromium.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 06, 2021 at 03:17:02AM +0300, Jarkko Sakkinen wrote:
-> +FIXTURE_SETUP(enclave)
-> +{
-> +	if (!setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata))
-> +		ASSERT_TRUE(false);
+Hello:
 
-Probably would make more sense:
+This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
-        ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
+On Thu,  5 Aug 2021 18:40:36 +0200 you wrote:
+> Currently, this test is incorrectly printing the destination port
+> in place of the destination IP.
+> 
+> Signed-off-by: Jose Blanquicet <josebl@microsoft.com>
+> ---
+>  tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Right?
+Here is the summary with links:
+  - selftests/bpf: Fix bpf-iter-tcp4 test to print correctly the dest IP
+    https://git.kernel.org/bpf/bpf-next/c/277b13405703
 
-[and similar remarks to 7/8 and 8/8]
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-/Jarkko
+
