@@ -2,103 +2,194 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7233E3711
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Aug 2021 22:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3313E3D29
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Aug 2021 01:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbhHGU5H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 7 Aug 2021 16:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbhHGU5H (ORCPT
+        id S229977AbhHHXii (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Aug 2021 19:38:38 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:53848 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229942AbhHHXii (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Aug 2021 16:57:07 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF318C0613CF;
-        Sat,  7 Aug 2021 13:56:48 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id k11-20020a17090a62cbb02901786a5edc9aso4314106pjs.5;
-        Sat, 07 Aug 2021 13:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=aDPS+XgQ7hE35dLkgpgBaogFW2sWOGSB2/ljVEyiaXE=;
-        b=QkN+d27NFol80qPk1x1PjEoadt867p+EnfVJEqQr3mIcvz03YJ3gO1J6bUhpUlgSBC
-         HRu9ZMDPANHSGwqKlJ8kkTfoUCwVQ4k10powPrORmLPwjpXjciqPdQz3SjKEG3GbQJL9
-         YeQwJOzEDSrDTavXdi928gnCdhu0CmelWuE5FttBfOeYNG+J2R91b5yAniGIQlJt1Tf8
-         69Ha4VqwQtHl1irko2AgAAuQcTISDnNRWJKbMrj3qOu+uK//g4/psooaxzmqYYUXISXO
-         5tS6uCo4XXLB91hv981M3AsXAqYVdHscQrx5l55M9tn4kj1LoQriaQdO9y0afbLI881u
-         JC9Q==
+        Sun, 8 Aug 2021 19:38:38 -0400
+Received: by mail-io1-f69.google.com with SMTP id w3-20020a0566020343b02905393057ad92so11627245iou.20
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Aug 2021 16:38:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aDPS+XgQ7hE35dLkgpgBaogFW2sWOGSB2/ljVEyiaXE=;
-        b=ZETXojj/0+HQc5IqooKnxTJRAN0Che09uc4ENaKtK8Tjyl28jwbzRZ/Y7IogHqmlJC
-         MxmzQXcR4ZpPOAe8ehn8lRh0uNYXr7rzj/FO68Pf0S923AmplAiUIc8Yiw1gpkM+2vfG
-         QFPLtFFlrGjvdXK87U2K0/Gpj6kY3wWuiR/ckONZjz3aUoZOrfE809TIGT6+dcosJ/o5
-         94uny19yAKD4RaFXoVDYVPHd3jtm3kP3ZTZ2pKjhju1vjYpyW7INv1/5qOimkRR05q6o
-         oiFFauVJWxosijLE9JIsofXEHigyS92VdFj8dht97z72DurYE5lKoWKyY18M86lBV0qD
-         /mnA==
-X-Gm-Message-State: AOAM530qgFKZFqV6NRF4OiLYE7XemDkyzyCX5NKut4CYrVFUvTtCZipG
-        uSUoqHKyUF4tyu6XTngdx2g=
-X-Google-Smtp-Source: ABdhPJwYep8tTUVrpoNuljGQS+T87KcHeKmlJQ8E1VasglxRR6sopaSE2SP5GJqcCuWgm1dBo0iYFA==
-X-Received: by 2002:a17:90a:5982:: with SMTP id l2mr17279489pji.18.1628369807552;
-        Sat, 07 Aug 2021 13:56:47 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:645:c000:2163:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id b15sm16955974pgm.15.2021.08.07.13.56.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Aug 2021 13:56:47 -0700 (PDT)
-Date:   Sat, 7 Aug 2021 13:56:44 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Yangbo Lu <yangbo.lu@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        mptcp@lists.linux.dev, "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rui Sousa <rui.sousa@nxp.com>,
-        Sebastien Laveze <sebastien.laveze@nxp.com>
-Subject: Re: [net-next, v5, 02/11] ptp: support ptp physical/virtual clocks
- conversion
-Message-ID: <20210807205644.GD22362@hoboy.vegasvil.org>
-References: <20210630081202.4423-1-yangbo.lu@nxp.com>
- <20210630081202.4423-3-yangbo.lu@nxp.com>
- <87r1f6kqby.fsf@vcostago-mobl2.amr.corp.intel.com>
- <20210807142259.GB22362@hoboy.vegasvil.org>
- <20210807144332.szyazdfl42abwzmd@skbuf>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=6Sls2ZePO2B7rK1frbRgJ99vGjzszT5eqt0ie+TyZh4=;
+        b=n9cmTvayQSKM+1joEMz4gf/OmZZ/r3ID2km+9mU9vwU+ENjfMa+e7uPNbW6o0Mt3xW
+         6PZ/yj+3UeqYSVsSkrSKYgjFKzJpRWCZwE4rLaLiYGAUlb71TktPP/vtGvPQYegVBW4r
+         a1E4/WP1buzfAIKDN4HaPlsANVjwwO1i4iONr6XWACNBtEl4o8Ma8JaKD+ptoRcRBkXl
+         aqmdwVsAXz+izCqoodTVFbEWJ3FNv8dy3t6poptJpsqjkhWTY+4KNyubqlCWQdLspgD3
+         pmJFN06olp6VSv0Enz06/6oTQfaptebreQq2MQ4GUzN5/+jN8dpfzI06vjRioURS8DUm
+         USNg==
+X-Gm-Message-State: AOAM530+7JexxeOKhP7ylXu9jxH/KwQWOQ9cxpRx1iRVDgAf/z54D2Mn
+        rhmxccxnSfJ1cHohd5GMRiyScrRyt63gBQn+MAO4foLrknMk
+X-Google-Smtp-Source: ABdhPJzDq0KkjK6Hn7ioKuW9SGjXRihEUKOaipf9eMWxxIETGIhosE/xhsxde+AokRZJxSiizlG2oXwC7MMWm60zZs2yAHMtKZYd
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210807144332.szyazdfl42abwzmd@skbuf>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6e02:1aa3:: with SMTP id l3mr453617ilv.299.1628465898703;
+ Sun, 08 Aug 2021 16:38:18 -0700 (PDT)
+Date:   Sun, 08 Aug 2021 16:38:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006bd0b305c914c3dc@google.com>
+Subject: [syzbot] BUG: sleeping function called from invalid context in _copy_to_iter
+From:   syzbot <syzbot+8760ca6c1ee783ac4abd@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        christian.brauner@ubuntu.com, cong.wang@bytedance.com,
+        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
+        jamorris@linux.microsoft.com, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, rao.shoaib@oracle.com, shuah@kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Aug 07, 2021 at 05:43:32PM +0300, Vladimir Oltean wrote:
-> >  3. Let the vclocks hold a reference to the underlying posix dynamic clock.
-> 
-> So even if the vclock holds a reference to the underlying POSIX clock,
-> that won't prevent the hardware driver from unbinding, and further
-> gettime() calls on the vclock from faulting, will it?
+Hello,
 
-Oh, your are right.  The vclocks call the real PHC clock's methods
-directly, not through the posix dynamic clock layer.
+syzbot found the following issue on:
 
-> What about:
-> 
-> 4. Create a device link with the vclock being a consumer and the parent
->    clock being a supplier? This way, ptp_vclock_unregister() is
->    automatically called whenever (and before) ptp_clock_unregister() is.
-> 
-> https://www.kernel.org/doc/html/latest/driver-api/device_link.html
+HEAD commit:    c2eecaa193ff pktgen: Remove redundant clone_skb override
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12e3a69e300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0c23f8230e048
+dashboard link: https://syzkaller.appspot.com/bug?extid=8760ca6c1ee783ac4abd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15c5b104300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10062aaa300000
 
-Sounds promising.
+The issue was bisected to:
 
-Thanks,
-Richard
+commit 314001f0bf927015e459c9d387d62a231fe93af3
+Author: Rao Shoaib <rao.shoaib@oracle.com>
+Date:   Sun Aug 1 07:57:07 2021 +0000
+
+    af_unix: Add OOB support
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10765f8e300000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12765f8e300000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14765f8e300000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8760ca6c1ee783ac4abd@syzkaller.appspotmail.com
+Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+
+BUG: sleeping function called from invalid context at lib/iov_iter.c:619
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 8443, name: syz-executor700
+2 locks held by syz-executor700/8443:
+ #0: ffff888028fa0d00 (&u->iolock){+.+.}-{3:3}, at: unix_stream_read_generic+0x16c6/0x2190 net/unix/af_unix.c:2501
+ #1: ffff888028fa0df0 (&u->lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:354 [inline]
+ #1: ffff888028fa0df0 (&u->lock){+.+.}-{2:2}, at: unix_stream_read_generic+0x16d0/0x2190 net/unix/af_unix.c:2502
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 1 PID: 8443 Comm: syz-executor700 Not tainted 5.14.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:105
+ ___might_sleep.cold+0x1f1/0x237 kernel/sched/core.c:9154
+ __might_fault+0x6e/0x180 mm/memory.c:5258
+ _copy_to_iter+0x199/0x1600 lib/iov_iter.c:619
+ copy_to_iter include/linux/uio.h:139 [inline]
+ simple_copy_to_iter+0x4c/0x70 net/core/datagram.c:519
+ __skb_datagram_iter+0x10f/0x770 net/core/datagram.c:425
+ skb_copy_datagram_iter+0x40/0x50 net/core/datagram.c:533
+ skb_copy_datagram_msg include/linux/skbuff.h:3620 [inline]
+ unix_stream_read_actor+0x78/0xc0 net/unix/af_unix.c:2701
+ unix_stream_recv_urg net/unix/af_unix.c:2433 [inline]
+ unix_stream_read_generic+0x17cd/0x2190 net/unix/af_unix.c:2504
+ unix_stream_recvmsg+0xb1/0xf0 net/unix/af_unix.c:2717
+ sock_recvmsg_nosec net/socket.c:944 [inline]
+ sock_recvmsg net/socket.c:962 [inline]
+ sock_recvmsg net/socket.c:958 [inline]
+ ____sys_recvmsg+0x2c4/0x600 net/socket.c:2622
+ ___sys_recvmsg+0x127/0x200 net/socket.c:2664
+ do_recvmmsg+0x24d/0x6d0 net/socket.c:2758
+ __sys_recvmmsg net/socket.c:2837 [inline]
+ __do_sys_recvmmsg net/socket.c:2860 [inline]
+ __se_sys_recvmmsg net/socket.c:2853 [inline]
+ __x64_sys_recvmmsg+0x20b/0x260 net/socket.c:2853
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x43ef39
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffca8776d68 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
+RAX: ffffffffffffffda RBX: 0000000000400488 RCX: 000000000043ef39
+RDX: 0000000000000700 RSI: 0000000020001140 RDI: 0000000000000004
+RBP: 0000000000402f20 R08: 0000000000000000 R09: 0000000000400488
+R10: 0000000000000007 R11: 0000000000000246 R12: 0000000000402fb0
+R13: 0000000000000000 R14: 00000000004ac018 R15: 0000000000400488
+
+=============================
+[ BUG: Invalid wait context ]
+5.14.0-rc3-syzkaller #0 Tainted: G        W        
+-----------------------------
+syz-executor700/8443 is trying to lock:
+ffff8880212b6a28 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0xa3/0x180 mm/memory.c:5260
+other info that might help us debug this:
+context-{4:4}
+2 locks held by syz-executor700/8443:
+ #0: ffff888028fa0d00 (&u->iolock){+.+.}-{3:3}, at: unix_stream_read_generic+0x16c6/0x2190 net/unix/af_unix.c:2501
+ #1: ffff888028fa0df0 (&u->lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:354 [inline]
+ #1: ffff888028fa0df0 (&u->lock){+.+.}-{2:2}, at: unix_stream_read_generic+0x16d0/0x2190 net/unix/af_unix.c:2502
+stack backtrace:
+CPU: 1 PID: 8443 Comm: syz-executor700 Tainted: G        W         5.14.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:105
+ print_lock_invalid_wait_context kernel/locking/lockdep.c:4666 [inline]
+ check_wait_context kernel/locking/lockdep.c:4727 [inline]
+ __lock_acquire.cold+0x213/0x3ab kernel/locking/lockdep.c:4965
+ lock_acquire kernel/locking/lockdep.c:5625 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5590
+ __might_fault mm/memory.c:5261 [inline]
+ __might_fault+0x106/0x180 mm/memory.c:5246
+ _copy_to_iter+0x199/0x1600 lib/iov_iter.c:619
+ copy_to_iter include/linux/uio.h:139 [inline]
+ simple_copy_to_iter+0x4c/0x70 net/core/datagram.c:519
+ __skb_datagram_iter+0x10f/0x770 net/core/datagram.c:425
+ skb_copy_datagram_iter+0x40/0x50 net/core/datagram.c:533
+ skb_copy_datagram_msg include/linux/skbuff.h:3620 [inline]
+ unix_stream_read_actor+0x78/0xc0 net/unix/af_unix.c:2701
+ unix_stream_recv_urg net/unix/af_unix.c:2433 [inline]
+ unix_stream_read_generic+0x17cd/0x2190 net/unix/af_unix.c:2504
+ unix_stream_recvmsg+0xb1/0xf0 net/unix/af_unix.c:2717
+ sock_recvmsg_nosec net/socket.c:944 [inline]
+ sock_recvmsg net/socket.c:962 [inline]
+ sock_recvmsg net/socket.c:958 [inline]
+ ____sys_recvmsg+0x2c4/0x600 net/socket.c:2622
+ ___sys_recvmsg+0x127/0x200 net/socket.c:2664
+ do_recvmmsg+0x24d/0x6d0 net/socket.c:2758
+ __sys_recvmmsg net/socket.c:2837 [inline]
+ __do_sys_recvmmsg net/socket.c:2860 [inline]
+ __se_sys_recvmmsg net/socket.c:2853 [inline]
+ __x64_sys_recvmmsg+0x20b/0x260 net/socket.c:2853
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x43ef39
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffca8776d68 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
+RAX: ffffffffffffffda RBX: 0000000000400488 RCX: 000000000043ef39
+RDX: 0000000000000700 RSI: 0000000020001140 RDI: 0000000000000004
+RBP: 0000000000402f20 R08: 0000000000000000 R09: 0000000000400488
+R10: 0000000000000007 R11: 0000000000000246 R12: 0000
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
