@@ -2,152 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D631F3E42BD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Aug 2021 11:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990633E43BB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Aug 2021 12:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234551AbhHIJcT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Aug 2021 05:32:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43192 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234597AbhHIJcT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Aug 2021 05:32:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 22A2D611C5;
-        Mon,  9 Aug 2021 09:31:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628501518;
-        bh=FOrdcQNSfE4qcKwJIDhTp8LMWfTjCfvnygplnr9i9uo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HhNsKRBO35VbzPgqXJX5LVF37nhqTKYJQAlDmw2WuYUyK93k+4x3vOxQZyseSE33j
-         VozV6SoUhJyypy01Gud8Uz+cJ5XA9pisqiZEAs0fa0EEUp+BZ9vPk/x4m0o62FSj+v
-         EKYkLTWvPLixsy6iWgUmv8io64YY81ny81mveiKZ1EwsNgewMmKB+sucTY2tIcOIjs
-         AOXThBbO5ebGOniQqHIJh9O47P5c4Qo7BTv3T9C1D095RZPtFzOlsAovAvNzowNGft
-         YgMsxbdoLNwo74Mt+9jYj8qS1ORfbbfGZXxEklq7GzaUYjGNgc02/FOl6Z+t+GrvM7
-         7EMyDa9vFaoVQ==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 8/8] selftests/sgx: Add a new kselftest: unclobbered_vdso_oversubscribed
-Date:   Mon,  9 Aug 2021 12:31:27 +0300
-Message-Id: <20210809093127.76264-9-jarkko@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210809093127.76264-1-jarkko@kernel.org>
-References: <20210809093127.76264-1-jarkko@kernel.org>
+        id S233857AbhHIKSK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Aug 2021 06:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234904AbhHIKSK (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 9 Aug 2021 06:18:10 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB1EC0613D3;
+        Mon,  9 Aug 2021 03:17:49 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1628504266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mUREw8STJ2JWCIPIy1C7QUNcphVARQ51gXSM8DV+C24=;
+        b=KQ+99kkaNjD1Av179Orlm992PCKb9LQzNHyTyYJk474sOaLFDMzrbEBo6VnDQwMIVOj0HH
+        7Vg0WcdSPCRQOEQHqYYuIK+UBl0jXtaYiAhTcrzrh+SUhwdbKclZKG1jj/plt0+/CcVGcA
+        bLD8R9rMzuCZvr7xK0abr8E/CwnBZvfI5WSt0o3fFHoYUOOITjejDc5B+fezadwrhIRLTt
+        TZJcnsSoWyvZ+APsd/QLAupLicHnGocK0NwpIqTyYUG/V0JngnJh0tjRsTvpLNuam6kfzH
+        EKUTywhCFPQ1Z/zEOg3hcVfw7+bbs7rkMddgaG6HbkkL3lwOCAbxndQBkwxKRQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1628504266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mUREw8STJ2JWCIPIy1C7QUNcphVARQ51gXSM8DV+C24=;
+        b=dhN5EycmkS7LI28GcBkJIEkszO1KtksoHgVU9B71fNWgSUeiW3cJKGvECK+nH+MgDE/3J0
+        WdvR44JAO/80+iCA==
+To:     "Chen, Rong A" <rong.a.chen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Subject: Re: [kbuild-all] Re: sparc64-linux-gcc: error: unrecognized
+ command-line option '-mxsave'
+In-Reply-To: <277810e0-3887-f5d4-a150-60fdb1626e60@intel.com>
+References: <202107271153.7QWf3g6F-lkp@intel.com>
+ <efd7ab16-ed45-0ab0-a123-4e8e45c100d0@intel.com>
+ <8bee8632-9129-bb02-ab94-f65786e65268@intel.com> <87a6lu68xv.ffs@tglx>
+ <277810e0-3887-f5d4-a150-60fdb1626e60@intel.com>
+Date:   Mon, 09 Aug 2021 12:17:46 +0200
+Message-ID: <87im0eudkl.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a variation of the unclobbered_vdso test.
+On Mon, Aug 09 2021 at 09:54, Rong A. Chen wrote:
+> On 8/6/2021 8:42 PM, Thomas Gleixner wrote:
+>> On Wed, Aug 04 2021 at 17:04, Rong A. Chen wrote:
+>>> On 7/27/2021 10:52 PM, Dave Hansen wrote:
+>>>> On 7/26/21 8:11 PM, kernel test robot wrote:
+>>>>>>> sparc64-linux-gcc: error: unrecognized command-line option '-mxsave'
+>>>>
+>>>> Is there something else funky going on here?  All of the "-mxsave" flags
+>>>> that I can find are under checks for x86 builds, like:
+>>>>
+>>>> 	ifeq ($(CAN_BUILD_I386),1)
+>>>> 	$(BINARIES_32): CFLAGS += -m32 -mxsave
+>>>> 	..
+>>>>
+>>>> I'm confused how we could have a sparc64 compiler (and only a sparc64
+>>>> compiler) that would end up with "-mxsave" in CFLAGS.
+>>>
+>>> Hi Dave,
+>>>
+>>> We can reproduce the error and have no idea too, but we have disabled
+>>> the test for selftests on non-x86 arch.
+>> 
+>> This smells like a host/target compiler mixup. Can you please make the
+>> kernel build verbose with 'V=1' and provide the full build output?
+>
+> Hi Thomas,
+>
+> I run the below command:
+>
+> $make V=1 --keep-going CROSS_COMPILE=sparc64-linux- -j1 O=build_dir 
+> ARCH=sparc64 -C tools/testing/selftests/vm
+> ...
+> sparc64-linux-gcc -Wall -I ../../../../usr/include  -no-pie -m32 -mxsave 
+>   protection_keys.c -lrt -lpthread -lrt -ldl -lm -o 
+> /root/linux/tools/testing/selftests/vm/protection_keys_32
+> sparc64-linux-gcc: error: unrecognized command-line option '-mxsave'
+> make: *** [Makefile:107:
 
-In the new test, create a heap for the test enclave, which has the same
-size as all available Enclave Page Cache (EPC) pages in the system. This
-will guarantee that all test_encl.elf pages *and* SGX Enclave Control
-Structure (SECS) have been swapped out by the page reclaimer during the
-load time..
+Right. That's clearly broken because all these x8664 muck is derived
+from:
 
-This test will trigger both the page reclaimer and the page fault handler.
-The page reclaimer triggered, while the heap is being created during the
-load time. The page fault handler is triggered for all the required pages,
-while the test case is executing.
+  MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+which obviously fails for cross compiling because it's looking at the
+compile machine and not at the target.
+
+Something like the below should cure that, but TBH I lost track
+which one of ARCH, SUBARCH, UTS_MACHINE should be used here. The kbuild
+folks should know.
+
+Thanks,
+
+        tglx
+
 ---
-
-v4:
-* Wrap setup_test_encl() and get_sysfs_long() with ASSERT_TRUE().
-
- tools/testing/selftests/sgx/main.c | 59 ++++++++++++++++++++++++++++++
- tools/testing/selftests/sgx/main.h |  1 +
- 2 files changed, 60 insertions(+)
-
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index f41fba919d06..2e0a6523c60c 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -245,6 +245,65 @@ TEST_F(enclave, unclobbered_vdso)
- 	EXPECT_EQ(self->run.user_data, 0);
- }
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -4,7 +4,6 @@
+ include local_config.mk
  
-+static bool sysfs_get_ulong(const char *path, unsigned long *value)
-+{
-+	struct stat sbuf;
-+	char buf[128];
-+	ssize_t ret;
-+	int fd;
-+
-+	ret = stat(path, &sbuf);
-+	if (ret)
-+		return false;
-+
-+	fd = open(path, O_RDONLY);
-+	if (fd < 0)
-+		return false;
-+
-+	ret = read(fd, buf, sizeof(buf));
-+	if (ret < 0) {
-+		close(fd);
-+		return false;
-+	}
-+
-+	errno = 0;
-+	*value = strtoul(buf, NULL, 0);
-+
-+	close(fd);
-+
-+	return errno ? false : true;
-+}
-+
-+TEST_F(enclave, unclobbered_vdso_oversubscribed)
-+{
-+	unsigned long total_mem;
-+	struct encl_op op;
-+
-+	ASSERT_TRUE(sysfs_get_ulong(SGX_TOTAL_MEM_PATH, &total_mem));
-+	ASSERT_TRUE(setup_test_encl(total_mem, &self->encl, _metadata));
-+
-+	memset(&self->run, 0, sizeof(self->run));
-+	self->run.tcs = self->encl.encl_base;
-+
-+	op.type = ENCL_OP_PUT;
-+	op.buffer = MAGIC;
-+
-+	EXPECT_EQ(ENCL_CALL(&op, &self->run, false), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+	op.type = ENCL_OP_GET;
-+	op.buffer = 0;
-+
-+	EXPECT_EQ(ENCL_CALL(&op, &self->run, false), 0);
-+
-+	EXPECT_EQ(op.buffer, MAGIC);
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+}
-+
- TEST_F(enclave, clobbered_vdso)
- {
- 	struct encl_op op;
-diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
-index b45c52ec7ab3..dd7767364107 100644
---- a/tools/testing/selftests/sgx/main.h
-+++ b/tools/testing/selftests/sgx/main.h
-@@ -7,6 +7,7 @@
- #define MAIN_H
+ uname_M := $(shell uname -m 2>/dev/null || echo not)
+-MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
  
- #define ENCL_HEAP_SIZE_DEFAULT	4096
-+#define SGX_TOTAL_MEM_PATH	"/sys/kernel/debug/x86/sgx_total_mem"
+ # Without this, failed build products remain, with up-to-date timestamps,
+ # thus tricking Make (and you!) into believing that All Is Well, in subsequent
+@@ -46,7 +45,7 @@ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += userfaultfd
+ TEST_GEN_FILES += split_huge_page_test
  
- struct encl_segment {
- 	void *src;
--- 
-2.32.0
-
+-ifeq ($(MACHINE),x86_64)
++ifeq ($(UTS_MACHINE),x86_64)
+ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
+ CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
+ CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
+@@ -68,7 +67,7 @@ TEST_GEN_FILES += $(BINARIES_64)
+ endif
+ else
+ 
+-ifneq (,$(findstring $(MACHINE),ppc64))
++ifneq (,$(findstring $(UTS_MACHINE),ppc64))
+ TEST_GEN_FILES += protection_keys
+ endif
+ 
+@@ -87,7 +86,7 @@ TEST_FILES := test_vmalloc.sh
+ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
+ 
+-ifeq ($(MACHINE),x86_64)
++ifeq ($(UTS_MACHINE),x86_64)
+ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+ 
