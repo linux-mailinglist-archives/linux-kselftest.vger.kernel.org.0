@@ -2,230 +2,439 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D353E4DFA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Aug 2021 22:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAADD3E4EA2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Aug 2021 23:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234302AbhHIUh7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Aug 2021 16:37:59 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:41528 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233500AbhHIUh7 (ORCPT
+        id S231716AbhHIVj1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Aug 2021 17:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230424AbhHIVj0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Aug 2021 16:37:59 -0400
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 179KXl7Y022007;
-        Mon, 9 Aug 2021 20:37:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=1tY5p38S9lTtLm9pHV40BqAB6SwexSmAgffuvoh5ZTU=;
- b=BNaZ2SkkN/3SRRCpMQqyZv9ff3s7MOUSvQK5a1GLCIUEgp6Vk8olFYx9HrahVip4aHMS
- qxEtIRR97Jgsv3FH3RS4URQZvWnsd8EMWOZxGKf+m24RKqDsMm1JZm+6+e1uj/UCQjp5
- vXoFDW1E4DyVhWtqADs0ZodRfuyO2ndVEMtpAblk9OKVWNJ6HFEu0T8UEQaVeNr18nHd
- 6WPmG6XGTwLPnP9DnkrTbjwx3MlD4QRvfbWPaBl7e60hS3bhE7EBL07WpVPEDzkMUdPY
- 2K50oWq3gOoYfpwp39rhhfiaB8jnOUgU0tmfihg5hHYNzMHVYXZbnVObm/nHXorG1BGb AA== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2020-01-29;
- bh=1tY5p38S9lTtLm9pHV40BqAB6SwexSmAgffuvoh5ZTU=;
- b=WcaX6W2U+zmoiypK1Ai3wH7PwY6FWbIvhJNKPKraX1YoPCNHPMMXt95dZNa8vIhsqXP2
- ja6sxPEu35eQz73y5HFDfACI2+abNaQhhQyc7VoBF+BSngisAiXulixU0v1jvYbIrWaX
- joWdF8bjLAsTXZjjaFQHyjyfRUGSUOszsboaZgw28IHL712TsxSzHCdOrq8jsUo7/jMd
- Mnw7zE9bCyK8bwvF8R3phk2phqZPIDGSvQYMw2qUuyNxi2F+a6gMRo9n8G+fWuO21hEw
- fVWvu/sshdN6tIP9hZK2lNBWLc2nO1p+XSr4IJ1KSkOoUOq/jvLKV7FBv4aB60sfmlLK Jw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3aav18j9js-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 09 Aug 2021 20:37:14 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 179Ka4jl076219;
-        Mon, 9 Aug 2021 20:37:13 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
-        by userp3020.oracle.com with ESMTP id 3aa3xrvyq9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 09 Aug 2021 20:37:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IIdzrO58/UoHEatMgEuP4wC+JMs/CzLj0bMsaXr2/bEl6y+W+hm2c8XpLeTfocx0K+IZ3NvRCn2cA8GTXhzoRmazAoieS4nUycq9CF6UyfWOirVsC01Cu3BLyS1J4pdsT3WRtQTkxoW9XAzrntDuyh6s9BKdP2SMBPNAOMI8+g73ST15pOLjqRRebwSaHgXRrvHXga5i8pfMXzvo5KOX2I3NTM6v2pMHi9JaQydVeQ7HFWVzuEbd03MWgQU/sHOBO6+HK3oUtoY/XFcPeYM+NszUAtafQ3Ktpo7d1gaLr5ukk3mh5EJDg+NhkdGcaqm7b5XXcdPt8j41+9iSYrw9LQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1tY5p38S9lTtLm9pHV40BqAB6SwexSmAgffuvoh5ZTU=;
- b=CPrG3JWXnkTEnzeGepzS9dTgGs0ATvKsLU1DgrA9g3kXNaI6vhz8j4z3nrxf8ykmcB4rWu5Gi+8VXWV45ySirjG0QUC0yNL6WdeAV3hojiviHRm0LlTgCND6T2QhIHyzpETdUr2JuK/O04xCacRrMG1BVWNdmJESQOyLELD219gk2CDZxD3SQetcqNHWnXZxK0OC1X3JOu7OhONQct4LZqbpKiF2V4g9IgMNUVNRcqvYitC50JOQwfrxOn5ygim0aiTLgG3yCaaHYRu6dLU1UBQvQVOAhPQebNP8Dm6fQ0TvpXcMAo+6fBjVdgkP8w3aljnk/suq3Cf8cQM9OkuMKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 9 Aug 2021 17:39:26 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB808C061796
+        for <linux-kselftest@vger.kernel.org>; Mon,  9 Aug 2021 14:39:05 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 203-20020a250bd40000b02905933fff7091so11218342ybl.16
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Aug 2021 14:39:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1tY5p38S9lTtLm9pHV40BqAB6SwexSmAgffuvoh5ZTU=;
- b=c9TFmyKiSYF7ADusy5OPS2sbGFd8iSVqmN3JCjUQwgqRhEHeJNq7J3D8NFH8o9XgQmnwlOkIey01aYOUucnaiAP7nfQ1VivOviWMKnPGIbeLJgBgYC68oPsYhhe9fPGWguXcwDz+T8icr9P/fokFAV76tGi4EB8UepLfdL2YNys=
-Authentication-Results: fb.com; dkim=none (message not signed)
- header.d=none;fb.com; dmarc=none action=none header.from=oracle.com;
-Received: from SJ0PR10MB4494.namprd10.prod.outlook.com (2603:10b6:a03:2d4::12)
- by SJ0PR10MB4495.namprd10.prod.outlook.com (2603:10b6:a03:2d6::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.17; Mon, 9 Aug
- 2021 20:37:10 +0000
-Received: from SJ0PR10MB4494.namprd10.prod.outlook.com
- ([fe80::588f:a774:17de:1d1b]) by SJ0PR10MB4494.namprd10.prod.outlook.com
- ([fe80::588f:a774:17de:1d1b%3]) with mapi id 15.20.4394.023; Mon, 9 Aug 2021
- 20:37:10 +0000
-Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
- _copy_to_iter
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+8760ca6c1ee783ac4abd@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        christian.brauner@ubuntu.com, cong.wang@bytedance.com,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        jamorris@linux.microsoft.com, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, shuah@kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-References: <0000000000006bd0b305c914c3dc@google.com>
- <0c106e6c-672f-474e-5815-97b65596139d@oracle.com>
- <CACT4Y+bK61B3r5Rx150FwKt5WJ8T-q-X0nC-r=oH7x4ZU5vdVw@mail.gmail.com>
- <e99cc036-2f83-ff9e-ea68-3eeb19bd4147@oracle.com>
- <CACT4Y+bFLFg9WUiGWq=8ubKFug47=XNjqQJkTX3v1Hos0r+Z_A@mail.gmail.com>
- <2901262f-1ba7-74c0-e5fc-394b65414d12@oracle.com>
- <YRGKWP7/n7+st7Ko@zeniv-ca.linux.org.uk>
- <YRGNIduUvw/kCLIU@zeniv-ca.linux.org.uk>
-From:   Shoaib Rao <rao.shoaib@oracle.com>
-Message-ID: <c1ec22f6-ed3b-fe70-2c7e-38a534f01d2b@oracle.com>
-Date:   Mon, 9 Aug 2021 13:37:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-In-Reply-To: <YRGNIduUvw/kCLIU@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: SJ0PR03CA0227.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::22) To SJ0PR10MB4494.namprd10.prod.outlook.com
- (2603:10b6:a03:2d4::12)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2606:b400:400:744d:8000::918] (2606:b400:8301:1010::16aa) by SJ0PR03CA0227.namprd03.prod.outlook.com (2603:10b6:a03:39f::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.17 via Frontend Transport; Mon, 9 Aug 2021 20:37:09 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 259b943e-3980-4e4e-9f1a-08d95b75765a
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB4495:
-X-Microsoft-Antispam-PRVS: <SJ0PR10MB44956C62D9152516296560E4EFF69@SJ0PR10MB4495.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2803;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zZKzF8k6545HrTO1DxEhxb1KOvou5l6MKRpoOchTEtFnoBQewu6c80EYmP1qhHfruJIigdSDtotuHSBTJb1AJwlCuXuTcRWPhaXmnKfflODtLmM0odJaiwM2ET+K5xVG3Bk/XQwXip2l/lwbDgIssinLersENFA4YHs+R1ghVibRPhObjpltrgtr6Q7sXiQK2XqkGkPCpG2EsmMyUliRTBuuYtYjFPm1WS/4sIge1l7MDTMb2M/B38FrkRnLnBE11LjeFxQdHpf47qrv5VF9zdDXgzMnJ/xuw8pV5jqMUFI2a6JlRp2pPfrOuLnVB5XVFHYxMRw/CREPq8119Iw9zFS+WQkq8/PWqGTpdZ4bzFhJcQuOkhZEiBRViZUcNybAvqEKLbuy6/fl1K9F47s4GXtk0FdWd7241HVydaW+IFFd9WXHKRg5tT2DIJTrNhpf0FIcWit4RMRFsLoZUBi7Ju5jBnS3A2B0L+Za+uW/EITcz9msWEaXJF3q5EbMNKa3b5MeCnSAk38VkP+N1ye0p5Hc7JuJRE3LISNSVBRc2vswTmIM5CF+wM4fRviSF8UEm6363yFUsHwzEyytTGpHDYwNxlqFIM1EqiisoU4/u6p+ORTr869R7jF6bRLZPaYuL9Q+bfbNxAkqkL3i0B0bXReI3O9tV+SEX3xo1X1zJdgyw4a/LJXPlz3CPLY8s83HEnc2sPcogIB38MQdxDHl8RSQ/voznX34bOvBKXsFtv4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4494.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(136003)(366004)(376002)(346002)(186003)(478600001)(2616005)(4326008)(53546011)(7416002)(38100700002)(83380400001)(5660300002)(2906002)(6486002)(66946007)(6916009)(66476007)(66556008)(316002)(54906003)(31696002)(8676002)(36756003)(86362001)(31686004)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUJLUlBSOVpSNmJOM3JFakxPQUVPT0JNYm9uSXV6allhS3dZSUtCU1d0WnBu?=
- =?utf-8?B?c1hyNnVFeDM2SDlqaWlsS2NOakFySmFJWHd6ZDVRUUx2MUdveVFvRGMvZ3RO?=
- =?utf-8?B?Wlo1V01USXhIMm9rRmRWUHI4WlM4TTU5YXJlSkxGZEh6a01ob0dZaTY2aW1t?=
- =?utf-8?B?NUt5ZlN4a3dYOFNkajlOWXJRT2k1MFZuRGxvc2EveHJ6L0RxRVRNOE5HN3Zo?=
- =?utf-8?B?RjZMUytnNmM5TVQ2eERReEs1cHMrT0pZQ0RrUHdGOXV5cFZOTE84S0MrNEhZ?=
- =?utf-8?B?TW1McjQyTkFWSFh3YzlHVGJQdWxEeUt1N2hIdWVsRzBWNWFmc3FKTzdEQSs5?=
- =?utf-8?B?TFRrenlmZGtLUHBlTm1WNlpBZlRCcVZNRDIzYWs5YndhK2tzTG9nMVUxMHRU?=
- =?utf-8?B?SUVJNTFkMHUzSjNqdUZPanNqbDBaU3lHaFoxUzNmUDN4QzM2MWM4ME1KYlhu?=
- =?utf-8?B?TDBRMEwwc3phWUNXak1hWHlpV1ZHT1ltSkR1TUsrRWIxcUNtOXVjNDIwYTUy?=
- =?utf-8?B?R1NLdVpUbTR3aHMwUURSVjU2MmJFNHBJdkl4RzhkZmtEVnpUY25nQTdNRklh?=
- =?utf-8?B?aUhzUFIwdVFYclh0aVpwSVFKQkw0WWIvVXdPNUkrQ1JpMHRWcVFQWTNMVCtR?=
- =?utf-8?B?MDJPY3VETDdTc2NrN203T0F2a1k4UVczbEhWay9pQjVHSTlRUWIvMkxLUEtJ?=
- =?utf-8?B?c0JTc2VXcVNiY0hsQWkvcThWM1F0SWtzT0cxaWVjMzZVQ0Q1Vmk0S3hqWXd1?=
- =?utf-8?B?MGV3UHpyVFIvZ2l3Szl4WDFVaE1BSUhFcTNWM1NNTTl4aUc1Y0xidkR3MVZH?=
- =?utf-8?B?TGNjRGFqUnFvOThaT2EvVmpIQkNuM3c2QTJSbmVYMW9nQjZjSkp2TkxGdTdu?=
- =?utf-8?B?VEsyallWTDZQVmRyYmJrYkRacWUzbjZWN1lkUWVNNzYwZ1Azd0dlTFNTaVZj?=
- =?utf-8?B?dXI5bjN1aGxoOW5qb0V1NFoxRFhLY2lmdGJLRC8xZ00rMXFic1F1aU5pUXJr?=
- =?utf-8?B?ZjI2LytRWlVyZ2M4ZU9vQTFKNWxnNDE4MitQL2x1djk5eXhXam9UNUtHbXMw?=
- =?utf-8?B?Vkx4akRnN01jcy8vTzhCbFJrWXlXUjQrMzd2Ykw5dFhaRUNidlZDa1U4Q0pJ?=
- =?utf-8?B?K214RFViamJ5ODUvM0VyZGdiMHpTdk5XOVNuZUg0TGx3dzhyQVJVcW91NjN2?=
- =?utf-8?B?S1ZTYU1ad3RrRVlQSVE0L0pneHVJcGpXajNvaktyQlBHVFF3MzVrZm0wMitm?=
- =?utf-8?B?U0E5MnM4bVZMMWtaT010K250eXllSWVhdFlwc2E5RHlqWlBySEtUNk4wY3o1?=
- =?utf-8?B?Z1kzQzh3TUlkZ3IxY0RHZWNpUUhWZjk3Qk5lVEl4Y3ZxY0ZkV2hzM0RZNHZH?=
- =?utf-8?B?SXliMUI2RVdqSE8vRXl3SzVHR1RmYXlUd0p0T2xGcjNSeGJFN3hsdTVaQjhZ?=
- =?utf-8?B?WXY1YkwyM1B4Q1llZDQxcXpCR0FCZ3dpSjczTmFPUm1TUjRYMGFBaE9vMXRa?=
- =?utf-8?B?eUtickdkODZhd0xSL0p0aXYvbFdTaDQvVDhrdk1WVC95TW1RSGV1OTR3Tndi?=
- =?utf-8?B?eGE4Z1p1OTVkd1hsVFNBNS9NQTRQeGhOM0FWV1JmdkNsbjBzRkV3VzJkdWtZ?=
- =?utf-8?B?WlBwdXJ6U3YwVitIRjh5TEdhYjVSaDdFM29uemNnQVZLcGoyS0k0cUdHZjI5?=
- =?utf-8?B?QVIvSEZiRy9rbFAyVkNEdHg1QmZuTHI1VWFIdGpTUlhWREp5WVpZeHBlUThG?=
- =?utf-8?B?UzVZTkV5OTJDd1dIYUNNK2hYVWdMMXdRMmhNcTdIV0ZVaDFDTnhFOCtyOXJ4?=
- =?utf-8?Q?luu2SPddzn1FtmeQIeRrTYO/NqZQdbdTnUMl4=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 259b943e-3980-4e4e-9f1a-08d95b75765a
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4494.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2021 20:37:10.7106
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uiJNrit9qrTxV+Q7UWkHVWqwiNyERN2qqmBWmiGWzZ5uK5HhSYXidyDUvO1Us1PZpgvKf8ffvGjNj2vLp7wCOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4495
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10071 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 malwarescore=0 phishscore=0 adultscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108090146
-X-Proofpoint-ORIG-GUID: efDRBCVu5JlMJoylX_y1QgRW7GGTxnlC
-X-Proofpoint-GUID: efDRBCVu5JlMJoylX_y1QgRW7GGTxnlC
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=rea36+YW/U7Z8AHR3hF0KLU2xw3kVy2/sVrfpSo7wOY=;
+        b=W80f9tg1238Qp0Kx8t7SI2p/TWukgVzzWga95HZmyo1GIfy8QUE1Qj6GXSpGkzLLWh
+         nkcvbL8XFcXCWNckzsR19xFMqLuLuFIlYHnYqQLvK9e68fZuGtetr1o3dUuDQTd7P7Xh
+         51Faag2KxCkS1u9Gw1c8l8uAh7mbahtodq6hj7LKbuCvMzAR74AkZ+OAVOzKnBkWVArO
+         Mu0CcTKtIVhDQ3itZ7vnuK+HTtsvGsSLSfo4qbkXQE8OtwEKqEf6PtlTyvRsaY5g6aMK
+         bpdIhVnu1XPHwuxSrCp6EHlrxWerA2FlgMNgeONwZ7pD23wbhoyBzMfAszvs9ASB3VlY
+         vM7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=rea36+YW/U7Z8AHR3hF0KLU2xw3kVy2/sVrfpSo7wOY=;
+        b=YIYAh9Iv8eaD4l85iEFJDof3byh3G2wql3SxGbVFTTTJRJq88ev9pPiWdKqt0RxZqj
+         FUppE52xxlMJbx+MjTVRZ/afI2IA9nK5AFsehmc/DJKM47bm0CRpJNIxa/Unq0J/i4G8
+         0H/U+NxtRI5qo3EpNMK2/uoRp5aBJDBhePGyNojiclyFB1YAgaNhPqEqy3mE1xUTLT3x
+         FjAxioot65dkrqEG1JvMsYcRyZuk7xlqbsJ9lCWoq8/o32U9xK/uR853E3VYunupOpsP
+         o5UpzVpjCujnRaYSwqvhodbLVDkA4Sw/KQCcsrffz0Km60Qtu2yWfkVluVsNq2CBIV28
+         5MJQ==
+X-Gm-Message-State: AOAM533wqMk3irBVlOuWoNx39PfzvAIXtE1dqo6nAfAq4P2ShYuMNRfI
+        edn4BSZeAa3n6riVnVQ6mzxswITN78l0wQ==
+X-Google-Smtp-Source: ABdhPJya3AQnMHZ4Pw06jSp1UmWIyW6XRt/XVMyuTnf68jTFx7leTfx+QvQM41r2qTCUNcPXrt+9SBbyrFn1WA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:5423:deca:618d:f91e])
+ (user=dlatypov job=sendgmr) by 2002:a25:d903:: with SMTP id
+ q3mr17223918ybg.11.1628545145007; Mon, 09 Aug 2021 14:39:05 -0700 (PDT)
+Date:   Mon,  9 Aug 2021 14:38:59 -0700
+Message-Id: <20210809213859.3495973-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.605.g8dce9f2422-goog
+Subject: [PATCH] kunit: tool: allow filtering test cases via glob
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Commit 1d71307a6f94 ("kunit: add unit test for filtering suites by
+names") introduced the ability to filter which suites we run via glob.
 
-On 8/9/21 1:16 PM, Al Viro wrote:
-> On Mon, Aug 09, 2021 at 08:04:40PM +0000, Al Viro wrote:
->> On Mon, Aug 09, 2021 at 12:40:03PM -0700, Shoaib Rao wrote:
->>
->>> Page faults occur all the time, the page may not even be in the cache or the
->>> mapping is not there (mmap), so I would not consider this a bug. The code
->>> should complain about all other calls as they are also copying  to user
->>> pages. I must not be following some semantics for the code to be triggered
->>> but I can not figure that out. What is the recommended interface to do user
->>> copy from kernel?
->> 	What are you talking about?  Yes, page faults happen.  No, they
->> must not be triggered in contexts when you cannot afford going to sleep.
->> In particular, you can't do that while holding a spinlock.
->>
->> 	There are things that can't be done under a spinlock.  If your
->> commit is attempting that, it's simply broken.
-> ... in particular, this
->
-> +#if IS_ENABLED(CONFIG_AF_UNIX_OOB)
-> +               mutex_lock(&u->iolock);
-> +               unix_state_lock(sk);
-> +
-> +               err = unix_stream_recv_urg(state);
-> +
-> +               unix_state_unlock(sk);
-> +               mutex_unlock(&u->iolock);
-> +#endif
->
-> is 100% broken, since you *are* attempting to copy data to userland between
-> spin_lock(&unix_sk(s)->lock) and spin_unlock(&unix_sk(s)->lock).
+This change extends it so we can also filter individual test cases
+inside of suites as well.
 
-Yes, but why are we calling it unix_state_lock() why not 
-unix_state_spinlock() ?
+This is quite useful when, e.g.
+* trying to run just the tests cases you've just added or are working on
+* trying to debug issues with test hermeticity
 
-I have tons of experience doing kernel coding and you can never ever 
-cover everything, that is why I wanted to root cause the issue instead 
-of just turning off the check.
+Examples:
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit '*exec*.parse*'
+...
+============================================================
+======== [PASSED] kunit_executor_test ========
+[PASSED] parse_filter_test
+============================================================
+Testing complete. 1 tests run. 0 failed. 0 crashed.
 
-Imagine you or Eric make a mistake and break the kernel, how would you 
-guys feel if I were to write a similar email?
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit '*.no_matching_tests'
+...
+[ERROR] no tests run!
 
-Shoaib
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ lib/kunit/executor.c      | 107 +++++++++++++++++++++++++++++++++----
+ lib/kunit/executor_test.c | 109 +++++++++++++++++++++++++++++++++-----
+ 2 files changed, 192 insertions(+), 24 deletions(-)
 
->
-> You can't do blocking operations under a spinlock.  And copyout is inherently
-> a blocking operation - it can require any kind of IO to complete.  If you
-> have the destination (very much valid - no bad addresses there) in the middle
-> of a page mmapped from a file and currently not paged in, you *must* read
-> the current contents of the page, at least into the parts of page that
-> are not going to be overwritten by your copyout.  No way around that.  And
-> that can involve any kind of delays and any amount of disk/network/whatnot
-> traffic.
->
-> You fundamentally can not do that kind of thing without giving the CPU up.
-> And under a spinlock you are not allowed to do that.
->
-> In the current form that commit is obviously broken.
-I am
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index acd1de436f59..bab3ab940acc 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -17,21 +17,80 @@ extern struct kunit_suite * const * const __kunit_suites_end[];
+ static char *filter_glob_param;
+ module_param_named(filter_glob, filter_glob_param, charp, 0);
+ MODULE_PARM_DESC(filter_glob,
+-		"Filter which KUnit test suites run at boot-time, e.g. list*");
++		"Filter which KUnit test suites/tests run at boot-time, e.g. list* or list*.*del_test");
++
++/* glob_match() needs NULL terminated strings, so we need a copy of filter_glob_param. */
++struct kunit_test_filter {
++	char *suite_glob;
++	char *test_glob;
++};
++
++/* Split "suite_glob.test_glob" into two. Assumes filter_glob is not empty. */
++static void kunit_parse_filter_glob(struct kunit_test_filter *parsed,
++				    const char *filter_glob)
++{
++	const int len = strlen(filter_glob);
++	const char *period = strchr(filter_glob, '.');
++
++	if (!period) {
++		parsed->suite_glob = kmalloc(len, GFP_KERNEL);
++		parsed->test_glob = NULL;
++		strcpy(parsed->suite_glob, filter_glob);
++		return;
++	}
++
++	parsed->suite_glob = kzalloc(period - filter_glob + 1, GFP_KERNEL);
++	parsed->test_glob = kzalloc(len - (period - filter_glob) + 1, GFP_KERNEL);
++
++	strncpy(parsed->suite_glob, filter_glob, period - filter_glob);
++	strncpy(parsed->test_glob, period + 1, len - (period - filter_glob));
++}
++
++/* Create a copy of suite with only tests that match test_glob. */
++static struct kunit_suite *
++kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
++{
++	int n = 0;
++	struct kunit_case *filtered, *test_case;
++	struct kunit_suite *copy;
++
++	kunit_suite_for_each_test_case(suite, test_case) {
++		if (!test_glob || glob_match(test_glob, test_case->name))
++			++n;
++	}
++
++	if (n == 0)
++		return NULL;
++
++	/* Use memcpy to workaround copy->name being const. */
++	copy = kmalloc(sizeof(*copy), GFP_KERNEL);
++	memcpy(copy, suite, sizeof(*copy));
++
++	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
++
++	n = 0;
++	kunit_suite_for_each_test_case(suite, test_case) {
++		if (!test_glob || glob_match(test_glob, test_case->name))
++			filtered[n++] = *test_case;
++	}
++
++	copy->test_cases = filtered;
++	return copy;
++}
+ 
+ static char *kunit_shutdown;
+ core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
+ 
+ static struct kunit_suite * const *
+ kunit_filter_subsuite(struct kunit_suite * const * const subsuite,
+-			const char *filter_glob)
++		      struct kunit_test_filter *filter)
+ {
+ 	int i, n = 0;
+-	struct kunit_suite **filtered;
++	struct kunit_suite **filtered, *filtered_suite;
+ 
+ 	n = 0;
+-	for (i = 0; subsuite[i] != NULL; ++i) {
+-		if (glob_match(filter_glob, subsuite[i]->name))
++	for (i = 0; subsuite[i]; ++i) {
++		if (glob_match(filter->suite_glob, subsuite[i]->name))
+ 			++n;
+ 	}
+ 
+@@ -44,8 +103,11 @@ kunit_filter_subsuite(struct kunit_suite * const * const subsuite,
+ 
+ 	n = 0;
+ 	for (i = 0; subsuite[i] != NULL; ++i) {
+-		if (glob_match(filter_glob, subsuite[i]->name))
+-			filtered[n++] = subsuite[i];
++		if (!glob_match(filter->suite_glob, subsuite[i]->name))
++			continue;
++		filtered_suite = kunit_filter_tests(subsuite[i], filter->test_glob);
++		if (filtered_suite)
++			filtered[n++] = filtered_suite;
+ 	}
+ 	filtered[n] = NULL;
+ 
+@@ -57,12 +119,32 @@ struct suite_set {
+ 	struct kunit_suite * const * const *end;
+ };
+ 
++static void kunit_free_subsuite(struct kunit_suite * const *subsuite)
++{
++	unsigned int i;
++
++	for (i = 0; subsuite[i]; i++)
++		kfree(subsuite[i]);
++
++	kfree(subsuite);
++}
++
++static void kunit_free_suite_set(struct suite_set suite_set)
++{
++	struct kunit_suite * const * const *suites;
++
++	for (suites = suite_set.start; suites < suite_set.end; suites++)
++		kunit_free_subsuite(*suites);
++	kfree(suite_set.start);
++}
++
+ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+ 					    const char *filter_glob)
+ {
+ 	int i;
+ 	struct kunit_suite * const **copy, * const *filtered_subsuite;
+ 	struct suite_set filtered;
++	struct kunit_test_filter filter;
+ 
+ 	const size_t max = suite_set->end - suite_set->start;
+ 
+@@ -73,12 +155,17 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+ 		return filtered;
+ 	}
+ 
++	kunit_parse_filter_glob(&filter, filter_glob);
++
+ 	for (i = 0; i < max; ++i) {
+-		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], filter_glob);
++		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], &filter);
+ 		if (filtered_subsuite)
+ 			*copy++ = filtered_subsuite;
+ 	}
+ 	filtered.end = copy;
++
++	kfree(filter.suite_glob);
++	kfree(filter.test_glob);
+ 	return filtered;
+ }
+ 
+@@ -126,9 +213,7 @@ int kunit_run_all_tests(void)
+ 		__kunit_test_suites_init(*suites);
+ 
+ 	if (filter_glob_param) { /* a copy was made of each array */
+-		for (suites = suite_set.start; suites < suite_set.end; suites++)
+-			kfree(*suites);
+-		kfree(suite_set.start);
++		kunit_free_suite_set(suite_set);
+ 	}
+ 
+ 	kunit_handle_shutdown();
+diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+index cdbe54b16501..dbb49c099e02 100644
+--- a/lib/kunit/executor_test.c
++++ b/lib/kunit/executor_test.c
+@@ -9,38 +9,103 @@
+ #include <kunit/test.h>
+ 
+ static void kfree_at_end(struct kunit *test, const void *to_free);
++static void free_subsuite_at_end(struct kunit *test,
++				 struct kunit_suite *const *to_free);
+ static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+-					    const char *suite_name);
++					    const char *suite_name,
++					    struct kunit_case *test_cases);
++
++void dummy_test(struct kunit *test) {}
++
++struct kunit_case dummy_test_cases[] = {
++	/* .run_case is not important, just needs to be non-NULL */
++	{ .name = "test1", .run_case = dummy_test },
++	{ .name = "test2", .run_case = dummy_test },
++	{},
++};
++
++static void parse_filter_test(struct kunit *test)
++{
++	struct kunit_test_filter filter = {NULL, NULL};
++
++	kunit_parse_filter_glob(&filter, "suite");
++	KUNIT_EXPECT_STREQ(test, filter.suite_glob, "suite");
++	KUNIT_EXPECT_FALSE(test, filter.test_glob);
++	kfree(filter.suite_glob);
++	kfree(filter.test_glob);
++
++	kunit_parse_filter_glob(&filter, "suite.test");
++	KUNIT_EXPECT_STREQ(test, filter.suite_glob, "suite");
++	KUNIT_EXPECT_STREQ(test, filter.test_glob, "test");
++	kfree(filter.suite_glob);
++	kfree(filter.test_glob);
++}
+ 
+ static void filter_subsuite_test(struct kunit *test)
+ {
+ 	struct kunit_suite *subsuite[3] = {NULL, NULL, NULL};
+ 	struct kunit_suite * const *filtered;
++	struct kunit_test_filter filter = {
++		.suite_glob = "suite2",
++		.test_glob = NULL,
++	};
+ 
+-	subsuite[0] = alloc_fake_suite(test, "suite1");
+-	subsuite[1] = alloc_fake_suite(test, "suite2");
++	subsuite[0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
++	subsuite[1] = alloc_fake_suite(test, "suite2", dummy_test_cases);
+ 
+ 	/* Want: suite1, suite2, NULL -> suite2, NULL */
+-	filtered = kunit_filter_subsuite(subsuite, "suite2*");
++	filtered = kunit_filter_subsuite(subsuite, &filter);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered);
+-	kfree_at_end(test, filtered);
++	free_subsuite_at_end(test, filtered);
+ 
++	/* Validate we just have suite2 */
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered[0]);
+ 	KUNIT_EXPECT_STREQ(test, (const char *)filtered[0]->name, "suite2");
++	KUNIT_EXPECT_FALSE(test, filtered[1]);
++}
++
++static void filter_subsuite_test_glob_test(struct kunit *test)
++{
++	struct kunit_suite *subsuite[3] = {NULL, NULL, NULL};
++	struct kunit_suite * const *filtered;
++	struct kunit_test_filter filter = {
++		.suite_glob = "suite2",
++		.test_glob = "test2",
++	};
++
++	subsuite[0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
++	subsuite[1] = alloc_fake_suite(test, "suite2", dummy_test_cases);
+ 
++	/* Want: suite1, suite2, NULL -> suite2 (just test1), NULL */
++	filtered = kunit_filter_subsuite(subsuite, &filter);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered);
++	free_subsuite_at_end(test, filtered);
++
++	/* Validate we just have suite2 */
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered[0]);
++	KUNIT_EXPECT_STREQ(test, (const char *)filtered[0]->name, "suite2");
+ 	KUNIT_EXPECT_FALSE(test, filtered[1]);
++
++	/* Now validate we just have test2 */
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered[0]->test_cases);
++	KUNIT_EXPECT_STREQ(test, (const char *)filtered[0]->test_cases[0].name, "test2");
++	KUNIT_EXPECT_FALSE(test, filtered[0]->test_cases[1].name);
+ }
+ 
+ static void filter_subsuite_to_empty_test(struct kunit *test)
+ {
+ 	struct kunit_suite *subsuite[3] = {NULL, NULL, NULL};
+ 	struct kunit_suite * const *filtered;
++	struct kunit_test_filter filter = {
++		.suite_glob = "not_found",
++		.test_glob = NULL,
++	};
+ 
+-	subsuite[0] = alloc_fake_suite(test, "suite1");
+-	subsuite[1] = alloc_fake_suite(test, "suite2");
++	subsuite[0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
++	subsuite[1] = alloc_fake_suite(test, "suite2", dummy_test_cases);
+ 
+-	filtered = kunit_filter_subsuite(subsuite, "not_found");
+-	kfree_at_end(test, filtered); /* just in case */
++	filtered = kunit_filter_subsuite(subsuite, &filter);
++	free_subsuite_at_end(test, filtered); /* just in case */
+ 
+ 	KUNIT_EXPECT_FALSE_MSG(test, filtered,
+ 			       "should be NULL to indicate no match");
+@@ -52,7 +117,7 @@ static void kfree_subsuites_at_end(struct kunit *test, struct suite_set *suite_s
+ 
+ 	kfree_at_end(test, suite_set->start);
+ 	for (suites = suite_set->start; suites < suite_set->end; suites++)
+-		kfree_at_end(test, *suites);
++		free_subsuite_at_end(test, *suites);
+ }
+ 
+ static void filter_suites_test(struct kunit *test)
+@@ -74,8 +139,8 @@ static void filter_suites_test(struct kunit *test)
+ 	struct suite_set filtered = {.start = NULL, .end = NULL};
+ 
+ 	/* Emulate two files, each having one suite */
+-	subsuites[0][0] = alloc_fake_suite(test, "suite0");
+-	subsuites[1][0] = alloc_fake_suite(test, "suite1");
++	subsuites[0][0] = alloc_fake_suite(test, "suite0", dummy_test_cases);
++	subsuites[1][0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
+ 
+ 	/* Filter out suite1 */
+ 	filtered = kunit_filter_suites(&suite_set, "suite0");
+@@ -88,7 +153,9 @@ static void filter_suites_test(struct kunit *test)
+ }
+ 
+ static struct kunit_case executor_test_cases[] = {
++	KUNIT_CASE(parse_filter_test),
+ 	KUNIT_CASE(filter_subsuite_test),
++	KUNIT_CASE(filter_subsuite_test_glob_test),
+ 	KUNIT_CASE(filter_subsuite_to_empty_test),
+ 	KUNIT_CASE(filter_suites_test),
+ 	{}
+@@ -120,14 +187,30 @@ static void kfree_at_end(struct kunit *test, const void *to_free)
+ 				     (void *)to_free);
+ }
+ 
++static void free_subsuite_res_free(struct kunit_resource *res)
++{
++	kunit_free_subsuite(res->data);
++}
++
++static void free_subsuite_at_end(struct kunit *test,
++				 struct kunit_suite *const *to_free)
++{
++	if (IS_ERR_OR_NULL(to_free))
++		return;
++	kunit_alloc_and_get_resource(test, NULL, free_subsuite_res_free,
++				     GFP_KERNEL, (void *)to_free);
++}
++
+ static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+-					    const char *suite_name)
++					    const char *suite_name,
++					    struct kunit_case *test_cases)
+ {
+ 	struct kunit_suite *suite;
+ 
+ 	/* We normally never expect to allocate suites, hence the non-const cast. */
+ 	suite = kunit_kzalloc(test, sizeof(*suite), GFP_KERNEL);
+ 	strncpy((char *)suite->name, suite_name, sizeof(suite->name) - 1);
++	suite->test_cases = test_cases;
+ 
+ 	return suite;
+ }
+
+base-commit: 36a21d51725af2ce0700c6ebcb6b9594aac658a6
+-- 
+2.32.0.605.g8dce9f2422-goog
+
