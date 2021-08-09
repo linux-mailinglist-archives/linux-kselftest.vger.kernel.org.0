@@ -2,276 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE16B3E3EB4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Aug 2021 06:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20103E42AD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Aug 2021 11:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbhHIEL0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Aug 2021 00:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbhHIELY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Aug 2021 00:11:24 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2921C061760
-        for <linux-kselftest@vger.kernel.org>; Sun,  8 Aug 2021 21:11:04 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5B645891B3;
-        Mon,  9 Aug 2021 16:11:03 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1628482263;
-        bh=9qJpd9xSR7ilj9s/94yeh+OX1I1FvoUY8N6Fhs3y0yQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=lbQBF8ITtHJe4QQtiD7/cr2TAFPTTfU1Pu0gysNPPFFn3ue9lmqm8knptc5cobh97
-         l+DPBenS2par78o+huEiaRmBYLz7HhnVm00g37fVVH7MTWoz3Yd9gJxzbkAc2ottww
-         JtSXfQc1CYQb9AEKfPRPr2K+9//l5Ytd/BGcckozgMqrSdST+6hUH/BlqEpBCoN7Ow
-         zVvqOt8yDzVVJB6CwI+Dgeuf/1gzSk8IS3mEycJDnEkaqK//2yuSBMkXbj08FBgRqQ
-         d7oyhvTK/B/fe4IpS4wczvI0/ZvSqLBQpPuSuBx6F7mja9HoZwsKwrkkSSP8xYqLzB
-         ruSnekncXxI2Q==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6110aad50000>; Mon, 09 Aug 2021 16:11:01 +1200
-Received: from coled-dl.ws.atlnz.lc (coled-dl.ws.atlnz.lc [10.33.25.26])
-        by pat.atlnz.lc (Postfix) with ESMTP id CAE4413EDC1;
-        Mon,  9 Aug 2021 16:11:01 +1200 (NZST)
-Received: by coled-dl.ws.atlnz.lc (Postfix, from userid 1801)
-        id C72FF2428A0; Mon,  9 Aug 2021 16:11:01 +1200 (NZST)
-From:   Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
-To:     pablo@netfilter.org
-Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
-        kuba@kernel.org, shuah@kernel.org,
-        Cole.Dishington@alliedtelesis.co.nz, linux-kernel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 3/3] selftests: netfilter: Add RFC-7597 Section 5.1 PSID selftests
-Date:   Mon,  9 Aug 2021 16:10:37 +1200
-Message-Id: <20210809041037.29969-4-Cole.Dishington@alliedtelesis.co.nz>
+        id S234495AbhHIJby (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Aug 2021 05:31:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42536 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234338AbhHIJby (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 9 Aug 2021 05:31:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A187360EE7;
+        Mon,  9 Aug 2021 09:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628501494;
+        bh=+KqkAyGByVyyPvBABgZGemTQKNRfitcRyp+gXqI3bgM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FJ9EtegxAtLqEQ3eAQIvE2XHdnnV/n62W7eseIeiCBarXeAz95pWmqI2qzxTyGQVw
+         woHXWnX9qbCO3qa5oPhsKyS3t0w29MkCoF0HFxTwmZIKRWqKtlxqaFYnc2+AT23d0a
+         0CZCTN7p2wX89/sJ51M8nhFyMObk24Y1r/CwWlWYScWdCZW+oLYvkIYTUPQ88woJ+I
+         SjKP1dz+sR3x8RKEh31drcwTTAMY997gmisgEJNw2m/YC7l1WGY8A/Zi2U57OzEY0g
+         HAsWWqMIh+VRlBrekYht60Eto/0K7gWwpm9q9QIUJYs2orqlE6TgNCHOTz0VGJper3
+         x8Izziz9B3Vkw==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH v4 0/8] Add an oversubscription test
+Date:   Mon,  9 Aug 2021 12:31:19 +0300
+Message-Id: <20210809093127.76264-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210809041037.29969-1-Cole.Dishington@alliedtelesis.co.nz>
-References: <20210726143729.GN9904@breakpoint.cc>
- <20210809041037.29969-1-Cole.Dishington@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=dvql9Go4 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=MhDmnRu9jo8A:10 a=sF_rvDO487Xu6NHlfHgA:9 a=wOcukherponeolA-:21 a=uWybusRNZRjIeY3Y:21
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add selftests for masquerading into a smaller subset of ports defined by
-PSID.
+The goal of these patches is to add a test case for a SGX reserved
+memory oversubscription, i.e. make sure that the page reclaimer and
+and the page fault handler are working correctly.
 
-Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
----
+Change Log
+==========
 
-Notes:
-    No changes.
+v3:
+* Reorganized the patch set into smaller pieces, and refactored the code
+  so that the test enclave can be created inside each test case. Added a
+  new test case unclobbered_vdso_oversubscribed that creates a large enough
+  heap to fill all of the available SGX reserved memory (EPC).
 
- .../netfilter/nat_masquerade_psid.sh          | 182 ++++++++++++++++++
- 1 file changed, 182 insertions(+)
- create mode 100644 tools/testing/selftests/netfilter/nat_masquerade_psid=
-.sh
+Jarkko Sakkinen (8):
+  x86/sgx: Add /sys/kernel/debug/x86/sgx_total_mem
+  selftests/sgx: Assign source for each segment
+  selftests/sgx: Make data measurement for an enclave segment optional
+  selftests/sgx: Create a heap for the test enclave
+  selftests/sgx: Dump segments and /proc/self/maps only on failure
+  selftests/sgx: Encpsulate the test enclave creation
+  selftests/sgx: Move setup_test_encl() to each TEST_F()
+  selftests/sgx: Add a new kselftest: unclobbered_vdso_oversubscribed
 
-diff --git a/tools/testing/selftests/netfilter/nat_masquerade_psid.sh b/t=
-ools/testing/selftests/netfilter/nat_masquerade_psid.sh
-new file mode 100644
-index 000000000000..56c1b509caf6
---- /dev/null
-+++ b/tools/testing/selftests/netfilter/nat_masquerade_psid.sh
-@@ -0,0 +1,182 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# <:copyright-gpl
-+# Copyright (C) 2021 Allied Telesis Labs NZ
-+#
-+# check that NAT can masquerade using PSID defined ranges.
-+#
-+# Setup is:
-+#
-+# nsclient1(veth0) -> (veth1)nsrouter(veth2) -> (veth0)nsclient2
-+# Setup a nat masquerade rule with psid defined ranges.
-+#
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=3D4
-+ret=3D0
-+ns_all=3D"nsclient1 nsrouter nsclient2"
-+
-+readonly infile=3D"$(mktemp)"
-+readonly outfile=3D"$(mktemp)"
-+readonly datalen=3D32
-+readonly server_port=3D8080
-+
-+conntrack -V > /dev/null 2>&1
-+if [ $? -ne 0 ];then
-+	echo "SKIP: Could not run test without conntrack tool"
-+	exit $ksft_skip
-+fi
-+
-+iptables --version > /dev/null 2>&1
-+if [ $? -ne 0 ];then
-+	echo "SKIP: Could not run test without iptables tool"
-+	exit $ksft_skip
-+fi
-+
-+ip -Version > /dev/null 2>&1
-+if [ $? -ne 0 ];then
-+	echo "SKIP: Could not run test without ip tool"
-+	exit $ksft_skip
-+fi
-+
-+ipv4() {
-+	echo -n 192.168.$1.$2
-+}
-+
-+cleanup() {
-+	for n in $ns_all; do ip netns del $n;done
-+
-+	if [ -f "${outfile}" ]; then
-+		rm "$outfile"
-+	fi
-+	if [ -f "${infile}" ]; then
-+		rm "$infile"
-+	fi
-+}
-+
-+server_listen() {
-+	ip netns exec nsclient2 nc -l -p "$server_port" > "$outfile" &
-+	server_pid=3D$!
-+	sleep 0.2
-+}
-+
-+client_connect() {
-+	ip netns exec nsclient1 timeout 2 nc -w 1 -p "$port" $(ipv4 2 2) "$serv=
-er_port" < $infile
-+}
-+
-+verify_data() {
-+	local _ret=3D0
-+	wait "$server_pid"
-+	cmp "$infile" "$outfile" 2>/dev/null
-+	_ret=3D$?
-+	rm "$outfile"
-+	return $_ret
-+}
-+
-+test_service() {
-+	server_listen
-+	client_connect
-+	verify_data
-+}
-+
-+check_connection() {
-+	local _ret=3D0
-+	entry=3D$(ip netns exec nsrouter conntrack -p tcp --sport $port -L 2>&1=
-)
-+	entry=3D${entry##*sport=3D8080 dport=3D}
-+	entry=3D${entry%% *}
-+
-+	if [[ "x$(( ($entry & $psid_mask) / $two_power_j ))" !=3D "x$psid" ]]; =
-then
-+		_ret=3D1
-+		echo "Failed psid mask check for $offset_len:$psid:$psid_length with p=
-ort $entry"
-+	fi
-+
-+	if [[ "x$_ret" =3D "x0" ]] &&
-+	   [[ "x$offset_mask" !=3D "x0" -a "x$(( ($entry & $offset_mask) ))" =3D=
-=3D "x0" ]]; then
-+		_ret=3D1
-+		echo "Failed offset mask check for $offset_len:$psid:$psid_length with=
- port $entry"
-+	fi
-+	return $_ret
-+}
-+
-+run_test() {
-+	ip netns exec nsrouter iptables -A FORWARD -i veth1 -j ACCEPT
-+	ip netns exec nsrouter iptables -P FORWARD DROP
-+	ip netns exec nsrouter iptables -A FORWARD -m state --state ESTABLISHED=
-,RELATED -j ACCEPT
-+	ip netns exec nsrouter iptables -t nat --new psid
-+	ip netns exec nsrouter iptables -t nat --insert psid -j MASQUERADE \
-+		--psid $offset_len:$psid:$psid_length
-+	ip netns exec nsrouter iptables -t nat -I POSTROUTING -o veth2 -j psid
-+
-+	# calculate psid mask
-+	offset=3D$(( 1 << (16 - $offset_len) ))
-+	two_power_j=3D$(( $offset / (1 << $psid_length) ))
-+	offset_mask=3D$(( ( (1 << $offset_len) - 1 ) << (16 - $offset_len) ))
-+	psid_mask=3D$(( ( (1 << $psid_length) - 1) * $two_power_j ))
-+
-+	# Create file
-+	dd if=3D/dev/urandom of=3D"${infile}" bs=3D"${datalen}" count=3D1 >/dev=
-/null 2>&1
-+
-+	# Test multiple ports
-+	for p in 1 2 3 4 5; do
-+		port=3D1080$p
-+
-+		test_service
-+		if [ $? -ne 0 ]; then
-+			ret=3D1
-+			break
-+		fi
-+
-+		check_connection
-+		if [ $? -ne 0 ]; then
-+			ret=3D1
-+			break
-+		fi
-+	done
-+
-+	# tidy up test rules
-+	ip netns exec nsrouter iptables -F
-+	ip netns exec nsrouter iptables -t nat -F
-+	ip netns exec nsrouter iptables -t nat -X psid
-+}
-+
-+for n in $ns_all; do
-+	ip netns add $n
-+	ip -net $n link set lo up
-+done
-+
-+for i in 1 2; do
-+	ip link add veth0 netns nsclient$i type veth peer name veth$i netns nsr=
-outer
-+
-+	ip -net nsclient$i link set veth0 up
-+	ip -net nsclient$i addr add $(ipv4 $i 2)/24 dev veth0
-+
-+	ip -net nsrouter link set veth$i up
-+	ip -net nsrouter addr add $(ipv4 $i 1)/24 dev veth$i
-+done
-+
-+ip -net nsclient1 route add default via $(ipv4 1 1)
-+ip -net nsclient2 route add default via $(ipv4 2 1)
-+
-+ip netns exec nsrouter sysctl -q net.ipv4.conf.all.forwarding=3D1
-+
-+offset_len=3D0
-+psid_length=3D8
-+for psid in 0 52; do
-+	run_test
-+	if [ $? -ne 0 ]; then
-+		break
-+	fi
-+done
-+
-+offset_len=3D6
-+psid_length=3D8
-+for psid in 0 52; do
-+	run_test
-+	if [ $? -ne 0 ]; then
-+		break
-+	fi
-+done
-+
-+cleanup
-+exit $ret
---=20
+ Documentation/x86/sgx.rst               |   6 ++
+ arch/x86/kernel/cpu/sgx/main.c          |  10 +-
+ tools/testing/selftests/sgx/load.c      |  40 ++++++--
+ tools/testing/selftests/sgx/main.c      | 123 +++++++++++++++++++-----
+ tools/testing/selftests/sgx/main.h      |   7 +-
+ tools/testing/selftests/sgx/sigstruct.c |  12 ++-
+ 6 files changed, 159 insertions(+), 39 deletions(-)
+
+-- 
 2.32.0
 
