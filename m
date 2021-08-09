@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4540A3E42AE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Aug 2021 11:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803783E42B1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Aug 2021 11:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbhHIJb5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Aug 2021 05:31:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42596 "EHLO mail.kernel.org"
+        id S234523AbhHIJcB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Aug 2021 05:32:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42702 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234368AbhHIJb5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Aug 2021 05:31:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B27946101D;
-        Mon,  9 Aug 2021 09:31:36 +0000 (UTC)
+        id S234514AbhHIJcA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 9 Aug 2021 05:32:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CEDA461078;
+        Mon,  9 Aug 2021 09:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628501497;
-        bh=mWQKQI8yAbXJt5cw/cLvAtRqYeiZGxdgd577VLR7NkU=;
+        s=k20201202; t=1628501500;
+        bh=26Mke/ZG9UNwcz+wcy8EloekYjH8aivYrRzQOW/SWCs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KpSEOer/OkpU7r6DV1KoKKhSCqIU4pMP+/lGcx8JhRMC3E1esRD9uB6ECI77bygeZ
-         H3x/10Dui32Fwd3ruyysS1gE3T/pA52msj7Id2xDBFoDuJGAecxcw36/wnS1EHa+JN
-         hvLgPnAoqUtHDfKYF66HyIEydCU76nAs60EtXMgEIBeD1TdlmeBWl0nBJAA/p6O9jN
-         NbcsdHoddzZmMUiQtT1f2BWRXoptyPDaxycbCNtAsqmludHan3Ru9p8GosS0ivrIYM
-         GGtI/2xs5a4W0Anw8Wllz5iNwPR13fr9+teVuWbA1DZ/sy9Mf6rw/2orU0F73+GJel
-         IyQ/BVDolaBSQ==
+        b=SPgfsKhQNW91yOyozLX5uLzm+xZUI7YoeL9Tvlxxw1z4u4j2lQ2qV45qvEZjOftYm
+         +jMLiuIL9zQe/zvurjNxuCrZzuuZ5A0rDjCHzSCyQf9V6UaajfuuZIA88MntGPQLe6
+         3RacrW9wUbrkMAW2jEichePVStvcAEc2p2jb29n5LA5p8jZg+t+rdmkLUvL/tmA3YN
+         ccbF1HPw24hiUeRyQzgdWcx3/D7MCt19FEc+B0ErDEMykvMaCKmxtQm5VFcNOktx68
+         siIoZs8nSDp5cEo81GjXgGvXGyVJbvxzM8LQrieR5vZq2O7qU4q1wBoefijmTBat2s
+         FaOWTXpyD4OgA==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
@@ -30,13 +30,10 @@ Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
         Borislav Petkov <bp@alien8.de>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v4 1/8] x86/sgx: Add /sys/kernel/debug/x86/sgx_total_mem
-Date:   Mon,  9 Aug 2021 12:31:20 +0300
-Message-Id: <20210809093127.76264-2-jarkko@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 2/8] selftests/sgx: Assign source for each segment
+Date:   Mon,  9 Aug 2021 12:31:21 +0300
+Message-Id: <20210809093127.76264-3-jarkko@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210809093127.76264-1-jarkko@kernel.org>
 References: <20210809093127.76264-1-jarkko@kernel.org>
@@ -46,92 +43,89 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Just like normal memory, SGX memory can be overcommitted.  SGX has its
-own reclaim mechanism which kicks in when physical SGX memory (Enclave
-Page Cache / EPC) is exhausted.  That reclaim mechanism is relatively
-rarely exercised and needs selftests to poke at it.
+Define source per segment so that enclave pages can be added from different
+sources, e.g. anonymous VMA for zero pages. In other words, add 'src' field
+to struct encl_segment, and assign it to 'encl->src' for pages inherited
+from the enclave binary.
 
-The amount of EPC on the system is determined by the BIOS and it varies
-wildly between systems.  It can be dozens of MB on desktops, or many GB
-on servers.
-
-To run in a reasonable amount of time, the selftest needs to know how
-much EPC there is in the system.
-
-Introduce a new debugfs file to export that information.
-
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
+ tools/testing/selftests/sgx/load.c      | 5 +++--
+ tools/testing/selftests/sgx/main.h      | 1 +
+ tools/testing/selftests/sgx/sigstruct.c | 8 ++++----
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-v3:
-* Describe the units of sgx_total_mem in Dcumentation/x86/sgx.rst.
-* Rewrite of the commit message (suggested by Dave):
-  https://lore.kernel.org/linux-sgx/5d3614af-2393-6744-9d85-7001241ca76e@intel.com/
-
-v2:
-* sgx_nr_all_pages -> sgx_total_mem
-
- Documentation/x86/sgx.rst      |  6 ++++++
- arch/x86/kernel/cpu/sgx/main.c | 10 +++++++++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/x86/sgx.rst b/Documentation/x86/sgx.rst
-index dd0ac96ff9ef..f11bfb331b93 100644
---- a/Documentation/x86/sgx.rst
-+++ b/Documentation/x86/sgx.rst
-@@ -250,3 +250,9 @@ user wants to deploy SGX applications both on the host and in guests
- on the same machine, the user should reserve enough EPC (by taking out
- total virtual EPC size of all SGX VMs from the physical EPC size) for
- host SGX applications so they can run with acceptable performance.
-+
-+Debugging
-+=========
-+
-+*/sys/kernel/debug/x86/sgx_total_mem* contains an integer describing
-+the total SGX reserved memory in bytes, available in the system.
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 63d3de02bbcc..b65da19a53ee 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*  Copyright(c) 2016-20 Intel Corporation. */
+diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+index 3ebe5d1fe337..5605474aab73 100644
+--- a/tools/testing/selftests/sgx/load.c
++++ b/tools/testing/selftests/sgx/load.c
+@@ -107,7 +107,7 @@ static bool encl_ioc_add_pages(struct encl *encl, struct encl_segment *seg)
+ 	memset(&secinfo, 0, sizeof(secinfo));
+ 	secinfo.flags = seg->flags;
  
-+#include <linux/debugfs.h>
- #include <linux/file.h>
- #include <linux/freezer.h>
- #include <linux/highmem.h>
-@@ -28,7 +29,10 @@ static DECLARE_WAIT_QUEUE_HEAD(ksgxd_waitq);
- static LIST_HEAD(sgx_active_page_list);
- static DEFINE_SPINLOCK(sgx_reclaimer_lock);
+-	ioc.src = (uint64_t)encl->src + seg->offset;
++	ioc.src = (uint64_t)seg->src;
+ 	ioc.offset = seg->offset;
+ 	ioc.length = seg->size;
+ 	ioc.secinfo = (unsigned long)&secinfo;
+@@ -216,6 +216,7 @@ bool encl_load(const char *path, struct encl *encl)
  
--/* The free page list lock protected variables prepend the lock. */
-+/* Total EPC memory available in bytes. */
-+static unsigned long sgx_total_mem;
-+
-+/* The number of free EPC pages in all nodes. */
- static unsigned long sgx_nr_free_pages;
+ 		if (j == 0) {
+ 			src_offset = phdr->p_offset & PAGE_MASK;
++			encl->src = encl->bin + src_offset;
  
- /* Nodes with one or more EPC sections. */
-@@ -656,6 +660,8 @@ static bool __init sgx_setup_epc_section(u64 phys_addr, u64 size,
- 		list_add_tail(&section->pages[i].list, &sgx_dirty_page_list);
+ 			seg->prot = PROT_READ | PROT_WRITE;
+ 			seg->flags = SGX_PAGE_TYPE_TCS << 8;
+@@ -228,13 +229,13 @@ bool encl_load(const char *path, struct encl *encl)
+ 
+ 		seg->offset = (phdr->p_offset & PAGE_MASK) - src_offset;
+ 		seg->size = (phdr->p_filesz + PAGE_SIZE - 1) & PAGE_MASK;
++		seg->src = encl->src + seg->offset;
+ 
+ 		j++;
  	}
  
-+	sgx_total_mem += nr_pages * PAGE_SIZE;
-+
- 	return true;
- }
+ 	assert(j == encl->nr_segments);
  
-@@ -823,6 +829,8 @@ static int __init sgx_init(void)
- 	if (sgx_vepc_init() && ret)
- 		goto err_provision;
+-	encl->src = encl->bin + src_offset;
+ 	encl->src_size = encl->segment_tbl[j - 1].offset +
+ 			 encl->segment_tbl[j - 1].size;
  
-+	debugfs_create_ulong("sgx_total_mem", 0444, arch_debugfs_dir, &sgx_total_mem);
-+
- 	return 0;
+diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
+index 68672fd86cf9..452d11dc4889 100644
+--- a/tools/testing/selftests/sgx/main.h
++++ b/tools/testing/selftests/sgx/main.h
+@@ -7,6 +7,7 @@
+ #define MAIN_H
  
- err_provision:
+ struct encl_segment {
++	void *src;
+ 	off_t offset;
+ 	size_t size;
+ 	unsigned int prot;
+diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+index 92bbc5a15c39..202a96fd81bf 100644
+--- a/tools/testing/selftests/sgx/sigstruct.c
++++ b/tools/testing/selftests/sgx/sigstruct.c
+@@ -289,14 +289,14 @@ static bool mrenclave_eextend(EVP_MD_CTX *ctx, uint64_t offset,
+ static bool mrenclave_segment(EVP_MD_CTX *ctx, struct encl *encl,
+ 			      struct encl_segment *seg)
+ {
+-	uint64_t end = seg->offset + seg->size;
++	uint64_t end = seg->size;
+ 	uint64_t offset;
+ 
+-	for (offset = seg->offset; offset < end; offset += PAGE_SIZE) {
+-		if (!mrenclave_eadd(ctx, offset, seg->flags))
++	for (offset = 0; offset < end; offset += PAGE_SIZE) {
++		if (!mrenclave_eadd(ctx, seg->offset + offset, seg->flags))
+ 			return false;
+ 
+-		if (!mrenclave_eextend(ctx, offset, encl->src + offset))
++		if (!mrenclave_eextend(ctx, seg->offset + offset, seg->src + offset))
+ 			return false;
+ 	}
+ 
 -- 
 2.32.0
 
