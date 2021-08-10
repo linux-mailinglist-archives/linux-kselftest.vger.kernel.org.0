@@ -2,139 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEC63E7DC0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Aug 2021 18:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9A93E7DEF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Aug 2021 19:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbhHJQqN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Aug 2021 12:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        id S231229AbhHJREz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Aug 2021 13:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbhHJQqM (ORCPT
+        with ESMTP id S230042AbhHJREz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Aug 2021 12:46:12 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868C1C06179B;
-        Tue, 10 Aug 2021 09:45:50 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id kl2so11237968qvb.11;
-        Tue, 10 Aug 2021 09:45:50 -0700 (PDT)
+        Tue, 10 Aug 2021 13:04:55 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B52C0613C1;
+        Tue, 10 Aug 2021 10:04:32 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id x10so22301982iop.13;
+        Tue, 10 Aug 2021 10:04:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=M34eDia/wYuF8zrcd5RLEymX5JCfRRmNCI+Mi4oB314=;
-        b=bouY3YiApoR3gWXtfofP2An+wsm1dwTUerOsd+kHo5hCwPB/TNEZchqzxISwFr0smN
-         y4E8DvaUp+HELOkpNht5eaygqa5s6ek3PKj7cb8tRqSmpiUdqI04WO5opRj7yK0qhak9
-         t79OEO1vxPm3aZPYLamDW5iTh7v0659NGHoMuddzn8E+LUeullEZpWG4iy2N4SBCsTtm
-         TL3yxN+OVayWIGyxMVvaCbgnHuAb4DuiRXfsWUeSoG5aqPFjj9/J0qcjlmGBgAgV5lxE
-         AmHpFfmzvOkFuFQM/JrkWQSrvXQ2dpeFIai90aBcJWp2GbcXHDp+ckCBuzVBMZi6IagO
-         voag==
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=qKjLpOXK2E4x5JMD/1Vmmi19gIauGt4KxUD98Wehp14=;
+        b=C4k686O0v0ff0siTcVNGZOuwLSM9CxMC+GGzNAZIMG+utS3u3kiHTh31vLukr29RXO
+         c9Wcx6YEZvD5T9uFjJd6IUA4q4nhL100ZC6GgjEWFCC9vktBdRuUhK6tR69PgBAmGL+g
+         G9oSwkdrBIc59hYur/Z0ZFwMdcV7Mhi3HigxDgaspa/RiufWazatGolkskySoFxaUtuC
+         +ve1tybj23pShl3zzDb0PaBxAqu75SLfDCBbG+aidT1kT+KZ77auR9xYz9b0lkMDmfbj
+         10TKDKZziGNF8oAuy/uD8ixlW8TSP8WE/Lq+3Ghmf4Ac8Dp7/wbXo7bDJVj+i3lG1tpt
+         pZhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=M34eDia/wYuF8zrcd5RLEymX5JCfRRmNCI+Mi4oB314=;
-        b=nnHn1BS5gIbvIzzdH+vONRR0ivKNsUE1yKxU7ecgQ0EYEbeZDMEyMIOh2KVhbKzjAi
-         N5PXofiNEgTe4TrTMgSgmbj0achVLWKQfyOiYX4gRvuUdfOwuKFJSZpPcnDlNKmLuQZd
-         RqhjyXvpvimUf6F1GocYw/86e/kTr426jYRDP9DI0liTUd1sXNzTz1DXxS7i5T2OoxqR
-         oUjUxLyDVRwEGacjHSFQ5ACo2Fhr0qThkZOtR6sYQHhcrFND5PFCrcaVPzCWAXT8hCjS
-         7bkrhb1DdjFdxOrzc9Q254c56DX4+LL51U7J61xqXaD8EMBnZ96m54EWhI3OJQoaQILi
-         XKzw==
-X-Gm-Message-State: AOAM532Xe/xw1fY1OLZeEuQ4lRTfJmm2xlkhA7qpWKJ8Vv/0MNWzxdeQ
-        jLlvHswZKwvmRNZQTZ9ywt4=
-X-Google-Smtp-Source: ABdhPJzQPdwgIXeLAmzH2RKwD/WxUvy1gi6/2LZN5Qq/5UHHmhRl33xC72Us8U8MvTAW/2Bes1nFRg==
-X-Received: by 2002:a05:6214:1c0f:: with SMTP id u15mr18742909qvc.17.1628613949742;
-        Tue, 10 Aug 2021 09:45:49 -0700 (PDT)
-Received: from localhost.localdomain (ec2-35-169-212-159.compute-1.amazonaws.com. [35.169.212.159])
-        by smtp.gmail.com with ESMTPSA id i123sm11510442qkf.60.2021.08.10.09.45.49
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=qKjLpOXK2E4x5JMD/1Vmmi19gIauGt4KxUD98Wehp14=;
+        b=HhpSfXh8EcM7da5EU6nOkOBvo48x71PA9LW0MOc5B3cUKttqqH6fyFWSXB1nhRS6E1
+         cVgIr5wkhoe5pbJL7Cd2MumrpHvlfTzK2Jv9ZAMUyOskNF+0YJJ8DnUXkBHr8V1KZO/u
+         Wyae5VrMxgwk+WM37Zx1O1TESf21rhC8NP55+Sphbq9tcLlyYbbHh72IwVLK88XIQUGp
+         qhFTM4xM9ov7FhxLsXctni8+3L9/Ik4xlysJOb0Ly+GWNRFAuGrUkqEZ7XRdIefjFUjQ
+         km6dz14ngUTbww9TfOYVa2pBtWu+tVKuWjD/3X/vrjAtYK5098qRWGvnJMQQzg/38I5i
+         zu1w==
+X-Gm-Message-State: AOAM531bIpQ1TDgbJ6D0b35DQpDCHggAGqiJ8vcxlbfNSdtNBMbCy7wU
+        XaQNLPudZVq8GQdH3op42xM=
+X-Google-Smtp-Source: ABdhPJx7vGesJitEUC/rVgfxeFrtliJzvWzTg2gRC8q71LZvPzBhsGoM1kiiTTVevxkjfPFdVcWymQ==
+X-Received: by 2002:a5d:9bcf:: with SMTP id d15mr65210ion.88.1628615072105;
+        Tue, 10 Aug 2021 10:04:32 -0700 (PDT)
+Received: from localhost ([172.243.157.240])
+        by smtp.gmail.com with ESMTPSA id l5sm2607191iln.13.2021.08.10.10.04.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Aug 2021 09:45:49 -0700 (PDT)
-From:   SeongJae Park <sj38.park@gmail.com>
-To:     shuah@kernel.org
-Cc:     gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sjpark@amazon.de>
-Subject: [PATCH v2] selftests/kselftest/runner/run_one(): Allow running non-executable files
-Date:   Tue, 10 Aug 2021 16:45:34 +0000
-Message-Id: <20210810164534.25902-1-sj38.park@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 10 Aug 2021 10:04:31 -0700 (PDT)
+Date:   Tue, 10 Aug 2021 10:04:26 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Jiang Wang <jiang.wang@bytedance.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        "Cong Wang ." <cong.wang@bytedance.com>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Message-ID: <6112b19a30160_1c2c820888@john-XPS-13-9370.notmuch>
+In-Reply-To: <CAM_iQpXiqhfL9M04x1hvJ_6zCCUoDAv1_ywysu=O7wnCUuJaTw@mail.gmail.com>
+References: <20210727001252.1287673-1-jiang.wang@bytedance.com>
+ <20210727001252.1287673-3-jiang.wang@bytedance.com>
+ <6100363add8a9_199a412089@john-XPS-13-9370.notmuch>
+ <CAM_iQpVedTzRbf-bC7WuGMFYF=qnUxbnUdqJ9+FaxrTAn5DkTw@mail.gmail.com>
+ <6101a56bf2a11_1e1ff620813@john-XPS-13-9370.notmuch>
+ <CAM_iQpXiqhfL9M04x1hvJ_6zCCUoDAv1_ywysu=O7wnCUuJaTw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/5] af_unix: add unix_stream_proto for
+ sockmap
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: SeongJae Park <sjpark@amazon.de>
+Cong Wang wrote:
+> On Wed, Jul 28, 2021 at 11:44 AM John Fastabend
+> <john.fastabend@gmail.com> wrote:
+> >
+> > Cong Wang wrote:
+> > > On Tue, Jul 27, 2021 at 9:37 AM John Fastabend <john.fastabend@gmail.com> wrote:
+> > > > Do we really need an unhash hook for unix_stream? I'm doing some testing
+> > > > now to pull it out of TCP side as well. It seems to be an artifact of old
+> > > > code that is no longer necessary. On TCP side at least just using close()
+> > > > looks to be enough now.
+> > >
+> > > How do you handle the disconnection from remote without ->unhash()?
+> >
+> > Would close() not work for stream/dgram sockets?
+> 
+> close() is called when the local closes the sockets, but when the remote
+> closes or disconnects it, unhash() is called. This is why TCP calls unhash()
+> to remove the socket from established socket hash table. unhash() itself
+> might not make much sense for AF_UNIX as it probably does not need a
+> hash table to track established ones, however, the idea is the same, that
+> is, we have to handle remote disconnections here.
 
-When running a test program, 'run_one()' checks if the program has the
-execution permission and fails if it doesn't.  However, it's easy to
-mistakenly missing the permission, as some common tools like 'diff'
-don't support the permission change well[1].  Compared to that, making
-mistakes in the test program's path would only rare, as those are
-explicitly listed in 'TEST_PROGS'.  Therefore, it might make more sense
-to resolve the situation on our own and run the program.
+Following up on this series. Leaving a socket in the sockmap until close()
+happens is not paticularly problematic, but does consume space in the map
+so unhash() is slightly better I guess. Thanks.
 
-For the reason, this commit makes the test program runner function to
-still print the warning message but try parsing the interpreter of the
-program and explicitly run it with the interpreter, in the case.
+> 
+> Thanks.
 
-[1] https://lore.kernel.org/mm-commits/YRJisBs9AunccCD4@kroah.com/
-
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: SeongJae Park <sjpark@amazon.de>
----
-Changes from v1
-(https://lore.kernel.org/linux-kselftest/20210810140459.23990-1-sj38.park@gmail.com/)
-- Parse and use the interpreter instead of changing the file
-
- tools/testing/selftests/kselftest/runner.sh | 28 +++++++++++++--------
- 1 file changed, 18 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index cc9c846585f0..a9ba782d8ca0 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -33,9 +33,9 @@ tap_timeout()
- {
- 	# Make sure tests will time out if utility is available.
- 	if [ -x /usr/bin/timeout ] ; then
--		/usr/bin/timeout --foreground "$kselftest_timeout" "$1"
-+		/usr/bin/timeout --foreground "$kselftest_timeout" $1
- 	else
--		"$1"
-+		$1
- 	fi
- }
- 
-@@ -65,17 +65,25 @@ run_one()
- 
- 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
- 	echo "# $TEST_HDR_MSG"
--	if [ ! -x "$TEST" ]; then
--		echo -n "# Warning: file $TEST is "
--		if [ ! -e "$TEST" ]; then
--			echo "missing!"
--		else
--			echo "not executable, correct this."
--		fi
-+	if [ ! -e "$TEST" ]; then
-+		echo "# Warning: file $TEST is missing!"
- 		echo "not ok $test_num $TEST_HDR_MSG"
- 	else
-+		cmd="./$BASENAME_TEST"
-+		if [ ! -x "$TEST" ]; then
-+			echo "# Warning: file $TEST is not executable"
-+
-+			if [ $(head -n 1 "$TEST" | cut -c -2) = "#!" ]
-+			then
-+				interpreter=$(head -n 1 "$TEST" | cut -c 3-)
-+				cmd="$interpreter ./$BASENAME_TEST"
-+			else
-+				echo "not ok $test_num $TEST_HDR_MSG"
-+				return
-+			fi
-+		fi
- 		cd `dirname $TEST` > /dev/null
--		((((( tap_timeout ./$BASENAME_TEST 2>&1; echo $? >&3) |
-+		((((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
- 			tap_prefix >&4) 3>&1) |
- 			(read xs; exit $xs)) 4>>"$logfile" &&
- 		echo "ok $test_num $TEST_HDR_MSG") ||
--- 
-2.17.1
 
