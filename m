@@ -2,114 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9E73E56A3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Aug 2021 11:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1901D3E58F6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Aug 2021 13:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238823AbhHJJUA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Aug 2021 05:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
+        id S240069AbhHJLVb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Aug 2021 07:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237811AbhHJJUA (ORCPT
+        with ESMTP id S240052AbhHJLVa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Aug 2021 05:20:00 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B116C0613D3;
-        Tue, 10 Aug 2021 02:19:38 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id q11-20020a7bce8b0000b02902e6880d0accso1466353wmj.0;
-        Tue, 10 Aug 2021 02:19:38 -0700 (PDT)
+        Tue, 10 Aug 2021 07:21:30 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FDEC0613D3;
+        Tue, 10 Aug 2021 04:21:09 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id l24so15091202qtj.4;
+        Tue, 10 Aug 2021 04:21:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mdkQluT1YKU8TSn2hpDxZUIUuX8zWsmkIMNtHoK0wRc=;
-        b=qVM7w2WOseqIEw+mvNsvmGJXAzYFNM8Mie/v2wzH0JqGmrG5fOKwNtYQ8W776vTCdU
-         aI+EPC0cVyNFCqV9Pxwtyaq+TOWm+rDGAuXaDNaXxnkonVhbOPW4yjeJSNRHr6czJ4uh
-         UmsblVZLlNTN93SIn+UcgPT8+NqQFtC4/mFuw7uYCpEdrVpp2U+fLbEKG8D1fdIkBsmR
-         mv5iGBAj/+syo8LT+/Krol9wJ0y7KWaBCfVtZM789SpGQoz8EZTtVPW6pg0wD3tflb+u
-         68u10QojnFTJ3GrdNQkxfeCmR3DJruqsr/Oy/FiP83cgikNtyE0EFAjpQAQiFYyqsP4m
-         qcsQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=BEkKNIfF5NMAPc4pKcTWNJLBpM+Ct7HuPUjxUSEGO4M=;
+        b=EyOiaIoc8MYJ8LO49gXt+3AWGIF+XF7UBjw3UVqIPXRnIBheH3t9LIX3YuDwQzai34
+         KjX8v2H3s9KKsc6OzPaQbNQy7EjeQfIB9xTA67/3F5z9x4jVrbqa9lmIxlf4PPo0kQbB
+         uRVv9VDwLl/sD73IH5DsVJir+DzuAK5whH0adfk+jnomwecwPZtryYwL0M00YJGjKrG8
+         nB4+cYC+2eUEAlKEYnOgLbB6a+atSYh3827LBTet4Gwg9RR6rtX/tjStGnCgW/A20av3
+         wNN4GXJExfu/46YDJqn+Tzk8EHao9xOgzE2BCQd8+DFNK5THXw5WaNRRRKp6W51dbts8
+         f9BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mdkQluT1YKU8TSn2hpDxZUIUuX8zWsmkIMNtHoK0wRc=;
-        b=Tnmx1g+5+MM5GXuyeQBBqCnyEVYgOr6jExbEBRwbnVNnuXaN5i3bVdndGBwYIGy2eJ
-         47db55mmTtL4VAV0cp4SGCQylngB8/yfp077sPCwKLbOEcTWeoX49FejiGnkGj0rsnpw
-         SyX0jA49MtMdwHhQ6ZMdrqmLOSeEw21RZHsKX7DKhxq/sNm8WXCv27Ier/Hpwgx1W2MI
-         Zix/MC3QIVrpsF2m7X04lZQ39uuB6kNBbSkkwpoKtwauigJ3GpdBrpo/ROekD81pMOEV
-         tMrnPyRkZdBTVjzw9gjOwmnqdSXyA3DXh34iHGO95J9A1o2mvuRZH87oQI2XFSk+jEiY
-         rUcQ==
-X-Gm-Message-State: AOAM533tDEm7FqZ/9z+Yi0ugfaUzIKzM8O21oOqhGcGxuHY8T/ca5Ehi
-        BI34LN07g90naDapRiUU+t8=
-X-Google-Smtp-Source: ABdhPJy/+b23lIB1oxOeE0LvJTOKe0visUMdYUMrEVAA4hRnBpkcBWogNS+intxWX6QIQc1UiCUiKw==
-X-Received: by 2002:a05:600c:213:: with SMTP id 19mr3636088wmi.2.1628587177196;
-        Tue, 10 Aug 2021 02:19:37 -0700 (PDT)
-Received: from [10.0.0.18] ([37.165.16.90])
-        by smtp.gmail.com with ESMTPSA id v5sm23513837wrd.74.2021.08.10.02.19.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Aug 2021 02:19:36 -0700 (PDT)
-Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
- _copy_to_iter
-To:     Shoaib Rao <rao.shoaib@oracle.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+8760ca6c1ee783ac4abd@syzkaller.appspotmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        jamorris@linux.microsoft.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>, kpsingh@kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Yonghong Song <yhs@fb.com>
-References: <0000000000006bd0b305c914c3dc@google.com>
- <0c106e6c-672f-474e-5815-97b65596139d@oracle.com>
- <CACT4Y+bK61B3r5Rx150FwKt5WJ8T-q-X0nC-r=oH7x4ZU5vdVw@mail.gmail.com>
- <e99cc036-2f83-ff9e-ea68-3eeb19bd4147@oracle.com>
- <CACT4Y+bFLFg9WUiGWq=8ubKFug47=XNjqQJkTX3v1Hos0r+Z_A@mail.gmail.com>
- <2901262f-1ba7-74c0-e5fc-394b65414d12@oracle.com>
- <CANn89iKcSvJ5U37q1Jz2gVYxVS=_ydNmDuTRZuAW=YvB+jGChg@mail.gmail.com>
- <CANn89iKqv4Ca8A1DmQsjvOqKvgay3-5j9gKPJKwRkwtUkmETYg@mail.gmail.com>
- <ca6a188a-6ce4-782b-9700-9ae4ac03f83e@oracle.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <66417ce5-a0f0-9012-6c2e-7c8f1b161cff@gmail.com>
-Date:   Tue, 10 Aug 2021 11:19:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <ca6a188a-6ce4-782b-9700-9ae4ac03f83e@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=BEkKNIfF5NMAPc4pKcTWNJLBpM+Ct7HuPUjxUSEGO4M=;
+        b=GlxB7/8FmeWUpK+GI4QdRpdldJLFQzr0bQuDW9HMOJn9mPiH3LMC4WaJbR/8NRSA0m
+         SaW10gl27JlLcn/uXwMab9YhzOFero7XvFzS0KXCQ869IC+A8vM1ctylhchvOrHJJnyZ
+         TTdKkqlbnXl0N3ppatocnGh3T92XY9vjfS7BXSXzjJsRdEcWOnGFxGVsLeiC6xISikrO
+         gnV3hJKVu3xRHZou0cYM0HVNNymlrOsxUzLfGLMLUZq299NEiUS8Mi/Da40zVFpIoXNk
+         iClPFEMR3q51odIxQ00f0tpSZBNrfSofTtmonMgeYSe6NZjr+rKuw2QW3MKZvJLwrfqH
+         0O4Q==
+X-Gm-Message-State: AOAM5305b0BvHsp4YAF5WrpfFxPstfYcBUgXyqPBm/lHvB5SY2blN+7K
+        Unrb48iVpEtFFLTaAKcj64k=
+X-Google-Smtp-Source: ABdhPJwV9xDaR1sNxVXMaHLYlK/6LDYyOYjr1EC2k54UDiSBPVSZLdBeSnMqAAtCrOgg2WoyZmvtMw==
+X-Received: by 2002:ac8:5e11:: with SMTP id h17mr24783204qtx.213.1628594468213;
+        Tue, 10 Aug 2021 04:21:08 -0700 (PDT)
+Received: from localhost.localdomain (ec2-35-169-212-159.compute-1.amazonaws.com. [35.169.212.159])
+        by smtp.gmail.com with ESMTPSA id f24sm2134438qtp.1.2021.08.10.04.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 04:21:07 -0700 (PDT)
+From:   SeongJae Park <sj38.park@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, SeongJae Park <sjpark@amazon.de>
+Subject: [PATCH] selftests/damon/debugfs_attrs: Add missing execute permission
+Date:   Tue, 10 Aug 2021 11:20:50 +0000
+Message-Id: <20210810112050.22225-1-sj38.park@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210806004226.47nyd%akpm@linux-foundation.org>
+References: <20210806004226.47nyd%akpm@linux-foundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: SeongJae Park <sjpark@amazon.de>
 
+Commit 04edafbc0c07 ("mm/damon: add user space selftests") of
+linux-mm[1] gives no execute permission to 'debugfs_attrs.sh' file.
+This results in a DAMON selftest failure as below:
 
-On 8/9/21 10:31 PM, Shoaib Rao wrote:
-> 
-> On 8/9/21 1:09 PM, Eric Dumazet wrote:
+    $ make -C tools/testing/selftests/damon run_tests
+    make: Entering directory '/home/sjpark/linux/tools/testing/selftests/damon'
+    TAP version 13
+    1..1
+    # selftests: damon: debugfs_attrs.sh
+    # Warning: file debugfs_attrs.sh is not executable, correct this.
+    not ok 1 selftests: damon: debugfs_attrs.sh
+    make: Leaving directory '/home/sjpark/linux/tools/testing/selftests/damon'
 
->> I am guessing that even your test would trigger the warning,
->> if you make sure to include CONFIG_DEBUG_ATOMIC_SLEEP=y in your kernel build.
-> 
-> Eric,
-> 
-> Thanks for the pointer, have you ever over looked at something when coding?
-> 
+To solve the problem, this commit adds the execute permission for
+'debugfs_attrs.sh' file.
 
-I _think_ I was trying to help, not shaming you in any way.
+[1] https://github.com/hnaz/linux-mm/commit/04edafbc0c07
 
-My question about spinlock/mutex was not sarcastic, you authored
-6 official linux patches, there is no evidence for linux kernel expertise.
+Signed-off-by: SeongJae Park <sjpark@amazon.de>
+---
+ tools/testing/selftests/damon/debugfs_attrs.sh | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_attrs.sh
+
+diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
+old mode 100644
+new mode 100755
+-- 
+2.17.1
+
