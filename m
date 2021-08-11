@@ -2,61 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A313E97E0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Aug 2021 20:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1723B3E98B9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Aug 2021 21:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbhHKSqx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Aug 2021 14:46:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45031 "EHLO
+        id S231176AbhHKT1t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Aug 2021 15:27:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55273 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230000AbhHKSqw (ORCPT
+        by vger.kernel.org with ESMTP id S230207AbhHKT1s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Aug 2021 14:46:52 -0400
+        Wed, 11 Aug 2021 15:27:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628707588;
+        s=mimecast20190719; t=1628710044;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BOILZBJ0R4YxSBlomh5xiyJL3tlxmw5VR/2YYVBHfVY=;
-        b=EwW1Lt7iXin0ZAb0YDhwtWWbqICvcow1T6t8TIqgeW3Ycfjhdzi922VTdJiwbiHaW0D6lo
-        KiPxSoeE3+2kQIULIqK1c0ZlGxHafOYUwdeTAlxaUWRfdYSfAH699RDYx822sQBQX+OBvH
-        pPP5DqI00Tuhdr0k0VS6u5M5lpUaEw0=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-171-ZJGonl40Nc-My7Bl9o62_Q-1; Wed, 11 Aug 2021 14:46:27 -0400
-X-MC-Unique: ZJGonl40Nc-My7Bl9o62_Q-1
-Received: by mail-qk1-f200.google.com with SMTP id b9-20020a05620a1269b02903b8bd5c7d95so1916654qkl.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Aug 2021 11:46:27 -0700 (PDT)
+        bh=tiwffSXoiH4DxwCpTg6qh9csw8fx7R1FkfmT6DZocnc=;
+        b=CyRliTBNRNsLfXCLTY0EZhKVS21jvL2Auc5Su/LojcjPOGhDuJb8oK8MspIiOaWKGufPHS
+        f395vfpoq1a7DDL7mzKS0xQrRYROn1GXoOvuv8C2jebsJhIIWSxWZKJfFr5hu6hFsGZ//i
+        Utgy7nBiX1XbbKhTFeErpfi+s4xw7ZI=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-223-X4GDbfwTOfKvQd71CMv0ow-1; Wed, 11 Aug 2021 15:27:23 -0400
+X-MC-Unique: X4GDbfwTOfKvQd71CMv0ow-1
+Received: by mail-qt1-f199.google.com with SMTP id x15-20020ac87a8f0000b0290294d1eeaa1dso1850152qtr.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Aug 2021 12:27:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:subject:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=BOILZBJ0R4YxSBlomh5xiyJL3tlxmw5VR/2YYVBHfVY=;
-        b=EPTB68WZyyZD78EIJ0a+ssrm7wrmS53wVSyrP7v4B7BwlRFgnG9MSePZyEnoiZ5yqN
-         nGiCcpTYmioeloEVm9eTi0CAjCBPmiSpyCIoUd2Ce8oV/ZkA+S7B2HlzpodFQhI4V+iP
-         8Ka1fRQsjd8+sbhRDs3QZ7D6EDRRyleJEClzKHieD/BpnPP+TlqcwrepMlQTco7py7R+
-         fp59ex1VHXL8ueet5YRTmZadGFbMG1iplynQMWB6gvu5NfRpgeowFwF8Ztu5w+QQfIDI
-         ZEjQwt5JAthkg7pwnO8ayNJ2CyZgrYsFx7UmM3rIdf+7eEf9ba5NgCQsfGAkWVdiUD3k
-         X1ww==
-X-Gm-Message-State: AOAM530BbdVzHF5BsKs1mbeRG8bET9aCNaxintSJDP3lGOZKnjlV7v/a
-        EFZSUdbkhH1NmW5+mOnIlte7SfmLASDUyA1qq403Ni+/M85H6vPjeqffVFPuE3LE6Lqc7x65q7l
-        ODmbF0PhhKDXQqJJFFL7bwQ72ZnQx
-X-Received: by 2002:ac8:47d9:: with SMTP id d25mr123624qtr.247.1628707586781;
-        Wed, 11 Aug 2021 11:46:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwc+HweGCSjMpjaJcpagiM7+c0ZCQmmIkZOMJU7you99awb+4aUS28VxuYA6K2SQkpFfVwoCg==
-X-Received: by 2002:ac8:47d9:: with SMTP id d25mr123604qtr.247.1628707586605;
-        Wed, 11 Aug 2021 11:46:26 -0700 (PDT)
+        bh=tiwffSXoiH4DxwCpTg6qh9csw8fx7R1FkfmT6DZocnc=;
+        b=bxzqugZ3MgfXO04TD21hHQQOuJ0WpHLcrurvouRGNWdy+T7KGAfzHAqc7O5+qjCUss
+         OEuy9R5MyX+sgrOTV2xvD8vITUYzJN+wBzBhoaeLQ9iWKvZTxjVxCb7r3ghZiyzwlUI1
+         YMfT8i21kuv0pwpfPPnPsfFuuqS+57JhxV+kXCko363Aiu8wi5PKLs8YKO4B5lJxmOD0
+         MXxBB4JX+MzNp9NNZSwBTzDVSPUFRyElxAYJpKGY3+o9Uk5Pwq3beWNgxsSqKpDkFzpg
+         zWY5SblTrPhQoEIJpQW+01VmKvp6r4nENFZ16sCIplJV9RzA4Tr8k2KITkptigbfRCvv
+         n4SQ==
+X-Gm-Message-State: AOAM5332Rke8V9C5jCswSuyV5menbnMja4/csjV6QidrflRVV/murAcO
+        adGoBFBMjTtqiJVAGqxfyfrQt6qVls3xVdqTjQK4pljpkq4zlJJjAJs9AT0k0H3e4jx0diUu/vc
+        QXKW94kJamlIX1DieOG+Mty0auE+B
+X-Received: by 2002:a05:6214:528a:: with SMTP id kj10mr223845qvb.38.1628710042540;
+        Wed, 11 Aug 2021 12:27:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxpq/PfA7+2XCpTTT9aRZ2gHbPglInuSLcGqqGbvnQp/UX636wyca1IWuYEvOy4vg/NuCUfRQ==
+X-Received: by 2002:a05:6214:528a:: with SMTP id kj10mr223832qvb.38.1628710042306;
+        Wed, 11 Aug 2021 12:27:22 -0700 (PDT)
 Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
-        by smtp.gmail.com with ESMTPSA id s69sm12744271qka.102.2021.08.11.11.46.24
+        by smtp.gmail.com with ESMTPSA id n11sm45000qkk.93.2021.08.11.12.27.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Aug 2021 11:46:25 -0700 (PDT)
+        Wed, 11 Aug 2021 12:27:21 -0700 (PDT)
 From:   Waiman Long <llong@redhat.com>
 X-Google-Original-From: Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v4 4/6] cgroup/cpuset: Allow non-top parent partition root
- to distribute out all CPUs
-To:     Tejun Heo <tj@kernel.org>, Waiman Long <llong@redhat.com>
+Subject: Re: [PATCH v4 2/6] cgroup/cpuset: Properly handle partition root tree
+To:     Tejun Heo <tj@kernel.org>
 Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -71,16 +70,14 @@ Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
 References: <20210811030607.13824-1-longman@redhat.com>
- <20210811030607.13824-5-longman@redhat.com>
- <YRQTTf+bJZ8f3O3+@slm.duckdns.org>
- <abfa6f2f-aa13-f18e-5a16-f568082d07bc@redhat.com>
- <YRQVFkNX5DcKixzy@slm.duckdns.org>
-Message-ID: <ef02d96b-325c-87f6-a6a3-d840feefef24@redhat.com>
-Date:   Wed, 11 Aug 2021 14:46:24 -0400
+ <20210811030607.13824-3-longman@redhat.com>
+ <YRQSKZB8rQUsfF2K@slm.duckdns.org>
+Message-ID: <b7897818-8fe6-8dd8-3ff6-6b15401162ba@redhat.com>
+Date:   Wed, 11 Aug 2021 15:27:20 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <YRQVFkNX5DcKixzy@slm.duckdns.org>
+In-Reply-To: <YRQSKZB8rQUsfF2K@slm.duckdns.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -88,28 +85,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/11/21 2:21 PM, Tejun Heo wrote:
-> On Wed, Aug 11, 2021 at 02:18:17PM -0400, Waiman Long wrote:
->> I don't think that is true. A task can reside anywhere in the cgroup
->> hierarchy. I have encountered no problem moving tasks around.
-> Oh, that shouldn't be happening with controllers enabled. Can you please
-> share a repro?
+On 8/11/21 2:08 PM, Tejun Heo wrote:
+> Hello,
+>
+> On Tue, Aug 10, 2021 at 11:06:03PM -0400, Waiman Long wrote:
+>> For a partition root tree with parent and child partition roots, this
+>> patch will now prohibit changing parent partition root back to member
+>> as changes to "cpuset.cpus.partition" should not cause those child
+>> partition roots to become invalid.
+> So, the general rule is that a descendant should never be able to affect or
+> restrict what an ancestor can do in terms of configuration. This is because
+> descendant cgroups can be delegated and a system manager sitting at a higher
+> level in the hierarchy may not have much control over what happens under
+> delegated subtrees.
+>
+> Given that we're promoting the error state as the first class citizen in the
+> interface anyway, wouldn't it be better to keep this in line too?
 
-I have done further testing. Enabling controllers won't prohibit moving 
-a task into a parent cgroup as long as the child cgroups have no tasks. 
-Once the child cgroup has task, moving another task to the parent is not 
-allowed (-EBUSY). Similarly if a parent cgroup has tasks, you can't put 
-new tasks into the child cgroup. I don't realize that we have such 
-constraints as I usually do my testing with a cgroup hierarchy with no 
-tasks initially. Anyway, a new lesson learned.
+Disabling partition at the parent level does invalidate all the child 
+partitions under it. So it must be done with care when we disable a 
+partition.
 
-I will try to see how to address that in the patch, but the additional 
-check added is still valid in some special case.
+How about we give some indication that a child partition exist when 
+reading cpuset.cpus.partition and recommend double-checking it before 
+disabling a partition? For example, we keep track of the number of cpus 
+delegated to child partitions. Perhaps we can list that information on read.
+
+With that information available, I have no objection to allow disabling 
+a parent partition with child partitions under it.
 
 Cheers,
 Longman
-
-
-
-
 
