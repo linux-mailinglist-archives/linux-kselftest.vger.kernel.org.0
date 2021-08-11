@@ -2,56 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D66D73E9767
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Aug 2021 20:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7243E9777
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Aug 2021 20:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbhHKSQG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Aug 2021 14:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbhHKSQF (ORCPT
+        id S231132AbhHKSSv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Aug 2021 14:18:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:30780 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230384AbhHKSSp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Aug 2021 14:16:05 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1835BC061765;
-        Wed, 11 Aug 2021 11:15:42 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id t7-20020a17090a5d87b029017807007f23so10920635pji.5;
-        Wed, 11 Aug 2021 11:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ym/H6d8WW77SzOZbzzokiM0xg1UPIyiB60qBZGBJt7Y=;
-        b=RnEVMsbaVXQl/0zBT1Pq4JA9Akvg664fiiU+SEcDZs6yqp8ZR2/NqgItGTwqC819y8
-         zDra0nlCGVmzZTiP159TqJSrdPBdaIykcQ4E/s6RciOVsfc53jD3fq2xgQ7V38AOpck5
-         FrZrL2VtgBhRaGiinA1ZlkiQ0PsQftoXTyf+Sjkz7kercQyhq6LsA4OGP/Xsm3YRsevJ
-         07RXQ6BQxfga8qV82P97on+PcbzYNsB7c3y3eGthDxlz+w4Euqu9LlQ7I9azElNw3avS
-         2enI75z+wQDqdpnwZZwWRHmUKj68vP7LMV/V6Z5+njWj6sPDqUxhHDR5jfJwYTk090Jd
-         yi8w==
+        Wed, 11 Aug 2021 14:18:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1628705901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4sdWMe6I8w2i60A4RZfVZLGm7Z1MFMDLriAO19Jv51I=;
+        b=OWFDuSJEd6axoR49rdB1w7XTGmrTX1NxmOYalBKZzsEwukaD0xwLLmLPynGodZrpSDiPwU
+        kid381Zk2qxgo4/pZO+atYXEEQh3V/c4qYZULqPOQL6mGENBSoB12BMvpO0n9oHKZEGg3d
+        MbewhWHGQ1FgdUGSuBz1ZGNCV+fLXJ4=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-33-lIvvKxcgMl6sn2UuKemZkA-1; Wed, 11 Aug 2021 14:18:20 -0400
+X-MC-Unique: lIvvKxcgMl6sn2UuKemZkA-1
+Received: by mail-qk1-f199.google.com with SMTP id x2-20020a05620a0ec2b02903b8bd8b612eso1844492qkm.19
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Aug 2021 11:18:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Ym/H6d8WW77SzOZbzzokiM0xg1UPIyiB60qBZGBJt7Y=;
-        b=o//G9JkhW/4+qkhoMrLJDaflq9oR8FoY/f4Lyo0fz0+jFOljCQzRbTDkELg0IwIa+M
-         l7MhWjWO9TAlyCNbb/oKuGfYP5Q5gD40D/xBKZOFpnBKtndgIvYCfO+5/P9Dy1U4Qb9S
-         HTuE7P00hKxfycfm4zAXO2OvjskxFlggWiWZLrlfJ8z7r+LXj+KJXVIuNGQVWxlA15xB
-         b7tz5MiHbSiNC/6LHRBssghXvs0HqOf0u1pyygFQw97GK9a+KOncRZOZDyi//GP8LKRI
-         hbAPK/L3ZfX/yjaDB0JFC3iy0Hwo8gQODEKX6ppn6ylCowygp23H1AseMj5x6CiB5nLf
-         iOlQ==
-X-Gm-Message-State: AOAM532ZuaXdV05pSIZuSkfaIHt9Xl/SyNFDQyrJhkWEorKfQFmwlIYl
-        m/qlWLQPtTANsxokf5ZxmbM=
-X-Google-Smtp-Source: ABdhPJy1emMxEqZApry6OWaGc6sDga6uHOLTeoOvtQ5GxCZ/YAJOnHc4JomhNpJC0ctUCQRlTyHpZQ==
-X-Received: by 2002:aa7:8b07:0:b029:3c7:c29f:9822 with SMTP id f7-20020aa78b070000b02903c7c29f9822mr14988pfd.33.1628705741537;
-        Wed, 11 Aug 2021 11:15:41 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id dw15sm105445pjb.42.2021.08.11.11.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 11:15:40 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 11 Aug 2021 08:15:39 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=4sdWMe6I8w2i60A4RZfVZLGm7Z1MFMDLriAO19Jv51I=;
+        b=PIy42CMhIi5EyE2Dwx1IpDMmegNaZGQgs4Tr5hVqM5u9nqIaLBJe/pJj0qkViseF5m
+         2IVdbYpn6PU9AVjUDmmO8ezISIiNRomH7PZgLu80IkGHs+1bdc0qn/XcX+t8wh7B8rvi
+         0FyQPGS4kVWR7YpZ/3Qute0qw/89zQOWGTe/JXiyYuKSLNNWDGAkFbWaYEwrYLp0d4Jt
+         IUay7SWDoHp5fTBtDzhrBdM8P8oBnuzPICVEXcBBtjJlfavSOVaYpCayUaeIG5l0u66Z
+         FqrwRX9szKgahP+eWS2aXMR/cQjDen2mYBVGeZCbDsKAHlLLjDo9oE38jeT8aAIRuPM6
+         1Q4A==
+X-Gm-Message-State: AOAM5300cfSOmrTphG8Dwsd9Fdz1wvUCk7lpy6odz2OndHl2flW5bmEy
+        aUPmK/ZsDRP+8O43+TjkIEzoz5ygtzushhttuBrUfL7GF1iDP5oXNj6cShLR91df9fypY515CBE
+        TsupxIGkK/o4JVXKvfm3QOUf0jg2E
+X-Received: by 2002:a0c:8c0c:: with SMTP id n12mr24540283qvb.13.1628705899517;
+        Wed, 11 Aug 2021 11:18:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxMRVK++tAy3NAo+jUnQ3F2vejRbQTm+/+F0mBpaBHrAr6FPUsKJ8ztdb4qjZs9fOBOrjGeWw==
+X-Received: by 2002:a0c:8c0c:: with SMTP id n12mr24540261qvb.13.1628705899355;
+        Wed, 11 Aug 2021 11:18:19 -0700 (PDT)
+Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
+        by smtp.gmail.com with ESMTPSA id e18sm18303qtq.16.2021.08.11.11.18.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Aug 2021 11:18:18 -0700 (PDT)
+From:   Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v4 4/6] cgroup/cpuset: Allow non-top parent partition root
+ to distribute out all CPUs
+To:     Tejun Heo <tj@kernel.org>
 Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -64,33 +69,47 @@ Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Juri Lelli <juri.lelli@redhat.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v4 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <YRQTy7eo5jOlHTc6@slm.duckdns.org>
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
 References: <20210811030607.13824-1-longman@redhat.com>
- <20210811030607.13824-6-longman@redhat.com>
+ <20210811030607.13824-5-longman@redhat.com>
+ <YRQTTf+bJZ8f3O3+@slm.duckdns.org>
+Message-ID: <abfa6f2f-aa13-f18e-5a16-f568082d07bc@redhat.com>
+Date:   Wed, 11 Aug 2021 14:18:17 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210811030607.13824-6-longman@redhat.com>
+In-Reply-To: <YRQTTf+bJZ8f3O3+@slm.duckdns.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On 8/11/21 2:13 PM, Tejun Heo wrote:
+> On Tue, Aug 10, 2021 at 11:06:05PM -0400, Waiman Long wrote:
+>> Currently, a parent partition root cannot distribute all its CPUs to
+>> child partition roots with no CPUs left. However in some use cases,
+>> a management application may want to create a parent partition root as
+>> a management unit with no task associated with it and has all its CPUs
+>> distributed to various child partition roots dynamically according to
+>> their needs. Leaving a cpu in the parent partition root in such a case is
+>> now a waste.
+>>
+>> To accommodate such use cases, a parent partition root can now have
+>> all its CPUs distributed to its child partition roots as long as:
+>>   1) it is not the top cpuset; and
+>>   2) there is no task directly associated with the parent.
+>>
+>> Once an empty parent partition root is formed, no new task can be moved
+>> into it.
+> The above are already enforced by cgroup2 core, right? No intermediate
+> cgroup with controllers enabled can have processes. From controllers' POV,
+> only leaves can have processes.
+>
+I don't think that is true. A task can reside anywhere in the cgroup 
+hierarchy. I have encountered no problem moving tasks around.
 
-On Tue, Aug 10, 2021 at 11:06:06PM -0400, Waiman Long wrote:
-> +	Poll and inotify events are triggered whenever the state
-> +	of "cpuset.cpus.partition" changes.  That includes changes
-> +	caused by write to "cpuset.cpus.partition" and cpu hotplug.
-> +	This will allow a user space agent to monitor changes caused
-> +	by hotplug events.
+Cheers,
+Longman
 
-It might be useful to emphasize that this is the primary mechanism to
-signify errors and thus should always be monitored.
-
-Thanks.
-
--- 
-tejun
