@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 421103E911E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Aug 2021 14:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936683E9121
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Aug 2021 14:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbhHKMbV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Aug 2021 08:31:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21077 "EHLO
+        id S230082AbhHKMba (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Aug 2021 08:31:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43739 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230195AbhHKMa6 (ORCPT
+        by vger.kernel.org with ESMTP id S230242AbhHKMbM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Aug 2021 08:30:58 -0400
+        Wed, 11 Aug 2021 08:31:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628685035;
+        s=mimecast20190719; t=1628685048;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mqva//46G3P1W1i9qkUsNb1aFp4F8WxoMORniqRpjcI=;
-        b=GOczVkFvyRyZtUq21yNMqHHFGxF1bRMpbBnbphtgwNDF5mBPNZqEInhZ+L8uF1eF/TD3Up
-        hel8Vl9eaMbwtasgcaheMyj0KGLZeZ0Si16d5dK/SlUVS9G+E57/w3ZAGrT3C0oGrvMQpB
-        wMGDi1BG9ZYOseuhItLs4sgRAaoVXcs=
+        bh=4e6sjxP1xMCtgKIkc/C7Ht738Uh5NYfem9ykOOCFrHo=;
+        b=Ary+uH/D/YBSoN8vjgBwvPbAiHeqQ2UhFGeRqpeiCg9GqNLk++Cnv5MLYwnpOyBe+gsTGq
+        C+t+LvmnRZ6sYqiIv2MUdnyRfoNNr02o1UIPoq3SVQKCZ6Vnj0M+XSeXInzIv6u6nIpmoc
+        Z3Wt1+RHPfPlvwrytc7gKhuUU+zkslU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-524-mHUc_4R9Om65EV7jJRPEKA-1; Wed, 11 Aug 2021 08:30:33 -0400
-X-MC-Unique: mHUc_4R9Om65EV7jJRPEKA-1
+ us-mta-559-vy3N7G0qPJ-MzSfqhPkfZQ-1; Wed, 11 Aug 2021 08:30:45 -0400
+X-MC-Unique: vy3N7G0qPJ-MzSfqhPkfZQ-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 87C678799FB;
-        Wed, 11 Aug 2021 12:30:30 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DAD40801A92;
+        Wed, 11 Aug 2021 12:30:41 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.35.206.50])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F14955D9C6;
-        Wed, 11 Aug 2021 12:30:14 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EAFB95D9C6;
+        Wed, 11 Aug 2021 12:30:30 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Kieran Bingham <kbingham@kernel.org>,
@@ -58,9 +58,9 @@ Cc:     Kieran Bingham <kbingham@kernel.org>,
         linux-doc@vger.kernel.org (open list:DOCUMENTATION),
         Shuah Khan <shuah@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v3 5/6] KVM: x86: implement KVM_GUESTDBG_BLOCKIRQ
-Date:   Wed, 11 Aug 2021 15:29:26 +0300
-Message-Id: <20210811122927.900604-6-mlevitsk@redhat.com>
+Subject: [PATCH v3 6/6] KVM: selftests: test KVM_GUESTDBG_BLOCKIRQ
+Date:   Wed, 11 Aug 2021 15:29:27 +0300
+Message-Id: <20210811122927.900604-7-mlevitsk@redhat.com>
 In-Reply-To: <20210811122927.900604-1-mlevitsk@redhat.com>
 References: <20210811122927.900604-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -70,100 +70,93 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KVM_GUESTDBG_BLOCKIRQ will allow KVM to block all interrupts
-while running.
-
-This change is mostly intended for more robust single stepping
-of the guest and it has the following benefits when enabled:
-
-* Resuming from a breakpoint is much more reliable.
-  When resuming execution from a breakpoint, with interrupts enabled,
-  more often than not, KVM would inject an interrupt and make the CPU
-  jump immediately to the interrupt handler and eventually return to
-  the breakpoint, to trigger it again.
-
-  From the user point of view it looks like the CPU never executed a
-  single instruction and in some cases that can even prevent forward
-  progress, for example, when the breakpoint is placed by an automated
-  script (e.g lx-symbols), which does something in response to the
-  breakpoint and then continues the guest automatically.
-  If the script execution takes enough time for another interrupt to
-  arrive, the guest will be stuck on the same breakpoint RIP forever.
-
-* Normal single stepping is much more predictable, since it won't
-  land the debugger into an interrupt handler.
-
-* RFLAGS.TF has less chance to be leaked to the guest:
-
-  We set that flag behind the guest's back to do single stepping
-  but if single step lands us into an interrupt/exception handler
-  it will be leaked to the guest in the form of being pushed
-  to the stack.
-  This doesn't completely eliminate this problem as exceptions
-  can still happen, but at least this reduces the chances
-  of this happening.
+Modify debug_regs test to create a pending interrupt
+and see that it is blocked when single stepping is done
+with KVM_GUESTDBG_BLOCKIRQ
 
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- Documentation/virt/kvm/api.rst  | 1 +
- arch/x86/include/asm/kvm_host.h | 3 ++-
- arch/x86/include/uapi/asm/kvm.h | 1 +
- arch/x86/kvm/x86.c              | 4 ++++
- 4 files changed, 8 insertions(+), 1 deletion(-)
+ .../testing/selftests/kvm/x86_64/debug_regs.c | 24 ++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 86d7ad3a126c..4ea1bb28297b 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -3357,6 +3357,7 @@ flags which can include the following:
-   - KVM_GUESTDBG_INJECT_DB:     inject DB type exception [x86]
-   - KVM_GUESTDBG_INJECT_BP:     inject BP type exception [x86]
-   - KVM_GUESTDBG_EXIT_PENDING:  trigger an immediate guest exit [s390]
-+  - KVM_GUESTDBG_BLOCKIRQ:      avoid injecting interrupts/NMI/SMI [x86]
+diff --git a/tools/testing/selftests/kvm/x86_64/debug_regs.c b/tools/testing/selftests/kvm/x86_64/debug_regs.c
+index 6097a8283377..5f078db1bcba 100644
+--- a/tools/testing/selftests/kvm/x86_64/debug_regs.c
++++ b/tools/testing/selftests/kvm/x86_64/debug_regs.c
+@@ -8,12 +8,15 @@
+ #include <string.h>
+ #include "kvm_util.h"
+ #include "processor.h"
++#include "apic.h"
  
- For example KVM_GUESTDBG_USE_SW_BP indicates that software breakpoints
- are enabled in memory so we need to ensure breakpoint exceptions are
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 72fe03506018..a12db20069d5 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -222,7 +222,8 @@ enum x86_intercept_stage;
- 	KVM_GUESTDBG_USE_HW_BP | \
- 	KVM_GUESTDBG_USE_SW_BP | \
- 	KVM_GUESTDBG_INJECT_BP | \
--	KVM_GUESTDBG_INJECT_DB)
-+	KVM_GUESTDBG_INJECT_DB | \
-+	KVM_GUESTDBG_BLOCKIRQ)
+ #define VCPU_ID 0
  
+ #define DR6_BD		(1 << 13)
+ #define DR7_GD		(1 << 13)
  
- #define PFERR_PRESENT_BIT 0
-diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-index a6c327f8ad9e..2ef1f6513c68 100644
---- a/arch/x86/include/uapi/asm/kvm.h
-+++ b/arch/x86/include/uapi/asm/kvm.h
-@@ -295,6 +295,7 @@ struct kvm_debug_exit_arch {
- #define KVM_GUESTDBG_USE_HW_BP		0x00020000
- #define KVM_GUESTDBG_INJECT_DB		0x00040000
- #define KVM_GUESTDBG_INJECT_BP		0x00080000
-+#define KVM_GUESTDBG_BLOCKIRQ		0x00100000
++#define IRQ_VECTOR 0xAA
++
+ /* For testing data access debug BP */
+ uint32_t guest_value;
  
- /* for KVM_SET_GUEST_DEBUG */
- struct kvm_guest_debug_arch {
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index e5c7b8fa1f7f..d7fade9e3b94 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8883,6 +8883,10 @@ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
- 		can_inject = false;
- 	}
+@@ -21,6 +24,11 @@ extern unsigned char sw_bp, hw_bp, write_data, ss_start, bd_start;
  
-+	/* Don't inject interrupts if the user asked to avoid doing so */
-+	if (vcpu->guest_debug & KVM_GUESTDBG_BLOCKIRQ)
-+		return 0;
+ static void guest_code(void)
+ {
++	/* Create a pending interrupt on current vCPU */
++	x2apic_enable();
++	x2apic_write_reg(APIC_ICR, APIC_DEST_SELF | APIC_INT_ASSERT |
++			 APIC_DM_FIXED | IRQ_VECTOR);
 +
  	/*
- 	 * Finally, inject interrupt events.  If an event cannot be injected
- 	 * due to architectural conditions (e.g. IF=0) a window-open exit
+ 	 * Software BP tests.
+ 	 *
+@@ -38,12 +46,19 @@ static void guest_code(void)
+ 		     "mov %%rax,%0;\n\t write_data:"
+ 		     : "=m" (guest_value) : : "rax");
+ 
+-	/* Single step test, covers 2 basic instructions and 2 emulated */
++	/*
++	 * Single step test, covers 2 basic instructions and 2 emulated
++	 *
++	 * Enable interrupts during the single stepping to see that
++	 * pending interrupt we raised is not handled due to KVM_GUESTDBG_BLOCKIRQ
++	 */
+ 	asm volatile("ss_start: "
++		     "sti\n\t"
+ 		     "xor %%eax,%%eax\n\t"
+ 		     "cpuid\n\t"
+ 		     "movl $0x1a0,%%ecx\n\t"
+ 		     "rdmsr\n\t"
++		     "cli\n\t"
+ 		     : : : "eax", "ebx", "ecx", "edx");
+ 
+ 	/* DR6.BD test */
+@@ -72,11 +87,13 @@ int main(void)
+ 	uint64_t cmd;
+ 	int i;
+ 	/* Instruction lengths starting at ss_start */
+-	int ss_size[4] = {
++	int ss_size[6] = {
++		1,		/* sti*/
+ 		2,		/* xor */
+ 		2,		/* cpuid */
+ 		5,		/* mov */
+ 		2,		/* rdmsr */
++		1,		/* cli */
+ 	};
+ 
+ 	if (!kvm_check_cap(KVM_CAP_SET_GUEST_DEBUG)) {
+@@ -154,7 +171,8 @@ int main(void)
+ 	for (i = 0; i < (sizeof(ss_size) / sizeof(ss_size[0])); i++) {
+ 		target_rip += ss_size[i];
+ 		CLEAR_DEBUG();
+-		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP;
++		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP |
++				KVM_GUESTDBG_BLOCKIRQ;
+ 		debug.arch.debugreg[7] = 0x00000400;
+ 		APPLY_DEBUG();
+ 		vcpu_run(vm, VCPU_ID);
 -- 
 2.26.3
 
