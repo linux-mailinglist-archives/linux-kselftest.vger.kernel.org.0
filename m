@@ -2,118 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1723B3E98B9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Aug 2021 21:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8541D3E9A19
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Aug 2021 22:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbhHKT1t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Aug 2021 15:27:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55273 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230207AbhHKT1s (ORCPT
+        id S230089AbhHKUyA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Aug 2021 16:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229655AbhHKUyA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Aug 2021 15:27:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628710044;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tiwffSXoiH4DxwCpTg6qh9csw8fx7R1FkfmT6DZocnc=;
-        b=CyRliTBNRNsLfXCLTY0EZhKVS21jvL2Auc5Su/LojcjPOGhDuJb8oK8MspIiOaWKGufPHS
-        f395vfpoq1a7DDL7mzKS0xQrRYROn1GXoOvuv8C2jebsJhIIWSxWZKJfFr5hu6hFsGZ//i
-        Utgy7nBiX1XbbKhTFeErpfi+s4xw7ZI=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-223-X4GDbfwTOfKvQd71CMv0ow-1; Wed, 11 Aug 2021 15:27:23 -0400
-X-MC-Unique: X4GDbfwTOfKvQd71CMv0ow-1
-Received: by mail-qt1-f199.google.com with SMTP id x15-20020ac87a8f0000b0290294d1eeaa1dso1850152qtr.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Aug 2021 12:27:22 -0700 (PDT)
+        Wed, 11 Aug 2021 16:54:00 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD42C0613D3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Aug 2021 13:53:36 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id t7-20020a17090a5d87b029017807007f23so11603125pji.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Aug 2021 13:53:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4jEgkWCU9y4Rnu8kdS6birld0TkC6w5rnKBfpu8sNtc=;
+        b=MuRdiMj2Ejckmk8D9amHgFMWIJInp4iTZhKV3yYTIPChZNbZGMRUmJbYW6smLGMlIz
+         Q59DqgBwPLorE5uch8gp+1qvvpwG9hQ+Xp7ihF6AgSsfedTnv94o6aa/cuaFKtPVrtQs
+         1PZoCi3Ts6+HM9AtvQbPLFFLkX80GaMGYm/nrhZn7tTeoQGdRK87EagdE1nSQonH91jE
+         q/XpTetEVA/W5UC8w/EeMofZbNeKS3kf9RbFMwFZsfgEXNrRE+h1IF43n/El75/HvM0/
+         53yiJrp+VAFWv5lCpb2UgSAgoGbY6wmC8t2ZVDLDdxOUDh0Oln21C5GAYolIb/tCbGrv
+         buRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=tiwffSXoiH4DxwCpTg6qh9csw8fx7R1FkfmT6DZocnc=;
-        b=bxzqugZ3MgfXO04TD21hHQQOuJ0WpHLcrurvouRGNWdy+T7KGAfzHAqc7O5+qjCUss
-         OEuy9R5MyX+sgrOTV2xvD8vITUYzJN+wBzBhoaeLQ9iWKvZTxjVxCb7r3ghZiyzwlUI1
-         YMfT8i21kuv0pwpfPPnPsfFuuqS+57JhxV+kXCko363Aiu8wi5PKLs8YKO4B5lJxmOD0
-         MXxBB4JX+MzNp9NNZSwBTzDVSPUFRyElxAYJpKGY3+o9Uk5Pwq3beWNgxsSqKpDkFzpg
-         zWY5SblTrPhQoEIJpQW+01VmKvp6r4nENFZ16sCIplJV9RzA4Tr8k2KITkptigbfRCvv
-         n4SQ==
-X-Gm-Message-State: AOAM5332Rke8V9C5jCswSuyV5menbnMja4/csjV6QidrflRVV/murAcO
-        adGoBFBMjTtqiJVAGqxfyfrQt6qVls3xVdqTjQK4pljpkq4zlJJjAJs9AT0k0H3e4jx0diUu/vc
-        QXKW94kJamlIX1DieOG+Mty0auE+B
-X-Received: by 2002:a05:6214:528a:: with SMTP id kj10mr223845qvb.38.1628710042540;
-        Wed, 11 Aug 2021 12:27:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxpq/PfA7+2XCpTTT9aRZ2gHbPglInuSLcGqqGbvnQp/UX636wyca1IWuYEvOy4vg/NuCUfRQ==
-X-Received: by 2002:a05:6214:528a:: with SMTP id kj10mr223832qvb.38.1628710042306;
-        Wed, 11 Aug 2021 12:27:22 -0700 (PDT)
-Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
-        by smtp.gmail.com with ESMTPSA id n11sm45000qkk.93.2021.08.11.12.27.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Aug 2021 12:27:21 -0700 (PDT)
-From:   Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v4 2/6] cgroup/cpuset: Properly handle partition root tree
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20210811030607.13824-1-longman@redhat.com>
- <20210811030607.13824-3-longman@redhat.com>
- <YRQSKZB8rQUsfF2K@slm.duckdns.org>
-Message-ID: <b7897818-8fe6-8dd8-3ff6-6b15401162ba@redhat.com>
-Date:   Wed, 11 Aug 2021 15:27:20 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4jEgkWCU9y4Rnu8kdS6birld0TkC6w5rnKBfpu8sNtc=;
+        b=Teu1eUbAx3R8T9K77jGLrTsx2IxrS52gBcPDbBmuKAe37QbM/dpoyCIyd6sPREN5DB
+         H9MKBJKJy0dT7KoxeX7bQ91iF9cYbeSPcax3AlDUFGl9gHd56kbfk9iiydqYLg9ZffAx
+         PagmgpnsgJtyH9S4WojTvT1kLCuf0qAJJnGgvE2OLvVPpC/bsE+dLBagNmBmm/WkXzs3
+         lHIiRRSoeoE/EjveyQevW+Lh+Djnzaw2MD0IjS2najzwiiSFiAgSOWEcw2aZ8FSZRLDR
+         38QHEnuK2cRy2mA7djtgby7SFf7S35CMLIHtT1JErYfVXKLAcC+YdM46UWP237V9+xi1
+         yvzA==
+X-Gm-Message-State: AOAM532Hd60SXhcDG5eIsZerPy1/C7DJ0C07rA6XJEa2IbAMEgKbZr+B
+        pMTdUZm7XHhOFsAh+9gA/+wzSTPkmKY+Qn7sf1ENSg==
+X-Google-Smtp-Source: ABdhPJzbB7mUtizyZfWEGecSDx8ABVAm/e76AFOlfpCjEWbKGiQaOmZWoZ3C6p7B77SQDOQ8EEP8uja+JWsSDCR+V8Q=
+X-Received: by 2002:a63:f62:: with SMTP id 34mr582085pgp.159.1628715215272;
+ Wed, 11 Aug 2021 13:53:35 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YRQSKZB8rQUsfF2K@slm.duckdns.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com>
+In-Reply-To: <CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 11 Aug 2021 13:53:24 -0700
+Message-ID: <CAFd5g44x9i2KfuJTfRpd6doqsLEbEZS0Gj=e4DvPU8Z-L4ga1Q@mail.gmail.com>
+Subject: Re: RFC - kernel test result specification (KTAP)
+To:     Rae Moar <rmoar@google.com>
+Cc:     David Gow <davidgow@google.com>, Tim.Bird@sony.com,
+        shuah@kernel.org, Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/11/21 2:08 PM, Tejun Heo wrote:
-> Hello,
+On Tue, Aug 10, 2021 at 4:25 PM Rae Moar <rmoar@google.com> wrote:
 >
-> On Tue, Aug 10, 2021 at 11:06:03PM -0400, Waiman Long wrote:
->> For a partition root tree with parent and child partition roots, this
->> patch will now prohibit changing parent partition root back to member
->> as changes to "cpuset.cpus.partition" should not cause those child
->> partition roots to become invalid.
-> So, the general rule is that a descendant should never be able to affect or
-> restrict what an ancestor can do in terms of configuration. This is because
-> descendant cgroups can be delegated and a system manager sitting at a higher
-> level in the hierarchy may not have much control over what happens under
-> delegated subtrees.
+> We are looking to further standardise the output format used by kernel
+> test frameworks like kselftest and KUnit. Thus far we have used the
+> TAP (Test Anything Protocol) specification, but it has been extended
+> in many different ways, so we would like to agree on a common "Kernel
+> TAP" (KTAP) format to resolve these differences. Thus, below is a
+> draft of a specification of KTAP. Note that this specification is
+> largely based on the current format of test results for KUnit tests.
 >
-> Given that we're promoting the error state as the first class citizen in the
-> interface anyway, wouldn't it be better to keep this in line too?
+> Additionally, this specification was heavily inspired by the KTAP
+> specification draft by Tim Bird
+> (https://lore.kernel.org/linux-kselftest/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com/T/).
+> However, there are some notable differences to his specification. One
+> such difference is the format of nested tests is more fully specified
+> in the following specification. However, they are specified in a way
+> which may not be compatible with many kselftest nested tests.
 
-Disabling partition at the parent level does invalidate all the child 
-partitions under it. So it must be done with care when we disable a 
-partition.
+Thanks for putting this together, Rae! I would definitely like to see
+us moving forward with standardizing fully on the KTAP spec.
 
-How about we give some indication that a child partition exist when 
-reading cpuset.cpus.partition and recommend double-checking it before 
-disabling a partition? For example, we keep track of the number of cpus 
-delegated to child partitions. Perhaps we can list that information on read.
+I am surprised to not yet see any comments here.
 
-With that information available, I have no objection to allow disabling 
-a parent partition with child partitions under it.
-
-Cheers,
-Longman
-
+I was thinking that this might make a good BoF topic at LPC, but I
+guess that depends on how interested people are in this topic.
