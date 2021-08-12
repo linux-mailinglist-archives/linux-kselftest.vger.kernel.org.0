@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FFA3EA937
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Aug 2021 19:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C833EA979
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Aug 2021 19:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235004AbhHLROO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Aug 2021 13:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
+        id S235920AbhHLRbR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Aug 2021 13:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbhHLRON (ORCPT
+        with ESMTP id S234465AbhHLRbO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Aug 2021 13:14:13 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407ABC061756
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Aug 2021 10:13:48 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id 188so9375331ioa.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Aug 2021 10:13:48 -0700 (PDT)
+        Thu, 12 Aug 2021 13:31:14 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AE2C061756
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Aug 2021 10:30:49 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id r72so9464272iod.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Aug 2021 10:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=C+kw6KEtW6hmma6EoO3CJHDh9sg5PN6QFZ9PAKAzm0Q=;
-        b=Rr8e0EBvWZ+YbwgmhRww1PZdSx8dyi2XQ+4O+T6zKcZnPJ/rsWfWp8MsHHFGhohoR5
-         DKtBawbVRfJg0+hXv/ZCSYAbs/NvZLksGeVRFN/pKWcKwSQhCu315QWDrhEoE5S+6hD/
-         C0WQygVgR/3CfOUWtKDurnIrpDOwv2HuaNehWTEa+n7a9bUrPd1Om0v1oY8PTjekd3dh
-         wIgZF2zPHwEvPsB0zahLuv6fNfS0wd55Gasu4nKTJSrBz+OGn134foQRq4EXsT2iuGkc
-         bOAmajGlvCwbFS2Bq691IqrAIWZnX2bpaEQOTZOSx/a1WFBzFnIGTFdNDjjI1x8KrEKy
-         VFtg==
+        bh=9bU1TEUKnSS2Vb5WitiqttPECUCgD2Zox5kX0NxOhxs=;
+        b=GgYERin3f6czP7m1aj3Pzmd5a5FhEu2VzwdjijONGPqsVxgP4epz62VObPzK2f5DfA
+         MnYE1v9kLBrJwNlyHPBgPHWfn9CNBP4TJdCb7Vl+bgWFqrd0B/eUooITqfiXdTCVUahS
+         YA0gETJRL9e+wzRY67xgtJz8kwwDJ0QWAIKivF1PQ9MWrGBFjOHT7d3Wei4WHwZdXVXG
+         LkR5d5OaV//FfM0nk2+0lzREYcjyhd1YIokAEoEluka6MJ8Ut0eDDRt4g+M5kpIjU/GK
+         C8sX2xEHKcjw3yLbQFv4AdwYNGY4BiXLWxUDn2Yj0fVIp62fs291s1xWU+RUQjYeudU3
+         V2eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=C+kw6KEtW6hmma6EoO3CJHDh9sg5PN6QFZ9PAKAzm0Q=;
-        b=r3FGrv8UItCW20yn/1NURU+ynEPo8V6MPwWnochKVPdpOOmmhaG0/FZA/yQLg2TQL4
-         Ylh+2yMkCKqy0S1ynoGbdhw6apPHB2P9BfZErrQyk6UZJBkLafTvzRDR1862WY/6YTyk
-         o+g1zL2uUDGhTKYZogt0bdoxJWZUe15C5IjzTJ2FaHPN65WwNtxfLZyvL5GHuT8OJho3
-         GFQg/rzOH+OCREq9NlpcglI18gJqKpSgXz6Vo4RO0TyWXW6ZjiHj7pv8CFy+HIs7lNF7
-         +j2P06ivVzIClNB8u2/JE0ZH/+q4EOHmLmCoqqtwzu4FO5/XZDwvVDILMdAdRMGgQPgN
-         WvDA==
-X-Gm-Message-State: AOAM532LkS78h8ax0DaHrGBtpZFmVufPyiqgvycrtBjAJpQX2EGZ8Xgc
-        EuhpfagPzTEwy6Ws2ooZDvVbnWiGDSx5aY+43qsigw==
-X-Google-Smtp-Source: ABdhPJxWAOKK3OAmEb2NC2KNtZMoGydS8sA/K3D7jRGe71nWWLOTTrhfL+kQGmHq2X/baJMtVWzdSMNitYRNE6TG/nM=
-X-Received: by 2002:a02:6a24:: with SMTP id l36mr4650319jac.4.1628788427511;
- Thu, 12 Aug 2021 10:13:47 -0700 (PDT)
+        bh=9bU1TEUKnSS2Vb5WitiqttPECUCgD2Zox5kX0NxOhxs=;
+        b=nEUxNveyiBaoxbbQg/f9gHPRSO5BjWbIoQVJRHETrazxuTEYuoEc+DVsRgcrtdE4SF
+         HTWyeUel7i/UapNMSKsWr5Cm7am9YzZVP7Knb+t3fnZvwCtanQ79Q4DU5hxw57SgLLqt
+         LXxWw/g5bybci9hpOEFAROGfFGviotXw1XO9hYoiAKJOwBA4+vDbjN+OcLYxonQf4r93
+         HsHAAvJJnpFlIYxjNCz5408J35rVmo8PK2y/oURmvvuYZLqMCxHHmoJJD/zsSHO6SRaH
+         ELnELWxz+UX6Un1JGxBKrD3CVUbR84Wrmj/2n+OmEcPfYv0bdeDwpqyNwGjvbZnFdsMr
+         QHqQ==
+X-Gm-Message-State: AOAM531VvYCqyQAzK0mfaZPr80eH9OJ32M/oY5ZWT09d8mA+cZcLbVr3
+        GDYsSKw8W7MjmpJZa/QZAFW2YmuwlLBmrS5xEIa96g==
+X-Google-Smtp-Source: ABdhPJxf+4hkz4MdlAPctqxAB/dvL35GV9zmiToS7vB9pdow7QCCHr/qplf9lz+N4YHFRA5gtT87tfLTmzN6oUqJW3c=
+X-Received: by 2002:a05:6638:11cd:: with SMTP id g13mr4544213jas.66.1628789448695;
+ Thu, 12 Aug 2021 10:30:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210805235145.2528054-1-dlatypov@google.com> <CABVgOS=u9sOEbS-m63HtBmiBSqDdsX+kRgBMUWzx4T8_VXvZ8g@mail.gmail.com>
-In-Reply-To: <CABVgOS=u9sOEbS-m63HtBmiBSqDdsX+kRgBMUWzx4T8_VXvZ8g@mail.gmail.com>
+References: <20210805235145.2528054-1-dlatypov@google.com> <20210805235145.2528054-2-dlatypov@google.com>
+ <CABVgOSmoNaYVcckw3PX7Cf32NjYPSpX3JqGESCqYJvTi6dwAsQ@mail.gmail.com>
+In-Reply-To: <CABVgOSmoNaYVcckw3PX7Cf32NjYPSpX3JqGESCqYJvTi6dwAsQ@mail.gmail.com>
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 12 Aug 2021 10:13:36 -0700
-Message-ID: <CAGS_qxqVZy4QvP3X3H1Ww=pFZD-j=hgYzYSXz-az+QMJ+CxdgQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kunit: tool: make --raw_output support only
- showing kunit output
+Date:   Thu, 12 Aug 2021 10:30:37 -0700
+Message-ID: <CAGS_qxqJ9TNbyKg2B2XP75VSBnvCyL+Xbz=TUGNOuHkEoCgGjQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: add 'kunit.action' param to allow listing
+ out tests
 To:     David Gow <davidgow@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -64,213 +65,227 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 11:48 PM David Gow <davidgow@google.com> wrote:
+On Thu, Aug 12, 2021 at 12:09 AM David Gow <davidgow@google.com> wrote:
 >
 > On Fri, Aug 6, 2021 at 7:51 AM Daniel Latypov <dlatypov@google.com> wrote:
 > >
-> > --raw_output is nice, but it would be nicer if could show only output
-> > after KUnit tests have started.
+> > Context:
+> > It's difficult to map a given .kunitconfig => set of enabled tests.
 > >
-> > So change the flag to allow specifying a string ('kunit').
-> > Make it so `--raw_output` alone will default to `--raw_output=all` and
-> > have the same original behavior.
+> > Having a standard, easy way of getting the list could be useful in a
+> > number of ways. For example, if we also extended kunit.filter_glob to
+> > allow filtering on tests, this would allow users to run tests cases one
+> > by one if they wanted to debug hermeticity issues.
 > >
-> > Drop the small kunit_parser.raw_output() function since it feels wrong
-> > to put it in "kunit_parser.py" when the point of it is to not parse
-> > anything.
+> > This patch:
+> > * adds a kunit.action module param with one valid non-null value, "list"
+> > * for the "list" action, it simply prints out "<suite>.<test>"
+> > * does not itself introduce kunit.py changes to make use of this [1].
+>
+> I really like this feature, and could live with the implementation,
+> but do feel like we should probably have a more detailed idea of how
+> the kunit_tool changes are going to work before settling on it for
+> sure.
+>
+> In particular, is the "<suite>.<test>" format the best way of giving
+> test information, or do we want something more (K)TAP-like. (e.g., a
+> test hierarchy with all tests marked SKIPed, or otherwise limited in
+> some way). Maybe that'd allow some of the parser code to be re-used,
+> and have fewer issues with having two separate ways of representing
+> the test hierarchy. (What if, e.g., there were test or suite names
+> with '.' in them?)
+>
+> On the other hand, this format does make it easier to use the
+> filter_glob stuff, so it could go either way...
+
+Yeah, the main point of this is to be consistent with filter_glob and
+test-level filtering.
+If we can come up with a more generic, "TAP-like" identifier for
+tests, we could use that for here and for filtering.
+
+Using "suite.test" seems to be relatively standard, hence why I've
+gone with that for both.
+E.g. in python:
+https://docs.python.org/3/library/unittest.html#command-line-interface
+
+$ python -m unittest test_module.TestClass.test_method
+
+Though I've only ever used that without "test_module" as
+
+$ ./tools/testing/kunit/kunit_tool_test.py KconfigTest
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+OK
+$ ./tools/testing/kunit/kunit_tool_test.py KconfigTest.test_is_subset_of
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+OK
+
+So I'd really prefer we stick with the current format, tbh.
+
+>
+> > Note: kunit.filter_glob is respected for this and all future actions.
+> > Note: we need a TAP header for kunit.py to isolate the KUnit output.
+>
+> I don't mind having a TAP header here, but we could either:
+> (a) have a separate header for a test list, and have kunit_tool look
+> for that as well, to avoid treating this as TAP when it isn't; or
+> (b) try to standardise a "test list" format as part of KTAP:
+> https://lore.kernel.org/linux-kselftest/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com/
+
+b. feels a bit overkill.
+
+I agree it's very hacky.
+I didn't want to mess around too much with the parser code while Rae
+was working on it.
+
+But we could change the parser code:
+* `func extract_tap_lines()` => `func extract_kunit_lines()`
+* kunit_start_re => `TAP...|KUNIT OTHER OUTPUT START MARKER`
+
+and use that marker here.
+
+I'm fine with adding a new marker, but I assumed we'd probably need to
+spend a good amount of time bikeshedding what exactly this new header
+would be :P
+Whereas this works right now and is ugly in a way that I don't think
+most people would notice.
+
+>
 > >
-> > E.g.
+> > Go with a more generic "action" param, since it seems like we might
+> > eventually have more modes besides just running or listing tests, e.g.
+> > * perhaps a benchmark mode that reruns test cases and reports timing
+> > * perhaps a deflake mode that reruns test cases that failed
+> > * perhaps a mode where we randomize test order to try and catch
+> >   hermeticity bugs like "test a only passes if run after test b"
 > >
-> > $ ./tools/testing/kunit/kunit.py run --raw_output=kunit
+>
+> The "action" parameter is fine by me. Do we want to give the default
+> "run" action a name as well as making it the default?
+
+I originally did that, but then realized we'd probably never use an
+explicit "run" action ever.
+I've added it back in locally and will include it in a v2.
+
+>
+> > Tested:
+> > $ ./tools/testing/kunit/kunit.py run --kernel_arg=kunit.action=list --raw_output=kunit
 > > ...
-> > [15:24:07] Starting KUnit Kernel ...
 > > TAP version 14
 > > 1..1
-> >     # Subtest: example
-> >     1..3
-> >     # example_simple_test: initializing
-> >     ok 1 - example_simple_test
-> >     # example_skip_test: initializing
-> >     # example_skip_test: You should not see a line below.
-> >     ok 2 - example_skip_test # SKIP this test should be skipped
-> >     # example_mark_skipped_test: initializing
-> >     # example_mark_skipped_test: You should see a line below.
-> >     # example_mark_skipped_test: You should see this line.
-> >     ok 3 - example_mark_skipped_test # SKIP this test should be skipped
-> > ok 1 - example
-> > [15:24:10] Elapsed time: 6.487s total, 0.001s configuring, 3.510s building, 0.000s running
+>
+> I really don't like the test plan line combined with the
+> "<suite>.<test>" format, particularly since this example notes that
+> there's only one test (presumably the suite), and then proceeds to
+> have three top-level things afterwards. It seems pretty misleading to
+> me.
+>
+> > example.example_simple_test
+> > example.example_skip_test
+> > example.example_mark_skipped_test
+> > reboot: System halted
+> >
+> > [1] The interface for this can work in a few ways. We could add a
+> > --list_tests flag or a new subcommand. But this change is enough to
+> > allow people to split each suite into its own invocation, e.g. via a
+> > short script like:
+> >
+> >   #!/bin/bash
+> >
+> >   cd $(git rev-parse --show-toplevel)
+> >
+> >   for suite in $(
+> >     ./tools/testing/kunit/kunit.py run --kernel_args=kunit.action=list --raw_output=kunit |
+> >     sed -n '/^TAP version/,$p' | grep -P -o '^[a-z][a-z0-9_-]+\.' | tr -d '.' | sort -u);
+> >   do
+> >     ./tools/testing/kunit/kunit.py run "${suite}"
+> >   done
 > >
 > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > > ---
->
-> Thanks: this is something I've secretly wanted for a long time, and I
-> really like the interface here of "--raw_output=kunit". I do wonder if
-> we want to make this behaviour the default, though...
-
-I personally would like it to be, but I don't really know who else is
-using --raw_output and why.
-Maybe they want to see non-KUnit output since they're debugging
-something not coming up on UML, etc.
-
->
-> The only other note I'd have, though this was a problem with the
-> previous version as well, is that the output still includes the other
-> kunit_tool output lines, e.g.:
-> [23:42:01] Configuring KUnit Kernel ...
-> [23:42:01] Building KUnit Kernel ...
->
-> This means that the "raw" output still can't easily just be redirected
-> elsewhere and used. That's probably a separate fix though, and I still
-> think this is a massive improvement over what we have.
-
-Yes, this is an annoyance to me as well.
-I was wondering if we should make those go to stderr or something so
-users could pipe just stdout?
-
-But yeah, it feels like a change for another patch.
-I was not hindered by this in making the hacky shell script in the
-second patch (to run each suite individually), but other consumers of
-the output might be.
-
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
-> -- David
->
-> >  Documentation/dev-tools/kunit/kunit-tool.rst |  9 ++++++---
-> >  tools/testing/kunit/kunit.py                 | 20 +++++++++++++++-----
-> >  tools/testing/kunit/kunit_parser.py          |  4 ----
-> >  tools/testing/kunit/kunit_tool_test.py       |  9 +++++++++
-> >  4 files changed, 30 insertions(+), 12 deletions(-)
+> > v1 -> v2: write about potential other "actions" in commit desc.
+> > ---
+> >  lib/kunit/executor.c | 46 +++++++++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 41 insertions(+), 5 deletions(-)
 > >
-> > diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
-> > index c7ff9afe407a..ae52e0f489f9 100644
-> > --- a/Documentation/dev-tools/kunit/kunit-tool.rst
-> > +++ b/Documentation/dev-tools/kunit/kunit-tool.rst
-> > @@ -114,9 +114,12 @@ results in TAP format, you can pass the ``--raw_output`` argument.
+> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> > index acd1de436f59..77d99ee5ed64 100644
+> > --- a/lib/kunit/executor.c
+> > +++ b/lib/kunit/executor.c
+> > @@ -15,9 +15,16 @@ extern struct kunit_suite * const * const __kunit_suites_end[];
+> >  #if IS_BUILTIN(CONFIG_KUNIT)
 > >
-> >         ./tools/testing/kunit/kunit.py run --raw_output
-> >
-> > -.. note::
-> > -       The raw output from test runs may contain other, non-KUnit kernel log
-> > -       lines.
-> > +The raw output from test runs may contain other, non-KUnit kernel log
-> > +lines. You can see just KUnit output with ``--raw_output=kunit``:
+> >  static char *filter_glob_param;
+> > +static char *action_param;
 > > +
-> > +.. code-block:: bash
+> >  module_param_named(filter_glob, filter_glob_param, charp, 0);
+> >  MODULE_PARM_DESC(filter_glob,
+> > -               "Filter which KUnit test suites run at boot-time, e.g. list*");
+> > +                "Filter which KUnit test suites run at boot-time, e.g. list*");
+> > +module_param_named(action, action_param, charp, 0);
+> > +MODULE_PARM_DESC(action,
+> > +                "Changes KUnit executor behavior, valid values are:\n"
+> > +                "<none>: run the tests like normal\n"
+> > +                "'list' to list test names instead of running them.\n");
+> >
+> >  static char *kunit_shutdown;
+> >  core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
+> > @@ -109,6 +116,33 @@ static void kunit_print_tap_header(struct suite_set *suite_set)
+> >         pr_info("1..%d\n", num_of_suites);
+> >  }
+> >
+> > +static void kunit_exec_run_tests(struct suite_set *suite_set)
+> > +{
+> > +       struct kunit_suite * const * const *suites;
 > > +
-> > +       ./tools/testing/kunit/kunit.py run --raw_output=kunit
-> >
-> >  If you have KUnit results in their raw TAP format, you can parse them and print
-> >  the human-readable summary with the ``parse`` command for kunit_tool. This
-> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> > index 7174377c2172..5a931456e718 100755
-> > --- a/tools/testing/kunit/kunit.py
-> > +++ b/tools/testing/kunit/kunit.py
-> > @@ -16,6 +16,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
-> >
-> >  from collections import namedtuple
-> >  from enum import Enum, auto
-> > +from typing import Iterable
-> >
-> >  import kunit_config
-> >  import kunit_json
-> > @@ -114,7 +115,16 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
-> >                                               'Tests not Parsed.')
-> >
-> >         if request.raw_output:
-> > -               kunit_parser.raw_output(request.input_data)
-> > +               output: Iterable[str] = request.input_data
-> > +               if request.raw_output == 'all':
-> > +                       pass
-> > +               elif request.raw_output == 'kunit':
-> > +                       output = kunit_parser.extract_tap_lines(output)
-> > +               else:
-> > +                       print(f'Unknown --raw_output option "{request.raw_output}"', file=sys.stderr)
-> > +               for line in output:
-> > +                       print(line.rstrip())
+> > +       kunit_print_tap_header(suite_set);
 > > +
-> >         else:
-> >                 test_result = kunit_parser.parse_run_tests(request.input_data)
-> >         parse_end = time.time()
-> > @@ -135,7 +145,6 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
-> >         return KunitResult(KunitStatus.SUCCESS, test_result,
-> >                                 parse_end - parse_start)
+> > +       for (suites = suite_set->start; suites < suite_set->end; suites++)
+> > +               __kunit_test_suites_init(*suites);
+> > +}
+> > +
+> > +static void kunit_exec_list_tests(struct suite_set *suite_set)
+> > +{
+> > +       unsigned int i;
+> > +       struct kunit_suite * const * const *suites;
+> > +       struct kunit_case *test_case;
+> > +
+> > +       /* Hack: print a tap header so kunit.py can find the start of KUnit output. */
+> > +       kunit_print_tap_header(suite_set);
+> > +
+> > +       for (suites = suite_set->start; suites < suite_set->end; suites++)
+> > +               for (i = 0; (*suites)[i] != NULL; i++) {
+> > +                       kunit_suite_for_each_test_case((*suites)[i], test_case) {
+> > +                               pr_info("%s.%s\n", (*suites)[i]->name, test_case->name);
+> > +                       }
+> > +               }
+> > +}
+> > +
+> >  int kunit_run_all_tests(void)
+> >  {
+> >         struct kunit_suite * const * const *suites;
+> > @@ -120,10 +154,12 @@ int kunit_run_all_tests(void)
+> >         if (filter_glob_param)
+> >                 suite_set = kunit_filter_suites(&suite_set, filter_glob_param);
 > >
+> > -       kunit_print_tap_header(&suite_set);
 > > -
-> >  def run_tests(linux: kunit_kernel.LinuxSourceTree,
-> >               request: KunitRequest) -> KunitResult:
-> >         run_start = time.time()
-> > @@ -181,7 +190,7 @@ def add_common_opts(parser) -> None:
-> >         parser.add_argument('--build_dir',
-> >                             help='As in the make command, it specifies the build '
-> >                             'directory.',
-> > -                            type=str, default='.kunit', metavar='build_dir')
-> > +                           type=str, default='.kunit', metavar='build_dir')
-> >         parser.add_argument('--make_options',
-> >                             help='X=Y make option, can be repeated.',
-> >                             action='append')
-> > @@ -246,8 +255,9 @@ def add_exec_opts(parser) -> None:
-> >                              action='append')
+> > -       for (suites = suite_set.start; suites < suite_set.end; suites++)
+> > -               __kunit_test_suites_init(*suites);
+> > +       if (!action_param)
+> > +               kunit_exec_run_tests(&suite_set);
+> > +       else if (strcmp(action_param, "list") == 0)
+> > +               kunit_exec_list_tests(&suite_set);
+> > +       else
+> > +               pr_err("kunit executor: unknown action '%s'\n", action_param);
 > >
-> >  def add_parse_opts(parser) -> None:
-> > -       parser.add_argument('--raw_output', help='don\'t format output from kernel',
-> > -                           action='store_true')
-> > +       parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
-> > +                           'If set to --raw_output=kunit, filters to just KUnit output.',
-> > +                           type=str, nargs='?', const='all', default=None)
-> >         parser.add_argument('--json',
-> >                             nargs='?',
-> >                             help='Stores test results in a JSON, and either '
-> > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> > index b88db3f51dc5..84938fefbac0 100644
-> > --- a/tools/testing/kunit/kunit_parser.py
-> > +++ b/tools/testing/kunit/kunit_parser.py
-> > @@ -106,10 +106,6 @@ def extract_tap_lines(kernel_output: Iterable[str]) -> LineStream:
-> >                                 yield line_num, line[prefix_len:]
-> >         return LineStream(lines=isolate_kunit_output(kernel_output))
-> >
-> > -def raw_output(kernel_output) -> None:
-> > -       for line in kernel_output:
-> > -               print(line.rstrip())
-> > -
-> >  DIVIDER = '=' * 60
-> >
-> >  RESET = '\033[0;0m'
-> > diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> > index 628ab00f74bc..619c4554cbff 100755
-> > --- a/tools/testing/kunit/kunit_tool_test.py
-> > +++ b/tools/testing/kunit/kunit_tool_test.py
-> > @@ -399,6 +399,15 @@ class KUnitMainTest(unittest.TestCase):
-> >                         self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
-> >                         self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
-> >
-> > +       def test_run_raw_output_kunit(self):
-> > +               self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
-> > +               kunit.main(['run', '--raw_output=kunit'], self.linux_source_mock)
-> > +               self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
-> > +               self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
-> > +               for call in self.print_mock.call_args_list:
-> > +                       self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
-> > +                       self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
-> > +
->
-> This is basically identical to test_run_raw_output(). Is there an easy
-> way of making sure this test can distinguish between them?
-
-It is identical.
-And the answer is no, not really right now.
-
-We'd have to redo the other test to be more thorough in order to
-distinguish the two different flag values, which is a bit more than I
-wanted to go into this particular patch.
-
->
-> >         def test_exec_timeout(self):
-> >                 timeout = 3453
-> >                 kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
-> >
-> > base-commit: f684616e08e9cd9db3cd53fe2e068dfe02481657
+> >         if (filter_glob_param) { /* a copy was made of each array */
+> >                 for (suites = suite_set.start; suites < suite_set.end; suites++)
 > > --
 > > 2.32.0.605.g8dce9f2422-goog
 > >
