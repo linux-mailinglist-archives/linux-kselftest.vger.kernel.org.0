@@ -2,193 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5851B3EBD4E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Aug 2021 22:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2813EBE5A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Aug 2021 00:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234037AbhHMU3T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Aug 2021 16:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S235264AbhHMWnU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Aug 2021 18:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233743AbhHMU3T (ORCPT
+        with ESMTP id S235059AbhHMWnT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Aug 2021 16:29:19 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FD1C061756
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Aug 2021 13:28:51 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id o185so17600302oih.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Aug 2021 13:28:51 -0700 (PDT)
+        Fri, 13 Aug 2021 18:43:19 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E51C061756;
+        Fri, 13 Aug 2021 15:42:52 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id a93so21673925ybi.1;
+        Fri, 13 Aug 2021 15:42:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=zk1heXrMYtMEgRgp0UUFws+A6Ti7NQpBEIoZ/rcxUIA=;
-        b=HpJ++4TkSiT7tXjH6uZWBqx3wvzNFo+Jrr65Jk3Irp4R5Tpxh/q00HHNAThglteN9j
-         y6jesKB+sQUjm+C7RkzsC5RryrlgWSCkc4v/LHyLaGg1+OuLNhQRB/tHf5lI56eJP+vA
-         rQLQNRcYp3VQgtWczVL8TyVN7W36icZHoim/A=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xTB2rvbHdT9dtL5MF50csZwyabzYfgL7Ys+DI5bY+gw=;
+        b=thjcz2D2EOw8ZvNwbYO7Fi2HV/gnwmqUkGFrnPkIyYRAXuvBejgor8x//38U9Q49me
+         OhgJ2WUm+VNuXaL8tilmdOB/4ho699k1x8nnBVNcJjszAOdlyittP42T/nnJdJG3c2o3
+         nwgQpatOoUCVfc5f8MMfeOVFqQDPOofLUpLKni7oJBDUCtXiOPJxuBZPykVHg2BY5Z/P
+         CP6UVidnGJUXVfU21Mj3xYvqpaDZ/hhbGbCUkYGNRe4D32cPdsBnzANw8/WA1zZyqNna
+         2jhFuoe8Zd0M4KZbUiWUU6bUewyqHBDfxaInfWT6WHk1FVVOEi06K2BGnaTkxVcVY3i3
+         tG2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=zk1heXrMYtMEgRgp0UUFws+A6Ti7NQpBEIoZ/rcxUIA=;
-        b=LKCdOTd5AIkdZWZ5RT8eYv+NVoekoKvsVxyr5t4f9LddD+t5h0fbP4BYrlMrrP+Gid
-         GTLRwzlHr1mtE3HwHatVfQ2kkxu5WpKTmXOQqQmzaRu2bGTx4o91aEfNXUOeXApSV/+e
-         ajFGNhuLgiUqD12t6AhR7hiYnjUH3Aa6uDGZ0nSid7TbIdvY/f5j++phPxEeuoxvheQ3
-         UfzUX1BrshA2qfaYdN+Tb/DuYjQ33ZXLC4eOlnqCGbqr4EnAE4cRcYXSfA3JSNrqzZ9+
-         xJw/JAxdr+bBHxn+OQpKm4n9ORwTVEiwU0DBJr3pULejW0LW+oMF8U1+IEJGzWtmVyR2
-         tbtw==
-X-Gm-Message-State: AOAM531HHVSx6K4iGszAKP/QezAf2XbB+sv67bujZlURaZa92FSY6zBX
-        CYVM4uQyo103ztU7V0MpaJM6BQ==
-X-Google-Smtp-Source: ABdhPJyPMGSNbTRUvOoP64e+K7c7MuB2NsgzhM14FVCQM63TgFT4G7ND8o9CL8N3fuyJikz2JhTh+A==
-X-Received: by 2002:aca:44d4:: with SMTP id r203mr3593452oia.126.1628886531195;
-        Fri, 13 Aug 2021 13:28:51 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 45sm537475otm.43.2021.08.13.13.28.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Aug 2021 13:28:50 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest update for Linux 5.14-rc6
-Message-ID: <f27686fd-6fb5-a906-b2d0-1e07cdf83594@linuxfoundation.org>
-Date:   Fri, 13 Aug 2021 14:28:50 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xTB2rvbHdT9dtL5MF50csZwyabzYfgL7Ys+DI5bY+gw=;
+        b=GsXxqU3wAvTyYnc+G0ggd+8+E8PRE8A7p0e5iWQpujz1ytRXyGE0c6EQoKim+QChGv
+         cTDi/+RlaraHZtYGTlcusN0IsUbmM1OjkepBbB1i3e6gpmHtdxCRSGdJORIGa1dZkIo6
+         VnMwfdcD9CoArA4ZPACgwW8ZOCJsAgA5GHsuVtoqy8QqhyCa4x/ztr1kv3OLwCAmLK2w
+         6AtmCgPQbeYX9IJ000U0w86rFI+2vNr4gasN04Y2MNCJKuPzjLq18rYCME0+oAc3x/j3
+         Rn0GURs2jvER4S6XGjxcAtbd35l9rXy2nzEHfqx+x8evR7SByVdy7aH963qYxnTCD0Ah
+         uUEQ==
+X-Gm-Message-State: AOAM533g+RMykWxQ0A0/1pyRajvk2dXZDEN6SQkPFNUFsNaRtVNnwMmX
+        QdMPvpfzQ9PAfESfncHQq/l0djbyEP3ojfk6DP4=
+X-Google-Smtp-Source: ABdhPJyMTPvE6njUlI21+DZ+bucvJyt/fdXQuyljP3JG43YMotimNibvpvawTznutxh0UK65bRhf8PrL6aoassA+Lzc=
+X-Received: by 2002:a25:5054:: with SMTP id e81mr5684764ybb.510.1628894571635;
+ Fri, 13 Aug 2021 15:42:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------6505005E49B8889672A6C2AA"
-Content-Language: en-US
+References: <20210809194742.1489985-1-jiang.wang@bytedance.com>
+In-Reply-To: <20210809194742.1489985-1-jiang.wang@bytedance.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 13 Aug 2021 15:42:40 -0700
+Message-ID: <CAEf4BzZe-Kmoj4HKe0oiDMq_KaSQAfdVAEqksd3d8Tx7cX+Ftw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 0/5] sockmap: add sockmap support for unix
+ stream socket
+To:     Jiang Wang <jiang.wang@bytedance.com>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Cong Wang <cong.wang@bytedance.com>,
+        duanxiongchun@bytedance.com, xieyongji@bytedance.com,
+        chaiwen.cc@bytedance.com, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------6505005E49B8889672A6C2AA
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Mon, Aug 9, 2021 at 12:47 PM Jiang Wang <jiang.wang@bytedance.com> wrote:
+>
+> This patch series add support for unix stream type
+> for sockmap. Sockmap already supports TCP, UDP,
+> unix dgram types. The unix stream support is similar
+> to unix dgram.
+>
+> Also add selftests for unix stream type in sockmap tests.
+>
 
-Hi Linus,
+Hey Jiang,
 
-Please pull the following Kselftest fixes update for Linux 5.14-rc6
+This patch doesn't apply cleanly to bpf-next anymore ([0]), can you
+please rebase and resubmit, adding John's and Jakub's acks along the
+way? Thanks!
 
-This Kselftest fixes update for Linux 5.14-rc6 consists of a single patch
-to sgx test to fix Q1 and Q2 calculation.
+  [0] https://github.com/kernel-patches/bpf/pull/1563#issuecomment-896128082
 
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
-
-   Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.14-rc6
-
-for you to fetch changes up to 567c39047dbee341244fe3bf79fea24ee0897ff9:
-
-   selftests/sgx: Fix Q1 and Q2 calculation in sigstruct.c (2021-07-30 17:20:01 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-fixes-5.14-rc6
-
-This Kselftest fixes update for Linux 5.14-rc6 consists of a single patch
-to sgx test to fix Q1 and Q2 calculation.
-
-----------------------------------------------------------------
-Tianjia Zhang (1):
-       selftests/sgx: Fix Q1 and Q2 calculation in sigstruct.c
-
-  tools/testing/selftests/sgx/sigstruct.c | 41 +++++++++++++++++----------------
-  1 file changed, 21 insertions(+), 20 deletions(-)
-----------------------------------------------------------------
-
---------------6505005E49B8889672A6C2AA
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-fixes-5.14-rc6.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-fixes-5.14-rc6.diff"
-
-diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-index dee7a3d6c5a5..92bbc5a15c39 100644
---- a/tools/testing/selftests/sgx/sigstruct.c
-+++ b/tools/testing/selftests/sgx/sigstruct.c
-@@ -55,10 +55,27 @@ static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
- 	return true;
- }
- 
-+static void reverse_bytes(void *data, int length)
-+{
-+	int i = 0;
-+	int j = length - 1;
-+	uint8_t temp;
-+	uint8_t *ptr = data;
-+
-+	while (i < j) {
-+		temp = ptr[i];
-+		ptr[i] = ptr[j];
-+		ptr[j] = temp;
-+		i++;
-+		j--;
-+	}
-+}
-+
- static bool calc_q1q2(const uint8_t *s, const uint8_t *m, uint8_t *q1,
- 		      uint8_t *q2)
- {
- 	struct q1q2_ctx ctx;
-+	int len;
- 
- 	if (!alloc_q1q2_ctx(s, m, &ctx)) {
- 		fprintf(stderr, "Not enough memory for Q1Q2 calculation\n");
-@@ -89,8 +106,10 @@ static bool calc_q1q2(const uint8_t *s, const uint8_t *m, uint8_t *q1,
- 		goto out;
- 	}
- 
--	BN_bn2bin(ctx.q1, q1);
--	BN_bn2bin(ctx.q2, q2);
-+	len = BN_bn2bin(ctx.q1, q1);
-+	reverse_bytes(q1, len);
-+	len = BN_bn2bin(ctx.q2, q2);
-+	reverse_bytes(q2, len);
- 
- 	free_q1q2_ctx(&ctx);
- 	return true;
-@@ -152,22 +171,6 @@ static RSA *gen_sign_key(void)
- 	return key;
- }
- 
--static void reverse_bytes(void *data, int length)
--{
--	int i = 0;
--	int j = length - 1;
--	uint8_t temp;
--	uint8_t *ptr = data;
--
--	while (i < j) {
--		temp = ptr[i];
--		ptr[i] = ptr[j];
--		ptr[j] = temp;
--		i++;
--		j--;
--	}
--}
--
- enum mrtags {
- 	MRECREATE = 0x0045544145524345,
- 	MREADD = 0x0000000044444145,
-@@ -367,8 +370,6 @@ bool encl_measure(struct encl *encl)
- 	/* BE -> LE */
- 	reverse_bytes(sigstruct->signature, SGX_MODULUS_SIZE);
- 	reverse_bytes(sigstruct->modulus, SGX_MODULUS_SIZE);
--	reverse_bytes(sigstruct->q1, SGX_MODULUS_SIZE);
--	reverse_bytes(sigstruct->q2, SGX_MODULUS_SIZE);
- 
- 	EVP_MD_CTX_destroy(ctx);
- 	RSA_free(key);
-
---------------6505005E49B8889672A6C2AA--
+>
+> Jiang Wang (5):
+>   af_unix: add read_sock for stream socket types
+>   af_unix: add unix_stream_proto for sockmap
+>   selftest/bpf: add tests for sockmap with unix stream type.
+>   selftest/bpf: change udp to inet in some function names
+>   selftest/bpf: add new tests in sockmap for unix stream to tcp.
+>
+>  include/net/af_unix.h                         |  8 +-
+>  net/unix/af_unix.c                            | 91 +++++++++++++++---
+>  net/unix/unix_bpf.c                           | 93 ++++++++++++++-----
+>  .../selftests/bpf/prog_tests/sockmap_listen.c | 48 ++++++----
+>  4 files changed, 187 insertions(+), 53 deletions(-)
+>
+> v1 -> v2 :
+>  - Call unhash in shutdown.
+>  - Clean up unix_create1 a bit.
+>  - Return -ENOTCONN if socket is not connected.
+>
+> v2 -> v3 :
+>  - check for stream type in update_proto
+>  - remove intermediate variable in __unix_stream_recvmsg
+>  - fix compile warning in unix_stream_recvmsg
+>
+> v3 -> v4 :
+>  - remove sk_is_unix_stream, just check TCP_ESTABLISHED for UNIX sockets.
+>  - add READ_ONCE in unix_dgram_recvmsg
+>  - remove type check in unix_stream_bpf_update_proto
+>
+> v4 -> v5 :
+>  - add two missing READ_ONCE for sk_prot.
+>
+> v5 -> v6 :
+>  - fix READ_ONCE by reading to a local variable first.
+>
+> --
+> 2.20.1
+>
