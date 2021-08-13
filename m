@@ -2,136 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2813EBE5A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Aug 2021 00:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7673EBEBC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Aug 2021 01:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235264AbhHMWnU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Aug 2021 18:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbhHMWnT (ORCPT
+        id S235570AbhHMX1d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Aug 2021 19:27:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:30746 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235475AbhHMX1c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Aug 2021 18:43:19 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E51C061756;
-        Fri, 13 Aug 2021 15:42:52 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id a93so21673925ybi.1;
-        Fri, 13 Aug 2021 15:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xTB2rvbHdT9dtL5MF50csZwyabzYfgL7Ys+DI5bY+gw=;
-        b=thjcz2D2EOw8ZvNwbYO7Fi2HV/gnwmqUkGFrnPkIyYRAXuvBejgor8x//38U9Q49me
-         OhgJ2WUm+VNuXaL8tilmdOB/4ho699k1x8nnBVNcJjszAOdlyittP42T/nnJdJG3c2o3
-         nwgQpatOoUCVfc5f8MMfeOVFqQDPOofLUpLKni7oJBDUCtXiOPJxuBZPykVHg2BY5Z/P
-         CP6UVidnGJUXVfU21Mj3xYvqpaDZ/hhbGbCUkYGNRe4D32cPdsBnzANw8/WA1zZyqNna
-         2jhFuoe8Zd0M4KZbUiWUU6bUewyqHBDfxaInfWT6WHk1FVVOEi06K2BGnaTkxVcVY3i3
-         tG2A==
+        Fri, 13 Aug 2021 19:27:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1628897224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ltnXqs72PoZJlgVvtR4opPys8udAwLGgtjNFBrBB1U=;
+        b=LPfofpB5wsE3uc6DItki/QQW/2eVCk/b6zL/irB70K7e4UI3+cL/cmOREnjFc++hLP1EMr
+        MzFofC7s8gNO5219Lo25faA44O6d2SsBuWj122soGep5949YYCiblXrdiQCS4mnx0gBCb7
+        L45pIbp622pk64FEBaFwRQmWVI4vK4A=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-509-JpeiGEiUOn-Hq735IQbKvg-1; Fri, 13 Aug 2021 19:27:03 -0400
+X-MC-Unique: JpeiGEiUOn-Hq735IQbKvg-1
+Received: by mail-wm1-f72.google.com with SMTP id f19-20020a1c1f13000000b002e6bd83c344so1313934wmf.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Aug 2021 16:27:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xTB2rvbHdT9dtL5MF50csZwyabzYfgL7Ys+DI5bY+gw=;
-        b=GsXxqU3wAvTyYnc+G0ggd+8+E8PRE8A7p0e5iWQpujz1ytRXyGE0c6EQoKim+QChGv
-         cTDi/+RlaraHZtYGTlcusN0IsUbmM1OjkepBbB1i3e6gpmHtdxCRSGdJORIGa1dZkIo6
-         VnMwfdcD9CoArA4ZPACgwW8ZOCJsAgA5GHsuVtoqy8QqhyCa4x/ztr1kv3OLwCAmLK2w
-         6AtmCgPQbeYX9IJ000U0w86rFI+2vNr4gasN04Y2MNCJKuPzjLq18rYCME0+oAc3x/j3
-         Rn0GURs2jvER4S6XGjxcAtbd35l9rXy2nzEHfqx+x8evR7SByVdy7aH963qYxnTCD0Ah
-         uUEQ==
-X-Gm-Message-State: AOAM533g+RMykWxQ0A0/1pyRajvk2dXZDEN6SQkPFNUFsNaRtVNnwMmX
-        QdMPvpfzQ9PAfESfncHQq/l0djbyEP3ojfk6DP4=
-X-Google-Smtp-Source: ABdhPJyMTPvE6njUlI21+DZ+bucvJyt/fdXQuyljP3JG43YMotimNibvpvawTznutxh0UK65bRhf8PrL6aoassA+Lzc=
-X-Received: by 2002:a25:5054:: with SMTP id e81mr5684764ybb.510.1628894571635;
- Fri, 13 Aug 2021 15:42:51 -0700 (PDT)
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2ltnXqs72PoZJlgVvtR4opPys8udAwLGgtjNFBrBB1U=;
+        b=WuGkb4nUCVMQkxX/XY8SnQZemULbJ4v/SVeE5hNNNC9evZhfS6Xkah4K84P6nMs0cE
+         M1jsrYYOuleh2D6RP1ImvjSBgC4TafxFeFAxbq2VbkGPehxcfI00dpx8pzMw1OqPt9VR
+         8rL9yXLdPVWdiKvnPpLKN8n8zpyHllv5ofiPFebgQCEZNW8cQgPrWxbJ3wEqrneHXqji
+         NXfpYtb54ZRHno/ZqgCsUp8PYRHVFN8l8Pzh3tex1jj3gNOjrat5SF5PQxTm4Y2VTEN1
+         6hkDB9y4puOrMDNQwR3eYaJkKxd1jQ4RpxVEPxDbROzsMwc4k7NHjWS6eA46eDhS1PEz
+         gldg==
+X-Gm-Message-State: AOAM531qmm4rvsACQGCNNl74BLfuxwjrhE8TYm26qN0DDEp6R0txejz1
+        w8sBobnaTNtaUHNzXwKd+4cWyAX1UT4P3dD8F6D5AYbZadcmWq9VG2PfeXUzyZLBnDLMXXw0WRF
+        P4sHkIzeTbSUQMleDscPh56KUqbRk
+X-Received: by 2002:a05:600c:1483:: with SMTP id c3mr4574073wmh.131.1628897222471;
+        Fri, 13 Aug 2021 16:27:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx0xDBu7qLTuycfsdJlyJRztUYK2z+Cba+NWhlTJD00FCnM/bVqlz1ZvzqvrtswSGYJMSQejg==
+X-Received: by 2002:a05:600c:1483:: with SMTP id c3mr4574048wmh.131.1628897222249;
+        Fri, 13 Aug 2021 16:27:02 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id q17sm2712042wrr.91.2021.08.13.16.27.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Aug 2021 16:27:01 -0700 (PDT)
+Subject: Re: [PATCH -next 1/2] selftests: Fix vm_handle_exception undefined
+ error
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Chen Lifu <chenlifu@huawei.com>, shuah@kernel.org,
+        bgardon@google.com, wangyanan55@huawei.com,
+        axelrasmussen@google.com, drjones@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, dwmw@amazon.co.uk, joao.m.martins@oracle.com,
+        yangyingliang@huawei.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210709063741.355325-1-chenlifu@huawei.com>
+ <f130f6ec-0c80-7a83-fad2-7d72d389b96b@linuxfoundation.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <b6fca25d-f241-4de2-5a8e-cbcd34abc758@redhat.com>
+Date:   Sat, 14 Aug 2021 01:26:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210809194742.1489985-1-jiang.wang@bytedance.com>
-In-Reply-To: <20210809194742.1489985-1-jiang.wang@bytedance.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 13 Aug 2021 15:42:40 -0700
-Message-ID: <CAEf4BzZe-Kmoj4HKe0oiDMq_KaSQAfdVAEqksd3d8Tx7cX+Ftw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 0/5] sockmap: add sockmap support for unix
- stream socket
-To:     Jiang Wang <jiang.wang@bytedance.com>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Cong Wang <cong.wang@bytedance.com>,
-        duanxiongchun@bytedance.com, xieyongji@bytedance.com,
-        chaiwen.cc@bytedance.com, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <f130f6ec-0c80-7a83-fad2-7d72d389b96b@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 9, 2021 at 12:47 PM Jiang Wang <jiang.wang@bytedance.com> wrote:
->
-> This patch series add support for unix stream type
-> for sockmap. Sockmap already supports TCP, UDP,
-> unix dgram types. The unix stream support is similar
-> to unix dgram.
->
-> Also add selftests for unix stream type in sockmap tests.
->
+On 13/08/21 19:01, Shuah Khan wrote:
+> On 7/9/21 12:37 AM, Chen Lifu wrote:
+>> Compile setftests on x86_64 occurs following error:
+>> make -C tools/testing/selftests
+>> ...
+>>
+>> x86_64/hyperv_features.c:618:2: warning: implicit declaration of 
+>> function ‘vm_handle_exception’ [-Wimplicit-function-declaration]
+>>    618 |  vm_handle_exception(vm, GP_VECTOR, guest_gp_handler);
+>> /usr/bin/ld: /tmp/cclOnpml.o: in function `main':
+>> tools/testing/selftests/kvm/x86_64/hyperv_features.c:618: undefined 
+>> reference to `vm_handle_exception'
+>> collect2: error: ld returned 1 exit status
+>>
+>> The reason is that commit b78f4a596692 ("KVM: selftests: Rename 
+>> vm_handle_exception")
+>> renamed "vm_handle_exception" function to 
+>> "vm_install_exception_handler" function.
+>>
+>> Fix it by replacing "vm_handle_exception" with 
+>> "vm_install_exception_handler"
+>> in corresponding selftests files.
+>>
+>> Signed-off-by: Chen Lifu <chenlifu@huawei.com>
+>> ---
+>>   tools/testing/selftests/kvm/x86_64/hyperv_features.c | 2 +-
+>>   tools/testing/selftests/kvm/x86_64/mmu_role_test.c   | 2 +-
+>>   2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+> 
+> 
+> Please include kvm in the commit summary. I think it is not getting
+> the right attention because of the summary line.
 
-Hey Jiang,
+The same patch was already committed:
 
-This patch doesn't apply cleanly to bpf-next anymore ([0]), can you
-please rebase and resubmit, adding John's and Jakub's acks along the
-way? Thanks!
+     commit f8f0edabcc09fafd695ed2adc0eb825104e35d5c
+     Author: Marc Zyngier <maz@kernel.org>
+     Date:   Thu Jul 1 08:19:28 2021 +0100
 
-  [0] https://github.com/kernel-patches/bpf/pull/1563#issuecomment-896128082
+     KVM: selftests: x86: Address missing vm_install_exception_handler conversions
+     
+     Commit b78f4a59669 ("KVM: selftests: Rename vm_handle_exception")
+     raced with a couple of new x86 tests, missing two vm_handle_exception
+     to vm_install_exception_handler conversions.
+     
+     Help the two broken tests to catch up with the new world.
+     
+     Cc: Andrew Jones <drjones@redhat.com>
+     CC: Ricardo Koller <ricarkol@google.com>
+     Cc: Paolo Bonzini <pbonzini@redhat.com>
+     Signed-off-by: Marc Zyngier <maz@kernel.org>
+     Message-Id: <20210701071928.2971053-1-maz@kernel.org>
+     Reviewed-by: Andrew Jones <drjones@redhat.com>
+     Reviewed-by: Ricardo Koller <ricarkol@google.com>
+     Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
->
-> Jiang Wang (5):
->   af_unix: add read_sock for stream socket types
->   af_unix: add unix_stream_proto for sockmap
->   selftest/bpf: add tests for sockmap with unix stream type.
->   selftest/bpf: change udp to inet in some function names
->   selftest/bpf: add new tests in sockmap for unix stream to tcp.
->
->  include/net/af_unix.h                         |  8 +-
->  net/unix/af_unix.c                            | 91 +++++++++++++++---
->  net/unix/unix_bpf.c                           | 93 ++++++++++++++-----
->  .../selftests/bpf/prog_tests/sockmap_listen.c | 48 ++++++----
->  4 files changed, 187 insertions(+), 53 deletions(-)
->
-> v1 -> v2 :
->  - Call unhash in shutdown.
->  - Clean up unix_create1 a bit.
->  - Return -ENOTCONN if socket is not connected.
->
-> v2 -> v3 :
->  - check for stream type in update_proto
->  - remove intermediate variable in __unix_stream_recvmsg
->  - fix compile warning in unix_stream_recvmsg
->
-> v3 -> v4 :
->  - remove sk_is_unix_stream, just check TCP_ESTABLISHED for UNIX sockets.
->  - add READ_ONCE in unix_dgram_recvmsg
->  - remove type check in unix_stream_bpf_update_proto
->
-> v4 -> v5 :
->  - add two missing READ_ONCE for sk_prot.
->
-> v5 -> v6 :
->  - fix READ_ONCE by reading to a local variable first.
->
-> --
-> 2.20.1
->
+For the other patch, returning 0 is going to cause issues elsewhere
+in the tests.  Either the test is failed immediately, or all callers
+must be examined carefully.
+
+Paolo
+
