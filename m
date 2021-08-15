@@ -2,59 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7733EC5AA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Aug 2021 23:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83233EC8B0
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Aug 2021 13:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbhHNVVS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 14 Aug 2021 17:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
+        id S237526AbhHOLKx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Aug 2021 07:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236311AbhHNVUg (ORCPT
+        with ESMTP id S229469AbhHOLKv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 14 Aug 2021 17:20:36 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E027C06122E;
-        Sat, 14 Aug 2021 14:19:28 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id a20so16360042plm.0;
-        Sat, 14 Aug 2021 14:19:28 -0700 (PDT)
+        Sun, 15 Aug 2021 07:10:51 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226E7C061764;
+        Sun, 15 Aug 2021 04:10:22 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id nt11so22180101pjb.2;
+        Sun, 15 Aug 2021 04:10:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=OaNgCZRD4hHUI4tS8xBQiKuxtW8/RbylDXTBHUi27OQ=;
-        b=RV62ISfXUBoaKNadbCVlghPZyQ+LHJJZ8dSVyYLeF8iDAUYBt2Lo5nKaM+6NUAiUwV
-         ooXkm64XmYElbEd8415cR6Ztf/GlBTG8Pfw2lQY0HtaEY7iW4Ykt3l5aqTg+gPaLLCQj
-         pmfOHAXuIgULb6rKaCKDU1rXZKdTVPdHjvaKAMXFkKuxT6DffqYrdpT88lhGiRl87EUh
-         rK4y06ZEa6KsZjcv4gRLgXnwOefJ/BRdzS0RcvV9pNj5LWbVaCD36GeihYWz1xVh15rK
-         bjhS6zLbvJaM8cmFQBWMbGGzReJVplYiMazH69fPOUHslXGsC0jofgQF6IZCARL6evZn
-         g0og==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1hTo1UwRlyqp+pMdlXGYPhfq0rOnoJLrck7pYizHgPU=;
+        b=ki4MbLSO6ktJBBmJWeAW9iXHb99ZK/NlJzMuyhU1WHgiB1izAuZcFaDxzfK8e5I4GN
+         GNd6Ga0s6XH90h8kPCmLzUU1hnM+OEcwApME4miRVOxbrBhnYa4Phm5kgSW8z+yDtdBJ
+         hYos1WTb8FiECvf6YO6Ie9c3VDtniCE7hS0VR6AbuIsXJx/aeU8NOKMNkVoR9Qz38BCg
+         L42/kNp8yGfmgJwLWJ1n6XsD9Ccr6bDMoD/Qwua2omJgB+pJkyiJsC2qO2bAyKxPgh3S
+         N9ykDctPuAiy0lQ/wzrmJIxRPmkVOtIU0B54EJ0s3R2ShftkFCbK/TEbvxqaM99en7C/
+         Tvmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OaNgCZRD4hHUI4tS8xBQiKuxtW8/RbylDXTBHUi27OQ=;
-        b=DTyjB/n/q9cm3kRuPssw1JS2Sw2a6kMDRbDJ7mZRIBhUXw7UmII5RM4yaXjRmUMOr4
-         t0oM9eU6yIy4QUJbDrlZmh6v7e/DnfAl8shQu0iyEmk+5TfFmEcABJE8A6UBdzy7OiMr
-         n55+nYB5LBqTyjQrFS+WU6aUDW9iFHXThHNckjdWyLQJljqYQQgd92oUWUTOQr7xhnTB
-         DD+/whBCCk5osv5iMZd8dogf5xCNieGZz8s9RJZM7NsiC38NB5xAVMx2QQrhkXSsZrXK
-         gxdSkdg4eeEcPWJyEABCJOTCzBX+8cQ9j22FRdSuNvE0/Rr7UJsuaDYDW8zMWa7ohvog
-         DAlg==
-X-Gm-Message-State: AOAM530p8kGHOtZRdMyqUdGFXgnOovKRjOsquckZJBGAw2w5g/9WXilB
-        tIwCrgRdGUkPICku/dEPCUI=
-X-Google-Smtp-Source: ABdhPJwWOGgPdsAP5xgLQmeuJG7wa9JnuUSFVObAMXt50U32Y2zsf4kDWiVRHM6r3Rl5iZJjQwDNVA==
-X-Received: by 2002:a65:6183:: with SMTP id c3mr8232385pgv.73.1628975967602;
-        Sat, 14 Aug 2021 14:19:27 -0700 (PDT)
-Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id y4sm5325910pjg.9.2021.08.14.14.19.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Aug 2021 14:19:27 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1hTo1UwRlyqp+pMdlXGYPhfq0rOnoJLrck7pYizHgPU=;
+        b=ZsJqVRkDQFisnC/Z5+FUGljpZ31HxTsSGhLYXTmKTsSGsPIocpgzUrTXzwz3Cgue0J
+         klFyFrc9oyjrk9KUvQ3iLYjD/qc8thOzpGVHgy81BfHw2xc9k0dNDznYqMdL5FNlmF4j
+         OGuPIb9T2+0ef9e/Um7EAkltERkBOoADWyKES1pq+Ctoqy07/zezwonHw1Cd/aqK7UEH
+         rN1dweq+tbhfxAgAdfQH/bPhmmmVo50Wa8EorZE/0N9xvg8vO8FjK5hHzd/BAPgGV+DW
+         oM4Jy+IRnm/To+Nx+KLL98fZxkyGmYfp+DhkQFkaZIBg7mlbmjqWYN4gNyPhnVygJOFc
+         CeWA==
+X-Gm-Message-State: AOAM532ihUlwUUnpzaU4hGtO/FaU4dPKbUPXHLFW1eiTr1dQVkzPu2mY
+        C6J9a6OH735Rbx9qDTrUWyyXuZV43yYMIx19EUw=
+X-Google-Smtp-Source: ABdhPJyX0puTwgDSKe17THJRks86nytntC1/Vm9fFgYZajAdikFyaOpXXy9Bg8UpfdHkE4M8OR1qUHu1CsaKoe3XyEw=
+X-Received: by 2002:a17:902:ced0:b029:12d:4ce1:ce3a with SMTP id
+ d16-20020a170902ced0b029012d4ce1ce3amr9073769plg.0.1629025821388; Sun, 15 Aug
+ 2021 04:10:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210814211713.180533-1-yury.norov@gmail.com> <20210814211713.180533-18-yury.norov@gmail.com>
+In-Reply-To: <20210814211713.180533-18-yury.norov@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 15 Aug 2021 14:09:45 +0300
+Message-ID: <CAHp75Vcjq-XmX-rikawj+wVwG+V+gXzZPishpanZ79-SGFb8rA@mail.gmail.com>
+Subject: Re: [PATCH 17/17] vsprintf: rework bitmap_list_string
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        "open list:VFIO DRIVER" <kvm@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
         Alexander Lobakin <alobakin@pm.me>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Alexey Klimov <aklimov@redhat.com>,
@@ -97,80 +105,30 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 17/17] vsprintf: rework bitmap_list_string
-Date:   Sat, 14 Aug 2021 14:17:13 -0700
-Message-Id: <20210814211713.180533-18-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210814211713.180533-1-yury.norov@gmail.com>
-References: <20210814211713.180533-1-yury.norov@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-bitmap_list_string() is very ineffective when printing bitmaps with long
-ranges of set bits because it calls find_next_bit for each bit in the
-bitmap.  We can do better by detecting ranges of set bits.
+On Sun, Aug 15, 2021 at 12:21 AM Yury Norov <yury.norov@gmail.com> wrote:
+>
+> bitmap_list_string() is very ineffective when printing bitmaps with long
+> ranges of set bits because it calls find_next_bit for each bit in the
+> bitmap.  We can do better by detecting ranges of set bits.
+>
+> In my environment, before/after is 943008/31008 ns.
 
-In my environment, before/after is 943008/31008 ns.
+I would add a couple of words, maybe in parentheses, to describe what
+your environment is.
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- lib/vsprintf.c | 24 +++++++-----------------
- 1 file changed, 7 insertions(+), 17 deletions(-)
+...
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index dd006adfe853..29a384eee286 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1241,20 +1241,13 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
- 			 struct printf_spec spec, const char *fmt)
- {
- 	int nr_bits = max_t(int, spec.field_width, 0);
--	/* current bit is 'cur', most recently seen range is [rbot, rtop] */
--	int cur, rbot, rtop;
- 	bool first = true;
-+	int rbot, rtop;
- 
- 	if (check_pointer(&buf, end, bitmap, spec))
- 		return buf;
- 
--	rbot = cur = find_first_bit(bitmap, nr_bits);
--	while (cur < nr_bits) {
--		rtop = cur;
--		cur = find_next_bit(bitmap, nr_bits, cur + 1);
--		if (cur < nr_bits && cur <= rtop + 1)
--			continue;
--
-+	for_each_set_bitrange(rbot, rtop, bitmap, nr_bits) {
- 		if (!first) {
- 			if (buf < end)
- 				*buf = ',';
-@@ -1263,15 +1256,12 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
- 		first = false;
- 
- 		buf = number(buf, end, rbot, default_dec_spec);
--		if (rbot < rtop) {
--			if (buf < end)
--				*buf = '-';
--			buf++;
--
--			buf = number(buf, end, rtop, default_dec_spec);
--		}
-+		if (rtop == rbot + 1)
-+			continue;
- 
--		rbot = cur;
-+		if (buf < end)
-+			*buf = '-';
-+		buf = number(++buf, end, rtop - 1, default_dec_spec);
- 	}
- 	return buf;
- }
+> +               buf = number(++buf, end, rtop - 1, default_dec_spec);
+
+++buf is a bit confusing here. Since you will rewrite the buf value
+anyway, I would write the parameter as buf + 1.
+
 -- 
-2.30.2
-
+With Best Regards,
+Andy Shevchenko
