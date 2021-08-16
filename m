@@ -2,241 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B77C3EDA28
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 17:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D563EDAA3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 18:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236634AbhHPPtB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Aug 2021 11:49:01 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:59542 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbhHPPtB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Aug 2021 11:49:01 -0400
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 032F820C29DE;
-        Mon, 16 Aug 2021 08:48:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 032F820C29DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1629128906;
-        bh=9mOL/CSpGs9LptWXf7MH9FSuaCw/pBcvYSishoXmWZY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=byRwxAmGduE955ruBRstuzNd3l8jFypoZrs1G/SY42nqLch8RRIfLVp46cnRV/tSE
-         8SpOAFPkJOEg3Qq/vQfF5W5M2q1sdwRkVLWQAZhxwM9z+DTleqskE6DT7J/I5MlE0w
-         sBpOifqgSSfXla70BN+cN4e9tqv5wks8uUHSQuzM=
-Date:   Mon, 16 Aug 2021 10:48:17 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
-Cc:     akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pasha.tatashin@soleen.com
-Subject: Re: [PATCH v2 2/2] selftests: vm: add COW time test for KSM pages
-Message-ID: <20210816154817.GM5469@sequoia>
-References: <cover.1628199399.git.zhansayabagdaulet@gmail.com>
- <eb4d348a90329b20d9659b86a501c9625efe4fab.1628199399.git.zhansayabagdaulet@gmail.com>
+        id S229735AbhHPQSH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Aug 2021 12:18:07 -0400
+Received: from mga09.intel.com ([134.134.136.24]:19482 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229556AbhHPQSH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Aug 2021 12:18:07 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="215889338"
+X-IronPort-AV: E=Sophos;i="5.84,326,1620716400"; 
+   d="scan'208";a="215889338"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2021 09:17:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,326,1620716400"; 
+   d="scan'208";a="487523670"
+Received: from amlin-018-053.igk.intel.com ([10.102.18.53])
+  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2021 09:17:31 -0700
+From:   Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+To:     linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
+        shuah@kernel.org, arkadiusz.kubalewski@intel.com, arnd@arndb.de,
+        nikolay@nvidia.com, cong.wang@bytedance.com,
+        colin.king@canonical.com, gustavoars@kernel.org
+Subject: [RFC net-next 0/7] Add basic SyncE interfaces
+Date:   Mon, 16 Aug 2021 18:07:10 +0200
+Message-Id: <20210816160717.31285-1-arkadiusz.kubalewski@intel.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb4d348a90329b20d9659b86a501c9625efe4fab.1628199399.git.zhansayabagdaulet@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2021-08-06 16:10:29, Zhansaya Bagdauletkyzy wrote:
-> Since merged pages are copied every time they need to be modified,
-> the write access time is different between shared and non-shared pages.
-> Add ksm_cow_time() function which evaluates latency of these COW
-> breaks. First, 4000 pages are allocated and the time, required to modify
-> 1 byte in every other page, is measured. After this, the pages are
-> merged into 2000 pairs and in each pair, 1 page is modified (i.e. they
-> are decoupled) to detect COW breaks. The time needed to break COW of
-> merged pages is then compared with performance of non-shared pages.
-> 
-> The test is run as follows: ./ksm_tests -C
-> The output:
->         Total size:    15 MiB
-> 
->         Not merged pages:
->         Total time:     0.001903112 s
->         Average speed:  3678.186 MiB/s
-> 
->         Merged pages:
->         Total time:     0.006215680 s
->         Average speed:  1126.184 MiB/s
-> 
-> Signed-off-by: Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
-> ---
-> v1 -> v2:
->  As suggested by Pavel,
->  - add baseline figures with non-shared pages
->  - instead of having all pages merged together, create pairs of
->    duplicated pages
-> 
-> Pavel's review comments:
-> https://lore.kernel.org/lkml/CA+CK2bDYZBBaU3pC369o01tCgydaJ6y91GZ0_MWONMMCajZOUw@mail.gmail.com/
-> 
->  tools/testing/selftests/vm/ksm_tests.c | 84 +++++++++++++++++++++++++-
->  1 file changed, 81 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
-> index 432dfe615e50..382ee6ccd13a 100644
-> --- a/tools/testing/selftests/vm/ksm_tests.c
-> +++ b/tools/testing/selftests/vm/ksm_tests.c
-> @@ -33,7 +33,8 @@ enum ksm_test_name {
->  	CHECK_KSM_UNMERGE,
->  	CHECK_KSM_ZERO_PAGE_MERGE,
->  	CHECK_KSM_NUMA_MERGE,
-> -	KSM_MERGE_TIME
-> +	KSM_MERGE_TIME,
-> +	KSM_COW_TIME
->  };
->  
->  static int ksm_write_sysfs(const char *file_path, unsigned long val)
-> @@ -98,7 +99,8 @@ static void print_help(void)
->  	       " -U (page unmerging)\n"
->  	       " -P evaluate merging time and speed.\n"
->  	       "    For this test, the size of duplicated memory area (in MiB)\n"
-> -	       "    must be provided using -s option\n\n");
-> +	       "    must be provided using -s option\n"
-> +	       " -C evaluate the time required to break COW of merged pages.\n\n");
->  
->  	printf(" -a: specify the access protections of pages.\n"
->  	       "     <prot> must be of the form [rwx].\n"
-> @@ -455,6 +457,75 @@ static int ksm_merge_time(int mapping, int prot, int timeout, size_t map_size)
->  	return KSFT_FAIL;
->  }
->  
-> +static int ksm_cow_time(int mapping, int prot, int timeout, size_t page_size)
-> +{
-> +	void *map_ptr;
-> +	struct timespec start_time, end_time;
-> +	unsigned long cow_time_ns;
-> +	int page_count = 4000;
+SyncE - Synchronous Ethernet is defined in ITU-T Rec. G.8264
+(https://www.itu.int/rec/T-REC-G.8264)
 
-size_t is more correct.
+SyncE allows synchronizing the frequency of ethernet PHY clock signal
+(the frequency used to send the data onto wire), to some reference
+clock signal.
 
-> +
-> +	map_ptr = allocate_memory(NULL, prot, mapping, '*', page_size * page_count);
-> +	if (!map_ptr)
-> +		return KSFT_FAIL;
-> +
-> +	if (clock_gettime(CLOCK_MONOTONIC_RAW, &start_time)) {
-> +		perror("clock_gettime");
-> +		return KSFT_FAIL;
-> +	}
-> +	for (size_t i = 0; i < page_count; i = i + 2)
-                           ^
-I think it is best to use the correct test here even though you're
-stepping by 2 and won't have any problems in practice:
+Multiple reference clock sources can be available. PHY ports recover
+the frequency at which the transmitter sent the data on the RX side.
+Alternatively, we can use external sources like 1PPS GPS, etc.
 
- i < (page_count - 1)
+This patch series introduces basic interfaces for communication
+with a SyncE capable device.
 
-This should be changed in all for loops in this function.
+The first part of the interface allows acquiring the synchronization
+state of DPLL (Digital Phase Locked Loop). DPLL LOCKED state means
+that the frequency generated by it is locked to the input frequency.
+As a result, PHYs connected to it are synchronized to the chosen input
+frequency signal.
 
-> +		memset(map_ptr + page_size * i, '-', 1);
-> +	if (clock_gettime(CLOCK_MONOTONIC_RAW, &end_time)) {
-> +		perror("clock_gettime");
-> +		return KSFT_FAIL;
-> +	}
-> +
-> +	cow_time_ns = (end_time.tv_sec - start_time.tv_sec) * NSEC_PER_SEC +
-> +		       (end_time.tv_nsec - start_time.tv_nsec);
-> +
-> +	printf("Total size:    %lu MiB\n\n", (page_size * page_count) / MB);
-> +	printf("Not merged pages:\n");
-> +	printf("Total time:     %ld.%09ld s\n", cow_time_ns / NSEC_PER_SEC,
-> +	       cow_time_ns % NSEC_PER_SEC);
-> +	printf("Average speed:  %.3f MiB/s\n\n", ((page_size * (page_count / 2)) / MB) /
-> +					       ((double)cow_time_ns / NSEC_PER_SEC));
-> +
-> +	/* Create 2000 pairs of duplicated pages */
-> +	for (size_t i = 0; i < page_count; i = i + 2) {
-> +		memset(map_ptr + page_size * i, '+', i + 1);
-> +		memset(map_ptr + page_size * (i + 1), '+', i + 1);
-> +	}
+The second part can be used to select the port from which the clock
+gets recovered. Each PHY chip can have multiple pins on which the
+recovered clock can be propagated. For example, a SyncE-capable PHY
+can recover the carrier frequency of the first port, divide it
+internally, and output it as a reference clock on PIN 0.
+When such a signal is enabled, the DPLL can LOCK to the frequency
+recovered on PIN 0.
 
-Since i is being used as the third argument to memset(), this loop only
-works if page_count is less than page_size. I could see someone quickly
-bumping page_count higher and then unknowingly getting bad test results.
+Next steps:
+ - Add CONFIG_SYNCE definition into Kconfig
+ - Add more configuration interfaces. Aiming at devlink, since this
+   would be device-wide configuration
 
-Lets gain a little headroom in page_count. We are creating page_count/2
-pairs of duplicate pages so we can use these memset() calls:
+Arkadiusz Kubalewski (7):
+  ptp: Add interface for acquiring DPLL state
+  selftests/ptp: Add usage of PTP_DPLL_GETSTATE ioctl in testptp
+  ice: add get_dpll_state ptp interface usage
+  net: add ioctl interface for recover reference clock on netdev
+  selftests/net: Add test app for SIOC{S|G}SYNCE
+  ice: add SIOC{S|G}SYNCE interface usage to recover reference signal
+  ice: add sysfs interface to configure PHY recovered reference signal
 
- memset(map_ptr + page_size * i, '+', i / 2 + 1);
- memset(map_ptr + page_size * (i + 1), '+', i / 2 + 1);
-
-Then add a short comment to the page_count declaration mentioning that
-page_count must be < (page_size / 2).
+ .../net/ethernet/intel/ice/ice_adminq_cmd.h   |  62 +++++
+ drivers/net/ethernet/intel/ice/ice_common.c   | 101 ++++++++
+ drivers/net/ethernet/intel/ice/ice_common.h   |   9 +
+ drivers/net/ethernet/intel/ice/ice_main.c     |   4 +
+ drivers/net/ethernet/intel/ice/ice_ptp.c      | 234 +++++++++++++++++-
+ drivers/net/ethernet/intel/ice/ice_ptp.h      |   9 +
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |   6 +
+ drivers/ptp/ptp_chardev.c                     |  15 ++
+ drivers/ptp/ptp_clockmatrix.h                 |  12 -
+ drivers/ptp/ptp_private.h                     |   2 +
+ drivers/ptp/ptp_sysfs.c                       |  48 ++++
+ include/linux/ptp_clock_kernel.h              |   9 +
+ include/uapi/linux/net_synce.h                |  21 ++
+ include/uapi/linux/ptp_clock.h                |  27 ++
+ include/uapi/linux/sockios.h                  |   4 +
+ net/core/dev_ioctl.c                          |   6 +-
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/phy_ref_clk.c     | 138 +++++++++++
+ tools/testing/selftests/ptp/testptp.c         |  27 +-
+ 19 files changed, 720 insertions(+), 15 deletions(-)
+ create mode 100644 include/uapi/linux/net_synce.h
+ create mode 100644 tools/testing/selftests/net/phy_ref_clk.c
 
 
-Everything else looks good to me.
+base-commit: aba1e4adb54e020d3ca85a4df3ef0f8febe87548
+-- 
+2.24.0
 
-Tyler
-
-> +	if (ksm_merge_pages(map_ptr, page_size * page_count, start_time, timeout))
-> +		goto err_out;
-> +
-> +	if (clock_gettime(CLOCK_MONOTONIC_RAW, &start_time)) {
-> +		perror("clock_gettime");
-> +		goto err_out;
-> +	}
-> +	for (size_t i = 0; i < page_count; i = i + 2)
-> +		memset(map_ptr + page_size * i, '-', 1);
-> +	if (clock_gettime(CLOCK_MONOTONIC_RAW, &end_time)) {
-> +		perror("clock_gettime");
-> +		goto err_out;
-> +	}
-> +
-> +	cow_time_ns = (end_time.tv_sec - start_time.tv_sec) * NSEC_PER_SEC +
-> +		       (end_time.tv_nsec - start_time.tv_nsec);
-> +
-> +	printf("Merged pages:\n");
-> +	printf("Total time:     %ld.%09ld s\n", cow_time_ns / NSEC_PER_SEC,
-> +	       cow_time_ns % NSEC_PER_SEC);
-> +	printf("Average speed:  %.3f MiB/s\n", ((page_size * (page_count / 2)) / MB) /
-> +					       ((double)cow_time_ns / NSEC_PER_SEC));
-> +
-> +	munmap(map_ptr, page_size * page_count);
-> +	return KSFT_PASS;
-> +
-> +err_out:
-> +	printf("Not OK\n");
-> +	munmap(map_ptr, page_size * page_count);
-> +	return KSFT_FAIL;
-> +}
-> +
->  int main(int argc, char *argv[])
->  {
->  	int ret, opt;
-> @@ -468,7 +539,7 @@ int main(int argc, char *argv[])
->  	bool merge_across_nodes = KSM_MERGE_ACROSS_NODES_DEFAULT;
->  	long size_MB = 0;
->  
-> -	while ((opt = getopt(argc, argv, "ha:p:l:z:m:s:MUZNP")) != -1) {
-> +	while ((opt = getopt(argc, argv, "ha:p:l:z:m:s:MUZNPC")) != -1) {
->  		switch (opt) {
->  		case 'a':
->  			prot = str_to_prot(optarg);
-> @@ -522,6 +593,9 @@ int main(int argc, char *argv[])
->  		case 'P':
->  			test_name = KSM_MERGE_TIME;
->  			break;
-> +		case 'C':
-> +			test_name = KSM_COW_TIME;
-> +			break;
->  		default:
->  			return KSFT_FAIL;
->  		}
-> @@ -571,6 +645,10 @@ int main(int argc, char *argv[])
->  		ret = ksm_merge_time(MAP_PRIVATE | MAP_ANONYMOUS, prot, ksm_scan_limit_sec,
->  				     size_MB);
->  		break;
-> +	case KSM_COW_TIME:
-> +		ret = ksm_cow_time(MAP_PRIVATE | MAP_ANONYMOUS, prot, ksm_scan_limit_sec,
-> +				   page_size);
-> +		break;
->  	}
->  
->  	if (ksm_restore(&ksm_sysfs_old)) {
-> -- 
-> 2.25.1
-> 
