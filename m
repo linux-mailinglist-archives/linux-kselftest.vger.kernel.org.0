@@ -2,257 +2,430 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DC73ED07F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 10:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FEA3ED833
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 15:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234863AbhHPIo7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Aug 2021 04:44:59 -0400
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:60908
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234821AbhHPIo5 (ORCPT
+        id S231359AbhHPN6l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Aug 2021 09:58:41 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:43874 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231402AbhHPN5f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Aug 2021 04:44:57 -0400
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPS id D8B4940CBA
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Aug 2021 08:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1629103465;
-        bh=5StmAxU2AOXbMFwiDpPqrKskutFIhD3O+XG8RAcrhBg=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=TA+w4IMxzCDLuGA/hn4++tLW2aPec4847ZmBFXxnQzviYwn793xvyh/6zvhk58toL
-         J6SP9XGmhWcae/RptuNrjGdVVvx5mgMQqnq3VJHbOb0cVUPTQgBmM5VBJap4r3X3H6
-         /W3rUADJZ4awjYNVmhIJc3zHpbp5Dn5n9t8EWiiw1FdIzzRwfWPLKxAThi3sD4E1ok
-         /nnr3Krtk3uqAW8HU4pRB9Pn+YSczM7cJjsORBItrWQ76QrlvVBlC0KBefnbqBkvtZ
-         L5VtuD+qZL9aJx6cLd4crnHML8QF+Sql7LXZ7uNDXOXH/EKcTjWoNOH5hxyVHIoPhG
-         kfritkA85N/Yg==
-Received: by mail-ed1-f72.google.com with SMTP id s8-20020a0564025208b02903bd8539e1caso8506271edd.22
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Aug 2021 01:44:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5StmAxU2AOXbMFwiDpPqrKskutFIhD3O+XG8RAcrhBg=;
-        b=fqbAFoDmUzhWPoT5eJbI1KpGhWZ99wXTHGdYzINcoGuOpPnrojG5qi/LPlb1jMfgA9
-         DHRz4ftFTVN5gso/9pcdBd1XMsdbo+4vNl8YdQkcQa28Oa99BdA1LnPI234sOHUqIqsm
-         IfoQe4vbPNU3AVrNbWLfe7iQScMh7iM+a0KB3mPmGxU+jasQHk1bHowmA3wTU4floi/e
-         +F6XzU5aPfle7pHmFnySWP5HsdJ9DnFCDrcEJh+Piim2dPtnFxHaU93q7LFHfhWYIQXf
-         81al7c8AVik1fKRJmg8KzgPBpvBaTpFgGLuPZobzcng0rPZd9g3J5WIYZIY2mrG8q7Bt
-         hJ2w==
-X-Gm-Message-State: AOAM531jgjGwon6a2oXFtHnkeOKrhcnPo5kOwntsSNLx6XZkKnoocFKp
-        +T0iEJzkYOPlYXw0BEZzt/kXNt1NGGsJwZNPZo20FE83UC/8nzvSanDka9s8y9c+J3fpzI+uLkT
-        rIKs5PXWSx+6z767vAcJcCZhqDULNVVUo39VJre1iGMQXBw==
-X-Received: by 2002:a17:906:f92:: with SMTP id q18mr15333216ejj.353.1629103465560;
-        Mon, 16 Aug 2021 01:44:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxgeOXTEbn8aiOBmH3TKWTTRbMArJhDuNlbv9uJlS3vN7PMhwqxt4mtlcHh4p0wRjmT14zz4w==
-X-Received: by 2002:a17:906:f92:: with SMTP id q18mr15333200ejj.353.1629103465362;
-        Mon, 16 Aug 2021 01:44:25 -0700 (PDT)
-Received: from [192.168.8.102] ([86.32.42.198])
-        by smtp.gmail.com with ESMTPSA id i11sm4469870edu.97.2021.08.16.01.44.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Aug 2021 01:44:25 -0700 (PDT)
-Subject: Re: [PATCH net-next 3/3] selftests: Add the NCI testcase reading T4T
- Tag
-To:     bongsu.jeon2@gmail.com, shuah@kernel.org
-Cc:     netdev@vger.kernel.org, linux-nfc@lists.01.org,
+        Mon, 16 Aug 2021 09:57:35 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 828E520C29E4;
+        Mon, 16 Aug 2021 06:57:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 828E520C29E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1629122224;
+        bh=HJAVAPOHgr41eETaBpO2lWQBQKKyVvKvZokS30cP0vg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YVVsdt6R92dcaf9eQQOqsqroF/T1YYHyOLdZpLYuKh5Uof60fe2lgKVzz2D5Gpbdo
+         lLE2JpaSxJYsnuFV3oMedaIkOws2L2liOG498JgKyhgXYNtuEZo2Qx32NFuWyyirLZ
+         Ou/3CKkVB4PvXOQta44bB6xyLdKpRhZFFpt0sWDQ=
+Date:   Mon, 16 Aug 2021 08:57:01 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
+Cc:     shuah@kernel.org, akpm@linux-foundation.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Bongsu Jeon <bongsu.jeon@samsung.com>
-References: <20210816040600.175813-1-bongsu.jeon2@gmail.com>
- <20210816040600.175813-4-bongsu.jeon2@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <44581a43-daff-b05e-ee5a-45969ccb3d8c@canonical.com>
-Date:   Mon, 16 Aug 2021 10:44:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        linux-mm@kvack.org, pasha.tatashin@soleen.com
+Subject: Re: [PATCH v2 1/4] selftests: vm: add KSM merge test
+Message-ID: <20210816135701.GH5469@sequoia>
+References: <cover.1626252248.git.zhansayabagdaulet@gmail.com>
+ <90287685c13300972ea84de93d1f3f900373f9fe.1626252248.git.zhansayabagdaulet@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210816040600.175813-4-bongsu.jeon2@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <90287685c13300972ea84de93d1f3f900373f9fe.1626252248.git.zhansayabagdaulet@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 16/08/2021 06:06, bongsu.jeon2@gmail.com wrote:
-> From: Bongsu Jeon <bongsu.jeon@samsung.com>
+On 2021-07-14 14:56:06, Zhansaya Bagdauletkyzy wrote:
+> Add check_ksm_merge() function to check the basic merging feature of
+> KSM. First, some number of identical pages are allocated and the
+> MADV_MERGEABLE advice is given to merge these pages. Then, pages_shared
+> and pages_sharing values are compared with the expected numbers using
+> assert_ksm_pages_count() function. The number of pages can be changed
+> using -p option.
 > 
-> Add the NCI testcase reading T4T Tag that has NFC TEST plain text.
-> the virtual device application acts as T4T Tag in this testcase.
-> 
-> Signed-off-by: Bongsu Jeon <bongsu.jeon@samsung.com>
+> Signed-off-by: Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
+
+Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+
+As Pavel mentioned, we went through some private iterations on these
+patches with Zhansaya so my review comments have already been addressed.
+
+Tyler
+
 > ---
->  tools/testing/selftests/nci/nci_dev.c | 384 +++++++++++++++++++++++---
->  1 file changed, 345 insertions(+), 39 deletions(-)
+>  tools/testing/selftests/vm/.gitignore     |   1 +
+>  tools/testing/selftests/vm/Makefile       |   1 +
+>  tools/testing/selftests/vm/ksm_tests.c    | 306 ++++++++++++++++++++++
+>  tools/testing/selftests/vm/run_vmtests.sh |  16 ++
+>  4 files changed, 324 insertions(+)
+>  create mode 100644 tools/testing/selftests/vm/ksm_tests.c
 > 
-> diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-> index 34e76c7fa1fe..65d887dc5ccc 100644
-> --- a/tools/testing/selftests/nci/nci_dev.c
-> +++ b/tools/testing/selftests/nci/nci_dev.c
-> @@ -57,6 +57,29 @@ const __u8 nci_init_rsp_v2[] = {0x40, 0x01, 0x1c, 0x00, 0x1a, 0x7e, 0x06,
->  const __u8 nci_rf_disc_map_rsp[] = {0x41, 0x00, 0x01, 0x00};
->  const __u8 nci_rf_disc_rsp[] = {0x41, 0x03, 0x01, 0x00};
->  const __u8 nci_rf_deact_rsp[] = {0x41, 0x06, 0x01, 0x00};
-> +const __u8 nci_rf_deact_ntf[] = {0x61, 0x06, 0x02, 0x00, 0x00};
-> +const __u8 nci_rf_activate_ntf[] = {0x61, 0x05, 0x1D, 0x01, 0x02, 0x04, 0x00,
-> +				     0xFF, 0xFF, 0x0C, 0x44, 0x03, 0x07, 0x04,
-> +				     0x62, 0x26, 0x11, 0x80, 0x1D, 0x80, 0x01,
-> +				     0x20, 0x00, 0x00, 0x00, 0x06, 0x05, 0x75,
-> +				     0x77, 0x81, 0x02, 0x80};
-> +const __u8 nci_t4t_select_cmd[] = {0x00, 0x00, 0x0C, 0x00, 0xA4, 0x04, 0x00,
-> +				    0x07, 0xD2, 0x76, 0x00, 0x00, 0x85, 0x01, 0x01};
-> +const __u8 nci_t4t_select_cmd2[] = {0x00, 0x00, 0x07, 0x00, 0xA4, 0x00, 0x0C, 0x02,
-> +				     0xE1, 0x03};
-> +const __u8 nci_t4t_select_cmd3[] = {0x00, 0x00, 0x07, 0x00, 0xA4, 0x00, 0x0C, 0x02,
-> +				     0xE1, 0x04};
-> +const __u8 nci_t4t_read_cmd[] = {0x00, 0x00, 0x05, 0x00, 0xB0, 0x00, 0x00, 0x0F};
-> +const __u8 nci_t4t_read_rsp[] = {0x00, 0x00, 0x11, 0x00, 0x0F, 0x20, 0x00, 0x3B,
-> +				  0x00, 0x34, 0x04, 0x06, 0xE1, 0x04, 0x08, 0x00,
-> +				  0x00, 0x00, 0x90, 0x00};
-> +const __u8 nci_t4t_read_cmd2[] = {0x00, 0x00, 0x05, 0x00, 0xB0, 0x00, 0x00, 0x02};
-> +const __u8 nci_t4t_read_rsp2[] = {0x00, 0x00, 0x04, 0x00, 0x0F, 0x90, 0x00};
-> +const __u8 nci_t4t_read_cmd3[] = {0x00, 0x00, 0x05, 0x00, 0xB0, 0x00, 0x02, 0x0F};
-> +const __u8 nci_t4t_read_rsp3[] = {0x00, 0x00, 0x11, 0xD1, 0x01, 0x0B, 0x54, 0x02,
-> +				   0x65, 0x6E, 0x4E, 0x46, 0x43, 0x20, 0x54, 0x45,
-> +				   0x53, 0x54, 0x90, 0x00};
-> +const __u8 nci_t4t_rsp_ok[] = {0x00, 0x00, 0x02, 0x90, 0x00};
+> diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+> index f0fd80ef17df..b02eac613fdd 100644
+> --- a/tools/testing/selftests/vm/.gitignore
+> +++ b/tools/testing/selftests/vm/.gitignore
+> @@ -27,3 +27,4 @@ hmm-tests
+>  memfd_secret
+>  local_config.*
+>  split_huge_page_test
+> +ksm_tests
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 521243770f26..e6f22a801b71 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -45,6 +45,7 @@ TEST_GEN_FILES += thuge-gen
+>  TEST_GEN_FILES += transhuge-stress
+>  TEST_GEN_FILES += userfaultfd
+>  TEST_GEN_FILES += split_huge_page_test
+> +TEST_GEN_FILES += ksm_tests
 >  
->  struct msgtemplate {
->  	struct nlmsghdr n;
-> @@ -87,7 +110,7 @@ static int create_nl_socket(void)
->  
->  static int send_cmd_mt_nla(int sd, __u16 nlmsg_type, __u32 nlmsg_pid,
->  			   __u8 genl_cmd, int nla_num, __u16 nla_type[],
-> -			   void *nla_data[], int nla_len[])
-> +			   void *nla_data[], int nla_len[], __u16 flags)
->  {
->  	struct sockaddr_nl nladdr;
->  	struct msgtemplate msg;
-> @@ -98,7 +121,7 @@ static int send_cmd_mt_nla(int sd, __u16 nlmsg_type, __u32 nlmsg_pid,
->  
->  	msg.n.nlmsg_len = NLMSG_LENGTH(GENL_HDRLEN);
->  	msg.n.nlmsg_type = nlmsg_type;
-> -	msg.n.nlmsg_flags = NLM_F_REQUEST;
-> +	msg.n.nlmsg_flags = flags;
->  	msg.n.nlmsg_seq = 0;
->  	msg.n.nlmsg_pid = nlmsg_pid;
->  	msg.g.cmd = genl_cmd;
-> @@ -108,12 +131,12 @@ static int send_cmd_mt_nla(int sd, __u16 nlmsg_type, __u32 nlmsg_pid,
->  	for (cnt = 0; cnt < nla_num; cnt++) {
->  		na = (struct nlattr *)(GENLMSG_DATA(&msg) + prv_len);
->  		na->nla_type = nla_type[cnt];
-> -		na->nla_len = nla_len[cnt] + NLA_HDRLEN;
-> +		na->nla_len = NLMSG_ALIGN(nla_len[cnt] + NLA_HDRLEN);
->  
->  		if (nla_len > 0)
->  			memcpy(NLA_DATA(na), nla_data[cnt], nla_len[cnt]);
->  
-> -		msg.n.nlmsg_len += NLMSG_ALIGN(na->nla_len);
-> +		msg.n.nlmsg_len += na->nla_len;
->  		prv_len = na->nla_len;
->  	}
->  
-> @@ -146,11 +169,11 @@ static int send_get_nfc_family(int sd, __u32 pid)
->  	nla_get_family_data = family_name;
->  
->  	return send_cmd_mt_nla(sd, GENL_ID_CTRL, pid, CTRL_CMD_GETFAMILY,
-> -				1, &nla_get_family_type,
-> -				&nla_get_family_data, &nla_get_family_len);
-> +				1, &nla_get_family_type, &nla_get_family_data,
-> +				&nla_get_family_len, NLM_F_REQUEST);
->  }
->  
-> -static int get_family_id(int sd, __u32 pid)
-> +static int get_family_id(int sd, __u32 pid, __u32 *event_group)
->  {
->  	struct {
->  		struct nlmsghdr n;
-> @@ -158,8 +181,9 @@ static int get_family_id(int sd, __u32 pid)
->  		char buf[512];
->  	} ans;
->  	struct nlattr *na;
-> -	int rep_len;
-> +	int resp_len;
-
-Here and in other places - all these renames rep_len->resp_len do not
-look like related to the commit, so please split these to separate commit.
->  	__u16 id;
-> +	int len;
->  	int rc;
->  
->  	rc = send_get_nfc_family(sd, pid);
-> @@ -167,17 +191,49 @@ static int get_family_id(int sd, __u32 pid)
->  	if (rc < 0)
->  		return 0;
->  
-> -	rep_len = recv(sd, &ans, sizeof(ans), 0);
-> +	resp_len = recv(sd, &ans, sizeof(ans), 0);
->  
-> -	if (ans.n.nlmsg_type == NLMSG_ERROR || rep_len < 0 ||
-> -	    !NLMSG_OK(&ans.n, rep_len))
-> +	if (ans.n.nlmsg_type == NLMSG_ERROR || resp_len < 0 ||
-> +	    !NLMSG_OK(&ans.n, resp_len))
->  		return 0;
->  
-> +	len = 0;
-> +	resp_len = GENLMSG_PAYLOAD(&ans.n);
->  	na = (struct nlattr *)GENLMSG_DATA(&ans);
-> -	na = (struct nlattr *)((char *)na + NLA_ALIGN(na->nla_len));
-> -	if (na->nla_type == CTRL_ATTR_FAMILY_ID)
-> -		id = *(__u16 *)NLA_DATA(na);
->  
-> +	while (len < resp_len) {
-> +		len += NLA_ALIGN(na->nla_len);
-> +		if (na->nla_type == CTRL_ATTR_FAMILY_ID) {
-> +			id = *(__u16 *)NLA_DATA(na);
-> +		} else if (na->nla_type == CTRL_ATTR_MCAST_GROUPS) {
-> +			struct nlattr *nested_na;
-> +			struct nlattr *group_na;
-> +			int group_attr_len;
-> +			int group_attr;
+>  ifeq ($(MACHINE),x86_64)
+>  CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
+> diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
+> new file mode 100644
+> index 000000000000..d74d5aa34b16
+> --- /dev/null
+> +++ b/tools/testing/selftests/vm/ksm_tests.c
+> @@ -0,0 +1,306 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +
-> +			nested_na = (struct nlattr *)((char *)na + NLA_HDRLEN);
-> +			group_na = (struct nlattr *)((char *)nested_na + NLA_HDRLEN);
-> +			group_attr_len = 0;
+> +#include <sys/mman.h>
+> +#include <stdbool.h>
+> +#include <time.h>
+> +#include <string.h>
 > +
-> +			for (group_attr = CTRL_ATTR_MCAST_GRP_UNSPEC;
-> +				group_attr < CTRL_ATTR_MCAST_GRP_MAX; group_attr++) {
-> +				if (group_na->nla_type == CTRL_ATTR_MCAST_GRP_ID) {
-> +					*event_group = *(__u32 *)((char *)group_na +
-> +								  NLA_HDRLEN);
-> +					break;
-> +				}
+> +#include "../kselftest.h"
 > +
-> +				group_attr_len += NLA_ALIGN(group_na->nla_len) +
-> +						  NLA_HDRLEN;
-> +				if (group_attr_len >= nested_na->nla_len)
-> +					break;
+> +#define KSM_SYSFS_PATH "/sys/kernel/mm/ksm/"
+> +#define KSM_FP(s) (KSM_SYSFS_PATH s)
+> +#define KSM_SCAN_LIMIT_SEC_DEFAULT 120
+> +#define KSM_PAGE_COUNT_DEFAULT 10l
+> +#define KSM_PROT_STR_DEFAULT "rw"
 > +
-> +				group_na = (struct nlattr *)((char *)group_na +
-> +							     NLA_ALIGN(group_na->nla_len));
-> +			}
-> +		}
-> +		na = (struct nlattr *)(GENLMSG_DATA(&ans) + len);
+> +struct ksm_sysfs {
+> +	unsigned long max_page_sharing;
+> +	unsigned long merge_across_nodes;
+> +	unsigned long pages_to_scan;
+> +	unsigned long run;
+> +	unsigned long sleep_millisecs;
+> +	unsigned long stable_node_chains_prune_millisecs;
+> +	unsigned long use_zero_pages;
+> +};
+> +
+> +static int ksm_write_sysfs(const char *file_path, unsigned long val)
+> +{
+> +	FILE *f = fopen(file_path, "w");
+> +
+> +	if (!f) {
+> +		fprintf(stderr, "f %s\n", file_path);
+> +		perror("fopen");
+> +		return 1;
 > +	}
->  	return id;
->  }
+> +	if (fprintf(f, "%lu", val) < 0) {
+> +		perror("fprintf");
+> +		return 1;
+> +	}
+> +	fclose(f);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ksm_read_sysfs(const char *file_path, unsigned long *val)
+> +{
+> +	FILE *f = fopen(file_path, "r");
+> +
+> +	if (!f) {
+> +		fprintf(stderr, "f %s\n", file_path);
+> +		perror("fopen");
+> +		return 1;
+> +	}
+> +	if (fscanf(f, "%lu", val) != 1) {
+> +		perror("fscanf");
+> +		return 1;
+> +	}
+> +	fclose(f);
+> +
+> +	return 0;
+> +}
+> +
+> +static int str_to_prot(char *prot_str)
+> +{
+> +	int prot = 0;
+> +
+> +	if ((strchr(prot_str, 'r')) != NULL)
+> +		prot |= PROT_READ;
+> +	if ((strchr(prot_str, 'w')) != NULL)
+> +		prot |= PROT_WRITE;
+> +	if ((strchr(prot_str, 'x')) != NULL)
+> +		prot |= PROT_EXEC;
+> +
+> +	return prot;
+> +}
+> +
+> +static void print_help(void)
+> +{
+> +	printf("usage: ksm_tests [-h] [-a prot] [-p page_count] [-l timeout]\n");
+> +	printf(" -a: specify the access protections of pages.\n"
+> +	       "     <prot> must be of the form [rwx].\n"
+> +	       "     Default: %s\n", KSM_PROT_STR_DEFAULT);
+> +	printf(" -p: specify the number of pages to test.\n"
+> +	       "     Default: %ld\n", KSM_PAGE_COUNT_DEFAULT);
+> +	printf(" -l: limit the maximum running time (in seconds) for a test.\n"
+> +	       "     Default: %d seconds\n", KSM_SCAN_LIMIT_SEC_DEFAULT);
+> +
+> +	exit(0);
+> +}
+> +
+> +static void  *allocate_memory(void *ptr, int prot, int mapping, char data, size_t map_size)
+> +{
+> +	void *map_ptr = mmap(ptr, map_size, PROT_WRITE, mapping, -1, 0);
+> +
+> +	if (!map_ptr) {
+> +		perror("mmap");
+> +		return NULL;
+> +	}
+> +	memset(map_ptr, data, map_size);
+> +	if (mprotect(map_ptr, map_size, prot)) {
+> +		perror("mprotect");
+> +		munmap(map_ptr, map_size);
+> +		return NULL;
+> +	}
+> +
+> +	return map_ptr;
+> +}
+> +
+> +static int ksm_do_scan(int scan_count, struct timespec start_time, int timeout)
+> +{
+> +	struct timespec cur_time;
+> +	unsigned long cur_scan, init_scan;
+> +
+> +	if (ksm_read_sysfs(KSM_FP("full_scans"), &init_scan))
+> +		return 1;
+> +	cur_scan = init_scan;
+> +
+> +	while (cur_scan < init_scan + scan_count) {
+> +		if (ksm_read_sysfs(KSM_FP("full_scans"), &cur_scan))
+> +			return 1;
+> +		if (clock_gettime(CLOCK_MONOTONIC_RAW, &cur_time)) {
+> +			perror("clock_gettime");
+> +			return 1;
+> +		}
+> +		if ((cur_time.tv_sec - start_time.tv_sec) > timeout) {
+> +			printf("Scan time limit exceeded\n");
+> +			return 1;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ksm_merge_pages(void *addr, size_t size, struct timespec start_time, int timeout)
+> +{
+> +	if (madvise(addr, size, MADV_MERGEABLE)) {
+> +		perror("madvise");
+> +		return 1;
+> +	}
+> +	if (ksm_write_sysfs(KSM_FP("run"), 1))
+> +		return 1;
+> +
+> +	/* Since merging occurs only after 2 scans, make sure to get at least 2 full scans */
+> +	if (ksm_do_scan(2, start_time, timeout))
+> +		return 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static bool assert_ksm_pages_count(long dupl_page_count)
+> +{
+> +	unsigned long max_page_sharing, pages_sharing, pages_shared;
+> +
+> +	if (ksm_read_sysfs(KSM_FP("pages_shared"), &pages_shared) ||
+> +	    ksm_read_sysfs(KSM_FP("pages_sharing"), &pages_sharing) ||
+> +	    ksm_read_sysfs(KSM_FP("max_page_sharing"), &max_page_sharing))
+> +		return false;
+> +
+> +	/*
+> +	 * Since there must be at least 2 pages for merging and 1 page can be
+> +	 * shared with the limited number of pages (max_page_sharing), sometimes
+> +	 * there are 'leftover' pages that cannot be merged. For example, if there
+> +	 * are 11 pages and max_page_sharing = 10, then only 10 pages will be
+> +	 * merged and the 11th page won't be affected. As a result, when the number
+> +	 * of duplicate pages is divided by max_page_sharing and the remainder is 1,
+> +	 * pages_shared and pages_sharing values will be equal between dupl_page_count
+> +	 * and dupl_page_count - 1.
+> +	 */
+> +	if (dupl_page_count % max_page_sharing == 1 || dupl_page_count % max_page_sharing == 0) {
+> +		if (pages_shared == dupl_page_count / max_page_sharing &&
+> +		    pages_sharing == pages_shared * (max_page_sharing - 1))
+> +			return true;
+> +	} else {
+> +		if (pages_shared == (dupl_page_count / max_page_sharing + 1) &&
+> +		    pages_sharing == dupl_page_count - pages_shared)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static int ksm_save_def(struct ksm_sysfs *ksm_sysfs)
+> +{
+> +	if (ksm_read_sysfs(KSM_FP("max_page_sharing"), &ksm_sysfs->max_page_sharing) ||
+> +	    ksm_read_sysfs(KSM_FP("merge_across_nodes"), &ksm_sysfs->merge_across_nodes) ||
+> +	    ksm_read_sysfs(KSM_FP("sleep_millisecs"), &ksm_sysfs->sleep_millisecs) ||
+> +	    ksm_read_sysfs(KSM_FP("pages_to_scan"), &ksm_sysfs->pages_to_scan) ||
+> +	    ksm_read_sysfs(KSM_FP("run"), &ksm_sysfs->run) ||
+> +	    ksm_read_sysfs(KSM_FP("stable_node_chains_prune_millisecs"),
+> +			   &ksm_sysfs->stable_node_chains_prune_millisecs) ||
+> +	    ksm_read_sysfs(KSM_FP("use_zero_pages"), &ksm_sysfs->use_zero_pages))
+> +		return 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ksm_restore(struct ksm_sysfs *ksm_sysfs)
+> +{
+> +	if (ksm_write_sysfs(KSM_FP("max_page_sharing"), ksm_sysfs->max_page_sharing) ||
+> +	    ksm_write_sysfs(KSM_FP("merge_across_nodes"), ksm_sysfs->merge_across_nodes) ||
+> +	    ksm_write_sysfs(KSM_FP("pages_to_scan"), ksm_sysfs->pages_to_scan) ||
+> +	    ksm_write_sysfs(KSM_FP("run"), ksm_sysfs->run) ||
+> +	    ksm_write_sysfs(KSM_FP("sleep_millisecs"), ksm_sysfs->sleep_millisecs) ||
+> +	    ksm_write_sysfs(KSM_FP("stable_node_chains_prune_millisecs"),
+> +			    ksm_sysfs->stable_node_chains_prune_millisecs) ||
+> +	    ksm_write_sysfs(KSM_FP("use_zero_pages"), ksm_sysfs->use_zero_pages))
+> +		return 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int check_ksm_merge(int mapping, int prot, long page_count, int timeout, size_t page_size)
+> +{
+> +	void *map_ptr;
+> +	struct timespec start_time;
+> +
+> +	if (clock_gettime(CLOCK_MONOTONIC_RAW, &start_time)) {
+> +		perror("clock_gettime");
+> +		return KSFT_FAIL;
+> +	}
+> +
+> +	/* fill pages with the same data and merge them */
+> +	map_ptr = allocate_memory(NULL, prot, mapping, '*', page_size * page_count);
+> +	if (!map_ptr)
+> +		return KSFT_FAIL;
+> +
+> +	if (ksm_merge_pages(map_ptr, page_size * page_count, start_time, timeout))
+> +		goto err_out;
+> +
+> +	/* verify that the right number of pages are merged */
+> +	if (assert_ksm_pages_count(page_count)) {
+> +		printf("OK\n");
+> +		munmap(map_ptr, page_size * page_count);
+> +		return KSFT_PASS;
+> +	}
+> +
+> +err_out:
+> +	printf("Not OK\n");
+> +	munmap(map_ptr, page_size * page_count);
+> +	return KSFT_FAIL;
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	int ret, opt;
+> +	int prot = 0;
+> +	int ksm_scan_limit_sec = KSM_SCAN_LIMIT_SEC_DEFAULT;
+> +	long page_count = KSM_PAGE_COUNT_DEFAULT;
+> +	size_t page_size = sysconf(_SC_PAGESIZE);
+> +	struct ksm_sysfs ksm_sysfs_old;
+> +
+> +	while ((opt = getopt(argc, argv, "ha:p:l:")) != -1) {
+> +		switch (opt) {
+> +		case 'a':
+> +			prot = str_to_prot(optarg);
+> +			break;
+> +		case 'p':
+> +			page_count = atol(optarg);
+> +			if (page_count <= 0) {
+> +				printf("The number of pages must be greater than 0\n");
+> +				return KSFT_FAIL;
+> +			}
+> +			break;
+> +		case 'l':
+> +			ksm_scan_limit_sec = atoi(optarg);
+> +			if (ksm_scan_limit_sec <= 0) {
+> +				printf("Timeout value must be greater than 0\n");
+> +				return KSFT_FAIL;
+> +			}
+> +			break;
+> +		case 'h':
+> +			print_help();
+> +			break;
+> +		default:
+> +			return KSFT_FAIL;
+> +		}
+> +	}
+> +
+> +	if (prot == 0)
+> +		prot = str_to_prot(KSM_PROT_STR_DEFAULT);
+> +
+> +	if (access(KSM_SYSFS_PATH, F_OK)) {
+> +		printf("Config KSM not enabled\n");
+> +		return KSFT_SKIP;
+> +	}
+> +
+> +	if (ksm_save_def(&ksm_sysfs_old)) {
+> +		printf("Cannot save default tunables\n");
+> +		return KSFT_FAIL;
+> +	}
+> +
+> +	if (ksm_write_sysfs(KSM_FP("run"), 2) ||
+> +	    ksm_write_sysfs(KSM_FP("sleep_millisecs"), 0) ||
+> +	    ksm_write_sysfs(KSM_FP("merge_across_nodes"), 1) ||
+> +	    ksm_write_sysfs(KSM_FP("pages_to_scan"), page_count))
+> +		return KSFT_FAIL;
+> +
+> +	ret = check_ksm_merge(MAP_PRIVATE | MAP_ANONYMOUS, prot, page_count, ksm_scan_limit_sec,
+> +			      page_size);
+> +
+> +	if (ksm_restore(&ksm_sysfs_old)) {
+> +		printf("Cannot restore default tunables\n");
+> +		return KSFT_FAIL;
+> +	}
+> +
+> +	return ret;
+> +}
+> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+> index d09a6b71f1e9..97b6f712134d 100755
+> --- a/tools/testing/selftests/vm/run_vmtests.sh
+> +++ b/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -377,6 +377,22 @@ else
+>  	exitcode=1
+>  fi
 >  
-> @@ -189,12 +245,13 @@ static int send_cmd_with_idx(int sd, __u16 nlmsg_type, __u32 nlmsg_pid,
->  	int nla_len = 4;
+> +echo "-------------------------------------------------------"
+> +echo "running KSM MADV_MERGEABLE test with 10 identical pages"
+> +echo "-------------------------------------------------------"
+> +./ksm_tests -p 10
+> +ret_val=$?
+> +
+> +if [ $ret_val -eq 0 ]; then
+> +	echo "[PASS]"
+> +elif [ $ret_val -eq $ksft_skip ]; then
+> +	 echo "[SKIP]"
+> +	 exitcode=$ksft_skip
+> +else
+> +	echo "[FAIL]"
+> +	exitcode=1
+> +fi
+> +
+>  exit $exitcode
 >  
->  	return send_cmd_mt_nla(sd, nlmsg_type, nlmsg_pid, genl_cmd, 1,
-> -				&nla_type, &nla_data, &nla_len);
-> +				&nla_type, &nla_data, &nla_len, NLM_F_REQUEST);
->  }
->  
-> -static int get_nci_devid(int sd, __u16 fid, __u32 pid, int dev_id, struct msgtemplate *msg)
-> +static int get_nci_devid(int sd, __u16 fid, __u32 pid, int dev_id,
-> +			 struct msgtemplate *msg)
-
-Does not look related.
-
-Best regards,
-Krzysztof
+>  exit $exitcode
+> -- 
+> 2.25.1
+> 
