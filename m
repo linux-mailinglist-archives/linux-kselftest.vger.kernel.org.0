@@ -2,141 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E283EDC09
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 19:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9723EDD84
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 21:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbhHPRJH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Aug 2021 13:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
+        id S229889AbhHPTEJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Aug 2021 15:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbhHPRJG (ORCPT
+        with ESMTP id S229556AbhHPTEI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Aug 2021 13:09:06 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559AFC061764;
-        Mon, 16 Aug 2021 10:08:34 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id om1-20020a17090b3a8100b0017941c44ce4so15189159pjb.3;
-        Mon, 16 Aug 2021 10:08:34 -0700 (PDT)
+        Mon, 16 Aug 2021 15:04:08 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F422C0613C1
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Aug 2021 12:03:36 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d17so21733592plr.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Aug 2021 12:03:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ezzl1wWnIMpMxrnM4W7DDVrnVpy6eCY3TnCdM56lXyY=;
-        b=bz0Ae35bR0EHDskVbOAz6ZJTJsciOg38ggObJYVxbzJbN6FSJ2ga3D1fhPcm3CBqpu
-         3K137eUco3rmgdvBI9wOWnRzVqJSHdIRWwzQRZVMq9CYCbapAYdanPceAefq2A03pnEk
-         ScQnPxf2oxwtXTyjKIK2YI3gVybmud2L8ktcDPC9qxhthbEbk0zZQlIxeZhSeuwb5oYW
-         9X2NF47UZc9uMfeoB5Wkg07GZfJzpqJDFJGhSzqy2xMdfwd2JTZXm6fOFfqwndB7PkVO
-         ZXyVbhwHcMWgPdS0q0PU8vFbLywFpxrvVfNCdp9x+byGTE+82sJ4puxpdMTTOxtrG8/d
-         OFdA==
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OQIDgHDinK9G6OVBaqwTHfY5KB000CBp6CpTZGMvcek=;
+        b=WY6mR6quoN2NpyDT0Cs4sZaNedYyZyWYZn7jL4roycAQ1Qc1jPq0YAcYZDJH/ybJld
+         QiUXHBTlLxAXmoJkMctv9/5GoophqAfiAUybaAGW8TcsfRUT2dzVp2Z5xFSQ2PRHzL2G
+         8H4MbrQOkNpPxPLcTRf69OPJcjLMcByxMlYsWOEStHoJ+NK6XPBxYvtAIn2C7CIn0DM0
+         eyLQjg9qBfZywYs19F19KCGSvZq8K0rB/FpWfwVXEdpQ6rupZ0ea9OGIfn1qd86zBQZM
+         IWDl+StJFsIe4ByBgiCZ4tqLVMX0RaltUDab7tEnyME18S8BDQ2GXg6Rzbk6z6OyvNOa
+         X0Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ezzl1wWnIMpMxrnM4W7DDVrnVpy6eCY3TnCdM56lXyY=;
-        b=Fxy5dvJq4tNe7bhcGG+PFyDrANErL+Bk2Rzk0HxcGQrtey6TnJE1Xi+X9QtdVIGTMH
-         fSQE4PU4GF7G2YnxYXXgfAvZ5yW7Nt5Clc3fhT+Be7aEGRAfkxrOGABGggW6A64f6cJ8
-         /EusrF5XL6PxJ1Y2Hk+WhM3Jof78XiKYirBzS6qc9iHsqcdavG35NTPzBbTxZNQ/9Bbd
-         EZn4Zh0el7Siu25f1aqP7Pbk0Kq8kkd4k2cvMFrwxvBJ19INSoeNo3GqW+p5eoAxuEbU
-         I5KnvdfLcnrF9cFuOjW+H3ChNpYdho9WSotpm0zl8vwpcXV3wMLh7g363t4JExK2HOkE
-         bFEg==
-X-Gm-Message-State: AOAM533IBAjHkACXhJf7qXRjrVRK5LNzq0hl4cxf7n/n7PLs3ZleCAWC
-        /kTgG0Pue6AtzIM+v5Dead0=
-X-Google-Smtp-Source: ABdhPJxRuP4eiiPsWD4zzp6jNj7ax4FTsTMWJEepxl8GOYruGJOctgnU1X900LAC34J+DvA5dVvmsQ==
-X-Received: by 2002:a63:f241:: with SMTP id d1mr16821140pgk.424.1629133713651;
-        Mon, 16 Aug 2021 10:08:33 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id n23sm13215976pgv.76.2021.08.16.10.08.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OQIDgHDinK9G6OVBaqwTHfY5KB000CBp6CpTZGMvcek=;
+        b=EoDORLh3OWfOGkRpPrAipanxNY+lCMenKCwBK4E10VXD0AyntyQLrvP/Xg9VJiAof+
+         sl7RMfpEvrHesx7RMRUJ0+YkFiIfJy8z8cy1YDH51ZnLrOAYALM6a/ImDDltAGE0vqGn
+         DZcE7msNjt4ARH9z9Jlvkm8jajbsel1Lr8EOCmkC+ejxwXo7zBEXtvRy7OzPSdUtV5OU
+         c6xCElpsutHL211RJjaaXFH7ZD/HNvOMqTSLT0saBKTTF85F3KtxnhXcBr9x4XPjBB77
+         /SHo1ubfmHwmka26/QQlo40YmFr1pfNgyp85ZU5YtZDZRuY3by4cZ0Az1rRySLF3yvrm
+         Yw8g==
+X-Gm-Message-State: AOAM530MozMVMy/iHp/hlP5CANPba75BpvQ8Eqjt1bdDeYOhweBlQY+A
+        9H9a4rfzUtrZmb0Ybu3YIqiZ4Q==
+X-Google-Smtp-Source: ABdhPJzpUs4hGAe1udl/DE9Ky+AbUywHhNGuWdpShcgWqkdr1vSLVsikHzErghPFMfVjwOXtjwgzXw==
+X-Received: by 2002:a17:902:9a02:b029:118:307e:a9dd with SMTP id v2-20020a1709029a02b0290118307ea9ddmr223456plp.47.1629140615950;
+        Mon, 16 Aug 2021 12:03:35 -0700 (PDT)
+Received: from ip-10-124-121-13.byted.org (ec2-54-241-92-238.us-west-1.compute.amazonaws.com. [54.241.92.238])
+        by smtp.gmail.com with ESMTPSA id t30sm175845pgl.47.2021.08.16.12.03.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Aug 2021 10:08:33 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 16 Aug 2021 07:08:31 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v6 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <YRqbj5+ZdS+7k0Fn@slm.duckdns.org>
-References: <20210814205743.3039-1-longman@redhat.com>
- <20210814205743.3039-6-longman@redhat.com>
+        Mon, 16 Aug 2021 12:03:35 -0700 (PDT)
+From:   Jiang Wang <jiang.wang@bytedance.com>
+To:     netdev@vger.kernel.org
+Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
+        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Rao Shoaib <rao.shoaib@oracle.com>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v7 0/5] sockmap: add sockmap support for unix stream socket
+Date:   Mon, 16 Aug 2021 19:03:19 +0000
+Message-Id: <20210816190327.2739291-1-jiang.wang@bytedance.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210814205743.3039-6-longman@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Aug 14, 2021 at 04:57:42PM -0400, Waiman Long wrote:
-> +	A parent partition may distribute all its CPUs to its child
-> +	partitions as long as it is not the root cgroup and there is no
-> +	task directly associated with that parent partition.  Otherwise,
+This patch series add support for unix stream type
+for sockmap. Sockmap already supports TCP, UDP,
+unix dgram types. The unix stream support is similar
+to unix dgram.
 
-"there is not task directly associated with the parent partition" isn't
-necessary, right? That's already enforced by the cgroup hierarchy itself.
+Also add selftests for unix stream type in sockmap tests.
 
-> +	there must be at least one cpu left in the parent partition.
-> +	A new task cannot be moved to a partition root with no effective
-> +	cpu.
-> +
-> +	Once becoming a partition root, changes to "cpuset.cpus"
-> +	is generally allowed as long as the first condition above
-> +	(cpu exclusivity rule) is true.
 
-All the above ultimately says is that "a new task cannot be moved to a
-partition root with no effective cpu", but I don't understand why this would
-be a separate rule. Shouldn't the partition just stop being a partition when
-it doesn't have any exclusive cpu? What's the benefit of having multiple its
-own failure mode?
+Jiang Wang (5):
+  af_unix: add read_sock for stream socket types
+  af_unix: add unix_stream_proto for sockmap
+  selftest/bpf: add tests for sockmap with unix stream type.
+  selftest/bpf: change udp to inet in some function names
+  selftest/bpf: add new tests in sockmap for unix stream to tcp.
 
-> +	Sometimes, changes to "cpuset.cpus" or cpu hotplug may cause
-> +	the state of the partition root to become invalid when the
-> +	other constraints of partition root are violated.  Therefore,
-> +	it is recommended that users should always set "cpuset.cpus"
-> +	to the proper value first before enabling partition.  In case
-> +	"cpuset.cpus" has to be modified after partition is enabled,
-> +	users should check the state of "cpuset.cpus.partition" after
-> +	making change to it to make sure that the partition is still
-> +	valid.
+ include/net/af_unix.h                         |  8 +-
+ net/core/sock_map.c                           |  1 +
+ net/unix/af_unix.c                            | 95 ++++++++++++++++---
+ net/unix/unix_bpf.c                           | 93 +++++++++++++-----
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 48 ++++++----
+ 5 files changed, 191 insertions(+), 54 deletions(-)
 
-So, idk why the this doesn't cover the one above it. Also, this really
-should be worded a lot stronger. It's not just recommended - confirming and
-monitoring the transitions is an integral and essential part of using
-cpuset.
+v1 -> v2 :
+ - Call unhash in shutdown.
+ - Clean up unix_create1 a bit.
+ - Return -ENOTCONN if socket is not connected.
 
-...
-> +	An invalid partition is not a real partition even though the
-> +	restriction of the cpu exclusivity rule will still apply.
+v2 -> v3 :
+ - check for stream type in update_proto
+ - remove intermediate variable in __unix_stream_recvmsg
+ - fix compile warning in unix_stream_recvmsg
 
-Is there a reason we can't bring this in line with other failure behaviors?
+v3 -> v4 :
+ - remove sk_is_unix_stream, just check TCP_ESTABLISHED for UNIX sockets.
+ - add READ_ONCE in unix_dgram_recvmsg
+ - remove type check in unix_stream_bpf_update_proto
 
-> +	In the special case of a parent partition competing with a child
-> +	partition for the only CPU left, the parent partition wins and
-> +	the child partition becomes invalid.
+v4 -> v5 :
+ - add two missing READ_ONCE for sk_prot.
 
-Given that parent partitions are *always* empty, this rule doesn't seem to
-make sense.
+v5 -> v6 :
+ - fix READ_ONCE by reading to a local variable first.
 
-So, I think this definitely is a step in the right direction but still seems
-to be neither here or there. Before, we pretended that we could police the
-input when we couldn't. Now, we're changing the interface so that it
-includes configuration failures as an integral part; however, we're still
-policing some particular inputs while letting other inputs pass through and
-trigger failures and why one is handled one way while the other differently
-seems rather arbitrary.
+v6 -> v7 :
+ - fix the following compiler error when CONFIG_UNIX is m.
+   modpost: "sock_map_unhash" [net/unix/unix.ko] undefined!
 
-Thanks.
+For the series:
 
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
 -- 
-tejun
+2.20.1
+
