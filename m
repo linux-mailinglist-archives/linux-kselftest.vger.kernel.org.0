@@ -2,290 +2,231 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97113ED8F5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 16:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C393ED937
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 16:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbhHPO3E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Aug 2021 10:29:04 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:48404 "EHLO
+        id S232661AbhHPOvU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Aug 2021 10:51:20 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:51436 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbhHPO3E (ORCPT
+        with ESMTP id S232555AbhHPOvR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Aug 2021 10:29:04 -0400
+        Mon, 16 Aug 2021 10:51:17 -0400
 Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 17EA520C29DE;
-        Mon, 16 Aug 2021 07:28:32 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 17EA520C29DE
+        by linux.microsoft.com (Postfix) with ESMTPSA id ECF2D20C29DE;
+        Mon, 16 Aug 2021 07:50:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com ECF2D20C29DE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1629124112;
-        bh=qUwF1jwILq/SE9G5F2rsf5ikLgkoedu2AKZ3W0Do1Es=;
+        s=default; t=1629125445;
+        bh=EtK88Klp/csYiXGlHYdDL4COx9P3F5jeMkcQ38wpqdY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VMwcPFKU2XOFvcz7+1wc6N58AY7ac16WbcigHYYIJuY/fdAIirU4dTFil5xVjj3R9
-         2Jtfdx9sE1sFDpKmpk8yPWAskv0dHHXnoadvJGn8P2knu5GlPlwqQVo8tDEL0RL9+v
-         DfJQPw7Cz3nJjfIgvQkM9X1bns8zidp0XIGk699M=
-Date:   Mon, 16 Aug 2021 09:28:30 -0500
+        b=j5eWDo8biK0TWQ9O7y48EhsnZe5sHR+7lF44x/5qMHz87OsfNWA/nt2BunNEJYJmg
+         7QJUlOM7A0mViYMDy8tjUp0CIvSK1TXOZ61nn2Va5wGXskzWmtOMhc6s1AkhntG32Z
+         do45fOJ+OrEF4oSPksIkv53UvoJm4mwUEXoXvI3s=
+Date:   Mon, 16 Aug 2021 09:50:40 -0500
 From:   Tyler Hicks <tyhicks@linux.microsoft.com>
 To:     Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
-Cc:     shuah@kernel.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, pasha.tatashin@soleen.com
-Subject: Re: [PATCH v2 4/4] selftests: vm: add KSM merging across nodes test
-Message-ID: <20210816142830.GK5469@sequoia>
-References: <cover.1626252248.git.zhansayabagdaulet@gmail.com>
- <071c17b5b04ebb0dfeba137acc495e5dd9d2a719.1626252248.git.zhansayabagdaulet@gmail.com>
+Cc:     akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pasha.tatashin@soleen.com
+Subject: Re: [PATCH v2 1/2] selftests: vm: add KSM merging time test
+Message-ID: <20210816145040.GL5469@sequoia>
+References: <cover.1628199399.git.zhansayabagdaulet@gmail.com>
+ <318b946ac80cc9205c89d0962048378f7ce0705b.1628199399.git.zhansayabagdaulet@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <071c17b5b04ebb0dfeba137acc495e5dd9d2a719.1626252248.git.zhansayabagdaulet@gmail.com>
+In-Reply-To: <318b946ac80cc9205c89d0962048378f7ce0705b.1628199399.git.zhansayabagdaulet@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2021-07-14 14:56:18, Zhansaya Bagdauletkyzy wrote:
-> Add check_ksm_numa_merge() function  to test that pages in different NUMA
-> nodes are being handled properly. First, two duplicate pages are allocated
-> in two separate NUMA nodes using the libnuma library. Since there is one
-> unique page in each node, with merge_across_nodes = 0, there won't be any
-> shared pages. If merge_across_nodes is set to 1, the pages will be
-> treated as usual duplicate pages and will be merged. If NUMA config is
-> not enabled or the number of NUMA nodes is less than two, then the test
-> is skipped. The test is run as follows: ./ksm_tests -N
+On 2021-08-06 16:10:27, Zhansaya Bagdauletkyzy wrote:
+> Add ksm_merge_time() function to determine speed and time needed for
+> merging. The total spent time is shown in seconds while speed is
+> in MiB/s. User must specify the size of duplicated memory area (in MiB)
+> before running the test.
+> 
+> The test is run as follows: ./ksm_tests -P -s 100
+> The output:
+> 	Total size:    100 MiB
+> 	Total time:    0.201106786 s
+> 	Average speed:  497.248 MiB/s
 > 
 > Signed-off-by: Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
+
+Thanks for addressing all of Pavel's feedback. This looks good to me.
 
 Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 
 Tyler
 
 > ---
->  tools/testing/selftests/vm/Makefile       |  2 +
->  tools/testing/selftests/vm/ksm_tests.c    | 88 ++++++++++++++++++++++-
->  tools/testing/selftests/vm/run_vmtests.sh | 32 +++++++++
->  3 files changed, 119 insertions(+), 3 deletions(-)
+> v1 -> v2:
+>  As suggested by Pavel,
+>  - replace MB with MiB
+>  - measure speed more accurately
 > 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index e6f22a801b71..d9605bd10f2d 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -146,6 +146,8 @@ $(OUTPUT)/hmm-tests: local_config.h
->  # HMM_EXTRA_LIBS may get set in local_config.mk, or it may be left empty.
->  $(OUTPUT)/hmm-tests: LDLIBS += $(HMM_EXTRA_LIBS)
->  
-> +$(OUTPUT)/ksm_tests: LDLIBS += -lnuma
-> +
->  local_config.mk local_config.h: check_config.sh
->  	/bin/sh ./check_config.sh $(CC)
->  
+> Pavel's review comments:
+> https://lore.kernel.org/lkml/CA+CK2bBpzdWMYoJdR2EQNNCrRn+Pg1Gs2oBqLR65JW3UUnWt0w@mail.gmail.com/
+> 
+>  tools/testing/selftests/vm/ksm_tests.c | 74 ++++++++++++++++++++++++--
+>  1 file changed, 70 insertions(+), 4 deletions(-)
+> 
 > diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
-> index 5843526471e1..cdeb4a028538 100644
+> index cdeb4a028538..432dfe615e50 100644
 > --- a/tools/testing/selftests/vm/ksm_tests.c
 > +++ b/tools/testing/selftests/vm/ksm_tests.c
-> @@ -4,6 +4,7 @@
->  #include <stdbool.h>
->  #include <time.h>
->  #include <string.h>
-> +#include <numa.h>
+> @@ -7,6 +7,7 @@
+>  #include <numa.h>
 >  
 >  #include "../kselftest.h"
+> +#include "../../../../include/vdso/time64.h"
 >  
-> @@ -13,6 +14,7 @@
->  #define KSM_PAGE_COUNT_DEFAULT 10l
+>  #define KSM_SYSFS_PATH "/sys/kernel/mm/ksm/"
+>  #define KSM_FP(s) (KSM_SYSFS_PATH s)
+> @@ -15,6 +16,7 @@
 >  #define KSM_PROT_STR_DEFAULT "rw"
 >  #define KSM_USE_ZERO_PAGES_DEFAULT false
-> +#define KSM_MERGE_ACROSS_NODES_DEFAULT true
+>  #define KSM_MERGE_ACROSS_NODES_DEFAULT true
+> +#define MB (1ul << 20)
 >  
 >  struct ksm_sysfs {
 >  	unsigned long max_page_sharing;
-> @@ -27,7 +29,8 @@ struct ksm_sysfs {
->  enum ksm_test_name {
+> @@ -30,7 +32,8 @@ enum ksm_test_name {
 >  	CHECK_KSM_MERGE,
 >  	CHECK_KSM_UNMERGE,
-> -	CHECK_KSM_ZERO_PAGE_MERGE
-> +	CHECK_KSM_ZERO_PAGE_MERGE,
-> +	CHECK_KSM_NUMA_MERGE
+>  	CHECK_KSM_ZERO_PAGE_MERGE,
+> -	CHECK_KSM_NUMA_MERGE
+> +	CHECK_KSM_NUMA_MERGE,
+> +	KSM_MERGE_TIME
 >  };
 >  
 >  static int ksm_write_sysfs(const char *file_path, unsigned long val)
-> @@ -83,11 +86,12 @@ static int str_to_prot(char *prot_str)
+> @@ -86,13 +89,16 @@ static int str_to_prot(char *prot_str)
 >  static void print_help(void)
 >  {
 >  	printf("usage: ksm_tests [-h] <test type> [-a prot] [-p page_count] [-l timeout]\n"
-> -	       "[-z use_zero_pages]\n");
-> +	       "[-z use_zero_pages] [-m merge_across_nodes]\n");
+> -	       "[-z use_zero_pages] [-m merge_across_nodes]\n");
+> +	       "[-z use_zero_pages] [-m merge_across_nodes] [-s size]\n");
 >  
 >  	printf("Supported <test type>:\n"
 >  	       " -M (page merging)\n"
 >  	       " -Z (zero pages merging)\n"
-> +	       " -N (merging of pages in different NUMA nodes)\n"
->  	       " -U (page unmerging)\n\n");
+>  	       " -N (merging of pages in different NUMA nodes)\n"
+> -	       " -U (page unmerging)\n\n");
+> +	       " -U (page unmerging)\n"
+> +	       " -P evaluate merging time and speed.\n"
+> +	       "    For this test, the size of duplicated memory area (in MiB)\n"
+> +	       "    must be provided using -s option\n\n");
 >  
 >  	printf(" -a: specify the access protections of pages.\n"
-> @@ -99,6 +103,8 @@ static void print_help(void)
->  	       "     Default: %d seconds\n", KSM_SCAN_LIMIT_SEC_DEFAULT);
->  	printf(" -z: change use_zero_pages tunable\n"
+>  	       "     <prot> must be of the form [rwx].\n"
+> @@ -105,6 +111,7 @@ static void print_help(void)
 >  	       "     Default: %d\n", KSM_USE_ZERO_PAGES_DEFAULT);
-> +	printf(" -m: change merge_across_nodes tunable\n"
-> +	       "     Default: %d\n", KSM_MERGE_ACROSS_NODES_DEFAULT);
+>  	printf(" -m: change merge_across_nodes tunable\n"
+>  	       "     Default: %d\n", KSM_MERGE_ACROSS_NODES_DEFAULT);
+> +	printf(" -s: the size of duplicated memory area (in MiB)\n");
 >  
 >  	exit(0);
 >  }
-> @@ -339,6 +345,68 @@ static int check_ksm_zero_page_merge(int mapping, int prot, long page_count, int
+> @@ -407,6 +414,47 @@ static int check_ksm_numa_merge(int mapping, int prot, int timeout, bool merge_a
 >  	return KSFT_FAIL;
 >  }
 >  
-> +static int check_ksm_numa_merge(int mapping, int prot, int timeout, bool merge_across_nodes,
-> +				size_t page_size)
+> +static int ksm_merge_time(int mapping, int prot, int timeout, size_t map_size)
 > +{
-> +	void *numa1_map_ptr, *numa2_map_ptr;
-> +	struct timespec start_time;
-> +	int page_count = 2;
+> +	void *map_ptr;
+> +	struct timespec start_time, end_time;
+> +	unsigned long scan_time_ns;
+> +
+> +	map_size *= MB;
+> +
+> +	map_ptr = allocate_memory(NULL, prot, mapping, '*', map_size);
+> +	if (!map_ptr)
+> +		return KSFT_FAIL;
 > +
 > +	if (clock_gettime(CLOCK_MONOTONIC_RAW, &start_time)) {
 > +		perror("clock_gettime");
-> +		return KSFT_FAIL;
-> +	}
-> +
-> +	if (numa_available() < 0) {
-> +		perror("NUMA support not enabled");
-> +		return KSFT_SKIP;
-> +	}
-> +	if (numa_max_node() < 1) {
-> +		printf("At least 2 NUMA nodes must be available\n");
-> +		return KSFT_SKIP;
-> +	}
-> +	if (ksm_write_sysfs(KSM_FP("merge_across_nodes"), merge_across_nodes))
-> +		return KSFT_FAIL;
-> +
-> +	/* allocate 2 pages in 2 different NUMA nodes and fill them with the same data */
-> +	numa1_map_ptr = numa_alloc_onnode(page_size, 0);
-> +	numa2_map_ptr = numa_alloc_onnode(page_size, 1);
-> +	if (!numa1_map_ptr || !numa2_map_ptr) {
-> +		perror("numa_alloc_onnode");
-> +		return KSFT_FAIL;
-> +	}
-> +
-> +	memset(numa1_map_ptr, '*', page_size);
-> +	memset(numa2_map_ptr, '*', page_size);
-> +
-> +	/* try to merge the pages */
-> +	if (ksm_merge_pages(numa1_map_ptr, page_size, start_time, timeout) ||
-> +	    ksm_merge_pages(numa2_map_ptr, page_size, start_time, timeout))
 > +		goto err_out;
-> +
-> +       /*
-> +	* verify that the right number of pages are merged:
-> +	* 1) if merge_across_nodes was enabled, 2 duplicate pages will be merged;
-> +	* 2) if merge_across_nodes = 0, there must be 0 merged pages, since there is
-> +	*    only 1 unique page in each node and they can't be shared.
-> +	*/
-> +	if (merge_across_nodes && !assert_ksm_pages_count(page_count))
+> +	}
+> +	if (ksm_merge_pages(map_ptr, map_size, start_time, timeout))
 > +		goto err_out;
-> +	else if (!merge_across_nodes && !assert_ksm_pages_count(0))
+> +	if (clock_gettime(CLOCK_MONOTONIC_RAW, &end_time)) {
+> +		perror("clock_gettime");
 > +		goto err_out;
+> +	}
 > +
-> +	numa_free(numa1_map_ptr, page_size);
-> +	numa_free(numa2_map_ptr, page_size);
-> +	printf("OK\n");
+> +	scan_time_ns = (end_time.tv_sec - start_time.tv_sec) * NSEC_PER_SEC +
+> +		       (end_time.tv_nsec - start_time.tv_nsec);
+> +
+> +	printf("Total size:    %lu MiB\n", map_size / MB);
+> +	printf("Total time:    %ld.%09ld s\n", scan_time_ns / NSEC_PER_SEC,
+> +	       scan_time_ns % NSEC_PER_SEC);
+> +	printf("Average speed:  %.3f MiB/s\n", (map_size / MB) /
+> +					       ((double)scan_time_ns / NSEC_PER_SEC));
+> +
+> +	munmap(map_ptr, map_size);
 > +	return KSFT_PASS;
 > +
 > +err_out:
-> +	numa_free(numa1_map_ptr, page_size);
-> +	numa_free(numa2_map_ptr, page_size);
 > +	printf("Not OK\n");
+> +	munmap(map_ptr, map_size);
 > +	return KSFT_FAIL;
 > +}
 > +
 >  int main(int argc, char *argv[])
 >  {
 >  	int ret, opt;
-> @@ -349,8 +417,9 @@ int main(int argc, char *argv[])
->  	struct ksm_sysfs ksm_sysfs_old;
+> @@ -418,8 +466,9 @@ int main(int argc, char *argv[])
 >  	int test_name = CHECK_KSM_MERGE;
 >  	bool use_zero_pages = KSM_USE_ZERO_PAGES_DEFAULT;
-> +	bool merge_across_nodes = KSM_MERGE_ACROSS_NODES_DEFAULT;
+>  	bool merge_across_nodes = KSM_MERGE_ACROSS_NODES_DEFAULT;
+> +	long size_MB = 0;
 >  
-> -	while ((opt = getopt(argc, argv, "ha:p:l:z:MUZ")) != -1) {
-> +	while ((opt = getopt(argc, argv, "ha:p:l:z:m:MUZN")) != -1) {
+> -	while ((opt = getopt(argc, argv, "ha:p:l:z:m:MUZN")) != -1) {
+> +	while ((opt = getopt(argc, argv, "ha:p:l:z:m:s:MUZNP")) != -1) {
 >  		switch (opt) {
 >  		case 'a':
 >  			prot = str_to_prot(optarg);
-> @@ -378,6 +447,12 @@ int main(int argc, char *argv[])
+> @@ -453,6 +502,12 @@ int main(int argc, char *argv[])
 >  			else
->  				use_zero_pages = 1;
+>  				merge_across_nodes = 1;
 >  			break;
-> +		case 'm':
-> +			if (strcmp(optarg, "0") == 0)
-> +				merge_across_nodes = 0;
-> +			else
-> +				merge_across_nodes = 1;
-> +			break;
+> +		case 's':
+> +			size_MB = atol(optarg);
+> +			if (size_MB <= 0) {
+> +				printf("Size must be greater than 0\n");
+> +				return KSFT_FAIL;
+> +			}
 >  		case 'M':
 >  			break;
 >  		case 'U':
-> @@ -386,6 +461,9 @@ int main(int argc, char *argv[])
->  		case 'Z':
->  			test_name = CHECK_KSM_ZERO_PAGE_MERGE;
+> @@ -464,6 +519,9 @@ int main(int argc, char *argv[])
+>  		case 'N':
+>  			test_name = CHECK_KSM_NUMA_MERGE;
 >  			break;
-> +		case 'N':
-> +			test_name = CHECK_KSM_NUMA_MERGE;
+> +		case 'P':
+> +			test_name = KSM_MERGE_TIME;
 > +			break;
 >  		default:
 >  			return KSFT_FAIL;
 >  		}
-> @@ -423,6 +501,10 @@ int main(int argc, char *argv[])
->  		ret = check_ksm_zero_page_merge(MAP_PRIVATE | MAP_ANONYMOUS, prot, page_count,
->  						ksm_scan_limit_sec, use_zero_pages, page_size);
+> @@ -505,6 +563,14 @@ int main(int argc, char *argv[])
+>  		ret = check_ksm_numa_merge(MAP_PRIVATE | MAP_ANONYMOUS, prot, ksm_scan_limit_sec,
+>  					   merge_across_nodes, page_size);
 >  		break;
-> +	case CHECK_KSM_NUMA_MERGE:
-> +		ret = check_ksm_numa_merge(MAP_PRIVATE | MAP_ANONYMOUS, prot, ksm_scan_limit_sec,
-> +					   merge_across_nodes, page_size);
+> +	case KSM_MERGE_TIME:
+> +		if (size_MB == 0) {
+> +			printf("Option '-s' is required.\n");
+> +			return KSFT_FAIL;
+> +		}
+> +		ret = ksm_merge_time(MAP_PRIVATE | MAP_ANONYMOUS, prot, ksm_scan_limit_sec,
+> +				     size_MB);
 > +		break;
 >  	}
 >  
 >  	if (ksm_restore(&ksm_sysfs_old)) {
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index 9b4e444fc4ed..45e803af7c77 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -441,6 +441,38 @@ else
->  	exitcode=1
->  fi
->  
-> +echo "-------------------------------------------------------------"
-> +echo "running KSM test with 2 NUMA nodes and merge_across_nodes = 1"
-> +echo "-------------------------------------------------------------"
-> +./ksm_tests -N -m 1
-> +ret_val=$?
-> +
-> +if [ $ret_val -eq 0 ]; then
-> +	echo "[PASS]"
-> +elif [ $ret_val -eq $ksft_skip ]; then
-> +	 echo "[SKIP]"
-> +	 exitcode=$ksft_skip
-> +else
-> +	echo "[FAIL]"
-> +	exitcode=1
-> +fi
-> +
-> +echo "-------------------------------------------------------------"
-> +echo "running KSM test with 2 NUMA nodes and merge_across_nodes = 0"
-> +echo "-------------------------------------------------------------"
-> +./ksm_tests -N -m 0
-> +ret_val=$?
-> +
-> +if [ $ret_val -eq 0 ]; then
-> +	echo "[PASS]"
-> +elif [ $ret_val -eq $ksft_skip ]; then
-> +	 echo "[SKIP]"
-> +	 exitcode=$ksft_skip
-> +else
-> +	echo "[FAIL]"
-> +	exitcode=1
-> +fi
-> +
->  exit $exitcode
->  
->  exit $exitcode
 > -- 
 > 2.25.1
 > 
