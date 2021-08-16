@@ -2,311 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FEA3ED833
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 15:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59483ED83B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Aug 2021 16:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbhHPN6l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Aug 2021 09:58:41 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:43874 "EHLO
+        id S230495AbhHPOAj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Aug 2021 10:00:39 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:43950 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbhHPN5f (ORCPT
+        with ESMTP id S231307AbhHPN6A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Aug 2021 09:57:35 -0400
+        Mon, 16 Aug 2021 09:58:00 -0400
 Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 828E520C29E4;
-        Mon, 16 Aug 2021 06:57:03 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 828E520C29E4
+        by linux.microsoft.com (Postfix) with ESMTPSA id EB95E20C29E5;
+        Mon, 16 Aug 2021 06:57:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EB95E20C29E5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1629122224;
-        bh=HJAVAPOHgr41eETaBpO2lWQBQKKyVvKvZokS30cP0vg=;
+        s=default; t=1629122248;
+        bh=E/0G9tUeONPp8TeHajPXWxsLEkidxhqUtffDfnrRgbc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YVVsdt6R92dcaf9eQQOqsqroF/T1YYHyOLdZpLYuKh5Uof60fe2lgKVzz2D5Gpbdo
-         lLE2JpaSxJYsnuFV3oMedaIkOws2L2liOG498JgKyhgXYNtuEZo2Qx32NFuWyyirLZ
-         Ou/3CKkVB4PvXOQta44bB6xyLdKpRhZFFpt0sWDQ=
-Date:   Mon, 16 Aug 2021 08:57:01 -0500
+        b=i0oXdOfeq3+icrOKxOSCzPfKLvYZUgPNvGcAfIoahe+YdkiYtVaydIGmGoKg5ZIDs
+         KKltYF9hnKujsYDUQula21mqVfcZF/jwoC7vjgqLDlALP398qYI+4/W7MyVJGUTOnA
+         K9qByerstchaHRfQYGFAUZmigL0MGcEsaw2wW5Sw=
+Date:   Mon, 16 Aug 2021 08:57:24 -0500
 From:   Tyler Hicks <tyhicks@linux.microsoft.com>
 To:     Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
 Cc:     shuah@kernel.org, akpm@linux-foundation.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-mm@kvack.org, pasha.tatashin@soleen.com
-Subject: Re: [PATCH v2 1/4] selftests: vm: add KSM merge test
-Message-ID: <20210816135701.GH5469@sequoia>
+Subject: Re: [PATCH v2 2/4] selftests: vm: add KSM unmerge test
+Message-ID: <20210816135724.GI5469@sequoia>
 References: <cover.1626252248.git.zhansayabagdaulet@gmail.com>
- <90287685c13300972ea84de93d1f3f900373f9fe.1626252248.git.zhansayabagdaulet@gmail.com>
+ <c0f55420440d704d5b094275b4365aa1b2ad46b5.1626252248.git.zhansayabagdaulet@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <90287685c13300972ea84de93d1f3f900373f9fe.1626252248.git.zhansayabagdaulet@gmail.com>
+In-Reply-To: <c0f55420440d704d5b094275b4365aa1b2ad46b5.1626252248.git.zhansayabagdaulet@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2021-07-14 14:56:06, Zhansaya Bagdauletkyzy wrote:
-> Add check_ksm_merge() function to check the basic merging feature of
-> KSM. First, some number of identical pages are allocated and the
-> MADV_MERGEABLE advice is given to merge these pages. Then, pages_shared
-> and pages_sharing values are compared with the expected numbers using
-> assert_ksm_pages_count() function. The number of pages can be changed
-> using -p option.
+On 2021-07-14 14:56:09, Zhansaya Bagdauletkyzy wrote:
+> Add check_ksm_unmerge() function to verify that KSM is properly
+> unmerging shared pages. For this, two duplicate pages are merged first
+> and then their contents are modified. Since they are not identical
+> anymore, the pages must be unmerged and the number of merged pages has
+> to be 0. The test is run as follows: ./ksm_tests -U
 > 
 > Signed-off-by: Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
 
 Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-As Pavel mentioned, we went through some private iterations on these
-patches with Zhansaya so my review comments have already been addressed.
-
 Tyler
 
 > ---
->  tools/testing/selftests/vm/.gitignore     |   1 +
->  tools/testing/selftests/vm/Makefile       |   1 +
->  tools/testing/selftests/vm/ksm_tests.c    | 306 ++++++++++++++++++++++
->  tools/testing/selftests/vm/run_vmtests.sh |  16 ++
->  4 files changed, 324 insertions(+)
->  create mode 100644 tools/testing/selftests/vm/ksm_tests.c
+>  tools/testing/selftests/vm/ksm_tests.c    | 72 +++++++++++++++++++++--
+>  tools/testing/selftests/vm/run_vmtests.sh | 18 +++++-
+>  2 files changed, 85 insertions(+), 5 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-> index f0fd80ef17df..b02eac613fdd 100644
-> --- a/tools/testing/selftests/vm/.gitignore
-> +++ b/tools/testing/selftests/vm/.gitignore
-> @@ -27,3 +27,4 @@ hmm-tests
->  memfd_secret
->  local_config.*
->  split_huge_page_test
-> +ksm_tests
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 521243770f26..e6f22a801b71 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -45,6 +45,7 @@ TEST_GEN_FILES += thuge-gen
->  TEST_GEN_FILES += transhuge-stress
->  TEST_GEN_FILES += userfaultfd
->  TEST_GEN_FILES += split_huge_page_test
-> +TEST_GEN_FILES += ksm_tests
->  
->  ifeq ($(MACHINE),x86_64)
->  CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
 > diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
-> new file mode 100644
-> index 000000000000..d74d5aa34b16
-> --- /dev/null
+> index d74d5aa34b16..80302bb8f64c 100644
+> --- a/tools/testing/selftests/vm/ksm_tests.c
 > +++ b/tools/testing/selftests/vm/ksm_tests.c
-> @@ -0,0 +1,306 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <sys/mman.h>
-> +#include <stdbool.h>
-> +#include <time.h>
-> +#include <string.h>
-> +
-> +#include "../kselftest.h"
-> +
-> +#define KSM_SYSFS_PATH "/sys/kernel/mm/ksm/"
-> +#define KSM_FP(s) (KSM_SYSFS_PATH s)
-> +#define KSM_SCAN_LIMIT_SEC_DEFAULT 120
-> +#define KSM_PAGE_COUNT_DEFAULT 10l
-> +#define KSM_PROT_STR_DEFAULT "rw"
-> +
-> +struct ksm_sysfs {
-> +	unsigned long max_page_sharing;
-> +	unsigned long merge_across_nodes;
-> +	unsigned long pages_to_scan;
-> +	unsigned long run;
-> +	unsigned long sleep_millisecs;
-> +	unsigned long stable_node_chains_prune_millisecs;
-> +	unsigned long use_zero_pages;
+> @@ -23,6 +23,11 @@ struct ksm_sysfs {
+>  	unsigned long use_zero_pages;
+>  };
+>  
+> +enum ksm_test_name {
+> +	CHECK_KSM_MERGE,
+> +	CHECK_KSM_UNMERGE
 > +};
 > +
-> +static int ksm_write_sysfs(const char *file_path, unsigned long val)
-> +{
-> +	FILE *f = fopen(file_path, "w");
+>  static int ksm_write_sysfs(const char *file_path, unsigned long val)
+>  {
+>  	FILE *f = fopen(file_path, "w");
+> @@ -75,7 +80,12 @@ static int str_to_prot(char *prot_str)
+>  
+>  static void print_help(void)
+>  {
+> -	printf("usage: ksm_tests [-h] [-a prot] [-p page_count] [-l timeout]\n");
+> +	printf("usage: ksm_tests [-h] <test type> [-a prot] [-p page_count] [-l timeout]\n");
 > +
-> +	if (!f) {
-> +		fprintf(stderr, "f %s\n", file_path);
-> +		perror("fopen");
-> +		return 1;
-> +	}
-> +	if (fprintf(f, "%lu", val) < 0) {
-> +		perror("fprintf");
-> +		return 1;
-> +	}
-> +	fclose(f);
+> +	printf("Supported <test type>:\n"
+> +	       " -M (page merging)\n"
+> +	       " -U (page unmerging)\n\n");
 > +
-> +	return 0;
-> +}
-> +
-> +static int ksm_read_sysfs(const char *file_path, unsigned long *val)
-> +{
-> +	FILE *f = fopen(file_path, "r");
-> +
-> +	if (!f) {
-> +		fprintf(stderr, "f %s\n", file_path);
-> +		perror("fopen");
-> +		return 1;
-> +	}
-> +	if (fscanf(f, "%lu", val) != 1) {
-> +		perror("fscanf");
-> +		return 1;
-> +	}
-> +	fclose(f);
-> +
-> +	return 0;
-> +}
-> +
-> +static int str_to_prot(char *prot_str)
-> +{
-> +	int prot = 0;
-> +
-> +	if ((strchr(prot_str, 'r')) != NULL)
-> +		prot |= PROT_READ;
-> +	if ((strchr(prot_str, 'w')) != NULL)
-> +		prot |= PROT_WRITE;
-> +	if ((strchr(prot_str, 'x')) != NULL)
-> +		prot |= PROT_EXEC;
-> +
-> +	return prot;
-> +}
-> +
-> +static void print_help(void)
-> +{
-> +	printf("usage: ksm_tests [-h] [-a prot] [-p page_count] [-l timeout]\n");
-> +	printf(" -a: specify the access protections of pages.\n"
-> +	       "     <prot> must be of the form [rwx].\n"
-> +	       "     Default: %s\n", KSM_PROT_STR_DEFAULT);
-> +	printf(" -p: specify the number of pages to test.\n"
-> +	       "     Default: %ld\n", KSM_PAGE_COUNT_DEFAULT);
-> +	printf(" -l: limit the maximum running time (in seconds) for a test.\n"
-> +	       "     Default: %d seconds\n", KSM_SCAN_LIMIT_SEC_DEFAULT);
-> +
-> +	exit(0);
-> +}
-> +
-> +static void  *allocate_memory(void *ptr, int prot, int mapping, char data, size_t map_size)
-> +{
-> +	void *map_ptr = mmap(ptr, map_size, PROT_WRITE, mapping, -1, 0);
-> +
-> +	if (!map_ptr) {
-> +		perror("mmap");
-> +		return NULL;
-> +	}
-> +	memset(map_ptr, data, map_size);
-> +	if (mprotect(map_ptr, map_size, prot)) {
-> +		perror("mprotect");
-> +		munmap(map_ptr, map_size);
-> +		return NULL;
-> +	}
-> +
-> +	return map_ptr;
-> +}
-> +
-> +static int ksm_do_scan(int scan_count, struct timespec start_time, int timeout)
-> +{
-> +	struct timespec cur_time;
-> +	unsigned long cur_scan, init_scan;
-> +
-> +	if (ksm_read_sysfs(KSM_FP("full_scans"), &init_scan))
-> +		return 1;
-> +	cur_scan = init_scan;
-> +
-> +	while (cur_scan < init_scan + scan_count) {
-> +		if (ksm_read_sysfs(KSM_FP("full_scans"), &cur_scan))
-> +			return 1;
-> +		if (clock_gettime(CLOCK_MONOTONIC_RAW, &cur_time)) {
-> +			perror("clock_gettime");
-> +			return 1;
-> +		}
-> +		if ((cur_time.tv_sec - start_time.tv_sec) > timeout) {
-> +			printf("Scan time limit exceeded\n");
-> +			return 1;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int ksm_merge_pages(void *addr, size_t size, struct timespec start_time, int timeout)
-> +{
-> +	if (madvise(addr, size, MADV_MERGEABLE)) {
-> +		perror("madvise");
-> +		return 1;
-> +	}
-> +	if (ksm_write_sysfs(KSM_FP("run"), 1))
-> +		return 1;
-> +
-> +	/* Since merging occurs only after 2 scans, make sure to get at least 2 full scans */
-> +	if (ksm_do_scan(2, start_time, timeout))
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static bool assert_ksm_pages_count(long dupl_page_count)
-> +{
-> +	unsigned long max_page_sharing, pages_sharing, pages_shared;
-> +
-> +	if (ksm_read_sysfs(KSM_FP("pages_shared"), &pages_shared) ||
-> +	    ksm_read_sysfs(KSM_FP("pages_sharing"), &pages_sharing) ||
-> +	    ksm_read_sysfs(KSM_FP("max_page_sharing"), &max_page_sharing))
-> +		return false;
-> +
-> +	/*
-> +	 * Since there must be at least 2 pages for merging and 1 page can be
-> +	 * shared with the limited number of pages (max_page_sharing), sometimes
-> +	 * there are 'leftover' pages that cannot be merged. For example, if there
-> +	 * are 11 pages and max_page_sharing = 10, then only 10 pages will be
-> +	 * merged and the 11th page won't be affected. As a result, when the number
-> +	 * of duplicate pages is divided by max_page_sharing and the remainder is 1,
-> +	 * pages_shared and pages_sharing values will be equal between dupl_page_count
-> +	 * and dupl_page_count - 1.
-> +	 */
-> +	if (dupl_page_count % max_page_sharing == 1 || dupl_page_count % max_page_sharing == 0) {
-> +		if (pages_shared == dupl_page_count / max_page_sharing &&
-> +		    pages_sharing == pages_shared * (max_page_sharing - 1))
-> +			return true;
-> +	} else {
-> +		if (pages_shared == (dupl_page_count / max_page_sharing + 1) &&
-> +		    pages_sharing == dupl_page_count - pages_shared)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +static int ksm_save_def(struct ksm_sysfs *ksm_sysfs)
-> +{
-> +	if (ksm_read_sysfs(KSM_FP("max_page_sharing"), &ksm_sysfs->max_page_sharing) ||
-> +	    ksm_read_sysfs(KSM_FP("merge_across_nodes"), &ksm_sysfs->merge_across_nodes) ||
-> +	    ksm_read_sysfs(KSM_FP("sleep_millisecs"), &ksm_sysfs->sleep_millisecs) ||
-> +	    ksm_read_sysfs(KSM_FP("pages_to_scan"), &ksm_sysfs->pages_to_scan) ||
-> +	    ksm_read_sysfs(KSM_FP("run"), &ksm_sysfs->run) ||
-> +	    ksm_read_sysfs(KSM_FP("stable_node_chains_prune_millisecs"),
-> +			   &ksm_sysfs->stable_node_chains_prune_millisecs) ||
-> +	    ksm_read_sysfs(KSM_FP("use_zero_pages"), &ksm_sysfs->use_zero_pages))
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ksm_restore(struct ksm_sysfs *ksm_sysfs)
-> +{
-> +	if (ksm_write_sysfs(KSM_FP("max_page_sharing"), ksm_sysfs->max_page_sharing) ||
-> +	    ksm_write_sysfs(KSM_FP("merge_across_nodes"), ksm_sysfs->merge_across_nodes) ||
-> +	    ksm_write_sysfs(KSM_FP("pages_to_scan"), ksm_sysfs->pages_to_scan) ||
-> +	    ksm_write_sysfs(KSM_FP("run"), ksm_sysfs->run) ||
-> +	    ksm_write_sysfs(KSM_FP("sleep_millisecs"), ksm_sysfs->sleep_millisecs) ||
-> +	    ksm_write_sysfs(KSM_FP("stable_node_chains_prune_millisecs"),
-> +			    ksm_sysfs->stable_node_chains_prune_millisecs) ||
-> +	    ksm_write_sysfs(KSM_FP("use_zero_pages"), ksm_sysfs->use_zero_pages))
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static int check_ksm_merge(int mapping, int prot, long page_count, int timeout, size_t page_size)
+>  	printf(" -a: specify the access protections of pages.\n"
+>  	       "     <prot> must be of the form [rwx].\n"
+>  	       "     Default: %s\n", KSM_PROT_STR_DEFAULT);
+> @@ -239,6 +249,46 @@ static int check_ksm_merge(int mapping, int prot, long page_count, int timeout,
+>  	return KSFT_FAIL;
+>  }
+>  
+> +static int check_ksm_unmerge(int mapping, int prot, int timeout, size_t page_size)
 > +{
 > +	void *map_ptr;
 > +	struct timespec start_time;
+> +	int page_count = 2;
 > +
 > +	if (clock_gettime(CLOCK_MONOTONIC_RAW, &start_time)) {
 > +		perror("clock_gettime");
@@ -321,8 +112,16 @@ Tyler
 > +	if (ksm_merge_pages(map_ptr, page_size * page_count, start_time, timeout))
 > +		goto err_out;
 > +
-> +	/* verify that the right number of pages are merged */
-> +	if (assert_ksm_pages_count(page_count)) {
+> +	/* change 1 byte in each of the 2 pages -- KSM must automatically unmerge them */
+> +	memset(map_ptr, '-', 1);
+> +	memset(map_ptr + page_size, '+', 1);
+> +
+> +	/* get at least 1 scan, so KSM can detect that the pages were modified */
+> +	if (ksm_do_scan(1, start_time, timeout))
+> +		goto err_out;
+> +
+> +	/* check that unmerging was successful and 0 pages are currently merged */
+> +	if (assert_ksm_pages_count(0)) {
 > +		printf("OK\n");
 > +		munmap(map_ptr, page_size * page_count);
 > +		return KSFT_PASS;
@@ -334,83 +133,61 @@ Tyler
 > +	return KSFT_FAIL;
 > +}
 > +
-> +int main(int argc, char *argv[])
-> +{
-> +	int ret, opt;
-> +	int prot = 0;
-> +	int ksm_scan_limit_sec = KSM_SCAN_LIMIT_SEC_DEFAULT;
-> +	long page_count = KSM_PAGE_COUNT_DEFAULT;
-> +	size_t page_size = sysconf(_SC_PAGESIZE);
-> +	struct ksm_sysfs ksm_sysfs_old;
-> +
-> +	while ((opt = getopt(argc, argv, "ha:p:l:")) != -1) {
-> +		switch (opt) {
-> +		case 'a':
-> +			prot = str_to_prot(optarg);
+>  int main(int argc, char *argv[])
+>  {
+>  	int ret, opt;
+> @@ -247,8 +297,9 @@ int main(int argc, char *argv[])
+>  	long page_count = KSM_PAGE_COUNT_DEFAULT;
+>  	size_t page_size = sysconf(_SC_PAGESIZE);
+>  	struct ksm_sysfs ksm_sysfs_old;
+> +	int test_name = CHECK_KSM_MERGE;
+>  
+> -	while ((opt = getopt(argc, argv, "ha:p:l:")) != -1) {
+> +	while ((opt = getopt(argc, argv, "ha:p:l:MU")) != -1) {
+>  		switch (opt) {
+>  		case 'a':
+>  			prot = str_to_prot(optarg);
+> @@ -270,6 +321,11 @@ int main(int argc, char *argv[])
+>  		case 'h':
+>  			print_help();
+>  			break;
+> +		case 'M':
 > +			break;
-> +		case 'p':
-> +			page_count = atol(optarg);
-> +			if (page_count <= 0) {
-> +				printf("The number of pages must be greater than 0\n");
-> +				return KSFT_FAIL;
-> +			}
+> +		case 'U':
+> +			test_name = CHECK_KSM_UNMERGE;
 > +			break;
-> +		case 'l':
-> +			ksm_scan_limit_sec = atoi(optarg);
-> +			if (ksm_scan_limit_sec <= 0) {
-> +				printf("Timeout value must be greater than 0\n");
-> +				return KSFT_FAIL;
-> +			}
-> +			break;
-> +		case 'h':
-> +			print_help();
-> +			break;
-> +		default:
-> +			return KSFT_FAIL;
-> +		}
+>  		default:
+>  			return KSFT_FAIL;
+>  		}
+> @@ -294,8 +350,16 @@ int main(int argc, char *argv[])
+>  	    ksm_write_sysfs(KSM_FP("pages_to_scan"), page_count))
+>  		return KSFT_FAIL;
+>  
+> -	ret = check_ksm_merge(MAP_PRIVATE | MAP_ANONYMOUS, prot, page_count, ksm_scan_limit_sec,
+> -			      page_size);
+> +	switch (test_name) {
+> +	case CHECK_KSM_MERGE:
+> +		ret = check_ksm_merge(MAP_PRIVATE | MAP_ANONYMOUS, prot, page_count,
+> +				      ksm_scan_limit_sec, page_size);
+> +		break;
+> +	case CHECK_KSM_UNMERGE:
+> +		ret = check_ksm_unmerge(MAP_PRIVATE | MAP_ANONYMOUS, prot, ksm_scan_limit_sec,
+> +					page_size);
+> +		break;
 > +	}
-> +
-> +	if (prot == 0)
-> +		prot = str_to_prot(KSM_PROT_STR_DEFAULT);
-> +
-> +	if (access(KSM_SYSFS_PATH, F_OK)) {
-> +		printf("Config KSM not enabled\n");
-> +		return KSFT_SKIP;
-> +	}
-> +
-> +	if (ksm_save_def(&ksm_sysfs_old)) {
-> +		printf("Cannot save default tunables\n");
-> +		return KSFT_FAIL;
-> +	}
-> +
-> +	if (ksm_write_sysfs(KSM_FP("run"), 2) ||
-> +	    ksm_write_sysfs(KSM_FP("sleep_millisecs"), 0) ||
-> +	    ksm_write_sysfs(KSM_FP("merge_across_nodes"), 1) ||
-> +	    ksm_write_sysfs(KSM_FP("pages_to_scan"), page_count))
-> +		return KSFT_FAIL;
-> +
-> +	ret = check_ksm_merge(MAP_PRIVATE | MAP_ANONYMOUS, prot, page_count, ksm_scan_limit_sec,
-> +			      page_size);
-> +
-> +	if (ksm_restore(&ksm_sysfs_old)) {
-> +		printf("Cannot restore default tunables\n");
-> +		return KSFT_FAIL;
-> +	}
-> +
-> +	return ret;
-> +}
+>  
+>  	if (ksm_restore(&ksm_sysfs_old)) {
+>  		printf("Cannot restore default tunables\n");
 > diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index d09a6b71f1e9..97b6f712134d 100755
+> index 97b6f712134d..3a23c6b47da2 100755
 > --- a/tools/testing/selftests/vm/run_vmtests.sh
 > +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -377,6 +377,22 @@ else
->  	exitcode=1
->  fi
->  
-> +echo "-------------------------------------------------------"
-> +echo "running KSM MADV_MERGEABLE test with 10 identical pages"
-> +echo "-------------------------------------------------------"
-> +./ksm_tests -p 10
+> @@ -380,7 +380,23 @@ fi
+>  echo "-------------------------------------------------------"
+>  echo "running KSM MADV_MERGEABLE test with 10 identical pages"
+>  echo "-------------------------------------------------------"
+> -./ksm_tests -p 10
+> +./ksm_tests -M -p 10
 > +ret_val=$?
 > +
 > +if [ $ret_val -eq 0 ]; then
@@ -423,9 +200,13 @@ Tyler
 > +	exitcode=1
 > +fi
 > +
->  exit $exitcode
+> +echo "------------------------"
+> +echo "running KSM unmerge test"
+> +echo "------------------------"
+> +./ksm_tests -U
+>  ret_val=$?
 >  
->  exit $exitcode
+>  if [ $ret_val -eq 0 ]; then
 > -- 
 > 2.25.1
 > 
