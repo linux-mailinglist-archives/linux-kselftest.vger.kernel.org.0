@@ -2,84 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4413A3EE40D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Aug 2021 04:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE043EE545
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Aug 2021 06:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbhHQCAk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Aug 2021 22:00:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41706 "EHLO mail.kernel.org"
+        id S229700AbhHQEEd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Aug 2021 00:04:33 -0400
+Received: from mga17.intel.com ([192.55.52.151]:4471 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233238AbhHQCAj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Aug 2021 22:00:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 084E360F55;
-        Tue, 17 Aug 2021 02:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629165607;
-        bh=MVnubLbxEzYHgLlzZ7aRkr3ISMZ+jDiZOyPTzWQo7T0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uFcUAC5i++kNEHGEf/zN8dR594RJDrxGy8M45/u1jF5u/x/NW0eC1qH2OzH5N4cij
-         UNlt+R+dh2RI+QPiKTNqdPYcbQpM76L3ajsXvbdX1l20gLz9At/aWY7LpWTbOv3VZH
-         cDXf8a+2m2XpsFlLEDOAcrpUEInCa73RfasnzhmqVMtxV25Qn7I6UalGMaRf3i+1MB
-         wlGT9chFOYlX7Rn9jK3doqDErpYSED7m99bzE/WM5ehgsFLeRPTKNI9JTnor9YI+Ap
-         aq/s+liEKnf7UMDjRTzBrlT8mOGTv8H+aQDYx5uk7nPPRyBv5E0H3UPbRuptmrg5yE
-         b48NBWtCYC7hw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id EB111609DA;
-        Tue, 17 Aug 2021 02:00:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229696AbhHQEEb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Aug 2021 00:04:31 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="196252752"
+X-IronPort-AV: E=Sophos;i="5.84,327,1620716400"; 
+   d="scan'208";a="196252752"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2021 21:03:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,327,1620716400"; 
+   d="scan'208";a="505156435"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by orsmga001.jf.intel.com with ESMTP; 16 Aug 2021 21:03:58 -0700
+Received: from shsmsx605.ccr.corp.intel.com (10.109.6.215) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Mon, 16 Aug 2021 21:03:57 -0700
+Received: from shsmsx605.ccr.corp.intel.com (10.109.6.215) by
+ SHSMSX605.ccr.corp.intel.com (10.109.6.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Tue, 17 Aug 2021 12:03:50 +0800
+Received: from shsmsx605.ccr.corp.intel.com ([10.109.6.215]) by
+ SHSMSX605.ccr.corp.intel.com ([10.109.6.215]) with mapi id 15.01.2242.010;
+ Tue, 17 Aug 2021 12:03:50 +0800
+From:   "Ma, XinjianX" <xinjianx.ma@intel.com>
+To:     "legion@kernel.org" <legion@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+CC:     lkp <lkp@intel.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
+        "containers@lists.linux-foundation.org" 
+        <containers@lists.linux-foundation.org>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "kernel-hardening@lists.openwall.com" 
+        <kernel-hardening@lists.openwall.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v11 5/9] Reimplement RLIMIT_MSGQUEUE on top of ucounts
+Thread-Topic: [PATCH v11 5/9] Reimplement RLIMIT_MSGQUEUE on top of ucounts
+Thread-Index: AQHXkxd6jQPRg5rF3UWHcji9NSI54Q==
+Date:   Tue, 17 Aug 2021 04:03:50 +0000
+Message-ID: <d650b7794e264d5f8aa107644cc9784f@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.239.127.36]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v7 0/5] sockmap: add sockmap support for unix stream
- socket
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162916560695.26282.3837040617464847653.git-patchwork-notify@kernel.org>
-Date:   Tue, 17 Aug 2021 02:00:06 +0000
-References: <20210816190327.2739291-1-jiang.wang@bytedance.com>
-In-Reply-To: <20210816190327.2739291-1-jiang.wang@bytedance.com>
-To:     Jiang Wang <jiang.wang@bytedance.com>
-Cc:     netdev@vger.kernel.org, cong.wang@bytedance.com,
-        duanxiongchun@bytedance.com, xieyongji@bytedance.com,
-        chaiwen.cc@bytedance.com, john.fastabend@gmail.com,
-        jakub@cloudflare.com, davem@davemloft.net, kuba@kernel.org,
-        daniel@iogearbox.net, lmb@cloudflare.com, ast@kernel.org,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, shuah@kernel.org, viro@zeniv.linux.org.uk,
-        christian.brauner@ubuntu.com, rao.shoaib@oracle.com,
-        johan.almbladh@anyfinetworks.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Hi Alexey,
 
-This series was applied to bpf/bpf-next.git (refs/heads/master):
+When lkp team run kernel selftests, we found after these series of patches, testcase mqueue: mq_perf_tests
+in kselftest failed with following message. 
 
-On Mon, 16 Aug 2021 19:03:19 +0000 you wrote:
-> This patch series add support for unix stream type
-> for sockmap. Sockmap already supports TCP, UDP,
-> unix dgram types. The unix stream support is similar
-> to unix dgram.
-> 
-> Also add selftests for unix stream type in sockmap tests.
-> 
-> [...]
+If you confirm and fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot lkp@intel.com
 
-Here is the summary with links:
-  - [bpf-next,v7,1/5] af_unix: add read_sock for stream socket types
-    https://git.kernel.org/bpf/bpf-next/c/77462de14a43
-  - [bpf-next,v7,2/5] af_unix: add unix_stream_proto for sockmap
-    https://git.kernel.org/bpf/bpf-next/c/94531cfcbe79
-  - [bpf-next,v7,3/5] selftest/bpf: add tests for sockmap with unix stream type.
-    https://git.kernel.org/bpf/bpf-next/c/9b03152bd469
-  - [bpf-next,v7,4/5] selftest/bpf: change udp to inet in some function names
-    https://git.kernel.org/bpf/bpf-next/c/75e0e27db6cf
-  - [bpf-next,v7,5/5] selftest/bpf: add new tests in sockmap for unix stream to tcp.
-    https://git.kernel.org/bpf/bpf-next/c/31c50aeed5a1
+```
+# selftests: mqueue: mq_perf_tests
+#
+# Initial system state:
+#       Using queue path:                       /mq_perf_tests
+#       RLIMIT_MSGQUEUE(soft):                  819200
+#       RLIMIT_MSGQUEUE(hard):                  819200
+#       Maximum Message Size:                   8192
+#       Maximum Queue Size:                     10
+#       Nice value:                             0
+#
+# Adjusted system state for testing:
+#       RLIMIT_MSGQUEUE(soft):                  (unlimited)
+#       RLIMIT_MSGQUEUE(hard):                  (unlimited)
+#       Maximum Message Size:                   16777216
+#       Maximum Queue Size:                     65530
+#       Nice value:                             -20
+#       Continuous mode:                        (disabled)
+#       CPUs to pin:                            3
+# ./mq_perf_tests: mq_open() at 296: Too many open files
+not ok 2 selftests: mqueue: mq_perf_tests # exit=1
+```    
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Test env:
+rootfs: debian-10
+gcc version: 9
 
-
+------
+Thanks 
+Ma Xinjian
