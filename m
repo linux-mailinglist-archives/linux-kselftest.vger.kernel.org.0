@@ -2,431 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D32F43EED6E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Aug 2021 15:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F723EEF84
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Aug 2021 17:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240091AbhHQN3f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Aug 2021 09:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240090AbhHQN3b (ORCPT
+        id S240354AbhHQPxN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Aug 2021 11:53:13 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:45980 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240280AbhHQPtC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Aug 2021 09:29:31 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57236C061764;
-        Tue, 17 Aug 2021 06:28:58 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id nt11so32092234pjb.2;
-        Tue, 17 Aug 2021 06:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tfmLY7S9YC+x9SpV8H7iTfznHpqcBZgtxlXa323i1bs=;
-        b=d4cPNEY9m/qmp+lOikOdTdgkUlBgn/O1r1AGSq8krU9fF7XRadb0fmpA1WzZOqAj9q
-         mzzIYGtxUXbs4kqTJL9P+hrKGjH0mscIt77UCqJq32ALiNSZcx1KFVn1RdxiMhjoz6f7
-         kT/EbRtLlqRyIVHE/FtgMU9iqdRcp7qTGGSECLnMR9CBRHbkMwYiYyy04fPuSrBVraoD
-         RaBLPW4QPHnpwM2JIZSzP8F0XmhcchLfD7/Y3PuKmi4bHwYZ1lfPCyDWbdfj9pY81e/f
-         byvt9mGhK5Ugq/pcwkyZM65NNIocFQPmUr+MPXmj40JY4QdnuMz/qp0fxG+4wllMuwrw
-         XFgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tfmLY7S9YC+x9SpV8H7iTfznHpqcBZgtxlXa323i1bs=;
-        b=FSedWMt8EnmddBX34ZIftoAX8pOjk8Ty8Edv/SCBbcV0lwE9h9mla1iMLKLR33lvGQ
-         0v31A8uSnXMZ9lWmYytWBKHFF6J32K+Y8fUcMRqseND5M3yiSD07uNTll8TZqJONDAAv
-         TyNBawCsW6XYMKlx/L4YR/opKOOEUeq/sXWkjauSkfw/5JgGlc/ca81NGLOkP2OktN0A
-         ozxPfYxYzmUcx4ro+ZZYncH9NM2tkEsYkxr93C64U346fgvHMUVbfHfl6OQvKgJIK85g
-         BW82vj/JeeO/ZzaJASQdDJ+UVxg3yKE5rbS5shiv9J6/2Hd6S/LEWpbjbZwnXcNhB4YZ
-         a0sw==
-X-Gm-Message-State: AOAM533e3kTe6H1ByTKSYunMey7OqwDO6B8ScAMosceyNMgGAQ84hd1L
-        usn23VKQsYpkuQzxCGXQA84=
-X-Google-Smtp-Source: ABdhPJyTjNxgWs8FD0a8HnHXP/C1rDd3NWyM6Z9DCRjar43gGz0WiBvbdN+PFUtYCYd2l5EfGAZpPA==
-X-Received: by 2002:a17:90a:154a:: with SMTP id y10mr3694151pja.8.1629206937928;
-        Tue, 17 Aug 2021 06:28:57 -0700 (PDT)
-Received: from ubuntu.localdomain ([182.226.226.37])
-        by smtp.gmail.com with ESMTPSA id j6sm2791577pfi.220.2021.08.17.06.28.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 06:28:57 -0700 (PDT)
-From:   bongsu.jeon2@gmail.com
-To:     shuah@kernel.org, krzysztof.kozlowski@canonical.com
-Cc:     netdev@vger.kernel.org, linux-nfc@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Bongsu Jeon <bongsu.jeon@samsung.com>
-Subject: [PATCH v2 net-next 8/8] selftests: nci: Add the NCI testcase reading T4T Tag
-Date:   Tue, 17 Aug 2021 06:28:18 -0700
-Message-Id: <20210817132818.8275-9-bongsu.jeon2@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210817132818.8275-1-bongsu.jeon2@gmail.com>
-References: <20210817132818.8275-1-bongsu.jeon2@gmail.com>
+        Tue, 17 Aug 2021 11:49:02 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51]:38074)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mG1Js-00DpJe-Qv; Tue, 17 Aug 2021 09:48:04 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:51836 helo=email.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mG1Jq-008gTq-AD; Tue, 17 Aug 2021 09:48:04 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     "Ma\, XinjianX" <xinjianx.ma@intel.com>
+Cc:     "legion\@kernel.org" <legion@kernel.org>,
+        "linux-kselftest\@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        lkp <lkp@intel.com>,
+        "akpm\@linux-foundation.org" <akpm@linux-foundation.org>,
+        "axboe\@kernel.dk" <axboe@kernel.dk>,
+        "christian.brauner\@ubuntu.com" <christian.brauner@ubuntu.com>,
+        "containers\@lists.linux-foundation.org" 
+        <containers@lists.linux-foundation.org>,
+        "jannh\@google.com" <jannh@google.com>,
+        "keescook\@chromium.org" <keescook@chromium.org>,
+        "kernel-hardening\@lists.openwall.com" 
+        <kernel-hardening@lists.openwall.com>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm\@kvack.org" <linux-mm@kvack.org>,
+        "oleg\@redhat.com" <oleg@redhat.com>,
+        "torvalds\@linux-foundation.org" <torvalds@linux-foundation.org>
+References: <d650b7794e264d5f8aa107644cc9784f@intel.com>
+Date:   Tue, 17 Aug 2021 10:47:14 -0500
+In-Reply-To: <d650b7794e264d5f8aa107644cc9784f@intel.com> (XinjianX Ma's
+        message of "Tue, 17 Aug 2021 04:03:50 +0000")
+Message-ID: <87a6lgysxp.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-XM-SPF: eid=1mG1Jq-008gTq-AD;;;mid=<87a6lgysxp.fsf@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+YR/Sxbe0UH84qAcIuO7Yi3l0O0ew6ZBk=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMSubLong
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4993]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;"Ma\, XinjianX" <xinjianx.ma@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1933 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 10 (0.5%), b_tie_ro: 9 (0.5%), parse: 0.95 (0.0%),
+         extract_message_metadata: 12 (0.6%), get_uri_detail_list: 1.36 (0.1%),
+         tests_pri_-1000: 6 (0.3%), tests_pri_-950: 1.25 (0.1%),
+        tests_pri_-900: 1.02 (0.1%), tests_pri_-90: 78 (4.0%), check_bayes: 76
+        (3.9%), b_tokenize: 8 (0.4%), b_tok_get_all: 8 (0.4%), b_comp_prob:
+        4.3 (0.2%), b_tok_touch_all: 51 (2.6%), b_finish: 1.01 (0.1%),
+        tests_pri_0: 448 (23.2%), check_dkim_signature: 0.57 (0.0%),
+        check_dkim_adsp: 3.6 (0.2%), poll_dns_idle: 1361 (70.4%),
+        tests_pri_10: 2.0 (0.1%), tests_pri_500: 1371 (70.9%), rewrite_mail:
+        0.00 (0.0%)
+Subject: Re: [PATCH v11 5/9] Reimplement RLIMIT_MSGQUEUE on top of ucounts
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Bongsu Jeon <bongsu.jeon@samsung.com>
+"Ma, XinjianX" <xinjianx.ma@intel.com> writes:
 
-Add the NCI testcase reading T4T Tag that has NFC TEST in plain text.
-the virtual device application acts as T4T Tag in this testcase.
+> Hi Alexey,
+>
+> When lkp team run kernel selftests, we found after these series of patches, testcase mqueue: mq_perf_tests
+> in kselftest failed with following message.
 
-Signed-off-by: Bongsu Jeon <bongsu.jeon@samsung.com>
----
- tools/testing/selftests/nci/nci_dev.c | 292 +++++++++++++++++++++++++-
- 1 file changed, 287 insertions(+), 5 deletions(-)
+Which kernel was this run against?
 
-diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-index a68b14642c20..e1bf55dabdf6 100644
---- a/tools/testing/selftests/nci/nci_dev.c
-+++ b/tools/testing/selftests/nci/nci_dev.c
-@@ -57,6 +57,29 @@ const __u8 nci_init_rsp_v2[] = {0x40, 0x01, 0x1c, 0x00, 0x1a, 0x7e, 0x06,
- const __u8 nci_rf_disc_map_rsp[] = {0x41, 0x00, 0x01, 0x00};
- const __u8 nci_rf_disc_rsp[] = {0x41, 0x03, 0x01, 0x00};
- const __u8 nci_rf_deact_rsp[] = {0x41, 0x06, 0x01, 0x00};
-+const __u8 nci_rf_deact_ntf[] = {0x61, 0x06, 0x02, 0x00, 0x00};
-+const __u8 nci_rf_activate_ntf[] = {0x61, 0x05, 0x1D, 0x01, 0x02, 0x04, 0x00,
-+				     0xFF, 0xFF, 0x0C, 0x44, 0x03, 0x07, 0x04,
-+				     0x62, 0x26, 0x11, 0x80, 0x1D, 0x80, 0x01,
-+				     0x20, 0x00, 0x00, 0x00, 0x06, 0x05, 0x75,
-+				     0x77, 0x81, 0x02, 0x80};
-+const __u8 nci_t4t_select_cmd[] = {0x00, 0x00, 0x0C, 0x00, 0xA4, 0x04, 0x00,
-+				    0x07, 0xD2, 0x76, 0x00, 0x00, 0x85, 0x01, 0x01};
-+const __u8 nci_t4t_select_cmd2[] = {0x00, 0x00, 0x07, 0x00, 0xA4, 0x00, 0x0C, 0x02,
-+				     0xE1, 0x03};
-+const __u8 nci_t4t_select_cmd3[] = {0x00, 0x00, 0x07, 0x00, 0xA4, 0x00, 0x0C, 0x02,
-+				     0xE1, 0x04};
-+const __u8 nci_t4t_read_cmd[] = {0x00, 0x00, 0x05, 0x00, 0xB0, 0x00, 0x00, 0x0F};
-+const __u8 nci_t4t_read_rsp[] = {0x00, 0x00, 0x11, 0x00, 0x0F, 0x20, 0x00, 0x3B,
-+				  0x00, 0x34, 0x04, 0x06, 0xE1, 0x04, 0x08, 0x00,
-+				  0x00, 0x00, 0x90, 0x00};
-+const __u8 nci_t4t_read_cmd2[] = {0x00, 0x00, 0x05, 0x00, 0xB0, 0x00, 0x00, 0x02};
-+const __u8 nci_t4t_read_rsp2[] = {0x00, 0x00, 0x04, 0x00, 0x0F, 0x90, 0x00};
-+const __u8 nci_t4t_read_cmd3[] = {0x00, 0x00, 0x05, 0x00, 0xB0, 0x00, 0x02, 0x0F};
-+const __u8 nci_t4t_read_rsp3[] = {0x00, 0x00, 0x11, 0xD1, 0x01, 0x0B, 0x54, 0x02,
-+				   0x65, 0x6E, 0x4E, 0x46, 0x43, 0x20, 0x54, 0x45,
-+				   0x53, 0x54, 0x90, 0x00};
-+const __u8 nci_t4t_rsp_ok[] = {0x00, 0x00, 0x02, 0x90, 0x00};
- 
- struct msgtemplate {
- 	struct nlmsghdr n;
-@@ -150,7 +173,7 @@ static int send_get_nfc_family(int sd, __u32 pid)
- 				&nla_get_family_len, NLM_F_REQUEST);
- }
- 
--static int get_family_id(int sd, __u32 pid)
-+static int get_family_id(int sd, __u32 pid, __u32 *event_group)
- {
- 	struct {
- 		struct nlmsghdr n;
-@@ -160,6 +183,7 @@ static int get_family_id(int sd, __u32 pid)
- 	struct nlattr *na;
- 	int resp_len;
- 	__u16 id;
-+	int len;
- 	int rc;
- 
- 	rc = send_get_nfc_family(sd, pid);
-@@ -173,11 +197,43 @@ static int get_family_id(int sd, __u32 pid)
- 	    !NLMSG_OK(&ans.n, resp_len))
- 		return 0;
- 
-+	len = 0;
-+	resp_len = GENLMSG_PAYLOAD(&ans.n);
- 	na = (struct nlattr *)GENLMSG_DATA(&ans);
--	na = (struct nlattr *)((char *)na + NLA_ALIGN(na->nla_len));
--	if (na->nla_type == CTRL_ATTR_FAMILY_ID)
--		id = *(__u16 *)NLA_DATA(na);
- 
-+	while (len < resp_len) {
-+		len += NLA_ALIGN(na->nla_len);
-+		if (na->nla_type == CTRL_ATTR_FAMILY_ID) {
-+			id = *(__u16 *)NLA_DATA(na);
-+		} else if (na->nla_type == CTRL_ATTR_MCAST_GROUPS) {
-+			struct nlattr *nested_na;
-+			struct nlattr *group_na;
-+			int group_attr_len;
-+			int group_attr;
-+
-+			nested_na = (struct nlattr *)((char *)na + NLA_HDRLEN);
-+			group_na = (struct nlattr *)((char *)nested_na + NLA_HDRLEN);
-+			group_attr_len = 0;
-+
-+			for (group_attr = CTRL_ATTR_MCAST_GRP_UNSPEC;
-+				group_attr < CTRL_ATTR_MCAST_GRP_MAX; group_attr++) {
-+				if (group_na->nla_type == CTRL_ATTR_MCAST_GRP_ID) {
-+					*event_group = *(__u32 *)((char *)group_na +
-+								  NLA_HDRLEN);
-+					break;
-+				}
-+
-+				group_attr_len += NLA_ALIGN(group_na->nla_len) +
-+						  NLA_HDRLEN;
-+				if (group_attr_len >= nested_na->nla_len)
-+					break;
-+
-+				group_na = (struct nlattr *)((char *)group_na +
-+							     NLA_ALIGN(group_na->nla_len));
-+			}
-+		}
-+		na = (struct nlattr *)(GENLMSG_DATA(&ans) + len);
-+	}
- 	return id;
- }
- 
-@@ -347,6 +403,7 @@ FIXTURE_SETUP(NCI)
- {
- 	struct msgtemplate msg;
- 	pthread_t thread_t;
-+	__u32 event_group;
- 	int status;
- 	int rc;
- 
-@@ -358,12 +415,16 @@ FIXTURE_SETUP(NCI)
- 	ASSERT_NE(self->sd, -1);
- 
- 	self->pid = getpid();
--	self->fid = get_family_id(self->sd, self->pid);
-+	self->fid = get_family_id(self->sd, self->pid, &event_group);
- 	ASSERT_NE(self->fid, -1);
- 
- 	self->virtual_nci_fd = open("/dev/virtual_nci", O_RDWR);
- 	ASSERT_GT(self->virtual_nci_fd, -1);
- 
-+	rc = setsockopt(self->sd, SOL_NETLINK, NETLINK_ADD_MEMBERSHIP, &event_group,
-+			sizeof(event_group));
-+	ASSERT_NE(rc, -1);
-+
- 	rc = ioctl(self->virtual_nci_fd, IOCTL_GET_NCIDEV_IDX, &self->dev_idex);
- 	ASSERT_EQ(rc, 0);
- 
-@@ -574,6 +635,227 @@ TEST_F(NCI, start_poll)
- 	EXPECT_EQ(status, 0);
- }
- 
-+int get_taginfo(int dev_idx, int sd, int fid, int pid)
-+{
-+	struct {
-+		struct nlmsghdr n;
-+		struct genlmsghdr g;
-+		char buf[512];
-+	} ans;
-+
-+	struct nlattr *na;
-+	__u32 protocol;
-+	int targetidx;
-+	__u8 sel_res;
-+	int resp_len;
-+	int len;
-+
-+	__u16 tagid_type;
-+	void *tagid_type_data;
-+	int tagid_len;
-+
-+	tagid_type = NFC_ATTR_DEVICE_INDEX;
-+	tagid_type_data = &dev_idx;
-+	tagid_len = 4;
-+
-+	send_cmd_mt_nla(sd, fid, pid, NFC_CMD_GET_TARGET, 1, &tagid_type,
-+			&tagid_type_data, &tagid_len, NLM_F_REQUEST | NLM_F_DUMP);
-+	resp_len = recv(sd, &ans, sizeof(ans), 0);
-+	if (ans.n.nlmsg_type == NLMSG_ERROR || resp_len < 0 ||
-+	    !NLMSG_OK(&ans.n, resp_len))
-+		return -1;
-+
-+	resp_len = GENLMSG_PAYLOAD(&ans.n);
-+	na = (struct nlattr *)GENLMSG_DATA(&ans);
-+
-+	len = 0;
-+	targetidx = -1;
-+	protocol = -1;
-+	sel_res = -1;
-+
-+	while (len < resp_len) {
-+		len += NLA_ALIGN(na->nla_len);
-+
-+		if (na->nla_type == NFC_ATTR_TARGET_INDEX)
-+			targetidx = *(int *)((char *)na + NLA_HDRLEN);
-+		else if (na->nla_type == NFC_ATTR_TARGET_SEL_RES)
-+			sel_res = *(__u8 *)((char *)na + NLA_HDRLEN);
-+		else if (na->nla_type == NFC_ATTR_PROTOCOLS)
-+			protocol = *(__u32 *)((char *)na + NLA_HDRLEN);
-+
-+		na = (struct nlattr *)(GENLMSG_DATA(&ans) + len);
-+	}
-+
-+	if (targetidx == -1 || sel_res != 0x20 || protocol != NFC_PROTO_ISO14443_MASK)
-+		return -1;
-+
-+	return targetidx;
-+}
-+
-+int connect_socket(int dev_idx, int target_idx)
-+{
-+	struct sockaddr_nfc addr;
-+	int sock;
-+	int err = 0;
-+
-+	sock = socket(AF_NFC, SOCK_SEQPACKET, NFC_SOCKPROTO_RAW);
-+	if (sock == -1)
-+		return -1;
-+
-+	addr.sa_family = AF_NFC;
-+	addr.dev_idx = dev_idx;
-+	addr.target_idx = target_idx;
-+	addr.nfc_protocol = NFC_PROTO_ISO14443;
-+
-+	err = connect(sock, (struct sockaddr *)&addr, sizeof(addr));
-+	if (err) {
-+		close(sock);
-+		return -1;
-+	}
-+
-+	return sock;
-+}
-+
-+int connect_tag(int dev_idx, int virtual_fd, int sd, int fid, int pid)
-+{
-+	struct genlmsghdr *genlhdr;
-+	struct nlattr *na;
-+	char evt_data[255];
-+	int target_idx;
-+	int resp_len;
-+	int evt_dev;
-+
-+	write(virtual_fd, nci_rf_activate_ntf, sizeof(nci_rf_activate_ntf));
-+	resp_len = recv(sd, evt_data, sizeof(evt_data), 0);
-+	if (resp_len < 0)
-+		return -1;
-+
-+	genlhdr = (struct genlmsghdr *)((struct nlmsghdr *)evt_data + 1);
-+	na = (struct nlattr *)(genlhdr + 1);
-+	evt_dev = *(int *)((char *)na + NLA_HDRLEN);
-+	if (dev_idx != evt_dev)
-+		return -1;
-+
-+	target_idx = get_taginfo(dev_idx, sd, fid, pid);
-+	if (target_idx == -1)
-+		return -1;
-+	return connect_socket(dev_idx, target_idx);
-+}
-+
-+int read_write_nci_cmd(int nfc_sock, int virtual_fd, const __u8 *cmd, __u32 cmd_len,
-+		       const __u8 *rsp, __u32 rsp_len)
-+{
-+	char buf[256];
-+	unsigned int len;
-+
-+	send(nfc_sock, &cmd[3], cmd_len - 3, 0);
-+	len = read(virtual_fd, buf, cmd_len);
-+	if (len < 0 || memcmp(buf, cmd, cmd_len))
-+		return -1;
-+
-+	write(virtual_fd, rsp, rsp_len);
-+	len = recv(nfc_sock, buf, rsp_len - 2, 0);
-+	if (len < 0 || memcmp(&buf[1], &rsp[3], rsp_len - 3))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+int read_tag(int nfc_sock, int virtual_fd)
-+{
-+	if (read_write_nci_cmd(nfc_sock, virtual_fd, nci_t4t_select_cmd,
-+			       sizeof(nci_t4t_select_cmd), nci_t4t_rsp_ok,
-+			       sizeof(nci_t4t_rsp_ok)))
-+		return -1;
-+
-+	if (read_write_nci_cmd(nfc_sock, virtual_fd, nci_t4t_select_cmd2,
-+			       sizeof(nci_t4t_select_cmd2), nci_t4t_rsp_ok,
-+			       sizeof(nci_t4t_rsp_ok)))
-+		return -1;
-+
-+	if (read_write_nci_cmd(nfc_sock, virtual_fd, nci_t4t_read_cmd,
-+			       sizeof(nci_t4t_read_cmd), nci_t4t_read_rsp,
-+			       sizeof(nci_t4t_read_rsp)))
-+		return -1;
-+
-+	if (read_write_nci_cmd(nfc_sock, virtual_fd, nci_t4t_select_cmd3,
-+			       sizeof(nci_t4t_select_cmd3), nci_t4t_rsp_ok,
-+			       sizeof(nci_t4t_rsp_ok)))
-+		return -1;
-+
-+	if (read_write_nci_cmd(nfc_sock, virtual_fd, nci_t4t_read_cmd2,
-+			       sizeof(nci_t4t_read_cmd2), nci_t4t_read_rsp2,
-+			       sizeof(nci_t4t_read_rsp2)))
-+		return -1;
-+
-+	return read_write_nci_cmd(nfc_sock, virtual_fd, nci_t4t_read_cmd3,
-+				  sizeof(nci_t4t_read_cmd3), nci_t4t_read_rsp3,
-+				  sizeof(nci_t4t_read_rsp3));
-+}
-+
-+static void *virtual_deactivate_proc(void *data)
-+{
-+	int virtual_fd;
-+	char buf[256];
-+	int deactcmd_len;
-+	int len;
-+
-+	virtual_fd = *(int *)data;
-+	deactcmd_len = sizeof(nci_rf_deact_cmd);
-+	len = read(virtual_fd, buf, deactcmd_len);
-+	if (len != deactcmd_len || memcmp(buf, nci_rf_deact_cmd, deactcmd_len))
-+		return (void *)-1;
-+
-+	write(virtual_fd, nci_rf_deact_rsp, sizeof(nci_rf_deact_rsp));
-+	write(virtual_fd, nci_rf_deact_ntf, sizeof(nci_rf_deact_ntf));
-+
-+	return (void *)0;
-+}
-+
-+int disconnect_tag(int nfc_sock, int virtual_fd)
-+{
-+	pthread_t thread_t;
-+	char buf[256];
-+	int status;
-+	int len;
-+
-+	send(nfc_sock, &nci_t4t_select_cmd3[3], sizeof(nci_t4t_select_cmd3) - 3, 0);
-+	len = read(virtual_fd, buf, sizeof(nci_t4t_select_cmd3));
-+	if (len < 0 || memcmp(buf, nci_t4t_select_cmd3, sizeof(nci_t4t_select_cmd3)))
-+		return -1;
-+
-+	len = recv(nfc_sock, buf, sizeof(nci_t4t_rsp_ok), 0);
-+	if (len != -1)
-+		return -1;
-+
-+	status = pthread_create(&thread_t, NULL, virtual_deactivate_proc,
-+				(void *)&virtual_fd);
-+
-+	close(nfc_sock);
-+	pthread_join(thread_t, (void **)&status);
-+	return status;
-+}
-+
-+TEST_F(NCI, t4t_tag_read)
-+{
-+	int nfc_sock;
-+	int status;
-+
-+	status = start_polling(self->dev_idex, self->proto, self->virtual_nci_fd,
-+			       self->sd, self->fid, self->pid);
-+	EXPECT_EQ(status, 0);
-+
-+	nfc_sock = connect_tag(self->dev_idex, self->virtual_nci_fd, self->sd,
-+			       self->fid, self->pid);
-+	ASSERT_GT(nfc_sock, -1);
-+
-+	status = read_tag(nfc_sock, self->virtual_nci_fd);
-+	ASSERT_EQ(status, 0);
-+
-+	status = disconnect_tag(nfc_sock, self->virtual_nci_fd);
-+	EXPECT_EQ(status, 0);
-+}
-+
- TEST_F(NCI, deinit)
- {
- 	struct msgtemplate msg;
--- 
-2.32.0
+Where can the mq_perf_tests that you ran and had problems with be found?
 
+During your run were you using user namespaces as part of your test
+environment?
+
+The error message too many files corresponds to the error code EMFILES
+which is the error code that is returned when the rlimit is reached.
+
+One possibility is that your test environment was run in a user
+namespace and so you wound up limited by rlimit of the user who created
+the user namespace at the point of user namespace creation. 
+
+At this point if you can give us enough information to look into this
+and attempt to reproduce it that would be appreciated.
+
+> If you confirm and fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot lkp@intel.com
+>
+> ```
+> # selftests: mqueue: mq_perf_tests
+> #
+> # Initial system state:
+> #       Using queue path:                       /mq_perf_tests
+> #       RLIMIT_MSGQUEUE(soft):                  819200
+> #       RLIMIT_MSGQUEUE(hard):                  819200
+> #       Maximum Message Size:                   8192
+> #       Maximum Queue Size:                     10
+> #       Nice value:                             0
+> #
+> # Adjusted system state for testing:
+> #       RLIMIT_MSGQUEUE(soft):                  (unlimited)
+> #       RLIMIT_MSGQUEUE(hard):                  (unlimited)
+> #       Maximum Message Size:                   16777216
+> #       Maximum Queue Size:                     65530
+> #       Nice value:                             -20
+> #       Continuous mode:                        (disabled)
+> #       CPUs to pin:                            3
+> # ./mq_perf_tests: mq_open() at 296: Too many open files
+> not ok 2 selftests: mqueue: mq_perf_tests # exit=1
+> ```    
+>
+> Test env:
+> rootfs: debian-10
+> gcc version: 9
+>
+> ------
+> Thanks 
+> Ma Xinjian
+
+Eric
