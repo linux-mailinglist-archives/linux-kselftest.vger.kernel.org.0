@@ -2,186 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED3C3EEB0B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Aug 2021 12:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAAF3EED59
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Aug 2021 15:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235845AbhHQKgF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Aug 2021 06:36:05 -0400
-Received: from mga14.intel.com ([192.55.52.115]:19823 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235939AbhHQKgF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Aug 2021 06:36:05 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="215764237"
-X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
-   d="scan'208";a="215764237"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2021 03:35:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
-   d="scan'208";a="471116758"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2021 03:35:31 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.4; Tue, 17 Aug 2021 03:35:31 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10 via Frontend Transport; Tue, 17 Aug 2021 03:35:31 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.108)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.10; Tue, 17 Aug 2021 03:35:30 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b4XYZKKE9VJXRtxldCDQ4Dvo1HCeBToXh3bFCukB1KloShbS8I2eSKwAiJhnns9oDGt/2tdThQVW60epIBJN1WmmOLo7gFRbhg9ZBPH1aZZtAtiNM2INrmd6UFIJBXtzqJhUPexT4D1LslZvEQW4sRyQ49NXOvZahWaZGkw4zt6/hfOAiAxwg+I09L1oRqoiqs/IFq9lahWNqzrFZqCyz+KAR2LmiQMn4SbJYqLjhdB6E+OUu6x3z195fHj9uR9az1Gxj0dLuMEiJ/MEFDomnyHDLiDUXvsb8AAscRXa9uYeVwoy25fm9pQNYBFg7+IAdE1SUll4BOjhL+JQGWsHEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PTp/pZZIPNptuVBq057+2MdDNdR3s+IpCh3FQdrJwrQ=;
- b=HpR9uTlyumQjHWn6Ky5AlInXXeCR5GXGpo7VU6rcgzZJsOHvxiznGmeiDyBSto5LQfF8YzrI9R4/ZCWaTh7TboBQf66gWqdCbgXsvVYSIw5zz99qSeCd1pmPiDqtVxDu+yrzWuMgYQOIGLbsb+z1z/yu/IlxAmAXS4oZV5fQlUNk7oqtaNcoBPa282s5y7YlBGGxakYAeK3hcJQhCjtMdN/sItB6p16tmPAesvWcpOx5iSnzfiscSQeSz0ottOQy72OdjVMxeOxVE7thwPqLj1Xv+g+wKvMu3kRvg4p4c9N+6+O81sZgA7hFRRHEPxYqDTKQiLFFIvh5AfZ6e0rdag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PTp/pZZIPNptuVBq057+2MdDNdR3s+IpCh3FQdrJwrQ=;
- b=WTM/QE1/9O/Zyun7mYnCODFcNp4tkUkAv6UBelXEQ5dmIzx+SApQ3l7OODBGoTao65O3tY1kg6xeZypj76nyp7ZFg2QPX2XEvxoGwtXC8PnF9jxjchYLzMou3PVI5gU0gGBB8eTssNgRL5kLMrj90JTRNVYbwNSWj7wIFeEN7Uw=
-Received: from DM6PR11MB4657.namprd11.prod.outlook.com (2603:10b6:5:2a6::7) by
- DM6PR11MB3963.namprd11.prod.outlook.com (2603:10b6:5:19b::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4415.19; Tue, 17 Aug 2021 10:35:29 +0000
-Received: from DM6PR11MB4657.namprd11.prod.outlook.com
- ([fe80::100:e37b:35bb:c213]) by DM6PR11MB4657.namprd11.prod.outlook.com
- ([fe80::100:e37b:35bb:c213%7]) with mapi id 15.20.4415.024; Tue, 17 Aug 2021
- 10:35:29 +0000
-From:   "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Intel Wired LAN <intel-wired-lan@lists.osuosl.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        David Miller <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        "cong.wang@bytedance.com" <cong.wang@bytedance.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: RE: [RFC net-next 4/7] net: add ioctl interface for recover reference
- clock on netdev
-Thread-Topic: [RFC net-next 4/7] net: add ioctl interface for recover
- reference clock on netdev
-Thread-Index: AQHXkrpDd8KR4sZrE0SVSHvcdxLd7at2iWmAgAD2LnA=
-Date:   Tue, 17 Aug 2021 10:35:29 +0000
-Message-ID: <DM6PR11MB4657C563333B755676B3069F9BFE9@DM6PR11MB4657.namprd11.prod.outlook.com>
-References: <20210816160717.31285-1-arkadiusz.kubalewski@intel.com>
- <20210816160717.31285-5-arkadiusz.kubalewski@intel.com>
- <CAK8P3a0N3N3mFvoPj_fkqOY30uudJceox=uwSW+nd0B0kf8-ng@mail.gmail.com>
-In-Reply-To: <CAK8P3a0N3N3mFvoPj_fkqOY30uudJceox=uwSW+nd0B0kf8-ng@mail.gmail.com>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.0.76
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: arndb.de; dkim=none (message not signed)
- header.d=none;arndb.de; dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6d6c9109-d981-4dcb-2ecd-08d9616abbd9
-x-ms-traffictypediagnostic: DM6PR11MB3963:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR11MB3963065F95528E49C5F9A2059BFE9@DM6PR11MB3963.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DscbYtHjkDLFqM5pklHkz4KiBTuDmet4ZUW63dQi5in/9nn57SlXGaLgC4Y8U6oj6c5SeU3J/7bjo55zcJwcFZTbT0v03Jm05RSOHsZ+DUlrVgW0Jo3npV+m5asnplFMI/9Nh9R7l6p346Db6IKfDK+s+Ush2F6YOPI8nuZ2M8XDwcrWf2fjDPyLSRLrV7MfpqNDj5XvohchcvuNf17H5EzkJWPI1dl+fwrdl9NukFLVQjDE5yVQTemRiX5YzC3akv4z5p5rzG0tnI/Enq7a072D/w5bc8SD3BAsBcgwmUJB6vn+bTfKZj4yCL+IfuUKwfdbv8syhrQ4gKxnic0X5W9ZZRfnOSGo7rYdOniVtqipFUPENZXdh3gNwDL3oPIKVh3rTU39f0La5gvEyBI05426LzBOM0HEaku4pwC/Ji9wPQAsDXgQpMxk6qT1jZyY9DTrJIFWwx8C5kJZGKcdq+n2b9yamFc0UNv9P0/IcuqViMAbFjtUI9KvAK1tlg5K4N2SgGZQGGt0k/dUJ5aDYpOCpnQrmWMHBoWjt3RRIFAMcGnMVBEtJOSNchk4NW09pafYSIui/7kVe0GVliBbY+i7hzEa+Vu/cXbGhv7A18lcIFgK14FmPdpcQnKJph/yi5xNVb+MXkf0qIEArAJ+dTZ1q5LC3joyFXtG5XVOmgXD3j7fnrcaUJbGS5PyHPnW63dwBh9AD5e1UG77FjE8eA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(39860400002)(376002)(396003)(366004)(76116006)(5660300002)(7416002)(6506007)(6916009)(186003)(38100700002)(122000001)(4326008)(26005)(66946007)(7696005)(64756008)(66446008)(66476007)(66556008)(478600001)(38070700005)(33656002)(316002)(8936002)(52536014)(86362001)(9686003)(71200400001)(2906002)(54906003)(8676002)(55016002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aVRUWk9ZQjFWU21uZFNvUTZvejVJNVpBQldNN2ZJN0FJTUl2T3VWL2JmWnBm?=
- =?utf-8?B?UmNVbmVJbzJJNUprYm1lNDc4QmYzTDhKL20vdDZlR2c4QWlxbytMemxZNWFQ?=
- =?utf-8?B?dHEzeEVCMU9JOTlxV2hETDIwYklWVzlsQkxDN1dqb3ZZVjVKeEsySzdFaUda?=
- =?utf-8?B?clFiV1NwQ1lYTXFzWjAvTThEL0txKzZTYmNFcGQzU1RlbDg0eG1qODdHVGo5?=
- =?utf-8?B?bE1ZcXZPV1piUHRoY3FmZ0lob2dtSWVwVzNvSk5KYzZ6cGQ4Z2RUNnFxU1BX?=
- =?utf-8?B?RFpBVlNkcjI3a1NiWkNRK0xsQ3Voa0w5R0VNcnRqN2xjdll3VEN3THdGN1NQ?=
- =?utf-8?B?VGVUSmFXd1plUWpERWR0Yms0V1gvNEIrYVIxMG9GLzRuazNLWnhoaFBTc1NQ?=
- =?utf-8?B?OTlIeWpUcWt6STNjNk9Ickw2a2xQVHNJaFBUNGwyM1ArQWpjd1JVbW5SQ0JC?=
- =?utf-8?B?VVpwRWs4bE12NlZWWVJ3VEpZcDM1c3NPWTV1SXhZZWpmaWhNVGI3Y05LMGZl?=
- =?utf-8?B?SWFKZVNBbkdBNkl2SXE2QkUyZXNRcWFyMnFkRnV5ejkvc0hFZzdEUUhwTEVF?=
- =?utf-8?B?bjVwZisxem9KWk1PNURzVFhRbW5QaE02c3RkUUpvaVluQm1jKzNOK2w4b0ll?=
- =?utf-8?B?T1hSUXQvQmpmVE9MQzJEZHh0ck9WU2dkQkppcjQwc0pEN3cvdW9UdjhncGFC?=
- =?utf-8?B?Q0FkTVdISXFhQ05YRldLVlF2OG8vL3NIdnlXbmNiV2g0M1NkWGNjb29UaWI3?=
- =?utf-8?B?QmUvMjA5dVBzSkdaQ2c4VFFWY0ZSUnp5U2pQTHJuMUpiZWlPY1VYRTlPZ1V3?=
- =?utf-8?B?N0VHeHpscGZrN3Bjd1FEeW9LTElDWnJmS1JjdW5wWVdsOUJGVUhZbTFhMTRr?=
- =?utf-8?B?N3JiOGYyRUtmNUxOZXg1Sm5aU3E5Rkg0SmFjM0kyRTZDcTFOWGdPMzNEbjJW?=
- =?utf-8?B?NGxvZmZpYy9FQzk2dmxRZGZySkJEQk9KRGpuRlcrSG9wZ2tVQnVzYjBRcVFE?=
- =?utf-8?B?UzdTUGVUWFRoemR2WW5zZVF0VFkrbFEreGphRUZlRWgxQjU3UU1acU4zczhu?=
- =?utf-8?B?MFg2T0ZKaHNGQW5KZ0RRbzJ2Sm1DSVh4dXp4K1pLeFlPZTdra3ZyUnhZRVJ0?=
- =?utf-8?B?eVk2TlBFUHVCN2p1SjlsT3U4NVBUSzBNRW8xOXhzREUwZFNEVWQ4d21mUUtz?=
- =?utf-8?B?Ry9iK3pmcVBaTUZWT0ovc0tyUktNeDkrdzJtY0hieTB2WXFGd3ovVUFNT3Az?=
- =?utf-8?B?L3U5VmI0MjJiRDhCOXBXT3hoR0x5QXAvMUw4VVRCZi9vcGtBRVgvTVNpRm9I?=
- =?utf-8?B?bFY2YWJndlQxZVBhYWYrbXNZeVQvQzFRdGFhdGF4bVlkdW9qTUV0Z3lVN3hn?=
- =?utf-8?B?Q2dtRHVGejBaMDUyODJDSFNwSmVqZmwzRmR0Ny9iaVhNZlBjdjk0Nks4SHBP?=
- =?utf-8?B?U3MrQ0VSK0NNMjFld0ErbGFWc3JpMzl5RTd5YzhpNDEzM2ZpblBSUkR6YjQ0?=
- =?utf-8?B?Z0dGa3FwODJYb1ZPbUNYdHZhdXFNREFPeGhZN3pMZDRLSGNnY2M1cm0zUlV6?=
- =?utf-8?B?ZHFBTEZDUzd1SWRuMFdaS2pkMDZOVzJ0dGw0eTZ6R0FsZzJJWVMzVjE2RElZ?=
- =?utf-8?B?QytRTTFNWjd0dEtBalJRbGNMSkN3V04xMDlRVWNhbm1Ka05DVUozS1FWMEsv?=
- =?utf-8?B?MGNWQVBTVGpzYzhUdGlBa0RFUFpOUEVTYW80Q0d4dkdyc1hsMVpGN1NkWTZo?=
- =?utf-8?Q?Q1U40OhMS0HXBxcpOmTt/rmnLZBbECarugdZjdN?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S236950AbhHQN3I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Aug 2021 09:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236398AbhHQN3H (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Aug 2021 09:29:07 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC17C061764;
+        Tue, 17 Aug 2021 06:28:34 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so5212327pjr.1;
+        Tue, 17 Aug 2021 06:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OzNUm8hN1AEsHQGtDta7OSeQVgR7GVTLDRlUoY7wuUY=;
+        b=nz1+0HpqWM7CXmGnMuDOtCz/0d9QhZJdet+zPgDQsTWVAYZQmRB1bdJW+L8Km8dgbX
+         M4jSA0ura8Gg6qK8XmNVt0bKOeH5cWWz/eU3lZy92okhsOUH5HnsvJUgj+vEDB7sgold
+         aplY+rmi00PBCVcdo2qClNXDIAB/yy6n4xzxgmlkeYASNiT8g2RkqtY4thbEGz1KYo18
+         4ZqbxAWB0z+/ydZgzB640i4d6R+RCP2lzod6KxZm14/38wdR1qrNtHBTe3Jnspkt721Y
+         PUlifTcJ2BGJI+mhw3Vn+Xu4C79GcujCgan57vqiExOxVrPa2w3kUs/XBG4r8KZ9rpM7
+         3GKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OzNUm8hN1AEsHQGtDta7OSeQVgR7GVTLDRlUoY7wuUY=;
+        b=kyDE/ZxjvOHcnH8mAkaOVVRCFTYiMgjuclUjS5PalbJTRjbamwkEg/8rqr3U38RXOW
+         vm/kCWgt5Jts5BDFiCjmpB7UJAV/ddfCV640dp9Og92YLx2fbxtvhCJ4+gIp2YUq1F1v
+         4N6edYaqKzrf3bGTRWTHql7BnmFbQeTZ2bKJYKQ9IVuNHmbOKEePspFpvhTIRhVlqCXN
+         ltfCgN2OTBrVkN1nA58RDAjnQIy0Lu2bDjeq/Z1FT6dhukt9QZkqVzuUfd43Gz9HLmn+
+         9L9t/lxxuWQF1qF+4Uh47EZn5GhW8Zh3TA7YrxWWKz+VboqwKp2YTUn3dz3zNGU1Hp0R
+         Fu0Q==
+X-Gm-Message-State: AOAM531F/GfuNUMsQyHxz1pURJ88Q9gweGGxUuqGEjRrZ/wX8UJ1FM8c
+        cNyvQhO3j8PZyk0DYDF0j5Q=
+X-Google-Smtp-Source: ABdhPJyI8pt16zmUi71MCy0jpKoWpUkAdRvoLlsd+zvpPOCIQJK4+08tlGKUoAxiMpMSeBl/XEQHBg==
+X-Received: by 2002:a17:902:da8a:b029:12c:6f0:fe3c with SMTP id j10-20020a170902da8ab029012c06f0fe3cmr2819657plx.41.1629206913694;
+        Tue, 17 Aug 2021 06:28:33 -0700 (PDT)
+Received: from ubuntu.localdomain ([182.226.226.37])
+        by smtp.gmail.com with ESMTPSA id j6sm2791577pfi.220.2021.08.17.06.28.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 06:28:32 -0700 (PDT)
+From:   bongsu.jeon2@gmail.com
+To:     shuah@kernel.org, krzysztof.kozlowski@canonical.com
+Cc:     netdev@vger.kernel.org, linux-nfc@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Bongsu Jeon <bongsu.jeon@samsung.com>
+Subject: [PATCH v2 net-next 0/8] Update the virtual NCI device driver and add the NCI testcase
+Date:   Tue, 17 Aug 2021 06:28:10 -0700
+Message-Id: <20210817132818.8275-1-bongsu.jeon2@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4657.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d6c9109-d981-4dcb-2ecd-08d9616abbd9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2021 10:35:29.4431
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RnqNbYFkRcKnh+b0qtN/e/HZ+ZCoCaMXYVxjwPXPrYTD1q/7i9/fq0V1rSsJWvJNVWoiCCA0Iavz2rPfUQdAJwYMaS9f/QDDgyoR6zNaQkc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3963
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Pk9uIE1vbiwgQXVnIDE2LCAyMDIxIGF0IDY6MTggUE0gQXJrYWRpdXN6IEt1YmFsZXdza2kNCj48
-YXJrYWRpdXN6Lmt1YmFsZXdza2lAaW50ZWwuY29tPiB3cm90ZToNCj4NCj4+ICsvKg0KPj4gKyAq
-IFN0cnVjdHVyZSB1c2VkIGZvciBwYXNzaW5nIGRhdGEgd2l0aCBTSU9DU1NZTkNFIGFuZCBTSU9D
-R1NZTkNFIGlvY3Rscw0KPj4gKyAqLw0KPj4gK3N0cnVjdCBzeW5jZV9yZWZfY2xrX2NmZyB7DQo+
-PiArICAgICAgIF9fdTggcGluX2lkOw0KPj4gKyAgICAgICBfQm9vbCBlbmFibGU7DQo+PiArfTsN
-Cj4NCj5JJ20gbm90IHN1cmUgaWYgdGhlcmUgYXJlIGFueSBndWFyYW50ZWVzIGFib3V0IHRoZSBz
-aXplIGFuZCBhbGlnbm1lbnQgb2YgX0Jvb2wsDQo+bWF5YmUgYmV0dGVyIHVzZSBfX3U4IGhlcmUg
-YXMgd2VsbCwgaWYgb25seSBmb3IgY2xhcml0eS4NCj4NCg0KU3VyZSwgd2lsbCBmaXggdGhhdCBp
-biBuZXh0IHBhdGNoLCBzZWVtcyByZWFzb25hYmxlDQoNCj4+ICsjZW5kaWYgLyogX05FVF9TWU5D
-RV9IICovDQo+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L3NvY2tpb3MuaCBiL2lu
-Y2x1ZGUvdWFwaS9saW51eC9zb2NraW9zLmgNCj4+IGluZGV4IDdkMWJjY2JiZWY3OC4uMzJjN2Q0
-OTA5YzMxIDEwMDY0NA0KPj4gLS0tIGEvaW5jbHVkZS91YXBpL2xpbnV4L3NvY2tpb3MuaA0KPj4g
-KysrIGIvaW5jbHVkZS91YXBpL2xpbnV4L3NvY2tpb3MuaA0KPj4gQEAgLTE1Myw2ICsxNTMsMTAg
-QEANCj4+ICAjZGVmaW5lIFNJT0NTSFdUU1RBTVAgIDB4ODliMCAgICAgICAgICAvKiBzZXQgYW5k
-IGdldCBjb25maWcgICAgICAgICAgICovDQo+PiAgI2RlZmluZSBTSU9DR0hXVFNUQU1QICAweDg5
-YjEgICAgICAgICAgLyogZ2V0IGNvbmZpZyAgICAgICAgICAgICAgICAgICAqLw0KPj4NCj4+ICsv
-KiBzeW5jaHJvbm91cyBldGhlcm5ldCBjb25maWcgcGVyIHBoeXNpY2FsIGZ1bmN0aW9uICovDQo+
-PiArI2RlZmluZSBTSU9DU1NZTkNFICAgICAweDg5YzAgICAgICAgICAgLyogc2V0IGFuZCBnZXQg
-Y29uZmlnICAgICAgICAgICAqLw0KPj4gKyNkZWZpbmUgU0lPQ0dTWU5DRSAgICAgMHg4OWMxICAg
-ICAgICAgIC8qIGdldCBjb25maWcgICAgICAgICAgICAgICAgICAgKi8NCj4NCj5JIHVuZGVyc3Rh
-bmQgdGhhdCB0aGVzZSBhcmUgdHJhZGl0aW9uYWxseSB1c2luZyB0aGUgb2xkLXN0eWxlIDE2LWJp
-dA0KPm51bWJlcnMsIGJ1dCBpcyB0aGVyZSBhbnkgcmVhc29uIHRvIGtlZXAgZG9pbmcgdGhhdCBy
-YXRoZXIgdGhhbg0KPm1ha2luZyB0aGVtIG1vZGVybiBsaWtlIHRoaXM/DQoNClBlcnNvbmFsbHkg
-SSB3b3VsZCB0cnkgdG8ga2VlcCBpdCBvbmUgd2F5LCBqdXN0IGZvciBjb25zaXN0ZW5jeSwgDQpi
-dXQgeW91IG1pZ2h0IGJlIHJpZ2h0IC0gbWFraW5nIGl0IG1vZGVybiB3YXkgaXMgYmV0dGVyIG9w
-dGlvbi4NCklmIG5vIG90aGVyIG9iamVjdGlvbnMgdG8gdGhpcyBjb21tZW50IEkgYW0gZ29pbmcg
-dG8gY2hhbmdlIGl0IGFjY29yZGluZyB0bw0KQXJuZCdzIHN1Z2dlc3Rpb24gaW4gbmV4dCBwYXRj
-aC4NCg0KPg0KPiNkZWZpbmUgU0lPQ1NTWU5DRSAgICAgX0lPV1IoMHg4OSwgMHhjMCwgc3RydWN0
-ICBzeW5jZV9yZWZfY2xrX2NmZykNCj4vKiBzZXQgYW5kIGdldCBjb25maWcgICAqLw0KPiNkZWZp
-bmUgU0lPQ0dTWU5DRSAgICAgX0lPUigweDg5LCAweGMxLCBzdHJ1Y3QgIHN5bmNlX3JlZl9jbGtf
-Y2ZnKQ0KPi8qIGdldCBjb25maWcgICAqLw0KPg0KPiAgICAgICAgQXJuZA0KPg0KDQpUaGFuayB5
-b3UsDQpBcmthZGl1c3oNCg==
+From: Bongsu Jeon <bongsu.jeon@samsung.com>
+
+This series updates the virtual NCI device driver and NCI selftest code
+and add the NCI test case in selftests.
+
+1/8 to use wait queue in virtual device driver.
+2/8 to remove the polling code in selftests.
+3/8 to fix a typo.
+4/8 to fix the next nlattr offset calculation.
+5/8 to fix the wrong condition in if statement.
+6/8 to add a flag parameter to the Netlink send function.
+7/8 to extract the start/stop discovery function.
+8/8 to add the NCI testcase in selftests.
+
+v2:
+ 1/8
+ - change the commit message.
+ - add the dfense code while reading a frame.
+ 3/8
+ - change the commit message.
+ - separate the commit into 3/8~8/8.
+
+Bongsu Jeon (8):
+  nfc: virtual_ncidev: Use wait queue instead of polling
+  selftests: nci: Remove the polling code to read a NCI frame
+  selftests: nci: Fix the typo
+  selftests: nci: Fix the code for next nlattr offset
+  selftests: nci: Fix the wrong condition
+  selftests: nci: Add the flags parameter for the send_cmd_mt_nla
+  selftests: nci: Extract the start/stop discovery function
+  selftests: nci: Add the NCI testcase reading T4T Tag
+
+ drivers/nfc/virtual_ncidev.c          |   9 +-
+ tools/testing/selftests/nci/nci_dev.c | 416 ++++++++++++++++++++++----
+ 2 files changed, 362 insertions(+), 63 deletions(-)
+
+-- 
+2.32.0
+
