@@ -2,108 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE043EE545
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Aug 2021 06:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52ECD3EE8E0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Aug 2021 10:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbhHQEEd convert rfc822-to-8bit (ORCPT
+        id S239136AbhHQIwJ convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Aug 2021 00:04:33 -0400
-Received: from mga17.intel.com ([192.55.52.151]:4471 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229696AbhHQEEb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Aug 2021 00:04:31 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="196252752"
-X-IronPort-AV: E=Sophos;i="5.84,327,1620716400"; 
-   d="scan'208";a="196252752"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2021 21:03:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,327,1620716400"; 
-   d="scan'208";a="505156435"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga001.jf.intel.com with ESMTP; 16 Aug 2021 21:03:58 -0700
-Received: from shsmsx605.ccr.corp.intel.com (10.109.6.215) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10; Mon, 16 Aug 2021 21:03:57 -0700
-Received: from shsmsx605.ccr.corp.intel.com (10.109.6.215) by
- SHSMSX605.ccr.corp.intel.com (10.109.6.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10; Tue, 17 Aug 2021 12:03:50 +0800
-Received: from shsmsx605.ccr.corp.intel.com ([10.109.6.215]) by
- SHSMSX605.ccr.corp.intel.com ([10.109.6.215]) with mapi id 15.01.2242.010;
- Tue, 17 Aug 2021 12:03:50 +0800
-From:   "Ma, XinjianX" <xinjianx.ma@intel.com>
-To:     "legion@kernel.org" <legion@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-CC:     lkp <lkp@intel.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
-        "containers@lists.linux-foundation.org" 
-        <containers@lists.linux-foundation.org>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "kernel-hardening@lists.openwall.com" 
-        <kernel-hardening@lists.openwall.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v11 5/9] Reimplement RLIMIT_MSGQUEUE on top of ucounts
-Thread-Topic: [PATCH v11 5/9] Reimplement RLIMIT_MSGQUEUE on top of ucounts
-Thread-Index: AQHXkxd6jQPRg5rF3UWHcji9NSI54Q==
-Date:   Tue, 17 Aug 2021 04:03:50 +0000
-Message-ID: <d650b7794e264d5f8aa107644cc9784f@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.239.127.36]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Tue, 17 Aug 2021 04:52:09 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:34217 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239349AbhHQIvr (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Aug 2021 04:51:47 -0400
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MaInF-1mccmC2Ekf-00WEWx; Tue, 17 Aug 2021 10:51:13 +0200
+Received: by mail-wr1-f44.google.com with SMTP id u16so10302086wrn.5;
+        Tue, 17 Aug 2021 01:51:13 -0700 (PDT)
+X-Gm-Message-State: AOAM532RCyQ7ad0IJuH95R9ZM5ZqSjQNUXmeO9E55jg4GQqcjfiCFt/z
+        Mtl+KfaInwS9i9VyfcrPLYivejFeD4iRNtaYO3s=
+X-Google-Smtp-Source: ABdhPJxy0S3dgbrbB+2nYK7McLmi6W/2RjAdWpCVrlXTpjcij9P5V8Nqaanw785zBrA27G7kE8fatC0nUCf8MIMztug=
+X-Received: by 2002:a5d:4b86:: with SMTP id b6mr2726669wrt.286.1629190273176;
+ Tue, 17 Aug 2021 01:51:13 -0700 (PDT)
 MIME-Version: 1.0
+References: <20210709001328.329716-1-andrealmeid@collabora.com> <20210709001328.329716-3-andrealmeid@collabora.com>
+In-Reply-To: <20210709001328.329716-3-andrealmeid@collabora.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 17 Aug 2021 10:50:57 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0MO1qJLRkCH8KrZ3+=L66KOsMRmcbrUvYdMoKykdKoyQ@mail.gmail.com>
+Message-ID: <CAK8P3a0MO1qJLRkCH8KrZ3+=L66KOsMRmcbrUvYdMoKykdKoyQ@mail.gmail.com>
+Subject: Re: [PATCH v5 02/11] futex2: Implement vectorized wait
+To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Collabora kernel ML <kernel@collabora.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        pgriffais@valvesoftware.com, z.figura12@gmail.com,
+        Joel Fernandes <joel@joelfernandes.org>,
+        malteskarupke@fastmail.fm, Linux API <linux-api@vger.kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Oskolkov <posk@posk.io>,
+        Andrey Semashev <andrey.semashev@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:UISJMkl+IaBsSotgyl9AZQDkgjgU/btUkhlQoMCvDrc2FeOQO++
+ DsOC/69f8AAXV5IjbQOXUcsDP22sJQRcNJmIXPjP19dq3At8k7v4Mis8ZCn3VyYJHV9F4Tf
+ kMrR7xSmtcTwxYdGPkMdYS2nYmuyh2YwFkuXhjhBvVjrLisEV7xxOmlVoTuBx2LBQSfwkkK
+ ClbEeRBgBfk6nJEO6Z/FQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:c0Ovau80hZI=:FTgVn/JcfGlpaD7+Z8o+og
+ 7uZ4MWCcs3tJhgIM4cEgcRNy0E5PIWHo43uxLgzQ6rsuvxsdbOvz9U3DpDnX1jYN11W6rmkBt
+ iO1LlKWUGOYjYe4I1Mny4y6rGfXnhFi9TbSMdZduBJbUd74m0S9LxW3BtoMRnuqerZz2vL9oQ
+ RMXoiRA/P1HUxbN0NbCvB3bDIRfGLRRVodN0XtvA6HbSoVKZ07iQTS8A2XC22X49paWV0EpEi
+ 1FS7ljhHlH3OHPcvDpVVYLW6GgBstPVLrFHC9/1RpzyI585yN13MEobYLojSdkdGw360/zraU
+ h7ZGEE9ViP2yUS2dvoXRzT3rTuc/EKrNcXOLutlu2+XZ5s8UjXPvg8nzkgs2G9yCcHlBRgYpz
+ +8tOnr8/i4CiZMVzoEQ0c9rPlbk4qpMfjMTSq6EJAExVwjBJqVkI+cgYVo2poNPbKnZLqkfMl
+ gKGg912NmkL3oYbj8IspQl625IwIQ/PmgcjUcdLOdTObTGb4cCfxWJX6zHNoWhlhYZH961t5U
+ 29viLW8tq/a0kqxU7aMYDyHXWJzBDpv/2RoR7nQGNAOrwrkiDzccTlqR0xNtKC2xA1dpKZ2ut
+ +9JGdRHxbWL0UXyUI1Sz7yLmRoFofOkDcWNrVAcpD0OB0Ye4pYsKK0Ee8IdJlW5t6qlzj5Zlm
+ d3wpAdhAIwcnYkfqFDnoKAE/eDVO2/0yo7Si55yywh1ggopJImTqwdgxwTWL2XDkzG2p8XsDa
+ NLqclA/8FJJ6poaey4mt49/wx0o/wabQ9mJM6JN3fU40QBNOTsQ/Q/QDOXwgqOyQexxx6MTc9
+ 1f+ZJE1DMJX0SvtWIVYviNqrg911TsRkcD1jV3MO9xnup/VnMFimnUpER1mm2HZeGGbR4PlGl
+ GaAfn7rx6FuydsTY4nqP5Lf4z58pXbcRZ8l+3fYQYC9Ns1hYdXc+IuVqAaL8ov/xvOMsBq/Q3
+ oQq4bH1C4jIH07410vqiKKEDeyVPbDhqHJZBXSoEYdtEccY4dszy1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Alexey,
+On Fri, Jul 9, 2021 at 2:13 AM André Almeida <andrealmeid@collabora.com> wrote:
+>
+> Add support to wait on multiple futexes. This is the interface
+> implemented by this syscall:
+>
+> futex_waitv(struct futex_waitv *waiters, unsigned int nr_futexes,
+>             unsigned int flags, struct timespec *timo)
+>
+> struct futex_waitv {
+>         __u64 val;
+>         void *uaddr;
+>         unsigned int flags;
+> };
 
-When lkp team run kernel selftests, we found after these series of patches, testcase mqueue: mq_perf_tests
-in kselftest failed with following message. 
+You should generally try to avoid structures with implicit padding
+like this one.
 
-If you confirm and fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot lkp@intel.com
+>  arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+>  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+>  include/linux/compat.h                 |   9 +
+>  include/linux/futex.h                  | 108 ++++++--
+>  include/uapi/asm-generic/unistd.h      |   4 +-
 
-```
-# selftests: mqueue: mq_perf_tests
-#
-# Initial system state:
-#       Using queue path:                       /mq_perf_tests
-#       RLIMIT_MSGQUEUE(soft):                  819200
-#       RLIMIT_MSGQUEUE(hard):                  819200
-#       Maximum Message Size:                   8192
-#       Maximum Queue Size:                     10
-#       Nice value:                             0
-#
-# Adjusted system state for testing:
-#       RLIMIT_MSGQUEUE(soft):                  (unlimited)
-#       RLIMIT_MSGQUEUE(hard):                  (unlimited)
-#       Maximum Message Size:                   16777216
-#       Maximum Queue Size:                     65530
-#       Nice value:                             -20
-#       Continuous mode:                        (disabled)
-#       CPUs to pin:                            3
-# ./mq_perf_tests: mq_open() at 296: Too many open files
-not ok 2 selftests: mqueue: mq_perf_tests # exit=1
-```    
+I would split out the syscall table changes from the implementation, but then
+do the table changes for all architectures, at least when you get to a version
+that gets close to being accepted.
 
-Test env:
-rootfs: debian-10
-gcc version: 9
+> +#ifdef CONFIG_COMPAT
+> +/**
+> + * compat_futex_parse_waitv - Parse a waitv array from userspace
+> + * @futexv:    Kernel side list of waiters to be filled
+> + * @uwaitv:     Userspace list to be parsed
+> + * @nr_futexes: Length of futexv
+> + *
+> + * Return: Error code on failure, pointer to a prepared futexv otherwise
+> + */
+> +static int compat_futex_parse_waitv(struct futex_vector *futexv,
+> +                                   struct compat_futex_waitv __user *uwaitv,
+> +                                   unsigned int nr_futexes)
+> +{
+> +       struct compat_futex_waitv aux;
+> +       unsigned int i;
+> +
+> +       for (i = 0; i < nr_futexes; i++) {
+> +               if (copy_from_user(&aux, &uwaitv[i], sizeof(aux)))
+> +                       return -EFAULT;
+> +
+> +               if ((aux.flags & ~FUTEXV_WAITER_MASK) ||
+> +                   (aux.flags & FUTEX_SIZE_MASK) != FUTEX_32)
+> +                       return -EINVAL;
+> +
+> +               futexv[i].w.flags = aux.flags;
+> +               futexv[i].w.val = aux.val;
+> +               futexv[i].w.uaddr = compat_ptr(aux.uaddr);
+> +               futexv[i].q = futex_q_init;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +COMPAT_SYSCALL_DEFINE4(futex_waitv, struct compat_futex_waitv __user *, waiters,
+> +                      unsigned int, nr_futexes, unsigned int, flags,
+> +                      struct __kernel_timespec __user *, timo)
+> +{
+> +       struct hrtimer_sleeper to;
+> +       struct futex_vector *futexv;
+> +       struct timespec64 ts;
+> +       ktime_t time;
+> +       int ret;
 
-------
-Thanks 
-Ma Xinjian
+It would be nice to reduce the duplication a little. compat_sys_futex_waitv()
+and sys_futex_waitv() only differ by a single line, in which they call
+a different
+parse function, and the two parse functions only differ in the layout of the
+user space structure. The get_timespec64() call already has an
+in_compat_syscall() check in it, so I would suggest having a single entry
+point for native and compat mode, but either having the parse function
+add another such check or making the structure layout compatible.
+
+The normal way of doing this is to have a __u64 value instead of the pointer,
+and then using u64_to_uptr() for the conversion. It might be nice to
+add a global
+
+typedef __u64 __kernel_uptr_t;
+
+for this purpose.
+
+       Arnd
