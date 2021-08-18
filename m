@@ -2,117 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9746D3F08EE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Aug 2021 18:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2493F09D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Aug 2021 19:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbhHRQWA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Aug 2021 12:22:00 -0400
-Received: from mail-io1-f52.google.com ([209.85.166.52]:34368 "EHLO
-        mail-io1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbhHRQV7 (ORCPT
+        id S232918AbhHRRDj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Aug 2021 13:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229784AbhHRRDi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Aug 2021 12:21:59 -0400
-Received: by mail-io1-f52.google.com with SMTP id i7so3616684iow.1;
-        Wed, 18 Aug 2021 09:21:24 -0700 (PDT)
+        Wed, 18 Aug 2021 13:03:38 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C194FC061764;
+        Wed, 18 Aug 2021 10:03:03 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id bo18so3114528pjb.0;
+        Wed, 18 Aug 2021 10:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=1o10C31aHLd2LPSTgzakMlhMfOFkU5VCGEeKjx0nPj4=;
+        b=Oz4jx0x5Zs5js4ubmLVJ93OgoPftLIzNNp92aDmbjtmwiIVYKdtH0pl+GeIz+AQ0FK
+         BibOcAC7ory9WvtJ6QOdFLKB3llcVylHrLkbIh+ifvxVWPN7Wh7GypJZtZSkLqEB+KN3
+         7ywn2EGk8KfSn/eTRUYxWp1wtBCv3V9h0X7pgsiv+LEjtIVglR7AHXrscuQY4wH8IOi0
+         lWt48YngVxL+hCU52uoiIfOVzMBZBh1RHv0UjGcsQ1xBjC5Cu1xg93Q0heHzrNFqCAbZ
+         w3lV9Qv/DMxxZA+sBNzNWgvh8jPlDh4Od0EGcgsT4HloEnC17JkKXx66t5xZ9NVXRuPU
+         Jk7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=g0gC+WjafyAckvmR2jgKWhTEEwfe3iTWJAbJzTBop3Y=;
-        b=qaNnVTTenGBBwVQYiZNGKQxtSYeD0voImZtowRcvA1K82JCxDKiG/lZPpLwmp8uT8p
-         zm4TgmXmYlR7zIJzq+99nPaWxD1Bfhbj+HhWTkay4q683d2vzptvnJtez0/LmTaXNJFM
-         SvCOaxR1IaFxbvcTU3bUSZSe4EPLYmFX1Dj6ra0xt1CnXDg5Uik9lgXGf5zpYLcPg0lz
-         oCxk+WyU7uoQode0jNBZ8oNh/nwze6mh0mmffVrqXp6q9xflIzS5Ssw9syWdvamRDx0v
-         FBS7gbAOThjwTnSINl1WT8st71RionMTFJCu/g6BARVOKyd72Tqlwvldi+Sl9zUOUlKg
-         Myig==
-X-Gm-Message-State: AOAM532nqalWE3iz9olvaAu+eYqSTilGf1/rVQ7o3NPTSFG0QlpqrOTu
-        g2/bwSCTcv//hQxjL2IbWbE=
-X-Google-Smtp-Source: ABdhPJxyCAXZZk17cmWbI2Hyif0mg+efhnTUqCkpRprycPO3ktyBAjtCIokfL8Wbv8TNGNohwm0Oww==
-X-Received: by 2002:a05:6638:2613:: with SMTP id m19mr6725966jat.11.1629303683988;
-        Wed, 18 Aug 2021 09:21:23 -0700 (PDT)
-Received: from [10.68.32.40] (broadband-188-32-236-56.ip.moscow.rt.ru. [188.32.236.56])
-        by smtp.gmail.com with ESMTPSA id a11sm63956ilf.79.2021.08.18.09.21.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Aug 2021 09:21:23 -0700 (PDT)
-Subject: Re: [RFC PATCH 1/5] checkpatch: improve handling of revert commits
-To:     Joe Perches <joe@perches.com>, linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Jiri Kosina <jkosina@suse.cz>,
-        Willy Tarreau <w@1wt.eu>
-References: <20210818154646.925351-1-efremov@linux.com>
- <20210818154646.925351-2-efremov@linux.com>
- <cc5801790fea258e20fa6b7e26de7806ae8e0dda.camel@perches.com>
-From:   Denis Efremov <efremov@linux.com>
-Message-ID: <3d347d4b-1576-754f-8633-ba6084cc0661@linux.com>
-Date:   Wed, 18 Aug 2021 19:21:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1o10C31aHLd2LPSTgzakMlhMfOFkU5VCGEeKjx0nPj4=;
+        b=uXuqmGIuli0PbrOMvlKztrL9z4g+pFDDbCAljnvpYwGEYR4p8rfmGqz5ldTB0IzFu8
+         T9s+cxaVT0ZdKZlb+xx2D35PcftP1NqyXidAp2wIwaqZq6WM/pmwCjYEZbYKeU0y5AXy
+         tBAu6XKFlOybr8CNfHilE225NAdb4FRM4x2Uf6UUpsWxJF0mIM23Jp1sO7ZnjoeKGPYM
+         Mg6j/TNjp5+uhbZiewLyFznKFn3XXLJuAvsKBVhHwc73f0mKEQoJJr0ke6+AJh2lyCZk
+         3keNMCDT0oQuVjI2h0R4sCDrxIR6cMLodXSlkoDpEH4BTeCJuq/IzzRUXm56c5Lk8edg
+         sZsw==
+X-Gm-Message-State: AOAM530Yp4tXJrtNcpt3eu78dYsw1ap/rS4iPsB6luBXznvUzfLVSUk2
+        FpTY9r7nBrjt41celq7aDNs=
+X-Google-Smtp-Source: ABdhPJzblPlYhVkYncUYxJqGiFndkjCTu6Kjut7fbo8TeEzaUAEhaz7bly4Jv5B7DA/K/0xxbdLOIQ==
+X-Received: by 2002:a17:90a:6f61:: with SMTP id d88mr10619309pjk.139.1629306183311;
+        Wed, 18 Aug 2021 10:03:03 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:645:c000:2163:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id h20sm330192pfc.32.2021.08.18.10.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Aug 2021 10:03:02 -0700 (PDT)
+Date:   Wed, 18 Aug 2021 10:02:59 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
+Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "nikolay@nvidia.com" <nikolay@nvidia.com>,
+        "cong.wang@bytedance.com" <cong.wang@bytedance.com>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "gustavoars@kernel.org" <gustavoars@kernel.org>
+Subject: Re: [RFC net-next 1/7] ptp: Add interface for acquiring DPLL state
+Message-ID: <20210818170259.GD9992@hoboy.vegasvil.org>
+References: <20210816160717.31285-1-arkadiusz.kubalewski@intel.com>
+ <20210816160717.31285-2-arkadiusz.kubalewski@intel.com>
+ <20210816235400.GA24680@hoboy.vegasvil.org>
+ <PH0PR11MB4951762ECB04D90D634E905DEAFE9@PH0PR11MB4951.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <cc5801790fea258e20fa6b7e26de7806ae8e0dda.camel@perches.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB4951762ECB04D90D634E905DEAFE9@PH0PR11MB4951.namprd11.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Aug 17, 2021 at 09:41:49AM +0000, Machnikowski, Maciej wrote:
 
+> The logic behind adding the DPLL state to the PTP subsystem is that SyncE DPLL on Network adapters, in most cases, drive the PTP timer.
 
-On 8/18/21 7:00 PM, Joe Perches wrote:
-> On Wed, 2021-08-18 at 18:46 +0300, Denis Efremov wrote:
->> Properly handle commits like:
->> commit f2791e7eadf4 ("Revert "floppy: refactor open() flags handling"")
-> 
-> Try this one:
-> 
-> https://lore.kernel.org/lkml/7f55d9d0369f1ea840fab83eeb77f9f3601fee41.camel@perches.com/
-> 
+So what?  The logic in the HW has nothing to do with the proper user
+space interfaces.  For example, we have SO_TIMESTAMPING and PHC as
+separate APIs, even though HW devices often implement both.
 
-It works but why not to use .+? then?
-I'm not sure that non-greedy patterns will properly handle commits like:
-$ git log --oneline | fgrep '")'
+> Having access to it in the PTP subsystem is beneficial, as Telco
+> standards, like G.8275.1/2, require a different behavior depending
+> on the SyncE availability and state.
 
-e.g. 
-commit ece2619fe8ed ("extcon: arizona: Fix flags parameter to the gpiod_get("wlf,micd-pol") call")
+Right, but this does say anything about the API.
 
+> Multiport adapters use a single PLL to drive all ports. If we add
+> the PLL interface to the PTP device - a tool that would implement
+> support for Telco standards would have a single source of
+> information about the presence and state of physical sync.
 
->>
->> Cc: Joe Perches <joe@perches.com>
->> Signed-off-by: Denis Efremov <efremov@linux.com>
->> ---
->>  scripts/checkpatch.pl | 12 ++++++------
->>  1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
->> index 461d4221e4a4..cf31e8c994d3 100755
->> --- a/scripts/checkpatch.pl
->> +++ b/scripts/checkpatch.pl
->> @@ -3200,20 +3200,20 @@ sub process {
->>  			$long = 1 if ($line =~ /\bcommit\s+[0-9a-f]{41,}/i);
->>  			$space = 0 if ($line =~ /\bcommit [0-9a-f]/i);
->>  			$case = 0 if ($line =~ /\b[Cc]ommit\s+[0-9a-f]{5,40}[^A-F]/);
->> -			if ($line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("([^"]+)"\)/i) {
->> +			if ($line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("(.+)"\)/i) {
->>  				$orig_desc = $1;
->>  				$hasparens = 1;
->>  			} elsif ($line =~ /\bcommit\s+[0-9a-f]{5,}\s*$/i &&
->>  				 defined $rawlines[$linenr] &&
->> -				 $rawlines[$linenr] =~ /^\s*\("([^"]+)"\)/) {
->> +				 $rawlines[$linenr] =~ /^\s*\("(.+)"\)/) {
->>  				$orig_desc = $1;
->>  				$hasparens = 1;
->> -			} elsif ($line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("[^"]+$/i &&
->> +			} elsif ($line =~ /\bcommit\s+[0-9a-f]{5,}\s+\(".+$/i &&
->>  				 defined $rawlines[$linenr] &&
->> -				 $rawlines[$linenr] =~ /^\s*[^"]+"\)/) {
->> -				$line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("([^"]+)$/i;
->> +				 $rawlines[$linenr] =~ /^\s*.+"\)/) {
->> +				$line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("(.+)$/i;
->>  				$orig_desc = $1;
->> -				$rawlines[$linenr] =~ /^\s*([^"]+)"\)/;
->> +				$rawlines[$linenr] =~ /^\s*(.+)"\)/;
->>  				$orig_desc .= " " . $1;
->>  				$hasparens = 1;
->>  			}
-> 
+Not really.  Nothing guarantees a sane mapping from MAC to PHC.  In
+many systems, there a many of each.
+
+> Moreover, it'll open the path for implementing PLL state-aware
+> ext_ts that would generate events only when the PLL device is locked
+> to the incoming signals improving the quality of external TS
+> events. I.e. an external PLL can be used to monitor incoming 1PPS
+> signal and disable event generation when its frequency drifts off
+> 1Hz by preset margins.
+
+I don't see how this prevents using RTNL (or something else) as the
+API for the SyncE configuration.
+
+> If we bind it to the Network port, a tool would need to find the
+> port that owns the PLL and read the state from a different place,
+> which sounds suboptimal.
+
+This is exactly how it works in ptpl4 today.  Some information comes
+from the PHC, some from RTNL (link state), some from ethtool
+(phc-interface mapping and time stamping abilities).
+
+> Additionally we'll lose ability to rely on external HW to monitor
+> external TS events.
+
+Sorry, I can't see that at all.
+
+Please do NOT tack this stuff onto the PHC subsystem just because you
+can.
+
+Thanks,
+Richard
