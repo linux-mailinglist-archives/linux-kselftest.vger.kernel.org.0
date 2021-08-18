@@ -2,135 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 694EA3F0A7E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Aug 2021 19:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDAA3F0A7C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Aug 2021 19:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbhHRRtp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Aug 2021 13:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S231402AbhHRRto (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Aug 2021 13:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbhHRRtn (ORCPT
+        with ESMTP id S231422AbhHRRtj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Aug 2021 13:49:43 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A865CC0617AD
+        Wed, 18 Aug 2021 13:49:39 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B80C06179A
         for <linux-kselftest@vger.kernel.org>; Wed, 18 Aug 2021 10:48:59 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id x4so3020199pgh.1
+Received: by mail-pf1-x42d.google.com with SMTP id j187so2900537pfg.4
         for <linux-kselftest@vger.kernel.org>; Wed, 18 Aug 2021 10:48:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1mY5RIBDNgWagktFsZEnudEN0wbyGTHt9HsdseVRFKY=;
-        b=lkw1GFxei+c9lM+dD9uJpW8DM95igP4b7m/SJ7F/1vBejrYpTKSFtUAf3aWrxF9tWn
-         v3DYj1UCk0uC+7Q+ySeP9w4Dqm+X0sdsz10+2CKJn1O3ZCId95GoWlD32iRwVx3YbYba
-         OYFJhccVe20gKZQT0LbD8pl3H/rCi0S73uBvg=
+        bh=9VAhCQA3MkM6rsCTMJO3M3k3MNEZtb/Tb2JXEPR3wc8=;
+        b=SNCXq/5oc+O/tePHpiIlGQK1Jx7CqAUD8e5IdHI683aauQpDfGujbae9TjWFhkU046
+         rLBkgjvQvx/rHbQXy9+zJe3cKrHceKrSA2AvGMxpnpE5p7VwcgX7ak86HeWswH40YbTw
+         G64ACPxE1o2scPWySFI7B8j/z0C8bzgR+gr6w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1mY5RIBDNgWagktFsZEnudEN0wbyGTHt9HsdseVRFKY=;
-        b=fXqVyZZ1r2jPI5oA0WKRV1aDRAXXwyinRIeWdnjkD/p+BIu9volpLHSlKYw6D0f34g
-         DXO6aK3sWOEPhdIlxzLcQKVPBoLNWMpV1WTLr0hBBCUatdzh0VyoUjpQcRQIRAtmvTZw
-         8T2uvhu3VEbGBxjp4DptVdMClCY08ueFJjafWDx53fnJA/r/eX+oflHrjoXOEL/ay7Z+
-         TfDauQOtqyHTwJ4FCg6f+trkON4xtScs0sucMU2SQHvqaXu/dYOayo6Gshns3H7cCPaN
-         8/hQ3g1txhXwSUMDwuZz9PC3xtroAkuxLYjxPGNKOktjTPG7WUaSKbzBlzXZ54XiG+63
-         IRRw==
-X-Gm-Message-State: AOAM532YwLtHoC2D337yITSKguIS71sNUn0JcYWAaiNNacMGbTekKMKO
-        VerR7wkYwCpXtT2v9k3kSb7i3g==
-X-Google-Smtp-Source: ABdhPJyFeBuwLVlU9TC3ZBx/6QU/4sy4LObAs/CpUDROrocaJs575Va38mcJ2sxKx6dEOTi/qL/Slg==
-X-Received: by 2002:a65:690c:: with SMTP id s12mr10069880pgq.401.1629308939206;
-        Wed, 18 Aug 2021 10:48:59 -0700 (PDT)
+        bh=9VAhCQA3MkM6rsCTMJO3M3k3MNEZtb/Tb2JXEPR3wc8=;
+        b=ehaQksgw8X0NkyhE1aTGCFx1aUNOum+KD/RWNdbQlYtcCSAa7ovTZua8Bhsnj83PBy
+         JukoK9l1xlG62l5CElOcnkA6Xi2iuN+a2m9ytdYpDYcQxiELoFbV2HjjBhIg6jpEkaeA
+         GzF3gHu5IEn19r+z5vYyxJh+tJr+eNnXdEW0u3LadlZ9aWoKRkmOeB5NYpuYOKu5jbe/
+         P/N25Zj8pWnuSm1Eh2oHVdrIwZB40K1mfvSwIbPL2n08Xolmfd1JEjwI15x6FXshUlkG
+         dPi27J4EWJL5ntD+c3cggUgBcMMmYLkuTAOr0z86P2wsyRIOK8G3owqrOWM5oKR+kZ4v
+         UzdQ==
+X-Gm-Message-State: AOAM533hEHXw3Ovhy7z69NpUhT/kI9FXCf2tv0mseiC5kt3NFBBvYLwx
+        mQVY6GSABUayovM+eIQwhJtpJA==
+X-Google-Smtp-Source: ABdhPJzWo9rtC4QhANM5t54ZDvpGyVJ01qR9Trm8ucGnt71I36aBkBxsezedVbtcTSSr5oPNubf9dQ==
+X-Received: by 2002:a63:ed50:: with SMTP id m16mr9989573pgk.231.1629308938931;
+        Wed, 18 Aug 2021 10:48:58 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q3sm455504pgf.18.2021.08.18.10.48.57
+        by smtp.gmail.com with ESMTPSA id q13sm5784525pjq.10.2021.08.18.10.48.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 18 Aug 2021 10:48:58 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
-        kernelci@groups.io,
         Guillaume Tucker <guillaume.tucker@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 3/4] lkdtm: Add kernel version to failure hints
-Date:   Wed, 18 Aug 2021 10:48:54 -0700
-Message-Id: <20210818174855.2307828-4-keescook@chromium.org>
+        linux-kernel@vger.kernel.org, kernelci@groups.io,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH 4/4] lkdtm/heap: Avoid __alloc_size hint warning for VMALLOC_LINEAR_OVERFLOW
+Date:   Wed, 18 Aug 2021 10:48:55 -0700
+Message-Id: <20210818174855.2307828-5-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210818174855.2307828-1-keescook@chromium.org>
 References: <20210818174855.2307828-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3259; h=from:subject; bh=PtEIiImPUmgrshOeUImaqyYgtJBgocXjAnTdV62YVWE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhHUgGpLo07w7JG+djZ75yRYafgXtPwCynK3PTDlkt e7AJbVOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYR1IBgAKCRCJcvTf3G3AJo2GD/ 44EkwrK4hbubbr73YxDXfIpSvaWKhnl8gYOa0sDntMqcNRIYzJmGYpNhEHdFQfkZjk1RJ1SR7n2O4X JN1krgFSEuHeAYQaLTMI81W0lhwr3PnOG2qyVGSS7z9qW/1yxUixQiX9lnQDmHfV3aIdB6bYAnKyOR pcJsx8ZdvhfYBahlY8W5jKhVlBZfYoIJKSmdYG12t02WmGwmz3Kou0uHoq1PBRTwDI0QTdbuToTBmJ n7H+N/4owQAe/L5GbyL+UnU2xQYvhwRRMotH02KzigIHfWeGYlrJdAdQOca9igIJ2g7Inlv3AcTlqE Gq3PQikM0G91IIYlsUngDHXmEbCRgyxB4KnA0CbQ4UsNmGhwBZdfvy4WJXixFYcykknjenN4HikXd4 e1EyGxr0t637X4e47h8JP77RqCA3+WA8PGAGnAiRZZalJBUk7rM0BqagmQTpxkiHFIbA+oLY63qu1y IJ9OypOASHrlhwGXhMe4WNOFN2JIXnct8NgPVRDdUDm5lIP0DWOim/w09zhVdd4tDn0madmZKXHsbF cbHznNBjFl8ghq0XtkLQkBJJW5xkTAu2B5Qu74FoKqtd/polUqitIbEi/ijp+2bJ0F45jjO4Bi3KDH Xz7QoPaVowJvl6NaDr4lP0U3vp231xWWZYgeL8KPCjBTjHdG1JDBxPRyPxaA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1433; h=from:subject; bh=hEHwsjZSD/SYU1VoaQ5mTXOJ9xQG9V/0cWsn/qe6UfM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhHUgGBUS/d6eL8MtIKgEouR7CqPpSrnry2WnQbOoB MJRkKMuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYR1IBgAKCRCJcvTf3G3AJq2QEA CYtjA8ExIWPk7JvqRI/61/kE99RMnZcDBn7KzqjP0m7JW5yqwlWBUMIz+ye1hV21EL2F5arOPH8BvR 3V9TjF+7swg9wtnWeIWdkurG6SE0wnSv9XECt+FpJzNKxsa9TsUw9OzP94iXOX0lhLJtiS5hbbDzvm 1xWlOJh9WnUVQVNHoQ0SWthtBbKyUGXh/xmr3ASedX9L6Ue100evlIwHgSaY4HK18yKW2oxesg9vRq 2nfod7QFT4T2wsrMrNBcPKnaillIzxm4xYIHVZ64iXPKFsSoxJAppeZ25QJS8u431AEsh7QC1vzUHN mYYvmqS5lBlfI4JWTTS2kh/l+646Yw6u2XmBhYm/auAnyQo6Y7uDXi4YZ0qxInN+fMocEm6/SG2Ts0 q+eQTj7eahrc7dPrq34ZqReM3Anssp+dl3jbBZ4qlHzyoL8i4QUkwHKBalsUDUu0AXanwZvIuUpVRE Xspwci5AKkP3cZFW92NW3seSikRnhZFP+SnAUf9FouV5pMfGgDfGEtAe+KcNGwOiaWjjArhEqeIHzt fiQFAZHI6CJUhJ+OdyXbeFfQfR/d0PG0GUn67vyUiVMF6oqs24HnZ7vRHm5paxs7yDRBfvhx+RD1sk 77kNe3nsroN6hhYbzbAgtAbYjR89fEwFvL1eLnnR4NI6p2wq7155My+YT1IA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In an effort to keep as much information in once place as possible in
-CI logs, report the kernel version and architecture in the failure hints.
+Once __alloc_size hints have been added, the compiler will (correctly!)
+see this as an overflow. We are, however, trying to test for this
+condition at run-time (not compile-time), so work around it with a
+volatile int offset.
 
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: kernelci@groups.io
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/misc/lkdtm/lkdtm.h | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/misc/lkdtm/heap.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-index f2e61581c1ae..d7d64d9765eb 100644
---- a/drivers/misc/lkdtm/lkdtm.h
-+++ b/drivers/misc/lkdtm/lkdtm.h
-@@ -5,13 +5,17 @@
- #define pr_fmt(fmt) "lkdtm: " fmt
+diff --git a/drivers/misc/lkdtm/heap.c b/drivers/misc/lkdtm/heap.c
+index 3d9aae5821a0..8a92f5a800fa 100644
+--- a/drivers/misc/lkdtm/heap.c
++++ b/drivers/misc/lkdtm/heap.c
+@@ -12,6 +12,13 @@ static struct kmem_cache *double_free_cache;
+ static struct kmem_cache *a_cache;
+ static struct kmem_cache *b_cache;
  
- #include <linux/kernel.h>
-+#include <generated/compile.h>
-+#include <generated/utsrelease.h>
++/*
++ * Using volatile here means the compiler cannot ever make assumptions
++ * about this value. This means compile-time length checks involving
++ * this variable cannot be performed; only run-time checks.
++ */
++static volatile int __offset = 1;
 +
-+#define LKDTM_KERNEL "kernel (" UTS_RELEASE " " UTS_MACHINE ")"
+ /*
+  * If there aren't guard pages, it's likely that a consecutive allocation will
+  * let us overflow into the second allocation without overwriting something real.
+@@ -24,7 +31,7 @@ void lkdtm_VMALLOC_LINEAR_OVERFLOW(void)
+ 	two = vzalloc(PAGE_SIZE);
  
- #define pr_expected_config(kconfig)				\
- {								\
- 	if (IS_ENABLED(kconfig)) 				\
--		pr_err("Unexpected! This kernel was built with " #kconfig "=y\n"); \
-+		pr_err("Unexpected! This " LKDTM_KERNEL " was built with " #kconfig "=y\n"); \
- 	else							\
--		pr_warn("This is probably expected, since this kernel was built *without* " #kconfig "=y\n"); \
-+		pr_warn("This is probably expected, since this " LKDTM_KERNEL " was built *without* " #kconfig "=y\n"); \
- }
+ 	pr_info("Attempting vmalloc linear overflow ...\n");
+-	memset(one, 0xAA, PAGE_SIZE + 1);
++	memset(one, 0xAA, PAGE_SIZE + __offset);
  
- #ifndef MODULE
-@@ -21,24 +25,24 @@ int lkdtm_check_bool_cmdline(const char *param);
- 	if (IS_ENABLED(kconfig)) {				\
- 		switch (lkdtm_check_bool_cmdline(param)) {	\
- 		case 0:						\
--			pr_warn("This is probably expected, since this kernel was built with " #kconfig "=y but booted with '" param "=N'\n"); \
-+			pr_warn("This is probably expected, since this " LKDTM_KERNEL " was built with " #kconfig "=y but booted with '" param "=N'\n"); \
- 			break;					\
- 		case 1:						\
--			pr_err("Unexpected! This kernel was built with " #kconfig "=y and booted with '" param "=Y'\n"); \
-+			pr_err("Unexpected! This " LKDTM_KERNEL " was built with " #kconfig "=y and booted with '" param "=Y'\n"); \
- 			break;					\
- 		default:					\
--			pr_err("Unexpected! This kernel was built with " #kconfig "=y (and booted without '" param "' specified)\n"); \
-+			pr_err("Unexpected! This " LKDTM_KERNEL " was built with " #kconfig "=y (and booted without '" param "' specified)\n"); \
- 		}						\
- 	} else {						\
- 		switch (lkdtm_check_bool_cmdline(param)) {	\
- 		case 0:						\
--			pr_warn("This is probably expected, as kernel was built *without* " #kconfig "=y and booted with '" param "=N'\n"); \
-+			pr_warn("This is probably expected, as this " LKDTM_KERNEL " was built *without* " #kconfig "=y and booted with '" param "=N'\n"); \
- 			break;					\
- 		case 1:						\
--			pr_err("Unexpected! This kernel was built *without* " #kconfig "=y but booted with '" param "=Y'\n"); \
-+			pr_err("Unexpected! This " LKDTM_KERNEL " was built *without* " #kconfig "=y but booted with '" param "=Y'\n"); \
- 			break;					\
- 		default:					\
--			pr_err("This is probably expected, since this kernel was built *without* " #kconfig "=y (and booted without '" param "' specified)\n"); \
-+			pr_err("This is probably expected, since this " LKDTM_KERNEL " was built *without* " #kconfig "=y (and booted without '" param "' specified)\n"); \
- 			break;					\
- 		}						\
- 	}							\
+ 	vfree(two);
+ 	vfree(one);
 -- 
 2.30.2
 
