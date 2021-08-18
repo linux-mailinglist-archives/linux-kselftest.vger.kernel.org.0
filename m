@@ -2,96 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DED1F3EFDAA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Aug 2021 09:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3200F3F00BC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Aug 2021 11:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236287AbhHRHTC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Aug 2021 03:19:02 -0400
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:62946 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238376AbhHRHTB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Aug 2021 03:19:01 -0400
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A4su1RKFKgYkp2hXIpLqE1MeALOsnbusQ8zAX?=
- =?us-ascii?q?PiFKOHhom6mj+vxG88506faKslwssR0b+OxoW5PwJE80l6QFgrX5VI3KNGbbUQ?=
- =?us-ascii?q?CTXeNfBOXZowHIKmnX8+5x8eNaebFiNduYNzNHpPe/zA6mM9tI+rW6zJw=3D?=
-X-IronPort-AV: E=Sophos;i="5.84,330,1620662400"; 
-   d="scan'208";a="113061284"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 18 Aug 2021 15:18:20 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id 011744D0D4BD;
-        Wed, 18 Aug 2021 15:18:19 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Wed, 18 Aug 2021 15:18:18 +0800
-Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Wed, 18 Aug 2021 15:18:18 +0800
-From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <philip.li@intel.com>,
-        <yifeix.zhu@intel.com>, Li Zhijian <lizhijian@cn.fujitsu.com>,
-        "kernel test robot" <lkp@intel.com>
-Subject: [PATCH] selftests/bpf: enlarge timeout to 3 seconds for test_maps
-Date:   Wed, 18 Aug 2021 15:16:02 +0800
-Message-ID: <20210818071602.2189-1-lizhijian@cn.fujitsu.com>
-X-Mailer: git-send-email 2.32.0
+        id S231960AbhHRJkm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Aug 2021 05:40:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34278 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231685AbhHRJkm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 18 Aug 2021 05:40:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id D5CAB60EBC;
+        Wed, 18 Aug 2021 09:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629279607;
+        bh=0fvRIpeJChIG3b+ddwk+hd8X2C41X4I/WrsBAxp94BM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mu01o7tr1hAMh5VvFLC43OS7vXHBJyYKTvY25EU4WPRX+V9OVhslTFmoZbEa3Kj2r
+         SRxESFe4IUz+cT7i1x92kabO57DMkBPr031X7lZ2oSxi7ebn6i+VHiDPEuP+p6LGx9
+         2+mlQdftp6Jv6O0T0pGVGQuEPVE8bJdu2B9CLQLCra0060GLpuTuwnNXpZoUmmR0GM
+         kUVB/r6A8r3Fblwhc8HXueXtoQDvMXmUi9fhGay9BUdn1lE+ZhIraTTSOJKgYnnFC4
+         Hn2866xnFCTM/vYgfM17LSvMFCvUucff6T/dnZZWNEjZRHIZzfNpmmxd/8fNMOjgYo
+         c6GqNjoIxfa4w==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C7F2A60A48;
+        Wed, 18 Aug 2021 09:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: 011744D0D4BD.ADCE3
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net-next 0/8] Update the virtual NCI device driver and add
+ the NCI testcase
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162927960781.17257.8348464007150730422.git-patchwork-notify@kernel.org>
+Date:   Wed, 18 Aug 2021 09:40:07 +0000
+References: <20210817132818.8275-1-bongsu.jeon2@gmail.com>
+In-Reply-To: <20210817132818.8275-1-bongsu.jeon2@gmail.com>
+To:     Bongsu Jeon <bongsu.jeon2@gmail.com>
+Cc:     shuah@kernel.org, krzysztof.kozlowski@canonical.com,
+        netdev@vger.kernel.org, linux-nfc@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bongsu.jeon@samsung.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-0Day robot observed that it's easily timeout on a heavy load host.
--------------------
- # selftests: bpf: test_maps
- # Fork 1024 tasks to 'test_update_delete'
- # Fork 1024 tasks to 'test_update_delete'
- # Fork 100 tasks to 'test_hashmap'
- # Fork 100 tasks to 'test_hashmap_percpu'
- # Fork 100 tasks to 'test_hashmap_sizes'
- # Fork 100 tasks to 'test_hashmap_walk'
- # Fork 100 tasks to 'test_arraymap'
- # Fork 100 tasks to 'test_arraymap_percpu'
- # Failed sockmap unexpected timeout
- not ok 3 selftests: bpf: test_maps # exit=1
- # selftests: bpf: test_lru_map
- # nr_cpus:8
--------------------
-Since this test will be scheduled by 0Day to a random host that could have
-only a few cpus(2-8), enlarge the timeout to avoid a false NG report.
+Hello:
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
----
- tools/testing/selftests/bpf/test_maps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series was applied to netdev/net-next.git (refs/heads/master):
 
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 30cbf5d98f7d..72673e0428fd 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -985,7 +985,7 @@ static void test_sockmap(unsigned int tasks, void *data)
- 
- 		FD_ZERO(&w);
- 		FD_SET(sfd[3], &w);
--		to.tv_sec = 1;
-+		to.tv_sec = 3;
- 		to.tv_usec = 0;
- 		s = select(sfd[3] + 1, &w, NULL, NULL, &to);
- 		if (s == -1) {
--- 
-2.32.0
+On Tue, 17 Aug 2021 06:28:10 -0700 you wrote:
+> From: Bongsu Jeon <bongsu.jeon@samsung.com>
+> 
+> This series updates the virtual NCI device driver and NCI selftest code
+> and add the NCI test case in selftests.
+> 
+> 1/8 to use wait queue in virtual device driver.
+> 2/8 to remove the polling code in selftests.
+> 3/8 to fix a typo.
+> 4/8 to fix the next nlattr offset calculation.
+> 5/8 to fix the wrong condition in if statement.
+> 6/8 to add a flag parameter to the Netlink send function.
+> 7/8 to extract the start/stop discovery function.
+> 8/8 to add the NCI testcase in selftests.
+> 
+> [...]
 
+Here is the summary with links:
+  - [v2,net-next,1/8] nfc: virtual_ncidev: Use wait queue instead of polling
+    https://git.kernel.org/netdev/net-next/c/8675569d73ca
+  - [v2,net-next,2/8] selftests: nci: Remove the polling code to read a NCI frame
+    https://git.kernel.org/netdev/net-next/c/4ef956c64394
+  - [v2,net-next,3/8] selftests: nci: Fix the typo
+    https://git.kernel.org/netdev/net-next/c/366f6edf5dea
+  - [v2,net-next,4/8] selftests: nci: Fix the code for next nlattr offset
+    https://git.kernel.org/netdev/net-next/c/78a7b2a8a0fa
+  - [v2,net-next,5/8] selftests: nci: Fix the wrong condition
+    https://git.kernel.org/netdev/net-next/c/1d5b8d01db98
+  - [v2,net-next,6/8] selftests: nci: Add the flags parameter for the send_cmd_mt_nla
+    https://git.kernel.org/netdev/net-next/c/6ebbc9680a33
+  - [v2,net-next,7/8] selftests: nci: Extract the start/stop discovery function
+    https://git.kernel.org/netdev/net-next/c/72696bd8a09d
+  - [v2,net-next,8/8] selftests: nci: Add the NCI testcase reading T4T Tag
+    https://git.kernel.org/netdev/net-next/c/61612511e55c
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
