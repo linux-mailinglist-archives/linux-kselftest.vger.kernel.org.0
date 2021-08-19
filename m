@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 814933F2254
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 23:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D9F3F225D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 23:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233845AbhHSVjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Aug 2021 17:39:55 -0400
-Received: from mail.efficios.com ([167.114.26.124]:57280 "EHLO
+        id S233801AbhHSVlu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Aug 2021 17:41:50 -0400
+Received: from mail.efficios.com ([167.114.26.124]:58084 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbhHSVjy (ORCPT
+        with ESMTP id S229834AbhHSVlt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Aug 2021 17:39:54 -0400
+        Thu, 19 Aug 2021 17:41:49 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 0AFE8378536;
-        Thu, 19 Aug 2021 17:39:17 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 3F7573781F6;
+        Thu, 19 Aug 2021 17:41:12 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id sqgMh8PS9est; Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+        with ESMTP id ZGEgsUCEHpib; Thu, 19 Aug 2021 17:41:07 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 7F9FE3784AD;
-        Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 7F9FE3784AD
+        by mail.efficios.com (Postfix) with ESMTP id B069F3783B1;
+        Thu, 19 Aug 2021 17:41:07 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com B069F3783B1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1629409152;
-        bh=5UmwxCORiN5yLIQm2BJu9shxBCOVFj1bc8s4bRqQFQo=;
+        s=default; t=1629409267;
+        bh=J2pdWpoMI+2vyTpqFQezmJJ20BZQemWJSr2tXYWs+kg=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=MF1eZ97b/KNT5hI9VL2d8/bJnxRVnz1puSaP8aXdbA0Yr8sbq1UW1Xnp5ROlOTAxA
-         BrBHYFiVE9fyDS+W6acYJK/dsDcXuZ5FxN6/TGgq81Ge5A7ri3UTyOOmZCNrrwpGaX
-         CaJRQA/6RdzkBds+FVqCWioAvW9dS868z5YzJqUiWVEa1eSWq/ub7V3SdNutNGYaHW
-         /BGNriEzzY77HlrWaGIlJrha5VHDUBgHaX9E9aF4RYwTeW4avIB2YHkFNmb79XRV+u
-         RMSG+xk/uZO1X64FabUncXvFyriO1d5efn0OTQ8xv/HTN1zVXC9OXfvrjvq/mcfJyu
-         98fIeMx5uJpUQ==
+        b=pa3pYJ3cbUZgsy5RMEfVX06b5BMW15nJGybYKI80PCZtKT/loekIXo67iDkr3zw2o
+         AcQDjSUEvPWZkfXFa2MNL3M12qdedS0z+iwaLKmQvShFxf5k9up1UVkNLovNXP8sDY
+         bdA2RyTMR+fBhQ1QbBLFpUUMqTGJRnrvlAIYO29B4UKvWiSALIAw+bbwWQjH4594fa
+         f4hMQXetpOHKVNonM0bzEra3naNVB6D/IW5A3QgT+JlY4hoy7eTAZclpqOtXJ3eyZe
+         4eLvEB8j4rfdfPDY0Vd+YVFdM2+RDHAKBJzLiMn18KxjxGQvY6sQUgo11F1HW7WM3d
+         KWwvfOAqkirvA==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id gNagT47KYem3; Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+        with ESMTP id lJ00l7vXwbaJ; Thu, 19 Aug 2021 17:41:07 -0400 (EDT)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 5C6F23784AA;
-        Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
-Date:   Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 774CF37853B;
+        Thu, 19 Aug 2021 17:41:07 -0400 (EDT)
+Date:   Thu, 19 Aug 2021 17:41:07 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
@@ -68,120 +68,190 @@ Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
         Peter Foley <pefoley@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         Ben Gardon <bgardon@google.com>
-Message-ID: <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20210818001210.4073390-2-seanjc@google.com>
-References: <20210818001210.4073390-1-seanjc@google.com> <20210818001210.4073390-2-seanjc@google.com>
-Subject: Re: [PATCH 1/5] KVM: rseq: Update rseq when processing
- NOTIFY_RESUME on xfer to KVM guest
+Message-ID: <1359319445.19723.1629409267434.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20210818001210.4073390-3-seanjc@google.com>
+References: <20210818001210.4073390-1-seanjc@google.com> <20210818001210.4073390-3-seanjc@google.com>
+Subject: Re: [PATCH 2/5] entry: rseq: Call rseq_handle_notify_resume() in
+ tracehook_notify_resume()
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF90 (Linux)/8.8.15_GA_4059)
-Thread-Topic: rseq: Update rseq when processing NOTIFY_RESUME on xfer to KVM guest
-Thread-Index: bvPQyLDSoOg+aSRtrktKYXzxAVZwCA==
+Thread-Topic: entry: rseq: Call rseq_handle_notify_resume() in tracehook_notify_resume()
+Thread-Index: gCU2eWL1uMmIvUsMi61iATE69Brb6A==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 ----- On Aug 17, 2021, at 8:12 PM, Sean Christopherson seanjc@google.com wrote:
 
-> Invoke rseq's NOTIFY_RESUME handler when processing the flag prior to
-> transferring to a KVM guest, which is roughly equivalent to an exit to
-> userspace and processes many of the same pending actions.  While the task
-> cannot be in an rseq critical section as the KVM path is reachable only
-> via ioctl(KVM_RUN), the side effects that apply to rseq outside of a
-> critical section still apply, e.g. the CPU ID needs to be updated if the
-> task is migrated.
+> Invoke rseq_handle_notify_resume() from tracehook_notify_resume() now
+> that the two function are always called back-to-back by architectures
+> that have rseq.  The rseq helper is stubbed out for architectures that
+> don't support rseq, i.e. this is a nop across the board.
 > 
-> Clearing TIF_NOTIFY_RESUME without informing rseq can lead to segfaults
-> and other badness in userspace VMMs that use rseq in combination with KVM,
-> e.g. due to the CPU ID being stale after task migration.
+> Note, tracehook_notify_resume() is horribly named and arguably does not
+> belong in tracehook.h as literally every line of code in it has nothing
+> to do with tracing.  But, that's been true since commit a42c6ded827d
+> ("move key_repace_session_keyring() into tracehook_notify_resume()")
+> first usurped tracehook_notify_resume() back in 2012.  Punt cleaning that
+> mess up to future patches.
+> 
+> No functional change intended.
 
-I agree with the problem assessment, but I would recommend a small change
-to this fix.
+This will make it harder to introduce new code paths which consume the
+NOTIFY_RESUME without calling the rseq callback, which introduces issues.
+Agreed.
+
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
 > 
-> Fixes: 72c3c0fe54a3 ("x86/kvm: Use generic xfer to guest work function")
-> Reported-by: Peter Foley <pefoley@google.com>
-> Bisected-by: Doug Evans <dje@google.com>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: stable@vger.kernel.org
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
-> kernel/entry/kvm.c | 4 +++-
-> kernel/rseq.c      | 4 ++--
-> 2 files changed, 5 insertions(+), 3 deletions(-)
+> arch/arm/kernel/signal.c     | 1 -
+> arch/arm64/kernel/signal.c   | 1 -
+> arch/csky/kernel/signal.c    | 4 +---
+> arch/mips/kernel/signal.c    | 4 +---
+> arch/powerpc/kernel/signal.c | 4 +---
+> arch/s390/kernel/signal.c    | 1 -
+> include/linux/tracehook.h    | 2 ++
+> kernel/entry/common.c        | 4 +---
+> kernel/entry/kvm.c           | 4 +---
+> 9 files changed, 7 insertions(+), 18 deletions(-)
 > 
+> diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
+> index a3a38d0a4c85..9df68d139965 100644
+> --- a/arch/arm/kernel/signal.c
+> +++ b/arch/arm/kernel/signal.c
+> @@ -670,7 +670,6 @@ do_work_pending(struct pt_regs *regs, unsigned int
+> thread_flags, int syscall)
+> 				uprobe_notify_resume(regs);
+> 			} else {
+> 				tracehook_notify_resume(regs);
+> -				rseq_handle_notify_resume(NULL, regs);
+> 			}
+> 		}
+> 		local_irq_disable();
+> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> index 23036334f4dc..22b55db13da6 100644
+> --- a/arch/arm64/kernel/signal.c
+> +++ b/arch/arm64/kernel/signal.c
+> @@ -951,7 +951,6 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
+> 
+> 			if (thread_flags & _TIF_NOTIFY_RESUME) {
+> 				tracehook_notify_resume(regs);
+> -				rseq_handle_notify_resume(NULL, regs);
+> 
+> 				/*
+> 				 * If we reschedule after checking the affinity
+> diff --git a/arch/csky/kernel/signal.c b/arch/csky/kernel/signal.c
+> index 312f046d452d..bc4238b9f709 100644
+> --- a/arch/csky/kernel/signal.c
+> +++ b/arch/csky/kernel/signal.c
+> @@ -260,8 +260,6 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
+> 	if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
+> 		do_signal(regs);
+> 
+> -	if (thread_info_flags & _TIF_NOTIFY_RESUME) {
+> +	if (thread_info_flags & _TIF_NOTIFY_RESUME)
+> 		tracehook_notify_resume(regs);
+> -		rseq_handle_notify_resume(NULL, regs);
+> -	}
+> }
+> diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
+> index f1e985109da0..c9b2a75563e1 100644
+> --- a/arch/mips/kernel/signal.c
+> +++ b/arch/mips/kernel/signal.c
+> @@ -906,10 +906,8 @@ asmlinkage void do_notify_resume(struct pt_regs *regs, void
+> *unused,
+> 	if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
+> 		do_signal(regs);
+> 
+> -	if (thread_info_flags & _TIF_NOTIFY_RESUME) {
+> +	if (thread_info_flags & _TIF_NOTIFY_RESUME)
+> 		tracehook_notify_resume(regs);
+> -		rseq_handle_notify_resume(NULL, regs);
+> -	}
+> 
+> 	user_enter();
+> }
+> diff --git a/arch/powerpc/kernel/signal.c b/arch/powerpc/kernel/signal.c
+> index e600764a926c..b93b87df499d 100644
+> --- a/arch/powerpc/kernel/signal.c
+> +++ b/arch/powerpc/kernel/signal.c
+> @@ -293,10 +293,8 @@ void do_notify_resume(struct pt_regs *regs, unsigned long
+> thread_info_flags)
+> 		do_signal(current);
+> 	}
+> 
+> -	if (thread_info_flags & _TIF_NOTIFY_RESUME) {
+> +	if (thread_info_flags & _TIF_NOTIFY_RESUME)
+> 		tracehook_notify_resume(regs);
+> -		rseq_handle_notify_resume(NULL, regs);
+> -	}
+> }
+> 
+> static unsigned long get_tm_stackpointer(struct task_struct *tsk)
+> diff --git a/arch/s390/kernel/signal.c b/arch/s390/kernel/signal.c
+> index 78ef53b29958..b307db26bf2d 100644
+> --- a/arch/s390/kernel/signal.c
+> +++ b/arch/s390/kernel/signal.c
+> @@ -537,5 +537,4 @@ void arch_do_signal_or_restart(struct pt_regs *regs, bool
+> has_signal)
+> void do_notify_resume(struct pt_regs *regs)
+> {
+> 	tracehook_notify_resume(regs);
+> -	rseq_handle_notify_resume(NULL, regs);
+> }
+> diff --git a/include/linux/tracehook.h b/include/linux/tracehook.h
+> index 3e80c4bc66f7..2564b7434b4d 100644
+> --- a/include/linux/tracehook.h
+> +++ b/include/linux/tracehook.h
+> @@ -197,6 +197,8 @@ static inline void tracehook_notify_resume(struct pt_regs
+> *regs)
+> 
+> 	mem_cgroup_handle_over_high();
+> 	blkcg_maybe_throttle_current();
+> +
+> +	rseq_handle_notify_resume(NULL, regs);
+> }
+> 
+> /*
+> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> index bf16395b9e13..d5a61d565ad5 100644
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -171,10 +171,8 @@ static unsigned long exit_to_user_mode_loop(struct pt_regs
+> *regs,
+> 		if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
+> 			handle_signal_work(regs, ti_work);
+> 
+> -		if (ti_work & _TIF_NOTIFY_RESUME) {
+> +		if (ti_work & _TIF_NOTIFY_RESUME)
+> 			tracehook_notify_resume(regs);
+> -			rseq_handle_notify_resume(NULL, regs);
+> -		}
+> 
+> 		/* Architecture specific TIF work */
+> 		arch_exit_to_user_mode_work(regs, ti_work);
 > diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
-> index 49972ee99aff..049fd06b4c3d 100644
+> index 049fd06b4c3d..49972ee99aff 100644
 > --- a/kernel/entry/kvm.c
 > +++ b/kernel/entry/kvm.c
-> @@ -19,8 +19,10 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu,
+> @@ -19,10 +19,8 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu,
 > unsigned long ti_work)
 > 		if (ti_work & _TIF_NEED_RESCHED)
 > 			schedule();
 > 
-> -		if (ti_work & _TIF_NOTIFY_RESUME)
-> +		if (ti_work & _TIF_NOTIFY_RESUME) {
+> -		if (ti_work & _TIF_NOTIFY_RESUME) {
+> +		if (ti_work & _TIF_NOTIFY_RESUME)
 > 			tracehook_notify_resume(NULL);
-> +			rseq_handle_notify_resume(NULL, NULL);
-> +		}
+> -			rseq_handle_notify_resume(NULL, NULL);
+> -		}
 > 
 > 		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
 > 		if (ret)
-> diff --git a/kernel/rseq.c b/kernel/rseq.c
-> index 35f7bd0fced0..58c79a7918cd 100644
-> --- a/kernel/rseq.c
-> +++ b/kernel/rseq.c
-> @@ -236,7 +236,7 @@ static bool in_rseq_cs(unsigned long ip, struct rseq_cs
-> *rseq_cs)
-> 
-> static int rseq_ip_fixup(struct pt_regs *regs)
-> {
-> -	unsigned long ip = instruction_pointer(regs);
-> +	unsigned long ip = regs ? instruction_pointer(regs) : 0;
-> 	struct task_struct *t = current;
-> 	struct rseq_cs rseq_cs;
-> 	int ret;
-> @@ -250,7 +250,7 @@ static int rseq_ip_fixup(struct pt_regs *regs)
-> 	 * If not nested over a rseq critical section, restart is useless.
-> 	 * Clear the rseq_cs pointer and return.
-> 	 */
-> -	if (!in_rseq_cs(ip, &rseq_cs))
-> +	if (!regs || !in_rseq_cs(ip, &rseq_cs))
-
-I think clearing the thread's rseq_cs unconditionally here when regs is NULL
-is not the behavior we want when this is called from xfer_to_guest_mode_work.
-
-If we have a scenario where userspace ends up calling this ioctl(KVM_RUN)
-from within a rseq c.s., we really want a CONFIG_DEBUG_RSEQ=y kernel to
-kill this application in the rseq_syscall handler when exiting back to usermode
-when the ioctl eventually returns.
-
-However, clearing the thread's rseq_cs will prevent this from happening.
-
-So I would favor an approach where we simply do:
-
-if (!regs)
-     return 0;
-
-Immediately at the beginning of rseq_ip_fixup, before getting the instruction
-pointer, so effectively skip all side-effects of the ip fixup code. Indeed, it
-is not relevant to do any fixup here, because it is nested in a ioctl system
-call.
-
-Effectively, this would preserve the SIGSEGV behavior when this ioctl is
-erroneously called by user-space from a rseq critical section.
-
-Thanks for looking into this !
-
-Mathieu
-
-> 		return clear_rseq_cs(t);
-> 	ret = rseq_need_restart(t, rseq_cs.flags);
-> 	if (ret <= 0)
 > --
 > 2.33.0.rc1.237.g0d66db33f3-goog
 
