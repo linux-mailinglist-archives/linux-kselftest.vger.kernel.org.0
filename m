@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C232B3F210E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 21:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280053F21E6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 22:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234436AbhHSTxO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Aug 2021 15:53:14 -0400
-Received: from mail-io1-f42.google.com ([209.85.166.42]:39441 "EHLO
-        mail-io1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbhHSTxO (ORCPT
+        id S230112AbhHSUwY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Aug 2021 16:52:24 -0400
+Received: from mail-lf1-f41.google.com ([209.85.167.41]:46621 "EHLO
+        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230031AbhHSUwY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Aug 2021 15:53:14 -0400
-Received: by mail-io1-f42.google.com with SMTP id a21so9241332ioq.6;
-        Thu, 19 Aug 2021 12:52:37 -0700 (PDT)
+        Thu, 19 Aug 2021 16:52:24 -0400
+Received: by mail-lf1-f41.google.com with SMTP id u22so15597278lfq.13;
+        Thu, 19 Aug 2021 13:51:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=yYuu4lI5p7DoBEaNzy386yfHwqBF6DSycUzLzLrgD2s=;
-        b=FPIlJITyl8PTEG88QMniDnGFq4psg9paW/jju+NQVgtRFoKB2Y8pyiDfL9VwV7HdIQ
-         ZTmxsvQPjqJ5UmGIcw8j8Qhjsi505vCVpc8bOBAPX8hHcw86GevrpCzbOQGCjaXVylXa
-         7WHv076E9RH+2HjmgeOVN+caWKkaz4JK41zqExOsq1OyGilr+Simss14pLYYXKC8JRRe
-         jFJh6+ZLHPzQl5Zth5L+tMIbpOPyVJ68B55vngooy5ke5bgHaQdwP4WnqH3s7E8SWcqG
-         aDg9HCRatrinoF5zkm0GTepcUngMdYv4e4qbN/rsFP19zVRNND33XwVCIL4cYBS8sJiY
-         Sqzw==
-X-Gm-Message-State: AOAM532otfIee+JxzvjNOnawrFvauN5FS9SCCRQTElbWUjzTKuP9OaiG
-        HiSILmFIngrBLKcbsi7eFHQ=
-X-Google-Smtp-Source: ABdhPJzKPCtxfgk8QGIZPlCl13lAIFcOthcP+uQDDChZM8swSZ8vicFNGoNNuepW0cr02WRzyQO90A==
-X-Received: by 2002:a05:6602:2219:: with SMTP id n25mr12516872ion.185.1629402757172;
-        Thu, 19 Aug 2021 12:52:37 -0700 (PDT)
+        bh=A3cvCpxfRoQDlHVtpQTz35oWEBjIU7MK3I1RSPqUnTI=;
+        b=Ci2M2cmrls84+ZsnE6g8PE1F4sbF+AIJoR/E/rGxXu5lFC+ofNb0jf68fdoJbKr4ls
+         ww28XMfq9Laceu0zxAnbfNxaTSR+3ass0YBDRMS8Od8AJA+DgakunNCjaQ8bfjrwPrgb
+         OKBF4iP9WAk1KBDbAVhhW5EjCwIo1axge/VCg/XJK/cPRijDMMwcwpRDJwiGYlyIeBlr
+         2HXHBbO1quS4y3JTSI3yOFkTaFUBb9BDN0C35kfVkYqEUrcH5D6WZSpdDmmKHcZtjzeR
+         Tk4bGOsDtAiyQ4e3MIYZdOW4FJFKnm+T8TRWiRspnwBEU5V2VLMrcSI8iF9DHNi++oRc
+         f3Rw==
+X-Gm-Message-State: AOAM533VZXzXYx9esgEl0toi94pHhqOJLwO1y+JX6WQX74RIFeb+gSow
+        D3n9lD7leq7DVoA8csCOmY8=
+X-Google-Smtp-Source: ABdhPJyH+1pHjJRPJ/Gv9OmJagVmP+KiDmOpZseeuc6ergP/QT3L2z4VNpY4WbR51bSnxOspglp28w==
+X-Received: by 2002:a05:6512:3890:: with SMTP id n16mr11644678lft.240.1629406306010;
+        Thu, 19 Aug 2021 13:51:46 -0700 (PDT)
 Received: from [192.168.1.109] ([213.87.152.233])
-        by smtp.gmail.com with ESMTPSA id x1sm2162535ilg.33.2021.08.19.12.52.33
+        by smtp.gmail.com with ESMTPSA id w32sm254878lfu.158.2021.08.19.13.51.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Aug 2021 12:52:36 -0700 (PDT)
-Subject: Re: [RFC PATCH 1/5] checkpatch: improve handling of revert commits
-To:     Joe Perches <joe@perches.com>, linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Jiri Kosina <jkosina@suse.cz>,
-        Willy Tarreau <w@1wt.eu>
+        Thu, 19 Aug 2021 13:51:45 -0700 (PDT)
+Subject: Re: [RFC PATCH 2/5] gen_initramfs.sh: use absolute path for
+ gen_init_cpio
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Jiri Kosina <jkosina@suse.cz>, Willy Tarreau <w@1wt.eu>
 References: <20210818154646.925351-1-efremov@linux.com>
- <20210818154646.925351-2-efremov@linux.com>
- <cc5801790fea258e20fa6b7e26de7806ae8e0dda.camel@perches.com>
- <3d347d4b-1576-754f-8633-ba6084cc0661@linux.com>
- <23c8ebaa0921d5597df9fc1d6cbbcc4f354f80c5.camel@perches.com>
+ <20210818154646.925351-3-efremov@linux.com>
+ <CAK7LNASTa+_d17wF6NW6GHC7Y+_RrXYZuo0MzzbsNnaRn8KJuQ@mail.gmail.com>
 From:   Denis Efremov <efremov@linux.com>
-Message-ID: <c31b2007-26a9-34e0-8c9a-8e11a00ce69f@linux.com>
-Date:   Thu, 19 Aug 2021 22:52:29 +0300
+Message-ID: <e90603ee-61e0-4530-34dc-087e40c94aa1@linux.com>
+Date:   Thu, 19 Aug 2021 23:51:43 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <23c8ebaa0921d5597df9fc1d6cbbcc4f354f80c5.camel@perches.com>
+In-Reply-To: <CAK7LNASTa+_d17wF6NW6GHC7Y+_RrXYZuo0MzzbsNnaRn8KJuQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -59,92 +60,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
 
-On 8/19/21 12:22 AM, Joe Perches wrote:
-> Hey Denis:
+
+On 8/19/21 3:24 AM, Masahiro Yamada wrote:
+> On Thu, Aug 19, 2021 at 12:47 AM Denis Efremov <efremov@linux.com> wrote:
+>>
+>> Use absolute path to call gen_init_cpio. This allows one
+>> to use gen_initramfs.sh from any directory.
 > 
-> Try this one please and let me know what you think...
+> I do not mind this, but $(dirname "$0")
+> is not necessarily an absolute path, is it?
+> 
+> 
+> I added test code:
+> 
+>    echo dirname is $(dirname $0)
+> 
+> in this script, and I saw
+> 
+>    dirname is usr
 
-Looks good to me. Couple of nitpicks below
+Oh, sorry, commit message is wrong. Would that be ok for you if I will change
+it in v2 to something like:
+
+Prepend gen_init_cpio call with the same path as gen_initramfs.sh called. This
+allows one to use gen_initramfs.sh from any directory, not only from the
+kernel's topdir.
 
 > 
-> ---
->  scripts/checkpatch.pl | 31 +++++++++++++------------------
->  1 file changed, 13 insertions(+), 18 deletions(-)
 > 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 161ce7fe5d1e5..4e2e79eff9b8c 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -3196,26 +3196,21 @@ sub process {
->  				$orig_commit = lc($1);
->  			}
->  
-> -			$short = 0 if ($line =~ /\bcommit\s+[0-9a-f]{12,40}/i);
-> -			$long = 1 if ($line =~ /\bcommit\s+[0-9a-f]{41,}/i);
-> -			$space = 0 if ($line =~ /\bcommit [0-9a-f]/i);
-> -			$case = 0 if ($line =~ /\b[Cc]ommit\s+[0-9a-f]{5,40}[^A-F]/);
-> -			if ($line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("([^"]+)"\)/i) {
-> -				$orig_desc = $1;
-> -				$hasparens = 1;
-> -			} elsif ($line =~ /\bcommit\s+[0-9a-f]{5,}\s*$/i &&
-> -				 defined $rawlines[$linenr] &&
-> -				 $rawlines[$linenr] =~ /^\s*\("([^"]+)"\)/) {
-> -				$orig_desc = $1;
-> -				$hasparens = 1;
-> -			} elsif ($line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("[^"]+$/i &&
-> -				 defined $rawlines[$linenr] &&
-> -				 $rawlines[$linenr] =~ /^\s*[^"]+"\)/) {
-> -				$line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("([^"]+)$/i;
-> +			my $input = $line;
-> +			for (my $n = 0; $n < 2; $n++) {
-> +				$input .= " $rawlines[$linenr + $n]" if ($#lines >= $linenr + $n);
-> +			}
-> +
-> +			$short = 0 if ($input =~ /\bcommit\s+[0-9a-f]{12,40}/i);
-> +			$long = 1 if ($input =~ /\bcommit\s+[0-9a-f]{41,}/i);
-> +			$space = 0 if ($input =~ /\bcommit [0-9a-f]/i);
-> +			$case = 0 if ($input =~ /\b[Cc]ommit\s+[0-9a-f]{5,40}[^A-F]/);
-> +			if ($input =~ /\bcommit\s+[0-9a-f]{5,}\s+($balanced_parens)/i) {
->  				$orig_desc = $1;
-> -				$rawlines[$linenr] =~ /^\s*([^"]+)"\)/;
-> -				$orig_desc .= " " . $1;
->  				$hasparens = 1;
-> +				# Always strip leading/trailing parens then double quotes if existing
-> +				$orig_desc = substr($orig_desc, 1, -1);
-> +				$orig_desc = substr($orig_desc, 1, -1) if ($orig_desc =~ /^".*"$/);
-
-Why do you want to add "if ($orig_desc =~ /^".*"$/);" here? and not just substr($orig_desc, 2, -2);?
-
->  			}
->  
->  			($id, $description) = git_commit_info($orig_commit,
 > 
-
-In your previous patch with '.*?' you added a branch to allow also newlines between commit and shas:
-```
-commit
-c3f157259438 (Revert "floppy: reintroduce O_NDELAY fix")
-```
-
-Maybe something like this will work (adding a last word from a prevline if line doesn't start from
-commit)
-+                       my $input = $line;
-                        if ($line =~ /\b(c)ommit\s+([0-9a-f]{5,})\b/i) {
-                                $init_char = $1;
-                                $orig_commit = lc($2);
-                        } elsif ($line =~ /\b([0-9a-f]{12,40})\b/i) {
-                                $orig_commit = lc($1);
-+                               $prevline =~ /(\w+)$/;
-+                               $line = $1 . " " . $prevline;
-                        }
- 
--                       my $input = $line;
-                        for (my $n = 0; $n < 2; $n++) {
-                                $input .= " $rawlines[$linenr + $n]" if ($#lines >= $linenr + $n);
-                        }
-
-Thanks,
-Denis
-
+> 
+>>
+>> Cc: Masahiro Yamada <masahiroy@kernel.org>
+>> Signed-off-by: Denis Efremov <efremov@linux.com>
+>> ---
+>>  usr/gen_initramfs.sh | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/usr/gen_initramfs.sh b/usr/gen_initramfs.sh
+>> index 63476bb70b41..2e4a86181c79 100755
+>> --- a/usr/gen_initramfs.sh
+>> +++ b/usr/gen_initramfs.sh
+>> @@ -244,4 +244,4 @@ if test -n "$KBUILD_BUILD_TIMESTAMP"; then
+>>                 timestamp="-t $timestamp"
+>>         fi
+>>  fi
+>> -usr/gen_init_cpio $timestamp $cpio_list > $output
+>> +"$(dirname "$0")"/gen_init_cpio $timestamp $cpio_list > $output
+>> --
+>> 2.31.1
+>>
+> 
+> 
+> --
+> Best Regards
+> Masahiro Yamada
+> 
