@@ -2,118 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 280053F21E6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 22:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814933F2254
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 23:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbhHSUwY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Aug 2021 16:52:24 -0400
-Received: from mail-lf1-f41.google.com ([209.85.167.41]:46621 "EHLO
-        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbhHSUwY (ORCPT
+        id S233845AbhHSVjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Aug 2021 17:39:55 -0400
+Received: from mail.efficios.com ([167.114.26.124]:57280 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229619AbhHSVjy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Aug 2021 16:52:24 -0400
-Received: by mail-lf1-f41.google.com with SMTP id u22so15597278lfq.13;
-        Thu, 19 Aug 2021 13:51:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=A3cvCpxfRoQDlHVtpQTz35oWEBjIU7MK3I1RSPqUnTI=;
-        b=Ci2M2cmrls84+ZsnE6g8PE1F4sbF+AIJoR/E/rGxXu5lFC+ofNb0jf68fdoJbKr4ls
-         ww28XMfq9Laceu0zxAnbfNxaTSR+3ass0YBDRMS8Od8AJA+DgakunNCjaQ8bfjrwPrgb
-         OKBF4iP9WAk1KBDbAVhhW5EjCwIo1axge/VCg/XJK/cPRijDMMwcwpRDJwiGYlyIeBlr
-         2HXHBbO1quS4y3JTSI3yOFkTaFUBb9BDN0C35kfVkYqEUrcH5D6WZSpdDmmKHcZtjzeR
-         Tk4bGOsDtAiyQ4e3MIYZdOW4FJFKnm+T8TRWiRspnwBEU5V2VLMrcSI8iF9DHNi++oRc
-         f3Rw==
-X-Gm-Message-State: AOAM533VZXzXYx9esgEl0toi94pHhqOJLwO1y+JX6WQX74RIFeb+gSow
-        D3n9lD7leq7DVoA8csCOmY8=
-X-Google-Smtp-Source: ABdhPJyH+1pHjJRPJ/Gv9OmJagVmP+KiDmOpZseeuc6ergP/QT3L2z4VNpY4WbR51bSnxOspglp28w==
-X-Received: by 2002:a05:6512:3890:: with SMTP id n16mr11644678lft.240.1629406306010;
-        Thu, 19 Aug 2021 13:51:46 -0700 (PDT)
-Received: from [192.168.1.109] ([213.87.152.233])
-        by smtp.gmail.com with ESMTPSA id w32sm254878lfu.158.2021.08.19.13.51.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Aug 2021 13:51:45 -0700 (PDT)
-Subject: Re: [RFC PATCH 2/5] gen_initramfs.sh: use absolute path for
- gen_init_cpio
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Jiri Kosina <jkosina@suse.cz>, Willy Tarreau <w@1wt.eu>
-References: <20210818154646.925351-1-efremov@linux.com>
- <20210818154646.925351-3-efremov@linux.com>
- <CAK7LNASTa+_d17wF6NW6GHC7Y+_RrXYZuo0MzzbsNnaRn8KJuQ@mail.gmail.com>
-From:   Denis Efremov <efremov@linux.com>
-Message-ID: <e90603ee-61e0-4530-34dc-087e40c94aa1@linux.com>
-Date:   Thu, 19 Aug 2021 23:51:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 19 Aug 2021 17:39:54 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 0AFE8378536;
+        Thu, 19 Aug 2021 17:39:17 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id sqgMh8PS9est; Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 7F9FE3784AD;
+        Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 7F9FE3784AD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1629409152;
+        bh=5UmwxCORiN5yLIQm2BJu9shxBCOVFj1bc8s4bRqQFQo=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=MF1eZ97b/KNT5hI9VL2d8/bJnxRVnz1puSaP8aXdbA0Yr8sbq1UW1Xnp5ROlOTAxA
+         BrBHYFiVE9fyDS+W6acYJK/dsDcXuZ5FxN6/TGgq81Ge5A7ri3UTyOOmZCNrrwpGaX
+         CaJRQA/6RdzkBds+FVqCWioAvW9dS868z5YzJqUiWVEa1eSWq/ub7V3SdNutNGYaHW
+         /BGNriEzzY77HlrWaGIlJrha5VHDUBgHaX9E9aF4RYwTeW4avIB2YHkFNmb79XRV+u
+         RMSG+xk/uZO1X64FabUncXvFyriO1d5efn0OTQ8xv/HTN1zVXC9OXfvrjvq/mcfJyu
+         98fIeMx5uJpUQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id gNagT47KYem3; Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 5C6F23784AA;
+        Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+Date:   Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Oleg Nesterov <oleg@redhat.com>, rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-csky <linux-csky@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390@vger.kernel.org, KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Peter Foley <pefoley@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Ben Gardon <bgardon@google.com>
+Message-ID: <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20210818001210.4073390-2-seanjc@google.com>
+References: <20210818001210.4073390-1-seanjc@google.com> <20210818001210.4073390-2-seanjc@google.com>
+Subject: Re: [PATCH 1/5] KVM: rseq: Update rseq when processing
+ NOTIFY_RESUME on xfer to KVM guest
 MIME-Version: 1.0
-In-Reply-To: <CAK7LNASTa+_d17wF6NW6GHC7Y+_RrXYZuo0MzzbsNnaRn8KJuQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF90 (Linux)/8.8.15_GA_4059)
+Thread-Topic: rseq: Update rseq when processing NOTIFY_RESUME on xfer to KVM guest
+Thread-Index: bvPQyLDSoOg+aSRtrktKYXzxAVZwCA==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+----- On Aug 17, 2021, at 8:12 PM, Sean Christopherson seanjc@google.com wrote:
 
+> Invoke rseq's NOTIFY_RESUME handler when processing the flag prior to
+> transferring to a KVM guest, which is roughly equivalent to an exit to
+> userspace and processes many of the same pending actions.  While the task
+> cannot be in an rseq critical section as the KVM path is reachable only
+> via ioctl(KVM_RUN), the side effects that apply to rseq outside of a
+> critical section still apply, e.g. the CPU ID needs to be updated if the
+> task is migrated.
+> 
+> Clearing TIF_NOTIFY_RESUME without informing rseq can lead to segfaults
+> and other badness in userspace VMMs that use rseq in combination with KVM,
+> e.g. due to the CPU ID being stale after task migration.
 
-On 8/19/21 3:24 AM, Masahiro Yamada wrote:
-> On Thu, Aug 19, 2021 at 12:47 AM Denis Efremov <efremov@linux.com> wrote:
->>
->> Use absolute path to call gen_init_cpio. This allows one
->> to use gen_initramfs.sh from any directory.
-> 
-> I do not mind this, but $(dirname "$0")
-> is not necessarily an absolute path, is it?
-> 
-> 
-> I added test code:
-> 
->    echo dirname is $(dirname $0)
-> 
-> in this script, and I saw
-> 
->    dirname is usr
-
-Oh, sorry, commit message is wrong. Would that be ok for you if I will change
-it in v2 to something like:
-
-Prepend gen_init_cpio call with the same path as gen_initramfs.sh called. This
-allows one to use gen_initramfs.sh from any directory, not only from the
-kernel's topdir.
+I agree with the problem assessment, but I would recommend a small change
+to this fix.
 
 > 
+> Fixes: 72c3c0fe54a3 ("x86/kvm: Use generic xfer to guest work function")
+> Reported-by: Peter Foley <pefoley@google.com>
+> Bisected-by: Doug Evans <dje@google.com>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+> kernel/entry/kvm.c | 4 +++-
+> kernel/rseq.c      | 4 ++--
+> 2 files changed, 5 insertions(+), 3 deletions(-)
 > 
+> diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
+> index 49972ee99aff..049fd06b4c3d 100644
+> --- a/kernel/entry/kvm.c
+> +++ b/kernel/entry/kvm.c
+> @@ -19,8 +19,10 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu,
+> unsigned long ti_work)
+> 		if (ti_work & _TIF_NEED_RESCHED)
+> 			schedule();
 > 
+> -		if (ti_work & _TIF_NOTIFY_RESUME)
+> +		if (ti_work & _TIF_NOTIFY_RESUME) {
+> 			tracehook_notify_resume(NULL);
+> +			rseq_handle_notify_resume(NULL, NULL);
+> +		}
 > 
->>
->> Cc: Masahiro Yamada <masahiroy@kernel.org>
->> Signed-off-by: Denis Efremov <efremov@linux.com>
->> ---
->>  usr/gen_initramfs.sh | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/usr/gen_initramfs.sh b/usr/gen_initramfs.sh
->> index 63476bb70b41..2e4a86181c79 100755
->> --- a/usr/gen_initramfs.sh
->> +++ b/usr/gen_initramfs.sh
->> @@ -244,4 +244,4 @@ if test -n "$KBUILD_BUILD_TIMESTAMP"; then
->>                 timestamp="-t $timestamp"
->>         fi
->>  fi
->> -usr/gen_init_cpio $timestamp $cpio_list > $output
->> +"$(dirname "$0")"/gen_init_cpio $timestamp $cpio_list > $output
->> --
->> 2.31.1
->>
+> 		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
+> 		if (ret)
+> diff --git a/kernel/rseq.c b/kernel/rseq.c
+> index 35f7bd0fced0..58c79a7918cd 100644
+> --- a/kernel/rseq.c
+> +++ b/kernel/rseq.c
+> @@ -236,7 +236,7 @@ static bool in_rseq_cs(unsigned long ip, struct rseq_cs
+> *rseq_cs)
 > 
-> 
+> static int rseq_ip_fixup(struct pt_regs *regs)
+> {
+> -	unsigned long ip = instruction_pointer(regs);
+> +	unsigned long ip = regs ? instruction_pointer(regs) : 0;
+> 	struct task_struct *t = current;
+> 	struct rseq_cs rseq_cs;
+> 	int ret;
+> @@ -250,7 +250,7 @@ static int rseq_ip_fixup(struct pt_regs *regs)
+> 	 * If not nested over a rseq critical section, restart is useless.
+> 	 * Clear the rseq_cs pointer and return.
+> 	 */
+> -	if (!in_rseq_cs(ip, &rseq_cs))
+> +	if (!regs || !in_rseq_cs(ip, &rseq_cs))
+
+I think clearing the thread's rseq_cs unconditionally here when regs is NULL
+is not the behavior we want when this is called from xfer_to_guest_mode_work.
+
+If we have a scenario where userspace ends up calling this ioctl(KVM_RUN)
+from within a rseq c.s., we really want a CONFIG_DEBUG_RSEQ=y kernel to
+kill this application in the rseq_syscall handler when exiting back to usermode
+when the ioctl eventually returns.
+
+However, clearing the thread's rseq_cs will prevent this from happening.
+
+So I would favor an approach where we simply do:
+
+if (!regs)
+     return 0;
+
+Immediately at the beginning of rseq_ip_fixup, before getting the instruction
+pointer, so effectively skip all side-effects of the ip fixup code. Indeed, it
+is not relevant to do any fixup here, because it is nested in a ioctl system
+call.
+
+Effectively, this would preserve the SIGSEGV behavior when this ioctl is
+erroneously called by user-space from a rseq critical section.
+
+Thanks for looking into this !
+
+Mathieu
+
+> 		return clear_rseq_cs(t);
+> 	ret = rseq_need_restart(t, rseq_cs.flags);
+> 	if (ret <= 0)
 > --
-> Best Regards
-> Masahiro Yamada
-> 
+> 2.33.0.rc1.237.g0d66db33f3-goog
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
