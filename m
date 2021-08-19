@@ -2,92 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B523F1CBD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 17:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC173F1CDE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 17:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240051AbhHSP3E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Aug 2021 11:29:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60302 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239990AbhHSP3D (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Aug 2021 11:29:03 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3727A60FE8;
-        Thu, 19 Aug 2021 15:28:27 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.94.2)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1mGjxx-004hgw-SJ; Thu, 19 Aug 2021 11:28:25 -0400
-Message-ID: <20210819152825.715290342@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Thu, 19 Aug 2021 11:26:09 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Tzvetomir Stoyanov" <tz.stoyanov@gmail.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v8 5/5] selftests/ftrace: Add selftest for testing duplicate eprobes and
- kprobes
-References: <20210819152604.704335282@goodmis.org>
+        id S240407AbhHSPeW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Aug 2021 11:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238744AbhHSPeW (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 19 Aug 2021 11:34:22 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DDAC061575;
+        Thu, 19 Aug 2021 08:33:45 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d4so13795081lfk.9;
+        Thu, 19 Aug 2021 08:33:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=h8Bu2sX4mQooXbRWe0x6sLuCvlPizN+9dv1SfrTEIoY=;
+        b=GCkGQM+Oc+rTglB8uAs1igR5f/9rJqSk+tvrlxWZl4vYARlNnLgeUrjuJusZzmob2C
+         9/EQtBirZWZpMPj7OV2oIVSvt2ipNyqgJObt5nzA6sSPMH06DoBniCLtmdwJfM3zXfEQ
+         Idsyj/h2+GHTaEve8eCs+en11Wb6HoOK0c0M2vwLHNbyP1waB7X0/3ubjF8gpRSYKTSV
+         JAGdxNb28b1bCEYKtCwwEhpmhikBh8flkpSzZ+GWO2T8K6T48aatentmFu0xvUtv63z3
+         QJiWNHpZNXvSiYCbHlqnisXvaYAMOr7k7YV573iFVcYch0/erH/xgwz47r49/lzVwCSv
+         5x/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=h8Bu2sX4mQooXbRWe0x6sLuCvlPizN+9dv1SfrTEIoY=;
+        b=ctlQ+c1Qfkb+ATnZNnV8pEVR9gLXjt/5JImTBwjCFQE8roV8z1F/gqsAbHVNUhA2BK
+         +OnnIjIYErZnGXwpgD8fbq3NQ3oZm8qR+48RhhDvp03GpwWpUQbig2p0CW0TvoDIbL2s
+         kL6B+j4Wdc22wIKh/WFNoSzY7apYsx2ZETOBrecmYcsbxi84Zm1D+zKexnmOV9VO96uh
+         crLREnJmqsNwOB2LtW6RmQG+P1ERKnJmHpH3eKv4CrPZgirsOEXOTVlaQOzN03fm62jp
+         v3VMen0cGMurMLmSSAvbqtLSsce18QmAnlxoFVibFgqCghw4mnPPtJ8gCgzAj1j4mULW
+         EYmw==
+X-Gm-Message-State: AOAM531Cv1ti6jGtKmkXfkgm1LgVLGBSECWMFHsmOlVin+PU1qyQ0Wek
+        y0zZsMnDK0V5wdJdc9S9sSuz+sE292azCw==
+X-Google-Smtp-Source: ABdhPJw+FocjAr5ZM3fRbW3ghtvsRy1dJBEhVWGae9OJPGqrA+EI8dSYCLiH3NTxwMLSpEg52ERLjw==
+X-Received: by 2002:a05:6512:e81:: with SMTP id bi1mr10712658lfb.58.1629387223959;
+        Thu, 19 Aug 2021 08:33:43 -0700 (PDT)
+Received: from asus ([147.30.82.254])
+        by smtp.gmail.com with ESMTPSA id j13sm338287lfe.48.2021.08.19.08.33.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Aug 2021 08:33:43 -0700 (PDT)
+Date:   Thu, 19 Aug 2021 21:33:40 +0600
+From:   Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tyhicks@linux.microsoft.com,
+        pasha.tatashin@soleen.com
+Subject: [PATCH v3 0/2] add KSM performance tests
+Message-ID: <cover.1629386192.git.zhansayabagdaulet@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Extend KSM self tests with a performance benchmark. These tests are not
+part of regular regression testing, as they are mainly intended to be
+used by developers making changes to the memory management subsystem.
+This patchset is a respin of the previous series:
+v2: https://lkml.org/lkml/2021/8/6/422
+v1: https://lkml.org/lkml/2021/8/1/130
 
-Add a selftest that makes sure that eprobes and kprobes can not be created
-with the same group and name as existing events.
+Zhansaya Bagdauletkyzy (2):
+  selftests: vm: add KSM merging time test
+  selftests: vm: add COW time test for KSM pages
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
----
- .../ftrace/test.d/dynevent/test_duplicates.tc | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+v2 -> v3:
+ - address COW test review comments
 
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
-new file mode 100644
-index 000000000000..022b569267ed
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
-@@ -0,0 +1,28 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Generic dynamic event - check if duplicate events are caught
-+# requires: dynamic_events "e[:[<group>/]<event>] <attached-group>.<attached-event>o [<args>]":README
-+
-+echo 0 > events/enable
-+
-+clear_dynamic_events
-+
-+# first create dynamic events for eprobes and kprobes.
-+
-+echo 'e:egroup/eevent syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
-+echo 'p:kgroup/kevent vfs_open file=+0($arg2)' >> dynamic_events
-+
-+# Test eprobe for same eprobe, existing kprobe and existing event
-+! echo 'e:egroup/eevent syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
-+! echo 'e:kgroup/kevent syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
-+! echo 'e:syscalls/sys_enter_open syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
-+
-+# Test kprobe for same kprobe, existing eprobe and existing event
-+! echo 'p:kgroup/kevent vfs_open file=+0($arg2)' >> dynamic_events
-+! echo 'p:egroup/eevent vfs_open file=+0($arg2)' >> dynamic_events
-+! echo 'p:syscalls/sys_enter_open vfs_open file=+0($arg2)' >> dynamic_events
-+
-+echo '-:egroup/eevent' >> dynamic_events
-+echo '-:kgroup/kevent' >> dynamic_events
-+
-+clear_trace
+v1 -> v2:
+ - replace MB with MiB
+ - address COW test review comments
+
+ tools/testing/selftests/vm/ksm_tests.c | 154 ++++++++++++++++++++++++-
+ 1 file changed, 150 insertions(+), 4 deletions(-)
+
 -- 
-2.30.2
+2.25.1
+
