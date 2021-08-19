@@ -2,187 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1E53F226F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 23:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813743F2279
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Aug 2021 23:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233612AbhHSVo6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Aug 2021 17:44:58 -0400
-Received: from smtprelay0095.hostedemail.com ([216.40.44.95]:36108 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232769AbhHSVo5 (ORCPT
+        id S235322AbhHSVxP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Aug 2021 17:53:15 -0400
+Received: from mail.efficios.com ([167.114.26.124]:34416 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229497AbhHSVxP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Aug 2021 17:44:57 -0400
-Received: from omf10.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 1D1DA182B0301;
-        Thu, 19 Aug 2021 21:44:20 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id EAFD52351F6;
-        Thu, 19 Aug 2021 21:44:18 +0000 (UTC)
-Message-ID: <8db9a7d938b2b1a1bdbd0224246e047c83581334.camel@perches.com>
-Subject: Re: [RFC PATCH 1/5] checkpatch: improve handling of revert commits
-From:   Joe Perches <joe@perches.com>
-To:     Denis Efremov <efremov@linux.com>, linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Jiri Kosina <jkosina@suse.cz>,
-        Willy Tarreau <w@1wt.eu>
-Date:   Thu, 19 Aug 2021 14:44:17 -0700
-In-Reply-To: <c31b2007-26a9-34e0-8c9a-8e11a00ce69f@linux.com>
-References: <20210818154646.925351-1-efremov@linux.com>
-         <20210818154646.925351-2-efremov@linux.com>
-         <cc5801790fea258e20fa6b7e26de7806ae8e0dda.camel@perches.com>
-         <3d347d4b-1576-754f-8633-ba6084cc0661@linux.com>
-         <23c8ebaa0921d5597df9fc1d6cbbcc4f354f80c5.camel@perches.com>
-         <c31b2007-26a9-34e0-8c9a-8e11a00ce69f@linux.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
+        Thu, 19 Aug 2021 17:53:15 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id C4AC93785BB;
+        Thu, 19 Aug 2021 17:52:37 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id q90BhJanX94H; Thu, 19 Aug 2021 17:52:36 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 981C1378471;
+        Thu, 19 Aug 2021 17:52:36 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 981C1378471
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1629409956;
+        bh=FT/9tsRw4GHMRYZjMUjeW+dU3pWo2sTLu4BVILOQ3Vw=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=ojeijnypP3ibFpXP9GNKQC8QIHrIsqnBvvg+UEcRGyTa1FEfNhNn8x208wd/fFwqK
+         l4eyPmQ5rRnhb9troaWdmxK9D9Evv+XIMyJFQCuftEfqk0wjU2POlBaXcUaVCTgxtW
+         Vo1/uOSpVLBZB4xKOPKTxe8Q8LbyfK3HVMrISp65jV9WWI4ghtodol8w+aFwXZmRRS
+         if6ZhAzSmtaA+QoIUip1h9ZuECrrxt/QgvDDIsnKdpaBH77xh4OEae/C83cxudANvB
+         Pg50WpzUclYjyihqu4XpgTA/XXyjqSfze5ZyC2oYsBYC2dN6eoVhXGuPn8jsIR2SGa
+         ykKv2wTVq8fjw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id jWSv7EA9TFNO; Thu, 19 Aug 2021 17:52:36 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 74D7037846E;
+        Thu, 19 Aug 2021 17:52:36 -0400 (EDT)
+Date:   Thu, 19 Aug 2021 17:52:36 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Oleg Nesterov <oleg@redhat.com>, rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-csky <linux-csky@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390@vger.kernel.org, KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Peter Foley <pefoley@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Ben Gardon <bgardon@google.com>
+Message-ID: <1540548616.19739.1629409956315.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20210818001210.4073390-5-seanjc@google.com>
+References: <20210818001210.4073390-1-seanjc@google.com> <20210818001210.4073390-5-seanjc@google.com>
+Subject: Re: [PATCH 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
+ detect task migration bugs
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: EAFD52351F6
-X-Stat-Signature: t1zx9hhwubbw8oxjsooka7fycowycjj3
-X-Spam-Status: No, score=5.20
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX189U7Bie0w4hCCQnlgtLr596sKKfNprumI=
-X-HE-Tag: 1629409458-37529
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF90 (Linux)/8.8.15_GA_4059)
+Thread-Topic: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs
+Thread-Index: ANwizCRJ0rGzNBwji1ThaEUA7GOz0w==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2021-08-19 at 22:52 +0300, Denis Efremov wrote:
-> Hi,
+----- On Aug 17, 2021, at 8:12 PM, Sean Christopherson seanjc@google.com wrote:
+
+> Add a test to verify an rseq's CPU ID is updated correctly if the task is
+> migrated while the kernel is handling KVM_RUN.  This is a regression test
+> for a bug introduced by commit 72c3c0fe54a3 ("x86/kvm: Use generic xfer
+> to guest work function"), where TIF_NOTIFY_RESUME would be cleared by KVM
+> without updating rseq, leading to a stale CPU ID and other badness.
 > 
-> On 8/19/21 12:22 AM, Joe Perches wrote:
-> > Hey Denis:
-> > 
-> > Try this one please and let me know what you think...
-> 
-> Looks good to me. Couple of nitpicks below
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
 
-yeah, thanks.
+[...]
 
-How about this one:
----
- scripts/checkpatch.pl | 72 ++++++++++++++++++++++++++++++---------------------
- 1 file changed, 43 insertions(+), 29 deletions(-)
+> +
+> +static void *migration_worker(void *ign)
+> +{
+> +	cpu_set_t allowed_mask;
+> +	int r, i, nr_cpus, cpu;
+> +
+> +	CPU_ZERO(&allowed_mask);
+> +
+> +	nr_cpus = CPU_COUNT(&possible_mask);
+> +
+> +	for (i = 0; i < 20000; i++) {
+> +		cpu = i % nr_cpus;
+> +		if (!CPU_ISSET(cpu, &possible_mask))
+> +			continue;
+> +
+> +		CPU_SET(cpu, &allowed_mask);
+> +
+> +		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
+> +		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)", errno,
+> +			    strerror(errno));
+> +
+> +		CPU_CLR(cpu, &allowed_mask);
+> +
+> +		usleep(10);
+> +	}
+> +	done = true;
+> +	return NULL;
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	struct kvm_vm *vm;
+> +	u32 cpu, rseq_cpu;
+> +	int r;
+> +
+> +	/* Tell stdout not to buffer its content */
+> +	setbuf(stdout, NULL);
+> +
+> +	r = sched_getaffinity(0, sizeof(possible_mask), &possible_mask);
+> +	TEST_ASSERT(!r, "sched_getaffinity failed, errno = %d (%s)", errno,
+> +		    strerror(errno));
+> +
+> +	if (CPU_COUNT(&possible_mask) < 2) {
+> +		print_skip("Only one CPU, task migration not possible\n");
+> +		exit(KSFT_SKIP);
+> +	}
+> +
+> +	sys_rseq(0);
+> +
+> +	/*
+> +	 * Create and run a dummy VM that immediately exits to userspace via
+> +	 * GUEST_SYNC, while concurrently migrating the process by setting its
+> +	 * CPU affinity.
+> +	 */
+> +	vm = vm_create_default(VCPU_ID, 0, guest_code);
+> +
+> +	pthread_create(&migration_thread, NULL, migration_worker, 0);
+> +
+> +	while (!done) {
+> +		vcpu_run(vm, VCPU_ID);
+> +		TEST_ASSERT(get_ucall(vm, VCPU_ID, NULL) == UCALL_SYNC,
+> +			    "Guest failed?");
+> +
+> +		cpu = sched_getcpu();
+> +		rseq_cpu = READ_ONCE(__rseq.cpu_id);
+> +
+> +		/*
+> +		 * Verify rseq's CPU matches sched's CPU, and that sched's CPU
+> +		 * is stable.  This doesn't handle the case where the task is
+> +		 * migrated between sched_getcpu() and reading rseq, and again
+> +		 * between reading rseq and sched_getcpu(), but in practice no
+> +		 * false positives have been observed, while on the other hand
+> +		 * blocking migration while this thread reads CPUs messes with
+> +		 * the timing and prevents hitting failures on a buggy kernel.
+> +		 */
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 161ce7fe5d1e5..4988515a0dfb3 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -1181,7 +1181,8 @@ sub git_commit_info {
- #		    git log --format='%H %s' -1 $line |
- #		    echo "commit $(cut -c 1-12,41-)"
- #		done
--	} elsif ($lines[0] =~ /^fatal: ambiguous argument '$commit': unknown revision or path not in the working tree\./) {
-+	} elsif ($lines[0] =~ /^fatal: ambiguous argument '$commit': unknown revision or path not in the working tree\./ ||
-+		 $lines[0] =~ /^fatal: bad object $commit/) {
- 		$id = undef;
- 	} else {
- 		$id = substr($lines[0], 0, 12);
-@@ -2587,6 +2588,8 @@ sub process {
- 	my $reported_maintainer_file = 0;
- 	my $non_utf8_charset = 0;
- 
-+	my $last_git_commit_id_linenr = -1;
-+
- 	my $last_blank_line = 0;
- 	my $last_coalesced_string_linenr = -1;
- 
-@@ -3173,7 +3176,8 @@ sub process {
- 		if ($in_commit_log && !$commit_log_possible_stack_dump &&
- 		    $line !~ /^\s*(?:Link|Patchwork|http|https|BugLink|base-commit):/i &&
- 		    $line !~ /^This reverts commit [0-9a-f]{7,40}/ &&
--		    ($line =~ /\bcommit\s+[0-9a-f]{5,}\b/i ||
-+		    (($line =~ /\bcommit\s+[0-9a-f]{5,}\b/i ||
-+		      ($line =~ /\bcommit\s*$/i && defined($rawlines[$linenr]) && $rawlines[$linenr] =~ /^\s*[0-9a-f]{5,}\b/i)) ||
- 		     ($line =~ /(?:\s|^)[0-9a-f]{12,40}(?:[\s"'\(\[]|$)/i &&
- 		      $line !~ /[\<\[][0-9a-f]{12,40}[\>\]]/i &&
- 		      $line !~ /\bfixes:\s*[0-9a-f]{12,40}/i))) {
-@@ -3183,49 +3187,59 @@ sub process {
- 			my $long = 0;
- 			my $case = 1;
- 			my $space = 1;
--			my $hasdesc = 0;
- 			my $hasparens = 0;
- 			my $id = '0123456789ab';
- 			my $orig_desc = "commit description";
- 			my $description = "";
-+			my $herectx = $herecurr;
-+			my $has_parens = 0;
-+
-+			my $input = $line;
-+			if ($line =~ /(?:\bcommit\s+[0-9a-f]{5,}|\bcommit\s*$)/i) {
-+				for (my $n = 0; $n < 2; $n++) {
-+					if ($input =~ /\bcommit\s+[0-9a-f]{5,}\s*$balanced_parens/i) {
-+						$has_parens = 1;
-+						last;
-+					}
-+					last if ($#lines < $linenr + $n);
-+					$input .= " " . trim($rawlines[$linenr + $n]);
-+					$herectx .= "$rawlines[$linenr + $n]\n";
-+				}
-+				$herectx = $herecurr if (!$has_parens);
-+			}
- 
--			if ($line =~ /\b(c)ommit\s+([0-9a-f]{5,})\b/i) {
-+			if ($input =~ /\b(c)ommit\s+([0-9a-f]{5,})\b/i) {
- 				$init_char = $1;
- 				$orig_commit = lc($2);
--			} elsif ($line =~ /\b([0-9a-f]{12,40})\b/i) {
-+				$short = 0 if ($input =~ /\bcommit\s+[0-9a-f]{12,40}/i);
-+				$long = 1 if ($input =~ /\bcommit\s+[0-9a-f]{41,}/i);
-+				$space = 0 if ($input =~ /\bcommit [0-9a-f]/i);
-+				$case = 0 if ($input =~ /\b[Cc]ommit\s+[0-9a-f]{5,40}[^A-F]/);
-+
-+				if ($input =~ /\bcommit\s+[0-9a-f]{5,}\s+($balanced_parens)/i) {
-+					$orig_desc = $1;
-+					# Always strip leading/trailing parens then double quotes if existing
-+					$orig_desc = substr($orig_desc, 1, -1);
-+					if ($orig_desc =~ /^".*"$/) {
-+						$orig_desc = substr($orig_desc, 1, -1);
-+						$hasparens = 1;
-+					}
-+				}
-+			} elsif ($input =~ /\b([0-9a-f]{12,40})\b/i) {
- 				$orig_commit = lc($1);
- 			}
- 
--			$short = 0 if ($line =~ /\bcommit\s+[0-9a-f]{12,40}/i);
--			$long = 1 if ($line =~ /\bcommit\s+[0-9a-f]{41,}/i);
--			$space = 0 if ($line =~ /\bcommit [0-9a-f]/i);
--			$case = 0 if ($line =~ /\b[Cc]ommit\s+[0-9a-f]{5,40}[^A-F]/);
--			if ($line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("([^"]+)"\)/i) {
--				$orig_desc = $1;
--				$hasparens = 1;
--			} elsif ($line =~ /\bcommit\s+[0-9a-f]{5,}\s*$/i &&
--				 defined $rawlines[$linenr] &&
--				 $rawlines[$linenr] =~ /^\s*\("([^"]+)"\)/) {
--				$orig_desc = $1;
--				$hasparens = 1;
--			} elsif ($line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("[^"]+$/i &&
--				 defined $rawlines[$linenr] &&
--				 $rawlines[$linenr] =~ /^\s*[^"]+"\)/) {
--				$line =~ /\bcommit\s+[0-9a-f]{5,}\s+\("([^"]+)$/i;
--				$orig_desc = $1;
--				$rawlines[$linenr] =~ /^\s*([^"]+)"\)/;
--				$orig_desc .= " " . $1;
--				$hasparens = 1;
--			}
--
- 			($id, $description) = git_commit_info($orig_commit,
- 							      $id, $orig_desc);
- 
- 			if (defined($id) &&
--			   ($short || $long || $space || $case || ($orig_desc ne $description) || !$hasparens)) {
-+			    ($short || $long || $space || $case || ($orig_desc ne $description) || !$hasparens) &&
-+			    $last_git_commit_id_linenr != $linenr - 1) {
- 				ERROR("GIT_COMMIT_ID",
--				      "Please use git commit description style 'commit <12+ chars of sha1> (\"<title line>\")' - ie: '${init_char}ommit $id (\"$description\")'\n" . $herecurr);
-+				      "Please use git commit description style 'commit <12+ chars of sha1> (\"<title line>\")' - ie: '${init_char}ommit $id (\"$description\")'\n" . $herectx);
- 			}
-+			#don't report the next line if this line ends in commit and the sha1 hash is the next line
-+			$last_git_commit_id_linenr = $linenr if ($line =~ /\bcommit\s*$/i);
- 		}
- 
- # Check for added, moved or deleted files
+I think you could get a stable cpu id between sched_getcpu and __rseq_abi.cpu_id
+if you add a pthread mutex to protect:
 
+sched_getcpu and __rseq_abi.cpu_id  reads
 
+vs
+
+sched_setaffinity calls within the migration thread.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+> +		TEST_ASSERT(rseq_cpu == cpu || cpu != sched_getcpu(),
+> +			    "rseq CPU = %d, sched CPU = %d\n", rseq_cpu, cpu);
+> +	}
+> +
+> +	pthread_join(migration_thread, NULL);
+> +
+> +	kvm_vm_free(vm);
+> +
+> +	sys_rseq(RSEQ_FLAG_UNREGISTER);
+> +
+> +	return 0;
+> +}
+> --
+> 2.33.0.rc1.237.g0d66db33f3-goog
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
