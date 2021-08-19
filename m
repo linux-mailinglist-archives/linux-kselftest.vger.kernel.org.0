@@ -2,118 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 249A33F22DF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 00:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04A23F22E4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 00:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235853AbhHSWR2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Aug 2021 18:17:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48540 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235852AbhHSWR1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Aug 2021 18:17:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BDED4608FE;
-        Thu, 19 Aug 2021 22:16:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629411410;
-        bh=Jch+3Ax87+1/iAOT5wwQKdSvOesvPFQpbYLw/CCHsy4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nfEhouSa0f1oZt3fUFd6CoNcNWblbFQZJuVIgrhiOwvluHbc+w5VmqCtEQCtLcjpg
-         AqJgH16xVZsLzgzq2StGFhx+22pdRClHRuoR7t/vhIiKLIkZFlzqErIKdM/rAskBR9
-         ccnmrSLV7rN43GekaO+WuyLS6Xwrlat8B5gVWp+p+HRUhO45fenfibSbX3JZbc3lg5
-         hTxrB3Yzp1HB9uFz42bqLCmzwoLAqesixAeGNITD8an/100eXGn6hVsrFy6VGGWygO
-         adh5fGE+j/tun0Zk1ZRQhxbW6DjwZPOqDQA7iQhc+b4UckgyOGEbYLYw0x1oUdH7Tc
-         L2Wox1/JUCQIw==
-Received: by mail-lf1-f45.google.com with SMTP id w20so16071284lfu.7;
-        Thu, 19 Aug 2021 15:16:50 -0700 (PDT)
-X-Gm-Message-State: AOAM532cSTiBLLWbBrXHomSntvLcPrHYYtUDhLL6vg+R8atn9O6doPYu
-        NuEFfkhpbkrhAGZRAiIiFNAH/i/UOBcmIdWZJ3A=
-X-Google-Smtp-Source: ABdhPJxo1NIsebdSOYgFeXIpqE8FX/yKBJ4O71p1uiBZoohYPx/cT9sIJJhaTXvOVLcWbgcIhnHDWoMbs1wwKUHk5bQ=
-X-Received: by 2002:a05:6512:169d:: with SMTP id bu29mr12221745lfb.160.1629411409125;
- Thu, 19 Aug 2021 15:16:49 -0700 (PDT)
+        id S236124AbhHSWRz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Aug 2021 18:17:55 -0400
+Received: from smtprelay0017.hostedemail.com ([216.40.44.17]:36608 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235852AbhHSWRy (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 19 Aug 2021 18:17:54 -0400
+Received: from omf16.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 6794025F3A;
+        Thu, 19 Aug 2021 22:17:17 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf16.hostedemail.com (Postfix) with ESMTPA id 21E1D255104;
+        Thu, 19 Aug 2021 22:17:16 +0000 (UTC)
+Message-ID: <ac2587d3d4b7ce87e8922380e36d7864bfb54262.camel@perches.com>
+Subject: Re: [RFC PATCH 1/5] checkpatch: improve handling of revert commits
+From:   Joe Perches <joe@perches.com>
+To:     Denis Efremov <efremov@linux.com>, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Jiri Kosina <jkosina@suse.cz>,
+        Willy Tarreau <w@1wt.eu>
+Date:   Thu, 19 Aug 2021 15:17:15 -0700
+In-Reply-To: <c31b2007-26a9-34e0-8c9a-8e11a00ce69f@linux.com>
+References: <20210818154646.925351-1-efremov@linux.com>
+         <20210818154646.925351-2-efremov@linux.com>
+         <cc5801790fea258e20fa6b7e26de7806ae8e0dda.camel@perches.com>
+         <3d347d4b-1576-754f-8633-ba6084cc0661@linux.com>
+         <23c8ebaa0921d5597df9fc1d6cbbcc4f354f80c5.camel@perches.com>
+         <c31b2007-26a9-34e0-8c9a-8e11a00ce69f@linux.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-References: <20210819072431.21966-1-lizhijian@cn.fujitsu.com> <20210819072431.21966-3-lizhijian@cn.fujitsu.com>
-In-Reply-To: <20210819072431.21966-3-lizhijian@cn.fujitsu.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 19 Aug 2021 15:16:38 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5J2dg+aiwbQC28YZkEYEstcCQKP7fY9e4i=OPuMMsSTQ@mail.gmail.com>
-Message-ID: <CAPhsuW5J2dg+aiwbQC28YZkEYEstcCQKP7fY9e4i=OPuMMsSTQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] selftests/bpf: add missing files required by
- test_bpftool.sh for installing
-To:     Li Zhijian <lizhijian@cn.fujitsu.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, philip.li@intel.com,
-        yifeix.zhu@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: skshep1bqut9k49n7cu9y6o5pd3jjqfi
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 21E1D255104
+X-Spam-Status: No, score=0.10
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18xeMNU5Xm3A6JVpFd9ED1ZFoW48dmRWWo=
+X-HE-Tag: 1629411436-234901
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 19, 2021 at 12:28 AM Li Zhijian <lizhijian@cn.fujitsu.com> wrote:
->
-> - 'make install' will install bpftool to INSTALL_PATH/bpf/bpftool
-> - add INSTALL_PATH/bpf to PATH
->
-> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+On Thu, 2021-08-19 at 22:52 +0300, Denis Efremov wrote:
+> Hi,
 
-Acked-by: Song Liu <songliubraving@fb.com>
 
-With one nit below:
+> 
+> Why do you want to add "if ($orig_desc =~ /^".*"$/);" here? and not just substr($orig_desc, 2, -2);?
 
-> ---
->  tools/testing/selftests/bpf/Makefile        | 4 +++-
->  tools/testing/selftests/bpf/test_bpftool.sh | 3 ++-
->  2 files changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index f405b20c1e6c..c6ca1b8e33d5 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -85,7 +85,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
->  TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
->         flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
->         test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
-> -       xdpxceiver xdp_redirect_multi
-> +       xdpxceiver xdp_redirect_multi test_bpftool.py
->
->  TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
->
-> @@ -187,6 +187,8 @@ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL)
->                     BPFOBJ=$(BPFOBJ) BPF_INCLUDE=$(INCLUDE_DIR) &&      \
->                     cp $(SCRATCH_DIR)/runqslower $@
->
-> +TEST_GEN_PROGS_EXTENDED += $(DEFAULT_BPFTOOL)
-> +
->  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/test_stub.o $(BPFOBJ)
->
->  $(OUTPUT)/test_dev_cgroup: cgroup_helpers.c
-> diff --git a/tools/testing/selftests/bpf/test_bpftool.sh b/tools/testing/selftests/bpf/test_bpftool.sh
-> index 6b7ba19be1d0..50cf9d3645d2 100755
-> --- a/tools/testing/selftests/bpf/test_bpftool.sh
-> +++ b/tools/testing/selftests/bpf/test_bpftool.sh
-> @@ -2,9 +2,10 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # Copyright (c) 2020 SUSE LLC.
->
-> +# 'make -C tools/testing/selftests/bpf install' will install to SCRIPT_PATH
+Because commit descriptions sometimes to not have quotes like
 
-nit: Should be SCRIPT_DIR.              ^^^^^
+commit <deadbeef> (Multiple word description)
 
->  SCRIPT_DIR=$(dirname $(realpath $0))
->
->  # 'make -C tools/testing/selftests/bpf' will install to BPFTOOL_INSTALL_PATH
->  BPFTOOL_INSTALL_PATH="$SCRIPT_DIR"/tools/sbin
-> -export PATH=$BPFTOOL_INSTALL_PATH:$PATH
-> +export PATH=$SCRIPT_DIR:$BPFTOOL_INSTALL_PATH:$PATH
->  python3 -m unittest -v test_bpftool.TestBpftool
-> --
-> 2.32.0
->
->
->
+btw:
+
+I tested the last proposal with this script:
+
+$ git log --grep="commit [0-9a-f]" -i --format=%h -1000 | \
+  while read commit ; do \
+    echo $commit; \
+    ./scripts/checkpatch.pl --git --no-summary --quiet --types=GIT_COMMIT_ID $commit ; \
+  done
+
+and there are still a fair number of ERRORs.
+
+And I'm not sure if this particular ERROR is that useful overall.
+
