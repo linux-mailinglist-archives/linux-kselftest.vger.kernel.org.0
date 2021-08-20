@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC513F365B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 00:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA323F3662
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 00:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbhHTWZ5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Aug 2021 18:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S233577AbhHTW1i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Aug 2021 18:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbhHTWZ5 (ORCPT
+        with ESMTP id S231615AbhHTW1i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Aug 2021 18:25:57 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CCCC061756
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:25:18 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id m26so9835915pff.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:25:18 -0700 (PDT)
+        Fri, 20 Aug 2021 18:27:38 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CF1C061757
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:27:00 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id j10-20020a17090a94ca00b00181f17b7ef7so1994332pjw.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:27:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=YqTJx2d+rK7r/727Mx+pw0RMm85LxTM+dupa4DkkVUg=;
-        b=XMJxhivK8HayiVyEBDemyRelIu51Uql4arICrgl1Xtu+OpldaIQuiN92D0dB+2PvY2
-         AoWaNBB7KO7F5FKoudHlgDL/hNd8A+FowUsdw3wL6BDm/iTL4Cc6YiTOferscwepyuQG
-         9XzUtw99s5/KFwywXDFpqMheslrF3wDRzL/P2DgSQRR0RtQLiklqmvKdqBE5L3ZAbbaZ
-         dmEsmdra+vDsgdRhVivluTSEwsP4y90ta1vlg9CE5AvtSTW6wIrc35O7x62Y6nnvox8U
-         jQS6/7VhaJmZu5wZ3xMtHYlcMetnl4hW/FqOnidhXXsmNwQLT3BkojygGTev8rmNq1ca
-         Ezdw==
+        bh=muCZGHGXDtZhLnuzxIVauvI9vXUTWXNUIrBwCRdMVco=;
+        b=RemefsbkLF0qjalfgS/QPFy+s0vrHUCCRwLs5Nng2oRX7YN+RbFWFDzyRbXDUTFeRe
+         ZcR6b656WMkKHvh5XwIeexMOkIK6TBTyMgP20QtOJD1jsJYkiBEWihN2CVwUcoknSiZc
+         kfCOTeIeF9ja69Sxfpo9Tze/gbXlfbWjwwnjO1rkWyU9/APS4tY7lkRghKHUYYvwXaoY
+         XjV//yV1jErHSoGWkaqeUNTbYjSMDPGF7Bsh5VYUZeLtO3D4NwU7djoZEoOgIYKcigrl
+         LaQ3UiKuwPAupo+Ikjg0jO22FUEuCmAC9TlZ9LlWOAqKDqGqdS7VTnu20IUdQ2TEEMfG
+         3dxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=YqTJx2d+rK7r/727Mx+pw0RMm85LxTM+dupa4DkkVUg=;
-        b=YapO19reTHxw7UmRRWQemfo0TYityt3AifCE4NmrEQnWeuCCzFN481I78VJzgS1rM/
-         SKYohT0GQ6de97Db4/mA5EXeD0hT/chRlcjYsTtj+5ylPohmm+epIWFhK8U676O8rXTi
-         LH0rJVcc23k02iqp+07KQT9uANT8aCPRgt339SIMhn26QTcnk1Xp79ZxEmm9c2mvwnx+
-         iwh9qiEvUFomOHIW3mpqeaMc/vHD5ZAnvaPXSOQak+eN15ZCmg/N4Ey2LvQUKQ84jm9S
-         kSRulwLBFH7XhxKOlqEVYooyZPQOkPhjkcsKEKfgnInoRp85YW1zl6MhOyauqhCUTrap
-         EvVA==
-X-Gm-Message-State: AOAM533OwsWsDJu5SMN7yj/9CDsP9WZKh71XrQkovAvFoA0avzzAIByi
-        vad0N4637fC1PkaASdBYMXnGeg==
-X-Google-Smtp-Source: ABdhPJyV4IjFC28xX7oRVRErRr3HUFYCEi0w5LU0UmTHa8mL37R5Jfy+NpSbOUll/e+Fp+fYUTcY5g==
-X-Received: by 2002:aa7:864e:0:b0:3e3:439b:c3fc with SMTP id a14-20020aa7864e000000b003e3439bc3fcmr9023525pfo.64.1629498318096;
-        Fri, 20 Aug 2021 15:25:18 -0700 (PDT)
+        bh=muCZGHGXDtZhLnuzxIVauvI9vXUTWXNUIrBwCRdMVco=;
+        b=Ep/1Bcvl8HrRop3ErlhnQelU9cJa3eFZAnqAIf0wMYwbYemWoXOFzzuhhvNu0+WvBi
+         +5bofh3OPV+hsboFQX4p/VofwJATN8vTr2Ovw+IFqYriC6Nh5op2TQaX2MGq2vamVVE9
+         I+5A/GEIjHIwLz9uOzfTRReKFmPvxpi70rB/GZEXdZBImcb8GgMayMeqQ5txJnUmMJL2
+         w0vtvm2X2C+xUxQpuaoMww9Xg3aK3osW4Irr1v9eDLAVVI/5OnBvs/rXtjJP3YUWoBvy
+         cGDQzNvLgn12Wp7szGIQSqF4oBrFSRQRyB8+o+QtscI57qbAifjhXVXijdNJ2yznbrz7
+         XLng==
+X-Gm-Message-State: AOAM532UjhdcPGQEKY8ds8YYH/fl5EB9oIN2XWinMnkwSO3weIVH+U3U
+        2BqW8eIvVgoj9Qq0G7NNTopjGg==
+X-Google-Smtp-Source: ABdhPJxsP8i0TWeDLg6wsQ9UPwVK0/yOGsDuiZiCVZBbzrivtJSRk9eK8LYUFD9Zq4FE5g5ke2YZTA==
+X-Received: by 2002:a17:902:7c15:b029:12c:78ec:bb61 with SMTP id x21-20020a1709027c15b029012c78ecbb61mr18323457pll.61.1629498419309;
+        Fri, 20 Aug 2021 15:26:59 -0700 (PDT)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o14sm9367987pgl.85.2021.08.20.15.25.17
+        by smtp.gmail.com with ESMTPSA id s1sm4169427pfd.13.2021.08.20.15.26.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Aug 2021 15:25:17 -0700 (PDT)
-Date:   Fri, 20 Aug 2021 22:25:11 +0000
+        Fri, 20 Aug 2021 15:26:58 -0700 (PDT)
+Date:   Fri, 20 Aug 2021 22:26:53 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
@@ -78,43 +78,44 @@ Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
         Peter Foley <pefoley@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
- detect task migration bugs
-Message-ID: <YSArx+ppjIH+6/uK@google.com>
+Subject: Re: [PATCH 1/5] KVM: rseq: Update rseq when processing NOTIFY_RESUME
+ on xfer to KVM guest
+Message-ID: <YSAsLShyWK3xgxse@google.com>
 References: <20210818001210.4073390-1-seanjc@google.com>
- <20210818001210.4073390-5-seanjc@google.com>
- <1540548616.19739.1629409956315.JavaMail.zimbra@efficios.com>
- <YR7qXvnI/AQM10gU@google.com>
- <407716135.20250.1629484298288.JavaMail.zimbra@efficios.com>
+ <20210818001210.4073390-2-seanjc@google.com>
+ <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
+ <YR7tzZ98XC6OV2vu@google.com>
+ <1872633041.20290.1629485463253.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <407716135.20250.1629484298288.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1872633041.20290.1629485463253.JavaMail.zimbra@efficios.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Fri, Aug 20, 2021, Mathieu Desnoyers wrote:
-> I still really hate flakiness in tests, because then people stop caring when they
-> fail once in a while. And with the nature of rseq, a once-in-a-while failure is a
-> big deal. Let's see if we can use other tricks to ensure stability of the cpu id
-> without changing timings too much.
+> Without the lazy clear scheme, a rseq c.s. would look like:
+> 
+>  *                     init(rseq_cs)
+>  *                     cpu = TLS->rseq::cpu_id_start
+>  *   [1]               TLS->rseq::rseq_cs = rseq_cs
+>  *   [start_ip]        ----------------------------
+>  *   [2]               if (cpu != TLS->rseq::cpu_id)
+>  *                             goto abort_ip;
+>  *   [3]               <last_instruction_in_cs>
+>  *   [post_commit_ip]  ----------------------------
+>  *   [4]               TLS->rseq::rseq_cs = NULL
+> 
+> But as a fast-path optimization, [4] is not entirely needed because the rseq_cs
+> descriptor contains information about the instruction pointer range of the critical
+> section. Therefore, userspace can omit [4], but if the kernel never clears it, it
+> means that it will have to re-read the rseq_cs descriptor's content each time it
+> needs to check it to confirm that it is not nested over a rseq c.s..
+> 
+> So making the kernel lazily clear the rseq_cs pointer is just an optimization which
+> ensures that the kernel won't do useless work the next time it needs to check
+> rseq_cs, given that it has already validated that the userspace code is currently
+> not within the rseq c.s. currently advertised by the rseq_cs field.
 
-Yeah, zero agrument regarding flaky tests.
-
-> One idea would be to use a seqcount lock.
-
-A sequence counter did the trick!  Thanks much!
-
-> But even if we use that, I'm concerned that the very long writer critical
-> section calling sched_setaffinity would need to be alternated with a sleep to
-> ensure the read-side progresses. The sleep delay could be relatively small
-> compared to the duration of the sched_setaffinity call, e.g. ratio 1:10.
-
-I already had an arbitrary usleep(10) to let the reader make progress between
-sched_setaffinity() calls.  Dropping it down to 1us didn't affect reproducibility,
-so I went with that to shave those precious cycles :-)  Eliminating the delay
-entirely did result in no repro, which was a nice confirmation that it's needed
-to let the reader get back into KVM_RUN.
-
-Thanks again!
+Thanks for the explanation, much appreciated!
