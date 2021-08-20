@@ -2,120 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA323F3662
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 00:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512063F36AA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 00:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbhHTW1i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Aug 2021 18:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
+        id S231482AbhHTWvE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Aug 2021 18:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbhHTW1i (ORCPT
+        with ESMTP id S232349AbhHTWvD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Aug 2021 18:27:38 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CF1C061757
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:27:00 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id j10-20020a17090a94ca00b00181f17b7ef7so1994332pjw.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:27:00 -0700 (PDT)
+        Fri, 20 Aug 2021 18:51:03 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149D8C061760
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:50:25 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id g73-20020a379d4c000000b003d3ed03ca28so7398412qke.23
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:50:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=muCZGHGXDtZhLnuzxIVauvI9vXUTWXNUIrBwCRdMVco=;
-        b=RemefsbkLF0qjalfgS/QPFy+s0vrHUCCRwLs5Nng2oRX7YN+RbFWFDzyRbXDUTFeRe
-         ZcR6b656WMkKHvh5XwIeexMOkIK6TBTyMgP20QtOJD1jsJYkiBEWihN2CVwUcoknSiZc
-         kfCOTeIeF9ja69Sxfpo9Tze/gbXlfbWjwwnjO1rkWyU9/APS4tY7lkRghKHUYYvwXaoY
-         XjV//yV1jErHSoGWkaqeUNTbYjSMDPGF7Bsh5VYUZeLtO3D4NwU7djoZEoOgIYKcigrl
-         LaQ3UiKuwPAupo+Ikjg0jO22FUEuCmAC9TlZ9LlWOAqKDqGqdS7VTnu20IUdQ2TEEMfG
-         3dxA==
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=gyS/18bxD5Ot3om3ClN1RHHdw6uDm46TAPmhFRClN7E=;
+        b=c0x2Ekl31aHgoUr6bS0aBngW8SrcCyXGQ6Eg5RkenHrpLPuk61rKOt6P1SLL5kGpCV
+         7Q/hwVqrOW+gQ/v3K19SjHlrik6vUlVurzVNjzrPZuy8yaIJYuxpQBictxecVo5Nq+kp
+         75zG8M002Kjp/q5WlQpL9i9sO4ZrKNxIQavsXfw2HehYTn5oog/nQS8x/qaEbhMPUOUM
+         ccXmKxYBcJpZ+gmTSFvQXJWzizQ+B84f2u2Q9D1+hN2pszPtrQntT2CFvtwN7i4kDteh
+         N7lB2iyqekXxnNmmaDxg+oJ9mOUY3XV5hIyhddm0GtJ4OgnYpsgomnp8ihDtrwm3h+GE
+         x/ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=muCZGHGXDtZhLnuzxIVauvI9vXUTWXNUIrBwCRdMVco=;
-        b=Ep/1Bcvl8HrRop3ErlhnQelU9cJa3eFZAnqAIf0wMYwbYemWoXOFzzuhhvNu0+WvBi
-         +5bofh3OPV+hsboFQX4p/VofwJATN8vTr2Ovw+IFqYriC6Nh5op2TQaX2MGq2vamVVE9
-         I+5A/GEIjHIwLz9uOzfTRReKFmPvxpi70rB/GZEXdZBImcb8GgMayMeqQ5txJnUmMJL2
-         w0vtvm2X2C+xUxQpuaoMww9Xg3aK3osW4Irr1v9eDLAVVI/5OnBvs/rXtjJP3YUWoBvy
-         cGDQzNvLgn12Wp7szGIQSqF4oBrFSRQRyB8+o+QtscI57qbAifjhXVXijdNJ2yznbrz7
-         XLng==
-X-Gm-Message-State: AOAM532UjhdcPGQEKY8ds8YYH/fl5EB9oIN2XWinMnkwSO3weIVH+U3U
-        2BqW8eIvVgoj9Qq0G7NNTopjGg==
-X-Google-Smtp-Source: ABdhPJxsP8i0TWeDLg6wsQ9UPwVK0/yOGsDuiZiCVZBbzrivtJSRk9eK8LYUFD9Zq4FE5g5ke2YZTA==
-X-Received: by 2002:a17:902:7c15:b029:12c:78ec:bb61 with SMTP id x21-20020a1709027c15b029012c78ecbb61mr18323457pll.61.1629498419309;
-        Fri, 20 Aug 2021 15:26:59 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s1sm4169427pfd.13.2021.08.20.15.26.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Aug 2021 15:26:58 -0700 (PDT)
-Date:   Fri, 20 Aug 2021 22:26:53 +0000
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=gyS/18bxD5Ot3om3ClN1RHHdw6uDm46TAPmhFRClN7E=;
+        b=GjNQRxYSC731/MTfw20gxZO3ukEwkES0/+jawsXXiJ+54msCxrzdp1xG6wcsogmtF2
+         OfVVuBY5N2n9Knxm8PmCLNXoPqtwRuTdzLncL4t86BU0PBqm0DaVDcfcT5CY0OBwch3j
+         bB3TIsZThVJkt937UwC5xUDpTPOYFUeCd68qfpsV5B1f9MEpE8aoLt4W1V8s2FrGitt0
+         h6PXGAkLrHuIuXh1NeROUhzgzIt8jg2EAscadcRTi8idCmQpnpLb08zvIP0E5IS+0e8z
+         s2Sy8CX1r94SazoOrnkY39eHi4EN2jg8T4gSKldDGkvVf8gbclEssyzHUd6omT8U4lNM
+         Y/tQ==
+X-Gm-Message-State: AOAM533mR70FOlQWD+Y2QOARuXKXRTwkf4TpSdweMWlj3jwZlR1vmSUi
+        ek6rCzbbrbdqLZmsKRYr4udOZSQykE4=
+X-Google-Smtp-Source: ABdhPJx4goZRGT6Tb8tV1HHxrF56PXshejmS+qu7yC6GJihmWv/bHnUoawuFayGttP22JtXzBIs2h2vWzkY=
+X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:f11d:a281:af9b:5de6])
+ (user=seanjc job=sendgmr) by 2002:a05:6214:ca2:: with SMTP id
+ s2mr22615169qvs.35.1629499824082; Fri, 20 Aug 2021 15:50:24 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 20 Aug 2021 15:49:57 -0700
+Message-Id: <20210820225002.310652-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.rc2.250.ged5fa647cd-goog
+Subject: [PATCH v2 0/5] KVM: rseq: Fix and a test for a KVM+rseq bug
 From:   Sean Christopherson <seanjc@google.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
+To:     Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
-        Oleg Nesterov <oleg@redhat.com>, rostedt <rostedt@goodmis.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-csky <linux-csky@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Peter Foley <pefoley@google.com>,
         Shakeel Butt <shakeelb@google.com>,
+        Sean Christopherson <seanjc@google.com>,
         Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 1/5] KVM: rseq: Update rseq when processing NOTIFY_RESUME
- on xfer to KVM guest
-Message-ID: <YSAsLShyWK3xgxse@google.com>
-References: <20210818001210.4073390-1-seanjc@google.com>
- <20210818001210.4073390-2-seanjc@google.com>
- <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
- <YR7tzZ98XC6OV2vu@google.com>
- <1872633041.20290.1629485463253.JavaMail.zimbra@efficios.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1872633041.20290.1629485463253.JavaMail.zimbra@efficios.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 20, 2021, Mathieu Desnoyers wrote:
-> Without the lazy clear scheme, a rseq c.s. would look like:
-> 
->  *                     init(rseq_cs)
->  *                     cpu = TLS->rseq::cpu_id_start
->  *   [1]               TLS->rseq::rseq_cs = rseq_cs
->  *   [start_ip]        ----------------------------
->  *   [2]               if (cpu != TLS->rseq::cpu_id)
->  *                             goto abort_ip;
->  *   [3]               <last_instruction_in_cs>
->  *   [post_commit_ip]  ----------------------------
->  *   [4]               TLS->rseq::rseq_cs = NULL
-> 
-> But as a fast-path optimization, [4] is not entirely needed because the rseq_cs
-> descriptor contains information about the instruction pointer range of the critical
-> section. Therefore, userspace can omit [4], but if the kernel never clears it, it
-> means that it will have to re-read the rseq_cs descriptor's content each time it
-> needs to check it to confirm that it is not nested over a rseq c.s..
-> 
-> So making the kernel lazily clear the rseq_cs pointer is just an optimization which
-> ensures that the kernel won't do useless work the next time it needs to check
-> rseq_cs, given that it has already validated that the userspace code is currently
-> not within the rseq c.s. currently advertised by the rseq_cs field.
+Patch 1 fixes a KVM+rseq bug where KVM's handling of TIF_NOTIFY_RESUME,
+e.g. for task migration, clears the flag without informing rseq and leads
+to stale data in userspace's rseq struct.
 
-Thanks for the explanation, much appreciated!
+Patch 2 is a cleanup to try and make future bugs less likely.  It's also
+a baby step towards moving and renaming tracehook_notify_resume() since
+it has nothing to do with tracing.
+
+Patch 3 is a fix/cleanup to stop overriding x86's unistd_{32,64}.h when
+the include path (intentionally) omits tools' uapi headers.  KVM's
+selftests do exactly that so that they can pick up the uapi headers from
+the installed kernel headers, and still use various tools/ headers that
+mirror kernel code, e.g. linux/types.h.  This allows the new test in
+patch 4 to reference __NR_rseq without having to manually define it.
+
+Patch 4 is a regression test for the KVM+rseq bug.
+
+Patch 5 is a cleanup made possible by patch 3.
+
+v2:
+  - Don't touch rseq_cs when handling KVM case so that rseq_syscall() will
+    still detect a naughty userspace. [Mathieu]
+  - Use a sequence counter + retry in the test to ensure the process isn't
+    migrated between sched_getcpu() and reading rseq.cpu_id, i.e. to
+    avoid a flaky test. [Mathieu]
+  - Add Mathieu's ack for patch 2.
+  - Add more comments in the test.
+
+v1: https://lkml.kernel.org/r/20210818001210.4073390-1-seanjc@google.com
+
+Sean Christopherson (5):
+  KVM: rseq: Update rseq when processing NOTIFY_RESUME on xfer to KVM
+    guest
+  entry: rseq: Call rseq_handle_notify_resume() in
+    tracehook_notify_resume()
+  tools: Move x86 syscall number fallbacks to .../uapi/
+  KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration
+    bugs
+  KVM: selftests: Remove __NR_userfaultfd syscall fallback
+
+ arch/arm/kernel/signal.c                      |   1 -
+ arch/arm64/kernel/signal.c                    |   1 -
+ arch/csky/kernel/signal.c                     |   4 +-
+ arch/mips/kernel/signal.c                     |   4 +-
+ arch/powerpc/kernel/signal.c                  |   4 +-
+ arch/s390/kernel/signal.c                     |   1 -
+ include/linux/tracehook.h                     |   2 +
+ kernel/entry/common.c                         |   4 +-
+ kernel/rseq.c                                 |  14 +-
+ .../x86/include/{ => uapi}/asm/unistd_32.h    |   0
+ .../x86/include/{ => uapi}/asm/unistd_64.h    |   3 -
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ tools/testing/selftests/kvm/rseq_test.c       | 154 ++++++++++++++++++
+ 14 files changed, 175 insertions(+), 21 deletions(-)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_32.h (100%)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_64.h (83%)
+ create mode 100644 tools/testing/selftests/kvm/rseq_test.c
+
+-- 
+2.33.0.rc2.250.ged5fa647cd-goog
+
