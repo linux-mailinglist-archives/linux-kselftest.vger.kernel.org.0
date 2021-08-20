@@ -2,72 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1DE3F2D97
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 16:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74343F2DB1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 16:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240788AbhHTOAp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Aug 2021 10:00:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33156 "EHLO mail.kernel.org"
+        id S235407AbhHTOJm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Aug 2021 10:09:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34490 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240739AbhHTOAp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Aug 2021 10:00:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id A10B061159;
-        Fri, 20 Aug 2021 14:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629468007;
-        bh=Dq87oFajLM6+NboP7w3uY9KbvujcE/JOecidW6OFOY0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rZiRXErw/gmBM42MpNa9NlCjjIZH/z0ULA/8SZoZtdu6Rnaq8v0+wWL3bpVoK/jsv
-         ZfAna7UAr/IEOBqeYr9/WHv28Lk1PxElgLIFPFsAmhHLLvBDjBftULlwjaCQyVjqhk
-         vHEZeMPkgiTXCebAgZIrnIwAlkEZkJqvaWQrCT6Yremo7/I0jOHNSTo15Y+zMULi0g
-         rrCMo2vymhq4S8E2eMBPJ5teByOVJo4/G4ubZf0kUoYXmcv1bedWmCEoOdeZex6Ksq
-         XqjPX+LvwUCeAqPS/bzKmCRZBG2YorJEhGCXjVMlERkzn+jNsDV1n2Yow0n2Ybhgo1
-         tOjKfIAN8ahFQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 96E9A60A6B;
-        Fri, 20 Aug 2021 14:00:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S234189AbhHTOJm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Aug 2021 10:09:42 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3DC02610FF;
+        Fri, 20 Aug 2021 14:09:03 +0000 (UTC)
+Date:   Fri, 20 Aug 2021 10:08:56 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Tzvetomir Stoyanov" <tz.stoyanov@gmail.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 4/5] selftests/ftrace: Add selftest for testing
+ eprobe events
+Message-ID: <20210820100856.0fb17ca9@oasis.local.home>
+In-Reply-To: <20210820094639.77a9d0eec97bde10e28f5b47@kernel.org>
+References: <20210819152604.704335282@goodmis.org>
+        <20210819152825.526931866@goodmis.org>
+        <20210820094639.77a9d0eec97bde10e28f5b47@kernel.org>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH linux-next] tools/net: Use bitwise instead of arithmetic
- operator for flags
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162946800761.1573.17184223059527143220.git-patchwork-notify@kernel.org>
-Date:   Fri, 20 Aug 2021 14:00:07 +0000
-References: <20210820033527.13210-1-jing.yangyang@zte.com.cn>
-In-Reply-To: <20210820033527.13210-1-jing.yangyang@zte.com.cn>
-To:     jing yangyang <cgel.zte@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jing.yangyang@zte.com.cn,
-        zealci@zte.com.cn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Fri, 20 Aug 2021 09:46:39 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-This patch was applied to netdev/net-next.git (refs/heads/master):
-
-On Thu, 19 Aug 2021 20:35:27 -0700 you wrote:
-> From: jing yangyang <jing.yangyang@zte.com.cn>
+> > +
+> > +echo "$SYNTH u64 filename; s64 ret;" > synthetic_events
+> > +echo "hist:keys=common_pid:__arg__1=$FIELD" > events/$SYSTEM/$START/trigger
+> > +echo "hist:keys=common_pid:filename=\$__arg__1,ret=ret:onmatch($SYSTEM.$START).trace($SYNTH,\$filename,\$ret)" > events/$SYSTEM/$END/trigger  
 > 
-> This silences the following coccinelle warning:
-> 
-> "WARNING: sum of probable bitmasks, consider |"
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: jing yangyang <jing.yangyang@zte.com.cn>
-> 
-> [...]
+> Hmm, can you make this more simple one without synthetic events?
+> Since synthetic event depends on CONFIG_SYNTH_EVENTS, you need to add
+> "synth_events" to 'requires' tag.
+> However, this means that this testcase doesn't run when CONFIG_SYNTH_EVENTS=n
+> but CONFIG_*PROBE_EVENTS=y.
 
-Here is the summary with links:
-  - [linux-next] tools/net: Use bitwise instead of arithmetic operator for flags
-    https://git.kernel.org/netdev/net-next/c/fa16ee77364f
+Sure. I just used this because it was one of the main purposes I was
+using it for. I may keep this as a test, but will rename it as
+something else, and make a more simple one for just testing the event
+probe add and removal.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+-- Steve
