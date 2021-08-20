@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C33D3F2410
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 02:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A95D3F2439
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 02:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234160AbhHTAOI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Aug 2021 20:14:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40028 "EHLO mail.kernel.org"
+        id S234349AbhHTArT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Aug 2021 20:47:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43376 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237041AbhHTAOF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Aug 2021 20:14:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BA5F260F91;
-        Fri, 20 Aug 2021 00:13:26 +0000 (UTC)
+        id S233644AbhHTArT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 19 Aug 2021 20:47:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7DDE060FDA;
+        Fri, 20 Aug 2021 00:46:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629418408;
-        bh=pus9MR59eH5Mwd9j2e5l5ukoPbXa+kXHBqMWOtX26p4=;
+        s=k20201202; t=1629420402;
+        bh=gKN7gx8PX+ih/o/6BTY2lm55czR9ZZKPxulLys7jVQs=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KfwQkwwTgpXDt89tUKWxttTRsteuL+MJcvOLIOSXUzfq+zSc3NHof8dzi4NNtnbWo
-         aXu72iugQlWiW6vb7sLJ8JQ4Ix7++yjOvfIJE9Esnrxja37zFGLu7+InzV3YCob9mD
-         BuSI6gp6xppjdKrZKaO/3oPbkI+0GNPzvfdAA7OO8o/hhDgCVmb+aLJ5zfYOfUaRLq
-         Q6aeRIbM5Qs//YjiZ7Ue9qQBRM0NnLjgBXDLPP3Odo/LfVDNpeeiiPeRdp9h4nN1ri
-         EEXrfCRrjp0yJmj//YaUcq+9KWKzvS+RkCkngTfadWi5BGiWbHj2tPYaVD9xgMqjvy
-         f6MHvE/G63CtQ==
-Date:   Fri, 20 Aug 2021 09:13:25 +0900
+        b=R823YqEzVPjKasv1ESpoEkS++umC0AXLAb6vxWuBwtY5nEU1FPk9Oz+/wtirc3c1j
+         ICZMQHVXNu/X12J64b3eKJs4kCCwPvS35YQQ7hVHSOwF9H02R7zroE/5u1qf24PBjY
+         WTHcd1DUmUusSm5Oqzdv/vbz1SMTECVUc4glhykCmmQM0Ab6yLAPNINIirQot3iOjW
+         uMvIaUVxxpm6kWm4qrJ3HS8Y+7BTMATCCNzipTSbnLyMJbFgkWFRycX5ijpSD//Yt1
+         +cOQtqGNpZxcZc1G4nARFsJFLrZvDo1Uk80lisZtc2WM2daf6nmhKf/HYp4CdZTrcq
+         qiKOrmewpRteg==
+Date:   Fri, 20 Aug 2021 09:46:39 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
@@ -35,12 +35,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 3/5] selftests/ftrace: Add clear_dynamic_events() to
- test cases
-Message-Id: <20210820091325.d5eab4b2c24562f67ab1e205@kernel.org>
-In-Reply-To: <20210819152825.348941368@goodmis.org>
+Subject: Re: [PATCH v8 4/5] selftests/ftrace: Add selftest for testing
+ eprobe events
+Message-Id: <20210820094639.77a9d0eec97bde10e28f5b47@kernel.org>
+In-Reply-To: <20210819152825.526931866@goodmis.org>
 References: <20210819152604.704335282@goodmis.org>
-        <20210819152825.348941368@goodmis.org>
+        <20210819152825.526931866@goodmis.org>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -49,72 +49,95 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 19 Aug 2021 11:26:07 -0400
+On Thu, 19 Aug 2021 11:26:08 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
 > From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 > 
-> Add a function to remove all dynamic events from the tracing directory. It
-> requires a loop as some of the dynamic events may depend on others being
-> removed first. Also add a safety that prevents it from looping infinitely
-> due to a bug where an event never gets removed.
+> Add a test to test event probes, by creating a synthetic event across
+> sys_enter_openat and sys_exit_openat that passes the filename pointer from
+> the enter of the system call to the exit, and then add an event probe to
+> the synthetic event to make sure that the file name is seen.
 > 
-> Link: https://lkml.kernel.org/r/20210819041842.696873153@goodmis.org
+> Link: https://lkml.kernel.org/r/20210819041842.884828019@goodmis.org
 > 
-
-Thank you for adding this useful function!
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-
 > Cc: Shuah Khan <shuah@kernel.org>
 > Cc: Shuah Khan <skhan@linuxfoundation.org>
 > Cc: linux-kselftest@vger.kernel.org
 > Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 > ---
->  .../testing/selftests/ftrace/test.d/functions | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
+>  .../test.d/dynevent/add_remove_eprobe.tc      | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-> index a6fac927ee82..f68d336b961b 100644
-> --- a/tools/testing/selftests/ftrace/test.d/functions
-> +++ b/tools/testing/selftests/ftrace/test.d/functions
-> @@ -83,6 +83,27 @@ clear_synthetic_events() { # reset all current synthetic events
->      done
->  }
->  
-> +clear_dynamic_events() { # reset all current dynamic events
-> +    again=1
-> +    stop=1
-> +    # loop mulitple times as some events require other to be removed first
-> +    while [ $again -eq 1 ]; do
-> +	stop=$((stop+1))
-> +	# Prevent infinite loops
-> +	if [ $stop -gt 10 ]; then
-> +	    break;
-> +	fi
-> +	again=2
-> +	grep -v '^#' dynamic_events|
-> +	while read line; do
-> +	    del=`echo $line | sed -e 's/^.\([^ ]*\).*/-\1/'`
-> +	    if ! echo "$del" >> dynamic_events; then
-> +		again=1
-> +	    fi
-> +	done
-> +    done
-> +}
+> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
+> new file mode 100644
+> index 000000000000..7b242f29b916
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
+> @@ -0,0 +1,53 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# description: Generic dynamic event - add/remove eprobe events
+> +# requires: dynamic_events "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
 > +
->  initialize_ftrace() { # Reset ftrace to initial-state
->  # As the initial state, ftrace will be set to nop tracer,
->  # no events, no triggers, no filters, no function filters,
-> @@ -93,6 +114,7 @@ initialize_ftrace() { # Reset ftrace to initial-state
->      reset_events_filter
->      reset_ftrace_filter
->      disable_events
-> +    clear_dynamic_events
->      [ -f set_event_pid ] && echo > set_event_pid
->      [ -f set_ftrace_pid ] && echo > set_ftrace_pid
->      [ -f set_ftrace_notrace ] && echo > set_ftrace_notrace
+> +echo 0 > events/enable
+> +
+> +clear_dynamic_events
+> +
+> +SYSTEM="syscalls"
+> +START="sys_enter_openat"
+> +END="sys_exit_openat"
+> +FIELD="filename"
+> +SYNTH="synth_open"
+> +EPROBE="eprobe_open"
+> +
+> +echo "$SYNTH u64 filename; s64 ret;" > synthetic_events
+> +echo "hist:keys=common_pid:__arg__1=$FIELD" > events/$SYSTEM/$START/trigger
+> +echo "hist:keys=common_pid:filename=\$__arg__1,ret=ret:onmatch($SYSTEM.$START).trace($SYNTH,\$filename,\$ret)" > events/$SYSTEM/$END/trigger
+
+Hmm, can you make this more simple one without synthetic events?
+Since synthetic event depends on CONFIG_SYNTH_EVENTS, you need to add
+"synth_events" to 'requires' tag.
+However, this means that this testcase doesn't run when CONFIG_SYNTH_EVENTS=n
+but CONFIG_*PROBE_EVENTS=y.
+
+Thank you,
+
+> +
+> +echo "e:$EPROBE synthetic/$SYNTH file=+0(\$filename):ustring ret=\$ret:s64" >> dynamic_events
+> +
+> +grep -q "$SYNTH" dynamic_events
+> +grep -q "$EPROBE" dynamic_events
+> +test -d events/synthetic/$SYNTH
+> +test -d events/eprobes/$EPROBE
+> +
+> +echo 1 > events/eprobes/$EPROBE/enable
+> +ls
+> +echo 0 > events/eprobes/$EPROBE/enable
+> +
+> +content=`grep '^ *ls-' trace | grep 'file='`
+> +nocontent=`grep '^ *ls-' trace | grep 'file=' | grep -v -e '"/' -e '"."'` || true
+> +
+> +if [ -z "$content" ]; then
+> +	exit_fail
+> +fi
+> +
+> +if [ ! -z "$nocontent" ]; then
+> +	exit_fail
+> +fi
+> +
+> +echo "-:$EPROBE" >> dynamic_events
+> +echo '!'"hist:keys=common_pid:filename=\$__arg__1,ret=ret:onmatch($SYSTEM.$START).trace($SYNTH,\$filename,\$ret)" > events/$SYSTEM/$END/trigger
+> +echo '!'"hist:keys=common_pid:__arg__1=$FIELD" > events/$SYSTEM/$START/trigger
+> +echo '!'"$SYNTH u64 filename; s64 ret;" >> synthetic_events
+> +
+> +! grep -q "$SYNTH" dynamic_events
+> +! grep -q "$EPROBE" dynamic_events
+> +! test -d events/synthetic/$SYNTH
+> +! test -d events/eprobes/$EPROBE
+> +
+> +clear_trace
 > -- 
 > 2.30.2
 
