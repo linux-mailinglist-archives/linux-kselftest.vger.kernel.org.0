@@ -2,106 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ABD3F2753
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 09:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1B93F28E0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 11:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbhHTHKX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Aug 2021 03:10:23 -0400
-Received: from foss.arm.com ([217.140.110.172]:54972 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233162AbhHTHKX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Aug 2021 03:10:23 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 968F51042;
-        Fri, 20 Aug 2021 00:09:45 -0700 (PDT)
-Received: from [10.163.69.164] (unknown [10.163.69.164])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 20FBD3F66F;
-        Fri, 20 Aug 2021 00:09:42 -0700 (PDT)
-Subject: Re: [PATCH] kselftest/arm64: pac: Fix skipping of tests on systems
- without PAC
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Boyan Karatotev <boyan.karatotev@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-References: <20210819165723.43903-1-broonie@kernel.org>
-From:   Amit Kachhap <amit.kachhap@arm.com>
-Message-ID: <a988b3e2-5f88-fbd5-99da-2066a65a17b2@arm.com>
-Date:   Fri, 20 Aug 2021 12:39:39 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S235001AbhHTJKU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Aug 2021 05:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232773AbhHTJKT (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Aug 2021 05:10:19 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302C5C061757
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 02:09:42 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id p22so10145641qki.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 02:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=WuDQPRa1pRZEmgy3rMsrN6WxMhN/6RZwdTFnT+vP0Q4=;
+        b=hFJnYYN6W4CsDcIVyUx2ldgP3beMW4jLNH/SGyYzXZ7BCc0KGd1k2ND/ddXkVyFBzR
+         guIjkcbm1NmdCLbZe8HMFSijx65jRHp/SdEKwlTl1Wrrm5GfFB+4ZVS5sv8x1a29xP5U
+         THsPNWQYsSJ5yPuhXe5CCySbf3d8KHk4ieqNWU1QRBTQFpIYNevU0ISY6bHFs3nh/n2S
+         aeYB/F9nFQwaieLCZI54fOmj0REUKAHwNOHq6pxHqVkFNAYAR1ZrLiFgkhfJD1EtDH4X
+         GpetBqXCAI10TRHamsMBRTUQpFk6zzmcbkWEi4ufFi/59ztBcLqf45Sb9NTW5DLLfDf/
+         UjVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=WuDQPRa1pRZEmgy3rMsrN6WxMhN/6RZwdTFnT+vP0Q4=;
+        b=BJTBHMdheWhncJ2fn9Zs2Oc6jVRkHGo/wUI0HRerJJsMpiLt0ANWb9bOxlEp0Nd5dN
+         L2o86sRUbdP5OdEWvWcBNlrxx8DXmE/8SQmJPR6gyhYF9NvDZndE0fAIyyPy/TsoqHyM
+         txUbYTi91BED2RLtLK0n1aLL+0wObE64geY3VTFMXWQp0GM3bIoBh8fyYn/1n48ahrTm
+         CLsGxBO8dQC2dNYO6G1vRaeCRHv9ddTjs5/zLqhgYN2nZiKSXQquEWcWxfJajawqIqFE
+         hkQyp9ocU0p7iV5kunq+hy43HdCOZqz3JIQREkbYNPVp6phputgqf7t4AQSeUB85NZpS
+         Mvjw==
+X-Gm-Message-State: AOAM531ajcqPafbmNNL8we+9ld3Tnt8y3Mg4fcSuHHzq44Aa7Y/CmoZK
+        FxGqTrbO97udNNj1bakoopDpV+XnRjnta7O+5jE=
+X-Google-Smtp-Source: ABdhPJyG2xEmxAYbVbw0iUlOEmdXfXcy24m7DXEexS/mITfNOxQp5Wtr3TQ/AKKjTgQq+sXNyeHYc24WCQSN0Ret/HU=
+X-Received: by 2002:a37:846:: with SMTP id 67mr7997191qki.167.1629450581284;
+ Fri, 20 Aug 2021 02:09:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210819165723.43903-1-broonie@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ac8:5184:0:0:0:0:0 with HTTP; Fri, 20 Aug 2021 02:09:40
+ -0700 (PDT)
+Reply-To: geomic123@yahoo.com
+From:   George Micheal <philipowiredu77@gmail.com>
+Date:   Fri, 20 Aug 2021 10:09:40 +0100
+Message-ID: <CAGkcCGHZMGrNP48LcZn4sRuaLsMHSeJnxJjFCOZvC71-qdJ4xg@mail.gmail.com>
+Subject: Waiting for response
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+-- 
+Dear Sir/Madam
 
+My name is Mr George Michael,i am the Personal Aid to former
+President Baba Yahya Abdul-Aziz Jemus Jammeh the Republic of Gambia in
+west Africa, who is currently in exile with his farmily. I have been
+trying on how to get in touch with you over an important issue
+concerning a project that will be profitable. I anticipate hearing
+from you for more details.
 
-On 8/19/21 10:27 PM, Mark Brown wrote:
-> The PAC tests check to see if the system supports the relevant PAC features
-> but instead of skipping the tests if they can't be executed they fail the
-> tests which makes things look like they're not working when they are.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->   tools/testing/selftests/arm64/pauth/pac.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
-> index 592fe538506e..b743daa772f5 100644
-> --- a/tools/testing/selftests/arm64/pauth/pac.c
-> +++ b/tools/testing/selftests/arm64/pauth/pac.c
-> @@ -25,13 +25,15 @@
->   do { \
->   	unsigned long hwcaps = getauxval(AT_HWCAP); \
->   	/* data key instructions are not in NOP space. This prevents a SIGILL */ \
-> -	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled"); \
-> +	if (!(hwcaps & HWCAP_PACA))					\
-> +		SKIP(return, "PAUTH not enabled"); \
->   } while (0)
->   #define ASSERT_GENERIC_PAUTH_ENABLED() \
-
-May be ASSERT_GENERIC_PAUTH_ENABLED can be replaced with
-something like VERIFY_GENERIC_PAUTH_ENABLED
-
-or can be modified like below and instead of failing it skips with a
-message
-
-   -	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled"); \
-   +	ASSERT_NE(0, hwcaps & HWCAP_PACA) SKIP(return, "PAUTH not 
-enabled"); \					
-
-
->   do { \
->   	unsigned long hwcaps = getauxval(AT_HWCAP); \
->   	/* generic key instructions are not in NOP space. This prevents a SIGILL */ \
-> -	ASSERT_NE(0, hwcaps & HWCAP_PACG) TH_LOG("Generic PAUTH not enabled"); \
-> +	if (!(hwcaps & HWCAP_PACG)) \
-> +		SKIP(return, "Generic PAUTH not enabled");	\
->   } while (0)
->   
->   void sign_specific(struct signatures *sign, size_t val)
-> @@ -256,7 +258,7 @@ TEST(single_thread_different_keys)
->   	unsigned long hwcaps = getauxval(AT_HWCAP);
->   
->   	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
-> -	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-> +	ASSERT_PAUTH_ENABLED();
->   	if (!(hwcaps & HWCAP_PACG)) {
->   		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
->   		nkeys = NKEYS - 1;
-> @@ -299,7 +301,7 @@ TEST(exec_changed_keys)
->   	unsigned long hwcaps = getauxval(AT_HWCAP);
->   
->   	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
-> -	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-> +	ASSERT_PAUTH_ENABLED();
->   	if (!(hwcaps & HWCAP_PACG)) {
->   		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
->   		nkeys = NKEYS - 1;
-> 
+Yours faithfully
+Mr George Michael
