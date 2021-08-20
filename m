@@ -2,63 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3140E3F2562
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 05:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816AB3F2568
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Aug 2021 05:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235425AbhHTDgU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Aug 2021 23:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
+        id S238100AbhHTDjW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Aug 2021 23:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238160AbhHTDgR (ORCPT
+        with ESMTP id S238265AbhHTDjT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Aug 2021 23:36:17 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829DDC061757;
-        Thu, 19 Aug 2021 20:35:40 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id 14so9567419qkc.4;
-        Thu, 19 Aug 2021 20:35:40 -0700 (PDT)
+        Thu, 19 Aug 2021 23:39:19 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A43C061760;
+        Thu, 19 Aug 2021 20:38:41 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id az7so9548628qkb.5;
+        Thu, 19 Aug 2021 20:38:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vgh7JrRkcx9hCV2goz+b7Zq4sC7ybgcPmkhc9duiNfg=;
-        b=blrip4eMq/uC82E/D2FZMuXVujwFldAMJ4vZJCXjLt3jA8TTmmLQcqQG7JS3yYe6NR
-         MvpoCMqWKOL44d1YXG8EKt0gaEW5LzqFXoWQgw+yFErIYIVlNMbm2b3zeeOWeVuqmAJ5
-         VXBsvaclmwT15lZjpEHuXYZvdodUOx4SA27LNTExxsy38n3CCOn4adimt/QgrHzeQa04
-         80rNMW2avuz3QVW6cy/HOjzg4LMRkDtrJtieUTfLTWT0+zBC38qvf+8PKDWSWclhaYvQ
-         syITFlKePDdVpKCV3t3F3CKPwar5jWeGLS1aCA60QGFsQGNcmHibTphZrp6y3GeJRnQi
-         NJaw==
+        bh=CpuoSi/aq4gNa9Y1M9Ya1mlkUyTMEQflq2RRPqeW+68=;
+        b=uaT893NDSqUkcMl32Yos8I5VoCaXqhc5MGa4oDFtd/SIv3wClOgVjyzePB4+UbotoL
+         PrEMiqeeBRg6KcRMeS+6agPae5QzghvQbozGs/wft8NM6KHfAjvSFFJrZ8mCz/p0A9uR
+         kqNoWaWnRDah+CBcxJzSk8auEy3IpiehHiY5KJ3z1zZVOSy9WiT5Fu+rbd1rsZ68KCKX
+         L8OEEEsfaRqIEFGu73r/LqteU1E0g43ct3NgYqxvj9N8LERluwPD+5ml1BDbQeixG7FA
+         EncE9ygzjg6kRVbyWfAtoQBqX4EGzdSOPSF7EuiPTbMujByv5y6NeggKM3gFwX/AyW/V
+         FUMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vgh7JrRkcx9hCV2goz+b7Zq4sC7ybgcPmkhc9duiNfg=;
-        b=J7uakKKABQCfyJl/a4owQ6/RurkKSoXsZS3kbG9y30B6f2yClKu3PzPvElXfGgZQAz
-         435l+/XQ7yiHILVeThcLTfnCKqYE1G4uYNYv/eB9t8y/OiRCneY5ROxJUspBRCpUcx2z
-         i04Uy+Fg8Ex9M+hDKKXT3vSVZBgj/Bs70u/9jgYSX2rSn4h0GoE2gkbiads28i63MQkC
-         uDIjuYlZGY9vaZEY7CzbTjgYMPe4mT6+SVAO7OTY9IonrvIF5DbS1vYlAQ5d5GDeZfBN
-         UqQoY9FlsaTzkBqGAIMH6biV+Lv2i2SmNyEnnuHxg2xFYPfLKiPD2xHuLWH1PpS85Qqh
-         PO4w==
-X-Gm-Message-State: AOAM530kXt0QtjYWxkhpoXVB99w6gF4/LUgmnK6HsoTdEHCqDJEmzPxK
-        rTcIkKU5W3BNRy4oAEn7jQU=
-X-Google-Smtp-Source: ABdhPJzn4IXVKzCEtkWiW91ZWXfFs4EAjGQ7vxQ7WwjsiCDTo6uKjQmN+WDcDHTq3XWiI4C3hF9cGw==
-X-Received: by 2002:a37:e20f:: with SMTP id g15mr7043720qki.450.1629430539792;
-        Thu, 19 Aug 2021 20:35:39 -0700 (PDT)
+        bh=CpuoSi/aq4gNa9Y1M9Ya1mlkUyTMEQflq2RRPqeW+68=;
+        b=q2+Ktj9cPfCysFn5BbCuJN0HJP2ffToNXrTwHzRpOqK/lDxAk6qQdTpxXXPjZ91gfa
+         AUthBQdKLERJeC1AyrAWmhwaeXr5ffs/5KaC21Me4llaYKdDCRXgFZ0bQz5swvUIcBjL
+         297eQGBhnFcqqDk9NX9azyGbZU2VhNuKJaLQYtuV3vil71bO7MkaUACeyAO2RAanTb/f
+         xsa5/xg1GHqyf6Ob14DOU8MdT3Qw3HoVyegK5KAFcDd3yHRQhNQ36nK17aCcUf2WiU6e
+         Ul8xqDgnsq5hHxmKeIhMWMMos2oYuarM83pGp7x2mJaFp5SRshgqz+ab+68QVSzTiGl7
+         Czfw==
+X-Gm-Message-State: AOAM533YHfnX/s/3ernGjKnt2qcjAQXZLxzw7Cmv/IsXarAEh+ri4DyA
+        LnnZSkUmFHnqhaVi89apBlY=
+X-Google-Smtp-Source: ABdhPJyVH4s2VxHdBtpBJybnfmCfAIEOZPIHXfx7mijL7vtDMDAFaPfz+fMd2O/Z1UFvnvLAoJDOsg==
+X-Received: by 2002:a05:620a:318f:: with SMTP id bi15mr3136506qkb.4.1629430721005;
+        Thu, 19 Aug 2021 20:38:41 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g7sm2147341qtj.28.2021.08.19.20.35.37
+        by smtp.gmail.com with ESMTPSA id y2sm2704851qkd.38.2021.08.19.20.38.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Aug 2021 20:35:39 -0700 (PDT)
+        Thu, 19 Aug 2021 20:38:40 -0700 (PDT)
 From:   CGEL <cgel.zte@gmail.com>
 X-Google-Original-From: CGEL <jing.yangyang@zte.com.cn>
-To:     "David S . Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         jing yangyang <jing.yangyang@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] tools/net: Use bitwise instead of arithmetic operator for flags
-Date:   Thu, 19 Aug 2021 20:35:27 -0700
-Message-Id: <20210820033527.13210-1-jing.yangyang@zte.com.cn>
+Subject: [PATCH linux-next] tools: remove unneeded semicolon
+Date:   Thu, 19 Aug 2021 20:38:31 -0700
+Message-Id: <cf335b749549186343bcb8f73a17c38afe6c5bdd.1629196408.git.jing.yangyang@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,31 +67,29 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: jing yangyang <jing.yangyang@zte.com.cn>
 
-This silences the following coccinelle warning:
+Eliminate the following coccicheck warning:
 
-"WARNING: sum of probable bitmasks, consider |"
+./tools/testing/selftests/kvm/access_tracking_perf_test.c:234:3-4:Unneeded semicolon
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: jing yangyang <jing.yangyang@zte.com.cn>
 ---
- tools/testing/selftests/net/psock_fanout.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/access_tracking_perf_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/psock_fanout.c b/tools/testing/selftests/net/psock_fanout.c
-index db45213..3653d64 100644
---- a/tools/testing/selftests/net/psock_fanout.c
-+++ b/tools/testing/selftests/net/psock_fanout.c
-@@ -111,8 +111,8 @@ static int sock_fanout_open(uint16_t typeflags, uint16_t group_id)
- static void sock_fanout_set_cbpf(int fd)
- {
- 	struct sock_filter bpf_filter[] = {
--		BPF_STMT(BPF_LD+BPF_B+BPF_ABS, 80),	      /* ldb [80] */
--		BPF_STMT(BPF_RET+BPF_A, 0),		      /* ret A */
-+		BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 80),	      /* ldb [80] */
-+		BPF_STMT(BPF_RET | BPF_A, 0),		      /* ret A */
- 	};
- 	struct sock_fprog bpf_prog;
+diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+index 71e277c..02a1c0f 100644
+--- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
++++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+@@ -231,7 +231,7 @@ static void *vcpu_thread_main(void *arg)
+ 		case ITERATION_MARK_IDLE:
+ 			mark_vcpu_memory_idle(vm, vcpu_id);
+ 			break;
+-		};
++		}
  
+ 		vcpu_last_completed_iteration[vcpu_id] = current_iteration;
+ 	}
 -- 
 1.8.3.1
 
