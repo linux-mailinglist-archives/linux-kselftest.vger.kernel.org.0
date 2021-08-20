@@ -2,117 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 121A23F36CC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 00:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1823F36E2
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 00:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240876AbhHTWvU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Aug 2021 18:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S229451AbhHTWvt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Aug 2021 18:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240900AbhHTWvQ (ORCPT
+        with ESMTP id S240854AbhHTWvr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Aug 2021 18:51:16 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6609EC0617AF
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:50:36 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id c63-20020a25e5420000b0290580b26e708aso11023906ybh.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Aug 2021 15:50:36 -0700 (PDT)
+        Fri, 20 Aug 2021 18:51:47 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01337C061757;
+        Fri, 20 Aug 2021 15:51:09 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id u22so23517048lfq.13;
+        Fri, 20 Aug 2021 15:51:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=Ut0lClAqKM9RGqTS5MESEM+F5WoPZRTQUckNTBRjTyg=;
-        b=TA/KEkzCm9eGIgSQhw9KNiaLFa6mERWpjzl8Sm2LP0D8MHshBELhR9PNTUHRE29ifz
-         mo90lRoRaNLAOUKwpDqprlo0/pMwtc5l0/AtaGDQuwQPp72yFVvsNL3ynlMO5kSBRj5m
-         LzAltW2EylkOxsEkvhRVhVSBOVOdYc11dmbjDqZ/XhKiygxbSFOOyUayIR4kGClbFLgR
-         /kFKufJdXalO6BD5koMO2tBk/9JBu0VO4U4stsueIYQrrElmsEUFhO7RIz6hEZLybaDq
-         KKumExIW2OSfE2RbrTkormhrvk3570q+R6kLizKIzC3ltGy9bDIK5NfDidM6k/fKRiu/
-         zAPw==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wS2+Os8U5Xqw5DO4Q5hTcwa/1+R2naY8oX8X+CBPw30=;
+        b=uHLhnitdWHLhLg11KD1TwttomzAOumdZmia6bK7YCs45El5yVQbGUm0sVlcsWSslGU
+         Mk0fyQNnRTbFXXRuqVvxVTdAyCt8WReyBegBD9cirqJVuNERu+BjM6/yh1EppxqNX9GZ
+         OORZcRfwLFSVlG+eSN6899/XIFeadhGbMUb3njaaQTQ75m75NVEEEwIH47D3TIBuWPMk
+         cLNNcTsteRZ/YM291Mv9wNgggq7sU9Zhe6hHDHVL9Ye3VQlOoe3dxkxrpY5AJJnNI0zx
+         BJYha6pbVdw9CdlyOrbLBWOjHtahNR+VvaDn9KWhRwVgwKQZeK2SYcr6qRzli1/Nss3n
+         yerA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=Ut0lClAqKM9RGqTS5MESEM+F5WoPZRTQUckNTBRjTyg=;
-        b=s5MQIR5QEYVbk3/RvL5cixiIZzg45RYo4a/zSFezx5oW6m2MQPBREQt2EWlw1N11p2
-         6jxE9EzzNwyjKC9gpsp+E71t6jFq0ixo2Za7/ApjTXkCe+oamFx6WcoXKR0cgStnIiWR
-         jfO5mKuUNz2RheNp3qklw8OABjhLUWikG7Fnr1Ns2O8CdZOvenlzrcHOXdSMIKMCUOql
-         EUDK0X8vzRpqTXVH1NT4wogdhtYBTm9RgYcibRZU8juXp2CJHGYiczJAYsTHXp+cshA5
-         XuF29fJODIirsp0/N4sxZj2Wc5xkodtH44shSY5HLYczkhqOfCNiA+KLxAORTHjeWruF
-         cPfw==
-X-Gm-Message-State: AOAM530SibD65gZjL/K/naf/jEC7/Sc0ejcAThAl3OgjuvDKTTXgZEEm
-        lygVPcMKh2WpmtYOwExhFGi1n8ursJY=
-X-Google-Smtp-Source: ABdhPJx3Gy465odAHrKuwh+xxU3EOcrY9EoPkXADk8KHQbivIS4NsZANbgwhJ1nQlBB3M+0Hs3NCAAyvqg4=
-X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:f11d:a281:af9b:5de6])
- (user=seanjc job=sendgmr) by 2002:a25:acc4:: with SMTP id x4mr8790476ybd.376.1629499835531;
- Fri, 20 Aug 2021 15:50:35 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 20 Aug 2021 15:50:02 -0700
-In-Reply-To: <20210820225002.310652-1-seanjc@google.com>
-Message-Id: <20210820225002.310652-6-seanjc@google.com>
-Mime-Version: 1.0
-References: <20210820225002.310652-1-seanjc@google.com>
-X-Mailer: git-send-email 2.33.0.rc2.250.ged5fa647cd-goog
-Subject: [PATCH v2 5/5] KVM: selftests: Remove __NR_userfaultfd syscall fallback
-From:   Sean Christopherson <seanjc@google.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wS2+Os8U5Xqw5DO4Q5hTcwa/1+R2naY8oX8X+CBPw30=;
+        b=OqPnv9fSaAMyp/qXQYExymq5jiYBUnT0mVuMuhXaeo0nR/M27JLeFZNOr8n3nvdOhy
+         9udrH9H0cpn59k3czYkrquj7toNviv8OKgCV7LyVK6S57Eqy75D0dU+BTnssGu1XRNmA
+         Dvo+9dNgqE4zOsSynO5uP/koYuX9GOik/JZtcMDFzigtPJRe8T59LdS8kU+J1KzoXgKx
+         bHwmDW1c3wOoU1T+UubHeyBBSNWAct2bbXNx/XsjXd4Cx+CXdosgyH/MQ5szHVgdM8aG
+         ncNWuBX9ueZqEF4EX+Dby/blJ/RSj1pQJJnauzmNflxDWfo072vkqxnM3nPLl+7/1Nx8
+         WcBg==
+X-Gm-Message-State: AOAM531tA1zQLEpuE+1eVLigH18xiQyxd7VgT3B0R65EBGwBOzUdDftr
+        k0wCnvEdOu9ij58ktzclB6w5jUgXu5o=
+X-Google-Smtp-Source: ABdhPJyj4L8ydMBQtl9P8mkO+LULFuurWz5U0xkbLNF/Vzi2l5aTv/dqqF2Km4Obr4InOCmuRYUaow==
+X-Received: by 2002:a05:6512:3c99:: with SMTP id h25mr9064665lfv.400.1629499867133;
+        Fri, 20 Aug 2021 15:51:07 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-120-72.dynamic.spd-mgts.ru. [46.138.120.72])
+        by smtp.googlemail.com with ESMTPSA id x74sm634452lff.54.2021.08.20.15.51.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Aug 2021 15:51:06 -0700 (PDT)
+Subject: Re: [PATCH bpf-next v7 2/5] af_unix: add unix_stream_proto for
+ sockmap
+To:     Jiang Wang <jiang.wang@bytedance.com>, netdev@vger.kernel.org
+Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
+        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Rao Shoaib <rao.shoaib@oracle.com>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20210816190327.2739291-1-jiang.wang@bytedance.com>
+ <20210816190327.2739291-3-jiang.wang@bytedance.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <424626ed-5a56-9460-8635-5a850da36656@gmail.com>
+Date:   Sat, 21 Aug 2021 01:51:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210816190327.2739291-3-jiang.wang@bytedance.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Revert the __NR_userfaultfd syscall fallback added for KVM selftests now
-that x86's unistd_{32,63}.h overrides are under uapi/ and thus not in
-KVM sefltests' search path, i.e. now that KVM gets x86 syscall numbers
-from the installed kernel headers.
+16.08.2021 22:03, Jiang Wang пишет:
+> Previously, sockmap for AF_UNIX protocol only supports
+> dgram type. This patch add unix stream type support, which
+> is similar to unix_dgram_proto. To support sockmap, dgram
+> and stream cannot share the same unix_proto anymore, because
+> they have different implementations, such as unhash for stream
+> type (which will remove closed or disconnected sockets from the map),
+> so rename unix_proto to unix_dgram_proto and add a new
+> unix_stream_proto.
+> 
+> Also implement stream related sockmap functions.
+> And add dgram key words to those dgram specific functions.
+> 
+> Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
+> Reviewed-by: Cong Wang <cong.wang@bytedance.com>
+> ---
+>  include/net/af_unix.h |  8 +++-
+>  net/core/sock_map.c   |  1 +
+>  net/unix/af_unix.c    | 83 ++++++++++++++++++++++++++++++++------
+>  net/unix/unix_bpf.c   | 93 +++++++++++++++++++++++++++++++++----------
+>  4 files changed, 148 insertions(+), 37 deletions(-)
 
-No functional change intended.
+This patch broke Qt WebEngine using recent linux-next (tested on ARM32
+only), please fix.
 
-Cc: Ben Gardon <bgardon@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/arch/x86/include/uapi/asm/unistd_64.h | 3 ---
- 1 file changed, 3 deletions(-)
+ 8<--- cut here ---
+ Unable to handle kernel NULL pointer dereference at virtual address
+00000000
+ pgd = 2fba1ffb
+ *pgd=00000000
+ Internal error: Oops: 80000005 [#1] PREEMPT SMP THUMB2
+ Modules linked in:
+ CPU: 1 PID: 1999 Comm: falkon Tainted: G        W
+5.14.0-rc5-01175-g94531cfcbe79-dirty #9240
+ Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+ PC is at 0x0
+ LR is at unix_shutdown+0x81/0x1a8
+ pc : [<00000000>]    lr : [<c08f3311>]    psr: 600f0013
+ sp : e45aff70  ip : e463a3c0  fp : beb54f04
+ r10: 00000125  r9 : e45ae000  r8 : c4a56664
+ r7 : 00000001  r6 : c4a56464  r5 : 00000001  r4 : c4a56400
+ r3 : 00000000  r2 : c5a6b180  r1 : 00000000  r0 : c4a56400
+ Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+ Control: 50c5387d  Table: 05aa804a  DAC: 00000051
+ Register r0 information: slab PING start c4a56400 pointer offset 0
+ Register r1 information: NULL pointer
+ Register r2 information: slab task_struct start c5a6b180 pointer offset 0
+ Register r3 information: NULL pointer
+ Register r4 information: slab PING start c4a56400 pointer offset 0
+ Register r5 information: non-paged memory
+ Register r6 information: slab PING start c4a56400 pointer offset 100
+ Register r7 information: non-paged memory
+ Register r8 information: slab PING start c4a56400 pointer offset 612
+ Register r9 information: non-slab/vmalloc memory
+ Register r10 information: non-paged memory
+ Register r11 information: non-paged memory
+ Register r12 information: slab filp start e463a3c0 pointer offset 0
+ Process falkon (pid: 1999, stack limit = 0x9ec48895)
+ Stack: (0xe45aff70 to 0xe45b0000)
+ ff60:                                     e45ae000 c5f26a00 00000000
+00000125
+ ff80: c0100264 c07f7fa3 beb54f04 fffffff7 00000001 e6f3fc0e b5e5e9ec
+beb54ec4
+ ffa0: b5da0ccc c010024b b5e5e9ec beb54ec4 0000000f 00000000 00000000
+beb54ebc
+ ffc0: b5e5e9ec beb54ec4 b5da0ccc 00000125 beb54f58 00785238 beb5529c
+beb54f04
+ ffe0: b5da1e24 beb54eac b301385c b62b6ee8 600f0030 0000000f 00000000
+00000000
+ [<c08f3311>] (unix_shutdown) from [<c07f7fa3>] (__sys_shutdown+0x2f/0x50)
+ [<c07f7fa3>] (__sys_shutdown) from [<c010024b>]
+(__sys_trace_return+0x1/0x16)
+ Exception stack(0xe45affa8 to 0xe45afff0)
 
-diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
-index 4205ed4158bf..cb52a3a8b8fc 100644
---- a/tools/arch/x86/include/uapi/asm/unistd_64.h
-+++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
-@@ -1,7 +1,4 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __NR_userfaultfd
--#define __NR_userfaultfd 282
--#endif
- #ifndef __NR_perf_event_open
- # define __NR_perf_event_open 298
- #endif
--- 
-2.33.0.rc2.250.ged5fa647cd-goog
 
