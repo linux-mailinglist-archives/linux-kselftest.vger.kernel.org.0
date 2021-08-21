@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4163F37EF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 03:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F4E3F37F1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 03:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbhHUBla (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Aug 2021 21:41:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35224 "EHLO mail.kernel.org"
+        id S230172AbhHUBme (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Aug 2021 21:42:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35512 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229783AbhHUBl3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Aug 2021 21:41:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C4F5F61163;
-        Sat, 21 Aug 2021 01:40:49 +0000 (UTC)
+        id S229783AbhHUBme (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Aug 2021 21:42:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C5A1361163;
+        Sat, 21 Aug 2021 01:41:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629510051;
-        bh=yKkJ4SLfNYw+uYg298yLZSt7Kzso3olgvrYqbSi4JpQ=;
+        s=k20201202; t=1629510115;
+        bh=HBWduDiPhGmHdP51duukiLFu8daTpY7XH8pt3F5Gdvg=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tirdiOdTmkhhkR0Rj6yNbP3zMxa/wl6C1Hr8R3Z7pR7FoEnwrYzeEebuJM0/yPYje
-         7QE7DH5NkZDJf0v7XtM/8XrAj3rlJPIC3aK3ZtRdkH7fqRQwR90lG8ZfnGr0/e8Ar/
-         m5BF0a9egBr65g3MsULoK9eekLiTLStfoaIiU8rh3upNj+0vJsCXU2N5b2WKwo2rNT
-         iFfKx55e+z/GHIb2GRaF9CX/nhrQWYwp6KOXzp3k7iJcpQwpSbcl+zV/IU/YyrHDKt
-         WJTx3/wrqB7R6ZFMyFct2mzPnk3RhBvUYWiY8a8xVsiYXp62iXWFQgxO3F1q2y+Kc+
-         Bm0f+o+dRR6EQ==
-Date:   Sat, 21 Aug 2021 10:40:48 +0900
+        b=EPN8ZQQg+M64VXwH9EZvhEHX3mwyKpAjPqifcxEHvyklD9mKWVfO0vhS4x0A538IE
+         89s96x55cAt8P8YvMOPXbMfXq+9ERqlLEvdDrPF/RNYJ/NsB4IOBizcaCWYTkRvwt8
+         Cn00B/rCLMDZ53lZqmkhOVkGK2uq9vQL3v+1qq4c/SF7JQPiCSQ9Po52uZD1Pw6283
+         caHoIuglN8fjNyXn3BVsHjo1gp5gFR9ol1i7n7ULUnvHibPR6ea+ovL96zy9RsURJJ
+         1E3SPUEaGQKroGOGrgf4GYBFeckX064DmRIO5tkzE+VQx9X/a9fRbJqW0S0ulYLxGJ
+         8wSd0sxNk/hcw==
+Date:   Sat, 21 Aug 2021 10:41:52 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
@@ -35,12 +35,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v9 4/6] selftests/ftrace: Add test case to test adding
- and removing of event probe
-Message-Id: <20210821104048.2eeda1067909e7df0771bef6@kernel.org>
-In-Reply-To: <20210820204742.274591200@goodmis.org>
+Subject: Re: [PATCH v9 6/6] selftests/ftrace: Add selftest for testing
+ duplicate eprobes and kprobes
+Message-Id: <20210821104152.de68dee1b30a72bf2b0c815f@kernel.org>
+In-Reply-To: <20210820204742.653288346@goodmis.org>
 References: <20210820204644.546662591@goodmis.org>
-        <20210820204742.274591200@goodmis.org>
+        <20210820204742.653288346@goodmis.org>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -49,76 +49,74 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 20 Aug 2021 16:46:48 -0400
+On Fri, 20 Aug 2021 16:46:50 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
 > From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 > 
-> Add a test case that adds an event probe, makes sure that it works, and
-> then removes it.
+> Add a selftest that makes sure that eprobes and kprobes can not be created
+> with the same group and name as existing events.
 > 
-> Link: https://lore.kernel.org/linux-kselftest/20210819152825.526931866@goodmis.org/
+> Link: https://lore.kernel.org/linux-kselftest/20210819152825.715290342@goodmis.org/
 > 
 > Cc: Shuah Khan <shuah@kernel.org>
 > Cc: Shuah Khan <skhan@linuxfoundation.org>
 > Cc: linux-kselftest@vger.kernel.org
 > Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-This looks good to me.
+OK, this looks good to me.
 
 Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-Thank you!
+Thank you,
 
 > ---
->  .../test.d/dynevent/add_remove_eprobe.tc      | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
+>  .../ftrace/test.d/dynevent/test_duplicates.tc | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
+> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
 > new file mode 100644
-> index 000000000000..25a3da4eaa44
+> index 000000000000..db522577ff78
 > --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
-> @@ -0,0 +1,40 @@
+> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> @@ -0,0 +1,38 @@
 > +#!/bin/sh
 > +# SPDX-License-Identifier: GPL-2.0
-> +# description: Generic dynamic event - add/remove eprobe events
-> +# requires: dynamic_events events/syscalls/sys_enter_openat "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
+> +# description: Generic dynamic event - check if duplicate events are caught
+> +# requires: dynamic_events "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
 > +
 > +echo 0 > events/enable
 > +
+> +HAVE_KPROBES=0
+> +
+> +if [ -f kprobe_events ]; then
+> +	HAVE_KPROBES=1
+> +fi
+> +
 > +clear_dynamic_events
 > +
-> +SYSTEM="syscalls"
-> +EVENT="sys_enter_openat"
-> +FIELD="filename"
-> +EPROBE="eprobe_open"
+> +# first create dynamic events for eprobes and kprobes.
 > +
-> +echo "e:$EPROBE $SYSTEM/$EVENT file=+0(\$filename):ustring" >> dynamic_events
+> +echo 'e:egroup/eevent syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
 > +
-> +grep -q "$EPROBE" dynamic_events
-> +test -d events/eprobes/$EPROBE
+> +# Test eprobe for same eprobe, existing kprobe and existing event
+> +! echo 'e:egroup/eevent syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
+> +! echo 'e:syscalls/sys_enter_open syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
 > +
-> +echo 1 > events/eprobes/$EPROBE/enable
-> +ls
-> +echo 0 > events/eprobes/$EPROBE/enable
+> +if [ $HAVE_KPROBES -eq 1 ]; then
+> +    echo 'p:kgroup/kevent vfs_open file=+0($arg2)' >> dynamic_events
+> +    ! echo 'e:kgroup/kevent syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
 > +
-> +content=`grep '^ *ls-' trace | grep 'file='`
-> +nocontent=`grep '^ *ls-' trace | grep 'file=' | grep -v -e '"/' -e '"."'` || true
+> +# Test kprobe for same kprobe, existing eprobe and existing event
+> +    ! echo 'p:kgroup/kevent vfs_open file=+0($arg2)' >> dynamic_events
+> +    ! echo 'p:egroup/eevent vfs_open file=+0($arg2)' >> dynamic_events
+> +    ! echo 'p:syscalls/sys_enter_open vfs_open file=+0($arg2)' >> dynamic_events
 > +
-> +if [ -z "$content" ]; then
-> +	exit_fail
+> +    echo '-:kgroup/kevent' >> dynamic_events
 > +fi
 > +
-> +if [ ! -z "$nocontent" ]; then
-> +	exit_fail
-> +fi
-> +
-> +echo "-:$EPROBE" >> dynamic_events
-> +
-> +! grep -q "$EPROBE" dynamic_events
-> +! test -d events/eprobes/$EPROBE
+> +echo '-:egroup/eevent' >> dynamic_events
 > +
 > +clear_trace
 > -- 
