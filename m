@@ -2,95 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6D13F3955
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 09:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B513F3B00
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 16:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232514AbhHUHf6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Aug 2021 03:35:58 -0400
-Received: from mail-lf1-f51.google.com ([209.85.167.51]:37567 "EHLO
-        mail-lf1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbhHUHf6 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Aug 2021 03:35:58 -0400
-Received: by mail-lf1-f51.google.com with SMTP id k5so25553150lfu.4;
-        Sat, 21 Aug 2021 00:35:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vdHlO3IeLiJjFFMfG6tQBlWyGHv5/0nFaPMZOieo2Bg=;
-        b=ZILHN8DBXzoAmV2qHEntuuWX6ysQSqe8P3Ti/LxSOc3pNWQ+FPpgL7Z0RkZh22NNlc
-         nIlqZoXHSZVLi4sHH5bh1Dgf1AKQlYeobj7F1qPaYNEKsWiPA9rkFVPdmkmWYtc2gG2t
-         WufaNgM5HUVj44moiAfmQaK2vR6K/iul0pgFDfIl/UNFvXNXw2D040TpwNZRc2k4MM5+
-         zIPdxoU11+HSSMidD2QOazghI3mM9kH6ii8/otkqck320leF62LAoiCxPRsjAfYe4qpz
-         +PBKJWwTPhsZkTPAwO5O8g6aPcOxQBOf1/eYTnrxPugT8/taj2YlZ73Pmeb3DfO76rcm
-         3gxA==
-X-Gm-Message-State: AOAM530+J7ZZuxMSuu+P3WVbhyTtV7+YzQ6H9wXVu00CC5xI6L4dbiWA
-        j8lafMqOqzrGgt3HMR6h6Vc=
-X-Google-Smtp-Source: ABdhPJyuB/PY35kDip9ACjk8D40JWPwyW94eK4gjhZVKbrL7BCz34zBXdXoaCDPvkZrs3z2IVk7nfA==
-X-Received: by 2002:a19:dc5e:: with SMTP id f30mr17990075lfj.318.1629531318070;
-        Sat, 21 Aug 2021 00:35:18 -0700 (PDT)
-Received: from [192.168.1.109] ([213.87.152.233])
-        by smtp.gmail.com with ESMTPSA id d24sm730743ljj.8.2021.08.21.00.35.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Aug 2021 00:35:17 -0700 (PDT)
-Subject: Re: [RFC PATCH 1/5] checkpatch: improve handling of revert commits
-To:     Joe Perches <joe@perches.com>, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Jiri Kosina <jkosina@suse.cz>,
-        Willy Tarreau <w@1wt.eu>
-References: <20210818154646.925351-1-efremov@linux.com>
- <20210818154646.925351-2-efremov@linux.com>
- <cc5801790fea258e20fa6b7e26de7806ae8e0dda.camel@perches.com>
- <3d347d4b-1576-754f-8633-ba6084cc0661@linux.com>
- <23c8ebaa0921d5597df9fc1d6cbbcc4f354f80c5.camel@perches.com>
- <c31b2007-26a9-34e0-8c9a-8e11a00ce69f@linux.com>
- <ac2587d3d4b7ce87e8922380e36d7864bfb54262.camel@perches.com>
- <7eda27d1-9e9f-dfd6-3a54-6c592a797ea5@linux.com>
- <4bf2c7360206025731928fa1c8ad95faa9e65ab8.camel@perches.com>
-From:   Denis Efremov <efremov@linux.com>
-Message-ID: <17ee07ea-d768-0099-cad7-43b5b5c75560@linux.com>
-Date:   Sat, 21 Aug 2021 10:35:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231829AbhHUOav (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 Aug 2021 10:30:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45772 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231491AbhHUOav (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 21 Aug 2021 10:30:51 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29E8B6124C;
+        Sat, 21 Aug 2021 14:30:12 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.94.2)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1mHS0h-004wnY-62; Sat, 21 Aug 2021 10:30:11 -0400
+Message-ID: <20210821143011.025087961@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Sat, 21 Aug 2021 10:29:06 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Tzvetomir Stoyanov" <tz.stoyanov@gmail.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [for-next][PATCH 2/6] selftests/ftrace: Add clear_dynamic_events() to test cases
+References: <20210821142904.655644298@goodmis.org>
 MIME-Version: 1.0
-In-Reply-To: <4bf2c7360206025731928fa1c8ad95faa9e65ab8.camel@perches.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
+Add a function to remove all dynamic events from the tracing directory. It
+requires a loop as some of the dynamic events may depend on others being
+removed first. Also add a safety that prevents it from looping infinitely
+due to a bug where an event never gets removed.
 
-On 8/21/21 10:12 AM, Joe Perches wrote:
-> On Sat, 2021-08-21 at 09:47 +0300, Denis Efremov wrote:
->>
->> On 8/20/21 1:17 AM, Joe Perches wrote:
->>>
->>> And I'm not sure if this particular ERROR is that useful overall.
->>
->> I find it useful to check commit-id and that it matches a title.
->> It's easy to make a typo in commit-id and get an invalid one.
-> 
-> That's true, but I meant requiring the sha1 hash to contain both
-> the word "commit" and use ("title").
-> 
-> Looking at checkpatch's errors produced by this GIT_COMMIT_ID
-> test makes the required form seem a bit too inflexible to me.
-> 
-> For instance: a sha1 hash may be repeated in a commit message where
-> the first instance has the correct form but the second use is just
-> the hash and the warning is still produced.
-> 
+Link: https://lkml.kernel.org/r/20210819152825.348941368@goodmis.org
 
-I agree with you. There is also another example with list of commits:
- - commit <id-1> ("Title1")
- - commit <id-2> ("Title2")
-...
+Cc: "Tzvetomir Stoyanov" <tz.stoyanov@gmail.com>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+ .../testing/selftests/ftrace/test.d/functions | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-I see no reason in writing "commit" on each line.
-
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index a6fac927ee82..f68d336b961b 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -83,6 +83,27 @@ clear_synthetic_events() { # reset all current synthetic events
+     done
+ }
+ 
++clear_dynamic_events() { # reset all current dynamic events
++    again=1
++    stop=1
++    # loop mulitple times as some events require other to be removed first
++    while [ $again -eq 1 ]; do
++	stop=$((stop+1))
++	# Prevent infinite loops
++	if [ $stop -gt 10 ]; then
++	    break;
++	fi
++	again=2
++	grep -v '^#' dynamic_events|
++	while read line; do
++	    del=`echo $line | sed -e 's/^.\([^ ]*\).*/-\1/'`
++	    if ! echo "$del" >> dynamic_events; then
++		again=1
++	    fi
++	done
++    done
++}
++
+ initialize_ftrace() { # Reset ftrace to initial-state
+ # As the initial state, ftrace will be set to nop tracer,
+ # no events, no triggers, no filters, no function filters,
+@@ -93,6 +114,7 @@ initialize_ftrace() { # Reset ftrace to initial-state
+     reset_events_filter
+     reset_ftrace_filter
+     disable_events
++    clear_dynamic_events
+     [ -f set_event_pid ] && echo > set_event_pid
+     [ -f set_ftrace_pid ] && echo > set_ftrace_pid
+     [ -f set_ftrace_notrace ] && echo > set_ftrace_notrace
+-- 
+2.30.2
