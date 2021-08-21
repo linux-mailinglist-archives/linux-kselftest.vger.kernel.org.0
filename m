@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D523F37ED
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 03:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4163F37EF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Aug 2021 03:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235893AbhHUBjG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Aug 2021 21:39:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34460 "EHLO mail.kernel.org"
+        id S229867AbhHUBla (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Aug 2021 21:41:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35224 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230172AbhHUBjG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Aug 2021 21:39:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4CA0F6115A;
-        Sat, 21 Aug 2021 01:38:25 +0000 (UTC)
+        id S229783AbhHUBl3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Aug 2021 21:41:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C4F5F61163;
+        Sat, 21 Aug 2021 01:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629509907;
-        bh=Ho9JVlJs97ztPR9AJtuL3+94U2yv6sPg84bnD6MpLZo=;
+        s=k20201202; t=1629510051;
+        bh=yKkJ4SLfNYw+uYg298yLZSt7Kzso3olgvrYqbSi4JpQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JYvvqLcWtv/C8HQczf9GpGViuQTrSo6ky4irszjp/rg0J25NnOw+N6bLyW14MwiuF
-         /GN6z6GV5fHb0smSoIlFkGNvvqBc0nmuqTpGpknME06aBkGkuYqrVRoVXUTCZrKdmQ
-         2jH9QMxP75L4B5N+TpvXQGRmxy25xyvgcshzqqr5q4KNt8DaUot2Cn49vi5lk7TOLY
-         v2KesOxAsiIq0MQHYhFR6v8LEU/yST9VGoSQf7KVDh/gTTwheXoPRPHwKKcepGkqLp
-         P9IKtFCu6ThZkO7iuYBHIL9L9VgtxELzDsKybRFSocBbUNnu0FiAWYBMMoGhEMwHIB
-         uRoEfKIv269gA==
-Date:   Sat, 21 Aug 2021 10:38:23 +0900
+        b=tirdiOdTmkhhkR0Rj6yNbP3zMxa/wl6C1Hr8R3Z7pR7FoEnwrYzeEebuJM0/yPYje
+         7QE7DH5NkZDJf0v7XtM/8XrAj3rlJPIC3aK3ZtRdkH7fqRQwR90lG8ZfnGr0/e8Ar/
+         m5BF0a9egBr65g3MsULoK9eekLiTLStfoaIiU8rh3upNj+0vJsCXU2N5b2WKwo2rNT
+         iFfKx55e+z/GHIb2GRaF9CX/nhrQWYwp6KOXzp3k7iJcpQwpSbcl+zV/IU/YyrHDKt
+         WJTx3/wrqB7R6ZFMyFct2mzPnk3RhBvUYWiY8a8xVsiYXp62iXWFQgxO3F1q2y+Kc+
+         Bm0f+o+dRR6EQ==
+Date:   Sat, 21 Aug 2021 10:40:48 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
@@ -35,12 +35,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v9 5/6] selftests/ftrace: Add selftest for testing
- eprobe events on synthetic events
-Message-Id: <20210821103823.3991d3b48ade660c8e33e637@kernel.org>
-In-Reply-To: <20210820204742.463259900@goodmis.org>
+Subject: Re: [PATCH v9 4/6] selftests/ftrace: Add test case to test adding
+ and removing of event probe
+Message-Id: <20210821104048.2eeda1067909e7df0771bef6@kernel.org>
+In-Reply-To: <20210820204742.274591200@goodmis.org>
 References: <20210820204644.546662591@goodmis.org>
-        <20210820204742.463259900@goodmis.org>
+        <20210820204742.274591200@goodmis.org>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -49,15 +49,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 20 Aug 2021 16:46:49 -0400
+On Fri, 20 Aug 2021 16:46:48 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
 > From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 > 
-> Add a test to test event probes, by creating a synthetic event across
-> sys_enter_openat and sys_exit_openat that passes the filename pointer from
-> the enter of the system call to the exit, and then add an event probe to
-> the synthetic event to make sure that the file name is seen.
+> Add a test case that adds an event probe, makes sure that it works, and
+> then removes it.
 > 
 > Link: https://lore.kernel.org/linux-kselftest/20210819152825.526931866@goodmis.org/
 > 
@@ -73,41 +71,33 @@ Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 Thank you!
 
 > ---
->  .../inter-event/trigger-synthetic-eprobe.tc   | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
+>  .../test.d/dynevent/add_remove_eprobe.tc      | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
+> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
 > new file mode 100644
-> index 000000000000..914fe2e5d030
+> index 000000000000..25a3da4eaa44
 > --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
-> @@ -0,0 +1,53 @@
+> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
+> @@ -0,0 +1,40 @@
 > +#!/bin/sh
 > +# SPDX-License-Identifier: GPL-2.0
-> +# description: event trigger - test inter-event histogram trigger eprobe on synthetic event
-> +# requires: dynamic_events synthetic_events events/syscalls/sys_enter_openat/hist "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
+> +# description: Generic dynamic event - add/remove eprobe events
+> +# requires: dynamic_events events/syscalls/sys_enter_openat "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
 > +
 > +echo 0 > events/enable
 > +
 > +clear_dynamic_events
 > +
 > +SYSTEM="syscalls"
-> +START="sys_enter_openat"
-> +END="sys_exit_openat"
+> +EVENT="sys_enter_openat"
 > +FIELD="filename"
-> +SYNTH="synth_open"
 > +EPROBE="eprobe_open"
 > +
-> +echo "$SYNTH u64 filename; s64 ret;" > synthetic_events
-> +echo "hist:keys=common_pid:__arg__1=$FIELD" > events/$SYSTEM/$START/trigger
-> +echo "hist:keys=common_pid:filename=\$__arg__1,ret=ret:onmatch($SYSTEM.$START).trace($SYNTH,\$filename,\$ret)" > events/$SYSTEM/$END/trigger
+> +echo "e:$EPROBE $SYSTEM/$EVENT file=+0(\$filename):ustring" >> dynamic_events
 > +
-> +echo "e:$EPROBE synthetic/$SYNTH file=+0(\$filename):ustring ret=\$ret:s64" >> dynamic_events
-> +
-> +grep -q "$SYNTH" dynamic_events
 > +grep -q "$EPROBE" dynamic_events
-> +test -d events/synthetic/$SYNTH
 > +test -d events/eprobes/$EPROBE
 > +
 > +echo 1 > events/eprobes/$EPROBE/enable
@@ -126,13 +116,8 @@ Thank you!
 > +fi
 > +
 > +echo "-:$EPROBE" >> dynamic_events
-> +echo '!'"hist:keys=common_pid:filename=\$__arg__1,ret=ret:onmatch($SYSTEM.$START).trace($SYNTH,\$filename,\$ret)" > events/$SYSTEM/$END/trigger
-> +echo '!'"hist:keys=common_pid:__arg__1=$FIELD" > events/$SYSTEM/$START/trigger
-> +echo '!'"$SYNTH u64 filename; s64 ret;" >> synthetic_events
 > +
-> +! grep -q "$SYNTH" dynamic_events
 > +! grep -q "$EPROBE" dynamic_events
-> +! test -d events/synthetic/$SYNTH
 > +! test -d events/eprobes/$EPROBE
 > +
 > +clear_trace
