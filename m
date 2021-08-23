@@ -2,269 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F893F4D46
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Aug 2021 17:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F81A3F4DC6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Aug 2021 17:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbhHWPVG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Aug 2021 11:21:06 -0400
-Received: from mail.efficios.com ([167.114.26.124]:40902 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbhHWPVF (ORCPT
+        id S231183AbhHWPzG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Aug 2021 11:55:06 -0400
+Received: from www62.your-server.de ([213.133.104.62]:35630 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230314AbhHWPzG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Aug 2021 11:21:05 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 3DD74334FF2;
-        Mon, 23 Aug 2021 11:20:22 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id LJrPNFGBu5KN; Mon, 23 Aug 2021 11:20:17 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id C3F7D334FF1;
-        Mon, 23 Aug 2021 11:20:17 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C3F7D334FF1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1629732017;
-        bh=S5wesjMNZpOVqMilT2oI+HzIPYcgfplpkn76pAJBUMs=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=LBQNAG/kxGwqMN/Yd/hfOrxjE9t0y6mTOaFLuI1QnbF1Bwvo7LrjI6NIOizCVYXli
-         lu6pQIj77Aqgl/KXZ6F3PfMoWWhnub9YC9zozMs5LtB2BmOxbuKCqnl5C7d3ptaPBN
-         dVRV5F5ddn8WzFJJGinjIgDsc4ynmGgeUgMlotbRLV/D7mk1Fh76BbQIXs+VTG6u7e
-         aSXJiuhHVrV/iGfRd/aBKOv1s5wN2oTSSHOLrUGcv/SqxuaiRHdDhLrcpnRI80I8qb
-         y4OQAUHBlP/s8zu6Qqyre3oGuDakv+xU8On9JdL5oSi3xx3v39S8TQC7PJOvLtRIRM
-         MEy0mb4AWmGCg==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TyoIgPSn19Z2; Mon, 23 Aug 2021 11:20:17 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id A4BF83351E7;
-        Mon, 23 Aug 2021 11:20:17 -0400 (EDT)
-Date:   Mon, 23 Aug 2021 11:20:17 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Darren Hart <dvhart@infradead.org>
-Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-csky <linux-csky@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Ben Gardon <bgardon@google.com>
-Message-ID: <282257549.21721.1629732017655.JavaMail.zimbra@efficios.com>
-In-Reply-To: <766990430.21713.1629731934069.JavaMail.zimbra@efficios.com>
-References: <20210820225002.310652-1-seanjc@google.com> <20210820225002.310652-5-seanjc@google.com> <766990430.21713.1629731934069.JavaMail.zimbra@efficios.com>
-Subject: Re: [PATCH v2 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
- detect task migration bugs
+        Mon, 23 Aug 2021 11:55:06 -0400
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mICH7-0007Np-Gb; Mon, 23 Aug 2021 17:54:13 +0200
+Received: from [85.5.47.65] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mICH6-000KwX-Tj; Mon, 23 Aug 2021 17:54:13 +0200
+Subject: Re: [PATCH linux-next] tools: fix warning comparing pointer to 0
+To:     CGEL <cgel.zte@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Andrei Matei <andreimatei1@gmail.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jing yangyang <jing.yangyang@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20210820033057.13063-1-jing.yangyang@zte.com.cn>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <491f06b5-3680-012a-f1d0-9831aa18e56a@iogearbox.net>
+Date:   Mon, 23 Aug 2021 17:54:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210820033057.13063-1-jing.yangyang@zte.com.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF90 (Linux)/8.8.15_GA_4059)
-Thread-Topic: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs
-Thread-Index: 9INcR4B9tvRD6E6sZQ8uPmTSeu5zxPtDkgBM
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.2/26272/Mon Aug 23 10:21:13 2021)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[ re-send to Darren Hart ]
+On 8/20/21 5:30 AM, CGEL wrote:
+> From: jing yangyang <jing.yangyang@zte.com.cn>
+> 
+> Fix the following coccicheck warning:
+> ./tools/testing/selftests/bpf/progs/profiler.inc.h:364:18-22:WARNING
+> comparing pointer to 0
+> ./tools/testing/selftests/bpf/progs/profiler.inc.h:537:23-27:WARNING
+> comparing pointer to 0
+> ./tools/testing/selftests/bpf/progs/profiler.inc.h:544:21-25:WARNING
+> comparing pointer to 0
+> ./tools/testing/selftests/bpf/progs/profiler.inc.h:770:13-17:WARNING
+> comparing pointer to 0
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: jing yangyang <jing.yangyang@zte.com.cn>
 
------ On Aug 23, 2021, at 11:18 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+Please properly explain in the commit message what this 'fixes' exactly and
+why it is needed.
 
-> ----- On Aug 20, 2021, at 6:50 PM, Sean Christopherson seanjc@google.com wrote:
+> ---
+>   tools/testing/selftests/bpf/progs/profiler.inc.h | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
->> Add a test to verify an rseq's CPU ID is updated correctly if the task is
->> migrated while the kernel is handling KVM_RUN.  This is a regression test
->> for a bug introduced by commit 72c3c0fe54a3 ("x86/kvm: Use generic xfer
->> to guest work function"), where TIF_NOTIFY_RESUME would be cleared by KVM
->> without updating rseq, leading to a stale CPU ID and other badness.
->> 
-> 
-> [...]
-> 
-> +#define RSEQ_SIG 0xdeadbeef
-> 
-> Is there any reason for defining a custom signature rather than including
-> tools/testing/selftests/rseq/rseq.h ? This should take care of including
-> the proper architecture header which will define the appropriate signature.
-> 
-> Arguably you don't define rseq critical sections in this test per se, but
-> I'm wondering why the custom signature here.
-> 
-> [...]
-> 
->> +
->> +static void *migration_worker(void *ign)
->> +{
->> +	cpu_set_t allowed_mask;
->> +	int r, i, nr_cpus, cpu;
->> +
->> +	CPU_ZERO(&allowed_mask);
->> +
->> +	nr_cpus = CPU_COUNT(&possible_mask);
->> +
->> +	for (i = 0; i < 20000; i++) {
->> +		cpu = i % nr_cpus;
->> +		if (!CPU_ISSET(cpu, &possible_mask))
->> +			continue;
->> +
->> +		CPU_SET(cpu, &allowed_mask);
->> +
->> +		/*
->> +		 * Bump the sequence count twice to allow the reader to detect
->> +		 * that a migration may have occurred in between rseq and sched
->> +		 * CPU ID reads.  An odd sequence count indicates a migration
->> +		 * is in-progress, while a completely different count indicates
->> +		 * a migration occurred since the count was last read.
->> +		 */
->> +		atomic_inc(&seq_cnt);
-> 
-> So technically this atomic_inc contains the required barriers because the
-> selftests
-> implementation uses "__sync_add_and_fetch(&addr->val, 1)". But it's rather odd
-> that
-> the semantic differs from the kernel implementation in terms of memory barriers:
-> the
-> kernel implementation of atomic_inc guarantees no memory barriers, but this one
-> happens to provide full barriers pretty much by accident (selftests
-> futex/include/atomic.h documents no such guarantee).
-> 
-> If this full barrier guarantee is indeed provided by the selftests atomic.h
-> header,
-> I would really like a comment stating that in the atomic.h header so the carpet
-> is
-> not pulled from under our feet by a future optimization.
-> 
-> 
->> +		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
->> +		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
->> +			    errno, strerror(errno));
->> +		atomic_inc(&seq_cnt);
->> +
->> +		CPU_CLR(cpu, &allowed_mask);
->> +
->> +		/*
->> +		 * Let the read-side get back into KVM_RUN to improve the odds
->> +		 * of task migration coinciding with KVM's run loop.
-> 
-> This comment should be about increasing the odds of letting the seqlock
-> read-side
-> complete. Otherwise, the delay between the two back-to-back atomic_inc is so
-> small
-> that the seqlock read-side may never have time to complete the reading the rseq
-> cpu id and the sched_getcpu() call, and can retry forever.
-> 
-> I'm wondering if 1 microsecond is sufficient on other architectures as well. One
-> alternative way to make this depend less on the architecture's implementation of
-> sched_getcpu (whether it's a vDSO, or goes through a syscall) would be to read
-> the rseq cpu id and call sched_getcpu a few times (e.g. 3 times) in the
-> migration
-> thread rather than use usleep, and throw away the value read. This would ensure
-> the delay is appropriate on all architectures.
-> 
-> Thanks!
-> 
-> Mathieu
-> 
->> +		 */
->> +		usleep(1);
->> +	}
->> +	done = true;
->> +	return NULL;
->> +}
->> +
->> +int main(int argc, char *argv[])
->> +{
->> +	struct kvm_vm *vm;
->> +	u32 cpu, rseq_cpu;
->> +	int r, snapshot;
->> +
->> +	/* Tell stdout not to buffer its content */
->> +	setbuf(stdout, NULL);
->> +
->> +	r = sched_getaffinity(0, sizeof(possible_mask), &possible_mask);
->> +	TEST_ASSERT(!r, "sched_getaffinity failed, errno = %d (%s)", errno,
->> +		    strerror(errno));
->> +
->> +	if (CPU_COUNT(&possible_mask) < 2) {
->> +		print_skip("Only one CPU, task migration not possible\n");
->> +		exit(KSFT_SKIP);
->> +	}
->> +
->> +	sys_rseq(0);
->> +
->> +	/*
->> +	 * Create and run a dummy VM that immediately exits to userspace via
->> +	 * GUEST_SYNC, while concurrently migrating the process by setting its
->> +	 * CPU affinity.
->> +	 */
->> +	vm = vm_create_default(VCPU_ID, 0, guest_code);
->> +
->> +	pthread_create(&migration_thread, NULL, migration_worker, 0);
->> +
->> +	while (!done) {
->> +		vcpu_run(vm, VCPU_ID);
->> +		TEST_ASSERT(get_ucall(vm, VCPU_ID, NULL) == UCALL_SYNC,
->> +			    "Guest failed?");
->> +
->> +		/*
->> +		 * Verify rseq's CPU matches sched's CPU.  Ensure migration
->> +		 * doesn't occur between sched_getcpu() and reading the rseq
->> +		 * cpu_id by rereading both if the sequence count changes, or
->> +		 * if the count is odd (migration in-progress).
->> +		 */
->> +		do {
->> +			/*
->> +			 * Drop bit 0 to force a mismatch if the count is odd,
->> +			 * i.e. if a migration is in-progress.
->> +			 */
->> +			snapshot = atomic_read(&seq_cnt) & ~1;
->> +			smp_rmb();
->> +			cpu = sched_getcpu();
->> +			rseq_cpu = READ_ONCE(__rseq.cpu_id);
->> +			smp_rmb();
->> +		} while (snapshot != atomic_read(&seq_cnt));
->> +
->> +		TEST_ASSERT(rseq_cpu == cpu,
->> +			    "rseq CPU = %d, sched CPU = %d\n", rseq_cpu, cpu);
->> +	}
->> +
->> +	pthread_join(migration_thread, NULL);
->> +
->> +	kvm_vm_free(vm);
->> +
->> +	sys_rseq(RSEQ_FLAG_UNREGISTER);
->> +
->> +	return 0;
->> +}
->> --
->> 2.33.0.rc2.250.ged5fa647cd-goog
-> 
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+> diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
+> index 4896fdf..5c0bdab 100644
+> --- a/tools/testing/selftests/bpf/progs/profiler.inc.h
+> +++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
+> @@ -361,7 +361,7 @@ static INLINE void* populate_var_metadata(struct var_metadata_t* metadata,
+>   	int zero = 0;
+>   	struct var_kill_data_t* kill_data = bpf_map_lookup_elem(&data_heap, &zero);
+>   
+> -	if (kill_data == NULL)
+> +	if (!kill_dat)
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+And please don't send broken stuff like this.
+
+>   		return NULL;
+>   	struct task_struct* task = (struct task_struct*)bpf_get_current_task();
+>   
+> @@ -534,14 +534,14 @@ static INLINE bool is_dentry_allowed_for_filemod(struct dentry* file_dentry,
+>   	*device_id = dev_id;
+>   	bool* allowed_device = bpf_map_lookup_elem(&allowed_devices, &dev_id);
+>   
+> -	if (allowed_device == NULL)
+> +	if (!allowed_device)
+>   		return false;
+>   
+>   	u64 ino = BPF_CORE_READ(file_dentry, d_inode, i_ino);
+>   	*file_ino = ino;
+>   	bool* allowed_file = bpf_map_lookup_elem(&allowed_file_inodes, &ino);
+>   
+> -	if (allowed_file == NULL)
+> +	if (!allowed_fil)
+
+... same. You did not bother to compile test even.
+
+>   		if (!is_ancestor_in_allowed_inodes(BPF_CORE_READ(file_dentry, d_parent)))
+>   			return false;
+>   	return true;
+> @@ -689,7 +689,7 @@ int raw_tracepoint__sched_process_exec(struct bpf_raw_tracepoint_args* ctx)
+>   	u64 inode = BPF_CORE_READ(bprm, file, f_inode, i_ino);
+>   
+>   	bool* should_filter_binprm = bpf_map_lookup_elem(&disallowed_exec_inodes, &inode);
+> -	if (should_filter_binprm != NULL)
+> +	if (should_filter_binprm)
+>   		goto out;
+>   
+>   	int zero = 0;
+> 
+
