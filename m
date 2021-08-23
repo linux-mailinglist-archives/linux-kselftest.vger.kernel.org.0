@@ -2,123 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F81A3F4DC6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Aug 2021 17:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BDD3F513C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Aug 2021 21:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbhHWPzG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Aug 2021 11:55:06 -0400
-Received: from www62.your-server.de ([213.133.104.62]:35630 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbhHWPzG (ORCPT
+        id S232166AbhHWTYP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Aug 2021 15:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232158AbhHWTYO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Aug 2021 11:55:06 -0400
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mICH7-0007Np-Gb; Mon, 23 Aug 2021 17:54:13 +0200
-Received: from [85.5.47.65] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mICH6-000KwX-Tj; Mon, 23 Aug 2021 17:54:13 +0200
-Subject: Re: [PATCH linux-next] tools: fix warning comparing pointer to 0
-To:     CGEL <cgel.zte@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Andrei Matei <andreimatei1@gmail.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jing yangyang <jing.yangyang@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20210820033057.13063-1-jing.yangyang@zte.com.cn>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <491f06b5-3680-012a-f1d0-9831aa18e56a@iogearbox.net>
-Date:   Mon, 23 Aug 2021 17:54:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 23 Aug 2021 15:24:14 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D31C061757
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Aug 2021 12:23:31 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id k12-20020a056830150c00b0051abe7f680bso34188589otp.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Aug 2021 12:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=R61EvE5T8P1BLdeG5FoKvlIWFZXYQh2fedYwtenFS5w=;
+        b=Vg2yIG520LIhKpPXUI4mZ2ssujQNL8K4zT9coTZV5k2WN1GdU7pzXW90U6O9Us12z8
+         BYrO98kdP4HiatoAZ+FmTSdB75kZDyY3QhSTUGrRGbHbhAWiiouMFxvdGkc8J0XFaYoU
+         zroTYBKBZyw/rBnU7PmFqFyMVYt5+m5v3f8Ks=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=R61EvE5T8P1BLdeG5FoKvlIWFZXYQh2fedYwtenFS5w=;
+        b=J62u3oU/Oed/k2vs6kDFn4b46HRviKdlcDYcQ7K4S4uTHAvA3WHHfrHd2FgxMk4I4q
+         Z+NMBp4qfjzWC+kyMVf28Ey6dbta/koH1kZJZnJuH2V32D1T5Fj+ENOTFaafsTtCNAQ+
+         nWxCV24TkS/w93qZ/YCiJAtgqCDcyNdlgAraCZ+hWpqKseXNUcDeM9U3TvEMu8DZB+hr
+         /9SGmtPr/qoQQgTxhPve5Bj1V7GHqa313DBrWOHcEokMEkXNg5zaU5xMIlfyJIOs46Nh
+         YwugZHYV39L+6sGUcCINes/ovpb1AuY7Nfq5m7qb1nWDVDctuN/yKmL1zTnfOoSpaOFT
+         U0dA==
+X-Gm-Message-State: AOAM530x9hwjrIIHp2ieaFza3CI6+MTGBx+FAhKALO3UemK9bi2kvUg8
+        jBBjv+SkgKva0D74txKtcVU3FQ==
+X-Google-Smtp-Source: ABdhPJwNuSRfsc4F4tzHz4U6R/cVYWBvbE+fBQ8cEX0tAwdrEbJzg6m0MWx0CR8lkaYUwuB7YwjRPA==
+X-Received: by 2002:a05:6808:20e:: with SMTP id l14mr84473oie.87.1629746608138;
+        Mon, 23 Aug 2021 12:23:28 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id i27sm4117419ots.12.2021.08.23.12.23.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Aug 2021 12:23:27 -0700 (PDT)
+Subject: Re: [PATCH] selftests: openat2: Fix testing failure for O_LARGEFILE
+ flag
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>, shuah@kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <cyphar@cyphar.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <1627475340-128057-1-git-send-email-baolin.wang@linux.alibaba.com>
+ <01184d9e-477d-cbe4-c936-62b92e915911@linux.alibaba.com>
+ <9411d418-567b-78f0-0e4d-30f08371c55a@linux.alibaba.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a9dc1616-61b9-c010-950c-521693c74247@linuxfoundation.org>
+Date:   Mon, 23 Aug 2021 13:23:26 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210820033057.13063-1-jing.yangyang@zte.com.cn>
+In-Reply-To: <9411d418-567b-78f0-0e4d-30f08371c55a@linux.alibaba.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.2/26272/Mon Aug 23 10:21:13 2021)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/20/21 5:30 AM, CGEL wrote:
-> From: jing yangyang <jing.yangyang@zte.com.cn>
+Hi Baolin,
+
+On 8/22/21 8:40 PM, Baolin Wang wrote:
+> Hi Shuah,
 > 
-> Fix the following coccicheck warning:
-> ./tools/testing/selftests/bpf/progs/profiler.inc.h:364:18-22:WARNING
-> comparing pointer to 0
-> ./tools/testing/selftests/bpf/progs/profiler.inc.h:537:23-27:WARNING
-> comparing pointer to 0
-> ./tools/testing/selftests/bpf/progs/profiler.inc.h:544:21-25:WARNING
-> comparing pointer to 0
-> ./tools/testing/selftests/bpf/progs/profiler.inc.h:770:13-17:WARNING
-> comparing pointer to 0
+> On 2021/7/28 20:32, Baolin Wang wrote:
+>> Hi,
+>>
+>>> When running the openat2 test suite on ARM64 platform, we got below failure,
+>>> since the definition of the O_LARGEFILE is different on ARM64. So we can
+>>> set the correct O_LARGEFILE definition on ARM64 to fix this issue.
+>>
+>> Sorry, I forgot to copy the failure log:
+>>
+
+Please cc everybody get_maintainers.pl suggests. You are missing
+key reviewers for this change.
+
+Adding Christian Brauner and Aleksa Sarai to the thread.
+
+>> # openat2 unexpectedly returned # 3['/lkp/benchmarks/kernel_selftests/tools/testing/selftests/openat2'] with 208000 (!= 208000)
+
+Not sure I understand this. 208000 (!= 208000) look sthe same to me.
+
+>> not ok 102 openat2 with incompatible flags (O_PATH | O_LARGEFILE) fails with -22 (Invalid argument)
+>>
+>>>
+>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: jing yangyang <jing.yangyang@zte.com.cn>
-
-Please properly explain in the commit message what this 'fixes' exactly and
-why it is needed.
-
-> ---
->   tools/testing/selftests/bpf/progs/profiler.inc.h | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
-> index 4896fdf..5c0bdab 100644
-> --- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-> +++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-> @@ -361,7 +361,7 @@ static INLINE void* populate_var_metadata(struct var_metadata_t* metadata,
->   	int zero = 0;
->   	struct var_kill_data_t* kill_data = bpf_map_lookup_elem(&data_heap, &zero);
->   
-> -	if (kill_data == NULL)
-> +	if (!kill_dat)
-
-And please don't send broken stuff like this.
-
->   		return NULL;
->   	struct task_struct* task = (struct task_struct*)bpf_get_current_task();
->   
-> @@ -534,14 +534,14 @@ static INLINE bool is_dentry_allowed_for_filemod(struct dentry* file_dentry,
->   	*device_id = dev_id;
->   	bool* allowed_device = bpf_map_lookup_elem(&allowed_devices, &dev_id);
->   
-> -	if (allowed_device == NULL)
-> +	if (!allowed_device)
->   		return false;
->   
->   	u64 ino = BPF_CORE_READ(file_dentry, d_inode, i_ino);
->   	*file_ino = ino;
->   	bool* allowed_file = bpf_map_lookup_elem(&allowed_file_inodes, &ino);
->   
-> -	if (allowed_file == NULL)
-> +	if (!allowed_fil)
-
-... same. You did not bother to compile test even.
-
->   		if (!is_ancestor_in_allowed_inodes(BPF_CORE_READ(file_dentry, d_parent)))
->   			return false;
->   	return true;
-> @@ -689,7 +689,7 @@ int raw_tracepoint__sched_process_exec(struct bpf_raw_tracepoint_args* ctx)
->   	u64 inode = BPF_CORE_READ(bprm, file, f_inode, i_ino);
->   
->   	bool* should_filter_binprm = bpf_map_lookup_elem(&disallowed_exec_inodes, &inode);
-> -	if (should_filter_binprm != NULL)
-> +	if (should_filter_binprm)
->   		goto out;
->   
->   	int zero = 0;
+> Could you apply this patch if no objection from your side? Thanks.
 > 
 
+Ideally this define should come from an include file.
+
+Christian, Aleksa,
+
+Can you review this patch and let me know if this approach looks right.
+
+>>> ---
+>>>   tools/testing/selftests/openat2/openat2_test.c | 4 ++++
+>>>   1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
+>>> index d7ec1e7..1bddbe9 100644
+>>> --- a/tools/testing/selftests/openat2/openat2_test.c
+>>> +++ b/tools/testing/selftests/openat2/openat2_test.c
+>>> @@ -22,7 +22,11 @@
+>>>    * XXX: This is wrong on {mips, parisc, powerpc, sparc}.
+>>>    */
+>>>   #undef    O_LARGEFILE
+>>> +#ifdef __aarch64__
+>>> +#define    O_LARGEFILE 0x20000
+>>> +#else
+>>>   #define    O_LARGEFILE 0x8000
+>>> +#endif
+>>>   struct open_how_ext {
+>>>       struct open_how inner;
+>>>
+> 
+
+thanks,
+-- Shuah
