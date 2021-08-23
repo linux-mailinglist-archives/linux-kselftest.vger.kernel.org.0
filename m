@@ -2,110 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 331A83F3D24
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Aug 2021 04:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2A33F4371
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Aug 2021 04:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbhHVCbl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Aug 2021 22:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbhHVCbl (ORCPT
+        id S230315AbhHWCkx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 22 Aug 2021 22:40:53 -0400
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:52362 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229958AbhHWCkx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Aug 2021 22:31:41 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4D8C061575;
-        Sat, 21 Aug 2021 19:31:01 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id n18so13228236pgm.12;
-        Sat, 21 Aug 2021 19:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XSTqDa97zOWgSBwGLOjBEzY0W1HCbmfHTpND18fwsyA=;
-        b=PhbRgYaQFfP7M8LtuZ0DJCgRqBc2hijhPP12YvRUKwgoWfGJfWjb4yDuFfii56KLZx
-         UApdP4wFmmp+bk/JkRzpa0RZ0bNMO6dk2YGX3PubQBqiSvbPWBns8puXAyEgDCmG00B7
-         tr1Ug/czFutolnj2Qe36ZPYYZhOAnccfghpigop6gfOoSkm04XMamwXZxuQ23biWfg5r
-         QTc60M6NIaNGgnBLGkI/blXBoEWtl6MR0PEvsYzfewnZge+ORNa8GokVvugIQtnbX9vk
-         Cb5bInAXy/ZIHsL06t2tqvp3KODH+/9slG/it09ZgKWWEofwipch7QXYfXPvXvEqC1LS
-         OC1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XSTqDa97zOWgSBwGLOjBEzY0W1HCbmfHTpND18fwsyA=;
-        b=DmYEp0x/TEUY7LIrjMzWGZHl8a19frlrdAtXv8+nlzjJm4dxexJhs+MZktL1dr/IkC
-         H72o2U2Afo/wpUKiIPBeHcwxkmcusm5PJYdp5piEZDGAqgpZTp+PQ8A+MXmPmEuFR9+C
-         sn/icLB46CZ7D85nnAqT58K609vdvowJlKlIVEHIRhNOouchHCO7733GTwec7H26yizo
-         8m7P05w8uupR6cyP9i4P/nV/gVRl/OqAjgovdx1kHwR/ypc9JFhFOtuhUtymScrL3SGb
-         atXput/w28MJRr3cFhVvq5TRiyx/B+GCc/TV3/Jb1OiJYUyzDhVYV//HaadH8nx6Cmuw
-         zgIw==
-X-Gm-Message-State: AOAM533WLlAqfnXeJ0JmBEq9+f9bgjbkdGE3jCnlsnMspVdlEHfo4tH7
-        iwOBr3Pek7YaLRDluE7NsBY=
-X-Google-Smtp-Source: ABdhPJwWkVfbhs8JZCkYB40Ea1nyaA/y97j+qEa6V5jVVdosZTc+l16NXyb9birWU12gqKpy95GIYQ==
-X-Received: by 2002:a63:2541:: with SMTP id l62mr26438157pgl.183.1629599460655;
-        Sat, 21 Aug 2021 19:31:00 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:645:c000:2163:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id mq18sm9743976pjb.45.2021.08.21.19.30.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Aug 2021 19:31:00 -0700 (PDT)
-Date:   Sat, 21 Aug 2021 19:30:57 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "nikolay@nvidia.com" <nikolay@nvidia.com>,
-        "cong.wang@bytedance.com" <cong.wang@bytedance.com>,
-        "colin.king@canonical.com" <colin.king@canonical.com>,
-        "gustavoars@kernel.org" <gustavoars@kernel.org>,
-        "Bross, Kevin" <kevin.bross@intel.com>,
-        "Stanton, Kevin B" <kevin.b.stanton@intel.com>,
-        Ahmad Byagowi <abyagowi@fb.com>
-Subject: Re: [RFC net-next 1/7] ptp: Add interface for acquiring DPLL state
-Message-ID: <20210822023057.GA6481@hoboy.vegasvil.org>
-References: <20210816160717.31285-1-arkadiusz.kubalewski@intel.com>
- <20210816160717.31285-2-arkadiusz.kubalewski@intel.com>
- <20210816235400.GA24680@hoboy.vegasvil.org>
- <PH0PR11MB4951762ECB04D90D634E905DEAFE9@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210818170259.GD9992@hoboy.vegasvil.org>
- <PH0PR11MB495162EC9116F197D79589F5EAFF9@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210819153414.GC26242@hoboy.vegasvil.org>
- <PH0PR11MB4951F51CBA231DFD65806CDAEAC09@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210820155538.GB9604@hoboy.vegasvil.org>
- <PH0PR11MB49518ED9AAF8B543FD8324B9EAC19@PH0PR11MB4951.namprd11.prod.outlook.com>
+        Sun, 22 Aug 2021 22:40:53 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0Ul81QuM_1629686409;
+Received: from 30.21.164.129(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Ul81QuM_1629686409)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 23 Aug 2021 10:40:10 +0800
+Subject: Re: [PATCH] selftests: openat2: Fix testing failure for O_LARGEFILE
+ flag
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1627475340-128057-1-git-send-email-baolin.wang@linux.alibaba.com>
+ <01184d9e-477d-cbe4-c936-62b92e915911@linux.alibaba.com>
+Message-ID: <9411d418-567b-78f0-0e4d-30f08371c55a@linux.alibaba.com>
+Date:   Mon, 23 Aug 2021 10:40:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB49518ED9AAF8B543FD8324B9EAC19@PH0PR11MB4951.namprd11.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <01184d9e-477d-cbe4-c936-62b92e915911@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 20, 2021 at 06:30:02PM +0000, Machnikowski, Maciej wrote:
+Hi Shuah,
 
-> Since the 40.5.2 is not applicable to higher-speed ethernet which
-> don't use auto-negotiation, but rather the link training sequence
-> where the RX side always syncs its clock to the TX side.
+On 2021/7/28 20:32, Baolin Wang wrote:
+> Hi,
+> 
+>> When running the openat2 test suite on ARM64 platform, we got below 
+>> failure,
+>> since the definition of the O_LARGEFILE is different on ARM64. So we can
+>> set the correct O_LARGEFILE definition on ARM64 to fix this issue.
+> 
+> Sorry, I forgot to copy the failure log:
+> 
+> # openat2 unexpectedly returned # 
+> 3['/lkp/benchmarks/kernel_selftests/tools/testing/selftests/openat2'] 
+> with 208000 (!= 208000)
+> not ok 102 openat2 with incompatible flags (O_PATH | O_LARGEFILE) fails 
+> with -22 (Invalid argument)
+> 
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-By "the RX side always syncs its clock to the TX side" do you mean the
-RX channel synchronizes to the link partner's TX channel?
+Could you apply this patch if no objection from your side? Thanks.
 
-Wow, that brings back the 100 megabit scheme I guess.  That's cool,
-because the same basic idea applies to the PHYTER then.
-
-Still we are doing to need a way for user space to query the HW
-topology to discover whether a given ports may be syntonized from a
-second port.  I don't think your pin selection thing works unless user
-space can tell what the pins are connected to.
-
-Thanks,
-Richard
+>> ---
+>>   tools/testing/selftests/openat2/openat2_test.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/openat2/openat2_test.c 
+>> b/tools/testing/selftests/openat2/openat2_test.c
+>> index d7ec1e7..1bddbe9 100644
+>> --- a/tools/testing/selftests/openat2/openat2_test.c
+>> +++ b/tools/testing/selftests/openat2/openat2_test.c
+>> @@ -22,7 +22,11 @@
+>>    * XXX: This is wrong on {mips, parisc, powerpc, sparc}.
+>>    */
+>>   #undef    O_LARGEFILE
+>> +#ifdef __aarch64__
+>> +#define    O_LARGEFILE 0x20000
+>> +#else
+>>   #define    O_LARGEFILE 0x8000
+>> +#endif
+>>   struct open_how_ext {
+>>       struct open_how inner;
+>>
