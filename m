@@ -2,96 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2263F62BD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Aug 2021 18:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0EA3F62E0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Aug 2021 18:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbhHXQgG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Aug 2021 12:36:06 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:48443 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229596AbhHXQgG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Aug 2021 12:36:06 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4GvF8S4byJz9sVj;
-        Tue, 24 Aug 2021 18:35:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id D1LQstLI5zhQ; Tue, 24 Aug 2021 18:35:20 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4GvF8S3cQSz9sV8;
-        Tue, 24 Aug 2021 18:35:20 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 58B8A8B828;
-        Tue, 24 Aug 2021 18:35:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id R1botbm034Qo; Tue, 24 Aug 2021 18:35:20 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7482C8B80A;
-        Tue, 24 Aug 2021 18:35:19 +0200 (CEST)
+        id S232206AbhHXQnK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Aug 2021 12:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230016AbhHXQnJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 24 Aug 2021 12:43:09 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4700AC061757
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Aug 2021 09:42:21 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id j18so27093976ioj.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Aug 2021 09:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nIgXchQzkQhDuuxzVmoHtjc1x93MwuM62GG3/htVnnc=;
+        b=KBiJ2SXhXbplYkTDTlgBKn+GW+K2v1LLz+EFVixmgw6vRoIIIsEbnEpVq3wEFG7LJ4
+         fvKH5uG5E2XcfDDTBIguvTuzzA4ljDGsD+YD35BNEkHHS5OAldRXYV1GS5NGRpajpnzW
+         klTsgpCugR+REOLminT46oURTG4xCKeUzMtxQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nIgXchQzkQhDuuxzVmoHtjc1x93MwuM62GG3/htVnnc=;
+        b=tIFV6wVuNsrbNRlUFhPvolPGlpAQE+ZFSe56YwBxnkWb9g53VSOjz52CrTQjNkABuV
+         66cI9tXFRne3EuGiTPWY+dlOn3Qw4E1H19inX5RYj5ZrOmBIuWxXdk/T2LFpUscej+ey
+         YSr3dU0FVdaLhO1++gVCTa5PELAw9nyONIoV+rfezJaUrgiy2Y0M14HElkWEkzhBhbX1
+         yGLDr9845qnIc8BETqUUO1jpwCMl2bQ0JT8DAfP54zrmiC7bVF/CT3wQ7fghgmRNAkLg
+         N0KnQACHR47qUdsqL9SavnB106xMJWuL1leci5r2gYSl8WNiG+k/uRA7XAZ1L5FO5s3o
+         uVCA==
+X-Gm-Message-State: AOAM530FK0GFOTq7xI7XZI315j421A4eRLhqgaLMANuK3Bu1gov1jCGg
+        wKf+WM9YIIoiPkQNaupSToqnFw==
+X-Google-Smtp-Source: ABdhPJzMw5fmv+XMCK8ylBh9MKFCODi5eD0DzaIc7+CibHXe9LdxjQ8fqrYMknxdF7urKjq5vCuB2g==
+X-Received: by 2002:a5d:9bcf:: with SMTP id d15mr31669482ion.88.1629823340657;
+        Tue, 24 Aug 2021 09:42:20 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id m13sm9743492ilh.43.2021.08.24.09.42.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Aug 2021 09:42:20 -0700 (PDT)
 Subject: Re: [PATCH linux-next] selftests/powerpc: remove duplicate include
-To:     Shuah Khan <skhan@linuxfoundation.org>, CGEL <cgel.zte@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        CGEL <cgel.zte@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>
 Cc:     Zeal Robot <zealci@zte.com.cn>, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
         linux-kselftest@vger.kernel.org,
         Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Shuah Khan <shuah@kernel.org>
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 References: <20210824030550.57467-1-deng.changcheng@zte.com.cn>
  <9096738b-7e57-418d-6253-16a107789dac@linuxfoundation.org>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <e59721c8-fe59-cafe-01a3-8c7d74f2583d@csgroup.eu>
-Date:   Tue, 24 Aug 2021 18:35:09 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+ <e59721c8-fe59-cafe-01a3-8c7d74f2583d@csgroup.eu>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <7f9f3bf4-646c-b8ab-8d46-7e87cf8e9af3@linuxfoundation.org>
+Date:   Tue, 24 Aug 2021 10:42:19 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <9096738b-7e57-418d-6253-16a107789dac@linuxfoundation.org>
+In-Reply-To: <e59721c8-fe59-cafe-01a3-8c7d74f2583d@csgroup.eu>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-Le 24/08/2021 à 16:41, Shuah Khan a écrit :
-> On 8/23/21 9:05 PM, CGEL wrote:
->> From: Changcheng Deng <deng.changcheng@zte.com.cn>
->>
->> Clean up the following includecheck warning:
->>
->> ./tools/testing/selftests/powerpc/tm/tm-poison.c: inttypes.h is included
->> more than once.
->>
->> No functional change.
->>
->> Reported-by: Zeal Robot <zealci@zte.com.cn>
->> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
->> ---
->>   tools/testing/selftests/powerpc/tm/tm-poison.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/powerpc/tm/tm-poison.c 
->> b/tools/testing/selftests/powerpc/tm/tm-poison.c
->> index 29e5f26..27c083a 100644
->> --- a/tools/testing/selftests/powerpc/tm/tm-poison.c
->> +++ b/tools/testing/selftests/powerpc/tm/tm-poison.c
->> @@ -20,7 +20,6 @@
->>   #include <sched.h>
->>   #include <sys/types.h>
->>   #include <signal.h>
->> -#include <inttypes.h>
->>   #include "tm.h"
->>
+On 8/24/21 10:35 AM, Christophe Leroy wrote:
 > 
-> We can't accept this patch. The from and Signed-off-by don't match.
+> 
+> Le 24/08/2021 à 16:41, Shuah Khan a écrit :
+>> On 8/23/21 9:05 PM, CGEL wrote:
+>>> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+>>>
+>>> Clean up the following includecheck warning:
+>>>
+>>> ./tools/testing/selftests/powerpc/tm/tm-poison.c: inttypes.h is included
+>>> more than once.
+>>>
+>>> No functional change.
+>>>
+>>> Reported-by: Zeal Robot <zealci@zte.com.cn>
+>>> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+>>> ---
+>>>   tools/testing/selftests/powerpc/tm/tm-poison.c | 1 -
+>>>   1 file changed, 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/powerpc/tm/tm-poison.c b/tools/testing/selftests/powerpc/tm/tm-poison.c
+>>> index 29e5f26..27c083a 100644
+>>> --- a/tools/testing/selftests/powerpc/tm/tm-poison.c
+>>> +++ b/tools/testing/selftests/powerpc/tm/tm-poison.c
+>>> @@ -20,7 +20,6 @@
+>>>   #include <sched.h>
+>>>   #include <sys/types.h>
+>>>   #include <signal.h>
+>>> -#include <inttypes.h>
+>>>   #include "tm.h"
+>>>
+>>
+>> We can't accept this patch. The from and Signed-off-by don't match.
+> 
+> As far as I can see they match:
+> 
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> 
 
-As far as I can see they match:
+Yeah. My bad.
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+thanks,
+-- Shuah
 
-Christophe
