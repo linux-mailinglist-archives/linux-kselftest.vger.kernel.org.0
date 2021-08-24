@@ -2,128 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AE63F6906
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Aug 2021 20:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E7E3F697B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Aug 2021 21:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbhHXSZb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Aug 2021 14:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
+        id S234012AbhHXTFT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Aug 2021 15:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbhHXSZa (ORCPT
+        with ESMTP id S231745AbhHXTFS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Aug 2021 14:25:30 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A0C061764;
-        Tue, 24 Aug 2021 11:24:45 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id q70so26627834ybg.11;
-        Tue, 24 Aug 2021 11:24:45 -0700 (PDT)
+        Tue, 24 Aug 2021 15:05:18 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E11C061757;
+        Tue, 24 Aug 2021 12:04:34 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id q3so998131plx.4;
+        Tue, 24 Aug 2021 12:04:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P4XKEDVshvZ6mRCpA96uYzQxuCPzHu8v7URpToKGGfI=;
-        b=RI6YnTmUvPwOZrHhC6zq2WoBXCIXbNELNmUJLU3UnOpLIYXgNs1b8Ri4XPjOyZ2oPS
-         GUqPBBXJdmEqM8HjrV8QsD5c1HQ1lv88q+UACqEb6xdZlE7QfCofBm3wiSogl478PHM8
-         CZ0D9HFVAtRIEKe9XwiLhRnZK1Rw5RryaDS0utmfZlJ6uwUcRGkXSHyPfvmHwavGOjLZ
-         TCdHrrG9vmx298Wa04ngje3V09EJJwP/hZokaJHJIwBokmwN3RWzWJ4VnO66dx5IL5hO
-         BKxJTo/OXvY/t5NT/D87zLlJ9hLxaCJluDWPNHIGYHy4VKHqGygVDzr5AK2brTAYZAE5
-         Qf5Q==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/UA6BwC0CYO3Y/QhMBFUGVm/MkfIStQXJiA2tvHOy2E=;
+        b=InWzEdcms5aFyJNybcPjVBSg4/YyHC4fs7zj6R3+Yv8npQ+KHDzLn7itVIJu+p0sHT
+         Q6/AUyTgYzD4VmqdR9mT1dT/7tCLVlhkqQ/1fiIhbCTjlCBCkR0yPpVP4Ca8n7w2ruLK
+         XWlTNoMagLkN9eGT4Cw2YtHTD8+Z3VwnEmanlqU5CZ0xTq6kvLeWtXHeIAqIeABYjt0f
+         d3erx68+4v5ESugAEzgpSqPJvh3Y/ygsLs1WR4yWXbCmSqKrnG7ph4qWLPKhvlxAPqQn
+         sKyLbd5GGKgF0NFzQJ/4M8M/eNrdTnpp2PZvqEyxbd5bFuVuIpnAOVFlYGR1lUTG1JJ5
+         CFDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P4XKEDVshvZ6mRCpA96uYzQxuCPzHu8v7URpToKGGfI=;
-        b=aEQBun9lDGWLKa0bPZjYP9xxdEeTmkMBScHKba4o4F++ij5v4dOnn8P0wG0x6YlBxn
-         pkcg5/0mKmF94IOnd8sYtxmUSLCp69UZcbnVRo28sn+i2OoBZzeCBYT1y364059vHmJE
-         gL3T5ba0VJH0jBRwkituezPmPRWPGeFT9lyrJS7VsnyjHzrpC3G97Bs6IUar+Vsjz7uC
-         C8uXxUhCoKWdVeBaMSoJOI3xjFneKOfDb5R/Ihoo18NAw/ldFMVqXSW3W0FFps6LdauE
-         BOnsj9Yx5SntzDQ3RFFKa+kCdFntVZcbmXLBscXBSEDAMtzAVtsAi0hrmilEdJYxxoYO
-         W6xQ==
-X-Gm-Message-State: AOAM530950XacFwh+ONbemZa+OYmcXuDPSnlwjuch95jdalSXMT4WjOo
-        yB4FwN6QX1GxrJaVp5EPwoePiWZkBAD5iiF3SWw=
-X-Google-Smtp-Source: ABdhPJyg9+JntaD9Y+zvdFtgLUZCtvUcBlxuswgnnLasJRbdJkRTFDNEyqdZPXY+3NTmO7zhkYI5tg2zIsCeT6utHP0=
-X-Received: by 2002:a25:bb13:: with SMTP id z19mr54535514ybg.347.1629829485212;
- Tue, 24 Aug 2021 11:24:45 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=/UA6BwC0CYO3Y/QhMBFUGVm/MkfIStQXJiA2tvHOy2E=;
+        b=lS4W5pM2Wl0BBsmO52qQMvrliPU6rbS8gxrMsakpZONEcSGQcPqgserR6rOkgXmprY
+         +/dmMVWjswUy83IcdTSVaG7JKe4H9l6QPJGOlftdakPHVAmPdMqw0kl8TB0tKjXP5oEf
+         uDDj+W+IpnKauHAdbEpIY94nqIrgJXlo6MxGciKlLhCYZUhsRQ9phQZCW7JzqG/5TGDW
+         jGeZS9bANaqUJwAVqwcL2gRIVnrPNlkOa0daunmXMROy0LKJTmajuesUoe05PTSvCdtT
+         nBmocAlmLqo0nP+i1l06W2WBxR4GdgMzGtLj2RHuwPh3/vkd2gQPc2CaYQqWgnk2XZdY
+         lUwQ==
+X-Gm-Message-State: AOAM530vvaKQzfH/jFhSQZY2Yv8Btzl/TS5JfV2etjXK/wKGV3b3pM2V
+        S9o4nawErxQR9SSaG8TAoAo=
+X-Google-Smtp-Source: ABdhPJyhbBipA6XjYTSx4y0PY5Ht0XzmDWNUtPlnqLHfabUjvvNeTCPw9WKJzvTRd4sM/RPuAgOVYw==
+X-Received: by 2002:a17:90a:3fcb:: with SMTP id u11mr6071898pjm.178.1629831873686;
+        Tue, 24 Aug 2021 12:04:33 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id y12sm19425378pfa.25.2021.08.24.12.04.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Aug 2021 12:04:32 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 24 Aug 2021 09:04:31 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <llong@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v6 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <YSVCv0WjTzwPUWUN@slm.duckdns.org>
+References: <20210814205743.3039-1-longman@redhat.com>
+ <20210814205743.3039-6-longman@redhat.com>
+ <YRqbj5+ZdS+7k0Fn@slm.duckdns.org>
+ <95b72d36-32a9-8356-05b7-2829e4cc29ad@redhat.com>
 MIME-Version: 1.0
-References: <20210821025837.1614098-1-davemarchevsky@fb.com>
- <20210821025837.1614098-3-davemarchevsky@fb.com> <CAEf4BzYEOzfmwi8n8K_W_6Pc+gC081ncmRCAq8Fz0vr=y7eMcg@mail.gmail.com>
- <CAADnVQLUWHO0EhLhMVATc9-z11H7ROF6DCmJ=sW+-iP1baeWWg@mail.gmail.com>
- <CAEf4Bza30Rkg02AzmG7Mw5AyE1wykPBuH6f_fXAQXLu2qH2POA@mail.gmail.com> <CAADnVQ+Kxei6_q4PWQ57zVr86gKqu=4s07Y1Kwy9SNz__PWYdQ@mail.gmail.com>
-In-Reply-To: <CAADnVQ+Kxei6_q4PWQ57zVr86gKqu=4s07Y1Kwy9SNz__PWYdQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 24 Aug 2021 11:24:34 -0700
-Message-ID: <CAEf4BzbU6xt49+VYSDGoXonOMdB3SPDdh_sr2pTeUC66sT3kPw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/5] bpf: add bpf_trace_vprintk helper
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Florent Revest <revest@chromium.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <95b72d36-32a9-8356-05b7-2829e4cc29ad@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 24, 2021 at 11:17 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Aug 24, 2021 at 11:02 AM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Tue, Aug 24, 2021 at 10:57 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Mon, Aug 23, 2021 at 9:50 PM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Fri, Aug 20, 2021 at 7:59 PM Dave Marchevsky <davemarchevsky@fb.com> wrote:
-> > > > >
-> > > > > This helper is meant to be "bpf_trace_printk, but with proper vararg
-> > > >
-> > > > We have bpf_snprintf() and bpf_seq_printf() names for other BPF
-> > > > helpers using the same approach. How about we call this one simply
-> > > > `bpf_printf`? It will be in line with other naming, it is logical BPF
-> > > > equivalent of user-space printf (which outputs to stderr, which in BPF
-> > > > land is /sys/kernel/debug/tracing/trace_pipe). And it will be logical
-> > > > to have a nice and short BPF_PRINTF() convenience macro provided by
-> > > > libbpf.
-> > > >
-> > > > > support". Follow bpf_snprintf's example and take a u64 pseudo-vararg
-> > > > > array. Write to dmesg using the same mechanism as bpf_trace_printk.
-> > > >
-> > > > Are you sure about the dmesg part?... bpf_trace_printk is outputting
-> > > > into /sys/kernel/debug/tracing/trace_pipe.
-> > >
-> > > Actually I like bpf_trace_vprintk() name, since it makes it obvious that
-> >
-> > It's the inconsistency with bpf_snprintf() and bpf_seq_printf() that's
-> > mildly annoying (it's f at the end, and no v- prefix). Maybe
-> > bpf_trace_printf() then? Or is it too close to bpf_trace_printk()?
->
-> bpf_trace_printf could be ok, but see below.
->
-> > But
-> > either way you would be using BPF_PRINTF() macro for this. And we can
-> > make that macro use bpf_trace_printk() transparently for <3 args, so
-> > that new macro works on old kernels.
->
-> Cannot we change the existing bpf_printk() macro to work on old and new kernels?
+Hello,
 
-Only if we break backwards compatibility. And I only know how to
-detect the presence of new helper with CO-RE, which automatically
-makes any BPF program using this macro CO-RE-dependent, which might
-not be what users want (vmlinux BTF is still not universally
-available). If I could do something like that without breaking change
-and without CO-RE, I'd update bpf_printk() to use `const char *fmt`
-for format string a long time ago. But adding CO-RE dependency for
-bpf_printk() seems like a no-go.
+On Tue, Aug 24, 2021 at 01:35:33AM -0400, Waiman Long wrote:
+> Sorry for the late reply as I was on vacation last week.
 
-> So bpf_printk() would use bpf_trace_printf() on new and
-> bpf_trace_printk() on old?
-> I think bpf_trace_vprintk() looks cleaner in this context if we reuse
-> bpf_printk() macro.
+No worries. Hope you enjoyed the vacation. :)
+
+> > All the above ultimately says is that "a new task cannot be moved to a
+> > partition root with no effective cpu", but I don't understand why this would
+> > be a separate rule. Shouldn't the partition just stop being a partition when
+> > it doesn't have any exclusive cpu? What's the benefit of having multiple its
+> > own failure mode?
+>
+> A partition with 0 cpu can be considered as a special partition type for
+> spawning child partitions. This can be temporary as the cpus will be given
+> back when a child partition is destroyed.
+
+But it can also happen by cpus going offline while the partition is
+populated, right? Am I correct in thinking that a partition without cpu is
+valid if its subtree contains cpus and invalid otherwise? If that's the
+case, it looks like the rules can be made significantly simpler. The parent
+cgroups never have processes anyway, so a partition is valid if its subtree
+contains cpus, invalid otherwise.
+
+> > So, I think this definitely is a step in the right direction but still seems
+> > to be neither here or there. Before, we pretended that we could police the
+> > input when we couldn't. Now, we're changing the interface so that it
+> > includes configuration failures as an integral part; however, we're still
+> > policing some particular inputs while letting other inputs pass through and
+> > trigger failures and why one is handled one way while the other differently
+> > seems rather arbitrary.
+> > 
+> The cpu_exclusive and load_balance flags are attributes associated directly
+> with the partition type. They are not affected by cpu availability or
+> changing of cpu list. That is why they are kept even when the partition
+> become invalid. If we have to remove them, it will be equivalent to changing
+> partition back to member and we may not need an invalid partition type at
+> all. Also, we will not be able to revert back to partition again when the
+> cpus becomes available.
+
+Oh, yeah, I'm not saying to lose those states. What I'm trying to say is
+that the rules and failure modes seem a lot more complicated than they need
+to be. If the configuration becomes invalid for whatever reason, transition
+the partition into invalid state and report why. If the situation resolves
+for whatever reason, transition it back to valid state. Shouldn't that work?
+
+Thanks.
+
+-- 
+tejun
