@@ -2,117 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0EA3F62E0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Aug 2021 18:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1043F6347
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Aug 2021 18:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbhHXQnK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Aug 2021 12:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
+        id S232294AbhHXQvM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Aug 2021 12:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbhHXQnJ (ORCPT
+        with ESMTP id S232894AbhHXQvJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Aug 2021 12:43:09 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4700AC061757
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Aug 2021 09:42:21 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id j18so27093976ioj.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Aug 2021 09:42:21 -0700 (PDT)
+        Tue, 24 Aug 2021 12:51:09 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715DCC0613C1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Aug 2021 09:50:25 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id z2so21203772iln.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Aug 2021 09:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nIgXchQzkQhDuuxzVmoHtjc1x93MwuM62GG3/htVnnc=;
-        b=KBiJ2SXhXbplYkTDTlgBKn+GW+K2v1LLz+EFVixmgw6vRoIIIsEbnEpVq3wEFG7LJ4
-         fvKH5uG5E2XcfDDTBIguvTuzzA4ljDGsD+YD35BNEkHHS5OAldRXYV1GS5NGRpajpnzW
-         klTsgpCugR+REOLminT46oURTG4xCKeUzMtxQ=
+        bh=4wnJLmDQpwuCqmlXZqmbQNE5CdhWiVCeYL5fmov+jPQ=;
+        b=Cq0fO4jvWCmNgiGilupCwBZ2tfiVRhKAEoiGtovZjenwmX9//DacVdrdYr70cOKjdt
+         k+IEENvoo4egWQXg9ihuqGfNLtksAN/nL2E2ohO4U4tXsoppZINewj7UL2jGDIQiWf3G
+         aRg439BxgGKzu2DKKGWnjSVYfB8d9d23KLXQ8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=nIgXchQzkQhDuuxzVmoHtjc1x93MwuM62GG3/htVnnc=;
-        b=tIFV6wVuNsrbNRlUFhPvolPGlpAQE+ZFSe56YwBxnkWb9g53VSOjz52CrTQjNkABuV
-         66cI9tXFRne3EuGiTPWY+dlOn3Qw4E1H19inX5RYj5ZrOmBIuWxXdk/T2LFpUscej+ey
-         YSr3dU0FVdaLhO1++gVCTa5PELAw9nyONIoV+rfezJaUrgiy2Y0M14HElkWEkzhBhbX1
-         yGLDr9845qnIc8BETqUUO1jpwCMl2bQ0JT8DAfP54zrmiC7bVF/CT3wQ7fghgmRNAkLg
-         N0KnQACHR47qUdsqL9SavnB106xMJWuL1leci5r2gYSl8WNiG+k/uRA7XAZ1L5FO5s3o
-         uVCA==
-X-Gm-Message-State: AOAM530FK0GFOTq7xI7XZI315j421A4eRLhqgaLMANuK3Bu1gov1jCGg
-        wKf+WM9YIIoiPkQNaupSToqnFw==
-X-Google-Smtp-Source: ABdhPJzMw5fmv+XMCK8ylBh9MKFCODi5eD0DzaIc7+CibHXe9LdxjQ8fqrYMknxdF7urKjq5vCuB2g==
-X-Received: by 2002:a5d:9bcf:: with SMTP id d15mr31669482ion.88.1629823340657;
-        Tue, 24 Aug 2021 09:42:20 -0700 (PDT)
+        bh=4wnJLmDQpwuCqmlXZqmbQNE5CdhWiVCeYL5fmov+jPQ=;
+        b=WJMY59cEZo4XThRFEdnuG5mSu2pDxH9XWQfqscJs6iTnm4Td18V0OLSIqWWWOADA+M
+         H5UK7kmf3XQGe7fK0uPd5K5CDCj0HHK9l6KPC111MSdzaHwGmrU9pyWSotcQp5vbu4MW
+         5GrKfhgA+AhpeIz31OLSYx2PRewuFO8sKqeSfO45Rl+Gfx/hXSMa6QapqNdkf4x6of2z
+         e58F0F0BvYhyIebyaUTWUjaOS87bC/CVSG2gs4jbT/nw3S9Wav9+A0Qf6XlI/oYofEpH
+         dAIc+0K7sZVf6k2PV4sT2p81ZvKCCznRbXS+Bb142fiW6fv6uW+ibqf+T/+7gBWiLhbl
+         2+yg==
+X-Gm-Message-State: AOAM533P8uOTmkRmHhXqsSCyaLhOJyqPd8XbPSp6Lj3tEEXyHnloNNfj
+        2kSn26laHgTW7axAiNhuudBOIS+X3/vLQA==
+X-Google-Smtp-Source: ABdhPJydHPCaEnl3IkA8mTycs0cxZYQP9Ymnmlz/K/UoonbCL0bLKLGni/gwJHR1eYvfFVZ2P0G6Og==
+X-Received: by 2002:a05:6e02:547:: with SMTP id i7mr27240637ils.102.1629823824918;
+        Tue, 24 Aug 2021 09:50:24 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id m13sm9743492ilh.43.2021.08.24.09.42.19
+        by smtp.gmail.com with ESMTPSA id c23sm10333329ioi.31.2021.08.24.09.50.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Aug 2021 09:42:20 -0700 (PDT)
-Subject: Re: [PATCH linux-next] selftests/powerpc: remove duplicate include
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        CGEL <cgel.zte@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Zeal Robot <zealci@zte.com.cn>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        linux-kselftest@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Shuah Khan <shuah@kernel.org>,
+        Tue, 24 Aug 2021 09:50:24 -0700 (PDT)
+Subject: Re: [PATCH] selftests: openat2: Fix testing failure for O_LARGEFILE
+ flag
+To:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>, shuah@kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20210824030550.57467-1-deng.changcheng@zte.com.cn>
- <9096738b-7e57-418d-6253-16a107789dac@linuxfoundation.org>
- <e59721c8-fe59-cafe-01a3-8c7d74f2583d@csgroup.eu>
+References: <1627475340-128057-1-git-send-email-baolin.wang@linux.alibaba.com>
+ <01184d9e-477d-cbe4-c936-62b92e915911@linux.alibaba.com>
+ <9411d418-567b-78f0-0e4d-30f08371c55a@linux.alibaba.com>
+ <a9dc1616-61b9-c010-950c-521693c74247@linuxfoundation.org>
+ <20210824112129.2t6lzqyf2dxllw4a@senku>
+ <20210824113619.a3gyxlerst7tumzn@wittgenstein>
+ <11702c81-8b7c-bbe6-705a-f0fed5f10ba5@linuxfoundation.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7f9f3bf4-646c-b8ab-8d46-7e87cf8e9af3@linuxfoundation.org>
-Date:   Tue, 24 Aug 2021 10:42:19 -0600
+Message-ID: <15672b09-e4fc-78ec-7415-1ff7b777cc15@linuxfoundation.org>
+Date:   Tue, 24 Aug 2021 10:50:23 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <e59721c8-fe59-cafe-01a3-8c7d74f2583d@csgroup.eu>
+In-Reply-To: <11702c81-8b7c-bbe6-705a-f0fed5f10ba5@linuxfoundation.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/24/21 10:35 AM, Christophe Leroy wrote:
-> 
-> 
-> Le 24/08/2021 à 16:41, Shuah Khan a écrit :
->> On 8/23/21 9:05 PM, CGEL wrote:
->>> From: Changcheng Deng <deng.changcheng@zte.com.cn>
->>>
->>> Clean up the following includecheck warning:
->>>
->>> ./tools/testing/selftests/powerpc/tm/tm-poison.c: inttypes.h is included
->>> more than once.
->>>
->>> No functional change.
->>>
->>> Reported-by: Zeal Robot <zealci@zte.com.cn>
->>> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
->>> ---
->>>   tools/testing/selftests/powerpc/tm/tm-poison.c | 1 -
->>>   1 file changed, 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/powerpc/tm/tm-poison.c b/tools/testing/selftests/powerpc/tm/tm-poison.c
->>> index 29e5f26..27c083a 100644
->>> --- a/tools/testing/selftests/powerpc/tm/tm-poison.c
->>> +++ b/tools/testing/selftests/powerpc/tm/tm-poison.c
->>> @@ -20,7 +20,6 @@
->>>   #include <sched.h>
->>>   #include <sys/types.h>
->>>   #include <signal.h>
->>> -#include <inttypes.h>
->>>   #include "tm.h"
->>>
->>
->> We can't accept this patch. The from and Signed-off-by don't match.
-> 
-> As far as I can see they match:
-> 
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
-> 
+On 8/24/21 8:33 AM, Shuah Khan wrote:
+> On 8/24/21 5:36 AM, Christian Brauner wrote:
+>> On Tue, Aug 24, 2021 at 09:21:29PM +1000, Aleksa Sarai wrote:
+>>> On 2021-08-23, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>> Hi Baolin,
+>>>>
+>>>> On 8/22/21 8:40 PM, Baolin Wang wrote:
+>>>>> Hi Shuah,
+>>>>>
+>>>>> On 2021/7/28 20:32, Baolin Wang wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>>> When running the openat2 test suite on ARM64 platform, we got below failure,
+>>>>>>> since the definition of the O_LARGEFILE is different on ARM64. So we can
+>>>>>>> set the correct O_LARGEFILE definition on ARM64 to fix this issue.
+>>>>>>
+>>>>>> Sorry, I forgot to copy the failure log:
+>>>>>>
 
-Yeah. My bad.
+Please send me v2 with failure log included in the commit log.
 
 thanks,
 -- Shuah
