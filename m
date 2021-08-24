@@ -2,258 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A9B3F60C1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Aug 2021 16:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAE93F60E4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Aug 2021 16:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237953AbhHXOnD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Aug 2021 10:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237915AbhHXOnB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Aug 2021 10:43:01 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6D0C0613C1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Aug 2021 07:42:17 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id b10so14585376ioq.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Aug 2021 07:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FwbKzIHfOUcOHLQOCoMjPPJ39zypjy/jBf8c4OAsOC4=;
-        b=IMBvfBTGP0rgkTV9Ly4yXPRhv6n82+4zUKI4dUNOn5l7JSdlu5Ljw+GLWItYfTglfj
-         hl9dRhTpuDUMR8Ggc1PYWqnqrDDt0+Rt+u9ooWFILBODRXZnAf5XvPNUDwh44ego36Ti
-         EkTCNd09fluwejVub3lNVkdjRYdbezUO3A0/M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FwbKzIHfOUcOHLQOCoMjPPJ39zypjy/jBf8c4OAsOC4=;
-        b=VoCK7yQDSmwwOsb09L4Ed4TiSzt3YtnPUuU9dL/w36N0U1cmEGyrC6DDS+4DWXbw3t
-         Y4SQwp1SkBzNr29PdQttbbca1RPN73FOEvV7wdYmUN0fsSEj9Cse5ZW2jfIU8WztmL+A
-         ssjYq7m7axVw6hl2m6qTOzmXLJ4zlXx2GtJfwv4chU0ROQl3XUpeTz/0Ja15VH5IjIgw
-         NdEDRVc77Dk7Qi6wdiVQg2pWeCjHktLTy/1sfCal6T8ku/FpIw7/BWm5ZhSJ4pTme8c3
-         dIPs6hv3u740Q9kAHm00HZhu1J45ur8VB9D3vJtkiyHUpM4aV08CFJUP9vDIKpsKHWjn
-         DYiw==
-X-Gm-Message-State: AOAM532ZKGzhoBFzq49w0yeiH+G44uv51eITUwnQuKtqQG8gIGuSQHAC
-        Yt5nBV5VI8L++8gXsA+Li0rGpw==
-X-Google-Smtp-Source: ABdhPJxQqu8mETyqzXRwMvnGEqy/vUzqQMc7CKp8pg0AuUJ9ABYvX7tg4YhSapD5b3Uqbgkex9hkBw==
-X-Received: by 2002:a6b:5a04:: with SMTP id o4mr1540398iob.44.1629816136793;
-        Tue, 24 Aug 2021 07:42:16 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id q10sm10318395ion.3.2021.08.24.07.42.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Aug 2021 07:42:16 -0700 (PDT)
-Subject: Re: [PATCH linux-next] tools:test_xdp_noinline: fix boolreturn.cocci
- warnings
-To:     CGEL <cgel.zte@gmail.com>, Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S237939AbhHXOrn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Aug 2021 10:47:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58128 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237755AbhHXOrm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 24 Aug 2021 10:47:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5383061214;
+        Tue, 24 Aug 2021 14:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629816418;
+        bh=Y2VvGS4ewH0QFV6jn39fYPmqIbAtnr1Y+vm2V40pcbc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Df8kuWrSWWNcLUXAcC0rexKKK2wVu7j9FZnPDxVf3Fhhti5KIsPTGoxxVc9OrpnKn
+         PoYnGctC6V0MyPhVbQ3RA9a2u5tLdAwuBLRtqABOUbjbSZtGpEscGAwba+1yJ/faAc
+         CBDEyRLWnnYl+o6+pmKXZMdcRXq43s36S14dMjdPS9zhUBWHpzLZ4QtN3hVhpUFNGh
+         cf/KnVaz0pXNqjls71nDDHmVXdnRzqQIFOwSjYuSgr/WJRIIryCSNllTe2mqM+Df7Y
+         JXuTU1gLB4mCpWB1cLt56xmLT/sf19tXQkDw3nRaCAse4S0wa2c/bUEvy9stYII5b/
+         u2vq0kcFE/pfw==
+Date:   Tue, 24 Aug 2021 07:46:57 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     CGEL <cgel.zte@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jing Yangyang <jing.yangyang@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] tools:test_xdp_noinline: fix
+ boolreturn.cocci warnings
+Message-ID: <20210824074657.363455a6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <2d701f13-8996-ed7d-3d41-794aa8a6e96c@linuxfoundation.org>
 References: <20210824065526.60416-1-deng.changcheng@zte.com.cn>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2d701f13-8996-ed7d-3d41-794aa8a6e96c@linuxfoundation.org>
-Date:   Tue, 24 Aug 2021 08:42:15 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        <2d701f13-8996-ed7d-3d41-794aa8a6e96c@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20210824065526.60416-1-deng.changcheng@zte.com.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/24/21 12:55 AM, CGEL wrote:
-> From: Jing Yangyang <jing.yangyang@zte.com.cn>
+On Tue, 24 Aug 2021 08:42:15 -0600 Shuah Khan wrote:
+> On 8/24/21 12:55 AM, CGEL wrote:
+> > From: Jing Yangyang <jing.yangyang@zte.com.cn>
+> > 
+> > Return statements in functions returning bool should use true/false
+> > instead of 1/0.
+> > 
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Jing Yangyang <jing.yangyang@zte.com.cn>
 > 
-> Return statements in functions returning bool should use true/false
-> instead of 1/0.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Jing Yangyang <jing.yangyang@zte.com.cn>
-> ---
->   .../selftests/bpf/progs/test_xdp_noinline.c        | 42 +++++++++++-----------
->   1 file changed, 21 insertions(+), 21 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> index 3a67921..37075f8 100644
-> --- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> +++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> @@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
->   	udp = data + off;
->   
->   	if (udp + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	if (!is_icmp) {
->   		pckt->flow.port16[0] = udp->source;
->   		pckt->flow.port16[1] = udp->dest;
-> @@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
->   		pckt->flow.port16[0] = udp->dest;
->   		pckt->flow.port16[1] = udp->source;
->   	}
-> -	return 1;
-> +	return true;
->   }
->   
->   static __attribute__ ((noinline))
-> @@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
->   
->   	tcp = data + off;
->   	if (tcp + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	if (tcp->syn)
->   		pckt->flags |= (1 << 1);
->   	if (!is_icmp) {
-> @@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
->   		pckt->flow.port16[0] = tcp->dest;
->   		pckt->flow.port16[1] = tcp->source;
->   	}
-> -	return 1;
-> +	return true;
->   }
->   
->   static __attribute__ ((noinline))
-> @@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
->   	void *data;
->   
->   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
-> -		return 0;
-> +		return false;
->   	data = (void *)(long)xdp->data;
->   	data_end = (void *)(long)xdp->data_end;
->   	new_eth = data;
-> @@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
->   	old_eth = data + sizeof(struct ipv6hdr);
->   	if (new_eth + 1 > data_end ||
->   	    old_eth + 1 > data_end || ip6h + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	memcpy(new_eth->eth_dest, cval->mac, 6);
->   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 56710;
-> @@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
->   	ip6h->saddr.in6_u.u6_addr32[2] = 3;
->   	ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
->   	memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
-> -	return 1;
-> +	return true;
->   }
->   
->   static __attribute__ ((noinline))
-> @@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
->   	ip_suffix <<= 15;
->   	ip_suffix ^= pckt->flow.src;
->   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
-> -		return 0;
-> +		return false;
->   	data = (void *)(long)xdp->data;
->   	data_end = (void *)(long)xdp->data_end;
->   	new_eth = data;
-> @@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
->   	old_eth = data + sizeof(struct iphdr);
->   	if (new_eth + 1 > data_end ||
->   	    old_eth + 1 > data_end || iph + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	memcpy(new_eth->eth_dest, cval->mac, 6);
->   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 8;
-> @@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
->   		csum += *next_iph_u16++;
->   	iph->check = ~((csum & 0xffff) + (csum >> 16));
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
-> -		return 0;
-> -	return 1;
-> +		return false;
-> +	return true;
->   }
->   
->   static __attribute__ ((noinline))
-> @@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void **data_end, bool inner_v4)
->   	else
->   		new_eth->eth_proto = 56710;
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
-> -		return 0;
-> +		return false;
->   	*data = (void *)(long)xdp->data;
->   	*data_end = (void *)(long)xdp->data_end;
-> -	return 1;
-> +	return true;
->   }
->   
->   static __attribute__ ((noinline))
-> @@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void **data_end)
->   	memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 8;
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
-> -		return 0;
-> +		return false;
->   	*data = (void *)(long)xdp->data;
->   	*data_end = (void *)(long)xdp->data_end;
-> -	return 1;
-> +	return true;
->   }
->   
->   static __attribute__ ((noinline))
-> @@ -564,22 +564,22 @@ static bool get_packet_dst(struct real_definition **real,
->   	hash = get_packet_hash(pckt, hash_16bytes);
->   	if (hash != 0x358459b7 /* jhash of ipv4 packet */  &&
->   	    hash != 0x2f4bc6bb /* jhash of ipv6 packet */)
-> -		return 0;
-> +		return false;
->   	key = 2 * vip_info->vip_num + hash % 2;
->   	real_pos = bpf_map_lookup_elem(&ch_rings, &key);
->   	if (!real_pos)
-> -		return 0;
-> +		return false;
->   	key = *real_pos;
->   	*real = bpf_map_lookup_elem(&reals, &key);
->   	if (!(*real))
-> -		return 0;
-> +		return false;
->   	if (!(vip_info->flags & (1 << 1))) {
->   		__u32 conn_rate_key = 512 + 2;
->   		struct lb_stats *conn_rate_stats =
->   		    bpf_map_lookup_elem(&stats, &conn_rate_key);
->   
->   		if (!conn_rate_stats)
-> -			return 1;
-> +			return true;
->   		cur_time = bpf_ktime_get_ns();
->   		if ((cur_time - conn_rate_stats->v2) >> 32 > 0xffFFFF) {
->   			conn_rate_stats->v1 = 1;
-> @@ -587,14 +587,14 @@ static bool get_packet_dst(struct real_definition **real,
->   		} else {
->   			conn_rate_stats->v1 += 1;
->   			if (conn_rate_stats->v1 >= 1)
-> -				return 1;
-> +				return true;
->   		}
->   		if (pckt->flow.proto == IPPROTO_UDP)
->   			new_dst_lru.atime = cur_time;
->   		new_dst_lru.pos = key;
->   		bpf_map_update_elem(lru_map, &pckt->flow, &new_dst_lru, 0);
->   	}
-> -	return 1;
-> +	return true;
->   }
->   
->   __attribute__ ((noinline))
-> 
+> We can't accept this patch. The from and Signed-off-by don't match.
 
-We can't accept this patch. The from and Signed-off-by don't match.
+That's what I thought but there is a From in the email body which git
+will pick up. The submission is correct.
 
-thanks,
--- Shuah
+Please trim your responses.
