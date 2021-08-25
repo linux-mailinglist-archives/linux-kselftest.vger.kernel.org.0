@@ -2,132 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B8B3F7AC5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Aug 2021 18:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6543F7B22
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Aug 2021 19:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239550AbhHYQie (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Aug 2021 12:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbhHYQid (ORCPT
+        id S230302AbhHYRGW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Aug 2021 13:06:22 -0400
+Received: from mail.netfilter.org ([217.70.188.207]:53282 "EHLO
+        mail.netfilter.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229540AbhHYRGW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Aug 2021 12:38:33 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1880C061757;
-        Wed, 25 Aug 2021 09:37:47 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id u3so52876744ejz.1;
-        Wed, 25 Aug 2021 09:37:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1K9N5MpNmrjGAXxPDH6ASnSz5pQKTpuvkicsC84kSJQ=;
-        b=g/6iBX5tJrRFfNspQP63D4yGRv27vOeGfOWrFoh+KDZaMsWO0TvTgvongSC9frZPMO
-         0CtMaRip+gjDHUzTiN3ED4VCKiE+eOXnZV0PADS8PaRFzZ+QLxOf9NIjno9KzEVSKFez
-         tvl7toFz+9dqEoBa/m7i/UkYTK/ym0xJKg/WhpgyOiRy621xbdotMyQmxHhKQ0PoaWDm
-         uM2ChNbe1qc3aORXJGlP2KlEz3DBsEcJ1hapEwuvxUepBtbYHb6d/OuIdMWWwS02+H4h
-         qSTnj8gMKhZRHKjtNG0arkqYh9QiZ1QKOawTbq+TmJ0DSSwTqDOhgs0T+6tayOe30Nqh
-         cApg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1K9N5MpNmrjGAXxPDH6ASnSz5pQKTpuvkicsC84kSJQ=;
-        b=fH+rmHKZx/FPyCVBunTA/24Lc5z5655vJdqZVjz/cLOdze8TZhH0ntKfiwMSrNamT4
-         3iYLg4/c216eD9yWUJnBd1g6WiGE8Vavk9hk84MfSoYfi5dIcv1Kw3xrznqY8lA8sbXN
-         iEH4qlyDw2zsgDn/IcwvBU319ViDK5PPIkn7RODtfN8hUy82fTzKUZdNAG/MqoEwE1vh
-         lzm3J1cdsjhkYDDaywCbrD6fJvDUSZXxvI61A8XnKMfu264rWmr+H3sbgONX+GD//YYj
-         yN1vbqYFaTyMAjBVUuSRyCfrSVXtzxgOD/tDo8w/sakShiwbR0tXZr4jMSYNeXA5iWtu
-         veVA==
-X-Gm-Message-State: AOAM532eOBJNYcjribeRIg7m05f4Tv33L2rw+bUs/aguQE9mlS7hYBMr
-        yHhdAtDJxqfPUSRNoYqC5jr9jkNqt2p2DQ==
-X-Google-Smtp-Source: ABdhPJxBhRXzymupWy8orO37b7pnDcCkM/RCtXtmKzhqthB7ffqi0rlr2wCJimXkY60VuPmETgJ4oQ==
-X-Received: by 2002:a17:907:1b02:: with SMTP id mp2mr47492298ejc.196.1629909464473;
-        Wed, 25 Aug 2021 09:37:44 -0700 (PDT)
-Received: from ?IPv6:2a04:241e:502:1d80:f02c:a1bd:70b1:fe95? ([2a04:241e:502:1d80:f02c:a1bd:70b1:fe95])
-        by smtp.gmail.com with ESMTPSA id u18sm78992ejf.118.2021.08.25.09.37.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Aug 2021 09:37:43 -0700 (PDT)
-From:   Leonard Crestez <cdleonard@gmail.com>
-Subject: Re: [RFCv3 09/15] selftests: tcp_authopt: Test key address binding
-To:     David Ahern <dsahern@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        Menglong Dong <dong.menglong@zte.com.cn>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1629840814.git.cdleonard@gmail.com>
- <09c7cff43f832d0aba8dfad67f56066aeeca8475.1629840814.git.cdleonard@gmail.com>
- <922fe343-c867-62ff-14b8-3d84ed2e1b76@gmail.com>
-Message-ID: <bb3fe6a6-0995-c235-6b58-383481001ef3@gmail.com>
-Date:   Wed, 25 Aug 2021 19:37:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Wed, 25 Aug 2021 13:06:22 -0400
+Received: from netfilter.org (unknown [78.30.35.141])
+        by mail.netfilter.org (Postfix) with ESMTPSA id 558FF60126;
+        Wed, 25 Aug 2021 19:04:39 +0200 (CEST)
+Date:   Wed, 25 Aug 2021 19:05:29 +0200
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        kuba@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
+        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
+        Blair Steven <blair.steven@alliedtelesis.co.nz>
+Subject: Re: [PATCH net-next 2/3] net: netfilter: Add RFC-7597 Section 5.1
+ PSID support
+Message-ID: <20210825170529.GA31115@salvia>
+References: <20210726143729.GN9904@breakpoint.cc>
+ <20210809041037.29969-1-Cole.Dishington@alliedtelesis.co.nz>
+ <20210809041037.29969-3-Cole.Dishington@alliedtelesis.co.nz>
 MIME-Version: 1.0
-In-Reply-To: <922fe343-c867-62ff-14b8-3d84ed2e1b76@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210809041037.29969-3-Cole.Dishington@alliedtelesis.co.nz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 25.08.2021 08:18, David Ahern wrote:
-> On 8/24/21 2:34 PM, Leonard Crestez wrote:
->> By default TCP-AO keys apply to all possible peers but it's possible to
->> have different keys for different remote hosts.
->>
->> This patch adds initial tests for the behavior behind the
->> TCP_AUTHOPT_KEY_BIND_ADDR flag. Server rejection is tested via client
->> timeout so this can be slightly slow.
->>
->> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
->> ---
->>   .../tcp_authopt_test/netns_fixture.py         |  63 +++++++
->>   .../tcp_authopt/tcp_authopt_test/server.py    |  82 ++++++++++
->>   .../tcp_authopt/tcp_authopt_test/test_bind.py | 143 ++++++++++++++++
->>   .../tcp_authopt/tcp_authopt_test/utils.py     | 154 ++++++++++++++++++
->>   4 files changed, 442 insertions(+)
->>   create mode 100644 tools/testing/selftests/tcp_authopt/tcp_authopt_test/netns_fixture.py
->>   create mode 100644 tools/testing/selftests/tcp_authopt/tcp_authopt_test/server.py
->>   create mode 100644 tools/testing/selftests/tcp_authopt/tcp_authopt_test/test_bind.py
->>   create mode 100644 tools/testing/selftests/tcp_authopt/tcp_authopt_test/utils.py
->>
+Hi,
+
+On Mon, Aug 09, 2021 at 04:10:36PM +1200, Cole Dishington wrote:
+> Adds support for masquerading into a smaller subset of ports -
+> defined by the PSID values from RFC-7597 Section 5.1. This is part of
+> the support for MAP-E and Lightweight 4over6, which allows multiple
+> devices to share an IPv4 address by splitting the L4 port / id into
+> ranges.
 > 
-> This should be under selftests/net as a single "tcp_authopt" directory
-> from what I can tell.
+> Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+> Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+> Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+> Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+> Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
+> Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+> Reviewed-by: Florian Westphal <fw@strlen.de>
+[...]
 
-Maybe? I found no clear guidelines for organizing tests by subsystem. I 
-just did a grep for .py in selftests and placed mine next to tc-testing.
+Looking at the userspace logic:
 
-Having a tcp_authopt_test code directory under tcp_authopt is the 
-standard pattern for python packages, otherwise all submodules with 
-utilities of dubious generality are dumped at the global level. Removing 
-the tcp_authopt/tcp_authopt_test structure is awkward in python.
+https://patchwork.ozlabs.org/project/netfilter-devel/patch/20210716002219.30193-1-Cole.Dishington@alliedtelesis.co.nz/
 
-One way to deal with this is to add my test code in 
-tools/testing/selftests/net/tcp_authopt and my setup.cfg and similar 
-directly in tools/testing/selftests/net. This would make "net" the root 
-of the package and make it easy to add other networking pytests. This 
-seems close to what you mean.
+Chunk extracted from void parse_psid(...)
 
-kselftest itself does not seem to offer any special support for python 
-code, only some for C and shell. Maybe it could offer a "kselftest" 
-package with common utilities that are used by multiple test packages 
-and everything would be installed into a single virtualenv by makefiles.
+>        offset = (1 << (16 - offset_len));
 
---
-Regards,
-Leonard
+Assuming offset_len = 6, then you skip 0-1023 ports, OK.
+
+>        psid = psid << (16 - offset_len - psid_len);
+
+This psid calculation is correct? Maybe:
+
+        psid = psid << (16 - offset_len);
+
+instead?
+
+        psid=0  =>      0 << (16 - 6) = 1024
+        psid=1  =>      1 << (16 - 6) = 2048
+
+This is implicitly assuming that 64 PSIDs are available, each of them
+taking 1024 ports, ie. psid_len is 6 bits. But why are you subtracting
+the psid_len above?
+
+>        /* Handle the special case of no offset bits (a=0), so offset loops */
+>        min = psid;
+
+OK, this line above is the minimal port in the range
+
+>        if (offset)
+>                min += offset;
+
+... which is incremented by the offset (to skip the 0-1023 ports).
+
+>       r->min_proto.all = htons(min);
+>       r->max_proto.all = htons(min + ((1 << (16 - offset_len - psid_len)) - 1));
+
+Here, you subtract psid_len again, not sure why.
+
+>       r->base_proto.all = htons(offset);
+
+base is set to offset, ie. 1024.
+
+>       r->flags |= NF_NAT_RANGE_PSID;
+>       r->flags |= NF_NAT_RANGE_PROTO_SPECIFIED;
+
+Now looking at the kernel side.
+
+> diff --git a/net/netfilter/nf_nat_masquerade.c b/net/netfilter/nf_nat_masquerade.c
+> index 8e8a65d46345..19a4754cda76 100644
+> --- a/net/netfilter/nf_nat_masquerade.c
+> +++ b/net/netfilter/nf_nat_masquerade.c
+> @@ -55,8 +55,31 @@ nf_nat_masquerade_ipv4(struct sk_buff *skb, unsigned int hooknum,
+>  	newrange.flags       = range->flags | NF_NAT_RANGE_MAP_IPS;
+>  	newrange.min_addr.ip = newsrc;
+>  	newrange.max_addr.ip = newsrc;
+> -	newrange.min_proto   = range->min_proto;
+> -	newrange.max_proto   = range->max_proto;
+> +
+> +	if (range->flags & NF_NAT_RANGE_PSID) {
+> +		u16 base = ntohs(range->base_proto.all);
+> +		u16 min =  ntohs(range->min_proto.all);
+> +		u16 off = 0;
+> +
+> +		/* xtables should stop base > 2^15 by enforcement of
+> +		 * 0 <= offset_len < 16 argument, with offset_len=0
+> +		 * as a special case inwhich base=0.
+
+I don't understand this comment.
+
+> +		 */
+> +		if (WARN_ON_ONCE(base > (1 << 15)))
+> +			return NF_DROP;
+> +
+> +		/* If offset=0, port range is in one contiguous block */
+> +		if (base)
+> +			off = prandom_u32_max(((1 << 16) / base) - 1);
+
+Assuming the example above, base is set to 1024. Then, off is a random
+value between UINT16_MAX (you expressed this as 1 << 16) and the base
+which is 1024 minus 1.
+
+So this is picking a random off (actually the PSID?) between 0 and 63.
+What about clashes? I mean, two different machines behind the NAT
+might get the same off.
+
+> +		newrange.min_proto.all   = htons(min + base * off);
+
+min could be 1024, 2048, 3072... you add base which is 1024 * off.
+
+Is this duplicated? Both calculated in user and kernel space?
+
+> +		newrange.max_proto.all   = htons(ntohs(newrange.min_proto.all) + ntohs(range->max_proto.all) - min);
+
+I'm stopping here, I'm getting lost.
+
+My understanding about this RFC is that you would like to split the
+16-bit ports in ranges to uniquely identify the host behind the NAT.
+
+Why don't you just you just select the port range from userspace
+utilizing the existing infrastructure? I mean, why do you need this
+kernel patch?
+
+Florian already suggested:
+
+> Is it really needed to place all of this in the nat core?
+> 
+> The only thing that has to be done in the NAT core, afaics, is to
+> suppress port reallocation attmepts when NF_NAT_RANGE_PSID is set.
+> 
+> Is there a reason why nf_nat_masquerade_ipv4/6 can't be changed instead
+> to do what you want?
+> 
+> AFAICS its enough to set NF_NAT_RANGE_PROTO_SPECIFIED and init the
+> upper/lower boundaries, i.e. change input given to nf_nat_setup_info().
+
+extracted from:
+
+https://patchwork.ozlabs.org/project/netfilter-devel/patch/20210422023506.4651-1-Cole.Dishington@alliedtelesis.co.nz/
