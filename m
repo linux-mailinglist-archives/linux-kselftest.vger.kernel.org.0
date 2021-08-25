@@ -2,63 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FD33F7A94
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Aug 2021 18:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62DA3F7A9E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Aug 2021 18:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237393AbhHYQcr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Aug 2021 12:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S241669AbhHYQdg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Aug 2021 12:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240303AbhHYQcp (ORCPT
+        with ESMTP id S241646AbhHYQdd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Aug 2021 12:32:45 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739EBC0613CF;
-        Wed, 25 Aug 2021 09:31:59 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id n27so20839261eja.5;
-        Wed, 25 Aug 2021 09:31:59 -0700 (PDT)
+        Wed, 25 Aug 2021 12:33:33 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA217C0613CF;
+        Wed, 25 Aug 2021 09:32:47 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id u3so52846889ejz.1;
+        Wed, 25 Aug 2021 09:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=from:subject:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wMkJXZoogesNm5JJZvMGG6cJlR5rgjyot4jq2nzi3Aw=;
-        b=XULmqv9aBdS0Fee5y/TVfH7zm0Ki8Fr9H6xJYbd0rgvjJtLfgAxop9scK+vLa5YF7Q
-         ukSf92YyYuuQd/O8ZZsjGI9hE1j+oCpd+hr3dAHN3kkyZGA6gwGLU83U1lOgfLD8UqP8
-         8L0bsVwbZ1o3hbubchyuRfG94vhOJq3fimjwrPyi81k0fIXjklnca92aKj3WQoj4fn5v
-         Ws9+UJMA2uevL8VA2/+8ZeYGLy2p7aZwhafF+9t2DhnRkJ/PFfOY/aRf+dVBG4sRCmtU
-         CV6orFj5J2Ba/ezTejHEBAHrDkMSCv/KF844Hk+jogvV7mtmKSQ3UiXLcMn0F00vBA2b
-         vrcQ==
+        bh=vvAn8Qq1yUHd991dRWHMu/nzZChgKVNVamGBLSj0MkU=;
+        b=LyYU6ViIKtar+uf/3IZB+IZZr5DI8TEd/YudslRBZy9+/8CrzD2fzAP43QA/yZIIE5
+         WEO+kujpYaencwfXKNz0tQdQbLbTgvSiTbNsOWWARORLoA2w3jGaV1/SaYM6tg446TEa
+         eJ7p+op2YIrlYucEpIUNswJ2NvE0qRPBXny4aCY1Beui7DDdsDmdhPik0Q7JnYUWLeN9
+         Z8R7SNFjEP2kwv+GVOdSTRSOJkNiNwpKDNMY8FzlCetE/IQ2q57FhZ9KDVhZjO3VtjWw
+         1njM1uRmePgg6WL0CKfSI3dlra8zXXjElqEyT3k8Ck10oORi3Optn7U8b9/DAWxoY2Hf
+         PBLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=wMkJXZoogesNm5JJZvMGG6cJlR5rgjyot4jq2nzi3Aw=;
-        b=jOaRvfG4CdG7+5hAwusJDmL8egOvWnWliM5KV8QsKS+zIe+5gc1Eb/Rpkd1Z0WZ4N6
-         qiZeW2ZShhoARBysCwH9uAXcIBMb+l5diDxbGjfsvywQgprA/MG3AvOeNGyROcAbhi3C
-         2yqW6Oxyxc2nUrg0eXJ4DKaINO7IaWVgqViib8H6fo6eofDPVS8WQUU1cS5pDkYCPXDp
-         u3y3WSoeam6YH2KS/GAiziVCx+iN+DTcexrf7PpTqhvX+gPGtow+yEP8WGoCb9DEPJRX
-         2aR66g9G6X3Rg2BPRTnkPPDrNONFB2Ie2SsxLRCxP4uI/o3a9l9PX1+p1CP2WFetTgMF
-         yacw==
-X-Gm-Message-State: AOAM530cRMvKYQ28xdtIE4RdxyTt4KaebeyKDQoJZHuqcCquhy5Ot15S
-        kVYSKX0p8Y9SvGH64WW5hB57wSxuswMM1A==
-X-Google-Smtp-Source: ABdhPJyjhFW8we3pTfnvc4pI+Xrp2mFk6xfZ9gm2T2OaD4xNkrY/og4kroIQQpaA9fsSUNaUm683XQ==
-X-Received: by 2002:a17:907:7785:: with SMTP id ky5mr9640191ejc.247.1629909118029;
-        Wed, 25 Aug 2021 09:31:58 -0700 (PDT)
+        bh=vvAn8Qq1yUHd991dRWHMu/nzZChgKVNVamGBLSj0MkU=;
+        b=ZVb/VNFIaNJNkwBdk+tHRsawxTUYp+bwUyKosiyChPdW68aysuQrluCAJFz99oTuJ1
+         BGcWcZKuev5QUssLKV2UxvL8G1tUNpTEQrnbVmFoD5PQqBJ0oqOaNe4P9gltPat7FSsR
+         8wHrJdxhYIsgv65HkPnBSEFpwuZz3S8KsqoHIZxu0xizTmSNo8lqafQqoiU7RLK94Al1
+         tKNKjQdcsvyNFkpzSx+3g6B6VIep8UuYeEmUpNvT2lz5MMr1JpUpp4P/Z9hFUkmfaMTk
+         vorUDsgEhHyqiimmaLJDz9PoFCMKLtm0sfe5x+EoTykH/s9ADsJckVS46k6aUgCdyN5N
+         y4BQ==
+X-Gm-Message-State: AOAM530ZnAvUFaHeou+ooKP+IA2F+F783POR7livd/nERaBZoTbiIzOq
+        lHGaAKbv+V33dlwoQuzloNY=
+X-Google-Smtp-Source: ABdhPJw4Ao1UW1KM0SEPv7AkWoGmf/32vUDSlbCVniZSY/5NkINPR5SiUGknu9m6JqndOvEi9n74Yg==
+X-Received: by 2002:a17:906:e82:: with SMTP id p2mr23089746ejf.50.1629909166464;
+        Wed, 25 Aug 2021 09:32:46 -0700 (PDT)
 Received: from ?IPv6:2a04:241e:502:1d80:f02c:a1bd:70b1:fe95? ([2a04:241e:502:1d80:f02c:a1bd:70b1:fe95])
-        by smtp.gmail.com with ESMTPSA id y21sm302048edu.13.2021.08.25.09.31.56
+        by smtp.gmail.com with ESMTPSA id x15sm78312ejc.59.2021.08.25.09.32.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Aug 2021 09:31:57 -0700 (PDT)
-Subject: Re: [RFCv3 05/15] tcp: authopt: Add crypto initialization
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
+        Wed, 25 Aug 2021 09:32:45 -0700 (PDT)
+From:   Leonard Crestez <cdleonard@gmail.com>
+Subject: Re: [RFCv3 07/15] tcp: authopt: Hook into tcp core
+To:     Eric Dumazet <eric.dumazet@gmail.com>,
         Dmitry Safonov <0x7f454c46@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
         "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -69,24 +67,18 @@ Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
         Ivan Delalande <colona@arista.com>,
         Priyaranjan Jha <priyarjha@google.com>,
         Menglong Dong <dong.menglong@zte.com.cn>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>
 References: <cover.1629840814.git.cdleonard@gmail.com>
- <abb720b34b9eef1cc52ef68017334e27a2af83c6.1629840814.git.cdleonard@gmail.com>
- <30f73293-ea03-d18f-d923-0cf499d4b208@gmail.com>
- <20210825080817.GA19149@gondor.apana.org.au>
- <CAMj1kXE_sDZJjmkoqHcLz=9fDqLPBNbyfH4zxN2s2RdgKO=eSw@mail.gmail.com>
-From:   Leonard Crestez <cdleonard@gmail.com>
-Message-ID: <c8f254e8-e241-8aad-4211-14c4da4e211c@gmail.com>
-Date:   Wed, 25 Aug 2021 19:31:55 +0300
+ <73b11222e312a60a17ccaeabbd0e96732289defc.1629840814.git.cdleonard@gmail.com>
+ <3fc7b060-0ed9-eb73-92c0-0765fe4cb414@gmail.com>
+Message-ID: <07c44a66-1db3-1136-8894-731dafb0d2d7@gmail.com>
+Date:   Wed, 25 Aug 2021 19:32:44 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <CAMj1kXE_sDZJjmkoqHcLz=9fDqLPBNbyfH4zxN2s2RdgKO=eSw@mail.gmail.com>
+In-Reply-To: <3fc7b060-0ed9-eb73-92c0-0765fe4cb414@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -94,49 +86,177 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 8/25/21 7:04 PM, Ard Biesheuvel wrote:
-> On Wed, 25 Aug 2021 at 10:08, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+On 25.08.2021 01:59, Eric Dumazet wrote:
+> On 8/24/21 2:34 PM, Leonard Crestez wrote:
+>> The tcp_authopt features exposes a minimal interface to the rest of the
+>> TCP stack. Only a few functions are exposed and if the feature is
+>> disabled they return neutral values, avoiding ifdefs in the rest of the
+>> code.
 >>
->> On Tue, Aug 24, 2021 at 04:34:58PM -0700, Eric Dumazet wrote:
->>>
->>> On 8/24/21 2:34 PM, Leonard Crestez wrote:
->>>> The crypto_shash API is used in order to compute packet signatures. The
->>>> API comes with several unfortunate limitations:
->>>>
->>>> 1) Allocating a crypto_shash can sleep and must be done in user context.
->>>> 2) Packet signatures must be computed in softirq context
->>>> 3) Packet signatures use dynamic "traffic keys" which require exclusive
->>>> access to crypto_shash for crypto_setkey.
->>>>
->>>> The solution is to allocate one crypto_shash for each possible cpu for
->>>> each algorithm at setsockopt time. The per-cpu tfm is then borrowed from
->>>> softirq context, signatures are computed and the tfm is returned.
->>>>
->>>
->>> I could not see the per-cpu stuff that you mention in the changelog.
+>> Add calls into tcp authopt from send, receive and accept code.
 >>
->> Perhaps it's time we moved the key information from the tfm into
->> the request structure for hashes? Or at least provide a way for
->> the key to be in the request structure in addition to the tfm as
->> the tfm model still works for IPsec.  Ard/Eric, what do you think
->> about that?
+>> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+>> ---
+>>   include/net/tcp_authopt.h |  56 +++++++++
+>>   net/ipv4/tcp_authopt.c    | 246 ++++++++++++++++++++++++++++++++++++++
+>>   net/ipv4/tcp_input.c      |  17 +++
+>>   net/ipv4/tcp_ipv4.c       |   3 +
+>>   net/ipv4/tcp_minisocks.c  |   2 +
+>>   net/ipv4/tcp_output.c     |  74 +++++++++++-
+>>   net/ipv6/tcp_ipv6.c       |   4 +
+>>   7 files changed, 401 insertions(+), 1 deletion(-)
 >>
+>> diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
+>> index c9ee2059b442..61db268f36f8 100644
+>> --- a/include/net/tcp_authopt.h
+>> +++ b/include/net/tcp_authopt.h
+>> @@ -21,10 +21,11 @@ struct tcp_authopt_key_info {
+>>   	/* Wire identifiers */
+>>   	u8 send_id, recv_id;
+>>   	u8 alg_id;
+>>   	u8 keylen;
+>>   	u8 key[TCP_AUTHOPT_MAXKEYLEN];
+>> +	u8 maclen;
 > 
-> I think it makes sense for a shash desc to have the ability to carry a
-> key, which will be used instead of the TFM key, but this seems like
-> quite a lot of work, given that all implementations will need to be
-> updated. Also, setkey() can currently sleep, so we need to check
-> whether the existing key manipulation code can actually execute during
-> init/update/final if sleeping is not permitted.
+> I do not see maclen being enforced to 12, or a multiple of 4 ?
 
-Are you sure that setkey can sleep? The documentation is not clear, 
-maybe it only applies to certain hardware implementations?
+For both current algorithms the maclen value is 12. I just implemented 
+RFC5926, there is no way to control this from userspace.
 
-The TCP Authentication Option needs dynamic keys for SYN and SYNACK 
-packets, all of which happens in BH context.
+> This means that later [2], tcp_authopt_hash() will leave up to 3
+> unitialized bytes in the TCP options, sent to the wire.
+> 
+> This is a  security issue, since we will leak kernel memory.
 
---
-Regards,
-Leonard
+Filling the remainder with zeroes does make sense, or at least 
+WARN_ON(maclen != 4) so that it's obvious to anyone who attempts to 
+extend the algorithms.
+
+>> +struct tcp_authopt_key_info *tcp_authopt_lookup_send(struct tcp_authopt_info *info,
+>> +						     const struct sock *addr_sk,
+>> +						     int send_id)
+>> +{
+>> +	struct tcp_authopt_key_info *result = NULL;
+>> +	struct tcp_authopt_key_info *key;
+>> +
+>> +	hlist_for_each_entry_rcu(key, &info->head, node, 0) {
+>> +		if (send_id >= 0 && key->send_id != send_id)
+>> +			continue;
+>> +		if (key->flags & TCP_AUTHOPT_KEY_ADDR_BIND) {
+>> +			if (addr_sk->sk_family == AF_INET) {
+>> +				struct sockaddr_in *key_addr = (struct sockaddr_in *)&key->addr;
+>> +				const struct in_addr *daddr =
+>> +					(const struct in_addr *)&addr_sk->sk_daddr;
+> 
+> Why a cast is needed ? sk_daddr is a __be32, no need to cast it to in_addr
+>> +
+>> +				if (WARN_ON(key_addr->sin_family != AF_INET))
+> 
+> Why a WARN_ON() is used ? If we expect this to trigger, then at minimumum WARN_ON_ONCE() please.
+> 
+>> +					continue;
+>> +				if (memcmp(daddr, &key_addr->sin_addr, sizeof(*daddr)))
+>> +					continue;
+> 
+> Using memcmp() to compare two __be32 is overkill.
+> 
+>> +			}
+>> +			if (addr_sk->sk_family == AF_INET6) {
+>> +				struct sockaddr_in6 *key_addr = (struct sockaddr_in6 *)&key->addr;
+>> +				const struct in6_addr *daddr = &addr_sk->sk_v6_daddr;
+> 
+> Not sure why a variable is used, you need it once.
+> 
+>> +
+>> +				if (WARN_ON(key_addr->sin6_family != AF_INET6))
+>> +					continue;
+>> +				if (memcmp(daddr, &key_addr->sin6_addr, sizeof(*daddr)))
+> 
+> ipv6_addr_equal() should be faster.
+
+OK, I will replace the comparisons.
+
+Checking address family is mostly paranoia on my part, I don't know if a 
+real scenario exists for AF mismatch. Still need to check ipv4-mapped 
+ipv6 addresses, not sure if those can receive ipv4 skbs on an ipv6 socket.
+
+>> +struct tcp_authopt_key_info *tcp_authopt_select_key(const struct sock *sk,
+>> +						    const struct sock *addr_sk,
+>> +						    u8 *rnextkeyid)
+>> +{
+>> +	struct tcp_authopt_info *info;
+>> +
+>> +	info = rcu_dereference(tcp_sk(sk)->authopt_info);
+> 
+> distro kernels will have CONFIG_TCP_AUTHOPT set, meaning
+> that we will add a cache line miss for every incoming TCP packet
+> even on hosts not using any RFC5925 TCP flow.
+> 
+> For TCP MD5 we are using a static key, to avoid this extra cost.
+
+OK, will add a static_key.
+
+The check for "does socket have tcp_authopt" also belongs in an inline 
+wrapper, similar to inbound check
+
+>> +int __tcp_authopt_openreq(struct sock *newsk, const struct sock *oldsk, struct request_sock *req)
+>> +{
+>> +	struct tcp_authopt_info *old_info;
+>> +	struct tcp_authopt_info *new_info;
+>> +	int err;
+>> +
+>> +	old_info = rcu_dereference(tcp_sk(oldsk)->authopt_info);
+>> +	if (!old_info)
+>> +		return 0;
+>> +
+>> +	new_info = kmalloc(sizeof(*new_info), GFP_ATOMIC | __GFP_ZERO);
+> 
+> kzalloc() is your friend. (same remark for your other patches, where you are using __GFP_ZERO)
+> Also see additional comment [1]
+
+OK
+> 
+>> +	if (!new_info)
+>> +		return -ENOMEM;
+>> +
+>> +	sk_nocaps_add(newsk, NETIF_F_GSO_MASK);
+>> +	new_info->src_isn = tcp_rsk(req)->snt_isn;
+>> +	new_info->dst_isn = tcp_rsk(req)->rcv_isn;
+>> +	INIT_HLIST_HEAD(&new_info->head);
+>> +	err = tcp_authopt_clone_keys(newsk, oldsk, new_info, old_info);
+>> +	if (err) {
+>> +		__tcp_authopt_info_free(newsk, new_info);
+> 
+> 		Are we leaving in place old value of newsk->authopt_info ?
+> 		If this is copied from the listener, I think you need
+> 		to add a tcp_sk(newsk)->authopt_info = NULL;
+> 		before the kzalloc() call done above.
+
+Yes, authopt_info should be set to NULL on error because keeping the 
+listen socket's value is wrong and dangerous (double free).
+
+Leaving authopt_info NULL or malloc failure is still possible dangerous 
+because it means all keys are ignored and accepted. Not clear how we 
+could cause tcp_create_openreq_child to fail instead.
+
+This is a problem in a few other parts: if cryptography fails the 
+outbound MAC is filled with zeros because there's not obvious way to 
+make TX fail at that point.
+
+>> +	err = __tcp_authopt_calc_mac(sk, skb, key, false, macbuf);
+>> +	if (err) {
+>> +		/* If mac calculation fails and caller doesn't handle the error
+>> +		 * try to make it obvious inside the packet.
+>> +		 */
+>> +		memset(hash_location, 0, key->maclen);
+>> +		return err;
+>> +	}
+>> +	memcpy(hash_location, macbuf, key->maclen);
+> 
+> 
+> [2]
+> This is the place were we do not make sure to clear the padding bytes
+> (if key->maclen is not a multiple of 4)
+
+Yes. It might make sense to fix in caller because it's the caller which 
+decides to align options.
