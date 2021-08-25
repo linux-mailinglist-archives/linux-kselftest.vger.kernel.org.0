@@ -2,116 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 566203F7CFE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Aug 2021 22:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA3F3F7DC8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Aug 2021 23:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242554AbhHYUFD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Aug 2021 16:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbhHYUFD (ORCPT
+        id S231873AbhHYVky (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Aug 2021 17:40:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43612 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231245AbhHYVkw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Aug 2021 16:05:03 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2391AC061757
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Aug 2021 13:04:17 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id l7-20020a0568302b0700b0051c0181deebso441187otv.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Aug 2021 13:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RA3M/vOsIOYIXJH3RoPts4CCXAW9QCJKSqu44COBkGE=;
-        b=Guns7hjNARkbdBWWVfuXj8IHvqOauZbeRkUMHXr9kdt5Dl0jza/oJbe/srdRZziPGQ
-         nYO4sVnbMFzp5TaJ9o/Te5FMnxnw5yhkPWh+ZBUFjjWL7qIOdSBsu+SqYnPlLDyq4Sgx
-         9YMTQqeyDsQ/7d4S5HlTB6b4dyQ/rA7NrLNHs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RA3M/vOsIOYIXJH3RoPts4CCXAW9QCJKSqu44COBkGE=;
-        b=CHccmC7tgOsuIssV3rzx03EGbD0jezLQRL8/9ItT9vnI4BW0AFtgnSc0gTlR5fX/r7
-         sNOgiUsX3RzzvALPSREyHkUshcGJxr1cEHX4LZjmdk5ehRBGERf9sjym30xTXyDRZt29
-         anLrzq+BYhRYOceoeXmQz0pwd1rLLXUVS9Z3JWToVJ8s/z1xEMeYdLWvMTf72Fo+ZKL6
-         KFfjmghgP7y1IfQSANbsRvCzSqvlaHUyD6zivsW57z5rNWcIJ6vLCoTeXXvaAc2KbJ9Y
-         Q9wEmDCHDxAjnjf4B8UdAwpuWE+lo/uS5NppiP5in5SeR778rDaWEFfhi/HKtPaYEkJj
-         l4LA==
-X-Gm-Message-State: AOAM532oG6GASS+VF3OWmG5xstkkxjBeJ2xTer3R+IMovE6wVxkwHnJ5
-        JHD5NvWmR4QzAqVGRIQr1ZMmiw==
-X-Google-Smtp-Source: ABdhPJx4sKPp6OJaXzeb91suWooqUYST0b36LI0gHjt3MFO7BAtYEk/OSEzGS4gNQOfFvqJaByWX1w==
-X-Received: by 2002:a9d:4042:: with SMTP id o2mr174980oti.332.1629921854542;
-        Wed, 25 Aug 2021 13:04:14 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 97sm159738otv.26.2021.08.25.13.04.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Aug 2021 13:04:14 -0700 (PDT)
-Subject: Re: [PATCH linux-next] tools:signal: fix boolreturn.cocci warnings
-To:     CGEL <cgel.zte@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Yangyang <jing.yangyang@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210824065131.60346-1-deng.changcheng@zte.com.cn>
- <16561a4f-6043-cc5b-7a50-5be1ff10bfa5@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <de79e084-705e-c23d-08cc-c102af6b2dae@linuxfoundation.org>
-Date:   Wed, 25 Aug 2021 14:04:13 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <16561a4f-6043-cc5b-7a50-5be1ff10bfa5@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Wed, 25 Aug 2021 17:40:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1629927606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=CxAroS7sIZX9mrxN+Q1ftZvesv/+pNbSAsaThJf3nu8=;
+        b=RqptNbPRt4/5DqEIOE1SrN2/hlb7uZmGweGKMXUESbeHiOqRCkbpAsLhOy5nk+JXAwu6Vo
+        gLObVaercItQ9ptxeE+PyxNks8FE7IQPc0mr0J+i1nuwYn4ScJOR/NJe7nF12AO5a9g8Ih
+        qHnJE8/HQgEzlwjJ9mUa2EqOQOxl5BA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-540-GqJenG2xNI2d9Se4AYBgBw-1; Wed, 25 Aug 2021 17:40:05 -0400
+X-MC-Unique: GqJenG2xNI2d9Se4AYBgBw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 179D28015C7;
+        Wed, 25 Aug 2021 21:40:03 +0000 (UTC)
+Received: from llong.com (unknown [10.22.18.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D23991B472;
+        Wed, 25 Aug 2021 21:39:53 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v7 0/6] cgroup/cpuset: Add new cpuset partition type & empty effecitve cpus
+Date:   Wed, 25 Aug 2021 17:37:44 -0400
+Message-Id: <20210825213750.6933-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/24/21 8:39 AM, Shuah Khan wrote:
-> On 8/24/21 12:51 AM, CGEL wrote:
->> From: Jing Yangyang <jing.yangyang@zte.com.cn>
->>
->> ./tools/testing/selftests/arm64/signal/test_signals_utils.h:112:9-10
->> WARNING: return of 0/1 in function 'get_current_context' with
->> return type bool
->>
->> Return statements in functions returning bool should use true/false
->> instead of 1/0.
->>
->> Generated by: scripts/coccinelle/misc/boolreturn.cocci
->>
->> Reported-by: Zeal Robot <zealci@zte.com.cn>
->> Signed-off-by: Jing Yangyang <jing.yangyang@zte.com.cn>
->> ---
->>   tools/testing/selftests/arm64/signal/test_signals_utils.h | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
->> index 6772b5c..66122e6 100644
->> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
->> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
->> @@ -109,7 +109,7 @@ static __always_inline bool get_current_context(struct tdescr *td,
->>       if (seen_already) {
->>           fprintf(stdout,
->>               "Unexpected successful sigreturn detected: live_uc is stale !\n");
->> -        return 0;
->> +        return false;
+v7:
+ - Simplify the documentation patch (patch 5) as suggested by Tejun.
+ - Fix a typo in patch 2 and improper commit log in patch 3.
 
-The change is fine. However, the function doc references to return 1/0
-needs updates as well.
+v6:
+ - Remove duplicated tmpmask from update_prstate() which should fix the
+   frame size too large problem reported by kernel test robot.
 
-  * 1. grab a valid sigcontext into td->live_uc for result analysis: in
-  * such case it returns 1.
-  *
-  * 2. detect if, somehow, a previously grabbed live_uc context has been
-  * used actively with a sigreturn: in such a case the execution would have
-  * magically resumed in the middle of this function itself (seen_already==1):
-  * in such a case return 0, since in fact we have not just simply grabbed
-  * the context.
+v5:
+ - Rebased to the latest for-5.15 branch of cgroup git tree and drop the
+   1st v4 patch as it has been merged.
+ - Update patch 1 to always allow changing partition root back to member
+   even if it invalidates child partitions undeneath it.
+ - Adjust the empty effective cpu partition patch to not allow 0 effective
+   cpu for terminal partition which will make it invalid).
+ - Add a new patch to enable reading of cpuset.cpus.partition to display
+   the reason that causes invalid partition.
+ - Adjust the documentation and testing patch accordingly.
 
-thanks,
--- Shuah
+This patchset makes four enhancements to the cpuset v2 code.
+
+ Patch 1: Properly handle partition root tree and make partition
+ invalid in case changes to cpuset.cpus violate any of the partition
+ root constraints.
+
+ Patch 2: Enable the "cpuset.cpus.partition" file to show the reason
+ that causes invalid partition like "root invalid (No cpu available
+ due to hotplug)".
+
+ Patch 3: Add a new partition state "isolated" to create a partition
+ root without load balancing. This is for handling intermitten workloads
+ that have a strict low latency requirement.
+
+ Patch 4: Allow partition roots that are not the top cpuset to distribute
+ all its cpus to child partitions as long as there is no task associated
+ with that partition root. This allows more flexibility for middleware
+ to manage multiple partitions.
+
+Patch 5 updates the cgroup-v2.rst file accordingly. Patch 6 adds a new
+cpuset test to test the new cpuset partition code.
+
+
+Waiman Long (6):
+  cgroup/cpuset: Properly transition to invalid partition
+  cgroup/cpuset: Show invalid partition reason string
+  cgroup/cpuset: Add a new isolated cpus.partition type
+  cgroup/cpuset: Allow non-top parent partition to distribute out all
+    CPUs
+  cgroup/cpuset: Update description of cpuset.cpus.partition in
+    cgroup-v2.rst
+  kselftest/cgroup: Add cpuset v2 partition root state test
+
+ Documentation/admin-guide/cgroup-v2.rst       | 112 +--
+ kernel/cgroup/cpuset.c                        | 337 ++++++---
+ tools/testing/selftests/cgroup/Makefile       |   5 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       | 663 ++++++++++++++++++
+ tools/testing/selftests/cgroup/wait_inotify.c |  86 +++
+ 5 files changed, 1050 insertions(+), 153 deletions(-)
+ create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
+ create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
+
+-- 
+2.18.1
+
