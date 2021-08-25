@@ -2,98 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B56AF3F7CAB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Aug 2021 21:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FD33F7CBE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Aug 2021 21:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238760AbhHYTZP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Aug 2021 15:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
+        id S242491AbhHYTcQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Aug 2021 15:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236654AbhHYTZO (ORCPT
+        with ESMTP id S234330AbhHYTcQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Aug 2021 15:25:14 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2154CC061757;
-        Wed, 25 Aug 2021 12:24:28 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id om1-20020a17090b3a8100b0017941c44ce4so4815082pjb.3;
-        Wed, 25 Aug 2021 12:24:28 -0700 (PDT)
+        Wed, 25 Aug 2021 15:32:16 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C74C0613CF
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Aug 2021 12:31:30 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id a20-20020a0568300b9400b0051b8ca82dfcso390099otv.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Aug 2021 12:31:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:84;0;0cto;
-        bh=PGxtjBFxPgG3Jd9Zpl37bDstSoJ0Gj+kNpbO5xi0BEw=;
-        b=SqsbO1EwGVFKKZI4L7H6CKN1OWwR+R4V6j6RZ/XwrfaNg7tatBfXGORpM/dsXhuRWX
-         1gGcpWO7f4fzfSW3sYTHcJzW74XYyF/lnRct3FlyvJdYRLeERW2cbhTE0121qCKQhbkO
-         j7cUUVCjDL+r+QJMGc2QBnOeQwaVJ1fwStUtZWPCRkJLYsxEG1Dp8np9JLU5bnFM7d7n
-         JMkhwIhU48DZ9uOPs5cIaW6cr8mIltTcfJ+woL5GfhljTDGhcYWcRo2CWIeqOs5u4FKh
-         9LH75bTT9EP48nvcrzlGn1TH5wICzP5ov/p/cyLPTf8oZ1yMh/9k78X3Zi1L4UjoNDm7
-         T0+g==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=J6WVjBvRIT9A+PrV6sxYc5oJqYhffihj3mZfN9H1dBg=;
+        b=cRh+wuj9sAm9jNkbwlr/GCHXATQ88pPCKppXfUIy6dkAQwiRWGUxp7B/uI5Qvv6SW9
+         udoev0jxKXpaNed5mEERl71dmvdRngbtcrWxZB2DgfJBAojZiX1ktlzaoUMusoW0ZA6K
+         Gh/+Hfl1aKsLDeEcA9z8w/swfj7HoWcrixe38=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:84;0;0cto;
-        bh=PGxtjBFxPgG3Jd9Zpl37bDstSoJ0Gj+kNpbO5xi0BEw=;
-        b=piUhJwUhpgYf9yKt4O7nnPp000Oz+yh+7jFGMHR7jINHSQkTATk9Lu8znnrUbYQpXx
-         O92i1l7hrVEexoAbp3CY5LMZrS7BwVRb488K6dAEFOqesRygNDc/QXC8HF+enuEiQjHT
-         KTbYFHP1AKi6sSVOaSlvZJz4UMGQ6IuM5kuiE5TqwkPtStfjOVst8cCID1bdbZYFvJpz
-         T7wwKRBX8Fj9UufQ3slhnMZzEBaKQDZthLFJqw1n1vO4F8Ia96HkzOJjZEChfK1b6KmT
-         9ZwL+QX8OahZgHrf1CIYIaACG302130hqbWTXQigdTt87uB0EC20VhdO5EjfStPZ2STm
-         Cmug==
-X-Gm-Message-State: AOAM533T63x83Kh8uvI7CPmMSJtmwcUZt1cENrNU8ORS68qxra0iS747
-        YZty03cmvAw8SNHI+jObfXY=
-X-Google-Smtp-Source: ABdhPJzcYsvA9r2rerZdhGMEavTs6kvS9wilCSHl3DkaXZchE9YYxbWlcghNlLlUYImzSpqn+Spu4A==
-X-Received: by 2002:a17:902:b084:b029:12b:6caa:7d9e with SMTP id p4-20020a170902b084b029012b6caa7d9emr176051plr.57.1629919467563;
-        Wed, 25 Aug 2021 12:24:27 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id x4sm504283pfu.65.2021.08.25.12.24.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Aug 2021 12:24:26 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 25 Aug 2021 09:24:25 -1000
-From:   Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v6 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <YSaY6SbKMD2b3Oec@slm.duckdns.org>
-References: <20210814205743.3039-1-longman@redhat.com>
- <20210814205743.3039-6-longman@redhat.com>
- <YRqbj5+ZdS+7k0Fn@slm.duckdns.org>
- <95b72d36-32a9-8356-05b7-2829e4cc29ad@redhat.com>
- <YSVCv0WjTzwPUWUN@slm.duckdns.org>
- <af7ad628-62f4-848b-7eaa-1c9eb62355b6@redhat.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=J6WVjBvRIT9A+PrV6sxYc5oJqYhffihj3mZfN9H1dBg=;
+        b=lRB7Z/XyLToO5GdohandQv2xVMDBraOVjZ3Vjhk0lh0xw9bjb4fPBLlq1RGG357LBh
+         yfMiPAEaxWfz5yxcT0XnNS4pd5TNrDYRQgi1SwTBg2CsVEi3Gi5TqGFsdxRVhoY1o4iG
+         n05kg8hupleoQ6q+jXkbi+xN26c0FTTifYjzA/IVRiJBk2PKvHJfT4Rw+tp/eyzaGa3F
+         uTKmziRNTbHawyE8LiHEXZ9IIiPYATzrFzg25PDfeN0nKdGJutWqP0XVgK/iFV03jRLq
+         Yck+npQSJP2TqmJLvWdpt8VSdUjKczEZreh3xTFG7Pr/Xk1MlSKJSro0junxQFBWdUWs
+         8zaw==
+X-Gm-Message-State: AOAM532yx4yMiz9zgIHjsO3BKwpdEoLPpPH2UL5kBiXi90iTMWz8dutG
+        Lt4Y8mK0/yoE/FrcYWTTYGRYpg==
+X-Google-Smtp-Source: ABdhPJzn7PpAMNIwAANraSQTOK7Ycgz1keQAfVRX9TYP4QAz30FZ/pSOKYIUDkIykLmZS5fZSUh6QQ==
+X-Received: by 2002:a05:6830:2a06:: with SMTP id y6mr89291otu.134.1629919889711;
+        Wed, 25 Aug 2021 12:31:29 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id k19sm156565oiw.49.2021.08.25.12.31.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Aug 2021 12:31:29 -0700 (PDT)
+Subject: Re: [PATCH] selftests: cleanup config
+To:     Li Zhijian <lizhijian@cn.fujitsu.com>, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, shuah@kernel.org, Jason@zx2c4.com,
+        masahiroy@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210825050948.10339-1-lizhijian@cn.fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <6547d239-56b7-71c0-70c9-20a67bdad1dd@linuxfoundation.org>
+Date:   Wed, 25 Aug 2021 13:31:28 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af7ad628-62f4-848b-7eaa-1c9eb62355b6@redhat.com>
-84;0;0cTo: Waiman Long <llong@redhat.com>
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20210825050948.10339-1-lizhijian@cn.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On 8/24/21 11:09 PM, Li Zhijian wrote:
+> - DEBUG_PI_LIST was renamed to DEBUG_PLIST since 8e18faeac3 ("lib/plist: rename DEBUG_PI_LIST to DEBUG_PLIST")
+> - SYNC was removed since aff9da10e21 ("staging/android: make sync_timeline internal to sw_sync")
+> 
 
-On Wed, Aug 25, 2021 at 03:21:59PM -0400, Waiman Long wrote:
-> I agree that the current description is probably more complicated than it
-> should be. I will try to fix that.
+Please write a complete commit log explaining the change
+and tell us what happens if we don't do this.
 
-To avoid repeating back-and-forth with all the code changes, would it help
-if you first describe the intended behaviors whether that's in the form of
-doc patch or just informal description?
+> $ for k in $(grep ^CONFIG $(find tools/testing/selftests/ -name config) | awk -F'=' '{print$1}' | awk -F':' '{print $2}' | sort | uniq); do  k=${k#CONFIG_}; git grep -qw -e "menuconfig $k" -e "config $k" || echo "$k is missing"; done;
+> DEBUG_PI_LIST is missing
+> SYNC is missing
+> 
+> CC: Philip Li <philip.li@intel.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+> ---
+>   tools/testing/selftests/cpufreq/config              | 2 +-
+>   tools/testing/selftests/sync/config                 | 1 -
+>   tools/testing/selftests/wireguard/qemu/debug.config | 2 +-
+>   3 files changed, 2 insertions(+), 3 deletions(-)
+> 
 
-Thank you.
+Please split this into 3 patches
 
--- 
-tejun
+thanks,
+-- Shuah
+
