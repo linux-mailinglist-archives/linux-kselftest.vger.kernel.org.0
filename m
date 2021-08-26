@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A62C53F818D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Aug 2021 06:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDED3F81BE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Aug 2021 06:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbhHZEWL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Aug 2021 00:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S232572AbhHZE1m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Aug 2021 00:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbhHZEWK (ORCPT
+        with ESMTP id S229608AbhHZE1l (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Aug 2021 00:22:10 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88B0C0613C1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Aug 2021 21:21:23 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id z4so2784095wrr.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Aug 2021 21:21:23 -0700 (PDT)
+        Thu, 26 Aug 2021 00:27:41 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A1CC0613C1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Aug 2021 21:26:55 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id q14so2819924wrp.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Aug 2021 21:26:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dqiB7c1Z9XcGZUEwKVWzCrWdTbtlx+NC89TeoGFmDVc=;
-        b=OUi3mfrb6wGFv8z4xyhFetyDSFiIEPri52LvAHU2V2pU0c8WMy/N/gFdDxXyXA/E1M
-         c3Mu+x6jSvdhYBy6i9lvnZc9J641TugcaBfid29a1xip9GWQ16koXDmw1Rb1VqLAfJRF
-         GA0BXDmDUzjeRlYT3vi8MOoUAYyPuC56jGQCC4nvNgWC8Gl/YLdj9I4IZT4oF6y8NgDF
-         29CyuHcK59HBIOm0C0wTJ05rV4trhwz+ojC0n4X4VbDlN0wlTiZCDIDlsHxMHxCdG+ze
-         rX0LssbTdAqPNsGpbZwdDbeI5a62Pw2amZdy+LizXYyBu3EgWQhTz1sgvNuf8jPd3Jf5
-         0e0A==
+         :cc:content-transfer-encoding;
+        bh=N4lJ8QMbfg7GkcPRcPmDTwgEwk429EDYI8YSDC4YcwM=;
+        b=XOeB0HPUw0dpBG3AvA8HoIDun43Qjhf8K1KRu2rrydo5zriIvLWz/QohNsFUzyceD1
+         47zYt26ZtZHRKIZS0yOFIQFxUtGqLNqt/8P2eRJiK6qIMypzC92AvbRrGATMKBBNhH3x
+         cvTPTx4HXg5eItqVI2lXXxfovmheVBO7eSI7GKwj4S5DEB1VG9Xpyxjh2tvLVjXhy4Y2
+         XKxQLCTZTqrbfTkkqm9HB90/BfAFAtGNk666cTmheJqOqQK6qAAUJIlpP+BY0XmM/ov5
+         +UA/C5dobQgSXqnJSxJluS8PeTC04OWTctK0GtAvsQgp496ardXziiw1BronnzJaTPMj
+         9oVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dqiB7c1Z9XcGZUEwKVWzCrWdTbtlx+NC89TeoGFmDVc=;
-        b=ar25FWq3ePqAb+d/GDB5m1TIx0gWwxKRsVWQH3USHjmAUs5ZZKfxOwb+uCPPpJwyj8
-         1QudqU6es6+7Z463Yt17A/i1ej7zrcDClgLbZzT+EotkQLvkRRWgag7itgIfMxM6j7xi
-         4qHk28T1PpvRH3HZwp/tT1rBy+2CTW3qhx3dAgWONGkR/vzDKFM+w4ZNm07aKCQKXIrL
-         z6KzJilcMCXIqEgEDp5Ei2a1r5mtFulXUibc7lxbm4rCS7P+kQD44DyKGMYmfqiimI8v
-         zHjEqLBws0+WfTgTSYXfVJKc/oDS/+QSBRXg0uFQwFv4OjkxrPg+dUToC7dY2EKpnWw3
-         7IXQ==
-X-Gm-Message-State: AOAM530fUYjMHX7D2JE/iIi7gXirrGtBGmSjf6xU1X8TQDSc0Kw1CU14
-        1wVTn4Tow0r9JjLdnrVS+PRsLsFUk99/xnl/NPIqnw==
-X-Google-Smtp-Source: ABdhPJxEy2TlLGjpCk2RMUqLtuIJjkkI4vcoXK76UuY/4/v016SbyMIF2y4caw+WizaC+FKe8aiTNnUYMKSg4npS4+k=
-X-Received: by 2002:a5d:64e6:: with SMTP id g6mr1464029wri.288.1629951682092;
- Wed, 25 Aug 2021 21:21:22 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=N4lJ8QMbfg7GkcPRcPmDTwgEwk429EDYI8YSDC4YcwM=;
+        b=sDKtpDAmTLcOOBc7Y5eDMk9JTszBMeLcmEe3FZu4FQOf2ZGnnJiOPHYMSZCR/P9I0O
+         UYWy8jCNOwq2AgUewk4Jn642k+i4s6Tt+YeL+pRTvFiZzrIuAu9JAl9Nuaz6UdTdsyEA
+         toOFPINEm4krRmFtMZWJ+YbWoKlZUTi5UHRkF+Rdi3hdwRmKVfkmZ4UbvymwPwqOh2KS
+         YYRW7NDZa6o5hQ+CGQuf8ithPS6cnkiufJPsuj0EvyVwsPN1JvPFQTQUNH+w2G531nMU
+         arAYXFMqveuTjzI4Njyl3UdEpY6OyI1Bc3iZUxZrPbcFtiNWSw8atQ33sY1aQKR0Ovyr
+         zhSA==
+X-Gm-Message-State: AOAM531e2NRuSGZ+A6KJBF+jckMjOD2ifRYoWKbll6mESLhXPglt9ZTf
+        lxMQY8k1edeQswGMkQFKYgiRFt2nwTcWv4XNyWCrkg==
+X-Google-Smtp-Source: ABdhPJyGY6T0Q9TPPMPO6Wrl80VzUoRNRcEaXbX/bIM8fVqYiLYnIE+8nqi1FsN46fgTmlypkoZG8pogJ07UquPvRAU=
+X-Received: by 2002:adf:f08b:: with SMTP id n11mr1403480wro.176.1629952013296;
+ Wed, 25 Aug 2021 21:26:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210826012626.1163705-1-isabellabdoamaral@usp.br> <20210826012626.1163705-4-isabellabdoamaral@usp.br>
-In-Reply-To: <20210826012626.1163705-4-isabellabdoamaral@usp.br>
+References: <20210826012626.1163705-1-isabellabdoamaral@usp.br> <20210826012626.1163705-7-isabellabdoamaral@usp.br>
+In-Reply-To: <20210826012626.1163705-7-isabellabdoamaral@usp.br>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 26 Aug 2021 12:21:11 +0800
-Message-ID: <CABVgOSkhN-DPYnhuTG1hGU-2aP0MEaKjz+0=Sr_VNKUhpgz79g@mail.gmail.com>
-Subject: Re: [PATCH 3/6] test_hash.c: split test_int_hash into arch-specific functions
+Date:   Thu, 26 Aug 2021 12:26:42 +0800
+Message-ID: <CABVgOSkHkN8Rx+JKN3W89oECAYuoiyVndvhGcOQswDbo9RXQ8w@mail.gmail.com>
+Subject: Re: [PATCH 6/6] test_hash.c: refactor into kunit
 To:     Isabella Basso <isabellabdoamaral@usp.br>
 Cc:     linux@sciencehorizons.net,
         Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -62,296 +62,496 @@ Cc:     linux@sciencehorizons.net,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         ~lkcamp/patches@lists.sr.ht, rodrigosiqueiramelo@gmail.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000008f6fa05ca6eb3c3"
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000008f6fa05ca6eb3c3
-Content-Type: text/plain; charset="UTF-8"
-
-On Thu, Aug 26, 2021 at 9:26 AM Isabella Basso <isabellabdoamaral@usp.br> wrote:
+On Thu, Aug 26, 2021 at 9:26 AM Isabella Basso <isabellabdoamaral@usp.br> w=
+rote:
 >
-> Split the The test_int_hash function to keep its mainloop separate from
-> arch-specific chunks, which are only compiled as needed. This aims at
-> improving readability.
->
-> Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
-> ---
+> Use KUnit framework to make tests more easily integrable with CIs. Even
+> though these tests are not yet properly written as unit tests this
+> change should help in debugging.
 
-I like this, but have a note below. It _may_ be worth combining some
-of these test refactoring patches with the KUnit port patch:
-definitely a matter of taste rather than something I think is
-necessary, but I personally think they're related enough they could go
-together if you wanted.
+Thanks -- I think KUnit is a good fit for these tests. I've tested the
+series, and it works well for me (but again, I'm no expert on the
+hashing code).
+
+I've left a few comments below, but there's nothing major which seems
+to actually break the test, so this series is nevertheless:
+
+Tested-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  lib/test_hash.c | 84 +++++++++++++++++++++++++++++++------------------
->  1 file changed, 54 insertions(+), 30 deletions(-)
 >
+> Also drop module support and remove kernel messages (i.e. through
+> pr_info) as KUnit handles all debugging output.
+
+To clarify, are you actually dropping support for building this as a
+module, or just letting KUnit handle it for you? Ideally, this will
+still work as a module, even if it also works as a built-in test.
+(Given that the Kconfig entry still is 'tristate', I assume this is the cas=
+e.)
+
+>
+> Co-developed-by: Augusto Dur=C3=A3es Camargo <augusto.duraes33@gmail.com>
+> Signed-off-by: Augusto Dur=C3=A3es Camargo <augusto.duraes33@gmail.com>
+> Co-developed-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
+> Signed-off-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
+> Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
+> ---
+>  lib/Kconfig.debug |  28 ++++---
+>  lib/Makefile      |   2 +-
+>  lib/test_hash.c   | 197 ++++++++++++++--------------------------------
+>  3 files changed, 79 insertions(+), 148 deletions(-)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 5e5894d98c50..adefb03a7e16 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2221,15 +2221,6 @@ config TEST_RHASHTABLE
+>
+>           If unsure, say N.
+>
+> -config TEST_HASH
+> -       tristate "Perform selftest on hash functions"
+> -       help
+> -         Enable this option to test the kernel's integer (<linux/hash.h>=
+), and
+> -         string (<linux/stringhash.h>) hash functions on boot (or module=
+ load).
+> -
+> -         This is intended to help people writing architecture-specific
+> -         optimized versions.  If unsure, say N.
+> -
+>  config TEST_SIPHASH
+>         tristate "Perform selftest on siphash functions"
+>         help
+> @@ -2378,6 +2369,25 @@ config BITFIELD_KUNIT
+>
+>           If unsure, say N.
+>
+> +config HASH_KUNIT_TEST
+> +       tristate "KUnit Test for integer hash functions" if !KUNIT_ALL_TE=
+STS
+> +       depends on KUNIT
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         Enable this option to test the kernel's string (<linux/stringha=
+sh.h>), and
+> +         integer (<linux/hash.h>) hash functions on boot.
+> +
+> +         KUnit tests run during boot and output the results to the debug=
+ log
+> +         in TAP format (https://testanything.org/). Only useful for kern=
+el devs
+> +         running the KUnit test harness, and not intended for inclusion =
+into a
+> +         production build.
+> +
+> +         For more information on KUnit and unit tests in general please =
+refer
+> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +         This is intended to help people writing architecture-specific
+> +         optimized versions. If unsure, say N.
+> +
+>  config RESOURCE_KUNIT_TEST
+>         tristate "KUnit test for resource API"
+>         depends on KUNIT
+> diff --git a/lib/Makefile b/lib/Makefile
+> index c2e81d0eb31c..0bc336d9d036 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -62,7 +62,7 @@ obj-$(CONFIG_TEST_BITOPS) +=3D test_bitops.o
+>  CFLAGS_test_bitops.o +=3D -Werror
+>  obj-$(CONFIG_TEST_SYSCTL) +=3D test_sysctl.o
+>  obj-$(CONFIG_TEST_SIPHASH) +=3D test_siphash.o
+> -obj-$(CONFIG_TEST_HASH) +=3D test_hash.o
+> +obj-$(CONFIG_HASH_KUNIT_TEST) +=3D test_hash.o
+>  obj-$(CONFIG_TEST_IDA) +=3D test_ida.o
+>  obj-$(CONFIG_KASAN_KUNIT_TEST) +=3D test_kasan.o
+>  CFLAGS_test_kasan.o +=3D -fno-builtin
 > diff --git a/lib/test_hash.c b/lib/test_hash.c
-> index 8bcc645a7294..ed75c768c231 100644
+> index c168823b0963..84590bbf47dc 100644
 > --- a/lib/test_hash.c
 > +++ b/lib/test_hash.c
-> @@ -61,6 +61,45 @@ fill_buf(char *buf, size_t len, u32 seed)
->         }
+> @@ -14,14 +14,10 @@
+>   * and hash_64().
+>   */
+>
+> -#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt "\n"
+> -
+> -#include <linux/compiler.h>
+>  #include <linux/types.h>
+> -#include <linux/module.h>
+>  #include <linux/hash.h>
+>  #include <linux/stringhash.h>
+> -#include <linux/printk.h>
+> +#include <kunit/test.h>
+>
+>  #define SIZE 256 /* Run time is cubic in SIZE */
+>
+> @@ -29,7 +25,7 @@ static u32 string_or; /* stores or-ed string output */
+>  static u32 hash_or[2][33] =3D { { 0, } }; /* stores or-ed hash output */
+>
+>  /* 32-bit XORSHIFT generator.  Seed must not be zero. */
+> -static u32 __init __attribute_const__
+> +static u32 __attribute_const__
+>  xorshift(u32 seed)
+>  {
+>         seed ^=3D seed << 13;
+> @@ -39,7 +35,7 @@ xorshift(u32 seed)
 >  }
 >
-> +#ifdef HAVE_ARCH__HASH_32
-> +static bool __init
-> +test_int_hash32(u32 *h0, u32 *h1, u32 *h2)
+>  /* Given a non-zero x, returns a non-zero byte. */
+> -static u8 __init __attribute_const__
+> +static u8 __attribute_const__
+>  mod255(u32 x)
+>  {
+>         x =3D (x & 0xffff) + (x >> 16);   /* 1 <=3D x <=3D 0x1fffe */
+> @@ -50,8 +46,7 @@ mod255(u32 x)
+>  }
+>
+>  /* Fill the buffer with non-zero bytes. */
+> -static void __init
+> -fill_buf(char *buf, size_t len, u32 seed)
+> +static void fill_buf(char *buf, size_t len, u32 seed)
+>  {
+>         size_t i;
+>
+> @@ -62,41 +57,31 @@ fill_buf(char *buf, size_t len, u32 seed)
+>  }
+>
+>  #ifdef HAVE_ARCH__HASH_32
+> -static bool __init
+> -test_int_hash32(u32 *h0, u32 *h1, u32 *h2)
+> +static bool test_int_hash32(struct kunit *test, u32 *h0, u32 *h1, u32 *h=
+2)
+>  {
+>         hash_or[1][0] |=3D *h2 =3D __hash_32_generic(h0);
+>  #if HAVE_ARCH__HASH_32 =3D=3D 1
+> -       if (*h1 !=3D *h2) {
+> -               pr_err("__hash_32(%#x) =3D %#x !=3D __hash_32_generic() =
+=3D %#x",
+> -                      *h0, *h1, *h2);
+> -               return false;
+> -       }
+> +       KUNIT_ASSERT_EQ_MSG(test, *h1, *h2,
+> +                           "__hash_32(%#x) =3D %#x !=3D __hash_32_generi=
+c() =3D %#x",
+> +                           *h0, *h1, *h2);
 
-I'm unsure about this name. Having test_int_hash32() test only
-__hash_32(), where test_int_hash64() tests hash_64() feels a little
-bit inconsistent. Maybe this is somewhere we should have the extra
-underscore like in HAVE_ARCH__HASH_32.
+Should this (and others) be EXPECTations rather than ASSERTions? I
+imagine we'd want to continue the test even if this doesn't match.
 
-I get that because the architecture-specific hash_32() is removed
-earlier, there's no need for an extra function to test how that
-compares against a generic function, so there's no conflict here, but
-it did confuse me briefly.
+(I know that the existing function returns early here, but I'd argue
+that __hash_32() and __hash_32_generic() producing different results
+is a separate issue than the final ORed result turning out
+differently, and we shouldn't change the latter by exiting out early
+from the former. Equally, there's probably an argument for splitting
+out the __hash_32() vs __hash_32_generic() tests completely from the
+_or tests, but that would be more work.)
 
-The other option is, as mentioned in the earlier patch, to keep the
-architecture-specific hash_32() (and _maybe_ get rid of __hash_32()
-entirely), in which case this name would be perfect for testing that.
-
-> +{
-> +       hash_or[1][0] |= *h2 = __hash_32_generic(h0);
-> +#if HAVE_ARCH__HASH_32 == 1
-> +       if (*h1 != *h2) {
-> +               pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
-> +                      *h0, *h1, *h2);
-> +               return false;
-> +       }
-> +#endif
-> +       return true;
-> +}
-> +#endif
-> +
-> +#ifdef HAVE_ARCH_HASH_64
-> +static bool __init
-> +test_int_hash64(unsigned long long h64, u32 *h0, u32 *h1, u32 *h2, u32 const *m, int k)
-> +{
-> +       *h2 = hash_64_generic(*h64, *k);
-> +#if HAVE_ARCH_HASH_64 == 1
-> +       if (*h1 != *h2) {
-> +               pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() = %#x",
-> +                      *h64, *k, *h1, *h2);
-> +               return false;
-> +       }
-> +#else
-> +       if (*h2 > *m) {
-> +               pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
-> +                      *h64, *k, *h1, *m);
-> +               return false;
-> +       }
-> +#endif
-> +       return true;
-> +
-> +}
-> +#endif
-> +
->  /*
->   * Test the various integer hash functions.  h64 (or its low-order bits)
->   * is the integer to hash.  hash_or accumulates the OR of the hash values,
-> @@ -74,19 +113,17 @@ static bool __init
->  test_int_hash(unsigned long long h64)
+>  #endif
+> -       return true;
+>  }
+>  #endif
+>
+>  #ifdef HAVE_ARCH_HASH_64
+> -static bool __init
+> -test_int_hash64(unsigned long long h64, u32 *h0, u32 *h1, u32 *h2, u32 c=
+onst *m, int k)
+> +static bool test_int_hash64(struct kunit *test, unsigned long long h64, =
+u32 *h0, u32 *h1,
+> +               u32 *h2, u32 const *m, int k)
+>  {
+>         *h2 =3D hash_64_generic(*h64, *k);
+>  #if HAVE_ARCH_HASH_64 =3D=3D 1
+> -       if (*h1 !=3D *h2) {
+> -               pr_err("hash_64(%#llx, %d) =3D %#x !=3D hash_64_generic()=
+ =3D %#x",
+> -                      *h64, *k, *h1, *h2);
+> -               return false;
+> -       }
+> +       KUNIT_ASSERT_EQ_MSG(test, *h1, *h2,
+> +                           "hash_64(%#llx, %d) =3D %#x !=3D hash_64_gene=
+ric() =3D %#x",
+> +                           *h64, *k, *h1, *h2);
+>  #else
+> -       if (*h2 > *m) {
+> -               pr_err("hash_64_generic(%#llx, %d) =3D %#x > %#x",
+> -                      *h64, *k, *h1, *m);
+> -               return false;
+> -       }
+> +       KUNIT_ASSERT_LE_MSG(test, *h1, *h2,
+> +                           "hash_64_generic(%#llx, %d) =3D %#x > %#x",
+> +                           *h64, *k, *h1, *m);
+>  #endif
+> -       return true;
+> -
+>  }
+>  #endif
+>
+> @@ -109,8 +94,7 @@ test_int_hash64(unsigned long long h64, u32 *h0, u32 *=
+h1, u32 *h2, u32 const *m,
+>   * inline, the code being tested is actually in the module, and you can
+>   * recompile and re-test the module without rebooting.
+>   */
+> -static bool __init
+> -test_int_hash(unsigned long long h64)
+> +static void test_int_hash(struct kunit *test, unsigned long long h64)
 >  {
 >         int k;
-> -       u32 h0 = (u32)h64, h1, h2;
-> +       u32 h0 = (u32)h64, h1;
-> +
-> +#if defined HAVE_ARCH__HASH_32 || defined HAVE_ARCH_HASH_64
-> +       u32 h2;
-> +#endif
->
+>         u32 h0 =3D (u32)h64, h1;
+> @@ -122,7 +106,7 @@ test_int_hash(unsigned long long h64)
 >         /* Test __hash32 */
->         hash_or[0][0] |= h1 = __hash_32(h0);
+>         hash_or[0][0] |=3D h1 =3D __hash_32(h0);
 >  #ifdef HAVE_ARCH__HASH_32
-> -       hash_or[1][0] |= h2 = __hash_32_generic(h0);
-> -#if HAVE_ARCH__HASH_32 == 1
-> -       if (h1 != h2) {
-> -               pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
-> -                       h0, h1, h2);
-> +       if (!test_int_hash32(&h0, &h1, &h2))
+> -       if (!test_int_hash32(&h0, &h1, &h2))
+> +       if (!test_int_hash32(test, &h0, &h1, &h2))
 >                 return false;
-> -       }
-> -#endif
 >  #endif
 >
->         /* Test k = 1..32 bits */
-> @@ -107,24 +144,11 @@ test_int_hash(unsigned long long h64)
->                         return false;
->                 }
->  #ifdef HAVE_ARCH_HASH_64
-> -               h2 = hash_64_generic(h64, k);
-> -#if HAVE_ARCH_HASH_64 == 1
-> -               if (h1 != h2) {
-> -                       pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() "
-> -                               "= %#x", h64, k, h1, h2);
-> +               if (!test_int_hash64(&h64, &h0, &h1, &h2, &m, &k))
->                         return false;
-> -               }
-> -#else
-> -               if (h2 > m) {
-> -                       pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
-> -                               h64, k, h1, m);
+> @@ -132,27 +116,22 @@ test_int_hash(unsigned long long h64)
+>
+>                 /* Test hash_32 */
+>                 hash_or[0][k] |=3D h1 =3D hash_32(h0, k);
+> -               if (h1 > m) {
+> -                       pr_err("hash_32(%#x, %d) =3D %#x > %#x", h0, k, h=
+1, m);
 > -                       return false;
 > -               }
-> -#endif
+> +               KUNIT_ASSERT_LE_MSG(test, h1, m,
+> +                                   "hash_32(%#x, %d) =3D %#x > %#x",
+> +                                   h0, k, h1, m);
+>
+>                 /* Test hash_64 */
+>                 hash_or[1][k] |=3D h1 =3D hash_64(h64, k);
+> -               if (h1 > m) {
+> -                       pr_err("hash_64(%#llx, %d) =3D %#x > %#x", h64, k=
+, h1, m);
+> -                       return false;
+> -               }
+> +               KUNIT_ASSERT_LE_MSG(test, h1, m,
+> +                                   "hash_64(%#llx, %d) =3D %#x > %#x",
+> +                                   h64, k, h1, m);
+>  #ifdef HAVE_ARCH_HASH_64
+> -               if (!test_int_hash64(&h64, &h0, &h1, &h2, &m, &k))
+> -                       return false;
+> +               test_int_hash64(test, &h64, &h0, &h1, &h2, &m, &k);
 >  #endif
 >         }
->
-> -       (void)h2;       /* Suppress unused variable warning */
->         return true;
+> -
+> -       return true;
 >  }
 >
-> @@ -150,15 +174,15 @@ test_hash_init(void)
->                         /* Check that hashlen_string gets the length right */
->                         if (hashlen_len(hashlen) != j-i) {
->                                 pr_err("hashlen_string(%d..%d) returned length"
-> -                                       " %u, expected %d",
-> -                                       i, j, hashlen_len(hashlen), j-i);
-> +                                      " %u, expected %d",
-> +                                      i, j, hashlen_len(hashlen), j-i);
-
-These whitespace changes probably aren't necessary.
-
->                                 return -EINVAL;
->                         }
+> -static int __init test_string_or(void)
+> +static void test_string_or(struct kunit *test)
+>  {
+>         char buf[SIZE+1];
+>         int i, j;
+> @@ -173,19 +152,14 @@ static int __init test_string_or(void)
+>         } /* j */
+>
+>         /* The OR of all the hash values should cover all the bits */
+> -       if (~string_or) {
+> -               pr_err("OR of all string hash results =3D %#x !=3D %#x",
+> -                      string_or, -1u);
+> -               return -EINVAL;
+> -       }
+> -
+> -       return 0;
+> +       KUNIT_ASSERT_FALSE_MSG(test, ~string_or,
+> +                             "OR of all string hash results =3D %#x !=3D=
+ %#x",
+> +                             string_or, -1u);
+>  }
+>
+> -static int __init test_hash_or(void)
+> +static void test_hash_or(struct kunit *test)
+>  {
+>         char buf[SIZE+1];
+> -       unsigned tests =3D 0;
+>         unsigned long long h64 =3D 0;
+>         int i, j;
+>
+> @@ -201,39 +175,27 @@ static int __init test_hash_or(void)
+>                         u32 h0 =3D full_name_hash(buf+i, buf+i, j-i);
+>
+>                         /* Check that hashlen_string gets the length righ=
+t */
+> -                       if (hashlen_len(hashlen) !=3D j-i) {
+> -                               pr_err("hashlen_string(%d..%d) returned l=
+ength"
+> -                                      " %u, expected %d",
+> -                                      i, j, hashlen_len(hashlen), j-i);
+> -                               return -EINVAL;
+> -                       }
+> +                       KUNIT_ASSERT_EQ_MSG(test, hashlen_len(hashlen), j=
+-i,
+> +                                           "hashlen_string(%d..%d) retur=
+ned length %u, expected %d",
+> +                                           i, j, hashlen_len(hashlen), j=
+-i);
 >                         /* Check that the hashes match */
->                         if (hashlen_hash(hashlen) != h0) {
->                                 pr_err("hashlen_string(%d..%d) = %08x != "
-> -                                       "full_name_hash() = %08x",
-> -                                       i, j, hashlen_hash(hashlen), h0);
-> +                                      "full_name_hash() = %08x",
-> +                                      i, j, hashlen_hash(hashlen), h0);
-
-These whitespace changes probably aren't necessary.
-
->                                 return -EINVAL;
->                         }
+> -                       if (hashlen_hash(hashlen) !=3D h0) {
+> -                               pr_err("hashlen_string(%d..%d) =3D %08x !=
+=3D "
+> -                                      "full_name_hash() =3D %08x",
+> -                                      i, j, hashlen_hash(hashlen), h0);
+> -                               return -EINVAL;
+> -                       }
+> +                       KUNIT_ASSERT_EQ_MSG(test, hashlen_hash(hashlen), =
+h0,
+> +                                           "hashlen_string(%d..%d) =3D %=
+08x !=3D full_name_hash() =3D %08x",
+> +                                           i, j, hashlen_hash(hashlen), =
+h0);
 >
-> @@ -178,14 +202,14 @@ test_hash_init(void)
->         }
->         if (~hash_or[0][0]) {
->                 pr_err("OR of all __hash_32 results = %#x != %#x",
-> -                       hash_or[0][0], -1u);
-> +                      hash_or[0][0], -1u);
-
-This whitespace change probably isn't necessary.
-
->                 return -EINVAL;
->         }
+>                         h64 =3D h64 << 32 | h0;   /* For use with hash_64=
+ */
+> -                       if (!test_int_hash(h64))
+> -                               return -EINVAL;
+> -                       tests++;
+> +                       test_int_hash(test, h64);
+>                 } /* i */
+>         } /* j */
+>
+> -       if (~hash_or[0][0]) {
+> -               pr_err("OR of all __hash_32 results =3D %#x !=3D %#x",
+> -                      hash_or[0][0], -1u);
+> -               return -EINVAL;
+> -       }
+> +       KUNIT_ASSERT_FALSE_MSG(test, ~hash_or[0][0],
+> +                              "OR of all __hash_32 results =3D %#x !=3D =
+%#x",
+> +                              hash_or[0][0], -1u);
 >  #ifdef HAVE_ARCH__HASH_32
->  #if HAVE_ARCH__HASH_32 != 1    /* Test is pointless if results match */
->         if (~hash_or[1][0]) {
->                 pr_err("OR of all __hash_32_generic results = %#x != %#x",
-> -                       hash_or[1][0], -1u);
-> +                      hash_or[1][0], -1u);
-
-You get the idea...
-
->                 return -EINVAL;
->         }
+>  #if HAVE_ARCH__HASH_32 !=3D 1    /* Test is pointless if results match *=
+/
+> -       if (~hash_or[1][0]) {
+> -               pr_err("OR of all __hash_32_generic results =3D %#x !=3D =
+%#x",
+> -                      hash_or[1][0], -1u);
+> -               return -EINVAL;
+> -       }
+> +       KUNIT_ASSERT_FALSE_MSG(test, ~hash_or[1][0],
+> +                              "OR of all __hash_32_generic results =3D %=
+#x !=3D %#x",
+> +                              hash_or[1][0], -1u);
 >  #endif
-> @@ -197,12 +221,12 @@ test_hash_init(void)
+>  #endif
 >
->                 if (hash_or[0][i] != m) {
->                         pr_err("OR of all hash_32(%d) results = %#x "
-> -                               "(%#x expected)", i, hash_or[0][i], m);
-> +                              "(%#x expected)", i, hash_or[0][i], m);
->                         return -EINVAL;
->                 }
->                 if (hash_or[1][i] != m) {
->                         pr_err("OR of all hash_64(%d) results = %#x "
-> -                               "(%#x expected)", i, hash_or[1][i], m);
-> +                              "(%#x expected)", i, hash_or[1][i], m);
->                         return -EINVAL;
->                 }
+> @@ -241,65 +203,24 @@ static int __init test_hash_or(void)
+>         for (i =3D 1; i <=3D 32; i++) {
+>                 u32 const m =3D ((u32)2 << (i-1)) - 1;    /* Low i bits s=
+et */
+>
+> -               if (hash_or[0][i] !=3D m) {
+> -                       pr_err("OR of all hash_32(%d) results =3D %#x "
+> -                              "(%#x expected)", i, hash_or[0][i], m);
+> -                       return -EINVAL;
+> -               }
+> -               if (hash_or[1][i] !=3D m) {
+> -                       pr_err("OR of all hash_64(%d) results =3D %#x "
+> -                              "(%#x expected)", i, hash_or[1][i], m);
+> -                       return -EINVAL;
+> -               }
+> +               KUNIT_ASSERT_EQ_MSG(test, hash_or[0][i], m,
+> +                                   "OR of all hash_32(%d) results =3D %#=
+x (%#x expected)",
+> +                                   i, hash_or[0][i], m);
+> +               KUNIT_ASSERT_EQ_MSG(test, hash_or[1][i], m,
+> +                                   "OR of all hash_64(%d) results =3D %#=
+x (%#x expected)",
+> +                                   i, hash_or[1][i], m);
 >         }
+> -
+> -       pr_notice("%u tests passed.", tests);
+> -
+> -       return 0;
+>  }
+>
+> -static void __init notice_skipped_tests(void)
+> -{
+> -       /* Issue notices about skipped tests. */
+> -#ifdef HAVE_ARCH__HASH_32
+> -#if HAVE_ARCH__HASH_32 !=3D 1
+> -       pr_info("__hash_32() is arch-specific; not compared to generic.")=
+;
+> -#endif
+> -#else
+> -       pr_info("__hash_32() has no arch implementation to test.");
+> -#endif
+> -#ifdef HAVE_ARCH_HASH_64
+> -#if HAVE_ARCH_HASH_64 !=3D 1
+> -       pr_info("hash_64() is arch-specific; not compared to generic.");
+> -#endif
+> -#else
+> -       pr_info("hash_64() has no arch implementation to test.");
+> -#endif
+> -}
+> -
+> -static int __init
+> -test_hash_init(void)
+> -{
+> -       int ret;
+> -
+> -       ret =3D test_string_or();
+> -       if (ret < 0)
+> -               return ret;
+> -
+> -       ret =3D test_hash_or();
+> -       if (ret < 0)
+> -               return ret;
+> -
+> -       notice_skipped_tests();
+> -
+> -       return ret;
+> -}
+> -
+> -static void __exit test_hash_exit(void)
+> -{
+> -}
+> +static struct kunit_case hash_test_cases[] =3D {
+> +       KUNIT_CASE(test_string_or),
+> +       KUNIT_CASE(test_hash_or),
+
+Ideally, these could be split up further into separate __hash_32(),
+hash_32(), and hash_64() tests. Maybe even with separate tests for
+architecture-specific versus generic implementations as mentioned
+above, if that made sense. It'd require enough reworking of the tests
+and expected results though, that I wouldn't necessarily want to force
+such a significant change at the same time as this more
+straightforward port to KUnit.
+
+> +       {}
+> +};
+>
+> -module_init(test_hash_init);   /* Does everything */
+> -module_exit(test_hash_exit);   /* Does nothing */
+> +static struct kunit_suite hash_test_suite =3D {
+> +       .name =3D "hash_tests",
+
+It might be worth just naming this "hash", as the fact that it's a
+KUnit suite already tells us it contains tests.
+
+> +       .test_cases =3D hash_test_cases,
+> +};
+>
+> -MODULE_LICENSE("GPL");
+
+It's probably worth keeping this in as it's still GPLed, and can be
+built as a module.
+
+> +kunit_test_suite(hash_test_suite);
+
+
 > --
 > 2.33.0
 >
-
---00000000000008f6fa05ca6eb3c3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnAYJKoZIhvcNAQcCoIIPjTCCD4kCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz2MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-/nKVAPkPCzwfEPbL1262MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwgZoGCCsGAQUF
-BwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9nc2F0
-bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNv
-bS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouseLHIb
-0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vY2Ev
-Z3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA+XCDyl6gdUzbfGv+D
-Xg1PhWeHLeXCPc9+sNLwRPD9AYET0o6RJYqNAVFC77sI4quIUtKk+H44VwMwNOhX3PY+69dzUd2E
-XLgutq81YK/Kt/wRUdEbgvDhvjumsVENI6xc4xZzAXAZqJLK+AR5oNtx0o9GC2el89ZF3yPI8KqH
-1aOYvtgDisoXXmst9rm6Njnt9AitTax0LwWdl1yGwnA6cqJfq8h7Ehg+6X3TGW4wMM1RsB9tLL2d
-osQsJT49+adAbU2yODf/XkIQevor0sIhJuxYkLay9G2GK1DCEmqUfbXWF5yQRxBkhVXHodFI2+V1
-OPxk5TOVVOId6G/60Hq4MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xv
-YmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAyMDIw
-AhABeyW1Dfueu+w9B/G1jwK+MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBML9GI
-uJSeL6ge8FZ4Ll6IaQ4SSj+qAWpn3SV4QZ5oyTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwG
-CSqGSIb3DQEJBTEPFw0yMTA4MjYwNDIxMjJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEq
-MAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqG
-SIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAeblLowh3DKxJeKcP2T2OG6Zm
-5ixCaohqwbeBruyqQayroaKfvCMx68SI1yudISem8IBzgcJ7DCuTkuOYbIjhzzwfdTQN+l/PKSEF
-uCAFwv8gDiC+rDmQx60hZXJyqY9GaCKFI1jRBc4DqQy0MsiQWZ3A/0Sj9URd1UO3x6pRPGRV4Qjf
-DRQWVx/sDrCXgVcyel8vF+OkR8Ec9Z9Pw8pAp+7/SMOFIcOY5zy7SNFFDZXyj9MpUDmbFl+meFtD
-0hR+B8RkXoJzqs6vxjtk2XCYT7qBdSy4Rxic/a35NA89YeWKcgQVLssrRyXt7RqGczY095EjFZNZ
-Ih+wycxAXaGspg==
---00000000000008f6fa05ca6eb3c3--
