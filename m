@@ -2,163 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8F13F8A2C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Aug 2021 16:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981C83F8D24
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Aug 2021 19:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232559AbhHZOhe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Aug 2021 10:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
+        id S231648AbhHZRgI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Aug 2021 13:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbhHZOhe (ORCPT
+        with ESMTP id S230242AbhHZRgI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Aug 2021 10:37:34 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF74C061757
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Aug 2021 07:36:46 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id g66-20020a9d12c8000000b0051aeba607f1so3722423otg.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Aug 2021 07:36:46 -0700 (PDT)
+        Thu, 26 Aug 2021 13:36:08 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA72C061757;
+        Thu, 26 Aug 2021 10:35:20 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id q3so2249052plx.4;
+        Thu, 26 Aug 2021 10:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D0x7kG5inCAU4odH4Ca7hH6L2dymSyP8KvC1gg8txvI=;
-        b=P0I9/WLM2kllF2CsU1LJ1VGJOKg93R3WGspayrL/kOiIA6MkG9oqhNa47EwKWRGDH4
-         ahgUV0kHqxhhwVbAjWKODDViXGRiXBM5qexE1XTinlHlts6w3lvuOxblzuHXxib+V0zE
-         PncJ6Z+0nepcixsaZQ9h0XemG/8fELyMs+gqs1dXMC2EI6fa6kbk5hdPZTCMaABedJtA
-         LyBqYLuhs2P0moxsuej5Oj8V9O2gwHeUVhBZBrrG2lB4Ai/i/4yRb0KYjXIcxm5A2jgy
-         lNg0KLQ5XDDhgeJeWQRKVMXru0Wz7MSIYBDTUO0Y4q28bDJDPNlDL2yQAuRGxhzHfeau
-         8XBA==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EZSEycsP4qShPCh1rVVDGzpSXPPGPKKt4tNdiEEa5Yo=;
+        b=c94jOw6mYlRttgV/ELojAGblRHKn2cClqABKr0Rvj2jkxVok/L/2iBafzHm+g/ccHc
+         W9R0GGnvBRh0fDrFaOgkTIcPtoaluXGUrLvFqa8Yh+KxKHeCQeSlkFA89mn3jvrRkRP1
+         fGr97QjrUTLFCaEO12/dK154B2bAXnCGhCh8L32Kd7ZONxYdm1ispu+eBkW5si1Gs1uX
+         hvMTI3drWfbpfGiYw9LRuL3xXT1FJVCW65JZm9q6oVQP9kSYO8mSg4NZXnHatM/tb+Z6
+         /CKBO6g+WRERs1NDPKp4ymYaIWkU1hUNJVAVYLZWGW7xll6zIUiQSTuOLzVvzDsMFke0
+         d9qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D0x7kG5inCAU4odH4Ca7hH6L2dymSyP8KvC1gg8txvI=;
-        b=mbHQsCHR2Ez3aZdcDagO7mnqgwjz8cX/b9ITBWy36HfT8xLipTtE5+PPgC+MjNeqXx
-         xEIJ3v6zPLsLOtAvKpNSSQ6uitnInt0ME/Q8y++/eimRRcF6eHZ536mM3y2rVZQT9g19
-         GV9p4SV/B1GrB7SUsipjDDba/QwvZc1FJXjT9SAqmZgYC0DJa8NczZ/YIQjO3U7YPJjI
-         T7iZgea/t6VP8B+D3mw/wAanEo7o57u2UyxmTafO/HGrTnfDkM1nq9tOCAgfBRSTCsXN
-         6T/UgcWscIWJIm/PTYc9Q5KNOzrYpeItIshrsCrZMWhidy9VFA8OdUJVH1kVpYWfGbCN
-         S3+g==
-X-Gm-Message-State: AOAM531dm+Jjs9ctNzYMWFnU41aY03n4zKNwQLBhW7SUtWZ16nroFMSc
-        MudVsNnv7gVGPDsjPdvm9vNLxqqnMYqOefL6LsPbEw==
-X-Google-Smtp-Source: ABdhPJx8znIwtijGE5yCzihQvV6CBXxvSBuPVEbykUDFH/2TOhXQIdLMBM58CoB3+b3BFLSZpKxHsIY/LmwlfPW0oRI=
-X-Received: by 2002:a05:6830:88:: with SMTP id a8mr3470082oto.233.1629988605961;
- Thu, 26 Aug 2021 07:36:45 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=EZSEycsP4qShPCh1rVVDGzpSXPPGPKKt4tNdiEEa5Yo=;
+        b=nu+T1Gemzsc6NxTZ750jZll8cjG/8wkx/OiX9sul/I+OFLmY9QE+vIutnPq8Xb+MSQ
+         +uoeOxoWNP/fLEx3AOyfLEVD+/Ydi1H6cfeGRdN4vdVHi6W82gaGa/6VnBgh4Y7i90Oc
+         AzE5BGeNnuThMVcwSupGJnc+mkfvZIAxyDNmfxb6iyY9BGpi2b0VEKbX0kcfymzohl1u
+         /cDqPRkHeSFf6fZsEaK+gHj6QRDZFtbXZIqRD2x4UVWKh5eaiAapkVShxVUTTrX7zyRW
+         mwjAkMyBH/dmA5FRN9o2QRZYQHq731n3FfesdojjF3x0mCyVxrQIbwlL122ZsW4uG+TU
+         mqSQ==
+X-Gm-Message-State: AOAM530CwsJYYmVdf9qXbTO5YROOKdzL9sMoj5GQ7BYhkh9ZUBMA44FD
+        QJ5SrvLfOIWtdq5mwxocL04=
+X-Google-Smtp-Source: ABdhPJymWHDxxzJjTigGN5lvXbqmg6P7g6x2gzttSRV3Qkej8MJPiLPGWOPaqIExD/17GCx8Ab0eNA==
+X-Received: by 2002:a17:90a:1991:: with SMTP id 17mr9217042pji.149.1629999319833;
+        Thu, 26 Aug 2021 10:35:19 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:a096])
+        by smtp.gmail.com with ESMTPSA id n14sm10441971pjm.5.2021.08.26.10.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Aug 2021 10:35:19 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 26 Aug 2021 07:35:14 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v7 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <YSfQ0mYWs2zUyqGY@mtj.duckdns.org>
+References: <20210825213750.6933-1-longman@redhat.com>
+ <20210825213750.6933-6-longman@redhat.com>
 MIME-Version: 1.0
-References: <20210826012626.1163705-1-isabellabdoamaral@usp.br> <20210826012626.1163705-3-isabellabdoamaral@usp.br>
-In-Reply-To: <20210826012626.1163705-3-isabellabdoamaral@usp.br>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 26 Aug 2021 16:36:34 +0200
-Message-ID: <CANpmjNPdP4OZGE3is4twths1fejCjZeEKAweVpgdqBUc=e59ww@mail.gmail.com>
-Subject: Re: [PATCH 2/6] test_hash.c: move common definitions to top of file
-To:     Isabella Basso <isabellabdoamaral@usp.br>
-Cc:     linux@sciencehorizons.net, geert@linux-m68k.org,
-        ferreiraenzoa@gmail.com, augusto.duraes33@gmail.com,
-        brendanhiggins@google.com, dlatypov@google.com,
-        davidgow@google.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        ~lkcamp/patches@lists.sr.ht, rodrigosiqueiramelo@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210825213750.6933-6-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 26 Aug 2021 at 03:26, 'Isabella Basso' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
-> Keep function signatures minimal by making common definitions static.
-> This does not change any behavior.
+Hello, Waiman.
 
-This seems like an odd change; if I read it right it's changing the
-out-param passed to test_int_hash() to simply be static globals.
+Let's stop iterating on the patchset until we reach a consensus.
 
-For one, it makes the code harder to read because now test_int_hash()
-is no longer "pure" (no global side-effects ... modulo printfs), and
-what was previously an out-param, is now a global.
+On Wed, Aug 25, 2021 at 05:37:49PM -0400, Waiman Long wrote:
+>  	1) The "cpuset.cpus" is not empty and the list of CPUs are
+>  	   exclusive, i.e. they are not shared by any of its siblings.
 
-Unfortunately this is poor style and likely to lead to hard-to-debug
-problems. One such problem is if suddenly you have multiple threads
-involved. While this is just a test and unlikely to be a problem, I
-would recommend not introducing global state carelessly.
+Part of it can be reached by cpus going offline.
 
-An alternative common idiom, where a set of variables are always
-passed around to other functions, is to introduce a struct and pass a
-pointer to it along.
+>  	2) The parent cgroup is a partition root.
 
-> Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
-> ---
->  lib/test_hash.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/lib/test_hash.c b/lib/test_hash.c
-> index d4b0cfdb0377..8bcc645a7294 100644
-> --- a/lib/test_hash.c
-> +++ b/lib/test_hash.c
-> @@ -23,6 +23,11 @@
->  #include <linux/stringhash.h>
->  #include <linux/printk.h>
->
-> +#define SIZE 256 /* Run time is cubic in SIZE */
-> +
-> +static u32 string_or; /* stores or-ed string output */
-> +static u32 hash_or[2][33] = { { 0, } }; /* stores or-ed hash output */
+This condition can happen if a parent stop being a partition.
 
-These now use up memory for as long as this module is loaded, vs.
-before where it would only use up stack space. (For a test that's not
-a problem, but in non-test code it might.)
+> -	3) The "cpuset.cpus" is also a proper subset of the parent's
+> +	3) The "cpuset.cpus" is a subset of the parent's
+>  	   "cpuset.cpus.effective".
 
->  /* 32-bit XORSHIFT generator.  Seed must not be zero. */
->  static u32 __init __attribute_const__
->  xorshift(u32 seed)
-> @@ -66,7 +71,7 @@ fill_buf(char *buf, size_t len, u32 seed)
->   * recompile and re-test the module without rebooting.
->   */
->  static bool __init
-> -test_int_hash(unsigned long long h64, u32 hash_or[2][33])
-> +test_int_hash(unsigned long long h64)
->  {
->         int k;
->         u32 h0 = (u32)h64, h1, h2;
-> @@ -123,17 +128,15 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
->         return true;
->  }
->
-> -#define SIZE 256       /* Run time is cubic in SIZE */
-> -
->  static int __init
->  test_hash_init(void)
->  {
->         char buf[SIZE+1];
-> -       u32 string_or = 0, hash_or[2][33] = { { 0, } };
->         unsigned tests = 0;
->         unsigned long long h64 = 0;
->         int i, j;
->
-> +       string_or = 0;
+This can happen if cpus go offline.
 
-That's another problem with changes like this; now the compiler has no
-chance to warn you in case the variable is not initialized correctly.
+>  	4) There is no child cgroups with cpuset enabled.  This is for
+>  	   eliminating corner cases that have to be handled if such a
+>  	   condition is allowed.
 
-Also, I don't see string_or used anywhere else. Why make it global?
-If a later change would require that, it should say so in the commit
-message. But my guess is you can avoid all that by bundling everything
-up in a struct.
+This may make sense as a short cut for us but doesn't really stem from
+interface or behavior requirements.
 
->         fill_buf(buf, SIZE, 1);
->
->         /* Test every possible non-empty substring in the buffer. */
-> @@ -161,7 +164,7 @@ test_hash_init(void)
->
->                         string_or |= h0;
->                         h64 = h64 << 32 | h0;   /* For use with hash_64 */
-> -                       if (!test_int_hash(h64, hash_or))
-> +                       if (!test_int_hash(h64))
->                                 return -EINVAL;
->                         tests++;
->                 } /* i */
-> --
-> 2.33.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20210826012626.1163705-3-isabellabdoamaral%40usp.br.
+Of the four conditions listed, two are bogus (the states can be
+reached through a different path and the configuration success or
+failure can be timing dependent if configuration racaes against cpu
+hotplug operations) and one maybe makes sense half-way and one is more
+of a shortcut.
+
+Can't we just replace these with transitions to invalid state with
+proper explanation? That'd get rid of the error handling duplications
+from both the kernel and user side, make automated configurations
+which may race against hot plug operations reliable, and consistently
+provide users with why something failed.
+
+Thank you.
+
+-- 
+tejun
