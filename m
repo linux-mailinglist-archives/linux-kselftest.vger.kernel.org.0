@@ -2,68 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403043F8711
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Aug 2021 14:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A13DB3F897A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Aug 2021 15:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242455AbhHZMPe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Aug 2021 08:15:34 -0400
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:54288
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242446AbhHZMPe (ORCPT
+        id S242761AbhHZN6R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Aug 2021 09:58:17 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:38630 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242768AbhHZN6K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Aug 2021 08:15:34 -0400
-Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 26 Aug 2021 09:58:10 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C66CF2230B;
+        Thu, 26 Aug 2021 13:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1629986237; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EnhMvs9n1nhsU1o7+xe9+Bo6hjRyCva0kdWrwKPRW08=;
+        b=GR//V0SiIEZKLC6w/96Ri/cMSee15eFRF7D1Vw13XhIHov2iDzsBhkCDnzKVLSJpFK3HsG
+        8kGlTGpPk7GQg4S3H0Q3HtwEcMPUwRcy6z3BgXTc4to++5I4qh2Z3tVt7aaH90iUtXrGB+
+        XxO2hZXNgRy0t1NpHNzYylTUjcl8whY=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 21CF93F365;
-        Thu, 26 Aug 2021 12:14:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1629980086;
-        bh=/dJmievy+1/SfYgUqjAoPZYohmD9QSxsCNc6tg+k6gw=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
-        b=F5KJEkOYs1j0nVBSQVF9qNBSrqNZdNDwVf7Efjf7SDZNntz+QpS+S8DjF8pFDgQ3T
-         sfpwbawKS6tkrkd0o1BzHtXcLvXYKUZgpzPln12bLlu98gwgSCj5ilia/W5R8D2nCB
-         LT/tb/sxF4Ob4kl2gHVHO+0azRuJdIgG4HoF/sZLTGug2WUVYFl59za1Kz3oXqtw6Q
-         HhVOqDMnRtmmNu7z5U7ijnMj/pAj7QtL/TEH0oelSNdjPr9Kflhr/kqBQxSjCtxROm
-         ruTu0izi/7TkJSqxF44vGKPZ9XttBipkMqLxWGF9XihNshHtg8fOO9a5oNDhmoafGT
-         HZzOWnMP93k4Q==
-From:   Colin King <colin.king@canonical.com>
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: safesetid: Fix spelling mistake "cant" -> "can't"
-Date:   Thu, 26 Aug 2021 13:14:45 +0100
-Message-Id: <20210826121445.13062-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        by relay2.suse.de (Postfix) with ESMTPS id 7E2C5A3B99;
+        Thu, 26 Aug 2021 13:57:14 +0000 (UTC)
+Date:   Thu, 26 Aug 2021 15:57:13 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrea Merello <andrea.merello@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Ben Gardon <bgardon@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Perches <joe@perches.com>, Jonas Bonn <jonas@southpole.se>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rich Felker <dalias@libc.org>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH 11/17] find: micro-optimize for_each_{set,clear}_bit()
+Message-ID: <YSeduU41Ef568xhS@alley>
+References: <20210814211713.180533-1-yury.norov@gmail.com>
+ <20210814211713.180533-12-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210814211713.180533-12-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Sat 2021-08-14 14:17:07, Yury Norov wrote:
+> The macros iterate thru all set/clear bits in a bitmap. They search a
+> first bit using find_first_bit(), and the rest bits using find_next_bit().
+> 
+> Since find_next_bit() is called shortly after find_first_bit(), we can
+> save few lines of I-cache by not using find_first_bit().
 
-There is a spelling mistake in an error message. Fix it.
+Is this only a speculation or does it fix a real performance problem?
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- tools/testing/selftests/safesetid/safesetid-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The macro is used like:
 
-diff --git a/tools/testing/selftests/safesetid/safesetid-test.c b/tools/testing/selftests/safesetid/safesetid-test.c
-index 0c4d50644c13..4b809c93ba36 100644
---- a/tools/testing/selftests/safesetid/safesetid-test.c
-+++ b/tools/testing/selftests/safesetid/safesetid-test.c
-@@ -152,7 +152,7 @@ static void write_policies(void)
- 
- 	fd = open(add_whitelist_policy_file, O_WRONLY);
- 	if (fd < 0)
--		die("cant open add_whitelist_policy file\n");
-+		die("can't open add_whitelist_policy file\n");
- 	written = write(fd, policy_str, strlen(policy_str));
- 	if (written != strlen(policy_str)) {
- 		if (written >= 0) {
--- 
-2.32.0
+	for_each_set_bit(bit, addr, size) {
+		fn(bit);
+	}
 
+IMHO, the micro-opimization does not help when fn() is non-trivial.
+
+
+> --- a/include/linux/find.h
+> +++ b/include/linux/find.h
+> @@ -280,7 +280,7 @@ unsigned long find_next_bit_le(const void *addr, unsigned
+>  #endif
+>  
+>  #define for_each_set_bit(bit, addr, size) \
+> -	for ((bit) = find_first_bit((addr), (size));		\
+> +	for ((bit) = find_next_bit((addr), (size), 0);		\
+>  	     (bit) < (size);					\
+>  	     (bit) = find_next_bit((addr), (size), (bit) + 1))
+>  
+
+It is not a big deal. I just think that the original code is slightly
+more self-explaining.
+
+Best Regards,
+Petr
