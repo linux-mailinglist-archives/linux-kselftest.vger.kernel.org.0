@@ -2,235 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E0A3F9127
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Aug 2021 01:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82F53F91F3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Aug 2021 03:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243827AbhHZXzp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Aug 2021 19:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbhHZXzp (ORCPT
+        id S243938AbhH0Bgc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Aug 2021 21:36:32 -0400
+Received: from esa16.fujitsucc.c3s2.iphmx.com ([216.71.158.33]:35640 "EHLO
+        esa16.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243923AbhH0Bgb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Aug 2021 19:55:45 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B4BC061757
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Aug 2021 16:54:57 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id j2so2804809pll.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Aug 2021 16:54:57 -0700 (PDT)
+        Thu, 26 Aug 2021 21:36:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1630028144; x=1661564144;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=DJ8d1IW5RM2UrO2J79DELfPaF/ux7quRWVnkFoq/iF8=;
+  b=Z5xH3rzcqk4MHuiq8hgYSNetacJpqgQqx4q/xAmdBPBjYcuczRbuiKyg
+   cFcSh1NnBqe4tEt+XzjkDirAFS9fMylXK5IYu1laqxIiKoziIuVHQ5Xmj
+   duYK9mVnDNtqj7V8fiR0jwpd7UOV0Y7cz6Ytz0O26ZmtedGjnf0QCQgDr
+   0SIIqDFoGO987wPoo9Y5hHimG/Y0ZKiXjnpkNIIvY1DNSJmrIJFduDd1G
+   KN2THt8sdsxCyFzh3RaIHyHg0OE1nAeQ0CD4H5V/73qR+sIkrQoNBVahD
+   Eem4uJs4L+l6siU7w0AMJ+9cx1eX2VQlKWuBEbHRkaa9fVm/8VA2euFRQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10088"; a="37804745"
+X-IronPort-AV: E=Sophos;i="5.84,355,1620658800"; 
+   d="scan'208";a="37804745"
+Received: from mail-ty1jpn01lp2050.outbound.protection.outlook.com (HELO JPN01-TY1-obe.outbound.protection.outlook.com) ([104.47.93.50])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2021 10:35:38 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gEADiifWyIXt5NqIamKzpZ38erIaafo7NQkJi1agRGDJi1SH3VHO//Xz5fmTIRKdjHDy1P+uC4FfALIq0VATlH9IKe8BBYNDc+rizWGpDmMuvozxDckMcXuggkuJjoN5NqvqQx3IzVynzB/4DB+bMo6zg5TRXvoHk0Fo03m/rSpRj+dOkZV0GWZJpbAOMiq1n1aWKffUCM5oQBWPwnQISipNoB6Te9Hch8NgrpXmhPhmMqcpu93G1FO2w7NnZN002ThKM+3sVCYJukp6kwHbfWCxkXqRmvs+WHgTfjiZsUfbj5w7Z7c8GwuHV4TXqP4sSZd2Ju4cq4kXAERvdPyk1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DJ8d1IW5RM2UrO2J79DELfPaF/ux7quRWVnkFoq/iF8=;
+ b=eT4OqdZiEmAIdjm+aAPABZJleakQr2gckRT95TiGu5uvZ0iC9ciR4Y/K0gBmNEA94kmv3u1h++gzMeg5PxPZMZFCW828LF+7GA7BCCb2hnOws6e4eccz2hGyewtgLAI36wIX8ppiREvBNFWA/0GTpgkxkHfS/mScrn1KFtTO/wKrYqSbb82J1fUZICFLPd4dlhfKzgwKWtlAtd/KRpVeOGROsc/dFPKiXQaigCJhx8risVfx8OykI38oNT7KaVHAkc1ByrUuYXqD28nVS7yRMBX1WR8WV83GayXN3tnDaMfjq1QfP2hGASrjCBcfp1koCGgT8UWs5CgyPTWZU2muvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dW8gFjFomOc5wOdjLD9Dz4jaY3La87NN9K39GXWQx+E=;
-        b=ItG8l0YBP+DbB+c2JE7Df+BDJmWlmM348qS2tn+o20n2CfRdWAMxuKeVWdApc9i/ph
-         SXx9VY/vjBKJ3otuIt73eO92WBuq2g3EeJrPGA1j+NIfwr3rwhzUL7XKr8ulfNJkTyAs
-         A/hdowTP0Ti4TQsIpZGrNAHfz/lIC0cgWPZ6lWsmT7TuDhNU3UrobkDJ2/YT8+DUskzz
-         HyZQgME2+z2UW9Kqa9640Z5XVMQ6hwklS3TQ+vcyW689vKbrce53AFsKL98ApNqD/w6b
-         XBODsFQkhS7SADidGdS4SqCHCuSJuloxnOtFCWTXqWXH7UgBlb+bA6idy73fwmLcWo99
-         dmPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dW8gFjFomOc5wOdjLD9Dz4jaY3La87NN9K39GXWQx+E=;
-        b=gBph4JPSCBd/LbCz5VpGOcesvhM/3rgE2FcSgts7X3jGiG3TRY4iZFjthbzebvtbKB
-         rnT3XeRCZYcFkqrfKtAfkT+lLjfeyT8IPzgd+dpD3LhLNazVRyZSBBZkQj5jI2ZL/CH/
-         NzaoYPsmIDU9FFeXuGaScFObEPzo3xkxXwj9/8qPAIWW/fxbmJl1eAWhERona3omgQaH
-         ahgeix0glt7RGa2jn8CsuM4icrL5vZv9/cBiyWRuCWM8Oze9SV+IiZNNp45//jXC/jTA
-         A3Lk7nK8i0xyRGLAsgtU1rjet8wb8j4eYf67atMTlMhqJz/k3ubIPJ0ACKtetTwXbRTd
-         m4rw==
-X-Gm-Message-State: AOAM5320dqyaXMVjDEPn6b9i0WDvUzapD2PZS5olzIPq03M9fKIkwn16
-        ywmE2ivSRqAXA1GPYUG2Naog5Q==
-X-Google-Smtp-Source: ABdhPJwzNqdZ7nV9Pm9TbIto/bocQMQl0ruPz+G7jXml1aOfc3KfC0ZbBEbJQskaU4OTATHvb0yPjg==
-X-Received: by 2002:a17:902:c643:b0:130:eab4:bd22 with SMTP id s3-20020a170902c64300b00130eab4bd22mr5672776pls.13.1630022096179;
-        Thu, 26 Aug 2021 16:54:56 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id r3sm3863725pff.119.2021.08.26.16.54.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Aug 2021 16:54:55 -0700 (PDT)
-Date:   Thu, 26 Aug 2021 23:54:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     dvhart <dvhart@infradead.org>,
-        "Russell King, ARM Linux" <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-csky <linux-csky@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
- detect task migration bugs
-Message-ID: <YSgpy8iXXXUQ+b/k@google.com>
-References: <20210820225002.310652-1-seanjc@google.com>
- <20210820225002.310652-5-seanjc@google.com>
- <766990430.21713.1629731934069.JavaMail.zimbra@efficios.com>
- <282257549.21721.1629732017655.JavaMail.zimbra@efficios.com>
- <YSblqrrpKcORzilX@google.com>
- <1700758714.29394.1630003332081.JavaMail.zimbra@efficios.com>
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DJ8d1IW5RM2UrO2J79DELfPaF/ux7quRWVnkFoq/iF8=;
+ b=FgRt/k86ftw5EmcG2w8US2zqRLpwt9Q8o72YtR4FzK3Pl4w3Eqz+ZBOos6vFo4zObl22OVscoTFiOYvH7cw9waU/Qw+3/DistJCkbxxucM/77SZ9NLQB6nllKRF/6KCxaOGMXl1dvW8O8VlvskUSnydq4++amtYdQUt/+8UbvJk=
+Received: from OS3PR01MB7650.jpnprd01.prod.outlook.com (2603:1096:604:14f::5)
+ by OSZPR01MB7988.jpnprd01.prod.outlook.com (2603:1096:604:1bc::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.17; Fri, 27 Aug
+ 2021 01:35:34 +0000
+Received: from OS3PR01MB7650.jpnprd01.prod.outlook.com
+ ([fe80::7407:c85b:2ea4:2ba9]) by OS3PR01MB7650.jpnprd01.prod.outlook.com
+ ([fe80::7407:c85b:2ea4:2ba9%5]) with mapi id 15.20.4457.023; Fri, 27 Aug 2021
+ 01:35:34 +0000
+From:   "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+CC:     "philip.li@intel.com" <philip.li@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 1/3] selftests/sync: Remove the deprecated config SYNC
+Thread-Topic: [PATCH v2 1/3] selftests/sync: Remove the deprecated config SYNC
+Thread-Index: AQHXmh1P4IEybxgKl0qVPyRSxm2LuKuGSUsAgABJkoA=
+Date:   Fri, 27 Aug 2021 01:35:34 +0000
+Message-ID: <69835666-1710-5103-fb06-2636a3a3c5bb@fujitsu.com>
+References: <20210826015847.7416-1-lizhijian@cn.fujitsu.com>
+ <20210826015847.7416-2-lizhijian@cn.fujitsu.com>
+ <239339d5-5626-ea04-97db-7dc070a48636@linuxfoundation.org>
+In-Reply-To: <239339d5-5626-ea04-97db-7dc070a48636@linuxfoundation.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dff2632f-87eb-4552-951e-08d968faf734
+x-ms-traffictypediagnostic: OSZPR01MB7988:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <OSZPR01MB7988CED6C3980CB5879501F4A5C89@OSZPR01MB7988.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WsVvAnzxRJWPMK0Of7lLFuCn+xthwYGDhn0ZDI1wd9pnvcwhPuo6ylwUMwUqajiN1GAQiHYDQd6QT+nB3GHv4YEws/tsqZugEgj96A7cwK+ESWgH1zu5mt0ft1S/iU4qV1hmObcO5/y90se7xFOkrOSoLbvy77kESUf0qzssA2Kn/w4fdwShWdP9ED+Hm9vTdfacHjJfYRvlFKPBM1irfFb/DOj/fbYT3/qbilEUs4s99XMhDAxiHFf+IuAsthz5FJgExbR8xnSS+I50L4hGYQeJDUPQOL/ALXr5jlEPx+LlzbDgUaeKpOk6u+GyjbgHSIita15cVFo12tdTyXKBWo+hOD/0s1bMDb49KbZWuVH9S3ogXzjbODX+ahYtpXpIkm2GF9KvTSEj3Nt1GlXTrty6EQMQS1Pk3ma2Dnz8QxuSI481DpFkvKYZTwOdzE2ORaAZt30B1+smpCwq4oNRLtXNZHeLHG2tPQiKmA/d0ZdMpNIMjQ9WWQBnHsDIEwgPRzIbHSDPUk2PBN5ryEhN9+LyIHVRY3sbAgRhnLqGQwLspbUMN5gUun3cEQzYraHzbae0Eba5IUZHS6xO+lObzXqE86WbJUUEBZV3nguu7j2QTiyJbRkX+ZGBZdhs2xNeNYFJwUAu7vyuHPahOskd/3gINNGzkmwrffFJcsOfie0D11c9TN4lzcQ/Ztz1t+FERRvb9VbIEmeiXDEJ2cz2d3tBb+D4nwmeaEM7FQI7XMYnASPnk1oHMEFRAz3ahi+aZGwNCqXvH3REGKAaWLvgGYjeOnDwZSvh1a2bC8AicPnO2GFM7LorLUntQcaYcIeG247dPQCTSfGsmHNsRfr9R84N7xTTkz/97yetGyKjMb8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB7650.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(396003)(366004)(39860400002)(376002)(8936002)(66556008)(6486002)(66446008)(2906002)(85182001)(5660300002)(38070700005)(2616005)(86362001)(64756008)(66476007)(83380400001)(478600001)(110136005)(54906003)(4326008)(53546011)(71200400001)(6506007)(8676002)(122000001)(38100700002)(6512007)(36756003)(186003)(31696002)(31686004)(316002)(966005)(26005)(76116006)(66946007)(91956017)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U3plZ1k4NllhQ3h3ZTBGOWVHQjh2TUhsSk5saW02UTNzMEZLVzZMbzd4ZEs0?=
+ =?utf-8?B?UVNHajZ2aDZIRWJUNlluYVg1eG45MmI3QUxyMkJRWUNOSG5lK1lGZ25FQzV2?=
+ =?utf-8?B?UVMrVzdoa3FuWjVFY1N0RnY3Slp1YVV3NGhrbkJ6V296RUYxeDlTNkQ4V2xr?=
+ =?utf-8?B?WnV3STQyWmJPZnozSVhOZ0Z1YTEvQWdYYkhJcFM0cEE0dUFzVnZsSTFyY1dz?=
+ =?utf-8?B?dDBUMUVPSjA4R0I1VTVmU1NEdkxNSXp5QmI1ampBRlpzL1RMR20wZG4rVkRW?=
+ =?utf-8?B?RkFWSWhOMlpENWN4R3kxRGMxZFBhV0NMYjFobDE3clhNNTFrT1NGVlFIWUJ0?=
+ =?utf-8?B?ZHc0Uk5ZL1U2NlNTYnBZb3JjQU1lOUNtN1ZOTUkxM0pDM2JZbnRnREhZamRI?=
+ =?utf-8?B?NEl0bEg4UUUwN0RxTTIxZG56c3lTK1ByZFRGODF6VXVnYml6bTRjZWs0Q1JG?=
+ =?utf-8?B?Vm1ickNTRGN1dGVQSUJVZFhqSzJ6U25adENLMVFXbnJTNFRDNWxaM1l1dUJv?=
+ =?utf-8?B?WVpuQXRKNTJwTkJFT0RzTUpkQm1vaStWTFZJL2ZTSkxuN3RYV25CM0kwY1Bt?=
+ =?utf-8?B?NFJZV0o5VXVjaTd5TnJrd2RZeXpzc2tvRjVPalpZeElSZGVpVFVsdHZZK3M5?=
+ =?utf-8?B?K3dEN2RLaE9UdVB3Z1VBU1MrdzdETWJRT3B1V0dvQTFyN3ZEa2lBbTVzLzNq?=
+ =?utf-8?B?cGhjcGFpalhPNWNFWjBHM3daNW1JU1kzeFVhZ1hIWW5td3IxZkFucHU2cURJ?=
+ =?utf-8?B?ZGNtd1hWRENxYXRJeGxDS2kwWHdQQUtHUFpYWTdYZG8xOCtEOUZlVWJLdTB2?=
+ =?utf-8?B?Zkc5VmJpdnJ0TXVYL3ZWcC9mMElmOGp5SlNuUUptWE1OR2lONzN2YStHWTl0?=
+ =?utf-8?B?RTk4N0srREJJdVZ4VlNvNUFLR2lvMVJtVTBlTkprQ3FKZC9vSnJOcmJTcDYr?=
+ =?utf-8?B?M04yL1ZZS0szL0hFandMdE92MWYwdmF0ZFpnbStEcm0yT3RxdWtDb1d1TVJs?=
+ =?utf-8?B?NmE0aFRMWHZ3TVJSazFFa1dyUEhJRU51dWxLcDllZFdkNHhiRXBXQ1Q2SU9Z?=
+ =?utf-8?B?WnNYcUFETXBZdVUwME5SbnU5MS94UFBlRzhpU0kvOCtkMHNVVFlXWk9Mcko1?=
+ =?utf-8?B?QW1xUkp3cnVSYzUxTmNxZnprYXhub2x1dVd2MndTbkw2Vi9aQUEvOWRwM29H?=
+ =?utf-8?B?dkNzNlhsREZENjRETDdYY3czM1JqQUhDcWpXWlg1SklsUXVxRW0vV0oyWDVF?=
+ =?utf-8?B?ZVVjRkdnSGhrbit3ejBnVVlUNm9NTkZlaXIwWmRlVllpTGlNaktrWXYrMzYw?=
+ =?utf-8?B?U2ZzSzFiV0pBOUJseW0zL2tyQklQaXA2QWdqeXJYakNHdVNQMUlnQlJzN1A4?=
+ =?utf-8?B?dk5iZWh1aEdSRGZvOGp4dm5VaUhmYTJCeEtpK1JuMVVEUkVkVE9hc2RPTHpX?=
+ =?utf-8?B?dDg3cXRQd3pTeEIxU0VaMUJ2cy9tc1IxZ0NPa281VGd3S20xdENSK21kT0tn?=
+ =?utf-8?B?YmV2MnpjRm94QkUzbHlSRHluVnZyODBqMHdETzJaaUhsV2l6RXpUSDhXWVZj?=
+ =?utf-8?B?bWVnTlBZTDlSeDVOTDNZUzNXdDBlRXE2eDlyU2FDU0s5WEFMeG5iSmMrWXN3?=
+ =?utf-8?B?RndqQzJnTG9SOTlQS0ZVVkhKcnZqeXYzekxGVm5pZmF3eXBqdmlLWFN6blJ5?=
+ =?utf-8?B?ZTZoaGZ3Vk1pRmFtVDRUZlJpaCtTVHV4bjFVcHYrSmVHdHFxT1RzZ0lBMDJw?=
+ =?utf-8?B?aFYza0ljR2lpbEZvRUxadmttVWxwZnNycUQzYlpLYXJrQmpWeUN2aldneXlm?=
+ =?utf-8?B?WUw1M0tWZEVwSU5hMFY2Zz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <77974BE93D34C54391B55D992307E611@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1700758714.29394.1630003332081.JavaMail.zimbra@efficios.com>
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB7650.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dff2632f-87eb-4552-951e-08d968faf734
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2021 01:35:34.7420
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gTr8oz46Hj0g6r+m8dSsvIjminKHbCzSPfw/n/ZW7kRrAODKDySmkgAH/k9i8ESBVmBokwFCp+nswES7n76i6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB7988
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 26, 2021, Mathieu Desnoyers wrote:
-> ----- On Aug 25, 2021, at 8:51 PM, Sean Christopherson seanjc@google.com wrote:
-> >> >> +		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> >> >> +		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
-> >> >> +			    errno, strerror(errno));
-> >> >> +		atomic_inc(&seq_cnt);
-> >> >> +
-> >> >> +		CPU_CLR(cpu, &allowed_mask);
-> >> >> +
-> >> >> +		/*
-> >> >> +		 * Let the read-side get back into KVM_RUN to improve the odds
-> >> >> +		 * of task migration coinciding with KVM's run loop.
-> >> > 
-> >> > This comment should be about increasing the odds of letting the seqlock
-> >> > read-side complete. Otherwise, the delay between the two back-to-back
-> >> > atomic_inc is so small that the seqlock read-side may never have time to
-> >> > complete the reading the rseq cpu id and the sched_getcpu() call, and can
-> >> > retry forever.
-> > 
-> > Hmm, but that's not why there's a delay.  I'm not arguing that a livelock isn't
-> > possible (though that syscall would have to be screaming fast),
-> 
-> I don't think we have the same understanding of the livelock scenario. AFAIU the livelock
-> would be caused by a too-small delay between the two consecutive atomic_inc() from one
-> loop iteration to the next compared to the time it takes to perform a read-side critical
-> section of the seqlock. Back-to-back atomic_inc can be performed very quickly, so I
-> doubt that the sched_getcpu implementation have good odds to be fast enough to complete
-> in that narrow window, leading to lots of read seqlock retry.
-
-Ooooh, yeah, brain fart on my side.  I was thinking of the two atomic_inc() in the
-same loop iteration and completely ignoring the next iteration.  Yes, I 100% agree
-that a delay to ensure forward progress is needed.  An assertion in main() that the
-reader complete at least some reasonable number of KVM_RUNs is also probably a good
-idea, e.g. to rule out a false pass due to the reader never making forward progress.
-
-FWIW, the do-while loop does make forward progress without a delay, but at ~50% 
-throughput, give or take.
-
-> > but the primary motivation is very much to allow the read-side enough time
-> > to get back into KVM proper.
-> 
-> I'm puzzled by your statement. AFAIU, let's say we don't have the delay, then we
-> have:
-> 
-> migration thread                             KVM_RUN/read-side thread
-> -----------------------------------------------------------------------------------
->                                              - ioctl(KVM_RUN)
-> - atomic_inc_seq_cst(&seqcnt)
-> - sched_setaffinity
-> - atomic_inc_seq_cst(&seqcnt)
->                                              - a = atomic_load(&seqcnt) & ~1
->                                              - smp_rmb()
->                                              - b = LOAD_ONCE(__rseq_abi->cpu_id);
->                                              - sched_getcpu()
->                                              - smp_rmb()
->                                              - re-load seqcnt/compare (succeeds)
->                                                - Can only succeed if entire read-side happens while the seqcnt
->                                                  is in an even numbered state.
->                                              - if (a != b) abort()
->   /* no delay. Even counter state is very
->      short. */
-> - atomic_inc_seq_cst(&seqcnt)
->   /* Let's suppose the lack of delay causes the
->      setaffinity to complete too early compared
->      with KVM_RUN ioctl */
-> - sched_setaffinity
-> - atomic_inc_seq_cst(&seqcnt)
-> 
->   /* no delay. Even counter state is very
->      short. */
-> - atomic_inc_seq_cst(&seqcnt)
->   /* Then a setaffinity from a following
->      migration thread loop will run
->      concurrently with KVM_RUN */
->                                              - ioctl(KVM_RUN)
-> - sched_setaffinity
-> - atomic_inc_seq_cst(&seqcnt)
-> 
-> As pointed out here, if the first setaffinity runs too early compared with KVM_RUN,
-> a following setaffinity will run concurrently with it. However, the fact that 
-> the even counter state is very short may very well hurt progress of the read seqlock.
-
-*sigh*
-
-Several hours later, I think I finally have my head wrapped around everything.
-
-Due to the way the test is written and because of how KVM's run loop works,
-TIF_NOTIFY_RESUME or TIF_NEED_RESCHED effectively has to be set before KVM actually
-enters the guest, otherwise KVM will exit to userspace without touching the flag,
-i.e. it will be handled by the normal exit_to_user_mode_loop().
-
-Where I got lost was trying to figure out why I couldn't make the bug reproduce by
-causing the guest to exit to KVM, but not userspace, in which case KVM should
-easily trigger the problematic flow as the window for sched_getcpu() to collide
-with KVM would be enormous.  The reason I didn't go down this route for the
-"official" test is that, unless there's something clever I'm overlooking, it
-requires arch specific guest code, and ialso I don't know that forcing an exit
-would even be necessary/sufficient on other architectures.
-
-Anyways, I was trying to confirm that the bug was being hit without a delay, while
-still retaining the sequence retry in the test.  The test doesn't fail because the
-back-to-back atomic_inc() changes seqcnt too fast.  The read-side makes forward
-progress, but it never observes failure because the do-while loop only ever
-completes after another sched_setaffinity(), never after the one that collides
-with KVM because it takes too long to get out of ioctl(KVM_RUN) and back to the
-test.  I.e. the atomic_inc() in the next loop iteration (makes seq_cnt odd) always
-completes before the check, and so the check ends up spinning until another
-migration, which correctly updates rseq.  This was expected and didn't confuse me.
-
-What confused me is that I was trying to confirm the bug was being hit from within
-the kernel by confirming KVM observed TIF_NOTIFY_RESUME, but I misunderstood when
-TIF_NOTIFY_RESUME would get set.  KVM can observe TIF_NOTIFY_RESUME directly, but
-it's rare, and I suspect happens iff sched_setaffinity() hits the small window where
-it collides with KVM_RUN before KVM enters the guest.
-
-More commonly, the bug occurs when KVM sees TIF_NEED_RESCHED.  In that case, KVM
-calls xfer_to_guest_mode_work(), which does schedule() and _that_ sets
-TIF_NOTIFY_RESUME.  xfer_to_guest_mode_work() then mishandles TIF_NOTIFY_RESUME
-and the bug is hit, but my confirmation logic in KVM never fired.
-
-So there are effectively three reasons we want a delay:
-
-  1. To allow sched_setaffinity() to coincide with ioctl(KVM_RUN) before KVM can
-     enter the guest so that the guest doesn't need an arch-specific VM-Exit source.
-
-  2. To let ioctl(KVM_RUN) make its way back to the test before the next round
-     of migration.
-
-  3. To ensure the read-side can make forward progress, e.g. if sched_getcpu()
-     involves a syscall.
-
-
-After looking at KVM for arm64 and s390, #1 is a bit tenuous because x86 is the
-only arch that currently uses xfer_to_guest_mode_work(), i.e. the test could be
-tweaked to be overtly x86-specific.  But since a delay is needed for #2 and #3,
-I'd prefer to rely on it for #1 as well in the hopes that this test provides
-coverage for arm64 and/or s390 if they're ever converted to use the common
-xfer_to_guest_mode_work().
+DQoNCk9uIDI3LzA4LzIwMjEgMDU6MTAsIFNodWFoIEtoYW4gd3JvdGU6DQo+IE9uIDgvMjUvMjEg
+Nzo1OCBQTSwgTGkgWmhpamlhbiB3cm90ZToNCj4+IFNZTkMgd2FzIHJlbW92ZWQgc2luY2UgYWZm
+OWRhMTBlMjEgKCJzdGFnaW5nL2FuZHJvaWQ6IG1ha2Ugc3luY190aW1lbGluZSBpbnRlcm5hbCB0
+byBzd19zeW5jIikNCj4+IExLUC8wRGF5IHdpbGwgY2hlY2sgaWYgYWxsIGNvbmZpZ3MgbGlzdGlu
+ZyB1bmRlciBzZWxmdGVzdHMgYXJlIGFibGUgdG8gYmUgZW5hYmxlZCBwcm9wZXJseS4NCj4+DQo+
+DQo+IENhbiB5b3UgcGxlYXNlIHN0YXRlIHdoYXQgeW91IGFyciBmeGluZyBhbmQgYWxzbyBrZWVw
+IHRoZSBzZW50ZW5jZXMNCj4gNzUgY2hhcnMgb3IgbGVzcy4NCj4NCj4gV2hlcmUgaXMgTEtQIHdh
+cm5pbmc/IA0KaHR0cHM6Ly8wMS5vcmcvbGtwDQpMS1AoYWthLiAwRGF5KSBvZnRlbiByZXBvcnRz
+IGlzc3VlIHJlbGF0ZWQgdG8gdGhlICpyZWNlbnQqIGtlcm5lbCBjb21taXRzL1dJUCBwYXRjaGVz
+IHB1YmxpY2x5Lg0KQXMgdGhlIExLUCBrZWVwaW5nIGltcHJvdmVtZW50LCBpdCB3aWxsIGNvdmVy
+IG1vcmUgYXNwZWN0cyBpbiB0aGUga2VybmVsIHNvIHRoYXQgbW9yZSBpc3N1ZXMgd2lsbCBiZSBk
+ZXRlY3RlZC4NCg0KU28gaW4gdGhpcyBjYXNlLCB3aGljaCBpcyByZWxhdGVkIHRvIHRvbyBvbGQg
+a2VybmVsLCBpdCBqdXN0IHJlcG9ydGVkIGl0IGludGVybmFsbHkuDQoNCg0KPiBJbmNsdWRlIHRo
+ZSB3YXJuaW5nIGFuZCBleHBsYWluIHdoeSB0aGlzDQo+IGNoYW5nZSBpcyBuZWNlc3NhcnkuDQot
+IGl0J3Mgbm90IHJlYXNvbmFibGUgdG8ga2VlcCB0aGUgZGVwcmVjYXRlZCBjb25maWdzLCByaWdo
+dCA/DQoNCi0gSW4gbXkgdW5kZXJzdGFuZGluZywgY29uZmlncyB1bmRlciBrc2VsZnRlc3RzIGFy
+ZSByZWNvbW1lbmRlZCBieSBjb3JyZXNwb25kaW5nIHRlc3RzLg0KU28gaWYgc29tZSBjb25maWdz
+IGFyZSBtaXNzaW5nLCBpdCB3aWxsIGltcGFjdCB0aGUgdGVzdGluZyByZXN1bHRzDQoNCkRvIHlv
+dSBtZWFuIHRoZSBjb21taXQgbG9nIHNob3VsZCBpbmNsdWRlIGFib3ZlIDIgcmVhc29ucyA/DQoN
+ClRoYW5rcw0KDQo+DQo+PiBGb3IgdGhlIG1pc3NpbmcgY29uZmlncywgaXQgd2lsbCByZXBvcnQg
+c29tZXRoaW5nIGxpa2U6DQo+PiBMS1AgV0FSTiBtaXNzIGNvbmZpZyBDT05GSUdfU1lOQz0gb2Yg
+c3luYy9jb25maWcNCj4+DQo+PiBDQzogUGhpbGlwIExpIDxwaGlsaXAubGlAaW50ZWwuY29tPg0K
+Pj4gUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0KPj4gU2ln
+bmVkLW9mZi1ieTogTGkgWmhpamlhbiA8bGl6aGlqaWFuQGNuLmZ1aml0c3UuY29tPg0KPj4gLS0t
+DQo+DQo+IHRoYW5rcywNCj4gLS0gU2h1YWgNCj4NCj4NCg==
