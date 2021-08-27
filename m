@@ -2,128 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 258F93FA19D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Aug 2021 00:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397BB3FA1A2
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Aug 2021 00:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbhH0WvF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Aug 2021 18:51:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44654 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232126AbhH0WvE (ORCPT
+        id S232376AbhH0W7I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Aug 2021 18:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232405AbhH0W7H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Aug 2021 18:51:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630104614;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=En27XuojdaIOCdDdv7ALogd6FL3p5QlR3VuvOI+21oc=;
-        b=Mq+qFALNALfEp76UYjYy6GgmawNUqQK/iXPYqLQ9aLacJs4SjBZ1P61AddPBM5tPNAXd4C
-        QDs8DO51n0S5oLPCQB4AMvW96vNJC06kyDKcZ59YMmBZlTBkEUTJf9ek4cK9zn5LULPtcD
-        eKCeHDVNMgn4UKbSpyxaQaYxY74nL/M=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-564-l9lOM3CoNyGYBUSvxFVWzg-1; Fri, 27 Aug 2021 18:50:13 -0400
-X-MC-Unique: l9lOM3CoNyGYBUSvxFVWzg-1
-Received: by mail-qv1-f69.google.com with SMTP id dv7-20020ad44ee7000000b0036fa79fd337so922869qvb.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Aug 2021 15:50:13 -0700 (PDT)
+        Fri, 27 Aug 2021 18:59:07 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7782DC061796
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Aug 2021 15:58:18 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id n14-20020a0c9d4e0000b0290354a5f8c800so1666264qvf.17
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Aug 2021 15:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=GZHnj3E2iDvREWy+Xx+rZN4g2ibNoBnA7xrbQSSkUpQ=;
+        b=Ipr9sUKvRrPwBplFtKFiksRe+d689PFtXWc/Ur0tK0j9TaPCWRldqoTsZgTOf7eRdQ
+         Fk3SAWF0exxDZo6OU5+uO/oIPv8KrjQFY/5i+VnMqfIjRHSQA1Ad3BSH1Iqd2NLUpR+u
+         T1G7gYqLhIGcKSvRvo0kNTWMGN1mLcBiX9y/P/9nDw3eOwjt7nI1dmBGBZNitT2sm5G4
+         UM0v/rUJFws0K04jm3JpdET4jlniWVuyKjdnCdkPHnJlS7tOW8IrlK2dUZBT2LF52doa
+         AInHmiscxdtXgN50u9c3rNBXlMjmcMdYHSS1NA2HsOunffqHikGFbgpBfumRGcLdWLMG
+         ndag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=En27XuojdaIOCdDdv7ALogd6FL3p5QlR3VuvOI+21oc=;
-        b=m0T8s9fF30ujLr8Eqc1KjkUd3IyLIo+GOnIEZ8EYErvBs08sqs2kmzmFXipTaxZETY
-         qiFOe/X8KkU0f9fs29oPHwObLgddWsoqcfJHjFqqrPWZHQE+jTZQmq8O3eexSTHTCG1j
-         KrpgWmihobonT8nBBsspluDb7fnyWypooHWvuwWuVercCIPZLZEDjYOv+llTDSXSrgTU
-         thPhxr0UtMfZWPIaj6FUcZfvAVY8LxETiaqFYLUDSNmqRrEUY0sHI2N5DHhtfvbcRKwR
-         jCRrx6i1jUXZKZyHjT9lIvfirEsKmlTsjUjT10dj26CqN9UPXhCPeJVurjF0RF6hu4w5
-         Lstw==
-X-Gm-Message-State: AOAM5306I4dT1txGS0Rdmjdkil3pJ9p81mhnP02+pPVp5BKBLxrlSkfv
-        CGwmoa6BO/K/pNcjpnjpS7UbnFawUjBHBrIWTRG9IctEXqlQSZNKRIgNMZtc9X3kZFNgmIo5qZU
-        R9PND9zTXtt7HPhDk/d4ScSKWlyX2
-X-Received: by 2002:a37:6c2:: with SMTP id 185mr11562370qkg.260.1630104612875;
-        Fri, 27 Aug 2021 15:50:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzDwQTZ4QOhNVfh2Wu90ofVKbf58SD0ih0hTl4Eu7RstEN8nFTD7XE3SpMp4kcVkOfvIHjAtw==
-X-Received: by 2002:a37:6c2:: with SMTP id 185mr11562356qkg.260.1630104612655;
-        Fri, 27 Aug 2021 15:50:12 -0700 (PDT)
-Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
-        by smtp.gmail.com with ESMTPSA id k186sm5784054qkd.47.2021.08.27.15.50.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Aug 2021 15:50:12 -0700 (PDT)
-From:   Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v7 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-To:     Tejun Heo <tj@kernel.org>, Waiman Long <llong@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20210825213750.6933-1-longman@redhat.com>
- <20210825213750.6933-6-longman@redhat.com> <YSfQ0mYWs2zUyqGY@mtj.duckdns.org>
- <32e27fcc-32f1-b26c-ae91-9e03f7e433af@redhat.com>
- <YShjb2WwvuB4s4gX@slm.duckdns.org>
- <d22ea3be-2429-5923-a80c-5af3b384def9@redhat.com>
- <YSlY0H/qeXQIGOfk@slm.duckdns.org>
-Message-ID: <392c3724-f583-c7fc-cfa1-a3f1665114c9@redhat.com>
-Date:   Fri, 27 Aug 2021 18:50:10 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <YSlY0H/qeXQIGOfk@slm.duckdns.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=GZHnj3E2iDvREWy+Xx+rZN4g2ibNoBnA7xrbQSSkUpQ=;
+        b=V8f+D1jQ38I3mj9RoY20oF/RwTr4l8IVf4mi1PoTF6hTTDc2Yi+7yqV0MzkvFV98hs
+         lMbFwyQVq7hOaWbyDINw4rZRrzWU0wdecQGchRaxAnKjMaxmpl3N/ASfmSG/lDB4acOJ
+         RTCYAC8qMoVzlnrVh/5NT4wI/cXHb0x+nhSUMzsQuQqnJ/2pQAyGT9wJAIrcYChGuqSZ
+         s2TgP1Dp1+mBFFTWGfPRfAvU/Cx9INqZM5SPNGjivqZdni8KaWXxw22Gm/BeqE3wpCbI
+         xD+E/ZEaNfafpNv8U/OlgGf0+g+D/weGLVIwOp0Jv/9FvME+q8SA//fi5qi7vqoe+sRG
+         gjtA==
+X-Gm-Message-State: AOAM530jYkf4K19ZQg4nbAdQ+i6J4ms553hp0lbThR2QWBvDtp27itio
+        KskPrulszTMa41KA9KGBrzhjRVAWoQ==
+X-Google-Smtp-Source: ABdhPJyPQXrAmKDniGpm1UBQMb14WCydWu0slGzRxOkyyHh40TZsVGLOyER1nvp3TEx+NesyazTbsvENEA==
+X-Received: from sunrae.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2814])
+ (user=rmoar job=sendgmr) by 2002:a0c:ab51:: with SMTP id i17mr12144736qvb.62.1630105097700;
+ Fri, 27 Aug 2021 15:58:17 -0700 (PDT)
+Date:   Fri, 27 Aug 2021 22:58:10 +0000
+Message-Id: <20210827225812.3247919-1-rmoar@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.259.gc128427fd7-goog
+Subject: [PATCH 0/2] selftests: tool: update format of kselftest TAP results
+ to improve compatibility with KTAP
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        dlatypov@google.com, keescook@chromium.org, shuah@kernel.org
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/27/21 5:27 PM, Tejun Heo wrote:
-> Hello,
->
-> On Fri, Aug 27, 2021 at 05:19:31PM -0400, Waiman Long wrote:
->> Well, that is a valid point. The cpus may have been offlined when a
->> partition is being created. I can certainly relent on this check in forming
->> a partition. IOW, cpus_allowed can contain some or all offline cpus and a
->> valid (some are online) or invalid (all are offline) partition can be
->> formed. I can also allow an invalid child partition to be formed with an
->> invalid parent partition. However, the cpu exclusivity rules will still
->> apply.
->>
->> Other than that, do you envision any other circumstances where we should
->> allow an invalid partition to be formed?
-> Now that most restrictions are removed from configuration side, just go all
-> the way? Given that the user must check the status afterwards anyway, I
-> don't see technical or even usability reasons for leaving some pieces
-> behind. Going all the way would be easier to use too - bang in the target
-> config and read the resulting state to reliably find out why a partition
-> isn't valid, especially if we list *all* the reasons so that the user
-> tell whether the configuration is as intended immediately.
+This series of patches updates the format of kselftest TAP results to improve
+compatibility with the proposed KTAP specification
+(https://lore.kernel.org/linux-kselftest/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com/).
 
-The cpu exclusivity rule is due to the setting of CPU_EXCLUSIVE bit. 
-This is a pre-existing condition unless you want to change how the 
-cpuset.cpu_exclusive works.
+Three changes:
+- Change from "# " to "  " for indentation of nested tests
+- Add subtest header line at start of tests with subtests. Line format
+is "# Subtest: [name of test]".
+- Remove TAP header in nested tests
 
-So the new rules will be:
+Standardizing TAP results would not only allow for clearer documentation and ease of reading but by standardizing the format across different testing frameworks, we could also share the use of tools.
 
-1) The "cpuset.cpus" is not empty and the list of CPUs are exclusive.
-2) The parent cgroup is a partition root (can be an invalid one).
-3) The "cpuset.cpus" is a subset of the parent's cpuset.cpus.allowed.
-4) No child cgroup with cpuset enabled.
+As an example:
 
-I think they are reasonable. What do you think?
+This is a truncated version of TAP results from the kselftest ptrace with the new format changes:
 
-Cheers,
-Longman
+TAP version 13
+1..1
+# selftests: ptrace: get_syscall_info
+  # Subtest: selftests: ptrace: get_syscall_info
+  1..1
+  # Starting 1 tests from 1 test cases.
+  #  RUN           global.get_syscall_info ...
+  #            OK  global.get_syscall_info
+  ok 1 global.get_syscall_info
+  # PASSED: 1 / 1 tests passed.
+  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+ok 1 selftests: ptrace: get_syscall_info
+
+With the new patch to update the KUnit parser to improve compatibility with the proposed KTAP specification, (https://lore.kernel.org/linux-kselftest/20210826195505.3066755-1-rmoar@google.com/) the above TAP results would be parsed as the following:
+
+[20:46:09] ============================================================
+[20:46:09] ===== selftests: ptrace: get_syscall_info (1 subtest) ======
+[20:46:09] [PASSED] global.get_syscall_info
+[20:46:09] ======= [PASSED] selftests: ptrace: get_syscall_info =======
+[20:46:09] ============================================================
+[20:46:09] Testing complete. Passed: 1, Failed: 0, Crashed: 0, Skipped: 0, Errors: 0
+
+Thus, the kunit parser could become a useful tool for kselftest users.
+
+Rae Moar (2):
+  selftests: tool: Add subtest header line and change indentation format
+    in TAP results
+  Revert "selftests: Remove KSFT_TAP_LEVEL"
+
+ tools/testing/selftests/Makefile            | 6 ++++++
+ tools/testing/selftests/kselftest/prefix.pl | 2 +-
+ tools/testing/selftests/kselftest/runner.sh | 7 ++++---
+ 3 files changed, 11 insertions(+), 4 deletions(-)
+
+-- 
+2.33.0.259.gc128427fd7-goog
 
