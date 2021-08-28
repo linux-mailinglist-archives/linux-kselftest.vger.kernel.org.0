@@ -2,111 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3BD3FA20A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Aug 2021 02:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74A73FA2BE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Aug 2021 03:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbhH1AHW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Aug 2021 20:07:22 -0400
-Received: from mail.efficios.com ([167.114.26.124]:47366 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbhH1AHP (ORCPT
+        id S232866AbhH1BPB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Aug 2021 21:15:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34401 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230238AbhH1BO6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Aug 2021 20:07:15 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 334D2383D90;
-        Fri, 27 Aug 2021 20:06:25 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id dJnw97AVp-6J; Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id AABF53839D9;
-        Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com AABF53839D9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1630109180;
-        bh=aNbnUoaMo9qyJFeAmPDlGUugMe1xHV+lzHQym41zPgk=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=ibXqVy9zMTh8pzWhCDOoh0A6j0FvWS8eYDH852Q65ZQn7p1jJGIre5/cPOpdeIP+y
-         aA3o07Eg6BWPXmQhKAcL/ut69D3yBdvdejeJXIhzPTSWYfZet9c55De2zXu/+jv9qb
-         9rMBUNtRH3XFmY4l5818jP7JeOTnYOyaVW6g21SlH6hM5lnPmcjj7mBKimFhzIieoI
-         r/xa04WF8N3Rq/3K+SW2ss83aevuy6/MvU/Sy30Y15mPyUw7HSYrNN1GbX2+DRw0YH
-         7ZItjz+GSSq3DkuqubXPIjIIupZU9sNhSleF8+cDrSh10TSYD5CLywa6jmXG5NyjL6
-         CV8mJ14ojbACA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9JJ04Y5MGhgL; Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 87F07383C99;
-        Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-Date:   Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     dvhart <dvhart@infradead.org>,
-        "Russell King, ARM Linux" <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Fri, 27 Aug 2021 21:14:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630113245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nj7lN9b3OW9PxFPw9p3QaG1rQrZn9spoM1KJO1HMw1U=;
+        b=OiTPvqSwxCH1iVByALwmsvWztXa/3e0siXMeTF5ZfLkSjsngkRk/a1NdJOh6knBCL6r0Jp
+        m51gdKLiz0MGOqrwb0yRThS/8L3y9QnMAkZRmA+0sIO3PNWSCNmPhFSQKWP0A5hc0e8KNe
+        J5Hsp9aXrqMK4TyrvPYPXnCtHERaiWI=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-559-Uf_b-yYFOGeYrS6J-CGltw-1; Fri, 27 Aug 2021 21:14:04 -0400
+X-MC-Unique: Uf_b-yYFOGeYrS6J-CGltw-1
+Received: by mail-qv1-f69.google.com with SMTP id j11-20020a0cf9cb000000b00375f0642d2dso951479qvo.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Aug 2021 18:14:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=nj7lN9b3OW9PxFPw9p3QaG1rQrZn9spoM1KJO1HMw1U=;
+        b=YIY81gEvT8RDaFJT3d1Mj3OspThvKIqWqiADGob781391yVGKTiu0jYYeSxuHjdLTU
+         PRSSSY8PfB0RwLgAXxjUMxsgG69kcsV8/hTeFyg836EJO29SMzjvttqz1NOcy4lJaD4C
+         j2REeqnbv3DlvOhh030fTidTkHXRGQIte227XzcSb7gMfCUhZj6t36pWbuAqHAAvhloy
+         lJUMXZTv8yLa1bgXpj7az+I0LyNOL1RrOHNR9xgFEpxIINybBDESgbA8sqfZ39mlFe+r
+         oeWav+B4PKry2aos6LWemoJLaOvKiHNgeUEPSekbKz3SvU8+u5qbNsym1k6PIjny7//B
+         w2bg==
+X-Gm-Message-State: AOAM5300pEApARwnpCmFUAG84pfLXUJVMd3Fl/BuSuaUy+mSDERS8LH0
+        O9oPSn+/wwSffx698+KQgal6bmBaL8Z4ZW6398CyMCQ5DUUyEvrg9+g+tiRSBP7QjIPiPJhtyZH
+        Wi+k7nmixTyi8rbfkGM2fakF5Vx7N
+X-Received: by 2002:a37:652:: with SMTP id 79mr12078377qkg.197.1630113244160;
+        Fri, 27 Aug 2021 18:14:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJykNQoi0T51RsUXHOgq9qN2JS1S6X7N+wT1bH2pmiiItHjdiaYmsBmA5yoKxviFq81ypmmOdA==
+X-Received: by 2002:a37:652:: with SMTP id 79mr12078348qkg.197.1630113243925;
+        Fri, 27 Aug 2021 18:14:03 -0700 (PDT)
+Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
+        by smtp.gmail.com with ESMTPSA id 21sm6009570qkk.51.2021.08.27.18.14.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Aug 2021 18:14:02 -0700 (PDT)
+From:   Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v7 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+To:     Tejun Heo <tj@kernel.org>, Waiman Long <llong@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-csky <linux-csky@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Ben Gardon <bgardon@google.com>
-Message-ID: <1054916754.30218.1630109180443.JavaMail.zimbra@efficios.com>
-In-Reply-To: <YSlz8h9SWgeuicak@google.com>
-References: <20210820225002.310652-1-seanjc@google.com> <766990430.21713.1629731934069.JavaMail.zimbra@efficios.com> <282257549.21721.1629732017655.JavaMail.zimbra@efficios.com> <YSblqrrpKcORzilX@google.com> <1700758714.29394.1630003332081.JavaMail.zimbra@efficios.com> <YSgpy8iXXXUQ+b/k@google.com> <339641531.29941.1630091374065.JavaMail.zimbra@efficios.com> <YSlz8h9SWgeuicak@google.com>
-Subject: Re: [PATCH v2 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
- detect task migration bugs
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20210825213750.6933-1-longman@redhat.com>
+ <20210825213750.6933-6-longman@redhat.com> <YSfQ0mYWs2zUyqGY@mtj.duckdns.org>
+ <32e27fcc-32f1-b26c-ae91-9e03f7e433af@redhat.com>
+ <YShjb2WwvuB4s4gX@slm.duckdns.org>
+ <d22ea3be-2429-5923-a80c-5af3b384def9@redhat.com>
+ <YSlY0H/qeXQIGOfk@slm.duckdns.org>
+ <392c3724-f583-c7fc-cfa1-a3f1665114c9@redhat.com>
+ <YSl2yxEvnDrPxzUV@slm.duckdns.org>
+Message-ID: <f1168ddc-cb67-ecfd-6644-4963c857a0a0@redhat.com>
+Date:   Fri, 27 Aug 2021 21:14:01 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <YSl2yxEvnDrPxzUV@slm.duckdns.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF91 (Linux)/8.8.15_GA_4059)
-Thread-Topic: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs
-Thread-Index: eu98ugrRMaO1Ldp5KUn1lSy5MLrp5Q==
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
------ On Aug 27, 2021, at 7:23 PM, Sean Christopherson seanjc@google.com wrote:
+On 8/27/21 7:35 PM, Tejun Heo wrote:
+> Hello,
+>
+> On Fri, Aug 27, 2021 at 06:50:10PM -0400, Waiman Long wrote:
+>> The cpu exclusivity rule is due to the setting of CPU_EXCLUSIVE bit. This is
+>> a pre-existing condition unless you want to change how the
+>> cpuset.cpu_exclusive works.
+>>
+>> So the new rules will be:
+>>
+>> 1) The "cpuset.cpus" is not empty and the list of CPUs are exclusive.
+> Empty cpu list can be considered an exclusive one.
+It doesn't make sense to me to have a partition with no cpu configured 
+at all. I very much prefer the users to set cpuset.cpus first before 
+turning it into a partition.
+>
+>> 2) The parent cgroup is a partition root (can be an invalid one).
+> Does this mean a partition parent can't stop being a partition if one or
+> more of its children become partitions? If so, it violates the rule that a
+> descendant shouldn't be able to restrict what its ancestors can do.
 
-> On Fri, Aug 27, 2021, Mathieu Desnoyers wrote:
-[...]
->> Does it reproduce if we randomize the delay to have it picked randomly from 0us
->> to 100us (with 1us step) ? It would remove a lot of the needs for arch-specific
->> magic delay value.
-> 
-> My less-than-scientific testing shows that it can reproduce at delays up to
-> ~500us,
-> but above ~10us the reproducibility starts to drop.  The bug still reproduces
-> reliably, it just takes more iterations, and obviously the test runs a bit
-> slower.
-> 
-> Any objection to using a 1-10us delay, e.g. a simple usleep((i % 10) + 1)?
+No. As I said in the documentation, transitioning from partition root to 
+member is allowed. Against, it is illogical to allow a cpuset to become 
+a potential partition if it parent is not even a partition root at all. 
+In the case that the parent is reverted back to a member, the child 
+partitions will stay invalid forever unless the parent become a valid 
+partition again.
 
-Works for me, thanks!
+>
+>> 3) The "cpuset.cpus" is a subset of the parent's cpuset.cpus.allowed.
+> Why not just go by effective? This would mean that a parent can't withdraw
+> CPUs from its allowed set once descendants are configured. Restrictions like
+> this are fine when the entire hierarchy is configured by a single entity but
+> become awkward when configurations are multi-tiered, automated and dynamic.
 
-Mathieu
+The original rule is to be based on effective cpus. However, to properly 
+handle the case of allowing offlined cpus to be included in the 
+partition, I have to change it to cpu_allowed instead. I can certainly 
+change it back to effective if you prefer.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+>
+>> 4) No child cgroup with cpuset enabled.
+> idk, maybe? I'm having a hard time seeing the point in adding these
+> restrictions when the state transitions are asynchronous anyway. Would it
+> help if we try to separate what's absoluately and technically necessary and
+> what seems reasonable or high bar and try to justify why each of the latter
+> should be added?
+
+This rule is there mainly for ease of implementation. Otherwise, I need 
+to add additional code to handle the conversion of child cpusets which 
+can be rather complex and require a lot more debugging. This rule will 
+no longer apply once the cpuset becomes a partition root.
+
+Cheers,
+Longman
+
+
