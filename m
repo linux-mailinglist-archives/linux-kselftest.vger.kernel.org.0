@@ -2,115 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B81763FCB61
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Aug 2021 18:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C62D3FCBC8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Aug 2021 18:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239898AbhHaQU1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Aug 2021 12:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
+        id S240221AbhHaQvS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Aug 2021 12:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239136AbhHaQU0 (ORCPT
+        with ESMTP id S240207AbhHaQvS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Aug 2021 12:20:26 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ABFC061575;
-        Tue, 31 Aug 2021 09:19:31 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 17so17268860pgp.4;
-        Tue, 31 Aug 2021 09:19:31 -0700 (PDT)
+        Tue, 31 Aug 2021 12:51:18 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE64AC061760
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id b7so25801359iob.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wKtFFLPlbriGAMxk9vE8E7Hel3Bz+VZdqkGX4LaIKZo=;
-        b=DJjxlImbK5bY/hBlQZOfAxHgMznwgb498a5fU4vuIGNEVAoV89x/jypVLZ0THwg8xL
-         pkv4K2CNqqa9Nvudz3NR2M0gANhyx9+BHXuyoudKugzeXhojuMJHnFY/PIy4h5Rc4a35
-         myjZxH+KP7c+QxhoO4xOlHFwz4HaIU9WxRi42AKeh0KD7QYZmEAtgLoihVYI6SKC2eIF
-         qbA6iKbBKWfs65Q2juWBpB5nS6Dyw0hZeeGQkMs+e/8XeHK30WTu55oHkdXMf/0A4HK6
-         99eGjSLcwzmVi+38oBqOHwxgAhc4tHsgGTZXNU8orRtAWnDT/N9u0UAS4aoPEhfswSH6
-         68pg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9DgEycQMGsPFJfjxU5xvxrR4KHhDrk4WSJNzhOW4AfQ=;
+        b=MfjSCVNRe434fYhenU9ffr8sZqfGAcf1uUoqNOVaIRgH+JaKZSNKzJHusmvxK81+C3
+         8CDko/RSC3or7OxXyVLlmiifUT5pRiw5wyL47f3ED22Kad1Ie/Q1cWV7Ruotylp+l4Vp
+         WB40MKtUpWJ1InzLUYKdHuVwCVDgddn42mr+w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wKtFFLPlbriGAMxk9vE8E7Hel3Bz+VZdqkGX4LaIKZo=;
-        b=hwsv7MK+VI3kMTkftFW4/JM0ofSTdBNVnPYDfa3VBmGuxka1/AKOaPJwxmIvI9AKGT
-         RaqVyEWpWdjQb/vnggf7nCBzD18D2N/VlDB2k+FXVDNt8pbT1zbgM6mbKS4amCTkihi7
-         E0juMOE/O/fpIQcey+YsvQ3Rd0MvXpouvoz3uKoK/EDcbn+qtHsXUDlPfSdNNOqyPkZp
-         5t8eo1QmR3+pm4xYnqVexLAC2VnhRKX6Nk9sEytF5yP+wvuWfjymanfdq9c4NAmf0SEb
-         F3xX8nBuJVT0KNmVH0oeBL+NYvmFubuxEhlfTKaaeh3JrgL9rhhdiAGFAR/5IEEsbNl4
-         cdfA==
-X-Gm-Message-State: AOAM5328k4tFujPqFaXnhA1Z2ZYtGB1qadp/3GnLwNHanG1Wa3lDkEI1
-        6BpMvHzt6OaXpnOtvv2bdJM=
-X-Google-Smtp-Source: ABdhPJzBpDuzBDRFHhJzk6xqE+MOP5/gu24LM6f1luLCTnLqOi9XIxRbrbuGV5N9lU4MCo7M1Pnu0A==
-X-Received: by 2002:a62:8415:0:b0:407:8998:7c84 with SMTP id k21-20020a628415000000b0040789987c84mr673075pfd.71.1630426771124;
-        Tue, 31 Aug 2021 09:19:31 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:645:c000:2163:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id n24sm20904404pgv.60.2021.08.31.09.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Aug 2021 09:19:30 -0700 (PDT)
-Date:   Tue, 31 Aug 2021 09:19:27 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "abyagowi@fb.com" <abyagowi@fb.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        bsd@fb.com
-Subject: Re: [RFC v2 net-next 1/2] rtnetlink: Add new RTM_GETSYNCESTATE
- message to get SyncE status
-Message-ID: <20210831161927.GA10747@hoboy.vegasvil.org>
-References: <20210829080512.3573627-1-maciej.machnikowski@intel.com>
- <20210829080512.3573627-2-maciej.machnikowski@intel.com>
- <20210829151017.GA6016@hoboy.vegasvil.org>
- <PH0PR11MB495126A63998DABA5B5DE184EACA9@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210830205758.GA26230@hoboy.vegasvil.org>
- <20210830162909.110753ec@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9DgEycQMGsPFJfjxU5xvxrR4KHhDrk4WSJNzhOW4AfQ=;
+        b=PYI/tv0MDQfdVS3S/ysoJ/wtgpCUf+SASTSPmKrhofi5ObNgaK4gyUQA2Z8D5jRPTZ
+         wB+cJ6dLrCfOTTXNMv3EhcGQm5nh9qzdUOdRyUOJSS2VVR1BXfelP3BSk/oZGbEW4XmZ
+         VfNX/64D1p2Y7yzA9TVlMmttIFrR6K7v2yoYvMhhyUwLeOrtuTJ/s+Oh+9djs1oeY/RT
+         1uKT/urWFemm/mSnA8chYKgZ9Eqn3kZEN6/J88xstse1q7PQu6pP4SvsWaKB1MLwfs9i
+         E79zGMWjkXcMre4vphevHCEW4lgE5zulITm3H3Gdoou1wGev3yIPJbPFaKS0tXvvgwhE
+         T6hg==
+X-Gm-Message-State: AOAM5311h1zghTTwF2fGg1OxwRmjzd1rP5D4AWJFIR82lecRrdBnZbFM
+        U/FKQir+owjCUyNfWkYgb4dShw==
+X-Google-Smtp-Source: ABdhPJyJg5KBLvWmLAPWyRpm+uePjJeTSZiwMFAFjgh5Ssa6EJ4XJ4Xc7U5XLea3QhF1v9iT5FAxQA==
+X-Received: by 2002:a6b:7a03:: with SMTP id h3mr23648569iom.39.1630428622224;
+        Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id 3sm6079565iln.79.2021.08.31.09.50.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Aug 2021 09:50:21 -0700 (PDT)
+Subject: Re: [PATCH v3 0/2] kselftests: clean configs
+To:     Li Zhijian <lizhijian@cn.fujitsu.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     philip.li@intel.com, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210831102316.280512-1-lizhijian@cn.fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3a386a77-80f5-81c0-5bda-df656c057fa6@linuxfoundation.org>
+Date:   Tue, 31 Aug 2021 10:50:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210830162909.110753ec@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210831102316.280512-1-lizhijian@cn.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 30, 2021 at 04:29:09PM -0700, Jakub Kicinski wrote:
-> Hmm, IDK if this really belongs in RTNL. The OCP time card that
-> Jonathan works on also wants to report signal lock, and it locks
-> to GNSS. It doesn't have any networking functionality whatsoever.
+On 8/31/21 4:23 AM, Li Zhijian wrote:
+> 0Day will check if all configs listing under selftests are able
+> to be enabled properly.
 > 
-> Can we add a genetlink family for clock info/configuration? From 
-> what I understood discussing this with Jonathan it sounded like most
-> clocks today have a vendor-specific character device for configuration
-> and reading status.
+> For the missing configs, it will report something like:
+> LKP WARN miss config CONFIG_SYNC= of sync/config
 > 
-> I'm happy to write the plumbing if this seems like an okay idea 
-> but too much work for anyone to commit.
+> CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> CC: Viresh Kumar <viresh.kumar@linaro.org>
+> CC: linux-pm@vger.kernel.org
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Li Zhijian (2):
+>    selftests/sync: Remove the deprecated config SYNC
+>    selftests/cpufreq: Rename DEBUG_PI_LIST to DEBUG_PLIST
+> 
+>   tools/testing/selftests/cpufreq/config | 2 +-
+>   tools/testing/selftests/sync/config    | 1 -
+>   2 files changed, 1 insertion(+), 2 deletions(-)
+> 
 
-This sounds nice.
+Thank you. These two patches will be queued up for 5.15
 
-As you said later on in this thread, any API we merge now will have to
-last.  That is why I'm being so picky here.  We want new APIs to cover
-current HW _and_ be reasonable for the future.
-
-I don't see a DPLL as either a PTP Hardware Clock or a Network
-Device.  It is a PLL.
-
-The kernel can and should have a way to represent the relationship
-between these three different kind of IP block.  We already have a
-way to get from PHC to netdev interface.
-
-I understand that Maciej and team want to get support for their card
-ASAP.  However, proper kernel/user API takes time.  For example, the
-PHC stuff took one year and fourteen revisions.  But it was worth the
-wait, because the API has help up pretty well all these years since
-the v3.0 kernel.
-
-There is no need to quickly merge some poorly designed interfaces.
-
-Thanks,
-Richard
-
+thanks,
+-- Shuah
