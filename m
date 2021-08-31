@@ -2,151 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF983FC642
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Aug 2021 13:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3367C3FC695
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Aug 2021 13:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241033AbhHaKsL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Aug 2021 06:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237852AbhHaKsL (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Aug 2021 06:48:11 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2F1C061575;
-        Tue, 31 Aug 2021 03:47:16 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so1663637pjr.1;
-        Tue, 31 Aug 2021 03:47:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=a5gyd43f5zC4BpSnVHpfbLGSISBJk03DFe0K9GmEp+s=;
-        b=dkpsii4jDYLZWoAFDWWH1iacNBfspn+R84S8krXcfYJj1mAMG9OkrCuvL/6ymyLmRk
-         a8g7CG50q0EikxFK8EEHJBgP1xiDyGNxEWAIJ70ZqAQz8lGXjcLcfyDQvoYAVu91kfdO
-         5y9PElt7vz7HHcmVsHfuf2MEozOPZdLTXjHaIyx7brDEchZwH5lveG0oZ0z3OOjFovem
-         Qt1WzzvmWnp1u87O5L/hl8y9XHYZDAKxhrZ8GCCMHZ10vJVXc8D077ErSuEfd7vcI2zf
-         t2cSMCB6zz8jpkz7Q4r0kmRT++TGUgaR8ipjkOYTmf+U/QvnBwALZA17t607TYmH73/3
-         Mnfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=a5gyd43f5zC4BpSnVHpfbLGSISBJk03DFe0K9GmEp+s=;
-        b=Vw9s1JH44kZ7HPnozDPFVhCwdTm1QBn+6HoVtokyZ9drf7pRvUWma2mA73cA70uJmU
-         3iM38KbRIhvzWGE1VOnbfFgi2jw3zt+COuvILcXehUwQRidXI8rKF059+LAGiIMgejA9
-         M4TwG77Ten2yNXwx9vLLIFSS5sJGvgrSmbTwGnOlwKBfZKiS1mPIrowM2vhk+fxPQE6N
-         uEViknLN7Ks19xNjgUm9GeVAf0c7knfGjZORdDQ3NhbcP+ETUqHvoGmjoAP9FuLMiYYL
-         7DEEboVapC/HjdIIC4NRLxBF1a9yxSA2yCn88esaKdoY3hiHkkI/hLV5UXPFh16+nYe3
-         XnnQ==
-X-Gm-Message-State: AOAM532rJNsgR/iAbkAwx+XrlbAWNDtxGxMNDmecd6nPKsF6S0pQDBm3
-        zhbHGgtsQgAXvPBA1m+GPkM=
-X-Google-Smtp-Source: ABdhPJzQcWtSfoph9uR44Q9vqBfL3YpVWD7U1Q4HHpncwCs6AMpDbWZVH+SBD+p+OdfYFM5ETUQe1A==
-X-Received: by 2002:a17:90b:1c8c:: with SMTP id oo12mr4674452pjb.170.1630406835935;
-        Tue, 31 Aug 2021 03:47:15 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id u62sm17542795pfc.68.2021.08.31.03.47.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Aug 2021 03:47:15 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     bamv2005@gmail.com
-Cc:     shuah@kernel.org, linux-gpio@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chi Minghao <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] selftest: gpio: undeclared variable
-Date:   Tue, 31 Aug 2021 03:47:07 -0700
-Message-Id: <20210831104707.16667-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        id S229615AbhHaLe2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Aug 2021 07:34:28 -0400
+Received: from mga05.intel.com ([192.55.52.43]:45803 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229566AbhHaLe2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 31 Aug 2021 07:34:28 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="304028737"
+X-IronPort-AV: E=Sophos;i="5.84,366,1620716400"; 
+   d="scan'208";a="304028737"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 04:33:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,366,1620716400"; 
+   d="scan'208";a="531061833"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by FMSMGA003.fm.intel.com with ESMTP; 31 Aug 2021 04:33:27 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Tue, 31 Aug 2021 04:33:26 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10 via Frontend Transport; Tue, 31 Aug 2021 04:33:26 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.10; Tue, 31 Aug 2021 04:33:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jLMVz4wy+nU8mvFJTPD6hk0cm0dlNE+3AeUTv7M2Hxo41++KJEM9ZVn1e65tb4pI+Vos6F2JfwXTUdA1KRsLiFvhnSc3Jj319Bw8I2mwkqCy5iF6IeL6mg/tjrejCBQp6na70Oaw0pDO93TSBAi3xNWrkvo/XtSQeRbajnWbHFyOedHOxyHGAOcyR2sOA0LjD/2uQc7Jix9ArlREgbcFA1G7E6ofp+gnP0s0esGVdZTEeDDks80W5cuGdK0lvzfLcvZI6+eFVQmBMWmBtIsrZZFAiqryyORO7LwFcAu/o32WcaFaPD2RnbrNeSobUQIlTH+FE657HwOocbvCLQzyaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5aUoZ7vgJ8jKF+1dw+X/wTqdLiVmZFsVi7URc1LUYSs=;
+ b=dtbd+KyTkZSI/Q7Lqpy3su3Sr/+Z54PouHj8GXtknFAW7IrKTM4gLECdRexjWm3jfCBl4BGnCaWSAeTlC/2RRGtgeHXYqdsmvF+dOgMPwv/u+/592gm7pWcYC/9SYoxw79Zb7dQHl0XUGjL4rpx7Z/oIWeqFST4QvTxajTf9yTJiyNeCwYf7lYcEeLh/CJ3yOawpFl+filntFJLp5rpK9PL8FBdfColdgw1xN41ps50vIcKV4e5LtBiouQj7QuyBK0/66nWja/NuGAa6eWyK+UVCFwZyBVb2yR2uaTCKDUM3cMB6M7QzUIihylb4ki09Aybh6/Wr3FStytnuh1MCzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5aUoZ7vgJ8jKF+1dw+X/wTqdLiVmZFsVi7URc1LUYSs=;
+ b=CEohaXzlsnpHmPlVsM9q2dzrOUL2vKqLxzamKdZvImNoqO8G8QthdsaDO+sXx2KQfQmtQLdsWAryNKdiUcsxCDku9Kpt4KvpLnwk/81SONpjvgXfJOLHsUlB/nwW4AYodQKdzgxi4qywvit+mrToPwHgCcbkXGex+LVWdPXUo1M=
+Received: from SJ0PR11MB4958.namprd11.prod.outlook.com (2603:10b6:a03:2ae::24)
+ by BYAPR11MB3045.namprd11.prod.outlook.com (2603:10b6:a03:88::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.23; Tue, 31 Aug
+ 2021 11:33:25 +0000
+Received: from SJ0PR11MB4958.namprd11.prod.outlook.com
+ ([fe80::7865:f66:4ed9:5062]) by SJ0PR11MB4958.namprd11.prod.outlook.com
+ ([fe80::7865:f66:4ed9:5062%7]) with mapi id 15.20.4373.031; Tue, 31 Aug 2021
+ 11:33:25 +0000
+From:   "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "abyagowi@fb.com" <abyagowi@fb.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [RFC v3 net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
+ to get SyncE status
+Thread-Topic: [RFC v3 net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
+ to get SyncE status
+Thread-Index: AQHXnP8G0rXtbOmRxkCrNLlOsBrAhKuMW7EAgAEBqeA=
+Date:   Tue, 31 Aug 2021 11:33:25 +0000
+Message-ID: <SJ0PR11MB495871A89632732B0028404EEACC9@SJ0PR11MB4958.namprd11.prod.outlook.com>
+References: <20210829173934.3683561-1-maciej.machnikowski@intel.com>
+        <20210829173934.3683561-2-maciej.machnikowski@intel.com>
+ <20210830111416.34a8362d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210830111416.34a8362d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+dlp-product: dlpe-windows
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0d980634-9030-4a76-6bb3-08d96c732549
+x-ms-traffictypediagnostic: BYAPR11MB3045:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR11MB304554FFDD1FCD19225DDC1CEACC9@BYAPR11MB3045.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: J7sIqF0fA0ND6Zk/szC1nSTsEfDR1blOwz6PYj0nTwKsZ6b1BXuZ4vs4Zd2QCYfR7erEE8rg17RoFkzbTd1dM+W7MekE1hbWq+4FaKuNjiTR/gD2+IIOfkeJmCTuFLgoLKc+doAw+szeVNm6lhqdemKZbrUP5/2zf2wcblrVdkYay43v6RuLMAIguBsf6pv4fbc5NNjfJWQ9K88oPFCuOgGpgHalylvRslylSLMAztwaiNuhLX4lQw5fuFWQbVQg4kM7D+2WBDLiXaEvWXvFRBsTW4tcBrC2hS3HV4M8XXciyHqZlH6Mx8R4kPzMuihvKfPpoPT1eHyX32fHpxaiX98HACbKcB542nfqM15n/Zb0z2tmecD7XcLPuv56KscbX/saXYF+ah7/6jG3WPrF1O+9Sft+nfvr+tqINSkf2q2N5QIKi6PZ22Fr7hO5Pg0RqkbeU0wcaiHJMYcj1echv0obB56edylC36pB2kg8HQF02pkwZjkEcIiR+9TvKc1USpcTL5qyXPvs7SipLZECAEl45uef2uCJWrl+PBkOcs5wBteqHbwJKaprGLmMl+KPL1Y6LSvJburP4GdLC1FOBJRuvB3IvTwdvFkkdp9GhNCkxKzQs0oSgWJkM8IWqD99LtS+aABPZhuvjcPngxBsDoZsYvVc8NHJ0XxH5TeYYvzUfWy8mIh7a4lZQYo+jEIzVyP2FQ/zQP5DOGrVFaOegw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB4958.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(366004)(396003)(376002)(136003)(7696005)(4744005)(6506007)(66946007)(66556008)(83380400001)(8676002)(186003)(76116006)(8936002)(2906002)(38070700005)(64756008)(478600001)(5660300002)(9686003)(6916009)(53546011)(15650500001)(66476007)(54906003)(55016002)(38100700002)(26005)(52536014)(122000001)(4326008)(71200400001)(33656002)(316002)(86362001)(66446008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0ddnniKkhDHkhElkq7hTLNLBag//vrrTT1js3hO3Jkf+J2Zrr0WCvb1jhVKe?=
+ =?us-ascii?Q?7J+V3jHjvZ7hP8TWyStFIPV7hamBhp3xMFWqW1AunpG1F1mUijetx0+tSdDw?=
+ =?us-ascii?Q?TbEkgab2NM/LnrP6LJDknwXK2C7jkQTM3mQovqo87OpgFRq39+N5apHJQvuZ?=
+ =?us-ascii?Q?ECKOb2twvTYlKoMXEnjSCArr0n3bpX1k9HnRVQ2InauyGTD8PTnvDiTuN2Ii?=
+ =?us-ascii?Q?MSEOrv/0G5GpsKFixW5U3Wnf6Rvtj3b4yU3k9Bt6HMyfyk0PTFD9XIg4YZpR?=
+ =?us-ascii?Q?0yOuVZ+nkmnA+E1Tv+XSKKJpI+AL7uLn8ocgqpI6Ejb14OvyLYxueMRQPYvU?=
+ =?us-ascii?Q?JdiyX3TEKP5Qd9HYX6nePHl3jv80RGa9bf5gRU4+lJ7wu8ORs9QKKElAkuRS?=
+ =?us-ascii?Q?gfSBl1Q1HnvkD0lUr0DiXJo85uSp3STjlXa0hfgnBMWEqZTYhlT+jttMHHjV?=
+ =?us-ascii?Q?hL+fdsFkcc9f9Xl8hHvGtme/tm8nitpfHfuxOsJu+1MdJ2FdCki0HfABFlub?=
+ =?us-ascii?Q?xcwWxB2fPe21pMh7RvTGo6EQGP3db5VL7LQNHx2zt4Lulgue3shbZJTOKvoW?=
+ =?us-ascii?Q?kvKiHX/fxzlRQ+6PFVtEKH0kGk6Dul8M7D3wvge//Yt7WYwp77N+qSBd4L5U?=
+ =?us-ascii?Q?4epbDHrZMyMUg1fRaFsg7Ak7ChdOnl2HnGHZLGhC9orXIRd7lCOfv5P0RpFX?=
+ =?us-ascii?Q?dmv00j1VnzirE4BgAPYeflF0rj7ZW+yODff6zsjb+B0H6GvZypdK7u7t03d1?=
+ =?us-ascii?Q?X/lfFPu4/0YW3GkjplyPcTwSoY+YL1zIKZZ1XEarTCx5h7ggOF2UsasI9zZV?=
+ =?us-ascii?Q?UGPf337dIzAeT52pb4oCvwA9Ec2cHe5AdhGpy1lFaeW/oYLbFPHL4mNSqfc0?=
+ =?us-ascii?Q?cyW8dqp+EogYJ1iJ85pwQrc4G1S559+IRaWvbxMwPAOceNA1XbP5Y9F6JxJT?=
+ =?us-ascii?Q?GW9xYKfQAEmWUMz9wrz7X61LZcxutAdIa2aKuR+gZZNL9eXsIqT5zPKO+Ptj?=
+ =?us-ascii?Q?TcDm+zmc9RsOH2RcasPLkVUe16cHhJ+v6WDkfaxTG6mQ40GgPGsvsqeJLrdL?=
+ =?us-ascii?Q?ywtQfya6MJqCfELCdghKnHD9Ovh9Z+bNKm6B6IyOqN65AuL80JtYILNvMReH?=
+ =?us-ascii?Q?aGceSxrE/2wrBJ3lzgS/rq9+sypDwpwdd5cWJtBymwnkytiu/jLP11xpWqzX?=
+ =?us-ascii?Q?8gWfaKZd+on6wPgcDdybm9syKZZh015zZ/9qn2DnZkQ/38jYblCB2Y6ylZjJ?=
+ =?us-ascii?Q?dlkR/55mNNP8DQz9tHgavLhqBB5gk00U7kha6NT/HZWZrdlPOJDHx8syXL2h?=
+ =?us-ascii?Q?h30=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB4958.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d980634-9030-4a76-6bb3-08d96c732549
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2021 11:33:25.1267
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KvoOL9O/p34XkjnC7j8LYQtg+M4EiMvpBmIw3kHxlUWBtw0shk3PEOCF2lH0He6hxKPDIpz2XrMXMg8o6I6EP0SIjvJjf0deaX6+AAY2MkM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3045
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Chi Minghao <chi.minghao@zte.com.cn>
+> -----Original Message-----
+> From: Jakub Kicinski <kuba@kernel.org>
+> Sent: Monday, August 30, 2021 8:14 PM
+> To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
+> Subject: Re: [RFC v3 net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE
 
-Add undeclared variable
+> > +#define IF_EEC_PIN_UNKNOWN	0xFF
+> > +
+> > +struct if_eec_state_msg {
+> > +	__u32 ifindex;
+> > +	__u8 state;
+> > +	__u8 src;
+> > +	__u8 pin;
+> > +	__u8 pad;
+> > +};
+>=20
+> Please break this structure up into individual attributes.
+>=20
+> This way you won't have to expose the special PIN_UNKNOWN value to user
+> space (skip the invalid attrs instead).
 
-Fixes: shortid ("undeclared variable")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Chi Minghao <chi.minghao@zte.com.cn>
----
- .../testing/selftests/gpio/gpio-mockup-cdev.c | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
+Addressed all other comments.=20
+For this one - I'll add flags which will indicate validity of all values. S=
+ince=20
+this structure is self-contained and addresses the generic need for state=20
+report.
 
-diff --git a/tools/testing/selftests/gpio/gpio-mockup-cdev.c b/tools/testing/selftests/gpio/gpio-mockup-cdev.c
-index e83eac71621a..83a32b8835d3 100644
---- a/tools/testing/selftests/gpio/gpio-mockup-cdev.c
-+++ b/tools/testing/selftests/gpio/gpio-mockup-cdev.c
-@@ -15,9 +15,66 @@
- #include <unistd.h>
- #include <sys/ioctl.h>
- #include <linux/gpio.h>
-+#include <linux/const.h>
-+#include <linux/ioctl.h>
-+#include <linux/types.h>
- 
- #define CONSUMER	"gpio-mockup-cdev"
- 
-+#define GPIO_V2_LINE_NUM_ATTRS_MAX 10
-+#define GPIO_V2_LINES_MAX 64
-+#define GPIO_MAX_NAME_SIZE 32
-+
-+#define GPIOHANDLE_REQUEST_BIAS_PULL_UP	(1UL << 5)
-+#define GPIOHANDLE_REQUEST_BIAS_DISABLE	(1UL << 7)
-+#define GPIOHANDLE_REQUEST_BIAS_PULL_DOWN	(1UL << 6)
-+#define GPIO_V2_LINE_GET_VALUES_IOCTL _IOWR(0xB4, 0x0E, struct gpio_v2_line_values)
-+#define GPIO_V2_GET_LINE_IOCTL _IOWR(0xB4, 0x07, struct gpio_v2_line_request)
-+
-+enum gpio_v2_line_flag {
-+	GPIO_V2_LINE_FLAG_ACTIVE_LOW = _BITULL(1),
-+	GPIO_V2_LINE_FLAG_INPUT	= _BITULL(2),
-+	GPIO_V2_LINE_FLAG_OUTPUT = _BITULL(3),
-+	GPIO_V2_LINE_FLAG_BIAS_PULL_UP = _BITULL(8),
-+	GPIO_V2_LINE_FLAG_BIAS_PULL_DOWN = _BITULL(9),
-+	GPIO_V2_LINE_FLAG_BIAS_DISABLED	= _BITULL(10),
-+};
-+enum gpio_v2_line_attr_id {
-+	GPIO_V2_LINE_ATTR_ID_OUTPUT_VALUES = 2,
-+};
-+struct gpio_v2_line_values {
-+	__aligned_u64 bits;
-+	__aligned_u64 mask;
-+};
-+struct gpio_v2_line_attribute {
-+	__u32 id;
-+	__u32 padding;
-+	union {
-+		__aligned_u64 flags;
-+		__aligned_u64 values;
-+		__u32 debounce_period_us;
-+	};
-+};
-+struct gpio_v2_line_config_attribute {
-+	struct gpio_v2_line_attribute attr;
-+	__aligned_u64 mask;
-+};
-+struct gpio_v2_line_config {
-+	__aligned_u64 flags;
-+	__u32 num_attrs;
-+	__u32 padding[5];
-+	struct gpio_v2_line_config_attribute attrs[GPIO_V2_LINE_NUM_ATTRS_MAX];
-+};
-+struct gpio_v2_line_request {
-+	__u32 offsets[GPIO_V2_LINES_MAX];
-+	char consumer[GPIO_MAX_NAME_SIZE];
-+	struct gpio_v2_line_config config;
-+	__u32 num_lines;
-+	__u32 event_buffer_size;
-+	__u32 padding[5];
-+	__s32 fd;
-+};
-+
- static int request_line_v2(int cfd, unsigned int offset,
- 			   uint64_t flags, unsigned int val)
- {
--- 
-2.25.1
+Will resubmit as a patch.
+
+Thanks!
+Maciek
 
