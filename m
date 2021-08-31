@@ -2,169 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 758153FCB29
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Aug 2021 18:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81763FCB61
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Aug 2021 18:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239635AbhHaQDu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Aug 2021 12:03:50 -0400
-Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:52887 "EHLO
-        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232770AbhHaQDt (ORCPT
+        id S239898AbhHaQU1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Aug 2021 12:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239136AbhHaQU0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Aug 2021 12:03:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1630425774;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=25jrdhRgNt/ErZHAWcIXw0iEYF4vH0j5QahFJgSAI4s=;
-        b=pjHuT4vI8/6MThodRL2IEUflYgfum3Db22DM+64kilIp9b6g7pRO/yrXBnLPQ3xJ
-        lUo6ZD1//CQqTInNKP0wRo93lz7FYxonTV0VWwYgfsFopQMQpUj/Z3FQufPku3sRmza
-        sWvLRTkouWn049Of7noy3pcdifyn+QCLZOPf9DXM=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1630425774;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=25jrdhRgNt/ErZHAWcIXw0iEYF4vH0j5QahFJgSAI4s=;
-        b=hjhlwpA4pI8FJSbsoCJcjRbM+UyhOixco87dWXv5+UWYpUqCn5BNwCj3Y+gEkN/G
-        xVfj8fFzgDlT6W1AJlgSmRh57I+r2O6030Y4YmfGqQIN5YM2bYVJ6Wk11h9U5MtKkoQ
-        15RLRiNaCXv8xUGzMiX1BY97w3gLjhtJQQeIQzm0=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210831
+        Tue, 31 Aug 2021 12:20:26 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ABFC061575;
+        Tue, 31 Aug 2021 09:19:31 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 17so17268860pgp.4;
+        Tue, 31 Aug 2021 09:19:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wKtFFLPlbriGAMxk9vE8E7Hel3Bz+VZdqkGX4LaIKZo=;
+        b=DJjxlImbK5bY/hBlQZOfAxHgMznwgb498a5fU4vuIGNEVAoV89x/jypVLZ0THwg8xL
+         pkv4K2CNqqa9Nvudz3NR2M0gANhyx9+BHXuyoudKugzeXhojuMJHnFY/PIy4h5Rc4a35
+         myjZxH+KP7c+QxhoO4xOlHFwz4HaIU9WxRi42AKeh0KD7QYZmEAtgLoihVYI6SKC2eIF
+         qbA6iKbBKWfs65Q2juWBpB5nS6Dyw0hZeeGQkMs+e/8XeHK30WTu55oHkdXMf/0A4HK6
+         99eGjSLcwzmVi+38oBqOHwxgAhc4tHsgGTZXNU8orRtAWnDT/N9u0UAS4aoPEhfswSH6
+         68pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wKtFFLPlbriGAMxk9vE8E7Hel3Bz+VZdqkGX4LaIKZo=;
+        b=hwsv7MK+VI3kMTkftFW4/JM0ofSTdBNVnPYDfa3VBmGuxka1/AKOaPJwxmIvI9AKGT
+         RaqVyEWpWdjQb/vnggf7nCBzD18D2N/VlDB2k+FXVDNt8pbT1zbgM6mbKS4amCTkihi7
+         E0juMOE/O/fpIQcey+YsvQ3Rd0MvXpouvoz3uKoK/EDcbn+qtHsXUDlPfSdNNOqyPkZp
+         5t8eo1QmR3+pm4xYnqVexLAC2VnhRKX6Nk9sEytF5yP+wvuWfjymanfdq9c4NAmf0SEb
+         F3xX8nBuJVT0KNmVH0oeBL+NYvmFubuxEhlfTKaaeh3JrgL9rhhdiAGFAR/5IEEsbNl4
+         cdfA==
+X-Gm-Message-State: AOAM5328k4tFujPqFaXnhA1Z2ZYtGB1qadp/3GnLwNHanG1Wa3lDkEI1
+        6BpMvHzt6OaXpnOtvv2bdJM=
+X-Google-Smtp-Source: ABdhPJzBpDuzBDRFHhJzk6xqE+MOP5/gu24LM6f1luLCTnLqOi9XIxRbrbuGV5N9lU4MCo7M1Pnu0A==
+X-Received: by 2002:a62:8415:0:b0:407:8998:7c84 with SMTP id k21-20020a628415000000b0040789987c84mr673075pfd.71.1630426771124;
+        Tue, 31 Aug 2021 09:19:31 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:645:c000:2163:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id n24sm20904404pgv.60.2021.08.31.09.19.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Aug 2021 09:19:30 -0700 (PDT)
+Date:   Tue, 31 Aug 2021 09:19:27 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "abyagowi@fb.com" <abyagowi@fb.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        bsd@fb.com
+Subject: Re: [RFC v2 net-next 1/2] rtnetlink: Add new RTM_GETSYNCESTATE
+ message to get SyncE status
+Message-ID: <20210831161927.GA10747@hoboy.vegasvil.org>
+References: <20210829080512.3573627-1-maciej.machnikowski@intel.com>
+ <20210829080512.3573627-2-maciej.machnikowski@intel.com>
+ <20210829151017.GA6016@hoboy.vegasvil.org>
+ <PH0PR11MB495126A63998DABA5B5DE184EACA9@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210830205758.GA26230@hoboy.vegasvil.org>
+ <20210830162909.110753ec@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017b9cf2f6d8-7bd9b83d-d4bf-4ef1-91fc-576ba78763dd-000000@email.amazonses.com>
-Date:   Tue, 31 Aug 2021 16:02:53 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.08.31-54.240.48.37
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210830162909.110753ec@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.14.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 52c7b727581fe725f8b8a283af21fe0651c73c48
-* git describe: next-20210831
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210831
+On Mon, Aug 30, 2021 at 04:29:09PM -0700, Jakub Kicinski wrote:
+> Hmm, IDK if this really belongs in RTNL. The OCP time card that
+> Jonathan works on also wants to report signal lock, and it locks
+> to GNSS. It doesn't have any networking functionality whatsoever.
+> 
+> Can we add a genetlink family for clock info/configuration? From 
+> what I understood discussing this with Jonathan it sounded like most
+> clocks today have a vendor-specific character device for configuration
+> and reading status.
+> 
+> I'm happy to write the plumbing if this seems like an okay idea 
+> but too much work for anyone to commit.
 
-## Regressions (compared to next-20210830)
-* dragonboard-410c, kselftest-capabilities
-  - capabilities.test_execve
+This sounds nice.
 
-* i386, kselftest-rtc
-  - rtc.rtctest
+As you said later on in this thread, any API we merge now will have to
+last.  That is why I'm being so picky here.  We want new APIs to cover
+current HW _and_ be reasonable for the future.
 
-* qemu-arm64-gic-version2, kselftest-timers
-  - timers.rtcpie
+I don't see a DPLL as either a PTP Hardware Clock or a Network
+Device.  It is a PLL.
 
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
+The kernel can and should have a way to represent the relationship
+between these three different kind of IP block.  We already have a
+way to get from PHC to netdev interface.
 
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
+I understand that Maciej and team want to get support for their card
+ASAP.  However, proper kernel/user API takes time.  For example, the
+PHC stuff took one year and fourteen revisions.  But it was worth the
+wait, because the API has help up pretty well all these years since
+the v3.0 kernel.
 
-* x86, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
+There is no need to quickly merge some poorly designed interfaces.
 
-* x86, kselftest-rtc
-  - rtc.rtctest
+Thanks,
+Richard
 
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20210830)
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-  - rtc.rtctest.rtc.alarm_alm_set_minute
-
-* qemu_arm64, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-
-## Test result summary
-total: 6489, pass: 3757, fail: 565, skip: 2167, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
