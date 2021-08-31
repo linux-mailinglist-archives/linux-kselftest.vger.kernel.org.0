@@ -2,95 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C62D3FCBC8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Aug 2021 18:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D333FCC32
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Aug 2021 19:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240221AbhHaQvS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Aug 2021 12:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S233368AbhHaRUb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Aug 2021 13:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240207AbhHaQvS (ORCPT
+        with ESMTP id S229986AbhHaRUa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Aug 2021 12:51:18 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE64AC061760
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id b7so25801359iob.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
+        Tue, 31 Aug 2021 13:20:30 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35E1C061575
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Aug 2021 10:19:34 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id f34-20020a05622a1a2200b0029c338949c1so121557qtb.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Aug 2021 10:19:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9DgEycQMGsPFJfjxU5xvxrR4KHhDrk4WSJNzhOW4AfQ=;
-        b=MfjSCVNRe434fYhenU9ffr8sZqfGAcf1uUoqNOVaIRgH+JaKZSNKzJHusmvxK81+C3
-         8CDko/RSC3or7OxXyVLlmiifUT5pRiw5wyL47f3ED22Kad1Ie/Q1cWV7Ruotylp+l4Vp
-         WB40MKtUpWJ1InzLUYKdHuVwCVDgddn42mr+w=
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=dmkOdfcI6U6JDwUvYTzByiIe7Et2CCkWqmfYAB8t7A8=;
+        b=Ml7dcq37gQJuyMBrIRF+SqWDEkygN+PXfDuRZsIk3ntCeBt22foD9APomI6rr6CxX3
+         ZKteec+wNKmAvAQnLa71p/gjdVmuh7ShSkwwmutFFZacegSnKf6OzEwmYetPuxH8e0nI
+         kf9+fdlLbzBJlHOzhV7ota53+5qxuERECQ9PlpJIBOpnX1lDxbBGoMH/VIlU9qTS4lxf
+         WWUJgrQDq5Um7bh7nZll/bqFem2VT9iohl/DmDAqDmafJejgdwKQz4yfPsxKWx5wybqv
+         ZdgRlJgyyAfCYldUDVApV1q707yGvaXvh2DgCxLe+Dz+YPjenXA7pbeZdh87UYbIxiWW
+         Lx0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9DgEycQMGsPFJfjxU5xvxrR4KHhDrk4WSJNzhOW4AfQ=;
-        b=PYI/tv0MDQfdVS3S/ysoJ/wtgpCUf+SASTSPmKrhofi5ObNgaK4gyUQA2Z8D5jRPTZ
-         wB+cJ6dLrCfOTTXNMv3EhcGQm5nh9qzdUOdRyUOJSS2VVR1BXfelP3BSk/oZGbEW4XmZ
-         VfNX/64D1p2Y7yzA9TVlMmttIFrR6K7v2yoYvMhhyUwLeOrtuTJ/s+Oh+9djs1oeY/RT
-         1uKT/urWFemm/mSnA8chYKgZ9Eqn3kZEN6/J88xstse1q7PQu6pP4SvsWaKB1MLwfs9i
-         E79zGMWjkXcMre4vphevHCEW4lgE5zulITm3H3Gdoou1wGev3yIPJbPFaKS0tXvvgwhE
-         T6hg==
-X-Gm-Message-State: AOAM5311h1zghTTwF2fGg1OxwRmjzd1rP5D4AWJFIR82lecRrdBnZbFM
-        U/FKQir+owjCUyNfWkYgb4dShw==
-X-Google-Smtp-Source: ABdhPJyJg5KBLvWmLAPWyRpm+uePjJeTSZiwMFAFjgh5Ssa6EJ4XJ4Xc7U5XLea3QhF1v9iT5FAxQA==
-X-Received: by 2002:a6b:7a03:: with SMTP id h3mr23648569iom.39.1630428622224;
-        Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 3sm6079565iln.79.2021.08.31.09.50.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Aug 2021 09:50:21 -0700 (PDT)
-Subject: Re: [PATCH v3 0/2] kselftests: clean configs
-To:     Li Zhijian <lizhijian@cn.fujitsu.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     philip.li@intel.com, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210831102316.280512-1-lizhijian@cn.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3a386a77-80f5-81c0-5bda-df656c057fa6@linuxfoundation.org>
-Date:   Tue, 31 Aug 2021 10:50:20 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20210831102316.280512-1-lizhijian@cn.fujitsu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=dmkOdfcI6U6JDwUvYTzByiIe7Et2CCkWqmfYAB8t7A8=;
+        b=qyUiART7qS74urXI5PXw1AFCfTAb7+gtrGhzE9aNPZpDCP8coqqzNMNPmDyl8qnSde
+         u87Ve52vCre64MIr6yJE8dzEjyN+tZv8ICmcYKyX5KGKI/M6v/oJgIMHQO49lY/HtJ9t
+         lhCK5LfiGASrCpTif6aRW+x30f1+RNrn/0ZaM8IcM4EuiTI5s9WIpvqbzyxmcVMAXQzF
+         cFYVx/AjGjlFSFFX9aQAOe7E9bDWRcTY0SxozTMsNHLrJ8fPIdkmmaj1XFRqie3FsEEM
+         t6WN9C943nR+Ch3WMnA42Q8+Okxc/2jkrW+2SuZRQGdkzEoGka3q9Ti6hZvr+NiMsEnd
+         72fw==
+X-Gm-Message-State: AOAM531bb46iSzN2ewWu4hR9kzTaOGpj5rw9udxRzFRrD4+GYLC3eX41
+        5Gbcybxgha8b7CUnLRmBlBgS/Qf/kTyMfQ==
+X-Google-Smtp-Source: ABdhPJyFEMhIUiSB9Ixf8MBWUFnT4sJu0XyS49wBGirVOsYp6NnJCWVeWZ0j7Cg8K1VyPfNHtVLeFMNTiX9ucg==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:7ad4:b790:ae28:9a76])
+ (user=dlatypov job=sendgmr) by 2002:ad4:5247:: with SMTP id
+ s7mr29849422qvq.58.1630430374053; Tue, 31 Aug 2021 10:19:34 -0700 (PDT)
+Date:   Tue, 31 Aug 2021 10:19:25 -0700
+Message-Id: <20210831171926.3832806-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.259.gc128427fd7-goog
+Subject: [PATCH v3 1/2] kunit: drop assumption in kunit-log-test about current suite
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/31/21 4:23 AM, Li Zhijian wrote:
-> 0Day will check if all configs listing under selftests are able
-> to be enabled properly.
-> 
-> For the missing configs, it will report something like:
-> LKP WARN miss config CONFIG_SYNC= of sync/config
-> 
-> CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> CC: Viresh Kumar <viresh.kumar@linaro.org>
-> CC: linux-pm@vger.kernel.org
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> Li Zhijian (2):
->    selftests/sync: Remove the deprecated config SYNC
->    selftests/cpufreq: Rename DEBUG_PI_LIST to DEBUG_PLIST
-> 
->   tools/testing/selftests/cpufreq/config | 2 +-
->   tools/testing/selftests/sync/config    | 1 -
->   2 files changed, 1 insertion(+), 2 deletions(-)
-> 
+This test assumes that the declared kunit_suite object is the exact one
+which is being executed, which KUnit will not guarantee [1].
 
-Thank you. These two patches will be queued up for 5.15
+Specifically, `suite->log` is not initialized until a suite object is
+executed. So if KUnit makes a copy of the suite and runs that instead,
+this test dereferences an invalid pointer and (hopefully) segfaults.
 
-thanks,
--- Shuah
+N.B. since we no longer assume this, we can no longer verify that
+`suite->log` is *not* allocated during normal execution.
+
+An alternative to this patch that would allow us to test that would
+require exposing an API for the current test to get its current suite.
+Exposing that for one internal kunit test seems like overkill, and
+grants users more footguns (e.g. reusing a test case in multiple suites
+and changing behavior based on the suite name, dynamically modifying the
+setup/cleanup funcs, storing/reading stuff out of the suite->log, etc.).
+
+[1] In a subsequent patch, KUnit will allow running subsets of test
+cases within a suite by making a copy of the suite w/ the filtered test
+list. But there are other reasons KUnit might execute a copy, e.g. if it
+ever wants to support parallel execution of different suites, recovering
+from errors and restarting suites
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ lib/kunit/kunit-test.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index d69efcbed624..555601d17f79 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -415,12 +415,15 @@ static struct kunit_suite kunit_log_test_suite = {
+ 
+ static void kunit_log_test(struct kunit *test)
+ {
+-	struct kunit_suite *suite = &kunit_log_test_suite;
++	struct kunit_suite suite;
++
++	suite.log = kunit_kzalloc(test, KUNIT_LOG_SIZE, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
+ 
+ 	kunit_log(KERN_INFO, test, "put this in log.");
+ 	kunit_log(KERN_INFO, test, "this too.");
+-	kunit_log(KERN_INFO, suite, "add to suite log.");
+-	kunit_log(KERN_INFO, suite, "along with this.");
++	kunit_log(KERN_INFO, &suite, "add to suite log.");
++	kunit_log(KERN_INFO, &suite, "along with this.");
+ 
+ #ifdef CONFIG_KUNIT_DEBUGFS
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+@@ -428,12 +431,11 @@ static void kunit_log_test(struct kunit *test)
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+ 				     strstr(test->log, "this too."));
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+-				     strstr(suite->log, "add to suite log."));
++				     strstr(suite.log, "add to suite log."));
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+-				     strstr(suite->log, "along with this."));
++				     strstr(suite.log, "along with this."));
+ #else
+ 	KUNIT_EXPECT_PTR_EQ(test, test->log, (char *)NULL);
+-	KUNIT_EXPECT_PTR_EQ(test, suite->log, (char *)NULL);
+ #endif
+ }
+ 
+
+base-commit: 9c849ce86e0fa93a218614eac562ace44053d7ce
+-- 
+2.33.0.259.gc128427fd7-goog
+
