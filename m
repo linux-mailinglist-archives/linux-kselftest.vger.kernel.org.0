@@ -2,118 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8CD3FD927
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Sep 2021 14:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B4C3FE21A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Sep 2021 20:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243961AbhIAMDa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Sep 2021 08:03:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50732 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243901AbhIAMD1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Sep 2021 08:03:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC3BC6101B;
-        Wed,  1 Sep 2021 12:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630497750;
-        bh=PZUBxYDRnOVPYWSHFQRrdCVWytJpgNo7LuOxHkoA64E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XUvNuv02XEXCsWS+AA6bHQ7GjQ57uNzp1oufsP6yqHbKlrXuBWGHvin1vF6an90ec
-         shcCf+JdUKIGCrtP76xFFY7UpSuNQ/gledBS2GszKgHlDHcKSbxdw5OF+plGbsbqQA
-         K3dQFpHJWvivh+MHaoPYjNAzrzJwEdaa3llO/YaZgeLKR28qqKhe9ZMgRwVCnXltkq
-         dl4FjWjSVK5vyBkpQApfUL0ufUsacDcte7RniXFfSzOcPzwkcqdKOP3Mx1TO8RtHJH
-         vGw6XuWplv97KE4Ul+HQwWbl50EXgtX5V47onH3tB/7hVE11ApbcBoGZIB39d70jIF
-         N3OKaBZbvtP/A==
-Date:   Wed, 1 Sep 2021 13:01:55 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     kernelci@groups.io, Tim.Bird@sony.com
-Cc:     keescook@chromium.org, rmoar@google.com, brendanhiggins@google.com,
-        davidgow@google.com, shuah@kernel.org, dlatypov@google.com,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, guillaume.tucker@collabora.com
-Subject: Re: RFC - kernel test result specification (KTAP)
-Message-ID: <20210901120155.GA5976@sirena.org.uk>
-References: <CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com>
- <202108272330.AE55FCD@keescook>
- <BYAPR13MB2503A4B79074D8ED5579345DFDCB9@BYAPR13MB2503.namprd13.prod.outlook.com>
- <202108301226.800F3D6D4@keescook>
- <BYAPR13MB25037E7EE38DE8717DC7D254FDCB9@BYAPR13MB2503.namprd13.prod.outlook.com>
+        id S1344974AbhIASMg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Sep 2021 14:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346798AbhIASMT (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 1 Sep 2021 14:12:19 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1589FC0612A7
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Sep 2021 11:11:21 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id w7so250909pgk.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Sep 2021 11:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=LD3mpzy1s09M3e/Eheelu/QMtbN6lrYJQ+S1BsYhmG4zP9OQuKOeD1zHV2lZaK7Hdt
+         vXoBMumPRACuZhnwd8TYAFIvdImPe0Zn4DA41GnzHGsnpDZPE0wUFWVFNzgpxF6bh6D8
+         CVxTiiIN7w8BVpPirFLytZKK2cFqqV6q9qR8cw4XmdYYgGZs+MdnDeP+neEr/SbnLI2h
+         mwT6gqJ8+HvNCQei5Zu6b3U+/YcUOepEDfVn6t0IkNG5YzxTV8mH8IqZ4zEsqBchdgxI
+         E/zGH3KCiuS7UdfEMBVKPbpzhhPyh4quLRALvE4iCHtswqSZDgWUuzksodIw8OWwGR1Z
+         0RlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=cLC+vqs/j1+kxOJT+8ZmgzFlZYJsOHo16xtPxewC4uly9TsaLlL1sZlSFLtk2i/nfu
+         KpVTU4r5O0BgZP2Rvk/SFvra/xO6Z9px/K69tsoM5UF01n5WNDvsbGfJ2gAm044LM4XP
+         wkO4Y7pRz6wRDaGXR57nSPxluwbbtRfo+/drOBtVpjzcpKe8R2zh0rRS/ACObkhsjSYR
+         /4pMUYtGcZi9E6oQPZOBhyf8QYZLzUHUq+Xu5f46lGENp1NfRE0f1Db2s0YShGGGmQlb
+         8CfLexH4XFKHMqUiiDsqV1rA5CeS+k/3dRa+XfzDWjz6dCDiAm3fZdOV3Dk9mGqfsQxm
+         89yw==
+X-Gm-Message-State: AOAM533RvBDLAnJW/AUVuTTvBnbu1dWZ04MNeI933HucOSV+y0oij8aX
+        dE8D1Awmd5rKnIYCsYGUaxK88VKTBtz4JA/rcyJN2/NQ7Anj/Q==
+X-Google-Smtp-Source: ABdhPJwbbBYGjUEQSS3Bb7EfYk34O3AVuG22pVIF78fkATQG8c+PQmeHgcc35+YrriS74Wl5STB8JbzOasp+8kCVBlk=
+X-Received: by 2002:a67:8c5:: with SMTP id 188mr1017695vsi.4.1630519870726;
+ Wed, 01 Sep 2021 11:11:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="OgqxwSJOaUobr8KG"
-Content-Disposition: inline
-In-Reply-To: <BYAPR13MB25037E7EE38DE8717DC7D254FDCB9@BYAPR13MB2503.namprd13.prod.outlook.com>
-X-Cookie: Who was that masked man?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:ab0:740d:0:0:0:0:0 with HTTP; Wed, 1 Sep 2021 11:11:10 -0700 (PDT)
+From:   CorisBank International <corisbankintlbf@gmail.com>
+Date:   Wed, 1 Sep 2021 11:11:10 -0700
+Message-ID: <CA+25hwzjLgVdtDXYWeuqFBTvAbpc4oxK0dW54s7tjGNyU_m0ow@mail.gmail.com>
+Subject: CORISBANK INTERNATIONAL OFFICIAL NOTIFICATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Att: Client
 
---OgqxwSJOaUobr8KG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 30, 2021 at 10:04:24PM +0000, Tim.Bird@sony.com wrote:
-> > -----Original Message-----
-> > From: Kees Cook <keescook@chromium.org>
-> > On Mon, Aug 30, 2021 at 05:48:07PM +0000, Tim.Bird@sony.com wrote:
-> > > From: Kees Cook <keescook@chromium.org>
+CORISBANK INTERNATIONAL URGENT NOTIFICATION
 
-> > XFAIL capture the condition of the test logic in that a test for
-> > something arm64-specific on a non-arm64 machine is _not_ a "pass". It
-> > will fail. But it's an expected failure. And, as a directive, must come
-> > with the evidence bit:
+Notification / Notification/ Notification
 
-> > not ok 1 PAN catches bad accessg # XFAIL PAN CPU feature is arm64 only
+Note, We are writing to inform you officially that Finally the Central
+Bank Financial Authority have approved to transfer your $8.2Million
+which was signed by late Mrs Rose Banneth the COVID.19 victim to
+transfer to you, Late Mrs Rose Banneth the France Lady contacted us to
+transfer her fund in our bank to you for Orphanage work before she
+died by the COVID.19
+and as it is now, you will receive your fund through our corresponding
+bank in Dubai [Emirate Investment Bank ] for security reason. Please
+you should reconfirm your details to receive the $8.2Million.
 
-> > As a test author, I want to see this as distinct from failure and
-> > success.
+Name, Country, Address, occupations, Age, Telephone number, account
+Details so that we can immediately forward to the World Bank to
+transfer the fund.
+You are advised to comply on timely manner to permit this esteem bank
+transfer your fund as scheduled.
 
-> I agree that this case is different from a normal failure.
+We look forward to serving you better
+Your Financial Comfort Is A Priority
+Thank you for choosing Corisbank International.
 
-> In the example you provide of a feature that applies to only specific
-> architectures, I would use a SKIP instead.  It's not that the testcase fa=
-iled.
-> It's that it does not even make sense for the device under test.
+Sincerely,
 
-That's what all the arm64 tests are doing at the minute - they're
-skipping tests on systems where the feature being tested isn't
-supported.  We've determined that the test can't meaningfully be run so
-we're going to skip it.  We also don't use XFAIL for tests that are
-checking that an error of some kind is generated, the test is formulated
-as "error is reported when we do X" meaning that PASS/FAIL makes sense
-directly.
+----
 
-There's a couple of XFAIL uses in other selftests but it's pretty
-infrequent.
-
-> > This is what we have now except basically just replacing "# $name" with
-> > "test $num $name"
-
-> Actually, I like this idea.  Including the number is a nice touch.
-> I think that will help to distinguish such a line from other 'unknown lin=
-e' output.
-> I don't know if I'd leave the description off of the result line, though.=
-=20
-> A lot of parsers are looking for that.
-
-It's also important that humans are able to understand the output and
-the descriptions do help with that.
-
---OgqxwSJOaUobr8KG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEva7IACgkQJNaLcl1U
-h9DAIwf/cJy2JDXJtSeQXblw3OFFnLEGSHyJYlnjSPFNerdt+bf6i2jQRAd5B+KF
-fYh48HdgeWjBbVMl+55efWYM/mwdzCsBokD4drmlGXxftSaNvIHWYWcH8HAbeyl5
-ZoFRhrKUxrcbGcmgF/Ki3H8pUzyihXnVONbdkUA76VXdV8OdwULJ1qUDcGoX20iC
-MxN/lrhf9+nzVIyAziTxYCPlFWmISpgsDiKmB/RrbpP6bV5fqI+Wjlz6LRye0plb
-724w1E5aahM4VIH6m5TkWNyMcOL27TshqUwIn56yviDEt33FTB1r+ZL50BC6nj4m
-kX+36Vdpn/s0iN9+oWpHTVSegdLxFw==
-=+z4Y
------END PGP SIGNATURE-----
-
---OgqxwSJOaUobr8KG--
+Mr Diakarya Ouattara
+Managing Director
+Bank Coris
+Burkina Faso
++226 556 163 37
+financial_bf_info@accountant.com
