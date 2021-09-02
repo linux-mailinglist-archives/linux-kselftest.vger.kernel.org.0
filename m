@@ -2,275 +2,396 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB673FECE1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Sep 2021 13:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB083FF033
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Sep 2021 17:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233906AbhIBL0k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Sep 2021 07:26:40 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:3776 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233850AbhIBL0j (ORCPT
+        id S1345805AbhIBP3h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Sep 2021 11:29:37 -0400
+Received: from mail.efficios.com ([167.114.26.124]:38750 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345689AbhIBP3g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Sep 2021 07:26:39 -0400
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 182AvqDT029916;
-        Thu, 2 Sep 2021 11:25:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=bMivpNKdwQijQtZdNwiAuq4UrcxGOu86zctUhW4blIM=;
- b=PqaxiqECFaCEM5l5teMAnIat3s5OT+67Tig49lawLRyTya84jMuuHSMUp8+lAUDYDTTs
- DmHQf6mBDLRRtGac2YKXOmCsZ1qJnxKmyE5h9RBaXU/el/s+32m5TfhXkCZkmQ6tNpLd
- oRkVcMUXFN2iko/VVOw72vVzxt/u4LrborKIogDokPGmAA6ut+OD70sERinV7Z9YBnVf
- bD6Z7FIxyG+mYp3kYohZdqS4Tcj5lSqJzEEhEHOv4VVHaQFuNItw5ZL6muUxpAl362Q0
- DqNg1tzGeBwo2bxn4+/iNLZSPf4kbnxftFHtYeoxromspnm3xeruiFLcGELVQak+84HS SQ== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2020-01-29;
- bh=bMivpNKdwQijQtZdNwiAuq4UrcxGOu86zctUhW4blIM=;
- b=BIMNN1vnAlxbV/Ed3syPhAGwYCrExPs2guX15nrvulGPVxgoZhe1MxjJ7ttZbCALDAnC
- 64QBZW6ddZg1t7XQYz1ibJ2Js2nctcBEeLPLvnwNr8LkWYtrejila91+asyk22YtXnV8
- 8NsS1jguQLOiuuhsJB6lKJzk/bPGUJ5CO3Fv7vlDeNJajCPL/8IDfI9xxvTZtXa0oKwS
- Im85mqPQ8YO2j1ZzCOUd1wF/hfXWFPdFNSidjEbfnXPUvMdkNp9U5gL7sEi1Roph36iA
- Q6dvYBaWZ8ydfapPDqppu9rsA/KP7a8dLpCLP81OxLetN2bWjvHXEmMGIpZ+lK1LLI12 ug== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3atdw02cpg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Sep 2021 11:25:29 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 182BFrhi095406;
-        Thu, 2 Sep 2021 11:25:28 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2173.outbound.protection.outlook.com [104.47.56.173])
-        by aserp3030.oracle.com with ESMTP id 3atdywuku1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Sep 2021 11:25:28 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nEIunnHbxzw7mLvA08GVcVX9btE6+DynxNxxKZtC82WqGD706tDvL+f+p2B0P0S5x4RP6mNTxCLDPZpI4ez79/87zWrSuO5Ce3baTjqhgrComDj3LVCLHcKIbIrCM7xjjSqg96Oy0+4yGy0KUMw/XG7nRAEfZR8EcRiF1Bq4A89x7b4skivx3OwaVqmCFIFgft0Z+hCa5soaFvQdj1qrMQXxqV6T1jp7ZIOaTSO1uaY+vSusvSqh7WiQM6+RcJtfnnEkQD7lC1EV+ByJByyeDI+OaWFz3OQRV3uli+XY6elWqbYZsAYMudYyuLviuhb1PFbT+aHXEmctmETZRAnEHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=bMivpNKdwQijQtZdNwiAuq4UrcxGOu86zctUhW4blIM=;
- b=GT4CeKvYMiDp42CBmBbsvceHtq9ine+F5iNTnxMsco3aumXwPTEmOyHvtW2HIEkjIfAKJNtx4gCEK1c3TdhaqDlYT34QeBBv7Ghv8DOnXYYiRe+VA1bN5FyJJ7RF70yY7YpwJYs9x4xIpN+ZxeTF7aKqvV3YDVTeeG9Sd6GQM8GuXMvOU2v2dLZCw2ZqbHP1WSpeEQKh2N1HAt6yMIKhYHcU9zc7O13Dl/euPglRxTO0ImQ23myy2sV5lSc0jk/SKkyJLHYq7vO6KOwuF6j/6BW1TA9ZQIju3iWeUTyOfd4Iy3ApyiQvtWOVL2ISvJOL1QYz1m4Fl9cEJBs5czWLTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bMivpNKdwQijQtZdNwiAuq4UrcxGOu86zctUhW4blIM=;
- b=O1OiQZNlCJ+Uby5juyL3n5DNsuF83RrfD2cV8zrJzqYf+qLJ0Y0spu7jgwzBIqLRE3DlBrix+PHxXxCPzYnCma3d7+76ujRhqubkTCKuJLFqoWXcO6NisNsfylaASCjdFn+08AynOj/j4/aIYH37dX3Ref5LFyL6R38SQ0QGCwo=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=oracle.com;
-Received: from CO1PR10MB4705.namprd10.prod.outlook.com (2603:10b6:303:96::11)
- by MWHPR10MB1568.namprd10.prod.outlook.com (2603:10b6:300:26::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.19; Thu, 2 Sep
- 2021 11:25:25 +0000
-Received: from CO1PR10MB4705.namprd10.prod.outlook.com
- ([fe80::95c2:636:f86f:c6a8]) by CO1PR10MB4705.namprd10.prod.outlook.com
- ([fe80::95c2:636:f86f:c6a8%8]) with mapi id 15.20.4478.022; Thu, 2 Sep 2021
- 11:25:25 +0000
-Subject: Re: [PATCH] kselftests/sched: cleanup the child processes
-To:     Li Zhijian <lizhijian@cn.fujitsu.com>, peterz@infradead.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-References: <20210902024333.75983-1-lizhijian@cn.fujitsu.com>
-From:   Chris Hyser <chris.hyser@oracle.com>
-Message-ID: <282b1eaf-c506-c18c-01d7-df7bdab88fef@oracle.com>
-Date:   Thu, 2 Sep 2021 07:25:21 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-In-Reply-To: <20210902024333.75983-1-lizhijian@cn.fujitsu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0256.namprd03.prod.outlook.com
- (2603:10b6:610:e5::21) To CO1PR10MB4705.namprd10.prod.outlook.com
- (2603:10b6:303:96::11)
+        Thu, 2 Sep 2021 11:29:36 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 34F1F374320;
+        Thu,  2 Sep 2021 11:28:37 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id LP_tK4KXAATN; Thu,  2 Sep 2021 11:28:36 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 4757D37431D;
+        Thu,  2 Sep 2021 11:28:36 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4757D37431D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1630596516;
+        bh=lyEy5Tw3HF5zzHal3IxuH63JnLhK6o3BByEcr5vw1rg=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=PkYRnHv/ofNva5xCGCWueWu5kG7//pAcru9Vl9Em5Gr3OvbQeSUiRGgWKTmzh2OfI
+         Sjtr9l+kUcUIU9XZlToc+Z4wJQBVyFWbHEHUeSa+2RDCaXhYGy6qHgpoOj5xKQtN1V
+         nNnhbYFS65/K1T/uccIE8G+ADHVcibcfGmbWCoPO3tZKw3cRLH6j//CQvxXLj4F0Xk
+         2daMpjzb9zUYo73hQUpnKiVqJdvVS9W+rw3XPFfCIThSmgxJdsdRNZF0M2JsUcIFNZ
+         O76eGLqYGHd+qIENC46Yt2seVQPY/F6Nz2q4acGRDTmp90tKL4W3jimKfH2bSHiM3a
+         5YgHnoT9xiBDQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id OXXEWNoZQrO3; Thu,  2 Sep 2021 11:28:36 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 1CA5F37431C;
+        Thu,  2 Sep 2021 11:28:36 -0400 (EDT)
+Date:   Thu, 2 Sep 2021 11:28:36 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-csky <linux-csky@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Peter Foley <pefoley@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Ben Gardon <bgardon@google.com>
+Message-ID: <93105975.4876.1630596516005.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20210901203030.1292304-5-seanjc@google.com>
+References: <20210901203030.1292304-1-seanjc@google.com> <20210901203030.1292304-5-seanjc@google.com>
+Subject: Re: [PATCH v3 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
+ detect task migration bugs
 MIME-Version: 1.0
-Received: from [192.168.0.193] (67.242.218.156) by CH0PR03CA0256.namprd03.prod.outlook.com (2603:10b6:610:e5::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.17 via Frontend Transport; Thu, 2 Sep 2021 11:25:24 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2bd2bec5-6071-4fd1-8a6b-08d96e045be1
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1568:
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1568D39F6F3521046A2CFFA89BCE9@MWHPR10MB1568.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:16;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h0H4PaVog9KI3vC437bhfxxnyjxvced0NNinD3VDKDBlacTq9IwR8kUhX/BbsnrWu6UguMlDMZu/TlDpfxWTcaHGjBtHX1xuVmYjier4iDz/cuXdqxSCsoyzOdXKKynAb5gzm9w00vlOlvjiHeVhSYya5jqMmNjSG/9iXq5VWywKb4DXjdjiWl9Y4tTP279gbM+wEdKiPerxFkSfVgkksmNOjgx1O8LDu9Sd9GZDRgwbqpvWqaFwW9bgIwaTJhb5VFT1GBqHTZq4sQMZvqOuOyZKEaKR65nn2zk1xEIsh4jOjFmtr4rTYZNHDFH/CsiAfpqgA+6VznIMwQX7MsaCy6mqJhWDmPHEvqykz+CLUhlf9FOEgLM6Ub/vzciBVbQivSDfFK2k8c0eDkbX76JatNbWwv0ph2cK+ZUEbAo8mmy69nVr68P56xJ1dj3yE50XvvT6ZsOTVsQglfsX/DAYzcOnhufGvwwl3DAgogCpBlyZ+/DkaMnb/39S0qpnBJz2SBn5G/eLuVIy33x2089aLMUO066UvoRDb6Hsmmx+4Yt4jZR3QGiHH8Pfy10GlR7Bg3D0Vs/hpBQ1yb2Nx8ePEx6MOp1M/8JuTMilN16dPPl/9zZ+hC444/t+cL18Igo3n8yT9d38lfqwkYIASug8aVx00vyLwqgEYnzOb3noSUCorY21RkWFqrspTlf2nLBlEO5RBDpMDPJUWWm6zghCGtpM4+tnSWUQ8fXM61bMgjvIl5FhP0xA4AiIgwGiU20tGXQF6oqyqQJQnctHWClzsA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4705.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(366004)(346002)(376002)(136003)(66946007)(66476007)(66556008)(8676002)(6666004)(478600001)(83380400001)(54906003)(52116002)(53546011)(31696002)(16576012)(316002)(86362001)(38350700002)(38100700002)(31686004)(36756003)(6486002)(44832011)(2906002)(186003)(5660300002)(8936002)(4326008)(956004)(26005)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2Urc0tzZHlXT3FQc1g2UjdTM294bnNjZjEzMFhSL0cwYVh1SEtzVEI0WFQv?=
- =?utf-8?B?bDZpSzR6SE1vTm9rSUNnMVZUc3ZrT0pZVWQ0NDN1N0NyR0NQWkVSbGZkR2pG?=
- =?utf-8?B?Z1E5RElCN2FZOXlqaVNKVCtLR1JRNmN3bGR2RVVPdjRqTzlvUnpGUjN4Q1Mw?=
- =?utf-8?B?c2RBTlBuaWlFN0NGelplK3pRNm1YcXlIbGZxNjZEb0ZiYktFRnlHbEZEOXFn?=
- =?utf-8?B?eU9SVjEzTk5kQVF5SEQzcjR6RHJEdW1mQWJ3cURZblFaRmpKancvcVRxcTRD?=
- =?utf-8?B?dlkrK1pFV2h4VUZpR2pIbWpyNEVESzl3clNWd1RGYjFaZ3dVbVVQR0lpN1dM?=
- =?utf-8?B?aWRpemJLSHppRlNtM2xCd1lWblR3K09PKytRZG1vQzdOWGpUNlZvcFMvdncv?=
- =?utf-8?B?Z3M3REZxZHBpem5RVFdsSkhxb2RvcWRUTXp1azZJOTAyaEhaNHk4UkNjdFRo?=
- =?utf-8?B?VWhMbVg0a21mbWhnam9jM3FQRnBVSjNhdCtHSUtnejBLQWhsanJOUjJ5clZ0?=
- =?utf-8?B?Tk9xbGRqS2dZRXh0TU1scUZUR2RQOTBZa3VvNU55Z3c0emZGWkIwVVZqNnJO?=
- =?utf-8?B?bEE2Z3pqYTRqVzZyMGdkWmRVdEF0OXVDdWR3ZDRWTzZLalNXRzd4ZWVVYXVW?=
- =?utf-8?B?R0xkV1E1aGhiRFRrK24rL2x6ekxtTTIrUE4vdHV6MEVZcXA5Wk5vbFN4TVI3?=
- =?utf-8?B?Ty91VUJBQXNTamJOelZUWldvMzdvNTMydzVKZGJQNnB6Wk56eExQVFhBOFM4?=
- =?utf-8?B?Y01tWjhHRWk3N2duMUZLL052dXQzVWc3Z1RPbmdSMFN4RUxrYjFQMTZQOFd4?=
- =?utf-8?B?SUhsUSs3T2xJUmpnUSs0dmJlUDBwbjhUbTVxMHQrWGt5ZWN0NWtFQ0hMQUw5?=
- =?utf-8?B?ZkxqZGxlN2wwUzFzOWxlLzJyOW9hQlJGRzNSTW5XSGZQd0h2YTd2RlA0QVNF?=
- =?utf-8?B?elprSkZjRE8yRFdNUk1XZVRjbGpMK2NHK1M3R0pPZFJFVWhhZEc2TTI3Mnp6?=
- =?utf-8?B?K2RRU05vQXFWYlRTdHozbFV4aWdWSEUyaWpsQjkzRDFrNUNDRFJqTURvTHNG?=
- =?utf-8?B?VEp2Z3FQQTNVUmFXS1BVR21VM0dsNzg0N2dGbDBJN2pCQm44UkhZZjFKV3Zt?=
- =?utf-8?B?U1hVU2pHcU9JODIzMzBXRXdvRFJBY2o2clB4ZExlRHFCUHhkaHYxWFVaRlhM?=
- =?utf-8?B?c1dOdjgwazU4YkJ4NUlUaDV3YnJjM0lPMGFPSlFzVTVSUmk1VFV0ZGZab2ZI?=
- =?utf-8?B?QUdmTHBsaWRBQzNqdDlyWDFFdUdqMU1oQ2NhL1JJKzludVNRZTZhOGR0K0VH?=
- =?utf-8?B?ZWlUWXZaZ2tlLy9icFUzRWtkSHNySU1MVEE4My9GMU9PRUFrWnVZbjhRY3hq?=
- =?utf-8?B?d2NORndQcUFFNzZ0SG9wTHhHTHhhUnR5cXh6eDZEWkZYVXF6NGpLT1BRcTZl?=
- =?utf-8?B?Qm5kUm9ZdUt3ZDRNMi9FeUs1cys4Z2ZHN2V3ZkxyZVhpRlRySzFubTRycjRL?=
- =?utf-8?B?QkRjWUNRSHhTbTh0ZzRwNW5OVGNaUnFINmRVRVRyemZaZGdCV0NwUlphY3M4?=
- =?utf-8?B?dWNwMXFleFE3QkE4VWw0em5pMHBieGEvK2pzZGpPZmZUT0wzT1ZOangzckpt?=
- =?utf-8?B?dy9SbG5hSTV1QmpNTVhyRmMzOG9mUWprRzB1dFdNVnhTeXkrTHNadXBVNVR0?=
- =?utf-8?B?Sml5TVVEdDl4S0FSMXdHOHBrNnlKZkJWclFMdWJjRSs4RFNObThKKzkzTHdS?=
- =?utf-8?Q?3G8/7Xec50eGCFjEiVntcuh5H8PHads9GmrNOsx?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bd2bec5-6071-4fd1-8a6b-08d96e045be1
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4705.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2021 11:25:25.2208
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 57j9Q3qCf19HvD90khCWz6iTiU46eAIlYI4sruKAO5xLV5Qq7Ey7HgNK6IUtLR0iJqnM8Kp4/d04fCvJ0ab5/A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1568
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10094 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
- mlxlogscore=999 spamscore=0 phishscore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2108310000
- definitions=main-2109020071
-X-Proofpoint-GUID: n1E0LeeZsYRKROzU783cNPIw0AaN2G2Y
-X-Proofpoint-ORIG-GUID: n1E0LeeZsYRKROzU783cNPIw0AaN2G2Y
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4125 (ZimbraWebClient - FF91 (Linux)/8.8.15_GA_4059)
+Thread-Topic: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs
+Thread-Index: EyGVp1d/A2F7ckYRHUvub8wzNHGsxA==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+----- On Sep 1, 2021, at 4:30 PM, Sean Christopherson seanjc@google.com wrote:
 
+> Add a test to verify an rseq's CPU ID is updated correctly if the task is
+> migrated while the kernel is handling KVM_RUN.  This is a regression test
+> for a bug introduced by commit 72c3c0fe54a3 ("x86/kvm: Use generic xfer
+> to guest work function"), where TIF_NOTIFY_RESUME would be cleared by KVM
+> without updating rseq, leading to a stale CPU ID and other badness.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-On 9/1/21 10:43 PM, Li Zhijian wrote:
-> Previously, 'make -C sched run_tests' will block forever when it occurs
-> something wrong where the *selftests framework* is waiting for its child
-> processes to exit.
-> 
-> [root@iaas-rpma sched]# ./cs_prctl_test
-> 
->   ## Create a thread/process/process group hiearchy
-> Not a core sched system
-> tid=74985, / tgid=74985 / pgid=74985: ffffffffffffffff
-> Not a core sched system
->      tid=74986, / tgid=74986 / pgid=74985: ffffffffffffffff
-> Not a core sched system
->          tid=74988, / tgid=74986 / pgid=74985: ffffffffffffffff
-> Not a core sched system
->          tid=74989, / tgid=74986 / pgid=74985: ffffffffffffffff
-> Not a core sched system
->          tid=74990, / tgid=74986 / pgid=74985: ffffffffffffffff
-> Not a core sched system
->      tid=74987, / tgid=74987 / pgid=74985: ffffffffffffffff
-> Not a core sched system
->          tid=74991, / tgid=74987 / pgid=74985: ffffffffffffffff
-> Not a core sched system
->          tid=74992, / tgid=74987 / pgid=74985: ffffffffffffffff
-> Not a core sched system
->          tid=74993, / tgid=74987 / pgid=74985: ffffffffffffffff
-> 
-> Not a core sched system
-> (268) FAILED: get_cs_cookie(0) == 0
-> 
->   ## Set a cookie on entire process group
-> -1 = prctl(62, 1, 0, 2, 0)
-> core_sched create failed -- PGID: Invalid argument
-> (cs_prctl_test.c:272) -
-> [root@iaas-rpma sched]# ps
->      PID TTY          TIME CMD
->     4605 pts/2    00:00:00 bash
->    74986 pts/2    00:00:00 cs_prctl_test
->    74987 pts/2    00:00:00 cs_prctl_test
->    74999 pts/2    00:00:00 ps
-> 
-> CC: Philip Li <philip.li@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+Thanks!
+
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
 > ---
->   tools/testing/selftests/sched/cs_prctl_test.c | 28 ++++++++++++-------
->   1 file changed, 18 insertions(+), 10 deletions(-)
+> tools/testing/selftests/kvm/.gitignore  |   1 +
+> tools/testing/selftests/kvm/Makefile    |   3 +
+> tools/testing/selftests/kvm/rseq_test.c | 236 ++++++++++++++++++++++++
+> 3 files changed, 240 insertions(+)
+> create mode 100644 tools/testing/selftests/kvm/rseq_test.c
 > 
-> diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-> index 63fe6521c56d..1829383715c6 100644
-> --- a/tools/testing/selftests/sched/cs_prctl_test.c
-> +++ b/tools/testing/selftests/sched/cs_prctl_test.c
-> @@ -64,6 +64,17 @@ enum pid_type {PIDTYPE_PID = 0, PIDTYPE_TGID, PIDTYPE_PGID};
->   
->   const int THREAD_CLONE_FLAGS = CLONE_THREAD | CLONE_SIGHAND | CLONE_FS | CLONE_VM | CLONE_FILES;
->   
-> +struct child_args {
-> +	int num_threads;
-> +	int pfd[2];
-> +	int cpid;
-> +	int thr_tids[MAX_THREADS];
+> diff --git a/tools/testing/selftests/kvm/.gitignore
+> b/tools/testing/selftests/kvm/.gitignore
+> index 0709af0144c8..6d031ff6b68e 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -47,6 +47,7 @@
+> /kvm_page_table_test
+> /memslot_modification_stress_test
+> /memslot_perf_test
+> +/rseq_test
+> /set_memory_region_test
+> /steal_time
+> /kvm_binary_stats_test
+> diff --git a/tools/testing/selftests/kvm/Makefile
+> b/tools/testing/selftests/kvm/Makefile
+> index 5832f510a16c..0756e79cb513 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -80,6 +80,7 @@ TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
+> TEST_GEN_PROGS_x86_64 += kvm_page_table_test
+> TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
+> TEST_GEN_PROGS_x86_64 += memslot_perf_test
+> +TEST_GEN_PROGS_x86_64 += rseq_test
+> TEST_GEN_PROGS_x86_64 += set_memory_region_test
+> TEST_GEN_PROGS_x86_64 += steal_time
+> TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
+> @@ -92,6 +93,7 @@ TEST_GEN_PROGS_aarch64 += dirty_log_test
+> TEST_GEN_PROGS_aarch64 += dirty_log_perf_test
+> TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+> TEST_GEN_PROGS_aarch64 += kvm_page_table_test
+> +TEST_GEN_PROGS_aarch64 += rseq_test
+> TEST_GEN_PROGS_aarch64 += set_memory_region_test
+> TEST_GEN_PROGS_aarch64 += steal_time
+> TEST_GEN_PROGS_aarch64 += kvm_binary_stats_test
+> @@ -103,6 +105,7 @@ TEST_GEN_PROGS_s390x += demand_paging_test
+> TEST_GEN_PROGS_s390x += dirty_log_test
+> TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+> TEST_GEN_PROGS_s390x += kvm_page_table_test
+> +TEST_GEN_PROGS_s390x += rseq_test
+> TEST_GEN_PROGS_s390x += set_memory_region_test
+> TEST_GEN_PROGS_s390x += kvm_binary_stats_test
+> 
+> diff --git a/tools/testing/selftests/kvm/rseq_test.c
+> b/tools/testing/selftests/kvm/rseq_test.c
+> new file mode 100644
+> index 000000000000..060538bd405a
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/rseq_test.c
+> @@ -0,0 +1,236 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#define _GNU_SOURCE /* for program_invocation_short_name */
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <pthread.h>
+> +#include <sched.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <signal.h>
+> +#include <syscall.h>
+> +#include <sys/ioctl.h>
+> +#include <asm/barrier.h>
+> +#include <linux/atomic.h>
+> +#include <linux/rseq.h>
+> +#include <linux/unistd.h>
+> +
+> +#include "kvm_util.h"
+> +#include "processor.h"
+> +#include "test_util.h"
+> +
+> +#define VCPU_ID 0
+> +
+> +static __thread volatile struct rseq __rseq = {
+> +	.cpu_id = RSEQ_CPU_ID_UNINITIALIZED,
 > +};
 > +
-> +static struct child_args procs[MAX_PROCESSES];
-> +static int num_processes = 2;
-> +static int need_cleanup = 0;
+> +/*
+> + * Use an arbitrary, bogus signature for configuring rseq, this test does not
+> + * actually enter an rseq critical section.
+> + */
+> +#define RSEQ_SIG 0xdeadbeef
 > +
->   static int _prctl(int option, unsigned long arg2, unsigned long arg3, unsigned long arg4,
->   		  unsigned long arg5)
->   {
-> @@ -80,8 +91,14 @@ static int _prctl(int option, unsigned long arg2, unsigned long arg3, unsigned l
->   #define handle_error(msg) __handle_error(__FILE__, __LINE__, msg)
->   static void __handle_error(char *fn, int ln, char *msg)
->   {
-> +	int pidx;
->   	printf("(%s:%d) - ", fn, ln);
->   	perror(msg);
-> +	if (need_cleanup) {
-> +		for (pidx = 0; pidx < num_processes; ++pidx)
-> +			kill(procs[pidx].cpid, 15);
-> +		need_cleanup = 0;
+> +/*
+> + * Any bug related to task migration is likely to be timing-dependent; perform
+> + * a large number of migrations to reduce the odds of a false negative.
+> + */
+> +#define NR_TASK_MIGRATIONS 100000
+> +
+> +static pthread_t migration_thread;
+> +static cpu_set_t possible_mask;
+> +static bool done;
+> +
+> +static atomic_t seq_cnt;
+> +
+> +static void guest_code(void)
+> +{
+> +	for (;;)
+> +		GUEST_SYNC(0);
+> +}
+> +
+> +static void sys_rseq(int flags)
+> +{
+> +	int r;
+> +
+> +	r = syscall(__NR_rseq, &__rseq, sizeof(__rseq), flags, RSEQ_SIG);
+> +	TEST_ASSERT(!r, "rseq failed, errno = %d (%s)", errno, strerror(errno));
+> +}
+> +
+> +static void *migration_worker(void *ign)
+> +{
+> +	cpu_set_t allowed_mask;
+> +	int r, i, nr_cpus, cpu;
+> +
+> +	CPU_ZERO(&allowed_mask);
+> +
+> +	nr_cpus = CPU_COUNT(&possible_mask);
+> +
+> +	for (i = 0; i < NR_TASK_MIGRATIONS; i++) {
+> +		cpu = i % nr_cpus;
+> +		if (!CPU_ISSET(cpu, &possible_mask))
+> +			continue;
+> +
+> +		CPU_SET(cpu, &allowed_mask);
+> +
+> +		/*
+> +		 * Bump the sequence count twice to allow the reader to detect
+> +		 * that a migration may have occurred in between rseq and sched
+> +		 * CPU ID reads.  An odd sequence count indicates a migration
+> +		 * is in-progress, while a completely different count indicates
+> +		 * a migration occurred since the count was last read.
+> +		 */
+> +		atomic_inc(&seq_cnt);
+> +
+> +		/*
+> +		 * Ensure the odd count is visible while sched_getcpu() isn't
+> +		 * stable, i.e. while changing affinity is in-progress.
+> +		 */
+> +		smp_wmb();
+> +		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
+> +		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
+> +			    errno, strerror(errno));
+> +		smp_wmb();
+> +		atomic_inc(&seq_cnt);
+> +
+> +		CPU_CLR(cpu, &allowed_mask);
+> +
+> +		/*
+> +		 * Wait 1-10us before proceeding to the next iteration and more
+> +		 * specifically, before bumping seq_cnt again.  A delay is
+> +		 * needed on three fronts:
+> +		 *
+> +		 *  1. To allow sched_setaffinity() to prompt migration before
+> +		 *     ioctl(KVM_RUN) enters the guest so that TIF_NOTIFY_RESUME
+> +		 *     (or TIF_NEED_RESCHED, which indirectly leads to handling
+> +		 *     NOTIFY_RESUME) is handled in KVM context.
+> +		 *
+> +		 *     If NOTIFY_RESUME/NEED_RESCHED is set after KVM enters
+> +		 *     the guest, the guest will trigger a IO/MMIO exit all the
+> +		 *     way to userspace and the TIF flags will be handled by
+> +		 *     the generic "exit to userspace" logic, not by KVM.  The
+> +		 *     exit to userspace is necessary to give the test a chance
+> +		 *     to check the rseq CPU ID (see #2).
+> +		 *
+> +		 *     Alternatively, guest_code() could include an instruction
+> +		 *     to trigger an exit that is handled by KVM, but any such
+> +		 *     exit requires architecture specific code.
+> +		 *
+> +		 *  2. To let ioctl(KVM_RUN) make its way back to the test
+> +		 *     before the next round of migration.  The test's check on
+> +		 *     the rseq CPU ID must wait for migration to complete in
+> +		 *     order to avoid false positive, thus any kernel rseq bug
+> +		 *     will be missed if the next migration starts before the
+> +		 *     check completes.
+> +		 *
+> +		 *  3. To ensure the read-side makes efficient forward progress,
+> +		 *     e.g. if sched_getcpu() involves a syscall.  Stalling the
+> +		 *     read-side means the test will spend more time waiting for
+> +		 *     sched_getcpu() to stabilize and less time trying to hit
+> +		 *     the timing-dependent bug.
+> +		 *
+> +		 * Because any bug in this area is likely to be timing-dependent,
+> +		 * run with a range of delays at 1us intervals from 1us to 10us
+> +		 * as a best effort to avoid tuning the test to the point where
+> +		 * it can hit _only_ the original bug and not detect future
+> +		 * regressions.
+> +		 *
+> +		 * The original bug can reproduce with a delay up to ~500us on
+> +		 * x86-64, but starts to require more iterations to reproduce
+> +		 * as the delay creeps above ~10us, and the average runtime of
+> +		 * each iteration obviously increases as well.  Cap the delay
+> +		 * at 10us to keep test runtime reasonable while minimizing
+> +		 * potential coverage loss.
+> +		 *
+> +		 * The lower bound for reproducing the bug is likely below 1us,
+> +		 * e.g. failures occur on x86-64 with nanosleep(0), but at that
+> +		 * point the overhead of the syscall likely dominates the delay.
+> +		 * Use usleep() for simplicity and to avoid unnecessary kernel
+> +		 * dependencies.
+> +		 */
+> +		usleep((i % 10) + 1);
 > +	}
->   	exit(EXIT_FAILURE);
->   }
->   
-> @@ -108,13 +125,6 @@ static unsigned long get_cs_cookie(int pid)
->   	return cookie;
->   }
->   
-> -struct child_args {
-> -	int num_threads;
-> -	int pfd[2];
-> -	int cpid;
-> -	int thr_tids[MAX_THREADS];
-> -};
-> -
->   static int child_func_thread(void __attribute__((unused))*arg)
->   {
->   	while (1)
-> @@ -214,10 +224,7 @@ void _validate(int line, int val, char *msg)
->   
->   int main(int argc, char *argv[])
->   {
-> -	struct child_args procs[MAX_PROCESSES];
-> -
->   	int keypress = 0;
-> -	int num_processes = 2;
->   	int num_threads = 3;
->   	int delay = 0;
->   	int res = 0;
-> @@ -264,6 +271,7 @@ int main(int argc, char *argv[])
->   
->   	printf("\n## Create a thread/process/process group hiearchy\n");
->   	create_processes(num_processes, num_threads, procs);
-> +	need_cleanup = 1;
->   	disp_processes(num_processes, procs);
->   	validate(get_cs_cookie(0) == 0);
->   
+> +	done = true;
+> +	return NULL;
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	int r, i, snapshot;
+> +	struct kvm_vm *vm;
+> +	u32 cpu, rseq_cpu;
+> +
+> +	/* Tell stdout not to buffer its content */
+> +	setbuf(stdout, NULL);
+> +
+> +	r = sched_getaffinity(0, sizeof(possible_mask), &possible_mask);
+> +	TEST_ASSERT(!r, "sched_getaffinity failed, errno = %d (%s)", errno,
+> +		    strerror(errno));
+> +
+> +	if (CPU_COUNT(&possible_mask) < 2) {
+> +		print_skip("Only one CPU, task migration not possible\n");
+> +		exit(KSFT_SKIP);
+> +	}
+> +
+> +	sys_rseq(0);
+> +
+> +	/*
+> +	 * Create and run a dummy VM that immediately exits to userspace via
+> +	 * GUEST_SYNC, while concurrently migrating the process by setting its
+> +	 * CPU affinity.
+> +	 */
+> +	vm = vm_create_default(VCPU_ID, 0, guest_code);
+> +
+> +	pthread_create(&migration_thread, NULL, migration_worker, 0);
+> +
+> +	for (i = 0; !done; i++) {
+> +		vcpu_run(vm, VCPU_ID);
+> +		TEST_ASSERT(get_ucall(vm, VCPU_ID, NULL) == UCALL_SYNC,
+> +			    "Guest failed?");
+> +
+> +		/*
+> +		 * Verify rseq's CPU matches sched's CPU.  Ensure migration
+> +		 * doesn't occur between sched_getcpu() and reading the rseq
+> +		 * cpu_id by rereading both if the sequence count changes, or
+> +		 * if the count is odd (migration in-progress).
+> +		 */
+> +		do {
+> +			/*
+> +			 * Drop bit 0 to force a mismatch if the count is odd,
+> +			 * i.e. if a migration is in-progress.
+> +			 */
+> +			snapshot = atomic_read(&seq_cnt) & ~1;
+> +
+> +			/*
+> +			 * Ensure reading sched_getcpu() and rseq.cpu_id
+> +			 * complete in a single "no migration" window, i.e. are
+> +			 * not reordered across the seq_cnt reads.
+> +			 */
+> +			smp_rmb();
+> +			cpu = sched_getcpu();
+> +			rseq_cpu = READ_ONCE(__rseq.cpu_id);
+> +			smp_rmb();
+> +		} while (snapshot != atomic_read(&seq_cnt));
+> +
+> +		TEST_ASSERT(rseq_cpu == cpu,
+> +			    "rseq CPU = %d, sched CPU = %d\n", rseq_cpu, cpu);
+> +	}
+> +
+> +	/*
+> +	 * Sanity check that the test was able to enter the guest a reasonable
+> +	 * number of times, e.g. didn't get stalled too often/long waiting for
+> +	 * sched_getcpu() to stabilize.  A 2:1 migration:KVM_RUN ratio is a
+> +	 * fairly conservative ratio on x86-64, which can do _more_ KVM_RUNs
+> +	 * than migrations given the 1us+ delay in the migration task.
+> +	 */
+> +	TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
+> +		    "Only performed %d KVM_RUNs, task stalled too much?\n", i);
+> +
+> +	pthread_join(migration_thread, NULL);
+> +
+> +	kvm_vm_free(vm);
+> +
+> +	sys_rseq(RSEQ_FLAG_UNREGISTER);
+> +
+> +	return 0;
+> +}
+> --
+> 2.33.0.153.gba50c8fa24-goog
 
-Reviewed-by: Chris Hyser <chris.hyser@oracle.com>
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
