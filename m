@@ -2,184 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D4E3FF4C6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Sep 2021 22:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9E23FF4D7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Sep 2021 22:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbhIBUUD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Sep 2021 16:20:03 -0400
-Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:37331 "EHLO
-        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240146AbhIBUUD (ORCPT
+        id S232042AbhIBUYZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Sep 2021 16:24:25 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:58630 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346339AbhIBUYQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Sep 2021 16:20:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1630613943;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=5l9yd/Xx+Ayncm22q6bq52OrpE1mfSYuLOTlZPSE7Kw=;
-        b=RGIrMJ9nwzltRnAMzkNiWJQhw0+IKb6xkqoFifw28YrAiAc5Mo8RUb6P0CgwiusT
-        QAvhRt64v+CNoiY0wrmBCzo9sWOndsyjUFTUo32kNPvSY/X47LFUhsOPzrObcppC9IA
-        Y5GPQWb5kjSm3ObHeRO2zXbbH5Pzerf1aDxOeQQM=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1630613943;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=5l9yd/Xx+Ayncm22q6bq52OrpE1mfSYuLOTlZPSE7Kw=;
-        b=TVn5qPbKWUWtbz/4T5FyVYn5jwi6s5mM7GxONG09rySZD8L3osl3yLZkPjgq/MNM
-        mRqx/Zwo8fH7TOWvPf4p6UJ4SXWrfbqMynXS8S8Nh+RFzcarmAIPIpjnGUNiiwMvcMS
-        CpVf2ljEPBkJ4Ge0IJeR1THtEO9mB/tiU1mr6LS0=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210902
+        Thu, 2 Sep 2021 16:24:16 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id F27671F44AE4
+Subject: Re: KernelCI Hackfest #2 - Sept 6-10 2021
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     "kernelci@groups.io" <kernelci@groups.io>
+Cc:     kernelci-members <kernelci-members@groups.io>,
+        automated-testing@lists.yoctoproject.org,
+        Collabora Kernel ML <kernel@collabora.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Summer Wang <wangsummer@google.com>,
+        linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Reply-To: kernelci@groups.io, guillaume.tucker@collabora.com
+References: <169771B791E5E075.25031@groups.io>
+Message-ID: <259a2ea9-63da-b5df-3496-676c2b76700b@collabora.com>
+Date:   Thu, 2 Sep 2021 21:22:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <169771B791E5E075.25031@groups.io>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Message-ID: <0100017ba82a353b-c7100603-a163-49ea-a90d-4176769fe59e-000000@email.amazonses.com>
-Date:   Thu, 2 Sep 2021 20:19:03 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.09.02-54.240.8.29
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.14.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 34560ced20599a01660a693f464c7c7dc83db1d9
-* git describe: next-20210902
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210902
+On 02/08/2021 10:00, Guillaume Tucker wrote:
+> The first KernelCI hackfest[1] early June was successful in getting
+> a number of kernel developers to work alongside the core KernelCI
+> team.  Test coverage was increased in particular with kselftest,
+> LTP, KUnit and a new test suite for libcamera.  We're now improving
+> documentation and tooling to make it easier for anyone to get
+> started.  Find out more about KernelCI on https://kernelci.org.
+> 
+> The second hackfest is scheduled for the 6th-10th September.  It
+> should be a good opportunity to start discussing and working on
+> upstream kernel testing topics ahead of the Linux Plumbers
+> Conference[2].
 
-## Regressions (compared to next-20210831)
-* i386, kselftest-net
-  - net.so_txtime.sh
+Please find below some extra information for the KernelCI
+Hackfest which is taking place next week.  We're expecting at
+least some contributors from the Civil Infrastructure Platform
+project, the Google Chrome OS kernel team, Collabora kernel
+developers and a few more from the wider Linux kernel community.
 
-* qemu_arm, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_migrate
-
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_arm64, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* qemu_i386, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_x86_64, kselftest-timers
-  - timers.rtcpie
-
-* x86, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* x86, kselftest-rtc
-  - rtc.rtctest
+If you need any direct support, please reply to this email or ask
+on kernelci.slack.com or IRC #kernelci (libera.chat).
 
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Here's the project board where anyone can already add some ideas:
+> 
+>   https://github.com/orgs/kernelci/projects/5
+
+In order to add an issue to the workboard, please first create
+one in a KernelCI GitHub repository such as kernelci-core:
+
+  https://github.com/kernelci/kernelci-core/issues
+
+Each contributor to the hackfest should be added to the
+KernelCI "hackers" team, which has permission to edit the
+workboard.  If you aren't part of this team yet, please ask and
+you'll be invited.
+
+Note: Having a GitHub account is not mandatory for taking part in
+the hackfest.  It's mainly there to facilitate coordination, even
+though it is required in order to contribute to the KernelCI
+GitHub repositories.  Contributions as part of the hackfest may
+also be in the kernel tree such as improvements to kselftest,
+KUnit or bug fixes, or other test suites such as LTP etc.
 
 
-## Fixes (compared to next-20210831)
-* dragonboard-410c, kselftest-capabilities
-  - capabilities.test_execve
+> The hackfest features:
+> 
+> * Daily open hours online using Big Blue Button to discuss things
+>   and get support from the KernelCI team
+> 
+> * KernelCI team members available across most time zones to provide
+>   quick feedback
+> 
+> * A curated list of topics and a project board to help set
+>   objectives and coordinate efforts between all contributors
 
-* hi6220-hikey, kselftest-rtc
-  - rtc.rtctest
+Please see the table below with the proposed daily open hours to
+accommodate most time zones:
 
-* i386, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_arm64, kselftest-timers
-  - timers.rtcpie
-
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
-
-* x15, kselftest-rtc
-  - rtc.rtctest
+Region        Zone    Time 1       Time 2
+East Asia     GMT+10  17:00-19:00  03:00-05:00
+Europe        GMT+2   09:00-11:00  19:00-21:00
+              UTC     07:00-09:00  17:00-19:00
+West America  GMT-7   00:00-02:00  10:00-12:00
 
 
-## Test result summary
-total: 4712, pass: 2612, fail: 374, skip: 1726, xfail: 0
+They will be held as a Big Blue Button virtual conference with
+the same URL as the last hackfest.  It's not being shared
+publicly to avoid any potential abuse, so please ask if you don't
+have it already.
 
-## Build Summary
+On Monday, the focus should be put on getting started and
+reviewing the backlog on the hackfest workboard to distribute
+things among people or help new contributors find topics suitable
+for them.  Open hours are otherwise opportunities to get more
+direct support from the KernelCI team or discuss any topic.
 
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
+See you there!
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Best wishes,
+Guillaume
+
+> [1] https://foundation.kernelci.org/blog/2021/06/24/the-first-ever-kernelci-hackfest/
+> [2] https://www.linuxplumbersconf.org/event/11/page/104-accepted-microconferences#cont-test
