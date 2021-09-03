@@ -2,451 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C74E1400254
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Sep 2021 17:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB345400304
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Sep 2021 18:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349726AbhICPbU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Sep 2021 11:31:20 -0400
-Received: from mga14.intel.com ([192.55.52.115]:5963 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349696AbhICPbU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Sep 2021 11:31:20 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10096"; a="219150085"
-X-IronPort-AV: E=Sophos;i="5.85,265,1624345200"; 
-   d="scan'208";a="219150085"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2021 08:30:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,265,1624345200"; 
-   d="scan'208";a="500491572"
-Received: from unknown (HELO localhost.igk.intel.com) ([10.102.22.231])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Sep 2021 08:30:16 -0700
-From:   Maciej Machnikowski <maciej.machnikowski@intel.com>
-To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org
-Cc:     richardcochran@gmail.com, abyagowi@fb.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 2/2] ice: add support for reading SyncE DPLL state
-Date:   Fri,  3 Sep 2021 17:14:36 +0200
-Message-Id: <20210903151436.529478-3-maciej.machnikowski@intel.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20210903151436.529478-1-maciej.machnikowski@intel.com>
-References: <20210903151436.529478-1-maciej.machnikowski@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1349937AbhICQPL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Sep 2021 12:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349936AbhICQPL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 Sep 2021 12:15:11 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BABC061575
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Sep 2021 09:14:11 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id y185-20020a3764c20000b02903d2c78226ceso6323820qkb.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Sep 2021 09:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=M6ta55C5YrTiWpJmRXkscLbV8qDYp7HoT3jJ6wg8fKI=;
+        b=JMhBqnd8AJEbyTVh+/OD0W9I+YhqfjmIJiyFfl6RyNSqhBCGkFjYt2FvjsgRkwCdQF
+         D+H+YMexFArgRpval3MhGlLM11t50kFSok9v8VRevgc988OF/fM9C0yss5onTZDJGFn9
+         vWNgxVEF6qBMIYr5qamQcDSVsNRBZfVUrf6Hfe+8/Q007XoAjBoquGHFuQ0K287IuoRP
+         LtKf/HMh3+KN73qlCprG9FvVFca/yoDftSdfgV0upNRCSaPr7I8ya6q+EosR6D1XZ/4w
+         IpAOHtvAWPJ0Sl6U639yuArOSzzvdYZ86y7qfqo/h0TbjxfALNTtM6YzrSNUoIXvjRKz
+         VWEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=M6ta55C5YrTiWpJmRXkscLbV8qDYp7HoT3jJ6wg8fKI=;
+        b=SSRRHOWbJWqPPOxeZkiqdjxVKnkRb9466UcncgAxsujxuWUBjkDGdvzlivf9HWe+FR
+         T2mKLvmMrlxK61+HjI+Jdb8IZougSBlKQ8d+ppK2quHgraBbDtNUlWPlAcexi0Fr7TLR
+         MMWghlp/60koJOx+2nl+bpLQEoLyRs1PFKhhfkY03aNSPCSi6X59ZVJVU3zWxCNeJjUC
+         CFqSLq/obPNXU5U9cBTk+Gy4eNC8COCVElpchHm6lAhc9l2gUA2+b0pRyTEkpVDYAeGQ
+         eZDOEsp/GgZOoVUZkR0W7CSFjXog1VPk6wg3xwDWAGleoPTJAyBMfUXXTo7KSWenBXhq
+         z9TQ==
+X-Gm-Message-State: AOAM531f5vSsJhbkYhuVpk+s+dSl2nWmSHxfuFwi+cIHt97i73BYBmo7
+        ixaZLe5toCButpII65ixJ3HcUuWluMzqkA==
+X-Google-Smtp-Source: ABdhPJyhy9kIgP9BQY4I4hoOAicE1VyjpnSlpawr29BJjQNMqgNZx01vITsQM5Xj+ykD8wQvDu+jmDzNSaklOw==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:4791:26fa:5a8a:1c2a])
+ (user=dlatypov job=sendgmr) by 2002:a05:6214:268e:: with SMTP id
+ gm14mr4477617qvb.51.1630685650225; Fri, 03 Sep 2021 09:14:10 -0700 (PDT)
+Date:   Fri,  3 Sep 2021 09:14:05 -0700
+Message-Id: <20210903161405.1861312-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
+Subject: [PATCH] kunit: tool: better handling of quasi-bool args (--json, --raw_output)
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Implement SyncE DPLL monitoring for E810-T devices.
-Poll loop will periodically check the state of the DPLL and cache it
-in the pf structure. State changes will be logged in the system log.
+Problem:
 
-Cached state can be read using the RTM_GETEECSTATE rtnetlink
-message.
+What does this do?
+$ kunit.py run --json
+Well, it runs all the tests and prints test results out as JSON.
 
-Signed-off-by: Maciej Machnikowski <maciej.machnikowski@intel.com>
+And next is
+$ kunit.py run my-test-suite --json
+This runs just `my-test-suite` and prints results out as JSON.
+
+But what about?
+$ kunit.py run --json my-test-suite
+This runs all the tests and stores the json results in a "my-test-suite"
+file.
+
+Why:
+--json, and now --raw_output are actually string flags. They just have a
+default value. --json in particular takes the name of an output file.
+
+It was intended that you'd do
+$ kunit.py run --json=my_output_file my-test-suite
+if you ever wanted to specify the value.
+
+Workaround:
+It doesn't seem like there's a way to make
+https://docs.python.org/3/library/argparse.html only accept arg values
+after a '='.
+
+I believe that `--json` should "just work" regardless of where it is.
+So this patch automatically rewrites a bare `--json` to `--json=stdout`.
+
+That makes the examples above work the same way.
+Add a regression test that can catch this for --raw_output.
+
+Fixes: 6a499c9c42d0 ("kunit: tool: make --raw_output support only showing kunit output")
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- drivers/net/ethernet/intel/ice/ice.h          |  5 ++
- .../net/ethernet/intel/ice/ice_adminq_cmd.h   | 34 ++++++++++
- drivers/net/ethernet/intel/ice/ice_common.c   | 62 +++++++++++++++++++
- drivers/net/ethernet/intel/ice/ice_common.h   |  4 ++
- drivers/net/ethernet/intel/ice/ice_devids.h   |  3 +
- drivers/net/ethernet/intel/ice/ice_main.c     | 29 +++++++++
- drivers/net/ethernet/intel/ice/ice_ptp.c      | 35 +++++++++++
- drivers/net/ethernet/intel/ice/ice_ptp_hw.c   | 44 +++++++++++++
- drivers/net/ethernet/intel/ice/ice_ptp_hw.h   | 22 +++++++
- 9 files changed, 238 insertions(+)
+ tools/testing/kunit/kunit.py           | 24 ++++++++++++++++++++++--
+ tools/testing/kunit/kunit_tool_test.py |  8 ++++++++
+ 2 files changed, 30 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index eadcb9958346..6fb7e07e8a62 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -508,6 +508,11 @@ struct ice_pf {
- #define ICE_VF_AGG_NODE_ID_START	65
- #define ICE_MAX_VF_AGG_NODES		32
- 	struct ice_agg_node vf_agg_node[ICE_MAX_VF_AGG_NODES];
-+
-+	enum if_eec_state synce_dpll_state;
-+	u8 synce_dpll_pin;
-+	enum if_eec_state ptp_dpll_state;
-+	u8 ptp_dpll_pin;
- };
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 5a931456e718..95d62020e4f2 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -16,7 +16,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
  
- struct ice_netdev_priv {
-diff --git a/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h b/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-index 21b4c7cd6f05..b84da5e9d025 100644
---- a/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-+++ b/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-@@ -1727,6 +1727,36 @@ struct ice_aqc_add_rdma_qset_data {
- 	struct ice_aqc_add_tx_rdma_qset_entry rdma_qsets[];
- };
+ from collections import namedtuple
+ from enum import Enum, auto
+-from typing import Iterable
++from typing import Iterable, Sequence
  
-+/* Get CGU DPLL status (direct 0x0C66) */
-+struct ice_aqc_get_cgu_dpll_status {
-+	u8 dpll_num;
-+	u8 ref_state;
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_REF_SW_LOS		BIT(0)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_REF_SW_SCM		BIT(1)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_REF_SW_CFM		BIT(2)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_REF_SW_GST		BIT(3)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_REF_SW_PFM		BIT(4)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_REF_SW_ESYNC	BIT(6)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_FAST_LOCK_EN	BIT(7)
-+	__le16 dpll_state;
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_STATE_LOCK		BIT(0)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_STATE_HO		BIT(1)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_STATE_HO_READY	BIT(2)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_STATE_FLHIT		BIT(5)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_STATE_PSLHIT	BIT(7)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_STATE_CLK_REF_SHIFT	8
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_STATE_CLK_REF_SEL	\
-+	ICE_M(0x1F, ICE_AQC_GET_CGU_DPLL_STATUS_STATE_CLK_REF_SHIFT)
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_STATE_MODE_SHIFT	13
-+#define ICE_AQC_GET_CGU_DPLL_STATUS_STATE_MODE \
-+	ICE_M(0x7, ICE_AQC_GET_CGU_DPLL_STATUS_STATE_MODE_SHIFT)
-+	__le32 phase_offset_h;
-+	__le32 phase_offset_l;
-+	u8 eec_mode;
-+	u8 rsvd[1];
-+	__le16 node_handle;
-+};
-+
- /* Configure Firmware Logging Command (indirect 0xFF09)
-  * Logging Information Read Response (indirect 0xFF10)
-  * Note: The 0xFF10 command has no input parameters.
-@@ -1954,6 +1984,7 @@ struct ice_aq_desc {
- 		struct ice_aqc_fw_logging fw_logging;
- 		struct ice_aqc_get_clear_fw_log get_clear_fw_log;
- 		struct ice_aqc_download_pkg download_pkg;
-+		struct ice_aqc_get_cgu_dpll_status get_cgu_dpll_status;
- 		struct ice_aqc_driver_shared_params drv_shared_params;
- 		struct ice_aqc_set_mac_lb set_mac_lb;
- 		struct ice_aqc_alloc_free_res_cmd sw_res_ctrl;
-@@ -2108,6 +2139,9 @@ enum ice_adminq_opc {
- 	ice_aqc_opc_update_pkg				= 0x0C42,
- 	ice_aqc_opc_get_pkg_info_list			= 0x0C43,
+ import kunit_config
+ import kunit_json
+@@ -186,6 +186,26 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 				exec_result.elapsed_time))
+ 	return parse_result
  
-+	/* 1588/SyncE commands/events */
-+	ice_aqc_opc_get_cgu_dpll_status			= 0x0C66,
-+
- 	ice_aqc_opc_driver_shared_params		= 0x0C90,
- 
- 	/* Standalone Commands/Events */
-diff --git a/drivers/net/ethernet/intel/ice/ice_common.c b/drivers/net/ethernet/intel/ice/ice_common.c
-index 2fb81e359cdf..e7474643a421 100644
---- a/drivers/net/ethernet/intel/ice/ice_common.c
-+++ b/drivers/net/ethernet/intel/ice/ice_common.c
-@@ -69,6 +69,31 @@ bool ice_is_e810(struct ice_hw *hw)
- 	return hw->mac_type == ICE_MAC_E810;
- }
- 
-+/**
-+ * ice_is_e810t
-+ * @hw: pointer to the hardware structure
-+ *
-+ * returns true if the device is E810T based, false if not.
-+ */
-+bool ice_is_e810t(struct ice_hw *hw)
-+{
-+	switch (hw->device_id) {
-+	case ICE_DEV_ID_E810C_SFP:
-+		if (hw->subsystem_device_id == ICE_SUBDEV_ID_E810T ||
-+		    hw->subsystem_device_id == ICE_SUBDEV_ID_E810T2)
-+			return true;
-+		break;
-+	case ICE_DEV_ID_E810C_QSFP:
-+		if (hw->subsystem_device_id == ICE_SUBDEV_ID_E810T2)
-+			return true;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return false;
++# Problem:
++# $ kunit.py run --json
++# works as one would expect and prints the parsed test results as JSON.
++# $ kunit.py run --json suite_name
++# would *not* pass suite_name as the filter_glob and print as json.
++# argparse will consider it to be another way of writing
++# $ kunit.py run --json=suite_name
++# i.e. it would run all tests, and dump the json to a `suite_name` file.
++# So we hackily automatically rewrite --json => --json=stdout
++pseudo_bool_flag_defaults = {
++		'--json': 'stdout',
++		'--raw_output': 'kunit',
 +}
++def massage_argv(argv: Sequence[str]) -> Sequence[str]:
++	def massage_arg(arg: str) -> str:
++		if arg not in pseudo_bool_flag_defaults:
++			return arg
++		return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
++	return map(massage_arg, argv)
 +
- /**
-  * ice_clear_pf_cfg - Clear PF configuration
-  * @hw: pointer to the hardware structure
-@@ -4520,6 +4545,42 @@ ice_dis_vsi_rdma_qset(struct ice_port_info *pi, u16 count, u32 *qset_teid,
- 	return ice_status_to_errno(status);
- }
+ def add_common_opts(parser) -> None:
+ 	parser.add_argument('--build_dir',
+ 			    help='As in the make command, it specifies the build '
+@@ -303,7 +323,7 @@ def main(argv, linux=None):
+ 				  help='Specifies the file to read results from.',
+ 				  type=str, nargs='?', metavar='input_file')
  
-+/**
-+ * ice_aq_get_cgu_dpll_status
-+ * @hw: pointer to the HW struct
-+ * @dpll_num: DPLL index
-+ * @ref_state: Reference clock state
-+ * @dpll_state: DPLL state
-+ * @phase_offset: Phase offset in ps
-+ * @eec_mode: EEC_mode
-+ *
-+ * Get CGU DPLL status (0x0C66)
-+ */
-+enum ice_status
-+ice_aq_get_cgu_dpll_status(struct ice_hw *hw, u8 dpll_num, u8 *ref_state,
-+			   u16 *dpll_state, u64 *phase_offset, u8 *eec_mode)
-+{
-+	struct ice_aqc_get_cgu_dpll_status *cmd;
-+	struct ice_aq_desc desc;
-+	enum ice_status status;
-+
-+	ice_fill_dflt_direct_cmd_desc(&desc, ice_aqc_opc_get_cgu_dpll_status);
-+	cmd = &desc.params.get_cgu_dpll_status;
-+	cmd->dpll_num = dpll_num;
-+
-+	status = ice_aq_send_cmd(hw, &desc, NULL, 0, NULL);
-+	if (!status) {
-+		*ref_state = cmd->ref_state;
-+		*dpll_state = le16_to_cpu(cmd->dpll_state);
-+		*phase_offset = le32_to_cpu(cmd->phase_offset_h);
-+		*phase_offset <<= 32;
-+		*phase_offset += le32_to_cpu(cmd->phase_offset_l);
-+		*eec_mode = cmd->eec_mode;
-+	}
-+
-+	return status;
-+}
-+
- /**
-  * ice_replay_pre_init - replay pre initialization
-  * @hw: pointer to the HW struct
-@@ -4974,3 +5035,4 @@ bool ice_fw_supports_report_dflt_cfg(struct ice_hw *hw)
- 	}
- 	return false;
- }
-+
-diff --git a/drivers/net/ethernet/intel/ice/ice_common.h b/drivers/net/ethernet/intel/ice/ice_common.h
-index fb16070f02e2..ccd76c0cbf2c 100644
---- a/drivers/net/ethernet/intel/ice/ice_common.h
-+++ b/drivers/net/ethernet/intel/ice/ice_common.h
-@@ -100,6 +100,7 @@ enum ice_status
- ice_aq_manage_mac_write(struct ice_hw *hw, const u8 *mac_addr, u8 flags,
- 			struct ice_sq_cd *cd);
- bool ice_is_e810(struct ice_hw *hw);
-+bool ice_is_e810t(struct ice_hw *hw);
- enum ice_status ice_clear_pf_cfg(struct ice_hw *hw);
- enum ice_status
- ice_aq_set_phy_cfg(struct ice_hw *hw, struct ice_port_info *pi,
-@@ -156,6 +157,9 @@ ice_cfg_vsi_rdma(struct ice_port_info *pi, u16 vsi_handle, u16 tc_bitmap,
- int
- ice_ena_vsi_rdma_qset(struct ice_port_info *pi, u16 vsi_handle, u8 tc,
- 		      u16 *rdma_qset, u16 num_qsets, u32 *qset_teid);
-+enum ice_status
-+ice_aq_get_cgu_dpll_status(struct ice_hw *hw, u8 dpll_num, u8 *ref_state,
-+			   u16 *dpll_state, u64 *phase_offset, u8 *eec_mode);
- int
- ice_dis_vsi_rdma_qset(struct ice_port_info *pi, u16 count, u32 *qset_teid,
- 		      u16 *q_id);
-diff --git a/drivers/net/ethernet/intel/ice/ice_devids.h b/drivers/net/ethernet/intel/ice/ice_devids.h
-index 9d8194671f6a..e52dbeddb783 100644
---- a/drivers/net/ethernet/intel/ice/ice_devids.h
-+++ b/drivers/net/ethernet/intel/ice/ice_devids.h
-@@ -52,4 +52,7 @@
- /* Intel(R) Ethernet Connection E822-L 1GbE */
- #define ICE_DEV_ID_E822L_SGMII		0x189A
+-	cli_args = parser.parse_args(argv)
++	cli_args = parser.parse_args(massage_argv(argv))
  
-+#define ICE_SUBDEV_ID_E810T		0x000E
-+#define ICE_SUBDEV_ID_E810T2		0x000F
-+
- #endif /* _ICE_DEVIDS_H_ */
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 0d6c143f6653..62a011f135bd 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -5978,6 +5978,34 @@ static void ice_napi_disable_all(struct ice_vsi *vsi)
- 	}
- }
+ 	if get_kernel_root_path():
+ 		os.chdir(get_kernel_root_path())
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 619c4554cbff..1edcc8373b4e 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -408,6 +408,14 @@ class KUnitMainTest(unittest.TestCase):
+ 			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
+ 			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
  
-+/**
-+ * ice_get_eec_state - get state of SyncE DPLL
-+ * @netdev: network interface device structure
-+ * @state: state of SyncE DPLL
-+ * @sync_src: port is a source of the sync signal
-+ */
-+static int
-+ice_get_eec_state(struct net_device *netdev, enum if_eec_state *state,
-+		  u32 *eec_flags, struct netlink_ext_ack *extack)
-+{
-+	struct ice_netdev_priv *np = netdev_priv(netdev);
-+	struct ice_vsi *vsi = np->vsi;
-+	struct ice_pf *pf = vsi->back;
++	def test_run_raw_output_does_not_take_positional_args(self):
++		# --raw_output is a string flag, but we don't want it to consume
++		# any positional arguments, only ones after an '='
++		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
++		kunit.main(['run', '--raw_output', 'filter_glob'], self.linux_source_mock)
++		self.linux_source_mock.run_kernel.assert_called_once_with(
++			args=None, build_dir='.kunit', filter_glob='filter_glob', timeout=300)
 +
-+	if (!ice_is_e810t(&pf->hw))
-+		return -EOPNOTSUPP;
-+
-+	*state = pf->synce_dpll_state;
-+
-+	*eec_flags = 0;
-+	if (pf->synce_dpll_pin == REF1P || pf->synce_dpll_pin == REF1N) {
-+		/* Add check if the current PF drives the EEC clock */
-+		*eec_flags |= EEC_SRC_PORT;
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * ice_down - Shutdown the connection
-  * @vsi: The VSI being stopped
-@@ -7268,4 +7296,5 @@ static const struct net_device_ops ice_netdev_ops = {
- 	.ndo_bpf = ice_xdp,
- 	.ndo_xdp_xmit = ice_xdp_xmit,
- 	.ndo_xsk_wakeup = ice_xsk_wakeup,
-+	.ndo_get_eec_state = ice_get_eec_state,
- };
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.c b/drivers/net/ethernet/intel/ice/ice_ptp.c
-index 05cc5870e4ef..ccbc2d1cc754 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
-@@ -1409,6 +1409,36 @@ static void ice_ptp_tx_tstamp_cleanup(struct ice_ptp_tx *tx)
- 	}
- }
- 
-+static void ice_handle_cgu_state(struct ice_pf *pf)
-+{
-+	enum if_eec_state cgu_state;
-+	u8 pin;
-+
-+	cgu_state = ice_get_dpll_state(&pf->hw, ICE_CGU_DPLL_SYNCE, &pin);
-+	if (pf->synce_dpll_state != cgu_state) {
-+		pf->synce_dpll_state = cgu_state;
-+		pf->synce_dpll_pin = pin;
-+
-+		dev_warn(ice_pf_to_dev(pf),
-+			 "<DPLL%i> state changed to: %d, pin %d",
-+			 ICE_CGU_DPLL_SYNCE,
-+			 pf->synce_dpll_state,
-+			 pin);
-+	}
-+
-+	cgu_state = ice_get_dpll_state(&pf->hw, ICE_CGU_DPLL_PTP, &pin);
-+	if (pf->ptp_dpll_state != cgu_state) {
-+		pf->ptp_dpll_state = cgu_state;
-+		pf->ptp_dpll_pin = pin;
-+
-+		dev_warn(ice_pf_to_dev(pf),
-+			 "<DPLL%i> state changed to: %d, pin %d",
-+			 ICE_CGU_DPLL_PTP,
-+			 pf->ptp_dpll_state,
-+			 pin);
-+	}
-+}
-+
- static void ice_ptp_periodic_work(struct kthread_work *work)
- {
- 	struct ice_ptp *ptp = container_of(work, struct ice_ptp, work.work);
-@@ -1417,6 +1447,10 @@ static void ice_ptp_periodic_work(struct kthread_work *work)
- 	if (!test_bit(ICE_FLAG_PTP, pf->flags))
- 		return;
- 
-+	if (ice_is_e810t(&pf->hw) &&
-+	    &pf->hw.func_caps.ts_func_info.src_tmr_owned)
-+		ice_handle_cgu_state(pf);
-+
- 	ice_ptp_update_cached_phctime(pf);
- 
- 	ice_ptp_tx_tstamp_cleanup(&pf->ptp.port.tx);
-@@ -1598,3 +1632,4 @@ void ice_ptp_release(struct ice_pf *pf)
- 
- 	dev_info(ice_pf_to_dev(pf), "Removed PTP clock\n");
- }
-+
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp_hw.c b/drivers/net/ethernet/intel/ice/ice_ptp_hw.c
-index 3eca0e4eab0b..df09f176512b 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp_hw.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp_hw.c
-@@ -375,6 +375,50 @@ static int ice_ptp_port_cmd_e810(struct ice_hw *hw, enum ice_ptp_tmr_cmd cmd)
- 	return 0;
- }
- 
-+/**
-+ * ice_get_dpll_state - get the state of the DPLL
-+ * @hw: pointer to the hw struct
-+ * @dpll_idx: Index of internal DPLL unit
-+ * @pin: pointer to a buffer for returning currently active pin
-+ *
-+ * This function will read the state of the DPLL(dpll_idx). If optional
-+ * parameter pin is given it'll be used to retrieve currently active pin.
-+ *
-+ * Return: state of the DPLL
-+ */
-+enum if_eec_state
-+ice_get_dpll_state(struct ice_hw *hw, u8 dpll_idx, u8 *pin)
-+{
-+	enum ice_status status;
-+	u64 phase_offset;
-+	u16 dpll_state;
-+	u8 ref_state;
-+	u8 eec_mode;
-+
-+	if (dpll_idx >= ICE_CGU_DPLL_MAX)
-+		return IF_EEC_STATE_INVALID;
-+
-+	status = ice_aq_get_cgu_dpll_status(hw, dpll_idx, &ref_state,
-+					    &dpll_state, &phase_offset,
-+					    &eec_mode);
-+	if (status)
-+		return IF_EEC_STATE_INVALID;
-+
-+	if (pin) {
-+		/* current ref pin in dpll_state_refsel_status_X register */
-+		*pin = (dpll_state &
-+			ICE_AQC_GET_CGU_DPLL_STATUS_STATE_CLK_REF_SEL) >>
-+		       ICE_AQC_GET_CGU_DPLL_STATUS_STATE_CLK_REF_SHIFT;
-+	}
-+
-+	if (dpll_state & ICE_AQC_GET_CGU_DPLL_STATUS_STATE_LOCK)
-+		return IF_EEC_STATE_LOCKED;
-+	else if (dpll_state & ICE_AQC_GET_CGU_DPLL_STATUS_STATE_HO)
-+		return IF_EEC_STATE_HOLDOVER;
-+
-+	return IF_EEC_STATE_FREERUN;
-+}
-+
- /* Device agnostic functions
-  *
-  * The following functions implement useful behavior to hide the differences
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp_hw.h b/drivers/net/ethernet/intel/ice/ice_ptp_hw.h
-index 55a414e87018..cc5dc79fc926 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp_hw.h
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp_hw.h
-@@ -30,6 +30,8 @@ int ice_clear_phy_tstamp(struct ice_hw *hw, u8 block, u8 idx);
- 
- /* E810 family functions */
- int ice_ptp_init_phy_e810(struct ice_hw *hw);
-+enum if_eec_state
-+ice_get_dpll_state(struct ice_hw *hw, u8 dpll_idx, u8 *pin);
- 
- #define PFTSYN_SEM_BYTES	4
- 
-@@ -76,4 +78,24 @@ int ice_ptp_init_phy_e810(struct ice_hw *hw);
- #define LOW_TX_MEMORY_BANK_START	0x03090000
- #define HIGH_TX_MEMORY_BANK_START	0x03090004
- 
-+enum ice_e810t_cgu_dpll {
-+	ICE_CGU_DPLL_SYNCE,
-+	ICE_CGU_DPLL_PTP,
-+	ICE_CGU_DPLL_MAX
-+};
-+
-+enum ice_e810t_cgu_pins {
-+	REF0P,
-+	REF0N,
-+	REF1P,
-+	REF1N,
-+	REF2P,
-+	REF2N,
-+	REF3P,
-+	REF3N,
-+	REF4P,
-+	REF4N,
-+	NUM_E810T_CGU_PINS
-+};
-+
- #endif /* _ICE_PTP_HW_H_ */
+ 	def test_exec_timeout(self):
+ 		timeout = 3453
+ 		kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
+
+base-commit: a9c9a6f741cdaa2fa9ba24a790db8d07295761e3
 -- 
-2.26.3
+2.33.0.153.gba50c8fa24-goog
 
