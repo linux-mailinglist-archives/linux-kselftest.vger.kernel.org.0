@@ -2,83 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC58F3FFD6B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Sep 2021 11:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903DA3FFFC3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Sep 2021 14:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348882AbhICJsU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Sep 2021 05:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
+        id S1349356AbhICMct (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Sep 2021 08:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348912AbhICJsT (ORCPT
+        with ESMTP id S1349328AbhICMcs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Sep 2021 05:48:19 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD90C061575
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Sep 2021 02:47:20 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id y128so6255200oie.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Sep 2021 02:47:20 -0700 (PDT)
+        Fri, 3 Sep 2021 08:32:48 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F4EC061575
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Sep 2021 05:31:48 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id o39-20020a05600c512700b002e74638b567so3469852wms.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Sep 2021 05:31:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=pM0QW4XzXDQ2Jqqtk1jcaaKtDz17T4Xc1nIbDPo6lT0=;
-        b=jvEgzczmlJnD9DKk+Zphy8wfsrNwYKp8NmsseUBqCsL65OOcxtjlKo8O4kmsXQnTqr
-         xuaK7VXFqz08mbqsr1nJvDiyCsJdFJj0kWXsHh3tHaLnbva8LtAn0nFOVBIJmKsn38GF
-         5HK0IYwHOcILinORyFzzWcxLRhArwF9J0wk4+RYx/XwiyRLEPUDB01+oGP/YrQVouQNz
-         h7VzYJTADdEGdHo/+kN4r3cH9uLHH4GAexYyMacuoTKytxGkvveVUjkL/k9QbIOZmJIt
-         gtOAp6mmxIMa1mK1aDr0gPQh1u0QHH2dcTUz6aA8TCN28ddNvK69ppL6VGPAdUVBSkei
-         wSWg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vTpqNQaM6lWYVJnHl82Fyh/O+33HHqtU4xirnSXQUYs=;
+        b=p4lyLGqiJiypZqMDxYZYmOZ55pKcMEV3cwx3gZUZsyKyAGLkRDW11I9fbVJgXkrt4D
+         eopoaoajV/miiQtWFmeCDwINubRea14TOZ3uIbLpu1NkKnqvoA3Vf2cjD7hUFb18SnaV
+         MZVas75N3s31DFhGRByuswfj4twLv1DgvCyZuyg44q8ZTJK7Ve6ZUyrfwjHfWsW9t5Wv
+         p/YSBu3agQhigfwSoJMZ7kVZZ28jpGmcaduIfi0WHK+QD8kYovKl1t9NxFcgkBgPRdsR
+         ZckUki+LylHVA1TVO/o4LjjdGe2zblirLw2QdqucAzyTIV0gxTAexOdbk8wPZ7SJXoX9
+         bXPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=pM0QW4XzXDQ2Jqqtk1jcaaKtDz17T4Xc1nIbDPo6lT0=;
-        b=a0zUUh3tlOSV+gzu4DkvnOuFECHJiIhijF0VwwtocsI0FDRYWTspX3YUNcrfNUJgsM
-         0ewVez71M6hXxp0xsfnY5z7OL1uEzXhhOA7oFzT1PyV8pTQToOnYFppOLUy983FKpDzE
-         zSzC4mT8eNV2pYaRFKKxztcOvkEmjvNYOWhwlrqjjaW+jQmO8aMglxZkl646H95DgW5S
-         fCj4SbQ1Ut5VPrMp+0uCf8E/UbaAxJT7/A3FpS7IubmkfRwKRa58cAn/DDlIJQ9Fwgo+
-         /dVRx1s/TeJvchfDiwlMF13pBCXoUJqiuEOO1chaFxzXkDcPFjnBQGwhipeV2Q29pLPo
-         ve+w==
-X-Gm-Message-State: AOAM533iVWh7fEaxDaAYHik87ocKjtMXgDB0BuQIhQ+AznWaAavGnKnx
-        GYsK44OcOSils3mw93T6L40DffCCgn5lkNB5/Q==
-X-Google-Smtp-Source: ABdhPJw1zkUiQ2Ab8V2dVJdJaH9LBAPQJJNSuViFs/4Jqgm3MO18ZOCsQVOBShKztsKNhdiOR6IKua4y3vE8KYSBRt8=
-X-Received: by 2002:aca:bfc4:: with SMTP id p187mr5586604oif.21.1630662439216;
- Fri, 03 Sep 2021 02:47:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vTpqNQaM6lWYVJnHl82Fyh/O+33HHqtU4xirnSXQUYs=;
+        b=M34l3K8wQEGEfHp4u2erJ7RUt+lJFI4RJcOwCCvwgqIym45pYiGu07F/B1AEDqXR3c
+         bJyEdIEeDxuNVKial928Eb+mKhP/4hgWDP/lkshK8U430ltUKuZEecHMeDwgEHipvRAr
+         6wzZs3onuOgBD4MLyXMlRce/yLLVZJcoCKsnjw5eQ3NeXK6lC87N0HTanI0lcAaxQoiG
+         IDR7dNeFTyOmv5Ww3isVc/NTMxoiqBOGWRx24nzjA+6rCLxTuqLTF6foSPnQJF8zqPtL
+         4xDZXaYa5DPy3WAA5nYrh98jLvZiBjdNwlTYYmdehBWtaIxSbgcnYf1JH77lAVQEK7sw
+         LSjg==
+X-Gm-Message-State: AOAM533MsDcgEXC7IipMV5ze4TFLNmmMa0K53XTWaZI5ShSR6ehV1PCW
+        s7AdNU+ioZY4OX/XLDkwRiJPHQ==
+X-Google-Smtp-Source: ABdhPJwWnw6fJtjHPeIU/KjhjOFglKmSaCXrxfWPWoUO24U0pvjCCpWFz1eU84xUCuAY5YQpA34oAQ==
+X-Received: by 2002:a05:600c:3656:: with SMTP id y22mr7994102wmq.58.1630672307332;
+        Fri, 03 Sep 2021 05:31:47 -0700 (PDT)
+Received: from larix (19.11.114.78.rev.sfr.net. [78.114.11.19])
+        by smtp.gmail.com with ESMTPSA id k1sm4758119wrz.61.2021.09.03.05.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Sep 2021 05:31:46 -0700 (PDT)
+Date:   Fri, 3 Sep 2021 14:33:57 +0200
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix build of task_pt_regs tests
+ for arm64
+Message-ID: <YTIWNRqZ/HmHgcaE@larix>
+References: <20210902090925.2010528-1-jean-philippe@linaro.org>
+ <CAADnVQKwHXw7fLGpJBJBb_MW+d1Gzexo2wk9QwE2v3fy=kHDRA@mail.gmail.com>
 MIME-Version: 1.0
-Reply-To: drmikepaul226@gmail.com
-Sender: magadam1009@gmail.com
-Received: by 2002:a05:6830:61a:0:0:0:0 with HTTP; Fri, 3 Sep 2021 02:47:18
- -0700 (PDT)
-From:   "Dr. mike paul" <drmikpaul226@gmail.com>
-Date:   Fri, 3 Sep 2021 10:47:18 +0100
-X-Google-Sender-Auth: BIpNL6yc-vpBconGOgLklH-XnNI
-Message-ID: <CAOdfs1dTRPUz2XzBa2JPzMhxJJD2-CXvyUWehRFV_x6xijqc_Q@mail.gmail.com>
-Subject: Hello.........!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQKwHXw7fLGpJBJBb_MW+d1Gzexo2wk9QwE2v3fy=kHDRA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-                      Good day my mail to you.
-I am Dr. Mike Paul, the Audit and Account Manager (A.D.B)Bank in
-Ouagadougou Burkina Faso, west africa,
-I have a business transaction for you, In my department i discovered
-an abandoned Sum of US$10,2 Million Dollars, In an account that
-belongs to one of our late foreign customer who died years ago with
-his Family member. ever Since he died, Nobody to claim the left over
-balance in the account.
-it is therefore upon this discovery that I decided to seek your
-assistance to transfer the funds to your bank account.  I will give
-you the guide lines of how we can achieve this transfer of the balance
-$10,2 Million Dollars to your account, the fund will be share 50-50%.
-by both of us
-Send the information required below for more details,
+On Thu, Sep 02, 2021 at 12:13:40PM -0700, Alexei Starovoitov wrote:
+> On Thu, Sep 2, 2021 at 2:08 AM Jean-Philippe Brucker
+> <jean-philippe@linaro.org> wrote:
+> >
+> > struct pt_regs is not exported to userspace on all archs. arm64 and s390
+> > export "user_pt_regs" instead, which causes build failure at the moment:
+> >
+> >   progs/test_task_pt_regs.c:8:16: error: variable has incomplete type 'struct pt_regs'
+> >   struct pt_regs current_regs = {};
+> 
+> Right, which is 'bpf_user_pt_regs_t'.
+> It's defined for all archs and arm64/s390/ppc/risv define it
+> differently from pt_regs.
+> 
+> >
+> > Use the multi-arch macros defined by tools/lib/bpf/bpf_tracing.h to copy
+> > the pt_regs into a locally-defined struct.
+> >
+> > Copying the user_pt_regs struct on arm64 wouldn't work because the
+> > struct is too large and the compiler complains about using too much
+> > stack.
+> 
+> That's a different issue.
 
-1. Full Names:.......
-2. Address:............
-3. Your Age:...........
-4. Your Country:......
-5. Your Private Phone Number:.....
+It does work when doing an implicit copy (current_regs = *regs) rather
+than using __builtin_memcpy(). Don't know why but I'll take it.
 
-Best Regards,
-Dr. Mike Paul.
+> I think the cleaner fix would be to make the test use
+> bpf_user_pt_regs_t instead.
+
+Right, although that comes with another complication. We end up including
+tools/include/uapi/asm/bpf_perf_event.h which requires the compiler
+builtins "__aarch64__", "__s390__", etc. Those are not defined with
+"clang -target bpf" so I have to add them to the command line.
+I'll resend with your suggestion but this patch is simpler.
+
+Thanks,
+Jean
