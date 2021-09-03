@@ -2,92 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B27940031C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Sep 2021 18:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D2E4003AF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Sep 2021 18:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349507AbhICQUB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Sep 2021 12:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
+        id S1349616AbhICQwl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Sep 2021 12:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349459AbhICQUA (ORCPT
+        with ESMTP id S230187AbhICQwk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Sep 2021 12:20:00 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E337EC061760
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Sep 2021 09:19:00 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id q68so5991111pga.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Sep 2021 09:19:00 -0700 (PDT)
+        Fri, 3 Sep 2021 12:52:40 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6760C061575;
+        Fri,  3 Sep 2021 09:51:40 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id c206so11155373ybb.12;
+        Fri, 03 Sep 2021 09:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=odGeZgDUh80LbtOglqZT7TpIL3a8b5IUWFxM/rMRVuo=;
-        b=hh+hnnzNXtfUDoDduEq8Qy1zGG6JdTaSlow02XWgKLKDK8SludKizTBs7YPd6/MVHy
-         kjXlUWECX8C60WbBobplP9Xun1YFUilkKp+c3drIyKQG7ArptopF63iUlrTN9L16l3tF
-         rF4UlAU72eo4KrRtzkYeNO3gQjvIlSpoqy4OqD5OSDGeyHPW7U5FcqyhUHfzxkCmnEpo
-         +M5gaCGHxvs3hobPjHkSRMow16STRhvFC7BCv4XQmQw/M7unxZCwTnC+aqgIewomlTdW
-         P4/i03ejkjjqKMsX+kuvm1TrFLhcw9cV3QBqVrMhnFpYuuIPSM3yTYFGZa7LtJq9UfFP
-         irqg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=idwDNbH9Wo5Pci3iRQ8ors3jpFQBSSL6bTxgZX7Cc/8=;
+        b=DKE9nLlWSUOxRlyu+tVrpndtb8H9vBjqtSM/j++9gc3jidyTis6Kdb/3AMX2R3fypJ
+         OC5IBwWIsY62dmtGvHvQlCqieLDPFqVfR41QMC+riJULOJO3BMP//M7x+u3nergv4lAZ
+         0Z5wx3oq4BTyxapS+zKzpA7rlEu6KOZwEelyvqo73Hntb31nalLqoQ3hobAinV0aud/E
+         CNBIFe7TWZDj438BEKwXpWDfeokfkTgTq81nVzRKYQ4rdmcKK5YeBa1lUuG0lCs4z8xE
+         AjSwnxv+BgXCpL2nFmaNgHzybwyNX7q2z4jeTd7TOW7q0KVGK9EPi3l2LmcjSCKxeknR
+         5zYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=odGeZgDUh80LbtOglqZT7TpIL3a8b5IUWFxM/rMRVuo=;
-        b=CFAyB5Dr8WByIfiBJrQReQSkgtzH5lOr+yOfTTrCHT/bKpU7jbSGt0iPGu7OUppEqQ
-         yxLxodmBz/1+GK0QzqRFh1KTW5s5m10hD3UtZPeyBYowFYQmQVWkF745isx6S5Fn/QJk
-         6e1YNeQ4qxgooxZRdLHTWQiBUIieibxxlmMaX5kLtQJKiRoCzijfGS9rImvyNb0pLAFR
-         DrxUV1bfP00osYm8qv5bhIJQJeaBm08d2wa6yr5NumwN/QTTnMHJoOlWQgBt2MuC5O5s
-         pViWfND64lp89PcvQlxfBE8F5K6wYocchd83iyKs61xcaKhWS1HWXhHw2FANdVlJksia
-         V3PQ==
-X-Gm-Message-State: AOAM533oSHS2nU1Zmw8aVJulJZB+1swvaKHMUD8eR43TBRYmxQt/0D6Y
-        gk9jT1WM9U67U0iL255uBuzDvQ==
-X-Google-Smtp-Source: ABdhPJxbirKV8uNI4Ze/GuQJ/lxTM+sX5BkaryzloCIuJ4Q6JPCS1Jdu2jvp5k/Z2HQvX02FVK8iGw==
-X-Received: by 2002:a62:1b92:0:b0:3eb:3f92:724 with SMTP id b140-20020a621b92000000b003eb3f920724mr3891732pfb.3.1630685940371;
-        Fri, 03 Sep 2021 09:19:00 -0700 (PDT)
-Received: from hermes.local (204-195-33-123.wavecable.com. [204.195.33.123])
-        by smtp.gmail.com with ESMTPSA id b7sm5736505pfl.195.2021.09.03.09.18.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Sep 2021 09:19:00 -0700 (PDT)
-Date:   Fri, 3 Sep 2021 09:18:57 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Maciej Machnikowski <maciej.machnikowski@intel.com>
-Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        richardcochran@gmail.com, abyagowi@fb.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
- to get SyncE status
-Message-ID: <20210903091857.70bdf57a@hermes.local>
-In-Reply-To: <20210903151436.529478-2-maciej.machnikowski@intel.com>
-References: <20210903151436.529478-1-maciej.machnikowski@intel.com>
-        <20210903151436.529478-2-maciej.machnikowski@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=idwDNbH9Wo5Pci3iRQ8ors3jpFQBSSL6bTxgZX7Cc/8=;
+        b=gCirFejT8n1dMO5gBmUzfraFszZm4gbsyOL31cQOtmEZ1XnQ8yeDUnS2jWjsfqdb3z
+         jCb0AKcM69C+Zh553swRfAKD/Cp0vflqAEqvwIg6uaVC4p2YDmKBt0APA4K9fo90X3Ts
+         tIRAf5RAnb7e3KCH4MPae1jJ8xnJPPs3lmPTv5p5GqHRbEKiRbylYNlo7RmhLhjjRkWn
+         qaY29extBNFaCT+QFn1Qc+yd+eQKLkuHxlNc3Q9YcPh6tYjOhmcrNC5DUCEh8IdCNX0z
+         kV+JubJStGasG2IIX0NWep6KgZ/afURXSnpwe1pwQXw55TjqdX/W5RMiaFoEXwvDk/S/
+         eCCg==
+X-Gm-Message-State: AOAM533LI3PAUNzhdutZL42fspKT81nh8cpNirqiTQ4mH+nLNtZdpSc+
+        Bc06a4EUwWiWufoKZy7pGYW6UXjOAFu10eMoFYE=
+X-Google-Smtp-Source: ABdhPJwEf6iJS9+pCeC+HwaYztN89WrvtY7/BT6uo8708nAfmVai0k8G+L5mAPn2SD0CoAZ317OM/QKDekKYlRCuhwQ=
+X-Received: by 2002:a5b:7c4:: with SMTP id t4mr7819ybq.368.1630687900091; Fri,
+ 03 Sep 2021 09:51:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20210902090925.2010528-1-jean-philippe@linaro.org>
+ <CAADnVQKwHXw7fLGpJBJBb_MW+d1Gzexo2wk9QwE2v3fy=kHDRA@mail.gmail.com> <YTIWNRqZ/HmHgcaE@larix>
+In-Reply-To: <YTIWNRqZ/HmHgcaE@larix>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 3 Sep 2021 09:51:29 -0700
+Message-ID: <CAEf4BzYqfykri6kF=KM8eQrJb3O0HLahB2ZqA-N_8TfmsZCr8g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix build of task_pt_regs tests
+ for arm64
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri,  3 Sep 2021 17:14:35 +0200
-Maciej Machnikowski <maciej.machnikowski@intel.com> wrote:
+On Fri, Sep 3, 2021 at 5:31 AM Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
+>
+> On Thu, Sep 02, 2021 at 12:13:40PM -0700, Alexei Starovoitov wrote:
+> > On Thu, Sep 2, 2021 at 2:08 AM Jean-Philippe Brucker
+> > <jean-philippe@linaro.org> wrote:
+> > >
+> > > struct pt_regs is not exported to userspace on all archs. arm64 and s390
+> > > export "user_pt_regs" instead, which causes build failure at the moment:
+> > >
+> > >   progs/test_task_pt_regs.c:8:16: error: variable has incomplete type 'struct pt_regs'
+> > >   struct pt_regs current_regs = {};
+> >
+> > Right, which is 'bpf_user_pt_regs_t'.
+> > It's defined for all archs and arm64/s390/ppc/risv define it
+> > differently from pt_regs.
+> >
+> > >
+> > > Use the multi-arch macros defined by tools/lib/bpf/bpf_tracing.h to copy
+> > > the pt_regs into a locally-defined struct.
+> > >
+> > > Copying the user_pt_regs struct on arm64 wouldn't work because the
+> > > struct is too large and the compiler complains about using too much
+> > > stack.
+> >
+> > That's a different issue.
+>
+> It does work when doing an implicit copy (current_regs = *regs) rather
+> than using __builtin_memcpy(). Don't know why but I'll take it.
+>
+> > I think the cleaner fix would be to make the test use
+> > bpf_user_pt_regs_t instead.
+>
+> Right, although that comes with another complication. We end up including
+> tools/include/uapi/asm/bpf_perf_event.h which requires the compiler
+> builtins "__aarch64__", "__s390__", etc. Those are not defined with
+> "clang -target bpf" so I have to add them to the command line.
+> I'll resend with your suggestion but this patch is simpler.
+>
 
-> This patch series introduces basic interface for reading the Ethernet
-> Equipment Clock (EEC) state on a SyncE capable device. This state gives
-> information about the state of EEC. This interface is required to
-> implement Synchronization Status Messaging on upper layers.
-> 
-> Initial implementation returns SyncE EEC state and flags attributes.
-> The only flag currently implemented is the EEC_SRC_PORT. When it's set
-> the EEC is synchronized to the recovered clock recovered from the
-> current port.
-> 
-> SyncE EEC state read needs to be implemented as a ndo_get_eec_state
-> function.
-> 
-> Signed-off-by: Maciej Machnikowski <maciej.machnikowski@intel.com>
+The test doesn't care about struct pt_regs type itself, it only cares
+to check that contents of captured pt_regs are the same.
 
-Is there a simpler way to do this? Seems like you are adding
-a lot for a use case specific to a small class of devices.
-For example adding a new network device operation adds small
-amount of bloat to every other network device in the kernel.
+We can use CO-RE to check whether user_pt_regs or pt_regs exists in
+the kernel. We can also use bpf_core_type_size() to know exactly how
+many bytes we want to capture. And then just use
+bpf_probe_read_kernel() as memcpy() equivalent to capture bytes. This
+should work on all architectures.
 
+> Thanks,
+> Jean
