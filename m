@@ -2,116 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CE240103B
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Sep 2021 16:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF9E4011F6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Sep 2021 00:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbhIEOcK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 5 Sep 2021 10:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
+        id S232043AbhIEWct (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 5 Sep 2021 18:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234024AbhIEOcK (ORCPT
+        with ESMTP id S229510AbhIEWcs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Sep 2021 10:32:10 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5089DC061575
-        for <linux-kselftest@vger.kernel.org>; Sun,  5 Sep 2021 07:31:07 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id dm15so5677501edb.10
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 Sep 2021 07:31:07 -0700 (PDT)
+        Sun, 5 Sep 2021 18:32:48 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B8CC061575
+        for <linux-kselftest@vger.kernel.org>; Sun,  5 Sep 2021 15:31:44 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id i21so9616004ejd.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 05 Sep 2021 15:31:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=7/1jDOGzfp3PXRcY9mA9mIPbXo8eoYQIufcyNrSrdxM=;
-        b=ysj6gmVcqNHadgXS9+bDPwQsbxGxVvOIR/E3NWp852m68iBMAwhSXd6/07o+6DMJsr
-         k/DirnKmIctct/dhSj0twwPKBli9JeeYmVrj2/Mk2Ofq3CAdniV5ae5/0qnSjgf2wkBo
-         daX+WtqPeBMJtXhF/7jezOqmmRlTt3GmPO7OrZV4zlRK0JhF6BOxJSNexqT2eYkOaG/3
-         424dfGfyKbBB5BkXMHhB/7g8OAV9gVN4b0O87tF8TzoHzy2yH/EEDqxS+iP0vRM0GOLv
-         eqFjRtXTuuo44PGn8M2KWjqkNkgN89PWGai9S2WsFUBybPbZAZHCQm3/5Qbtcsa805gr
-         ZoAQ==
+        d=usp.br; s=usp-google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=IQBzpOrkgt1sL5aFZ4ypTx/31uYXv7KGinPeuizSygY=;
+        b=JxcOyyugTRMkxVBO9psg4Jzl3NliBERfPC1KPUtxtZkV9yMGsKON1zg7daaZKoSnlp
+         3M+WO+08tTsi5kpjhAbjAVW+rQIr2QyP3BcLvrOYPR4HeJ02GIT9sZDY3oXYTqs1s6Y6
+         98sT2r5k7pctQ9krCefkpm6VNMSLbyigftwjGs21SS/hsExc7VePwvSrdDDqa1A4zUaW
+         N0sQwlXVB0LHsq6+JGPZuEgcZMR9VQDjtvAuq4DTUy6oV1iF+m/t+alXGyxRF489mFQh
+         WjjUo1+tK5raRH4TUjCQZzw0SEfeCkSCjsDn8El2UAAwcjlVyPJrbo6nPEES2Y0a2uFz
+         9Azw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=7/1jDOGzfp3PXRcY9mA9mIPbXo8eoYQIufcyNrSrdxM=;
-        b=qtGosKMHhs1hnBcva4fFrDOPatV0wS1H1/3BYiWtmB9hRFFtLnpCi1koZYq0Sgo4HY
-         42JP5x6Wevn2Snb20VAc8uvktt0RTPJ6MQzRSeTs1FQyS6O8NBcKoIyB23WJbNsUByv+
-         HFTMjxUq5QVQL5pubZvOmgAYqDpUpH+Sn9b9QAOg2oRmptbLVLHjKo6t0yAnmbnvpwai
-         KDcp5uy4hkyg8AsD7mp1biZ7n8neW0VpYMTx13RKKU5OECRydia6UvsXS3Wpyx21ZJrd
-         IVgP5OKHxg8tAS3aFj7fSEd2EENqMEGgDJWvqYLbwXXsV1yjn0FSAn6zlgkemn8l9S5Z
-         mF6A==
-X-Gm-Message-State: AOAM533bxXUhbRFKHnpUH9H67o3QNiOUW5rd4MbVNmOE/mcqzc0NCPS0
-        bQfylR9L/VOF+yigd7/a1YjYVg9OPWvcoChMB4K39b+BzwP4qw==
-X-Google-Smtp-Source: ABdhPJxLkulszZ+5R2hFoQFt48ejGYp+MiYE+Yd64kvqwhDDt0F7dgJCJoOQl5S+PU2dcz0yxakLb94XV64LLw5bpuQ=
-X-Received: by 2002:aa7:d3c7:: with SMTP id o7mr8971267edr.288.1630852265055;
- Sun, 05 Sep 2021 07:31:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IQBzpOrkgt1sL5aFZ4ypTx/31uYXv7KGinPeuizSygY=;
+        b=lLEtU1/5I8xfroQGQEdktdyAlry0gYpKb0QbZ5faJTKpR3+0iAIpsqfj/N5VD1raOK
+         6ZlsNUgYhBBTyZs0h5gqlF3rK4DI0yFog5ehHivster08LGWNLvi8h90Udq2qYTHLXB4
+         PLXcN2k4YueAoio4KDzBn7e05WfWWi1OFAr8pGr1abZowfEMo9xmSnPGXkSa6GBrrVBo
+         75L5yI7acKHYF/74Ywcgd0PsU3K+wbN90+a206JhIT+M55wN+xYSsOEd62/i9Bry/Std
+         d5q3q6XrjyppmdX5BC8plGleK33ZjS1sQ1EjA4v5wQqlp/1iWuOF8zPnEvsJrZ4zIvQW
+         3+ZA==
+X-Gm-Message-State: AOAM532kBO6k8qwnl2EMQQ+8CuhVoB8bRR5vLJ7kOqO32MHswS+tlFXn
+        ij5iTmj+K7iXA4uSEY4pi/R7vfeb+HtZVvhWouj3hg==
+X-Google-Smtp-Source: ABdhPJz9SSYRr/gjgg62TZKE74JqYdhBC0T2ckfqD385iZBfk0LXoaPi8NW+0cJehqzqO68EknrpN4ceDjS/IdHWygY=
+X-Received: by 2002:a17:906:c7d0:: with SMTP id dc16mr10628308ejb.555.1630881103283;
+ Sun, 05 Sep 2021 15:31:43 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sun, 5 Sep 2021 20:00:54 +0530
-Message-ID: <CA+G9fYsNttv1A+iWdaaabZCfbo+miw9LDTzOjrSuuEoKOqVvDA@mail.gmail.com>
-Subject: proc-pid-vm.c:214:19: warning: 'str_vsyscall' defined but not used
-To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+References: <20210826012626.1163705-1-isabellabdoamaral@usp.br>
+ <20210826012626.1163705-2-isabellabdoamaral@usp.br> <CABVgOS==dbwMyFcP5ZMhMWGSNTXgsCw1gm2DnoCCnhA0SRhpzw@mail.gmail.com>
+In-Reply-To: <CABVgOS==dbwMyFcP5ZMhMWGSNTXgsCw1gm2DnoCCnhA0SRhpzw@mail.gmail.com>
+From:   Isabella B do Amaral <isabellabdoamaral@usp.br>
+Date:   Sun, 5 Sep 2021 19:31:31 -0300
+Message-ID: <CAAniXFT_C0kZ64uJWYwXsFR3KDyqmXdZH=vrWqmOvaioW7yLvw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] hash.h: remove unused define directive
+To:     David Gow <davidgow@google.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Enzo Ferreira <ferreiraenzoa@gmail.com>,
+        =?UTF-8?Q?Augusto_Dur=C3=A3es_Camargo?= 
+        <augusto.duraes33@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, lkft-triage@lists.linaro.org,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        ~lkcamp/patches@lists.sr.ht, rodrigosiqueiramelo@gmail.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Following build warnings noticed while building stable-rc Linux 5.14.1-rc1
-with gcc-11 for arm64 architecture.
+Hi, David,
 
-aarch64-linux-gnu-gcc -Wall -O2 -Wno-unused-function -D_GNU_SOURCE
-proc-pid-vm.c  -o kselftest/proc/proc-pid-vm
-proc-pid-vm.c:214:19: warning: 'str_vsyscall' defined but not used
-[-Wunused-const-variable=]
-  214 | static const char str_vsyscall[] =
-      |                   ^~~~~~~~~~~~
-proc-pid-vm.c:212:13: warning: 'g_vsyscall' defined but not used
-[-Wunused-variable]
-  212 | static bool g_vsyscall = false;
-      |             ^~~~~~~~~~
+On Thu, Aug 26, 2021 at 1:01 AM David Gow <davidgow@google.com> wrote:
+>
+> On Thu, Aug 26, 2021 at 9:26 AM Isabella Basso <isabellabdoamaral@usp.br>=
+ wrote:
+> >
+> > The HAVE_ARCH_HASH_32 (single underscore) define hasn't been used for
+> > any known supported architectures that have their own hash function
+> > implementation (i.e. m68k, Microblaze, H8/300, pa-risc) since George's
+> > patch [1], which introduced it.
+> >
+> > The supported 32-bit architectures from the list above have only been
+> > making use of the (more general) HAVE_ARCH__HASH_32 define, which only
+> > lacks the right shift operator, that wasn't targeted for optimizations
+> > so far.
+> >
+> > [1] https://lore.kernel.org/lkml/20160525073311.5600.qmail@ns.scienceho=
+rizons.net/
+> >
+> > Co-developed-by: Augusto Dur=C3=A3es Camargo <augusto.duraes33@gmail.co=
+m>
+> > Signed-off-by: Augusto Dur=C3=A3es Camargo <augusto.duraes33@gmail.com>
+> > Co-developed-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
+> > Signed-off-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
+> > Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
+> > ---
+>
+> I'm not familiar with the hash functions here, so take this with the
+> appropriate heap of salt, but it took me a little while to understand
+> exactly what this is doing.
+>
+> As I understand it:
+> - There are separate __hash_32() and hash_32() functions.
+> - Both of these have generic implementations, which can optionally be
+> overridden by an architecture-specific optimised version.
+> - There aren't any architectures which provide an optimised hash_32()
+> implementation.
+> - This patch therefore removes support for architecture-specific
+> hash_32() implementations, and leaves only the generic implementation.
+> - This generic implementation of hash_32() itself relies on
+> __hash_32(), which may still be optimised.
+>
+> Could the commit description be updated to make this a bit clearer?
 
+Sure, that makes perfect sense! Thank you very much for the feedback! Writi=
+ng
+those descriptions was quite a challenge for me, as I wasn't perfectly sure=
+ of
+what the appropriate reasoning should be for the message. I'm also glad I w=
+as
+able to get a grasp similar to yours. :)
 
-Build config:
-https://builds.tuxbuild.com/1xXcUtI2INra8KaHjOXXQMOyAD0/config
+> While we are getting rid of the HAVE_ARCH_HASH_32 #define, that seems
+> to be a side-effect/implementation detail of removing support for
+> architecture-specific hash_32() implementations...
+>
+> The other wild, out-there option would be to remove __hash_32()
+> entirely and make everything use hash_32(), which then could have
+> architecture-specific implementations. A quick grep reveals that
+> there's only one use of __hash_32() outside of the hashing code itself
+> (in fs/namei.c). This would be much more consistent with what
+> hash_64() does, but also would be significantly more work, and
+> potentially could have some implication (full_name_hash() performance
+> maybe?) which I'm not aware of. So it's possibly not worth it.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+I do agree with you that it seems a bit over the top, as I'm also really no=
+t
+aware of the performance implications of such a change (and that seemed to =
+be
+what motivated most of the patch series that introduced the __hash_32() to
+fs/namei.c), so I'd rather not mess with fs/namei.c based on consistency
+reasons alone.
 
-meta data:
------------
-    git_describe: v5.14-rc6-389-g95dc72bb9c03,
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc,
-    git_sha: 95dc72bb9c032093e79e628a98c927b3db73a6c3,
-    git_short_log: 95dc72bb9c03 (\Linux 5.14.1-rc1\),
-    kconfig: [
-        defconfig,
-        https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/lkft.config,
-        https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/lkft-crypto.config,
-        https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/distro-overrides.config,
-        https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/systemd.config,
-        https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/virtio.config,
-        CONFIG_ARM64_MODULE_PLTS=y
-    ],
-    kernel_version: 5.14.1-rc1,
-    target_arch: arm64,
-    targets: [
-        dtbs,
-        dtbs-legacy,
-        headers,
-        kernel,
-        kselftest,
-        kselftest-merge,
-        modules
-    ],
-    toolchain: gcc-11,
-
-steps to reproduce:
-https://builds.tuxbuild.com/1xXcUtI2INra8KaHjOXXQMOyAD0/tuxmake_reproducer.sh
-
+Thanks,
 --
-Linaro LKFT
-https://lkft.linaro.org
+Isabella Basso
