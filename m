@@ -2,99 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 301DF4019C4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Sep 2021 12:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BF0401A7B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Sep 2021 13:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242014AbhIFK3Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Sep 2021 06:29:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28268 "EHLO
+        id S233158AbhIFLV2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Sep 2021 07:21:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:33713 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242013AbhIFK3W (ORCPT
+        by vger.kernel.org with ESMTP id S230284AbhIFLV1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Sep 2021 06:29:22 -0400
+        Mon, 6 Sep 2021 07:21:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630924097;
+        s=mimecast20190719; t=1630927222;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=REmJl8s2nvMdTdbKRVVIcDfYVEbx2wjp9XTagCASYqs=;
-        b=M0Tzz4taVNiDQ7O9U0tpdW1QbeRJ9elAmkEpqslUOUXBdmGj3whd/+ybivfoD9GN1i2m4T
-        R5N7BcHNHfal9jq4A2i7oeL8XfzZ00iCopkW9hVuCjpWkVrzUftHACZQmahxOWuQhHKD1K
-        F5TqTn1xqMSPQBbP3rrsS+tIOWbMg7s=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-219-u_LGkimyND6IeZyRmNH9Ng-1; Mon, 06 Sep 2021 06:28:16 -0400
-X-MC-Unique: u_LGkimyND6IeZyRmNH9Ng-1
-Received: by mail-ed1-f70.google.com with SMTP id y10-20020a056402270a00b003c8adc4d40cso3333456edd.15
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Sep 2021 03:28:16 -0700 (PDT)
+        bh=j7VH8fL3glvum3Nt0WVFPZDDHGKO9yZkd04H/l3akBA=;
+        b=Qj05cyGYy6ALDy97812fK3Snt+vbujbdmxBGJd7XaaaCA8G6fIOF1SxIIO12/u2OKbLHXt
+        PZLY0pGw+chH+qDO1cyDuIPnNIUouDotKfyRClvQk/8CaWWS1zuSFryL9/9OibLth44nxZ
+        w4u1vMESFELlQ1Lqg2V20AzLOK9LcMs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-313-xJQHHUvpNryUFm_Go1QFGQ-1; Mon, 06 Sep 2021 07:20:21 -0400
+X-MC-Unique: xJQHHUvpNryUFm_Go1QFGQ-1
+Received: by mail-wm1-f71.google.com with SMTP id w25-20020a1cf6190000b0290252505ddd56so2214648wmc.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Sep 2021 04:20:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=REmJl8s2nvMdTdbKRVVIcDfYVEbx2wjp9XTagCASYqs=;
-        b=XfMd/BsL7F6hNOpN8IpA9sK+aGOy9yfBJ26S67YE4Xhk8r2FAy1PcFKMYFMLPSE+z8
-         T6hXCpM3+V+opioXSMQONSQHgMi8Q89MSBjdwST+iabhsb535m3HBG3yX0TxaE98C2bl
-         4jaDRGU81nUJCIaOfbZUl2AKL4CcRnX+WFXdVmUlqJKe5G4oUqbjDCSIJNS2xAeHvb6K
-         8aa4gjBYJ7jvv+CoIMBMCgjhCFPUm7n37aw7NzZ/Cd/khl8dRVOwsAG4qC/y6d8nZR6m
-         dQ7LLbsLC3QhRSifIypza3wIdtBDlUFtRg+45iWlzeKCI2kU4tan16gQYAmt9rKuEyhY
-         C4pw==
-X-Gm-Message-State: AOAM530tlhbifY7GvxY4uicSIGVzPd53pst8NgXwqKgJszPBAZnt+t9S
-        qpXTIGrV4H5W4bYsFY7eYHDAtOifaCpL+0WAdx5KsB2Vv5rJsgtYC8di/1zk224wmPWa3b9xmQz
-        xW1ABj5MP+RPgyueAY+KH9P/MPNu+
-X-Received: by 2002:a17:906:1d19:: with SMTP id n25mr13007259ejh.11.1630924095430;
-        Mon, 06 Sep 2021 03:28:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz7T8yPC7CUEnqP8Q5KGyfYQsTy7fdIFm0w0WX7OHu/0lN1pf6u81fhziGWQVchhgc+jbFRRA==
-X-Received: by 2002:a17:906:1d19:: with SMTP id n25mr13007231ejh.11.1630924095200;
-        Mon, 06 Sep 2021 03:28:15 -0700 (PDT)
+        bh=j7VH8fL3glvum3Nt0WVFPZDDHGKO9yZkd04H/l3akBA=;
+        b=OXNJUkoJpveYlYDhCi0olgn3KBDCgh2g845ctLFRviVOQHMKCqq2eIOdJgy03kvgfR
+         fgStl1AUiEh9/rUTkTsNvuCnFjNGbDqcpZNDBuYV+V3btFkQZecbkb0iwvKUINDz2Pit
+         WvhnOl9ZlTIBxbxvsYmft4OsiuCVrkDSJA5L3ziUuy/bqOj9ja8QSEtnDgYYlQWJddLo
+         PDzyeBlNLH9Dj3lzMjM/CCdEqHjIF3EXkrUTwK5JHG2WDBXuWqdtB0VTDifWNbwB+gC3
+         cIhRLjxBpA1bfDyZaAPNVuWDlCaIeYNeHvocvzAl/JvWJpu0ohPldqBWUfec/NgLohqc
+         sbzQ==
+X-Gm-Message-State: AOAM530JcH1As4llK2ICdBiSTUIXG/VcfTMzKp2tiFNIwOEmyv6Qpk8o
+        TCzV8QiQZXz+szvLPzgpSp23WuZ+CR+uIzb71nadjahQHogQ4FOnD9awaTVDJppwLxZIfWJrbT2
+        QbrZFWKb6D8hHBYoHBnpGf0EVk9Qe
+X-Received: by 2002:a1c:9a0e:: with SMTP id c14mr11072631wme.119.1630927220084;
+        Mon, 06 Sep 2021 04:20:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxnnpEuWDhXm/HsiMYhbswprAY/0U3Qm9lUNt38ZqMW4d4O9iigvGYH5X6vA70t10AlgvDOaw==
+X-Received: by 2002:a1c:9a0e:: with SMTP id c14mr11072600wme.119.1630927219810;
+        Mon, 06 Sep 2021 04:20:19 -0700 (PDT)
 Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id h7sm4431526edr.4.2021.09.06.03.28.13
+        by smtp.gmail.com with ESMTPSA id m11sm7585194wrz.28.2021.09.06.04.20.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Sep 2021 03:28:14 -0700 (PDT)
-Subject: Re: [PATCH 1/5] KVM: rseq: Update rseq when processing NOTIFY_RESUME
- on xfer to KVM guest
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Oleg Nesterov <oleg@redhat.com>, rostedt <rostedt@goodmis.org>,
+        Mon, 06 Sep 2021 04:20:19 -0700 (PDT)
+Subject: Re: [PATCH v3 6/6] KVM: selftests: test KVM_GUESTDBG_BLOCKIRQ
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Kieran Bingham <kbingham@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
         Ingo Molnar <mingo@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        shuah <shuah@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-csky <linux-csky@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Ben Gardon <bgardon@google.com>
-References: <20210818001210.4073390-1-seanjc@google.com>
- <20210818001210.4073390-2-seanjc@google.com>
- <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
- <YR7tzZ98XC6OV2vu@google.com>
- <1872633041.20290.1629485463253.JavaMail.zimbra@efficios.com>
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20210811122927.900604-1-mlevitsk@redhat.com>
+ <20210811122927.900604-7-mlevitsk@redhat.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <425456d3-4772-2a1b-9cf3-a5b750b95c2e@redhat.com>
-Date:   Mon, 6 Sep 2021 12:28:12 +0200
+Message-ID: <137f2dcc-75d2-9d71-e259-dd66d43ad377@redhat.com>
+Date:   Mon, 6 Sep 2021 13:20:14 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <1872633041.20290.1629485463253.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20210811122927.900604-7-mlevitsk@redhat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -102,22 +91,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 20/08/21 20:51, Mathieu Desnoyers wrote:
->> Ah, or is it the case that rseq_cs is non-NULL if and only if userspace is in an
->> rseq critical section, and because syscalls in critical sections are illegal, by
->> definition clearing rseq_cs is a nop unless userspace is misbehaving.
-> Not quite, as I described above. But we want it to stay set so the CONFIG_DEBUG_RSEQ
-> code executed when returning from ioctl to userspace will be able to validate that
-> it is not nested within a rseq critical section.
+On 11/08/21 14:29, Maxim Levitsky wrote:
+> Modify debug_regs test to create a pending interrupt
+> and see that it is blocked when single stepping is done
+> with KVM_GUESTDBG_BLOCKIRQ
 > 
->> If that's true, what about explicitly checking that at NOTIFY_RESUME?  Or is it
->> not worth the extra code to detect an error that will likely be caught anyways?
-> The error will indeed already be caught on return from ioctl to userspace, so I
-> don't see any added value in duplicating this check.
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>   .../testing/selftests/kvm/x86_64/debug_regs.c | 24 ++++++++++++++++---
+>   1 file changed, 21 insertions(+), 3 deletions(-)
 
-Sean, can you send a v2 (even for this patch only would be okay)?
-
-Thanks,
+I haven't looked very much at this, but the test fails.
 
 Paolo
+
+> diff --git a/tools/testing/selftests/kvm/x86_64/debug_regs.c b/tools/testing/selftests/kvm/x86_64/debug_regs.c
+> index 6097a8283377..5f078db1bcba 100644
+> --- a/tools/testing/selftests/kvm/x86_64/debug_regs.c
+> +++ b/tools/testing/selftests/kvm/x86_64/debug_regs.c
+> @@ -8,12 +8,15 @@
+>   #include <string.h>
+>   #include "kvm_util.h"
+>   #include "processor.h"
+> +#include "apic.h"
+>   
+>   #define VCPU_ID 0
+>   
+>   #define DR6_BD		(1 << 13)
+>   #define DR7_GD		(1 << 13)
+>   
+> +#define IRQ_VECTOR 0xAA
+> +
+>   /* For testing data access debug BP */
+>   uint32_t guest_value;
+>   
+> @@ -21,6 +24,11 @@ extern unsigned char sw_bp, hw_bp, write_data, ss_start, bd_start;
+>   
+>   static void guest_code(void)
+>   {
+> +	/* Create a pending interrupt on current vCPU */
+> +	x2apic_enable();
+> +	x2apic_write_reg(APIC_ICR, APIC_DEST_SELF | APIC_INT_ASSERT |
+> +			 APIC_DM_FIXED | IRQ_VECTOR);
+> +
+>   	/*
+>   	 * Software BP tests.
+>   	 *
+> @@ -38,12 +46,19 @@ static void guest_code(void)
+>   		     "mov %%rax,%0;\n\t write_data:"
+>   		     : "=m" (guest_value) : : "rax");
+>   
+> -	/* Single step test, covers 2 basic instructions and 2 emulated */
+> +	/*
+> +	 * Single step test, covers 2 basic instructions and 2 emulated
+> +	 *
+> +	 * Enable interrupts during the single stepping to see that
+> +	 * pending interrupt we raised is not handled due to KVM_GUESTDBG_BLOCKIRQ
+> +	 */
+>   	asm volatile("ss_start: "
+> +		     "sti\n\t"
+>   		     "xor %%eax,%%eax\n\t"
+>   		     "cpuid\n\t"
+>   		     "movl $0x1a0,%%ecx\n\t"
+>   		     "rdmsr\n\t"
+> +		     "cli\n\t"
+>   		     : : : "eax", "ebx", "ecx", "edx");
+>   
+>   	/* DR6.BD test */
+> @@ -72,11 +87,13 @@ int main(void)
+>   	uint64_t cmd;
+>   	int i;
+>   	/* Instruction lengths starting at ss_start */
+> -	int ss_size[4] = {
+> +	int ss_size[6] = {
+> +		1,		/* sti*/
+>   		2,		/* xor */
+>   		2,		/* cpuid */
+>   		5,		/* mov */
+>   		2,		/* rdmsr */
+> +		1,		/* cli */
+>   	};
+>   
+>   	if (!kvm_check_cap(KVM_CAP_SET_GUEST_DEBUG)) {
+> @@ -154,7 +171,8 @@ int main(void)
+>   	for (i = 0; i < (sizeof(ss_size) / sizeof(ss_size[0])); i++) {
+>   		target_rip += ss_size[i];
+>   		CLEAR_DEBUG();
+> -		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP;
+> +		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP |
+> +				KVM_GUESTDBG_BLOCKIRQ;
+>   		debug.arch.debugreg[7] = 0x00000400;
+>   		APPLY_DEBUG();
+>   		vcpu_run(vm, VCPU_ID);
+> 
 
