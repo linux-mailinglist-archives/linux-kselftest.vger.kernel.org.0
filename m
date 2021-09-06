@@ -2,123 +2,183 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6714340209D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Sep 2021 22:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EBF4020FC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Sep 2021 23:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235677AbhIFUCN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Sep 2021 16:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233562AbhIFUCM (ORCPT
+        id S231288AbhIFVEd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Sep 2021 17:04:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36981 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231246AbhIFVEd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Sep 2021 16:02:12 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444D8C061575
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Sep 2021 13:01:07 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id f2so12964326ljn.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Sep 2021 13:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=UkyLfdWueNNxe1Qb3XvyB9HNkffKZTQ0ibmlbba1EJ4=;
-        b=OdQP2/gs45I/iflH232SnxOcuyBqUwcbIs0y6yWKkGq46J0EwBG/NkAHQJcAbav77d
-         x/hazPng714LbqKQsjDV68TdMp7r6FisNye8g7p2rXtzuWEwx4qTEiLglMskrX8c4mdJ
-         Fri/WAauDOPmTyJGo63j0XqDd3AbE2IVEwfik=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=UkyLfdWueNNxe1Qb3XvyB9HNkffKZTQ0ibmlbba1EJ4=;
-        b=uMJqxvUB9yI0b67lDcieScbc6Y4FU795kAK1Sf/0FspGy/D0SyL78jvvMaDwtaJRVz
-         neXl7JGrGZLW2GWbuiAU4j+nsoCV3J1fNqwDjZDdKbpKF5eYpLo83MMh9S9bTAAtwkBY
-         kLw5T9KoPya6hQ9+1oG0OVNpXa6F3E9TyNRnVP+7zrctVUTTx8LhlvnUb9rhvRVIKsvk
-         Fq07y72pcecpum+FxNMFXeeTVnFwg7biFOfH+YxYwFkoalUF+GG9K5pmEvTG/KlI4MWy
-         hdqGH/bZ9qeyk8Zb1aFI7dSDS8VBO/Tj4Wy2HZ69FtEvwKBd6e3Uo8BaaA7RrwEZL+tO
-         PWYQ==
-X-Gm-Message-State: AOAM533XBqATGlwr9wif5y0haQJzadIl4u0eXrVokG4Q7PLVv+XEvhSw
-        Bbqv0+hd0mRoiE728PADIBs89TZXC8pgJVh1
-X-Google-Smtp-Source: ABdhPJwnT17Mk4wmluvPZgKC1E41m67ou07g0g0aWMKvfrI2ED39XAPEaBtrpagKs/mUemrRNo6kEw==
-X-Received: by 2002:a05:651c:118f:: with SMTP id w15mr11925726ljo.47.1630958465023;
-        Mon, 06 Sep 2021 13:01:05 -0700 (PDT)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
-        by smtp.gmail.com with ESMTPSA id s9sm1176041ljp.34.2021.09.06.13.01.04
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Sep 2021 13:01:04 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id m28so15195825lfj.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Sep 2021 13:01:04 -0700 (PDT)
-X-Received: by 2002:a05:6512:3da5:: with SMTP id k37mr10599018lfv.655.1630958463829;
- Mon, 06 Sep 2021 13:01:03 -0700 (PDT)
-MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 Sep 2021 13:00:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgd2eJrkQCb2Pd0Fzh3mX1AjMHXAjjYxOPdCNCRDx2oYg@mail.gmail.com>
-Message-ID: <CAHk-=wgd2eJrkQCb2Pd0Fzh3mX1AjMHXAjjYxOPdCNCRDx2oYg@mail.gmail.com>
-Subject: Fixing up at least some fallout from '-Werror'
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     kunit-dev@googlegroups.com,
+        Mon, 6 Sep 2021 17:04:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630962207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6zz5nxlrQtpfoMyc8K53x2jtzybHx8hYr7zwDuDWfXs=;
+        b=hviGSOUK7IkFfErGyBqH+JMRjocysbTgSezPfHh9ajZ1FF1g5cw/BIemUnFv/6fBnQxQHH
+        P4rReYwA0eHBkaU1Ga3KNRaHbM8g/bNjN+ImSj9mhuBQqL7ZL2Ya2C5pRMrAlZqFj0yioG
+        s9VYGWtfNnTduZF0mX3HdLcWUbngj5I=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-479-uZc-LRAoNMyRVS2c3iyUSw-1; Mon, 06 Sep 2021 17:03:26 -0400
+X-MC-Unique: uZc-LRAoNMyRVS2c3iyUSw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 23486107ACCD;
+        Mon,  6 Sep 2021 21:03:22 +0000 (UTC)
+Received: from starship (unknown [10.35.206.50])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 91FD05C1BB;
+        Mon,  6 Sep 2021 21:03:15 +0000 (UTC)
+Message-ID: <37b82ee53a3a84563b65be8e63193d4b823ea139.camel@redhat.com>
+Subject: Re: [PATCH v3 6/6] KVM: selftests: test KVM_GUESTDBG_BLOCKIRQ
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Kieran Bingham <kbingham@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Date:   Tue, 07 Sep 2021 00:03:14 +0300
+In-Reply-To: <137f2dcc-75d2-9d71-e259-dd66d43ad377@redhat.com>
+References: <20210811122927.900604-1-mlevitsk@redhat.com>
+         <20210811122927.900604-7-mlevitsk@redhat.com>
+         <137f2dcc-75d2-9d71-e259-dd66d43ad377@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-So I just committed these three fixes:
+On Mon, 2021-09-06 at 13:20 +0200, Paolo Bonzini wrote:
+> On 11/08/21 14:29, Maxim Levitsky wrote:
+> > Modify debug_regs test to create a pending interrupt
+> > and see that it is blocked when single stepping is done
+> > with KVM_GUESTDBG_BLOCKIRQ
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >   .../testing/selftests/kvm/x86_64/debug_regs.c | 24 ++++++++++++++++---
+> >   1 file changed, 21 insertions(+), 3 deletions(-)
+> 
+> I haven't looked very much at this, but the test fails.
 
-   4b93c544e90e ("thunderbolt: test: split up test cases in
-tb_test_credit_alloc_all")
-   ba7b1f861086 ("lib/test_scanf: split up number parsing test routines")
-   1476ff21abb4 ("iwl: fix debug printf format strings")
+Works for me :-(
 
-for the fallout from -Werror that I could easily check (mainly i386
-'allyesconfig' - a situation I don't normally test).
+[mlevitsk@starship ~/Kernel/master/src/tools/testing/selftests/kvm]$./x86_64/debug_regs 
+[mlevitsk@starship ~/Kernel/master/src/tools/testing/selftests/kvm]$echo $?
+0
 
-The printk format string one was trivial and I hopefully didn't screw
-anything up, but I'd ask people to look at and verify the two other
-ones. I tried to be very careful, and organizing the code movement in
-such a way that 'git diff' shows that it's doing the same thing before
-and after, but hey, mistakes happen.
 
-I found those two test-based ones somewhat annoying, because they both
-showed how little the test infrastructure tries to follow kernel
-rules. I bet those warnings have been showing up for a long long time,
-and people went "that's not a relevant configuration" or had some
-other reason to ignore them.
+Maybe you run the test on kernel that doesn't support KVM_GUESTDBG_BLOCKIRQ?
 
-No, the test cases may not be relevant in most situations, but it's
-not a good thing when something that is supposed to verify kernel
-behavior then violates some very fundamental and core kernel rules.
+Best regards,
+	Maxim Levitsky
 
-And maybe it was simply missed. The one thing that was clear when I
-did that thunderbolt thing in particular is how easy it is to create
-variations of those 'struct some-assertion-struct' things on stack as
-part of the KUNIT infrastructure. That's unfortunate. It is possible
-that the solution to the kernel stack usage might have been to make
-those structures static instead, but I didn't check whether the
-description structs really can be.
+> 
+> Paolo
+> 
+> > diff --git a/tools/testing/selftests/kvm/x86_64/debug_regs.c b/tools/testing/selftests/kvm/x86_64/debug_regs.c
+> > index 6097a8283377..5f078db1bcba 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/debug_regs.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/debug_regs.c
+> > @@ -8,12 +8,15 @@
+> >   #include <string.h>
+> >   #include "kvm_util.h"
+> >   #include "processor.h"
+> > +#include "apic.h"
+> >   
+> >   #define VCPU_ID 0
+> >   
+> >   #define DR6_BD		(1 << 13)
+> >   #define DR7_GD		(1 << 13)
+> >   
+> > +#define IRQ_VECTOR 0xAA
+> > +
+> >   /* For testing data access debug BP */
+> >   uint32_t guest_value;
+> >   
+> > @@ -21,6 +24,11 @@ extern unsigned char sw_bp, hw_bp, write_data, ss_start, bd_start;
+> >   
+> >   static void guest_code(void)
+> >   {
+> > +	/* Create a pending interrupt on current vCPU */
+> > +	x2apic_enable();
+> > +	x2apic_write_reg(APIC_ICR, APIC_DEST_SELF | APIC_INT_ASSERT |
+> > +			 APIC_DM_FIXED | IRQ_VECTOR);
+> > +
+> >   	/*
+> >   	 * Software BP tests.
+> >   	 *
+> > @@ -38,12 +46,19 @@ static void guest_code(void)
+> >   		     "mov %%rax,%0;\n\t write_data:"
+> >   		     : "=m" (guest_value) : : "rax");
+> >   
+> > -	/* Single step test, covers 2 basic instructions and 2 emulated */
+> > +	/*
+> > +	 * Single step test, covers 2 basic instructions and 2 emulated
+> > +	 *
+> > +	 * Enable interrupts during the single stepping to see that
+> > +	 * pending interrupt we raised is not handled due to KVM_GUESTDBG_BLOCKIRQ
+> > +	 */
+> >   	asm volatile("ss_start: "
+> > +		     "sti\n\t"
+> >   		     "xor %%eax,%%eax\n\t"
+> >   		     "cpuid\n\t"
+> >   		     "movl $0x1a0,%%ecx\n\t"
+> >   		     "rdmsr\n\t"
+> > +		     "cli\n\t"
+> >   		     : : : "eax", "ebx", "ecx", "edx");
+> >   
+> >   	/* DR6.BD test */
+> > @@ -72,11 +87,13 @@ int main(void)
+> >   	uint64_t cmd;
+> >   	int i;
+> >   	/* Instruction lengths starting at ss_start */
+> > -	int ss_size[4] = {
+> > +	int ss_size[6] = {
+> > +		1,		/* sti*/
+> >   		2,		/* xor */
+> >   		2,		/* cpuid */
+> >   		5,		/* mov */
+> >   		2,		/* rdmsr */
+> > +		1,		/* cli */
+> >   	};
+> >   
+> >   	if (!kvm_check_cap(KVM_CAP_SET_GUEST_DEBUG)) {
+> > @@ -154,7 +171,8 @@ int main(void)
+> >   	for (i = 0; i < (sizeof(ss_size) / sizeof(ss_size[0])); i++) {
+> >   		target_rip += ss_size[i];
+> >   		CLEAR_DEBUG();
+> > -		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP;
+> > +		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP |
+> > +				KVM_GUESTDBG_BLOCKIRQ;
+> >   		debug.arch.debugreg[7] = 0x00000400;
+> >   		APPLY_DEBUG();
+> >   		vcpu_run(vm, VCPU_ID);
+> > 
 
-It would be even nicer if they were 'static const'. Being fully
-initialized instead of generating not only code that uses up stack,
-but also the code to dynamically initialize them on the stack is all
-kinds of nasty. I took one look at the generated code, and ran away
-screaming.
 
-Anyway, I'm adding the Kunit maintainer and lists here too, just to
-see if maybe it could be possible to make those 'struct kunit_assert'
-things and friends be static and const, but at least for the cases
-that caused problems for i386, those three commits should make the
-build pass.
-
-The test_scanf case didn't actually use the Kunit infrastructure, the
-stack use explosion is because gcc doesn't seem to combine stack
-allocations in many situations. I know gcc *sometimes* does that stack
-allocation combining, but not here. I suspect it might be related to
-type aliasing, and only merging stack slots when they have the same
-types, and thus triggered by the different result buffer sizes. Maybe.
-
-             Linus
