@@ -2,175 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5EB40271F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Sep 2021 12:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2DA40273D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Sep 2021 12:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbhIGK2U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Sep 2021 06:28:20 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28918 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232704AbhIGK2T (ORCPT
+        id S242593AbhIGKfJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Sep 2021 06:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233710AbhIGKfJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Sep 2021 06:28:19 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 187A3m2L185757;
-        Tue, 7 Sep 2021 06:26:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=hYpyRO2QO5ja5Cllzf8va+62OtNtrJ0wjhk/TKUrqBU=;
- b=lqljPIH9KkHLCT5Gy9MA1vnTJpL77bCWCQMx6vCmsf6B9Zk2GP3CAD2sfsVFVssDJz9M
- fFXgGV2micqcmDP/3sFKttO6SYNQkIDnWmAsBXdOF9RUKeXMf4v7sCKgcEW3IkoU3uW2
- IcI88dFyGHRbBX0jOnxMvryELM2RfSqs1FX9Hvc/Axe3MemXMVm2vg5xoc/i52Uhuiwa
- SgN/CJLnKwG+KyAfwSCs168JlmIbw7dmUai13Zj1+BYDCb94tlkwic0YdhOENeA0aFYW
- uE9hIQ08mBAJs6rpr9CuyuATEN0EUv7yOSjzHrqS8Zpd8BBQIJlzFVO2yG6w4hvpXoWP 3w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ax46mkead-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Sep 2021 06:26:57 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 187AOmS5107878;
-        Tue, 7 Sep 2021 06:26:57 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ax46mke9v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Sep 2021 06:26:57 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 187AEAd8029636;
-        Tue, 7 Sep 2021 10:26:54 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3av02jcp1u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Sep 2021 10:26:54 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 187AMaxK58458602
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Sep 2021 10:22:36 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 03CBB11C04C;
-        Tue,  7 Sep 2021 10:26:52 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A7A711C052;
-        Tue,  7 Sep 2021 10:26:51 +0000 (GMT)
-Received: from sig-9-145-45-184.uk.ibm.com (unknown [9.145.45.184])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Sep 2021 10:26:51 +0000 (GMT)
-Message-ID: <bdfabd343bdec7e27ff92bc0145d813011227f8f.camel@linux.ibm.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix build of task_pt_regs
- test for arm64
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, dxu@dxuuu.xyz,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 07 Sep 2021 12:26:51 +0200
-In-Reply-To: <20210906163635.302307-1-jean-philippe@linaro.org>
-References: <20210906163635.302307-1-jean-philippe@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: NdwkWpoL10Iv5cFaVpCDIFWyiMRxnxyd
-X-Proofpoint-ORIG-GUID: Xelaojuf83pH6u9f-0x7i0Bnu_kwGOQ0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 7 Sep 2021 06:35:09 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67C4C061575
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Sep 2021 03:34:01 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id l10so18602053lfg.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Sep 2021 03:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=I2FM/c/lyq+wiSWHr+eS3OSV6CCy3Zk/GIi/tQYaLjs=;
+        b=O1RFMMbMhn5YYxRMFo/pU2yOk04ScgxFz8l4AdlEXpMeb6o0Vk2Crlko9JxzLSHOh8
+         NprCfsymTaeJp1u6klmUl+/Ti6OqYbhYLCoSAzUmHZV6agDCO2yQ6oACWyHkM2zXd5sS
+         ixgb/JpJfGkmI2zj33ROGhP1Z/BZiO6qBoXkB9bPaZIfJQF/lODEUPbURrE1ZHACim3Q
+         DsCTMWfG6uiBoDrHsCN9+AMx3dmuVFS8Vp5WSEBo8CeYfAVqVdNgAtzQMTMimH4n7q4D
+         efMflpQF7r3wXkqWVDLEkQdBs9RyyiHdYkfjLlmoczRGdOPdqTjQKQUZRgoy3AAcJ9h6
+         Rcyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=I2FM/c/lyq+wiSWHr+eS3OSV6CCy3Zk/GIi/tQYaLjs=;
+        b=YfghlaXUd4jPIHTl7emoJyIGu+4T3/Myi/DQvOvD+17s2Znd7kaNbJgFRjeX0NfI9r
+         EgX0N52f7tKQQYY5VaDSqvBXQCOP4bLLEAXOib+83GYJPn1LT5r+xSiQrRPwtXbFqQ3s
+         C9xTGQ1/g4uMyro/RKCRXUgbpLye9ietLYA6nBto9dPxKyLcQHB7or7qr3ev7VhqPaKQ
+         wydiS4OWEwk6penI+WEWB9c1/yD8W4IdcJFsD/9guG24Ew6T7vuvZr/RPYqZAJzr+yQO
+         tqGU2FfwGwdlKKCGBVtd1/6wahrJxN/iBAdmr+Lgdv+PCIeAR4dQGzica3NF4eTK34Tc
+         PNaQ==
+X-Gm-Message-State: AOAM533E7GGj5CyXX2xoR+CtrvmB+bAeNRB3inup8tvgoj3FdMA1+6Ht
+        0wjqbt4RDw6SdzqODZYU0vihsaxR+NqWB8jm+l8=
+X-Google-Smtp-Source: ABdhPJx/GZ4eWjJh7CK4GmDTCAQYdn+1S1auvINGPbwOq33U/1Lu3oXlM+/1kHNe0QWgM2RhmdqBPlQ7dQdmBkAxu44=
+X-Received: by 2002:a05:6512:3190:: with SMTP id i16mr11217714lfe.64.1631010839824;
+ Tue, 07 Sep 2021 03:33:59 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-09-07_03:2021-09-07,2021-09-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 impostorscore=0 mlxscore=0 bulkscore=0 clxscore=1011
- malwarescore=0 mlxlogscore=999 suspectscore=0 phishscore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2108310000 definitions=main-2109070067
+Reply-To: godwinppter@gmail.com
+Sender: mrszoungranamonica@gmail.com
+Received: by 2002:a05:6512:4013:0:0:0:0 with HTTP; Tue, 7 Sep 2021 03:33:59
+ -0700 (PDT)
+From:   Godwin Pete <godwinnpeter@gmail.com>
+Date:   Tue, 7 Sep 2021 12:33:59 +0200
+X-Google-Sender-Auth: 6iYJvM5QAYMDZ5gV-lTxzxgN3yU
+Message-ID: <CAAB_Engc2Uz92cqKhGuCPpRbPkEs=ErddEjskf_nFsZKZwEVtw@mail.gmail.com>
+Subject: =?UTF-8?Q?Responder_com_Urg=C3=AAncia?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2021-09-06 at 17:36 +0100, Jean-Philippe Brucker wrote:
-> struct pt_regs is not exported to userspace on all archs. arm64 and
-> s390
-> export "user_pt_regs" instead, which causes build failure at the
-> moment:
-> 
->   progs/test_task_pt_regs.c:8:16: error: variable has incomplete type
-> 'struct pt_regs'
->   struct pt_regs current_regs = {};
-> 
-> Instead of using pt_regs from ptrace.h, use the larger kernel struct
-> from vmlinux.h directly. Since the test runner task_pt_regs.c does not
-> have access to the kernel struct definition, copy it into a char array.
-> 
-> Fixes: 576d47bb1a92 ("bpf: selftests: Add bpf_task_pt_regs() selftest")
-> Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> ---
-> v2: Work on struct pt_regs from vmlinux.h
-> v1:
-> https://lore.kernel.org/bpf/20210902090925.2010528-1-jean-philippe@linaro.org/
-> ---
->  .../selftests/bpf/prog_tests/task_pt_regs.c   |  1 -
->  .../selftests/bpf/progs/test_task_pt_regs.c   | 19 +++++++++++++------
->  2 files changed, 13 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
-> b/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
-> index 53f0e0fa1a53..37c20b5ffa70 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
-> @@ -1,7 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #define _GNU_SOURCE
->  #include <test_progs.h>
-> -#include <linux/ptrace.h>
->  #include "test_task_pt_regs.skel.h"
->  
->  void test_task_pt_regs(void)
-> diff --git a/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
-> b/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
-> index 6c059f1cfa1b..e6cb09259408 100644
-> --- a/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
-> +++ b/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
-> @@ -1,12 +1,17 @@
->  // SPDX-License-Identifier: GPL-2.0
->  
-> -#include <linux/ptrace.h>
-> -#include <linux/bpf.h>
-> +#include "vmlinux.h"
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
->  
-> -struct pt_regs current_regs = {};
-> -struct pt_regs ctx_regs = {};
-> +#define PT_REGS_SIZE sizeof(struct pt_regs)
-> +
-> +/*
-> + * The kernel struct pt_regs isn't exported in its entirety to
-> userspace.
-> + * Pass it as an array to task_pt_regs.c
-> + */
-> +char current_regs[PT_REGS_SIZE] = {};
-> +char ctx_regs[PT_REGS_SIZE] = {};
->  int uprobe_res = 0;
->  
->  SEC("uprobe/trigger_func")
-> @@ -17,8 +22,10 @@ int handle_uprobe(struct pt_regs *ctx)
->  
->         current = bpf_get_current_task_btf();
->         regs = (struct pt_regs *) bpf_task_pt_regs(current);
-> -       __builtin_memcpy(&current_regs, regs, sizeof(*regs));
-> -       __builtin_memcpy(&ctx_regs, ctx, sizeof(*ctx));
-> +       if (bpf_probe_read_kernel(current_regs, PT_REGS_SIZE, regs))
-> +               return 0;
-> +       if (bpf_probe_read_kernel(ctx_regs, PT_REGS_SIZE, ctx))
-> +               return 0;
->  
->         /* Prove that uprobe was run */
->         uprobe_res = 1;
+Meu bom amigo,
 
-I've tested this patch on s390 and it does indeed fix the build issue.
-Thanks!
+S=C3=B3 quero saber se voc=C3=AA pode me ajudar a transferir o valor de (US=
+ $ 3
+milh=C3=B5es). Ap=C3=B3s a transfer=C3=AAncia, temos que compartilhar, 50% =
+para mim e
+50% para voc=C3=AA. Informe-me se voc=C3=AA puder me ajudar para que eu pos=
+sa
+fornecer mais informa=C3=A7=C3=B5es sobre a transfer=C3=AAncia. Espero que =
+voc=C3=AA possa
+trabalhar comigo honestamente?
 
-Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-
+obrigado
