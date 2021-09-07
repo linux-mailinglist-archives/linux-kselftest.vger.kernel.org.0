@@ -2,162 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF4E40250B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Sep 2021 10:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F253840254F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Sep 2021 10:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242215AbhIGIYy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Sep 2021 04:24:54 -0400
-Received: from a8-81.smtp-out.amazonses.com ([54.240.8.81]:37341 "EHLO
-        a8-81.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241498AbhIGIYx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Sep 2021 04:24:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1631003026;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=mqDJB5QSzE5uy34oPHFeD7QhM9qsekfPmL2EBVnHIRc=;
-        b=o+GnPLrw3nubL2ebUe33wiX0lUyfy7oXjcyN6N2foX+JWGEYsDL58J7KNZOLpB6P
-        FCFzseKGERHVsczXZu/go1EShEF1zS80ubez3Gl1ZA5pV8CvaInmTNTtUF0nPDjpIb6
-        peVaO0I6/FyLA2beqD8VrZuVD8GmtrTSDJ4amDlE=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1631003026;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=mqDJB5QSzE5uy34oPHFeD7QhM9qsekfPmL2EBVnHIRc=;
-        b=XiwiWSj0IR9/JfkQ9scA4SfkkK9mh0jIuEd5W85X4dWeOdNAE+kEc1Wk7T3K0DEn
-        xNOjYItqnNbWa5XYP0kcDU3/apNhP1Chucbby0BwOKJI9iQtyInyzmr/wMWiQwNDUH6
-        OA1Jf6z+ULyk8t7/jUT/RHig3kPwY193a/PSamOk=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210906
+        id S241555AbhIGIoB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Sep 2021 04:44:01 -0400
+Received: from mga05.intel.com ([192.55.52.43]:27286 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236858AbhIGIoB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Sep 2021 04:44:01 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10099"; a="305697790"
+X-IronPort-AV: E=Sophos;i="5.85,274,1624345200"; 
+   d="scan'208";a="305697790"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2021 01:42:55 -0700
+X-IronPort-AV: E=Sophos;i="5.85,274,1624345200"; 
+   d="scan'208";a="448910336"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2021 01:42:51 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 07 Sep 2021 11:42:49 +0300
+Date:   Tue, 7 Sep 2021 11:42:49 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Luca Coelho <luciano.coelho@intel.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kunit-dev@googlegroups.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: Fixing up at least some fallout from '-Werror'
+Message-ID: <YTcmCT9rz0Uvapot@lahna>
+References: <CAHk-=wgd2eJrkQCb2Pd0Fzh3mX1AjMHXAjjYxOPdCNCRDx2oYg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017bbf5b249f-56121498-870e-41a1-a255-33492e7d63bb-000000@email.amazonses.com>
-Date:   Tue, 7 Sep 2021 08:23:46 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.09.07-54.240.8.81
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgd2eJrkQCb2Pd0Fzh3mX1AjMHXAjjYxOPdCNCRDx2oYg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.14.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 7800ca95d0ed11b492962dc3abc2181c9d5f7f82
-* git describe: next-20210906
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210906
+On Mon, Sep 06, 2021 at 01:00:48PM -0700, Linus Torvalds wrote:
+> So I just committed these three fixes:
+> 
+>    4b93c544e90e ("thunderbolt: test: split up test cases in
+> tb_test_credit_alloc_all")
+>    ba7b1f861086 ("lib/test_scanf: split up number parsing test routines")
+>    1476ff21abb4 ("iwl: fix debug printf format strings")
+> 
+> for the fallout from -Werror that I could easily check (mainly i386
+> 'allyesconfig' - a situation I don't normally test).
+> 
+> The printk format string one was trivial and I hopefully didn't screw
+> anything up, but I'd ask people to look at and verify the two other
+> ones. I tried to be very careful, and organizing the code movement in
+> such a way that 'git diff' shows that it's doing the same thing before
+> and after, but hey, mistakes happen.
+> 
+> I found those two test-based ones somewhat annoying, because they both
+> showed how little the test infrastructure tries to follow kernel
+> rules. I bet those warnings have been showing up for a long long time,
+> and people went "that's not a relevant configuration" or had some
+> other reason to ignore them.
+> 
+> No, the test cases may not be relevant in most situations, but it's
+> not a good thing when something that is supposed to verify kernel
+> behavior then violates some very fundamental and core kernel rules.
+> 
+> And maybe it was simply missed. The one thing that was clear when I
+> did that thunderbolt thing in particular is how easy it is to create
+> variations of those 'struct some-assertion-struct' things on stack as
+> part of the KUNIT infrastructure. That's unfortunate. It is possible
+> that the solution to the kernel stack usage might have been to make
+> those structures static instead, but I didn't check whether the
+> description structs really can be.
 
-## Regressions (compared to next-20210903)
-* hi6220-hikey, kselftest-rtc
-  - rtc.rtctest
-
-* hi6220-hikey, kselftest-timers
-  - timers.nsleep-lat
-  - timers.set-timer-lat
-
-* qemu-arm64-gic-version2, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
-
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20210903)
-* qemu-arm64-gic-version2, kselftest-timers
-  - timers.rtcpie
-
-* qemu_arm64, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* qemu_arm64, kselftest-timers
-  - timers.rtcpie
-
-
-## Test result summary
-total: 3570, pass: 1917, fail: 288, skip: 1365, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Thanks for doing this! I certainly have received few mails from the
+kbuildbot about this but haven't figured how to fix them properly.
+Splitting the test to several small functions sounds like a good way to
+do this. I'll keep this in mind in the future when adding more test
+cases.
