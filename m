@@ -2,139 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB92402F19
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Sep 2021 21:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE52940304F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Sep 2021 23:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345746AbhIGTsj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Sep 2021 15:48:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35622 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232112AbhIGTsi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Sep 2021 15:48:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 13FDB61106;
-        Tue,  7 Sep 2021 19:47:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631044051;
-        bh=1Bz7auCWrxm+wLmDaCt3yZIJBxmHDfjlY1u05m7Vaao=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qDHeBAwlLs885YAnETqy2p4CZIr2qQqC6vWR5P0lvoRrkHASe9jcrUDXgVLjCE657
-         JNWNrXr68I0i0nIZQc+uC+AreEcZnHnXtdXgaLyc9coysCPgyAoE8gUALmRbnusK/k
-         TU8AeqRvyZGnFvmq5jEBB663tsgGFe6m306D8r9m2FUmufaL2Kaet1xSVw7biO5XnI
-         ACGxyNdasrIf5e0EwQdv7jnfowRniFZpQlqYfXaUnKIKfJJTPzb/iT25unDa7N6J5V
-         MeHjMu/sK2BX+lOyZ33z3P/6yNyLLJL9xfTJNRVIefEfkloWluQ0s83KV2+gkrs3q4
-         2evhlWCKatWxA==
-Date:   Tue, 7 Sep 2021 12:47:30 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "abyagowi@fb.com" <abyagowi@fb.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Andrew Lunn" <andrew@lunn.ch>, Michal Kubecek <mkubecek@suse.cz>,
-        Saeed Mahameed <saeed@kernel.org>,
-        Michael Chan <michael.chan@broadcom.com>
-Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
- to get SyncE status
-Message-ID: <20210907124730.33852895@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <PH0PR11MB49512C265E090FC8741D8510EAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
-References: <20210903151436.529478-1-maciej.machnikowski@intel.com>
-        <20210903151436.529478-2-maciej.machnikowski@intel.com>
-        <20210903151425.0bea0ce7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <PH0PR11MB4951623918C9BA8769C10E50EAD29@PH0PR11MB4951.namprd11.prod.outlook.com>
-        <20210906113925.1ce63ac7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <PH0PR11MB49511F2017F48BBAAB2A065CEAD29@PH0PR11MB4951.namprd11.prod.outlook.com>
-        <20210906180124.33ff49ef@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <PH0PR11MB495152B03F32A5A17EDB2F6CEAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
-        <20210907075509.0b3cb353@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <PH0PR11MB49512C265E090FC8741D8510EAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
+        id S1347265AbhIGVbE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Sep 2021 17:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348635AbhIGVaF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Sep 2021 17:30:05 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7DEC061575
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Sep 2021 14:28:54 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id n24so369970ion.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Sep 2021 14:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=uQ1QKlOMUxMJjspXpCNHZjX329YTQj9Uc23PyYscxxE=;
+        b=FbO+pDJXDBkBjC1rlKAdQfQgfh08Xa3kp6kg4kr7w0Y5RfqJlJsZJaWhpbBQz8nQqc
+         keSp3KjF48yyjtGYzivaNDwdC5pmNPDMlXgcahzEhY/BtqEdJRNRPSFOYLUsZ498FeFY
+         NucFj/hNQX432SYJKtlG1bl88o+Q4HvaC23zc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uQ1QKlOMUxMJjspXpCNHZjX329YTQj9Uc23PyYscxxE=;
+        b=BjKD/I3iQvvaBhVklAia5GQiuUu44Affon/+acY8N71Sr26Jch6c1Po578+y3AcpnO
+         0xUeVCgA782F7JI3bP/ozaDI2p+PlhxYPxfSdzPpqkam4AOR9e6a154ncOaIS1oeu5UN
+         vEdaU1vqPq4vqTHMuA/afi2JE8SIyRI9tJzjdujgp4kHqG4ztBoPahfcXd44Ugu1vhD4
+         6q8hZMNPKo8Hrs5msXPPU9M4Sf+SrLyISCpvroVJrPfGKvFolhPF4ZyvXyHbax6hoZh2
+         iXL7FFIMPSELVUqSTwrLOJDXpS7CVwKj2uqPd5g/Z9qGjI3KcvYSfDLEbAG8uAXqnDxp
+         LDcw==
+X-Gm-Message-State: AOAM530ODxxoj3NnjwNN4xm5csah1m3gLmK+7/zJ6Ie1de0Q96VVR/zt
+        ou+Pczim2WbOO4WXVMAm3qx4eA==
+X-Google-Smtp-Source: ABdhPJzq6xHc9ICyXPhNWoqmW3TFqPqfpQwhKPYhzkwAjJos1JLP7WLlq4mXoHgNUL0MH3n/iMByWw==
+X-Received: by 2002:a05:6638:4104:: with SMTP id ay4mr397781jab.10.1631050134251;
+        Tue, 07 Sep 2021 14:28:54 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id m13sm140087ilh.43.2021.09.07.14.28.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Sep 2021 14:28:53 -0700 (PDT)
+Subject: Re: [PATCH 5/5][RFC] selftests/pfru: add test for Platform Firmware
+ Runtime Update and Telemetry
+To:     Chen Yu <yu.c.chen@intel.com>, linux-acpi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Dou Shengnan <shengnanx.dou@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1631025237.git.yu.c.chen@intel.com>
+ <1cef405de3484eef108251562fbf461bad4294c7.1631025237.git.yu.c.chen@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <82889db2-1927-582d-c27f-b1f0927ca903@linuxfoundation.org>
+Date:   Tue, 7 Sep 2021 15:28:52 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <1cef405de3484eef108251562fbf461bad4294c7.1631025237.git.yu.c.chen@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 7 Sep 2021 15:47:05 +0000 Machnikowski, Maciej wrote:
-> > > It can be either in FW or in Linux - depending on the deployment.
-> > > We try to define the API that would enable Linux to manage that.  
-> > 
-> > We should implement the API for Linux to manage things from the get go.  
+On 9/7/21 9:40 AM, Chen Yu wrote:
+> Introduce a simple test for Platform Firmware Runtime Update and Telemetry
+> drivers. It is based on ioctl to either update firmware driver or code injection,
+> and read corresponding PFRU Telemetry log into user space.
 > 
-> Yep! Yet let's go one step at a time. I believe once we have the basics (EEC 
-> monitoring and recovered clock configuration) we'll be able to implement
-> a basic functionality - and add bells and whistles later on, as there are more
-> capabilities that we could support in SW.
 
-The set API may shape how the get API looks. We need a minimal viable
-API where the whole control part of it is not "firmware or proprietary
-tools take care of that".
+A few things to consider and add handling for them in the
+test.
 
-Do you have public docs on how the whole solution works?
+What happens when non-root user runs this test?
+What happens when the pfru device doesn't exist?
 
-> > > The DPLL will operate on pins, so it will have a pin connected from the
-> > > MAC/PHY that will have the recovered clock, but the recovered clock
-> > > can be enabled from any port/lane. That information is kept in the
-> > > MAC/PHY and the DPLL side will not be aware who it belongs to.  
-> > 
-> > So the clock outputs are muxed to a single pin at the Ethernet IP
-> > level, in your design. I wonder if this is the common implementation
-> > and therefore if it's safe to bake that into the API. Input from other
-> > vendors would be great...  
-> 
-> I believe this is the state-of-art: here's the Broadcom public one
-> https://docs.broadcom.com/doc/1211168567832, I believe Marvel
-> has similar solution. But would also be happy to hear others.
 
-Interesting. That reveals the need for also marking the backup
-(/secondary) clock.
+[snip]
 
-Have you seen any docs on how systems with discreet PHY ASICs mux 
-the clocks?
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	int fd_update, fd_log, fd_capsule;
+> +	struct telem_data_info data_info;
+> +	struct telem_info info;
+> +	struct update_cap_info cap;
+> +	void *addr_map_capsule;
+> +	struct stat st;
+> +	char *log_buf;
+> +	int ret = 0;
+> +
+> +	parse_options(argc, argv);
+> +
+> +	fd_log = open("/dev/pfru/telemetry", O_RDWR);
+> +	if (fd_log < 0) {
+> +		perror("Cannot open telemetry device...");
+> +		return 1;
+> +	}
 
-> > Also do I understand correctly that the output of the Ethernet IP
-> > is just the raw Rx clock once receiver is locked and the DPLL which
-> > enum if_synce_state refers to is in the time IP, that DPLL could be
-> > driven by GNSS etc?  
-> 
-> Ethernet IP/PHY usually outputs a divided clock signal (since it's 
-> easier to route) derived from the RX clock.
-> The DPLL connectivity is vendor-specific, as you can use it to connect 
-> some external signals, but you can as well just care about relying 
-> the SyncE clock and only allow recovering it and passing along 
-> the QL info when your EEC is locked. That's why I backed up from
-> a full DPLL implementation in favor of a more generic EEC clock.
+Is this considered an error or unsupported?
 
-What is an ECC clock? To me the PLL state in the Ethernet port is the
-state of the recovered clock. enum if_eec_state has values like
-holdover which seem to be more applicable to the "system wide" PLL.
+> +	fd_update = open("/dev/pfru/update", O_RDWR);
+> +	if (fd_update < 0) {
+> +		perror("Cannot open code injection device...");
+> +		return 1;
+> +	}
+> +
 
-Let me ask this - if one port is training the link and the other one has
-the lock and is the source - what state will be reported for each port?
+Same here. If test is run on platform with pfru test should skip
+instead of reporting failure/error.
 
-> The Time IP is again relative and vendor-specific. If SyncE is deployed 
-> alongside PTP it will most likely be tightly coupled, but if you only
-> care about having a frequency source - it's not mandatory and it can be
-> as well in the PHY IP.
-
-I would not think having just the freq is very useful.
-
-> Also I think I will strip the reported states to the bare minimum defined
-> in the ITU-T G.781 instead of reusing the states that were already defined 
-> for a specific DPLL.
-> 
-> > > This is the right thinking. The DPLL can also have different external sources,
-> > > like the GNSS, and can also drive different output clocks. But for the most
-> > > basic SyncE implementation, which only runs on a recovered clock, we won't  
-> > > need the DPLL subsystem.  
-> > 
-> > The GNSS pulse would come in over an external pin, tho, right? Your
-> > earlier version of the patchset had GNSS as an enum value, how would
-> > the driver / FW know that a given pin means GNSS?  
-> 
-> The GNSS 1PPS will more likely go directly to the "full" DPLL. 
-> The pin topology can be derived from FW or any vendor-specific way of mapping
-> pins to their sources. And, in "worst" case can just be hardcoded for a specific
-> device.
+thanks,
+-- Shuah
