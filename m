@@ -2,29 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3554041A7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 01:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215254041FB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 01:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240269AbhIHXPx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Sep 2021 19:15:53 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:33320 "EHLO vps0.lunn.ch"
+        id S236059AbhIHX7M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Sep 2021 19:59:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233315AbhIHXPx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Sep 2021 19:15:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=bapeTSXWnVrReW5xragxY89xR94ididCYWaqgoqyVsI=; b=KPNr47v/1s3mRi92jt5Y8SCPJM
-        q8Y2fQggZY8Hz6Qtlqt4yPloNEXQXzVQbPw5f+n30ONGiqbeTOIkBkoFXl16JZss6HWK+fuHB5WSB
-        y0Ij4PgxST1QDpTJyv9ElkH8eWVGeJKPtNwzAqjlpfD22Ye//MW9ash7bj8ID2GEuBwI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mO6m4-005oeL-2W; Thu, 09 Sep 2021 01:14:36 +0200
-Date:   Thu, 9 Sep 2021 01:14:36 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jakub Kicinski <kuba@kernel.org>
+        id S234374AbhIHX7M (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Sep 2021 19:59:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 637B661074;
+        Wed,  8 Sep 2021 23:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631145483;
+        bh=naqFHkyuBJj75mYvsBiHe8qSClYBBKiI1/BuxmIm9Rc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JZjlze49Z84VDPYYfXqYdWFDEUisnWjMKAHNR4JLCOM9bKq90K7M4MqpqsRhnH+Nd
+         WAIF4JFhDWbdo72pXx89d/i3xRFdssgDzTjrTQCQw7eh6tTOSDz8CLtn9XdO1BKqkg
+         s7F1OorDuTZZhsgS4doHJ2tab8EElZGmRh12bRXUqywjXAL4hhLCDn8gcjXoOw1S+C
+         3pGCaNmxtOoylC5oNIKVeERm20Bs+SZzoBAogKqI6U0zzeimh0+jbedBxy6FMcoZTF
+         5VIPFOLq3DMzEmZ6ZMdS9JtdUJLM6hrYxT7J875+3aRqntafz5qdmqqp8UPCSHW1II
+         5mile4vYJlcJA==
+Date:   Wed, 8 Sep 2021 16:58:02 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
 Cc:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
@@ -38,46 +39,63 @@ Cc:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
         Michael Chan <michael.chan@broadcom.com>
 Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
  to get SyncE status
-Message-ID: <YTlD3Gok7w/MF+g2@lunn.ch>
+Message-ID: <20210908165802.1d5c952d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <YTlD3Gok7w/MF+g2@lunn.ch>
 References: <PH0PR11MB49511F2017F48BBAAB2A065CEAD29@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210906180124.33ff49ef@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <PH0PR11MB495152B03F32A5A17EDB2F6CEAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210907075509.0b3cb353@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <PH0PR11MB49512C265E090FC8741D8510EAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210907124730.33852895@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <PH0PR11MB495169997552152891A69B57EAD49@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210908092115.191fdc28@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <PH0PR11MB4951AA3C65DD8E7612F5F396EAD49@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210908151852.7ad8a0f1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20210906180124.33ff49ef@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <PH0PR11MB495152B03F32A5A17EDB2F6CEAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
+        <20210907075509.0b3cb353@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <PH0PR11MB49512C265E090FC8741D8510EAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
+        <20210907124730.33852895@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <PH0PR11MB495169997552152891A69B57EAD49@PH0PR11MB4951.namprd11.prod.outlook.com>
+        <20210908092115.191fdc28@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <PH0PR11MB4951AA3C65DD8E7612F5F396EAD49@PH0PR11MB4951.namprd11.prod.outlook.com>
+        <20210908151852.7ad8a0f1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <YTlD3Gok7w/MF+g2@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210908151852.7ad8a0f1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> As you said, pin -> ref mapping is board specific, so the API should
-> not assume knowledge of routing between Port and ECC.
+On Thu, 9 Sep 2021 01:14:36 +0200 Andrew Lunn wrote:
+> > As you said, pin -> ref mapping is board specific, so the API should
+> > not assume knowledge of routing between Port and ECC.  
+> 
+> That information will probably end up in device tree. And X different
+> implementations of ACPI, unless somebody puts there foot down and
+> stops the snow flakes.
+> 
+> > Imagine a system with two cascaded switch ASICs and a bunch of PHYs.
+> > How do you express that by pure extensions to the proposed API?  
+> 
+> Device tree is good at that. ACPI might eventually catch up.
 
-That information will probably end up in device tree. And X different
-implementations of ACPI, unless somebody puts there foot down and
-stops the snow flakes.
+I could well be wrong but some of those connectors could well be just
+SMAs on the back plate, no? User could cable those up to their heart
+content.
 
-> Imagine a system with two cascaded switch ASICs and a bunch of PHYs.
-> How do you express that by pure extensions to the proposed API?
+https://engineering.fb.com/2021/08/11/open-source/time-appliance/
 
-Device tree is good at that. ACPI might eventually catch up.
+> How complex a setup do we actually expect? Can there be multiple
+> disjoint SyncE trees within an Ethernet switch cluster? Or would it be
+> reasonable to say all you need to configure is the clock source, and
+> all other ports of the switches are slaves if SyncE is enabled for the
+> port? I've never see any SOHO switch hardware which allows you to have
+> disjoint PTP trees, so it does not sound too unreasonable to only
+> allow a single SyncE tree per switch cluster.
 
-How complex a setup do we actually expect? Can there be multiple
-disjoint SyncE trees within an Ethernet switch cluster? Or would it be
-reasonable to say all you need to configure is the clock source, and
-all other ports of the switches are slaves if SyncE is enabled for the
-port? I've never see any SOHO switch hardware which allows you to have
-disjoint PTP trees, so it does not sound too unreasonable to only
-allow a single SyncE tree per switch cluster.
+Not sure. I get the (perhaps unfounded) feeling that just forwarding
+the clock from one port to the rest is simpler. Maciej cares primarily
+about exposing the clock to other non-Ethernet things, the device would
+be an endpoint here, using the clock for LTE or whatnot.
 
-Also, if you are cascading switches, you generally don't put PHYs in
-the middle, you just connect the SERDES lanes together.
+> Also, if you are cascading switches, you generally don't put PHYs in
+> the middle, you just connect the SERDES lanes together.
 
-	 Andrew
+My concern was a case where PHY connected to one switch exposes the
+refclock on an aux pin which is then muxed to more than one switch ASIC.
+IOW the "source port" is not actually under the same switch. 
+
+Again, IDK if that's realistic.
