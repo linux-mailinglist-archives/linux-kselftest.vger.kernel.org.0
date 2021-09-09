@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3DE405153
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 14:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E60405210
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 14:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245352AbhIIMfl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 08:35:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33230 "EHLO mail.kernel.org"
+        id S240828AbhIIMkw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 08:40:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38910 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353003AbhIIM1J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:27:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1F37F61B21;
-        Thu,  9 Sep 2021 11:51:57 +0000 (UTC)
+        id S1353008AbhIIMdh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:33:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9456D6136A;
+        Thu,  9 Sep 2021 11:53:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188317;
-        bh=reU0cyggiRXlCOoC8r79/ZpqbrPAprKiA8MNgItW210=;
+        s=k20201202; t=1631188406;
+        bh=35mbzRvU6JfJ7yvh2CXrenvC6BWUwLp9YJcEV3nMwhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GTOcTzT4x9NPu4Csku5lkQZ+7IrhPGniWTdPDB17vISSn/cMT3LMuLk4UwEcLAl4V
-         CdEybsTYpVRDNiz5Dm19DluXexLm1o9Y5ISHQHNTeYX8Hx2k7y3G6kv23jmigIM7FP
-         Gd48K/OR7/hqZNYVv3xITv1XP1cynft4iEg4v2Xd7q4lrVykct36pA47fNJd+C+8LB
-         dwhkejuoRtVeKqjHnnKjeKpm3YEtaiA3l00q/jqkrz/lezoxceCoxiaosRfwOHp9oa
-         DkmNv06DlT7uay3EEzKgXJhE4Ai2PjO1zkEmupD9GHGjw+CVs8K0SZeXGTYXxJRoog
-         79vh8veGFj4hw==
+        b=INgbKlQsnZQ6uX41DDDeMN9xgLfIgPrjZVvubig5oKhI0EZJMz6bbAizA9LaDR2+i
+         UVcucFE+HcbxG2t2X/lilzOY3XC2rNm/h5knVsHME0dT2/a6n/UdF0OlR8GKC7zbgo
+         WX6NBpQiNODhIY2fETdNbNAUo3B6+yjJ+TvrB7nmtJ7hdTykqqF6YKm4ufWoA56QpS
+         9Rt6NSCi1i16Q5OwpjyABBZQyfQiHGHAuvqOs+HIQT2mlO72ohUQk7RaKiA0YkOMMr
+         cp3NTYg5xb0pEg445Gh/xU2fVYkMImt9vthz/h/s7oDae5svWMjoZ79R366hvyjEd4
+         /gXylCIAfE5Jg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 031/176] selftests: firmware: Fix ignored return val of asprintf() warn
-Date:   Thu,  9 Sep 2021 07:48:53 -0400
-Message-Id: <20210909115118.146181-31-sashal@kernel.org>
+Cc:     Jussi Maki <joamaki@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 099/176] selftests/bpf: Fix xdp_tx.c prog section name
+Date:   Thu,  9 Sep 2021 07:50:01 -0400
+Message-Id: <20210909115118.146181-99-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
 References: <20210909115118.146181-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -44,41 +44,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Jussi Maki <joamaki@gmail.com>
 
-[ Upstream commit fe968ca2cac91888310b143a483123c84906e3fc ]
+[ Upstream commit 95413846cca37f20000dd095cf6d91f8777129d7 ]
 
-Fix the following ingonred return val of asprintf() warn during
-build:
+The program type cannot be deduced from 'tx' which causes an invalid
+argument error when trying to load xdp_tx.o using the skeleton.
+Rename the section name to "xdp" so that libbpf can deduce the type.
 
-cc -Wall -O2    fw_namespace.c  -o ../tools/testing/selftests/firmware/fw_namespace
-fw_namespace.c: In function ‘main’:
-fw_namespace.c:132:2: warning: ignoring return value of ‘asprintf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-  132 |  asprintf(&fw_path, "/lib/firmware/%s", fw_name);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20210708031827.51293-1-skhan@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Jussi Maki <joamaki@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20210731055738.16820-7-joamaki@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/firmware/fw_namespace.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/xdp_tx.c   | 2 +-
+ tools/testing/selftests/bpf/test_xdp_veth.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/firmware/fw_namespace.c b/tools/testing/selftests/firmware/fw_namespace.c
-index 5ebc1aec7923..817b2f1e8ee6 100644
---- a/tools/testing/selftests/firmware/fw_namespace.c
-+++ b/tools/testing/selftests/firmware/fw_namespace.c
-@@ -129,7 +129,8 @@ int main(int argc, char **argv)
- 		die("mounting tmpfs to /lib/firmware failed\n");
+diff --git a/tools/testing/selftests/bpf/progs/xdp_tx.c b/tools/testing/selftests/bpf/progs/xdp_tx.c
+index 94e6c2b281cb..5f725c720e00 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_tx.c
++++ b/tools/testing/selftests/bpf/progs/xdp_tx.c
+@@ -3,7 +3,7 @@
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
  
- 	sys_path = argv[1];
--	asprintf(&fw_path, "/lib/firmware/%s", fw_name);
-+	if (asprintf(&fw_path, "/lib/firmware/%s", fw_name) < 0)
-+		die("error: failed to build full fw_path\n");
+-SEC("tx")
++SEC("xdp")
+ int xdp_tx(struct xdp_md *xdp)
+ {
+ 	return XDP_TX;
+diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
+index ba8ffcdaac30..995278e684b6 100755
+--- a/tools/testing/selftests/bpf/test_xdp_veth.sh
++++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
+@@ -108,7 +108,7 @@ ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
+ ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
  
- 	setup_fw(fw_path);
+ ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp_dummy
+-ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec tx
++ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
+ ip -n ns3 link set dev veth33 xdp obj xdp_dummy.o sec xdp_dummy
  
+ trap cleanup EXIT
 -- 
 2.30.2
 
