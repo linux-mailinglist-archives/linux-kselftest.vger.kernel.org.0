@@ -2,39 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D6340528D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 14:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C56740538C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 14:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353372AbhIIMoI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 08:44:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45810 "EHLO mail.kernel.org"
+        id S1344725AbhIIMxM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 08:53:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55854 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354207AbhIIMi7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:38:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 40BC461BB3;
-        Thu,  9 Sep 2021 11:54:30 +0000 (UTC)
+        id S1355100AbhIIMlC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:41:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 020C461BF9;
+        Thu,  9 Sep 2021 11:54:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188471;
-        bh=Ovgj/vvutDI05EUO8Ndt1ma2M8LJQI9jF2jiL+0HvmY=;
+        s=k20201202; t=1631188496;
+        bh=RgyEE/gxv2+PbwT+Twl7+jMwQK+Cn83YUGhdVMiZbVs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BnsNRZAMHlo1uucQ0UV9B9fCRkdhNpFhCA60RJaixYGxmclqvJODiw5arITVY5uL7
-         Tp+Q2Lj81lgkAqKwNHQ6fpA1VVBed4K8Vvqjzqze1oXAbrZLUuIAZ3NFEClj66g4pO
-         iz9qvk/gJezj84Ay/txRRmoczrgecO8hQM0tA0Y7+9szV/iTfYPWtxKMuEJZBQYwgH
-         CbQAQS5tSzYL7T1Eo0XAsF+gOl83sFlPZP7xRGMtMU8lwt9PDnyQYq1ot9AgML0Q/i
-         1EW56s8HHchWOGCDEwZ/IDP7SrcriCn/Br3hqH4/aJ1V8LarzRdXWAgEphw+ynQcPX
-         K8vloWCnenBqw==
+        b=RIV6mbAjy/2HiIsbNfP99F04YOBbm9spod9GJTbRZhuZkQIgO7plBE0Z+D4gYPjaH
+         SnHTSyWM7UU4ABtCliVQA1xJe+VyCVREdTKrW88AjUymZU/BweOj28Tp4bGHApwcml
+         PU2/0JBl1j83zi00dEwWVQQWjzI/ZKeBbMc3FqhmDhA79Zi/DvSJGQJnx3OJCchzkG
+         3er1o6kHskC5y2O6EVa2w3FTg5W9+BEMkaQw/8xeIBigriDBh8XcG1L766m2ZVktG+
+         Xfpyv0UGMTUn5e61nTtoXn68Fm/2odcrUMKOjjoQB6/z0cpHLYx6fhWWg+Pn9CqSPF
+         pCcekQDlV2bgg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
-        kernel test robot <lkp@intel.com>,
+Cc:     Chengfeng Ye <cyeaa@connect.ust.hk>,
         Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 149/176] selftests/bpf: Enlarge select() timeout for test_maps
-Date:   Thu,  9 Sep 2021 07:50:51 -0400
-Message-Id: <20210909115118.146181-149-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 169/176] selftests/bpf: Fix potential unreleased lock
+Date:   Thu,  9 Sep 2021 07:51:11 -0400
+Message-Id: <20210909115118.146181-169-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
 References: <20210909115118.146181-1-sashal@kernel.org>
@@ -46,55 +44,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Li Zhijian <lizhijian@cn.fujitsu.com>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-[ Upstream commit 2d82d73da35b72b53fe0d96350a2b8d929d07e42 ]
+[ Upstream commit 47bb27a20d6ea22cd092c1fc2bb4fcecac374838 ]
 
-0Day robot observed that it's easily timeout on a heavy load host.
--------------------
- # selftests: bpf: test_maps
- # Fork 1024 tasks to 'test_update_delete'
- # Fork 1024 tasks to 'test_update_delete'
- # Fork 100 tasks to 'test_hashmap'
- # Fork 100 tasks to 'test_hashmap_percpu'
- # Fork 100 tasks to 'test_hashmap_sizes'
- # Fork 100 tasks to 'test_hashmap_walk'
- # Fork 100 tasks to 'test_arraymap'
- # Fork 100 tasks to 'test_arraymap_percpu'
- # Failed sockmap unexpected timeout
- not ok 3 selftests: bpf: test_maps # exit=1
- # selftests: bpf: test_lru_map
- # nr_cpus:8
--------------------
-Since this test will be scheduled by 0Day to a random host that could have
-only a few cpus(2-8), enlarge the timeout to avoid a false NG report.
+This lock is not released if the program
+return at the patched branch.
 
-In practice, i tried to pin it to only one cpu by 'taskset 0x01 ./test_maps',
-and knew 10S is likely enough, but i still perfer to a larger value 30.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20210820015556.23276-2-lizhijian@cn.fujitsu.com
+Link: https://lore.kernel.org/bpf/20210827074140.118671-1-cyeaa@connect.ust.hk
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_maps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 0d92ebcb335d..179e680e8d13 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -968,7 +968,7 @@ static void test_sockmap(unsigned int tasks, void *data)
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
+index ec281b0363b8..86f97681ad89 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
+@@ -195,8 +195,10 @@ static void run_test(int cgroup_fd)
  
- 		FD_ZERO(&w);
- 		FD_SET(sfd[3], &w);
--		to.tv_sec = 1;
-+		to.tv_sec = 30;
- 		to.tv_usec = 0;
- 		s = select(sfd[3] + 1, &w, NULL, NULL, &to);
- 		if (s == -1) {
+ 	pthread_mutex_lock(&server_started_mtx);
+ 	if (CHECK_FAIL(pthread_create(&tid, NULL, server_thread,
+-				      (void *)&server_fd)))
++				      (void *)&server_fd))) {
++		pthread_mutex_unlock(&server_started_mtx);
+ 		goto close_server_fd;
++	}
+ 	pthread_cond_wait(&server_started, &server_started_mtx);
+ 	pthread_mutex_unlock(&server_started_mtx);
+ 
 -- 
 2.30.2
 
