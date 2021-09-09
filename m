@@ -2,113 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A07E0405BA0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 19:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98386405BCA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 19:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239943AbhIIRBS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 13:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        id S240077AbhIIRMM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 13:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239370AbhIIRBR (ORCPT
+        with ESMTP id S239891AbhIIRMM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 13:01:17 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32517C061575
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Sep 2021 10:00:08 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id b7so3213198iob.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Sep 2021 10:00:08 -0700 (PDT)
+        Thu, 9 Sep 2021 13:12:12 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5A2C061575
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Sep 2021 10:11:02 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id z6-20020a257e06000000b0059bad6decfbso3171739ybc.16
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Sep 2021 10:11:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2paSwQM8zCxokyQ6GIbHK5N8e/MvXNOEn1+qQELdMbY=;
-        b=bUtpOWsfwWVZVVdqZQr4prAXWhLtnpDKnW1NVBf1elwFDXGPzH9pP5b1AYjXNpKW+u
-         KwAITZt6iBOVQ0ZTlqf5VFH27xIBISY6VkY3/Cq77PbQYov7Ve53nGSNZ6ULxrHajpy6
-         pPgp8UhXigGWsNhjl4CGV0pLgIinpslfZfcHqpgs6ZvgJCYkkIQxOBQRea3Sn9J6g2gq
-         pKoHiQn/cS+lp88/p6m3H17RLTBJb6y71UklEzwU5YUQJw/1G4eCjpRmqJfz1kp7aewE
-         SCC3wyxOtQxajE1y0Mkh1S9P/IO2dhn77Fa4rduKB3DBDg0DDp2OS99leBK9UCnD1fUM
-         6t2g==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=uy74vWb7x9CjpeXzDF9JGC37Nd1wyF55MqZMbJTR5Wo=;
+        b=KMiCfwB1nufAZzfwSVnXzPS82JzQ6fOxWEC4q/O5nQ7bU6Bx5w+WlxaqAclivgSus5
+         9fRTE67ONAz6q79HJt9krqocKryGTA6icq1fxyfeQCbEl7MMlLb9/VsxTDw2VZCgjXVy
+         bjWt9v0DF2GNZ3V/oH3W8RuMffP0BPf83mgRMhsogXJ9gy3tXO6C0WEOLgTTylju8Vrq
+         5UNjDpNIKB77J1x6g/QtmtmozEth0VUpiHQScDl/dJZEKyEuVjMHPLKeedSmLiWSen1A
+         sNL2h6S3wzPy7PbxAPU8oSSzRu+GLN4VSFfGM5+Y+xE2g1utwBqIyxBZWl5zuOUViXnK
+         w1Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2paSwQM8zCxokyQ6GIbHK5N8e/MvXNOEn1+qQELdMbY=;
-        b=E+KG3EOAvipOOvOqz2D3wdpcVHhfB81w/Z0JAHP/mJGrWbTjGwHQeI32RDyymEuOSk
-         aBLV8ZWOgqlJ5k3nRWkDb3t6HdhxgAgB7DMBbwmxJOIj19o2h5SC6j4WdpblIJ1Sl5Xj
-         kswp++4MtNNTlU0uAUY+jsbccM8MEB/2fMtcw67DtW7Qh5Y8bKKYxe/gcVuKylD0s4ZD
-         WXKD9Fw8rEVPC5RQ4e/PA2vXCCUYygZJ55g76FzWY7h6jrMzxwhxUkk/rPnxn1/HfDrw
-         tkXflHA6P4Bnol5oZfCJ8t/6Kxxk+bpezL/+Zq6Qk3u7llK0lPL2lhkUQ0zGZ6htwGen
-         /3hA==
-X-Gm-Message-State: AOAM531MVKRJKoYrONYq3tqtl83+bBzeNDXPqY1foFqEVipzty9sPE0a
-        MSu3jGfH8pUVUtUpfhDY6T/FlfALTLmeRVa/MJrw/w==
-X-Google-Smtp-Source: ABdhPJyvnDOMYLUfuOx8UO8RZc5WDLY8KKpV4m0wWiT2yrmOl6CNyM1Zix/Yg4swBUAJ7F2lxGiM6RMiJY9BpXXVE2s=
-X-Received: by 2002:a05:6602:38e:: with SMTP id f14mr3623809iov.62.1631206807352;
- Thu, 09 Sep 2021 10:00:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <1631172276-82914-1-git-send-email-xiyuyang19@fudan.edu.cn>
-In-Reply-To: <1631172276-82914-1-git-send-email-xiyuyang19@fudan.edu.cn>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=uy74vWb7x9CjpeXzDF9JGC37Nd1wyF55MqZMbJTR5Wo=;
+        b=j4FDjm05dKLcN46lusz6BuCuP/IZ58pedFd0eRulaG5BvzM/79Zfm/5cqio3g8Z3vE
+         JnZq/OId3fb/zQCVPhEa+78eSMI1XnBIHodEoVyHzy0i8G1Px00Wyharhzkl1A/vQWUl
+         zM9OCF9QpJu+9jP8uCTy3OngmEfLfTTgt5+MiAOMd0VvtZtRYS9gmt1JRg2iO5flh/ut
+         Opar/Dluic455bg0qHJ0Lm9WvABFAaGKb6hHy9zKPBGqczCY32vYbjGxl79b+7yjO7TO
+         A7SS00lQjg/Ph/kdbpEkIJPStnlKOTs5RuUiRtEJb8vzfme4N7D+1Pic+getpV9V5zeY
+         bKrA==
+X-Gm-Message-State: AOAM533+E4jimkuQ8MOsCfWVsP6amF7U/3NAPboPsGl/tF/8Cb70HZ14
+        B0snHW177ApDGZGHSWiz2NkKPQHgtfNveA==
+X-Google-Smtp-Source: ABdhPJz/Qr4KbA9nPcYmGjr5qftwLt6v207+aRKN2ehtwNbyTWlnEO1sGHvMKOcEmYvY61jzJb5z16dBLCm17g==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:d3ed:35f2:f475:fbc1])
+ (user=dlatypov job=sendgmr) by 2002:a25:d68e:: with SMTP id
+ n136mr5409238ybg.271.1631207461822; Thu, 09 Sep 2021 10:11:01 -0700 (PDT)
+Date:   Thu,  9 Sep 2021 10:10:51 -0700
+Message-Id: <20210909171052.3192326-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.309.g3052b89438-goog
+Subject: [PATCH v4 1/2] kunit: drop assumption in kunit-log-test about current suite
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 9 Sep 2021 09:59:56 -0700
-Message-ID: <CAGS_qxp2e3pgZ6nGW+5=qneeVw_Pd_ex9kX4jZqA9bweoHXxFA@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: fix reference count leak in kfree_at_end
-To:     Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, yuanxzhang@fudan.edu.cn,
-        Xin Tan <tanxin.ctf@gmail.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 9, 2021 at 12:26 AM 'Xiyu Yang' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> The reference counting issue happens in the normal path of
-> kfree_at_end(). When kunit_alloc_and_get_resource() is invoked, the
-> function forgets to handle the returned resource object, whose refcount
-> increased inside, causing a refcount leak.
->
-> Fix this issue by calling kunit_alloc_resource() instead of
-> kunit_alloc_and_get_resource().
->
-> Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-> Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+This test assumes that the declared kunit_suite object is the exact one
+which is being executed, which KUnit will not guarantee [1].
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Specifically, `suite->log` is not initialized until a suite object is
+executed. So if KUnit makes a copy of the suite and runs that instead,
+this test dereferences an invalid pointer and (hopefully) segfaults.
 
-Ah, thanks for finding and fixing this!
-We really should have better documentation/otherwise make it clearer
-that people shouldn't use the "_and_get" version.
+N.B. since we no longer assume this, we can no longer verify that
+`suite->log` is *not* allocated during normal execution.
 
-I went and added some pr_info() calls to verify that these were being
-leaked before and they're fixed now.
+An alternative to this patch that would allow us to test that would
+require exposing an API for the current test to get its current suite.
+Exposing that for one internal kunit test seems like overkill, and
+grants users more footguns (e.g. reusing a test case in multiple suites
+and changing behavior based on the suite name, dynamically modifying the
+setup/cleanup funcs, storing/reading stuff out of the suite->log, etc.).
 
-I copy-pasted this mistake into
-https://lore.kernel.org/linux-kselftest/20210831171926.3832806-2-dlatypov@google.com/.
-I'll send a v3 fix for that patch as well.
+[1] In a subsequent patch, KUnit will allow running subsets of test
+cases within a suite by making a copy of the suite w/ the filtered test
+list. But there are other reasons KUnit might execute a copy, e.g. if it
+ever wants to support parallel execution of different suites, recovering
+from errors and restarting suites
 
-> ---
->  lib/kunit/executor_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-> index cdbe54b16501..c2dcfb1f6e97 100644
-> --- a/lib/kunit/executor_test.c
-> +++ b/lib/kunit/executor_test.c
-> @@ -116,7 +116,7 @@ static void kfree_at_end(struct kunit *test, const void *to_free)
->         /* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
->         if (IS_ERR_OR_NULL(to_free))
->                 return;
-> -       kunit_alloc_and_get_resource(test, NULL, kfree_res_free, GFP_KERNEL,
-> +       kunit_alloc_resource(test, NULL, kfree_res_free, GFP_KERNEL,
->                                      (void *)to_free);
->  }
->
-> --
-> 2.7.4
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/1631172276-82914-1-git-send-email-xiyuyang19%40fudan.edu.cn.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
+ lib/kunit/kunit-test.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index d69efcbed624..555601d17f79 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -415,12 +415,15 @@ static struct kunit_suite kunit_log_test_suite = {
+ 
+ static void kunit_log_test(struct kunit *test)
+ {
+-	struct kunit_suite *suite = &kunit_log_test_suite;
++	struct kunit_suite suite;
++
++	suite.log = kunit_kzalloc(test, KUNIT_LOG_SIZE, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
+ 
+ 	kunit_log(KERN_INFO, test, "put this in log.");
+ 	kunit_log(KERN_INFO, test, "this too.");
+-	kunit_log(KERN_INFO, suite, "add to suite log.");
+-	kunit_log(KERN_INFO, suite, "along with this.");
++	kunit_log(KERN_INFO, &suite, "add to suite log.");
++	kunit_log(KERN_INFO, &suite, "along with this.");
+ 
+ #ifdef CONFIG_KUNIT_DEBUGFS
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+@@ -428,12 +431,11 @@ static void kunit_log_test(struct kunit *test)
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+ 				     strstr(test->log, "this too."));
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+-				     strstr(suite->log, "add to suite log."));
++				     strstr(suite.log, "add to suite log."));
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+-				     strstr(suite->log, "along with this."));
++				     strstr(suite.log, "along with this."));
+ #else
+ 	KUNIT_EXPECT_PTR_EQ(test, test->log, (char *)NULL);
+-	KUNIT_EXPECT_PTR_EQ(test, suite->log, (char *)NULL);
+ #endif
+ }
+ 
+
+base-commit: a3fa7a101dcff93791d1b1bdb3affcad1410c8c1
+-- 
+2.33.0.309.g3052b89438-goog
+
