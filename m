@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 351CE404F49
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 14:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE41404FD8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 14:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240301AbhIIMSA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 08:18:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52712 "EHLO mail.kernel.org"
+        id S1352786AbhIIMXJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 08:23:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53658 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350883AbhIIMOO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:14:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A4C961A54;
-        Thu,  9 Sep 2021 11:49:10 +0000 (UTC)
+        id S1347513AbhIIMRI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:17:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5336861A86;
+        Thu,  9 Sep 2021 11:49:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188151;
-        bh=35mbzRvU6JfJ7yvh2CXrenvC6BWUwLp9YJcEV3nMwhw=;
+        s=k20201202; t=1631188190;
+        bh=fXUm+1P8jqrO3JjwbNQzdbjMaWrfv6nz8zqrQTyzUZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e53XPLNa4zM/0aIsg7RalaLPEUTJnn78SQ1L4uWeL6Y+kaGNtSjUkQPv6GLYaJ/Vt
-         ySuPu9XW0H2q4HP0nPhgq8/XF1NkipIt6HUXuK0mCjTcLffBKnv31O5FagyDQDX92c
-         iT61BM2xRHt2SJz0Gp2gkp0JdGgguycOEFQNNaPJeFESk+DjRE/YkgG0lgnq9dFFaA
-         MWPc9BwB1WEaPZpMZNrN4Fp3AUlq+u6IT+n4Z6xA+/cvrZgAGIKP6Ii3K6TFflnz/Y
-         fn3uz4YFfX1y7vwRlm7fiYoFxqSptDrINip0eqBFLzgrSPatYM4Ec9xNvZo/9OKjj6
-         SBk6jO/YnEE4w==
+        b=n+cOCDr7SfRl5eDJOowGC/xxNstZ/6M1YOQQMfFMv/cdPrgcw414oH/oIV1oYJqAl
+         /4JaMkL0lAYkWS2KXvOzMaEJEiHSxP74sb4OYXdS0qJKXFuaNQ4E6W7gCQkzIBu4C+
+         irYWlUbH8BcHw9WqaM7kyfwynMe2csiirZw1RZokq8a0eLBwu9MaQPQiLRM57nAd+I
+         7odO+W0Tem5eY+Gtm1xxfG4lBHdRqXQrKM+F6pSH6TIetEGNipsLgUDF/HPmvU3zW5
+         8qcZOMKVJ8EPQZQwyDcn32TzPG2LgmMkbEfoftzkxCJ+7ScGqFpfFOPxhifL5Q58J7
+         4N3D+8mVE1Ahg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jussi Maki <joamaki@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Yucong Sun <fallentree@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 120/219] selftests/bpf: Fix xdp_tx.c prog section name
-Date:   Thu,  9 Sep 2021 07:44:56 -0400
-Message-Id: <20210909114635.143983-120-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 150/219] selftests/bpf: Correctly display subtest skip status
+Date:   Thu,  9 Sep 2021 07:45:26 -0400
+Message-Id: <20210909114635.143983-150-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
 References: <20210909114635.143983-1-sashal@kernel.org>
@@ -44,50 +44,78 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jussi Maki <joamaki@gmail.com>
+From: Yucong Sun <fallentree@fb.com>
 
-[ Upstream commit 95413846cca37f20000dd095cf6d91f8777129d7 ]
+[ Upstream commit f667d1d66760fcb27aee6c9964eefde39a464afe ]
 
-The program type cannot be deduced from 'tx' which causes an invalid
-argument error when trying to load xdp_tx.o using the skeleton.
-Rename the section name to "xdp" so that libbpf can deduce the type.
+In skip_account(), test->skip_cnt is set to 0 at the end, this makes next print
+statement never display SKIP status for the subtest. This patch moves the
+accounting logic after the print statement, fixing the issue.
 
-Signed-off-by: Jussi Maki <joamaki@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210731055738.16820-7-joamaki@gmail.com
+This patch also added SKIP status display for normal tests.
+
+Signed-off-by: Yucong Sun <fallentree@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20210817044732.3263066-3-fallentree@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/xdp_tx.c   | 2 +-
- tools/testing/selftests/bpf/test_xdp_veth.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_progs.c | 25 ++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_tx.c b/tools/testing/selftests/bpf/progs/xdp_tx.c
-index 94e6c2b281cb..5f725c720e00 100644
---- a/tools/testing/selftests/bpf/progs/xdp_tx.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_tx.c
-@@ -3,7 +3,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 6396932b97e2..9ed13187136c 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -148,18 +148,18 @@ void test__end_subtest()
+ 	struct prog_test_def *test = env.test;
+ 	int sub_error_cnt = test->error_cnt - test->old_error_cnt;
  
--SEC("tx")
-+SEC("xdp")
- int xdp_tx(struct xdp_md *xdp)
- {
- 	return XDP_TX;
-diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
-index ba8ffcdaac30..995278e684b6 100755
---- a/tools/testing/selftests/bpf/test_xdp_veth.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
-@@ -108,7 +108,7 @@ ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
- ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
+-	if (sub_error_cnt)
+-		env.fail_cnt++;
+-	else if (test->skip_cnt == 0)
+-		env.sub_succ_cnt++;
+-	skip_account();
+-
+ 	dump_test_log(test, sub_error_cnt);
  
- ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp_dummy
--ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec tx
-+ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
- ip -n ns3 link set dev veth33 xdp obj xdp_dummy.o sec xdp_dummy
+ 	fprintf(env.stdout, "#%d/%d %s:%s\n",
+ 	       test->test_num, test->subtest_num, test->subtest_name,
+ 	       sub_error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
  
- trap cleanup EXIT
++	if (sub_error_cnt)
++		env.fail_cnt++;
++	else if (test->skip_cnt == 0)
++		env.sub_succ_cnt++;
++	skip_account();
++
+ 	free(test->subtest_name);
+ 	test->subtest_name = NULL;
+ }
+@@ -783,17 +783,18 @@ int main(int argc, char **argv)
+ 			test__end_subtest();
+ 
+ 		test->tested = true;
+-		if (test->error_cnt)
+-			env.fail_cnt++;
+-		else
+-			env.succ_cnt++;
+-		skip_account();
+ 
+ 		dump_test_log(test, test->error_cnt);
+ 
+ 		fprintf(env.stdout, "#%d %s:%s\n",
+ 			test->test_num, test->test_name,
+-			test->error_cnt ? "FAIL" : "OK");
++			test->error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
++
++		if (test->error_cnt)
++			env.fail_cnt++;
++		else
++			env.succ_cnt++;
++		skip_account();
+ 
+ 		reset_affinity();
+ 		restore_netns();
 -- 
 2.30.2
 
