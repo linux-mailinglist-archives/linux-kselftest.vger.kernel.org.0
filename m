@@ -2,36 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F27404FDE
+	by mail.lfdr.de (Postfix) with ESMTP id CF427404FDF
 	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 14:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352878AbhIIMXN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 08:23:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56862 "EHLO mail.kernel.org"
+        id S1352891AbhIIMXP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 08:23:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57010 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348681AbhIIMRZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:17:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6904D61279;
-        Thu,  9 Sep 2021 11:49:55 +0000 (UTC)
+        id S1348186AbhIIMRd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:17:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 39B6661A84;
+        Thu,  9 Sep 2021 11:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188196;
-        bh=qEiAm24eqpsL2TxBMKk2BMy+kt0VnPszMUVXtFF6ej0=;
+        s=k20201202; t=1631188199;
+        bh=AfyNKaF0xtWhgKji+tagvSCdhOnS9R1W6yf+rMj9Wis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QpJJoGcYR837gy/TTKeM4siLN6K4mr/BpmcsjkRB17pYeR9ZShmJsej1UfkEMRlQL
-         QGggT1z8Q9GW8BORxQTGfrSjVoX5Kg4KJGtuiL15jQaxjd04vsc/gUx4mSyQ1Fd4Hc
-         JA3HgWtS6CyTqyJFdrFa0JJAREi9YlwmQ39mA6vVZOah1bLYFoGyp/0bRhcUUK9km9
-         6Y++qX7lmeg0ocIDpROs7G1jCmBaZZXAzOwHRIX19EhgnF+rihgplxURLQHKKz0c+o
-         H7m/53YbFQ5v3XcfhXd3TFA+xS5TnU+VSzX+YOlO+ki/9pfGZItJv+rLF/zTTnCjf0
-         j+HQPOxm/vKyQ==
+        b=uCAu2qwrHygfxXjmLQJ6h2aMe0l4xUm+1LbSlFoK6T9O+46xGOcJW/StDyqO+NbEM
+         xi73h+5mRx6/FBGMWz7HLtfs2qOhNyqVbnLyAm3ts5TGCZEevJGsaNl4iaCUOdgCIb
+         1As29oUtmT9ZIWZG6d/JhkBgTKRBLcvYzgSzouabQVAEHOyJf3RtyxbU+tWz6QdgFj
+         jdYL+RInNotMKkzegefJbUNzwZWd2i/g2wygQgL2YHlD+5fP1KcGTYRndvhtfQlOHu
+         BA0YUqrrTEepLODvVp9tYZBWVjVlLjOUSkRd/gyFyHXYX5faWAsjskWShDChJObbm+
+         sfKYHE/CeBmCQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bongsu Jeon <bongsu.jeon@samsung.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+Cc:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 155/219] selftests: nci: Fix the wrong condition
-Date:   Thu,  9 Sep 2021 07:45:31 -0400
-Message-Id: <20210909114635.143983-155-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 157/219] kselftest/arm64: mte: Fix misleading output when skipping tests
+Date:   Thu,  9 Sep 2021 07:45:33 -0400
+Message-Id: <20210909114635.143983-157-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
 References: <20210909114635.143983-1-sashal@kernel.org>
@@ -43,32 +44,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Bongsu Jeon <bongsu.jeon@samsung.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 1d5b8d01db98abb8c176838fad73287366874582 ]
+[ Upstream commit 83e5dcbece4ea67ec3ad94b897e2844184802fd7 ]
 
-memcpy should be executed only in case nla_len's value is greater than 0.
+When skipping the tests due to a lack of system support for MTE we
+currently print a message saying FAIL which makes it look like the test
+failed even though the test did actually report KSFT_SKIP, creating some
+confusion. Change the error message to say SKIP instead so things are
+clearer.
 
-Signed-off-by: Bongsu Jeon <bongsu.jeon@samsung.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20210819172902.56211-1-broonie@kernel.org
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/nci/nci_dev.c | 2 +-
+ tools/testing/selftests/arm64/mte/mte_common_util.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-index 9687100f15ea..acd4125ff39f 100644
---- a/tools/testing/selftests/nci/nci_dev.c
-+++ b/tools/testing/selftests/nci/nci_dev.c
-@@ -110,7 +110,7 @@ static int send_cmd_mt_nla(int sd, __u16 nlmsg_type, __u32 nlmsg_pid,
- 		na->nla_type = nla_type[cnt];
- 		na->nla_len = nla_len[cnt] + NLA_HDRLEN;
+diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
+index f50ac31920d1..0328a1e08f65 100644
+--- a/tools/testing/selftests/arm64/mte/mte_common_util.c
++++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
+@@ -298,7 +298,7 @@ int mte_default_setup(void)
+ 	int ret;
  
--		if (nla_len > 0)
-+		if (nla_len[cnt] > 0)
- 			memcpy(NLA_DATA(na), nla_data[cnt], nla_len[cnt]);
- 
- 		prv_len = NLA_ALIGN(nla_len[cnt]) + NLA_HDRLEN;
+ 	if (!(hwcaps2 & HWCAP2_MTE)) {
+-		ksft_print_msg("FAIL: MTE features unavailable\n");
++		ksft_print_msg("SKIP: MTE features unavailable\n");
+ 		return KSFT_SKIP;
+ 	}
+ 	/* Get current mte mode */
 -- 
 2.30.2
 
