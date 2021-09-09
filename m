@@ -2,51 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B527D40484C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 12:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52DE404884
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 12:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbhIIKRK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 06:17:10 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:52008 "EHLO
-        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbhIIKRK (ORCPT
+        id S233891AbhIIKel (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 06:34:41 -0400
+Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:36773 "EHLO
+        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233370AbhIIKel (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 06:17:10 -0400
-Received: from localhost (unknown [149.11.102.75])
-        by mail.monkeyblade.net (Postfix) with ESMTPSA id E4FD14F65C2E3;
-        Thu,  9 Sep 2021 03:15:57 -0700 (PDT)
-Date:   Thu, 09 Sep 2021 11:15:52 +0100 (BST)
-Message-Id: <20210909.111552.1875064195273792824.davem@davemloft.net>
-To:     maciej.machnikowski@intel.com
-Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        richardcochran@gmail.com, abyagowi@fb.com,
-        anthony.l.nguyen@intel.com, linux-kselftest@vger.kernel.org,
-        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com,
-        kuba@kernel.org, andrew@lunn.ch
-Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE
- message to get SyncE status
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <PH0PR11MB4951328A680F3D0FC7F9051CEAD59@PH0PR11MB4951.namprd11.prod.outlook.com>
-References: <20210908165802.1d5c952d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <PH0PR11MB49516BE62562735F017470A4EAD59@PH0PR11MB4951.namprd11.prod.outlook.com>
-        <PH0PR11MB4951328A680F3D0FC7F9051CEAD59@PH0PR11MB4951.namprd11.prod.outlook.com>
-X-Mailer: Mew version 6.8 on Emacs 27.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
+        Thu, 9 Sep 2021 06:34:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1631183611;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=NLAHBFkpBfVcepdP4n6unTWH+qW7Gpa3zTYSRlDA05Y=;
+        b=kPYBsZXqyTQqlsI1txpDdzZDXoDrLQqKGnFgr0Q07dDgfS090VZjWisjxKf86o50
+        dW9KD7pTdPN9UJ0s5z/+InO5cJzDqRCrQuJm39fBnH9ZSTuK8xXdYzwDoct7c6zeBZB
+        fTjXmlClk3InhsQuvWPjGhd5pJNfUYqpZ7QiEbsg=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1631183611;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=NLAHBFkpBfVcepdP4n6unTWH+qW7Gpa3zTYSRlDA05Y=;
+        b=VNVMJX51eU4g9EuciuTJjgNrMjbA/xecWqu2Z5UwFhjFIadNwX7gjHVu5T0wCdpt
+        VQQ63kLvtIkHksJojvSOGmqNdNczSnRJdtUBfS/Du2xpPLlNTafEAoCloVIDXFLvjn1
+        /bTU1cjhG+xU0HHHqEiEml9doWofn5Lu8YdFM9Sw=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20210908
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Thu, 09 Sep 2021 03:16:00 -0700 (PDT)
+Message-ID: <0100017bca1ea508-afc3ea4f-b6ae-4f40-91a2-523d2dca0514-000000@email.amazonses.com>
+Date:   Thu, 9 Sep 2021 10:33:31 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.09.09-54.240.48.37
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
-Date: Thu, 9 Sep 2021 09:24:07 +0000
+## Build
+* kernel: 5.14.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 999569d59a0aa2509ae4a67ecc266c1134e37e7b
+* git describe: next-20210908
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210908
 
-> Dave,
-> 
-> Are there any free slots on Plumbers to discuss and close on SyncE interfaces 
-> (or can we add an extra one). I can reuse the slides from the Netdev to give 
-> background and a live discussion may help closing opens around it,
-> and I'd be happy to co-present with anyone who wants to also join this effort.
+## Regressions (compared to next-20210907)
+* x15, kselftest-rtc
+  - rtc.rtctest
 
-Sorry, I think it's much too late for this.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20210907)
+* hi6220-hikey, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_arm64, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+
+## Test result summary
+total: 6126, pass: 3608, fail: 597, skip: 1921, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
