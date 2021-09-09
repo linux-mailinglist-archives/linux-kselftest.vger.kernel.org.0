@@ -2,150 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52DE404884
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 12:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54180404A21
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 13:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbhIIKel (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 06:34:41 -0400
-Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:36773 "EHLO
-        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233370AbhIIKel (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 06:34:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1631183611;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=NLAHBFkpBfVcepdP4n6unTWH+qW7Gpa3zTYSRlDA05Y=;
-        b=kPYBsZXqyTQqlsI1txpDdzZDXoDrLQqKGnFgr0Q07dDgfS090VZjWisjxKf86o50
-        dW9KD7pTdPN9UJ0s5z/+InO5cJzDqRCrQuJm39fBnH9ZSTuK8xXdYzwDoct7c6zeBZB
-        fTjXmlClk3InhsQuvWPjGhd5pJNfUYqpZ7QiEbsg=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1631183611;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=NLAHBFkpBfVcepdP4n6unTWH+qW7Gpa3zTYSRlDA05Y=;
-        b=VNVMJX51eU4g9EuciuTJjgNrMjbA/xecWqu2Z5UwFhjFIadNwX7gjHVu5T0wCdpt
-        VQQ63kLvtIkHksJojvSOGmqNdNczSnRJdtUBfS/Du2xpPLlNTafEAoCloVIDXFLvjn1
-        /bTU1cjhG+xU0HHHqEiEml9doWofn5Lu8YdFM9Sw=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210908
+        id S237094AbhIILov (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 07:44:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45698 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238776AbhIILnr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:43:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 976596120A;
+        Thu,  9 Sep 2021 11:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631187731;
+        bh=2K+jeZhi6NWGxwSm3736qe8/WFfuxqbpxEPeczVvA9E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HgVgTtXujJrfVKhY1r/8i8A88QhNJ1yT6L1BdrUvXdAafVjQLzqnxfsCBkCRNAq12
+         ooizrwlHkzD918CHbdU5BMgICEjmmiss1kTbCU3lTOP9ytRuyeyLUb0UNW+Uu8Bfkw
+         wHSrt6lsYfT0bgULwC+otYnicc2e5sGI9GbaC3jw3+V2V2EW7yAxknWNVp4pCz2HhZ
+         EUvA59Ix50wJltHdTVb5XjmczKqVDGCRM9GcCdUtpBmujx27po/Ko4dWvFXrx5ejJX
+         jWM2SNnjWs2ESz9f93TIZ5RSDpza6p2TtpDPIh9GwB2LvClFt+KpQnIszrG7dFhZmf
+         ltVRFFYatewhw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 051/252] selftests: firmware: Fix ignored return val of asprintf() warn
+Date:   Thu,  9 Sep 2021 07:37:45 -0400
+Message-Id: <20210909114106.141462-51-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
+References: <20210909114106.141462-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017bca1ea508-afc3ea4f-b6ae-4f40-91a2-523d2dca0514-000000@email.amazonses.com>
-Date:   Thu, 9 Sep 2021 10:33:31 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.09.09-54.240.48.37
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.14.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 999569d59a0aa2509ae4a67ecc266c1134e37e7b
-* git describe: next-20210908
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210908
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-## Regressions (compared to next-20210907)
-* x15, kselftest-rtc
-  - rtc.rtctest
+[ Upstream commit fe968ca2cac91888310b143a483123c84906e3fc ]
 
+Fix the following ingonred return val of asprintf() warn during
+build:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+cc -Wall -O2    fw_namespace.c  -o ../tools/testing/selftests/firmware/fw_namespace
+fw_namespace.c: In function ‘main’:
+fw_namespace.c:132:2: warning: ignoring return value of ‘asprintf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  132 |  asprintf(&fw_path, "/lib/firmware/%s", fw_name);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20210708031827.51293-1-skhan@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/firmware/fw_namespace.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-## Fixes (compared to next-20210907)
-* hi6220-hikey, kselftest-rtc
-  - rtc.rtctest
+diff --git a/tools/testing/selftests/firmware/fw_namespace.c b/tools/testing/selftests/firmware/fw_namespace.c
+index 0e393cb5f42d..4c6f0cd83c5b 100644
+--- a/tools/testing/selftests/firmware/fw_namespace.c
++++ b/tools/testing/selftests/firmware/fw_namespace.c
+@@ -129,7 +129,8 @@ int main(int argc, char **argv)
+ 		die("mounting tmpfs to /lib/firmware failed\n");
+ 
+ 	sys_path = argv[1];
+-	asprintf(&fw_path, "/lib/firmware/%s", fw_name);
++	if (asprintf(&fw_path, "/lib/firmware/%s", fw_name) < 0)
++		die("error: failed to build full fw_path\n");
+ 
+ 	setup_fw(fw_path);
+ 
+-- 
+2.30.2
 
-* qemu_arm64, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-
-## Test result summary
-total: 6126, pass: 3608, fail: 597, skip: 1921, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
