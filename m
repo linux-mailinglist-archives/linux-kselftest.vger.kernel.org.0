@@ -2,162 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE66405A26
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 17:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07E0405BA0
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 19:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236918AbhIIPYN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 11:24:13 -0400
-Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:59723 "EHLO
-        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236865AbhIIPYH (ORCPT
+        id S239943AbhIIRBS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 13:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239370AbhIIRBR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 11:24:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1631200977;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=/62tsyL2E1/xK7osPvmgAeiFEDXec4QXMpUsVth13hg=;
-        b=QWk758cpZTH2ABXEULc7ICYmexTxyxgEvrT378ml1dER5WjaD87kYexavxTkfFSc
-        a/x4IK8NZpIAoweUlkwmzSXyNaYNtf+GsnCUfBS/7LkkYawoCGfHBCzkVWjgU7F5SGf
-        6Q2b0R4ZllIRdKEMbvn0PJDtY+n8nylNfoVK9980=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1631200977;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=/62tsyL2E1/xK7osPvmgAeiFEDXec4QXMpUsVth13hg=;
-        b=UG2qaeY6wP2jH1oHEJISOlx3vm4Sh0+aDj+hNzy5QCUc9JSdZDgkjVCVcXZNxtAV
-        9BkEcnJUJB3rGHnhO+qPCt9Rxp0gem/ZBIUVGziDlO9GpIF1cXjET4C8R+ZTH5PiTYl
-        JE8YZfE6A7lb09oRg8HJFhRRVLsziHq8KlA9tbl0=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210909
+        Thu, 9 Sep 2021 13:01:17 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32517C061575
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Sep 2021 10:00:08 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id b7so3213198iob.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Sep 2021 10:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2paSwQM8zCxokyQ6GIbHK5N8e/MvXNOEn1+qQELdMbY=;
+        b=bUtpOWsfwWVZVVdqZQr4prAXWhLtnpDKnW1NVBf1elwFDXGPzH9pP5b1AYjXNpKW+u
+         KwAITZt6iBOVQ0ZTlqf5VFH27xIBISY6VkY3/Cq77PbQYov7Ve53nGSNZ6ULxrHajpy6
+         pPgp8UhXigGWsNhjl4CGV0pLgIinpslfZfcHqpgs6ZvgJCYkkIQxOBQRea3Sn9J6g2gq
+         pKoHiQn/cS+lp88/p6m3H17RLTBJb6y71UklEzwU5YUQJw/1G4eCjpRmqJfz1kp7aewE
+         SCC3wyxOtQxajE1y0Mkh1S9P/IO2dhn77Fa4rduKB3DBDg0DDp2OS99leBK9UCnD1fUM
+         6t2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2paSwQM8zCxokyQ6GIbHK5N8e/MvXNOEn1+qQELdMbY=;
+        b=E+KG3EOAvipOOvOqz2D3wdpcVHhfB81w/Z0JAHP/mJGrWbTjGwHQeI32RDyymEuOSk
+         aBLV8ZWOgqlJ5k3nRWkDb3t6HdhxgAgB7DMBbwmxJOIj19o2h5SC6j4WdpblIJ1Sl5Xj
+         kswp++4MtNNTlU0uAUY+jsbccM8MEB/2fMtcw67DtW7Qh5Y8bKKYxe/gcVuKylD0s4ZD
+         WXKD9Fw8rEVPC5RQ4e/PA2vXCCUYygZJ55g76FzWY7h6jrMzxwhxUkk/rPnxn1/HfDrw
+         tkXflHA6P4Bnol5oZfCJ8t/6Kxxk+bpezL/+Zq6Qk3u7llK0lPL2lhkUQ0zGZ6htwGen
+         /3hA==
+X-Gm-Message-State: AOAM531MVKRJKoYrONYq3tqtl83+bBzeNDXPqY1foFqEVipzty9sPE0a
+        MSu3jGfH8pUVUtUpfhDY6T/FlfALTLmeRVa/MJrw/w==
+X-Google-Smtp-Source: ABdhPJyvnDOMYLUfuOx8UO8RZc5WDLY8KKpV4m0wWiT2yrmOl6CNyM1Zix/Yg4swBUAJ7F2lxGiM6RMiJY9BpXXVE2s=
+X-Received: by 2002:a05:6602:38e:: with SMTP id f14mr3623809iov.62.1631206807352;
+ Thu, 09 Sep 2021 10:00:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017bcb27a095-3fa09b23-571d-4ce4-b120-33f6e7ec779f-000000@email.amazonses.com>
-Date:   Thu, 9 Sep 2021 15:22:57 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.09.09-54.240.8.97
+References: <1631172276-82914-1-git-send-email-xiyuyang19@fudan.edu.cn>
+In-Reply-To: <1631172276-82914-1-git-send-email-xiyuyang19@fudan.edu.cn>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 9 Sep 2021 09:59:56 -0700
+Message-ID: <CAGS_qxp2e3pgZ6nGW+5=qneeVw_Pd_ex9kX4jZqA9bweoHXxFA@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: fix reference count leak in kfree_at_end
+To:     Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, yuanxzhang@fudan.edu.cn,
+        Xin Tan <tanxin.ctf@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.14.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: f7f581157d1c8a2f14bef2739dd34135c9e6b233
-* git describe: next-20210909
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210909
+On Thu, Sep 9, 2021 at 12:26 AM 'Xiyu Yang' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> The reference counting issue happens in the normal path of
+> kfree_at_end(). When kunit_alloc_and_get_resource() is invoked, the
+> function forgets to handle the returned resource object, whose refcount
+> increased inside, causing a refcount leak.
+>
+> Fix this issue by calling kunit_alloc_resource() instead of
+> kunit_alloc_and_get_resource().
+>
+> Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
 
-## Regressions (compared to next-20210907)
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-* x15, kselftest-rtc
-  - rtc.rtctest
+Ah, thanks for finding and fixing this!
+We really should have better documentation/otherwise make it clearer
+that people shouldn't use the "_and_get" version.
 
+I went and added some pr_info() calls to verify that these were being
+leaked before and they're fixed now.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+I copy-pasted this mistake into
+https://lore.kernel.org/linux-kselftest/20210831171926.3832806-2-dlatypov@google.com/.
+I'll send a v3 fix for that patch as well.
 
-
-## Fixes (compared to next-20210907)
-* hi6220-hikey, kselftest-rtc
-  - rtc.rtctest
-
-* qemu-arm64-gic-version3, kselftest-timers
-  - timers.rtcpie
-
-* qemu_arm, kselftest-pidfd
-  - pidfd.pidfd_test
-
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-
-## Test result summary
-total: 6381, pass: 3846, fail: 617, skip: 1918, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> ---
+>  lib/kunit/executor_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+> index cdbe54b16501..c2dcfb1f6e97 100644
+> --- a/lib/kunit/executor_test.c
+> +++ b/lib/kunit/executor_test.c
+> @@ -116,7 +116,7 @@ static void kfree_at_end(struct kunit *test, const void *to_free)
+>         /* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
+>         if (IS_ERR_OR_NULL(to_free))
+>                 return;
+> -       kunit_alloc_and_get_resource(test, NULL, kfree_res_free, GFP_KERNEL,
+> +       kunit_alloc_resource(test, NULL, kfree_res_free, GFP_KERNEL,
+>                                      (void *)to_free);
+>  }
+>
+> --
+> 2.7.4
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/1631172276-82914-1-git-send-email-xiyuyang19%40fudan.edu.cn.
