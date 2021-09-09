@@ -2,37 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24844404FE0
+	by mail.lfdr.de (Postfix) with ESMTP id 6F606404FE1
 	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 14:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352841AbhIIMXQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 08:23:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57534 "EHLO mail.kernel.org"
+        id S1353543AbhIIMXR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 08:23:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350182AbhIIMR7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:17:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C76B6128C;
-        Thu,  9 Sep 2021 11:49:59 +0000 (UTC)
+        id S1353059AbhIIMUM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:20:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 35D8061A89;
+        Thu,  9 Sep 2021 11:50:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188200;
-        bh=n94kMwFHUMe+HkJMYWMwz/mNrdLxyfQDhWM2x1S7TPk=;
+        s=k20201202; t=1631188234;
+        bh=irqyFv88sOHnPHJmIZxNFsH3dUiHqespwnL0sn7K1eU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kz6vSgWUBrb9kZTnxAFTqc2zadE0DF7hS5d1vUpwlnqTrfShngSXvw9cj0rccSU3m
-         zQcu6HhxT/kzyoZOGt89gm51lkdF7K+1m/jj599jG3Jz5xZkRzQOzmEFysPebr0Jfg
-         qsdPv6lsa56l0otBiy3524mNdVBBc28e3EsnkdEvGUj40Amd41kpdiQtvRSKwB5VM8
-         tGTNvoern3IUHFXj5N+YHSQfmpCSwZGAcg4scfplTXNbOW/JpxmuWkH/LR3KtvAphp
-         U79YRm1N0/gdr9RyudDTa/IYvH/uJD4i0y+Sygrtr3G4q17SA6qixKJtr28Y68kTvb
-         inWbDW2MrQavg==
+        b=ssUGol4xSt4EwNz46/Bai1uL8AnuAU22waKYXzScE03xvG5gk9fiz4I7vB+sbCSBP
+         +GajHH+8lPltndLVhChGCiJqVlc1pwvuuot7Yw1BSIE9Q/6E8kSGjUKms4tRA8DcQE
+         0y5wemStj9D9vWCcLXkjbgoz4avCobZ3BsznWdWNj+G1GMWvEqHhFzi1SYnzD5Wyjl
+         AaruSsBVEEG0e0uWApu3Mgb5Kr65wUqCLDKC+trBKNcROfADSZuC+J6AfNf+oQacUK
+         2qnK9V9gZKS2xkCFOekfGQei41rbTZkuarmzwGT5/q/ZHqFu3BhmpBS1eatoAZDmI/
+         UU/4wy8mfKedQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
+        kernel test robot <lkp@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
         Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 158/219] kselftest/arm64: pac: Fix skipping of tests on systems without PAC
-Date:   Thu,  9 Sep 2021 07:45:34 -0400
-Message-Id: <20210909114635.143983-158-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 185/219] selftests/bpf: Enlarge select() timeout for test_maps
+Date:   Thu,  9 Sep 2021 07:46:01 -0400
+Message-Id: <20210909114635.143983-185-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
 References: <20210909114635.143983-1-sashal@kernel.org>
@@ -44,62 +46,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-[ Upstream commit 0c69bd2ca6ee20064dde7853cd749284e053a874 ]
+[ Upstream commit 2d82d73da35b72b53fe0d96350a2b8d929d07e42 ]
 
-The PAC tests check to see if the system supports the relevant PAC features
-but instead of skipping the tests if they can't be executed they fail the
-tests which makes things look like they're not working when they are.
+0Day robot observed that it's easily timeout on a heavy load host.
+-------------------
+ # selftests: bpf: test_maps
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 100 tasks to 'test_hashmap'
+ # Fork 100 tasks to 'test_hashmap_percpu'
+ # Fork 100 tasks to 'test_hashmap_sizes'
+ # Fork 100 tasks to 'test_hashmap_walk'
+ # Fork 100 tasks to 'test_arraymap'
+ # Fork 100 tasks to 'test_arraymap_percpu'
+ # Failed sockmap unexpected timeout
+ not ok 3 selftests: bpf: test_maps # exit=1
+ # selftests: bpf: test_lru_map
+ # nr_cpus:8
+-------------------
+Since this test will be scheduled by 0Day to a random host that could have
+only a few cpus(2-8), enlarge the timeout to avoid a false NG report.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20210819165723.43903-1-broonie@kernel.org
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+In practice, i tried to pin it to only one cpu by 'taskset 0x01 ./test_maps',
+and knew 10S is likely enough, but i still perfer to a larger value 30.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20210820015556.23276-2-lizhijian@cn.fujitsu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/arm64/pauth/pac.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_maps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
-index 592fe538506e..b743daa772f5 100644
---- a/tools/testing/selftests/arm64/pauth/pac.c
-+++ b/tools/testing/selftests/arm64/pauth/pac.c
-@@ -25,13 +25,15 @@
- do { \
- 	unsigned long hwcaps = getauxval(AT_HWCAP); \
- 	/* data key instructions are not in NOP space. This prevents a SIGILL */ \
--	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled"); \
-+	if (!(hwcaps & HWCAP_PACA))					\
-+		SKIP(return, "PAUTH not enabled"); \
- } while (0)
- #define ASSERT_GENERIC_PAUTH_ENABLED() \
- do { \
- 	unsigned long hwcaps = getauxval(AT_HWCAP); \
- 	/* generic key instructions are not in NOP space. This prevents a SIGILL */ \
--	ASSERT_NE(0, hwcaps & HWCAP_PACG) TH_LOG("Generic PAUTH not enabled"); \
-+	if (!(hwcaps & HWCAP_PACG)) \
-+		SKIP(return, "Generic PAUTH not enabled");	\
- } while (0)
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 51adc42b2b40..7fed68492a2e 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -968,7 +968,7 @@ static void test_sockmap(unsigned int tasks, void *data)
  
- void sign_specific(struct signatures *sign, size_t val)
-@@ -256,7 +258,7 @@ TEST(single_thread_different_keys)
- 	unsigned long hwcaps = getauxval(AT_HWCAP);
- 
- 	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
--	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-+	ASSERT_PAUTH_ENABLED();
- 	if (!(hwcaps & HWCAP_PACG)) {
- 		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
- 		nkeys = NKEYS - 1;
-@@ -299,7 +301,7 @@ TEST(exec_changed_keys)
- 	unsigned long hwcaps = getauxval(AT_HWCAP);
- 
- 	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
--	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-+	ASSERT_PAUTH_ENABLED();
- 	if (!(hwcaps & HWCAP_PACG)) {
- 		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
- 		nkeys = NKEYS - 1;
+ 		FD_ZERO(&w);
+ 		FD_SET(sfd[3], &w);
+-		to.tv_sec = 1;
++		to.tv_sec = 30;
+ 		to.tv_usec = 0;
+ 		s = select(sfd[3] + 1, &w, NULL, NULL, &to);
+ 		if (s == -1) {
 -- 
 2.30.2
 
