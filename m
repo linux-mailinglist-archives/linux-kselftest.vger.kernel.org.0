@@ -2,99 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5914055E0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 15:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE66405A26
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Sep 2021 17:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353859AbhIINOL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Sep 2021 09:14:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43766 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355911AbhIINDp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 09:03:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9FB9F6140F;
-        Thu,  9 Sep 2021 11:59:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188799;
-        bh=dhMsRfuZVwhSZ56t3qLAGsartIx3boKk4d89WZH9zXc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VVSFnYlWQ/ucppI5Xs1VEv9Ejd+8fgDTJvqE7EhKO9X6Sueu0kY9jhNN3jQ6ySZtC
-         1a6XgVi/LmlfLMZGxom5h4MPGG6o/jJAeIKqsJJPrUF44R8YU4UiZnQyiD43pnotwX
-         9Vcw5FV2YsatdGG+2DUwSiYqlJxfps3DvweDShZXVoFwhgwEmcPX9jwUgOg8+Mo2GA
-         OoLv/OU+2H3lvkO8wlqEuxqA4UDQqHCICYCUBY71hh6jT8MAAdbLpCAjrB2qtgzmKJ
-         rvU06lbtRlX4QdYso11E3t4k8ByKpMupcO96WtO6GVliGGlfe2d3BBOLqdzNIi8Kyj
-         LSWO+niYMi2kw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
-        kernel test robot <lkp@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 47/59] selftests/bpf: Enlarge select() timeout for test_maps
-Date:   Thu,  9 Sep 2021 07:58:48 -0400
-Message-Id: <20210909115900.149795-47-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909115900.149795-1-sashal@kernel.org>
-References: <20210909115900.149795-1-sashal@kernel.org>
+        id S236918AbhIIPYN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Sep 2021 11:24:13 -0400
+Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:59723 "EHLO
+        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236865AbhIIPYH (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 11:24:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1631200977;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=/62tsyL2E1/xK7osPvmgAeiFEDXec4QXMpUsVth13hg=;
+        b=QWk758cpZTH2ABXEULc7ICYmexTxyxgEvrT378ml1dER5WjaD87kYexavxTkfFSc
+        a/x4IK8NZpIAoweUlkwmzSXyNaYNtf+GsnCUfBS/7LkkYawoCGfHBCzkVWjgU7F5SGf
+        6Q2b0R4ZllIRdKEMbvn0PJDtY+n8nylNfoVK9980=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1631200977;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=/62tsyL2E1/xK7osPvmgAeiFEDXec4QXMpUsVth13hg=;
+        b=UG2qaeY6wP2jH1oHEJISOlx3vm4Sh0+aDj+hNzy5QCUc9JSdZDgkjVCVcXZNxtAV
+        9BkEcnJUJB3rGHnhO+qPCt9Rxp0gem/ZBIUVGziDlO9GpIF1cXjET4C8R+ZTH5PiTYl
+        JE8YZfE6A7lb09oRg8HJFhRRVLsziHq8KlA9tbl0=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20210909
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017bcb27a095-3fa09b23-571d-4ce4-b120-33f6e7ec779f-000000@email.amazonses.com>
+Date:   Thu, 9 Sep 2021 15:22:57 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.09.09-54.240.8.97
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Li Zhijian <lizhijian@cn.fujitsu.com>
+## Build
+* kernel: 5.14.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: f7f581157d1c8a2f14bef2739dd34135c9e6b233
+* git describe: next-20210909
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210909
 
-[ Upstream commit 2d82d73da35b72b53fe0d96350a2b8d929d07e42 ]
+## Regressions (compared to next-20210907)
+* qemu-arm64-mte, kselftest-timers
+  - timers.rtcpie
 
-0Day robot observed that it's easily timeout on a heavy load host.
--------------------
- # selftests: bpf: test_maps
- # Fork 1024 tasks to 'test_update_delete'
- # Fork 1024 tasks to 'test_update_delete'
- # Fork 100 tasks to 'test_hashmap'
- # Fork 100 tasks to 'test_hashmap_percpu'
- # Fork 100 tasks to 'test_hashmap_sizes'
- # Fork 100 tasks to 'test_hashmap_walk'
- # Fork 100 tasks to 'test_arraymap'
- # Fork 100 tasks to 'test_arraymap_percpu'
- # Failed sockmap unexpected timeout
- not ok 3 selftests: bpf: test_maps # exit=1
- # selftests: bpf: test_lru_map
- # nr_cpus:8
--------------------
-Since this test will be scheduled by 0Day to a random host that could have
-only a few cpus(2-8), enlarge the timeout to avoid a false NG report.
+* x15, kselftest-rtc
+  - rtc.rtctest
 
-In practice, i tried to pin it to only one cpu by 'taskset 0x01 ./test_maps',
-and knew 10S is likely enough, but i still perfer to a larger value 30.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20210820015556.23276-2-lizhijian@cn.fujitsu.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/bpf/test_maps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 96c6238a4a1f..3f503ad37a2b 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -730,7 +730,7 @@ static void test_sockmap(int tasks, void *data)
- 
- 		FD_ZERO(&w);
- 		FD_SET(sfd[3], &w);
--		to.tv_sec = 1;
-+		to.tv_sec = 30;
- 		to.tv_usec = 0;
- 		s = select(sfd[3] + 1, &w, NULL, NULL, &to);
- 		if (s == -1) {
--- 
-2.30.2
 
+## Fixes (compared to next-20210907)
+* hi6220-hikey, kselftest-rtc
+  - rtc.rtctest
+
+* qemu-arm64-gic-version3, kselftest-timers
+  - timers.rtcpie
+
+* qemu_arm, kselftest-pidfd
+  - pidfd.pidfd_test
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+
+## Test result summary
+total: 6381, pass: 3846, fail: 617, skip: 1918, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
