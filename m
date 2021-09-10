@@ -2,110 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 867FF406D64
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Sep 2021 16:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBA24070A0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Sep 2021 19:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbhIJOPj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Sep 2021 10:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
+        id S231389AbhIJRom (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Sep 2021 13:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbhIJOPi (ORCPT
+        with ESMTP id S229664AbhIJRol (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Sep 2021 10:15:38 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80200C061574;
-        Fri, 10 Sep 2021 07:14:27 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id n18so1912603pgm.12;
-        Fri, 10 Sep 2021 07:14:27 -0700 (PDT)
+        Fri, 10 Sep 2021 13:44:41 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92A4C061756
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Sep 2021 10:43:30 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id b7so3347258iob.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Sep 2021 10:43:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oe4VM1UblhS5+gJIFks4ik7gcc8ov9uDrnYIOA6m+LI=;
-        b=pQ28E8z4ROEJSjDnjaoXfmDVQXV+FaMJ7j2Ao9Iv3Bg8H1ySc3TbHpE/Dp0THKY7x2
-         FrtiekEFA/I87Ge2nyQ+09Xp2IjGeGuIbHNwymknYxUt8d8rzXTXEKZQWZMF/wfyq2SE
-         Pjo6xH7sf5BBHszizp5nykKOB8QNZCDsn6x5lcFHDdUkh+95IYtjPmWz4E1FF4mcFGFQ
-         5Do9ewuzSPURZXaUEqd4gCNnQ7eJp7atvGmqGwg8jVnPBoTbajC1PhtUf04LhdWUzGgM
-         j4i+9JD/g3SDsWQd0nv7GZER8nywgTRdPdUJwMKLlnYyH+6z5bxezv3tkpZ25Ea4rIhI
-         nhrw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Qw3i7ZkRYyRAIDKAvMyUaqPTTRDJN0J3gzh1YtLJNZI=;
+        b=H0qmjbKYUEvyXyLOKZSh7axYPu5rWika6mv2MFuBPBKYYGY7sLSyUD16rVZbR9Iig3
+         bOK2yBJ9w1rvQBTuHa84A/SdI+JFHBlrzRZtRmrPydwIUcoj9lvSkFf6IzB9UiB5Stxt
+         0R3p4cFeKAlcXs/PGQ6OHHkr7OxH95OaY6Srk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oe4VM1UblhS5+gJIFks4ik7gcc8ov9uDrnYIOA6m+LI=;
-        b=m4Sch/yBguk6aVOFyGcT1axr2J29kD0un7LjA/4XFBjGHiL/UcPrFPgnY856krGbYr
-         RBXIa4rYIzuQ8uurk1MnCiLajTqdvTff44FD1Dwh+0/esta2Tfr3OuXOiwk8/He24eKG
-         Of0b31j4p0ayCLVXBKApG5A5S0ScMqRl2MTgDC++SyQFrxOEr95RelGfSS4KI8mbnhUl
-         Q0av/Tdbr2tZGbmlLRxOkXnH4+Sea2Sye5Wzw2PrT2eUbJaa0hQUEwBJ20laciR+neMk
-         iE0GyV1GnlCot+BH6IskS07js5JPWiSezP2IupNO3TAxuA2f18ax/6u2aUzkFHW99Ppe
-         UjNQ==
-X-Gm-Message-State: AOAM5331nrekiBJCaE5QK1vHAzfTiJyl30kAdBuUKUOpLgeQhVd7xwqA
-        jhZma4E3TiauJFFkYv8ByGk=
-X-Google-Smtp-Source: ABdhPJwOzKr8hK79NXiiFvMDuPJ5QyQWRVMQ+Hpt1ZMMluuVorlghIuaTIVRcqzGrXZQ3vlrka44rA==
-X-Received: by 2002:a63:131f:: with SMTP id i31mr7547782pgl.207.1631283266990;
-        Fri, 10 Sep 2021 07:14:26 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:645:c000:2163:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id a15sm5474422pgn.25.2021.09.10.07.14.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Sep 2021 07:14:26 -0700 (PDT)
-Date:   Fri, 10 Sep 2021 07:14:23 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ido Schimmel <idosch@idosch.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "abyagowi@fb.com" <abyagowi@fb.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Saeed Mahameed <saeed@kernel.org>,
-        Michael Chan <michael.chan@broadcom.com>
-Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
- to get SyncE status
-Message-ID: <20210910141423.GA21865@hoboy.vegasvil.org>
-References: <PH0PR11MB49512C265E090FC8741D8510EAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210907124730.33852895@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <PH0PR11MB495169997552152891A69B57EAD49@PH0PR11MB4951.namprd11.prod.outlook.com>
- <20210908092115.191fdc28@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <PH0PR11MB4951AA3C65DD8E7612F5F396EAD49@PH0PR11MB4951.namprd11.prod.outlook.com>
- <YTkQTQM6Is4Hqmxh@lunn.ch>
- <20210908152027.313d7168@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <YTlAT+1wkazy3Uge@lunn.ch>
- <20210909020915.GA30747@hoboy.vegasvil.org>
- <PH0PR11MB49515C4ACE9BAD7BD9172825EAD59@PH0PR11MB4951.namprd11.prod.outlook.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Qw3i7ZkRYyRAIDKAvMyUaqPTTRDJN0J3gzh1YtLJNZI=;
+        b=RQmVAbnIHoA/IKCPilt3/iw1ya/MQrrS239NuMG3FXwKjSAHYosIcWeYeOT5QB2BNr
+         gYDhtVdA/tnWAgO1OnVE3h3BGYA2hMXlcHOKbFVPjjM8/ZyVxrqUTs8USFVOtrfM06CS
+         sFK7N0Ia5y3ctA1XXyhAzuifqemZXiE5gB8KCDz7rjO82PPvWgijC9M96ljxoz3vohel
+         +U0SATqNXjD6dp3BLEfBmJqDWO9QmufSILuHGDJaQvpSsUFsMaotEAJVgWnFtHWabtfx
+         dWP//AICl79z/KiscExOhxZi+pg9JrIXcsxeEYoD5t0IEER+z7pk8bdAzzZj2D4XMmlp
+         px2A==
+X-Gm-Message-State: AOAM532OI+AlfShOQq9jY6XDbGKOroUVVmvASxNrIyLfEcVbcNJ7SBN7
+        PkGmeqD6MI6d1cNLtfygTfWqNw==
+X-Google-Smtp-Source: ABdhPJxbeVole14DxMmq7hdrTu6bspXWv6Dh2xY5aXGIAfaszutk1niQpVx0lIia221XbGJCTsH67w==
+X-Received: by 2002:a5d:9145:: with SMTP id y5mr7905456ioq.200.1631295810144;
+        Fri, 10 Sep 2021 10:43:30 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id l1sm2867638ilc.65.2021.09.10.10.43.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Sep 2021 10:43:29 -0700 (PDT)
+Subject: Re: After KUnit update for Linux 5.15-rc1 - unable to share VFAT
+ filesystem via samba
+To:     Arthur Marsh <arthur.marsh@internode.on.net>
+Cc:     linux-kernel@vger.kernel.org, brendanhiggins@google.com,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <6A72EAE4-A0F7-4CD2-89BB-36A8F4A7D321@internode.on.net>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f1d84102-6edf-271f-52f9-0d4bbc85c0c7@linuxfoundation.org>
+Date:   Fri, 10 Sep 2021 11:43:28 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB49515C4ACE9BAD7BD9172825EAD59@PH0PR11MB4951.namprd11.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <6A72EAE4-A0F7-4CD2-89BB-36A8F4A7D321@internode.on.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 09, 2021 at 08:18:10AM +0000, Machnikowski, Maciej wrote:
+Hi Arthur,
 
-> Controlling the clock that actually drives any components (PHY/MAC) in
-> runtime can be a good way to brick the part.
-
-I didn't say that.
-
-> I feel that, while the reuse 
-> of structures may be a good idea, the userspace API for clocks is not. 
-> They are usually set up once at the board init level and stay like that "forever".
+On 9/10/21 5:57 AM, Arthur Marsh wrote:
 > 
-> The outputs we need to control are only a subset of all of them and they
-> rather fall in the PTP pins level of details, rather than clock ones.
+>   Hi, I have been sharing an old VFAT formatted hard disk on one pc to
+> another using Samba and sometime after kernel 5.14.0 it stopped working (apparently no longer being shared as the mount.smbfs command
+> on the client failed with error -13 yet mount.smbfs still worked for
+> ext3 filesytems shared from the same machine which had the VFAT
+> filesystem).
+>   The only error I saw on the machine with the VFAT formatted hard disk
+> was the output of the mount command had truncated the name of the
+> mount to only include the first 4 characters of the base name of the
+> mount point.
+>   e.g. when VFAT filesystem was mounted on /mnt/victoria, the output of
+> the mount command showed the filesytem mounted on /mnt/vict
+> 
 
-clk-gate.c
-clk-mux.c
+This could be path name related to the second bad commit in your bisect.
 
-Making that available for user space to twiddle is a better way that
-tacking on to the PTP stuff.
+> The kernel build used was i386 with gcc 11.2.0-4 using
+> 
+> make - j2 menuconfig bindeb-pkg
+> 
+> .config available on request.
+> 
 
-You can model your device as having a multiplexer in front of it.
+Can you send your config and dmesg? This will help determine if
+KUNIT is enabled - it shouldn't be.
 
-Thanks,
-Richard
+>   The git-bisect was:
+> victoria:/usr/src/linux# git bisect loggit bisect start '--' 'fs/fat'#
+> good: [7d2a07b769330c34b4deabeed939325c77a7ec2f] Linux 5.14git bisect
+> good 7d2a07b769330c34b4deabeed939325c77a7ec2f# bad:
+> [a3fa7a101dcff93791d1b1bdb3affcad1410c8c1] Merge branches 'akpm' and
+> 'akpm-hotfixes' (patches from Andrew)git bisect bad
+> a3fa7a101dcff93791d1b1bdb3affcad1410c8c1# good:
+> [edb0872f44ec9976ea6d052cb4b93cd2d23ac2ba] block: move the bdi from
+> the request_queue to the gendiskgit bisect good
+> edb0872f44ec9976ea6d052cb4b93cd2d23ac2ba# good:
+> [b0d4adaf3b3c4402d9c3b6186e02aa1e4f7985cd] fat: Add KUnit tests for
+> checksums and timestampsgit bisect good
+
+
+> b0d4adaf3b3c4402d9c3b6186e02aa1e4f7985cd# bad:
+
+This one is a KUnit patch
+Subject: [PATCH] fat: Add KUnit tests for checksums and timestamps
+
+
+> [c815f04ba94940fbc303a6ea9669e7da87f8e77d] Merge tag
+> 'linux-kselftest-kunit-5.15-rc1' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftestgit
+> bisect bad c815f04ba94940fbc303a6ea9669e7da87f8e77d# first bad commit:
+> [c815f04ba94940fbc303a6ea9669e7da87f8e77d] Merge tag
+
+Subject: [PATCH] d_path: make 'prepend()' fill up the buffer exactly on
+  overflow
+
+> 'linux-kselftest-kunit-5.15-rc1' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+>
+thanks,
+-- Shuah
