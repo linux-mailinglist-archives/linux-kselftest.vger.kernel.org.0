@@ -2,90 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1519840734A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Sep 2021 00:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26012407352
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Sep 2021 00:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbhIJWUx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Sep 2021 18:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
+        id S234747AbhIJWWl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Sep 2021 18:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232820AbhIJWUx (ORCPT
+        with ESMTP id S234744AbhIJWWl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Sep 2021 18:20:53 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCF3C061756
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Sep 2021 15:19:41 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id q14so3586484ils.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Sep 2021 15:19:41 -0700 (PDT)
+        Fri, 10 Sep 2021 18:22:41 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C3CC061756
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Sep 2021 15:21:29 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id w29so3886701wra.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Sep 2021 15:21:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=q2q2tt2mrZO6cCReszztSL4ypwEDswnrQTtGtJCGJUE=;
-        b=FN/Bo/Y2mKvITk5fX4RDdo/EOjbEl5HNP693ui7alCsnUPzSKnjXQSGDxopPyoPNfy
-         S94yPZdeW/9/oxkiNatiRrCQM1uYOYRCMx3cb1/kZYqRBuQhZkDv4W3crFmeQPDjLj5o
-         6Kpg1SJgeCbqCD9paidrzFq/vI3kfCkcc3d0E=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O957Ri/0BgbMSrPbxQY/9ULVJYFNDqjXyqmF7WgsPVo=;
+        b=LhvJ5TKap96EqV9/pPcDlP3U58e7yk7wFss4ufzPsVIj5y2XJbPcKaAlOvABrLGrKd
+         CmDE5YasEk5QfA+RKiPigj25VuDR6UuHnzRiCaYoq+K0CAG8NYbyGBvY8ej0MZc8VM7X
+         IxjGId1hnLBYpgGrJP2zj7WaRkX53sDTuAv8EZablEdPkv7j/ZX2sQbAhjfrrTuIKkMp
+         otLhkNMkkgX8sTYHW3wEYAlI2gN62tAFfyVtrmgD1uoCzfIzo0Qx2YR61X0F79pJztA5
+         9gKzxU93MSzBFOTyjkUAUPWifDmGlbnN2B2trk8LX+nkdqmcv1PHt2Y1Ihu9OOAtu9C1
+         xZzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=q2q2tt2mrZO6cCReszztSL4ypwEDswnrQTtGtJCGJUE=;
-        b=UuG/I5bqslbre5OWKBghMW9QLrCau1BDmpXx32p//tToPiV2Sf+KibYqC6oixS5q9b
-         LKyl935LEByoIkOulL/n/MAKYDgB7ykhVbaj9ECcKSuwhHosRxM2mVK0j5b+tvQY8X1T
-         Cwq7jeduTODONkKxpnNO1HucBiVpOKxecbOxLmBDHPVFgUvm2XWzG64bwgZfciRXZcPK
-         xXsF9xzQw31XuCAiZWpXKb7vpPfpVcKXiECqsKCTLBzSdeKcHF6Im+XuOIqLUcDwjvw0
-         UhClMlodz992mNTNF3RUiYp90kDmACRoRONcEh5Tw3D9+gNP5GN8dxj36FOsYNKa3Iis
-         mV0w==
-X-Gm-Message-State: AOAM530GvAze7lDXdPlr3CVfMg0wuVLY8ZjHiGwv9pln57Q6zNpNYBw1
-        iIdKdQxJ8GyzNQVU2CcEEirFhA==
-X-Google-Smtp-Source: ABdhPJx5czYfpKhMlBBPu5m4CeFhOqRAnbQlMHVCkvr1ENOs2XiZ7N3+pkrA4pjeydS3feFdfRlyig==
-X-Received: by 2002:a92:d852:: with SMTP id h18mr8339299ilq.211.1631312381107;
-        Fri, 10 Sep 2021 15:19:41 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id n11sm3165349ioo.44.2021.09.10.15.19.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Sep 2021 15:19:40 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O957Ri/0BgbMSrPbxQY/9ULVJYFNDqjXyqmF7WgsPVo=;
+        b=iL9v0tx96UCvA9Eq36H5mAO6A6+7LdxKNF4HTMpPY2/J0o9c87FZV6mvz1iGk3C+X3
+         LlCNDnUGQlZM6r70yXIrQ7Ej36EcpTgVy8V/GOxu0thuV8Su+bY+uYEcVjKGcxepKatl
+         JP0kluXLnkOMQroq3zMGVLd6C9zEZxd4BVALsqXmFRLwp4nfemJITbu3W8hSF1/OOWNe
+         K+Ygc/lIL6X7iiLH9bFWkoV8wGjqX/AT9FRqEzc16kmtbuAia3ryo+G2HHBqGmHl6QWX
+         bw4ui+dRDsFlTRT9qnTZOZOdiQPlALG4EgcjjXz7LezjsAdcjpfvzftOIUjGuxyzsuKX
+         QlwQ==
+X-Gm-Message-State: AOAM5304RnYlKFNHGQkGXhp8krJy0PZBVjFt71aYfExAy+4xrdOwsUMG
+        sE6ZsPAsPJhhB29KXhweLGfJNPKUtvNyfEK/xX4vl3dge7wjSQ==
+X-Google-Smtp-Source: ABdhPJwPCI1BFrQljr8CVIaPm/HOKh9tjiswuqnbA3ltFmsMfJOsLlLTxXucgARNDednGBrthMujWF+g5kzitLnlR20=
+X-Received: by 2002:a05:6000:124b:: with SMTP id j11mr2646wrx.147.1631312487842;
+ Fri, 10 Sep 2021 15:21:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <6A72EAE4-A0F7-4CD2-89BB-36A8F4A7D321@internode.on.net>
+In-Reply-To: <6A72EAE4-A0F7-4CD2-89BB-36A8F4A7D321@internode.on.net>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 11 Sep 2021 06:21:16 +0800
+Message-ID: <CABVgOSkHoVcRQLGVTZZ1andSY4UHqoRwLdyiTHh9KTQ4m3av9w@mail.gmail.com>
 Subject: Re: After KUnit update for Linux 5.15-rc1 - unable to share VFAT
  filesystem via samba
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Arthur Marsh <arthur.marsh@internode.on.net>,
-        David Gow <davidgow@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <6A72EAE4-A0F7-4CD2-89BB-36A8F4A7D321@internode.on.net>
- <CAFd5g46N6PuOrEyaqK4jRx1_NyVqgtPWvRc2=8vQ8xu2iS3Low@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fe9eaf40-bb77-ec3f-a5db-859b2e045327@linuxfoundation.org>
-Date:   Fri, 10 Sep 2021 16:19:39 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <CAFd5g46N6PuOrEyaqK4jRx1_NyVqgtPWvRc2=8vQ8xu2iS3Low@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Arthur Marsh <arthur.marsh@internode.on.net>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/10/21 3:23 PM, Brendan Higgins wrote:
-> +David Gow - just FYI since you are the only KUnit person who touched
-> VFAT. PTAL at other emails in thread too, please.
-> 
+On Fri, Sep 10, 2021 at 8:02 PM Arthur Marsh
+<arthur.marsh@internode.on.net> wrote:
+>
+>
+>  Hi, I have been sharing an old VFAT formatted hard disk on one pc to
+> another using Samba and sometime after kernel 5.14.0 it stopped working (apparently no longer being shared as the mount.smbfs command
+> on the client failed with error -13 yet mount.smbfs still worked for
+> ext3 filesytems shared from the same machine which had the VFAT
+> filesystem).
+>  The only error I saw on the machine with the VFAT formatted hard disk
+> was the output of the mount command had truncated the name of the
+> mount to only include the first 4 characters of the base name of the
+> mount point.
+>  e.g. when VFAT filesystem was mounted on /mnt/victoria, the output of
+> the mount command showed the filesytem mounted on /mnt/vict
+>
 
-Agree. Arthur confirmed CONFIG_KUNIT isn't enabled.
+I can't reproduce this on my machine (which is openSUSE Tumbleweed
+with their "vanilla" 5.14 kernel package on x86_64, mounting a FAT16
+filesystem).
 
-I requested for a quick test with (repeating this for David's benefit)
+# mount /dev/sda1 /mnt/victoria
+# mount | grep vic
+/dev/sda1 on /mnt/victoria type vfat
+(rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro)
+# uname -a
+Linux patpat 5.14.0-1-vanilla #1 SMP Mon Aug 30 07:01:36 UTC 2021
+(dc06e24) x86_64 x86_64 x86_64 GNU/Linux
 
-reverting the following one
-at a time to isolate:
+I can try it again on an older i386 machine, but I doubt that'd change
+things: this doesn't smell architecture-specific to me.
 
-b0d4adaf3b3c4402d9c3b6186e02aa1e4f7985cd (this is the other one in
-you bisect log)
+This seems a lot more like it's something to do with /proc/mounts or
+similar, rather than a FAT specific issue (and, unless something
+really strange has happened with the CONFIG_FAT_DEFAULT_CODEPAGE
+config option, which I doubt), this change shouldn't affect anything
+at all when KUnit isn't enabled and used. I suspect it just shows up
+in the bisect because it's basically the only change in fs/fat for a
+while.
 
-c815f04ba94940fbc303a6ea9669e7da87f8e77d (This is the KUnit patch)
-(This one shouldn't be in play without CONFIG_KUNIT)
+The bisect against the whole kernel tree seems likely to be of more use.
 
-thanks,
--- Shuah
+-- David
