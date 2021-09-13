@@ -2,173 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B28408CB1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Sep 2021 15:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB1D408CAF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Sep 2021 15:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240304AbhIMNVM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Sep 2021 09:21:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34852 "EHLO mail.kernel.org"
+        id S240233AbhIMNVL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Sep 2021 09:21:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34854 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240395AbhIMNUd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S240399AbhIMNUd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 13 Sep 2021 09:20:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 80228610A8;
-        Mon, 13 Sep 2021 13:18:54 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3673361216;
+        Mon, 13 Sep 2021 13:18:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631539135;
-        bh=GBsRjVbp2ScqVMX9Rr82B9alQFkrFeuX8lSU+S6t9jw=;
+        s=k20201202; t=1631539137;
+        bh=3RGlMrOqTC9QZNG8f5YOa/s+hJ+c18k3VekrOVRUQEA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mo8M6F4jz6PBNNdSEeT08UIeYOdOhmcWcxJ4JK1yp/v6YWhep7BCTWJloB0NlJ2+z
-         Q2XslFd1yWpmMkPJTEX9pPBhUEhMDxmQjphAjuyaCT5WQ2oVXW9RBMuE97hLMCDhWw
-         ZhGQGoF6Pt/NORov6iBqBLIljMKvXccQX9wU1ZaxSPZurQgVxAWFJ6B91a7ABR7m/r
-         hK5qmedrYZrgjya+6DP6xQXoLWqk38LjjIAitkoI47DOus28FTzyHLose+lzXlVBFR
-         +t6UHHtk/oMezHnKwGexZchwJVJ3gYBD80LdbQ84cYgtKerw4jnOO75azukZJBEjGp
-         VrADSS5L8EVVw==
+        b=IFbjj6TVfED9S9hFdrABRBiPHgjsJy9Vn6kn4XrpXDQhQL/zOLEFomg3Vr+wNZrk5
+         4Y0rdZXrWWtYMGG2zhmyZoCF0Ulztir+NcpKpO7Bs40ht5pmFygtQfKVEvfQBnCjJZ
+         NTYqZKDOxUhBaTF9zFXluRuD+uU3t9xMAY8vv383K1tw+q0AtZkN+0mEvxZLQw5WVN
+         /zp8KezwAdNv8Jr1e49Vt09sBVtWK0aO6N9Iez0BnHx5QBfgQGU4Q9Bzbpe7hCwBfz
+         v6RbGAWGrfbBoaXrMcQY89vDFaQP58r3VEXniFhGvXBk/WjB1Y/S96PDsrLXMpl0B+
+         D8osld9OQ9hmQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 3/8] selftests: arm64: Remove extraneous register setting code
-Date:   Mon, 13 Sep 2021 13:55:00 +0100
-Message-Id: <20210913125505.52619-4-broonie@kernel.org>
+Subject: [PATCH v1 4/8] selftests: arm64: Document what the SVE ptrace test is doing
+Date:   Mon, 13 Sep 2021 13:55:01 +0100
+Message-Id: <20210913125505.52619-5-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210913125505.52619-1-broonie@kernel.org>
 References: <20210913125505.52619-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3606; h=from:subject; bh=GBsRjVbp2ScqVMX9Rr82B9alQFkrFeuX8lSU+S6t9jw=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhP0oklyFeSTAZL9y/xQilQl6l9HiIjTJLxnjcpFwn v/JDMgeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYT9KJAAKCRAk1otyXVSH0JLrB/ 0TvQ6h1gx2cw1qONvFzw2hBsrYjxazyL0NYUXZzQTLueRtG6mTVimLc6oT3VIkVUkJtWK0mlDH/Vph 7AAetum9hEkOYvio5+iT89JqhR1U8hNkqvE0d5rJA5rXWSVQYhs4znMI+JS0kois5sg7QIciU4bc7o FP7XRkef64uucbVQ3CMOP3KyT6eT4ov/RwSyu9Z9vrKtenl8cAecmZdBvHWF/WbFj4bG3C0VfMnzTt EJb3C4tLN3FKpALgN0kTgU/WbQwTobX57c6iYosnl6IWNnlbeOqqOcfDLzFeg484PgjkEiXAtK6myL lbZPrRPQBjukbw8EOm0URM4VA4oL/Z
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2330; h=from:subject; bh=3RGlMrOqTC9QZNG8f5YOa/s+hJ+c18k3VekrOVRUQEA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhP0ol6DkHVUICf8Th6pUk6tfsdEP8uH4OL+9Tu5lU 0FceRhqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYT9KJQAKCRAk1otyXVSH0LgVB/ 9A/aC9RnVqvaN747YpyJsNIdYQ3o0Uhr6aQXDK3BRYACofl6l4MCga6Kc86rrtUPyHGBxQ29d7+jAj Rr2PYf4nYn3IZ6qPXZD9ZlXNuSOll4ilpEzlDpoxN6+nVTQUQovU9lBYuXULo6bQrLXT3FT2psB1Su mxR/vMqcUaEy6Kx+E7vaKigrZPnR1OpML7/OIpTzP6dAh9FDgqLDaqIdgbcArzNBaJHufAfG525N9i ls6l8tjS6WvKSXh+YrAEdy6BbCkoteGxDnFhag1mT9DRQGsXUfJUkxzNjUvSgp6J56iUgMYCl8v5iY fcfJDtASr41L/eJhnKIyGWQnIrlOFt
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For some reason the SVE ptrace test code starts off by setting values in
-some of the SVE vector registers in the parent process which it then never
-interacts with when verifying the ptrace interfaces. This is not especially
-relevant to what's being tested and somewhat confusing when reading the
-code so let's remove it.
+Before we go modifying it further let's add some comments and output
+clarifications explaining what this test is actually doing.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/Makefile     |  2 +-
- .../selftests/arm64/fp/sve-ptrace-asm.S       | 33 -------------------
- tools/testing/selftests/arm64/fp/sve-ptrace.c | 28 ----------------
- 3 files changed, 1 insertion(+), 62 deletions(-)
- delete mode 100644 tools/testing/selftests/arm64/fp/sve-ptrace-asm.S
+ tools/testing/selftests/arm64/fp/sve-ptrace.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index f2abdd6ba12e..4367125b7c27 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -12,7 +12,7 @@ all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
- fpsimd-test: fpsimd-test.o
- 	$(CC) -nostdlib $^ -o $@
- rdvl-sve: rdvl-sve.o rdvl.o
--sve-ptrace: sve-ptrace.o sve-ptrace-asm.o
-+sve-ptrace: sve-ptrace.o
- sve-probe-vls: sve-probe-vls.o rdvl.o
- sve-test: sve-test.o
- 	$(CC) -nostdlib $^ -o $@
-diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace-asm.S b/tools/testing/selftests/arm64/fp/sve-ptrace-asm.S
-deleted file mode 100644
-index 3e81f9fab574..000000000000
---- a/tools/testing/selftests/arm64/fp/sve-ptrace-asm.S
-+++ /dev/null
-@@ -1,33 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--// Copyright (C) 2015-2019 ARM Limited.
--// Original author: Dave Martin <Dave.Martin@arm.com>
--#include <asm/unistd.h>
--
--.arch_extension sve
--
--.globl sve_store_patterns
--
--sve_store_patterns:
--	mov	x1, x0
--
--	index	z0.b, #0, #1
--	str	q0, [x1]
--
--	mov	w8, #__NR_getpid
--	svc	#0
--	str	q0, [x1, #0x10]
--
--	mov	z1.d, z0.d
--	str	q0, [x1, #0x20]
--
--	mov	w8, #__NR_getpid
--	svc	#0
--	str	q0, [x1, #0x30]
--
--	mov	z1.d, z0.d
--	str	q0, [x1, #0x40]
--
--	ret
--
--.size	sve_store_patterns, . - sve_store_patterns
--.type	sve_store_patterns, @function
 diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-index 7035f01423b3..d2ec48f649f9 100644
+index d2ec48f649f9..fc4a672825eb 100644
 --- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
 +++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-@@ -26,11 +26,6 @@
- #define NT_ARM_SVE 0x405
- #endif
+@@ -181,6 +181,7 @@ static int do_parent(pid_t child)
+ 		}
+ 	}
  
--/* Number of registers filled in by sve_store_patterns */
--#define NR_VREGS 5
--
--void sve_store_patterns(__uint128_t v[NR_VREGS]);
--
- static void dump(const void *buf, size_t size)
- {
- 	size_t i;
-@@ -40,23 +35,6 @@ static void dump(const void *buf, size_t size)
- 		printf(" %.2x", *p++);
- }
++	/* New process should start with FPSIMD registers only */
+ 	sve = get_sve(pid, &svebuf, &svebufsz);
+ 	if (!sve) {
+ 		int e = errno;
+@@ -191,14 +192,15 @@ static int do_parent(pid_t child)
  
--static int check_vregs(const __uint128_t vregs[NR_VREGS])
--{
--	int i;
--	int ok = 1;
--
--	for (i = 0; i < NR_VREGS; ++i) {
--		printf("# v[%d]:", i);
--		dump(&vregs[i], sizeof vregs[i]);
--		putchar('\n');
--
--		if (vregs[i] != vregs[0])
--			ok = 0;
--	}
--
--	return ok;
--}
--
- static int do_child(void)
- {
- 	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL))
-@@ -309,7 +287,6 @@ static int do_parent(pid_t child)
- int main(void)
- {
- 	int ret = EXIT_SUCCESS;
--	__uint128_t v[NR_VREGS];
- 	pid_t child;
+ 		goto error;
+ 	} else {
+-		ksft_test_result_pass("get_sve\n");
++		ksft_test_result_pass("get_sve(FPSIMD)\n");
+ 	}
  
- 	ksft_print_header();
-@@ -318,11 +295,6 @@ int main(void)
- 	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
- 		ksft_exit_skip("SVE not available\n");
+ 	ksft_test_result((sve->flags & SVE_PT_REGS_MASK) == SVE_PT_REGS_FPSIMD,
+-			 "FPSIMD registers\n");
++			 "Set FPSIMD registers\n");
+ 	if ((sve->flags & SVE_PT_REGS_MASK) != SVE_PT_REGS_FPSIMD)
+ 		goto error;
  
--	sve_store_patterns(v);
--
--	if (!check_vregs(v))
--		ksft_exit_fail_msg("Initial check_vregs() failed\n");
--
- 	child = fork();
- 	if (!child)
- 		return do_child();
++	/* Try to set a known FPSIMD state via PT_REGS_SVE */
+ 	fpsimd = (struct user_fpsimd_state *)((char *)sve +
+ 					      SVE_PT_FPSIMD_OFFSET);
+ 	for (i = 0; i < 32; ++i) {
+@@ -219,6 +221,7 @@ static int do_parent(pid_t child)
+ 		goto error;
+ 	}
+ 
++	/* Zero the first SVE Z register */
+ 	vq = sve_vq_from_vl(sve->vl);
+ 
+ 	newsvebufsz = SVE_PT_SVE_ZREG_OFFSET(vq, 1);
+@@ -245,6 +248,7 @@ static int do_parent(pid_t child)
+ 		goto error;
+ 	}
+ 
++	/* Try to read back the value we just set */
+ 	new_sve = get_sve(pid, &newsvebuf, &newsvebufsz);
+ 	if (!new_sve) {
+ 		int e = errno;
+@@ -257,12 +261,13 @@ static int do_parent(pid_t child)
+ 	}
+ 
+ 	ksft_test_result((new_sve->flags & SVE_PT_REGS_MASK) == SVE_PT_REGS_SVE,
+-			 "SVE registers\n");
++			 "Get SVE registers\n");
+ 	if ((new_sve->flags & SVE_PT_REGS_MASK) != SVE_PT_REGS_SVE)
+ 		goto error;
+ 
+ 	dump_sve_regs(new_sve, 3, sizeof fpsimd->vregs[0]);
+ 
++	/* Verify that the register we set has the value we expected */
+ 	p = (unsigned char *)new_sve + SVE_PT_SVE_ZREG_OFFSET(vq, 1);
+ 	for (i = 0; i < sizeof fpsimd->vregs[0]; ++i) {
+ 		unsigned char expected = i;
 -- 
 2.20.1
 
