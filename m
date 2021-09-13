@@ -2,88 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F634407BFE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Sep 2021 08:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E464408784
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Sep 2021 10:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbhILGET (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 Sep 2021 02:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbhILGET (ORCPT
+        id S238046AbhIMIwN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Sep 2021 04:52:13 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:52817 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235987AbhIMIwN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 Sep 2021 02:04:19 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64503C061757
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Sep 2021 23:03:05 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id v19so1401727pjh.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Sep 2021 23:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=Y79dqLpJXJyOzP2VVEHo915utOWniBE+qykCnVE2o3Q=;
-        b=p3laVEpdtRg4ofU3VjuXTKgZnzryo/1r7+kf9Mhtac7AdB1wkB6++HxCH5LMB0PN6x
-         rz+4fyzP8s4HT3bNMcWl7aj3sWyGUIp3sJN627IOwXfpe62PJPB0F9rnQchyGFbo1FLW
-         iO8az5M/GhhVoqG7q3RbwLHN7BQjNAx1GYME6dxLbYdl+xCDE1yk3jgkcFTqNLRjTZ53
-         rB0P7boWuB10Cj2OBogRyKodhSuScyjCwOgVnse56jWieOssDmaugznEt8Bw+vFDgXx6
-         /7dAN7d/KKYdkufPfgFWnB+KvdFJPHkyUOHsy3HSoA0R+rSJoKFJfZ4djiy1mUVLyBjX
-         m3Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=Y79dqLpJXJyOzP2VVEHo915utOWniBE+qykCnVE2o3Q=;
-        b=xP/a3vIc4FQoc6mPOLoODBugEjdt4Zhm4nuP4kLusRNHM7yKWSLJq3E4khw95w5LGc
-         XtfgNC6ga7mH8MXEMEaVGCKZLQyLLn++ap5A5T8nnN6UdWMTiOAEF4fe30O9pgjeeHZy
-         ug17tRNz3LTLHmu6I9zuBjND6KISZZRdCPixAy2aK5fsuJVGUeAwKgw37gDk/sUDMYa9
-         SP4jGk+D1ey6pTA7/7r1x/kgL0XvDjQMwWUy09uuy1y2SpQNnX0AjZCsjwrALN5LRJ50
-         /a+jC0dX2HnS3WCQwetxKtzSeu0rDB+tDrdPPRI/6W74hWKhCXjm/MLnNw9SxHaCkK77
-         d9dQ==
-X-Gm-Message-State: AOAM531afShbslSVTJmX4DPQeYLvBlUO0mxDgO36+jFeHzeWE+pqyacp
-        Vbd+LrMjOfVKGXk0rr9WMhov/vQZ2Ww6hjK12JNn6OCJjjDM2Q==
-X-Google-Smtp-Source: ABdhPJywpwUR+GMBdzrOqbqoxnHWSufTxcJYCOAbce2OlQL8PBjFwUAbXpjfyarggje6cxoegtmtenwWmkHvHb9nHC8=
-X-Received: by 2002:a17:90a:a791:: with SMTP id f17mr6029490pjq.225.1631426584745;
- Sat, 11 Sep 2021 23:03:04 -0700 (PDT)
+        Mon, 13 Sep 2021 04:52:13 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.nyi.internal (Postfix) with ESMTP id B658D580B05;
+        Mon, 13 Sep 2021 04:50:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 13 Sep 2021 04:50:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=oEBMjG
+        HbxkehBrxFgJqADlnGq31HX2RE4tw3YGcGOxo=; b=f35bXpQY4Dkcqm2P7Tp3sF
+        uumChSSx8jFh7qOKyLaxeRTr5e0PSckEp04xgcGNXxkxo4AXRXZeFmCoXwSoS8zz
+        ps5NQYIakD6Owa0YnOvN89SO75qvV1qQEzEP233A380UH2+jdxA0iUHv/q98oslE
+        wcvd+rn1QtAZvPk/G7NxK25CrK/ivKKTR/ybuQYEmGlMYMBEqugBi0IPuSRieYBn
+        tQVMZ0hzLKK5x36ORsDFEbTiKI1zIhfuAC6RV4g2/QRRFPNGDkqX3UtDih5krgLm
+        o28yvTFXn5W/iOGBryVWdSWM3Ne2aoAWqBq9Nm5uWQGCa81yQZ/NpTBMba1fygeg
+        ==
+X-ME-Sender: <xms:7xA_YRDbnwoIwg1Mkok3tynI4u6_OZb2oZANpU-hMY04g1FcCDMcHg>
+    <xme:7xA_YfjBlj_R4JgSeJ_J4oEtCbVeYIf4UN2G_EYZtte6XV9g2r8GE3vG6J2rvNcPR
+    t5FouFOJPXkDf0>
+X-ME-Received: <xmr:7xA_Ycm-dV0Z4DqdBDA44yjluaAo9IRItj0kgiIJzxSwuJQ2NLLD9HaWuvc4odd4srNbfKa0wGNCo7KZVD41fmhBZSMOMg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudegjedgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
+    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:7xA_Ybw9uggka_pKgpmH_Ezv20W9TEz1eM9dqYTKIblStIMy018Z0Q>
+    <xmx:7xA_YWT1VjigWlHdo9Atx-hTkQxxmDMQvLhEvhOaJmgVULCEGOWyBg>
+    <xmx:7xA_YebvlI4FxCy66gU5jxA7JHZ1C_tW5Y-n3jImh_csP77blIGwFA>
+    <xmx:8RA_YSbIfpC1B94dnYQ_r5KoDOw950dNMBzVAhXwys3VXemZ0CrDKQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Sep 2021 04:50:55 -0400 (EDT)
+Date:   Mon, 13 Sep 2021 11:50:51 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "abyagowi@fb.com" <abyagowi@fb.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Saeed Mahameed <saeed@kernel.org>,
+        Michael Chan <michael.chan@broadcom.com>
+Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
+ to get SyncE status
+Message-ID: <YT8Q6yWQGt0/B2iy@shredder>
+References: <PH0PR11MB4951623918C9BA8769C10E50EAD29@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210906113925.1ce63ac7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB49511F2017F48BBAAB2A065CEAD29@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210906180124.33ff49ef@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB495152B03F32A5A17EDB2F6CEAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210907075509.0b3cb353@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB49512C265E090FC8741D8510EAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210907124730.33852895@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB495169997552152891A69B57EAD49@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210908092115.191fdc28@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a11:412:0:0:0:0 with HTTP; Sat, 11 Sep 2021 23:03:04
- -0700 (PDT)
-From:   Jennifer Chung <wamaofficebf226@gmail.com>
-Date:   Sat, 11 Sep 2021 18:03:04 -1200
-Message-ID: <CADrdR4N_cQfXEXHpAtpsRjPfD0b0T8KL8mS1pLOwwHUMdwez1Q@mail.gmail.com>
-Subject: Reply urgent.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210908092115.191fdc28@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On Wed, Sep 08, 2021 at 09:21:15AM -0700, Jakub Kicinski wrote:
+> Mumble, mumble. Ido, Florian - any devices within your purview which
+> would support SyncE? 
 
-Its my pleasure to contact you, I hope you are good? I know this
-message may come to you as a surprise but i am contacting you due to
-the situation of things, My name is Dr. Jennifer Chung. i deal on Real
-Estate and Investor and i have all my investments here in Afghanistan
-but i have decided to relocate due to the present situation of things
-here now in Afghanistan since the Taliban's sweep into Afghan capital
-and took over the government.
-
-So since then business, offices bank's has been shut down as people
-are running for their lives, So for this reason i have decided to
-relocate and move my investment to your country, I want you to help me
-receive and secure the sum of USD$10.5 Million Dollars (Ten Million
-Five Hundred Thousand United State Dollars) which i want to use to
-invest over there in your country, I was able to secure the money with
-the help of a courier company which they are going to send the money
-to you so once you receive the money you can secure it till i find my
-way to join you over there in your country.
-
-All i need from you is to receive and secure the money till i come to
-meet with you there in your country and i am willing to offer you 10%
-of the money if you assure to secure the money, Also promise that you
-will not betray me after receving the fund, So if you are willing to
-receive the money then quickly indicate so i can give you full details
-and what next to do, I wait your urgent reply as soon as possible as
-the situation here is getting worster day by day.
-
-Reply through my private Email: dr.jenniferchung05@gmail.com
-
-Thanks
-Dr. Jennifer Chung.
+Sorry for the delay, was AFK. I remember SyncE being mentioned a few
+times in the past, so it is likely that we will be requested to add
+SyncE support in mlxsw in the future. I will try to solicit feedback
+from colleagues more familiar with the subject and provide it here next
+week.
