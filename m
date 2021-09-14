@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC19740A6C6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Sep 2021 08:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EFD40A706
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Sep 2021 09:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239015AbhINGmS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Sep 2021 02:42:18 -0400
-Received: from mga14.intel.com ([192.55.52.115]:29468 "EHLO mga14.intel.com"
+        id S240553AbhINHEX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Sep 2021 03:04:23 -0400
+Received: from mga01.intel.com ([192.55.52.88]:43416 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232880AbhINGmS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Sep 2021 02:42:18 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="221569687"
+        id S240327AbhINHEN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Sep 2021 03:04:13 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="244234463"
 X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
-   d="scan'208";a="221569687"
+   d="scan'208";a="244234463"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 23:40:58 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2021 00:02:56 -0700
 X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
-   d="scan'208";a="543808160"
+   d="scan'208";a="543817039"
 Received: from chenyu-desktop.sh.intel.com (HELO chenyu-desktop) ([10.239.158.176])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 23:40:55 -0700
-Date:   Tue, 14 Sep 2021 14:46:49 +0800
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2021 00:02:53 -0700
+Date:   Tue, 14 Sep 2021 15:08:46 +0800
 From:   Chen Yu <yu.c.chen@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
+To:     Mike Rapoport <rppt@kernel.org>
 Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Len Brown <len.brown@intel.com>,
@@ -34,80 +34,39 @@ Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dou Shengnan <shengnanx.dou@intel.com>
 Subject: Re: [PATCH 5/5][RFC] selftests/pfru: add test for Platform Firmware
  Runtime Update and Telemetry
-Message-ID: <20210914064649.GA79693@chenyu-desktop>
+Message-ID: <20210914070846.GA80235@chenyu-desktop>
 References: <cover.1631025237.git.yu.c.chen@intel.com>
  <1cef405de3484eef108251562fbf461bad4294c7.1631025237.git.yu.c.chen@intel.com>
- <82889db2-1927-582d-c27f-b1f0927ca903@linuxfoundation.org>
+ <YTh9mEjm7EI1dmu7@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <82889db2-1927-582d-c27f-b1f0927ca903@linuxfoundation.org>
+In-Reply-To: <YTh9mEjm7EI1dmu7@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah, thank you for taking a look at this,
-On Tue, Sep 07, 2021 at 03:28:52PM -0600, Shuah Khan wrote:
-> On 9/7/21 9:40 AM, Chen Yu wrote:
+Hi Mike,
+On Wed, Sep 08, 2021 at 12:08:40PM +0300, Mike Rapoport wrote:
+> On Tue, Sep 07, 2021 at 11:40:30PM +0800, Chen Yu wrote:
 > > Introduce a simple test for Platform Firmware Runtime Update and Telemetry
 > > drivers. It is based on ioctl to either update firmware driver or code injection,
 > > and read corresponding PFRU Telemetry log into user space.
-> > 
+> >
+[snip.. 
+> > +struct updated_result {
+> > +	enum dsm_status status;
+> > +	enum dsm_status ext_status;
+> > +	unsigned long low_auth_time;
+> > +	unsigned long high_auth_time;
+> > +	unsigned long low_exec_time;
+> > +	unsigned long high_exec_time;
+> > +};
 > 
-> A few things to consider and add handling for them in the
-> test.
-> 
-> What happens when non-root user runs this test?
-Currently the code does not distinguish between root and non-root. The
-next version will terminate if the user is non-root.
-> What happens when the pfru device doesn't exist?
-> 
-Currently the code terminates if either pfru_update or pfru_telemetry
-device was not found.
-> 
-> [snip]
-> 
-> > +}
-> > +
-> > +int main(int argc, char *argv[])
-> > +{
-> > +	int fd_update, fd_log, fd_capsule;
-> > +	struct telem_data_info data_info;
-> > +	struct telem_info info;
-> > +	struct update_cap_info cap;
-> > +	void *addr_map_capsule;
-> > +	struct stat st;
-> > +	char *log_buf;
-> > +	int ret = 0;
-> > +
-> > +	parse_options(argc, argv);
-> > +
-> > +	fd_log = open("/dev/pfru/telemetry", O_RDWR);
-> > +	if (fd_log < 0) {
-> > +		perror("Cannot open telemetry device...");
-> > +		return 1;
-> > +	}
-> 
-> Is this considered an error or unsupported?
-> 
-> > +	fd_update = open("/dev/pfru/update", O_RDWR);
-> > +	if (fd_update < 0) {
-> > +		perror("Cannot open code injection device...");
-> > +		return 1;
-> > +	}
-> > +
-> 
-> Same here. If test is run on platform with pfru test should skip
-> instead of reporting failure/error.
-> 
-Okay, got it. The next version will do the following to fix this:
-1. If the pfru_update device is not found, the test will terminate.
-   This is because the pfru_update driver is the fundamental driver.
-   If this driver is not detected, there would be no information at all.
-2. If the pfru_telemetry device is not found, the test will skip
-   the log setting/retrieving. Since the pfru_telemetry driver
-   is optional, the user can still update the firmware without
-   checking the telemetry log.
+> Most of these types and constants seem to be a copy of uapu/linux/pfru.h.
+> Shouldn't the test get them from there?
+>
+Yes they have shared structures. The next version will reuse the uapi header.
 
-Thanks,
+thanks,
 Chenyu 
