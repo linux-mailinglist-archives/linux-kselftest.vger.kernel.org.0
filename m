@@ -2,52 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EA240B991
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Sep 2021 23:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6632140B993
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Sep 2021 23:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbhINVFN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Sep 2021 17:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        id S234062AbhINVFS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Sep 2021 17:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233101AbhINVFN (ORCPT
+        with ESMTP id S231997AbhINVFR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Sep 2021 17:05:13 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C78C061762
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Sep 2021 14:03:55 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id q19-20020ac87353000000b0029a09eca2afso183980qtp.21
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Sep 2021 14:03:55 -0700 (PDT)
+        Tue, 14 Sep 2021 17:05:17 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9ECEC061574
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Sep 2021 14:03:59 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id q17-20020a25b591000000b005a07d27bbdaso628218ybj.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Sep 2021 14:03:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=P3s0PW2EH0Ml3/EPFCPc5wxGhj/fXxyvj2Gi1PZuoSk=;
-        b=gqInJp3HHRboDb0kWTrpzheyc7vfv7JjlQ75l8Oj0cNVKJgYwjyAU2WGzmVz5lR0x3
-         PZ1fP6luP6Wz3AsMwAVadM1QkS71XaHqi3NcVfZvhXBFSDQBvNfeznybKCX/i/zAb2uf
-         eo94UuAVlK2qqbuOjEwJ7+pmAlRNgsr/g+R5oHfEKX5GBKlw7wSCzFdZ4z+5AWP6BjUm
-         Lq0ls3VniuJFRurRzcSCuBfd9aT/gTmo2O4dOCFz28XN1xl1yA9O00OgAJdOsQyBbNvq
-         gAf0I6r6pQgfbn8ynKrkSFEf5DOf/362LylkzUXl79424tM5vkGc+4u0c5Cnl0O2exq+
-         D7nA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=tMEzaOXPLWybXOtL02WgeGBJsEbq6ofo3HLDr16Ye1U=;
+        b=L29o/ViIPzEZJNJxT6tNV3F7GCqjF9vDwBqsWKwi/7qzl05RvRqn2HA5jH1VPAzLDc
+         mF7A67eQBTL13GqfJKaS+jJvdQiVOiCYAmh+s/S37jVov+Op16UFKjizxG6xqMKo7yHf
+         MznJiAaHz6M7nKyMAhiyRUFj7xaeHSUAU3ijwzs4lL1/VsxgJDqx/hop/5Nh61/fqQ1P
+         yw3gv3DKEMAEclpM4bt1mTTEQGy8dHrEhXmZSJbZRKep8ORZgjsARfu5/rF8lxWjPYGg
+         YGa4GzshUSdljEBnJ1lAb+XWS/959sslQ1iwyaHHmwXYXvnEnBtlFrnyf+NRLUUjioB0
+         lNDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=P3s0PW2EH0Ml3/EPFCPc5wxGhj/fXxyvj2Gi1PZuoSk=;
-        b=RjXc0tK8bEcTtuNzNelEyi62aNqrXneGcHvsZLH3q2aAUN8lJls/D34+TtVRyoSCi9
-         M27AaN/RCvnuT4Vz+IFLTxkhjQV8jtwy1C6M0vGw/4CrV0N0e+DbcuhTgQvmkNEWuPPk
-         l1AvfnRnymeQdZ02px5/W7GOF2VXOu9UMLt2OcAScBbDrQzs6i0kyjvpjBPIKz1WG4+1
-         nyxmMhRRbbyaFp1aTJ3VtiuruOD87IczkiN9Owz7Q/15scrN4OMhn9M+XObzk2hgXc6y
-         TFTdmZAtYBcdbsLkgM0w43tHBP30x+8meL+sjMSTh4dauqXy7c+7i5HpUYTjGuG0hIec
-         zfKw==
-X-Gm-Message-State: AOAM5300hIdqjs1hR/wVsT5mfePKvmPgLNn3YjD5k9OvzfvDvjl5bIL1
-        AMkS//nia2i1vlnvlPQf9jPQYUXGCd6r5w==
-X-Google-Smtp-Source: ABdhPJxmWqvku6GifqE8nxKe/KFa7bFUFGuR0FRJUo1/cU9Zz23KhJzYUdDYOlaleSjXAJJcIVOn5umYrwoHnA==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=tMEzaOXPLWybXOtL02WgeGBJsEbq6ofo3HLDr16Ye1U=;
+        b=0kTlhcMRpYW4/M2m0MPqpZsNva2VYR0BUVoCPy+n5Xztu4tMUXohoHa+shn5OzTLlP
+         82RPG3w2Rxr7XA0+RE3VIn44kaBEnHyMU1Zetxvl3ZviUpyUfjljIUzAutImQtarB6Tk
+         Y7n6GhthdK67uFRWifE8ljNQWbydWD9t3JQQlxI7ZNeY8Spu1ufxCswDqxIqyhydtvmj
+         fX4O9lNL8Yu8uHKBJIBmUUdLSsBnUnBCywRSOvemgNpuS0pv8M+FdVYQoTb7XkmuzDbG
+         CAguEPybgjjM4QH/Azxk8Wc0XwO3HDBeiYRqXFgD4vu/P0cLOqLt0tjFJ3ctLEfdfM2S
+         8S2Q==
+X-Gm-Message-State: AOAM532d2TRmV0rfxoe+eTzqQWRsPvSh3H31KumUQOyK+jGDz1Go7NOv
+        k3fdBlmX1XfTS6avurwi5WVd/HCZvdRsrg==
+X-Google-Smtp-Source: ABdhPJw3riUsJUYYvoLiEud6itoj3gBoqhiP4G/r3qYftSJ71gtmYuNUrD2RWT6EhGxJHRNRYjyG5BFmSMcaOA==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:28d6:f5a5:bbcc:620])
- (user=dlatypov job=sendgmr) by 2002:a05:6214:492:: with SMTP id
- ay18mr7619903qvb.4.1631653434636; Tue, 14 Sep 2021 14:03:54 -0700 (PDT)
-Date:   Tue, 14 Sep 2021 14:03:47 -0700
-Message-Id: <20210914210348.717392-1-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:a25:7c44:: with SMTP id
+ x65mr1435497ybc.186.1631653438384; Tue, 14 Sep 2021 14:03:58 -0700 (PDT)
+Date:   Tue, 14 Sep 2021 14:03:48 -0700
+In-Reply-To: <20210914210348.717392-1-dlatypov@google.com>
+Message-Id: <20210914210348.717392-2-dlatypov@google.com>
 Mime-Version: 1.0
+References: <20210914210348.717392-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.33.0.309.g3052b89438-goog
-Subject: [PATCH v5 1/2] kunit: drop assumption in kunit-log-test about current suite
+Subject: [PATCH v5 2/2] kunit: tool: allow filtering test cases via glob
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -58,75 +62,437 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This test assumes that the declared kunit_suite object is the exact one
-which is being executed, which KUnit will not guarantee [1].
+Commit 1d71307a6f94 ("kunit: add unit test for filtering suites by
+names") introduced the ability to filter which suites we run via glob.
 
-Specifically, `suite->log` is not initialized until a suite object is
-executed. So if KUnit makes a copy of the suite and runs that instead,
-this test dereferences an invalid pointer and (hopefully) segfaults.
+This change extends it so we can also filter individual test cases
+inside of suites as well.
 
-N.B. since we no longer assume this, we can no longer verify that
-`suite->log` is *not* allocated during normal execution.
+This is quite useful when, e.g.
+* trying to run just the tests cases you've just added or are working on
+* trying to debug issues with test hermeticity
 
-An alternative to this patch that would allow us to test that would
-require exposing an API for the current test to get its current suite.
-Exposing that for one internal kunit test seems like overkill, and
-grants users more footguns (e.g. reusing a test case in multiple suites
-and changing behavior based on the suite name, dynamically modifying the
-setup/cleanup funcs, storing/reading stuff out of the suite->log, etc.).
+Examples:
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit '*exec*.parse*'
+...
+============================================================
+======== [PASSED] kunit_executor_test ========
+[PASSED] parse_filter_test
+============================================================
+Testing complete. 1 tests run. 0 failed. 0 crashed.
 
-[1] In a subsequent patch, KUnit will allow running subsets of test
-cases within a suite by making a copy of the suite w/ the filtered test
-list. But there are other reasons KUnit might execute a copy, e.g. if it
-ever wants to support parallel execution of different suites, recovering
-from errors and restarting suites
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit '*.no_matching_tests'
+...
+[ERROR] no tests run!
 
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- lib/kunit/kunit-test.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+v1 -> v2: update Documentation/.../running_tips.rst
+v2 -> v3: add missing `static` (thanks lkp bot), add prework patch to
+fix kunit-log-test's assumption about the current suite.
+v3 -> v4: s/alloc_and_get_resource/alloc_resource, fixes a leak.
+Thanks to Xiyu Yang and Xin Tan for finding this.
+v4 -> v5: add missing static on `dummy_test_cases`
+---
+ .../dev-tools/kunit/running_tips.rst          |  11 +-
+ lib/kunit/executor.c                          | 107 +++++++++++++++--
+ lib/kunit/executor_test.c                     | 109 +++++++++++++++---
+ tools/testing/kunit/kunit.py                  |   5 +-
+ 4 files changed, 203 insertions(+), 29 deletions(-)
 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index d69efcbed624..555601d17f79 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -415,12 +415,15 @@ static struct kunit_suite kunit_log_test_suite = {
+diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
+index 30d2147eb5b5..7b6d26a25959 100644
+--- a/Documentation/dev-tools/kunit/running_tips.rst
++++ b/Documentation/dev-tools/kunit/running_tips.rst
+@@ -25,8 +25,8 @@ It can be handy to create a bash function like:
+ Running a subset of tests
+ -------------------------
  
- static void kunit_log_test(struct kunit *test)
- {
--	struct kunit_suite *suite = &kunit_log_test_suite;
-+	struct kunit_suite suite;
+-``kunit.py run`` accepts an optional glob argument to filter tests. Currently
+-this only matches against suite names, but this may change in the future.
++``kunit.py run`` accepts an optional glob argument to filter tests. The format
++is ``"<suite_glob>[.test_glob]"``.
+ 
+ Say that we wanted to run the sysctl tests, we could do so via:
+ 
+@@ -35,6 +35,13 @@ Say that we wanted to run the sysctl tests, we could do so via:
+ 	$ echo -e 'CONFIG_KUNIT=y\nCONFIG_KUNIT_ALL_TESTS=y' > .kunit/.kunitconfig
+ 	$ ./tools/testing/kunit/kunit.py run 'sysctl*'
+ 
++We can filter down to just the "write" tests via:
 +
-+	suite.log = kunit_kzalloc(test, KUNIT_LOG_SIZE, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
++.. code-block:: bash
++
++	$ echo -e 'CONFIG_KUNIT=y\nCONFIG_KUNIT_ALL_TESTS=y' > .kunit/.kunitconfig
++	$ ./tools/testing/kunit/kunit.py run 'sysctl*.*write*'
++
+ We're paying the cost of building more tests than we need this way, but it's
+ easier than fiddling with ``.kunitconfig`` files or commenting out
+ ``kunit_suite``'s.
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index acd1de436f59..bab3ab940acc 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -17,21 +17,80 @@ extern struct kunit_suite * const * const __kunit_suites_end[];
+ static char *filter_glob_param;
+ module_param_named(filter_glob, filter_glob_param, charp, 0);
+ MODULE_PARM_DESC(filter_glob,
+-		"Filter which KUnit test suites run at boot-time, e.g. list*");
++		"Filter which KUnit test suites/tests run at boot-time, e.g. list* or list*.*del_test");
++
++/* glob_match() needs NULL terminated strings, so we need a copy of filter_glob_param. */
++struct kunit_test_filter {
++	char *suite_glob;
++	char *test_glob;
++};
++
++/* Split "suite_glob.test_glob" into two. Assumes filter_glob is not empty. */
++static void kunit_parse_filter_glob(struct kunit_test_filter *parsed,
++				    const char *filter_glob)
++{
++	const int len = strlen(filter_glob);
++	const char *period = strchr(filter_glob, '.');
++
++	if (!period) {
++		parsed->suite_glob = kmalloc(len, GFP_KERNEL);
++		parsed->test_glob = NULL;
++		strcpy(parsed->suite_glob, filter_glob);
++		return;
++	}
++
++	parsed->suite_glob = kzalloc(period - filter_glob + 1, GFP_KERNEL);
++	parsed->test_glob = kzalloc(len - (period - filter_glob) + 1, GFP_KERNEL);
++
++	strncpy(parsed->suite_glob, filter_glob, period - filter_glob);
++	strncpy(parsed->test_glob, period + 1, len - (period - filter_glob));
++}
++
++/* Create a copy of suite with only tests that match test_glob. */
++static struct kunit_suite *
++kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
++{
++	int n = 0;
++	struct kunit_case *filtered, *test_case;
++	struct kunit_suite *copy;
++
++	kunit_suite_for_each_test_case(suite, test_case) {
++		if (!test_glob || glob_match(test_glob, test_case->name))
++			++n;
++	}
++
++	if (n == 0)
++		return NULL;
++
++	/* Use memcpy to workaround copy->name being const. */
++	copy = kmalloc(sizeof(*copy), GFP_KERNEL);
++	memcpy(copy, suite, sizeof(*copy));
++
++	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
++
++	n = 0;
++	kunit_suite_for_each_test_case(suite, test_case) {
++		if (!test_glob || glob_match(test_glob, test_case->name))
++			filtered[n++] = *test_case;
++	}
++
++	copy->test_cases = filtered;
++	return copy;
++}
  
- 	kunit_log(KERN_INFO, test, "put this in log.");
- 	kunit_log(KERN_INFO, test, "this too.");
--	kunit_log(KERN_INFO, suite, "add to suite log.");
--	kunit_log(KERN_INFO, suite, "along with this.");
-+	kunit_log(KERN_INFO, &suite, "add to suite log.");
-+	kunit_log(KERN_INFO, &suite, "along with this.");
+ static char *kunit_shutdown;
+ core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
  
- #ifdef CONFIG_KUNIT_DEBUGFS
- 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-@@ -428,12 +431,11 @@ static void kunit_log_test(struct kunit *test)
- 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
- 				     strstr(test->log, "this too."));
- 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
--				     strstr(suite->log, "add to suite log."));
-+				     strstr(suite.log, "add to suite log."));
- 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
--				     strstr(suite->log, "along with this."));
-+				     strstr(suite.log, "along with this."));
- #else
- 	KUNIT_EXPECT_PTR_EQ(test, test->log, (char *)NULL);
--	KUNIT_EXPECT_PTR_EQ(test, suite->log, (char *)NULL);
- #endif
+ static struct kunit_suite * const *
+ kunit_filter_subsuite(struct kunit_suite * const * const subsuite,
+-			const char *filter_glob)
++		      struct kunit_test_filter *filter)
+ {
+ 	int i, n = 0;
+-	struct kunit_suite **filtered;
++	struct kunit_suite **filtered, *filtered_suite;
+ 
+ 	n = 0;
+-	for (i = 0; subsuite[i] != NULL; ++i) {
+-		if (glob_match(filter_glob, subsuite[i]->name))
++	for (i = 0; subsuite[i]; ++i) {
++		if (glob_match(filter->suite_glob, subsuite[i]->name))
+ 			++n;
+ 	}
+ 
+@@ -44,8 +103,11 @@ kunit_filter_subsuite(struct kunit_suite * const * const subsuite,
+ 
+ 	n = 0;
+ 	for (i = 0; subsuite[i] != NULL; ++i) {
+-		if (glob_match(filter_glob, subsuite[i]->name))
+-			filtered[n++] = subsuite[i];
++		if (!glob_match(filter->suite_glob, subsuite[i]->name))
++			continue;
++		filtered_suite = kunit_filter_tests(subsuite[i], filter->test_glob);
++		if (filtered_suite)
++			filtered[n++] = filtered_suite;
+ 	}
+ 	filtered[n] = NULL;
+ 
+@@ -57,12 +119,32 @@ struct suite_set {
+ 	struct kunit_suite * const * const *end;
+ };
+ 
++static void kunit_free_subsuite(struct kunit_suite * const *subsuite)
++{
++	unsigned int i;
++
++	for (i = 0; subsuite[i]; i++)
++		kfree(subsuite[i]);
++
++	kfree(subsuite);
++}
++
++static void kunit_free_suite_set(struct suite_set suite_set)
++{
++	struct kunit_suite * const * const *suites;
++
++	for (suites = suite_set.start; suites < suite_set.end; suites++)
++		kunit_free_subsuite(*suites);
++	kfree(suite_set.start);
++}
++
+ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+ 					    const char *filter_glob)
+ {
+ 	int i;
+ 	struct kunit_suite * const **copy, * const *filtered_subsuite;
+ 	struct suite_set filtered;
++	struct kunit_test_filter filter;
+ 
+ 	const size_t max = suite_set->end - suite_set->start;
+ 
+@@ -73,12 +155,17 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+ 		return filtered;
+ 	}
+ 
++	kunit_parse_filter_glob(&filter, filter_glob);
++
+ 	for (i = 0; i < max; ++i) {
+-		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], filter_glob);
++		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], &filter);
+ 		if (filtered_subsuite)
+ 			*copy++ = filtered_subsuite;
+ 	}
+ 	filtered.end = copy;
++
++	kfree(filter.suite_glob);
++	kfree(filter.test_glob);
+ 	return filtered;
  }
  
-
-base-commit: 316346243be6df12799c0b64b788e06bad97c30b
+@@ -126,9 +213,7 @@ int kunit_run_all_tests(void)
+ 		__kunit_test_suites_init(*suites);
+ 
+ 	if (filter_glob_param) { /* a copy was made of each array */
+-		for (suites = suite_set.start; suites < suite_set.end; suites++)
+-			kfree(*suites);
+-		kfree(suite_set.start);
++		kunit_free_suite_set(suite_set);
+ 	}
+ 
+ 	kunit_handle_shutdown();
+diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+index cdbe54b16501..e6323f398dfa 100644
+--- a/lib/kunit/executor_test.c
++++ b/lib/kunit/executor_test.c
+@@ -9,38 +9,103 @@
+ #include <kunit/test.h>
+ 
+ static void kfree_at_end(struct kunit *test, const void *to_free);
++static void free_subsuite_at_end(struct kunit *test,
++				 struct kunit_suite *const *to_free);
+ static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+-					    const char *suite_name);
++					    const char *suite_name,
++					    struct kunit_case *test_cases);
++
++static void dummy_test(struct kunit *test) {}
++
++static struct kunit_case dummy_test_cases[] = {
++	/* .run_case is not important, just needs to be non-NULL */
++	{ .name = "test1", .run_case = dummy_test },
++	{ .name = "test2", .run_case = dummy_test },
++	{},
++};
++
++static void parse_filter_test(struct kunit *test)
++{
++	struct kunit_test_filter filter = {NULL, NULL};
++
++	kunit_parse_filter_glob(&filter, "suite");
++	KUNIT_EXPECT_STREQ(test, filter.suite_glob, "suite");
++	KUNIT_EXPECT_FALSE(test, filter.test_glob);
++	kfree(filter.suite_glob);
++	kfree(filter.test_glob);
++
++	kunit_parse_filter_glob(&filter, "suite.test");
++	KUNIT_EXPECT_STREQ(test, filter.suite_glob, "suite");
++	KUNIT_EXPECT_STREQ(test, filter.test_glob, "test");
++	kfree(filter.suite_glob);
++	kfree(filter.test_glob);
++}
+ 
+ static void filter_subsuite_test(struct kunit *test)
+ {
+ 	struct kunit_suite *subsuite[3] = {NULL, NULL, NULL};
+ 	struct kunit_suite * const *filtered;
++	struct kunit_test_filter filter = {
++		.suite_glob = "suite2",
++		.test_glob = NULL,
++	};
+ 
+-	subsuite[0] = alloc_fake_suite(test, "suite1");
+-	subsuite[1] = alloc_fake_suite(test, "suite2");
++	subsuite[0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
++	subsuite[1] = alloc_fake_suite(test, "suite2", dummy_test_cases);
+ 
+ 	/* Want: suite1, suite2, NULL -> suite2, NULL */
+-	filtered = kunit_filter_subsuite(subsuite, "suite2*");
++	filtered = kunit_filter_subsuite(subsuite, &filter);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered);
+-	kfree_at_end(test, filtered);
++	free_subsuite_at_end(test, filtered);
+ 
++	/* Validate we just have suite2 */
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered[0]);
+ 	KUNIT_EXPECT_STREQ(test, (const char *)filtered[0]->name, "suite2");
++	KUNIT_EXPECT_FALSE(test, filtered[1]);
++}
++
++static void filter_subsuite_test_glob_test(struct kunit *test)
++{
++	struct kunit_suite *subsuite[3] = {NULL, NULL, NULL};
++	struct kunit_suite * const *filtered;
++	struct kunit_test_filter filter = {
++		.suite_glob = "suite2",
++		.test_glob = "test2",
++	};
++
++	subsuite[0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
++	subsuite[1] = alloc_fake_suite(test, "suite2", dummy_test_cases);
+ 
++	/* Want: suite1, suite2, NULL -> suite2 (just test1), NULL */
++	filtered = kunit_filter_subsuite(subsuite, &filter);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered);
++	free_subsuite_at_end(test, filtered);
++
++	/* Validate we just have suite2 */
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered[0]);
++	KUNIT_EXPECT_STREQ(test, (const char *)filtered[0]->name, "suite2");
+ 	KUNIT_EXPECT_FALSE(test, filtered[1]);
++
++	/* Now validate we just have test2 */
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered[0]->test_cases);
++	KUNIT_EXPECT_STREQ(test, (const char *)filtered[0]->test_cases[0].name, "test2");
++	KUNIT_EXPECT_FALSE(test, filtered[0]->test_cases[1].name);
+ }
+ 
+ static void filter_subsuite_to_empty_test(struct kunit *test)
+ {
+ 	struct kunit_suite *subsuite[3] = {NULL, NULL, NULL};
+ 	struct kunit_suite * const *filtered;
++	struct kunit_test_filter filter = {
++		.suite_glob = "not_found",
++		.test_glob = NULL,
++	};
+ 
+-	subsuite[0] = alloc_fake_suite(test, "suite1");
+-	subsuite[1] = alloc_fake_suite(test, "suite2");
++	subsuite[0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
++	subsuite[1] = alloc_fake_suite(test, "suite2", dummy_test_cases);
+ 
+-	filtered = kunit_filter_subsuite(subsuite, "not_found");
+-	kfree_at_end(test, filtered); /* just in case */
++	filtered = kunit_filter_subsuite(subsuite, &filter);
++	free_subsuite_at_end(test, filtered); /* just in case */
+ 
+ 	KUNIT_EXPECT_FALSE_MSG(test, filtered,
+ 			       "should be NULL to indicate no match");
+@@ -52,7 +117,7 @@ static void kfree_subsuites_at_end(struct kunit *test, struct suite_set *suite_s
+ 
+ 	kfree_at_end(test, suite_set->start);
+ 	for (suites = suite_set->start; suites < suite_set->end; suites++)
+-		kfree_at_end(test, *suites);
++		free_subsuite_at_end(test, *suites);
+ }
+ 
+ static void filter_suites_test(struct kunit *test)
+@@ -74,8 +139,8 @@ static void filter_suites_test(struct kunit *test)
+ 	struct suite_set filtered = {.start = NULL, .end = NULL};
+ 
+ 	/* Emulate two files, each having one suite */
+-	subsuites[0][0] = alloc_fake_suite(test, "suite0");
+-	subsuites[1][0] = alloc_fake_suite(test, "suite1");
++	subsuites[0][0] = alloc_fake_suite(test, "suite0", dummy_test_cases);
++	subsuites[1][0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
+ 
+ 	/* Filter out suite1 */
+ 	filtered = kunit_filter_suites(&suite_set, "suite0");
+@@ -88,7 +153,9 @@ static void filter_suites_test(struct kunit *test)
+ }
+ 
+ static struct kunit_case executor_test_cases[] = {
++	KUNIT_CASE(parse_filter_test),
+ 	KUNIT_CASE(filter_subsuite_test),
++	KUNIT_CASE(filter_subsuite_test_glob_test),
+ 	KUNIT_CASE(filter_subsuite_to_empty_test),
+ 	KUNIT_CASE(filter_suites_test),
+ 	{}
+@@ -120,14 +187,30 @@ static void kfree_at_end(struct kunit *test, const void *to_free)
+ 				     (void *)to_free);
+ }
+ 
++static void free_subsuite_res_free(struct kunit_resource *res)
++{
++	kunit_free_subsuite(res->data);
++}
++
++static void free_subsuite_at_end(struct kunit *test,
++				 struct kunit_suite *const *to_free)
++{
++	if (IS_ERR_OR_NULL(to_free))
++		return;
++	kunit_alloc_resource(test, NULL, free_subsuite_res_free,
++			     GFP_KERNEL, (void *)to_free);
++}
++
+ static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+-					    const char *suite_name)
++					    const char *suite_name,
++					    struct kunit_case *test_cases)
+ {
+ 	struct kunit_suite *suite;
+ 
+ 	/* We normally never expect to allocate suites, hence the non-const cast. */
+ 	suite = kunit_kzalloc(test, sizeof(*suite), GFP_KERNEL);
+ 	strncpy((char *)suite->name, suite_name, sizeof(suite->name) - 1);
++	suite->test_cases = test_cases;
+ 
+ 	return suite;
+ }
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 5a931456e718..66f67af97971 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -243,9 +243,8 @@ def add_exec_opts(parser) -> None:
+ 			    default=300,
+ 			    metavar='timeout')
+ 	parser.add_argument('filter_glob',
+-			    help='maximum number of seconds to allow for all tests '
+-			    'to run. This does not include time taken to build the '
+-			    'tests.',
++			    help='Filter which KUnit test suites/tests run at '
++			    'boot-time, e.g. list* or list*.*del_test',
+ 			    type=str,
+ 			    nargs='?',
+ 			    default='',
 -- 
 2.33.0.309.g3052b89438-goog
 
