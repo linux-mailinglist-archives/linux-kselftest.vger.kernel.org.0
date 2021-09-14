@@ -2,71 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EFD40A706
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Sep 2021 09:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A8940A8C0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Sep 2021 10:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240553AbhINHEX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Sep 2021 03:04:23 -0400
-Received: from mga01.intel.com ([192.55.52.88]:43416 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240327AbhINHEN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Sep 2021 03:04:13 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="244234463"
-X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
-   d="scan'208";a="244234463"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2021 00:02:56 -0700
-X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
-   d="scan'208";a="543817039"
-Received: from chenyu-desktop.sh.intel.com (HELO chenyu-desktop) ([10.239.158.176])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2021 00:02:53 -0700
-Date:   Tue, 14 Sep 2021 15:08:46 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Aubrey Li <aubrey.li@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Dou Shengnan <shengnanx.dou@intel.com>
-Subject: Re: [PATCH 5/5][RFC] selftests/pfru: add test for Platform Firmware
- Runtime Update and Telemetry
-Message-ID: <20210914070846.GA80235@chenyu-desktop>
-References: <cover.1631025237.git.yu.c.chen@intel.com>
- <1cef405de3484eef108251562fbf461bad4294c7.1631025237.git.yu.c.chen@intel.com>
- <YTh9mEjm7EI1dmu7@kernel.org>
+        id S229820AbhINICg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Sep 2021 04:02:36 -0400
+Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:46809 "EHLO
+        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229650AbhINICG (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Sep 2021 04:02:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1631606448;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=8cEO6j2p8T8EMB3yyNv/pGzqLdYy7sLG/Q8nHX32wxc=;
+        b=kLTq5Z0FD1N5wq8k+Ma7RGprjalriA5f9YYc+rlJlmtvOFIOS7k/ismBGZb/Wk7W
+        12GwOWI2XPrvkrWTbQvNc/2EYiyKu228C+Kv6sScJMs9XOVDGBhh8WCve+M73xvpanF
+        KoE3Z+6672TisQin/nUrd55AdMKxjrvVFXwtbiN8=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1631606448;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=8cEO6j2p8T8EMB3yyNv/pGzqLdYy7sLG/Q8nHX32wxc=;
+        b=TxJrH9afvO0gfXdFYpMiWMODnD027c1QPbu1qOi5Ow1DM1wr36gxFg4+mnYr9aoT
+        fDCQJdXcTdw3WEcoszM2+UXGeqTVHo6WWAUN+0GEKMl0S0WQtxvUGZYFKvkoImQQSmU
+        y7+n+/jgZzQdcyCjXwddsv5RFFMk1jcxuBE/QSsE=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20210910
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YTh9mEjm7EI1dmu7@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017be352a016-4ed4291b-f97d-4fcc-ad84-452397ca60f1-000000@email.amazonses.com>
+Date:   Tue, 14 Sep 2021 08:00:48 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.09.14-54.240.8.97
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mike,
-On Wed, Sep 08, 2021 at 12:08:40PM +0300, Mike Rapoport wrote:
-> On Tue, Sep 07, 2021 at 11:40:30PM +0800, Chen Yu wrote:
-> > Introduce a simple test for Platform Firmware Runtime Update and Telemetry
-> > drivers. It is based on ioctl to either update firmware driver or code injection,
-> > and read corresponding PFRU Telemetry log into user space.
-> >
-[snip.. 
-> > +struct updated_result {
-> > +	enum dsm_status status;
-> > +	enum dsm_status ext_status;
-> > +	unsigned long low_auth_time;
-> > +	unsigned long high_auth_time;
-> > +	unsigned long low_exec_time;
-> > +	unsigned long high_exec_time;
-> > +};
-> 
-> Most of these types and constants seem to be a copy of uapu/linux/pfru.h.
-> Shouldn't the test get them from there?
->
-Yes they have shared structures. The next version will reuse the uapi header.
+## Build
+* kernel: 5.14.0
+* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: aa14a3016182213f022068500486ef3bcacb9006
+* git describe: next-20210910
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210910
 
-thanks,
-Chenyu 
+## Regressions (compared to next-20210909)
+* hi6220-hikey, kselftest-rtc
+  - rtc.rtctest
+
+* juno-r2, kselftest-net
+  - net.udpgso_bench.sh
+
+* qemu_arm, kselftest-pidfd
+  - pidfd.pidfd_test
+
+* x15, kselftest-rtc
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.date_read
+
+* x86, kselftest-net
+  - net.fib-onlink-tests.sh
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20210909)
+* juno-r2, kselftest-
+  - rtc.rtctest
+
+* juno-r2, kselftest-rtc
+  - rtc.rtctest
+
+* qemu-arm64-mte, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* qemu-arm64-mte, kselftest-timers
+  - timers.rtcpie
+
+* qemu_arm64, kselftest-timers
+  - timers.rtcpie
+
+
+## Test result summary
+total: 6624, pass: 3951, fail: 723, skip: 1950, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
