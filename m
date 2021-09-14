@@ -2,19 +2,19 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 410EF40B4E3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Sep 2021 18:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6CC40B4E7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Sep 2021 18:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbhINQhE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Sep 2021 12:37:04 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3800 "EHLO
+        id S230345AbhINQhF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Sep 2021 12:37:05 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3801 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbhINQg5 (ORCPT
+        with ESMTP id S229917AbhINQg5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 14 Sep 2021 12:36:57 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H886W5Xzmz67Pmr;
-        Wed, 15 Sep 2021 00:33:23 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H886d38wHz67tGc;
+        Wed, 15 Sep 2021 00:33:29 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -27,9 +27,9 @@ CC:     <linux-integrity@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v3 06/13] diglim: IMA info
-Date:   Tue, 14 Sep 2021 18:33:54 +0200
-Message-ID: <20210914163401.864635-7-roberto.sassu@huawei.com>
+Subject: [PATCH v3 07/13] diglim: Interfaces - digest_list_add, digest_list_del
+Date:   Tue, 14 Sep 2021 18:33:55 +0200
+Message-ID: <20210914163401.864635-8-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210914163401.864635-1-roberto.sassu@huawei.com>
 References: <20210914163401.864635-1-roberto.sassu@huawei.com>
@@ -44,214 +44,374 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce diglim_ima_get_info() to retrieve the digest and the actions
-performed by IMA on the passed digest list file or buffer.
+Introduce <securityfs>/integrity/diglim/digest_list_add, which can be used
+to upload a digest list and add the digests to the hash table; passed data
+are interpreted as file path if the first byte is / or as the digest list
+itself otherwise.
 
-diglim_ima_get_info() requires the caller to write-lock the file to ensure
-that the file content the integrity status is retrieved from didn't change
-since the time the buffer passed as argument was filled.
+diglim_ima_get_info() is called to retrieve from IMA the digest of the
+passed digest list (file or buffer), and the actions performed (measure/
+appraise/appraise with signature).
+
+Also introduce <securityfs>/integrity/diglim/digest_list_del, which can be
+used to upload a digest list and delete the digests from the hash table;
+data are interpreted in the same way as described for digest_list_add.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- MAINTAINERS                        |   1 +
- security/integrity/diglim/Makefile |   2 +-
- security/integrity/diglim/diglim.h |   6 ++
- security/integrity/diglim/ima.c    | 122 +++++++++++++++++++++++++++++
- security/integrity/integrity.h     |   4 +
- 5 files changed, 134 insertions(+), 1 deletion(-)
- create mode 100644 security/integrity/diglim/ima.c
+ .../security/diglim/implementation.rst        |   9 +
+ MAINTAINERS                                   |   1 +
+ include/linux/kernel_read_file.h              |   1 +
+ security/integrity/diglim/Makefile            |   2 +-
+ security/integrity/diglim/diglim.h            |   2 +
+ security/integrity/diglim/fs.c                | 276 ++++++++++++++++++
+ 6 files changed, 290 insertions(+), 1 deletion(-)
+ create mode 100644 security/integrity/diglim/fs.c
 
+diff --git a/Documentation/security/diglim/implementation.rst b/Documentation/security/diglim/implementation.rst
+index 626af0d245ef..f7b48c093f39 100644
+--- a/Documentation/security/diglim/implementation.rst
++++ b/Documentation/security/diglim/implementation.rst
+@@ -217,3 +217,12 @@ back when one of the steps fails.
+ 
+ #. digest_list_parse() deletes the struct digest_list_item on unsuccessful
+    add or successful delete.
++
++
++Interfaces
++----------
++
++This section introduces the interfaces in
++``<securityfs>/integrity/diglim`` necessary to interact with DIGLIM.
++
++.. kernel-doc:: security/integrity/diglim/fs.c
 diff --git a/MAINTAINERS b/MAINTAINERS
-index f5959936d490..f10690dda734 100644
+index f10690dda734..826f628f4fab 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -5514,6 +5514,7 @@ F:	Documentation/security/diglim/introduction.rst
  F:	include/linux/diglim.h
  F:	include/uapi/linux/diglim.h
  F:	security/integrity/diglim/diglim.h
-+F:	security/integrity/diglim/ima.c
++F:	security/integrity/diglim/fs.c
+ F:	security/integrity/diglim/ima.c
  F:	security/integrity/diglim/methods.c
  F:	security/integrity/diglim/parser.c
+diff --git a/include/linux/kernel_read_file.h b/include/linux/kernel_read_file.h
+index 575ffa1031d3..636ecdfdc616 100644
+--- a/include/linux/kernel_read_file.h
++++ b/include/linux/kernel_read_file.h
+@@ -14,6 +14,7 @@
+ 	id(KEXEC_INITRAMFS, kexec-initramfs)	\
+ 	id(POLICY, security-policy)		\
+ 	id(X509_CERTIFICATE, x509-certificate)	\
++	id(DIGEST_LIST, digest-list)	\
+ 	id(MAX_ID, )
  
+ #define __fid_enumify(ENUM, dummy) READING_ ## ENUM,
 diff --git a/security/integrity/diglim/Makefile b/security/integrity/diglim/Makefile
-index 34e4e154fff3..880dc5300792 100644
+index 880dc5300792..5cb1a8bfa0fc 100644
 --- a/security/integrity/diglim/Makefile
 +++ b/security/integrity/diglim/Makefile
 @@ -5,4 +5,4 @@
  
  obj-$(CONFIG_DIGLIM) += diglim.o
  
--diglim-y := methods.o parser.o
-+diglim-y := methods.o parser.o ima.o
+-diglim-y := methods.o parser.o ima.o
++diglim-y := methods.o parser.o ima.o fs.o
 diff --git a/security/integrity/diglim/diglim.h b/security/integrity/diglim/diglim.h
-index afdb0affdc5e..ebe8936520b5 100644
+index ebe8936520b5..c597c2e7a52a 100644
 --- a/security/integrity/diglim/diglim.h
 +++ b/security/integrity/diglim/diglim.h
-@@ -22,6 +22,8 @@
- #include <linux/hash_info.h>
- #include <linux/diglim.h>
- 
-+#include "../integrity.h"
+@@ -227,4 +227,6 @@ int digest_list_parse(loff_t size, void *buf, enum ops op, u8 actions,
+ int diglim_ima_get_info(struct file *file, u8 *buffer, size_t buffer_len,
+ 			char *event_name, u8 *digest, size_t digest_len,
+ 			enum hash_algo *algo, u8 *actions);
 +
- #define MAX_DIGEST_SIZE 64
- #define HASH_BITS 10
- #define DIGLIM_HTABLE_SIZE (1 << HASH_BITS)
-@@ -221,4 +223,8 @@ void digest_list_del(u8 *digest, enum hash_algo algo, u8 actions,
- 
- int digest_list_parse(loff_t size, void *buf, enum ops op, u8 actions,
- 		      u8 *digest, enum hash_algo algo, const char *label);
-+
-+int diglim_ima_get_info(struct file *file, u8 *buffer, size_t buffer_len,
-+			char *event_name, u8 *digest, size_t digest_len,
-+			enum hash_algo *algo, u8 *actions);
++ssize_t digest_list_read(struct path *root, char *path, enum ops op);
  #endif /*__DIGLIM_INTERNAL_H*/
-diff --git a/security/integrity/diglim/ima.c b/security/integrity/diglim/ima.c
+diff --git a/security/integrity/diglim/fs.c b/security/integrity/diglim/fs.c
 new file mode 100644
-index 000000000000..2cc1ec1299f8
+index 000000000000..5698afd2d18a
 --- /dev/null
-+++ b/security/integrity/diglim/ima.c
-@@ -0,0 +1,122 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/security/integrity/diglim/fs.c
+@@ -0,0 +1,276 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Copyright (C) 2021 Huawei Technologies Duesseldorf GmbH
++ * Copyright (C) 2005,2006,2007,2008 IBM Corporation
++ * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Functions to retrieve the integrity status from IMA.
++ * Functions for the interfaces exposed in securityfs.
 + */
 +
++#include <linux/fcntl.h>
++#include <linux/kernel_read_file.h>
++#include <linux/module_signature.h>
++#include <linux/slab.h>
++#include <linux/init.h>
++#include <linux/seq_file.h>
++#include <linux/rculist.h>
++#include <linux/rcupdate.h>
++#include <linux/parser.h>
 +#include <linux/vmalloc.h>
-+#include <linux/module.h>
++#include <linux/namei.h>
 +#include <linux/ima.h>
 +
 +#include "diglim.h"
 +
-+static int diglim_ima_get_info_file(struct file *file, u8 *digest,
-+				    size_t digest_len, enum hash_algo *algo,
-+				    u8 *actions)
++#define MAX_DIGEST_LIST_SIZE (64 * 1024 * 1024 - 1)
++
++static struct dentry *diglim_dir;
++/**
++ * DOC: digest_list_add
++ *
++ * digest_list_add can be used to upload a digest list and add the digests
++ * to the hash table; passed data are interpreted as file path if the first
++ * byte is ``/`` or as the digest list itself otherwise.
++ *
++ * diglim_ima_get_info() is called to retrieve from IMA the digest of the passed
++ * digest list (file or buffer), and the actions performed (measure/appraise/
++ * appraise with signature).
++ */
++static struct dentry *digest_list_add_dentry;
++/**
++ * DOC: digest_list_del
++ *
++ * digest_list_del can be used to upload a digest list and delete the
++ * digests from the hash table; data are interpreted in the same way as
++ * described for digest_list_add.
++ */
++static struct dentry *digest_list_del_dentry;
++char digest_list_label[NAME_MAX + 1];
++
++/*
++ * check_modsig: detect appended signature
++ */
++static int check_modsig(u8 *buf, size_t buf_len)
 +{
-+	struct integrity_iint_cache *iint;
-+	struct inode *inode = file_inode(file);
-+	int ret = -ENOENT;
++	const size_t marker_len = strlen(MODULE_SIG_STRING);
++	const struct module_signature *sig;
++	size_t sig_len;
++	const void *p;
 +
-+	iint = integrity_iint_find(inode);
-+	if (!iint)
-+		return ret;
-+
-+	mutex_lock(&iint->mutex);
-+	/* File digest has not been calculated. */
-+	if (!(iint->flags & IMA_COLLECTED))
-+		goto out;
-+
-+	ret = 0;
-+
-+	if (iint->flags & IMA_MEASURED)
-+		*actions |= 1 << COMPACT_ACTION_IMA_MEASURED;
-+
-+	if (iint->flags & IMA_APPRAISED)
-+		*actions |= 1 << COMPACT_ACTION_IMA_APPRAISED;
-+
-+	if (test_bit(IMA_DIGSIG, &iint->atomic_flags))
-+		*actions |= 1 << COMPACT_ACTION_IMA_APPRAISED_DIGSIG;
-+
-+	if (algo)
-+		*algo = iint->ima_hash->algo;
-+	if (digest)
-+		memcpy(digest, iint->ima_hash->digest, hash_digest_size[*algo]);
-+out:
-+	mutex_unlock(&iint->mutex);
-+	return ret;
-+}
-+
-+static int diglim_ima_get_info_buffer(u8 *buffer, size_t buffer_len,
-+				      char *event_name, u8 *digest,
-+				      size_t digest_len, enum hash_algo *algo,
-+				      u8 *actions)
-+{
-+	int ret;
-+
-+	ret = ima_measure_critical_data("diglim", event_name, buffer,
-+					buffer_len, false, digest, digest_len);
-+	if (ret < 0 && ret != -EEXIST)
++	if (buf_len <= marker_len + sizeof(*sig))
 +		return -ENOENT;
 +
-+	*algo = ima_get_current_hash_algo();
++	p = buf + buf_len - marker_len;
++	if (memcmp(p, MODULE_SIG_STRING, marker_len))
++		return -ENOENT;
 +
-+	if (!ret || ret == -EEXIST)
-+		*actions |= 1 << COMPACT_ACTION_IMA_MEASURED;
++	sig = (const struct module_signature *)(p - sizeof(*sig));
++	sig_len = be32_to_cpu(sig->sig_len);
++	return marker_len + sig_len + sizeof(*sig);
++}
++
++/*
++ * digest_list_read: read and parse the digest list from the path
++ */
++ssize_t digest_list_read(struct path *root, char *path, enum ops op)
++{
++	void *data = NULL;
++	char *datap;
++	size_t size;
++	u8 actions = 0;
++	struct file *file;
++	char event_name[NAME_MAX + 9 + 1];
++	u8 digest[IMA_MAX_DIGEST_SIZE] = { 0 };
++	enum hash_algo algo;
++	int rc, pathlen = strlen(path);
++
++	/* Remove \n. */
++	datap = path;
++	strsep(&datap, "\n");
++
++	if (root)
++		file = file_open_root(root, path, O_RDONLY, 0);
++	else
++		file = filp_open(path, O_RDONLY, 0);
++	if (IS_ERR(file)) {
++		pr_err("unable to open file: %s (%ld)", path, PTR_ERR(file));
++		return PTR_ERR(file);
++	}
++
++	/* Deny writes to the file to obtain stable information from IMA. */
++	rc = deny_write_access(file);
++	if (rc < 0) {
++		pr_err("unable to deny write access to file: %s (%d)", path,
++			rc);
++		goto out;
++	}
++
++	rc = kernel_read_file(file, 0, &data, INT_MAX, NULL,
++			      READING_DIGEST_LIST);
++	if (rc < 0) {
++		pr_err("unable to read file: %s (%d)", path, rc);
++		goto out_allow_write;
++	}
++
++	size = rc;
++	rc = check_modsig(data, size);
++	if (rc > 0)
++		size -= rc;
++
++	snprintf(event_name, sizeof(event_name), "%s_file_%s",
++		 op == DIGEST_LIST_ADD ? "add" : "del",
++		 file_dentry(file)->d_name.name);
++
++	rc = diglim_ima_get_info(file, data, size, event_name, digest,
++				 sizeof(digest), &algo, &actions);
++	if (rc < 0) {
++		pr_err("unable to retrieve IMA info for %s (%d)\n", path, rc);
++		goto out_vfree;
++	}
++
++	rc = digest_list_parse(size, data, op, actions, digest, algo, "");
++	if (rc < 0 && rc != -EEXIST)
++		pr_err("unable to upload digest list %s (%d)\n", path, rc);
++out_vfree:
++	vfree(data);
++out_allow_write:
++	allow_write_access(file);
++out:
++	fput(file);
++
++	if (rc < 0)
++		return rc;
++
++	return pathlen;
++}
++
++/*
++ * digest_list_write: write the digest list path or the digest list itself
++ */
++static ssize_t digest_list_write(struct file *file, const char __user *buf,
++				 size_t datalen, loff_t *ppos)
++{
++	char *data;
++	char *digest_list_label_ptr;
++	ssize_t result;
++	enum ops op = DIGEST_LIST_ADD;
++	struct dentry *dentry = file_dentry(file);
++	u8 digest[IMA_MAX_DIGEST_SIZE];
++	char event_name[NAME_MAX + 11 + 1];
++	enum hash_algo algo;
++	u8 actions = 0;
++
++	/* No partial writes. */
++	result = -EINVAL;
++	if (*ppos != 0)
++		goto out;
++
++	result = -EFBIG;
++	if (datalen > MAX_DIGEST_LIST_SIZE)
++		goto out;
++
++	data = memdup_user_nul(buf, datalen);
++	if (IS_ERR(data)) {
++		result = PTR_ERR(data);
++		goto out;
++	}
++
++	if (dentry == digest_list_del_dentry)
++		op = DIGEST_LIST_DEL;
++
++	result = -EPERM;
++
++	if (data[0] == '/') {
++		result = digest_list_read(NULL, data, op);
++	} else {
++		/* Remove \n. */
++		digest_list_label_ptr = digest_list_label;
++		strsep(&digest_list_label_ptr, "\n");
++
++		snprintf(event_name, sizeof(event_name), "%s_buffer_%s",
++			 op == DIGEST_LIST_ADD ? "add" : "del",
++			 digest_list_label);
++
++		result = diglim_ima_get_info(NULL, data, datalen, event_name,
++					     digest, sizeof(digest), &algo,
++					     &actions);
++		if (result < 0) {
++			pr_err("unable to retrieve IMA info for buffer (%ld)\n",
++			       result);
++			goto out_kfree;
++		}
++
++		memset(digest_list_label, 0, sizeof(digest_list_label));
++
++		result = digest_list_parse(datalen, data, op, actions, digest,
++					   algo, "");
++		if (result < 0 && result != -EEXIST)
++			pr_err("unable to upload generated digest list\n");
++	}
++out_kfree:
++	kfree(data);
++out:
++	return result;
++}
++
++static unsigned long flags;
++
++/*
++ * digest_list_open: sequentialize access to the add/del files
++ */
++static int digest_list_open(struct inode *inode, struct file *filp)
++{
++	if ((filp->f_flags & O_ACCMODE) != O_WRONLY)
++		return -EACCES;
++
++	if (test_and_set_bit(0, &flags))
++		return -EBUSY;
 +
 +	return 0;
 +}
 +
-+/**
-+ * diglim_ima_get_info - retrieve the integrity status of digest list from IMA
-+ * @file: file to retrieve the integrity status from
-+ * @buffer: buffer to retrieve the integrity status from (alternative to file)
-+ * @buffer_len: buffer length
-+ * @event_name: name of the event to be generated by IMA for buffer measurement
-+ * @digest: digest of the file or the buffer
-+ * @digest_len: digest length
-+ * @algo: digest algorithm
-+ * @actions: actions performed on the file or the buffer
-+ *
-+ * This function attempts to retrieve some information from the passed digest
-+ * list file or buffer: the digest, its algorithm, and the actions performed by
-+ * IMA.
-+ *
-+ * This function first attempts to retrieve the information from the file, and
-+ * if unsuccessful, attempts with the buffer.
-+ *
-+ * The caller must prevent writes to the file with deny_write_access() to ensure
-+ * that the file content the integrity status is retrieved from didn't change
-+ * since the time the buffer passed as argument was filled.
-+ *
-+ * Return: 0 if the information has been successfully retrieved, -ENOENT
-+ *         otherwise.
++/*
++ * digest_list_release - release the add/del files
 + */
-+int diglim_ima_get_info(struct file *file, u8 *buffer, size_t buffer_len,
-+			char *event_name, u8 *digest, size_t digest_len,
-+			enum hash_algo *algo, u8 *actions)
++static int digest_list_release(struct inode *inode, struct file *file)
 +{
-+	int ret = -ENOENT;
-+
-+	/* Ensure that the file is write-locked. */
-+	if (file && atomic_read(&file_inode(file)->i_writecount) >= 0)
-+		return -EINVAL;
-+
-+	if (file) {
-+		ret = diglim_ima_get_info_file(file, digest, digest_len, algo,
-+					       actions);
-+		if (!ret && (*actions & (1 << COMPACT_ACTION_IMA_MEASURED)))
-+			return ret;
-+	}
-+
-+	if (buffer) {
-+		ret = diglim_ima_get_info_buffer(buffer, buffer_len, event_name,
-+						 digest, digest_len, algo,
-+						 actions);
-+	}
-+
-+	return ret;
++	clear_bit(0, &flags);
++	return 0;
 +}
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 74919b638f52..de5dde382f11 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -6,6 +6,9 @@
-  * Mimi Zohar <zohar@us.ibm.com>
-  */
- 
-+#ifndef __INTEGRITY_H
-+#define __INTEGRITY_H
 +
- #ifdef pr_fmt
- #undef pr_fmt
- #endif
-@@ -285,3 +288,4 @@ static inline void __init add_to_platform_keyring(const char *source,
- {
- }
- #endif
-+#endif /*__INTEGRITY_H*/
++static const struct file_operations digest_list_upload_ops = {
++	.open = digest_list_open,
++	.write = digest_list_write,
++	.read = seq_read,
++	.release = digest_list_release,
++	.llseek = generic_file_llseek,
++};
++
++static int __init diglim_fs_init(void)
++{
++	diglim_dir = securityfs_create_dir("diglim", integrity_dir);
++	if (IS_ERR(diglim_dir))
++		return -1;
++
++	digest_list_add_dentry = securityfs_create_file("digest_list_add", 0200,
++						diglim_dir, NULL,
++						&digest_list_upload_ops);
++	if (IS_ERR(digest_list_add_dentry))
++		goto out;
++
++	digest_list_del_dentry = securityfs_create_file("digest_list_del", 0200,
++						diglim_dir, NULL,
++						&digest_list_upload_ops);
++	if (IS_ERR(digest_list_del_dentry))
++		goto out;
++
++	return 0;
++out:
++	securityfs_remove(digest_list_del_dentry);
++	securityfs_remove(digest_list_add_dentry);
++	securityfs_remove(diglim_dir);
++	return -1;
++}
++
++late_initcall(diglim_fs_init);
 -- 
 2.25.1
 
