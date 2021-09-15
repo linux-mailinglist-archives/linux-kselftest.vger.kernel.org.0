@@ -2,168 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C95A40C430
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 13:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A571440C698
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 15:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbhIOLMn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Sep 2021 07:12:43 -0400
-Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:49495 "EHLO
-        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232519AbhIOLMm (ORCPT
+        id S233395AbhIONrh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Sep 2021 09:47:37 -0400
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:30343 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235132AbhIONrg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Sep 2021 07:12:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1631704283;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=sknG1moYEVNO2oNgby1Tzuy00bW0QT9xhDP3A++Bv4o=;
-        b=l8eRPG6XdW+CdGKmnn6trDCsHTfQZZwv52y8vY683tCDm2+4J6zUa+jlUU9GoZXh
-        GXPFhNIGKpEXKJjLc/NrXujbes9O8dQu/l45Rb9y0ghAC/CKT9D2zuFmW5NczO4khQW
-        CetLWOHkzDA5D+Rym1tKNgy7OxPGQMUHAtPtzVwo=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1631704283;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=sknG1moYEVNO2oNgby1Tzuy00bW0QT9xhDP3A++Bv4o=;
-        b=TkIbVhbnLfPhGtqxkHVj6tRjVRV27Uu9EQ/BtxaJMEVmlI6zDqc856ATpW8aIPat
-        k6jUCYkAe/AGZQuBsATHgshQ0hSVWNK9AkhRTa7DGyBO3a4hLT6GVZNelomA8zIUnzx
-        bDEMuRrmC0DAwaOPB1Jcr6O6BiODCxmYwtDQ9O9w=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210914
+        Wed, 15 Sep 2021 09:47:36 -0400
+IronPort-Data: =?us-ascii?q?A9a23=3AtWDvGaDDLm2aBRVW/9/hw5YqxClBgxIJ4g17XOL?=
+ =?us-ascii?q?fB1a502gn1mFVmmJNWTuDPK6PajT8KYpxbdzn90tQvpGAx9UxeLYW3SszFioV8?=
+ =?us-ascii?q?6IpJjg4wn/YZnrUdouaJK5ex512huLocYZkExcwmj/3auK49SgliPnTLlbBILW?=
+ =?us-ascii?q?s1h5ZFFYMpBgJ2UoLd94R2uaEsPDha++/kYqaT/73ZDdJ7wVJ3lc8sMpvnv/AU?=
+ =?us-ascii?q?MPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnREmLx9BFrBM6?=
+ =?us-ascii?q?nk6rgbwsBRbu60Qqm0yIQAvb9xEMZ4HFaPqUTbZLwbW9TiieJntJwwdNlu4GyS?=
+ =?us-ascii?q?BsyI+vHn+F1vxxwSngiYPcapuebSZS4mYnJp6HcSFPowO1GDUcqMIle8eFyaUl?=
+ =?us-ascii?q?W9f0cKShLahGrhuSqzbb9Qe5p7uw4LNTiPKsct2tmwDWfCuwpKbjHQqPX9Zpb0?=
+ =?us-ascii?q?S02i8RmA/nTfYwaZCBpYRCGZAdAUn8TCZQjjKKrnXT7fSFVs069u6U6+S7QwRZ?=
+ =?us-ascii?q?33byrN8DaEuFm7+09cl2w/zqApjqmREpBcoH39NZMyVr07senoM8xcNh6+GWEy?=
+ =?us-ascii?q?8NX?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Ae0leOquSnvIn14NmhJkB/vdS7skDStV00zEX?=
+ =?us-ascii?q?/kB9WHVpm62j5qSTdZEguCMc5wx+ZJheo7q90cW7IE80lqQFhLX5X43SPzUO0V?=
+ =?us-ascii?q?HARO5fBODZsl/d8kPFltJ15ONJdqhSLJnKB0FmsMCS2mKFOudl7N6Z0K3Av4vj?=
+ =?us-ascii?q?80s=3D?=
+X-IronPort-AV: E=Sophos;i="5.85,295,1624291200"; 
+   d="scan'208";a="114524604"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 15 Sep 2021 21:46:15 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+        by cn.fujitsu.com (Postfix) with ESMTP id C9BFF4D0DC6F;
+        Wed, 15 Sep 2021 21:46:14 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 15 Sep 2021 21:46:14 +0800
+Received: from FNSTPC.g08.fujitsu.local (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Wed, 15 Sep 2021 21:46:13 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] selftests: be sure to make khdr before other targets
+Date:   Wed, 15 Sep 2021 21:45:54 +0800
+Message-ID: <20210915134554.19581-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017be927779e-86ec80b9-7373-479f-a65b-c48a33625d05-000000@email.amazonses.com>
-Date:   Wed, 15 Sep 2021 11:11:23 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.09.15-54.240.8.97
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-ID: C9BFF4D0DC6F.A110C
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc1
-* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: 815c5020b5ab041761fdd4272783a6104a92fd9e
-* git describe: next-20210914
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210914
+LKP/0Day reported some building errors about kvm, and errors message
+are not always same:
+- lib/x86_64/processor.c:1083:31: error: ‘KVM_CAP_NESTED_STATE’ undeclared
+(first use in this function); did you mean ‘KVM_CAP_PIT_STATE2’?
+- lib/test_util.c:189:30: error: ‘MAP_HUGE_16KB’ undeclared (first use
+in this function); did you mean ‘MAP_HUGE_16GB’?
 
-## Regressions (compared to next-20210909)
-* hi6220-hikey, kselftest-rtc
-  - rtc.rtctest
+Although kvm relies on the khdr, they still be built in parallel when -j
+is specified. In this case, it will cause compiling errors.
 
-* qemu_arm, kselftest-pidfd
-  - pidfd.pidfd_test
+Here we mark target khdr as NOTPARALLEL to make it be always built
+first.
 
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
+CC: Philip Li <philip.li@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+ tools/testing/selftests/lib.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* x86, kselftest-net
-  - net.fib-onlink-tests.sh
-  - net.ip_defrag.sh
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20210909)
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
-
-* qemu_arm64, kselftest-timers
-  - timers.rtcpie
-
-* x15, kselftest-rtc
-  - rtc.rtctest
-
-* x86, kselftest-rtc
-  - rtc.rtctest
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 7ee911355328..5074b01f2a29 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -48,6 +48,7 @@ ARCH		?= $(SUBARCH)
+ # When local build is done, headers are installed in the default
+ # INSTALL_HDR_PATH usr/include.
+ .PHONY: khdr
++.NOTPARALLEL:
+ khdr:
+ ifndef KSFT_KHDR_INSTALL_DONE
+ ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+-- 
+2.33.0
 
 
-## Test result summary
-total: 4931, pass: 2696, fail: 406, skip: 1829, xfail: 0
 
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
