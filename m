@@ -2,19 +2,19 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C6F40CA5E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 18:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB2940CA5B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 18:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbhIOQgP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S229747AbhIOQgP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Wed, 15 Sep 2021 12:36:15 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3826 "EHLO
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3827 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbhIOQeK (ORCPT
+        with ESMTP id S229894AbhIOQeK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 15 Sep 2021 12:34:10 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H8m0s0m94z67jhw;
-        Thu, 16 Sep 2021 00:30:37 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H8m0c3vhRz67yV7;
+        Thu, 16 Sep 2021 00:30:24 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -27,9 +27,9 @@ CC:     <linux-integrity@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 3/9] diglim: LSM
-Date:   Wed, 15 Sep 2021 18:31:39 +0200
-Message-ID: <20210915163145.1046505-4-roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 4/9] diglim: Tests - LSM
+Date:   Wed, 15 Sep 2021 18:31:40 +0200
+Message-ID: <20210915163145.1046505-5-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210915163145.1046505-1-roberto.sassu@huawei.com>
 References: <20210915163145.1046505-1-roberto.sassu@huawei.com>
@@ -44,633 +44,515 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce a new LSM to keep track of the operations performed by digest
-list parsers to convert the digest lists and upload them to the kernel.
+Introduce more tests to ensure that DIGLIM LSM works as expected:
 
-The motivation and its behavior is described more in detail in
-Documentation/security/diglim/lsm.rst.
+- digest_list_add_del_test_parser_upload;
+- digest_list_add_del_test_parser_upload_not_measured;
+- digest_list_add_del_test_parser_upload_write;
+- digest_list_add_del_test_parser_upload_read;
+- digest_list_add_del_test_parser_upload_char_dev.
+
+The tests are in tools/testing/selftests/diglim/selftest.c.
+
+A description of the tests can be found in
+Documentation/security/diglim/tests.rst.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- Documentation/security/diglim/index.rst |   1 +
- Documentation/security/diglim/lsm.rst   |  65 ++++
- MAINTAINERS                             |   1 +
- security/integrity/diglim/Makefile      |   2 +-
- security/integrity/diglim/diglim.h      |  27 ++
- security/integrity/diglim/fs.c          |   3 +
- security/integrity/diglim/hooks.c       | 436 ++++++++++++++++++++++++
- 7 files changed, 534 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/security/diglim/lsm.rst
- create mode 100644 security/integrity/diglim/hooks.c
+ Documentation/security/diglim/tests.rst   |  18 +-
+ tools/testing/selftests/diglim/Makefile   |  12 +-
+ tools/testing/selftests/diglim/common.h   |   9 +
+ tools/testing/selftests/diglim/selftest.c | 357 +++++++++++++++++++++-
+ 4 files changed, 378 insertions(+), 18 deletions(-)
 
-diff --git a/Documentation/security/diglim/index.rst b/Documentation/security/diglim/index.rst
-index d4ba4ce50a59..bf3cc4a9a91d 100644
---- a/Documentation/security/diglim/index.rst
-+++ b/Documentation/security/diglim/index.rst
-@@ -12,3 +12,4 @@ Digest Lists Integrity Module (DIGLIM)
-    implementation
-    remote_attestation
-    tests
-+   lsm
-diff --git a/Documentation/security/diglim/lsm.rst b/Documentation/security/diglim/lsm.rst
-new file mode 100644
-index 000000000000..ce979e6c6dfd
---- /dev/null
-+++ b/Documentation/security/diglim/lsm.rst
-@@ -0,0 +1,65 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+LSM
-+===
-+
-+When digest lists (in compact format) are directly uploaded by the kernel,
-+determining their integrity is straightforward, as a file open is the only
-+operation performed.
-+
-+However, if digest lists are first processed by a user space parser, many
-+operations occur before the converted digest list is uploaded to the
-+kernel, and any of them may affect the result of the conversion. In this
-+case, the integrity of all files involved must be evaluated to ensure that
-+the output is the expected one.
-+
-+The new DIGLIM LSM has been introduced with two goals: the first is to
-+identify user space parsers as soon as they are loaded, in order to monitor
-+the operations they perform; the second is to avoid interference from other
-+processes, which are assumed as untrusted.
-+
-+Regarding the first goal, user space parsers are identified by calculating
-+the digest of their executable and searching it in the DIGLIM hash table.
-+An executable is successfully recognized as a digest list parser if its
-+digest is found and the associated type is COMPACT_PARSER. Once a parser
-+has been identified, DIGLIM LSM monitors the integrity of opened files. In
-+addition, it also denies access to ld.so.cache, to avoid an unknown
-+measurement or appraisal failure, and to files without content measurable
-+by IMA (e.g. character devices).
-+
-+The integrity status of the parser, a set of flags representing the
-+operations performed by IMA, is kept in the credentials of the process
-+identified as parser. Initially, the flags are set from the operations done
-+on the executable and they are AND-ed with the flags retrieved at each file
-+open (which themselves are set from the operations done by IMA on that
-+file). This ensures that even if one file was not processed, this is
-+reflected in the global integrity status of the parser. Given that the AND
-+operation prevents the cleared flag to be set again, the only way to upload
-+a converted digest list with that flag is to restart the parser.
-+
-+The flags still set in the process credentials at the time the parser
-+uploads the converted digest lists are then copied to the converted lists
-+themselves, so that they can be retrieved by DIGLIM users during a digest
-+query and evaluated (the query result might be discarded). This mechanism
-+is reliable against LSM misconfiguration: if for any reason DIGLIM LSM is
-+turned off, no flags will be set in the converted digest list.
-+
-+Regarding the second goal, avoiding interference from other user space
-+processes is necessary if they are assumed to be untrusted. This threat
-+model applies if the system is supposed to enforce a mandatory policy where
-+only files shipped by software vendors are allowed to be accessed. The
-+mandatory policy could be also defined by system administrators (they could
-+decide the set of approved software vendors).
-+
-+To avoid interference to the user space parsers from other processes, the
-+following countermeasures are implemented. First, files accessed by user
-+space parsers are exclusively write-locked until the parsers finish to use
-+them. A failure when write-locking a file (if the file was already opened
-+for writing by another process) will result in the file access to be denied
-+to the parser. Second, ptraces on the parsers are also denied as they might
-+influence their execution.
-+
-+Other than these two limitations (not being able to access files
-+write-locked by the parsers and to ptrace the parsers), processes which are
-+not identified as parsers are not subject to the policy enforcement by
-+DIGLIM LSM.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0ffceb271803..94220e40b7e2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5511,6 +5511,7 @@ F:	Documentation/security/diglim/architecture.rst
- F:	Documentation/security/diglim/implementation.rst
- F:	Documentation/security/diglim/index.rst
- F:	Documentation/security/diglim/introduction.rst
-+F:	Documentation/security/diglim/lsm.rst
- F:	Documentation/security/diglim/remote_attestation.rst
- F:	Documentation/security/diglim/tests.rst
- F:	include/linux/diglim.h
-diff --git a/security/integrity/diglim/Makefile b/security/integrity/diglim/Makefile
-index ae79a3317ec8..37fa6ef2a73c 100644
---- a/security/integrity/diglim/Makefile
-+++ b/security/integrity/diglim/Makefile
-@@ -5,4 +5,4 @@
+diff --git a/Documentation/security/diglim/tests.rst b/Documentation/security/diglim/tests.rst
+index 899e7d6683cf..21874918433d 100644
+--- a/Documentation/security/diglim/tests.rst
++++ b/Documentation/security/diglim/tests.rst
+@@ -14,7 +14,12 @@ expected:
+ - ``digest_list_add_del_test_file_upload_measured``;
+ - ``digest_list_add_del_test_file_upload_measured_chown``;
+ - ``digest_list_check_measurement_list_test_file_upload``;
+-- ``digest_list_check_measurement_list_test_buffer_upload``.
++- ``digest_list_check_measurement_list_test_buffer_upload``;
++- ``digest_list_add_del_test_parser_upload``;
++- ``digest_list_add_del_test_parser_upload_not_measured``
++- ``digest_list_add_del_test_parser_upload_write``;
++- ``digest_list_add_del_test_parser_upload_read``;
++- ``digest_list_add_del_test_parser_upload_char_dev``.
  
- obj-$(CONFIG_DIGLIM) += diglim.o
+ The tests are in ``tools/testing/selftests/diglim/selftest.c``.
  
--diglim-y := methods.o parser.o ima.o fs.o loader.o
-+diglim-y := methods.o parser.o ima.o fs.o loader.o hooks.o
-diff --git a/security/integrity/diglim/diglim.h b/security/integrity/diglim/diglim.h
-index c597c2e7a52a..b53de803a63c 100644
---- a/security/integrity/diglim/diglim.h
-+++ b/security/integrity/diglim/diglim.h
-@@ -21,6 +21,7 @@
- #include <crypto/hash_info.h>
- #include <linux/hash_info.h>
- #include <linux/diglim.h>
-+#include <linux/lsm_hooks.h>
+@@ -68,3 +73,14 @@ addition.
  
- #include "../integrity.h"
- 
-@@ -28,6 +29,13 @@
- #define HASH_BITS 10
- #define DIGLIM_HTABLE_SIZE (1 << HASH_BITS)
- 
-+#define FLAG_PARSER_EXEC	0x01
-+#define FLAG_PARSER_FILE_ACCESS	0x02
-+#define FLAG_PARSER_FILE_ACCESS_DENY	0x04
+ The ``file_upload`` variant uploads a file, while the ``buffer_upload``
+ variant uploads a buffer.
 +
-+extern struct lsm_blob_sizes diglim_lsm_blob_sizes;
-+extern int diglim_lsm_enabled;
-+
- /**
-  * struct digest_list_item - a digest list loaded into the kernel
-  *
-@@ -229,4 +237,23 @@ int diglim_ima_get_info(struct file *file, u8 *buffer, size_t buffer_len,
- 			enum hash_algo *algo, u8 *actions);
++The ``digest_list_add_del_test_parser`` tests verify the correctness of
++DIGLIM LSM. The ``upload`` variant ensures that files opened by the parser
++are evaluated and the actions are copied to the converted digest list. The
++``upload_not_measured`` variant ensures that the IMA measure action is not
++set to the converted digest list if the parser read a file not measured.
++The ``upload_write`` variant ensures that the parser cannot access a file
++concurrently written by another process. The ``upload_read`` variant
++ensures that files being read by the parser cannot be written by other
++processes. Finally, the ``upload_char_dev`` variant ensures that the parser
++cannot access files without measurable content (e.g. character device).
+diff --git a/tools/testing/selftests/diglim/Makefile b/tools/testing/selftests/diglim/Makefile
+index 100c219955d7..0e68d8363dd3 100644
+--- a/tools/testing/selftests/diglim/Makefile
++++ b/tools/testing/selftests/diglim/Makefile
+@@ -7,13 +7,19 @@ LDLIBS += -lpthread
  
- ssize_t digest_list_read(struct path *root, char *path, enum ops op);
-+static inline u8 *diglim_cred_actions(const struct cred *cred)
+ OVERRIDE_TARGETS = 1
+ 
+-TEST_GEN_PROGS = selftest
+-TEST_GEN_PROGS_EXTENDED = libcommon.so
++TEST_GEN_PROGS = selftest manage_digest_lists
++TEST_GEN_PROGS_EXTENDED = libcommon.so libcommon.a common.o
+ 
+ include ../lib.mk
+ 
+ $(OUTPUT)/libcommon.so: common.c
+ 	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
+ 
++$(OUTPUT)/libcommon.a: common.o
++	ar rcs libcommon.a common.o
++
+ $(OUTPUT)/selftest: selftest.c $(TEST_GEN_PROGS_EXTENDED)
+-	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS) -lcommon
++	$(CC) $(CFLAGS) -DOUTPUT=\"$(OUTPUT)\" $< -o $@ $(LDFLAGS) -lcommon
++
++$(OUTPUT)/manage_digest_lists: manage_digest_lists.c $(TEST_GEN_PROGS_EXTENDED)
++	$(CC) $(CFLAGS) -static $< -o $@ $(LDFLAGS) -lcommon
+diff --git a/tools/testing/selftests/diglim/common.h b/tools/testing/selftests/diglim/common.h
+index 6c7979f4182e..b71031adb830 100644
+--- a/tools/testing/selftests/diglim/common.h
++++ b/tools/testing/selftests/diglim/common.h
+@@ -26,6 +26,15 @@
+ 
+ #define BUFFER_SIZE 1024
+ 
++#define INTEGRITY_DIR "/sys/kernel/security/integrity"
++#define DIGEST_LIST_DIR INTEGRITY_DIR "/diglim"
++#define DIGEST_QUERY_PATH DIGEST_LIST_DIR "/digest_query"
++#define DIGEST_LABEL_PATH DIGEST_LIST_DIR "/digest_list_label"
++#define DIGEST_LIST_ADD_PATH DIGEST_LIST_DIR "/digest_list_add"
++#define DIGEST_LIST_DEL_PATH DIGEST_LIST_DIR "/digest_list_del"
++#define DIGEST_LISTS_LOADED_PATH DIGEST_LIST_DIR "/digest_lists_loaded"
++#define DIGESTS_COUNT DIGEST_LIST_DIR "/digests_count"
++
+ int write_buffer(char *path, char *buffer, size_t buffer_len, int uid);
+ int read_buffer(char *path, char **buffer, size_t *buffer_len, bool alloc,
+ 		bool is_char);
+diff --git a/tools/testing/selftests/diglim/selftest.c b/tools/testing/selftests/diglim/selftest.c
+index 273ba80c43fd..af7a590c445f 100644
+--- a/tools/testing/selftests/diglim/selftest.c
++++ b/tools/testing/selftests/diglim/selftest.c
+@@ -63,16 +63,6 @@ typedef uint64_t u64;
+ 
+ #define DIGEST_LIST_PATH_TEMPLATE "/tmp/digest_list.XXXXXX"
+ 
+-#define INTEGRITY_DIR "/sys/kernel/security/integrity"
+-
+-#define DIGEST_LIST_DIR INTEGRITY_DIR "/diglim"
+-#define DIGEST_QUERY_PATH DIGEST_LIST_DIR "/digest_query"
+-#define DIGEST_LABEL_PATH DIGEST_LIST_DIR "/digest_list_label"
+-#define DIGEST_LIST_ADD_PATH DIGEST_LIST_DIR "/digest_list_add"
+-#define DIGEST_LIST_DEL_PATH DIGEST_LIST_DIR "/digest_list_del"
+-#define DIGEST_LISTS_LOADED_PATH DIGEST_LIST_DIR "/digest_lists_loaded"
+-#define DIGESTS_COUNT DIGEST_LIST_DIR "/digests_count"
+-
+ #define IMA_POLICY_PATH INTEGRITY_DIR "/ima/policy"
+ #define IMA_MEASUREMENTS_PATH INTEGRITY_DIR "/ima/ascii_runtime_measurements"
+ 
+@@ -94,7 +84,11 @@ typedef uint64_t u64;
+ #define MAX_DIGEST_LIST_SIZE 10000
+ #define NUM_ITERATIONS 100000
+ 
+-enum upload_types { UPLOAD_FILE, UPLOAD_FILE_CHOWN, UPLOAD_BUFFER };
++#define DIGEST_LIST_PARSER_PATH OUTPUT "/manage_digest_lists"
++#define DIGEST_LIST_PARSER_PATH_COPY "/tmp/diglim/manage_digest_lists"
++
++enum upload_types { UPLOAD_FILE, UPLOAD_FILE_CHOWN, UPLOAD_BUFFER,
++		    UPLOAD_PARSER, UPLOAD_PARSER_CHOWN, NO_UPLOAD };
+ 
+ const char *const hash_algo_name[HASH_ALGO__LAST] = {
+ 	[HASH_ALGO_MD4]		= "md4",
+@@ -486,6 +480,69 @@ static struct digest_list_item *digest_list_generate_random(void)
+ 	return !ret ? digest_list : NULL;
+ }
+ 
++static struct digest_list_item *digest_list_generate_file(char *file_path,
++							enum compact_types type)
 +{
-+	return cred->security + diglim_lsm_blob_sizes.lbs_cred;
-+}
++	struct digest_list_item *digest_list;
++	struct compact_list_hdr *hdr;
++	u8 digest[64];
++	int ret;
 +
-+static inline u8 *diglim_cred_flags(const struct cred *cred)
-+{
-+	return diglim_cred_actions(cred) + 1;
-+}
++	digest_list = calloc(1, sizeof(*digest_list));
++	if (!digest_list)
++		return NULL;
 +
-+static inline u8 *diglim_inode(const struct inode *inode)
-+{
-+	return inode->i_security + diglim_lsm_blob_sizes.lbs_inode;
-+}
-+
-+static inline u8 *diglim_file(const struct file *file)
-+{
-+	return file->f_security + diglim_lsm_blob_sizes.lbs_file;
-+}
- #endif /*__DIGLIM_INTERNAL_H*/
-diff --git a/security/integrity/diglim/fs.c b/security/integrity/diglim/fs.c
-index 467ff4f7c0ce..56c6f7ff2b3c 100644
---- a/security/integrity/diglim/fs.c
-+++ b/security/integrity/diglim/fs.c
-@@ -577,6 +577,9 @@ static ssize_t digest_list_write(struct file *file, const char __user *buf,
- 	enum hash_algo algo;
- 	u8 actions = 0;
- 
-+	if (diglim_lsm_enabled)
-+		actions = *diglim_cred_actions(current_cred());
-+
- 	/* No partial writes. */
- 	result = -EINVAL;
- 	if (*ppos != 0)
-diff --git a/security/integrity/diglim/hooks.c b/security/integrity/diglim/hooks.c
-new file mode 100644
-index 000000000000..f186ffbac628
---- /dev/null
-+++ b/security/integrity/diglim/hooks.c
-@@ -0,0 +1,436 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2021 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Functions to evaluate the integrity of converted digest lists.
-+ */
-+
-+#include <linux/vmalloc.h>
-+#include <linux/module.h>
-+#include <linux/cred.h>
-+#include <linux/lsm_hooks.h>
-+#include <linux/binfmts.h>
-+#include <linux/xattr.h>
-+#include <linux/file.h>
-+#include <linux/fdtable.h>
-+#include <linux/sched/mm.h>
-+#include <linux/ima.h>
-+#include <uapi/linux/magic.h>
-+
-+#include "diglim.h"
-+
-+int diglim_lsm_enabled;
-+
-+/**
-+ * diglim_file_read_with_ima - read the file with IMA
-+ * @file: file descriptor of the file being accessed
-+ *
-+ * This function opens the file again so that it can pass the file descriptor to
-+ * IMA for reading the file. It also marks the inode so that diglim_file_open()
-+ * recognizes that the open was made by DIGLIM LSM and does not process it.
-+ *
-+ * NOTE: the second open might be not necessary, depending on the IMA policy;
-+ *       however, since the second open is always performed with type
-+ *       READING_DIGEST_LIST, it can be easily monitored by IMA with a rule with
-+ *       func=DIGEST_LIST_CHECK
-+ *
-+ * Return: 0 on success, a negative value on error
-+ */
-+static int diglim_file_read_with_ima(struct file *file)
-+{
-+	struct inode *inode = file_inode(file);
-+	u8 *inode_flags = diglim_inode(inode);
-+	void *datap = NULL;
-+	struct file *f;
-+	int ret, flags;
-+
-+	/* Taken from ima_crypto.c. */
-+	flags = file->f_flags & ~(O_WRONLY | O_APPEND | O_TRUNC | O_CREAT |
-+				  O_NOCTTY | O_EXCL);
-+	flags |= O_RDONLY;
-+
-+	/* Signal to diglim_file_open() to not evaluate the second open. */
-+	*inode_flags |= FLAG_PARSER_FILE_ACCESS;
-+	/* Open an additional file descriptor to use with ima_read_file(). */
-+	f = dentry_open(&file->f_path, flags, file->f_cred);
-+	*inode_flags &= ~FLAG_PARSER_FILE_ACCESS;
-+	if (IS_ERR(f))
-+		return PTR_ERR(f);
-+
-+	/*
-+	 * Pass the file descriptor to IMA with file type READING_DIGEST_LIST,
-+	 * so that this operation can be more easily identified with an IMA rule
-+	 * with func=DIGEST_LIST_CHECK.
-+	 */
-+	ret = kernel_read_file(f, 0, &datap, INT_MAX, NULL,
-+			       READING_DIGEST_LIST);
-+	if (ret >= 0)
-+		vfree(datap);
-+
-+	fput(f);
-+	return ret;
-+}
-+
-+/**
-+ * diglim_identify_parser - identify a digest list parser from the executable
-+ * @cred: credentials of the child process
-+ * @file: file descriptor of the child process executable
-+ *
-+ * This function first identifies a digest list parser from the executable, by
-+ * searching the executable digest in the DIGLIM hash table. A parser is
-+ * successfully identified if the digest is found in the hash table and if the
-+ * type of the found digest is COMPACT_PARSER.
-+ *
-+ * If a parser has been successfully identified, this function also sets the
-+ * actions performed by IMA on the executable in the process credentials. These
-+ * initial actions will be AND-ed with the actions performed by IMA on each
-+ * regular file opened by the parser. A missing action for a file will cause
-+ * the corresponding action in the process credentials to be irreversibly
-+ * cleared.
-+ *
-+ * Updating the actions in the process credentials in this way makes it clear
-+ * whether or not the parser is suitable for use for a particular integrity goal
-+ * (measurement or appraisal). If an action is set, it means that the executable
-+ * and the process inputs have been evaluated for a particular goal, and from
-+ * this it can be inferred that the output of the process is also correct.
-+ *
-+ * Return: 0 if a digest list parser has been successfully identified, a
-+ *         negative value otherwise
-+ */
-+static int diglim_identify_parser(const struct cred *cred, struct file *file)
-+{
-+	struct integrity_iint_cache *iint;
-+	struct inode *inode = file_inode(file);
-+	u8 *parser_actions = diglim_cred_actions(cred);
-+	u8 digest[IMA_MAX_DIGEST_SIZE];
-+	enum hash_algo algo = HASH_ALGO__LAST;
-+	u16 modifiers = 0;
-+	u8 digest_list_actions = 0, file_actions = 0;
-+	int ret = -ENOENT;
-+
-+	/* Read the file with IMA. */
-+	ret = diglim_file_read_with_ima(file);
-+	if (ret < 0)
-+		return ret;
-+
-+	iint = integrity_iint_find(inode);
-+	if (!iint)
-+		return ret;
-+
-+	/*
-+	 * Since executables are write-protected, information obtained from IMA
-+	 * (digest and actions performed on the executable) are safe to use
-+	 * without the risk of races with writers.
-+	 */
-+	mutex_lock(&iint->mutex);
-+	if (!(iint->flags & IMA_COLLECTED)) {
-+		mutex_unlock(&iint->mutex);
++	digest_list->size = sizeof(struct compact_list_hdr) +
++			    hash_digest_size[HASH_ALGO_SHA256];
++	digest_list->buf = calloc(digest_list->size, sizeof(unsigned char));
++	if (!digest_list->buf) {
++		ret = -ENOMEM;
 +		goto out;
 +	}
 +
-+	/* Query the executable digest to determine if it is a parser. */
-+	ret = diglim_digest_get_info(iint->ima_hash->digest,
-+				     iint->ima_hash->algo, COMPACT_PARSER,
-+				     &modifiers, &digest_list_actions);
++	hdr = (struct compact_list_hdr *)digest_list->buf;
 +
-+	mutex_unlock(&iint->mutex);
++	hdr->version = 1;
++	hdr->_reserved = 0;
++	hdr->type = type;
++	hdr->modifiers = 0;
++	hdr->algo = HASH_ALGO_SHA256;
++	hdr->count = 1;
++	hdr->datalen = hash_digest_size[hdr->algo];
 +
++	hdr->type = __cpu_to_le16(hdr->type);
++	hdr->algo = __cpu_to_le16(hdr->algo);
++	hdr->count = __cpu_to_le32(hdr->count);
++	hdr->datalen = __cpu_to_le32(hdr->datalen);
++
++	ret = calc_file_digest(digest_list->buf + sizeof(*hdr), file_path,
++			       HASH_ALGO_SHA256);
 +	if (ret < 0)
 +		goto out;
 +
-+	/* Obtain the flags from IMA operations on the executable. */
-+	ret = diglim_ima_get_info(file, NULL, 0, NULL, digest, sizeof(digest),
-+				  &algo, &file_actions);
-+	if (!ret)
-+		*parser_actions |= file_actions;
++	digest_list->algo = get_ima_hash_algo();
++	if (digest_list->algo == HASH_ALGO__LAST) {
++		ret = -ENOENT;
++		goto out;
++	}
 +
-+	pr_debug("%s: task: %d(%s), parser initial actions: %d\n", __func__,
-+		 current->pid, current->comm, *parser_actions);
++	ret = calc_digest(digest, digest_list->buf, digest_list->size,
++			  digest_list->algo);
++	if (ret < 0)
++		goto out;
++
++	_bin2hex(digest_list->digest_str, digest,
++		 hash_digest_size[digest_list->algo]);
 +out:
-+	return ret;
-+}
-+
-+/**
-+ * diglim_bprm_committing_creds - implement the bprm_committing_creds hook
-+ * @bprm: linux_binprm structure of the file being executed
-+ *
-+ * This function implements the bprm_committing_creds hook, to identify a digest
-+ * list parser from the digest of the executable. After a successful
-+ * identification, the FLAG_PARSER_EXEC flag is set in the process credentials,
-+ * so that the diglim_file_open() hook below knows that it should enforce the
-+ * parser policy.
-+ */
-+static void diglim_bprm_committing_creds(struct linux_binprm *bprm)
-+{
-+	u8 *parser_flags = diglim_cred_flags(bprm->cred);
-+	int ret;
-+
-+	/*
-+	 * Try to identify the parsers if the parent directory is named diglim.
-+	 */
-+	if (strcmp(file_dentry(bprm->file)->d_parent->d_name.name, "diglim"))
-+		return;
-+
-+	ret = diglim_identify_parser(bprm->cred, bprm->file);
-+	if (ret < 0)
-+		return;
-+
-+	*parser_flags |= FLAG_PARSER_EXEC;
-+}
-+
-+/**
-+ * diglim_file_open_check - check file access and if IMA eval is required
-+ * @file: file descriptor of the file being accessed
-+ *
-+ * This function checks a file access and determines whether or not it is safe
-+ * for the parser to access the file. Access (read) is considered safe if the
-+ * file is in a trusted filesystem (procfs, securityfs), does not have content
-+ * to be read or it has content that can be measured/appraised by IMA, and there
-+ * are no concurrent writes.
-+ *
-+ * NOTE: access to ld.so.cache, although it can be allowed, is instead denied to
-+ *       avoid an unknown measurement in the measurement list or appraisal
-+ *       failure.
-+ *
-+ * This function also determines whether an IMA evaluation is required.
-+ *
-+ * The following table summarizes the policy enforced on the parsers.
-+ *
-+ *                                    Not parser               parser
-+ * +-----------+--------------+-----------------------+-----------------------+
-+ * | operation | file type    |                       |                       |
-+ * +-----------+--------------+                       |                       |
-+ * |           | ld.so.cache  | allow                 | allow                 |
-+ * |           | reg          | allow [1]             | allow                 |
-+ * |   write   | dir/link     | allow                 | allow                 |
-+ * |           | procfs/secfs | allow                 | allow                 |
-+ * |           | char/block/  | allow                 | allow                 |
-+ * |           | socket/fifo  |                       |                       |
-+ * +-----------+--------------+-----------------------+-----------------------+
-+ * |           | ld.so.cache  | allow                 | deny                  |
-+ * |           | reg          | allow                 | allow [2] + IMA eval  |
-+ * |   read    | dir/link     | allow                 | allow                 |
-+ * |           | procfs/secfs | allow                 | allow                 |
-+ * |           | char/block/  | allow                 | deny                  |
-+ * |           | socket/fifo  |                       |                       |
-+ * +-----------+--------------+-----------------------+-----------------------+
-+ *
-+ * [1]: if not write-locked by the parser
-+ * [2]: if there are no concurrent writes
-+ *
-+ * Return: 0 if access is allowed but IMA eval is not required, -EPERM if access
-+ *         is denied and 1 if access is allowed and IMA eval is required.
-+ */
-+static int diglim_file_open_check(struct file *file)
-+{
-+	struct inode *inode = file_inode(file);
-+
-+	/* Skip non-read operations. */
-+	if (!(file->f_mode & FMODE_READ))
-+		return 0;
-+
-+	/* Deny access to ld.so.cache. */
-+	if (!strcmp(file_dentry(file)->d_name.name, "ld.so.cache"))
-+		return -EPERM;
-+
-+	/* Deny access to files that can have content but cannot be measured. */
-+	if (!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode) &&
-+	    !S_ISDIR(inode->i_mode))
-+		return -EPERM;
-+
-+	/* Allow access to dirs and symlinks. */
-+	if (!S_ISREG(inode->i_mode))
-+		return 0;
-+
-+	/* Allow access to files in procfs and securityfs. */
-+	if (inode->i_sb->s_magic == PROC_SUPER_MAGIC ||
-+	    inode->i_sb->s_magic == SECURITYFS_MAGIC)
-+		return 0;
-+
-+	return 1;
-+}
-+
-+/**
-+ * diglim_file_lock - write-lock the file before retrieving IMA actions
-+ * @file: file descriptor of the file being locked
-+ *
-+ * This function write-locks the file being accessed in order to safely retrieve
-+ * IMA actions and ensure that there are no concurrent writes, which would cause
-+ * the retrieved actions to be outdated.
-+ *
-+ * Since IMA eventually resets the actions only when the file is closed, getting
-+ * the exclusive write-lock ensures that the actions are up to date (for the
-+ * exclusive write-lock to succeed there must be no pending writes, which means
-+ * that IMA already updated the actions in ima_check_last_writer()).
-+ *
-+ * Return: 0 on success, -ETXTBSY if the file cannot be write-locked
-+ */
-+static int diglim_file_lock(struct file *file)
-+{
-+	u8 *file_flags = diglim_file(file);
-+	int ret;
-+
-+	/* Write-lock the file until the parser finishes to use it. */
-+	ret = deny_write_access(file);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Grab a reference to the inode to avoid free before unlocking it. */
-+	igrab(file_inode(file));
-+
-+	/* Record deny_write_access() call in the file descriptor. */
-+	*file_flags |= FLAG_PARSER_FILE_ACCESS_DENY;
-+	return 0;
-+}
-+
-+/**
-+ * diglim_file_unlock - unlock the file locked by DIGLIM LSM
-+ * @file: file descriptor of the file being unlocked
-+ *
-+ * This function first checks if the file was locked by DIGLIM LSM, and if yes,
-+ * unlocks it.
-+ */
-+static void diglim_file_unlock(struct file *file)
-+{
-+	u8 *file_flags;
-+
-+	file_flags = diglim_file(file);
-+
-+	/* File not write-locked by DIGLIM LSM. */
-+	if (!(*file_flags & FLAG_PARSER_FILE_ACCESS_DENY))
-+		return;
-+
-+	/* Release write-lock. */
-+	allow_write_access(file);
-+
-+	/* Clear flag. */
-+	*file_flags &= ~FLAG_PARSER_FILE_ACCESS_DENY;
-+
-+	/* Release reference taken in diglim_file_lock(). */
-+	iput(file_inode(file));
-+}
-+
-+/**
-+ * diglim_file_open - check file access and update process actions
-+ * @file: file descriptor of the file being accessed
-+ *
-+ * This function checks the file being accessed by the parser and does an AND
-+ * of the actions in the parser process credentials with the actions done by IMA
-+ * on that file.
-+ *
-+ * The actions in the parser process credentials will be then copied to the
-+ * converted digest lists uploaded by the parser.
-+ *
-+ * Return: 0 if access is allowed, a negative value if access is denied
-+ */
-+static int diglim_file_open(struct file *file)
-+{
-+	u8 file_actions = 0;
-+	u8 *parser_flags = diglim_cred_flags(current_cred());
-+	u8 *parser_actions = diglim_cred_actions(current_cred());
-+	u8 initial_parser_actions = *parser_actions;
-+	struct inode *inode = file_inode(file);
-+	u8 *inode_flags = diglim_inode(inode);
-+	int ret;
-+
-+	/* Skip processes that are not the parser. */
-+	if (!(*parser_flags & FLAG_PARSER_EXEC))
-+		return 0;
-+
-+	/* Skip calls due to dentry_open() in diglim_file_read_with_ima(). */
-+	if (*inode_flags & FLAG_PARSER_FILE_ACCESS)
-+		return 0;
-+
-+	/* Check file access. */
-+	ret = diglim_file_open_check(file);
-+	if (ret <= 0)
-+		return ret;
-+
-+	/* Try to write-lock the file. */
-+	ret = diglim_file_lock(file);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Read the file with IMA. */
-+	ret = diglim_file_read_with_ima(file);
 +	if (ret < 0) {
-+		diglim_file_unlock(file);
-+		return ret;
++		free(digest_list->buf);
++		free(digest_list);
++		return NULL;
 +	}
 +
-+	/* Retrieve the actions performed by IMA on the file. */
-+	diglim_ima_get_info(file, NULL, 0, NULL, NULL, 0, NULL, &file_actions);
-+
-+	/* Do an AND of the parser process actions with the file actions. */
-+	*parser_actions &= file_actions;
-+
-+	if (*parser_actions != initial_parser_actions)
-+		pr_err("%s: task: %d(%s), cleared parser actions, file: %s, old flags: %d, new flags: %d\n",
-+		       __func__, current->pid, current->comm,
-+		       file_dentry(file)->d_name.name, initial_parser_actions,
-+		       *parser_actions);
-+
-+	return 0;
++	return digest_list;
 +}
 +
-+/**
-+ * diglim_file_free - unlock files accessed by the parser
-+ * @file: file descriptor of the file being monitored
-+ *
-+ * This function unlocks files accessed by the parser.
-+ */
-+void diglim_file_free(struct file *file)
+ static int digest_list_upload(struct digest_list_item *digest_list, enum ops op,
+ 			      enum upload_types upload_type, int uid)
+ {
+@@ -494,16 +551,20 @@ static int digest_list_upload(struct digest_list_item *digest_list, enum ops op,
+ 	unsigned char *buffer = digest_list->buf;
+ 	size_t buffer_len = digest_list->size;
+ 	unsigned char rnd[3];
+-	int ret = 0, fd;
++	int ret = 0, fd, status;
+ 
+ 	if (op == DIGEST_LIST_ADD) {
+ 		if (upload_type == UPLOAD_FILE ||
+-		    upload_type == UPLOAD_FILE_CHOWN) {
++		    upload_type == UPLOAD_FILE_CHOWN ||
++		    upload_type == UPLOAD_PARSER ||
++		    upload_type == UPLOAD_PARSER_CHOWN ||
++		    upload_type == NO_UPLOAD) {
+ 			fd = mkstemp(path_template);
+ 			if (fd < 0)
+ 				return -EPERM;
+ 
+-			if (upload_type == UPLOAD_FILE_CHOWN)
++			if (upload_type == UPLOAD_FILE_CHOWN ||
++			    upload_type == UPLOAD_PARSER_CHOWN)
+ 				ret = fchown(fd, 3000, -1);
+ 
+ 			fchmod(fd, 0644);
+@@ -550,6 +611,25 @@ static int digest_list_upload(struct digest_list_item *digest_list, enum ops op,
+ 				   strlen(basename), -1);
+ 		if (ret < 0)
+ 			goto out;
++	} else if (upload_type == UPLOAD_PARSER ||
++		   upload_type == UPLOAD_PARSER_CHOWN) {
++		if (fork() == 0) {
++			execlp(DIGEST_LIST_PARSER_PATH_COPY,
++			       DIGEST_LIST_PARSER_PATH_COPY,
++			       path_template, path_upload, NULL);
++			exit(1);
++		}
++
++		ret = 0;
++
++		wait(&status);
++		if (WEXITSTATUS(status) != 0)
++			ret = -EINVAL;
++
++		goto out;
++	} else if (upload_type == NO_UPLOAD) {
++		ret = 0;
++		goto out;
+ 	}
+ 
+ 	ret = write_buffer(path_upload, (char *)buffer, buffer_len, uid);
+@@ -1439,4 +1519,253 @@ TEST_F_TIMEOUT(test_measure,
+ 						       UPLOAD_BUFFER);
+ }
+ 
++FIXTURE(test_parser)
 +{
-+	diglim_file_unlock(file);
-+}
-+
-+/**
-+ * diglim_ptrace_access_check - deny ptraces on the parser process
-+ * @child: task being ptraced
-+ * @mode: ptrace mode
-+ *
-+ * This function denies ptraces on the parser process.
-+ *
-+ * Return: 0 if the ptrace is not done on the parser process, -EACCES otherwise
-+ */
-+static int diglim_ptrace_access_check(struct task_struct *child,
-+				       unsigned int mode)
-+{
-+	const struct cred *cred = get_task_cred(child);
-+	u8 *flags = diglim_cred_flags(cred);
-+
-+	/* Deny ptraces to the parser. */
-+	if (*flags & FLAG_PARSER_EXEC)
-+		return -EACCES;
-+
-+	return 0;
-+}
-+
-+static struct security_hook_list diglim_lsm_hooks[] __lsm_ro_after_init = {
-+	LSM_HOOK_INIT(bprm_committing_creds, diglim_bprm_committing_creds),
-+	LSM_HOOK_INIT(file_open, diglim_file_open),
-+	LSM_HOOK_INIT(file_free_security, diglim_file_free),
-+	LSM_HOOK_INIT(ptrace_access_check, diglim_ptrace_access_check),
++	struct digest_list_item *digest_list;
 +};
 +
-+static int __init diglim_lsm_init(void)
++#define PARSER_RULES "measure func=DIGEST_LIST_CHECK fowner=3000 \n"
++
++FIXTURE_SETUP(test_parser)
 +{
-+	diglim_lsm_enabled = 1;
-+	security_add_hooks(diglim_lsm_hooks, ARRAY_SIZE(diglim_lsm_hooks),
-+			   "diglim");
-+	return 0;
++	int ret;
++
++	ret = load_ima_policy(PARSER_RULES);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("load_ima_policy() failed");
++	}
++
++	unlink(DIGEST_LIST_PARSER_PATH_COPY);
++	mkdir("/tmp/diglim", 0700);
++
++	ret = copy_file(DIGEST_LIST_PARSER_PATH, DIGEST_LIST_PARSER_PATH_COPY);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("copy_file() failed");
++	}
++
++	ret = chown(DIGEST_LIST_PARSER_PATH_COPY, 3000, -1);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("chown() failed");
++	}
++
++	chmod(DIGEST_LIST_PARSER_PATH_COPY, 0755);
++
++	self->digest_list = digest_list_generate_file(
++						DIGEST_LIST_PARSER_PATH_COPY,
++						COMPACT_PARSER);
++	ASSERT_NE(NULL, self->digest_list) {
++		TH_LOG("Cannot generate digest list");
++	}
++
++	self->digest_list->actions |= (1 << COMPACT_ACTION_IMA_MEASURED);
++
++	ret = digest_list_upload(self->digest_list, DIGEST_LIST_ADD,
++				 UPLOAD_FILE, 1000);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_upload() failed");
++	}
++
++	ret = digest_list_check(self->digest_list, DIGEST_LIST_ADD);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_check() failed");
++	}
 +}
 +
-+struct lsm_blob_sizes diglim_lsm_blob_sizes __lsm_ro_after_init = {
-+	.lbs_cred = 2 * sizeof(u8),
-+	.lbs_inode = sizeof(u8),
-+	.lbs_file = sizeof(u8),
-+};
++FIXTURE_TEARDOWN(test_parser)
++{
++	int ret;
 +
-+DEFINE_LSM(diglim) = {
-+	.name = "diglim",
-+	.init = diglim_lsm_init,
-+	.blobs = &diglim_lsm_blob_sizes,
-+};
++	ret = digest_list_upload(self->digest_list, DIGEST_LIST_DEL,
++				 UPLOAD_FILE, 1000);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_upload() failed");
++	}
++
++	free(self->digest_list->buf);
++	free(self->digest_list);
++}
++
++TEST_F_TIMEOUT(test_parser, digest_list_add_del_test_parser_upload, UINT_MAX)
++{
++	struct digest_list_item *digest_list;
++	int ret;
++
++	digest_list = digest_list_generate_file("/bin/cat", COMPACT_FILE);
++	ASSERT_NE(NULL, digest_list) {
++		TH_LOG("Cannot generate digest list");
++	}
++
++	digest_list->actions |= (1 << COMPACT_ACTION_IMA_MEASURED);
++
++	ret = digest_list_upload(digest_list, DIGEST_LIST_ADD,
++				 UPLOAD_PARSER_CHOWN, -1);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_upload() failed");
++	}
++
++	ret = digest_list_check(digest_list, DIGEST_LIST_ADD);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_check() failed");
++	}
++
++	ret = digest_list_upload(digest_list, DIGEST_LIST_DEL,
++				 UPLOAD_PARSER_CHOWN, -1);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_upload() failed");
++	}
++
++	ret = digest_list_check(digest_list, DIGEST_LIST_DEL);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_check() failed");
++	}
++
++	free(digest_list);
++}
++
++TEST_F_TIMEOUT(test_parser, digest_list_add_del_test_parser_upload_not_measured,
++	       UINT_MAX)
++{
++	struct digest_list_item *digest_list;
++	int ret;
++
++	digest_list = digest_list_generate_file("/bin/cat", COMPACT_FILE);
++	ASSERT_NE(NULL, digest_list) {
++		TH_LOG("Cannot generate digest list");
++	}
++
++	ret = digest_list_upload(digest_list, DIGEST_LIST_ADD,
++				 UPLOAD_PARSER, -1);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_upload() failed");
++	}
++
++	ret = digest_list_check(digest_list, DIGEST_LIST_ADD);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_check() failed");
++	}
++
++	ret = digest_list_upload(digest_list, DIGEST_LIST_DEL,
++				 UPLOAD_PARSER, -1);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_upload() failed");
++	}
++
++	ret = digest_list_check(digest_list, DIGEST_LIST_DEL);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_check() failed");
++	}
++
++	free(digest_list);
++}
++
++TEST_F_TIMEOUT(test_parser, digest_list_add_del_test_parser_upload_write,
++	       UINT_MAX)
++{
++	char path_template[] = DIGEST_LIST_PATH_TEMPLATE;
++	struct digest_list_item *digest_list;
++	int ret, fd, status, fds[2];
++	char c = 0;
++
++	digest_list = digest_list_generate_file("/bin/cat", COMPACT_FILE);
++	ASSERT_NE(NULL, digest_list) {
++		TH_LOG("Cannot generate digest list");
++	}
++
++	digest_list->actions |= (1 << COMPACT_ACTION_IMA_MEASURED);
++
++	ret = digest_list_upload(digest_list, DIGEST_LIST_ADD, NO_UPLOAD, -1);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_upload() failed");
++	}
++
++	memcpy(path_template + sizeof(DIGEST_LIST_PATH_TEMPLATE) - 7,
++	       digest_list->filename_suffix, 6);
++
++	ret = pipe(fds);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("pipe() failed");
++	}
++
++	if (fork() == 0) {
++		fd = open(path_template, O_WRONLY);
++		if (fd < 0)
++			exit(1);
++
++		close(fds[1]);
++		ret = read(fds[0], &c, sizeof(c));
++		exit(1);
++	}
++
++	close(fds[0]);
++
++	if (fork() == 0) {
++		execlp(DIGEST_LIST_PARSER_PATH, DIGEST_LIST_PARSER_PATH,
++		       path_template, DIGEST_LIST_ADD_PATH, NULL);
++		exit(1);
++	}
++
++	wait(&status);
++	ASSERT_EQ(1, WEXITSTATUS(status)) {
++		TH_LOG("digest list parser unexpected exit code %d",
++		       WEXITSTATUS(status));
++	}
++
++	free(digest_list);
++}
++
++TEST_F_TIMEOUT(test_parser, digest_list_add_del_test_parser_upload_read,
++	       UINT_MAX)
++{
++	char path_template[] = DIGEST_LIST_PATH_TEMPLATE;
++	struct digest_list_item *digest_list;
++	int ret, fd;
++
++	digest_list = digest_list_generate_file("/bin/cat", COMPACT_FILE);
++	ASSERT_NE(NULL, digest_list) {
++		TH_LOG("Cannot generate digest list");
++	}
++
++	ret = digest_list_upload(digest_list, DIGEST_LIST_ADD, NO_UPLOAD, -1);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("digest_list_upload() failed");
++	}
++
++	memcpy(path_template + sizeof(DIGEST_LIST_PATH_TEMPLATE) - 7,
++	       digest_list->filename_suffix, 6);
++
++	if (fork() == 0) {
++		execlp(DIGEST_LIST_PARSER_PATH, DIGEST_LIST_PARSER_PATH,
++		       path_template, DIGEST_LIST_ADD_PATH, "open_and_wait",
++		       NULL);
++		exit(1);
++	}
++
++	fd = open(path_template, O_WRONLY);
++	ASSERT_LT(0, fd) {
++		TH_LOG("digest list open success unexpected");
++		close(fd);
++	}
++
++	wait(NULL);
++	free(digest_list);
++	unlink(path_template);
++}
++
++TEST_F_TIMEOUT(test_parser, digest_list_add_del_test_parser_upload_char_dev,
++	       UINT_MAX)
++{
++	int status;
++
++	if (fork() == 0) {
++		execlp(DIGEST_LIST_PARSER_PATH, DIGEST_LIST_PARSER_PATH,
++		       "/dev/null", DIGEST_LIST_ADD_PATH, NULL);
++		exit(1);
++	}
++
++	wait(&status);
++	ASSERT_NE(0, WEXITSTATUS(status)) {
++		TH_LOG("digest list parser success unexpected");
++	}
++}
++
+ TEST_HARNESS_MAIN
 -- 
 2.25.1
 
