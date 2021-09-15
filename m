@@ -2,231 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CF040CA46
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 18:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7D440CA71
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 18:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbhIOQfi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Sep 2021 12:35:38 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3832 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbhIOQfd (ORCPT
+        id S229647AbhIOQjJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Sep 2021 12:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229479AbhIOQjJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Sep 2021 12:35:33 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H8m2B67JVz67vP9;
-        Thu, 16 Sep 2021 00:31:46 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Wed, 15 Sep 2021 18:34:10 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <mchehab+huawei@kernel.org>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 9/9] diglim: Admin guide
-Date:   Wed, 15 Sep 2021 18:31:45 +0200
-Message-ID: <20210915163145.1046505-10-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210915163145.1046505-1-roberto.sassu@huawei.com>
-References: <20210915163145.1046505-1-roberto.sassu@huawei.com>
+        Wed, 15 Sep 2021 12:39:09 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749FEC061574
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Sep 2021 09:37:50 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id j18so4208328ioj.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Sep 2021 09:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9Nz/2E2PrP0EyYnOX/D4z45C7Q87NY/jFqlSGxgcBSw=;
+        b=YSO6hITEUxm1tpML2V6mAcy4nBF4VlfDulFzHI7yUXXT+D8yXmEMaO/QWuQ2jt6dBb
+         b+Qe0RolV7NB9SF6UYUMekD8oW5kOQcU6QuhwdBvmkRj4fBak1LvRkBl3zE9vmRSiXtd
+         lRNThZk2FJYz2M5JZBpbvPUPd0Grnyg7cHOWI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9Nz/2E2PrP0EyYnOX/D4z45C7Q87NY/jFqlSGxgcBSw=;
+        b=q3GGimR5Z5AYFwlPJikq7e5rcmVabnNYm0FpOczeN5BI+wGSJ/k3h90ndullJkYjrJ
+         ulajl5aX5c4muWNp6ctD6Aw4ppZtzqOvY1vv4OsQxMynV7RsN6m8HPvK7IsL0vTmRivA
+         /89vjVEhm6tE3QTYGE2ZhpyG2pzJawRgrXMn+VW/pjattbvb7l0BVtVyd2drh5WkQuPP
+         zOp6gVXl3mAmYWjejQ4fx/7g3YnnPT9MaVWkouhCplkpiO7BOwwHCo/OCHyQ/K6YVg/e
+         QWF69lNftkTNvJB7yD/VQqru7bmBUGZuXmeoT/VdNCQvQ+o7lcWipixh8oBeBckmzzlK
+         rx3A==
+X-Gm-Message-State: AOAM530UJ/+pTJkSI9I0yAozYrwObX8qFS9XdJ/tsa9KWiDSum91kxao
+        regKbwjkG9Y7nK5AhZ935HbN1A==
+X-Google-Smtp-Source: ABdhPJyVCrLvDDbQWbBJs3aeOai3WOMrD87VP+bTMx8uLA4Rk51h5yeIzK3nECkj12i49CJDKHtUeg==
+X-Received: by 2002:a02:aa17:: with SMTP id r23mr796209jam.52.1631723869885;
+        Wed, 15 Sep 2021 09:37:49 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id x5sm211092ioa.35.2021.09.15.09.37.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Sep 2021 09:37:49 -0700 (PDT)
+Subject: Re: [PATCH] selftests: be sure to make khdr before other targets
+To:     Li Zhijian <lizhijian@cn.fujitsu.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210915134554.19581-1-lizhijian@cn.fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <4f193721-39fd-bcb1-1e14-253c60ab4961@linuxfoundation.org>
+Date:   Wed, 15 Sep 2021 10:37:48 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+In-Reply-To: <20210915134554.19581-1-lizhijian@cn.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce a DIGLIM administration guide. Its main purpose is to help users
-to configure a system to load to the kernel all the digests of executable
-and firmware from the RPM DB, and kernel modules of a custom kernel and a
-temporary file mapped as executable as custom digest lists.
+On 9/15/21 7:45 AM, Li Zhijian wrote:
+> LKP/0Day reported some building errors about kvm, and errors message
+> are not always same:
+> - lib/x86_64/processor.c:1083:31: error: ‘KVM_CAP_NESTED_STATE’ undeclared
+> (first use in this function); did you mean ‘KVM_CAP_PIT_STATE2’?
+> - lib/test_util.c:189:30: error: ‘MAP_HUGE_16KB’ undeclared (first use
+> in this function); did you mean ‘MAP_HUGE_16GB’?
+> 
+> Although kvm relies on the khdr, they still be built in parallel when -j
+> is specified. In this case, it will cause compiling errors.
+> 
+> Here we mark target khdr as NOTPARALLEL to make it be always built
+> first.
+> 
+> CC: Philip Li <philip.li@intel.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+> ---
+>   tools/testing/selftests/lib.mk | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 7ee911355328..5074b01f2a29 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -48,6 +48,7 @@ ARCH		?= $(SUBARCH)
+>   # When local build is done, headers are installed in the default
+>   # INSTALL_HDR_PATH usr/include.
+>   .PHONY: khdr
+> +.NOTPARALLEL:
+>   khdr:
+>   ifndef KSFT_KHDR_INSTALL_DONE
+>   ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+> 
 
-With further patch sets, it will be possible to load an execution policy in
-IMA and create a measurement list only with digest lists and unknown files,
-and to perform secure boot at application level.
+Thank you for the fix. Applied to
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- Documentation/admin-guide/diglim.rst | 136 +++++++++++++++++++++++++++
- Documentation/admin-guide/index.rst  |   1 +
- MAINTAINERS                          |   1 +
- 3 files changed, 138 insertions(+)
- create mode 100644 Documentation/admin-guide/diglim.rst
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/
+fixes branch.
 
-diff --git a/Documentation/admin-guide/diglim.rst b/Documentation/admin-guide/diglim.rst
-new file mode 100644
-index 000000000000..886100cf5a62
---- /dev/null
-+++ b/Documentation/admin-guide/diglim.rst
-@@ -0,0 +1,136 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======
-+DIGLIM
-+======
-+
-+Digest Lists Integrity Module (DIGLIM) is an integrity extension aiming to
-+facilitate the deployment of remote attestation and secure boot solutions
-+based on Integrity Measurement Architecture (IMA).
-+
-+DIGLIM documentation can be retrieved at ``Documentation/security/diglim``.
-+
-+Kernel Configuration Options
-+============================
-+
-+DIGLIM can be enabled by setting ``CONFIG_DIGLIM=y`` in the kernel
-+configuration. Optionally, it is possible to set
-+``CONFIG_DIGLIM_DIGEST_LISTS_DIR`` with the directory digest lists are
-+taken from by a kernel loader executed at kernel initialization time.
-+Finally, with ``CONFIG_DIGLIM_UPLOADER_PATH`` it is possible to specify the
-+path of the digest list uploader, which will execute user space parsers to
-+process the digest lists in ``CONFIG_DIGLIM_DIGEST_LISTS_DIR`` that are not
-+in the format recognized by the kernel.
-+
-+
-+LSM
-+===
-+
-+DIGLIM includes an LSM to protect user space parsers from other processes,
-+when the parsers convert a digest list and uploads it to the kernel. As for
-+other LSMs, ``diglim`` should be added to the list of enabled LSMs,
-+provided with the ``lsm=`` kernel option. If DIGLIM LSM is not enabled,
-+digest lists uploaded by the parser will not be marked as processed by IMA
-+and will not be suitable for use.
-+
-+
-+Setup
-+=====
-+
-+Digest lists must be loaded as soon as possible, before files are accessed,
-+so that IMA finds the digest of those files with a query. More details on
-+the benefits of DIGLIM for IMA can be found in
-+``Documentation/security/diglim/introduction.rst``.
-+
-+
-+Digest List Generation
-+----------------------
-+
-+Digest lists can be generated with the tools provided in ``tools/diglim``
-+in the kernel sources. In order to compile the tools, it is necessary to
-+install the ``glibc-static`` and ``rpm-devel`` packages.
-+
-+``compact_gen`` can be used to generate digest lists in the compact format,
-+which can be directly uploaded to the kernel.
-+
-+In order to upload digests from the RPM database, it is necessary to
-+generate three digest lists: one for ``upload_digest_lists``, which is
-+responsible to execute the parsers for digest lists not in the compact
-+format; two for ``rpm_parser``, which actually loads the RPM digest lists.
-+
-+``rpm_parser`` requires two digest lists, one for identification by DIGLIM
-+LSM, and the other for measurement and appraisal with IMA. The commands
-+are::
-+
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /usr/libexec/diglim/rpm_parser -t parser
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /usr/libexec/diglim/rpm_parser -t file
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /usr/libexec/diglim/upload_digest_lists -t file
-+
-+Optionally, an appended signature can be added to the generated digest
-+lists, with the sign-file tool included in the kernel sources::
-+
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-parser_list-compact-rpm_parser
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-file_list-compact-rpm_parser
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-file_list-compact-upload_digest_lists
-+
-+With an appropriate policy, appended signatures can be seen in the
-+measurement, by selecting the ``ima-modsig`` template.
-+
-+Afterwards, digest lists can be generated from the RPM database with the
-+command::
-+
-+ # tools/diglim/rpm_gen -d /etc/digest_lists
-+
-+If a custom kernel is used, an additional digest list should be generated
-+for kernel modules::
-+
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /lib/modules/`uname -r` -t file
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-file_list-compact-`uname -r`
-+
-+Finally, in Fedora there is an mmap with execution permission on a file
-+with 4K of zeros. A digest list can be generated by executing::
-+
-+ # dd if=/dev/zero of=/tmp/mmap bs=4096 count=1
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /tmp/mmap -f
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-file_list-compact-mmap
-+
-+
-+Initial Ram Disk
-+----------------
-+
-+Generated digest lists should be copied to the initial ram disk in the
-+``CONFIG_DIGLIM_DIGEST_LISTS_DIR`` directory. This can be accomplished,
-+with dracut, by adding in /etc/dracut.conf::
-+
-+ install_optional_items+=" /etc/digest_lists/* "
-+
-+if ``CONFIG_DIGLIM_DIGEST_LISTS_DIR=/etc/digest_lists``.
-+
-+``upload_digest_lists`` and ``rpm_parser`` can be also copied to the
-+initial ram disk by adding the following lines in /etc/dracut.conf::
-+
-+ install_optional_items+=" /usr/libexec/diglim/upload_digest_lists "
-+ install_optional_items+=" /usr/libexec/diglim/rpm_parser "
-+
-+assuming that the binaries are installed in /usr/libexec/diglim.
-+
-+Another important option is::
-+
-+ do_strip="no"
-+
-+This prevents dracut from stripping the symbols from binaries. If binaries
-+are altered, their digest will be different from the reference value and
-+will not be found in the DIGLIM hash table.
-+
-+
-+Boot and Digest List Upload
-+---------------------------
-+
-+After generating the initial ram disk and rebooting, digest lists should
-+have been added to the DIGLIM hash table. This can be checked by executing::
-+
-+ # cat /sys/kernel/security/integrity/diglim/digests_count
-+ Parser digests: 1
-+ File digests: 104273
-+ Metadata digests: 0
-+ Digest list digests: 2430
-diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
-index dc00afcabb95..1cc7d3b3e79c 100644
---- a/Documentation/admin-guide/index.rst
-+++ b/Documentation/admin-guide/index.rst
-@@ -79,6 +79,7 @@ configure specific aspects of kernel behavior to your liking.
-    cputopology
-    dell_rbu
-    device-mapper/index
-+   diglim
-    edid
-    efi-stub
-    ext4
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1efc1724376e..953c86915c49 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5507,6 +5507,7 @@ M:	Roberto Sassu <roberto.sassu@huawei.com>
- L:	linux-integrity@vger.kernel.org
- S:	Supported
- T:	git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
-+F:	Documentation/admin-guide/diglim.rst
- F:	Documentation/security/diglim/architecture.rst
- F:	Documentation/security/diglim/implementation.rst
- F:	Documentation/security/diglim/index.rst
--- 
-2.25.1
-
+thanks,
+-- Shuah
