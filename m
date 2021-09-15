@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 862A640CA3C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 18:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66ABB40CA43
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 18:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbhIOQfb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Sep 2021 12:35:31 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3829 "EHLO
+        id S230420AbhIOQfh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Sep 2021 12:35:37 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3830 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbhIOQfa (ORCPT
+        with ESMTP id S229554AbhIOQfb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Sep 2021 12:35:30 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H8m2P53Mfz67j6Y;
-        Thu, 16 Sep 2021 00:31:57 +0800 (CST)
+        Wed, 15 Sep 2021 12:35:31 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H8m2Q2bSMz67hKh;
+        Thu, 16 Sep 2021 00:31:58 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Wed, 15 Sep 2021 18:34:08 +0200
+ 15.1.2308.8; Wed, 15 Sep 2021 18:34:09 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
         <mchehab+huawei@kernel.org>
@@ -27,9 +27,9 @@ CC:     <linux-integrity@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 6/9] diglim: RPM digest list generator
-Date:   Wed, 15 Sep 2021 18:31:42 +0200
-Message-ID: <20210915163145.1046505-7-roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 7/9] diglim: Digest list uploader
+Date:   Wed, 15 Sep 2021 18:31:43 +0200
+Message-ID: <20210915163145.1046505-8-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210915163145.1046505-1-roberto.sassu@huawei.com>
 References: <20210915163145.1046505-1-roberto.sassu@huawei.com>
@@ -44,391 +44,306 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce the generator of RPM digest lists, which takes the RPM header
-from a package or the RPM DB. Optionally, it appends the RPM header
-signature with the same format of kernel modules and ID PKEY_ID_PGP.
+Introduce a digest list uploader. Its syntax is:
 
-This type of digest list can be loaded through the user space parser
-rpm_parser, which is introduced in a subsequent patch.
+upload_digest_lists <add|del> <digest list file/directory>
+
+Its main function is to determine which digest list parsers must be
+executed to parse the digest lists in the specified location. The uploader
+then executes the parsers in sequence, which are expected to be in the same
+directory as the uploader.
+
+Given that this tool is not involved in the conversion of the digest lists,
+it does not need to be identified as a parser by DIGLIM LSM.
+
+It is intentionally compiled as a static binary. Otherwise, a build service
+of a Linux distribution would need to be modified to generate a digest list
+for each of the shared library the uploader depends on (e.g. glibc).
+Instead, with a static binary, only a digest list for that binary has to be
+generated.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- MAINTAINERS            |   1 +
- tools/diglim/Makefile  |   5 +-
- tools/diglim/rpm_gen.c | 334 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 339 insertions(+), 1 deletion(-)
- create mode 100644 tools/diglim/rpm_gen.c
+ MAINTAINERS                        |   1 +
+ tools/diglim/Makefile              |   5 +-
+ tools/diglim/upload_digest_lists.c | 238 +++++++++++++++++++++++++++++
+ 3 files changed, 243 insertions(+), 1 deletion(-)
+ create mode 100644 tools/diglim/upload_digest_lists.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index b752790c06ea..04b252ebd7e1 100644
+index 04b252ebd7e1..148a2a7957b7 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -5526,6 +5526,7 @@ F:	tools/diglim/Makefile
- F:	tools/diglim/common.c
+@@ -5527,6 +5527,7 @@ F:	tools/diglim/common.c
  F:	tools/diglim/common.h
  F:	tools/diglim/compact_gen.c
-+F:	tools/diglim/rpm_gen.c
+ F:	tools/diglim/rpm_gen.c
++F:	tools/diglim/upload_digest_lists.c
  F:	tools/testing/selftests/diglim/
  
  DIOLAN U2C-12 I2C DRIVER
 diff --git a/tools/diglim/Makefile b/tools/diglim/Makefile
-index 45efa554449d..332bcd93af78 100644
+index 332bcd93af78..a22125ad0281 100644
 --- a/tools/diglim/Makefile
 +++ b/tools/diglim/Makefile
 @@ -3,7 +3,7 @@
  CC := $(CROSS_COMPILE)gcc
  CFLAGS += -O2 -Wall -g -I./ -I../../usr/include/ -ggdb
  
--PROGS := compact_gen
-+PROGS := compact_gen rpm_gen
+-PROGS := compact_gen rpm_gen
++PROGS := compact_gen rpm_gen upload_digest_lists
  PROGS_EXTENDED := common.o
  
  all: $(PROGS)
-@@ -16,3 +16,6 @@ common.o: common.c
+@@ -19,3 +19,6 @@ compact_gen: compact_gen.c $(PROGS_EXTENDED)
  
- compact_gen: compact_gen.c $(PROGS_EXTENDED)
- 	$(CC) $(CFLAGS) $< $(PROGS_EXTENDED) -o $@ $(LDFLAGS) -lcrypto
+ rpm_gen: rpm_gen.c $(PROGS_EXTENDED)
+ 	$(CC) $(CFLAGS) $< $(PROGS_EXTENDED) -o $@ $(LDFLAGS) -lrpm -lrpmio
 +
-+rpm_gen: rpm_gen.c $(PROGS_EXTENDED)
-+	$(CC) $(CFLAGS) $< $(PROGS_EXTENDED) -o $@ $(LDFLAGS) -lrpm -lrpmio
-diff --git a/tools/diglim/rpm_gen.c b/tools/diglim/rpm_gen.c
++upload_digest_lists: upload_digest_lists.c
++	$(CC) $(CFLAGS) -static $< -o $@ $(LDFLAGS)
+diff --git a/tools/diglim/upload_digest_lists.c b/tools/diglim/upload_digest_lists.c
 new file mode 100644
-index 000000000000..fbee65ea0394
+index 000000000000..06086dd64aa3
 --- /dev/null
-+++ b/tools/diglim/rpm_gen.c
-@@ -0,0 +1,334 @@
++++ b/tools/diglim/upload_digest_lists.c
+@@ -0,0 +1,238 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Generate RPM digest lists.
++ * Run parsers of digest list formats not recognizable by the kernel.
 + */
 +
 +#include <stdio.h>
-+#include <fcntl.h>
 +#include <errno.h>
++#include <fts.h>
++#include <string.h>
++#include <stdbool.h>
++#include <fcntl.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <sys/wait.h>
++#include <linux/limits.h>
++#include <sys/mount.h>
++#include <sys/vfs.h>
++#include <sys/stat.h>
++#include <linux/magic.h>
 +
-+#include <limits.h>
-+#include <rpm/rpmlib.h>
-+#include <rpm/header.h>
-+#include <rpm/rpmts.h>
-+#include <rpm/rpmdb.h>
-+#include <rpm/rpmlog.h>
-+#include <rpm/rpmtag.h>
-+#include <bits/endianness.h>
++#define MOUNT_FLAGS (MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME)
++#define PROCFS_MNTPOINT "/proc"
++#define SYSFS_MNTPOINT "/sys"
++#define SECURITYFS_MNTPOINT SYSFS_MNTPOINT "/kernel/security"
++#define DIGLIM_DIR SECURITYFS_MNTPOINT "/integrity/diglim"
 +
-+#include "common.h"
-+
-+#if __BYTE_ORDER == __BIG_ENDIAN
-+#include <linux/byteorder/big_endian.h>
-+#else
-+#include <linux/byteorder/little_endian.h>
-+#endif
-+
-+#include "../../usr/include/linux/diglim.h"
-+
-+const unsigned char rpm_header_magic[8] = {
-+	0x8e, 0xad, 0xe8, 0x01, 0x00, 0x00, 0x00, 0x00
++struct format_entry {
++	struct format_entry *next;
++	char *format;
 +};
 +
-+/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
-+#define MODULE_SIG_STRING "~Module signature appended~\n"
++struct format_entry *head;
++bool procfs_mounted;
++bool sysfs_mounted;
++bool securityfs_mounted;
 +
-+enum pkey_id_type {
-+	PKEY_ID_PGP,		/* OpenPGP generated key ID */
-+	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
-+	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
-+};
-+
-+/*
-+ * Module signature information block.
-+ *
-+ * The constituents of the signature section are, in order:
-+ *
-+ *	- Signer's name
-+ *	- Key identifier
-+ *	- Signature data
-+ *	- Information block
-+ */
-+struct module_signature {
-+	u8	algo;		/* Public-key crypto algorithm [0] */
-+	u8	hash;		/* Digest algorithm [0] */
-+	u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
-+	u8	signer_len;	/* Length of signer's name [0] */
-+	u8	key_id_len;	/* Length of key identifier [0] */
-+	u8	__pad[3];
-+	__be32	sig_len;	/* Length of signature data */
-+};
-+
-+static int gen_filename_prefix(char *filename, int filename_len, int pos,
-+			       const char *format, enum compact_types type)
++int add_format_parser(char *path)
 +{
-+	return snprintf(filename, filename_len, "%d-%s_list-%s-",
-+			(pos >= 0) ? pos : 0, compact_types_str[type], format);
-+}
++	char *name;
++	char *type_start, *format_start, *format_end;
++	struct format_entry *cur, *new;
++	int ret = 0;
 +
-+static void gen_filename(Header rpm, int pos, enum compact_types type,
-+			 char *filename, int filename_len, char *output_format)
-+{
-+	rpmtd name = rpmtdNew(), version = rpmtdNew();
-+	rpmtd release = rpmtdNew(), arch = rpmtdNew();
-+	int prefix_len;
++	name = strrchr(path, '/');
++	if (!name)
++		return -EINVAL;
 +
-+	headerGet(rpm, RPMTAG_NAME, name, 0);
-+	headerGet(rpm, RPMTAG_VERSION, version, 0);
-+	headerGet(rpm, RPMTAG_RELEASE, release, 0);
-+	headerGet(rpm, RPMTAG_ARCH, arch, 0);
++	name++;
 +
-+	prefix_len = gen_filename_prefix(filename, filename_len, pos,
-+					 output_format, type);
++	type_start = strchr(name, '-');
++	if (!type_start++)
++		return 0;
 +
-+	snprintf(filename + prefix_len, filename_len - prefix_len,
-+		 "%s-%s-%s.%s", rpmtdGetString(name), rpmtdGetString(version),
-+		 rpmtdGetString(release), rpmtdGetString(arch));
++	format_start = strchr(type_start, '-');
++	if (!format_start++)
++		return 0;
 +
-+	rpmtdFree(name);
-+	rpmtdFree(version);
-+	rpmtdFree(release);
-+	rpmtdFree(arch);
-+}
++	format_end = strchr(format_start, '-');
++	if (!format_end)
++		return 0;
 +
-+static int find_package(Header rpm, char *package)
-+{
-+	rpmtd name = rpmtdNew();
-+	int found = 0;
++	if (!strncmp(format_start, "compact", format_end - format_start))
++		return 0;
 +
-+	headerGet(rpm, RPMTAG_NAME, name, 0);
-+	if (!strncmp(rpmtdGetString(name), package, strlen(package)))
-+		found = 1;
++	cur = head;
 +
-+	rpmtdFree(name);
-+	return found;
-+}
++	while (cur) {
++		if (!strncmp(format_start, cur->format,
++			     format_end - format_start))
++			goto out;
 +
-+static int write_rpm_header(Header rpm, int dirfd, char *filename)
-+{
-+	rpmtd immutable;
-+	ssize_t ret;
-+	int fd;
++		cur = cur->next;
++	}
 +
-+	fd = openat(dirfd, filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-+	if (fd < 0)
-+		return -EACCES;
-+
-+	ret = write(fd, rpm_header_magic, sizeof(rpm_header_magic));
-+	if (ret != sizeof(rpm_header_magic)) {
-+		ret = -EIO;
++	new = malloc(sizeof(*new));
++	if (!new) {
++		ret = -ENOMEM;
 +		goto out;
 +	}
 +
-+	immutable = rpmtdNew();
-+	headerGet(rpm, RPMTAG_HEADERIMMUTABLE, immutable, 0);
-+	ret = write(fd, immutable->data, immutable->count);
-+	if (ret != immutable->count) {
-+		ret = -EIO;
++	new->format = strndup(format_start, format_end - format_start);
++	if (!new->format) {
++		ret = -ENOMEM;
 +		goto out;
 +	}
 +
-+	rpmtdFree(immutable);
++	new->next = head;
++	head = new;
 +out:
-+	close(fd);
-+
 +	if (ret < 0)
-+		unlinkat(dirfd, filename, 0);
++		free(new);
 +
 +	return ret;
 +}
 +
-+static int write_rpm_header_signature(Header rpm, int dirfd, char *filename)
++void free_list(void)
 +{
-+	struct module_signature modsig = { 0 };
-+	rpmtd signature = rpmtdNew();
-+	int ret, fd;
++	struct format_entry *cur = head, *tmp;
 +
-+	headerGet(rpm, RPMTAG_RSAHEADER, signature, 0);
-+	fd = openat(dirfd, filename, O_WRONLY | O_APPEND);
-+	if (fd < 0) {
-+		ret = -errno;
-+		goto out;
++	while (cur) {
++		tmp = cur;
++		cur = tmp->next;
++		free(tmp->format);
++		free(tmp);
 +	}
-+
-+	modsig.id_type = PKEY_ID_PGP;
-+	modsig.sig_len = signature->count;
-+	modsig.sig_len = __cpu_to_be32(modsig.sig_len);
-+
-+	ret = write(fd, signature->data, signature->count);
-+	if (ret != signature->count) {
-+		ret = -EIO;
-+		goto out_fd;
-+	}
-+
-+	ret = write(fd, &modsig, sizeof(modsig));
-+	if (ret != sizeof(modsig)) {
-+		ret = -EIO;
-+		goto out_fd;
-+	}
-+
-+	ret = write(fd, MODULE_SIG_STRING, sizeof(MODULE_SIG_STRING) - 1);
-+	if (ret != sizeof(MODULE_SIG_STRING) - 1) {
-+		ret = -EIO;
-+		goto out;
-+	}
-+
-+	ret = 0;
-+out_fd:
-+	close(fd);
-+out:
-+	rpmtdFree(signature);
-+
-+	if (ret < 0)
-+		unlinkat(dirfd, filename, 0);
-+
-+	return ret;
 +}
 +
-+static void usage(char *progname)
++static int mount_filesystems(void)
 +{
-+	printf("Usage: %s <options>\n", progname);
-+	printf("Options:\n");
-+	printf("\t-d <output directory>: directory digest lists are written to\n"
-+	       "\t-r <RPM path>: RPM package the digest list is generated from (all RPM packages in DB if not specified)\n"
-+	       "\t-p <package>: selected RPM package in RPM DB\n"
-+	       "\t-h: display help\n");
-+}
-+
-+static void gen_rpm_digest_list(Header rpm, int dirfd, char *filename)
-+{
++	struct stat st;
++	struct statfs stf;
 +	int ret;
 +
-+	ret = write_rpm_header(rpm, dirfd, filename);
-+	if (ret < 0) {
-+		printf("Cannot generate %s digest list\n", filename);
-+		return;
++	if (stat("/proc/self", &st) == -1 ||
++	    statfs("/proc/self", &stf) == -1 || stf.f_type != 0x9fa0) {
++		ret = mount(PROCFS_MNTPOINT, PROCFS_MNTPOINT, "proc",
++			    MOUNT_FLAGS, NULL);
++		if (ret < 0) {
++			printf("Cannot mount procfs\n");
++			return ret;
++		}
++
++		procfs_mounted = true;
 +	}
 +
-+	ret = write_rpm_header_signature(rpm, dirfd, filename);
-+	if (ret < 0)
-+		printf("Cannot add signature to %s digest list\n",
-+		       filename);
++	if (stat(SECURITYFS_MNTPOINT, &st) == -1 ||
++	    statfs(SYSFS_MNTPOINT, &stf) == -1 ||
++	    stf.f_type != 0x62656572) {
++		ret = mount(SYSFS_MNTPOINT, SYSFS_MNTPOINT, "sysfs",
++			    MOUNT_FLAGS, NULL);
++		if (ret < 0) {
++			printf("Cannot mount sysfs\n");
++			return ret;
++		}
++
++		sysfs_mounted = true;
++	}
++
++	if (stat(DIGLIM_DIR, &st) == -1 ||
++	    statfs(SECURITYFS_MNTPOINT, &stf) == -1 ||
++	    stf.f_type != 0x73636673) {
++		ret = mount(SECURITYFS_MNTPOINT, SECURITYFS_MNTPOINT,
++			    "securityfs", MOUNT_FLAGS, NULL);
++		if (ret < 0) {
++			printf("Cannot mount securityfs\n");
++			return ret;
++		}
++
++		securityfs_mounted = true;
++	}
++
++	return 0;
++}
++
++static void umount_filesystems(void)
++{
++	if (procfs_mounted)
++		umount(PROCFS_MNTPOINT);
++	if (securityfs_mounted)
++		umount(SECURITYFS_MNTPOINT);
++	if (sysfs_mounted)
++		umount(SYSFS_MNTPOINT);
 +}
 +
 +int main(int argc, char *argv[])
 +{
-+	char filename[NAME_MAX + 1];
-+	rpmts ts = NULL;
-+	Header hdr;
-+	FD_t fd;
-+	rpmdbMatchIterator mi;
-+	rpmVSFlags vsflags = 0;
-+	char *input_package = NULL, *selected_package = NULL;
-+	char *output_dir = NULL;
-+	struct stat st;
-+	int c;
-+	int ret, dirfd;
++	char *paths[2] = { NULL, NULL };
++	struct format_entry *cur;
++	char parser_path[PATH_MAX], *sep;
++	FTS *fts = NULL;
++	FTSENT *ftsent;
++	int fts_flags = (FTS_PHYSICAL | FTS_COMFOLLOW | FTS_NOCHDIR | FTS_XDEV);
++	int ret;
 +
-+	while ((c = getopt(argc, argv, "d:r:p:h")) != -1) {
-+		switch (c) {
-+		case 'd':
-+			output_dir = optarg;
++	if (argc != 3) {
++		printf("Usage: %s add|del <digest list path>\n", argv[0]);
++		return -EINVAL;
++	}
++
++	paths[0] = argv[2];
++
++	fts = fts_open(paths, fts_flags, NULL);
++	if (!fts)
++		return -EACCES;
++
++	while ((ftsent = fts_read(fts)) != NULL) {
++		switch (ftsent->fts_info) {
++		case FTS_F:
++			ret = add_format_parser(ftsent->fts_path);
++			if (ret < 0)
++				printf("Cannot upload %s\n", ftsent->fts_path);
++
 +			break;
-+		case 'r':
-+			input_package = optarg;
-+			break;
-+		case 'p':
-+			selected_package = optarg;
-+			break;
-+		case 'h':
-+			usage(argv[0]);
-+			exit(0);
 +		default:
-+			printf("Invalid option %c\n", c);
-+			exit(1);
++			break;
 +		}
 +	}
 +
-+	if (!output_dir) {
-+		printf("Output directory not specified\n");
-+		exit(1);
-+	}
++	fts_close(fts);
++	fts = NULL;
 +
-+	if (stat(output_dir, &st) == -1)
-+		mkdir(output_dir, 0755);
++	ret = mount_filesystems();
++	if (ret < 0)
++		goto out;
 +
-+	dirfd = open(output_dir, O_RDONLY | O_DIRECTORY);
-+	if (dirfd < 0) {
-+		printf("Unable to open %s, ret: %d\n", output_dir, -errno);
-+		ret = -errno;
++	ret = readlink("/proc/self/exe", parser_path, sizeof(parser_path));
++	if (ret < 0)
++		goto out;
++
++	sep = strrchr(parser_path, '/');
++	if (!sep++) {
++		ret = -ENOENT;
 +		goto out;
 +	}
 +
-+	ts = rpmtsCreate();
-+	if (!ts) {
-+		rpmlog(RPMLOG_NOTICE, "rpmtsCreate() error..\n");
-+		ret = -EACCES;
-+		goto out;
-+	}
++	cur = head;
 +
-+	ret = rpmReadConfigFiles(NULL, NULL);
-+	if (ret != RPMRC_OK) {
-+		rpmlog(RPMLOG_NOTICE, "Unable to read RPM configuration.\n");
-+		ret = -EACCES;
-+		goto out;
-+	}
-+
-+	if (input_package) {
-+		vsflags |= _RPMVSF_NODIGESTS;
-+		vsflags |= _RPMVSF_NOSIGNATURES;
-+		rpmtsSetVSFlags(ts, vsflags);
-+
-+		fd = Fopen(input_package, "r.ufdio");
-+		if ((!fd) || Ferror(fd)) {
-+			rpmlog(RPMLOG_NOTICE,
-+			       "Failed to open package file %s, %s\n",
-+			       input_package, Fstrerror(fd));
-+			ret = -EACCES;
-+			goto out_rpm;
++	while (cur) {
++		if (fork() == 0) {
++			snprintf(sep, sizeof(parser_path) - (sep - parser_path),
++				 "%s_parser", cur->format);
++			return execlp(parser_path, parser_path, argv[1],
++				      argv[2], NULL);
 +		}
 +
-+		ret = rpmReadPackageFile(ts, fd, "rpm", &hdr);
-+		Fclose(fd);
-+
-+		if (ret != RPMRC_OK) {
-+			rpmlog(RPMLOG_NOTICE,
-+			       "Could not read package file %s\n",
-+			       input_package);
-+			goto out_rpm;
-+		}
-+
-+		gen_filename(hdr, 0, COMPACT_FILE, filename, sizeof(filename),
-+			     "rpm");
-+
-+		gen_rpm_digest_list(hdr, dirfd, filename);
-+		headerFree(hdr);
-+		goto out_rpm;
++		wait(NULL);
++		cur = cur->next;
 +	}
 +
-+	mi = rpmtsInitIterator(ts, RPMDBI_PACKAGES, NULL, 0);
-+	while ((hdr = rpmdbNextIterator(mi)) != NULL) {
-+		gen_filename(hdr, 0, COMPACT_FILE, filename, sizeof(filename),
-+			     "rpm");
-+
-+		if (strstr(filename, "gpg-pubkey") != NULL)
-+			continue;
-+
-+		if (selected_package && !find_package(hdr, selected_package))
-+			continue;
-+
-+		gen_rpm_digest_list(hdr, dirfd, filename);
-+	}
-+
-+	rpmdbFreeIterator(mi);
-+out_rpm:
-+	rpmFreeRpmrc();
-+	rpmtsFree(ts);
 +out:
-+	close(dirfd);
++	free_list();
++	umount_filesystems();
 +	return ret;
 +}
 -- 
