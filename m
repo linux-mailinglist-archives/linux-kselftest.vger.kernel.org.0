@@ -2,99 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A571440C698
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 15:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1F140CA28
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Sep 2021 18:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbhIONrh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Sep 2021 09:47:37 -0400
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:30343 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235132AbhIONrg (ORCPT
+        id S229970AbhIOQeL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Sep 2021 12:34:11 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3823 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229834AbhIOQeJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Sep 2021 09:47:36 -0400
-IronPort-Data: =?us-ascii?q?A9a23=3AtWDvGaDDLm2aBRVW/9/hw5YqxClBgxIJ4g17XOL?=
- =?us-ascii?q?fB1a502gn1mFVmmJNWTuDPK6PajT8KYpxbdzn90tQvpGAx9UxeLYW3SszFioV8?=
- =?us-ascii?q?6IpJjg4wn/YZnrUdouaJK5ex512huLocYZkExcwmj/3auK49SgliPnTLlbBILW?=
- =?us-ascii?q?s1h5ZFFYMpBgJ2UoLd94R2uaEsPDha++/kYqaT/73ZDdJ7wVJ3lc8sMpvnv/AU?=
- =?us-ascii?q?MPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnREmLx9BFrBM6?=
- =?us-ascii?q?nk6rgbwsBRbu60Qqm0yIQAvb9xEMZ4HFaPqUTbZLwbW9TiieJntJwwdNlu4GyS?=
- =?us-ascii?q?BsyI+vHn+F1vxxwSngiYPcapuebSZS4mYnJp6HcSFPowO1GDUcqMIle8eFyaUl?=
- =?us-ascii?q?W9f0cKShLahGrhuSqzbb9Qe5p7uw4LNTiPKsct2tmwDWfCuwpKbjHQqPX9Zpb0?=
- =?us-ascii?q?S02i8RmA/nTfYwaZCBpYRCGZAdAUn8TCZQjjKKrnXT7fSFVs069u6U6+S7QwRZ?=
- =?us-ascii?q?33byrN8DaEuFm7+09cl2w/zqApjqmREpBcoH39NZMyVr07senoM8xcNh6+GWEy?=
- =?us-ascii?q?8NX?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Ae0leOquSnvIn14NmhJkB/vdS7skDStV00zEX?=
- =?us-ascii?q?/kB9WHVpm62j5qSTdZEguCMc5wx+ZJheo7q90cW7IE80lqQFhLX5X43SPzUO0V?=
- =?us-ascii?q?HARO5fBODZsl/d8kPFltJ15ONJdqhSLJnKB0FmsMCS2mKFOudl7N6Z0K3Av4vj?=
- =?us-ascii?q?80s=3D?=
-X-IronPort-AV: E=Sophos;i="5.85,295,1624291200"; 
-   d="scan'208";a="114524604"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 15 Sep 2021 21:46:15 +0800
-Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
-        by cn.fujitsu.com (Postfix) with ESMTP id C9BFF4D0DC6F;
-        Wed, 15 Sep 2021 21:46:14 +0800 (CST)
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Wed, 15 Sep 2021 21:46:14 +0800
-Received: from FNSTPC.g08.fujitsu.local (10.167.225.141) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Wed, 15 Sep 2021 21:46:13 +0800
-From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>,
-        Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] selftests: be sure to make khdr before other targets
-Date:   Wed, 15 Sep 2021 21:45:54 +0800
-Message-ID: <20210915134554.19581-1-lizhijian@cn.fujitsu.com>
-X-Mailer: git-send-email 2.33.0
+        Wed, 15 Sep 2021 12:34:09 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H8m0q01TBz67jmn;
+        Thu, 16 Sep 2021 00:30:35 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Wed, 15 Sep 2021 18:32:46 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
+        <mchehab+huawei@kernel.org>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 0/9] integrity: Introduce DIGLIM advanced features
+Date:   Wed, 15 Sep 2021 18:31:36 +0200
+Message-ID: <20210915163145.1046505-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-ID: C9BFF4D0DC6F.A110C
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-LKP/0Day reported some building errors about kvm, and errors message
-are not always same:
-- lib/x86_64/processor.c:1083:31: error: ‘KVM_CAP_NESTED_STATE’ undeclared
-(first use in this function); did you mean ‘KVM_CAP_PIT_STATE2’?
-- lib/test_util.c:189:30: error: ‘MAP_HUGE_16KB’ undeclared (first use
-in this function); did you mean ‘MAP_HUGE_16GB’?
+Introduction
+============
 
-Although kvm relies on the khdr, they still be built in parallel when -j
-is specified. In this case, it will cause compiling errors.
+This patch set depends on:
+- support for the euid policy keyword for critical data
+  (https://lore.kernel.org/linux-integrity/20210705115650.3373599-1-roberto.sassu@huawei.com/)
+- basic DIGLIM
+  (https://lore.kernel.org/linux-integrity/20210914163401.864635-1-roberto.sassu@huawei.com/)
 
-Here we mark target khdr as NOTPARALLEL to make it be always built
-first.
+Introduce the remaining features necessary to upload to the kernel
+reference values from RPM headers or digest lists in other formats.
 
-CC: Philip Li <philip.li@intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
----
- tools/testing/selftests/lib.mk | 1 +
- 1 file changed, 1 insertion(+)
+Loader: it will automatically uploads digest lists from a directory
+        specified in the kernel configuration and will execute a user space
+        uploader to upload digest lists in a format that is not recognized
+        by the kernel;
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 7ee911355328..5074b01f2a29 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -48,6 +48,7 @@ ARCH		?= $(SUBARCH)
- # When local build is done, headers are installed in the default
- # INSTALL_HDR_PATH usr/include.
- .PHONY: khdr
-+.NOTPARALLEL:
- khdr:
- ifndef KSFT_KHDR_INSTALL_DONE
- ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+LSM: it identifies digest list parsers and monitor their activity for
+     integrity evaluation; it protects digest list parsers from other user
+     space processes considered as untrusted;
+
+Digest list generators: user space tools to generate digest lists from
+                        files (in the compact format) or from the RPM DB;
+
+Digest list uploader and parsers: user space tools responsible to upload to
+                                  the kernel digest lists not in the
+                                  compact format (e.g. those derived from
+                                  the RPM DB);
+
+Administration guide: it describes the steps necessary to upload to the
+                      kernel all the digests of an RPM-based Linux
+                      distribution, using a custom kernel with the DIGLIM
+                      patches applied.
+
+With these changes, DIGLIM is ready to be used by IMA for measurement and
+appraisal (this functionality will be added with a future patch set).
+
+DIGLIM already supports appended signatures, but at the moment they cannot
+be interpreted by IMA (unsupported ID PKEY_ID_PGP). Another patch set is
+necessary to load the PGP keys from the Linux distribution to the system
+keyring and to verify the PGP signatures of the RPM headers.
+
+With the patch sets above and the execution policies for IMA proposed some
+time ago, it will be possible to generate a measurement list with digest
+lists and unknown files, and enable IMA appraisal in enforcing mode.
+The kernel command line would be:
+
+ima_template=ima-modsig ima_policy="exec_tcb|tmpfs|digest_lists|appraise_exec_tcb|appraise_tmpfs|appraise_digest_lists"
+
+The effort required for Linux distribution vendors will be to generate and
+sign the digest lists for the digest list uploader and the RPM parser. This
+could be done for example in the kernel-tools package (or in a separate
+package). Existing package signatures are sufficient for remaining files.
+
+
+Issues/Questions
+================
+
+Lockdep (patch 2/9)
+-------------------
+
+I'm using iterate_dir() and file_open_root() to iterate and open files
+in a directory. Unfortunately, I get the following warning:
+
+============================================
+WARNING: possible recursive locking detected
+5.15.0-rc1-dont-use-00049-ga5a881519991 #134 Not tainted
+--------------------------------------------
+swapper/1 is trying to acquire lock:
+0000000066812898 (&sb->s_type->i_mutex_key#7){++++}-{4:4}, at: path_openat+0x75d/0xd20
+
+but task is already holding lock:
+0000000066812898 (&sb->s_type->i_mutex_key#7){++++}-{4:4}, at: iterate_dir+0x65/0x250
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&sb->s_type->i_mutex_key#7);
+  lock(&sb->s_type->i_mutex_key#7);
+
+ *** DEADLOCK ***
+
+
+due to the fact that path_openat() might be trying to lock the directory
+already locked by iterate_dir(). What it would be a good way to avoid it?
+
+
+Inode availability in security_file_free() (patch 3/9)
+------------------------------------------------------
+
+It seems that this hook is called when the last reference to a file is
+released. After enabling debugging, sometimes the kernel reported that the
+inode I was trying to access was already freed.
+
+To avoid this situation, I'm grabbing an additional reference of the inode
+in the security_file_open() hook, to ensure that the inode does not
+disappear, and I'm releasing it in the security_file_free() hook. Is this
+solution acceptable?
+
+Roberto Sassu (9):
+  ima: Introduce new hook DIGEST_LIST_CHECK
+  diglim: Loader
+  diglim: LSM
+  diglim: Tests - LSM
+  diglim: Compact digest list generator
+  diglim: RPM digest list generator
+  diglim: Digest list uploader
+  diglim: RPM parser
+  diglim: Admin guide
+
+ Documentation/admin-guide/diglim.rst          | 136 +++++
+ Documentation/admin-guide/index.rst           |   1 +
+ .../security/diglim/implementation.rst        |  16 +
+ Documentation/security/diglim/index.rst       |   1 +
+ Documentation/security/diglim/lsm.rst         |  65 +++
+ Documentation/security/diglim/tests.rst       |  18 +-
+ MAINTAINERS                                   |  10 +
+ security/integrity/diglim/Kconfig             |  14 +
+ security/integrity/diglim/Makefile            |   2 +-
+ security/integrity/diglim/diglim.h            |  27 +
+ security/integrity/diglim/fs.c                |   3 +
+ security/integrity/diglim/hooks.c             | 436 ++++++++++++++++
+ security/integrity/diglim/loader.c            |  92 ++++
+ security/integrity/iint.c                     |   1 +
+ security/integrity/ima/ima.h                  |   1 +
+ security/integrity/ima/ima_main.c             |   3 +-
+ security/integrity/ima/ima_policy.c           |   3 +
+ security/integrity/integrity.h                |   8 +
+ tools/diglim/Makefile                         |  27 +
+ tools/diglim/common.c                         |  79 +++
+ tools/diglim/common.h                         |  59 +++
+ tools/diglim/compact_gen.c                    | 349 +++++++++++++
+ tools/diglim/rpm_gen.c                        | 334 ++++++++++++
+ tools/diglim/rpm_parser.c                     | 483 ++++++++++++++++++
+ tools/diglim/upload_digest_lists.c            | 238 +++++++++
+ tools/testing/selftests/diglim/Makefile       |  12 +-
+ tools/testing/selftests/diglim/common.h       |   9 +
+ tools/testing/selftests/diglim/selftest.c     | 357 ++++++++++++-
+ 28 files changed, 2764 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/admin-guide/diglim.rst
+ create mode 100644 Documentation/security/diglim/lsm.rst
+ create mode 100644 security/integrity/diglim/hooks.c
+ create mode 100644 security/integrity/diglim/loader.c
+ create mode 100644 tools/diglim/Makefile
+ create mode 100644 tools/diglim/common.c
+ create mode 100644 tools/diglim/common.h
+ create mode 100644 tools/diglim/compact_gen.c
+ create mode 100644 tools/diglim/rpm_gen.c
+ create mode 100644 tools/diglim/rpm_parser.c
+ create mode 100644 tools/diglim/upload_digest_lists.c
+
 -- 
-2.33.0
-
-
+2.25.1
 
