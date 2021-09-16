@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A97640DC72
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 16:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65AB40DC85
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 16:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238221AbhIPOLG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Sep 2021 10:11:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51762 "EHLO mail.kernel.org"
+        id S237383AbhIPOPU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Sep 2021 10:15:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52652 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236328AbhIPOLG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 10:11:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 59E9160238;
-        Thu, 16 Sep 2021 14:09:45 +0000 (UTC)
+        id S235546AbhIPOPU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Sep 2021 10:15:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 27C1A61164;
+        Thu, 16 Sep 2021 14:13:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631801385;
-        bh=JSVAyZlj7EFaNRDNJV5SQUCEv0kAxzwlmnzQyh2xd00=;
+        s=k20201202; t=1631801639;
+        bh=Ou7RB0CenpTfBy4XOy0FC9vI/kcV12k9i3vow3MfXfk=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=HvrpYOLJC2Li+zPYNRshCCf9T6Q72DMytidkaG2MJOQgRmlqCuwKjHVGOHfPpeJlH
-         px1pxbidskVQey0HE2pQLslzZwKrXAC9cmD9+Gn5u6hGRUm6ui2HmnSsXPOEvipfX0
-         QrsDpA8OXqScfjtYF9bgfXtQ0SJq3hv66KKPYMUZtqcfFT5n+5mGyV3rnyiB9+Lafo
-         ZGgTwnCohPIn/a2AFuTgnlZPf2ZctZrHM+5WJeJWF8jmUG1xayo8Ut8vhyq8QImVnW
-         NXMpCd0G6GEqrH+R2HulZYSWoqYkRWx2l1sCDT8C1YeE3/SQlRGKNB0J1y35q4ULo8
-         9/PPjBcI2Uq2g==
-Message-ID: <6f3cc681e10877e639b882eaabf1a5e21bd2fc94.camel@kernel.org>
-Subject: Re: [PATCH 02/14] x86/sgx: Add /sys/kernel/debug/x86/sgx_total_mem
+        b=PayO4Q/7lTE0w+RUF1dqMtjN7OalRzVPBLuechm5DKitA/8NOqWti8a0fBSpg9fVP
+         mpYM7qwJjVWnnE1Q+dGYqKntjXbcrOlDNvRyzxtV2bV5z6P7gR7trPEEoRLwvGriW1
+         Nxe+XYki75Eg/SgFPV8aa2i5fwywDy78gQLhV7aqkYgnH0fdKkMV4m+83+1HPY0q0l
+         fkkdabsCY3lBV59Qo5E6k+Hy3LYdSqsS3K+rcxyMssSXc98bgxSOzzHg8qcGqWKbkv
+         w3g8rgU+xC4ygh3PxvcNLvukaZFJAdFDuwUwhnWa2WWm64fL6ltqtrktM73Rpuxr4+
+         CjyQbuGQrVIWA==
+Message-ID: <d6bf64ddd231f766aafe6f7775ba9fb2adad95c5.camel@kernel.org>
+Subject: Re: [PATCH 00/14] selftests/sgx: Oversubscription, page permission,
+ thread entry
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Reinette Chatre <reinette.chatre@intel.com>,
         linux-sgx@vger.kernel.org, shuah@kernel.org
 Cc:     seanjc@google.com, bp@alien8.de, dave.hansen@linux.intel.com,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 16 Sep 2021 17:09:43 +0300
-In-Reply-To: <086aa5a16faf0d9b47ba9e0ebd2213713d0e76ff.1631731214.git.reinette.chatre@intel.com>
+Date:   Thu, 16 Sep 2021 17:13:57 +0300
+In-Reply-To: <cover.1631731214.git.reinette.chatre@intel.com>
 References: <cover.1631731214.git.reinette.chatre@intel.com>
-         <086aa5a16faf0d9b47ba9e0ebd2213713d0e76ff.1631731214.git.reinette.chatre@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.36.5-0ubuntu1 
@@ -43,33 +43,49 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Wed, 2021-09-15 at 13:30 -0700, Reinette Chatre wrote:
-> From: Jarkko Sakkinen <jarkko@kernel.org>
+> Hi Everybody,
 >=20
-> Just like normal memory, SGX memory can be overcommitted.  SGX has its
-> own reclaim mechanism which kicks in when physical SGX memory (Enclave
-> Page Cache / EPC) is exhausted.  That reclaim mechanism is relatively
-> rarely exercised and needs selftests to poke at it.
+> This series consists out of outstanding SGX selftests changes, rebased
+> and gathered in a single series that is more easily merged for testing
+> and development, and a few more changes added to expand the existing test=
+s.
 >=20
-> The amount of EPC on the system is determined by the BIOS and it varies
-> wildly between systems.  It can be dozens of MB on desktops, or many GB
-> on servers.
+> The outstanding SGX selftest changes included in this series that have al=
+ready
+> been submitted separately are:
 >=20
-> To run in a reasonable amount of time, the selftest needs to know how
-> much EPC there is in the system.
+> * An almost two year old patch fixing a benign linker warning that is sti=
+ll
+>   present today:
+>   https://lore.kernel.org/linux-sgx/20191017030340.18301-2-sean.j.christo=
+pherson@intel.com/
+>   The original patch is added intact and not all email addresses
+>   within are valid.
 >=20
-> Introduce a new debugfs file to export that information.
+> * Latest (v4) of Jarkko Sakkinen's series to add an oversubscription test=
+:
+>   https://lore.kernel.org/linux-sgx/20210809093127.76264-1-jarkko@kernel.=
+org/
 >=20
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> [reinette: Use as placeholder patch until other discussions complete]
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> * Latest (v2) of Jarkko Sakkinen's patch that provides provide per-op
+>   parameter structs for the test enclave:
+>   https://lore.kernel.org/linux-sgx/20210812224645.90280-1-jarkko@kernel.=
+org/
+>=20
+> The reason why most of these patches are outstanding is that they depend
+> on a kernel change that is still under discussion. Decision to wait in:
+> https://lore.kernel.org/linux-sgx/f8674dac5579a8a424de1565f7ffa2b5bf2f8e3=
+6.camel@kernel.org/
+> The original patch for this kernel dependency continues to be included in
+> this series as a placeholder until the ongoing discussions are concluded.
+>=20
+> The new changes introduced in this series builds on Jarkko's outstanding
+> SGX selftest changes and adds new tests for page permissions, exception
+> handling, and thread entry.
 
-This could be replaced with the following two patches:
+Thanks for including my patches into this! It's a good idea that
+we carry single series (and probably least confusing to Shuah).
 
-https://lore.kernel.org/linux-sgx/20210914030422.377601-1-jarkko@kernel.org=
-/T/#t
-
-I forgot to CC this to you when I sent it, sorry about that.
+Thank you.
 
 /Jarkko
-
