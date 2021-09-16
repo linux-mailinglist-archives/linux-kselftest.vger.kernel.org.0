@@ -2,39 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A55540DDE2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 17:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285F540DDE9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 17:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238632AbhIPPXB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Sep 2021 11:23:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45058 "EHLO mail.kernel.org"
+        id S230298AbhIPPYt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Sep 2021 11:24:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45336 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230190AbhIPPXA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 11:23:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8372560EE9;
-        Thu, 16 Sep 2021 15:21:39 +0000 (UTC)
+        id S230190AbhIPPYt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Sep 2021 11:24:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2634660EE9;
+        Thu, 16 Sep 2021 15:23:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631805700;
-        bh=Bkxhrw1NoKl7qQD8wcmrV0nbEEiWsEj6Tk4Ey4NyGSY=;
+        s=k20201202; t=1631805808;
+        bh=HSGEtdJmYKwJTCSoUdvulSt8bMOu6jwLF1xXsopNyUs=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=dBCGVFBDO0w4gbXvYA3EHHvEDvJ9CBROJ+0ZBSsEZLv+EEo+8Ff/6SHG/9umZr3i7
-         M36sbfsC3giIhJrE+LMXI1MSGhu6d0+IC9HHEDuQLdBVZW8fQPzGnvrW4NrcuReV41
-         e6UpFtBAyPHNZX8TENE79uan9VtbullZ3oap2k0mkSXWtOCTE7EtTtx8nFDDe6eEh2
-         YP2Ro3Nzz3R4CMJH/p2BMI9YgZb5SptK3KeD0/N6ggvLJ+SEy8cDLqWVVL9o1w2MdH
-         acB/1lPsK4rUZzoT47MLHQ6cpnxQVRWyl85eI5s7MeltLgXC07n5cqaadt1JTqWdj9
-         LXlix++uQ6Z/w==
-Message-ID: <d04d83a679f026ae2aa28535bdc826b8cf95e887.camel@kernel.org>
-Subject: Re: [PATCH 12/14] selftests/sgx: Add page permission and exception
- test
+        b=TC1yv5zVdPdZIuLeIFMl4GFunvWV1BHm/hzFCEkpzzOZ88c9qNU0EevE8Dqa3B1lY
+         jprwi1s/+a5TJ2lRf17u+TTb0vkcAUH4ruWlqj7WW+6JaMj1WpK0fE0+GAZdKOoidK
+         DDHQF4B7V0MUyeWeidvQzHnYPYHbhEl6zj+F2EkDMV3KjaGMIXCbNZbOKbOoiKVZGr
+         lLDbqNJkct0D/lX7nYf9+cGbAyo5q7SFSHsqpor2MI4ZVA/ON8ysjgBPcgivK+7hF3
+         fuAvmGLWCl3BFL38ePL9x5NoMcxJJW6kUYYokMyrlDELO3i/4ZyhtKYAxJjZy8bFnd
+         8HBz4qtGuZ69A==
+Message-ID: <fe7dc7cc1b923ac07cfe8a05b5e1303c49a80a9f.camel@kernel.org>
+Subject: Re: [PATCH 13/14] selftests/sgx: Enable multiple thread support
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Reinette Chatre <reinette.chatre@intel.com>,
         linux-sgx@vger.kernel.org, shuah@kernel.org
 Cc:     seanjc@google.com, bp@alien8.de, dave.hansen@linux.intel.com,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 16 Sep 2021 18:21:37 +0300
-In-Reply-To: <a6e69ea22a2694d252302af283ee3e3f023d3577.1631731214.git.reinette.chatre@intel.com>
+Date:   Thu, 16 Sep 2021 18:23:26 +0300
+In-Reply-To: <7b413966289d22f043762b3d20e30cb6ded936e3.1631731214.git.reinette.chatre@intel.com>
 References: <cover.1631731214.git.reinette.chatre@intel.com>
-         <a6e69ea22a2694d252302af283ee3e3f023d3577.1631731214.git.reinette.chatre@intel.com>
+         <7b413966289d22f043762b3d20e30cb6ded936e3.1631731214.git.reinette.chatre@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.36.5-0ubuntu1 
@@ -44,279 +43,134 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Wed, 2021-09-15 at 13:31 -0700, Reinette Chatre wrote:
-> The Enclave Page Cache Map (EPCM) is a secure structure used by the
-> processor to track the contents of the enclave page cache. The EPCM
-> contains permissions with which enclave pages can be accessed. SGX
-> support allows EPCM and PTE page permissions to differ - as long as
-> the PTE permissions do not exceed the EPCM permissions.
+> Each thread executing in an enclave is associated with a Thread Control
+> Structure (TCS). The test enclave contains two hardcoded TCS. Each TCS
+> contains meta-data used by the hardware to save and restore thread specif=
+ic
+> information when entering/exiting the enclave.
 >=20
-> Add a test to ensure that (1) PTE permissions can be changed as long as
-> they do not exceed EPCM permissions, and (2) even if EPCM permissions
-> allow a page to be written to, if the PTE permissions do not then a #PF
-> should be generated when attempting to write to a (from PTE perspective)
-> read-only page.
+> The two TCS structures within the test enclave share their SSA (State Sav=
+e
+> Area) resulting in the threads clobbering each other's data. Fix this by
+> providing each TCS their own SSA area.
 >=20
-> This introduces the first test of SGX exception handling. In this test
-> the issue that caused the exception (PTE page permissions) can be fixed
-> from outside the enclave and after doing so it is possible to re-enter
-> enclave at original entrypoint with ERESUME.
+> Additionally, there is an 8K stack space and its address is
+> computed from the enclave entry point which is correctly done for
+> TCS #1 that starts on the first address inside the enclave but
+> results in out of bounds memory when entering as TCS #2. Split 8K
+> stack space into two separate pages with offset symbol between to ensure
+> the current enclave entry calculation can continue to be used for both th=
+reads.
+>=20
+> While using the enclave with multiple threads requires these fixes the
+> impact is not apparent because every test up to this point enters the
+> enclave from the first TCS.
+>=20
+> More detail about the stack fix:
+> -------------------------------
+> Before this change the test enclave (test_encl) looks as follows:
+>=20
+> .tcs (2 pages):
+> (page 1) TCS #1
+> (page 2) TCS #2
+>=20
+> .text (1 page)
+> One page of code
+>=20
+> .data (5 pages)
+> (page 1) encl_buffer
+> (page 2) encl_buffer
+> (page 3) SSA
+> (page 4 and 5) STACK
+> encl_stack:
+>=20
+> As shown above there is a symbol, encl_stack, that points to the end of t=
+he
+> .data segment (pointing to the end of page 5 in .data) which is also the =
+end
+> of the enclave.
+>=20
+> The enclave entry code computes the stack address by adding encl_stack to=
+ the
+> pointer to the TCS that entered the enclave. When entering at TCS #1 the
+> stack is computed correctly but when entering at TCS #2 the stack pointer
+> would point to one page beyond the end of the enclave and a #PF would
+> result when TCS #2 attempts to enter the enclave.
+>=20
+> The fix involves moving the encl_stack symbol between the two stack pages=
+.
+> Doing so enables the stack address computation in the entry code to compu=
+te
+> the correct stack address for each TCS.
 >=20
 > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 > ---
->  tools/testing/selftests/sgx/defines.h   |  14 +++
->  tools/testing/selftests/sgx/main.c      | 134 ++++++++++++++++++++++++
->  tools/testing/selftests/sgx/test_encl.c |  21 ++++
->  3 files changed, 169 insertions(+)
+>  .../selftests/sgx/test_encl_bootstrap.S       | 21 ++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
 >=20
-> diff --git a/tools/testing/selftests/sgx/defines.h b/tools/testing/selfte=
-sts/sgx/defines.h
-> index 9ea0c7882dfb..0bbda6f0c7d3 100644
-> --- a/tools/testing/selftests/sgx/defines.h
-> +++ b/tools/testing/selftests/sgx/defines.h
-> @@ -21,6 +21,8 @@
->  enum encl_op_type {
->  	ENCL_OP_PUT_TO_BUFFER,
->  	ENCL_OP_GET_FROM_BUFFER,
-> +	ENCL_OP_PUT_TO_ADDRESS,
-> +	ENCL_OP_GET_FROM_ADDRESS,
->  	ENCL_OP_MAX,
->  };
+> diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/te=
+sting/selftests/sgx/test_encl_bootstrap.S
+> index 5d5680d4ea39..82fb0dfcbd23 100644
+> --- a/tools/testing/selftests/sgx/test_encl_bootstrap.S
+> +++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+> @@ -12,7 +12,7 @@
 > =20
-> @@ -38,4 +40,16 @@ struct encl_op_get_from_buf {
->  	uint64_t value;
->  };
+>  	.fill	1, 8, 0			# STATE (set by CPU)
+>  	.fill	1, 8, 0			# FLAGS
+> -	.quad	encl_ssa		# OSSA
+> +	.quad	encl_ssa_tcs1		# OSSA
+>  	.fill	1, 4, 0			# CSSA (set by CPU)
+>  	.fill	1, 4, 1			# NSSA
+>  	.quad	encl_entry		# OENTRY
+> @@ -23,10 +23,10 @@
+>  	.fill	1, 4, 0xFFFFFFFF	# GSLIMIT
+>  	.fill	4024, 1, 0		# Reserved
 > =20
-> +struct encl_op_put_to_addr {
-> +	struct encl_op_header header;
-> +	uint64_t value;
-> +	uint64_t addr;
-> +};
-> +
-> +struct encl_op_get_from_addr {
-> +	struct encl_op_header header;
-> +	uint64_t value;
-> +	uint64_t addr;
-> +};
-> +
->  #endif /* DEFINES_H */
-> diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests=
-/sgx/main.c
-> index 3eb9b89ece5f..308cf09ab02a 100644
-> --- a/tools/testing/selftests/sgx/main.c
-> +++ b/tools/testing/selftests/sgx/main.c
-> @@ -21,6 +21,7 @@
->  #include "main.h"
+> -	# Identical to the previous TCS.
+> +	# TCS2
+>  	.fill	1, 8, 0			# STATE (set by CPU)
+>  	.fill	1, 8, 0			# FLAGS
+> -	.quad	encl_ssa		# OSSA
+> +	.quad	encl_ssa_tcs2		# OSSA
+>  	.fill	1, 4, 0			# CSSA (set by CPU)
+>  	.fill	1, 4, 1			# NSSA
+>  	.quad	encl_entry		# OENTRY
+> @@ -40,8 +40,9 @@
+>  	.text
 > =20
->  static const uint64_t MAGIC =3D 0x1122334455667788ULL;
-> +static const uint64_t MAGIC2 =3D 0x8877665544332211ULL;
->  vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
+>  encl_entry:
+> -	# RBX contains the base address for TCS, which is also the first addres=
+s
+> -	# inside the enclave. By adding the value of le_stack_end to it, we get
+> +	# RBX contains the base address for TCS, which is the first address
+> +	# inside the enclave for TCS #1 and one page into the enclave for
+> +	# TCS #2. By adding the value of encl_stack to it, we get
+>  	# the absolute address for the stack.
+>  	lea	(encl_stack)(%rbx), %rax
+>  	xchg	%rsp, %rax
+> @@ -81,9 +82,15 @@ encl_entry:
 > =20
->  struct vdso_symtab {
-> @@ -107,6 +108,25 @@ static Elf64_Sym *vdso_symtab_get(struct vdso_symtab=
- *symtab, const char *name)
->  	return NULL;
->  }
+>  	.section ".data", "aw"
 > =20
-> +/*
-> + * Return the offset in the enclave where the data segment can be found.
-> + * The first RW segment loaded is the TCS, skip that to get info on the
-> + * data segment.
-> + */
-> +static off_t encl_get_data_offset(struct encl *encl)
-> +{
-> +	int i;
-> +
-> +	for (i =3D 0; i < encl->nr_segments; i++) {
-> +		struct encl_segment *seg =3D &encl->segment_tbl[i];
-> +
-> +		if (i !=3D 0 && seg->prot =3D=3D (PROT_READ | PROT_WRITE))
-> +			return seg->offset;
+> -encl_ssa:
+> +encl_ssa_tcs1:
+> +	.space 4096
+> +encl_ssa_tcs2:
+>  	.space 4096
+> =20
+>  	.balign 4096
+> -	.space 8192
+> +	# Stack of TCS #1
+> +	.space 4096
+>  encl_stack:
+> +	.balign 4096
+> +	# Stack of TCS #2
+> +	.space 4096
 
-So, why not
 
-	for (i =3D 1; i < encl->nr_segments; i++)
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-?
-
-> +	}
-> +
-> +	return -1;
-> +}
-> +
->  FIXTURE(enclave) {
->  	struct encl encl;
->  	struct sgx_enclave_run run;
-> @@ -373,4 +393,118 @@ TEST_F(enclave, clobbered_vdso_and_user_function)
->  	EXPECT_EQ(self->run.user_data, 0);
->  }
-> =20
-> +/*
-> + * Second page of .data segment is used to test changing PTE permissions=
-.
-> + * This spans the local encl_buffer within the test enclave.
-> + *
-> + * 1) Start with a sanity check: a value is written to the target page w=
-ithin
-> + *    the enclave and read back to ensure target page can be written to.
-> + * 2) Change PTE permissions (RW -> RO) of target page within enclave.
-> + * 3) Repeat (1) - this time expecting a regular #PF communicated via th=
-e
-> + *    vDSO.
-> + * 4) Change PTE permissions of target page within enclave back to be RW=
-.
-> + * 5) Repeat (1) by resuming enclave, now expected to be possible to wri=
-te to
-> + *    and read from target page within enclave.
-> + */
-> +TEST_F(enclave, pte_permissions)
-> +{
-> +	struct encl_op_get_from_addr get_addr_op;
-> +	struct encl_op_put_to_addr put_addr_op;
-> +	unsigned long data_start;
-> +	int ret;
-> +
-> +	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metad=
-ata));
-> +
-> +	memset(&self->run, 0, sizeof(self->run));
-> +	self->run.tcs =3D self->encl.encl_base;
-> +
-> +	data_start =3D self->encl.encl_base +
-> +		     encl_get_data_offset(&self->encl) +
-> +		     PAGE_SIZE;
-> +
-> +	/*
-> +	 * Sanity check to ensure it is possible to write to page that will
-> +	 * have its permissions manipulated.
-> +	 */
-> +
-> +	/* Write MAGIC to page */
-> +	put_addr_op.value =3D MAGIC;
-> +	put_addr_op.addr =3D data_start;
-> +	put_addr_op.header.type =3D ENCL_OP_PUT_TO_ADDRESS;
-> +
-> +	EXPECT_EQ(ENCL_CALL(&put_addr_op, &self->run, true), 0);
-> +
-> +	EXPECT_EEXIT(&self->run);
-> +	EXPECT_EQ(self->run.exception_vector, 0);
-> +	EXPECT_EQ(self->run.exception_error_code, 0);
-> +	EXPECT_EQ(self->run.exception_addr, 0);
-> +
-> +	/*
-> +	 * Read memory that was just written to, confirming that it is the
-> +	 * value previously written (MAGIC).
-> +	 */
-> +	get_addr_op.value =3D 0;
-> +	get_addr_op.addr =3D data_start;
-> +	get_addr_op.header.type =3D ENCL_OP_GET_FROM_ADDRESS;
-> +
-> +	EXPECT_EQ(ENCL_CALL(&get_addr_op, &self->run, true), 0);
-> +
-> +	EXPECT_EQ(get_addr_op.value, MAGIC);
-> +	EXPECT_EEXIT(&self->run);
-> +	EXPECT_EQ(self->run.exception_vector, 0);
-> +	EXPECT_EQ(self->run.exception_error_code, 0);
-> +	EXPECT_EQ(self->run.exception_addr, 0);
-> +
-> +	/* Change PTE permissions of target page within the enclave */
-> +	ret =3D mprotect((void *)data_start, PAGE_SIZE, PROT_READ);
-> +	if (ret)
-> +		perror("mprotect");
-> +
-> +	/*
-> +	 * PTE permissions of target page changed to read-only, EPCM
-> +	 * permissions unchanged (EPCM permissions are RW), attempt to
-> +	 * write to the page, expecting a regular #PF.
-> +	 */
-> +
-> +	put_addr_op.value =3D MAGIC2;
-> +
-> +	EXPECT_EQ(ENCL_CALL(&put_addr_op, &self->run, true), 0);
-> +
-> +	EXPECT_EQ(self->run.exception_vector, 14);
-> +	EXPECT_EQ(self->run.exception_error_code, 0x7);
-> +	EXPECT_EQ(self->run.exception_addr, data_start);
-> +
-> +	self->run.exception_vector =3D 0;
-> +	self->run.exception_error_code =3D 0;
-> +	self->run.exception_addr =3D 0;
-> +
-> +	/*
-> +	 * Change PTE permissions back to enable enclave to write to the
-> +	 * target page and resume enclave - do not expect any exceptions this
-> +	 * time.
-> +	 */
-> +	ret =3D mprotect((void *)data_start, PAGE_SIZE, PROT_READ | PROT_WRITE)=
-;
-> +	if (ret)
-> +		perror("mprotect");
-> +
-> +	EXPECT_EQ(vdso_sgx_enter_enclave((unsigned long)&put_addr_op, 0,
-> +					 0, ERESUME, 0, 0, &self->run),
-> +		 0);
-> +
-> +	EXPECT_EEXIT(&self->run);
-> +	EXPECT_EQ(self->run.exception_vector, 0);
-> +	EXPECT_EQ(self->run.exception_error_code, 0);
-> +	EXPECT_EQ(self->run.exception_addr, 0);
-> +
-> +	get_addr_op.value =3D 0;
-> +
-> +	EXPECT_EQ(ENCL_CALL(&get_addr_op, &self->run, true), 0);
-> +
-> +	EXPECT_EQ(get_addr_op.value, MAGIC2);
-> +	EXPECT_EEXIT(&self->run);
-> +	EXPECT_EQ(self->run.exception_vector, 0);
-> +	EXPECT_EQ(self->run.exception_error_code, 0);
-> +	EXPECT_EQ(self->run.exception_addr, 0);
-> +}
-> +
->  TEST_HARNESS_MAIN
-> diff --git a/tools/testing/selftests/sgx/test_encl.c b/tools/testing/self=
-tests/sgx/test_encl.c
-> index 4e8da738173f..5d86e3e6456a 100644
-> --- a/tools/testing/selftests/sgx/test_encl.c
-> +++ b/tools/testing/selftests/sgx/test_encl.c
-> @@ -4,6 +4,11 @@
->  #include <stddef.h>
->  #include "defines.h"
-> =20
-> +/*
-> + * Data buffer spanning two pages that will be placed first in .data
-> + * segment. Even if not used internally the second page is needed by
-> + * external test manipulating page permissions.
-> + */
->  static uint8_t encl_buffer[8192] =3D { 1 };
-> =20
->  static void *memcpy(void *dest, const void *src, size_t n)
-> @@ -30,11 +35,27 @@ static void do_encl_op_get_from_buf(void *op)
->  	memcpy(&op2->value, &encl_buffer[0], 8);
->  }
-> =20
-> +static void do_encl_op_put_to_addr(void *_op)
-> +{
-> +	struct encl_op_put_to_addr *op =3D _op;
-> +
-> +	memcpy((void *)op->addr, &op->value, 8);
-> +}
-> +
-> +static void do_encl_op_get_from_addr(void *_op)
-> +{
-> +	struct encl_op_get_from_addr *op =3D _op;
-> +
-> +	memcpy(&op->value, (void *)op->addr, 8);
-> +}
-> +
->  void encl_body(void *rdi,  void *rsi)
->  {
->  	const void (*encl_op_array[ENCL_OP_MAX])(void *) =3D {
->  		do_encl_op_put_to_buf,
->  		do_encl_op_get_from_buf,
-> +		do_encl_op_put_to_addr,
-> +		do_encl_op_get_from_addr,
->  	};
-> =20
->  	struct encl_op_header *op =3D (struct encl_op_header *)rdi;
+Thanks for the throughout explanation!
 
 /Jarkko
 
