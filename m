@@ -2,108 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC56040D2C6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 07:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE3F40D403
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 09:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234350AbhIPFHf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Sep 2021 01:07:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52909 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234246AbhIPFHc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 01:07:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631768771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CKN8XQ4WQkJPsTlSjGiV3oiFQPmnO4fijF4pI7KTQvg=;
-        b=CsPw98ckRgMgn5I919qDzq8/g4Nq4m6DUtok34TQaSVsu2BRB56Vc5wKiEHWLconPUiM/o
-        +CA7VltsBZ+O+1IwKar7eJfEylrnPUeFpv15bE/wGYkq5IHIDmr78U67l6bkYWFGezEA1t
-        QNx/Dbgy2f4tPehffam/KbuRcaAcXU0=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-216-uswPuSSHO5anGoYMAI_VfQ-1; Thu, 16 Sep 2021 01:06:07 -0400
-X-MC-Unique: uswPuSSHO5anGoYMAI_VfQ-1
-Received: by mail-ed1-f71.google.com with SMTP id c7-20020a05640227c700b003d27f41f1d4so4006521ede.16
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Sep 2021 22:06:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CKN8XQ4WQkJPsTlSjGiV3oiFQPmnO4fijF4pI7KTQvg=;
-        b=3mcpdtlt2vPHMyGLImfkhM0P2JO+POi/Df9KF0m24WG3+WOhZ0t0Mo+7g/MheAOuo5
-         t5gTo2QNo/mhnc7XOYD7WVZuslQNxtsqixsEY8yLmX3rYPLD28HdJBhMlCVnt66ENuBO
-         KT2+zrXkJEBwwir2nFAG2IPChK2oYktdOMrdCn7cTKhXvo1iACrW+UN0qD68E6OVTqZG
-         IeEaGH12PtCTcRKoyC3NfaBTuO2Y2GCSh54fjRHXRphhF6p8M57YGkqi6h8GhcDRermC
-         c1+nWBkasHU4429nQUDZzE8GnKlD0vb3BUfzFgJI9sTkmXcuTV/hkBtALRT3OFr4vcId
-         4Xsw==
-X-Gm-Message-State: AOAM533jbcL+YSSI/pQX7h9aqrnU6FeSMGDbvmu0I1gm4gYAQtnf8+Uo
-        rsON9MtTh1HVij5LEu7g8OrjCUswzd3zmT7JojoVUmjpweNsb/5FX4MDIFNQeCt/2YYOtCIKeG/
-        f959opWwxfIYnm0zPBXxUH3x/2dA7
-X-Received: by 2002:a05:6402:42d5:: with SMTP id i21mr4302150edc.14.1631768766387;
-        Wed, 15 Sep 2021 22:06:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx1bdIwbG7TUmxAk3tSV06VOIwCk8kiZfGgssZZPwl5DDnRixxI9jEnMirROatK9dy9eF1wuA==
-X-Received: by 2002:a05:6402:42d5:: with SMTP id i21mr4302128edc.14.1631768766157;
-        Wed, 15 Sep 2021 22:06:06 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.gmail.com with ESMTPSA id u4sm740910ejc.19.2021.09.15.22.06.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Sep 2021 22:06:05 -0700 (PDT)
-Subject: Re: [PATCH 0/4] selftests: kvm: fscanf warn fixes and cleanups
-To:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1631737524.git.skhan@linuxfoundation.org>
- <56178039-ab72-fca3-38fa-a1d422e4d3ef@redhat.com>
- <aca932b9-5864-be95-c9f6-f745b6a6b7f3@linuxfoundation.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <d9da3a33-6ecc-3d52-8f9a-f465692ecb93@redhat.com>
-Date:   Thu, 16 Sep 2021 07:06:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232059AbhIPHsE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Sep 2021 03:48:04 -0400
+Received: from mga12.intel.com ([192.55.52.136]:61638 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233142AbhIPHsD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Sep 2021 03:48:03 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10108"; a="202007573"
+X-IronPort-AV: E=Sophos;i="5.85,297,1624345200"; 
+   d="scan'208";a="202007573"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2021 00:46:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,297,1624345200"; 
+   d="scan'208";a="545422566"
+Received: from fedora29.sh.intel.com ([10.239.182.87])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Sep 2021 00:46:40 -0700
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
+        Yu Yu-cheng <yu-cheng.yu@intel.com>,
+        Yu Fenghua <fenghua.yu@intel.com>,
+        Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>
+Subject: [RFC PATCH v4 0/2] Introduce XSAVE/XRSTOR self-test
+Date:   Thu, 16 Sep 2021 15:45:31 +0800
+Message-Id: <cover.1631776654.git.pengfei.xu@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <aca932b9-5864-be95-c9f6-f745b6a6b7f3@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 16/09/21 02:02, Shuah Khan wrote:
-> On 9/15/21 4:34 PM, Paolo Bonzini wrote:
->> On 15/09/21 23:28, Shuah Khan wrote:
->>> This patch series fixes fscanf() ignoring return value warnings.
->>> Consolidates get_run_delay() duplicate defines moving it to
->>> common library.
->>>
->>> Shuah Khan (4):
->>>    selftests:kvm: fix get_warnings_count() ignoring fscanf() return warn
->>>    selftests:kvm: fix get_trans_hugepagesz() ignoring fscanf() return
->>>      warn
->>>    selftests: kvm: move get_run_delay() into lib/test_util
->>>    selftests: kvm: fix get_run_delay() ignoring fscanf() return warn
->>>
->>>   .../testing/selftests/kvm/include/test_util.h |  3 +++
->>>   tools/testing/selftests/kvm/lib/test_util.c   | 22 ++++++++++++++++++-
->>>   tools/testing/selftests/kvm/steal_time.c      | 16 --------------
->>>   .../selftests/kvm/x86_64/mmio_warning_test.c  |  3 ++-
->>>   .../selftests/kvm/x86_64/xen_shinfo_test.c    | 15 -------------
->>>   5 files changed, 26 insertions(+), 33 deletions(-)
->>>
->>
->> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
->>
->> Thanks Shuah!
->>
-> 
-> Thank you. I can take these through linux-kselftest - let me know
-> if that causes issues for kvm tree.
+The XSAVE feature set supports the saving and restoring of state components,
+which is used for process context switching. The state components include
+x87 state for FPU execution environment, SSE state, AVX state and so on. In
+order to ensure that XSAVE works correctly, add XSAVE basic test for
+XSAVE architecture functionality.
 
-Go ahead if it's for 5.15-rc, I don't have any selftests patches pending.
+This patch set tests and verifies the basic functions of XSAVE/XRSTOR in
+user space; during and after signal processing on the x86 platform, the
+XSAVE contents of the process should not be changed.
 
-Paolo
+This series introduces only the most basic XSAVE tests.  In the
+future, the intention is to continue expanding the scope of
+these selftests to include more kernel XSAVE-related functionality
+and XSAVE-managed features like AMX and shadow stacks.
+
+========
+- Change from v3 to v4:
+  - Improve the comment in patch 1.
+
+- Change from v2 to v3:
+  - Improve the description of patch 2 git log.
+
+- Change from v1 to v2:
+  - Improve the cover-letter. (Dave Hansen)
+
+Pengfei Xu (2):
+  selftests/xsave: test basic XSAVE architecture functionality
+  selftests/xsave: add xsave test during and after signal handling
+
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/xsave/.gitignore      |   3 +
+ tools/testing/selftests/xsave/Makefile        |   6 +
+ tools/testing/selftests/xsave/xsave_common.h  | 246 ++++++++++++++++++
+ .../selftests/xsave/xsave_instruction.c       |  83 ++++++
+ .../selftests/xsave/xsave_signal_handle.c     | 184 +++++++++++++
+ 6 files changed, 523 insertions(+)
+ create mode 100644 tools/testing/selftests/xsave/.gitignore
+ create mode 100644 tools/testing/selftests/xsave/Makefile
+ create mode 100644 tools/testing/selftests/xsave/xsave_common.h
+ create mode 100644 tools/testing/selftests/xsave/xsave_instruction.c
+ create mode 100644 tools/testing/selftests/xsave/xsave_signal_handle.c
+
+-- 
+2.20.1
 
