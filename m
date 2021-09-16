@@ -2,100 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBB140D979
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 14:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE95C40D98A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 14:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239134AbhIPMJZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Sep 2021 08:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S239341AbhIPMOV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Sep 2021 08:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239086AbhIPMJZ (ORCPT
+        with ESMTP id S239396AbhIPMOU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 08:09:25 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1744C061574;
-        Thu, 16 Sep 2021 05:08:04 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id b18so16356032lfb.1;
-        Thu, 16 Sep 2021 05:08:04 -0700 (PDT)
+        Thu, 16 Sep 2021 08:14:20 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779FEC061766
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 05:13:00 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id g16so9134835wrb.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 05:13:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gx8WrC9z8YFXZyGyok96l3Xw1N/IRmVwR+qMVh5xouk=;
-        b=FQDWahQIHHuYSdvwp4TKH+JtAF1A/8UKyPcxRirlEcUChUwKA0XTiaGKPp+KrnplQP
-         Las8ouxa/5+QsVVc3a+DNhQOUVqdsItyldRl5cuWMHkCPBs50WSXXIeMAm7i9jxZNb1o
-         nD28qS7H+RGBmKPL64kNioSzm8Z7FtF6YGeZx8ybyIDe7qC6hFgMWAoRXxNJp8By1W3G
-         shReY+JVw3jWJYDEemyWtGG4vUi+cT4PpSp81KXzA+P5JultXmwJ5HKfnl3kfvbpmK1z
-         CVGeTPNpkuuAxdrzz2iezm0h4dmtCwFL8s+kSEAqEzTJOdJR2CbAFASTm8NIXrtp/VkO
-         R0Wg==
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nAa7hcN3ascpVQvM2OTeR2k2GxYPakXsr5xj8Xor+Lw=;
+        b=WmD/Z3+ncYgIZPTkselMJKRJwFC5I8QlynB+q8Lx4A4w+1BwjPde8V+HFZ6T61d3Z0
+         WKVnlly6gf/xyNqeuOpkTGnrKuo3Nxcf/0+NI5UBolir1q1MWuUtuIz/RXfmU9IeW4lo
+         Wn1ilNGM56xVE7XDbRQu4sBu+57OlID40Z97fV41DuOiSZVTetL3kTj2ZwthotdFdH/Q
+         SXUKvUGfvyzlorYs+n55BkMW476UbDatDv318GaIiqZLzQesajEooYAG0rOQ92vePetd
+         EhyWlX87ZPx152HdnX8/byXkwQz6eKseOdCyzYZYo0y2pwUyJfEPx4ro/AcoWJzqDAQt
+         ERWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gx8WrC9z8YFXZyGyok96l3Xw1N/IRmVwR+qMVh5xouk=;
-        b=jeEL8umu04lNhw3wgwQQzUGKvIvdkReB17vFNc+lHKgPGIWyUjKlRrzlbnGunVVog2
-         L+1Z9ClVv49inUs8qAkl+9fjeGWwcqSMRQA2Ty3M2zshGmSVx2nVDAOn8tXaf6J+Nrhu
-         WaFFAcinV3inT4SB2kFdHb2VXNdYOkqkup2BU26sbhU3n5ZdFFQLp0wtlb5WNj6DoW8J
-         JqZsXWGqy9EBMg02RJd1tgYveimbWMZf4gNbBHrDnT0ibYUwF8IrGSn/r9YEHO78smnO
-         ndFbOv/ljyRaBailoU4wD9M53yEcdwkhimgxTml2ZCk8B0Ce/m1nK8PZMuGzeNYBCbH5
-         lb9A==
-X-Gm-Message-State: AOAM531AZM25Vi3iIjTMZSQbf86icYL0+60tyIhzS9nns0H9hFidflMu
-        KvHtCgsqpi+dSzPNG4A4FH6K90jdJywjFSUW5dkPmLznRDS5iA==
-X-Google-Smtp-Source: ABdhPJypP/0/O+j/C7G6slq8HMTxvXhDGqkFek2o141s436UyANTaO0dyXLgHJk8fM60LJ7J0wCbDcMOu0LrNusEavs=
-X-Received: by 2002:a19:500e:: with SMTP id e14mr3785791lfb.673.1631794078566;
- Thu, 16 Sep 2021 05:07:58 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nAa7hcN3ascpVQvM2OTeR2k2GxYPakXsr5xj8Xor+Lw=;
+        b=S0ybfTFuAPoby6KRrjIFH3kXPo+imtjky/FozxuzOCkatWNrzv3wgPSWmRVX9flZK9
+         JqCs3qvnRKtFDFvuVm1ratOfw0116nZUzD6vSRlH/RkDN5bRWj2ksXyhGgxF/Y9Tvyr4
+         HdrjcCQPK07pJSein3/MfDrfjBkiFNqD2MRAoVyJcTNNXN/sXT3w8JBc3eBPE4Utqr5D
+         gZn3p6ygdvac8U2O43Spt52hhyM6zE2pA9prcRyyrmkCIJe9zM3AqxbRA75pCPz3NgP4
+         jd86VCYpwAp/NgiL1TFVWFicHMUYlZHFlblsIzz8RystKm2dWhMZhI6SShl1ZB6mRA31
+         LrtQ==
+X-Gm-Message-State: AOAM533Y1FruMSoVzFYjpHEBg6fRglhebwPgQ8/PIrso9ehAF3vTY08C
+        itPY8vk4FzmApdwbopmEi5eg5Q==
+X-Google-Smtp-Source: ABdhPJzjhJgO8cFIT2GipL1pyLBESTYNhG5MXheT1l5nRxXPi6XFjSoeUvTa4kKMZP8Y/iAwUO0X0A==
+X-Received: by 2002:a5d:64ea:: with SMTP id g10mr2658238wri.274.1631794379049;
+        Thu, 16 Sep 2021 05:12:59 -0700 (PDT)
+Received: from [192.168.1.8] ([149.86.87.95])
+        by smtp.gmail.com with ESMTPSA id m29sm3450939wrb.89.2021.09.16.05.12.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Sep 2021 05:12:58 -0700 (PDT)
+Subject: Re: [PATCH 08/24] tools: bpftool: update bpftool-prog.rst reference
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Beckett <david.beckett@netronome.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+References: <cover.1631783482.git.mchehab+huawei@kernel.org>
+ <dc4bae7a14518fbfff20a0f539df06a5c19b09de.1631783482.git.mchehab+huawei@kernel.org>
+ <eb80e8f5-b9d7-5031-8ebb-4595bb295dbf@isovalent.com>
+ <20210916124930.7ae3b722@coco.lan>
+ <33d66a49-2fc0-57a1-c1e5-34e932bcc237@isovalent.com>
+ <20210916133036.37c50383@coco.lan>
+From:   Quentin Monnet <quentin@isovalent.com>
+Message-ID: <8d5eaebb-29ac-5ee6-20ec-09d30d33dd73@isovalent.com>
+Date:   Thu, 16 Sep 2021 13:12:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20210916115212.24246-1-wangxiang@cdjrlc.com>
-In-Reply-To: <20210916115212.24246-1-wangxiang@cdjrlc.com>
-From:   Bongsu Jeon <bongsu.jeon2@gmail.com>
-Date:   Thu, 16 Sep 2021 21:07:47 +0900
-Message-ID: <CACwDmQCbmSo1viWUqUciXUx0jbznPiSj4na+XE2QaD+_B39GWQ@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: nci: replace unsigned int with int
-To:     Xiang wangx <wangxiang@cdjrlc.com>
-Cc:     Bongsu Jeon <bongsu.jeon@samsung.com>, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210916133036.37c50383@coco.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I asked you two things.
-Please check them below.
+2021-09-16 13:30 UTC+0200 ~ Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org>
 
-On Thu, Sep 16, 2021 at 8:54 PM Xiang wangx <wangxiang@cdjrlc.com> wrote:
->
-> Should not use comparison of unsigned expressions < 0
+> [PATCH] scripts: documentation-file-ref-check: fix bpf selftests path
+> 
+> tools/testing/selftests/bpf/test_bpftool_synctypes.py use
+> relative patches on the top of BPFTOOL_DIR:
+> 
+> 	BPFTOOL_DIR = os.path.join(LINUX_ROOT, 'tools/bpf/bpftool')
+> 
+> Change the script to automatically convert:
+> 
+> 	testing/selftests/bpf -> bpf/bpftool
+> 
+> In order to properly check the files used by such script.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> 
+> diff --git a/scripts/documentation-file-ref-check b/scripts/documentation-file-ref-check
+> index 7187ea5e5149..2d91cfe11cd2 100755
+> --- a/scripts/documentation-file-ref-check
+> +++ b/scripts/documentation-file-ref-check
+> @@ -144,6 +144,7 @@ while (<IN>) {
+>  		if ($f =~ m/tools/) {
+>  			my $path = $f;
+>  			$path =~ s,(.*)/.*,$1,;
+> +			$path =~ s,testing/selftests/bpf,bpf/bpftool,;
+>  			next if (grep -e, glob("$path/$ref $path/../$ref $path/$fulref"));
+>  		}
+>  
+> 
+> 
+> 
 
-Please put '.' at the end of the log and add the changelog.
-For example
-=> Should not use comparison of unsigned expressions < 0.
+I tested the patch and it works well on my side.
 
->
-> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
-> ---
+However, this looks a bit fragile to me. There is no particular reason
+to have testing/selftests/bpf point to bpf/bpftool other than to
+accommodate the current case, we could imagine other selftest files
+pointing to other parts of the documentation in the future. I would
+instead make an exception for test_bpftool_synctypes.py specifically
+(other selftest files don't usually parse documentation anyway).
+Alternatively, I would look at excluding lines where the path is used in
+code (tricky to detect), maybe at least when used with os.path.join():
 
-Please add the change log here.
-For example =>
-Changes since v1
-* Change commit log
+    next if ($ln =~ m,os\.path\.join\([^\,]*\,\s*['"]$fulref,);
 
->  tools/testing/selftests/nci/nci_dev.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-> index e1bf55dabdf6..162c41e9bcae 100644
-> --- a/tools/testing/selftests/nci/nci_dev.c
-> +++ b/tools/testing/selftests/nci/nci_dev.c
-> @@ -746,7 +746,7 @@ int read_write_nci_cmd(int nfc_sock, int virtual_fd, const __u8 *cmd, __u32 cmd_
->                        const __u8 *rsp, __u32 rsp_len)
->  {
->         char buf[256];
-> -       unsigned int len;
-> +       int len;
->
->         send(nfc_sock, &cmd[3], cmd_len - 3, 0);
->         len = read(virtual_fd, buf, cmd_len);
-> --
-> 2.20.1
->
+But I'm not familiar with documentation-file-ref-check in the first
+place, so these are just my two cents.
+
+Thanks,
+Quentin
