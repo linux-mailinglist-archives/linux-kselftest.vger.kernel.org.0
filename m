@@ -2,178 +2,502 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D41640DEA2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 17:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6CB40DED1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 17:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240283AbhIPPvl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Sep 2021 11:51:41 -0400
-Received: from mga07.intel.com ([134.134.136.100]:36812 "EHLO mga07.intel.com"
+        id S240186AbhIPQAk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Sep 2021 12:00:40 -0400
+Received: from mga01.intel.com ([192.55.52.88]:1706 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240371AbhIPPvj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 11:51:39 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10109"; a="286281224"
+        id S240084AbhIPQAk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Sep 2021 12:00:40 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10109"; a="244977584"
 X-IronPort-AV: E=Sophos;i="5.85,298,1624345200"; 
-   d="scan'208";a="286281224"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2021 08:50:12 -0700
+   d="scan'208";a="244977584"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2021 08:59:19 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,298,1624345200"; 
-   d="scan'208";a="482756783"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2021 08:50:11 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 16 Sep 2021 08:50:11 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Thu, 16 Sep 2021 08:50:11 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Thu, 16 Sep 2021 08:50:11 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Igt9MPROZOzJ/oF1xuvZ5TYSvga8NiJcS0UZHFw3nHkXSMiCLs68jawpz4d3079dpWNPI+H8jzDfqhmo+0F5shHZT4otSpb5bWpKqU+vv+1XYnpL/5c80h5k6rZCmWjWbmOwY8YHVcpYQWWjyYcq9Y7ajRH79Ao20mdOvLTXw3Jp5QbR8UvQ8haWEssc5Rl8nf6XeQAmzJHISTPqjQW7ovWn8Wmw2DM7qINGEa1YTDMjyj3OOwdANeW3N1bNMQB+wq05vyHozub/tDozJpQBBs+Zw6w6LNk1M2YYgUqC+qHGihrAmCn/D3NOm3IXILUhZxdMeWM+IR7aq/BBGbYvgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=0hm/+9710DHp+YP1mYm1hfRFtXKNaZklMEN0IBf4XSM=;
- b=K2EJSooVpZ30acRlZH5Bc+tcrGgp5spvEx0HdbAyhGWogaHd/figCehVxhE+DtfiNEhxrKIakxc0cJAmQ2a0jBDunvMLDyuBFV47+o3/Qpez9cxyWCqK3/CkH4ZQT9kLs88Sa5FqwK4AOMIaGsIHhNZ2A9qRYmllPynjx3fBrlmD6/fp5JlXq+u+LwaPwgltZaQFGZqmfcWHqZx5oxVT9pyIcdjvT5f7zbJqYpN+Y0/Z0ACMaAoqoSSbBn3ZuOML8X8JLTbKmWYxSykQ5HBLUkXkSSPGudhTRizG3WFuXQDFjnAXoEj6WaXjOyhL6m3gjDvnzyNZ0zNr/2uQz1eTPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0hm/+9710DHp+YP1mYm1hfRFtXKNaZklMEN0IBf4XSM=;
- b=A9IUvz16yrkYJgG996WkRYHCs/bXajx6EiFasdji7zO8FJ+wzvU3fi65FgsAXQn75iyvuoUZr26flBD4vQNgm/Q67wsBry7Sz/SpbAbmU6xizAvWGJsHOkQaTpPXw4SXrPcZPm3AOuYS5bSDsL7zyWS8yma3R1QeLnim2emN8Aw=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=intel.com;
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by BN6PR11MB1668.namprd11.prod.outlook.com (2603:10b6:405:10::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.18; Thu, 16 Sep
- 2021 15:50:07 +0000
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::d47c:525:2aef:f6a]) by BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::d47c:525:2aef:f6a%3]) with mapi id 15.20.4523.016; Thu, 16 Sep 2021
- 15:50:07 +0000
-Subject: Re: [PATCH 12/14] selftests/sgx: Add page permission and exception
- test
-To:     Dave Hansen <dave.hansen@intel.com>, <linux-sgx@vger.kernel.org>,
-        <jarkko@kernel.org>, <shuah@kernel.org>
-CC:     <seanjc@google.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <cover.1631731214.git.reinette.chatre@intel.com>
- <a6e69ea22a2694d252302af283ee3e3f023d3577.1631731214.git.reinette.chatre@intel.com>
- <9990d737-9b9c-911f-3850-c9f3bc43c29b@intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-Message-ID: <839c8954-8b95-1dc9-944c-eda4c95abc5a@intel.com>
-Date:   Thu, 16 Sep 2021 08:50:03 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
-In-Reply-To: <9990d737-9b9c-911f-3850-c9f3bc43c29b@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW2PR16CA0069.namprd16.prod.outlook.com
- (2603:10b6:907:1::46) To BN0PR11MB5744.namprd11.prod.outlook.com
- (2603:10b6:408:166::16)
+   d="scan'208";a="472824281"
+Received: from chenyu-desktop.sh.intel.com ([10.239.158.176])
+  by orsmga007.jf.intel.com with ESMTP; 16 Sep 2021 08:59:15 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     linux-acpi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Chen Yu <yu.c.chen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Dou Shengnan <shengnanx.dou@intel.com>
+Subject: [PATCH v3 5/5] selftests/pfru: add test for Platform Firmware Runtime Update and Telemetry
+Date:   Fri, 17 Sep 2021 00:04:55 +0800
+Message-Id: <80966998ecc8fd7842a7899b4846b23b9b9b76c3.1631802163.git.yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1631802162.git.yu.c.chen@intel.com>
+References: <cover.1631802162.git.yu.c.chen@intel.com>
 MIME-Version: 1.0
-Received: from [192.168.1.221] (71.238.111.198) by MW2PR16CA0069.namprd16.prod.outlook.com (2603:10b6:907:1::46) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend Transport; Thu, 16 Sep 2021 15:50:06 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 63c614c0-82a7-4dff-fda1-08d97929a850
-X-MS-TrafficTypeDiagnostic: BN6PR11MB1668:
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN6PR11MB1668D675259B8348BE6AF4F0F8DC9@BN6PR11MB1668.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nkWQJ/4qgf3wkS02Jef+eHe9M7v59HScJ9tMK+jp4jm7CYTyN8c0El/eOUp+EwFl2FVBbiHcTTtqJxCA86qa/RMug9a9njIrao2vv3fwJIrzMy12XTgNbxNRy/BkkMjjR5X0CnDFT7OEGsErE78oNvcGg2qqjQilQMuYEMKUzRsiNZr0gVo2Wu8iPnLm88VtqKq3BxHZ91BIua2laAk0TvLky90JSemAJG02fpN2sd5nBDFOTOLusREfhTQwezZruKhFRdzxU6S6h54GZh0wSxxLAffUcDMDTUQblv9qQ6GVnnQrI9hqJnV9Jqz2jZNoRu5+2+B96SE5fMEPGS31B4WuxlFF2JQ90/fdaB6amhNlQ5hKnjRlg7SJHIGDrkyYHSvOzYV3onNHpmTRhG0ALrK0PwzliCKDZRHCyZlxguUyA2jUoYUdPDIBSWwpaPHomMe3AvbUjwKInKrrTIbL82g5PqOJXaphyewJKgD3CoetcDqMUIbDsGk+5p9IcvFqu7Qbv1ia0Xviyi2n03XyZW2Bh0u6JcGooyiR7gGJcW1sfIt48FtAMpF7xjhf5YOpsLoOv4ua4ug3zNxBliRjlyIoFkpim0prGDeAku21wosfR4cxp/FTK8GFnNF+IY3RV1QvQ17pF9ZumobzG3XwPY9abGLb7fjCkzHm0MlAoHNxqzsj8C1Fe7Do8/H4YBn7QQZ4pvJEvrV/wF175NeLL20JfbuIKSjE5bGJiFmDhWE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(376002)(366004)(136003)(396003)(6666004)(4326008)(38100700002)(44832011)(956004)(186003)(66946007)(66476007)(66556008)(8936002)(83380400001)(53546011)(6486002)(5660300002)(31686004)(26005)(478600001)(8676002)(31696002)(316002)(2616005)(16576012)(86362001)(2906002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VjNhNUEzSnZwM2FMeTY5bktZcUdER0lNNzMwR1FvNkUrc1doUjc2U1VjMmtk?=
- =?utf-8?B?NFZhTXZpc2UrWHhHeU1KSk5UdDNseDNWTlFVbUFRNW53MEZVR3VPQWJ2OVlm?=
- =?utf-8?B?Zis4ckdqWXM2bXI1NVFyclZnUGhtZGtNVDZPY0lrc2R5V21VLzh1MkI4eGpk?=
- =?utf-8?B?SmJoRFVHN0N6V25RMFlmbXhBZVdkY2xqZHpTa29qVTBFRW5yWjFLekZQVC9F?=
- =?utf-8?B?WDA2QjZaRDBKVS9xbmx4M2xtRWljRGpHTnZGSHBYaFRxTnZHdERPMUtJWmVr?=
- =?utf-8?B?bjFnbER1Y1pGRlhFODEvQ1pBeGdmaktOcXJRRTBON2xYYS91YnExN2xaZ240?=
- =?utf-8?B?WlBHczdPZWJjVDNTeTdIRWFVRTdpZmNzRTNzZkVNZm56WkNOOWc1OVJjZnVG?=
- =?utf-8?B?STU0RkVtYWZhOFJqR3owbkI3WEM3L2ZYUFp5YUIyRWViY0U4WXVjQWhuU2NS?=
- =?utf-8?B?ZzVXbFVIalFrV2xnSlJxK2pQRE8xbDNjQTZIQzhzZ01oRmlsS294SjZuNGJX?=
- =?utf-8?B?VlUzMHdCZHVHcTdsNzAwZ1hVRk12LzRwdk5NelpoVlJPZHQwRm50QXZTOTVm?=
- =?utf-8?B?TE1ELzIxTjcxMnhoOVZ3am9zVlN5dm5tTU1oc21JZHlQWGFobWliQ3QvRGJ6?=
- =?utf-8?B?SUJhTEFka1NaYWZ5VTNvb3ZlTkxTcnhkQXlYaUxob1RaUGhXU1MxR21wYmsy?=
- =?utf-8?B?N24zVnlUcll1d0ZheHJ5TXkrUjUzQURneGZOcHNhM0xHYkd5cE5sOWtwWmh3?=
- =?utf-8?B?U0hyb0NpZTJNM3VTTlVxWWNVWUR3QUc3NTRXSTg5MXJpazUyaTBIL2FOZzBO?=
- =?utf-8?B?R3RKc3lqVm5VL2NIc2xoRnVGYkxpMGdsLzhuaGUvNWExcDliYmtpVCtlcHBG?=
- =?utf-8?B?QXFDZTZ4NUE4UDc4enk3K3FkZkVzRndaQzk4VXhtbFlhMDlBS0c2bWRtUDVz?=
- =?utf-8?B?akxhcU9yNDNna1dyOTd4OW1rRjY1cExiUHUxRk9RTkJDL2ZwRzBVQS8zZHRL?=
- =?utf-8?B?ZmdMQ1FYNlhNZkdPa0g3V2ZpaGk1L2ZIVmRWdXJsM05Lcm9UK0xYS0kva0gr?=
- =?utf-8?B?VVpqMG4rM1Z5ay9iT1dXcVhIKzVFZ1p2dFpBeWxhVEV4ZHJxd0RDUExncmM5?=
- =?utf-8?B?ZmU3VkR3d2hWN2t4UnhqbFpqSWEvUHQxMy85RFJZTE9yZWNpYVpPeW1oZkJ1?=
- =?utf-8?B?RDZXblI4OEpNeWNtaXUyKzhPREdnanQwQ3BEVmllOE82RjRZam5BUjljRlZQ?=
- =?utf-8?B?bVhONWFUZjU5RGF1MFZZenB1eVRRRkQ1T0MrWEdKdkx5TGI0TUR2aWJINy9Z?=
- =?utf-8?B?cm9TQ0Q2dStXTjg5c0VraDZoS1hLU2x5VFp6emJDOEZiOXVTazhjamhVNEha?=
- =?utf-8?B?SnNod3BGSU5iVyt5eWpUZ2lvVlZ6bURBWEMwRXVVUU9ISHVNNmVWU2oyRjVM?=
- =?utf-8?B?eDU3ZTFXcXc0bjRjVTgwZ2w0Y2lhRi84U1dPMGdjTmJHMm5WVW8rRWZGKzEr?=
- =?utf-8?B?UTBtUkFIaW5XOVM4QkxrYVRRUzJkNmVrNkJUUnFJQ0tNK2VvQWdiNFZlcGt0?=
- =?utf-8?B?MjFsQVZHb3FIYXJoTWhWS0JVWGdjVlNWRno0RURHUzN4NEdud3VXY21YVXMw?=
- =?utf-8?B?VDNPUVJ2Q3VMV2t0am9Ib2J3cjNrbitiUzBNaXhSaUVUMFhlTkYzU0srQ3RU?=
- =?utf-8?B?NWVuSk9MZlNWSFJ4anRyUWsvZGdyK2ZsenVyQUNSdGNSa3ZCVGtpM1ZzU3JT?=
- =?utf-8?Q?WodJHX3zIggg1Di2Iy8YQd82XWHRkXiLlr5itG1?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63c614c0-82a7-4dff-fda1-08d97929a850
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2021 15:50:07.5131
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0iZ+iyxpUkB5eIm1riZlBnH1wq1yrLNXA4WIggoDkn+9jl7FuxijfWmbiucnyGVNvN+B1G+zmSpKHx2UW8ZgIQsFNFvf5Jf6ZYmGk7v1oeA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1668
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dave,
+Introduce a simple test for Platform Firmware Runtime Update and Telemetry
+drivers. It is based on ioctl to either update firmware driver or code
+injection, and read corresponding PFRU Telemetry log into user space.
 
-On 9/16/2021 8:30 AM, Dave Hansen wrote:
-> On 9/15/21 1:31 PM, Reinette Chatre wrote:
->> Add a test to ensure that (1) PTE permissions can be changed as long as
->> they do not exceed EPCM permissions, and (2) even if EPCM permissions
->> allow a page to be written to, if the PTE permissions do not then a #PF
->> should be generated when attempting to write to a (from PTE perspective)
->> read-only page.
-> 
-> It took me a minute to figure out what this was trying to say.
+For example:
 
-The goal was to describe what features/functionalities are being tested. 
-You accurately point out that it is not clear how the test implemented 
-in the patch matches with these test goals.
+./pfru_test -h
+usage: pfru_test [OPTIONS]
+ code injection:
+  -l, --load
+  -s, --stage
+  -a, --activate
+  -u, --update [stage and activate]
+  -q, --query
+  -d, --revid update
+ telemetry:
+  -G, --getloginfo
+  -T, --type(0:execution, 1:history)
+  -L, --level(0, 1, 2, 4)
+  -R, --read
+  -D, --revid log
 
->  Maybe
-> breaking it down into these three steps would help:
-> 
-> Add a test that:
->   (1) Creates an SGX enclave page with writable EPCM permission
->   (2) Changes the PTE permission on the page to read-only.  This should
->       be permitted because the permission does not exceed the EPCM
->       permission.
->   (3) Attempts a write to the page and generate a page fault (#PF)
->       because of the read-only PTE.
+./pfru_test -G
+ log_level:4
+ log_type:0
+ log_revid:2
+ max_data_size:65536
+ chunk1_size:0
+ chunk2_size:1401
+ rollover_cnt:0
+ reset_cnt:4
 
-Thank you for the suggestion. What I understand from your feedback is 
-that I should mix the description of the actual test with what 
-features/functionalities are being tested. You do so in your suggestion 
-for (2) and to do the same for (3) I now plan to expand it to:
+./pfru_test -q
+ code injection image type:794bf8b2-6e7b-454e-885f-3fb9bb185402
+ fw_version:0
+ code_rt_version:1
+ driver update image type:0e5f0b14-f849-7945-ad81-bc7b6d2bb245
+ drv_rt_version:0
+ drv_svn:0
+ platform id:39214663-b1a8-4eaa-9024-f2bb53ea4723
+ oem id:a36db54f-ea2a-e14e-b7c4-b5780e51ba3d
 
-    (3) Attempts a write to the page. This should generate a page fault
-        (#PF) because of the read-only PTE even though the EPCM
-        permissions allow the page to be written to.
+launch the update:
+./pfru_test -l yours.cap -u -T 1 -L 4
 
-Reinette
+Tested-by: Dou Shengnan <shengnanx.dou@intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+v3: No change since v2.
+v2: Do not allow non-root user to run this test.
+    (Shuah Khan)
+    Test runs on platform without pfru_telemetry should skip
+    instead of reporting failure/error.
+    (Shuah Khan)
+    Reuse uapi/linux/pfru.h instead of copying it into
+    the test directory.
+    (Mike Rapoport)
+---
+ include/uapi/linux/pfru.h                |   5 +
+ tools/testing/selftests/Makefile         |   1 +
+ tools/testing/selftests/pfru/Makefile    |   7 +
+ tools/testing/selftests/pfru/config      |   2 +
+ tools/testing/selftests/pfru/pfru_test.c | 328 +++++++++++++++++++++++
+ 5 files changed, 343 insertions(+)
+ create mode 100644 tools/testing/selftests/pfru/Makefile
+ create mode 100644 tools/testing/selftests/pfru/config
+ create mode 100644 tools/testing/selftests/pfru/pfru_test.c
+
+diff --git a/include/uapi/linux/pfru.h b/include/uapi/linux/pfru.h
+index b04852602133..c8a98efd5eb6 100644
+--- a/include/uapi/linux/pfru.h
++++ b/include/uapi/linux/pfru.h
+@@ -8,7 +8,12 @@
+ #define __PFRU_H__
+ 
+ #include <linux/ioctl.h>
++#ifdef __KERNEL__
+ #include <linux/uuid.h>
++#else
++#include <uuid/uuid.h>
++#include <linux/types.h>
++#endif
+ 
+ #define PFRU_UUID		"ECF9533B-4A3C-4E89-939E-C77112601C6D"
+ #define PFRU_CODE_INJ_UUID		"B2F84B79-7B6E-4E45-885F-3FB9BB185402"
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index c852eb40c4f7..9f1d7b5ea4a7 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -58,6 +58,7 @@ TARGETS += seccomp
+ TARGETS += sgx
+ TARGETS += sigaltstack
+ TARGETS += size
++TARGETS += pfru
+ TARGETS += sparc64
+ TARGETS += splice
+ TARGETS += static_keys
+diff --git a/tools/testing/selftests/pfru/Makefile b/tools/testing/selftests/pfru/Makefile
+new file mode 100644
+index 000000000000..c61916ccf637
+--- /dev/null
++++ b/tools/testing/selftests/pfru/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0+
++
++CFLAGS += -Wall -O2
++LDLIBS := -luuid
++
++TEST_GEN_PROGS := pfru_test
++include ../lib.mk
+diff --git a/tools/testing/selftests/pfru/config b/tools/testing/selftests/pfru/config
+new file mode 100644
+index 000000000000..37f53609acbd
+--- /dev/null
++++ b/tools/testing/selftests/pfru/config
+@@ -0,0 +1,2 @@
++CONFIG_ACPI_PFRU=m
++CONFIG_ACPI_PFRU_TELEMETRY=m
+diff --git a/tools/testing/selftests/pfru/pfru_test.c b/tools/testing/selftests/pfru/pfru_test.c
+new file mode 100644
+index 000000000000..b3799d73ab1c
+--- /dev/null
++++ b/tools/testing/selftests/pfru/pfru_test.c
+@@ -0,0 +1,328 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Tests Runtime Update/Telemetry (see Documentation/x86/pfru_update.rst)
++ */
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <getopt.h>
++#include <sys/ioctl.h>
++#include <sys/mman.h>
++
++#include "../../../../include/uapi/linux/pfru.h"
++
++#define MAX_LOG_SIZE 65536
++
++char *capsule_name;
++int action, query_cap, log_type, log_level, log_read, log_getinfo,
++	revid, log_revid;
++int set_log_level, set_log_type,
++	set_revid, set_log_revid;
++
++char *progname;
++
++static int valid_log_level(int level)
++{
++	return (level == LOG_ERR) || (level == LOG_WARN) ||
++		(level == LOG_INFO) || (level == LOG_VERB);
++}
++
++static int valid_log_type(int type)
++{
++	return (type == LOG_EXEC_IDX) || (type == LOG_HISTORY_IDX);
++}
++
++static void help(void)
++{
++	fprintf(stderr,
++		"usage: %s [OPTIONS]\n"
++		" code injection:\n"
++		"  -l, --load\n"
++		"  -s, --stage\n"
++		"  -a, --activate\n"
++		"  -u, --update [stage and activate]\n"
++		"  -q, --query\n"
++		"  -d, --revid update\n"
++		" telemetry:\n"
++		"  -G, --getloginfo\n"
++		"  -T, --type(0:execution, 1:history)\n"
++		"  -L, --level(0, 1, 2, 4)\n"
++		"  -R, --read\n"
++		"  -D, --revid log\n",
++		progname);
++}
++
++char *option_string = "l:sauqd:GT:L:RD:h";
++static struct option long_options[] = {
++	{"load", required_argument, 0, 'l'},
++	{"stage", no_argument, 0, 's'},
++	{"activate", no_argument, 0, 'a'},
++	{"update", no_argument, 0, 'u'},
++	{"query", no_argument, 0, 'q'},
++	{"getloginfo", no_argument, 0, 'G'},
++	{"type", required_argument, 0, 'T'},
++	{"level", required_argument, 0, 'L'},
++	{"read", no_argument, 0, 'R'},
++	{"setrev", required_argument, 0, 'd'},
++	{"setrevlog", required_argument, 0, 'D'},
++	{"help", no_argument, 0, 'h'},
++	{}
++};
++
++static void parse_options(int argc, char **argv)
++{
++	char *pathname;
++	int c;
++
++	pathname = strdup(argv[0]);
++	progname = basename(pathname);
++
++	while (1) {
++		int option_index = 0;
++
++		c = getopt_long(argc, argv, option_string,
++				long_options, &option_index);
++		if (c == -1)
++			break;
++		switch (c) {
++		case 'l':
++			capsule_name = optarg;
++			break;
++		case 's':
++			action = 1;
++			break;
++		case 'a':
++			action = 2;
++			break;
++		case 'u':
++			action = 3;
++			break;
++		case 'q':
++			query_cap = 1;
++			break;
++		case 'G':
++			log_getinfo = 1;
++			break;
++		case 'T':
++			log_type = atoi(optarg);
++			set_log_type = 1;
++			break;
++		case 'L':
++			log_level = atoi(optarg);
++			set_log_level = 1;
++			break;
++		case 'R':
++			log_read = 1;
++			break;
++		case 'd':
++			revid = atoi(optarg);
++			set_revid = 1;
++			break;
++		case 'D':
++			log_revid = atoi(optarg);
++			set_log_revid = 1;
++			break;
++		case 'h':
++			help();
++			break;
++		default:
++			break;
++		}
++	}
++}
++
++void print_cap(struct pfru_update_cap_info *cap)
++{
++	char *uuid = malloc(37);
++
++	if (!uuid) {
++		perror("Can not allocate uuid buffer\n");
++		exit(1);
++	}
++	uuid_unparse(cap->code_type, uuid);
++	printf("code injection image type:%s\n", uuid);
++	printf("fw_version:%d\n", cap->fw_version);
++	printf("code_rt_version:%d\n", cap->code_rt_version);
++
++	uuid_unparse(cap->drv_type, uuid);
++	printf("driver update image type:%s\n", uuid);
++	printf("drv_rt_version:%d\n", cap->drv_rt_version);
++	printf("drv_svn:%d\n", cap->drv_svn);
++
++	uuid_unparse(cap->platform_id, uuid);
++	printf("platform id:%s\n", uuid);
++	uuid_unparse(cap->oem_id, uuid);
++	printf("oem id:%s\n", uuid);
++
++	free(uuid);
++}
++
++int main(int argc, char *argv[])
++{
++	int fd_update, fd_log, fd_capsule;
++	struct pfru_telem_data_info data_info;
++	struct pfru_telem_info info;
++	struct pfru_update_cap_info cap;
++	void *addr_map_capsule;
++	struct stat st;
++	char *log_buf;
++	int ret = 0;
++
++	if (getuid() != 0) {
++		printf("Please run the test as root - Exiting.\n");
++		return 1;
++	}
++
++	parse_options(argc, argv);
++
++	fd_update = open("/dev/pfru/update", O_RDWR);
++	if (fd_update < 0) {
++		printf("PFRU device not supported - Quit...\n");
++		return 1;
++	}
++
++	if (query_cap) {
++		ret = read(fd_update, &cap, sizeof(cap));
++		if (ret == -1) {
++			perror("Read error.");
++			return 1;
++		}
++		print_cap(&cap);
++	}
++
++	fd_log = open("/dev/pfru/telemetry", O_RDWR);
++	if (fd_log < 0) {
++		printf("PFRU telemetry not supported. Skip...\n");
++		goto skip_log_set;
++	}
++
++	if (log_getinfo) {
++		ret = ioctl(fd_log, PFRU_LOG_IOC_GET_DATA_INFO, &data_info);
++		if (ret) {
++			perror("Get log data info failed.");
++			return 1;
++		}
++		ret = ioctl(fd_log, PFRU_LOG_IOC_GET_INFO, &info);
++		if (ret) {
++			perror("Get log info failed.");
++			return 1;
++		}
++		printf("log_level:%d\n", info.log_level);
++		printf("log_type:%d\n", info.log_type);
++		printf("log_revid:%d\n", info.log_revid);
++		printf("max_data_size:%d\n", data_info.max_data_size);
++		printf("chunk1_size:%d\n", data_info.chunk1_size);
++		printf("chunk2_size:%d\n", data_info.chunk2_size);
++		printf("rollover_cnt:%d\n", data_info.rollover_cnt);
++		printf("reset_cnt:%d\n", data_info.reset_cnt);
++
++		return 0;
++	}
++
++	info.log_level = -1;
++	info.log_type = -1;
++	info.log_revid = -1;
++
++	if (set_log_level) {
++		if (!valid_log_level(log_level)) {
++			printf("Invalid log level %d\n",
++			       log_level);
++		} else {
++			info.log_level = log_level;
++		}
++	}
++	if (set_log_type) {
++		if (!valid_log_type(log_type)) {
++			printf("Invalid log type %d\n",
++			       log_type);
++		} else {
++			info.log_type = log_type;
++		}
++	}
++	if (set_log_revid) {
++		if (!pfru_valid_revid(log_revid)) {
++			printf("Invalid log revid %d\n",
++			       log_revid);
++		} else {
++			info.log_revid = log_revid;
++		}
++	}
++
++	ret = ioctl(fd_log, PFRU_LOG_IOC_SET_INFO, &info);
++	if (ret) {
++		perror("Log information set failed.(log_level, log_type, log_revid)");
++		return 1;
++	}
++
++skip_log_set:
++	if (set_revid) {
++		ret = ioctl(fd_update, PFRU_IOC_SET_REV, &revid);
++		if (ret) {
++			perror("pfru update revid set failed");
++			return 1;
++		}
++		printf("pfru update revid set to %d\n", revid);
++	}
++
++	if (capsule_name) {
++		fd_capsule = open(capsule_name, O_RDONLY);
++		if (fd_capsule < 0) {
++			perror("Can not open capsule file...");
++			return 1;
++		}
++		if (fstat(fd_capsule, &st) < 0) {
++			perror("Can not fstat capsule file...");
++			return 1;
++		}
++		addr_map_capsule = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED,
++					fd_capsule, 0);
++		if (addr_map_capsule == MAP_FAILED) {
++			perror("Failed to mmap capsule file.");
++			return 1;
++		}
++		ret = write(fd_update, (char *)addr_map_capsule, st.st_size);
++		printf("Load %d bytes of capsule file into the system\n",
++		       ret);
++		if (ret == -1) {
++			perror("Failed to load capsule file");
++			return 1;
++		}
++		munmap(addr_map_capsule, st.st_size);
++		printf("Load done.\n");
++	}
++
++	if (action) {
++		if (action == 1)
++			ret = ioctl(fd_update, PFRU_IOC_STAGE, NULL);
++		else if (action == 2)
++			ret = ioctl(fd_update, PFRU_IOC_ACTIVATE, NULL);
++		else if (action == 3)
++			ret = ioctl(fd_update, PFRU_IOC_STAGE_ACTIVATE, NULL);
++		else
++			return 1;
++		printf("Update finished, return %d\n", ret);
++	}
++
++	if (fd_log > 0 && log_read) {
++		log_buf = malloc(MAX_LOG_SIZE + 1);
++		if (!log_buf) {
++			perror("log_buf allocate failed.");
++			return 1;
++		}
++		ret = read(fd_log, log_buf, MAX_LOG_SIZE);
++		if (ret == -1) {
++			perror("Read error.");
++			return 1;
++		}
++		log_buf[ret] = '\0';
++		printf("%s\n", log_buf);
++		free(log_buf);
++	}
++
++	return 0;
++}
+-- 
+2.25.1
 
