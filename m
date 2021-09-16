@@ -2,148 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A33FE40DDEE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 17:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15E840DDF9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 17:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238864AbhIPPZZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Sep 2021 11:25:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45482 "EHLO mail.kernel.org"
+        id S238995AbhIPPbc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Sep 2021 11:31:32 -0400
+Received: from mga11.intel.com ([192.55.52.93]:64133 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230190AbhIPPZZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 11:25:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D4BA60EE9;
-        Thu, 16 Sep 2021 15:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631805844;
-        bh=2nrkydlaMYejuedrwA9DOFv1JBObJhlmPDYP3yHSowo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=JMLt13gXCHusPmZgqgOrvGWXzteJ6RVvB7t7v8A+pnDUVFo26+QptPS62RB/3SNPT
-         OgYthOxEROPGivXDCttO1WsmIG2hY4y7hq8GZBGykQDPkoEOLZPJWYO1qNlcbBKT7u
-         8ypJf59iB6LZ3eHK6k+9BRcbQV7M+2P0eho9LAdzl3ldQKcpQYAS/3EAEOmntSSwja
-         fsy/PPJQ3mDY7FPKBYSuCuKhSZHy5ZX+mFydE1yc0l2uZB36mvlcCFD8mYSOK9MRNC
-         4lAgomUEcIZN3CFGxYDLoEDClV72Ha3rqi85riQUgYiNuQEw/IOHzTqhBoUifbZq6a
-         pi5Fe7WF4qT5w==
-Message-ID: <534b1bbc0a76b8832c3d89ff62663085545ad7aa.camel@kernel.org>
-Subject: Re: [PATCH 14/14] selftests/sgx: Add test for multiple TCS entry
-From:   Jarkko Sakkinen <jarkko@kernel.org>
+        id S238988AbhIPPbb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Sep 2021 11:31:31 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10109"; a="219403588"
+X-IronPort-AV: E=Sophos;i="5.85,298,1624345200"; 
+   d="scan'208";a="219403588"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2021 08:30:08 -0700
+X-IronPort-AV: E=Sophos;i="5.85,298,1624345200"; 
+   d="scan'208";a="482750265"
+Received: from mpbarre-mobl1.amr.corp.intel.com (HELO [10.212.167.35]) ([10.212.167.35])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2021 08:30:08 -0700
+Subject: Re: [PATCH 12/14] selftests/sgx: Add page permission and exception
+ test
 To:     Reinette Chatre <reinette.chatre@intel.com>,
-        linux-sgx@vger.kernel.org, shuah@kernel.org
+        linux-sgx@vger.kernel.org, jarkko@kernel.org, shuah@kernel.org
 Cc:     seanjc@google.com, bp@alien8.de, dave.hansen@linux.intel.com,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 16 Sep 2021 18:24:02 +0300
-In-Reply-To: <b908c7d2f210f11fc50abeb84a2dc22566941ffd.1631731214.git.reinette.chatre@intel.com>
 References: <cover.1631731214.git.reinette.chatre@intel.com>
-         <b908c7d2f210f11fc50abeb84a2dc22566941ffd.1631731214.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.36.5-0ubuntu1 
+ <a6e69ea22a2694d252302af283ee3e3f023d3577.1631731214.git.reinette.chatre@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <9990d737-9b9c-911f-3850-c9f3bc43c29b@intel.com>
+Date:   Thu, 16 Sep 2021 08:30:05 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <a6e69ea22a2694d252302af283ee3e3f023d3577.1631731214.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2021-09-15 at 13:31 -0700, Reinette Chatre wrote:
-> Each thread executing in an enclave is associated with a Thread Control
-> Structure (TCS). The SGX test enclave contains two hardcoded TCS, thus
-> supporting two threads in the enclave.
->=20
-> Add a test to ensure it is possible to enter enclave at both entrypoints.
->=20
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
->  tools/testing/selftests/sgx/defines.h   |  1 +
->  tools/testing/selftests/sgx/main.c      | 32 +++++++++++++++++++++++++
->  tools/testing/selftests/sgx/test_encl.c |  6 +++++
->  3 files changed, 39 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/sgx/defines.h b/tools/testing/selfte=
-sts/sgx/defines.h
-> index 0bbda6f0c7d3..02d775789ea7 100644
-> --- a/tools/testing/selftests/sgx/defines.h
-> +++ b/tools/testing/selftests/sgx/defines.h
-> @@ -23,6 +23,7 @@ enum encl_op_type {
->  	ENCL_OP_GET_FROM_BUFFER,
->  	ENCL_OP_PUT_TO_ADDRESS,
->  	ENCL_OP_GET_FROM_ADDRESS,
-> +	ENCL_OP_NOP,
->  	ENCL_OP_MAX,
->  };
-> =20
-> diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests=
-/sgx/main.c
-> index 308cf09ab02a..0a2552ad9ec8 100644
-> --- a/tools/testing/selftests/sgx/main.c
-> +++ b/tools/testing/selftests/sgx/main.c
-> @@ -393,6 +393,38 @@ TEST_F(enclave, clobbered_vdso_and_user_function)
->  	EXPECT_EQ(self->run.user_data, 0);
->  }
-> =20
-> +/*
-> + * Sanity check that it is possible to enter either of the two hardcoded=
- TCS
-> + */
-> +TEST_F(enclave, tcs_entry)
-> +{
-> +	struct encl_op_header op;
-> +
-> +	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metad=
-ata));
-> +
-> +	memset(&self->run, 0, sizeof(self->run));
-> +	self->run.tcs =3D self->encl.encl_base;
-> +
-> +	op.type =3D ENCL_OP_NOP;
-> +
-> +	EXPECT_EQ(ENCL_CALL(&op, &self->run, true), 0);
-> +
-> +	EXPECT_EEXIT(&self->run);
-> +	EXPECT_EQ(self->run.exception_vector, 0);
-> +	EXPECT_EQ(self->run.exception_error_code, 0);
-> +	EXPECT_EQ(self->run.exception_addr, 0);
-> +
-> +	/* Move to the next TCS. */
-> +	self->run.tcs =3D self->encl.encl_base + PAGE_SIZE;
-> +
-> +	EXPECT_EQ(ENCL_CALL(&op, &self->run, true), 0);
-> +
-> +	EXPECT_EEXIT(&self->run);
-> +	EXPECT_EQ(self->run.exception_vector, 0);
-> +	EXPECT_EQ(self->run.exception_error_code, 0);
-> +	EXPECT_EQ(self->run.exception_addr, 0);
-> +}
-> +
->  /*
->   * Second page of .data segment is used to test changing PTE permissions=
-.
->   * This spans the local encl_buffer within the test enclave.
-> diff --git a/tools/testing/selftests/sgx/test_encl.c b/tools/testing/self=
-tests/sgx/test_encl.c
-> index 5d86e3e6456a..4fca01cfd898 100644
-> --- a/tools/testing/selftests/sgx/test_encl.c
-> +++ b/tools/testing/selftests/sgx/test_encl.c
-> @@ -49,6 +49,11 @@ static void do_encl_op_get_from_addr(void *_op)
->  	memcpy(&op->value, (void *)op->addr, 8);
->  }
-> =20
-> +static void do_encl_op_nop(void *_op)
-> +{
-> +
-> +}
-> +
->  void encl_body(void *rdi,  void *rsi)
->  {
->  	const void (*encl_op_array[ENCL_OP_MAX])(void *) =3D {
-> @@ -56,6 +61,7 @@ void encl_body(void *rdi,  void *rsi)
->  		do_encl_op_get_from_buf,
->  		do_encl_op_put_to_addr,
->  		do_encl_op_get_from_addr,
-> +		do_encl_op_nop,
->  	};
-> =20
->  	struct encl_op_header *op =3D (struct encl_op_header *)rdi;
+On 9/15/21 1:31 PM, Reinette Chatre wrote:
+> Add a test to ensure that (1) PTE permissions can be changed as long as
+> they do not exceed EPCM permissions, and (2) even if EPCM permissions
+> allow a page to be written to, if the PTE permissions do not then a #PF
+> should be generated when attempting to write to a (from PTE perspective)
+> read-only page.
 
+It took me a minute to figure out what this was trying to say.  Maybe
+breaking it down into these three steps would help:
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-/Jarkko
+Add a test that:
+ (1) Creates an SGX enclave page with writable EPCM permission
+ (2) Changes the PTE permission on the page to read-only.  This should
+     be permitted because the permission does not exceed the EPCM
+     permission.
+ (3) Attempts a write to the page and generate a page fault (#PF)
+     because of the read-only PTE.
 
