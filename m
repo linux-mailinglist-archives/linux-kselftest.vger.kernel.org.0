@@ -2,84 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DE940D6C6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 11:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BD240D7C7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 12:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237155AbhIPJ5f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Sep 2021 05:57:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58054 "EHLO mail.kernel.org"
+        id S236754AbhIPKu6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Sep 2021 06:50:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38034 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236221AbhIPJ4s (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 05:56:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 422DE61246;
-        Thu, 16 Sep 2021 09:55:26 +0000 (UTC)
+        id S235644AbhIPKu5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Sep 2021 06:50:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B08C461212;
+        Thu, 16 Sep 2021 10:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631786126;
-        bh=SoojYHvRGcHq15wi1lokm8T7b2MKM9WukjphpKpCLUU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qNqk8O4PX1qXimy6EWm5bQoVNFiVTR5H3v6A43glANGoBIWoKM/8Tzvig7E5moXtT
-         l1/0IqcfiTwxlPZGO9wQDDYvh3G2dFW673LPfUvSG8FhJtXWgsm6McLgJvTassg1/W
-         BRTx36XZrifByAfgOmkfwtP48stDuKpUH/8WXzDdGjiD5d02DZkg78B09ZBW4HVo/y
-         6YM74V+b1EdkuM4VUaHeZrwlFQkb7kcBVsOLBwJjcw6dsHrWypnIk0vOGF78UF0V1I
-         Q6fNOtbAUT+CU4A1HKWmaABEXYsBFawsegShcjzQU8oVZG9ssnEDAtBOOW47npnz5m
-         0h07Tuz/vydlA==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mQo72-001vTw-Gk; Thu, 16 Sep 2021 11:55:24 +0200
+        s=k20201202; t=1631789377;
+        bh=fp1TNMHOFsWq2J/VHlgIglOFHSB2pZWpIK3WKY20BB0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JLBWL53G2batQtel8a586fQ7gSdE+AdJTh5qkJ7j9B1MTl3GkRcrJyjszQG1/PYzS
+         dfpeFx29TJZfq5rNLRu/8+/omTILNZe2pZ4D3h99zTnqwzPILu8LvtA6EY96z28cWR
+         KxHgbaZnB71knyCA2rQ+wK3XNAbDDFKlnwNyJuksfyGf5BgSGD67OWvqWq+zJghcGF
+         McFZ8aavNQq0Ul5HAjDlC0jLJDVtJq6iYq3zshXa0ErQmHn1jnAq44b53IpWC8C/66
+         vkplh0A3mOpQYrYTXyeLFrdyNeCMHXkpgmfzc1oxShgVo6RsjtMq18w98xGvby3sXx
+         tK7ipVa9SOzug==
+Date:   Thu, 16 Sep 2021 12:49:30 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@gmail.com>,
+        David Beckett <david.beckett@netronome.com>,
         Jakub Kicinski <kuba@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 10/23] bpftool: update bpftool-cgroup.rst reference
-Date:   Thu, 16 Sep 2021 11:55:09 +0200
-Message-Id: <9e9f62ab09c26736338545f9aa27c0e825517a32.1631785820.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1631785820.git.mchehab+huawei@kernel.org>
-References: <cover.1631785820.git.mchehab+huawei@kernel.org>
+Subject: Re: [PATCH 08/24] tools: bpftool: update bpftool-prog.rst reference
+Message-ID: <20210916124930.7ae3b722@coco.lan>
+In-Reply-To: <eb80e8f5-b9d7-5031-8ebb-4595bb295dbf@isovalent.com>
+References: <cover.1631783482.git.mchehab+huawei@kernel.org>
+        <dc4bae7a14518fbfff20a0f539df06a5c19b09de.1631783482.git.mchehab+huawei@kernel.org>
+        <eb80e8f5-b9d7-5031-8ebb-4595bb295dbf@isovalent.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The file name: Documentation/bpftool-cgroup.rst
-should be, instead: tools/bpf/bpftool/Documentation/bpftool-cgroup.rst.
+Hi Quentin,
 
-Update its cross-reference accordingly.
+Em Thu, 16 Sep 2021 10:43:45 +0100
+Quentin Monnet <quentin@isovalent.com> escreveu:
 
-Fixes: a2b5944fb4e0 ("selftests/bpf: Check consistency between bpftool source, doc, completion")
-Fixes: 5ccda64d38cc ("bpftool: implement cgroup bpf operations")
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- tools/testing/selftests/bpf/test_bpftool_synctypes.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 2021-09-16 11:14 UTC+0200 ~ Mauro Carvalho Chehab
+> <mchehab+huawei@kernel.org>
+> > The file name: Documentation/bpftool-prog.rst
+> > should be, instead: tools/bpf/bpftool/Documentation/bpftool-prog.rst.
+> > 
+> > Update its cross-reference accordingly.
+> > 
+> > Fixes: a2b5944fb4e0 ("selftests/bpf: Check consistency between bpftool source, doc, completion")
+> > Fixes: ff69c21a85a4 ("tools: bpftool: add documentation")  
+> 
+> Hi,
+> How is this a fix for the commit that added the documentation in bpftool?
+> 
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > ---
+> >  tools/testing/selftests/bpf/test_bpftool_synctypes.py | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+> > index be54b7335a76..27a2c369a798 100755
+> > --- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+> > +++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+> > @@ -374,7 +374,7 @@ class ManProgExtractor(ManPageExtractor):
+> >      """
+> >      An extractor for bpftool-prog.rst.
+> >      """
+> > -    filename = os.path.join(BPFTOOL_DIR, 'Documentation/bpftool-prog.rst')
+> > +    filename = os.path.join(BPFTOOL_DIR, 'tools/bpf/bpftool/Documentation/bpftool-prog.rst')
+> >  
+> >      def get_attach_types(self):
+> >          return self.get_rst_list('ATTACH_TYPE')
+> >   
+> 
+> No I don't believe it should. BPFTOOL_DIR already contains
+> 'tools/bpf/bpftool' and the os.path.join() concatenates the two path
+> fragments.
+> 
+> Where is this suggestion coming from? Did you face an issue with the script?
 
-diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-index 2d7eb683bd5a..c974abd4db13 100755
---- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-+++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-@@ -392,7 +392,7 @@ class ManCgroupExtractor(ManPageExtractor):
-     """
-     An extractor for bpftool-cgroup.rst.
-     """
--    filename = os.path.join(BPFTOOL_DIR, 'Documentation/bpftool-cgroup.rst')
-+    filename = os.path.join(BPFTOOL_DIR, 'tools/bpf/bpftool/Documentation/bpftool-cgroup.rst')
- 
-     def get_attach_types(self):
-         return self.get_rst_list('ATTACH_TYPE')
--- 
-2.31.1
+No, I didn't face any issues with this script.
 
+The suggestion cames from the script at:
+
+	./scripts/documentation-file-ref-check
+
+which is meant to discover broken doc references. 
+
+Such script has already a rule to handle stuff under tools/:
+
+		# Accept relative Documentation patches for tools/
+		if ($f =~ m/tools/) {
+			my $path = $f;
+			$path =~ s,(.*)/.*,$1,;
+			next if (grep -e, glob("$path/$ref $path/../$ref $path/$fulref"));
+		}
+
+but it seems it needs a fixup in order for it to stop reporting issues
+at test_bpftool_synctypes.py:
+
+	$ ./scripts/documentation-file-ref-check 
+	...
+	tools/testing/selftests/bpf/test_bpftool_synctypes.py: Documentation/bpftool-prog.rst
+	tools/testing/selftests/bpf/test_bpftool_synctypes.py: Documentation/bpftool-map.rst
+	tools/testing/selftests/bpf/test_bpftool_synctypes.py: Documentation/bpftool-cgroup.rst
+
+I'll drop the patches touching it for a next version, probably
+adding a fix for such script.
+
+Thanks,
+Mauro
