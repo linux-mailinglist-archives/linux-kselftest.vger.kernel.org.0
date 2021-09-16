@@ -2,71 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7E140D9DE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 14:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2CD40DA7F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Sep 2021 15:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239473AbhIPM0V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Sep 2021 08:26:21 -0400
-Received: from smtpbg128.qq.com ([106.55.201.39]:39858 "EHLO smtpbg587.qq.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235816AbhIPM0U (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 08:26:20 -0400
-X-QQ-mid: bizesmtp32t1631795092to1nkx5k
-Received: from localhost.localdomain (unknown [180.113.36.229])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Thu, 16 Sep 2021 20:24:44 +0800 (CST)
-X-QQ-SSF: 0100000000800030B000000A0000000
-X-QQ-FEAT: gSGF8h2+s1IADEzB2CCwyyD6/XD9p1aGVRPyyJchy5+VAf++gx9oqFzn3LG1A
-        CovWeQ/XIp3aG7oPPk4Ps1jbU+32qjHlyeXKxVUHtvnuvWkjvDfSbH90uWaDy8dQHLuMSpv
-        vNzwDh/hHz7HlfZ55OI7tCUfq+KrL7lHOFqDTqcREgOaFdMeN6UFpkAnhmIzrNfWNJSJZjU
-        EpTFKN0GgJEKuBpOKbDMZnv9wlzycrdiXoJ0ukyqKQgWD1GNV9Jj3MKTPbMxMeFX+lK2tZz
-        yLl1klhtXNq/zJG9PnEprBe+xC4bg3x18gtBJL1kuxjAuVfs/TFi65ZxH7MXSgXVIsmjoZ1
-        RcaAag2WLBTbgy4uZh2mI+k2RzfAw==
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     bongsu.jeon@samsung.com
-Cc:     shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH v3] selftests: nci: replace unsigned int with int
-Date:   Thu, 16 Sep 2021 20:24:42 +0800
-Message-Id: <20210916122442.14732-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.20.1
+        id S239765AbhIPNB3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Sep 2021 09:01:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55750 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239741AbhIPNB2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Sep 2021 09:01:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id CC5F860EE9;
+        Thu, 16 Sep 2021 13:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631797207;
+        bh=b2pU57FhVLp5+sAxVdLdiB8G3NtaTNgb27tj1GNVBSU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=gfcfXUtFYwc/wLuaB+FiiOL32FOzDeL63kkn1u/vSuBHebXZRlYQSRvPeAqu1Gw8k
+         8epXIMgEbA87h4Fb1bntHb9XTlDxAv2QebBEPAWFDtA7uH6Orj0+GhOLHpVe2nPttR
+         NRp4gxc0M8O8Tf8uKCQbOfr9DMECMLbMPktX8un5eYK4EPDbIZ7btwu1HLJjcMasjS
+         8jFGgY0Q/1y2US2ZNLwGX/enwCqkfoXFCXppPfBf074iXGRw8Z8MvFA7fYOhmNEt5j
+         AMk206vIZzX9isSHM0BxMrrt/mDDxVzzGtd033cv7xj7mVOOznvvtaAfi3P30sS8Hq
+         U/iBe2LTwVb5A==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B77E960A9E;
+        Thu, 16 Sep 2021 13:00:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam5
+Subject: Re: [PATCH v3] selftests: nci: replace unsigned int with int
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163179720774.29332.2952119753951803388.git-patchwork-notify@kernel.org>
+Date:   Thu, 16 Sep 2021 13:00:07 +0000
+References: <20210916122442.14732-1-wangxiang@cdjrlc.com>
+In-Reply-To: <20210916122442.14732-1-wangxiang@cdjrlc.com>
+To:     Xiang wangx <wangxiang@cdjrlc.com>
+Cc:     bongsu.jeon@samsung.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Should not use comparison of unsigned expressions < 0.
+Hello:
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
----
+This patch was applied to netdev/net.git (refs/heads/master):
 
-Changes since v1
-* Change commit log
+On Thu, 16 Sep 2021 20:24:42 +0800 you wrote:
+> Should not use comparison of unsigned expressions < 0.
+> 
+> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+> ---
+> 
+> Changes since v1
+> * Change commit log
+> 
+> [...]
 
-Changes since v2
-* Change commit log
+Here is the summary with links:
+  - [v3] selftests: nci: replace unsigned int with int
+    https://git.kernel.org/netdev/net/c/98dc68f8b0c2
 
- tools/testing/selftests/nci/nci_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-index e1bf55dabdf6..162c41e9bcae 100644
---- a/tools/testing/selftests/nci/nci_dev.c
-+++ b/tools/testing/selftests/nci/nci_dev.c
-@@ -746,7 +746,7 @@ int read_write_nci_cmd(int nfc_sock, int virtual_fd, const __u8 *cmd, __u32 cmd_
- 		       const __u8 *rsp, __u32 rsp_len)
- {
- 	char buf[256];
--	unsigned int len;
-+	int len;
- 
- 	send(nfc_sock, &cmd[3], cmd_len - 3, 0);
- 	len = read(virtual_fd, buf, cmd_len);
--- 
-2.20.1
 
