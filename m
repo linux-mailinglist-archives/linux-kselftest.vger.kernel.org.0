@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4064D40F216
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 08:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5ED40F213
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 08:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245095AbhIQGNQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Sep 2021 02:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S245264AbhIQGNN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 02:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245098AbhIQGMz (ORCPT
+        with ESMTP id S245106AbhIQGM5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 02:12:55 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6B7C061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:33 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id 13-20020ac8560d000000b0029f69548889so86474283qtr.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:33 -0700 (PDT)
+        Fri, 17 Sep 2021 02:12:57 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E3CC0613E1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:35 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id d202-20020a3768d3000000b003d30722c98fso62594023qkc.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=09xEzYT+gOEMXKux86y0OboJKHhnFsj7tooXascaZws=;
-        b=idTj1foInP1ZjiSa8tzyXsAbvISX9h8D2okHQm47jLNzxI/gnljnhVQYgRp7gVyxij
-         CsbzwRxgqhnisizhrS+yfMH6UHQ4fCv6XeCSCXXwKBm8fIy/regcyzobSzoURswbI015
-         EhQaKFRWM6aq6l5B15meILrewxbaU6yp3g2Nl/72UnbQCanMYa7JpZscbFct1T1qwgHw
-         WQJVUe+4dvGKD1YQH+pOx77QCpeyZep2k1EX0iFtXgeHezV2k7OgPXfN3EKXyp8yiBcw
-         v4zOLgOsvCuCahcjEDuwXB5WMCghprYxDyANJW8IiN3wz2UXia2L39Jl4z728eSWNBky
-         tuvA==
+        bh=a16EJJC8qIqgq8caJJ9rZnk5BIeQcHgz6nBaZlUahJ4=;
+        b=mRZGnePzs2y6KqAQfe6Ck+DkP+Foa3blX6juarQJ18Sqvw6BFn2gA7pydsaxOjMZqc
+         HRlb/vKtIhygpXSgaHB409dpz9AhJrphfamLZU1gG4ObG+Rmk3RUc5SRgd4y3wPc6+Ov
+         89W5x13jsc5jfnYljnXFxChRd/2j1bM7BfbH66pnCquAayMNq9LOb2+cxkEtbzLxvDTl
+         0bn5yMg6sIYTVEUeGE7mezPVGCVAOAvv4bBjedRlVspT8EhMbB3w9RYNzHV/yRxBbUHi
+         WToToCFsOIDqWxXvvM2ABw/iKXuTenyu46QkdzOXRU+sp4UGv+vROZ3Q5AGnAFYKsd3B
+         kl5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=09xEzYT+gOEMXKux86y0OboJKHhnFsj7tooXascaZws=;
-        b=Nq7t8Tj2SOrcCeG4IBO1wshQcx4VWIZNAv9MlXnGDDWmcxaKO+bT4f4PUf3rJR3jQ+
-         9iP9SPZWp/HPemyhK00Id2BtpjMMGioYQmNIQicqtmUTS6N5lVt5++wmCs/oKDivqlFj
-         fNR70kSohSAflUH3RBsI5wZ2WSNTKKVUYW1je2xcNFSjYjKnMJn/qqv3i/jddQ1eN10z
-         2RYtSImCSlUdFFRZIU2ByASFb9C+IS7kFtQM1fyOwFBRAypSeeZ1Q3BH5kDVI4VmgIjk
-         GEz0jJbMJLAr+f+vjRaaaVBFlCNLaFz/+taWxCC9R6vMRAP317LzrdK/xBrr6jSD7jVn
-         lfNQ==
-X-Gm-Message-State: AOAM531yMmRAigtRET0lywVJLbt0AweSTKTLoI0ZH/XKQxzqBfdCEC2Z
-        IfgA1l0ztbj2AJA4V+kFIOgtnULWDq9e8K7y7wUfCA==
-X-Google-Smtp-Source: ABdhPJypRsw47dQReFc9GVfIgcLEvPuWKVLfs9Zkoz23e3pfAoJ7NFelyWt9aLLvWQZohalclJUd3bgYSnBd8nu1IvZJKA==
+        bh=a16EJJC8qIqgq8caJJ9rZnk5BIeQcHgz6nBaZlUahJ4=;
+        b=aS2vOcv03AGcl+fB7iifDmuSPn8MBBxgzLQbhY/8kCRKkXw1WDw+Az82h9UUn4BehJ
+         DLlfKEgsbIvjoT+IWR94S0a1/HOE4wxXyjbeHUBIYd9f0MWjjSBbAJKstSrLclw8YpO+
+         d+OTIjWOwGetSVZPZCBbZmg8a9eCf9FW1FreYrunSFJ9m9EX2jid63ADW1bXGUR8LuT9
+         5Bop0qMi34BKVnlc51zXjnuS1ElprxQ9he1+Qu0Vf7W8/qGUONBrr72sPECXetAUoK95
+         nkCJp0G954TsPU0BN8tZspzkDhq0BvarNLhqmcofQAFwjmpSlbuMxLO2tM6UoUZe2fQJ
+         N2/Q==
+X-Gm-Message-State: AOAM531yko4xw+l/tLmcpUH+Xlxa+MJF9TtUfQlrZUUgqjcTce9c2yn+
+        +lufbaKRVYFC2aIh41tcOBwIt4AE+RwR5qqv1O0jng==
+X-Google-Smtp-Source: ABdhPJx2QRnWG7xa+kh2z4MTN26rfm570JnuU75BFe3uCQj9UmSttAn5ZQMcMCpcxKfx8N8gvMCYdb0nOiaf4ooLmBmZeA==
 X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:4845:43ba:3ff5:2de1])
- (user=brendanhiggins job=sendgmr) by 2002:a25:d747:: with SMTP id
- o68mr11675107ybg.488.1631859092480; Thu, 16 Sep 2021 23:11:32 -0700 (PDT)
-Date:   Thu, 16 Sep 2021 23:11:01 -0700
+ (user=brendanhiggins job=sendgmr) by 2002:a05:6214:2e4:: with SMTP id
+ h4mr9633253qvu.3.1631859094676; Thu, 16 Sep 2021 23:11:34 -0700 (PDT)
+Date:   Thu, 16 Sep 2021 23:11:02 -0700
 In-Reply-To: <20210917061104.2680133-1-brendanhiggins@google.com>
-Message-Id: <20210917061104.2680133-4-brendanhiggins@google.com>
+Message-Id: <20210917061104.2680133-5-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20210917061104.2680133-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
-Subject: [PATCH v1 3/6] device property: build kunit tests without structleak plugin
+Subject: [PATCH v1 4/6] thunderbolt: build kunit tests without structleak plugin
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
         keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
@@ -73,29 +73,32 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 The structleak plugin causes the stack frame size to grow immensely when
 used with KUnit:
 
-../drivers/base/test/property-entry-test.c:492:1: warning: the frame size of 2832 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-../drivers/base/test/property-entry-test.c:322:1: warning: the frame size of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-../drivers/base/test/property-entry-test.c:250:1: warning: the frame size of 4976 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-../drivers/base/test/property-entry-test.c:115:1: warning: the frame size of 3280 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+drivers/thunderbolt/test.c:1529:1: error: the frame size of 1176 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
 
 Turn it off in this file.
 
+Linus already split up tests in this file, so this change *should* be
+redundant now.
+
 Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- drivers/base/test/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thunderbolt/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
-index 64b2f3d744d51..7f76fee6f989d 100644
---- a/drivers/base/test/Makefile
-+++ b/drivers/base/test/Makefile
-@@ -2,4 +2,4 @@
- obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+= test_async_driver_probe.o
+diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
+index da19d7987d005..78fd365893c13 100644
+--- a/drivers/thunderbolt/Makefile
++++ b/drivers/thunderbolt/Makefile
+@@ -7,6 +7,7 @@ thunderbolt-objs += usb4_port.o nvm.o retimer.o quirks.o
+ thunderbolt-${CONFIG_ACPI} += acpi.o
+ thunderbolt-$(CONFIG_DEBUG_FS) += debugfs.o
+ thunderbolt-${CONFIG_USB4_KUNIT_TEST} += test.o
++CFLAGS_test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
  
- obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) += property-entry-test.o
--CFLAGS_REMOVE_property-entry-test.o += -fplugin-arg-structleak_plugin-byref -fplugin-arg-structleak_plugin-byref-all
-+CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+ thunderbolt_dma_test-${CONFIG_USB4_DMA_TEST} += dma_test.o
+ obj-$(CONFIG_USB4_DMA_TEST) += thunderbolt_dma_test.o
 -- 
 2.33.0.464.g1972c5931b-goog
 
