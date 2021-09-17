@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A682140F1FD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 08:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2ED040F1F8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 08:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245064AbhIQGM5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Sep 2021 02:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
+        id S245022AbhIQGMz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 02:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245046AbhIQGMu (ORCPT
+        with ESMTP id S245067AbhIQGMx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 02:12:50 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AE1C0613E0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:28 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id w10-20020a0cb54a000000b0037a9848b92fso87653441qvd.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:28 -0700 (PDT)
+        Fri, 17 Sep 2021 02:12:53 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E171C061764
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:31 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id h7-20020a37b707000000b003fa4d25d9d0so62493852qkf.17
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=TXG48xSRlx8rIgQW++hQT3j5R9gwaLAhcS6CZziLHmQ=;
-        b=WmhloRtjGIK9ydAlJ6OHR1E2w5RjxR8VBTPhCI/O0xak8DgT2MO76zuYYPl24VmGPp
-         yse5VSvtdAU2msUdkpYQOJUnKSnFyFST5EPn8fCafk6yZQ46FNdPLWKTSBR3+zxtOBW7
-         sNbBXeRo0RHv8ziNHdSoGEpUFFISJxxpYhiy+2MVKGbzGc7jYpxOV8tLAcwl+rv4VK8Q
-         OMGMl9rnWCFAnIkBzs5nVhwMf8z+PicX1CD1YvIz5WrRHo6Ylwov8F5oYotxfS+1/LEt
-         DKN9SHB8jZeMVVnMBsn1ODzNyalQkI/zxfzf3xRkXWq64KC757pRykt/gdw+TEESPIrZ
-         Su1w==
+         :cc:content-transfer-encoding;
+        bh=I4FOT8yOHsLhfAzdZiAF0l/kcO/QKiXi6j8WbW9LXJI=;
+        b=UY3TinilJRju1u6lzAykebCAKMTWaSuBZvn8jYC8UK4+LbXvIlCflfwHlFEphBHs8B
+         1iFMgEZGban4DYDF7Ng4Bxjo8NRN9zOf3LLvDcjhZho+zGb8eIYgXkYwA0Otb0f/FShE
+         yCmK2uqakDDxdXMcri2Lg+CMzpqgtphiucDdAVEWrO4iTlv4H6bq8Gawab6VO22To9bF
+         X7RxLGWNSjvgLN+qQRj6LibXm4BaLGhu5Xy+N2dBaNZPk7IY2MX6VGtuGBV+XMHGYz17
+         gK2smKuDIdXkivtrGOnp7UxDzkVWma4nv+Xs6OV5VYWRjcuzPSQps0HL5bUHRRb0Qx+d
+         Iq5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=TXG48xSRlx8rIgQW++hQT3j5R9gwaLAhcS6CZziLHmQ=;
-        b=1n3a9Dq2Bq7wk8PlTRMitq+bKj4vB2tHsWYtk7wmi2WBUJxAaNBSAXzogzkxI1rb7m
-         pDd67nr82l5S3k/8xVtmNJ8Wxc7/re4hysDAay98F2v0yD+BQRwjJHbwuZO8LFy61Tav
-         6XBrnJZq7ANqNTZIiE1X3duSR/mYnIF4aKrE2TsBYWVtnjEUN+IENqSFNI6j/j2RIx0I
-         QuE2L7pltZliTbJOm7lTqNHpGoIHaC9skJyIe9iPpWOcYJsCllbU46Rry8Dq/5VidTyV
-         313H0fMgB3+dp+YY6AvkmEeKZkMZPOfYLLioiFvNUIAzlkjz2wED5lmWYPcUagYzl72J
-         fiSg==
-X-Gm-Message-State: AOAM531dwxBenUjDgcJICpk5TVNQlJPB5MRB0szf48OIzPTyCqLpZFpH
-        xKs/55s5oIie9aAZt8u55OJtOxKKcCqNHr7Y0nko6g==
-X-Google-Smtp-Source: ABdhPJypn4hhdPHmNfweWLWHauxWHrVoQvMZsHWsDKioZ9IeJPJspxqNCPwjtYoY9xvXJMChe6ahFtlZ1gOXKE6/5Xximw==
+         :references:subject:from:to:cc:content-transfer-encoding;
+        bh=I4FOT8yOHsLhfAzdZiAF0l/kcO/QKiXi6j8WbW9LXJI=;
+        b=As18IKRTDN+KNZzFtY08qUB8i/o6yBpbAX2ouw5//513CLecN7AMptvs2IIZmxovTq
+         eD9hbeGl0Ut+ypQ71iYRnqTP62s4GTzJgCVSEmAAqtam2JVobJdVDJWTZ1ehrW4FwqK9
+         aUcddznWrDPfMQ52NqY6BOnxxgBUSkDC5/0MaMqV0ZmVftR1tfiVIdqD6Fethz1a46ho
+         A01qScd+lhyw1n6MxD3sU5HLTCxXbJjsYGestVwsJhGzD2Jmguu0wghI2LMSbH4aW6Wb
+         1+KCUFszNYQ1fJ0aLXXC2nCWTeZeUtWeyTiTARqi1srsCvUjcRRiQRgzAEavkZDvsI05
+         lLKQ==
+X-Gm-Message-State: AOAM530KJywq3NbRzdcJUUS/TFNL9Q1YXYQXXHBb7KWlHLQy5P7RanVs
+        6d+j8Ulkaamy2aueUFJzz7+591BwEB26txCjPxc9Hw==
+X-Google-Smtp-Source: ABdhPJxQU9dA2VoByCENV7Js4YP5bqWeXxiNL61cyojxtkYNrLzgmDJAwC0DC/PduGlki5LgIsdKe1pz5QUxEe86UMUTvA==
 X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:4845:43ba:3ff5:2de1])
- (user=brendanhiggins job=sendgmr) by 2002:a25:ca08:: with SMTP id
- a8mr11249514ybg.231.1631859087755; Thu, 16 Sep 2021 23:11:27 -0700 (PDT)
-Date:   Thu, 16 Sep 2021 23:10:59 -0700
+ (user=brendanhiggins job=sendgmr) by 2002:a25:6d43:: with SMTP id
+ i64mr11100758ybc.252.1631859090133; Thu, 16 Sep 2021 23:11:30 -0700 (PDT)
+Date:   Thu, 16 Sep 2021 23:11:00 -0700
 In-Reply-To: <20210917061104.2680133-1-brendanhiggins@google.com>
-Message-Id: <20210917061104.2680133-2-brendanhiggins@google.com>
+Message-Id: <20210917061104.2680133-3-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20210917061104.2680133-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
-Subject: [PATCH v1 1/6] gcc-plugins/structleak: add makefile var for disabling structleak
+Subject: [PATCH v1 2/6] iio/test-format: build kunit tests without structleak plugin
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
         keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
@@ -66,34 +66,36 @@ Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
         Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KUnit and structleak don't play nice, so add a makefile variable for
-enabling structleak when it complains.
+The structleak plugin causes the stack frame size to grow immensely when
+used with KUnit:
 
-Co-developed-by: Kees Cook <keescook@chromium.org>
+../drivers/iio/test/iio-test-format.c: In function =E2=80=98iio_test_iio_fo=
+rmat_value_fixedpoint=E2=80=99:
+../drivers/iio/test/iio-test-format.c:98:1: warning: the frame size of 2336=
+ bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+
+Turn it off in this file.
+
+Co-developed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- scripts/Makefile.gcc-plugins | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/iio/test/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/scripts/Makefile.gcc-plugins b/scripts/Makefile.gcc-plugins
-index 952e46876329a..4aad284800355 100644
---- a/scripts/Makefile.gcc-plugins
-+++ b/scripts/Makefile.gcc-plugins
-@@ -19,6 +19,10 @@ gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF)		\
- 		+= -fplugin-arg-structleak_plugin-byref
- gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL)	\
- 		+= -fplugin-arg-structleak_plugin-byref-all
-+ifdef CONFIG_GCC_PLUGIN_STRUCTLEAK
-+    DISABLE_STRUCTLEAK_PLUGIN += -fplugin-arg-structleak_plugin-disable
-+endif
-+export DISABLE_STRUCTLEAK_PLUGIN
- gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK)		\
- 		+= -DSTRUCTLEAK_PLUGIN
- 
--- 
+diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
+index f1099b4953014..467519a2027e5 100644
+--- a/drivers/iio/test/Makefile
++++ b/drivers/iio/test/Makefile
+@@ -5,3 +5,4 @@
+=20
+ # Keep in alphabetical order
+ obj-$(CONFIG_IIO_TEST_FORMAT) +=3D iio-test-format.o
++CFLAGS_iio-test-format.o +=3D $(DISABLE_STRUCTLEAK_PLUGIN)
+--=20
 2.33.0.464.g1972c5931b-goog
 
