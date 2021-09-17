@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB59640F745
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 14:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDB940F746
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 14:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbhIQMLU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Sep 2021 08:11:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47990 "EHLO mail.kernel.org"
+        id S230287AbhIQML0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 08:11:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48126 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229446AbhIQMLT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 08:11:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3FE2F60187;
-        Fri, 17 Sep 2021 12:09:57 +0000 (UTC)
+        id S229446AbhIQMLZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Sep 2021 08:11:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7C64960187;
+        Fri, 17 Sep 2021 12:10:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631880597;
-        bh=eqg/nDhFJayhUYdR3eTgL9JXj5aAu9NgVnQhmHor+MM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NvSjDT0TZatazYAOK421dNGJza2GvUpVfqtqnBsHUGy/0llYhEMaHi+lIIIPiEHmV
-         eD2zUr9qzNaNtbMKzSbzyXaSxkQ/i9JxbSUVjO5w6zdIFWOXR9JGsnKjQ/3tAD9XDe
-         s3ae29F2gc5N7z0hYAvpycuYXRM075Dcj3opyexIvv7mC2HMf5hv2ORccAJPZgVWfT
-         f8GBiGmhLBBCTbWnVzQPXvC2c+fzO1Gph/xAqvIVx1PHd0VSzJYjWdW10Wi0M3neJp
-         urEa1b3CtxSLir5diJ7U0y9m0ElpPFJ3x5b/quEUajRW8hZPseQ6nel94qwcerfZiD
-         vr0yAXfDzSbjA==
+        s=k20201202; t=1631880604;
+        bh=7ylfGXXJ8kffqS5H5ss3UKZCeSeFg8BoMiJBHNfE90c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oe47OioeXswMQgT91lPgmAaQZ6sGSYqfSWeSIUz2y+9wsyu8Mr8aohumPu/Cf7a11
+         PuOvCAq3ulPa94KXIqS/3YjRqfmzqJbDy7wTdvUMuGKqxO5nRObP2YWroOR9kC/3V4
+         ZH+88nbBCuz3b0bG5FADJKeZaS8BexeUNngJWlTeVvXr5H/aw9AwfWcOTn+Xqvu3MC
+         HRnm1Gyha3fVWg5fxpkl/UIPK36kIbnAgaqOzq1vURM9Jpq+dC3aJrHtIXun0glmdt
+         VDXuY7UD51+YjRR27VU8fNf3ZFBuGh1a7w6qHlqs0R2wOzYLaWgZ3fPADm7Ufb1CIp
+         pwKzCbO9r5Rwg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
@@ -30,40 +30,41 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, misono.tomohiro@fujitsu.com,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 0/4] selftests: arm64: vec-syscfg updates
-Date:   Fri, 17 Sep 2021 13:08:51 +0100
-Message-Id: <20210917120855.13858-1-broonie@kernel.org>
+Subject: [PATCH v2 1/4] selftests: arm64: Fix printf() format mismatch in vec-syscfg
+Date:   Fri, 17 Sep 2021 13:08:52 +0100
+Message-Id: <20210917120855.13858-2-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210917120855.13858-1-broonie@kernel.org>
+References: <20210917120855.13858-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=910; h=from:subject; bh=eqg/nDhFJayhUYdR3eTgL9JXj5aAu9NgVnQhmHor+MM=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhRIVRICuTTOTtT5mOuYFGcjIkmsm4ibuRsYG9ZoO6 6sSThDyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYUSFUQAKCRAk1otyXVSH0D7JB/ 95WoFMZVB393/u8DprskS8KjRsaBJsVgufi4niZEuSU/b+sah766hvmHpkVjsApRhR0YZ3QekMlah/ WLhMXuLQuHtYysky4uhWt3DjOYl8Jvfnzkdfr0YnGnXHOKDDTG7hOGorRTGFZEUbcN2ZBGRmxSuBDh 8nDJPI7oCXHmAtX8vYDHMcdVIpFLYsWqelEe9ApfMHf8lz5X08jWxgjhHgiWrdvu7srI/umryLP7nN feIdWXhuYA1ZOhI3/uHA5v1VMZKLDk7PLlmue0JZkjG+LpqVtcOSOnXyFKD4G1RVene8shjIT1QTeJ fCYMBYPtZ7or+/Ea1yJ8g8s8L1ygbB
+X-Developer-Signature: v=1; a=openpgp-sha256; l=901; h=from:subject; bh=7ylfGXXJ8kffqS5H5ss3UKZCeSeFg8BoMiJBHNfE90c=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhRIVSFfNKGnLFWLyli3f4LmQge9pq7YMt+YL9ck0m EvunI0qJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYUSFUgAKCRAk1otyXVSH0FWUB/ 92GYL7NxN+w9+JXU5U8s7CvvXrZYC9XFIK/ljJBt0MG7SiRwBSSZ9eHsHdw9mO+/gYvP5VKVbCP97O 0JLoR7m3Xubp9rLz0i6u5ygb+nPxW6DkUYqV9Y605qoJoAtUlnZNO1BoaPtdXWzfYER7HEqqQVmEVY 8MR970WrdlwDJTOghzv/jMEqpPjg3DSXXUmkgAjgah118enrKeJIM3fpch4u96a2fgfEkUqTalN5x0 trMlahPBm+yox2tLx7TiDPjoy+p/4efDSdid/Z7snyM5CIt4REde/lbLp6Ku9n5mAFpdsRmjFw3cFt cScK5QveYHIeV9AHe29bRQP+4F0EIJ
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series fixes up a few issues introduced into vec-syscfg during
-refactoring in the review process, then adds a new test which ensures
-that the behaviour when we attempt to set a vector length which is not
-supported by the current system matches what is documented in the SVE
-ABI documentation.
+The format for this error message calls for the plain text version of the
+error but we weren't supply it.
 
-v2:
- - Fix handling of missing VLs when checking that vector length setting
-   works as expected.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/vec-syscfg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Mark Brown (4):
-  selftests: arm64: Fix printf() format mismatch in vec-syscfg
-  selftests: arm64: Remove bogus error check on writing to files
-  selftests: arm64: Fix and enable test for setting current VL in
-    vec-syscfg
-  selftests: arm64: Verify that all possible vector lengths are handled
-
- tools/testing/selftests/arm64/fp/vec-syscfg.c | 89 ++++++++++++++++---
- 1 file changed, 76 insertions(+), 13 deletions(-)
-
-
-base-commit: 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f
+diff --git a/tools/testing/selftests/arm64/fp/vec-syscfg.c b/tools/testing/selftests/arm64/fp/vec-syscfg.c
+index c02071dcb563..b2de002ee325 100644
+--- a/tools/testing/selftests/arm64/fp/vec-syscfg.c
++++ b/tools/testing/selftests/arm64/fp/vec-syscfg.c
+@@ -109,7 +109,7 @@ static int get_child_rdvl(struct vec_data *data)
+ 
+ 		/* exec() a new binary which puts the VL on stdout */
+ 		ret = execl(data->rdvl_binary, data->rdvl_binary, NULL);
+-		fprintf(stderr, "execl(%s) failed: %d\n",
++		fprintf(stderr, "execl(%s) failed: %d (%s)\n",
+ 			data->rdvl_binary, errno, strerror(errno));
+ 
+ 		exit(EXIT_FAILURE);
 -- 
 2.20.1
 
