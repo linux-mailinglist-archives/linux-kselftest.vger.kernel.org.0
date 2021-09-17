@@ -2,97 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD0840FF88
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 20:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFAE240FFD1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 21:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240417AbhIQSmQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Sep 2021 14:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
+        id S243227AbhIQT1j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 15:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240462AbhIQSmP (ORCPT
+        with ESMTP id S243116AbhIQT1j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 14:42:15 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F025C061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 11:40:53 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bq5so36823577lfb.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 11:40:53 -0700 (PDT)
+        Fri, 17 Sep 2021 15:27:39 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D815AC061757
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 12:26:16 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id m4so11403773ilj.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 12:26:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Cpak71tpwGIH8sDgLDrdJbMzVDQHoqt6rJZasCMwdzc=;
-        b=PPZqYKySWRBXLCmQqLignaVRzeemkJWbOSVm4Nk3LB3/dwYqxZT99gFitFC859Cqmo
-         5dHLqIWjBbL09xTf3eNTCSAzEfwW62QnHoObFrYVOWn0PPzzY6lksRvKhahbrO9bPfvT
-         /jfwN2l8iu/pKIRl254LqCHUDuwZMUECiAh00=
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LfjPbohhavkhWKwUH/1kohR8OTnMGA2qFf1xFiq2UHI=;
+        b=Lo+woY7Spj8UgYNNeMHQdnMWU2klrZ/GBMQ5e6FdAoGYqsYn5+G5X8wBnUoZFSsJEe
+         poHOvO/0mVPmln7opKC0a5Wib3EmkEzGmvUPq+Rb/RqI9chpE4ieOOAxd5r73EHJ/OMl
+         PQntOfNV9bLZZyW2qHGIH98GfWG8TXul36wUI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cpak71tpwGIH8sDgLDrdJbMzVDQHoqt6rJZasCMwdzc=;
-        b=ufsZHJayJXjZiPiSTZUvn/tCzvfFagfY9L2P5iw3MaE+xOSNvZX/K6opU8cJUDzJaq
-         qxKvzc+bTo6sZRyOvwoYyni87B1aUjyemp4n90TmPMtNusCLw+Tj2bxcpcqHfKDxwg2Y
-         NQDvkIh2FrNAxYR6jlBRqbwJlj/XaVuXk81GEaVcAvAW/Moq5K04nLcjWXIcSyQbdwSV
-         oj8VNcHBUKD2IyQ4Instz7gnsyAoR5TcsVMUGBAH9K2VjnsyFK4AVMZKcrtaTvJ7G+jZ
-         xPBX9ml/l2nnoHV/DBL1huyYqEJlKVH6TGinh1QLBJwCIj6Hm2tyF8+17m4aTM/Xx2bZ
-         6uNA==
-X-Gm-Message-State: AOAM532bnRZmYE9tGBbgZySa17NAWoI/g2Vas8lhMPO7hrAHNEJGN5VP
-        vrRiJ2sopdhq7U7w98SagrtjWIbmoU5RaG8jcGM=
-X-Google-Smtp-Source: ABdhPJwzdpMY+83Oo4lsmiZ8JuMmUyX1rmJU3nHcPlka8Z8LwlqOEGCdiLi2SsBnWsrbqQpb/i+0zQ==
-X-Received: by 2002:a05:6512:3587:: with SMTP id m7mr2835756lfr.157.1631904051180;
-        Fri, 17 Sep 2021 11:40:51 -0700 (PDT)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id k16sm582972lfj.231.2021.09.17.11.40.49
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Sep 2021 11:40:49 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id i25so37120385lfg.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 11:40:49 -0700 (PDT)
-X-Received: by 2002:a19:ae15:: with SMTP id f21mr9099719lfc.402.1631904049054;
- Fri, 17 Sep 2021 11:40:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LfjPbohhavkhWKwUH/1kohR8OTnMGA2qFf1xFiq2UHI=;
+        b=uyzwtP+v2P/UMy7wxggim7a9YcKao+ZEd0XLXfIUwP/ToQIpVpSXLOKkniliRqOqKl
+         9X3YnN98JOktAitKFYWBfTKtMbckU2GR/t1ZOppchDtjWCzYsW/j8569gbhMtkxDAIdL
+         7z3zdCN8/FDbiRBh2f1FJHMOE/JTz28eZmMYZBBsIqBBXLQKwJxp7wKMHwDNKs2DGim5
+         s+b8bSl8vCUJAp/LubKhoCSlrmirlrHXi29XDD7gAinhKryBwOc9joHt1B3jMhT0LFVL
+         Q0od/eGB/7IjuvjpvxHw1ZJ+VECbuV7TNnjiry8mFogaPr8X41T/98lym3vTiXdlykXa
+         4Lzw==
+X-Gm-Message-State: AOAM5320ndZi80v9BaXwEa2DdWBuQEbm7kL+YODBiFJWE5NAvOpgYjrr
+        ivgtNz5zrWg6+oE/jR/rwSNDHBVPHKqisg==
+X-Google-Smtp-Source: ABdhPJyM9NIWQgoA1uI3YhwlV9QCsoV76t9AMOguXV/oSCSoFT/5S3blhepGLBj6aij3GGKOp05Z5A==
+X-Received: by 2002:a92:c145:: with SMTP id b5mr8896077ilh.203.1631906776241;
+        Fri, 17 Sep 2021 12:26:16 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id 9sm4049208ily.9.2021.09.17.12.26.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Sep 2021 12:26:15 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: net: af_unix: Fix incorrect args in test result msg
+Date:   Fri, 17 Sep 2021 13:26:14 -0600
+Message-Id: <20210917192614.24862-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210917061104.2680133-1-brendanhiggins@google.com>
- <20210917061104.2680133-6-brendanhiggins@google.com> <202109170856.8DDB49112D@keescook>
-In-Reply-To: <202109170856.8DDB49112D@keescook>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Sep 2021 11:40:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whck4RtO7yp-jKK8QQc0bCDZBkdHc=3pGiFsFjwnQ+-mw@mail.gmail.com>
-Message-ID: <CAHk-=whck4RtO7yp-jKK8QQc0bCDZBkdHc=3pGiFsFjwnQ+-mw@mail.gmail.com>
-Subject: Re: [PATCH v1 5/6] mmc: sdhci-of-aspeed: build kunit tests without
- structleak plugin
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rafael Wysocki <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>, andreas.noever@gmail.com,
-        michael.jamet@intel.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        YehezkelShB@gmail.com, Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 17, 2021 at 8:57 AM Kees Cook <keescook@chromium.org> wrote:
->
-> This isn't a stand-alone test object, so I'm less excited about
-> disabling STRUCTLEAK here.
+Fix the args to fprintf(). Splitting the message ends up passing
+incorrect arg for "sigurg %d" and an extra arg overall. The test
+result message ends up incorrect.
 
-Yeah, please don't do this for things that aren't pure tests. You're
-now disabling security measures (even if I hate the gcc plugins and
-hope they will go away).
+test_unix_oob.c: In function ‘main’:
+test_unix_oob.c:274:43: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘char *’ [-Wformat=]
+  274 |   fprintf(stderr, "Test 3 failed, sigurg %d len %d OOB %c ",
+      |                                          ~^
+      |                                           |
+      |                                           int
+      |                                          %s
+  275 |   "atmark %d\n", signal_recvd, len, oob, atmark);
+      |   ~~~~~~~~~~~~~
+      |   |
+      |   char *
+test_unix_oob.c:274:19: warning: too many arguments for format [-Wformat-extra-args]
+  274 |   fprintf(stderr, "Test 3 failed, sigurg %d len %d OOB %c ",
 
-             Linus
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/net/af_unix/test_unix_oob.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+index 0f3e3763f4f8..3dece8b29253 100644
+--- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
++++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+@@ -271,8 +271,9 @@ main(int argc, char **argv)
+ 	read_oob(pfd, &oob);
+ 
+ 	if (!signal_recvd || len != 127 || oob != '%' || atmark != 1) {
+-		fprintf(stderr, "Test 3 failed, sigurg %d len %d OOB %c ",
+-		"atmark %d\n", signal_recvd, len, oob, atmark);
++		fprintf(stderr,
++			"Test 3 failed, sigurg %d len %d OOB %c atmark %d\n",
++			signal_recvd, len, oob, atmark);
+ 		die(1);
+ 	}
+ 
+-- 
+2.30.2
+
