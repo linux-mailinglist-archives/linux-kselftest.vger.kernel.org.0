@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F0840F325
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 09:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959B640F364
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 09:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239424AbhIQHXu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Sep 2021 03:23:50 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:44499 "EHLO
+        id S241364AbhIQHjv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 03:39:51 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:39869 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233839AbhIQHXt (ORCPT
+        with ESMTP id S241219AbhIQHjt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 03:23:49 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MVvCn-1mHThU09DR-00RmsA; Fri, 17 Sep 2021 09:22:25 +0200
-Received: by mail-wr1-f48.google.com with SMTP id t8so13544371wrq.4;
-        Fri, 17 Sep 2021 00:22:24 -0700 (PDT)
-X-Gm-Message-State: AOAM533d2e3gdScN5QoJuVuHz2DYRF7zteoDv/ZILhs3R+Zs+um5rIPy
-        lA4Ip7+pWUtM25EzEtXnDMFfg6L652xbw9nxtxM=
-X-Google-Smtp-Source: ABdhPJzJsrzhqboheOkJF5DSOKul11PbpO1/TRN4PuVM4wUc/lsEjGqfYS2kGw1Iq3DVe/OqQTjG5Qdil3wWKPMut74=
-X-Received: by 2002:adf:f884:: with SMTP id u4mr9953811wrp.411.1631863344560;
- Fri, 17 Sep 2021 00:22:24 -0700 (PDT)
+        Fri, 17 Sep 2021 03:39:49 -0400
+Received: from mail-wm1-f44.google.com ([209.85.128.44]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N4i7l-1mrMEX1B39-011fzs; Fri, 17 Sep 2021 09:38:26 +0200
+Received: by mail-wm1-f44.google.com with SMTP id j134-20020a1c238c000000b0030b32367649so2847100wmj.3;
+        Fri, 17 Sep 2021 00:38:25 -0700 (PDT)
+X-Gm-Message-State: AOAM5329Gb+ssnvXdH6heWdrpkJrTgtyGZf9WsbMqUt834XsUrgm+rxv
+        hDbfhWuOcLY6tPc4svV17GmuQ/VYhu59DCu8OH0=
+X-Google-Smtp-Source: ABdhPJzqEZb8uxQdpRwHZH0EmrNx3v2i+fVgS6Kr5ZrLrEswJ1yeHIrJXd93ArwHsVs0YujyejdmCw8mrsywRiSe6lo=
+X-Received: by 2002:a1c:7413:: with SMTP id p19mr8990196wmc.98.1631864305564;
+ Fri, 17 Sep 2021 00:38:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210917061104.2680133-1-brendanhiggins@google.com> <20210917061104.2680133-7-brendanhiggins@google.com>
-In-Reply-To: <20210917061104.2680133-7-brendanhiggins@google.com>
+References: <20210917061104.2680133-1-brendanhiggins@google.com>
+In-Reply-To: <20210917061104.2680133-1-brendanhiggins@google.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Sep 2021 09:22:08 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a21j9yJe_X=kU6v2YgOnrhunRbPv+O6STSH71qTb7xnfg@mail.gmail.com>
-Message-ID: <CAK8P3a21j9yJe_X=kU6v2YgOnrhunRbPv+O6STSH71qTb7xnfg@mail.gmail.com>
-Subject: Re: [PATCH v1 6/6] bitfield: build kunit tests without structleak plugin
+Date:   Fri, 17 Sep 2021 09:38:09 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a257cAgtPhT1Li2GnZ-UZW3LVZa3fWX1YUnWGEENvpqJA@mail.gmail.com>
+Message-ID: <CAK8P3a257cAgtPhT1Li2GnZ-UZW3LVZa3fWX1YUnWGEENvpqJA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/6] kunit: build kunit tests without structleak plugin
 To:     Brendan Higgins <brendanhiggins@google.com>
 Cc:     Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -54,63 +54,69 @@ Cc:     Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>,
         linux-hardening@vger.kernel.org,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xGdJUU7Jbd4lvFcJi7VZTkYeXXOYuREu0Ya+f5SVA3D4fcQVzv5
- sgRAiCMKKh3ytUEGmD6Dxf7aETOZ0X/pGgsz2AUIrp9kUt5lqMHR7GHL+Y2l01nZH4mzLRC
- joVrXC9Ab/Y6xXXfTFeXn/bBIdvEQu3XMlqzqp9iyVUBeQ5WSddVw9o3hbB6el/wOUfnBy/
- WeuyQDCELhT3LewzUbwBg==
+X-Provags-ID: V03:K1:8igt7gSCPa6W3i8e60BRlnHtEl3QLqROvP2iyXqGUxh9JjbZsya
+ YOaky9kf1Z103GywzFAUeR7J7/q3zN3dwsOIil6WaIJcddqZDBmpVy5lEde5P/6vdR9Ecax
+ RAflHp7t6feK1wbEO3TbUmIB2JF1DXQzxa7nCxtD5gvuXtwzF3XCXyRaqFQJTMbL8BFi83B
+ c+On9PdB6Mw3L6t3AL4Gw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aaLODG2UnWY=:8UNFcgwItep3KN1dO16puC
- XIEYICuRxqJbEU5ER23X5Z6PR9LZVEIze8kIOAfxatbqRqyM2PPSFtCH9Igaph7MWx8xiEsW5
- InUmTmeETPnUyvoTrIsYwyBBu4M7nHkfkN1VmhFCdizrpkGDyyddhpFuJcaPIPcsqDuIhTzi5
- 0MAl8jixoNfMFCUpMQP4/RDpXbnHeKSf/tpJ7PMyp2vltwcMoeINfgF+3YNskF1bOCJK9qQB3
- fKAnBvxBFhgTn6V9N5ByDxdiUDkdHK5h/XgpNDXbseTxaMpH9uWKvGCPx39I24X38EnfOme3c
- TwpDCPSGWP5vRzaX3Q5iWlzNpHB0N5+wpfNWbwVTDG8oelEiWrmVXR94m9BlmDdlT50/FhJoB
- ct0CHugb5GiJtqETF9YSXoKCsm3u4SQbXjmO2o+tiBX/l9OFP5t6MwmSWIdt3elXcpvnJqQLa
- KLCvwLz7ra1d4eYfxTCxTBHdd+4+rOVi65uqRQx5fiUR/thIRAGduFtgg+rfxbpnJ43v3dWg3
- PpCCK+ZVtqT+HCFDouRYyvIaO/6Wqiv95HHcFrzDsCReGfWd6HWHMB40R9RInPuTAGKQZQvTf
- OIhHpTorZ4zAJNqhgZXMNx61Ws000Db8FJ37sTpRs3Ru/YmZSw+fU6jJmJvk+Vtt7GU4eucxn
- 97CYR/u/EZOxUG50tu5ZPNz9bLt49JaQLdNMPQZS1K+QeH46LIvn0tgJsgidWXCeBSh7oRImO
- LLleyzgY0c+YJMwy7qbf+oooD/oC0JLRq7emc0aqeUx6z43yeRCtQ0Xqu11DkdaI2wWQVr1id
- +rSEvWF1itpoJYTMGv7VXeExWLmTIEf4reCMz5X9IQfMreMgoXpCFbTyCzJtNkP1pmFB6myNi
- YSjsuQmyeXtyBgUgFYSw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MTx620soU1A=:zwxZqn0uhqEr29Vzm2xKd7
+ HbGFGLmUB8Fyd97OaZAEvOLFES+LAkYe2uRiZ8JKz+VOoJcL9sjY07kk6u9Qw2GhZRLfR8khr
+ OkhmDgxaiUrNA1eOkAQQtyS7wwjP3dxpN72SiXOxalJHdhn6Xp9QaUqes6OVgK6W8eslCwk1+
+ 0ws7QftXW71rdRgA6lE4yjfOMd8UXGoxfihA/HA8ZJMizMXUP7gxdXTCWUoMPyW+cWQe0viaY
+ VAONw7BiGUGOg/Lab+ejI/XT2ot+JZ81tk51S1Np1H0meXOZza+nYm4MZQVpLMc0tUQ+rNaa4
+ JogkHWN+ga4za1pm1qgYdaKTq32+MHCYukDc4M3IIRcvrveaF7l5fPEocmLHjp+D4PYVsuY/N
+ +4WqCgE54w8cvQhlyPSoDtYmCu1vbROd1jNQXrv1v55bqaPuSPKZAmTX+a3Z5TTP2p39Aas5f
+ JPUkM5fjJcawL395lRUylcbgXwY+BDc3wh1Dh0bf/FwFyf6SdIvFCbN6WHnjMvHPxA6zWc3sb
+ o7OxFo0zrC7oQoTdTzGp5oWGokdXNF6PSlwq8mjn0WKvMzKAn1Y7SNm7gQeZCDjpwVMLhhKec
+ xMyKhKqdHw30dmrEC5nSQMzVTkZgL/63jkDKGcopG6+NwcojOdjMJITp7p8oXSq4eC7ofJ7wj
+ m43vCNnd1kJ+x4S7gU6ryr7iOJFwvIahFxpiBF4dURwIWFRBayL7+ObAWBwRbYLYgYk/lyvfT
+ pYv2NaddWqsqr3gys9VpWZRk4RFQmimu4wrEsEFbDV4+MVNLdhyUkDBs2kfKiAeHFt5hpxEe9
+ FX36ZULmCuk9K+BQhU5AUSNJSBIJUoLSFMr9js5G6SdiJEWFwvPcykykqdXINyTLTUPfhznCV
+ 2MP77ZLr7QbEOjoSHwFQ==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 17, 2021 at 8:11 AM Brendan Higgins
+On Fri, Sep 17, 2021 at 8:10 AM Brendan Higgins
 <brendanhiggins@google.com> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> The structleak plugin causes the stack frame size to grow immensely when
+> used with KUnit; this is caused because KUnit allocates lots of
+> moderately sized structs on the stack as part of its assertion macro
+> implementation. For most tests with small to moderately sized tests
+> cases there are never enough KUnit assertions to be an issue at all;
+> even when a single test cases has many KUnit assertions, the compiler
+> should never put all these struct allocations on the stack at the same
+> time since the scope of the structs is so limited; however, the
+> structleak plugin does not seem to respect the compiler doing the right
+> thing and will still warn of excessive stack size in some cases.
 >
-> The structleak plugin causes the stack frame size to grow immensely:
+> These patches are not a permanent solution since new tests can be added
+> with huge test cases, but this serves as a stop gap to stop structleak
+> from being used on KUnit tests which will currently result in excessive
+> stack size.
 >
-> lib/bitfield_kunit.c: In function 'test_bitfields_constants':
-> lib/bitfield_kunit.c:93:1: error: the frame size of 7440 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+> Of the following patches, I think the thunderbolt patch may be
+> unnecessary since Linus already fixed that test. Additionally, I was not
+> able to reproduce the error on the sdhci-of-aspeed test. Nevertheless, I
+> included these tests cases for completeness. Please see my discussion
+> with Arnd for more context[1].
 >
-> Turn it off in this file.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> ---
->  lib/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 5efd1b435a37c..c93c4b59af969 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -351,7 +351,7 @@ obj-$(CONFIG_OBJAGG) += objagg.o
->  obj-$(CONFIG_PLDMFW) += pldmfw/
->
->  # KUnit tests
-> -CFLAGS_bitfield_kunit.o := $(call cc-option,-Wframe-larger-than=10240)
-> +CFLAGS_bitfield_kunit.o := $(call cc-option,-Wframe-larger-than=10240) $(DISABLE_STRUCTLEAK_PLUGIN)
+> NOTE: Arnd did the legwork for most of these patches, but did not
+> actually share code for some of them, so I left his Signed-off-by off of
+> those patches as I don't want to misrepresent him. Arnd, please sign off
+> on those patches at your soonest convenience.
 
-I think the  $(call cc-option,-Wframe-larger-than=10240) needs to be dropped
-here. This was not in my original patch and it is definitely broken on
-all architectures
-with 8KB stack size or less if the function needs that much. What is the amount
-of actual stack usage you observe without this? If we still get a warning, then
-I think this needs to be fixed in the code.
+Thanks a lot for picking up this work where I dropped the ball.
 
-       Arnd
+Patches 1-5 look good to me, and I replied on one remaining issue I see
+with patch 6. I think you did more work on these that I did, by doing
+a nice write-up and splitting them into separate patches with useful
+changelogs, you should keep authorship, and just change my
+S-o-b to Suggested-by.
+
+If you prefer to keep me as the author, then the correct way would
+be to commit them with --author= to ensure that the author and
+first s-o-b match.
+
+        Arnd
