@@ -2,110 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EE340FE8C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 19:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD0840FF88
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 20:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343867AbhIQRVK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Sep 2021 13:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
+        id S240417AbhIQSmQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 14:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245754AbhIQRVF (ORCPT
+        with ESMTP id S240462AbhIQSmP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 13:21:05 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752C4C061574;
-        Fri, 17 Sep 2021 10:19:42 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id b64so19736870qkg.0;
-        Fri, 17 Sep 2021 10:19:42 -0700 (PDT)
+        Fri, 17 Sep 2021 14:42:15 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F025C061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 11:40:53 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bq5so36823577lfb.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 11:40:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yEuHcEoTPhrJMHC9qczQ1zTZGx1PP9TVKF6T/LQNqgw=;
-        b=h9BmRkFvq8Tw0BUoP2OqOak1QZa7azLRc/ZLIxCowUtFeLIEXmIVbzK4RRJxRbpxKA
-         t+0pwpMosoG3+n2hRJyfbv7/6iZH3E61i4amg4LM2lEv3hUE9IIzlsNShfGsEmIyIbgg
-         NvnjL3RhdkCjM3Pthh2delGuxp0e1/eqydc6utgUUgN1ZfaGZ4YTrTXp+OGSDWA3NcAh
-         45mgKI8M+PhLmlmGM3IEVjBOcFojBVm1JuGENbBi7/TA9jJeyworq7sUXhdON25H+dBo
-         otHXhSkalw87nBtswnTMMSCzOXQ7kGEk8MYVwsqTCBx3lcVzjx03Cc8Tx4b6YAUtXRdt
-         YQEw==
+        bh=Cpak71tpwGIH8sDgLDrdJbMzVDQHoqt6rJZasCMwdzc=;
+        b=PPZqYKySWRBXLCmQqLignaVRzeemkJWbOSVm4Nk3LB3/dwYqxZT99gFitFC859Cqmo
+         5dHLqIWjBbL09xTf3eNTCSAzEfwW62QnHoObFrYVOWn0PPzzY6lksRvKhahbrO9bPfvT
+         /jfwN2l8iu/pKIRl254LqCHUDuwZMUECiAh00=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yEuHcEoTPhrJMHC9qczQ1zTZGx1PP9TVKF6T/LQNqgw=;
-        b=DTxTSYD5h/xDCopC2hAUUaLS3zCR7hRcxlRoSAG435Tq0wJkgrnkWetbwWlBDjzN3F
-         le3p7j179yqbm64twMpX49gaDKCeUwJW/ZjpeKcQlZg06nJ594JzErwds21w4MuOfNSz
-         M5DGw1dCinlgZSI/2ojBMgtFDgCX93KfdVe4j+wqvXbRtWSnZ6qyUwSs2DYX0Tm0RqfH
-         dlQDt6E3do+bdynA07IN/dSUHsBE6G0U9vKIp7UnAGgsCVztyA+yZ5iFk7OhoE9xk458
-         dVn/ar9f9TMdkqW/QQmdX1k5bVgE/SzUSB+sGmRIPf8MQgHFblQ1F2dLg5qsA6iQy8iZ
-         UclQ==
-X-Gm-Message-State: AOAM530P1NSGSY5/++QcudUgKIsJkyi/V88oTr5ngW7u2f2MiMvn2yuF
-        2oel+XRp0BZvbX1LgKVa6FA26BuWLgEPFlmEqzw=
-X-Google-Smtp-Source: ABdhPJy/4sOJNTJQKBKNPQeCpUOewSj7Hlyg3iQvB3Cl4VJP4x9wnMhvfdo2aCTvmGJS+auCzr98i5IDVv51vxXWC5U=
-X-Received: by 2002:a5b:408:: with SMTP id m8mr14966427ybp.2.1631899181660;
- Fri, 17 Sep 2021 10:19:41 -0700 (PDT)
+        bh=Cpak71tpwGIH8sDgLDrdJbMzVDQHoqt6rJZasCMwdzc=;
+        b=ufsZHJayJXjZiPiSTZUvn/tCzvfFagfY9L2P5iw3MaE+xOSNvZX/K6opU8cJUDzJaq
+         qxKvzc+bTo6sZRyOvwoYyni87B1aUjyemp4n90TmPMtNusCLw+Tj2bxcpcqHfKDxwg2Y
+         NQDvkIh2FrNAxYR6jlBRqbwJlj/XaVuXk81GEaVcAvAW/Moq5K04nLcjWXIcSyQbdwSV
+         oj8VNcHBUKD2IyQ4Instz7gnsyAoR5TcsVMUGBAH9K2VjnsyFK4AVMZKcrtaTvJ7G+jZ
+         xPBX9ml/l2nnoHV/DBL1huyYqEJlKVH6TGinh1QLBJwCIj6Hm2tyF8+17m4aTM/Xx2bZ
+         6uNA==
+X-Gm-Message-State: AOAM532bnRZmYE9tGBbgZySa17NAWoI/g2Vas8lhMPO7hrAHNEJGN5VP
+        vrRiJ2sopdhq7U7w98SagrtjWIbmoU5RaG8jcGM=
+X-Google-Smtp-Source: ABdhPJwzdpMY+83Oo4lsmiZ8JuMmUyX1rmJU3nHcPlka8Z8LwlqOEGCdiLi2SsBnWsrbqQpb/i+0zQ==
+X-Received: by 2002:a05:6512:3587:: with SMTP id m7mr2835756lfr.157.1631904051180;
+        Fri, 17 Sep 2021 11:40:51 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id k16sm582972lfj.231.2021.09.17.11.40.49
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Sep 2021 11:40:49 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id i25so37120385lfg.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 11:40:49 -0700 (PDT)
+X-Received: by 2002:a19:ae15:: with SMTP id f21mr9099719lfc.402.1631904049054;
+ Fri, 17 Sep 2021 11:40:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1631785820.git.mchehab+huawei@kernel.org> <9e9f62ab09c26736338545f9aa27c0e825517a32.1631785820.git.mchehab+huawei@kernel.org>
-In-Reply-To: <9e9f62ab09c26736338545f9aa27c0e825517a32.1631785820.git.mchehab+huawei@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 17 Sep 2021 10:19:30 -0700
-Message-ID: <CAEf4BzZhr+3JzuPvyTozQSts7QixnyY1N8CD+-ZuteHodCpmRA@mail.gmail.com>
-Subject: Re: [PATCH v2 10/23] bpftool: update bpftool-cgroup.rst reference
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
+References: <20210917061104.2680133-1-brendanhiggins@google.com>
+ <20210917061104.2680133-6-brendanhiggins@google.com> <202109170856.8DDB49112D@keescook>
+In-Reply-To: <202109170856.8DDB49112D@keescook>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Sep 2021 11:40:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whck4RtO7yp-jKK8QQc0bCDZBkdHc=3pGiFsFjwnQ+-mw@mail.gmail.com>
+Message-ID: <CAHk-=whck4RtO7yp-jKK8QQc0bCDZBkdHc=3pGiFsFjwnQ+-mw@mail.gmail.com>
+Subject: Re: [PATCH v1 5/6] mmc: sdhci-of-aspeed: build kunit tests without
+ structleak plugin
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rafael Wysocki <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>, andreas.noever@gmail.com,
+        michael.jamet@intel.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        YehezkelShB@gmail.com, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 16, 2021 at 2:55 AM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
+On Fri, Sep 17, 2021 at 8:57 AM Kees Cook <keescook@chromium.org> wrote:
 >
-> The file name: Documentation/bpftool-cgroup.rst
-> should be, instead: tools/bpf/bpftool/Documentation/bpftool-cgroup.rst.
->
-> Update its cross-reference accordingly.
->
-> Fixes: a2b5944fb4e0 ("selftests/bpf: Check consistency between bpftool source, doc, completion")
-> Fixes: 5ccda64d38cc ("bpftool: implement cgroup bpf operations")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  tools/testing/selftests/bpf/test_bpftool_synctypes.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-> index 2d7eb683bd5a..c974abd4db13 100755
-> --- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-> +++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-> @@ -392,7 +392,7 @@ class ManCgroupExtractor(ManPageExtractor):
->      """
->      An extractor for bpftool-cgroup.rst.
->      """
-> -    filename = os.path.join(BPFTOOL_DIR, 'Documentation/bpftool-cgroup.rst')
-> +    filename = os.path.join(BPFTOOL_DIR, 'tools/bpf/bpftool/Documentation/bpftool-cgroup.rst')
+> This isn't a stand-alone test object, so I'm less excited about
+> disabling STRUCTLEAK here.
 
-Same, this is wrong, please double-check all bpftool path adjustments,
-in case you didn't CC me on all of the related patches. Thanks!
+Yeah, please don't do this for things that aren't pure tests. You're
+now disabling security measures (even if I hate the gcc plugins and
+hope they will go away).
 
->
->      def get_attach_types(self):
->          return self.get_rst_list('ATTACH_TYPE')
-> --
-> 2.31.1
->
+             Linus
