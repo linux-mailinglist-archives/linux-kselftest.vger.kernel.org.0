@@ -2,92 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A334100EE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 23:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5102410177
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Sep 2021 00:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242762AbhIQVzZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Sep 2021 17:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S236562AbhIQWrN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 18:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242370AbhIQVzV (ORCPT
+        with ESMTP id S232201AbhIQWrM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 17:55:21 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617BCC061764
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 14:53:59 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id i13so11780775ilm.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 14:53:59 -0700 (PDT)
+        Fri, 17 Sep 2021 18:47:12 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E57C061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 15:45:50 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id i13so11892642ilm.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 15:45:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fWR0esOBVBV64rKinxIgFxJ4wKagR9YhECkqxWxa0Tw=;
-        b=grs8gzHe5cek7z8ddLzkbZFT7aCOxQJODThfS5zh/JoI7HS4l1kwTTu7rDiPM2U1HS
-         50yJla7O7avcIoYd7ryDuwWFWQotD8dMUhzDqWtwm0za2axPDLgCp3WOYQ7XsTUahFBA
-         PmCw/f4CquFNZn9tPYHg/W1yqtFj2NG6e7mNM=
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=s8oIHj/9NV18y7Efw1SPbOXztrTlc/2JIRRHKj00s8o=;
+        b=GEV1lp1FWsl9aCGq/lYX6WjdxzlGJNJNJk+XXeP6TBFDv+1s1hMpLwhVbIHBX0gHW1
+         KFfu6nrtKr92XGR18HJu6nD5t1fy0ZSB8+ofV5t9GKDpCVxoAP2JLLNLkO2DWtFcyY20
+         PwbGDYD+DVnKDRV4qIez7x9rKcI7s8GLMThQs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fWR0esOBVBV64rKinxIgFxJ4wKagR9YhECkqxWxa0Tw=;
-        b=w4SomFOxUO6UUxPULlMrvsh4DFUOQM9ni+0CKjNaCRzZakPBa1vqRyd51DrlcJj2k4
-         rRJrDPSXjNwnBscVTChRf9bCeeUwP/74aCLCigRYQIYAeDZKEn2IKFBlvtFPJS0ZZ2bj
-         jbQ47skG9nZraSmTFV7Cv78CG/zO3/1+hNQCmefJVN4Uhul5G50O49rOttv6Ut9wVmFz
-         8+4gup3q44GENPcOja7FAOOUSM8JqmZXzh2RDx+Hd6It50PcRV+yTdwTkAJv8b8kedQe
-         EgERq3lmdJyblPZzptuHDUoD/yU/BMb8VrF4cKZlf5YkjVHf4gD2GD7qsiRC3VMTRBJK
-         EHJg==
-X-Gm-Message-State: AOAM531o9yRe2bOTULOYS7Ucs2mhDTabSOIGIvY8QY8PrdVERD/79ezg
-        iaX/qXfVrYFCT4jAKeg5Zsb4Lw==
-X-Google-Smtp-Source: ABdhPJy2rJ1ey28tHL7q/gFDZW67ncHgR3kfTnhfa8+NV1dCDCgJWrmoAMq2uukUi+T5BT3LGK0oQg==
-X-Received: by 2002:a92:cd09:: with SMTP id z9mr9916764iln.50.1631915638652;
-        Fri, 17 Sep 2021 14:53:58 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id b3sm4390167ile.37.2021.09.17.14.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 14:53:58 -0700 (PDT)
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=s8oIHj/9NV18y7Efw1SPbOXztrTlc/2JIRRHKj00s8o=;
+        b=AZ9BKCJ4EBuz5joyqhdT42e9Ll5sqBOOGDhj3OfQyiqihK3jkRzWK/dlwe9XZ2vzEP
+         uIemKjXtlqq3JMwfd3tH5aKU8aJ41q5OQEa9+tbGJY1c/jCLM6YSDLwz4lQ5VFwwSvS6
+         X0SPvggeSod2p7ayRzAyodj643t3w10kWIIGsR8Twd0UJhlnSwSBiFz+pt+M3fQ/XA3Y
+         c6D2K4S5ZgyaHSOKqnapL1VWrIX3ivwNwfidm2cdF/7lqn7otH2ffr3B9eaNZ/VXXsEi
+         5GGKvA7M2bu6enUzbC+X3pMR3nHGVfoCi6zuJxPQ3x7np1OxlvOTGbS6jddJdgdVkTd9
+         9onQ==
+X-Gm-Message-State: AOAM533G0V2WfcueBtrPSapX/llq1A5Hxa1XibrJcI0RxHQih8FxppjO
+        8pSdOv17YJv4csckKhg6+iZ/LPJhYZp/mw==
+X-Google-Smtp-Source: ABdhPJylHR3n8gVPmxcCHcbnvnfV/4UGWy0eJTkCtam3aFRjDRpd5MsCL0miGgcspW8EJqzJSJFxNw==
+X-Received: by 2002:a92:cb43:: with SMTP id f3mr10037558ilq.261.1631918749788;
+        Fri, 17 Sep 2021 15:45:49 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id s12sm4474952ilo.70.2021.09.17.15.45.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Sep 2021 15:45:49 -0700 (PDT)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: net: af_unix: Fix makefile to use TEST_GEN_PROGS
-Date:   Fri, 17 Sep 2021 15:53:56 -0600
-Message-Id: <20210917215356.33791-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.30.2
+Subject: selftests/vm madv_populate.c test
+Message-ID: <b703a326-66f7-bf35-58ee-f60e504ea5ef@linuxfoundation.org>
+Date:   Fri, 17 Sep 2021 16:45:48 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Makefile uses TEST_PROGS instead of TEST_GEN_PROGS to define
-executables. TEST_PROGS is for shell scripts that need to be
-installed and run by the common lib.mk framework. The common
-framework doesn't touch TEST_PROGS when it does build and clean.
+Hi David,
 
-As a result "make kselftest-clean" and "make clean" fail to remove
-executables. Run and install work because the common framework runs
-and installs TEST_PROGS. Build works because the Makefile defines
-"all" rule which is unnecessary if TEST_GEN_PROGS is used.
+I am running into the following warning when try to build this test:
 
-Use TEST_GEN_PROGS so the common framework can handle build/run/
-install/clean properly.
+madv_populate.c:334:2: warning: #warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition" [-Wcpp]
+   334 | #warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition"
+       |  ^~~~~~~
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/net/af_unix/Makefile | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing/selftests/net/af_unix/Makefile
-index cfc7f4f97fd1..df341648f818 100644
---- a/tools/testing/selftests/net/af_unix/Makefile
-+++ b/tools/testing/selftests/net/af_unix/Makefile
-@@ -1,5 +1,2 @@
--##TEST_GEN_FILES := test_unix_oob
--TEST_PROGS := test_unix_oob
-+TEST_GEN_PROGS := test_unix_oob
- include ../../lib.mk
--
--all: $(TEST_PROGS)
--- 
-2.30.2
+I see that the following handling is in place. However there is no
+other information to explain why the check is necessary.
 
+#if defined(MADV_POPULATE_READ) && defined(MADV_POPULATE_WRITE)
+
+#else /* defined(MADV_POPULATE_READ) && defined(MADV_POPULATE_WRITE) */
+
+#warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition"
+
+I do see these defined in:
+
+include/uapi/asm-generic/mman-common.h:#define MADV_POPULATE_READ       22
+include/uapi/asm-generic/mman-common.h:#define MADV_POPULATE_WRITE      23
+
+Is this the case of missing include from madv_populate.c?
+
+thanks,
+-- Shuah
