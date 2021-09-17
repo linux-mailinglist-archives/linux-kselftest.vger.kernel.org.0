@@ -2,178 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1886F40ED70
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 00:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE6540F1F3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 08:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241155AbhIPWka (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Sep 2021 18:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S245057AbhIQGMv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 02:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241141AbhIPWka (ORCPT
+        with ESMTP id S245015AbhIQGMu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 18:40:30 -0400
+        Fri, 17 Sep 2021 02:12:50 -0400
 Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187C4C061756
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 15:39:09 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id h18-20020a0cffd2000000b0037e78fb2552so35066044qvv.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 15:39:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6714DC0613CF
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:26 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id u6-20020ad449a6000000b003798010ad14so87303751qvx.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=EdHLsFLcwc3yqlVGHs+Fv4V3AJJwg9rmZTGpHSJ/dcQ=;
-        b=fKMDm4mfMdMQonLPVgx0CETjfgrQ2t/yvCNuS1UZSWK9cYO86A6JNCHa9B3+JhWLU9
-         Puhi17TKciloF/mCw+fnhIdCnYikypcy4zUToQEbVhQJUTOi3MndUy/rp3vOYCXS0Gjt
-         wqAQy/dVwvMneOWvFdfMF6U0+rvRRypQVTAMQEgcKKd3SdHm40VIqf0QcwfEZ6jUa+fl
-         zfckZVRHFzda2MhZ/gwVCPwmMw61wsQWDTfmlTJ+fmsRg7zgIzo6LvSu+KtXsbw4HW8h
-         Q266m3QV+H8Tqbjw0d8ibJUEalrRjcqH7K8tZMdu6BnFsixccFu9btCu/VwQ2y73Kfz9
-         8Osw==
+        bh=3zrUVwbKEfBYS+g/qOMTeXZGXa+cM1Fx/id4TGcTnuY=;
+        b=aqjshXeHh7KYq65oIgapr0BQjil3sP1rDi7xaSzByT7HUdNhTaI1Ys3Wxlz/Z7g3Am
+         +hOjpH810t+0u4G9mpxQRBffRfJ62rH1ddXs4ULDpEQR6Ts6jBfJ0gjcpO4kVp8wCOHQ
+         Vl8iN8hld/46cAlQUMTAiAhB/6+eDCE1dhcnqKSrsGDeqrAxl6t2FhBn8Bsl4kzSxqNL
+         NAWZ+7xfiGeYj9Qd6nT39cNlAK7qfcwkxHdx1U+CIiom21GYWoJX+2VtAip3VlCuFz1w
+         jGyqNia1LYugFTCoMyC2dyRJTvbrZO/b7LutqymMpftkHK3U8/75gDv5A0e2jD9U6hVB
+         ilXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=EdHLsFLcwc3yqlVGHs+Fv4V3AJJwg9rmZTGpHSJ/dcQ=;
-        b=Y+98GS8jN4nBvA/r13u3dMS9E/LQMQsSbqnI1sWWCLmEloUmEzFHhDXc4wpPCaoxUD
-         nIMIk7xoupRk1hpEZ+alA8CVKGpWNcnDdonRq2lomKv2+AOiv3GN750WiuUBg3X2HGmI
-         /DAEhKvtgNhDdY5Lm3aYzAvIvrPJfhtcLoRqz9mIy59fxxNnTaLe/J6cXoJYslzGsG2b
-         bsyCeI7F00EMfDJhzECMwNlFIgdIMqyvIHkM037nnUqR8IfMBvgqzolj/OEEsze688ks
-         TeSy6qgDb63zUwqXTJJoEgt2bblWuSz6I6nFHZuA0YQ/Y4UAXDlpeym8/LUEWV6PYkit
-         iNMg==
-X-Gm-Message-State: AOAM532tyX3suOj+f+ZxhfZWzvvNH/xDpjlmA7xhdvGj/S9s3U9F04j/
-        6ff4nQUVnaRZKDdCe7GYhIP3QyzBv5vZ8g==
-X-Google-Smtp-Source: ABdhPJwQUR5FF0JMgIrjHmd3U9D6zBGgXV0PSIguUKGVDxuXyMFE2eLv+YX8Cbxj2d+Wo2qtWTZ0jRXHhMNSHw==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:84a4:4669:156a:f5fb])
- (user=dlatypov job=sendgmr) by 2002:a25:bfc8:: with SMTP id
- q8mr9612510ybm.473.1631831948194; Thu, 16 Sep 2021 15:39:08 -0700 (PDT)
-Date:   Thu, 16 Sep 2021 15:39:03 -0700
-Message-Id: <20210916223903.1592541-1-dlatypov@google.com>
+        bh=3zrUVwbKEfBYS+g/qOMTeXZGXa+cM1Fx/id4TGcTnuY=;
+        b=Vu5P63MvEPqwVL0fRLOiMbxbzaJgMkJemX9IZWDOfhP0TMaFD8a/dSqVCxvL12xySx
+         tJmiVNLFz6k5vQMpEXrnAf3WenLxdu5uV6owrkqVb8Y4ojybLn+XLrbhncs7n1G1xqB4
+         sBCfCd/HsZz/0yrqXuQcYuqnT/4yHQRPyQOQc8giB3WxX7PLe0AP6Xj3g4bd5adZ3Vzy
+         nNdqrisEsuSj5P7csvJ2iECYjZUkZBtdS0FMFUiwG5Y48LhfGsuyBShPtW5Yhr9naNNP
+         oWdlRepzwcOImNbcVnnplwFgxiShZBpOk7P+tFwCcvWf6S+RjvBc1L8tV8dcqLEqTQZR
+         O1YA==
+X-Gm-Message-State: AOAM532NT8fdR/KecCZ0Jzju0oCakg/D1tQW9MnUowjBVGLB1g04wwQt
+        wXqr5w2XAPU1MxDdAlFJLsKq0yo4QuCy4i2RFf8r/g==
+X-Google-Smtp-Source: ABdhPJycuTlpICuFt0WKNwqUbICZRKz0xI20vVDuhSpUpfdHDy2C99ZMkURQuV1YTT5+M888e29TyWCs6BP2z006i3tORQ==
+X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:4845:43ba:3ff5:2de1])
+ (user=brendanhiggins job=sendgmr) by 2002:ad4:522c:: with SMTP id
+ r12mr9348777qvq.17.1631859085422; Thu, 16 Sep 2021 23:11:25 -0700 (PDT)
+Date:   Thu, 16 Sep 2021 23:10:58 -0700
+Message-Id: <20210917061104.2680133-1-brendanhiggins@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
-Subject: [PATCH] kunit: tool: make --raw_output only support showing kunit output
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
+Subject: [PATCH v1 0/6] kunit: build kunit tests without structleak plugin
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
+        keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
+        lars@metafoo.de, ulf.hansson@linaro.org, andreas.noever@gmail.com,
+        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+        YehezkelShB@gmail.com, masahiroy@kernel.org,
+        michal.lkml@markovi.net, ndesaulniers@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit 6a499c9c42d0 ("kunit: tool: make --raw_output support only
-showing kunit output") made --raw_output a string-typed argument.
-Passing --raw_output=kunit would make it only show KUnit-related output
-and not everything.
+The structleak plugin causes the stack frame size to grow immensely when
+used with KUnit; this is caused because KUnit allocates lots of
+moderately sized structs on the stack as part of its assertion macro
+implementation. For most tests with small to moderately sized tests
+cases there are never enough KUnit assertions to be an issue at all;
+even when a single test cases has many KUnit assertions, the compiler
+should never put all these struct allocations on the stack at the same
+time since the scope of the structs is so limited; however, the
+structleak plugin does not seem to respect the compiler doing the right
+thing and will still warn of excessive stack size in some cases.
 
-However, converting it to a string-typed argument had side effects.
+These patches are not a permanent solution since new tests can be added
+with huge test cases, but this serves as a stop gap to stop structleak
+from being used on KUnit tests which will currently result in excessive
+stack size.
 
-These calls used to work:
-$ kunit.py run --raw_output
-$ kunit.py run --raw_output suite_filter
-$ kunit.py run suite_filter --raw_output
+Of the following patches, I think the thunderbolt patch may be
+unnecessary since Linus already fixed that test. Additionally, I was not
+able to reproduce the error on the sdhci-of-aspeed test. Nevertheless, I
+included these tests cases for completeness. Please see my discussion
+with Arnd for more context[1].
 
-But now the second is actually parsed as
-$ kunit.py run --raw_output=suite_filter
+NOTE: Arnd did the legwork for most of these patches, but did not
+actually share code for some of them, so I left his Signed-off-by off of
+those patches as I don't want to misrepresent him. Arnd, please sign off
+on those patches at your soonest convenience.
 
-So the order you add in --raw_output now matters and command lines that
-used to work might not anymore.
+[1] https://lore.kernel.org/linux-arm-kernel/CAFd5g44udqkDiYBWh+VeDVJ=ELXeoXwunjv0f9frEN6HJODZng@mail.gmail.com/
 
-Change --raw_output back to a boolean flag, but change its behavior to
-match that of the former --raw_output=kunit.
-The assumption is that this is what most people wanted to see anyways.
+Arnd Bergmann (1):
+  bitfield: build kunit tests without structleak plugin
 
-To get the old behavior, users can simply do:
-$ kunit.py run >/dev/null; cat .kunit/test.log
-They don't have any easy way of getting the --raw_output=kunit behavior.
+Brendan Higgins (5):
+  gcc-plugins/structleak: add makefile var for disabling structleak
+  iio/test-format: build kunit tests without structleak plugin
+  device property: build kunit tests without structleak plugin
+  thunderbolt: build kunit tests without structleak plugin
+  mmc: sdhci-of-aspeed: build kunit tests without structleak plugin
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
+ drivers/base/test/Makefile   | 2 +-
+ drivers/iio/test/Makefile    | 1 +
+ drivers/mmc/host/Makefile    | 1 +
+ drivers/thunderbolt/Makefile | 1 +
+ lib/Makefile                 | 2 +-
+ scripts/Makefile.gcc-plugins | 4 ++++
+ 6 files changed, 9 insertions(+), 2 deletions(-)
 
-Meta: this is an alternative to
-https://lore.kernel.org/linux-kselftest/20210903161405.1861312-1-dlatypov@google.com/
-
-I'd slightly prefer that approach, but if we're fine with giving up the
-old --raw_output semantics entirely, this would be cleaner.
-I'd also assume that most people would prefer the new semantics, but I'm
-not sure of that.
-
----
- Documentation/dev-tools/kunit/kunit-tool.rst |  7 -------
- tools/testing/kunit/kunit.py                 | 12 +++---------
- tools/testing/kunit/kunit_tool_test.py       | 13 ++++++-------
- 3 files changed, 9 insertions(+), 23 deletions(-)
-
-diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
-index ae52e0f489f9..03404746f1f6 100644
---- a/Documentation/dev-tools/kunit/kunit-tool.rst
-+++ b/Documentation/dev-tools/kunit/kunit-tool.rst
-@@ -114,13 +114,6 @@ results in TAP format, you can pass the ``--raw_output`` argument.
- 
- 	./tools/testing/kunit/kunit.py run --raw_output
- 
--The raw output from test runs may contain other, non-KUnit kernel log
--lines. You can see just KUnit output with ``--raw_output=kunit``:
--
--.. code-block:: bash
--
--	./tools/testing/kunit/kunit.py run --raw_output=kunit
--
- If you have KUnit results in their raw TAP format, you can parse them and print
- the human-readable summary with the ``parse`` command for kunit_tool. This
- accepts a filename for an argument, or will read from standard input.
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 5a931456e718..3626a56472b5 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -115,13 +115,7 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
- 					      'Tests not Parsed.')
- 
- 	if request.raw_output:
--		output: Iterable[str] = request.input_data
--		if request.raw_output == 'all':
--			pass
--		elif request.raw_output == 'kunit':
--			output = kunit_parser.extract_tap_lines(output)
--		else:
--			print(f'Unknown --raw_output option "{request.raw_output}"', file=sys.stderr)
-+		output = kunit_parser.extract_tap_lines(request.input_data)
- 		for line in output:
- 			print(line.rstrip())
- 
-@@ -256,8 +250,8 @@ def add_exec_opts(parser) -> None:
- 
- def add_parse_opts(parser) -> None:
- 	parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
--			    'If set to --raw_output=kunit, filters to just KUnit output.',
--			    type=str, nargs='?', const='all', default=None)
-+			    'It will only show output from KUnit.',
-+			    action='store_true')
- 	parser.add_argument('--json',
- 			    nargs='?',
- 			    help='Stores test results in a JSON, and either '
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 619c4554cbff..55ed3dac31ee 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -399,14 +399,13 @@ class KUnitMainTest(unittest.TestCase):
- 			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
- 			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
- 
--	def test_run_raw_output_kunit(self):
-+	def test_run_raw_output_does_not_take_positional_args(self):
-+		# --raw_output might eventually support an argument, but we don't want it
-+		# to consume any positional arguments, only ones after an '='.
- 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
--		kunit.main(['run', '--raw_output=kunit'], self.linux_source_mock)
--		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
--		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
--		for call in self.print_mock.call_args_list:
--			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
--			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
-+		kunit.main(['run', '--raw_output', 'filter_glob'], self.linux_source_mock)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(
-+			args=None, build_dir='.kunit', filter_glob='filter_glob', timeout=300)
- 
- 	def test_exec_timeout(self):
- 		timeout = 3453
 
 base-commit: 316346243be6df12799c0b64b788e06bad97c30b
 -- 
