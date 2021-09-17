@@ -2,90 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5102410177
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Sep 2021 00:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248F24101EC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Sep 2021 01:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236562AbhIQWrN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Sep 2021 18:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
+        id S241202AbhIQX7j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 19:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbhIQWrM (ORCPT
+        with ESMTP id S241028AbhIQX7j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 18:47:12 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E57C061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 15:45:50 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id i13so11892642ilm.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 15:45:50 -0700 (PDT)
+        Fri, 17 Sep 2021 19:59:39 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52539C061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 16:58:16 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id v16so12076531ilg.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 16:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=s8oIHj/9NV18y7Efw1SPbOXztrTlc/2JIRRHKj00s8o=;
-        b=GEV1lp1FWsl9aCGq/lYX6WjdxzlGJNJNJk+XXeP6TBFDv+1s1hMpLwhVbIHBX0gHW1
-         KFfu6nrtKr92XGR18HJu6nD5t1fy0ZSB8+ofV5t9GKDpCVxoAP2JLLNLkO2DWtFcyY20
-         PwbGDYD+DVnKDRV4qIez7x9rKcI7s8GLMThQs=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iEwpCdHpCUMK6ZYhkRZ63EGoiK2SIHmWKpqoZAtsUSk=;
+        b=fbi1JaFCOUNGamRDuc+XgjKosx83lIsqgu7zvOd9DvcMNHIu1TkQunLfc1XQLJ/uPb
+         sjujlsYnNNIT2gR008/E9OerXXZycMli4b6jzvygcR0aDb9dq4reMaGRXbi5veXxVdDr
+         64VBhMIi8rLrvaXrJUl/uqrsSW4GXhPmrAHXs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=s8oIHj/9NV18y7Efw1SPbOXztrTlc/2JIRRHKj00s8o=;
-        b=AZ9BKCJ4EBuz5joyqhdT42e9Ll5sqBOOGDhj3OfQyiqihK3jkRzWK/dlwe9XZ2vzEP
-         uIemKjXtlqq3JMwfd3tH5aKU8aJ41q5OQEa9+tbGJY1c/jCLM6YSDLwz4lQ5VFwwSvS6
-         X0SPvggeSod2p7ayRzAyodj643t3w10kWIIGsR8Twd0UJhlnSwSBiFz+pt+M3fQ/XA3Y
-         c6D2K4S5ZgyaHSOKqnapL1VWrIX3ivwNwfidm2cdF/7lqn7otH2ffr3B9eaNZ/VXXsEi
-         5GGKvA7M2bu6enUzbC+X3pMR3nHGVfoCi6zuJxPQ3x7np1OxlvOTGbS6jddJdgdVkTd9
-         9onQ==
-X-Gm-Message-State: AOAM533G0V2WfcueBtrPSapX/llq1A5Hxa1XibrJcI0RxHQih8FxppjO
-        8pSdOv17YJv4csckKhg6+iZ/LPJhYZp/mw==
-X-Google-Smtp-Source: ABdhPJylHR3n8gVPmxcCHcbnvnfV/4UGWy0eJTkCtam3aFRjDRpd5MsCL0miGgcspW8EJqzJSJFxNw==
-X-Received: by 2002:a92:cb43:: with SMTP id f3mr10037558ilq.261.1631918749788;
-        Fri, 17 Sep 2021 15:45:49 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id s12sm4474952ilo.70.2021.09.17.15.45.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Sep 2021 15:45:49 -0700 (PDT)
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iEwpCdHpCUMK6ZYhkRZ63EGoiK2SIHmWKpqoZAtsUSk=;
+        b=ldqRR9BEeHbaIG8UAtNyeuNVc+i7Qr7hYxXJKoHCxLhdHVuOsKHdCyc16qqqxBgWfJ
+         N77OJnPojKM4OnXXa0qs9VG3mQAuvlylALRRJImUrNEioNf/vVEhr4vUzgK/lcT8PR/f
+         nIy9TxEcbqOlyhOlb44eCW/6qyq+7/3leNb6EF4Zo72TnS4UcNT/c41HLyziBQB0rB4Z
+         qWIIYmo1zw7bXp8A+UH+5ErReIZHQ9HbpU92txDwmmCjmoO5BUcV7OZT11XfuXq2ZRAH
+         yQNTmA06uKpZdQyduEbzh0pimlFjniGynlGU1Kbl2DxbDoR3uHM1N9mS/tKipgVrEvH2
+         zhKA==
+X-Gm-Message-State: AOAM5336anuwOWYiZgGKacY8PDrvWH5ZcsNEYDofM6NvPNPYS87rRMhD
+        Hkh5RpEH/0QQ3lWjw8fJ8S/REg==
+X-Google-Smtp-Source: ABdhPJz7pg3FiGuvl67HjuZzVblMpfpUNjBO9Y5beoN1SzVXB1yROx05BJxP2yUP8LIYorBnW3ZuEg==
+X-Received: by 2002:a92:7f0a:: with SMTP id a10mr10298794ild.22.1631923095529;
+        Fri, 17 Sep 2021 16:58:15 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id c11sm4443035ilq.26.2021.09.17.16.58.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Sep 2021 16:58:15 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: selftests/vm madv_populate.c test
-Message-ID: <b703a326-66f7-bf35-58ee-f60e504ea5ef@linuxfoundation.org>
-Date:   Fri, 17 Sep 2021 16:45:48 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+To:     shuah@kernel.org, skhan@linuxfoundation.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: drivers/dma-buf: Fix implicit declaration warns
+Date:   Fri, 17 Sep 2021 17:58:13 -0600
+Message-Id: <20210917235813.42410-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David,
+udmabuf has the following implicit declaration warns:
 
-I am running into the following warning when try to build this test:
+udmabuf.c:30:10: warning: implicit declaration of function 'open';
+udmabuf.c:42:8: warning: implicit declaration of function 'fcntl'
 
-madv_populate.c:334:2: warning: #warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition" [-Wcpp]
-   334 | #warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition"
-       |  ^~~~~~~
+These are caused due to not including fcntl.h and including just
+linux/fcntl.h. Fix it to include fcntl.h which will bring in the
+linux/fcntl.h. In addition, define __EXPORTED_HEADERS__ to bring in
+F_ADD_SEALS and F_SEAL_SHRINK defines and fix the following error
+that show up when just fcntl.h is included.
 
+udmabuf.c:45:21: error: 'F_ADD_SEALS' undeclared
+   45 |  ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
+      |                     ^~~~~~~~~~~
+udmabuf.c:45:34: error: 'F_SEAL_SHRINK' undeclared
+   45 |  ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
+      |                                  ^~~~~~~~~~~~~
 
-I see that the following handling is in place. However there is no
-other information to explain why the check is necessary.
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/drivers/dma-buf/udmabuf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-#if defined(MADV_POPULATE_READ) && defined(MADV_POPULATE_WRITE)
+diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+index 4de902ea14d8..de1c4e6de0b2 100644
+--- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
++++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+@@ -1,10 +1,13 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#define __EXPORTED_HEADERS__
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <string.h>
+ #include <errno.h>
+-#include <linux/fcntl.h>
++#include <fcntl.h>
+ #include <malloc.h>
+ 
+ #include <sys/ioctl.h>
+-- 
+2.30.2
 
-#else /* defined(MADV_POPULATE_READ) && defined(MADV_POPULATE_WRITE) */
-
-#warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition"
-
-I do see these defined in:
-
-include/uapi/asm-generic/mman-common.h:#define MADV_POPULATE_READ       22
-include/uapi/asm-generic/mman-common.h:#define MADV_POPULATE_WRITE      23
-
-Is this the case of missing include from madv_populate.c?
-
-thanks,
--- Shuah
