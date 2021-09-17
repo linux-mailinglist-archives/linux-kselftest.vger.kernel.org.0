@@ -2,103 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAE240FFD1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 21:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A334100EE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Sep 2021 23:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243227AbhIQT1j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Sep 2021 15:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
+        id S242762AbhIQVzZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Sep 2021 17:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243116AbhIQT1j (ORCPT
+        with ESMTP id S242370AbhIQVzV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 15:27:39 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D815AC061757
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 12:26:16 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id m4so11403773ilj.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 12:26:16 -0700 (PDT)
+        Fri, 17 Sep 2021 17:55:21 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617BCC061764
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 14:53:59 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id i13so11780775ilm.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Sep 2021 14:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=LfjPbohhavkhWKwUH/1kohR8OTnMGA2qFf1xFiq2UHI=;
-        b=Lo+woY7Spj8UgYNNeMHQdnMWU2klrZ/GBMQ5e6FdAoGYqsYn5+G5X8wBnUoZFSsJEe
-         poHOvO/0mVPmln7opKC0a5Wib3EmkEzGmvUPq+Rb/RqI9chpE4ieOOAxd5r73EHJ/OMl
-         PQntOfNV9bLZZyW2qHGIH98GfWG8TXul36wUI=
+        bh=fWR0esOBVBV64rKinxIgFxJ4wKagR9YhECkqxWxa0Tw=;
+        b=grs8gzHe5cek7z8ddLzkbZFT7aCOxQJODThfS5zh/JoI7HS4l1kwTTu7rDiPM2U1HS
+         50yJla7O7avcIoYd7ryDuwWFWQotD8dMUhzDqWtwm0za2axPDLgCp3WOYQ7XsTUahFBA
+         PmCw/f4CquFNZn9tPYHg/W1yqtFj2NG6e7mNM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=LfjPbohhavkhWKwUH/1kohR8OTnMGA2qFf1xFiq2UHI=;
-        b=uyzwtP+v2P/UMy7wxggim7a9YcKao+ZEd0XLXfIUwP/ToQIpVpSXLOKkniliRqOqKl
-         9X3YnN98JOktAitKFYWBfTKtMbckU2GR/t1ZOppchDtjWCzYsW/j8569gbhMtkxDAIdL
-         7z3zdCN8/FDbiRBh2f1FJHMOE/JTz28eZmMYZBBsIqBBXLQKwJxp7wKMHwDNKs2DGim5
-         s+b8bSl8vCUJAp/LubKhoCSlrmirlrHXi29XDD7gAinhKryBwOc9joHt1B3jMhT0LFVL
-         Q0od/eGB/7IjuvjpvxHw1ZJ+VECbuV7TNnjiry8mFogaPr8X41T/98lym3vTiXdlykXa
-         4Lzw==
-X-Gm-Message-State: AOAM5320ndZi80v9BaXwEa2DdWBuQEbm7kL+YODBiFJWE5NAvOpgYjrr
-        ivgtNz5zrWg6+oE/jR/rwSNDHBVPHKqisg==
-X-Google-Smtp-Source: ABdhPJyM9NIWQgoA1uI3YhwlV9QCsoV76t9AMOguXV/oSCSoFT/5S3blhepGLBj6aij3GGKOp05Z5A==
-X-Received: by 2002:a92:c145:: with SMTP id b5mr8896077ilh.203.1631906776241;
-        Fri, 17 Sep 2021 12:26:16 -0700 (PDT)
+        bh=fWR0esOBVBV64rKinxIgFxJ4wKagR9YhECkqxWxa0Tw=;
+        b=w4SomFOxUO6UUxPULlMrvsh4DFUOQM9ni+0CKjNaCRzZakPBa1vqRyd51DrlcJj2k4
+         rRJrDPSXjNwnBscVTChRf9bCeeUwP/74aCLCigRYQIYAeDZKEn2IKFBlvtFPJS0ZZ2bj
+         jbQ47skG9nZraSmTFV7Cv78CG/zO3/1+hNQCmefJVN4Uhul5G50O49rOttv6Ut9wVmFz
+         8+4gup3q44GENPcOja7FAOOUSM8JqmZXzh2RDx+Hd6It50PcRV+yTdwTkAJv8b8kedQe
+         EgERq3lmdJyblPZzptuHDUoD/yU/BMb8VrF4cKZlf5YkjVHf4gD2GD7qsiRC3VMTRBJK
+         EHJg==
+X-Gm-Message-State: AOAM531o9yRe2bOTULOYS7Ucs2mhDTabSOIGIvY8QY8PrdVERD/79ezg
+        iaX/qXfVrYFCT4jAKeg5Zsb4Lw==
+X-Google-Smtp-Source: ABdhPJy2rJ1ey28tHL7q/gFDZW67ncHgR3kfTnhfa8+NV1dCDCgJWrmoAMq2uukUi+T5BT3LGK0oQg==
+X-Received: by 2002:a92:cd09:: with SMTP id z9mr9916764iln.50.1631915638652;
+        Fri, 17 Sep 2021 14:53:58 -0700 (PDT)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 9sm4049208ily.9.2021.09.17.12.26.15
+        by smtp.gmail.com with ESMTPSA id b3sm4390167ile.37.2021.09.17.14.53.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 12:26:15 -0700 (PDT)
+        Fri, 17 Sep 2021 14:53:58 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: net: af_unix: Fix incorrect args in test result msg
-Date:   Fri, 17 Sep 2021 13:26:14 -0600
-Message-Id: <20210917192614.24862-1-skhan@linuxfoundation.org>
+Subject: [PATCH] selftests: net: af_unix: Fix makefile to use TEST_GEN_PROGS
+Date:   Fri, 17 Sep 2021 15:53:56 -0600
+Message-Id: <20210917215356.33791-1-skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the args to fprintf(). Splitting the message ends up passing
-incorrect arg for "sigurg %d" and an extra arg overall. The test
-result message ends up incorrect.
+Makefile uses TEST_PROGS instead of TEST_GEN_PROGS to define
+executables. TEST_PROGS is for shell scripts that need to be
+installed and run by the common lib.mk framework. The common
+framework doesn't touch TEST_PROGS when it does build and clean.
 
-test_unix_oob.c: In function ‘main’:
-test_unix_oob.c:274:43: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘char *’ [-Wformat=]
-  274 |   fprintf(stderr, "Test 3 failed, sigurg %d len %d OOB %c ",
-      |                                          ~^
-      |                                           |
-      |                                           int
-      |                                          %s
-  275 |   "atmark %d\n", signal_recvd, len, oob, atmark);
-      |   ~~~~~~~~~~~~~
-      |   |
-      |   char *
-test_unix_oob.c:274:19: warning: too many arguments for format [-Wformat-extra-args]
-  274 |   fprintf(stderr, "Test 3 failed, sigurg %d len %d OOB %c ",
+As a result "make kselftest-clean" and "make clean" fail to remove
+executables. Run and install work because the common framework runs
+and installs TEST_PROGS. Build works because the Makefile defines
+"all" rule which is unnecessary if TEST_GEN_PROGS is used.
+
+Use TEST_GEN_PROGS so the common framework can handle build/run/
+install/clean properly.
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/net/af_unix/test_unix_oob.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/af_unix/Makefile | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-index 0f3e3763f4f8..3dece8b29253 100644
---- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
-+++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-@@ -271,8 +271,9 @@ main(int argc, char **argv)
- 	read_oob(pfd, &oob);
- 
- 	if (!signal_recvd || len != 127 || oob != '%' || atmark != 1) {
--		fprintf(stderr, "Test 3 failed, sigurg %d len %d OOB %c ",
--		"atmark %d\n", signal_recvd, len, oob, atmark);
-+		fprintf(stderr,
-+			"Test 3 failed, sigurg %d len %d OOB %c atmark %d\n",
-+			signal_recvd, len, oob, atmark);
- 		die(1);
- 	}
- 
+diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing/selftests/net/af_unix/Makefile
+index cfc7f4f97fd1..df341648f818 100644
+--- a/tools/testing/selftests/net/af_unix/Makefile
++++ b/tools/testing/selftests/net/af_unix/Makefile
+@@ -1,5 +1,2 @@
+-##TEST_GEN_FILES := test_unix_oob
+-TEST_PROGS := test_unix_oob
++TEST_GEN_PROGS := test_unix_oob
+ include ../../lib.mk
+-
+-all: $(TEST_PROGS)
 -- 
 2.30.2
 
