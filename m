@@ -2,76 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A190F410772
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Sep 2021 17:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F56410B84
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Sep 2021 14:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239886AbhIRP4L convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Sep 2021 11:56:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44186 "EHLO mail.kernel.org"
+        id S231463AbhISMVd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Sep 2021 08:21:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48420 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237245AbhIRP4K (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Sep 2021 11:56:10 -0400
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB92261244;
-        Sat, 18 Sep 2021 15:54:40 +0000 (UTC)
-Date:   Sat, 18 Sep 2021 16:58:20 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
-        keescook@chromium.org, rafael@kernel.org, lars@metafoo.de,
-        ulf.hansson@linaro.org, andreas.noever@gmail.com,
-        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-        YehezkelShB@gmail.com, masahiroy@kernel.org,
-        michal.lkml@markovi.net, ndesaulniers@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v1 2/6] iio/test-format: build kunit tests without
- structleak plugin
-Message-ID: <20210918165820.076237b4@jic23-huawei>
-In-Reply-To: <20210917061104.2680133-3-brendanhiggins@google.com>
-References: <20210917061104.2680133-1-brendanhiggins@google.com>
-        <20210917061104.2680133-3-brendanhiggins@google.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        id S230158AbhISMVc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 19 Sep 2021 08:21:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id BD9CA61074;
+        Sun, 19 Sep 2021 12:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632054007;
+        bh=juJaSv0GiyOfkymwzpKe+oRrnnW9W6D26nuvMHCibgU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CyLJQ59Z27l7gSQGmek1ivVkfZKgwcjvqjLjBMHsBwmJyjGyMSzMGzZtVkpwrFTUI
+         H/EICPqni/qN2QiGIiC4iCejXq7VZhFyU5p74HtojlxGGd4VJwyRC2zxD3lkPZNiLE
+         xIM85SH47zvsaDPws1Sxn6aZAcvZSd/7I11APH8Tttc6sR5vJ3HI+zA+HkwdqWHoz2
+         QOk14y/8dz6RTC57SnKSRU0PtUPiT7oG5gSjJhb7y8dkZR/mhOwWFQXdGAcU/nxy9m
+         YkwmLzKFtPzMndJIZZP1i8zqKmgIsn9HaYstwmrTbqoHfmemkhK2/Kc3Lap/gKihXV
+         /qOGUdCNTQiHg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id ABA17608B9;
+        Sun, 19 Sep 2021 12:20:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests: net: af_unix: Fix incorrect args in test result
+ msg
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163205400769.8407.15151406750714105944.git-patchwork-notify@kernel.org>
+Date:   Sun, 19 Sep 2021 12:20:07 +0000
+References: <20210917192614.24862-1-skhan@linuxfoundation.org>
+In-Reply-To: <20210917192614.24862-1-skhan@linuxfoundation.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 16 Sep 2021 23:11:00 -0700
-Brendan Higgins <brendanhiggins@google.com> wrote:
+Hello:
 
-> The structleak plugin causes the stack frame size to grow immensely when
-> used with KUnit:
-> 
-> ../drivers/iio/test/iio-test-format.c: In function ‘iio_test_iio_format_value_fixedpoint’:
-> ../drivers/iio/test/iio-test-format.c:98:1: warning: the frame size of 2336 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-> 
-> Turn it off in this file.
-> 
-> Co-developed-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+This patch was applied to netdev/net.git (refs/heads/master):
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> ---
->  drivers/iio/test/Makefile | 1 +
->  1 file changed, 1 insertion(+)
+On Fri, 17 Sep 2021 13:26:14 -0600 you wrote:
+> Fix the args to fprintf(). Splitting the message ends up passing
+> incorrect arg for "sigurg %d" and an extra arg overall. The test
+> result message ends up incorrect.
 > 
-> diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
-> index f1099b4953014..467519a2027e5 100644
-> --- a/drivers/iio/test/Makefile
-> +++ b/drivers/iio/test/Makefile
-> @@ -5,3 +5,4 @@
->  
->  # Keep in alphabetical order
->  obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
-> +CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+> test_unix_oob.c: In function ‘main’:
+> test_unix_oob.c:274:43: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘char *’ [-Wformat=]
+>   274 |   fprintf(stderr, "Test 3 failed, sigurg %d len %d OOB %c ",
+>       |                                          ~^
+>       |                                           |
+>       |                                           int
+>       |                                          %s
+>   275 |   "atmark %d\n", signal_recvd, len, oob, atmark);
+>       |   ~~~~~~~~~~~~~
+>       |   |
+>       |   char *
+> test_unix_oob.c:274:19: warning: too many arguments for format [-Wformat-extra-args]
+>   274 |   fprintf(stderr, "Test 3 failed, sigurg %d len %d OOB %c ",
+> 
+> [...]
+
+Here is the summary with links:
+  - selftests: net: af_unix: Fix incorrect args in test result msg
+    https://git.kernel.org/netdev/net/c/48514a223330
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
