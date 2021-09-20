@@ -2,86 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1EA411484
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Sep 2021 14:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8F8412826
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Sep 2021 23:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238336AbhITMd1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Sep 2021 08:33:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55702 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238218AbhITMd0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Sep 2021 08:33:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 778E960F4B;
-        Mon, 20 Sep 2021 12:31:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632141120;
-        bh=Uux/2Cc70BUzmHbCJBRHEOFQH+Jr1wcoLMV9FMrSuPk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y/9kWfLMyj0Zzz/+7NKVDzT2gOyL10S0dNKxxwayJjpiDJfSa8PsJHMiOoHH9np/7
-         fFNRmGtNlNk31MgWVPFpmCJtab87j20z0ACPus+NL8npAYW9GlvIEW8sDC/kz3NYgW
-         D51fnwr5dPxhXu7ykHOsFFt74ATB8A+S7koDqqDsMXb9uQJW6f37/dxYrum7LB64E4
-         0IBQhmQut7QjEHc/CdB19zA1PNdNt7gqkp217bCa4IWCXvNAKQ7+r2cBJSTylSvfWJ
-         ZEvU7JSKxCnuFAFR36l4Sl+3F38tL12lDm0X9+adm/3BQfD5HNn4fcZU3wG7+nXSQ1
-         qIFKls9Zm6ANQ==
-Date:   Mon, 20 Sep 2021 13:31:16 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH] kselftest/arm64: signal: Skip tests if required features
- are missing
-Message-ID: <20210920123116.GF4192@sirena.org.uk>
-References: <20210920121228.35368-1-cristian.marussi@arm.com>
- <20210920122240.GE4192@sirena.org.uk>
- <20210920123014.GA6510@e120937-lin>
+        id S237890AbhITVkM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Sep 2021 17:40:12 -0400
+Received: from mail-pj1-f50.google.com ([209.85.216.50]:39536 "EHLO
+        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232305AbhITViL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 20 Sep 2021 17:38:11 -0400
+Received: by mail-pj1-f50.google.com with SMTP id h3-20020a17090a580300b0019ce70f8243so436630pji.4;
+        Mon, 20 Sep 2021 14:36:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tUvDrFJV0hIvR0FAKJySgQhotyp6SN23Xzoslz2iXJo=;
+        b=rwZ8zwlOidTutGkQxGYrOqBF81JA94pO/u/nicLbi8TPvOZ0lWpHXtFWr08RN/wTrJ
+         IiIRTTtidtb818tIxjG/sUl5qP6oemw3Jz7NH5ypuMD3jhsZtqgdq7nXaYmVlHPphAe6
+         JpmYpsu8+zYOKlgCbMae/wIw0vaIS9E8dBUCPclWhDxMbd5eZyuMAIQra8GhouB3syxw
+         OBARQGaw+56cXoXGnBWnkpDI96myiIfCgjYJZfOWdKGg0XEEZaPxNDGthq4sLqiMWIhn
+         C5u9x8Dtl1q17tfaSXB4/8frZQnBZ9LqYhC++2BEzCj6ZaLvpFProu+dyeHa57B/KSaG
+         lYuQ==
+X-Gm-Message-State: AOAM530VxUgz86UupmG9CScevh7BcKZpOOC90kodH2IHniIoGjjidd6X
+        ufdv9YGfPrYmJC0PgNlRyQ0=
+X-Google-Smtp-Source: ABdhPJyw/FT9hwIaBUlZHvWR3+Hn3uHenYuvTL7vKPHQz+qO3v2aNVYX5WaGhiZkP6ICvrNNf+Ln6Q==
+X-Received: by 2002:a17:90a:9a2:: with SMTP id 31mr1283242pjo.58.1632173803816;
+        Mon, 20 Sep 2021 14:36:43 -0700 (PDT)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:6e2a:d64:7d9d:bd4a])
+        by smtp.gmail.com with ESMTPSA id i5sm328287pjk.47.2021.09.20.14.36.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Sep 2021 14:36:42 -0700 (PDT)
+Subject: Re: [PATCH v7 09/12] sysfs: fix deadlock race with module removal
+To:     Luis Chamberlain <mcgrof@kernel.org>, tj@kernel.org,
+        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
+        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org
+Cc:     rdunlap@infradead.org, rafael@kernel.org, masahiroy@kernel.org,
+        ndesaulniers@google.com, yzaikin@google.com, nathan@kernel.org,
+        ojeda@kernel.org, penguin-kernel@I-love.SAKURA.ne.jp,
+        vitor@massaru.org, elver@google.com, jarkko@kernel.org,
+        glider@google.com, rf@opensource.cirrus.com,
+        stephen@networkplumber.org, David.Laight@ACULAB.COM,
+        jolsa@kernel.org, andriy.shevchenko@linux.intel.com,
+        trishalfonso@google.com, andreyknvl@gmail.com, jikos@kernel.org,
+        mbenes@suse.com, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, reinette.chatre@intel.com,
+        fenghua.yu@intel.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        daniel.vetter@ffwll.ch, bhelgaas@google.com, kw@linux.com,
+        dan.j.williams@intel.com, senozhatsky@chromium.org, hch@lst.de,
+        joe@perches.com, hkallweit1@gmail.com, axboe@kernel.dk,
+        jpoimboe@redhat.com, tglx@linutronix.de, keescook@chromium.org,
+        rostedt@goodmis.org, peterz@infradead.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, copyleft-next@lists.fedorahosted.org
+References: <20210918050430.3671227-1-mcgrof@kernel.org>
+ <20210918050430.3671227-10-mcgrof@kernel.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <6db06c27-e3af-b0aa-6f38-9c31dd8194fa@acm.org>
+Date:   Mon, 20 Sep 2021 14:36:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gMR3gsNFwZpnI/Ts"
-Content-Disposition: inline
-In-Reply-To: <20210920123014.GA6510@e120937-lin>
-X-Cookie: diplomacy, n:
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210918050430.3671227-10-mcgrof@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 9/17/21 10:04 PM, Luis Chamberlain wrote:
+> A sketch of how this can happen follows:
+> 
+> CPU A                              CPU B
+>                                     whatever_store()
+> module_unload
+>    mutex_lock(foo)
+>                                     mutex_lock(foo)
+>     del_gendisk(zram->disk);
+>       device_del()
+>         device_remove_groups()
+> 
+> In this situation whatever_store() is waiting for the mutex foo to
+> become unlocked, but that won't happen until module removal is complete.
+> But module removal won't complete until the sysfs file being poked
+> completes which is waiting for a lock already held.
 
---gMR3gsNFwZpnI/Ts
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+If I remember correctly I encountered the deadlock scenario described
+above for the first time about ten years ago while working on the SCST
+project. We solved this deadlock by removing the sysfs attributes from
+the module unload code before grabbing mutex_lock(foo), e.g. by calling
+sysfs_remove_file(). This works because calling sysfs_remove_file()
+multiple times in a row is safe. Is that solution good enough for the
+zram driver?
 
-On Mon, Sep 20, 2021 at 01:30:14PM +0100, Cristian Marussi wrote:
-> On Mon, Sep 20, 2021 at 01:22:40PM +0100, Mark Brown wrote:
-> > On Mon, Sep 20, 2021 at 01:12:28PM +0100, Cristian Marussi wrote:
-> > > During initialization of a signal testcase, features declared as required
-> > > are properly checked against the running system but no action is then taken
-> > > to effectively skip such a testcase.
+Thanks,
 
-> > Reviwed-by: Mark Brown <broonie@kernel.org>
-
-> > I have a version of this locally which I thought I'd sent out already
-> > among all the in flight patches I've got for kseltest but it looks like
-> > it didn't make it.
-
-> Ah ok sorry, I did not know. Pick either as you wish.
-
-No, please use this one - like I say I thought I'd sent mine out but it
-looks like I didn't.
-
---gMR3gsNFwZpnI/Ts
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFIfxMACgkQJNaLcl1U
-h9C1wgf+NQ/8kb/cwNhHFV2OhVXQa5JedDzJWq9DtdVu2IHM5+f6F4j2xC3eWS0E
-KZ/07GGv3NxfmI1FvwmqS1miDzPZ2SH8NoIPwuPAGu/PAcfukFV7maUFZXEYzGsq
-UdJ2jf5QJ/8p9QQqPdutUeY0+E1Re4nQ5T7oMEf6p0ObXCZImHNEg0Qg1+AzyYCV
-Fq29DGGHTlUxE3jWGXGlbjHLYrMleQfsznViuvQQoBj0qBCUUgaiQVfmgKxUTsMh
-cAMTrhP7TFPwcYYli8Efm6eLrvka+eAdYS+oh+hkBgWvCXlppUJCw60uJwAviSky
-INh2idtsuqBwYIferxOOVhH6CPzEvw==
-=5o6W
------END PGP SIGNATURE-----
-
---gMR3gsNFwZpnI/Ts--
+Bart.
