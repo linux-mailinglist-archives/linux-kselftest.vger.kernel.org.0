@@ -2,225 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 621C14135B5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 16:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05C4413677
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 17:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbhIUO7k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Sep 2021 10:59:40 -0400
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:44231 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233647AbhIUO7k (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Sep 2021 10:59:40 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id D4F7E320206D;
-        Tue, 21 Sep 2021 10:58:10 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 21 Sep 2021 10:58:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=KZuaBl
-        egpZxrGOGjpqS/zX1ucSsSnWc4YVGlN/BrIWM=; b=JYCZDZYKxSwrWU+k2+2nY0
-        YRTjvElQBszX9Qm8a8UZY71PG0yFOUK3Fr4lBgXlEHu9nuXPZIh8nrWZoWTwhHXE
-        bY2eFEgMJd5XP45Rk4pzGJhnVGpUA4lBC03hz9EeXFHQoY8JxBqDv5elgu8yipyF
-        mOrNeEwLHLUVaQLoFWHKzE0fQbybxTqFl3CFmKXK0+3XLh+RKY7aJ9suA7Hy0bG4
-        fu0iXNWA9HiX5TIiXTq93N2hr7fh9VidBQdHmfBuGpwKYH8Mq+LCjs6FGwveRpo5
-        DTqh4HkjdmLYU7hH0uBlbMIDpQw0o2n8BtKvSBuEfFthPd81B85xdApzP2Aku6IA
-        ==
-X-ME-Sender: <xms:AfNJYTg4nIBlpLqlDgCc2r29dlitU7FCqmCDSB85hWGjBs7adYow9g>
-    <xme:AfNJYQBcnMgo2JUGVK8sysNiPlQaNQrGKx82YvFtY2w7bJT50-1zSbuWMwPFV4_W2
-    0JAibyvaLY1dHA>
-X-ME-Received: <xmr:AfNJYTGEm6yda2njY-dKd1KIN16HryHYm_N0c9bNUf-1oZ7NQyy49Noq-TudjYcyOsQNSZ2Vs0G_R8CaTAAKMC4erKj_1A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeigedgkeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeduveetjeegkeevtdffudethedvveejjeeuueekueeitdefvdfhhfelgfehveef
-    hfenucffohhmrghinheprhgvnhgvshgrshdrtghomhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:AfNJYQS7Ctffl2-5_tC1IcSges4-IrjAJThbPT3OgBRXn79_DDSH4A>
-    <xmx:AfNJYQz9ik9FVmD9l9BUiblpqqed47_nYQm-kNiq5068VH0DmcebSA>
-    <xmx:AfNJYW4ife3lNGYdkgkCGdrE4sHPskIGv5THq5Be5puP9ma2P6d8gw>
-    <xmx:AvNJYXkb6AT1960SS9S5DrFnuwWZ_VdQKlUYXFMrk4Ai8phAfXvC5Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Sep 2021 10:58:08 -0400 (EDT)
-Date:   Tue, 21 Sep 2021 17:58:05 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "abyagowi@fb.com" <abyagowi@fb.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
- to get SyncE status
-Message-ID: <YUny/edqnbdTFnBS@shredder>
-References: <20210903151436.529478-1-maciej.machnikowski@intel.com>
- <20210903151436.529478-2-maciej.machnikowski@intel.com>
- <YUnbCzBOPP9hWQ5c@shredder>
- <PH0PR11MB4951E98FCEC0F1EA230BA1DAEAA19@PH0PR11MB4951.namprd11.prod.outlook.com>
+        id S234222AbhIUPul (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Sep 2021 11:50:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38636 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229804AbhIUPuk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 21 Sep 2021 11:50:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B3B061183;
+        Tue, 21 Sep 2021 15:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632239352;
+        bh=SYPIsUeB0QpNl9iOqz8TrUCBGO94e+noRg1ECZdTJME=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UaaVRIqswzz+NS3S8fQEaKMO9RtdOXsyeprnTEIheXJKQGHNj08P7eyrd/PQOFBCR
+         AN5tBBs86O+nP3GdbvOj2N+vfIACcMw2gY7GyzZmcnfLHUMHWEqqTO8tVeryaAcPBC
+         wa3PUemimJFndCXNOCuGMsRHqw57UEYG+Vl8QmekwFARdVX0/7ufVsMqf8T+9g7Szp
+         diWZkbbph3gXn35UaYmr5cUyleLHlYXnKdZMqMkRG/D9zQZoy6oFBj2a59MNnxAHRK
+         YIYKWUHNZvNhOBYpWGFXq5g7hiH0GMlpMxwr02jYDVngebiKxCzBjK5YB3wvzgzdsQ
+         QI6X04sAKlF5w==
+Received: by mail-qt1-f178.google.com with SMTP id x9so6771427qtv.0;
+        Tue, 21 Sep 2021 08:49:12 -0700 (PDT)
+X-Gm-Message-State: AOAM530DTdfrLatLheUDRErjR0q716Etht84WYtht7AKXxWF0VYHTMnt
+        NVdMaemE2/1nYxdiR7t9kXytp6X1M9drt3Q8/zI=
+X-Google-Smtp-Source: ABdhPJxkbOxqy1A7fvfdyNFD5npSBw9ZclgHN9SR+lhraCwiqhyTzn8pzClLHqd6Gjl1VdDdZRtbIZxWA0QsI3m+TXk=
+X-Received: by 2002:ac8:4113:: with SMTP id q19mr29065258qtl.108.1632239341024;
+ Tue, 21 Sep 2021 08:49:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB4951E98FCEC0F1EA230BA1DAEAA19@PH0PR11MB4951.namprd11.prod.outlook.com>
+References: <20210917194709.3562413-1-mcgrof@kernel.org> <20210917194709.3562413-10-mcgrof@kernel.org>
+ <c70dcb03e27e43c5b5311e184357df39@AcuMS.aculab.com>
+In-Reply-To: <c70dcb03e27e43c5b5311e184357df39@AcuMS.aculab.com>
+From:   Luis Chamberlain <mcgrof@kernel.org>
+Date:   Tue, 21 Sep 2021 08:48:49 -0700
+X-Gmail-Original-Message-ID: <CAB=NE6WjupsJFwsj94sC_j3gcYn2Qo0sx1=tMv=WUZ83jq_DFw@mail.gmail.com>
+Message-ID: <CAB=NE6WjupsJFwsj94sC_j3gcYn2Qo0sx1=tMv=WUZ83jq_DFw@mail.gmail.com>
+Subject: Re: [PATCH v7 09/12] sysfs: fix deadlock race with module removal
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "tj@kernel.org" <tj@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "yzaikin@google.com" <yzaikin@google.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ojeda@kernel.org" <ojeda@kernel.org>,
+        "vitor@massaru.org" <vitor@massaru.org>,
+        "elver@google.com" <elver@google.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "glider@google.com" <glider@google.com>,
+        "rf@opensource.cirrus.com" <rf@opensource.cirrus.com>,
+        "stephen@networkplumber.org" <stephen@networkplumber.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "trishalfonso@google.com" <trishalfonso@google.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "jikos@kernel.org" <jikos@kernel.org>,
+        "mbenes@suse.com" <mbenes@suse.com>,
+        "ngupta@vflare.org" <ngupta@vflare.org>,
+        "sergey.senozhatsky.work@gmail.com" 
+        <sergey.senozhatsky.work@gmail.com>,
+        "reinette.chatre@intel.com" <reinette.chatre@intel.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "hch@lst.de" <hch@lst.de>, "joe@perches.com" <joe@perches.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-spdx@vger.kernel.org" <linux-spdx@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "copyleft-next@lists.fedorahosted.org" 
+        <copyleft-next@lists.fedorahosted.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 01:37:37PM +0000, Machnikowski, Maciej wrote:
-> > -----Original Message-----
-> > From: Ido Schimmel <idosch@idosch.org>
-> > Sent: Tuesday, September 21, 2021 3:16 PM
-> > To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
-> > Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE
-> > message to get SyncE status
-> > 
-> > On Fri, Sep 03, 2021 at 05:14:35PM +0200, Maciej Machnikowski wrote:
-> > > diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-> > > index eebd3894fe89..78a8a5af8cd8 100644
-> > > --- a/include/uapi/linux/if_link.h
-> > > +++ b/include/uapi/linux/if_link.h
-> > > @@ -1273,4 +1273,35 @@ enum {
-> > >
-> > >  #define IFLA_MCTP_MAX (__IFLA_MCTP_MAX - 1)
-> > >
-> > > +/* SyncE section */
-> > > +
-> > > +enum if_eec_state {
-> > > +	IF_EEC_STATE_INVALID = 0,
-> > > +	IF_EEC_STATE_FREERUN,
-> > > +	IF_EEC_STATE_LOCKACQ,
-> > > +	IF_EEC_STATE_LOCKREC,
-> > > +	IF_EEC_STATE_LOCKED,
-> > > +	IF_EEC_STATE_HOLDOVER,
-> > > +	IF_EEC_STATE_OPEN_LOOP,
-> > > +	__IF_EEC_STATE_MAX,
-> > 
-> > Can you document these states? I'm not clear on what LOCKACQ, LOCKREC
-> > and OPEN_LOOP mean. I also don't see ice using them and it's not really
-> > a good practice to add new uAPI without any current users.
-> > 
-> 
-> I'll fix that enum to use generic states defined in G.781 which are limited to:
-> - Freerun
-> - LockedACQ (locked, acquiring holdover memory)
-> - Locked (locked with holdover acquired)
-> - Holdover
+On Tue, Sep 21, 2021 at 1:24 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Luis Chamberlain
+> > Sent: 17 September 2021 20:47
+> >
+> > When sysfs attributes use a lock also used on module removal we can
+> > race to deadlock. This happens when for instance a sysfs file on
+> > a driver is used, then at the same time we have module removal call
+> > trigger. The module removal call code holds a lock, and then the sysfs
+> > file entry waits for the same lock. While holding the lock the module
+> > removal tries to remove the sysfs entries, but these cannot be removed
+> > yet as one is waiting for a lock. This won't complete as the lock is
+> > already held. Likewise module removal cannot complete, and so we deadlock.
+>
+> Isn't the real problem the race between a sysfs file action and the
+> removal of the sysfs node?
 
-Thanks, it is good to conform to a standard.
+Nope, that is taken care of by kernfs.
 
-Can ice distinguish between LockedACQ and Locked? From G.781 I
-understand that the former is a transient state. Is the distinction
-between the two important for user space / the selection operation? If
-not, maybe we only need Locked?
+> This isn't really related to module unload - except that may
+> well remove some sysfs nodes.
 
-> 
-> > From v1 I understand that these states were copied from commit
-> > 797d3186544f ("ptp: ptp_clockmatrix: Add wait_for_sys_apll_dpll_lock.")
-> > from Renesas.
-> > 
-> > Figure 11 in the following PDF describes the states, but it seems
-> > specific to the particular device and probably shouldn't be exposed to
-> > user space as-is:
-> > https://www.renesas.com/us/en/document/dst/8a34041-datasheet
-> > 
-> > I have a few questions about this being a per-netdev attribute:
-> > 
-> > 1. My understanding is that in the multi-port adapter you are working
-> > with you have a single EEC that is used to set the Tx frequency of all
-> > the ports. Is that correct?
-> 
-> That's correct.
->  
-> > 2. Assuming the above is correct, is it possible that one port is in
-> > LOCKED state and another (for some reason) is in HOLDOVER state? If yes,
-> > then I agree about this being a per-netdev attribute. The interface can
-> > also be extended with another attribute specifying the HOLDOVER reason.
-> > For example, netdev being down.
-> 
-> All ports driven by a single EEC will report the same state.
+Nope, the issue is a deadlock that can happen due to a shared lock on
+module removal and a driver sysfs operation.
 
-So maybe we just need to report via ethtool the association between the
-EEC and the netdev and expose the state as an attribute of the EEC
-(along with the selected source and other info)?
+> This is the same problem as removing any other kind of driver callback.
+> There are three basic solutions:
+> 1) Use a global lock - not usually useful.
+> 2) Have the remove call sleep until any callbacks are complete.
+> 3) Have the remove just request removal and have a final
+>    callback (from a different context).
 
-This is similar to how PHC/netdev association is queried via ethtool.
-For a given netdev, TSINFO_GET will report the PTP hw clock index via
-ETHTOOL_A_TSINFO_PHC_INDEX. See Documentation/networking/ethtool-netlink.rst
+Kernfs already does a sort of combination of 1) and 2) but 1) is using
+atomic reference counts.
 
-> 
-> > Regardless, I agree with previous comments made about this belonging in
-> > ethtool rather than rtnetlink.
-> 
-> Will take a look at it - as it will require support in linuxptp as well.
-> 
-> > > +};
-> > > +
-> > > +#define IF_EEC_STATE_MAX	(__IF_EEC_STATE_MAX - 1)
-> > > +#define EEC_SRC_PORT		(1 << 0) /* recovered clock from the
-> > port is
-> > > +					  * currently the source for the EEC
-> > > +					  */
-> > 
-> > I'm not sure about this one. If we are going to expose this as a
-> > per-netdev attribute (see more below), any reason it can't be added as
-> > another state (e.g., IF_EEC_STATE_LOCKED_SRC)?
-> 
-> OK! That's a great idea! Yet we'll need LOCKED_SRC and LOCKED_ACQ_SRC,
-> but still sounds good.
-> 
-> > IIUC, in the common case of a simple NE the source of the EEC is always
-> > one of the ports, but in the case of a PRC the source is most likely
-> > external (e.g., GPS).
-> 
-> True
-> 
-> > If so, I think we need a way to represent the EEC as a separate object
-> > with the ability to set its source and report it via the same interface.
-> > I'm unclear on how exactly an external source looks like, but for the
-> > netdev case maybe something like this:
-> > 
-> > devlink clock show [ dev clock CLOCK ]
-> > devlink clock set DEV clock CLOCK [ { src_type SRC_TYPE } ]
-> > SRC_TYPE : = { port DEV/PORT_INDEX }
-> 
-> Unfortunately, EEC lives in 2 worlds - it belongs to a netdev (in very simple
-> deployments the EEC may be a part of the PHY and only allow synchronizing
-> the TX frequency to a single lane/port), but also can go outside of netdev
-> and be a boar-wise frequency source.
-> 
-> > The only source type above is 'port' with the ability to set the
-> > relevant port, but more can be added. Obviously, 'devlink clock show'
-> > will give you the current source in addition to other information such
-> > as frequency difference with respect to the input frequency.
-> 
-> We considered devlink interface for configuring the clock/DPLL, but a
-> new concept was born at the list to add a DPLL subsystem that will
-> cover more use cases, like a TimeCard.
+> If the remove can sleep (as in 2) then there is a requirement
+> on the driver code to not hold any locks across the 'remove'
+> that can be acquired during the callbacks.
 
-The reason I suggested devlink is that it is suited for device-wide
-configuration and it is already used by both MAC drivers and the
-TimeCard driver. If we have a good reason to create a new generic
-netlink family for this stuff, then OK.
+And this is the part that kernfs has no control over since the removal
+and sysfs operation are implementation specific.
 
-> 
-> > Finally, can you share more info about the relation to the PHC? My
-> > understanding is that one of the primary use cases for SyncE is to drive
-> > all the PHCs in the network using the same frequency. How do you imagine
-> > this configuration is going to look like? Can the above interface be
-> > extended for that?
-> 
-> That would be a configurable parameter/option of the PTP program.
-> Just like it can check the existence of link on a given port, it'll also be
-> able to check if we use EEC and it's locked. If it is, and is a source of
-> PHC frequency - the ptp tool can decide to not apply frequency corrections
-> to the PHC, just like the ptp4l does when nullf servo is used, but can do that
-> dynamically.
+> Now, for sysfs, you probably only want to sleep the remove code
+> while a read/write is in progress - not just because the node
+> is open.
+> That probably requires marking an open node 'invalid' and
+> deferring delete to close.
 
-The part I don't understand is "is a source of PHC frequency". How do we
-configure / query that?
+This is already done by kernfs.
+
+> None of this requires a reference count on the module.
+
+You are missing the point to the other aspect of the try_module_get(),
+it lets you also check if module exit has been entered. By using
+try_module_get() you let the module exit trump proceeding with an
+operation, therefore also preventing any potential use of a shared
+lock on module exit and the driver specific sysfs operation.
+
+  Luis
