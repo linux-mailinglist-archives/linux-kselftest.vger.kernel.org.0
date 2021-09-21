@@ -2,164 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C05C4413677
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 17:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960744136EC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 18:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbhIUPul (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Sep 2021 11:50:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38636 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229804AbhIUPuk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Sep 2021 11:50:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B3B061183;
-        Tue, 21 Sep 2021 15:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632239352;
-        bh=SYPIsUeB0QpNl9iOqz8TrUCBGO94e+noRg1ECZdTJME=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UaaVRIqswzz+NS3S8fQEaKMO9RtdOXsyeprnTEIheXJKQGHNj08P7eyrd/PQOFBCR
-         AN5tBBs86O+nP3GdbvOj2N+vfIACcMw2gY7GyzZmcnfLHUMHWEqqTO8tVeryaAcPBC
-         wa3PUemimJFndCXNOCuGMsRHqw57UEYG+Vl8QmekwFARdVX0/7ufVsMqf8T+9g7Szp
-         diWZkbbph3gXn35UaYmr5cUyleLHlYXnKdZMqMkRG/D9zQZoy6oFBj2a59MNnxAHRK
-         YIYKWUHNZvNhOBYpWGFXq5g7hiH0GMlpMxwr02jYDVngebiKxCzBjK5YB3wvzgzdsQ
-         QI6X04sAKlF5w==
-Received: by mail-qt1-f178.google.com with SMTP id x9so6771427qtv.0;
-        Tue, 21 Sep 2021 08:49:12 -0700 (PDT)
-X-Gm-Message-State: AOAM530DTdfrLatLheUDRErjR0q716Etht84WYtht7AKXxWF0VYHTMnt
-        NVdMaemE2/1nYxdiR7t9kXytp6X1M9drt3Q8/zI=
-X-Google-Smtp-Source: ABdhPJxkbOxqy1A7fvfdyNFD5npSBw9ZclgHN9SR+lhraCwiqhyTzn8pzClLHqd6Gjl1VdDdZRtbIZxWA0QsI3m+TXk=
-X-Received: by 2002:ac8:4113:: with SMTP id q19mr29065258qtl.108.1632239341024;
- Tue, 21 Sep 2021 08:49:01 -0700 (PDT)
+        id S231953AbhIUQGS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Sep 2021 12:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229944AbhIUQGR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 21 Sep 2021 12:06:17 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BEFC061574
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Sep 2021 09:04:48 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id t7so7522423wrw.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Sep 2021 09:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=coWrcKNQXUcAkW6e4seTKxWfYWVGPQPXp8yLL94hyig=;
+        b=sSUX9iegwh2LgqDqAq8CnLIvs0UJd5YQCegAmQ4wVeQakoLpU321n0oNmJdHcwGJKl
+         vqHMq07lz5kBVj4gn2Zh6sCfYtvING96kGBwHTc+1/9+zjBuZXvVgU3YvcHjcfJPOlJt
+         cSJ6GRK9L+CevrFyjJZtGiE5XiC/bH+vOOoFCFvmvpc/5gRFNqVsogLtMGo4MXlFc8h5
+         MqucXdQn8y3RoDv6SFHun3zjQpbdPofMa0zjsm6MF90iOUfzF4X+0uPrAVdNfR2k8oej
+         QEZMMpbHUhL6dC2VKGcSGceoQiCYI7uBTqlP853DHTQi1HEcq5GCh8EZd1pruF9Ge1ZH
+         Vqwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=coWrcKNQXUcAkW6e4seTKxWfYWVGPQPXp8yLL94hyig=;
+        b=t6BypbcMvcAhnBTiwHeAKzsm2TwbVYX8oLEkc0fKtjUkQ92m/WjrR0RyS52lW/TIIc
+         EBXqAOi0R3G+S5ZTSU0wbRB4mVCrInmBDFCrTG2Zuos/9y8JSUF+zPfJHLTCgAqnoDpM
+         CzCt38DS/TubKGgL10PMyrYzjF0e9PyxPi9z70TzxI/ngFr1L28hhLyNRzSbZdSx7Pev
+         Th2zFT3tv4TMPnL6o5Z/U6QS8eFv+DJrpnhWqhqk87FDfV/WL5eTuJSFfbb4LHiPeFE+
+         Fk1lbuufYUplKDoQXjjtsEQua4Rl2mWVXDY2jm/T/WCuKeyWfw4WKv1zpbyt5aXDucQ8
+         8EgQ==
+X-Gm-Message-State: AOAM5308ZcU/SpDFMNUwaGZKUeLOokO0vN2D1AVQO0HQSZBQ3wKDogaF
+        9mm55IptUqyzhR9XL50Had8hvaMe/4cXJK+zKw3kMqqvwRJxMg==
+X-Google-Smtp-Source: ABdhPJxHeUUHc47TNWqkz7pxGlYFmPjPwxe2J7+GFiMiO8H6tcoRNwnXA3Iu2bbG5z+UBZYHrgUHfN0nl119ga2ofmM=
+X-Received: by 2002:a7b:c453:: with SMTP id l19mr5465741wmi.7.1632240286357;
+ Tue, 21 Sep 2021 09:04:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210917194709.3562413-1-mcgrof@kernel.org> <20210917194709.3562413-10-mcgrof@kernel.org>
- <c70dcb03e27e43c5b5311e184357df39@AcuMS.aculab.com>
-In-Reply-To: <c70dcb03e27e43c5b5311e184357df39@AcuMS.aculab.com>
-From:   Luis Chamberlain <mcgrof@kernel.org>
-Date:   Tue, 21 Sep 2021 08:48:49 -0700
-X-Gmail-Original-Message-ID: <CAB=NE6WjupsJFwsj94sC_j3gcYn2Qo0sx1=tMv=WUZ83jq_DFw@mail.gmail.com>
-Message-ID: <CAB=NE6WjupsJFwsj94sC_j3gcYn2Qo0sx1=tMv=WUZ83jq_DFw@mail.gmail.com>
-Subject: Re: [PATCH v7 09/12] sysfs: fix deadlock race with module removal
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "tj@kernel.org" <tj@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "yzaikin@google.com" <yzaikin@google.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "vitor@massaru.org" <vitor@massaru.org>,
-        "elver@google.com" <elver@google.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "glider@google.com" <glider@google.com>,
-        "rf@opensource.cirrus.com" <rf@opensource.cirrus.com>,
-        "stephen@networkplumber.org" <stephen@networkplumber.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "trishalfonso@google.com" <trishalfonso@google.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "mbenes@suse.com" <mbenes@suse.com>,
-        "ngupta@vflare.org" <ngupta@vflare.org>,
-        "sergey.senozhatsky.work@gmail.com" 
-        <sergey.senozhatsky.work@gmail.com>,
-        "reinette.chatre@intel.com" <reinette.chatre@intel.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "hch@lst.de" <hch@lst.de>, "joe@perches.com" <joe@perches.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-spdx@vger.kernel.org" <linux-spdx@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "copyleft-next@lists.fedorahosted.org" 
-        <copyleft-next@lists.fedorahosted.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+References: <20210914210348.717392-1-dlatypov@google.com>
+In-Reply-To: <20210914210348.717392-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 22 Sep 2021 00:04:35 +0800
+Message-ID: <CABVgOSkZiT7K1d_hAdfSNVbTV1usE-NAbTgPom01PjLB=r_MFw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] kunit: drop assumption in kunit-log-test about
+ current suite
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 1:24 AM David Laight <David.Laight@aculab.com> wrote:
+On Wed, Sep 15, 2021 at 5:03 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> From: Luis Chamberlain
-> > Sent: 17 September 2021 20:47
-> >
-> > When sysfs attributes use a lock also used on module removal we can
-> > race to deadlock. This happens when for instance a sysfs file on
-> > a driver is used, then at the same time we have module removal call
-> > trigger. The module removal call code holds a lock, and then the sysfs
-> > file entry waits for the same lock. While holding the lock the module
-> > removal tries to remove the sysfs entries, but these cannot be removed
-> > yet as one is waiting for a lock. This won't complete as the lock is
-> > already held. Likewise module removal cannot complete, and so we deadlock.
+> This test assumes that the declared kunit_suite object is the exact one
+> which is being executed, which KUnit will not guarantee [1].
 >
-> Isn't the real problem the race between a sysfs file action and the
-> removal of the sysfs node?
+> Specifically, `suite->log` is not initialized until a suite object is
+> executed. So if KUnit makes a copy of the suite and runs that instead,
+> this test dereferences an invalid pointer and (hopefully) segfaults.
+>
+> N.B. since we no longer assume this, we can no longer verify that
+> `suite->log` is *not* allocated during normal execution.
+>
+> An alternative to this patch that would allow us to test that would
+> require exposing an API for the current test to get its current suite.
+> Exposing that for one internal kunit test seems like overkill, and
+> grants users more footguns (e.g. reusing a test case in multiple suites
+> and changing behavior based on the suite name, dynamically modifying the
+> setup/cleanup funcs, storing/reading stuff out of the suite->log, etc.).
+>
+> [1] In a subsequent patch, KUnit will allow running subsets of test
+> cases within a suite by making a copy of the suite w/ the filtered test
+> list. But there are other reasons KUnit might execute a copy, e.g. if it
+> ever wants to support parallel execution of different suites, recovering
+> from errors and restarting suites
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+Thanks for fixing this.
 
-Nope, that is taken care of by kernfs.
+I do think that using "fake" tests/suites like this in more cases will
+unlock testing other parts of KUnit as well.
 
-> This isn't really related to module unload - except that may
-> well remove some sysfs nodes.
+Reviewed-by: David Gow <davidgow@google.com>
 
-Nope, the issue is a deadlock that can happen due to a shared lock on
-module removal and a driver sysfs operation.
+Cheers,
+-- David
 
-> This is the same problem as removing any other kind of driver callback.
-> There are three basic solutions:
-> 1) Use a global lock - not usually useful.
-> 2) Have the remove call sleep until any callbacks are complete.
-> 3) Have the remove just request removal and have a final
->    callback (from a different context).
 
-Kernfs already does a sort of combination of 1) and 2) but 1) is using
-atomic reference counts.
-
-> If the remove can sleep (as in 2) then there is a requirement
-> on the driver code to not hold any locks across the 'remove'
-> that can be acquired during the callbacks.
-
-And this is the part that kernfs has no control over since the removal
-and sysfs operation are implementation specific.
-
-> Now, for sysfs, you probably only want to sleep the remove code
-> while a read/write is in progress - not just because the node
-> is open.
-> That probably requires marking an open node 'invalid' and
-> deferring delete to close.
-
-This is already done by kernfs.
-
-> None of this requires a reference count on the module.
-
-You are missing the point to the other aspect of the try_module_get(),
-it lets you also check if module exit has been entered. By using
-try_module_get() you let the module exit trump proceeding with an
-operation, therefore also preventing any potential use of a shared
-lock on module exit and the driver specific sysfs operation.
-
-  Luis
+>  lib/kunit/kunit-test.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> index d69efcbed624..555601d17f79 100644
+> --- a/lib/kunit/kunit-test.c
+> +++ b/lib/kunit/kunit-test.c
+> @@ -415,12 +415,15 @@ static struct kunit_suite kunit_log_test_suite = {
+>
+>  static void kunit_log_test(struct kunit *test)
+>  {
+> -       struct kunit_suite *suite = &kunit_log_test_suite;
+> +       struct kunit_suite suite;
+> +
+> +       suite.log = kunit_kzalloc(test, KUNIT_LOG_SIZE, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
+>
+>         kunit_log(KERN_INFO, test, "put this in log.");
+>         kunit_log(KERN_INFO, test, "this too.");
+> -       kunit_log(KERN_INFO, suite, "add to suite log.");
+> -       kunit_log(KERN_INFO, suite, "along with this.");
+> +       kunit_log(KERN_INFO, &suite, "add to suite log.");
+> +       kunit_log(KERN_INFO, &suite, "along with this.");
+>
+>  #ifdef CONFIG_KUNIT_DEBUGFS
+>         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+> @@ -428,12 +431,11 @@ static void kunit_log_test(struct kunit *test)
+>         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+>                                      strstr(test->log, "this too."));
+>         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+> -                                    strstr(suite->log, "add to suite log."));
+> +                                    strstr(suite.log, "add to suite log."));
+>         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+> -                                    strstr(suite->log, "along with this."));
+> +                                    strstr(suite.log, "along with this."));
+>  #else
+>         KUNIT_EXPECT_PTR_EQ(test, test->log, (char *)NULL);
+> -       KUNIT_EXPECT_PTR_EQ(test, suite->log, (char *)NULL);
+>  #endif
+>  }
+>
+>
+> base-commit: 316346243be6df12799c0b64b788e06bad97c30b
+> --
+> 2.33.0.309.g3052b89438-goog
+>
