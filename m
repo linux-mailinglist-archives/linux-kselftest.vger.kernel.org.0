@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EDB413770
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 18:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C547B413773
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 18:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234640AbhIUQW3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Sep 2021 12:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S234493AbhIUQWf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Sep 2021 12:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234668AbhIUQWY (ORCPT
+        with ESMTP id S234516AbhIUQW2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Sep 2021 12:22:24 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A7EC06124A
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Sep 2021 09:19:26 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id w17so32791943wrv.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Sep 2021 09:19:25 -0700 (PDT)
+        Tue, 21 Sep 2021 12:22:28 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FFBC061767
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Sep 2021 09:20:05 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id t18so40859914wrb.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Sep 2021 09:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NKVGrhptbQ2tPiSL11nU0NzuroCFSqGvZwC9U+FzQXo=;
-        b=cnPF/ciB+iDSyvwxImERVYo6y1riM5QaBbXOBdYqlfMOBn5DmGuMeNMjPqpvQQxwd/
-         Sl/cTDYIdhOAI8hvMLemRECUrCA4vYkmVS7GznZvY026VR1ny7iCWWXwPOAuLuJRBtA4
-         LdrslU2N3CzM1oixg0AR5CvGCZ317KZUj7vBbauKP2HZLnY2JUqUkYpcR0WMjydZapDp
-         GYbE9VZR1oYOKfXG6j4RUgzTP0708tHOl5zNRh/cHf0v45UJZSmZrvbYuqZV7yN0GuOd
-         +269i8WMxbA1c7J373jf9HJlZYx1Q0vNzFIx5JvtoU1wbL7pwVVr5HLYDzH614iNqdLu
-         VimA==
+        bh=078yoIIes6XudmrA4ndvhJcU0cqJ5ibZSu/SRqkDGds=;
+        b=LD7Xem73lecJCrN4VziR5KcEWxK5iCEy6tqZaK5KCA9LB0VCuJchCA0iT98pdeX3zG
+         WCDjpZYupCOQz9C2hEONtTu7PinvrJFwHqLMpE+jyDBrQe5s8VITYlFWygdOR15gX//b
+         dRgBFxrZENPcbUyM1VT+x7LIla20YSnzht1ryfdiAivrI5ne2O9XD3pLMGWU1CMxhJQO
+         qaStlXjXQGtdMiGiQU0Bvo9pT0pCo3+kz9eY1y45vXvgVuuc4QqQnt50IAPxgQ+1LO+X
+         eh1CaAjN/kP2/L7zxJW/mNQQLYjL9EUpL4A6//mtFzgoYCe6gODwctowDPBBCnA0qmjq
+         hyOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NKVGrhptbQ2tPiSL11nU0NzuroCFSqGvZwC9U+FzQXo=;
-        b=OoESCpLOWflPxVppuLDbicmxOYXAHUbCBbljlWYcDcSXVv9UW/nosdseFpYjFkiR40
-         K3K/gyR67rnCOfIOL7383kQVSlLrBf9eoNIO/Fs/OGmTek0qZhkN0MlHJJxo6HxVPRsa
-         w5fl7PmS10C+v+JJ0rTVxIWvUJIfhOl1M2Cn7qE+Ric2R2zbhAd0i9XHEAtKHEwDTq/P
-         opwZJVNdJ9iCHQ9fZGAfIRB+N0jnzHFVtfybQHIAnP4j2HVo3mha611ivDz94XKOKboy
-         averIYKkjHTjezZ/q4FzCzvwdfM8+SZ3wOuBzeOFZSxkVK0NrZqI2biJxZXZeLFr67rS
-         jJhg==
-X-Gm-Message-State: AOAM530yToEVL+kZ/jv22AcPbhx157Qu1JJJquwazlIAEIfgzG2uIwW/
-        ts4UUq2h8W6OK8hGhsbTUjQO5ZD87YdxJE3EC3QffA==
-X-Google-Smtp-Source: ABdhPJyyuA1e+uumxVvmaTLP0O0qfCPf138r+ak1Oej8DfIhZDRDI8CkWwglj8dr+zecAMd163VXykg5wFi3e1WUQwk=
-X-Received: by 2002:a05:6000:124b:: with SMTP id j11mr36621327wrx.147.1632241164364;
- Tue, 21 Sep 2021 09:19:24 -0700 (PDT)
+        bh=078yoIIes6XudmrA4ndvhJcU0cqJ5ibZSu/SRqkDGds=;
+        b=v2ENjTeVlfJs2vOwSPRzfpjWhTKAEyWTuJYubjSUutHKtRH9z5oguI/GfMdIpRc8TU
+         2Nnqnj1igqwZQugrf7wza3Z8EgHTh13Q3qN6O+ziMPlQ8grEUwXRpiUMuuyZ/2Si45rG
+         7/c57RvTG54iPd0CSxEumalLQDJ7uplDefYZzQFdMJ5pvy0IikPDPkOvBHUDrGvY26bZ
+         snjhJJUJpbrQhtgwy7AjNPMokKZpujVmxvHa6llB6YqMuShea99C2aH9PmZY8dvLTxmC
+         c00VRH+nqHNrDcjIZb9xNAtjC6xQQgEpEKg4p1gyXhI/joML+jpVfICLcz3n1c+Bxvqt
+         P4fw==
+X-Gm-Message-State: AOAM530dyRA+W9hcLoZtuu33W6wGzuc1vbfUt5OgKbD3/ltuSLr+NaHh
+        kGE/CxwlZSOBPBjS/mFX1OXXUOrxZoh71V0pErtI8g==
+X-Google-Smtp-Source: ABdhPJxaDiXULVbh/F82K9ZFKKGTEq6b50WBbTfis9z0VqZVmbdS3XARCUgkO9Ie6hE4+J0O81R8wqC5QZUZpUwtI8E=
+X-Received: by 2002:adf:d1e9:: with SMTP id g9mr24352051wrd.200.1632241203757;
+ Tue, 21 Sep 2021 09:20:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210903161405.1861312-1-dlatypov@google.com>
-In-Reply-To: <20210903161405.1861312-1-dlatypov@google.com>
+References: <20210916223903.1592541-1-dlatypov@google.com>
+In-Reply-To: <20210916223903.1592541-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 22 Sep 2021 00:19:12 +0800
-Message-ID: <CABVgOSmJBpAcVOTxF1FZptUL4+bcLzBPieSDmfMVtkCuCQ6ouA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: better handling of quasi-bool args (--json, --raw_output)
+Date:   Wed, 22 Sep 2021 00:19:52 +0800
+Message-ID: <CABVgOSk3K5PGii7uMBpqRRxgVZpxPX19CMn8cYp_782T1ycZig@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: make --raw_output only support showing kunit output
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -63,137 +63,146 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Sep 4, 2021 at 12:14 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Fri, Sep 17, 2021 at 6:39 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Problem:
+> Commit 6a499c9c42d0 ("kunit: tool: make --raw_output support only
+> showing kunit output") made --raw_output a string-typed argument.
+> Passing --raw_output=kunit would make it only show KUnit-related output
+> and not everything.
 >
-> What does this do?
-> $ kunit.py run --json
-> Well, it runs all the tests and prints test results out as JSON.
+> However, converting it to a string-typed argument had side effects.
 >
-> And next is
-> $ kunit.py run my-test-suite --json
-> This runs just `my-test-suite` and prints results out as JSON.
+> These calls used to work:
+> $ kunit.py run --raw_output
+> $ kunit.py run --raw_output suite_filter
+> $ kunit.py run suite_filter --raw_output
 >
-> But what about?
-> $ kunit.py run --json my-test-suite
-> This runs all the tests and stores the json results in a "my-test-suite"
-> file.
+> But now the second is actually parsed as
+> $ kunit.py run --raw_output=suite_filter
 >
-> Why:
-> --json, and now --raw_output are actually string flags. They just have a
-> default value. --json in particular takes the name of an output file.
+> So the order you add in --raw_output now matters and command lines that
+> used to work might not anymore.
 >
-> It was intended that you'd do
-> $ kunit.py run --json=my_output_file my-test-suite
-> if you ever wanted to specify the value.
+> Change --raw_output back to a boolean flag, but change its behavior to
+> match that of the former --raw_output=kunit.
+> The assumption is that this is what most people wanted to see anyways.
 >
-> Workaround:
-> It doesn't seem like there's a way to make
-> https://docs.python.org/3/library/argparse.html only accept arg values
-> after a '='.
+> To get the old behavior, users can simply do:
+> $ kunit.py run >/dev/null; cat .kunit/test.log
+> They don't have any easy way of getting the --raw_output=kunit behavior.
 >
-> I believe that `--json` should "just work" regardless of where it is.
-> So this patch automatically rewrites a bare `--json` to `--json=stdout`.
->
-> That makes the examples above work the same way.
-> Add a regression test that can catch this for --raw_output.
->
-> Fixes: 6a499c9c42d0 ("kunit: tool: make --raw_output support only showing kunit output")
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
-Thanks! This definitely is a real issue that we need to fix: it's been
-sheer luck that I haven't hit it several times.
+>
+> Meta: this is an alternative to
+> https://lore.kernel.org/linux-kselftest/20210903161405.1861312-1-dlatypov@google.com/
+>
+> I'd slightly prefer that approach, but if we're fine with giving up the
+> old --raw_output semantics entirely, this would be cleaner.
+> I'd also assume that most people would prefer the new semantics, but I'm
+> not sure of that.
+>
+> ---
 
-I do think the implementation here is both hacky, and requires a
-little bit more Python knowledge than I'm personally super comfortable
-with. The comments are good, though, which makes me reasonably content
-that I could work with it if I had to.
+Thanks. I'm happy with either approach, but this is the one I properly
+understand. If you'd rather push the other one, I agree that it's
+better from a user perspective, so I'm okay with that: it's just a bit
+beyond my comfort zone Python-hacks wise.
 
-Additionally, it produces a mypy warning:
-tools/testing/kunit/kunit.py:207: error: Incompatible return value
-type (got "Iterator[str]", expected "Sequence[str]")
+If we do go with this one, and I need the whole output, just running
+the UML 'linux' binary is another option, which I've used in the past.
+That's a bit trickier for qemu though: maybe there's some benefit in
+having a --dry-run option for kunit.py run which just prints the
+command used to execute the kernel. That's obviously beyond the scope
+of this, though.
 
-Regardless, this works very well from the user point of view, so it's:
-Tested-by: David Gow <davidgow@google.com>
+Regardless, this is
+Reviewed-by: David Gow <davidgow@google.com>
 
-Thanks,
+Cheers,
 -- David
 
->  tools/testing/kunit/kunit.py           | 24 ++++++++++++++++++++++--
->  tools/testing/kunit/kunit_tool_test.py |  8 ++++++++
->  2 files changed, 30 insertions(+), 2 deletions(-)
+
+>  Documentation/dev-tools/kunit/kunit-tool.rst |  7 -------
+>  tools/testing/kunit/kunit.py                 | 12 +++---------
+>  tools/testing/kunit/kunit_tool_test.py       | 13 ++++++-------
+>  3 files changed, 9 insertions(+), 23 deletions(-)
 >
+> diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
+> index ae52e0f489f9..03404746f1f6 100644
+> --- a/Documentation/dev-tools/kunit/kunit-tool.rst
+> +++ b/Documentation/dev-tools/kunit/kunit-tool.rst
+> @@ -114,13 +114,6 @@ results in TAP format, you can pass the ``--raw_output`` argument.
+>
+>         ./tools/testing/kunit/kunit.py run --raw_output
+>
+> -The raw output from test runs may contain other, non-KUnit kernel log
+> -lines. You can see just KUnit output with ``--raw_output=kunit``:
+> -
+> -.. code-block:: bash
+> -
+> -       ./tools/testing/kunit/kunit.py run --raw_output=kunit
+> -
+>  If you have KUnit results in their raw TAP format, you can parse them and print
+>  the human-readable summary with the ``parse`` command for kunit_tool. This
+>  accepts a filename for an argument, or will read from standard input.
 > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 5a931456e718..95d62020e4f2 100755
+> index 5a931456e718..3626a56472b5 100755
 > --- a/tools/testing/kunit/kunit.py
 > +++ b/tools/testing/kunit/kunit.py
-> @@ -16,7 +16,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
+> @@ -115,13 +115,7 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
+>                                               'Tests not Parsed.')
 >
->  from collections import namedtuple
->  from enum import Enum, auto
-> -from typing import Iterable
-> +from typing import Iterable, Sequence
+>         if request.raw_output:
+> -               output: Iterable[str] = request.input_data
+> -               if request.raw_output == 'all':
+> -                       pass
+> -               elif request.raw_output == 'kunit':
+> -                       output = kunit_parser.extract_tap_lines(output)
+> -               else:
+> -                       print(f'Unknown --raw_output option "{request.raw_output}"', file=sys.stderr)
+> +               output = kunit_parser.extract_tap_lines(request.input_data)
+>                 for line in output:
+>                         print(line.rstrip())
 >
->  import kunit_config
->  import kunit_json
-> @@ -186,6 +186,26 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
->                                 exec_result.elapsed_time))
->         return parse_result
+> @@ -256,8 +250,8 @@ def add_exec_opts(parser) -> None:
 >
-> +# Problem:
-> +# $ kunit.py run --json
-> +# works as one would expect and prints the parsed test results as JSON.
-> +# $ kunit.py run --json suite_name
-> +# would *not* pass suite_name as the filter_glob and print as json.
-> +# argparse will consider it to be another way of writing
-> +# $ kunit.py run --json=suite_name
-> +# i.e. it would run all tests, and dump the json to a `suite_name` file.
-> +# So we hackily automatically rewrite --json => --json=stdout
-> +pseudo_bool_flag_defaults = {
-> +               '--json': 'stdout',
-> +               '--raw_output': 'kunit',
-> +}
-> +def massage_argv(argv: Sequence[str]) -> Sequence[str]:
-> +       def massage_arg(arg: str) -> str:
-> +               if arg not in pseudo_bool_flag_defaults:
-> +                       return arg
-> +               return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
-> +       return map(massage_arg, argv)
-> +
->  def add_common_opts(parser) -> None:
->         parser.add_argument('--build_dir',
->                             help='As in the make command, it specifies the build '
-> @@ -303,7 +323,7 @@ def main(argv, linux=None):
->                                   help='Specifies the file to read results from.',
->                                   type=str, nargs='?', metavar='input_file')
->
-> -       cli_args = parser.parse_args(argv)
-> +       cli_args = parser.parse_args(massage_argv(argv))
->
->         if get_kernel_root_path():
->                 os.chdir(get_kernel_root_path())
+>  def add_parse_opts(parser) -> None:
+>         parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
+> -                           'If set to --raw_output=kunit, filters to just KUnit output.',
+> -                           type=str, nargs='?', const='all', default=None)
+> +                           'It will only show output from KUnit.',
+> +                           action='store_true')
+>         parser.add_argument('--json',
+>                             nargs='?',
+>                             help='Stores test results in a JSON, and either '
 > diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 619c4554cbff..1edcc8373b4e 100755
+> index 619c4554cbff..55ed3dac31ee 100755
 > --- a/tools/testing/kunit/kunit_tool_test.py
 > +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -408,6 +408,14 @@ class KUnitMainTest(unittest.TestCase):
+> @@ -399,14 +399,13 @@ class KUnitMainTest(unittest.TestCase):
 >                         self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
 >                         self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
 >
+> -       def test_run_raw_output_kunit(self):
 > +       def test_run_raw_output_does_not_take_positional_args(self):
-> +               # --raw_output is a string flag, but we don't want it to consume
-> +               # any positional arguments, only ones after an '='
-> +               self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+> +               # --raw_output might eventually support an argument, but we don't want it
+> +               # to consume any positional arguments, only ones after an '='.
+>                 self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+> -               kunit.main(['run', '--raw_output=kunit'], self.linux_source_mock)
+> -               self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+> -               self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+> -               for call in self.print_mock.call_args_list:
+> -                       self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
+> -                       self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
 > +               kunit.main(['run', '--raw_output', 'filter_glob'], self.linux_source_mock)
 > +               self.linux_source_mock.run_kernel.assert_called_once_with(
 > +                       args=None, build_dir='.kunit', filter_glob='filter_glob', timeout=300)
-> +
+>
 >         def test_exec_timeout(self):
 >                 timeout = 3453
->                 kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
 >
-> base-commit: a9c9a6f741cdaa2fa9ba24a790db8d07295761e3
+> base-commit: 316346243be6df12799c0b64b788e06bad97c30b
 > --
-> 2.33.0.153.gba50c8fa24-goog
+> 2.33.0.464.g1972c5931b-goog
 >
