@@ -2,84 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BB1413403
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 15:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA96741345C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 15:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbhIUN13 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Sep 2021 09:27:29 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:42203 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232906AbhIUN12 (ORCPT
+        id S233117AbhIUNiV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Sep 2021 09:38:21 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:39163 "EHLO
+        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233011AbhIUNiR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Sep 2021 09:27:28 -0400
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailout.west.internal (Postfix) with ESMTP id 035A53200987;
-        Tue, 21 Sep 2021 09:25:59 -0400 (EDT)
+        Tue, 21 Sep 2021 09:38:17 -0400
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id 0A5552B011EA;
+        Tue, 21 Sep 2021 09:36:47 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 21 Sep 2021 09:26:00 -0400
+  by compute5.internal (MEProxy); Tue, 21 Sep 2021 09:36:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=FlxnQ1
-        G0tyJvkWQzOxKMOHkauuw5F5XxO64w6ivhM9I=; b=Akj2woKoe0MjMfRpR4lg+B
-        akSbxXhneKhRxa8mQcO3Sql5UzLBN1dFldjShd7Kae0Jt8k1JPcW1YDBDzGybApq
-        uSslHf7SumXCmVF7OMLWxoDCUIKXkFJ9ySIIAVdazEtv2JvaOwV+A/UcTUmhlauA
-        vxbCNmxRIAxbWs9KVBlzjF1N5F7snzM9o/qRZxTSRdTkdfDCx0U7nJYsB6BYTCh2
-        lVO63+Tms49VvRI79biLcZ+k9uvDxMUZ9gWd1w2prHzbVKAOWIh0PSpoEC7NByjm
-        7RyKT4jg3Z/8K4jwU5r6/jJ21jw7W22bAksRa2OC9W1PNynSilM1g1VsavbxImiQ
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=lKxLHh
+        UqsgxPtzaPsQjSQ9FkHSNCCx7h6WzPiI38knc=; b=rOR1L7+co5Fc2ifL7EMIOg
+        aOAeq2qPw1hv20cDirpcoz6qJmgof23dwz3ZkCdTYK4DW+b6Ft96fKfw78KgRLzJ
+        uwRR/WX9MbkvZ8EDskI6qvE08X5/OIyJ1wkM3M6FqCOLjOGRbhGGQTCwwNwtA+zx
+        fyjKo2M5anfybLUjAkhxOZR9+50G83+R/KGk3phKPw1qMHg4BB3lzpSsyflyHpHD
+        frnk9aN9kV2dtsR/GySZrwYvcdPdRi1cbpUSRh6KSlHGDnM5bGh7GS7cTa1r7ili
+        ztLcTyCgk+A7lJ+jdQCWbU9/4MgRkLv/M5bTEKmg6dGL/wQNSaLHLVdVKCHC+Hwg
         ==
-X-ME-Sender: <xms:Zt1JYekr4SLoSFBi_cXYkiMXatsSj7phcDndqiVlOavgd_YDlaPBWQ>
-    <xme:Zt1JYV0kFfjJophw3YBEISJPOq_59DYdJcFC42OOLZZTIki5jzV9pUsTEEcBDIF5H
-    KVLixAa_OvfNJs>
-X-ME-Received: <xmr:Zt1JYcphyMJ9QRwUeffUbHrFH22OicoAIy3uQI2cTV0PRzML1dT7tR5oDhAvNay1aLjCKWLYjk6WFKvq8q7VA_lpwyXEcQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeigedgieegucetufdoteggodetrfdotf
+X-ME-Sender: <xms:7d9JYZkWMG8hsrO_6ZkRXU0P5JQ2nwFGErnmms7_KcfueeaMinLAgQ>
+    <xme:7d9JYU0xyVZxS75AZnvNjyPvU4Jisv6SSJlycJBTPDyvwESHz02hUrhMV48DALhVw
+    ecyDhxZ8vW7zkc>
+X-ME-Received: <xmr:7d9JYfqDUeaGBcTK2VoW6bjyFHd0CdYUZyPXbC1iXVEbZOLo0PSNzNcWfDxtvB2XkQiCOIWVXy8_N5gM8b_1EIv-03x_Bg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeigedgieekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
     tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
-    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:Zt1JYSmLSI7RyU9lELLNbrVduxQtWzZAQ9GlervbL_fdyok3A6S4aw>
-    <xmx:Zt1JYc3a-dV9i-yth0NSzf4i9aX_NX7MuBxoljwo1OzVi0LzP8tLxg>
-    <xmx:Zt1JYZvz2JEKo19Vi4QytdeBSdTyyXQZLXkNjMQx5Xck3COucimkwA>
-    <xmx:Z91JYWpdhY7522FWW0ltvF_EmoIt8vIW5e9l3Xu9bP3mN1y6HOEGRw>
+    gvrhhnpeejhedufeelkeefveekieeiieeffeetjeeigeduveeikedvteeileekgffhgfel
+    vdenucffohhmrghinhepmhgvlhhlrghnohigrdgtohhmnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhr
+    gh
+X-ME-Proxy: <xmx:7d9JYZk5owgeEI0YZTjz81J81swNz46JP_BF24Ng4clhodLfUmWZKg>
+    <xmx:7d9JYX3Ajla1-j5BDOwkto8789ZHWnffuFlvMmmmk5qlKVPJOM8OJQ>
+    <xmx:7d9JYYvf2nXhyyJ7BUTuNKlEQNoiHBPU687wZaKXgjvcyCdKixoNxA>
+    <xmx:799JYQvr40t1RWoWoT3dbzv5qvtZ1S8vKtVHq95-AL0IX_U2JJpjSul2GGQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Sep 2021 09:25:57 -0400 (EDT)
-Date:   Tue, 21 Sep 2021 16:25:54 +0300
+ 21 Sep 2021 09:36:44 -0400 (EDT)
+Date:   Tue, 21 Sep 2021 16:36:41 +0300
 From:   Ido Schimmel <idosch@idosch.org>
-To:     Maciej Machnikowski <maciej.machnikowski@intel.com>
-Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        richardcochran@gmail.com, abyagowi@fb.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] ice: add support for reading SyncE DPLL
- state
-Message-ID: <YUndYq8EcpyPnPud@shredder>
-References: <20210903151436.529478-1-maciej.machnikowski@intel.com>
- <20210903151436.529478-3-maciej.machnikowski@intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "abyagowi@fb.com" <abyagowi@fb.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Saeed Mahameed <saeed@kernel.org>,
+        Michael Chan <michael.chan@broadcom.com>
+Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
+ to get SyncE status
+Message-ID: <YUnf6V5F/hAslHnJ@shredder>
+References: <PH0PR11MB4951623918C9BA8769C10E50EAD29@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210906113925.1ce63ac7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB49511F2017F48BBAAB2A065CEAD29@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210906180124.33ff49ef@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB495152B03F32A5A17EDB2F6CEAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210907075509.0b3cb353@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB49512C265E090FC8741D8510EAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210907124730.33852895@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB495169997552152891A69B57EAD49@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210908092115.191fdc28@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210903151436.529478-3-maciej.machnikowski@intel.com>
+In-Reply-To: <20210908092115.191fdc28@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 03, 2021 at 05:14:36PM +0200, Maciej Machnikowski wrote:
-> Implement SyncE DPLL monitoring for E810-T devices.
-> Poll loop will periodically check the state of the DPLL and cache it
-> in the pf structure. State changes will be logged in the system log.
-> 
-> Cached state can be read using the RTM_GETEECSTATE rtnetlink
-> message.
+On Wed, Sep 08, 2021 at 09:21:15AM -0700, Jakub Kicinski wrote:
+> Mumble, mumble. Ido, Florian - any devices within your purview which
+> would support SyncE?
 
-This seems sub-optimal. My understanding is that this information is of
-importance to the user space process that takes care of the ESMC
-protocol. It would probably want to receive a notification when the
-state of the DPLL/EEC changes as opposed to polling the kernel or poking
-into its log.
+So it's public info that Connect-X has it:
+https://www.mellanox.com/files/doc-2020/pb-connectx-6-dx-en-card.pdf
 
-So I think that whatever netlink-based interface we agree on to
-represent the EEC (devlink or something else), should have the ability
-to send a notification when the state changes.
+Given the nature of SyncE, I think you can extrapolate from that about
+other devices :)
+
+Anyway, Petr and I started discussing this with the colleagues defining
+the HW/SW interfaces and we will help with the review to make sure we
+end up with a uAPI that works across multiple implementations.
