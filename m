@@ -2,337 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 138B8413757
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 18:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EDB413770
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Sep 2021 18:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234937AbhIUQTc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Sep 2021 12:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S234640AbhIUQW3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Sep 2021 12:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234621AbhIUQSt (ORCPT
+        with ESMTP id S234668AbhIUQWY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Sep 2021 12:18:49 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE7BC0613DE;
-        Tue, 21 Sep 2021 09:17:16 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id v24so76389473eda.3;
-        Tue, 21 Sep 2021 09:17:16 -0700 (PDT)
+        Tue, 21 Sep 2021 12:22:24 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A7EC06124A
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Sep 2021 09:19:26 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id w17so32791943wrv.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Sep 2021 09:19:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PZHGXm7R/JEU6vc8GKEW973CLXt7h16wy5g4hm2R7wo=;
-        b=qpEocCGtIbmPIBOY44TbpBrFLusxsaxnRppUrrkcvnDdz1iN4RLSCJxLa7YpvF5jrf
-         CaNUfIOy8K56UE07kHh62MXFL5lUQfF2G+KJwuY3McPbVAa9RvkTekAys1nsz+12PSmU
-         v3wlZcFsbitT5DjmIRRoVYJxWh2qnk1qixwz5wpj+Sp9asNbK7r2Bs652rwqHsqNvZuj
-         dajGxjnE4luLPFIfWKgGP9/L0/d5+iZDrlFZbIybB3QYtd3gOidXeRxHq7FZn+qoV1C4
-         FHlcgqvNqUBgPvrUxmmF/NeOx7g6YD3NCliqeXE4Q8zwKEwkyxSNV9waNujgfqR1WzgG
-         fOsw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NKVGrhptbQ2tPiSL11nU0NzuroCFSqGvZwC9U+FzQXo=;
+        b=cnPF/ciB+iDSyvwxImERVYo6y1riM5QaBbXOBdYqlfMOBn5DmGuMeNMjPqpvQQxwd/
+         Sl/cTDYIdhOAI8hvMLemRECUrCA4vYkmVS7GznZvY026VR1ny7iCWWXwPOAuLuJRBtA4
+         LdrslU2N3CzM1oixg0AR5CvGCZ317KZUj7vBbauKP2HZLnY2JUqUkYpcR0WMjydZapDp
+         GYbE9VZR1oYOKfXG6j4RUgzTP0708tHOl5zNRh/cHf0v45UJZSmZrvbYuqZV7yN0GuOd
+         +269i8WMxbA1c7J373jf9HJlZYx1Q0vNzFIx5JvtoU1wbL7pwVVr5HLYDzH614iNqdLu
+         VimA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PZHGXm7R/JEU6vc8GKEW973CLXt7h16wy5g4hm2R7wo=;
-        b=NMB0AdI9p/tYeXvz7DJq/T7ySqLc/6A3CBc0PQCe8OeIZIukWd3GaXgJX4mLBLeAbD
-         m6RTQmEXE21zjRRV3WjdICl8Xv+oCnddXn7iM8Z1eY3d0yM+6TgR7XBbJNPxjy61GvCj
-         HDBoOeqcTkglfMBYH79XK28WLXRTmRkvTqo4Ll4JnNiyaD8GeduOmmDnIru1JSJ+3dZ3
-         +15EJISY9btnEg7Xl4nlfJaugdLr1+vl7+0RafJUT94aj6Yjz176XVcBIkFyuOR5nOk5
-         EGqg/690uiNAiCmSXiR31vUkniWp3eY20ywLFe8iZfMa+S7mJDYm+UDn0MQluVugni/L
-         yoaA==
-X-Gm-Message-State: AOAM530fixbCUopsvdLHUTeH9NWF8jg7/g/eFIKuxUQnE1Q28pX2gxc1
-        eGCR4kb0eWHEoJwiosktFJc=
-X-Google-Smtp-Source: ABdhPJxu+PuOaxlAzsMyFahwSkNqujCfgEOO1ijyOjTluvDHDgzsVgJiHkP1QT0qyMI/+w6yz8HQBg==
-X-Received: by 2002:a50:be86:: with SMTP id b6mr34762477edk.138.1632240950198;
-        Tue, 21 Sep 2021 09:15:50 -0700 (PDT)
-Received: from pinky.lan ([2a04:241e:502:1df0:b065:9bdf:4016:277])
-        by smtp.gmail.com with ESMTPSA id kx17sm7674075ejc.51.2021.09.21.09.15.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Sep 2021 09:15:49 -0700 (PDT)
-From:   Leonard Crestez <cdleonard@gmail.com>
-To:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        Menglong Dong <dong.menglong@zte.com.cn>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 19/19] selftests: tcp_authopt: Add tests for rollover
-Date:   Tue, 21 Sep 2021 19:15:02 +0300
-Message-Id: <613b69cdbc7b22907af1e1359546b87822aa05d9.1632240523.git.cdleonard@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1632240523.git.cdleonard@gmail.com>
-References: <cover.1632240523.git.cdleonard@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NKVGrhptbQ2tPiSL11nU0NzuroCFSqGvZwC9U+FzQXo=;
+        b=OoESCpLOWflPxVppuLDbicmxOYXAHUbCBbljlWYcDcSXVv9UW/nosdseFpYjFkiR40
+         K3K/gyR67rnCOfIOL7383kQVSlLrBf9eoNIO/Fs/OGmTek0qZhkN0MlHJJxo6HxVPRsa
+         w5fl7PmS10C+v+JJ0rTVxIWvUJIfhOl1M2Cn7qE+Ric2R2zbhAd0i9XHEAtKHEwDTq/P
+         opwZJVNdJ9iCHQ9fZGAfIRB+N0jnzHFVtfybQHIAnP4j2HVo3mha611ivDz94XKOKboy
+         averIYKkjHTjezZ/q4FzCzvwdfM8+SZ3wOuBzeOFZSxkVK0NrZqI2biJxZXZeLFr67rS
+         jJhg==
+X-Gm-Message-State: AOAM530yToEVL+kZ/jv22AcPbhx157Qu1JJJquwazlIAEIfgzG2uIwW/
+        ts4UUq2h8W6OK8hGhsbTUjQO5ZD87YdxJE3EC3QffA==
+X-Google-Smtp-Source: ABdhPJyyuA1e+uumxVvmaTLP0O0qfCPf138r+ak1Oej8DfIhZDRDI8CkWwglj8dr+zecAMd163VXykg5wFi3e1WUQwk=
+X-Received: by 2002:a05:6000:124b:: with SMTP id j11mr36621327wrx.147.1632241164364;
+ Tue, 21 Sep 2021 09:19:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210903161405.1861312-1-dlatypov@google.com>
+In-Reply-To: <20210903161405.1861312-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 22 Sep 2021 00:19:12 +0800
+Message-ID: <CABVgOSmJBpAcVOTxF1FZptUL4+bcLzBPieSDmfMVtkCuCQ6ouA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: better handling of quasi-bool args (--json, --raw_output)
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-RFC5925 requires that the use can examine or control the keys being
-used. This is implemented in linux via fields on the TCP_AUTHOPT
-sockopt.
+On Sat, Sep 4, 2021 at 12:14 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Problem:
+>
+> What does this do?
+> $ kunit.py run --json
+> Well, it runs all the tests and prints test results out as JSON.
+>
+> And next is
+> $ kunit.py run my-test-suite --json
+> This runs just `my-test-suite` and prints results out as JSON.
+>
+> But what about?
+> $ kunit.py run --json my-test-suite
+> This runs all the tests and stores the json results in a "my-test-suite"
+> file.
+>
+> Why:
+> --json, and now --raw_output are actually string flags. They just have a
+> default value. --json in particular takes the name of an output file.
+>
+> It was intended that you'd do
+> $ kunit.py run --json=my_output_file my-test-suite
+> if you ever wanted to specify the value.
+>
+> Workaround:
+> It doesn't seem like there's a way to make
+> https://docs.python.org/3/library/argparse.html only accept arg values
+> after a '='.
+>
+> I believe that `--json` should "just work" regardless of where it is.
+> So this patch automatically rewrites a bare `--json` to `--json=stdout`.
+>
+> That makes the examples above work the same way.
+> Add a regression test that can catch this for --raw_output.
+>
+> Fixes: 6a499c9c42d0 ("kunit: tool: make --raw_output support only showing kunit output")
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+Thanks! This definitely is a real issue that we need to fix: it's been
+sheer luck that I haven't hit it several times.
 
-Add socket-level tests for the adjusting keyids on live connections and
-checking the they are reflected on the peer.
+I do think the implementation here is both hacky, and requires a
+little bit more Python knowledge than I'm personally super comfortable
+with. The comments are good, though, which makes me reasonably content
+that I could work with it if I had to.
 
-Also check smooth transitions via rnextkeyid.
+Additionally, it produces a mypy warning:
+tools/testing/kunit/kunit.py:207: error: Incompatible return value
+type (got "Iterator[str]", expected "Sequence[str]")
 
-Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
----
- .../tcp_authopt_test/linux_tcp_authopt.py     |  16 +-
- .../tcp_authopt_test/test_rollover.py         | 180 ++++++++++++++++++
- 2 files changed, 193 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/tcp_authopt/tcp_authopt_test/test_rollover.py
+Regardless, this works very well from the user point of view, so it's:
+Tested-by: David Gow <davidgow@google.com>
 
-diff --git a/tools/testing/selftests/tcp_authopt/tcp_authopt_test/linux_tcp_authopt.py b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/linux_tcp_authopt.py
-index 339298998ff9..1ba4358654be 100644
---- a/tools/testing/selftests/tcp_authopt/tcp_authopt_test/linux_tcp_authopt.py
-+++ b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/linux_tcp_authopt.py
-@@ -23,10 +23,12 @@ TCP_AUTHOPT_KEY = 39
- 
- TCP_AUTHOPT_MAXKEYLEN = 80
- 
- 
- class TCP_AUTHOPT_FLAG(IntFlag):
-+    LOCK_KEYID = BIT(0)
-+    LOCK_RNEXTKEYID = BIT(1)
-     REJECT_UNEXPECTED = BIT(2)
- 
- 
- class TCP_AUTHOPT_KEY_FLAG(IntFlag):
-     DEL = BIT(0)
-@@ -42,24 +44,32 @@ class TCP_AUTHOPT_ALG(IntEnum):
- @dataclass
- class tcp_authopt:
-     """Like linux struct tcp_authopt"""
- 
-     flags: int = 0
--    sizeof = 4
-+    send_keyid: int = 0
-+    send_rnextkeyid: int = 0
-+    recv_keyid: int = 0
-+    recv_rnextkeyid: int = 0
-+    sizeof = 8
- 
-     def pack(self) -> bytes:
-         return struct.pack(
--            "I",
-+            "IBBBB",
-             self.flags,
-+            self.send_keyid,
-+            self.send_rnextkeyid,
-+            self.recv_keyid,
-+            self.recv_rnextkeyid,
-         )
- 
-     def __bytes__(self):
-         return self.pack()
- 
-     @classmethod
-     def unpack(cls, b: bytes):
--        tup = struct.unpack("I", b)
-+        tup = struct.unpack("IBBBB", b)
-         return cls(*tup)
- 
- 
- def set_tcp_authopt(sock, opt: tcp_authopt):
-     return sock.setsockopt(socket.SOL_TCP, TCP_AUTHOPT, bytes(opt))
-diff --git a/tools/testing/selftests/tcp_authopt/tcp_authopt_test/test_rollover.py b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/test_rollover.py
-new file mode 100644
-index 000000000000..a348a7acfe0f
---- /dev/null
-+++ b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/test_rollover.py
-@@ -0,0 +1,180 @@
-+# SPDX-License-Identifier: GPL-2.0
-+import typing
-+import socket
-+from .server import SimpleServerThread
-+from .linux_tcp_authopt import (
-+    TCP_AUTHOPT_FLAG,
-+    set_tcp_authopt_key,
-+    tcp_authopt,
-+    tcp_authopt_key,
-+    set_tcp_authopt,
-+    get_tcp_authopt,
-+)
-+from .utils import DEFAULT_TCP_SERVER_PORT, create_listen_socket, check_socket_echo
-+from contextlib import ExitStack, contextmanager
-+from .conftest import skipif_missing_tcp_authopt
-+
-+pytestmark = skipif_missing_tcp_authopt
-+
-+
-+@contextmanager
-+def make_tcp_authopt_socket_pair(
-+    server_addr="127.0.0.1",
-+    server_authopt: tcp_authopt = None,
-+    server_key_list: typing.Iterable[tcp_authopt_key] = [],
-+    client_authopt: tcp_authopt = None,
-+    client_key_list: typing.Iterable[tcp_authopt_key] = [],
-+) -> typing.Tuple[socket.socket, socket.socket]:
-+    """Make a pair for connected sockets for key switching tests
-+
-+    Server runs in a background thread implementing echo protocol"""
-+    with ExitStack() as exit_stack:
-+        listen_socket = exit_stack.enter_context(
-+            create_listen_socket(bind_addr=server_addr)
-+        )
-+        server_thread = exit_stack.enter_context(
-+            SimpleServerThread(listen_socket, mode="echo")
-+        )
-+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-+        client_socket.settimeout(1.0)
-+
-+        if server_authopt:
-+            set_tcp_authopt(listen_socket, server_authopt)
-+        for k in server_key_list:
-+            set_tcp_authopt_key(listen_socket, k)
-+        if client_authopt:
-+            set_tcp_authopt(client_socket, client_authopt)
-+        for k in client_key_list:
-+            set_tcp_authopt_key(client_socket, k)
-+
-+        client_socket.connect((server_addr, DEFAULT_TCP_SERVER_PORT))
-+        check_socket_echo(client_socket)
-+        server_socket = server_thread.server_socket[0]
-+
-+        yield client_socket, server_socket
-+
-+
-+def test_get_keyids(exit_stack: ExitStack):
-+    """Check reading key ids"""
-+    sk1 = tcp_authopt_key(send_id=11, recv_id=12, key="111")
-+    sk2 = tcp_authopt_key(send_id=21, recv_id=22, key="222")
-+    ck1 = tcp_authopt_key(send_id=12, recv_id=11, key="111")
-+    client_socket, server_socket = exit_stack.enter_context(
-+        make_tcp_authopt_socket_pair(
-+            server_key_list=[sk1, sk2],
-+            client_key_list=[ck1],
-+        )
-+    )
-+
-+    check_socket_echo(client_socket)
-+    client_tcp_authopt = get_tcp_authopt(client_socket)
-+    server_tcp_authopt = get_tcp_authopt(server_socket)
-+    assert server_tcp_authopt.send_keyid == 11
-+    assert server_tcp_authopt.send_rnextkeyid == 12
-+    assert server_tcp_authopt.recv_keyid == 12
-+    assert server_tcp_authopt.recv_rnextkeyid == 11
-+    assert client_tcp_authopt.send_keyid == 12
-+    assert client_tcp_authopt.send_rnextkeyid == 11
-+    assert client_tcp_authopt.recv_keyid == 11
-+    assert client_tcp_authopt.recv_rnextkeyid == 12
-+
-+
-+def test_rollover_send_keyid(exit_stack: ExitStack):
-+    """Check reading key ids"""
-+    sk1 = tcp_authopt_key(send_id=11, recv_id=12, key="111")
-+    sk2 = tcp_authopt_key(send_id=21, recv_id=22, key="222")
-+    ck1 = tcp_authopt_key(send_id=12, recv_id=11, key="111")
-+    ck2 = tcp_authopt_key(send_id=22, recv_id=21, key="222")
-+    client_socket, server_socket = exit_stack.enter_context(
-+        make_tcp_authopt_socket_pair(
-+            server_key_list=[sk1, sk2],
-+            client_key_list=[ck1, ck2],
-+            client_authopt=tcp_authopt(
-+                send_keyid=12, flags=TCP_AUTHOPT_FLAG.LOCK_KEYID
-+            ),
-+        )
-+    )
-+
-+    check_socket_echo(client_socket)
-+    assert get_tcp_authopt(client_socket).recv_keyid == 11
-+    assert get_tcp_authopt(server_socket).recv_keyid == 12
-+
-+    # Explicit request for key2
-+    set_tcp_authopt(
-+        client_socket, tcp_authopt(send_keyid=22, flags=TCP_AUTHOPT_FLAG.LOCK_KEYID)
-+    )
-+    check_socket_echo(client_socket)
-+    assert get_tcp_authopt(client_socket).recv_keyid == 21
-+    assert get_tcp_authopt(server_socket).recv_keyid == 22
-+
-+
-+def test_rollover_rnextkeyid(exit_stack: ExitStack):
-+    """Check reading key ids"""
-+    sk1 = tcp_authopt_key(send_id=11, recv_id=12, key="111")
-+    sk2 = tcp_authopt_key(send_id=21, recv_id=22, key="222")
-+    ck1 = tcp_authopt_key(send_id=12, recv_id=11, key="111")
-+    ck2 = tcp_authopt_key(send_id=22, recv_id=21, key="222")
-+    client_socket, server_socket = exit_stack.enter_context(
-+        make_tcp_authopt_socket_pair(
-+            server_key_list=[sk1],
-+            client_key_list=[ck1, ck2],
-+            client_authopt=tcp_authopt(
-+                send_keyid=12, flags=TCP_AUTHOPT_FLAG.LOCK_KEYID
-+            ),
-+        )
-+    )
-+
-+    check_socket_echo(client_socket)
-+    assert get_tcp_authopt(server_socket).recv_rnextkeyid == 11
-+
-+    # request rnextkeyd=22 but server does not have it
-+    set_tcp_authopt(
-+        client_socket,
-+        tcp_authopt(send_rnextkeyid=21, flags=TCP_AUTHOPT_FLAG.LOCK_RNEXTKEYID),
-+    )
-+    check_socket_echo(client_socket)
-+    check_socket_echo(client_socket)
-+    assert get_tcp_authopt(server_socket).recv_rnextkeyid == 21
-+    assert get_tcp_authopt(server_socket).send_keyid == 11
-+
-+    # after adding k2 on server the key is switched
-+    set_tcp_authopt_key(server_socket, sk2)
-+    check_socket_echo(client_socket)
-+    check_socket_echo(client_socket)
-+    assert get_tcp_authopt(server_socket).send_keyid == 21
-+
-+
-+def test_rollover_delkey(exit_stack: ExitStack):
-+    sk1 = tcp_authopt_key(send_id=11, recv_id=12, key="111")
-+    sk2 = tcp_authopt_key(send_id=21, recv_id=22, key="222")
-+    ck1 = tcp_authopt_key(send_id=12, recv_id=11, key="111")
-+    ck2 = tcp_authopt_key(send_id=22, recv_id=21, key="222")
-+    client_socket, server_socket = exit_stack.enter_context(
-+        make_tcp_authopt_socket_pair(
-+            server_key_list=[sk1, sk2],
-+            client_key_list=[ck1, ck2],
-+            client_authopt=tcp_authopt(
-+                send_keyid=12, flags=TCP_AUTHOPT_FLAG.LOCK_KEYID
-+            ),
-+        )
-+    )
-+
-+    check_socket_echo(client_socket)
-+    assert get_tcp_authopt(server_socket).recv_keyid == 12
-+
-+    # invalid send_keyid is just ignored
-+    set_tcp_authopt(client_socket, tcp_authopt(send_keyid=7))
-+    check_socket_echo(client_socket)
-+    assert get_tcp_authopt(client_socket).send_keyid == 12
-+    assert get_tcp_authopt(server_socket).recv_keyid == 12
-+    assert get_tcp_authopt(client_socket).recv_keyid == 11
-+
-+    # If a key is removed it is replaced by anything that matches
-+    ck1.delete_flag = True
-+    set_tcp_authopt_key(client_socket, ck1)
-+    check_socket_echo(client_socket)
-+    check_socket_echo(client_socket)
-+    assert get_tcp_authopt(client_socket).send_keyid == 22
-+    assert get_tcp_authopt(server_socket).send_keyid == 21
-+    assert get_tcp_authopt(server_socket).recv_keyid == 22
-+    assert get_tcp_authopt(client_socket).recv_keyid == 21
--- 
-2.25.1
+Thanks,
+-- David
 
+>  tools/testing/kunit/kunit.py           | 24 ++++++++++++++++++++++--
+>  tools/testing/kunit/kunit_tool_test.py |  8 ++++++++
+>  2 files changed, 30 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 5a931456e718..95d62020e4f2 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -16,7 +16,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
+>
+>  from collections import namedtuple
+>  from enum import Enum, auto
+> -from typing import Iterable
+> +from typing import Iterable, Sequence
+>
+>  import kunit_config
+>  import kunit_json
+> @@ -186,6 +186,26 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+>                                 exec_result.elapsed_time))
+>         return parse_result
+>
+> +# Problem:
+> +# $ kunit.py run --json
+> +# works as one would expect and prints the parsed test results as JSON.
+> +# $ kunit.py run --json suite_name
+> +# would *not* pass suite_name as the filter_glob and print as json.
+> +# argparse will consider it to be another way of writing
+> +# $ kunit.py run --json=suite_name
+> +# i.e. it would run all tests, and dump the json to a `suite_name` file.
+> +# So we hackily automatically rewrite --json => --json=stdout
+> +pseudo_bool_flag_defaults = {
+> +               '--json': 'stdout',
+> +               '--raw_output': 'kunit',
+> +}
+> +def massage_argv(argv: Sequence[str]) -> Sequence[str]:
+> +       def massage_arg(arg: str) -> str:
+> +               if arg not in pseudo_bool_flag_defaults:
+> +                       return arg
+> +               return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
+> +       return map(massage_arg, argv)
+> +
+>  def add_common_opts(parser) -> None:
+>         parser.add_argument('--build_dir',
+>                             help='As in the make command, it specifies the build '
+> @@ -303,7 +323,7 @@ def main(argv, linux=None):
+>                                   help='Specifies the file to read results from.',
+>                                   type=str, nargs='?', metavar='input_file')
+>
+> -       cli_args = parser.parse_args(argv)
+> +       cli_args = parser.parse_args(massage_argv(argv))
+>
+>         if get_kernel_root_path():
+>                 os.chdir(get_kernel_root_path())
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 619c4554cbff..1edcc8373b4e 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -408,6 +408,14 @@ class KUnitMainTest(unittest.TestCase):
+>                         self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
+>                         self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
+>
+> +       def test_run_raw_output_does_not_take_positional_args(self):
+> +               # --raw_output is a string flag, but we don't want it to consume
+> +               # any positional arguments, only ones after an '='
+> +               self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+> +               kunit.main(['run', '--raw_output', 'filter_glob'], self.linux_source_mock)
+> +               self.linux_source_mock.run_kernel.assert_called_once_with(
+> +                       args=None, build_dir='.kunit', filter_glob='filter_glob', timeout=300)
+> +
+>         def test_exec_timeout(self):
+>                 timeout = 3453
+>                 kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
+>
+> base-commit: a9c9a6f741cdaa2fa9ba24a790db8d07295761e3
+> --
+> 2.33.0.153.gba50c8fa24-goog
+>
