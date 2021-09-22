@@ -2,119 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBD4414EB9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Sep 2021 19:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CE5414F2C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Sep 2021 19:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236716AbhIVRGK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Sep 2021 13:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236665AbhIVRGK (ORCPT
+        id S236840AbhIVReg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Sep 2021 13:34:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42071 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236797AbhIVReb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Sep 2021 13:06:10 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114D9C061756
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Sep 2021 10:04:40 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id b6so3575904ilv.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Sep 2021 10:04:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6Ux03cG5hBPJ9MQ2bUemW8lwVWLAct1mE8axUh1mK6k=;
-        b=Z6U/J9MOXmwaNV+2zF5ntuLypdkphil3PjK5ro65TRqO89DHh8u1ndKkc8KqLah1rV
-         v99nt+Du+gWUFK0sn9LyHdJiRBylTtBEBq6YeeXbLq4yaXDOUH1CLuZeqNoiFSjbnB4I
-         mr8TRJoZ+L1Jol1L2QB1qQqlkv1/Y6CoiYPjicVRS3m8qBWdhjEIR2WJzya1A39m1blW
-         ++icpE8GBziVH0LzlbpOdDup4TVgTz8adYh6IxwQ88C2YONiBD0QLxo4ZQalU17Bx4bd
-         30O6XguWTD14tRIKez+dPQyOOihhIiUVm6bue5FEKlUHLcoaHDlzdgqHoaZ3bFGlD5mo
-         EDEQ==
+        Wed, 22 Sep 2021 13:34:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632331981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MZ4chEPGfSUbQ0+WB80DpWY3pUb3ySacIIiH07OzzAA=;
+        b=M7IB6PCnAqwaU1XXmmi2xx9F9fk2w9V8021o14jQPv+UbIF8Sjloj+kgQRBCj4zFGU5LlV
+        Nd4rthDeJ77f8jwdbGX+HUQ/K+CoSHqsfTOLb9ENu8ns9V0xN21Cz/03VsByTtjHQj2YJu
+        AFblJ/g80Re3JxvpGHkvymTpdf9IxV0=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-381-gzUVknuBN-OK3YVU_PDIEA-1; Wed, 22 Sep 2021 13:32:59 -0400
+X-MC-Unique: gzUVknuBN-OK3YVU_PDIEA-1
+Received: by mail-qt1-f197.google.com with SMTP id x28-20020ac8701c000000b0029f4b940566so9663906qtm.19
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Sep 2021 10:32:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6Ux03cG5hBPJ9MQ2bUemW8lwVWLAct1mE8axUh1mK6k=;
-        b=YINh0n139xAgkuJOXfOofgMIAsm1BHR/ST3uPQ5H0x6F3Y9h3rwHoAX6LiZRVx5LjJ
-         m/VtgDTqWuMs2kdNLEg7XSwMnbod3yR9zkYBjudhyCQY17tr0Sjqr1xj/G7BJWHhgewD
-         NU0I8Us4dTV58Bn87BwmmL8oDslCbqbRpBOZlLgQaa0FcwBWIIQ9EdzHips9GGLgsa3S
-         +2dxJl7Kadr/bqpNbRJ0p3lccXCVPe5E12o7loq7ad3eNf/Jdw5nUpfI1sTnJPemSJgP
-         Iphsmgf2IxHVhzEnKADJ82/q7PDz+LrU6MzOo9j+GYcl08Efe02JKy/i6frxL7BHz/Dh
-         aHig==
-X-Gm-Message-State: AOAM532DR+Znd7Fb4fT62EsRhzfcQqHN2L7C2I6IMvtCB2qtrLLY5RGD
-        uRegy81/Dd2zSuDVa0JQQ3mboZhFZTJQSq2wM3rNJQ==
-X-Google-Smtp-Source: ABdhPJz+KAJcw9lPLpGejjDEw4hAk3C/8Z8dhpkjFErjgU4n2XhzvH7ncUcXbpu1TUH9G56ERqUMbzU2TyTdwYMDTlQ=
-X-Received: by 2002:a92:db0b:: with SMTP id b11mr48933iln.275.1632330279236;
- Wed, 22 Sep 2021 10:04:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210921163323.944352-1-axelrasmussen@google.com>
- <YUoaDr2wsW8wtk5Z@t490s> <CAJHvVcj68inRrpmw0pJq9qFc20JzG8+s7b31HkXQcsLcAJN_0Q@mail.gmail.com>
- <YUowr6phZU4v7dds@t490s> <CAJHvVcgz18qU9vjPimOhJ5YswfJnLN0tQGfsgjCh6M7ckvhfgA@mail.gmail.com>
- <YUp438W5p5VHL1Ch@t490s>
-In-Reply-To: <YUp438W5p5VHL1Ch@t490s>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 22 Sep 2021 10:04:03 -0700
-Message-ID: <CAJHvVciZc0mpcw8OSPk71YsVzCTajY+ikymcD3+zBJKsZynYkg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] userfaultfd/selftests: fix feature support detection
-To:     Peter Xu <peterx@redhat.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MZ4chEPGfSUbQ0+WB80DpWY3pUb3ySacIIiH07OzzAA=;
+        b=w3173vG6eE8Cs0G9AzlBYoz2s4k4VhYtjf8rMKdGvdK1IFqEQuHC5R3Hpru7wGYkAy
+         5qyytD35FeJugWI3dRKNVbCYmII5Q/+00OjvwoyQ39Ya9DelwrnlZkuwJ58x5rIV+K9l
+         uekseFtZ4G9FkB2Df1KsPzQ1bDdBs+53loPnFh1OA2p7R55EDi+6c3nhhg/paTK9yN+i
+         dc9weQc9x6LPoGPLl9CsEkSRTQRU1OPmAWl6CpdIlGwRaAkgUU5voolvfOjyuYB5hrTg
+         wXX+XwuWo+s6eDV53ImtGmWGErwnH5Xlk+jaO6UH/GLxcWcso1AIhuMGzrH06wyF9YNO
+         y5jQ==
+X-Gm-Message-State: AOAM5306dPCP4TuOSQ/23mQd9wiXIFWGThL0gojcG5zvWcXPX0dPaYfW
+        lMLzKdf83AZzOa9og3wrD1uOVSdXuQyvk1F8qF0jOOD44tzl4VZ3KnKo6SWQcc7fu2wN/Mzy+K3
+        xtAzXFm4r7RO+ijvJMIxHQtXCJuK0
+X-Received: by 2002:a37:a394:: with SMTP id m142mr441168qke.62.1632331979230;
+        Wed, 22 Sep 2021 10:32:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxW3s8uMYgBcSDjxDYcpMGPxHXsr8QBkq7aoss9LqopmKZ+usF6kGL5uVjE8LbpBJf8Uk26UQ==
+X-Received: by 2002:a37:a394:: with SMTP id m142mr441144qke.62.1632331978972;
+        Wed, 22 Sep 2021 10:32:58 -0700 (PDT)
+Received: from t490s ([2607:fea8:56a2:9100::d3ec])
+        by smtp.gmail.com with ESMTPSA id j26sm1821108qtr.53.2021.09.22.10.32.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Sep 2021 10:32:57 -0700 (PDT)
+Date:   Wed, 22 Sep 2021 13:32:56 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
         Linuxkselftest <linux-kselftest@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 1/3] userfaultfd/selftests: fix feature support detection
+Message-ID: <YUtoyNic4Jxfv9f7@t490s>
+References: <20210921163323.944352-1-axelrasmussen@google.com>
+ <YUoaDr2wsW8wtk5Z@t490s>
+ <CAJHvVcj68inRrpmw0pJq9qFc20JzG8+s7b31HkXQcsLcAJN_0Q@mail.gmail.com>
+ <YUowr6phZU4v7dds@t490s>
+ <CAJHvVcgz18qU9vjPimOhJ5YswfJnLN0tQGfsgjCh6M7ckvhfgA@mail.gmail.com>
+ <YUp438W5p5VHL1Ch@t490s>
+ <CAJHvVciZc0mpcw8OSPk71YsVzCTajY+ikymcD3+zBJKsZynYkg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJHvVciZc0mpcw8OSPk71YsVzCTajY+ikymcD3+zBJKsZynYkg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thanks for discussing the design Peter. I have some ideas which might
-make for a nicer v2; I'll massage the code a bit and see what I can
-come up with.
+Hello, Axel,
 
-On Tue, Sep 21, 2021 at 5:29 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Tue, Sep 21, 2021 at 01:31:12PM -0700, Axel Rasmussen wrote:
-> > Ah, it has to do with us asserting the list of expected ioctls. The
-> > kernel changes the list of ioctls it reports in response to a
-> > UFFDIO_REGISTER, depending on the particular kind of vma being
-> > registered, **as well as what mode(s) it is being registered with**.
-> >
-> > So for example, consider the hugetlb_shared test. When registering,
-> > the kernel might set the UFFDIO_CONTINUE bit or not, depending on
-> > whether we registered with the MINOR mode bit set in particular.
->
-> I can understand your point, but the "capability set" of the kernel is still
-> the same.  In this case we should have UFFDIO_CONTINUE capability for
-> hugetlb_shared test globally, as long as the kernel supports it, irrelevant of
-> what test case we're going to have.
->
-> Then in the test, if we don't register with MINOR mode, IMHO we should just
-> mask out the expected_ioctls with UFFDIO_CONTINUE because it does not make
-> sense to request UFFDIO_CONTINUE if we will never use it in the test.
+On Wed, Sep 22, 2021 at 10:04:03AM -0700, Axel Rasmussen wrote:
+> Thanks for discussing the design Peter. I have some ideas which might
+> make for a nicer v2; I'll massage the code a bit and see what I can
+> come up with.
 
-Right, this is how it was before. I didn't love how the base set
-included everything, and then each test is responsible for removing
-the things it isn't testing. It seems reversed: why not just have each
-test compute the set of things it *is* testing?
+Sure thing.  Note again that as I don't have a strong opinion on that, feel
+free to keep it.  However if you provide v2, I'll read.
 
->
-> In other words, having a "uffd_features" global variable and having it changing
-> all the time during tests is odd to me, but I agree it's not a big deal. :)
+[off-topic below]
 
-100% agree with this. From my perspective this is tech debt since:
+Another thing I probably have forgot but need your confirmation is, when you
+worked on uffd minor mode, did you explicitly disable thp, or is it allowed?
 
-8ba6e86408 userfaultfd/selftests: reinitialize test context in each test
+When I'm reworking the uffd-wp series, I noticed that commit e1e267c7928f
+("khugepaged: skip collapse if uffd-wp detected", 2020-04-07) was actually
+awkward and not efficient, as we can simply lookup the vma flags for detecting
+uffd-wp enablement.  I'm preparing a patch for it to do it by checking vmas
+(and that patch will also pave the way for file-backed).
 
-It used to be that we just had one global context (variables like
-uffd, count_verify, area_src, area_dst, etc). But this had the problem
-where some previous test can mutate the context, breaking or affecting
-following tests. After 8ba6e86408, we clear and reinitialize all these
-variables for each test, but they're still global. I think it would be
-cleaner if these instead were in a struct, which each test initialized
-and then destroyed within its own scope. If we were to do such a
-refactor, I would put uffd_features in that struct too - it should be
-private to a test, since it's a property we get from the uffd.
+Then I noticed we need similar thing for minor mode?
 
-But, I wasn't sure it was worth the churn to do something like this.
+I think the answer is yes, but I didn't see any code that explicitly handled
+thp for minor mode, do you remember?
 
->
-> --
-> Peter Xu
->
+To be explicit, what if in mcontinue_atomic_pte() we get a shmem_getpage() call
+with a thp returned?  Will minor mode break?
+
+I plan to post the khugepaged patch soon and I plan to cover minor mode too
+there, but I'm not sure whether that's enough, as the thp can be there from the
+1st day I think, but I could have missed something.
+
+-- 
+Peter Xu
+
