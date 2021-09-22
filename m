@@ -2,98 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6716413EA4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Sep 2021 02:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4271941419D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Sep 2021 08:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbhIVAax (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Sep 2021 20:30:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55653 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229524AbhIVAax (ORCPT
+        id S232656AbhIVGXl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Sep 2021 02:23:41 -0400
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:57003 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232570AbhIVGXk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Sep 2021 20:30:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632270563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NmEXaXF/Zeuy5snsjO8cTG6bYqexhCWu35mF9eZUaWg=;
-        b=AzFDPB0imFshaOw23EtGuiiOI8QdBcIKMSjqeeDEgxu3+VoXn9adsJPfTcoeTeL9PwnMQ1
-        e76OaxROXPhb06YOl0nUrtw7s1DwtcGA4r3YEXwUvoErXYFfEiDLRMglsj2ZQlAPolaPWN
-        T5IsW+kH2ZiMmyHfrgWMuOu0TVZPchw=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-364-jfwADpBqMvKp6j-Wcn8Rhg-1; Tue, 21 Sep 2021 20:29:22 -0400
-X-MC-Unique: jfwADpBqMvKp6j-Wcn8Rhg-1
-Received: by mail-qt1-f200.google.com with SMTP id o7-20020ac86d07000000b002a69537d614so4699790qtt.21
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Sep 2021 17:29:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NmEXaXF/Zeuy5snsjO8cTG6bYqexhCWu35mF9eZUaWg=;
-        b=XJuHiAKAcrlrCo8vNwLDWJ4ZClZU0RwPYV7HWxInBNbvtID0qgTb96PDbH/E3hnP2U
-         W65b0A+jIuha68A6DxrkT0XRFsKet8vIyeSt4taWohUrRc1K5/gIbbZXMuPwuNu2bPfa
-         F1FEbW4X0axdcGdR8MWSY3KnwJiWvdF68bh0QjymyS4cLCwpRszd5mdJ3DoL+y8OczBr
-         CoCltMheGnfwBb3SgNpoBIucXol9vP55U5Fx2psqdPy+czAcohawfyxEHUm2JV6uZeAu
-         XWIKEuOd1XV/N5NJpBKDlrV21+dpXYUNQvdQ4f0mdLlXHb6vIf1rJ1gnEoc/FcbFp2Zj
-         tw0g==
-X-Gm-Message-State: AOAM530xMtLzCiCiVfqP6ki3ujzsNJbNuo9KnP3QyNsgue41YcsjMPgR
-        t5lut1sLpIOZ6W4oklzLs+dhKbRc3OnEct5AXoTkx8CcsNAmENO56hTVoAkKEWx9ci1GRF6dpvz
-        gf9IT9PMDOygJRzzxvkBNyeBisYP7
-X-Received: by 2002:a05:620a:524:: with SMTP id h4mr3517160qkh.320.1632270561731;
-        Tue, 21 Sep 2021 17:29:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzp8OHGlxNnMNUsKkbTB5lbA+kEvBE9p0uF3GnGKhmEwdsDq6bdIOgUAQGlx7CMSNBruskFFA==
-X-Received: by 2002:a05:620a:524:: with SMTP id h4mr3517145qkh.320.1632270561484;
-        Tue, 21 Sep 2021 17:29:21 -0700 (PDT)
-Received: from t490s ([2607:fea8:56a2:9100::d3ec])
-        by smtp.gmail.com with ESMTPSA id i6sm416278qtx.40.2021.09.21.17.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Sep 2021 17:29:20 -0700 (PDT)
-Date:   Tue, 21 Sep 2021 20:29:19 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] userfaultfd/selftests: fix feature support detection
-Message-ID: <YUp438W5p5VHL1Ch@t490s>
-References: <20210921163323.944352-1-axelrasmussen@google.com>
- <YUoaDr2wsW8wtk5Z@t490s>
- <CAJHvVcj68inRrpmw0pJq9qFc20JzG8+s7b31HkXQcsLcAJN_0Q@mail.gmail.com>
- <YUowr6phZU4v7dds@t490s>
- <CAJHvVcgz18qU9vjPimOhJ5YswfJnLN0tQGfsgjCh6M7ckvhfgA@mail.gmail.com>
+        Wed, 22 Sep 2021 02:23:40 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailout.west.internal (Postfix) with ESMTP id 8EB733201CF8;
+        Wed, 22 Sep 2021 02:22:10 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 22 Sep 2021 02:22:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=FxOlqX
+        be295nOShnbwm0vH+4KEHmjGRkKffE/LvQIG8=; b=B/uKbHU/4yHRmy8ekiRoYo
+        y29eNFNK3C3MqHLZ/TpJHAe2tJP7was1/4rsbTMP0JXOhfp7eyWQAiMBPwkUalzP
+        lNlg/VMlhTEuf/GZ+iWwGUW357FwnHbMFL8a1odtUOiAqyoArvAJ8uCdgQZ3e7L4
+        YbS8sAeYxJ8QTObi4iKfWKybuHUUCzKkdy3Zftc3tqZZZwnhUtpozf+6zMj4YviH
+        vaVGwxhPfjEpQN6mZMihhG/yhc63D6mLx+UVtKdTFUu34iBqm8fNwEyT0MCzUiCi
+        Hvq/y5sTzv1DgW9xYlobhHZ2nhpcDuUNiHjVfJzfY5PFRUA/fb8gg7EdEo5MXOgg
+        ==
+X-ME-Sender: <xms:kctKYYlTbXyUEWhXxgnbAJKwzXAoauQ5Pp9GF3mns1-cZEcnT-mtJA>
+    <xme:kctKYX3D20vHMdOHDH-3opUa7dnlT3oGD9w2zC_YB53hETvwcxcD2YwmeePldzj8R
+    rF4wroRDh8DNQE>
+X-ME-Received: <xmr:kctKYWri0FKGOViCtNkz0u7GsVUXt6_DVOMJgpmJOmCb8FMGVDMwMO-kXgUVCrfz1oa4CBDBR4VYwQqrCoiFW3SNNHNCBg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeiiedguddtudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnheptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudeh
+    leetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    guohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:kctKYUkP99iOdwA7vV70_zpMp7duypnGQW9HuJO7Rx_Ov7XF-I1bDQ>
+    <xmx:kctKYW3cfPo64an5WdAI5FAfRi3GgQYDRUXqNGsn9Uuyko60W_Bf6Q>
+    <xmx:kctKYbtklhBX49WPf6wC2F1-loEhSG5OgHbN_VWifgUqOFHaM_41sQ>
+    <xmx:kstKYQqt6lfSuI-vuA9J7knt4heRYYZOyapQa09PZ2qlTRmZd_A_AQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Sep 2021 02:22:08 -0400 (EDT)
+Date:   Wed, 22 Sep 2021 09:22:04 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "abyagowi@fb.com" <abyagowi@fb.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
+ to get SyncE status
+Message-ID: <YUrLjGJwMc/UpqOK@shredder>
+References: <20210903151436.529478-1-maciej.machnikowski@intel.com>
+ <20210903151436.529478-2-maciej.machnikowski@intel.com>
+ <YUnbCzBOPP9hWQ5c@shredder>
+ <PH0PR11MB4951E98FCEC0F1EA230BA1DAEAA19@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <YUny/edqnbdTFnBS@shredder>
+ <20210921141445.24ae714e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJHvVcgz18qU9vjPimOhJ5YswfJnLN0tQGfsgjCh6M7ckvhfgA@mail.gmail.com>
+In-Reply-To: <20210921141445.24ae714e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 01:31:12PM -0700, Axel Rasmussen wrote:
-> Ah, it has to do with us asserting the list of expected ioctls. The
-> kernel changes the list of ioctls it reports in response to a
-> UFFDIO_REGISTER, depending on the particular kind of vma being
-> registered, **as well as what mode(s) it is being registered with**.
+On Tue, Sep 21, 2021 at 02:14:45PM -0700, Jakub Kicinski wrote:
+> On Tue, 21 Sep 2021 17:58:05 +0300 Ido Schimmel wrote:
+> > > > The only source type above is 'port' with the ability to set the
+> > > > relevant port, but more can be added. Obviously, 'devlink clock show'
+> > > > will give you the current source in addition to other information such
+> > > > as frequency difference with respect to the input frequency.  
+> > > 
+> > > We considered devlink interface for configuring the clock/DPLL, but a
+> > > new concept was born at the list to add a DPLL subsystem that will
+> > > cover more use cases, like a TimeCard.  
+> > 
+> > The reason I suggested devlink is that it is suited for device-wide
+> > configuration and it is already used by both MAC drivers and the
+> > TimeCard driver. If we have a good reason to create a new generic
+> > netlink family for this stuff, then OK.
 > 
-> So for example, consider the hugetlb_shared test. When registering,
-> the kernel might set the UFFDIO_CONTINUE bit or not, depending on
-> whether we registered with the MINOR mode bit set in particular.
+> For NICs mapping between devlink instances and HW is not clear.
+> Most register devlink per PCI dev which usually maps to a Eth port.
+> So if we have one DPLL on a 2 port NIC mapping will get icky, no?
 
-I can understand your point, but the "capability set" of the kernel is still
-the same.  In this case we should have UFFDIO_CONTINUE capability for
-hugetlb_shared test globally, as long as the kernel supports it, irrelevant of
-what test case we're going to have.
+Yes, having to represent the same EEC in multiple devlink instances is
+not nice.
 
-Then in the test, if we don't register with MINOR mode, IMHO we should just
-mask out the expected_ioctls with UFFDIO_CONTINUE because it does not make
-sense to request UFFDIO_CONTINUE if we will never use it in the test.
+> 
+> Is the motivation to save the boilerplate code associated with new
+> genetlink family or something more? 
 
-In other words, having a "uffd_features" global variable and having it changing
-all the time during tests is odd to me, but I agree it's not a big deal. :)
-
--- 
-Peter Xu
-
+I don't mind either way. I simply wanted to understand the motivation
+for not using any existing framework. The above argument is convincing
+enough, IMO.
