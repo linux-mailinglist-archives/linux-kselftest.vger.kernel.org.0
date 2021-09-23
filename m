@@ -2,70 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4495A41632F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 18:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E2D41637A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 18:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242148AbhIWQ11 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Sep 2021 12:27:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45907 "EHLO
+        id S233256AbhIWQmj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Sep 2021 12:42:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53316 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242160AbhIWQ1Z (ORCPT
+        by vger.kernel.org with ESMTP id S242076AbhIWQm3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Sep 2021 12:27:25 -0400
+        Thu, 23 Sep 2021 12:42:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632414353;
+        s=mimecast20190719; t=1632415257;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=b8Ah2Qh7p6T0mn87VL57RtyibfllbNYrDwoM7m+3Joo=;
-        b=Uhuknb7Z49e0mHtA97Khg5/6Fc/q9Hedh5N0DpzcrWc/2QO1ZtMD6eqoLUsAOMrD40A0DI
-        j9pKdNZ7SM+GT+TIOdBSFPikFC6EIcxFUPI5Okk0auIXrI9eKGEdX+MfzEuBSBj1ewjUIv
-        973x0Lf7XtRF4XdHA9go3qQIPfPNH2E=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-43-fG-Eo86XOpqu5L6LiOXt7Q-1; Thu, 23 Sep 2021 12:25:50 -0400
-X-MC-Unique: fG-Eo86XOpqu5L6LiOXt7Q-1
-Received: by mail-ed1-f70.google.com with SMTP id a6-20020a50c306000000b003da30a380e1so2565084edb.23
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Sep 2021 09:25:50 -0700 (PDT)
+        bh=zP+bWc/dUYs2mSzQjaFxDbmITT9MtxhTtHRPh17NjHA=;
+        b=cseyJwBy/WlO55bKikQ/s6GlUBARdmtveZARYsxMR15I8aq8WyRdMrC77nu7W8q2GoG6aN
+        LKP6rk88nIy6M/lbMFHP3iKYvy6ju0AWHQNcty+0pZ1FbUUGi5g74rJPHHz+b8p0/nkGNS
+        WGs3n6JcIbfRSpSM4IFHM4fEeWTdxMw=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-205-XdAf9EHsNbie57KGGkvBxQ-1; Thu, 23 Sep 2021 12:40:56 -0400
+X-MC-Unique: XdAf9EHsNbie57KGGkvBxQ-1
+Received: by mail-ej1-f69.google.com with SMTP id v19-20020a170906b013b02905b2f1bbf8f3so109588ejy.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Sep 2021 09:40:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=b8Ah2Qh7p6T0mn87VL57RtyibfllbNYrDwoM7m+3Joo=;
-        b=abPxIjWh+QxrFizgw3/GOUdmJWtZHmbMQTgIZ/xjXxHiEopjE26/v+2gTEWBTFxKHl
-         uZPatKtpD419uPBPUJW93Gu7opDSGhUG7K1LRhuRavF3g/exfILcDWqkn3g0o3FSKCcd
-         XUXEhfmsdYMPXD1a9mfmRnX7qaeIqupGFQr3ztGP+gzdYqnbirIqSbQHotERnHWp0coq
-         ibddaBObXLxkm2WWeVV4jNm+/2RKQQiSNatbermopPDyZ+ergCRf7ibbc+3zZ6lG45TC
-         n4Zwf1Npb++pvo+C8OGIJzHxOyb4u0r2etpCEggSWMwtVKAvgfUa0w5H5OSFELGKPCZl
-         hjjg==
-X-Gm-Message-State: AOAM531mesHvfxI5fSPlF47TB0Aej5H5iJJz+8RAt/I5ozGvkDxjnKld
-        7Gw3M0XBwknZxoQdjr52qGv3P0bnTME+/qMsruq3heREhKVGOATTs3qgXWV4oakYWOmkjXavcHo
-        3vy+OPBz0mCXkSHtj63KVffotF5oD
-X-Received: by 2002:aa7:da93:: with SMTP id q19mr6706451eds.206.1632414349553;
-        Thu, 23 Sep 2021 09:25:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx9XnSwLPcjGBamhpDTdT3EiRg8QNymAoajRgXO8jyqO9O2UVhfynrBSpJ2DkEt/MKXS42ECQ==
-X-Received: by 2002:aa7:da93:: with SMTP id q19mr6706421eds.206.1632414349350;
-        Thu, 23 Sep 2021 09:25:49 -0700 (PDT)
+        bh=zP+bWc/dUYs2mSzQjaFxDbmITT9MtxhTtHRPh17NjHA=;
+        b=XB6OIRyGTPPRhQFVAj4WyjrNkd51JnrCbSiA0DtM753c6MUAi5BwKeM39v/fud/yan
+         fgnCjZJEQWgghMSdyXURQxu7DumhdLS1d5GrSMnHpTEvGo6c5maqC0oNRawXVj7B+7TF
+         +65GcQp2S33Dtdy9tIxMKiRHaKmcQDBrrZobXJALAtr79X6aYffQ5C3ar3o8E82gFZPf
+         lbBk/rTNXWlJjzUdzfH5Y4Ft8a82acmXL+jomOQcgvijsXmFfqc7st+kKS8hZx3uVpe6
+         CblrefhZ9nes48J9Vl9SHzn2EmAo892qf+qWyJGYWCQbgm4e2mGPH+VcG05v6JT6RnTG
+         mWag==
+X-Gm-Message-State: AOAM531qo3CuXNs9OMktGkNETqUQlENps8/YHFlAoNprUAANodD3yQ6g
+        8DHsNJEjtFt9worDI9ll1jPr42xsQnd8i+w7jn5Av1qdmKExgD3jA1hb8MJeDbAoK8pJnZgOQPf
+        O4xWokEAtcV7CDs1/apSMSTk1b96H
+X-Received: by 2002:a17:906:2ed1:: with SMTP id s17mr6246842eji.261.1632415255514;
+        Thu, 23 Sep 2021 09:40:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzA3H1NEO39c84G7G9Gxn0iDSuQcLqjCEqbpf1IdiajRyX3HzH0gKAc7QxjqWRW/ttMCGcB5A==
+X-Received: by 2002:a17:906:2ed1:: with SMTP id s17mr6246826eji.261.1632415255330;
+        Thu, 23 Sep 2021 09:40:55 -0700 (PDT)
 Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id gl2sm3237224ejb.110.2021.09.23.09.25.47
+        by smtp.gmail.com with ESMTPSA id kx17sm3255053ejc.51.2021.09.23.09.40.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Sep 2021 09:25:48 -0700 (PDT)
-Subject: Re: [PATCH] kvm: selftests: Fix spelling mistake "missmatch" ->
- "mismatch"
-To:     Colin King <colin.king@canonical.com>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210826120752.12633-1-colin.king@canonical.com>
+        Thu, 23 Sep 2021 09:40:54 -0700 (PDT)
+Subject: Re: [PATCH 06/14] KVM: x86: SVM: don't set VMLOAD/VMSAVE intercepts
+ on vCPU reset
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, Bandan Das <bsd@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
+        Wei Huang <wei.huang2@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Jim Mattson <jmattson@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>
+References: <20210914154825.104886-1-mlevitsk@redhat.com>
+ <20210914154825.104886-7-mlevitsk@redhat.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <02094ffc-11c4-8b72-f889-a0654f95d2bb@redhat.com>
-Date:   Thu, 23 Sep 2021 18:25:47 +0200
+Message-ID: <7289d070-152b-aece-1302-33e5a461657c@redhat.com>
+Date:   Thu, 23 Sep 2021 18:40:51 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210826120752.12633-1-colin.king@canonical.com>
+In-Reply-To: <20210914154825.104886-7-mlevitsk@redhat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -73,33 +85,53 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26/08/21 14:07, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On 14/09/21 17:48, Maxim Levitsky wrote:
+> commit adc2a23734ac ("KVM: nSVM: improve SYSENTER emulation on AMD"),
+> made init_vmcb set vmload/vmsave intercepts unconditionally,
+> and relied on svm_vcpu_after_set_cpuid to clear them when possible.
 > 
-> There is a spelling mistake in an error message. Fix it.
+> However init_vmcb is also called when the vCPU is reset, and it is
+> not followed by another call to svm_vcpu_after_set_cpuid because
+> the CPUID is already set.
 > 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> This mistake makes the VMSAVE/VMLOAD intercept to be set when
+> it is not needed, and harms performance of the nested guest.
+> 
+> Fixes: adc2a23734ac ("KVM: nSVM: improve SYSENTER emulation on AMD")
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 > ---
->   tools/testing/selftests/kvm/lib/sparsebit.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   arch/x86/kvm/svm/svm.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/lib/sparsebit.c b/tools/testing/selftests/kvm/lib/sparsebit.c
-> index a0d0c83d83de..50e0cf41a7dd 100644
-> --- a/tools/testing/selftests/kvm/lib/sparsebit.c
-> +++ b/tools/testing/selftests/kvm/lib/sparsebit.c
-> @@ -1866,7 +1866,7 @@ void sparsebit_validate_internal(struct sparsebit *s)
->   		 * of total bits set.
->   		 */
->   		if (s->num_set != total_bits_set) {
-> -			fprintf(stderr, "Number of bits set missmatch,\n"
-> +			fprintf(stderr, "Number of bits set mismatch,\n"
->   				"  s->num_set: 0x%lx total_bits_set: 0x%lx",
->   				s->num_set, total_bits_set);
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 6645542df9bd..861ac9f74331 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -1199,8 +1199,6 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
+>   	svm_set_intercept(svm, INTERCEPT_SHUTDOWN);
+>   	svm_set_intercept(svm, INTERCEPT_VMRUN);
+>   	svm_set_intercept(svm, INTERCEPT_VMMCALL);
+> -	svm_set_intercept(svm, INTERCEPT_VMLOAD);
+> -	svm_set_intercept(svm, INTERCEPT_VMSAVE);
+>   	svm_set_intercept(svm, INTERCEPT_STGI);
+>   	svm_set_intercept(svm, INTERCEPT_CLGI);
+>   	svm_set_intercept(svm, INTERCEPT_SKINIT);
+> @@ -1377,6 +1375,10 @@ static int svm_create_vcpu(struct kvm_vcpu *vcpu)
+>   	svm->guest_state_loaded = false;
 >   
+>   	svm_switch_vmcb(svm, &svm->vmcb01);
+> +
+> +	svm_set_intercept(svm, INTERCEPT_VMLOAD);
+> +	svm_set_intercept(svm, INTERCEPT_VMSAVE);
+> +
+>   	init_vmcb(vcpu);
+>   
+>   	svm_vcpu_init_msrpm(vcpu, svm->msrpm);
 > 
 
-
-Queued, thanks.
+This needs to be redone after the latest refactoring of svm_vcpu_reset. 
+  I'll send a patch myself.
 
 Paolo
 
