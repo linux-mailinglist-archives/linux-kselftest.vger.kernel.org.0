@@ -2,67 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7022541649A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 19:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B67F4167EE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Sep 2021 00:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239489AbhIWRoy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Sep 2021 13:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233669AbhIWRoy (ORCPT
+        id S243464AbhIWWZn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Sep 2021 18:25:43 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:37578 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243436AbhIWWZf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Sep 2021 13:44:54 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5A4C061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Sep 2021 10:43:22 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id e15so29201756lfr.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Sep 2021 10:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5AsGrA4DlL+PCBChvj92hqjB0hfn92LRQaKu0Z47lw0=;
-        b=Si9+CYKyfr0+MJSTikLpq8OmrkFFqVZA6eu+vjrEfdaaThKPZDL6T6+MDV1adNkjCh
-         0OAnNYHRmXZpo2C5odFXa5Z6I8TsIa5X0ARLYyEZyPppIGryj6GjtSO0ijoSdmjJZKWB
-         7Ze3Xkj2YYceIB8ucTrx3P7sXnCtB537DYl6Y6jJIDphFXvtGD6NVIbOSNAzLTWhxIh+
-         fPOWnBVMiFvMEcJ0VSNMIVqvilluBxJc2uR0iJdctM9sIdryelqJecGrdKxVzCGN6ed4
-         PmmyYDFpiwkEA72dHy1c+nG+9oY9uw/BGmVSfjebMl7ebUn9uZqL6jppowCCLqvHNR8a
-         4ItQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5AsGrA4DlL+PCBChvj92hqjB0hfn92LRQaKu0Z47lw0=;
-        b=CHGshNvnkjGhwMA/esiwV34099bhS1YMyqRdZGUWlOC77R9mP0PYSqOgjrKaTwcc0w
-         ptdqelKV76lyufbtrScuuwiMGY3kPN5D91/w3hWwMhmBAGyIPxUPk7R1ePq+1aVcRIgM
-         6Ufe5hAxQQpD1jO/HbN9vhHWiQMzqA0oWIHxGNwMFcQMafD3UBlTBOPwKLjBYU3kzPiZ
-         +NwkLzenqDQ/EWf+Fl6l4lKPYqOW5d4usLBd/aTeOzJNq5a0O3rLCMjtgFuEAkJnT0G/
-         AK082qhB4qRVSnbM48aIdXxC3VH+m77TqH7N8qgIKZMRGQ1LBGV3cnZDoTe+h9g0tkx7
-         tB7Q==
-X-Gm-Message-State: AOAM531yoL8B3hmYZluY+68yZym6u60vU4g1oyKpo9R1bKHmgKHUwqQB
-        39FfzV310J/neN5FRPoz/04YxXngx0QhY5F5pOQ=
-X-Google-Smtp-Source: ABdhPJw7AgYWS4c1DXlxPZ79Y+1RLim7Mm0zlHR7znltwX3iDQssVVpBa6rdct2Geqn3pkn62nijjvWGX37saTGM0x0=
-X-Received: by 2002:a05:651c:1408:: with SMTP id u8mr6365387lje.253.1632419000548;
- Thu, 23 Sep 2021 10:43:20 -0700 (PDT)
+        Thu, 23 Sep 2021 18:25:35 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1632435841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Matoo2OIfdawfGuu3j6hbf2m+pvAyOqko4uRRDDqJ0=;
+        b=N9ssRTZGMxorWOBqZEIQ9Tt2vNTC5I8aj19BMSE9Xssk0QWWtT/+0NICD6ssXGkA5FR8ds
+        7HwcthwHMm5PC2Ku+n2v00I8mpZkiSVyBlEP9litACd8ROqGfpHbiBNt7rpSxNEqPlEYoy
+        0WAbbsoSaHa38BXkXdMOEyhZcgpZeu/OVVG86ipRvJudoV8qZrOLuOHhnH4J38TdHWYzTm
+        k2wC7mCPI2oPu5BiSuRDTc1c4YPpiojnhbSVvtiUjxhC8qtgZkHBzuLSFi9C4zMHQXQui+
+        44GBHIIVFKD1k02kDBFfUkrxVzbrvQND6Rs33SPZqSweYAPfS01ntNPARWGLOg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1632435841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Matoo2OIfdawfGuu3j6hbf2m+pvAyOqko4uRRDDqJ0=;
+        b=/7ConpvTXAvFWy6BmvzoZaT07ZxWDyhnP2mIpX3mCcpKyA1zbHQBf+ebCtIwiiVEMqZdvP
+        uR9Iu/xxODMvHjBw==
+To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
+Cc:     Sohil Mehta <sohil.mehta@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 03/13] x86/cpu: Enumerate User Interrupts support
+In-Reply-To: <20210913200132.3396598-4-sohil.mehta@intel.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-4-sohil.mehta@intel.com>
+Date:   Fri, 24 Sep 2021 00:24:00 +0200
+Message-ID: <87lf3nexrz.ffs@tglx>
 MIME-Version: 1.0
-Received: by 2002:a2e:9782:0:0:0:0:0 with HTTP; Thu, 23 Sep 2021 10:43:19
- -0700 (PDT)
-Reply-To: mrs.billchantallawrence@homemail.com
-From:   Bill Chantal <aamadchantal001@gmail.com>
-Date:   Thu, 23 Sep 2021 10:43:19 -0700
-Message-ID: <CA+svXzhoWktu1QoCZ2=kvs_cVUwQ64W94_+Ey5gwaa14LYXASQ@mail.gmail.com>
-Subject: Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-dear
+On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
+> SENDUIPI is a special ring-3 instruction that makes a supervisor mode
+> memory access to the UPID and UITT memory. Currently, KPTI needs to be
+> off for User IPIs to work.  Processors that support user interrupts are
+> not affected by Meltdown so the auto mode of KPTI will default to off.
+>
+> Users who want to force enable KPTI will need to wait for a later
+> version of this patch series that is compatible with KPTI. We need to
+> allocate the UPID and UITT structures from a special memory region that
+> has supervisor access but it is mapped into userspace. The plan is to
+> implement a mechanism similar to LDT.
 
-You have been compensated with the sum of 5.1 million dollars in this
-united nation the payment will be Issue into ATM visa card and send to
-you from the Santander bank of Spain we need your address passport and
-your whatsapp number.
-Thanks
+Seriously?
 
-Mrs. bill Chantal
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+
+This SOB chain is invalid. Ditto in several other patches.
+
+>  
+> +config X86_USER_INTERRUPTS
+> +	bool "User Interrupts (UINTR)"
+> +	depends on X86_LOCAL_APIC && X86_64
+
+X86_64 does not work w/o LOCAL_APIC so this dependency is pointless.
+
+> +	depends on CPU_SUP_INTEL
+> +	help
+> +	  User Interrupts are events that can be delivered directly to
+> +	  userspace without a transition through the kernel. The interrupts
+> +	  could be generated by another userspace application, kernel or a
+> +	  device.
+> +
+> +	  Refer, Documentation/x86/user-interrupts.rst for details.
+
+"Refer, Documentation..." is not a sentence.
+
+>  
+> +/* User Interrupt interface */
+> +#define MSR_IA32_UINTR_RR		0x985
+> +#define MSR_IA32_UINTR_HANDLER		0x986
+> +#define MSR_IA32_UINTR_STACKADJUST	0x987
+> +#define MSR_IA32_UINTR_MISC		0x988	/* 39:32-UINV, 31:0-UITTSZ */
+
+Bah, these tail comments are crap. Please define proper masks/shift
+constants for this instead of using magic numbers in the code.
+
+> +static __always_inline void setup_uintr(struct cpuinfo_x86 *c)
+
+This has to be always inline because it's performance critical or what?
+
+> +{
+> +	/* check the boot processor, plus compile options for UINTR. */
+
+Sentences start with uppercase letters.
+
+> +	if (!cpu_feature_enabled(X86_FEATURE_UINTR))
+> +		goto disable_uintr;
+> +
+> +	/* checks the current processor's cpuid bits: */
+> +	if (!cpu_has(c, X86_FEATURE_UINTR))
+> +		goto disable_uintr;
+> +
+> +	/*
+> +	 * User Interrupts currently doesn't support PTI. For processors that
+> +	 * support User interrupts PTI in auto mode will default to off.  Need
+> +	 * this check only for users who have force enabled PTI.
+> +	 */
+> +	if (boot_cpu_has(X86_FEATURE_PTI)) {
+> +		pr_info_once("x86: User Interrupts (UINTR) not enabled. Please disable PTI using 'nopti' kernel parameter\n");
+
+That message does not make sense. The admin has explicitly added 'pti'
+to the kernel command line on a CPU which is not affected. So why would
+he now have to add 'nopti' ?
+
+Thanks,
+
+        tglx
