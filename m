@@ -2,68 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 572D841632C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 18:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4495A41632F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 18:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232675AbhIWQ1T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Sep 2021 12:27:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48358 "EHLO
+        id S242148AbhIWQ11 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Sep 2021 12:27:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45907 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229929AbhIWQ1T (ORCPT
+        by vger.kernel.org with ESMTP id S242160AbhIWQ1Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Sep 2021 12:27:19 -0400
+        Thu, 23 Sep 2021 12:27:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632414347;
+        s=mimecast20190719; t=1632414353;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wWAQUvc9WZ1vqHaShxlPjUIFPCCCFA7GbKj7JUFPVOc=;
-        b=Zho8tDgl3GjM1RdnsxUMj+NwcHpN9nvERmKuAfPfARvBr0YhgdsxiRZaNEpgZZ/eGhJf4v
-        X8lof4kaUuV2Fk1B8rEQmXAaQZ3WS3hzZ1Nxie8JOzYKTlEKMJj2W+PrJ+zP6y9MLkT+Hq
-        7+J9Kj5rtNbLvfEQuU2EZzj2IGPWGZ4=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-509-ktBF9z51PJWXEbLKnwWnyA-1; Thu, 23 Sep 2021 12:25:45 -0400
-X-MC-Unique: ktBF9z51PJWXEbLKnwWnyA-1
-Received: by mail-ed1-f72.google.com with SMTP id r11-20020aa7cfcb000000b003d4fbd652b9so7274316edy.14
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Sep 2021 09:25:45 -0700 (PDT)
+        bh=b8Ah2Qh7p6T0mn87VL57RtyibfllbNYrDwoM7m+3Joo=;
+        b=Uhuknb7Z49e0mHtA97Khg5/6Fc/q9Hedh5N0DpzcrWc/2QO1ZtMD6eqoLUsAOMrD40A0DI
+        j9pKdNZ7SM+GT+TIOdBSFPikFC6EIcxFUPI5Okk0auIXrI9eKGEdX+MfzEuBSBj1ewjUIv
+        973x0Lf7XtRF4XdHA9go3qQIPfPNH2E=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-43-fG-Eo86XOpqu5L6LiOXt7Q-1; Thu, 23 Sep 2021 12:25:50 -0400
+X-MC-Unique: fG-Eo86XOpqu5L6LiOXt7Q-1
+Received: by mail-ed1-f70.google.com with SMTP id a6-20020a50c306000000b003da30a380e1so2565084edb.23
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Sep 2021 09:25:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=wWAQUvc9WZ1vqHaShxlPjUIFPCCCFA7GbKj7JUFPVOc=;
-        b=24eIs29bkCFmbhQjc381vEsnYZqVua+ZqGVJZIa1dnnF5L18+3ZyI+A9FeC6pDzsun
-         fjq7vZlH2HfLxKDqKZqNB6tug16fniAOQdCECP0FQSHV3AjYKxENrIrJtpIU3fODDru1
-         bThRWH+y+amyBoNcxNoxZrvO+nU8znxtg6e4e0lRt+dJsXO10CJeiw72X2eppemulFTr
-         emNtTcUhhToik4gmWdPsOJD1TQi0FgY1kQbagDrIKj+6B06yc8uPJWVG6vH0Nro24NDD
-         94n6eUZv3nXKZv1lqcFDZsukgkeH3BLx/l+p3E2eq4iQ/8yTSIwlem2H6CB0DK824RuC
-         XruQ==
-X-Gm-Message-State: AOAM531V3yPHf+IDptXApzOetnXMlpAOgpAd13LkpVUv0ic94a6LfBfE
-        5+Z50w5FFapW7mgzcikaYQm/Ja/TJoKAeI5HbmyEI8EVGipcqCbiOWdYmBx2/7+4He18xf75n6e
-        5QiB0O4vdz5U30DSyb5SJnpSrMXpN
-X-Received: by 2002:a50:be8f:: with SMTP id b15mr6548778edk.200.1632414344680;
-        Thu, 23 Sep 2021 09:25:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyLPNCijm8vobMxCnfKUVsjGg5A9p8RGVLMgIZqTgCZT5T3yOUKBCQlwpq8PPv5EUorDNEyhw==
-X-Received: by 2002:a50:be8f:: with SMTP id b15mr6548754edk.200.1632414344492;
-        Thu, 23 Sep 2021 09:25:44 -0700 (PDT)
+        bh=b8Ah2Qh7p6T0mn87VL57RtyibfllbNYrDwoM7m+3Joo=;
+        b=abPxIjWh+QxrFizgw3/GOUdmJWtZHmbMQTgIZ/xjXxHiEopjE26/v+2gTEWBTFxKHl
+         uZPatKtpD419uPBPUJW93Gu7opDSGhUG7K1LRhuRavF3g/exfILcDWqkn3g0o3FSKCcd
+         XUXEhfmsdYMPXD1a9mfmRnX7qaeIqupGFQr3ztGP+gzdYqnbirIqSbQHotERnHWp0coq
+         ibddaBObXLxkm2WWeVV4jNm+/2RKQQiSNatbermopPDyZ+ergCRf7ibbc+3zZ6lG45TC
+         n4Zwf1Npb++pvo+C8OGIJzHxOyb4u0r2etpCEggSWMwtVKAvgfUa0w5H5OSFELGKPCZl
+         hjjg==
+X-Gm-Message-State: AOAM531mesHvfxI5fSPlF47TB0Aej5H5iJJz+8RAt/I5ozGvkDxjnKld
+        7Gw3M0XBwknZxoQdjr52qGv3P0bnTME+/qMsruq3heREhKVGOATTs3qgXWV4oakYWOmkjXavcHo
+        3vy+OPBz0mCXkSHtj63KVffotF5oD
+X-Received: by 2002:aa7:da93:: with SMTP id q19mr6706451eds.206.1632414349553;
+        Thu, 23 Sep 2021 09:25:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx9XnSwLPcjGBamhpDTdT3EiRg8QNymAoajRgXO8jyqO9O2UVhfynrBSpJ2DkEt/MKXS42ECQ==
+X-Received: by 2002:aa7:da93:: with SMTP id q19mr6706421eds.206.1632414349350;
+        Thu, 23 Sep 2021 09:25:49 -0700 (PDT)
 Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id t10sm3225755ejf.15.2021.09.23.09.25.43
+        by smtp.gmail.com with ESMTPSA id gl2sm3237224ejb.110.2021.09.23.09.25.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Sep 2021 09:25:43 -0700 (PDT)
-Subject: Re: [PATCH] KVM: selftests: Fix kvm_vm_free() in cr4_cpuid_sync and
- vmx_tsc_adjust tests
-To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, Wei Huang <wei@redhat.com>
-References: <20210826074928.240942-1-thuth@redhat.com>
+        Thu, 23 Sep 2021 09:25:48 -0700 (PDT)
+Subject: Re: [PATCH] kvm: selftests: Fix spelling mistake "missmatch" ->
+ "mismatch"
+To:     Colin King <colin.king@canonical.com>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210826120752.12633-1-colin.king@canonical.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <75a3bb1f-ff4a-0f3b-6ffd-8118fcb40c5a@redhat.com>
-Date:   Thu, 23 Sep 2021 18:25:43 +0200
+Message-ID: <02094ffc-11c4-8b72-f889-a0654f95d2bb@redhat.com>
+Date:   Thu, 23 Sep 2021 18:25:47 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210826074928.240942-1-thuth@redhat.com>
+In-Reply-To: <20210826120752.12633-1-colin.king@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -71,46 +73,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26/08/21 09:49, Thomas Huth wrote:
-> The kvm_vm_free() statement here is currently dead code, since the loop
-> in front of it can only be left with the "goto done" that jumps right
-> after the kvm_vm_free(). Fix it by swapping the locations of the "done"
-> label and the kvm_vm_free().
+On 26/08/21 14:07, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> There is a spelling mistake in an error message. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 > ---
->   tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c | 3 +--
->   tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c | 2 +-
->   2 files changed, 2 insertions(+), 3 deletions(-)
+>   tools/testing/selftests/kvm/lib/sparsebit.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
-> index f40fd097cb35..6f6fd189dda3 100644
-> --- a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
-> @@ -109,8 +109,7 @@ int main(int argc, char *argv[])
->   		}
->   	}
+> diff --git a/tools/testing/selftests/kvm/lib/sparsebit.c b/tools/testing/selftests/kvm/lib/sparsebit.c
+> index a0d0c83d83de..50e0cf41a7dd 100644
+> --- a/tools/testing/selftests/kvm/lib/sparsebit.c
+> +++ b/tools/testing/selftests/kvm/lib/sparsebit.c
+> @@ -1866,7 +1866,7 @@ void sparsebit_validate_internal(struct sparsebit *s)
+>   		 * of total bits set.
+>   		 */
+>   		if (s->num_set != total_bits_set) {
+> -			fprintf(stderr, "Number of bits set missmatch,\n"
+> +			fprintf(stderr, "Number of bits set mismatch,\n"
+>   				"  s->num_set: 0x%lx total_bits_set: 0x%lx",
+>   				s->num_set, total_bits_set);
 >   
-> -	kvm_vm_free(vm);
-> -
->   done:
-> +	kvm_vm_free(vm);
->   	return 0;
->   }
-> diff --git a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-> index 7e33a350b053..e683d0ac3e45 100644
-> --- a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-> @@ -161,7 +161,7 @@ int main(int argc, char *argv[])
->   		}
->   	}
->   
-> -	kvm_vm_free(vm);
->   done:
-> +	kvm_vm_free(vm);
->   	return 0;
->   }
 > 
+
 
 Queued, thanks.
 
