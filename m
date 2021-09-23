@@ -2,176 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25496415AFC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 11:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B3E415E2E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 14:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240190AbhIWJdd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Sep 2021 05:33:33 -0400
-Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:50725 "EHLO
-        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240166AbhIWJdc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Sep 2021 05:33:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1632389520;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=U2nlz7BP5H1aA7VdA6cI2yp+6geRrlnSkXKmQFtAFvA=;
-        b=Mn8BHFUhLk2Bwwt2Hv/fjyJr4Xq701mXTbGkIBn1xFCbnVH+ToST2THgsebc1ctI
-        qonkH7f/FzMOmSW4/oeapYM85xn0FvvMq21Xl4rs/OqPxq2tRwZ455JdZbeyz6fW3Jf
-        2xc1UBYfDIqHzF5gAUTrKGDkSeSeKAFj/BIooJBA=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1632389520;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=U2nlz7BP5H1aA7VdA6cI2yp+6geRrlnSkXKmQFtAFvA=;
-        b=BKYa2r9wn+dfgXXtfWo0AewRt47eJy90BKSjnPMqaNohzTbfrNv0TY8kkXpjSd/m
-        /xxJoSPmxy7E0VU1aqAa05mU8UQu1x4sTQ0/rU+JAKEQnqKTBfdmK4/X79nnqLrLgN3
-        1jah1B8K+u9tIhz8eueu/gIEoXQfd6HwVwSAarS8=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210917
+        id S240982AbhIWMUt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Sep 2021 08:20:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44976 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240987AbhIWMUj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 Sep 2021 08:20:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A753361214;
+        Thu, 23 Sep 2021 12:19:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1632399548;
+        bh=a5drWzuoeMZl8QP24M3+/zzD9bz02p+umQKMUtGw/us=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I/mTuHbo2gLcg9kkEvmFogd2VA8vMY06o9QjuRssvz5ca5X16E29nSfJHjVqYlvON
+         AAjPv2xjDCwOnqOjTatbJGebL91RmGSqgVKwn6ouKN9V1zudAfAOoY4XWPISHnNaeP
+         fx3vOX8EQqw7aGWb5n8vm1/D/l0XNWiftPVdmBmU=
+Date:   Thu, 23 Sep 2021 14:19:05 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Mehta, Sohil" <sohil.mehta@intel.com>
+Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Lutomirski, Andy" <luto@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "Kammela, Gayatri" <gayatri.kammela@intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Witt, Randy E" <randy.e.witt@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Thomas, Ramesh" <ramesh.thomas@intel.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
+Message-ID: <YUxwuR4V+kwk1L34@kroah.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <c08f38db-77da-c50e-23f7-b3a76688deeb@intel.com>
+ <BYAPR11MB33203044CD5D7413846655F9E5DA9@BYAPR11MB3320.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017c11ff5c50-97a26794-63e1-468e-82b4-7833a478c912-000000@email.amazonses.com>
-Date:   Thu, 23 Sep 2021 09:32:00 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.09.23-54.240.8.97
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR11MB33203044CD5D7413846655F9E5DA9@BYAPR11MB3320.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 9004fd387338b1104499b2c52ef5729a32c408f0
-* git describe: next-20210917
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210917
+On Tue, Sep 14, 2021 at 07:03:36PM +0000, Mehta, Sohil wrote:
+> Resending.. There were some email delivery issues.
+> 
+> On 9/13/2021 1:27 PM, Dave Hansen wrote:
+> >	User Interrupts directly deliver events to user space and are
+> >	10x faster than the closest alternative.
+> 
+> Thanks Dave. This is definitely more attention-grabbing than the
+> previous intro. I'll include this next time.
+> 
+> One thing to note, the 10x gain is only applicable for User IPIs.
+> For other source of User Interrupts (like kernel-to-user
+> notifications and other external sources), we don't have the data
+> yet.
+> 
+> I realized the User IPI data in the cover also needs some
+> clarification. The 10x gain is only seen when the receiver is
+> spinning in User space - waiting for interrupts.
+> 
+> If the receiver were to block (wait) in the kernel, the performance
+> would drop as expected. However, User IPI (blocked) would still be
+> 10% faster than Eventfd and 40% faster than signals.
+> 
+> Here is the updated table:
+> +---------------------+-------------------------+
+> | IPC type            |   Relative Latency      |
+> |                     |(normalized to User IPI) |
+> +---------------------+-------------------------+
+> | User IPI            |                     1.0 |
+> | User IPI (blocked)  |                     8.9 |
+> | Signal              |                    14.8 |
+> | Eventfd             |                     9.7 |
+> | Pipe                |                    16.3 |
+> | Domain              |                    17.3 |
+> +---------------------+-------------------------+
 
-## Regressions (compared to next-20210914)
-* hi6220-hikey, kselftest-proc
-  - proc.proc-uptime-001
+Relative is just that, "relative".  If the real values are extremely
+tiny, then relative is just "this goes a tiny tiny bit faster than what
+you have today in eventfd", right?
 
-* qemu-arm64-gic-version3, kselftest-timers
-  - timers.rtcpie
+So how about "absolute"?  What are we talking here?
 
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
+And this is really only for the "one userspace task waking up another
+userspace task" policies.  What real workload can actually use this?
 
-* qemu_arm, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_migrate
+thanks,
 
-* qemu_arm64, kselftest-timers
-  - timers.rtcpie
-
-* qemu_i386, kselftest-timers
-  - timers.rtcpie
-
-* x15, kselftest-rtc
-  - rtc.rtctest
-
-* x86, kselftest-rtc
-  - rtc.rtctest
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20210914)
-* hi6220-hikey, kselftest-rtc
-  - rtc.rtctest
-
-* i386, kselftest-net
-  - net.test_bpf.sh
-
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
-
-* x86, kselftest-net
-  - net.ip_defrag.sh
-
-
-## Test result summary
-total: 4894, pass: 2675, fail: 411, skip: 1808, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+greg k-h
