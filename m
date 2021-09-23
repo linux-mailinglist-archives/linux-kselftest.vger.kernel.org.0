@@ -2,177 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C16944157F4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 07:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF5B415930
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 09:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239219AbhIWFt0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Sep 2021 01:49:26 -0400
-Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:38625 "EHLO
-        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229890AbhIWFtZ (ORCPT
+        id S237451AbhIWHk0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Sep 2021 03:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233033AbhIWHkZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Sep 2021 01:49:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1632376074;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=3SX6DvL+6dSye6mRXpQpLiVaLSVQovXRhmITVyTneNw=;
-        b=hK90uQLcVSx5D3B70zlDQqSOnM0d0r0FjiVoprvXb5mbUN2+Eu/OFZWcNkpbuapP
-        oOWhyxQPiDOU/axkN2W5ZfrdOtcX4RrtxeSzHm2RXZsx7Gmj28ccMplACiJGjzgSzzf
-        9SZpBsl/RTkds7/J7VnrfuE9Y1ChxWv7qjLJt3Zg=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1632376074;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=3SX6DvL+6dSye6mRXpQpLiVaLSVQovXRhmITVyTneNw=;
-        b=IxgpL3q+XXQX0ZKr4vW9UhwPmPmhL2h5p9SdwG3Teh/qMsMvYq58t2QMi7OJNDFp
-        kPOQOIbqtkqqOpSftaDVi0J0RWF2M2J4oRi1AtpLBPYsp+2GjwKq1hgkOpBqL+gYA2R
-        Bzy8DzutEDiQj3UUxoHprrfSXie3zX1E+18wy+a8=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210916
+        Thu, 23 Sep 2021 03:40:25 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28650C061574;
+        Thu, 23 Sep 2021 00:38:54 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id v24so20227912eda.3;
+        Thu, 23 Sep 2021 00:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rDC5PC+a0NllCEpjH7mFGoqlO3Pfx2bUG7RA79+/FLw=;
+        b=m2i5+hexQJVilRRhFLWcncgCHBgJvNoFBnXpbuM/mncHeX51TWSF/F20729JVlNEAr
+         V45pr+tYK7IZgHHi+4F4GMl7Nh00Mykgj3ISPyGlYXNGXBKpt+h1vijAdTTCMasQof7P
+         /gGA1pil25WjMTbu1BMpnuaP97S9KCmKTPWFwS1k3Pq5o35W+i0VX4boNMmSntdeTBzH
+         6Ksjt3e2OPnWpVLsVXIqM5k8BUzRuBk5lM81TBtrv45bg81NbpVdA1qEi6BkHcRrny0N
+         br1t93AYgltzYlPTgbAe8uPUbwdVJYCxA4qwdMb3eUCGbsrZgVz3aI80bB8Rhpggi73A
+         8/HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rDC5PC+a0NllCEpjH7mFGoqlO3Pfx2bUG7RA79+/FLw=;
+        b=vVfnRsZqQLGZP84N5Ffnm+cXKXXKxej9EIMz5PRuGTOYG1LikLIayL8RtaID5bJedV
+         olTt0Jy+QYc6m44LXohBX4Kfa/k7wp/+QzapI/BMqz7AqU3yEmPETGxUM0GzrfkAlLNI
+         v6k2+EmaMPYhPmFaw6IftRp42606u8w4fmNVa7/2mySqQT6enuHJbQLLYbLWLkvEzl8O
+         0BaWBAFcW39isS396CtKIbjo8RvDg5ArwbnkSo2JcuDQeTbT2lsWfu1B7QtHoL1PtWui
+         gx3l3XqHhmQhWDrqGq48a5bbgwmEKDYt68onR4Z/+pv18tVyqlBKejO3r+LVkAA0P6RF
+         5bYQ==
+X-Gm-Message-State: AOAM530qZSdvD9TrHhxq7an69osZ+qR8HUpERbCGgDT6NzPz96xMmuog
+        yEy9buhnZAYMAvbnXP23IpT0m/mfsmA9snudfqg=
+X-Google-Smtp-Source: ABdhPJyjzgHJDh+Fs64RdNZbvuzzH3I7YTJrBgLlFYJ+90fM3o+BJpkdJnZ7Olj0kmds1AjaloWBuA==
+X-Received: by 2002:a17:906:9401:: with SMTP id q1mr3493373ejx.313.1632382732580;
+        Thu, 23 Sep 2021 00:38:52 -0700 (PDT)
+Received: from ?IPv6:2a04:241e:501:3870:3080:ac6c:f9d1:39b4? ([2a04:241e:501:3870:3080:ac6c:f9d1:39b4])
+        by smtp.gmail.com with ESMTPSA id b14sm2817949edy.56.2021.09.23.00.38.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Sep 2021 00:38:52 -0700 (PDT)
+Subject: Re: [PATCH 00/19] tcp: Initial support for RFC5925 auth option
+To:     Francesco Ruggeri <fruggeri@arista.com>
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Priyaranjan Jha <priyarjha@google.com>,
+        Menglong Dong <dong.menglong@zte.com.cn>,
+        netdev <netdev@vger.kernel.org>, linux-crypto@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1632240523.git.cdleonard@gmail.com>
+ <CA+HUmGjQWwDJSYRJPix3xBw8yMwqLcgYO7hBWxXT9eYmJttKgQ@mail.gmail.com>
+From:   Leonard Crestez <cdleonard@gmail.com>
+Message-ID: <6505b7d2-7792-429d-42a6-d41711de0dc1@gmail.com>
+Date:   Thu, 23 Sep 2021 10:38:49 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <CA+HUmGjQWwDJSYRJPix3xBw8yMwqLcgYO7hBWxXT9eYmJttKgQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Message-ID: <0100017c11322f11-0823e650-3cef-4126-8e28-d13245670437-000000@email.amazonses.com>
-Date:   Thu, 23 Sep 2021 05:47:54 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.09.23-54.240.8.97
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 368847b165bbfbdcf0bd4c96b167893dcdb13aba
-* git describe: next-20210916
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210916
+On 9/22/21 11:23 PM, Francesco Ruggeri wrote:
+> On Tue, Sep 21, 2021 at 9:15 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+>> * Sequence Number Extension not implemented so connections will flap
+>> every ~4G of traffic.
+> 
+> Could you expand on this?
+> What exactly do you mean by flap? Will the connection be terminated?
+> I assume that depending on the initial sequence numbers the first flaps
+> may occur well before 4G.
+> Do you use a SNE of 0 in the hash computation, or do you just not include
+> the SNE in it?
 
-## Regressions (compared to next-20210914)
-* i386, kselftest-net
-  - net.ip_defrag.sh
-  - net.so_txtime.sh
+SNE is hardcoded to zero, with the logical consequence of incorrect 
+signatures on sequence number wrapping. The SNE has to be included 
+because otherwise all signatures would be invalid.
 
-* qemu-arm64-gic-version3, kselftest-timers
-  - timers.rtcpie
+You are correct that this can break much sooner than 4G of traffic, but 
+still in the GB range on average. I didn't test the exact behavior (not 
+clear how) but if signatures don't validate the connection will likely 
+timeout.
 
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
+My plan is to use TCP_REPAIR to control sequence numbers and test this 
+reliably in an isolated environment (not interop with a cisco VM or 
+similar). I want to implement TCP_REPAIR support for TCP-AO anyway.
 
-* x15, kselftest-rtc
-  - rtc.rtctest
-
-* x86, kselftest-lkdtm
-  - lkdtm.SLAB_FREE_DOUBLE.sh
-
-* x86, kselftest-rtc
-  - rtc.rtctest
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20210914)
-* i386, kselftest-net
-  - net.test_bpf.sh
-
-* qemu-arm64-gic-version2, kselftest-timers
-  - timers.rtcpie
-
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
-
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* x86, kselftest-net
-  - net.ip_defrag.sh
-
-
-## Test result summary
-total: 4870, pass: 2704, fail: 394, skip: 1772, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
+It was skipped because the patch series is already quite large.
 
 --
-Linaro LKFT
-https://lkft.linaro.org
+Regards,
+Leonard
