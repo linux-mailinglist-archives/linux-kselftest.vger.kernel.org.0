@@ -2,124 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 217E4415994
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 09:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25496415AFC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Sep 2021 11:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbhIWHva (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Sep 2021 03:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233011AbhIWHv3 (ORCPT
+        id S240190AbhIWJdd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Sep 2021 05:33:33 -0400
+Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:50725 "EHLO
+        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240166AbhIWJdc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Sep 2021 03:51:29 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFE3C061756;
-        Thu, 23 Sep 2021 00:49:57 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id dj4so20424671edb.5;
-        Thu, 23 Sep 2021 00:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RlhgwksuUm7dWwJH3Rb88cQWw5W+Xn4yAyWyU7jvE54=;
-        b=Ay9Rh+fTliF5ZQIByyU7Xrsxhp97ULNyfO7KxfkxXaUVD+uWWDRwCHid+EAA6mqs80
-         RodYmRCKORkwtceQ0Kx78YzgCarMJ/QWcsHNVhD2dy+gnskgpdeaQY+oq5b69bWibzmB
-         ziJ2hJ30te8zg3xkwOnm4hx8XNdmVAj6dnCO6bu8GhZA1XkvaqXuSE+tzqABWtsHo0ql
-         DlOaxG3Uj98xdj6TMg+mIaqHIlAEZj88FVGptt3xQhsrVVa8rX3J+FHyOM+x7DjL5JiX
-         WIKyppKzGchh70uUYamHDrJ7o6ygvUww4cXLnDVz9+233rrqTQVwpD52p8LKH3lfCj6G
-         1YFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RlhgwksuUm7dWwJH3Rb88cQWw5W+Xn4yAyWyU7jvE54=;
-        b=rd1tABzpjprG5plYijtQqSeT+2tHoiZAip1LSRouF4vu4z3HgyG0bIJZeg+PvgBW8e
-         LP95IPiWeS34Zb9tEk1l36o3PHuxeVYk8HffKv1DLYHdF2iaLs7WETMgEUH0towMIpfQ
-         K2WSuLD26ab2cBNp8jhx+F+h3ddeJexqzUFFG9J/uGo8tN6ci0yAt6VtMTZH9hVknWpX
-         JFcDv/uZmk+Y4krCoC1/hEcyg+Jk8twY1AYaY5Y6oa8lWCUEYx0inhlysTzdk3bk919Q
-         366vVYS6kp8bvj/2xfnrjvytCd8GOZWwa52KmAHMzmaCp+7goNqfPkKk0xz2QIik9BMi
-         27pQ==
-X-Gm-Message-State: AOAM532/vU7y2PgWY/a6/SrbuN1lYeyDicrZT4EnMDsRt1DvHAafj86a
-        EDM3MvPsOcXJGGKxwvIC/JdoeI6WucW0Oazum7Y=
-X-Google-Smtp-Source: ABdhPJxUZ2jSYNqD84zt5ylPGbyACX428FxSv/I4bXsNdNQVXXiV619+aQfuFev5Cjp/yLOmFOCumQ==
-X-Received: by 2002:a17:906:4fd6:: with SMTP id i22mr3507629ejw.92.1632383396175;
-        Thu, 23 Sep 2021 00:49:56 -0700 (PDT)
-Received: from ?IPv6:2a04:241e:501:3870:3080:ac6c:f9d1:39b4? ([2a04:241e:501:3870:3080:ac6c:f9d1:39b4])
-        by smtp.gmail.com with ESMTPSA id jl12sm2433435ejc.120.2021.09.23.00.49.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Sep 2021 00:49:55 -0700 (PDT)
-Subject: Re: [PATCH 00/19] tcp: Initial support for RFC5925 auth option
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        Menglong Dong <dong.menglong@zte.com.cn>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1632240523.git.cdleonard@gmail.com>
- <20210921161327.10b29c88@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Leonard Crestez <cdleonard@gmail.com>
-Message-ID: <f84a32c9-ee7e-6e72-ccb2-69ac0210dc34@gmail.com>
-Date:   Thu, 23 Sep 2021 10:49:53 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Thu, 23 Sep 2021 05:33:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1632389520;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=U2nlz7BP5H1aA7VdA6cI2yp+6geRrlnSkXKmQFtAFvA=;
+        b=Mn8BHFUhLk2Bwwt2Hv/fjyJr4Xq701mXTbGkIBn1xFCbnVH+ToST2THgsebc1ctI
+        qonkH7f/FzMOmSW4/oeapYM85xn0FvvMq21Xl4rs/OqPxq2tRwZ455JdZbeyz6fW3Jf
+        2xc1UBYfDIqHzF5gAUTrKGDkSeSeKAFj/BIooJBA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1632389520;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=U2nlz7BP5H1aA7VdA6cI2yp+6geRrlnSkXKmQFtAFvA=;
+        b=BKYa2r9wn+dfgXXtfWo0AewRt47eJy90BKSjnPMqaNohzTbfrNv0TY8kkXpjSd/m
+        /xxJoSPmxy7E0VU1aqAa05mU8UQu1x4sTQ0/rU+JAKEQnqKTBfdmK4/X79nnqLrLgN3
+        1jah1B8K+u9tIhz8eueu/gIEoXQfd6HwVwSAarS8=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20210917
 MIME-Version: 1.0
-In-Reply-To: <20210921161327.10b29c88@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+Message-ID: <0100017c11ff5c50-97a26794-63e1-468e-82b4-7833a478c912-000000@email.amazonses.com>
+Date:   Thu, 23 Sep 2021 09:32:00 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.09.23-54.240.8.97
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/22/21 2:13 AM, Jakub Kicinski wrote:
-> On Tue, 21 Sep 2021 19:14:43 +0300 Leonard Crestez wrote:
->> This is similar to TCP MD5 in functionality but it's sufficiently
->> different that wire formats are incompatible. Compared to TCP-MD5 more
->> algorithms are supported and multiple keys can be used on the same
->> connection but there is still no negotiation mechanism.
-> 
-> Hopefully there will be some feedback / discussion, but even if
-> everyone acks this you'll need to fix all the transient build
-> failures, and kdoc warnings added - and repost.
-> git rebase --exec='make' and scripts/kernel-doc are your allies.
+## Build
+* kernel: 5.15.0-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 9004fd387338b1104499b2c52ef5729a32c408f0
+* git describe: next-20210917
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210917
 
-Hello,
+## Regressions (compared to next-20210914)
+* hi6220-hikey, kselftest-proc
+  - proc.proc-uptime-001
 
-I already went through several round of testing with git rebase 
---exec='$test' but it seems I introduced a few new failures after 
-several rounds of squashing fixes. I'll need to check kernel-doc 
-comments for source files not referenced in documenation.
+* qemu-arm64-gic-version3, kselftest-timers
+  - timers.rtcpie
 
-Many of the patch splits were artificially created in order to ease 
-review, for example "signing packets" doesn't do anything without also 
-"hooking in the tcp stack". Some static functions will trigger warnings 
-because they're unused until the next patch, not clear what the 
-preferred solution would be here. I could remove the "static" marker 
-until the next patch or reverse the order and have the initial "tcp 
-integration" patches call crypto code that just returns an error and 
-fills-in a signature of zeros.
+* qemu-arm64-mte, kselftest-timers
+  - timers.rtcpie
 
-A large amount of the code is just selftests and much of it is not 
-completely specific to TCP-AO. Maybe I could try to repost the parts 
-that verify handling of timewait corners and resets in a variant that 
-only handles "md5" and "unsigned"?
+* qemu_arm, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_migrate
 
-I already tried posting my scapy implementation of TCP-AO and MD5 to 
-scapy upstream because it is not specific to linux .
+* qemu_arm64, kselftest-timers
+  - timers.rtcpie
+
+* qemu_i386, kselftest-timers
+  - timers.rtcpie
+
+* x15, kselftest-rtc
+  - rtc.rtctest
+
+* x86, kselftest-rtc
+  - rtc.rtctest
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20210914)
+* hi6220-hikey, kselftest-rtc
+  - rtc.rtctest
+
+* i386, kselftest-net
+  - net.test_bpf.sh
+
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
+
+* x86, kselftest-net
+  - net.ip_defrag.sh
+
+
+## Test result summary
+total: 4894, pass: 2675, fail: 411, skip: 1808, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
 
 --
-Regards,
-Leonard
+Linaro LKFT
+https://lkft.linaro.org
