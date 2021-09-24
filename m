@@ -2,163 +2,308 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C727A417C51
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Sep 2021 22:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F5D417C55
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Sep 2021 22:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347021AbhIXUYH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Sep 2021 16:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
+        id S1348400AbhIXUYf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Sep 2021 16:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345900AbhIXUYG (ORCPT
+        with ESMTP id S1348409AbhIXUYe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Sep 2021 16:24:06 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E45C061571
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Sep 2021 13:22:33 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id i24so14935197wrc.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Sep 2021 13:22:33 -0700 (PDT)
+        Fri, 24 Sep 2021 16:24:34 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C4AC061571
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Sep 2021 13:23:01 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id o59-20020a9d2241000000b0054745f28c69so12667795ota.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Sep 2021 13:23:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P6UjX46EgO1JdvaA1S99BM8bVjWyLM+0KRRhsNVfqrc=;
-        b=hNilYYi9DfGN1Dx6/MtN058s8ZQ30CNP0PCqpqvXCmeNiuOhFNazMI2RkNfZif6nAu
-         rGIBi3W2uxP6WNpia+1cWs6TX03mE6nmeXC+3L1ns31tp1llFuebuAA/v7XkUejdwrwh
-         V845bcchNr9ZOJjCFBOLaVkMIQCvhHcHNVA0BWSfr3cb4pSvlkXIrj0zYGbj6eBeE3Pt
-         zGHYlYYrUxJJNdVUDPgyAaFeOV7d6ouoZgJXW5xwoMszebmsbXDdOg4LAWDzhss5Tnm2
-         r1TtraxcgioXJZ3Y+EpqAFcp2mmQi0NNeJNQ+tXpLR/y+DgFSipRMQNc/YZLV9BYxfj9
-         ye/g==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=9EXJi7A1yTVZrVRufkedawlpN9HCEyZZmN7KIo6e0hg=;
+        b=Q4HAF7FkD8pyTHT8TB7OmxGNlQmHLFLdxvFuPXt2s72V+LSQbbzgrVeBiMtmhRp58J
+         raAjh7AR3cPYLhOBhCPy4zUy2jwTPDuummjcA5C3dOzG/4jCqhTBD9p6ndtBAPBuzclM
+         h4SPsrSM3J7PgMqnRKQoGXMqzh+4/syKhasG8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P6UjX46EgO1JdvaA1S99BM8bVjWyLM+0KRRhsNVfqrc=;
-        b=Hfcd4Z+Ie8HQd2k8v4JLNh6n8QWdpzwx3IWO5jptY26WqFgkbkycUpuYPeLCEu0Dcr
-         snrB/VxNCSKsQuCf1sBs12EAOxKZOQqyNm/duiGLcB8xYgCrmka8cGm4buhicXd2fWLG
-         6sj2jnxCqevZhG21N6gc9IgRDWzQ2PWKokZuxNwx27/n/AHXuR9Fr+51Tr8efeRdcnXb
-         CvX6UFzgMgjc8TBE85FXpJ4wA0QBZoFUMmzkpMM0VmTTWaibnjBPNsT5OGlJMc9R3aK0
-         I2xdw7Fj0ngL73ZbQV9A/ZHs2TRza2926W1O0ebijL4rel+3MfDiPswuNEsHIp66dMxm
-         AzvQ==
-X-Gm-Message-State: AOAM5306vpzNRlKeVssD/ijbZ8TFREF9KuTtg5HMN04EJ5dLlvnV9Qxq
-        5cK8WLSmuE28UNR/6vnRxqkuFzxvfBJZr+MgahYhPw==
-X-Google-Smtp-Source: ABdhPJwmZTsxjXTVscp7BYpW00OnOGQJJcYUcorRFaAk4dC1Hn0zxo5UNELpTtJfZBek6h0ROSX+WX77q3jllKbjarY=
-X-Received: by 2002:adf:f48e:: with SMTP id l14mr13662271wro.109.1632514951618;
- Fri, 24 Sep 2021 13:22:31 -0700 (PDT)
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=9EXJi7A1yTVZrVRufkedawlpN9HCEyZZmN7KIo6e0hg=;
+        b=R7uGYm3ql4N+Hj0xnA/mG+Ej/U1CNiCugpViWBjf2NAF85fL5oG2r6ojBorAek16Kb
+         ePWDM+uFuhC4u9VaEZLwNuGFe6sfrdOSSzKY+yAX4AAle5YUSEjaQaSwzbKtENXaP/Wz
+         9exlYon6rUDtwjgV/kSrZJM2JJ40ofIY4nfaLstc3O7CW08/XSxQxKtScj8VP9h1z/uY
+         s/j84Md2eXPdZUWhgfNSsnqmyzdtekPHJTMwQsDVeo/xEaxjeVNO3qEKJ7T2tuGMdguO
+         f8SRE4qqZLOz27O61R0cco3D6BYu64hshtkvM5SJn9CKTg17wbLKBmMjPe7cvxKElEua
+         yliQ==
+X-Gm-Message-State: AOAM533i9gI/nh8BXcnMXX7A5B3wrvU9XzcVnp4biNTaV2shOD8sUKc2
+        /ePNl/ht/wszaJQK+lMtNx9LIQ==
+X-Google-Smtp-Source: ABdhPJxvpTUEQHpV+LwJMGaq9q75Tg2QzSqmaoOb8eHIJ/mbJ/cfZX4z8DSxdCQ9Zf4tcyNsCPLnQA==
+X-Received: by 2002:a9d:1716:: with SMTP id i22mr5786434ota.20.1632514980860;
+        Fri, 24 Sep 2021 13:23:00 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id r188sm2395016oie.7.2021.09.24.13.23.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Sep 2021 13:23:00 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes update for Linux 5.15-rc3
+Message-ID: <61a77c13-1963-1dd5-d9bb-806cc8435326@linuxfoundation.org>
+Date:   Fri, 24 Sep 2021 14:22:59 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <CAJHvVcgz18qU9vjPimOhJ5YswfJnLN0tQGfsgjCh6M7ckvhfgA@mail.gmail.com>
- <YUp438W5p5VHL1Ch@t490s> <CAJHvVciZc0mpcw8OSPk71YsVzCTajY+ikymcD3+zBJKsZynYkg@mail.gmail.com>
- <YUtoyNic4Jxfv9f7@t490s> <CAJHvVcg6PRCK_JcYEhRqq2vPyypnc+ySOtLhtFf5GrcQjimsJQ@mail.gmail.com>
- <YUulep3+YADkwlUu@t490s> <CAJHvVcijQdS_hfUnasz7BhhQeiHmNu=C5j8xfX=uWsfVO9-+Eg@mail.gmail.com>
- <YUvBEXV1Qs5wC+Jc@t490s> <CADrL8HUhV9ag6n3=MT2pNhtfrp8xH1Y-9zgispubzLy0ye6frw@mail.gmail.com>
- <CAPcxDJ6E3c2gcnJ8pDeQidf-yHDP7S=Knah_b3hy+FL1kOObqA@mail.gmail.com> <YU4wgSmStmkxxSt5@t490s>
-In-Reply-To: <YU4wgSmStmkxxSt5@t490s>
-From:   Jue Wang <juew@google.com>
-Date:   Fri, 24 Sep 2021 13:22:19 -0700
-Message-ID: <CAPcxDJ41OrRk5AyYK+3XtMB17ycuw3g3PR4njrZQfXnbQtsZfA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] userfaultfd/selftests: fix feature support detection
-To:     Peter Xu <peterx@redhat.com>
-Cc:     James Houghton <jthoughton@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed;
+ boundary="------------4D0C20D5DAC32B487853F987"
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 1:09 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Sep 22, 2021 at 10:43:40PM -0700, Jue Wang wrote:
->
-> [...]
->
-> > > > Could I know what's the workaround?  Normally if the workaround works solidly,
-> > > > then there's less need to introduce a kernel interface for that.  Otherwise I'm
-> > > > glad to look into such a formal proposal.
-> > >
-> > > The workaround is, for the region that you want to zap, run through
-> > > this sequence of syscalls: mumap, mmap, and re-register with
-> > > userfaultfd if it was registered before. If we're using tmpfs, we can
-> > > use madvise(DONTNEED) instead, but this is kind of an abuse of the
-> > > API. I don't think there's a guarantee that the PTEs will get zapped,
-> > > but currently they will always get zapped if we're using tmpfs. I
-> > > really like the idea of adding a new madvise() mode that is guaranteed
-> > > to zap the PTEs.
->
-> I see.
->
-> > >
-> > > >
-> > > > > It's also useful for memory poisoning, I think, if the host
-> > > > > decides some page(s) are "bad" and wants to intercept any future guest
-> > > > > accesses to those page(s).
-> > > >
-> > > > Curious: isn't hwpoison information come from MCEs; or say, host kernel side?
-> > > > Then I thought the host kernel will have full control of it already.
-> > > >
-> > > > Or there's other way that the host can try to detect some pages are going to be
-> > > > rotten?  So the userspace can do something before the kernel handles those
-> > > > exceptions?
-> > >
-> > > Here's a general idea of how we would like to use userfaultfd to support MPR:
-> > >
-> > > If a guest accesses a poisoned page for the first time, we will get an
-> > > MCE through the host kernel and send an MCE to the guest. The guest
-> > > will now no longer be able to access this page, and we have to enforce
-> > > this. After a live migration, the pages that were poisoned before
-> > > probably won't still be poisoned (from the host's perspective), so we
-> > > can't rely on the host kernel's MCE handling path. This is where
-> > > userfaultfd and this new madvise mode come in: we can just
-> > > madvise(MADV_ZAP) the poisoned page(s) on the target during a
-> > > migration. Now all accesses will be routed to the VMM and we can
-> > > inject an MCE. We don't *need* the new madvise mode, as we can also
-> > > use fallocate(PUNCH_HOLE) (works for tmpfs and hugetlbfs), but it
-> > > would be more convenient if we didn't have to use fallocate.
-> > >
-> > > Jue Wang can provide more context here, so I've cc'd him. There may be
-> > > some things I'm wrong about, so Jue feel free to correct me.
-> > >
-> > James is right.
-> >
-> > The page is marked PG_HWPoison in the source VM host's kernel. The need
-> > of intercepting guest accesses to it exist on the target VM host, where
-> > the same physical page is no longer poisoned.
-> >
-> > On the target host, the hypervisor needs to intercept all guest accesses
-> > to pages poisoned from the source VM host.
->
-> Thanks for these information, James, Jue, Axel.  I'm not familiar with memory
-> failures yet, so please bare with me with a few naive questions.
->
-> So now I can undertand that hw-poisonsed pages on src host do not mean these
-> pages will be hw-poisoned on dest host too, but I may have missed the reason on
-> why dest host needs to trap it with pgtable removed.
->
-> AFAIU after pages got hw-poisoned on src, and after vmm injects MCEs into the
-> guest, the guest shouldn't be accessing these pages any more, am I right?  Then
+This is a multi-part message in MIME format.
+--------------4D0C20D5DAC32B487853F987
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This is also our hope for the guest to behave but there is no guarantee on
-guest behavior.
+Hi Linus,
 
-The goal here is to have the hypervisor provide consistent behavior
-aligned to native
-hardware, i.e., a guest page with "memory errors" stay persistently in
-that state
-no matter on source or target.
+Please pull the following Kselftest fixes update for Linux 5.15-rc3.
 
-> after migration completes, IIUC the guest shouldn't be accessing these pages
-> too.  My current understanding is, instead of trapping these pages on dest, we
-> should just (somehow, which I have no real idea...) un-hw-poison these pages
-> after migration because these pages are very possibly normal pages there.  When
-> there's real hw-poisoned pages reported on dst host, we should re-inject MCE
-> errors to guest with another set of pages.
->
-> Could you tell me where did I miss?
->
-> Thanks,
->
-> --
-> Peter Xu
->
+This Kselftest fixes update for Linux 5.15-rc3 consists of:
+
+- fix to Kselftest common framework header install to run before
+   other targets for it work correctly in parallel build case.
+- fixes to kvm test to not ignore fscanf() returns which could
+   result in inconsistent test behavior and failures.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+
+   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.15-rc3
+
+for you to fetch changes up to f5013d412a43662b63f3d5f3a804d63213acd471:
+
+   selftests: kvm: fix get_run_delay() ignoring fscanf() return warn (2021-09-16 12:57:32 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-5.15-rc3
+
+This Kselftest fixes update for Linux 5.15-rc3 consists of:
+
+- fix to Kselftest common framework header install to run before
+   other targets for it work correctly in parallel build case.
+- fixes to kvm test to not ignore fscanf() returns which could
+   result in inconsistent test behavior and failures.
+
+----------------------------------------------------------------
+Li Zhijian (1):
+       selftests: be sure to make khdr before other targets
+
+Shuah Khan (4):
+       selftests:kvm: fix get_warnings_count() ignoring fscanf() return warn
+       selftests:kvm: fix get_trans_hugepagesz() ignoring fscanf() return warn
+       selftests: kvm: move get_run_delay() into lib/test_util
+       selftests: kvm: fix get_run_delay() ignoring fscanf() return warn
+
+  tools/testing/selftests/kvm/include/test_util.h    |  3 +++
+  tools/testing/selftests/kvm/lib/test_util.c        | 22 +++++++++++++++++++++-
+  tools/testing/selftests/kvm/steal_time.c           | 16 ----------------
+  .../selftests/kvm/x86_64/mmio_warning_test.c       |  3 ++-
+  .../testing/selftests/kvm/x86_64/xen_shinfo_test.c | 15 ---------------
+  tools/testing/selftests/lib.mk                     |  1 +
+  6 files changed, 27 insertions(+), 33 deletions(-)
+
+----------------------------------------------------------------
+
+--------------4D0C20D5DAC32B487853F987
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-5.15-rc3.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-fixes-5.15-rc3.diff"
+
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index d79be15dd3d2..451fed5ce8e7 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -95,6 +95,8 @@ struct vm_mem_backing_src_alias {
+ 	uint32_t flag;
+ };
+ 
++#define MIN_RUN_DELAY_NS	200000UL
++
+ bool thp_configured(void);
+ size_t get_trans_hugepagesz(void);
+ size_t get_def_hugetlb_pagesz(void);
+@@ -102,6 +104,7 @@ const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
+ size_t get_backing_src_pagesz(uint32_t i);
+ void backing_src_help(void);
+ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
++long get_run_delay(void);
+ 
+ /*
+  * Whether or not the given source type is shared memory (as opposed to
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index af1031fed97f..a9107bfae402 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -11,6 +11,7 @@
+ #include <stdlib.h>
+ #include <time.h>
+ #include <sys/stat.h>
++#include <sys/syscall.h>
+ #include <linux/mman.h>
+ #include "linux/kernel.h"
+ 
+@@ -129,13 +130,16 @@ size_t get_trans_hugepagesz(void)
+ {
+ 	size_t size;
+ 	FILE *f;
++	int ret;
+ 
+ 	TEST_ASSERT(thp_configured(), "THP is not configured in host kernel");
+ 
+ 	f = fopen("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size", "r");
+ 	TEST_ASSERT(f != NULL, "Error in opening transparent_hugepage/hpage_pmd_size");
+ 
+-	fscanf(f, "%ld", &size);
++	ret = fscanf(f, "%ld", &size);
++	ret = fscanf(f, "%ld", &size);
++	TEST_ASSERT(ret < 1, "Error reading transparent_hugepage/hpage_pmd_size");
+ 	fclose(f);
+ 
+ 	return size;
+@@ -300,3 +304,19 @@ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name)
+ 	TEST_FAIL("Unknown backing src type: %s", type_name);
+ 	return -1;
+ }
++
++long get_run_delay(void)
++{
++	char path[64];
++	long val[2];
++	FILE *fp;
++
++	sprintf(path, "/proc/%ld/schedstat", syscall(SYS_gettid));
++	fp = fopen(path, "r");
++	/* Return MIN_RUN_DELAY_NS upon failure just to be safe */
++	if (fscanf(fp, "%ld %ld ", &val[0], &val[1]) < 2)
++		val[1] = MIN_RUN_DELAY_NS;
++	fclose(fp);
++
++	return val[1];
++}
+diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+index ecec30865a74..2172d65b85e4 100644
+--- a/tools/testing/selftests/kvm/steal_time.c
++++ b/tools/testing/selftests/kvm/steal_time.c
+@@ -10,7 +10,6 @@
+ #include <sched.h>
+ #include <pthread.h>
+ #include <linux/kernel.h>
+-#include <sys/syscall.h>
+ #include <asm/kvm.h>
+ #include <asm/kvm_para.h>
+ 
+@@ -20,7 +19,6 @@
+ 
+ #define NR_VCPUS		4
+ #define ST_GPA_BASE		(1 << 30)
+-#define MIN_RUN_DELAY_NS	200000UL
+ 
+ static void *st_gva[NR_VCPUS];
+ static uint64_t guest_stolen_time[NR_VCPUS];
+@@ -217,20 +215,6 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpuid)
+ 
+ #endif
+ 
+-static long get_run_delay(void)
+-{
+-	char path[64];
+-	long val[2];
+-	FILE *fp;
+-
+-	sprintf(path, "/proc/%ld/schedstat", syscall(SYS_gettid));
+-	fp = fopen(path, "r");
+-	fscanf(fp, "%ld %ld ", &val[0], &val[1]);
+-	fclose(fp);
+-
+-	return val[1];
+-}
+-
+ static void *do_steal_time(void *arg)
+ {
+ 	struct timespec ts, stop;
+diff --git a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+index e6480fd5c4bd..8039e1eff938 100644
+--- a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
++++ b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+@@ -82,7 +82,8 @@ int get_warnings_count(void)
+ 	FILE *f;
+ 
+ 	f = popen("dmesg | grep \"WARNING:\" | wc -l", "r");
+-	fscanf(f, "%d", &warnings);
++	if (fscanf(f, "%d", &warnings) < 1)
++		warnings = 0;
+ 	fclose(f);
+ 
+ 	return warnings;
+diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+index 117bf49a3d79..eda0d2a51224 100644
+--- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+@@ -14,7 +14,6 @@
+ #include <stdint.h>
+ #include <time.h>
+ #include <sched.h>
+-#include <sys/syscall.h>
+ 
+ #define VCPU_ID		5
+ 
+@@ -98,20 +97,6 @@ static void guest_code(void)
+ 	GUEST_DONE();
+ }
+ 
+-static long get_run_delay(void)
+-{
+-        char path[64];
+-        long val[2];
+-        FILE *fp;
+-
+-        sprintf(path, "/proc/%ld/schedstat", syscall(SYS_gettid));
+-        fp = fopen(path, "r");
+-        fscanf(fp, "%ld %ld ", &val[0], &val[1]);
+-        fclose(fp);
+-
+-        return val[1];
+-}
+-
+ static int cmp_timespec(struct timespec *a, struct timespec *b)
+ {
+ 	if (a->tv_sec > b->tv_sec)
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index fa2ac0e56b43..fe7ee2b0f29c 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -48,6 +48,7 @@ ARCH		?= $(SUBARCH)
+ # When local build is done, headers are installed in the default
+ # INSTALL_HDR_PATH usr/include.
+ .PHONY: khdr
++.NOTPARALLEL:
+ khdr:
+ ifndef KSFT_KHDR_INSTALL_DONE
+ ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+
+--------------4D0C20D5DAC32B487853F987--
