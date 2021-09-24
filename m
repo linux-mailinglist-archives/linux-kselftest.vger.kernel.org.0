@@ -2,36 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6684416932
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Sep 2021 03:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFA041705D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Sep 2021 12:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243708AbhIXBDz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Sep 2021 21:03:55 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:38524 "EHLO
+        id S240407AbhIXKfX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Sep 2021 06:35:23 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:41134 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243676AbhIXBDz (ORCPT
+        with ESMTP id S229911AbhIXKfX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Sep 2021 21:03:55 -0400
+        Fri, 24 Sep 2021 06:35:23 -0400
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1632445341;
+        s=2020; t=1632479629;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kQk2GihfSjtSeZUWZy1F+u7jfH25EFIJlwAQfvaVLi0=;
-        b=1LVRE8MVY421IfWRt9am8QgddckQOV4Jq+7iSes11mrYMdt7vzrInJeEr6W26CgBOyBS4H
-        /RNeRYnri1xJRRPY6UNmkCEvfjCzg+7BhrQBPKRKHnzZ/kCxnP0r0c3mIC4NxKLvlkXHTO
-        KfxwvHyJ1p//1O8yyGqtqmfEwXE3d/k6az+MZpjj0UJ30/0Y8cyjaIHl65G2W7j90AGvGy
-        Rqf7VO1KMMTxOReGXUy63pSN/JYBmV24Grclj6m44UfAlGsmDP72hORGFXPt2NDBpQxqhP
-        AkKRshaPbCTMuhFlT1gSLa6k70JxRKI53wf3I2tbuxYy04xqm9IOTacD2qBnvw==
+         in-reply-to:in-reply-to; bh=3qlwpik2ZScVioRdtjZP8dq5+cHoEHM42Y3IpVn8O9Q=;
+        b=AvrQWPehTUVeCLggZJeZ3UYEa+fnpn39vXJdpbQqIG/r6Rui1EN4hlJBV8UQ3zBeDSB3BQ
+        BKkOHaQ+yVzL/HOgB+9iWi5Lz8GXpxPAUhdUHWPcTQSpFVcCqywiA78Ymd32UcKZNbt9fx
+        +LRZJgrq/4BtoDPDFofUuyLpwpSG2ggTdIRBAQ5joeXEfvlBBs/38u7pJvrCmbtzys8/Nl
+        9ZRYAuD2f7OWTC2rwXKqv47ryeVecQ/PxQqhrpNbghize7ara9fFRGmibIfxomh1lqQUxy
+        Q/Wqpk+OIJuQGgSPMcaw7+fnBIA+HNrXLpVtvtGVAeq9qpFI2qFZNrxGZ2IB4w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1632445341;
+        s=2020e; t=1632479629;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kQk2GihfSjtSeZUWZy1F+u7jfH25EFIJlwAQfvaVLi0=;
-        b=3aPjjZKeE1+jA9HmIhDpgs4l8/mPEyArvUVFnsXiH/YzTv7WWpGSUEXQQP5L73JRWfFD2F
-        fgGmIXzaeL/EpKBg==
+         in-reply-to:in-reply-to; bh=3qlwpik2ZScVioRdtjZP8dq5+cHoEHM42Y3IpVn8O9Q=;
+        b=ne6ljzK1+lXK4uvd1YB/lXPIykpTmY7pn0htgpsCu3j7Zq1g8CpGd2UYATKTaqbfUhth9B
+        EEY3Lsa/5HpuihBQ==
 To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
 Cc:     Sohil Mehta <sohil.mehta@intel.com>,
         Tony Luck <tony.luck@intel.com>,
@@ -54,13 +52,11 @@ Cc:     Sohil Mehta <sohil.mehta@intel.com>,
         Ramesh Thomas <ramesh.thomas@intel.com>,
         linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 08/13] x86/process/64: Clean up uintr task fork and
- exit paths
-In-Reply-To: <20210913200132.3396598-9-sohil.mehta@intel.com>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-9-sohil.mehta@intel.com>
-Date:   Fri, 24 Sep 2021 03:02:21 +0200
-Message-ID: <8735pug50i.ffs@tglx>
+Subject: Re: [RFC PATCH 09/13] x86/uintr: Introduce vector registration and
+ uintr_fd syscall
+In-Reply-To: <20210913200132.3396598-10-sohil.mehta@intel.com>
+Date:   Fri, 24 Sep 2021 12:33:48 +0200
+Message-ID: <87wnn6dzzn.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -68,127 +64,155 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
-
-> The user interrupt MSRs and the user interrupt state is task specific.
-> During task fork and exit clear the task state, clear the MSRs and
-> dereference the shared resources.
->
-> Some of the memory resources like the UPID are referenced in the file
-> descriptor and could be in use while the uintr_fd is still valid.
-> Instead of freeing up  the UPID just dereference it.
-
-Derefencing the UPID, i.e. accessing task->upid->foo helps in which way?
-
-You want to drop the reference count I assume. Then please write that
-so. 
-
-> Eventually when every user releases the reference the memory resource
-> will be freed up.
-
-Yeah, eventually or not...
-
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-
-> @@ -260,6 +260,7 @@ int fpu_clone(struct task_struct *dst)
+>  static void free_upid(struct uintr_upid_ctx *upid_ctx)
 >  {
->  	struct fpu *src_fpu = &current->thread.fpu;
->  	struct fpu *dst_fpu = &dst->thread.fpu;
-> +	struct uintr_state *uintr_state;
+> +	put_task_struct(upid_ctx->task);
+
+That's current, right?
+
+>  	kfree(upid_ctx->upid);
+>  	upid_ctx->upid = NULL;
+>  	kfree(upid_ctx);
+> @@ -93,6 +93,7 @@ static struct uintr_upid_ctx *alloc_upid(void)
 >  
->  	/* The new task's FPU state cannot be valid in the hardware. */
->  	dst_fpu->last_cpu = -1;
-> @@ -284,6 +285,14 @@ int fpu_clone(struct task_struct *dst)
+>  	upid_ctx->upid = upid;
+>  	refcount_set(&upid_ctx->refs, 1);
+> +	upid_ctx->task = get_task_struct(current);
+
+Current takes a refcount on it's own task struct when allocating upid,
+and releases it at some point when freeing upid, right?
+
+What for? Comments are overrated, except for comments describing
+the obvious in the wrong way.
+
+If this ever comes back in some form, then I pretty please want the life
+time rules of this documented properly. The current state is
+unreviewable.
+
+>  	return upid_ctx;
+>  }
+> @@ -103,6 +104,77 @@ static void put_upid_ref(struct uintr_upid_ctx *upid_ctx)
+>  		free_upid(upid_ctx);
+>  }
 >  
->  	else
->  		save_fpregs_to_fpstate(dst_fpu);
-> +
-> +	/* UINTR state is not expected to be inherited (in the current design). */
-> +	if (static_cpu_has(X86_FEATURE_UINTR)) {
-> +		uintr_state = get_xsave_addr(&dst_fpu->state.xsave, XFEATURE_UINTR);
-> +		if (uintr_state)
-> +			memset(uintr_state, 0, sizeof(*uintr_state));
-> +	}
-
-1) If the FPU registers are up to date then this can be completely
-   avoided by excluding the UINTR component from XSAVES
-
-2) If the task never used that muck then UINTR is in init state and
-   clearing that memory is a redunant exercise because it has been
-   cleared already
-
-So yes, this clearly is evidence how this is enhancing performance.
-
-> +/*
-> + * This should only be called from exit_thread().
-
-Should? Would? Maybe or what?
-
-> + * exit_thread() can happen in current context when the current thread is
-> + * exiting or it can happen for a new thread that is being created.
-
-A right that makes sense. If a new thread is created then it can call
-exit_thread(), right?
-
-> + * For new threads is_uintr_receiver() should fail.
-
-Should fail?
-
-> + */
-> +void uintr_free(struct task_struct *t)
+> +static struct uintr_upid_ctx *get_upid_ref(struct uintr_upid_ctx *upid_ctx)
 > +{
-> +	struct uintr_receiver *ui_recv;
-> +	struct fpu *fpu;
+> +	refcount_inc(&upid_ctx->refs);
+> +	return upid_ctx;
+> +}
 > +
-> +	if (!static_cpu_has(X86_FEATURE_UINTR) || !is_uintr_receiver(t))
+> +static void __clear_vector_from_upid(u64 uvec, struct uintr_upid *upid)
+> +{
+> +	clear_bit(uvec, (unsigned long *)&upid->puir);
+> +}
+> +
+> +static void __clear_vector_from_task(u64 uvec)
+> +{
+> +	struct task_struct *t = current;
+> +
+> +	pr_debug("recv: task=%d free vector %llu\n", t->pid, uvec);
+> +
+> +	if (!(BIT_ULL(uvec) & t->thread.ui_recv->uvec_mask))
 > +		return;
 > +
-> +	if (WARN_ON_ONCE(t != current))
-> +		return;
+> +	clear_bit(uvec, (unsigned long *)&t->thread.ui_recv->uvec_mask);
 > +
-> +	fpu = &t->thread.fpu;
-> +
-> +	fpregs_lock();
-> +
-> +	if (fpregs_state_valid(fpu, smp_processor_id())) {
-> +		wrmsrl(MSR_IA32_UINTR_MISC, 0ULL);
-> +		wrmsrl(MSR_IA32_UINTR_PD, 0ULL);
-> +		wrmsrl(MSR_IA32_UINTR_RR, 0ULL);
-> +		wrmsrl(MSR_IA32_UINTR_STACKADJUST, 0ULL);
-> +		wrmsrl(MSR_IA32_UINTR_HANDLER, 0ULL);
-> +	} else {
-> +		struct uintr_state *p;
-> +
-> +		p = get_xsave_addr(&fpu->state.xsave, XFEATURE_UINTR);
-> +		if (p) {
-> +			p->handler = 0;
-> +			p->uirr = 0;
-> +			p->upid_addr = 0;
-> +			p->stack_adjust = 0;
-> +			p->uinv = 0;
-> +		}
-> +	}
-> +
-> +	/* Check: Can a thread be context switched while it is exiting? */
+> +	if (!t->thread.ui_recv->uvec_mask)
+> +		pr_debug("recv: task=%d unregistered all user vectors\n", t->pid);
 
-This looks like a question which should be answered _before_ writing
-such code.
+Once you are done debugging this complex function can you please turn it
+into an unconditional clear_bit(...) at the call site?
 
-> +	ui_recv = t->thread.ui_recv;
+> +/* Callback to clear the vector structures when a vector is unregistered. */
+> +static void receiver_clear_uvec(struct callback_head *head)
+> +{
+> +	struct uintr_receiver_info *r_info;
+> +	struct uintr_upid_ctx *upid_ctx;
+> +	struct task_struct *t = current;
+> +	u64 uvec;
+> +
+> +	r_info = container_of(head, struct uintr_receiver_info, twork);
+> +	uvec = r_info->uvec;
+> +	upid_ctx = r_info->upid_ctx;
 > +
 > +	/*
-> +	 * Suppress notifications so that no further interrupts are
-> +	 * generated based on this UPID.
+> +	 * If a task has unregistered the interrupt handler the vector
+> +	 * structures would have already been cleared.
+
+would ? No. They must have been cleared already, anything else is a bug.
+
 > +	 */
-> +	set_bit(UPID_SN, (unsigned long *)&ui_recv->upid_ctx->upid->nc.status);
-> +	put_upid_ref(ui_recv->upid_ctx);
-> +	kfree(ui_recv);
-> +	t->thread.ui_recv = NULL;
+> +	if (is_uintr_receiver(t)) {
+> +		/*
+> +		 * The UPID context in the callback might differ from the one
+> +		 * on the task if the task unregistered its interrupt handler
+> +		 * and then registered itself again. The vector structures
+> +		 * related to the previous UPID would have already been cleared
+> +		 * in that case.
+> +		 */
+> +		if (t->thread.ui_recv->upid_ctx != upid_ctx) {
+> +			pr_debug("recv: task %d is now using a different UPID\n",
+> +				 t->pid);
+> +			goto out_free;
+> +		}
+> +
+> +		/*
+> +		 * If the vector has been recognized in the UIRR don't modify
+> +		 * it. We need to disable User Interrupts before modifying the
+> +		 * UIRR. It might be better to just let that interrupt get
+> +		 * delivered.
 
-Again, why needs all this put/kfree muck be within the fpregs locked section?
+Might be better? Please provide coherent explanations why this is correct.
 
-> +	fpregs_unlock();
+> +		 */
+> +		__clear_vector_from_upid(uvec, upid_ctx->upid);
+> +		__clear_vector_from_task(uvec);
+> +	}
+> +
+> +out_free:
+> +	put_upid_ref(upid_ctx);
+> +	kfree(r_info);
 > +}
+> +
+>  int do_uintr_unregister_handler(void)
+>  {
+>  	struct task_struct *t = current;
+> @@ -239,6 +311,53 @@ int do_uintr_register_handler(u64 handler)
+>  	return 0;
+>  }
+>  
+> +void do_uintr_unregister_vector(struct uintr_receiver_info *r_info)
+> +{
+> +	int ret;
+> +
+> +	pr_debug("recv: Adding task work to clear vector %llu added for task=%d\n",
+> +		 r_info->uvec, r_info->upid_ctx->task->pid);
+> +
+> +	init_task_work(&r_info->twork, receiver_clear_uvec);
+
+How is this safe? Reinitialization has to be serialized against other
+usage. Again: Document the life time and serialization rules. Your
+pr_debugs sprinkled all over the place are not a replacement for that.
+
+> +	ret = task_work_add(r_info->upid_ctx->task, &r_info->twork, true);
+
+Care to look at the type of the third argument of task_work_add()?
+
+> +struct uintrfd_ctx {
+> +	struct uintr_receiver_info *r_info;
+
+Yet another wrapper struct? What for?
+
+> +/*
+> + * sys_uintr_create_fd - Create a uintr_fd for the registered interrupt vector.
+
+So this creates a file descriptor for a vector which is already
+allocated and then it calls do_uintr_register_vector() which allocates
+the vector?
+
+> + */
+> +SYSCALL_DEFINE2(uintr_create_fd, u64, vector, unsigned int, flags)
+> +{
 
 Thanks,
 
