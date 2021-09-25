@@ -2,117 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB2041828C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Sep 2021 16:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7473741829A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Sep 2021 16:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237777AbhIYOQa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 Sep 2021 10:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S234173AbhIYOWY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 25 Sep 2021 10:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbhIYOQa (ORCPT
+        with ESMTP id S233738AbhIYOWY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Sep 2021 10:16:30 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D47C061570;
-        Sat, 25 Sep 2021 07:14:55 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id ee50so47968737edb.13;
-        Sat, 25 Sep 2021 07:14:55 -0700 (PDT)
+        Sat, 25 Sep 2021 10:22:24 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0004C061570
+        for <linux-kselftest@vger.kernel.org>; Sat, 25 Sep 2021 07:20:49 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id h2so12430119ybi.13
+        for <linux-kselftest@vger.kernel.org>; Sat, 25 Sep 2021 07:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hi5r/QTKc0hakYYPxOLmnUQF3xIEtGRWHl7PZ9tsfa4=;
-        b=ikUsUlqEpAEVeeQr8KpV9A0k3XvxLReCSOUdzvuL7OFNhnoMCW0fS/heeVX++tm2Fj
-         brF+FOgZdoHFcuHMCSXyDvtr67eA4uS+dsEschaOGJoxB6B02uXdMuqJdGOLMRGVxJU7
-         TnGK9Qs7FOVNDiU20Iim1oNxuMnj+OXttG3ZqpXXnG7elhu6vGz/Au4DAw9TcOd8Vv1s
-         eFc6w68nXOTpZfkBPAEUT1jot4nJW6OLJo9jAOThhBqHjdAe2uGfi5JBCG8e6f2UToMN
-         CSk3oSOvNIrfks3NLTSLOUSO0qPCQNSDWV6lwWc76oGn3cXpl4uwKjhsdUqzaxdltq7t
-         EWBA==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=FELeHWRLzFEBrq4obhX73D1BquHMgJ/7I3UYNELg8LY=;
+        b=QtK/tlj5hdqW++FDokHzq8qc9ukQcLa4xUrTlt2+DtVb6QCwlSw6rLZ2jTATV2mDTg
+         KikR5UQw1KI6yLpaHQCMYA6MKqxOhsyZHF+LXXqn/NZCY+27z67uiRFvlMlGp7f/zmso
+         H11q+vc044E1J7H7SRmkmcuq6uHimkhkFHOgSxoJHh155HvovWPGLgFm9/RkQDchxRqL
+         /fJH0fVyGazOdNjpaCRf5PpDv3LNecB6fGet1MLK9tM2wZZJlp2J+xzIlirMj7Jb2AW7
+         3Y/WAY52RvcFNtmV9xYfeytrF2X1bdoNwgc+cJqV7f9eXefwxyBwAJ7ZY+Epa6K3NRrA
+         LMCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hi5r/QTKc0hakYYPxOLmnUQF3xIEtGRWHl7PZ9tsfa4=;
-        b=HyYjx2f5V9FgBh00ZdR78KAtyzuzneYMl/LHH89/seSCaQjgNk5RRKr2WBTYHPF20b
-         YZd/qfRDfrIxrJLQ29MCyRD3ZfVa2tWuTo1gpNFm6ot3qS7UqNTUUgZBeMEcYeaXWwoQ
-         8ZiheWx9uAgj3urW9o/rmLiy0BNihvZ15n17TmP9frXBfYBmcYAglXwEgj123kqftkGa
-         mWFRhkNBPKaq1kBzCXbbdE9NfLbq1+yRd6nbzD38gyNFFKdwv6HwJTaNIowfljuELTNy
-         5iRVilf+eiawGHU9FQDQ+M+c59eHu2AgcMFWQ90+5rMO2ASYWDeFKjMM0oL+wSG9z7PK
-         2QQQ==
-X-Gm-Message-State: AOAM532Eud2LAsk1GzmLE87kjMw3HZPBH0fDmE6xT2jgE+AMVQvO0Yp0
-        ruieUebJweEK0my1f4oskb1XDyXtRS/rhDWLSwk=
-X-Google-Smtp-Source: ABdhPJyw95qtw/Li2PyMyMyWxpjzmlZNuzkRi9jH/UEyb7cWbwy6LipocE7q899bLht3ndlmaN6Npg==
-X-Received: by 2002:a17:906:32c9:: with SMTP id k9mr17484811ejk.218.1632579293736;
-        Sat, 25 Sep 2021 07:14:53 -0700 (PDT)
-Received: from ?IPv6:2a04:241e:501:3800:55c:dc9d:9cc1:2c16? ([2a04:241e:501:3800:55c:dc9d:9cc1:2c16])
-        by smtp.gmail.com with ESMTPSA id e11sm6297928ejm.41.2021.09.25.07.14.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Sep 2021 07:14:53 -0700 (PDT)
-Subject: Re: [PATCH 08/19] tcp: authopt: Disable via sysctl by default
-To:     David Ahern <dsahern@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        Menglong Dong <dong.menglong@zte.com.cn>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1632240523.git.cdleonard@gmail.com>
- <b0abf2b789220708011a862a892c37b0fd76dc25.1632240523.git.cdleonard@gmail.com>
- <cafecbeb-7d4d-489c-177d-29fff78eb4d1@gmail.com>
-From:   Leonard Crestez <cdleonard@gmail.com>
-Message-ID: <65ed79e3-bef1-19c4-ac1d-9d6833236a1c@gmail.com>
-Date:   Sat, 25 Sep 2021 17:14:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=FELeHWRLzFEBrq4obhX73D1BquHMgJ/7I3UYNELg8LY=;
+        b=NTX4T72uwjMOout68ZO27UwnFyFRUyD03V6IFatCSizQ6pY4WIHygtDRpPOG54/v1X
+         FfPXxspGITz88+JK4ydYcelt6xhhC4OeRAud6zIS19oqh/fR6j1abGwReH+o4FuLXAat
+         IiImIcCkR+xGpUyV5Au6Lz1VjDmy/TE47h+if6/E0Kzmt7YU17kcK8TCd6bm1/1f8Lj+
+         yDWI7q5kaJHQbi4r5sqVYuQoYftcCLkPh5wZvwp0WnR6I8y3pSmmnf3qVRVUD0xBt4Bx
+         qak+J2DLvStOCkVzm/DSVPB0q258/Gvx6s1TzRyYaWs+DaaA97W5/2NIKIfmTtJ7BQy6
+         jDrw==
+X-Gm-Message-State: AOAM530hpMtHoN3v2Ooem/DPRg0U1GVOL5belYSnKysDxTWKVujRDON6
+        mO3g5Pvq8YK4S749qbkWtcmHmOQ5/A+VKVnEWPrTsmqId4E=
+X-Google-Smtp-Source: ABdhPJwD+n7TGIAXK4E4fSf2K6cWuWXvb8zZ6yCPFMjS1vXen/atkPviR0BBZAEIiwWjuTSLNb+LZ1cftN3jL9fh9Rs=
+X-Received: by 2002:a25:ba08:: with SMTP id t8mr19808400ybg.111.1632579649096;
+ Sat, 25 Sep 2021 07:20:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <cafecbeb-7d4d-489c-177d-29fff78eb4d1@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Turritopsis Dohrnii Teo En Ming <ceo.teo.en.ming@gmail.com>
+Date:   Sat, 25 Sep 2021 22:20:38 +0800
+Message-ID: <CAMEJMGGSJ9=3+O1kPikQKgtP9CNtTmyf-mhMqprh7up8afLNKg@mail.gmail.com>
+Subject: Introduction: I am a Linux and open source software enthusiast
+To:     linux-kselftest@vger.kernel.org
+Cc:     ceo@teo-en-ming-corp.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Subject: Introduction: I am a Linux and open source software enthusiast
+
+Greetings from Singapore,
+
+My name is Mr. Turritopsis Dohrnii Teo En Ming, 43 years old as of 25
+September 2021. My country is Singapore. Presently I am an IT
+Consultant with a System Integrator (SI)/computer firm in Singapore. I
+am also a Linux and open source software and information technology
+enthusiast.
+
+You can read my autobiography on my redundant blogs. The title of my
+autobiography is:
+
+"Autobiography of Singaporean Targeted Individual Mr. Turritopsis
+Dohrnii Teo En Ming (Very First Draft, Lots More to Add in Future)"
+
+Links to my redundant blogs (Blogger and Wordpress) can be found in my
+email signature below. These are my main blogs.
+
+I have three other redundant blogs, namely:
+
+https://teo-en-ming.tumblr.com/
+
+https://teo-en-ming.medium.com/
+
+https://teo-en-ming.livejournal.com/
+
+Future/subsequent versions of my autobiography will be published on my
+redundant blogs.
+
+My Blog Books (in PDF format) are also available for download on my
+redundant blogs.
+
+I have also published many guides, howtos, tutorials, and information
+technology articles on my redundant blogs.
+
+Thank you very much.
 
 
-On 9/25/21 4:57 AM, David Ahern wrote:
-> On 9/21/21 10:14 AM, Leonard Crestez wrote:
->> This is mainly intended to protect against local privilege escalations
->> through a rarely used feature so it is deliberately not namespaced.
->>
->> Enforcement is only at the setsockopt level, this should be enough to
->> ensure that the tcp_authopt_needed static key never turns on.
->>
->> No effort is made to handle disabling when the feature is already in
->> use.
->>
-> 
-> MD5 does not require a sysctl to use it, so why should this auth mechanism?
 
-I think it would make sense for both these features to be off by 
-default. They interact with TCP in complex ways and are available to all 
-unprivileged users but their real usecases are actually very limited.
 
-Having to flip a few sysctls is very reasonable in the context of 
-setting up a router.
 
-My concern is that this feature ends up in distro kernels and somebody 
-finds a way to use it for privilege escalation.
 
-It also seems reasonable for "experimental" features to be off by default.
+-----BEGIN EMAIL SIGNATURE-----
 
---
-Regards,
-Leonard
+The Gospel for all Targeted Individuals (TIs):
+
+[The New York Times] Microwave Weapons Are Prime Suspect in Ills of
+U.S. Embassy Workers
+
+Link:
+https://www.nytimes.com/2018/09/01/science/sonic-attack-cuba-microwave.html
+
+********************************************************************************************
+
+Singaporean Targeted Individual Mr. Turritopsis Dohrnii Teo En Ming's
+Academic Qualifications as at 14 Feb 2019 and refugee seeking attempts
+at the United Nations Refugee Agency Bangkok (21 Mar 2017), in Taiwan
+(5 Aug 2019) and Australia (25 Dec 2019 to 9 Jan 2020):
+
+[1] https://tdtemcerts.wordpress.com/
+
+[2] https://tdtemcerts.blogspot.sg/
+
+[3] https://www.scribd.com/user/270125049/Teo-En-Ming
+
+-----END EMAIL SIGNATURE-----
