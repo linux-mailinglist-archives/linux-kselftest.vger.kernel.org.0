@@ -2,56 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C813641829D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Sep 2021 16:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2AC4182AC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Sep 2021 16:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245298AbhIYOWx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 Sep 2021 10:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S245152AbhIYO1O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 25 Sep 2021 10:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237777AbhIYOWx (ORCPT
+        with ESMTP id S233738AbhIYO1N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Sep 2021 10:22:53 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69989C061570;
-        Sat, 25 Sep 2021 07:21:18 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id bx4so48144082edb.4;
-        Sat, 25 Sep 2021 07:21:18 -0700 (PDT)
+        Sat, 25 Sep 2021 10:27:13 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED1BC061570;
+        Sat, 25 Sep 2021 07:25:38 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id dj4so48165112edb.5;
+        Sat, 25 Sep 2021 07:25:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=z0mum1JZyG80yxFXdZBZQxtN2hhcJoR8p5bCBGs0LNc=;
-        b=J/VIHUhu8QB8vjwZZ2LZnBneypDZ+f5pOAInrhdEtQAsnbeNbmnW1/PXMhvfT3Q02L
-         qyrrtUVCjR0sJ4U1SbHePQ0BS55amfCoiolGhPSKv3m/R0WaGRx3uKyNRL2BWuDJkV5V
-         K+Mu++9MGSVsU+KZmenOk6HP6IVYenTk2s+oHagCLw91chvyJWdZWDtZqAQX4tO1eG+Z
-         ysXDyoSlZyk/HuG76iBf47fsj14pDqFoX7548LO1sYNnMlQm+MI1EDqpU56UP7NjiCu1
-         OEZO5BVloBclX2kiddqTelMssOjj3q/xw91FXRs9vHMN3lXfKp21MEM4mnAm8HsnIF3D
-         k2sA==
+        bh=lU4nVuw7o1r/PfKx8aQqaO6GC4TAE1elqJfGU2aTcGE=;
+        b=Rmz2N0jm9/QxLpL2Oly7zCwxsgUgF04PXqkaYqMYe4BWHzH/XSDT5odLQlD/wQjjY7
+         1+2RHyHnxaPbM7EU/Qb2NjQiKFE4zFtcAdMpRZEWwgx0qKSnmaFteYJzOlPE3WB7r2Vu
+         PB/4egz7LywiX1DqFuTjjJLKHSQ9tVw7/eYKu6ANN5AkzfGjELD2poBwDTn+G/YlMcfK
+         denO4SP4AR1m54DRpUiIz3aUJ3bj0rI2yOC0Gf4xggvGGe+2738jv9awsRArP9509nSh
+         N/v5dfIqyiEKFF2WFI13owtaNLrgCLLpU6mmN0jNoq15KWJBnZDxKLoEdovnF8cgF1IH
+         juiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=z0mum1JZyG80yxFXdZBZQxtN2hhcJoR8p5bCBGs0LNc=;
-        b=mmpzh15TJSAg3oIaHwKMY4HRtYhzR3xZEHWkmMcCHD6rLqHy1EA6xkzei+HkoYuVhm
-         PUDHbYBOzOUcipPCLHzORyC/Z/AsKEM17DLX7582z9Yafb6EKs/aW+D8xykoOuZXQ/xN
-         QlzVGwcYDXkddMbVXdOf/Q5swJbjFSrAY8g68ccEHiDoUP3uq/BUvzwAbea6cloX6f6C
-         sR6SxPAdHIMB4c+EolC1O8GAIvwbxjoVR0IIEkeTVVhRg0ZsCDkVbwkk9rEXNfBObkxh
-         zRsckse2Fx7Dtk0ZsjevDeAeYjBL59nw7O6aSAIdFJKVrAKz0UfjPS8ioyr21MZOMkoq
-         jk4Q==
-X-Gm-Message-State: AOAM533zAk2ufa1h3ezKMi82ODfSs0rmYgVOREaadEwgE/FdNaU7GCxQ
-        9kVrE+ewbf6e2RFpAjWRyFe18jXqTRUGrwfznPk=
-X-Google-Smtp-Source: ABdhPJxwvm2l72YQ6y2fIdhSBGLI68xUZRQKCsGTSb7+D3v6cK7SwP/Svpq6kExpGu/btbDu/z+zug==
-X-Received: by 2002:a05:6402:1808:: with SMTP id g8mr11507501edy.188.1632579677067;
-        Sat, 25 Sep 2021 07:21:17 -0700 (PDT)
+        bh=lU4nVuw7o1r/PfKx8aQqaO6GC4TAE1elqJfGU2aTcGE=;
+        b=ZuwI44BvDjiN3q57q7ylF7CIT5lrCRuSzcCIH/WBcJxST0s0uRDQbbXMxljXmsqUAc
+         B3lu1NGNibPsRoef1grdu8+O57u17TiHe9luezXhs2Jj8tICBTDOC6ChmmmwQokxnodZ
+         9eMrkHXQDuvyFzgq1BI1arkbA1t5k49SPO/6oCQFvjyRB5/k7NOkZOSesgdMnu5y8EjB
+         RtcGGH1QHw6PdeEW93F43WpCl4H7jWdeG42x+8sZctvq5jRz2V5S7dstnIVQnlQJ/muL
+         99c3oQ7yeeX/FgyvpVhpe6DWilZ7W1Zp3E0pV2z0WZGdNZNmtMTLkb07+Kqpxh42DrqF
+         oRXg==
+X-Gm-Message-State: AOAM533bymODMa65tUIAeuH/Hdmtp12kEix57xFdXRA7kliCi6dKOl7B
+        1Bw7JmVp4WxqfAntdwOXsARZglXE8crWJnc/CsM=
+X-Google-Smtp-Source: ABdhPJwRlM2aM6JJl+ufi6fYnlTvRj+JsiiDXQCeD/sOpio9OLevqAIj0qP4GFgcWYgr9jeHaWxN6w==
+X-Received: by 2002:a17:906:6b93:: with SMTP id l19mr17569763ejr.26.1632579937355;
+        Sat, 25 Sep 2021 07:25:37 -0700 (PDT)
 Received: from ?IPv6:2a04:241e:501:3800:55c:dc9d:9cc1:2c16? ([2a04:241e:501:3800:55c:dc9d:9cc1:2c16])
-        by smtp.gmail.com with ESMTPSA id p8sm6341704ejo.2.2021.09.25.07.21.15
+        by smtp.gmail.com with ESMTPSA id u19sm7603020edv.40.2021.09.25.07.25.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Sep 2021 07:21:16 -0700 (PDT)
+        Sat, 25 Sep 2021 07:25:36 -0700 (PDT)
 Subject: Re: [PATCH 00/19] tcp: Initial support for RFC5925 auth option
-To:     David Ahern <dsahern@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
         David Ahern <dsahern@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
@@ -60,26 +59,25 @@ Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
         Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
         Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Christoph Paasch <cpaasch@apple.com>,
         Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        netdev <netdev@vger.kernel.org>, linux-crypto@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
+        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <cover.1632240523.git.cdleonard@gmail.com>
- <CA+HUmGjQWwDJSYRJPix3xBw8yMwqLcgYO7hBWxXT9eYmJttKgQ@mail.gmail.com>
- <6505b7d2-7792-429d-42a6-d41711de0dc1@gmail.com>
- <e5b191ed-881e-542c-40e1-0cefdbfb2f10@gmail.com>
+ <20210921161327.10b29c88@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <f84a32c9-ee7e-6e72-ccb2-69ac0210dc34@gmail.com>
+ <20210923065803.744485ce@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 From:   Leonard Crestez <cdleonard@gmail.com>
-Message-ID: <b6c15f48-b6d1-e656-c796-9e7e63e646b3@gmail.com>
-Date:   Sat, 25 Sep 2021 17:21:14 +0300
+Message-ID: <f8e1d59f-5473-df7c-ee23-4c0a7a4d6f11@gmail.com>
+Date:   Sat, 25 Sep 2021 17:25:35 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <e5b191ed-881e-542c-40e1-0cefdbfb2f10@gmail.com>
+In-Reply-To: <20210923065803.744485ce@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -89,40 +87,32 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 
-On 9/25/21 4:35 AM, David Ahern wrote:
-> On 9/23/21 1:38 AM, Leonard Crestez wrote:
->> On 9/22/21 11:23 PM, Francesco Ruggeri wrote:
->>> On Tue, Sep 21, 2021 at 9:15 AM Leonard Crestez <cdleonard@gmail.com>
->>> wrote:
->>>> * Sequence Number Extension not implemented so connections will flap
->>>> every ~4G of traffic.
->>>
->>> Could you expand on this?
->>> What exactly do you mean by flap? Will the connection be terminated?
->>> I assume that depending on the initial sequence numbers the first flaps
->>> may occur well before 4G.
->>> Do you use a SNE of 0 in the hash computation, or do you just not include
->>> the SNE in it?
->>
->> SNE is hardcoded to zero, with the logical consequence of incorrect
->> signatures on sequence number wrapping. The SNE has to be included
->> because otherwise all signatures would be invalid.
->>
->> You are correct that this can break much sooner than 4G of traffic, but
->> still in the GB range on average. I didn't test the exact behavior (not
->> clear how) but if signatures don't validate the connection will likely
->> timeout.
->>
+On 9/23/21 4:58 PM, Jakub Kicinski wrote:
+> On Thu, 23 Sep 2021 10:49:53 +0300 Leonard Crestez wrote:
+>> Many of the patch splits were artificially created in order to ease
+>> review, for example "signing packets" doesn't do anything without also
+>> "hooking in the tcp stack". Some static functions will trigger warnings
+>> because they're unused until the next patch, not clear what the
+>> preferred solution would be here. I could remove the "static" marker
+>> until the next patch or reverse the order and have the initial "tcp
+>> integration" patches call crypto code that just returns an error and
+>> fills-in a signature of zeros.
 > 
-> This is for BGP and LDP connections. What's the expected frequency of
-> rollover for large FIBs? Seems like it could be fairly often.
+> Ease of review is important, so although discouraged transient warnings
+> are acceptable if the code is much easier to read that way. The problem
+> here was that the build was also broken, but looking at it again I
+> think you're just missing exports, please make sure to build test with
+> IPV6 compiled as a module:
+> 
+> ERROR: modpost: "tcp_authopt_hash" [net/ipv6/ipv6.ko] undefined!
+> ERROR: modpost: "__tcp_authopt_select_key" [net/ipv6/ipv6.ko] undefined!
 
-Implementing SNE is obviously required for standard conformance, I'm not 
-claiming it is not needed. I will include this in a future version.
+The kernel build robot sent me an email regarding IPv6=m last time, I 
+fixed that issue but introduced another. I check for IPv6=m specifically 
+but only did "make net/ipv4/ net/ipv6/" and missed the error.
 
-I skipped it because it has very few interactions with the rest of the 
-code so it can be implemented separately. Many tests can pass just fine 
-ignoring SNE.
+I went through the series and solved checkpatch, kernel-doc and 
+compilation issues in a more systematic fashion, I will repost later.
 
 --
 Regards,
