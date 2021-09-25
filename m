@@ -2,111 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBD2418250
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Sep 2021 15:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB2041828C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Sep 2021 16:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245591AbhIYNca (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 Sep 2021 09:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S237777AbhIYOQa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 25 Sep 2021 10:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245082AbhIYNc3 (ORCPT
+        with ESMTP id S233738AbhIYOQa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Sep 2021 09:32:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526DFC061570;
-        Sat, 25 Sep 2021 06:30:55 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1632576652;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hcK440/A2t29+9f6o8g/qxJ5FA5DoAQ9IVDgmyj6BZ0=;
-        b=zBt4lL7w0QoxRlFafp5xqcbaerU8EfhjSVUVexryfeIDcjvBZVariaTz94zXNMySEvdOEH
-        Qig4F7ofz6uBrsquUQrNjaNCiXKBkARSXkBVdN1L0CorVFiTD7jkWpVqQi/DdC6SL5R4Hq
-        k71IpDGIHXdcJAAaWDUvxpZUtoeCg2PhULYERxSHFeM3MWBORxz6AxQC8DHYiREwR3S/Zt
-        wgitbVfV0yeWIvQt10IPl3VHO9q2dRxT9tv0FbtD0bAYKhmO9M6XznWyTnMxDiR7Q3VCAz
-        D45ShYq1/0LbLxHrKcwBicomCR7CTyTj9UQ4snBUQp/6OnCmCZSZBoB25ah8Rg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1632576652;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hcK440/A2t29+9f6o8g/qxJ5FA5DoAQ9IVDgmyj6BZ0=;
-        b=2OOV6i0kLQWP28ioPuSUEXkWCesxyw7FyOiyJFUOWrG4vE5zTrLUAbhUGBaMY4KnFMrYrP
-        6Wd2SIz/ETv8N9BA==
-To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
-Cc:     Sohil Mehta <sohil.mehta@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 05/13] x86/irq: Reserve a user IPI notification vector
-In-Reply-To: <87fstugabg.ffs@tglx>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-6-sohil.mehta@intel.com> <87fstugabg.ffs@tglx>
-Date:   Sat, 25 Sep 2021 15:30:52 +0200
-Message-ID: <878rzkeq9f.ffs@tglx>
+        Sat, 25 Sep 2021 10:16:30 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D47C061570;
+        Sat, 25 Sep 2021 07:14:55 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ee50so47968737edb.13;
+        Sat, 25 Sep 2021 07:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hi5r/QTKc0hakYYPxOLmnUQF3xIEtGRWHl7PZ9tsfa4=;
+        b=ikUsUlqEpAEVeeQr8KpV9A0k3XvxLReCSOUdzvuL7OFNhnoMCW0fS/heeVX++tm2Fj
+         brF+FOgZdoHFcuHMCSXyDvtr67eA4uS+dsEschaOGJoxB6B02uXdMuqJdGOLMRGVxJU7
+         TnGK9Qs7FOVNDiU20Iim1oNxuMnj+OXttG3ZqpXXnG7elhu6vGz/Au4DAw9TcOd8Vv1s
+         eFc6w68nXOTpZfkBPAEUT1jot4nJW6OLJo9jAOThhBqHjdAe2uGfi5JBCG8e6f2UToMN
+         CSk3oSOvNIrfks3NLTSLOUSO0qPCQNSDWV6lwWc76oGn3cXpl4uwKjhsdUqzaxdltq7t
+         EWBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hi5r/QTKc0hakYYPxOLmnUQF3xIEtGRWHl7PZ9tsfa4=;
+        b=HyYjx2f5V9FgBh00ZdR78KAtyzuzneYMl/LHH89/seSCaQjgNk5RRKr2WBTYHPF20b
+         YZd/qfRDfrIxrJLQ29MCyRD3ZfVa2tWuTo1gpNFm6ot3qS7UqNTUUgZBeMEcYeaXWwoQ
+         8ZiheWx9uAgj3urW9o/rmLiy0BNihvZ15n17TmP9frXBfYBmcYAglXwEgj123kqftkGa
+         mWFRhkNBPKaq1kBzCXbbdE9NfLbq1+yRd6nbzD38gyNFFKdwv6HwJTaNIowfljuELTNy
+         5iRVilf+eiawGHU9FQDQ+M+c59eHu2AgcMFWQ90+5rMO2ASYWDeFKjMM0oL+wSG9z7PK
+         2QQQ==
+X-Gm-Message-State: AOAM532Eud2LAsk1GzmLE87kjMw3HZPBH0fDmE6xT2jgE+AMVQvO0Yp0
+        ruieUebJweEK0my1f4oskb1XDyXtRS/rhDWLSwk=
+X-Google-Smtp-Source: ABdhPJyw95qtw/Li2PyMyMyWxpjzmlZNuzkRi9jH/UEyb7cWbwy6LipocE7q899bLht3ndlmaN6Npg==
+X-Received: by 2002:a17:906:32c9:: with SMTP id k9mr17484811ejk.218.1632579293736;
+        Sat, 25 Sep 2021 07:14:53 -0700 (PDT)
+Received: from ?IPv6:2a04:241e:501:3800:55c:dc9d:9cc1:2c16? ([2a04:241e:501:3800:55c:dc9d:9cc1:2c16])
+        by smtp.gmail.com with ESMTPSA id e11sm6297928ejm.41.2021.09.25.07.14.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Sep 2021 07:14:53 -0700 (PDT)
+Subject: Re: [PATCH 08/19] tcp: authopt: Disable via sysctl by default
+To:     David Ahern <dsahern@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Priyaranjan Jha <priyarjha@google.com>,
+        Menglong Dong <dong.menglong@zte.com.cn>,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1632240523.git.cdleonard@gmail.com>
+ <b0abf2b789220708011a862a892c37b0fd76dc25.1632240523.git.cdleonard@gmail.com>
+ <cafecbeb-7d4d-489c-177d-29fff78eb4d1@gmail.com>
+From:   Leonard Crestez <cdleonard@gmail.com>
+Message-ID: <65ed79e3-bef1-19c4-ac1d-9d6833236a1c@gmail.com>
+Date:   Sat, 25 Sep 2021 17:14:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <cafecbeb-7d4d-489c-177d-29fff78eb4d1@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 24 2021 at 01:07, Thomas Gleixner wrote:
-> On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
->> The kernel doesn't need to do anything in this case other than receiving
->> the interrupt and clearing the local APIC. The user interrupt is always
->> stored in the receiver's UPID before the IPI is generated. When the
->> receiver gets scheduled back the interrupt would be delivered based on
->> its UPID.
->
-> So why on earth is that vector reaching the CPU at all?
 
-Let's see how this works:
 
-  task starts using UINTR.
-    set UINTR_NOTIFACTION_VECTOR in MSR_IA32_UINTR_MISC
-    
-So from that point on the User-Interrupt Notification Identification
-mechanism swallows the vector.
+On 9/25/21 4:57 AM, David Ahern wrote:
+> On 9/21/21 10:14 AM, Leonard Crestez wrote:
+>> This is mainly intended to protect against local privilege escalations
+>> through a rarely used feature so it is deliberately not namespaced.
+>>
+>> Enforcement is only at the setsockopt level, this should be enough to
+>> ensure that the tcp_authopt_needed static key never turns on.
+>>
+>> No effort is made to handle disabling when the feature is already in
+>> use.
+>>
+> 
+> MD5 does not require a sysctl to use it, so why should this auth mechanism?
 
-Where this stops working is not limited to context switch. The wreckage
-comes from XSAVES:
+I think it would make sense for both these features to be off by 
+default. They interact with TCP in complex ways and are available to all 
+unprivileged users but their real usecases are actually very limited.
 
- "After saving the user-interrupt state component, XSAVES clears
-  UINV. (UINV is IA32_UINTR_MISC[39:32]; XSAVES does not modify the
-  remainder of that MSR.)"
+Having to flip a few sysctls is very reasonable in the context of 
+setting up a router.
 
-So the problem is _not_ context switch. The problem is XSAVES and that
-can be issued even without a context switch.
+My concern is that this feature ends up in distro kernels and somebody 
+finds a way to use it for privilege escalation.
 
-The obvious question is: What is the value of clearing UINV?
+It also seems reasonable for "experimental" features to be off by default.
 
-Absolutely none. That notification vector cannot be used for anything
-else, so why would the OS be interested to see it ever? This is about
-user space interupts, right?
-
-UINV should be set _ONCE_ when CR4.UINTR is enabled and not be touched
-by XSAVES/XRSTORS at all. Any delivery of this vector to the OS should
-be considered a hardware bug.
-
-Thanks,
-
-         tglx
+--
+Regards,
+Leonard
