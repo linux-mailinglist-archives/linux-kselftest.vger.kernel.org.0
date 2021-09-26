@@ -2,124 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C482F418982
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Sep 2021 16:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53927418B74
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Sep 2021 00:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbhIZOmq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 Sep 2021 10:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S230399AbhIZWfG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 Sep 2021 18:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbhIZOmq (ORCPT
+        with ESMTP id S230331AbhIZWfG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Sep 2021 10:42:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF5BC061570;
-        Sun, 26 Sep 2021 07:41:10 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1632667266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hvxujl/WR9NE4z9yR3CG2NsuD0b1CscqQ9FonpyX/t8=;
-        b=tO78wZ3Oimkqfmo32SdwkVOF2u/4YvsMWW2EXJfAPODt9bSIgiRTcNErsZUgyFLIGVv/Cg
-        Di1LV7baxeht89PKwwHXAbFVgWi5S4IPzVbrk5Z2i7HfxZJlm2ell/1R1y06Q+zSHs1T6m
-        uE4gD1ECNgKECGHjZCQ8ip1ZtAnJLeEvg2bxcTIYTlgBMfjTQDg9fdZ49GPfsbCYaYUlOW
-        xAs6yJth3Jvgt6Sqbfoap6j5qnvc1nHDaQmYbuUemVtsSqNsEXWUW8RoB0kRC4VAPNZJmp
-        C4F+dcTMCSSeijZMlO4+mBM7HnIxNocVovtnxQAQByV9gLl7DVH+0x4Jc/NpDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1632667266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hvxujl/WR9NE4z9yR3CG2NsuD0b1CscqQ9FonpyX/t8=;
-        b=tdgMfNN+QcT4fi/5uor+BX9eFf6MqMfFfSFACxG9tQhS5/lYAY9zYIxJTeRg9vtexB8PPb
-        F2lwNbzM65TLgfDQ==
-To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
-Cc:     Sohil Mehta <sohil.mehta@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
-In-Reply-To: <20210913200132.3396598-12-sohil.mehta@intel.com>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-12-sohil.mehta@intel.com>
-Date:   Sun, 26 Sep 2021 16:41:05 +0200
-Message-ID: <874ka7csce.ffs@tglx>
+        Sun, 26 Sep 2021 18:35:06 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A74C061575
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Sep 2021 15:33:29 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id l13so15076082qtv.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Sep 2021 15:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ihFPTFKKKq4JF63fFgU4S70k8fEeFkVZwaLA0o+0S1w=;
+        b=dt6kBKPfhesz6dYT4wmTDIEwXlzaggBWLdWaQcYWSpLTvcbCrGkjSfZjOqBbK+rH5b
+         arzqWzA7d9m89grrzH7dspeb5/5cfnQi+HzHvZNH0ejZmDYZ+FqlrKVJlrhONuFQ9mqD
+         sTUpopnfFaYU7kVlQ4qVk0apIdL0cFL5m2msYcQXRaB/49F4hU9L0jJkko32yCEuDWDN
+         GAk6Y5pgq9bQQheIQCFrPqIGkyFURYc+Kxr2qp7DydpaokM7l0yqPAPDMkXAclKz/MMa
+         77QkLn2bSDCGG6XC51arCYAUw5uPGCWijIKT7SXsQIfAsZTyXerBMqEXMQJFGSlEBL+C
+         9kJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ihFPTFKKKq4JF63fFgU4S70k8fEeFkVZwaLA0o+0S1w=;
+        b=nVsdRtNteP4Jzo53WPZ2V5zgaxl5pY5Yx4knC4IDwGwuZDrPGAHorirpfrV7SvMQRZ
+         v8Znuy9EaosiSV437knkSthLGy5H8l0dGx/vkK0pk7KmstTzqYth+/8oILhJ1oKrvgMm
+         iiDKZvbQpttFknJFoaheF/RzZjBaBqdcMfNnzl05I/z6SL8YYDcVkli3VaJQk5nCak1e
+         Qe7aeoZfJPX09SAf8Ac2lvvVDyBiN1cUKUhF+SPxqN7HvZYL8Q19J//Otwnxok9oGt+u
+         3ZLYBlyHk1SnY1WDJevQN5kMblZ+Z67uulj9QpuFSBosHQVR99oOGeDY3vNty3Ak8F9X
+         UHqA==
+X-Gm-Message-State: AOAM533jdvWjmbHVcnMusUqGbYNIo8tFsS11Pag4upFfoLckxG8jPoh3
+        A3Q4dKi81dcf7qBJfGIiETTCow==
+X-Google-Smtp-Source: ABdhPJxe0bzrgVx21M0zs7TeiFoD4MQoDNbqqKqxUqdQ/rM3rf0ncylbP00xYCNDejGIO+FJWz8xNg==
+X-Received: by 2002:ac8:d3:: with SMTP id d19mr13696347qtg.409.1632695608592;
+        Sun, 26 Sep 2021 15:33:28 -0700 (PDT)
+Received: from aehse.localdomain ([2804:d41:bd1c:9100:f2e1:f671:7a83:1eb8])
+        by smtp.gmail.com with ESMTPSA id x6sm7244151qts.79.2021.09.26.15.33.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Sep 2021 15:33:28 -0700 (PDT)
+From:   Isabella Basso <isabellabdoamaral@usp.br>
+To:     geert@linux-m68k.org
+Cc:     ferreiraenzoa@gmail.com, augusto.duraes33@gmail.com,
+        brendanhiggins@google.com, dlatypov@google.com,
+        davidgow@google.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        ~lkcamp/patches@lists.sr.ht, rodrigosiqueiramelo@gmail.com,
+        Isabella Basso <isabellabdoamaral@usp.br>
+Subject: [PATCH v2 0/5] test_hash.c: refactor into KUnit
+Date:   Sun, 26 Sep 2021 19:33:17 -0300
+Message-Id: <20210926223322.848641-1-isabellabdoamaral@usp.br>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
-> Add a new system call to allow applications to block in the kernel and
-> wait for user interrupts.
->
-> <The current implementation doesn't support waking up from other
-> blocking system calls like sleep(), read(), epoll(), etc.
->
-> uintr_wait() is a placeholder syscall while we decide on that
-> behaviour.>
+We refactored the lib/test_hash.c file into KUnit as part of the student
+group LKCAMP [1] introductory hackathon for kernel development.
 
-Which behaviour? You cannot integrate this into [clock_]nanosleep() by
-any means or wakeup something which is blocked in read(somefd) via
-SENDUIPI.
+This test was pointed to our group by Daniel Latypov [2], so its full
+conversion into a pure KUnit test was our goal in this patch series, but
+we ran into many problems relating to it not being split as unit tests,
+which complicated matters a bit, as the reasoning behind the original
+tests is quite cryptic for those unfamiliar with hash implementations.
 
-What you can do is implement read() and poll() support for the
-uintrfd. Anything else is just not going to fly.
+Some interesting developments we'd like to highlight are:
 
-Adding support for read/poll is pretty much a straight forward variant
-of a correctly implemented wait()/wakeup() mechanism.
+- In patch 1/5 we noticed that there was an unused define directive that
+  could be removed.
+- In patch 4/5 we noticed how stringhash and hash tests are all under
+  the lib/test_hash.c file, which might cause some confusion, and we
+  also broke those kernel config entries up.
 
-While poll()/read() support might be useful and poll() also provides a
-timeout, having an explicit (timed) wait mechanism might be interesting.
+Overall KUnit developments have been made in the other patches in this
+series:
 
-But that brings me to an interesting question. There are two cases:
+In patches 2/5, 3/5 and 5/5 we refactored the lib/test_hash.c
+file so as to make it more compatible with the KUnit style, whilst
+preserving the original idea of the maintainer who designed it (i.e.
+George Spelvin), which might be undesirable for unit tests, but we
+assume it is enough for a first patch.
 
- 1) The task installed a user space interrupt handler. Now it
-    want's to play nice and yield the CPU while waiting.
+This is our first patch series so we hope our contributions are
+interesting and also hope to get some useful criticism from the
+community. :)
 
-    So it needs to reinstall the UINV vector on return to user and
-    update UIRR, but that'd be covered by the existing mechanism. Fine.
+Changes since V1:
+- Fixed compilation on parisc and m68k.
+- Fixed whitespace mistakes.
+- Renamed a few functions.
+- Refactored globals into struct for test function params, thus removing
+  a patch. 
+- Reworded some commit messages.
 
- 2) Task has no user space interrupt handler installed and just want's
-    to use that wait mechanism.
+[1] - https://lkcamp.dev/
+[2] - https://lore.kernel.org/linux-kselftest/CAGS_qxojszgM19u=3HLwFgKX5bm5KhywvsSunuBAt5RtR+GyxQ@mail.gmail.com/
 
-    What is consuming the pending bit(s)? 
+Isabella Basso (5):
+  hash.h: remove unused define directive
+  test_hash.c: split test_int_hash into arch-specific functions
+  test_hash.c: split test_hash_init
+  lib/Kconfig.debug: properly split hash test kernel entries
+  test_hash.c: refactor into kunit
 
-    If that's not a valid use case, then the wait has to check for that
-    and reject the syscall with EINVAL.
+ include/linux/hash.h       |   5 +-
+ lib/Kconfig.debug          |  28 ++++-
+ lib/Makefile               |   3 +-
+ lib/test_hash.c            | 247 +++++++++++++++++--------------------
+ tools/include/linux/hash.h |   5 +-
+ 5 files changed, 139 insertions(+), 149 deletions(-)
 
-    If it is valid, then how are the pending bits consumed and relayed to
-    user space?
+-- 
+2.33.0
 
-The same questions arise when you think about implementing poll/read
-support simply because the regular poll/read semantics are:
-
-  poll waits for the event and read consumes the event
-
-which would be similar to #2 above, but with an installed user space
-interrupt handler the return from the poll system call would consume the
-event immediately (assumed that UIF is set).
-
-Thanks,
-
-        tglx
