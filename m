@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0786F418B7A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Sep 2021 00:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF56B418B7C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Sep 2021 00:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbhIZWfQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 Sep 2021 18:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
+        id S231138AbhIZWfX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 Sep 2021 18:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbhIZWfQ (ORCPT
+        with ESMTP id S231151AbhIZWfT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Sep 2021 18:35:16 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38231C061575
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Sep 2021 15:33:39 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id p4so34958594qki.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Sep 2021 15:33:39 -0700 (PDT)
+        Sun, 26 Sep 2021 18:35:19 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89003C061604
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Sep 2021 15:33:42 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id r18so10021399qvy.8
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Sep 2021 15:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=usp.br; s=usp-google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=keB75pA8tqWnwI9BXtLybyOviHEmwePg0jqXukti5H0=;
-        b=YkNS0cUGVRMRN4pM13cbUzfkfYkN+S5ChWWvDx9U9VzL0puW6p85QqS4nMvhw2K9/8
-         GD+38B2lvKd1u/X6Q6dr7pa2IXt9/a+LvIJK/dkb37GdQh5x48/3wiUeIldiBC7J2m7S
-         W1S60u65asCW5aSIBjt8koryzI21oZ7k+ppRnT/GRz9E1E9BpIo0T1ciUO82M4OwVRdO
-         YVwauef4oPuZ1SFOOVKvK/OlwPx4ZKkv0BA7i9AKXQxEgijpUYCPZR6tRNK8FVhEz5HE
-         nxX8LvQGVzkF0lBcIJ+aIqXUQT7pU149pCCNQ3yqBOofuujtF0VFxNl56SjyEKfr42cB
-         k6Kw==
+        bh=tzBIb9Rrkx8NbszjPdEpu16O5Mah570+vhSFzL6iVU4=;
+        b=Y/0/o41Pe70qQK42UBfSUxuIpnjC4YEfaSZ/UYMWHES/flFLEToveab17WLhcNVcKB
+         GR2F9mdNeqemVHENgXeRLl98XUkl4rtguI3a5jtFz3zCCuYuY9pJ9Gvy0wt1GAhUP+q0
+         rdaiVhkJFcw01gjL4qcsMlb61PTmjKusbosQlMh5lxIuiyOa64qAt0XspObUdCBxeeqX
+         gLR1jOiUqRw5ZQzl22QVvN0CsihS65sr8SXn0PzPs3OkPuX0/oknbIyASrG3LH2Mujj7
+         paWWhUeJl8It37sOsLi16y03iYg1NANggXlqw17e9G/rcHcGaN/eL9CkV7Br7hkU9ar8
+         AJtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=keB75pA8tqWnwI9BXtLybyOviHEmwePg0jqXukti5H0=;
-        b=vpvAk3Xyz46moekpAmYab0pnXiBo7ix8gKdLkE5Me5Ah+RLbZRJHcDiHUliSXrCUfr
-         aT9EJ85RrELIN3imFPlGFjF4NfLSKUUaBj0jmTNJXWlzxcmN2eikfM1GyUZErJDa0iRK
-         /RZ1hWKBV2FW21wPW8WkaoWe6bxOptbn9dS4O2DJDQMhbl8s6yxqnNBEC692o5vP7hfv
-         ZsbKN1N3duqH9nSlhw5FB88lbJjCaRScQlJrzIoE7ufNF+Fr6f/BxC5LR3pn8TzrTe6L
-         s0f6vpJZlR6KYFXuYkTaOI73ihSiowoV0l5nZ+WQiovnIdnO+r6t6t4hmMxXpQv5taG/
-         Gq7Q==
-X-Gm-Message-State: AOAM533ZrLvIjIc+J7OenJ+IkZGzmWPlm8HCe/FwxVhQ2vaTU0Sm2fPu
-        R64dEKpS3pGRKxvUWoRAA5KskA==
-X-Google-Smtp-Source: ABdhPJwCEzMCikARt8F/wU9Zl9tIuNx7l/U0w/ossc8f/G7oN3wq7egq/zGtwMdjtF8G6oePDDJO/Q==
-X-Received: by 2002:a37:716:: with SMTP id 22mr20662271qkh.99.1632695618422;
-        Sun, 26 Sep 2021 15:33:38 -0700 (PDT)
+        bh=tzBIb9Rrkx8NbszjPdEpu16O5Mah570+vhSFzL6iVU4=;
+        b=llk2qwM9IqsPG1X9xXESwsK8bnIerrYhrQi5RIpIxqgwNiCCrJ4C7+6NHhqQZq5DWJ
+         Now3q95zNiLAoCmmATHlaQuQvNTxHhbF0u50OfnkG5hHer4HrVDPalvh/i+3Ax+EQFh8
+         L4aNctYlalC3n7sVlskqQrSCR38NZyFw+ztzgztf9p1uW7hpA3CMzywyiJfR5ns/bkj8
+         Pk5lFILBk7IVhybhhzWMW8CohOyK7YgtZzLF5pud39pW2M8juv5o/4y3X3Xs7oxV2wJT
+         yB53C6TeQ30x0eewlcco+BE7RnqwF3SKOprB1gOU3+33mrcCU3fgTQtViNivJHDJKO/g
+         0o3g==
+X-Gm-Message-State: AOAM531X4RKikcc8ZpC4KfeNqh3DcgDR52N33ZhyKrcui8Mhe0V4db7y
+        DaeQxF9lg3EgzG6fvOCwFn6R5Q==
+X-Google-Smtp-Source: ABdhPJx5HD00AzRcLzny2/Y+fepBxWgk/Zkm/8XqmoemEyc0fYvS0c3N0NbzjA/cfFbwcDISkLWSvA==
+X-Received: by 2002:ad4:4531:: with SMTP id l17mr2839310qvu.18.1632695621723;
+        Sun, 26 Sep 2021 15:33:41 -0700 (PDT)
 Received: from aehse.localdomain ([2804:d41:bd1c:9100:f2e1:f671:7a83:1eb8])
-        by smtp.gmail.com with ESMTPSA id x6sm7244151qts.79.2021.09.26.15.33.35
+        by smtp.gmail.com with ESMTPSA id x6sm7244151qts.79.2021.09.26.15.33.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Sep 2021 15:33:38 -0700 (PDT)
+        Sun, 26 Sep 2021 15:33:41 -0700 (PDT)
 From:   Isabella Basso <isabellabdoamaral@usp.br>
 To:     geert@linux-m68k.org
 Cc:     ferreiraenzoa@gmail.com, augusto.duraes33@gmail.com,
@@ -56,9 +56,9 @@ Cc:     ferreiraenzoa@gmail.com, augusto.duraes33@gmail.com,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         ~lkcamp/patches@lists.sr.ht, rodrigosiqueiramelo@gmail.com,
         Isabella Basso <isabellabdoamaral@usp.br>
-Subject: [PATCH v2 3/5] test_hash.c: split test_hash_init
-Date:   Sun, 26 Sep 2021 19:33:20 -0300
-Message-Id: <20210926223322.848641-4-isabellabdoamaral@usp.br>
+Subject: [PATCH v2 4/5] lib/Kconfig.debug: properly split hash test kernel entries
+Date:   Sun, 26 Sep 2021 19:33:21 -0300
+Message-Id: <20210926223322.848641-5-isabellabdoamaral@usp.br>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210926223322.848641-1-isabellabdoamaral@usp.br>
 References: <20210926223322.848641-1-isabellabdoamaral@usp.br>
@@ -68,137 +68,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Split up test_hash_init so that it calls each test more explicitly
-insofar it is possible without rewriting the entire file. This aims at
-improving readability.
+Split TEST_HASH so that each entry only has one file.
 
-Split tests performed on string_or as they don't interfere with those
-performed in hash_or. Also separate pr_info calls about skipped tests as
-they're not part of the tests themselves, but only warn about
-(un)defined arch-specific hash functions.
-
-Changes since v1:
-- As suggested by David Gow:
-  1. Rename arch-specific test functions.
-  2. Remove spare whitespace changes.
-- As suggested by Marco Elver:
-  1. Add struct for carrying test variables.
+Note that there's no stringhash test file, but actually
+<linux/stringhash.h> tests are performed in lib/test_hash.c.
 
 Tested-by: David Gow <davidgow@google.com>
 Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
 ---
- lib/test_hash.c | 66 ++++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 54 insertions(+), 12 deletions(-)
+ lib/Kconfig.debug | 14 +++++++++++---
+ lib/Makefile      |  3 ++-
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/lib/test_hash.c b/lib/test_hash.c
-index 08fe63776c4f..db9dd18b4e8b 100644
---- a/lib/test_hash.c
-+++ b/lib/test_hash.c
-@@ -153,11 +153,39 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 2a9b6dcdac4f..eb6c4daf5fcb 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2207,9 +2207,17 @@ config TEST_RHASHTABLE
+ config TEST_HASH
+ 	tristate "Perform selftest on hash functions"
+ 	help
+-	  Enable this option to test the kernel's integer (<linux/hash.h>),
+-	  string (<linux/stringhash.h>), and siphash (<linux/siphash.h>)
+-	  hash functions on boot (or module load).
++	  Enable this option to test the kernel's integer (<linux/hash.h>), and
++	  string (<linux/stringhash.h>) hash functions on boot (or module load).
++
++	  This is intended to help people writing architecture-specific
++	  optimized versions.  If unsure, say N.
++
++config TEST_SIPHASH
++	tristate "Perform selftest on siphash functions"
++	help
++	  Enable this option to test the kernel's siphash (<linux/siphash.h>) hash
++	  functions on boot (or module load).
  
- #define SIZE 256	/* Run time is cubic in SIZE */
- 
--static int __init
--test_hash_init(void)
-+static int __init test_string_or(void)
- {
- 	char buf[SIZE+1];
--	u32 string_or = 0, hash_or[2][33] = { { 0, } };
-+	u32 string_or = 0;
-+	int i, j;
-+
-+	fill_buf(buf, SIZE, 1);
-+
-+	/* Test every possible non-empty substring in the buffer. */
-+	for (j = SIZE; j > 0; --j) {
-+		buf[j] = '\0';
-+
-+		for (i = 0; i <= j; i++) {
-+			u32 h0 = full_name_hash(buf+i, buf+i, j-i);
-+
-+			string_or |= h0;
-+		} /* i */
-+	} /* j */
-+
-+	/* The OR of all the hash values should cover all the bits */
-+	if (~string_or) {
-+		pr_err("OR of all string hash results = %#x != %#x",
-+		       string_or, -1u);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int __init test_hash_or(void)
-+{
-+	char buf[SIZE+1];
-+	u32 hash_or[2][33] = { { 0, } };
- 	unsigned tests = 0;
- 	unsigned long long h64 = 0;
- 	int i, j;
-@@ -187,7 +215,6 @@ test_hash_init(void)
- 				return -EINVAL;
- 			}
- 
--			string_or |= h0;
- 			h64 = h64 << 32 | h0;	/* For use with hash_64 */
- 			if (!test_int_hash(h64, hash_or))
- 				return -EINVAL;
-@@ -195,12 +222,6 @@ test_hash_init(void)
- 		} /* i */
- 	} /* j */
- 
--	/* The OR of all the hash values should cover all the bits */
--	if (~string_or) {
--		pr_err("OR of all string hash results = %#x != %#x",
--			string_or, -1u);
--		return -EINVAL;
--	}
- 	if (~hash_or[0][0]) {
- 		pr_err("OR of all __hash_32 results = %#x != %#x",
- 			hash_or[0][0], -1u);
-@@ -232,6 +253,13 @@ test_hash_init(void)
- 		}
- 	}
- 
-+	pr_notice("%u tests passed.", tests);
-+
-+	return 0;
-+}
-+
-+static void __init notice_skipped_tests(void)
-+{
- 	/* Issue notices about skipped tests. */
- #ifdef HAVE_ARCH__HASH_32
- #if HAVE_ARCH__HASH_32 != 1
-@@ -247,10 +275,24 @@ test_hash_init(void)
- #else
- 	pr_info("hash_64() has no arch implementation to test.");
- #endif
-+}
- 
--	pr_notice("%u tests passed.", tests);
-+static int __init
-+test_hash_init(void)
-+{
-+	int ret;
- 
--	return 0;
-+	ret = test_string_or();
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = test_hash_or();
-+	if (ret < 0)
-+		return ret;
-+
-+	notice_skipped_tests();
-+
-+	return ret;
- }
- 
- static void __exit test_hash_exit(void)
+ 	  This is intended to help people writing architecture-specific
+ 	  optimized versions.  If unsure, say N.
+diff --git a/lib/Makefile b/lib/Makefile
+index 5efd1b435a37..c2e81d0eb31c 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -61,7 +61,8 @@ obj-$(CONFIG_TEST_FIRMWARE) += test_firmware.o
+ obj-$(CONFIG_TEST_BITOPS) += test_bitops.o
+ CFLAGS_test_bitops.o += -Werror
+ obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
+-obj-$(CONFIG_TEST_HASH) += test_hash.o test_siphash.o
++obj-$(CONFIG_TEST_SIPHASH) += test_siphash.o
++obj-$(CONFIG_TEST_HASH) += test_hash.o
+ obj-$(CONFIG_TEST_IDA) += test_ida.o
+ obj-$(CONFIG_KASAN_KUNIT_TEST) += test_kasan.o
+ CFLAGS_test_kasan.o += -fno-builtin
 -- 
 2.33.0
 
