@@ -2,161 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7687418D4A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Sep 2021 02:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D401418E92
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Sep 2021 07:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbhI0Aar (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 Sep 2021 20:30:47 -0400
-Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:37013 "EHLO
-        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232113AbhI0Aar (ORCPT
+        id S232909AbhI0FKb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Sep 2021 01:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232906AbhI0FKa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Sep 2021 20:30:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1632702549;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=VrCAw0M2TSCOPJ2yqB+ST2keDACLKH38LqHD83yCNRc=;
-        b=hEqjOOTqGUfDh6K0SdaDWdwOKpIPjdD5xk5ENNHSrUv75QaAq/V4q7EMPqCdfoS0
-        zs6jowcEbcuepIEXwL93KNvkiuULcoGx8To1FEifQLREc0AHBT2yFGbSpmiSfFVyQMV
-        qkXgvvCaSOou2beIsJVicakGig56cQCHD623UuX8=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1632702549;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=VrCAw0M2TSCOPJ2yqB+ST2keDACLKH38LqHD83yCNRc=;
-        b=cf0gF7/7E5SYIc6Q7jjtACfw+9b7YiAot3+9O6Quoy2McNgirVGYkhpAJoqdwy2q
-        dLY5olrXZYJFb0nhrR/Qj7k45SgRQho6VPPZ+YvTQ5ahczuf2Kmn8mGgbu8N/kQAQMb
-        SwyP59etfV9wmIXZkUH5sEiuZDSrz1teIm0yIFy4=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210923
+        Mon, 27 Sep 2021 01:10:30 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5C1C061570
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Sep 2021 22:08:53 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id w19so23992801oik.10
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Sep 2021 22:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SLHlg4YGVTg0HXcKo1tJkW4eMr2Raz4FD5EIiUlBE58=;
+        b=NogeARQ/2uetXRhWv+EaYD2/or3uqefhiRfHgMizlRUHSJy4Rs2hlaIBC5jkIM47Dc
+         WSVRDIdyHPHMVH0PIwGDTyNlCUClOTJdq6/cQdzV7TPMCQ9gJzFbuZIIGjrWhiAE565A
+         o1eC3vwomKIyXCi418S2TsZ49X6VPT48W2ujSPgWR+3br2rkLg7RVjf8C/FQHT6j0Bpr
+         BuWbctFSv2slMf86pkl4zoiw/0pQ9bZcPNjwF6i5YTN8RJ2HbWXAbMDi9f2OTXt93BNJ
+         L4W0JN/+PrclcsOSCI7yxx16gnHG3Yj6N/mLoZhYRpEALPZmSylA6Ilg+8bRU+WuNm6i
+         HXFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SLHlg4YGVTg0HXcKo1tJkW4eMr2Raz4FD5EIiUlBE58=;
+        b=o6SfxxlBMXuNadaWQRkQiUbv75ZF/4HYzYx6Ehs+dZE4W+RNZuKnb3o4ALe6Ny3u/G
+         OYeOUEYfP+Ue/QkIQ+aNiKPl/RmMXQTlC++Bjurx0JeMTZWzaG0GT/ZNjCD0b5GjyhGQ
+         L8eg3TscArQMa1sFv9oftioGbtLU7IlgphfKSXOJ29wHTeiWhhHt+FmlVWKBBJDiUuDR
+         4QWW9dR6EfflDrDHtErj/gvui4qmCBMg7Vfy/EYoa1Meq2x20Pj84JWpdqEzRp324Vwo
+         rsoNmwj/0AUqKlyVoEiTaxyycwJcMhSOFYhESqk7bzDVXCz0RQNk9KB3hDIOQa97DsdL
+         J9lQ==
+X-Gm-Message-State: AOAM533HPYcgoBgDvJxu0+VPr6TpZ10TobvxBz/UvKY7qM/O1JL8g6qg
+        M1GT3xFZkS1LnKw1SgDlIEFurCVA/UOdTi1SpwM=
+X-Google-Smtp-Source: ABdhPJxpkdoiX4R+IbiSJm9cP/x09rPAyAVdOR30o1DX1IlCtFWN6zu3Bu/VfXpq1nYpnMOvXX/XGshhwLD4WonzFuE=
+X-Received: by 2002:aca:6108:: with SMTP id v8mr10434686oib.139.1632719300589;
+ Sun, 26 Sep 2021 22:08:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017c24a7cca8-4999c0b3-3cb0-4333-a5a4-65d62dc8cd49-000000@email.amazonses.com>
-Date:   Mon, 27 Sep 2021 00:29:09 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.09.27-54.240.8.97
+Received: by 2002:a05:6839:5c:0:0:0:0 with HTTP; Sun, 26 Sep 2021 22:08:20
+ -0700 (PDT)
+Reply-To: pzongo277@gmail.com
+From:   "Mr.Phillip Zongo" <ks0404999@gmail.com>
+Date:   Sun, 26 Sep 2021 22:08:20 -0700
+Message-ID: <CAO6O_WWpd0dUPOZVajaOBf1XcGWn+OJLCjWe_NxwFu+uRO21zg@mail.gmail.com>
+Subject: PLEASE REPLY QUICK
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: bc5aa70f26995791074a00da8b57ead3a9c1a646
-* git describe: next-20210923
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210923
-
-## Regressions (compared to next-20210915)
-* qemu-arm64-gic-version2, kselftest-timers
-  - timers.rtcpie
-
-* qemu_i386, kselftest-seccomp
-  - seccomp.seccomp_benchmark
-
-* qemu_x86_64, kselftest-x86
-  - x86.iopl_64
+-- 
+I am Mr.Phillip Zongo. I work at the bank. I get your contact from
+internet search i hope that you will not expose or betray this trust
+and confident that am about to have in you for the benefit of our both
+families i am in need of your help as a foreigner to transfer sum of
+$15 million U.S dollars (Fifteen million U.S dollars) into your
+account risk is completely %100 free.
 
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Please I will like you to keep this proposal as top secret and Also
+note that you will have 40% of the above mentioned fund, while 60%
+will be for me.
+
+if you agree to transact this business with me I will give you full
+details of this transaction immediately you notify me your interest by
+sending your data.
+
+your full name
+
+your country
+
+your age
+
+your occupation
+
+your phone Number
+
+your office or House Address
+
+Copy of your passport or id card
 
 
-## Fixes (compared to next-20210915)
-* qemu-arm64-gic-version2, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
 
-* qemu-arm64-gic-version3, kselftest-timers
-  - timers.rtcpie
+Thanks
 
-* qemu-arm64-mte, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
-
-* qemu_arm64, kselftest-timers
-  - timers.rtcpie
-
-
-## Test result summary
-total: 3678, pass: 1997, fail: 324, skip: 1357, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Mr.Phillip Zongo
