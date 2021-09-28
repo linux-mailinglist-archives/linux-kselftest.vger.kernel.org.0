@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1AF41A7A4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Sep 2021 07:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F8D41A7FA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Sep 2021 07:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239218AbhI1F6m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Sep 2021 01:58:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48798 "EHLO mail.kernel.org"
+        id S239274AbhI1GAx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Sep 2021 02:00:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239123AbhI1F6K (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Sep 2021 01:58:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0F684611C7;
-        Tue, 28 Sep 2021 05:56:31 +0000 (UTC)
+        id S239092AbhI1F73 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 Sep 2021 01:59:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4DF5C61371;
+        Tue, 28 Sep 2021 05:56:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632808591;
-        bh=Xaf80vQCf6Z2EysDRr0wcPFN4faFcp6DJPtAaB5DD8I=;
+        s=k20201202; t=1632808616;
+        bh=ngnFhTU/JETqR764UoXSOx79JXyoqcpvWMouzvqyaTs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kNm/TkAvtC27dfnr69HAD35qBTCRyMkUFa/7w3IwO0o4XL14ukK3b/NSdyLdL7PBA
-         pgtBrl8LPVq7QbOmdGuaBYF71PUwImFzQwcE8pAxYKL7CGyvLWVTYGejKh8IeAOXoy
-         rgygs27hhwJm8GUNPpuztTM84aAUISlJU9SSSoAvA2/1IxoipOXYQr3yB5Qb8bfsyt
-         RGhVcEeRoG0ixDt2yqO33DPYZDXOXScuWnza77A87ADdAjjjNKIqof8FC/UAFh786R
-         jyFCppgatKNOnrhHK4Flac1QTjuzFsyZYO0QgP5luOM1DnF5YUUuaN/W6fhp5PtVFX
-         s241LCpSLElIQ==
+        b=OkB3tmP7rV8ukbS7lECWAZgDg5bgrmLYK0R+3BzaOm15Da67QodTGg90ZkNhZ5bGQ
+         MyVwzxOeLAkDaH9PQnbXiVNyAET6TA1RehzZDyIlIoRSAhnzpBCRKHX0UNx1F4VOrD
+         RuSIkUAMjpgzqYFlfP5L2Pb7D+Hj8098KT+3LDQqpSv+xl414pxJJsGY2iDCYxIGYy
+         0dVRiocpHVNPygjniUZKi0T3jOkwCJAMZkrdl158cMpovKm53E4/rk3JNdvfArmrz7
+         uOzeO3nBpvKc9XK1PcEU5qdsq5SgcbcYNrQTjJoCD3qJ+/vWsHc9Vv3+Ey01RhrSo7
+         yD/Kww5AdjDtQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        bgardon@google.com, drjones@redhat.com, wangyanan55@huawei.com,
-        axelrasmussen@google.com, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 27/40] selftests: kvm: fix get_run_delay() ignoring fscanf() return warn
-Date:   Tue, 28 Sep 2021 01:55:11 -0400
-Message-Id: <20210928055524.172051-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 15/23] selftests: be sure to make khdr before other targets
+Date:   Tue, 28 Sep 2021 01:56:36 -0400
+Message-Id: <20210928055645.172544-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210928055524.172051-1-sashal@kernel.org>
-References: <20210928055524.172051-1-sashal@kernel.org>
+In-Reply-To: <20210928055645.172544-1-sashal@kernel.org>
+References: <20210928055645.172544-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -46,70 +46,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-[ Upstream commit f5013d412a43662b63f3d5f3a804d63213acd471 ]
+[ Upstream commit 8914a7a247e065438a0ec86a58c1c359223d2c9e ]
 
-Fix get_run_delay() to check fscanf() return value to get rid of the
-following warning. When fscanf() fails return MIN_RUN_DELAY_NS from
-get_run_delay(). Move MIN_RUN_DELAY_NS from steal_time.c to test_util.h
-so get_run_delay() and steal_time.c can use it.
+LKP/0Day reported some building errors about kvm, and errors message
+are not always same:
+- lib/x86_64/processor.c:1083:31: error: ‘KVM_CAP_NESTED_STATE’ undeclared
+(first use in this function); did you mean ‘KVM_CAP_PIT_STATE2’?
+- lib/test_util.c:189:30: error: ‘MAP_HUGE_16KB’ undeclared (first use
+in this function); did you mean ‘MAP_HUGE_16GB’?
 
-lib/test_util.c: In function ‘get_run_delay’:
-lib/test_util.c:316:2: warning: ignoring return value of ‘fscanf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-  316 |  fscanf(fp, "%ld %ld ", &val[0], &val[1]);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Although kvm relies on the khdr, they still be built in parallel when -j
+is specified. In this case, it will cause compiling errors.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+Here we mark target khdr as NOTPARALLEL to make it be always built
+first.
+
+CC: Philip Li <philip.li@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/include/test_util.h | 2 ++
- tools/testing/selftests/kvm/lib/test_util.c     | 4 +++-
- tools/testing/selftests/kvm/steal_time.c        | 1 -
- 3 files changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/lib.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index c7409b9b4e5b..451fed5ce8e7 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -95,6 +95,8 @@ struct vm_mem_backing_src_alias {
- 	uint32_t flag;
- };
- 
-+#define MIN_RUN_DELAY_NS	200000UL
-+
- bool thp_configured(void);
- size_t get_trans_hugepagesz(void);
- size_t get_def_hugetlb_pagesz(void);
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index f80dd38a38b2..a9107bfae402 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -313,7 +313,9 @@ long get_run_delay(void)
- 
- 	sprintf(path, "/proc/%ld/schedstat", syscall(SYS_gettid));
- 	fp = fopen(path, "r");
--	fscanf(fp, "%ld %ld ", &val[0], &val[1]);
-+	/* Return MIN_RUN_DELAY_NS upon failure just to be safe */
-+	if (fscanf(fp, "%ld %ld ", &val[0], &val[1]) < 2)
-+		val[1] = MIN_RUN_DELAY_NS;
- 	fclose(fp);
- 
- 	return val[1];
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index 51fe95a5c36a..2172d65b85e4 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -19,7 +19,6 @@
- 
- #define NR_VCPUS		4
- #define ST_GPA_BASE		(1 << 30)
--#define MIN_RUN_DELAY_NS	200000UL
- 
- static void *st_gva[NR_VCPUS];
- static uint64_t guest_stolen_time[NR_VCPUS];
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 0af84ad48aa7..b7217b5251f5 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -48,6 +48,7 @@ ARCH		?= $(SUBARCH)
+ # When local build is done, headers are installed in the default
+ # INSTALL_HDR_PATH usr/include.
+ .PHONY: khdr
++.NOTPARALLEL:
+ khdr:
+ ifndef KSFT_KHDR_INSTALL_DONE
+ ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
 -- 
 2.33.0
 
