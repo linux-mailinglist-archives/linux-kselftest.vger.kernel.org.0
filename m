@@ -2,167 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC9141AA75
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Sep 2021 10:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6F341AE34
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Sep 2021 13:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239403AbhI1IN1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Sep 2021 04:13:27 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:33958 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239043AbhI1IN0 (ORCPT
+        id S240508AbhI1Lxa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Sep 2021 07:53:30 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60924 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S240381AbhI1Lx2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Sep 2021 04:13:26 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1632816706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MuA+W1hIA1rAMXQIqohvtqkn6nT1tdEByWW7so2/mJE=;
-        b=o4AnzY92TDieIgsy0BxYM5ZrB7EKL02pFUFM6LcB4FFSjyx/IoknxzoYCwx61/g49g1LW9
-        K6ODGpL2PzQRXYgEhGdPzWWs/0oZKiBxLNrfe7Vf75kdG+hFBCC9oIUPDD4Z3KmMuxxn2z
-        Eg4wnTUmdqDlGRQ9761Xg/RubHl4bDgobqZFuEimIakTgiYXKDfnsZ7HDISSL4gSa4q4ni
-        WhxbEGAaexob8STeYYdPQ1VURR2ErZWrmiBRLAY6VVshAZAENbVuJrWbK11ilMwSQ2Y/uF
-        5qZWAPY1vXTkeOvt8isNigKPsNXfir2Zi9EpdZDuxDjOHZAqQht0UjX0xxs+bA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1632816706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MuA+W1hIA1rAMXQIqohvtqkn6nT1tdEByWW7so2/mJE=;
-        b=l8vTUOns3NZZW+RgVuFEifsZxru0n8deKjPocVe7Z5Jbqqa5HK5OCRpnvmZ2yuboQGYauN
-        090YSxHuWDSQ8PAw==
-To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
-Cc:     Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 05/13] x86/irq: Reserve a user IPI notification vector
-In-Reply-To: <447377f0-21e5-067d-55ac-cb2eeca7ceae@intel.com>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-6-sohil.mehta@intel.com> <87fstugabg.ffs@tglx>
- <878rzkeq9f.ffs@tglx> <87bl4fcxz8.ffs@tglx>
- <447377f0-21e5-067d-55ac-cb2eeca7ceae@intel.com>
-Date:   Tue, 28 Sep 2021 10:11:45 +0200
-Message-ID: <878rzhazlq.ffs@tglx>
+        Tue, 28 Sep 2021 07:53:28 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18SApfwK021111;
+        Tue, 28 Sep 2021 07:51:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
+ date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=frlVS1az/WulHbrX6D1bYZP2D7LX8/U+EvRFZZvVv3Y=;
+ b=lVQG/EJAye4HaVBUbci1rvRpEFpzoSPx1TXIu2ijVJlj1tYGbNzdsQKFMNI//a7OISjq
+ BB7SPeBNhTNJySZKuL0G5OrsaBTYCkGiscpr5jiVIanvYYgMFfb7yX+Gq1k1yFaocXRC
+ C4nG05eqnfQwO86rdWWNF968lo6gSUFqs4jO4XFI3QYTcd5+xGZ8inuz9VkdsGHUPuZ8
+ fdZTOnM4VqIAnX97gUfHykpC55Yp4z2iTGFrW39+5Kj69om0AIXPdVzYFBCAy+P2A31f
+ paN+gM2LTFcXllhhadQsce4+9p+/GeCmsNhlb66y+LEBdVNwoNfdb/1J7xhMxzLGRbBJ 2Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3bby6qcf4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Sep 2021 07:51:14 -0400
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18SAv26Y023990;
+        Tue, 28 Sep 2021 07:51:13 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3bby6qcf41-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Sep 2021 07:51:13 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18SBhHbe012840;
+        Tue, 28 Sep 2021 11:51:12 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3b9u1jux9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Sep 2021 11:51:12 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18SBp8uG000732
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Sep 2021 11:51:08 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F9D011C05E;
+        Tue, 28 Sep 2021 11:51:08 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB89B11C04C;
+        Tue, 28 Sep 2021 11:51:03 +0000 (GMT)
+Received: from pratiks-thinkpad.ibm.com (unknown [9.43.58.127])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Sep 2021 11:51:03 +0000 (GMT)
+From:   "Pratik R. Sampat" <psampat@linux.ibm.com>
+To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        shuah@kernel.org, farosas@linux.ibm.com, kjain@linux.ibm.com,
+        linuxppc-dev@lists.ozlabs.org, kvm-ppc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        psampat@linux.ibm.com, pratik.r.sampat@gmail.com
+Subject: [PATCH v8 0/2] Interface to represent PAPR firmware attributes
+Date:   Tue, 28 Sep 2021 17:21:00 +0530
+Message-Id: <20210928115102.57117-1-psampat@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Hr71Fp_CKehqAkrOAFSu_7vVi5AF_6VR
+X-Proofpoint-ORIG-GUID: jjDfv2T8fmnGw42LRkoVeGaBqrtkaeGq
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-28_05,2021-09-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0 phishscore=0
+ mlxscore=0 spamscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2109280065
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sohil,
+RFC: https://lkml.org/lkml/2021/6/4/791
+PATCH v1: https://lkml.org/lkml/2021/6/16/805
+PATCH v2: https://lkml.org/lkml/2021/7/6/138
+PATCH v3: https://lkml.org/lkml/2021/7/12/2799
+PATCH v4: https://lkml.org/lkml/2021/7/16/532
+PATCH v5: https://lkml.org/lkml/2021/7/19/247
+PATCH v6: https://lkml.org/lkml/2021/7/20/36
+PATCH v7: https://lkml.org/lkml/2021/7/23/26 
 
-On Mon, Sep 27 2021 at 12:07, Sohil Mehta wrote:
-> On 9/26/2021 5:39 AM, Thomas Gleixner wrote:
->
-> The User-interrupt notification processing moves all the pending 
-> interrupts from UPID.PIR to the UIRR.
+Changelog v7-->v8
+1. Rebased and tested against 5.15
+2. Added a selftest to check if the energy and frequency attribues
+   exist and their files populated
 
-Indeed that makes sense. Should have thought about that myself.
+Also, have implemented a POC using this interface for the powerpc-utils'
+ppc64_cpu --frequency command-line tool to utilize this information
+in userspace.
+The POC for the new interface has been sent to the powerpc-utils mailing
+list for early review: https://groups.google.com/g/powerpc-utils-devel/c/r4i7JnlyQ8s
 
->> Also the restore portion on the way back to user space has to be coupled
->> more tightly:
->>
->> arch_exit_to_user_mode_prepare()
->> {
->>          ...
->>          if (unlikely(ti_work & _TIF_UPID))
->>          	uintr_restore_upid(ti_work & _TIF_NEED_FPU_LOAD);
->>          if (unlikely(ti_work & _TIF_NEED_FPU_LOAD))
->>          	switch_fpu_return();
->> }
->
-> I am assuming _TIF_UPID would be set everytime SN is set and XSTATE is 
-> saved.
+Sample output from the powerpc-utils tool is as follows:
 
-Yes.
+# ppc64_cpu --frequency
+Power and Performance Mode: XXXX
+Idle Power Saver Status   : XXXX
+Processor Folding Status  : XXXX --> Printed if Idle power save status is supported
 
->> upid_set_ndst(upid)
->> {
->> 	apicid = __this_cpu_read(x86_cpu_to_apicid);
->>
->>          if (x2apic_enabled())
->>              upid->ndst.x2apic = apicid;
->>          else
->>              upid->ndst.apic = apicid;
->> }
->>
->> uintr_restore_upid(bool xrstors_pending)
->> {
->>          clear_thread_flag(TIF_UPID);
->>          
->> 	// Update destination
->>          upid_set_ndst(upid);
->>
->>          // Do we need something stronger here?
->>          barrier();
->>
->>          clear_bit(SN, upid->status);
->>
->>          // Any SENDUIPI after this point sends to this CPU
->>             
->>          // Any bit which was set in upid->pir after SN was set
->>          // and/or UINV was cleared by XSAVES up to the point
->>          // where SN was cleared above is not reflected in UIRR.
->>
->> 	// As this runs with interrupts disabled the current state
->>          // of upid->pir can be read and used for restore. A SENDUIPI
->>          // which sets a bit in upid->pir after that read will send
->>          // the notification vector which is going to be handled once
->>          // the task reenables interrupts on return to user space.
->>          // If the SENDUIPI set the bit before the read then the
->>          // notification vector handling will just observe the same
->>          // PIR state.
->>
->>          // Needs to be a locked access as there might be a
->>          // concurrent SENDUIPI modiying it.
->>          pir = read_locked(upid->pir);
->>
->>          if (xrstors_pending)) {
->>          	// Update the saved xstate for xrstors
->>             	current->xstate.uintr.uinv = UINTR_NOTIFICATION_VECTOR;
->
-> XSAVES saves the UINV value into the XSTATE buffer. I am not sure if we 
-> need this again. Is it because it could have been overwritten by calling 
-> XSAVES twice?
+Platform reported frequencies --> Frequencies reported from the platform's H_CALL i.e PAPR interface
+min        :    NNNN GHz
+max        :    NNNN GHz
+static     :    NNNN GHz
 
-Yes that can happen AFAICT. I haven't done a deep analysis, but this
-needs to looked at.
+Tool Computed frequencies
+min        :    NNNN GHz (cpu XX)
+max        :    NNNN GHz (cpu XX)
+avg        :    NNNN GHz
 
->>                  current->xstate.uintr.uirr = pir;
->
-> I believe PIR should be ORed. There could be some bits already set in 
-> the UIRR.
->
-> Also, shouldn't UPID->PIR be cleared? If not, we would detect these 
-> interrupts all over again during the next ring transition.
+Pratik R. Sampat (2):
+  powerpc/pseries: Interface to represent PAPR firmware attributes
+  selftest/powerpc: Add PAPR sysfs attributes sniff test
 
-Right. So that PIR read above needs to be a locked cmpxchg().
+ .../sysfs-firmware-papr-energy-scale-info     |  26 ++
+ arch/powerpc/include/asm/hvcall.h             |  24 +-
+ arch/powerpc/kvm/trace_hv.h                   |   1 +
+ arch/powerpc/platforms/pseries/Makefile       |   3 +-
+ .../pseries/papr_platform_attributes.c        | 312 ++++++++++++++++++
+ tools/testing/selftests/powerpc/Makefile      |   1 +
+ .../powerpc/papr_attributes/.gitignore        |   2 +
+ .../powerpc/papr_attributes/Makefile          |   7 +
+ .../powerpc/papr_attributes/attr_test.c       | 107 ++++++
+ 9 files changed, 481 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-firmware-papr-energy-scale-info
+ create mode 100644 arch/powerpc/platforms/pseries/papr_platform_attributes.c
+ create mode 100644 tools/testing/selftests/powerpc/papr_attributes/.gitignore
+ create mode 100644 tools/testing/selftests/powerpc/papr_attributes/Makefile
+ create mode 100644 tools/testing/selftests/powerpc/papr_attributes/attr_test.c
 
->>          } else {
->>                  // Manually restore UIRR and UINV
->>                  wrmsrl(IA32_UINTR_RR, pir);
-> I believe read-modify-write here as well.
+-- 
+2.31.1
 
-Sigh, yes.
-
-Thanks,
-
-        tglx
