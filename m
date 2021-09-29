@@ -2,106 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DD141CE24
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 23:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B663341CFEA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Sep 2021 01:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346992AbhI2V3U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Sep 2021 17:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S1346931AbhI2X1m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Sep 2021 19:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347005AbhI2V3M (ORCPT
+        with ESMTP id S1346868AbhI2X1l (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Sep 2021 17:29:12 -0400
+        Wed, 29 Sep 2021 19:27:41 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014CAC061776
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 14:27:31 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id z2-20020a254c02000000b005b68ef4fe24so5248517yba.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 14:27:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8A8C06161C
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 16:25:59 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b5-20020a251b05000000b005b575f23711so5658277ybb.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 16:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=08MMqZQxkHJyz/VF+8d0XPyGY6ToAo0OA/OmmtaYHyg=;
-        b=Xc0r7XDhQk/RWJL3VJzgIR6Z34QQY3yA7gfvyI2MR/G/ctI7q+99DthyY5LlcWg2e7
-         yNZKWxRGgPdrPrKcdjVGfuLYpgUyyaxc9QM+cEdXLZO7cGIBk81SomjCOBT5pFHhS50s
-         c6xbphtTxJebvIq+LQjYxHjM/EiPRt3x+0CttaNT3TVpxgt96Nx34le5hdAMHS1ggHKu
-         uoCMduNUutZNaLiuUGpfAGsoSYuT04gWEbTvHxWTQXG9vA1xAV4uphxEGXqqwOYkP7G9
-         Czl8saVkvd0Wswmv2h2fMTdekMv294gEiwyuHMbzXc/Mvk4eKvpBG3Q+5f1Pbd2ghoD/
-         m3kA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=3k/5/Q3FVmwGpvBlwOcSeIO10fDHqoiU1INzIKkbGck=;
+        b=pyekV7dNkLHfcmd/KRNZyEpbmyCyLBiobS+q2fL0ZeZe9rvsOWfKuVu+sjI+iwE+PI
+         AxvIrbxOweE3/UckGwwp6bXJyTV5+32MaZfGsmbq/SjMQ91PKfXmKrt+eFzLgp2fL1x0
+         G1UKGN2eo93mzaAEK3PrymKslz7ayFLQRLSqPGvq/yv0Jw67CHqUoYfaBNzpKzo6Wxvb
+         ZM3nWtOHFV/c1Xz5c0s7YHyPIng7ym2DjN8AbLfooZloJ1ByMBxpgqjKWYvo9VHkSDdT
+         86LTqUojzoWw3kgRgP0v0IUiWMOd6AihM9rIp2kIob7O6c0gNIvhb1LKs8u3AUG9qiKF
+         Vb1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=08MMqZQxkHJyz/VF+8d0XPyGY6ToAo0OA/OmmtaYHyg=;
-        b=h7J7hztxfDamS7Apbi98qivL/1i+sz4NfGxISdFqTPiu/HqGAgCULWxnunRuHv3buT
-         V8khVrojFND+b1YAd99DnUGGJV6/nYhOnQ6BKseH4lXnYBnx3LZUj/1NMmaQYIxsEJ46
-         vQd87vGYCvQ4cpYHAJcXqWh8G216msMRD8O/zo0Jq0hfoWQlehtjkvA70j8mFL21qyT/
-         ZUv7Q7MuejN9lUYn4moyID+0urKaWnKdE0MoNedEM42cG9EjYfEnr7xaMfjwUJjPRgId
-         n41kAVtza4jLufpQSYlZcho8Nul2hPPWcGzBPBJAv+8jsZv5XbGzDujQ42yZ+zjYkMTg
-         S7Xg==
-X-Gm-Message-State: AOAM532MN18KeLGsaM6oItSwSZW6NxKhxLoEe/UjLvsjqgaSIEFzkSQY
-        09dz5ZPv/EnxeXoLu8IQ0dtNv3dc/6tlK9WK3fIo2g==
-X-Google-Smtp-Source: ABdhPJydtA3evA/mok1g6x4rh7TZpUEjkOozHd/KU5sU/LKW6mja59yYtNHfsoGoBJBqAHbTDyWHKtYkEMdXaZ/OgKddcA==
-X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:83f4:ff43:90d6:efd3])
- (user=brendanhiggins job=sendgmr) by 2002:a25:1584:: with SMTP id
- 126mr2372236ybv.126.1632950850186; Wed, 29 Sep 2021 14:27:30 -0700 (PDT)
-Date:   Wed, 29 Sep 2021 14:27:13 -0700
-In-Reply-To: <20210929212713.1213476-1-brendanhiggins@google.com>
-Message-Id: <20210929212713.1213476-6-brendanhiggins@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=3k/5/Q3FVmwGpvBlwOcSeIO10fDHqoiU1INzIKkbGck=;
+        b=zMHT+Mpv17i7/SWCbD1bZDv8hFtqACxjNvv8JJGnHXurNDhKO7Qym7qbERteEhbTOg
+         LA68Sm+IF2+0elzo8t6PxqJYxBol2HqTU6228cB9yHNzIGrv2v1dBggbUbQcTiN5cDP8
+         Quxj0ySbo+q1O/eunIH1kVA+DGTYc+k0kXDuG7RwuQsYHODj1Msg0StTaURPcKlAIAs1
+         UYP6m/Y8EjoVGw4ywwGySItl2m2quu+9rWdo2c2b9+ctEE8uGX0aSZKdICGx5BmxRnBN
+         AKDtsh2D+d/zbGRc/KFTX/wX2Ww5T80qAgDCOZR3DvxCanafC6zxsQjH08O6l7vLqs82
+         kPOg==
+X-Gm-Message-State: AOAM531ef+HFbYEb5twqIO5U9P/M1Tvn8oSscULZzfvK7tm0043UyCo2
+        FUDgATE5ckri1X1v/IFMOSi1ebG6KC/wtw==
+X-Google-Smtp-Source: ABdhPJwz46ZXct29xbVnwPzD0zpZwmHFQwxPnnJTy8QLu8SC0Q38KtTNwOddxfaK8BpFdIOsovpHYXnzMsqyjA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:e473:7cd7:9986:85b7])
+ (user=dlatypov job=sendgmr) by 2002:a25:db91:: with SMTP id
+ g139mr2883604ybf.391.1632957959133; Wed, 29 Sep 2021 16:25:59 -0700 (PDT)
+Date:   Wed, 29 Sep 2021 16:25:34 -0700
+Message-Id: <20210929232534.1433720-1-dlatypov@google.com>
 Mime-Version: 1.0
-References: <20210929212713.1213476-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
-Subject: [PATCH v2 5/5] bitfield: build kunit tests without structleak plugin
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
-        keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
-        lars@metafoo.de, ulf.hansson@linaro.org, andreas.noever@gmail.com,
-        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-        YehezkelShB@gmail.com, masahiroy@kernel.org,
-        michal.lkml@markovi.net, ndesaulniers@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
+Subject: [PATCH] kunit: tool: show list of valid --arch options when invalid
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Consider this attempt to run KUnit in QEMU:
+$ ./tools/testing/kunit/kunit.py run --arch=x86
 
-The structleak plugin causes the stack frame size to grow immensely:
+Before you'd get this error message:
+kunit_kernel.ConfigError: x86 is not a valid arch
 
-lib/bitfield_kunit.c: In function 'test_bitfields_constants':
-lib/bitfield_kunit.c:93:1: error: the frame size of 7440 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+After:
+kunit_kernel.ConfigError: x86 is not a valid arch, options are ['alpha', 'arm', 'arm64', 'i386', 'powerpc', 'riscv', 's390', 'sparc', 'x86_64']
 
-Turn it off in this file.
+This should make it a bit easier for people to notice when they make
+typos, etc. Currently, one would have to dive into the python code to
+figure out what the valid set is.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
-Changes since last revision:
- - Dropped -Wframe-larger-than=10240 from CFLAGS.
----
- lib/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/kunit/kunit_kernel.py    | 5 +++--
+ tools/testing/kunit/kunit_tool_test.py | 4 ++++
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/lib/Makefile b/lib/Makefile
-index 5efd1b435a37c..a841be5244ac6 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -351,7 +351,7 @@ obj-$(CONFIG_OBJAGG) += objagg.o
- obj-$(CONFIG_PLDMFW) += pldmfw/
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 1870e75ff153..a6b3cee3f0d0 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -198,8 +198,9 @@ def get_source_tree_ops(arch: str, cross_compile: Optional[str]) -> LinuxSourceT
+ 		return LinuxSourceTreeOperationsUml(cross_compile=cross_compile)
+ 	elif os.path.isfile(config_path):
+ 		return get_source_tree_ops_from_qemu_config(config_path, cross_compile)[1]
+-	else:
+-		raise ConfigError(arch + ' is not a valid arch')
++
++	options = [f[:-3] for f in os.listdir(QEMU_CONFIGS_DIR) if f.endswith('.py')]
++	raise ConfigError(arch + ' is not a valid arch, options are ' + str(sorted(options)))
  
- # KUnit tests
--CFLAGS_bitfield_kunit.o := $(call cc-option,-Wframe-larger-than=10240)
-+CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
- obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ def get_source_tree_ops_from_qemu_config(config_path: str,
+ 					 cross_compile: Optional[str]) -> Tuple[
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index cad37a98e599..2ae72f04cbe0 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -289,6 +289,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
+ 				pass
+ 			kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
+ 
++	def test_invalid_arch(self):
++		with self.assertRaisesRegex(kunit_kernel.ConfigError, 'not a valid arch, options are.*x86_64'):
++			kunit_kernel.LinuxSourceTree('', arch='invalid')
++
+ 	# TODO: add more test cases.
+ 
+ 
+
+base-commit: 865a0a8025ee0b54d1cc74834c57197d184a441e
 -- 
 2.33.0.685.g46640cef36-goog
 
