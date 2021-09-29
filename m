@@ -2,104 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B3F41BC9C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 04:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E27041BD73
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 05:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243681AbhI2COR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Sep 2021 22:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242761AbhI2COR (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Sep 2021 22:14:17 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2476C06161C
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Sep 2021 19:12:36 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id b6so1222764ilv.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Sep 2021 19:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3ncHSqeWvmQnAH4fmEz/nsHqUsBXIb6xkEvRSYXpDRo=;
-        b=cgfujflTOgMlCBvsPEW6ttFA5E2snmFqB9X3p0JX6mWK2Yrs/kIYyG59fADC8DZblc
-         APjzHj1f8JQskgXuFj2epjqrQLgjI+gtvxFetIC5/a562j5WWQFwc+VTEU6RSdu8Ar+W
-         czQSxYbAd2uKnaAGjmeq3CCErsNHHE2GpZ7u78V0Pf8gYUe3OBRMdvFY1kn46WuVvXSB
-         R1/GRKK16Twy1oPRbr+mHY6MIFiV80vc61xA6z9Rnv9kAOgr6FN8s1dlh3fKcxUAM9Ef
-         EGrZL91luO4XHm4EbCap8EUsvZXUfiVythEAL0LXDuARb2gv5uJpam+ehHBFzutr3bMA
-         ZSIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3ncHSqeWvmQnAH4fmEz/nsHqUsBXIb6xkEvRSYXpDRo=;
-        b=ANWtSle/bmDX8KKcS09/Aj4dFR95C8qI5TYPBDEKa7u3xyHkW0tPqyCTjBForopLEu
-         9C9y3XSka2tN7HC9LZX8/O72o3MGQI3Ktv8HKqmI3YAwr4he9ftjy8F9HqF1PcC4UD17
-         +pg0b0ZuowGKaY5vixd+Ii7hFzmDibQdsxScOR3UwCt8Zq1FMxzg9ud5b1Z4HCPqA37P
-         ZJof47lqeLwkqUrXc1DFWJF8cDmzIeTOrPVFKyY41xJAHatu8nd1xqqAo3ky1XwNX7aG
-         RLc9WpOPMECuyeLj64dqFKGYFlFJ3ej9sOyXJJMyI0xPUD1rSQPN2vYpzo7KKCaHz9t9
-         lvVg==
-X-Gm-Message-State: AOAM531hjKdFKdfZ7AOkM5HO1sz7xtvZZF8bZMHGgdzP4gpphs4olGHo
-        HrPwqFYzb/zzHxvnFMUiIJE3YM85PNSkHFNjV3jhag==
-X-Google-Smtp-Source: ABdhPJwzGI6eCrV5BbUaVTbIae7h3xxUmozHKTA12EjFPo/1XrzoSUCa7J8CIbyUOwYbIq9Oei3buy6Bq/rOIm70sPg=
-X-Received: by 2002:a92:b301:: with SMTP id p1mr6366328ilh.10.1632881556082;
- Tue, 28 Sep 2021 19:12:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210928221111.1162779-1-dlatypov@google.com> <CABVgOS=0K78N+KMK3km5TKVDD9L8AMRpNCfvihCqU2h3U-oE-w@mail.gmail.com>
-In-Reply-To: <CABVgOS=0K78N+KMK3km5TKVDD9L8AMRpNCfvihCqU2h3U-oE-w@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 28 Sep 2021 19:12:25 -0700
-Message-ID: <CAGS_qxpkak7QEfPvQhozuJt5VN=9+hcNOjrEryVj=hV8A1mcDQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: misc fixes (unused vars, imports, leaked files)
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S244003AbhI2Dch (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Sep 2021 23:32:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43344 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243349AbhI2Dch (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 Sep 2021 23:32:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 188596136A;
+        Wed, 29 Sep 2021 03:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632886256;
+        bh=WCjXIv7h+cvI30x4kcTCUOWtS0sTzxXS+pms9WS2R5w=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=pT1r5SFiZQttdoly5ySvJ0wy9GKMU6NNZ2hQ7mllvAOTYvb/8AjrLZwqiDb6OLq1/
+         d4AkfvdeD7WHIx5vt8YEtfyGHi1CIV79T7L7bJfU5o2UFs9lNtwpGpBWQGO3Z+oJ1O
+         7Da4vhkxb+EuXfc4mdAhFFQBYwaecYP1y9g6JLy/0dqUT3qQMY/M+i4eMv0OxbzIxK
+         PqB484m6pD9MkVptjCWWoHJvpiWONqlpwPL4DdIRe7Y9r5qOF0kRef/lgWmzYBWBl4
+         w0rObQEDEdeTTDoCRTbQRi7hKjcRTCX4eSE+tDOrtyFkoowFd873kkicHWxSdVIuNO
+         Wkm87Gcu4oNjA==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 23E2E27C0054;
+        Tue, 28 Sep 2021 23:30:54 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute6.internal (MEProxy); Tue, 28 Sep 2021 23:30:54 -0400
+X-ME-Sender: <xms:7d1TYcpBynFjX9dwv5ETADwstKZVMRQnpcJ86Sig_u94lANjdzB60Q>
+    <xme:7d1TYSqbZ0So3QXRgAdXGZHu18vAuOcO1B0YJ9Y7LaLJzRvnccGYrieAYJEEom7jh
+    i_zRa0S0xW2dbS_HUc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekuddgjedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpedthfehtedtvdetvdetudfgueeuhfdtudegvdelveelfedvteelfffg
+    fedvkeegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
+    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
+    drlhhuthhordhush
+X-ME-Proxy: <xmx:7d1TYRMlnaMhYK8KveqmK6msef7i_1-WAFahc39gefVObWR8pwFEng>
+    <xmx:7d1TYT5Hn8VPeyxtz_yhSxipRPsNR0xXg0i7dRtqo_O2KqQ5OQUGdg>
+    <xmx:7d1TYb7NPuxikq6JUHVmkIRqaQ3-9aFVFy8f-wOO9L2gNCWByyf4vQ>
+    <xmx:7t1TYSJo-17mOdkG5LkTQegSlGgERPCKxteWdjcOXwA8FVr3eBlqRSeCJ4o>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 29AC621E0063; Tue, 28 Sep 2021 23:30:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1303-gb2406efd75-fm-20210922.002-gb2406efd
+Mime-Version: 1.0
+Message-Id: <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
+In-Reply-To: <20210913200132.3396598-12-sohil.mehta@intel.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-12-sohil.mehta@intel.com>
+Date:   Tue, 28 Sep 2021 20:30:27 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Sohil Mehta" <sohil.mehta@intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Cc:     "Tony Luck" <tony.luck@intel.com>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, "Jens Axboe" <axboe@kernel.dk>,
+        "Christian Brauner" <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Shuah Khan" <shuah@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Raj Ashok" <ashok.raj@intel.com>,
+        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
+        "Gayatri Kammela" <gayatri.kammela@intel.com>,
+        "Zeng Guang" <guang.zeng@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Randy E Witt" <randy.e.witt@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Ramesh Thomas" <ramesh.thomas@intel.com>,
+        "Linux API" <linux-api@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 5:34 PM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Mon, Sep 13, 2021, at 1:01 PM, Sohil Mehta wrote:
+> Add a new system call to allow applications to block in the kernel and
+> wait for user interrupts.
 >
-> On Wed, Sep 29, 2021 at 6:11 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > Drop some variables in unit tests that were unused and/or add assertions
-> > based on them.
-> >
-> > For ExitStack, it was imported, but the `es` variable wasn't used so it
-> > didn't do anything, and we were leaking the file objects.
-> > Refactor it to just use nested `with` statements to properly close them.
-> >
-> > And drop the direct use of .close() on file objects in the kunit tool
-> > unit test, as these can be leaked if test assertions fail.
->
-> To clarify for a python novice: this is referring to using "with" so
-> that the file isn't leaked if the assertion fails, rather than
-> suggesting that leaks are okay for failing tests, right?
 
-Correct.
-Ah, I see how it can be misread now.
-
-But on that note, it's probably fine to leak the files as CPython
-should close the file object during GC.
-And tests failing should make those file objects go out of scope immediately.
+...
 
 >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> These all seem sensible to me. Thanks for cleaning this up!
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
-> -- David
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/CABVgOS%3D0K78N%2BKMK3km5TKVDD9L8AMRpNCfvihCqU2h3U-oE-w%40mail.gmail.com.
+> When the application makes this syscall the notification vector is
+> switched to a new kernel vector. Any new SENDUIPI will invoke the kernel
+> interrupt which is then used to wake up the process.
+
+Any new SENDUIPI that happens to hit the target CPU's ucode at a time when the kernel vector is enabled will deliver the interrupt.  Any new SENDUIPI that happens to hit the target CPU's ucode at a time when a different UIPI-using task is running will *not* deliver the interrupt, unless I'm missing some magic.  Which means that wakeups will be missed, which I think makes this whole idea a nonstarter.
+
+Am I missing something?
