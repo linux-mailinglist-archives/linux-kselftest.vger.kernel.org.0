@@ -2,157 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D41FF41C6EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 16:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F6841C70F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 16:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344529AbhI2Oj1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Sep 2021 10:39:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37603 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344564AbhI2OjY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Sep 2021 10:39:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632926263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zxKKmmMRHJSYhaR7u+5ryK3qo040LzhTNWQ2wFcbJqY=;
-        b=Hfnad3FyibG68Gagmp+wpSxm/MlrH5TwdASqLgirrnwaTKOOoKawqQlUNcE081CTtz5mFM
-        9t745zKGnK7agBC5QXZkvPnt48nR4vAFePOB6SgrFlTgwaRRn4Xtc4AbqTX7rFUv99l2xX
-        Cw7CRAWDQlm97BftumE+2r3ANvPogsg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-39-8UlB_jwgMrCaCz7PRId56w-1; Wed, 29 Sep 2021 10:37:37 -0400
-X-MC-Unique: 8UlB_jwgMrCaCz7PRId56w-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 897568015C7;
-        Wed, 29 Sep 2021 14:37:34 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.195.135])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 745251017E27;
-        Wed, 29 Sep 2021 14:37:28 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH v1 6/6] x86: remove memory hotplug support on X86_32
-Date:   Wed, 29 Sep 2021 16:36:00 +0200
-Message-Id: <20210929143600.49379-7-david@redhat.com>
-In-Reply-To: <20210929143600.49379-1-david@redhat.com>
-References: <20210929143600.49379-1-david@redhat.com>
+        id S245396AbhI2Opy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Sep 2021 10:45:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35202 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244878AbhI2Opy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 Sep 2021 10:45:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC2DE613CD;
+        Wed, 29 Sep 2021 14:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632926653;
+        bh=KDeH4Oq7N91SAJ92j6g8VLFdgZePjlYp+OIhj/hPpQs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YhJ0yBEgr1JT6AeXNNCwP7pMEN51qs+wSNIm63I3d8Ijqg/ZECwKvlIvYBFVd/IHb
+         n6gGb64KIZaM5knIGeavMny6Pu6o+4Y/dGUl6ZHDLOt6a3U2D5xucaPkzB1v+0fLDP
+         2zrLrZkt7L2If1rf0i+2SMRFA41F2NfFR2liN/7hW5S1eWJm/klF2Mo1JeYwNEqsj5
+         gO2BMqPcya3TylBSTIjocPzTB7H2PyHSfTMTTV7i+UCOH7gYmthWhdgziXgSVcpQuG
+         8uRy1bvvxsO00ptb6RQZFeMH6cC1XsoBQW81tflEJWRqzSjZpthnsuoLMnUh1pBnps
+         QNLr47W1Kxgng==
+Date:   Wed, 29 Sep 2021 15:43:23 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, misono.tomohiro@fujitsu.com
+Subject: Re: [PATCH v2 0/4] selftests: arm64: vec-syscfg updates
+Message-ID: <20210929144323.GQ4199@sirena.org.uk>
+References: <20210917120855.13858-1-broonie@kernel.org>
+ <20210929143113.GA22029@willie-the-truck>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7kD9y3RnPUgTZee0"
+Content-Disposition: inline
+In-Reply-To: <20210929143113.GA22029@willie-the-truck>
+X-Cookie: 98% lean.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CONFIG_MEMORY_HOTPLUG was marked BROKEN over one year and we just
-restricted it to 64 bit. Let's remove the unused x86 32bit implementation
-and simplify the Kconfig.
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- arch/x86/Kconfig      |  6 +++---
- arch/x86/mm/init_32.c | 31 -------------------------------
- 2 files changed, 3 insertions(+), 34 deletions(-)
+--7kD9y3RnPUgTZee0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index ab83c22d274e..85f4762429f1 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -62,7 +62,7 @@ config X86
- 	select ARCH_32BIT_OFF_T			if X86_32
- 	select ARCH_CLOCKSOURCE_INIT
- 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if X86_64 && HUGETLB_PAGE && MIGRATION
--	select ARCH_ENABLE_MEMORY_HOTPLUG if X86_64 || (X86_32 && HIGHMEM)
-+	select ARCH_ENABLE_MEMORY_HOTPLUG if X86_64
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE if MEMORY_HOTPLUG
- 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if (PGTABLE_LEVELS > 2) && (X86_64 || X86_PAE)
- 	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
-@@ -1615,7 +1615,7 @@ config ARCH_SELECT_MEMORY_MODEL
- 
- config ARCH_MEMORY_PROBE
- 	bool "Enable sysfs memory/probe interface"
--	depends on X86_64 && MEMORY_HOTPLUG
-+	depends on MEMORY_HOTPLUG
- 	help
- 	  This option enables a sysfs memory/probe interface for testing.
- 	  See Documentation/admin-guide/mm/memory-hotplug.rst for more information.
-@@ -2395,7 +2395,7 @@ endmenu
- 
- config ARCH_HAS_ADD_PAGES
- 	def_bool y
--	depends on X86_64 && ARCH_ENABLE_MEMORY_HOTPLUG
-+	depends on ARCH_ENABLE_MEMORY_HOTPLUG
- 
- config ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE
- 	def_bool y
-diff --git a/arch/x86/mm/init_32.c b/arch/x86/mm/init_32.c
-index bd90b8fe81e4..5cd7ea6d645c 100644
---- a/arch/x86/mm/init_32.c
-+++ b/arch/x86/mm/init_32.c
-@@ -779,37 +779,6 @@ void __init mem_init(void)
- 	test_wp_bit();
- }
- 
--#ifdef CONFIG_MEMORY_HOTPLUG
--int arch_add_memory(int nid, u64 start, u64 size,
--		    struct mhp_params *params)
--{
--	unsigned long start_pfn = start >> PAGE_SHIFT;
--	unsigned long nr_pages = size >> PAGE_SHIFT;
--	int ret;
--
--	/*
--	 * The page tables were already mapped at boot so if the caller
--	 * requests a different mapping type then we must change all the
--	 * pages with __set_memory_prot().
--	 */
--	if (params->pgprot.pgprot != PAGE_KERNEL.pgprot) {
--		ret = __set_memory_prot(start, nr_pages, params->pgprot);
--		if (ret)
--			return ret;
--	}
--
--	return __add_pages(nid, start_pfn, nr_pages, params);
--}
--
--void arch_remove_memory(u64 start, u64 size, struct vmem_altmap *altmap)
--{
--	unsigned long start_pfn = start >> PAGE_SHIFT;
--	unsigned long nr_pages = size >> PAGE_SHIFT;
--
--	__remove_pages(start_pfn, nr_pages, altmap);
--}
--#endif
--
- int kernel_set_to_readonly __read_mostly;
- 
- static void mark_nxdata_nx(void)
--- 
-2.31.1
+On Wed, Sep 29, 2021 at 03:31:14PM +0100, Will Deacon wrote:
 
+> With this series applied, I see a test failing under qemu with:
+
+> # selftests: arm64: vec-syscfg
+> # TAP version 13
+> # 1..10
+> # ok 1 SVE default vector length 64
+> # ok 2 # SKIP Need to be root to write to /proc
+> # ok 3 # SKIP Need to be root to write to /proc
+
+AFAICT this is due to running as a non-root user, the testsuite was
+already having serious issues before then...
+
+> # ok 4 SVE current VL is 64
+> # ok 5 SVE set VL 64 and have VL 64
+> # ok 6 # SKIP SVE only one VL supported
+> # ok 7 # SKIP SVE only one VL supported
+> # ok 8 # SKIP SVE only one VL supported
+> # ok 9 # SKIP SVE only one VL supported
+> # # SVE VL 272 returned 256 not maximum 0
+
+...as it's starting off by testing an interface that's only writable by
+root and then relying on that information, the existing tests were also
+not working usefully.  qemu by default supports way more than one vector
+length.  In any case it's just the test added by the last patch that's
+causing the output here, the first four patches should be fine and fix
+issues.
+
+I'm not sure it's a particularly good idea to run kselftest as a
+non-root user TBH, it's going to cause you to skip a lot of tests.
+
+--7kD9y3RnPUgTZee0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFUe4sACgkQJNaLcl1U
+h9DBfQf9HNL8PZN0AtWCqD1wZf94yN/NDZBjC7dAhHnPvds0UmoA1Oba1db4VkLD
+Qz/6MSjljl/twcINqAmlsAUV8wo2/evGdf3U0cVSglt8g34Vcii5w3n0eSNevvdJ
+oLpGtOWqZKrl3tULCbCAYS+tQAYiKgFj2mtG9QU2T8zEkFLUbfNBj1qaLXT+Uw7w
+53nZlTRwD90Gb5lhjR7ArEF41kCONsMBBf6Ph2g4MMryM2ldlpRMvHZM72FQ51cw
+56pjUM5+BZJtTEHaBMQMHIWLFOg8EKWxd1WxW8fqOjfJxRzFpvbo/DH+mdoKW+ry
++BzSGBgCN4qyTGcgASu4SkZLC1bi8Q==
+=BntX
+-----END PGP SIGNATURE-----
+
+--7kD9y3RnPUgTZee0--
