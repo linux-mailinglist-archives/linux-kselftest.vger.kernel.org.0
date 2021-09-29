@@ -2,407 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A2041BE50
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 06:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCB841BE84
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 06:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243961AbhI2Ek4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Sep 2021 00:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243866AbhI2Ekz (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Sep 2021 00:40:55 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430B3C061746
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Sep 2021 21:39:15 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id t8so2009930wrq.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Sep 2021 21:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=67mqzM9vkgGjQwhQ1XaY1buxYWbfE9oewimMqvpjnjY=;
-        b=oAUtFakPxOAeyXjiARVDm4a+qRjFw0DIxSyCyhcPJvTtCqb5wL0xIHi0XItyJKhTNP
-         CDpMh+j2yfN7OgTiWsGUhp4bdk7cGiSTv1r6yfwi1yYOs9zXA/vN3W2YOwYE8Lbvrnqq
-         k1Ac9Q9dsKqAqSiCvu2oKKs3G/LqWuLYYA8vQ+1jiN/bEbz2N0JHG0gzXjnewWq9ZxBR
-         fKvQd0tKoD4PdYscHonUgq7EXn5CMimNI6GinAWDMAsC8tZ1qwKbmzafNe5rl6zP8arm
-         WMSfh10cWiciLgoQrh1ol6Xe3+wd4AI9A6PPdSDAAJO/1mX/aJOFaOxiPPXGuHcx/1Dy
-         iIjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=67mqzM9vkgGjQwhQ1XaY1buxYWbfE9oewimMqvpjnjY=;
-        b=WxOWkmSTRYWtxoRMtJOANa8FNII3Gw03Oa2+L6eZYPeAOtZqKLFMhsIGchaGbqX3HL
-         Zc336jbxZ+sc0PqsDWLoh8bm3YwT3N/nARu5okVbgv03QooYT7EsNKPR9lgOOz7GyB0X
-         qVHnZJMFN0aQtp25vIBhD/QfBrH5lHwquNRaFI/LvpWnLGoSzd11KAuq3HsgJyeuA0R1
-         ArVBlBgUMlo8eecyGgtrRlEtmEJmctzxK2mOsAjDeDLsJE42QhLTBbdnlj8D+RD4sTSO
-         oQzUxrcTXpQ5YE/7DZWayMELi+NvinnWphZyLFIvqHXQ/tJL0pHj40tnoG08DtFp3dSC
-         HSIQ==
-X-Gm-Message-State: AOAM532/GHn5n+XctV7fqGJFnGWop5Mzi25W0AQkBPEXcHiOivFDtAhm
-        uRLc+q8f4vYZlm9LpZajzs9/u/m6X6vDOaqL1cNG1Q==
-X-Google-Smtp-Source: ABdhPJx4z7MW8k8uAepJDfu9i9g/UQ6c+5S1WRToTTl750jH0eNddEGo+v+1xagOiYxT6cfd3cdU4H/sZc0XAFAhmbM=
-X-Received: by 2002:adf:dd8a:: with SMTP id x10mr2575172wrl.200.1632890353478;
- Tue, 28 Sep 2021 21:39:13 -0700 (PDT)
+        id S244045AbhI2E6A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Sep 2021 00:58:00 -0400
+Received: from mga06.intel.com ([134.134.136.31]:44345 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242323AbhI2E6A (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 Sep 2021 00:58:00 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10121"; a="285875580"
+X-IronPort-AV: E=Sophos;i="5.85,331,1624345200"; 
+   d="scan'208";a="285875580"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2021 21:56:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,331,1624345200"; 
+   d="scan'208";a="476522432"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga007.jf.intel.com with ESMTP; 28 Sep 2021 21:56:19 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Tue, 28 Sep 2021 21:56:19 -0700
+Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Tue, 28 Sep 2021 21:56:18 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12 via Frontend Transport; Tue, 28 Sep 2021 21:56:18 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.109)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.12; Tue, 28 Sep 2021 21:56:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V3StPj7osNp7V8aA838LyqQv3GplU52rB97gzoQPUErs63juEnWWrq6kIoVNslFyWAD31BaKysd3BFxqf1Qif8nHMsF7fdTbff5cRz3jmmT0Px9+jlDPRsGKeFnrUCTstueLYsG8QBra/IQF2gIrDcioh6Iccjr1r7wkL2R1smER93BxnFcSIQa9+ijxA2k2voiBCq/lGQ4vx7UL39xEfzRZOvoSrf8+aW54kswYYdLyuJOcFdIp3OZRGjYt40lZP/WQZ14oooTn+Ycqwr4ZXmN/S0NcBrWd7yBu7dNVn6aY9anzmjXymbC5HbayR5xscccyrg1AO19+NLHWXqR69A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=9eHoo2yJxHTj8c2iXwmSitMyZiEEpaIo8DeMZW12rL4=;
+ b=oQ5LOZ1hIIz+5uHLdFIGqoliUB/JrKt3Bkvvt1u6PA6y0CnWOYjD3QqWTtA0AtI30Llg159+6csYbw32tOztVoH/4kdJUBJMnJkjsiyBUSm9cCfSl+OSgHTpnCkePX5cXJSMVaTRi6jR0G7lCHgLi4miPt1SM6P1toLThp0KN6omXUutd/J1dzy63u2lvIjJiYJKAS/Htk1CCfwYWMQHx0Torzne5k1Qj4SZWidFDgXrW2Tmm6xuODZeWezTI0vjfVNfXRc7GJ085Ui81ytjLGDoAGdhW2zm1jBNBAhEvcihVa2airwZOUIsmCDIBXJ9jK1xu1VLHksMVhOCgMBEiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9eHoo2yJxHTj8c2iXwmSitMyZiEEpaIo8DeMZW12rL4=;
+ b=ax7ZcEirVFcuV/53WHJmuGXt4PrXVj4VzIMhu6eh5cZES9D5AxQO/P6s475nrH6uqQJSLPgymK9Xn4doN/qyFHy/Cwv4klqnnoHG/zx1Ja/qF9ETY5I9KligbYI71NWsD7a6YSLGAg8ySm2Tv9QbWjOtdLRTgiRL7jXH5ehUU24=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
+ by SJ0PR11MB4797.namprd11.prod.outlook.com (2603:10b6:a03:2d4::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15; Wed, 29 Sep
+ 2021 04:56:11 +0000
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::4167:f9ef:19b2:eaff]) by BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::4167:f9ef:19b2:eaff%3]) with mapi id 15.20.4544.021; Wed, 29 Sep 2021
+ 04:56:11 +0000
+Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
+To:     Andy Lutomirski <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+CC:     Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "Gayatri Kammela" <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-12-sohil.mehta@intel.com>
+ <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
+From:   Sohil Mehta <sohil.mehta@intel.com>
+Message-ID: <c6e83d0e-6551-4e16-0822-0abbc4d656c4@intel.com>
+Date:   Tue, 28 Sep 2021 21:56:08 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
+In-Reply-To: <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: BYAPR02CA0025.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::38) To BYAPR11MB3320.namprd11.prod.outlook.com
+ (2603:10b6:a03:18::25)
 MIME-Version: 1.0
-References: <20210928222926.1180749-1-dlatypov@google.com> <20210928222926.1180749-4-dlatypov@google.com>
-In-Reply-To: <20210928222926.1180749-4-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 29 Sep 2021 12:39:02 +0800
-Message-ID: <CABVgOSnx+x1HmVWZi_Dc2HwNS8LeBX2W=0=j-jMkB+6EZhFvew@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] kunit: tool: support running each suite/test separately
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Received: from [192.168.86.33] (73.222.31.188) by BYAPR02CA0025.namprd02.prod.outlook.com (2603:10b6:a02:ee::38) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.13 via Frontend Transport; Wed, 29 Sep 2021 04:56:10 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 248e4fdd-4ce7-46b4-be2e-08d9830574d2
+X-MS-TrafficTypeDiagnostic: SJ0PR11MB4797:
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SJ0PR11MB4797C3E7A7ED90561FA6EE02E5A99@SJ0PR11MB4797.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hSrXa27At+7QeWj2J0gx6pgdZHiSU99I9jwNOmImPJhweKpwFf071Uzw8AxDH7dJJyXD4w+DgcTbdgJraz6F16eC7iyeumg5aZ4f0kpJjFI+K+wfpa+71bMaR7GFhwYPOjluvHuppISYnrT0/s1O0tpnXS3YJjAaSeo/dwcATVlL4OMW4HQjg/8HXx+LKiXMGVaDV6mEycPPd3p69pSp7xyK1JwQUjbPuyLk4QnLvMiNf7JKRxmdfT85apBYdkunAtoo/nUU/En4iq+d3rEfKEnN6boxFSo7pOxJ59T0y3UzhcIRb1Bihk5nXg8H7V6NDo56ILD/sNh8NNmO9npFMZPlLmSSJop9uRR3pHolwXfEBQGbLeQ52ibf+AW3GhnKJtHpGEPyAHY9zN3hiRMYjtLU9fCn6xEjqRkZQDfiyn2Fpf21quzqjrS7XLWuPw/h1GqjcvxwNREe3GhQtquBi6F/Kx/ptKk2CXLRtadxvK1DrYoOYr/2fAJ3krhmoNigvL7xXpdWC9FUgMf1MNiVEIZ4GEtSZ1dvgd1Quck20rhd4L1p1WflG6iy0Mo2O7zipOMRh5qJ7sQVTScObwr7ulDg/HTsO0g3skvqbnemyhJbmruy0cCe0O5Pvij7j5LKJGqFVPcs0VUgWiXNFD4SFMtFeA/TnT6OTBM+Yj5/n9Zu6ChUI5hP0zzXVRsviuUPE6BH+qjY5DFCGtidFHbPpDHQ0XlBsqDC8Sb9kMb45eXWbm+VXWbUH819t97G4WBk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(31696002)(2906002)(44832011)(7416002)(186003)(508600001)(8676002)(86362001)(36756003)(83380400001)(956004)(2616005)(16576012)(66476007)(316002)(66556008)(54906003)(110136005)(53546011)(26005)(66946007)(8936002)(4326008)(6486002)(31686004)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bkZOUmhGNjMxWWJkT0pwZEdib292akx1MDVNNUltSXMzMUMxSTF3VHFJd3hx?=
+ =?utf-8?B?VEJMNXpYMWMyZThTOG44NXpINTM0VE1Hb2dvTHJia0g2UFhDNk1wNko2YkV5?=
+ =?utf-8?B?MGR2WXVOc2pTeFFSOG5HQ1BhemM4SnE5T0xGQUNFcFJxR3YrcTdGcVdCazFB?=
+ =?utf-8?B?djZFazV4UGIzbWU5MVNYbnJRQVBxNzAvRWpwc2hQeW1iSkdZem9SS0NiOURQ?=
+ =?utf-8?B?SXR1MktacnJHVUdhc0RJazRHdmpkeitZeGtON1EyOEpjU0IzVWU1cTJLMTNi?=
+ =?utf-8?B?akx2Q25UYkhhWm9STXk0KzRvcng0SVZZZUQ3bU1GZzhtUmJ5YkIzN0JlWU5j?=
+ =?utf-8?B?cnl1aVhPeWVzekU5NDJwU1hPTzJEQURVcVE1ZlNMeHk4VFNYWkVIQkNhT04w?=
+ =?utf-8?B?Vkx5UURZb1hsdVlYaXNDbWx4c1pLcGxSTGVIYml1UWdJSTU1RENkMHBoMTRJ?=
+ =?utf-8?B?NXFQUEpMZHI0TmF2cWNVOTFldm5pMTU0K2RpaVRacXk1U1V4TXpqUDhHQll5?=
+ =?utf-8?B?ZXVmc3NrVm91bGVJOHVYZDh3eWxpWEllSzd5cG1PczNsdzArQnYvTHJ1Q2ha?=
+ =?utf-8?B?NENId1NRcVZGSGUrSXdzRUg3bmRBVFhPVFVJTWNyMElYNE1rcDBSUEF4bmx0?=
+ =?utf-8?B?Zld0MjZPRW83QXJqSUNOdSsrUXBJYk5qZlN4bnhSK2theVNwWkdaYnM3UVpT?=
+ =?utf-8?B?Y0Z3dGppMHdkU3VrOWVOUlk4cjVYRkkxcUs2Yk5QdGgrVFY3N3lwUjd1cTVy?=
+ =?utf-8?B?Q2creUlQVkp2S2Q1OXhOUHdiMjVpR1NrVXVzbDRjcTNCSUxoeFUwYmpkeE9a?=
+ =?utf-8?B?N2cyRlBoQ2kvRnpLc0lVL1hzZy9POVZKdHpTYm15NVpNU2VHTDBIMkU1N2pK?=
+ =?utf-8?B?cEc2bnNjSExvV3pPUTBwTyt1VXhwbUxZVUNxL01Fa3hkdVdNSnU4bjB2Ynlm?=
+ =?utf-8?B?T25Ia0NWWHJ4d2ZvamNOdVVMb3E0UmVBVkRyRnJuZ09YcWhudnJlTnQvT2N1?=
+ =?utf-8?B?eVI5eGliY2JEa2h4ZHZkREZmNjUzUm5aOTJ0SnROd0F5allTRGUvNXE2dS9n?=
+ =?utf-8?B?V1BJYzNPRlJMVndBVlRtNUhrd285NUh5WHlXcys3cjlySmhpNjlBenZtaWk2?=
+ =?utf-8?B?L0xGWHNIbHFmSjNNY1FrUHFxYm1KTFBBSGxPamtRKzZ1NFVxb1RPVkcxWE5w?=
+ =?utf-8?B?bzQ3dktHT3hWcEc4TGZ5OWplQlh0SlZRR0g4ZmNxUW9TNHg4V0pXbE5jQ25u?=
+ =?utf-8?B?TTYzd2dHTG04R3k5TXNsZld3TktYdkpQWTQ4ZTNHRHFSMmVYSUVmNUxpNDNp?=
+ =?utf-8?B?NlE3YjcxTTAvN0NNcktkYmJMTWZSdkEvVVJCNVA5eWFCR2VzY0V3c05rVEts?=
+ =?utf-8?B?MWtvUyt6c0xVcE4vcmQ1R2ZkS3BRNEtwQXkyTHBuZjlWMEY3NjdmenJVSTlD?=
+ =?utf-8?B?NURuQks3S3p1Rmc4Y0NDK2JuQ0V0NG5EVDNFcElDRFVsdGN2NTNEZDM3alAx?=
+ =?utf-8?B?R3VaWDdZZ0Z4ZElWanpkdGpaRFlpdXlZd2M5c0RoWXRKQXJtQ0ZyamVQekFI?=
+ =?utf-8?B?OEhTRkhKbGcvaHR0UzFLYUJ0azBCSVV5ZHY5SXArMEhwYnpWdDIyaFFQWU9F?=
+ =?utf-8?B?TUFTeEd2ZW0rdWlRKzA5c2pBdFBkSjUwdmZXMjBGOFZ0YUJ3ZTdkN1RTVXQ1?=
+ =?utf-8?B?NC9BTnBRb1BQZ1g3UUV3c0F0NlVFOEErYS85aC9mZ0pkSjg0R0VxYzBpVmFx?=
+ =?utf-8?Q?ezgQY2hI2rydY46aXa/wMlZRsSGh4RCu9X6R4Sa?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 248e4fdd-4ce7-46b4-be2e-08d9830574d2
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2021 04:56:11.0387
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pQ7RRFh6mxA8iStN3DA3AtLd2Oh/EG2ymdJhQpSJbZUzBWyu3zadWtWqbrrszHhP6EMwx+tb2gaH/qOQJAvrbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4797
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 29, 2021 at 6:29 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> The new --run_isolated flag makes the tool boot the kernel once per
-> suite or test, preventing leftover state from one suite to impact the
-> other. This can be useful as a starting point to debugging test
-> hermeticity issues.
->
-> Note: it takes a lot longer, so people should not use it normally.
->
-> Consider the following very simplified example:
->
->   bool disable_something_for_test = false;
->   void function_being_tested() {
->     ...
->     if (disable_something_for_test) return;
->     ...
->   }
->
->   static void test_before(struct kunit *test)
->   {
->     disable_something_for_test = true;
->     function_being_tested();
->     /* oops, we forgot to reset it back to false */
->   }
->
->   static void test_after(struct kunit *test)
->   {
->     /* oops, now "fixing" test_before can cause test_after to fail! */
->     function_being_tested();
->   }
->
-> Presented like this, the issues are obvious, but it gets a lot more
-> complicated to track down as the amount of test setup and helper
-> functions increases.
->
-> Another use case is memory corruption. It might not be surface as an
-Nit: "might not be surfaced" or "might not surface"
-
-> failure/crash in the test case or suite that caused it. I've noticed in
-> kunit's own unit tests, the 3rd suite after might be the one to finally
-> crash after an out-of-bounds write, for example.
->
-> Example usage:
->
-> Per suite:
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit --run_isolated=suite
-> ...
-> Starting KUnit Kernel (1/7)...
-> ============================================================
-> ======== [PASSED] kunit_executor_test ========
-> ....
-> Testing complete. 5 tests run. 0 failed. 0 crashed. 0 skipped.
-> Starting KUnit Kernel (2/7)...
-> ============================================================
-> ======== [PASSED] kunit-try-catch-test ========
+On 9/28/2021 8:30 PM, Andy Lutomirski wrote:
+> On Mon, Sep 13, 2021, at 1:01 PM, Sohil Mehta wrote:
+>> Add a new system call to allow applications to block in the kernel and
+>> wait for user interrupts.
+>>
 > ...
 >
-> Per test:
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit --run_isolated=test
-> Starting KUnit Kernel (1/23)...
-> ============================================================
-> ======== [PASSED] kunit_executor_test ========
-> [PASSED] parse_filter_test
-> ============================================================
-> Testing complete. 1 tests run. 0 failed. 0 crashed. 0 skipped.
-> Starting KUnit Kernel (2/23)...
-> ============================================================
-> ======== [PASSED] kunit_executor_test ========
-> [PASSED] filter_subsuite_test
-> ...
+>> When the application makes this syscall the notification vector is
+>> switched to a new kernel vector. Any new SENDUIPI will invoke the kernel
+>> interrupt which is then used to wake up the process.
+> Any new SENDUIPI that happens to hit the target CPU's ucode at a time when the kernel vector is enabled will deliver the interrupt.  Any new SENDUIPI that happens to hit the target CPU's ucode at a time when a different UIPI-using task is running will *not* deliver the interrupt, unless I'm missing some magic.  Which means that wakeups will be missed, which I think makes this whole idea a nonstarter.
 >
-> It works with filters as well:
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit --run_isolated=suite example
-> ...
-> Starting KUnit Kernel (1/1)...
-> ============================================================
-> ======== [PASSED] example ========
-> ...
->
-> It also handles test filters, '*.*skip*' runs these 3 tests:
->   kunit_status.kunit_status_mark_skipped_test
->   example.example_skip_test
->   example.example_mark_skipped_test
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
-
-Really glad to finally have this feature.
-
-A few minor comments below (mostly mypy issues, though one of them
-seems to be a real bug). Otherwise, the main concern I have is that
-there's no final total of the tests run/passed/failed. That may be
-easier to implement post the parser rework patch, though, so I don't
-think we should hold this up for it:
-https://lore.kernel.org/linux-kselftest/20210901190623.315736-1-rmoar@google.com/
-
-Also, if we changed the TAP header stuff in patch 1, there'd need to
-be a couple of minor changes here to support it.
-
-Minor issues below aside, this is
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  tools/testing/kunit/kunit.py           | 91 ++++++++++++++++++++------
->  tools/testing/kunit/kunit_tool_test.py | 40 +++++++++++
->  2 files changed, 112 insertions(+), 19 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 31eec9f6ecc3..e7b92caba53d 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -16,7 +16,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
->
->  from collections import namedtuple
->  from enum import Enum, auto
-> -from typing import Iterable
-> +from typing import Iterable, List
->
->  import kunit_config
->  import kunit_json
-> @@ -31,13 +31,13 @@ KunitBuildRequest = namedtuple('KunitBuildRequest',
->                                ['jobs', 'build_dir', 'alltests',
->                                 'make_options'])
->  KunitExecRequest = namedtuple('KunitExecRequest',
-> -                              ['timeout', 'build_dir', 'alltests',
-> -                               'filter_glob', 'kernel_args'])
-> +                             ['timeout', 'build_dir', 'alltests',
-> +                              'filter_glob', 'kernel_args', 'run_isolated'])
->  KunitParseRequest = namedtuple('KunitParseRequest',
->                                ['raw_output', 'build_dir', 'json'])
->  KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
->                                            'build_dir', 'alltests', 'filter_glob',
-> -                                          'kernel_args', 'json', 'make_options'])
-> +                                          'kernel_args', 'run_isolated', 'json', 'make_options'])
->
->  KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
->
-> @@ -91,21 +91,66 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
->                            'built kernel successfully',
->                            build_end - build_start)
->
-> -def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest,
-> -              parse_request: KunitParseRequest) -> KunitResult:
-> -       kunit_parser.print_with_timestamp('Starting KUnit Kernel ...')
-> -       test_start = time.time()
-> -       run_result = linux.run_kernel(
-> -               args=request.kernel_args,
-> -               timeout=None if request.alltests else request.timeout,
-> -               filter_glob=request.filter_glob,
-> -               build_dir=request.build_dir)
-> +def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> List[str]:
-> +       args = ['kunit.action=list']
-> +       if request.kernel_args:
-> +               args.extend(request.kernel_args)
-> +
-> +       output = linux.run_kernel(args=args,
-> +                          timeout=None if request.alltests else request.timeout,
-> +                          filter_glob=request.filter_glob,
-> +                          build_dir=request.build_dir)
-> +       output = kunit_parser.extract_tap_lines(output)
-
-mypy gives an error here:
-tools/testing/kunit/kunit.py:103: error: Incompatible types in
-assignment (expression has type "LineStream", variable has type
-"Iterator[str]")
-tools/testing/kunit/kunit.py:103: note: 'LineStream' is missing
-following 'Iterator' protocol member:
-tools/testing/kunit/kunit.py:103: note:     __next__
-
-> +       # Hack! Drop the TAP version header and top-level test plan.
-> +       output.pop()
-> +       output.pop()
-
-Similarly, mypy is complaining that:
-tools/testing/kunit/kunit.py:105: error: "Iterator[str]" has no attribute "pop"
-tools/testing/kunit/kunit.py:106: error: "Iterator[str]" has no attribute "pop"
-
-Also, we could get rid of one of these output.pop() lines if we
-removed the test plan in Patch 1.
-
-> +       return list(output)
-> +
-> +def _suites_from_test_list(tests: List[str]) -> List[str]:
-> +       """Extracts all the suites from an ordered list of tests."""
-> +       suites = []  # type: List[str]
-> +       for t in tests:
-> +               parts = t.split('.', maxsplit=2)
-> +               if len(parts) != 2:
-> +                       raise ValueError(f'internal KUnit error, test name should be of the form "<suite>.<test>", got "{t}"')
-> +               suite, case = parts
-> +               if not suites or suites[-1] != suite:
-> +                       suites.append(suite)
-> +       return suites
-> +
->
-> -       test_end = time.time()
-> -       exec_time = test_end - test_start
->
-> -       # Named tuples are immutable, so we rebuild them here manually
-> -       result = parse_tests(parse_request, run_result)
-> +def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest,
-> +              parse_request: KunitParseRequest) -> KunitResult:
-> +       filter_globs = [request.filter_glob]
-> +       if request.run_isolated:
-> +               tests = _list_tests(linux, request)
-> +               if request.run_isolated == 'test':
-> +                       filter_globs = tests
-> +               if request.run_isolated == 'suite':
-> +                       filter_globs = _suites_from_test_list(tests)
-> +                       # Apply the test-part of the user's glob, if present.
-> +                       if '.' in request.filter_glob:
-> +                               test_glob = request.filter_glob.split('.', maxsplit=2)[1]
-> +                               filter_globs = [g + '.'+ test_glob for g in filter_globs]
-> +
-> +       overall_status = kunit_parser.TestStatus.SUCCESS
-> +       exec_time = 0
-
-This doesn't seem to work. My test run, for example, gave:
-Elapsed time: 71.706s total, 0.001s configuring, 3.241s building, 0.001s running
-
-The 0.001s running time seems way too small here.
-
-Digging into this, it might be related to this mypy warning:
-tools/testing/kunit/kunit.py:150: error: Incompatible types in
-assignment (expression has type "float", variable has type "int")
-
-Should it be exec_time = 0.0 or similar?
+> Am I missing something?
 
 
-> +       for i, filter_glob in enumerate(filter_globs):
-> +               kunit_parser.print_with_timestamp('Starting KUnit Kernel ({}/{})...'.format(i+1, len(filter_globs)))
-> +
-> +               test_start = time.time()
-> +               run_result = linux.run_kernel(
-> +                       args=request.kernel_args,
-> +                       timeout=None if request.alltests else request.timeout,
-> +                       filter_glob=filter_glob,
-> +                       build_dir=request.build_dir)
-> +
-> +               test_end = time.time()
-> +               exec_time += test_end - test_start
-> +
-> +               result = parse_tests(parse_request, run_result)
-> +               overall_status = kunit_parser.max_status(overall_status, result.status)
->
->         return KunitResult(status=result.status, result=result.result, elapsed_time=exec_time)
->
-> @@ -166,7 +211,7 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
->
->         exec_request = KunitExecRequest(request.timeout, request.build_dir,
->                                  request.alltests, request.filter_glob,
-> -                                request.kernel_args)
-> +                                request.kernel_args, request.run_isolated)
->         parse_request = KunitParseRequest(request.raw_output,
->                                           request.build_dir,
->                                           request.json)
-> @@ -250,6 +295,12 @@ def add_exec_opts(parser) -> None:
->         parser.add_argument('--kernel_args',
->                             help='Kernel command-line parameters. Maybe be repeated',
->                              action='append')
-> +       parser.add_argument('--run_isolated', help='If set, boot the kernel for each '
-> +                           'individual suite/test. This is can be useful for debugging '
-> +                           'a non-hermetic test, one that might pass/fail based on '
-> +                           'what ran before it.',
-> +                           type=str,
-> +                           choices=['suite', 'test']),
->
->  def add_parse_opts(parser) -> None:
->         parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
-> @@ -323,6 +374,7 @@ def main(argv, linux=None):
->                                        cli_args.alltests,
->                                        cli_args.filter_glob,
->                                        cli_args.kernel_args,
-> +                                      cli_args.run_isolated,
->                                        cli_args.json,
->                                        cli_args.make_options)
->                 result = run_tests(linux, request)
-> @@ -378,7 +430,8 @@ def main(argv, linux=None):
->                                                 cli_args.build_dir,
->                                                 cli_args.alltests,
->                                                 cli_args.filter_glob,
-> -                                               cli_args.kernel_args)
-> +                                               cli_args.kernel_args,
-> +                                               cli_args.run_isolated)
->                 parse_request = KunitParseRequest(cli_args.raw_output,
->                                                   cli_args.build_dir,
->                                                   cli_args.json)
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 619c4554cbff..bcfdc6664c9d 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -477,6 +477,46 @@ class KUnitMainTest(unittest.TestCase):
->                       args=['a=1','b=2'], build_dir='.kunit', filter_glob='', timeout=300)
->                 self.print_mock.assert_any_call(StrContains('Testing complete.'))
->
-> +       def test_list_tests(self):
-> +               want = ['suite.test1', 'suite.test2', 'suite2.test1']
-> +               self.linux_source_mock.run_kernel.return_value = ['TAP version 14', '1..0'] + want
-> +
-> +               got = kunit._list_tests(self.linux_source_mock,
-> +                                    kunit.KunitExecRequest(300, '.kunit', False, 'suite*', None, 'suite'))
-> +
-> +               self.assertEqual(got, want)
-> +               # Should respect the user's filter glob when listing tests.
-> +               self.linux_source_mock.run_kernel.assert_called_once_with(
-> +                       args=['kunit.action=list'], build_dir='.kunit', filter_glob='suite*', timeout=300)
-> +
-> +
-> +       @mock.patch.object(kunit, '_list_tests')
-> +       def test_run_isolated_by_suite(self, mock_tests):
-> +               mock_tests.return_value = ['suite.test1', 'suite.test2', 'suite2.test1']
-> +               kunit.main(['exec', '--run_isolated=suite', 'suite*.test*'], self.linux_source_mock)
-> +
-> +               # Should respect the user's filter glob when listing tests.
-> +               mock_tests.assert_called_once_with(mock.ANY,
-> +                                    kunit.KunitExecRequest(300, '.kunit', False, 'suite*.test*', None, 'suite'))
-> +               self.linux_source_mock.run_kernel.assert_has_calls([
-> +                       mock.call(args=None, build_dir='.kunit', filter_glob='suite.test*', timeout=300),
-> +                       mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test*', timeout=300),
-> +               ])
-> +
-> +       @mock.patch.object(kunit, '_list_tests')
-> +       def test_run_isolated_by_test(self, mock_tests):
-> +               mock_tests.return_value = ['suite.test1', 'suite.test2', 'suite2.test1']
-> +               kunit.main(['exec', '--run_isolated=test', 'suite*'], self.linux_source_mock)
-> +
-> +               # Should respect the user's filter glob when listing tests.
-> +               mock_tests.assert_called_once_with(mock.ANY,
-> +                                    kunit.KunitExecRequest(300, '.kunit', False, 'suite*', None, 'test'))
-> +               self.linux_source_mock.run_kernel.assert_has_calls([
-> +                       mock.call(args=None, build_dir='.kunit', filter_glob='suite.test1', timeout=300),
-> +                       mock.call(args=None, build_dir='.kunit', filter_glob='suite.test2', timeout=300),
-> +                       mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test1', timeout=300),
-> +               ])
-> +
->
->  if __name__ == '__main__':
->         unittest.main()
-> --
-> 2.33.0.685.g46640cef36-goog
->
+The current kernel implementation reserves 2 notification vectors (NV) 
+for the 2 states of a thread (running vs blocked).
+
+NV-1 – used only for tasks that are running. (results in a user 
+interrupt or a spurious kernel interrupt)
+
+NV-2 – used only for a tasks that are blocked in the kernel. (always 
+results in a kernel interrupt)
+
+The UPID.UINV bits are switched between NV-1 and NV-2 based on the state 
+of the task.
+
+However, NV-1 is also programmed in the running task's MISC_MSR UINV 
+bits. This is what tells the ucode that the notification vector received 
+is for the user instead of the kernel.
+
+NV-2 is never programmed in the MISC_MSR of a task. When NV-2 arrives on 
+any cpu there is never a possibility of it being detected as a User 
+Interrupt. It will always be delivered to the kernel.
+
+Does this help clarify the above?
+
+
+I just realized, we need to be careful when the notification vectors are 
+switched in the UPID. Any pending vectors detected after the switch 
+should abort the blocking call. The current code is wrong in a lot of 
+places where it touches the UPID.
+
+Thanks,
+Sohil
+
