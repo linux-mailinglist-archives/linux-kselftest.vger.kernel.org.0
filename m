@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BECB41CCF4
+	by mail.lfdr.de (Postfix) with ESMTP id DF45F41CCF5
 	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 21:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345894AbhI2T4d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Sep 2021 15:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S1346010AbhI2T4f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Sep 2021 15:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237351AbhI2T42 (ORCPT
+        with ESMTP id S1345843AbhI2T4a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Sep 2021 15:56:28 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8F9C061764
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 12:54:46 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id l11-20020a056902072b00b005a776eefb28so5003661ybt.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 12:54:46 -0700 (PDT)
+        Wed, 29 Sep 2021 15:56:30 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF32C061767
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 12:54:48 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id j6-20020a05620a288600b0045e5d85ca17so10647104qkp.16
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 12:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=cmuN5/kREXwmVWvA5tkze8AF++qHoi0QEen4hqx19c0=;
-        b=OQHtExlktX+92wICLzjUgzDTBZXxoI3WVRWnYw6oTo6d32fdZqoGi9IHUBAHn2oj4K
-         0hEWVIRSE51HT1Gub1QEXkwvpqMapvSpu+7zFTA6mbFwdUDYBtpv11MP9+t2mz7GUoOC
-         eG5GLlhPd3RaRKmPqJBEqsm71YNFDWgOOVJ02VaTkhiNNReE6wNfW7/T3lNQ0Hg2VVCs
-         FNGOkLKPWKf1ikZO9FIaX41IvBC+fmkh14nYm520bJLVq9amS5HrOEYTZupjlaWM7zo+
-         JKQayfjXJBiY6ruROIu96vOMlB6uF65BSL65cyEpzGn7EFzWTXdRD7QEcRetr5GWgqy3
-         8JbA==
+        bh=9sOOAbpo+CDeDN2zgZAi4uwZL9FbPXFHzEInK3wMaN8=;
+        b=MjEUyYEAPg62Uua1oTEbR7gL326WtcE7HZiyPUyqsvxymoVlqFIqASJRtboj1BPbyg
+         n9/TU6pcpp2bVgAswzJc6ESN8yGo1/1dWGt4am0SdaMZQToHyFQTa2zjupdjm3PXPLse
+         zywmrq/UWjwZ8VJCD7o5iapFL17oroEiaAzc1fxWm+otUO4hE1R3ZQ17WqLdLstL7Jn8
+         QYaAvm6w5tQrme3tvmGikGmt89/pqMGNTfk/16RqLgSefnRKtE0b7vG8JQl2sdX4lavC
+         HzWvw2HEhZAwR7tN9Qpa00Ti0xXBUsAwR4Yxyhs1ua/7a9IhivOU1v6OwXEpXexA1yNP
+         Ae3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=cmuN5/kREXwmVWvA5tkze8AF++qHoi0QEen4hqx19c0=;
-        b=5WqVEotbWdaeXdoKb0pyZoAZ+f/Ib5YzuXMlgs4CA8wOw0+lC3eTWTjvBV4M9Oxh96
-         Q5tKcXW7Oe27AIwhLqW+VKLTujME9nrBSlklUIZ+xiZYweQa7c7HYaTpLIbdfnv2JZ8Z
-         1kWOu0ykQ4LkjbAdn6Qc7SNG8LEKcnHfbNywOFkGdcESask6ZDbem2y4HNV95BnNq1OY
-         bbcCcOSRW8l3CnGHk6JJF4NhGraFmInLWVlBiwCsu5iPy7iP9bn0O54SCKvSzRvUjpVe
-         i/WUmjBElNMdbO+ief8PLmsM/TF3MQtu3uamBwFjzGdk4v9mMdh2lhnFDwpg5ZH+Wc8G
-         FtPg==
-X-Gm-Message-State: AOAM532+95XAQbzsbNH03o/TZLiX+tllBOipsZFmLzCVglN6PkLchV5G
-        HCBUUhlMOVTR8wnlwf+470R03hC0vY/z1w==
-X-Google-Smtp-Source: ABdhPJwDlPdBEhkctOrLWQ+LWC6bVlq6tpkkvhzzv0QqtngCuM4KIeiEpbL0u9KO8juX9vrO40pJog6erGTP4A==
+        bh=9sOOAbpo+CDeDN2zgZAi4uwZL9FbPXFHzEInK3wMaN8=;
+        b=kjhVTnDH8YyQAxnD/it/hscco2hKZs1Jd6s3BTuuIip8a4tJIiUlZ7KA4nJGn1rCPS
+         /+QjnubSp/4yI7s7b5Xr6XPs7xHQs/RTSbNBN4bqj512+tsNgJ16xvXDEAsxET11y6Iq
+         0yNO0oqBtt1SjaM+/pY0A2WOLVv7klD3/fczSjDGVsttLsLRDbV418HsTG9HYnnOld7L
+         phBLIqQ8kDmc+k4rNA3Afjjkqdo1jB/l7YDuAzvOtfv0ieF1aDb8BlBRScpjrAzcYDAy
+         eLN8Q3/6MWzH4i/oKzGAREXGrxbTKJ+shIcs0Fb1rjuiVQVRpGBSvtZT/QX+vrqeAblC
+         iqrw==
+X-Gm-Message-State: AOAM530NQh8LjL+HDK3YP5CXo0cYN6ZUj2amB8B/aTDXdYI9nyLQ7o+W
+        PVfQjM9v69wipf2RIGNf7alsX+JRJkeWHQ==
+X-Google-Smtp-Source: ABdhPJx6QuIgvNNe4a2Cw8n9tyR1htGGPtY2/CjwI4hQMAPvoGr8HaN4rjiWgODRe9Q0Sq5NLdItrzNKmX3JGQ==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:e473:7cd7:9986:85b7])
- (user=dlatypov job=sendgmr) by 2002:a05:6902:102e:: with SMTP id
- x14mr2272641ybt.410.1632945285749; Wed, 29 Sep 2021 12:54:45 -0700 (PDT)
-Date:   Wed, 29 Sep 2021 12:54:33 -0700
+ (user=dlatypov job=sendgmr) by 2002:a05:6214:2d1:: with SMTP id
+ g17mr242890qvu.63.1632945287995; Wed, 29 Sep 2021 12:54:47 -0700 (PDT)
+Date:   Wed, 29 Sep 2021 12:54:34 -0700
 In-Reply-To: <20210929195436.1405996-1-dlatypov@google.com>
-Message-Id: <20210929195436.1405996-2-dlatypov@google.com>
+Message-Id: <20210929195436.1405996-3-dlatypov@google.com>
 Mime-Version: 1.0
 References: <20210929195436.1405996-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
-Subject: [PATCH v3 1/4] kunit: add 'kunit.action' param to allow listing out tests
+Subject: [PATCH v3 2/4] kunit: tool: factor exec + parse steps into a function
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -62,121 +62,153 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Context:
-It's difficult to map a given .kunitconfig => set of enabled tests.
-Letting kunit.py figure that out would be useful.
+Currently this code is copy-pasted between the normal "run" subcommand
+and the "exec" subcommand.
 
-This patch:
-* is intended to be an implementation detail used only by kunit.py
-* adds a kunit.action module param with one valid non-null value, "list"
-* for the "list" action, it simply prints out "<suite>.<test>"
-* leaves the kunit.py changes to make use of this for another patch.
+Given we don't have any interest in just executing the tests without
+giving the user any indication what happened (i.e. parsing the output),
+make a function that does both this things and can be reused.
 
-Note: kunit.filter_glob is respected for this and all future actions.
+This will be useful when we allow more complicated ways of running
+tests, e.g. invoking the kernel multiple times instead of just once,
+etc.
 
-Hack: we print a TAP header (but no test plan) to allow kunit.py to
-use the same code to pick up KUnit output that it does for normal tests.
-Since this is intended to be an implementation detail, it seems fine for
-now. Maybe in the future we output each test as SKIPPED or the like.
+We remove input_data from the ParseRequest so the callers don't have to
+pass in a dummy value for this field. Named tuples are also immutable,
+so if they did pass in a dummy, exec_tests() would need to make a copy
+to call parse_tests().
 
-Go with a more generic "action" param, since it seems like we might
-eventually have more modes besides just running or listing tests, e.g.
-* perhaps a benchmark mode that reruns test cases and reports timing
-* perhaps a deflake mode that reruns test cases that failed
-* perhaps a mode where we randomize test order to try and catch
-  hermeticity bugs like "test a only passes if run after test b"
-
-Tested:
-$ ./tools/testing/kunit/kunit.py run --kernel_arg=kunit.action=list --raw_output=kunit
-...
-TAP version 14
-1..1
-example.example_simple_test
-example.example_skip_test
-example.example_mark_skipped_test
-reboot: System halted
+Removing it also makes KunitParseRequest match the other *Request types,
+as they only contain user arguments/flags, not data.
 
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 Reviewed-by: David Gow <davidgow@google.com>
 ---
- lib/kunit/executor.c | 45 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 40 insertions(+), 5 deletions(-)
+ tools/testing/kunit/kunit.py | 44 ++++++++++++++++--------------------
+ 1 file changed, 19 insertions(+), 25 deletions(-)
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index bab3ab940acc..ce1f57a44ab9 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -15,9 +15,16 @@ extern struct kunit_suite * const * const __kunit_suites_end[];
- #if IS_BUILTIN(CONFIG_KUNIT)
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 66f67af97971..31eec9f6ecc3 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -34,7 +34,7 @@ KunitExecRequest = namedtuple('KunitExecRequest',
+                               ['timeout', 'build_dir', 'alltests',
+                                'filter_glob', 'kernel_args'])
+ KunitParseRequest = namedtuple('KunitParseRequest',
+-			       ['raw_output', 'input_data', 'build_dir', 'json'])
++			       ['raw_output', 'build_dir', 'json'])
+ KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
+ 					   'build_dir', 'alltests', 'filter_glob',
+ 					   'kernel_args', 'json', 'make_options'])
+@@ -91,23 +91,25 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+ 			   'built kernel successfully',
+ 			   build_end - build_start)
  
- static char *filter_glob_param;
-+static char *action_param;
-+
- module_param_named(filter_glob, filter_glob_param, charp, 0);
- MODULE_PARM_DESC(filter_glob,
- 		"Filter which KUnit test suites/tests run at boot-time, e.g. list* or list*.*del_test");
-+module_param_named(action, action_param, charp, 0);
-+MODULE_PARM_DESC(action,
-+		 "Changes KUnit executor behavior, valid values are:\n"
-+		 "<none>: run the tests like normal\n"
-+		 "'list' to list test names instead of running them.\n");
+-def exec_tests(linux: kunit_kernel.LinuxSourceTree,
+-	       request: KunitExecRequest) -> KunitResult:
++def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest,
++	       parse_request: KunitParseRequest) -> KunitResult:
+ 	kunit_parser.print_with_timestamp('Starting KUnit Kernel ...')
+ 	test_start = time.time()
+-	result = linux.run_kernel(
++	run_result = linux.run_kernel(
+ 		args=request.kernel_args,
+ 		timeout=None if request.alltests else request.timeout,
+-                filter_glob=request.filter_glob,
++		filter_glob=request.filter_glob,
+ 		build_dir=request.build_dir)
  
- /* glob_match() needs NULL terminated strings, so we need a copy of filter_glob_param. */
- struct kunit_test_filter {
-@@ -196,9 +203,35 @@ static void kunit_print_tap_header(struct suite_set *suite_set)
- 	pr_info("1..%d\n", num_of_suites);
- }
+ 	test_end = time.time()
++	exec_time = test_end - test_start
  
--int kunit_run_all_tests(void)
-+static void kunit_exec_run_tests(struct suite_set *suite_set)
- {
- 	struct kunit_suite * const * const *suites;
+-	return KunitResult(KunitStatus.SUCCESS,
+-			   result,
+-			   test_end - test_start)
++	# Named tuples are immutable, so we rebuild them here manually
++	result = parse_tests(parse_request, run_result)
 +
-+	kunit_print_tap_header(suite_set);
-+
-+	for (suites = suite_set->start; suites < suite_set->end; suites++)
-+		__kunit_test_suites_init(*suites);
-+}
-+
-+static void kunit_exec_list_tests(struct suite_set *suite_set)
-+{
-+	unsigned int i;
-+	struct kunit_suite * const * const *suites;
-+	struct kunit_case *test_case;
-+
-+	/* Hack: print a tap header so kunit.py can find the start of KUnit output. */
-+	pr_info("TAP version 14\n");
-+
-+	for (suites = suite_set->start; suites < suite_set->end; suites++)
-+		for (i = 0; (*suites)[i] != NULL; i++) {
-+			kunit_suite_for_each_test_case((*suites)[i], test_case) {
-+				pr_info("%s.%s\n", (*suites)[i]->name, test_case->name);
-+			}
-+		}
-+}
-+
-+int kunit_run_all_tests(void)
-+{
- 	struct suite_set suite_set = {
- 		.start = __kunit_suites_start,
- 		.end = __kunit_suites_end,
-@@ -207,10 +240,12 @@ int kunit_run_all_tests(void)
- 	if (filter_glob_param)
- 		suite_set = kunit_filter_suites(&suite_set, filter_glob_param);
++	return KunitResult(status=result.status, result=result.result, elapsed_time=exec_time)
  
--	kunit_print_tap_header(&suite_set);
+-def parse_tests(request: KunitParseRequest) -> KunitResult:
++def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitResult:
+ 	parse_start = time.time()
+ 
+ 	test_result = kunit_parser.TestResult(kunit_parser.TestStatus.SUCCESS,
+@@ -115,7 +117,7 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
+ 					      'Tests not Parsed.')
+ 
+ 	if request.raw_output:
+-		output: Iterable[str] = request.input_data
++		output: Iterable[str] = input_data
+ 		if request.raw_output == 'all':
+ 			pass
+ 		elif request.raw_output == 'kunit':
+@@ -126,7 +128,7 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
+ 			print(line.rstrip())
+ 
+ 	else:
+-		test_result = kunit_parser.parse_run_tests(request.input_data)
++		test_result = kunit_parser.parse_run_tests(input_data)
+ 	parse_end = time.time()
+ 
+ 	if request.json:
+@@ -165,15 +167,11 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	exec_request = KunitExecRequest(request.timeout, request.build_dir,
+ 				 request.alltests, request.filter_glob,
+ 				 request.kernel_args)
+-	exec_result = exec_tests(linux, exec_request)
+-	if exec_result.status != KunitStatus.SUCCESS:
+-		return exec_result
 -
--	for (suites = suite_set.start; suites < suite_set.end; suites++)
--		__kunit_test_suites_init(*suites);
-+	if (!action_param)
-+		kunit_exec_run_tests(&suite_set);
-+	else if (strcmp(action_param, "list") == 0)
-+		kunit_exec_list_tests(&suite_set);
-+	else
-+		pr_err("kunit executor: unknown action '%s'\n", action_param);
+ 	parse_request = KunitParseRequest(request.raw_output,
+-					  exec_result.result,
+ 					  request.build_dir,
+ 					  request.json)
+-	parse_result = parse_tests(parse_request)
++
++	exec_result = exec_tests(linux, exec_request, parse_request)
  
- 	if (filter_glob_param) { /* a copy was made of each array */
- 		kunit_free_suite_set(suite_set);
+ 	run_end = time.time()
+ 
+@@ -184,7 +182,7 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 				config_result.elapsed_time,
+ 				build_result.elapsed_time,
+ 				exec_result.elapsed_time))
+-	return parse_result
++	return exec_result
+ 
+ def add_common_opts(parser) -> None:
+ 	parser.add_argument('--build_dir',
+@@ -381,15 +379,12 @@ def main(argv, linux=None):
+ 						cli_args.alltests,
+ 						cli_args.filter_glob,
+ 						cli_args.kernel_args)
+-		exec_result = exec_tests(linux, exec_request)
+ 		parse_request = KunitParseRequest(cli_args.raw_output,
+-						  exec_result.result,
+ 						  cli_args.build_dir,
+ 						  cli_args.json)
+-		result = parse_tests(parse_request)
++		result = exec_tests(linux, exec_request, parse_request)
+ 		kunit_parser.print_with_timestamp((
+-			'Elapsed time: %.3fs\n') % (
+-				exec_result.elapsed_time))
++			'Elapsed time: %.3fs\n') % (result.elapsed_time))
+ 		if result.status != KunitStatus.SUCCESS:
+ 			sys.exit(1)
+ 	elif cli_args.subcommand == 'parse':
+@@ -399,10 +394,9 @@ def main(argv, linux=None):
+ 			with open(cli_args.file, 'r') as f:
+ 				kunit_output = f.read().splitlines()
+ 		request = KunitParseRequest(cli_args.raw_output,
+-					    kunit_output,
+ 					    None,
+ 					    cli_args.json)
+-		result = parse_tests(request)
++		result = parse_tests(request, kunit_output)
+ 		if result.status != KunitStatus.SUCCESS:
+ 			sys.exit(1)
+ 	else:
 -- 
 2.33.0.685.g46640cef36-goog
 
