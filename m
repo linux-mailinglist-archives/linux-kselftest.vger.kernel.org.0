@@ -2,121 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C39041CA13
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 18:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100EF41CA51
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 18:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345472AbhI2Q2c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Sep 2021 12:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344370AbhI2Q2c (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Sep 2021 12:28:32 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6B4C06161C
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 09:26:51 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id i13so3508451ilm.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 09:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nvuL53GG4ZKcbarpu9fgiT4nxY3Ya+EWac650T7Wl+I=;
-        b=XcSO1sDId1+SHHk+UyucSVrt5zUeR7axtjojlaAXN0DgbbzXMhXDnUFvckaPx0VvMZ
-         cujcoUirOyn/2fIBsEQRz3vJQM3mEGu6yHNJGY8JjQZ27Iae6AzJmf43K6+cCXS+gLZT
-         jUcX3vab4MGz4Wr8bVEgG9ArDSyHd24GEMtvM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nvuL53GG4ZKcbarpu9fgiT4nxY3Ya+EWac650T7Wl+I=;
-        b=eIDHd5zLnOVPGl8jcugEmR3nUJq4Ylj/FpyD3NKBhC4TMBPRU12JAsAclcIQS1nvWh
-         uCZAAr04zV8jkbW5d/AeBhH3HzIffQvSXgdo0kiFn1i0LdZ1O1U/ECGYTbIWdp/Qtm3v
-         vXjfrfUCGDsXxjwWEYCt6aDnEW5rtHr4mCVntoQe4WcgTOYSJdSkIRFZ76dM2vA/g/NJ
-         XjXn4hxSXrgCnGHkVyovgW2RF/+vh8ewPasbiD5eCgPGvkvUMVdIbbIv8kfMiZwneLW6
-         wKU71Qb68zy436QqqnilGBoWE5uqtcKByGI9IeyJ9GHZOFc2xIXO3nUv5wBu/VnM5g1A
-         1tmw==
-X-Gm-Message-State: AOAM532MfqqytDXLqknq5ZLsM+wSMBIYUpc2E6ouH7ZhAhDeM9EQosHg
-        1++CQHM0/Ynn2N38RfTFM7KMyQ==
-X-Google-Smtp-Source: ABdhPJwYGVu9LWWLKU5+zt5Dh26Qzuzn6kc/7fVZKzaYWO+hcZEhSaUyZdGsYCovA+0FCET8IyJEHQ==
-X-Received: by 2002:a05:6e02:1caa:: with SMTP id x10mr425573ill.280.1632932810795;
-        Wed, 29 Sep 2021 09:26:50 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id q17sm133023iod.51.2021.09.29.09.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Sep 2021 09:26:50 -0700 (PDT)
-Subject: Re: [PATCH v2 0/4] selftests: arm64: vec-syscfg updates
-To:     Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        id S1345911AbhI2Qjw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Sep 2021 12:39:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40244 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344376AbhI2Qjw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 Sep 2021 12:39:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B5C760F6E;
+        Wed, 29 Sep 2021 16:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632933490;
+        bh=seeBK6jT9/yDCZFkA5WcebzZu0xlpHUHOmo08Y4Y3MQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Woa15ujxFTWO4EXjfY/kEs2ppTWT6EfuKSlaBvzC24HirWQn2Z+THQOFbBPpkDnnj
+         4tXPfpxmW1ITDujaMvZakDYrRuWbLOzwdbmx6omxo2MzenLeFjTW/G2K8kLumA+pRr
+         qL3Z18Mmtw/c7niKYN63Fnxfd1Migb9q7aEK6e8lboMaYixpENKhUvNmRMGfuW/iox
+         i6x6ZvFK/RXIEqNQI53N68ZSNPuGhWAuD78DXyrnGMUm3u3AvE2DVR+7aRQkX89u8s
+         mAV9H9zPc4/TvUoK6xuvw+1cQbRVc8rGXKMH9pVkZZsgs9Wn46W80EovsJ8ziSAXV8
+         vOHL93Y0o76qQ==
+Date:   Wed, 29 Sep 2021 17:37:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Shuah Khan <shuah@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, misono.tomohiro@fujitsu.com,
-        Shuah Khan <skhan@linuxfoundation.org>
+        linux-kselftest@vger.kernel.org, misono.tomohiro@fujitsu.com
+Subject: Re: [PATCH v2 0/4] selftests: arm64: vec-syscfg updates
+Message-ID: <20210929163721.GT4199@sirena.org.uk>
 References: <20210917120855.13858-1-broonie@kernel.org>
  <20210929143113.GA22029@willie-the-truck>
  <20210929144323.GQ4199@sirena.org.uk>
  <20210929153511.GB22029@willie-the-truck>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <1b573881-ef9f-c7ae-c08b-8079f63f66ec@linuxfoundation.org>
-Date:   Wed, 29 Sep 2021 10:26:49 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+ <1b573881-ef9f-c7ae-c08b-8079f63f66ec@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20210929153511.GB22029@willie-the-truck>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aEcIyhw0mmnxygNd"
+Content-Disposition: inline
+In-Reply-To: <1b573881-ef9f-c7ae-c08b-8079f63f66ec@linuxfoundation.org>
+X-Cookie: 98% lean.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/29/21 9:35 AM, Will Deacon wrote:
-> On Wed, Sep 29, 2021 at 03:43:23PM +0100, Mark Brown wrote:
->> On Wed, Sep 29, 2021 at 03:31:14PM +0100, Will Deacon wrote:
->>
->>> With this series applied, I see a test failing under qemu with:
->>
->>> # selftests: arm64: vec-syscfg
->>> # TAP version 13
->>> # 1..10
->>> # ok 1 SVE default vector length 64
->>> # ok 2 # SKIP Need to be root to write to /proc
->>> # ok 3 # SKIP Need to be root to write to /proc
->>
->> AFAICT this is due to running as a non-root user, the testsuite was
->> already having serious issues before then...
->>
->>> # ok 4 SVE current VL is 64
->>> # ok 5 SVE set VL 64 and have VL 64
->>> # ok 6 # SKIP SVE only one VL supported
->>> # ok 7 # SKIP SVE only one VL supported
->>> # ok 8 # SKIP SVE only one VL supported
->>> # ok 9 # SKIP SVE only one VL supported
->>> # # SVE VL 272 returned 256 not maximum 0
->>
->> ...as it's starting off by testing an interface that's only writable by
->> root and then relying on that information, the existing tests were also
->> not working usefully.  qemu by default supports way more than one vector
->> length.  In any case it's just the test added by the last patch that's
->> causing the output here, the first four patches should be fine and fix
->> issues.
->>
->> I'm not sure it's a particularly good idea to run kselftest as a
->> non-root user TBH, it's going to cause you to skip a lot of tests.
-> 
 
-We don't want Kselftest default run to be as root. Users can choose to
-run as root which would be an explicit choice so they expect and plan
-for the impact. Example panic test.
+--aEcIyhw0mmnxygNd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Ah, thanks for pointing that out. It would probably be better to skip the
-> tests rather than fail them if they're not running with sufficient
-> permissions, but I'll go ahead and queue your v3 for now.
-> 
+On Wed, Sep 29, 2021 at 10:26:49AM -0600, Shuah Khan wrote:
+> On 9/29/21 9:35 AM, Will Deacon wrote:
+> > On Wed, Sep 29, 2021 at 03:43:23PM +0100, Mark Brown wrote:
 
-Correct. I would like to see tests skipped not failed if either config
-or permissions are lacking to run the tests.
+> > > I'm not sure it's a particularly good idea to run kselftest as a
+> > > non-root user TBH, it's going to cause you to skip a lot of tests.
 
-thanks,
--- Shuah
+> We don't want Kselftest default run to be as root. Users can choose to
+> run as root which would be an explicit choice so they expect and plan
+> for the impact. Example panic test.
+
+OTOH if you're trying to verify that the tests aren't broken it's not
+that great since it'll mean that you'll not be exercising a bunch of the
+code.
+
+> > Ah, thanks for pointing that out. It would probably be better to skip the
+> > tests rather than fail them if they're not running with sufficient
+> > permissions, but I'll go ahead and queue your v3 for now.
+
+> Correct. I would like to see tests skipped not failed if either config
+> or permissions are lacking to run the tests.
+
+As I said previously that's what my v3 that Will referenced above does.
+
+--aEcIyhw0mmnxygNd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFUlkAACgkQJNaLcl1U
+h9BXCwf8C/QJ0Wk8Siu/Ov7a+fsmZ72GiFe+uTJyGHx5p6qudilGHoMRmOZx7bcN
+lteDZh2DjfwkAltlZX56Yr1nqo1R/UdxboUJoH3VhGwVuC/1RgRQw2YGb77wbsz9
+kyVU1H1RR8muJ0heM7LBYPdo91EE+/cB6onssOcLhlQ5uj/apaaGje6bxGz3gTDo
++XQbzsepyf0avQVGI0ULYh9gzjw746fopDzZ1PzyBM7ZytdYSMAjoYenKvCLQ/h7
+eYch0qsCVUWJwhRiPKdVwsHH1Z7v6jSaGigaajwDN6NP8j3/Qn8+zepGTBJbEcrl
+OKh0AxT5/J0Yy1sEcawT0VkwHZUUQQ==
+=Qqh1
+-----END PGP SIGNATURE-----
+
+--aEcIyhw0mmnxygNd--
