@@ -2,85 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B837341C6BA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 16:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA7F41C6CB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Sep 2021 16:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344493AbhI2OdA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Sep 2021 10:33:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59736 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344491AbhI2OdA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Sep 2021 10:33:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DCF20610CC;
-        Wed, 29 Sep 2021 14:31:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632925879;
-        bh=TPQtX6XHYQ53fqndnwbaqt5bCqHmnEL9FXx/KOdAC3I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UlxwqVKeYq4z1IS0nmgc1xQ5zsYaYh7gMb3V2FkwKOC8RVoCDtJ9G/EMir1muOHZG
-         cYWzOcnsQE68svhZK4KeehZ5KLV4yCoPDJDGgZumRqZezObnJuN8+AijRP8E7ecSWo
-         nyrWd1O2BSuhuQIj/eZjvYCKcl3ZL/IOoy9UpTU4VKXgJRbaYS/hzhW3OAieWrm9WU
-         j+R8L+LYbq1OaKJh/v3MVtX67ESnGHyKqBGFEuAcxGL7UUkGdCuVwbBZSSDcjPhdrL
-         8rwVCIyDnA5L3L7WdowAzq7w8aFsiGKOCt+JothggyOR5PUiOpNLPBoKazakOvcK7w
-         T5PdY88Lvm1ng==
-Date:   Wed, 29 Sep 2021 15:31:14 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, misono.tomohiro@fujitsu.com
-Subject: Re: [PATCH v2 0/4] selftests: arm64: vec-syscfg updates
-Message-ID: <20210929143113.GA22029@willie-the-truck>
-References: <20210917120855.13858-1-broonie@kernel.org>
+        id S1343889AbhI2Oi2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Sep 2021 10:38:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:49327 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245475AbhI2Oi1 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 Sep 2021 10:38:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632926206;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nIk9pQetoscf+b27hympjQHq3MQ54pmAnbOf3Iv9ZjU=;
+        b=UYNllIXiXGSXvGQNYPKdLMrrvigJk/vMJQG7+F4p94ydBhuHhRKhqhX/SdczD4SmvAwEqL
+        wBy1oxtca0xipaHWx90zXvHknbyuZ+en2pThGKQ4Nv4M+pCVTj/YTdj9tJ8zKLaorjUKM+
+        JpVV1Rw6I8GzbR95GyHu01bEs+puKFI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-347-HiDlfpr9McK8TyeFjAqzig-1; Wed, 29 Sep 2021 10:36:43 -0400
+X-MC-Unique: HiDlfpr9McK8TyeFjAqzig-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 281DB1006AA4;
+        Wed, 29 Sep 2021 14:36:40 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.195.135])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B51FA10016F4;
+        Wed, 29 Sep 2021 14:36:01 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH v1 0/6] mm/memory_hotplug: Kconfig and 32 bit cleanups
+Date:   Wed, 29 Sep 2021 16:35:54 +0200
+Message-Id: <20210929143600.49379-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210917120855.13858-1-broonie@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 17, 2021 at 01:08:51PM +0100, Mark Brown wrote:
-> This series fixes up a few issues introduced into vec-syscfg during
-> refactoring in the review process, then adds a new test which ensures
-> that the behaviour when we attempt to set a vector length which is not
-> supported by the current system matches what is documented in the SVE
-> ABI documentation.
-> 
-> v2:
->  - Fix handling of missing VLs when checking that vector length setting
->    works as expected.
+Some cleanups around CONFIG_MEMORY_HOTPLUG, including removing 32 bit
+leftovers of memory hotplug support.
 
-With this series applied, I see a test failing under qemu with:
+Compile-tested on various architectures, quickly tested memory hotplug
+on x86-64.
 
-# selftests: arm64: vec-syscfg
-# TAP version 13
-# 1..10
-# ok 1 SVE default vector length 64
-# ok 2 # SKIP Need to be root to write to /proc
-# ok 3 # SKIP Need to be root to write to /proc
-# ok 4 SVE current VL is 64
-# ok 5 SVE set VL 64 and have VL 64
-# ok 6 # SKIP SVE only one VL supported
-# ok 7 # SKIP SVE only one VL supported
-# ok 8 # SKIP SVE only one VL supported
-# ok 9 # SKIP SVE only one VL supported
-# # SVE VL 272 returned 256 not maximum 0
-# # SVE VL 288 returned 256 not maximum 0
-# # SVE VL 304 returned 256 not maximum 0
-# # SVE VL 320 returned 256 not maximum 0
-# # SVE VL 336 returned 256 not maximum 0
-# # SVE VL 352 returned 256 not maximum 0
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Alex Shi <alexs@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Jason Wang <jasowang@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: x86@kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: virtualization@lists.linux-foundation.org
 
-[repeat similar messages for ages]
+David Hildenbrand (6):
+  mm/memory_hotplug: remove CONFIG_X86_64_ACPI_NUMA dependency from
+    CONFIG_MEMORY_HOTPLUG
+  mm/memory_hotplug: remove CONFIG_MEMORY_HOTPLUG_SPARSE
+  mm/memory_hotplug: restrict CONFIG_MEMORY_HOTPLUG to 64 bit
+  mm/memory_hotplug: remove HIGHMEM leftovers
+  mm/memory_hotplug: remove stale function declarations
+  x86: remove memory hotplug support on X86_32
 
-  # SVE VL 8160 returned 256 not maximum 0
-# # SVE VL 8176 returned 256 not maximum 0
-# # SVE VL 8192 returned 256 not maximum 0
-# not ok 10 SVE prctl() set all VLs, 496 errors
-# # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:6 error:0
+ Documentation/core-api/memory-hotplug.rst     |  3 --
+ .../zh_CN/core-api/memory-hotplug.rst         |  4 --
+ arch/powerpc/include/asm/machdep.h            |  2 +-
+ arch/powerpc/kernel/setup_64.c                |  2 +-
+ arch/powerpc/platforms/powernv/setup.c        |  4 +-
+ arch/powerpc/platforms/pseries/setup.c        |  2 +-
+ arch/x86/Kconfig                              |  6 +--
+ arch/x86/mm/init_32.c                         | 31 ---------------
+ drivers/base/Makefile                         |  2 +-
+ drivers/base/node.c                           |  9 ++---
+ drivers/virtio/Kconfig                        |  2 +-
+ include/linux/memory.h                        | 19 ++++------
+ include/linux/memory_hotplug.h                |  3 --
+ include/linux/node.h                          |  4 +-
+ lib/Kconfig.debug                             |  2 +-
+ mm/Kconfig                                    |  8 +---
+ mm/memory_hotplug.c                           | 38 +------------------
+ tools/testing/selftests/memory-hotplug/config |  1 -
+ 18 files changed, 28 insertions(+), 114 deletions(-)
 
-Will
+
+base-commit: 5816b3e6577eaa676ceb00a848f0fd65fe2adc29
+-- 
+2.31.1
+
