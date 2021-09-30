@@ -2,287 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BDD41E351
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Sep 2021 23:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBDD41E397
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Oct 2021 00:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349820AbhI3VZI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Sep 2021 17:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349843AbhI3VZH (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Sep 2021 17:25:07 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F992C06176E
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Sep 2021 14:23:24 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id x16-20020a25b910000000b005b6b7f2f91cso10593991ybj.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Sep 2021 14:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=UjO0qfZl4lNdUd4h5vIafSHB+z3WAy5EBdv+I+4Y+ZY=;
-        b=NwuarFTQoOfHoDeTi+T72vz5pPPePDKc9XoOvHlF3UtqrcWcq/q4zZpM9lyS9Dlvzs
-         TDWAzKLsIqRyzDiC80gjehJ1c3jkH0Rp/76tPNGNrRsROUR6aItI+jWag7kVz2hf8lXM
-         89gjvFOzpkmUhKvmIGNiD2lX1alvv/LXDEXmnfI6zmACXz8tr6d5xocMf6/fg+7IZUI6
-         YJynVNW1ymb1mMfmCCim0mtKOP13wyRX1K+fJGasZWuTRBl86+XRyoqzjbaxOw6/W4ZA
-         LpsFDih4sVtkpTTF7XcBvYGehyRz6yQI2ZdZw9TzhNXiofpVcpK/m/7kKXKkDHk0je3N
-         MYQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=UjO0qfZl4lNdUd4h5vIafSHB+z3WAy5EBdv+I+4Y+ZY=;
-        b=QgmJJPL06kMrnE80oL1LE/lmMKpFT1NgujUP7a803/Yp7mWH4bkq284W8BPRsXHKDs
-         L2jCr3YqGXMO6cQPb7tFFwokXjFY5k5O6GitxylD9t1OaEr8acAVVTozSARtW6bmQ2li
-         relwMT054Of3BsCa8xEwHh8xoBuVINMkR5Q5EHf/HWVqwLwcceD+FF6cNcMCyi60uFeA
-         CvCauzICH5UKc3m+dikUFWGYTVWcTYSp+3VVC7Lcn6mwEz4vK0FUNK9NGMA3xyZMXK9Q
-         dUgzizSX5U3/plnFMU+a04G9mwKccKUsOQHpUlgUomVif2ny+Ve8aURd5+37AsIWHrW1
-         pJlg==
-X-Gm-Message-State: AOAM5308KBVyK1yS8svrPyzGjjZXVssPplI5OsYAcTSK8g+hKMkkmyZ/
-        AXDPEMrPP3ctpxMbpxKmnropHx/lwUxuUQhlWvHW
-X-Google-Smtp-Source: ABdhPJwUW2K57dvjts7mcKwjlfEPksJiGD50c7w8aBNiDKCiLJOXQKw/OsBEXOhZjEve/HLM7Ff5UwDrF+MYno8HeNIG
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:fa06:3b29:d3c:37e6])
- (user=axelrasmussen job=sendgmr) by 2002:a25:47d6:: with SMTP id
- u205mr766836yba.193.1633037003842; Thu, 30 Sep 2021 14:23:23 -0700 (PDT)
-Date:   Thu, 30 Sep 2021 14:23:09 -0700
-In-Reply-To: <20210930212309.4001967-1-axelrasmussen@google.com>
-Message-Id: <20210930212309.4001967-4-axelrasmussen@google.com>
+        id S245310AbhI3WDv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Sep 2021 18:03:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55350 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229644AbhI3WDv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 30 Sep 2021 18:03:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E349619F5;
+        Thu, 30 Sep 2021 22:02:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633039328;
+        bh=2lX2HS9p7h6jVhzTp+A/c8lOWnTkxK3BWpjUhjVAspk=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=DoX0OvxqWP+fcmhRSZwVxN4k+1r5YBC1wRi8pniTKlxH3tACBGX4+E1i+yVjntK4b
+         0iWtOlCOdWHpEAn3J3bL3IlchzExStZ5E2auAtQpd7bF8WyG8bw7F2s0CP5APPTDTo
+         0m3wwZ4U+BrL5+4//yR5l1VxJDd8Ti3ELWDMrfuGilQP4e0dGIJnOGwzhlTY69oB13
+         GKVmw4+PEamDDsv1AIqh0mnH4w1g+7W4XlKyD2Nhyfyj0WgzXCXQ4sPK5MOl1pEJmZ
+         18m+YIc09tm+G4oVB3Sbgh3Q3juJMrICckMfzuRVUFhaCWVruZDmxzvFPgnCsmIQnl
+         GvnUP3JDGUo6A==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 7EFF227C0054;
+        Thu, 30 Sep 2021 18:02:05 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute6.internal (MEProxy); Thu, 30 Sep 2021 18:02:05 -0400
+X-ME-Sender: <xms:3DNWYaN6K1HaFgb_J05zGYyqVXqKvabwgebyr9hUC3zkxxmR5abd0A>
+    <xme:3DNWYY_F60-VbYshuls7MAekehK87YHGHNlkmGeWnPnYRdEN-weebXQPy2fnBJ6Jy
+    6vsNvRtJcudxCxPADI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekhedgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdelheejjeevhfdutdeggefftdejtdffgeevteehvdfgjeeiveei
+    ueefveeuvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:3DNWYRTwFfTAJpG4EY22PYhz4Ert7EDfbqqBHhP062OWBRy-DPhS7A>
+    <xmx:3DNWYaucXJL1-5aX6DTXwUEX22GUFqM4kXWPATyv0eLqtlXK-NbrDA>
+    <xmx:3DNWYScbGHpLO9rw9OLb4tG1UdbOtsxmmxfSlE4BVR-pq3EMMKSTCQ>
+    <xmx:3TNWYQepZXGaGAmyFThUoEUwUCXJSZAnoNPDtfxLIvGgtvb2FSw7GHDGSlc>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 689F621E0062; Thu, 30 Sep 2021 18:02:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1322-g921842b88a-fm-20210929.001-g921842b8
 Mime-Version: 1.0
-References: <20210930212309.4001967-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.33.0.800.g4c38ced690-goog
-Subject: [PATCH v2 3/3] userfaultfd/selftests: fix calculation of expected ioctls
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <b537a890-4b9f-462e-8c17-5c7aa9b60138@www.fastmail.com>
+In-Reply-To: <877dex7tgj.ffs@tglx>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-12-sohil.mehta@intel.com>
+ <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
+ <c6e83d0e-6551-4e16-0822-0abbc4d656c4@intel.com>
+ <fd54f257-fa02-4ec3-a81b-b5e60f24bf94@www.fastmail.com> <877dex7tgj.ffs@tglx>
+Date:   Thu, 30 Sep 2021 15:01:44 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Sohil Mehta" <sohil.mehta@intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Cc:     "Tony Luck" <tony.luck@intel.com>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, "Jens Axboe" <axboe@kernel.dk>,
+        "Christian Brauner" <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Shuah Khan" <shuah@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Raj Ashok" <ashok.raj@intel.com>,
+        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
+        "Gayatri Kammela" <gayatri.kammela@intel.com>,
+        "Zeng Guang" <guang.zeng@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Randy E Witt" <randy.e.witt@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Ramesh Thomas" <ramesh.thomas@intel.com>,
+        "Linux API" <linux-api@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Today, we assert that the ioctls the kernel reports as supported for a
-registration match a precomputed list. We decide which ioctls are
-supported by examining the memory type. Then, in several locations we
-"fix up" this list by adding or removing things this initial decision
-got wrong.
 
-What ioctls the kernel reports is actually a function of several things:
-- The memory type
-- Kernel feature support (e.g., no writeprotect on aarch64)
-- The registration type (e.g., CONTINUE only supported for MINOR mode)
 
-So, we can't fully compute this at the start, in set_test_type. It
-varies per test, depending on what registration mode(s) those tests use.
+On Thu, Sep 30, 2021, at 12:29 PM, Thomas Gleixner wrote:
+> On Thu, Sep 30 2021 at 11:08, Andy Lutomirski wrote:
+>> On Tue, Sep 28, 2021, at 9:56 PM, Sohil Mehta wrote:
+>> I think we have three choices:
+>>
+>> Use a fancy wrapper around SENDUIPI.  This is probably a bad idea.
+>>
+>> Treat the NV-2 as a real interrupt and honor affinity settings.  This
+>> will be annoying and slow, I think, if it's even workable at all.
+>
+> We can make it a real interrupt in form of a per CPU interrupt, but
+> affinity settings are not really feasible because the affinity is in t=
+he
+> UPID.ndst field. So, yes we can target it to some CPU, but that's racy.
+>
+>> Handle this case with faults instead of interrupts.  We could set a
+>> reserved bit in UPID so that SENDUIPI results in #GP, decode it, and
+>> process it.  This puts the onus on the actual task causing trouble,
+>> which is nice, and it lets us find the UPID and target directly
+>> instead of walking all of them.  I don't know how well it would play
+>> with hypothetical future hardware-initiated uintrs, though.
+>
+> I thought about that as well and dismissed it due to the hardware
+> initiated ones but thinking more about it, those need some translation
+> unit (e.g. irq remapping) anyway, so it might be doable to catch those
+> as well. So we could just ignore them for now and go for the #GP trick
+> and deal with the device initiated ones later when they come around :)
 
-Instead, introduce a new function which computes the correct list. This
-centralizes the add/remove of ioctls depending on these function inputs
-in one place, so we don't have to repeat ourselves in various tests.
+Sounds good to me. In the long run, if Intel wants device initiated fanc=
+y interrupts to work well, they need a new design.
 
-Not only is the resulting code a bit shorter, but it fixes a real bug in
-the existing code: previously, we would incorrectly require the
-writeprotect ioctl to be present on aarch64, where it isn't actually
-supported.
+>
+> But even with that we still need to keep track of the armed ones per C=
+PU
+> so we can handle CPU hotunplug correctly. Sigh...
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 77 ++++++++++++------------
- 1 file changed, 38 insertions(+), 39 deletions(-)
+I don=E2=80=99t think any real work is needed. We will only ever have ar=
+med UPIDs (with notification interrupts enabled) for running tasks, and =
+hot-unplugged CPUs don=E2=80=99t have running tasks.  We do need a way t=
+o drain pending IPIs before we offline a CPU, but that=E2=80=99s a separ=
+ate problem and may be unsolvable for all I know. Is there a magic APIC =
+operation to wait until all initiated IPIs targeting the local CPU arriv=
+e?  I guess we can also just mask the notification vector so that it won=
+=E2=80=99t crash us if we get a stale IPI after going offline.
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 00d1b7555865..2348b6371ec8 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -308,37 +308,24 @@ static void shmem_alias_mapping(__u64 *start, size_t len, unsigned long offset)
- }
- 
- struct uffd_test_ops {
--	unsigned long expected_ioctls;
- 	void (*allocate_area)(void **alloc_area);
- 	void (*release_pages)(char *rel_area);
- 	void (*alias_mapping)(__u64 *start, size_t len, unsigned long offset);
- };
- 
--#define SHMEM_EXPECTED_IOCTLS		((1 << _UFFDIO_WAKE) | \
--					 (1 << _UFFDIO_COPY) | \
--					 (1 << _UFFDIO_ZEROPAGE))
--
--#define ANON_EXPECTED_IOCTLS		((1 << _UFFDIO_WAKE) | \
--					 (1 << _UFFDIO_COPY) | \
--					 (1 << _UFFDIO_ZEROPAGE) | \
--					 (1 << _UFFDIO_WRITEPROTECT))
--
- static struct uffd_test_ops anon_uffd_test_ops = {
--	.expected_ioctls = ANON_EXPECTED_IOCTLS,
- 	.allocate_area	= anon_allocate_area,
- 	.release_pages	= anon_release_pages,
- 	.alias_mapping = noop_alias_mapping,
- };
- 
- static struct uffd_test_ops shmem_uffd_test_ops = {
--	.expected_ioctls = SHMEM_EXPECTED_IOCTLS,
- 	.allocate_area	= shmem_allocate_area,
- 	.release_pages	= shmem_release_pages,
- 	.alias_mapping = shmem_alias_mapping,
- };
- 
- static struct uffd_test_ops hugetlb_uffd_test_ops = {
--	.expected_ioctls = UFFD_API_RANGE_IOCTLS_BASIC & ~(1 << _UFFDIO_CONTINUE),
- 	.allocate_area	= hugetlb_allocate_area,
- 	.release_pages	= hugetlb_release_pages,
- 	.alias_mapping = hugetlb_alias_mapping,
-@@ -356,6 +343,33 @@ static inline uint64_t uffd_minor_feature(void)
- 		return 0;
- }
- 
-+static uint64_t get_expected_ioctls(uint64_t mode)
-+{
-+	uint64_t ioctls = UFFD_API_RANGE_IOCTLS;
-+
-+	if (test_type == TEST_HUGETLB)
-+		ioctls &= ~(1 << _UFFDIO_ZEROPAGE);
-+
-+	if (!((mode & UFFDIO_REGISTER_MODE_WP) && test_uffdio_wp))
-+		ioctls &= ~(1 << _UFFDIO_WRITEPROTECT);
-+
-+	if (!((mode & UFFDIO_REGISTER_MODE_MINOR) && test_uffdio_minor))
-+		ioctls &= ~(1 << _UFFDIO_CONTINUE);
-+
-+	return ioctls;
-+}
-+
-+static void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
-+{
-+	uint64_t expected = get_expected_ioctls(mode);
-+	uint64_t actual = ioctls & expected;
-+
-+	if (actual != expected) {
-+		err("missing ioctl(s): expected %"PRIx64" actual: %"PRIx64,
-+		    expected, actual);
-+	}
-+}
-+
- static void userfaultfd_open(uint64_t *features)
- {
- 	struct uffdio_api uffdio_api;
-@@ -1000,11 +1014,9 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
- {
- 	struct uffdio_zeropage uffdio_zeropage;
- 	int ret;
--	unsigned long has_zeropage;
-+	bool has_zeropage = get_expected_ioctls(0) & (1 << _UFFDIO_ZEROPAGE);
- 	__s64 res;
- 
--	has_zeropage = uffd_test_ops->expected_ioctls & (1 << _UFFDIO_ZEROPAGE);
--
- 	if (offset >= nr_pages * page_size)
- 		err("unexpected offset %lu", offset);
- 	uffdio_zeropage.range.start = (unsigned long) area_dst + offset;
-@@ -1044,7 +1056,6 @@ static int uffdio_zeropage(int ufd, unsigned long offset)
- static int userfaultfd_zeropage_test(void)
- {
- 	struct uffdio_register uffdio_register;
--	unsigned long expected_ioctls;
- 
- 	printf("testing UFFDIO_ZEROPAGE: ");
- 	fflush(stdout);
-@@ -1059,9 +1070,8 @@ static int userfaultfd_zeropage_test(void)
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
--	expected_ioctls = uffd_test_ops->expected_ioctls;
--	if ((uffdio_register.ioctls & expected_ioctls) != expected_ioctls)
--		err("unexpected missing ioctl for anon memory");
-+	assert_expected_ioctls_present(
-+		uffdio_register.mode, uffdio_register.ioctls);
- 
- 	if (uffdio_zeropage(uffd, 0))
- 		if (my_bcmp(area_dst, zeropage, page_size))
-@@ -1074,7 +1084,6 @@ static int userfaultfd_zeropage_test(void)
- static int userfaultfd_events_test(void)
- {
- 	struct uffdio_register uffdio_register;
--	unsigned long expected_ioctls;
- 	pthread_t uffd_mon;
- 	int err, features;
- 	pid_t pid;
-@@ -1098,9 +1107,8 @@ static int userfaultfd_events_test(void)
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
--	expected_ioctls = uffd_test_ops->expected_ioctls;
--	if ((uffdio_register.ioctls & expected_ioctls) != expected_ioctls)
--		err("unexpected missing ioctl for anon memory");
-+	assert_expected_ioctls_present(
-+		uffdio_register.mode, uffdio_register.ioctls);
- 
- 	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &stats))
- 		err("uffd_poll_thread create");
-@@ -1128,7 +1136,6 @@ static int userfaultfd_events_test(void)
- static int userfaultfd_sig_test(void)
- {
- 	struct uffdio_register uffdio_register;
--	unsigned long expected_ioctls;
- 	unsigned long userfaults;
- 	pthread_t uffd_mon;
- 	int err, features;
-@@ -1152,9 +1159,8 @@ static int userfaultfd_sig_test(void)
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
--	expected_ioctls = uffd_test_ops->expected_ioctls;
--	if ((uffdio_register.ioctls & expected_ioctls) != expected_ioctls)
--		err("unexpected missing ioctl for anon memory");
-+	assert_expected_ioctls_present(
-+		uffdio_register.mode, uffdio_register.ioctls);
- 
- 	if (faulting_process(1))
- 		err("faulting process failed");
-@@ -1189,7 +1195,6 @@ static int userfaultfd_sig_test(void)
- static int userfaultfd_minor_test(void)
- {
- 	struct uffdio_register uffdio_register;
--	unsigned long expected_ioctls;
- 	unsigned long p;
- 	pthread_t uffd_mon;
- 	uint8_t expected_byte;
-@@ -1211,10 +1216,8 @@ static int userfaultfd_minor_test(void)
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
--	expected_ioctls = uffd_test_ops->expected_ioctls;
--	expected_ioctls |= 1 << _UFFDIO_CONTINUE;
--	if ((uffdio_register.ioctls & expected_ioctls) != expected_ioctls)
--		err("unexpected missing ioctl(s)");
-+	assert_expected_ioctls_present(
-+		uffdio_register.mode, uffdio_register.ioctls);
- 
- 	/*
- 	 * After registering with UFFD, populate the non-UFFD-registered side of
-@@ -1411,8 +1414,6 @@ static int userfaultfd_stress(void)
- 	pthread_attr_setstacksize(&attr, 16*1024*1024);
- 
- 	while (bounces--) {
--		unsigned long expected_ioctls;
--
- 		printf("bounces: %d, mode:", bounces);
- 		if (bounces & BOUNCE_RANDOM)
- 			printf(" rnd");
-@@ -1440,10 +1441,8 @@ static int userfaultfd_stress(void)
- 			uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
- 		if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 			err("register failure");
--		expected_ioctls = uffd_test_ops->expected_ioctls;
--		if ((uffdio_register.ioctls & expected_ioctls) !=
--		    expected_ioctls)
--			err("unexpected missing ioctl for anon memory");
-+		assert_expected_ioctls_present(
-+			uffdio_register.mode, uffdio_register.ioctls);
- 
- 		if (area_dst_alias) {
- 			uffdio_register.range.start = (unsigned long)
--- 
-2.33.0.800.g4c38ced690-goog
-
+>
+> Thanks,
+>
+>         tglx
