@@ -2,141 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBDD41E397
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Oct 2021 00:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676FD41E3BE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Oct 2021 00:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245310AbhI3WDv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Sep 2021 18:03:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55350 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229644AbhI3WDv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Sep 2021 18:03:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E349619F5;
-        Thu, 30 Sep 2021 22:02:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633039328;
-        bh=2lX2HS9p7h6jVhzTp+A/c8lOWnTkxK3BWpjUhjVAspk=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=DoX0OvxqWP+fcmhRSZwVxN4k+1r5YBC1wRi8pniTKlxH3tACBGX4+E1i+yVjntK4b
-         0iWtOlCOdWHpEAn3J3bL3IlchzExStZ5E2auAtQpd7bF8WyG8bw7F2s0CP5APPTDTo
-         0m3wwZ4U+BrL5+4//yR5l1VxJDd8Ti3ELWDMrfuGilQP4e0dGIJnOGwzhlTY69oB13
-         GKVmw4+PEamDDsv1AIqh0mnH4w1g+7W4XlKyD2Nhyfyj0WgzXCXQ4sPK5MOl1pEJmZ
-         18m+YIc09tm+G4oVB3Sbgh3Q3juJMrICckMfzuRVUFhaCWVruZDmxzvFPgnCsmIQnl
-         GvnUP3JDGUo6A==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 7EFF227C0054;
-        Thu, 30 Sep 2021 18:02:05 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute6.internal (MEProxy); Thu, 30 Sep 2021 18:02:05 -0400
-X-ME-Sender: <xms:3DNWYaN6K1HaFgb_J05zGYyqVXqKvabwgebyr9hUC3zkxxmR5abd0A>
-    <xme:3DNWYY_F60-VbYshuls7MAekehK87YHGHNlkmGeWnPnYRdEN-weebXQPy2fnBJ6Jy
-    6vsNvRtJcudxCxPADI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekhedgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdelheejjeevhfdutdeggefftdejtdffgeevteehvdfgjeeiveei
-    ueefveeuvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:3DNWYRTwFfTAJpG4EY22PYhz4Ert7EDfbqqBHhP062OWBRy-DPhS7A>
-    <xmx:3DNWYaucXJL1-5aX6DTXwUEX22GUFqM4kXWPATyv0eLqtlXK-NbrDA>
-    <xmx:3DNWYScbGHpLO9rw9OLb4tG1UdbOtsxmmxfSlE4BVR-pq3EMMKSTCQ>
-    <xmx:3TNWYQepZXGaGAmyFThUoEUwUCXJSZAnoNPDtfxLIvGgtvb2FSw7GHDGSlc>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 689F621E0062; Thu, 30 Sep 2021 18:02:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1322-g921842b88a-fm-20210929.001-g921842b8
+        id S1346605AbhI3WWg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Sep 2021 18:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229644AbhI3WWf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 30 Sep 2021 18:22:35 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DB7C06176A
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Sep 2021 15:20:52 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id x16-20020a25b910000000b005b6b7f2f91cso10810026ybj.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Sep 2021 15:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=XcWUiZrKPvcsO2JyZO05WjXmCKArwR1SUmaqLWJ1TH8=;
+        b=sKsGVMz2+yzKbIp/RGJtNRzunEBXXTIKXB1d256NaFkPCkx+gav3AAvoUzPocmg/XA
+         ryYKc8ZjqqrrxazRYkISAL7RNlmrirot0VXFbnjgcN4TNa2ZLJiHF73v07Fk/Vg3F0iQ
+         8FYXaFxqp3rSWPTfKcQc4eksM8Y9Mm2DTL6TxDRiGd1LKpAFybKNsi1nc1n6+myUNvEp
+         KRQ67gohr2D3+4Jys1wqeV1Adjkwc2eU2A1R+cwDHGi6hSpH4D3qZMkVEKh8m7t7HQTM
+         wTafqDzsWFbOyFXdYuwMjNsxwLcRAQCUCz6/P40f9AyXSCxNsuENVi1AGLNMGmWJvr8I
+         snRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=XcWUiZrKPvcsO2JyZO05WjXmCKArwR1SUmaqLWJ1TH8=;
+        b=qxI3OmvOIFqm6iIggGD2RK8B18/jYF0cTpMSDW9jcgTAcV8mJ5A0hxSbiUUsrrkacb
+         AL8w5UYRXAo3y6RQgX0zxelWA13Fr7eoIgs5cZMo3QxW9EqzoDdcbL6uClPBB240MDbf
+         tlPcfMuf/yT5R019qcucqy+AuU0MFMefRZSQb/ipAjscDK96Ode/+hX+Zmsprk3I5BZl
+         zu5Dv8CRsE/roOzmTPfKSC3BdPA1ng9dt//Zx8vkqQDurCyGubtoIkZPbzHSOCYVUHTe
+         ifySCfvxosx5Qzzr5X3ynV1I029O6IEozUMpEilsfX+CsR+WhJGnqqNIpo6gZDqKOY6m
+         jjMg==
+X-Gm-Message-State: AOAM533Ovzjdxgla1wF0fcaWI3B7lx7arFjysID5DodxcJHs651/djOd
+        x6rlG7ozLPGYmPCkTUJ/dXIWqRrEFVQW2w==
+X-Google-Smtp-Source: ABdhPJxD50RBcoG3NxE6a9bafyHFO5/7qK4AROrgxYz72WGLH1AhmwRPA2lubRUYWYmO0TZ2r7bWlDgpWHIYdA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:39fa:d88:fb3b:880e])
+ (user=dlatypov job=sendgmr) by 2002:a25:fc05:: with SMTP id
+ v5mr2022824ybd.120.1633040451780; Thu, 30 Sep 2021 15:20:51 -0700 (PDT)
+Date:   Thu, 30 Sep 2021 15:20:44 -0700
+Message-Id: <20210930222048.1692635-1-dlatypov@google.com>
 Mime-Version: 1.0
-Message-Id: <b537a890-4b9f-462e-8c17-5c7aa9b60138@www.fastmail.com>
-In-Reply-To: <877dex7tgj.ffs@tglx>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-12-sohil.mehta@intel.com>
- <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
- <c6e83d0e-6551-4e16-0822-0abbc4d656c4@intel.com>
- <fd54f257-fa02-4ec3-a81b-b5e60f24bf94@www.fastmail.com> <877dex7tgj.ffs@tglx>
-Date:   Thu, 30 Sep 2021 15:01:44 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Sohil Mehta" <sohil.mehta@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Cc:     "Tony Luck" <tony.luck@intel.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, "Jens Axboe" <axboe@kernel.dk>,
-        "Christian Brauner" <christian@brauner.io>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Shuah Khan" <shuah@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Raj Ashok" <ashok.raj@intel.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        "Gayatri Kammela" <gayatri.kammela@intel.com>,
-        "Zeng Guang" <guang.zeng@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Randy E Witt" <randy.e.witt@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Ramesh Thomas" <ramesh.thomas@intel.com>,
-        "Linux API" <linux-api@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: git-send-email 2.33.0.800.g4c38ced690-goog
+Subject: [PATCH v4 0/3] kunit: allow running test suites/cases individually
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Allow running each suite or each test case alone per kernel boot.
+The motivation for this is to debug "test hermeticity" issues.
+This new --run_isolated flag would be a good first step to try and
+narrow down root causes.
+
+Context: sometimes tests pass/fail depending on what ran before them.
+Memory corruption errors in particular might only cause noticeable
+issues later on. But you can also have the opposite, where "fixing" one
+test causes another to start failing.
+
+Usage:
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit --run_isolated=suite
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit --run_isolated=test
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit --run_isolated=test example
+
+The last one would provide output like
+  ======== [PASSED] example ========
+  [PASSED] example_simple_test
+  ============================================================
+  Testing complete. 1 tests run. 0 failed. 0 crashed. 0 skipped.
+  Starting KUnit Kernel (2/3)...
+  ============================================================
+  ======== [SKIPPED] example ========
+  [SKIPPED] example_skip_test # SKIP this test should be skipped
+  ============================================================
+  Testing complete. 1 tests run. 0 failed. 0 crashed. 1 skipped.
+  Starting KUnit Kernel (3/3)...
+  ============================================================
+  ======== [SKIPPED] example ========
+  [SKIPPED] example_mark_skipped_test # SKIP this test should be skipped
+  ============================================================
+  Testing complete. 1 tests run. 0 failed. 0 crashed. 1 skipped.
+
+See the last patch's description for a bit more detail.
+
+Meta:
+The first patch is from another series with just a reworded commit
+message, https://lore.kernel.org/linux-kselftest/20210805235145.2528054-2-dlatypov@google.com/
+
+This patch series is based on Shuah's kunit branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
+
+Changes:
+v1 -> v2: rebase onto Shuah's kunit branch, fix missing code in patch 1.
+v2 -> v3: fix mypy errors, drop test plan from output, fix pre-existing
+bug where kunit was not actually tracking test execution time (new patch 3).
+v3 -> v4: attempt to filter out non-KUnit dmesg output when getting list
+of test names, using this regex: ^[^\s.]+\.[^\s.]+$
+
+Daniel Latypov (4):
+  kunit: add 'kunit.action' param to allow listing out tests
+  kunit: tool: factor exec + parse steps into a function
+  kunit: tool: actually track how long it took to run tests
+  kunit: tool: support running each suite/test separately
+
+ lib/kunit/executor.c                   |  45 ++++++++-
+ tools/testing/kunit/kunit.py           | 134 +++++++++++++++++--------
+ tools/testing/kunit/kunit_tool_test.py |  40 ++++++++
+ 3 files changed, 173 insertions(+), 46 deletions(-)
 
 
-On Thu, Sep 30, 2021, at 12:29 PM, Thomas Gleixner wrote:
-> On Thu, Sep 30 2021 at 11:08, Andy Lutomirski wrote:
->> On Tue, Sep 28, 2021, at 9:56 PM, Sohil Mehta wrote:
->> I think we have three choices:
->>
->> Use a fancy wrapper around SENDUIPI.  This is probably a bad idea.
->>
->> Treat the NV-2 as a real interrupt and honor affinity settings.  This
->> will be annoying and slow, I think, if it's even workable at all.
->
-> We can make it a real interrupt in form of a per CPU interrupt, but
-> affinity settings are not really feasible because the affinity is in t=
-he
-> UPID.ndst field. So, yes we can target it to some CPU, but that's racy.
->
->> Handle this case with faults instead of interrupts.  We could set a
->> reserved bit in UPID so that SENDUIPI results in #GP, decode it, and
->> process it.  This puts the onus on the actual task causing trouble,
->> which is nice, and it lets us find the UPID and target directly
->> instead of walking all of them.  I don't know how well it would play
->> with hypothetical future hardware-initiated uintrs, though.
->
-> I thought about that as well and dismissed it due to the hardware
-> initiated ones but thinking more about it, those need some translation
-> unit (e.g. irq remapping) anyway, so it might be doable to catch those
-> as well. So we could just ignore them for now and go for the #GP trick
-> and deal with the device initiated ones later when they come around :)
+base-commit: 3b29021ddd10cfb6b2565c623595bd3b02036f33
+-- 
+2.33.0.800.g4c38ced690-goog
 
-Sounds good to me. In the long run, if Intel wants device initiated fanc=
-y interrupts to work well, they need a new design.
-
->
-> But even with that we still need to keep track of the armed ones per C=
-PU
-> so we can handle CPU hotunplug correctly. Sigh...
-
-I don=E2=80=99t think any real work is needed. We will only ever have ar=
-med UPIDs (with notification interrupts enabled) for running tasks, and =
-hot-unplugged CPUs don=E2=80=99t have running tasks.  We do need a way t=
-o drain pending IPIs before we offline a CPU, but that=E2=80=99s a separ=
-ate problem and may be unsolvable for all I know. Is there a magic APIC =
-operation to wait until all initiated IPIs targeting the local CPU arriv=
-e?  I guess we can also just mask the notification vector so that it won=
-=E2=80=99t crash us if we get a stale IPI after going offline.
-
->
-> Thanks,
->
->         tglx
