@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3DE41E0C3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Sep 2021 20:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEF741E0C7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Sep 2021 20:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353329AbhI3SRs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Sep 2021 14:17:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56610 "EHLO mail.kernel.org"
+        id S1353333AbhI3SRv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Sep 2021 14:17:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56676 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353324AbhI3SRs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Sep 2021 14:17:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E8208619E5;
-        Thu, 30 Sep 2021 18:16:04 +0000 (UTC)
+        id S1353324AbhI3SRu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 30 Sep 2021 14:17:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7BA2661A03;
+        Thu, 30 Sep 2021 18:16:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633025765;
-        bh=Ds6Ok6cyT0TVU/rm+TKPRTRqmCBG9LLrn3T5OWU46UQ=;
+        s=k20201202; t=1633025768;
+        bh=z4BkFsnZQAiK4yXnYuJ0qRAF0/SGLRB90x5afGMHX7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ct9SCBRZaLt3w/XHz9QAdz9436ut+b5sBPFt+cCyJZpxNSP6oQhYmVIRhPle2FSuw
-         VTj1Gp4DVdnUhfAAQO93vrwoiF5LKAa6a/l8y9FaxiL35UUsgLNpyhJtFmZ+SSg7hy
-         ATPjhN/PvLib4qXyh6hf1omLXhCbjTdXj/GkN4oiJGTTLGo5Vsxx1d4yBjuVxXWxsj
-         P0T3SujMHyknm7OSl6GP0nnr4Pgn+gf987TScaNQJuMB+oNDlCTahPetfDM55+JEDV
-         qjmAWXzH5Zgly3b1hU6nCN0M4OMxUNOJUlymAtxtLmThl2hkZU6x5TWIk11CyP4dw7
-         8aLV/MD4Fj5jQ==
+        b=rLSuPDaRKnNGMnuAgc1B3s9bA/b3+Xsv+MGQ8/iQ178tuWRC4UvLwg2ifuICim6j5
+         OJO7bn4HIWWayIEnQGglI2+vcnY7x9w+qB7KxNNubxHHgeu0xBOWQwWFYv2OwkMQZK
+         YSwJUYn9BYPqGYolxGElFPQHVbsEMvy6vSdUGsVYt+y38jDjxTGz/rKNtGFPU0oX++
+         cG0ReLJsumFS7D/+05HCHyPH7PnxdZH/C/ZelTlJ5bZouH/86CDFcmnlE/7070OcNi
+         0iX3WLOAuo4bx+IjMISpYzCG8RyPu9yIygojHX1noLZQbgUy+xBeHuRnUD6wg9qzvp
+         bKx5QSG9wmOQA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -35,228 +35,428 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 10/38] arm64/sve: Generalise vector length configuration prctl() for SME
-Date:   Thu, 30 Sep 2021 19:11:16 +0100
-Message-Id: <20210930181144.10029-11-broonie@kernel.org>
+Subject: [PATCH v1 11/38] selftests: arm64: Parameterise ptrace vector length information
+Date:   Thu, 30 Sep 2021 19:11:17 +0100
+Message-Id: <20210930181144.10029-12-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210930181144.10029-1-broonie@kernel.org>
 References: <20210930181144.10029-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7651; h=from:subject; bh=Ds6Ok6cyT0TVU/rm+TKPRTRqmCBG9LLrn3T5OWU46UQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhVf3JJYjih7kQFjiwbCQZoj9YLc5VSXQBnLN/RrD2 SOrlbt6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYVX9yQAKCRAk1otyXVSH0InmB/ 9TAU/BTXykkJT1SPeB3c/FZ+Y4y/N9ojVmMZmZxJ1B08WA1J8P2yrUznNdM1RSXPdgbgL2rNjC4v9B oVReXu6Rn12Y147PL9m4Wy81CkNM7ENgFbnNdA2RWhDCllrvnJXQCPouUD+/rNvqNhC1YhHn6CXVuJ hQCa2uyAzsfLPRgNIzb0/45SpGhkQtVfBkOKHBOeOsgGlVP1lgjuz0iYNnb5uegcldwqMH/ZjaTkrI W6myz9d8Ui0J7JbNzCNgiOYWbXTfz2YFauIF802jWTWxHwHJyPxdKFGUc1YavfrQcQ9LAvAfZfkfeq OEBPkrpnh6VgWHpUAKqOavVYKHtnzi
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14254; h=from:subject; bh=z4BkFsnZQAiK4yXnYuJ0qRAF0/SGLRB90x5afGMHX7w=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhVf3KmWkp/bZ4GzcCnR0KbjFPtzAmBg5rb3nedQ0b nAqg1+2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYVX9ygAKCRAk1otyXVSH0CsCB/ 0WCcdl7Tih1kSFgGFQ34FxBX48MepBUZIPAjN7t+An4OElIv8haDHdN782Dzh46NfYOCnMqu2/8Ka6 Klbdt+cEyq+1c1QsdEqyPhMF1L/dVEnG3LUxBWEIKfcHsnwAFGYqEJvxRDbIK3tVdvTIFoX/FBk0wU nLNt1j7LsG1+928y4VAEuMqsuIj3QBbMKfocyPLe6gD3yg7nsHIlcZ3EuvAEQJg7PfYdEN60PjVg2M Aqza3D8tMuZq+4Lm++3+VVdQ7p+rtGmBUBnYmCwKmOmu/DFJk/H2uIDyKom931PKF8dhKPNDk6JEH+ 0KK2VxPSxSCMH9CleUxsDriype9oJT
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In preparation for adding SME support update the bulk of the implementation
-for the vector length configuration prctl() calls to be independent of
-vector type.
+SME introduces a new mode called streaming mode in which the SVE registers
+have a different vector length. Since the ptrace interface for this is
+based on the existing SVE interface prepare for supporting this by moving
+the regset specific configuration into  struct and passing that around,
+allowing these tests to be reused for streaming mode. As we will also have
+to verify the interoperation of the SVE and streaming SVE regsets don't
+just iterate over an array.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h |  8 +++---
- arch/arm64/kernel/fpsimd.c      | 47 ++++++++++++++++++---------------
- arch/arm64/kernel/ptrace.c      |  4 +--
- arch/arm64/kvm/reset.c          |  8 +++---
- 4 files changed, 36 insertions(+), 31 deletions(-)
+ tools/testing/selftests/arm64/fp/sve-ptrace.c | 192 ++++++++++++------
+ 1 file changed, 129 insertions(+), 63 deletions(-)
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index a18f409dec33..802597140121 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -51,8 +51,8 @@ extern void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *state,
- extern void fpsimd_flush_task_state(struct task_struct *target);
- extern void fpsimd_save_and_flush_cpu_state(void);
+diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+index ac0629f05365..e200f7ed9572 100644
+--- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
++++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+@@ -21,16 +21,36 @@
  
--/* Maximum VL that SVE VL-agnostic software can transparently support */
--#define SVE_VL_ARCH_MAX 0x100
-+/* Maximum VL that SVE/SME VL-agnostic software can transparently support */
-+#define VL_ARCH_MAX 0x100
+ #include "../../kselftest.h"
  
- /* Offset of FFR in the SVE register dump */
- static inline size_t sve_ffr_offset(int vl)
-@@ -103,11 +103,13 @@ extern void fpsimd_sync_to_sve(struct task_struct *task);
- extern void sve_sync_to_fpsimd(struct task_struct *task);
- extern void sve_sync_from_fpsimd_zeropad(struct task_struct *task);
+-#define VL_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
+-#define FPSIMD_TESTS 3
+-
+-#define EXPECTED_TESTS (VL_TESTS + FPSIMD_TESTS)
++#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
  
--extern int sve_set_vector_length(struct task_struct *task,
-+extern int vec_set_vector_length(struct task_struct *task, enum vec_type type,
- 				 unsigned long vl, unsigned long flags);
+ /* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
+ #ifndef NT_ARM_SVE
+ #define NT_ARM_SVE 0x405
+ #endif
  
- extern int sve_set_current_vl(unsigned long arg);
- extern int sve_get_current_vl(void);
-+extern int sme_set_current_vl(unsigned long arg);
-+extern int sme_get_current_vl(void);
- 
- static inline void sve_user_disable(void)
++struct vec_type {
++	const char *name;
++	unsigned long hwcap_type;
++	unsigned long hwcap;
++	int regset;
++	int prctl_set;
++};
++
++static const struct vec_type vec_types[] = {
++	{
++		.name = "SVE",
++		.hwcap_type = AT_HWCAP,
++		.hwcap = HWCAP_SVE,
++		.regset = NT_ARM_SVE,
++		.prctl_set = PR_SVE_SET_VL,
++	},
++};
++
++#define VL_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
++#define FPSIMD_TESTS 3
++
++#define EXPECTED_TESTS ((VL_TESTS + FPSIMD_TESTS) * ARRAY_SIZE(vec_types))
++
+ static void fill_buf(char *buf, size_t size)
  {
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index e3a88fba390d..b3d4786e2601 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -635,7 +635,7 @@ void sve_sync_from_fpsimd_zeropad(struct task_struct *task)
- 	__fpsimd_to_sve(sst, fst, vq);
+ 	int i;
+@@ -59,7 +79,8 @@ static int get_fpsimd(pid_t pid, struct user_fpsimd_state *fpsimd)
+ 	return ptrace(PTRACE_GETREGSET, pid, NT_PRFPREG, &iov);
  }
  
--int sve_set_vector_length(struct task_struct *task,
-+int vec_set_vector_length(struct task_struct *task, enum vec_type type,
- 			  unsigned long vl, unsigned long flags)
+-static struct user_sve_header *get_sve(pid_t pid, void **buf, size_t *size)
++static struct user_sve_header *get_sve(pid_t pid, const struct vec_type *type,
++				       void **buf, size_t *size)
  {
- 	if (flags & ~(unsigned long)(PR_SVE_VL_INHERIT |
-@@ -646,33 +646,35 @@ int sve_set_vector_length(struct task_struct *task,
- 		return -EINVAL;
+ 	struct user_sve_header *sve;
+ 	void *p;
+@@ -80,7 +101,7 @@ static struct user_sve_header *get_sve(pid_t pid, void **buf, size_t *size)
  
- 	/*
--	 * Clamp to the maximum vector length that VL-agnostic SVE code can
--	 * work with.  A flag may be assigned in the future to allow setting
--	 * of larger vector lengths without confusing older software.
-+	 * Clamp to the maximum vector length that VL-agnostic code
-+	 * can work with.  A flag may be assigned in the future to
-+	 * allow setting of larger vector lengths without confusing
-+	 * older software.
+ 		iov.iov_base = *buf;
+ 		iov.iov_len = sz;
+-		if (ptrace(PTRACE_GETREGSET, pid, NT_ARM_SVE, &iov))
++		if (ptrace(PTRACE_GETREGSET, pid, type->regset, &iov))
+ 			goto error;
+ 
+ 		sve = *buf;
+@@ -96,17 +117,19 @@ static struct user_sve_header *get_sve(pid_t pid, void **buf, size_t *size)
+ 	return NULL;
+ }
+ 
+-static int set_sve(pid_t pid, const struct user_sve_header *sve)
++static int set_sve(pid_t pid, const struct vec_type *type,
++		   const struct user_sve_header *sve)
+ {
+ 	struct iovec iov;
+ 
+ 	iov.iov_base = (void *)sve;
+ 	iov.iov_len = sve->size;
+-	return ptrace(PTRACE_SETREGSET, pid, NT_ARM_SVE, &iov);
++	return ptrace(PTRACE_SETREGSET, pid, type->regset, &iov);
+ }
+ 
+ /* Validate attempting to set the specfied VL via ptrace */
+-static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
++static void ptrace_set_get_vl(pid_t child, const struct vec_type *type,
++			      unsigned int vl, bool *supported)
+ {
+ 	struct user_sve_header sve;
+ 	struct user_sve_header *new_sve = NULL;
+@@ -116,10 +139,10 @@ static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
+ 	*supported = false;
+ 
+ 	/* Check if the VL is supported in this process */
+-	prctl_vl = prctl(PR_SVE_SET_VL, vl);
++	prctl_vl = prctl(type->prctl_set, vl);
+ 	if (prctl_vl == -1)
+-		ksft_exit_fail_msg("prctl(PR_SVE_SET_VL) failed: %s (%d)\n",
+-				   strerror(errno), errno);
++		ksft_exit_fail_msg("prctl(PR_%s_SET_VL) failed: %s (%d)\n",
++				   type->name, strerror(errno), errno);
+ 
+ 	/* If the VL is not supported then a supported VL will be returned */
+ 	*supported = (prctl_vl == vl);
+@@ -128,9 +151,10 @@ static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
+ 	memset(&sve, 0, sizeof(sve));
+ 	sve.size = sizeof(sve);
+ 	sve.vl = vl;
+-	ret = set_sve(child, &sve);
++	ret = set_sve(child, type, &sve);
+ 	if (ret != 0) {
+-		ksft_test_result_fail("Failed to set VL %u\n", vl);
++		ksft_test_result_fail("Failed to set %s VL %u\n",
++				      type->name, vl);
+ 		return;
+ 	}
+ 
+@@ -138,12 +162,14 @@ static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
+ 	 * Read back the new register state and verify that we have the
+ 	 * same VL that we got from prctl() on ourselves.
  	 */
--	if (vl > SVE_VL_ARCH_MAX)
--		vl = SVE_VL_ARCH_MAX;
-+	if (vl > VL_ARCH_MAX)
-+		vl = VL_ARCH_MAX;
+-	if (!get_sve(child, (void **)&new_sve, &new_sve_size)) {
+-		ksft_test_result_fail("Failed to read VL %u\n", vl);
++	if (!get_sve(child, type, (void **)&new_sve, &new_sve_size)) {
++		ksft_test_result_fail("Failed to read %s VL %u\n",
++				      type->name, vl);
+ 		return;
+ 	}
  
--	vl = find_supported_vector_length(ARM64_VEC_SVE, vl);
-+	vl = find_supported_vector_length(type, vl);
+-	ksft_test_result(new_sve->vl = prctl_vl, "Set VL %u\n", vl);
++	ksft_test_result(new_sve->vl = prctl_vl, "Set %s VL %u\n",
++			 type->name, vl);
  
- 	if (flags & (PR_SVE_VL_INHERIT |
- 		     PR_SVE_SET_VL_ONEXEC))
--		task_set_sve_vl_onexec(task, vl);
-+		task_set_vl_onexec(task, type, vl);
+ 	free(new_sve);
+ }
+@@ -159,7 +185,7 @@ static void check_u32(unsigned int vl, const char *reg,
+ }
+ 
+ /* Access the FPSIMD registers via the SVE regset */
+-static void ptrace_sve_fpsimd(pid_t child)
++static void ptrace_sve_fpsimd(pid_t child, const struct vec_type *type)
+ {
+ 	void *svebuf = NULL;
+ 	size_t svebufsz = 0;
+@@ -169,17 +195,18 @@ static void ptrace_sve_fpsimd(pid_t child)
+ 	unsigned char *p;
+ 
+ 	/* New process should start with FPSIMD registers only */
+-	sve = get_sve(child, &svebuf, &svebufsz);
++	sve = get_sve(child, type, &svebuf, &svebufsz);
+ 	if (!sve) {
+-		ksft_test_result_fail("get_sve: %s\n", strerror(errno));
++		ksft_test_result_fail("get_sve(%s): %s\n",
++				      type->name, strerror(errno));
+ 
+ 		return;
+ 	} else {
+-		ksft_test_result_pass("get_sve(FPSIMD)\n");
++		ksft_test_result_pass("get_sve(%s FPSIMD)\n", type->name);
+ 	}
+ 
+ 	ksft_test_result((sve->flags & SVE_PT_REGS_MASK) == SVE_PT_REGS_FPSIMD,
+-			 "Set FPSIMD registers\n");
++			 "Set FPSIMD registers via %s\n", type->name);
+ 	if ((sve->flags & SVE_PT_REGS_MASK) != SVE_PT_REGS_FPSIMD)
+ 		goto out;
+ 
+@@ -193,9 +220,9 @@ static void ptrace_sve_fpsimd(pid_t child)
+ 			p[j] = j;
+ 	}
+ 
+-	if (set_sve(child, sve)) {
+-		ksft_test_result_fail("set_sve(FPSIMD): %s\n",
+-				      strerror(errno));
++	if (set_sve(child, type, sve)) {
++		ksft_test_result_fail("set_sve(%s FPSIMD): %s\n",
++				      type->name, strerror(errno));
+ 
+ 		goto out;
+ 	}
+@@ -207,16 +234,20 @@ static void ptrace_sve_fpsimd(pid_t child)
+ 		goto out;
+ 	}
+ 	if (memcmp(fpsimd, &new_fpsimd, sizeof(*fpsimd)) == 0)
+-		ksft_test_result_pass("get_fpsimd() gave same state\n");
++		ksft_test_result_pass("%s get_fpsimd() gave same state\n",
++				      type->name);
  	else
- 		/* Reset VL to system default on next exec: */
--		task_set_sve_vl_onexec(task, 0);
-+		task_set_vl_onexec(task, type, 0);
- 
- 	/* Only actually set the VL if not deferred: */
- 	if (flags & PR_SVE_SET_VL_ONEXEC)
- 		goto out;
- 
--	if (vl == task_get_sve_vl(task))
-+	if (vl == task_get_vl(task, type))
- 		goto out;
- 
- 	/*
- 	 * To ensure the FPSIMD bits of the SVE vector registers are preserved,
- 	 * write any live register state back to task_struct, and convert to a
--	 * non-SVE thread.
-+	 * regular FPSIMD thread.  Since the vector length can only be changed
-+	 * with a syscall we can't be in streaming mode while reconfiguring.
- 	 */
- 	if (task == current) {
- 		get_cpu_fpsimd_context();
-@@ -693,10 +695,10 @@ int sve_set_vector_length(struct task_struct *task,
- 	 */
- 	sve_free(task);
- 
--	task_set_sve_vl(task, vl);
-+	task_set_vl(task, type, vl);
+-		ksft_test_result_fail("get_fpsimd() gave different state\n");
++		ksft_test_result_fail("%s get_fpsimd() gave different state\n",
++				      type->name);
  
  out:
--	update_tsk_thread_flag(task, TIF_SVE_VL_INHERIT,
-+	update_tsk_thread_flag(task, vec_vl_inherit_flag(type),
- 			       flags & PR_SVE_VL_INHERIT);
+ 	free(svebuf);
+ }
  
- 	return 0;
-@@ -704,20 +706,21 @@ int sve_set_vector_length(struct task_struct *task,
- 
- /*
-  * Encode the current vector length and flags for return.
-- * This is only required for prctl(): ptrace has separate fields
-+ * This is only required for prctl(): ptrace has separate fields.
-+ * SVE and SME use the same bits for _ONEXEC and _INHERIT.
-  *
-- * flags are as for sve_set_vector_length().
-+ * flags are as for vec_set_vector_length().
-  */
--static int sve_prctl_status(unsigned long flags)
-+static int vec_prctl_status(enum vec_type type, unsigned long flags)
+ /* Validate attempting to set SVE data and read SVE data */
+-static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
++static void ptrace_set_sve_get_sve_data(pid_t child,
++					const struct vec_type *type,
++					unsigned int vl)
  {
- 	int ret;
+ 	void *write_buf;
+ 	void *read_buf = NULL;
+@@ -231,8 +262,8 @@ static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
+ 	data_size = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
+ 	write_buf = malloc(data_size);
+ 	if (!write_buf) {
+-		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
+-				      data_size, vl);
++		ksft_test_result_fail("Error allocating %d byte buffer for %s VL %u\n",
++				      data_size, type->name, vl);
+ 		return;
+ 	}
+ 	write_sve = write_buf;
+@@ -256,23 +287,26 @@ static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
  
- 	if (flags & PR_SVE_SET_VL_ONEXEC)
--		ret = task_get_sve_vl_onexec(current);
-+		ret = task_get_vl_onexec(current, type);
- 	else
--		ret = task_get_sve_vl(current);
-+		ret = task_get_vl(current, type);
+ 	/* TODO: Generate a valid FFR pattern */
  
--	if (test_thread_flag(TIF_SVE_VL_INHERIT))
-+	if (test_thread_flag(vec_vl_inherit_flag(type)))
- 		ret |= PR_SVE_VL_INHERIT;
- 
- 	return ret;
-@@ -735,11 +738,11 @@ int sve_set_current_vl(unsigned long arg)
- 	if (!system_supports_sve() || is_compat_task())
- 		return -EINVAL;
- 
--	ret = sve_set_vector_length(current, vl, flags);
-+	ret = vec_set_vector_length(current, ARM64_VEC_SVE, vl, flags);
- 	if (ret)
- 		return ret;
- 
--	return sve_prctl_status(flags);
-+	return vec_prctl_status(ARM64_VEC_SVE, flags);
- }
- 
- /* PR_SVE_GET_VL */
-@@ -748,7 +751,7 @@ int sve_get_current_vl(void)
- 	if (!system_supports_sve() || is_compat_task())
- 		return -EINVAL;
- 
--	return sve_prctl_status(0);
-+	return vec_prctl_status(ARM64_VEC_SVE, 0);
- }
- 
- static void vec_probe_vqs(struct vl_info *info,
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 88a9034fb9b5..716dde289446 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -812,9 +812,9 @@ static int sve_set(struct task_struct *target,
- 
- 	/*
- 	 * Apart from SVE_PT_REGS_MASK, all SVE_PT_* flags are consumed by
--	 * sve_set_vector_length(), which will also validate them for us:
-+	 * vec_set_vector_length(), which will also validate them for us:
- 	 */
--	ret = sve_set_vector_length(target, header.vl,
-+	ret = vec_set_vector_length(target, ARM64_VEC_SVE, header.vl,
- 		((unsigned long)header.flags & ~SVE_PT_REGS_MASK) << 16);
- 	if (ret)
+-	ret = set_sve(child, write_sve);
++	ret = set_sve(child, type, write_sve);
+ 	if (ret != 0) {
+-		ksft_test_result_fail("Failed to set VL %u data\n", vl);
++		ksft_test_result_fail("Failed to set %s VL %u data\n",
++				      type->name, vl);
  		goto out;
-diff --git a/arch/arm64/kvm/reset.c b/arch/arm64/kvm/reset.c
-index 09cd30a9aafb..0f6741c80226 100644
---- a/arch/arm64/kvm/reset.c
-+++ b/arch/arm64/kvm/reset.c
-@@ -52,10 +52,10 @@ int kvm_arm_init_sve(void)
- 		 * The get_sve_reg()/set_sve_reg() ioctl interface will need
- 		 * to be extended with multiple register slice support in
- 		 * order to support vector lengths greater than
--		 * SVE_VL_ARCH_MAX:
-+		 * VL_ARCH_MAX:
- 		 */
--		if (WARN_ON(kvm_sve_max_vl > SVE_VL_ARCH_MAX))
--			kvm_sve_max_vl = SVE_VL_ARCH_MAX;
-+		if (WARN_ON(kvm_sve_max_vl > VL_ARCH_MAX))
-+			kvm_sve_max_vl = VL_ARCH_MAX;
+ 	}
  
- 		/*
- 		 * Don't even try to make use of vector lengths that
-@@ -103,7 +103,7 @@ static int kvm_vcpu_finalize_sve(struct kvm_vcpu *vcpu)
- 	 * set_sve_vls().  Double-check here just to be sure:
- 	 */
- 	if (WARN_ON(!sve_vl_valid(vl) || vl > sve_max_virtualisable_vl() ||
--		    vl > SVE_VL_ARCH_MAX))
-+		    vl > VL_ARCH_MAX))
- 		return -EIO;
+ 	/* Read the data back */
+-	if (!get_sve(child, (void **)&read_buf, &read_sve_size)) {
+-		ksft_test_result_fail("Failed to read VL %u data\n", vl);
++	if (!get_sve(child, type, (void **)&read_buf, &read_sve_size)) {
++		ksft_test_result_fail("Failed to read %s VL %u data\n",
++				      type->name, vl);
+ 		goto out;
+ 	}
+ 	read_sve = read_buf;
  
- 	buf = kzalloc(SVE_SIG_REGS_SIZE(sve_vq_from_vl(vl)), GFP_KERNEL);
+ 	/* We might read more data if there's extensions we don't know */
+ 	if (read_sve->size < write_sve->size) {
+-		ksft_test_result_fail("Wrote %d bytes, only read %d\n",
+-				      write_sve->size, read_sve->size);
++		ksft_test_result_fail("%s wrote %d bytes, only read %d\n",
++				      type->name, write_sve->size,
++				      read_sve->size);
+ 		goto out_read;
+ 	}
+ 
+@@ -299,7 +333,8 @@ static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
+ 	check_u32(vl, "FPCR", write_buf + SVE_PT_SVE_FPCR_OFFSET(vq),
+ 		  read_buf + SVE_PT_SVE_FPCR_OFFSET(vq), &errors);
+ 
+-	ksft_test_result(errors == 0, "Set and get SVE data for VL %u\n", vl);
++	ksft_test_result(errors == 0, "Set and get %s data for VL %u\n",
++			 type->name, vl);
+ 
+ out_read:
+ 	free(read_buf);
+@@ -308,7 +343,9 @@ static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
+ }
+ 
+ /* Validate attempting to set SVE data and read SVE data */
+-static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
++static void ptrace_set_sve_get_fpsimd_data(pid_t child,
++					   const struct vec_type *type,
++					   unsigned int vl)
+ {
+ 	void *write_buf;
+ 	struct user_sve_header *write_sve;
+@@ -326,8 +363,8 @@ static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
+ 	data_size = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
+ 	write_buf = malloc(data_size);
+ 	if (!write_buf) {
+-		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
+-				      data_size, vl);
++		ksft_test_result_fail("Error allocating %d byte buffer for %s VL %u\n",
++				      data_size, type->name, vl);
+ 		return;
+ 	}
+ 	write_sve = write_buf;
+@@ -345,16 +382,17 @@ static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
+ 	fill_buf(write_buf + SVE_PT_SVE_FPSR_OFFSET(vq), SVE_PT_SVE_FPSR_SIZE);
+ 	fill_buf(write_buf + SVE_PT_SVE_FPCR_OFFSET(vq), SVE_PT_SVE_FPCR_SIZE);
+ 
+-	ret = set_sve(child, write_sve);
++	ret = set_sve(child, type, write_sve);
+ 	if (ret != 0) {
+-		ksft_test_result_fail("Failed to set VL %u data\n", vl);
++		ksft_test_result_fail("Failed to set %s VL %u data\n",
++				      type->name, vl);
+ 		goto out;
+ 	}
+ 
+ 	/* Read the data back */
+ 	if (get_fpsimd(child, &fpsimd_state)) {
+-		ksft_test_result_fail("Failed to read VL %u FPSIMD data\n",
+-				      vl);
++		ksft_test_result_fail("Failed to read %s VL %u FPSIMD data\n",
++				      type->name, vl);
+ 		goto out;
+ 	}
+ 
+@@ -369,7 +407,8 @@ static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
+ 		       sizeof(tmp));
+ 
+ 		if (tmp != fpsimd_state.vregs[i]) {
+-			printf("# Mismatch in FPSIMD for VL %u Z%d\n", vl, i);
++			printf("# Mismatch in FPSIMD for %s VL %u Z%d\n",
++			       type->name, vl, i);
+ 			errors++;
+ 		}
+ 	}
+@@ -379,8 +418,8 @@ static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
+ 	check_u32(vl, "FPCR", write_buf + SVE_PT_SVE_FPCR_OFFSET(vq),
+ 		  &fpsimd_state.fpcr, &errors);
+ 
+-	ksft_test_result(errors == 0, "Set and get FPSIMD data for VL %u\n",
+-			 vl);
++	ksft_test_result(errors == 0, "Set and get FPSIMD data for %s VL %u\n",
++			 type->name, vl);
+ 
+ out:
+ 	free(write_buf);
+@@ -390,7 +429,7 @@ static int do_parent(pid_t child)
+ {
+ 	int ret = EXIT_FAILURE;
+ 	pid_t pid;
+-	int status;
++	int status, i;
+ 	siginfo_t si;
+ 	unsigned int vq, vl;
+ 	bool vl_supported;
+@@ -449,23 +488,50 @@ static int do_parent(pid_t child)
+ 		}
+ 	}
+ 
+-	/* FPSIMD via SVE regset */
+-	ptrace_sve_fpsimd(child);
+-
+-	/* Step through every possible VQ */
+-	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
+-		vl = sve_vl_from_vq(vq);
++	/*
++	 * Do all the FPSIMD tests before starting SVE so we know we
++	 * don't have SVE specific register state.
++	 */
++	for (i = 0; i < ARRAY_SIZE(vec_types); i++) {
++		/* FPSIMD via SVE regset */
++		if (getauxval(vec_types[i].hwcap_type) & vec_types[i].hwcap) {
++			ptrace_sve_fpsimd(child, &vec_types[i]);
++		} else {
++			ksft_test_result_skip("%s FPSIMD get via SVE\n",
++					      vec_types[i].name);
++			ksft_test_result_skip("%s FPSIMD set via SVE\n",
++					      vec_types[i].name);
++			ksft_test_result_skip("%s set read via FPSIMD\n",
++					      vec_types[i].name);
++		}
++	}
+ 
+-		/* First, try to set this vector length */
+-		ptrace_set_get_vl(child, vl, &vl_supported);
++	for (i = 0; i < ARRAY_SIZE(vec_types); i++) {
++		/* Step through every possible VQ */
++		for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
++			vl = sve_vl_from_vq(vq);
++
++			/* First, try to set this vector length */
++			if (getauxval(vec_types[i].hwcap_type) &
++			    vec_types[i].hwcap) {
++				ptrace_set_get_vl(child, &vec_types[i], vl,
++						  &vl_supported);
++			} else {
++				ksft_test_result_skip("%s get/set VL %d\n",
++						      vec_types[i].name, vl);
++				vl_supported = false;
++			}
+ 
+-		/* If the VL is supported validate data set/get */
+-		if (vl_supported) {
+-			ptrace_set_sve_get_sve_data(child, vl);
+-			ptrace_set_sve_get_fpsimd_data(child, vl);
+-		} else {
+-			ksft_test_result_skip("set SVE get SVE for VL %d\n", vl);
+-			ksft_test_result_skip("set SVE get FPSIMD for VL %d\n", vl);
++			/* If the VL is supported validate data set/get */
++			if (vl_supported) {
++				ptrace_set_sve_get_sve_data(child, &vec_types[i], vl);
++				ptrace_set_sve_get_fpsimd_data(child, &vec_types[i], vl);
++			} else {
++				ksft_test_result_skip("%s set SVE get SVE for VL %d\n",
++						      vec_types[i].name, vl);
++				ksft_test_result_skip("%s set SVE get FPSIMD for VL %d\n",
++						      vec_types[i].name, vl);
++			}
+ 		}
+ 	}
+ 
 -- 
 2.20.1
 
