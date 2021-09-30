@@ -2,142 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 748C341D16A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Sep 2021 04:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD5441DEFE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Sep 2021 18:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347741AbhI3CbL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Sep 2021 22:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbhI3CbK (ORCPT
+        id S1350936AbhI3Q2d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Sep 2021 12:28:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60966 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350914AbhI3Q2d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Sep 2021 22:31:10 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6AFC06161C
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 19:29:28 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id m22so1949370wrb.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Sep 2021 19:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wBQ+fBqDufsZ2pR8Xs3PtO6hk0wPJayHkkMAyHuIi34=;
-        b=EfuvwwpifNif07V/TXk0XigOLO/sb0r5QM4s8dgLsMzYO1El6z53yKSVCTRHk2uNeY
-         9gBZG3OwmIWvrydxCyBCZflkQ0JfAFKS2cyqneYBfPXSOT5ttikZoziGgZokFGurfw3F
-         rfrdp9TDhTgTrTtISOHvaVZ3WktooGW74MNfxeTWmULfBbj5IMMUTYMkkME0468pT/Kg
-         AbINvei0os7aMIegWOB1aFE4D/Lx6F6GjP2pLISdNHfbvUhgGxqIuWqm37X0hAujbnjv
-         UPetHiD+57qXQnPAFWe/jO+FsX+3Is/znOjc5fEFTLLmPLgsEUEq5pQQ0uRjelpSEdK6
-         ilMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wBQ+fBqDufsZ2pR8Xs3PtO6hk0wPJayHkkMAyHuIi34=;
-        b=ZKsGYYlO3XHqdJjXh5K7zx63UzVHqcyUIEl1HrlSmLVU2/JqNYoZ+jSRySOc+NyYcK
-         BjO3888xwierlKZePIyf4lPdjYEnsXN2vtmVQJ6WgiDhwgz5M9xco3P9Wg/x7R5XdfVK
-         HmbJEKd0EFW4aFNPOY48H3TSyrd0kdUZs9/BbMhHSKYaOebTVxY+o3UdGLsyGrIODQav
-         JFX7SIXmsMwCA546beGK3Qkm1F/73tW71NlRCBwQkOUynGLmtW4hxLMIx4UkaYjrFm9x
-         clWxA0nRCselOZVylKcxZGlMNIeyXYS6e8IATn9LEy6llvuCIJTFMz6wZ39+o2kOTDNz
-         PPWQ==
-X-Gm-Message-State: AOAM533djTvbmGS+EetGrLa/e67gg3iX5vyQwnbDEz41AFTrHe1+n/XZ
-        +fBrJbqZK9AnwK9at5HKdvkgkpPr0qVEJ+W0e6MZYQ==
-X-Google-Smtp-Source: ABdhPJzRiRV6qDjf56A7NSUtAMTXlkbO4pQs0kSE/pzCmZDMa+Oi2afBja47mDpohYgkoYAaRSoJ7t6YUoMlHRLR4z8=
-X-Received: by 2002:adf:dd8a:: with SMTP id x10mr3377012wrl.200.1632968967342;
- Wed, 29 Sep 2021 19:29:27 -0700 (PDT)
+        Thu, 30 Sep 2021 12:28:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633019210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8PISp8iVa05eQ0nPoH/bRhmYC2DUIpy9ROZ0Fj+fBBY=;
+        b=DoJXyMwbCaC4UvJNUhl3ShX1sRauOrTe7wSvnj91umVbMZqnb7vneTbBOaWTyKbdBTc0MX
+        yNdViQMEcMsdxtng/fTqfAq8vuYCO4aE0ddrpliCyzx83bVSOuCzV+KDfZ44q7ua9H8bED
+        IrmhXqIgR2bkkS1hFw4t/Woz6gp2vOo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-308-g76yGbzRPzCK8PZNQzH-fA-1; Thu, 30 Sep 2021 12:26:46 -0400
+X-MC-Unique: g76yGbzRPzCK8PZNQzH-fA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D68F835DEE;
+        Thu, 30 Sep 2021 16:26:43 +0000 (UTC)
+Received: from localhost (unknown [10.39.195.132])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 57C985F4E2;
+        Thu, 30 Sep 2021 16:26:41 +0000 (UTC)
+Date:   Thu, 30 Sep 2021 17:26:40 +0100
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Sohil Mehta <sohil.mehta@intel.com>
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
+Message-ID: <YVXlQIt/oWQlIupu@stefanha-x1.localdomain>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
 MIME-Version: 1.0
-References: <20210929195436.1405996-1-dlatypov@google.com> <20210929195436.1405996-4-dlatypov@google.com>
-In-Reply-To: <20210929195436.1405996-4-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 30 Sep 2021 10:29:16 +0800
-Message-ID: <CABVgOSk_kj4w74gP8og_x07AQgwaF0WkH5-hmkoEdcviQb5_tQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] kunit: tool: actually track how long it took to
- run tests
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="i9X2Z49tWwf/3JF/"
+Content-Disposition: inline
+In-Reply-To: <20210913200132.3396598-1-sohil.mehta@intel.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 3:54 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> This is a long standing bug in kunit tool.
-> Since these files were added, run_kernel() has always yielded lines.
->
-> That means, the call to run_kernel() returns before the kernel finishes
-> executing tests, potentially before a single line of output is even
-> produced.
->
-> So code like this
->   time_start = time.time()
->   result = linux.run_kernel(...)
->   time_end = time.time()
->
-> would only measure the time taken for python to give back the generator
-> object.
->
-> From a caller's perspective, the only way to know the kernel has exited
-> is for us to consume all the output from the `result` generator object.
-> Alternatively, we could change run_kernel() to try and do its own book
-> keeping and return the total time, but that doesn't seem worth it.
->
-> This change makes us record `time_end` after we're doing parsing all the
-> output (which should mean we've consumed all of it, or errored out).
-> That means we're including in the parsing time as well, but that should
-> be quite small, and it's better than claiming it took 0s to run tests.
->
-> Let's use this as an example:
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit example
->
-> Before:
-> Elapsed time: 7.684s total, 0.001s configuring, 4.692s building, 0.000s running
->
-> After:
-> Elapsed time: 6.283s total, 0.001s configuring, 3.202s building, 3.079s running
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
 
-Thanks for looking into and fixing this: clearly I should've noticed
-it before. :-)
+--i9X2Z49tWwf/3JF/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Including the parsing time as well doesn't worry me: as you note, it
-should be negligible.
+On Mon, Sep 13, 2021 at 01:01:19PM -0700, Sohil Mehta wrote:
+> User Interrupts Introduction
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+>=20
+> User Interrupts (Uintr) is a hardware technology that enables delivering
+> interrupts directly to user space.
+>=20
+> Today, virtually all communication across privilege boundaries happens by=
+ going
+> through the kernel. These include signals, pipes, remote procedure calls =
+and
+> hardware interrupt based notifications. User interrupts provide the found=
+ation
+> for more efficient (low latency and low CPU utilization) versions of these
+> common operations by avoiding transitions through the kernel.
+>=20
+> In the User Interrupts hardware architecture, a receiver is always expect=
+ed to
+> be a user space task. However, a user interrupt can be sent by another us=
+er
+> space task, kernel or an external source (like a device).
+>=20
+> In addition to the general infrastructure to receive user interrupts, this
+> series introduces a single source: interrupts from another user task.  Th=
+ese
+> are referred to as User IPIs.
+>=20
+> The first implementation of User IPIs will be in the Intel processor code=
+-named
+> Sapphire Rapids. Refer Chapter 11 of the Intel Architecture instruction s=
+et
+> extensions for details of the hardware architecture [1].
+>=20
+> Series-reviewed-by: Tony Luck <tony.luck@intel.com>
+>=20
+> Main goals of this RFC
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> - Introduce this upcoming technology to the community.
+> This cover letter includes a hardware architecture summary along with the
+> software architecture and kernel design choices. This post is a bit long =
+as a
+> result. Hopefully, it helps answer more questions than it creates :) I am=
+ also
+> planning to talk about User Interrupts next week at the LPC Kernel summit.
+>=20
+> - Discuss potential use cases.
+> We are starting to look at actual usages and libraries (like libevent[2] =
+and
+> liburing[3]) that can take advantage of this technology. Unfortunately, we
+> don't have much to share on this right now. We need some help from the
+> community to identify usages that can benefit from this. We would like to=
+ make
+> sure the proposed APIs work for the eventual consumers.
+>=20
+> - Get early feedback on the software architecture.
+> We are hoping to get some feedback on the direction of overall software
+> architecture - starting with User IPI, extending it for kernel-to-user
+> interrupt notifications and external interrupts in the future.=20
+>=20
+> - Discuss some of the main architecture opens.
+> There is lot of work that still needs to happen to enable this technology=
+=2E We
+> are looking for some input on future patches that would be of interest. H=
+ere
+> are some of the big opens that we are looking to resolve.
+> * Should Uintr interrupt all blocking system calls like sleep(), read(),
+>   poll(), etc? If so, should we implement an SA_RESTART type of mechanism
+>   similar to signals? - Refer Blocking for interrupts section below.
+>=20
+> * Should the User Interrupt Target table (UITT) be shared between threads=
+ of a
+>   multi-threaded application or maybe even across processes? - Refer Shar=
+ing
+>   the UITT section below.
+>=20
+> Why care about this? - Micro benchmark performance
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> There is a ~9x or higher performance improvement using User IPI over othe=
+r IPC
+> mechanisms for event signaling.
+>=20
+> Below is the average normalized latency for a 1M ping-pong IPC notificati=
+ons
+> with message size=3D1.
+>=20
+> +------------+-------------------------+
+> | IPC type   |   Relative Latency      |
+> |            |(normalized to User IPI) |
+> +------------+-------------------------+
+> | User IPI   |                     1.0 |
+> | Signal     |                    14.8 |
+> | Eventfd    |                     9.7 |
 
-Reviewed-by: David Gow <davidgow@google.com>
+Is this the bi-directional eventfd benchmark?
+https://github.com/intel/uintr-ipc-bench/blob/linux-rfc-v1/source/eventfd/e=
+ventfd-bi.c
 
--- David
+Two things stand out:
 
->  tools/testing/kunit/kunit.py | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 31eec9f6ecc3..5e717594df5b 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -101,12 +101,14 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest,
->                 filter_glob=request.filter_glob,
->                 build_dir=request.build_dir)
->
-> +       result = parse_tests(parse_request, run_result)
-> +
-> +       # run_kernel() doesn't block on the kernel exiting.
-> +       # That only happens after we get the last line of output from `run_result`.
-> +       # So exec_time here actually contains parsing + execution time, which is fine.
->         test_end = time.time()
->         exec_time = test_end - test_start
->
-> -       # Named tuples are immutable, so we rebuild them here manually
-> -       result = parse_tests(parse_request, run_result)
-> -
->         return KunitResult(status=result.status, result=result.result, elapsed_time=exec_time)
->
->  def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitResult:
-> --
-> 2.33.0.685.g46640cef36-goog
->
+1. The server and client threads are racing on the same eventfd.
+   Eventfds aren't bi-directional! The eventfd_wait() function has code
+   to write the value back, which is a waste of CPU cycles and hinders
+   progress. I've never seen eventfd used this way in real applications.
+   Can you use two separate eventfds?
+
+2. The fd is in blocking mode and the task may be descheduled, so we're
+   measuring eventfd read/write latency plus scheduler/context-switch
+   latency. A fairer comparison against user interrupts would be to busy
+   wait on a non-blocking fd so the scheduler/context-switch latency is
+   mostly avoided. After all, the uintrfd-bi.c benchmark does this in
+   uintrfd_wait():
+
+     // Keep spinning until the interrupt is received
+     while (!uintr_received[token]);
+
+--i9X2Z49tWwf/3JF/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmFV5UAACgkQnKSrs4Gr
+c8hf0wgAm6bnfUmQ8qskTYEGJX82TAe5nbxR5p9nO/xZtesrjT3IUeVFHKuylsNr
+eItzDKlRBJlncB1z4cLXkKhT2+ARj4zN88mJ0qXZKIZpravgmW7A9E8EgOeFOixA
+Vkxo6220auDhTeLLCyfg76/5mtW/Kb6Taj1wfc3WZQxZeb9exv9R1LGRV8NzsipE
+FCuKTyzjhdVtkFfS9w24/SK6z3b9rTyDHcVENET/LFHRfax7Tona3+bsWGrhH/cB
+ArwCJ4ziT8ZAgoK0rbuxCj0+PT2ZM2uXF3ctsjk+ljZC6yUAIxZJGS7siboRUIjH
+icdl/RoAJ4wqNTJRBciAqv2rRRkpxg==
+=M4lD
+-----END PGP SIGNATURE-----
+
+--i9X2Z49tWwf/3JF/--
+
