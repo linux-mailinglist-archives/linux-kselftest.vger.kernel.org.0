@@ -2,164 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC6E41F50C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Oct 2021 20:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5606141F50D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Oct 2021 20:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbhJASiF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Oct 2021 14:38:05 -0400
-Received: from a48-34.smtp-out.amazonses.com ([54.240.48.34]:58663 "EHLO
-        a48-34.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231563AbhJASiB (ORCPT
+        id S1353707AbhJASin (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Oct 2021 14:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355969AbhJASig (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Oct 2021 14:38:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1633113375;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=Pi2QmFmCbw9QR4Jt3DFvRTDf9GC8U0sdxOvu3s+iDFA=;
-        b=mQlirr9z2O/60GbYqQxLfPVn7qcejh4k4Cc7uXhhNVOl9yAYUVBCewi+L+LAnjat
-        urUnNqscBdQZC4sz1v6OJa5sRoQapufms03MT86FobuJbkWXfE7l1V3lvI4hCH/DlTz
-        GFWwMdm82OwkcreZZwAjz0l0p767GNiVLVYn+Ylw=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1633113375;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=Pi2QmFmCbw9QR4Jt3DFvRTDf9GC8U0sdxOvu3s+iDFA=;
-        b=Z90E5jGz3xBmP9ZoHIKfwk0p8ExYrIeMAXnnlUR56ECDWcrDY3yckZ5GHJ/jsW9m
-        ArhL7aA4SllV/W1SBa+GRuP2HHuTx6g0mVvcKlywzOQ7iEsT0NOVboZXLkcTP1dW/dU
-        eqhkI7ZrU14084peNfNAzfDKTqWOnKTwv9hg2nwU=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211001
+        Fri, 1 Oct 2021 14:38:36 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C9C061775;
+        Fri,  1 Oct 2021 11:36:44 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p1so2647059pfh.8;
+        Fri, 01 Oct 2021 11:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U/jeo0cc4IS12fXu/3bym/iiyWz3QTfkGKyYijbo8pY=;
+        b=cPfJPl85flsr5d4GoEpVUbaPdgMoIQXFsKWqOJIawh2OktBJif4WDJTgJfCp+DZVLE
+         xWjav8cTfeSzwz6vvFgspe8IuaOqaPNp1QmAXMnLOJhWBr+i9jTOc6g0I++ZmPq70S2u
+         wz+gnit0JRnRxpEKSiaFE/4qg58Qj5poqu6BZscEk7exNp72iz2SVBawCsfF7bRb9kd4
+         WQHbaZ7lwO2hmVGRat0sOY4CbIqesw4bhvmbdOsncWv6mImb8vtBs90Az8MFfTQzaGqX
+         NLKwh1XOC6ZlMYoPzZDX2cqXJ7bDqFJFTjyJjRGAPHJ1urMr9+ZmccUHI/ZdKgggTBpL
+         HMCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U/jeo0cc4IS12fXu/3bym/iiyWz3QTfkGKyYijbo8pY=;
+        b=p3PHMLbvL10ZT7WKQ3MUmMalH4Xgz4SBRI5LFbymV3M7k00S65G7KB4Cc5qX7eQk8Q
+         JsUYMVfDDmHcqSb3EsnzmcyEh0nOBVqDgC0nbBHXyHERFZeOsZ6rP3iRaYFgPXlee0wf
+         vmJ3h5k7Bln7j3ZEk10xfxZPIvlEStDjdfvkoZeMaUIAapj73mdUpF2tYauS3DxeinCi
+         U8b443AhUC9FnkJcYJGkJSoWjcC7/TUC5ROE9NdPi7qUr4OfIB7kFzsBaR4M6wxDIV8H
+         A+fhxsqMoarDLgyMSd3iBXNV04Vhijq9/DWM0dAht5tMNf5q8cMAZkyHd2UGXD7RZTgB
+         rCiQ==
+X-Gm-Message-State: AOAM532SN6xnR6UcfWMoch6otfb7/kqlT7QRc6pY9CF0AXvCTys+t+ip
+        EgB4Oui4+Jl6jxpWlYnRVBs=
+X-Google-Smtp-Source: ABdhPJxpcN7h+xroaO4ziJJc8u4TcIRQF/ZupaBuavc2M/JBoGPwQoLCynTihJtuxc2oGWN1VfWgvw==
+X-Received: by 2002:a62:e210:0:b0:44b:ae4c:8c01 with SMTP id a16-20020a62e210000000b0044bae4c8c01mr11498160pfi.45.1633113403479;
+        Fri, 01 Oct 2021 11:36:43 -0700 (PDT)
+Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id t23sm2310819pgn.25.2021.10.01.11.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Oct 2021 11:36:43 -0700 (PDT)
+Date:   Fri, 1 Oct 2021 11:36:44 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrea Merello <andrea.merello@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Ben Gardon <bgardon@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Perches <joe@perches.com>, Jonas Bonn <jonas@southpole.se>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rich Felker <dalias@libc.org>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH RESEND 2 00/16] Resend bitmap patches
+Message-ID: <YVdVPGaF2Gq1PGpG@yury-ThinkPad>
+References: <20211001181226.228340-1-yury.norov@gmail.com>
+ <YVdSK4rFmLVFrKrD@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017c3d247fd6-11bfe31f-1e4d-4f1e-9b4d-72226c798e9c-000000@email.amazonses.com>
-Date:   Fri, 1 Oct 2021 18:36:15 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.10.01-54.240.48.34
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YVdSK4rFmLVFrKrD@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc3
-* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: a25006a77348ba06c7bc96520d331cd9dd370715
-* git describe: next-20211001
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211001
+On Fri, Oct 01, 2021 at 09:23:39PM +0300, Andy Shevchenko wrote:
+> On Fri, Oct 01, 2021 at 11:12:10AM -0700, Yury Norov wrote:
+> > Hi Stephen,
+> > 
+> > Can you please take this series into the next tree? It has been already
+> > in next-tree for 5.14:
+> > 
+> > https://lore.kernel.org/linux-mmc/YSeduU41Ef568xhS@alley/T/
+> > 
+> > But it was damaged and we decided to merge it in 5.15 cycle. No changes
+> > comparing to 5.14, except for Andy's patch that was already upstreamed
+> > and therefore removed from here.
+> > 
+> > The git tree is here:
+> > 	https://github.com/norov/linux/tree/bitmap-20210929
+> 
+> 
+> This is a dup with the same subject. Which one should we look into?
 
-## Regressions (compared to next-20210923)
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
+Please ignore this (short) series. It's a duplication, my connection
+was broken and I had to restart submitting.
 
-* qemu_i386, kselftest-rtc
-  - rtc.rtctest
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20210923)
-* dragonboard-410c, kselftest-net
-  - net.udpgso_bench.sh
-
-* hi6220-hikey, kselftest-kvm
-  - kvm.rseq_test
-
-* qemu-arm64-gic-version2, kselftest-timers
-  - timers.rtcpie
-
-* qemu-arm64-gic-version3, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
-
-
-## Test result summary
-total: 5371, pass: 3101, fail: 459, skip: 1811, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Sorry for noise.
