@@ -2,100 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F4F41F610
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Oct 2021 21:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A79741F6EA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Oct 2021 23:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354071AbhJAUBE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Oct 2021 16:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbhJAUBE (ORCPT
+        id S231689AbhJAVaz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Oct 2021 17:30:55 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:59858 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229727AbhJAVay (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Oct 2021 16:01:04 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D534C06177E
-        for <linux-kselftest@vger.kernel.org>; Fri,  1 Oct 2021 12:59:19 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id i62so13009634ioa.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Oct 2021 12:59:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pDTsW1n9PK29PC83itCom+RuJCbJXbDX2PBAwxtEi5Q=;
-        b=Ml99nyYTXl1us4C9eU4XDofXWruq6cG2KGnk9dBR0BrGt6e9VpgeS9aQ5dGZaNTLWa
-         gq89Rn4zH9/iiMwTTtcuhkBn4FnGHAWSCFXQrwPFb7ygn1Cl6uLRfzmGcA6KN3JjIKTM
-         ZldSrFlNMxq9AJf2SMJl3OQAOWl7m9tPSFXQg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pDTsW1n9PK29PC83itCom+RuJCbJXbDX2PBAwxtEi5Q=;
-        b=AorT4ghqLLlFSLhyTSbluh6a5Rn/BcRLKH8jyEGOjPPFSRHMZTN13KZfnf7gbmFRvn
-         h/K62yVc4FfcYzz+HVwzELQJ8zV0AbPfHZ/MtkEEPrlIabVUUfx+2bLuAjcuhXrfOsNQ
-         IDkvIu1frb/suuZ8Pi47Q1KnQ+pfRGBJvo0TyO0gyCYwb8hMrOKfOx1xXP9sn+a8e9Ao
-         9Nw0zaGCxJ30Qe9iWJ3O+uY//Tg0cQO7F4MzFkAM8aaQz4oMTjhRVVXmIja0cCfn8EKv
-         KC4uIGNffAYhkICC5Z5DjmBwYxWR/pnsUYL0DkbrRbF6VNK8Kv/LgR4sWdJJY2SIhL9t
-         QkAw==
-X-Gm-Message-State: AOAM533/l/Q3ACXTPjDtW0T2v6rS7KgRSg+asar6k4ciI9DJNxFXX/5q
-        vy5LpMO9JV2KN3kyOM+ZyFrhAQ==
-X-Google-Smtp-Source: ABdhPJz7WObTRwrNwsUIUmOaCxXC6fSE3ENtuiDAss6zrGtbO8V3lFAqhwaVSA/N9RO0GGFulz0KNQ==
-X-Received: by 2002:a02:23c3:: with SMTP id u186mr4578264jau.34.1633118358965;
-        Fri, 01 Oct 2021 12:59:18 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id f20sm4000141ile.57.2021.10.01.12.59.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Oct 2021 12:59:18 -0700 (PDT)
-Subject: Re: [PATCH v2] kunit: fix reference count leak in kfree_at_end
-To:     Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, yuanxzhang@fudan.edu.cn,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1631172276-82914-1-git-send-email-xiyuyang19@fudan.edu.cn>
- <CAFd5g45mgi-bnTEiHshpyxnah74toncgCgmcQcHq=kP3L3r+Vw@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <aad94cba-5d07-b816-d307-382894f0a012@linuxfoundation.org>
-Date:   Fri, 1 Oct 2021 13:59:17 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 1 Oct 2021 17:30:54 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1633123748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xVh65H2Fp5ijtkJEhRPg4UVo19RUyKFUjPzFX2ov0uk=;
+        b=y8YhK2p3xqDnbz3PXfLBx/isyD7z2c/RlgGuOoLzyg077RwbT+p6IINOBUH4bI+nh9tnfx
+        vD1dWiFGoxqhYpBO12KbpPRVUJIvEwj9hfy7lUksnqd3HNIGYkTUbbxr1D+40jpdBL8Wdt
+        ek6MpA1lv5vfxCGJHqjMVjreYEDQO55GDlO5q0cf62L1/uR03gILXZkFj/Rb/0mhUePTVC
+        alts5PtCmS4ZGs1GMqXwynAQc0ZeQ8uNCPvh0Kx9cwU44ySemsmre0aPij/A4ZJrcRHUD/
+        a13iBnIpLXaVWRXOZB6Ob4pVlB5iCBRUDTq8QzHbE7HNb/IzXNwhbuoNyOYCfw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1633123748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xVh65H2Fp5ijtkJEhRPg4UVo19RUyKFUjPzFX2ov0uk=;
+        b=XO7TyMsBSh50qLM3BMaabrrwikLWLxoZtkPtuva7JEVZ4/1LK5CdQaUFP/YT1bQ7ZpN6zN
+        GWbMV8jfecxCoeBQ==
+To:     Andy Lutomirski <luto@kernel.org>,
+        Sohil Mehta <sohil.mehta@intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>
+Cc:     Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
+In-Reply-To: <0364c572-4bc2-4538-8d65-485dbfa81f0d@www.fastmail.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-12-sohil.mehta@intel.com>
+ <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
+ <c6e83d0e-6551-4e16-0822-0abbc4d656c4@intel.com>
+ <fd54f257-fa02-4ec3-a81b-b5e60f24bf94@www.fastmail.com>
+ <877dex7tgj.ffs@tglx>
+ <b537a890-4b9f-462e-8c17-5c7aa9b60138@www.fastmail.com>
+ <87tui162am.ffs@tglx>
+ <25ba1e1f-c05b-4b67-b547-6b5dbc958a2f@www.fastmail.com>
+ <87pmsp5aqx.ffs@tglx>
+ <0364c572-4bc2-4538-8d65-485dbfa81f0d@www.fastmail.com>
+Date:   Fri, 01 Oct 2021 23:29:07 +0200
+Message-ID: <875yug4eos.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <CAFd5g45mgi-bnTEiHshpyxnah74toncgCgmcQcHq=kP3L3r+Vw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/28/21 3:27 PM, Brendan Higgins wrote:
-> On Thu, Sep 9, 2021 at 12:26 AM Xiyu Yang <xiyuyang19@fudan.edu.cn> wrote:
+On Fri, Oct 01 2021 at 08:13, Andy Lutomirski wrote:
+
+> On Fri, Oct 1, 2021, at 2:56 AM, Thomas Gleixner wrote:
+>> On Thu, Sep 30 2021 at 21:41, Andy Lutomirski wrote:
+>>> On Thu, Sep 30, 2021, at 5:01 PM, Thomas Gleixner wrote:
 >>
->> The reference counting issue happens in the normal path of
->> kfree_at_end(). When kunit_alloc_and_get_resource() is invoked, the
->> function forgets to handle the returned resource object, whose refcount
->> increased inside, causing a refcount leak.
+>>> Now that I read the docs some more, I'm seriously concerned about this
+>>> XSAVE design.  XSAVES with UINTR is destructive -- it clears UINV.  If
+>>> we actually use this, then the whole last_cpu "preserve the state in
+>>> registers" optimization goes out the window.  So does anything that
+>>> happens to assume that merely saving the state doesn't destroy it on
+>>> respectable modern CPUs XRSTORS will #GP if you XRSTORS twice, which
+>>> makes me nervous and would need a serious audit of our XRSTORS paths.
 >>
->> Fix this issue by calling kunit_alloc_resource() instead of
->> kunit_alloc_and_get_resource().
->>
->> Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
->> Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-> 
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> 
-> Thanks!
-> 
+>> I have no idea what you are fantasizing about. You can XRSTORS five
+>> times in a row as long as your XSTATE memory image is correct.
+>
+> I'm just reading TFM, which is some kind of dystopian fantasy.
+>
+> 11.8.2.4 XRSTORS
+>
+> Before restoring the user-interrupt state component, XRSTORS verifies
+> that UINV is 0. If it is not, XRSTORS causes a general-protection
+> fault (#GP) before loading any part of the user-interrupt state
+> component. (UINV is IA32_UINTR_MISC[39:32]; XRSTORS does not check the
+> contents of the remainder of that MSR.)
 
-Thank you for the fix.
+Duh. I was staring at the SDM and searching for a hint. Stupid me!
 
-Applied now after fixing a checkpatch alignment check to
+> So if UINV is set in the memory image and you XRSTORS five times in a
+> row, the first one will work assuming UINV was zero.  The second one
+> will #GP.
 
-git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/
-kunit-fixes branch.
+Yes. I can see what you mean now :)
 
-Please remember to run checkpatch.pl before sending patches.
+> 11.8.2.3 XSAVES
+> After saving the user-interrupt state component, XSAVES clears UINV. (UINV is IA32_UINTR_MISC[39:32];
+> XSAVES does not modify the remainder of that MSR.)
+>
+> So if we're running a UPID-enabled user task and we switch to a kernel
+> thread, we do XSAVES and UINV is cleared.  Then we switch back to the
+> same task and don't do XRSTORS (or otherwise write IA32_UINTR_MISC)
+> and UINV is still clear.
 
-thanks,
--- Shuah
+Yes, that has to be mopped up on the way to user space.
+
+> And we had better clear UINV when running a kernel thread because the
+> UPID might get freed or the kernel thread might do some CPL3
+> shenanigans (via EFI, perhaps? I don't know if any firmwares actually
+> do this).
+
+Right. That's what happens already with the current pile.
+
+> So all this seems to put UINV into the "independent" category of
+> feature along with LBR.  And the 512-byte wastes from extra copies of
+> the legacy area and the loss of the XMODIFIED optimization will just
+> be collateral damage.
+
+So we'd end up with two XSAVES on context switch. We can simply do:
+
+        XSAVES();
+        fpu.state.xtsate.uintr.uinv = 0;
+
+which allows to do as many XRSTORS in a row as we want. Only the final
+one on the way to user space will have to restore the real vector if the
+register state is not valid:
+
+       if (fpu_state_valid()) {
+            if (needs_uinv(current)
+               wrmsrl(UINV, vector);
+       } else {
+            if (needs_uinv(current)
+               fpu.state.xtsate.uintr.uinv = vector;
+            XRSTORS();
+       }
+
+Hmm?
+
+Thanks,
+
+        tglx
