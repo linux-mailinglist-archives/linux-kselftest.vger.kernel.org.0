@@ -2,55 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E9041FA3B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Oct 2021 09:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117FE41FA3D
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Oct 2021 09:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbhJBHVz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 2 Oct 2021 03:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
+        id S232517AbhJBHWM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 2 Oct 2021 03:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231941AbhJBHVy (ORCPT
+        with ESMTP id S232355AbhJBHWM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Oct 2021 03:21:54 -0400
+        Sat, 2 Oct 2021 03:22:12 -0400
 Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD03C061775
-        for <linux-kselftest@vger.kernel.org>; Sat,  2 Oct 2021 00:20:09 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id s24so8779563wmh.4
-        for <linux-kselftest@vger.kernel.org>; Sat, 02 Oct 2021 00:20:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B799DC061775
+        for <linux-kselftest@vger.kernel.org>; Sat,  2 Oct 2021 00:20:26 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id g19-20020a1c9d13000000b003075062d4daso8294761wme.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 02 Oct 2021 00:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=S4WTRvyYeldW8QekSycFwQ5FlF4CTjAutou4WtcIjj4=;
-        b=L2jFQQk+Tr+KJxp5/VepfSxRQM5j9SwxtvlskuE0PJ+mmKMbcDDEV/fo2GgvjP5M4s
-         wKsIi5T5KWAvUzXqS6nC/+rlnhJ/L47nqetcXFAXc3sj5gdPa/lqQge4DdQF3kv+pr2F
-         PH9rtLeiU4bfhZeCOvsTivmEt0H3BnhFUjLZWgzKknFt6x7SOdrIxV2HhZQV19MvGSZ9
-         otzCoQHE+H+kKpRSzC7vl7DOI/ReCYIyFfJ3g52qkEOp/+2VBqqglqfp56jES4t4yDKy
-         X13CCy/6PsNQ1Tel2VG7YHhu/DAOgHzyhY6ocGZho3GQpE92dGWwCGxxNUy5L/s650Vi
-         9O/Q==
+         :cc;
+        bh=3FnGZoxeDqkUXZxDHIuKWA3WY8/3b4UZNXWAVQLvHaU=;
+        b=mQ1RQo+1hJqiCB4hNcMrnvesT/bvrEbIBGsDvIud4xTJ+zIA0qj9hAYx3z22O24DT1
+         M3Aicm75v5Ui80tx1LSG6gdBXkuWEyPv82Sr6oWlsKBT+sfFguCJLhbjYKtLBrPgpv2z
+         dEvNMFz3myDZo/sDzq/Xqr/sK311NhjZq38O7hsgoPoqsPcQbHFpanBi106FUR2f1bwB
+         gd5/CFIWSu255BXLxAXHcrSlhMv83l1GKVD4Otyo/zkZExMQAuP8gj+lGIeuywa60fl2
+         B1qmpM40b9SrtLTLho0oW9qc0eqaZkRsoFGQYiJGLyxM7fhxAq2uuiSHVgVddov/lT7O
+         udig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=S4WTRvyYeldW8QekSycFwQ5FlF4CTjAutou4WtcIjj4=;
-        b=QjwdGg9pNX+e9cDoHwAncvIihPOnd/4RylsxQeja47ZqIlEFGYHYSKcujXuq97srOr
-         eN4uMLPghsFu8LhXedkA5H5C77WasAwm1ywNkY3VQGipapyEseoBiubklcyBxGjI7hq7
-         OjmWenrwi4uX5UCbOVnz2kzrFdArtjoq/P824yVhQ0RSwX+xsn3rrq+fWbgaTkOOcctR
-         ZDSp9+YDP0sJnc4u3fiW/Pk+ecQLn3Mcs5i6zjG7vYTTZbY8A0X+Kej3WOpBYpJG1/Cx
-         KLAHAchAKJLa6KUmbbPBm5XqZ1hu8iX4pc/+Nir0M0Lb6mcz3m46CGNq8ZBHzv+gUY7M
-         P4FQ==
-X-Gm-Message-State: AOAM531QTPOpgxMjABYpmC1eFLD0JCPaPBvAtJQ9kvG+LEQP2CJf2Il4
-        rx0/KIui8VCmbVT5GotFXI/S3WgGotMUSjGhchgifw==
-X-Google-Smtp-Source: ABdhPJydhaV371BMrf3l2dtZKS3QQFptiUMmQudz9NU/tAQyTV8xfoRc+SLGKM91m6bf/0EUuX5c3SAUJaiVWnpqu/I=
-X-Received: by 2002:a05:600c:1c1d:: with SMTP id j29mr8166189wms.49.1633159207545;
- Sat, 02 Oct 2021 00:20:07 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=3FnGZoxeDqkUXZxDHIuKWA3WY8/3b4UZNXWAVQLvHaU=;
+        b=EfvifPgAkoH3nlw2DBZnw4ZW/zgQHSvW23Rq5TGFV0UxKQUH1ynuuCPBZ8AElGhGqu
+         HIekjzwPugbq7EIvw7kugc/5Egif/KJx654/ZlfGDA+KYSePTchS1zsoZLepL0rJLbKy
+         ZoFsxP9ai42ySz/1oG8qdvzWDVcOReDeOU9Kz01ud4152Dv+btzD4qpQIB6W6WqU0S3u
+         Ax2WPl7CoWiAKIa4QT8xJrOXTE2P6G2DwZfOrASCIlfaFo67De67TD79xcTzL2ZTGs6u
+         cHxafMLrV+GUQmF5zGIgvx8z4Qmtwu1ihr0/yG+oxsmsLySKviLmYDPlTrCaZSAy/SNo
+         OkQA==
+X-Gm-Message-State: AOAM532KuHzzfVzGalEyuXc1ucBKjBNqcbdTBu/6MZQzCVCKq0F14tE5
+        C9dbYg4vxYGwOHzuSlQpkkWq+0cc0nL7Qj3v+tntkQ==
+X-Google-Smtp-Source: ABdhPJzjELT9F60D42m4Yx/7U10YB04bKrU0ShGAnqywmTaJZHXJkeIma30H9xv619fTILqUMPcxmZs9JNes5fn6GTQ=
+X-Received: by 2002:a7b:c453:: with SMTP id l19mr8062506wmi.7.1633159225169;
+ Sat, 02 Oct 2021 00:20:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210926223322.848641-1-isabellabdoamaral@usp.br> <20210926223322.848641-2-isabellabdoamaral@usp.br>
-In-Reply-To: <20210926223322.848641-2-isabellabdoamaral@usp.br>
+References: <20210926223322.848641-1-isabellabdoamaral@usp.br> <20210926223322.848641-3-isabellabdoamaral@usp.br>
+In-Reply-To: <20210926223322.848641-3-isabellabdoamaral@usp.br>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 2 Oct 2021 15:19:56 +0800
-Message-ID: <CABVgOS=Ux00jm9Qiy-u0zhhHUBpmXQCsnFdr=sEU-1q1XBWM7w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] hash.h: remove unused define directive
+Date:   Sat, 2 Oct 2021 15:20:14 +0800
+Message-ID: <CABVgOS=kzCyfHgR_5OwoqMuNZBmziYFFa5gTVzH-W4ZbV101xQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] test_hash.c: split test_int_hash into
+ arch-specific functions
 To:     Isabella Basso <isabellabdoamaral@usp.br>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>, ferreiraenzoa@gmail.com,
         augusto.duraes33@gmail.com,
@@ -62,138 +63,180 @@ Cc:     Geert Uytterhoeven <geert@linux-m68k.org>, ferreiraenzoa@gmail.com,
         KUnit Development <kunit-dev@googlegroups.com>,
         ~lkcamp/patches@lists.sr.ht, rodrigosiqueiramelo@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 6:33 AM Isabella Basso <isabellabdoamaral@usp.br> w=
-rote:
+On Mon, Sep 27, 2021 at 6:33 AM Isabella Basso <isabellabdoamaral@usp.br> wrote:
 >
-> Currently, there exist hash_32() and __hash_32() functions, which were
-> introduced in a patch [1] targeting architecture specific optimizations.
-> These functions can be overridden on a per-architecture basis to achieve
-> such optimizations. They must set their corresponding define directive
-> (HAVE_ARCH_HASH_32 and HAVE_ARCH__HASH_32, respectively) so that header
-> files can deal with these overrides properly.
->
-> As the supported 32-bit architectures that have their own hash function
-> implementation (i.e. m68k, Microblaze, H8/300, pa-risc) have only been
-> making use of the (more general) __hash_32() function (which only lacks
-> a right shift operation when compared to the hash_32() function),
-> remove the define directive corresponding to the arch-specific hash_32()
-> implementation.
->
-> [1] https://lore.kernel.org/lkml/20160525073311.5600.qmail@ns.sciencehori=
-zons.net/
->
-> Changes since v1:
-> - As suggested by David Gow:
->   1. Reword commit message.
-
-Maybe move this changelog to below the "---", so it doesn't show up in
-the final commit message?
-
+> Split the test_int_hash function to keep its mainloop separate from
+> arch-specific chunks, which are only compiled as needed. This aims at
+> improving readability.
 >
 > Tested-by: David Gow <davidgow@google.com>
-> Co-developed-by: Augusto Dur=C3=A3es Camargo <augusto.duraes33@gmail.com>
-> Signed-off-by: Augusto Dur=C3=A3es Camargo <augusto.duraes33@gmail.com>
-> Co-developed-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
-> Signed-off-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
 > Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
 > ---
 
-This looks sensible enough to me. Since no-one seems to be speaking up
-in architecture-specific hash_32()'s defence, let's get rid of it.
+This looks good to me. It's possibly worth fixing up the changelog
+mixup between this and patch 3 if you send out a v3.
+
+A minor suggestion re: commenting below, otherwise this is:
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-Cheers,
 -- David
 
-
->  include/linux/hash.h       |  5 +----
->  lib/test_hash.c            | 24 +-----------------------
->  tools/include/linux/hash.h |  5 +----
->  3 files changed, 3 insertions(+), 31 deletions(-)
+>  lib/test_hash.c | 86 ++++++++++++++++++++++++++++++++-----------------
+>  1 file changed, 57 insertions(+), 29 deletions(-)
 >
-> diff --git a/include/linux/hash.h b/include/linux/hash.h
-> index ad6fa21d977b..38edaa08f862 100644
-> --- a/include/linux/hash.h
-> +++ b/include/linux/hash.h
-> @@ -62,10 +62,7 @@ static inline u32 __hash_32_generic(u32 val)
->         return val * GOLDEN_RATIO_32;
->  }
->
-> -#ifndef HAVE_ARCH_HASH_32
-> -#define hash_32 hash_32_generic
-> -#endif
-> -static inline u32 hash_32_generic(u32 val, unsigned int bits)
-> +static inline u32 hash_32(u32 val, unsigned int bits)
->  {
->         /* High bits are more random, so use them. */
->         return __hash_32(val) >> (32 - bits);
 > diff --git a/lib/test_hash.c b/lib/test_hash.c
-> index 0ee40b4a56dd..d4b0cfdb0377 100644
+> index d4b0cfdb0377..08fe63776c4f 100644
 > --- a/lib/test_hash.c
 > +++ b/lib/test_hash.c
-> @@ -94,22 +94,7 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][3=
-3])
->                         pr_err("hash_32(%#x, %d) =3D %#x > %#x", h0, k, h=
-1, m);
+> @@ -56,6 +56,53 @@ fill_buf(char *buf, size_t len, u32 seed)
+>         }
+>  }
+>
+> +/* Holds most testing variables for the int test */
+
+It might be worth commenting what these variables actually are here,
+as it's pretty confusing on a quick read through.
+
+Maybe something like:
+
+> +struct test_hash_params {
+> +       unsigned long long *h64;
+
+/* Pointer to integer to be hashed. */
+
+> +       u32 h0;
+
+/* Low 32-bits of integer to be hashed. */
+
+> +       u32 h1;
+
+/* Arch-specific hash result. */
+
+> +       u32 h2;
+
+/* Generic hash result. */
+
+> +       u32 (*hash_or)[33];
+
+/* ORed hashes of given size (in bits) */
+
+
+> +};
+> +
+> +#ifdef HAVE_ARCH__HASH_32
+> +static bool __init
+> +test_int__hash_32(struct test_hash_params *params)
+> +{
+> +       params->hash_or[1][0] |= params->h2 = __hash_32_generic(params->h0);
+> +#if HAVE_ARCH__HASH_32 == 1
+> +       if (params->h1 != params->h2) {
+> +               pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
+> +                      params->h0, params->h1, params->h2);
+> +               return false;
+> +       }
+> +#endif
+> +       return true;
+> +}
+> +#endif
+> +
+> +#ifdef HAVE_ARCH_HASH_64
+> +static bool __init
+> +test_int_hash_64(struct test_hash_params *params, u32 const *m, int *k)
+> +{
+> +       params->h2 = hash_64_generic(*params->h64, *k);
+> +#if HAVE_ARCH_HASH_64 == 1
+> +       if (params->h1 != params->h2) {
+> +               pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() = %#x",
+> +                      *params->h64, *k, params->h1, params->h2);
+> +               return false;
+> +       }
+> +#else
+> +       if (params->h2 > *m) {
+> +               pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
+> +                      *params->h64, *k, params->h1, *m);
+> +               return false;
+> +       }
+> +#endif
+> +       return true;
+> +}
+> +#endif
+> +
+>  /*
+>   * Test the various integer hash functions.  h64 (or its low-order bits)
+>   * is the integer to hash.  hash_or accumulates the OR of the hash values,
+> @@ -69,19 +116,13 @@ static bool __init
+>  test_int_hash(unsigned long long h64, u32 hash_or[2][33])
+>  {
+>         int k;
+> -       u32 h0 = (u32)h64, h1, h2;
+> +       struct test_hash_params params = { &h64, (u32)h64, 0, 0, hash_or };
+>
+>         /* Test __hash32 */
+> -       hash_or[0][0] |= h1 = __hash_32(h0);
+> +       hash_or[0][0] |= params.h1 = __hash_32(params.h0);
+>  #ifdef HAVE_ARCH__HASH_32
+> -       hash_or[1][0] |= h2 = __hash_32_generic(h0);
+> -#if HAVE_ARCH__HASH_32 == 1
+> -       if (h1 != h2) {
+> -               pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
+> -                       h0, h1, h2);
+> +       if (!test_int__hash_32(&params))
+>                 return false;
+> -       }
+> -#endif
+>  #endif
+>
+>         /* Test k = 1..32 bits */
+> @@ -89,37 +130,24 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
+>                 u32 const m = ((u32)2 << (k-1)) - 1;    /* Low k bits set */
+>
+>                 /* Test hash_32 */
+> -               hash_or[0][k] |= h1 = hash_32(h0, k);
+> -               if (h1 > m) {
+> -                       pr_err("hash_32(%#x, %d) = %#x > %#x", h0, k, h1, m);
+> +               hash_or[0][k] |= params.h1 = hash_32(params.h0, k);
+> +               if (params.h1 > m) {
+> +                       pr_err("hash_32(%#x, %d) = %#x > %#x", params.h0, k, params.h1, m);
 >                         return false;
 >                 }
-> -#ifdef HAVE_ARCH_HASH_32
-> -               h2 =3D hash_32_generic(h0, k);
-> -#if HAVE_ARCH_HASH_32 =3D=3D 1
-> -               if (h1 !=3D h2) {
-> -                       pr_err("hash_32(%#x, %d) =3D %#x !=3D hash_32_gen=
-eric() "
-> -                               " =3D %#x", h0, k, h1, h2);
-> -                       return false;
+>
+>                 /* Test hash_64 */
+> -               hash_or[1][k] |= h1 = hash_64(h64, k);
+> -               if (h1 > m) {
+> -                       pr_err("hash_64(%#llx, %d) = %#x > %#x", h64, k, h1, m);
+> +               hash_or[1][k] |= params.h1 = hash_64(h64, k);
+> +               if (params.h1 > m) {
+> +                       pr_err("hash_64(%#llx, %d) = %#x > %#x", h64, k, params.h1, m);
+>                         return false;
+>                 }
+>  #ifdef HAVE_ARCH_HASH_64
+> -               h2 = hash_64_generic(h64, k);
+> -#if HAVE_ARCH_HASH_64 == 1
+> -               if (h1 != h2) {
+> -                       pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() "
+> -                               "= %#x", h64, k, h1, h2);
+> +               if (!test_int_hash_64(&params, &m, &k))
+>                         return false;
 > -               }
 > -#else
 > -               if (h2 > m) {
-> -                       pr_err("hash_32_generic(%#x, %d) =3D %#x > %#x",
-> -                               h0, k, h1, m);
+> -                       pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
+> -                               h64, k, h1, m);
 > -                       return false;
 > -               }
 > -#endif
-> -#endif
-> +
->                 /* Test hash_64 */
->                 hash_or[1][k] |=3D h1 =3D hash_64(h64, k);
->                 if (h1 > m) {
-> @@ -227,13 +212,6 @@ test_hash_init(void)
->  #else
->         pr_info("__hash_32() has no arch implementation to test.");
 >  #endif
-> -#ifdef HAVE_ARCH_HASH_32
-> -#if HAVE_ARCH_HASH_32 !=3D 1
-> -       pr_info("hash_32() is arch-specific; not compared to generic.");
-> -#endif
-> -#else
-> -       pr_info("hash_32() has no arch implementation to test.");
-> -#endif
->  #ifdef HAVE_ARCH_HASH_64
->  #if HAVE_ARCH_HASH_64 !=3D 1
->         pr_info("hash_64() is arch-specific; not compared to generic.");
-> diff --git a/tools/include/linux/hash.h b/tools/include/linux/hash.h
-> index ad6fa21d977b..38edaa08f862 100644
-> --- a/tools/include/linux/hash.h
-> +++ b/tools/include/linux/hash.h
-> @@ -62,10 +62,7 @@ static inline u32 __hash_32_generic(u32 val)
->         return val * GOLDEN_RATIO_32;
+>         }
+>
+> -       (void)h2;       /* Suppress unused variable warning */
+>         return true;
 >  }
 >
-> -#ifndef HAVE_ARCH_HASH_32
-> -#define hash_32 hash_32_generic
-> -#endif
-> -static inline u32 hash_32_generic(u32 val, unsigned int bits)
-> +static inline u32 hash_32(u32 val, unsigned int bits)
->  {
->         /* High bits are more random, so use them. */
->         return __hash_32(val) >> (32 - bits);
 > --
 > 2.33.0
 >
