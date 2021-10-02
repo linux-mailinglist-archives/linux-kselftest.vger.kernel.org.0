@@ -2,56 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 117FE41FA3D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Oct 2021 09:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1957941FA3F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Oct 2021 09:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbhJBHWM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 2 Oct 2021 03:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S232537AbhJBHW1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 2 Oct 2021 03:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbhJBHWM (ORCPT
+        with ESMTP id S232507AbhJBHWZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Oct 2021 03:22:12 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B799DC061775
-        for <linux-kselftest@vger.kernel.org>; Sat,  2 Oct 2021 00:20:26 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id g19-20020a1c9d13000000b003075062d4daso8294761wme.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 02 Oct 2021 00:20:26 -0700 (PDT)
+        Sat, 2 Oct 2021 03:22:25 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93755C0613E8
+        for <linux-kselftest@vger.kernel.org>; Sat,  2 Oct 2021 00:20:39 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id b192-20020a1c1bc9000000b0030cfaf18864so8253782wmb.4
+        for <linux-kselftest@vger.kernel.org>; Sat, 02 Oct 2021 00:20:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3FnGZoxeDqkUXZxDHIuKWA3WY8/3b4UZNXWAVQLvHaU=;
-        b=mQ1RQo+1hJqiCB4hNcMrnvesT/bvrEbIBGsDvIud4xTJ+zIA0qj9hAYx3z22O24DT1
-         M3Aicm75v5Ui80tx1LSG6gdBXkuWEyPv82Sr6oWlsKBT+sfFguCJLhbjYKtLBrPgpv2z
-         dEvNMFz3myDZo/sDzq/Xqr/sK311NhjZq38O7hsgoPoqsPcQbHFpanBi106FUR2f1bwB
-         gd5/CFIWSu255BXLxAXHcrSlhMv83l1GKVD4Otyo/zkZExMQAuP8gj+lGIeuywa60fl2
-         B1qmpM40b9SrtLTLho0oW9qc0eqaZkRsoFGQYiJGLyxM7fhxAq2uuiSHVgVddov/lT7O
-         udig==
+        bh=T1Ud3yDO/mU6TccdcskPnDQTaXDLehnkBGI7d6s35xM=;
+        b=B0EcOkKcH3oEQb7zcg9ToBGl49Rxgm9YBwkA6a4QdbCQqnY+1hJkg5bV+35BR1Fc8M
+         lf13Nv7bgPZWZOpYZMa9ytM+a1/VhHOMZBaU8CZBBOYsRxFxQdWCM0SIr3n1zHnh42gm
+         zYKYo8xQGDzPmR+wJLwPMjH7hPL9JyYuOvPYx6P3LR0xMub7nCaGFZqaCZPLr49bO+tP
+         8u40ttpjkXTtTZKDFgQQLFaJB8Qrh2Y/I5uFxeSvomknEV2BH385POo9XNfzxTkCKdqx
+         DqUakPPOmGw995gSbqgCzGzMVctudL8OVyZZJVNh0pSi1aoYYWV1TDfjFB/13pEow5Y7
+         lGJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3FnGZoxeDqkUXZxDHIuKWA3WY8/3b4UZNXWAVQLvHaU=;
-        b=EfvifPgAkoH3nlw2DBZnw4ZW/zgQHSvW23Rq5TGFV0UxKQUH1ynuuCPBZ8AElGhGqu
-         HIekjzwPugbq7EIvw7kugc/5Egif/KJx654/ZlfGDA+KYSePTchS1zsoZLepL0rJLbKy
-         ZoFsxP9ai42ySz/1oG8qdvzWDVcOReDeOU9Kz01ud4152Dv+btzD4qpQIB6W6WqU0S3u
-         Ax2WPl7CoWiAKIa4QT8xJrOXTE2P6G2DwZfOrASCIlfaFo67De67TD79xcTzL2ZTGs6u
-         cHxafMLrV+GUQmF5zGIgvx8z4Qmtwu1ihr0/yG+oxsmsLySKviLmYDPlTrCaZSAy/SNo
-         OkQA==
-X-Gm-Message-State: AOAM532KuHzzfVzGalEyuXc1ucBKjBNqcbdTBu/6MZQzCVCKq0F14tE5
-        C9dbYg4vxYGwOHzuSlQpkkWq+0cc0nL7Qj3v+tntkQ==
-X-Google-Smtp-Source: ABdhPJzjELT9F60D42m4Yx/7U10YB04bKrU0ShGAnqywmTaJZHXJkeIma30H9xv619fTILqUMPcxmZs9JNes5fn6GTQ=
-X-Received: by 2002:a7b:c453:: with SMTP id l19mr8062506wmi.7.1633159225169;
- Sat, 02 Oct 2021 00:20:25 -0700 (PDT)
+        bh=T1Ud3yDO/mU6TccdcskPnDQTaXDLehnkBGI7d6s35xM=;
+        b=VVgtwFYZt1lpTY9507zw+C+iiv3tLXh1BJaHzX7cAXqbtbZuXvVDJrUWqAiZonAucW
+         Y/z9XVYTxSafzUZKC8rhR/KqlA3ZDb1sxCq4h10+JM6Sz2c7yRK7ND4nR2P5CkcLwf9w
+         6xM0WBhL06l1TzxvCCPBdWNsk9OxFmXP+c4ZblKq/IF5+us2fFefQPyxlQTewiWp8Piu
+         sdNm44+C7Lf8M74zHQvnSRfAWS70uVG3ZTeg9bGu42JRAaxPXhaRYT7EkU/ckKJljLoU
+         M2Sr2Yo/cyIiBgIna0zPjqmZIS+a0Of78z8kWlAgYCvxSeQd7fxay1mUB+UUi2CJ78N2
+         lE8w==
+X-Gm-Message-State: AOAM530gzuxx/GqYuaj6zT+L8ZMfJu2wp1cL32fi0Ppolvv68U3XSTrr
+        5i5dgZ9mpbS37CnhTIrFLWOz44Wxihb6gWmXvyL0yA==
+X-Google-Smtp-Source: ABdhPJwKCgvihNpSg67yqGnXyI4AiEwkzgNsgM56wAarVRiqQCbt8q7UO17OBUwfkGmGTUukzt2yj+K6ygnxTsL8H4A=
+X-Received: by 2002:a05:600c:4eca:: with SMTP id g10mr8303412wmq.16.1633159238067;
+ Sat, 02 Oct 2021 00:20:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210926223322.848641-1-isabellabdoamaral@usp.br> <20210926223322.848641-3-isabellabdoamaral@usp.br>
-In-Reply-To: <20210926223322.848641-3-isabellabdoamaral@usp.br>
+References: <20210926223322.848641-1-isabellabdoamaral@usp.br> <20210926223322.848641-4-isabellabdoamaral@usp.br>
+In-Reply-To: <20210926223322.848641-4-isabellabdoamaral@usp.br>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 2 Oct 2021 15:20:14 +0800
-Message-ID: <CABVgOS=kzCyfHgR_5OwoqMuNZBmziYFFa5gTVzH-W4ZbV101xQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] test_hash.c: split test_int_hash into
- arch-specific functions
+Date:   Sat, 2 Oct 2021 15:20:27 +0800
+Message-ID: <CABVgOSnC0PfFaT8AWRfE=Rv-RyF5+ZKR6HjnwA9Gp2w35UXC0A@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] test_hash.c: split test_hash_init
 To:     Isabella Basso <isabellabdoamaral@usp.br>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>, ferreiraenzoa@gmail.com,
         augusto.duraes33@gmail.com,
@@ -69,174 +68,162 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Mon, Sep 27, 2021 at 6:33 AM Isabella Basso <isabellabdoamaral@usp.br> wrote:
 >
-> Split the test_int_hash function to keep its mainloop separate from
-> arch-specific chunks, which are only compiled as needed. This aims at
+> Split up test_hash_init so that it calls each test more explicitly
+> insofar it is possible without rewriting the entire file. This aims at
 > improving readability.
+>
+> Split tests performed on string_or as they don't interfere with those
+> performed in hash_or. Also separate pr_info calls about skipped tests as
+> they're not part of the tests themselves, but only warn about
+> (un)defined arch-specific hash functions.
+>
+> Changes since v1:
+> - As suggested by David Gow:
+>   1. Rename arch-specific test functions.
+>   2. Remove spare whitespace changes.
+> - As suggested by Marco Elver:
+>   1. Add struct for carrying test variables.
+
+Nit: Move the changelog to after the "---" (and the correct patch).
+
 >
 > Tested-by: David Gow <davidgow@google.com>
 > Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
 > ---
 
-This looks good to me. It's possibly worth fixing up the changelog
-mixup between this and patch 3 if you send out a v3.
+This seems good to me, though I admit this is the part I'm probably
+least knowledgeable about. I'm pretty sure there has to be a more
+straightforward way to test some of these hash functions, but it's
+probably better to keep this as-is rather than doing anything too
+drastic in the middle of the port to KUnit.
 
-A minor suggestion re: commenting below, otherwise this is:
+The biggest downside here is that we now double the number of calls to
+fill_buffer() and full_name_hash(), so the test is likely to be a bit
+slower. It still runs fast enough (at least with the default SIZE of
+256) that it's not noticeable to me, though, so I don't think it's a
+problem.
+
+Apart from Marco's comment about the changelog in the commit message
+is fixed, this is:
 
 Reviewed-by: David Gow <davidgow@google.com>
 
+Cheers,
 -- David
 
->  lib/test_hash.c | 86 ++++++++++++++++++++++++++++++++-----------------
->  1 file changed, 57 insertions(+), 29 deletions(-)
+
+>  lib/test_hash.c | 66 ++++++++++++++++++++++++++++++++++++++++---------
+>  1 file changed, 54 insertions(+), 12 deletions(-)
 >
 > diff --git a/lib/test_hash.c b/lib/test_hash.c
-> index d4b0cfdb0377..08fe63776c4f 100644
+> index 08fe63776c4f..db9dd18b4e8b 100644
 > --- a/lib/test_hash.c
 > +++ b/lib/test_hash.c
-> @@ -56,6 +56,53 @@ fill_buf(char *buf, size_t len, u32 seed)
->         }
->  }
+> @@ -153,11 +153,39 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
 >
-> +/* Holds most testing variables for the int test */
-
-It might be worth commenting what these variables actually are here,
-as it's pretty confusing on a quick read through.
-
-Maybe something like:
-
-> +struct test_hash_params {
-> +       unsigned long long *h64;
-
-/* Pointer to integer to be hashed. */
-
-> +       u32 h0;
-
-/* Low 32-bits of integer to be hashed. */
-
-> +       u32 h1;
-
-/* Arch-specific hash result. */
-
-> +       u32 h2;
-
-/* Generic hash result. */
-
-> +       u32 (*hash_or)[33];
-
-/* ORed hashes of given size (in bits) */
-
-
-> +};
-> +
-> +#ifdef HAVE_ARCH__HASH_32
-> +static bool __init
-> +test_int__hash_32(struct test_hash_params *params)
-> +{
-> +       params->hash_or[1][0] |= params->h2 = __hash_32_generic(params->h0);
-> +#if HAVE_ARCH__HASH_32 == 1
-> +       if (params->h1 != params->h2) {
-> +               pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
-> +                      params->h0, params->h1, params->h2);
-> +               return false;
-> +       }
-> +#endif
-> +       return true;
-> +}
-> +#endif
-> +
-> +#ifdef HAVE_ARCH_HASH_64
-> +static bool __init
-> +test_int_hash_64(struct test_hash_params *params, u32 const *m, int *k)
-> +{
-> +       params->h2 = hash_64_generic(*params->h64, *k);
-> +#if HAVE_ARCH_HASH_64 == 1
-> +       if (params->h1 != params->h2) {
-> +               pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() = %#x",
-> +                      *params->h64, *k, params->h1, params->h2);
-> +               return false;
-> +       }
-> +#else
-> +       if (params->h2 > *m) {
-> +               pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
-> +                      *params->h64, *k, params->h1, *m);
-> +               return false;
-> +       }
-> +#endif
-> +       return true;
-> +}
-> +#endif
-> +
->  /*
->   * Test the various integer hash functions.  h64 (or its low-order bits)
->   * is the integer to hash.  hash_or accumulates the OR of the hash values,
-> @@ -69,19 +116,13 @@ static bool __init
->  test_int_hash(unsigned long long h64, u32 hash_or[2][33])
+>  #define SIZE 256       /* Run time is cubic in SIZE */
+>
+> -static int __init
+> -test_hash_init(void)
+> +static int __init test_string_or(void)
 >  {
->         int k;
-> -       u32 h0 = (u32)h64, h1, h2;
-> +       struct test_hash_params params = { &h64, (u32)h64, 0, 0, hash_or };
+>         char buf[SIZE+1];
+> -       u32 string_or = 0, hash_or[2][33] = { { 0, } };
+> +       u32 string_or = 0;
+> +       int i, j;
+> +
+> +       fill_buf(buf, SIZE, 1);
+> +
+> +       /* Test every possible non-empty substring in the buffer. */
+> +       for (j = SIZE; j > 0; --j) {
+> +               buf[j] = '\0';
+> +
+> +               for (i = 0; i <= j; i++) {
+> +                       u32 h0 = full_name_hash(buf+i, buf+i, j-i);
+> +
+> +                       string_or |= h0;
+> +               } /* i */
+> +       } /* j */
+> +
+> +       /* The OR of all the hash values should cover all the bits */
+> +       if (~string_or) {
+> +               pr_err("OR of all string hash results = %#x != %#x",
+> +                      string_or, -1u);
+> +               return -EINVAL;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int __init test_hash_or(void)
+> +{
+> +       char buf[SIZE+1];
+> +       u32 hash_or[2][33] = { { 0, } };
+>         unsigned tests = 0;
+>         unsigned long long h64 = 0;
+>         int i, j;
+> @@ -187,7 +215,6 @@ test_hash_init(void)
+>                                 return -EINVAL;
+>                         }
 >
->         /* Test __hash32 */
-> -       hash_or[0][0] |= h1 = __hash_32(h0);
-> +       hash_or[0][0] |= params.h1 = __hash_32(params.h0);
->  #ifdef HAVE_ARCH__HASH_32
-> -       hash_or[1][0] |= h2 = __hash_32_generic(h0);
-> -#if HAVE_ARCH__HASH_32 == 1
-> -       if (h1 != h2) {
-> -               pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
-> -                       h0, h1, h2);
-> +       if (!test_int__hash_32(&params))
->                 return false;
+> -                       string_or |= h0;
+>                         h64 = h64 << 32 | h0;   /* For use with hash_64 */
+>                         if (!test_int_hash(h64, hash_or))
+>                                 return -EINVAL;
+> @@ -195,12 +222,6 @@ test_hash_init(void)
+>                 } /* i */
+>         } /* j */
+>
+> -       /* The OR of all the hash values should cover all the bits */
+> -       if (~string_or) {
+> -               pr_err("OR of all string hash results = %#x != %#x",
+> -                       string_or, -1u);
+> -               return -EINVAL;
 > -       }
-> -#endif
->  #endif
->
->         /* Test k = 1..32 bits */
-> @@ -89,37 +130,24 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
->                 u32 const m = ((u32)2 << (k-1)) - 1;    /* Low k bits set */
->
->                 /* Test hash_32 */
-> -               hash_or[0][k] |= h1 = hash_32(h0, k);
-> -               if (h1 > m) {
-> -                       pr_err("hash_32(%#x, %d) = %#x > %#x", h0, k, h1, m);
-> +               hash_or[0][k] |= params.h1 = hash_32(params.h0, k);
-> +               if (params.h1 > m) {
-> +                       pr_err("hash_32(%#x, %d) = %#x > %#x", params.h0, k, params.h1, m);
->                         return false;
+>         if (~hash_or[0][0]) {
+>                 pr_err("OR of all __hash_32 results = %#x != %#x",
+>                         hash_or[0][0], -1u);
+> @@ -232,6 +253,13 @@ test_hash_init(void)
 >                 }
->
->                 /* Test hash_64 */
-> -               hash_or[1][k] |= h1 = hash_64(h64, k);
-> -               if (h1 > m) {
-> -                       pr_err("hash_64(%#llx, %d) = %#x > %#x", h64, k, h1, m);
-> +               hash_or[1][k] |= params.h1 = hash_64(h64, k);
-> +               if (params.h1 > m) {
-> +                       pr_err("hash_64(%#llx, %d) = %#x > %#x", h64, k, params.h1, m);
->                         return false;
->                 }
->  #ifdef HAVE_ARCH_HASH_64
-> -               h2 = hash_64_generic(h64, k);
-> -#if HAVE_ARCH_HASH_64 == 1
-> -               if (h1 != h2) {
-> -                       pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() "
-> -                               "= %#x", h64, k, h1, h2);
-> +               if (!test_int_hash_64(&params, &m, &k))
->                         return false;
-> -               }
-> -#else
-> -               if (h2 > m) {
-> -                       pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
-> -                               h64, k, h1, m);
-> -                       return false;
-> -               }
-> -#endif
->  #endif
 >         }
 >
-> -       (void)h2;       /* Suppress unused variable warning */
->         return true;
+> +       pr_notice("%u tests passed.", tests);
+> +
+> +       return 0;
+> +}
+> +
+> +static void __init notice_skipped_tests(void)
+> +{
+>         /* Issue notices about skipped tests. */
+>  #ifdef HAVE_ARCH__HASH_32
+>  #if HAVE_ARCH__HASH_32 != 1
+> @@ -247,10 +275,24 @@ test_hash_init(void)
+>  #else
+>         pr_info("hash_64() has no arch implementation to test.");
+>  #endif
+> +}
+>
+> -       pr_notice("%u tests passed.", tests);
+> +static int __init
+> +test_hash_init(void)
+> +{
+> +       int ret;
+>
+> -       return 0;
+> +       ret = test_string_or();
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       ret = test_hash_or();
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       notice_skipped_tests();
+> +
+> +       return ret;
 >  }
 >
+>  static void __exit test_hash_exit(void)
 > --
 > 2.33.0
 >
