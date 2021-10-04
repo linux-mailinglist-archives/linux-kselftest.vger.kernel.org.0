@@ -2,137 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10279421918
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Oct 2021 23:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78BC421989
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Oct 2021 23:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234732AbhJDVRD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Oct 2021 17:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
+        id S234446AbhJDWBA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Oct 2021 18:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbhJDVRA (ORCPT
+        with ESMTP id S233319AbhJDWBA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Oct 2021 17:17:00 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54A9C061745
-        for <linux-kselftest@vger.kernel.org>; Mon,  4 Oct 2021 14:15:10 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id n71so22063454iod.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Oct 2021 14:15:10 -0700 (PDT)
+        Mon, 4 Oct 2021 18:01:00 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46C8C061745
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Oct 2021 14:59:10 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id a73so14946176pge.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Oct 2021 14:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=4k8bYvmRsjfzFzJJCboCZs0zna0o9e8j9J5j74p//xE=;
-        b=Rx2l5uJeecno9wbVOT4T4bcECuW3JJGYSr3rrb9tPpHstKbUwhAhTKhGhklTVg+o2G
-         wvnvaZ/E7tnzHuTc2HBDtmqjtt23bAP8fU+olObpS9HQ8jBrAQp1E/EjAALtpDEjmgy2
-         ivJ6sbq7g9FxmjaehKsLiUd0gW9C+bvG3Iwl0=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oR9FHMJEaE13BkBpbWUGvIfigwsE0vr7a2ZHshK3wS8=;
+        b=Uoo+1ct0QV2Ux4fbTZVkWV8nryL5oetajREzRreulNaUhqlC127gIysHH7lp/i5knd
+         STWX/oNrsWN/HniF6cnQextBItaxCNwuRcpx/leW+XanjTZULZlAs1FdmzN6w1oGLTks
+         XjkB8WL/XqvKW/Hu2cBqEIKC2JRFf+GWKDb+4fy1w94BjAyYTUi9F7X9dDKeM9RpNPHv
+         8oDAUbv2tcX08n7EstQAwWAjsLm8S5P1VbkOYlcEmBBGcLBIooCZpHd/6G03TqPmJGX+
+         8WY2gFAXuya754SoO6LK5JOY9kqfXXHGCMesZ1NCfhngY0kKQfSLeHz9HL+zFEfmIuGV
+         ZJqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=4k8bYvmRsjfzFzJJCboCZs0zna0o9e8j9J5j74p//xE=;
-        b=iN3d9c3hGo9erzWB9Kt/PKyopeHgNnA+a7BXKFKXuGp0NGd86lFCVmcbi39DFEQ0XG
-         Fvn6SwwG8K5X0aQY5km80cg2J+EknM6eTfKf9K/RilJMe0UvCePqnl0fHqdvlD9XaiTx
-         fXymyPj9ehds5LIH9AmFFMoXLHE623by1htM9wn9Unq3vrBzaG4zgt0f4+EsRo/j4GKh
-         AohKynHLhaBOq2H/GmiwelyvEJqtQjNlyIHWaB0Vu+IU6QOPdHsVj6vvSuykDjiZ0jWY
-         Mk9HGvwX/DtI/TgiYWHIjhvaXy4fry1A3WKwbI4j+Unhd9tP36Mr4dlYiROq+EKbyRcr
-         tnbQ==
-X-Gm-Message-State: AOAM530Yh3VbBtFFcxRpsMN4oNgAZsdyaBNsG8L5tejyeM3rVqZPFKir
-        vJDK0Al1gmzJHG6pTBwXcrZJsg==
-X-Google-Smtp-Source: ABdhPJwBDBXrlmTC5AKFUiBjQGnZsChXuhixhh2UV3rjbKfaUMPJPJtGUZjqxWhVfCjWNjtStKf32w==
-X-Received: by 2002:a6b:fe18:: with SMTP id x24mr11267330ioh.119.1633382110185;
-        Mon, 04 Oct 2021 14:15:10 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id n4sm8528455ili.63.2021.10.04.14.15.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Oct 2021 14:15:09 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest fixes update for Linux 5.15-rc5
-Message-ID: <6c737cda-28aa-0ac7-c07c-5115d0968bd9@linuxfoundation.org>
-Date:   Mon, 4 Oct 2021 15:15:09 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oR9FHMJEaE13BkBpbWUGvIfigwsE0vr7a2ZHshK3wS8=;
+        b=Jcaiul9gqw4Nju/gGuJqp+hNQ7etuCaMkdx4LdOUNpdQDc/tBRUYuY/L5bzh25eEal
+         WG6NQo6FyLhSsQgO8y8ST2nyJRDCZjud5XyVSg3rm1tHQUPxDJAzW9nygy79pBmMHSYm
+         azpIePBlFgAbfDQxMPTyDqdfG1BAo1fxccLzSs5Wr+Iso+YufOU595OqI37nQG+XHB44
+         /Kg3YyPct9RuPxJ9C48y2lfojy6ngla1V151BCftss2nHfheDZRH2djuW2lNLgCtBkFU
+         EQWI+pg9NkzANr/m59+fkz5lWfgtBHKsk2DaguCKDfmz7V89Rmw5BId/vVQJ7S8jDWBu
+         w/FA==
+X-Gm-Message-State: AOAM532qFUT0DRGHVSYxOrS4c1uuuqzv1u+8ww6fu8MKzcBsti9nQAxD
+        Oj9gHI8e7ijKDUxWJGw2s3nJTX907coO8yIeshRLmg==
+X-Google-Smtp-Source: ABdhPJx/IYfNIgTxZHkDt7sZz13R0PuKORGcEsg8RwW6O6NXtMs8sbqqQu2exzbVt+/skIEmvc8fcdL37FQ4z7F3MlQ=
+X-Received: by 2002:a65:6658:: with SMTP id z24mr13092905pgv.266.1633384750068;
+ Mon, 04 Oct 2021 14:59:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------242C93BA0792A9C583A205A9"
-Content-Language: en-US
+References: <20211002013635.2076371-1-dlatypov@google.com>
+In-Reply-To: <20211002013635.2076371-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 4 Oct 2021 14:58:59 -0700
+Message-ID: <CAFd5g45Cnyt0nJ9d8KwAYO8jZu_5YdGkXT6XLcbJQWG1V4PP1Q@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix too small allocation when using suite-only kunit.filter_glob
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org,
+        kernel test robot <oliver.sang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------242C93BA0792A9C583A205A9
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Fri, Oct 1, 2021 at 6:36 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> When a user filters by a suite and not a test, e.g.
+> $ ./tools/testing/kunit/kunit.py run 'suite_name'
+>
+> it hits this code
+>   const int len = strlen(filter_glob);
+>   ...
+>   parsed->suite_glob = kmalloc(len, GFP_KERNEL);
+> which fails to allocate space for the terminating NULL.
+>
+> Somehow, it seems like we can't easily reproduce this under UML, so the
+> existing `parse_filter_test()` didn't catch this.
+>
+> Fix this by allocating `len + 1` and switch to kzalloc() just to be a
+> bit more defensive. We're only going to run this code once per kernel
+> boot, and it should never be very long.
+>
+> Also update the unit tests to be a bit more cautious.
+> This bug showed up as a NULL pointer dereference here:
+> >  KUNIT_EXPECT_STREQ(test, (const char *)filtered.start[0][0]->name, "suite0");
+> `filtered.start[0][0]` was NULL, and `name` is at offset 0 in the struct,
+> so `...->name` was also NULL.
+>
+> Fixes: 3b29021ddd10 ("kunit: tool: allow filtering test cases via glob")
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Hi Linus,
-
-Please pull the following Kselftest fixes update for Linux 5.15-rc5.
-
-This Kselftest fixes update for Linux 5.15-rc5 consists of a fix
-to implicit declaration warns in drivers/dma-buf test.
-
-I have been seeing this for a while and managed to fix it.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit f5013d412a43662b63f3d5f3a804d63213acd471:
-
-   selftests: kvm: fix get_run_delay() ignoring fscanf() return warn (2021-09-16 12:57:32 -0600)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.15-rc5
-
-for you to fetch changes up to 2f9602870886af74d97bac23ee6db5f5466d0a49:
-
-   selftests: drivers/dma-buf: Fix implicit declaration warns (2021-09-27 09:52:29 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-fixes-5.15-rc5
-
-This Kselftest fixes update for Linux 5.15-rc5 consists of a fix
-to implicit declaration warns in drivers/dma-buf test.
-
-----------------------------------------------------------------
-Shuah Khan (1):
-       selftests: drivers/dma-buf: Fix implicit declaration warns
-
-  tools/testing/selftests/drivers/dma-buf/udmabuf.c | 5 ++++-
-  1 file changed, 4 insertions(+), 1 deletion(-)
-----------------------------------------------------------------
-
---------------242C93BA0792A9C583A205A9
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-fixes-5.15-rc5.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-fixes-5.15-rc5.diff"
-
-diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-index 4de902ea14d8..de1c4e6de0b2 100644
---- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-+++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-@@ -1,10 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#define __EXPORTED_HEADERS__
-+
- #include <stdio.h>
- #include <stdlib.h>
- #include <unistd.h>
- #include <string.h>
- #include <errno.h>
--#include <linux/fcntl.h>
-+#include <fcntl.h>
- #include <malloc.h>
- 
- #include <sys/ioctl.h>
-
---------------242C93BA0792A9C583A205A9--
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
