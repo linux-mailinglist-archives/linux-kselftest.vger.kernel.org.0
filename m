@@ -2,91 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C78BC421989
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Oct 2021 23:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79BA421990
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Oct 2021 00:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234446AbhJDWBA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Oct 2021 18:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbhJDWBA (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Oct 2021 18:01:00 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46C8C061745
-        for <linux-kselftest@vger.kernel.org>; Mon,  4 Oct 2021 14:59:10 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id a73so14946176pge.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Oct 2021 14:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oR9FHMJEaE13BkBpbWUGvIfigwsE0vr7a2ZHshK3wS8=;
-        b=Uoo+1ct0QV2Ux4fbTZVkWV8nryL5oetajREzRreulNaUhqlC127gIysHH7lp/i5knd
-         STWX/oNrsWN/HniF6cnQextBItaxCNwuRcpx/leW+XanjTZULZlAs1FdmzN6w1oGLTks
-         XjkB8WL/XqvKW/Hu2cBqEIKC2JRFf+GWKDb+4fy1w94BjAyYTUi9F7X9dDKeM9RpNPHv
-         8oDAUbv2tcX08n7EstQAwWAjsLm8S5P1VbkOYlcEmBBGcLBIooCZpHd/6G03TqPmJGX+
-         8WY2gFAXuya754SoO6LK5JOY9kqfXXHGCMesZ1NCfhngY0kKQfSLeHz9HL+zFEfmIuGV
-         ZJqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oR9FHMJEaE13BkBpbWUGvIfigwsE0vr7a2ZHshK3wS8=;
-        b=Jcaiul9gqw4Nju/gGuJqp+hNQ7etuCaMkdx4LdOUNpdQDc/tBRUYuY/L5bzh25eEal
-         WG6NQo6FyLhSsQgO8y8ST2nyJRDCZjud5XyVSg3rm1tHQUPxDJAzW9nygy79pBmMHSYm
-         azpIePBlFgAbfDQxMPTyDqdfG1BAo1fxccLzSs5Wr+Iso+YufOU595OqI37nQG+XHB44
-         /Kg3YyPct9RuPxJ9C48y2lfojy6ngla1V151BCftss2nHfheDZRH2djuW2lNLgCtBkFU
-         EQWI+pg9NkzANr/m59+fkz5lWfgtBHKsk2DaguCKDfmz7V89Rmw5BId/vVQJ7S8jDWBu
-         w/FA==
-X-Gm-Message-State: AOAM532qFUT0DRGHVSYxOrS4c1uuuqzv1u+8ww6fu8MKzcBsti9nQAxD
-        Oj9gHI8e7ijKDUxWJGw2s3nJTX907coO8yIeshRLmg==
-X-Google-Smtp-Source: ABdhPJx/IYfNIgTxZHkDt7sZz13R0PuKORGcEsg8RwW6O6NXtMs8sbqqQu2exzbVt+/skIEmvc8fcdL37FQ4z7F3MlQ=
-X-Received: by 2002:a65:6658:: with SMTP id z24mr13092905pgv.266.1633384750068;
- Mon, 04 Oct 2021 14:59:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211002013635.2076371-1-dlatypov@google.com>
-In-Reply-To: <20211002013635.2076371-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 4 Oct 2021 14:58:59 -0700
-Message-ID: <CAFd5g45Cnyt0nJ9d8KwAYO8jZu_5YdGkXT6XLcbJQWG1V4PP1Q@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix too small allocation when using suite-only kunit.filter_glob
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org,
-        kernel test robot <oliver.sang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S233289AbhJDWFu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Oct 2021 18:05:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50050 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230517AbhJDWFu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 4 Oct 2021 18:05:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 8B02261248;
+        Mon,  4 Oct 2021 22:04:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633385040;
+        bh=ptPjZamrSRz75pgEjsbsvW8bq613ATjRZtw+WHXkg6s=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=A4t+dqU6YbHzkyq82ovgnGv9BwpGyyRC7B88wqb9YIRg4857cQi7BVQo+aZsCbEgC
+         JLwSHJiifVxruUt15RGPqmgc7vsXUieSzbhlrk4fYkn5DPsEOmIgBK3eQmmpOIcSin
+         wAyDO+5VvCG//a1EUjOX2KZBzBSnPeAFlG0iT6PRyyIsDcfZnQnnkTjNaLFQdjQlJG
+         2Y8M2WYxpAvV8TuGbis7i+45MSAltIEvhnIqk+0SncV2NTnpsG58oZCZdUUMZqG90p
+         D5DX2q4Sswmolujzg2MTq5JuN5OoCCyVLaUWf1fBgUlJsCo9+lnSkdfCmFa3YKmzJI
+         +AFsqGT7MY+SA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 785F9609D8;
+        Mon,  4 Oct 2021 22:04:00 +0000 (UTC)
+Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.15-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <6c737cda-28aa-0ac7-c07c-5115d0968bd9@linuxfoundation.org>
+References: <6c737cda-28aa-0ac7-c07c-5115d0968bd9@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <6c737cda-28aa-0ac7-c07c-5115d0968bd9@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.15-rc5
+X-PR-Tracked-Commit-Id: 2f9602870886af74d97bac23ee6db5f5466d0a49
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f6274b06e326d8471cdfb52595f989a90f5e888f
+Message-Id: <163338504042.6107.2760751247423903309.pr-tracker-bot@kernel.org>
+Date:   Mon, 04 Oct 2021 22:04:00 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 1, 2021 at 6:36 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> When a user filters by a suite and not a test, e.g.
-> $ ./tools/testing/kunit/kunit.py run 'suite_name'
->
-> it hits this code
->   const int len = strlen(filter_glob);
->   ...
->   parsed->suite_glob = kmalloc(len, GFP_KERNEL);
-> which fails to allocate space for the terminating NULL.
->
-> Somehow, it seems like we can't easily reproduce this under UML, so the
-> existing `parse_filter_test()` didn't catch this.
->
-> Fix this by allocating `len + 1` and switch to kzalloc() just to be a
-> bit more defensive. We're only going to run this code once per kernel
-> boot, and it should never be very long.
->
-> Also update the unit tests to be a bit more cautious.
-> This bug showed up as a NULL pointer dereference here:
-> >  KUNIT_EXPECT_STREQ(test, (const char *)filtered.start[0][0]->name, "suite0");
-> `filtered.start[0][0]` was NULL, and `name` is at offset 0 in the struct,
-> so `...->name` was also NULL.
->
-> Fixes: 3b29021ddd10 ("kunit: tool: allow filtering test cases via glob")
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+The pull request you sent on Mon, 4 Oct 2021 15:15:09 -0600:
 
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.15-rc5
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f6274b06e326d8471cdfb52595f989a90f5e888f
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
