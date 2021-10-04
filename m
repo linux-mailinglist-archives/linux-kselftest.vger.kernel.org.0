@@ -2,263 +2,253 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E344204E0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Oct 2021 04:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48FAA4214A7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Oct 2021 19:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbhJDCXq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 3 Oct 2021 22:23:46 -0400
-Received: from pi.codeconstruct.com.au ([203.29.241.158]:34622 "EHLO
-        codeconstruct.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbhJDCXq (ORCPT
+        id S237989AbhJDRDA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Oct 2021 13:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237591AbhJDRC7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 3 Oct 2021 22:23:46 -0400
-Received: from [172.16.66.73] (unknown [49.255.141.98])
-        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id AA3952012C;
-        Mon,  4 Oct 2021 10:21:48 +0800 (AWST)
-Message-ID: <101d12fc9250b7a445ff50a9e7a25cd74d0e16eb.camel@codeconstruct.com.au>
-Subject: Re: [PATCH net-next 1/2] mctp: test: disallow MCTP_TEST when
- building as a module
-From:   Jeremy Kerr <jk@codeconstruct.com.au>
-To:     David Gow <davidgow@google.com>
-Cc:     Matt Johnston <matt@codeconstruct.com.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Date:   Mon, 04 Oct 2021 10:21:47 +0800
-In-Reply-To: <CABVgOS=F9K_AzoWjKPRT9m014NAo37vKHYEp-jHWDt5M+pkzSw@mail.gmail.com>
-References: <20211002022656.1681956-1-jk@codeconstruct.com.au>
-         <CABVgOS=F9K_AzoWjKPRT9m014NAo37vKHYEp-jHWDt5M+pkzSw@mail.gmail.com>
+        Mon, 4 Oct 2021 13:02:59 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7ADC06174E
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Oct 2021 10:01:10 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id d1-20020a056902060100b005b9c7c04351so6647662ybt.14
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Oct 2021 10:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Mo3PE3P1ieu1o7ruBSuI9hdnELVPjKYRFQStGRBmn/U=;
+        b=UQon0Wfqg4GxMOuasE8AUhiaIFLhfSwmsGpyth6skSfLoFChbF9PG4+f/Wo6S2/70n
+         EV/hz2Nmar8O7gfkeM3VAJI1panHn04NElI+ayr6EAAIxHR7u5VQAh9j1aDsTcUynG4D
+         qEiSBDrthXmgzSzFZDX3/cWkxHQjmnnycmHUVCTEFCyi2Qw0BfEG9BWgqGUs2C6K3k4v
+         k80wwtIioj2XaSKh2mtrZbBtv3i9VEVeFppECgg39MKzdTh+Id3EpoQbkocuZflLCTNP
+         qxto98fPR6l3nAakDL3Vk+BcIddP9th+xi3Gv4pIrVJgMK2r7MRmiECSsMDFsEOCYiTf
+         uNsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Mo3PE3P1ieu1o7ruBSuI9hdnELVPjKYRFQStGRBmn/U=;
+        b=tgyHXI+h+IAiICBlY/NbWxVoHCNjbqX8MscrVMSvzu5jVn6p/wiYO9TNGtkg11zv3k
+         AOoXpi9cvYSN0w4k5EUH0M41I42Rxk7wjEew3+uSuiWCh2BgnSmUdjsm8HC0sN9zeIRb
+         xi+0B2yxDQ0qAfzhs5dtBrXAtvA7FoZHXc4eQWQ0Nn5V+cNl28SejCVF1Df0ona0GiSc
+         DlBsBSnnz7wtSeogtgOdLXsUwuSQnB7FjyANhoqr/Nqv0jYYvwzjXQn2UnL/+kL//DM1
+         6oc5ZGCovYJ3cgTnuPMKErHbN1QBIuItr7OzeaEJpKuodbVy/IXDWfniUIQ3DzzBXp7O
+         sEJw==
+X-Gm-Message-State: AOAM530tCnVx9ot0xzIwf5PhZIpx3wVSRgGpSUFtjXAnbnyztxAOSlSB
+        ryW74JDBJo4fTMePWCX/plwZ1qO/SVZ02A==
+X-Google-Smtp-Source: ABdhPJzkolyH7q9Y8u0KG2zn5wZ7ALjaLNHA/08E9qzmIy3t99h5C4o2EQPfB14uyNNAjLQZcFbWIH3p5VsjAA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:ee03:329e:90be:b395])
+ (user=dlatypov job=sendgmr) by 2002:a5b:846:: with SMTP id
+ v6mr8164116ybq.457.1633366869207; Mon, 04 Oct 2021 10:01:09 -0700 (PDT)
+Date:   Mon,  4 Oct 2021 10:01:02 -0700
+Message-Id: <20211004170102.2522514-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.800.g4c38ced690-goog
+Subject: [PATCH] kunit: tool: yield output from run_kernel in real time
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David,
+Currently, `run_kernel()` dumps all the kernel output to a file
+(.kunit/test.log) and then opens the file and yields it to callers.
+This made it easier to respect the requested timeout, if any.
 
-[removing netdev, this is more kunit-related]
+But it means that we can't yield the results in real time, either to the
+parser or to stdout (if --raw_output is set).
 
-> This looks good to me. I don't think you'll be the only person to hit
-> this issue, so -- while it's probably overall nicer if tests can sit
-> in their own module -- we'll look into finding a way of supporting
-> this with KUnit at some point.
+This change spins up a background thread to enforce the timeout, which
+allows us to yield the kernel output in real time, while also copying it
+to the .kunit/test.log file.
+It's also careful to ensure that the .kunit/test.log file is complete,
+even in the kunit_parser throws an exception/otherwise doesn't consume
+every line, see the new `finally` block and unit test.
 
-Just digging in to this a little: what's the intended structure here? Is
-it intended to have the tests as their own loadable modules?
+For example:
 
-For MCTP, I'd like to enable tests when we're built as a module; in that
-case, are you expecting we'd now have two modules: the core, and the
-kunit tests?
+$ ./tools/testing/kunit/kunit.py run --arch=x86_64 --raw_output
+<configure + build steps>
+...
+<can now see output from QEMU in real time>
 
-As you've seen, my test implementation here is to directly include the
-<tests>.c file; this means I don't need to EXPORT_SYMBOL all of the
-MCTP-internal functions that I want to test; they can remain private to
-the individual compilation unit. However, the current kunit_test_suites
-implementation prevents this.
+This does not currently have a visible effect when --raw_output is not
+passed, as kunit_parser.py currently only outputs everything at the end.
+But that could change, and this patch is a necessary step towards
+showing parsed test results in real time.
 
-I've been hacking around with the (very experimental) patch below, to
-allow tests in modules (without open-coding kunit_test_suites, which the
-aspeed mmc sdhci driver has done), but I don't have much background on
-kunit, so I'm not sure whether this is a useful direction to take.
-
-However, this might allow a bunch of cleanups in future - we'd no longer
-need the array-of-arrays of suites, and can remove some of the custom
-suites definitions scattered around the tree.
-
-Cheers,
-
-
-Jeremy
-
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
-From: Jeremy Kerr <jk@codeconstruct.com.au>
-Date: Sun, 3 Oct 2021 10:13:02 +0800
-Subject: [RFC] kunit: Don't steal module_init
+ tools/testing/kunit/kunit_kernel.py    | 73 +++++++++++++++-----------
+ tools/testing/kunit/kunit_tool_test.py | 17 ++++++
+ 2 files changed, 60 insertions(+), 30 deletions(-)
 
-Currently, the MODULE version of kunit_test_suites defines its own
-module_init/exit_module functions, meaning that you can't define a
-module that has both an init and a kunit test suite.
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 2c6f916ccbaf..b8cba8123aa3 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -12,7 +12,8 @@ import subprocess
+ import os
+ import shutil
+ import signal
+-from typing import Iterator, Optional, Tuple
++import threading
++from typing import Iterator, List, Optional, Tuple
+ 
+ from contextlib import ExitStack
+ 
+@@ -103,8 +104,8 @@ class LinuxSourceTreeOperations(object):
+ 		if stderr:  # likely only due to build warnings
+ 			print(stderr.decode())
+ 
+-	def run(self, params, timeout, build_dir, outfile) -> None:
+-		pass
++	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
++		raise RuntimeError('not implemented!')
+ 
+ 
+ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+@@ -123,7 +124,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+ 		kconfig.parse_from_string(self._kconfig)
+ 		base_kunitconfig.merge_in_entries(kconfig)
+ 
+-	def run(self, params, timeout, build_dir, outfile):
++	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+ 		kernel_path = os.path.join(build_dir, self._kernel_path)
+ 		qemu_command = ['qemu-system-' + self._qemu_arch,
+ 				'-nodefaults',
+@@ -134,18 +135,10 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+ 				'-nographic',
+ 				'-serial stdio'] + self._extra_qemu_params
+ 		print('Running tests with:\n$', ' '.join(qemu_command))
+-		with open(outfile, 'w') as output:
+-			process = subprocess.Popen(' '.join(qemu_command),
+-						   stdin=subprocess.PIPE,
+-						   stdout=output,
+-						   stderr=subprocess.STDOUT,
+-						   text=True, shell=True)
+-		try:
+-			process.wait(timeout=timeout)
+-		except Exception as e:
+-			print(e)
+-			process.terminate()
+-		return process
++		return subprocess.Popen(' '.join(qemu_command),
++					   stdout=subprocess.PIPE,
++					   stderr=subprocess.STDOUT,
++					   text=True, shell=True)
+ 
+ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+ 	"""An abstraction over command line operations performed on a source tree."""
+@@ -175,17 +168,13 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+ 		kunit_parser.print_with_timestamp(
+ 			'Starting Kernel with all configs takes a few minutes...')
+ 
+-	def run(self, params, timeout, build_dir, outfile):
++	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+ 		"""Runs the Linux UML binary. Must be named 'linux'."""
+ 		linux_bin = get_file_path(build_dir, 'linux')
+-		outfile = get_outfile_path(build_dir)
+-		with open(outfile, 'w') as output:
+-			process = subprocess.Popen([linux_bin] + params,
+-						   stdin=subprocess.PIPE,
+-						   stdout=output,
+-						   stderr=subprocess.STDOUT,
+-						   text=True)
+-			process.wait(timeout)
++		return subprocess.Popen([linux_bin] + params,
++					   stdout=subprocess.PIPE,
++					   stderr=subprocess.STDOUT,
++					   text=True)
+ 
+ def get_kconfig_path(build_dir) -> str:
+ 	return get_file_path(build_dir, KCONFIG_PATH)
+@@ -330,12 +319,36 @@ class LinuxSourceTree(object):
+ 		args.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+ 		if filter_glob:
+ 			args.append('kunit.filter_glob='+filter_glob)
+-		outfile = get_outfile_path(build_dir)
+-		self._ops.run(args, timeout, build_dir, outfile)
+-		subprocess.call(['stty', 'sane'])
+-		with open(outfile, 'r') as file:
+-			for line in file:
++
++		process = self._ops.start(args, build_dir)
++		assert process.stdout is not None  # tell mypy it's set
++
++		# Enforce the timeout in a background thread.
++		def _wait_proc():
++			try:
++				process.wait(timeout=timeout)
++			except Exception as e:
++				print(e)
++				process.terminate()
++				process.wait()
++		waiter = threading.Thread(target=_wait_proc)
++		waiter.start()
++
++		output = open(get_outfile_path(build_dir), 'w')
++		try:
++			# Tee the output to the file and to our caller in real time.
++			for line in process.stdout:
++				output.write(line)
+ 				yield line
++		# This runs even if our caller doesn't consume every line.
++		finally:
++			# Flush any leftover output to the file
++			output.write(process.stdout.read())
++			output.close()
++			process.stdout.close()
++
++			waiter.join()
++			subprocess.call(['stty', 'sane'])
+ 
+ 	def signal_handler(self, sig, frame) -> None:
+ 		logging.error('Build interruption occurred. Cleaning console.')
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 619c4554cbff..f9a7398a9584 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -14,6 +14,7 @@ import tempfile, shutil # Handling test_tmpdir
+ import itertools
+ import json
+ import signal
++import subprocess
+ import os
+ 
+ import kunit_config
+@@ -291,6 +292,22 @@ class LinuxSourceTreeTest(unittest.TestCase):
+ 				pass
+ 			tree = kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
+ 
++	def test_run_kernel_hits_exception(self):
++		def fake_start(unused_args, unused_build_dir):
++			return subprocess.Popen(['echo "hi\nbye"'], shell=True, text=True, stdout=subprocess.PIPE)
++
++		with tempfile.TemporaryDirectory('') as build_dir:
++			tree = kunit_kernel.LinuxSourceTree(build_dir, load_config=False)
++			mock.patch.object(tree._ops, 'start', side_effect=fake_start).start()
++
++			with self.assertRaises(ValueError):
++				for line in tree.run_kernel(build_dir=build_dir):
++					self.assertEqual(line, 'hi\n')
++					raise ValueError('uh oh, did not read all output')
++
++			with open(kunit_kernel.get_outfile_path(build_dir), 'rt') as outfile:
++				self.assertEqual(outfile.read(), 'hi\nbye\n', msg='Missing some output')
++
+ 	# TODO: add more test cases.
+ 
+ 
 
-This change removes the kunit-defined module inits, and instead parses
-the kunit tests from their own section in the module. After module init,
-we call __kunit_test_suites_init() on the contents of that section,
-which prepares and runs the suite.
-
-This essentially unifies the module- and non-module kunit init formats.
-
-Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
----
- include/kunit/test.h   | 43 ++---------------------------------------
- include/linux/module.h |  4 ++++
- kernel/module.c        |  6 ++++++
- lib/kunit/test.c       | 44 +++++++++++++++++++++++++++++++++++++++++-
- 4 files changed, 55 insertions(+), 42 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 24b40e5c160b..8f34fc5c85ec 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -307,41 +307,8 @@ static inline int kunit_run_all_tests(void)
- }
- #endif /* IS_BUILTIN(CONFIG_KUNIT) */
- 
--#ifdef MODULE
--/**
-- * kunit_test_suites_for_module() - used to register one or more
-- *			 &struct kunit_suite with KUnit.
-- *
-- * @__suites: a statically allocated list of &struct kunit_suite.
-- *
-- * Registers @__suites with the test framework. See &struct kunit_suite for
-- * more information.
-- *
-- * If a test suite is built-in, module_init() gets translated into
-- * an initcall which we don't want as the idea is that for builtins
-- * the executor will manage execution.  So ensure we do not define
-- * module_{init|exit} functions for the builtin case when registering
-- * suites via kunit_test_suites() below.
-- */
--#define kunit_test_suites_for_module(__suites)				\
--	static int __init kunit_test_suites_init(void)			\
--	{								\
--		return __kunit_test_suites_init(__suites);		\
--	}								\
--	module_init(kunit_test_suites_init);				\
--									\
--	static void __exit kunit_test_suites_exit(void)			\
--	{								\
--		return __kunit_test_suites_exit(__suites);		\
--	}								\
--	module_exit(kunit_test_suites_exit)
--#else
--#define kunit_test_suites_for_module(__suites)
--#endif /* MODULE */
--
- #define __kunit_test_suites(unique_array, unique_suites, ...)		       \
- 	static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
--	kunit_test_suites_for_module(unique_array);			       \
- 	static struct kunit_suite **unique_suites			       \
- 	__used __section(".kunit_test_suites") = unique_array
- 
-@@ -354,14 +321,8 @@ static inline int kunit_run_all_tests(void)
-  * Registers @suites with the test framework. See &struct kunit_suite for
-  * more information.
-  *
-- * When builtin,  KUnit tests are all run via executor; this is done
-- * by placing the array of struct kunit_suite * in the .kunit_test_suites
-- * ELF section.
-- *
-- * An alternative is to build the tests as a module.  Because modules do not
-- * support multiple initcall()s, we need to initialize an array of suites for a
-- * module.
-- *
-+ * KUnit tests are all run via executor; this is done by placing the array of
-+ * struct kunit_suite * in the .kunit_test_suites ELF section.
-  */
- #define kunit_test_suites(__suites...)						\
- 	__kunit_test_suites(__UNIQUE_ID(array),				\
-diff --git a/include/linux/module.h b/include/linux/module.h
-index c9f1200b2312..ff056cc667d4 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -502,6 +502,10 @@ struct module {
- 	int num_static_call_sites;
- 	struct static_call_site *static_call_sites;
- #endif
-+#ifdef CONFIG_KUNIT
-+	struct kunit_suite ***kunit_suites_ptrs;
-+	int num_kunit_suites_ptrs;
-+#endif
- 
- #ifdef CONFIG_LIVEPATCH
- 	bool klp; /* Is this a livepatch module? */
-diff --git a/kernel/module.c b/kernel/module.c
-index 40ec9a030eec..4d90157a959d 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3365,6 +3365,12 @@ static int find_module_sections(struct module *mod, struct load_info *info)
- 					      sizeof(*mod->static_call_sites),
- 					      &mod->num_static_call_sites);
- #endif
-+#ifdef CONFIG_KUNIT
-+	mod->kunit_suites_ptrs = section_objs(info, ".kunit_test_suites",
-+					      sizeof(*mod->kunit_suites_ptrs),
-+					      &mod->num_kunit_suites_ptrs);
-+#endif
-+
- 	mod->extable = section_objs(info, "__ex_table",
- 				    sizeof(*mod->extable), &mod->num_exentries);
- 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index f246b847024e..3b8dcb776030 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -586,6 +586,47 @@ void __kunit_test_suites_exit(struct kunit_suite **suites)
- }
- EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
- 
-+static void kunit_module_init(struct module *mod)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < mod->num_kunit_suites_ptrs; i++)
-+		__kunit_test_suites_init(mod->kunit_suites_ptrs[i]);
-+}
-+
-+static void kunit_module_exit(struct module *mod)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < mod->num_kunit_suites_ptrs; i++)
-+		__kunit_test_suites_exit(mod->kunit_suites_ptrs[i]);
-+}
-+
-+static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
-+			       void *data)
-+{
-+	struct module *mod = data;
-+
-+	switch (val) {
-+	case MODULE_STATE_LIVE:
-+		kunit_module_init(mod);
-+		break;
-+	case MODULE_STATE_GOING:
-+		kunit_module_exit(mod);
-+		break;
-+	case MODULE_STATE_COMING:
-+	case MODULE_STATE_UNFORMED:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct notifier_block kunit_mod_nb = {
-+	.notifier_call = kunit_module_notify,
-+	.priority = 0,
-+};
-+
- /*
-  * Used for static resources and when a kunit_resource * has been created by
-  * kunit_alloc_resource().  When an init function is supplied, @data is passed
-@@ -795,12 +836,13 @@ static int __init kunit_init(void)
- {
- 	kunit_debugfs_init();
- 
--	return 0;
-+	return register_module_notifier(&kunit_mod_nb);
- }
- late_initcall(kunit_init);
- 
- static void __exit kunit_exit(void)
- {
-+	unregister_module_notifier(&kunit_mod_nb);
- 	kunit_debugfs_cleanup();
- }
- module_exit(kunit_exit);
+base-commit: 3b29021ddd10cfb6b2565c623595bd3b02036f33
 -- 
-2.30.2
-
+2.33.0.800.g4c38ced690-goog
 
