@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C1042349E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 01:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF46B4234A2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 01:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237116AbhJEXsH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Oct 2021 19:48:07 -0400
-Received: from mail-bn8nam11hn2217.outbound.protection.outlook.com ([52.100.171.217]:8641
+        id S237109AbhJEXsI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Oct 2021 19:48:08 -0400
+Received: from mail-bn8nam11hn2208.outbound.protection.outlook.com ([52.100.171.208]:38080
         "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237159AbhJEXr4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Oct 2021 19:47:56 -0400
+        id S236966AbhJEXr6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 5 Oct 2021 19:47:58 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FsrquY6FraHrzETT3XWuofKHvz049UcHvcQRfgS64zZcqQp14+FriQ2agcCVO+IZ/utBTVA1QtYoiirX7PEWjo8kXQZH57jg1TcjQ0au6yy8NnNhAJpOTyC+CjJTpaJVQVfOAzu80y+8s4ShOIMi/+Izpu+k5u/3P3d06SwFotlIlO92I+0JBuyNXwgL5jeB0iIQOw6ArJX7GjomOViX36SIKSYk19wE8zMRnoYcqsaW6hcD9ufOUFxgfkelKO2FqnV+D8LA2x3jE2UV0NrngsOz0LfuK8zzurqlhtpb45vpbDRfZiwMiGPQB07pJaxVC7ubVTiFNhgmxy7ZdUCC1Q==
+ b=YBQR4frYlhS46ZJDTL2VnZcXiLM5LplQjUoTfQN3CZu0EY7CE0FtkguYfB99iuL0k/43owEmvmkjbw4NzuLvaefM/1H3NFjr4tkyNYNb1GUxil9JSMiawI5bf1fda35FGrAxbO5JQjtcDa03Y9jYJuN/lXX3B8/keXmu4fzSx2EoJCNAJfGBs0L/pegwqySjmIFGQuE9Jug7NQAbtcxbz7IftuxsQJsYhdbmQl8Z6KUAdOlcBD/khDWLrrmLVumPqw9jBQoFvngCuP2BDBPPMnVcxY2Z4/qUfnRiBG0MBAYKpaUcm5HkrDvnMBKmXpifWgZUCPxJyna9LWiDa7ANHA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w1yt174BkP9mJg2zq1FVO4125cgDK7TQCy43M1tA0dQ=;
- b=RN+GiteUJPD6wjVhC3TG5t+gNRjNsSjxwuPGiv66A2tdPM6etnoMMSzzNuWd/YMq6Y4gZkv4IMirIBqAbcnfq7UbowyXlQmmS3nFucK/6qnl44Q9yUrMahIGgxyNxbt/hh8hX9hY4mb5I38ws8Rc4Ewky06LyUYzsd3HtRu9k5EGxkR69qG0Qfm/0kCn8yUEh0Yv8bC5JFm/rj/XmXHfJGCX9o8ST8jk6A/dnNxl+teqoYAh251ZaKQiqIMsu7A8p3S5ZDrv1Y6VQcDGFuFuvo3B/wvfak0p3lJr7+lAW07O3VWe2r2LvT8GxSNBuomK+Foguk8HC2Wy0vYZ4pUqpg==
+ bh=Ukg735LtZUz8u/3Gx7DRtsq8S0qw8QEJzUvZN9TkjK0=;
+ b=IUh3NjwdvKG92+/BMjhpO2neLRZQS3//L00Hb/ELoMmNTZSq8SQwFidpKQQzcjU980s7VDOxnvMtVmicVS8nrcXO5HSWt66P8tNjpY2db1bJxLybzJXFOLJ6TG7RpE/yLOYFr8xQlQOd6FREyIAfXCaAyPP/nravwlZpzPjckW8QUojp5TzV1NOaPbNcqdHF097fnhcRvct6kouAlAeN9DeB7xM6rUQr2YKImLJesSYJPxvt31KvHNVzwQK6X+s4SUUuSzDdiI7OsX+eysJ15dkg5Yy9zvRKXMN/kJ1ljwi1eJZI2V17XYAvs2kNWh+hgJshEa6DWoUBqFtXACQLww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w1yt174BkP9mJg2zq1FVO4125cgDK7TQCy43M1tA0dQ=;
- b=OdPsDhxksuMLN+M024/n9TvdjOJ6g01rhQXjMPdwu+cyHdifW/wO/Q6Pu6RA7N5nH/x/iczsrTMhZl5gx0lYBy++wA/PxYg7q1s/57PUSzTVuHGYpZCTldRRvw/AB9KIGBV9NQuH1BwKZYvZ/S04nAz1CwLPwsOpBgYWLEBwbE8=
+ bh=Ukg735LtZUz8u/3Gx7DRtsq8S0qw8QEJzUvZN9TkjK0=;
+ b=VWI4oGUmuES5HqHuzeTfMPxRiDrQ+Q4MC3gjOh3NTMT4UgkFsYdPi0I3BrGsDzREI+v2s6zXodkqYZ6fVraAf1/lbmI/gmkgrKQzuH1MxFn1aPx7YZNSpuAPtG96sNv6sQ6sB2EtH84Bqcux0NG7cOw403jDexlHH5LjIUHLgzc=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from CH2PR12MB4133.namprd12.prod.outlook.com (2603:10b6:610:7a::13)
  by CH2PR12MB3925.namprd12.prod.outlook.com (2603:10b6:610:21::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.22; Tue, 5 Oct
- 2021 23:45:55 +0000
+ 2021 23:45:56 +0000
 Received: from CH2PR12MB4133.namprd12.prod.outlook.com
  ([fe80::59b0:c983:56:ec27]) by CH2PR12MB4133.namprd12.prod.outlook.com
  ([fe80::59b0:c983:56:ec27%5]) with mapi id 15.20.4587.018; Tue, 5 Oct 2021
- 23:45:55 +0000
+ 23:45:56 +0000
 From:   Michael Roth <michael.roth@amd.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
@@ -58,207 +58,247 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         "H . Peter Anvin" <hpa@zytor.com>
-Subject: [RFC 14/16] KVM: selftests: add helpers for SEV-SNP-related instructions/exits
-Date:   Tue,  5 Oct 2021 18:44:57 -0500
-Message-Id: <20211005234459.430873-15-michael.roth@amd.com>
+Subject: [RFC 15/16] KVM: selftests: add SEV-SNP boot tests
+Date:   Tue,  5 Oct 2021 18:44:58 -0500
+Message-Id: <20211005234459.430873-16-michael.roth@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211005234459.430873-1-michael.roth@amd.com>
 References: <20211005234459.430873-1-michael.roth@amd.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SA0PR12CA0008.namprd12.prod.outlook.com
- (2603:10b6:806:6f::13) To CH2PR12MB4133.namprd12.prod.outlook.com
+X-ClientProxiedBy: SA0PR12CA0007.namprd12.prod.outlook.com
+ (2603:10b6:806:6f::12) To CH2PR12MB4133.namprd12.prod.outlook.com
  (2603:10b6:610:7a::13)
 MIME-Version: 1.0
-Received: from localhost (165.204.77.1) by SA0PR12CA0008.namprd12.prod.outlook.com (2603:10b6:806:6f::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.18 via Frontend Transport; Tue, 5 Oct 2021 23:45:54 +0000
+Received: from localhost (165.204.77.1) by SA0PR12CA0007.namprd12.prod.outlook.com (2603:10b6:806:6f::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.18 via Frontend Transport; Tue, 5 Oct 2021 23:45:56 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e7d518b7-110a-4923-d5e1-08d9885a4591
+X-MS-Office365-Filtering-Correlation-Id: e8a4d8f8-0054-4700-f5b9-08d9885a468c
 X-MS-TrafficTypeDiagnostic: CH2PR12MB3925:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CH2PR12MB392501621E95C0E784B140DB95AF9@CH2PR12MB3925.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-Microsoft-Antispam-PRVS: <CH2PR12MB39252E0185D235BD3F5ACBDD95AF9@CH2PR12MB3925.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?XOi0RpoIEyj2Ig8c14VGuaNm39r1AmZCYaNr5SUeC0BRmy891O6puwEe3u3W?=
- =?us-ascii?Q?MGHjOU4KDgBe46axm9HUwO5MnlVMPElh1I6o5Hwjh0xqxXXX0bw/i5kd6qMB?=
- =?us-ascii?Q?VKLHVL/fLxJs3TQ01R1U2YTqwcf3Ugf7SmIZIBCrhJbAEwuhz22oNGQvoNf0?=
- =?us-ascii?Q?HrnKq4eyX3ZkMK5XBkJvmrwM4YS10hCcmyDE8Rpl1IEN5qxh1isYtuUeULMP?=
- =?us-ascii?Q?NW1oxq+QEqOstvZDtHXvebfw36qblbiNewvo+3PUvawXXFgl+faqrpuDa/Fz?=
- =?us-ascii?Q?zN1XPr1CHBvdxP1PD8T2a/8ZspxPAtkpbqWfwKKFAlUuJw6mCm8wZHmJmcmq?=
- =?us-ascii?Q?NyhjHN6A99DbSK3csxaHSDE3vfTgWISDpOA6EsybDy/UjsaQJvEU08nXSC8n?=
- =?us-ascii?Q?T/RIH73XeEg/1cyQ45jJTCu60H70ZOoEHGPe7KeAPDv03EzsjqPMfRZ+nsVJ?=
- =?us-ascii?Q?PkLJIlIgRuaNHr3hD6zBogBGvqSnupqXWXdaKzj/95L/nIixlYSN4xONy4rD?=
- =?us-ascii?Q?D0wl0ByLUQxTskSjEw4Hr7bpgyNR5c0bcvLWJy6FoUiiJkPTFsYwo0EK6/6U?=
- =?us-ascii?Q?+UgO8MohXo/OnC3/dD8WoVJ3D9qa04D45OEzCXwGapfxQoa1+Ufg0vsQrlSO?=
- =?us-ascii?Q?eFGvK/GBdd6+nfU7T9J57mFr7PMlQF+6Xi3POwYbXpEt8U1TZcurQ8CY+C4i?=
- =?us-ascii?Q?3T/OU/XYIRHe60xpB3Icp+xlowdgCkQXc32sa97oxvorwMYu7nK9bsfg0H/N?=
- =?us-ascii?Q?JROWrEIvSQsf5GYdaJKklH8nzeJcxMTJ4MWruDADwS0NN4JtQIWqyPWq2tzS?=
- =?us-ascii?Q?gNfjJW9mqf/uetn6ceQTfFWXojdH9V8g9m6dAPcrEz5kyM/2PJIkUhmlW7cm?=
- =?us-ascii?Q?NsWpvv7sI24bu8Gmv4pytYGNxg9I5OjDYrgZi4P2V1kCYPsiJNUTbm75GOuo?=
- =?us-ascii?Q?khrK+1E/w2Z55LmtsFD/Q3IbLKH2HwquGyBjMDTHIqqVMUGTS2YNl5sCqz9J?=
- =?us-ascii?Q?LTyFr9XWT0Rzj6q8uzugFgC/7rW0ufgu1p1puLVdsHwy/DI=3D?=
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?vJSeYd6diUa6l/HwGkYfefmAbaDQuSfpSnCr+lCwRodQQIa4nCOBN0ANKR8P?=
+ =?us-ascii?Q?an0j+LYdP1eEpQ5/vPqfOxAEsf4mgImUMvjYcn31a3YtPl24Q8/3Rf2RYoOw?=
+ =?us-ascii?Q?xZHA7i7L6nS8TPPHEAeBaxULogl0pX7nI7ZojLiOQfYuKWkHaMpIhedtCRRu?=
+ =?us-ascii?Q?Bei2VHDQ4ReTTxX+fyMovjkIDzilCkfgiXi0/D/J4d9wZUcnuvGXILpuXr22?=
+ =?us-ascii?Q?cBfQQtGm8PqLhx4giUA8KUq3j4ol5lBKjrppagaUFlQOj/dZX39i1hJvjOdD?=
+ =?us-ascii?Q?gVY+O3Gv8ZFjSlFLVMpAYAI/TKbVlordsc24UTdZ4CDu5f9nNw2c6HCn8CWw?=
+ =?us-ascii?Q?3PCdggKR3nQeTJUMVWd9xsg/GF1h//lEQfuLRLwKhVFBQnJNtbdZp/k8GAY8?=
+ =?us-ascii?Q?AtVQ88WrLyOLEIWvZ1I0qOuwSicMQ6DY/RkLU6I70thAtQXhL4bxX31Nbad4?=
+ =?us-ascii?Q?Y+6S6gCIF2FRSYhJQ95ZYEUOeyPyRL8A/+1MpSMCzw/QYR2LUmLR74ivBWnY?=
+ =?us-ascii?Q?0V9u/peIzhZOf4nC88mT7aocDC+qUAUbkUQFlyWEZxW3I+8n0awSOmmWo2Tj?=
+ =?us-ascii?Q?3Fl344K1pCz+KsqNV26GuugapCwg22VCmaZ10QFDGjD8Pe9Apg6jdrWzLO9K?=
+ =?us-ascii?Q?vxYohIF03g2RKA7Wx74Wq5asecFk0tgenGTm8TRzCJV0N8ifMfzpnZOC1Zsg?=
+ =?us-ascii?Q?tlkxbJeEOqNo+31AYO+CfVTAHcML9Tr2d7P0bRKNa4Fa+bsvHJYvFcpFfhaB?=
+ =?us-ascii?Q?Gt3IHQ61TfK41tZ3WcPsWNebXy9mNn4hHrUWTBFlpOAw/RizIJ94VZBoUEnJ?=
+ =?us-ascii?Q?S2HUF6eItcxUI0cOQTMhmDuEMkGm1Hb4joowlFfynk13u7S5E917dhoNBkHH?=
+ =?us-ascii?Q?3YTzsb7Z6K2xo8a14PA0fhsGnb4X7rRHYC2kHPh3gsjdBlkf+JWdEDOkrvrA?=
+ =?us-ascii?Q?wr6vj7IdZnbtkn/auaASWM34uuxSeA+l/GsvDKAtx5AeL4uxgnN4v77HJGLx?=
+ =?us-ascii?Q?kUSLEJXOHGInpq57PgKnOXjIuEtatZMHAkJem0woZRR0zL8=3D?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:CH2PR12MB4133.namprd12.prod.outlook.com;PTR:;CAT:OSPM;SFS:(4636009)(366004)(8936002)(5660300002)(6486002)(6916009)(316002)(8676002)(44832011)(26005)(54906003)(66946007)(38350700002)(66556008)(66476007)(83380400001)(38100700002)(52116002)(956004)(508600001)(36756003)(7416002)(86362001)(2616005)(4326008)(1076003)(6496006)(186003)(2906002)(23200700001);DIR:OUT;SFP:1501;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/oc4fZremX9mz4r8mFATbDIY3z1S+qJSCaaZx7NRYooKYxW3bpL6lo+81xmm?=
- =?us-ascii?Q?HhJ0wROQ8+PnI9yuhPDg4olVNVriNQ8Be+7YbindGlDCba3bayUyMdLyq4lw?=
- =?us-ascii?Q?ED7KyRd671tYwtDzL3JjXNWHKrDIx8XZ2bqupDuy6nRLBwstjzZyi8I6Alco?=
- =?us-ascii?Q?ZpO7hcedoiushJZNS6IlCRwjxWyyRlV2oJ98znOOSxXBGnaDF98s5SDnVrja?=
- =?us-ascii?Q?Ami/fM4O4qFI801dGznDQkooHg6rcq88eD5Q8CFNstCmKvrnVnOod+veg6b3?=
- =?us-ascii?Q?k7HFRF6anXutRJ4JetIzu6lKQPg2NBoA5tX3roalSRNrcaYvTT9ziYVh2P2I?=
- =?us-ascii?Q?jGlM/V6VbZlopUHV2Do+g/DYCSs7F95BpmL4TW608hquGfq+3ECF50ItnyfW?=
- =?us-ascii?Q?cU2tjy1PCLqdADSSCZflncwuNZRbmQZBUkBdwNl3K9lkf4syQL6zA7/I2Sgl?=
- =?us-ascii?Q?olIfcUaga4RyRqwmsg10w2Mwg5LYZyvHxRLKlOkLQa7qGjZBNoCeYtMw8XEc?=
- =?us-ascii?Q?wKJFQ0+hovA70TSOTJmZm2aVEHI92uWh7Leclqgej64MgyURLoVDU+laI9Xw?=
- =?us-ascii?Q?tdS/PODwPFJX+vkotxw8Nu8mbGiUQSaipu9Ok6D54B0PLefv81PZ9BRv+iHz?=
- =?us-ascii?Q?JB7ozRQ8b1wyEp22kLYxsNJAOBfScPwPT4YC4UTQ+LH9/BPCunGCktVRffnl?=
- =?us-ascii?Q?aCccPiRPMWVrB7Lu8ojY9j72mOjr8Hv2yLLRj84qp6u0jdjTHVJcUCsv3n5m?=
- =?us-ascii?Q?1AOXHEoBKZzv20KthkZgOQhWG8YWZmUdMir3Ro/tvlgZuy59lRnqSp4pvPWt?=
- =?us-ascii?Q?8mxCq9vHEV/hfRdtMGBg9DEgIGjQAwryUml6gDGRyat01Ced43+bAWRqBasF?=
- =?us-ascii?Q?Co7q9ch8VRAeCxPnrnw2jaqn14LenZlw9DQDE2ctUDw0+s1gba4UnSmbp00S?=
- =?us-ascii?Q?wIjPYBgj8olbR145o1ZXwDCcSWQ3WApqEFGQOR0s3LvxJHQFx7EfholK0g/C?=
- =?us-ascii?Q?kpW53PZkGfK714viLmG0RxT/3sEhQP1agSRnf+vLl9QOHNSE+eR8DhyfOOs9?=
- =?us-ascii?Q?IymOytrvpZQyoeFHMo7DT9/TlpgH8gOQnxIhSTsO7QfEY7VU7q7Haj9xbogB?=
- =?us-ascii?Q?cS8E9mZJHIICiC1rLkLEn0DY1ejCVhqdEKlWJ2wyJoEFgGSzYVkUpDSC/lnp?=
- =?us-ascii?Q?8e9zkoi9Ux5odlHtUgAA7CsSwkUNEFDFyooRl+14FvQoxhyKee17dzprgtTW?=
- =?us-ascii?Q?KMdlGNeCTYTmQFAlDE4RyAcweKRHx3Kl+Nbv4JzwECozG3eYXKBHZEOoWePH?=
- =?us-ascii?Q?0ktL0cJDIe2qPw9LUF2Wcu24?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L5Ga/gLQn6uwcs4dPCYBl3aCrCImjYnHbb4+xdDXhkeAB3gMb183jOfF0ptO?=
+ =?us-ascii?Q?+QStMY0TVpwc8Wo4uikH9GOiciMd73Sc1nUZFiHFhpemakCT9sNjWnS11A2p?=
+ =?us-ascii?Q?05C/MjecqHXoIZ8SQLQiYE1+dvLYpaNFamezHPCNxZcyu3zlItdKRTnHFN6y?=
+ =?us-ascii?Q?FAhHN+hUMU/PSeSeVm4Hz2f+J2oVMSugNf+C4cQo70FulQweVDT+tdUAZFVs?=
+ =?us-ascii?Q?fkxssN6lYhYE3g6joMqKjDoeqKXBmx09K+WieERaaq5VW5gr70bJ8amD7vY/?=
+ =?us-ascii?Q?b51LzIWN+eaVAQ8e1uYaDswuXAP/58ohcDWbScjO/5a1t97nm9cxMyj2kkpA?=
+ =?us-ascii?Q?p038+RxjLXRakx/2bnr0BnLZnYZdHov3ns+3uDX5XeuB79xH6ApUgORvterp?=
+ =?us-ascii?Q?wPkp+WrtAQ6cKlLOWv68wBdoV18rdLuZrmIS38jd3DUQoXWuo5dCYfm1lChW?=
+ =?us-ascii?Q?QlkIxVuJsq6mrq8khGgN4zMRMgmZTkEy4MILlq0lAAbg8LxJFym4/TlxhkZX?=
+ =?us-ascii?Q?wWmRqn8rnJ599zr6FdxenJ/2l/8NP+6t9zb2wvDJ+XQqkPbz6QLu6hyy0ezX?=
+ =?us-ascii?Q?hG3t/eLLPrmU1yUWs7txGXXixHabXLk/RNjmGANVVPGMUrMH8EonSlVoh8I8?=
+ =?us-ascii?Q?WejrBX4o/mSeFJBRRbWTH0JyqlbbxnriY8wzBmZWg1jE2BFUzbcFoJ2F/t6/?=
+ =?us-ascii?Q?8a+IVIvZLp70gXtVZt4ytRqcj4JGI53oQ6HTOJdZeH/G2ATfrTZRQDa0LEEv?=
+ =?us-ascii?Q?2MBQSBQJ9aB+6HGk//cXx2Gl3cBUPZ3RF/QQdFCsGuYf5Y3YtoAczJTeY6d5?=
+ =?us-ascii?Q?a7aJJU1WjSDnugF4O2ISotlUbbd30jm4vKsp3e5nL23PVeuX+ulx+ijeD0+i?=
+ =?us-ascii?Q?vHQnSvEtx86O0s/8uyGkF9bQA2vs+RNLcImKpN2HTo31OHVe7w6Qbb6PdBPs?=
+ =?us-ascii?Q?vqGctkZkrgvvOOhrhLiUTPQz3vU/NS9UaTDNDaZnzMTs49Y+4M7GpkG4l/SG?=
+ =?us-ascii?Q?feqBtc4WZb8RdmB9CO78f+DfrPWck4SVHcVUwg34l3uj/Foc6sicgCbjS1cl?=
+ =?us-ascii?Q?SXxtTWpNlFheqtjLRfTY8kzXY/NxvJ2Mo/PtTZm5Lkxv5SgGBTWgQ+v+wo9o?=
+ =?us-ascii?Q?/EQ0FwLX1ir5oyfgqEIXwcovwVkdDDOyFwWxcO2n+m2g0xcucRjBZNuQc+ke?=
+ =?us-ascii?Q?JthIqluOH623VIaP9MbMDtQ2CAVNdKqBEOxv2Qp+oV73GPNshUFiRuf3RadE?=
+ =?us-ascii?Q?3bvL3dnXqwXEBvtgHM97QLTYr9jZxUQXtGw/p2GRL2AHW0cRPGhJjDw39V7x?=
+ =?us-ascii?Q?eLabJar8vNVkjH83hrZCVs0C?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7d518b7-110a-4923-d5e1-08d9885a4591
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8a4d8f8-0054-4700-f5b9-08d9885a468c
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4133.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2021 23:45:54.8262
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2021 23:45:56.6422
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8R08/G5LHXpIyOYxkHvVRycbhn48YUU3l0riiXy7OkdCdoGQIek5alJVC95SUHtYCyN8+xVXEKLwJJwZ3X7+Bw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Jyd/GhVc6hYbUuVsG+tfzM6UhLxhWzfVWRte60h3RlDw6f5GALaXPolZ8Mnqql0loNkkLLBXls70zYw81kINYw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3925
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Extend the existing sev_exitlib with helpers for handling pvalidate
-instructions and issuing page-state changes via the GHCB MSR protocol.
-
-Subsequent SEV-SNP-related tests will make use of these in guest code.
+Extend the existing SEV/SEV-ES boot tests to also cover SEV-SNP guests.
+Also add a basic test to check validation state of initial guest memory.
 
 Signed-off-by: Michael Roth <michael.roth@amd.com>
 ---
- .../kvm/include/x86_64/sev_exitlib.h          |  6 ++
- .../selftests/kvm/lib/x86_64/sev_exitlib.c    | 77 +++++++++++++++++++
- 2 files changed, 83 insertions(+)
+ .../selftests/kvm/include/x86_64/svm_util.h   |  1 +
+ .../selftests/kvm/x86_64/sev_all_boot_test.c  | 86 +++++++++++++++----
+ 2 files changed, 71 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/sev_exitlib.h b/tools/testing/selftests/kvm/include/x86_64/sev_exitlib.h
-index 4b67b4004dfa..5c7356f9e925 100644
---- a/tools/testing/selftests/kvm/include/x86_64/sev_exitlib.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/sev_exitlib.h
-@@ -8,7 +8,13 @@
- #ifndef SELFTEST_KVM_SEV_EXITLIB_H
- #define SELFTEST_KVM_SEV_EXITLIB_H
+diff --git a/tools/testing/selftests/kvm/include/x86_64/svm_util.h b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
+index 4319bb6f4691..6c51fc304ce9 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/svm_util.h
++++ b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
+@@ -18,6 +18,7 @@
  
-+#define PVALIDATE_NO_UPDATE 255
-+
- int sev_es_handle_vc(void *ghcb, u64 ghcb_gpa, struct ex_regs *regs);
- void sev_es_terminate(int reason);
-+void snp_register_ghcb(u64 ghcb_gpa);
-+void snp_psc_set_shared(u64 gpa);
-+void snp_psc_set_private(u64 gpa);
-+int snp_pvalidate(void *ptr, bool rmp_psize, bool validate);
+ #define SVM_EXIT_CPUID		0x072
+ #define SVM_EXIT_VMMCALL	0x081
++#define SVM_EXIT_NOT_VALIDATED	0x404
  
- #endif /* SELFTEST_KVM_SEV_EXITLIB_H */
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/sev_exitlib.c b/tools/testing/selftests/kvm/lib/x86_64/sev_exitlib.c
-index b3f7b0297e5b..546b402d5015 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/sev_exitlib.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/sev_exitlib.c
-@@ -51,6 +51,19 @@
- #define GHCB_REG_GPA_RESP(resp) ((resp) & GENMASK_ULL(11, 0))
- #define GHCB_REG_GPA_RESP_VAL(resp) ((resp) >> 12)
- 
-+/* GHCB MSR protocol for Page State Change */
-+#define GHCB_PSC_REQ_PRIVATE		1
-+#define GHCB_PSC_REQ_SHARED		2
-+#define GHCB_PSC_REQ_PSMASH		3
-+#define GHCB_PSC_REQ_UNSMASH		4
-+#define GHCB_PSC_REQ_CODE		0x14UL
-+#define GHCB_PSC_REQ(gfn, op)		\
-+	(((unsigned long)((op) & 0xf) << 52) |  \
-+	 ((unsigned long)((gfn) & ~(1ULL << 40)) << 12) | \
-+	 GHCB_PSC_REQ_CODE)
-+#define GHCB_PSC_RESP_CODE		0x15UL
-+#define GHCB_PSC_RESP(resp)		((resp) & GENMASK_ULL(11, 0))
-+
- /* GHCB format/accessors */
- 
- struct ghcb {
-@@ -247,3 +260,67 @@ int sev_es_handle_vc(void *ghcb, u64 ghcb_gpa, struct ex_regs *regs)
- 
- 	return handle_vc_cpuid(ghcb, ghcb_gpa, regs);
+ struct svm_test_data {
+ 	/* VMCB */
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+index 58c57c4c0ec1..3d8048efa25f 100644
+--- a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
++++ b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+@@ -217,6 +217,48 @@ guest_sev_es_code(struct sev_sync_data *sync, uint8_t *shared_buf,
+ 	guest_test_done(sync);
  }
-+
-+void snp_register_ghcb(u64 ghcb_gpa)
+ 
++static void __attribute__((__flatten__))
++guest_sev_snp_code(struct sev_sync_data *sync, uint8_t *shared_buf,
++		   uint8_t *private_buf, uint64_t ghcb_gpa, void *ghcb_gva)
 +{
-+	u64 gfn = ghcb_gpa >> PAGE_SHIFT;
-+	u64 resp;
++	uint32_t eax, ebx, ecx, edx, token = 1;
++	uint64_t sev_status;
++	int ret;
 +
-+	sev_es_wrmsr_ghcb(GHCB_REG_GPA_REQ(gfn));
-+	VMGEXIT();
++	guest_test_start(sync);
 +
-+	resp = sev_es_rdmsr_ghcb();
-+	if (GHCB_REG_GPA_RESP(resp) != GHCB_REG_GPA_RESP_CODE ||
-+	    GHCB_REG_GPA_RESP_VAL(resp) != gfn)
-+		sev_es_terminate(GHCB_TERMINATE_REASON_UNSPEC);
++again:
++	/* Check CPUID values via GHCB MSR protocol. */
++	eax = 0x8000001f;
++	ecx = 0;
++	cpuid(&eax, &ebx, &ecx, &edx);
++
++	/* Check SEV bit. */
++	SEV_GUEST_ASSERT(sync, token++, eax & (1 << 1));
++	/* Check SEV-ES bit. */
++	SEV_GUEST_ASSERT(sync, token++, eax & (1 << 3));
++
++	if (!ghcb0_gva) {
++		ghcb0_gva = ghcb_gva;
++		ghcb0_gpa = ghcb_gpa;
++		snp_register_ghcb(ghcb0_gpa);
++		/* Check CPUID bits again using GHCB-based protocol. */
++		goto again;
++	}
++
++	/* Check SEV/SEV-ES/SEV-SNP enabled bits (bits 0, 1, and 3, respectively). */
++	sev_status = rdmsr(MSR_AMD64_SEV);
++	SEV_GUEST_ASSERT(sync, token++, (sev_status & 0x7) == 7);
++
++	/* Confirm private data was validated by FW prior to boot. */
++	ret = snp_pvalidate(private_buf, 0, true);
++	SEV_GUEST_ASSERT(sync, token++, ret == PVALIDATE_NO_UPDATE);
++
++	guest_test_common(sync, shared_buf, private_buf);
++
++	guest_test_done(sync);
 +}
 +
-+static void snp_psc_request(u64 gfn, int op)
-+{
-+	u64 resp;
+ static void
+ setup_test_common(struct sev_vm *sev, void *guest_code, vm_vaddr_t *sync_vaddr,
+ 		  vm_vaddr_t *shared_vaddr, vm_vaddr_t *private_vaddr)
+@@ -244,7 +286,7 @@ setup_test_common(struct sev_vm *sev, void *guest_code, vm_vaddr_t *sync_vaddr,
+ 	fill_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x42);
+ }
+ 
+-static void test_sev(void *guest_code, uint64_t policy)
++static void test_sev(void *guest_code, bool snp, uint64_t policy)
+ {
+ 	vm_vaddr_t sync_vaddr, shared_vaddr, private_vaddr;
+ 	uint8_t *shared_buf, *private_buf;
+@@ -254,7 +296,8 @@ static void test_sev(void *guest_code, uint64_t policy)
+ 	struct kvm_vm *vm;
+ 	int i;
+ 
+-	sev = sev_vm_create(policy, TOTAL_PAGES);
++	sev = snp ? sev_snp_vm_create(policy, TOTAL_PAGES)
++		  : sev_vm_create(policy, TOTAL_PAGES);
+ 	if (!sev)
+ 		return;
+ 	vm = sev_get_vm(sev);
+@@ -262,7 +305,7 @@ static void test_sev(void *guest_code, uint64_t policy)
+ 	setup_test_common(sev, guest_code, &sync_vaddr, &shared_vaddr, &private_vaddr);
+ 
+ 	/* Set up guest params. */
+-	if (policy & SEV_POLICY_ES) {
++	if (snp || (policy & SEV_POLICY_ES)) {
+ 		vm_vaddr_t ghcb_vaddr = vm_vaddr_alloc_shared(vm, PAGE_SIZE, 0);
+ 
+ 		vcpu_args_set(vm, VCPU_ID, 6, sync_vaddr, shared_vaddr, private_vaddr,
+@@ -280,34 +323,45 @@ static void test_sev(void *guest_code, uint64_t policy)
+ 	private_buf = addr_gva2hva(vm, private_vaddr);
+ 
+ 	/* Allocations/setup done. Encrypt initial guest payload. */
+-	sev_vm_launch(sev);
++	if (snp) {
++		sev_snp_vm_launch(sev);
++	} else {
++		sev_vm_launch(sev);
+ 
+-	/* Dump the initial measurement. A test to actually verify it would be nice. */
+-	sev_vm_measure(sev, measurement);
+-	pr_info("guest measurement: ");
+-	for (i = 0; i < 32; ++i)
+-		pr_info("%02x", measurement[i]);
+-	pr_info("\n");
++		/* Dump the initial measurement. A test to actually verify it would be nice. */
++		sev_vm_measure(sev, measurement);
++		pr_info("guest measurement: ");
++		for (i = 0; i < 32; ++i)
++			pr_info("%02x", measurement[i]);
++		pr_info("\n");
+ 
+-	sev_vm_launch_finish(sev);
++		sev_vm_launch_finish(sev);
++	}
+ 
+ 	/* Guest is ready to run. Do the tests. */
+ 	check_test_start(vm, sync);
+ 	check_test_common(vm, sync, shared_buf, private_buf);
+ 	check_test_done(vm, sync);
+ 
+-	sev_vm_free(sev);
++	if (snp)
++		sev_snp_vm_free(sev);
++	else
++		sev_vm_free(sev);
+ }
+ 
+ int main(int argc, char *argv[])
+ {
+ 	/* SEV tests */
+-	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
+-	test_sev(guest_sev_code, 0);
++	test_sev(guest_sev_code, false, SEV_POLICY_NO_DBG);
++	test_sev(guest_sev_code, false, 0);
+ 
+ 	/* SEV-ES tests */
+-	test_sev(guest_sev_es_code, SEV_POLICY_ES | SEV_POLICY_NO_DBG);
+-	test_sev(guest_sev_es_code, SEV_POLICY_ES);
++	test_sev(guest_sev_es_code, false, SEV_POLICY_ES | SEV_POLICY_NO_DBG);
++	test_sev(guest_sev_es_code, false, SEV_POLICY_ES);
 +
-+	sev_es_wrmsr_ghcb(GHCB_PSC_REQ(gfn, op));
-+	VMGEXIT();
-+
-+	resp = sev_es_rdmsr_ghcb();
-+	if (GHCB_PSC_RESP(resp) != GHCB_PSC_RESP_CODE)
-+		sev_es_terminate(GHCB_TERMINATE_REASON_UNSPEC);
-+}
-+
-+void snp_psc_set_shared(u64 gpa)
-+{
-+	snp_psc_request(gpa >> PAGE_SHIFT, GHCB_PSC_REQ_SHARED);
-+}
-+
-+void snp_psc_set_private(u64 gpa)
-+{
-+	snp_psc_request(gpa >> PAGE_SHIFT, GHCB_PSC_REQ_PRIVATE);
-+}
-+
-+/* From arch/x86/include/asm/asm.h */
-+#ifdef __GCC_ASM_FLAG_OUTPUTS__
-+# define CC_SET(c) "\n\t/* output condition code " #c "*/\n"
-+# define CC_OUT(c) "=@cc" #c
-+#else
-+# define CC_SET(c) "\n\tset" #c " %[_cc_" #c "]\n"
-+# define CC_OUT(c) [_cc_ ## c] "=qm"
-+#endif
-+
-+int snp_pvalidate(void *ptr, bool rmp_psize, bool validate)
-+{
-+	uint64_t gva = (uint64_t)ptr;
-+	bool no_rmpupdate;
-+	int rc;
-+
-+	/* "pvalidate" mnemonic support in binutils 2.36 and newer */
-+	asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFF\n\t"
-+		     CC_SET(c)
-+		     : CC_OUT(c) (no_rmpupdate), "=a"(rc)
-+		     : "a"(gva), "c"(rmp_psize), "d"(validate)
-+		     : "memory", "cc");
-+
-+	if (no_rmpupdate)
-+		return PVALIDATE_NO_UPDATE;
-+
-+	return rc;
-+}
++	/* SEV-SNP tests */
++	test_sev(guest_sev_snp_code, true, SNP_POLICY_SMT);
++	test_sev(guest_sev_snp_code, true, SNP_POLICY_SMT | SNP_POLICY_DBG);
+ 
+ 	return 0;
+ }
 -- 
 2.25.1
 
