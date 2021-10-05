@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF46B4234A2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 01:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0E94234A4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 01:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237109AbhJEXsI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Oct 2021 19:48:08 -0400
-Received: from mail-bn8nam11hn2208.outbound.protection.outlook.com ([52.100.171.208]:38080
+        id S237151AbhJEXsb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Oct 2021 19:48:31 -0400
+Received: from mail-bn8nam11hn2217.outbound.protection.outlook.com ([52.100.171.217]:8641
         "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236966AbhJEXr6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Oct 2021 19:47:58 -0400
+        id S237240AbhJEXsH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 5 Oct 2021 19:48:07 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YBQR4frYlhS46ZJDTL2VnZcXiLM5LplQjUoTfQN3CZu0EY7CE0FtkguYfB99iuL0k/43owEmvmkjbw4NzuLvaefM/1H3NFjr4tkyNYNb1GUxil9JSMiawI5bf1fda35FGrAxbO5JQjtcDa03Y9jYJuN/lXX3B8/keXmu4fzSx2EoJCNAJfGBs0L/pegwqySjmIFGQuE9Jug7NQAbtcxbz7IftuxsQJsYhdbmQl8Z6KUAdOlcBD/khDWLrrmLVumPqw9jBQoFvngCuP2BDBPPMnVcxY2Z4/qUfnRiBG0MBAYKpaUcm5HkrDvnMBKmXpifWgZUCPxJyna9LWiDa7ANHA==
+ b=BAE1+BeUwCym5tr3UcdT9gvtJN/cbxZuvReH0Uk334mYWa+izijZ2LsrQeree/suomH0PWw3h3u/37QmCIqkcKGB6mhHAm7TuVP0I/LH13Ju35eeo3Lwglkvws47xLgabFXE8T0Be051YaYjni/TowcukQslBbOyT5WYrDH/h0EbOnMGIVOdnuqC6NX2NjJd9Pq5aKCk029ZsYko0yYe9hQ7+badPgjYuzyYJeIm0qJ0Zp5Oh6ZO8BLrNtNln5h8auOJQ8sL/CLEUDqVBvGVj28uCdpw5HANCDL55DW7NNwHXGz6xaa5OuhivwAuGmD1BVi7m9d74lWpzU9+wCSA3g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ukg735LtZUz8u/3Gx7DRtsq8S0qw8QEJzUvZN9TkjK0=;
- b=IUh3NjwdvKG92+/BMjhpO2neLRZQS3//L00Hb/ELoMmNTZSq8SQwFidpKQQzcjU980s7VDOxnvMtVmicVS8nrcXO5HSWt66P8tNjpY2db1bJxLybzJXFOLJ6TG7RpE/yLOYFr8xQlQOd6FREyIAfXCaAyPP/nravwlZpzPjckW8QUojp5TzV1NOaPbNcqdHF097fnhcRvct6kouAlAeN9DeB7xM6rUQr2YKImLJesSYJPxvt31KvHNVzwQK6X+s4SUUuSzDdiI7OsX+eysJ15dkg5Yy9zvRKXMN/kJ1ljwi1eJZI2V17XYAvs2kNWh+hgJshEa6DWoUBqFtXACQLww==
+ bh=qBVg4Filp1xn8ZowPTaMrMyh17Zi4wOJlTQEV8OVZZ0=;
+ b=mxewDvH3zXqfVY71valu68jrkWMh9+WFv01ripMccv8ExK9NjBwMKpjbyFsj+fDwnq0K+BeagWlrlNLU51GJ0uK8THLg/QAPz2tcMXM3v5j41MEgxX1H6zAWSrGoKk5pzRc0+RDTwbCsgx1RP6msFilIMrfhIffUa6tromsbyKf24As+aJY/cOPLBI8cwfeUJSwEdYM86lU6oqzCmDm+u2hE5rS3VH+RMoNdWgwkhEJmG4bpQbCL0uZjPnyTzo//I7KsA40TX+8JAWC0lDgFF5Ocj0gXeGMBBtEKgpgiHhRefVMB8JRhNdg4HOy+Ru3LN445bAlTL/IMT06PVqXMVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ukg735LtZUz8u/3Gx7DRtsq8S0qw8QEJzUvZN9TkjK0=;
- b=VWI4oGUmuES5HqHuzeTfMPxRiDrQ+Q4MC3gjOh3NTMT4UgkFsYdPi0I3BrGsDzREI+v2s6zXodkqYZ6fVraAf1/lbmI/gmkgrKQzuH1MxFn1aPx7YZNSpuAPtG96sNv6sQ6sB2EtH84Bqcux0NG7cOw403jDexlHH5LjIUHLgzc=
+ bh=qBVg4Filp1xn8ZowPTaMrMyh17Zi4wOJlTQEV8OVZZ0=;
+ b=rChr1hSg8AYXNsRKKRLaLIvaIyuI1l059CI8pOb+xjanhUSzrSE2oAvH0YZggnDO2kYvvTAhkhcVWvgxDxfOLiqf66NX30oerCtmN1zo0kDftlOH5NZ564FKqp568Ti+LELRq90rjun1KEToyU9XHWfjIS06ZzPWxYEhHoSWF8o=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from CH2PR12MB4133.namprd12.prod.outlook.com (2603:10b6:610:7a::13)
  by CH2PR12MB3925.namprd12.prod.outlook.com (2603:10b6:610:21::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.22; Tue, 5 Oct
- 2021 23:45:56 +0000
+ 2021 23:45:58 +0000
 Received: from CH2PR12MB4133.namprd12.prod.outlook.com
  ([fe80::59b0:c983:56:ec27]) by CH2PR12MB4133.namprd12.prod.outlook.com
  ([fe80::59b0:c983:56:ec27%5]) with mapi id 15.20.4587.018; Tue, 5 Oct 2021
- 23:45:56 +0000
+ 23:45:58 +0000
 From:   Michael Roth <michael.roth@amd.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
@@ -58,9 +58,9 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         "H . Peter Anvin" <hpa@zytor.com>
-Subject: [RFC 15/16] KVM: selftests: add SEV-SNP boot tests
-Date:   Tue,  5 Oct 2021 18:44:58 -0500
-Message-Id: <20211005234459.430873-16-michael.roth@amd.com>
+Subject: [RFC 16/16] KVM: selftests: add SEV-SNP tests for page-state changes
+Date:   Tue,  5 Oct 2021 18:44:59 -0500
+Message-Id: <20211005234459.430873-17-michael.roth@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211005234459.430873-1-michael.roth@amd.com>
 References: <20211005234459.430873-1-michael.roth@amd.com>
@@ -70,235 +70,497 @@ X-ClientProxiedBy: SA0PR12CA0007.namprd12.prod.outlook.com
  (2603:10b6:806:6f::12) To CH2PR12MB4133.namprd12.prod.outlook.com
  (2603:10b6:610:7a::13)
 MIME-Version: 1.0
-Received: from localhost (165.204.77.1) by SA0PR12CA0007.namprd12.prod.outlook.com (2603:10b6:806:6f::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.18 via Frontend Transport; Tue, 5 Oct 2021 23:45:56 +0000
+Received: from localhost (165.204.77.1) by SA0PR12CA0007.namprd12.prod.outlook.com (2603:10b6:806:6f::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.18 via Frontend Transport; Tue, 5 Oct 2021 23:45:57 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e8a4d8f8-0054-4700-f5b9-08d9885a468c
+X-MS-Office365-Filtering-Correlation-Id: 0ff2a08d-5bd3-4bb3-539f-08d9885a4793
 X-MS-TrafficTypeDiagnostic: CH2PR12MB3925:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CH2PR12MB39252E0185D235BD3F5ACBDD95AF9@CH2PR12MB3925.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-Microsoft-Antispam-PRVS: <CH2PR12MB3925F4702C5B86D11AF5050795AF9@CH2PR12MB3925.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?vJSeYd6diUa6l/HwGkYfefmAbaDQuSfpSnCr+lCwRodQQIa4nCOBN0ANKR8P?=
- =?us-ascii?Q?an0j+LYdP1eEpQ5/vPqfOxAEsf4mgImUMvjYcn31a3YtPl24Q8/3Rf2RYoOw?=
- =?us-ascii?Q?xZHA7i7L6nS8TPPHEAeBaxULogl0pX7nI7ZojLiOQfYuKWkHaMpIhedtCRRu?=
- =?us-ascii?Q?Bei2VHDQ4ReTTxX+fyMovjkIDzilCkfgiXi0/D/J4d9wZUcnuvGXILpuXr22?=
- =?us-ascii?Q?cBfQQtGm8PqLhx4giUA8KUq3j4ol5lBKjrppagaUFlQOj/dZX39i1hJvjOdD?=
- =?us-ascii?Q?gVY+O3Gv8ZFjSlFLVMpAYAI/TKbVlordsc24UTdZ4CDu5f9nNw2c6HCn8CWw?=
- =?us-ascii?Q?3PCdggKR3nQeTJUMVWd9xsg/GF1h//lEQfuLRLwKhVFBQnJNtbdZp/k8GAY8?=
- =?us-ascii?Q?AtVQ88WrLyOLEIWvZ1I0qOuwSicMQ6DY/RkLU6I70thAtQXhL4bxX31Nbad4?=
- =?us-ascii?Q?Y+6S6gCIF2FRSYhJQ95ZYEUOeyPyRL8A/+1MpSMCzw/QYR2LUmLR74ivBWnY?=
- =?us-ascii?Q?0V9u/peIzhZOf4nC88mT7aocDC+qUAUbkUQFlyWEZxW3I+8n0awSOmmWo2Tj?=
- =?us-ascii?Q?3Fl344K1pCz+KsqNV26GuugapCwg22VCmaZ10QFDGjD8Pe9Apg6jdrWzLO9K?=
- =?us-ascii?Q?vxYohIF03g2RKA7Wx74Wq5asecFk0tgenGTm8TRzCJV0N8ifMfzpnZOC1Zsg?=
- =?us-ascii?Q?tlkxbJeEOqNo+31AYO+CfVTAHcML9Tr2d7P0bRKNa4Fa+bsvHJYvFcpFfhaB?=
- =?us-ascii?Q?Gt3IHQ61TfK41tZ3WcPsWNebXy9mNn4hHrUWTBFlpOAw/RizIJ94VZBoUEnJ?=
- =?us-ascii?Q?S2HUF6eItcxUI0cOQTMhmDuEMkGm1Hb4joowlFfynk13u7S5E917dhoNBkHH?=
- =?us-ascii?Q?3YTzsb7Z6K2xo8a14PA0fhsGnb4X7rRHYC2kHPh3gsjdBlkf+JWdEDOkrvrA?=
- =?us-ascii?Q?wr6vj7IdZnbtkn/auaASWM34uuxSeA+l/GsvDKAtx5AeL4uxgnN4v77HJGLx?=
- =?us-ascii?Q?kUSLEJXOHGInpq57PgKnOXjIuEtatZMHAkJem0woZRR0zL8=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:CH2PR12MB4133.namprd12.prod.outlook.com;PTR:;CAT:OSPM;SFS:(4636009)(366004)(8936002)(5660300002)(6486002)(6916009)(316002)(8676002)(44832011)(26005)(54906003)(66946007)(38350700002)(66556008)(66476007)(83380400001)(38100700002)(52116002)(956004)(508600001)(36756003)(7416002)(86362001)(2616005)(4326008)(1076003)(6496006)(186003)(2906002)(23200700001);DIR:OUT;SFP:1501;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?HC2nK3t+jm2U4hd++jGfU5QJdAzuyq91n7TVZGGeP2cXxxoUqDiokbI9Z4yd?=
+ =?us-ascii?Q?rmma0pn5UVnu3TOb9gWDPtZzc3zCAoC0RGTE/wqNB44UoF/FPlbOdu5lEeD8?=
+ =?us-ascii?Q?tqSPrtiZ9JenIIoOlQdP7OwisIpzLr+1fdbSH1Mwp+99Vn496iQv55DB1iHo?=
+ =?us-ascii?Q?fNga+dTEQkI52OA/wcg6JQAvu6PMcoycdKdwfLhj/9ceKavWSriLiQk0ti+V?=
+ =?us-ascii?Q?cC+v2gr7hroYKo3VTAXhso+Mm+Kg3HAcg3RtTf3/vYFpdFp6jz3AQVp+dfxS?=
+ =?us-ascii?Q?v2JO6RPqrvV+wvzzPsYx1VqDENeySD4TMxHFDWmnt4MBNxHA3v24f/ez1M9N?=
+ =?us-ascii?Q?bIcBQ4KfHgguGWnsDjaIW2eO/gE5W/dDPZ0786FKAh/gstlZb4j2kTeK9M7f?=
+ =?us-ascii?Q?I4ZQlaAtHZ/oZ5K30fz9nIqk148Wq6tZ1sgOmOZEhXya1Zg1dYDaR3fRSonU?=
+ =?us-ascii?Q?ia1d+TL4M9aF6rWKjjiODXI0b5fcUKapDwFkDsVa3NS/KpNKTpolv4xL/BZ9?=
+ =?us-ascii?Q?v+hOmmBMebDO86Fk46vy67vEwr82bzQN+6BGXwda53GFehpY3q9OktGBLmm8?=
+ =?us-ascii?Q?lq2P9H04umwj8FvI2Oqt/tUMIcGN+U+m4gV2UJZxP76eAJh9fGI9RqbdME/Y?=
+ =?us-ascii?Q?sEWe6LyjgE9VDmgfwx1A7HxMjeAgKCMpup6HsspjGwjLS+d062+Cw9pGm9n+?=
+ =?us-ascii?Q?oLyNyvkDOkev/S/nYv8xg+E7OmMEErdSUvv22BUTUKF8YT0wENVLiZcLjDSo?=
+ =?us-ascii?Q?330ZW/ASSH1n6c5Mc0mRBxzD5UnIdDJRn4D6089h3LuNc5BLieE/jBby9mmn?=
+ =?us-ascii?Q?Xk6ozLqnOhMKN2GarO1itXnuf19vQpPvty6PFMpRVBPzXkGQnpZgfOdomqjc?=
+ =?us-ascii?Q?E/xeomtDmYU8JvCuVLyNskh1eunI7/ylfAAIBd+NjcDCnB5IWa7M8B7OdRWw?=
+ =?us-ascii?Q?SF2Sp6RZgJNdBrG5XQmwdhyCrPtemzWa971/4vqeZxukNhONCCeZgvUwl/s+?=
+ =?us-ascii?Q?PPAfmkAzjeQalsQMqBox9TqU7qGAYJoJy4l6owlXyU/zCpg=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:CH2PR12MB4133.namprd12.prod.outlook.com;PTR:;CAT:OSPM;SFS:(4636009)(366004)(8936002)(5660300002)(6486002)(30864003)(6916009)(316002)(8676002)(44832011)(26005)(54906003)(66946007)(38350700002)(66556008)(66476007)(83380400001)(38100700002)(52116002)(956004)(508600001)(36756003)(7416002)(86362001)(2616005)(4326008)(1076003)(6496006)(186003)(2906002)(23200700001);DIR:OUT;SFP:1501;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L5Ga/gLQn6uwcs4dPCYBl3aCrCImjYnHbb4+xdDXhkeAB3gMb183jOfF0ptO?=
- =?us-ascii?Q?+QStMY0TVpwc8Wo4uikH9GOiciMd73Sc1nUZFiHFhpemakCT9sNjWnS11A2p?=
- =?us-ascii?Q?05C/MjecqHXoIZ8SQLQiYE1+dvLYpaNFamezHPCNxZcyu3zlItdKRTnHFN6y?=
- =?us-ascii?Q?FAhHN+hUMU/PSeSeVm4Hz2f+J2oVMSugNf+C4cQo70FulQweVDT+tdUAZFVs?=
- =?us-ascii?Q?fkxssN6lYhYE3g6joMqKjDoeqKXBmx09K+WieERaaq5VW5gr70bJ8amD7vY/?=
- =?us-ascii?Q?b51LzIWN+eaVAQ8e1uYaDswuXAP/58ohcDWbScjO/5a1t97nm9cxMyj2kkpA?=
- =?us-ascii?Q?p038+RxjLXRakx/2bnr0BnLZnYZdHov3ns+3uDX5XeuB79xH6ApUgORvterp?=
- =?us-ascii?Q?wPkp+WrtAQ6cKlLOWv68wBdoV18rdLuZrmIS38jd3DUQoXWuo5dCYfm1lChW?=
- =?us-ascii?Q?QlkIxVuJsq6mrq8khGgN4zMRMgmZTkEy4MILlq0lAAbg8LxJFym4/TlxhkZX?=
- =?us-ascii?Q?wWmRqn8rnJ599zr6FdxenJ/2l/8NP+6t9zb2wvDJ+XQqkPbz6QLu6hyy0ezX?=
- =?us-ascii?Q?hG3t/eLLPrmU1yUWs7txGXXixHabXLk/RNjmGANVVPGMUrMH8EonSlVoh8I8?=
- =?us-ascii?Q?WejrBX4o/mSeFJBRRbWTH0JyqlbbxnriY8wzBmZWg1jE2BFUzbcFoJ2F/t6/?=
- =?us-ascii?Q?8a+IVIvZLp70gXtVZt4ytRqcj4JGI53oQ6HTOJdZeH/G2ATfrTZRQDa0LEEv?=
- =?us-ascii?Q?2MBQSBQJ9aB+6HGk//cXx2Gl3cBUPZ3RF/QQdFCsGuYf5Y3YtoAczJTeY6d5?=
- =?us-ascii?Q?a7aJJU1WjSDnugF4O2ISotlUbbd30jm4vKsp3e5nL23PVeuX+ulx+ijeD0+i?=
- =?us-ascii?Q?vHQnSvEtx86O0s/8uyGkF9bQA2vs+RNLcImKpN2HTo31OHVe7w6Qbb6PdBPs?=
- =?us-ascii?Q?vqGctkZkrgvvOOhrhLiUTPQz3vU/NS9UaTDNDaZnzMTs49Y+4M7GpkG4l/SG?=
- =?us-ascii?Q?feqBtc4WZb8RdmB9CO78f+DfrPWck4SVHcVUwg34l3uj/Foc6sicgCbjS1cl?=
- =?us-ascii?Q?SXxtTWpNlFheqtjLRfTY8kzXY/NxvJ2Mo/PtTZm5Lkxv5SgGBTWgQ+v+wo9o?=
- =?us-ascii?Q?/EQ0FwLX1ir5oyfgqEIXwcovwVkdDDOyFwWxcO2n+m2g0xcucRjBZNuQc+ke?=
- =?us-ascii?Q?JthIqluOH623VIaP9MbMDtQ2CAVNdKqBEOxv2Qp+oV73GPNshUFiRuf3RadE?=
- =?us-ascii?Q?3bvL3dnXqwXEBvtgHM97QLTYr9jZxUQXtGw/p2GRL2AHW0cRPGhJjDw39V7x?=
- =?us-ascii?Q?eLabJar8vNVkjH83hrZCVs0C?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zRjvnVX3M6YQOWgo9bvXAOdWPj/DT+0cgvEgX2WQcTv79GuUmkssymMNta/t?=
+ =?us-ascii?Q?tdCY/9zTDM37HYaOobnDikerJCkqxooz3x7pvsYOAxk3HBZk1u+FBUq0k0DA?=
+ =?us-ascii?Q?nW59a9XR0FoRcOCdiM8lna5OfsjPOqrlkwftbBI1GwXPXyBFXyQtncmo4yys?=
+ =?us-ascii?Q?dUMnU6U9SEXXKyJSPjqE+D5eO5zh0/R12jJqRd3LBdAwWHY5E2Y2ksUAdtLZ?=
+ =?us-ascii?Q?qgUIYeq3mpeC0iZGzjHadFmvBnWLBGYWNcOnmK2cPsL4feG3r1JnTf+Heihq?=
+ =?us-ascii?Q?l9QlUq6S9kmuP6ffWPP3IUajKRUIMYCFcI4qYXIkv0UPBYdknYYtaZH6bmNd?=
+ =?us-ascii?Q?FqDO/u9Uu32kZg2anRDAfXdPO4YVmXCGmnyvNPbt9xf1oD3p8MU/pILRGmxz?=
+ =?us-ascii?Q?uF1xFMQtIxKXLn3A1SwA9VtKWDsX+DRkQ7JRTs1+R1Gx+IDFnqW1qO5Ahije?=
+ =?us-ascii?Q?hyJxnbx6DG0lYdvt755C9dbJDGVyUuDPHj3AVpyOHdwW+16uaOg92eqksTXb?=
+ =?us-ascii?Q?ybPKTq8NoUocYQJ5YEvd0WpsxAkhIsSwnoiIRuErHY3InNvZlvvqWIxfuURK?=
+ =?us-ascii?Q?V9RbPsgyOlxmGb8aYqm8l+4Z1uEP+Haimdu0Yh5sjKJkMTE47fFGbnMS+xVc?=
+ =?us-ascii?Q?wYfk0nd2smqKblyN1Z7HIWO6r5KHlbihdL7ho+RNmhpxlie+G3jALjecF3lu?=
+ =?us-ascii?Q?6sDK+5DKBKOkL5bMBm+DrAniwYa3CLyU5GyHDDfgsAK3wQnfxeuQXzErtlOo?=
+ =?us-ascii?Q?LMsodcrnrc8M95DuqqMQa4ncMpRxm52ZSs/keKJ246H7KEfRXvMP4xX4niMZ?=
+ =?us-ascii?Q?r0fgkb6SqEU+euXR0Fbzr/uuvCUM2098y8B8WYtdCR8bxLLkXg2r53Ibp7lC?=
+ =?us-ascii?Q?Kw5/dDS2P3AusVYM6KO2WaBuclv61qdiCBrBzgq4ha1Q/ZqSe7t3jw8NHWGz?=
+ =?us-ascii?Q?kM+H3mEgqRY+n41aw+rSaUGShfWNU9XjXOWdyYy9+YzGlnTjsyMB3kNOFiff?=
+ =?us-ascii?Q?2bsOcxtTI2BsOCHf7KEyl0BPWRAqi7Y+nOeHt/QaF8x4JRQcdOyA20R+h7Pm?=
+ =?us-ascii?Q?bgHgp/fTtmMiQOaaU6S0VCiuWsaAQZdZXZALq1h9o6b0zbCSncu5abA6uJBP?=
+ =?us-ascii?Q?ZrSr0yMdohUE8Ky8r81MOBo0S2+l5hgtdUV051QYAo8VsYoVTmLRyeY6LhJ2?=
+ =?us-ascii?Q?WxIj/c+0uhWfnTMPSjwqzSlQjuPxuFm6K2MfSz2/iytvLVmgjrDvARExuixR?=
+ =?us-ascii?Q?B3ShJFCS5cKBukTpwJrIWW39+KLKl5dzmvF8rQhCHOtYwBe9JcwDCb2Zy05p?=
+ =?us-ascii?Q?53nM6pujaqHvxRYNoOuH6BE9?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8a4d8f8-0054-4700-f5b9-08d9885a468c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ff2a08d-5bd3-4bb3-539f-08d9885a4793
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4133.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2021 23:45:56.6422
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2021 23:45:58.1625
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Jyd/GhVc6hYbUuVsG+tfzM6UhLxhWzfVWRte60h3RlDw6f5GALaXPolZ8Mnqql0loNkkLLBXls70zYw81kINYw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3H4GIFWkK6mn9BvIJnp/L8/GjJJtWZrVysc1amD0Tuuv+H+KEp5wFdvYLEwDoxpzaXzEdlLhzwRdyX2mo2aC0Q==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3925
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Extend the existing SEV/SEV-ES boot tests to also cover SEV-SNP guests.
-Also add a basic test to check validation state of initial guest memory.
+With SEV-SNP guests memory is marked as private/shared or
+validated/un-validated in the RMP table. Transitioning memory between
+these states can be done within a guest via pvalidate instructions and
+the page-state changes via GHCB protocol. Add a number of tests to
+cover various permutations of the operations across shared/private
+guest memory.
 
 Signed-off-by: Michael Roth <michael.roth@amd.com>
 ---
- .../selftests/kvm/include/x86_64/svm_util.h   |  1 +
- .../selftests/kvm/x86_64/sev_all_boot_test.c  | 86 +++++++++++++++----
- 2 files changed, 71 insertions(+), 16 deletions(-)
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/x86_64/sev_snp_psc_test.c   | 378 ++++++++++++++++++
+ 3 files changed, 380 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/sev_snp_psc_test.c
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/svm_util.h b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-index 4319bb6f4691..6c51fc304ce9 100644
---- a/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-@@ -18,6 +18,7 @@
- 
- #define SVM_EXIT_CPUID		0x072
- #define SVM_EXIT_VMMCALL	0x081
-+#define SVM_EXIT_NOT_VALIDATED	0x404
- 
- struct svm_test_data {
- 	/* VMCB */
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-index 58c57c4c0ec1..3d8048efa25f 100644
---- a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-@@ -217,6 +217,48 @@ guest_sev_es_code(struct sev_sync_data *sync, uint8_t *shared_buf,
- 	guest_test_done(sync);
- }
- 
-+static void __attribute__((__flatten__))
-+guest_sev_snp_code(struct sev_sync_data *sync, uint8_t *shared_buf,
-+		   uint8_t *private_buf, uint64_t ghcb_gpa, void *ghcb_gva)
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index 824f100bec2a..cad9ebe7728d 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -39,6 +39,7 @@
+ /x86_64/xss_msr_test
+ /x86_64/vmx_pmu_msrs_test
+ /x86_64/sev_all_boot_test
++/x86_64/sev_snp_psc_test
+ /access_tracking_perf_test
+ /demand_paging_test
+ /dirty_log_test
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 7b3261cc60a3..b95fb86f12aa 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -73,6 +73,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_msrs_test
+ TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
+ TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
+ TEST_GEN_PROGS_x86_64 += x86_64/sev_all_boot_test
++TEST_GEN_PROGS_x86_64 += x86_64/sev_snp_psc_test
+ TEST_GEN_PROGS_x86_64 += access_tracking_perf_test
+ TEST_GEN_PROGS_x86_64 += demand_paging_test
+ TEST_GEN_PROGS_x86_64 += dirty_log_test
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_snp_psc_test.c b/tools/testing/selftests/kvm/x86_64/sev_snp_psc_test.c
+new file mode 100644
+index 000000000000..695abcd14792
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86_64/sev_snp_psc_test.c
+@@ -0,0 +1,378 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * SEV-SNP tests for pvalidate and page-state changes.
++ *
++ * Copyright (C) 2021 Advanced Micro Devices
++ */
++#define _GNU_SOURCE /* for program_invocation_short_name */
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/ioctl.h>
++
++#include "test_util.h"
++#include "kvm_util.h"
++#include "processor.h"
++#include "svm_util.h"
++#include "linux/psp-sev.h"
++#include "sev.h"
++#include "sev_exitlib.h"
++
++#define VCPU_ID			0
++#define PAGE_SHIFT		12
++#define PAGE_SIZE		(1UL << PAGE_SHIFT)
++#define PAGE_STRIDE		64
++
++/* NOTE: private/shared pages must each number at least 4 and be power of 2. */
++
++#define SHARED_PAGES		512
++#define SHARED_VADDR_MIN	0x1000000
++
++#define PRIVATE_PAGES		512
++#define PRIVATE_VADDR_MIN	(SHARED_VADDR_MIN + SHARED_PAGES * PAGE_SIZE)
++
++#define TOTAL_PAGES		(512 + SHARED_PAGES + PRIVATE_PAGES)
++#define LINEAR_MAP_GVA		(PRIVATE_VADDR_MIN + PRIVATE_PAGES * PAGE_SIZE)
++
++struct pageTableEntry {
++	uint64_t present:1;
++	uint64_t ignored_11_01:11;
++	uint64_t pfn:40;
++	uint64_t ignored_63_52:12;
++};
++
++/* Globals for use by #VC handler and helpers. */
++static int page_not_validated_count;
++static struct sev_sync_data *guest_sync;
++static uint8_t enc_bit;
++
++static void fill_buf(uint8_t *buf, size_t pages, size_t stride, uint8_t val)
 +{
-+	uint32_t eax, ebx, ecx, edx, token = 1;
-+	uint64_t sev_status;
++	int i, j;
++
++	for (i = 0; i < pages; i++)
++		for (j = 0; j < PAGE_SIZE; j += stride)
++			buf[i * PAGE_SIZE + j] = val;
++}
++
++static bool check_buf_nostop(uint8_t *buf, size_t pages, size_t stride, uint8_t val)
++{
++	bool matches = true;
++	int i, j;
++
++	for (i = 0; i < pages; i++)
++		for (j = 0; j < PAGE_SIZE; j += stride)
++			if (buf[i * PAGE_SIZE + j] != val)
++				matches = false;
++	return matches;
++}
++
++static bool check_buf(uint8_t *buf, size_t pages, size_t stride, uint8_t val)
++{
++	int i, j;
++
++	for (i = 0; i < pages; i++)
++		for (j = 0; j < PAGE_SIZE; j += stride)
++			if (buf[i * PAGE_SIZE + j] != val)
++				return false;
++
++	return true;
++}
++
++static void vc_handler(struct ex_regs *regs)
++{
 +	int ret;
 +
-+	guest_test_start(sync);
++	if (regs->error_code == SVM_EXIT_NOT_VALIDATED) {
++		unsigned long gva;
 +
-+again:
-+	/* Check CPUID values via GHCB MSR protocol. */
++		page_not_validated_count++;
++
++		asm volatile("mov %%cr2,%0" : "=r" (gva));
++		ret = snp_pvalidate((void *)gva, 0, true);
++		SEV_GUEST_ASSERT(guest_sync, 9001, !ret);
++
++		return;
++	}
++
++	ret = sev_es_handle_vc(NULL, 0, regs);
++	SEV_GUEST_ASSERT(guest_sync, 20000 + regs->error_code, !ret);
++}
++
++#define gpa_mask(gpa) (gpa & ~(1ULL << enc_bit))
++#define gfn_mask(gfn) (gfn & ~((1ULL << enc_bit) >> PAGE_SHIFT))
++#define va(gpa) ((void *)(LINEAR_MAP_GVA + (gpa & ~(1ULL << enc_bit))))
++#define gfn2va(gfn) va(gfn_mask(gfn) * PAGE_SIZE)
++
++static void set_pte_bit(void *ptr, uint8_t pos, bool enable)
++{
++	struct pageTableEntry *pml4e, *pdpe, *pde, *pte;
++	uint16_t index[4];
++	uint64_t *pte_val;
++	uint64_t gva = (uint64_t)ptr;
++
++	index[0] = (gva >> 12) & 0x1FFU;
++	index[1] = (gva >> 21) & 0x1FFU;
++	index[2] = (gva >> 30) & 0x1FFU;
++	index[3] = (gva >> 39) & 0x1FFU;
++
++	pml4e = (struct pageTableEntry *)va(gpa_mask(get_cr3()));
++	SEV_GUEST_ASSERT(guest_sync, 1001, pml4e[index[3]].present);
++
++	pdpe = (struct pageTableEntry *)gfn2va(pml4e[index[3]].pfn);
++	SEV_GUEST_ASSERT(guest_sync, 1002, pdpe[index[2]].present);
++
++	pde = (struct pageTableEntry *)gfn2va(pdpe[index[2]].pfn);
++	SEV_GUEST_ASSERT(guest_sync, 1003, pde[index[1]].present);
++
++	pte = (struct pageTableEntry *)gfn2va(pde[index[1]].pfn);
++	SEV_GUEST_ASSERT(guest_sync, 1004, pte[index[0]].present);
++
++	pte_val = (uint64_t *)&pte[index[0]];
++	if (enable)
++		*pte_val |= (1UL << pos);
++	else
++		*pte_val &= ~(1UL << pos);
++
++	asm volatile("invlpg (%0)" ::"r" (gva) : "memory");
++}
++
++static void guest_test_psc(uint64_t shared_buf_gpa, uint8_t *shared_buf,
++			   uint64_t private_buf_gpa, uint8_t *private_buf)
++{
++	bool success;
++	int rc, i;
++
++	sev_guest_sync(guest_sync, 100, 0);
++
++	/* Flip 1st half of private pages to shared and verify VMM can read them. */
++	for (i = 0; i < (PRIVATE_PAGES / 2); i++) {
++		rc = snp_pvalidate(&private_buf[i * PAGE_SIZE], 0, false);
++		SEV_GUEST_ASSERT(guest_sync, 101, !rc);
++		snp_psc_set_shared(private_buf_gpa + i * PAGE_SIZE);
++		set_pte_bit(&private_buf[i * PAGE_SIZE], enc_bit, false);
++	}
++	fill_buf(private_buf, PRIVATE_PAGES / 2, PAGE_STRIDE, 0x43);
++
++	sev_guest_sync(guest_sync, 200, 0);
++
++	/*
++	 * Flip 2nd half of private pages to shared and hand them to the VMM.
++	 *
++	 * This time leave the C-bit set, which should cause a 0x404
++	 * (PAGE_NOT_VALIDATED) #VC when guest later attempts to access each
++	 * page.
++	 */
++	for (i = PRIVATE_PAGES / 2; i < PRIVATE_PAGES; i++) {
++		rc = snp_pvalidate(&private_buf[i * PAGE_SIZE], 0, false);
++		if (rc)
++			sev_guest_abort(guest_sync, rc, 0);
++		snp_psc_set_shared(private_buf_gpa + i * PAGE_SIZE);
++	}
++
++	sev_guest_sync(guest_sync, 300, 0);
++
++	/*
++	 * VMM has filled up the newly-shared pages, but C-bit is still set, so
++	 * verify the contents still show up as encrypted, and make sure to
++	 * access each to verify #VC records the PAGE_NOT_VALIDATED exceptions.
++	 */
++	WRITE_ONCE(page_not_validated_count, 0);
++	success = check_buf_nostop(&private_buf[(PRIVATE_PAGES / 2) * PAGE_SIZE],
++				   PRIVATE_PAGES / 2, PAGE_STRIDE, 0x44);
++	SEV_GUEST_ASSERT(guest_sync, 301, !success);
++	SEV_GUEST_ASSERT(guest_sync, 302,
++			 READ_ONCE(page_not_validated_count) == (PRIVATE_PAGES / 2));
++
++	/* Now flip the C-bit off and verify the VMM-provided values are intact. */
++	for (i = PRIVATE_PAGES / 2; i < PRIVATE_PAGES; i++)
++		set_pte_bit(&private_buf[i * PAGE_SIZE], enc_bit, false);
++	success = check_buf(&private_buf[(PRIVATE_PAGES / 2) * PAGE_SIZE],
++			    PRIVATE_PAGES / 2, PAGE_STRIDE, 0x44);
++	SEV_GUEST_ASSERT(guest_sync, 303, success);
++
++	/* Flip the 1st half back to private pages. */
++	for (i = 0; i < (PRIVATE_PAGES / 2); i++) {
++		snp_psc_set_private(private_buf_gpa + i * PAGE_SIZE);
++		set_pte_bit(&private_buf[i * PAGE_SIZE], enc_bit, true);
++		rc = snp_pvalidate(&private_buf[i * PAGE_SIZE], 0, true);
++		SEV_GUEST_ASSERT(guest_sync, 304, !rc);
++	}
++	/* Pages are private again, write over them with new encrypted data. */
++	fill_buf(private_buf, PRIVATE_PAGES / 2, PAGE_STRIDE, 0x45);
++
++	sev_guest_sync(guest_sync, 400, 0);
++
++	/*
++	 * Take some private pages and flip the C-bit off. Subsequent access
++	 * should cause an RMP fault, which should lead to the VMM doing a
++	 * PSC to shared on our behalf.
++	 */
++	for (i = 0; i < (PRIVATE_PAGES / 4); i++)
++		set_pte_bit(&private_buf[i * PAGE_SIZE], enc_bit, false);
++	fill_buf(private_buf, PRIVATE_PAGES / 4, PAGE_STRIDE, 0x46);
++
++	sev_guest_sync(guest_sync, 500, 0);
++
++	/* Flip all even-numbered shared pages to private. */
++	for (i = 0; i < SHARED_PAGES; i++) {
++		if ((i % 2) != 0)
++			continue;
++
++		snp_psc_set_private(shared_buf_gpa + i * PAGE_SIZE);
++		set_pte_bit(&shared_buf[i * PAGE_SIZE], enc_bit, true);
++		rc = snp_pvalidate(&shared_buf[i * PAGE_SIZE], 0, true);
++		SEV_GUEST_ASSERT(guest_sync, 501, !rc);
++	}
++
++	/* Write across the entire range and hand it back to VMM to verify. */
++	fill_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x47);
++
++	sev_guest_sync(guest_sync, 600, 0);
++}
++
++static void check_test_psc(struct kvm_vm *vm, struct sev_sync_data *sync,
++			   uint8_t *shared_buf, uint8_t *private_buf)
++{
++	struct kvm_run *run = vcpu_state(vm, VCPU_ID);
++	bool success;
++	int i;
++
++	/* Initial check-in for PSC tests. */
++	vcpu_run(vm, VCPU_ID);
++	sev_check_guest_sync(run, sync, 100);
++
++	vcpu_run(vm, VCPU_ID);
++	sev_check_guest_sync(run, sync, 200);
++
++	/* 1st half of private buffer should be shared now, check contents. */
++	success = check_buf(private_buf, PRIVATE_PAGES / 2, PAGE_STRIDE, 0x43);
++	TEST_ASSERT(success, "Unexpected contents in newly-shared buffer.");
++
++	vcpu_run(vm, VCPU_ID);
++	sev_check_guest_sync(run, sync, 300);
++
++	/* 2nd half of private buffer should be shared now, write to it. */
++	fill_buf(&private_buf[(PRIVATE_PAGES / 2) * PAGE_SIZE],
++		 PRIVATE_PAGES / 2, PAGE_STRIDE, 0x44);
++
++	vcpu_run(vm, VCPU_ID);
++	sev_check_guest_sync(run, sync, 400);
++
++	/* 1st half of private buffer should no longer be shared. Verify. */
++	success = check_buf(private_buf, PRIVATE_PAGES / 2, PAGE_STRIDE, 0x45);
++	TEST_ASSERT(!success, "Unexpected contents in newly-private buffer.");
++
++	vcpu_run(vm, VCPU_ID);
++	sev_check_guest_sync(run, sync, 500);
++
++	/* 1st quarter of private buffer should be shared again. Verify. */
++	success = check_buf(private_buf, PRIVATE_PAGES / 4, PAGE_STRIDE, 0x46);
++	TEST_ASSERT(success, "Unexpected contents in newly-shared buffer.");
++
++	vcpu_run(vm, VCPU_ID);
++	sev_check_guest_sync(run, sync, 600);
++
++	/* Verify even-numbered pages in shared_buf are now private. */
++	for (i = 0; i < SHARED_PAGES; i++) {
++		success = check_buf(&shared_buf[i * PAGE_SIZE], 1, PAGE_STRIDE, 0x47);
++		if ((i % 2) == 0)
++			TEST_ASSERT(!success, "Private buffer contains plain-text.");
++		else
++			TEST_ASSERT(success, "Shared buffer contains cipher-text.");
++	}
++}
++
++static void __attribute__((__flatten__))
++guest_code(struct sev_sync_data *sync, uint64_t shared_buf_gpa, uint8_t *shared_buf,
++	   uint64_t private_buf_gpa, uint8_t *private_buf)
++{
++	uint32_t eax, ebx, ecx, edx;
++
++	/* Initial check-in. */
++	guest_sync = sync;
++	sev_guest_sync(guest_sync, 1, 0);
++
++	/* Get encryption bit via CPUID. */
 +	eax = 0x8000001f;
 +	ecx = 0;
 +	cpuid(&eax, &ebx, &ecx, &edx);
++	enc_bit = ebx & 0x3F;
 +
-+	/* Check SEV bit. */
-+	SEV_GUEST_ASSERT(sync, token++, eax & (1 << 1));
-+	/* Check SEV-ES bit. */
-+	SEV_GUEST_ASSERT(sync, token++, eax & (1 << 3));
++	/* Do the tests. */
++	guest_test_psc(shared_buf_gpa, shared_buf, private_buf_gpa, private_buf);
 +
-+	if (!ghcb0_gva) {
-+		ghcb0_gva = ghcb_gva;
-+		ghcb0_gpa = ghcb_gpa;
-+		snp_register_ghcb(ghcb0_gpa);
-+		/* Check CPUID bits again using GHCB-based protocol. */
-+		goto again;
-+	}
-+
-+	/* Check SEV/SEV-ES/SEV-SNP enabled bits (bits 0, 1, and 3, respectively). */
-+	sev_status = rdmsr(MSR_AMD64_SEV);
-+	SEV_GUEST_ASSERT(sync, token++, (sev_status & 0x7) == 7);
-+
-+	/* Confirm private data was validated by FW prior to boot. */
-+	ret = snp_pvalidate(private_buf, 0, true);
-+	SEV_GUEST_ASSERT(sync, token++, ret == PVALIDATE_NO_UPDATE);
-+
-+	guest_test_common(sync, shared_buf, private_buf);
-+
-+	guest_test_done(sync);
++	sev_guest_done(guest_sync, 10000, 0);
 +}
 +
- static void
- setup_test_common(struct sev_vm *sev, void *guest_code, vm_vaddr_t *sync_vaddr,
- 		  vm_vaddr_t *shared_vaddr, vm_vaddr_t *private_vaddr)
-@@ -244,7 +286,7 @@ setup_test_common(struct sev_vm *sev, void *guest_code, vm_vaddr_t *sync_vaddr,
- 	fill_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x42);
- }
- 
--static void test_sev(void *guest_code, uint64_t policy)
-+static void test_sev(void *guest_code, bool snp, uint64_t policy)
- {
- 	vm_vaddr_t sync_vaddr, shared_vaddr, private_vaddr;
- 	uint8_t *shared_buf, *private_buf;
-@@ -254,7 +296,8 @@ static void test_sev(void *guest_code, uint64_t policy)
- 	struct kvm_vm *vm;
- 	int i;
- 
--	sev = sev_vm_create(policy, TOTAL_PAGES);
-+	sev = snp ? sev_snp_vm_create(policy, TOTAL_PAGES)
-+		  : sev_vm_create(policy, TOTAL_PAGES);
- 	if (!sev)
- 		return;
- 	vm = sev_get_vm(sev);
-@@ -262,7 +305,7 @@ static void test_sev(void *guest_code, uint64_t policy)
- 	setup_test_common(sev, guest_code, &sync_vaddr, &shared_vaddr, &private_vaddr);
- 
- 	/* Set up guest params. */
--	if (policy & SEV_POLICY_ES) {
-+	if (snp || (policy & SEV_POLICY_ES)) {
- 		vm_vaddr_t ghcb_vaddr = vm_vaddr_alloc_shared(vm, PAGE_SIZE, 0);
- 
- 		vcpu_args_set(vm, VCPU_ID, 6, sync_vaddr, shared_vaddr, private_vaddr,
-@@ -280,34 +323,45 @@ static void test_sev(void *guest_code, uint64_t policy)
- 	private_buf = addr_gva2hva(vm, private_vaddr);
- 
- 	/* Allocations/setup done. Encrypt initial guest payload. */
--	sev_vm_launch(sev);
-+	if (snp) {
-+		sev_snp_vm_launch(sev);
-+	} else {
-+		sev_vm_launch(sev);
- 
--	/* Dump the initial measurement. A test to actually verify it would be nice. */
--	sev_vm_measure(sev, measurement);
--	pr_info("guest measurement: ");
--	for (i = 0; i < 32; ++i)
--		pr_info("%02x", measurement[i]);
--	pr_info("\n");
-+		/* Dump the initial measurement. A test to actually verify it would be nice. */
-+		sev_vm_measure(sev, measurement);
-+		pr_info("guest measurement: ");
-+		for (i = 0; i < 32; ++i)
-+			pr_info("%02x", measurement[i]);
-+		pr_info("\n");
- 
--	sev_vm_launch_finish(sev);
-+		sev_vm_launch_finish(sev);
-+	}
- 
- 	/* Guest is ready to run. Do the tests. */
- 	check_test_start(vm, sync);
- 	check_test_common(vm, sync, shared_buf, private_buf);
- 	check_test_done(vm, sync);
- 
--	sev_vm_free(sev);
-+	if (snp)
-+		sev_snp_vm_free(sev);
-+	else
-+		sev_vm_free(sev);
- }
- 
- int main(int argc, char *argv[])
- {
- 	/* SEV tests */
--	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
--	test_sev(guest_sev_code, 0);
-+	test_sev(guest_sev_code, false, SEV_POLICY_NO_DBG);
-+	test_sev(guest_sev_code, false, 0);
- 
- 	/* SEV-ES tests */
--	test_sev(guest_sev_es_code, SEV_POLICY_ES | SEV_POLICY_NO_DBG);
--	test_sev(guest_sev_es_code, SEV_POLICY_ES);
-+	test_sev(guest_sev_es_code, false, SEV_POLICY_ES | SEV_POLICY_NO_DBG);
-+	test_sev(guest_sev_es_code, false, SEV_POLICY_ES);
++int main(int argc, char *argv[])
++{
++	vm_vaddr_t shared_vaddr, private_vaddr, sync_vaddr;
++	uint8_t *shared_buf, *private_buf;
++	struct sev_sync_data *sync;
++	struct kvm_run *run;
++	struct sev_vm *sev;
++	struct kvm_vm *vm;
 +
-+	/* SEV-SNP tests */
-+	test_sev(guest_sev_snp_code, true, SNP_POLICY_SMT);
-+	test_sev(guest_sev_snp_code, true, SNP_POLICY_SMT | SNP_POLICY_DBG);
- 
- 	return 0;
- }
++	/* Create VM and main memslot/region. */
++	sev = sev_snp_vm_create(SNP_POLICY_SMT, TOTAL_PAGES);
++	if (!sev)
++		exit(KSFT_SKIP);
++	vm = sev_get_vm(sev);
++
++	/* Set up VCPU and #VC handler. */
++	vm_vcpu_add_default(vm, VCPU_ID, guest_code);
++	kvm_vm_elf_load(vm, program_invocation_name);
++	vm_init_descriptor_tables(vm);
++	vm_install_exception_handler(vm, 29, vc_handler);
++	vcpu_init_descriptor_tables(vm, VCPU_ID);
++
++	/* Set up shared page for sync buffer. */
++	sync_vaddr = vm_vaddr_alloc_shared(vm, PAGE_SIZE, 0);
++	sync = addr_gva2hva(vm, sync_vaddr);
++
++	/* Set up additional buffer for reserved shared memory. */
++	shared_vaddr = vm_vaddr_alloc_shared(vm, SHARED_PAGES * PAGE_SIZE,
++					     SHARED_VADDR_MIN);
++	shared_buf = addr_gva2hva(vm, shared_vaddr);
++	memset(shared_buf, 0, SHARED_PAGES * PAGE_SIZE);
++
++	/* Set up additional buffer for reserved private memory. */
++	private_vaddr = vm_vaddr_alloc(vm, PRIVATE_PAGES * PAGE_SIZE,
++				       PRIVATE_VADDR_MIN);
++	private_buf = addr_gva2hva(vm, private_vaddr);
++	memset(private_buf, 0, PRIVATE_PAGES * PAGE_SIZE);
++
++	/*
++	 * Create a linear mapping of all guest memory. This will map all pages
++	 * as encrypted, which is okay in this case, because the linear mapping
++	 * will only be used to access page tables, which are always treated
++	 * as encrypted.
++	 */
++	virt_map(vm, LINEAR_MAP_GVA, 1UL << sev_get_enc_bit(sev), TOTAL_PAGES);
++
++	/* Set up guest params. */
++	vcpu_args_set(vm, VCPU_ID, 5, sync_vaddr,
++		      addr_gva2gpa(vm, shared_vaddr), shared_vaddr,
++		      addr_gva2gpa(vm, private_vaddr), private_vaddr);
++
++	/* Encrypt initial guest payload and prepare to run it. */
++	sev_snp_vm_launch(sev);
++
++	/* Initial guest check-in. */
++	run = vcpu_state(vm, VCPU_ID);
++	vcpu_run(vm, VCPU_ID);
++	sev_check_guest_sync(run, sync, 1);
++
++	/* Do the tests. */
++	check_test_psc(vm, sync, shared_buf, private_buf);
++
++	/* Wait for guest to finish up. */
++	vcpu_run(vm, VCPU_ID);
++	sev_check_guest_done(run, sync, 10000);
++
++	sev_snp_vm_free(sev);
++
++	return 0;
++}
 -- 
 2.25.1
 
