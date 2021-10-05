@@ -2,105 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5379B423283
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Oct 2021 22:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F89A4232C1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Oct 2021 23:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235994AbhJEVAa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Oct 2021 17:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
+        id S236600AbhJEVVd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Oct 2021 17:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236314AbhJEVAa (ORCPT
+        with ESMTP id S235845AbhJEVVc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Oct 2021 17:00:30 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7434FC061749;
-        Tue,  5 Oct 2021 13:58:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=0oxTH1mltzxv2kpZ9e/Nb63q0lm9Q7e253v367zsV3Y=; b=RrdK9zAeGnsu0eMFyd5QmGfGIn
-        6Os8KeZT2X2FY48lNSSZw6chr2YMSNaRXq8dEeEQbykqI6yl0gUHLs606/b2p3vxETaZHUGpMquBK
-        /3zZZKmqM+iUklMJJqXA8/yAe9JUoyy6InzyAEwpN/QFQMRILDm8g9/j2ixnVmYCk2Bx3vec6Z+pd
-        D4YdJb0/aA0M9LCRSv5to6wBs6aDc+OXsSlDSN37lAUYyNz1hLKbtdJcP3DrqMq3nul6iw7HmEOe4
-        D9pA6/DnIubuIb205ewUiLukQVUuzdYqi2vVexdo707EBmZPxtzfOtOA0uq/1Akwc/EsCSChAvUr3
-        B10zHUZg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mXrWI-00BsZI-SR; Tue, 05 Oct 2021 20:58:38 +0000
-Subject: Re: [PATCH] kunit: fix kernel-doc warnings due to mismatched arg
- names
-To:     Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com,
-        davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-References: <20211005204632.3132652-1-dlatypov@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <e20d43eb-c72e-c297-65a8-76e52437b83c@infradead.org>
-Date:   Tue, 5 Oct 2021 13:58:38 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 5 Oct 2021 17:21:32 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5459C061749
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Oct 2021 14:19:41 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id ls14-20020a17090b350e00b001a00e2251c8so659615pjb.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Oct 2021 14:19:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bqCgn0aR6MOwk9tPJfJQ1joytFSNdU+PPgwwrO6xJlI=;
+        b=PeELKdrd2cYGP2YhLx/BUG9C0M7dCY7GpMFStukaQTqPiIBnJQpAbJ6eKYF/wAzQXB
+         uCe4bOILYDhJzRJaw8b1uzoSdc9troRrH51TOnnZbbyJdwDtEYp0nG7+ys2c3L8romn5
+         wH3HiI6x5+mqBt4Ne5NnRWgkD6piQAy/thWmMtbqcJrfTkIRbWm1wFYNGJNdhD8ps6aE
+         mewTlq/1HvZlkjlL8qDskzOsTsKFUOvILu84oKE7N01jzAj4xmeAB0Pzg8WLT5zH7sKJ
+         rerV59ccdBd79b0gl83XhMbzq/jbWKeLcCEEWr74fsl24W8bfFgtzu28cBS2lB8fad9/
+         OCag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bqCgn0aR6MOwk9tPJfJQ1joytFSNdU+PPgwwrO6xJlI=;
+        b=tU5Qyg6Dk8GpOww2NNxsKWzKHUXfEXF6m3vmp1ydejMI632Ql0DYf8WTOH6cQkEoS0
+         oEDaINp8eIvYO445B8T+KZw6dvmU+HemPT8gblYDfRQ7swRq2ija7LSnBL9PwUn4QYCK
+         ODqy2lh0V1wRgsaJzxJ7N/hORDIReA7UpwWsAqhqobP1LjpmICuz1ctKjv1j162giT3e
+         Aregzl6CCJePNFjFMvEmPHDS5Rowxldq2tG7CO6ZnCNEWHvhAtTnMhfHa/8v2JGdFez4
+         brTLZtZg6ZpBTBvcHSxlGjoUHDGh/fTflIgUTbpB6F8CpdRE0DhGS6u6qovA208QvcdF
+         7hXQ==
+X-Gm-Message-State: AOAM532OfHHoZqLzGQ4oSeLNGeOBPtrpj5y0GVwSxEoPk8ccu65IwuCG
+        yeDB3KkMq2lR8qi7mnWveKlrlSjRpwFMzJhBD7Zlxs9Sujc=
+X-Google-Smtp-Source: ABdhPJwIYwD2mwMY7UV/wgmEJL38fXuPQlhIzuHh00eQwOuBfhYyHK1J09g7y4Jz42UNP5guuQY20p7Iu0TGJ8XmSHQ=
+X-Received: by 2002:a17:903:208b:b0:13e:d2b9:f2e8 with SMTP id
+ d11-20020a170903208b00b0013ed2b9f2e8mr7288540plc.66.1633468781010; Tue, 05
+ Oct 2021 14:19:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211005204632.3132652-1-dlatypov@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210926223322.848641-1-isabellabdoamaral@usp.br> <CABVgOSkG=J7TpuzZMW_RbGA9f4NRZxGXRS8wd-cBmrWHD97pRQ@mail.gmail.com>
+In-Reply-To: <CABVgOSkG=J7TpuzZMW_RbGA9f4NRZxGXRS8wd-cBmrWHD97pRQ@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 5 Oct 2021 14:19:30 -0700
+Message-ID: <CAFd5g47ECaw3CRH4MKzVPYmYhsiXR5hvha0ciadAFtEuUz6Xdw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] test_hash.c: refactor into KUnit
+To:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Isabella Basso <isabellabdoamaral@usp.br>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        ferreiraenzoa@gmail.com, augusto.duraes33@gmail.com,
+        Daniel Latypov <dlatypov@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        ~lkcamp/patches@lists.sr.ht, rodrigosiqueiramelo@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/5/21 1:46 PM, Daniel Latypov wrote:
-> Commit 7122debb4367 ("kunit: introduce
-> kunit_kmalloc_array/kunit_kcalloc() helpers") added new functions but
-> called last arg `flags`, unlike the existing code that used `gfp`.
-> This only is an issue in test.h, test.c still used `gfp`.
-> 
-> But the documentation was copy-pasted with the old names, leading to
-> kernel-doc warnings.
-> 
-> Do s/flags/gfp to make the names consistent and fix the warnings.
-> 
-> Fixes: 7122debb4367 ("kunit: introduce kunit_kmalloc_array/kunit_kcalloc() helpers")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
++Shuah Khan
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+On Sat, Oct 2, 2021 at 12:30 AM David Gow <davidgow@google.com> wrote:
+>
+> On Mon, Sep 27, 2021 at 6:33 AM Isabella Basso <isabellabdoamaral@usp.br> wrote:
+> >
+> > We refactored the lib/test_hash.c file into KUnit as part of the student
+> > group LKCAMP [1] introductory hackathon for kernel development.
+> >
+> > This test was pointed to our group by Daniel Latypov [2], so its full
+> > conversion into a pure KUnit test was our goal in this patch series, but
+> > we ran into many problems relating to it not being split as unit tests,
+> > which complicated matters a bit, as the reasoning behind the original
+> > tests is quite cryptic for those unfamiliar with hash implementations.
+> >
+> > Some interesting developments we'd like to highlight are:
+> >
+> > - In patch 1/5 we noticed that there was an unused define directive that
+> >   could be removed.
+> > - In patch 4/5 we noticed how stringhash and hash tests are all under
+> >   the lib/test_hash.c file, which might cause some confusion, and we
+> >   also broke those kernel config entries up.
+> >
+> > Overall KUnit developments have been made in the other patches in this
+> > series:
+> >
+> > In patches 2/5, 3/5 and 5/5 we refactored the lib/test_hash.c
+> > file so as to make it more compatible with the KUnit style, whilst
+> > preserving the original idea of the maintainer who designed it (i.e.
+> > George Spelvin), which might be undesirable for unit tests, but we
+> > assume it is enough for a first patch.
+> >
+> > This is our first patch series so we hope our contributions are
+> > interesting and also hope to get some useful criticism from the
+> > community. :)
+> >
+> > Changes since V1:
+> > - Fixed compilation on parisc and m68k.
+> > - Fixed whitespace mistakes.
+> > - Renamed a few functions.
+> > - Refactored globals into struct for test function params, thus removing
+> >   a patch.
+> > - Reworded some commit messages.
+> >
+> > [1] - https://lkcamp.dev/
+> > [2] - https://lore.kernel.org/linux-kselftest/CAGS_qxojszgM19u=3HLwFgKX5bm5KhywvsSunuBAt5RtR+GyxQ@mail.gmail.com/
+> >
+>
+> Thanks: I've gone through this new revision, and it still works fine,
+> and my prior comments have been addressed. The commit messages in
+> particular are much clearer, thank you! I've reviewed the various
+> patches and left a few comments here and there, but there's nothing
+> too drastic.
+>
+> I'm pretty happy with this from the KUnit side, but it would be ideal
+> if someone with more knowledge of the hash functions looked over it.
+> Unfortunately, George's email is bouncing, and no-one else has made
+> any particularly major changes to this.
+>
+> My only remaining comment on the tests themselves is that it'd be nice
+> to have them split up further into more, smaller tests. Given that
+> it's a port of an existing test, though, I understand the desire not
+> to change things too drastically.
+>
+> We also need to work out how this is going to go upstream: does it go
+> through the kunit branch (via Shuah's kselftest repo), or directly to
+> Linus (who's handled most of the other recent-ish changes here.
+> Brendan, any thoughts?
 
-Thanks.
+I think Shuah should take them in 5.16.
 
-> ---
->   include/kunit/test.h | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 24b40e5c160b..018e776a34b9 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -613,7 +613,7 @@ void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
->    * and is automatically cleaned up after the test case concludes. See &struct
->    * kunit_resource for more information.
->    */
-> -void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t flags);
-> +void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp);
->   
->   /**
->    * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
-> @@ -657,9 +657,9 @@ static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
->    *
->    * See kcalloc() and kunit_kmalloc_array() for more information.
->    */
-> -static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp_t flags)
-> +static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp_t gfp)
->   {
-> -	return kunit_kmalloc_array(test, n, size, flags | __GFP_ZERO);
-> +	return kunit_kmalloc_array(test, n, size, gfp | __GFP_ZERO);
->   }
->   
->   void kunit_cleanup(struct kunit *test);
-> 
-> base-commit: 3b29021ddd10cfb6b2565c623595bd3b02036f33
-> 
+Shuah, let me know if you are OK taking these in 5.16 and I will
+update the patch tracker.
 
-
--- 
-~Randy
+> Cheers,
+> -- David
+>
+>
+>
+> > Isabella Basso (5):
+> >   hash.h: remove unused define directive
+> >   test_hash.c: split test_int_hash into arch-specific functions
+> >   test_hash.c: split test_hash_init
+> >   lib/Kconfig.debug: properly split hash test kernel entries
+> >   test_hash.c: refactor into kunit
+> >
+> >  include/linux/hash.h       |   5 +-
+> >  lib/Kconfig.debug          |  28 ++++-
+> >  lib/Makefile               |   3 +-
+> >  lib/test_hash.c            | 247 +++++++++++++++++--------------------
+> >  tools/include/linux/hash.h |   5 +-
+> >  5 files changed, 139 insertions(+), 149 deletions(-)
+> >
+> > --
+> > 2.33.0
+> >
