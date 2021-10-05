@@ -2,143 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2743242223B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Oct 2021 11:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F207B422531
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Oct 2021 13:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233554AbhJEJ0a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Oct 2021 05:26:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43353 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233501AbhJEJ03 (ORCPT
+        id S234480AbhJELj4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Oct 2021 07:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234470AbhJELjz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Oct 2021 05:26:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1633425879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qyGWEhpdvwHRCn/lr1t/kNe6MHkOq9fXmq3K7gAa+cc=;
-        b=RD2GftGyfyrVrqjB0yAUet2wrjKOU9CTSPZ76kmGPW9dyAfqEDyS/5d4nqAQ2WAcWIHeA/
-        QyMwUo3a1/GhMPHkJAjz4WMyE9g0zkcLUPRXUXxI/22cZThD2i4+/dgrqmq/PgM8SkcYzO
-        GenOJcQ32mVQoL0GnyJ+ABuvOFBT84s=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-531-YETLEAj_PmuF1NvZWR3dfQ-1; Tue, 05 Oct 2021 05:24:35 -0400
-X-MC-Unique: YETLEAj_PmuF1NvZWR3dfQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A2C610151E1;
-        Tue,  5 Oct 2021 09:24:33 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C0F385F4EA;
-        Tue,  5 Oct 2021 09:24:23 +0000 (UTC)
-Date:   Tue, 5 Oct 2021 17:24:18 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
-        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
-        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
-        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 09/12] sysfs: fix deadlock race with module removal
-Message-ID: <YVwZwh7qDKfSM59h@T590>
-References: <20210927163805.808907-1-mcgrof@kernel.org>
- <20210927163805.808907-10-mcgrof@kernel.org>
+        Tue, 5 Oct 2021 07:39:55 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E644C061749
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Oct 2021 04:38:05 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id i30so2584498vsj.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Oct 2021 04:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=LKMdW8eXJJQoIzur5jtUB7TYD/pVRqgw99BRVM74YbM=;
+        b=bvHZj8CnlZu/+k3WLurBvfhh8xIG9cTHGpmv5QNT0Q0h4qrSXD6qs7OfQK1CK8UvPd
+         p/JHCQltA8FqwaV165+0xZN9ilKyWt3ILxkK4gJ/jh0INlA3VoI3HXssCn6qv+6JfUWw
+         kZt5fplFQIUXlMBVNq+yFJaNPkBvR2eMxbwkuq39vU1dZbtgkyeNb2kGbsnpKw/ar2ca
+         7RuNPiT6kOJuL7SCaFx5tjAiAqoSzBremcgpQ+la/A4Zg+nAcG8T+M1JLkxYdydMpiWO
+         Pko6EbDyS76P7sY+8acDHlcvd2T/Kbi9l1NCjbNG2J2aR7kD62o1JuJc9/zs/qC19MIC
+         xT3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=LKMdW8eXJJQoIzur5jtUB7TYD/pVRqgw99BRVM74YbM=;
+        b=evnVF/PYZ/MRDFVVSW6WeTrvimqzJyYEu82bCsVKs4IchGQaSg6OStSsHaOv06Qvvc
+         kMLm6+HOzfHsTN3EeG7qaXk/3qEdO0TzdezfQ+fGsfHzIzakZND4fF89Kk9q4eE8OmIN
+         6RZsYl3WGfOYoP5tRM95y3s7wmftflmt4olk163p3BgQrvmYxaBHzNwyriEdCoouH6D0
+         416uQRtcb1Ib2glJoWdQ1OH6iD6BSDQPH1iW1zMbnSWhM0+SBe5S6bSLqKmWK4lSBzPY
+         vZGX0OmG1cNMH47wzT7Q3rWArLs6p//kWwYVwks3BChJILQkVLz134Gp/MVwXWAiqinc
+         m7FQ==
+X-Gm-Message-State: AOAM533wO9qeDYoEKo/in91uNCA4IB0gk0XjHLPiGvLcHZzN1CFszcBx
+        DaRQDOWQRwxwtvNTco4KUKidNXKx24RRLxu/z1s=
+X-Google-Smtp-Source: ABdhPJy2Fcly/B3q+ApQe3Lqm68if/UpQSGfe7I4ZCfIr4Bv32Z5KQkaOe75e6oOPv8dx2PjLUPrUXX7VX9mwkQh/2s=
+X-Received: by 2002:a67:f60f:: with SMTP id k15mr17754871vso.9.1633433884401;
+ Tue, 05 Oct 2021 04:38:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210927163805.808907-10-mcgrof@kernel.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Received: by 2002:a59:aa12:0:b0:236:458b:903c with HTTP; Tue, 5 Oct 2021
+ 04:38:04 -0700 (PDT)
+Reply-To: lydiawright836@gmail.com
+From:   LYDIA WRIGHT <jacobbarney58@gmail.com>
+Date:   Tue, 5 Oct 2021 14:38:04 +0300
+Message-ID: <CAEfbTUKeJrbSdi_29JMfqp-3QWk-ng+g2H7xf4S+ZiWG9GVvMQ@mail.gmail.com>
+Subject: Hello Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 09:38:02AM -0700, Luis Chamberlain wrote:
-> When driver sysfs attributes use a lock also used on module removal we
-> can race to deadlock. This happens when for instance a sysfs file on
-> a driver is used, then at the same time we have module removal call
-> trigger. The module removal call code holds a lock, and then the
-> driver's sysfs file entry waits for the same lock. While holding the
-> lock the module removal tries to remove the sysfs entries, but these
-> cannot be removed yet as one is waiting for a lock. This won't complete
-> as the lock is already held. Likewise module removal cannot complete,
-> and so we deadlock.
-> 
-> This can now be easily reproducible with our sysfs selftest as follows:
-> 
-> ./tools/testing/selftests/sysfs/sysfs.sh -t 0027
-> 
-> This uses a local driver lock. Test 0028 can also be used, that uses
-> the rtnl_lock():
-> 
-> ./tools/testing/selftests/sysfs/sysfs.sh -t 0028
-> 
-> To fix this we extend the struct kernfs_node with a module reference
-> and use the try_module_get() after kernfs_get_active() is called. As
-> documented in the prior patch, we now know that once kernfs_get_active()
-> is called the module is implicitly guarded to exist and cannot be removed.
-> This is because the module is the one in charge of removing the same
-> sysfs file it created, and removal of sysfs files on module exit will wait
-> until they don't have any active references. By using a try_module_get()
-> after kernfs_get_active() we yield to let module removal trump calls to
-> process a sysfs operation, while also preventing module removal if a sysfs
-> operation is in already progress. This prevents the deadlock.
-> 
-> This deadlock was first reported with the zram driver, however the live
+Greetings dear,
 
-Looks not see the lock pattern you mentioned in zram driver, can you
-share the related zram code?
+My name is Lydia A. Wright, and I'm from Akron, Ohio. The U.S.A, This
+message will most likely surprise you. I'm dying of cancer, which I
+was diagnosed with around two years ago, and I'm recovering from a
+stroke that has made walking difficult.
+Mr. L=C3=A9vi Wright, my husband, passed away in mid-March 2011 from a
+heart attack. I'll be having surgery soon.  I only have a few years
+left in this world, my late spouse has  $10.5 million as a family
+valuable , which I intend to gift to charity.
 
-> patching folks have acknowledged they have observed this as well with
-> live patching, when a live patch is removed. I was then able to
-> reproduce easily by creating a dedicated selftest for it.
-> 
-> A sketch of how this can happen follows, consider foo a local mutex
-> part of a driver, and used on the driver's module exit routine and
-> on one of its sysfs ops:
-> 
-> foo.c:
-> static DEFINE_MUTEX(foo);
-> static ssize_t foo_store(struct device *dev,
-> 			 struct device_attribute *attr,
-> 			 const char *buf, size_t count)
-> {
-> 	...
-> 	mutex_lock(&foo);
-> 	...
-> 	mutex_lock(&foo);
-> 	...
-> }
-> static DEVICE_ATTR_RW(foo);
-> ...
-> void foo_exit(void)
-> {
-> 	mutex_lock(&foo);
-> 	...
-> 	mutex_unlock(&foo);
-> }
-> module_exit(foo_exit);
-> 
-> And this can lead to this condition:
-> 
-> CPU A                              CPU B
->                                    foo_store()
-> foo_exit()
->   mutex_lock(&foo)
->                                    mutex_lock(&foo)
->    del_gendisk(some_struct->disk);
->      device_del()
->        device_remove_groups()
+For more information, please contact me at (lydiawright836@gmail.com)
+. Thank you sincerely!
 
-I guess the deadlock exists if foo_exit() is called anywhere. If yes,
-look the issue may not be related with removing module directly, right?
-
-
-
-Thanks,
-Ming
-
+Mrs. Lydia A. Wright
+Rosalind Ct, Akron, Ohio , U.S.A
