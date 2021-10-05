@@ -2,262 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3423A42305C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Oct 2021 20:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8D342306E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Oct 2021 20:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbhJESwS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Oct 2021 14:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S229684AbhJES4K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Oct 2021 14:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbhJESwS (ORCPT
+        with ESMTP id S229662AbhJES4I (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Oct 2021 14:52:18 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0A7C061749
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Oct 2021 11:50:27 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id y23so218180lfb.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Oct 2021 11:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lXdezQfuCfVkENY7jnc43K9813HJFYnFN+4/R39hM/w=;
-        b=q03Oj5ha0jq4IwzFMGNAXWasG6hsDXopmlEBCVyNfl06Cr57ccAVIw//C+FoVyxZkP
-         wh6TPHqNpxyuOz4N/nXnIB7zf7eTkayp6sQbWDK+jf0GJZZ4cA/EsVX1+nLNZupavxnm
-         dS+l+8KDcF4aL0kUpNsGIWZCjKe8mIkdE7sJoXIXT6TMAWZszrO9ozBY9S/glNN7o57g
-         nsxbNYA5OFcP/o3ZCIj3vZ6vR7DW4MDWgk+ZznaFJ6qN/uXOFLYc6yqZAB8S0uYhHOCG
-         nwC+xoNtOBBQzTWZsrr2ctZtjTk+HjZ+F5wTZTIzZZ51uEw9Altrb6xwkWRVMhl/7FVd
-         eO0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lXdezQfuCfVkENY7jnc43K9813HJFYnFN+4/R39hM/w=;
-        b=LjeYakCkL/VNA0TKTRCcPsQlVQPwYYmfn4IB1/DwrzDrI1RV9clA+l+CJUiVlzz2Ae
-         oxdfxx1oX5AQ04LaD5tbl2z/0kl4SPMQCz21x2nIs3qxzuixXEt047fU0wB21IDgXSyz
-         tUOBx2msk8pzyc6/r2QfPXqUD7M/AmUU0ZR1ZDZ8MgQvy+xHLGqTxG9lwvXGbTroQ69u
-         7cA+yZQiAP6BJ7Z7COV+iFzRPajeb35d9MUOyFxArhvE1zvU5nNDu6/OE/0hHOy6G6LU
-         MsaEbr1sbqxSt9H+fYjmJuaV9fjfoWmJ73faAhERGKV77bwe4G8br1i5VDoUtRpBE6R2
-         s4lw==
-X-Gm-Message-State: AOAM5330a7icpuKJ8RLMeX9NPRtg8PcqZmbmMJB+ipkG2WKqA5t7ELzK
-        QohSdSGmdD2PCsBM/vQCa23Xj31Zl88BsxoUBu0sqg==
-X-Google-Smtp-Source: ABdhPJytzFo4zbb2aR2vokF6x9HkN6BJUAxhIehAY3OVqFeHzbzGHIRc0Rc+UX1hX+BArmitfvwB7L/Y6yjicKgOC4M=
-X-Received: by 2002:a2e:b892:: with SMTP id r18mr24029097ljp.220.1633459825395;
- Tue, 05 Oct 2021 11:50:25 -0700 (PDT)
+        Tue, 5 Oct 2021 14:56:08 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8421C061749;
+        Tue,  5 Oct 2021 11:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=FVV1YBR9IhK1qGAecM676RSXQazVBgX6DGfNAvuxHgc=; b=f583AHTNgWAXJ8zuMWjbXeWRjT
+        WrYsMtxnSidRz5GscdqlzgrkcjjaciUNW7qTvj0nOuCpHeqgCAkB3AhqCB3DuaOVIq5X4uSvmlr7Y
+        5u9p3ZxbBJqT6s7DUM2skHjcyJIMFyg5tRADwX5oIRpl4cPlj1ZLeTku6bVPsCwUpn9NrLVzIlG1F
+        4/SDJtQFLWO1iqp2rOL02Uh7inJwUTPqfnxHRLwT6URkjYWwJ8xtoJc0F9vSE/fL3lGimq73sXNhU
+        WviSOgDte/2FY7Q2tO0JR4We+TIVy9myu/F53UyJddgJwSw4A7V3fvUpQAw9ehkVSWkFf2rp3/jlJ
+        HvwjaAbQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mXpZv-00BZNT-TI; Tue, 05 Oct 2021 18:54:15 +0000
+Subject: Re: [PATCH] kunit: fix kernel-doc warnings in doc. build
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211005053019.26284-1-rdunlap@infradead.org>
+ <CAGS_qxqRQ+1DmKQwyw-=Yud5LTeZ9LzPQfh-ooOrFuQFN1V3Dg@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <70b0b0c4-47d0-7bb3-3bdd-688a91074bfb@infradead.org>
+Date:   Tue, 5 Oct 2021 11:54:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211004230431.2321009-1-adelg@google.com> <CAKwvOdnGrKbsfreQHQQprSTeHRaqadJtKi3N9LE+mZGgmUCf1g@mail.gmail.com>
- <CAEHm+vHNorGNxPMzrhqWhsKnQrLxfciAVmaMtgPk0E-7b0D8FA@mail.gmail.com>
-In-Reply-To: <CAEHm+vHNorGNxPMzrhqWhsKnQrLxfciAVmaMtgPk0E-7b0D8FA@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 5 Oct 2021 11:50:13 -0700
-Message-ID: <CAKwvOdm5vF08BmgAN9TKEmQnu8o9Nq_oDLiPztBkarWvCpp8kQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: Remove explicit headers for clang
-To:     Andrew Delgadillo <adelg@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Greg Thelen <gthelen@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAGS_qxqRQ+1DmKQwyw-=Yud5LTeZ9LzPQfh-ooOrFuQFN1V3Dg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 5, 2021 at 11:43 AM Andrew Delgadillo <adelg@google.com> wrote:
->
-> On Tue, Oct 5, 2021 at 9:59 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
-> >
-> > On Mon, Oct 4, 2021 at 4:04 PM Andrew Delgadilo <adelg@google.com> wrote:
-> > >
-> > > From: Andrew Delgadillo <adelg@google.com>
-> > >
-> > > GCC allows paths to header files to be passed on the command line while
-> > > using -o, but clang does not:
-> >
-> > Ah, it's because `-I` *insn't* being used more so than `-o` being present.
-> > >
-> > > $ make -C tools/testing/selftests TARGETS=futex
-> > >
-> > > $ make -C tools/testing/selftests TARGETS=futex LLVM=1
-> > > clang -Wall   -g -O2 -Wall -D_GNU_SOURCE -pthread -I../include \
-> > > -I../../ -I../../../../../usr/include/ -I/kselftest/usr/include \
-> > > futex_wait_timeout.c ../include/futextest.h ../include/atomic.h \
-> > > ../include/logging.h -lpthread -lrt -o \
-> > > tools/testing/selftests/futex/functional/futex_wait_timeout
-> > > clang: error: cannot specify -o when generating multiple output files
-> >
-> > Why aren't `-I` flags being passed? Rather than:
-> >
-> > $ clang ... ../include/futextest.h ../include/atomic.h ../include/logging.h ...
-> >
-> > shouldn't this be:
-> >
-> > $ clang ... -I ../include/futextest.h -I ../include/atomic.h -I
-> > ../include/logging.h
->
-> Okay, I see, so the fix here wouldn't be to remove the headers from
-> the commandline, we should just prepend them with `-l`.
+On 10/5/21 9:21 AM, Daniel Latypov wrote:
+> On Mon, Oct 4, 2021 at 10:30 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> Fix documentation build warnings in <kunit/test.h>:
+>>
+>> ../include/kunit/test.h:616: warning: Function parameter or member 'flags' not described in 'kunit_kmalloc_array'
+>> ../include/kunit/test.h:616: warning: Excess function parameter 'gfp' description in 'kunit_kmalloc_array'
+>> ../include/kunit/test.h:661: warning: Function parameter or member 'flags' not described in 'kunit_kcalloc'
+>> ../include/kunit/test.h:661: warning: Excess function parameter 'gfp' description in 'kunit_kcalloc'
+>>
+>> Fixes: 0a756853586c ("kunit: test: add test resource management API")
+>> Fixes: 7122debb4367 ("kunit: introduce kunit_kmalloc_array/kunit_kcalloc() helpers")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Brendan Higgins <brendanhiggins@google.com>
+>> Cc: linux-kselftest@vger.kernel.org
+>> Cc: kunit-dev@googlegroups.com
+>> Cc: Daniel Latypov <dlatypov@google.com>
+>> Cc: Shuah Khan <skhan@linuxfoundation.org>
+>> ---
+>>   include/kunit/test.h |    4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> --- lnx-515-rc4.orig/include/kunit/test.h
+>> +++ lnx-515-rc4/include/kunit/test.h
+>> @@ -607,7 +607,7 @@ void kunit_remove_resource(struct kunit
+>>    * @test: The test context object.
+>>    * @n: number of elements.
+>>    * @size: The size in bytes of the desired memory.
+>> - * @gfp: flags passed to underlying kmalloc().
+>> + * @flags: gfp flags passed to underlying kmalloc().
+> 
+> Thanks for catching this.
+> But can we instead rename the parameters?
+> I can send out a patch for that if you'd prefer.
+> 
+> The other funcs here use `gfp_t gfp`, which is why this copy-pasted
+> comment does too.
+> In test.c, kmalloc_array() actually calls the parameter `gfp` as well.
+> 
 
-Yes; I suspect they're added for a reason. If not for the futex tests
-then perhaps others, so removing them outright may allow the futex
-selftests to build, but I worry stripping them out might cause more
-issues down the line for building other selftests with clang, or
-regress the build with GCC support even.  But maybe not?
-
->
-> > >
-> > > To fix this, remove explicit paths to headers from the commandline in
-> > > lib.mk. We must explicitly remove them for x86 and binderfs as they are
-> > > not filtered out by the change to lib.mk, but the compiler search paths
-> > > for includes are already setup correctly, so the compiler finds the
-> > > correct headers.
-> > >
-> > > Tested: selftests build with LLVM=1 now.
-> >
-> > With this patch applied
-> > $ make -C tools/testing/selftests TARGETS=futex LLVM=1
-> > WFM but
-> > $ make -C tools/testing/selftests LLVM=1
-> > fails, horribly. Are you always expected to pass TARGETS when building
-> > the selftests?
->
-> I specifically passed TARGETS=futex because I want to point out a
-> specific example where this is in an issue as there are other errors I
-> see when I build all of selftests with LLVM=1. But to answer your
-> question, no, I do not think you are expected to always pass TARGETS.
->
-> When I run (without this patch)
->
-> $ make -C tools/testing/selftests LLVM=1
->  I get a bunch of errors as well ranging from:
-> - clang: error: cannot specify -o when generating multiple output
-> files <-- the specific one I'm trying to fix
-> - clang: warning: argument unused during compilation: '-pie'
-> [-Wunused-command-line-argument]
-> - include/x86_64/processor.h:344:25: warning: variable 'xmm7' is
-> uninitialized when used here [-Wuninitialized]
->
->                 return (unsigned long)xmm7;
-> - fuse_mnt.c:17:10: fatal error: 'fuse.h' file not found
->
-> #include <fuse.h>
->
->          ^~~~~~~~
->
-> However with the patch applied, I no longer see any "clang: error:
-> cannot specify -o when generating multiple output files", meaning that
-> I fixed one class of errors when building with LLVM=1.
->
-> Do you see a clean build currently when building selftests with
-> LLVM=1?
-
-No.
-
-> I'm not arguing that this patch fixes *all* the errors seen,
-
-That was my interpretation of your `Tested` tag. Perhaps it can be reworded?
-
-> but it at least fixes one class of them. Although, it seems I went
-> about fixing it in the wrong manner. I can respin this to prepend -l
-> before header includes to get rid of the "clang: error: cannot specify
-> -o when generating multiple output files" errors.
->
->
->
->
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Andrew Delgadillo <adelg@google.com>
-> > > ---
-> > >  tools/testing/selftests/filesystems/binderfs/Makefile | 2 +-
-> > >  tools/testing/selftests/lib.mk                        | 2 +-
-> > >  tools/testing/selftests/x86/Makefile                  | 4 ++--
-> > >  3 files changed, 4 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/filesystems/binderfs/Makefile b/tools/testing/selftests/filesystems/binderfs/Makefile
-> > > index 8af25ae96049..58e41bd98200 100644
-> > > --- a/tools/testing/selftests/filesystems/binderfs/Makefile
-> > > +++ b/tools/testing/selftests/filesystems/binderfs/Makefile
-> > > @@ -3,6 +3,6 @@
-> > >  CFLAGS += -I../../../../../usr/include/ -pthread
-> > >  TEST_GEN_PROGS := binderfs_test
-> > >
-> > > -binderfs_test: binderfs_test.c ../../kselftest.h ../../kselftest_harness.h
-> > > +binderfs_test: binderfs_test.c
-> > >
-> > >  include ../../lib.mk
-> > > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> > > index fa2ac0e56b43..fb152e20c86a 100644
-> > > --- a/tools/testing/selftests/lib.mk
-> > > +++ b/tools/testing/selftests/lib.mk
-> > > @@ -142,7 +142,7 @@ endif
-> > >  ifeq ($(OVERRIDE_TARGETS),)
-> > >  LOCAL_HDRS := $(selfdir)/kselftest_harness.h $(selfdir)/kselftest.h
-> > >  $(OUTPUT)/%:%.c $(LOCAL_HDRS)
-> > > -       $(LINK.c) $(filter-out $(LOCAL_HDRS),$^) $(LDLIBS) -o $@
-> > > +       $(LINK.c) $(filter-out %.h,$^) $(LDLIBS) -o $@
-> >
-> > What? Aren't kselftest.h and kselftest_harness.h already part of
-> > LOCAL_HDRS?  Perhaps that filter-out is broken, or LOCAL_HDRS.  Yeah,
-> > adding some debugging:
-> >
-> > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> > index fe7ee2b0f29c..827f766d6057 100644
-> > --- a/tools/testing/selftests/lib.mk
-> > +++ b/tools/testing/selftests/lib.mk
-> > @@ -142,6 +142,7 @@ endif
-> >  # OVERRIDE_TARGETS = 1.
-> >  ifeq ($(OVERRIDE_TARGETS),)
-> >  LOCAL_HDRS := $(selfdir)/kselftest_harness.h $(selfdir)/kselftest.h
-> > +$(info $$LOCAL_HDRS is [${LOCAL_HDRS}])
-> >  $(OUTPUT)/%:%.c $(LOCAL_HDRS)
-> >         $(LINK.c) $(filter-out $(LOCAL_HDRS),$^) $(LDLIBS) -o $@
-> >
-> > prints:
-> >
-> > $LOCAL_HDRS is [/android0/kernel-all/tools/testing/selftests/kselftest_harness.h
-> > /android0/kernel-all/tools/testing/selftests/kselftest.h]
-> >
-> > so of course filter-out isn't going to match `../include/futextest.h
-> > ../include/atomic.h ../include/logging.h`.
->
-> Like you mentioned above, it seems a better way to about this would be
-> to prepend -I before the includes. I'll go ahead and send a new patch
-> to do that.
-
-SGTM.  Thanks for pursuing this! ++beers_owed;
-
-> > >
-> > >  $(OUTPUT)/%.o:%.S
-> > >         $(COMPILE.S) $^ -o $@
-> > > diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> > > index b4142cd1c5c2..68967006b3e9 100644
-> > > --- a/tools/testing/selftests/x86/Makefile
-> > > +++ b/tools/testing/selftests/x86/Makefile
-> > > @@ -72,10 +72,10 @@ all_64: $(BINARIES_64)
-> > >  EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64)
-> > >
-> > >  $(BINARIES_32): $(OUTPUT)/%_32: %.c helpers.h
-> > > -       $(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl -lm
-> > > +       $(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(filter-out %.h,$^) -lrt -ldl -lm
-> > >
-> > >  $(BINARIES_64): $(OUTPUT)/%_64: %.c helpers.h
-> > > -       $(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl
-> > > +       $(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(filter-out %.h,$^) -lrt -ldl
-> > >
-> > >  # x86_64 users should be encouraged to install 32-bit libraries
-> > >  ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
-> > > --
-> > > 2.33.0.800.g4c38ced690-goog
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
-
-
+Sure, go ahead with it, please.
 
 -- 
-Thanks,
-~Nick Desaulniers
+~Randy
