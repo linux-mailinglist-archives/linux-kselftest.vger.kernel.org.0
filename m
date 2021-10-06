@@ -2,55 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B32E14248B0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 23:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21914248E8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 23:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239547AbhJFVSH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Oct 2021 17:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S239597AbhJFV2y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Oct 2021 17:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbhJFVSG (ORCPT
+        with ESMTP id S232152AbhJFV2x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Oct 2021 17:18:06 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD76C061746;
-        Wed,  6 Oct 2021 14:16:14 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id y12so1197014eda.4;
-        Wed, 06 Oct 2021 14:16:14 -0700 (PDT)
+        Wed, 6 Oct 2021 17:28:53 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1972C061746;
+        Wed,  6 Oct 2021 14:27:00 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id r18so14970299edv.12;
+        Wed, 06 Oct 2021 14:27:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zMN0PJSw/kmUZUYUDBwwSaq1S7W29aD0DpcprY8DFv4=;
-        b=hE2qO9icgWR8ZPz/2jEIQl00Qag1SjF69Ny2CrM4gRr8etxmUy44XIx1agYFaTBYWU
-         fpSn0Nf7qfJh6EdvtqjHtlLF+cm0qJkijWh+y9CNRQG1461benzB/nJxxJzkj5sonXA6
-         ZrlrZmIt8xvpwN+POKgybkmAbvjLBWPc8Lnqbo9lEBrKyYdf0tiJwP94hLNwmakC7Yul
-         Pu368inQjZ+zbSWOJWEEkVgfDbB84nJ1N/3hSWqxKdxvor0jKJyfwOqbOsxgeHg0gt4b
-         p5KCici5eWg0s2XEYHTAZQnCOmVWsuVOl69Tm3b6T5r3Bd3YpsoOW2SqMiZkcFkuc7rW
-         BnkQ==
+        bh=TEIVevLr+KkOe+yPKE3J8X4wJFJQbdygarJo9OKidbQ=;
+        b=p0GJzPzOWa+cfAfY7747JRX8oWbNXWM97C+z3apyCRClrxPBjlhMCbhDwrP1n5mIBV
+         RgI9GJMetZmD5wfDzGyGcIQ4EGyVVWS0StFQRyS/V0XPGF5xxBxlfbkKcRTeVla+EY3C
+         sSWC++lI0pD0Z+2zRCLmlsVf+tDEfw7NBO9DFupQAZe2XPKEg22DASeETxnztVfVYe4p
+         5rnWbtkj/LTjQ8EaBANyPrukGnYuemEPj5T3nnk8jJCkuH2OqbMWTLwYAl7ZfYhQBAgO
+         21waD25l8+vmUCrtobkSWroSM2MkCUTjDEtSVI66OO5KNMh/RX4SFGDl0a1qnUoOSt+Z
+         QrNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zMN0PJSw/kmUZUYUDBwwSaq1S7W29aD0DpcprY8DFv4=;
-        b=sjenEmuqHanWu0m2YNw7DjoJwoNa0m0Rnn2djEjzJuL2yy5XscZcn0U+iQj+iCshro
-         PKpG02O90u97fWniIKbCZmWVQhlghk/onuUOOPjRl3O9xFg6VETG+puRZbX5zyKeKeN6
-         jgHVTr0L8HbuWouh5evXHZJAm+ygqzFck2mW8cj+ea6D5vvK3M8A00/iPbJju/E1MVNF
-         /ozh3XC2+NWWfZv8QKLkunmQdz7uB78MLCwDuTuWubes/uvPuVDCRNz+Pkre1Mkkl0Ex
-         yj/dEWyE7RelNAbWeo6VXVzF85RocOqtXQKsYx8KIUrAWvPzqqF2yHyv+Nc8Gs/O2jIr
-         9PnA==
-X-Gm-Message-State: AOAM5305B/BGtAp+5MPA5D7w8F5ABDRbQ/Hwd8DlLr9JNuAMvNyPdhyK
-        TcfXIMv/7sLY44V5Mo7tDnfbRuyABD7b23tH7Xxyhw==
-X-Google-Smtp-Source: ABdhPJxTruFef8YM7ESfPUDvfsceyasKtSMB9M1AZI1jPWzsoHrUSN7CCnGvWmlaBxXCf1pO94pirw==
-X-Received: by 2002:a17:906:3d22:: with SMTP id l2mr650852ejf.187.1633554972793;
-        Wed, 06 Oct 2021 14:16:12 -0700 (PDT)
+        bh=TEIVevLr+KkOe+yPKE3J8X4wJFJQbdygarJo9OKidbQ=;
+        b=ZaBL33TLosI14z+pOCna39qRVpA6llOL3BIFAU0HducJNYYYMjwd/cKaIM/d2BGWWF
+         FzFmrbk5ZOHU/hH0ZCkUdfPvH2USRl74vThiGU0yt2E2LX5DC40iqBNGcjH5BHgSrXd/
+         dwa5Gygyt3OS4wgsgKBnG04JKeLXDQk+nTgfzbI0U9PCLif9b5n3o1yed0xQ2bdv/bIM
+         48fMF8VrsyGgV3+Www+BvbzsWulSXdUaQscFo2606+odX/G7c2ho2vRRFD5YvIjrHzdA
+         OCGfkkESW0YpegVRqs1u4Db4eC+uIsbxujtOd7KbZBMf+vR7KjODchAuazOGy5VUDgaM
+         4myA==
+X-Gm-Message-State: AOAM5322PQvE9EnYS3EBJVAta+Kb6MpAT4ZXsAdc1KaQRCMJ2aoxuaaL
+        2SE25lSURcjb+QP31+QWINVmnafYO66NwEBFiuhqBA==
+X-Google-Smtp-Source: ABdhPJyCU+oSJN5PiFKY5i0hkVZ1JGnxR2EGlN1fAjiHYGe2Leq7H1zEuBIFtcu4sJpy8XtCJSp02g==
+X-Received: by 2002:a05:6402:3509:: with SMTP id b9mr780972edd.187.1633555619218;
+        Wed, 06 Oct 2021 14:26:59 -0700 (PDT)
 Received: from ?IPv6:2a04:241e:501:3870:473a:8ebc:828b:d6c6? ([2a04:241e:501:3870:473a:8ebc:828b:d6c6])
-        by smtp.gmail.com with ESMTPSA id fx4sm9375832ejb.113.2021.10.06.14.16.11
+        by smtp.gmail.com with ESMTPSA id x16sm5204655eds.92.2021.10.06.14.26.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 14:16:12 -0700 (PDT)
-Subject: Re: [PATCH 05/11] selftests: net/fcnal: kill_procs via spin instead
- of sleep
+        Wed, 06 Oct 2021 14:26:58 -0700 (PDT)
+Subject: Re: [PATCH 11/11] selftests: net/fcnal: Reduce client timeout
 To:     David Ahern <dsahern@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
         Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -59,15 +58,15 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <cover.1633520807.git.cdleonard@gmail.com>
- <ff71285715d47b8c9b6bedb3b50700a26bc81f41.1633520807.git.cdleonard@gmail.com>
- <b1a213d5-470d-637d-4e78-1b7653d87041@gmail.com>
+ <516043441bd13bc1e6ba7f507a04362e04c06da5.1633520807.git.cdleonard@gmail.com>
+ <3ed2262e-fce2-c587-5112-e4583cd042ed@gmail.com>
 From:   Leonard Crestez <cdleonard@gmail.com>
-Message-ID: <7ac2b77d-4633-bd3e-c24f-ec87d34b4516@gmail.com>
-Date:   Thu, 7 Oct 2021 00:16:11 +0300
+Message-ID: <c48ea9e2-acdc-eb11-a4b0-35474003fcf3@gmail.com>
+Date:   Thu, 7 Oct 2021 00:26:57 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <b1a213d5-470d-637d-4e78-1b7653d87041@gmail.com>
+In-Reply-To: <3ed2262e-fce2-c587-5112-e4583cd042ed@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,56 +76,37 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 
-On 06.10.2021 17:45, David Ahern wrote:
+On 06.10.2021 18:01, David Ahern wrote:
 > On 10/6/21 5:47 AM, Leonard Crestez wrote:
->> Sleeping for one second after a kill is not necessary and adds up quite
->> quickly. Replace with a fast loop spinning until pidof returns nothing.
+>> Reduce default client timeout from 5 seconds to 500 miliseconds.
+>> Can be overridden from environment by exporting NETTEST_CLIENT_TIMEOUT=5
+>>
+>> Some tests need ICMP timeouts so pass an explicit -t5 for those.
 >>
 >> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
 >> ---
->>   tools/testing/selftests/net/fcnal-test.sh | 11 +++++++++--
->>   1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
->> index 0bd60cd3bc06..b7fda51deb3f 100755
->> --- a/tools/testing/selftests/net/fcnal-test.sh
->> +++ b/tools/testing/selftests/net/fcnal-test.sh
->> @@ -176,12 +176,19 @@ show_hint()
->>   	fi
->>   }
->>   
->>   kill_procs()
->>   {
->> -	killall nettest ping ping6 >/dev/null 2>&1
->> -	sleep 1
->> +	local pids
->> +	while true; do
->> +		pids=$(pidof nettest ping ping6)
->> +		if [[ -z $pids ]]; then
->> +			break
->> +		fi
->> +		kill $pids
->> +		sleep 0.01
->> +	done
->>   }
->>   
->>   do_run_cmd()
->>   {
->>   	local cmd="$*"
+>>   tools/testing/selftests/net/fcnal-test.sh | 17 +++++++++++------
+>>   1 file changed, 11 insertions(+), 6 deletions(-)
 >>
 > 
-> ideally the script keeps track of processes it launches and only kills
-> those. The original killall was just a stop gap until the process
-> tracking was added.
+> The problem with blindly reducing the timeouts is running the script on
+> a loaded server. Some tests are expected to timeout while for tests a
+> timeout is a failure.
 
-That's harder to do. This is much faster and not in any way worse than 
-killall + sleep.
+Keeping the default value "5" would be fine as long as it is possible to 
+override externally and get fast results on a mostly-idle machine.
 
-Some sort of a wrapper would have to added for each process running the 
-background, for each run_ping_bg.
+Placing a default value in the environment which is overriden by certain 
+tests achieves that.
 
-If nettest forks by itself then $! won't work, maybe some sort of 
---pid-file switch would be required?
+In theory it would also be possible for fcnal-test.sh to parse as 
+"--timeout" option and pass it into every single test but that solution 
+would cause much more code churn.
+
+Having default values in environment variables that can still be 
+overridden by command-line arguments is a common pattern in many tools. 
+It also avoids having to pass-through every flag through every 
+intermediate wrapper.
 
 --
 Regards,
