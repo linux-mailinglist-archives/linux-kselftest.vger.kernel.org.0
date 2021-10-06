@@ -2,90 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E61F4240A6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 17:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB30942424C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 18:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbhJFPDD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Oct 2021 11:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238436AbhJFPDC (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Oct 2021 11:03:02 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8201DC061746;
-        Wed,  6 Oct 2021 08:01:10 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id p80so3121276iod.10;
-        Wed, 06 Oct 2021 08:01:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zmQVBnLuuHm9wz/qDU61XUER4/3YeXffUriok7CGmrQ=;
-        b=N0MC7STt5a6sAPzVxDw6eIsL2hmmuLBac9kAvUel8adWiokU59Hnc1mj/r/yeqAv4p
-         v4lMglM+W551qOaZxtLmuP4zhLh8Xt9VBXVK1TBzIZbUiIBe7w1PG/pAYXnS+Gl6QlgY
-         E260NMlkLNUrqlGEuxgPUYcLOiXsULuE/OKhQH2XfmwdS3KMK5HpwBKXIeenJycxr9YC
-         PhTtlAAr64MUULUlo9nzIGQoRZdmJDEVfXe0axUsCykYp2VM8epbTFdXDapSyjAaSi75
-         HV2ssovfVoiZbYSDLNQs9bV1/nc5ou1xjTNR6+b7WURar+NDMe9YTZHMXNRkABaDSQym
-         7hHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zmQVBnLuuHm9wz/qDU61XUER4/3YeXffUriok7CGmrQ=;
-        b=Cpgrw9GvnhkUKvpWwKJEfQM9y13vAXouxu/4IXxHNlnkRwnc+Q+e7SmMsews1RpGeE
-         lwSWMVO75wBtUOTcLWaeZVXHSHutdx94a+V0FCC3X4XL6HxzAhD8N1V3YMXaTObDKSeN
-         XZi+sf7tXUhvEoChzzA7P+pef5IVmd9IK0gydfXQoVb2Fa5mfAmUGDvQUHxyZmLOL8gu
-         LQIlmXhzRbsBEu6DWpAzJ7r/AOIUq4KcJRkucH8IRCoVdXb5gM2O1ami+it/UsAJz525
-         pA41fo0csU7xezHZ6zbKnxcp4gnd7XY2JbB+rN8sMAL/isdTxaUi0efOhfnCex6jD+iN
-         llJw==
-X-Gm-Message-State: AOAM533ftvHhcQYdOfSytGPZ18rkJcohyqtO+mMcVymSAsgJ+3bVneJy
-        rCP7NhLLgBxW+B948O6HfyzTHKGVI7colA==
-X-Google-Smtp-Source: ABdhPJypqGEuNCB1EtGjteQ830u3Tun58j4yvf8K/TeIcnO8I/Tfa0ErUjWHuf2okMFZDbY4KZhLWA==
-X-Received: by 2002:a02:6a0d:: with SMTP id l13mr7757883jac.92.1633532469379;
-        Wed, 06 Oct 2021 08:01:09 -0700 (PDT)
-Received: from Davids-MacBook-Pro.local ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id z187sm12262817iof.49.2021.10.06.08.01.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 08:01:09 -0700 (PDT)
-Subject: Re: [PATCH 11/11] selftests: net/fcnal: Reduce client timeout
-To:     Leonard Crestez <cdleonard@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Seth David Schoen <schoen@loyalty.org>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1633520807.git.cdleonard@gmail.com>
- <516043441bd13bc1e6ba7f507a04362e04c06da5.1633520807.git.cdleonard@gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <3ed2262e-fce2-c587-5112-e4583cd042ed@gmail.com>
-Date:   Wed, 6 Oct 2021 09:01:08 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        id S231768AbhJFQNX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Oct 2021 12:13:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41384 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238744AbhJFQNW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 6 Oct 2021 12:13:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 77B5161154;
+        Wed,  6 Oct 2021 16:11:29 +0000 (UTC)
+Date:   Wed, 6 Oct 2021 17:11:26 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: arm64: Add coverage of ptrace flags for SVE
+ VL inheritance
+Message-ID: <YV3KrmEwXRi51qCi@arm.com>
+References: <20211005123537.976795-1-broonie@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <516043441bd13bc1e6ba7f507a04362e04c06da5.1633520807.git.cdleonard@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211005123537.976795-1-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/6/21 5:47 AM, Leonard Crestez wrote:
-> Reduce default client timeout from 5 seconds to 500 miliseconds.
-> Can be overridden from environment by exporting NETTEST_CLIENT_TIMEOUT=5
+On Tue, Oct 05, 2021 at 01:35:37PM +0100, Mark Brown wrote:
+> Add a test that covers enabling and disabling of SVE vector length
+> inheritance via the ptrace interface.
 > 
-> Some tests need ICMP timeouts so pass an explicit -t5 for those.
-> 
-> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
-> ---
->  tools/testing/selftests/net/fcnal-test.sh | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
-> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-The problem with blindly reducing the timeouts is running the script on
-a loaded server. Some tests are expected to timeout while for tests a
-timeout is a failure.
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+
+(I guess this will go in via the arm64 tree)
