@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10705424061
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 16:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BFA424088
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 16:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239047AbhJFOuM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Oct 2021 10:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S238226AbhJFO4o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Oct 2021 10:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239075AbhJFOuM (ORCPT
+        with ESMTP id S238205AbhJFO4o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Oct 2021 10:50:12 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A850C061753;
-        Wed,  6 Oct 2021 07:48:20 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id y207so1161494oia.11;
-        Wed, 06 Oct 2021 07:48:20 -0700 (PDT)
+        Wed, 6 Oct 2021 10:56:44 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BC0C061746;
+        Wed,  6 Oct 2021 07:54:52 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id r9so3158432ile.5;
+        Wed, 06 Oct 2021 07:54:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XewLXbV0fAQkfACZ0ivzGkAxnAOatRqilHKzFIJtiSs=;
-        b=eaA+LZSl9AW8MmZzbCJUc7FStyD0+qd6gmORfpg4PzeLUMX4p0H15dxUoLESK8nn/q
-         ivUuiJ/bKCAqEfOl/tz/ukTGTPkB5yxqhBegwCBdR9sTPZmS6+KO+HBDlRlpvHTp35H2
-         Gvp2kZUcV7TjHBdGVal3CvR2u1wGSUqY55NTgo6GFZJPRUY4u6bCXOZKOOAl3C5n6pis
-         DG3enOJHeY9e4MjDW2Mq3IxiWgof7X1mD2RarUp2lp7d9GOtfX3t7le5aiyejn4MRr8R
-         QcJw4f01gVWqulnU3YO+i1/4uM9gvAMrpkZT4dgIh9/yu8N+Wm/8QEEqduhUpaAjnA3S
-         OaUw==
+        bh=KwYHYOuqFAsOEN4ljfi4q77Tgl6pY1vJiqgxP79RAEQ=;
+        b=M+tdo9ZG5jUgwwtycOG2oql/AFGQkkXt3HIp07R3MPKzZAo/PgQX9JBjrB5DJ6pQyX
+         ILlSrfPTqvdBaWMZrKUdTzSrFqDYkXs+qpoUa1QWoem3XNlRB6wZjkvvUrREYqAhzQKZ
+         jRCCgy6AiJ+WUyW6TX2BAd2e5JhoL+hauZ6uKlhCr17I+wlipjOJyn+OxvLHv/d00x1Q
+         uJDKXnCYaGT+RDfDUIdsd/B9wrZrcR0ae47ox+PSYXfnebO5la/U8RQP8MjTFPW4+E+I
+         HkKT32+bMnLqusfQGbttAZOic7KpgnHDbB0ZhRb5REemuSTeuMo/K6o8fYPUMwToqcLQ
+         hCgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=XewLXbV0fAQkfACZ0ivzGkAxnAOatRqilHKzFIJtiSs=;
-        b=EqSs2NlFomA0nRXzEM3NiZDPYbecUH97brQCMUwpS64sF6ZZNEQbV7DwnZsJ5MF7UO
-         dnzj4KaJa5//pUlzbeLwa2z3uJjJlnlkecqgoghK9GABXtJzVuq+cZbEWfHWKMeDpx0Q
-         ZAjo7N/0BRK9k4kKIm0YNEQcCwM/MqOSXIAMeoeIh2qms1ifB114qvkXM4PBiNt1uizk
-         g2JwUySpCrVWnuRwS2vDVwPCZl+JnIcaF/Q9AL3QvMGCJ8nEf2g0cT/JFKuVvtJx4Aul
-         cjWezeA+U5+Ru/ZDmlYfcnckpnzf9zt8e/N6qOL6dayHfC7totFIpQKE7fTc3VGunRTn
-         2tig==
-X-Gm-Message-State: AOAM5310u2EXOwx0jQeePqbiY3qrtmdpVuzqgn411gNAsHpdHgYHXbPS
-        VOe4kfuLbYpge2MGar6mIB2G9fpBJQRQhw==
-X-Google-Smtp-Source: ABdhPJwZR7gD+cfvXEQnaHAtlW7krJO1KYObe5mXqBSnJiDhMeLGUe7m8FbiWNdqZGFqm3O2uSr62Q==
-X-Received: by 2002:a05:6808:1525:: with SMTP id u37mr7402733oiw.12.1633531699254;
-        Wed, 06 Oct 2021 07:48:19 -0700 (PDT)
+        bh=KwYHYOuqFAsOEN4ljfi4q77Tgl6pY1vJiqgxP79RAEQ=;
+        b=IBPVs3ulkyLRbl8726pg48YWb0L6XPmLq9HBtUbPPcOQ8l6JYi5BDr+3LAiuGktFqL
+         u0L0SI7Hi82KUQkecc7reP8J6uWGQF4Khfwpf+i/Qw+zo8KqA5O3JfzL11iXVSuVHZGH
+         6T86tgGnyCfF4Py5jCc0QeQEbibB3n1brYhYxSOBNevbIc8bOysxfZN+TyALhqIIuSAO
+         3lduinko5s/S9jR9up+Q2tDMfiHNjzIGoHpf+BqCj3W48yLMrrjX5esaRnvefUyx0csA
+         yR4DI9mlkvstH2LYzmu458Ezon0r9DKDToYuqLjaCiTeCEnNAjhTfN05l0aI4HOdaNuE
+         l5Ow==
+X-Gm-Message-State: AOAM532MfdbduoZ+wEymzBZ4f4ygjKWORXboJf0qHf2UcacUzhv0dtnb
+        dRjbIHfqY+hL/7oXIB+cMSo5v/Rlm1vAuQ==
+X-Google-Smtp-Source: ABdhPJw2K+yfK4cXBrDCD12ujVOz41XePSjB//mONzXLbUMRUw9E0PTqfjsD9LnGwSqMYwUp6ItPfQ==
+X-Received: by 2002:a05:6e02:1c47:: with SMTP id d7mr1048302ilg.49.1633532091352;
+        Wed, 06 Oct 2021 07:54:51 -0700 (PDT)
 Received: from Davids-MacBook-Pro.local ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id h91sm4148196otb.38.2021.10.06.07.48.18
+        by smtp.googlemail.com with ESMTPSA id d8sm1358712ioh.46.2021.10.06.07.54.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 07:48:19 -0700 (PDT)
-Subject: Re: [PATCH 06/11] selftests: net/fcnal: Do not capture do_run_cmd in
- verbose mode
+        Wed, 06 Oct 2021 07:54:51 -0700 (PDT)
+Subject: Re: [PATCH 08/11] selftests: net/fcnal: Replace sleep after server
+ start with -k
 To:     Leonard Crestez <cdleonard@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>
@@ -60,14 +60,14 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <cover.1633520807.git.cdleonard@gmail.com>
- <b989bb17303518eb149064a6aaaa1c37d2b703c4.1633520807.git.cdleonard@gmail.com>
+ <ec40bd7128a30e93b90ba888f3468f394617a010.1633520807.git.cdleonard@gmail.com>
 From:   David Ahern <dsahern@gmail.com>
-Message-ID: <fcb7be3e-f965-438d-2d5a-b9ce433338ce@gmail.com>
-Date:   Wed, 6 Oct 2021 08:48:17 -0600
+Message-ID: <43210038-b04b-3726-1355-d5f132f6c64e@gmail.com>
+Date:   Wed, 6 Oct 2021 08:54:50 -0600
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
  Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <b989bb17303518eb149064a6aaaa1c37d2b703c4.1633520807.git.cdleonard@gmail.com>
+In-Reply-To: <ec40bd7128a30e93b90ba888f3468f394617a010.1633520807.git.cdleonard@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -76,21 +76,31 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 10/6/21 5:47 AM, Leonard Crestez wrote:
-> This way running with -v will show interspersed output from both nettest
-> client and server. This helps to identify the order of events.
+> The -k switch makes the server fork into the background after the listen
+> call is succesful, this can be used to replace most of the `sleep 1`
+> statements in this script.
 > 
-> It is also required in order to make nettest fork in the background by
-> itself because shell capturing does not stop if the target forks.
+> Change performed with a vim command:
 > 
-> This also fixes SC2166 warning:
-> Prefer [ p ] && [ q ] as [ p -a q ] is not well defined.
+> s/nettest \(.*-s.*\) &\n\s*sleep 1\n/nettest \1 -k\r
 > 
 > Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
 > ---
->  tools/testing/selftests/net/fcnal-test.sh | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
+>  tools/testing/selftests/net/fcnal-test.sh | 641 ++++++++--------------
+>  1 file changed, 219 insertions(+), 422 deletions(-)
 > 
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+I have a change from January [1] that runs the tests with 1 binary -
+takes both client and server side arguments, does the server setup,
+switches namespaces as needed and then runs the client side. I got
+bogged down validating the before and after which takes a long time
+given the number of tests. The output in verbose mode is as important as
+the pass / fail. Many of the tests document existing behavior as well as
+intended behavior.
+
+You used a search and replace to update the tests. Did you then do the
+compare of test results - not pass / fail but output?
 
 
+[1]
+https://github.com/dsahern/linux/commit/8e16fbab1eb224298e3324a9ddf38e27eee439c7
