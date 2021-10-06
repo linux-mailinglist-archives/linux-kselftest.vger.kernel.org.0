@@ -2,79 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5C5424549
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 19:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783BB4246AC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Oct 2021 21:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbhJFRxz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Oct 2021 13:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbhJFRxz (ORCPT
+        id S231807AbhJFTaS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Oct 2021 15:30:18 -0400
+Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:57235 "EHLO
+        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229992AbhJFTaS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Oct 2021 13:53:55 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E444FC061753
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Oct 2021 10:52:02 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 133so3189918pgb.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Oct 2021 10:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MQNWDrCnQF/tr5+mIHlRRgV+bRRUZairo48aO2ea71I=;
-        b=q7BEViEUtZC0fsj/hRrovxearhhejH4hSRYb81gV41uhbWG/84EMYc1v83IcjCgjk4
-         ZzMczjyMPorgO73J6tSZ+N+D0702liLAbC/KYH9HtEtSPZiy9MdzbGkNet2A8zJeHiUD
-         bkkVZkr61jfcfMruEvyoDAUPpufcVUQbndDMZ/OS367H4cJsJyX9RHgX0rUoI8Oj/Hc7
-         2cAdvWGa7G4BC7MRbNec5Pbj2mlJBnOG4EYpRzp/SNDDJcfVQfcA3ARqEnVFwFOE92V9
-         AIftIfVSeE6tf3wkW/HTfy22wK7AtihevU7NvBuYutsgVA8n0sVlx+VUHvJ+E2V9Gk6/
-         gFMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MQNWDrCnQF/tr5+mIHlRRgV+bRRUZairo48aO2ea71I=;
-        b=q7du9+0S+8CJYjPdF8QNNPzG8ouse5QVZJ/JHVQh+Prr0DSt3e+LtzQCujnCJcZwQv
-         dN9m7/g3mVhLTrrpdYNUzCCpZtEIuXHkUJ1Md17t4Sa2InsIDGe7r6o6YRNK2O/4kOn+
-         9rUsdoD9TE7SNexAVd6ipNm8+TF5tRP8I0o0eyM1Yknc9rRwq/eoe9jTYPGvTL/IpuWL
-         WTwMrJoIXKn9RzO2BXXA0DbCtEz+6Y3Ry3ueG1vDmlQioD461COQejt1wiojYdrwojx5
-         IBTxE1kai/6AyLI0bnzIyEkxoYXbcKo8c4/FdlvGomChhY5kTn4SkUU6w/MzAT/zLhEU
-         jP6Q==
-X-Gm-Message-State: AOAM53181RP/9uOlG3gmLQmFKTgUxB9N6BvZvr7j+uSx7RMxu0Sipe2F
-        uPjcEdpuhv0Z5Deu22LrppNsQ4xYIrDVghYQAxTg7A==
-X-Google-Smtp-Source: ABdhPJy3f1QMT405K93zxHsRbpK5JAHC3pdOPfeSRR3MlWH6+VLWHudcNGLQwY/7sGYkqFUwzCyQWwWs2KDo8g7mL/A=
-X-Received: by 2002:aa7:824b:0:b0:44c:22ad:2763 with SMTP id
- e11-20020aa7824b000000b0044c22ad2763mr27694293pfn.63.1633542722198; Wed, 06
- Oct 2021 10:52:02 -0700 (PDT)
+        Wed, 6 Oct 2021 15:30:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1633548505;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=e7hLuqiKouck0xO6SAg1QqTnkMpnfaEcSMwizUw71u8=;
+        b=YgWPUQdB8S5ftIJrDraUzeRvNyfdDNVF1IWefp4HTIkXwXOW8fQsOMJXX4kyql+l
+        c0tFp4MPGoCXDcwVs61+oVb9yYlBYXXAUbhOb7OfjxINV4op2oUXBMXmUWIoeKyr3CP
+        3DSygPcYeezkfyDJTNsb6UG/MDo23q45kgpQZHXc=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1633548505;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=e7hLuqiKouck0xO6SAg1QqTnkMpnfaEcSMwizUw71u8=;
+        b=kpm6nezP/G2fPq2YRNQ2B+cgWw3B5xeJl39b03naOjWa9Pr5i7jvou/GrumIksfC
+        X58pjlNGHwBFheoNeVideVbJ0fJb8Gb2kLNpIwteDgNTvH8Oq0IeHUenlCMxX0xTAUH
+        mpG80fXXdF1T0bHmtptw51Yaj6MBGynIc3hauec8=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211005
 MIME-Version: 1.0
-References: <20211005204632.3132652-1-dlatypov@google.com>
-In-Reply-To: <20211005204632.3132652-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Oct 2021 10:51:51 -0700
-Message-ID: <CAFd5g44rj627arBcrUsPfTCNzK8+LaV_kqYjvdP8b77=iGVvug@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix kernel-doc warnings due to mismatched arg names
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017c57140e55-d3376e43-4f62-41c6-b71e-a91aeb36e866-000000@email.amazonses.com>
+Date:   Wed, 6 Oct 2021 19:28:25 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.10.06-54.240.48.37
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 5, 2021 at 1:46 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Commit 7122debb4367 ("kunit: introduce
-> kunit_kmalloc_array/kunit_kcalloc() helpers") added new functions but
-> called last arg `flags`, unlike the existing code that used `gfp`.
-> This only is an issue in test.h, test.c still used `gfp`.
->
-> But the documentation was copy-pasted with the old names, leading to
-> kernel-doc warnings.
->
-> Do s/flags/gfp to make the names consistent and fix the warnings.
->
-> Fixes: 7122debb4367 ("kunit: introduce kunit_kmalloc_array/kunit_kcalloc() helpers")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+## Build
+* kernel: 5.15.0-rc4
+* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: 29616f67fcbd6b26242440372a3b0f0a085109c6
+* git describe: next-20211005
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211005
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+## Regressions (compared to next-20211001)
+* dragonboard-410c, kselftest-net
+  - net.udpgso_bench.sh
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_i386, kselftest-mqueue
+  - mqueue.mq_perf_tests
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211001)
+* qemu-arm64-mte, kselftest-timers
+  - timers.rtcpie
+
+* x86, kselftest-rtc
+  - rtc.rtctest
+
+
+## Test result summary
+total: 4329, pass: 2399, fail: 349, skip: 1581, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
