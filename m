@@ -2,26 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F8542513D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 12:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890594251ED
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 13:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240868AbhJGKkY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 06:40:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53488 "EHLO mail.kernel.org"
+        id S233872AbhJGL0C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 07:26:02 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:55890 "EHLO deadmen.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240949AbhJGKkQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 06:40:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6F57B60F02;
-        Thu,  7 Oct 2021 10:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633603103;
-        bh=lu5k2LNYph7kGX6NH429bKjPjz5kZlIuiNVBrGopjRg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FsJkGVtPNbgrwogrOSdK+rN2seu5yj1PE4+u2NIGUe5Y3/9JbaMTJz+bEFD31/K5e
-         VhntWSLtGP2rsc0Pt4o9ElpUJeaQKTCb4rFwYqoEpa2kbjdYMVddcfo1XRKjK/CLFv
-         5KVQuX2l22s/RDZ4jnmVjdTTNmlAk+fn75hmueY0=
-Date:   Thu, 7 Oct 2021 12:38:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S232729AbhJGL0B (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Oct 2021 07:26:01 -0400
+Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
+        by deadmen.hmeau.com with esmtp (Exim 4.92 #5 (Debian))
+        id 1mYRVB-0008EV-J1; Thu, 07 Oct 2021 19:23:53 +0800
+Received: from herbert by gondobar with local (Exim 4.92)
+        (envelope-from <herbert@gondor.apana.org.au>)
+        id 1mYRUm-00051c-R8; Thu, 07 Oct 2021 19:23:28 +0800
+Date:   Thu, 7 Oct 2021 19:23:28 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -30,6 +27,7 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
         netdev@vger.kernel.org,
         Brendan Higgins <brendanhiggins@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
@@ -38,56 +36,57 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Thomas Graf <tgraf@suug.ch>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 2/4] kernel.h: Split out container_of() and
- typeof_member() macros
-Message-ID: <YV7OHWy+0MNGpUKl@kroah.com>
+Subject: Re: [PATCH v2 3/4] lib/rhashtable: Replace kernel.h with the
+ necessary inclusions
+Message-ID: <20211007112328.GA19281@gondor.apana.org.au>
 References: <20211007095129.22037-1-andriy.shevchenko@linux.intel.com>
- <20211007095129.22037-3-andriy.shevchenko@linux.intel.com>
+ <20211007095129.22037-4-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211007095129.22037-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211007095129.22037-4-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 07, 2021 at 12:51:27PM +0300, Andy Shevchenko wrote:
-> --- a/lib/radix-tree.c
-> +++ b/lib/radix-tree.c
-> @@ -12,19 +12,21 @@
->  #include <linux/bitmap.h>
->  #include <linux/bitops.h>
->  #include <linux/bug.h>
-> +#include <linux/container_of.h>
->  #include <linux/cpu.h>
->  #include <linux/errno.h>
->  #include <linux/export.h>
->  #include <linux/idr.h>
->  #include <linux/init.h>
+On Thu, Oct 07, 2021 at 12:51:28PM +0300, Andy Shevchenko wrote:
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
+> 
+> Replace kernel.h inclusion with the list of what is really being used.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  lib/rhashtable.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/rhashtable.c b/lib/rhashtable.c
+> index a422c7dd9126..01502cf77564 100644
+> --- a/lib/rhashtable.c
+> +++ b/lib/rhashtable.c
+> @@ -12,9 +12,13 @@
+>   */
+>  
+>  #include <linux/atomic.h>
+> +#include <linux/bit_spinlock.h>
+>  #include <linux/container_of.h>
 > -#include <linux/kernel.h>
->  #include <linux/kmemleak.h>
-> +#include <linux/math.h>
->  #include <linux/percpu.h>
->  #include <linux/preempt.h>		/* in_interrupt() */
->  #include <linux/radix-tree.h>
->  #include <linux/rcupdate.h>
->  #include <linux/slab.h>
->  #include <linux/string.h>
-> +#include <linux/types.h>
->  #include <linux/xarray.h>
->  
->  /*
-> @@ -285,6 +287,8 @@ radix_tree_node_alloc(gfp_t gfp_mask, struct radix_tree_node *parent,
->  	return ret;
->  }
->  
-> +extern void radix_tree_node_rcu_free(struct rcu_head *head);
+> +#include <linux/err.h>
+> +#include <linux/export.h>
+>  #include <linux/init.h>
+> +#include <linux/jhash.h>
+> +#include <linux/lockdep.h>
+>  #include <linux/log2.h>
+>  #include <linux/sched.h>
+>  #include <linux/rculist.h>
 
-.c files should not need an extern, this belongs in a .h file somewhere,
-or something really went wrong here...
+Nack.  I can see the benefits of splitting things out of kernel.h
+but there is no reason to add crap to end users like rhashtable.c.
 
-thanks,
-
-greg k-h
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
