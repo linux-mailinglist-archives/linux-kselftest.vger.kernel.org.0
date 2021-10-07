@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A45F4256E0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 17:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EA54256EA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 17:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242438AbhJGPqF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 11:46:05 -0400
-Received: from mga02.intel.com ([134.134.136.20]:27707 "EHLO mga02.intel.com"
+        id S242492AbhJGPqM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 11:46:12 -0400
+Received: from mga06.intel.com ([134.134.136.31]:45046 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242421AbhJGPqE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 11:46:04 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="213423814"
+        id S242407AbhJGPqL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Oct 2021 11:46:11 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="287168772"
 X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="213423814"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:44:10 -0700
+   d="scan'208";a="287168772"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:44:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="478610545"
+   d="scan'208";a="568676724"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 07 Oct 2021 08:44:04 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 07 Oct 2021 08:44:08 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5D01F3DB; Thu,  7 Oct 2021 18:44:10 +0300 (EEST)
+        id 7595A554; Thu,  7 Oct 2021 18:44:10 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -40,9 +40,9 @@ Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         jic23@kernel.org, linux@rasmusvillemoes.dk,
         Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [PATCH v4 4/7] list.h: Replace kernel.h with the necessary inclusions
-Date:   Thu,  7 Oct 2021 18:44:04 +0300
-Message-Id: <20211007154407.29746-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 6/7] plist: Replace kernel.h with the necessary inclusions
+Date:   Thu,  7 Oct 2021 18:44:06 +0300
+Message-Id: <20211007154407.29746-7-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com>
 References: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com>
@@ -59,29 +59,26 @@ Replace kernel.h inclusion with the list of what is really being used.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/list.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ include/linux/plist.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/list.h b/include/linux/list.h
-index f2af4b4aa4e9..5dc679b373da 100644
---- a/include/linux/list.h
-+++ b/include/linux/list.h
-@@ -2,11 +2,13 @@
- #ifndef _LINUX_LIST_H
- #define _LINUX_LIST_H
+diff --git a/include/linux/plist.h b/include/linux/plist.h
+index 66bab1bca35c..0f352c1d3c80 100644
+--- a/include/linux/plist.h
++++ b/include/linux/plist.h
+@@ -73,8 +73,11 @@
+ #ifndef _LINUX_PLIST_H_
+ #define _LINUX_PLIST_H_
  
-+#include <linux/container_of.h>
-+#include <linux/const.h>
- #include <linux/types.h>
- #include <linux/stddef.h>
- #include <linux/poison.h>
--#include <linux/const.h>
 -#include <linux/kernel.h>
++#include <linux/container_of.h>
+ #include <linux/list.h>
++#include <linux/types.h>
 +
-+#include <asm/barrier.h>
++#include <asm/bug.h>
  
- /*
-  * Circular doubly linked list implementation.
+ struct plist_head {
+ 	struct list_head node_list;
 -- 
 2.33.0
 
