@@ -2,24 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 890594251ED
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 13:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D190C425238
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 13:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbhJGL0C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 07:26:02 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:55890 "EHLO deadmen.hmeau.com"
+        id S241074AbhJGLqr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 07:46:47 -0400
+Received: from mga09.intel.com ([134.134.136.24]:65334 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232729AbhJGL0B (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 07:26:01 -0400
-Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
-        by deadmen.hmeau.com with esmtp (Exim 4.92 #5 (Debian))
-        id 1mYRVB-0008EV-J1; Thu, 07 Oct 2021 19:23:53 +0800
-Received: from herbert by gondobar with local (Exim 4.92)
-        (envelope-from <herbert@gondor.apana.org.au>)
-        id 1mYRUm-00051c-R8; Thu, 07 Oct 2021 19:23:28 +0800
-Date:   Thu, 7 Oct 2021 19:23:28 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S230091AbhJGLqo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Oct 2021 07:46:44 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="226127319"
+X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
+   d="scan'208";a="226127319"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 04:44:50 -0700
+X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
+   d="scan'208";a="522572633"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 04:44:45 -0700
+Received: from andy by smile with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mYRpJ-009VuO-7q;
+        Thu, 07 Oct 2021 14:44:41 +0300
+Date:   Thu, 7 Oct 2021 14:44:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Randy Dunlap <rdunlap@infradead.org>,
@@ -39,54 +46,34 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>
 Subject: Re: [PATCH v2 3/4] lib/rhashtable: Replace kernel.h with the
  necessary inclusions
-Message-ID: <20211007112328.GA19281@gondor.apana.org.au>
+Message-ID: <YV7dqcCbxaeBcELY@smile.fi.intel.com>
 References: <20211007095129.22037-1-andriy.shevchenko@linux.intel.com>
  <20211007095129.22037-4-andriy.shevchenko@linux.intel.com>
+ <20211007112328.GA19281@gondor.apana.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211007095129.22037-4-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211007112328.GA19281@gondor.apana.org.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 07, 2021 at 12:51:28PM +0300, Andy Shevchenko wrote:
-> When kernel.h is used in the headers it adds a lot into dependency hell,
-> especially when there are circular dependencies are involved.
-> 
-> Replace kernel.h inclusion with the list of what is really being used.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  lib/rhashtable.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-> index a422c7dd9126..01502cf77564 100644
-> --- a/lib/rhashtable.c
-> +++ b/lib/rhashtable.c
-> @@ -12,9 +12,13 @@
->   */
->  
->  #include <linux/atomic.h>
-> +#include <linux/bit_spinlock.h>
->  #include <linux/container_of.h>
-> -#include <linux/kernel.h>
-> +#include <linux/err.h>
-> +#include <linux/export.h>
->  #include <linux/init.h>
-> +#include <linux/jhash.h>
-> +#include <linux/lockdep.h>
->  #include <linux/log2.h>
->  #include <linux/sched.h>
->  #include <linux/rculist.h>
+On Thu, Oct 07, 2021 at 07:23:28PM +0800, Herbert Xu wrote:
+> On Thu, Oct 07, 2021 at 12:51:28PM +0300, Andy Shevchenko wrote:
+> > When kernel.h is used in the headers it adds a lot into dependency hell,
+> > especially when there are circular dependencies are involved.
 
-Nack.  I can see the benefits of splitting things out of kernel.h
-but there is no reason to add crap to end users like rhashtable.c.
+> > Replace kernel.h inclusion with the list of what is really being used.
 
-Thanks,
+> Nack.  I can see the benefits of splitting things out of kernel.h
+> but there is no reason to add crap to end users like rhashtable.c.
+
+Crap is in the kernel.h. Could you elaborate how making a proper list
+of the inclusions is a crap?
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+With Best Regards,
+Andy Shevchenko
+
+
