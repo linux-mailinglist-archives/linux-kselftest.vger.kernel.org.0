@@ -2,106 +2,189 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1625E424B97
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 03:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAA7424BE8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 04:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbhJGBYl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Oct 2021 21:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbhJGBYl (ORCPT
+        id S232262AbhJGCuB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Oct 2021 22:50:01 -0400
+Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:60861 "EHLO
+        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232254AbhJGCt7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Oct 2021 21:24:41 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771E5C061746;
-        Wed,  6 Oct 2021 18:22:48 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id h189so2063399iof.1;
-        Wed, 06 Oct 2021 18:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ll0oa75vwhrd/jX569DuLEC0YhlCdGYCCf3ViMztJWY=;
-        b=XI9c895b2ORswndS2kO8/54RqxOi4N4Y/aDaXGGuPcUzXKv509ghzLFNCLwZQEzu+C
-         6o8cl1x14ANfLLWcEEYzyIp3DHpvnRFY+OAaNJy4VlGrPecgrwwgbg/qBu+IABIa5/XE
-         MB6VR3rDdODDoBj9Qb7I+F3aaUGuv6P2LUqW8PiZxDMj6b13g9CRJL3qsiY6emhRYODD
-         J6tGEWH30YnenomVB4vh9OM4q5E764cKtZM8nyjH9sbuJBp9KOE7NaL8pwYnE03/BBq8
-         41+RrUArdcvUBU/sO42N971kvkeZFDvcDtDhSAxCvZOW7HAQyYYplfNA/WQ0dBmKTW+5
-         wbaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ll0oa75vwhrd/jX569DuLEC0YhlCdGYCCf3ViMztJWY=;
-        b=LfYy213qG1l6NSyNGHDjTpUrzhbtoDmPA8K57M+4dpU5K4RZ84UDlDEtcJC9pzZMax
-         TEE+Kzi6Vf2mhF16cPY0jXQx05KYVEmtWrMQAmgBlayI/QUQrMnJb2BAm2633xW7UG61
-         f+8YE6dQRy3rs2QUB4UI9EOnRSze+OfHQhk3YAj/qkpDgfuqqoBdg/rfJxl8h2EWKhxF
-         TR265Dk77KlPdBL6xtmxTofZVGChtajOINuRi9l8oeFYVZzhOTsodOYSPV1VDh1nESJD
-         ojmcAJU2czhMmcpYccQySEHw0zA+WiAjfeGN0gteQSOUmxIiIvusOHnwcYDBOIUZpjaj
-         1piQ==
-X-Gm-Message-State: AOAM530aXGs46P+gYOFqavFXbS8jWmWEYFSaeJ8pflylkyepQqRcxiPH
-        jHQNaUaBbddxtCySLnebCuyI7waFsQpyqA==
-X-Google-Smtp-Source: ABdhPJyUBKkqYtLhwhfFhyTmGHceMBGSgF4rJ3DHDWyO1q38N5zNLE2m3V1mkvbYuFMuaXGYoBTDRw==
-X-Received: by 2002:a05:6602:1644:: with SMTP id y4mr1123006iow.82.1633569767459;
-        Wed, 06 Oct 2021 18:22:47 -0700 (PDT)
-Received: from Davids-MacBook-Pro.local ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id q6sm1549712ile.23.2021.10.06.18.22.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 18:22:47 -0700 (PDT)
-Subject: Re: [PATCH 08/11] selftests: net/fcnal: Replace sleep after server
- start with -k
-To:     Leonard Crestez <cdleonard@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Seth David Schoen <schoen@loyalty.org>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1633520807.git.cdleonard@gmail.com>
- <ec40bd7128a30e93b90ba888f3468f394617a010.1633520807.git.cdleonard@gmail.com>
- <43210038-b04b-3726-1355-d5f132f6c64e@gmail.com>
- <d6882c3f-4ecf-4b4e-c20e-09b88da4fbd6@gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <888962dc-8d55-4875-cf44-c0b8ebaa1978@gmail.com>
-Date:   Wed, 6 Oct 2021 19:22:45 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Wed, 6 Oct 2021 22:49:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1633574885;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=EqFG7Btd6Vmpw/YcXSmMd6LpA3vOePUL53XxUo/XV5c=;
+        b=RXmibPpS1KrwO+JGzYUb1+ROC0bMXmSux1DKbUB0OE10Y+8ig7WX1vi03eFKjYHZ
+        hctN7p2PHAXzutusMcIpCP4/+9aKPcxoI6Uj3mX5z1Rom2s84/ESO+AnXTSYreOLBMH
+        BlPfQWJ1DjTiRvs1l6NQefSYhUL6yKFMK83nJKdI=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1633574885;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=EqFG7Btd6Vmpw/YcXSmMd6LpA3vOePUL53XxUo/XV5c=;
+        b=XIMgFAO8OY9UsSPhPXpSUTMqf6EI6DQU/lzvdDUKrA0oZLiVRcdV25gi3KCc7QGq
+        skQDlYfgMfIoXs/YDEZxnWURXmUJxuXF74YKHPJPOP8Ri3Wjn+yH1dBf2RtlzUeLN1q
+        Awqf9m1WO6uPvcEvobgwO+abS2HIf9VCPsh/AMY0=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211006
 MIME-Version: 1.0
-In-Reply-To: <d6882c3f-4ecf-4b4e-c20e-09b88da4fbd6@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+Message-ID: <0100017c58a697f1-a764d5a1-92e3-4d60-b202-db01d96744a7-000000@email.amazonses.com>
+Date:   Thu, 7 Oct 2021 02:48:05 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.10.07-54.240.8.73
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/6/21 3:35 PM, Leonard Crestez wrote:
-> 
-> I counted the [FAIL] or [ OK ] markers but not the output of nettest
-> itself. I don't know what to look for, I guess I could diff the outputs?
-> 
-> Shouldn't it be sufficient to compare the exit codes of the nettest client?
+## Build
+* kernel: 5.15.0-rc4
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 0dda5ee37364eb58a960d7a031aebd7fa3e26384
+* git describe: next-20211006
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211006
 
-mistakes happen. The 700+ tests that exist were verified by me when I
-submitted the script - that each test passes when it should and fails
-when it should. "FAIL" has many reasons. I tried to have separate exit
-codes for nettest.c to capture the timeouts vs ECONNREFUSED, etc., but I
-could easily have made a mistake. scanning the output is the best way.
-Most of the 'supposed to fail' tests have a HINT saying why it should fail.
+## Regressions (compared to next-20211001)
+* dragonboard-410c, kselftest-net
+  - net.ip_defrag.sh
 
-> 
-> The output is also modified by a previous change to not capture server
-> output separately and instead let it be combined with that of the
-> client. That change is required for this one, doing out=$(nettest -k)
-> does not return on fork unless the pipe is also closed.
-> 
-> I did not look at your change, mine is relatively minimal because it
-> only changes who decide when the server goes into the background: the
-> shell script or the server itself. This makes it work very easily even
-> for tests with multiple server instances.
+* dragonboard-410c, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
 
-The logging issue is why I went with 1 binary do both server and client
-after nettest.c got support for changing namespaces.
+* qemu-arm64-gic-version3, kselftest-timers
+  - timers.rtcpie
 
+* qemu_arm64, kselftest-timers
+  - timers.rtcpie
+
+* qemu_i386, kselftest-mqueue
+  - mqueue.mq_perf_tests
+
+* qemu_i386, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
+  - rseq.run_param_test.sh
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.steal_time
+
+* qemu_x86_64, kselftest-mqueue
+  - mqueue.mq_perf_tests
+
+* qemu_x86_64, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
+  - rseq.run_param_test.sh
+
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
+
+* x86, kselftest-lkdtm
+  - lkdtm.SLAB_FREE_DOUBLE.sh
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211001)
+* qemu-arm64-mte, kselftest-timers
+  - timers.rtcpie
+
+
+## Test result summary
+total: 4010, pass: 2387, fail: 331, skip: 1292, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
