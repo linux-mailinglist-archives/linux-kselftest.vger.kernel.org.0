@@ -2,37 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E64C425062
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 11:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACC64250A1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 12:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240757AbhJGJxa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 05:53:30 -0400
-Received: from mga07.intel.com ([134.134.136.100]:13166 "EHLO mga07.intel.com"
+        id S240708AbhJGKCz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 06:02:55 -0400
+Received: from mga04.intel.com ([192.55.52.120]:8011 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240540AbhJGJx3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 05:53:29 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="289712384"
+        id S240592AbhJGKCz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Oct 2021 06:02:55 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="224984792"
 X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
-   d="scan'208";a="289712384"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 02:51:35 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="224984792"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 03:00:50 -0700
 X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
-   d="scan'208";a="657327911"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 07 Oct 2021 02:51:29 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 294313DB; Thu,  7 Oct 2021 12:51:36 +0300 (EEST)
+   d="scan'208";a="478502327"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 03:00:41 -0700
+Received: from andy by smile with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mYQCa-009UJJ-Hs;
+        Thu, 07 Oct 2021 13:00:36 +0300
+Date:   Thu, 7 Oct 2021 13:00:36 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
@@ -40,58 +47,60 @@ Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Graf <tgraf@suug.ch>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2 4/4] kunit: Replace kernel.h with the necessary inclusions
-Date:   Thu,  7 Oct 2021 12:51:29 +0300
-Message-Id: <20211007095129.22037-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211007095129.22037-1-andriy.shevchenko@linux.intel.com>
-References: <20211007095129.22037-1-andriy.shevchenko@linux.intel.com>
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Thomas Graf <tgraf@suug.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v1 3/3] kernel.h: Split out container_of() and
+ typeof_memeber() macros
+Message-ID: <YV7FREwrt4auntWs@smile.fi.intel.com>
+References: <20210713084541.7958-1-andriy.shevchenko@linux.intel.com>
+ <20210713084541.7958-3-andriy.shevchenko@linux.intel.com>
+ <YO1s+rHEqC9RjMva@kroah.com>
+ <YO12ARa3i1TprGnJ@smile.fi.intel.com>
+ <YO13lSUdPfNGOnC3@kroah.com>
+ <CANiq72=vs8-88h3Z+BON=qA4CZQ1pS1nggnCFHDEHYyG+Y+3JQ@mail.gmail.com>
+ <YV67+vrn3MxpXABy@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YV67+vrn3MxpXABy@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When kernel.h is used in the headers it adds a lot into dependency hell,
-especially when there are circular dependencies are involved.
+On Thu, Oct 07, 2021 at 12:20:58PM +0300, Andy Shevchenko wrote:
+> On Tue, Jul 13, 2021 at 08:39:22PM +0200, Miguel Ojeda wrote:
+> > On Tue, Jul 13, 2021 at 1:23 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > Life is messy and can not easily be partitioned into tiny pieces.  That
+> > > way usually ends up being even messier in the end...
+> > 
+> > I agree measurements would be ideal.
+> > 
+> > Having said that, even if it makes no performance difference, I think
+> > it is reasonable to split things (within reason) and makes a bunch of
+> > other things easier, plus sometimes one can enforce particular
+> > conventions in the separate header (like I did when introducing
+> > `compiler_attributes.h`).
+> 
+> It does almost 2% (steady) speedup. I will send a v2 with methodology
+> and numbers of testing.
 
-Replace kernel.h inclusion with the list of what is really being used.
+Seems it's slightly different Cc list, so TWIMC the v2 is here:
+https://lore.kernel.org/linux-media/20211007095129.22037-5-andriy.shevchenko@linux.intel.com/T/#u
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/kunit/test.h | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 4d498f496790..d88d9f7ead0a 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -12,12 +12,20 @@
- #include <kunit/assert.h>
- #include <kunit/try-catch.h>
- 
-+#include <linux/compiler_attributes.h>
- #include <linux/container_of.h>
--#include <linux/kernel.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/kconfig.h>
-+#include <linux/kref.h>
-+#include <linux/list.h>
- #include <linux/module.h>
- #include <linux/slab.h>
-+#include <linux/spinlock.h>
-+#include <linux/string.h>
- #include <linux/types.h>
--#include <linux/kref.h>
-+
-+#include <asm/rwonce.h>
- 
- struct kunit_resource;
- 
 -- 
-2.33.0
+With Best Regards,
+Andy Shevchenko
+
 
