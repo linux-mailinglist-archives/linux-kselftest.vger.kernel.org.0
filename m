@@ -2,85 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DF2425727
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 17:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F35425732
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 17:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240912AbhJGP4h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 11:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbhJGP4h (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 11:56:37 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733AFC061570;
-        Thu,  7 Oct 2021 08:54:43 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id w11so3636339ilv.6;
-        Thu, 07 Oct 2021 08:54:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gEeeOHW2XScEPt9l9T7cyjA12nlEqvYFpEPTjeOlhtk=;
-        b=GozB4eJgGzxuSljp5CgF97+YvAQZiobXsfKatDDQ3SRdjV2w8zl+tdKbRMUkZ11WcY
-         BmsMIF92hW1T1Jdh5lxRyNQ66QsBegrZZ+oA2TEwHuVAddzl1effAhfw7pZD6aiBsE7x
-         +vZf8T3375mHEuNkUinYCN5zcXtkNNTr81FAmSWvrZ0eGcy7NuSWVsgZVXjoOM6/OHMo
-         ZkHWT4MKtp4InKxaDfwpGg8drLeh4nWQ05eDCw/Xb3d33+ARxwS4ZjH9btiE6vbM1u4R
-         KIFemT4+ChWkJl+rH2yst3brWqM8DyXlwFZhQBiXMaSZnRU7AAACPOd02GJNDpnuaEUC
-         8w+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gEeeOHW2XScEPt9l9T7cyjA12nlEqvYFpEPTjeOlhtk=;
-        b=6Wg4W+kldb2yjvWcKvV5yX/J9ooxvqQxb+UKCd+xy8oQMOqK+R6PczdYou+BF3YNuB
-         7r9hV3MxycFYBL2xHQ/tz2cbRZdjBrokvAIm7TuXD3H71Rppid/asIFdGAjCRVyRA4KR
-         Iu8lItPY5qMJ/rZcf8EP2r+4YMZEKFnijVi0wdz6Hh9q9M+C3Fe1NLf3iHC5jaJomwCa
-         sHdGBQB3dRgE23JTe6Kh0EsdTHNZRku6+SMZOcQKIxE6Vz6kKOrxeaSlSNBVVqoh/Vks
-         d/vTB9zukai8LQtdwZKy+sWL4mAVcxg3vGDFiaDxt7biIzrG5K4oGvdnjSkNWCf56FGX
-         t9ig==
-X-Gm-Message-State: AOAM532kFbUOrwApz91X8kgXmvwBIxZFaiUxzuM9Zgcv9LjJz/W1/hrm
-        qLceJCC68qf9eXs9fmRJCFEWJfTnHP0mTdUkOJg=
-X-Google-Smtp-Source: ABdhPJzmi9FW2Opfs1nIzYmaM2A75n805ZIic6DitSDDSrvjWB4ocsStnK68m9Da+iZyOmOC4GLILSc2WVwn06BgL78=
-X-Received: by 2002:a05:6e02:1d86:: with SMTP id h6mr3917519ila.5.1633622082893;
- Thu, 07 Oct 2021 08:54:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com> <20211007154407.29746-3-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211007154407.29746-3-andriy.shevchenko@linux.intel.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 7 Oct 2021 17:54:32 +0200
-Message-ID: <CANiq72=pCQgwHe5u2nS_RkGBnRLdcw2v=vk-8eNDeAP9ygO0SQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/7] kernel.h: Split out container_of() and
- typeof_member() macros
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        id S242132AbhJGP5Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 11:57:16 -0400
+Received: from mga11.intel.com ([192.55.52.93]:60499 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240504AbhJGP5Q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Oct 2021 11:57:16 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="223685476"
+X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
+   d="scan'208";a="223685476"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:55:22 -0700
+X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
+   d="scan'208";a="484563268"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:55:14 -0700
+Received: from andy by smile with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mYVji-009aKV-9f;
+        Thu, 07 Oct 2021 18:55:10 +0300
+Date:   Thu, 7 Oct 2021 18:55:10 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Thomas Graf <tgraf@suug.ch>,
         Andrew Morton <akpm@linux-foundation.org>,
         Jonathan Cameron <jic23@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v1 3/3] kernel.h: Split out container_of() and
+ typeof_memeber() macros
+Message-ID: <YV8YXlVMAvY4iIC3@smile.fi.intel.com>
+References: <20210713084541.7958-1-andriy.shevchenko@linux.intel.com>
+ <20210713084541.7958-3-andriy.shevchenko@linux.intel.com>
+ <YO1s+rHEqC9RjMva@kroah.com>
+ <YO12ARa3i1TprGnJ@smile.fi.intel.com>
+ <YO13lSUdPfNGOnC3@kroah.com>
+ <CANiq72=vs8-88h3Z+BON=qA4CZQ1pS1nggnCFHDEHYyG+Y+3JQ@mail.gmail.com>
+ <YV67+vrn3MxpXABy@smile.fi.intel.com>
+ <CANiq72nKya4OW0Eof=7PP-U78uo+j8DL0UUDNsW3ww_5PPJVtA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiq72nKya4OW0Eof=7PP-U78uo+j8DL0UUDNsW3ww_5PPJVtA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 7, 2021 at 5:44 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> +#define typeof_member(T, m)    typeof(((T*)0)->m)
+On Thu, Oct 07, 2021 at 05:39:56PM +0200, Miguel Ojeda wrote:
+> On Thu, Oct 7, 2021 at 11:21 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > It does almost 2% (steady) speedup. I will send a v2 with methodology
+> > and numbers of testing.
+> 
+> Thanks for taking the time to get the numbers!
 
-Is the patch missing the removal from the other place?
+There is a v4 out, you are among others in Cc list.
 
-Cheers,
-Miguel
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
