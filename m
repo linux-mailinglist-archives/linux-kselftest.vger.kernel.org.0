@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A19A642511D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 12:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4C942513A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 12:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240917AbhJGKfz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 06:35:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50494 "EHLO mail.kernel.org"
+        id S240901AbhJGKjy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 06:39:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240901AbhJGKfv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 06:35:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 160096113E;
-        Thu,  7 Oct 2021 10:33:57 +0000 (UTC)
+        id S240868AbhJGKj1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Oct 2021 06:39:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A49260C4C;
+        Thu,  7 Oct 2021 10:37:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633602837;
-        bh=ej3xM+C2sbJT1uDuzwnHgF8+qHlWQvdjlHWGaHrAnnA=;
+        s=korg; t=1633603053;
+        bh=xDMazokcPNABQ4Qk5ZpSLObojNMHpNQ7xmSlqlHdOXU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nCbG5PriPvm2tvJYzAOOhXZyNohjHetOvyL7xD4IiohKwsf0ImbvKO1sAmeqeLNiM
-         mBoNXPY959zJx34ryOYxwYtrFtovOYu+23tn2S9teTcZgMWYB+a3XGWutX21GAQgyq
-         vYMS2+dgFADc1mJK8ejVZtVGB0VO5zX3PIn84PWk=
-Date:   Thu, 7 Oct 2021 12:33:55 +0200
+        b=ddn/JHGpcuqFBIT5H+VDQ8CAR2wDHpesc/AofsrL8HwIWIX7Eo4zQIbcPI+6VqB0d
+         2eGvtZFHMt+pKKMzNkQtYLEiwgDvi+KwXJWXPpKNfaVAgowCFMP8kNYf3i9Fp8Pfc8
+         AXsRpvRKtzpEH4nzdOHT/d7L9b723qNH96RcgA6o=
+Date:   Thu, 7 Oct 2021 12:37:31 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -40,178 +40,200 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Thomas Graf <tgraf@suug.ch>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 0/4] kernel.h further split
-Message-ID: <YV7NEze2IvUgHusJ@kroah.com>
+Subject: Re: [PATCH v2 2/4] kernel.h: Split out container_of() and
+ typeof_member() macros
+Message-ID: <YV7N6/2+/oDv81Fq@kroah.com>
 References: <20211007095129.22037-1-andriy.shevchenko@linux.intel.com>
+ <20211007095129.22037-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211007095129.22037-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211007095129.22037-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 07, 2021 at 12:51:25PM +0300, Andy Shevchenko wrote:
-> The kernel.h is a set of something which is not related to each other
-> and often used in non-crossed compilation units, especially when drivers
-> need only one or two macro definitions from it.
+On Thu, Oct 07, 2021 at 12:51:27PM +0300, Andy Shevchenko wrote:
+> kernel.h is being used as a dump for all kinds of stuff for a long time.
+> Here is the attempt cleaning it up by splitting out container_of() and
+> typeof_member() macros.
 > 
-> Here is the split of container_of(). The goals are the following:
-> - untwist the dependency hell a bit
-> - drop kernel.h inclusion where it's only used for container_of()
-> - speed up C preprocessing.
+> At the same time convert users in the header and other folders to use it.
+> Though for time being include new header back to kernel.h to avoid twisted
+> indirected includes for existing users.
 > 
-> People, like Greg KH and Miguel Ojeda, were asking about the latter.
-> Read below the methodology and test setup with outcome numbers.
+> Note, there are _a lot_ of headers and modules that include kernel.h solely
+> for one of these macros and this allows to unburden compiler for the twisted
+> inclusion paths and to make new code cleaner in the future.
 > 
-> The methodology
-> ===============
-> The question here is how to measure in the more or less clean way
-> the C preprocessing time when building a project like Linux kernel.
-> To answer it, let's look around and see what tools do we have that
-> may help. Aha, here is ccache tool that seems quite plausible to
-> be used. Its core idea is to preprocess C file, count hash (MD4)
-> and compare to ones that are in the cache. If found, return the
-> object file, avoiding compilation stage.
-> 
-> Taking into account the property of the ccache, configure and use
-> it in the below steps:
-> 
-> 1. Configure kernel with allyesconfig
-> 
-> 2. Make it with `make` to be sure that the cache is filled with
->    the latest data. I.o.w. warm up the cache.
-> 
-> 3. Run `make -s` (silent mode to reduce the influence of
->    the unrelated things, like console output) 10 times and
->    measure 'real' time spent.
-> 
-> 4. Repeat 1-3 for each patch or patch set to get data sets before
->    and after.
-> 
-> When we get the raw data, calculating median will show us the number.
-> Comparing them before and after we will see the difference.
-> 
-> The setup
-> =========
-> I have used the Intel x86_64 server platform (see partial output of
->  `lscpu` below):
-> 
-> $ lscpu
-> Architecture:            x86_64
->   CPU op-mode(s):        32-bit, 64-bit
->   Address sizes:         46 bits physical, 48 bits virtual
->   Byte Order:            Little Endian
-> CPU(s):                  88
->   On-line CPU(s) list:   0-87
-> Vendor ID:               GenuineIntel
->   Model name:            Intel(R) Xeon(R) CPU E5-2699 v4 @ 2.20GHz
->     CPU family:          6
->     Model:               79
->     Thread(s) per core:  2
->     Core(s) per socket:  22
->     Socket(s):           2
->     Stepping:            1
->     CPU max MHz:         3600.0000
->     CPU min MHz:         1200.0000
-> ...
-> Caches (sum of all):
->   L1d:                   1.4 MiB (44 instances)
->   L1i:                   1.4 MiB (44 instances)
->   L2:                    11 MiB (44 instances)
->   L3:                    110 MiB (2 instances)
-> NUMA:
->   NUMA node(s):          2
->   NUMA node0 CPU(s):     0-21,44-65
->   NUMA node1 CPU(s):     22-43,66-87
-> Vulnerabilities:
->   Itlb multihit:         KVM: Mitigation: Split huge pages
->   L1tf:                  Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable
->   Mds:                   Mitigation; Clear CPU buffers; SMT vulnerable
->   Meltdown:              Mitigation; PTI
->   Spec store bypass:     Mitigation; Speculative Store Bypass disabled via prctl and seccomp
->   Spectre v1:            Mitigation; usercopy/swapgs barriers and __user pointer sanitization
->   Spectre v2:            Mitigation; Full generic retpoline, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling
->   Tsx async abort:       Mitigation; Clear CPU buffers; SMT vulnerable
-> 
-> With the following GCC:
-> 
-> $ gcc --version
-> gcc (Debian 10.3.0-11) 10.3.0
-> 
-> The commands I have run during the measurement were:
-> 
-> 	rm -rf $O
-> 	make O=$O allyesconfig
-> 	time make O=$O -s -j64	# this step has been measured
-> 
-> The raw data and median
-> =======================
-> Before patch 2 (yes, I have measured the only patch 2 effect) in the series
-> (the data is sorted by time):
-> 
-> real    2m8.794s
-> real    2m11.183s
-> real    2m11.235s
-> real    2m11.639s
-> real    2m11.960s
-> real    2m12.014s
-> real    2m12.609s
-> real    2m13.177s
-> real    2m13.462s
-> real    2m19.132s
-> 
-> After patch 2 has been applied:
-> 
-> real    2m8.536s
-> real    2m8.776s
-> real    2m9.071s
-> real    2m9.459s
-> real    2m9.531s
-> real    2m9.610s
-> real    2m10.356s
-> real    2m10.430s
-> real    2m11.117s
-> real    2m11.885s
-> 
-> Median values are:
-> 	131.987s before
-> 	129.571s after
-> 
-> We see the steady speedup as of 1.83%.
-
-You do know about kcbench:
-	https://gitlab.com/knurd42/kcbench.git
-
-Try running that to make it such that we know how it was tested :)
-
-thanks,
-
-greg k-h
-
-
-> 
-> Andy Shevchenko (4):
->   kernel.h: Drop unneeded <linux/kernel.h> inclusion from other headers
->   kernel.h: Split out container_of() and typeof_member() macros
->   lib/rhashtable: Replace kernel.h with the necessary inclusions
->   kunit: Replace kernel.h with the necessary inclusions
-> 
->  include/kunit/test.h         | 14 ++++++++++++--
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  include/kunit/test.h         |  2 ++
 >  include/linux/container_of.h | 37 ++++++++++++++++++++++++++++++++++++
 >  include/linux/kernel.h       | 31 +-----------------------------
 >  include/linux/kobject.h      |  1 +
 >  include/linux/list.h         |  6 ++++--
 >  include/linux/llist.h        |  4 +++-
 >  include/linux/plist.h        |  5 ++++-
->  include/linux/rwsem.h        |  1 -
->  include/linux/spinlock.h     |  1 -
 >  include/media/media-entity.h |  3 ++-
 >  lib/radix-tree.c             |  6 +++++-
->  lib/rhashtable.c             |  7 ++++++-
->  12 files changed, 75 insertions(+), 41 deletions(-)
+>  lib/rhashtable.c             |  1 +
+>  10 files changed, 60 insertions(+), 36 deletions(-)
 >  create mode 100644 include/linux/container_of.h
 > 
-> -- 
-> 2.33.0
-> 
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 24b40e5c160b..4d498f496790 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -11,6 +11,8 @@
+>  
+>  #include <kunit/assert.h>
+>  #include <kunit/try-catch.h>
+> +
+> +#include <linux/container_of.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+> diff --git a/include/linux/container_of.h b/include/linux/container_of.h
+> new file mode 100644
+> index 000000000000..f6ee1be0e784
+> --- /dev/null
+> +++ b/include/linux/container_of.h
+> @@ -0,0 +1,37 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_CONTAINER_OF_H
+> +#define _LINUX_CONTAINER_OF_H
+> +
+> +#define typeof_member(T, m)	typeof(((T*)0)->m)
+> +
+> +/**
+> + * container_of - cast a member of a structure out to the containing structure
+> + * @ptr:	the pointer to the member.
+> + * @type:	the type of the container struct this is embedded in.
+> + * @member:	the name of the member within the struct.
+> + *
+> + */
+> +#define container_of(ptr, type, member) ({				\
+> +	void *__mptr = (void *)(ptr);					\
+> +	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
+> +			 !__same_type(*(ptr), void),			\
+> +			 "pointer type mismatch in container_of()");	\
+> +	((type *)(__mptr - offsetof(type, member))); })
+> +
+> +/**
+> + * container_of_safe - cast a member of a structure out to the containing structure
+> + * @ptr:	the pointer to the member.
+> + * @type:	the type of the container struct this is embedded in.
+> + * @member:	the name of the member within the struct.
+> + *
+> + * If IS_ERR_OR_NULL(ptr), ptr is returned unchanged.
+> + */
+> +#define container_of_safe(ptr, type, member) ({				\
+> +	void *__mptr = (void *)(ptr);					\
+> +	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
+> +			 !__same_type(*(ptr), void),			\
+> +			 "pointer type mismatch in container_of()");	\
+> +	IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) :			\
+> +		((type *)(__mptr - offsetof(type, member))); })
+> +
+> +#endif	/* _LINUX_CONTAINER_OF_H */
+> diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+> index d416fe3165cb..ad9fdcce9dcf 100644
+> --- a/include/linux/kernel.h
+> +++ b/include/linux/kernel.h
+> @@ -9,6 +9,7 @@
+>  #include <linux/stddef.h>
+>  #include <linux/types.h>
+>  #include <linux/compiler.h>
+> +#include <linux/container_of.h>
+>  #include <linux/bitops.h>
+>  #include <linux/kstrtox.h>
+>  #include <linux/log2.h>
+> @@ -482,36 +483,6 @@ static inline void ftrace_dump(enum ftrace_dump_mode oops_dump_mode) { }
+>  #define __CONCAT(a, b) a ## b
+>  #define CONCATENATE(a, b) __CONCAT(a, b)
+>  
+> -/**
+> - * container_of - cast a member of a structure out to the containing structure
+> - * @ptr:	the pointer to the member.
+> - * @type:	the type of the container struct this is embedded in.
+> - * @member:	the name of the member within the struct.
+> - *
+> - */
+> -#define container_of(ptr, type, member) ({				\
+> -	void *__mptr = (void *)(ptr);					\
+> -	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
+> -			 !__same_type(*(ptr), void),			\
+> -			 "pointer type mismatch in container_of()");	\
+> -	((type *)(__mptr - offsetof(type, member))); })
+> -
+> -/**
+> - * container_of_safe - cast a member of a structure out to the containing structure
+> - * @ptr:	the pointer to the member.
+> - * @type:	the type of the container struct this is embedded in.
+> - * @member:	the name of the member within the struct.
+> - *
+> - * If IS_ERR_OR_NULL(ptr), ptr is returned unchanged.
+> - */
+> -#define container_of_safe(ptr, type, member) ({				\
+> -	void *__mptr = (void *)(ptr);					\
+> -	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
+> -			 !__same_type(*(ptr), void),			\
+> -			 "pointer type mismatch in container_of()");	\
+> -	IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) :			\
+> -		((type *)(__mptr - offsetof(type, member))); })
+> -
+>  /* Rebuild everything on CONFIG_FTRACE_MCOUNT_RECORD */
+>  #ifdef CONFIG_FTRACE_MCOUNT_RECORD
+>  # define REBUILD_DUE_TO_FTRACE_MCOUNT_RECORD
+> diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+> index efd56f990a46..bf8371e58b17 100644
+> --- a/include/linux/kobject.h
+> +++ b/include/linux/kobject.h
+> @@ -15,6 +15,7 @@
+>  #ifndef _KOBJECT_H_
+>  #define _KOBJECT_H_
+>  
+> +#include <linux/container_of.h>
+>  #include <linux/types.h>
+>  #include <linux/list.h>
+>  #include <linux/sysfs.h>
+> diff --git a/include/linux/list.h b/include/linux/list.h
+> index f2af4b4aa4e9..5dc679b373da 100644
+> --- a/include/linux/list.h
+> +++ b/include/linux/list.h
+> @@ -2,11 +2,13 @@
+>  #ifndef _LINUX_LIST_H
+>  #define _LINUX_LIST_H
+>  
+> +#include <linux/container_of.h>
+> +#include <linux/const.h>
+>  #include <linux/types.h>
+>  #include <linux/stddef.h>
+>  #include <linux/poison.h>
+> -#include <linux/const.h>
+> -#include <linux/kernel.h>
+> +
+> +#include <asm/barrier.h>
+>  
+>  /*
+>   * Circular doubly linked list implementation.
+
+
+This change looks odd.
+
+You already have kernel.h including container_of.h, so why not have a
+series that does:
+	- create container_of.h and have kernel.h include it
+	- multiple patches that remove kernel.h and use container_of.h
+	  instead only.
+	- multiple patches that remove kernel.h and use container_of.h
+	  and other .h files (like list.h seems to need here.)
+	- remove container_of.h from kernel.h
+
+Mushing them all together here makes this really hard to understand why
+this change is needed here.
+
+thanks,
+
+greg k-h
