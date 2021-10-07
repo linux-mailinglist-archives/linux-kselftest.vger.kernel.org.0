@@ -2,189 +2,223 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAA7424BE8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 04:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74491424CDD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 07:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbhJGCuB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Oct 2021 22:50:01 -0400
-Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:60861 "EHLO
-        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232254AbhJGCt7 (ORCPT
+        id S240160AbhJGFqM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 01:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240158AbhJGFqL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Oct 2021 22:49:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1633574885;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=EqFG7Btd6Vmpw/YcXSmMd6LpA3vOePUL53XxUo/XV5c=;
-        b=RXmibPpS1KrwO+JGzYUb1+ROC0bMXmSux1DKbUB0OE10Y+8ig7WX1vi03eFKjYHZ
-        hctN7p2PHAXzutusMcIpCP4/+9aKPcxoI6Uj3mX5z1Rom2s84/ESO+AnXTSYreOLBMH
-        BlPfQWJ1DjTiRvs1l6NQefSYhUL6yKFMK83nJKdI=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1633574885;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=EqFG7Btd6Vmpw/YcXSmMd6LpA3vOePUL53XxUo/XV5c=;
-        b=XIMgFAO8OY9UsSPhPXpSUTMqf6EI6DQU/lzvdDUKrA0oZLiVRcdV25gi3KCc7QGq
-        skQDlYfgMfIoXs/YDEZxnWURXmUJxuXF74YKHPJPOP8Ri3Wjn+yH1dBf2RtlzUeLN1q
-        Awqf9m1WO6uPvcEvobgwO+abS2HIf9VCPsh/AMY0=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211006
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017c58a697f1-a764d5a1-92e3-4d60-b202-db01d96744a7-000000@email.amazonses.com>
-Date:   Thu, 7 Oct 2021 02:48:05 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.10.07-54.240.8.73
+        Thu, 7 Oct 2021 01:46:11 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85325C061755
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Oct 2021 22:44:18 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id r13-20020ac86d2d000000b002a755d36425so4237781qtu.14
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Oct 2021 22:44:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=mIj9Jk5MgblNz5q9sG/zsQIq+TdmIYSKr+8KbGGg5VE=;
+        b=gX6kWtp+Nh3tQGqYQ1MPA9e4Ad0JzGcIBSHXfkqmZoxq2JdwiIwlVfYgj0DvVyd9EW
+         H8OjRrcPU9SNcs0Yc1JQ3TDB1zM4Z0BOkuGVcfMsLzH/hbcPwOGcgvW7A0V4Jb1Cy1DE
+         Ps2O3+AA/DJLYpr4AmxWBYrStgZmz8lRTrgT8wCQXau30kp8DR894ItWMo9k+ZVutguQ
+         jXEqjdLXCQYgp8bLib57u7ZrFC63WKkh33JMn8GcZLLnKmQmA66kI7vWDXtHkVW2sSPd
+         roWw9MINXGyXpNbGO+FzRt+8rnLywLnKY04Kc7NPPRvWnySgiJs08v1YZcnrlIXTbMe5
+         3rPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=mIj9Jk5MgblNz5q9sG/zsQIq+TdmIYSKr+8KbGGg5VE=;
+        b=saDLn+RQngzPFCvWV8/bg/wGjL+fj/vUVO7ZwdTchSscj+3KjmLZhq3pJw/8G9HZZJ
+         6KmrHQfScAvQ40FMvJf5OWsTsr6k7HNVUJ+Km2IM5Vpj3Elx9+f8mqjEpa+MTPyLRpPX
+         wRynNHfgARexBMAsbmTKVk3GCFxw2B6pzr9O99joSDS977UznjaJ7RkR1dXkC6qyiM3I
+         V+LkRcn6MT7JzKYfUxZhgtTjwsXBDN3hy3fPImwi8Sz0+8IxATcu/est4cUHYboyFILi
+         fl8ClEmHM7UfnwMUVzimIvPbsA83bY2nopCH1F9zQMEmO9Pifd/yFVDw28I+AUxeWVU9
+         zoWg==
+X-Gm-Message-State: AOAM53330R39b1EXpPV1E25e4UNMwTjR/CAJTHysvRQN9j4WlmTUZDf7
+        PPttMZDQJ4dbAOdklZn+Tr6GY30uSq+z8g==
+X-Google-Smtp-Source: ABdhPJxaY1Kcgps6yP1EX2w3aIMgCkcw1hNuPT2VdXBWMBaTmNqUIXtOR+JykXPwaG2BrpMzLEhFME23e7+ZnA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:e436:7947:9f25:884c])
+ (user=dlatypov job=sendgmr) by 2002:ac8:7cba:: with SMTP id
+ z26mr2669082qtv.11.1633585457632; Wed, 06 Oct 2021 22:44:17 -0700 (PDT)
+Date:   Wed,  6 Oct 2021 22:44:10 -0700
+Message-Id: <20211007054410.290427-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
+Subject: [PATCH] kunit: tool: print parsed test results fully incrementally
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc4
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 0dda5ee37364eb58a960d7a031aebd7fa3e26384
-* git describe: next-20211006
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211006
+With the parser rework [1] and run_kernel() rework [2], this allows the
+parser to print out test results incrementally.
 
-## Regressions (compared to next-20211001)
-* dragonboard-410c, kselftest-net
-  - net.ip_defrag.sh
+Currently, that's held up by the fact that the LineStream eagerly
+pre-fetches the next line when you call pop().
+This blocks parse_test_result() from returning until the line *after*
+the "ok 1 - test name" line is also printed.
 
-* dragonboard-410c, kselftest-rseq
-  - rseq.basic_percpu_ops_test
-  - rseq.basic_test
-  - rseq.param_test
-  - rseq.param_test_benchmark
-  - rseq.param_test_compare_twice
+One can see this with the following example:
+$ (echo -e 'TAP version 14\n1..3\nok 1 - fake test'; sleep 2; echo -e 'ok 2 - fake test 2'; sleep 3; echo -e 'ok 3 - fake test 3') | ./tools/testing/kunit/kunit.py parse
 
-* qemu-arm64-gic-version3, kselftest-timers
-  - timers.rtcpie
+Before this patch [1]: there's a pause before 'fake test' is printed.
+After this patch: 'fake test' is printed out immediately.
 
-* qemu_arm64, kselftest-timers
-  - timers.rtcpie
+This patch also adds
+* a unit test to verify LineStream's behavior directly
+* a test case to ensure that it's lazily calling the generator
+* an explicit exception for when users go beyond EOF
 
-* qemu_i386, kselftest-mqueue
-  - mqueue.mq_perf_tests
+[1] https://lore.kernel.org/linux-kselftest/20211006170049.106852-1-dlatypov@google.com/
+[2] https://lore.kernel.org/linux-kselftest/20211005011340.2826268-1-dlatypov@google.com/
 
-* qemu_i386, kselftest-rseq
-  - rseq.basic_percpu_ops_test
-  - rseq.basic_test
-  - rseq.param_test
-  - rseq.param_test_benchmark
-  - rseq.param_test_compare_twice
-  - rseq.run_param_test.sh
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_parser.py    | 22 ++++++++++----
+ tools/testing/kunit/kunit_tool_test.py | 42 +++++++++++++++++++++++++-
+ 2 files changed, 57 insertions(+), 7 deletions(-)
 
-* qemu_x86_64, kselftest-kvm
-  - kvm.steal_time
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index f01fd565f978..82900a5f9ad6 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -172,42 +172,51 @@ class TestCounts:
+ class LineStream:
+ 	"""
+ 	A class to represent the lines of kernel output.
+-	Provides a peek()/pop() interface over an iterator of
++	Provides a lazy peek()/pop() interface over an iterator of
+ 	(line#, text).
+ 	"""
+ 	_lines: Iterator[Tuple[int, str]]
+ 	_next: Tuple[int, str]
++	_need_next: bool
+ 	_done: bool
+ 
+ 	def __init__(self, lines: Iterator[Tuple[int, str]]):
+ 		"""Creates a new LineStream that wraps the given iterator."""
+ 		self._lines = lines
+ 		self._done = False
++		self._need_next = True
+ 		self._next = (0, '')
+-		self._get_next()
+ 
+ 	def _get_next(self) -> None:
+-		"""Advances the LineSteam to the next line."""
++		"""Advances the LineSteam to the next line, if necessary."""
++		if not self._need_next:
++			return
+ 		try:
+ 			self._next = next(self._lines)
+ 		except StopIteration:
+ 			self._done = True
++		finally:
++			self._need_next = False
+ 
+ 	def peek(self) -> str:
+ 		"""Returns the current line, without advancing the LineStream.
+ 		"""
++		self._get_next()
+ 		return self._next[1]
+ 
+ 	def pop(self) -> str:
+ 		"""Returns the current line and advances the LineStream to
+ 		the next line.
+ 		"""
+-		n = self._next
+-		self._get_next()
+-		return n[1]
++		s = self.peek()
++		if self._done:
++			raise ValueError(f'LineStream: going past EOF, last line was {s}')
++		self._need_next = True
++		return s
+ 
+ 	def __bool__(self) -> bool:
+ 		"""Returns True if stream has more lines."""
++		self._get_next()
+ 		return not self._done
+ 
+ 	# Only used by kunit_tool_test.py.
+@@ -220,6 +229,7 @@ class LineStream:
+ 
+ 	def line_number(self) -> int:
+ 		"""Returns the line number of the current line."""
++		self._get_next()
+ 		return self._next[0]
+ 
+ # Parsing helper methods:
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index c309ed76aef5..3cb02827c941 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -13,8 +13,9 @@ import tempfile, shutil # Handling test_tmpdir
+ 
+ import itertools
+ import json
+-import signal
+ import os
++import signal
++from typing import Iterable
+ 
+ import kunit_config
+ import kunit_parser
+@@ -320,6 +321,45 @@ class KUnitParserTest(unittest.TestCase):
+ 				result.status)
+ 			self.assertEqual('kunit-resource-test', result.test.subtests[0].name)
+ 
++def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
++	return kunit_parser.LineStream(enumerate(strs, start=1))
++
++class LineStreamTest(unittest.TestCase):
++
++	def test_basic(self):
++		stream = line_stream_from_strs(['hello', 'world'])
++
++		self.assertTrue(stream, msg='Should be more input')
++		self.assertEqual(stream.line_number(), 1)
++		self.assertEqual(stream.peek(), 'hello')
++		self.assertEqual(stream.pop(), 'hello')
++
++		self.assertTrue(stream, msg='Should be more input')
++		self.assertEqual(stream.line_number(), 2)
++		self.assertEqual(stream.peek(), 'world')
++		self.assertEqual(stream.pop(), 'world')
++
++		self.assertFalse(stream, msg='Should be no more input')
++		with self.assertRaisesRegex(ValueError, 'LineStream: going past EOF'):
++			stream.pop()
++
++	def test_is_lazy(self):
++		called_times = 0
++		def generator():
++			nonlocal called_times
++			for i in range(1,5):
++				called_times += 1
++				yield called_times, str(called_times)
++
++		stream = kunit_parser.LineStream(generator())
++		self.assertEqual(called_times, 0)
++
++		self.assertEqual(stream.pop(), '1')
++		self.assertEqual(called_times, 1)
++
++		self.assertEqual(stream.pop(), '2')
++		self.assertEqual(called_times, 2)
++
+ class LinuxSourceTreeTest(unittest.TestCase):
+ 
+ 	def setUp(self):
 
-* qemu_x86_64, kselftest-mqueue
-  - mqueue.mq_perf_tests
+base-commit: 9b409050eaf2da929408fa60fbf535745d828e67
+-- 
+2.33.0.882.g93a45727a2-goog
 
-* qemu_x86_64, kselftest-rseq
-  - rseq.basic_percpu_ops_test
-  - rseq.basic_test
-  - rseq.param_test
-  - rseq.param_test_benchmark
-  - rseq.param_test_compare_twice
-  - rseq.run_param_test.sh
-
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
-
-* x86, kselftest-lkdtm
-  - lkdtm.SLAB_FREE_DOUBLE.sh
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211001)
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
-
-
-## Test result summary
-total: 4010, pass: 2387, fail: 331, skip: 1292, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
