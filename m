@@ -2,93 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE284259BA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 19:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643B4425E30
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 22:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242912AbhJGRtA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 13:49:00 -0400
-Received: from smtprelay0057.hostedemail.com ([216.40.44.57]:50724 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241071AbhJGRs7 (ORCPT
+        id S231366AbhJGUyh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 16:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231825AbhJGUyg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 13:48:59 -0400
-Received: from omf13.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id AF308181D5AA8;
-        Thu,  7 Oct 2021 17:47:04 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 3E9C91124F8;
-        Thu,  7 Oct 2021 17:47:00 +0000 (UTC)
-Message-ID: <50e81a87af1f832ae8e135b15aa41a87c08400e0.camel@perches.com>
-Subject: Re: [PATCH v4 6/7] plist: Replace kernel.h with the necessary
- inclusions
-From:   Joe Perches <joe@perches.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        jic23@kernel.org, linux@rasmusvillemoes.dk,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Date:   Thu, 07 Oct 2021 10:46:59 -0700
-In-Reply-To: <YV8vHZg0Xcs0DbPV@smile.fi.intel.com>
-References: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com>
-         <20211007154407.29746-7-andriy.shevchenko@linux.intel.com>
-         <1ec405c5a8fd24de9066277ce855d7e39f93e691.camel@perches.com>
-         <YV8sPjLn1jqLOm2H@smile.fi.intel.com>
-         <04ebb29ccb707bc37df2d3ddd684781114a1a62e.camel@perches.com>
-         <YV8vHZg0Xcs0DbPV@smile.fi.intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
+        Thu, 7 Oct 2021 16:54:36 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55F5C061570;
+        Thu,  7 Oct 2021 13:52:42 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id t16so6167945eds.9;
+        Thu, 07 Oct 2021 13:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vZCxEEwfZlNuSFz3ypr49dINxMEpRI9Ap0TDgahu5dA=;
+        b=GP4nfLs25Lcggx7ongKrjmDyvwqQ8FpJplLIlrT8W5VVwvAencnctBCdswf5Uxmu5N
+         x84FxUrBQoTyUj7PuiBpOAcnTUPF1/ruQl3PTrFyvm7x89epvOhpFMjlRbdlfE9ZutdA
+         7Cayhr9+HuAXvGMnGCvKDMq0v3A3NWcdG/Ov3KS+ofCaW2UJN+q4HfyfT2RvXJp8EdIb
+         cmcmchUUN9RKgoqJlyDbLjr18anrvsxRbJDgOP2rxumxgZpDAS7EMlU+JZSmF72cozb5
+         1fd1plJs9/tRC2e2c1ZEmdEnz0iG/8fT835i5Fx2BSItDPziS++gfKQGKQMgTMQ/WSXM
+         AMZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vZCxEEwfZlNuSFz3ypr49dINxMEpRI9Ap0TDgahu5dA=;
+        b=GM9UCpNwWOmWr09f8QlqkNGmQSHDCtXNGMRfBVw3Q87qpM3A7TZxJMYe/PCGTu7O1U
+         LTE6XE5kIcAAQfxClZ3ihT7SEL44xMrDfMwejhahpFVWX30wBQJ8jRZz4G4BKegb+L5n
+         IrtGw6IuZnSxbS2uUE+VDgJ/rIdLjggWI6yyN4r/JxuPsVdYxsyuDoSm1qxp4/Ul7H6H
+         jTjZC8jb45xsw9DWUlsY2s3hhniAPQaYXLy0tgoWiAcclR9dmwnSAncXl15UrL7rNFNb
+         pgbggfCYqkKLpWp3VXXPPK040+EG0/kXUAT9Y3kGgLa+J5HWVx0DgMCDcbf7KFV2tJ6Z
+         7RMw==
+X-Gm-Message-State: AOAM530Y7GMeJENv9kW3bkYOJG5Yrmg37MAVrCdrPFFJT93PiGPqQsya
+        Xr5BtgdaLObwM2KWWNsaijXq3lvTNjorp2DZMNBZCg==
+X-Google-Smtp-Source: ABdhPJy7DTDvXZNOAHbVT6qYrd2+tmNBH+CVXkM2Uvpk/nZM6x7aSsZuM3UvnKPi5RecnxRM9PBRYg==
+X-Received: by 2002:a05:6402:2748:: with SMTP id z8mr9639409edd.291.1633639961243;
+        Thu, 07 Oct 2021 13:52:41 -0700 (PDT)
+Received: from ?IPv6:2a04:241e:501:3870:b7fe:dd48:83ff:bcc8? ([2a04:241e:501:3870:b7fe:dd48:83ff:bcc8])
+        by smtp.gmail.com with ESMTPSA id x11sm202349edj.62.2021.10.07.13.52.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Oct 2021 13:52:40 -0700 (PDT)
+Subject: Re: [PATCH 11/11] selftests: net/fcnal: Reduce client timeout
+To:     David Ahern <dsahern@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Seth David Schoen <schoen@loyalty.org>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1633520807.git.cdleonard@gmail.com>
+ <516043441bd13bc1e6ba7f507a04362e04c06da5.1633520807.git.cdleonard@gmail.com>
+ <3ed2262e-fce2-c587-5112-e4583cd042ed@gmail.com>
+ <c48ea9e2-acdc-eb11-a4b0-35474003fcf3@gmail.com>
+ <65ae97e3-73c1-3221-96fe-6096a8aacfa1@gmail.com>
+From:   Leonard Crestez <cdleonard@gmail.com>
+Message-ID: <d7ac5d58-1e59-a657-a51b-4d757f7552ca@gmail.com>
+Date:   Thu, 7 Oct 2021 23:52:39 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 3E9C91124F8
-X-Spam-Status: No, score=-1.40
-X-Stat-Signature: js9xg1nie7rcba17bhx9wntqbj17r6mz
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19aRUm/4rtwwqaN+mIxySG7FIoWsloqmj0=
-X-HE-Tag: 1633628820-910685
+In-Reply-To: <65ae97e3-73c1-3221-96fe-6096a8aacfa1@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2021-10-07 at 20:32 +0300, Andy Shevchenko wrote:
-> On Thu, Oct 07, 2021 at 10:26:05AM -0700, Joe Perches wrote:
-> > On Thu, 2021-10-07 at 20:19 +0300, Andy Shevchenko wrote:
-> > > On Thu, Oct 07, 2021 at 10:12:56AM -0700, Joe Perches wrote:
-> > > > On Thu, 2021-10-07 at 18:44 +0300, Andy Shevchenko wrote:
-> > > > > When kernel.h is used in the headers it adds a lot into dependency hell,
-> > > > > especially when there are circular dependencies are involved.
-> > > > > 
-> > > > > Replace kernel.h inclusion with the list of what is really being used.
-> > > > []
-> > > > > diff --git a/include/linux/plist.h b/include/linux/plist.h
-> > > > []
-> > > > > @@ -73,8 +73,11 @@
-> > > > []
-> > > > > +#include <asm/bug.h>
-> > > > 
-> > > > why asm/bug.h and not linux/bug.h ?
-> > > 
-> > > The direct inclusion is from that one. Why linux/bug?
-> > 
-> > A general guideline is to avoid asm includes.
+On 07.10.2021 04:17, David Ahern wrote:
+> On 10/6/21 3:26 PM, Leonard Crestez wrote:
+>> On 06.10.2021 18:01, David Ahern wrote:
+>>> On 10/6/21 5:47 AM, Leonard Crestez wrote:
+>>>> Reduce default client timeout from 5 seconds to 500 miliseconds.
+>>>> Can be overridden from environment by exporting NETTEST_CLIENT_TIMEOUT=5
+>>>>
+>>>> Some tests need ICMP timeouts so pass an explicit -t5 for those.
+>>>>
+>>>> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+>>>> ---
+>>>>    tools/testing/selftests/net/fcnal-test.sh | 17 +++++++++++------
+>>>>    1 file changed, 11 insertions(+), 6 deletions(-)
+>>>>
+>>>
+>>> The problem with blindly reducing the timeouts is running the script on
+>>> a loaded server. Some tests are expected to timeout while for tests a
+>>> timeout is a failure.
+>>
+>> Keeping the default value "5" would be fine as long as it is possible to
+>> override externally and get fast results on a mostly-idle machine.
 > 
-> It's fine when it has any useful background. Doing cargo cult is not always
-> a good idea. I plead for common sense.
+> 5 is the default for nettest.c; the test script passes in -t1 for all tests.
 
-Common sense isn't particularly common.
-Someone is going to run checkpatch on it and submit a patch one day.
-Maybe add a comment for the less common.
+An explicit -t is only passed for some of the tests
 
-cheers, Joe
+$ grep -c nettest.*-r tools/testing/selftests/net/fcnal-test.sh
+243
+$ grep -c nettest.*-t tools/testing/selftests/net/fcnal-test.sh
+15
 
+>> Placing a default value in the environment which is overriden by certain
+>> tests achieves that.
+>>
+>> In theory it would also be possible for fcnal-test.sh to parse as
+>> "--timeout" option and pass it into every single test but that solution
+>> would cause much more code churn.
+>>
+>> Having default values in environment variables that can still be
+>> overridden by command-line arguments is a common pattern in many tools.
+>> It also avoids having to pass-through every flag through every
+>> intermediate wrapper.
+> 
+> I do not agree with env variables here.
 
+Would you agree with adding an option to fcnal-test.sh which decreases 
+timeouts passed to nettest client calls?
