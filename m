@@ -2,56 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A3C424D3E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 08:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6782D424D89
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Oct 2021 08:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240216AbhJGGYM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 02:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
+        id S240339AbhJGG5u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 02:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240215AbhJGGYL (ORCPT
+        with ESMTP id S240286AbhJGG5c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 02:24:11 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DB8C061755
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Oct 2021 23:22:18 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id v17so15498917wrv.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Oct 2021 23:22:18 -0700 (PDT)
+        Thu, 7 Oct 2021 02:57:32 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2397BC06176F
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Oct 2021 23:55:37 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id v17so15735880wrv.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Oct 2021 23:55:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iaq5nU4GLaIaZC0meQweypNii34zyivZ0fMvPt1tbnU=;
-        b=kI7aZw6yORYbMtcxAl6QRwzFXWNiCvIA1hTkd3rfw4ZpgpmJo9xJdezhlLdHMM9U0t
-         DwJ+/LqXxv6eXDT+lNE385nITwFkxe4VuuaCozoNYsWfjtoxFivWMHLzOtQq6+LwJ9ZO
-         Ul88ZugDMVh2erdGjKcv7iM0+l9AlPEbLYwza7HGIbVreTw6NGX08GsVj2qoPQTCQGn/
-         TQC2gdPbBwreC4H3pVC7sqPDDzUClrzeLW5azmYnUcpMRopgH/KljDCLIgp3IPSrK/dJ
-         RV06xIPSokaNFA+FVKUjZEeBbX0/jUECn4Ttc1ib4ZL8AZ8ksFJuq3ZAxM8eQKGZmojD
-         bp0A==
+        bh=B8RUD7tgl7QBdRvO3S95Wf0Fqgv9Sk7pIXK1c0ZKGNo=;
+        b=kGbrd6nJPydsGcCe1K/7K2ucX7InBSm+e+PCuITNTKJ24khyutoW8rGdBJSCb+ojdx
+         NnFmUzXtqUY0KapTp34iZCFrHIAD6oKfWL74F0GZZE8456ik87GFvuCLS8hTSE8ZqAQw
+         /azyoMSCwf6/LWZ++su08CVRkUkdQv9ua9AVJBCL4NVatmUGbsrRLGH1iEMJj3uvgMNI
+         +re5NrU96RafWbrBrvEG49SALATPBDYEhsNbOUhMn4YN9JP4qj/Hp3R+VKPd3Ta/jS5j
+         iPVIdI1OA3dWxz7IzGxIeNtBOvPU0aKEjxbD+WaNGhCwFmVNpHLBrlR0vHwfby57kRdi
+         353Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iaq5nU4GLaIaZC0meQweypNii34zyivZ0fMvPt1tbnU=;
-        b=RXwgFYkOaqV6v8+h1jKI+40fJcM2BCarXMAZqRRw6J8WK8d8xgvs+rXRoo3QgLKedh
-         tqt2ZTLm9q7Kr4esrraIAGoAMzxIwok/5OtKq2yX+dbMnReMCR7d9RF1a8IsyYdVgOjv
-         7JGCm4xyz+p4DTmgKuJu+tRN1tjGGho4vrYk/NyNmXWPACbW9KhPUp7TpNLgTXOQD4g7
-         WIvZeaD9M7GI1M6CatMgvETZzYXSpnXsZQwN+uAypl1oXd6vxC65CHmq3JsGxzIlm9xy
-         yKHp3wvuKBEBIda0cbeAersloNtnlUZMe8eIEB4EaN5aP87msHhqK5vBTcu9E/irO+hn
-         EU8A==
-X-Gm-Message-State: AOAM532PLx0r01W7ULCLwCkp9XCBpF87qnakXI+uPTN6a7sfWbKKXj6g
-        nlORdEccvdjy/DSlqrRUW2pYcm8AlJi+wQVJcYiYoQ==
-X-Google-Smtp-Source: ABdhPJxltkfELzP1Sj98wJJVPLf/rcHIL7//lDCPacy+UhPycFVG4s0SAFlkuXzufb7RwHHMsjR95a2Vafkfwx8PeCM=
-X-Received: by 2002:a05:600c:284b:: with SMTP id r11mr2443559wmb.179.1633587736875;
- Wed, 06 Oct 2021 23:22:16 -0700 (PDT)
+        bh=B8RUD7tgl7QBdRvO3S95Wf0Fqgv9Sk7pIXK1c0ZKGNo=;
+        b=S54V1hmESiG864srz7ZJsvX1ANTRo0skhKQPxPpnFClS6OkuMJ1scRb3sQA43+xHR8
+         bNuB0/mh3uxorLMztlCJYPNHz93KUFkD6lnv0jvIRzP8KJ2MVl535jldWKo1cJ4LR8JF
+         I6btO0iaVTJ2XWCVH09hLw6YgWU9Ocfprqk0khBOzU8reqX0cQmLiJkHxh2sc0NM5xd+
+         1SXfkvn18Sfn1eCh6HC8DRMx9u+1bxA/nT21TP5BwpvderQk2cvQ0E/T7YtrI5SNNRXl
+         aMpMaQAygDapJbeuRAXMtoXaolAaLK8D42jQNPOX7UPEQP5ReVfa3Skon+gay+fbzvTA
+         bqag==
+X-Gm-Message-State: AOAM531mit2uIkBuyhov0vGyE84deqLn3W5L1ND11jzauycZD+DHxiYG
+        9pGnNPucdyAh6BtUqXIp9w6Gh1RxVNdLgXN6KqmsQg==
+X-Google-Smtp-Source: ABdhPJyhav1vupCSDW40GLrZgzAwI3C1wfuH+z5yfi4o1Rr8u/qKLGD8HzQDC4g6gB+s8+80wLJb6+PVyNCm29rPuu4=
+X-Received: by 2002:a7b:c453:: with SMTP id l19mr2730254wmi.7.1633589735502;
+ Wed, 06 Oct 2021 23:55:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211006170049.106852-1-dlatypov@google.com>
-In-Reply-To: <20211006170049.106852-1-dlatypov@google.com>
+References: <20211007054410.290427-1-dlatypov@google.com>
+In-Reply-To: <20211007054410.290427-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 7 Oct 2021 14:22:05 +0800
-Message-ID: <CABVgOS=Bvf_ESOZP_5FJxYe4rBOjR=VZ4bhwgLYOdLu5=-W4+g@mail.gmail.com>
-Subject: Re: [PATCH v6] kunit: tool: improve compatibility of kunit_parser
- with KTAP specification
+Date:   Thu, 7 Oct 2021 14:55:24 +0800
+Message-ID: <CABVgOS=V-+DRtjrtEXn6fJgfe-jZJU1t_0CLfWWN=fRUUe74hw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: print parsed test results fully incrementally
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -64,115 +63,183 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 7, 2021 at 1:00 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Thu, Oct 7, 2021 at 1:44 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> From: Rae Moar <rmoar@google.com>
+> With the parser rework [1] and run_kernel() rework [2], this allows the
+> parser to print out test results incrementally.
 >
-> Update to kunit_parser to improve compatibility with KTAP
-> specification including arbitrarily nested tests. Patch accomplishes
-> three major changes:
+> Currently, that's held up by the fact that the LineStream eagerly
+> pre-fetches the next line when you call pop().
+> This blocks parse_test_result() from returning until the line *after*
+> the "ok 1 - test name" line is also printed.
 >
-> - Use a general Test object to represent all tests rather than TestCase
-> and TestSuite objects. This allows for easier implementation of arbitrary
-> levels of nested tests and promotes the idea that both test suites and test
-> cases are tests.
+> One can see this with the following example:
+> $ (echo -e 'TAP version 14\n1..3\nok 1 - fake test'; sleep 2; echo -e 'ok 2 - fake test 2'; sleep 3; echo -e 'ok 3 - fake test 3') | ./tools/testing/kunit/kunit.py parse
 >
-> - Print errors incrementally rather than all at once after the
-> parsing finishes to maximize information given to the user in the
-> case of the parser given invalid input and to increase the helpfulness
-> of the timestamps given during printing. Note that kunit.py parse does
-> not print incrementally yet. However, this fix brings us closer to
-> this feature.
+> Before this patch [1]: there's a pause before 'fake test' is printed.
+> After this patch: 'fake test' is printed out immediately.
 >
-> - Increase compatibility for different formats of input. Arbitrary levels
-> of nested tests supported. Also, test cases and test suites are now
-> supported to be present on the same level of testing.
+> This patch also adds
+> * a unit test to verify LineStream's behavior directly
+> * a test case to ensure that it's lazily calling the generator
+> * an explicit exception for when users go beyond EOF
 >
-> This patch now implements the draft KTAP specification here:
-> https://lore.kernel.org/linux-kselftest/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com/
-> We'll update the parser as the spec evolves.
+> [1] https://lore.kernel.org/linux-kselftest/20211006170049.106852-1-dlatypov@google.com/
+> [2] https://lore.kernel.org/linux-kselftest/20211005011340.2826268-1-dlatypov@google.com/
 >
-> This patch adjusts the kunit_tool_test.py file to check for
-> the correct outputs from the new parser and adds a new test to check
-> the parsing for a KTAP result log with correct format for multiple nested
-> subtests (test_is_test_passed-all_passed_nested.log).
->
-> This patch also alters the kunit_json.py file to allow for arbitrarily
-> nested tests.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
-> NOTE: this patch is now applied on top of
-> https://lore.kernel.org/linux-kselftest/20210930222048.1692635-5-dlatypov@google.com/
-> to resolve a conflict.
->
-> Change log from v5:
-> https://lore.kernel.org/linux-kselftest/20211006001447.20919-1-dlatypov@google.com/
-> - Tweak commit message to reflect the KTAP spec is a draft
-> - Add missing Signed-off-by
-> - Tweak docstrings
->
-> Change log from v3,4:
-> https://lore.kernel.org/linux-kselftest/20210901190623.315736-1-rmoar@google.com/
-> - Move test_kselftest_nested from LinuxSourceTreeTest => KUnitParserTest.
-> - Resolve conflict with hermetic testing patches.
->   - max_status is no longer defined, so we need to use the TestCounts
->     type now. And to keep --raw_output working, we need to set this to
->     SUCCESS to avoid the default assumption that the kernel crashed.
->
-> Ignore v4, was accidentally based on v2.
->
-> Change log from v2:
-> https://lore.kernel.org/linux-kselftest/20210826195505.3066755-1-rmoar@google.com/
-> - Fixes bug of type disagreement in kunit_json.py for build_dir
-> - Removes raw_output()
-> - Changes docstrings in kunit_parser.py (class docstring, LineStream
->   docstrings, add_error(), total(), get_status(), all parsing methods)
-> - Fixes bug of not printing diagnostic log in the case of end of lines
-> - Sets default status of all tests to TEST_CRASHED
-> - Adds and prints empty tests with crashed status in case of missing
->   tests
-> - Prints 'subtest' in instance of 1 subtest instead of 'subtests'
-> - Includes checking for 'BUG:' message in search of crash messages in
->   log (note that parse_crash_in_log method could be removed but would
->   require deleting tests in kunit_tool_test.py that include the crash
->   message that is no longer used. If removed, parser would still print
->   log in cases of test crashed or failure, which would now include
->   missing subtests)
-> - Fixes bug of including directives (other than SKIP) in test name
->   when matching name in result line for subtests
->
->
-> Change log from v1:
-> https://lore.kernel.org/linux-kselftest/20210820200032.2178134-1-rmoar@google.com/
-> - Rebase onto kselftest/kunit branch
-> - Add tests to kunit_tool_test.py to check parser is correctly stripping
->   hyphen, producing correct json objects with nested tests, correctly
->   passing kselftest TAP output, and correctly deals with missing test plan.
-> - Fix bug to correctly match test name in instance of a missing test plan.
-> - Fix bug in kunit_tool_test.py pointed out by Daniel where it was not
->   correctly checking for a proper match to the '0 tests run!' error
->   message. Reverts changes back to original.
-> - A few minor changes to commit message using Daniel's comments.
-> - Change docstrings using Daniel's comments to reduce:
->   - Shortens some docstrings to be one-line or just description if it is
->     self explanatory.
->   - Remove explicit respecification of types of parameters and returns
->     because this is already specified in the function annoations. However,
->     some descriptions of the parameters and returns remain and some contain
->     the type for context. Additionally, the types of public attributes of
->     classes remain.
->   - Remove any documentation of 'Return: None'
->   - Remove docstrings of helper methods within other methods
 > ---
 
-Looks good to me, thanks!
+Thanks. I tried this out with qemu/i386 and it does appropriately
+pause while 'time_test_cases' is running, but shows all the results
+beforehand. For reference, the output (with timestamps):
+[23:53:06] =============== time_test_cases (1 subtest) ================
+[23:53:58] [PASSED] time64_to_tm_test_date_range
+[23:53:58] ================= [PASSED] time_test_cases =================
 
-This is still:
+
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
+
+>  tools/testing/kunit/kunit_parser.py    | 22 ++++++++++----
+>  tools/testing/kunit/kunit_tool_test.py | 42 +++++++++++++++++++++++++-
+>  2 files changed, 57 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index f01fd565f978..82900a5f9ad6 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -172,42 +172,51 @@ class TestCounts:
+>  class LineStream:
+>         """
+>         A class to represent the lines of kernel output.
+> -       Provides a peek()/pop() interface over an iterator of
+> +       Provides a lazy peek()/pop() interface over an iterator of
+>         (line#, text).
+>         """
+>         _lines: Iterator[Tuple[int, str]]
+>         _next: Tuple[int, str]
+> +       _need_next: bool
+>         _done: bool
+>
+>         def __init__(self, lines: Iterator[Tuple[int, str]]):
+>                 """Creates a new LineStream that wraps the given iterator."""
+>                 self._lines = lines
+>                 self._done = False
+> +               self._need_next = True
+>                 self._next = (0, '')
+> -               self._get_next()
+>
+>         def _get_next(self) -> None:
+> -               """Advances the LineSteam to the next line."""
+> +               """Advances the LineSteam to the next line, if necessary."""
+> +               if not self._need_next:
+> +                       return
+>                 try:
+>                         self._next = next(self._lines)
+>                 except StopIteration:
+>                         self._done = True
+> +               finally:
+> +                       self._need_next = False
+>
+>         def peek(self) -> str:
+>                 """Returns the current line, without advancing the LineStream.
+>                 """
+> +               self._get_next()
+>                 return self._next[1]
+>
+>         def pop(self) -> str:
+>                 """Returns the current line and advances the LineStream to
+>                 the next line.
+>                 """
+> -               n = self._next
+> -               self._get_next()
+> -               return n[1]
+> +               s = self.peek()
+> +               if self._done:
+> +                       raise ValueError(f'LineStream: going past EOF, last line was {s}')
+> +               self._need_next = True
+> +               return s
+>
+>         def __bool__(self) -> bool:
+>                 """Returns True if stream has more lines."""
+> +               self._get_next()
+>                 return not self._done
+>
+>         # Only used by kunit_tool_test.py.
+> @@ -220,6 +229,7 @@ class LineStream:
+>
+>         def line_number(self) -> int:
+>                 """Returns the line number of the current line."""
+> +               self._get_next()
+>                 return self._next[0]
+>
+>  # Parsing helper methods:
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index c309ed76aef5..3cb02827c941 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -13,8 +13,9 @@ import tempfile, shutil # Handling test_tmpdir
+>
+>  import itertools
+>  import json
+> -import signal
+>  import os
+> +import signal
+> +from typing import Iterable
+>
+>  import kunit_config
+>  import kunit_parser
+> @@ -320,6 +321,45 @@ class KUnitParserTest(unittest.TestCase):
+>                                 result.status)
+>                         self.assertEqual('kunit-resource-test', result.test.subtests[0].name)
+>
+> +def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
+> +       return kunit_parser.LineStream(enumerate(strs, start=1))
+> +
+> +class LineStreamTest(unittest.TestCase):
+> +
+> +       def test_basic(self):
+> +               stream = line_stream_from_strs(['hello', 'world'])
+> +
+> +               self.assertTrue(stream, msg='Should be more input')
+> +               self.assertEqual(stream.line_number(), 1)
+> +               self.assertEqual(stream.peek(), 'hello')
+> +               self.assertEqual(stream.pop(), 'hello')
+> +
+> +               self.assertTrue(stream, msg='Should be more input')
+> +               self.assertEqual(stream.line_number(), 2)
+> +               self.assertEqual(stream.peek(), 'world')
+> +               self.assertEqual(stream.pop(), 'world')
+> +
+> +               self.assertFalse(stream, msg='Should be no more input')
+> +               with self.assertRaisesRegex(ValueError, 'LineStream: going past EOF'):
+> +                       stream.pop()
+> +
+> +       def test_is_lazy(self):
+> +               called_times = 0
+> +               def generator():
+> +                       nonlocal called_times
+> +                       for i in range(1,5):
+> +                               called_times += 1
+> +                               yield called_times, str(called_times)
+> +
+> +               stream = kunit_parser.LineStream(generator())
+> +               self.assertEqual(called_times, 0)
+> +
+> +               self.assertEqual(stream.pop(), '1')
+> +               self.assertEqual(called_times, 1)
+> +
+> +               self.assertEqual(stream.pop(), '2')
+> +               self.assertEqual(called_times, 2)
+> +
+>  class LinuxSourceTreeTest(unittest.TestCase):
+>
+>         def setUp(self):
+>
+> base-commit: 9b409050eaf2da929408fa60fbf535745d828e67
+> --
+> 2.33.0.882.g93a45727a2-goog
+>
