@@ -2,78 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE91942620B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Oct 2021 03:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B786D426264
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Oct 2021 04:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbhJHBeC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 21:34:02 -0400
-Received: from mga02.intel.com ([134.134.136.20]:9978 "EHLO mga02.intel.com"
+        id S234904AbhJHCUe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Oct 2021 22:20:34 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:55904 "EHLO deadmen.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229524AbhJHBeC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 21:34:02 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="213551682"
-X-IronPort-AV: E=Sophos;i="5.85,356,1624345200"; 
-   d="scan'208";a="213551682"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 18:32:07 -0700
-X-IronPort-AV: E=Sophos;i="5.85,356,1624345200"; 
-   d="scan'208";a="439751495"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.172.35]) ([10.249.172.35])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 18:32:03 -0700
-Subject: Re: [kbuild-all] Re: [PATCH v1 19/38] arm64/sme: Implement vector
- length configuration prctl()s
-To:     Mark Brown <broonie@kernel.org>, kernel test robot <lkp@intel.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kbuild-all@lists.01.org, Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-References: <20210930181144.10029-20-broonie@kernel.org>
- <202110011351.yhJYSPTs-lkp@intel.com> <20211001124014.GB5080@sirena.org.uk>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <a033745b-c5d0-d56a-bf0a-95b93f7f4bab@intel.com>
-Date:   Fri, 8 Oct 2021 09:32:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        id S233656AbhJHCUe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Oct 2021 22:20:34 -0400
+Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
+        by deadmen.hmeau.com with esmtp (Exim 4.92 #5 (Debian))
+        id 1mYfT0-0002Vk-4Y; Fri, 08 Oct 2021 10:18:34 +0800
+Received: from herbert by gondobar with local (Exim 4.92)
+        (envelope-from <herbert@gondor.apana.org.au>)
+        id 1mYfSr-0006Zi-Mn; Fri, 08 Oct 2021 10:18:25 +0800
+Date:   Fri, 8 Oct 2021 10:18:25 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Graf <tgraf@suug.ch>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 3/4] lib/rhashtable: Replace kernel.h with the
+ necessary inclusions
+Message-ID: <20211008021825.GA25242@gondor.apana.org.au>
+References: <20211007095129.22037-1-andriy.shevchenko@linux.intel.com>
+ <20211007095129.22037-4-andriy.shevchenko@linux.intel.com>
+ <20211007112328.GA19281@gondor.apana.org.au>
+ <YV7dqcCbxaeBcELY@smile.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211001124014.GB5080@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YV7dqcCbxaeBcELY@smile.fi.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Oct 07, 2021 at 02:44:41PM +0300, Andy Shevchenko wrote:
+>
+> Crap is in the kernel.h. Could you elaborate how making a proper list
+> of the inclusions is a crap?
 
+Unless you're planning on not including all those header files from
+kernel.h, then adding them all to an end node like rhashtable.c is
+just a waste of time.
 
-On 10/1/2021 8:40 PM, Mark Brown wrote:
-> On Fri, Oct 01, 2021 at 01:20:12PM +0800, kernel test robot wrote:
-> 
->> config: arc-randconfig-r043-20210930 (attached as .config)
->> compiler: arc-elf-gcc (GCC) 11.2.0
-> 
-> I suspect you're reporting architectures in alphabetical order - can I
-> suggest making a priority list of widely used architectures?  I know I
-> tend to zone out issues which look like they only occur on less actively
-> maintained architectures as some of them have odd architecture specific
-> issues that really need to be fixed at the architecture level.
-> 
-> 
+You should be targetting other header files and not c files.
 
-Hi Mark,
-
-Thanks for your advice, we run the tests on different architectures
-randomly for now, and we'll consider a priority list of widely used
-architectures.
-
-Best Regards,
-Rong Chen
-
-
-
-
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
