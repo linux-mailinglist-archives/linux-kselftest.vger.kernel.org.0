@@ -2,84 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D3F4262AD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Oct 2021 05:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48B542668F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Oct 2021 11:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbhJHDDX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Oct 2021 23:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbhJHDDW (ORCPT
+        id S229924AbhJHJTn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Oct 2021 05:19:43 -0400
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:57816 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229710AbhJHJTn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 23:03:22 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45C7C061570;
-        Thu,  7 Oct 2021 20:01:27 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id i189so1338903ioa.1;
-        Thu, 07 Oct 2021 20:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+fkNQoyl7/G1Nnp9gBXkyA8zVSQ0T+pMI2DlTvcxdJ0=;
-        b=eVfJGv//wsqA1LQ0R0YFWDRrIIhEWpxrQw24kEWUx7a+wfAvVrqRBD+OaXWQPrZd09
-         jjWT0PUkPK4HW92jpmatwGZAcY1gLSRmmVswaLuYYG9yZOaKAvLacwDz4/MDWtpGjf3s
-         yD196w92FBT9SQf1cU4fSCfNlEv+LyziPj9HAmKMxzy46Zagqa7lvkQCI/Z5OPRNjEPM
-         LJ0mktcvJQN9fTB7y0dCboIoyUbJae66pTvCSgA/5X/qWQOyBM8x1zmNlZCF35oKX6N2
-         eQsN6OH/uoi2BjRu/a9sqQZ9JOQRi6f+IXtCk9BfSPKzDkzHOr7EeIpXCKPCZg6hwY1F
-         7E2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+fkNQoyl7/G1Nnp9gBXkyA8zVSQ0T+pMI2DlTvcxdJ0=;
-        b=bpcT5oaJOgJV1/A3DtjraxPt7wA1wQG5rXU9xqXg0zxq6HnroRLPWk3T6biWqtSjju
-         GeJn4QHLoL7LnNWpBjyi5zEHGoh9yXX+zwceDlXI20aUZnkvor0eajbi3xYKfVnzzfts
-         rA/31omhiIVR9/cXzeaEhuGPh9NF6azYALgxQD4iq8xfz+ss9iMGooHZbudVs8TQjG4L
-         kGqEV5UHVs0Y7zi1ivBsUirAVtxzEYIXrM6fVVGZEhB3944JARrkuu9SHUwf6F2EUZRq
-         Onvzsqot04ajGwkjLUCP8L3/7eL3g9q5U3qs+5dq7EptcQY4L+VwPBwZcI4206Tl+ja6
-         3pag==
-X-Gm-Message-State: AOAM532CUzWvoOI+7WN4nY+KYw5iLEqsNAqgXIBcV0dgr/HCu5bB1O6F
-        VhgB0sOD58+AYd01ACsGDOzSQ2HHGnrwwg==
-X-Google-Smtp-Source: ABdhPJy7xYb7ZZlXqk05zv002T3/APASk+2gMDILIK5EmQmfrW8yeLoeMuxCNZ5wNCL7esX/fcFZdg==
-X-Received: by 2002:a6b:b204:: with SMTP id b4mr5632349iof.66.1633662086655;
-        Thu, 07 Oct 2021 20:01:26 -0700 (PDT)
-Received: from Davids-MacBook-Pro.local ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id b13sm389561ioq.26.2021.10.07.20.01.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Oct 2021 20:01:25 -0700 (PDT)
-Subject: Re: [PATCH 11/11] selftests: net/fcnal: Reduce client timeout
-To:     Leonard Crestez <cdleonard@gmail.com>,
+        Fri, 8 Oct 2021 05:19:43 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Ur-Ab74_1633684665;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Ur-Ab74_1633684665)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 08 Oct 2021 17:17:45 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Seth David Schoen <schoen@loyalty.org>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1633520807.git.cdleonard@gmail.com>
- <516043441bd13bc1e6ba7f507a04362e04c06da5.1633520807.git.cdleonard@gmail.com>
- <3ed2262e-fce2-c587-5112-e4583cd042ed@gmail.com>
- <c48ea9e2-acdc-eb11-a4b0-35474003fcf3@gmail.com>
- <65ae97e3-73c1-3221-96fe-6096a8aacfa1@gmail.com>
- <d7ac5d58-1e59-a657-a51b-4d757f7552ca@gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <9f78b5f9-997f-fbc5-0831-c66c3d1c2654@gmail.com>
-Date:   Thu, 7 Oct 2021 21:01:24 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Shuah Khan <shuah@kernel.org>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] selftests/tls: add SM4 GCM/CCM to tls selftests
+Date:   Fri,  8 Oct 2021 17:17:45 +0800
+Message-Id: <20211008091745.42917-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.3.ge56e4f7
 MIME-Version: 1.0
-In-Reply-To: <d7ac5d58-1e59-a657-a51b-4d757f7552ca@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/7/21 2:52 PM, Leonard Crestez wrote:
-> Would you agree with adding an option to fcnal-test.sh which decreases
-> timeouts passed to nettest client calls?
+Add new cipher as a variant of standard tls selftests.
 
-sure
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ tools/testing/selftests/net/tls.c | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 97fceb9be9ed..d3047e251fe9 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -29,6 +29,8 @@ struct tls_crypto_info_keys {
+ 	union {
+ 		struct tls12_crypto_info_aes_gcm_128 aes128;
+ 		struct tls12_crypto_info_chacha20_poly1305 chacha20;
++		struct tls12_crypto_info_sm4_gcm sm4gcm;
++		struct tls12_crypto_info_sm4_ccm sm4ccm;
+ 	};
+ 	size_t len;
+ };
+@@ -49,6 +51,16 @@ static void tls_crypto_info_init(uint16_t tls_version, uint16_t cipher_type,
+ 		tls12->aes128.info.version = tls_version;
+ 		tls12->aes128.info.cipher_type = cipher_type;
+ 		break;
++	case TLS_CIPHER_SM4_GCM:
++		tls12->len = sizeof(struct tls12_crypto_info_sm4_gcm);
++		tls12->sm4gcm.info.version = tls_version;
++		tls12->sm4gcm.info.cipher_type = cipher_type;
++		break;
++	case TLS_CIPHER_SM4_CCM:
++		tls12->len = sizeof(struct tls12_crypto_info_sm4_ccm);
++		tls12->sm4ccm.info.version = tls_version;
++		tls12->sm4ccm.info.cipher_type = cipher_type;
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -148,13 +160,13 @@ FIXTURE_VARIANT(tls)
+ 	uint16_t cipher_type;
+ };
+ 
+-FIXTURE_VARIANT_ADD(tls, 12_gcm)
++FIXTURE_VARIANT_ADD(tls, 12_aes_gcm)
+ {
+ 	.tls_version = TLS_1_2_VERSION,
+ 	.cipher_type = TLS_CIPHER_AES_GCM_128,
+ };
+ 
+-FIXTURE_VARIANT_ADD(tls, 13_gcm)
++FIXTURE_VARIANT_ADD(tls, 13_aes_gcm)
+ {
+ 	.tls_version = TLS_1_3_VERSION,
+ 	.cipher_type = TLS_CIPHER_AES_GCM_128,
+@@ -172,6 +184,18 @@ FIXTURE_VARIANT_ADD(tls, 13_chacha)
+ 	.cipher_type = TLS_CIPHER_CHACHA20_POLY1305,
+ };
+ 
++FIXTURE_VARIANT_ADD(tls, 13_sm4_gcm)
++{
++	.tls_version = TLS_1_3_VERSION,
++	.cipher_type = TLS_CIPHER_SM4_GCM,
++};
++
++FIXTURE_VARIANT_ADD(tls, 13_sm4_ccm)
++{
++	.tls_version = TLS_1_3_VERSION,
++	.cipher_type = TLS_CIPHER_SM4_CCM,
++};
++
+ FIXTURE_SETUP(tls)
+ {
+ 	struct tls_crypto_info_keys tls12;
+-- 
+2.19.1.3.ge56e4f7
+
