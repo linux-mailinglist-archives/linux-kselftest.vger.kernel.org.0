@@ -2,147 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B3D427463
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Oct 2021 01:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BE742746C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Oct 2021 01:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243850AbhJHXxh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Oct 2021 19:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S243945AbhJHX5F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Oct 2021 19:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243797AbhJHXxh (ORCPT
+        with ESMTP id S243932AbhJHX5F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Oct 2021 19:53:37 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D169C061570
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Oct 2021 16:51:41 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id b78so12503362iof.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Oct 2021 16:51:41 -0700 (PDT)
+        Fri, 8 Oct 2021 19:57:05 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E02BC061762
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Oct 2021 16:55:09 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id on6so8705302pjb.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Oct 2021 16:55:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ezETEItaR/J7gVYokGl5RwwQegihaa7iGOTvGlA0fCo=;
-        b=Aj5BCG0OeDtBjcw0y+N8PBCSsKH+ppd8XKj64hJe3IOQABTMfuQNw77uJ2FiX3CcGw
-         x3TFwr7vUhP8JM+FRTXTrtguDMEeWuBiPIuOsRJ9n8X5aPHNTX7WPWab9VNoAlWMK6kb
-         ucVW2Yf1ZL/FcRCwT4yMEcPkYazlI6vEd5JFHXQoJJolu0c0SyO2HZqCt1W2CkmkKD2b
-         3dmGEwQjUIes/LMgcd29Tbt69eVDSoaTebhmfILtX2IJUmXvJyI6HLEdVFWJgWl4BcHz
-         tft3xzxd2+mQ8CJFJYwmICjV1ljSsdZMmbcQ1M/6+Sv1i+5+GFQ+fulBMNKZEDBGkqaa
-         1Cag==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NTgT6QanWfRduDXfALgprcIXPoYmwJMRISipF8hOgn0=;
+        b=UvrNsbuHOolQTlQBXEtvY7PhQ4e4HGX7cruVovKzRM26iiB57Q92NDOkOvdFsX9KBd
+         9WQXT1UMFWJsbCYpXTLLlQQyIlz2otEFClCRNRWAE1mWhdllnhjYqjC+fcpXest6HeZ2
+         wypm984zf7l3YgA/7h3zdE6+DYAIADuYfU6fU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ezETEItaR/J7gVYokGl5RwwQegihaa7iGOTvGlA0fCo=;
-        b=McoUwV9sd/rT7BKK88xfhqH6rKubwxk/Dsc+H3lVCisbYaBSnfmw8O2SuRskmW+xWd
-         nBCNV/ULR9qPU8/mZMvaTGtzLGrFzDbSTgenKb9SPnsVP0ZZ4mhxVfpAz80cJaOupDPC
-         FpAHy+ppq/0M3owIZakzJ9l+hUJ2Vi9rbH+aWyE6Gp8+GhS/egQnSr9E5LnnDLIpb6a3
-         dLtI4iYpWvaUDVkz2pzNyn0RWL1NL9sQCbEn2KSHwWbpqEwTEaYVHm/OrIzL0TONZkQK
-         Tt/bjyB9Rou/1bxuVJ0puB8Nq97uRgTAuow1HX5gOcHbEJhInJEC49dL7gwLuRTidI6x
-         Mo/g==
-X-Gm-Message-State: AOAM533S7j497KgmLyIPP5r+2NQFcmkjVogq0lP3adO028Rg2aw57CDl
-        9z49pzrez/07+gP+7jZ2IYX3GPMQsFoDBvvFq2I3Aw==
-X-Google-Smtp-Source: ABdhPJxRZSFkhXw4g00xRunPY70k7kUJTWx8xMHPbfr89r83VdZ9Hvh5ToOMRnQk5ukyXaELkAir1AsbB/rEDzzpGr0=
-X-Received: by 2002:a6b:b5d8:: with SMTP id e207mr9302657iof.52.1633737100442;
- Fri, 08 Oct 2021 16:51:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NTgT6QanWfRduDXfALgprcIXPoYmwJMRISipF8hOgn0=;
+        b=kYRN4XNhCLNAy28A0m2aQ6ko0wo6rq0PJ+oWXe2iYg8oigFSEDP78EN5jgo5NfG3Dp
+         fHx5PGu2Rl4U/80aVjOLqaFRdavqc/kb7C97yisi+6D5fiwnc0D39uv48QaP+b0tQJ3c
+         o3zpK6L7LYAQS749Yv142YkHNYz6iND2eLzuWq+a3+67XllkyFO7yaGXG1QfmepadpRz
+         Zvk4eBrxTdl8RyLQAs1vCdOgScvxKacpwqBUwW4Y2k2EBjx5k8jgHP+4EBSwpiZbxQZQ
+         7KtuQBPteKQJkVao7VJOBZRj1SGEqNgFr7j7OQcF+aVOMFsPNAzYQL5F4TrQUQuEvasy
+         utNA==
+X-Gm-Message-State: AOAM533hpINx9nM7rdPq3O0L+2uPpmLXtjkJL8k4Kk+eAXNNLg8bdkkn
+        ym35hUEXcEn3VB/E5aQNt1XWFw==
+X-Google-Smtp-Source: ABdhPJxVP3N4yhiAQdhQSX2YP8sb7Lm448c8O2UVd19pFUeo4nh/fLA29BP3BsuiH+I1rOT0b4n0kQ==
+X-Received: by 2002:a17:90b:224e:: with SMTP id hk14mr14867208pjb.224.1633737308774;
+        Fri, 08 Oct 2021 16:55:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b13sm13196981pjl.15.2021.10.08.16.55.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Oct 2021 16:55:08 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Gladkov <gladkov.alexey@gmail.com>, jannh@google.com,
+        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, christian.brauner@ubuntu.com,
+        amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
+        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
+        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
+        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, ebiederm@xmission.com,
+        ohoono.kwon@samsung.com, kaleshsingh@google.com,
+        yifeifz2@illinois.edu, linux-arch@vger.kernel.org,
+        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
+        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
+        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
+        chris@zankel.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] selftests: proc: Make sure wchan works when it exists
+Date:   Fri,  8 Oct 2021 16:55:04 -0700
+Message-Id: <20211008235504.2957528-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20211008210752.1109785-1-dlatypov@google.com>
-In-Reply-To: <20211008210752.1109785-1-dlatypov@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 8 Oct 2021 16:51:29 -0700
-Message-ID: <CAGS_qxp0iF+7FLbgVyBHXONN8kKjcAr7B+q=kgF1c71pbgybPQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: continue past invalid utf-8 output
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3546; h=from:subject; bh=rB8jOOGIdiP/iyWBGWq3AhwcsSSZTX18wRYEg/FXYmE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhYNpXPkUEdGrIu4y1HLLDxNMb+n9ox77AOSdFvFSD bfhAXb+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYWDaVwAKCRCJcvTf3G3AJn0CD/ 4qW+e9mYMV4ZcwM0iBRmJhmZQxAWr33QtMkLwAO/EaIltsDgim6Ni+pKchA7nIQjf3oFoqZjbhP1Cp C5Y7Qq4W1DR1cD046gu5TzATKoxsbcwcSzBS5mrAPaUKY+vIyciYsqgw2myydRz4vBdNOKy9UcpVLm paa85vPMPsppqd8cQv/Wf1V6J7sjIXORRYYMokEGmQO/aXSShOol1KMtbgLiVh5ws4/KbOjtT0Z3XU R/kBl05TmhX1U0qXJiDMTeHa3PfSHFgxLTbqNUQQzsosY7JSG4IWl4KLpVpC6WRSvnSlYdf1tw65M0 FnCVLSWYGZ1wLsSMcsPhhU+5Vviwlrr4QUtFNXsFxLXOXn/JrgN3XtJWWlfuepZyKeGWOqNX3DzKNw 1BepILhh0xVogfv0fIoee3O/i1+8FjgQUZSO2cCC1fjVW+P5CMAKJwOqhJzlJ3aphOFwcJYTs4SJ5v SRBo1aFbAxpB5Z8dkUeM2EtS5bbjiIj2oau4wVSmQ4wkLIhXT14qIEA70r6JONKZtfnIBmBLESvybZ /eMvMPyvwOaV6N3NiZ1pNMmC8mOJXV4CjQ70UB44ZvfWOg+aMru+++l1uCPrJumAAPedlRsnt08d1J w8+mDwVkblkD5MbHnVgz3Odw5e5YJoCoKR7LNNX10D3EKvOIl/PDTirCZQ0w==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 8, 2021 at 2:08 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> kunit.py currently crashes and fails to parse kernel output if it's not
-> fully valid utf-8.
->
-> This can come from memory corruption or or just inadvertently printing
-> out binary data as strings.
->
-> E.g. adding this line into a kunit test
->   pr_info("\x80")
-> will cause this exception
->   UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 1961: invalid start byte
->
-> We can tell Python how to handle errors, see
-> https://docs.python.org/3/library/codecs.html#error-handlers
->
-> Unfortunately, it doesn't seem like there's a way to specify this in
-> just one location, so we need to repeat ourselves quite a bit.
->
-> Specify `errors='backslashreplace'` so we instead:
-> * print out the offending byte as '\x80'
-> * try and continue parsing the output.
->   * as long as the TAP lines themselves are valid, we're fine.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
->  tools/testing/kunit/kunit.py        | 3 ++-
->  tools/testing/kunit/kunit_kernel.py | 4 ++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 9c9ed4071e9e..28ae096d4b53 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -457,9 +457,10 @@ def main(argv, linux=None):
->                         sys.exit(1)
->         elif cli_args.subcommand == 'parse':
->                 if cli_args.file == None:
-> +                       sys.stdin.reconfigure(errors='backslashreplace')
+This makes sure that wchan contains a sensible symbol when a process is
+blocked. Specifically this calls the sleep() syscall, and expects the
+architecture to have called schedule() from a function that has "sleep"
+somewhere in its name. For example, on the architectures I tested
+(x86_64, arm64, arm, mips, and powerpc) this is "hrtimer_nanosleep":
 
-Ugh, pytype doesn't like this even though it's valid.
-I can squash the error with
-  sys.stdin.reconfigure(errors='backslashreplace')  # pytype:
-disable=attribute-error
+$ tools/testing/selftests/proc/proc-pid-wchan
+ok: found 'sleep' in wchan 'hrtimer_nanosleep'
 
-I had wanted us to avoid having anything specific to pytype in the code.
-But mypy (the more common typechecker iirc) hasn't been smart enough
-to typecheck our code since the QEMU support landed.
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Hi Peter,
 
-If we don't add this directive, both typecheckers will report at least
-one spurious warning.
-Should I go ahead and add it, Brendan/David?
+Can you add this to the wchan series, please? This should help wchan from
+regressing in the future, and allow us to notice if the depth accidentally
+changes, like Mark saw.
+---
+ tools/testing/selftests/proc/Makefile         |  1 +
+ tools/testing/selftests/proc/proc-pid-wchan.c | 69 +++++++++++++++++++
+ 2 files changed, 70 insertions(+)
+ create mode 100644 tools/testing/selftests/proc/proc-pid-wchan.c
 
->                         kunit_output = sys.stdin
->                 else:
-> -                       with open(cli_args.file, 'r') as f:
-> +                       with open(cli_args.file, 'r', errors='backslashreplace') as f:
->                                 kunit_output = f.read().splitlines()
->                 request = KunitParseRequest(cli_args.raw_output,
->                                             None,
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index faa6320e900e..f08c6c36a947 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -135,7 +135,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
->                                            stdin=subprocess.PIPE,
->                                            stdout=subprocess.PIPE,
->                                            stderr=subprocess.STDOUT,
-> -                                          text=True, shell=True)
-> +                                          text=True, shell=True, errors='backslashreplace')
->
->  class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
->         """An abstraction over command line operations performed on a source tree."""
-> @@ -172,7 +172,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
->                                            stdin=subprocess.PIPE,
->                                            stdout=subprocess.PIPE,
->                                            stderr=subprocess.STDOUT,
-> -                                          text=True)
-> +                                          text=True, errors='backslashreplace')
->
->  def get_kconfig_path(build_dir) -> str:
->         return get_file_path(build_dir, KCONFIG_PATH)
->
-> base-commit: a032094fc1ed17070df01de4a7883da7bb8d5741
-> --
-> 2.33.0.882.g93a45727a2-goog
->
+diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
+index 1054e40a499a..45cf35703ece 100644
+--- a/tools/testing/selftests/proc/Makefile
++++ b/tools/testing/selftests/proc/Makefile
+@@ -8,6 +8,7 @@ TEST_GEN_PROGS += fd-002-posix-eq
+ TEST_GEN_PROGS += fd-003-kthread
+ TEST_GEN_PROGS += proc-loadavg-001
+ TEST_GEN_PROGS += proc-pid-vm
++TEST_GEN_PROGS += proc-pid-wchan
+ TEST_GEN_PROGS += proc-self-map-files-001
+ TEST_GEN_PROGS += proc-self-map-files-002
+ TEST_GEN_PROGS += proc-self-syscall
+diff --git a/tools/testing/selftests/proc/proc-pid-wchan.c b/tools/testing/selftests/proc/proc-pid-wchan.c
+new file mode 100644
+index 000000000000..7d7870c31cef
+--- /dev/null
++++ b/tools/testing/selftests/proc/proc-pid-wchan.c
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Make sure that wchan returns a reasonable symbol when blocked.
++ */
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <signal.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/wait.h>
++
++#define perror_exit(str) do { perror(str); _exit(1); } while (0)
++
++int main(void)
++{
++	char buf[64];
++	pid_t child;
++	int sync[2], fd;
++
++	if (pipe(sync) < 0)
++		perror_exit("pipe");
++
++	child = fork();
++	if (child < 0)
++		perror_exit("fork");
++	if (child == 0) {
++		/* Child */
++		if (close(sync[0]) < 0)
++			perror_exit("child close sync[0]");
++		if (close(sync[1]) < 0)
++			perror_exit("child close sync[1]");
++		sleep(10);
++		_exit(0);
++	}
++	/* Parent */
++	if (close(sync[1]) < 0)
++		perror_exit("parent close sync[1]");
++	if (read(sync[0], buf, 1) != 0)
++		perror_exit("parent read sync[0]");
++
++	snprintf(buf, sizeof(buf), "/proc/%d/wchan", child);
++	fd = open(buf, O_RDONLY);
++	if (fd < 0) {
++		if (errno == ENOENT)
++			return 4;
++		perror_exit(buf);
++	}
++
++	memset(buf, 0, sizeof(buf));
++	if (read(fd, buf, sizeof(buf) - 1) < 1)
++		perror_exit(buf);
++	if (strstr(buf, "sleep") == NULL) {
++		fprintf(stderr, "FAIL: did not find 'sleep' in wchan '%s'\n", buf);
++		return 1;
++	}
++	printf("ok: found 'sleep' in wchan '%s'\n", buf);
++
++	if (kill(child, SIGKILL) < 0)
++		perror_exit("kill");
++	if (waitpid(child, NULL, 0) != child) {
++		fprintf(stderr, "waitpid: got the wrong child!?\n");
++		return 1;
++	}
++
++	return 0;
++}
+-- 
+2.30.2
+
