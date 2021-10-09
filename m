@@ -2,68 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F58E427483
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Oct 2021 02:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAC04274A7
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Oct 2021 02:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243892AbhJIAMD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Oct 2021 20:12:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60464 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243818AbhJIAMD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Oct 2021 20:12:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 0EB2F60FC3;
-        Sat,  9 Oct 2021 00:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633738207;
-        bh=98gtCc2rJJsNDXtGpCkdID9cTcNp76kpQ/7acnYzelI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TRsFyhMf8bUdmsDncV2P8EnnSYJIsq3C/Y3Ui/SolyAW6cUfCs6rfg/P9X9jc9Z0i
-         CSf2qopxm0htj3FdRB636vhnqhX3A5tj3arBhyu3g3MDQ0hPeYDn/TdtKI7Xud8zU5
-         qCuUlLjf1hUb3Uh9QfXQG7WhAKLz7xin3SB15ivCUVyMRIK85Ab3XyBlgtx6SE7tSy
-         hswHCwWFFJwmM8Z24v5GrBZF7FSAfq5yKuF6xSWbrJJTytJxejALnv7pPKY7eYEuE1
-         fw1zGf5QDFZSXU/P+PVHDiP7C1GVFjsTi8BsXqIt0lb740cFaAQy4WbbeKWJtcMeil
-         QSTvxOypAX+Zw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 016BC60A38;
-        Sat,  9 Oct 2021 00:10:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S231996AbhJIAbm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Oct 2021 20:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231963AbhJIAbm (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 8 Oct 2021 20:31:42 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E3EC061570
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Oct 2021 17:29:46 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id e3so946819wrc.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Oct 2021 17:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/Sn+ay3w7XhYS/cW7EsEYXtsnzNUJKfJeytfY5AXlNw=;
+        b=DQrYV071HwuJ4qlYfUdoEbaiPwF9VWcsVMR3sf204l60jHxe0+LPVxB9A/gRq+kBoM
+         9BBswd+Y2c8M85U518SjjraF9Wl7LAK7JNIkGGqmzMwqElCa0F/9QogDB4i/+wi34AA/
+         h1LPsXztvj171+0wg5CPSKB3qkRkhH+FJ7WY5cz/5OcsRxKNRdSAy/OOSqRPixMQcvJ5
+         Y5ZkhjJ1liEerJI9nGoAgxtkDQU9fCCtCgGb4jlsU4+EuxRgAgtq5uilo15YcnxMhOoC
+         PM5LtcrfmzAQz0SKjyw7uuqkomS++53ZgBm7+HZtkTfWkFuCoCl4b2caRL5ZXpzYtRI1
+         NTvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/Sn+ay3w7XhYS/cW7EsEYXtsnzNUJKfJeytfY5AXlNw=;
+        b=fLsqPKBkrcaWSrD56ZrAifBUuh3uPCpPwo5kGdTFmYCZkQWLxZuqp+9IX6BflWnC3C
+         QoXTDsOjVXYBGW0DxzFbb2blwDfrqFwxR6z0PLZ4qb3Sox0iCaFBtztO4H2XoGXsCcSS
+         aHq1CzOIsH/AbPHTH120EChfsMFjLL5Zq5pdbTi2v9sLfVBvQvJCuTAn/bouauGIp7GS
+         yLoS5G9OETPMIKx7uMkTvv4Xgsagf4INFFBA4/NxXgwofpR+8/KXEtOH33S4DlHnr7Yx
+         vJYj+jrbW0eSn3wyUUQEOWPwHMQUtOtxsflq938BlNUj70/ptLlE/lrK6zwu0Q9/Ml7r
+         0Dqw==
+X-Gm-Message-State: AOAM532U8okO4kdCm2FaOlZchPBN9snqqsvXGcxXSUcRHHMajYsn1gRn
+        bCiRQer7Mx7vfu6eN91BrLwUOU1pp0Ks2S1Yvt/lEQ==
+X-Google-Smtp-Source: ABdhPJw2as5bmHxecz7/0JS4czddYtNYJSsVrXvAoFT7mivsXp/HLhL+2JtXv4Di72c0revJv3TErf9hqexvG9Ouwq4=
+X-Received: by 2002:adf:a152:: with SMTP id r18mr7974165wrr.317.1633739384795;
+ Fri, 08 Oct 2021 17:29:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/tls: add SM4 GCM/CCM to tls selftests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163373820700.1766.226175234547653621.git-patchwork-notify@kernel.org>
-Date:   Sat, 09 Oct 2021 00:10:07 +0000
-References: <20211008091745.42917-1-tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <20211008091745.42917-1-tianjia.zhang@linux.alibaba.com>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        borisp@nvidia.com, john.fastabend@gmail.com, daniel@iogearbox.net,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20211008232421.1264857-1-dlatypov@google.com>
+In-Reply-To: <20211008232421.1264857-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 9 Oct 2021 08:29:33 +0800
+Message-ID: <CABVgOS=GanpOft7jtKNtyjucE1aaLH8-n3PPmQNCzvdnLAZ1bA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix --json output for skipped tests
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri,  8 Oct 2021 17:17:45 +0800 you wrote:
-> Add new cipher as a variant of standard tls selftests.
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+On Sat, Oct 9, 2021 at 7:24 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Currently, KUnit will report SKIPPED tests as having failed if one uses
+> --json.
+>
+> Add the missing if statement to set the appropriate status ("SKIP").
+> See https://api.kernelci.org/schema-test-case.html:
+>   "status": {
+>       "type": "string",
+>       "description": "The status of the execution of this test case",
+>       "enum": ["PASS", "FAIL", "SKIP", "ERROR"],
+>       "default": "PASS"
+>   },
+> with this, we now can properly produce all four of the statuses.
+>
+> Fixes: 5acaf6031f53 ("kunit: tool: Support skipped tests in kunit_tool")
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
->  tools/testing/selftests/net/tls.c | 28 ++++++++++++++++++++++++++--
->  1 file changed, 26 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - selftests/tls: add SM4 GCM/CCM to tls selftests
-    https://git.kernel.org/netdev/net-next/c/e506342a03c7
+Ah: thanks! I totally missed this!
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: David Gow <davidgow@google.com>
 
+-- David
 
+>  tools/testing/kunit/kunit_json.py      | 2 ++
+>  tools/testing/kunit/kunit_tool_test.py | 6 ++++++
+>  2 files changed, 8 insertions(+)
+>
+> diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
+> index 746bec72b9ac..b6e66c5d64d1 100644
+> --- a/tools/testing/kunit/kunit_json.py
+> +++ b/tools/testing/kunit/kunit_json.py
+> @@ -30,6 +30,8 @@ def _get_group_json(test: Test, def_config: str,
+>                         test_case = {"name": subtest.name, "status": "FAIL"}
+>                         if subtest.status == TestStatus.SUCCESS:
+>                                 test_case["status"] = "PASS"
+> +                       elif subtest.status == TestStatus.SKIPPED:
+> +                               test_case["status"] = "SKIP"
+>                         elif subtest.status == TestStatus.TEST_CRASHED:
+>                                 test_case["status"] = "ERROR"
+>                         test_cases.append(test_case)
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 77e61b0a40e8..b3cc0227843c 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -426,6 +426,12 @@ class KUnitJsonTest(unittest.TestCase):
+>                         {'name': 'example_simple_test', 'status': 'ERROR'},
+>                         result["sub_groups"][1]["test_cases"][0])
+>
+> +       def test_skipped_test_json(self):
+> +               result = self._json_for('test_skip_tests.log')
+> +               self.assertEqual(
+> +                       {'name': 'example_skip_test', 'status': 'SKIP'},
+> +                       result["sub_groups"][1]["test_cases"][1])
+> +
+>         def test_no_tests_json(self):
+>                 result = self._json_for('test_is_test_passed-no_tests_run_with_header.log')
+>                 self.assertEqual(0, len(result['sub_groups']))
+>
+> base-commit: 4a86e2973c31902a2a72f4f25f99b2367188ec5d
+> --
+> 2.33.0.882.g93a45727a2-goog
+>
