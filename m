@@ -2,52 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1ACC427581
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Oct 2021 03:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA71427583
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Oct 2021 03:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbhJIB4O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Oct 2021 21:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
+        id S244113AbhJIB4R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Oct 2021 21:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbhJIB4O (ORCPT
+        with ESMTP id S232078AbhJIB4Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Oct 2021 21:56:14 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDA7C061570
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Oct 2021 18:54:18 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id t3-20020a056214154300b00383496932feso3281521qvw.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Oct 2021 18:54:18 -0700 (PDT)
+        Fri, 8 Oct 2021 21:56:16 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A95EC061570
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Oct 2021 18:54:20 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id h8-20020a05620a284800b0045ec745583cso9773851qkp.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Oct 2021 18:54:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=76p5MfvWGdwgnPxyAjvl4ZNMkG5vyADIcjc+KTZ0VLI=;
-        b=Chzs3PWcNNhn8atVsXvU5xbtTKp9v03XRcUaIQlfRAi6Z92Ln3/UerWQvw7iAUguex
-         0OQfmH0CI5eiRMXm+Tg+aUQ7RUcAVXwHEhwDGRQBYSzdncJn14B0u9hpxxtm0XZ0rD8t
-         J2Ie9fU6G4OZ/6CVU1Z3xJpNO+g5GhSCkTqskkfP6rl870Z7AkLBDA5euXRgwgxDFu9N
-         5K/lzQBqhdDqJNyC+9089GXQ/yh64cmnQRDxfTkP2Jq2xnwCyFw+ZD0qO/p9UcOMcUwg
-         98QdGMomgEh0gIPmDwJ9P7BBvRgTUSSNlNY+Zvknqsu/u/zlhAyFIqdkB3DqsvvFPcyA
-         jSZQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=/BFuDxjBhHOhIxtZh16h2WKXDrqK0nM9uXbgauSX0cE=;
+        b=Exhl9qN4bHilVV3EMRGH9uFWiU4Obdd5CEjxgNTxD6CCpxzzrn9UbEvRxhwc8bZgvH
+         abj1E4CAZBVgmwx++uks7jsxPmHt8LuAckbBR+Kd+TkK1H6JZVh212BijTZ0/9SE9XiQ
+         1G47jKOGEtyACOLK8aTA2ic9tZKDafWmNx+19X8mI7r9VvQpqdRzrA1qRWks9q3/e9cm
+         ibgINR+TbotiXN1XopZQQfLuuNoEqLiadY89xccv06VRWwrjB8tMjGJqVXe9sBMi9rl3
+         VLMAn007CgF31vS8NIIGorb6heJUppfel4EyR0F3SNIY4fh3tcEddfcxuW+7Nz/wVVjQ
+         8jEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=76p5MfvWGdwgnPxyAjvl4ZNMkG5vyADIcjc+KTZ0VLI=;
-        b=Hr1HT3u1++woRiYzY7w5yhyrqAUCibhANm1m2RwNUAA72HN8hYN4qnUsINHhkszzrs
-         qtM60zc2koM/IO/UIitjOCgbI+AZq7D1yFfDeK3HaSFhmvBFSpkVW0emx0szeL9rRRjw
-         ro+MfEOU6Rssm2GU3jXNati3G7c8NhVXqcZXIlkC94xDo/7p1f07pRL0unnmzYFoCQxn
-         jQLRb2ga71RvhsDLcCUMvCkycoRL0RDNQRATbYHaXYSv6JjFCHRiT0RtscAScOUUGwv/
-         OSvND3uHN0zVRHG9T6+y4mInjknue1W2+I+TY5LdCr9AMMSaO23JKdROUm6EWGjxcG0l
-         eKvQ==
-X-Gm-Message-State: AOAM531gGpbafA4OdI3l0EuyBPTqNRXC85Siv4iHKCtqVt8vXpgqgbJ2
-        Ute25lPiZDsFAbcYCWm7B6b75/CX86O8RQ==
-X-Google-Smtp-Source: ABdhPJwmD1xs2RsWk/c6qQMb40ItPikYaYoMbdjAvJqHFKg0LeD3Gl1ATx8YZfcMbjmOANvoaB/jeWkQ+7XFVA==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=/BFuDxjBhHOhIxtZh16h2WKXDrqK0nM9uXbgauSX0cE=;
+        b=nYl7vHwUnp9/oyqdW03wmNTVj48wepNPdhS2ZpvS1s5KAqX8r/dl2aiHzrkTssOH8Q
+         z6D0uTtXi6jDB79m5KkM5dRcte3f04ndbDBtHtdesIuv6x+1pvVldBnB1mQDhOE5kqWU
+         MlUqxuSYmaFXrec88QMwu+8o4aVW/C6dmDG9jo0PJ3AoMwcP6cXzuMPXCFVReSjzvJrK
+         OWMxOO3aNfhvl1AffZ/QEyO67De9bWZi6pEgFHIbNZD5irn7EAX+y3Jg1T5SWFUTYI8D
+         vInvWQEBtuUj9oZUu5qjtP5DvmvTvizc/XXFqEt4UuTVH59vV3/RvxkEaMYbWsjMBWOx
+         INlg==
+X-Gm-Message-State: AOAM532mLoDx9rceetQHV3lnbD1SQfHsHZ3qi4ltiGSVKd8F7N1zC822
+        zAbubK/t/vKAC19AkxvurAjPFCQkNLvVPA==
+X-Google-Smtp-Source: ABdhPJx3JkLFfb6HNWrDZycGSjzK+wvmW+wxFcD65PEQ2s9rB7S8aKTKKkVILNC0Wd+YFhk+bZtOu+Ob7eevGQ==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:fc52:cec:3819:b41f])
- (user=dlatypov job=sendgmr) by 2002:ac8:3e82:: with SMTP id
- y2mr1861044qtf.284.1633744457242; Fri, 08 Oct 2021 18:54:17 -0700 (PDT)
-Date:   Fri,  8 Oct 2021 18:54:05 -0700
-Message-Id: <20211009015406.1311319-1-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:ac8:138c:: with SMTP id
+ h12mr1781731qtj.357.1633744459494; Fri, 08 Oct 2021 18:54:19 -0700 (PDT)
+Date:   Fri,  8 Oct 2021 18:54:06 -0700
+In-Reply-To: <20211009015406.1311319-1-dlatypov@google.com>
+Message-Id: <20211009015406.1311319-2-dlatypov@google.com>
 Mime-Version: 1.0
+References: <20211009015406.1311319-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
-Subject: [PATCH 1/2] kunit: tool: use dataclass instead of collections.namedtuple
+Subject: [PATCH 2/2] kunit: tool: delete kunit_parser.TestResult type
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -58,286 +62,252 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-namedtuple is a terse way of defining a collection of fields.
-However, it does not allow us to annotate the type of these fields.
-It also doesn't let us have any sort of inheritance between types.
+The `log` field is unused, and the `status` field is accessible via
+`test.status`.
 
-Since commit df4b0807ca1a ("kunit: tool: Assert the version
-requirement"), kunit.py has asserted that it's running on python >=3.7.
+So it's simpler to just return the main `Test` object directly.
 
-So in that case use a 3.7 feature, dataclasses, to replace these.
-
-Changes in detail:
-* Make KunitExecRequest contain all the fields needed for exec_tests
-* Use inheritance to dedupe fields
-  * also allows us to e.g. pass a KUnitRequest in as a KUnitParseRequest
-  * this has changed around the order of some fields
-* Use named arguments when constructing all request objects in kunit.py
-  * This is to prevent accidentally mixing up fields, etc.
+And since we're no longer returning a namedtuple, which has no type
+annotations, this hopefully means typecheckers are better equipped to
+find any errors.
 
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- tools/testing/kunit/kunit.py           | 139 +++++++++++++------------
- tools/testing/kunit/kunit_tool_test.py |   6 +-
- 2 files changed, 75 insertions(+), 70 deletions(-)
+ tools/testing/kunit/kunit.py           | 14 ++++++--------
+ tools/testing/kunit/kunit_json.py      |  6 +++---
+ tools/testing/kunit/kunit_parser.py    | 10 +++-------
+ tools/testing/kunit/kunit_tool_test.py | 26 +++++++++++++-------------
+ 4 files changed, 25 insertions(+), 31 deletions(-)
 
 diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 9c9ed4071e9e..f879414a13c4 100755
+index f879414a13c4..72ba4ec20244 100755
 --- a/tools/testing/kunit/kunit.py
 +++ b/tools/testing/kunit/kunit.py
-@@ -15,38 +15,57 @@ import time
+@@ -172,10 +172,10 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+ 		test_end = time.time()
+ 		exec_time += test_end - test_start
  
- assert sys.version_info >= (3, 7), "Python version is too old"
+-		test_counts.add_subtest_counts(result.result.test.counts)
++		test_counts.add_subtest_counts(result.result.counts)
  
--from collections import namedtuple
-+from dataclasses import dataclass
- from enum import Enum, auto
--from typing import Iterable, List
-+from typing import Any, Iterable, List, Optional
+ 	kunit_status = _map_to_overall_status(test_counts.get_status())
+-	return KunitResult(status=kunit_status, result=result.result, elapsed_time=exec_time)
++	return KunitResult(status=kunit_status, result=result, elapsed_time=exec_time)
  
- import kunit_json
- import kunit_kernel
+ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+ 	if test_status in (kunit_parser.TestStatus.SUCCESS, kunit_parser.TestStatus.SKIPPED):
+@@ -186,14 +186,12 @@ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+ def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitResult:
+ 	parse_start = time.time()
+ 
+-	test_result = kunit_parser.TestResult(kunit_parser.TestStatus.SUCCESS,
+-					      kunit_parser.Test(),
+-					      'Tests not Parsed.')
++	test_result = kunit_parser.Test()
+ 
+ 	if request.raw_output:
+ 		# Treat unparsed results as one passing test.
+-		test_result.test.status = kunit_parser.TestStatus.SUCCESS
+-		test_result.test.counts.passed = 1
++		test_result.status = kunit_parser.TestStatus.SUCCESS
++		test_result.counts.passed = 1
+ 
+ 		output: Iterable[str] = input_data
+ 		if request.raw_output == 'all':
+@@ -211,7 +209,7 @@ def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitR
+ 
+ 	if request.json:
+ 		json_obj = kunit_json.get_json_result(
+-					test_result=test_result,
++					test=test_result,
+ 					def_config='kunit_defconfig',
+ 					build_dir=request.build_dir,
+ 					json_path=request.json)
+diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
+index 746bec72b9ac..31d76030f5c2 100644
+--- a/tools/testing/kunit/kunit_json.py
++++ b/tools/testing/kunit/kunit_json.py
+@@ -11,7 +11,7 @@ import os
+ 
  import kunit_parser
  
--KunitResult = namedtuple('KunitResult', ['status','result','elapsed_time'])
+-from kunit_parser import Test, TestResult, TestStatus
++from kunit_parser import Test, TestStatus
+ from typing import Any, Dict, Optional
+ 
+ JsonObj = Dict[str, Any]
+@@ -48,9 +48,9 @@ def _get_group_json(test: Test, def_config: str,
+ 	}
+ 	return test_group
+ 
+-def get_json_result(test_result: TestResult, def_config: str,
++def get_json_result(test: Test, def_config: str,
+ 		build_dir: Optional[str], json_path: str) -> str:
+-	test_group = _get_group_json(test_result.test, def_config, build_dir)
++	test_group = _get_group_json(test, def_config, build_dir)
+ 	test_group["name"] = "KUnit Test Group"
+ 	json_obj = json.dumps(test_group, indent=4)
+ 	if json_path != 'stdout':
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index f01fd565f978..0b2626cc0628 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -12,14 +12,11 @@
+ from __future__ import annotations
+ import re
+ 
+-from collections import namedtuple
+ from datetime import datetime
+ from enum import Enum, auto
+ from functools import reduce
+ from typing import Iterable, Iterator, List, Optional, Tuple
+ 
+-TestResult = namedtuple('TestResult', ['status','test','log'])
 -
--KunitConfigRequest = namedtuple('KunitConfigRequest',
--				['build_dir', 'make_options'])
--KunitBuildRequest = namedtuple('KunitBuildRequest',
--			       ['jobs', 'build_dir', 'alltests',
--				'make_options'])
--KunitExecRequest = namedtuple('KunitExecRequest',
--			      ['timeout', 'build_dir', 'alltests',
--			       'filter_glob', 'kernel_args', 'run_isolated'])
--KunitParseRequest = namedtuple('KunitParseRequest',
--			       ['raw_output', 'build_dir', 'json'])
--KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
--					   'build_dir', 'alltests', 'filter_glob',
--					   'kernel_args', 'run_isolated', 'json', 'make_options'])
--
--KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
--
- class KunitStatus(Enum):
- 	SUCCESS = auto()
- 	CONFIG_FAILURE = auto()
- 	BUILD_FAILURE = auto()
- 	TEST_FAILURE = auto()
+ class Test(object):
+ 	"""
+ 	A class to represent a test parsed from KTAP results. All KTAP
+@@ -796,7 +793,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+ 		print_test_result(test)
+ 	return test
  
-+@dataclass
-+class KunitResult:
-+	status: KunitStatus
-+	result: Any
-+	elapsed_time: float
-+
-+@dataclass
-+class KunitConfigRequest:
-+	build_dir: str
-+	make_options: Optional[List[str]]
-+
-+@dataclass
-+class KunitBuildRequest(KunitConfigRequest):
-+	jobs: int
-+	alltests: bool
-+
-+@dataclass
-+class KunitParseRequest:
-+	raw_output: Optional[str]
-+	build_dir: str
-+	json: Optional[str]
-+
-+@dataclass
-+class KunitExecRequest(KunitParseRequest):
-+	timeout: int
-+	alltests: bool
-+	filter_glob: str
-+	kernel_args: Optional[List[str]]
-+	run_isolated: Optional[str]
-+
-+@dataclass
-+class KunitRequest(KunitExecRequest, KunitBuildRequest):
-+	pass
-+
-+
-+KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
-+
- def get_kernel_root_path() -> str:
- 	path = sys.argv[0] if not __file__ else __file__
- 	parts = os.path.realpath(path).split('tools/testing/kunit')
-@@ -121,8 +140,7 @@ def _suites_from_test_list(tests: List[str]) -> List[str]:
+-def parse_run_tests(kernel_output: Iterable[str]) -> TestResult:
++def parse_run_tests(kernel_output: Iterable[str]) -> Test:
+ 	"""
+ 	Using kernel output, extract KTAP lines, parse the lines for test
+ 	results and print condensed test results and summary line .
+@@ -805,8 +802,7 @@ def parse_run_tests(kernel_output: Iterable[str]) -> TestResult:
+ 	kernel_output - Iterable object contains lines of kernel output
  
- 
- 
--def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest,
--	       parse_request: KunitParseRequest) -> KunitResult:
-+def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> KunitResult:
- 	filter_globs = [request.filter_glob]
- 	if request.run_isolated:
- 		tests = _list_tests(linux, request)
-@@ -147,7 +165,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest,
- 			filter_glob=filter_glob,
- 			build_dir=request.build_dir)
- 
--		result = parse_tests(parse_request, run_result)
-+		result = parse_tests(request, run_result)
- 		# run_kernel() doesn't block on the kernel exiting.
- 		# That only happens after we get the last line of output from `run_result`.
- 		# So exec_time here actually contains parsing + execution time, which is fine.
-@@ -211,27 +229,15 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	      request: KunitRequest) -> KunitResult:
- 	run_start = time.time()
- 
--	config_request = KunitConfigRequest(request.build_dir,
--					    request.make_options)
--	config_result = config_tests(linux, config_request)
-+	config_result = config_tests(linux, request)
- 	if config_result.status != KunitStatus.SUCCESS:
- 		return config_result
- 
--	build_request = KunitBuildRequest(request.jobs, request.build_dir,
--					  request.alltests,
--					  request.make_options)
--	build_result = build_tests(linux, build_request)
-+	build_result = build_tests(linux, request)
- 	if build_result.status != KunitStatus.SUCCESS:
- 		return build_result
- 
--	exec_request = KunitExecRequest(request.timeout, request.build_dir,
--				 request.alltests, request.filter_glob,
--				 request.kernel_args, request.run_isolated)
--	parse_request = KunitParseRequest(request.raw_output,
--					  request.build_dir,
--					  request.json)
--
--	exec_result = exec_tests(linux, exec_request, parse_request)
-+	exec_result = exec_tests(linux, request)
- 
- 	run_end = time.time()
- 
-@@ -382,16 +388,16 @@ def main(argv, linux=None):
- 					cross_compile=cli_args.cross_compile,
- 					qemu_config_path=cli_args.qemu_config)
- 
--		request = KunitRequest(cli_args.raw_output,
--				       cli_args.timeout,
--				       cli_args.jobs,
--				       cli_args.build_dir,
--				       cli_args.alltests,
--				       cli_args.filter_glob,
--				       cli_args.kernel_args,
--				       cli_args.run_isolated,
--				       cli_args.json,
--				       cli_args.make_options)
-+		request = KunitRequest(build_dir=cli_args.build_dir,
-+				       make_options=cli_args.make_options,
-+				       jobs=cli_args.jobs,
-+				       alltests=cli_args.alltests,
-+				       raw_output=cli_args.raw_output,
-+				       json=cli_args.json,
-+				       timeout=cli_args.timeout,
-+				       filter_glob=cli_args.filter_glob,
-+				       kernel_args=cli_args.kernel_args,
-+				       run_isolated=cli_args.run_isolated)
- 		result = run_tests(linux, request)
- 		if result.status != KunitStatus.SUCCESS:
- 			sys.exit(1)
-@@ -407,8 +413,8 @@ def main(argv, linux=None):
- 					cross_compile=cli_args.cross_compile,
- 					qemu_config_path=cli_args.qemu_config)
- 
--		request = KunitConfigRequest(cli_args.build_dir,
--					     cli_args.make_options)
-+		request = KunitConfigRequest(build_dir=cli_args.build_dir,
-+					     make_options=cli_args.make_options)
- 		result = config_tests(linux, request)
- 		kunit_parser.print_with_timestamp((
- 			'Elapsed time: %.3fs\n') % (
-@@ -423,10 +429,10 @@ def main(argv, linux=None):
- 					cross_compile=cli_args.cross_compile,
- 					qemu_config_path=cli_args.qemu_config)
- 
--		request = KunitBuildRequest(cli_args.jobs,
--					    cli_args.build_dir,
--					    cli_args.alltests,
--					    cli_args.make_options)
-+		request = KunitBuildRequest(build_dir=cli_args.build_dir,
-+					    make_options=cli_args.make_options,
-+					    jobs=cli_args.jobs,
-+					    alltests=cli_args.alltests)
- 		result = build_tests(linux, request)
- 		kunit_parser.print_with_timestamp((
- 			'Elapsed time: %.3fs\n') % (
-@@ -441,16 +447,15 @@ def main(argv, linux=None):
- 					cross_compile=cli_args.cross_compile,
- 					qemu_config_path=cli_args.qemu_config)
- 
--		exec_request = KunitExecRequest(cli_args.timeout,
--						cli_args.build_dir,
--						cli_args.alltests,
--						cli_args.filter_glob,
--						cli_args.kernel_args,
--						cli_args.run_isolated)
--		parse_request = KunitParseRequest(cli_args.raw_output,
--						  cli_args.build_dir,
--						  cli_args.json)
--		result = exec_tests(linux, exec_request, parse_request)
-+		exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
-+						build_dir=cli_args.build_dir,
-+						json=cli_args.json,
-+						timeout=cli_args.timeout,
-+						alltests=cli_args.alltests,
-+						filter_glob=cli_args.filter_glob,
-+						kernel_args=cli_args.kernel_args,
-+						run_isolated=cli_args.run_isolated)
-+		result = exec_tests(linux, exec_request)
- 		kunit_parser.print_with_timestamp((
- 			'Elapsed time: %.3fs\n') % (result.elapsed_time))
- 		if result.status != KunitStatus.SUCCESS:
-@@ -461,9 +466,9 @@ def main(argv, linux=None):
- 		else:
- 			with open(cli_args.file, 'r') as f:
- 				kunit_output = f.read().splitlines()
--		request = KunitParseRequest(cli_args.raw_output,
--					    None,
--					    cli_args.json)
-+		request = KunitParseRequest(raw_output=cli_args.raw_output,
-+					    build_dir='',
-+					    json=cli_args.json)
- 		result = parse_tests(request, kunit_output)
- 		if result.status != KunitStatus.SUCCESS:
- 			sys.exit(1)
+ 	Return:
+-	TestResult - Tuple containg status of main test object, main test
+-		object with all subtests, and log of all KTAP lines.
++	Test - the main test object with all subtests.
+ 	"""
+ 	print_with_timestamp(DIVIDER)
+ 	lines = extract_tap_lines(kernel_output)
+@@ -820,4 +816,4 @@ def parse_run_tests(kernel_output: Iterable[str]) -> TestResult:
+ 			test.status = test.counts.get_status()
+ 	print_with_timestamp(DIVIDER)
+ 	print_summary_line(test)
+-	return TestResult(test.status, test, lines)
++	return test
 diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 6648de1f9ceb..2540bb10b4e8 100755
+index 2540bb10b4e8..6aa625a55a1b 100755
 --- a/tools/testing/kunit/kunit_tool_test.py
 +++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -556,7 +556,7 @@ class KUnitMainTest(unittest.TestCase):
- 		self.linux_source_mock.run_kernel.return_value = ['TAP version 14', 'init: random output'] + want
+@@ -179,7 +179,7 @@ class KUnitParserTest(unittest.TestCase):
+ 		with open(empty_log) as file:
+ 			result = kunit_parser.parse_run_tests(
+ 				kunit_parser.extract_tap_lines(file.readlines()))
+-		self.assertEqual(0, len(result.test.subtests))
++		self.assertEqual(0, len(result.subtests))
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.FAILURE_TO_PARSE_TESTS,
+ 			result.status)
+@@ -191,7 +191,7 @@ class KUnitParserTest(unittest.TestCase):
+ 			result = kunit_parser.parse_run_tests(
+ 				kunit_parser.extract_tap_lines(
+ 				file.readlines()))
+-		self.assertEqual(2, result.test.counts.errors)
++		self.assertEqual(2, result.counts.errors)
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.SUCCESS,
+ 			result.status)
+@@ -203,7 +203,7 @@ class KUnitParserTest(unittest.TestCase):
+ 			result = kunit_parser.parse_run_tests(
+ 				kunit_parser.extract_tap_lines(
+ 				file.readlines()))
+-		self.assertEqual(0, len(result.test.subtests))
++		self.assertEqual(0, len(result.subtests))
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.NO_TESTS,
+ 			result.status)
+@@ -217,7 +217,7 @@ class KUnitParserTest(unittest.TestCase):
+ 				file.readlines()))
+ 		print_mock.assert_any_call(StrContains('invalid KTAP input!'))
+ 		print_mock.stop()
+-		self.assertEqual(0, len(result.test.subtests))
++		self.assertEqual(0, len(result.subtests))
  
- 		got = kunit._list_tests(self.linux_source_mock,
--				     kunit.KunitExecRequest(300, '.kunit', False, 'suite*', None, 'suite'))
-+				     kunit.KunitExecRequest(None, '.kunit', None, 300, False, 'suite*', None, 'suite'))
+ 	def test_crashed_test(self):
+ 		crashed_log = test_data_path('test_is_test_passed-crash.log')
+@@ -258,10 +258,10 @@ class KUnitParserTest(unittest.TestCase):
+ 			result.status)
+ 		self.assertEqual(
+ 			"sysctl_test",
+-			result.test.subtests[0].name)
++			result.subtests[0].name)
+ 		self.assertEqual(
+ 			"example",
+-			result.test.subtests[1].name)
++			result.subtests[1].name)
+ 		file.close()
  
- 		self.assertEqual(got, want)
- 		# Should respect the user's filter glob when listing tests.
-@@ -571,7 +571,7 @@ class KUnitMainTest(unittest.TestCase):
  
- 		# Should respect the user's filter glob when listing tests.
- 		mock_tests.assert_called_once_with(mock.ANY,
--				     kunit.KunitExecRequest(300, '.kunit', False, 'suite*.test*', None, 'suite'))
-+				     kunit.KunitExecRequest(None, '.kunit', None, 300, False, 'suite*.test*', None, 'suite'))
- 		self.linux_source_mock.run_kernel.assert_has_calls([
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test*', timeout=300),
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test*', timeout=300),
-@@ -584,7 +584,7 @@ class KUnitMainTest(unittest.TestCase):
+@@ -272,7 +272,7 @@ class KUnitParserTest(unittest.TestCase):
+ 			self.assertEqual(
+ 				kunit_parser.TestStatus.SUCCESS,
+ 				result.status)
+-			self.assertEqual('kunit-resource-test', result.test.subtests[0].name)
++			self.assertEqual('kunit-resource-test', result.subtests[0].name)
  
- 		# Should respect the user's filter glob when listing tests.
- 		mock_tests.assert_called_once_with(mock.ANY,
--				     kunit.KunitExecRequest(300, '.kunit', False, 'suite*', None, 'test'))
-+				     kunit.KunitExecRequest(None, '.kunit', None, 300, False, 'suite*', None, 'test'))
- 		self.linux_source_mock.run_kernel.assert_has_calls([
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test1', timeout=300),
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test2', timeout=300),
-
-base-commit: e3c6457b588d83b7ecd40eb4bd6d95007020fbe4
+ 	def test_ignores_multiple_prefixes(self):
+ 		prefix_log = test_data_path('test_multiple_prefixes.log')
+@@ -281,7 +281,7 @@ class KUnitParserTest(unittest.TestCase):
+ 			self.assertEqual(
+ 				kunit_parser.TestStatus.SUCCESS,
+ 				result.status)
+-			self.assertEqual('kunit-resource-test', result.test.subtests[0].name)
++			self.assertEqual('kunit-resource-test', result.subtests[0].name)
+ 
+ 	def test_prefix_mixed_kernel_output(self):
+ 		mixed_prefix_log = test_data_path('test_interrupted_tap_output.log')
+@@ -290,7 +290,7 @@ class KUnitParserTest(unittest.TestCase):
+ 			self.assertEqual(
+ 				kunit_parser.TestStatus.SUCCESS,
+ 				result.status)
+-			self.assertEqual('kunit-resource-test', result.test.subtests[0].name)
++			self.assertEqual('kunit-resource-test', result.subtests[0].name)
+ 
+ 	def test_prefix_poundsign(self):
+ 		pound_log = test_data_path('test_pound_sign.log')
+@@ -299,7 +299,7 @@ class KUnitParserTest(unittest.TestCase):
+ 			self.assertEqual(
+ 				kunit_parser.TestStatus.SUCCESS,
+ 				result.status)
+-			self.assertEqual('kunit-resource-test', result.test.subtests[0].name)
++			self.assertEqual('kunit-resource-test', result.subtests[0].name)
+ 
+ 	def test_kernel_panic_end(self):
+ 		panic_log = test_data_path('test_kernel_panic_interrupt.log')
+@@ -308,7 +308,7 @@ class KUnitParserTest(unittest.TestCase):
+ 			self.assertEqual(
+ 				kunit_parser.TestStatus.TEST_CRASHED,
+ 				result.status)
+-			self.assertEqual('kunit-resource-test', result.test.subtests[0].name)
++			self.assertEqual('kunit-resource-test', result.subtests[0].name)
+ 
+ 	def test_pound_no_prefix(self):
+ 		pound_log = test_data_path('test_pound_no_prefix.log')
+@@ -317,7 +317,7 @@ class KUnitParserTest(unittest.TestCase):
+ 			self.assertEqual(
+ 				kunit_parser.TestStatus.SUCCESS,
+ 				result.status)
+-			self.assertEqual('kunit-resource-test', result.test.subtests[0].name)
++			self.assertEqual('kunit-resource-test', result.subtests[0].name)
+ 
+ class LinuxSourceTreeTest(unittest.TestCase):
+ 
+@@ -368,7 +368,7 @@ class KUnitJsonTest(unittest.TestCase):
+ 		with open(test_data_path(log_file)) as file:
+ 			test_result = kunit_parser.parse_run_tests(file)
+ 			json_obj = kunit_json.get_json_result(
+-				test_result=test_result,
++				test=test_result,
+ 				def_config='kunit_defconfig',
+ 				build_dir=None,
+ 				json_path='stdout')
 -- 
 2.33.0.882.g93a45727a2-goog
 
