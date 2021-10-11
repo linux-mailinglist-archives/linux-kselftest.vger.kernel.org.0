@@ -2,107 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5BF428D31
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 14:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E97428D7A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 15:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236641AbhJKMkV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 08:40:21 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3961 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236688AbhJKMkU (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 08:40:20 -0400
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HSdXs5TRbz689n8;
-        Mon, 11 Oct 2021 20:34:53 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 11 Oct 2021 14:38:18 +0200
-Received: from localhost (10.52.122.204) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Mon, 11 Oct
- 2021 13:38:17 +0100
-Date:   Mon, 11 Oct 2021 13:37:59 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        id S235237AbhJKNEP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 09:04:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42442 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232277AbhJKNEP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 Oct 2021 09:04:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9934D60E08;
+        Mon, 11 Oct 2021 13:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633957335;
+        bh=CoYoJamo+BhxaDE+VFzXDpH6lw6wexLMwa6DyI5FyTE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ODdTLyIKcCcJ/8YxnDZg4U4czb1bIJfYVaBt5gEOOh9RBfj4d86Rkxm+RiAUg/GSH
+         3XZ/mOnSy86N0O5wQT1EBew6pe6zu7ZLa/k/qszBpfzJ0e8s6VyHIObvQ2sZ4XrIRW
+         PHUrA5F/uWamKS896pt2j2OtUgPFZtFtOm2Lt2RvzBheZbaPq1w/sK6rNeXQZtoq/1
+         dNxp8M5Ctqbhsegl4SmbNG+4NWAd7cyEKMPNPVsvpYQ9BEGcCwu8Ua31P6nuDbcEbu
+         MVkEhannKiDmpN7UXSXwYVIuBVuqR0+ygJunmMIysGWE43uDck3hyjc6jMs2lHo93j
+         SaHO969umaKkw==
+Date:   Mon, 11 Oct 2021 14:02:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        "Alan Hayward" <alan.hayward@arm.com>,
+        Alan Hayward <alan.hayward@arm.com>,
         Luis Machado <luis.machado@arm.com>,
-        "Salil Akerkar" <Salil.Akerkar@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
         Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v1 24/38] arm64/sme: Implement traps and syscall
- handling for SME
-Message-ID: <20211011133759.000042c4@Huawei.com>
-In-Reply-To: <20210930181144.10029-25-broonie@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 01/38] arm64/fp: Reindent fpsimd_save()
+Message-ID: <YWQ11M8gzqJiGZUy@sirena.org.uk>
 References: <20210930181144.10029-1-broonie@kernel.org>
-        <20210930181144.10029-25-broonie@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
+ <20210930181144.10029-2-broonie@kernel.org>
+ <20211011103959.00003d8a@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.122.204]
-X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="q4lhg99skX22zewd"
+Content-Disposition: inline
+In-Reply-To: <20211011103959.00003d8a@Huawei.com>
+X-Cookie: Your ignorance cramps my conversation.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 30 Sep 2021 19:11:30 +0100
-Mark Brown <broonie@kernel.org> wrote:
 
-> By default all SME operations in userspace will trap.  When this happens
-> we allocate storage space for the SME register state, set up the SVE
-> registers and disable traps.  We do not need to initialize ZA since the
-> architecture guarantees that it will be zeroed when enabled and when we
-> trap ZA is disabled.
-> 
-> On syscall we exit streaming mode if we were previously in it and ensure
-> that all but the lower 128 bits of the registers are zeroed while
-> preserving the state of ZA. This follows the aarch64 PCS for SME, ZA
-> state is preserved over a function call and streaming mode is exited.
-> Since the traps for SME do not distinguish between streaming mode SVE
-> and ZA usage if ZA is in use rather than reenabling traps we instead
-> zero the parts of the SVE registers not shared with FPSIMD and leave SME
-> enabled, this simplifies handling SME traps. If ZA is not in use then we
-> reenable SME traps and fall through to normal handling of SVE.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-...  continuing the trivial theme of my review today...
+--q4lhg99skX22zewd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Mon, Oct 11, 2021 at 10:39:59AM +0100, Jonathan Cameron wrote:
 
->  
->  	/*
->  	 * task_fpsimd_load() won't be called to update CPACR_EL1 in
-> -	 * ret_to_user unless TIF_FOREIGN_FPSTATE is still set, which only
-> -	 * happens if a context switch or kernel_neon_begin() or context
-> -	 * modification (sigreturn, ptrace) intervenes.
-> -	 * So, ensure that CPACR_EL1 is already correct for the fast-path case.
-> +	 * ret_to_user unless TIF_FOREIGN_FPSTATE is still set, which
-> +	 * only happens if a context switch or kernel_neon_begin() or
+> > +	if (IS_ENABLED(CONFIG_ARM64_SVE) &&
+> > +	    test_thread_flag(TIF_SVE)) {
 
-Why the rewrap here?
+> Trivial, but - the above now fits nicely on oneline under 80 chars.
 
-> +	 * context modification (sigreturn, ptrace) intervenes.  So,
-> +	 * ensure that CPACR_EL1 is already correct for the fast-path
-> +	 * case.
->  	 */
->  	sve_user_disable();
->  }
->  
->  void do_el0_svc(struct pt_regs *regs)
->  {
-> -	sve_user_discard();
-> +	fp_user_discard();
->  	el0_svc_common(regs, regs->regs[8], __NR_syscalls, sys_call_table);
->  }
->  
+> Looks like you have another instance of this in patch 21 in roughly the same place.
 
+> Then you drop at least some of this code later. hohum, maybe not worth tidying up.
+
+Yes, indeed.  I think I deliberately didn't reindent to help make it a
+bit more obviously mechanical given that as you've noticed there's going
+to be meaningful changes replacing the actual code later.  Given that
+this is at the start of a very large series I'll just leave things as
+they are unless Catalin or Will really wants the reformatting here.
+
+--q4lhg99skX22zewd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFkNdMACgkQJNaLcl1U
+h9A2Pgf/fW+Ga+cBouA0dQQZWloet8RTKIaeEkFRaC3dNJRODqIjb68bt90L/vTw
+nl2ggPPYtXECtoKi4QuVQHIR3Ono5P6TQQjbPmixw9bDJiDrxoQkRsAiPzLqybkS
+VMpFydwQyRs6jVKfh6+lybxhMn5kG0QCl/xS78gGYq2EE6owilLfO2c8pBB0hQAp
+Pe66WA9ll3oqVOGSZIeeiaKe6ePCESuVvN67ZnLD6LDhH+7iSwMvxmTlLEcR+4ZQ
+YyfloRyB8YIIi1hIc8sJngxFxEKwOzuhzo52J/WagcVf7XVsveVZmRcMn0yEqZxR
+X7+07HpxCjO5gUmcg+wY3sm0VewF6Q==
+=c13s
+-----END PGP SIGNATURE-----
+
+--q4lhg99skX22zewd--
