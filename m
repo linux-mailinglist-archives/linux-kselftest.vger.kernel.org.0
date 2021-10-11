@@ -2,78 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE2342975C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 21:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0757C4297F5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 22:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234480AbhJKTNo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 15:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234121AbhJKTNn (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 15:13:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334F6C061570;
-        Mon, 11 Oct 2021 12:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ftuJyAIkxX7N4Dz/v5CU90ZsxfI0kloQ5HQEKjjsC9M=; b=tXeFa3ISt/VDGSJDRaEEvR43kP
-        KNm3e7FjPlzGc0rVjcTWihz4v0DUvUrreG75r3ChG2HDvi7Pq2x4Iik5Mh+NczNE9PCh2eFuYSaCy
-        IGlzJt+h3jbz99GTgPgcreQ+fzxxHo137H0pOvsyc0X/VyVrPMzXDOJ03EzHKHDWlrfCNIMTjSjst
-        xzuWQRwsGREcfyZENaluVObW8Yq7h67jkRlUM+MPGh/R0x5BK765Mgvs9L8bxL69NfruWIZ/1s+Vt
-        CgdcAXVkRZTQ4LudKgo7B9a4xop7T0iIL/ieQlTgf5Jt0eC3Y96PNr51OJmr7KrncnYKT4aztOgz3
-        bLXM+vTw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ma0i0-00ASpf-OY; Mon, 11 Oct 2021 19:11:36 +0000
-Date:   Mon, 11 Oct 2021 12:11:36 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
-        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
-        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
-        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 03/12] selftests: add tests_sysfs module
-Message-ID: <YWSMaIW1JRtottET@bombadil.infradead.org>
-References: <20210927163805.808907-1-mcgrof@kernel.org>
- <20210927163805.808907-4-mcgrof@kernel.org>
- <alpine.LSU.2.21.2110071620130.19025@pobox.suse.cz>
+        id S234809AbhJKUMJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 16:12:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39848 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231926AbhJKUMI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 Oct 2021 16:12:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8548860E54;
+        Mon, 11 Oct 2021 20:10:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633983008;
+        bh=3ZMlnBCJ9VeMjnrQY1dZrPrVF4Rw56UmLkBkE58B8uE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jMap5lamOvxqdl4QOdTgduFOWxtqUlFBbJboVHlitrBbwPGCx6WUaRK8oh+334h+t
+         L/QQwEZeCtn1gKmlarui+pg35XaSPvpKSHbUkz5Kr8W2rBKXasYjCYCDzLD29wIcGO
+         Nnr/vO8VzxgtnWnOoxJg9u6Luih/2fz2ZlwszghV0hAd90UvCICruefTVkLJbnq6ZO
+         LR8O6NRH1BmYdhwJhn98nOxdIDrBj8X6Hq+S2z6ZJ4IjARHKxXcNAwyY/LpZGeKMcE
+         w/LLQvcjXXPBH4Z/4jWpJBEZDptGKM3hyfbUtL9V3HDkj9uwwKYnNGtKvYMnhYHirc
+         +aW5uhhpPAv2A==
+Date:   Mon, 11 Oct 2021 21:10:05 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        Richard Sandiford <Richard.Sandiford@arm.com>
+Subject: Re: [PATCH v1 12/38] arm64/sme: Provide ABI documentation for SME
+Message-ID: <YWSaHaJOIbEigw4w@sirena.org.uk>
+References: <20210930181144.10029-1-broonie@kernel.org>
+ <20210930181144.10029-13-broonie@kernel.org>
+ <20211011131730.GL2700@arm.com>
+ <YWQ67ad5wfRgp9l7@sirena.org.uk>
+ <20211011141937.GM2700@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2Ut2fhagX+Q0sTMt"
 Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2110071620130.19025@pobox.suse.cz>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20211011141937.GM2700@arm.com>
+X-Cookie: May contain nuts.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 07, 2021 at 04:23:22PM +0200, Miroslav Benes wrote:
-> On Mon, 27 Sep 2021, Luis Chamberlain wrote:
-> 
-> > This adds a new selftest module which can be used to test sysfs, which
-> > would otherwise require using an existing driver. This lets us muck
-> > with a template driver to test breaking things without affecting
-> > system behaviour or requiring the dependencies of a real device
-> > driver.
-> > 
-> > A series of 28 tests are added. Support for using two device types are
-> > supported:
-> > 
-> >   * misc
-> >   * block
-> 
-> I suppose the selftests will run for more than 45 seconds (default 
-> kselftest timeout), so you probably also want to set timeout to something 
-> sensible in tools/testing/selftests/sysfs/settings file (0 would disable 
-> it).
 
-Good catch, I'll use a default of 200, in practice for me this runs in
-much less than that, about 110 seconds, so 200 should be good wiggle
-room.
+--2Ut2fhagX+Q0sTMt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-  Luis
+On Mon, Oct 11, 2021 at 03:19:37PM +0100, Szabolcs Nagy wrote:
+
+> if fork resets tpidr2 then returning to a stack frame
+> that set tpidr2 could cause clobbered za state.
+> (userspace can fix this up, but if we want this case
+> to work then it's better to fix it on the kernel side)
+
+OK, that makes sense.  I've changed the code and the kselftest so that
+TPIDR2 is preserved on thread creation.
+
+--2Ut2fhagX+Q0sTMt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFkmhwACgkQJNaLcl1U
+h9DYIwf/SdjGcrk+B6BeNC/Ct9Vu1tEGt+28v6DFGGo1syrzRhtCaCyW6jZh3oJM
+Rz4YRRuVx/eoH7DdB4ReUFQ7gXhONMWsH+8DynWMP6hBd0HB4Rc2rMIsWVwecKQ6
+qgGcb93O3bc5IGhzqPNAPcSa49GGAXXZ8ce56LSQcI1Kkh4D5/m8advYBX0TMH+E
+DF2xWhvT/VkWDMP8a/VTbVmRgGp399y2gx3/W/wLy0tEmmNt+p3VoQeX4HztOTST
+tg9vQgkR3l9obAJdE8VbYU5JOqYmCB8ZmB6L7sjIn0PiqphVpXfWt9SQGnF9bBKW
+sTYAOVPir8vBkeQ9ydwmaLDbvBwXFQ==
+=xgvx
+-----END PGP SIGNATURE-----
+
+--2Ut2fhagX+Q0sTMt--
