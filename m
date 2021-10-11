@@ -2,135 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F8D428BE0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 13:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC8B428C58
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 13:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236177AbhJKLZk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 07:25:40 -0400
-Received: from mail-eopbgr1320120.outbound.protection.outlook.com ([40.107.132.120]:62851
-        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233913AbhJKLZk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 07:25:40 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cHrLPEhTKBZl1VvebL8GYV26DXJwA2XxLE7FEaKVJAeCYu3SBPiDP2J9dHHjozW0Q0IgsRNno3g6th3Ody8qeWM1/XdPOGTWbbWFkcpwa1am8C15jJndmEOT3ztD7fbaC5q9w4XZTRqFZSzPPAUWR/qNQqjEpIRb2vSeaEkSI1amrxG1i2WU+pTEO4e0pinQ7BqcNd/llh1lo9OvpKtBcq5amQW5AltHOOF6HVKkR2seROq6j/rAJ2rmzbplY6ocg8ROZ6P7fNmawbNqx9hyoFI3L4AsfBZ4/gElOs3RNowya+C8C+aHrtw7iFtFJvNK6RB73/mZgGpg+705pS8pSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ER/Mx7+nssZ/OpWEVMvGcvUQOIMgFhAF0IkSgo/ER4w=;
- b=C9yCufhiKb3o388NMpL6ujJRzY18deHge2OziB2SlUMJ6d/gS/cQjnGHIZbgd1fja+DMZaMXTgGij+hnyc67bf/jrtcq8PAjUfG4pTYbFOKJ4ZaJT8oHFHwzuh1+V7wooXqLvii52fgWthpbZJrRtScZUX1xKRY2Z4Ub1rsf7WUSXG1IRa/ibKOikw0+e171ZQi/UaSk/O1/cH8l30K1eBCGibKgDsmTUpWkxiGy5U5wtinew0I709/6Jury1ESxRInt5FDa+L6op6Z6rK82CkR5OlWEz07Jdxrdwpdh+3w6pW18w+Rytz99L9BC5eyzFM/EUmY8nyzT3Xi77URNNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ER/Mx7+nssZ/OpWEVMvGcvUQOIMgFhAF0IkSgo/ER4w=;
- b=gflFDxlX2taKFMMTKVHkRSl0sGvb4JpaTy2iGG6MpgK9CJCWOIPif1FW2gx9xCYlALZhoFEukuy6rN1uvb+oMczZyjFG0IzTIZAce3XqOR3S0SrUaCAl+4wZm0xXwyHKtn4o2nVNH3agdBNBsNt8qUiF1RtY8CoXqoz9+5GxXD8=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- SG2PR06MB3821.apcprd06.prod.outlook.com (2603:1096:4:df::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4587.19; Mon, 11 Oct 2021 11:23:33 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::fc12:4e1b:cc77:6c0]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::fc12:4e1b:cc77:6c0%6]) with mapi id 15.20.4587.026; Mon, 11 Oct 2021
- 11:23:33 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] selftests: bpf: Remove dumplicated include in cgroup_helpers
-Date:   Mon, 11 Oct 2021 19:19:48 +0800
-Message-Id: <20211011111948.19301-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.30.2
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR0302CA0015.apcprd03.prod.outlook.com
- (2603:1096:202::25) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        id S231659AbhJKLum (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 07:50:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37274 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236114AbhJKLum (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 Oct 2021 07:50:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EF39060E0C;
+        Mon, 11 Oct 2021 11:48:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633952922;
+        bh=Z1/JhxxEatT+l2NqNuffCCtFx2fY6SMTSZ9VwNJdlFY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oSEL6Y5FvTC7jFnEaXT5jMyBdAGK7dV3+aeP6Jg5KmH3Oh9SlxaqQMxXLsrvsjXXf
+         55pxBu4ja90fq+ruvavx7yZlYoQs7OuxnCKkRJ5V6f/b/SX805suGscqUplucklBqx
+         7GqjrZi4NnLG27CKab16cUQRmjjUZL58xETuUwIJui+dwxNp5dHhBGW9P9Ev3p1j6P
+         cstCT/4/rdQHRkzFU3XbWyFnZStXxiwhZ30wrpReJ3kLIZL85eAUADSc05IU+8fNUw
+         Y3u4axrlhJ2xSgQFxv6A0MII1F/Krq9e0hdBp2icVI21iviJkSYtdpyN9I+cGERBPo
+         qq3oXJHgC9yyw==
+Date:   Mon, 11 Oct 2021 12:48:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Alan Hayward <Alan.Hayward@arm.com>
+Cc:     Catalin Marinas <Catalin.Marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Luis Machado <Luis.Machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant KumarDwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        nd <nd@arm.com>
+Subject: Re: [PATCH v1 12/38] arm64/sme: Provide ABI documentation for SME
+Message-ID: <YWQkmBpnFFiROFeA@sirena.org.uk>
+References: <20210930181144.10029-1-broonie@kernel.org>
+ <20210930181144.10029-13-broonie@kernel.org>
+ <59675B79-E426-4177-8A4E-43026E42B9E3@arm.com>
+ <YWBjp8UnkMaHsZRA@sirena.org.uk>
+ <0749CCC0-CCEF-4869-9F55-FD9AC97CBA67@arm.com>
+ <YWB6KmvHGfYBBoxK@sirena.org.uk>
+ <78C51A1B-DF42-463B-9B1D-AE96756C5854@arm.com>
 MIME-Version: 1.0
-Received: from NJ-11126903.vivo.xyz (203.90.234.87) by HK2PR0302CA0015.apcprd03.prod.outlook.com (2603:1096:202::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.4 via Frontend Transport; Mon, 11 Oct 2021 11:23:31 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ee98f123-dd16-4af4-7db7-08d98ca98f2a
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3821:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SG2PR06MB38218BE0155E60F271291E9AABB59@SG2PR06MB3821.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:296;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 09v7iv6jusmSasLE9dFeMIZEuA9IGFBcztzAUdW0s/FdykYo7PV9WXkjrcVq2hZbgO3jdzpFZIC5cqcga9BvTIHcQpnhTneoelaHLPu4r2mioO2Wy776kNT9zQBSPQBbUP7gtQ7aARSI4wuo2DFIEwxsAlfn/SnVbfuuQaJEpOdj67iWP1gXDAjWSc6yfEopA17V3ywdjAQs4FqyCe03vt8rvSTFnK5Z5RcAjEmcGoXF5dANbeTA7sygKiVMX53evfE1h6ngjCMRWSEdUfhhZl0ul+Y3Kd0l9NazLmziZ/ZgrkS1faGsVbdmcsmGaSazYoiURyBFenKRW1yQ7RuMY0nvgcQG+WgKxziHzGoo9Zmluu787bwRW1axtUumd+IIGf6Mkmg0FfC0LPr4rFNsb/RM6f7wjqOiOu+F1OcpozO/bDOUjQni5+kzfsHHY9MqDJDrRwCLA0OhTJjXvJXTZKAJlrxvreV0tGLHHPL8Yeh0qUcCudAXVCzYvHuQPgwwtE/O163djbzlPeiA69fSU86l7SXHN554UuBxeSCAq+hJxyvKGLcjmfM/o5NxY3UfQNBcfgCVWnUo47OTTathgriJANdaPtXIj2zOY0pQlEN5TP1UgGZ212Eq54+h58Udt6FIERvFvcFNpN254bid0PYHq60/5G+hHFEqghXGY90JUq6bzLjEmeONx/em1vxYQzzjJkhbiz55uvrRPTVdHrNrePXkq/dh3OVo/T8nn/5xzORptIMqjwU5fu+pl+uB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(107886003)(186003)(4744005)(8936002)(52116002)(26005)(508600001)(2906002)(8676002)(86362001)(36756003)(6506007)(5660300002)(6486002)(4326008)(1076003)(83380400001)(6666004)(110136005)(6512007)(66946007)(956004)(38100700002)(38350700002)(2616005)(921005)(66556008)(66476007)(316002)(7416002)(4730100016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2/PKx8Jq8gWVehCGNknW9vtHAAkRG6AM65mq2kmOKvGVYuKg9gEV2XaYeOMW?=
- =?us-ascii?Q?0nVK2PtEjMOfmhurE3A3L4xHwAE8d3HYrj/IwPO8pMvOmTTm+KDV6p4+BhGa?=
- =?us-ascii?Q?Ny+Rc2QR3eD/fqdVv/wDzZXejPaf1pHGs0DgDcOB8AxcJEMhr8BMEcgYahav?=
- =?us-ascii?Q?wo1em7e4qKHWb48/8E/0S103ZRlcRoVqmZxx9KCZTN5kPDxpGI8SupdqrW5x?=
- =?us-ascii?Q?AvFqgAXAX+PQcyOojCxJu0XIELpKpGhTyGA5pQpDuIOszrTYSzCpdq4/p0pN?=
- =?us-ascii?Q?9j79n8YGk+ZazLWWc18HYbH4FQyiyt7T3Q0EyvevO1aGN7KL0UXNa8eFU/LY?=
- =?us-ascii?Q?w5GDN6VrVxibbmYthTPqj+0D0RVasgl6QuKn3kzfQqmL7NGiYfl2ZlyAnEue?=
- =?us-ascii?Q?3XfttA+FYFesUkxb7SCCnyMtmiFc3sT1ZkWEsgfyCVHNbWyzPh+BwYSU9Ion?=
- =?us-ascii?Q?10ugV9gR37ZGTHvcaN3E8wPjjXBHJMRnUqTkE7hySLfU0jEG5w0boCF2iihl?=
- =?us-ascii?Q?J9HyZnioKH68Rbr5RIQZKzvm1WSWd72UxQ1A3niaXN+avl4QTgNEsy/r+GiI?=
- =?us-ascii?Q?XR38hdVdJYizCRAHxZB3lS9r7ZQITUCBlXSp3bwUtPpRzB3m9r/jgTbD0XQp?=
- =?us-ascii?Q?dlVbAUlA91j38Uog0iTi5TikUJM6JDbr0v9Mr424lQwr1hC5F+Q4r3A1SUBX?=
- =?us-ascii?Q?F61k65sr6ViFizksXkOvzdH90A9yUigmJiqog95JbXrI0VzJ2CODwHYLKf2x?=
- =?us-ascii?Q?zuXIJe/0RRuVGz3YUiFZlzdSxbnzkUFkc6JttwR6mbR5YTuDdy2Eg+3NRdav?=
- =?us-ascii?Q?ZP+y2Pc6PajzA+3E2vOA+MktY/QAXSc3MAkz33Lr9bijSZ+qPqRvhS6j64JK?=
- =?us-ascii?Q?4/BFknEssnwXf+WhL1Qkw1Nl8aKGwofpxltw3E5IykkMOW2aWHm1vmVW2lYs?=
- =?us-ascii?Q?8heVMFhMSw3EM4QnLJqJCNUdXv2rVIe573A7D5cqTT7ksNeBkxkws1y/flB5?=
- =?us-ascii?Q?LUnp3L7k6G/AZcdUPhDAbnVgjtOBHNtB7q9TSxSE3XqQXyRu3MImuN52FNS+?=
- =?us-ascii?Q?cfRqP5CDhkWlNTRJNMw3hcvRZDMWfz7o2ZZNn2Sdz0wIm6lAmPDAmYHPyuS8?=
- =?us-ascii?Q?v4d4TTWQejb260xzyV9SW8D7JNAKmg1FniGasMgsQBTAFmOeI3H9mkqhx+1D?=
- =?us-ascii?Q?YiFhlrTGdSpHO+THxhMs9+1DhusnbpVmq2xSpFt4tNCfaLseiRAgWXXkrky9?=
- =?us-ascii?Q?0qkuOcy73dHwL/ACeqDDrQxCRdar6w6A8LCqd+ZC/jxJ6y5PJr+bL7ffrEB9?=
- =?us-ascii?Q?UKosafgkHGYJdx+1lvvvndoT?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee98f123-dd16-4af4-7db7-08d98ca98f2a
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2021 11:23:33.2052
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a4EnZGhY4qX6me0btOCes7zhoFgIPphWG+blUEHuclVX5ba5+6t5/xGdcSov48ldprgpq7W2l82jiA1rnLFwRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3821
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YByx5LhWlp99fXXV"
+Content-Disposition: inline
+In-Reply-To: <78C51A1B-DF42-463B-9B1D-AE96756C5854@arm.com>
+X-Cookie: Your ignorance cramps my conversation.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix following checkincludes.pl warning:
-./tools/testing/selftests/bpf/cgroup_helpers.c
-12	#include <unistd.h>
-    14	#include <unistd.h>
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- tools/testing/selftests/bpf/cgroup_helpers.c | 1 -
- 1 file changed, 1 deletion(-)
+--YByx5LhWlp99fXXV
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index 8fcd44841bb2..9d59c3990ca8 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -11,7 +11,6 @@
- #include <fcntl.h>
- #include <unistd.h>
- #include <ftw.h>
--#include <unistd.h>
- 
- #include "cgroup_helpers.h"
- 
--- 
-2.30.2
+On Mon, Oct 11, 2021 at 11:15:09AM +0000, Alan Hayward wrote:
+> > On 8 Oct 2021, at 18:04, Mark Brown <broonie@kernel.org> wrote:
 
+> > I will if/when it gets fixed that way.  Actually, while looking
+> > at that code I was tempted to remove the support for returning
+> > FPSIMD only registers via NT_ARM_SVE entirely and just always
+> > convert to SVE format - I'm not sure what the use case was there?
+> > It's not a pressing thing but it seemed like it was a bit of an
+> > implementation detail that we were revealing.
+
+> What about in the write registers case?
+
+Both register sets accept FPSIMD registers for writes - we can't remove
+that for the SVE register set given that it's ABI.
+
+> With the existing code:
+> Read SVE registers with ptrace. Get FPSIMD. Update FPSIMD with new values=
+=2E Write back to ptrace.
+> In that scenario, the internal SVE states stays =E2=80=9Cinactive=E2=80=
+=9D in the kernel.
+
+Right.
+
+> If ptrace always returned an SVE structure, then writing back with the sa=
+me structure would cause the
+> SVE state to become active. It=E2=80=99s a small difference, but we reall=
+y don=E2=80=99t want the debugger to effect things.
+
+With the existing code - with the wider availability of SVE hardware
+we'll see soon we might be looking at changing how the kernel handles
+enabling and disabling SVE which might mean we want to change how that
+looks internally anyway.  Part of what has me thinking about this is
+that what we've got at the minute is quite tied to the implementation
+and we might want to change that.
+
+--YByx5LhWlp99fXXV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFkJJcACgkQJNaLcl1U
+h9BHqgf/bX8EzVZFKTIoBVOMUJIlFJ9rtZwWjw6JQkjf525ToIDJQORSPghVbO23
+RMPHuwLkkyJ6kmIOo35wDG6A4u+mDloEGokvmtfuAHdAIdFQbNDvnMUCfZWRpRz4
+LMFoxwqu/iyFsuHB0e+/H/BN1Ac4HBWSGKFG2JSiivzqJQOpS3CMFUscI+T16bRI
+dwnXmEz0/CRoiqtQmLje7M/nvSoy4AKk4sY+TFREi+jvD6To+ynrWx/5eVvk/i8d
+lwPNreWw1oMCNjW/8ZLH2FkhzXdj8usuw+pYnm7TYJlyfvBySLYlTEJL2bUN13/n
+sAz+pXFplABmLPYbNUIStBDTc5gM5w==
+=Uo00
+-----END PGP SIGNATURE-----
+
+--YByx5LhWlp99fXXV--
