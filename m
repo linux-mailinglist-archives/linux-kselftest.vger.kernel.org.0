@@ -2,93 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1502428DB1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 15:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E6D428DB0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 15:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235283AbhJKNUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 09:20:22 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3963 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbhJKNUW (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 09:20:22 -0400
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HSfRh3S3Lz67YMc;
-        Mon, 11 Oct 2021 21:15:28 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 11 Oct 2021 15:18:20 +0200
-Received: from localhost (10.52.122.204) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Mon, 11 Oct
- 2021 14:18:19 +0100
-Date:   Mon, 11 Oct 2021 14:18:01 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        id S235297AbhJKNUL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 09:20:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50944 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231392AbhJKNUL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 Oct 2021 09:20:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0708A60F23;
+        Mon, 11 Oct 2021 13:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633958291;
+        bh=rdHCT/yf1NuYYpIhO1/KL29JDCvdQcG2Q+tlFqrPW0I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HVir+opPBXYUnAhRrXS0w1uk52YHx7CfzROMLLD2YYVm8wH9dENp/hlH+t8NfHguF
+         DFEpqe5n7h3+w+aP5L5aR9YwPBMoX9K0B/mnnDWIfkYTNdBgc/SX9JBLjJe4rlWUOr
+         DuSDbg7K9KHaInUSy9vzzDu4deaEuU2YtZUYb1o0/gWKL5cbZvWRaRE32pEMioCtPa
+         HJttj1fsr/ikKn7z8jhNpCwVxiu00sE102fv5mEJIzuW7w3RqioxoRpZuzHM0ITtYh
+         uCf3jNLmWGCh8ICCyV3aTyONKtd19m/Lx3k9OEzWEYvjyYbS1/V5/JYYcNUM2Rpa+Z
+         74DI1T0g0W2Cw==
+Date:   Mon, 11 Oct 2021 14:18:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        "Alan Hayward" <alan.hayward@arm.com>,
+        Alan Hayward <alan.hayward@arm.com>,
         Luis Machado <luis.machado@arm.com>,
-        "Salil Akerkar" <Salil.Akerkar@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
         Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v1 08/38] arm64/sve: Track vector lengths for tasks in
- an array
-Message-ID: <20211011141801.0000224a@Huawei.com>
-In-Reply-To: <YWQ4qDmu8Yyiwm5C@sirena.org.uk>
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 10/38] arm64/sve: Generalise vector length
+ configuration prctl() for SME
+Message-ID: <YWQ5kIsc9A3Sgcm+@sirena.org.uk>
 References: <20210930181144.10029-1-broonie@kernel.org>
-        <20210930181144.10029-9-broonie@kernel.org>
-        <20211011112057.00007b90@Huawei.com>
-        <YWQ4qDmu8Yyiwm5C@sirena.org.uk>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
+ <20210930181144.10029-11-broonie@kernel.org>
+ <20211011112750.00004066@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.122.204]
-X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="C6KrJVARtSiWrDNu"
+Content-Disposition: inline
+In-Reply-To: <20211011112750.00004066@Huawei.com>
+X-Cookie: Your ignorance cramps my conversation.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 11 Oct 2021 14:14:16 +0100
-Mark Brown <broonie@kernel.org> wrote:
 
-> On Mon, Oct 11, 2021 at 11:20:57AM +0100, Jonathan Cameron wrote:
-> > Mark Brown <broonie@kernel.org> wrote:  
-> 
-> > > As for SVE we will track a per task SME vector length for tasks. Convert
-> > > the existing storage for the vector length into an array and update
-> > > fpsimd_flush_task() to initialise this in a function.  
-> 
-> > I'm clearly having a trivial comment day.  Given reduction in indenting
-> > it would be nice perhaps to reformat comments to take that into account.  
-> 
-> Again I'll have done this to make it clearer that things are just being
-> moved about - as a reviewer I do find things like that very helpful.
-> 
-> > I'm also unconvinced the trivial wrappers are worthwhile.  (maybe you drop
-> > those later?)  
-> 
-> They do hide what we're doing from the rest of the series which makes
-> the whole thing a lot easier to work with, especially if we change what
-> data structures we use or there's some debate as to the names of the
-> constants.  A bunch of them directly map onto existing trivial wrappers
-> too, there's been some stylistic preference for that.
-> 
-> If people want to remove the wrappers I'd propose leaving them for now
-> then adding a patch afterwards which removes them, or at least waiting
-> until we've got very firm agreement from Catalin and Will on the data
-> structures and constants.
-> 
+--C6KrJVARtSiWrDNu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Makes sense.
+On Mon, Oct 11, 2021 at 11:27:50AM +0100, Jonathan Cameron wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
-J
+> >  	/*
+> > -	 * Clamp to the maximum vector length that VL-agnostic SVE code can
+> > -	 * work with.  A flag may be assigned in the future to allow setting
+> > -	 * of larger vector lengths without confusing older software.
+> > +	 * Clamp to the maximum vector length that VL-agnostic code
+> > +	 * can work with.  A flag may be assigned in the future to
+> > +	 * allow setting of larger vector lengths without confusing
+> > +	 * older software.
+
+> Why the oddly short wrapping at sub 70 chars?
+
+This is the default for my editor in Linux kernel style, I guess among
+other things it keeps things readable even when they're quoted several
+times during review.  If there is a particular magic number that Catalin
+and Will have in mind I can go through and reflow to that.
+
+--C6KrJVARtSiWrDNu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFkOZAACgkQJNaLcl1U
+h9AW9Af/WZg3w6b719MVG6bSXJRG7JVKYTUVmrTj5EJMg6YuTUdM5zHEu4U4hJY5
+pZ5CoK992P1eQKPR6aibBXfhxnJvit1kDu3v87OFlnBBMAfDWKJIWjlhGHEw/r9B
+avWUrLK8m4Jb+/ruuxNl1mxtvOgMbokPaOTpF21/3M2XXixRpi+YNBGeaqUGX2G8
+EylSxYcb0JRaEur9jHGxPBvlxJbK3tKauBZDwto+0ZQRw0WDv/lHIdZolmiKWl2r
+d+fbO+dQcqPedggYNgAUYrqwi65OgoKoCeU9XQxYwmKBd121YN9jPsQomInTWKm5
+TIf0hlG8iMXuDWlRMZRtP5by7KrsZg==
+=mzO8
+-----END PGP SIGNATURE-----
+
+--C6KrJVARtSiWrDNu--
