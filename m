@@ -2,81 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA104291D0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 16:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8834429314
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 17:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbhJKOcP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 10:32:15 -0400
-Received: from www62.your-server.de ([213.133.104.62]:59424 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236716AbhJKOcM (ORCPT
+        id S231951AbhJKPZr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 11:25:47 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:42497 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230486AbhJKPZq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 10:32:12 -0400
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mZwJY-000Cmb-Vp; Mon, 11 Oct 2021 16:30:05 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mZwJY-000MJx-M5; Mon, 11 Oct 2021 16:30:04 +0200
-Subject: Re: [PATCH] selftests: bpf: Remove dumplicated include in
- cgroup_helpers
-To:     Wan Jiabing <wanjiabing@vivo.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kael_w@yeah.net
-References: <20211011111948.19301-1-wanjiabing@vivo.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0b1f31ec-68e4-92e1-f4a6-b97fcb3ba6a8@iogearbox.net>
-Date:   Mon, 11 Oct 2021 16:30:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 11 Oct 2021 11:25:46 -0400
+Received: (Authenticated sender: n@nfraprado.net)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 80593240005;
+        Mon, 11 Oct 2021 15:23:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nfraprado.net;
+        s=gm1; t=1633965825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=sezK/FAtcCli+p2YnDeNIUcTto02XK4Nsqv33VCxO7E=;
+        b=P9LVtYWqf/QKJcDJfkzgorULf9ZsoNS8YAKnA138ulq+BYkCr7blpOOuEkhFYD1Om9drKa
+        zxxX9e1vN6kb6NpCfJIDO90woKiVt4tmk1FWTyzbl2PkVTdyWZvzA9OY62MDlnkwum11Q7
+        7GRD5LViaHb0xDZoK1ix7tzbtOpHAxjrvcRVMFA5z26TJ4Re/wMtB8L+p570Xai3OJsP5F
+        xsIyZp2+GLa0ctRGsNwQpeavEC6ESValcaHczL7NkUWvkPHF3Iy/UH2xe6ECx+w8eLOlp7
+        d0U5EcNZrcfOCez4w+ZM0cM35jZQGctIVP9G4s8O50DuE1pL5JPo8yr1Ee8vDA==
+Date:   Mon, 11 Oct 2021 10:23:33 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <n@nfraprado.net>
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@riseup.net>,
+        Leandro Ribeiro <leandrohr@riseup.net>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Pedro Sader Azevedo <pedro.saderazevedo@protonmail.com>,
+        isinyaaa <isabellabdoamaral@gmail.com>,
+        ~lkcamp/discussion@lists.sr.ht
+Subject: DRM KUnit hackathon
+Message-ID: <20211011152333.gm5jkaog6b6nbv5w@notapiano>
 MIME-Version: 1.0
-In-Reply-To: <20211011111948.19301-1-wanjiabing@vivo.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26319/Mon Oct 11 10:18:47 2021)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/11/21 1:19 PM, Wan Jiabing wrote:
-> Fix following checkincludes.pl warning:
-> ./tools/testing/selftests/bpf/cgroup_helpers.c
-> 12	#include <unistd.h>
->      14	#include <unistd.h>
+Hello,
 
-What does the 12 vs 14 mean here? Please provide a proper commit description, e.g. if
-you used checkincludes.pl, maybe include the full command invocation and the relevant
-output, so that this is more obvious and in a better shape. Thanks!
+We belong to a student group, LKCAMP [1], which is focused on sharing kernel and
+free software development knowledge and mentoring newcomers to become
+contributors to these projects.
 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->   tools/testing/selftests/bpf/cgroup_helpers.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-> index 8fcd44841bb2..9d59c3990ca8 100644
-> --- a/tools/testing/selftests/bpf/cgroup_helpers.c
-> +++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-> @@ -11,7 +11,6 @@
->   #include <fcntl.h>
->   #include <unistd.h>
->   #include <ftw.h>
-> -#include <unistd.h>
->   
->   #include "cgroup_helpers.h"
->   
-> 
+As part of our efforts, we'll be organizing a hackathon to convert the drm
+selftests in drivers/gpu/drm/selftests/ (and possibly the ones in
+drivers/dma-buf too) to the KUnit framework. It will take place on October 30.
 
+So please expect to receive some patches from our mentees on that date. It
+probably won't be a big volume (experience tells it'll be around half a dozen
+patches). We'll also make sure to do an internal review beforehand to catch
+common first-timer mistakes and teach the basics.
+
+We're already working on making sure that the converted KUnit tests can still be
+run by IGT.
+
+Please let us know if there's any issue with this date. Otherwise we look
+forward to helping a few newcomers get their patches in the kernel on the 30th
+:).
+
+Thanks!
+
+[1] - https://lkcamp.dev/
