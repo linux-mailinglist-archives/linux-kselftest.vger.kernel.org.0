@@ -2,668 +2,189 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C36A0428BBF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 13:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8D9428BD2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 13:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236002AbhJKLHh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 07:07:37 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3958 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235970AbhJKLHb (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 07:07:31 -0400
-Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HSbTK37PKz6H7NQ;
-        Mon, 11 Oct 2021 19:01:41 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 11 Oct 2021 13:05:26 +0200
-Received: from localhost (10.52.122.204) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Mon, 11 Oct
- 2021 12:05:25 +0100
-Date:   Mon, 11 Oct 2021 12:05:07 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+        id S236136AbhJKLRX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 07:17:23 -0400
+Received: from mail-eopbgr20048.outbound.protection.outlook.com ([40.107.2.48]:2222
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235970AbhJKLRW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 Oct 2021 07:17:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v2d3g7luhCRcd0wGVAH5ynCPcFeMu8ON0KprvA9OmN8=;
+ b=b5RfJBIxeJMHH6QJdzEIj4oi4izYr65C2rBgK6tkzPus1ve3MXt8CKRtk3HKOiDHuiBP8OBTjDbQmjPxRMq4Ww4QhT1wNA/Nv7qTFA94lEVxBn+3FbBQ1OjoO0tnlxsr82UlMxq++nTexA8HmDL74PcVCepXvZZbCfD41rCQfm4=
+Received: from DB6PR0801CA0066.eurprd08.prod.outlook.com (2603:10a6:4:2b::34)
+ by VI1PR08MB3791.eurprd08.prod.outlook.com (2603:10a6:803:c0::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.18; Mon, 11 Oct
+ 2021 11:15:18 +0000
+Received: from DB5EUR03FT044.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:4:2b:cafe::b) by DB6PR0801CA0066.outlook.office365.com
+ (2603:10a6:4:2b::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.18 via Frontend
+ Transport; Mon, 11 Oct 2021 11:15:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; vger.kernel.org; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;vger.kernel.org; dmarc=pass action=none
+ header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DB5EUR03FT044.mail.protection.outlook.com (10.152.21.167) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4587.18 via Frontend Transport; Mon, 11 Oct 2021 11:15:18 +0000
+Received: ("Tessian outbound 8e26f7114b75:v103"); Mon, 11 Oct 2021 11:15:18 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: c29aac52253b5d5f
+X-CR-MTA-TID: 64aa7808
+Received: from 75a8cd70f0f8.2
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 0AFA66E4-8881-42E7-9C5D-D8CF1AD32D42.1;
+        Mon, 11 Oct 2021 11:15:12 +0000
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 75a8cd70f0f8.2
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Mon, 11 Oct 2021 11:15:12 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X+gbYNbY3VEde/ClYsNUM5RLDdYUkyscy3eWUkCibdl4ggM5R3s8OQyR/uz7CKA8ItKd+LDpGUtfLnKxdXErjvYnJ/qsTJOCnBR0GxvvIBxgjn/zNjp38LvTa7aIMy6irCNrz+iN+kzyR1QU2SDeVGF7VzC5NpEVveqRD5kIT1so1h0HKZ4uKvTWPUMqferE5YiN0qDu9hvKVTXGGhzDZ1cKyHVIWtTK7jP/TsNcB0v/ta5H1dPFzWN1pzoDOzojuYyHf0P8odls8dWqvaBPqB9awSXksa9j23ZhtGQJ/0lggVTM3iz7S3GTLhwm0vCCdUp1xRfHTEGsZ6XilNyL3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v2d3g7luhCRcd0wGVAH5ynCPcFeMu8ON0KprvA9OmN8=;
+ b=h+FHM0Y/JiaD8jjFycHJSo8alDpDeq7yYmTI3AZmSo5sU3AqLfDrM5TECVyche6bTtaMXfMg/NEr56N9AFanZuB3/AHKBSUAhXQdWlFvdqBxYOfWlJUdBAkNIHEoPMGsOJh65hdMfPZ3maqavkAYrIlXDxImTldf5DvSabcqhgO5U925cNwPSk3o4EVDSVAgOivP9L8kATNRcBnW41pQcxJcz3boFiV8n+hathHBeWHVcvQC1swpboYNF0O4zAFN2L9az7/q1qGDO1n/QBTbSb8PKICJOp2FjF+p447RprTxRqPn6FQsCu7cbvnscWNsVtyPYtvvIDKeV5/+ok3TfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v2d3g7luhCRcd0wGVAH5ynCPcFeMu8ON0KprvA9OmN8=;
+ b=b5RfJBIxeJMHH6QJdzEIj4oi4izYr65C2rBgK6tkzPus1ve3MXt8CKRtk3HKOiDHuiBP8OBTjDbQmjPxRMq4Ww4QhT1wNA/Nv7qTFA94lEVxBn+3FbBQ1OjoO0tnlxsr82UlMxq++nTexA8HmDL74PcVCepXvZZbCfD41rCQfm4=
+Received: from AM6PR08MB3957.eurprd08.prod.outlook.com (2603:10a6:20b:a2::14)
+ by AS8PR08MB6806.eurprd08.prod.outlook.com (2603:10a6:20b:39b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.22; Mon, 11 Oct
+ 2021 11:15:11 +0000
+Received: from AM6PR08MB3957.eurprd08.prod.outlook.com
+ ([fe80::5d0c:6e21:5ba3:ff8e]) by AM6PR08MB3957.eurprd08.prod.outlook.com
+ ([fe80::5d0c:6e21:5ba3:ff8e%6]) with mapi id 15.20.4587.026; Mon, 11 Oct 2021
+ 11:15:10 +0000
+From:   Alan Hayward <Alan.Hayward@arm.com>
 To:     Mark Brown <broonie@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
+CC:     Catalin Marinas <Catalin.Marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        "Alan Hayward" <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        "Salil Akerkar" <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Luis Machado <Luis.Machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant KumarDwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kselftest@vger.kernel.org>
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        nd <nd@arm.com>
 Subject: Re: [PATCH v1 12/38] arm64/sme: Provide ABI documentation for SME
-Message-ID: <20211011120507.00000c13@Huawei.com>
-In-Reply-To: <20210930181144.10029-13-broonie@kernel.org>
+Thread-Topic: [PATCH v1 12/38] arm64/sme: Provide ABI documentation for SME
+Thread-Index: AQHXtidOZO4UAjfSg0qeXzNUy0IvB6vJMIuAgAAVfICAABWIgIAABU4AgARVUwA=
+Date:   Mon, 11 Oct 2021 11:15:09 +0000
+Message-ID: <78C51A1B-DF42-463B-9B1D-AE96756C5854@arm.com>
 References: <20210930181144.10029-1-broonie@kernel.org>
-        <20210930181144.10029-13-broonie@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
+ <20210930181144.10029-13-broonie@kernel.org>
+ <59675B79-E426-4177-8A4E-43026E42B9E3@arm.com>
+ <YWBjp8UnkMaHsZRA@sirena.org.uk>
+ <0749CCC0-CCEF-4869-9F55-FD9AC97CBA67@arm.com>
+ <YWB6KmvHGfYBBoxK@sirena.org.uk>
+In-Reply-To: <YWB6KmvHGfYBBoxK@sirena.org.uk>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3654.120.0.1.13)
+Authentication-Results-Original: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=arm.com;
+x-ms-publictraffictype: Email
+X-MS-Office365-Filtering-Correlation-Id: 40752450-9e58-4c46-e467-08d98ca8687f
+x-ms-traffictypediagnostic: AS8PR08MB6806:|VI1PR08MB3791:
+x-ms-exchange-transport-forked: True
+X-Microsoft-Antispam-PRVS: <VI1PR08MB379189220C4C74BA995B1CA997B59@VI1PR08MB3791.eurprd08.prod.outlook.com>
+x-checkrecipientrouted: true
+nodisclaimer: true
+x-ms-oob-tlc-oobclassifiers: OLM:9508;OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: zMrjsB4jonUV0QuFmE3Jk38MevNCCoVGoB1riT3vUkKuKH5BLF2UtzlySOUv7w7EZrlC5aHvYu8jp/0gxaBzrc8W+VtsZQP7MEJCX4JFQB5W358IKwvDlhpKObOgT9LsQFm0D0Vpom6ycpthvCVtdkoKRTbEL4PhFKyLjh60pZyy02085xHSWs8gUqKaxwKPVcih3Y01ZTBnPajlA4oCQNpChVZSGi4KIUmGI5vT+icUnAT1ydCvBQnuV0WhOPxKkT6TB2HTRIeQYXoM2j6MIVqdhSM5220FGCilZEr+Q8tA690KCoRZmJfd5e55cMXLQ7XHkpaVVEAWCkYUh1um3XckTkytwgPIkkzAaw1liii/2u2l4YNX89x3I2usnMRnP2c2nzdAQoKrMEl9OO1KqpYUb8AEaAuXS0lVY2/7dqMKbRWCQBAT34p4Ry1JmuP0hLAgUA5vP32JhhiPd6QHLPdsGS26BrCb10h3MYGYgCjOx6H4KJkmJ1RK/jgE3iH7dXQvjii5I1N2uhdc1J91FmSe8WChTrncwHfBwbITQlw34vdZu6razbI5edLcbjPNy8o2UlMjvhGlagY8yX7o3aW0Pw3zCnOzAUHEw/6ubk5xEmYb4neeQHVQg6jldQ9dnLGlel1nSaZH2GcVBlXNG55PNpyWuw7eIsH8cNj4cGNYLm4y9vQjG6B4CZIH2+Vet8F9DMZnZUT5U3zJymBXpgO0kOapz1obLL1Jlds5JdzkBJXGC9GWEUCzq7PSSY/L
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB3957.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(64756008)(36756003)(2616005)(66446008)(508600001)(122000001)(33656002)(38100700002)(91956017)(66476007)(76116006)(71200400001)(6512007)(66946007)(186003)(5660300002)(66556008)(4326008)(6486002)(38070700005)(6506007)(53546011)(8936002)(54906003)(2906002)(26005)(83380400001)(8676002)(6916009)(316002)(45980500001);DIR:OUT;SFP:1101;
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AA9D5482A809FA40AAE02643CB365DB2@eurprd08.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.122.204]
-X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6806
+Original-Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT044.eop-EUR03.prod.protection.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: d885eeac-5587-43d3-04d1-08d98ca863b0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Drb8Yq3DgaewDd/53ydcaGbz8bo2s4MnldWyeeE3ItPsHkzANIumBTpdylPIJ6zUakeT2hty2gvDlCZqZym9KsNegXQEYAQcD94/CU/CSFiwwuA9BOrYeSgaAId6RZIV/JiwrFiRZFWutwMfJYlUF+GyDwTQi5MZ79AHiSX8+OD7zA2A9GC1RsTdnBtCcZIz7ivUf2pMv8qbio+TyfKGMHBhel5tfuy8wZJgB+g+bgOCBWdsCK0582c7nxYlOvWBPp+0EeIFVwbAYmj+FxySy0cIU4hTtjmiWL6PmEB02vLCPgNjIuAspftm8J61Pk3g0I13iHpmGxhGZmcw8J4z60pnoIwN5XVlrgfv4RKpptWJDVF3GeYbyymuOA7uYNYjVN40q6zciIoAvVB48goX6w4ina5vY725pWdyVH5v/z74FCh7N24bT6k8fjzN1g8LGhfPbv7gdEOwQBAzHbpzojvvyXaI5tf8VIePYLw8QqTHCvr9sufFqylT8bmSZm4xfyHEcsN4z9UukZSSnAITu9N73mymLeEwwbv3dUZyilN6yRq43F1PA5lyqeFNZd4gAvmO9ekJmzRdszVrjHBL4NjP1sddJSuH/SyiSWoUlYiZXXZg1njZxpi6dvrYKm5DqTp3uNCD0YHQRsFZK2Cr3VZkpTwaKFXeGKWhZnv1KhzThOQkv6IAQZrWumdeTi+EihljgsZs91s7E8zNaWH8Zw==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(54906003)(82310400003)(6486002)(316002)(6512007)(8676002)(70586007)(70206006)(356005)(6862004)(33656002)(4326008)(47076005)(8936002)(26005)(81166007)(2906002)(86362001)(5660300002)(508600001)(83380400001)(36756003)(36860700001)(6506007)(53546011)(336012)(2616005)(186003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2021 11:15:18.5172
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40752450-9e58-4c46-e467-08d98ca8687f
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR03FT044.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB3791
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 30 Sep 2021 19:11:18 +0100
-Mark Brown <broonie@kernel.org> wrote:
-
-> Provide ABI documentation for SME similar to that for SVE. Due to the very
-> large overlap around streaming SVE mode in both implementation and
-> interfaces documentation for streaming mode SVE is added to the SVE
-> document rather than the SME one.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-A few more editorial bits to add to what Alan pointed out.
-
-thanks,
-
-Jonathan
-
-> ---
->  Documentation/arm64/index.rst |   1 +
->  Documentation/arm64/sme.rst   | 427 ++++++++++++++++++++++++++++++++++
->  Documentation/arm64/sve.rst   |  62 ++++-
->  3 files changed, 480 insertions(+), 10 deletions(-)
->  create mode 100644 Documentation/arm64/sme.rst
-> 
-> diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-> index 4f840bac083e..ae21f8118830 100644
-> --- a/Documentation/arm64/index.rst
-> +++ b/Documentation/arm64/index.rst
-> @@ -21,6 +21,7 @@ ARM64 Architecture
->      perf
->      pointer-authentication
->      silicon-errata
-> +    sme
->      sve
->      tagged-address-abi
->      tagged-pointers
-> diff --git a/Documentation/arm64/sme.rst b/Documentation/arm64/sme.rst
-> new file mode 100644
-> index 000000000000..7a69bf637afd
-> --- /dev/null
-> +++ b/Documentation/arm64/sme.rst
-> @@ -0,0 +1,427 @@
-> +===================================================
-> +Scalable Matrix Extension support for AArch64 Linux
-> +===================================================
-> +
-> +This document outlines briefly the interface provided to userspace by Linux in
-> +order to support use of the ARM Scalable Matrix Extension (SME).
-> +
-> +This is an outline of the most important features and issues only and not
-> +intended to be exhaustive.  It should be read in conjunction with the SVE
-> +documentation in sve.rst which provides details on the Streaming SVE mode
-> +included in SME.
-> +
-> +This document does not aim to describe the SME architecture or programmer's
-> +model.  To aid understanding, a minimal description of relevant programmer's
-> +model features for SME is included in Appendix A.
-> +
-> +
-> +1.  General
-> +-----------
-> +
-> +* PSTATE.SM and PSTATE.ZA, the streaming mode vector length and the ZA
-> +  register state are tracked per thread.
-> +
-> +* The presence of SVE is reported to userspace via HWCAP2_SME in the aux vector
-> +  AT_HWCAP2 entry.  Presence of this flag implies the presence of the SME
-> +  instructions and registers, and the Linux-specific system interfaces
-> +  described in this document.  SME is reported in /proc/cpuinfo as "sme".
-> +
-> +* Support for the execution of SME instructions in userspace can also be
-> +  detected by reading the CPU ID register ID_AA64PFR1_EL1 using an MRS
-> +  instruction, and checking that the value of the SME field is nonzero. [3]
-> +
-> +  It does not guarantee the presence of the system interfaces described in the
-> +  following sections: software that needs to verify that those interfaces are
-> +  present must check for HWCAP2_SME instead.
-> +
-> +* There are a number of optional SME features, presence of these is reported
-> +  through AT_HWCAP2 through:
-> +
-> +	HWCAP2_SME_I16I64
-> +	HWCAP2_SME_F64F64
-> +	HWCAP2_SME_I8I32
-> +	HWCAP2_SME_F16F32
-> +	HWCAP2_SME_B16F32
-> +	HWCAP2_SME_F32F32
-> +
-> +  This list may be extended over time as the SME architecture evolves.
-> +
-> +  These extensions are also reported via the CPU ID register ID_AA64SMFR0_EL1,
-> +  which userspace can read using an MRS instruction.  See elf_hwcaps.txt and
-> +  cpu-feature-registers.txt for details.
-> +
-> +* Debuggers should restrict themselves to interacting with the target via the
-> +  NT_ARM_SVE, NT_ARM_SSVE and NT_ARM_ZA regsets.  The recommended way
-> +  of detecting support for these regsets is to connect to a target process
-> +  first and then attempt a
-> +
-> +	ptrace(PTRACE_GETREGSET, pid, NT_ARM_<regset>, &iov).
-> +
-> +* Whenever ZA register values are exchanged in memory between userspace and
-> +  the kernel, the register value is encoded in memory as a series of horizontal
-> +  vectors from 0 to VL/8-1 stored in the same endianness invariant format as is
-> +  used for SVE vectors.
-> +
-> +
-> +2.  Vector lengths
-> +------------------
-> +
-> +SME defines a second vector length similar to the SVE vector length which is
-> +controls the size of the streaming mode SVE vectors and the ZA matrix array.
-> +The ZA matrix is square with each side having as many bytes as a SVE vector.
-> +
-> +
-> +3.  Sharing of streaming and non-streaming mode SVE state
-> +---------------------------------------------------------
-> +
-> +It is implementation defined which if any parts of the SVE state are shared
-> +between streaming and non-streaming modes.  When switching between modes
-> +via software interfaces such as ptrace if no register content is provided as
-> +part of switching no state will be assumed to be shared and everything will
-> +be zeroed.
-> +
-> +
-> +4.  System call behaviour
-> +-------------------------
-> +
-> +* On syscall PSTATE.ZA is preserved, if PSTATE.ZA==1 then the contents of the
-> +  ZA matrix are preserved.
-> +
-> +* On syscall PSTATE.SM will be cleared and the SVE registers will be handled
-> +  as normal.
-> +
-> +* Neither the SVE registers nor ZA are used to pass arguments to or receive
-> +  results from any syscall.
-> +
-> +* On creation fork() or clone() the newly created process will have PSTATE.SM
-> +  and PSTATE.ZA cleared.
-> +
-> +* All other SME state of a thread, including the currently configured vector
-> +  length, the state of the PR_SME_VL_INHERIT flag, and the deferred vector
-> +  length (if any), is preserved across all syscalls, subject to the specific
-> +  exceptions for execve() described in section 6.
-> +
-> +
-> +5.  Signal handling
-> +-------------------
-> +
-> +* A new signal frame record za_context encodes the ZA register contents on
-> +  signal delivery. [1]
-> +
-> +* The signal frame record for ZA always contains basic metadata, in particular
-> +  the thread's vector length (in za_context.vl).
-> +
-> +* The ZA matrix may or may not be included in the record, depending on
-> +  the value of PSTATE.ZA.  The registers are present if  and only if:
-
-                                                          ^^
-
-> +  za_context.head.size >= ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(za_context.vl))
-> +  in which case PSTATE.ZA == 1.
-> +
-> +* If matrix data is present, the remainder of the record has a vl-dependent
-> +  size and layout.  Macros ZA_SIG_* are defined [1] to facilitate access to
-> +  them.
-> +
-> +* The matrix is stored as a series of horizontal vectors in the same format as
-> +  is used for SVE vectors.
-> +
-> +* If the ZA context is too big to fit in sigcontext.__reserved[], then extra
-> +  space is allocated on the stack, an extra_context record is written in
-> +  __reserved[] referencing this space.  za_context is then written in the
-> +  extra space.  Refer to [1] for further details about this mechanism.
-> +
-> +
-> +5.  Signal return
-> +-----------------
-> +
-> +When returning from a signal handler:
-> +
-> +* If there is no za_context record in the signal frame, or if the record is
-> +  present but contains no register data as desribed in the previous section,
-> +  then ZA is disabled.
-> +
-> +* If za_context is present in the signal frame and contains matrix data then
-> +  PSTATE.ZA is set to 1 and ZA is populated with the specified data.
-> +
-> +* The vector length cannot be changed via signal return.  If za_context.vl in
-> +  the signal frame does not match the current vector length, the signal return
-> +  attempt is treated as illegal, resulting in a forced SIGSEGV.
-> +
-> +
-> +6.  prctl extensions
-> +--------------------
-> +
-> +Some new prctl() calls are added to allow programs to manage the SVE vector
-
-Another SVE rather than SME?
-
-> +length:
-> +
-> +prctl(PR_SME_SET_VL, unsigned long arg)
-> +
-> +    Sets the vector length of the calling thread and related flags, where
-> +    arg == vl | flags.  Other threads of the calling process are unaffected.
-> +
-> +    vl is the desired vector length, where sve_vl_valid(vl) must be true.
-> +
-> +    flags:
-> +
-> +	PR_SME_VL_INHERIT
-> +
-> +	    Inherit the current vector length across execve().  Otherwise, the
-> +	    vector length is reset to the system default at execve().  (See
-> +	    Section 9.)
-> +
-> +	PR_SME_SET_VL_ONEXEC
-> +
-> +	    Defer the requested vector length change until the next execve()
-> +	    performed by this thread.
-> +
-> +	    The effect is equivalent to implicit exceution of the following
-> +	    call immediately after the next execve() (if any) by the thread:
-> +
-> +		prctl(PR_SME_SET_VL, arg & ~PR_SME_SET_VL_ONEXEC)
-> +
-> +	    This allows launching of a new program with a different vector
-> +	    length, while avoiding runtime side effects in the caller.
-> +
-> +	    Without PR_SME_SET_VL_ONEXEC, the requested change takes effect
-> +	    immediately.
-> +
-> +
-> +    Return value: a nonnegative on success, or a negative value on error:
-> +	EINVAL: SME not supported, invalid vector length requested, or
-> +	    invalid flags.
-> +
-> +
-> +    On success:
-> +
-> +    * Either the calling thread's vector length or the deferred vector length
-> +      to be applied at the next execve() by the thread (dependent on whether
-> +      PR_SME_SET_VL_ONEXEC is present in arg), is set to the largest value
-> +      supported by the system that is less than or equal to vl.  If vl ==
-> +      SVE_VL_MAX, the value set will be the largest value supported by the
-> +      system.
-> +
-> +    * Any previously outstanding deferred vector length change in the calling
-> +      thread is cancelled.
-> +
-> +    * The returned value describes the resulting configuration, encoded as for
-> +      PR_SME_GET_VL.  The vector length reported in this value is the new
-> +      current vector length for this thread if PR_SME_SET_VL_ONEXEC was not
-> +      present in arg; otherwise, the reported vector length is the deferred
-> +      vector length that will be applied at the next execve() by the calling
-> +      thread.
-> +
-> +    * Changing the vector length causes all of ZA, P0..P15, FFR and all bits of
-> +      Z0..Z31 except for Z0 bits [127:0] .. Z31 bits [127:0] to become
-> +      unspecified, including both streaming and non-streaming SVE state.
-> +      Calling PR_SME_SET_VL with vl equal to the thread's current vector
-> +      length, or calling PR_SME_SET_VL with the PR_SVE_SET_VL_ONEXEC flag,
-> +      does not constitute a change to the vector length for this purpose.
-> +
-> +    * Changing the vector length causes PSTATE.ZA and PSTATE.SM to be cleared.
-> +      Calling PR_SME_SET_VL with vl equal to the thread's current vector
-> +      length, or calling PR_SME_SET_VL with the PR_SVE_SET_VL_ONEXEC flag,
-> +      does not constitute a change to the vector length for this purpose.
-> +
-> +
-> +prctl(PR_SME_GET_VL)
-> +
-> +    Gets the vector length of the calling thread.
-> +
-> +    The following flag may be OR-ed into the result:
-> +
-> +	PR_SME_VL_INHERIT
-> +
-> +	    Vector length will be inherited across execve().
-> +
-> +    There is no way to determine whether there is an outstanding deferred
-> +    vector length change (which would only normally be the case between a
-> +    fork() or vfork() and the corresponding execve() in typical use).
-> +
-> +    To extract the vector length from the result, and it with
-> +    PR_SME_VL_LEN_MASK.
-> +
-> +    Return value: a nonnegative value on success, or a negative value on error:
-> +	EINVAL: SME not supported.
-> +
-> +
-> +7.  ptrace extensions
-> +---------------------
-> +
-> +* A new regset NT_ARM_SSVE is defined for access to streaming mode SVE
-> +  state via PTRACE_GETREGSET and  PTRACE_SETREGSET, this is documented in
-> +  sve.rst.
-> +
-> +* A new regset NT_ARM_ZA is defined for ZA state for access to ZA state via
-> +  PTRACE_GETREGSET and PTRACE_SETREGSET.
-> +
-> +  Refer to [2] for definitions.
-> +
-> +The regset data starts with struct user_za_header, containing:
-> +
-> +    size
-> +
-> +	Size of the complete regset, in bytes.
-> +	This depends on vl and possibly on other things in the future.
-> +
-> +	If a call to PTRACE_GETREGSET requests less data than the value of
-> +	size, the caller can allocate a larger buffer and retry in order to
-> +	read the complete regset.
-> +
-> +    max_size
-> +
-> +	Maximum size in bytes that the regset can grow to for the target
-> +	thread.  The regset won't grow bigger than this even if the target
-> +	thread changes its vector length etc.
-> +
-> +    vl
-> +
-> +	Target thread's current streaming vector length, in bytes.
-> +
-> +    max_vl
-> +
-> +	Maximum possible streaming vector length for the target thread.
-> +
-> +    flags
-> +
-> +	Zero or more of the following flags, which have the same
-> +	meaning and behaviour as the corresponding PR_SET_VL_* flags:
-> +
-> +	    SME_PT_VL_INHERIT
-> +
-> +	    SME_PT_VL_ONEXEC (SETREGSET only).
-> +
-> +* The effects of changing the vector length and/or flags are equivalent to
-> +  those documented for PR_SME_SET_VL.
-> +
-> +  The caller must make a further GETREGSET call if it needs to know what VL is
-> +  actually set by SETREGSET, unless is it known in advance that the requested
-> +  VL is supported.
-> +
-> +* The size and layout of the payload depends on the header fields.  The
-> +  SME_PT_ZA_*() macros are provided to facilitate access to the data.
-> +
-> +* In either case, for SETREGSET it is permissible to omit the payload, in which
-> +  case the vector length and flags are changed and PSTATE.ZA is set to 0
-> +  (along with any consequences of those changes).  If a payload is provided
-> +  then PSTATE.ZA will be set to 1.
-> +
-> +* For SETREGSET, if the requested VL is not supported, the effect will be the
-> +  same as if the payload were omitted, except that an EIO error is reported.
-> +  No attempt is made to translate the payload data to the correct layout
-> +  for the vector length actually set.  It is up to the caller to translate the
-> +  payload layout for the actual VL and retry.
-> +
-> +* The effect of writing a partial, incomplete payload is unspecified.
-> +
-> +
-> +8.  ELF coredump extensions
-> +---------------------------
-> +
-> +* NT_ARM_SSVE notes will be added to each coredump for
-> +  each thread of the dumped process.  The contents will be equivalent to the
-> +  data that would have been read if a PTRACE_GETREGSET of the corresponding
-> +  type were executed for each thread when the coredump was generated.
-> +
-> +* A NT_ARM_ZA note will be added to each coredump for each thread of the
-> +  dumped process.  The contents will be equivalent to the data that would have
-> +  been read if a PTRACE_GETREGSET of NT_ARM_ZA were executed for each thread
-> +  when the coredump was generated.
-> +
-> +
-> +9.  System runtime configuration
-> +--------------------------------
-> +
-> +* To mitigate the ABI impact of expansion of the signal frame, a policy
-> +  mechanism is provided for administrators, distro maintainers and developers
-> +  to set the default vector length for userspace processes:
-> +
-> +/proc/sys/abi/sme_default_vector_length
-> +
-> +    Writing the text representation of an integer to this file sets the system
-> +    default vector length to the specified value, unless the value is greater
-> +    than the maximum vector length supported by the system in which case the
-> +    default vector length is set to that maximum.
-> +
-> +    The result can be determined by reopening the file and reading its
-> +    contents.
-> +
-> +    At boot, the default vector length is initially set to 32 or the maximum
-> +    supported vector length, whichever is smaller and supported.  This
-> +    determines the initial vector length of the init process (PID 1).
-> +
-> +    Reading this file returns the current system default vector length.
-> +
-> +* At every execve() call, the new vector length of the new process is set to
-> +  the system default vector length, unless
-> +
-> +    * PR_SME_VL_INHERIT (or equivalently SME_PT_VL_INHERIT) is set for the
-> +      calling thread, or
-> +
-> +    * a deferred vector length change is pending, established via the
-> +      PR_SME_SET_VL_ONEXEC flag (or SME_PT_VL_ONEXEC).
-> +
-> +* Modifying the system default vector length does not affect the vector length
-> +  of any existing process or thread that does not make an execve() call.
-> +
-> +
-> +Appendix A.  SME programmer's model (informative)
-> +=================================================
-> +
-> +This section provides a minimal description of the additions made by SVE to the
-> +ARMv8-A programmer's model that are relevant to this document.
-> +
-> +Note: This section is for information only and not intended to be complete or
-> +to replace any architectural specification.
-> +
-> +A.1.  Registers
-> +---------------
-> +
-> +In A64 state, SME adds the following:
-> +
-> +* A new mode, streaming mode, in which a subset of the normal FPSIMD and SVE
-> +  features are available.  When supported EL0 software may enter and leave
-> +  streaming mode at any time.
-> +
-> +  For best system performance it is strongly encourage for software to enable
-> +  streaming mode only when it is actively being used.
-> +
-> +* A new vector length controlling the size of ZA and the Z registers when in
-> +  streaming mode, separately to the vector length used for SVE when not in
-> +  streaming mode.  There is no requirement that either the currently selected
-> +  vector length or the set of vector lengths supported for the two modes in
-> +  a given system have any relationship.  The streaming mode vector length
-> +  is referred to as SVL.
-> +
-> +* A new ZA matrix register.  This is a square matrix of SVLxSVL bits.  Most
-> +  operations on ZA require that streaming mode be enabled but ZA can be
-> +  enabled without streaming mode in order to load, save and retain data.
-> +
-> +  For best system performance it is strongly encourage for software to enable
-> +  ZA only when it is actively being used.
-> +
-> +* Two new 1 bit fields in PSTATE which may be controlled via the SMSTART and
-> +  SMSTOP instructions or by access to the SVCR system register:
-> +
-> +  * PSTATE.ZA, if this is 1 then the ZA matrix is accessible and has valid
-> +    data while if it is 0 then ZA can not be accessed.  When PSTATE.ZA is
-> +    changed from 0 to 1 all bits in ZA are cleared.
-> +
-> +  * PSTATE.SM, if this is 1 then the PE is in streaming mode.  When the value
-> +    of PSTATE.SM is changed then it is implementationd defined if the subset
-> +    of the floating point register bits valid in both modes may be retained.
-> +    Any other bits will be cleared.
-> +
-> +
-> +References
-> +==========
-> +
-> +[1] arch/arm64/include/uapi/asm/sigcontext.h
-> +    AArch64 Linux signal ABI definitions
-> +
-> +[2] arch/arm64/include/uapi/asm/ptrace.h
-> +    AArch64 Linux ptrace ABI definitions
-> +
-> +[3] Documentation/arm64/cpu-feature-registers.rst
-> +
-> +[4] ARM IHI0055C
-> +    http://infocenter.arm.com/help/topic/com.arm.doc.ihi0055c/IHI0055C_beta_aapcs64.pdf
-> +    http://infocenter.arm.com/help/topic/com.arm.doc.subset.swdev.abi/index.html
-> +    Procedure Call Standard for the ARM 64-bit Architecture (AArch64)
-> diff --git a/Documentation/arm64/sve.rst b/Documentation/arm64/sve.rst
-> index 03137154299e..574ad883b0f3 100644
-> --- a/Documentation/arm64/sve.rst
-> +++ b/Documentation/arm64/sve.rst
-> @@ -7,7 +7,9 @@ Author: Dave Martin <Dave.Martin@arm.com>
->  Date:   4 August 2017
->  
->  This document outlines briefly the interface provided to userspace by Linux in
-> -order to support use of the ARM Scalable Vector Extension (SVE).
-> +order to support use of the ARM Scalable Vector Extension (SVE), including
-> +interactions with Streaming SVE mode added by the Scalable Matrix Extension
-> +(SME).
->  
->  This is an outline of the most important features and issues only and not
->  intended to be exhaustive.
-> @@ -23,6 +25,9 @@ model features for SVE is included in Appendix A.
->  * SVE registers Z0..Z31, P0..P15 and FFR and the current vector length VL, are
->    tracked per-thread.
->  
-> +* In streaming mode FFR is not accessible, when these interfaces are used to
-> +  access streaming mode FFR is read and written as zero.
-> +
->  * The presence of SVE is reported to userspace via HWCAP_SVE in the aux vector
->    AT_HWCAP entry.  Presence of this flag implies the presence of the SVE
->    instructions and registers, and the Linux-specific system interfaces
-> @@ -53,10 +58,19 @@ model features for SVE is included in Appendix A.
->    which userspace can read using an MRS instruction.  See elf_hwcaps.txt and
->    cpu-feature-registers.txt for details.
->  
-> +* On hardware that supports the SME extensions, HWCAP2_SME will also be
-> +  reported in the AT_HWCAP2 aux vector entry.  Among other things SME adds
-> +  streaming mode which provides a subset of the SVE feature set using a
-> +  separate SME vector length and the same Z/V registers.  See sme.rst
-> +  for more details.
-> +
->  * Debuggers should restrict themselves to interacting with the target via the
->    NT_ARM_SVE regset.  The recommended way of detecting support for this regset
->    is to connect to a target process first and then attempt a
-> -  ptrace(PTRACE_GETREGSET, pid, NT_ARM_SVE, &iov).
-> +  ptrace(PTRACE_GETREGSET, pid, NT_ARM_SVE, &iov).  Note that when SME is
-> +  present and streaming SVE mode is in use the FPSIMD subset of registers
-> +  will be read via NT_ARM_SVE and NT_ARM_SVE writes will exit streaming mode
-> +  in the target.
->  
->  * Whenever SVE scalable register values (Zn, Pn, FFR) are exchanged in memory
->    between userspace and the kernel, the register value is encoded in memory in
-> @@ -126,6 +140,11 @@ the SVE instruction set architecture.
->    are only present in fpsimd_context.  For convenience, the content of V0..V31
->    is duplicated between sve_context and fpsimd_context.
->  
-> +* The record contains a flag field which includes a flag SVE_SIG_FLAG_SM which
-> +  if set indicates that the thread is in streaming mode and the vector length
-> +  and register data (if present) describe the streaming SVE data and vector
-> +  length.
-> +
->  * The signal frame record for SVE always contains basic metadata, in particular
->    the thread's vector length (in sve_context.vl).
->  
-> @@ -170,6 +189,11 @@ When returning from a signal handler:
->    the signal frame does not match the current vector length, the signal return
->    attempt is treated as illegal, resulting in a forced SIGSEGV.
->  
-> +* It is permitted to enter or leave streaming mode by setting or clearing
-> +  the SVE_SIG_FLAG_SM flag but applications should take care to ensure that
-> +  when doing so sve_context.vl and any register data are appropriate for the
-> +  vector length in the new mode.
-> +
->  
->  6.  prctl extensions
->  --------------------
-> @@ -265,8 +289,14 @@ prctl(PR_SVE_GET_VL)
->  7.  ptrace extensions
->  ---------------------
->  
-> -* A new regset NT_ARM_SVE is defined for use with PTRACE_GETREGSET and
-> -  PTRACE_SETREGSET.
-> +* New regsets NT_ARM_SVE and NT_ARM_SSVE are defined for use with
-> +  PTRACE_GETREGSET and PTRACE_SETREGSET. NT_ARM_SSVE describes the
-> +  streaming mode SVE registers and NT_ARM_SVE describes the
-> +  non-streaming mode SVE registers.
-> +
-> +  In this description a register set is referred to as being "live" when
-> +  the target is in the appropriate streaming or non-streaming mode and is
-> +  using data beyond the subset shared with the FPSIMD Vn registers.
->  
->    Refer to [2] for definitions.
->  
-> @@ -297,7 +327,7 @@ The regset data starts with struct user_sve_header, containing:
->  
->      flags
->  
-> -	either
-> +	at most one of
->  
->  	    SVE_PT_REGS_FPSIMD
->  
-> @@ -331,6 +361,10 @@ The regset data starts with struct user_sve_header, containing:
->  
->  	    SVE_PT_VL_ONEXEC (SETREGSET only).
->  
-> +	If neither FPSIMD nor SVE flags are provided then no register
-> +	payload is available, this is only possible when SME is implemented.
-> +
-> +
->  * The effects of changing the vector length and/or flags are equivalent to
->    those documented for PR_SVE_SET_VL.
->  
-> @@ -355,17 +389,25 @@ The regset data starts with struct user_sve_header, containing:
->    unspecified.  It is up to the caller to translate the payload layout
->    for the actual VL and retry.
->  
-> +* Where SME is implemented it is not possible to GETREGSET the register
-> +  state for normal SVE when in streaming mode, nor the streaming mode
-> +  register state when in normal mode, regardless of the implementation defined
-> +  behaviour of the hardware for sharing data between the two modes.
-> +
-> +* Any SETREGSET of NT_ARM_SVE will exit streaming mode if the target was in
-> +  streaming mode and any SETREGSET of NT_ARM_SSVE will enter streaming mode
-> +  if the target was not in streaming mode.
-> +
->  * The effect of writing a partial, incomplete payload is unspecified.
->  
->  
->  8.  ELF coredump extensions
->  ---------------------------
->  
-> -* A NT_ARM_SVE note will be added to each coredump for each thread of the
-> -  dumped process.  The contents will be equivalent to the data that would have
-> -  been read if a PTRACE_GETREGSET of NT_ARM_SVE were executed for each thread
-> -  when the coredump was generated.
-> -
-> +* NT_ARM_SVE and NT_ARM_SSVE notes will be added to each coredump for
-> +  each thread of the dumped process.  The contents will be equivalent to the
-> +  data that would have been read if a PTRACE_GETREGSET of the corresponding
-> +  type were executed for each thread when the coredump was generated.
->  
->  9.  System runtime configuration
->  --------------------------------
-
+DQoNCj4gT24gOCBPY3QgMjAyMSwgYXQgMTg6MDQsIE1hcmsgQnJvd24gPGJyb29uaWVAa2VybmVs
+Lm9yZz4gd3JvdGU6DQo+IA0KPiBPbiBGcmksIE9jdCAwOCwgMjAyMSBhdCAwNDo0NTo0NFBNICsw
+MDAwLCBBbGFuIEhheXdhcmQgd3JvdGU6DQo+Pj4gT24gOCBPY3QgMjAyMSwgYXQgMTY6MjgsIE1h
+cmsgQnJvd24gPGJyb29uaWVAa2VybmVsLm9yZz4gd3JvdGU6DQo+Pj4gT24gRnJpLCBPY3QgMDgs
+IDIwMjEgYXQgMDI6MTE6NDZQTSArMDAwMCwgQWxhbiBIYXl3YXJkIHdyb3RlOg0KPiANCj4+Pj4g
+Q2FuIE5UX0FSTV9TU1ZFIHJldHVybiBhIGZwc2ltZD8NCj4gDQo+Pj4gSXQncyBkb2N1bWVudGVk
+IHRoYXQgd2F5IGZvciBzaW1wbGljaXR5IGJ1dCBpbiB0aGUgY3VycmVudA0KPj4+IGltcGxlbWVu
+dGF0aW9uIGl0IHdvbid0IGV2ZXIgYWN0dWFsbHkgZG8gc28gaW4gcHJhY3RpY2UuICBUaGUNCj4+
+PiBvbmx5IGNhc2Ugd2hlcmUgSSBjb3VsZCBzZWUgdGhhdCBpdCBtaWdodCBoYXBwZW4gd291bGQg
+YmUgaWYgd2UNCj4+PiBjaGFuZ2UgdGhlIHN5c2NhbGxzIHRvIHN0YXkgaW4gc3RyZWFtaW5nIG1v
+ZGUgb3ZlciBzeXNjYWxsLCBpbg0KPj4+IHRoYXQgY2FzZSB3ZSBjb3VsZCBkbyBhcyB3ZSBkbyBm
+b3IgU1ZFIGFuZCBwcmVzZXJ2ZSBGUFNJTUQNCj4+PiByZWdpc3RlcnMgb25seS4gIEF0IHByZXNl
+bnQgd2UgZHJvcCBvdXQgb2Ygc3RyZWFtaW5nIG1vZGUgaWYgd2UNCj4+PiBnZXQgYSBzeXNjYWxs
+IHdpdGggaXQgZW5hYmxlZCBzbyBpdCdzIGEgbm9uLWlzc3VlLCBpZiBwZW9wbGUNCj4+PiBhZ3Jl
+ZSB0aGF0IHRoYXQncyB0aGUgcmlnaHQgdGhpbmcgZm9yIHRoZSBzeXNjYWxscyB0aGVuIHdlIHNo
+b3VsZA0KPj4+IHVwZGF0ZSB0aGUgZG9jdW1lbnRhdGlvbiB0byBzcGVjaWZ5IHRoaXMgc2luY2Ug
+b3RoZXJ3aXNlIHdlJ2xsDQo+Pj4gZG91YnRsZXNzIGNhdGNoIHNvbWVvbmUgYnkgc3VycHJpc2Ug
+aWYgd2UgZXZlciBtYW5hZ2UgdG8gc3RhcnQNCj4+PiBkb2luZyBpdCBpbiB0aGUgZnV0dXJlLg0K
+PiANCj4+IOKApi5vciBpdOKAmWxsIGVuZCB1cCBleGVjdXRpbmcgc29tZSBjb2RlIHRoYXQgd2Fz
+IHdyaXR0ZW4gdG8gY29wZSB3aXRoIGZwc2ltZCwgYnV0IGhhcyBuZXZlciBiZWVuDQo+PiBydW4u
+IE1pZ2h0IGJlIHdvcnRoIG1ha2luZyBpdCBleHBsaWNpdCBpbiB0aGUgZG9jdW1lbnRhdGlvbi4N
+Cj4gDQo+IEkgd2lsbCBpZi93aGVuIGl0IGdldHMgZml4ZWQgdGhhdCB3YXkuICBBY3R1YWxseSwg
+d2hpbGUgbG9va2luZw0KPiBhdCB0aGF0IGNvZGUgSSB3YXMgdGVtcHRlZCB0byByZW1vdmUgdGhl
+IHN1cHBvcnQgZm9yIHJldHVybmluZw0KPiBGUFNJTUQgb25seSByZWdpc3RlcnMgdmlhIE5UX0FS
+TV9TVkUgZW50aXJlbHkgYW5kIGp1c3QgYWx3YXlzDQo+IGNvbnZlcnQgdG8gU1ZFIGZvcm1hdCAt
+IEknbSBub3Qgc3VyZSB3aGF0IHRoZSB1c2UgY2FzZSB3YXMgdGhlcmU/DQo+IEl0J3Mgbm90IGEg
+cHJlc3NpbmcgdGhpbmcgYnV0IGl0IHNlZW1lZCBsaWtlIGl0IHdhcyBhIGJpdCBvZiBhbg0KPiBp
+bXBsZW1lbnRhdGlvbiBkZXRhaWwgdGhhdCB3ZSB3ZXJlIHJldmVhbGluZy4NCg0KDQpXaGF0IGFi
+b3V0IGluIHRoZSB3cml0ZSByZWdpc3RlcnMgY2FzZT8NCg0KV2l0aCB0aGUgZXhpc3RpbmcgY29k
+ZToNClJlYWQgU1ZFIHJlZ2lzdGVycyB3aXRoIHB0cmFjZS4gR2V0IEZQU0lNRC4gVXBkYXRlIEZQ
+U0lNRCB3aXRoIG5ldyB2YWx1ZXMuIFdyaXRlIGJhY2sgdG8gcHRyYWNlLg0KSW4gdGhhdCBzY2Vu
+YXJpbywgdGhlIGludGVybmFsIFNWRSBzdGF0ZXMgc3RheXMg4oCcaW5hY3RpdmXigJ0gaW4gdGhl
+IGtlcm5lbC4NCg0KSWYgcHRyYWNlIGFsd2F5cyByZXR1cm5lZCBhbiBTVkUgc3RydWN0dXJlLCB0
+aGVuIHdyaXRpbmcgYmFjayB3aXRoIHRoZSBzYW1lIHN0cnVjdHVyZSB3b3VsZCBjYXVzZSB0aGUN
+ClNWRSBzdGF0ZSB0byBiZWNvbWUgYWN0aXZlLiBJdOKAmXMgYSBzbWFsbCBkaWZmZXJlbmNlLCBi
+dXQgd2UgcmVhbGx5IGRvbuKAmXQgd2FudCB0aGUgZGVidWdnZXIgdG8gZWZmZWN0IHRoaW5ncy4N
+Cg0KWW91IGNvdWxkIHNvbHZlIHRoYXQgYnkgYWRkaW5nIGFuIFNWRV9TVEFURV9JTkFDVElWRSB0
+byB0aGUgaGVhZGVyIGZsYWdzLiBCdXQsIGVpdGhlciB3YXksIHRoZQ0KZGVidWdnZXIgd291bGQg
+dGhlbiBuZWVkIHRvIHN1cHBvcnQgdGhlIGV4aXN0aW5nIG1ldGhvZCBhbmQgdGhlIG5ldyBtZXRo
+b2QgKGJlY2F1c2UgdGhlIGRlYnVnZ2VyDQpoYXMgbm8gY29udHJvbCBvbiB3aGF0IE9TIHZlcnNp
+b24gaXTigJlzIHJ1bm5pbmcgb24pLg0KDQpJ4oCZZCByZWNvbW1lbmQgbGVhdmluZyBhcyBpcy4N
+Cg0KDQpBbGFuLg0KDQo=
