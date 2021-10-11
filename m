@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2551428DB4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 15:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F32428DC0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Oct 2021 15:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbhJKNWd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 09:22:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51652 "EHLO mail.kernel.org"
+        id S236891AbhJKN0K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 09:26:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53264 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231392AbhJKNWc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 09:22:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 06794603E9;
-        Mon, 11 Oct 2021 13:20:31 +0000 (UTC)
+        id S236878AbhJKN0A (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 Oct 2021 09:26:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C7DD60E8B;
+        Mon, 11 Oct 2021 13:23:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633958432;
-        bh=LBwIwOty85QDOC3THb1be6KrVEGV3fYy4H3zIBQBU5k=;
+        s=k20201202; t=1633958640;
+        bh=EijPaM9W0mPwUpENKtNwymqqsbdHgGtGwRe7gpMLQZ4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WJ2cHs1QRCeIJ2LGAvHTzYXBLr1ecLna04Cj6YsPJ1hWKrdhe7GQccic+Mw/1BNmp
-         9/6vqBIFPejBBCbyWb/KQd4q3zzOWhBL0Yg+U5iWViggVFrUNbdfUkuuOgNtvOpRYH
-         LtlTubMFLVOXg78CzQN2ZrVXBAkTXLHt2trPS1pDZs3ubJH+acA+ThmhSR5fC1F/ht
-         NlVtFoK54bPrkoP/fs+sUdfDmIVCYi7RCFE/SjNL193VofWH8Ea9qiAgD5ACQIIC/L
-         hR0NfQQT9R5vO+7Ws88tF1PzVWtReRPwWBzPwYZat+WjMB/0OK0J/y752CcdwYZKC7
-         aRHhn7orIBYxg==
-Date:   Mon, 11 Oct 2021 14:20:30 +0100
+        b=oM6k9c/csPucnurJrkStvKun3lcgd3+zxj1xlB6m3rS1+34OfS29lJBspH2nBd7qF
+         pAz/ttsqgvkugTpAlZE5Okeamp6dPh36DiswpUy1uLM/U6lxFKPNYY+5npIOOFolZa
+         8C6AI1WtZ5WtWU8g1Vwg5fD5mdKF85zm//SIPRNgoSi/qsZiMmzb478zSxlYjDKd50
+         3NRatgp53aL035bnjTVuAeWXxJCfpxzgxgKeyXT5Fp//9gldLidUZfg7lmJTSlHqS6
+         MAdt+1S/dQodoAHkVMZDMro4dvH8bcwE+/2srYYETs83s4z+CyWSUV1Ixgc3lz8O7G
+         VHUAKTC+TILGQ==
+Date:   Mon, 11 Oct 2021 14:23:57 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -34,55 +34,56 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Luis Machado <luis.machado@arm.com>,
         Salil Akerkar <Salil.Akerkar@arm.com>,
         Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH v1 12/38] arm64/sme: Provide ABI documentation for SME
-Message-ID: <YWQ6HpO2Wvl007ku@sirena.org.uk>
+Message-ID: <YWQ67ad5wfRgp9l7@sirena.org.uk>
 References: <20210930181144.10029-1-broonie@kernel.org>
  <20210930181144.10029-13-broonie@kernel.org>
- <20211011120507.00000c13@Huawei.com>
+ <20211011131730.GL2700@arm.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cXjaZWrSpNaeo2og"
+        protocol="application/pgp-signature"; boundary="e+dWKRrS7L0NT8W4"
 Content-Disposition: inline
-In-Reply-To: <20211011120507.00000c13@Huawei.com>
+In-Reply-To: <20211011131730.GL2700@arm.com>
 X-Cookie: Your ignorance cramps my conversation.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---cXjaZWrSpNaeo2og
+--e+dWKRrS7L0NT8W4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 11, 2021 at 12:05:07PM +0100, Jonathan Cameron wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+On Mon, Oct 11, 2021 at 02:17:30PM +0100, Szabolcs Nagy wrote:
 
-> > Signed-off-by: Mark Brown <broonie@kernel.org>
+> > +* PSTATE.SM and PSTATE.ZA, the streaming mode vector length and the ZA
+> > +  register state are tracked per thread.
 
-> A few more editorial bits to add to what Alan pointed out.
+> can you add a note that there is a new TPIDR2_EL0
+> per thread and on thread creation it's 0 (and i
+> guess unchanged on fork).
 
-I think I updated everything, thanks.  Please delete unneeded context
-=66rom mails when replying.  Doing this makes it much easier to find your
-reply in the message, helping ensure it won't be missed by people
-scrolling through the irrelevant quoted material.
+Sure.  It's actually reset to 0 on fork() - would that be a problem?
 
---cXjaZWrSpNaeo2og
+> at least this abi makes most sense to me.
+
+OK, thanks.
+
+--e+dWKRrS7L0NT8W4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFkOh0ACgkQJNaLcl1U
-h9A5dQf/XSX4FOdThios8/yo/cAdumDle0nKTbZgMz/jVLXUszLkigJl5TFI9BlW
-DhDjSxC4QoCflpXx0gPQbInZ41NWS2L46y0o9bUrs+j+YKAaGVkygMkazhFPT3v8
-4N58y+ELjeQEmqlwKnhg6iW/GRPZqYjF2Yf/n8UsDCbHIV6NqCJA+FybADYU2Vqo
-E2mFaRScZ8SVcmL0KVXdM9TGmi1CA/l4onjGDgTyu8dTADW9G+D89UooOu/mhEHk
-wujYTSvvNRpcYeAZ6NFUXcFsdOF6I8lDQ+qxEApye1i6CzLvkEh54rErYroWW/Dx
-KGCraFdZ0dVWvZoFoMO4fk5VA28nEA==
-=222A
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFkOuwACgkQJNaLcl1U
+h9BxqAf/d5GNqu04NDiHgeqYqUhItUF5yqFeSuZg+vOGYKIIyq9DETys3ZJVb/2+
+3gniHrj4ntOnQPBA3IHbxGnAH2oZ1y8b7UNBAoyV3oy+q44/N6Phvay0AJ+GKkld
+oLh4SYj0jetMOMLPiNB/6RO3H/pDYK0JxIztzDDAb2DvfU/ATOuTaj55HBf9bxED
+S2yVABPUpFOWsNJujg0684V4xx/WQyS/Atx0rpQeisiFOssGgqdr4Q+A1cxTxQJ6
+4L7HELBpLHRh+Jajtx4Ho9RXc9RDq+6NE33FoWyfJ6qRBbYxgBpO/8fdxr0CzjRZ
+zVgzHFlyfXjdGnmufJgjM/edzCjgiQ==
+=OQA0
 -----END PGP SIGNATURE-----
 
---cXjaZWrSpNaeo2og--
+--e+dWKRrS7L0NT8W4--
