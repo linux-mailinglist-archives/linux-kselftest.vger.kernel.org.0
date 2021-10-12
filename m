@@ -2,111 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BDE429BAE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 04:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A726429BB5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 05:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbhJLDAu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 23:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        id S231790AbhJLDDf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 23:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbhJLDAs (ORCPT
+        with ESMTP id S231742AbhJLDDd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 23:00:48 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F18BC061570
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Oct 2021 19:58:47 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id k7so61988834wrd.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Oct 2021 19:58:47 -0700 (PDT)
+        Mon, 11 Oct 2021 23:03:33 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01C4C061570;
+        Mon, 11 Oct 2021 20:01:31 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id t15so2676717pfl.13;
+        Mon, 11 Oct 2021 20:01:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4Ec/hb1Y/9LCVoUftmh0qiQK8eNZx2rEOUkHSa/obH8=;
-        b=dEijaRIgDhnCyjENpotMHu+8LX+4UZti7TOsXZisXk+ub5UMPjIQpB8y4lEDBKDOF6
-         61U3cA592zpYaWpJEvfZhzyhXbole5q9gxoY+DkERAltHN5FZUFfbn0gRV4dGUeWeNnx
-         2DQaBCfLRPu6X5AFfGvRN2PR7OA38QYnFAaQxGl6X1XE02ArPYR4uirLtSdYgi5sBYv8
-         X8wsMjPZyNsbPFftQ4UltEWaSn73BvhVWiyYDH4KzKdMD4W99EfPQOy59ChnwvDCZpoL
-         xBLRBT7UC00RMisE5jtWI2ws1FyYUeVpUxHFu6Ktjg+tSiddGy6UolPzV++Ac0F+aBB1
-         xMlQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AMCytzgSZ3FsdSOFb5Ppvpt7FDy4HICMnNT5RYUnNMY=;
+        b=ZZvCI+IWpcOzBSZFRoQ4p0Uh3753QA+4/hnULh2LKdY3+zrsOnKTHtHUVuBmEkcwKn
+         Bqho4lQWmwJfqma+V+v534dMUd9h5dvFhuyIgW4w5gvgGxA/doVG0TlGMC2Y8A0I+LkZ
+         LLdylk14M5dbHKRuNIEdSVjbo3HadhJZ0jfhS8XrP9oZiGZrpGx+zmAse9SpucwThh9/
+         x+55iuYsk2lXxwGz1NlhSxGdYdjCmRdiqBzAxHLy9cvHoe8lYccBWrecZK+ryjfZdE+n
+         eTYgvy0V1Iu5aNf6fIQ+526DMiF8fKp/0S5rzRRKiocNTp5g33JKLU/TjxJ/oMaTQuhZ
+         FWxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4Ec/hb1Y/9LCVoUftmh0qiQK8eNZx2rEOUkHSa/obH8=;
-        b=FCN5/MixZztAT9aHfETtLQyLicZFRrFkdK8Ry/QZOD76QAFW2X3fMoNc68cIQGNzSn
-         stvJK8SR9QafwoYuil/RX67wHRKhXeIVd8WvbQMtAt/EPhtxofxGcNtdVgU2olX4i8C6
-         f/bGVU5xp3xXMmZMJFu+/LKrto2FPN37URLRSH8qqd1RKQIDdiOmpLhZjItGPjKIxmdd
-         TnME7VHSLPAWGfQq5v7p2cTFJG7Xn81eRrKsxjYU+DwciOnw6LzPIpWxfEGuYDxGvowU
-         qfC14mKUHq/HIZjYAg9A45e65P78HhplZw/yVq2nQFlzkVXd9MON6coZz3wngcnFOMxt
-         9RPA==
-X-Gm-Message-State: AOAM532KFqAnA5RcKwXsdYwl0orUQlq/KrEr3pmu0IT/yujnsQoR7k1l
-        ev4LDr2JoF8aESvamShSXVyn9IdHv+iE3aAyxUSvZg==
-X-Google-Smtp-Source: ABdhPJyFQFwqcN2RSPHCu5qZPjvCTeSqTLHS4FBPAfWS26eg9QNYmX86ow8kwWCGOkNWVH0l1r8+OsqFDuisil7nxyU=
-X-Received: by 2002:a05:600c:284b:: with SMTP id r11mr2882582wmb.179.1634007526109;
- Mon, 11 Oct 2021 19:58:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AMCytzgSZ3FsdSOFb5Ppvpt7FDy4HICMnNT5RYUnNMY=;
+        b=ykbMFNZMwIulqH4K5CGlA3q0kSekM6YvP2/6mA/T8P69I/wZPI/awqzGUXgxRQ2c9D
+         FvJg6H3mVMN394VLCms0XUHFtvhs+SIbbaO+62nwsrdsbpZGaMmBQ1mat5eZzTED7O+A
+         fNpHXLG1aSsV4lM9cs4u+aDfwKdxC3OC5Lw1hmppvnELaaVptti7f/pzimEQb6cv3Nlk
+         DTOhd1gCoLlr3dTgTbs+owpG+68djOkNPWzzAhZMiktJaEKpibePAc7M0h/A5bxIKUaz
+         hWLfPaIaG6LqzriRrGlVO9U3wdCXb0tdoFVSQ70oDf6O/8HfLWHxJj7uupvud3yB61yd
+         ddyw==
+X-Gm-Message-State: AOAM532ibYL599Q+h7YU7v4cD8doOprKnaQrDTtwGmqb1+9n8uFOqn5g
+        SSGpY0o/ONf2FK3Hz27XbYI=
+X-Google-Smtp-Source: ABdhPJySfeA3NkPC4FfFwnhlWMrGmUc41lxkXJ2BoSb4GTmdEWlk9TDD8NGtVRczHibbvSWS6EWVpA==
+X-Received: by 2002:a05:6a00:ac6:b029:374:a33b:a74 with SMTP id c6-20020a056a000ac6b0290374a33b0a74mr29664983pfl.51.1634007691395;
+        Mon, 11 Oct 2021 20:01:31 -0700 (PDT)
+Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
+        by smtp.gmail.com with ESMTPSA id e15sm8739432pfc.134.2021.10.11.20.01.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Oct 2021 20:01:31 -0700 (PDT)
+From:   davidcomponentone@gmail.com
+To:     akpm@linux-foundation.org
+Cc:     shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Yang <davidcomponentone@gmail.com>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] Fix application of sizeof to pointer
+Date:   Tue, 12 Oct 2021 11:01:16 +0800
+Message-Id: <20211012030116.184027-1-davidcomponentone@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20211011215037.1629208-1-dlatypov@google.com>
-In-Reply-To: <20211011215037.1629208-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 12 Oct 2021 10:58:34 +0800
-Message-ID: <CABVgOSn_27uKpu7FEHUWfFNrhRmmwf+5aS_vbRfa5OZDYJwepA@mail.gmail.com>
-Subject: Re: [PATCH v8] kunit: tool: improve compatibility of kunit_parser
- with KTAP specification
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 5:50 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> From: Rae Moar <rmoar@google.com>
->
-> Update to kunit_parser to improve compatibility with KTAP
-> specification including arbitrarily nested tests. Patch accomplishes
-> three major changes:
->
-> - Use a general Test object to represent all tests rather than TestCase
-> and TestSuite objects. This allows for easier implementation of arbitrary
-> levels of nested tests and promotes the idea that both test suites and test
-> cases are tests.
->
-> - Print errors incrementally rather than all at once after the
-> parsing finishes to maximize information given to the user in the
-> case of the parser given invalid input and to increase the helpfulness
-> of the timestamps given during printing. Note that kunit.py parse does
-> not print incrementally yet. However, this fix brings us closer to
-> this feature.
->
-> - Increase compatibility for different formats of input. Arbitrary levels
-> of nested tests supported. Also, test cases and test suites are now
-> supported to be present on the same level of testing.
->
-> This patch now implements the draft KTAP specification here:
-> https://lore.kernel.org/linux-kselftest/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com/
-> We'll update the parser as the spec evolves.
->
-> This patch adjusts the kunit_tool_test.py file to check for
-> the correct outputs from the new parser and adds a new test to check
-> the parsing for a KTAP result log with correct format for multiple nested
-> subtests (test_is_test_passed-all_passed_nested.log).
->
-> This patch also alters the kunit_json.py file to allow for arbitrarily
-> nested tests.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
+From: David Yang <davidcomponentone@gmail.com>
 
-Thanks -- this fixes the KASAN issues for me.
+The coccinelle check report:
+"./tools/testing/selftests/vm/split_huge_page_test.c:344:36-42:
+ERROR: application of sizeof to pointer"
+Using the "strlen" to fix it.
 
-Cheers,
--- David
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
+---
+ tools/testing/selftests/vm/split_huge_page_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/testing/selftests/vm/split_huge_page_test.c
+index 1af16d2c2a0a..52497b7b9f1d 100644
+--- a/tools/testing/selftests/vm/split_huge_page_test.c
++++ b/tools/testing/selftests/vm/split_huge_page_test.c
+@@ -341,7 +341,7 @@ void split_file_backed_thp(void)
+ 	}
+ 
+ 	/* write something to the file, so a file-backed THP can be allocated */
+-	num_written = write(fd, tmpfs_loc, sizeof(tmpfs_loc));
++	num_written = write(fd, tmpfs_loc, strlen(tmpfs_loc) + 1);
+ 	close(fd);
+ 
+ 	if (num_written < 1) {
+-- 
+2.30.2
+
