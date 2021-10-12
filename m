@@ -2,107 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B01429EFF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 09:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E9B429FB6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 10:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234459AbhJLHyH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Oct 2021 03:54:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24233 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234413AbhJLHyG (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Oct 2021 03:54:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634025124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DawGZtwoY4tpG7sttmX7k/wQ7T3bzhJ2Z3tfnHYSP0M=;
-        b=LW2Vl66sAYVl6I709ZWr8LTim4cGB1USntli0VLkEBm7PzlbEDk5LuugsHHYz7yc4j7gm1
-        tcayZ4KXVnF5+A3hQ+QE8lZ0Bd+DXlCObeDYK0OvR2gfdvx8SGXEglYCWp5b0UVOVsguTK
-        RXjFH/5EqNXqXZfThcsJy9Ixl5gUsCI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-401-sczdr6Q8ODGw-l3VY02DGQ-1; Tue, 12 Oct 2021 03:51:37 -0400
-X-MC-Unique: sczdr6Q8ODGw-l3VY02DGQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C7BA419057A8;
-        Tue, 12 Oct 2021 07:51:34 +0000 (UTC)
-Received: from starship (unknown [10.35.206.50])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5FDAA60BE5;
-        Tue, 12 Oct 2021 07:51:08 +0000 (UTC)
-Message-ID: <8f4be85e44f5997e24d534423b9d9b4dbcaa5d84.camel@redhat.com>
-Subject: Re: [PATCH 07/14] KVM: x86: SVM: add warning for CVE-2021-3656
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, Bandan Das <bsd@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Wei Huang <wei.huang2@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jim Mattson <jmattson@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        id S234660AbhJLIZm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Oct 2021 04:25:42 -0400
+Received: from mail-eopbgr40042.outbound.protection.outlook.com ([40.107.4.42]:41014
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234501AbhJLIZi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 12 Oct 2021 04:25:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=giE24xpN2bO0piiAhrXQTA5jSsVwY/3bkgHMp/BBjzs=;
+ b=s8R50yFtCTipvo4KdQZG9cDOhtGDrfH7k3JLC8LVzo4UmxC5bPievq5FwpfagOJ8YLv2vdFXVt2xmbyEQ20/5+XZpkv+teTyTcS1STvoTHYsmSap8bZCQTHfdDva2oHmx4bExn0LgKcEctIMeKUQx7f8Y/YgHaUVMSEpjt6rxds=
+Received: from DU2PR04CA0198.eurprd04.prod.outlook.com (2603:10a6:10:28d::23)
+ by DBBPR08MB4742.eurprd08.prod.outlook.com (2603:10a6:10:f5::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.22; Tue, 12 Oct
+ 2021 08:23:33 +0000
+Received: from DB5EUR03FT059.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:28d:cafe::23) by DU2PR04CA0198.outlook.office365.com
+ (2603:10a6:10:28d::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.21 via Frontend
+ Transport; Tue, 12 Oct 2021 08:23:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; vger.kernel.org; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;vger.kernel.org; dmarc=pass action=none
+ header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DB5EUR03FT059.mail.protection.outlook.com (10.152.21.175) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4587.18 via Frontend Transport; Tue, 12 Oct 2021 08:23:33 +0000
+Received: ("Tessian outbound a8bfe25d7364:v103"); Tue, 12 Oct 2021 08:23:33 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 8e2827dcced20e87
+X-CR-MTA-TID: 64aa7808
+Received: from 6e8afa36b042.2
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id A8CEA2E7-397B-4F09-A938-7D6E44E93BC8.1;
+        Tue, 12 Oct 2021 08:23:27 +0000
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 6e8afa36b042.2
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Tue, 12 Oct 2021 08:23:27 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B6AFOnrUopePW4NTreWz9u5GTxC6L7E+5rLsiteV/KK1PY0XuK9TXF9+Okf5lQhJQtXUwE8sIYgC6NhGk1Va7gKNbLrRmwfe/niyZQb/EFDVwVEthB+XrW+BqhBA5umwV7fVw2SbkALaR4Z17X2XnDvWG947AKQKS4YRxvr5cMz/teYv1EuUk7/DFL6XBC6wcdcM874TvJcYSJTW8TxHAdw8IpXbTo39bXmezHDl0Mvznlz+qasX5O6TxH2T/x8mf8F6zPtLBpOqG7wwBNp8XeX0jp62ywhTtQ2cDfZScv4JFxp8vz9CF4mbzdwiTVj1vn4VvehkazLVpWh5bFKi2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=giE24xpN2bO0piiAhrXQTA5jSsVwY/3bkgHMp/BBjzs=;
+ b=WRlPNiJFiXOPUwiABCssOJhHEUvY+FeaK6yqNWFJRQPGKqhd9Kc6vJPsRsu3PRZ0v6G5MGUeLgoZzFMyINXneWZqdKrFtmQBSOr+J0Lg+afUFCac2TF3b7E9awsZAvBE+gwErD2V0Hf25+1ml0GeaurZ/xK5qOfo8URi/3nPsBf045133Z7ehYD1r5ujDOHX7M8GycxFcCeRQKw2tpI7HFUgT+YabVfJsanQfWt1Lbrw6vHSzPrVB/iccvm9f21wQcyjj0BYc0IjTlMpYk6EaMif77+5NqVgaFZDxXvujiLd8H+dAs/Anmp1Z6avQ3YsefD/t0AB+dw2v+H+lMmonw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=giE24xpN2bO0piiAhrXQTA5jSsVwY/3bkgHMp/BBjzs=;
+ b=s8R50yFtCTipvo4KdQZG9cDOhtGDrfH7k3JLC8LVzo4UmxC5bPievq5FwpfagOJ8YLv2vdFXVt2xmbyEQ20/5+XZpkv+teTyTcS1STvoTHYsmSap8bZCQTHfdDva2oHmx4bExn0LgKcEctIMeKUQx7f8Y/YgHaUVMSEpjt6rxds=
+Authentication-Results-Original: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by DB9PR08MB7129.eurprd08.prod.outlook.com (2603:10a6:10:2c7::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.19; Tue, 12 Oct
+ 2021 08:23:25 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::2900:7140:8ac4:6846]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::2900:7140:8ac4:6846%5]) with mapi id 15.20.4587.026; Tue, 12 Oct 2021
+ 08:23:24 +0000
+Date:   Tue, 12 Oct 2021 09:23:21 +0100
+From:   Szabolcs Nagy <szabolcs.nagy@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        Wanpeng Li <wanpengli@tencent.com>
-Date:   Tue, 12 Oct 2021 10:51:07 +0300
-In-Reply-To: <4c04106a-fd8e-fb54-799f-06331a3e65b9@intel.com>
-References: <20210914154825.104886-1-mlevitsk@redhat.com>
-         <20210914154825.104886-8-mlevitsk@redhat.com>
-         <4c04106a-fd8e-fb54-799f-06331a3e65b9@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        Richard Sandiford <Richard.Sandiford@arm.com>
+Subject: Re: [PATCH v1 12/38] arm64/sme: Provide ABI documentation for SME
+Message-ID: <20211012082321.GN2700@arm.com>
+References: <20210930181144.10029-1-broonie@kernel.org>
+ <20210930181144.10029-13-broonie@kernel.org>
+ <20211011131730.GL2700@arm.com>
+ <YWQ67ad5wfRgp9l7@sirena.org.uk>
+ <20211011141937.GM2700@arm.com>
+ <YWSaHaJOIbEigw4w@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YWSaHaJOIbEigw4w@sirena.org.uk>
+X-ClientProxiedBy: LO4P123CA0456.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1aa::11) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Received: from arm.com (217.140.106.52) by LO4P123CA0456.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:1aa::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.21 via Frontend Transport; Tue, 12 Oct 2021 08:23:23 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3d0893d1-8eb4-4e24-7d27-08d98d5994c2
+X-MS-TrafficTypeDiagnostic: DB9PR08MB7129:|DBBPR08MB4742:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DBBPR08MB474282D863DB4A07D94AA6C6EDB69@DBBPR08MB4742.eurprd08.prod.outlook.com>
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: Tfcp1fUW4eUlIxCnwPiL+RaMmVpy1TgAvzwzyua90hykp1A8M6BB2Y9qV4l/aG4Rhw7PRmDiD0YOHWr7sd1pbLjSKTUt2+/lbEtlAfFUfacdf5KOl8vxH46Q3Shk5xEiB/xz+LadbOH45Mc1m3aVKbdnXtfvYtvAVIHYuH2f4WXl6U2NUSPFVVdWG2qwNHnM/WPnIctOmu0MR1KZYnpsHmzK3/JkuGouz5mDzhayUyZgxSBqFX70J6pxAC5mCVZYGBYYPE7gJPB0R5JnU3xrP1CJ6YuQkLNXA85MS6bmq+Ck6MIiK8ncMjVKKXAmVYy2ehuY+5DhfRyB2cDezMijmtmJOWlack9BSHU2z/HNO7ykVH+oXKC1foKohXhoRGmuaB4TlDIoeAc9Wt5WXIz2atqoeUW+BTy1HMDgmGMTw6E90fP3EtJx50YoZUwMG/O8VlyLq0sjLqx8Mo8UwCfV+e4eIp07Z3P7aXcjuRFEnnpzNnt6yTxpbBeh6vXtIvKivCUrTwegSkeWzq5N8cfOrn2RTpqFv5uvXbSE4FcdS//PVuIAos2eb/c0t73/XkOTExTrZaoc5fBkcEcnx843BmMDGLtL80bC0cmjVRfkCIa8RkBD5ESbG6gw3jPpj7eQ8ttRq914iFdEmX0+FGTRV6iUORXS3jUJdn3OUHeEMkx2GR+idjOORQE9Eo0vzHN0pixC9A142rgzJDgXu+Ys8w==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8886007)(54906003)(2616005)(38100700002)(38350700002)(66946007)(956004)(44832011)(55016002)(5660300002)(66556008)(66476007)(33656002)(316002)(6916009)(26005)(2906002)(508600001)(8936002)(186003)(52116002)(36756003)(4326008)(1076003)(83380400001)(8676002)(86362001)(7696005);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB7129
+Original-Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT059.eop-EUR03.prod.protection.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 8120af5a-c490-462d-b249-08d98d598ede
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8G8aLxbHSyz/R0NargnpQichZctqb5QEwXaUrPCIcMzqEiO4FKYZllNz4Ptv36p/Yw8HSPQBa/CgfeyS0xDDEemlMo1+7+cI9GejkfjtmVFSDvDq+gbjLXkBGyf2TqenWaJQfFjHiR+awjHg+rkllcjL9dgHxEU0pvi7KfFO8lPxQUdSPl0YRZ7Xxy/1eIfK1SPPVKL7xaFUw8EkGlamFbZBOr4zPLMDGEpUElZyMYIDZgUoSZerZj6KS0CkwVan8XdTUIqUfnxxW3AGDdpJoJwAet7zLSfjva3dth0HbciWXSfH+YVIjoBoeqEvooFuYVrfgFIpUSQJBse2eO37beL4UgDJbBf7Qv0M8tJqq5LCeRgB0tVRhUfYVdu35ZJ1Ezvy0UHWOtu/65zaK3R6O/LqdsFTTu24u07qT7whw5CiXqorzEdKUUvxLspupgGuMsa692VK7fgcxUv4RU21TuMXbXe38asqBi16GmSsyrT4c633Q6N7k0ZCDD5EFMpY5egTjT/EfJDyy9G6cOa+fIKEnXVFJJK6Epz/LUikmc1MbAusrs+MqPI1G3+MHF/U+ZMF30GtkPjPZatUBJKCMgpaqUqJNrDoV4omebpIwy6VwPgPOfSCoa3cklNInQQgajO1SfZ6tEZpqfUdhW85Y8vhjpQXnuBjiMIUsmJLOzpkkrljHnu0u+asoKW3NsrlRCOMoW+/Px4DRpCKM1pSfw==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(86362001)(33656002)(956004)(83380400001)(44832011)(1076003)(8886007)(7696005)(6862004)(2616005)(8936002)(5660300002)(316002)(26005)(54906003)(2906002)(82310400003)(81166007)(186003)(36860700001)(55016002)(8676002)(508600001)(356005)(4326008)(336012)(47076005)(70206006)(36756003)(70586007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2021 08:23:33.6940
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d0893d1-8eb4-4e24-7d27-08d98d5994c2
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR03FT059.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB4742
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2021-10-12 at 01:30 +0800, Xiaoyao Li wrote:
-> On 9/14/2021 11:48 PM, Maxim Levitsky wrote:
-> > Just in case, add a warning ensuring that on guest entry,
-> > either both VMLOAD and VMSAVE intercept is enabled or
-> > vVMLOAD/VMSAVE is enabled.
-> > 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >   arch/x86/kvm/svm/svm.c | 6 ++++++
-> >   1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index 861ac9f74331..deeebd05f682 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -3784,6 +3784,12 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
-> >   
-> >   	WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
-> >   
-> > +	/* Check that CVE-2021-3656 can't happen again */
-> > +	if (!svm_is_intercept(svm, INTERCEPT_VMSAVE) ||
-> > +	    !svm_is_intercept(svm, INTERCEPT_VMSAVE))
+The 10/11/2021 21:10, Mark Brown wrote:
+> On Mon, Oct 11, 2021 at 03:19:37PM +0100, Szabolcs Nagy wrote:
 > 
-> either one needs to be INTERCEPT_VMLOAD, right?
-
-Oops! Of course.
-
-Best regards,
-	Maxim Levitsky
+> > if fork resets tpidr2 then returning to a stack frame
+> > that set tpidr2 could cause clobbered za state.
+> > (userspace can fix this up, but if we want this case
+> > to work then it's better to fix it on the kernel side)
 > 
-> > +		WARN_ON(!(svm->vmcb->control.virt_ext &
-> > +			  VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK));
-> > +
-> >   	sync_lapic_to_cr8(vcpu);
-> >   
-> >   	if (unlikely(svm->asid != svm->vmcb->control.asid)) {
-> > 
+> OK, that makes sense.  I've changed the code and the kselftest so that
+> TPIDR2 is preserved on thread creation.
 
+does thread creation have to work the same way as fork?
+
+(in a pthread_create child we want tpidr2 to be 0,
+since it represents thread specific data. in a fork
+child we want to preserve tpidr2 to mirror the
+state of the parent as much as possible)
+
+for sme pcs to work, the libc has to be updated anyway,
+so we can change the clone child to set tpidr2. however
+that's not atomic wrt thread creation. i don't think we
+aim to support async-signal-safe za usage in the pcs so
+this is not a problem, but if the kernel did the work
+then the situation would be clearer in userspace.
+
+i'm not sure when to do tpidr2=0 exactly, but something
+like CLONE_SETTLS is set or child runs on a new stack
+would work for me. if that's too ugly then preserving
+tpidr2 in the child is fine.
 
