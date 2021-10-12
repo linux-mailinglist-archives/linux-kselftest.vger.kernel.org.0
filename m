@@ -2,213 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C176842A2FD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 13:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7ED542A4EA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 14:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232791AbhJLLUL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Oct 2021 07:20:11 -0400
-Received: from verein.lst.de ([213.95.11.211]:40992 "EHLO verein.lst.de"
+        id S236553AbhJLMyO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Oct 2021 08:54:14 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:53064 "EHLO mx1.riseup.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232665AbhJLLUK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Oct 2021 07:20:10 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 5B16267373; Tue, 12 Oct 2021 13:18:06 +0200 (CEST)
-Date:   Tue, 12 Oct 2021 13:18:06 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        id S236480AbhJLMyN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 12 Oct 2021 08:54:13 -0400
+X-Greylist: delayed 543 seconds by postgrey-1.27 at vger.kernel.org; Tue, 12 Oct 2021 08:54:12 EDT
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4HTFgs2pYHzF5dl;
+        Tue, 12 Oct 2021 05:43:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1634042585; bh=4w6t5fBBfKE9+SDNGm5cejSYucdNYt5oljmtArLdZnE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iXI/1wYwXruF9xaJkGlL0KGZ5ns7WrBDxHKX/rl4WADVYEEX3uk8yS0LkaZBzBZkp
+         LKX/fDtnitFT3BJAvQz0nJ4sjmopFuE0yAbSBLyR2G/jFVR4feMwjLn2LYEep9qidX
+         1jgcvAATcD4sjg7GRIP9sjqLGnb5jWlw0CsLQPcQ=
+X-Riseup-User-ID: 0BC07B29D6927D1FBB6E95CCA9804A5792989B25CA201C700A167EBA105A55C6
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4HTFgn4rf1z1yWH;
+        Tue, 12 Oct 2021 05:43:01 -0700 (PDT)
+Message-ID: <98332725-14eb-a268-8086-d4ffd14b7c67@riseup.net>
+Date:   Tue, 12 Oct 2021 09:42:58 -0300
+MIME-Version: 1.0
+Subject: Re: [PATCH v6 0/1] lib: Convert UUID runtime test to KUnit
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-kernel@vger.kernel.org,
         Brendan Higgins <brendanhiggins@google.com>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
         nfraprado@collabora.com, leandro.ribeiro@collabora.com,
         lucmaga@gmail.com, David Gow <davidgow@google.com>,
         Daniel Latypov <dlatypov@google.com>
-Subject: Re: [PATCH v6 0/1] lib: Convert UUID runtime test to KUnit
-Message-ID: <20211012111806.GA2537@lst.de>
 References: <20211006001345.73898-1-andrealmeid@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ <20211012111806.GA2537@lst.de>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeida@riseup.net>
+In-Reply-To: <20211012111806.GA2537@lst.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211006001345.73898-1-andrealmeid@collabora.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It seems I only received the 0/1 but never the actual patch?
+Hi Christoph,
 
-On Tue, Oct 05, 2021 at 09:13:44PM -0300, André Almeida wrote:
-> Hi,
+Ã€s 08:18 de 12/10/21, Christoph Hellwig escreveu:
+> It seems I only received the 0/1 but never the actual patch?
 > 
-> This patch converts existing UUID runtime test to use KUnit framework.
-> 
-> Below, there's a comparison between the old output format and the new
-> one. Keep in mind that even if KUnit seems very verbose, this is the
-> corner case where _every_ test has failed.
-> 
-> * This is how the current output looks like in success:
-> 
->   test_uuid: all 18 tests passed
-> 
-> * And when it fails:
-> 
->   test_uuid: conversion test #1 failed on LE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: cmp test #2 failed on LE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: cmp test #2 actual data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: conversion test #3 failed on BE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: cmp test #4 failed on BE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: cmp test #4 actual data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
->   test_uuid: conversion test #5 failed on LE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: cmp test #6 failed on LE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: cmp test #6 actual data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: conversion test #7 failed on BE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: cmp test #8 failed on BE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: cmp test #8 actual data: '64b4371c-77c1-48f9-8221-29f054fc023b'
->   test_uuid: conversion test #9 failed on LE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: cmp test #10 failed on LE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: cmp test #10 actual data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: conversion test #11 failed on BE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: cmp test #12 failed on BE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: cmp test #12 actual data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
->   test_uuid: negative test #13 passed on wrong LE data: 'c33f4995-3701-450e-9fbf206a2e98e576 '
->   test_uuid: negative test #14 passed on wrong BE data: 'c33f4995-3701-450e-9fbf206a2e98e576 '
->   test_uuid: negative test #15 passed on wrong LE data: '64b4371c-77c1-48f9-8221-29f054XX023b'
->   test_uuid: negative test #16 passed on wrong BE data: '64b4371c-77c1-48f9-8221-29f054XX023b'
->   test_uuid: negative test #17 passed on wrong LE data: '0cb4ddff-a545-4401-9d06-688af53e'
->   test_uuid: negative test #18 passed on wrong BE data: '0cb4ddff-a545-4401-9d06-688af53e'
->   test_uuid: failed 18 out of 18 tests
-> 
-> 
-> * Now, here's how it looks like with KUnit:
-> 
->   ======== [PASSED] uuid ========
->   [PASSED] uuid_correct_be
->   [PASSED] uuid_correct_le
->   [PASSED] uuid_wrong_be
->   [PASSED] uuid_wrong_le
-> 
-> * And if every test fail with KUnit:
-> 
->   ======== [FAILED] uuid ========
->   [FAILED] uuid_correct_be
->       # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
->       Expected uuid_parse(data->uuid, &be) == 1, but
->           uuid_parse(data->uuid, &be) == 0
->   
->   failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
->       # uuid_correct_be: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
->       # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
->       Expected uuid_parse(data->uuid, &be) == 1, but
->           uuid_parse(data->uuid, &be) == 0
->   
->   failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
->       # uuid_correct_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
->       # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
->       Expected uuid_parse(data->uuid, &be) == 1, but
->           uuid_parse(data->uuid, &be) == 0
->   
->   failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
->       # uuid_correct_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
->       not ok 1 - uuid_correct_be
->   
->   [FAILED] uuid_correct_le
->       # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
->       Expected guid_parse(data->uuid, &le) == 1, but
->           guid_parse(data->uuid, &le) == 0
->   
->   failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
->       # uuid_correct_le: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
->       # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
->       Expected guid_parse(data->uuid, &le) == 1, but
->           guid_parse(data->uuid, &le) == 0
->   
->   failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
->       # uuid_correct_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
->       # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
->       Expected guid_parse(data->uuid, &le) == 1, but
->           guid_parse(data->uuid, &le) == 0
->   
->   failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
->       # uuid_correct_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
->       not ok 2 - uuid_correct_le
->   
->   [FAILED] uuid_wrong_be
->       # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
->       Expected uuid_parse(*data, &be) == 0, but
->           uuid_parse(*data, &be) == -22
->   
->   parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
->       # uuid_wrong_be: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
->       # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
->       Expected uuid_parse(*data, &be) == 0, but
->           uuid_parse(*data, &be) == -22
->   
->   parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
->       # uuid_wrong_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
->       # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
->       Expected uuid_parse(*data, &be) == 0, but
->           uuid_parse(*data, &be) == -22
->   
->   parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
->       # uuid_wrong_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
->       not ok 3 - uuid_wrong_be
->   
->   [FAILED] uuid_wrong_le
->       # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
->       Expected guid_parse(*data, &le) == 0, but
->           guid_parse(*data, &le) == -22
->   
->   parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
->       # uuid_wrong_le: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
->       # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
->       Expected guid_parse(*data, &le) == 0, but
->           guid_parse(*data, &le) == -22
->   
->   parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
->       # uuid_wrong_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
->       # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
->       Expected guid_parse(*data, &le) == 0, but
->           guid_parse(*data, &le) == -22
->   
->   parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
->       # uuid_wrong_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
->       not ok 4 - uuid_wrong_le
-> 
-> Changes from v5:
->  - Add reviewed-by Brendan
->  - Rebased on top of 5.15-rc4
-> 
-> Changes from v4:
->  - Add reviewed-by
-> v4: https://lore.kernel.org/lkml/20210621133148.9226-1-andrealmeid@collabora.com/
-> 
-> Changes from v3:
->  - Drop unnecessary casts and braces.
->  - Simplify Kconfig entry
-> v3: https://lore.kernel.org/lkml/20210610163959.71634-1-andrealmeid@collabora.com/
-> 
-> Changes from v2:
->  - Clarify in commit message the new test cases setup
-> v2: https://lore.kernel.org/lkml/20210609233730.164082-1-andrealmeid@collabora.com/
-> 
-> Changes from v1:
->  - Test suite name: uuid_test -> uuid
->  - Config name: TEST_UUID -> UUID_KUNIT_TEST
->  - Config entry in the Kconfig file left where it is
->  - Converted tests to use _MSG variant
-> v1: https://lore.kernel.org/lkml/20210605215215.171165-1-andrealmeid@collabora.com/
-> 
-> André Almeida (1):
->   lib: Convert UUID runtime test to KUnit
-> 
->  lib/Kconfig.debug |   8 ++-
->  lib/Makefile      |   2 +-
->  lib/test_uuid.c   | 137 +++++++++++++++++++---------------------------
->  3 files changed, 64 insertions(+), 83 deletions(-)
-> 
-> -- 
-> 2.33.0
----end quoted text---
+
+According to lore, the patch was sent in your way:
+https://lore.kernel.org/lkml/20211006001345.73898-2-andrealmeid@collabora.com/
+
+But I can do a resend anyways if you want.
