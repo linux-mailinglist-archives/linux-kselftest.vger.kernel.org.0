@@ -2,135 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76738429A5E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 02:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE11429A60
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 02:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbhJLAXQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 20:23:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23610 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234330AbhJLAXP (ORCPT
+        id S233915AbhJLAXv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 20:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231886AbhJLAXv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 20:23:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1633998074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XpsLnH9NGEB0jCvrlBpGabDndtUY8/3VwXWgLo0MtD0=;
-        b=jJshqgaVmc4Vbe/ytuRVLwXTQtDtyaejc23GXSOF+iKuiYxYDL74Mizwg6VDnyflZqmI6B
-        D/mX75Koykd1BbkA8mq+1omdpDGcifupVrI0kCisZTt8deWyN+VbrGWls85gmoap1DqQzu
-        vl79GmUFVoZbPvH0Vq5jwgCHkAOupDc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-95-00PJPiFrMTyzNCMr5bA9IA-1; Mon, 11 Oct 2021 20:21:08 -0400
-X-MC-Unique: 00PJPiFrMTyzNCMr5bA9IA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8C2DF657;
-        Tue, 12 Oct 2021 00:21:04 +0000 (UTC)
-Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 496F757CA1;
-        Tue, 12 Oct 2021 00:20:51 +0000 (UTC)
-Date:   Tue, 12 Oct 2021 08:20:46 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
-        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
-        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
-        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 09/12] sysfs: fix deadlock race with module removal
-Message-ID: <YWTU3kTlJKONyFjZ@T590>
-References: <20210927163805.808907-1-mcgrof@kernel.org>
- <20210927163805.808907-10-mcgrof@kernel.org>
- <YVwZwh7qDKfSM59h@T590>
- <YWSr2trabEJflzlj@bombadil.infradead.org>
+        Mon, 11 Oct 2021 20:23:51 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C607C061570
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Oct 2021 17:21:50 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id x130so7146542pfd.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Oct 2021 17:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=n459MQOlWwd6ptzNZBJzvaoErNGrU6E1S82qnsrtuLg=;
+        b=Q8ahDM2cS8ZsSkgGOs8wn39AcY2HNyWksVxrM/UkiiMS+yzKKVYPKksTHvqam8QNCR
+         2H1kE+SBXF9XUPDBTKDs1K7oSZqoK7I2IawyOb7FOgwkCPDX360v/mmuz5ak1Wbtta9A
+         N1M31XGdDVw6z7dN9N3IuIgPQDDbhqewOOqZc3xjDkH1RmF60P+K0qg8z4wdvt3II+xC
+         YNR3ONvv6Br16Kp25cDzfcuRZOL1FHMv6EI5XmQLH2ZQWeVEgT7PJmCj9Z2Qh8h7DlME
+         lAYEbUxYzso4t14GwetkL7h0t8H2vbI7jwxR7ko2UOVjUfmMjSf4JP4M5R6wQhUYrtIv
+         z/bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=n459MQOlWwd6ptzNZBJzvaoErNGrU6E1S82qnsrtuLg=;
+        b=XLob8LfNG8a4FZNIgnUq/d8tYXDEgVRXWTGyBwxkVRefV64mX7qwOTgbyTXDzIUYom
+         fFhMqc8mUXO678WkePHLzO72iNo31GZfR8zMO7EixabXzYiQa7fRp9DCGmB8nTcD3m/i
+         trmPCV23useQHL6vrxMRWgY6m1oH7/1BfSsOU0sJ9FSbU0GwqIBrBm7593VGOlm22c4L
+         gkYaGnySjKFU3ehEiO8VCEposSJzR5k5cV+x9jbHbzEmaIxpVFixg9r20g/N1pCybs32
+         h8UEEBtxD+nSP2ermdGU5DQRr2DOOs8YOsphmObOrstQ4yVyopZyKZPMwWFjkaO+5+SE
+         TvAQ==
+X-Gm-Message-State: AOAM533szDXfYCsYHDaXzyWeeG950nNBactgzh6c1FJbzstBKPbB558I
+        IahFCYa2sMYu8X4yUQ3MHelMDQ==
+X-Google-Smtp-Source: ABdhPJy2L2VgOs2YW1MTifaPx+BYcn3AzPzFFDo67xDEIdnNEoumVjuITkFIccRaC0dy1uuNFPxIjw==
+X-Received: by 2002:aa7:94a8:0:b0:44c:f3e0:81fb with SMTP id a8-20020aa794a8000000b0044cf3e081fbmr16029819pfl.6.1633998109653;
+        Mon, 11 Oct 2021 17:21:49 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x35sm10054611pfh.52.2021.10.11.17.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Oct 2021 17:21:49 -0700 (PDT)
+Date:   Tue, 12 Oct 2021 00:21:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, Bandan Das <bsd@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
+        Wei Huang <wei.huang2@amd.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Jim Mattson <jmattson@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>
+Subject: Re: [PATCH 07/14] KVM: x86: SVM: add warning for CVE-2021-3656
+Message-ID: <YWTVGaX4V1eR6k0k@google.com>
+References: <20210914154825.104886-1-mlevitsk@redhat.com>
+ <20210914154825.104886-8-mlevitsk@redhat.com>
+ <f0c0e659-23a8-59ab-edf8-5b380d723493@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YWSr2trabEJflzlj@bombadil.infradead.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <f0c0e659-23a8-59ab-edf8-5b380d723493@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 02:25:46PM -0700, Luis Chamberlain wrote:
-> On Tue, Oct 05, 2021 at 05:24:18PM +0800, Ming Lei wrote:
-> > On Mon, Sep 27, 2021 at 09:38:02AM -0700, Luis Chamberlain wrote:
-> > > When driver sysfs attributes use a lock also used on module removal we
-> > > can race to deadlock. This happens when for instance a sysfs file on
-> > > a driver is used, then at the same time we have module removal call
-> > > trigger. The module removal call code holds a lock, and then the
-> > > driver's sysfs file entry waits for the same lock. While holding the
-> > > lock the module removal tries to remove the sysfs entries, but these
-> > > cannot be removed yet as one is waiting for a lock. This won't complete
-> > > as the lock is already held. Likewise module removal cannot complete,
-> > > and so we deadlock.
-> > > 
-> > > This can now be easily reproducible with our sysfs selftest as follows:
-> > > 
-> > > ./tools/testing/selftests/sysfs/sysfs.sh -t 0027
-> > > 
-> > > This uses a local driver lock. Test 0028 can also be used, that uses
-> > > the rtnl_lock():
-> > > 
-> > > ./tools/testing/selftests/sysfs/sysfs.sh -t 0028
-> > > 
-> > > To fix this we extend the struct kernfs_node with a module reference
-> > > and use the try_module_get() after kernfs_get_active() is called. As
-> > > documented in the prior patch, we now know that once kernfs_get_active()
-> > > is called the module is implicitly guarded to exist and cannot be removed.
-> > > This is because the module is the one in charge of removing the same
-> > > sysfs file it created, and removal of sysfs files on module exit will wait
-> > > until they don't have any active references. By using a try_module_get()
-> > > after kernfs_get_active() we yield to let module removal trump calls to
-> > > process a sysfs operation, while also preventing module removal if a sysfs
-> > > operation is in already progress. This prevents the deadlock.
-> > > 
-> > > This deadlock was first reported with the zram driver, however the live
+On Thu, Sep 23, 2021, Paolo Bonzini wrote:
+> On 14/09/21 17:48, Maxim Levitsky wrote:
+> > Just in case, add a warning ensuring that on guest entry,
+> > either both VMLOAD and VMSAVE intercept is enabled or
+> > vVMLOAD/VMSAVE is enabled.
 > > 
-> > Looks not see the lock pattern you mentioned in zram driver, can you
-> > share the related zram code?
-> 
-> I recommend to not look at the zram driver, instead look at the
-> test_sysfs driver as that abstracts the issue more clearly and uses
-
-Looks test_sysfs isn't in linus tree, where can I find it? Also please
-update your commit log about this wrong info if it can't be applied on
-zram.
-
-> two different locks as an example. The point is that if on module
-> removal *any* lock is used which is *also* used on the sysfs file
-> created by the module, you can deadlock.
-> 
-> > > And this can lead to this condition:
-> > > 
-> > > CPU A                              CPU B
-> > >                                    foo_store()
-> > > foo_exit()
-> > >   mutex_lock(&foo)
-> > >                                    mutex_lock(&foo)
-> > >    del_gendisk(some_struct->disk);
-> > >      device_del()
-> > >        device_remove_groups()
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >   arch/x86/kvm/svm/svm.c | 6 ++++++
+> >   1 file changed, 6 insertions(+)
 > > 
-> > I guess the deadlock exists if foo_exit() is called anywhere. If yes,
-> > look the issue may not be related with removing module directly, right?
+> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > index 861ac9f74331..deeebd05f682 100644
+> > --- a/arch/x86/kvm/svm/svm.c
+> > +++ b/arch/x86/kvm/svm/svm.c
+> > @@ -3784,6 +3784,12 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
+> >   	WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
+> > +	/* Check that CVE-2021-3656 can't happen again */
+> > +	if (!svm_is_intercept(svm, INTERCEPT_VMSAVE) ||
+> > +	    !svm_is_intercept(svm, INTERCEPT_VMSAVE))
+> > +		WARN_ON(!(svm->vmcb->control.virt_ext &
+> > +			  VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK));
+> > +
+> >   	sync_lapic_to_cr8(vcpu);
+> >   	if (unlikely(svm->asid != svm->vmcb->control.asid)) {
+> > 
 > 
-> No, the reason this can deadlock is that the module exit routine will
-> patiently wait for the sysfs / kernfs files to be stop being used,
+> While it's nice to be "proactive", this does adds some extra work. Maybe it
+> should be under CONFIG_DEBUG_KERNEL.  It could be useful to make it into its
+> own function so we can add similar intercept invariants in the same place.
 
-Can you share the code which waits for the sysfs / kernfs files to be
-stop being used? And why does it make a difference in case of being
-called from module_exit()?
+I don't know that DEBUG_KERNEL will guard much, DEBUG_KERNEL=y is very common,
+e.g. it's on by default in the x86 defconfigs.  I too agree it's nice to be
+proactive, but this isn't that different than say failing to intercept CR3 loads
+when shadow paging is enabled.
 
-
-
-Thanks,
-Ming
-
+If we go down the path of effectively auditing KVM invariants, I'd rather we
+commit fully and (a) add a dedicated Kconfig that is highly unlikely to be turned
+on by accident and (b) audit a large number of invariants.
