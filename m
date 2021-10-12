@@ -2,94 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A726429BB5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 05:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9121E429CB0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 06:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbhJLDDf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 23:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
+        id S231796AbhJLEk4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Oct 2021 00:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbhJLDDd (ORCPT
+        with ESMTP id S229733AbhJLEkz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 23:03:33 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01C4C061570;
-        Mon, 11 Oct 2021 20:01:31 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id t15so2676717pfl.13;
-        Mon, 11 Oct 2021 20:01:31 -0700 (PDT)
+        Tue, 12 Oct 2021 00:40:55 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8C8C061570
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Oct 2021 21:38:54 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id r7so62730039wrc.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Oct 2021 21:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AMCytzgSZ3FsdSOFb5Ppvpt7FDy4HICMnNT5RYUnNMY=;
-        b=ZZvCI+IWpcOzBSZFRoQ4p0Uh3753QA+4/hnULh2LKdY3+zrsOnKTHtHUVuBmEkcwKn
-         Bqho4lQWmwJfqma+V+v534dMUd9h5dvFhuyIgW4w5gvgGxA/doVG0TlGMC2Y8A0I+LkZ
-         LLdylk14M5dbHKRuNIEdSVjbo3HadhJZ0jfhS8XrP9oZiGZrpGx+zmAse9SpucwThh9/
-         x+55iuYsk2lXxwGz1NlhSxGdYdjCmRdiqBzAxHLy9cvHoe8lYccBWrecZK+ryjfZdE+n
-         eTYgvy0V1Iu5aNf6fIQ+526DMiF8fKp/0S5rzRRKiocNTp5g33JKLU/TjxJ/oMaTQuhZ
-         FWxQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g7rTryP4vcvwiDtwKDXkhIPEiG4Hr4DzoT/xadUmcvM=;
+        b=GNfzN6C254mVqPtbDgtAmfxRijdE6RyX1YCf2AZwRTbYZZS4dRXLWRe+c8Ockrgxk0
+         vdcePSKhJsaB2pDW30PBmXtkTFAOSe8iFDjATD58nnwFh9zVNZc+5NjEny8qc/0EEBDd
+         I1oaoWCtkv9duQlHt8FM44Z3VhhQBYjhT2JYXSVlLEYai/JHvDlbERIeBjJy5Jrj9H8l
+         5EAkB/I6qk/IOphVsbevnxkgwh8nMxZA07GZ8P1z0T8xRvgGDo4rp2r1xCI4TKjUdU5s
+         QHXDglVbvTnlCrr6qjaiHp5oWW8PIbT5MeRncum6jiPQ3XRUIQwaZPzmzrjCVio22U/e
+         mVjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AMCytzgSZ3FsdSOFb5Ppvpt7FDy4HICMnNT5RYUnNMY=;
-        b=ykbMFNZMwIulqH4K5CGlA3q0kSekM6YvP2/6mA/T8P69I/wZPI/awqzGUXgxRQ2c9D
-         FvJg6H3mVMN394VLCms0XUHFtvhs+SIbbaO+62nwsrdsbpZGaMmBQ1mat5eZzTED7O+A
-         fNpHXLG1aSsV4lM9cs4u+aDfwKdxC3OC5Lw1hmppvnELaaVptti7f/pzimEQb6cv3Nlk
-         DTOhd1gCoLlr3dTgTbs+owpG+68djOkNPWzzAhZMiktJaEKpibePAc7M0h/A5bxIKUaz
-         hWLfPaIaG6LqzriRrGlVO9U3wdCXb0tdoFVSQ70oDf6O/8HfLWHxJj7uupvud3yB61yd
-         ddyw==
-X-Gm-Message-State: AOAM532ibYL599Q+h7YU7v4cD8doOprKnaQrDTtwGmqb1+9n8uFOqn5g
-        SSGpY0o/ONf2FK3Hz27XbYI=
-X-Google-Smtp-Source: ABdhPJySfeA3NkPC4FfFwnhlWMrGmUc41lxkXJ2BoSb4GTmdEWlk9TDD8NGtVRczHibbvSWS6EWVpA==
-X-Received: by 2002:a05:6a00:ac6:b029:374:a33b:a74 with SMTP id c6-20020a056a000ac6b0290374a33b0a74mr29664983pfl.51.1634007691395;
-        Mon, 11 Oct 2021 20:01:31 -0700 (PDT)
-Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
-        by smtp.gmail.com with ESMTPSA id e15sm8739432pfc.134.2021.10.11.20.01.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Oct 2021 20:01:31 -0700 (PDT)
-From:   davidcomponentone@gmail.com
-To:     akpm@linux-foundation.org
-Cc:     shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Yang <davidcomponentone@gmail.com>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] Fix application of sizeof to pointer
-Date:   Tue, 12 Oct 2021 11:01:16 +0800
-Message-Id: <20211012030116.184027-1-davidcomponentone@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g7rTryP4vcvwiDtwKDXkhIPEiG4Hr4DzoT/xadUmcvM=;
+        b=oac5wqhpCdhvJgWCWag5vENet48MOuFQD55MnPxPpy4zXcSKXGLFs4Ks5U3dyEfPuF
+         NaoKFO0V5hTnkJFA5Htt7MPZUpif8NX8oZ7XtjWPthCXiGOeeimTmLRhGIYfvk+BfAYB
+         iXcUXCh0zTT61IkUNICmsyMYUHMKRftYlfAsfZKp7pXRe5uHGn0SMSlgP0Q2J2JUSvjg
+         nyeKWreuvK1VYrOMlk04H4Oq9wWy+JmYNLXiYQOz6qoO+d+V2UipZNl+bXTrjMUqkG5Y
+         U5vbRgm8gCvwYCx/r8dtJmIiObqHbevQ+ab6scfjGGiaau6shSEasCngX/CEBFGQqNMR
+         TcRw==
+X-Gm-Message-State: AOAM532qDKz0BvROrQ8zxuzXVekCdMMK86KTa83mSQf2R/IPB5qB3QUA
+        aM7icN2wpx8DbLr59ZdVmGn06a0vhQOxzLz1AbvRGw==
+X-Google-Smtp-Source: ABdhPJz1b8TLG7VPqwLKxaslZtx4r380JAZPn0QrPsMDMTUSisrIa3/RAph4GeEGWc21hXfOVs1vhtKUFU/At/nBxes=
+X-Received: by 2002:a05:600c:410e:: with SMTP id j14mr3160501wmi.49.1634013533117;
+ Mon, 11 Oct 2021 21:38:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211002022656.1681956-1-jk@codeconstruct.com.au>
+ <CABVgOS=F9K_AzoWjKPRT9m014NAo37vKHYEp-jHWDt5M+pkzSw@mail.gmail.com>
+ <101d12fc9250b7a445ff50a9e7a25cd74d0e16eb.camel@codeconstruct.com.au>
+ <CABVgOSmOFtYMiHWKTbbXST00pbYE88eu3DagD8pHt5=QdmCqyg@mail.gmail.com> <de7b75062fbc19824111685a9b8119545ee83e35.camel@codeconstruct.com.au>
+In-Reply-To: <de7b75062fbc19824111685a9b8119545ee83e35.camel@codeconstruct.com.au>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 12 Oct 2021 12:38:41 +0800
+Message-ID: <CABVgOS=evHzhP5k9EshZM4MG+Zt9qDwn11tf2Q7EaYgVwdWGOQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/2] mctp: test: disallow MCTP_TEST when building
+ as a module
+To:     Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     Matt Johnston <matt@codeconstruct.com.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: David Yang <davidcomponentone@gmail.com>
+On Mon, Oct 11, 2021 at 10:10 AM Jeremy Kerr <jk@codeconstruct.com.au> wrote:
+>
+> Hi David,
+>
+> > In any case, thanks a lot -- this is awesome.
+>
+> Oh neat, glad it's useful!
+>
+> I'm happy to keep hacking on this if it's in a direction that makes
+> sense for kunit in general. As an approximate plan, I can fix the UML
+> breakages, then work on some resulting simplifications for tree-wide
+> initialisers (we'd no longer need the null-terminated arrays of suites
+> everywhere, for example).
+>
++dlatypov, +kunit-dev
 
-The coccinelle check report:
-"./tools/testing/selftests/vm/split_huge_page_test.c:344:36-42:
-ERROR: application of sizeof to pointer"
-Using the "strlen" to fix it.
+Yeah, we think this would be a much better direction for KUnit to go
+for modules. If you're happy to work on it, that'd be great! Brendan,
+Daniel (CCed), and I would be more than willing to help out with
+questions, reviews, etc, as well.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: David Yang <davidcomponentone@gmail.com>
----
- tools/testing/selftests/vm/split_huge_page_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On the other hand, if you're really busy and you'd rather we pick this
+up, improved module support has been on the to-do list for ages, so we
+could bump it up the list a bit and finish it off.
 
-diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/testing/selftests/vm/split_huge_page_test.c
-index 1af16d2c2a0a..52497b7b9f1d 100644
---- a/tools/testing/selftests/vm/split_huge_page_test.c
-+++ b/tools/testing/selftests/vm/split_huge_page_test.c
-@@ -341,7 +341,7 @@ void split_file_backed_thp(void)
- 	}
- 
- 	/* write something to the file, so a file-backed THP can be allocated */
--	num_written = write(fd, tmpfs_loc, sizeof(tmpfs_loc));
-+	num_written = write(fd, tmpfs_loc, strlen(tmpfs_loc) + 1);
- 	close(fd);
- 
- 	if (num_written < 1) {
--- 
-2.30.2
+The UML breakages were mostly pretty simple: our default config
+doesn't require module support at all, so the various functions should
+just need to go behind the appropriate #ifdefs. A quick way to test it
+is just to run './tools/testing/kunit/kunit.py run' from the kernel
+source directory, which will configure, build, and run everything in
+the .kunit builddir.
 
+Cheers,
+-- David
