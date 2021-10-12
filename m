@@ -2,115 +2,248 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 608C842ADCA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 22:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AFB42AEAE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 23:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233658AbhJLU3p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Oct 2021 16:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S235596AbhJLVUm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Oct 2021 17:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbhJLU3o (ORCPT
+        with ESMTP id S233223AbhJLVUl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Oct 2021 16:29:44 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CA8C061570
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Oct 2021 13:27:42 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id k3so396450ilu.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Oct 2021 13:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mVITERo9v4+nlxDnJTQtLwh6+ZFxaND/0s7RMl72dZo=;
-        b=fVHW5nMY9phbWkMYJul3zH/rSHDKP0O+6cEW4eDRCLWUjg3UBH14TpkqordcVSIubK
-         mDik2j+1XKAmrqEE4k7khLU3+hdkA3vFPj2qkxQ5G62lGKtfm3itzsEJ4bUmnhp8m3iK
-         hFwIkkjw3mjH4iCYP8pR+D7imTA+Xg9I2sNs40XexBIElMlDhNPrc5k0OQwiG1G+TPG7
-         lFhm4cpLDDq/7LpFs58P5M+SnAihSQO2OhvY9wIUqqLbEMj7gzSdfa7/CTsp167qV/5f
-         kbfHsI8fqyfXVq0SwZmHMgmSj0YkoaerVeXudC6HCEa5NYoqIKTf3eULI0R3Dx+iiumE
-         457g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mVITERo9v4+nlxDnJTQtLwh6+ZFxaND/0s7RMl72dZo=;
-        b=IFG86hhEwag2lgI8EfqHihXmCeJkbHTywiU6Akvi4ccJsLL+cdsCJ4IXykShzL0i4Q
-         SRYV9o5F4mFXwvE60Sl0iFIo6LS4kmuunk58danEIZqtzwGxMMVWy3eA8p81G16mLm+E
-         Ddn2g9Q/bchgAiOnqIDjU3VDaXVvo7V34LNRyLpwOQGCzCntaUwXfK5DS+cmmPr1YmFE
-         xh+df3x2I8QNNRP6tDVQaeeF7/iuCjdMjGEUoUm7hLRG4bb3O5DuLOJ0fwqLouiIn/6A
-         Km615Ezqqr87zlkWbRuuEcaLGOuUGa01iokPMfPeol1rRLylLYht488VhilMy2yJcuv6
-         1bJQ==
-X-Gm-Message-State: AOAM5332DnDuNzc/3v1uL0ZQA9M5CcZ3SU5bP2A+VBNxzik0lzzLlWIu
-        f+qOrdWfVRHx+EWg/Gf4MNIzrRgfE10w6becuTiQRg==
-X-Google-Smtp-Source: ABdhPJy0DS8bhz1zPmlsGJqnOJybS1MC42MT2jkXUHDZD12ETYoBGzcOlAqQVoNsUD+u85AuKQQxbGZEB1pBIcmaZf4=
-X-Received: by 2002:a05:6e02:1c4e:: with SMTP id d14mr25255946ilg.121.1634070461996;
- Tue, 12 Oct 2021 13:27:41 -0700 (PDT)
+        Tue, 12 Oct 2021 17:20:41 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC92C061570;
+        Tue, 12 Oct 2021 14:18:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vWzGsAV2KWJEGMZ3MY3jerls6czxe/slqAoHxuRSd8g=; b=D6jsX9HUrv8ydp4bNYkgz/pIE2
+        k9+v4Meo0YrAhvRChSvovjxGfOncxPHVch+gsAH7jjX1KMZq0N66TrOTSU4gkmaC+eWOZJqxTB1wy
+        8E29AZmDENJq2hg5JRNSh36Cos1zExkPmaQpMmrkE/2ki9A3RbYGaz5ZoDuWLqFow4bPPH/qDdR1u
+        e2e+Jekrz1JM5zVym6uCCznKWDk8HcaHs1iW01t6SxPcCYsypYEQpnCzD4d/ECV8Y2B5M2m2ljjfg
+        0b3w2RzckXS6m4LFPZNiI7fysi/t/OrRy9OZGKc0BFr4wh21EVG7rWtrywuLTPQzax+aPQ7UuF4e+
+        lHMlbHMg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1maPAK-00E0hW-HR; Tue, 12 Oct 2021 21:18:28 +0000
+Date:   Tue, 12 Oct 2021 14:18:28 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
+        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
+        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
+        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 09/12] sysfs: fix deadlock race with module removal
+Message-ID: <YWX7pAn0YMaJeJBA@bombadil.infradead.org>
+References: <20210927163805.808907-1-mcgrof@kernel.org>
+ <20210927163805.808907-10-mcgrof@kernel.org>
+ <YVwZwh7qDKfSM59h@T590>
+ <YWSr2trabEJflzlj@bombadil.infradead.org>
+ <YWTU3kTlJKONyFjZ@T590>
 MIME-Version: 1.0
-References: <20211002022656.1681956-1-jk@codeconstruct.com.au>
- <CABVgOS=F9K_AzoWjKPRT9m014NAo37vKHYEp-jHWDt5M+pkzSw@mail.gmail.com>
- <101d12fc9250b7a445ff50a9e7a25cd74d0e16eb.camel@codeconstruct.com.au>
- <CABVgOSmOFtYMiHWKTbbXST00pbYE88eu3DagD8pHt5=QdmCqyg@mail.gmail.com>
- <de7b75062fbc19824111685a9b8119545ee83e35.camel@codeconstruct.com.au> <CABVgOS=evHzhP5k9EshZM4MG+Zt9qDwn11tf2Q7EaYgVwdWGOQ@mail.gmail.com>
-In-Reply-To: <CABVgOS=evHzhP5k9EshZM4MG+Zt9qDwn11tf2Q7EaYgVwdWGOQ@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 12 Oct 2021 13:27:30 -0700
-Message-ID: <CAGS_qxo5Esn6jzgtp1THAWgHC_pPXfYwNigfPVGD_q2mkHNtwQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/2] mctp: test: disallow MCTP_TEST when building
- as a module
-To:     David Gow <davidgow@google.com>
-Cc:     Jeremy Kerr <jk@codeconstruct.com.au>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YWTU3kTlJKONyFjZ@T590>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 9:38 PM David Gow <davidgow@google.com> wrote:
->
-> On Mon, Oct 11, 2021 at 10:10 AM Jeremy Kerr <jk@codeconstruct.com.au> wrote:
-> >
-> > Hi David,
-> >
-> > > In any case, thanks a lot -- this is awesome.
-> >
-> > Oh neat, glad it's useful!
+On Tue, Oct 12, 2021 at 08:20:46AM +0800, Ming Lei wrote:
+> On Mon, Oct 11, 2021 at 02:25:46PM -0700, Luis Chamberlain wrote:
+> > On Tue, Oct 05, 2021 at 05:24:18PM +0800, Ming Lei wrote:
+> > > On Mon, Sep 27, 2021 at 09:38:02AM -0700, Luis Chamberlain wrote:
+> > > > When driver sysfs attributes use a lock also used on module removal we
+> > > > can race to deadlock. This happens when for instance a sysfs file on
+> > > > a driver is used, then at the same time we have module removal call
+> > > > trigger. The module removal call code holds a lock, and then the
+> > > > driver's sysfs file entry waits for the same lock. While holding the
+> > > > lock the module removal tries to remove the sysfs entries, but these
+> > > > cannot be removed yet as one is waiting for a lock. This won't complete
+> > > > as the lock is already held. Likewise module removal cannot complete,
+> > > > and so we deadlock.
+> > > > 
+> > > > This can now be easily reproducible with our sysfs selftest as follows:
+> > > > 
+> > > > ./tools/testing/selftests/sysfs/sysfs.sh -t 0027
+> > > > 
+> > > > This uses a local driver lock. Test 0028 can also be used, that uses
+> > > > the rtnl_lock():
+> > > > 
+> > > > ./tools/testing/selftests/sysfs/sysfs.sh -t 0028
+> > > > 
+> > > > To fix this we extend the struct kernfs_node with a module reference
+> > > > and use the try_module_get() after kernfs_get_active() is called. As
+> > > > documented in the prior patch, we now know that once kernfs_get_active()
+> > > > is called the module is implicitly guarded to exist and cannot be removed.
+> > > > This is because the module is the one in charge of removing the same
+> > > > sysfs file it created, and removal of sysfs files on module exit will wait
+> > > > until they don't have any active references. By using a try_module_get()
+> > > > after kernfs_get_active() we yield to let module removal trump calls to
+> > > > process a sysfs operation, while also preventing module removal if a sysfs
+> > > > operation is in already progress. This prevents the deadlock.
+> > > > 
+> > > > This deadlock was first reported with the zram driver, however the live
+> > > 
+> > > Looks not see the lock pattern you mentioned in zram driver, can you
+> > > share the related zram code?
+> > 
+> > I recommend to not look at the zram driver, instead look at the
+> > test_sysfs driver as that abstracts the issue more clearly and uses
+> 
+> Looks test_sysfs isn't in linus tree, where can I find it?
 
-+1
+https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20210927-sysfs-generic-deadlock-fix
 
-> >
-> > I'm happy to keep hacking on this if it's in a direction that makes
-> > sense for kunit in general. As an approximate plan, I can fix the UML
-> > breakages, then work on some resulting simplifications for tree-wide
-> > initialisers (we'd no longer need the null-terminated arrays of suites
-> > everywhere, for example).
+> Also please
+> update your commit log about this wrong info if it can't be applied on
+> zram.
 
-Getting rid of the arrays of arrays of suites sounds great to me.
+It does apply to zram, it is just that I have other fixes for zram in
+my pipeline which will change the zram driver further, and so what makes
+more sense is to abstract the issue into a selftest driver to
+demonstrate the issue more clearly.
 
-I could also pick that bit up, since I'm the person who most recently
-added code that depends on it:
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=3b29021ddd10cfb6b2565c623595bd3b02036f33
+To reproduce the deadlock revert the patch in this thread and then run
+either of these two tests as root:
 
-> >
-> +dlatypov, +kunit-dev
->
-> Yeah, we think this would be a much better direction for KUnit to go
-> for modules. If you're happy to work on it, that'd be great! Brendan,
-> Daniel (CCed), and I would be more than willing to help out with
-> questions, reviews, etc, as well.
->
-> On the other hand, if you're really busy and you'd rather we pick this
-> up, improved module support has been on the to-do list for ages, so we
-> could bump it up the list a bit and finish it off.
->
-> The UML breakages were mostly pretty simple: our default config
-> doesn't require module support at all, so the various functions should
-> just need to go behind the appropriate #ifdefs. A quick way to test it
-> is just to run './tools/testing/kunit/kunit.py run' from the kernel
-> source directory, which will configure, build, and run everything in
-> the .kunit builddir.
->
-> Cheers,
-> -- David
+./tools/testing/selftests/sysfs/sysfs.sh -w 0027
+./tools/testing/selftests/sysfs/sysfs.sh -w 0028
+
+You will need to enable the test_sysfs driver.
+
+> > two different locks as an example. The point is that if on module
+> > removal *any* lock is used which is *also* used on the sysfs file
+> > created by the module, you can deadlock.
+> > 
+> > > > And this can lead to this condition:
+> > > > 
+> > > > CPU A                              CPU B
+> > > >                                    foo_store()
+> > > > foo_exit()
+> > > >   mutex_lock(&foo)
+> > > >                                    mutex_lock(&foo)
+> > > >    del_gendisk(some_struct->disk);
+> > > >      device_del()
+> > > >        device_remove_groups()
+> > > 
+> > > I guess the deadlock exists if foo_exit() is called anywhere. If yes,
+> > > look the issue may not be related with removing module directly, right?
+> > 
+> > No, the reason this can deadlock is that the module exit routine will
+> > patiently wait for the sysfs / kernfs files to be stop being used,
+> 
+> Can you share the code which waits for the sysfs / kernfs files to be
+> stop being used?
+
+How about a call trace of the two tasks which deadlock, here is one of
+running test 0027:
+
+kdevops login: [  363.875459] INFO: task sysfs.sh:1271 blocked for more
+than 120 seconds.
+[  363.878341]       Tainted: G            E
+5.15.0-rc3-next-20210927+ #83
+[  363.881218] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+disables this message.
+[  363.882255] task:sysfs.sh        state:D stack:    0 pid: 1271 ppid:
+1 flags:0x00000004
+[  363.882894] Call Trace:
+[  363.883091]  <TASK>
+[  363.883259]  __schedule+0x2fd/0x990
+[  363.883551]  schedule+0x43/0xe0
+[  363.883800]  schedule_preempt_disabled+0x14/0x20
+[  363.884160]  __mutex_lock.constprop.0+0x249/0x470
+[  363.884524]  test_dev_x_store+0xa5/0xc0 [test_sysfs]
+[  363.884915]  kernfs_fop_write_iter+0x177/0x220
+[  363.885257]  new_sync_write+0x11c/0x1b0
+[  363.885556]  vfs_write+0x20d/0x2a0
+[  363.885821]  ksys_write+0x5f/0xe0
+[  363.886081]  do_syscall_64+0x38/0xc0
+[  363.886359]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  363.886748] RIP: 0033:0x7fee00f8bf33
+[  363.887029] RSP: 002b:00007ffd372c5d18 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+[  363.887633] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fee00f8bf33
+[  363.888217] RDX: 0000000000000003 RSI: 000055a4d14a0db0 RDI: 0000000000000001
+[  363.888761] RBP: 000055a4d14a0db0 R08: 000000000000000a R09: 0000000000000002
+[  363.889267] R10: 000055a4d1554ac0 R11: 0000000000000246 R12: 0000000000000003
+[  363.889983] R13: 00007fee0105c6a0 R14: 0000000000000003 R15: 00007fee0105c8a0
+[  363.890513]  </TASK>
+[  363.890709] INFO: task modprobe:1276 blocked for more than 120 seconds.
+[  363.891185]       Tainted: G            E 5.15.0-rc3-next-20210927+ #83
+[  363.891781] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[  363.892353] task:modprobe        state:D stack:    0 pid: 1276 ppid: 1 flags:0x00004000
+[  363.892955] Call Trace:
+[  363.893141]  <TASK>
+[  363.893457]  __schedule+0x2fd/0x990
+[  363.893865]  schedule+0x43/0xe0
+[  363.894246]  __kernfs_remove.part.0+0x21e/0x2a0
+[  363.894704]  ? do_wait_intr_irq+0xa0/0xa0
+[  363.895142]  kernfs_remove_by_name_ns+0x50/0x90
+[  363.895632]  remove_files+0x2b/0x60
+[  363.896035]  sysfs_remove_group+0x38/0x80
+[  363.896470]  sysfs_remove_groups+0x29/0x40
+[  363.896912]  device_remove_attrs+0x5b/0x90
+[  363.897352]  device_del+0x183/0x400
+[  363.897758]  unregister_test_dev_sysfs+0x5b/0xaa [test_sysfs]
+[  363.898317]  test_sysfs_exit+0x45/0xfb0 [test_sysfs]
+[  363.898833]  __do_sys_delete_module+0x18d/0x2a0
+[  363.899329]  ? fpregs_assert_state_consistent+0x1e/0x40
+[  363.899868]  ? exit_to_user_mode_prepare+0x3a/0x180
+[  363.900390]  do_syscall_64+0x38/0xc0
+[  363.900810]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  363.901330] RIP: 0033:0x7f21915c57d7
+[  363.901747] RSP: 002b:00007ffd90869fe8 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
+[  363.902442] RAX: ffffffffffffffda RBX: 000055ce676ffc30 RCX: 00007f21915c57d7
+[  363.903104] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000055ce676ffc98
+[  363.903782] RBP: 000055ce676ffc30 R08: 0000000000000000 R09: 0000000000000000
+[  363.904462] R10: 00007f2191638ac0 R11: 0000000000000206 R12: 000055ce676ffc98
+[  363.905128] R13: 0000000000000000 R14: 0000000000000000 R15: 000055ce676ffdf0
+[  363.905797]  </TASK>
+
+
+And gdb:
+
+(gdb) l *(__kernfs_remove+0x21e)
+0xffffffff8139288e is in __kernfs_remove (fs/kernfs/dir.c:476).
+471                     if (atomic_read(&kn->active) != KN_DEACTIVATED_BIAS)
+472                             lock_contended(&kn->dep_map, _RET_IP_);
+473             }
+474
+475             /* but everyone should wait for draining */
+476             wait_event(root->deactivate_waitq,
+477                        atomic_read(&kn->active) == KN_DEACTIVATED_BIAS);
+478
+479             if (kernfs_lockdep(kn)) {
+480                     lock_acquired(&kn->dep_map, _RET_IP_);
+
+(gdb) l *(kernfs_remove_by_name_ns+0x50)
+0xffffffff813938d0 is in kernfs_remove_by_name_ns (fs/kernfs/dir.c:1534).
+1529
+1530            kn = kernfs_find_ns(parent, name, ns);
+1531            if (kn)
+1532                    __kernfs_remove(kn);
+1533
+1534            up_write(&kernfs_rwsem);
+1535
+1536            if (kn)
+1537                    return 0;
+1538            else
+
+The same happens for test 0028 except instead of a mutex
+lock an rtnl_lock() is used.
+
+Would this be better for the commit log?
+
+> And why does it make a difference in case of being
+> called from module_exit()?
+
+Well because that is where we remove the sysfs files. *If*
+a developer happens to use a lock on a sysfs op but it is
+also used on module exit, this deadlock is bound to happen.
+
+  Luis
