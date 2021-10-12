@@ -2,329 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7442942999E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 01:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76738429A5E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Oct 2021 02:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235638AbhJKXJ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Oct 2021 19:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbhJKXJ5 (ORCPT
+        id S230108AbhJLAXQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Oct 2021 20:23:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23610 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234330AbhJLAXP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 19:09:57 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9DEC06161C
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Oct 2021 16:07:56 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id r134so10453528iod.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Oct 2021 16:07:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=P+dOL8YCkCS+M9njSgrTchU0oQ1w/SWbaVmp/lr8Y1U=;
-        b=RggLfEDZBaS0Ty2wwLTktSTJsSOpGf0SlGVzyaZtFR5v3eqKCfQaylkVmTXqaXJoJH
-         PbDoPrRoffIP1ndUO3HUftKGh4C7bpP3kEvu6cipEWkdX3+AGmM62sHq8viHgVvM/BuM
-         kho84/Xiq++KETp07vB6l/PSu+bCiDcq/VER4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=P+dOL8YCkCS+M9njSgrTchU0oQ1w/SWbaVmp/lr8Y1U=;
-        b=YjsCHMmfTnp4W+4ax3YO9v8nwoVkaAEum6TTSHL/yChNsHXqmEPX683N21nVnVIwdS
-         Y4nYC3efvujRdbyHtui9yw9zJlw9t2/MbBPcSerHKtZNtkIy+Kf0u/Q2X4KdkKFt3Ia0
-         9UwpJ8eqP2fCocy8m8pPJ9Zlub38oTPaQJ2cx/dk++KKJ1NqiZp2pDZCwgyKoRuPMHqw
-         sScXBureZLgT5fgviaDNJNfwB7ReR7geMNI5an6G82zsm054RlTW6sBDKemt9HIgoSOj
-         54ZmWRlrI22RXa/MWCHXxsQLVeF0J52S2n6SIX+szEH/J0eMnAD3Qq0JWnOf20B21c0z
-         wxyw==
-X-Gm-Message-State: AOAM533Hs7sJkRPZ9RYeLO2r+LO2/QPDihhdFZMBV+JIeYUJW3u5VKJ4
-        ui7s1fyiOgtLJlR7t3F3e1M26g==
-X-Google-Smtp-Source: ABdhPJyLG2fxYcCj8gSY58fMhphGKXalXwHfvMWUmHMiBWRXqt3MR+fw6JXO/NEviWcrTL5DyhJg1w==
-X-Received: by 2002:a05:6602:2f16:: with SMTP id q22mr11803163iow.29.1633993676091;
-        Mon, 11 Oct 2021 16:07:56 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id l20sm4699705ioh.34.2021.10.11.16.07.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Oct 2021 16:07:55 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] KUnit fixes update for Linux 5.15-rc6
-Message-ID: <4972e6a4-54cd-ab86-757e-6078e9c66a30@linuxfoundation.org>
-Date:   Mon, 11 Oct 2021 17:07:54 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 11 Oct 2021 20:23:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633998074;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XpsLnH9NGEB0jCvrlBpGabDndtUY8/3VwXWgLo0MtD0=;
+        b=jJshqgaVmc4Vbe/ytuRVLwXTQtDtyaejc23GXSOF+iKuiYxYDL74Mizwg6VDnyflZqmI6B
+        D/mX75Koykd1BbkA8mq+1omdpDGcifupVrI0kCisZTt8deWyN+VbrGWls85gmoap1DqQzu
+        vl79GmUFVoZbPvH0Vq5jwgCHkAOupDc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-95-00PJPiFrMTyzNCMr5bA9IA-1; Mon, 11 Oct 2021 20:21:08 -0400
+X-MC-Unique: 00PJPiFrMTyzNCMr5bA9IA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8C2DF657;
+        Tue, 12 Oct 2021 00:21:04 +0000 (UTC)
+Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 496F757CA1;
+        Tue, 12 Oct 2021 00:20:51 +0000 (UTC)
+Date:   Tue, 12 Oct 2021 08:20:46 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
+        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
+        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
+        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 09/12] sysfs: fix deadlock race with module removal
+Message-ID: <YWTU3kTlJKONyFjZ@T590>
+References: <20210927163805.808907-1-mcgrof@kernel.org>
+ <20210927163805.808907-10-mcgrof@kernel.org>
+ <YVwZwh7qDKfSM59h@T590>
+ <YWSr2trabEJflzlj@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------8F9B7E04D3AB73465DD1E6F0"
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YWSr2trabEJflzlj@bombadil.infradead.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------8F9B7E04D3AB73465DD1E6F0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Mon, Oct 11, 2021 at 02:25:46PM -0700, Luis Chamberlain wrote:
+> On Tue, Oct 05, 2021 at 05:24:18PM +0800, Ming Lei wrote:
+> > On Mon, Sep 27, 2021 at 09:38:02AM -0700, Luis Chamberlain wrote:
+> > > When driver sysfs attributes use a lock also used on module removal we
+> > > can race to deadlock. This happens when for instance a sysfs file on
+> > > a driver is used, then at the same time we have module removal call
+> > > trigger. The module removal call code holds a lock, and then the
+> > > driver's sysfs file entry waits for the same lock. While holding the
+> > > lock the module removal tries to remove the sysfs entries, but these
+> > > cannot be removed yet as one is waiting for a lock. This won't complete
+> > > as the lock is already held. Likewise module removal cannot complete,
+> > > and so we deadlock.
+> > > 
+> > > This can now be easily reproducible with our sysfs selftest as follows:
+> > > 
+> > > ./tools/testing/selftests/sysfs/sysfs.sh -t 0027
+> > > 
+> > > This uses a local driver lock. Test 0028 can also be used, that uses
+> > > the rtnl_lock():
+> > > 
+> > > ./tools/testing/selftests/sysfs/sysfs.sh -t 0028
+> > > 
+> > > To fix this we extend the struct kernfs_node with a module reference
+> > > and use the try_module_get() after kernfs_get_active() is called. As
+> > > documented in the prior patch, we now know that once kernfs_get_active()
+> > > is called the module is implicitly guarded to exist and cannot be removed.
+> > > This is because the module is the one in charge of removing the same
+> > > sysfs file it created, and removal of sysfs files on module exit will wait
+> > > until they don't have any active references. By using a try_module_get()
+> > > after kernfs_get_active() we yield to let module removal trump calls to
+> > > process a sysfs operation, while also preventing module removal if a sysfs
+> > > operation is in already progress. This prevents the deadlock.
+> > > 
+> > > This deadlock was first reported with the zram driver, however the live
+> > 
+> > Looks not see the lock pattern you mentioned in zram driver, can you
+> > share the related zram code?
+> 
+> I recommend to not look at the zram driver, instead look at the
+> test_sysfs driver as that abstracts the issue more clearly and uses
 
-Hi Linus,
+Looks test_sysfs isn't in linus tree, where can I find it? Also please
+update your commit log about this wrong info if it can't be applied on
+zram.
 
-Please pull the following KUnit fixes update for Linux 5.15-rc6.
+> two different locks as an example. The point is that if on module
+> removal *any* lock is used which is *also* used on the sysfs file
+> created by the module, you can deadlock.
+> 
+> > > And this can lead to this condition:
+> > > 
+> > > CPU A                              CPU B
+> > >                                    foo_store()
+> > > foo_exit()
+> > >   mutex_lock(&foo)
+> > >                                    mutex_lock(&foo)
+> > >    del_gendisk(some_struct->disk);
+> > >      device_del()
+> > >        device_remove_groups()
+> > 
+> > I guess the deadlock exists if foo_exit() is called anywhere. If yes,
+> > look the issue may not be related with removing module directly, right?
+> 
+> No, the reason this can deadlock is that the module exit routine will
+> patiently wait for the sysfs / kernfs files to be stop being used,
 
-This KUnit fixes update for Linux 5.15-rc6 consists of:
+Can you share the code which waits for the sysfs / kernfs files to be
+stop being used? And why does it make a difference in case of being
+called from module_exit()?
 
-- Fixes to address the structleak plugin causing the stack frame size
-   to grow immensely when used with KUnit. Fixes include adding a new
-   makefile to disable structleak and using it from KUnit iio, device
-   property, thunderbolt, and bitfield tests to disable it.
 
-- KUnit framework reference count leak in kfree_at_end
 
-- KUnit tool fix to resolve conflict between --json and --raw_output
-   and generate correct test output in either case.
+Thanks,
+Ming
 
-- kernel-doc warnings due to mismatched arg names
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
-
-   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.15-rc6
-
-for you to fetch changes up to 361b57df62de249dc0b2acbf48823662a5001bcd:
-
-   kunit: fix kernel-doc warnings due to mismatched arg names (2021-10-06 17:54:07 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-kunit-fixes-5.15-rc6
-
-This KUnit fixes update for Linux 5.15-rc6 consists of:
-
-- Fixes to address the structleak plugin causing the stack frame size
-   to grow immensely when used with KUnit. Fixes include adding a new
-   makefile to disable structleak and using it from KUnit iio, device
-   property, thunderbolt, and bitfield tests to disable it.
-
-- KUnit framework reference count leak in kfree_at_end
-
-- KUnit tool fix to resolve conflict between --json and --raw_output
-   and generate correct test output in either case.
-
-- kernel-doc warnings due to mismatched arg names
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-       bitfield: build kunit tests without structleak plugin
-
-Brendan Higgins (4):
-       gcc-plugins/structleak: add makefile var for disabling structleak
-       iio/test-format: build kunit tests without structleak plugin
-       device property: build kunit tests without structleak plugin
-       thunderbolt: build kunit tests without structleak plugin
-
-Daniel Latypov (2):
-       kunit: tool: better handling of quasi-bool args (--json, --raw_output)
-       kunit: fix kernel-doc warnings due to mismatched arg names
-
-Xiyu Yang (1):
-       kunit: fix reference count leak in kfree_at_end
-
-  drivers/base/test/Makefile             |  2 +-
-  drivers/iio/test/Makefile              |  1 +
-  drivers/thunderbolt/Makefile           |  1 +
-  include/kunit/test.h                   |  6 +++---
-  lib/Makefile                           |  2 +-
-  lib/kunit/executor_test.c              |  4 ++--
-  scripts/Makefile.gcc-plugins           |  4 ++++
-  tools/testing/kunit/kunit.py           | 24 ++++++++++++++++++++++--
-  tools/testing/kunit/kunit_tool_test.py |  8 ++++++++
-  9 files changed, 43 insertions(+), 9 deletions(-)
-----------------------------------------------------------------
-
---------------8F9B7E04D3AB73465DD1E6F0
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-kunit-fixes-5.15-rc6.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-kunit-fixes-5.15-rc6.diff"
-
-diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
-index 64b2f3d744d5..7f76fee6f989 100644
---- a/drivers/base/test/Makefile
-+++ b/drivers/base/test/Makefile
-@@ -2,4 +2,4 @@
- obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+= test_async_driver_probe.o
- 
- obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) += property-entry-test.o
--CFLAGS_REMOVE_property-entry-test.o += -fplugin-arg-structleak_plugin-byref -fplugin-arg-structleak_plugin-byref-all
-+CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
-diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
-index f1099b495301..467519a2027e 100644
---- a/drivers/iio/test/Makefile
-+++ b/drivers/iio/test/Makefile
-@@ -5,3 +5,4 @@
- 
- # Keep in alphabetical order
- obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
-+CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
-diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
-index da19d7987d00..78fd365893c1 100644
---- a/drivers/thunderbolt/Makefile
-+++ b/drivers/thunderbolt/Makefile
-@@ -7,6 +7,7 @@ thunderbolt-objs += usb4_port.o nvm.o retimer.o quirks.o
- thunderbolt-${CONFIG_ACPI} += acpi.o
- thunderbolt-$(CONFIG_DEBUG_FS) += debugfs.o
- thunderbolt-${CONFIG_USB4_KUNIT_TEST} += test.o
-+CFLAGS_test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
- 
- thunderbolt_dma_test-${CONFIG_USB4_DMA_TEST} += dma_test.o
- obj-$(CONFIG_USB4_DMA_TEST) += thunderbolt_dma_test.o
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 24b40e5c160b..018e776a34b9 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -613,7 +613,7 @@ void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
-  * and is automatically cleaned up after the test case concludes. See &struct
-  * kunit_resource for more information.
-  */
--void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t flags);
-+void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp);
- 
- /**
-  * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
-@@ -657,9 +657,9 @@ static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
-  *
-  * See kcalloc() and kunit_kmalloc_array() for more information.
-  */
--static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp_t flags)
-+static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp_t gfp)
- {
--	return kunit_kmalloc_array(test, n, size, flags | __GFP_ZERO);
-+	return kunit_kmalloc_array(test, n, size, gfp | __GFP_ZERO);
- }
- 
- void kunit_cleanup(struct kunit *test);
-diff --git a/lib/Makefile b/lib/Makefile
-index 5efd1b435a37..a841be5244ac 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -351,7 +351,7 @@ obj-$(CONFIG_OBJAGG) += objagg.o
- obj-$(CONFIG_PLDMFW) += pldmfw/
- 
- # KUnit tests
--CFLAGS_bitfield_kunit.o := $(call cc-option,-Wframe-larger-than=10240)
-+CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
- obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-index cdbe54b16501..e14a18af573d 100644
---- a/lib/kunit/executor_test.c
-+++ b/lib/kunit/executor_test.c
-@@ -116,8 +116,8 @@ static void kfree_at_end(struct kunit *test, const void *to_free)
- 	/* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
- 	if (IS_ERR_OR_NULL(to_free))
- 		return;
--	kunit_alloc_and_get_resource(test, NULL, kfree_res_free, GFP_KERNEL,
--				     (void *)to_free);
-+	kunit_alloc_resource(test, NULL, kfree_res_free, GFP_KERNEL,
-+			     (void *)to_free);
- }
- 
- static struct kunit_suite *alloc_fake_suite(struct kunit *test,
-diff --git a/scripts/Makefile.gcc-plugins b/scripts/Makefile.gcc-plugins
-index 952e46876329..4aad28480035 100644
---- a/scripts/Makefile.gcc-plugins
-+++ b/scripts/Makefile.gcc-plugins
-@@ -19,6 +19,10 @@ gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF)		\
- 		+= -fplugin-arg-structleak_plugin-byref
- gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL)	\
- 		+= -fplugin-arg-structleak_plugin-byref-all
-+ifdef CONFIG_GCC_PLUGIN_STRUCTLEAK
-+    DISABLE_STRUCTLEAK_PLUGIN += -fplugin-arg-structleak_plugin-disable
-+endif
-+export DISABLE_STRUCTLEAK_PLUGIN
- gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK)		\
- 		+= -DSTRUCTLEAK_PLUGIN
- 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 5a931456e718..ac35c61f65f5 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -16,7 +16,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
- 
- from collections import namedtuple
- from enum import Enum, auto
--from typing import Iterable
-+from typing import Iterable, Sequence
- 
- import kunit_config
- import kunit_json
-@@ -186,6 +186,26 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 				exec_result.elapsed_time))
- 	return parse_result
- 
-+# Problem:
-+# $ kunit.py run --json
-+# works as one would expect and prints the parsed test results as JSON.
-+# $ kunit.py run --json suite_name
-+# would *not* pass suite_name as the filter_glob and print as json.
-+# argparse will consider it to be another way of writing
-+# $ kunit.py run --json=suite_name
-+# i.e. it would run all tests, and dump the json to a `suite_name` file.
-+# So we hackily automatically rewrite --json => --json=stdout
-+pseudo_bool_flag_defaults = {
-+		'--json': 'stdout',
-+		'--raw_output': 'kunit',
-+}
-+def massage_argv(argv: Sequence[str]) -> Sequence[str]:
-+	def massage_arg(arg: str) -> str:
-+		if arg not in pseudo_bool_flag_defaults:
-+			return arg
-+		return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
-+	return list(map(massage_arg, argv))
-+
- def add_common_opts(parser) -> None:
- 	parser.add_argument('--build_dir',
- 			    help='As in the make command, it specifies the build '
-@@ -303,7 +323,7 @@ def main(argv, linux=None):
- 				  help='Specifies the file to read results from.',
- 				  type=str, nargs='?', metavar='input_file')
- 
--	cli_args = parser.parse_args(argv)
-+	cli_args = parser.parse_args(massage_argv(argv))
- 
- 	if get_kernel_root_path():
- 		os.chdir(get_kernel_root_path())
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 619c4554cbff..1edcc8373b4e 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -408,6 +408,14 @@ class KUnitMainTest(unittest.TestCase):
- 			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
- 			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
- 
-+	def test_run_raw_output_does_not_take_positional_args(self):
-+		# --raw_output is a string flag, but we don't want it to consume
-+		# any positional arguments, only ones after an '='
-+		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
-+		kunit.main(['run', '--raw_output', 'filter_glob'], self.linux_source_mock)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(
-+			args=None, build_dir='.kunit', filter_glob='filter_glob', timeout=300)
-+
- 	def test_exec_timeout(self):
- 		timeout = 3453
- 		kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
-
---------------8F9B7E04D3AB73465DD1E6F0--
