@@ -2,269 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC7A42B1CA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 03:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F9A42B257
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 03:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235747AbhJMBJ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Oct 2021 21:09:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26475 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234321AbhJMBJ2 (ORCPT
+        id S231200AbhJMBsJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Oct 2021 21:48:09 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:55896 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230402AbhJMBsJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Oct 2021 21:09:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634087245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9W5/Nim7UR99mhQj6VlGoOdNyQkVOGVgooJgVby/UVQ=;
-        b=DJyaTYAGVUCm+fAZpcxjd0AGXg/mjRP//WCQR/8E2KumLQqPK4MjT3dBD+J/BHeJJLCwdY
-        b4wI+iUUOqj79LaEGIb6AjG/rv3HdibCX+heA+gJmpL7wlSD7/LwwWDsgXZruijtlA1npK
-        y9JqWZebV81DjsXcUlWsiQlTKQWqJfE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-479-HxK1RB5_PS67AtBc8N0hMg-1; Tue, 12 Oct 2021 21:07:22 -0400
-X-MC-Unique: HxK1RB5_PS67AtBc8N0hMg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BF65169721;
-        Wed, 13 Oct 2021 01:07:19 +0000 (UTC)
-Received: from T590 (ovpn-8-23.pek2.redhat.com [10.72.8.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 145D660D30;
-        Wed, 13 Oct 2021 01:07:09 +0000 (UTC)
-Date:   Wed, 13 Oct 2021 09:07:03 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
-        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
-        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
-        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 09/12] sysfs: fix deadlock race with module removal
-Message-ID: <YWYxN875B6rlmAjC@T590>
-References: <20210927163805.808907-1-mcgrof@kernel.org>
- <20210927163805.808907-10-mcgrof@kernel.org>
- <YVwZwh7qDKfSM59h@T590>
- <YWSr2trabEJflzlj@bombadil.infradead.org>
- <YWTU3kTlJKONyFjZ@T590>
- <YWX7pAn0YMaJeJBA@bombadil.infradead.org>
+        Tue, 12 Oct 2021 21:48:09 -0400
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19D0WcG9023311;
+        Wed, 13 Oct 2021 01:45:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=LqfUY0FqKTovrirAZ2FM9aDm4Raca8+qROzfjMZurDc=;
+ b=b2In9Ysp/byMtWt6PArPImNdres3Ir3Fh6rDxodSA59oVPjarQKE8q4LjqbZlBTnsOLK
+ TP1ckG0CV01aC4XN4xwxWYoFDGP9kk46J/lgOdtf5f3B2AoSVMgwnNb0aKEqw/yjZY2m
+ Opi83q/qhQYD6VUnPW4DbGHG/vmPcD9oat0A0dESJFlcaor6hyks7ca0J8otMJTgZe/0
+ QRxEa6KbonhAvu9tpStIGjONs7nUD7khbbxrp8+SX6B2JfkLDsVPzYcfUudQNtaY5C0H
+ ziYo2kE93OZTJXobivM/WqXWqEf8Mq+g4vbBWeF6ZcgBQnM7koz6ZpSGAVcg4iccG5wS /Q== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3bnkbj0pxx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Oct 2021 01:45:17 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19D1j8EK055081;
+        Wed, 13 Oct 2021 01:45:16 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2172.outbound.protection.outlook.com [104.47.58.172])
+        by userp3020.oracle.com with ESMTP id 3bkyvb6nr9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Oct 2021 01:45:16 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N7nv7c6l+WQrOtDb65F8sJL0yeRk1qVOv2j1gDT5ARjoY0fP0rq434hLBSr1UTydDUS+Yh/cKBGhbjgoQHkPrF8qdMdZB2XzS+pfs25ucpwfLXbcEkmJo7DLG6vUvEgZwij2zNJPaYwUGlPvcSQEvW2owZ90D7GYb5Gr99m6LX3mxeS4574tVsg6POxsNHTlImGZ8lE7oftIcTUVYFpUtCZvF8Es/NC49Ch1WepZAUOmy+EGMvBVlIKLEYK8NVZs9mt1feUY5bFHdt3QpaHWjA2+EKHrSeFFLKuDGd8tF0txV3V210b3909Fepz+PErVn7tDalLaSf2+eSJ26vt2lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LqfUY0FqKTovrirAZ2FM9aDm4Raca8+qROzfjMZurDc=;
+ b=AhYyKsG1TchD5uP1WeIQYsTb4kkE1JB3Wglni2OsCMabrn2hk52qU+nW05huiuaEujpJyUa9/s2TzYwuV0/ToqQR78Pfl3Ukl7k4kdZ4W5P+FusU44kItVSZWlz4o207SJ5sYKn8afNZTFmGxzeKorqDtMz7c6mg6uexr+j0+6BP6jCqCHpQm11nhl1JG1cRcXSprbObCruPn2vEEBhNfG2d3Z5H0jvrARHp4tD2Q835tL4KB6Gco7yE2w5XFsWmsZIID/pxLlQQmeO6lfaFkClxlsTF/UpasB6yz7u+2CkgGlrQ7UMRQbomS6RZ6XmFgaHRPh4PQU3XgL1waPtaTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LqfUY0FqKTovrirAZ2FM9aDm4Raca8+qROzfjMZurDc=;
+ b=RINf2jHXCyxBvaSt5S2k+brwpVOwD0B/+Bdxh4207VMGlwdPsSxiiZnRVTQ5FddSDMIp+SteyUIQwxctcywYrEsMia2nBDVAalWJYxk7H6wVRWQbtz+R3NkJJu+MBpVSiq00Xw3x0t4j8jY9Fjq68quCWdpIK/vmd5t7KsXpvZ4=
+Authentication-Results: zytor.com; dkim=none (message not signed)
+ header.d=none;zytor.com; dmarc=none action=none header.from=oracle.com;
+Received: from SN6PR10MB3021.namprd10.prod.outlook.com (2603:10b6:805:cc::19)
+ by SN6PR10MB2910.namprd10.prod.outlook.com (2603:10b6:805:d8::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.20; Wed, 13 Oct
+ 2021 01:45:14 +0000
+Received: from SN6PR10MB3021.namprd10.prod.outlook.com
+ ([fe80::f12a:c57a:88a7:2491]) by SN6PR10MB3021.namprd10.prod.outlook.com
+ ([fe80::f12a:c57a:88a7:2491%7]) with mapi id 15.20.4587.026; Wed, 13 Oct 2021
+ 01:45:14 +0000
+Subject: Re: [RFC 04/16] KVM: selftests: set CPUID before setting sregs in
+ vcpu creation
+To:     Michael Roth <michael.roth@amd.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
+References: <20211005234459.430873-1-michael.roth@amd.com>
+ <20211006203617.13045-1-michael.roth@amd.com>
+From:   Krish Sadhukhan <krish.sadhukhan@oracle.com>
+Message-ID: <29aa85d5-fcc7-bf25-dd04-2476dc7b6241@oracle.com>
+Date:   Tue, 12 Oct 2021 18:45:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+In-Reply-To: <20211006203617.13045-1-michael.roth@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-ClientProxiedBy: SA9PR13CA0029.namprd13.prod.outlook.com
+ (2603:10b6:806:21::34) To SN6PR10MB3021.namprd10.prod.outlook.com
+ (2603:10b6:805:cc::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YWX7pAn0YMaJeJBA@bombadil.infradead.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Received: from localhost.localdomain (2606:b400:8301:1010::16aa) by SA9PR13CA0029.namprd13.prod.outlook.com (2603:10b6:806:21::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.10 via Frontend Transport; Wed, 13 Oct 2021 01:45:11 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 73d1d21f-5576-4308-5268-08d98deb19a6
+X-MS-TrafficTypeDiagnostic: SN6PR10MB2910:
+X-Microsoft-Antispam-PRVS: <SN6PR10MB2910281CD8DE9437CE5E003981B79@SN6PR10MB2910.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oENTTioCqWt727MhK3VQptny3zinWqw5fpypvqwa4GanGk2zqFJZmpXPRBmmPIX7/CYMEF3v37gqIlDH//2H1yVHbiUTD5WO0BsZcM9Riz4OMQJpHfJkPHdYbsh3HcC9bAQ9ROLiKnpabvnmgRaBBuJ79B5Vt3tFM19/CeVbkEhEjz3R18nr335LXttlLSMLD+luwlcczbM+okcI18zpEcXPu3yyYgkDnuLrlmzg0/8DRz6F21ZidSPtuulRjxjbHCIdGTbjkL9nof7j4ReO6Cf7UM1e6oP67eKCmPujsCU5kuBXgz8EPMerxst1PUzAovE3H9hBeEEn53w0waerN21iQs9JFg8qoRasDIFuOeDMBOB5HMTJ47hiD3ARi8v5BgySZ8mSNsl1HIBEp1HHzc6XUJn17u9UNJTyna7d7rkBw+C4MaMpHm1lBlj8XWq5gKvJ4aInGp3F7fSuDjdaCwu/HxpU0CLO2/gsITqvirq4759TsZxYv2pqwDmis7n8dkA7VcO4aPBpwr6BmZDSulrhpKZ7QtLWUyRikIEUz7OtVeZn0ydD76Z+o4kf6Z7/WfUCWINzMqLNQrXIHsosAJjjBg9l0JZaxzpt3k8zGmWckA9K/37E65TER+By5kVGOjBCbR6/fUxMvfwYZ6OfQoT6ASVeZu7FYDm/nzWs7HyT0CuS7DXv2Xg8bKTi0CXLRcV7q2wk0I0EbLb7+YqIZj2cPNM/BEyeIEOQVnY+pdE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3021.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(44832011)(8936002)(53546011)(186003)(8676002)(316002)(6506007)(2906002)(36756003)(6486002)(2616005)(508600001)(4744005)(38100700002)(5660300002)(86362001)(66476007)(66556008)(66946007)(54906003)(31696002)(7416002)(4326008)(31686004)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MkFxaW5PWmtHWnIzcXRic0t5QW5yOU1rcCt0RDdaMDZvNkorWnQzMXJDaldz?=
+ =?utf-8?B?dys1dHNqSkhCMjdrOGU5ZFBiZnZRTkFqemZqMzBDSVNRSFM4dWJtd2ZoU1hp?=
+ =?utf-8?B?UDFhci9FdGIxZm5CZHNhOW0vOTdoaDRKOWo3VzdoeFBEWThmVEt3MXlVVWRS?=
+ =?utf-8?B?aEJHY0dTTWhZM2RVeFptZUQ4WXArY2l3dktrM2R4NVRxdHM5NjNGSGQrUVhm?=
+ =?utf-8?B?VG1aWHh2Q290blk5SjlCSW1kOHVZOWpuTW0vU0JiR0c3QU5XL2piUzFvaVQ1?=
+ =?utf-8?B?SHNjck5FU1NvWCtyU2Zxb1lVSUUrYXc4eGd0YnNnWXdtUnUrRUxIK0FxZVFF?=
+ =?utf-8?B?L1dYV2swRHl0S0diUTQyU2FTTXhRckpFQ0Frd2FTYVVweFMvYjZKMTZpNlBm?=
+ =?utf-8?B?UURYTU9YQmEvMklEa0tEMXUrVXdUWnlwS2pPVis0U0I0dDNWWFNzbG02Ym4v?=
+ =?utf-8?B?S2JOQnVGVDhVbk0ySkxDRWVtS3R3c3VtU3ZCMEtkRzdkN0szcEdGQWlXS2FW?=
+ =?utf-8?B?Q0EvNTcrem1YVFM3YkZOWmtMY3lzeWc3Y2hqTTRLMDVnYnZ5a3BLZ2hmQVFF?=
+ =?utf-8?B?ZWo3R1ppa25VeHdldXNJaU9qeWorTC92cDcwVTFCZXppOUdKbitEQ3ZDYzFX?=
+ =?utf-8?B?UE1udTEycHRJL0ZnanAzbWRNMFhwZzNzcVUva1dsNTJJeTJXTzkyNlQybGZp?=
+ =?utf-8?B?Z2daL0tpUVRseEh5TkJSWCtxNUVTdDIzWUV5S2xSMlpTditnd1JhMm1rbHFW?=
+ =?utf-8?B?Z0p3ZFg2cVdaYkY0VG96Q0xoUFdnVXpBOWVDWE1uc01ad3RjUUM0YjdlaTMw?=
+ =?utf-8?B?ZGhjeS9uL1lJaHd0T2VTTDluV1pQZkU1YU9DSDhJdzhQS1VWRmFodk5XQkpZ?=
+ =?utf-8?B?WnprN2crczU3QVZyNE1pT2ZrV1NUV2J2TnBxYzVodkgxcHJhYklpQXV6b2p2?=
+ =?utf-8?B?MnBNU05JSkZhOWcyR0JMV2xVaW1qUHJGQmNadHNSYldHaDRYdzlQNFRKWm9D?=
+ =?utf-8?B?RGlRR2VtQ1hqbVlGaGZrWEJtakdqTDNDenRJdHM1UjF6a3JDUVg4TFhXYU1q?=
+ =?utf-8?B?bWFIZ0VaTVNUYVZWNEEwWmxrNDlJOGFFRXNBSC9wUkFDOGZUY0hPZkRzQWl1?=
+ =?utf-8?B?bDNzVisvK3BkS1piS0hmc1BrTnZ0MDdWeEt0YnRnTHN5K1MzTHc2VStDMnZT?=
+ =?utf-8?B?eEV0NDdieWc1TEVxNVRTbWFibC8wZlZuZVY0dDRmSjYvcTJ2VS9RK1pqM0dp?=
+ =?utf-8?B?OEgreWp2QURsVWZiZTJya2lWMVEzQ2o5ZElRZGJLQW9Ba3orMEE3VXhCaUVM?=
+ =?utf-8?B?NURSNUNJd3FWMjNjNC9YVllXTG13M3BPTysvY1hBemIwbkVBS0w1ak9tNW9s?=
+ =?utf-8?B?U2hYYU00cStpQm5XUWdSbG95d3hxWVFWTVF4cHN2aVhER0ZCUzQ1Y2plaHJI?=
+ =?utf-8?B?RU1NMnBHamwzVUEzUUMrQTN0VVI3bnc0b1E0YUxnVGFxN2dCaTZXYTh0M2t6?=
+ =?utf-8?B?SVdxNXVSaHFnVytHWmFic3J6RjcxeUNwTzN3aWJBQVNWQU52aEVlbVpTbFd4?=
+ =?utf-8?B?WDZ0TzZQRFJNMkF1cWNOSzdMMWhpeXBIUEUwOUxmTnN2UHkzM0U2djlncU8x?=
+ =?utf-8?B?OUJ4cCtKT2pKSzJjVVJyMHVPWVNscDhaSG16T1pEeEtKcnNzajlCSFZob0w4?=
+ =?utf-8?B?bmpxbHNCK3FnY2JjRHBtWmc4czFBdGhRVDZmV3BFdHJmT09PWURWMW5aMkw0?=
+ =?utf-8?B?WHFQWEwyV2duUEZteFJhdHdIVHdkVVFlWmlqNm52TzRNTTBQYjk1Z0hvVThP?=
+ =?utf-8?B?RUwrSmFOdlYweExHbzBMdz09?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73d1d21f-5576-4308-5268-08d98deb19a6
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3021.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2021 01:45:13.8416
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2A8TeKK1Bz+i8zWFQm7dIVCwvax2iztPGxOeKj1dXSkJRhp92vnOQQx4dGGJA9ws/s+Q38kyR/D8Xbe0YY504+56XodJHArS6ZcmtNDzczM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2910
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10135 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ adultscore=0 bulkscore=0 mlxscore=0 spamscore=0 mlxlogscore=787
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2110130008
+X-Proofpoint-ORIG-GUID: uTf5vghR-yLHGzL-fJGQiCONy-bxlNc3
+X-Proofpoint-GUID: uTf5vghR-yLHGzL-fJGQiCONy-bxlNc3
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 02:18:28PM -0700, Luis Chamberlain wrote:
-> On Tue, Oct 12, 2021 at 08:20:46AM +0800, Ming Lei wrote:
-> > On Mon, Oct 11, 2021 at 02:25:46PM -0700, Luis Chamberlain wrote:
-> > > On Tue, Oct 05, 2021 at 05:24:18PM +0800, Ming Lei wrote:
-> > > > On Mon, Sep 27, 2021 at 09:38:02AM -0700, Luis Chamberlain wrote:
-> > > > > When driver sysfs attributes use a lock also used on module removal we
-> > > > > can race to deadlock. This happens when for instance a sysfs file on
-> > > > > a driver is used, then at the same time we have module removal call
-> > > > > trigger. The module removal call code holds a lock, and then the
-> > > > > driver's sysfs file entry waits for the same lock. While holding the
-> > > > > lock the module removal tries to remove the sysfs entries, but these
-> > > > > cannot be removed yet as one is waiting for a lock. This won't complete
-> > > > > as the lock is already held. Likewise module removal cannot complete,
-> > > > > and so we deadlock.
-> > > > > 
-> > > > > This can now be easily reproducible with our sysfs selftest as follows:
-> > > > > 
-> > > > > ./tools/testing/selftests/sysfs/sysfs.sh -t 0027
-> > > > > 
-> > > > > This uses a local driver lock. Test 0028 can also be used, that uses
-> > > > > the rtnl_lock():
-> > > > > 
-> > > > > ./tools/testing/selftests/sysfs/sysfs.sh -t 0028
-> > > > > 
-> > > > > To fix this we extend the struct kernfs_node with a module reference
-> > > > > and use the try_module_get() after kernfs_get_active() is called. As
-> > > > > documented in the prior patch, we now know that once kernfs_get_active()
-> > > > > is called the module is implicitly guarded to exist and cannot be removed.
-> > > > > This is because the module is the one in charge of removing the same
-> > > > > sysfs file it created, and removal of sysfs files on module exit will wait
-> > > > > until they don't have any active references. By using a try_module_get()
-> > > > > after kernfs_get_active() we yield to let module removal trump calls to
-> > > > > process a sysfs operation, while also preventing module removal if a sysfs
-> > > > > operation is in already progress. This prevents the deadlock.
-> > > > > 
-> > > > > This deadlock was first reported with the zram driver, however the live
-> > > > 
-> > > > Looks not see the lock pattern you mentioned in zram driver, can you
-> > > > share the related zram code?
-> > > 
-> > > I recommend to not look at the zram driver, instead look at the
-> > > test_sysfs driver as that abstracts the issue more clearly and uses
-> > 
-> > Looks test_sysfs isn't in linus tree, where can I find it?
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20210927-sysfs-generic-deadlock-fix
-> 
-> > Also please
-> > update your commit log about this wrong info if it can't be applied on
-> > zram.
-> 
-> It does apply to zram, it is just that I have other fixes for zram in
-> my pipeline which will change the zram driver further, and so what makes
-> more sense is to abstract the issue into a selftest driver to
-> demonstrate the issue more clearly.
-> 
-> To reproduce the deadlock revert the patch in this thread and then run
-> either of these two tests as root:
-> 
-> ./tools/testing/selftests/sysfs/sysfs.sh -w 0027
-> ./tools/testing/selftests/sysfs/sysfs.sh -w 0028
-> 
-> You will need to enable the test_sysfs driver.
-> 
-> > > two different locks as an example. The point is that if on module
-> > > removal *any* lock is used which is *also* used on the sysfs file
-> > > created by the module, you can deadlock.
-> > > 
-> > > > > And this can lead to this condition:
-> > > > > 
-> > > > > CPU A                              CPU B
-> > > > >                                    foo_store()
-> > > > > foo_exit()
-> > > > >   mutex_lock(&foo)
-> > > > >                                    mutex_lock(&foo)
-> > > > >    del_gendisk(some_struct->disk);
-> > > > >      device_del()
-> > > > >        device_remove_groups()
-> > > > 
-> > > > I guess the deadlock exists if foo_exit() is called anywhere. If yes,
-> > > > look the issue may not be related with removing module directly, right?
-> > > 
-> > > No, the reason this can deadlock is that the module exit routine will
-> > > patiently wait for the sysfs / kernfs files to be stop being used,
-> > 
-> > Can you share the code which waits for the sysfs / kernfs files to be
-> > stop being used?
-> 
-> How about a call trace of the two tasks which deadlock, here is one of
-> running test 0027:
-> 
-> kdevops login: [  363.875459] INFO: task sysfs.sh:1271 blocked for more
-> than 120 seconds.
-> [  363.878341]       Tainted: G            E
-> 5.15.0-rc3-next-20210927+ #83
-> [  363.881218] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> disables this message.
-> [  363.882255] task:sysfs.sh        state:D stack:    0 pid: 1271 ppid:
-> 1 flags:0x00000004
-> [  363.882894] Call Trace:
-> [  363.883091]  <TASK>
-> [  363.883259]  __schedule+0x2fd/0x990
-> [  363.883551]  schedule+0x43/0xe0
-> [  363.883800]  schedule_preempt_disabled+0x14/0x20
-> [  363.884160]  __mutex_lock.constprop.0+0x249/0x470
-> [  363.884524]  test_dev_x_store+0xa5/0xc0 [test_sysfs]
-> [  363.884915]  kernfs_fop_write_iter+0x177/0x220
-> [  363.885257]  new_sync_write+0x11c/0x1b0
-> [  363.885556]  vfs_write+0x20d/0x2a0
-> [  363.885821]  ksys_write+0x5f/0xe0
-> [  363.886081]  do_syscall_64+0x38/0xc0
-> [  363.886359]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [  363.886748] RIP: 0033:0x7fee00f8bf33
-> [  363.887029] RSP: 002b:00007ffd372c5d18 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> [  363.887633] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fee00f8bf33
-> [  363.888217] RDX: 0000000000000003 RSI: 000055a4d14a0db0 RDI: 0000000000000001
-> [  363.888761] RBP: 000055a4d14a0db0 R08: 000000000000000a R09: 0000000000000002
-> [  363.889267] R10: 000055a4d1554ac0 R11: 0000000000000246 R12: 0000000000000003
-> [  363.889983] R13: 00007fee0105c6a0 R14: 0000000000000003 R15: 00007fee0105c8a0
-> [  363.890513]  </TASK>
-> [  363.890709] INFO: task modprobe:1276 blocked for more than 120 seconds.
-> [  363.891185]       Tainted: G            E 5.15.0-rc3-next-20210927+ #83
-> [  363.891781] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  363.892353] task:modprobe        state:D stack:    0 pid: 1276 ppid: 1 flags:0x00004000
-> [  363.892955] Call Trace:
-> [  363.893141]  <TASK>
-> [  363.893457]  __schedule+0x2fd/0x990
-> [  363.893865]  schedule+0x43/0xe0
-> [  363.894246]  __kernfs_remove.part.0+0x21e/0x2a0
-> [  363.894704]  ? do_wait_intr_irq+0xa0/0xa0
-> [  363.895142]  kernfs_remove_by_name_ns+0x50/0x90
-> [  363.895632]  remove_files+0x2b/0x60
-> [  363.896035]  sysfs_remove_group+0x38/0x80
-> [  363.896470]  sysfs_remove_groups+0x29/0x40
-> [  363.896912]  device_remove_attrs+0x5b/0x90
-> [  363.897352]  device_del+0x183/0x400
-> [  363.897758]  unregister_test_dev_sysfs+0x5b/0xaa [test_sysfs]
-> [  363.898317]  test_sysfs_exit+0x45/0xfb0 [test_sysfs]
-> [  363.898833]  __do_sys_delete_module+0x18d/0x2a0
-> [  363.899329]  ? fpregs_assert_state_consistent+0x1e/0x40
-> [  363.899868]  ? exit_to_user_mode_prepare+0x3a/0x180
-> [  363.900390]  do_syscall_64+0x38/0xc0
-> [  363.900810]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [  363.901330] RIP: 0033:0x7f21915c57d7
-> [  363.901747] RSP: 002b:00007ffd90869fe8 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
-> [  363.902442] RAX: ffffffffffffffda RBX: 000055ce676ffc30 RCX: 00007f21915c57d7
-> [  363.903104] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000055ce676ffc98
-> [  363.903782] RBP: 000055ce676ffc30 R08: 0000000000000000 R09: 0000000000000000
-> [  363.904462] R10: 00007f2191638ac0 R11: 0000000000000206 R12: 000055ce676ffc98
-> [  363.905128] R13: 0000000000000000 R14: 0000000000000000 R15: 000055ce676ffdf0
-> [  363.905797]  </TASK>
 
-That doesn't show the deadlock is related with module_exit().
-
-> 
-> 
-> And gdb:
-> 
-> (gdb) l *(__kernfs_remove+0x21e)
-> 0xffffffff8139288e is in __kernfs_remove (fs/kernfs/dir.c:476).
-> 471                     if (atomic_read(&kn->active) != KN_DEACTIVATED_BIAS)
-> 472                             lock_contended(&kn->dep_map, _RET_IP_);
-> 473             }
-> 474
-> 475             /* but everyone should wait for draining */
-> 476             wait_event(root->deactivate_waitq,
-> 477                        atomic_read(&kn->active) == KN_DEACTIVATED_BIAS);
-> 478
-> 479             if (kernfs_lockdep(kn)) {
-> 480                     lock_acquired(&kn->dep_map, _RET_IP_);
-> 
-> (gdb) l *(kernfs_remove_by_name_ns+0x50)
-> 0xffffffff813938d0 is in kernfs_remove_by_name_ns (fs/kernfs/dir.c:1534).
-> 1529
-> 1530            kn = kernfs_find_ns(parent, name, ns);
-> 1531            if (kn)
-> 1532                    __kernfs_remove(kn);
-> 1533
-> 1534            up_write(&kernfs_rwsem);
-> 1535
-> 1536            if (kn)
-> 1537                    return 0;
-> 1538            else
-> 
-> The same happens for test 0028 except instead of a mutex
-> lock an rtnl_lock() is used.
-> 
-> Would this be better for the commit log?
-> 
-> > And why does it make a difference in case of being
-> > called from module_exit()?
-> 
-> Well because that is where we remove the sysfs files. *If*
-> a developer happens to use a lock on a sysfs op but it is
-> also used on module exit, this deadlock is bound to happen.
-
-It is clearly one AA deadlock, what I meant was that it isn't related with
-module exit cause lock & device_del() isn't always done in module exit, so
-I doubt your fix with grabbing module refcnt is good or generic enough.
-
-Except for your cooked test_sys module, how many real drivers do suffer the
-problem? What are they? Why can't we fix the exact driver?
-
-
-Thanks,
-Ming
-
+On 10/6/21 1:36 PM, Michael Roth wrote:
+> KVM_SET_CPUID*, but kselftests currently call KVM_SET_SREGS as part of
+> vm_vcpu_add_default(),*prior*  to vCPU creation, so there's no
+> opportunity to call KVM_SET_CPUID* in advance. As a result,
+In the current code, I see that KVM_SET_SREGS is called by vcpu_setup() 
+which is called after vm_vcpu_add() that calls KVM_CREATE_VCPU. Since 
+you mentioned "prior", I wanted to check if the wording was wrong or if 
+I missed something.
