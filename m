@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9864942C738
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 19:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC39C42C740
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 19:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238031AbhJMRGg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Oct 2021 13:06:36 -0400
-Received: from mga07.intel.com ([134.134.136.100]:3455 "EHLO mga07.intel.com"
+        id S238202AbhJMRGq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Oct 2021 13:06:46 -0400
+Received: from mga17.intel.com ([192.55.52.151]:51757 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237966AbhJMRGb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Oct 2021 13:06:31 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10136"; a="290971631"
+        id S238044AbhJMRGh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 13 Oct 2021 13:06:37 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10136"; a="208280009"
 X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
-   d="scan'208";a="290971631"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 10:04:27 -0700
+   d="scan'208";a="208280009"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 10:04:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
-   d="scan'208";a="547989901"
+   d="scan'208";a="441723894"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Oct 2021 10:04:21 -0700
+  by orsmga006.jf.intel.com with ESMTP; 13 Oct 2021 10:04:22 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D796F5EA; Wed, 13 Oct 2021 20:04:23 +0300 (EEST)
+        id E49BD616; Wed, 13 Oct 2021 20:04:23 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -40,9 +40,9 @@ Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         jic23@kernel.org, linux@rasmusvillemoes.dk,
         Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [PATCH v5 6/7] plist: Replace kernel.h with the necessary inclusions
-Date:   Wed, 13 Oct 2021 20:04:16 +0300
-Message-Id: <20211013170417.87909-7-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v5 7/7] media: entity: Replace kernel.h with the necessary inclusions
+Date:   Wed, 13 Oct 2021 20:04:17 +0300
+Message-Id: <20211013170417.87909-8-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211013170417.87909-1-andriy.shevchenko@linux.intel.com>
 References: <20211013170417.87909-1-andriy.shevchenko@linux.intel.com>
@@ -58,27 +58,28 @@ especially when there are circular dependencies are involved.
 Replace kernel.h inclusion with the list of what is really being used.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/linux/plist.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ include/media/media-entity.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/plist.h b/include/linux/plist.h
-index 66bab1bca35c..0f352c1d3c80 100644
---- a/include/linux/plist.h
-+++ b/include/linux/plist.h
-@@ -73,8 +73,11 @@
- #ifndef _LINUX_PLIST_H_
- #define _LINUX_PLIST_H_
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index 09737b47881f..fea489f03d57 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -13,10 +13,11 @@
  
--#include <linux/kernel.h>
+ #include <linux/bitmap.h>
+ #include <linux/bug.h>
 +#include <linux/container_of.h>
+ #include <linux/fwnode.h>
+-#include <linux/kernel.h>
  #include <linux/list.h>
+ #include <linux/media.h>
 +#include <linux/types.h>
-+
-+#include <asm/bug.h>
  
- struct plist_head {
- 	struct list_head node_list;
+ /* Enums used internally at the media controller to represent graphs */
+ 
 -- 
 2.33.0
 
