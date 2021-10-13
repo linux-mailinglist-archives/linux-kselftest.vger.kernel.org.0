@@ -2,84 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC39C42C740
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 19:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31A442C8D3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 20:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238202AbhJMRGq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Oct 2021 13:06:46 -0400
-Received: from mga17.intel.com ([192.55.52.151]:51757 "EHLO mga17.intel.com"
+        id S229967AbhJMSjg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Oct 2021 14:39:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35750 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238044AbhJMRGh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Oct 2021 13:06:37 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10136"; a="208280009"
-X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
-   d="scan'208";a="208280009"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 10:04:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
-   d="scan'208";a="441723894"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 13 Oct 2021 10:04:22 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E49BD616; Wed, 13 Oct 2021 20:04:23 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        jic23@kernel.org, linux@rasmusvillemoes.dk,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [PATCH v5 7/7] media: entity: Replace kernel.h with the necessary inclusions
-Date:   Wed, 13 Oct 2021 20:04:17 +0300
-Message-Id: <20211013170417.87909-8-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211013170417.87909-1-andriy.shevchenko@linux.intel.com>
-References: <20211013170417.87909-1-andriy.shevchenko@linux.intel.com>
+        id S229814AbhJMSjg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 13 Oct 2021 14:39:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3FE06610A0;
+        Wed, 13 Oct 2021 18:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634150252;
+        bh=4GZEzamE26qpJU7uu+fqafcszILrax/UK1nk+uHh7Ss=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L0gsc4U5W+/CAUtySNc7RtKdfaCUsQ4pze4uOWeDJhlrVV21heVzzvP8fNpURxROR
+         Q2S14hHsIGg5fRyedITJbtD5OXu5qQ3V0v7YQOYw5A6IhqVZKSK0vsKd/IMDsqs7xs
+         u/gjK89kWYzNvVYri0O2NHf3NBg0Tjqe4y0+cMfvFtuaKmKGtogibv/3DWCic4eumo
+         EFL3RIZ4SvMsDyj7B/WyFiYG94qLv6j9DvOmM1LEQ4jZwlmsF4/6i8wtNk8PIo2fQA
+         oAkFX60EoIewRhWJlHUrFGq/QUZNXQaenhaXUezS+4yT9WRAkArMDJ87HhxlQdpL5I
+         1uAqknogsrujg==
+Date:   Wed, 13 Oct 2021 19:37:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        Richard Sandiford <Richard.Sandiford@arm.com>
+Subject: Re: [PATCH v1 12/38] arm64/sme: Provide ABI documentation for SME
+Message-ID: <YWcnan0ifmngWzJ1@sirena.org.uk>
+References: <20210930181144.10029-1-broonie@kernel.org>
+ <20210930181144.10029-13-broonie@kernel.org>
+ <20211011131730.GL2700@arm.com>
+ <YWQ67ad5wfRgp9l7@sirena.org.uk>
+ <20211011141937.GM2700@arm.com>
+ <YWSaHaJOIbEigw4w@sirena.org.uk>
+ <20211012082321.GN2700@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bDSCeHHLDQazAnvi"
+Content-Disposition: inline
+In-Reply-To: <20211012082321.GN2700@arm.com>
+X-Cookie: Where do you think you're going today?
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When kernel.h is used in the headers it adds a lot into dependency hell,
-especially when there are circular dependencies are involved.
 
-Replace kernel.h inclusion with the list of what is really being used.
+--bDSCeHHLDQazAnvi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- include/media/media-entity.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Tue, Oct 12, 2021 at 09:23:21AM +0100, Szabolcs Nagy wrote:
+> The 10/11/2021 21:10, Mark Brown wrote:
 
-diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index 09737b47881f..fea489f03d57 100644
---- a/include/media/media-entity.h
-+++ b/include/media/media-entity.h
-@@ -13,10 +13,11 @@
- 
- #include <linux/bitmap.h>
- #include <linux/bug.h>
-+#include <linux/container_of.h>
- #include <linux/fwnode.h>
--#include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/media.h>
-+#include <linux/types.h>
- 
- /* Enums used internally at the media controller to represent graphs */
- 
--- 
-2.33.0
+> > OK, that makes sense.  I've changed the code and the kselftest so that
+> > TPIDR2 is preserved on thread creation.
 
+> does thread creation have to work the same way as fork?
+
+> (in a pthread_create child we want tpidr2 to be 0,
+> since it represents thread specific data. in a fork
+> child we want to preserve tpidr2 to mirror the
+> state of the parent as much as possible)
+
+...
+
+> i'm not sure when to do tpidr2=0 exactly, but something
+> like CLONE_SETTLS is set or child runs on a new stack
+> would work for me. if that's too ugly then preserving
+> tpidr2 in the child is fine.
+
+Resetting it on CLONE_SETTLS is straightforward to implement so if that
+works for you it sounds good to me, I've got it implemented locally
+already with a test case.
+
+--bDSCeHHLDQazAnvi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFnJ2kACgkQJNaLcl1U
+h9C0zwf/RGZv2LeH/H48CAwXDA1MHp59jdD7Jnj9C1t6weT4wx0I88rVY5ldAZ2v
+r/vIO1phJ46ma1H2fmDTL4paomWT2aNE6JMK6EpEiKaZ8TY+TMskJHKTimPgCwcO
+2QCCw9czNqbb8E8xIBJ0xHOkYmcU/k4w9NCtV+CfNNTWT+BUf51RixQiaKhRtSIH
+MZpPnOBTSllS4Zxa5lE/X17j1xCylSnpszeg/b5Forlghb6yGTFHuyLFtIxXi2Ld
+8gqi94Wn3KjT+OvAPkkd14h9BGS4Up/cNN6NGTRvBbJojkIvfKuf3I/LAD46A04Z
+LCfzPOsJWUhnj2HMwGcyEKtYlZFiOw==
+=Yg7r
+-----END PGP SIGNATURE-----
+
+--bDSCeHHLDQazAnvi--
