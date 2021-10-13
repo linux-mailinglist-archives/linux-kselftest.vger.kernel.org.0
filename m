@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B57CD42C733
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 19:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD2642C72D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 19:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237935AbhJMRG3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Oct 2021 13:06:29 -0400
-Received: from mga09.intel.com ([134.134.136.24]:30782 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230225AbhJMRG1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S237855AbhJMRG1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Wed, 13 Oct 2021 13:06:27 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10136"; a="227375955"
+Received: from mga18.intel.com ([134.134.136.126]:8979 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237473AbhJMRG0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 13 Oct 2021 13:06:26 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10136"; a="214422789"
 X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
-   d="scan'208";a="227375955"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 10:04:23 -0700
+   d="scan'208";a="214422789"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 10:04:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
-   d="scan'208";a="570908632"
+   d="scan'208";a="659610349"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Oct 2021 10:04:15 -0700
+  by orsmga005.jf.intel.com with ESMTP; 13 Oct 2021 10:04:16 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8C7B72E4; Wed, 13 Oct 2021 20:04:23 +0300 (EEST)
+        id 982D7107; Wed, 13 Oct 2021 20:04:23 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -40,65 +40,64 @@ Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         jic23@kernel.org, linux@rasmusvillemoes.dk,
         Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [PATCH v5 0/7] kernel.h further split
-Date:   Wed, 13 Oct 2021 20:04:10 +0300
-Message-Id: <20211013170417.87909-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v5 1/7] kernel.h: Drop unneeded <linux/kernel.h> inclusion from other headers
+Date:   Wed, 13 Oct 2021 20:04:11 +0300
+Message-Id: <20211013170417.87909-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211013170417.87909-1-andriy.shevchenko@linux.intel.com>
+References: <20211013170417.87909-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-v4: https://lore.kernel.org/linux-media/20211007154407.29746-1-andriy.shevchenko@linux.intel.com/T/#u
-v3: https://lore.kernel.org/linux-media/20211007150339.28910-1-andriy.shevchenko@linux.intel.com/T/#u
-v2: https://lore.kernel.org/linux-media/20211007095129.22037-1-andriy.shevchenko@linux.intel.com/T/#u
+There is no evidence we need kernel.h inclusion in certain headers.
+Drop unneeded <linux/kernel.h> inclusion from other headers.
 
-The kernel.h is a set of something which is not related to each other
-and often used in non-crossed compilation units, especially when drivers
-need only one or two macro definitions from it.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/rwsem.h    | 1 -
+ include/linux/smp.h      | 1 -
+ include/linux/spinlock.h | 1 -
+ 3 files changed, 3 deletions(-)
 
-Here is the split of container_of(). The goals are the following:
-- untwist the dependency hell a bit
-- drop kernel.h inclusion where it's only used for container_of()
-
-In v5:
-- dropped code duplication (Miguel)
-- added necessary includes into container_of.h (Joe)
-- dropped other header shuffling in list.h (Jonathan)
-- added tag (Sakari)
-
-In v4:
-- dropped kobject.h change (Greg)
-- Cc'ed more people (as per v1)
-
-In v3:
-- split patch 2 to more patches (Greg)
-- excluded C changes (Herbert, Greg)
-- measured with kcbench, see below (Greg)
-
-Andy Shevchenko (7):
-  kernel.h: Drop unneeded <linux/kernel.h> inclusion from other headers
-  kernel.h: Split out container_of() and typeof_member() macros
-  kunit: Replace kernel.h with the necessary inclusions
-  list: Replace kernel.h with the necessary inclusions
-  llist: Replace kernel.h with the necessary inclusions
-  plist: Replace kernel.h with the necessary inclusions
-  media: entity: Replace kernel.h with the necessary inclusions
-
- include/kunit/test.h         | 13 ++++++++++--
- include/linux/container_of.h | 40 ++++++++++++++++++++++++++++++++++++
- include/linux/kernel.h       | 33 +----------------------------
- include/linux/list.h         |  4 +++-
- include/linux/llist.h        |  4 +++-
- include/linux/plist.h        |  5 ++++-
- include/linux/rwsem.h        |  1 -
- include/linux/smp.h          |  1 -
- include/linux/spinlock.h     |  1 -
- include/media/media-entity.h |  3 ++-
- 10 files changed, 64 insertions(+), 41 deletions(-)
- create mode 100644 include/linux/container_of.h
-
+diff --git a/include/linux/rwsem.h b/include/linux/rwsem.h
+index 352c6127cb90..f9348769e558 100644
+--- a/include/linux/rwsem.h
++++ b/include/linux/rwsem.h
+@@ -11,7 +11,6 @@
+ #include <linux/linkage.h>
+ 
+ #include <linux/types.h>
+-#include <linux/kernel.h>
+ #include <linux/list.h>
+ #include <linux/spinlock.h>
+ #include <linux/atomic.h>
+diff --git a/include/linux/smp.h b/include/linux/smp.h
+index 510519e8a1eb..a80ab58ae3f1 100644
+--- a/include/linux/smp.h
++++ b/include/linux/smp.h
+@@ -108,7 +108,6 @@ static inline void on_each_cpu_cond(smp_cond_func_t cond_func,
+ #ifdef CONFIG_SMP
+ 
+ #include <linux/preempt.h>
+-#include <linux/kernel.h>
+ #include <linux/compiler.h>
+ #include <linux/thread_info.h>
+ #include <asm/smp.h>
+diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+index 76a855b3ecde..c04e99edfe92 100644
+--- a/include/linux/spinlock.h
++++ b/include/linux/spinlock.h
+@@ -57,7 +57,6 @@
+ #include <linux/compiler.h>
+ #include <linux/irqflags.h>
+ #include <linux/thread_info.h>
+-#include <linux/kernel.h>
+ #include <linux/stringify.h>
+ #include <linux/bottom_half.h>
+ #include <linux/lockdep.h>
 -- 
 2.33.0
 
