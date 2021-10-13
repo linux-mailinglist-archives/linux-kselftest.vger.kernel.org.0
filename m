@@ -2,112 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64ED042C160
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 15:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B6042C465
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 17:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234531AbhJMN2O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Oct 2021 09:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbhJMN2L (ORCPT
+        id S233971AbhJMPGk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Oct 2021 11:06:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46013 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233969AbhJMPGj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Oct 2021 09:28:11 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B4DC061570
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Oct 2021 06:26:08 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id r7so8383748wrc.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Oct 2021 06:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=4ZBC969FVok1eY2w7nMmmgvhC6HvUOJiXWHVhHaFOwU=;
-        b=SQ0Rp6hvlW7gN0NVEBBstW2sqB4by4Ckf7kjf5i337dhcKAKP3eMkso5odE6ceCR+k
-         5YUwti+PFCzR2dzDtdtC21eNr5SMfNESb0MnJ4DmfoRDqWwRDLU5o3F2NxOH1Fhz6wd9
-         F5oSY29oFS5nyChuGBjeNjvkIRcBATGB3hZbU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=4ZBC969FVok1eY2w7nMmmgvhC6HvUOJiXWHVhHaFOwU=;
-        b=a9PEh/tEfXrUCC4XkS6P/M38iKEDIsgjWt14+58fUvsgiKDROflQrZUGuqxbr7qnkv
-         6O4Wrf18ODZmFjL3NM3kLeKgbu9KQShOFVY08Dnqw2X/TeUqGe3vXrV7AfP+XnWsd/wQ
-         K50rdHdYouYXb75Lp6XhvpIwJ9a2eyHolQ0aMqrlQufb52eTnna0G3PUwEruPIgvXtxb
-         oa5egk5d/B5Aj8K4PWeom+GBTwxwazv6M6Rd7hPPOvEfl8BSdf1meDX27k51HMD0HOaJ
-         nDynJJgGblWMMwMIZ8XbyYRcyjcL15WNqt+oRkB/HK3i40tvs56OY6QMvk21WjOjhHt5
-         LcBw==
-X-Gm-Message-State: AOAM5327QxcaPmhi5xzkD/KA8Be3ZWCMxGNflqIIryl5eQaEYz3O4O4c
-        X8BsqeTzck1xGnmp1eH74BHkAQ==
-X-Google-Smtp-Source: ABdhPJxLknOsY+y5dglY3Mf+URYIj8Yvxtch0BAmgkFvyiT4UmA4TlWStXR+IldJYABbavd4nNE9fg==
-X-Received: by 2002:a1c:7f56:: with SMTP id a83mr13368905wmd.20.1634131566597;
-        Wed, 13 Oct 2021 06:26:06 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id y191sm5963420wmc.36.2021.10.13.06.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Oct 2021 06:26:05 -0700 (PDT)
-Date:   Wed, 13 Oct 2021 15:26:03 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <n@nfraprado.net>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@riseup.net>,
-        Leandro Ribeiro <leandrohr@riseup.net>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Pedro Sader Azevedo <pedro.saderazevedo@protonmail.com>,
-        isinyaaa <isabellabdoamaral@gmail.com>,
-        ~lkcamp/discussion@lists.sr.ht
-Subject: Re: DRM KUnit hackathon
-Message-ID: <YWbea0x7i+z3N3gC@phenom.ffwll.local>
-References: <20211011152333.gm5jkaog6b6nbv5w@notapiano>
+        Wed, 13 Oct 2021 11:06:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634137476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d+mcxn9Yq7uI+Viy+K4BQvLPxElVK5331udxqYrTR1s=;
+        b=g3yTbwaTWftttAbigPXwRTdavrQJ2CQKrc8e2HhedzHgdfeudQOV1aTBdBvXzZQzVg0pfX
+        ZZGKk4EOd/yLj8UV2XmjMw4zU0FysbxuKb+TaUNx1xD/ZozgRAc7o/igoBb7CRIeGBjQVL
+        1GxrQ3sCRhp/KieSrtpVMiUF2KRf/os=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-16-yR6kJGqXNkKhVj3G7P5dzg-1; Wed, 13 Oct 2021 11:04:34 -0400
+X-MC-Unique: yR6kJGqXNkKhVj3G7P5dzg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4EDE0802CB8;
+        Wed, 13 Oct 2021 15:04:31 +0000 (UTC)
+Received: from T590 (ovpn-8-39.pek2.redhat.com [10.72.8.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0AAC357CB9;
+        Wed, 13 Oct 2021 15:04:12 +0000 (UTC)
+Date:   Wed, 13 Oct 2021 23:04:07 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Miroslav Benes <mbenes@suse.cz>, tj@kernel.org,
+        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
+        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
+        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
+        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ming.lei@redhat.com
+Subject: Re: [PATCH v8 09/12] sysfs: fix deadlock race with module removal
+Message-ID: <YWb1Z7EXruo6gaEp@T590>
+References: <20210927163805.808907-1-mcgrof@kernel.org>
+ <20210927163805.808907-10-mcgrof@kernel.org>
+ <YVwZwh7qDKfSM59h@T590>
+ <YWSr2trabEJflzlj@bombadil.infradead.org>
+ <YWTU3kTlJKONyFjZ@T590>
+ <YWX7pAn0YMaJeJBA@bombadil.infradead.org>
+ <YWYxN875B6rlmAjC@T590>
+ <YWbSk6p3bfXUPZ92@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211011152333.gm5jkaog6b6nbv5w@notapiano>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+In-Reply-To: <YWbSk6p3bfXUPZ92@bombadil.infradead.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 10:23:33AM -0500, Nícolas F. R. A. Prado wrote:
-> Hello,
+On Wed, Oct 13, 2021 at 05:35:31AM -0700, Luis Chamberlain wrote:
+> On Wed, Oct 13, 2021 at 09:07:03AM +0800, Ming Lei wrote:
+> > On Tue, Oct 12, 2021 at 02:18:28PM -0700, Luis Chamberlain wrote:
+> > > > Looks test_sysfs isn't in linus tree, where can I find it?
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20210927-sysfs-generic-deadlock-fix
+> > > 
+> > > To reproduce the deadlock revert the patch in this thread and then run
+> > > either of these two tests as root:
+> > > 
+> > > ./tools/testing/selftests/sysfs/sysfs.sh -w 0027
+> > > ./tools/testing/selftests/sysfs/sysfs.sh -w 0028
+> > > 
+> > > You will need to enable the test_sysfs driver.
+> > > > Can you share the code which waits for the sysfs / kernfs files to be
+> > > > stop being used?
+> > > 
+> > > How about a call trace of the two tasks which deadlock, here is one of
+> > > running test 0027:
+> > > 
+> > > kdevops login: [  363.875459] INFO: task sysfs.sh:1271 blocked for more
+> > > than 120 seconds.
 > 
-> We belong to a student group, LKCAMP [1], which is focused on sharing kernel and
-> free software development knowledge and mentoring newcomers to become
-> contributors to these projects.
+> <-- snip -->
 > 
-> As part of our efforts, we'll be organizing a hackathon to convert the drm
-> selftests in drivers/gpu/drm/selftests/ (and possibly the ones in
-> drivers/dma-buf too) to the KUnit framework. It will take place on October 30.
+> > That doesn't show the deadlock is related with module_exit().
 > 
-> So please expect to receive some patches from our mentees on that date. It
-> probably won't be a big volume (experience tells it'll be around half a dozen
-> patches). We'll also make sure to do an internal review beforehand to catch
-> common first-timer mistakes and teach the basics.
-> 
-> We're already working on making sure that the converted KUnit tests can still be
-> run by IGT.
-> 
-> Please let us know if there's any issue with this date. Otherwise we look
-> forward to helping a few newcomers get their patches in the kernel on the 30th
-> :).
+> Not directly no.
 
-Welcome all, looking forward to cool stuff!
-
-Cheers, Daniel
+Then the patch title of 'sysfs: fix deadlock race with module removal'
+is wrong.
 
 > 
-> Thanks!
+> > It is clearly one AA deadlock, what I meant was that it isn't related with
+> > module exit cause lock & device_del() isn't always done in module exit, so
+> > I doubt your fix with grabbing module refcnt is good or generic enough.
 > 
-> [1] - https://lkcamp.dev/
+> A device_del() *can* happen in other areas other than module exit sure,
+> but the issue is if a shared lock is used *before* device_del() and also
+> used on a sysfs op. Typically this can happen on module exit, and the
+> other common use case in my experience is on sysfs ops, such is the case
+> with the zram driver. Both cases are covered then by this fix.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Again, can you share the related zram code about the issue? In
+zram_drv.c of linus or next tree, I don't see any lock is held before
+calling del_gendisk().
+
+> 
+> If there are other areas, that is still driver specific, but of the
+> things we *can* generalize, definitely module exit is a common path.
+> 
+> > Except for your cooked test_sys module, how many real drivers do suffer the
+> > problem? What are they?
+> 
+> I only really seriously considered trying to generalize this after it
+
+IMO your generalization isn't good or correct because this kind of issue
+is _not_ related with module exit at all. What matters is just that one lock is
+held before calling device_del(), meantime the same lock is required
+in the device's attribute show/store function().
+
+There are many cases in which we call device_del() not from module_exit(),
+such as scsi scan, scsi sysfs store(), or even handling event from
+device side, nvme error handling, usb hotplug, ...
+
+> was hinted to me live patching was also affected, and so clearly
+> something generic was desirable.
+
+It might be just the only two drivers(zram and live patch) with this bug, and
+it is one simply AA bug in driver. Not mention I don't see such usage in
+zram_drv.c.
+
+> 
+> There may be other drivers for sure, but a hunt for that with semantics
+> would require a bit complex coccinelle patch with iteration support.
+> 
+> > Why can't we fix the exact driver?
+> 
+> You can try, the way the lock is used in zram is correct, specially
+
+What is the lock in zram? Again can you share the related functions?
+
+> after my other fix in this series which addresses another unrelated bug
+> with cpu hotplug multistate support. So we then can proceed to either
+> take the position to say: "Thou shalt not use a shared lock on module
+> exit and a sysfs op" and try to fix all places, or we generalize a fix
+> for this. A generic fix seems more desirable.
+
+What matters is that the lock is held before calling device_del()
+instead of being held in module_exit().
+
+
+
+Thanks,
+Ming
+
