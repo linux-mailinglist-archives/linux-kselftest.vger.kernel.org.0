@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8D342CD07
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Oct 2021 23:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB6B42CD94
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Oct 2021 00:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbhJMVr0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Oct 2021 17:47:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28939 "EHLO
+        id S230243AbhJMWN6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Oct 2021 18:13:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33046 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229588AbhJMVr0 (ORCPT
+        by vger.kernel.org with ESMTP id S229883AbhJMWN5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Oct 2021 17:47:26 -0400
+        Wed, 13 Oct 2021 18:13:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634161522;
+        s=mimecast20190719; t=1634163113;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=U8NktTL+j+V52ocu5gAgw2ZAwNJbWDWLL3JUp269XtE=;
-        b=hkyrG9L37t4H5WpQv3tQDlAo0lTNPU5BlHchEKRDMIoA1FRjC5YnULs3SKdKNGvoBIDLGW
-        IY02fwQf6BuyNXxCoaceBO00eyqg6duSFZdfbRlfHvbCPTHCiIILlQGhGJ1UVh6XI2FyCJ
-        L13JT20ArjB4o4azqEIDyvxICSsaDR8=
+        bh=JmNllblB/cMMbHhwVjswqlhts6bUBeMmcJX0XzZQCXY=;
+        b=K9pGbCPG/SOaxdCrTiJK5Ev+SmRpv1Cnq4S0LUTX7jH3phYDEF92Zy0mkN3d6LlJr8DqWY
+        mi0P18cXZbB2MB8zwK7uaz8yM2HERr0rYWV1gH5ZWk+zAEtbys1LeaIB2JGnkgHfp3tmIV
+        tGiMUnkjheqAfozZjPO0nJhji5tMmzI=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-516-4-HEbvF4OhqmW0k-j3CjBA-1; Wed, 13 Oct 2021 17:45:19 -0400
-X-MC-Unique: 4-HEbvF4OhqmW0k-j3CjBA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-476-ETx3FszKMweJdLE2ipqRLA-1; Wed, 13 Oct 2021 18:11:50 -0400
+X-MC-Unique: ETx3FszKMweJdLE2ipqRLA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D70E2101F7BC;
-        Wed, 13 Oct 2021 21:45:16 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3596A802921;
+        Wed, 13 Oct 2021 22:11:48 +0000 (UTC)
 Received: from llong.remote.csb (unknown [10.22.33.183])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7407719D9B;
-        Wed, 13 Oct 2021 21:45:14 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0279D5F4F9;
+        Wed, 13 Oct 2021 22:11:38 +0000 (UTC)
 Subject: Re: [PATCH v7 5/6] cgroup/cpuset: Update description of
  cpuset.cpus.partition in cgroup-v2.rst
+From:   Waiman Long <longman@redhat.com>
 To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
         Waiman Long <llong@redhat.com>
 Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
@@ -60,194 +60,145 @@ References: <20210825213750.6933-1-longman@redhat.com>
  <YSl2yxEvnDrPxzUV@slm.duckdns.org>
  <3533e4f9-169c-d13c-9c4e-d9ec6bdc78f0@redhat.com>
  <20211012143913.GA22036@blackbody.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-Message-ID: <5eacfdcc-148b-b599-3111-4f2971e7ddc0@redhat.com>
-Date:   Wed, 13 Oct 2021 17:45:14 -0400
+ <5eacfdcc-148b-b599-3111-4f2971e7ddc0@redhat.com>
+Message-ID: <306d7fca-ee8a-e5dc-973e-5255d73de71f@redhat.com>
+Date:   Wed, 13 Oct 2021 18:11:37 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211012143913.GA22036@blackbody.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <5eacfdcc-148b-b599-3111-4f2971e7ddc0@redhat.com>
+Content-Type: multipart/mixed;
+ boundary="------------B9F95CE910141AE77C835857"
 Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+This is a multi-part message in MIME format.
+--------------B9F95CE910141AE77C835857
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 10/12/21 10:39 AM, Michal Koutný wrote:
-> On Wed, Oct 06, 2021 at 02:21:03PM -0400, Waiman Long <llong@redhat.com> wrote:
->> Sorry for not following up with this patchset sooner as I was busy on other
->> tasks.
-> Thanks for continuing with this.
+On 10/13/21 5:45 PM, Waiman Long wrote:
 >
->> 	1) The "cpuset.cpus" is not empty and the list of CPUs are
->> 	   exclusive, i.e. they are not shared by any of its siblings.
->> 	2) The parent cgroup is a partition root.
->> 	3) The "cpuset.cpus" is a subset of the union of parent's
->> 	   "cpuset.cpus.effective" and offlined CPUs in parent's
->> 	   "cpuset.cpus".
->> 	4) There is no child cgroups with cpuset enabled.  This avoids
->> 	   cpu migrations of multiple cgroups simultaneously which can
->> 	   be problematic.
+>
 >>
->>          A partition, when enabled, can be in an invalid state. An example
-
-Thanks for the comments.
-
-
->>          is when its parent is also an invalid partition.
-> You say:
-> "it can only be enabled in a cgroup if all the following conditions are met.",
-> "2) The parent cgroup is a partition root."
+>> In conclusion, it'd be good to have validity conditions separate from
+>> transition conditions (since hotplug transition can't be rejected) and
+>> perhaps treat administrative changes from an ancestor equally as a
+>> hotplug.
 >
-> and then the example:
-> "A partition, when enabled, can be in an invalid state. An example is
-> when its parent is also an invalid partition."
+> I am trying to make the result of changing "cpuset.cpus" as close to 
+> hotplug as possible but there are cases where the "cpuset.cpus" change 
+> is prohibited but hotplug can still happen to remove the cpu.
 >
-> But the first two statements imply you can't have enabled the partition
-> in such a case.
-
-Yes, you are right. We should not allow enabling partition when the 
-parent is an invalid right. I will fix that.
-
-
-> I think there is still mixup of partition validity conditions and
-> transition conditions, yours would roughly divide into (not precisely,
-> just to share my understanding):
+> Hope this will help to clarify the current design.
 >
-> Validity conditions
->   	1) The "cpuset.cpus" is not empty and the list of CPUs are
->   	   exclusive, i.e. they are not shared by any of its siblings.
->   	2) The parent cgroup is a partition root.
->
-> Transition conditions:
->   	3) The "cpuset.cpus" is a subset of the union of parent's
->   	   "cpuset.cpus.effective" and offlined CPUs in parent's
->   	   "cpuset.cpus".
-
-I am going to change this condition to just "cpuset.cpus" is a subset of 
-parent's "cpuset.cpus". After some deliberation, I  had concluded it 
-doesn't make sense from the system partition planning point of view to 
-allow a valid partition to contain cpus that are not in the designated 
-"cpuset.cpus". That will automatically included offlined cpus in 
-parent's "cpuset.cpus".
-
-
->   	4) There is no child cgroups with cpuset enabled.  This avoids
->   	   cpu migrations of multiple cgroups simultaneously which can
->   	   be problematic.
->
-> (I've put no. 3 into transition conditions because _after_ the
-> transition parent's cpuset.cpus.effective are subtracted the new root's
-> cpuset.cpus but I'd like to have something similar as a validity
-> condition but I haven't come up with that yet.)
->
-> I consider the following situation:
->
-> r		// all cpus 0-7
-> `- part1	cpus=0-3	root >partition
->     ` subpart1	cpus=0-1	root >partition
->     ` subpart2	cpus=2-3	root >partition
-> `- other	cpus=4-7	// member by default
->
-> Both subpart1 and subpart2 are valid partition roots.
-> Look at actions listed below (as alternatives, not a sequence):
->
-> a) hotplug offlines cpu 3
->    - would part1 still be considered a valid root?
->      - perhaps not
->    - would subpart1 still be considered a valid root?
->      - it could be, but its parent is invalid so no?
->    - would subpart2 still be considered a valid root?
->      - perhaps not
->      
-
-They will all be valid roots. They will become invalid only when their 
-effective cpus are empty and there are tasks in the partition.
-
-> b) administrative change writes 0-2 into part1 cpus
-
-That is actually not allowed because of the following code in 
-validate_change():
-
-static int validate_change(struct cpuset *cur, struct cpuset *trial)
-{
-     :
-         /* Each of our child cpusets must be a subset of us */
-         ret = -EBUSY;
-         cpuset_for_each_child(c, css, cur)
-                 if (!is_cpuset_subset(c, trial))
-                         goto out;
-
->    - would part1 still be considered a valid root?
->      - yes
->    - would subpart1 still be considered a valid root?
->      - yes
->    - would subpart2 still be considered a valid root?
->      - perhaps not
->
-> c) administrative change writes 3-7 into `other` cpus
->    - should this fail or invalidate a root partition part1?
->      - perhaps fail since the same "owner" manages all siblings and
->        should reduce part1 first
-Again, this will not be allowed because of the CPU_EXCLUSIVE flag set in 
-part1.
->
-> The answers above are just my "natural" responses, the ideal may be
-> different. The issue I want to illustrate is that if all the conditions
-> are formed as transition conditions only, they can't be used to reason
-> about hotplug or config changes (except for cpuset.cpus.partitions
-> writes).
->
-> What would help me with the understanding -- the invalid root partition is defined as
-> 1) such a cgroup where no cpus are granted from the top (and thus has to fall back to ancestors)
-> or
-> 2) such a cgroup where cpus requested in cpuset.cpus can't be fulfilled (i.e. any missing invalidates)?
-For a valid partition, "cpuset.cpus.effective" is always a subset of 
-"cpuset.cpus". When "cpuset.cpus.effective" becomes empty and there are 
-tasks in the partition, it becomes invalid and inherent the non-empty 
-cpuset.cpus.effective of the nearest ancestor. The condition that causes 
-"cpuset.cpus.effective" to become empty can be hotplug or changes to 
-"cpuset.cpus".
-> Furthermore, another example (motivated by the patch 4/6)
->
-> r		// all cpus 0-7
-> `- part1	cpus=0-4	root >partition
->     ` subpart1	cpus=0-1	root >partition
->     ` subpart2	cpus=2-3	root >partition
->     ` task
-> `- other	cpus=5-7	// member by default
->
-> It's a valid and achievable state (even on v2 since cpuset is a threaded
-> controller).
->
-> a) cpu 4 is offlined
->    - this should invalidate part1 (and propagate invalidation into
->      subpart1 and subpart2).
-
-That is subject to design. My current thought is to keep part1 as valid 
-but invalidate the child partitions (subpart1 and subpart2).
-
-
-> b) administrative write 0-3 into part1 cpus
->    - should this invalidate part1 or be rejected?
-
-The result should be the same as (a).
-
->
-> In conclusion, it'd be good to have validity conditions separate from
-> transition conditions (since hotplug transition can't be rejected) and
-> perhaps treat administrative changes from an ancestor equally as a
-> hotplug.
-
-I am trying to make the result of changing "cpuset.cpus" as close to 
-hotplug as possible but there are cases where the "cpuset.cpus" change 
-is prohibited but hotplug can still happen to remove the cpu.
-
-Hope this will help to clarify the current design.
+BTW, the attached file is the current draft of cpuset.cpus.partition 
+document.
 
 Cheers,
 Longman
+
+
+--------------B9F95CE910141AE77C835857
+Content-Type: text/plain; charset=UTF-8;
+ name="cpuset.cpus.partition.txt"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cpuset.cpus.partition.txt"
+
+ICBjcHVzZXQuY3B1cy5wYXJ0aXRpb24KCUEgcmVhZC13cml0ZSBzaW5nbGUgdmFsdWUgZmls
+ZSB3aGljaCBleGlzdHMgb24gbm9uLXJvb3QKCWNwdXNldC1lbmFibGVkIGNncm91cHMuICBU
+aGlzIGZsYWcgaXMgb3duZWQgYnkgdGhlIHBhcmVudCBjZ3JvdXAKCWFuZCBpcyBub3QgZGVs
+ZWdhdGFibGUuCgoJSXQgYWNjZXB0cyBvbmx5IHRoZSBmb2xsb3dpbmcgaW5wdXQgdmFsdWVz
+IHdoZW4gd3JpdHRlbiB0by4KCgkgID09PT09PT09CT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09CgkgICJtZW1iZXIiCU5vbi1yb290IG1lbWJlciBvZiBhIHBhcnRpdGlvbgoJ
+ICAicm9vdCIJUGFydGl0aW9uIHJvb3QKCSAgImlzb2xhdGVkIglQYXJ0aXRpb24gcm9vdCB3
+aXRob3V0IGxvYWQgYmFsYW5jaW5nCgkgID09PT09PT09CT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09CgoJV2hlbiBzZXQgdG8gYmUgYSBwYXJ0aXRpb24gcm9vdCwgdGhlIGN1
+cnJlbnQgY2dyb3VwIGlzIHRoZQoJcm9vdCBvZiBhIG5ldyBwYXJ0aXRpb24gb3Igc2NoZWR1
+bGluZyBkb21haW4gdGhhdCBjb21wcmlzZXMKCWl0c2VsZiBhbmQgYWxsIGl0cyBkZXNjZW5k
+YW50cyBleGNlcHQgdGhvc2UgdGhhdCBhcmUgc2VwYXJhdGUKCXBhcnRpdGlvbiByb290cyB0
+aGVtc2VsdmVzIGFuZCB0aGVpciBkZXNjZW5kYW50cy4gIFRoZSByb290CgljZ3JvdXAgaXMg
+YWx3YXlzIGEgcGFydGl0aW9uIHJvb3QuCgoJV2hlbiBzZXQgdG8gImlzb2xhdGVkIiwgdGhl
+IENQVXMgaW4gdGhhdCBwYXJ0aXRpb24gcm9vdCB3aWxsCgliZSBpbiBhbiBpc29sYXRlZCBz
+dGF0ZSB3aXRob3V0IGFueSBsb2FkIGJhbGFuY2luZyBmcm9tIHRoZQoJc2NoZWR1bGVyLiAg
+VGFza3MgaW4gc3VjaCBhIHBhcnRpdGlvbiBtdXN0IGJlIGV4cGxpY2l0bHkgYm91bmQKCXRv
+IGVhY2ggaW5kaXZpZHVhbCBDUFUuCgoJImNwdXNldC5jcHVzIiBtdXN0IGFsd2F5cyBiZSBz
+ZXQgdXAgZmlyc3QgYmVmb3JlIGVuYWJsaW5nCglwYXJ0aXRpb24uICBVbmxpa2UgIm1lbWJl
+ciIgd2hvc2UgImNwdXNldC5jcHVzLmVmZmVjdGl2ZSIgY2FuCgljb250YWluIENQVXMgbm90
+IGluICJjcHVzZXQuY3B1cyIsIHRoaXMgY2FuIG5ldmVyIGhhcHBlbiB3aXRoIGEKCXZhbGlk
+IHBhcnRpdGlvbiByb290LiAgSW4gb3RoZXIgd29yZHMsICJjcHVzZXQuY3B1cy5lZmZlY3Rp
+dmUiCglpcyBhbHdheXMgYSBzdWJzZXQgb2YgImNwdXNldC5jcHVzIiBmb3IgYSB2YWxpZCBw
+YXJ0aXRpb24gcm9vdC4KCglXaGVuIGEgcGFyZW50IHBhcnRpdGlvbiByb290IGNhbm5vdCBl
+eGNsdXNpdmVseSBncmFudCBhbnkgb2YKCXRoZSBDUFVzIHNwZWNpZmllZCBpbiAiY3B1c2V0
+LmNwdXMiLCAiY3B1c2V0LmNwdXMuZWZmZWN0aXZlIgoJYmVjb21lcyBlbXB0eS4gSWYgdGhl
+cmUgYXJlIHRhc2tzIGluIHRoZSBwYXJ0aXRpb24gcm9vdCwgdGhlCglwYXJ0aXRpb24gcm9v
+dCBiZWNvbWVzIGludmFsaWQgYW5kICJjcHVzZXQuY3B1cy5lZmZlY3RpdmUiCglpcyByZXNl
+dCB0byB0aGF0IG9mIHRoZSBuZWFyZXN0IG5vbi1lbXB0eSBhbmNlc3Rvci4KCiAgICAgICAg
+Tm90ZSB0aGF0IGEgdGFzayBjYW5ub3QgYmUgbW92ZWQgdG8gYSBjZ3JvdXAgd2l0aCBlbXB0
+eQogICAgICAgICJjcHVzZXQuY3B1cy5lZmZlY3RpdmUiLgoKCVRoZXJlIGFyZSBhZGRpdGlv
+bmFsIGNvbnN0cmFpbnRzIG9uIHdoZXJlIGEgcGFydGl0aW9uIHJvb3QgY2FuCgliZSBlbmFi
+bGVkICgicm9vdCIgb3IgImlzb2xhdGVkIikuICBJdCBjYW4gb25seSBiZSBlbmFibGVkIGlu
+CglhIGNncm91cCBpZiBhbGwgdGhlIGZvbGxvd2luZyBjb25kaXRpb25zIGFyZSBtZXQuCgoJ
+MSkgVGhlICJjcHVzZXQuY3B1cyIgaXMgbm9uLWVtcHR5IGFuZCBleGNsdXNpdmUsIGkuZS4g
+dGhleSBhcmUKCSAgIG5vdCBzaGFyZWQgYnkgYW55IG9mIGl0cyBzaWJsaW5ncy4KCTIpIFRo
+ZSBwYXJlbnQgY2dyb3VwIGlzIGEgdmFsaWQgcGFydGl0aW9uIHJvb3QuCgkzKSBUaGUgImNw
+dXNldC5jcHVzIiBpcyBhIHN1YnNldCBvZiBwYXJlbnQncyAiY3B1c2V0LmNwdXMiLgoJNCkg
+VGhlcmUgaXMgbm8gY2hpbGQgY2dyb3VwcyB3aXRoIGNwdXNldCBlbmFibGVkLiAgVGhpcyBh
+dm9pZHMKCSAgIGNwdSBtaWdyYXRpb25zIG9mIG11bHRpcGxlIGNncm91cHMgc2ltdWx0YW5l
+b3VzbHkgd2hpY2ggY2FuCgkgICBiZSBwcm9ibGVtYXRpYy4KCglPbiByZWFkLCB0aGUgImNw
+dXNldC5jcHVzLnBhcnRpdGlvbiIgZmlsZSBjYW4gc2hvdyB0aGUgZm9sbG93aW5nCgl2YWx1
+ZXMuCgoJICA9PT09PT09PT09PT09PT09PT09PT09CT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PQoJICAibWVtYmVyIgkJCU5vbi1yb290IG1lbWJlciBvZiBhIHBhcnRpdGlvbgoJ
+ICAicm9vdCIJCQlQYXJ0aXRpb24gcm9vdAoJICAiaXNvbGF0ZWQiCQkJUGFydGl0aW9uIHJv
+b3Qgd2l0aG91dCBsb2FkIGJhbGFuY2luZwoJICAicm9vdCBpbnZhbGlkICg8cmVhc29uPiki
+CUludmFsaWQgcGFydGl0aW9uIHJvb3QKCSAgPT09PT09PT09PT09PT09PT09PT09PQk9PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT0KCiAgICAgICAgSW4gdGhlIGNhc2Ugb2YgYW4g
+aW52YWxpZCBwYXJ0aXRpb24gcm9vdCwgYSBkZXNjcmlwdGl2ZSBzdHJpbmcgb24KICAgICAg
+ICB3aHkgdGhlIHBhcnRpdGlvbiBpcyBpbnZhbGlkIGlzIGluY2x1ZGVkIHdpdGhpbiBwYXJl
+bnRoZXNlcy4KCglPbmNlIGJlY29taW5nIGEgcGFydGl0aW9uIHJvb3QsIGNoYW5nZXMgdG8g
+ImNwdXNldC5jcHVzIiBpcwoJZ2VuZXJhbGx5IGFsbG93ZWQgYXMgbG9uZyBhcyB0aGUgY3B1
+IGxpc3QgaXMgZXhjbHVzaXZlIGFuZCBpcwoJYSBzdXBlcnNldCBvZiBjaGlsZHJlbidzIGNw
+dSBsaXN0cy4KCiAgICAgICAgVGhlIGNvbnN0cmFpbnRzIG9mIGEgdmFsaWQgcGFydGl0aW9u
+IHJvb3QgYXJlIGFzIGZvbGxvd3M6CgogICAgICAgIDEpICJjcHVzZXQuY3B1cyIgaXMgbm9u
+LWVtcHR5IGFuZCBleGNsdXNpdmUuCiAgICAgICAgMikgVGhlIHBhcmVudCBjZ3JvdXAgaXMg
+YSB2YWxpZCBwYXJ0aXRpb24gcm9vdC4KICAgICAgICAzKSAiY3B1c2V0LmNwdXMuZWZmZWN0
+aXZlIiBpcyBhIHN1YnNldCBvZiAiY3B1c2V0LmNwdXMiCiAgICAgICAgNCkgImNwdXNldC5j
+cHVzLmVmZmVjdGl2ZSIgaXMgbm9uLWVtcHR5IHdoZW4gdGhlcmUgYXJlIHRhc2tzCiAgICAg
+ICAgICAgaW4gdGhlIHBhcnRpdGlvbi4KCglDaGFuZ2VzIHRvICJjcHVzZXQuY3B1cyIgb3Ig
+Y3B1IGhvdHBsdWcgbWF5IGNhdXNlIHRoZSBzdGF0ZQoJb2YgYSB2YWxpZCBwYXJ0aXRpb24g
+cm9vdCB0byBiZWNvbWUgaW52YWxpZCB3aGVuIG9uZSBvciBtb3JlCgljb25zdHJhaW50cyBv
+ZiBhIHZhbGlkIHBhcnRpdGlvbiByb290IGFyZSB2aW9sYXRlZC4gIFRoZXJlZm9yZSwKCXVz
+ZXIgc3BhY2UgYWdlbnRzIHRoYXQgbWFuYWdlIHBhcnRpdGlvbiByb290cyBzaG91bGQgYXZv
+aWQKCXVubmVjZXNzYXJ5IGNoYW5nZXMgdG8gImNwdXNldC5jcHVzIiBhbmQgYWx3YXlzIGNo
+ZWNrIHRoZSBzdGF0ZQoJb2YgImNwdXNldC5jcHVzLnBhcnRpdGlvbiIgYWZ0ZXIgbWFraW5n
+IGNoYW5nZXMgdG8gbWFrZSBzdXJlCgl0aGF0IHRoZSBwYXJ0aXRpb25zIGFyZSBmdW5jdGlv
+bmluZyBwcm9wZXJseSBhcyBleHBlY3RlZC4KCiAgICAgICAgQ2hhbmdpbmcgYSBwYXJ0aXRp
+b24gcm9vdCB0byAibWVtYmVyIiBpcyBhbHdheXMgYWxsb3dlZC4KICAgICAgICBJZiB0aGVy
+ZSBhcmUgY2hpbGQgcGFydGl0aW9uIHJvb3RzIHVuZGVybmVhdGggaXQsIGhvd2V2ZXIsCiAg
+ICAgICAgdGhleSB3aWxsIGJlIGZvcmNlZCB0byBiZSBzd2l0Y2hlZCBiYWNrIHRvICJtZW1i
+ZXIiIHRvbyBhbmQKICAgICAgICBsb3NlIHRoZWlyIHBhcnRpdGlvbnMuIFNvIGNhcmUgbXVz
+dCBiZSB0YWtlbiB0byBkb3VibGUgY2hlY2sKICAgICAgICBmb3IgdGhpcyBjb25kaXRpb24g
+YmVmb3JlIGRpc2FibGluZyBhIHBhcnRpdGlvbiByb290LgoKCVNldHRpbmcgYSBjZ3JvdXAg
+dG8gYSB2YWxpZCBwYXJ0aXRpb24gcm9vdCB3aWxsIHRha2UgdGhlIENQVXMKCWF3YXkgZnJv
+bSB0aGUgZWZmZWN0aXZlIENQVXMgb2YgdGhlIHBhcmVudCBwYXJ0aXRpb24uCgoJQSB2YWxp
+ZCBwYXJlbnQgcGFydGl0aW9uIG1heSBkaXN0cmlidXRlIG91dCBhbGwgaXRzIENQVXMgdG8K
+CWl0cyBjaGlsZCBwYXJ0aXRpb25zIGFzIGxvbmcgYXMgaXQgaXMgbm90IHRoZSByb290IGNn
+cm91cCBhcwoJd2UgbmVlZCBzb21lIGhvdXNlLWtlZXBpbmcgQ1BVcyBpbiB0aGUgcm9vdCBj
+Z3JvdXAuCgoJQW4gaW52YWxpZCBwYXJ0aXRpb24gaXMgbm90IGEgcmVhbCBwYXJ0aXRpb24g
+ZXZlbiB0aG91Z2ggc29tZQoJaW50ZXJuYWwgc3RhdGVzIG1heSBzdGlsbCBiZSBrZXB0LgoK
+CUFuIGludmFsaWQgcGFydGl0aW9uIHJvb3QgY2FuIGJlIHJldmVydGVkIGJhY2sgdG8gYSBy
+ZWFsCglwYXJ0aXRpb24gcm9vdCBpZiBub25lIG9mIHRoZSBjb25zdHJhaW50cyBvZiBhIHZh
+bGlkIHBhcnRpdGlvbgogICAgICAgIHJvb3QgYXJlIHZpb2xhdGVkLgoKCVBvbGwgYW5kIGlu
+b3RpZnkgZXZlbnRzIGFyZSB0cmlnZ2VyZWQgd2hlbmV2ZXIgdGhlIHN0YXRlIG9mCgkiY3B1
+c2V0LmNwdXMucGFydGl0aW9uIiBjaGFuZ2VzLiAgVGhhdCBpbmNsdWRlcyBjaGFuZ2VzIGNh
+dXNlZCBieQoJd3JpdGUgdG8gImNwdXNldC5jcHVzLnBhcnRpdGlvbiIsIGNwdSBob3RwbHVn
+IGFuZCBvdGhlciBjaGFuZ2VzCgl0aGF0IG1ha2UgdGhlIHBhcnRpdGlvbiBpbnZhbGlkLiAg
+VGhpcyB3aWxsIGFsbG93IHVzZXIgc3BhY2UKCWFnZW50cyB0byBtb25pdG9yIHVuZXhwZWN0
+ZWQgY2hhbmdlcyB0byAiY3B1c2V0LmNwdXMucGFydGl0aW9uIgoJd2l0aG91dCB0aGUgbmVl
+ZCB0byBkbyBjb250aW51b3VzIHBvbGxpbmcuCgo=
+--------------B9F95CE910141AE77C835857--
 
