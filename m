@@ -2,116 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 256F742F710
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Oct 2021 17:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7879942F721
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Oct 2021 17:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235047AbhJOPkd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Oct 2021 11:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
+        id S236778AbhJOPrJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Oct 2021 11:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbhJOPkd (ORCPT
+        with ESMTP id S241005AbhJOPrJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Oct 2021 11:40:33 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A102BC061570
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Oct 2021 08:38:26 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id 188so8172095iou.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Oct 2021 08:38:26 -0700 (PDT)
+        Fri, 15 Oct 2021 11:47:09 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C634AC061762
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Oct 2021 08:45:02 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id i189so8258219ioa.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Oct 2021 08:45:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=K3e3fPc7t2heMZulUyPXuSYTrB88WAMaLXw51fmC8FI=;
-        b=GwmgesfT4HkmXK0wRnLzI8Byt0N60D5PL8+cgcMIf+AHXxyISkp0pPGNX4KIRpncv1
-         WrMtVkt4aLnr1E1A5J9vBXSiF4VcdBOBbwBzFeewoOtuRgaI0v3TC4t7yDhrajLM3DeO
-         p//CWbSkmbzfyDg3MghT0eKiTPkk9FdrqvEqU=
+        bh=tsavfGnFECXuxpubCpirg1R3vZvOUaYaxqi9oyOqKwo=;
+        b=ChuHOHn0/F6tN80qDqx9dphmlweCzg+OUkJILwXpV4FyCUsmzM00TVEQEtEJS0/OfH
+         75MS+LsCPDS7lS0bjpnJTrsuKJne4+iEN9CAiHQ2SZMpSZrKBHaQ5J/5Bj6vzm1DSr4x
+         bK0R94yakoD0MlswRcVe6G7eycVzh7nKTfjwM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=K3e3fPc7t2heMZulUyPXuSYTrB88WAMaLXw51fmC8FI=;
-        b=qdXCxxvzoNSpSX5yNkI/APL3SAfmIzvy+YURxQ5c1wRSYnR4wXJV508EH9Rw0CfyU1
-         4CDnz6wpQi1H7ly8Pgib5ITwlGPfDBB65Lq3l3nX7+Lj/uJoXCZM4zyw02bPGTjv3nep
-         K6jQsiq5aQDdZyg8+WyMxHWpOf9sL8JBw5qZA+LyjJxDfQ8PbhIBK48ktQZGYTY7EFRn
-         EYq7RzlrR27p181YZlGWZm9s3Imxx9TPPGppxhVdmStE8794agN0rwmZghb1yGCyoZxC
-         oRQDnX/KodF1VEY5KL4F+rGg+jpbFNm3MaRq0hbapvEuvbxRZksQ/YI3aok9AyR5Rapl
-         PUUQ==
-X-Gm-Message-State: AOAM532sQr8MgqWM1rmbQbU2yUi/5JuUegMJ/jf0/Nf7kzwjCCmsujbW
-        RAPTnWRNvSLMhOItXEXBPKsHkyfGlY6CHA==
-X-Google-Smtp-Source: ABdhPJxJL8c5vZdOxZB4JmZkMR0dRtCWu8QDLxF3hfT5HnDc8N/180h61DAt/qfE86UGaWjPelwE6Q==
-X-Received: by 2002:a5e:c018:: with SMTP id u24mr4159426iol.197.1634312306057;
-        Fri, 15 Oct 2021 08:38:26 -0700 (PDT)
+        bh=tsavfGnFECXuxpubCpirg1R3vZvOUaYaxqi9oyOqKwo=;
+        b=X2RzeFGtgoEi3pTfG5FOtqSOGPw47CDtI+pRaJWLryoC+q2vHWvN7ZiwAgWEH5jDPD
+         lX7SLm9oCDxKdsBytBHW0e0CGMtUd4XiZw2PAEHouE3rOeXrtx4cxPCc66q4X74vMp0U
+         a3GmAywMleABdl6vVaTDJ0p538+jxRxr+XBnmA0HiNW+ghpI4T6fdAYVFPrrq32YxVK3
+         vYxMCl2G6aQ2C1ccReFtx6UfkPTY6n1cviUOVh+6652OnC/hQZ9CRnkBt8N0L0FvD14h
+         /T1jQFq02oSA4tST+UTekMNsHt65EiaATAhrExdSh5CHquWOM2+UjC1Roh2jLgGLA8LK
+         Ll4A==
+X-Gm-Message-State: AOAM531UXkzFunX8oYdOFsDG8mjPWleP4WaDOAc2l6M9AyEUrrsU9479
+        bRBfZTkCFS7FVG7AhA/WOZEO2KmjleQ=
+X-Google-Smtp-Source: ABdhPJzdiLVhltf+etzX2lpHjoHWVtxfWghpmqDVlhoBkxCySer4V5YZdZfhfpCYJ8FCX6cCCia1cg==
+X-Received: by 2002:a05:6602:15cc:: with SMTP id f12mr4251184iow.33.1634312702114;
+        Fri, 15 Oct 2021 08:45:02 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id v26sm1980979iox.35.2021.10.15.08.38.25
+        by smtp.gmail.com with ESMTPSA id q17sm2595902iot.16.2021.10.15.08.45.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Oct 2021 08:38:25 -0700 (PDT)
-Subject: Re: [RFC][PATCH] selftests/vm/transhuge-stress: fix ram size thinko
-To:     "George G. Davis" <george_davis@mentor.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        "George G. Davis" <davis.george@siemens.com>,
+        Fri, 15 Oct 2021 08:45:01 -0700 (PDT)
+Subject: Re: selftests/vm madv_populate.c test
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20210825135843.29052-1-george_davis@mentor.com>
+References: <b703a326-66f7-bf35-58ee-f60e504ea5ef@linuxfoundation.org>
+ <0a20f6b6-5985-8b3e-a577-7495dcf7d2b8@redhat.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <41be8425-761b-fa55-40c5-687b397e8ad2@linuxfoundation.org>
-Date:   Fri, 15 Oct 2021 09:38:24 -0600
+Message-ID: <3a06d58e-7301-6fbc-a305-d9f7c7220843@linuxfoundation.org>
+Date:   Fri, 15 Oct 2021 09:45:01 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210825135843.29052-1-george_davis@mentor.com>
+In-Reply-To: <0a20f6b6-5985-8b3e-a577-7495dcf7d2b8@redhat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/25/21 7:58 AM, George G. Davis wrote:
-> From: "George G. Davis" <davis.george@siemens.com>
+On 9/18/21 1:41 AM, David Hildenbrand wrote:
+> On 18.09.21 00:45, Shuah Khan wrote:
+>> Hi David,
+>>
+>> I am running into the following warning when try to build this test:
+>>
+>> madv_populate.c:334:2: warning: #warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition" [-Wcpp]
+>>     334 | #warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition"
+>>         |  ^~~~~~~
+>>
+>>
+>> I see that the following handling is in place. However there is no
+>> other information to explain why the check is necessary.
+>>
+>> #if defined(MADV_POPULATE_READ) && defined(MADV_POPULATE_WRITE)
+>>
+>> #else /* defined(MADV_POPULATE_READ) && defined(MADV_POPULATE_WRITE) */
+>>
+>> #warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition"
+>>
+>> I do see these defined in:
+>>
+>> include/uapi/asm-generic/mman-common.h:#define MADV_POPULATE_READ       22
+>> include/uapi/asm-generic/mman-common.h:#define MADV_POPULATE_WRITE      23
+>>
+>> Is this the case of missing include from madv_populate.c?
 > 
-> When executing transhuge-stress with an argument to specify the virtual
-> memory size for testing, the ram size is reported as 0, e.g.
+> Hi Shuan,
 > 
-> transhuge-stress 384
-> thp-mmap: allocate 192 transhuge pages, using 384 MiB virtual memory and 0 MiB of ram
-> thp-mmap: 0.184 s/loop, 0.957 ms/page,   2090.265 MiB/s  192 succeed,    0 failed
+> note that we're including "#include <sys/mman.h>", which in my
+> understanding maps to the version installed on your system instead
+> of the one in our build environment.ing.
 > 
-> This appears to be due to a thinko in commit 0085d61fe05e
-> ("selftests/vm/transhuge-stress: stress test for memory compaction"),
-> where, at a guess, the intent was to base "xyz MiB of ram" on `ram`
-> size. Here are results after using `ram` size:
+> So as soon as you have a proper kernel + the proper headers installed
+> and try to build, it would pick up MADV_POPULATE_READ and
+> MADV_POPULATE_WRITE from the updated headers. That makes sense: you
+> annot run any MADV_POPULATE_READ/MADV_POPULATE_WRITE tests on a kernel
+> that doesn't support it.
 > 
-> thp-mmap: allocate 192 transhuge pages, using 384 MiB virtual memory and 14 MiB of ram
-> 
-> Fixes: 0085d61fe05e ("selftests/vm/transhuge-stress: stress test for memory compaction")
-> Signed-off-by: George G. Davis <davis.george@siemens.com>
-> ---
->   tools/testing/selftests/vm/transhuge-stress.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vm/transhuge-stress.c b/tools/testing/selftests/vm/transhuge-stress.c
-> index fd7f1b4a96f9..5e4c036f6ad3 100644
-> --- a/tools/testing/selftests/vm/transhuge-stress.c
-> +++ b/tools/testing/selftests/vm/transhuge-stress.c
-> @@ -79,7 +79,7 @@ int main(int argc, char **argv)
->   
->   	warnx("allocate %zd transhuge pages, using %zd MiB virtual memory"
->   	      " and %zd MiB of ram", len >> HPAGE_SHIFT, len >> 20,
-> -	      len >> (20 + HPAGE_SHIFT - PAGE_SHIFT - 1));
-> +	      ram >> (20 + HPAGE_SHIFT - PAGE_SHIFT - 1));
->   
->   	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
->   	if (pagemap_fd < 0)
+> See vm/userfaultfd.c where we do something similar.
 > 
 
-Sorry for the delay on this. The change looks good to me.
+Kselftest is for testing the kernel with kernel headers. That is the
+reason why there is the dependency on header install.
 
-Andrew! Would you like me to take this through kselftest tree?
+> 
+> As soon as we have a proper environment, it seems to work just fine:
+> 
+> Linux vm-0 5.15.0-0.rc1.20210915git3ca706c189db.13.fc36.x86_64 #1 SMP Thu Sep 16 11:32:54 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+> [root@vm-0 linux]# cat /etc/redhat-release
+> Fedora release 36 (Rawhide)
+
+This is a distro release. We don't want to have dependency on headers
+from the distro to run selftests. Hope this makes sense.
+
+I still see this on my test system running Linux 5.15-rc5.
+
+Can we make this work with kernel headers?
 
 thanks,
 -- Shuah
