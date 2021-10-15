@@ -2,111 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DBD42F964
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Oct 2021 18:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686D042FA49
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Oct 2021 19:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241863AbhJORAR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Oct 2021 13:00:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34854 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234056AbhJORAR (ORCPT
+        id S237709AbhJORdt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Oct 2021 13:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235261AbhJORds (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Oct 2021 13:00:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634317089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BCCImfJhyHOawDgiSCX14dm7XlnLossWZqBpkklh4Cw=;
-        b=czCdG48MNPMldmw5QvnqX2jgucqYVc5plEvncaloiq07usSO9UzEZMYZcD5juLuedR9uxr
-        NJNcXBn16rjwjlfB+kuSTm1LBOL7hROf8AlVAzI+YjZAAmpN7BBooo7baos8HsuLCD0K+N
-        4S3lteQ3RLE4th/D3YZ8vDrwmTQF6YQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-524-KPdbV3pHPqSG91ky1sBnOg-1; Fri, 15 Oct 2021 12:58:06 -0400
-X-MC-Unique: KPdbV3pHPqSG91ky1sBnOg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 50C4310A8E00;
-        Fri, 15 Oct 2021 16:58:05 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.193.82])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C1705C1A3;
-        Fri, 15 Oct 2021 16:57:59 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     David Hildenbrand <david@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v1] selftests/vm: make MADV_POPULATE_(READ|WRITE) use in-tree headers
-Date:   Fri, 15 Oct 2021 18:57:58 +0200
-Message-Id: <20211015165758.41374-1-david@redhat.com>
+        Fri, 15 Oct 2021 13:33:48 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BA6C061570;
+        Fri, 15 Oct 2021 10:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uUlcTDK4XPU+iizrpIkJOrRHPABQ0RGWVp54/0NzJKk=; b=NgbjHiyaDO4zvgJzUVTEBWtoLd
+        MxI2VAOvKixcFxmUR9Q78HrsKsnDB2feafuRocMJlVJca+AtlN2zmCFgfeF73UGfFhvY36HHdpv+c
+        p1/8xX3sPuI7ChCJO1bKSWXZ0nrU7NiH+lVFMaTQ4HoVgLCIiqAeSMRNDIBy98+Bb908T9VbJT4zJ
+        VTKMweCE7STFbx6SekAkMWFyslODFau0/CJz9pXg1M5OcXwK3M7uRgMch3FDaVwHYbHdPwaAjj2ZP
+        IHpqOF83NJkwFyvrlkb19rWiAs7nWP3NODSCnSsYVSn/uKy59n0CpkMd0lNUHlfse0jti5fbGEnEE
+        EJKPi/Fg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mbR3L-008L4Y-Lv; Fri, 15 Oct 2021 17:31:31 +0000
+Date:   Fri, 15 Oct 2021 10:31:31 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
+        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
+        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
+        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
+Message-ID: <YWm68xUnAofop3PZ@bombadil.infradead.org>
+References: <20210927163805.808907-1-mcgrof@kernel.org>
+ <20210927163805.808907-12-mcgrof@kernel.org>
+ <YWeOJP2UJWYF94fu@T590>
+ <YWeR4moCRh+ZHOmH@T590>
+ <YWiSAN6xfYcUDJCb@bombadil.infradead.org>
+ <YWjCpLUNPF3s4P2U@T590>
+ <YWjJ0O7K+31Iz3ox@bombadil.infradead.org>
+ <YWk9e957Hb+I7HvR@T590>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YWk9e957Hb+I7HvR@T590>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The madv_populate selftest currently builds with a warning when the
-local installed headers (via the distribution) don't include
-MADV_POPULATE_READ and MADV_POPULATE_WRITE. The warning is correct,
-because the test cannot locate the necessary header.
+On Fri, Oct 15, 2021 at 04:36:11PM +0800, Ming Lei wrote:
+> On Thu, Oct 14, 2021 at 05:22:40PM -0700, Luis Chamberlain wrote:
+> > On Fri, Oct 15, 2021 at 07:52:04AM +0800, Ming Lei wrote:
+> ...
+> > > 
+> > > We need to understand the exact reason why there is still cpuhp node
+> > > left, can you share us the exact steps for reproducing the issue?
+> > > Otherwise we may have to trace and narrow down the reason.
+> > 
+> > See my commit log for my own fix for this issue.
+> 
+> OK, thanks!
+> 
+> I can reproduce the issue, and the reason is that reset_store fails
+> zram_remove() when unloading module, then the warning is caused.
+> 
+> The top 3 patches in the following tree can fix the issue:
+> 
+> https://github.com/ming1/linux/commits/my_v5.15-blk-dev
 
-Reason is that the in-tree installed headers (usr/include) have a
-"linux" instead of a "sys" subdirectory.
+Thanks for trying an alternative fix! A crash stops yes, however this
+also ends up leaving the driver in an unrecoverable state after a few
+tries. Ie, you CTRL-C the scripts and try again over and over again and
+the driver ends up in a situation where it just says:
 
-Including "linux/mman.h" instead of "sys/mman.h" doesn't work (e.g.,
-mmap() and madvise() are not defined that way). The only
-thing that seems to work is including "linux/mman.h" in addition to
-"sys/mman.h".
+zram: Can't change algorithm for initialized device
 
-We can get rid of our availability check and simplify.
+And the zram module can't be removed at that point.
 
-Reported-by: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- tools/testing/selftests/vm/madv_populate.c | 15 +--------------
- 1 file changed, 1 insertion(+), 14 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/madv_populate.c b/tools/testing/selftests/vm/madv_populate.c
-index b959e4ebdad4..3ee0e8275600 100644
---- a/tools/testing/selftests/vm/madv_populate.c
-+++ b/tools/testing/selftests/vm/madv_populate.c
-@@ -14,12 +14,11 @@
- #include <unistd.h>
- #include <errno.h>
- #include <fcntl.h>
-+#include <linux/mman.h>
- #include <sys/mman.h>
- 
- #include "../kselftest.h"
- 
--#if defined(MADV_POPULATE_READ) && defined(MADV_POPULATE_WRITE)
--
- /*
-  * For now, we're using 2 MiB of private anonymous memory for all tests.
-  */
-@@ -328,15 +327,3 @@ int main(int argc, char **argv)
- 				   err, ksft_test_num());
- 	return ksft_exit_pass();
- }
--
--#else /* defined(MADV_POPULATE_READ) && defined(MADV_POPULATE_WRITE) */
--
--#warning "missing MADV_POPULATE_READ or MADV_POPULATE_WRITE definition"
--
--int main(int argc, char **argv)
--{
--	ksft_print_header();
--	ksft_exit_skip("MADV_POPULATE_READ or MADV_POPULATE_WRITE not defined\n");
--}
--
--#endif /* defined(MADV_POPULATE_READ) && defined(MADV_POPULATE_WRITE) */
--- 
-2.31.1
-
+  Luis
