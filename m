@@ -2,96 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8647C42F502
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Oct 2021 16:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256F742F710
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Oct 2021 17:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236941AbhJOOTh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Oct 2021 10:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        id S235047AbhJOPkd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Oct 2021 11:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234160AbhJOOTf (ORCPT
+        with ESMTP id S230146AbhJOPkd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Oct 2021 10:19:35 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B885BC061764
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Oct 2021 07:17:28 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id p16so42596324lfa.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Oct 2021 07:17:28 -0700 (PDT)
+        Fri, 15 Oct 2021 11:40:33 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A102BC061570
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Oct 2021 08:38:26 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id 188so8172095iou.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Oct 2021 08:38:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NNBNetlXiKA/5wOmeUNGAiY3ozuqgab3m7QPlttlB08=;
-        b=CkPGlgl27sU2jSGBCoEIwfYUgGG9z5FzoqDhlFLSg61p58QeVXqcCoiZJf5G4SpakK
-         VYuZz7j8aL5DftQ1TUAa4QaMcjxBD25M7+7dFFZCvvYwgqW7fJDMd1iw83z6xXqLlfi4
-         DkpPZfPzLe1KM9+pNjKBOILQN8UQA/WIq4wL8=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=K3e3fPc7t2heMZulUyPXuSYTrB88WAMaLXw51fmC8FI=;
+        b=GwmgesfT4HkmXK0wRnLzI8Byt0N60D5PL8+cgcMIf+AHXxyISkp0pPGNX4KIRpncv1
+         WrMtVkt4aLnr1E1A5J9vBXSiF4VcdBOBbwBzFeewoOtuRgaI0v3TC4t7yDhrajLM3DeO
+         p//CWbSkmbzfyDg3MghT0eKiTPkk9FdrqvEqU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NNBNetlXiKA/5wOmeUNGAiY3ozuqgab3m7QPlttlB08=;
-        b=4+oD5B/h+0fRlmNgx3qxfXtx3nqU3HHlgYC69MEij/vpHBwPxDPQXhnmb3DDfXkM6C
-         ZYlXEPae50u6YKk3QLqwj1Y9KICWdEz7kXNiaMBCvaXdSrxhPid6dru2xSo1jx55BW7G
-         djrZ224SwisXGj/39Y9A4zIFkNW6MswGPMe/7+uAB38aBvRp0cSRiGLr+PLMls6FQM3v
-         jPqfIYeX9ycYiqEh0buaxjPRTpODZ7RQXQLLOELBfyzrex379K5ld8ti+vRFoT6DqWEZ
-         EYl70T8oU11etJ18J2CnwcTAk/u/d7dWo/CfkQeV9itGre/UrKCFofj2LJjA2c1X6LN6
-         d1SQ==
-X-Gm-Message-State: AOAM533eH9gDrqcMDVEYa0K8oUxQkaQcdIO/p9kc8wnKMilXs20B1N60
-        NdsvU2WiW90AClp8/0JuqqPi/Ww7xsfhnTY/tuu2YQ==
-X-Google-Smtp-Source: ABdhPJxC2+JyudW+dRKjr4gncthcJMBkAZznViO+/7S3dZxYXWMvX/Wnq0PXw79vvK7l5bPCnyJAPWJjRdC//U6T9ko=
-X-Received: by 2002:a05:6512:38a8:: with SMTP id o8mr11424441lft.102.1634307447034;
- Fri, 15 Oct 2021 07:17:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211015112336.1973229-1-markpash@cloudflare.com>
-In-Reply-To: <20211015112336.1973229-1-markpash@cloudflare.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Fri, 15 Oct 2021 15:17:16 +0100
-Message-ID: <CACAyw99T4bUoXp7kAftuOMBW4YVLfAosJvVSKwpoBXVgH4sAVQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/2] Get ifindex in BPF_SK_LOOKUP prog type
-To:     Mark Pashmfouroush <markpash@cloudflare.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=K3e3fPc7t2heMZulUyPXuSYTrB88WAMaLXw51fmC8FI=;
+        b=qdXCxxvzoNSpSX5yNkI/APL3SAfmIzvy+YURxQ5c1wRSYnR4wXJV508EH9Rw0CfyU1
+         4CDnz6wpQi1H7ly8Pgib5ITwlGPfDBB65Lq3l3nX7+Lj/uJoXCZM4zyw02bPGTjv3nep
+         K6jQsiq5aQDdZyg8+WyMxHWpOf9sL8JBw5qZA+LyjJxDfQ8PbhIBK48ktQZGYTY7EFRn
+         EYq7RzlrR27p181YZlGWZm9s3Imxx9TPPGppxhVdmStE8794agN0rwmZghb1yGCyoZxC
+         oRQDnX/KodF1VEY5KL4F+rGg+jpbFNm3MaRq0hbapvEuvbxRZksQ/YI3aok9AyR5Rapl
+         PUUQ==
+X-Gm-Message-State: AOAM532sQr8MgqWM1rmbQbU2yUi/5JuUegMJ/jf0/Nf7kzwjCCmsujbW
+        RAPTnWRNvSLMhOItXEXBPKsHkyfGlY6CHA==
+X-Google-Smtp-Source: ABdhPJxJL8c5vZdOxZB4JmZkMR0dRtCWu8QDLxF3hfT5HnDc8N/180h61DAt/qfE86UGaWjPelwE6Q==
+X-Received: by 2002:a5e:c018:: with SMTP id u24mr4159426iol.197.1634312306057;
+        Fri, 15 Oct 2021 08:38:26 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id v26sm1980979iox.35.2021.10.15.08.38.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Oct 2021 08:38:25 -0700 (PDT)
+Subject: Re: [RFC][PATCH] selftests/vm/transhuge-stress: fix ram size thinko
+To:     "George G. Davis" <george_davis@mentor.com>,
         Shuah Khan <shuah@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>,
-        Florent Revest <revest@chromium.org>,
-        Joe Stringer <joe@cilium.io>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        "George G. Davis" <davis.george@siemens.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210825135843.29052-1-george_davis@mentor.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <41be8425-761b-fa55-40c5-687b397e8ad2@linuxfoundation.org>
+Date:   Fri, 15 Oct 2021 09:38:24 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20210825135843.29052-1-george_davis@mentor.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 15 Oct 2021 at 12:24, Mark Pashmfouroush
-<markpash@cloudflare.com> wrote:
->
-> BPF_SK_LOOKUP users may want to have access to the ifindex of the skb
-> which triggered the socket lookup. This may be useful for selectively
-> applying programmable socket lookup logic to packets that arrive on a
-> specific interface, or excluding packets from an interface.
+On 8/25/21 7:58 AM, George G. Davis wrote:
+> From: "George G. Davis" <davis.george@siemens.com>
+> 
+> When executing transhuge-stress with an argument to specify the virtual
+> memory size for testing, the ram size is reported as 0, e.g.
+> 
+> transhuge-stress 384
+> thp-mmap: allocate 192 transhuge pages, using 384 MiB virtual memory and 0 MiB of ram
+> thp-mmap: 0.184 s/loop, 0.957 ms/page,   2090.265 MiB/s  192 succeed,    0 failed
+> 
+> This appears to be due to a thinko in commit 0085d61fe05e
+> ("selftests/vm/transhuge-stress: stress test for memory compaction"),
+> where, at a guess, the intent was to base "xyz MiB of ram" on `ram`
+> size. Here are results after using `ram` size:
+> 
+> thp-mmap: allocate 192 transhuge pages, using 384 MiB virtual memory and 14 MiB of ram
+> 
+> Fixes: 0085d61fe05e ("selftests/vm/transhuge-stress: stress test for memory compaction")
+> Signed-off-by: George G. Davis <davis.george@siemens.com>
+> ---
+>   tools/testing/selftests/vm/transhuge-stress.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vm/transhuge-stress.c b/tools/testing/selftests/vm/transhuge-stress.c
+> index fd7f1b4a96f9..5e4c036f6ad3 100644
+> --- a/tools/testing/selftests/vm/transhuge-stress.c
+> +++ b/tools/testing/selftests/vm/transhuge-stress.c
+> @@ -79,7 +79,7 @@ int main(int argc, char **argv)
+>   
+>   	warnx("allocate %zd transhuge pages, using %zd MiB virtual memory"
+>   	      " and %zd MiB of ram", len >> HPAGE_SHIFT, len >> 20,
+> -	      len >> (20 + HPAGE_SHIFT - PAGE_SHIFT - 1));
+> +	      ram >> (20 + HPAGE_SHIFT - PAGE_SHIFT - 1));
+>   
+>   	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+>   	if (pagemap_fd < 0)
+> 
 
-For the series:
+Sorry for the delay on this. The change looks good to me.
 
-Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
+Andrew! Would you like me to take this through kselftest tree?
 
--- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
-
-www.cloudflare.com
+thanks,
+-- Shuah
