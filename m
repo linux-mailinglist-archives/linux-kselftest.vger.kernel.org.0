@@ -2,88 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 686D042FA49
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Oct 2021 19:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2513D42FC27
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Oct 2021 21:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237709AbhJORdt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Oct 2021 13:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235261AbhJORds (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Oct 2021 13:33:48 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BA6C061570;
-        Fri, 15 Oct 2021 10:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uUlcTDK4XPU+iizrpIkJOrRHPABQ0RGWVp54/0NzJKk=; b=NgbjHiyaDO4zvgJzUVTEBWtoLd
-        MxI2VAOvKixcFxmUR9Q78HrsKsnDB2feafuRocMJlVJca+AtlN2zmCFgfeF73UGfFhvY36HHdpv+c
-        p1/8xX3sPuI7ChCJO1bKSWXZ0nrU7NiH+lVFMaTQ4HoVgLCIiqAeSMRNDIBy98+Bb908T9VbJT4zJ
-        VTKMweCE7STFbx6SekAkMWFyslODFau0/CJz9pXg1M5OcXwK3M7uRgMch3FDaVwHYbHdPwaAjj2ZP
-        IHpqOF83NJkwFyvrlkb19rWiAs7nWP3NODSCnSsYVSn/uKy59n0CpkMd0lNUHlfse0jti5fbGEnEE
-        EJKPi/Fg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mbR3L-008L4Y-Lv; Fri, 15 Oct 2021 17:31:31 +0000
-Date:   Fri, 15 Oct 2021 10:31:31 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
-        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
-        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
-        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
-Message-ID: <YWm68xUnAofop3PZ@bombadil.infradead.org>
-References: <20210927163805.808907-1-mcgrof@kernel.org>
- <20210927163805.808907-12-mcgrof@kernel.org>
- <YWeOJP2UJWYF94fu@T590>
- <YWeR4moCRh+ZHOmH@T590>
- <YWiSAN6xfYcUDJCb@bombadil.infradead.org>
- <YWjCpLUNPF3s4P2U@T590>
- <YWjJ0O7K+31Iz3ox@bombadil.infradead.org>
- <YWk9e957Hb+I7HvR@T590>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YWk9e957Hb+I7HvR@T590>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+        id S238479AbhJOTb1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Oct 2021 15:31:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41578 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235265AbhJOTbW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 15 Oct 2021 15:31:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AB9A461151;
+        Fri, 15 Oct 2021 19:29:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1634326156;
+        bh=3JS/1kbwClvIz4bw9kp2a/P9fTD2/8UbJaeK5lJxnkE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DsnBwVbi/py5VyDgLutJnKvgeqNbFgDvx0Zz4vICvFjeLGosgjY4Ycv+xb7CRY8Sr
+         AMAD0Rjun8jZyoTyj+OTinSaI029/rK6FHalqQJkQ/RiEOTLVWUCRxfnTJU9DXo8dw
+         Hxb+Z6cuMsUwa2c7cyJKBOdFFPQupnhIBj7roG6s=
+Date:   Fri, 15 Oct 2021 12:29:12 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "George G. Davis" <george_davis@mentor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        "George G. Davis" <davis.george@siemens.com>,
+        Konstantin Khlebnikov <koct9i@gmail.com>
+Subject: Re: [RFC][PATCH] selftests/vm/transhuge-stress: fix ram size thinko
+Message-Id: <20211015122912.d42e5a8c41d623b544f7dd38@linux-foundation.org>
+In-Reply-To: <41be8425-761b-fa55-40c5-687b397e8ad2@linuxfoundation.org>
+References: <20210825135843.29052-1-george_davis@mentor.com>
+        <41be8425-761b-fa55-40c5-687b397e8ad2@linuxfoundation.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 04:36:11PM +0800, Ming Lei wrote:
-> On Thu, Oct 14, 2021 at 05:22:40PM -0700, Luis Chamberlain wrote:
-> > On Fri, Oct 15, 2021 at 07:52:04AM +0800, Ming Lei wrote:
-> ...
-> > > 
-> > > We need to understand the exact reason why there is still cpuhp node
-> > > left, can you share us the exact steps for reproducing the issue?
-> > > Otherwise we may have to trace and narrow down the reason.
+On Fri, 15 Oct 2021 09:38:24 -0600 Shuah Khan <skhan@linuxfoundation.org> wrote:
+
+> On 8/25/21 7:58 AM, George G. Davis wrote:
+> > From: "George G. Davis" <davis.george@siemens.com>
 > > 
-> > See my commit log for my own fix for this issue.
+> > When executing transhuge-stress with an argument to specify the virtual
+> > memory size for testing, the ram size is reported as 0, e.g.
+> > 
+> > transhuge-stress 384
+> > thp-mmap: allocate 192 transhuge pages, using 384 MiB virtual memory and 0 MiB of ram
+> > thp-mmap: 0.184 s/loop, 0.957 ms/page,   2090.265 MiB/s  192 succeed,    0 failed
+> > 
+> > This appears to be due to a thinko in commit 0085d61fe05e
+> > ("selftests/vm/transhuge-stress: stress test for memory compaction"),
+> > where, at a guess, the intent was to base "xyz MiB of ram" on `ram`
+> > size. Here are results after using `ram` size:
+> > 
+> > thp-mmap: allocate 192 transhuge pages, using 384 MiB virtual memory and 14 MiB of ram
+> > 
+> > Fixes: 0085d61fe05e ("selftests/vm/transhuge-stress: stress test for memory compaction")
+> > Signed-off-by: George G. Davis <davis.george@siemens.com>
+> > ---
+> >   tools/testing/selftests/vm/transhuge-stress.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/vm/transhuge-stress.c b/tools/testing/selftests/vm/transhuge-stress.c
+> > index fd7f1b4a96f9..5e4c036f6ad3 100644
+> > --- a/tools/testing/selftests/vm/transhuge-stress.c
+> > +++ b/tools/testing/selftests/vm/transhuge-stress.c
+> > @@ -79,7 +79,7 @@ int main(int argc, char **argv)
+> >   
+> >   	warnx("allocate %zd transhuge pages, using %zd MiB virtual memory"
+> >   	      " and %zd MiB of ram", len >> HPAGE_SHIFT, len >> 20,
+> > -	      len >> (20 + HPAGE_SHIFT - PAGE_SHIFT - 1));
+> > +	      ram >> (20 + HPAGE_SHIFT - PAGE_SHIFT - 1));
+> >   
+> >   	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> >   	if (pagemap_fd < 0)
+> > 
 > 
-> OK, thanks!
-> 
-> I can reproduce the issue, and the reason is that reset_store fails
-> zram_remove() when unloading module, then the warning is caused.
-> 
-> The top 3 patches in the following tree can fix the issue:
-> 
-> https://github.com/ming1/linux/commits/my_v5.15-blk-dev
+> Sorry for the delay on this. The change looks good to me.
 
-Thanks for trying an alternative fix! A crash stops yes, however this
-also ends up leaving the driver in an unrecoverable state after a few
-tries. Ie, you CTRL-C the scripts and try again over and over again and
-the driver ends up in a situation where it just says:
+Konstantin, coould you please take a look?
 
-zram: Can't change algorithm for initialized device
+> Andrew! Would you like me to take this through kselftest tree?
 
-And the zram module can't be removed at that point.
-
-  Luis
+Is OK thanks - I'll add it to my mm/thp pile.
