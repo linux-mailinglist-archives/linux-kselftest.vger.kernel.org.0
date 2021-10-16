@@ -2,93 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1660430053
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Oct 2021 06:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9EB4300EE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Oct 2021 09:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236375AbhJPEvq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Oct 2021 00:51:46 -0400
-Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:47733 "EHLO
-        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236300AbhJPEvp (ORCPT
+        id S239794AbhJPHpD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Oct 2021 03:45:03 -0400
+Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:33879 "EHLO
+        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239843AbhJPHpD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Oct 2021 00:51:45 -0400
+        Sat, 16 Oct 2021 03:45:03 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1634359776;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1634370175;
         h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=ZNOhtZa9LyPmWL+SWfry4dnkSnODoOTwjBxIEG7XBnQ=;
-        b=bizjB9/ZyfRad0Qwv4erNGDSOqlcq79n/nCsH8+pooMJw0+HAlGBx9HTHZBS7eGz
-        WVA0hs0BIbFhSTJbV1v4R4vfZy3mFl9GajcSZN32ZrokDHLndm7zVm3MNQ/jAYNHLuB
-        ucNFcmYd6UoxL6zWVuEdiXIUlaQkjaQYYH93Q5sw=
+        bh=9vJZeoEpkV9mMJBDKzN4wORIOffHfCPZHQ5ejPyGBos=;
+        b=oyp5GyAlEXmseHpAUQ1prjZMlIi0y8rrtoOywz1jO5FWjOrlZ/V9bxOM3vyjNcxU
+        t5llvtnAsJobcF6zH2V1JjBlLxy+Ka8XVPfQdkZH6qw0yJ6FclOKGLKo3+EOIkEicDs
+        znJr5qERVXUW833AdzHVF37moVNhO5/0sUM/2I8s=
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1634359776;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1634370175;
         h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=ZNOhtZa9LyPmWL+SWfry4dnkSnODoOTwjBxIEG7XBnQ=;
-        b=aWf7tiqXQH9ImZjRJ6idlpcl0MPmX/TdyjHERy0qgdr5fRkcgV/QocylXEc53kWo
-        CpMl8Suw/O47Hq3Ay13k+UaTFvbP8nwZH+YoeHpltkJ794V7Vhd6TJC0X3wBKcoe6E4
-        PmiYV+SjFp3aKPKXEPTylsoRSn9CMh5H1OtY+diE=
+        bh=9vJZeoEpkV9mMJBDKzN4wORIOffHfCPZHQ5ejPyGBos=;
+        b=cxB2Gs1UUHGwvMBl/f85gWDop+UaMiapSStIgZstl5763Moz09r7W+2JbdB3hl1y
+        LTk00xSq8d0MnOzfx2vRL+EcaOO/oSMcFwJ3ib2OY3zPRC+ql/s/Q+B5vZIn9HUC9wN
+        wZoxn6uLZlo1JJn8M/8XEmOVPOBTgKzvTMyj6+Sc=
 From:   lkft@linaro.org
 To:     lkft@linaro.org
 Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
         shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211011
+Subject: lkft kselftest for next-20211012
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <0100017c876f132d-fbd163be-a633-4274-ba2a-f0ac4a197c9e-000000@email.amazonses.com>
-Date:   Sat, 16 Oct 2021 04:49:36 +0000
+Message-ID: <0100017c880dc028-6c3e7879-8a66-41b9-9ddf-3cc3a761de34-000000@email.amazonses.com>
+Date:   Sat, 16 Oct 2021 07:42:55 +0000
 Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.10.16-54.240.8.97
+X-SES-Outgoing: 2021.10.16-54.240.8.35
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 ## Build
-* kernel: 5.15.0-rc4
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* kernel: 5.15.0-rc5
+* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
 * git branch: master
-* git commit: d3134eb5de8546a214c028fb7195e764b89da7d4
-* git describe: next-20211011
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211011
+* git commit: 6d3d22efa090e7a5d3691613297aab12c6d2708a
+* git describe: next-20211012
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211012
 
-## Regressions (compared to next-20211006)
-* hi6220-hikey, kselftest-timers
-  - timers.nsleep-lat
-  - timers.set-timer-lat
+## Regressions (compared to next-20211007)
+No regressions found.
 
-* qemu_i386, kselftest-pidfd
-  - pidfd.pidfd_test
-
-* qemu_x86_64, kselftest-pidfd
-  - pidfd.pidfd_test
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211006)
-* dragonboard-410c, kselftest-gpio
-  - gpio.gpio-mockup.sh
-
-* qemu_i386, kselftest-gpio
-  - gpio.gpio-mockup.sh
-
-* qemu_i386, kselftest-seccomp
-  - seccomp.seccomp_benchmark
-
-* qemu_x86_64, kselftest-seccomp
-  - seccomp.seccomp_benchmark
-
-* x86, kselftest-lkdtm
-  - lkdtm.SLAB_FREE_DOUBLE.sh
-
+## Fixes (compared to next-20211007)
+No fixes found.
 
 ## Test result summary
-total: 2802, pass: 1736, fail: 237, skip: 829, xfail: 0
+total: 2849, pass: 1736, fail: 238, skip: 875, xfail: 0
 
 ## Build Summary
 
 ## Test suites summary
 * kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
 * kselftest-bpf
 * kselftest-breakpoints
 * kselftest-capabilities
