@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5872E43272D
+	by mail.lfdr.de (Postfix) with ESMTP id C726B43272E
 	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Oct 2021 21:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbhJRTMn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Oct 2021 15:12:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37956 "EHLO mail.kernel.org"
+        id S231811AbhJRTMr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Oct 2021 15:12:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229924AbhJRTMl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Oct 2021 15:12:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7782B60ED3;
-        Mon, 18 Oct 2021 19:10:29 +0000 (UTC)
+        id S232091AbhJRTMo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 18 Oct 2021 15:12:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3132261074;
+        Mon, 18 Oct 2021 19:10:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634584230;
-        bh=+Jz54IdfqZFR2B5eyH0lv2js+NSOcBQ38b1fjkYAxPg=;
+        s=k20201202; t=1634584232;
+        bh=WjZeha3MWu4TJuokbQ1Ub4DAQ9GmKwVVzyOzdhRbxVo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TZK/dlBM4B1Y9AS0rLpasjvl3RFE0XCBA1n9aiCKYmw62upA1rCndlabKKNFWWdkj
-         Tk1xXILANpngpI3wmCyqyUJxPvIKx7T6b8as1KfvBq0LxY2872uNaU2CB1PBoV5JPG
-         fGxbFxovhlbeDH+wYYI5SmaqTZcJHSD/oeCvxNnHYTImTNglK0kCFS7C6orTsQVo3S
-         w0QCiRwI6dk7u158G5ffdvApIrmv3/3E+u/WgnmsnTmt7Xf5S7sw71IYxTQ7FNizDZ
-         Lbei327tiZu3nUAFW//43Xfxo+4He9uhvnJa2mOC9QwlPIC29xXlIQjXJkyJtSleoa
-         sHmdNNrmd+eEA==
+        b=sWHb8PFkBSUmIlBnAvjuAOQxtfgmDMYxGmQxOLFZaFxtEbo6BOustO8VfV/9u0MsY
+         B89St9ywXlQYONa/pTqjAL6XMDCuDd7ZUmrgPXQhS4JLXIePP9hnaTy5iI7ij/GTaO
+         fDN4ODisYYiPOLJOhApLpVYS6QbbkEH06P39rpWtqqgr9Xk1wInmeLeJlvZQI+zJKq
+         B2qHfX0stjkuP/+t0OvWVbwTOlgP5qqFzbP8ovw3hU3PNRCnueMJ0IxREhqWHQq7IP
+         qfuqCN9TFHtmT5hmDy+dPWA5qC0V/IWmJ/xcHQHLbXHACJxppJbih0DP80rG4WN72y
+         VttFDJoRaYbjA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -35,252 +35,120 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 09/42] arm64/sve: Track vector lengths for tasks in an array
-Date:   Mon, 18 Oct 2021 20:08:25 +0100
-Message-Id: <20211018190858.2119209-10-broonie@kernel.org>
+Subject: [PATCH v2 10/42] arm64/sve: Make sysctl interface for SVE reusable by SME
+Date:   Mon, 18 Oct 2021 20:08:26 +0100
+Message-Id: <20211018190858.2119209-11-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211018190858.2119209-1-broonie@kernel.org>
 References: <20211018190858.2119209-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7903; h=from:subject; bh=+Jz54IdfqZFR2B5eyH0lv2js+NSOcBQ38b1fjkYAxPg=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbcYuexQ47T5079pXSLnhoxw7cZP2ceX7xdzxGCTT RBe4NqmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW3GLgAKCRAk1otyXVSH0AeYB/ 9Jalh/D4kdhHrcCJso0P2dc683WBKnYKkPAQ8I7DFqCuuIllujg5h4l/I2diuftHoFvpKnLmYiASwt kJ2/LLsoop6LVaZ4wJesWV46Gd52yb6SNUSsqypQh/Vsk+n0B0dthKwGR2zOH9dTYluwiIWQwR46s3 JYAYwWoYEdhD47kVttYVvcOCcFWDCmOWvVOsprSlQVda2uc/yFhs56yK2/AWy0tGf2Y3CeWHpMRxm1 sS1AWDilrNATHV1pRoQScujbiBMunzyaUqzSg9tmi/RNSCAXVPtQTeybX01CMtYw//Sm5RH2Q5FAdf 9FJLPZ2UnYPZs9yLjZrbuonZCVvbil
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3161; h=from:subject; bh=WjZeha3MWu4TJuokbQ1Ub4DAQ9GmKwVVzyOzdhRbxVo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbcYvSmJgZCxrTpwBtd0xxBnTBDB1GcuBKHruW3mB M803OhWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW3GLwAKCRAk1otyXVSH0E2jB/ 0R+NyIeujRzf5gJiTvWY6lEAd63gFBeojLqRehtobSrfoTpuT+A4krRk5OTHsqZE0DM55l/fSApBKz tr6eY6EUzy9ekZJr0tRkVagd6WM8m8FfpLh5xpOkmCImAh5E5UzGENkP/nmoQARBoaP21V9cjCOPud quU62W2t+bsUCA2Jwfl+PGE6CwrZH+6MVExM2dj3P+z7Rr/KWpJ8RELhfmeaK5Fo4J9+XsjP+bvu/9 lFAtrWdHYxUVJg/QAzLY+qpqBAofDPejugLVBTGHgWcqas5/fzxUQKYlUXTGgJX3oYsm1xlDHF+UT9 rqy8M1F9ecyTVIIwD191cCFvpXD0Vb
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As for SVE we will track a per task SME vector length for tasks. Convert
-the existing storage for the vector length into an array and update
-fpsimd_flush_task() to initialise this in a function.
+The vector length configuration for SME is very similar to that for SVE
+so in order to allow reuse refactor the SVE configuration so that it takes
+the vector type from the struct ctl_table. Since there's no dedicated space
+for this we repurpose the extra1 field to store the vector type, this is
+otherwise unused for integer sysctls.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/processor.h   | 44 +++++++++++--
- arch/arm64/include/asm/thread_info.h |  2 +-
- arch/arm64/kernel/fpsimd.c           | 97 ++++++++++++++++------------
- 3 files changed, 95 insertions(+), 48 deletions(-)
+ arch/arm64/kernel/fpsimd.c | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index fb0608fe9ded..9b854e8196df 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -152,8 +152,8 @@ struct thread_struct {
- 
- 	unsigned int		fpsimd_cpu;
- 	void			*sve_state;	/* SVE registers, if any */
--	unsigned int		sve_vl;		/* SVE vector length */
--	unsigned int		sve_vl_onexec;	/* SVE vl after next exec */
-+	unsigned int		vl[ARM64_VEC_MAX];	/* vector length */
-+	unsigned int		vl_onexec[ARM64_VEC_MAX]; /* vl after next exec */
- 	unsigned long		fault_address;	/* fault info */
- 	unsigned long		fault_code;	/* ESR_EL1 value */
- 	struct debug_info	debug;		/* debugging */
-@@ -169,15 +169,45 @@ struct thread_struct {
- 	u64			sctlr_user;
- };
- 
-+static inline unsigned int thread_get_vl(struct thread_struct *thread,
-+					 enum vec_type type)
-+{
-+	return thread->vl[type];
-+}
-+
- static inline unsigned int thread_get_sve_vl(struct thread_struct *thread)
- {
--	return thread->sve_vl;
-+	return thread_get_vl(thread, ARM64_VEC_SVE);
-+}
-+
-+unsigned int task_get_vl(const struct task_struct *task, enum vec_type type);
-+void task_set_vl(struct task_struct *task, enum vec_type type,
-+		 unsigned long vl);
-+void task_set_vl_onexec(struct task_struct *task, enum vec_type type,
-+			unsigned long vl);
-+unsigned int task_get_vl_onexec(const struct task_struct *task,
-+				enum vec_type type);
-+
-+static inline unsigned int task_get_sve_vl(const struct task_struct *task)
-+{
-+	return task_get_vl(task, ARM64_VEC_SVE);
- }
- 
--unsigned int task_get_sve_vl(const struct task_struct *task);
--void task_set_sve_vl(struct task_struct *task, unsigned long vl);
--unsigned int task_get_sve_vl_onexec(const struct task_struct *task);
--void task_set_sve_vl_onexec(struct task_struct *task, unsigned long vl);
-+static inline void task_set_sve_vl(struct task_struct *task, unsigned long vl)
-+{
-+	task_set_vl(task, ARM64_VEC_SVE, vl);
-+}
-+
-+static inline unsigned int task_get_sve_vl_onexec(const struct task_struct *task)
-+{
-+	return task_get_vl_onexec(task, ARM64_VEC_SVE);
-+}
-+
-+static inline void task_set_sve_vl_onexec(struct task_struct *task,
-+					  unsigned long vl)
-+{
-+	task_set_vl_onexec(task, ARM64_VEC_SVE, vl);
-+}
- 
- #define SCTLR_USER_MASK                                                        \
- 	(SCTLR_ELx_ENIA | SCTLR_ELx_ENIB | SCTLR_ELx_ENDA | SCTLR_ELx_ENDB |   \
-diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-index 6623c99f0984..d5c8ac81ce11 100644
---- a/arch/arm64/include/asm/thread_info.h
-+++ b/arch/arm64/include/asm/thread_info.h
-@@ -78,7 +78,7 @@ int arch_dup_task_struct(struct task_struct *dst,
- #define TIF_SINGLESTEP		21
- #define TIF_32BIT		22	/* 32bit process */
- #define TIF_SVE			23	/* Scalable Vector Extension in use */
--#define TIF_SVE_VL_INHERIT	24	/* Inherit sve_vl_onexec across exec */
-+#define TIF_SVE_VL_INHERIT	24	/* Inherit SVE vl_onexec across exec */
- #define TIF_SSBD		25	/* Wants SSB mitigation */
- #define TIF_TAGGED_ADDR		26	/* Allow tagged user addresses */
- 
 diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index e75dd20a40cf..3474122f9207 100644
+index 3474122f9207..53462636b5cf 100644
 --- a/arch/arm64/kernel/fpsimd.c
 +++ b/arch/arm64/kernel/fpsimd.c
-@@ -133,6 +133,17 @@ __ro_after_init struct vl_info vl_info[ARM64_VEC_MAX] = {
- #endif
- };
+@@ -15,6 +15,7 @@
+ #include <linux/compiler.h>
+ #include <linux/cpu.h>
+ #include <linux/cpu_pm.h>
++#include <linux/ctype.h>
+ #include <linux/kernel.h>
+ #include <linux/linkage.h>
+ #include <linux/irqflags.h>
+@@ -155,11 +156,6 @@ static int get_default_vl(enum vec_type type)
+ 	return READ_ONCE(vl_config[type].__default_vl);
+ }
  
-+static unsigned int vec_vl_inherit_flag(enum vec_type type)
+-static int get_sve_default_vl(void)
+-{
+-	return get_default_vl(ARM64_VEC_SVE);
+-}
+-
+ #ifdef CONFIG_ARM64_SVE
+ 
+ static void set_default_vl(enum vec_type type, int val)
+@@ -172,6 +168,11 @@ static void set_sve_default_vl(int val)
+ 	set_default_vl(ARM64_VEC_SVE, val);
+ }
+ 
++static int get_sve_default_vl(void)
 +{
-+	switch (type) {
-+	case ARM64_VEC_SVE:
-+		return TIF_SVE_VL_INHERIT;
-+	default:
-+		WARN_ON_ONCE(1);
-+		return 0;
-+	}
++	return get_default_vl(ARM64_VEC_SVE);
 +}
 +
- struct vl_config {
- 	int __default_vl;		/* Default VL for tasks */
+ static void __percpu *efi_sve_state;
+ 
+ #else /* ! CONFIG_ARM64_SVE */
+@@ -406,17 +407,21 @@ static unsigned int find_supported_vector_length(enum vec_type type,
+ 
+ #if defined(CONFIG_ARM64_SVE) && defined(CONFIG_SYSCTL)
+ 
+-static int sve_proc_do_default_vl(struct ctl_table *table, int write,
++static int vec_proc_do_default_vl(struct ctl_table *table, int write,
+ 				  void *buffer, size_t *lenp, loff_t *ppos)
+ {
+-	struct vl_info *info = &vl_info[ARM64_VEC_SVE];
++	struct vl_info *info = table->extra1;
++	enum vec_type type = info->type;
+ 	int ret;
+-	int vl = get_sve_default_vl();
++	int vl = get_default_vl(type);
+ 	struct ctl_table tmp_table = {
+ 		.data = &vl,
+ 		.maxlen = sizeof(vl),
+ 	};
+ 
++	if (!info)
++		return -EINVAL;
++
+ 	ret = proc_dointvec(&tmp_table, write, buffer, lenp, ppos);
+ 	if (ret || !write)
+ 		return ret;
+@@ -428,7 +433,7 @@ static int sve_proc_do_default_vl(struct ctl_table *table, int write,
+ 	if (!sve_vl_valid(vl))
+ 		return -EINVAL;
+ 
+-	set_sve_default_vl(find_supported_vector_length(ARM64_VEC_SVE, vl));
++	set_default_vl(type, find_supported_vector_length(type, vl));
+ 	return 0;
+ }
+ 
+@@ -436,7 +441,8 @@ static struct ctl_table sve_default_vl_table[] = {
+ 	{
+ 		.procname	= "sve_default_vector_length",
+ 		.mode		= 0644,
+-		.proc_handler	= sve_proc_do_default_vl,
++		.proc_handler	= vec_proc_do_default_vl,
++		.extra1		= &vl_info[ARM64_VEC_SVE],
+ 	},
+ 	{ }
  };
-@@ -239,24 +250,27 @@ static void sve_free(struct task_struct *task)
- 	__sve_free(task);
- }
+@@ -1107,7 +1113,7 @@ static void fpsimd_flush_thread_vl(enum vec_type type)
+ 		vl = get_default_vl(type);
  
--unsigned int task_get_sve_vl(const struct task_struct *task)
-+unsigned int task_get_vl(const struct task_struct *task, enum vec_type type)
- {
--	return task->thread.sve_vl;
-+	return task->thread.vl[type];
- }
+ 	if (WARN_ON(!sve_vl_valid(vl)))
+-		vl = SVE_VL_MIN;
++		vl = vl_info[type].min_vl;
  
--void task_set_sve_vl(struct task_struct *task, unsigned long vl)
-+void task_set_vl(struct task_struct *task, enum vec_type type,
-+		 unsigned long vl)
- {
--	task->thread.sve_vl = vl;
-+	task->thread.vl[type] = vl;
- }
- 
--unsigned int task_get_sve_vl_onexec(const struct task_struct *task)
-+unsigned int task_get_vl_onexec(const struct task_struct *task,
-+				enum vec_type type)
- {
--	return task->thread.sve_vl_onexec;
-+	return task->thread.vl_onexec[type];
- }
- 
--void task_set_sve_vl_onexec(struct task_struct *task, unsigned long vl)
-+void task_set_vl_onexec(struct task_struct *task, enum vec_type type,
-+			unsigned long vl)
- {
--	task->thread.sve_vl_onexec = vl;
-+	task->thread.vl_onexec[type] = vl;
- }
- 
- /*
-@@ -1074,10 +1088,43 @@ void fpsimd_thread_switch(struct task_struct *next)
- 	__put_cpu_fpsimd_context();
- }
- 
--void fpsimd_flush_thread(void)
-+static void fpsimd_flush_thread_vl(enum vec_type type)
- {
- 	int vl, supported_vl;
- 
-+	/*
-+	 * Reset the task vector length as required.  This is where we
-+	 * ensure that all user tasks have a valid vector length
-+	 * configured: no kernel task can become a user task without
-+	 * an exec and hence a call to this function.  By the time the
-+	 * first call to this function is made, all early hardware
-+	 * probing is complete, so __sve_default_vl should be valid.
-+	 * If a bug causes this to go wrong, we make some noise and
-+	 * try to fudge thread.sve_vl to a safe value here.
-+	 */
-+	vl = task_get_vl_onexec(current, type);
-+	if (!vl)
-+		vl = get_default_vl(type);
-+
-+	if (WARN_ON(!sve_vl_valid(vl)))
-+		vl = SVE_VL_MIN;
-+
-+	supported_vl = find_supported_vector_length(type, vl);
-+	if (WARN_ON(supported_vl != vl))
-+		vl = supported_vl;
-+
-+	task_set_vl(current, type, vl);
-+
-+	/*
-+	 * If the task is not set to inherit, ensure that the vector
-+	 * length will be reset by a subsequent exec:
-+	 */
-+	if (!test_thread_flag(vec_vl_inherit_flag(type)))
-+		task_set_vl_onexec(current, type, 0);
-+}
-+
-+void fpsimd_flush_thread(void)
-+{
- 	if (!system_supports_fpsimd())
- 		return;
- 
-@@ -1090,37 +1137,7 @@ void fpsimd_flush_thread(void)
- 	if (system_supports_sve()) {
- 		clear_thread_flag(TIF_SVE);
- 		sve_free(current);
--
--		/*
--		 * Reset the task vector length as required.
--		 * This is where we ensure that all user tasks have a valid
--		 * vector length configured: no kernel task can become a user
--		 * task without an exec and hence a call to this function.
--		 * By the time the first call to this function is made, all
--		 * early hardware probing is complete, so __sve_default_vl
--		 * should be valid.
--		 * If a bug causes this to go wrong, we make some noise and
--		 * try to fudge thread.sve_vl to a safe value here.
--		 */
--		vl = task_get_sve_vl_onexec(current);
--		if (!vl)
--			vl = get_sve_default_vl();
--
--		if (WARN_ON(!sve_vl_valid(vl)))
--			vl = SVE_VL_MIN;
--
--		supported_vl = find_supported_vector_length(ARM64_VEC_SVE, vl);
--		if (WARN_ON(supported_vl != vl))
--			vl = supported_vl;
--
--		task_set_sve_vl(current, vl);
--
--		/*
--		 * If the task is not set to inherit, ensure that the vector
--		 * length will be reset by a subsequent exec:
--		 */
--		if (!test_thread_flag(TIF_SVE_VL_INHERIT))
--			task_set_sve_vl_onexec(current, 0);
-+		fpsimd_flush_thread_vl(ARM64_VEC_SVE);
- 	}
- 
- 	put_cpu_fpsimd_context();
+ 	supported_vl = find_supported_vector_length(type, vl);
+ 	if (WARN_ON(supported_vl != vl))
 -- 
 2.30.2
 
