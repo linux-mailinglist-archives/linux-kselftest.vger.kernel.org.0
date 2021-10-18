@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CB443274C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Oct 2021 21:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D9243274D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Oct 2021 21:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbhJRTNu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Oct 2021 15:13:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38986 "EHLO mail.kernel.org"
+        id S233165AbhJRTNx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Oct 2021 15:13:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232892AbhJRTNt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Oct 2021 15:13:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E1D436128E;
-        Mon, 18 Oct 2021 19:11:37 +0000 (UTC)
+        id S232813AbhJRTNw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 18 Oct 2021 15:13:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9AA4B6128B;
+        Mon, 18 Oct 2021 19:11:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634584298;
-        bh=y7oT69szA/urDPs5Mt7jluLl2o6+yXQperP2iUwh3AY=;
+        s=k20201202; t=1634584301;
+        bh=P2l5Y5PDPDJcPc6k74icHUD6sRurj6ctKkCgiE7n3uE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U3+c1zSscZEkBNRafUUHaOhu5vkyv9DFbHkmj9s2+JEFnDgOoan54R4HRtw0QiIbd
-         vc8S93FRNDk50CJe9qXBK3gDNqX3kh3njP7g3eCUh5qhooH6cIyheAObavaPHCAk6y
-         0VxkxpGHUfj8ifjVc+L20a8jDWet3Nh+0SItVLwhLqOMyEMvW51N/1qCKQjbu7vaPP
-         8jyfBzAVvJfLa95knTg4qLsUARKuEH7xIaCOdaLKDUenSMAa6eG0lMzXg9zg1OE3UI
-         iebf6IG309YYhAq2tbihAy5ZmXWAeDZmmscPFH+lrSQVDdTM8+QiVLm4IN7BwOItXr
-         3FTGfrIQC/E8w==
+        b=Mx1xiFyRQc9juJ3sYKtVjZy6Fx+vBrBLen3J8zk8Z44HhHD0CINoj4LwpnOnaOfyi
+         q4oYlDFTYEdTVqkR2olfBC7kThYbOZls3S64b9S7WNpMj/P5aezsS54XjW9944Njny
+         u5Hc+XEL6pv9ens4Y8ECduaX9zh46BDRpdlgtaSrHmaT80xoaJy9y+2ihOmHS7euFA
+         l+YsyO/nwU17O36djwXDCD/Sk125Whyj1ZHN16V9WMsLJW1HxiRAwFpOxJchOx9+o6
+         GuYKWvGOtzgJBoPMi2gYFkdFoYAhEOrhlmZvolPzc4LPs6VgygJzWV19MN48WXf7/G
+         UOk/ngQmzUIKA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -35,56 +35,77 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 34/42] arm64/sme: Provide Kconfig for SME
-Date:   Mon, 18 Oct 2021 20:08:50 +0100
-Message-Id: <20211018190858.2119209-35-broonie@kernel.org>
+Subject: [PATCH v2 35/42] kselftest/arm64: sme: Add streaming SME support to vlset
+Date:   Mon, 18 Oct 2021 20:08:51 +0100
+Message-Id: <20211018190858.2119209-36-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211018190858.2119209-1-broonie@kernel.org>
 References: <20211018190858.2119209-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1520; h=from:subject; bh=y7oT69szA/urDPs5Mt7jluLl2o6+yXQperP2iUwh3AY=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbcZBQs2ISDFmh4uUajl+uc5MZuWdkPo2w2uOk2bw Dn0TZi6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW3GQQAKCRAk1otyXVSH0IZ2B/ wLc5fet5rvuk29Ek9t8qdRG9V+iRMyVf2JzGem3gUf5pV1IBFvvf+youR6H8Urvk2RTewGx8j6Xpv3 w7a9l/2P4I1OgGv++jPXvPVllYYq8Mh93JwQe+qS+7mwc+oDIPrf4GoWP249N+JZBGdKfKOr1OZapz qAHtDD6CormjIZ9kqsSDV9OoY4kFHGUbX3Q6xHwirJ+0O94jn4zYNfalXsKjesJY3bUixi1yNyCMEk nGGgH86EXvk04fOquWJe1bae1HFfhvOz5V4RdB6HwYfjKtdW2ZE9Tp7i49lUPCL6/7AyoXHDZGCED/ tnKzS8XkDK2oYqzDb36cKahiH6cqri
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1924; h=from:subject; bh=P2l5Y5PDPDJcPc6k74icHUD6sRurj6ctKkCgiE7n3uE=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbcZCOiCWCuqdEhEwDeB0fuhFIzO/DqyGIULZWFjy SmyMmrCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW3GQgAKCRAk1otyXVSH0Ek6B/ 4j09hDwjQpLv0be/vtzRDNBH3YOGDen207SJTrLLgJcBAD1HuAeXZ9TW3ZG6eCTQraDXeSyU/Qk9TJ OIK1HdouBx278JtdIYMvzhWdtrogLFsvNiEh5OWEPRIaIG5OVAidaApPe5IFHqS727hRPZ3Sn4mWzr nBLZdLgfOQbiYbAyZ2hES4zVOnBizBXgbErYtSHXb3yxKRJH8tjfo8fwFZqJyd0Nm3OicmQjO0ASqf HrhNhsouEFHLpmgwfOWt0ixnVCfuzuxZO2CWm/dRGbE5ownZL5qLJCo94EjO3ry4Yu0MzyVrkCUQwY NzcnrpE232+l8nwFtaIeBVHCNbBUHm
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that basline support for the Scalable Matrix Extension (SME) is present
-introduce the Kconfig option allowing it to be built. While there is no
-requirement for a system with SME to support SVE at runtime the support for
-streaming mode SVE is mostly shared with normal SVE so depend on SVE.
-
-Since there is currently no support for KVM and no handling of either
-streaming mode or ZA with KVM the option the feature is marked as being
-incompatible with KVM and not enabled by default.
+The Scalable Matrix Extenions (SME) introduces additional register state
+with configurable vector lengths, similar to SVE but configured separately.
+Extend vlset to support configuring this state with a --sme or -s command
+line option.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/Kconfig | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/testing/selftests/arm64/fp/vlset.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 5c7ae4c3954b..f7004dd0a1b4 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1719,6 +1719,17 @@ config ARM64_SVE
- 	  booting the kernel.  If unsure and you are not observing these
- 	  symptoms, you should assume that it is safe to say Y.
+diff --git a/tools/testing/selftests/arm64/fp/vlset.c b/tools/testing/selftests/arm64/fp/vlset.c
+index 308d27a68226..76912a581a95 100644
+--- a/tools/testing/selftests/arm64/fp/vlset.c
++++ b/tools/testing/selftests/arm64/fp/vlset.c
+@@ -22,12 +22,15 @@ static int inherit = 0;
+ static int no_inherit = 0;
+ static int force = 0;
+ static unsigned long vl;
++static int set_ctl = PR_SVE_SET_VL;
++static int get_ctl = PR_SVE_GET_VL;
  
-+config ARM64_SME
-+	bool "ARM Scalable Matrix Extension support"
-+	depends on ARM64_SVE
-+	depends on !KVM
-+	help
-+	  The Scalable Matrix Extension (SME) is an extension to the AArch64
-+	  execution state which utilises a substantial subset of the SVE
-+	  instruction set, together with the addition of new architectural
-+	  register state capable of holding two dimensional matrix tiles to
-+	  enable various matrix operations.
-+
- config ARM64_MODULE_PLTS
- 	bool "Use PLTs to allow module memory to spill over into vmalloc area"
- 	depends on MODULES
+ static const struct option options[] = {
+ 	{ "force",	no_argument, NULL, 'f' },
+ 	{ "inherit",	no_argument, NULL, 'i' },
+ 	{ "max",	no_argument, NULL, 'M' },
+ 	{ "no-inherit",	no_argument, &no_inherit, 1 },
++	{ "sme",	no_argument, NULL, 's' },
+ 	{ "help",	no_argument, NULL, '?' },
+ 	{}
+ };
+@@ -50,6 +53,9 @@ static int parse_options(int argc, char **argv)
+ 		case 'M':	vl = SVE_VL_MAX; break;
+ 		case 'f':	force = 1; break;
+ 		case 'i':	inherit = 1; break;
++		case 's':	set_ctl = PR_SME_SET_VL;
++				get_ctl = PR_SME_GET_VL;
++				break;
+ 		case 0:		break;
+ 		default:	goto error;
+ 		}
+@@ -125,14 +131,14 @@ int main(int argc, char **argv)
+ 	if (inherit)
+ 		flags |= PR_SVE_VL_INHERIT;
+ 
+-	t = prctl(PR_SVE_SET_VL, vl | flags);
++	t = prctl(set_ctl, vl | flags);
+ 	if (t < 0) {
+ 		fprintf(stderr, "%s: PR_SVE_SET_VL: %s\n",
+ 			program_name, strerror(errno));
+ 		goto error;
+ 	}
+ 
+-	t = prctl(PR_SVE_GET_VL);
++	t = prctl(get_ctl);
+ 	if (t == -1) {
+ 		fprintf(stderr, "%s: PR_SVE_GET_VL: %s\n",
+ 			program_name, strerror(errno));
 -- 
 2.30.2
 
