@@ -2,109 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 726D243215E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Oct 2021 17:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D1643237A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Oct 2021 18:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbhJRPDE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Oct 2021 11:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
+        id S233128AbhJRQJS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Oct 2021 12:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbhJRPC6 (ORCPT
+        with ESMTP id S232231AbhJRQJS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Oct 2021 11:02:58 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DA7C061771
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Oct 2021 08:00:47 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id z5so600312ybj.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Oct 2021 08:00:47 -0700 (PDT)
+        Mon, 18 Oct 2021 12:09:18 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C73C06161C;
+        Mon, 18 Oct 2021 09:07:06 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id z69so13769221iof.9;
+        Mon, 18 Oct 2021 09:07:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yQkeMWxNdicFAAWTAtbOE6aF1W+WIaXoV/8+6cchqI8=;
-        b=HQuhjHzd68lT6lhxBf8HUihdVnwS4T2Ig7sWEvOoCGgH+ysNUMxEI3OkdpA0XJ74h0
-         +JbF74+ixWIP4aQ9aV+cZsR4mY7dUANs/zVo4qgrvzHBGLI8wpa07bQ+UixgKa75y/UO
-         C8QKQboTm9rG3SZsGHsNXpR0TGfklavauhsf14OFmCnwBrzID3M9j5at+j75UpVCSx2D
-         /fOfh3RfFDrqKLx9jnLqJOC/m5H7gypxMkx0a2L/mf0WAC4anpLHRrMTsz1nlizuu6Lt
-         TCuvOEQtuoijHtNWIpS8evoR4GC97kOX1tr6sx8zqntbtS/+7+TmwBMzsdPBCiph2WF2
-         oDZw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=/mTRsShBa0RedCL/8LYjfYhzL4WnaAlgO3es86cebV8=;
+        b=cUk+7h7TIexWwHkAj4k6UnkOyxoX7UzvYwSdOx5wPRXGQJ7ChybSfiEt/jBkF+r+MK
+         TEQAOCr/v/RxGCI5V8bkRLGrZSRsoJHgUIdGhHITt0WLzfgz4MOvf//KK+46br7Vn9aw
+         GEPt6iEeyl4s+NSOoyMYMyq1I2P8ZGKFLxP3vwjW85Vn5ULakJk4xzKYhKIxyF5F+hrG
+         U6T/riKd6XMRANLoMwH4U8HR8leER6nef159R0fyqF/zk5tHSyPmFk33KEE+XloBFogL
+         5xMgkrLGEv3WzDXiirrdDk4eVwq6z42FVTQ1GFtrHAPlLuQ4wROxbQSXhO3E10i7oKQR
+         vSrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yQkeMWxNdicFAAWTAtbOE6aF1W+WIaXoV/8+6cchqI8=;
-        b=HWrzgQ9gvRkeidoR0c844+uGSHm92c+sPW7/Oz2mTFYvJUZusz70U6KdtXWyoP4KHl
-         x9+R1HX4xwkKU4V8VgnCrJkZRGKSLd1GvYsGRbOo+Wqtqd6frI2KOnTbE4tt3tX58K3k
-         +zxzlYbE+ipB7OudTiLwqvmTPkG19tJNsbrtYEKKDuTvvkZHtvkDwbE9kHpR2XYq0Z/n
-         crENQLEz6bpU58yYCIIEAZVvttD0t5UMalBvmNeZOPVGRyH0dTZc1mH7ySUhj/6D0tnC
-         jd8XN2lAQJ5uAi7uvr2PIpZzTDAun8olPb5tPBnAWJJQDr00cWNs9CXwPjKf7sAr9mtc
-         V/SQ==
-X-Gm-Message-State: AOAM531JrxVKFRWxClf/EuQ83aWUzx9pB7f3YRty++mmik9dsP3P7UsD
-        s3+vr7Rj0CKj+OB0PF6/6d9DlayUybCuczwdmaEOaw==
-X-Google-Smtp-Source: ABdhPJzTXAMFmMoIkV0+BXEjgWpxmi9RsQZHUznpHserY8wnyjT9v19fakt246AE5Zru3tzrkr8HqjfXlsxAVsKqAPg=
-X-Received: by 2002:a25:1487:: with SMTP id 129mr32454048ybu.206.1634569246414;
- Mon, 18 Oct 2021 08:00:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211005234459.430873-1-michael.roth@amd.com> <20211005234459.430873-3-michael.roth@amd.com>
-In-Reply-To: <20211005234459.430873-3-michael.roth@amd.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Mon, 18 Oct 2021 08:00:00 -0700
-Message-ID: <CAL715W+-H7ZSQZeZmAbbJNGKaZCNqf4VdLismivxux=gerFuDw@mail.gmail.com>
-Subject: Re: [RFC 02/16] KVM: selftests: add hooks for managing encrypted
- guest memory
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     linux-kselftest@vger.kernel.org, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=/mTRsShBa0RedCL/8LYjfYhzL4WnaAlgO3es86cebV8=;
+        b=fC+79xY63hQf3iKBNDbs6aSNHRQSSX0axO16YtFbCINUOEpFZKFBo/zY1YuRdSejMq
+         KnGTZpi+wWuA2ctzsMGmGK80dDiX0hMx3ur8q4PZkHZxpPr1RvGy+Kv9ObzIbs7nG0W9
+         P+SBZ/7/BQYJY+H69Vkvxim7F61hl2aOH9vhCMZpKSzu4AD+LvkufEsTAFX7R+3rSh0v
+         biKf1MyC3EE4UVfDwGvAeRdug9wqIJ+Lb3CI5/s3L8U95Pq38cNfx4UDWHRrL1gwoOVe
+         DosodrbXRI0UC0X7Ld93bzSgX7G7mAk8ZVJF6aCsv8iy66jc5j7cWuqEOeXJ5OgQYeSt
+         CDxw==
+X-Gm-Message-State: AOAM533dZX9sOHmb282YzCzzQu0M+cpJZgwRu0xr+x9bHnS+OwomeEUp
+        lpCi4NZsS6/5nA1HJPdlrhA=
+X-Google-Smtp-Source: ABdhPJyWIHgwW8gcHHZCBaExCk/ZbXnX2pGmMUfJ3ykpnFTd5jPFQGtHwf9Iz1Nf1IBavCvlHxpumg==
+X-Received: by 2002:a6b:f816:: with SMTP id o22mr15689164ioh.106.1634573226289;
+        Mon, 18 Oct 2021 09:07:06 -0700 (PDT)
+Received: from localhost ([172.243.157.240])
+        by smtp.gmail.com with ESMTPSA id i15sm7114153ilb.30.2021.10.18.09.07.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Oct 2021 09:07:05 -0700 (PDT)
+Date:   Mon, 18 Oct 2021 09:06:57 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Wan Jiabing <wanjiabing@vivo.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
+Message-ID: <616d9ba173075_1eb12088b@john-XPS-13-9370.notmuch>
+In-Reply-To: <20211012023231.19911-1-wanjiabing@vivo.com>
+References: <20211012023231.19911-1-wanjiabing@vivo.com>
+Subject: RE: [PATCH] [v2] selftests: bpf: Remove duplicated include in
+ cgroup_helpers
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> +void vm_set_memory_encryption(struct kvm_vm *vm, bool enc_by_default, bool has_enc_bit,
-> +                             uint8_t enc_bit)
-> +{
-> +       vm->memcrypt.enabled = true;
-> +       vm->memcrypt.enc_by_default = enc_by_default;
-> +       vm->memcrypt.has_enc_bit = has_enc_bit;
-> +       vm->memcrypt.enc_bit = enc_bit;
-> +}
-> +
-> +struct sparsebit *
-> +vm_get_encrypted_phy_pages(struct kvm_vm *vm, int slot, vm_paddr_t *gpa_start,
-> +                          uint64_t *size)
-> +{
-> +       struct userspace_mem_region *region;
-> +       struct sparsebit *encrypted_phy_pages;
-> +
-> +       if (!vm->memcrypt.enabled)
-> +               return NULL;
-> +
-> +       region = memslot2region(vm, slot);
-> +       if (!region)
-> +               return NULL;
-> +
-> +       encrypted_phy_pages = sparsebit_alloc();
-> +       sparsebit_copy(encrypted_phy_pages, region->encrypted_phy_pages);
+Wan Jiabing wrote:
+> Fix following checkincludes.pl warning:
+> ./scripts/checkincludes.pl tools/testing/selftests/bpf/cgroup_helpers.c
+> tools/testing/selftests/bpf/cgroup_helpers.c: unistd.h is included more
+> than once.
+> 
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+> Changelog:
+> v2:
+> - Fix the commit description.
+> ---
 
-Do we have to make a copy for the sparsebit? Why not just return the
-pointer? By looking at your subsequent patches, I find that this data
-structure seems to be just read-only?
+The Subject is a bit unusual. Typically it would be something like,
 
--Mingwei
+ "[PATCH bpf-next] selftests, remove duplicated include in cgroup_helpers"
+
+For the actual patch though LGTM.
+
+Acked-by: John Fastabend <john.fastabend@gmail.com>
