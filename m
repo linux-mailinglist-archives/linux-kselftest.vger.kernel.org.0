@@ -2,454 +2,206 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F492432755
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Oct 2021 21:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC54A4327B9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Oct 2021 21:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbhJRTOM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Oct 2021 15:14:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39252 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231739AbhJRTOL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Oct 2021 15:14:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BB5F56128E;
-        Mon, 18 Oct 2021 19:11:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634584320;
-        bh=FEoaObX/7jlvODggBVDxiBmA3UMo0R1bZBQe/0/gRxo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RHwWiinAA4qLoq89ETjoToABZKkGM4N1fsnrvOU2S1qav2sHUg7tEZ5KiMow8lobv
-         wrdk68p45JdHj71s0NI29SxOp0PwxbyGGRWRByl6D7bH9oHytC7oScxk7k/3cDkJr2
-         h1mNUYro67Nr2WQYpe1Zn5+QuPgc7vQhVlhtSmH7CVbKAc8MtF2GtbiX6uRJwaKguA
-         TuCTj0/OcHseV1zaYHd9uWg89FDBiz/dz+747FIqNwVikP1lDHj4UviCvUMN1E9SyW
-         uX8eZkCJlLesg7O8wWYwPoDoXP6FcpxQ8CgfhL4ZKku47hNa9txpIvx8KFhuQa+ANd
-         I2XU6rRXpp8Xg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 42/42] kselftest/arm64: Add coverage for the ZA ptrace interface
-Date:   Mon, 18 Oct 2021 20:08:58 +0100
-Message-Id: <20211018190858.2119209-43-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211018190858.2119209-1-broonie@kernel.org>
-References: <20211018190858.2119209-1-broonie@kernel.org>
+        id S233356AbhJRTen (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Oct 2021 15:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231969AbhJRTem (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 18 Oct 2021 15:34:42 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7260CC06161C;
+        Mon, 18 Oct 2021 12:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B9bByHMOUaNb4hIzLjt6ee5iMVKuoAuSSlDfjNfXcVw=; b=XtN6iHFYDXFCgENpbEdGOr2pmU
+        yFFYqYJYUwhdr5Zlp2UsdTC2rL+hCJS1bFB6SdwLPL8YHN2d2igwldOx4aN39GeV7zWYehrfXe2jn
+        xPp8Wbs+3g4hxTSveCN7QqtgeFHuYXz8JAy/ZGSgg4zr67ZKFiZkEZvtfzpv+LZY72zafXjqhxeu+
+        5Fsq/DwQleE7J00WQFTjv7uxD1NogvR0qdqKtmAPsd2KXSwIcnQ3dqcWurIfkTXkOc6O9SU7pasYf
+        Jps0O7g4MB47gCoKXLrVqcnjY2O026y80dKCw6tVa5/wa0aFv5cYUejuIFIsV/jimkvEoP7FdHUzf
+        FB3gz3QQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mcYMl-00H11w-Tb; Mon, 18 Oct 2021 19:32:11 +0000
+Date:   Mon, 18 Oct 2021 12:32:11 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Ming Lei <ming.lei@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
+        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
+        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
+        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
+Message-ID: <YW3LuzaPhW96jSBK@bombadil.infradead.org>
+References: <20210927163805.808907-1-mcgrof@kernel.org>
+ <20210927163805.808907-12-mcgrof@kernel.org>
+ <YWeOJP2UJWYF94fu@T590>
+ <YWeR4moCRh+ZHOmH@T590>
+ <YWiSAN6xfYcUDJCb@bombadil.infradead.org>
+ <YWjCpLUNPF3s4P2U@T590>
+ <YWjJ0O7K+31Iz3ox@bombadil.infradead.org>
+ <YWk9e957Hb+I7HvR@T590>
+ <YWm68xUnAofop3PZ@bombadil.infradead.org>
+ <YWq3Z++uoJ/kcp+3@T590>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10062; h=from:subject; bh=FEoaObX/7jlvODggBVDxiBmA3UMo0R1bZBQe/0/gRxo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbcZILPY2bOAl2JeS6SE+AqJIcKR1y1Bs7J9oOxxj jIpCEEqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW3GSAAKCRAk1otyXVSH0G1HB/ 9oGof9vlnMpm4L0Qq7NWoN9ceeypeRrGLh/cC/TE+/EmZVYYS0Q6esyhpsClggBWcRkormO16kR1Y5 EeDyflKwsBtSs1NWkXyjRFtWZjJvFgdYqHkbjzrXjRjFwe8fFk4kaiZG9nnYhXeiDy9nu9Ce5Vemwn HbD3NOawU625BcLSWlm5vEO2Hznlw0N6LBcIoT+Ez1tmCs29lbatoaLNjJ9rSS/DHOKKTMMk8CoJbY 6whuI/B7tmI0clvp17zo4iyZ2gh6i8xBdy3kEp3hqHrmCWaPfwr7uP807higntUjQ3ccu5DXnvuMvG waDD7iCmB5XJMmAhmbkbcVR4+8U4kh
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YWq3Z++uoJ/kcp+3@T590>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some basic coverage for the ZA ptrace interface, including walking
-through all the vector lengths supported in the system. As with SVE we do
-not currently validate the data all the way through to the running process.
+On Sat, Oct 16, 2021 at 07:28:39PM +0800, Ming Lei wrote:
+> On Fri, Oct 15, 2021 at 10:31:31AM -0700, Luis Chamberlain wrote:
+> > On Fri, Oct 15, 2021 at 04:36:11PM +0800, Ming Lei wrote:
+> > > On Thu, Oct 14, 2021 at 05:22:40PM -0700, Luis Chamberlain wrote:
+> > > > On Fri, Oct 15, 2021 at 07:52:04AM +0800, Ming Lei wrote:
+> > > ...
+> > > > > 
+> > > > > We need to understand the exact reason why there is still cpuhp node
+> > > > > left, can you share us the exact steps for reproducing the issue?
+> > > > > Otherwise we may have to trace and narrow down the reason.
+> > > > 
+> > > > See my commit log for my own fix for this issue.
+> > > 
+> > > OK, thanks!
+> > > 
+> > > I can reproduce the issue, and the reason is that reset_store fails
+> > > zram_remove() when unloading module, then the warning is caused.
+> > > 
+> > > The top 3 patches in the following tree can fix the issue:
+> > > 
+> > > https://github.com/ming1/linux/commits/my_v5.15-blk-dev
+> > 
+> > Thanks for trying an alternative fix! A crash stops yes, however this
+> 
+> I doubt it is alternative since your patchset doesn't mention the exact
+> reason of 'Error: Removing state 63 which has instances left.', that is
+> simply caused by failing to remove zram because ->claim is set during
+> unloading module.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/.gitignore  |   1 +
- tools/testing/selftests/arm64/fp/Makefile    |   3 +-
- tools/testing/selftests/arm64/fp/za-ptrace.c | 353 +++++++++++++++++++
- 3 files changed, 356 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/fp/za-ptrace.c
+Well I disagree because it does explain how the race can happen, and it
+also explains how since the sysfs interface is exposed until module
+removal completes, it leaves exposed knobs to allow re-initializing of a
+struct zcomp for a zram device before the exit.
 
-diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index 1178fecc7aa1..59afc01f2019 100644
---- a/tools/testing/selftests/arm64/fp/.gitignore
-+++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -7,4 +7,5 @@ sve-test
- ssve-test
- vec-syscfg
- vlset
-+za-ptrace
- za-test
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index 4f32cb1041a0..f57ce07b2c91 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- CFLAGS += -I../../../../../usr/include/
--TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
-+TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg za-ptrace
- TEST_PROGS_EXTENDED := fpsimd-test fpsimd-stress \
- 	rdvl-sme rdvl-sve \
- 	sve-test sve-stress \
-@@ -25,5 +25,6 @@ vec-syscfg: vec-syscfg.o rdvl.o
- vlset: vlset.o
- za-test: za-test.o
- 	$(CC) -nostdlib $^ -o $@
-+za-ptrace: za-ptrace.o
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/arm64/fp/za-ptrace.c b/tools/testing/selftests/arm64/fp/za-ptrace.c
-new file mode 100644
-index 000000000000..6c172a5629dc
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/za-ptrace.c
-@@ -0,0 +1,353 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2021 ARM Limited.
-+ */
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <sys/ptrace.h>
-+#include <sys/types.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
-+#include <asm/sigcontext.h>
-+#include <asm/ptrace.h>
-+
-+#include "../../kselftest.h"
-+
-+#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
-+
-+/* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
-+#ifndef NT_ARM_ZA
-+#define NT_ARM_ZA 0x40c
-+#endif
-+
-+#define EXPECTED_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
-+
-+static void fill_buf(char *buf, size_t size)
-+{
-+	int i;
-+
-+	for (i = 0; i < size; i++)
-+		buf[i] = random();
-+}
-+
-+static int do_child(void)
-+{
-+	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL))
-+		ksft_exit_fail_msg("PTRACE_TRACEME", strerror(errno));
-+
-+	if (raise(SIGSTOP))
-+		ksft_exit_fail_msg("raise(SIGSTOP)", strerror(errno));
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+static struct user_za_header *get_za(pid_t pid, void **buf, size_t *size)
-+{
-+	struct user_za_header *za;
-+	void *p;
-+	size_t sz = sizeof(*za);
-+	struct iovec iov;
-+
-+	while (1) {
-+		if (*size < sz) {
-+			p = realloc(*buf, sz);
-+			if (!p) {
-+				errno = ENOMEM;
-+				goto error;
-+			}
-+
-+			*buf = p;
-+			*size = sz;
-+		}
-+
-+		iov.iov_base = *buf;
-+		iov.iov_len = sz;
-+		if (ptrace(PTRACE_GETREGSET, pid, NT_ARM_ZA, &iov))
-+			goto error;
-+
-+		za = *buf;
-+		if (za->size <= sz)
-+			break;
-+
-+		sz = za->size;
-+	}
-+
-+	return za;
-+
-+error:
-+	return NULL;
-+}
-+
-+static int set_za(pid_t pid, const struct user_za_header *za)
-+{
-+	struct iovec iov;
-+
-+	iov.iov_base = (void *)za;
-+	iov.iov_len = za->size;
-+	return ptrace(PTRACE_SETREGSET, pid, NT_ARM_ZA, &iov);
-+}
-+
-+/* Validate attempting to set the specfied VL via ptrace */
-+static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
-+{
-+	struct user_za_header za;
-+	struct user_za_header *new_za = NULL;
-+	size_t new_za_size = 0;
-+	int ret, prctl_vl;
-+
-+	*supported = false;
-+
-+	/* Check if the VL is supported in this process */
-+	prctl_vl = prctl(PR_SME_SET_VL, vl);
-+	if (prctl_vl == -1)
-+		ksft_exit_fail_msg("prctl(PR_SME_SET_VL) failed: %s (%d)\n",
-+				   strerror(errno), errno);
-+
-+	/* If the VL is not supported then a supported VL will be returned */
-+	*supported = (prctl_vl == vl);
-+
-+	/* Set the VL by doing a set with no register payload */
-+	memset(&za, 0, sizeof(za));
-+	za.size = sizeof(za);
-+	za.vl = vl;
-+	ret = set_za(child, &za);
-+	if (ret != 0) {
-+		ksft_test_result_fail("Failed to set VL %u\n", vl);
-+		return;
-+	}
-+
-+	/*
-+	 * Read back the new register state and verify that we have the
-+	 * same VL that we got from prctl() on ourselves.
-+	 */
-+	if (!get_za(child, (void **)&new_za, &new_za_size)) {
-+		ksft_test_result_fail("Failed to read VL %u\n", vl);
-+		return;
-+	}
-+
-+	ksft_test_result(new_za->vl = prctl_vl, "Set VL %u\n", vl);
-+
-+	free(new_za);
-+}
-+
-+/* Validate attempting to set no ZA data and read it back */
-+static void ptrace_set_no_data(pid_t child, unsigned int vl)
-+{
-+	void *read_buf = NULL;
-+	struct user_za_header write_za;
-+	struct user_za_header *read_za;
-+	size_t read_za_size = 0;
-+	int ret;
-+
-+	/* Set up some data and write it out */
-+	memset(&write_za, 0, sizeof(write_za));
-+	write_za.size = ZA_PT_ZA_OFFSET;
-+	write_za.vl = vl;
-+
-+	ret = set_za(child, &write_za);
-+	if (ret != 0) {
-+		ksft_test_result_fail("Failed to set VL %u no data\n", vl);
-+		return;
-+	}
-+
-+	/* Read the data back */
-+	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
-+		ksft_test_result_fail("Failed to read VL %u no data\n", vl);
-+		return;
-+	}
-+	read_za = read_buf;
-+
-+	/* We might read more data if there's extensions we don't know */
-+	if (read_za->size < write_za.size) {
-+		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
-+				      vl, write_za.size, read_za->size);
-+		goto out_read;
-+	}
-+
-+	ksft_test_result(read_za->size == write_za.size,
-+			 "Disabled ZA for VL %u\n", vl);
-+
-+out_read:
-+	free(read_buf);
-+}
-+
-+/* Validate attempting to set data and read it back */
-+static void ptrace_set_get_data(pid_t child, unsigned int vl)
-+{
-+	void *write_buf;
-+	void *read_buf = NULL;
-+	struct user_za_header *write_za;
-+	struct user_za_header *read_za;
-+	size_t read_za_size = 0;
-+	unsigned int vq = sve_vq_from_vl(vl);
-+	int ret;
-+	size_t data_size;
-+
-+	data_size = ZA_PT_SIZE(vq);
-+	write_buf = malloc(data_size);
-+	if (!write_buf) {
-+		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
-+				      data_size, vl);
-+		return;
-+	}
-+	write_za = write_buf;
-+
-+	/* Set up some data and write it out */
-+	memset(write_za, 0, data_size);
-+	write_za->size = data_size;
-+	write_za->vl = vl;
-+
-+	fill_buf(write_buf + ZA_PT_ZA_OFFSET, ZA_PT_ZA_SIZE(vq));
-+
-+	ret = set_za(child, write_za);
-+	if (ret != 0) {
-+		ksft_test_result_fail("Failed to set VL %u data\n", vl);
-+		goto out;
-+	}
-+
-+	/* Read the data back */
-+	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
-+		ksft_test_result_fail("Failed to read VL %u data\n", vl);
-+		goto out;
-+	}
-+	read_za = read_buf;
-+
-+	/* We might read more data if there's extensions we don't know */
-+	if (read_za->size < write_za->size) {
-+		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
-+				      vl, write_za->size, read_za->size);
-+		goto out_read;
-+	}
-+
-+	ksft_test_result(memcmp(write_buf + ZA_PT_ZA_OFFSET,
-+				read_buf + ZA_PT_ZA_OFFSET,
-+				ZA_PT_ZA_SIZE(vq)) == 0,
-+			 "Data match for VL %u\n", vl);
-+
-+out_read:
-+	free(read_buf);
-+out:
-+	free(write_buf);
-+}
-+
-+static int do_parent(pid_t child)
-+{
-+	int ret = EXIT_FAILURE;
-+	pid_t pid;
-+	int status;
-+	siginfo_t si;
-+	unsigned int vq, vl;
-+	bool vl_supported;
-+
-+	/* Attach to the child */
-+	while (1) {
-+		int sig;
-+
-+		pid = wait(&status);
-+		if (pid == -1) {
-+			perror("wait");
-+			goto error;
-+		}
-+
-+		/*
-+		 * This should never happen but it's hard to flag in
-+		 * the framework.
-+		 */
-+		if (pid != child)
-+			continue;
-+
-+		if (WIFEXITED(status) || WIFSIGNALED(status))
-+			ksft_exit_fail_msg("Child died unexpectedly\n");
-+
-+		if (!WIFSTOPPED(status))
-+			goto error;
-+
-+		sig = WSTOPSIG(status);
-+
-+		if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &si)) {
-+			if (errno == ESRCH)
-+				goto disappeared;
-+
-+			if (errno == EINVAL) {
-+				sig = 0; /* bust group-stop */
-+				goto cont;
-+			}
-+
-+			ksft_test_result_fail("PTRACE_GETSIGINFO: %s\n",
-+					      strerror(errno));
-+			goto error;
-+		}
-+
-+		if (sig == SIGSTOP && si.si_code == SI_TKILL &&
-+		    si.si_pid == pid)
-+			break;
-+
-+	cont:
-+		if (ptrace(PTRACE_CONT, pid, NULL, sig)) {
-+			if (errno == ESRCH)
-+				goto disappeared;
-+
-+			ksft_test_result_fail("PTRACE_CONT: %s\n",
-+					      strerror(errno));
-+			goto error;
-+		}
-+	}
-+
-+	/* Step through every possible VQ */
-+	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
-+		vl = sve_vl_from_vq(vq);
-+
-+		/* First, try to set this vector length */
-+		ptrace_set_get_vl(child, vl, &vl_supported);
-+
-+		/* If the VL is supported validate data set/get */
-+		if (vl_supported) {
-+			ptrace_set_no_data(child, vl);
-+			ptrace_set_get_data(child, vl);
-+		} else {
-+			ksft_test_result_skip("Disabled ZA for VL %u\n", vl);
-+			ksft_test_result_skip("Get and set data for VL %u\n",
-+					      vl);
-+		}
-+	}
-+
-+	ret = EXIT_SUCCESS;
-+
-+error:
-+	kill(child, SIGKILL);
-+
-+disappeared:
-+	return ret;
-+}
-+
-+int main(void)
-+{
-+	int ret = EXIT_SUCCESS;
-+	pid_t child;
-+
-+	srandom(getpid());
-+
-+	ksft_print_header();
-+	ksft_set_plan(EXPECTED_TESTS);
-+
-+	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
-+		ksft_exit_skip("SME not available\n");
-+
-+	child = fork();
-+	if (!child)
-+		return do_child();
-+
-+	if (do_parent(child))
-+		ret = EXIT_FAILURE;
-+
-+	ksft_print_cnts();
-+
-+	return ret;
-+}
--- 
-2.30.2
+> Yeah, you mentioned the race between disksize_store() vs. zram_remove(),
+> however I don't think it is reproduced easily in the test because the race
+> window is pretty small, also it can be fixed easily in my 3rd path
+> without any complicated tricks.
 
+Reproducing for me is... extremely easy.
+
+> Not dig into details of your patchset via grabbing module reference
+> count during show/store attribute of kernfs which is done in your patch
+> 9, but IMO this way isn't necessary:
+
+That's to address the deadlock only.
+
+> 1) any driver module has to cleanup anything which may refer to symbols
+> or data defined in module_exit of this driver
+
+Yes, and as the cpu multistate hotplug documentation warns (although
+such documentation is kind of hidden) that driver authors need to be
+careful with module removal too, refer to the warning at the end of
+__cpuhp_remove_state_cpuslocked() about module removal.
+
+> 2) device_del() is often done in module_exit(), once device_del()
+> returns, no any new show/store on the device's kobject attribute
+> is possible.
+
+Right and if a syfs knob is exposed before device_del() completely
+and is allowed to do things, the driver should take care to prevent
+races for CPU multistate support. The small state machine I added ensures
+we don't run over any expectations from cpu hotplug multistate support.
+
+I've *never* suggested there cannot be alternatives to my solution with
+the small state machine, but for you to say it is incorrect is simply
+not right either.
+
+> 3) it is _not_ a must or pattern for fixing bugs to hold one lock before
+> calling device_del(), meantime the lock is required in the device's
+> attribute show()/store(), which causes AA deadlock easily. Your approach
+> just avoids the issue by not releasing module until all show/store are
+> done.
+
+Right, there are two approaches here:
+
+a) Your approach is to accept the deadlock as a requirement and so
+you would prefer to implement an alternative to using a shared lock
+on module exit and sysfs op.
+
+b) While I address such a deadlock head on as I think this sort of locking
+be allowed for two reasons:
+   b1) as we never documented such requirement otherwise.
+   b2) There is a possibility that other drivers already exist too
+       which *do* use a shared lock on module removal and sysfs ops
+       (and I just confirmed this to be true)
+
+By you only addressing the deadlock as a requirement on approach a) you are
+forgetting that there *may* already be present drivers which *do* implement
+such patterns in the kernel. I worked on addressing the deadlock because
+I was informed livepatching *did* have that issue as well and so very
+likely a generic solution to the deadlock could be beneficial to other
+random drivers.
+
+So I *really* don't think it is wise for us to simply accept this new
+found deadlock as a *new* requirement, specially if we can fix it easily.
+
+A cursory review using Coccinelle potential issues with mutex lock
+directly used on module exit (so this doesn't cover drivers like zram
+which uses a routine and then grabs the lock through indirection) and a
+sysfs op shows these drivers are also affected by this deadlock:
+
+  * arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c
+  * lib/test_firmware.c
+
+Note that this cursory review does not cover spin_lock uses, and other
+forms locks. Consider the case where a routine is used and then that
+routine grabs a lock, so one level indirection. There are many levels
+of indirections possible here. And likewise there are different types
+of locks.
+
+> > also ends up leaving the driver in an unrecoverable state after a few
+> > tries. Ie, you CTRL-C the scripts and try again over and over again and
+> > the driver ends up in a situation where it just says:
+> > 
+> > zram: Can't change algorithm for initialized device
+> 
+> It means the algorithm can't be changed for one initialized device
+> at the exact time. That is understandable because two zram02.sh are
+> running concurrently.
+
+Indeed but with your patch it can get stuck and cannot be taken out of this
+state.
+
+> Your test script just runs two ./zram02.sh tasks concurrently forever,
+> so what is your expected result for the test? Of course, it can't be
+> over.
+>
+> I can't reproduce the 'unrecoverable' state in my test, can you share the
+> stack trace log after that happens?
+
+Try a bit harder, cancel the scripts after running for a while randomly
+(CTRL C a few times until the script finishes) and have them race again.
+Do this a few times.
+
+> > And the zram module can't be removed at that point.
+> 
+> It is just that systemd opens the zram or the disk is opened as swap
+> disk, and once systemd closes it or after you run swapoff, it can be
+> unloaded.
+
+With my patch this issues does not happen.
+
+  Luis
