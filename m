@@ -2,122 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A054302A9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Oct 2021 14:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5636B430E29
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Oct 2021 05:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236687AbhJPMwu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Oct 2021 08:52:50 -0400
-Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:46311 "EHLO
-        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236685AbhJPMwu (ORCPT
+        id S230166AbhJRDbo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Oct 2021 23:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229451AbhJRDbh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Oct 2021 08:52:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1634388641;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=1RxQHtXA9h7i0uhwY5a9sxr4XQ3c5/3mBGQLC45/Ycs=;
-        b=p2P5jrfwM34lmazIlEn9ZfejTKCkBITtqD5kglKeKW056cEG+0buG2bD5lDd7nXh
-        4Tc+spfaOCTlC/LFpb2kSCR5W7vluaYV/KXaJt+Sltp6FJXqzBNmgwNIu7u4ZNqOCs+
-        I0d/4S6bfEkfP6exAu9iOODzP4AeLn1uVwLQpNOY=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1634388641;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=1RxQHtXA9h7i0uhwY5a9sxr4XQ3c5/3mBGQLC45/Ycs=;
-        b=YhAtS1kHs1cNw1VwqObVLiWfXenzJJ6csuIaWysHp7VU9wSvA32gEur/iLLg+mY9
-        8v5Tj881mWyR2le30JheErcNEwUmhzENut+DDCIUfCg/vPiwwg9hOWfrELOQuZPmY5D
-        p5k03YOlG2PA8I3hOgFHiGQg0aHLDvMHAmAo2A6E=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211015
+        Sun, 17 Oct 2021 23:31:37 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E53AC06161C;
+        Sun, 17 Oct 2021 20:29:10 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 75so14630279pga.3;
+        Sun, 17 Oct 2021 20:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=z/ylY5vvx5KqxKz+xNvwJdpdJw5+5FU5nhFhUTLsP6U=;
+        b=bPiB52YVZ6xugdYoVwwX6zElVM0xfH8uUNDVLmt0JTZO+DMgHIWyiq8BLzjouivfE6
+         LVZi2EhDN8L/5oGT9I94I28lwQm4hLOp3deU1/Kx/BKBkdHSiRJpuma96PZuHqNU1S9w
+         a4juYMSyfdjjt28KCNDynG5NjjB7h7t0jZw6LdIBNUT8JMay1jvMCupR+8lNmVBqS3st
+         1+wIrEq9yoACbi3I93ZEU4hihhzkaVuaB/8j5kLdJIOLdRLgeQZfXMuP7azVTgC/Bjl8
+         yXhOyMbiggUnrRUvHckIXCnTEvDCOzqnAhWKhIhqFjin+MZb+vLFQgBlmBQ2zaheBO+0
+         HjjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z/ylY5vvx5KqxKz+xNvwJdpdJw5+5FU5nhFhUTLsP6U=;
+        b=ZCtsXmJ/wwtzgFckQukPXHYFAqXtsAX80FRI5B8pMLBokPm/jyEQgNxaU0sTvy+bP1
+         nnMCHy+ySLyTex+DCNn44gemswtzWb1zLv81fe5XADZgCcjuv8qKLCoBU4te0h6pssth
+         ODi3bgDh6RA+wG9Nai16Sy5DkRiKnTMhR9EKLoEf7lZPHhubb7PfS71tF6hEhy44BEia
+         Ld0piE+qpqvn4VzH9LxzP5SzDwOLuDrHowU1+S6KFKh6g0m56Ihcur8ed+IGpZWmhHUb
+         PE9UH2q/H5w8uFVJiHjoSEx59sqe+bD5T3xrbjBHK8JlXxEld2O/M2YmjgdwmdwNTpjZ
+         CEGQ==
+X-Gm-Message-State: AOAM531qbJc7dmGZzEJU8RGZ9B1xQvpYw1gfc94CInOMR+dYMsKCzhJm
+        zHJoWySYTQdgbOdZooDpJdE=
+X-Google-Smtp-Source: ABdhPJwPr0ojYey2tmRElAZma0tOh6ohytOGftBSpRh4js5ajCQuqz83wLVGyNL9Jws7TkqvXDd1LA==
+X-Received: by 2002:a63:5544:: with SMTP id f4mr21400410pgm.431.1634527749814;
+        Sun, 17 Oct 2021 20:29:09 -0700 (PDT)
+Received: from Laptop-X1 ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id c9sm10682612pgq.58.2021.10.17.20.29.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Oct 2021 20:29:09 -0700 (PDT)
+Date:   Mon, 18 Oct 2021 11:29:03 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/tls: add SM4 GCM/CCM to tls selftests
+Message-ID: <YWzp/5ClVG0nigMY@Laptop-X1>
+References: <20211008091745.42917-1-tianjia.zhang@linux.alibaba.com>
+ <YWk9ruGFxRA/1On6@Laptop-X1>
+ <cf53cf98-354f-f993-4b55-ff22dcc0d92d@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017c89278568-9d0a1317-f55f-4e57-95ee-45350fe39a39-000000@email.amazonses.com>
-Date:   Sat, 16 Oct 2021 12:50:41 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.10.16-54.240.8.29
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cf53cf98-354f-f993-4b55-ff22dcc0d92d@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc5
-* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: 7c832d2f9b959e3181370c8b0dacaf9efe13fc05
-* git describe: next-20211015
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211015
+On Fri, Oct 15, 2021 at 05:59:29PM +0800, Tianjia Zhang wrote:
+> This patch needs to enable the SM4 algorithm, and the config file you
+> provided does not enable this algorithm.
+> 
+Thanks Tianjia, I will ask CKI team if it's easy to enable the new config.
 
-## Regressions (compared to next-20211007)
-* qemu_x86_64, kselftest-seccomp
-  - seccomp.seccomp_benchmark
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211007)
-* qemu_x86_64, kselftest-pidfd
-  - pidfd.pidfd_test
-
-
-## Test result summary
-total: 1723, pass: 882, fail: 180, skip: 661, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Cheers
+Hangbin
