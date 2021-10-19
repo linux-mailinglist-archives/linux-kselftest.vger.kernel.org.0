@@ -2,123 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F19433259
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 11:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD67433353
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 12:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235082AbhJSJiC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Oct 2021 05:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbhJSJiC (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Oct 2021 05:38:02 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86178C061765
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Oct 2021 02:35:49 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id t2so46669836wrb.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Oct 2021 02:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=L2Opnlu/+Ei1mILrJUudB00wyP5HtEuEpZxkiaGcTuk=;
-        b=4Uvv/V9yhjJYTwf+O9NvMcCHZPepWSsWQ2DUG9K7T456ybg9EBcQvphaGM/VctW7mv
-         UXLs7h8Sh9o39g1WSMZgTt5pHkZBakrJZqayHGdmOXsrYJlqf7oDOVBbF/EHTSmlOMyM
-         a6IlSoE+YWI5Uld+lTvGOg/MOcO72KNwvdOOGLxYL53+KWobDyx1phCv8M3Ok53Efots
-         YvjwEjeZ9gSlhjRFgkE+fTmHhQgBNYZ6nIrX6sTpJ0IBFzXwwbDLAglILfPEYJiKXEYu
-         1EBw+rQt9324DpZLRV++n8Erlk1/ztmsoKNHHMZ0PnAoOkLDs5PbL0hHWC1QGe2BYPOH
-         YB1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L2Opnlu/+Ei1mILrJUudB00wyP5HtEuEpZxkiaGcTuk=;
-        b=LECZvefl9zOSOXJ+raF2TYuPMYqP2qZ0+EpsYiDIHu+KOiWs63sL0tSt9n6Xe1Rj+q
-         kKOTUkiQlwALqs56kcDh03n8PdtEdrO5P6+1q/agAteOuLDI8r/pywaf+6K7r5c5zSGi
-         8r8TFaIXVYpzbgERgshc3DNB24OqF28YprxbupbWCX2g4SdAoqQa/06Ve7sAkDWYjrxF
-         9BfRME2ljS0cW7TGkQ5E4GOnvwIxys1Kcm2iOtybEKkG7rcknHpb3Hfa8m/4tVUSXQZn
-         xdcod09yswcK8essGQa7vvO/pPBVM7E+WqDmgqknpOGle6Fse460+FUA/+a0RQK6WGqC
-         2HEQ==
-X-Gm-Message-State: AOAM533C2teuaEV/f2ixh/7Ty52RRrVgTofSbyRt/IIp60vKrWcJyaAq
-        tj/4y7/wXyk9yatj+WITWJujqA==
-X-Google-Smtp-Source: ABdhPJx8VfDG1M08CY2EwW4NlYD+30EjdeM5Y4rFFcgsoqwPfH7CxovxzrJhPB1TEyjaKCuj+tU1uA==
-X-Received: by 2002:adf:9b8a:: with SMTP id d10mr40402392wrc.151.1634636148051;
-        Tue, 19 Oct 2021 02:35:48 -0700 (PDT)
-Received: from [192.168.1.8] ([149.86.82.20])
-        by smtp.gmail.com with ESMTPSA id p3sm1727165wmp.43.2021.10.19.02.35.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Oct 2021 02:35:47 -0700 (PDT)
-Message-ID: <e11c38fa-22fa-a0ae-4dd1-cac5a208e021@isovalent.com>
-Date:   Tue, 19 Oct 2021 10:35:46 +0100
+        id S234794AbhJSKRF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Oct 2021 06:17:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59332 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230123AbhJSKRF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Oct 2021 06:17:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CECF96137B;
+        Tue, 19 Oct 2021 10:14:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634638492;
+        bh=OIANuj+Kcg7Vpqy8Rqqrz4DatAxJeMHZ/63Izt1awsw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a+euh2idGz7qgBsQsL21EQXlj6TQR/4yfNuYnb+NfI02XA7KdW357YooQGdJ3m3KU
+         ro+/Y1QC6uc90Zh+DcShf9vAWgHh7erU4QYegl9SXayG4F8pgs6oomu4/3fZReobGO
+         OPQIaSwHTO7izO6neUw6CVGWs6X5gehsg32bFcvKDtDgJ8SdOkqDAkzHz1cyz4rzA5
+         qU0ElebFxDtzyxJYe53Bi5X4Fn+Z2wfpz114Q/vE8i393QYLJNTO+CCnaVdkBfMwZl
+         cCeW3S4jBqdVSPGZti0BruLtJFAXY3hzj6FqSIOsu4gwd1QJy48GHYD6dOweu23bea
+         8O8TS2CIPNv+Q==
+Date:   Tue, 19 Oct 2021 11:14:47 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 04/42] arm64/sve: Make access to FFR optional
+Message-ID: <20211019101447.GA13251@willie-the-truck>
+References: <20211018190858.2119209-1-broonie@kernel.org>
+ <20211018190858.2119209-5-broonie@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3 14/23] bpftool: update bpftool-cgroup.rst reference
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-References: <cover.1634630485.git.mchehab+huawei@kernel.org>
- <11f3dc3cfc192e2ee271467d7a6c7c1920006766.1634630486.git.mchehab+huawei@kernel.org>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <11f3dc3cfc192e2ee271467d7a6c7c1920006766.1634630486.git.mchehab+huawei@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211018190858.2119209-5-broonie@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2021-10-19 09:04 UTC+0100 ~ Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org>
-> The file name: Documentation/bpftool-cgroup.rst
-> should be, instead: tools/bpf/bpftool/Documentation/bpftool-cgroup.rst.
+On Mon, Oct 18, 2021 at 08:08:20PM +0100, Mark Brown wrote:
+> SME introduces streaming SVE mode in which FFR is not present and the
+> instructions for accessing it UNDEF. In preparation for handling this
+> update the low level SVE state access functions to take a flag specifying
+> if FFR should be handled. When saving the register state we store a zero
+> for FFR to guard against uninitialized data being read. No behaviour change
+> should be introduced by this patch.
 > 
-> Update its cross-reference accordingly.
-> 
-> Fixes: a2b5944fb4e0 ("selftests/bpf: Check consistency between bpftool source, doc, completion")
-> Fixes: 5ccda64d38cc ("bpftool: implement cgroup bpf operations")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
+>  arch/arm64/include/asm/fpsimd.h       |  6 +++---
+>  arch/arm64/include/asm/fpsimdmacros.h | 20 ++++++++++++++------
+>  arch/arm64/kernel/entry-fpsimd.S      | 17 +++++++++++------
+>  arch/arm64/kernel/fpsimd.c            | 10 ++++++----
+>  arch/arm64/kvm/hyp/fpsimd.S           |  6 ++++--
+>  5 files changed, 38 insertions(+), 21 deletions(-)
 > 
-> To mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v3 00/23] at: https://lore.kernel.org/all/cover.1634630485.git.mchehab+huawei@kernel.org/
-> 
->  tools/testing/selftests/bpf/test_bpftool_synctypes.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-> index be54b7335a76..617b8084c440 100755
-> --- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-> +++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-> @@ -392,7 +392,7 @@ class ManCgroupExtractor(ManPageExtractor):
->      """
->      An extractor for bpftool-cgroup.rst.
->      """
-> -    filename = os.path.join(BPFTOOL_DIR, 'Documentation/bpftool-cgroup.rst')
-> +    filename = os.path.join(BPFTOOL_DIR, 'tools/bpf/bpftool/Documentation/bpftool-cgroup.rst')
+> diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+> index 917ecc301d1d..7f8a44a9a5e6 100644
+> --- a/arch/arm64/include/asm/fpsimd.h
+> +++ b/arch/arm64/include/asm/fpsimd.h
+> @@ -65,10 +65,10 @@ static inline void *sve_pffr(struct thread_struct *thread)
+>  	return (char *)thread->sve_state + sve_ffr_offset(thread->sve_vl);
+>  }
 >  
->      def get_attach_types(self):
->          return self.get_rst_list('ATTACH_TYPE')
-> 
+> -extern void sve_save_state(void *state, u32 *pfpsr);
+> +extern void sve_save_state(void *state, u32 *pfpsr, int save_ffr);
+>  extern void sve_load_state(void const *state, u32 const *pfpsr,
+> -			   unsigned long vq_minus_1);
+> -extern void sve_flush_live(unsigned long vq_minus_1);
+> +			   int restore_ffr, unsigned long vq_minus_1);
+> +extern void sve_flush_live(bool flush_ffr, unsigned long vq_minus_1);
+>  extern unsigned int sve_get_vl(void);
+>  extern void sve_set_vq(unsigned long vq_minus_1);
+>  
+> diff --git a/arch/arm64/include/asm/fpsimdmacros.h b/arch/arm64/include/asm/fpsimdmacros.h
+> index 00a2c0b69c2b..84d8cb7b07fa 100644
+> --- a/arch/arm64/include/asm/fpsimdmacros.h
+> +++ b/arch/arm64/include/asm/fpsimdmacros.h
+> @@ -217,28 +217,36 @@
+>  .macro sve_flush_z
+>   _for n, 0, 31, _sve_flush_z	\n
+>  .endm
+> -.macro sve_flush_p_ffr
+> +.macro sve_flush_p
+>   _for n, 0, 15, _sve_pfalse	\n
+> +.endm
+> +.macro sve_flush_ffr
+>  		_sve_wrffr	0
+>  .endm
+>  
+> -.macro sve_save nxbase, xpfpsr, nxtmp
+> +.macro sve_save nxbase, xpfpsr, save_ffr, nxtmp
+>   _for n, 0, 31,	_sve_str_v	\n, \nxbase, \n - 34
+>   _for n, 0, 15,	_sve_str_p	\n, \nxbase, \n - 16
+> +		cbz		\save_ffr, 921f
+>  		_sve_rdffr	0
+>  		_sve_str_p	0, \nxbase
+>  		_sve_ldr_p	0, \nxbase, -16
+> -
+> +		b		922f
+> +921:
+> +		str		xzr, [x\nxbase, #0]	// Zero out FFR
 
-No, this change is incorrect. We have discussed it several times before
-[0][1]. Please drop this patch.
+You can drop the '#0' here.
 
-Quentin
+> @@ -72,12 +74,15 @@ SYM_FUNC_END(sve_set_vq)
+>   * VQ must already be configured by caller, any further updates of VQ
+>   * will need to ensure that the register state remains valid.
+>   *
+> - * x0 = VQ - 1
+> + * x0 = include FFR?
+> + * x1 = VQ - 1
+>   */
+>  SYM_FUNC_START(sve_flush_live)
+> -	cbz		x0, 1f	// A VQ-1 of 0 is 128 bits so no extra Z state
+> +	cbz		x1, 1f	// A VQ-1 of 0 is 128 bits so no extra Z state
+>  	sve_flush_z
+> -1:	sve_flush_p_ffr
+> +1:	cbz		x0, 2f
+> +	sve_flush_p
+> +2:	sve_flush_ffr
+>  	ret
 
-[0]
-https://lore.kernel.org/bpf/eb80e8f5-b9d7-5031-8ebb-4595bb295dbf@isovalent.com/
-[1]
-https://lore.kernel.org/bpf/CAEf4BzZhr+3JzuPvyTozQSts7QixnyY1N8CD+-ZuteHodCpmRA@mail.gmail.com/
+I'm confused by this -- x0 seems to control whether or not we flush the
+predicate registers rather then ffr.
+
+>  SYM_FUNC_END(sve_flush_live)
+>  
+> diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+> index 0f6df1ece618..3d5d243c3f1c 100644
+> --- a/arch/arm64/kernel/fpsimd.c
+> +++ b/arch/arm64/kernel/fpsimd.c
+> @@ -289,7 +289,7 @@ static void task_fpsimd_load(void)
+>  
+>  	if (IS_ENABLED(CONFIG_ARM64_SVE) && test_thread_flag(TIF_SVE))
+>  		sve_load_state(sve_pffr(&current->thread),
+> -			       &current->thread.uw.fpsimd_state.fpsr,
+> +			       &current->thread.uw.fpsimd_state.fpsr, true,
+>  			       sve_vq_from_vl(current->thread.sve_vl) - 1);
+>  	else
+>  		fpsimd_load_state(&current->thread.uw.fpsimd_state);
+> @@ -325,7 +325,7 @@ static void fpsimd_save(void)
+>  
+>  		sve_save_state((char *)last->sve_state +
+>  					sve_ffr_offset(last->sve_vl),
+> -			       &last->st->fpsr);
+> +			       &last->st->fpsr, true);
+>  	} else {
+>  		fpsimd_save_state(last->st);
+>  	}
+> @@ -962,7 +962,7 @@ void do_sve_acc(unsigned int esr, struct pt_regs *regs)
+>  		unsigned long vq_minus_one =
+>  			sve_vq_from_vl(current->thread.sve_vl) - 1;
+>  		sve_set_vq(vq_minus_one);
+> -		sve_flush_live(vq_minus_one);
+> +		sve_flush_live(true, vq_minus_one);
+
+What does the pcs say about passing bools in registers? Can we guarantee
+that false is a 64-bit zero?
+
+Will
