@@ -2,148 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F380433885
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 16:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB49433A50
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 17:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbhJSOlb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Oct 2021 10:41:31 -0400
-Received: from foss.arm.com ([217.140.110.172]:49976 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229641AbhJSOla (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Oct 2021 10:41:30 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA49C2F;
-        Tue, 19 Oct 2021 07:39:17 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43D0A3F70D;
-        Tue, 19 Oct 2021 07:39:16 -0700 (PDT)
-Date:   Tue, 19 Oct 2021 15:39:11 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 04/42] arm64/sve: Make access to FFR optional
-Message-ID: <20211019135853.GA4938@lakrids.cambridge.arm.com>
-References: <20211018190858.2119209-1-broonie@kernel.org>
- <20211018190858.2119209-5-broonie@kernel.org>
- <20211019101447.GA13251@willie-the-truck>
+        id S233795AbhJSPat (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Oct 2021 11:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232568AbhJSPas (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Oct 2021 11:30:48 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98ABC06161C;
+        Tue, 19 Oct 2021 08:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Irq5/RNAL7WL43IvnY258AeD+l1VaGXwOE52U+SqXPo=; b=BqHGICTN9X/CcGdj7L0ihv22zQ
+        9q/SVG92dfC5oLbZmYixLJ1VoeZjUhyTv0j7beDiDnYzqJ574VBpdNozgOG0wpkTvZgUtJfb+eyRU
+        67mH1EwkXdtlZ3p5s0bUScCzno9A7LX9i7efipTyVJ8Wvw3A2x28NbLz1TSEa3PmID9extSQyAg1g
+        Iy6XY94RjdxjfyH304yfNLl/hOiRqm1zKIKcEjznjnyFeorh9b7ERTaNViTYOlgikBzTH5y7st9g2
+        xMUWCCoYsKuj3jtlez6AQl+/jXVPGHzvIk5GfkVgDpt28kwJfj8iFoHzuzjSrPyUkz9cXJgIJB0eg
+        OMGR8F7g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mcr2L-001gwU-3x; Tue, 19 Oct 2021 15:28:21 +0000
+Date:   Tue, 19 Oct 2021 08:28:21 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
+        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
+        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
+        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
+        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
+Message-ID: <YW7kFXlzRrvwzARP@bombadil.infradead.org>
+References: <YWeOJP2UJWYF94fu@T590>
+ <YWeR4moCRh+ZHOmH@T590>
+ <YWiSAN6xfYcUDJCb@bombadil.infradead.org>
+ <YWjCpLUNPF3s4P2U@T590>
+ <YWjJ0O7K+31Iz3ox@bombadil.infradead.org>
+ <YWk9e957Hb+I7HvR@T590>
+ <YWm68xUnAofop3PZ@bombadil.infradead.org>
+ <YWq3Z++uoJ/kcp+3@T590>
+ <YW3LuzaPhW96jSBK@bombadil.infradead.org>
+ <YW4uwep3BCe9Vxq8@T590>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211019101447.GA13251@willie-the-truck>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+In-Reply-To: <YW4uwep3BCe9Vxq8@T590>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 11:14:47AM +0100, Will Deacon wrote:
-> On Mon, Oct 18, 2021 at 08:08:20PM +0100, Mark Brown wrote:
-> >  SYM_FUNC_START(sve_flush_live)
-> > -	cbz		x0, 1f	// A VQ-1 of 0 is 128 bits so no extra Z state
-> > +	cbz		x1, 1f	// A VQ-1 of 0 is 128 bits so no extra Z state
-> >  	sve_flush_z
-> > -1:	sve_flush_p_ffr
-> > +1:	cbz		x0, 2f
-> > +	sve_flush_p
-> > +2:	sve_flush_ffr
-> >  	ret
+On Tue, Oct 19, 2021 at 10:34:41AM +0800, Ming Lei wrote:
+> Please try the following patch against upstream(linus or next) tree(basically
+> fold revised 2 and 3 of V1, and cover two issues: not fail zram_remove in
+> module_exit(), race between zram_remove() and disksize_store()), and see if
+> everything is fine for you:
 
-> > @@ -962,7 +962,7 @@ void do_sve_acc(unsigned int esr, struct pt_regs *regs)
-> >  		unsigned long vq_minus_one =
-> >  			sve_vq_from_vl(current->thread.sve_vl) - 1;
-> >  		sve_set_vq(vq_minus_one);
-> > -		sve_flush_live(vq_minus_one);
-> > +		sve_flush_live(true, vq_minus_one);
-> 
-> What does the pcs say about passing bools in registers? Can we guarantee
-> that false is a 64-bit zero?
+Page fault ...
 
-Per usual rules, bits [63:8] can be arbitrary -- AAPCS64 leaves it to the callee
-to extend values, with the upper bits being arbitrary, and it maps _Bool/bool
-to unsigned char, which covers bits [7:0].
+[   18.284256] zram: Removed device: zram0
+[   18.312974] BUG: unable to handle page fault for address:
+ffffad86de903008
+[   18.313707] #PF: supervisor read access in kernel mode
+[   18.314248] #PF: error_code(0x0000) - not-present page
+[   18.314797] PGD 100000067 P4D 100000067 PUD 10031e067 PMD 136a28067
+PTE 0
+[   18.315538] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[   18.316012] CPU: 3 PID: 1198 Comm: rmmod Tainted: G            E
+5.15.0-rc3-next-20210927+ #89
+[   18.316979] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.14.0-2 04/01/2014
+[   18.317876] RIP: 0010:zram_free_page+0x1b/0xf0 [zram]
+[   18.318430] Code: 1f 44 00 00 48 89 c8 c3 0f 1f 80 00 00 00 00 0f 1f
+44 00 00 41 54 49 89 f4 55 89 f5 53 48 8b 17 48 c1 e5 04 48 89 fb 48 01
+ea <48> 8b 42 08 a9 00 00 00 20 74 14 48 25 ff ff ff df 48 89 42 08 48
+[   18.320412] RSP: 0018:ffffad86f8013df8 EFLAGS: 00010286
+[   18.320978] RAX: 0000000000000001 RBX: ffff9b7b435c7800 RCX:
+0000000000000200
+[   18.321758] RDX: ffffad86de903000 RSI: 0000000000000000 RDI:
+ffff9b7b435c7800
+[   18.322524] RBP: 0000000000000000 R08: 0000000000000200 R09:
+0000000000000000
+[   18.323299] R10: 0000000000000200 R11: 0000000000000000 R12:
+0000000000000000
+[   18.324030] R13: ffff9b7b55191800 R14: ffff9b7b435c7820 R15:
+ffff9b7b4677f960
+[   18.324784] FS:  00007fc8e4c90580(0000) GS:ffff9b7c77cc0000(0000)
+knlGS:0000000000000000
+[   18.325651] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   18.326272] CR2: ffffad86de903008 CR3: 000000014f1de003 CR4:
+0000000000370ee0
+[   18.327047] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
+0000000000000000
+[   18.327818] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
+0000000000000400
+[   18.328586] Call Trace:
+[   18.328852]  <TASK>
+[   18.329284]  zram_reset_device+0xd8/0x140 [zram]
+[   18.329983]  zram_remove.cold+0xa/0x20 [zram]
+[   18.330644]  ? hot_remove_store+0xe0/0xe0 [zram]
+[   18.331367]  zram_remove_cb+0xd/0x10 [zram]
+[   18.332010]  idr_for_each+0x5b/0xd0
+[   18.332578]  destroy_devices+0x26/0x50 [zram]
+[   18.333238]  __do_sys_delete_module+0x18d/0x2a0
+[   18.333913]  ? fpregs_assert_state_consistent+0x1e/0x40
+[   18.334665]  ? exit_to_user_mode_prepare+0x3a/0x180
+[   18.335395]  do_syscall_64+0x38/0xc0
+[   18.335966]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   18.336681] RIP: 0033:0x7fc8e4db64a7
 
-So a bool false in a register is not guaranteed to be a 64-bit zero. But
-since it *is* guarnateed to be either 0 or 1, we can use TBZ/TBNZ
-instead of CBZ/CBNZ. Either that, or extend it to a wider type in the
-function prototype.
-
-The test below shows clang and GCC both agree with that (though this old
-GCC seems to do unnecessary zero extension as a caller):
-
-| [mark@gravadlaks:~]% cat bool.c       
-| #include <stdbool.h>
-| 
-| void callee_bool(bool b);
-| 
-| void callee_unsigned_int(unsigned int i);
-| 
-| void caller_unsigned_long(unsigned long l)
-| {
-|         unsigned long tmp = l & 0xffffffff;
-| 
-|         if (tmp)
-|                 callee_unsigned_int(tmp);
-|         else
-|                 callee_bool(tmp);
-| }
-| 
-| unsigned long bool_to_unsigned_long(bool b)
-| {
-|         return b;
-| }
-| [mark@gravadlaks:~]% gcc --version    
-| gcc (Debian 8.3.0-6) 8.3.0
-| Copyright (C) 2018 Free Software Foundation, Inc.
-| This is free software; see the source for copying conditions.  There is NO
-| warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-| 
-| [mark@gravadlaks:~]% gcc -c bool.c -O3
-| [mark@gravadlaks:~]% objdump -d bool.o
-| 
-| bool.o:     file format elf64-littleaarch64
-| 
-| 
-| Disassembly of section .text:
-| 
-| 0000000000000000 <caller_unsigned_long>:
-|    0:   34000040        cbz     w0, 8 <caller_unsigned_long+0x8>
-|    4:   14000000        b       0 <callee_unsigned_int>
-|    8:   52800000        mov     w0, #0x0                        // #0
-|    c:   14000000        b       0 <callee_bool>
-| 
-| 0000000000000010 <bool_to_unsigned_long>:
-|   10:   92401c00        and     x0, x0, #0xff
-|   14:   d65f03c0        ret
-| [mark@gravadlaks:~]% clang --version    
-| clang version 7.0.1-8+deb10u2 (tags/RELEASE_701/final)
-| Target: aarch64-unknown-linux-gnu
-| Thread model: posix
-| InstalledDir: /usr/bin
-| [mark@gravadlaks:~]% clang -c bool.c -O3
-| [mark@gravadlaks:~]% objdump -d bool.o  
-| 
-| bool.o:     file format elf64-littleaarch64
-| 
-| 
-| Disassembly of section .text:
-| 
-| 0000000000000000 <caller_unsigned_long>:
-|    0:   34000040        cbz     w0, 8 <caller_unsigned_long+0x8>
-|    4:   14000000        b       0 <callee_unsigned_int>
-|    8:   14000000        b       0 <callee_bool>
-| 
-| 000000000000000c <bool_to_unsigned_long>:
-|    c:   92400000        and     x0, x0, #0x1
-|   10:   d65f03c0        ret
-
-Thanks,
-Mark.
