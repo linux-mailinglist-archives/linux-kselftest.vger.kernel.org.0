@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F340433D55
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 19:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E6D433D56
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 19:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbhJSR0k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Oct 2021 13:26:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54694 "EHLO mail.kernel.org"
+        id S234524AbhJSR0m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Oct 2021 13:26:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54746 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233580AbhJSR0j (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Oct 2021 13:26:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AF95B61355;
-        Tue, 19 Oct 2021 17:24:25 +0000 (UTC)
+        id S233580AbhJSR0l (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Oct 2021 13:26:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6CC27610E5;
+        Tue, 19 Oct 2021 17:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634664266;
-        bh=W+84tHLcOZAWN5BwW6ZZUK9hQFjUbMrqnIca5VlL5Q0=;
+        s=k20201202; t=1634664269;
+        bh=Kjuk9QiVjgaOT+nmbe742UkwMU30Cuj2P7aMoHEbujk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nT2rPw1kxIRthMmqHdIKS01miRoEUgX8ZXuiNEMbQTHJM/I5tx6/xcTQ1i+vG26JE
-         1FhOATqVZo+ndnByDq9/mM2p0roqhTt5UeJ1AVrOs6cSu6b8mX+M1VEnMZufWK4HFM
-         uHEpL+USx99TwM0ZP65YD5edmadSjPmgx7NXN9SzigwiipcCWC0R6yHWGa3mPLsSs6
-         lkGgD6V5iEWBwg7d0zY8/VArULc+IPwjSbN8Ul8C2EtZZtfl+oSWyUmI/F0L1Q0uuI
-         HN6S/YjKzaEE8WiRJrxNTP/hs7V90W99vgbz0KYJDFL064uTQtKQxvk41VzFw21u1m
-         8vUfcriMHqMOw==
+        b=Q+CfGfZK6YIeOTGadXygBu1Vv+0CtQzlkAXuUrxPAE+QvP3Ro2qUfA+AG7AhH8zsO
+         29WI2DIK3ofvWeaQMh/nmFw+n6a6UYs/FlIAOs8EO0s0hY0qf3VfcvJH+OH2YTBwjn
+         2H3QB99enINhw077bVHvDgIXnLYYu1Ja+yGE5I8ixaA/Q+7SiwmBgyyJM1K3ASKAv7
+         f9WAB88xLjmqcL7AH8zANN7HXcG+TF6AwDS9S9y5b7TTyfefsEije7X5bSseHRfaMd
+         nzpIGB3600Fyu+JD2d6m/Y4noQjdbdr0qsMs32M1Ny7MUK0Bo35jfh7UCFRwqkvrzT
+         MvjIv1DzXiUBw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -35,90 +35,316 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 18/42] arm64/sme: Early CPU setup for SME
-Date:   Tue, 19 Oct 2021 18:22:23 +0100
-Message-Id: <20211019172247.3045838-19-broonie@kernel.org>
+Subject: [PATCH v3 19/42] arm64/sme: Basic enumeration support
+Date:   Tue, 19 Oct 2021 18:22:24 +0100
+Message-Id: <20211019172247.3045838-20-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211019172247.3045838-1-broonie@kernel.org>
 References: <20211019172247.3045838-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2261; h=from:subject; bh=W+84tHLcOZAWN5BwW6ZZUK9hQFjUbMrqnIca5VlL5Q0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbv7RQ9ixCcPG5zz09jsii37p/28yPJYGMTr1NVDA EpqAXkWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW7+0QAKCRAk1otyXVSH0BiVB/ 9Ks3jddE0qtlnvrL3jNBKY/XUYAdVLGlmBJi26nvXASOZS+xo4YWxrE4kjG0ykrGJavdz8cs50tB9Y iWiiIETIFtOwtND+mzw0+WhKPQVqIygh8Eme57Za+paMNqX/XdScZz+wGwTFTMOHDVvY8H9A+EqeUy lRGD0Vo6xSlKChK2SN5WtoU1pOKZEAJOTeNOi15vLZGGjjpOwmCH/QC9g4omRicbSOH7Oegz+0NEy5 sn05uZvWavtwJW6tVZwbkcxoCxUxxOGrBnefNjbolS4X2iEVqpKI80Ku8hNsSxYMPb0WwiCBZA+L7W OR834X/7GXqkK68KymoMR7pgS4UZhc
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11866; h=from:subject; bh=Kjuk9QiVjgaOT+nmbe742UkwMU30Cuj2P7aMoHEbujk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbv7SiVkaiJ9P0OHJzDGevN8E+Wa8tCIs5uNJIXfg tgGW0cWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW7+0gAKCRAk1otyXVSH0IbmB/ 4mojq8BNKNn/Le2o3vuhJ4LmzZs7iw5FFnfuJ4zYvOgkANl7ybGxxL8i0/LJiE5N0Vu9cPpSXWF2Mr 0IBQ+EE2GfDajvYPMKffTuAgx5OJ1bfRK4wZvtTIcPS3wI705QH110fCjq0+3aQwp0LtVHEEEtb2kP sYhMCZT9tDA/3pBz6hbsxH2/i1rTkirO9fzIYaPT7+2SrgRLs+1FpEa/NDQLma/ATMOmII+Cqwbr0L yLuyjgc4K1n2b59/ztC5c3yndn2bxesj590+Om149sJKL8ZIKM3OZvOtGU5o8aH1wge6kNSYD/oe78 zRcEIHTGrl4lduwmLgLWuTTSR29xix
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SME requires similar setup to that for SVE: disable traps to EL2 and
-make sure that the maximum vector length is available to EL1, for SME we
-have two traps - one for SME itself and one for TPIDR2.
-
-In addition since we currently make no active use of priority control
-for SCMUs we map all SME priorities lower ELs may configure to 0, the
-architecture specified minimum priority, to ensure that nothing we
-manage is able to configure itself to consume excessive resources.  This
-will need to be revisited should there be a need to manage SME
-priorities at runtime.
+This patch introduces basic cpufeature support for discovering the presence
+of the Scalable Matrix Extension and reporting hwcaps for the detected
+features.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/el2_setup.h | 36 ++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ Documentation/arm64/elf_hwcaps.rst  | 29 ++++++++++++++++++++
+ arch/arm64/include/asm/cpu.h        |  1 +
+ arch/arm64/include/asm/cpufeature.h |  6 +++++
+ arch/arm64/include/asm/fpsimd.h     |  1 +
+ arch/arm64/include/asm/hwcap.h      |  7 +++++
+ arch/arm64/include/uapi/asm/hwcap.h |  7 +++++
+ arch/arm64/kernel/cpufeature.c      | 41 +++++++++++++++++++++++++++++
+ arch/arm64/kernel/cpuinfo.c         |  8 ++++++
+ arch/arm64/kernel/fpsimd.c          | 19 +++++++++++++
+ arch/arm64/tools/cpucaps            |  1 +
+ 10 files changed, 120 insertions(+)
 
-diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
-index 3198acb2aad8..895a27a1dcb5 100644
---- a/arch/arm64/include/asm/el2_setup.h
-+++ b/arch/arm64/include/asm/el2_setup.h
-@@ -143,6 +143,41 @@
- .Lskip_sve_\@:
- .endm
+diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
+index ec1a5a63c1d0..39680ff764bb 100644
+--- a/Documentation/arm64/elf_hwcaps.rst
++++ b/Documentation/arm64/elf_hwcaps.rst
+@@ -247,6 +247,35 @@ HWCAP2_MTE
+     Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
+     by Documentation/arm64/memory-tagging-extension.rst.
  
-+/* SME register access and priority mapping */
-+.macro __init_el2_nvhe_sme
-+	mrs	x1, id_aa64pfr1_el1
-+	ubfx	x1, x1, #ID_AA64PFR1_SME_SHIFT, #4
-+	cbz	x1, .Lskip_sme_\@
++HWCAP2_SME
 +
-+	bic	x0, x0, #CPTR_EL2_TSM		// Also disable SME traps
-+	msr	cptr_el2, x0			// Disable copro. traps to EL2
-+	isb
++    Functionality implied by ID_AA64PFR1_EL1.SME == 0b0001, as described
++    by Documentation/arm64/sme.rst.
 +
-+	mrs	x1, sctlr_el2
-+	orr	x1, x1, #SCTLR_ELx_ENTP2	// Disable TPIDR2 traps
-+	msr	sctlr_el2, x1
-+	isb
++HWCAP2_SME_I16I64
 +
-+	mov	x1, #SMCR_ELx_LEN_MASK		// Enable full SME vector
-+	msr_s	SYS_SMCR_EL2, x1		// length for EL1.
++    Functionality implied by ID_AA64SMFR0_EL1.I16I64 == 0b1111.
 +
-+	mrs_s	x1, SYS_SMIDR_EL1		// Priority mapping supported?
-+	ubfx    x1, x1, #SYS_SMIDR_EL1_SMPS_SHIFT, #1
-+	cbz     x1, .Lskip_sme_\@
++HWCAP2_SME_F64F64
 +
-+	msr_s	SYS_SMPRIMAP_EL2, xzr		// Make all priorities equal
++    Functionality implied by ID_AA64SMFR0_EL1.F64F64 == 0b1.
 +
-+	mrs	x1, id_aa64mmfr1_el1		// HCRX_EL2 present?
-+	ubfx	x1, x1, #ID_AA64MMFR1_HCX_SHIFT, #4
-+	cbz	x1, .Lskip_sme_\@
++HWCAP2_SME_I8I32
 +
-+	mrs_s	x1, SYS_HCRX_EL2
-+	orr	x1, x1, #HCRX_EL2_SMPME_MASK	// Enable priority mapping
-+	msr_s	SYS_HCRX_EL2, x1
++    Functionality implied by ID_AA64SMFR0_EL1.I8I32 == 0b1111.
 +
-+.Lskip_sme_\@:
-+.endm
++HWCAP2_SME_F16F32
 +
- /* Disable any fine grained traps */
- .macro __init_el2_fgt
- 	mrs	x1, id_aa64mmfr0_el1
-@@ -196,6 +231,7 @@
- 	__init_el2_nvhe_idregs
- 	__init_el2_nvhe_cptr
- 	__init_el2_nvhe_sve
-+	__init_el2_nvhe_sme
- 	__init_el2_fgt
- 	__init_el2_nvhe_prepare_eret
- .endm
++    Functionality implied by ID_AA64SMFR0_EL1.F16F32 == 0b1.
++
++HWCAP2_SME_B16F32
++
++    Functionality implied by ID_AA64SMFR0_EL1.B16F32 == 0b1.
++
++HWCAP2_SME_F32F32
++
++    Functionality implied by ID_AA64SMFR0_EL1.F32F32 == 0b1.
++
+ 4. Unused AT_HWCAP bits
+ -----------------------
+ 
+diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
+index 0f6d16faa540..667b66fe1a53 100644
+--- a/arch/arm64/include/asm/cpu.h
++++ b/arch/arm64/include/asm/cpu.h
+@@ -57,6 +57,7 @@ struct cpuinfo_arm64 {
+ 	u64		reg_id_aa64pfr0;
+ 	u64		reg_id_aa64pfr1;
+ 	u64		reg_id_aa64zfr0;
++	u64		reg_id_aa64smfr0;
+ 
+ 	struct cpuinfo_32bit	aarch32;
+ 
+diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+index ef6be92b1921..e1b745bf5fbe 100644
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -727,6 +727,12 @@ static __always_inline bool system_supports_sve(void)
+ 		cpus_have_const_cap(ARM64_SVE);
+ }
+ 
++static __always_inline bool system_supports_sme(void)
++{
++	return IS_ENABLED(CONFIG_ARM64_SME) &&
++		cpus_have_const_cap(ARM64_SME);
++}
++
+ static __always_inline bool system_supports_cnp(void)
+ {
+ 	return IS_ENABLED(CONFIG_ARM64_CNP) &&
+diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+index 577bfcc252d6..e28e09f30ad4 100644
+--- a/arch/arm64/include/asm/fpsimd.h
++++ b/arch/arm64/include/asm/fpsimd.h
+@@ -74,6 +74,7 @@ extern void sve_set_vq(unsigned long vq_minus_1);
+ 
+ struct arm64_cpu_capabilities;
+ extern void sve_kernel_enable(const struct arm64_cpu_capabilities *__unused);
++extern void sme_kernel_enable(const struct arm64_cpu_capabilities *__unused);
+ 
+ extern u64 read_zcr_features(void);
+ 
+diff --git a/arch/arm64/include/asm/hwcap.h b/arch/arm64/include/asm/hwcap.h
+index 8c129db8232a..37605f4be103 100644
+--- a/arch/arm64/include/asm/hwcap.h
++++ b/arch/arm64/include/asm/hwcap.h
+@@ -105,6 +105,13 @@
+ #define KERNEL_HWCAP_RNG		__khwcap2_feature(RNG)
+ #define KERNEL_HWCAP_BTI		__khwcap2_feature(BTI)
+ #define KERNEL_HWCAP_MTE		__khwcap2_feature(MTE)
++#define KERNEL_HWCAP_SME		__khwcap2_feature(SME)
++#define KERNEL_HWCAP_SME_I16I64		__khwcap2_feature(SME_I16I64)
++#define KERNEL_HWCAP_SME_F64F64		__khwcap2_feature(SME_F64F64)
++#define KERNEL_HWCAP_SME_I8I32		__khwcap2_feature(SME_I8I32)
++#define KERNEL_HWCAP_SME_F16F32		__khwcap2_feature(SME_F16F32)
++#define KERNEL_HWCAP_SME_B16F32		__khwcap2_feature(SME_B16F32)
++#define KERNEL_HWCAP_SME_F32F32		__khwcap2_feature(SME_F32F32)
+ 
+ /*
+  * This yields a mask that user programs can use to figure out what
+diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
+index b8f41aa234ee..2d6bbee3c68a 100644
+--- a/arch/arm64/include/uapi/asm/hwcap.h
++++ b/arch/arm64/include/uapi/asm/hwcap.h
+@@ -75,5 +75,12 @@
+ #define HWCAP2_RNG		(1 << 16)
+ #define HWCAP2_BTI		(1 << 17)
+ #define HWCAP2_MTE		(1 << 18)
++#define HWCAP2_SME		(1 << 19)
++#define HWCAP2_SME_I16I64	(1 << 20)
++#define HWCAP2_SME_F64F64	(1 << 21)
++#define HWCAP2_SME_I8I32	(1 << 22)
++#define HWCAP2_SME_F16F32	(1 << 23)
++#define HWCAP2_SME_B16F32	(1 << 24)
++#define HWCAP2_SME_F32F32	(1 << 25)
+ 
+ #endif /* _UAPI__ASM_HWCAP_H */
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 405a65d7e618..9d3e87ba5d5a 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -246,6 +246,7 @@ static const struct arm64_ftr_bits ftr_id_aa64pfr0[] = {
+ };
+ 
+ static const struct arm64_ftr_bits ftr_id_aa64pfr1[] = {
++	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_SME_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_MPAMFRAC_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_RASFRAC_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_MTE),
+@@ -278,6 +279,22 @@ static const struct arm64_ftr_bits ftr_id_aa64zfr0[] = {
+ 	ARM64_FTR_END,
+ };
+ 
++static const struct arm64_ftr_bits ftr_id_aa64smfr0[] = {
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_I16I64_SHIFT, 4, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_F64F64_SHIFT, 1, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_I8I32_SHIFT, 4, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_F16F32_SHIFT, 1, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_B16F32_SHIFT, 1, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_F32F32_SHIFT, 1, 0),
++	ARM64_FTR_END,
++};
++
+ static const struct arm64_ftr_bits ftr_id_aa64mmfr0[] = {
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR0_ECV_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR0_FGT_SHIFT, 4, 0),
+@@ -624,6 +641,7 @@ static const struct __ftr_reg_entry {
+ 	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64PFR1_EL1, ftr_id_aa64pfr1,
+ 			       &id_aa64pfr1_override),
+ 	ARM64_FTR_REG(SYS_ID_AA64ZFR0_EL1, ftr_id_aa64zfr0),
++	ARM64_FTR_REG(SYS_ID_AA64SMFR0_EL1, ftr_id_aa64smfr0),
+ 
+ 	/* Op1 = 0, CRn = 0, CRm = 5 */
+ 	ARM64_FTR_REG(SYS_ID_AA64DFR0_EL1, ftr_id_aa64dfr0),
+@@ -935,6 +953,7 @@ void __init init_cpu_features(struct cpuinfo_arm64 *info)
+ 	init_cpu_ftr_reg(SYS_ID_AA64PFR0_EL1, info->reg_id_aa64pfr0);
+ 	init_cpu_ftr_reg(SYS_ID_AA64PFR1_EL1, info->reg_id_aa64pfr1);
+ 	init_cpu_ftr_reg(SYS_ID_AA64ZFR0_EL1, info->reg_id_aa64zfr0);
++	init_cpu_ftr_reg(SYS_ID_AA64SMFR0_EL1, info->reg_id_aa64smfr0);
+ 
+ 	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0))
+ 		init_32bit_cpu_features(&info->aarch32);
+@@ -2332,6 +2351,19 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.min_field_value = 1,
+ 	},
++#ifdef CONFIG_ARM64_SME
++	{
++		.desc = "Scalable Matrix Extension",
++		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
++		.capability = ARM64_SME,
++		.sys_reg = SYS_ID_AA64PFR1_EL1,
++		.sign = FTR_UNSIGNED,
++		.field_pos = ID_AA64PFR1_SME_SHIFT,
++		.min_field_value = ID_AA64PFR1_SME,
++		.matches = has_cpuid_feature,
++		.cpu_enable = sme_kernel_enable,
++	},
++#endif /* CONFIG_ARM64_SME */
+ 	{},
+ };
+ 
+@@ -2451,6 +2483,15 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
+ #ifdef CONFIG_ARM64_MTE
+ 	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_MTE_SHIFT, FTR_UNSIGNED, ID_AA64PFR1_MTE, CAP_HWCAP, KERNEL_HWCAP_MTE),
+ #endif /* CONFIG_ARM64_MTE */
++#ifdef CONFIG_ARM64_SME
++	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_SME_SHIFT, FTR_UNSIGNED, ID_AA64PFR1_SME, CAP_HWCAP, KERNEL_HWCAP_SME),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_I16I64_SHIFT, FTR_UNSIGNED, ID_AA64SMFR0_I16I64, CAP_HWCAP, KERNEL_HWCAP_SME_I16I64),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_F64F64_SHIFT, FTR_UNSIGNED, ID_AA64SMFR0_F64F64, CAP_HWCAP, KERNEL_HWCAP_SME_F64F64),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_I8I32_SHIFT, FTR_UNSIGNED, ID_AA64SMFR0_I8I32, CAP_HWCAP, KERNEL_HWCAP_SME_I8I32),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_F16F32_SHIFT, FTR_UNSIGNED, ID_AA64SMFR0_F16F32, CAP_HWCAP, KERNEL_HWCAP_SME_F16F32),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_B16F32_SHIFT, FTR_UNSIGNED, ID_AA64SMFR0_B16F32, CAP_HWCAP, KERNEL_HWCAP_SME_B16F32),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_F32F32_SHIFT, FTR_UNSIGNED, ID_AA64SMFR0_F32F32, CAP_HWCAP, KERNEL_HWCAP_SME_F32F32),
++#endif /* CONFIG_ARM64_SME */
+ 	{},
+ };
+ 
+diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
+index 87731fea5e41..9830fa0c7647 100644
+--- a/arch/arm64/kernel/cpuinfo.c
++++ b/arch/arm64/kernel/cpuinfo.c
+@@ -94,6 +94,13 @@ static const char *const hwcap_str[] = {
+ 	[KERNEL_HWCAP_RNG]		= "rng",
+ 	[KERNEL_HWCAP_BTI]		= "bti",
+ 	[KERNEL_HWCAP_MTE]		= "mte",
++	[KERNEL_HWCAP_SME]		= "sme",
++	[KERNEL_HWCAP_SME_I16I64]	= "smei16i64",
++	[KERNEL_HWCAP_SME_F64F64]	= "smef64f64",
++	[KERNEL_HWCAP_SME_I8I32]	= "smei8i32",
++	[KERNEL_HWCAP_SME_F16F32]	= "smef16f32",
++	[KERNEL_HWCAP_SME_B16F32]	= "smeb16f32",
++	[KERNEL_HWCAP_SME_F32F32]	= "smef32f32",
+ };
+ 
+ #ifdef CONFIG_COMPAT
+@@ -396,6 +403,7 @@ static void __cpuinfo_store_cpu(struct cpuinfo_arm64 *info)
+ 	info->reg_id_aa64pfr0 = read_cpuid(ID_AA64PFR0_EL1);
+ 	info->reg_id_aa64pfr1 = read_cpuid(ID_AA64PFR1_EL1);
+ 	info->reg_id_aa64zfr0 = read_cpuid(ID_AA64ZFR0_EL1);
++	info->reg_id_aa64smfr0 = read_cpuid(ID_AA64SMFR0_EL1);
+ 
+ 	if (id_aa64pfr1_mte(info->reg_id_aa64pfr1))
+ 		info->reg_gmid = read_cpuid(GMID_EL1);
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 66842aade1ba..5b3b47dfa620 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -986,6 +986,21 @@ void fpsimd_release_task(struct task_struct *dead_task)
+ 
+ #endif /* CONFIG_ARM64_SVE */
+ 
++#ifdef CONFIG_ARM64_SME
++
++void sme_kernel_enable(const struct arm64_cpu_capabilities *__always_unused p)
++{
++	/* Set priority for all PEs to architecturally defined minimum */
++	write_sysreg_s(read_sysreg_s(SYS_SMPRI_EL1) & ~SMPRI_EL1_PRIORITY_MASK,
++		       SYS_SMPRI_EL1);
++
++	/* Allow SME in kernel */
++	write_sysreg(read_sysreg(CPACR_EL1) | CPACR_EL1_SMEN_EL1EN, CPACR_EL1);
++	isb();
++}
++
++#endif /* CONFIG_ARM64_SVE */
++
+ /*
+  * Trapped SVE access
+  *
+@@ -1528,6 +1543,10 @@ static int __init fpsimd_init(void)
+ 	if (!cpu_have_named_feature(ASIMD))
+ 		pr_notice("Advanced SIMD is not implemented\n");
+ 
++
++	if (cpu_have_named_feature(SME) && !cpu_have_named_feature(SVE))
++		pr_notice("SME is implemented but not SVE\n");
++
+ 	return sve_sysctl_init();
+ }
+ core_initcall(fpsimd_init);
+diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+index 49305c2e6dfd..a21a82d3cd64 100644
+--- a/arch/arm64/tools/cpucaps
++++ b/arch/arm64/tools/cpucaps
+@@ -39,6 +39,7 @@ HW_DBM
+ KVM_PROTECTED_MODE
+ MISMATCHED_CACHE_TYPE
+ MTE
++SME
+ SPECTRE_V2
+ SPECTRE_V3A
+ SPECTRE_V4
 -- 
 2.30.2
 
