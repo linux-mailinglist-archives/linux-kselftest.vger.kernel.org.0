@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE027433D62
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 19:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9861F433D63
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 19:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234524AbhJSR1M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Oct 2021 13:27:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55224 "EHLO mail.kernel.org"
+        id S234526AbhJSR1P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Oct 2021 13:27:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55260 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230158AbhJSR1L (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Oct 2021 13:27:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A88261212;
-        Tue, 19 Oct 2021 17:24:58 +0000 (UTC)
+        id S230158AbhJSR1O (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Oct 2021 13:27:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 18B6A610E5;
+        Tue, 19 Oct 2021 17:25:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634664298;
-        bh=R+UM8eE2xL0Qbw+EfuxlKsj2zYTlTRa6hFTUtOOisQc=;
+        s=k20201202; t=1634664301;
+        bh=vDi+4fJGtN2LW6I/lmJyUgYd6Uj/USnH/LhPVVMBA30=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ci6m+pSQh3SM1zL6JjKx33JHQJpmfo1oFxMTLE9FCTckv+b42P0eC0NJFqHHmpGRA
-         dJKLwEziJqfyp37f+rzb5REXhdr1Cu8GMsnrNaBE9S2edvG2riayhQR087zIRhneuf
-         GoFmZup2AnGYGg9aDYoM0RPBUd4vq1ctt8omU56+qJFB4gXfbqUkBuox3/dOLySRbp
-         lHgWqr2V4NG2FhIjf4qkVFQCCQKL92CiXcS5jRUliqRwZd8iMIf20HrEc2IQY4TM0O
-         2RlFrXi3jUo5YNiuiMk8jFT7EuMtoEfLqI6xEH65+1aEFyT+pu/T3bfHTh/DARghx7
-         XvlaoBptvHOvA==
+        b=T303K3yN2Tzwmo8NIk3UjDRcZHXo1j4hWoA21H6GJWd9JbYFFwxybR6x7JcHGypjH
+         Unu/SfW9lBUAj9lewdIbAgTZ6gUc3jUxrJBPxPAmvCNSbZwoAE2Wbq4r0EctqSZryT
+         bpKVAzg4qZJxwv1GZ7T5dZq/MyDx2eYLDGUOLahGs2jM7efZHoi/8xJBKnNB0KrS/G
+         6wEhaZ1HGiox0o+/1caUx8TMyue602o9XFoFwUpxZ8pv90ZB7I3pqZG4m2MNkAeIwJ
+         rC65p+A//f9mAgv42rIBC6Ak5rJYKfkGzGY3tSDgDQ3J8pXjf8vBdJ5STKP9f263Ex
+         fVQCFFW4caoig==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -35,467 +35,284 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 30/42] arm64/sme: Implement ptrace support for streaming mode SVE registers
-Date:   Tue, 19 Oct 2021 18:22:35 +0100
-Message-Id: <20211019172247.3045838-31-broonie@kernel.org>
+Subject: [PATCH v3 31/42] arm64/sme: Add ptrace support for ZA
+Date:   Tue, 19 Oct 2021 18:22:36 +0100
+Message-Id: <20211019172247.3045838-32-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211019172247.3045838-1-broonie@kernel.org>
 References: <20211019172247.3045838-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=14915; h=from:subject; bh=R+UM8eE2xL0Qbw+EfuxlKsj2zYTlTRa6hFTUtOOisQc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbv7bXLeAxBt+aOGWGvOdIOYYAgBi1ziW++k9PAt4 k9pLUp+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW7+2wAKCRAk1otyXVSH0FEwB/ 0TnlisDJH4miQnM1L7s4fUOLKql8XLNy2qNdf/qUPWkwwJMTz6fcHjlfwuqcNVERcgomuii+Gt7MEu mMuumqXIjPZww+0+AHvTe7T6M/UEGbfiCaRp5KUkrxt3LWw4FkhwvhXyg30wAGvLKOtPCDLSCiSbKs M4pF1czCjWFBANhGG74byXypB1KJGAOYpiHKHtZCpArvTtFxpxBERkPd8K3+aS+ym8+49n9Ju7MJiE EQV4y2LWrQg8unM93rxsS31mpVckaPbRlihoPgKWnpRMTqreV0thCeRT0SyQsNMqUvAWKGl3LBTtu6 9OcowytAqhK37oGI9KtgA19XNEq8/I
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8277; h=from:subject; bh=vDi+4fJGtN2LW6I/lmJyUgYd6Uj/USnH/LhPVVMBA30=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbv7cjCCO2aWFEW8TGVej7ynsAbni9lHwgwkrd/Qb 5E4/EB+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW7+3AAKCRAk1otyXVSH0LGbB/ 9MA2pzhKTM8ZJ16g3n/+gmaUJxttiKvbOr9IhoMLkUrQMhYuDURMENIVG0xb8XetnOntoAV6uOswPk vgKyjFnga8gNjIF4iN9PK3VSiljzSKIAdX0m/bnsnAacWd/O0n4FIFixitpUaMIkzhSpmW3Rb9Fnc9 yKhQwtPulUPRdfPn8Nn1qram9Hj3iymBNgkFd9ENTGFQdqynmLrCIoWH9J5qKILiRI2qSBp4ekaZB9 jp60sSjxYoIOdd+ZGmyGEdnPFzVOxw6WA5ifcYvKy4sstxbba1o/unQ38Mn+bGt1AjugGC6rWnFEr8 lhg1y+IoRCy+KCRQHJZGO1ZfF8Usp2
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The streaming mode SVE registers are represented using the same data
-structures as for SVE but since the vector lengths supported and in use
-may not be the same as SVE we represent them with a new type NT_ARM_SSVE.
-Unfortunately we only have a single 16 bit reserved field available in
-the header so there is no space to fit the current and maximum vector
-length for both standard and streaming SVE mode without redefining the
-structure in a way the creates a complicatd and fragile ABI. Since FFR
-is not present in streaming mode it is read and written as zero.
+The ZA array can be read and written with the NT_ARM_ZA.  Similarly to
+our interface for the SVE vector registers the regset consists of a
+header with information on the current vector length followed by an
+optional register data payload, represented as for signals as a series
+of horizontal vectors from 0 to VL/8 in the endianness independent
+format used for vectors.
 
-Setting NT_ARM_SSVE registers will put the task into streaming mode,
-similarly setting NT_ARM_SVE registers will exit it. Reads that do not
-correspond to the current mode of the task will return the header with
-no register data. For compatibility reasons on write setting no flag for
-the register type will be interpreted as setting SVE registers, though
-users can provide no register data as an alternative mechanism for doing
-so.
+On get if ZA is enabled then register data will be provided, otherwise
+it will be omitted.  On set if register data is provided then ZA is
+enabled and initialized using the provided data, otherwise it is
+disabled.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/uapi/asm/ptrace.h |  13 +-
- arch/arm64/kernel/fpsimd.c           |  21 ++-
- arch/arm64/kernel/ptrace.c           | 212 +++++++++++++++++++++------
+ arch/arm64/include/uapi/asm/ptrace.h |  56 +++++++++++
+ arch/arm64/kernel/ptrace.c           | 144 +++++++++++++++++++++++++++
  include/uapi/linux/elf.h             |   1 +
- 4 files changed, 190 insertions(+), 57 deletions(-)
+ 3 files changed, 201 insertions(+)
 
 diff --git a/arch/arm64/include/uapi/asm/ptrace.h b/arch/arm64/include/uapi/asm/ptrace.h
-index 758ae984ff97..522b925a78c1 100644
+index 522b925a78c1..7fa2f7036aa7 100644
 --- a/arch/arm64/include/uapi/asm/ptrace.h
 +++ b/arch/arm64/include/uapi/asm/ptrace.h
-@@ -109,7 +109,7 @@ struct user_hwdebug_state {
- 	}		dbg_regs[16];
+@@ -268,6 +268,62 @@ struct user_pac_generic_keys {
+ 	__uint128_t	apgakey;
  };
  
--/* SVE/FP/SIMD state (NT_ARM_SVE) */
-+/* SVE/FP/SIMD state (NT_ARM_SVE & NT_ARM_SSVE) */
- 
- struct user_sve_header {
- 	__u32 size; /* total meaningful regset content in bytes */
-@@ -220,6 +220,7 @@ struct user_sve_header {
- 	(SVE_PT_SVE_PREG_OFFSET(vq, __SVE_NUM_PREGS) - \
- 		SVE_PT_SVE_PREGS_OFFSET(vq))
- 
-+/* For streaming mode SVE (SSVE) FFR must be read and written as zero */
- #define SVE_PT_SVE_FFR_OFFSET(vq) \
- 	(SVE_PT_REGS_OFFSET + __SVE_FFR_OFFSET(vq))
- 
-@@ -240,10 +241,12 @@ struct user_sve_header {
- 			- SVE_PT_SVE_OFFSET + (__SVE_VQ_BYTES - 1))	\
- 		/ __SVE_VQ_BYTES * __SVE_VQ_BYTES)
- 
--#define SVE_PT_SIZE(vq, flags)						\
--	 (((flags) & SVE_PT_REGS_MASK) == SVE_PT_REGS_SVE ?		\
--		  SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, flags)	\
--		: SVE_PT_FPSIMD_OFFSET + SVE_PT_FPSIMD_SIZE(vq, flags))
-+#define SVE_PT_SIZE(vq, flags)						  \
-+	 (((flags) & SVE_PT_REGS_MASK) == SVE_PT_REGS_SVE ?		  \
-+		  SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, flags)	  \
-+		: ((((flags) & SVE_PT_REGS_MASK) == SVE_PT_REGS_FPSIMD ?  \
-+		    SVE_PT_FPSIMD_OFFSET + SVE_PT_FPSIMD_SIZE(vq, flags) \
-+		  : SVE_PT_REGS_OFFSET)))
- 
- /* pointer authentication masks (NT_ARM_PAC_MASK) */
- 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index c46be05038d4..39f521dadd87 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -625,14 +625,19 @@ static void __fpsimd_to_sve(void *sst, struct user_fpsimd_state const *fst,
-  */
- static void fpsimd_to_sve(struct task_struct *task)
- {
--	unsigned int vq;
-+	unsigned int vq, vl;
- 	void *sst = task->thread.sve_state;
- 	struct user_fpsimd_state const *fst = &task->thread.uw.fpsimd_state;
- 
- 	if (!system_supports_sve())
- 		return;
- 
--	vq = sve_vq_from_vl(task_get_sve_vl(task));
-+	if (thread_sm_enabled(&task->thread))
-+		vl = task_get_sme_vl(task);
-+	else
-+		vl = task_get_sve_vl(task);
++/* ZA state (NT_ARM_ZA) */
 +
-+	vq = sve_vq_from_vl(vl);
- 	__fpsimd_to_sve(sst, fst, vq);
- }
- 
-@@ -649,7 +654,7 @@ static void fpsimd_to_sve(struct task_struct *task)
-  */
- static void sve_to_fpsimd(struct task_struct *task)
- {
--	unsigned int vq;
-+	unsigned int vq, vl;
- 	void const *sst = task->thread.sve_state;
- 	struct user_fpsimd_state *fst = &task->thread.uw.fpsimd_state;
- 	unsigned int i;
-@@ -658,7 +663,12 @@ static void sve_to_fpsimd(struct task_struct *task)
- 	if (!system_supports_sve())
- 		return;
- 
--	vq = sve_vq_from_vl(task_get_sve_vl(task));
-+	if (thread_sm_enabled(&task->thread))
-+		vl = task_get_sme_vl(task);
-+	else
-+		vl = task_get_sve_vl(task);
++struct user_za_header {
++	__u32 size; /* total meaningful regset content in bytes */
++	__u32 max_size; /* maxmium possible size for this thread */
++	__u16 vl; /* current vector length */
++	__u16 max_vl; /* maximum possible vector length */
++	__u16 flags;
++	__u16 __reserved;
++};
 +
-+	vq = sve_vq_from_vl(vl);
- 	for (i = 0; i < SVE_NUM_ZREGS; ++i) {
- 		p = (__uint128_t const *)ZREG(sst, vq, i);
- 		fst->vregs[i] = arm64_le128_to_cpu(*p);
-@@ -799,8 +809,7 @@ int vec_set_vector_length(struct task_struct *task, enum vec_type type,
- 	/*
- 	 * To ensure the FPSIMD bits of the SVE vector registers are preserved,
- 	 * write any live register state back to task_struct, and convert to a
--	 * regular FPSIMD thread.  Since the vector length can only be changed
--	 * with a syscall we can't be in streaming mode while reconfiguring.
-+	 * regular FPSIMD thread.
- 	 */
- 	if (task == current) {
- 		get_cpu_fpsimd_context();
++/*
++ * Common ZA_PT_* flags:
++ * These must be kept in sync with prctl interface in <linux/prctl.h>
++ */
++#define ZA_PT_VL_INHERIT		((1 << 17) /* PR_SME_VL_INHERIT */ >> 16)
++#define ZA_PT_VL_ONEXEC			((1 << 18) /* PR_SME_SET_VL_ONEXEC */ >> 16)
++
++
++/*
++ * The remainder of the ZA state follows struct user_za_header.  The
++ * total size of the ZA state (including header) depends on the
++ * metadata in the header:  ZA_PT_SIZE(vq, flags) gives the total size
++ * of the state in bytes, including the header.
++ *
++ * Refer to <asm/sigcontext.h> for details of how to pass the correct
++ * "vq" argument to these macros.
++ */
++
++/* Offset from the start of struct user_za_header to the register data */
++#define ZA_PT_ZA_OFFSET						\
++	((sizeof(struct user_za_header) + (__SVE_VQ_BYTES - 1))	\
++		/ __SVE_VQ_BYTES * __SVE_VQ_BYTES)
++
++/*
++ * The payload starts at offset ZA_PT_ZA_OFFSET, and is of size
++ * ZA_PT_ZA_SIZE(vq, flags).
++ *
++ * The ZA array is stored as a sequence of horizontal vectors ZAV of SVL/8
++ * bytes each, starting from vector 0.
++ *
++ * Additional data might be appended in the future.
++ *
++ * The ZA matrix is represented in memory in an endianness-invariant layout
++ * which differs from the layout used for the FPSIMD V-registers on big-endian
++ * systems: see sigcontext.h for more explanation.
++ */
++
++#define ZA_PT_ZAV_OFFSET(vq, n) \
++	(ZA_PT_ZA_OFFSET + ((vq * __SVE_VQ_BYTES) * n))
++
++#define ZA_PT_ZA_SIZE(vq) ((vq * __SVE_VQ_BYTES) * (vq * __SVE_VQ_BYTES))
++
++#define ZA_PT_SIZE(vq)						\
++	(ZA_PT_ZA_OFFSET + ZA_PT_ZA_SIZE(vq))
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif /* _UAPI__ASM_PTRACE_H */
 diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 716dde289446..414126ce5897 100644
+index 414126ce5897..702765f50a47 100644
 --- a/arch/arm64/kernel/ptrace.c
 +++ b/arch/arm64/kernel/ptrace.c
-@@ -714,21 +714,51 @@ static int system_call_set(struct task_struct *target,
- #ifdef CONFIG_ARM64_SVE
+@@ -996,6 +996,141 @@ static int ssve_set(struct task_struct *target,
+ 			      ARM64_VEC_SME);
+ }
  
- static void sve_init_header_from_task(struct user_sve_header *header,
--				      struct task_struct *target)
-+				      struct task_struct *target,
-+				      enum vec_type type)
- {
- 	unsigned int vq;
-+	bool active;
-+	bool fpsimd_only;
-+	enum vec_type task_type;
- 
- 	memset(header, 0, sizeof(*header));
- 
--	header->flags = test_tsk_thread_flag(target, TIF_SVE) ?
--		SVE_PT_REGS_SVE : SVE_PT_REGS_FPSIMD;
--	if (test_tsk_thread_flag(target, TIF_SVE_VL_INHERIT))
--		header->flags |= SVE_PT_VL_INHERIT;
-+	/* Check if the requested registers are active for the task */
-+	if (thread_sm_enabled(&target->thread))
-+		task_type = ARM64_VEC_SME;
++static int za_get(struct task_struct *target,
++		  const struct user_regset *regset,
++		  struct membuf to)
++{
++	struct user_za_header header;
++	unsigned int vq;
++	unsigned long start, end;
++
++	if (!system_supports_sme())
++		return -EINVAL;
++
++	/* Header */
++	memset(&header, 0, sizeof(header));
++
++	if (test_tsk_thread_flag(target, TIF_SME_VL_INHERIT))
++		header.flags |= ZA_PT_VL_INHERIT;
++
++	header.vl = task_get_sme_vl(target);
++	vq = sve_vq_from_vl(header.vl);
++	header.max_vl = sme_max_vl();
++	header.max_size = ZA_PT_SIZE(vq);
++
++	/* If ZA is not active there is only the header */
++	if (thread_za_enabled(&target->thread))
++		header.size = ZA_PT_SIZE(vq);
 +	else
-+		task_type = ARM64_VEC_SVE;
-+	active = (task_type == type);
++		header.size = ZA_PT_ZA_OFFSET;
 +
-+	switch (type) {
-+	case ARM64_VEC_SVE:
-+		if (test_tsk_thread_flag(target, TIF_SVE_VL_INHERIT))
-+			header->flags |= SVE_PT_VL_INHERIT;
-+		fpsimd_only = !test_tsk_thread_flag(target, TIF_SVE);
-+		break;
-+	case ARM64_VEC_SME:
-+		if (test_tsk_thread_flag(target, TIF_SME_VL_INHERIT))
-+			header->flags |= SVE_PT_VL_INHERIT;
-+		fpsimd_only = false;
-+		break;
-+	default:
-+		WARN_ON_ONCE(1);
-+		return;
-+	}
- 
--	header->vl = task_get_sve_vl(target);
-+	if (active) {
-+		if (fpsimd_only) {
-+			header->flags |= SVE_PT_REGS_FPSIMD;
-+		} else {
-+			header->flags |= SVE_PT_REGS_SVE;
-+		}
++	membuf_write(&to, &header, sizeof(header));
++
++	BUILD_BUG_ON(ZA_PT_ZA_OFFSET != sizeof(header));
++	end = ZA_PT_ZA_OFFSET;
++;
++	if (target == current)
++		fpsimd_preserve_current_state();
++
++	/* Any register data to include? */
++	if (thread_za_enabled(&target->thread)) {
++		start = end;
++		end = ZA_PT_SIZE(vq);
++		membuf_write(&to, target->thread.za_state, end - start);
 +	}
 +
-+	header->vl = task_get_vl(target, type);
- 	vq = sve_vq_from_vl(header->vl);
- 
--	header->max_vl = sve_max_vl();
-+	header->max_vl = vec_max_vl(type);
- 	header->size = SVE_PT_SIZE(vq, header->flags);
- 	header->max_size = SVE_PT_SIZE(sve_vq_from_vl(header->max_vl),
- 				      SVE_PT_REGS_SVE);
-@@ -739,19 +769,17 @@ static unsigned int sve_size_from_header(struct user_sve_header const *header)
- 	return ALIGN(header->size, SVE_VQ_BYTES);
- }
- 
--static int sve_get(struct task_struct *target,
--		   const struct user_regset *regset,
--		   struct membuf to)
-+static int sve_get_common(struct task_struct *target,
-+			  const struct user_regset *regset,
-+			  struct membuf to,
-+			  enum vec_type type)
- {
- 	struct user_sve_header header;
- 	unsigned int vq;
- 	unsigned long start, end;
- 
--	if (!system_supports_sve())
--		return -EINVAL;
--
- 	/* Header */
--	sve_init_header_from_task(&header, target);
-+	sve_init_header_from_task(&header, target, type);
- 	vq = sve_vq_from_vl(header.vl);
- 
- 	membuf_write(&to, &header, sizeof(header));
-@@ -759,49 +787,61 @@ static int sve_get(struct task_struct *target,
- 	if (target == current)
- 		fpsimd_preserve_current_state();
- 
--	/* Registers: FPSIMD-only case */
--
- 	BUILD_BUG_ON(SVE_PT_FPSIMD_OFFSET != sizeof(header));
--	if ((header.flags & SVE_PT_REGS_MASK) == SVE_PT_REGS_FPSIMD)
-+	BUILD_BUG_ON(SVE_PT_SVE_OFFSET != sizeof(header));
-+
-+	switch ((header.flags & SVE_PT_REGS_MASK)) {
-+	case SVE_PT_REGS_FPSIMD:
- 		return __fpr_get(target, regset, to);
- 
--	/* Otherwise: full SVE case */
-+	case SVE_PT_REGS_SVE:
-+		start = SVE_PT_SVE_OFFSET;
-+		end = SVE_PT_SVE_FFR_OFFSET(vq) + SVE_PT_SVE_FFR_SIZE(vq);
-+		membuf_write(&to, target->thread.sve_state, end - start);
- 
--	BUILD_BUG_ON(SVE_PT_SVE_OFFSET != sizeof(header));
--	start = SVE_PT_SVE_OFFSET;
--	end = SVE_PT_SVE_FFR_OFFSET(vq) + SVE_PT_SVE_FFR_SIZE(vq);
--	membuf_write(&to, target->thread.sve_state, end - start);
-+		start = end;
-+		end = SVE_PT_SVE_FPSR_OFFSET(vq);
-+		membuf_zero(&to, end - start);
- 
--	start = end;
--	end = SVE_PT_SVE_FPSR_OFFSET(vq);
--	membuf_zero(&to, end - start);
-+		/*
-+		 * Copy fpsr, and fpcr which must follow contiguously in
-+		 * struct fpsimd_state:
-+		 */
-+		start = end;
-+		end = SVE_PT_SVE_FPCR_OFFSET(vq) + SVE_PT_SVE_FPCR_SIZE;
-+		membuf_write(&to, &target->thread.uw.fpsimd_state.fpsr,
-+			     end - start);
- 
--	/*
--	 * Copy fpsr, and fpcr which must follow contiguously in
--	 * struct fpsimd_state:
--	 */
--	start = end;
--	end = SVE_PT_SVE_FPCR_OFFSET(vq) + SVE_PT_SVE_FPCR_SIZE;
--	membuf_write(&to, &target->thread.uw.fpsimd_state.fpsr, end - start);
-+		start = end;
-+		end = sve_size_from_header(&header);
-+		return membuf_zero(&to, end - start);
- 
--	start = end;
--	end = sve_size_from_header(&header);
--	return membuf_zero(&to, end - start);
-+	default:
-+		return 0;
-+	}
- }
- 
--static int sve_set(struct task_struct *target,
-+static int sve_get(struct task_struct *target,
- 		   const struct user_regset *regset,
--		   unsigned int pos, unsigned int count,
--		   const void *kbuf, const void __user *ubuf)
-+		   struct membuf to)
-+{
-+	if (!system_supports_sve())
-+		return -EINVAL;
-+
-+	return sve_get_common(target, regset, to, ARM64_VEC_SVE);
++	/* Zero any trailing padding */
++	start = end;
++	end = ALIGN(header.size, SVE_VQ_BYTES);
++	return membuf_zero(&to, end - start);
 +}
 +
-+static int sve_set_common(struct task_struct *target,
-+			  const struct user_regset *regset,
-+			  unsigned int pos, unsigned int count,
-+			  const void *kbuf, const void __user *ubuf,
-+			  enum vec_type type)
- {
- 	int ret;
- 	struct user_sve_header header;
- 	unsigned int vq;
- 	unsigned long start, end;
- 
--	if (!system_supports_sve())
--		return -EINVAL;
--
- 	/* Header */
- 	if (count < sizeof(header))
- 		return -EINVAL;
-@@ -814,13 +854,37 @@ static int sve_set(struct task_struct *target,
- 	 * Apart from SVE_PT_REGS_MASK, all SVE_PT_* flags are consumed by
- 	 * vec_set_vector_length(), which will also validate them for us:
- 	 */
--	ret = vec_set_vector_length(target, ARM64_VEC_SVE, header.vl,
-+	ret = vec_set_vector_length(target, type, header.vl,
- 		((unsigned long)header.flags & ~SVE_PT_REGS_MASK) << 16);
- 	if (ret)
- 		goto out;
- 
- 	/* Actual VL set may be less than the user asked for: */
--	vq = sve_vq_from_vl(task_get_sve_vl(target));
-+	vq = sve_vq_from_vl(task_get_vl(target, type));
++static int za_set(struct task_struct *target,
++		  const struct user_regset *regset,
++		  unsigned int pos, unsigned int count,
++		  const void *kbuf, const void __user *ubuf)
++{
++	int ret;
++	struct user_za_header header;
++	unsigned int vq;
++	unsigned long start, end;
 +
-+	/* Enter/exit streaming mode */
-+	if (system_supports_sme()) {
-+		u64 old_svcr = target->thread.svcr;
++	if (!system_supports_sme())
++		return -EINVAL;
 +
-+		switch (type) {
-+		case ARM64_VEC_SVE:
-+			target->thread.svcr &= ~SYS_SVCR_EL0_SM_MASK;
-+			break;
-+		case ARM64_VEC_SME:
-+			target->thread.svcr |= SYS_SVCR_EL0_SM_MASK;
-+			break;
-+		default:
-+			WARN_ON_ONCE(1);
-+			return -EINVAL;
-+		}
++	/* Header */
++	if (count < sizeof(header))
++		return -EINVAL;
++	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &header,
++				 0, sizeof(header));
++	if (ret)
++		goto out;
 +
-+		/*
-+		 * If we switched then invalidate any existing SVE
-+		 * state and ensure there's storage.
-+		 */
-+		if (target->thread.svcr != old_svcr)
-+			sve_alloc(target);
-+	}
- 
- 	/* Registers: FPSIMD-only case */
- 
-@@ -832,7 +896,10 @@ static int sve_set(struct task_struct *target,
- 		goto out;
- 	}
- 
--	/* Otherwise: full SVE case */
 +	/*
-+	 * Otherwise: no registers or full SVE case.  For backwards
-+	 * compatibility reasons we treat empty flags as SVE registers.
++	 * All current ZA_PT_* flags are consumed by
++	 * vec_set_vector_length(), which will also validate them for
++	 * us:
 +	 */
- 
- 	/*
- 	 * If setting a different VL from the requested VL and there is
-@@ -853,8 +920,9 @@ static int sve_set(struct task_struct *target,
- 
- 	/*
- 	 * Ensure target->thread.sve_state is up to date with target's
--	 * FPSIMD regs, so that a short copyin leaves trailing registers
--	 * unmodified.
-+	 * FPSIMD regs, so that a short copyin leaves trailing
-+	 * registers unmodified.  Always enable SVE even if going into
-+	 * streaming mode.
- 	 */
- 	fpsimd_sync_to_sve(target);
- 	set_tsk_thread_flag(target, TIF_SVE);
-@@ -890,8 +958,46 @@ static int sve_set(struct task_struct *target,
- 	return ret;
- }
- 
-+static int sve_set(struct task_struct *target,
-+		   const struct user_regset *regset,
-+		   unsigned int pos, unsigned int count,
-+		   const void *kbuf, const void __user *ubuf)
-+{
-+	if (!system_supports_sve())
-+		return -EINVAL;
++	ret = vec_set_vector_length(target, ARM64_VEC_SME, header.vl,
++		((unsigned long)header.flags) << 16);
++	if (ret)
++		goto out;
 +
-+	return sve_set_common(target, regset, pos, count, kbuf, ubuf,
-+			      ARM64_VEC_SVE);
++	/* Actual VL set may be less than the user asked for: */
++	vq = sve_vq_from_vl(task_get_sme_vl(target));
++
++	/* Ensure there is some SVE storage for streaming mode */
++	if (!target->thread.sve_state) {
++		sve_alloc(target);
++		if (!target->thread.sve_state) {
++			clear_thread_flag(TIF_SME);
++			ret = -ENOMEM;
++			goto out;
++		}
++	}
++
++	/* Allocate/reinit ZA storage */
++	sme_alloc(target);
++	if (!target->thread.za_state) {
++		ret = -ENOMEM;
++		clear_tsk_thread_flag(target, TIF_SME);
++		goto out;
++	}
++
++	/* If there is no data then disable ZA */
++	if (!count) {
++		target->thread.svcr &= ~SYS_SVCR_EL0_ZA_MASK;
++		goto out;
++	}
++
++	/*
++	 * If setting a different VL from the requested VL and there is
++	 * register data, the data layout will be wrong: don't even
++	 * try to set the registers in this case.
++	 */
++	if (vq != sve_vq_from_vl(header.vl)) {
++		ret = -EIO;
++		goto out;
++	}
++
++	BUILD_BUG_ON(ZA_PT_ZA_OFFSET != sizeof(header));
++	start = ZA_PT_ZA_OFFSET;
++	end = ZA_PT_SIZE(vq);
++	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf,
++				 target->thread.za_state,
++				 start, end);
++	if (ret)
++		goto out;
++
++	/* Mark ZA as active and let userspace use it */
++	set_tsk_thread_flag(target, TIF_SME);
++	target->thread.svcr |= SYS_SVCR_EL0_ZA_MASK;
++
++out:
++	fpsimd_flush_task_state(target);
++	return ret;
 +}
 +
- #endif /* CONFIG_ARM64_SVE */
+ #endif /* CONFIG_ARM64_SME */
  
-+#ifdef CONFIG_ARM64_SME
-+
-+static int ssve_get(struct task_struct *target,
-+		   const struct user_regset *regset,
-+		   struct membuf to)
-+{
-+	if (!system_supports_sme())
-+		return -EINVAL;
-+
-+	return sve_get_common(target, regset, to, ARM64_VEC_SME);
-+}
-+
-+static int ssve_set(struct task_struct *target,
-+		    const struct user_regset *regset,
-+		    unsigned int pos, unsigned int count,
-+		    const void *kbuf, const void __user *ubuf)
-+{
-+	if (!system_supports_sme())
-+		return -EINVAL;
-+
-+	return sve_set_common(target, regset, pos, count, kbuf, ubuf,
-+			      ARM64_VEC_SME);
-+}
-+
-+#endif /* CONFIG_ARM64_SME */
-+
  #ifdef CONFIG_ARM64_PTR_AUTH
- static int pac_mask_get(struct task_struct *target,
- 			const struct user_regset *regset,
-@@ -1109,6 +1215,9 @@ enum aarch64_regset {
- #ifdef CONFIG_ARM64_SVE
- 	REGSET_SVE,
+@@ -1217,6 +1352,7 @@ enum aarch64_regset {
  #endif
-+#ifdef CONFIG_ARM64_SVE
-+	REGSET_SSVE,
-+#endif
+ #ifdef CONFIG_ARM64_SVE
+ 	REGSET_SSVE,
++	REGSET_ZA,
+ #endif
  #ifdef CONFIG_ARM64_PTR_AUTH
  	REGSET_PAC_MASK,
- 	REGSET_PAC_ENABLED_KEYS,
-@@ -1189,6 +1298,17 @@ static const struct user_regset aarch64_regsets[] = {
- 		.set = sve_set,
+@@ -1308,6 +1444,14 @@ static const struct user_regset aarch64_regsets[] = {
+ 		.regset_get = ssve_get,
+ 		.set = ssve_set,
  	},
- #endif
-+#ifdef CONFIG_ARM64_SME
-+	[REGSET_SSVE] = { /* Streaming mode SVE */
-+		.core_note_type = NT_ARM_SSVE,
-+		.n = DIV_ROUND_UP(SVE_PT_SIZE(SVE_VQ_MAX, SVE_PT_REGS_SVE),
-+				  SVE_VQ_BYTES),
++	[REGSET_ZA] = { /* SME ZA */
++		.core_note_type = NT_ARM_ZA,
++		.n = DIV_ROUND_UP(ZA_PT_ZA_SIZE(SVE_VQ_MAX), SVE_VQ_BYTES),
 +		.size = SVE_VQ_BYTES,
 +		.align = SVE_VQ_BYTES,
-+		.regset_get = ssve_get,
-+		.set = ssve_set,
++		.regset_get = za_get,
++		.set = za_set,
 +	},
-+#endif
+ #endif
  #ifdef CONFIG_ARM64_PTR_AUTH
  	[REGSET_PAC_MASK] = {
- 		.core_note_type = NT_ARM_PAC_MASK,
 diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index 61bf4774b8f2..61502388683f 100644
+index 61502388683f..7ef574f3256a 100644
 --- a/include/uapi/linux/elf.h
 +++ b/include/uapi/linux/elf.h
-@@ -427,6 +427,7 @@ typedef struct elf64_shdr {
- #define NT_ARM_PACG_KEYS	0x408	/* ARM pointer authentication generic key */
+@@ -428,6 +428,7 @@ typedef struct elf64_shdr {
  #define NT_ARM_TAGGED_ADDR_CTRL	0x409	/* arm64 tagged address control (prctl()) */
  #define NT_ARM_PAC_ENABLED_KEYS	0x40a	/* arm64 ptr auth enabled keys (prctl()) */
-+#define NT_ARM_SSVE	0x40b		/* ARM Streaming SVE registers */
+ #define NT_ARM_SSVE	0x40b		/* ARM Streaming SVE registers */
++#define NT_ARM_ZA	0x40c		/* ARM SME ZA registers */
  #define NT_ARC_V2	0x600		/* ARCv2 accumulator/extra registers */
  #define NT_VMCOREDD	0x700		/* Vmcore Device Dump Note */
  #define NT_MIPS_DSP	0x800		/* MIPS DSP ASE registers */
