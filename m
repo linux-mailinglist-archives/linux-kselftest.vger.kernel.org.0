@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFF5433D43
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 19:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE7D433D44
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 19:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbhJSRZu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Oct 2021 13:25:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53928 "EHLO mail.kernel.org"
+        id S234594AbhJSRZx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Oct 2021 13:25:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233460AbhJSRZt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Oct 2021 13:25:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 74FAA61212;
-        Tue, 19 Oct 2021 17:23:36 +0000 (UTC)
+        id S233460AbhJSRZw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Oct 2021 13:25:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 340A2610E5;
+        Tue, 19 Oct 2021 17:23:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634664217;
-        bh=EY66616TcCrNTtvlQ1iP/Mic6pteYvGPqPysSuGmeik=;
+        s=k20201202; t=1634664219;
+        bh=6jAyzoU7sbK3D2Np76VXH9OD8yxSnhT/AlyskwNIuCs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CrZYGmMJaMIJN3B16WWu8a4K0r1xL8IInvtwbChf67MT9mRuDy8iiQg0bNhox7pcv
-         wTe0YmriFuIsrjrlTOW1qVXCGx5fDepGR263d4emKfq23JtjY6vlRE/HAhPxMgslWG
-         Hrt2nmpO24lkMExhRwYKWdkpoejKjOe0iero+EMHjaTsVyXmCkwmcGegmDKfc8Yl+a
-         ZY/TP+BuV8i28Cq3GwfXtbpOmhzww0VGvfsZspL+0ctEvC5jojE1iBLv8367SiaSez
-         3eJsYe1pQ8Qq8ZBGPBOxD/y95rX4AMx+vNAekoeE7oEFvxGWcVsqOyNbeK1yh18956
-         W55HPop797P9g==
+        b=jkJmyrFd4DVx4MvnYqFb6MbscO22RNhmbH2cUAamriPQZjD8K+W0RU/RhOIxgsusS
+         zR5G2URdcIE3ASbNACE0Qb2OdKk1SgL+hoaJsTuOb8e8jtYQ0S2hgqXf7QQRUvz7HW
+         y48zDOSirXq3Y1Fs7K2ULpQM5Ia9NlWhke9kzAaDA6CI0PUwZ+ltXeabT1ijF7iSWq
+         zJ+sBEbGx+8+P+nDsZEkuyPMJQekSyA9dAj28c4eCcmsCqtJuo7oFXHqFSLJL538QY
+         Lyd79wwRpM9ZdvJ+21NIosb+IBlIb9VhUsgO8tBDYb1fakyeXk3TiRpvt+NSLDNPew
+         4H+sOO2Qlobpw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -35,78 +35,71 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 01/42] arm64/fp: Reindent fpsimd_save()
-Date:   Tue, 19 Oct 2021 18:22:06 +0100
-Message-Id: <20211019172247.3045838-2-broonie@kernel.org>
+Subject: [PATCH v3 02/42] arm64/sve: Remove sve_load_from_fpsimd_state()
+Date:   Tue, 19 Oct 2021 18:22:07 +0100
+Message-Id: <20211019172247.3045838-3-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211019172247.3045838-1-broonie@kernel.org>
 References: <20211019172247.3045838-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1862; h=from:subject; bh=EY66616TcCrNTtvlQ1iP/Mic6pteYvGPqPysSuGmeik=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbv7EaS6xFJBpyZitL/aQgtPUEypvUI/1s4G82c6X Yc3PXHmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW7+xAAKCRAk1otyXVSH0PI6B/ 4/PUYHFsj0uRKgWUHp+lVZRjoE1UNwp8A/2W0svZWjm/u5HDTbZxVNZYB2wmC7dyxRQCKDdFmQ0Sxg 1aH83K9Wxj1W6rJithjdZZHpxdMUeCMUov8Y0TSYYREeOqeDpn+p180Tqla8v7YiiLXQctwkbWYGRV 255pKB8orQwXtSYptefu+MDPsStqsHSwURThdk/cNk6psjgcBBGbh++xRPH9xIo0+F4xEuVjiQB3Ag sfXZEEUY54ZQISb069B8SwZ0Fu458zrqRum4f4cikym8IZM9NnVc97P3GiZVNJ27kdKhQ4pF0VYbSA XWViWRrmfvWJtl69qVxRLa0MRfUqAW
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1923; h=from:subject; bh=6jAyzoU7sbK3D2Np76VXH9OD8yxSnhT/AlyskwNIuCs=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhbv7FpTwOgZh/1AfkKXCMC6CCaTm/+AOMIBKeHQff we1QQN6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYW7+xQAKCRAk1otyXVSH0EMfB/ sEH5U1XYru3j05qeJQbVU88Fk1/lqlHbT7lo3yzVj1I5kgugEwNlbKELDWSS1Zqu35/jjpMMZITVyQ 9kyZbJY1YbyAEsilO85U07PuiSnHqo4c+EbC2NeqH1ZtG6Gz9ZGcVmfF4q7oGXw+XhO9Uc+VjO1YKN oKjCFRxImmx3VVY1fu7E3WESyD1T4RQQIuPq2Xpd6z2pA0+ggkNLJBSWL9DUysZqqcGQCLuXa1rPZt KVMDA8HiH+mrf69Hfv1z/VI7iyhbVq/u6vmJlv5eT+UgjtV2P++WYo2dMCfZYgugiLhCKDEF6yftJ/ sZ3jXmuaUZz19bWegTaMdrjnqK2/WX
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently all the active code in fpsimd_save() is inside a check for
-TIF_FOREIGN_FPSTATE. Reduce the indentation level by changing to return
-from the function if TIF_FOREIGN_FPSTATE is set.
+Following optimisations of the SVE register handling we no longer load the
+SVE state from a saved copy of the FPSIMD registers, we convert directly
+in registers or from one saved state to another. Remove the function so we
+don't need to update it during further refactoring.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kernel/fpsimd.c | 38 ++++++++++++++++++++------------------
- 1 file changed, 20 insertions(+), 18 deletions(-)
+ arch/arm64/include/asm/fpsimd.h  |  2 --
+ arch/arm64/kernel/entry-fpsimd.S | 16 ----------------
+ 2 files changed, 18 deletions(-)
 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index ff4962750b3d..995f8801602b 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -308,24 +308,26 @@ static void fpsimd_save(void)
- 	WARN_ON(!system_supports_fpsimd());
- 	WARN_ON(!have_cpu_fpsimd_context());
+diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+index 9a62884183e5..e0e30567b80f 100644
+--- a/arch/arm64/include/asm/fpsimd.h
++++ b/arch/arm64/include/asm/fpsimd.h
+@@ -69,8 +69,6 @@ extern void sve_save_state(void *state, u32 *pfpsr);
+ extern void sve_load_state(void const *state, u32 const *pfpsr,
+ 			   unsigned long vq_minus_1);
+ extern void sve_flush_live(unsigned long vq_minus_1);
+-extern void sve_load_from_fpsimd_state(struct user_fpsimd_state const *state,
+-				       unsigned long vq_minus_1);
+ extern unsigned int sve_get_vl(void);
+ extern void sve_set_vq(unsigned long vq_minus_1);
  
--	if (!test_thread_flag(TIF_FOREIGN_FPSTATE)) {
--		if (IS_ENABLED(CONFIG_ARM64_SVE) &&
--		    test_thread_flag(TIF_SVE)) {
--			if (WARN_ON(sve_get_vl() != last->sve_vl)) {
--				/*
--				 * Can't save the user regs, so current would
--				 * re-enter user with corrupt state.
--				 * There's no way to recover, so kill it:
--				 */
--				force_signal_inject(SIGKILL, SI_KERNEL, 0, 0);
--				return;
--			}
+diff --git a/arch/arm64/kernel/entry-fpsimd.S b/arch/arm64/kernel/entry-fpsimd.S
+index 196e921f61de..afbf7dc47e1d 100644
+--- a/arch/arm64/kernel/entry-fpsimd.S
++++ b/arch/arm64/kernel/entry-fpsimd.S
+@@ -66,22 +66,6 @@ SYM_FUNC_START(sve_set_vq)
+ 	ret
+ SYM_FUNC_END(sve_set_vq)
+ 
+-/*
+- * Load SVE state from FPSIMD state.
+- *
+- * x0 = pointer to struct fpsimd_state
+- * x1 = VQ - 1
+- *
+- * Each SVE vector will be loaded with the first 128-bits taken from FPSIMD
+- * and the rest zeroed. All the other SVE registers will be zeroed.
+- */
+-SYM_FUNC_START(sve_load_from_fpsimd_state)
+-	sve_load_vq	x1, x2, x3
+-	fpsimd_restore	x0, 8
+-	sve_flush_p_ffr
+-	ret
+-SYM_FUNC_END(sve_load_from_fpsimd_state)
 -
--			sve_save_state((char *)last->sve_state +
--						sve_ffr_offset(last->sve_vl),
--				       &last->st->fpsr);
--		} else
--			fpsimd_save_state(last->st);
-+	if (test_thread_flag(TIF_FOREIGN_FPSTATE))
-+		return;
-+
-+	if (IS_ENABLED(CONFIG_ARM64_SVE) &&
-+	    test_thread_flag(TIF_SVE)) {
-+		if (WARN_ON(sve_get_vl() != last->sve_vl)) {
-+			/*
-+			 * Can't save the user regs, so current would
-+			 * re-enter user with corrupt state.
-+			 * There's no way to recover, so kill it:
-+			 */
-+			force_signal_inject(SIGKILL, SI_KERNEL, 0, 0);
-+			return;
-+		}
-+
-+		sve_save_state((char *)last->sve_state +
-+					sve_ffr_offset(last->sve_vl),
-+			       &last->st->fpsr);
-+	} else {
-+		fpsimd_save_state(last->st);
- 	}
- }
- 
+ /*
+  * Zero all SVE registers but the first 128-bits of each vector
+  *
 -- 
 2.30.2
 
