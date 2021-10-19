@@ -2,122 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B5F433226
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 11:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F19433259
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 11:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235062AbhJSJ0e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Oct 2021 05:26:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58965 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235051AbhJSJ0d (ORCPT
+        id S235082AbhJSJiC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Oct 2021 05:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234519AbhJSJiC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Oct 2021 05:26:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634635460;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wmbGZV2ZKwLQrOAxpGl2pHHhTDBQE+6LCzInPZcyFEo=;
-        b=hHV+57siKZcYdbWwnqDJirAKS/yKUgDXSSpQUOUfFy6Bc7rgSZ+z5E77P4UEKw8FDlANru
-        boQgcED7MzkcZvHqd8vbsylKKbJiBF5LqnVz5Pocn5yJqCZAXSAHB75fiiX5tMyV0ywcSI
-        sxpzLGKpUOKgK3NxMGNvLnFeBMViQV4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-390-Lm_WcdWwPiKJafreVln3Gg-1; Tue, 19 Oct 2021 05:24:16 -0400
-X-MC-Unique: Lm_WcdWwPiKJafreVln3Gg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9044B802575;
-        Tue, 19 Oct 2021 09:24:12 +0000 (UTC)
-Received: from T590 (ovpn-8-39.pek2.redhat.com [10.72.8.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 612425D6D5;
-        Tue, 19 Oct 2021 09:23:55 +0000 (UTC)
-Date:   Tue, 19 Oct 2021 17:23:50 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
-        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
-        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ming.lei@redhat.com
-Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
-Message-ID: <YW6OptglA6UykZg/@T590>
-References: <YWeR4moCRh+ZHOmH@T590>
- <YWiSAN6xfYcUDJCb@bombadil.infradead.org>
- <YWjCpLUNPF3s4P2U@T590>
- <YWjJ0O7K+31Iz3ox@bombadil.infradead.org>
- <YWk9e957Hb+I7HvR@T590>
- <YWm68xUnAofop3PZ@bombadil.infradead.org>
- <YWq3Z++uoJ/kcp+3@T590>
- <YW3LuzaPhW96jSBK@bombadil.infradead.org>
- <YW4uwep3BCe9Vxq8@T590>
- <alpine.LSU.2.21.2110190820590.15009@pobox.suse.cz>
+        Tue, 19 Oct 2021 05:38:02 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86178C061765
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Oct 2021 02:35:49 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id t2so46669836wrb.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Oct 2021 02:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=L2Opnlu/+Ei1mILrJUudB00wyP5HtEuEpZxkiaGcTuk=;
+        b=4Uvv/V9yhjJYTwf+O9NvMcCHZPepWSsWQ2DUG9K7T456ybg9EBcQvphaGM/VctW7mv
+         UXLs7h8Sh9o39g1WSMZgTt5pHkZBakrJZqayHGdmOXsrYJlqf7oDOVBbF/EHTSmlOMyM
+         a6IlSoE+YWI5Uld+lTvGOg/MOcO72KNwvdOOGLxYL53+KWobDyx1phCv8M3Ok53Efots
+         YvjwEjeZ9gSlhjRFgkE+fTmHhQgBNYZ6nIrX6sTpJ0IBFzXwwbDLAglILfPEYJiKXEYu
+         1EBw+rQt9324DpZLRV++n8Erlk1/ztmsoKNHHMZ0PnAoOkLDs5PbL0hHWC1QGe2BYPOH
+         YB1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=L2Opnlu/+Ei1mILrJUudB00wyP5HtEuEpZxkiaGcTuk=;
+        b=LECZvefl9zOSOXJ+raF2TYuPMYqP2qZ0+EpsYiDIHu+KOiWs63sL0tSt9n6Xe1Rj+q
+         kKOTUkiQlwALqs56kcDh03n8PdtEdrO5P6+1q/agAteOuLDI8r/pywaf+6K7r5c5zSGi
+         8r8TFaIXVYpzbgERgshc3DNB24OqF28YprxbupbWCX2g4SdAoqQa/06Ve7sAkDWYjrxF
+         9BfRME2ljS0cW7TGkQ5E4GOnvwIxys1Kcm2iOtybEKkG7rcknHpb3Hfa8m/4tVUSXQZn
+         xdcod09yswcK8essGQa7vvO/pPBVM7E+WqDmgqknpOGle6Fse460+FUA/+a0RQK6WGqC
+         2HEQ==
+X-Gm-Message-State: AOAM533C2teuaEV/f2ixh/7Ty52RRrVgTofSbyRt/IIp60vKrWcJyaAq
+        tj/4y7/wXyk9yatj+WITWJujqA==
+X-Google-Smtp-Source: ABdhPJx8VfDG1M08CY2EwW4NlYD+30EjdeM5Y4rFFcgsoqwPfH7CxovxzrJhPB1TEyjaKCuj+tU1uA==
+X-Received: by 2002:adf:9b8a:: with SMTP id d10mr40402392wrc.151.1634636148051;
+        Tue, 19 Oct 2021 02:35:48 -0700 (PDT)
+Received: from [192.168.1.8] ([149.86.82.20])
+        by smtp.gmail.com with ESMTPSA id p3sm1727165wmp.43.2021.10.19.02.35.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Oct 2021 02:35:47 -0700 (PDT)
+Message-ID: <e11c38fa-22fa-a0ae-4dd1-cac5a208e021@isovalent.com>
+Date:   Tue, 19 Oct 2021 10:35:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2110190820590.15009@pobox.suse.cz>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 14/23] bpftool: update bpftool-cgroup.rst reference
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+References: <cover.1634630485.git.mchehab+huawei@kernel.org>
+ <11f3dc3cfc192e2ee271467d7a6c7c1920006766.1634630486.git.mchehab+huawei@kernel.org>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <11f3dc3cfc192e2ee271467d7a6c7c1920006766.1634630486.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 08:23:51AM +0200, Miroslav Benes wrote:
-> > > By you only addressing the deadlock as a requirement on approach a) you are
-> > > forgetting that there *may* already be present drivers which *do* implement
-> > > such patterns in the kernel. I worked on addressing the deadlock because
-> > > I was informed livepatching *did* have that issue as well and so very
-> > > likely a generic solution to the deadlock could be beneficial to other
-> > > random drivers.
-> > 
-> > In-tree zram doesn't have such deadlock, if livepatching has such AA deadlock,
-> > just fixed it, and seems it has been fixed by 3ec24776bfd0.
+2021-10-19 09:04 UTC+0100 ~ Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org>
+> The file name: Documentation/bpftool-cgroup.rst
+> should be, instead: tools/bpf/bpftool/Documentation/bpftool-cgroup.rst.
 > 
-> I would not call it a fix. It is a kind of ugly workaround because the 
-> generic infrastructure lacked (lacks) the proper support in my opinion. 
-> Luis is trying to fix that.
+> Update its cross-reference accordingly.
+> 
+> Fixes: a2b5944fb4e0 ("selftests/bpf: Check consistency between bpftool source, doc, completion")
+> Fixes: 5ccda64d38cc ("bpftool: implement cgroup bpf operations")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+> 
+> To mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v3 00/23] at: https://lore.kernel.org/all/cover.1634630485.git.mchehab+huawei@kernel.org/
+> 
+>  tools/testing/selftests/bpf/test_bpftool_synctypes.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+> index be54b7335a76..617b8084c440 100755
+> --- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+> +++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+> @@ -392,7 +392,7 @@ class ManCgroupExtractor(ManPageExtractor):
+>      """
+>      An extractor for bpftool-cgroup.rst.
+>      """
+> -    filename = os.path.join(BPFTOOL_DIR, 'Documentation/bpftool-cgroup.rst')
+> +    filename = os.path.join(BPFTOOL_DIR, 'tools/bpf/bpftool/Documentation/bpftool-cgroup.rst')
+>  
+>      def get_attach_types(self):
+>          return self.get_rst_list('ATTACH_TYPE')
+> 
 
-What is the proper support of the generic infrastructure? I am not
-familiar with livepatching's model(especially with module unload), you mean
-livepatching have to do the following way from sysfs:
+No, this change is incorrect. We have discussed it several times before
+[0][1]. Please drop this patch.
 
-1) during module exit:
-	
-	mutex_lock(lp_lock);
-	kobject_put(lp_kobj);
-	mutex_unlock(lp_lock);
-	
-2) show()/store() method of attributes of lp_kobj
-	
-	mutex_lock(lp_lock)
-	...
-	mutex_unlock(lp_lock)
+Quentin
 
-IMO, the above usage simply caused AA deadlock. Even in Luis's patch
-'zram: fix crashes with cpu hotplug multistate', new/same AA deadlock
-(hot_remove_store() vs. disksize_store() or reset_store()) is added
-because hot_remove_store() isn't called from module_exit().
-
-Luis tries to delay unloading module until all show()/store() are done. But
-that can be obtained by the following way simply during module_exit():
-
-	kobject_del(lp_kobj); //all pending store()/show() from lp_kobj are done,
-						  //no new store()/show() can come after
-						  //kobject_del() returns	
-	mutex_lock(lp_lock);
-	kobject_put(lp_kobj);
-	mutex_unlock(lp_lock);
-
-Or can you explain your requirement on kobject/module unload in a bit
-details?
-
-
-Thanks,
-Ming
-
+[0]
+https://lore.kernel.org/bpf/eb80e8f5-b9d7-5031-8ebb-4595bb295dbf@isovalent.com/
+[1]
+https://lore.kernel.org/bpf/CAEf4BzZhr+3JzuPvyTozQSts7QixnyY1N8CD+-ZuteHodCpmRA@mail.gmail.com/
