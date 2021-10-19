@@ -2,99 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6E9433F6B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 21:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F458433FEB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Oct 2021 22:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbhJSTsx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Oct 2021 15:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbhJSTsw (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Oct 2021 15:48:52 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E596C06161C;
-        Tue, 19 Oct 2021 12:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jCo7U915eFRqWzpvn4v1HPXwjv12FjYjhZ4kBCli1BA=; b=XQzRM95CX9ofAeF03oyBgo9tdr
-        tca/b6ddAmgUpGHrIOgKOl7J+MmMtICCtW9iI9X/pIp9MDdL8jhpdq1WUpyF+AqNyJJXM+xcXea+Y
-        A+/eXwEiUOwerfpiB9WrGkP+ywwG+ealnZuYQt1ByR+KUnhNAXDvKMFwufKpwEgRWHNiYPNEhnjoi
-        bTJNL3eWVoeD+EBPCVAiiRgFpwqUUIkHuRc7HNZ6R8Ax6kfd/8src6qtI8PSnjLsvdemXY2lQiN4s
-        fVHcuQayWAEmJ2qh+RFvpTD5WkbnMFHUROEQZMwM1v8B3T9/7bol/7RXJacyarkYcDITzTWqga2Vd
-        eQK52yWw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mcv49-002XTn-Ah; Tue, 19 Oct 2021 19:46:29 +0000
-Date:   Tue, 19 Oct 2021 12:46:29 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Ming Lei <ming.lei@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
-        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
-        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
-        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
-        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
-Message-ID: <YW8glVdremhn1eF2@bombadil.infradead.org>
-References: <YWjJ0O7K+31Iz3ox@bombadil.infradead.org>
- <YWk9e957Hb+I7HvR@T590>
- <YWm68xUnAofop3PZ@bombadil.infradead.org>
- <YWq3Z++uoJ/kcp+3@T590>
- <YW3LuzaPhW96jSBK@bombadil.infradead.org>
- <YW4uwep3BCe9Vxq8@T590>
- <YW7pQKi8AlV+ZemU@bombadil.infradead.org>
- <YW7xbnrqfzifa9OC@kroah.com>
- <YW7yjQVC4NRfrWxD@bombadil.infradead.org>
- <YW8AQ4fMNV8MT1vX@kroah.com>
+        id S231738AbhJSUr7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Oct 2021 16:47:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49420 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230481AbhJSUr6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Oct 2021 16:47:58 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 940CE60EFF;
+        Tue, 19 Oct 2021 20:45:44 +0000 (UTC)
+Date:   Tue, 19 Oct 2021 16:45:43 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/5] tracing: Add division and multiplication support
+ for hist triggers
+Message-ID: <20211019164543.2ca20830@gandalf.local.home>
+In-Reply-To: <20210915195306.612966-3-kaleshsingh@google.com>
+References: <20210915195306.612966-1-kaleshsingh@google.com>
+        <20210915195306.612966-3-kaleshsingh@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YW8AQ4fMNV8MT1vX@kroah.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 07:28:35PM +0200, Greg KH wrote:
-> On Tue, Oct 19, 2021 at 09:30:05AM -0700, Luis Chamberlain wrote:
-> > On Tue, Oct 19, 2021 at 06:25:18PM +0200, Greg KH wrote:
-> > > On Tue, Oct 19, 2021 at 08:50:24AM -0700, Luis Chamberlain wrote:
-> > > > So do you want to take the position:
-> > > > 
-> > > > Hey driver authors: you cannot use any shared lock on module removal and
-> > > > on sysfs ops?
-> > > 
-> > > Yes, I would not recommend using such a lock at all.  sysfs operations
-> > > happen on a per-device basis, so you can lock the device structure.
-> > 
-> > All devices are going to be removed on module removal and so cannot be locked.
-> 
-> devices are not normally created by a driver, that is up to the bus
-> controller logic.  A module will just disconnect itself from the device,
-> the device does not go away.
-> 
-> But yes, there are exceptions, and if you are doing something odd like
-> that, then you need to be aware of crazy things like this, so be
-> careful.  But for all normal drivers, they do not have to worry about
-> this.
+On Wed, 15 Sep 2021 19:52:46 +0000
+Kalesh Singh <kaleshsingh@google.com> wrote:
 
-"Recommend" is a weak position to take given a possible deadlock with sysfs.
+> +static u64 hist_field_div(struct hist_field *hist_field,
+> +			   struct tracing_map_elt *elt,
+> +			   struct trace_buffer *buffer,
+> +			   struct ring_buffer_event *rbe,
+> +			   void *event)
+> +{
+> +	struct hist_field *operand1 = hist_field->operands[0];
+> +	struct hist_field *operand2 = hist_field->operands[1];
+> +
+> +	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
+> +	u64 val2 = operand2->fn(operand2, elt, buffer, rbe, event);
+> +
+> +	/* Return -1 for the undefined case */
+> +	if (!val2)
+> +		return -1;
+> +
+> +	return val1 / val2;
 
-Do we want to at the very least document this is not a supported scheme?
+This wont work on x86 32 bit machines, as u64 division will trigger
+floating point arithmetic by the compiler, and cause a fault.
 
-If so I can also add a simple 1 level indirrection coccinelle patch to
-detect these schemes and complain about them as wel, if we are going to
-take this position.
+You'll need to use one of the div64() helpers.
 
-But to simply disregard this as "not an issue", or we won't do anything
-seems pretty counter productive given we *do* had drivers with this
-issue before *and* still have them upstream, and can end up with more
-drivers like this later.
+-- Steve
 
-  Luis
+
+> +}
+> +
