@@ -2,179 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4436143500F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Oct 2021 18:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532814351DC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Oct 2021 19:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbhJTQYv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Oct 2021 12:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S231324AbhJTRtT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Oct 2021 13:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbhJTQYu (ORCPT
+        with ESMTP id S231392AbhJTRtD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Oct 2021 12:24:50 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A50C06161C
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 09:22:35 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id c29so3400965pfp.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 09:22:35 -0700 (PDT)
+        Wed, 20 Oct 2021 13:49:03 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA5AC061753;
+        Wed, 20 Oct 2021 10:46:38 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id v195so12636405ybb.0;
+        Wed, 20 Oct 2021 10:46:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AsIANaDEnDuXhpKm7gwaOuH/xV04ul7CfvYlvZYub/g=;
-        b=hIa98Nzm4wn5I0bee4rK8AjEp+Da/+KCCvTIWp0IckELqd5QXd74SwY8Gm2KbieChy
-         XDHimuoSI362xp30cEAny/C/6K9RCJm0Q3VMe6tfn3/ag3oBHx6tOB4jwvU1QFz83uFG
-         Ru4BV+gFudVG9y+kRTPjqNE9YIlmd1FYSEB6Fs4W7M1p50QN48giWiG/pvQ29+iWcLyq
-         HklKXIYrj8l6Z1qJTFvvt/kG2uCHhnE51/rQJWFm5vXdU0js2S+U9Ak1UW/L5zKtgJwz
-         Ox+jEwVdlkmAa+Eey0SGIlWq1EUDhY2/LujQp/MNi9WlrBtwEw9NFZLtLavG8/wlpG0T
-         dbvQ==
+        bh=sOKBPHMdWljkZNSIDrjUwmzeBvLMb2d21VbPwWacTgM=;
+        b=fuvYz9EiYxo+eAIB8lLKMZjoVGkpQhjptDXD7t+bH2LGHwLxNuORBHqD1+aGki/29m
+         i3EKQZOhqRpXiuRC2Zm4sQYgBCuMPwBm1dGN9n3MkQ0A6YJEq8sWqdKlhju3FghSEFGL
+         vTuPceVxHo5Lm2sX5h9jQYrUb9Kop382Wa5/dGGHRc5Hbc9Qvs7IiN8Hg3IAXjkuRijt
+         eWd5+ACFNktNe7+DxVYf7BPTXZLRLOfuWIzS3JTFiG8+PieISTfdQwSzv6n+nG57DE8x
+         uGo/A1znriTj0fcp2Mj2omTwSp+zw+BxxnpGAwxgkLwlfpvTYoRM0G/H3ZUNFpczG821
+         k45w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AsIANaDEnDuXhpKm7gwaOuH/xV04ul7CfvYlvZYub/g=;
-        b=WSacZ8uOlmECUUGY8F8j0TmIKQLJGxHiirRTZnfQidmrs/Db88064NfvjAvjqbrOTU
-         ivs7Tho07G/LV/586agEEeb9DcxxL1QcszEaHSXdQ0KAoDXj+9bxrdJm4nBy+89E4MDC
-         LAXAs/A8zpgO3nGYgEdoyg+w1zimDwtr7/ApYYErY6Xlt3Fr/mKCImWnnTNv16baT9ZM
-         t8DZl4GdOUGAuxvNDpewaWmZdfD5USYN07Q/oNSlp63ETceqP1YTKj4LeZFLLIjjjpCj
-         tan2JOqOtSQPGNa2vdtce4EBWX135vik72HfLAOZ0VMmo+rENgJNjFj0uU3wM+oSxOXY
-         KR4w==
-X-Gm-Message-State: AOAM532Zdrsy4aeE1/azq27pPrRfjhfKcjA1EpqWlNEv9r5pr4Xxz4/0
-        HmbFF934r0UPqxAm8Yj2gqSiz1ORKDfaNTkR9KACqQ==
-X-Google-Smtp-Source: ABdhPJzDP63xIcRb7NLHWlf3Xvnc+3zPfYVH0FR2foc/lDhPfVuY0gBMEp9v0ZbSoOHhCWpqAm60kyfZi7arrtXi9/A=
-X-Received: by 2002:a63:3483:: with SMTP id b125mr181088pga.79.1634746954789;
- Wed, 20 Oct 2021 09:22:34 -0700 (PDT)
+        bh=sOKBPHMdWljkZNSIDrjUwmzeBvLMb2d21VbPwWacTgM=;
+        b=LCXhYdW/BbswA7D2CBUMj0q71PSPQ4q5tl+fhj+STUnb5nBiB25crKtM9R68uE8t+6
+         chqHxav8kK7lqyGfFhDWW2t0Ueqd3XcQFve4ZYpMYIGXZE7g3SCQ8KLhWcmtyI8N8H+b
+         8FrsY7lCyNHTflthQeXdJn3/1NsQACX4OKIhCzggpG6VluhABjK52pzySomhc4ST8I4Q
+         aNNVv3xEXg/kb3M1kzPWO1thWnAxnBpL6rbwaQstnCNHQ77LqU3XuwlEWWcjmVag3ZtO
+         QAoGchDjNDrEcmmO0pAc0oUs/7uk6sA+5TELhyVxKqstkVc2ftgePdd3fTwaY2+p6hC+
+         KnRA==
+X-Gm-Message-State: AOAM530tVnpEtXYMSnovegjjgF+uzJaPmHwBA0SDi+SmV6wP9SfF83cJ
+        aZ395Lj5526hUs8500TtLvBOG1LPNXjTlRtKFZk=
+X-Google-Smtp-Source: ABdhPJy1/YWZivJtSDC696TGHVh7c8JDcR90h3/DoB2Lt5zT45YYfw4swcV8w8OngSAn2svPXmcGkpXF4IMshFTPFB0=
+X-Received: by 2002:a25:d3c8:: with SMTP id e191mr444609ybf.455.1634751998190;
+ Wed, 20 Oct 2021 10:46:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211020013153.4106001-1-kaleshsingh@google.com>
- <20211020013153.4106001-4-kaleshsingh@google.com> <20211020114805.3fbb7d94@gandalf.local.home>
-In-Reply-To: <20211020114805.3fbb7d94@gandalf.local.home>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 20 Oct 2021 09:22:24 -0700
-Message-ID: <CAC_TJvceZ=+QoRM2Qt4uRtikG5WZ_+KEjbPreg3ss=OOHFV7QA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] tracing: Fix operator precedence for hist triggers expression
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+References: <20211012023231.19911-1-wanjiabing@vivo.com> <616d9ba173075_1eb12088b@john-XPS-13-9370.notmuch>
+In-Reply-To: <616d9ba173075_1eb12088b@john-XPS-13-9370.notmuch>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 20 Oct 2021 10:46:27 -0700
+Message-ID: <CAEf4BzaAmvoT-n8pusycm_q1-Tp4B+KMxu3yw1BXkM3xHY2-HQ@mail.gmail.com>
+Subject: Re: [PATCH] [v2] selftests: bpf: Remove duplicated include in cgroup_helpers
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Wan Jiabing <wanjiabing@vivo.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, kael_w@yeah.net
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 8:48 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, Oct 18, 2021 at 9:07 AM John Fastabend <john.fastabend@gmail.com> wrote:
 >
-> On Tue, 19 Oct 2021 18:31:40 -0700
-> Kalesh Singh <kaleshsingh@google.com> wrote:
->
-> > @@ -2391,60 +2460,61 @@ static int check_expr_operands(struct trace_array *tr,
-> >  static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
-> >                                    struct trace_event_file *file,
-> >                                    char *str, unsigned long flags,
-> > -                                  char *var_name, unsigned int level)
-> > +                                  char *var_name, unsigned int *n_subexprs)
-> >  {
-> >       struct hist_field *operand1 = NULL, *operand2 = NULL, *expr = NULL;
-> >       unsigned long operand_flags;
-> >       int field_op, ret = -EINVAL;
-> >       char *sep, *operand1_str;
+> Wan Jiabing wrote:
+> > Fix following checkincludes.pl warning:
+> > ./scripts/checkincludes.pl tools/testing/selftests/bpf/cgroup_helpers.c
+> > tools/testing/selftests/bpf/cgroup_helpers.c: unistd.h is included more
+> > than once.
 > >
-> > -     if (level > 3) {
-> > +     if (*n_subexprs > 3) {
+> > Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> > ---
+> > Changelog:
+> > v2:
+> > - Fix the commit description.
+> > ---
 >
-> Why limit the sub expressions, and not just keep the limit of the level of
-> recursion. We allow 3 levels of recursion, but we could have more than 3
-> sub expressions.
+> The Subject is a bit unusual. Typically it would be something like,
 >
->
-> If we have:  a * b + c / d - e * f / h
->
-> It would break down into:
->               -
->        +            /
->    *       /     *     h
->  a   b   c  d  e  f
->
->
-> Which I believe is 6 "sub expressions", but never goes more than three deep
-> in recursion:
->
->    "a * b + c / d - e * f / h"
->
-> Step 1:
->
->   op = "-"
->   operand1 = "a * b + c / d"
->   operand2 = "e * f / h"
->
-> Process operand1: (recursion level 1)
->
->   op = "+"
->   operand1a = "a * b"
->   operand2a = "c / d"
->
-> Process operand1a: (recursion level 2)
->
->   op = "*"
->   operand1b = "a"
->   operand2b = "b"
->
-> return;
->
-> Process operand1b: (recursion level 2)
->
->   op = "/"
->   operand1b = "c"
->   operand2b = "d"
->
-> return;
->
-> return;
->
-> Process operand2: (recursion level 1)
->
->   op = "/"
->   operand1c = "e * f"
->   operand2c = "h"
->
-> Process operand1c: (recursion level 2)
->
->   op = "*"
->   operand1c = "e"
->   operand2c = "f"
->
-> return;
->
-> return;
->
->
->
-> > +
-> > +     /* LHS of string is an expression e.g. a+b in a+b+c */
-> > +     operand1 = parse_expr(hist_data, file, operand1_str, operand_flags, NULL, n_subexprs);
-> >       if (IS_ERR(operand1)) {
-> >               ret = PTR_ERR(operand1);
-> >               operand1 = NULL;
->
-> I wonder if we should look for optimizations, in case of operand1 and
-> operand2 are both constants?
->
-> Just perform the function, and convert it into a constant as well.
+>  "[PATCH bpf-next] selftests, remove duplicated include in cgroup_helpers"
 
-I think we achieve something like this by propagating up the
-HIST_FIELD_FL_CONST flag. Thanks for the suggestions. I'll update this
-in the next version.
-
-Thanks,
-Kalesh
+Also for selftests we use "selftests/bpf: " prefix (at least we
+generally try, for consistency). Fixed up, applied to bpf-next.
+Thanks.
 
 >
-> -- Steve
+> For the actual patch though LGTM.
+>
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
