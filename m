@@ -2,119 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC76F434F4A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Oct 2021 17:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E5E434F47
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Oct 2021 17:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbhJTPud (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Oct 2021 11:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbhJTPud (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Oct 2021 11:50:33 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEC4C06161C;
-        Wed, 20 Oct 2021 08:48:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HBm/Dqi3jW7uqk4DDOcgZCLMM+rxars2xSrNqJBELD4=; b=2Nfb8jhDT8Z/1YppkaaGzMBE5F
-        7DhHQ0SucI4gkSMWSPV7qRIfV71Fm6qrfDrJmlPqzT7KRfnj1yBiDyOvhgFH59z59TYTW1kELLAVg
-        mLk1u/MgB+DYSZ1pYh9quyEyxaf9eS7gY6oh1R2myWpq2f4ZN+t8O9pDmupq3jh8lU1/6coGTgRIG
-        C8k2APmUBWLR1sFqAAQXTM7S5Y5k25OWJXYSBl+d9lruqyMox+TX5UmnYt1ffUmBrwhJfbE6Q8mm2
-        r6X/+eHUQhd8s8zbcTZND5RIi0WiXLOOp5v6be+Wi35/qyZrcuIhl8AEJKo3MYxcs2OMjnbQngNMf
-        RACz1Adg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mdDoy-0057WV-4E; Wed, 20 Oct 2021 15:48:04 +0000
-Date:   Wed, 20 Oct 2021 08:48:04 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
-        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
-        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
-Message-ID: <YXA6NMhwoiIMeHji@bombadil.infradead.org>
-References: <YWjJ0O7K+31Iz3ox@bombadil.infradead.org>
- <YWk9e957Hb+I7HvR@T590>
- <YWm68xUnAofop3PZ@bombadil.infradead.org>
- <YWq3Z++uoJ/kcp+3@T590>
- <YW3LuzaPhW96jSBK@bombadil.infradead.org>
- <YW4uwep3BCe9Vxq8@T590>
- <YW7kFXlzRrvwzARP@bombadil.infradead.org>
- <YW7ygbLAwm2/LZFl@T590>
- <YW8eSq2B+5FtOLZb@bombadil.infradead.org>
- <YW9tqPunx5bssxIz@T590>
+        id S230434AbhJTPuY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Oct 2021 11:50:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59372 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230369AbhJTPuY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 Oct 2021 11:50:24 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 887DD61212;
+        Wed, 20 Oct 2021 15:48:08 +0000 (UTC)
+Date:   Wed, 20 Oct 2021 11:48:05 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
+        kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] tracing: Fix operator precedence for hist
+ triggers expression
+Message-ID: <20211020114805.3fbb7d94@gandalf.local.home>
+In-Reply-To: <20211020013153.4106001-4-kaleshsingh@google.com>
+References: <20211020013153.4106001-1-kaleshsingh@google.com>
+        <20211020013153.4106001-4-kaleshsingh@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YW9tqPunx5bssxIz@T590>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 09:15:20AM +0800, Ming Lei wrote:
-> On Tue, Oct 19, 2021 at 12:36:42PM -0700, Luis Chamberlain wrote:
-> > On Wed, Oct 20, 2021 at 12:29:53AM +0800, Ming Lei wrote:
-> > > diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-> > > index d0cae7a42f4d..a14ba3d350ea 100644
-> > > --- a/drivers/block/zram/zram_drv.c
-> > > +++ b/drivers/block/zram/zram_drv.c
-> > > @@ -1704,12 +1704,12 @@ static void zram_reset_device(struct zram *zram)
-> > >  	set_capacity_and_notify(zram->disk, 0);
-> > >  	part_stat_set_all(zram->disk->part0, 0);
-> > >  
-> > > -	up_write(&zram->init_lock);
-> > >  	/* I/O operation under all of CPU are done so let's free */
-> > >  	zram_meta_free(zram, disksize);
-> > >  	memset(&zram->stats, 0, sizeof(zram->stats));
-> > >  	zcomp_destroy(comp);
-> > >  	reset_bdev(zram);
-> > > +	up_write(&zram->init_lock);
-> > >  }
-> > >  
-> > >  static ssize_t disksize_store(struct device *dev,
-> > 
-> > With this, it still ends up in a state where we loop and can't get out of:
-> > 
-> > zram: Can't change algorithm for initialized device
-> 
-> Again, you are running two zram02.sh[1] on /dev/zram0, that isn't unexpected
+On Tue, 19 Oct 2021 18:31:40 -0700
+Kalesh Singh <kaleshsingh@google.com> wrote:
 
-You mean that it is not expected? If so then yes, of course.
+> @@ -2391,60 +2460,61 @@ static int check_expr_operands(struct trace_array *tr,
+>  static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
+>  				     struct trace_event_file *file,
+>  				     char *str, unsigned long flags,
+> -				     char *var_name, unsigned int level)
+> +				     char *var_name, unsigned int *n_subexprs)
+>  {
+>  	struct hist_field *operand1 = NULL, *operand2 = NULL, *expr = NULL;
+>  	unsigned long operand_flags;
+>  	int field_op, ret = -EINVAL;
+>  	char *sep, *operand1_str;
+>  
+> -	if (level > 3) {
+> +	if (*n_subexprs > 3) {
 
-> behavior. Here the difference is just timing.
+Why limit the sub expressions, and not just keep the limit of the level of
+recursion. We allow 3 levels of recursion, but we could have more than 3
+sub expressions.
 
-Right, but that is what helped reproduce a difficutl to re-produce customer
-bug. Once you find an easy way to reproduce a reported issue you stick
-with it and try to make the situation worse to ensure no more bugs are
-present.
 
-> Also you did not answer my question about your test expected result when
-> running the following script from two terminal concurrently:
-> 
-> 	while true; do
-> 		PATH=$PATH:$PWD:$PWD/../../../lib/ ./zram02.sh;
-> 	done
+If we have:  a * b + c / d - e * f / h
 
-If you run this, you should see no failures.
+It would break down into:
+              -
+       +            /
+   *       /     *     h
+ a   b   c  d  e  f
 
-Once you start a second script that one should cause odd issues on both
-sides but never crash or stall the module.
 
-A second series of tests is hitting CTRL-C on either randonly and
-restarting testing once again randomly.
+Which I believe is 6 "sub expressions", but never goes more than three deep
+in recursion:
 
-Again, neither should crash the kernel or stall the module.
+   "a * b + c / d - e * f / h"
 
-In the end of these tests you should be able to run the script alone
-just once and not see issues.
+Step 1:
 
-  Luis
+  op = "-"
+  operand1 = "a * b + c / d"
+  operand2 = "e * f / h"
+
+Process operand1: (recursion level 1)
+
+  op = "+"
+  operand1a = "a * b"
+  operand2a = "c / d"
+
+Process operand1a: (recursion level 2)
+
+  op = "*"
+  operand1b = "a"
+  operand2b = "b"
+
+return;
+
+Process operand1b: (recursion level 2)
+
+  op = "/"
+  operand1b = "c"
+  operand2b = "d"
+
+return;
+
+return;
+
+Process operand2: (recursion level 1)
+
+  op = "/"
+  operand1c = "e * f"
+  operand2c = "h"
+
+Process operand1c: (recursion level 2)
+
+  op = "*"
+  operand1c = "e"
+  operand2c = "f"
+
+return;
+
+return;
+
+
+
+> +
+> +	/* LHS of string is an expression e.g. a+b in a+b+c */
+> +	operand1 = parse_expr(hist_data, file, operand1_str, operand_flags, NULL, n_subexprs);
+>  	if (IS_ERR(operand1)) {
+>  		ret = PTR_ERR(operand1);
+>  		operand1 = NULL;
+
+I wonder if we should look for optimizations, in case of operand1 and
+operand2 are both constants?
+
+Just perform the function, and convert it into a constant as well.
+
+-- Steve
