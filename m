@@ -2,127 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC214346E5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Oct 2021 10:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013674346F2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Oct 2021 10:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbhJTIbL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Oct 2021 04:31:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40668 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229632AbhJTIbK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Oct 2021 04:31:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E5CF61183;
-        Wed, 20 Oct 2021 08:28:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634718536;
-        bh=8nW1a1YxwhHLkokHLmbAPUvEy8Sro976Y9vnhAQOL7U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b5OhBK9vzw98Pra6K1wa2zJ0J5EzHVm1XCT+E1fH6mcqn/K9AU7vR477/yH5qRf2Y
-         SwAeIQb04+15xwtWK1Tt7kdQGvlEAp4HnJ10Ae/gbnnLHh9ON0GTMtaH9GB8htEXdC
-         PEBT4jNWWKAtQNxw7vujFQeR5PU+4RP0ONCEkVl4=
-Date:   Wed, 20 Oct 2021 10:28:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Ming Lei <ming.lei@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
-        akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
-        shuah@kernel.org, bvanassche@acm.org, dan.j.williams@intel.com,
-        joe@perches.com, tglx@linutronix.de, keescook@chromium.org,
-        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
-Message-ID: <YW/TRkXth/mbTQ6b@kroah.com>
-References: <YWk9e957Hb+I7HvR@T590>
- <YWm68xUnAofop3PZ@bombadil.infradead.org>
- <YWq3Z++uoJ/kcp+3@T590>
- <YW3LuzaPhW96jSBK@bombadil.infradead.org>
- <YW4uwep3BCe9Vxq8@T590>
- <alpine.LSU.2.21.2110190820590.15009@pobox.suse.cz>
- <YW6OptglA6UykZg/@T590>
- <alpine.LSU.2.21.2110200835490.26817@pobox.suse.cz>
- <YW/KEsfWJMIPnz76@T590>
- <alpine.LSU.2.21.2110201014400.26817@pobox.suse.cz>
+        id S229632AbhJTIc3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Oct 2021 04:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229683AbhJTIcY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 Oct 2021 04:32:24 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD65C061768
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 01:30:08 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id m42so17083293wms.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 01:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=AcbCknbbtHbGw3Vd0vk/03qqtzI8ujhtq9XguWeSRMk=;
+        b=ivHmWxkSQLTfxpTj7dhhvSlvzaNXTGh0hbqAT3JucIqokrazKkhu6o15CjUexSM105
+         LBVl+KtdSjaSbZVHd+jogDO5uEgTDVti/GuERREkD2WNmU6cDIQBxX3jkM4GfakiUl5q
+         xqMaGVsNCMnKu9rjNKeXwGEzE8JP7cuLu19Sg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=AcbCknbbtHbGw3Vd0vk/03qqtzI8ujhtq9XguWeSRMk=;
+        b=FKj0fb7tGy3R7WmF7aKJsCEFDhp8bqsBYBA92kRhSSc9rq9EK8q+C//SVqT3O5mEdh
+         pNf2GfNajXxmrFjn+WQq/Go4jcIS/zI3DNLsS+fWSkyF4rp6nVipOsqZfS9u9C9nj1Po
+         akw3v7loMLC9hluccGZdP9al5kxdtSg8KflA2XGAFvBCaE6PLxxaNy4v4Vg9KPhkWMt5
+         nCWzVAKPFHItQgvxMos3GHswdg8cV8l1hI9dJVojRObBo2r9+8LWQJAKY6uSxBcnkbTk
+         jv3q/H9GOCgWeiyrm9yki38vw87EKeMpFJTVIf0XBG9xPPFDqv+34Ii0PFcVWWirbWVZ
+         /MxA==
+X-Gm-Message-State: AOAM530ipFz39IOonmJOHYjK4yP2kVG8Ov0hwLOPrWYU5GJDcVOgJGnT
+        b+IyzZKCGt+5R4Qv+8JPaPo8CA==
+X-Google-Smtp-Source: ABdhPJw+wTJP3EINkq3wLFo/fNuwR+IAQBZZkqAHuxV8Bf6kn1x5/8XdOPQTT6ggDVmG9S0mC425uA==
+X-Received: by 2002:a1c:6a11:: with SMTP id f17mr12198266wmc.132.1634718607017;
+        Wed, 20 Oct 2021 01:30:07 -0700 (PDT)
+Received: from antares.. (d.5.c.c.6.2.1.6.f.5.3.5.c.9.c.f.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:fc9c:535f:6126:cc5d])
+        by smtp.gmail.com with ESMTPSA id s13sm4473133wmc.47.2021.10.20.01.30.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Oct 2021 01:30:06 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 2/2] selftests: bpf: test RENAME_EXCHANGE and RENAME_NOREPLACE on bpffs
+Date:   Wed, 20 Oct 2021 09:29:56 +0100
+Message-Id: <20211020082956.8359-3-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211020082956.8359-1-lmb@cloudflare.com>
+References: <20211020082956.8359-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2110201014400.26817@pobox.suse.cz>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 10:19:27AM +0200, Miroslav Benes wrote:
-> On Wed, 20 Oct 2021, Ming Lei wrote:
-> 
-> > On Wed, Oct 20, 2021 at 08:43:37AM +0200, Miroslav Benes wrote:
-> > > On Tue, 19 Oct 2021, Ming Lei wrote:
-> > > 
-> > > > On Tue, Oct 19, 2021 at 08:23:51AM +0200, Miroslav Benes wrote:
-> > > > > > > By you only addressing the deadlock as a requirement on approach a) you are
-> > > > > > > forgetting that there *may* already be present drivers which *do* implement
-> > > > > > > such patterns in the kernel. I worked on addressing the deadlock because
-> > > > > > > I was informed livepatching *did* have that issue as well and so very
-> > > > > > > likely a generic solution to the deadlock could be beneficial to other
-> > > > > > > random drivers.
-> > > > > > 
-> > > > > > In-tree zram doesn't have such deadlock, if livepatching has such AA deadlock,
-> > > > > > just fixed it, and seems it has been fixed by 3ec24776bfd0.
-> > > > > 
-> > > > > I would not call it a fix. It is a kind of ugly workaround because the 
-> > > > > generic infrastructure lacked (lacks) the proper support in my opinion. 
-> > > > > Luis is trying to fix that.
-> > > > 
-> > > > What is the proper support of the generic infrastructure? I am not
-> > > > familiar with livepatching's model(especially with module unload), you mean
-> > > > livepatching have to do the following way from sysfs:
-> > > > 
-> > > > 1) during module exit:
-> > > > 	
-> > > > 	mutex_lock(lp_lock);
-> > > > 	kobject_put(lp_kobj);
-> > > > 	mutex_unlock(lp_lock);
-> > > > 	
-> > > > 2) show()/store() method of attributes of lp_kobj
-> > > > 	
-> > > > 	mutex_lock(lp_lock)
-> > > > 	...
-> > > > 	mutex_unlock(lp_lock)
-> > > 
-> > > Yes, this was exactly the case. We then reworked it a lot (see 
-> > > 958ef1e39d24 ("livepatch: Simplify API by removing registration step"), so 
-> > > now the call sequence is different. kobject_put() is basically offloaded 
-> > > to a workqueue scheduled right from the store() method. Meaning that 
-> > > Luis's work would probably not help us currently, but on the other hand 
-> > > the issues with AA deadlock were one of the main drivers of the redesign 
-> > > (if I remember correctly). There were other reasons too as the changelog 
-> > > of the commit describes.
-> > > 
-> > > So, from my perspective, if there was a way to easily synchronize between 
-> > > a data cleanup from module_exit callback and sysfs/kernfs operations, it 
-> > > could spare people many headaches.
-> > 
-> > kobject_del() is supposed to do so, but you can't hold a shared lock
-> > which is required in show()/store() method. Once kobject_del() returns,
-> > no pending show()/store() any more.
-> > 
-> > The question is that why one shared lock is required for livepatching to
-> > delete the kobject. What are you protecting when you delete one kobject?
-> 
-> I think it boils down to the fact that we embed kobject statically to 
-> structures which livepatch uses to maintain data. That is discouraged 
-> generally, but all the attempts to implement it correctly were utter 
-> failures.
+Add tests to exercise the behaviour of RENAME_EXCHANGE and RENAME_NOREPLACE
+on bpffs. The former checks that after an exchange the inode of two
+directories has changed. The latter checks that the source still exists
+after a failed rename.
 
-Sounds like this is the real problem that needs to be fixed.  kobjects
-should always control the lifespan of the structure they are embedded
-in.  If not, then that is a design flaw of the user of the kobject :(
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ .../selftests/bpf/prog_tests/test_bpffs.c     | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-Where in the kernel is this happening?  And where have been the attempts
-to fix this up?
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+index 172c999e523c..9c28ae9589bf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+ #define _GNU_SOURCE
++#include <stdio.h>
+ #include <sched.h>
+ #include <sys/mount.h>
+ #include <sys/stat.h>
+@@ -29,6 +30,7 @@ static int read_iter(char *file)
+ 
+ static int fn(void)
+ {
++	struct stat a, b;
+ 	int err, duration = 0;
+ 
+ 	err = unshare(CLONE_NEWNS);
+@@ -67,6 +69,43 @@ static int fn(void)
+ 	err = read_iter(TDIR "/fs2/progs.debug");
+ 	if (CHECK(err, "reading " TDIR "/fs2/progs.debug", "failed\n"))
+ 		goto out;
++
++	err = mkdir(TDIR "/fs1/a", 0777);
++	if (CHECK(err, "creating " TDIR "/fs1/a", "failed\n"))
++		goto out;
++	err = mkdir(TDIR "/fs1/a/1", 0777);
++	if (CHECK(err, "creating " TDIR "/fs1/a/1", "failed\n"))
++		goto out;
++	err = mkdir(TDIR "/fs1/b", 0777);
++	if (CHECK(err, "creating " TDIR "/fs1/b", "failed\n"))
++		goto out;
++
++	/* Check that RENAME_EXCHANGE works. */
++	err = stat(TDIR "/fs1/a", &a);
++	if (CHECK(err, "stat(" TDIR "/fs1/a)", "failed\n"))
++		goto out;
++	err = renameat2(0, TDIR "/fs1/a", 0, TDIR "/fs1/b", RENAME_EXCHANGE);
++	if (CHECK(err, "renameat2(RENAME_EXCHANGE)", "failed\n"))
++		goto out;
++	err = stat(TDIR "/fs1/b", &b);
++	if (CHECK(err, "stat(" TDIR "/fs1/b)", "failed\n"))
++		goto out;
++	if (CHECK(a.st_ino != b.st_ino, "b should have a's inode", "failed\n"))
++		goto out;
++	err = access(TDIR "/fs1/b/1", F_OK);
++	if (CHECK(err, "access(" TDIR "/fs1/b/1)", "failed\n"))
++		goto out;
++
++	/* Check that RENAME_NOREPLACE works. */
++	err = renameat2(0, TDIR "/fs1/b", 0, TDIR "/fs1/a", RENAME_NOREPLACE);
++	if (CHECK(!err, "renameat2(RENAME_NOREPLACE)", "succeeded\n")) {
++		err = -EINVAL;
++		goto out;
++	}
++	err = access(TDIR "/fs1/b", F_OK);
++	if (CHECK(err, "access(" TDIR "/fs1/b)", "failed\n"))
++		goto out;
++
+ out:
+ 	umount(TDIR "/fs1");
+ 	umount(TDIR "/fs2");
+-- 
+2.30.2
 
-thanks,
-
-greg k-h
