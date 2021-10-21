@@ -2,111 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CDB436B91
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 21:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E17436BB8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 22:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbhJUT4w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Oct 2021 15:56:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44641 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231976AbhJUT4t (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 15:56:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634846072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XQQxB68/bqgix0H59OBXlceD3gg5Noo7Iow2EZ2n7yg=;
-        b=IPCHsUFujQzn7aTNpej8zRJrbF6mDzgwNsfjoDfb2TK+fkyyT9fGV1eleKlakTevTKD2zb
-        KI4+s6w2qQ7BG0ts9wCzy+aYyOTwOuh+15jk+mVw2G0L6jYT4/Q4dhu8I6EouOHmcUL6B6
-        +mk6avsUeX6oi2dvMWYeKfcGqYzuBaw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-440-mVQx0dkjPWOBZv5FB1RQxA-1; Thu, 21 Oct 2021 15:54:31 -0400
-X-MC-Unique: mVQx0dkjPWOBZv5FB1RQxA-1
-Received: by mail-ed1-f72.google.com with SMTP id i7-20020a50d747000000b003db0225d219so1533858edj.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 12:54:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XQQxB68/bqgix0H59OBXlceD3gg5Noo7Iow2EZ2n7yg=;
-        b=J7s1LKqAcRDstKhL7YdXQ2RIcE+wOnCcOnj+tLbGVYwoahy2vM00YvUf20GXzbTc1j
-         1gFPsaCVR6gdixmyMmJ51nLJQM6C7hqVlMgupupTcf/HUr6xIpL6v6GPg3zF3Pc57O2Y
-         HN5d8KqN9ZFCJ27yb4Dvdc/irfCzdogP6tLqSeN7rHudazetcw4A6TjNekENsicCtShX
-         dKcDwed5Qm0ulokMBF00HbYRUYzP2xlI9BvSlmShyfWL8hypHiasFgEGlunLy7dBx2cU
-         TqS2F5eUXKalfNKs30jxlEW59HqjVqumy/gFnZU3m1ngchQNUT4Y0fV+IMqCXO76qF7I
-         f3Rw==
-X-Gm-Message-State: AOAM530O9JqSgrluMmPpnH939SIrg9/kXfUdvtDZrrJ8sVdduMSTTAOl
-        tad4ANklVFwFUMt8znm2xmCSJvMNtOqNfcJipEUIduOgyA6/reSdw92E4jf9pWRb7ZSMEDEKrNN
-        81GdfuQiloPGM6bUL6VRYgqxF45nq
-X-Received: by 2002:a05:6402:50c7:: with SMTP id h7mr10509067edb.191.1634846070222;
-        Thu, 21 Oct 2021 12:54:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzmJnU7g6ZVD24HMPBsZgL0Jyl+qXHtE9LJnZE9S9oVAH4QKW2i7BfFAIN7nIyagvTLyj43JA==
-X-Received: by 2002:a05:6402:50c7:: with SMTP id h7mr10509049edb.191.1634846070077;
-        Thu, 21 Oct 2021 12:54:30 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.gmail.com with ESMTPSA id t18sm3616082edd.18.2021.10.21.12.54.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Oct 2021 12:54:29 -0700 (PDT)
-Message-ID: <7edcd370-41a5-f7e8-1ea9-a6073c97638d@redhat.com>
-Date:   Thu, 21 Oct 2021 21:54:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Subject: Re: [PATCH v2] selftests: kvm: fix mismatched fclose() after popen()
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211021175603.22391-1-skhan@linuxfoundation.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211021175603.22391-1-skhan@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S231912AbhJUUGN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Oct 2021 16:06:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44782 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230020AbhJUUGM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 Oct 2021 16:06:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3980561251;
+        Thu, 21 Oct 2021 20:03:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634846635;
+        bh=6wcMAPIuLrajjhebGQXqdPC04sfh6LeM6s1G6IwbmDo=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=UF0Nep0XEdBF0LM9GoeKiRNKd/wpiEdDnvXUuZywx0P5uZ1fnDqYqdcYTQ0N5qeGJ
+         DHfkYAV/ch05bpxv5c+gmwzQqDLf0umodqdHJaXK4kmjFDGOau6dHF2dTS7jeUGKJb
+         5Txmj0ytHTJTJDLMqSmhhPskP/y6NI88ehRkLJdI7DG/NPfnqshhNnoEt/T4q3O+zh
+         mU5IX0kutJ0dQmTnys1NHJyp0Dy3EgWZOZa1kldziNr2ZmTapOWOQ30s4D8Odza2YY
+         0iotDf57X6QJHzwutdQS8As4whQZY3tg2dJWR8AN8E/LGZtceOFngpOc6FHn6Fwn7W
+         fQKtx9rDY0VgQ==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 4DC3E27C0054;
+        Thu, 21 Oct 2021 16:03:54 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute6.internal (MEProxy); Thu, 21 Oct 2021 16:03:54 -0400
+X-ME-Sender: <xms:qcdxYbiMTqQn4HSk6q_epceIccz0L_1UvyV87EFVaFIg785b2Z-LmQ>
+    <xme:qcdxYYBWdRlEyzGhHXXf8z9Cb1zFw42JqdF6muPVQewPJiCtAifTncLOH2BEbxueB
+    fepWttx6Wj_uhwf2TE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddviedgudegvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnheptdfhheettddvtedvtedugfeuuefhtddugedvleevleefvdetleff
+    gfefvdekgeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:qcdxYbEsDfgAjUDtMcxcGuoptY-lMRArMcBLC5kWtPoLYDEGlijgRQ>
+    <xmx:qcdxYYR50mlShwcXBJQJXp1adk2gxmrX8RbgfDnIRKyAlUajMw1-Qg>
+    <xmx:qcdxYYwZvuFcsCrbTdxHmayn3ov-cTMSTp_skfWC2EMQuAZbe0ErwA>
+    <xmx:qsdxYfmP2MMGkmr4dRhlEEwqeByj-8SOoeR3gSnxBw8_i69f_H64cQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D117521E006E; Thu, 21 Oct 2021 16:03:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1369-gd055fb5e7c-fm-20211018.002-gd055fb5e
+Mime-Version: 1.0
+Message-Id: <f4b83c21-4e73-45b6-ae3a-17659be512c0@www.fastmail.com>
+In-Reply-To: <20211008235504.2957528-1-keescook@chromium.org>
+References: <20211008235504.2957528-1-keescook@chromium.org>
+Date:   Thu, 21 Oct 2021 13:03:33 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Kees Cook" <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc:     "Mark Rutland" <mark.rutland@arm.com>,
+        "Shuah Khan" <shuah@kernel.org>,
+        "Alexey Dobriyan" <adobriyan@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        "Josh Poimboeuf" <jpoimboe@redhat.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Alexey Gladkov" <gladkov.alexey@gmail.com>,
+        "Jann Horn" <jannh@google.com>,
+        "Vito Caputo" <vcaputo@pengaru.com>,
+        "Ingo Molnar" <mingo@redhat.com>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Ben Segall" <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com,
+        "Christian Brauner" <christian.brauner@ubuntu.com>,
+        amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
+        michael.weiss@aisec.fraunhofer.de,
+        "Michal Hocko" <mhocko@suse.com>, deller@gmx.de,
+        "Qi Zheng" <zhengqi.arch@bytedance.com>, me@tobin.cc,
+        tycho@tycho.pizza, "Thomas Gleixner" <tglx@linutronix.de>,
+        "Borislav Petkov" <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Jens Axboe" <axboe@kernel.dk>, metze@samba.org,
+        "Lai Jiangshan" <laijs@linux.alibaba.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        ohoono.kwon@samsung.com, kaleshsingh@google.com,
+        yifeifz2@illinois.edu, linux-arch@vger.kernel.org,
+        vgupta@kernel.org, "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "Will Deacon" <will@kernel.org>, guoren@kernel.org,
+        bcain@codeaurora.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        nickhu@andestech.com, jonas@southpole.se,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>, hca@linux.ibm.com,
+        ysato@users.sourceforge.jp, davem@davemloft.net, chris@zankel.net,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] selftests: proc: Make sure wchan works when it exists
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 21/10/21 19:56, Shuah Khan wrote:
-> get_warnings_count() does fclose() using File * returned from popen().
-> Fix it to call pclose() as it should.
-> 
-> tools/testing/selftests/kvm/x86_64/mmio_warning_test
-> x86_64/mmio_warning_test.c: In function ‘get_warnings_count’:
-> x86_64/mmio_warning_test.c:87:9: warning: ‘fclose’ called on pointer returned from a mismatched allocation function [-Wmismatched-dealloc]
->     87 |         fclose(f);
->        |         ^~~~~~~~~
-> x86_64/mmio_warning_test.c:84:13: note: returned from ‘popen’
->     84 |         f = popen("dmesg | grep \"WARNING:\" | wc -l", "r");
->        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->   tools/testing/selftests/kvm/x86_64/mmio_warning_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
-> index 8039e1eff938..9f55ccd169a1 100644
-> --- a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
-> @@ -84,7 +84,7 @@ int get_warnings_count(void)
->   	f = popen("dmesg | grep \"WARNING:\" | wc -l", "r");
->   	if (fscanf(f, "%d", &warnings) < 1)
->   		warnings = 0;
-> -	fclose(f);
-> +	pclose(f);
->   
->   	return warnings;
->   }
-> 
 
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
-Thanks,
+On Fri, Oct 8, 2021, at 4:55 PM, Kees Cook wrote:
+> This makes sure that wchan contains a sensible symbol when a process is
+> blocked. Specifically this calls the sleep() syscall, and expects the
+> architecture to have called schedule() from a function that has "sleep"
+> somewhere in its name. For example, on the architectures I tested
+> (x86_64, arm64, arm, mips, and powerpc) this is "hrtimer_nanosleep":
 
-Paolo
+Is this really better than admitting that the whole mechanism is nonsense and disabling it?
 
+We could have a fixed string for each task state and call it a day.
