@@ -2,81 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2B04357D2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 02:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581244357DF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 02:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbhJUAdy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Oct 2021 20:33:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48882 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232140AbhJUAdt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Oct 2021 20:33:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 345A960FF2;
-        Thu, 21 Oct 2021 00:31:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634776294;
-        bh=2N7TWg46Hjrz6h+njX57e9C+a3Xllj8D+pXkB0nOhz4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DqOuJlmNVVV5HSW89rPxf/94/+KqNr9ByEXkQV83sc6t7CrXMj4o7uszHHYySJpXy
-         Ooijt/dU7t4KtIRpuPYLiYukU1gcwf+2n96a9w40rDAosI6+j73wwzUGzvKR2yTlm4
-         w/nA55g/9IhFHEFyvCN1C6TGY+gdqCrEoyzlOe1nX39IjFQc4Cy+zE+RN13jA+MqaK
-         OT1JlG1GeHhlxI2ILL2sZQdSv/RnR2acf2STy4DqlsrLIP//8jJivyLn67OBFa3duS
-         gdy9bZMg2X7wX66487Ag6LvK1Ki4eLxnf5LdQZL4Nm4um8JPrUlp1X6CLJnh+DA2s7
-         sTp4giaVYnwJA==
-Date:   Thu, 21 Oct 2021 09:31:31 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>, <mingo@redhat.com>,
-        <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] kselftests: ftrace: limit the executing time by reading
- from cached trace
-Message-Id: <20211021093131.affc348280aba040f76f769e@kernel.org>
-In-Reply-To: <20211020101659.42360147@gandalf.local.home>
-References: <20211018132616.2234853-1-lizhijian@cn.fujitsu.com>
-        <20211018221636.47157e52@gandalf.local.home>
-        <20211020112027.b01762f2adcfac99e71dcf99@kernel.org>
-        <20211019223454.5da09d74@gandalf.local.home>
-        <20211020115522.75f3e25247c1d30726e9b130@kernel.org>
-        <20211020101659.42360147@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S230268AbhJUAmF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Oct 2021 20:42:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47936 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230225AbhJUAmF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 Oct 2021 20:42:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634776789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nINcHNP1LunHuFgS+T7bSGFWStA5gFA7A821E6TM/8E=;
+        b=CbX4hham1ntphzzf2fngYUoCDjB9g0f5F7dzZutLUX2T2N81zOMzauIC7LZuKjXWgktulN
+        GZz+kuHKyprLzi4EAa7kBlTBHcy0XZxqm7EzOf2hiZud4eIcx60bJjG2wVywj1y9TpfNp8
+        yNfIzATb646+lOevZoiTEkv4cXoqmtY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-557-c3Q0yG6OP5e-tVuS9OPEsw-1; Wed, 20 Oct 2021 20:39:45 -0400
+X-MC-Unique: c3Q0yG6OP5e-tVuS9OPEsw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AFD5A1006AA2;
+        Thu, 21 Oct 2021 00:39:42 +0000 (UTC)
+Received: from T590 (ovpn-8-19.pek2.redhat.com [10.72.8.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2231319D9B;
+        Thu, 21 Oct 2021 00:39:10 +0000 (UTC)
+Date:   Thu, 21 Oct 2021 08:39:05 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
+        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
+        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
+        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
+        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ming.lei@redhat.com
+Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
+Message-ID: <YXC2qcx/RlLwjrKx@T590>
+References: <YWk9e957Hb+I7HvR@T590>
+ <YWm68xUnAofop3PZ@bombadil.infradead.org>
+ <YWq3Z++uoJ/kcp+3@T590>
+ <YW3LuzaPhW96jSBK@bombadil.infradead.org>
+ <YW4uwep3BCe9Vxq8@T590>
+ <YW7kFXlzRrvwzARP@bombadil.infradead.org>
+ <YW7ygbLAwm2/LZFl@T590>
+ <YW8eSq2B+5FtOLZb@bombadil.infradead.org>
+ <YW9tqPunx5bssxIz@T590>
+ <YXA6NMhwoiIMeHji@bombadil.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YXA6NMhwoiIMeHji@bombadil.infradead.org>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 20 Oct 2021 10:16:59 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Wed, 20 Oct 2021 11:55:22 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On Wed, Oct 20, 2021 at 08:48:04AM -0700, Luis Chamberlain wrote:
+> On Wed, Oct 20, 2021 at 09:15:20AM +0800, Ming Lei wrote:
+> > On Tue, Oct 19, 2021 at 12:36:42PM -0700, Luis Chamberlain wrote:
+> > > On Wed, Oct 20, 2021 at 12:29:53AM +0800, Ming Lei wrote:
+> > > > diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+> > > > index d0cae7a42f4d..a14ba3d350ea 100644
+> > > > --- a/drivers/block/zram/zram_drv.c
+> > > > +++ b/drivers/block/zram/zram_drv.c
+> > > > @@ -1704,12 +1704,12 @@ static void zram_reset_device(struct zram *zram)
+> > > >  	set_capacity_and_notify(zram->disk, 0);
+> > > >  	part_stat_set_all(zram->disk->part0, 0);
+> > > >  
+> > > > -	up_write(&zram->init_lock);
+> > > >  	/* I/O operation under all of CPU are done so let's free */
+> > > >  	zram_meta_free(zram, disksize);
+> > > >  	memset(&zram->stats, 0, sizeof(zram->stats));
+> > > >  	zcomp_destroy(comp);
+> > > >  	reset_bdev(zram);
+> > > > +	up_write(&zram->init_lock);
+> > > >  }
+> > > >  
+> > > >  static ssize_t disksize_store(struct device *dev,
+> > > 
+> > > With this, it still ends up in a state where we loop and can't get out of:
+> > > 
+> > > zram: Can't change algorithm for initialized device
+> > 
+> > Again, you are running two zram02.sh[1] on /dev/zram0, that isn't unexpected
 > 
-> > --- a/tools/testing/selftests/ftrace/test.d/functions
-> > +++ b/tools/testing/selftests/ftrace/test.d/functions
-> > @@ -124,6 +124,12 @@ initialize_ftrace() { # Reset ftrace to initial-state
-> >      [ -f uprobe_events ] && echo > uprobe_events
-> >      [ -f synthetic_events ] && echo > synthetic_events
-> >      [ -f snapshot ] && echo 0 > snapshot
-> > +
-> > +# Stop tracing while reading the trace file by default, to prevent
-> > +# the test results while checking it and to avoid taking a long time
-> > +# to check the result.
-> > +    [ -f options/pause-on-trace ] && echo 1 > options/pause-on-trace
-> > +
-> 
-> Is there a way we can save the previous setting and put it back on reset?
+> You mean that it is not expected? If so then yes, of course.
 
-No, since each testcase must be run under the clean state. Would we need to
-recover the settings?
-
-Thank you,
+My meaning is clear: it is not unexpected, so it is expected.
 
 > 
-> -- Steve
+> > behavior. Here the difference is just timing.
+> 
+> Right, but that is what helped reproduce a difficutl to re-produce customer
+> bug. Once you find an easy way to reproduce a reported issue you stick
+> with it and try to make the situation worse to ensure no more bugs are
+> present.
+> 
+> > Also you did not answer my question about your test expected result when
+> > running the following script from two terminal concurrently:
+> > 
+> > 	while true; do
+> > 		PATH=$PATH:$PWD:$PWD/../../../lib/ ./zram02.sh;
+> > 	done
+> 
+> If you run this, you should see no failures.
+
+OK, not see any failure when running single zram02.sh after applying my
+patch V2.
+
+> 
+> Once you start a second script that one should cause odd issues on both
+> sides but never crash or stall the module.
+
+crash can't be observed with my patch V2, what do you mean 'stall'
+the module? Is that 'zram' can't be unloaded after the test is
+terminated via multiple 'ctrl-c'?
+
+> 
+> A second series of tests is hitting CTRL-C on either randonly and
+> restarting testing once again randomly.
+
+ltp/zram02.sh has cleanup handler via trap to clean everything(swapoff/umount/reset/
+rmmod), ctrl-c will terminate current forground task and cause shell to run the
+cleanup handler first, but further 'ctrl-c' will terminate the cleanup handler,
+then the cleanup won't be done completely, such as zram disk is left as swap
+device and zram can't be unloaded. The idea can be observed via the following
+script:
+
+	#!/bin/bash
+	trap 'echo "enter trap"; sleep 20; echo "exit trap";' INT
+	sleep 30
+
+After the above script is run foreground, when 1st ctrl-c is pressed, 'sleep 30'
+is terminated, then the trap command is run, so you can see "enter trap"
+dumped. Then if you pressed 2nd ctrl-c, 'sleep 20' is terminated immediately.
+So 'swapoff' from zram02.sh's trap function can be terminated in this way.
+
+zram disk being left as swap disk can be observed with your patch too
+after terminating via multiple ctrl-c which has to be done this way because
+the test is dead loop.
+
+So it is hard to cleanup everything completely after multiple 'CTRL-C' is
+involved, and it should be impossible. It needs violent multiple ctrl-c to
+terminate the dealoop test.
+
+So it isn't reasonable to expect that zram can be always unloaded successfully
+after the test script is terminated via multiple ctrl-c.
+
+But zram can be unloaded after running swapoff manually, from driver
+viewpoint, nothing is wrong.
+
+> 
+> Again, neither should crash the kernel or stall the module.
+> 
+> In the end of these tests you should be able to run the script alone
+> just once and not see issues.
 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Thanks,
+Ming
+
