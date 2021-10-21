@@ -2,85 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB75A43612A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 14:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E919E436154
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 14:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbhJUMRz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Oct 2021 08:17:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58802 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230231AbhJUMRy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 08:17:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A90166120F;
-        Thu, 21 Oct 2021 12:15:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634818539;
-        bh=G9Fyn+LXoWKA+dJXkGbE/r3nlPUNszZi5Xifq7aBcs8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A+XN+IKTW8mMDKiQknDVE/GjUOi8ZFe8YM6VSwOo00MupvnhUh9NWggpyAxnMzIgA
-         HsJezYF4ECzVSCc1AvUFJEjnqGXhivPp7aO6F384SE/4BKYsDdAqSpIH8ThrF9ZWQ3
-         8Xe4v25f+YPtKxZEa+mUDw//5Obi6dt39+HbXKew2qMAmitwvMkNCqDJq8I1aZy0ww
-         anG4Hwda4MEoUbAyyCNYZ+75Fr67RZwCfkbb7vUHMOqLrab0AZVvMoxBdBU8jEhpSg
-         ZuFEyaAjh4xpukw/pau4M3QTamiYSNkwKgvWlZbN6bNhYtgdzJ1xpt7PDwd8n9gCF7
-         HI613S/nSxkbA==
-Date:   Thu, 21 Oct 2021 13:15:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 10/42] arm64/sve: Make sysctl interface for SVE
- reusable by SME
-Message-ID: <YXFZ6EdBklN4W1sU@sirena.org.uk>
-References: <20211019172247.3045838-1-broonie@kernel.org>
- <20211019172247.3045838-11-broonie@kernel.org>
- <20211021095550.GA16377@willie-the-truck>
+        id S231766AbhJUMV0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Oct 2021 08:21:26 -0400
+Received: from a8-81.smtp-out.amazonses.com ([54.240.8.81]:44787 "EHLO
+        a8-81.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231732AbhJUMVN (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 Oct 2021 08:21:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1634818737;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=IAJfVvHlajratTrTy88y+059Eo6KW9hnMw5Mxb9+yiI=;
+        b=nh/hQFKt0xux4F57JeNaENynnRExZqnAAF32eDjD2AO2oMj+T76SFhjUCFVvWv6v
+        Z8DsbABKWEn/V6Qx8VJ7h3yzif6/1b/7iM+eevZ73tyrBJu+or2hdOxqE9qqzrOE4gA
+        +iqsqoIpn8MPhTPWlhBhfixl4PA1oHYnEqY3J/hs=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1634818737;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=IAJfVvHlajratTrTy88y+059Eo6KW9hnMw5Mxb9+yiI=;
+        b=HgmFoplRZ5W6Lu0i8W92/scpFl/6DUxq4DzVl/v3SCSHF36qPwVJkNFGfCp9Rjmr
+        1WAJFVoE8Eo7B99aKG+FuESHF/lZDkAz8T5TaFCM1sJu5Ps3q9vpIc/WiQQJrkEHyvF
+        Mju1ehAYzeD2tgTVyNoW92jJbC7WZJ9+AJFSegMI=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: lkft kselftest for next-20211020
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KZ0sz92NMjGU1gkP"
-Content-Disposition: inline
-In-Reply-To: <20211021095550.GA16377@willie-the-truck>
-X-Cookie: I program, therefore I am.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017ca2ca3ec5-9753293e-36b1-4825-97b3-124dcd5d1d03-000000@email.amazonses.com>
+Date:   Thu, 21 Oct 2021 12:18:56 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.10.21-54.240.8.81
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+## Build
+* kernel: 5.15.0-rc6
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 51dba6e335ff9d1f6f50b5cacced8598956e1437
+* git describe: next-20211020
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211020
 
---KZ0sz92NMjGU1gkP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+## Regressions (compared to next-20211019)
+No regressions found.
 
-On Thu, Oct 21, 2021 at 10:55:51AM +0100, Will Deacon wrote:
-> On Tue, Oct 19, 2021 at 06:22:15PM +0100, Mark Brown wrote:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> > +	if (!info)
-> > +		return -EINVAL;
 
-> Is this check actually needed? If so, you've already dereferenced the
-> pointer.
+## Fixes (compared to next-20211019)
+No fixes found.
 
-It's redundant, just defensiveness.
+## Test result summary
+total: 1813, pass: 864, fail: 186, skip: 763, xfail: 0
 
---KZ0sz92NMjGU1gkP
-Content-Type: application/pgp-signature; name="signature.asc"
+## Build Summary
 
------BEGIN PGP SIGNATURE-----
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFxWecACgkQJNaLcl1U
-h9A5Kgf/a7iis1Wb8eZkh4Uz3o9Y8YEpVhnS1QtF5DTOfG6KpoAo4zh5hSkOlul0
-vI84jzx/ltUVbn3hk8goBqF6rt07EWOyd5K74lP6TBDvTKZMnv3SRI4qEKGAmUky
-zlN3BzihaiqwcKWx6l2Iuy6WGU4I4DY/gnPnE5mehryLWyHyfpdRSAXJbMGS9Qeb
-rJK+0JAm+A4atkqZ2i5Jlt9ESdA2AX4Y0TiuSXw7Aw6ZLZO5SpkcihKCwN/LHGVD
-rzvQcWkCQubW900zvPL19VZd8WbmvCGN0gdP3YBKpJUI3t/p1HmVZSItsmiYGlfw
-JCHjxSJKBz9angq9DPK7Zt9Uc6Gu2Q==
-=DLJo
------END PGP SIGNATURE-----
-
---KZ0sz92NMjGU1gkP--
+--
+Linaro LKFT
+https://lkft.linaro.org
