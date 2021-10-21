@@ -2,173 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 581244357DF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 02:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1002435840
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 03:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbhJUAmF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Oct 2021 20:42:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47936 "EHLO
+        id S230192AbhJUBbi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Oct 2021 21:31:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23056 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230225AbhJUAmF (ORCPT
+        by vger.kernel.org with ESMTP id S230268AbhJUBbh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Oct 2021 20:42:05 -0400
+        Wed, 20 Oct 2021 21:31:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634776789;
+        s=mimecast20190719; t=1634779762;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=nINcHNP1LunHuFgS+T7bSGFWStA5gFA7A821E6TM/8E=;
-        b=CbX4hham1ntphzzf2fngYUoCDjB9g0f5F7dzZutLUX2T2N81zOMzauIC7LZuKjXWgktulN
-        GZz+kuHKyprLzi4EAa7kBlTBHcy0XZxqm7EzOf2hiZud4eIcx60bJjG2wVywj1y9TpfNp8
-        yNfIzATb646+lOevZoiTEkv4cXoqmtY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-557-c3Q0yG6OP5e-tVuS9OPEsw-1; Wed, 20 Oct 2021 20:39:45 -0400
-X-MC-Unique: c3Q0yG6OP5e-tVuS9OPEsw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AFD5A1006AA2;
-        Thu, 21 Oct 2021 00:39:42 +0000 (UTC)
-Received: from T590 (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2231319D9B;
-        Thu, 21 Oct 2021 00:39:10 +0000 (UTC)
-Date:   Thu, 21 Oct 2021 08:39:05 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
-        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
-        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ming.lei@redhat.com
-Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
-Message-ID: <YXC2qcx/RlLwjrKx@T590>
-References: <YWk9e957Hb+I7HvR@T590>
- <YWm68xUnAofop3PZ@bombadil.infradead.org>
- <YWq3Z++uoJ/kcp+3@T590>
- <YW3LuzaPhW96jSBK@bombadil.infradead.org>
- <YW4uwep3BCe9Vxq8@T590>
- <YW7kFXlzRrvwzARP@bombadil.infradead.org>
- <YW7ygbLAwm2/LZFl@T590>
- <YW8eSq2B+5FtOLZb@bombadil.infradead.org>
- <YW9tqPunx5bssxIz@T590>
- <YXA6NMhwoiIMeHji@bombadil.infradead.org>
+        bh=BlV+ARiKa3/8/9BVagtX9yLh+qMMBcZxVM11x/BzOdk=;
+        b=Mx2hFJQaPu/B4NjScnTXPdUamued2IYbdZZ6ucIB7w2bZf40uOlpWp2lyTT0UEPZVjzz/s
+        BX8wtEJPbFTjOzc1VsxLCnwB2VGW3xIY0wqWAf2KUMTbWp80x/ejnVrwlMlKXNzNo4qtDI
+        vEN+zvwimjIQAtYnOZiyG3vNeA/ERO0=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-553-hLPv2evaNKiTIOE2xv9SMg-1; Wed, 20 Oct 2021 21:29:20 -0400
+X-MC-Unique: hLPv2evaNKiTIOE2xv9SMg-1
+Received: by mail-pj1-f71.google.com with SMTP id nk17-20020a17090b195100b001a199d7a415so1333749pjb.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 18:29:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BlV+ARiKa3/8/9BVagtX9yLh+qMMBcZxVM11x/BzOdk=;
+        b=0U16yMTrM8oaFH12zdfHVSEEj5y/UZCGY97EkCVeFJEZ8WXBu+jIOL8YnNBELbFuWS
+         0WqylKV0J+Gs/2jyEScQ+893kBiCf0GMhbqS+ezNN/++xPNXpDhudTQ059IcWPdAHZWD
+         I/KK71fe8xmWqRCnyMp9WhkTgLyW2AcPvLc/xYOrT2oUtBvcGKrKdBIcC1/JoNdxZ5dJ
+         pWsIMakCqPV/KNdCkyPycQ+D4sqPMAnv8hMjtT9OcyXgYSww3dorwcZ4Pq5nBt7ieD8w
+         MAxTakMMb/Rnh2Iqd1RX144gZeljtC5I1FfVi+f3j1Mm9/zLUvBGhy6S+TSS4zSGEQhS
+         wpHg==
+X-Gm-Message-State: AOAM5302el8Z+ZvDWY9EWU5l0maQ+yNfcDj404HoSOOPhCiYtGP+j2sf
+        rCL67uyGlY14Wnyq064BFGHJ+hSOD4lqs7E+PXp2QHvaFVb+11tWUKA4yNu1Ry54T7Kr6WOWXSY
+        Cr78UhjAiq3myCjm6WLjxmQZe6hiT
+X-Received: by 2002:a63:ed4a:: with SMTP id m10mr2119201pgk.448.1634779759750;
+        Wed, 20 Oct 2021 18:29:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzLT8cImRwZSUB9vci3AK/6sF9OSUh11r0p4OY2pwmW2mqhL9PPlJb2PmNU10BztrNI3j1fjA==
+X-Received: by 2002:a63:ed4a:: with SMTP id m10mr2119185pgk.448.1634779759505;
+        Wed, 20 Oct 2021 18:29:19 -0700 (PDT)
+Received: from xz-m1.local ([84.17.34.135])
+        by smtp.gmail.com with ESMTPSA id p4sm3192782pgc.15.2021.10.20.18.29.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Oct 2021 18:29:18 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 09:29:14 +0800
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/3] userfaultfd/selftests: fix feature support
+ detection
+Message-ID: <YXDCagVgh2O2YdIW@xz-m1.local>
+References: <20210930212309.4001967-1-axelrasmussen@google.com>
+ <20210930212309.4001967-3-axelrasmussen@google.com>
+ <CAJHvVcj9FpJgC5EsB1_6yfgDA8p5-=Oakccg+TUrGUWZB5nHzA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YXA6NMhwoiIMeHji@bombadil.infradead.org>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+In-Reply-To: <CAJHvVcj9FpJgC5EsB1_6yfgDA8p5-=Oakccg+TUrGUWZB5nHzA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 08:48:04AM -0700, Luis Chamberlain wrote:
-> On Wed, Oct 20, 2021 at 09:15:20AM +0800, Ming Lei wrote:
-> > On Tue, Oct 19, 2021 at 12:36:42PM -0700, Luis Chamberlain wrote:
-> > > On Wed, Oct 20, 2021 at 12:29:53AM +0800, Ming Lei wrote:
-> > > > diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-> > > > index d0cae7a42f4d..a14ba3d350ea 100644
-> > > > --- a/drivers/block/zram/zram_drv.c
-> > > > +++ b/drivers/block/zram/zram_drv.c
-> > > > @@ -1704,12 +1704,12 @@ static void zram_reset_device(struct zram *zram)
-> > > >  	set_capacity_and_notify(zram->disk, 0);
-> > > >  	part_stat_set_all(zram->disk->part0, 0);
-> > > >  
-> > > > -	up_write(&zram->init_lock);
-> > > >  	/* I/O operation under all of CPU are done so let's free */
-> > > >  	zram_meta_free(zram, disksize);
-> > > >  	memset(&zram->stats, 0, sizeof(zram->stats));
-> > > >  	zcomp_destroy(comp);
-> > > >  	reset_bdev(zram);
-> > > > +	up_write(&zram->init_lock);
-> > > >  }
-> > > >  
-> > > >  static ssize_t disksize_store(struct device *dev,
-> > > 
-> > > With this, it still ends up in a state where we loop and can't get out of:
-> > > 
-> > > zram: Can't change algorithm for initialized device
-> > 
-> > Again, you are running two zram02.sh[1] on /dev/zram0, that isn't unexpected
-> 
-> You mean that it is not expected? If so then yes, of course.
+On Wed, Oct 20, 2021 at 11:28:49AM -0700, Axel Rasmussen wrote:
+> Just a friendly bump for review. :) Peter, any objections to this
+> version? I think it fairly closely matches your suggestions from v1.
 
-My meaning is clear: it is not unexpected, so it is expected.
+Isn't the whole patchset already queued by Andrew? :)
 
-> 
-> > behavior. Here the difference is just timing.
-> 
-> Right, but that is what helped reproduce a difficutl to re-produce customer
-> bug. Once you find an easy way to reproduce a reported issue you stick
-> with it and try to make the situation worse to ensure no more bugs are
-> present.
-> 
-> > Also you did not answer my question about your test expected result when
-> > running the following script from two terminal concurrently:
-> > 
-> > 	while true; do
-> > 		PATH=$PATH:$PWD:$PWD/../../../lib/ ./zram02.sh;
-> > 	done
-> 
-> If you run this, you should see no failures.
+Anyway,
 
-OK, not see any failure when running single zram02.sh after applying my
-patch V2.
+Reviewed-by: Peter Xu <peterx@redhat.com>
 
-> 
-> Once you start a second script that one should cause odd issues on both
-> sides but never crash or stall the module.
+Thanks for the change!
 
-crash can't be observed with my patch V2, what do you mean 'stall'
-the module? Is that 'zram' can't be unloaded after the test is
-terminated via multiple 'ctrl-c'?
-
-> 
-> A second series of tests is hitting CTRL-C on either randonly and
-> restarting testing once again randomly.
-
-ltp/zram02.sh has cleanup handler via trap to clean everything(swapoff/umount/reset/
-rmmod), ctrl-c will terminate current forground task and cause shell to run the
-cleanup handler first, but further 'ctrl-c' will terminate the cleanup handler,
-then the cleanup won't be done completely, such as zram disk is left as swap
-device and zram can't be unloaded. The idea can be observed via the following
-script:
-
-	#!/bin/bash
-	trap 'echo "enter trap"; sleep 20; echo "exit trap";' INT
-	sleep 30
-
-After the above script is run foreground, when 1st ctrl-c is pressed, 'sleep 30'
-is terminated, then the trap command is run, so you can see "enter trap"
-dumped. Then if you pressed 2nd ctrl-c, 'sleep 20' is terminated immediately.
-So 'swapoff' from zram02.sh's trap function can be terminated in this way.
-
-zram disk being left as swap disk can be observed with your patch too
-after terminating via multiple ctrl-c which has to be done this way because
-the test is dead loop.
-
-So it is hard to cleanup everything completely after multiple 'CTRL-C' is
-involved, and it should be impossible. It needs violent multiple ctrl-c to
-terminate the dealoop test.
-
-So it isn't reasonable to expect that zram can be always unloaded successfully
-after the test script is terminated via multiple ctrl-c.
-
-But zram can be unloaded after running swapoff manually, from driver
-viewpoint, nothing is wrong.
-
-> 
-> Again, neither should crash the kernel or stall the module.
-> 
-> In the end of these tests you should be able to run the script alone
-> just once and not see issues.
-
-
-Thanks,
-Ming
+-- 
+Peter Xu
 
