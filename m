@@ -2,123 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFD2436AEA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 20:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7F1436AFD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 21:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbhJUSwz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Oct 2021 14:52:55 -0400
-Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:37773 "EHLO
-        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230267AbhJUSwz (ORCPT
+        id S231934AbhJUTCi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Oct 2021 15:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231239AbhJUTCh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 14:52:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1634842238;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=7/tOQ6BFMNpxLJjfhz32pUp9xILxNhV5HDz483NjpcI=;
-        b=UvG5/zQ0hTd/jNe6via6OAKTwH18ycjL3DkdpOmwuWZ5Vh8pA1o7QlUXpS1jHc0p
-        o5xCNkQ837Lb10ceQLkNYg23iH5KYZzA8lQ/CtsygvsqNpRHaqyDmEzZZcemMn/uMuL
-        rv7TnZX1RQIAJxrpwKcb7a3FlMKORwJrzve3oEkA=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1634842238;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=7/tOQ6BFMNpxLJjfhz32pUp9xILxNhV5HDz483NjpcI=;
-        b=Lx3hHsdouy/1BSlFOnwfWbEevpHL3k/4INmuph9xNwOKFgZXH61bl5rFZ6ndn0Ir
-        9MKWa5HX2kG1by1w0bWfsHKoaq0iCjGX/dM4hjWEVIj5w/agUSNJhxS5cYAHTZ+zSNn
-        rEHxT8KnSXqVnqwoU2F+T4KpK61Cvn2W4NtNclWw=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: lkft kselftest for next-20211021
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 21 Oct 2021 15:02:37 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F35C061764;
+        Thu, 21 Oct 2021 12:00:20 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id e144so2330820iof.3;
+        Thu, 21 Oct 2021 12:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=iFcW2waaDzlWoT00moK0M/0BZk8C4xXdFBWVDWe8eJ4=;
+        b=nW7EgpfP4RXYOxTA9VizbvEzUB9pQnDkWmZP+ZNSLmefHDcihr1RYZ7f5BxV4MVyPy
+         gPnFDmYgfZnKPuktv2H/T+j9keOajGzK4I0EGYP7e5uZxNuLrzU90qznQUlGwMHd2VdS
+         XP8nYtph9QMAFGqSIP82G98WBRHti7QmqnFmoW/1Net8m9GfUHxGsdkg67tsPPYTtB5M
+         RYsYJUWhYtDaLS/vduAZPe3jJbCN9Xy952bMDNP/OXJSJzgJ0MTyWc8nmMuYe0cV+98y
+         BRzcorBTMjiaNatXLs3AqBiAUaq/pr8gg4gvBSWqEznjpoZ/BkhIJohA+ag8TMI6jhIM
+         RCAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=iFcW2waaDzlWoT00moK0M/0BZk8C4xXdFBWVDWe8eJ4=;
+        b=Z+Nj6W2Hz/zqVE00wlQW0ZRKzyQAOtoBOb/1yveLS8BbAK5V7zbvbMyEc31xzd/kUL
+         Ni3jceEy4P76/+sxy348nrHL1Xvi18f2ddu3gChyJTgvQxDPYel63TmKGMPy2GIP5tQW
+         1RUuaJmP3/SW/4KiXpAszIhXfT5CYG6pIhx23venW2ebzUL5sXiR/sWgz66UVjDoRlC8
+         ygRQjCOvDZRyCx1DlCyKqGNxO8CPJxBkmIT21zJSscnx5Fvr9QzZzCMJegute6ZnW8QQ
+         C2thlVCrc5IhQN9a1YJ36QmgQVS/SXFrLrfE40dLVMUsRKDYN/AOk3SrLD6HEtgu1Xxo
+         QBkg==
+X-Gm-Message-State: AOAM533hBymHtlEm/ITej9zU+9r4P+QMymwXHfaSsYMtVLXwfWjTko2U
+        smanI2chgqQw/E+573+s3Io=
+X-Google-Smtp-Source: ABdhPJx9ZbjJxJZGLhodnAG1wzsJI+/xZfsA/Wmh62lOdGlrgYKbw7FJ6bDFny8bjjAUPNQzEPuVfw==
+X-Received: by 2002:a02:6f5d:: with SMTP id b29mr5101929jae.113.1634842820282;
+        Thu, 21 Oct 2021 12:00:20 -0700 (PDT)
+Received: from localhost ([172.243.157.240])
+        by smtp.gmail.com with ESMTPSA id m5sm3041706ild.45.2021.10.21.12.00.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 12:00:19 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 12:00:11 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Mark Pashmfouroush <markpash@cloudflare.com>,
+        markpash@cloudflare.com
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Message-ID: <6171b8bbe35a7_663a72084f@john-XPS-13-9370.notmuch>
+In-Reply-To: <20211015112336.1973229-2-markpash@cloudflare.com>
+References: <20211015112336.1973229-1-markpash@cloudflare.com>
+ <20211015112336.1973229-2-markpash@cloudflare.com>
+Subject: RE: [PATCH bpf-next 1/2] bpf: Add ifindex to bpf_sk_lookup
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <0100017ca430daed-ea2f1218-d66f-46de-bb25-0045748b1b5c-000000@email.amazonses.com>
-Date:   Thu, 21 Oct 2021 18:50:37 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.10.21-54.240.8.35
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc6
-* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: 3196a52aff93186897f15f1a6c03220ce6523d82
-* git describe: next-20211021
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211021
+Mark Pashmfouroush wrote:
+> It may be helpful to have access to the ifindex during bpf socket
+> lookup. Add this to the bpf_sk_lookup API.
+> 
+> Signed-off-by: Mark Pashmfouroush <markpash@cloudflare.com>
+> 
 
-## Regressions (compared to next-20211019)
-No regressions found.
+Would be nice to have more details on the 'use case' here. I
+don't know off-hand how it 'may be helpful'.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+For the actual code though LGTM.
 
-
-## Fixes (compared to next-20211019)
-No fixes found.
-
-## Test result summary
-total: 2885, pass: 1788, fail: 246, skip: 851, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Acked-by: John Fastabend <john.fastabend@gmail.com>
