@@ -2,117 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A5B435ADC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 08:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6CD435B4E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 09:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbhJUGav (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Oct 2021 02:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S229499AbhJUHIn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Oct 2021 03:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbhJUGap (ORCPT
+        with ESMTP id S231158AbhJUHIj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 02:30:45 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC072C061753
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 23:28:29 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id y25-20020ac87059000000b002a71d24c242so3952437qtm.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 23:28:29 -0700 (PDT)
+        Thu, 21 Oct 2021 03:08:39 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A500AC06161C
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 00:06:22 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id m22so1310472wrb.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 00:06:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2Bw0oJWyLIy8gqKZ5/OEeCDpWLo7HHi7UvaPnMLR7o4=;
-        b=NJA3lzAaCLGv5YGqXi7DaRmNFPAK809xrGGdEbJmPwpbU7ydm+34dgSqhqQhxrG14z
-         eIwZnp5vLqhM7zhgMdfV1V/ww8nWNut2OyTqr5O1SSirwtpqkBO8OhBK9qzCBoY0gtGN
-         XJWkOgu1p51bP9GPzmz6a8sd6dxa2KPLT3h8tquGxEx5sdiWvhkAPbkBGBtgnz5gI+6D
-         ZS0J16thvs11qoma51KZx6FzOzfJEE5xBcjIcgr/ZWxKKwDTZajva41Rx4UBfYfsWaZI
-         uTIMspQ38PvoSSUEG5+ias05UlxhjRYclALt8GpLQDDMIdML5AioVtOhTUh/2qLQdyCR
-         hMsQ==
+        bh=wJ+W0CP0TdXGjAOZzbLuBJbtp4/c9oPqJrDhOCRvqSM=;
+        b=nUC4myidBp/vcoX8mJaBPvzHomBb1x7V/ai+eUnF1VTAL+OddCYGtXlEiG4E5qb/N2
+         yNYcb32Y5CuY3+G3Faar9VAqasuKlbajdmQoq/nlVQDVKvTgJG7Q2rk6x1MTEvR+dlkG
+         EwTIS/L4sOi378YocOUKfFhxDxsKUXi9LsyxIItJdJpzoqmcm18uUIvQtL8+v6xMQ57/
+         GIr42qmTQrnUmE9u+zCCJbEpb3rTgo+LxOl/SVyGuOE+76pxcit+07QUaca26BmP7xhS
+         7hoTfku+KbzypiFDalx9B7Jssz30Y+3Pdyw0kkpCLut7ETFnkh1UnRGmPQyrKaEXFx//
+         2azw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=2Bw0oJWyLIy8gqKZ5/OEeCDpWLo7HHi7UvaPnMLR7o4=;
-        b=pXJrBMDN/P0aFADEqr1PZSG8khaQeVybjjWo+iBRzB5YOX1SHDHGriWIUUUUMaGdjh
-         rnkP/iVBT46cNWhJXCKy9MEjQMVHGvHl/OOwHovo4/r6475DjNLgEXZdGI9XRz0ofMnm
-         8Ab/z7o9IU0K9imlNMnJdM09tSuAxyE/TC4EQoFdNbD6pevoSS6CDi369zmyLOihVzSj
-         WhqdSupNz6ZsMfwBrw3vpwvZ/biRJMvBjSaiLkCw3gY3Mn8AraacBBdyORJkWiUM0adk
-         x4F98c60WXvc5z4Ae+Cf4+UjfWYpLDP15eNfB5pJdKpcGEyX3sRiHQbfsNUfVhhkNTH9
-         X87Q==
-X-Gm-Message-State: AOAM5315nmKqCMiBbbt9aUMcjCNXxoNrrIXHllUd1DydMvs8lrQ554DA
-        CajA17bWn4zG583ep6NK0Zn3hpEjCzgzsA==
-X-Google-Smtp-Source: ABdhPJzx63aAumbS3i7RouTbrcfOq504XIijU/AfzVhOXWNLEuszTvEPkC70xldrbniKYPGl7qZD59WCKrx7kw==
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:1200:8c8:2819:6ab9])
- (user=davidgow job=sendgmr) by 2002:a25:24c1:: with SMTP id
- k184mr4238705ybk.2.1634797708963; Wed, 20 Oct 2021 23:28:28 -0700 (PDT)
-Date:   Wed, 20 Oct 2021 23:28:19 -0700
-In-Reply-To: <20211021062819.1313964-1-davidgow@google.com>
-Message-Id: <20211021062819.1313964-2-davidgow@google.com>
-Mime-Version: 1.0
-References: <20211021062819.1313964-1-davidgow@google.com>
-X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH 2/2] kunit: Report test parameter results as (K)TAP subtests
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wJ+W0CP0TdXGjAOZzbLuBJbtp4/c9oPqJrDhOCRvqSM=;
+        b=PeIQDsXYzBdtLPN6s1577w+rPgnrS+L8z0PDKkLxlZ8czhjXjNVJXJ6laP4wXg4lcM
+         yBQi2pIgWqCUZxdDjFb2ahQxTO8lFq1F+/nn9BAfVZDQ7Iwc+7DV16IbEcUaZFHMHyHn
+         meoBz7qYB9nAqMLlXIe2lmMNw9Mfp6AP16HttAnsGzq/d9KpHTXV58xHKtrtZEbwxddu
+         8bEjLOH87E9wGnMKHqbvmjyYD/UNwC5xqZEkt1aE6tgl3xU3FtU5HX4NjwtNsf3rPQsM
+         ni+XUtVwqXTBgitrqClz6HBSeV8O6e6y34GgX4RMFTeLWuWD2e7mOXlVjkKHlUbvK4LM
+         fvBw==
+X-Gm-Message-State: AOAM531oEF9FMB4posJp9hQ47Thi+dxECog+2HHrYQnxnbxVCl0J4sIF
+        ja6myvQ06Gz37v3j5E2eBwp8j9CYAuigXlXqbpbK8dZimM01/Q==
+X-Google-Smtp-Source: ABdhPJyqw7A1b5TFQFCdcA2PwAvt+uSUL1voDUWNwaAA5uVxAwHbwhhldiA6zKkYzNVsIZ5lblrh55blAux7nXQ6fe8=
+X-Received: by 2002:adf:ab58:: with SMTP id r24mr5068119wrc.200.1634799980993;
+ Thu, 21 Oct 2021 00:06:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211002022656.1681956-1-jk@codeconstruct.com.au>
+ <CABVgOS=F9K_AzoWjKPRT9m014NAo37vKHYEp-jHWDt5M+pkzSw@mail.gmail.com>
+ <101d12fc9250b7a445ff50a9e7a25cd74d0e16eb.camel@codeconstruct.com.au>
+ <CAFd5g46HN9pBcQhgEBGW6b=DR7ds48+Pggf0Y_d7804YO1aiKg@mail.gmail.com> <af2793322ce99c2bfa9e7dc35884a103b67f48b5.camel@codeconstruct.com.au>
+In-Reply-To: <af2793322ce99c2bfa9e7dc35884a103b67f48b5.camel@codeconstruct.com.au>
 From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 21 Oct 2021 15:06:09 +0800
+Message-ID: <CABVgOSn8fJ1YkFSwfNDoh93ve0r2Xom-RjiWvdwttvxqx39UEQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/2] mctp: test: disallow MCTP_TEST when building
+ as a module
+To:     Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, the results for individial parameters in a parameterised test
-are simply output as (K)TAP diagnostic lines. However, the plan was
-always[1] to make these (K)TAP subtests when kunit_tool supported them.
+On Thu, Oct 21, 2021 at 2:17 PM Jeremy Kerr <jk@codeconstruct.com.au> wrote:
+>
+> Hi Brendan,
+>
+> > I think this change here should mostly go into lib/kunit/executor.c:
+> >
+> > https://elixir.bootlin.com/linux/latest/source/lib/kunit/executor.c
+> >
+> > Not totally sure how this should interact with printing the TAP header
+> > and some other functionality, but we already have some module params
+> > in there that we may want to pick up when KUnit is loaded as a module.
+>
+> So I had a go at doing this as part of the executor, but that just
+> raised more questions about how we want this to work for the various
+> configurations of built-in/modules, where we have five options, assuming
+> two example kunit consumers:
+>
+>  - CONFIG_example1_TEST=y - our built-in suite: suites end up in the
+>    vmlinux kunit_test_suites section
+>
+>  - CONFIG_example2_TEST=m - our modular suite: suites end up in the
+>    modules' kunit_test_suites section, to be iterated on module load.
+>
+> Currently, it looks like we have:
+>
+> CONFIG_KUNIT=y
+>
+> 1) example1's tests are run through the built-in init path:
+>     kernel_init_freeable()
+>      -> kunit_run_all_tests, which iterates through the built-in
+>         kunit_test_suites section
+>
+> 2) example2's tests are run through:
+>
+>     the module's own module_init(),
+>      -> __kunit_test_suites_init()
+>            - passing the suite to be init-ed and immediately run.
+>
+> CONFIG_KUNIT=m - is where this gets tricky:
+>
+> 3) example1's tests are never run; we don't iterate the
+>    kunit_test_suites section when KUNIT=m (as kunit_run_all_tests() is
+>    empty)
+>
 
-With [2], these are now supported. (v5 will print out an error about the
-missing plan line, but this can safely be ignored, and will hopefully be
-changed). As a result, individual test parameter results are parsed,
-displayed in the formatted results, and counted for test statistics.
+Thus far, this hasn't been a much of a problem (at least for me), as
+the kunit test modules all depend on kunit.ko, so modprobing one of
+them will pull kunit.ko in as well. And I think Kconfig will
+discourage you from building kunit tests into a kernel if
+CONFIG_KUNIT=m.
 
-[1]: https://lore.kernel.org/linux-kselftest/CABVgOSnJAgWvTTABaF082LuYjAoAWzrBsyu9sT7x4GGMVsOD6Q@mail.gmail.com/
-[2]: https://lore.kernel.org/linux-kselftest/20211006001447.20919-1-dlatypov@google.com/
+> 4) loading example2.ko after kunit.ko will get example2's test run
+>    through example2's module_init -> __kunit_test_suites_init()
+>
+> 5) loading example2.ko before kunit.ko would result in an unresolved
+>    symbol, as __kunit_test_suites_init() doesn't exist yet.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+Again, this shouldn't happen if people use modprobe, but manual
+insmodding could trigger it.
+>
+> Is that all correct?
+>
+> With the proposed change to use a section for module's test suites:
+>
+> (1) would stay as-is
+>
+> (2) is similar, but the suites are loaded from the module's
+> kuint_test_suites section rather than an explicit call from
+> module_init().
+>
+> (3) would stay as-is (but we could export the __kuint_test_suites
+> section details, allowing kunit.ko to iterate the built-in suites - is
+> this desirable?).
 
-Note that this was previously posted as:
-https://lore.kernel.org/all/20211006071112.2206942-1-davidgow@google.com/
+I'd be okay with exporting __kunit_test_suites to support this. I do
+feel that this is the most niche case, though, so I'd equally be okay
+with not supporting it unless someone actually has a need for it.
+>
+> (4) is now the same as (2); once kunit.ko is present, it will be
+> notified on subsequent module loads, and will extract tests from the
+> module's own kuint_test_suites section
+>
+> (5) does not result in any dependencies between example2.ko and
+> kunit.ko. exmaple2.ko is able to be loaded before kunit.ko without
+> symbol dep issues, but (of course) its tests will not be run. We have an
+> option here to store the suites of loaded modules into a small built-in
+> list, for kunit.ko to consume when it starts, similar to the changes
+> possible in (3).
 
-No changes have been made, save for a trivial rebase on the current
-kselftest/kunit branch.
+One idea I've had in the past is to keep such a list around of "test
+suites to be run when KUnit is ready". This is partly because it's
+much nicer to have all the test suites run together as part of a
+single (K)TAP output, so this could be a way of implementing (at least
+part of) that.
 
- lib/kunit/test.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+In any case, this plan looks pretty good for me: I'm not sure if cases
+(3) and (5) show up often enough in the real world to be worth
+complicating things too much to get them working, but the other cases
+are important, and your plan handles those the way I'd expect.
 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 3bd741e50a2d..85265f9a66a1 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -508,6 +508,8 @@ int kunit_run_tests(struct kunit_suite *suite)
- 			/* Get initial param. */
- 			param_desc[0] = '\0';
- 			test.param_value = test_case->generate_params(NULL, param_desc);
-+			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-+				  "# Subtest: %s", test_case->name);
- 		}
- 
- 		do {
-@@ -520,9 +522,8 @@ int kunit_run_tests(struct kunit_suite *suite)
- 				}
- 
- 				kunit_log(KERN_INFO, &test,
--					  KUNIT_SUBTEST_INDENT
--					  "# %s: %s %d - %s",
--					  test_case->name,
-+					  KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-+					  "%s %d - %s",
- 					  kunit_status_to_ok_not_ok(test.status),
- 					  test.param_index + 1, param_desc);
- 
--- 
-2.33.0.1079.g6e70778dc9-goog
+Brendan: do you know of anyone who's actually building KUnit itself as
+a module? Given that there are some nasty side effects (bloating
+'current' with the test pointer, the KASLR address leak) which affects
+the whole build, I'm not sure it's actually ever useful to do so.
+Thoughts?
 
+-- David
