@@ -2,105 +2,369 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9D1436A36
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 20:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949A6436A8D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 20:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbhJUSMG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Oct 2021 14:12:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57842 "EHLO mail.kernel.org"
+        id S230103AbhJUScw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Oct 2021 14:32:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54836 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229968AbhJUSMG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 14:12:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6AB9161B00;
-        Thu, 21 Oct 2021 18:09:49 +0000 (UTC)
+        id S230020AbhJUScw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 Oct 2021 14:32:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DD83610CB;
+        Thu, 21 Oct 2021 18:30:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634839789;
-        bh=ZO2Nlxhc8pcrLTNv8YBuKfBn0744AE3LcV31TeMER6g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u4NOb7MVICr9P0PVYeIXu0bP5mDXRmUrBLqyNBFD3KoRyczjJAu94XUjAnvzQ0O4m
-         v2zzKMfVXc3ozjkQsvc9vBJmvFORz0hUxtdqf4LWTkbDCB87NKt+JPhj6GmEuCslfQ
-         YfurmYYXEOFJCEVYwwidEK5QkNl5vvaQn3+ZjTjAeC8gNlszSoIDMbAMjJnx23WmBh
-         dHe4PCzAXmYKmSxUmqigNMaZTqHG69QCPJVRWrLHsuPXkbnumrEDNEBoW9FwnU9fIM
-         DEAjR3XWRsyPK9d3z+G1fHstKJKe3jhzcKeTW1gaMe97KDbRRm5n4XGMwVai+SLkDD
-         QVPNm/NmWA43w==
+        s=k20201202; t=1634841035;
+        bh=eMilFjoF0vnCnDAfTIGL3zsLUDez3Us1jGsmqu73fCc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QKmbrLEkZa07gG4mlDTkXx5vLHlX9xwnSoO+76qqHmUREhFZR0BEedSM5oiR4vCnV
+         0t5tqqaCRfDqi+gsJcICD+ZHwI3/FmjUyL5V9jo1acfFvZ+NFgcLB6BvYk57WY5oNa
+         JNEiI8CFSyjn+G8gx5dk0bah1D/PI0YVfJzeHUvEW9IHrkiNzfW7zuoUBbp3d1bm1z
+         HdbRCx5AeHS6fwL5L3/bHFl711BvkMsuwYCr3a50HaQxJCRHpJTLKzs9QJcEjmUkbU
+         GnbYoLDtsgg3jE9zTNHGNhLvXSSOkdhGKEgmvKWnXmtk3Zl6HGcraCYzcwbYClP86H
+         bq9COIBz5+xEw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v4 33/33] kselftest/arm64: Add coverage for the ZA ptrace interface
-Date:   Thu, 21 Oct 2021 19:07:22 +0100
-Message-Id: <20211021180722.3699248-34-broonie@kernel.org>
+Subject: [PATCH] kselftest/arm64: Add a test program to exercise the syscall ABI
+Date:   Thu, 21 Oct 2021 19:30:32 +0100
+Message-Id: <20211021183032.3853413-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211021180722.3699248-1-broonie@kernel.org>
-References: <20211021180722.3699248-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10074; h=from:subject; bh=ZO2Nlxhc8pcrLTNv8YBuKfBn0744AE3LcV31TeMER6g=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhcaxYvX3bITXncNU9wi3pjkJIG7yLQbwBNxzqWOVy 0XPd4HGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYXGsWAAKCRAk1otyXVSH0NcGB/ 9prM5EgjiKSSDPrtDWOq0pDpM0Rx+VuGdPVjD90rg1eoqvEFjiSsLB5tsjoEGjHLWGWDMJUX5SpVu7 jf3lO5SP8dwTJykBAMUB4llZhjEkkDqqnI3lzxcNZ7ekAvlFHzojNBdVhfTVwFXnnHCd/+z6gUPB4Q z1dD6m0TnANHN9JuOGA5W6aGFo97pP+oG5CM9KBu85jj3abUE5B96VXVbIRrErSSmZq5/9e9dOUgm1 z1c2QY8SeSZQV7v0t1lmCaGV4gayWSIk1B2mUm88ZtxPS7tcWQlSkZmfEaPiXEE8jaeZYblEcokXlg 1RzQGLF1zjQki1Hzj47LBbZr0z5x5K
+X-Developer-Signature: v=1; a=openpgp-sha256; l=17450; h=from:subject; bh=eMilFjoF0vnCnDAfTIGL3zsLUDez3Us1jGsmqu73fCc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhcbC0Hp4VYlrrE75t0nmmeOZ7LP+mxoLCKiy3cqra 34EdVPSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYXGwtAAKCRAk1otyXVSH0OwhB/ 44eV24Qp7xKbJ3B7RRbgm9C9Zcc/MGOSZVPhBbovWUf4jOhMGIAOxe0wiFNChJOziM/BCZmRUaE6pV rkSYE/VhcP3QJql1VjDIJSqynvmF4Se3DALu21DM79i7O7tLcwNvK4NzrW/n+S+ZJ8Q2MbFFyO9ghG WoIFysrZZxg2viJ9TjPeq9157dYdbWUAIGr6kY45A/69Qr0EKijrpapRAC2mOsUHZP9tkhuvA/05XO GOMzSyE5BTmJl1p5wIRB1OLG5kl+BOCcNsf1+bg2/WPlYdUTfJyzfZoDqI4XssypCTVNPp1htxkzfi lzmiPZIQjd1ukaCgbHgqgiQbvZRHlK
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some basic coverage for the ZA ptrace interface, including walking
-through all the vector lengths supported in the system. As with SVE we do
-not currently validate the data all the way through to the running process.
+Currently we don't have any coverage of the syscall ABI so let's add a very
+dumb test program which sets up register patterns, does a sysscall and then
+checks that the register state after the syscall matches what we expect.
+The program is written in an extremely simplistic fashion with the goal of
+making it easy to verify that it's doing what it thinks it's doing, it is
+not a model of how one should write actual code.
+
+Currently we validate the general purpose, FPSIMD and SVE registers. There
+are other thing things that could be covered like FPCR and flags registers,
+these can be covered incrementally - my main focus at the minute is
+covering the ABI for the SVE registers.
+
+The program repeats the tests for all possible SVE vector lengths in case
+some vector length specific optimisation causes issues, as well as testing
+FPSIMD only. It tries two syscalls, getpid() and sched_yield(), in an
+effort to cover both immediate return to userspace and scheduling another
+task though there are no guarantees which cases will be hit.
+
+A new test directory "abi" is added to hold the test, it doesn't seem to
+fit well into any of the existing directories.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/.gitignore  |   1 +
- tools/testing/selftests/arm64/fp/Makefile    |   3 +-
- tools/testing/selftests/arm64/fp/za-ptrace.c | 353 +++++++++++++++++++
- 3 files changed, 356 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/fp/za-ptrace.c
+ tools/testing/selftests/arm64/Makefile        |   2 +-
+ tools/testing/selftests/arm64/abi/.gitignore  |   1 +
+ tools/testing/selftests/arm64/abi/Makefile    |   8 +
+ .../selftests/arm64/abi/syscall-abi-asm.S     | 240 +++++++++++++
+ .../testing/selftests/arm64/abi/syscall-abi.c | 328 ++++++++++++++++++
+ 5 files changed, 578 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/abi/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/abi/Makefile
+ create mode 100644 tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+ create mode 100644 tools/testing/selftests/arm64/abi/syscall-abi.c
 
-diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index 1178fecc7aa1..59afc01f2019 100644
---- a/tools/testing/selftests/arm64/fp/.gitignore
-+++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -7,4 +7,5 @@ sve-test
- ssve-test
- vec-syscfg
- vlset
-+za-ptrace
- za-test
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index d77e9903116b..d7fb200d0794 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+index ced910fb4019..1e8d9a8f59df 100644
+--- a/tools/testing/selftests/arm64/Makefile
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -4,7 +4,7 @@
+ ARCH ?= $(shell uname -m 2>/dev/null || echo not)
  
- CFLAGS += -I../../../../../usr/include/
--TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
-+TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg za-ptrace
- TEST_PROGS_EXTENDED := fpsimd-test fpsimd-stress \
- 	rdvl-sme rdvl-sve \
- 	sve-test sve-stress \
-@@ -25,5 +25,6 @@ vec-syscfg: vec-syscfg.o rdvl.o
- vlset: vlset.o
- za-test: za-test.o asm-utils.o
- 	$(CC) -nostdlib $^ -o $@
-+za-ptrace: za-ptrace.o
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/arm64/fp/za-ptrace.c b/tools/testing/selftests/arm64/fp/za-ptrace.c
+ ifneq (,$(filter $(ARCH),aarch64 arm64))
+-ARM64_SUBTARGETS ?= tags signal pauth fp mte bti
++ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi
+ else
+ ARM64_SUBTARGETS :=
+ endif
+diff --git a/tools/testing/selftests/arm64/abi/.gitignore b/tools/testing/selftests/arm64/abi/.gitignore
 new file mode 100644
-index 000000000000..6c172a5629dc
+index 000000000000..b79cf5814c23
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/za-ptrace.c
-@@ -0,0 +1,353 @@
++++ b/tools/testing/selftests/arm64/abi/.gitignore
+@@ -0,0 +1 @@
++syscall-abi
+diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
+new file mode 100644
+index 000000000000..96eba974ac8d
+--- /dev/null
++++ b/tools/testing/selftests/arm64/abi/Makefile
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2021 ARM Limited
++
++TEST_GEN_PROGS := syscall-abi
++
++include ../../lib.mk
++
++$(OUTPUT)/syscall-abi: syscall-abi.c syscall-abi-asm.S
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+new file mode 100644
+index 000000000000..40b6aaf258fb
+--- /dev/null
++++ b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+@@ -0,0 +1,240 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2021 ARM Limited.
++//
++// Assembly portion of the syscall ABI test
++
++//
++// Load values from memory into registers, invoke a syscall and save the
++// register values back to memory for later checking.  The syscall to be
++// invoked is configured in x8 of the input GPR data.
++//
++// x0:	SVE VL, 0 for FP only
++//
++//	GPRs:	gpr_in, gpr_out
++//	FPRs:	fpr_in, fpr_out
++//	Zn:	z_in, z_out
++//	Pn:	p_in, p_out
++//	FFR:	ffr_in, ffr_out
++
++.arch_extension sve
++
++.globl do_syscall
++do_syscall:
++	// Store callee saved registers x19-x29 (80 bytes) plus x0 and x1
++	stp	x29, x30, [sp, #-112]!
++	mov	x29, sp
++	stp	x0, x1, [sp, #16]
++	stp	x19, x20, [sp, #32]
++	stp	x21, x22, [sp, #48]
++	stp	x23, x24, [sp, #64]
++	stp	x25, x26, [sp, #80]
++	stp	x27, x28, [sp, #96]
++
++	// Load GPRs x8-x28, and save our SP/FP for later comparison
++	ldr	x2, =gpr_in
++	add	x2, x2, #64
++	ldp	x8, x9, [x2], #16
++	ldp	x10, x11, [x2], #16
++	ldp	x12, x13, [x2], #16
++	ldp	x14, x15, [x2], #16
++	ldp	x16, x17, [x2], #16
++	ldp	x18, x19, [x2], #16
++	ldp	x20, x21, [x2], #16
++	ldp	x22, x23, [x2], #16
++	ldp	x24, x25, [x2], #16
++	ldp	x26, x27, [x2], #16
++	ldr	x28, [x2], #8
++	str	x29, [x2], #8		// FP
++	str	x30, [x2], #8		// LR
++
++	// Load FPRs if we're not doing SVE and FPSR/FPCR always
++	cbnz	x0, 1f
++	ldr	x2, =fpr_in
++	ldp	q0, q1, [x2]
++	ldp	q2, q3, [x2, #16 * 2]
++	ldp	q4, q5, [x2, #16 * 4]
++	ldp	q6, q7, [x2, #16 * 6]
++	ldp	q8, q9, [x2, #16 * 8]
++	ldp	q10, q11, [x2, #16 * 10]
++	ldp	q12, q13, [x2, #16 * 12]
++	ldp	q14, q15, [x2, #16 * 14]
++	ldp	q16, q17, [x2, #16 * 16]
++	ldp	q18, q19, [x2, #16 * 18]
++	ldp	q20, q21, [x2, #16 * 20]
++	ldp	q22, q23, [x2, #16 * 22]
++	ldp	q24, q25, [x2, #16 * 24]
++	ldp	q26, q27, [x2, #16 * 26]
++	ldp	q28, q29, [x2, #16 * 28]
++	ldp	q30, q31, [x2, #16 * 30]
++1:
++
++	// Load the SVE registers if we're doing SVE
++	cbz	x0, 1f
++
++	ldr	x2, =z_in
++	ldr	z0, [x2, #0, MUL VL]
++	ldr	z1, [x2, #1, MUL VL]
++	ldr	z2, [x2, #2, MUL VL]
++	ldr	z3, [x2, #3, MUL VL]
++	ldr	z4, [x2, #4, MUL VL]
++	ldr	z5, [x2, #5, MUL VL]
++	ldr	z6, [x2, #6, MUL VL]
++	ldr	z7, [x2, #7, MUL VL]
++	ldr	z8, [x2, #8, MUL VL]
++	ldr	z9, [x2, #9, MUL VL]
++	ldr	z10, [x2, #10, MUL VL]
++	ldr	z11, [x2, #11, MUL VL]
++	ldr	z12, [x2, #12, MUL VL]
++	ldr	z13, [x2, #13, MUL VL]
++	ldr	z14, [x2, #14, MUL VL]
++	ldr	z15, [x2, #15, MUL VL]
++	ldr	z16, [x2, #16, MUL VL]
++	ldr	z17, [x2, #17, MUL VL]
++	ldr	z18, [x2, #18, MUL VL]
++	ldr	z19, [x2, #19, MUL VL]
++	ldr	z20, [x2, #20, MUL VL]
++	ldr	z21, [x2, #21, MUL VL]
++	ldr	z22, [x2, #22, MUL VL]
++	ldr	z23, [x2, #23, MUL VL]
++	ldr	z24, [x2, #24, MUL VL]
++	ldr	z25, [x2, #25, MUL VL]
++	ldr	z26, [x2, #26, MUL VL]
++	ldr	z27, [x2, #27, MUL VL]
++	ldr	z28, [x2, #28, MUL VL]
++	ldr	z29, [x2, #29, MUL VL]
++	ldr	z30, [x2, #30, MUL VL]
++	ldr	z31, [x2, #31, MUL VL]
++
++	ldr	x2, =ffr_in
++	ldr	p0, [x2, #0]
++	wrffr	p0.b
++
++	ldr	x2, =p_in
++	ldr	p0, [x2, #0, MUL VL]
++	ldr	p1, [x2, #1, MUL VL]
++	ldr	p2, [x2, #2, MUL VL]
++	ldr	p3, [x2, #3, MUL VL]
++	ldr	p4, [x2, #4, MUL VL]
++	ldr	p5, [x2, #5, MUL VL]
++	ldr	p6, [x2, #6, MUL VL]
++	ldr	p7, [x2, #7, MUL VL]
++	ldr	p8, [x2, #8, MUL VL]
++	ldr	p9, [x2, #9, MUL VL]
++	ldr	p10, [x2, #10, MUL VL]
++	ldr	p11, [x2, #11, MUL VL]
++	ldr	p12, [x2, #12, MUL VL]
++	ldr	p13, [x2, #13, MUL VL]
++	ldr	p14, [x2, #14, MUL VL]
++	ldr	p15, [x2, #15, MUL VL]
++1:
++
++	// Do the syscall
++	svc	#0
++
++	// Save GPRs x8-x30
++	ldr	x2, =gpr_out
++	add	x2, x2, #64
++	stp	x8, x9, [x2], #16
++	stp	x10, x11, [x2], #16
++	stp	x12, x13, [x2], #16
++	stp	x14, x15, [x2], #16
++	stp	x16, x17, [x2], #16
++	stp	x18, x19, [x2], #16
++	stp	x20, x21, [x2], #16
++	stp	x22, x23, [x2], #16
++	stp	x24, x25, [x2], #16
++	stp	x26, x27, [x2], #16
++	stp	x28, x29, [x2], #16
++	str	x30, [x2]
++
++	// Restore x0 and x1 for feature checks
++	ldp	x0, x1, [sp, #16]
++
++	// Save FPSIMD state
++	ldr	x2, =fpr_out
++	stp	q0, q1, [x2]
++	stp	q2, q3, [x2, #16 * 2]
++	stp	q4, q5, [x2, #16 * 4]
++	stp	q6, q7, [x2, #16 * 6]
++	stp	q8, q9, [x2, #16 * 8]
++	stp	q10, q11, [x2, #16 * 10]
++	stp	q12, q13, [x2, #16 * 12]
++	stp	q14, q15, [x2, #16 * 14]
++	stp	q16, q17, [x2, #16 * 16]
++	stp	q18, q19, [x2, #16 * 18]
++	stp	q20, q21, [x2, #16 * 20]
++	stp	q22, q23, [x2, #16 * 22]
++	stp	q24, q25, [x2, #16 * 24]
++	stp	q26, q27, [x2, #16 * 26]
++	stp	q28, q29, [x2, #16 * 28]
++	stp	q30, q31, [x2, #16 * 30]
++
++	// Save the SVE state if we have some
++	cbz	x0, 1f
++
++	ldr	x2, =z_out
++	str	z0, [x2, #0, MUL VL]
++	str	z1, [x2, #1, MUL VL]
++	str	z2, [x2, #2, MUL VL]
++	str	z3, [x2, #3, MUL VL]
++	str	z4, [x2, #4, MUL VL]
++	str	z5, [x2, #5, MUL VL]
++	str	z6, [x2, #6, MUL VL]
++	str	z7, [x2, #7, MUL VL]
++	str	z8, [x2, #8, MUL VL]
++	str	z9, [x2, #9, MUL VL]
++	str	z10, [x2, #10, MUL VL]
++	str	z11, [x2, #11, MUL VL]
++	str	z12, [x2, #12, MUL VL]
++	str	z13, [x2, #13, MUL VL]
++	str	z14, [x2, #14, MUL VL]
++	str	z15, [x2, #15, MUL VL]
++	str	z16, [x2, #16, MUL VL]
++	str	z17, [x2, #17, MUL VL]
++	str	z18, [x2, #18, MUL VL]
++	str	z19, [x2, #19, MUL VL]
++	str	z20, [x2, #20, MUL VL]
++	str	z21, [x2, #21, MUL VL]
++	str	z22, [x2, #22, MUL VL]
++	str	z23, [x2, #23, MUL VL]
++	str	z24, [x2, #24, MUL VL]
++	str	z25, [x2, #25, MUL VL]
++	str	z26, [x2, #26, MUL VL]
++	str	z27, [x2, #27, MUL VL]
++	str	z28, [x2, #28, MUL VL]
++	str	z29, [x2, #29, MUL VL]
++	str	z30, [x2, #30, MUL VL]
++	str	z31, [x2, #31, MUL VL]
++
++	ldr	x2, =p_out
++	str	p0, [x2, #0, MUL VL]
++	str	p1, [x2, #1, MUL VL]
++	str	p2, [x2, #2, MUL VL]
++	str	p3, [x2, #3, MUL VL]
++	str	p4, [x2, #4, MUL VL]
++	str	p5, [x2, #5, MUL VL]
++	str	p6, [x2, #6, MUL VL]
++	str	p7, [x2, #7, MUL VL]
++	str	p8, [x2, #8, MUL VL]
++	str	p9, [x2, #9, MUL VL]
++	str	p10, [x2, #10, MUL VL]
++	str	p11, [x2, #11, MUL VL]
++	str	p12, [x2, #12, MUL VL]
++	str	p13, [x2, #13, MUL VL]
++	str	p14, [x2, #14, MUL VL]
++	str	p15, [x2, #15, MUL VL]
++
++	ldr	x2, =ffr_out
++	rdffr	p0.b
++	str	p0, [x2, #0]
++1:
++
++	// Restore callee saved registers x19-x30
++	ldp	x19, x20, [sp, #32]
++	ldp	x21, x22, [sp, #48]
++	ldp	x23, x24, [sp, #64]
++	ldp	x25, x26, [sp, #80]
++	ldp	x27, x28, [sp, #96]
++	ldp	x29, x30, [sp], #112
++
++	ret
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
+new file mode 100644
+index 000000000000..0c284b1812aa
+--- /dev/null
++++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
+@@ -0,0 +1,328 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2021 ARM Limited.
 + */
++
 +#include <errno.h>
 +#include <stdbool.h>
 +#include <stddef.h>
@@ -110,345 +374,319 @@ index 000000000000..6c172a5629dc
 +#include <unistd.h>
 +#include <sys/auxv.h>
 +#include <sys/prctl.h>
-+#include <sys/ptrace.h>
-+#include <sys/types.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
 +#include <asm/sigcontext.h>
-+#include <asm/ptrace.h>
++#include <asm/unistd.h>
 +
 +#include "../../kselftest.h"
 +
 +#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
++#define NUM_VL ((SVE_VQ_MAX - SVE_VQ_MIN) + 1)
 +
-+/* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
-+#ifndef NT_ARM_ZA
-+#define NT_ARM_ZA 0x40c
-+#endif
++extern void do_syscall(int sve_vl);
 +
-+#define EXPECTED_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
-+
-+static void fill_buf(char *buf, size_t size)
++static void fill_random(void *buf, size_t size)
 +{
 +	int i;
++	uint32_t *lbuf = buf;
 +
-+	for (i = 0; i < size; i++)
-+		buf[i] = random();
++	/* random() returns a 32 bit number regardless of the size of long */
++	for (i = 0; i < size / sizeof(uint32_t); i++)
++		lbuf[i] = random();
 +}
 +
-+static int do_child(void)
++/*
++ * We also repeat the test for several syscalls to try to expose different
++ * behaviour.
++ */
++static struct syscall_cfg {
++	int syscall_nr;
++	const char *name;
++} syscalls[] = {
++	{ __NR_getpid,		"getpid()" },
++	{ __NR_sched_yield,	"sched_yield()" },
++};
++
++#define NUM_GPR 31
++uint64_t gpr_in[NUM_GPR];
++uint64_t gpr_out[NUM_GPR];
++
++static void setup_gpr(struct syscall_cfg *cfg, int sve_vl)
 +{
-+	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL))
-+		ksft_exit_fail_msg("PTRACE_TRACEME", strerror(errno));
-+
-+	if (raise(SIGSTOP))
-+		ksft_exit_fail_msg("raise(SIGSTOP)", strerror(errno));
-+
-+	return EXIT_SUCCESS;
++	fill_random(gpr_in, sizeof(gpr_in));
++	gpr_in[8] = cfg->syscall_nr;
 +}
 +
-+static struct user_za_header *get_za(pid_t pid, void **buf, size_t *size)
++static int check_gpr(struct syscall_cfg *cfg, int sve_vl)
 +{
-+	struct user_za_header *za;
-+	void *p;
-+	size_t sz = sizeof(*za);
-+	struct iovec iov;
-+
-+	while (1) {
-+		if (*size < sz) {
-+			p = realloc(*buf, sz);
-+			if (!p) {
-+				errno = ENOMEM;
-+				goto error;
-+			}
-+
-+			*buf = p;
-+			*size = sz;
-+		}
-+
-+		iov.iov_base = *buf;
-+		iov.iov_len = sz;
-+		if (ptrace(PTRACE_GETREGSET, pid, NT_ARM_ZA, &iov))
-+			goto error;
-+
-+		za = *buf;
-+		if (za->size <= sz)
-+			break;
-+
-+		sz = za->size;
-+	}
-+
-+	return za;
-+
-+error:
-+	return NULL;
-+}
-+
-+static int set_za(pid_t pid, const struct user_za_header *za)
-+{
-+	struct iovec iov;
-+
-+	iov.iov_base = (void *)za;
-+	iov.iov_len = za->size;
-+	return ptrace(PTRACE_SETREGSET, pid, NT_ARM_ZA, &iov);
-+}
-+
-+/* Validate attempting to set the specfied VL via ptrace */
-+static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
-+{
-+	struct user_za_header za;
-+	struct user_za_header *new_za = NULL;
-+	size_t new_za_size = 0;
-+	int ret, prctl_vl;
-+
-+	*supported = false;
-+
-+	/* Check if the VL is supported in this process */
-+	prctl_vl = prctl(PR_SME_SET_VL, vl);
-+	if (prctl_vl == -1)
-+		ksft_exit_fail_msg("prctl(PR_SME_SET_VL) failed: %s (%d)\n",
-+				   strerror(errno), errno);
-+
-+	/* If the VL is not supported then a supported VL will be returned */
-+	*supported = (prctl_vl == vl);
-+
-+	/* Set the VL by doing a set with no register payload */
-+	memset(&za, 0, sizeof(za));
-+	za.size = sizeof(za);
-+	za.vl = vl;
-+	ret = set_za(child, &za);
-+	if (ret != 0) {
-+		ksft_test_result_fail("Failed to set VL %u\n", vl);
-+		return;
-+	}
++	int errors = 0;
++	int i;
 +
 +	/*
-+	 * Read back the new register state and verify that we have the
-+	 * same VL that we got from prctl() on ourselves.
++	 * GPR x0-x7 may be clobbered, and all others should be preserved.
 +	 */
-+	if (!get_za(child, (void **)&new_za, &new_za_size)) {
-+		ksft_test_result_fail("Failed to read VL %u\n", vl);
-+		return;
++	for (i = 9; i < ARRAY_SIZE(gpr_in); i++) {
++		if (gpr_in[i] != gpr_out[i]) {
++			ksft_print_msg("%s SVE VL %d mismatch in GPR %d: %llx != %llx\n",
++				       cfg->name, sve_vl, i,
++				       gpr_in[i], gpr_out[i]);
++			errors++;
++		}
 +	}
 +
-+	ksft_test_result(new_za->vl = prctl_vl, "Set VL %u\n", vl);
-+
-+	free(new_za);
++	return errors;
 +}
 +
-+/* Validate attempting to set no ZA data and read it back */
-+static void ptrace_set_no_data(pid_t child, unsigned int vl)
++#define NUM_FPR 32
++uint64_t fpr_in[NUM_FPR * 2];
++uint64_t fpr_out[NUM_FPR * 2];
++
++static void setup_fpr(struct syscall_cfg *cfg, int sve_vl)
 +{
-+	void *read_buf = NULL;
-+	struct user_za_header write_za;
-+	struct user_za_header *read_za;
-+	size_t read_za_size = 0;
-+	int ret;
-+
-+	/* Set up some data and write it out */
-+	memset(&write_za, 0, sizeof(write_za));
-+	write_za.size = ZA_PT_ZA_OFFSET;
-+	write_za.vl = vl;
-+
-+	ret = set_za(child, &write_za);
-+	if (ret != 0) {
-+		ksft_test_result_fail("Failed to set VL %u no data\n", vl);
-+		return;
-+	}
-+
-+	/* Read the data back */
-+	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
-+		ksft_test_result_fail("Failed to read VL %u no data\n", vl);
-+		return;
-+	}
-+	read_za = read_buf;
-+
-+	/* We might read more data if there's extensions we don't know */
-+	if (read_za->size < write_za.size) {
-+		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
-+				      vl, write_za.size, read_za->size);
-+		goto out_read;
-+	}
-+
-+	ksft_test_result(read_za->size == write_za.size,
-+			 "Disabled ZA for VL %u\n", vl);
-+
-+out_read:
-+	free(read_buf);
++	fill_random(fpr_in, sizeof(fpr_in));
 +}
 +
-+/* Validate attempting to set data and read it back */
-+static void ptrace_set_get_data(pid_t child, unsigned int vl)
++static int check_fpr(struct syscall_cfg *cfg, int sve_vl)
 +{
-+	void *write_buf;
-+	void *read_buf = NULL;
-+	struct user_za_header *write_za;
-+	struct user_za_header *read_za;
-+	size_t read_za_size = 0;
-+	unsigned int vq = sve_vq_from_vl(vl);
-+	int ret;
-+	size_t data_size;
++	int errors = 0;
++	int i;
 +
-+	data_size = ZA_PT_SIZE(vq);
-+	write_buf = malloc(data_size);
-+	if (!write_buf) {
-+		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
-+				      data_size, vl);
-+		return;
-+	}
-+	write_za = write_buf;
-+
-+	/* Set up some data and write it out */
-+	memset(write_za, 0, data_size);
-+	write_za->size = data_size;
-+	write_za->vl = vl;
-+
-+	fill_buf(write_buf + ZA_PT_ZA_OFFSET, ZA_PT_ZA_SIZE(vq));
-+
-+	ret = set_za(child, write_za);
-+	if (ret != 0) {
-+		ksft_test_result_fail("Failed to set VL %u data\n", vl);
-+		goto out;
++	if (!sve_vl) {
++		for (i = 0; i < ARRAY_SIZE(fpr_in); i++) {
++			if (fpr_in[i] != fpr_out[i]) {
++				ksft_print_msg("%s Q%d/%d mismatch %llx != %llx\n",
++					       cfg->name,
++					       i / 2, i % 2,
++					       fpr_in[i], fpr_out[i]);
++				errors++;
++			}
++		}
 +	}
 +
-+	/* Read the data back */
-+	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
-+		ksft_test_result_fail("Failed to read VL %u data\n", vl);
-+		goto out;
-+	}
-+	read_za = read_buf;
-+
-+	/* We might read more data if there's extensions we don't know */
-+	if (read_za->size < write_za->size) {
-+		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
-+				      vl, write_za->size, read_za->size);
-+		goto out_read;
-+	}
-+
-+	ksft_test_result(memcmp(write_buf + ZA_PT_ZA_OFFSET,
-+				read_buf + ZA_PT_ZA_OFFSET,
-+				ZA_PT_ZA_SIZE(vq)) == 0,
-+			 "Data match for VL %u\n", vl);
-+
-+out_read:
-+	free(read_buf);
-+out:
-+	free(write_buf);
++	return errors;
 +}
 +
-+static int do_parent(pid_t child)
++static uint8_t z_zero[__SVE_ZREG_SIZE(SVE_VQ_MAX)];
++uint8_t z_in[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
++uint8_t z_out[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
++
++static void setup_z(struct syscall_cfg *cfg, int sve_vl)
 +{
-+	int ret = EXIT_FAILURE;
-+	pid_t pid;
-+	int status;
-+	siginfo_t si;
-+	unsigned int vq, vl;
-+	bool vl_supported;
++	fill_random(z_in, sizeof(z_in));
++}
 +
-+	/* Attach to the child */
-+	while (1) {
-+		int sig;
++static int check_z(struct syscall_cfg *cfg, int sve_vl)
++{
++	size_t reg_size = sve_vl;
++	int errors = 0;
++	int i;
 +
-+		pid = wait(&status);
-+		if (pid == -1) {
-+			perror("wait");
-+			goto error;
++	if (!sve_vl)
++		return 0;
++
++	/*
++	 * After a syscall the low 128 bits of the Z registers should
++	 * be preserved and the rest be zeroed.
++	 */
++	for (i = 0; i < SVE_NUM_ZREGS; i++) {
++		void *in = &z_in[reg_size * i];
++		void *out = &z_out[reg_size * i];
++
++		if (memcmp(in, out, SVE_VQ_BYTES) != 0) {
++			ksft_print_msg("%s SVE VL %d Z%d low 128 bits changed\n",
++				       cfg->name, sve_vl, i);
++			errors++;
 +		}
 +
-+		/*
-+		 * This should never happen but it's hard to flag in
-+		 * the framework.
-+		 */
-+		if (pid != child)
-+			continue;
++		memset(out, 0, SVE_VQ_BYTES);
++		if (memcmp(out, z_zero, reg_size) != 0) {
++			ksft_print_msg("%s SVE VL %d Z%d high bits set\n",
++				       cfg->name, sve_vl, i);
++			errors++;
++		}
++	}
 +
-+		if (WIFEXITED(status) || WIFSIGNALED(status))
-+			ksft_exit_fail_msg("Child died unexpectedly\n");
++	return errors;
++}
 +
-+		if (!WIFSTOPPED(status))
-+			goto error;
++uint8_t p_in[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
++uint8_t p_out[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
 +
-+		sig = WSTOPSIG(status);
++static void setup_p(struct syscall_cfg *cfg, int sve_vl)
++{
++	fill_random(p_in, sizeof(p_in));
++	fill_random(p_out, sizeof(p_out));
++}
 +
-+		if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &si)) {
-+			if (errno == ESRCH)
-+				goto disappeared;
++static int check_p(struct syscall_cfg *cfg, int sve_vl)
++{
++	size_t reg_size = sve_vq_from_vl(sve_vl) * 2;  /* 1 bit per VL byte */
++	int errors = 0;
++	int i;
 +
-+			if (errno == EINVAL) {
-+				sig = 0; /* bust group-stop */
-+				goto cont;
++	if (!sve_vl)
++		return 0;
++
++	/* After a syscall the P registers should be zeroed */
++	for (i = 0; i < SVE_NUM_PREGS * reg_size; i++)
++		if (p_out[i])
++			errors++;
++	if (errors)
++		ksft_print_msg("%s SVE VL %d predicate registers non-zero\n",
++			       cfg->name, sve_vl);
++
++	return errors;
++}
++
++uint8_t ffr_in[__SVE_PREG_SIZE(SVE_VQ_MAX)];
++uint8_t ffr_out[__SVE_PREG_SIZE(SVE_VQ_MAX)];
++
++static void setup_ffr(struct syscall_cfg *cfg, int sve_vl)
++{
++	/*
++	 * It is only valid to set a contiguous set of bits starting
++	 * at 0.  For now since we're expecting this to be cleared by
++	 * a syscall just set all bits.
++	 */
++	memset(ffr_in, 0xff, sizeof(ffr_in));
++	fill_random(ffr_out, sizeof(ffr_out));
++}
++
++static int check_ffr(struct syscall_cfg *cfg, int sve_vl)
++{
++	size_t reg_size = sve_vq_from_vl(sve_vl) * 2;  /* 1 bit per VL byte */
++	int errors = 0;
++	int i;
++
++	if (!sve_vl)
++		return 0;
++
++	/* After a syscall the P registers should be zeroed */
++	for (i = 0; i < reg_size; i++)
++		if (ffr_out[i])
++			errors++;
++	if (errors)
++		ksft_print_msg("%s SVE VL %d FFR non-zero\n",
++			       cfg->name, sve_vl);
++
++	return errors;
++}
++
++typedef void (*setup_fn)(struct syscall_cfg *cfg, int sve_vl);
++typedef int (*check_fn)(struct syscall_cfg *cfg, int sve_vl);
++
++/*
++ * Each set of registers has a setup function which is called before
++ * the syscall to fill values in a global variable for loading by the
++ * test code and a check function which validates that the results are
++ * as expected.  Vector lengths are passed everywhere, a vector length
++ * of 0 should be treated as do not test.
++ */
++static struct {
++	setup_fn setup;
++	check_fn check;
++} regset[] = {
++	{ setup_gpr, check_gpr },
++	{ setup_fpr, check_fpr },
++	{ setup_z, check_z },
++	{ setup_p, check_p },
++	{ setup_ffr, check_ffr },
++};
++
++static bool do_test(struct syscall_cfg *cfg, int sve_vl)
++{
++	int errors = 0;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(regset); i++)
++		regset[i].setup(cfg, sve_vl);
++
++	do_syscall(sve_vl);
++
++	for (i = 0; i < ARRAY_SIZE(regset); i++)
++		errors += regset[i].check(cfg, sve_vl);
++
++	return errors == 0;
++}
++
++static void test_one_syscall(struct syscall_cfg *cfg)
++{
++	int vq, ret;
++
++	/* FPSIMD only case */
++	ksft_test_result(do_test(cfg, 0),
++			 "%s SVE VL %d\n", cfg->name, 0);
++
++	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
++		return;
++
++	for (vq = 1; vq < NUM_VL + 1; vq++) {
++		bool skip = false;
++		int vl = 0;
++
++		if (vq) {
++			vl = sve_vl_from_vq(vq);
++
++			ret = prctl(PR_SVE_SET_VL, vl);
++			if (ret < 0) {
++				ksft_test_result_error("Failed to set VL %d\n",
++						       vl);
++				continue;
 +			}
 +
-+			ksft_test_result_fail("PTRACE_GETSIGINFO: %s\n",
-+					      strerror(errno));
-+			goto error;
++			if ((ret & PR_SVE_VL_LEN_MASK) != vl)
++				skip = true;
 +		}
 +
-+		if (sig == SIGSTOP && si.si_code == SI_TKILL &&
-+		    si.si_pid == pid)
-+			break;
++		if (!skip)
++			ksft_test_result(do_test(cfg, vl),
++					 "%s SVE VL %d\n", cfg->name, vl);
++	}
++}
 +
-+	cont:
-+		if (ptrace(PTRACE_CONT, pid, NULL, sig)) {
-+			if (errno == ESRCH)
-+				goto disappeared;
++int sve_count_vls(void)
++{
++	unsigned int vq;
++	int vl_count = 0;
++	int vl;
 +
-+			ksft_test_result_fail("PTRACE_CONT: %s\n",
-+					      strerror(errno));
-+			goto error;
-+		}
++	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
++		return 0;
++
++	/*
++	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 */
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SVE_SET_VL, vq * 16);
++		if (vl == -1)
++			ksft_exit_fail_msg("PR_SVE_SET_VL failed: %s (%d)\n",
++					   strerror(errno), errno);
++
++		vl &= PR_SVE_VL_LEN_MASK;
++
++		if (vq != sve_vq_from_vl(vl))
++			vq = sve_vq_from_vl(vl);
++
++		vl_count++;
 +	}
 +
-+	/* Step through every possible VQ */
-+	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
-+		vl = sve_vl_from_vq(vq);
-+
-+		/* First, try to set this vector length */
-+		ptrace_set_get_vl(child, vl, &vl_supported);
-+
-+		/* If the VL is supported validate data set/get */
-+		if (vl_supported) {
-+			ptrace_set_no_data(child, vl);
-+			ptrace_set_get_data(child, vl);
-+		} else {
-+			ksft_test_result_skip("Disabled ZA for VL %u\n", vl);
-+			ksft_test_result_skip("Get and set data for VL %u\n",
-+					      vl);
-+		}
-+	}
-+
-+	ret = EXIT_SUCCESS;
-+
-+error:
-+	kill(child, SIGKILL);
-+
-+disappeared:
-+	return ret;
++	return vl_count;
 +}
 +
 +int main(void)
 +{
-+	int ret = EXIT_SUCCESS;
-+	pid_t child;
++	int i;
 +
 +	srandom(getpid());
 +
 +	ksft_print_header();
-+	ksft_set_plan(EXPECTED_TESTS);
++	ksft_set_plan(ARRAY_SIZE(syscalls) * (sve_count_vls() + 1));
 +
-+	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
-+		ksft_exit_skip("SME not available\n");
-+
-+	child = fork();
-+	if (!child)
-+		return do_child();
-+
-+	if (do_parent(child))
-+		ret = EXIT_FAILURE;
++	for (i = 0; i < ARRAY_SIZE(syscalls); i++)
++		test_one_syscall(&syscalls[i]);
 +
 +	ksft_print_cnts();
 +
-+	return ret;
++	return 0;
 +}
 -- 
 2.30.2
