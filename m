@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD52436A2C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 20:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1305436A2D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 20:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbhJUSL2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Oct 2021 14:11:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56738 "EHLO mail.kernel.org"
+        id S232422AbhJUSLb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Oct 2021 14:11:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56838 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232381AbhJUSL2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 14:11:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 877F461AFC;
-        Thu, 21 Oct 2021 18:09:11 +0000 (UTC)
+        id S232381AbhJUSLb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 Oct 2021 14:11:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6F09F61B02;
+        Thu, 21 Oct 2021 18:09:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634839752;
-        bh=3HBBdjxYt3UpQgqgq0efMDkZStc8OofbR/SIbqk3WCg=;
+        s=k20201202; t=1634839755;
+        bh=9qDWgiu5vJ3aJ/SkyuYiO231kDNUJDdP3sBILOMUncg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FKt16FQsUY6LTDncsfqwcNlcdzTRFk0sQwK9KHmTmOAQIqJljj0ucwBK1Lm8fBEPA
-         N43XZH32mN1PL2V5jQ2hHavjAXWrfTl/P7F/daqo0G8yE+2esWJo4dlGK80h5waN/b
-         Xad2xk19DSCvxq6UP69QRYAD5RXj/yl9syK992lG2eOxorAS6GyoUu1HxAzZ0/E4Rj
-         w8Ta1NZGr5zAjXgnu1LNdlq43vcEVj9vSemWAaVnxGq8s7c8WbwP/fg1GXydzoWTiO
-         I2m6DTry2fK3lKCSpgaoJGTvwUsHtX40HRvnWnJ3bxA4LwiZa/aBvl3nuaPY2qiIKa
-         VODJP6qXMeDJA==
+        b=eL8/+el/unUzhurn9PyCJI4hRuiOgcLy5EsvUgpcLu1bZb9tgP2Mr0KYY+dcmLu3a
+         6lYP4TkLvJlYpxfox6NRvq0JJfY4DSZBZSNo35eYwljv/Evn1eTPHep0HoFTE19vzw
+         tAa+vFplKjuMKrDVO2clrzd4eHx8g9f9bH7EhUnqUTx3BcGf9s7yLUnFYo1WQI34mH
+         npRSQ3bTeS/q7V7d3DbbM7PDsZerjkMCFXrps6glDz+DWwpCIyizlfNxurKx5xdgrf
+         dCI2gGxHH7Y/NfLL/Ah49WYK9jHQViEuQhRm2GRJITRbd/ahNEL3ja1UfJb9ByCwhd
+         5Y+TwVmV5re+g==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -35,77 +35,133 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v4 23/33] arm64/sme: Disable streaming mode and ZA when flushing CPU state
-Date:   Thu, 21 Oct 2021 19:07:12 +0100
-Message-Id: <20211021180722.3699248-24-broonie@kernel.org>
+Subject: [PATCH v4 24/33] arm64/sme: Save and restore streaming mode over EFI runtime calls
+Date:   Thu, 21 Oct 2021 19:07:13 +0100
+Message-Id: <20211021180722.3699248-25-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211021180722.3699248-1-broonie@kernel.org>
 References: <20211021180722.3699248-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1981; h=from:subject; bh=3HBBdjxYt3UpQgqgq0efMDkZStc8OofbR/SIbqk3WCg=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhcaxQIhNlUvYK9Ff3HRgB4U32ndcoPpo2DZ62wdRY KWxZ0gSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYXGsUAAKCRAk1otyXVSH0BqhB/ sEiS1x6Mv1GuBXjhNptL0Mcpxo0UUeXooE9W1+Yjy3K4u9bj+NnF2bxVD6lUgSsRzUl8OD57zcQfxT Kpil1FuOqD+g5ozDVrbPtw7YDKQ7Wzg/QHI0WlQIo1wbVv+co5sBYjVEr/7XbvA23m9PqtjXLGMKFj 4cWoEcX1FuLa8y1dWZO1WTZ6DtsWi0dxvdTQ/buGIwmYxVza3O9Fze8Wm9ebBoXRZ4VJQKPrEDTdWR KTvcRrRK+mOGFHiKrwIsxkcRRW5SKJ17cMenPNMfLcjwgF/Bn0AnbY1mhC/rLgbXvSlUKh1rNKWzLx NmFO76dFzn8M+NJABKpQ9Tgn9KzFPn
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3623; h=from:subject; bh=9qDWgiu5vJ3aJ/SkyuYiO231kDNUJDdP3sBILOMUncg=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhcaxR6X08PDr9+9Kwl7X6H191zd1p/UaU+SrmnSQ5 hWnHV6mJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYXGsUQAKCRAk1otyXVSH0GydB/ 9ZZYMV6/74FyhHoOz9UQUKS2TEFCaoOWAVHDS45mUwMs//ctc7/l2cvgON2aczhTRfijlezEN+zUy7 JDwtYFm8klfjc0WbZLpVHI3Swh7tRJuLhDQtdqCqTp271MET2FSxI6FFJg58bRKCzChO2QaAlk76wi yjxpwtvLonoghlP2dq4ARiqhi+33CzzIXpkux4B5uIeyz6+/Ym92l8K01adknQfxPLtUdNXYg/hn8N 92/ge7/OXCvfBj3ubHX6fcNMD0J+EGaTTXk26UKaKvttz+zwxhTfCV6ad4zqeSBM8/k0yl69M20zVN I/zkY2wa6FeCh+UcTovYRNAeRVhNem
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Both streaming mode and ZA may increase power consumption when they are
-enabled and streaming mode makes many FPSIMD and SVE instructions undefined
-which will cause problems for any kernel mode floating point so disable
-both when we flush the CPU state. This covers both kernel_neon_begin() and
-idle and after flushing the state a reload is always required anyway.
+When saving and restoring the floating point state over an EFI runtime
+call ensure that we handle streaming mode, only handling FFR if we are not
+in streaming mode and ensuring that we are in normal mode over the call
+into runtime services.
+
+We currently assume that ZA will not be modified by runtime services, the
+specification is not yet finalised so this may need updating if that
+changes.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h | 7 +++++++
- arch/arm64/kernel/fpsimd.c      | 9 +++++++++
- 2 files changed, 16 insertions(+)
+ arch/arm64/kernel/fpsimd.c | 47 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 41 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index 180548c13940..f1cd552ebb81 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -300,6 +300,12 @@ static inline void sme_smstop_sm(void)
- 	asm volatile(".inst 0xd503427f");
- }
- 
-+static inline void sme_smstop(void)
-+{
-+	/* SMSTOP SM is an alias for MSR SVCRSMZA, #0 */
-+	asm volatile(".inst 0x7f4603d5");
-+}
-+
- static inline int sme_max_vl(void)
- {
- 	return vec_max_vl(ARM64_VEC_SME);
-@@ -322,6 +328,7 @@ static inline void sme_alloc(struct task_struct *task) { }
- 
- static inline void sme_smstart_sm(void) { }
- static inline void sme_smstop_sm(void) { }
-+static inline void sme_smstop(void) { }
- 
- static inline int sme_set_current_vl(unsigned long arg)
- {
 diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index af46db99ec82..cdbc1fd8fde2 100644
+index cdbc1fd8fde2..242afb78b000 100644
 --- a/arch/arm64/kernel/fpsimd.c
 +++ b/arch/arm64/kernel/fpsimd.c
-@@ -1744,6 +1744,15 @@ static void fpsimd_flush_cpu_state(void)
- {
- 	WARN_ON(!system_supports_fpsimd());
- 	__this_cpu_write(fpsimd_last_state.st, NULL);
-+
-+	/*
-+	 * Leaving streaming mode enabled will cause issues for any kernel
-+	 * NEON and leaving streaming mode or ZA enabled may incrase power
-+	 * consumption.
-+	 */
-+	if (system_supports_sme())
-+		sme_smstop();
-+
- 	set_thread_flag(TIF_FOREIGN_FPSTATE);
- }
+@@ -1046,21 +1046,25 @@ int vec_verify_vq_map(enum vec_type type)
  
+ static void __init sve_efi_setup(void)
+ {
+-	struct vl_info *info = &vl_info[ARM64_VEC_SVE];
++	int max_vl = 0;
++	int i;
+ 
+ 	if (!IS_ENABLED(CONFIG_EFI))
+ 		return;
+ 
++	for (i = 0; i < ARRAY_SIZE(vl_info); i++)
++		max_vl = max(vl_info[i].max_vl, max_vl);
++
+ 	/*
+ 	 * alloc_percpu() warns and prints a backtrace if this goes wrong.
+ 	 * This is evidence of a crippled system and we are returning void,
+ 	 * so no attempt is made to handle this situation here.
+ 	 */
+-	if (!sve_vl_valid(info->max_vl))
++	if (!sve_vl_valid(max_vl))
+ 		goto fail;
+ 
+ 	efi_sve_state = __alloc_percpu(
+-		SVE_SIG_REGS_SIZE(sve_vq_from_vl(info->max_vl)), SVE_VQ_BYTES);
++		SVE_SIG_REGS_SIZE(sve_vq_from_vl(max_vl)), SVE_VQ_BYTES);
+ 	if (!efi_sve_state)
+ 		goto fail;
+ 
+@@ -1830,6 +1834,7 @@ EXPORT_SYMBOL(kernel_neon_end);
+ static DEFINE_PER_CPU(struct user_fpsimd_state, efi_fpsimd_state);
+ static DEFINE_PER_CPU(bool, efi_fpsimd_state_used);
+ static DEFINE_PER_CPU(bool, efi_sve_state_used);
++static DEFINE_PER_CPU(bool, efi_sm_state);
+ 
+ /*
+  * EFI runtime services support functions
+@@ -1864,12 +1869,28 @@ void __efi_fpsimd_begin(void)
+ 		 */
+ 		if (system_supports_sve() && likely(efi_sve_state)) {
+ 			char *sve_state = this_cpu_ptr(efi_sve_state);
++			bool ffr = true;
++			u64 svcr;
+ 
+ 			__this_cpu_write(efi_sve_state_used, true);
+ 
++			/* If we are in streaming mode don't touch FFR */
++			if (system_supports_sme()) {
++				svcr = read_sysreg_s(SYS_SVCR_EL0);
++
++				ffr = svcr & SYS_SVCR_EL0_SM_MASK;
++
++				__this_cpu_write(efi_sm_state, ffr);
++			}
++
+ 			sve_save_state(sve_state + sve_ffr_offset(sve_max_vl()),
+ 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
+-				       true);
++				       ffr);
++
++			if (system_supports_sme())
++				sysreg_clear_set_s(SYS_SVCR_EL0,
++						   SYS_SVCR_EL0_SM_MASK, 0);
++
+ 		} else {
+ 			fpsimd_save_state(this_cpu_ptr(&efi_fpsimd_state));
+ 		}
+@@ -1892,11 +1913,25 @@ void __efi_fpsimd_end(void)
+ 		if (system_supports_sve() &&
+ 		    likely(__this_cpu_read(efi_sve_state_used))) {
+ 			char const *sve_state = this_cpu_ptr(efi_sve_state);
++			bool ffr = true;
++
++			/*
++			 * Restore streaming mode; EFI calls are
++			 * normal function calls so should not return in
++			 * streaming mode.
++			 */
++			if (system_supports_sme()) {
++				if (__this_cpu_read(efi_sm_state)) {
++					sysreg_clear_set_s(SYS_SVCR_EL0,
++							   0,
++							   SYS_SVCR_EL0_SM_MASK);
++					ffr = false;
++				}
++			}
+ 
+-			sve_set_vq(sve_vq_from_vl(sve_get_vl()) - 1);
+ 			sve_load_state(sve_state + sve_ffr_offset(sve_max_vl()),
+ 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
+-				       true);
++				       ffr);
+ 
+ 			__this_cpu_write(efi_sve_state_used, false);
+ 		} else {
 -- 
 2.30.2
 
