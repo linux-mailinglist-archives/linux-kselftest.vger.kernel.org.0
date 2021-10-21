@@ -2,107 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB7A435853
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 03:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733C54358A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 04:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbhJUBmE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Oct 2021 21:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
+        id S230442AbhJUCfA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Oct 2021 22:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbhJUBmD (ORCPT
+        with ESMTP id S230433AbhJUCe7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Oct 2021 21:42:03 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7D8C06161C;
-        Wed, 20 Oct 2021 18:39:48 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id f11so4466798pfc.12;
-        Wed, 20 Oct 2021 18:39:48 -0700 (PDT)
+        Wed, 20 Oct 2021 22:34:59 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B48CC061749
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 19:32:44 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id g25so367235wrb.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 19:32:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6z6pmntkws3JIoVxcs0cRfziVLFxgFIK3h3B/uS8Qww=;
-        b=LBanFLyPzSy4d/c2YdGtHAuRS0rCwCC0fwxWZUD3uY72P4mIC5Q/Qd53om0M/xw+MR
-         mBP84YbFvYoIYs3eOI7/+MG2cDLF20jsTLJ5BUV7niuEhXPbRRAipzBF4ALxSAZvRzsJ
-         XGMyy30/96g5nxGuffdBMQfuhsgHhPI0TkQcp52sEJxHf1YMTRKV3oqKDg9EFXkVB0ar
-         b1ghk7OOxKIU2wSmxBI/uAWkTP8nTCwZYJwaB4hODPYmneeBkGk2VRWf+zL4DGARSqVS
-         ZwbJ9Q31a+pCWwFQ3WOUM9AW/9G/UhNcMtxB1nKHlcg/oU11Au0FY5jzphZAYqldyZaW
-         j+qw==
+        bh=w5mE2x+hW5pUs3S3pcPG1uGiSDyc4WMJ3U35UkRsq+s=;
+        b=HgDmJOdjPt4QsbGwAloFChaUOnSeKyRpnqXxokF9l4WEPpLyC7btHMLS9ttFEbZlUf
+         6pJqFnUC4r0QMJ2lEknR87dQKLag/Zf+GxTBl8PCxnPNwGXN7+Ki5AzIkjI0tUDqAVtO
+         gY/vorVqzpdp7Ip8shJMHpq2kk6J61p1ttngKCC0uj3EUfGRB+3lp2t6YzdfLUiXwwWy
+         yB3ZHUGC3Xhd3lbqdeCnKXqXe7yFf3PSBPj8IoPiC4kZNPaBmAU78h4RysskHDN0DoD7
+         vQj3YNMihzDaUoJLbvwuZbeVGsOA9sjeBW8jXK+mF0yRNOVTYP0JfZ2ie9isHPejcNsV
+         4Klg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6z6pmntkws3JIoVxcs0cRfziVLFxgFIK3h3B/uS8Qww=;
-        b=rAmHy+UVILfzITv+g8wrnJMGxTaSVkgniAfKfDlKIhr8CnwwBNZy/PwGD2q1PD4imv
-         kckAALe28rz92FzCPvqECIHTC6urOKuN8CeMxfsRvDnrwIPITYuv2i/3zwOJtYOM7hEu
-         mP+xile4Z/fzjYjCcQr/WfVXhjrGWz4/z2V5rexugWFjxaMegTCkkjqWlnKKdt1u65pv
-         kWRKPIMW/e6PqnlQLIHrlKq0h86phByPrruRo5LtMZOvNTHKDpkFDSOdV4R0x5/sVRQa
-         Z5Mr82ZfpPaMQoe80auhesb+YSYq/pT8eEDrJymyflpD4fqeCctSQ/J88tYO402QiUvO
-         LnxA==
-X-Gm-Message-State: AOAM531s60O/cZT9yu4jTZs+jvmWn+m/kKxOGH7mVDcpnGs4aZQ/dr/k
-        ldhwOkIAmHtsPOPFtfJBof1fWJO1h6bgriAie9A=
-X-Google-Smtp-Source: ABdhPJzKd1h2Y5XOg7sXlFNskYrVsISwIn9PO9O2R5DyAwwJEYWLWs7/Xr0+HOjNH9TCHjpzFZfYAiud2L7v5Xx5LhY=
-X-Received: by 2002:a63:4f57:: with SMTP id p23mr2124913pgl.376.1634780388063;
- Wed, 20 Oct 2021 18:39:48 -0700 (PDT)
+        bh=w5mE2x+hW5pUs3S3pcPG1uGiSDyc4WMJ3U35UkRsq+s=;
+        b=kFxAHIkvra/LWzCoY3t9Gk7due31YaRETKYlsSLwS72qVzAJjTiZZPX7wW/bHeDFat
+         b15Ye1dk68UUG6RSFKFVHNMqsT2s/CfffG+7fuln/4cn4MyCjbbnfHUvScza8croxttT
+         SySnTMrBc4/lNaya38fwW9fnT5kl4W4uSRjhVLNMLAyNe5GQ7iHdFFqLofEBvBr/d3Ez
+         sfkrEjG/30/NKo8MGJoIJYz9Fm1fogVu+YLulakwbLckLxtBn4mz2L/f2KGBtbX4s75H
+         K5rkNyENZEX029Rpj97daAPnOCiJHWmIomnopjiRHnrAmzkBzlYGUprnOu8y6TndQD5O
+         ATEw==
+X-Gm-Message-State: AOAM532+eQCxXoLMJb8ilVbX1FJsf05pzajAucrSsZAAhL5DMmMll+nu
+        /KRfXdjS3t3IlbX4TsfLnJk45SKI5NztKd/5L6kfVw==
+X-Google-Smtp-Source: ABdhPJy1TXM/ktn3Tx4CCtwfH6IOLLZIhWo2njTND6Dw9Vd4e5cFoe+AAs3IHzDMwFTS/wlFt/j3LFtUc5oddOJVR9U=
+X-Received: by 2002:adf:9c11:: with SMTP id f17mr3823144wrc.147.1634783562902;
+ Wed, 20 Oct 2021 19:32:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211015112336.1973229-1-markpash@cloudflare.com> <20211015112336.1973229-2-markpash@cloudflare.com>
-In-Reply-To: <20211015112336.1973229-2-markpash@cloudflare.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 20 Oct 2021 18:39:36 -0700
-Message-ID: <CAADnVQ+_MysCNnaPZd550wQaohtWTikmgnsysoZhnNpwPgv23A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Add ifindex to bpf_sk_lookup
-To:     Mark Pashmfouroush <markpash@cloudflare.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+References: <20211020232121.1748376-1-dlatypov@google.com>
+In-Reply-To: <20211020232121.1748376-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 21 Oct 2021 10:32:31 +0800
+Message-ID: <CABVgOS=KuRiw1D3_TS9pvQ420JLcvv-sN9Lg7BP+OMy-dhYqMg@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: tool: continue past invalid utf-8 output
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 4:24 AM Mark Pashmfouroush
-<markpash@cloudflare.com> wrote:
+On Thu, Oct 21, 2021 at 7:21 AM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 6fc59d61937a..9bd3e8b8a659 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -6262,6 +6262,7 @@ struct bpf_sk_lookup {
->         __u32 local_ip4;        /* Network byte order */
->         __u32 local_ip6[4];     /* Network byte order */
->         __u32 local_port;       /* Host byte order */
-> +       __u32 ifindex;          /* Maps to skb->dev->ifindex */
+> kunit.py currently crashes and fails to parse kernel output if it's not
+> fully valid utf-8.
+>
+> This can come from memory corruption or or just inadvertently printing
+> out binary data as strings.
+>
+> E.g. adding this line into a kunit test
+>   pr_info("\x80")
+> will cause this exception
+>   UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 1961: invalid start byte
+>
+> We can tell Python how to handle errors, see
+> https://docs.python.org/3/library/codecs.html#error-handlers
+>
+> Unfortunately, it doesn't seem like there's a way to specify this in
+> just one location, so we need to repeat ourselves quite a bit.
+>
+> Specify `errors='backslashreplace'` so we instead:
+> * print out the offending byte as '\x80'
+> * try and continue parsing the output.
+>   * as long as the TAP lines themselves are valid, we're fine.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+> v1 -> v2: add comment to silence erroneous pytype error
+> ---
 
-Is the comment accurate?
-The bpf_sk_lookup_kern ifindex is populated with inet_iif(skb).
-Which is skb->skb_iif at this point (I think).
-skb->dev->ifindex would typically mean destination or egress ifindex.
-In __sk_buff we have 'ifindex' and 'ingress_ifindex' to differentiate them.
-If it's really dev->ifindex than keeping 'ifindex' name here would be correct,
-but looking at how it's populated in inet/udp_lookup makes me wonder
-whether it should be named 'ingress_ifindex' instead and comment clarified.
+Thanks. I've tested this, and it works well for me. I don't mind the
+pytype comment, even though I don't use pytype, so I'm glad it's
+there.
 
-If/when you resubmit please trim cc list to a minimum.
+Tested-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  tools/testing/kunit/kunit.py        | 3 ++-
+>  tools/testing/kunit/kunit_kernel.py | 4 ++--
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index e1dd3180f0d1..68e6f461c758 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -477,9 +477,10 @@ def main(argv, linux=None):
+>                         sys.exit(1)
+>         elif cli_args.subcommand == 'parse':
+>                 if cli_args.file == None:
+> +                       sys.stdin.reconfigure(errors='backslashreplace')  # pytype: disable=attribute-error
+>                         kunit_output = sys.stdin
+>                 else:
+> -                       with open(cli_args.file, 'r') as f:
+> +                       with open(cli_args.file, 'r', errors='backslashreplace') as f:
+>                                 kunit_output = f.read().splitlines()
+>                 request = KunitParseRequest(cli_args.raw_output,
+>                                             None,
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index faa6320e900e..f08c6c36a947 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -135,7 +135,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>                                            stdin=subprocess.PIPE,
+>                                            stdout=subprocess.PIPE,
+>                                            stderr=subprocess.STDOUT,
+> -                                          text=True, shell=True)
+> +                                          text=True, shell=True, errors='backslashreplace')
+>
+>  class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>         """An abstraction over command line operations performed on a source tree."""
+> @@ -172,7 +172,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>                                            stdin=subprocess.PIPE,
+>                                            stdout=subprocess.PIPE,
+>                                            stderr=subprocess.STDOUT,
+> -                                          text=True)
+> +                                          text=True, errors='backslashreplace')
+>
+>  def get_kconfig_path(build_dir) -> str:
+>         return get_file_path(build_dir, KCONFIG_PATH)
+>
+> base-commit: 63b136c634a2bdffd78795bc33ac2d488152ffe8
+> --
+> 2.33.0.1079.g6e70778dc9-goog
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20211020232121.1748376-1-dlatypov%40google.com.
