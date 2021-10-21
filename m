@@ -2,101 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 978DA436B17
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 21:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09ECD436B5D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 21:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbhJUTLo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Oct 2021 15:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
+        id S230272AbhJUTeS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Oct 2021 15:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbhJUTLo (ORCPT
+        with ESMTP id S230020AbhJUTeR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 15:11:44 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A7AC061764;
-        Thu, 21 Oct 2021 12:09:27 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id y67so2311235iof.10;
-        Thu, 21 Oct 2021 12:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=FeQZrD/GFZW0JDU3zbGskN7ftzFdVtgjVzqDu9TS7Ms=;
-        b=ZOEG6xzVpPFX81pZlgezkubTtjkxCzAWHJDE1K3kfPKKdwXaX5QeHrRpJlliqVCh4v
-         Zth87NUyTgm6i2SF8XbHRAt/WH/qijrwdDgWtAFMjVDsoMdWX9flsyCeksirfvteTMEq
-         4HgR2ojwPl1ce8ZONS2heuc1t2ALBchInx+C9rmfD/kbD3nkQw6XHYmCrmdFnQdUWTKw
-         FLnaSb8lFUzY98+ykmcHxwTGr6/EJm+6A9OeYlaaNBo1C4c4/qWhznIspztKVanDHwAB
-         tiyfloX4PqAkcACJ33DXOIu3im6+ND+2F30aXR0jdmfQRAAENnt+b+44OJLbSlrPVEwp
-         9Q6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=FeQZrD/GFZW0JDU3zbGskN7ftzFdVtgjVzqDu9TS7Ms=;
-        b=Puv/NTmQGiNrs0k12OCmZnhtx1M/C+BE3hGE1yl3uuipAQu459bnAYcbenKgwklBQW
-         mZmymV5Rd0pdQkSOGIkazF3TPU0JatN2mxgfgrLgBSEMMDwGc59nWW7yWyzeODP+M0TV
-         GPboPg1tT/Zfd+hc0+owZyfxXmIW07xJ2Z4nZi9Lf+9PQeXgEM7dodhxAdUfb666wDW8
-         LRhAgWaqOMQu6Rpjnc6S2zuLWX7lVMfG+S2IS/B7NWRUYHd+H7MfUfnj8wD2UXURR2tl
-         S/meo5JuXdD5EkO88zNUDZzghlFKAkyYc2KopCoBacA4FzCO46sio9F0xsqaHDDj7xn+
-         qxXQ==
-X-Gm-Message-State: AOAM533QrYFFX/BR27UtAoD5+pgH/MNcD9KDpi2TDFjEGaqOheUkMSN+
-        aC3DykaPh2kaWRu/UfLveD0=
-X-Google-Smtp-Source: ABdhPJxYyS8b782rgYOGxv8K3HN9v7F49gRdG5Mhz7caoiUI9oVCOzAetXVZSMCTjzqPwVhxMFvVkA==
-X-Received: by 2002:a05:6602:1799:: with SMTP id y25mr5062542iox.38.1634843367364;
-        Thu, 21 Oct 2021 12:09:27 -0700 (PDT)
-Received: from localhost ([172.243.157.240])
-        by smtp.gmail.com with ESMTPSA id 16sm2911923ioc.39.2021.10.21.12.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 12:09:26 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 12:09:18 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Mark Pashmfouroush <markpash@cloudflare.com>,
-        markpash@cloudflare.com
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-ID: <6171bade5c0c_663a720836@john-XPS-13-9370.notmuch>
-In-Reply-To: <20211015112336.1973229-3-markpash@cloudflare.com>
-References: <20211015112336.1973229-1-markpash@cloudflare.com>
- <20211015112336.1973229-3-markpash@cloudflare.com>
-Subject: RE: [PATCH bpf-next 2/2] selftests/bpf: Add tests for accessing
- ifindex in bpf_sk_lookup
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        Thu, 21 Oct 2021 15:34:17 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B179C061764;
+        Thu, 21 Oct 2021 12:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=g9ZT/0FoZ5x3CiuBFCIM2YP2UyvqhoFmEIhEg8pmdwA=; b=t7VYyTyL+zzJmyk7lTrCVP0pez
+        49bdDOM1ylEshNaga0LR0NiqVO7TwU3sEtDIn8iK2BsMimXC8z3ingoHZw9TbC3P9atfQUE3vD1JO
+        OzKhqPsoPFgZobOqz2Vg9JVzeTuGQs69r8tDIMfdQnGVIIn6G8UvlEOB9NwDGC8W3OheCqjNmoBUE
+        AxAMo2LXC1Rt2IKCqtdPdzPFBBqnpkS8tnYWUDmJLQRN/CjIFW33GamDdQd6x8Xt6vSc99scNHzTP
+        HrYS7wfwBelOBZfNEn17LxVEmQhL1xJfsUcIkdLaUBWVb2tHQpIaA8GY7WAvyE9VN1Z/9v/Du5Rzm
+        wgeZO64A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mddlp-00DUnf-A3; Thu, 21 Oct 2021 19:31:02 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 82CFA986DD9; Thu, 21 Oct 2021 21:30:33 +0200 (CEST)
+Date:   Thu, 21 Oct 2021 21:30:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Gladkov <gladkov.alexey@gmail.com>, jannh@google.com,
+        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, christian.brauner@ubuntu.com,
+        amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
+        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
+        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
+        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, ebiederm@xmission.com,
+        ohoono.kwon@samsung.com, kaleshsingh@google.com,
+        yifeifz2@illinois.edu, linux-arch@vger.kernel.org,
+        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
+        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
+        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
+        chris@zankel.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] selftests: proc: Make sure wchan works when it exists
+Message-ID: <20211021193033.GW174703@worktop.programming.kicks-ass.net>
+References: <20211008235504.2957528-1-keescook@chromium.org>
+ <202110211008.CC8B26A@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202110211008.CC8B26A@keescook>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Mark Pashmfouroush wrote:
-> A new field was added to the bpf_sk_lookup data that users can access.
-> Add tests that validate that the new ifindex field contains the right
-> data.
+On Thu, Oct 21, 2021 at 10:09:33AM -0700, Kees Cook wrote:
+
+> > Hi Peter,
+> > 
+> > Can you add this to the wchan series, please? This should help wchan from
+> > regressing in the future, and allow us to notice if the depth accidentally
+> > changes, like Mark saw.
+> > ---
 > 
-> Signed-off-by: Mark Pashmfouroush <markpash@cloudflare.com>
+> I'd like to make sure we have a regression test for this. Will you add
+> this to the wchan series please?
 
-LGTM.
+I have it there, but it's in the part that didn't make it in yet. I'm
+currently in the progress of reworking that.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+Do you want it it ahead of all that?
