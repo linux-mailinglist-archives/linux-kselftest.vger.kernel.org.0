@@ -2,87 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1002435840
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 03:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB7A435853
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 03:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbhJUBbi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Oct 2021 21:31:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23056 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230268AbhJUBbh (ORCPT
+        id S230192AbhJUBmE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Oct 2021 21:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229771AbhJUBmD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Oct 2021 21:31:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634779762;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BlV+ARiKa3/8/9BVagtX9yLh+qMMBcZxVM11x/BzOdk=;
-        b=Mx2hFJQaPu/B4NjScnTXPdUamued2IYbdZZ6ucIB7w2bZf40uOlpWp2lyTT0UEPZVjzz/s
-        BX8wtEJPbFTjOzc1VsxLCnwB2VGW3xIY0wqWAf2KUMTbWp80x/ejnVrwlMlKXNzNo4qtDI
-        vEN+zvwimjIQAtYnOZiyG3vNeA/ERO0=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-553-hLPv2evaNKiTIOE2xv9SMg-1; Wed, 20 Oct 2021 21:29:20 -0400
-X-MC-Unique: hLPv2evaNKiTIOE2xv9SMg-1
-Received: by mail-pj1-f71.google.com with SMTP id nk17-20020a17090b195100b001a199d7a415so1333749pjb.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Oct 2021 18:29:20 -0700 (PDT)
+        Wed, 20 Oct 2021 21:42:03 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7D8C06161C;
+        Wed, 20 Oct 2021 18:39:48 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id f11so4466798pfc.12;
+        Wed, 20 Oct 2021 18:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6z6pmntkws3JIoVxcs0cRfziVLFxgFIK3h3B/uS8Qww=;
+        b=LBanFLyPzSy4d/c2YdGtHAuRS0rCwCC0fwxWZUD3uY72P4mIC5Q/Qd53om0M/xw+MR
+         mBP84YbFvYoIYs3eOI7/+MG2cDLF20jsTLJ5BUV7niuEhXPbRRAipzBF4ALxSAZvRzsJ
+         XGMyy30/96g5nxGuffdBMQfuhsgHhPI0TkQcp52sEJxHf1YMTRKV3oqKDg9EFXkVB0ar
+         b1ghk7OOxKIU2wSmxBI/uAWkTP8nTCwZYJwaB4hODPYmneeBkGk2VRWf+zL4DGARSqVS
+         ZwbJ9Q31a+pCWwFQ3WOUM9AW/9G/UhNcMtxB1nKHlcg/oU11Au0FY5jzphZAYqldyZaW
+         j+qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BlV+ARiKa3/8/9BVagtX9yLh+qMMBcZxVM11x/BzOdk=;
-        b=0U16yMTrM8oaFH12zdfHVSEEj5y/UZCGY97EkCVeFJEZ8WXBu+jIOL8YnNBELbFuWS
-         0WqylKV0J+Gs/2jyEScQ+893kBiCf0GMhbqS+ezNN/++xPNXpDhudTQ059IcWPdAHZWD
-         I/KK71fe8xmWqRCnyMp9WhkTgLyW2AcPvLc/xYOrT2oUtBvcGKrKdBIcC1/JoNdxZ5dJ
-         pWsIMakCqPV/KNdCkyPycQ+D4sqPMAnv8hMjtT9OcyXgYSww3dorwcZ4Pq5nBt7ieD8w
-         MAxTakMMb/Rnh2Iqd1RX144gZeljtC5I1FfVi+f3j1Mm9/zLUvBGhy6S+TSS4zSGEQhS
-         wpHg==
-X-Gm-Message-State: AOAM5302el8Z+ZvDWY9EWU5l0maQ+yNfcDj404HoSOOPhCiYtGP+j2sf
-        rCL67uyGlY14Wnyq064BFGHJ+hSOD4lqs7E+PXp2QHvaFVb+11tWUKA4yNu1Ry54T7Kr6WOWXSY
-        Cr78UhjAiq3myCjm6WLjxmQZe6hiT
-X-Received: by 2002:a63:ed4a:: with SMTP id m10mr2119201pgk.448.1634779759750;
-        Wed, 20 Oct 2021 18:29:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzLT8cImRwZSUB9vci3AK/6sF9OSUh11r0p4OY2pwmW2mqhL9PPlJb2PmNU10BztrNI3j1fjA==
-X-Received: by 2002:a63:ed4a:: with SMTP id m10mr2119185pgk.448.1634779759505;
-        Wed, 20 Oct 2021 18:29:19 -0700 (PDT)
-Received: from xz-m1.local ([84.17.34.135])
-        by smtp.gmail.com with ESMTPSA id p4sm3192782pgc.15.2021.10.20.18.29.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Oct 2021 18:29:18 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 09:29:14 +0800
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] userfaultfd/selftests: fix feature support
- detection
-Message-ID: <YXDCagVgh2O2YdIW@xz-m1.local>
-References: <20210930212309.4001967-1-axelrasmussen@google.com>
- <20210930212309.4001967-3-axelrasmussen@google.com>
- <CAJHvVcj9FpJgC5EsB1_6yfgDA8p5-=Oakccg+TUrGUWZB5nHzA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6z6pmntkws3JIoVxcs0cRfziVLFxgFIK3h3B/uS8Qww=;
+        b=rAmHy+UVILfzITv+g8wrnJMGxTaSVkgniAfKfDlKIhr8CnwwBNZy/PwGD2q1PD4imv
+         kckAALe28rz92FzCPvqECIHTC6urOKuN8CeMxfsRvDnrwIPITYuv2i/3zwOJtYOM7hEu
+         mP+xile4Z/fzjYjCcQr/WfVXhjrGWz4/z2V5rexugWFjxaMegTCkkjqWlnKKdt1u65pv
+         kWRKPIMW/e6PqnlQLIHrlKq0h86phByPrruRo5LtMZOvNTHKDpkFDSOdV4R0x5/sVRQa
+         Z5Mr82ZfpPaMQoe80auhesb+YSYq/pT8eEDrJymyflpD4fqeCctSQ/J88tYO402QiUvO
+         LnxA==
+X-Gm-Message-State: AOAM531s60O/cZT9yu4jTZs+jvmWn+m/kKxOGH7mVDcpnGs4aZQ/dr/k
+        ldhwOkIAmHtsPOPFtfJBof1fWJO1h6bgriAie9A=
+X-Google-Smtp-Source: ABdhPJzKd1h2Y5XOg7sXlFNskYrVsISwIn9PO9O2R5DyAwwJEYWLWs7/Xr0+HOjNH9TCHjpzFZfYAiud2L7v5Xx5LhY=
+X-Received: by 2002:a63:4f57:: with SMTP id p23mr2124913pgl.376.1634780388063;
+ Wed, 20 Oct 2021 18:39:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVcj9FpJgC5EsB1_6yfgDA8p5-=Oakccg+TUrGUWZB5nHzA@mail.gmail.com>
+References: <20211015112336.1973229-1-markpash@cloudflare.com> <20211015112336.1973229-2-markpash@cloudflare.com>
+In-Reply-To: <20211015112336.1973229-2-markpash@cloudflare.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 20 Oct 2021 18:39:36 -0700
+Message-ID: <CAADnVQ+_MysCNnaPZd550wQaohtWTikmgnsysoZhnNpwPgv23A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add ifindex to bpf_sk_lookup
+To:     Mark Pashmfouroush <markpash@cloudflare.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 11:28:49AM -0700, Axel Rasmussen wrote:
-> Just a friendly bump for review. :) Peter, any objections to this
-> version? I think it fairly closely matches your suggestions from v1.
+On Fri, Oct 15, 2021 at 4:24 AM Mark Pashmfouroush
+<markpash@cloudflare.com> wrote:
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 6fc59d61937a..9bd3e8b8a659 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -6262,6 +6262,7 @@ struct bpf_sk_lookup {
+>         __u32 local_ip4;        /* Network byte order */
+>         __u32 local_ip6[4];     /* Network byte order */
+>         __u32 local_port;       /* Host byte order */
+> +       __u32 ifindex;          /* Maps to skb->dev->ifindex */
 
-Isn't the whole patchset already queued by Andrew? :)
+Is the comment accurate?
+The bpf_sk_lookup_kern ifindex is populated with inet_iif(skb).
+Which is skb->skb_iif at this point (I think).
+skb->dev->ifindex would typically mean destination or egress ifindex.
+In __sk_buff we have 'ifindex' and 'ingress_ifindex' to differentiate them.
+If it's really dev->ifindex than keeping 'ifindex' name here would be correct,
+but looking at how it's populated in inet/udp_lookup makes me wonder
+whether it should be named 'ingress_ifindex' instead and comment clarified.
 
-Anyway,
-
-Reviewed-by: Peter Xu <peterx@redhat.com>
-
-Thanks for the change!
-
--- 
-Peter Xu
-
+If/when you resubmit please trim cc list to a minimum.
