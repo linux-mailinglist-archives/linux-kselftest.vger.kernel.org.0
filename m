@@ -2,119 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FE54368C5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 19:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C244368E7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Oct 2021 19:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbhJURL5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Oct 2021 13:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S231319AbhJURVS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Oct 2021 13:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbhJURLv (ORCPT
+        with ESMTP id S229567AbhJURVR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 13:11:51 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8029C061764
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 10:09:34 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id s61-20020a17090a69c300b0019f663cfcd1so3653577pjj.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 10:09:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/h3z+ZI1NEezvcalKf2dOAyWJ+jaOF20N5IW04VxMnA=;
-        b=EDjRl+XfT9L+B0/Ui2ATB7qVPuwaM4acCWeRrcT+9g5GbxL0WJjmTq5c1ovmol2FJ0
-         1fskzEINTfsYw8g8nAAbg2ogfzpc+mC2cO++Uro/3Z17oY0UGCsaxq0L4FpQ5hTR0B+i
-         4F82TStCNcJSBnVJ6HHpuKiPMrmrBZjNNQaQ4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/h3z+ZI1NEezvcalKf2dOAyWJ+jaOF20N5IW04VxMnA=;
-        b=mKdv8E4be45dGaQwQN9R48WnkJB+BRXE2bosbvc9Bk7rONwYQkKn8zt1GYqsJ4aCMS
-         ORYavM6y0GahgyNgj+MBmEBFFR6A3qOYfSWVvXYZ59d63KNQ6F3mhehItwPvi7mPp9s8
-         idMWT1NJd0g955a5F6xX+fpIVvq/ZEgfTLFW3XR0gHKd17SXQHzCMB3NPqd63BjaxTga
-         Xz3/eGKo1dhGkt6uJ/xIo1PwzayonQg7XY/WvURk9AbG2KWJeQJLREkmrhsvtTKvtF2U
-         pQ20QQJtg34/vQdTDIF5YeEOJkS4UQeQ3/YBTGRCSPnffMiXu7vl/365AiiwTLbHZ0Hd
-         KsTQ==
-X-Gm-Message-State: AOAM532FubT7q9eWuNPleWDH4OpGFMQ6kdIs0kMaB+rQV6bajiUEBqhH
-        n2edeSo3qqAiS8dtf+eZTFGxFw==
-X-Google-Smtp-Source: ABdhPJx8xZPWUk8RdvIXPnnT/qf52D2k5QZILuisiCA7VHLuTMbbMXlu18CbRyoTtGgVOEZWXBbOqw==
-X-Received: by 2002:a17:90b:38c6:: with SMTP id nn6mr8039311pjb.246.1634836174380;
-        Thu, 21 Oct 2021 10:09:34 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y13sm6032193pgc.46.2021.10.21.10.09.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 10:09:34 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 10:09:33 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        linux-kselftest@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>, jannh@google.com,
-        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, christian.brauner@ubuntu.com,
-        amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
-        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
-        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
-        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, ebiederm@xmission.com,
-        ohoono.kwon@samsung.com, kaleshsingh@google.com,
-        yifeifz2@illinois.edu, linux-arch@vger.kernel.org,
-        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
-        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
-        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
-        chris@zankel.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] selftests: proc: Make sure wchan works when it exists
-Message-ID: <202110211008.CC8B26A@keescook>
-References: <20211008235504.2957528-1-keescook@chromium.org>
+        Thu, 21 Oct 2021 13:21:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0977C061764;
+        Thu, 21 Oct 2021 10:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AD7baqDv7qcOXIpKfV7ERWwjC0Jt5iI28VcJ9GrCqks=; b=rZTla/b7wEl07NyABgcNxY4UWI
+        6JYo0XaNvaYZ3UxR5KpgG/qNARinza7TjgaNGaBeO6CX8cPtGObHKiCHqQzQRzg3r0K5hun+hUiQB
+        JBYk+83/2/jiTN5s0tLuOeMdhxRuCu/eFq5Uh74WlzeOFtcncBfRQlntYmi6Hjge9bFsOrBo5NfSo
+        XWcjBM8locwogPOgmFNCI/tOpS93yC7LWUUkPEccW+0rf2d92TnZ83zCop52oeZpWZYchrbZY+1ue
+        pIG/OXVZDujhVNGknKs5lBF2owxKIDNKvMZQ57PWscfx06l4OwXv8Hu0JGDOEJzOZsyB2ktlNSET7
+        oVfNOJ5g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mdbiJ-008UQT-NH; Thu, 21 Oct 2021 17:18:47 +0000
+Date:   Thu, 21 Oct 2021 10:18:47 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
+        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
+        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
+        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
+        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
+Message-ID: <YXGg95OcaR+5ktAZ@bombadil.infradead.org>
+References: <YWm68xUnAofop3PZ@bombadil.infradead.org>
+ <YWq3Z++uoJ/kcp+3@T590>
+ <YW3LuzaPhW96jSBK@bombadil.infradead.org>
+ <YW4uwep3BCe9Vxq8@T590>
+ <YW7kFXlzRrvwzARP@bombadil.infradead.org>
+ <YW7ygbLAwm2/LZFl@T590>
+ <YW8eSq2B+5FtOLZb@bombadil.infradead.org>
+ <YW9tqPunx5bssxIz@T590>
+ <YXA6NMhwoiIMeHji@bombadil.infradead.org>
+ <YXC2qcx/RlLwjrKx@T590>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211008235504.2957528-1-keescook@chromium.org>
+In-Reply-To: <YXC2qcx/RlLwjrKx@T590>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 08, 2021 at 04:55:04PM -0700, Kees Cook wrote:
-> This makes sure that wchan contains a sensible symbol when a process is
-> blocked. Specifically this calls the sleep() syscall, and expects the
-> architecture to have called schedule() from a function that has "sleep"
-> somewhere in its name. For example, on the architectures I tested
-> (x86_64, arm64, arm, mips, and powerpc) this is "hrtimer_nanosleep":
+On Thu, Oct 21, 2021 at 08:39:05AM +0800, Ming Lei wrote:
+> On Wed, Oct 20, 2021 at 08:48:04AM -0700, Luis Chamberlain wrote:
+> > A second series of tests is hitting CTRL-C on either randonly and
+> > restarting testing once again randomly.
 > 
-> $ tools/testing/selftests/proc/proc-pid-wchan
-> ok: found 'sleep' in wchan 'hrtimer_nanosleep'
+> ltp/zram02.sh has cleanup handler via trap to clean everything(swapoff/umount/reset/
+> rmmod), ctrl-c will terminate current forground task and cause shell to run the
+> cleanup handler first, but further 'ctrl-c' will terminate the cleanup handler,
+> then the cleanup won't be done completely, such as zram disk is left as swap
+> device and zram can't be unloaded. The idea can be observed via the following
+> script:
 > 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Alexey Dobriyan <adobriyan@gmail.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Friendly ping.
-
-> ---
-> Hi Peter,
+> 	#!/bin/bash
+> 	trap 'echo "enter trap"; sleep 20; echo "exit trap";' INT
+> 	sleep 30
 > 
-> Can you add this to the wchan series, please? This should help wchan from
-> regressing in the future, and allow us to notice if the depth accidentally
-> changes, like Mark saw.
-> ---
+> After the above script is run foreground, when 1st ctrl-c is pressed, 'sleep 30'
+> is terminated, then the trap command is run, so you can see "enter trap"
+> dumped. Then if you pressed 2nd ctrl-c, 'sleep 20' is terminated immediately.
+> So 'swapoff' from zram02.sh's trap function can be terminated in this way.
+> 
+> zram disk being left as swap disk can be observed with your patch too
+> after terminating via multiple ctrl-c which has to be done this way because
+> the test is dead loop.
+> 
+> So it is hard to cleanup everything completely after multiple 'CTRL-C' is
+> involved, and it should be impossible. It needs violent multiple ctrl-c to
+> terminate the dealoop test.
+> 
+> So it isn't reasonable to expect that zram can be always unloaded successfully
+> after the test script is terminated via multiple ctrl-c.
 
-I'd like to make sure we have a regression test for this. Will you add
-this to the wchan series please?
+For the life of me, I do not run into these issue with my patch. But
+with yours I had.
 
--Kees
+To be clear, I run zram02.sh on two terminals. Then to interrupt I just leave
+CTRL-C pressed to issue multiple terminations until the script is done
+on each terminal at a time, until I see both have completed.
 
--- 
-Kees Cook
+I repeat the same test, noting always that when I start one one terminal
+the test is succeeding. And also when I cancel completely one script the
+test continue fine without issue.
+
+> But zram can be unloaded after running swapoff manually, from driver
+> viewpoint, nothing is wrong.
+
+I had not run into that issue with my patch FWIW.
+
+  Luis
