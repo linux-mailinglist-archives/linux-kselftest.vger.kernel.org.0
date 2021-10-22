@@ -2,170 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB687437245
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Oct 2021 08:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7474375EB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Oct 2021 13:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbhJVGyC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Oct 2021 02:54:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59874 "EHLO mail.kernel.org"
+        id S232584AbhJVLZn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Oct 2021 07:25:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48270 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231778AbhJVGyC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Oct 2021 02:54:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 812DC60FC4;
-        Fri, 22 Oct 2021 06:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634885505;
-        bh=ctbWjbnAqf9RYjRQz0w4rC0AWhi9RSDgNjyWV+eiuT0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=FLMuUgpIPs8cz/xILbwBCbONgbrROSVDIpqnF1aPiu3Bn4EH1uy6Q/mbMd2Owl81B
-         0R/I1UfOJMI5rnkALSrj75YkuK7cCMpEB6KefkImqqL0bUTttPib8zqxjJX8aSufvy
-         /L9Ve0n2Ex/yeQY8k+tlCr5QdVJsMD1+YpoFAh0pqgFRKYnCxwt5AIpmldMmTxpuek
-         VafrSxO1v3NAWAD64roR9gRnj10C8m8KkQMfNC7Qj/FCV9BR0oOL+auoJ3ebTpqeko
-         8P50O8IHjpv54N1cvO0f8H8sxTG16J/nKRBfQ9VP2XS74YzX7nrZxXffU73XKYuN8+
-         rJ45ZYTPCKHgQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     SeongJae Park <sj38.park@gmail.com>, shuah@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sjpark@amazon.de>
-Subject: Re: [PATCH v2] selftests/kselftest/runner/run_one(): Allow running non-executable files
-Date:   Fri, 22 Oct 2021 06:51:42 +0000
-Message-Id: <20211022065142.36118-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211015085241.16262-1-sj@kernel.org>
+        id S232539AbhJVLZn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 22 Oct 2021 07:25:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 511CB60F8F;
+        Fri, 22 Oct 2021 11:23:24 +0000 (UTC)
+Date:   Fri, 22 Oct 2021 12:23:20 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 07/42] arm64/sve: Put system wide vector length
+ information into structs
+Message-ID: <YXKfKJHRkiu6AXqy@arm.com>
+References: <20211019172247.3045838-1-broonie@kernel.org>
+ <20211019172247.3045838-8-broonie@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211019172247.3045838-8-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ping again, as more than two months have passed since the posting of this
-patch, but got no response yet.
+On Tue, Oct 19, 2021 at 06:22:12PM +0100, Mark Brown wrote:
+> diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+> index d164e2f35837..5a1f79a4a500 100644
+> --- a/arch/arm64/include/asm/fpsimd.h
+> +++ b/arch/arm64/include/asm/fpsimd.h
+> @@ -77,10 +77,6 @@ extern void sve_kernel_enable(const struct arm64_cpu_capabilities *__unused);
+>  
+>  extern u64 read_zcr_features(void);
+>  
+> -extern int __ro_after_init sve_max_vl;
+> -extern int __ro_after_init sve_max_virtualisable_vl;
+> -extern __ro_after_init DECLARE_BITMAP(sve_vq_map, SVE_VQ_MAX);
+> -
+>  /*
+>   * Helpers to translate bit indices in sve_vq_map to VQ values (and
+>   * vice versa).  This allows find_next_bit() to be used to find the
+[...]
+> @@ -139,11 +151,63 @@ static inline void sve_user_enable(void)
+[...]
+> +static inline int sve_max_virtualisable_vl(void)
+> +{
+> +	return vec_max_virtualisable_vl(ARM64_VEC_SVE);
+> +}
 
+With this change, sve_max_virtualisable_vl() is only defined if
+CONFIG_ARM64_SVE is enabled but it's still referenced from
+kvm_arm_init_sve() and kvm_vcpu_finalize_sve(), so the build fails if
+SVE is disabled.
 
-Thanks,
-SJ
+> +static struct vl_config vl_config[ARM64_VEC_MAX];
+> +
+> +static int get_default_vl(enum vec_type type)
+> +{
+> +	return READ_ONCE(vl_config[type].__default_vl);
+> +}
+>  
+>  static int get_sve_default_vl(void)
+>  {
+> -	return READ_ONCE(__sve_default_vl);
+> +	return get_default_vl(ARM64_VEC_SVE);
+>  }
+>  
+>  #ifdef CONFIG_ARM64_SVE
 
-On Fri, 15 Oct 2021 08:52:41 +0000 SeongJae Park <sj@kernel.org> wrote:
+I think after patch 9 I think I also get a warning on
+get_sve_default_vl() defined but not used when SVE is disabled. Maybe
+move the #ifdef higher but also make these static inline.
 
-> Gentle ping.
-> 
-> On Fri, 8 Oct 2021 09:58:28 +0000 SeongJae Park <sj@kernel.org> wrote:
-> 
-> > Hello Shuah,
-> > 
-> > 
-> > I was wondering if you had a chance to read this patch.
-> > 
-> > Without this patch, DAMON selftest fails as below:
-> > 
-> >     $ make -C tools/testing/selftests/damon/ run_tests
-> >     make: Entering directory '/home/sjpark/linux/tools/testing/selftests/damon'
-> >     TAP version 13
-> >     1..1
-> >     # selftests: damon: debugfs_attrs.sh
-> >     # Warning: file debugfs_attrs.sh is not executable, correct this.
-> >     not ok 1 selftests: damon: debugfs_attrs.sh
-> >     make: Leaving directory '/home/sjpark/linux/tools/testing/selftests/damon'
-> > 
-> > If you disagree in the approach, please also take a look in this one:
-> > https://lore.kernel.org/linux-kselftest/20210810112050.22225-1-sj38.park@gmail.com/
-> > 
-> > 
-> > Thanks,
-> > SJ
-> > 
-> > 
-> > On Mon, 13 Sep 2021 11:24:42 +0000 SeongJae Park <sj38.park@gmail.com> wrote:
-> > 
-> > > From: SeongJae Park <sjpark@amazon.de>
-> > > 
-> > > Hello Shuah,
-> > > 
-> > > 
-> > > Could you I ask your comment for this patch?
-> > > 
-> > > 
-> > > Thanks,
-> > > SJ
-> > > 
-> > > On Tue, 10 Aug 2021 16:45:34 +0000 SeongJae Park <sj38.park@gmail.com> wrote:
-> > > 
-> > > > From: SeongJae Park <sjpark@amazon.de>
-> > > > 
-> > > > When running a test program, 'run_one()' checks if the program has the
-> > > > execution permission and fails if it doesn't.  However, it's easy to
-> > > > mistakenly missing the permission, as some common tools like 'diff'
-> > > > don't support the permission change well[1].  Compared to that, making
-> > > > mistakes in the test program's path would only rare, as those are
-> > > > explicitly listed in 'TEST_PROGS'.  Therefore, it might make more sense
-> > > > to resolve the situation on our own and run the program.
-> > > > 
-> > > > For the reason, this commit makes the test program runner function to
-> > > > still print the warning message but try parsing the interpreter of the
-> > > > program and explicitly run it with the interpreter, in the case.
-> > > > 
-> > > > [1] https://lore.kernel.org/mm-commits/YRJisBs9AunccCD4@kroah.com/
-> > > > 
-> > > > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Signed-off-by: SeongJae Park <sjpark@amazon.de>
-> > > > ---
-> > > > Changes from v1
-> > > > (https://lore.kernel.org/linux-kselftest/20210810140459.23990-1-sj38.park@gmail.com/)
-> > > > - Parse and use the interpreter instead of changing the file
-> > > > 
-> > > >  tools/testing/selftests/kselftest/runner.sh | 28 +++++++++++++--------
-> > > >  1 file changed, 18 insertions(+), 10 deletions(-)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-> > > > index cc9c846585f0..a9ba782d8ca0 100644
-> > > > --- a/tools/testing/selftests/kselftest/runner.sh
-> > > > +++ b/tools/testing/selftests/kselftest/runner.sh
-> > > > @@ -33,9 +33,9 @@ tap_timeout()
-> > > >  {
-> > > >  	# Make sure tests will time out if utility is available.
-> > > >  	if [ -x /usr/bin/timeout ] ; then
-> > > > -		/usr/bin/timeout --foreground "$kselftest_timeout" "$1"
-> > > > +		/usr/bin/timeout --foreground "$kselftest_timeout" $1
-> > > >  	else
-> > > > -		"$1"
-> > > > +		$1
-> > > >  	fi
-> > > >  }
-> > > >  
-> > > > @@ -65,17 +65,25 @@ run_one()
-> > > >  
-> > > >  	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
-> > > >  	echo "# $TEST_HDR_MSG"
-> > > > -	if [ ! -x "$TEST" ]; then
-> > > > -		echo -n "# Warning: file $TEST is "
-> > > > -		if [ ! -e "$TEST" ]; then
-> > > > -			echo "missing!"
-> > > > -		else
-> > > > -			echo "not executable, correct this."
-> > > > -		fi
-> > > > +	if [ ! -e "$TEST" ]; then
-> > > > +		echo "# Warning: file $TEST is missing!"
-> > > >  		echo "not ok $test_num $TEST_HDR_MSG"
-> > > >  	else
-> > > > +		cmd="./$BASENAME_TEST"
-> > > > +		if [ ! -x "$TEST" ]; then
-> > > > +			echo "# Warning: file $TEST is not executable"
-> > > > +
-> > > > +			if [ $(head -n 1 "$TEST" | cut -c -2) = "#!" ]
-> > > > +			then
-> > > > +				interpreter=$(head -n 1 "$TEST" | cut -c 3-)
-> > > > +				cmd="$interpreter ./$BASENAME_TEST"
-> > > > +			else
-> > > > +				echo "not ok $test_num $TEST_HDR_MSG"
-> > > > +				return
-> > > > +			fi
-> > > > +		fi
-> > > >  		cd `dirname $TEST` > /dev/null
-> > > > -		((((( tap_timeout ./$BASENAME_TEST 2>&1; echo $? >&3) |
-> > > > +		((((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
-> > > >  			tap_prefix >&4) 3>&1) |
-> > > >  			(read xs; exit $xs)) 4>>"$logfile" &&
-> > > >  		echo "ok $test_num $TEST_HDR_MSG") ||
-> > > > -- 
-> > > > 2.17.1
-> > > > 
+>  
+> -static void set_sve_default_vl(int val)
+> +static void set_default_vl(enum vec_type type, int val)
+>  {
+> -	WRITE_ONCE(__sve_default_vl, val);
+> +	WRITE_ONCE(vl_config[type].__default_vl, val);
+>  }
+
+Same here, it should probably be static inline.
+
+>  
+> -/* Maximum supported vector length across all CPUs (initially poisoned) */
+> -int __ro_after_init sve_max_vl = SVE_VL_MIN;
+> -int __ro_after_init sve_max_virtualisable_vl = SVE_VL_MIN;
+> -
+> -/*
+> - * Set of available vector lengths,
+> - * where length vq encoded as bit __vq_to_bit(vq):
+> - */
+> -__ro_after_init DECLARE_BITMAP(sve_vq_map, SVE_VQ_MAX);
+> -/* Set of vector lengths present on at least one cpu: */
+> -static __ro_after_init DECLARE_BITMAP(sve_vq_partial_map, SVE_VQ_MAX);
+> +static void set_sve_default_vl(int val)
+> +{
+> +	set_default_vl(ARM64_VEC_SVE, val);
+> +}
+
+And here.
+
+-- 
+Catalin
