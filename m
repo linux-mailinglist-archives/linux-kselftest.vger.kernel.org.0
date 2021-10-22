@@ -2,157 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C55436F63
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Oct 2021 03:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F63436F95
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Oct 2021 03:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbhJVBcM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Oct 2021 21:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
+        id S231473AbhJVByc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Oct 2021 21:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbhJVBcM (ORCPT
+        with ESMTP id S230521AbhJVByb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 21:32:12 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAA2C061764
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 18:29:55 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id j3so2659806ilr.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 18:29:55 -0700 (PDT)
+        Thu, 21 Oct 2021 21:54:31 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D14C061766
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 18:52:14 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k7so2262482wrd.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 18:52:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=b3jDBk9yo6edEGUuLwwaGLCXLGM6rDEU8cNKE6u53Dk=;
-        b=oxbZC7ZhdszFv0Hb2S0jw4TtI/KtS15YhuoM+td6UKf8Lk3b7v45BgaaIZcV08Pv9p
-         qzpAG6oJ4oGon3Iu32Dq5WQ09YAIc5ha54mHceVOkRXpW2F3cgbYB6q+rH56+Zlw3Z8G
-         e1df350l668uaFM+P656oyIhAIaZQKHjqlDrQypLS3aTuPhfPpaAIK6xvU0oaMCduvwJ
-         ng2QsUslga3G7Sx5AGuTGctLe6OZhCGdNYt6obHx7gJIlGV/ZbzzE2nRaZL6E0lXv1P/
-         hwPNadOsGUYYsDCaaqBM4MT+WeBrQ09Pg6SXeiYRqDtGDA95crWSmf326nGO/muwYcUm
-         +eyw==
+        bh=RqJHISvUCdhEFp+Jfgg5EOh8TgpsKhCaH+eHcg+5i2Y=;
+        b=geA75xiju7ZMZN4ckoJltl1taoSytz0vDR0aUH2zGkzS5LlcaCLYJ3v2j65OVqS4d0
+         LhNXXiHE1nTM1iJlHxOLKkwEKqE8scg/s4lgsQOOjDPUCmbeZlgy3mT9AiIfPILncws/
+         uWxZO8gzRA5niJ2cNZTrDedqyQ0yUDXEmIO8Ipohvu4ukJoYznxsDQdkzQE+pMtNyNWf
+         zEU5A2mOwsB30h9aiQvUxUrRzH5lTZ8ba9mZ+wD5n3XY5VNlivfz1e3HFa+KiDdils8R
+         9ITkrwBZPx+mboOIkxpjLC8Dv3tAeODQEfoYNTyTNtVWsOCxeaGy9/FTFVYmeFOX2qun
+         Ql7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=b3jDBk9yo6edEGUuLwwaGLCXLGM6rDEU8cNKE6u53Dk=;
-        b=0e/NtABa0nLwLQznhiW8ZnqV2a2Z3kIo7ISRakztCtM5SErFr0RAaOFISVh+KUOKGC
-         QvcG70LkMzKnp7pYaQt0zOecs8lsStv8alwm+HVWuiCelmjbrnMktK7J//OUyDvwJzng
-         E4nVpUdMigisDtSkwHtWgXMaWC9YoQR3vo+Op2SKSX0C5jDOhyT5kpLLJXxoLjLYn5vZ
-         rx+tIrAs8wxFPprkwUaFg4Zi16ZJgT/DGIiOBkMJwT/8P7qJPefEdu21EUgjefrvd2LV
-         FM4fOa6phgoEcm5cHYAzmjUPb/kV5nWiKqaKIghr/2lSoay3aG1iwWvRrM7w5fvQIZxp
-         DUlA==
-X-Gm-Message-State: AOAM533seFdj6jTT43FarFU9Ck2OGklhYTyn/aG525NVADtCzEcB9XJB
-        8IuFsWj1Juzdvi8SCfr6V6gIbDxVor6EVSHLBPURxg==
-X-Google-Smtp-Source: ABdhPJzIcijVx0u8vP2/ilhqKw53hS2Rv+mSujkBZjeFpghYtPw3LN2tb012rXfai1OQ0aFDYuBtXkJzukmEeSjMPds=
-X-Received: by 2002:a92:cf44:: with SMTP id c4mr5888531ilr.293.1634866195037;
- Thu, 21 Oct 2021 18:29:55 -0700 (PDT)
+        bh=RqJHISvUCdhEFp+Jfgg5EOh8TgpsKhCaH+eHcg+5i2Y=;
+        b=rIQ4F5UK4Qd7dgZejps00LvRivh+z6+vxA/w1jNJ1wdUPp4/+zFLZrN4i1Ay5tA7Yd
+         lstBminmT3MjqEkl+YD+j/ytxJtPBrrOnu/4XcxZnZLPPUKxaeXLxkKRm1Q77f8lgBwo
+         36yf10698jj3xGsc7ToKtnH3CBzZvFFUr9cIhlqj3vtwXUIgL5Ucbn0I6mlIbIYo66HT
+         r17wScQCgjyM1h3UUqV2Abz2jOHKkubQhTSp4qVr2TDM0MdFXkcco0kw+C8RAAN7TmCi
+         0V7pZkf5V/zp31/1T5FM4ZtdlGkA+Asj+nId3+5IhW32J1cGtLxgx+Qj9xtFBd2wLZiq
+         B25Q==
+X-Gm-Message-State: AOAM53049zS1Bir0QQUAjlvVswP8LGl0ev3gLAp4paF2kUOsrjxOnoAl
+        rAbT9H9x/JLzx/9D7xy40ANKtDyou5vSdYXhJzXgZw==
+X-Google-Smtp-Source: ABdhPJzJUYAcLIkgypewSxqfh/YypBeD5x+U0jk4OrSfZ4B3G4uCjLduqAwQvZ5WQyX9+qPxhn5uB82NxzZ27LTAVLg=
+X-Received: by 2002:a05:6000:1362:: with SMTP id q2mr11861419wrz.44.1634867533110;
+ Thu, 21 Oct 2021 18:52:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211021062819.1313964-1-davidgow@google.com>
-In-Reply-To: <20211021062819.1313964-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 21 Oct 2021 18:29:43 -0700
-Message-ID: <CAGS_qxoBhfaE7NLzKWrsxwwz9BFeLRzb9Ycc-6U29pmtceqCTQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: Do not error on tests without test plans
-To:     David Gow <davidgow@google.com>
+References: <20211022004936.2049804-1-dlatypov@google.com>
+In-Reply-To: <20211022004936.2049804-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 22 Oct 2021 09:52:01 +0800
+Message-ID: <CABVgOSmn+JGAaNV7FFOfzrn=dODHFE==YUSEE3qqBeKiy+j2pA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix typecheck errors about loading qemu configs
+To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 11:28 PM David Gow <davidgow@google.com> wrote:
+On Fri, Oct 22, 2021 at 8:49 AM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> The (K)TAP spec encourages test output to begin with a 'test plan': a
-> count of the number of tests being run of the form:
-> 1..n
+> Currently, we have these errors:
+> $ mypy ./tools/testing/kunit/*.py
+> tools/testing/kunit/kunit_kernel.py:213: error: Item "_Loader" of "Optional[_Loader]" has no attribute "exec_module"
+> tools/testing/kunit/kunit_kernel.py:213: error: Item "None" of "Optional[_Loader]" has no attribute "exec_module"
+> tools/testing/kunit/kunit_kernel.py:214: error: Module has no attribute "QEMU_ARCH"
+> tools/testing/kunit/kunit_kernel.py:215: error: Module has no attribute "QEMU_ARCH"
 >
-> However, some test suites might not know the number of subtests in
-> advance (for example, KUnit's parameterised tests use a generator
-> function). In this case, it's not possible to print the test plan in
-> advance.
+> exec_module
+> ===========
 >
-> kunit_tool already parses test output which doesn't contain a plan, but
-> reports an error. Since we want to use nested subtests with KUnit
-> paramterised tests, remove this error.
+> pytype currently reports no errors, but that's because there's a comment
+> disabling it on 213.
 >
-> Signed-off-by: David Gow <davidgow@google.com>
+> This is due to https://github.com/python/typeshed/pull/2626.
+> The fix is to assert the loaded module implements the ABC
+> (abstract base class) we want which has exec_module support.
+>
+> QEMU_ARCH
+> =========
+>
+> pytype is fine with this, but mypy is not:
+> https://github.com/python/mypy/issues/5059
+>
+> Add a check that the loaded module does indeed have QEMU_ARCH.
+> Note: this is not enough to appease mypy, so we also add a comment to
+> squash the warning.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
->  tools/testing/kunit/kunit_parser.py    | 5 ++---
->  tools/testing/kunit/kunit_tool_test.py | 5 ++++-
->  2 files changed, 6 insertions(+), 4 deletions(-)
+
+Thanks -- this has been annoying me quite a bit, so it's good to have
+it fixed. It's a bit of a shame mypy needs the additional comment, but
+what can you do...
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  tools/testing/kunit/kunit_kernel.py | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
 >
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index 3355196d0515..50ded55c168c 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -340,8 +340,8 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
->         """
->         Parses test plan line and stores the expected number of subtests in
->         test object. Reports an error if expected count is 0.
-> -       Returns False and reports missing test plan error if fails to parse
-> -       test plan.
-> +       Returns False and sets expected_count to None if there is no valid test
-> +       plan.
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index faa6320e900e..c68b17905481 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -207,12 +207,15 @@ def get_source_tree_ops_from_qemu_config(config_path: str,
+>         module_path = '.' + os.path.join(os.path.basename(QEMU_CONFIGS_DIR), os.path.basename(config_path))
+>         spec = importlib.util.spec_from_file_location(module_path, config_path)
+>         config = importlib.util.module_from_spec(spec)
+> -       # TODO(brendanhiggins@google.com): I looked this up and apparently other
+> -       # Python projects have noted that pytype complains that "No attribute
+> -       # 'exec_module' on _importlib_modulespec._Loader". Disabling for now.
+> -       spec.loader.exec_module(config) # pytype: disable=attribute-error
+> -       return config.QEMU_ARCH.linux_arch, LinuxSourceTreeOperationsQemu(
+> -                       config.QEMU_ARCH, cross_compile=cross_compile)
+> +       # See https://github.com/python/typeshed/pull/2626 for context.
+> +       assert isinstance(spec.loader, importlib.abc.Loader)
+> +       spec.loader.exec_module(config)
+> +
+> +       if not hasattr(config, 'QEMU_ARCH'):
+> +               raise ValueError('qemu_config module missing "QEMU_ARCH": ' + config_path)
+> +       params: qemu_config.QemuArchParams = config.QEMU_ARCH  # type: ignore
+> +       return params.linux_arch, LinuxSourceTreeOperationsQemu(
+> +                       params, cross_compile=cross_compile)
 >
->         Accepted format:
->         - '1..[number of subtests]'
-> @@ -356,7 +356,6 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
->         match = TEST_PLAN.match(lines.peek())
->         if not match:
->                 test.expected_count = None
-> -               test.add_error('missing plan line!')
-
-This works well, but there's an edge case.
-
-This patch means we no longer print an error when there are no test
-cases in a subtest.
-We relied on a check just a bit lower in this function.
-
-Consider
-
-$ ./tools/testing/kunit/kunit.py parse <<EOF
-TAP version 14
-1..1
-  # Subtest: suite
-  1..1
-    # Subtest: case
-  ok 1 - case
-ok 1 - suite
-EOF
-
-This produces the following output (timestamps removed)
-
-============================================================
-==================== suite (1 subtest) =====================
-=========================== case ===========================
-====================== [PASSED] case =======================
-====================== [PASSED] suite ======================
-============================================================
-
-Should we surface some sort of error here?
-
-
->                 return False
->         test.log.append(lines.pop())
->         expected_count = int(match.group(1))
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 9c4126731457..bc8793145713 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -191,7 +191,10 @@ class KUnitParserTest(unittest.TestCase):
->                         result = kunit_parser.parse_run_tests(
->                                 kunit_parser.extract_tap_lines(
->                                 file.readlines()))
-> -               self.assertEqual(2, result.test.counts.errors)
-> +               # A missing test plan is not an error.
-> +               self.assertEqual(0, result.test.counts.errors)
-> +               # All tests should be accounted for.
-> +               self.assertEqual(10, result.test.counts.total())
->                 self.assertEqual(
->                         kunit_parser.TestStatus.SUCCESS,
->                         result.status)
+>  class LinuxSourceTree(object):
+>         """Represents a Linux kernel source tree with KUnit tests."""
+>
+> base-commit: 17ac23eb43f0cbefc8bfce44ad51a9f065895f9f
 > --
 > 2.33.0.1079.g6e70778dc9-goog
 >
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20211022004936.2049804-1-dlatypov%40google.com.
