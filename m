@@ -2,269 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA182439A55
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Oct 2021 17:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3963E439BA6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Oct 2021 18:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbhJYPXk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Oct 2021 11:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbhJYPXj (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Oct 2021 11:23:39 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E492C061745
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 08:21:17 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id h196so16012303iof.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 08:21:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g1N2MO7N+EoVGOL8rm+6dntk5xyx9uo4x6BVPD8b8i4=;
-        b=btnZrTqrV8hWsqiRSBJDRcIPRvsL2WGZqnvIOZq2RGW9ie4jz0jOT2I3L0ta+jakLh
-         WT0cIfcm0SYmeQMfPl4M6ksJIWUQT/BAXnMTgGuPgY4yoyxkRSyVk70heUOcpRVwszmt
-         RRdkGe8RSY2RjAf5hMxvhGpr9yfChFwYR5qsXpohoRX0vbYJsLmLyn6oAYoeEN0LpvMR
-         o9UayIktI8I/JwCPHb9FLmItFtn4JsSP7e1ZgRIEV4KWzwIcKKQT28+MCOxCP7TUPPL4
-         s/7/gHBcT4gV39/N+kOsZfX13LTr4yAGEoA7Vvu3JRAUsm4CRCVO76VS2a3TbNF//SoM
-         vxPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g1N2MO7N+EoVGOL8rm+6dntk5xyx9uo4x6BVPD8b8i4=;
-        b=7Zjl+eMnexN9abzH6TqIuzOG8vFfkJAkUYz1mVO3DLogCv2W1Y+pLePsHkIwFujcql
-         XHYOYScovAcJs9WXeWFLz5xK+qbtNPodbTuLaq3T4O/5xtWZJjZo5yCjwCHi7iFpsV4D
-         raMgXo+Lwo4yb6D8r74KK7Bxh/wEyMftl4fcKDc39mV7vLnCOTs7jc8d5hsCqiFlNbyE
-         j04lh9yhRyrny7Ys3lwcPHWLClzhgRyRe3rMYgXxVVEYo/z+xzNotv/pGJ5EEJ6ZDN9T
-         hkwVkULbLS2c3Lh5WlOLujhRxaP6vKsyL1c1bw3bQ6aVmSOKI9fi7YeFATpa8t0sxFYR
-         fvgQ==
-X-Gm-Message-State: AOAM53186hd02jxVAMpIZmXd94y0pdgR42H7n/auvsHmsA6r4ceGkzYg
-        QM2UfhIRPMhZUYkIEn0eq+f2Ch+WumkoI93OFlOO7w==
-X-Google-Smtp-Source: ABdhPJxjROoU61QBEa6QDpH9l7ZSa9Wuo2kqW4KQ5DnUb06qClsiHK4GXPxrZljd/AzSQZishvfxqaGh4IGzWcMeaUM=
-X-Received: by 2002:a5e:de46:: with SMTP id e6mr11428803ioq.62.1635175276512;
- Mon, 25 Oct 2021 08:21:16 -0700 (PDT)
+        id S233155AbhJYQiC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Oct 2021 12:38:02 -0400
+Received: from mail-mw2nam10on2045.outbound.protection.outlook.com ([40.107.94.45]:24161
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233257AbhJYQiC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 25 Oct 2021 12:38:02 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZlCKdONOAuobQa3gH5AJaS7KpLg5u5MKeSAFX7gnJc9QpBaDB0wsZ4PtzPmtQLndrdzaCUnsi6adsjKyx0vIpj4Oimqbyg/Wt+kg2rPuchYSnxF5LUsNLHDp77jv6UsoxVJEd2sGkaUSnb9ZJE7+SN733PVrv3y5xx1UUbM9Ur+TeMShsNMbIvoxwFTEQtnwiWGpXp1EnFNcNmWb3Y6R0yhCSAPYlRKB+sXExrBaec2cIsN71suGhDQUs/K4W132kB39v+OHfSIyQfj3lUct8tgG1IpX7gidwIhtzoPzwNJ3pphLKf/hnFsNjlc8tnSgykh7ROsuFL16Y0Twlqd1Uw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eXBs+uCQU5dRKV1r5LoCgbi/NTMnDSA4JMqtk/FNA6E=;
+ b=OoNbAQ78AXHdssEmy3YZ8rgsEvAjIFhNM+RndaJa6hURl2SLa1Du8FtFFaGlWfNx6jZ4RcqLePI5D1fHCxaVQjkS8foB5Cp3dIsyxJDMrURceL3U1GDDlNDEJTUOaSS7goAJk23OghyTXiPkGKVxt1QiI0SNjiH8CiTzh2aU8XsBH/1rgb/RJ0E4j4YO2jWona+DGjKEo/67wES/F8wIv5i2RShRVAt90dZkIR6Nkrx1hyQiPmdcZGOGnuCtq3tYBttDdqiUofk5madUbsUearkjA7WUUz84Y36Z7+AT0LJm+J8HZ0/nqRCFt3cspmC4YmEH6x1ZmG+z2VUolXSzwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eXBs+uCQU5dRKV1r5LoCgbi/NTMnDSA4JMqtk/FNA6E=;
+ b=4gu4LL0ZNaSBQwFtePuY6Y3nysl8V/B+q8dSXgHVhZxdc9IwxL2hpO7k36X7vdTnje0q/SAc6YuLr8z07holFLDIWeUtXiWurIjp5ABej0QkxZOb8bSlN8X6lXvMeZvUoOAyqRtdGD5HW0MJA2qi7KcrlCiixphxT6MCgbTt6DI=
+Received: from MW4PR04CA0352.namprd04.prod.outlook.com (2603:10b6:303:8a::27)
+ by BN6PR1201MB0018.namprd12.prod.outlook.com (2603:10b6:405:54::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16; Mon, 25 Oct
+ 2021 16:35:35 +0000
+Received: from CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8a:cafe::51) by MW4PR04CA0352.outlook.office365.com
+ (2603:10b6:303:8a::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.18 via Frontend
+ Transport; Mon, 25 Oct 2021 16:35:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT059.mail.protection.outlook.com (10.13.174.160) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4628.16 via Frontend Transport; Mon, 25 Oct 2021 16:35:35 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Mon, 25 Oct
+ 2021 11:35:34 -0500
+Date:   Mon, 25 Oct 2021 09:14:27 -0500
+From:   Michael Roth <michael.roth@amd.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+CC:     <linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Mingwei Zhang" <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "Tom Lendacky" <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "David Woodhouse" <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        "Jim Mattson" <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Subject: Re: [RFC 03/16] KVM: selftests: handle encryption bits in page tables
+Message-ID: <20211025141427.u2dstri5ehgegryk@amd.com>
+References: <20211005234459.430873-1-michael.roth@amd.com>
+ <20211005234459.430873-4-michael.roth@amd.com>
+ <31db4c63-218a-5b26-f6ed-d30113f95e29@redhat.com>
+ <20211024164945.mt62qjrld3dwssv4@amd.com>
+ <9de44944-57c1-047c-8c66-94eee6369a67@redhat.com>
 MIME-Version: 1.0
-References: <20211021062819.1313964-1-davidgow@google.com> <CAGS_qxoBhfaE7NLzKWrsxwwz9BFeLRzb9Ycc-6U29pmtceqCTQ@mail.gmail.com>
- <CABVgOS=vbqNnc_uW9czL6+vD55+XVa0X+=VPH+Tz0nGg0EF2gA@mail.gmail.com> <CAGS_qxqVWSTPdNs4AedPdHwj_QqUTi5JML4284FQDgD4CRoXHw@mail.gmail.com>
-In-Reply-To: <CAGS_qxqVWSTPdNs4AedPdHwj_QqUTi5JML4284FQDgD4CRoXHw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 25 Oct 2021 08:21:05 -0700
-Message-ID: <CAGS_qxq=MO_f3Nsm8VbXj5WOu5dPNbj4yeNHwAfZxxVyNgCszw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: Do not error on tests without test plans
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <9de44944-57c1-047c-8c66-94eee6369a67@redhat.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fb5e2cb0-1c92-44e6-a458-08d997d5784a
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0018:
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB00188BAD8CE96095C5743D5195839@BN6PR1201MB0018.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nbXRfgP2dHq5wtMeDWaNWNWhyVbWMADNh8m6M7PgmZ10PGCjugpz4sv5SEIfMzOoOwV6iSBqN32ugeL7AJgzMcgOJ2ZI9CRTdljCHIz8GH57ZEWHkC/72Ct7p5SGiwR7+LkwkFrU7Lbq5II7rQjAhpTFRINoZzHRp8ktpPHwE/ydYYPpQPuWd/1p66OkGHky/cSeXUUlnbaBU+/sfau/bU7zrkkLXdHOI7kVW20wYB8XLjKxG6XruYXkw9A2ra/WWoswkZV3YohENEKj34XzBUNpTivivVMTA3L/26OOcbcflqI9VoQXOA6E+NMUG/GDJpdj/AiE1Dj1Kp+iJSnchRSCYpGko/7EO/IKJ/ttu5CU+4jMnHX5VynNp1BUkfPAw5vFtjWBw+dmh4wOxEaTRP7PHZxkSrCbM0LYIVUOEB4j0NHjv14ejR5BPw7NS7PHoKJfJJBFvAHMmkQisTJfZbVVp7Du/yAnk0oNzV82iNuncCJW0vixIGK1M8189ToyNyrvupMvOL1Yqz6wwnqK7rC2YGrbKTxrmcN02hgOcSr1ALxr/er5j49Ke70hASOr5DYhhqFC+ZcHUsjZPfmjf6J3oNFfXxrinX0Jmi3w9nQmPUKZ4Cusx/HayOgVOw9/D2smwjhUQxWm1ps4DMhcRu0xZZckR1ufnHacCzkU22yiDD6wGasg7qUU8eqNWkmxWRvO0pFjUhrCJrC0qvCPebXfjFKPts5QM+kwHtNokMM=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(81166007)(47076005)(2906002)(7416002)(508600001)(54906003)(36860700001)(356005)(8676002)(4326008)(6916009)(426003)(44832011)(186003)(336012)(8936002)(53546011)(36756003)(16526019)(70586007)(5660300002)(2616005)(4744005)(6666004)(1076003)(70206006)(82310400003)(86362001)(26005)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2021 16:35:35.0152
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb5e2cb0-1c92-44e6-a458-08d997d5784a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0018
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 3:41 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Thu, Oct 21, 2021 at 11:10 PM David Gow <davidgow@google.com> wrote:
-> >
-> > On Fri, Oct 22, 2021 at 9:29 AM Daniel Latypov <dlatypov@google.com> wrote:
-> > >
-> > > On Wed, Oct 20, 2021 at 11:28 PM David Gow <davidgow@google.com> wrote:
-> > > >
-> > > > The (K)TAP spec encourages test output to begin with a 'test plan': a
-> > > > count of the number of tests being run of the form:
-> > > > 1..n
-> > > >
-> > > > However, some test suites might not know the number of subtests in
-> > > > advance (for example, KUnit's parameterised tests use a generator
-> > > > function). In this case, it's not possible to print the test plan in
-> > > > advance.
-> > > >
-> > > > kunit_tool already parses test output which doesn't contain a plan, but
-> > > > reports an error. Since we want to use nested subtests with KUnit
-> > > > paramterised tests, remove this error.
-> > > >
-> > > > Signed-off-by: David Gow <davidgow@google.com>
-> > > > ---
-> > > >  tools/testing/kunit/kunit_parser.py    | 5 ++---
-> > > >  tools/testing/kunit/kunit_tool_test.py | 5 ++++-
-> > > >  2 files changed, 6 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> > > > index 3355196d0515..50ded55c168c 100644
-> > > > --- a/tools/testing/kunit/kunit_parser.py
-> > > > +++ b/tools/testing/kunit/kunit_parser.py
-> > > > @@ -340,8 +340,8 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
-> > > >         """
-> > > >         Parses test plan line and stores the expected number of subtests in
-> > > >         test object. Reports an error if expected count is 0.
-> > > > -       Returns False and reports missing test plan error if fails to parse
-> > > > -       test plan.
-> > > > +       Returns False and sets expected_count to None if there is no valid test
-> > > > +       plan.
-> > > >
-> > > >         Accepted format:
-> > > >         - '1..[number of subtests]'
-> > > > @@ -356,7 +356,6 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
-> > > >         match = TEST_PLAN.match(lines.peek())
-> > > >         if not match:
-> > > >                 test.expected_count = None
-> > > > -               test.add_error('missing plan line!')
-> > >
-> > > This works well, but there's an edge case.
-> > >
-> > > This patch means we no longer print an error when there are no test
-> > > cases in a subtest.
-> > > We relied on a check just a bit lower in this function.
-> > >
-> > > Consider
-> > >
-> > > $ ./tools/testing/kunit/kunit.py parse <<EOF
-> > > TAP version 14
-> > > 1..1
-> > >   # Subtest: suite
-> > >   1..1
-> > >     # Subtest: case
-> > >   ok 1 - case
-> > > ok 1 - suite
-> > > EOF
-> > >
-> > > This produces the following output (timestamps removed)
-> > >
-> > > ============================================================
-> > > ==================== suite (1 subtest) =====================
-> > > =========================== case ===========================
-> > > ====================== [PASSED] case =======================
-> > > ====================== [PASSED] suite ======================
-> > > ============================================================
-> > >
-> > > Should we surface some sort of error here?
-> >
-> > I thought about this a bit (and started prototyping it), and think the
-> > answer is probably "no" (or, perhaps, "optionally"). Largely because I
-> > think it'd be technically valid to have, e.g., a parameterised test
-> > whose generator function can legitimately provide zero subtests. And
->
-> That's the question. Should we report PASSED in that case as we do now?
->
-> Let's consider parameterised tests, our only current example in KUnit.
->
-> I think in most cases, it's a bug that if we got 0 cases and we should
-> let the user know somehow.
+On Mon, Oct 25, 2021 at 09:34:10AM +0200, Paolo Bonzini wrote:
+> On 24/10/21 18:49, Michael Roth wrote:
+> > So test code would need to consider cases where addr_gpa2raw() needs to be
+> > used to set the C-bit (which is basically only when they want to mix usage
+> > of the vm_phy_page[s]_alloc with their own mapping of the guest page tables,
+> > which doesn't seem to be done in any existing tests anyway).
+> 
+> Yes, and it seems like a more rare case in general.
+> 
+> > The library code would need these addr_gpa2raw() hooks in places where
+> > it calls virt_*map() internally. Probably just a handful of places
+> > though.
+> 
+> Either that, or you can have virt_*map that consults the encryption bitmap,
+> and virt_*map_enc (or _raw, doesn't matter) that takes the encryption state
+> explicitly as a bool.
 
-Actually, when I tried to pass in an empty parameter array, I get a segfault.
-So I guess we *do* let the user know somehow :)
-
-The root cause: we call test_case->run_case(test), but the
-test->param_value == NULL.
-So the test code will segfault whenever it tries to read from param_value.
-
-A hacky fix:
-
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 85265f9a66a1..e55f842ae355 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -513,6 +513,8 @@ int kunit_run_tests(struct kunit_suite *suite)
-                }
-
-                do {
-+                       if (test_case->generate_params && !test.param_value)
-+                               break;  // there were no parameters generated!
-                        kunit_run_case_catch_errors(suite, test_case, &test);
-
-                        if (test_case->generate_params) {
-
-> Should it be an error/warning? Maybe not, but wouldn't it be better to
-> report SKIPPED?
-> (This would require a change in KUnit on the kernel side, I'm not
-> suggesting we do this in the parser)
-
-Being a bit more concrete, I was originally thinking of the following:
-
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 85265f9a66a1..3f7141a72308 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -537,6 +537,9 @@ int kunit_run_tests(struct kunit_suite *suite)
-
-                } while (test.param_value);
-
-+               if (param_stats.total == 0)
-+                       test_case->status = KUNIT_SKIPPED;
-+
-                kunit_print_test_stats(&test, param_stats);
-
-                kunit_print_ok_not_ok(&test, true, test_case->status,
-
-But tacking onto the hacky fix above, it could look like
-
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 85265f9a66a1..a2d93b44ef88 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -513,6 +513,13 @@ int kunit_run_tests(struct kunit_suite *suite)
-                }
-
-                do {
-+                       if (test_case->generate_params && !test.param_value) {
-+                               strncpy(test.status_comment,"No test
-parameters generated",
-+                                       sizeof(test.status_comment));
-+                               test_case->status = KUNIT_SKIPPED;
-+                               break;
-+                       }
-+
-                        kunit_run_case_catch_errors(suite, test_case, &test);
-
-                        if (test_case->generate_params) {
-
-
-
-
->
-> > while that's probably worth warning about if it's the only test
-> > running, if you're trying to run all tests, and one random subtest of
-> > a test of a suite has no subtests, that seems like it'd be more
-> > annoying to error on than anything else.
-> >
-> > That being said, I'm not opposed to implementing it as an option, or
-> > at least having the test status set to NO_ERROR. The implementation
-> > I've experimented with basically moves the check to "parse_test", and
-> > errors if the number of subtests is 0 after parsing, if parent_test is
-> > true (or main, but my rough plan was to make main imply parent_test,
-> > and adjust the various conditions to match). I haven't looked into
-> > exactly how this is bubbled up yet, but I'd be okay with having an
-> > error if there are no tests run at all.
-> >
-> > I'll keep playing with this anyway: it's definitely a bit more of a
-> > minefield than I'd originally thought. :-)
-> >
-> > -- David
-> >
-> > >
-> > >
-> > > >                 return False
-> > > >         test.log.append(lines.pop())
-> > > >         expected_count = int(match.group(1))
-> > > > diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> > > > index 9c4126731457..bc8793145713 100755
-> > > > --- a/tools/testing/kunit/kunit_tool_test.py
-> > > > +++ b/tools/testing/kunit/kunit_tool_test.py
-> > > > @@ -191,7 +191,10 @@ class KUnitParserTest(unittest.TestCase):
-> > > >                         result = kunit_parser.parse_run_tests(
-> > > >                                 kunit_parser.extract_tap_lines(
-> > > >                                 file.readlines()))
-> > > > -               self.assertEqual(2, result.test.counts.errors)
-> > > > +               # A missing test plan is not an error.
-> > > > +               self.assertEqual(0, result.test.counts.errors)
-> > > > +               # All tests should be accounted for.
-> > > > +               self.assertEqual(10, result.test.counts.total())
-> > > >                 self.assertEqual(
-> > > >                         kunit_parser.TestStatus.SUCCESS,
-> > > >                         result.status)
-> > > > --
-> > > > 2.33.0.1079.g6e70778dc9-goog
-> > > >
+That sounds promising. Will give that a shot. Thanks!
