@@ -2,132 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3963E439BA6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Oct 2021 18:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5256843A30F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Oct 2021 21:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbhJYQiC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Oct 2021 12:38:02 -0400
-Received: from mail-mw2nam10on2045.outbound.protection.outlook.com ([40.107.94.45]:24161
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233257AbhJYQiC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Oct 2021 12:38:02 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZlCKdONOAuobQa3gH5AJaS7KpLg5u5MKeSAFX7gnJc9QpBaDB0wsZ4PtzPmtQLndrdzaCUnsi6adsjKyx0vIpj4Oimqbyg/Wt+kg2rPuchYSnxF5LUsNLHDp77jv6UsoxVJEd2sGkaUSnb9ZJE7+SN733PVrv3y5xx1UUbM9Ur+TeMShsNMbIvoxwFTEQtnwiWGpXp1EnFNcNmWb3Y6R0yhCSAPYlRKB+sXExrBaec2cIsN71suGhDQUs/K4W132kB39v+OHfSIyQfj3lUct8tgG1IpX7gidwIhtzoPzwNJ3pphLKf/hnFsNjlc8tnSgykh7ROsuFL16Y0Twlqd1Uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eXBs+uCQU5dRKV1r5LoCgbi/NTMnDSA4JMqtk/FNA6E=;
- b=OoNbAQ78AXHdssEmy3YZ8rgsEvAjIFhNM+RndaJa6hURl2SLa1Du8FtFFaGlWfNx6jZ4RcqLePI5D1fHCxaVQjkS8foB5Cp3dIsyxJDMrURceL3U1GDDlNDEJTUOaSS7goAJk23OghyTXiPkGKVxt1QiI0SNjiH8CiTzh2aU8XsBH/1rgb/RJ0E4j4YO2jWona+DGjKEo/67wES/F8wIv5i2RShRVAt90dZkIR6Nkrx1hyQiPmdcZGOGnuCtq3tYBttDdqiUofk5madUbsUearkjA7WUUz84Y36Z7+AT0LJm+J8HZ0/nqRCFt3cspmC4YmEH6x1ZmG+z2VUolXSzwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eXBs+uCQU5dRKV1r5LoCgbi/NTMnDSA4JMqtk/FNA6E=;
- b=4gu4LL0ZNaSBQwFtePuY6Y3nysl8V/B+q8dSXgHVhZxdc9IwxL2hpO7k36X7vdTnje0q/SAc6YuLr8z07holFLDIWeUtXiWurIjp5ABej0QkxZOb8bSlN8X6lXvMeZvUoOAyqRtdGD5HW0MJA2qi7KcrlCiixphxT6MCgbTt6DI=
-Received: from MW4PR04CA0352.namprd04.prod.outlook.com (2603:10b6:303:8a::27)
- by BN6PR1201MB0018.namprd12.prod.outlook.com (2603:10b6:405:54::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16; Mon, 25 Oct
- 2021 16:35:35 +0000
-Received: from CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8a:cafe::51) by MW4PR04CA0352.outlook.office365.com
- (2603:10b6:303:8a::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.18 via Frontend
- Transport; Mon, 25 Oct 2021 16:35:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT059.mail.protection.outlook.com (10.13.174.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4628.16 via Frontend Transport; Mon, 25 Oct 2021 16:35:35 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Mon, 25 Oct
- 2021 11:35:34 -0500
-Date:   Mon, 25 Oct 2021 09:14:27 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-CC:     <linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-        Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Mingwei Zhang" <mizhang@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "Tom Lendacky" <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "David Woodhouse" <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        "Jim Mattson" <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>
-Subject: Re: [RFC 03/16] KVM: selftests: handle encryption bits in page tables
-Message-ID: <20211025141427.u2dstri5ehgegryk@amd.com>
-References: <20211005234459.430873-1-michael.roth@amd.com>
- <20211005234459.430873-4-michael.roth@amd.com>
- <31db4c63-218a-5b26-f6ed-d30113f95e29@redhat.com>
- <20211024164945.mt62qjrld3dwssv4@amd.com>
- <9de44944-57c1-047c-8c66-94eee6369a67@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <9de44944-57c1-047c-8c66-94eee6369a67@redhat.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fb5e2cb0-1c92-44e6-a458-08d997d5784a
-X-MS-TrafficTypeDiagnostic: BN6PR1201MB0018:
-X-Microsoft-Antispam-PRVS: <BN6PR1201MB00188BAD8CE96095C5743D5195839@BN6PR1201MB0018.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nbXRfgP2dHq5wtMeDWaNWNWhyVbWMADNh8m6M7PgmZ10PGCjugpz4sv5SEIfMzOoOwV6iSBqN32ugeL7AJgzMcgOJ2ZI9CRTdljCHIz8GH57ZEWHkC/72Ct7p5SGiwR7+LkwkFrU7Lbq5II7rQjAhpTFRINoZzHRp8ktpPHwE/ydYYPpQPuWd/1p66OkGHky/cSeXUUlnbaBU+/sfau/bU7zrkkLXdHOI7kVW20wYB8XLjKxG6XruYXkw9A2ra/WWoswkZV3YohENEKj34XzBUNpTivivVMTA3L/26OOcbcflqI9VoQXOA6E+NMUG/GDJpdj/AiE1Dj1Kp+iJSnchRSCYpGko/7EO/IKJ/ttu5CU+4jMnHX5VynNp1BUkfPAw5vFtjWBw+dmh4wOxEaTRP7PHZxkSrCbM0LYIVUOEB4j0NHjv14ejR5BPw7NS7PHoKJfJJBFvAHMmkQisTJfZbVVp7Du/yAnk0oNzV82iNuncCJW0vixIGK1M8189ToyNyrvupMvOL1Yqz6wwnqK7rC2YGrbKTxrmcN02hgOcSr1ALxr/er5j49Ke70hASOr5DYhhqFC+ZcHUsjZPfmjf6J3oNFfXxrinX0Jmi3w9nQmPUKZ4Cusx/HayOgVOw9/D2smwjhUQxWm1ps4DMhcRu0xZZckR1ufnHacCzkU22yiDD6wGasg7qUU8eqNWkmxWRvO0pFjUhrCJrC0qvCPebXfjFKPts5QM+kwHtNokMM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(81166007)(47076005)(2906002)(7416002)(508600001)(54906003)(36860700001)(356005)(8676002)(4326008)(6916009)(426003)(44832011)(186003)(336012)(8936002)(53546011)(36756003)(16526019)(70586007)(5660300002)(2616005)(4744005)(6666004)(1076003)(70206006)(82310400003)(86362001)(26005)(316002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2021 16:35:35.0152
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb5e2cb0-1c92-44e6-a458-08d997d5784a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0018
+        id S237858AbhJYTzw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Oct 2021 15:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237065AbhJYTwg (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 25 Oct 2021 15:52:36 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F20C110F03
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 12:23:36 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id h185-20020a256cc2000000b005bdce4db0easo18763219ybc.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 12:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:cc;
+        bh=45dqToEc/K+4qvYglXNOL6jPB2qE5YwQ6TIrSNdSsg0=;
+        b=eQn5ZLssxldFFEhxptajYXoZMGs9HV23dovilifJseP8RIL4qBMurKl7iRcuLjZE6o
+         r6cCPI9WTfczLdj4jvolDqW7hIvzRcX10cFFN8pJUPJWwIrAiNF9dLx9v9rDAhLO5j0g
+         tnDckqwa3XkLFDIqwGnPJO7xY7+k2S52pjOKX8T8a1liNS15NQQMfXvCz9Q8sbVUgS9i
+         xGifvwdfMhU0uJiv0aWTfRJCCJVFdvOC2dKQ0U01PPy6xFfpcbG9hs1pZC0BtKDbI6mP
+         Iz4akSgkmSTn5yAKKyBrXimeu/macRug4e9BTx/cn2DAsZ9cRfBfrEFyUtb+v4BP8flJ
+         njXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
+        bh=45dqToEc/K+4qvYglXNOL6jPB2qE5YwQ6TIrSNdSsg0=;
+        b=thRoJC/0NaLXATgWn0/9SWVAq5MdH/KQJziLq4KH/E6mS1KfEMop3N+ChslPo4lbJI
+         wCap20+J/mLjyNNmnVfGmaAz1wbbTmUaM2g2tKRu7FVqkGNZDkEPXda9Y5dTVzzpGilE
+         pThYVdbK/UNJkmaH7xfDoSD4iQBZopFy0AE1B2nLUTrz5Vnpx8YeCxFaSHHlSXDbjYaa
+         VJII3JCk2ycZ/xu6zp+xWc3IH2+4ZWcQQNphdRdJ2OD4h+QKA0FhWCXokyoig5WZJGCK
+         7drNvZWZaNE3Cau9R5DopiC9bcMZfQgKDp8/LxkcJYNxRagm7F6Jm/hEYld288juVT/R
+         d5Lg==
+X-Gm-Message-State: AOAM530zjEWzt8yiDLvqGcREIFxHuuH8zd9YixTknjiGrT8Abhr1EZux
+        3KTPaRssGFBpYTzBPs6e30QE7pO5AiwrZLC1Bw==
+X-Google-Smtp-Source: ABdhPJxAredXlOjmRY+6CJVip/EoCfl8kgLTlcCmq4qx/3/Y9vNX8QPG8INl8LYUDvSsD121Ne63S2SXRngvuf0jDg==
+X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:b783:5702:523e:d435])
+ (user=kaleshsingh job=sendgmr) by 2002:a25:bd93:: with SMTP id
+ f19mr17888618ybh.23.1635189815637; Mon, 25 Oct 2021 12:23:35 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 12:23:11 -0700
+Message-Id: <20211025192330.2992076-1-kaleshsingh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
+Subject: [PATCH v3 0/8] tracing: Extend histogram triggers expression parsing
+From:   Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
+        kernel-team@android.com, Kalesh Singh <kaleshsingh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 09:34:10AM +0200, Paolo Bonzini wrote:
-> On 24/10/21 18:49, Michael Roth wrote:
-> > So test code would need to consider cases where addr_gpa2raw() needs to be
-> > used to set the C-bit (which is basically only when they want to mix usage
-> > of the vm_phy_page[s]_alloc with their own mapping of the guest page tables,
-> > which doesn't seem to be done in any existing tests anyway).
-> 
-> Yes, and it seems like a more rare case in general.
-> 
-> > The library code would need these addr_gpa2raw() hooks in places where
-> > it calls virt_*map() internally. Probably just a handful of places
-> > though.
-> 
-> Either that, or you can have virt_*map that consults the encryption bitmap,
-> and virt_*map_enc (or _raw, doesn't matter) that takes the encryption state
-> explicitly as a bool.
+Hi all,
 
-That sounds promising. Will give that a shot. Thanks!
+The v3 of the extending histogram exprssions series. The previous versions
+were posted at:
+
+v2: https://lore.kernel.org/r/20211020013153.4106001-1-kaleshsingh@google.com/
+v1: https://lore.kernel.org/r/20210915195306.612966-1-kaleshsingh@google.com/
+
+Patches 4 through 6 are new and adds some optimizations/improvements
+suggested by Steven Rostedt.
+
+The cover letter is copied below for convenience.
+
+Thanks,
+Kalesh
+
+---
+
+The frequency of the rss_stat trace event is known to be of the same
+magnitude as that of the sched_switch event on Android devices. This can
+cause flooding of the trace buffer with rss_stat traces leading to a
+decreased trace buffer capacity and loss of data.
+
+If it is not necessary to monitor very small changes in rss (as is the
+case in Android) then the rss_stat tracepoint can be throttled to only
+emit the event once there is a large enough change in the rss size.
+The original patch that introduced the rss_stat tracepoint also proposed
+a fixed throttling mechanism that only emits the rss_stat event
+when the rss size crosses a 512KB boundary. It was concluded that more
+generic support for this type of filtering/throttling was need, so that
+it can be applied to any trace event. [1]
+
+From the discussion in [1], histogram triggers seemed the most likely
+candidate to support this type of throttling. For instance to achieve the
+same throttling as was proposed in [1]:
+
+  (1) Create a histogram variable to save the 512KB bucket of the rss size
+  (2) Use the onchange handler to generate a synthetic event when the
+      rss size bucket changes.
+
+The only missing pieces to support such a hist trigger are:
+  (1) Support for setting a hist variable to a specific value -- to set
+      the bucket size / granularity.
+  (2) Support for division arithmetic operation -- to determine the
+      corresponding bucket for an rss size.
+
+This series extends histogram trigger expressions to:
+  (1) Allow assigning numeric literals to hist variable (eg. x=1234)
+      and using literals directly in expressions (eg. x=size/1234)
+  (2) Support division and multiplication in hist expressions.
+      (eg. a=$x/$y*z); and
+  (3) Fixes expression parsing for non-associative operators: subtraction
+      and division. (eg. 8-4-2 should be 2 not 6)
+
+The rss_stat event can then be throttled using histogram triggers as
+below:
+
+  # Create a synthetic event to monitor instead of the high frequency
+  # rss_stat event
+  echo 'rss_stat_throttled unsigned int mm_id; unsigned int curr;
+         int member; long size' >> tracing/synthetic_events
+
+  # Create a hist trigger that emits the synthetic rss_stat_throttled
+  # event only when the rss size crosses a 512KB boundary.
+  echo 'hist:keys=mm_id,member:bucket=size/0x80000:onchange($bucket)
+              .rss_stat_throttled(mm_id,curr,member,size)'
+        >> events/kmem/rss_stat/trigger
+
+ ------ Test Results ------
+Histograms can also be used to evaluate the effectiveness of this
+throttling by noting the Total Hits on each trigger:
+
+  echo 'hist:keys=common_pid' >> events/sched/sched_switch/trigger
+  echo 'hist:keys=common_pid' >> events/kmem/rss_stat/trigger
+  echo 'hist:keys=common_pid'
+           >> events/synthetic/rss_stat_throttled/trigger
+
+Allowing the above example (512KB granularity) run for 5 minutes on
+an arm64 device with 5.10 kernel:
+
+   sched_switch      : total hits = 147153
+   rss_stat          : total hits =  38863
+   rss_stat_throttled: total hits =   2409
+
+The synthetic rss_stat_throttled event is ~16x less frequent than the
+rss_stat event when using a 512KB granularity.
+
+
+The results are more pronounced when rss size is changing at a higher
+rate in small increments. For instance the following results were obtained
+by recording the hits on the above events for a run of Android's
+lmkd_unit_test [2], which continually forks processes that map anonymous
+memory until there is an oom kill:
+
+   sched_switch      : total hits =  148832
+   rss_stat          : total hits = 4754802
+   rss_stat_throttled: total hits =   96214
+
+In this stress test, the synthetic rss_stat_throttled event is ~50x less
+frequent than the rss_stat event when using a 512KB granularity.
+
+[1] https://lore.kernel.org/lkml/20190903200905.198642-1-joel@joelfernandes.org/
+[2] https://cs.android.com/android/platform/superproject/+/master:system/memory/lmkd/tests/lmkd_test.cpp
+
+
+Kalesh Singh (8):
+  tracing: Add support for creating hist trigger variables from literal
+  tracing: Add division and multiplication support for hist triggers
+  tracing: Fix operator precedence for hist triggers expression
+  tracing/histogram: Simplify handling of .sym-offset in expressions
+  tracing/histogram: Covert expr to const if both operands are constants
+  tracing/histogram: Optimize division by a power of 2
+  tracing/selftests: Add tests for hist trigger expression parsing
+  tracing/histogram: Document expression arithmetic and constants
+
+ Documentation/trace/histogram.rst             |  14 +
+ kernel/trace/trace_events_hist.c              | 400 ++++++++++++++----
+ .../testing/selftests/ftrace/test.d/functions |   4 +-
+ .../trigger/trigger-hist-expressions.tc       |  72 ++++
+ 4 files changed, 412 insertions(+), 78 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
+
+
+base-commit: ac8a6eba2a117e0fdc04da62ab568d1b7ca4c8f6
+-- 
+2.33.0.1079.g6e70778dc9-goog
+
