@@ -2,60 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E1A43A3D3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Oct 2021 22:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B1F43A3DD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Oct 2021 22:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbhJYUFS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Oct 2021 16:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
+        id S236708AbhJYUGd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Oct 2021 16:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237790AbhJYUCV (ORCPT
+        with ESMTP id S240921AbhJYUEf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Oct 2021 16:02:21 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C1EC0432F5
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 12:25:30 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id z2-20020a254c02000000b005b68ef4fe24so18917247yba.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 12:25:30 -0700 (PDT)
+        Mon, 25 Oct 2021 16:04:35 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FFFC036D66
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 12:25:48 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id u1-20020a170903124100b0013fd0e97269so4185347plh.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 12:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=zTwkaja/2JWSasZvIIm+cYcdHeXbXK6HRxptMu06TGw=;
-        b=es0PIzo5QRe/gNbKP/B9WOwdGUjl3l9nyAvVGwTkzf/E0vFbRT43d5JLLX+0lCXYrj
-         IuV1P8y4Zn0oRJfSwiaEGxa/UiAZz8da4/F8a5EHSpnbwDi+6C0PA/Lnnyz29lNBruSh
-         BEGlpTgEM0+76Ouvm072oqAOIMtPb9D7p+/gImv+17JnzOioFBRX0d4dWauFZr5olSzv
-         UhAfDvqixN7XGXm2cyzJHyg8HKcwCorh+H8p1i15l4RoGG8g0z94TwyT/Skl05dI3NSQ
-         h9ac+zm++4zhUn2z0dbq4Z7N72HhEcHJQV0eDJka8cAB4CrPam/tgATotv94uLIo0ENt
-         s3lA==
+        bh=0X4ZzEWqQCI4S+9dMmdUBiiRunDNYVnUP5vvvMfRtDs=;
+        b=bi59lsDZVQms20hwFrTJJM3A/hTBiNa7tq1pLsKiZNL6niHp8iT9X1jIprUqUp56p4
+         kaEdhbjPBAuGwiry1ymNlKFWkZP2Cp9AayRKUjjLVHK8hevBvbkMlMJT/4cEzSnsIIs8
+         uPmcHafy1IQXWqKXBrB8w9AZwKdiTrh4Ff0H9vjxkWqAI0qOYF8giDkLgh+s+ZozRO3B
+         wyecMadGlWFxZ26lpG2oAhPZPc/ooNC2pOHiaShcSLTCC2g5clVah9MT1LDQ7trjUMrP
+         F+I7gI3hUD1FBJIeCpmMiXv5Lq2ON1AkLjfH4qZYlZhmYlbtyBu6ylJkRXCUOs9DAWcO
+         NlCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:cc;
-        bh=zTwkaja/2JWSasZvIIm+cYcdHeXbXK6HRxptMu06TGw=;
-        b=UpniewnyVsqOIdGZJz8ww5qwxYy9GpfTgY5C1gAGnq2CjpN7wPrvsLq+xtws878KzQ
-         0k/hgfnoU10JvqNoyaIBRkdcAALdwNDI1Vvv36T1YfvOUtjZqAnypxuUnnpsoKf/YdIf
-         oRby3WeCauhCUJqivOrCDZjXxHvVvv/jhR6/2TOHf4qjmRa5vFB5ABcyCyMf0duDUPS7
-         87qXdTM3T5VAMyX9EIF7Aa3pk3noUU+faY9HDk8gpWAESajAFvtO6b1mkRyHa4RvtUgQ
-         p8iqj3QeYpMIM2Uf0sJiVmzpkM31dMNjJ+LGJROpe2J2hqa7aUyKyZEgx4wmw6yRekBI
-         kHnA==
-X-Gm-Message-State: AOAM530L87kHMPejcCgg8Y7ReRLEkAwHu7RS0uvGxKO8zaU5witofZCS
-        37KoHMi+sBIIOQIeGHW8zKY2n1sG3DRy8o+1nQ==
-X-Google-Smtp-Source: ABdhPJynb9pf2F0DjhOaAmMkHMZpmL6519gTydu0ZsQZU9+8HWvfo2CFsZGDTuGlxXOTmpzBjpkKiYIVVkTGlU3T6g==
+        bh=0X4ZzEWqQCI4S+9dMmdUBiiRunDNYVnUP5vvvMfRtDs=;
+        b=Si9evj6vxDw7YIEmH/7B7tUFyzeJ81hYvyRwrg0whoqV3RsaYpR9TXT3UZpIOCajpu
+         /oWQ8h8vzHUiIFebgilKpKMdkUxScO19WVWmdmeSsFVvJYTe2Y++hEPuAjCJ3S7U64Hd
+         Lr09y76TKYeHJSlqlpiQU2V8B57wTbQNnCxp5KKFXbl2sHZ/cLIRWTuHN3rb0UeCn59d
+         DH7Z5o+yPAhYQacGQUVEcYySbJGhHcDQmZ82lU7H0P5AahIG3C8kKVCmuid1agCfvzIc
+         NQMEpKbYgUmSnAtnXZ7Gim+tOX0fmQJmo8imRINjyreDFu2JHPJfdO1POVgGIoIvlqZd
+         clzg==
+X-Gm-Message-State: AOAM530gattarJEfJYnMNnlJaHhWrtNWvolnnJ5on1cKAf5vwetP9irg
+        egPyFrIwLemKrNHSKxGiJwCnhVLTYRTDV2+XvQ==
+X-Google-Smtp-Source: ABdhPJzXXPfI/4dfShXeTCziC9Z90/UVK1Pqw4rSjtJJCZfTyDZT4yuAF4sUhZ1BdorC8BCekgQgTIrfpmbx+Kceog==
 X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:b783:5702:523e:d435])
- (user=kaleshsingh job=sendgmr) by 2002:a25:400f:: with SMTP id
- n15mr21239484yba.497.1635189929323; Mon, 25 Oct 2021 12:25:29 -0700 (PDT)
-Date:   Mon, 25 Oct 2021 12:23:17 -0700
+ (user=kaleshsingh job=sendgmr) by 2002:a17:90b:3ecc:: with SMTP id
+ rm12mr23043839pjb.48.1635189947934; Mon, 25 Oct 2021 12:25:47 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 12:23:18 -0700
 In-Reply-To: <20211025192330.2992076-1-kaleshsingh@google.com>
-Message-Id: <20211025192330.2992076-7-kaleshsingh@google.com>
+Message-Id: <20211025192330.2992076-8-kaleshsingh@google.com>
 Mime-Version: 1.0
 References: <20211025192330.2992076-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH v3 6/8] tracing/histogram: Optimize division by a power of 2
+Subject: [PATCH v3 7/8] tracing/selftests: Add tests for hist trigger
+ expression parsing
 From:   Kalesh Singh <kaleshsingh@google.com>
 Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
         kernel-team@android.com, Kalesh Singh <kaleshsingh@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
         Jonathan Corbet <corbet@lwn.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
@@ -66,68 +67,125 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The division is a slow operation. If the divisor is a power of 2, use a
-shift instead.
-
-Results were obtained using Android's version of perf (simpleperf[1]) as
-described below:
-
-1. hist_field_div() is modified to call 2 test functions:
-   test_hist_field_div_[not]_optimized(); passing them the
-   same args. Use noinline and volatile to ensure these are
-   not optimized out by the compiler.
-2. Create a hist event trigger that uses division:
-      events/kmem/rss_stat$ echo 'hist:keys=common_pid:x=size/<divisor>'
-         >> trigger
-      events/kmem/rss_stat$ echo 'hist:keys=common_pid:vals=$x'
-         >> trigger
-3. Run Android's lmkd_test[2] to generate rss_stat events, and
-   record CPU samples with Android's simpleperf:
-      simpleperf record -a --exclude-perf --post-unwind=yes -m 16384 -g
-         -f 2000 -o perf.data
-
-== Results ==
-
-Divisor is a power of 2 (divisor == 32):
-
-   test_hist_field_div_not_optimized  | 8,717,091 cpu-cycles
-   test_hist_field_div_optimized      | 1,643,137 cpu-cycles
-
-If the divisor is a power of 2, the optimized version is ~5.3x faster.
-
-Divisor is not a power of 2 (divisor == 33):
-
-   test_hist_field_div_not_optimized  | 4,444,324 cpu-cycles
-   test_hist_field_div_optimized      | 5,497,958 cpu-cycles
-
-If the divisor is not a power of 2, as expected, the optimized version is
-slightly slower (~24% slower).
-
-[1] https://android.googlesource.com/platform/system/extras/+/master/simpleperf/doc/README.md
-[2] https://cs.android.com/android/platform/superproject/+/master:system/memory/lmkd/tests/lmkd_test.cpp
+Add tests for the parsing of hist trigger expressions; and to
+validate expression evaluation.
 
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-
+Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+Change-Id: Id3871697eb2d7537c8185494f5c1d347077798bc
 ---
- kernel/trace/trace_events_hist.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index db28bcf976f4..364cb3091789 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -304,6 +304,10 @@ static u64 hist_field_div(struct hist_field *hist_field,
- 	if (!val2)
- 		return -1;
+Changes in v3:
+  - Remove .sym-offset error check tests
+
+Changes in v2:
+  - Add Namhyung's Reviewed-by
+  - Update comment to clarify err_pos in "Too many subexpressions" test
+
+
+ .../testing/selftests/ftrace/test.d/functions |  4 +-
+ .../trigger/trigger-hist-expressions.tc       | 72 +++++++++++++++++++
+ 2 files changed, 74 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
+
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index 000fd05e84b1..1855a63559ad 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -16,13 +16,13 @@ reset_tracer() { # reset the current tracer
  
-+	/* Use shift if the divisor is a power of 2 */
-+	if (!(val2 & (val2 - 1)))
-+		return val1 >> __ffs64(val2);
+ reset_trigger_file() {
+     # remove action triggers first
+-    grep -H ':on[^:]*(' $@ |
++    grep -H ':on[^:]*(' $@ | tac |
+     while read line; do
+         cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
+ 	file=`echo $line | cut -f1 -d:`
+ 	echo "!$cmd" >> $file
+     done
+-    grep -Hv ^# $@ |
++    grep -Hv ^# $@ | tac |
+     while read line; do
+         cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
+ 	file=`echo $line | cut -f1 -d:`
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
+new file mode 100644
+index 000000000000..e715641c54d3
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
+@@ -0,0 +1,72 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: event trigger - test histogram expression parsing
++# requires: set_event events/sched/sched_process_fork/trigger events/sched/sched_process_fork/hist error_log
 +
- 	return div64_u64(val1, val2);
- }
- 
++
++fail() { #msg
++    echo $1
++    exit_fail
++}
++
++get_hist_var() { #var_name hist_path
++    hist_output=`grep -m1 "$1: " $2`
++    hitcount=`echo $hist_output | awk '{ for (i=1; i<=NF; ++i) { if ($i ~ "hitcount:") print $(i+1)} }'`
++    var_sum=`echo $hist_output | awk '{ for (i=1; i<=NF; ++i) { if ($i ~ "'$1':") print $(i+1)} }'`
++    var_val=$(( var_sum / hitcount ))
++    echo $var_val
++}
++
++test_hist_expr() { # test_name expression expected_val
++    reset_trigger
++
++    echo "Test hist trigger expressions - $1"
++
++    echo "hist:keys=common_pid:x=$2" > events/sched/sched_process_fork/trigger
++    echo 'hist:keys=common_pid:vals=$x' >> events/sched/sched_process_fork/trigger
++    for i in `seq 1 10` ; do ( echo "forked" > /dev/null); done
++
++    actual=`get_hist_var x events/sched/sched_process_fork/hist`
++
++    if [ $actual != $3 ]; then
++        fail "Failed hist trigger expression evaluation: Expression: $2 Expected: $3, Actual: $actual"
++    fi
++
++    reset_trigger
++}
++
++check_error() { # test_name command-with-error-pos-by-^
++    reset_trigger
++
++    echo "Test hist trigger expressions - $1"
++    ftrace_errlog_check 'hist:sched:sched_process_fork' "$2" 'events/sched/sched_process_fork/trigger'
++
++    reset_trigger
++}
++
++test_hist_expr "Variable assignment" "123" "123"
++
++test_hist_expr "Subtraction not associative" "16-8-4-2" "2"
++
++test_hist_expr "Division not associative" "64/8/4/2" "1"
++
++test_hist_expr "Same precedence operators (+,-) evaluated left to right" "16-8+4+2" "14"
++
++test_hist_expr "Same precedence operators (*,/) evaluated left to right" "4*3/2*2" "12"
++
++test_hist_expr "Multiplication evaluated before addition/subtraction" "4+3*2-2" "8"
++
++test_hist_expr "Division evaluated before addition/subtraction" "4+6/2-2" "5"
++
++# Division by zero returns -1
++test_hist_expr "Handles division by zero" "3/0" "-1"
++
++# err pos for "too many subexpressions" is dependent on where
++# the last subexpression was detected. This can vary depending
++# on how the expression tree was generated.
++check_error "Too many subexpressions" 'hist:keys=common_pid:x=32+^10*3/20-4'
++check_error "Too many subexpressions" 'hist:keys=common_pid:x=^1+2+3+4+5'
++
++check_error "Unary minus not supported in subexpression" 'hist:keys=common_pid:x=-(^1)+2'
++
++exit 0
 -- 
 2.33.0.1079.g6e70778dc9-goog
 
