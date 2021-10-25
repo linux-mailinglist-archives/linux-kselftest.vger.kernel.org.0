@@ -2,53 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE4043A46B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Oct 2021 22:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F62743A46E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Oct 2021 22:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236617AbhJYUZ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Oct 2021 16:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
+        id S237438AbhJYUZc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Oct 2021 16:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236790AbhJYUZV (ORCPT
+        with ESMTP id S236970AbhJYUZ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Oct 2021 16:25:21 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E569EC04640D
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 13:09:00 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id jz23-20020a17090b14d700b001a1d69b0215so209469pjb.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 13:09:00 -0700 (PDT)
+        Mon, 25 Oct 2021 16:25:27 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF58C046419
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 13:09:18 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id x68-20020a25ce47000000b005c198858e6bso2718976ybe.21
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Oct 2021 13:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:cc;
-        bh=yVyWdyfXHZ3pBBwGK5eO+moipbm7bhYPbjTGw1dCfng=;
-        b=paU2f9WAMWO8SuGFnY/Kf+ctPro0KZXFza3R2Go6L1ENoF+xpIVaiQv4dgzruOjST0
-         yeqxlawObXEBfUtTYms0QSZvEhpZMK3cL1EIi9bIXJW6RYt20TIBwkzpMBaMhrtC8D4l
-         giVB1OC1OlMV84o9DFVWF6CH6j+1KgLU+hLaCnQ4xN8po4KWpRePDpZvdUrWJ0wQiWWk
-         huc6vEISE+lYfJLS2Ib3sT8eDtopwh4XbczD452jbp6UDRPJ0cdDwCE5LTUgHAEBsaOL
-         To3KR/ygMlCO+QpCkSHq4iAa/miQNd9z3zdt6AatGyrFTlAsNri1Ph98OXJyHSdjfPPD
-         qRBg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
+        bh=qfxAeMql9xHTEYMmpB1rCuUFev8nHc9PFMoXaO3GDIc=;
+        b=EeKO10IdeY6lDu9fOw7fCpx0gmtGZlf2kJcFIwdqte99OfmVLo3DwJzGslEqR8Cypp
+         XU4Ep/K4eI+qWolLSvL9PlxeRJ6gEedZK81qYc32Hx91IuPpvMHHZfR8a0N0HLLKyXlw
+         2Gr93y4gUu0cO4g7WQB3/g8/nFjDXDFeQScnLmDjBmQTDgmBOOrVqqNfnR6V0fMGlOpA
+         q/ZipeBBzgzDvUre6a6KoOwiOeG4H1SoSyBORZTd9wiqn57S1fwQZPsSTd5x2SvqwX2m
+         WC/MW48HCuiLJI82UxAq7ZshC7t0hgquTi/tO3qAr8DPTH+2oQMgIOXF/rJ1xx26HWi0
+         jBOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
-        bh=yVyWdyfXHZ3pBBwGK5eO+moipbm7bhYPbjTGw1dCfng=;
-        b=4LjupbOXBONg7tDdkKkBTVZbFgDX0X1kR/xQ127Y8x9mEkxO+9a14Twk0fZJT9phtR
-         GflT+zUAMW7D8NnHbdRecRa0nWDwAqQPTgcRKef+9HpSCIaoNUQ1jlrj9uZYJsjm9MWT
-         6QkcTWgTjV2z9aH9lfIRqSFxiH06fBYmeFeh1svigh+enguSprhofbMvfLv8TxtiJTZC
-         q25hBtmED+z7rKCy1tceB6ZOJS9Rky8KNblpNWn5SVVN8v+gGhvy1wOOHf36AfOwfbLq
-         fmr2tNRyFdI5q8UQ4FnTtntY09R5ePWlFidypff8OJ2HNHSiJs+2wSl1shyyo81/xoo6
-         cwyQ==
-X-Gm-Message-State: AOAM530sWmLOSnJ9zde0Fq4bFptZGYelzsK6u+wgXvFDzYPWQRXbK+BU
-        +NqpTi6XkdGRfwr6gH+m10/g3AC93RAa70fFSw==
-X-Google-Smtp-Source: ABdhPJwKwboqqT191iT/YhdgeTOe2w0PYPuFItvV8w/w98mDq9AdbEtpY1CwTYX1s4LJcHwFfppa4za2fDs73QVjMg==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:cc;
+        bh=qfxAeMql9xHTEYMmpB1rCuUFev8nHc9PFMoXaO3GDIc=;
+        b=7/6vVj1dnp4ORSJFH2BH0IgjUbzNnPgyq2sGlV2ecvurivOr4uMyiS3H1RpKNaFSrk
+         zSulKi3RxvV7fjf4IPXc6pIRPhd5++LBD3DeW6ml7sIexTVI4TYVVovcoBmkTZZpwU8C
+         PoH7h7cvIfEJwbAUF6k3FvXw7pL5OXeY+fbyplDGJ45uun6P7V5U8k/Ao/th3dFxKXnr
+         gPielinXeO5K/vz7alKRVQd8gPI43AVUq7rNXF8B8tA0Bju/74Xbcqv6nriplwrT/Tx7
+         AHih4Rc/11+rl/u4pml6xjag4UzmJ1DxYzGwqOV10cTYJnfeBUqCH9mQHMB3cpRUN8v5
+         0Mig==
+X-Gm-Message-State: AOAM533JY9SNVT3HPA6+v54P4bFxhijteJa8xH8iYCxVVsTzMlWq5+lw
+        UMXgi13SD1bNgAt+sMTZPtOkRNRvfvumDqdKiA==
+X-Google-Smtp-Source: ABdhPJxizGuCeDpfyj9RAzRnqQT5ZcPO6lgFxNcYXb4DGT1xB/xP0+BrCl74JRDvjh61LxxJ3C6aSwLOvN7cGm6KVA==
 X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:b783:5702:523e:d435])
- (user=kaleshsingh job=sendgmr) by 2002:a05:6a00:216f:b0:44b:6212:4967 with
- SMTP id r15-20020a056a00216f00b0044b62124967mr21060858pff.23.1635192540392;
- Mon, 25 Oct 2021 13:09:00 -0700 (PDT)
-Date:   Mon, 25 Oct 2021 13:08:32 -0700
-Message-Id: <20211025200852.3002369-1-kaleshsingh@google.com>
+ (user=kaleshsingh job=sendgmr) by 2002:a25:3082:: with SMTP id
+ w124mr19944249ybw.6.1635192557993; Mon, 25 Oct 2021 13:09:17 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 13:08:33 -0700
+In-Reply-To: <20211025200852.3002369-1-kaleshsingh@google.com>
+Message-Id: <20211025200852.3002369-2-kaleshsingh@google.com>
 Mime-Version: 1.0
+References: <20211025200852.3002369-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH v4 0/8] tracing: Extend histogram triggers expression parsing
+Subject: [PATCH v4 1/8] tracing: Add support for creating hist trigger
+ variables from literal
 From:   Kalesh Singh <kaleshsingh@google.com>
 Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
         kernel-team@android.com, Kalesh Singh <kaleshsingh@google.com>,
@@ -64,133 +67,218 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi all,
+Currently hist trigger expressions don't support the use of numeric
+literals:
+	e.g. echo 'hist:keys=common_pid:x=$y-1234'
+		--> is not valid expression syntax
 
-The v4 of the extending histogram exprssions series. The previous versions
-were posted at:
+Having the ability to use numeric constants in hist triggers supports
+a wider range of expressions for creating variables.
 
-v3: https://lore.kernel.org/r/20211025192330.2992076-1-kaleshsingh@google.com/
-v2: https://lore.kernel.org/r/20211020013153.4106001-1-kaleshsingh@google.com/
-v1: https://lore.kernel.org/r/20210915195306.612966-1-kaleshsingh@google.com/
+Add support for creating trace event histogram variables from numeric
+literals.
 
-Patches 4 through 6 are new and adds some optimizations/improvements
-suggested by Steven Rostedt.
+	e.g. echo 'hist:keys=common_pid:x=1234,y=size-1024' >> event/trigger
 
-Removes the Change-Id tags that were inadvertently added in v3.
+A negative numeric constant is created, using unary minus operator
+(parentheses are required).
 
-The cover letter is copied below for convenience.
+	e.g. echo 'hist:keys=common_pid:z=-(2)' >> event/trigger
 
-Thanks,
-Kalesh
-
----
-
-The frequency of the rss_stat trace event is known to be of the same
-magnitude as that of the sched_switch event on Android devices. This can
-cause flooding of the trace buffer with rss_stat traces leading to a
-decreased trace buffer capacity and loss of data.
-
-If it is not necessary to monitor very small changes in rss (as is the
-case in Android) then the rss_stat tracepoint can be throttled to only
-emit the event once there is a large enough change in the rss size.
-The original patch that introduced the rss_stat tracepoint also proposed
-a fixed throttling mechanism that only emits the rss_stat event
-when the rss size crosses a 512KB boundary. It was concluded that more
-generic support for this type of filtering/throttling was need, so that
-it can be applied to any trace event. [1]
-
-From the discussion in [1], histogram triggers seemed the most likely
-candidate to support this type of throttling. For instance to achieve the
-same throttling as was proposed in [1]:
-
-  (1) Create a histogram variable to save the 512KB bucket of the rss size
-  (2) Use the onchange handler to generate a synthetic event when the
-      rss size bucket changes.
-
-The only missing pieces to support such a hist trigger are:
-  (1) Support for setting a hist variable to a specific value -- to set
-      the bucket size / granularity.
-  (2) Support for division arithmetic operation -- to determine the
-      corresponding bucket for an rss size.
-
-This series extends histogram trigger expressions to:
-  (1) Allow assigning numeric literals to hist variable (eg. x=1234)
-      and using literals directly in expressions (eg. x=size/1234)
-  (2) Support division and multiplication in hist expressions.
-      (eg. a=$x/$y*z); and
-  (3) Fixes expression parsing for non-associative operators: subtraction
-      and division. (eg. 8-4-2 should be 2 not 6)
-
-The rss_stat event can then be throttled using histogram triggers as
-below:
+Constants can be used with division/multiplication (added in the
+next patch in this series) to implement granularity filters for frequent
+trace events. For instance we can limit emitting the rss_stat
+trace event to when there is a 512KB cross over in the rss size:
 
   # Create a synthetic event to monitor instead of the high frequency
   # rss_stat event
   echo 'rss_stat_throttled unsigned int mm_id; unsigned int curr;
-         int member; long size' >> tracing/synthetic_events
+	int member; long size' >> tracing/synthetic_events
 
   # Create a hist trigger that emits the synthetic rss_stat_throttled
   # event only when the rss size crosses a 512KB boundary.
-  echo 'hist:keys=mm_id,member:bucket=size/0x80000:onchange($bucket)
-              .rss_stat_throttled(mm_id,curr,member,size)'
+  echo 'hist:keys=keys=mm_id,member:bucket=size/0x80000:onchange($bucket)
+      .rss_stat_throttled(mm_id,curr,member,size)'
         >> events/kmem/rss_stat/trigger
 
- ------ Test Results ------
-Histograms can also be used to evaluate the effectiveness of this
-throttling by noting the Total Hits on each trigger:
+A use case for using constants with addition/subtraction is not yet
+known, but for completeness the use of constants are supported for all
+operators.
 
-  echo 'hist:keys=common_pid' >> events/sched/sched_switch/trigger
-  echo 'hist:keys=common_pid' >> events/kmem/rss_stat/trigger
-  echo 'hist:keys=common_pid'
-           >> events/synthetic/rss_stat_throttled/trigger
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+---
 
-Allowing the above example (512KB granularity) run for 5 minutes on
-an arm64 device with 5.10 kernel:
+Changes in v3:
+  - Remove the limit on the number of constants that can be created,
+    per Steven Rostedt
 
-   sched_switch      : total hits = 147153
-   rss_stat          : total hits =  38863
-   rss_stat_throttled: total hits =   2409
+Changes in v2:
+  - Add description of use case for constants in arithmetic
+    operations in commit message, per Steven Rostedt
+  - Add Namhyung's Reviewed-by
 
-The synthetic rss_stat_throttled event is ~16x less frequent than the
-rss_stat event when using a 512KB granularity.
+ kernel/trace/trace_events_hist.c | 71 +++++++++++++++++++++++++++++++-
+ 1 file changed, 70 insertions(+), 1 deletion(-)
 
-
-The results are more pronounced when rss size is changing at a higher
-rate in small increments. For instance the following results were obtained
-by recording the hits on the above events for a run of Android's
-lmkd_unit_test [2], which continually forks processes that map anonymous
-memory until there is an oom kill:
-
-   sched_switch      : total hits =  148832
-   rss_stat          : total hits = 4754802
-   rss_stat_throttled: total hits =   96214
-
-In this stress test, the synthetic rss_stat_throttled event is ~50x less
-frequent than the rss_stat event when using a 512KB granularity.
-
-[1] https://lore.kernel.org/lkml/20190903200905.198642-1-joel@joelfernandes.org/
-[2] https://cs.android.com/android/platform/superproject/+/master:system/memory/lmkd/tests/lmkd_test.cpp
-
-
-Kalesh Singh (8):
-  tracing: Add support for creating hist trigger variables from literal
-  tracing: Add division and multiplication support for hist triggers
-  tracing: Fix operator precedence for hist triggers expression
-  tracing/histogram: Simplify handling of .sym-offset in expressions
-  tracing/histogram: Covert expr to const if both operands are constants
-  tracing/histogram: Optimize division by a power of 2
-  tracing/selftests: Add tests for hist trigger expression parsing
-  tracing/histogram: Document expression arithmetic and constants
-
- Documentation/trace/histogram.rst             |  14 +
- kernel/trace/trace_events_hist.c              | 400 ++++++++++++++----
- .../testing/selftests/ftrace/test.d/functions |   4 +-
- .../trigger/trigger-hist-expressions.tc       |  72 ++++
- 4 files changed, 412 insertions(+), 78 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
-
-
-base-commit: ac8a6eba2a117e0fdc04da62ab568d1b7ca4c8f6
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index f01e442716e2..28f711224944 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -66,7 +66,8 @@
+ 	C(EMPTY_SORT_FIELD,	"Empty sort field"),			\
+ 	C(TOO_MANY_SORT_FIELDS,	"Too many sort fields (Max = 2)"),	\
+ 	C(INVALID_SORT_FIELD,	"Sort field must be a key or a val"),	\
+-	C(INVALID_STR_OPERAND,	"String type can not be an operand in expression"),
++	C(INVALID_STR_OPERAND,	"String type can not be an operand in expression"), \
++	C(EXPECT_NUMBER,	"Expecting numeric literal"),
+ 
+ #undef C
+ #define C(a, b)		HIST_ERR_##a
+@@ -89,6 +90,7 @@ typedef u64 (*hist_field_fn_t) (struct hist_field *field,
+ #define HIST_FIELD_OPERANDS_MAX	2
+ #define HIST_FIELDS_MAX		(TRACING_MAP_FIELDS_MAX + TRACING_MAP_VARS_MAX)
+ #define HIST_ACTIONS_MAX	8
++#define HIST_CONST_DIGITS_MAX	21
+ 
+ enum field_op_id {
+ 	FIELD_OP_NONE,
+@@ -152,6 +154,9 @@ struct hist_field {
+ 	bool                            read_once;
+ 
+ 	unsigned int			var_str_idx;
++
++	/* Numeric literals are represented as u64 */
++	u64				constant;
+ };
+ 
+ static u64 hist_field_none(struct hist_field *field,
+@@ -163,6 +168,15 @@ static u64 hist_field_none(struct hist_field *field,
+ 	return 0;
+ }
+ 
++static u64 hist_field_const(struct hist_field *field,
++			   struct tracing_map_elt *elt,
++			   struct trace_buffer *buffer,
++			   struct ring_buffer_event *rbe,
++			   void *event)
++{
++	return field->constant;
++}
++
+ static u64 hist_field_counter(struct hist_field *field,
+ 			      struct tracing_map_elt *elt,
+ 			      struct trace_buffer *buffer,
+@@ -341,6 +355,7 @@ enum hist_field_flags {
+ 	HIST_FIELD_FL_CPU		= 1 << 15,
+ 	HIST_FIELD_FL_ALIAS		= 1 << 16,
+ 	HIST_FIELD_FL_BUCKET		= 1 << 17,
++	HIST_FIELD_FL_CONST		= 1 << 18,
+ };
+ 
+ struct var_defs {
+@@ -1516,6 +1531,12 @@ static void expr_field_str(struct hist_field *field, char *expr)
+ {
+ 	if (field->flags & HIST_FIELD_FL_VAR_REF)
+ 		strcat(expr, "$");
++	else if (field->flags & HIST_FIELD_FL_CONST) {
++		char str[HIST_CONST_DIGITS_MAX];
++
++		snprintf(str, HIST_CONST_DIGITS_MAX, "%llu", field->constant);
++		strcat(expr, str);
++	}
+ 
+ 	strcat(expr, hist_field_name(field, 0));
+ 
+@@ -1689,6 +1710,15 @@ static struct hist_field *create_hist_field(struct hist_trigger_data *hist_data,
+ 		goto out;
+ 	}
+ 
++	if (flags & HIST_FIELD_FL_CONST) {
++		hist_field->fn = hist_field_const;
++		hist_field->size = sizeof(u64);
++		hist_field->type = kstrdup("u64", GFP_KERNEL);
++		if (!hist_field->type)
++			goto free;
++		goto out;
++	}
++
+ 	if (flags & HIST_FIELD_FL_STACKTRACE) {
+ 		hist_field->fn = hist_field_none;
+ 		goto out;
+@@ -2090,6 +2120,29 @@ static struct hist_field *create_alias(struct hist_trigger_data *hist_data,
+ 	return alias;
+ }
+ 
++static struct hist_field *parse_const(struct hist_trigger_data *hist_data,
++				      char *str, char *var_name,
++				      unsigned long *flags)
++{
++	struct trace_array *tr = hist_data->event_file->tr;
++	struct hist_field *field = NULL;
++	u64 constant;
++
++	if (kstrtoull(str, 0, &constant)) {
++		hist_err(tr, HIST_ERR_EXPECT_NUMBER, errpos(str));
++		return NULL;
++	}
++
++	*flags |= HIST_FIELD_FL_CONST;
++	field = create_hist_field(hist_data, NULL, *flags, var_name);
++	if (!field)
++		return NULL;
++
++	field->constant = constant;
++
++	return field;
++}
++
+ static struct hist_field *parse_atom(struct hist_trigger_data *hist_data,
+ 				     struct trace_event_file *file, char *str,
+ 				     unsigned long *flags, char *var_name)
+@@ -2100,6 +2153,15 @@ static struct hist_field *parse_atom(struct hist_trigger_data *hist_data,
+ 	unsigned long buckets = 0;
+ 	int ret = 0;
+ 
++	if (isdigit(str[0])) {
++		hist_field = parse_const(hist_data, str, var_name, flags);
++		if (!hist_field) {
++			ret = -EINVAL;
++			goto out;
++		}
++		return hist_field;
++	}
++
+ 	s = strchr(str, '.');
+ 	if (s) {
+ 		s = strchr(++s, '.');
+@@ -4950,6 +5012,8 @@ static void hist_field_debug_show_flags(struct seq_file *m,
+ 
+ 	if (flags & HIST_FIELD_FL_ALIAS)
+ 		seq_puts(m, "        HIST_FIELD_FL_ALIAS\n");
++	else if (flags & HIST_FIELD_FL_CONST)
++		seq_puts(m, "        HIST_FIELD_FL_CONST\n");
+ }
+ 
+ static int hist_field_debug_show(struct seq_file *m,
+@@ -4971,6 +5035,9 @@ static int hist_field_debug_show(struct seq_file *m,
+ 			   field->var.idx);
+ 	}
+ 
++	if (field->flags & HIST_FIELD_FL_CONST)
++		seq_printf(m, "      constant: %llu\n", field->constant);
++
+ 	if (field->flags & HIST_FIELD_FL_ALIAS)
+ 		seq_printf(m, "      var_ref_idx (into hist_data->var_refs[]): %u\n",
+ 			   field->var_ref_idx);
+@@ -5213,6 +5280,8 @@ static void hist_field_print(struct seq_file *m, struct hist_field *hist_field)
+ 
+ 	if (hist_field->flags & HIST_FIELD_FL_CPU)
+ 		seq_puts(m, "common_cpu");
++	else if (hist_field->flags & HIST_FIELD_FL_CONST)
++		seq_printf(m, "%llu", hist_field->constant);
+ 	else if (field_name) {
+ 		if (hist_field->flags & HIST_FIELD_FL_VAR_REF ||
+ 		    hist_field->flags & HIST_FIELD_FL_ALIAS)
 -- 
 2.33.0.1079.g6e70778dc9-goog
 
