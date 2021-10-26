@@ -2,82 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1294D43B35C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Oct 2021 15:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369DD43B3BC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Oct 2021 16:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234299AbhJZNu2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Oct 2021 09:50:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35158 "EHLO mail.kernel.org"
+        id S236405AbhJZOPl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Oct 2021 10:15:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41058 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234040AbhJZNu1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Oct 2021 09:50:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EB7BC60D43;
-        Tue, 26 Oct 2021 13:48:01 +0000 (UTC)
+        id S235453AbhJZOPl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Oct 2021 10:15:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C31260F90;
+        Tue, 26 Oct 2021 14:13:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635256083;
-        bh=yvWbaAgszIY+i1riu8+GLyAf9j7J5wJXSpeI7MhemCU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LcCV5laRoidAf7SFcUPpTWeC1SxByrDOXwzPfYHBzfHZphr8LPpaZouQHh0pNNok9
-         fqSnWgLd05Aaohxo825lGg3DjFc6/KWGNBVDkBG0+oHiivhCUs0LRyXCNroKxytTrs
-         iL9tIZMy8kpdYjrOZBmk5DH3GJWl6qMIrhcHAp4MY25Cw3Z5Q9ImcEclcJEZea6T5T
-         Papmp52XXl189wdimFUmDB2Pwgy0Q62D0CXkE05y3/DCqBOVFRqi+zVEIauSo6VO8Y
-         DHO3eyUEyIucy342Oxjy2fEz7KDkkIfHt1dmh46TedyQzBH5347A5Ds8PaogJ+4szz
-         NZodZ0y7vbh5w==
-Date:   Tue, 26 Oct 2021 14:47:58 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Luis Machado <Luis.Machado@arm.com>
-Cc:     Catalin Marinas <Catalin.Marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <Alan.Hayward@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant KumarDwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 06/33] arm64/sme: Provide ABI documentation for SME
-Message-ID: <YXgHDpm2gaikm8Ow@sirena.org.uk>
-References: <20211021180722.3699248-1-broonie@kernel.org>
- <20211021180722.3699248-7-broonie@kernel.org>
- <VI1PR08MB3919C2F171F2185FB3500DD08B839@VI1PR08MB3919.eurprd08.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T2P7sbGh2AfvhHXR"
-Content-Disposition: inline
-In-Reply-To: <VI1PR08MB3919C2F171F2185FB3500DD08B839@VI1PR08MB3919.eurprd08.prod.outlook.com>
-X-Cookie: Times approximate.
+        s=k20201202; t=1635257597;
+        bh=geV42vPNxLlxZv9rgBVaCvziX4Jvid28ARPTlwgThYY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lMYoMAgNPyEyPD3KKWCfqYJCv5v3M9/aItkcGfVCKPq0yoW7NSHDsxhIr491NEWgl
+         DroZlu/C5FKUqq7FxgMkvRCHtReVt9tfEIIAg1d1m9X04lzUb8vzJth8U+Ge92lUnf
+         /244dCfnicUs8ShI8vwV+yqfLHVrfo6XYCWimvw1PlE7nYo1roPV2dJjR9U18rIHt/
+         f5m7NYB3ixSosA5eiavk6K7i4fetyu3LZU7irWMGysgDa6GOKqQfxxZpqhUud+NCmP
+         tuRvvtEcKAFBuRZMCCwd92HsGJ0DAT5rrAaiVRR9bZh8duoxzTf02YN/+pmldZ9LIA
+         WtklIbrPCUEEQ==
+Date:   Tue, 26 Oct 2021 23:13:14 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>, <mingo@redhat.com>,
+        <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] kselftests: ftrace: limit the executing time by reading
+ from cached trace
+Message-Id: <20211026231314.1b5c1f378f9c5410b01a2d85@kernel.org>
+In-Reply-To: <20211026091534.4ef376e0@gandalf.local.home>
+References: <20211018132616.2234853-1-lizhijian@cn.fujitsu.com>
+        <20211018221636.47157e52@gandalf.local.home>
+        <20211020112027.b01762f2adcfac99e71dcf99@kernel.org>
+        <20211019223454.5da09d74@gandalf.local.home>
+        <20211020115522.75f3e25247c1d30726e9b130@kernel.org>
+        <20211020101659.42360147@gandalf.local.home>
+        <20211021093131.affc348280aba040f76f769e@kernel.org>
+        <20211025221717.56daf4e8@rorschach.local.home>
+        <20211026211331.8496340b0011127e6505b5ff@kernel.org>
+        <20211026091534.4ef376e0@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, 26 Oct 2021 09:15:34 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
---T2P7sbGh2AfvhHXR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On Tue, 26 Oct 2021 21:13:31 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > > > No, since each testcase must be run under the clean state. Would we need to
+> > > > recover the settings?  
+> > > 
+> > > I would at least put it back to the default. If someone runs the tests,
+> > > it should at least put it back to what it was at boot. Otherwise,
+> > > someone might run the tests, and then wonder why events are being
+> > > dropped when they are reading the trace.  
+> > 
+> > Umm, we may need to have a knob to reset the ftrace options...
+> > Can we warn such user that if the ftracetest finds that the current
+> > value is not the same what it sets?
+> 
+> You mean before we set pause-on-trace, make sure that it was cleared?
+> 
+> That could work too, and then just set everything back to what we expected
+> it to be at the start.
 
-On Tue, Oct 26, 2021 at 01:38:51AM +0000, Luis Machado wrote:
+No, it costs much higher (to save the default settings and recover)
+OK, then just make it recover to the build default setting.
 
-> A few nits below...
+From e6ab7217c8f50dabee0f565764489fdd32e1ff07 Mon Sep 17 00:00:00 2001
+From: Masami Hiramatsu <mhiramat@kernel.org>
+Date: Wed, 20 Oct 2021 11:55:22 +0900
+Subject: [PATCH v2] selftests/ftrace: Stop tracing while reading the trace file
+ by default
 
-Thanks.  Hopefully I spotted everything and rolled it in, there's no
-flagging of what bits are quoted and you've not deleted any of the extra
-context so I might've missed some comment - if so sorry about that.
+Stop tracing while reading the trace file by default, to prevent
+the test results while checking it and to avoid taking a long time
+to check the result.
+If there is any testcase which wants to test the tracing while reading
+the trace file, please override this setting inside the test case.
 
---T2P7sbGh2AfvhHXR
-Content-Type: application/pgp-signature; name="signature.asc"
+This also recovers the pause-on-trace when clean it up.
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ Changes in v2:
+  - Recover pause-on-trace to 0 when exit.
+---
+ tools/testing/selftests/ftrace/ftracetest       |  2 +-
+ tools/testing/selftests/ftrace/test.d/functions | 12 ++++++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmF4Bw4ACgkQJNaLcl1U
-h9C+kAf/dJMDMxq7g3xc5n7ac4DB3VgPoBKkNmaObjcr06fAALqaW67DIBKHxmsy
-6HXrVDNarTRpuVqYqeKKvD0yq/ruRrIABLaq6+O7s9b/RXBafSa297xsdrYtvDz1
-lk8aDNsWo9TbEjDWq/0+MYNxTU2vFRdtUiw2QZMjqVVZ0O8FlHtXdDkdElGysw+4
-NPX9yfj+Ic+mw10p6C6zQ7U0u5pBOsEFKGlyeHzpdD0j4WedPpZqqOaGoUnh/BFV
-W5Vf3ExLJIIAJcitxySxA/VjQ1Aplh5EmQd8QjLdjJ4EyD9RghlBDp+HcJnPsMg6
-fC/N25YATYHeJjbxrntE19h44Cg15Q==
-=lVZQ
------END PGP SIGNATURE-----
-
---T2P7sbGh2AfvhHXR--
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index 8ec1922e974e..c3311c8c4089 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -428,7 +428,7 @@ for t in $TEST_CASES; do
+     exit 1
+   fi
+ done
+-(cd $TRACING_DIR; initialize_ftrace) # for cleanup
++(cd $TRACING_DIR; finish_ftrace) # for cleanup
+ 
+ prlog ""
+ prlog "# of passed: " `echo $PASSED_CASES | wc -w`
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index 000fd05e84b1..5f6cbec847fc 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -124,10 +124,22 @@ initialize_ftrace() { # Reset ftrace to initial-state
+     [ -f uprobe_events ] && echo > uprobe_events
+     [ -f synthetic_events ] && echo > synthetic_events
+     [ -f snapshot ] && echo 0 > snapshot
++
++# Stop tracing while reading the trace file by default, to prevent
++# the test results while checking it and to avoid taking a long time
++# to check the result.
++    [ -f options/pause-on-trace ] && echo 1 > options/pause-on-trace
++
+     clear_trace
+     enable_tracing
+ }
+ 
++finish_ftrace() {
++    initialize_ftrace
++# And recover it to default.
++    [ -f options/pause-on-trace ] && echo 0 > options/pause-on-trace
++}
++
+ check_requires() { # Check required files and tracers
+     for i in "$@" ; do
+         r=${i%:README}
+-- 
+2.25.1
