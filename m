@@ -2,70 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A340943B549
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Oct 2021 17:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B82443B5B2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Oct 2021 17:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbhJZPSx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Oct 2021 11:18:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235007AbhJZPSx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Oct 2021 11:18:53 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4E2CE6023D;
-        Tue, 26 Oct 2021 15:16:28 +0000 (UTC)
-Date:   Tue, 26 Oct 2021 11:16:26 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>, <mingo@redhat.com>,
-        <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] kselftests: ftrace: limit the executing time by reading
- from cached trace
-Message-ID: <20211026111626.73e9eb9c@gandalf.local.home>
-In-Reply-To: <20211026231314.1b5c1f378f9c5410b01a2d85@kernel.org>
-References: <20211018132616.2234853-1-lizhijian@cn.fujitsu.com>
-        <20211018221636.47157e52@gandalf.local.home>
-        <20211020112027.b01762f2adcfac99e71dcf99@kernel.org>
-        <20211019223454.5da09d74@gandalf.local.home>
-        <20211020115522.75f3e25247c1d30726e9b130@kernel.org>
-        <20211020101659.42360147@gandalf.local.home>
-        <20211021093131.affc348280aba040f76f769e@kernel.org>
-        <20211025221717.56daf4e8@rorschach.local.home>
-        <20211026211331.8496340b0011127e6505b5ff@kernel.org>
-        <20211026091534.4ef376e0@gandalf.local.home>
-        <20211026231314.1b5c1f378f9c5410b01a2d85@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S236979AbhJZPjL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Oct 2021 11:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236962AbhJZPjK (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Oct 2021 11:39:10 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40006C061745
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 08:36:46 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id t92-20020a25aae5000000b005c1494b029aso17739781ybi.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 08:36:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ojODAjLfRn1Lf+4i6CRGTfXa2Pbtlhx1DNx7kELm9pE=;
+        b=CozQzRWoQnVrztxALVJ1BzDa678ehPrMv8oKOOS8xxgpJsuDHKmPiwdlVPJEhDTD+o
+         A7tQpaw1PZikjLMiWhDaGBSCRjb/LhuL21JklXhtEJrHKwb/ra/OtJ3s0mwJtetlL/1D
+         8s/0dzuYHhfQZvDNqZVwYuG/oEN+gMsGBn6NAJQaFtOBcbAgSbD9EOiG6JYsIYAzAkXO
+         77o24ogRcNw0oNiwlrOEzHY7SwUxwDcETniACjzrM3EDUtCKFA12sIqqqCvl7auraKe1
+         6gYK9dtUUXH6gCajY1kKiy3fqYXHrK35HQoe1Cnl7CImi5+LyuF3e/MCFFIxqD/1dPIx
+         tqyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ojODAjLfRn1Lf+4i6CRGTfXa2Pbtlhx1DNx7kELm9pE=;
+        b=ym5m56/rn1E4VrCS3Dc2mVSuK1dNXvIblOX2Eja4PoY/2DNAffYCBEH/F/XUU4leli
+         PzLAd+KlYPDGROHNVY4QEsI5JFYJwH1CjMYVklHgrMDkRZ1Agu5gTbKC8T88s3Dd8iye
+         r1zzccQFBsAi0ExEnky5nIX+OVysMAPmEy9C7AQeyaX5OQ17peSnk8zOoxsWQ4U34e9r
+         hbKblXeOxRYhvcp9tnu6AOIrf9jypqogUcO9b7MvPsZhto1KstAWbC5mNA7SH7uckVXS
+         EdZx0tcpuy2j5lSQwWnd2c90SRtOSeA/QMgNx6TCeJ5mxhWb6b8hb5R28kFLAGY4EIFs
+         eR1w==
+X-Gm-Message-State: AOAM533WIVuMS0KdTD3Xtv+wXLRhFKH/KY35sv91fuGRIv9lr+bE0WKn
+        5LB0nSWKL6fvT3AzdMDm9aXlRmTtUNrBag==
+X-Google-Smtp-Source: ABdhPJyxj/d0EOrqXaqoO4qUvMk4Qh9ib6ShPlLenahXqtHevjSwpDY5SFjzvcdz2soobWRVGTTRo7hx6ZfvGw==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:d5d6:b5d1:7203:e1a2])
+ (user=dlatypov job=sendgmr) by 2002:a25:3189:: with SMTP id
+ x131mr13354941ybx.27.1635262605440; Tue, 26 Oct 2021 08:36:45 -0700 (PDT)
+Date:   Tue, 26 Oct 2021 08:36:38 -0700
+Message-Id: <20211026153638.3857452-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
+Subject: [PATCH] Documentation: kunit: remove claims that kunit is a mocking framework
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 26 Oct 2021 23:13:14 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+KUnit does not have any first party support for "mocking".
 
-> >From e6ab7217c8f50dabee0f565764489fdd32e1ff07 Mon Sep 17 00:00:00 2001  
-> From: Masami Hiramatsu <mhiramat@kernel.org>
-> Date: Wed, 20 Oct 2021 11:55:22 +0900
-> Subject: [PATCH v2] selftests/ftrace: Stop tracing while reading the trace file
->  by default
-> 
-> Stop tracing while reading the trace file by default, to prevent
-> the test results while checking it and to avoid taking a long time
-> to check the result.
-> If there is any testcase which wants to test the tracing while reading
-> the trace file, please override this setting inside the test case.
-> 
-> This also recovers the pause-on-trace when clean it up.
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+The original RFC had some, but the code got dropped.
+However, the documentation patches never got updated. This fixes that.
 
-Looks good. Can you resend this as a standalone patch, so that it triggers
-my patchwork?
+https://kunit.dev/mocking.html has a current writeup on the status quo
+and will hopefully be eventually folded into the in-kernel
+Documentation.
 
--- Steve
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ Documentation/dev-tools/kunit/api/index.rst | 3 +--
+ Documentation/dev-tools/kunit/api/test.rst  | 3 +--
+ Documentation/dev-tools/kunit/index.rst     | 2 +-
+ 3 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
+index b33ad72bcf0b..3006cadcf44a 100644
+--- a/Documentation/dev-tools/kunit/api/index.rst
++++ b/Documentation/dev-tools/kunit/api/index.rst
+@@ -12,5 +12,4 @@ following sections:
+ 
+ Documentation/dev-tools/kunit/api/test.rst
+ 
+- - documents all of the standard testing API excluding mocking
+-   or mocking related features.
++ - documents all of the standard testing API
+diff --git a/Documentation/dev-tools/kunit/api/test.rst b/Documentation/dev-tools/kunit/api/test.rst
+index aaa97f17e5b3..c5eca423e8b6 100644
+--- a/Documentation/dev-tools/kunit/api/test.rst
++++ b/Documentation/dev-tools/kunit/api/test.rst
+@@ -4,8 +4,7 @@
+ Test API
+ ========
+ 
+-This file documents all of the standard testing API excluding mocking or mocking
+-related features.
++This file documents all of the standard testing API.
+ 
+ .. kernel-doc:: include/kunit/test.h
+    :internal:
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+index cacb35ec658d..7af7dec83646 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -19,7 +19,7 @@ KUnit - Unit Testing for the Linux Kernel
+ What is KUnit?
+ ==============
+ 
+-KUnit is a lightweight unit testing and mocking framework for the Linux kernel.
++KUnit is a lightweight unit testing framework for the Linux kernel.
+ 
+ KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+ Googletest/Googlemock for C++. KUnit provides facilities for defining unit test
+
+base-commit: 2ab5d5e67f7ab2d2ecf67b8855ac65691f4e4b4d
+-- 
+2.33.0.1079.g6e70778dc9-goog
+
