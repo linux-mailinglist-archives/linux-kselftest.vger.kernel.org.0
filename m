@@ -2,63 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6C143AA29
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Oct 2021 04:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2013243AD3F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Oct 2021 09:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232761AbhJZCTm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Oct 2021 22:19:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46150 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230216AbhJZCTm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Oct 2021 22:19:42 -0400
-Received: from rorschach.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7BB8360C51;
-        Tue, 26 Oct 2021 02:17:18 +0000 (UTC)
-Date:   Mon, 25 Oct 2021 22:17:17 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>, <mingo@redhat.com>,
-        <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] kselftests: ftrace: limit the executing time by reading
- from cached trace
-Message-ID: <20211025221717.56daf4e8@rorschach.local.home>
-In-Reply-To: <20211021093131.affc348280aba040f76f769e@kernel.org>
-References: <20211018132616.2234853-1-lizhijian@cn.fujitsu.com>
-        <20211018221636.47157e52@gandalf.local.home>
-        <20211020112027.b01762f2adcfac99e71dcf99@kernel.org>
-        <20211019223454.5da09d74@gandalf.local.home>
-        <20211020115522.75f3e25247c1d30726e9b130@kernel.org>
-        <20211020101659.42360147@gandalf.local.home>
-        <20211021093131.affc348280aba040f76f769e@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S233258AbhJZHgk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Oct 2021 03:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232807AbhJZHgj (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Oct 2021 03:36:39 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFB8C061348
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 00:34:16 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id bl14so14353838qkb.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 00:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XOycsyS8WRs8WZM/52QyGEA5jLYLxAJ/W6Zuel7qkRA=;
+        b=RTkl8uyS7i/Iz5qRUnwc5xVXNU3ItwhMHQQvKidk2hcipXqcmdvIYKAl2f6Ta068Zk
+         VjHBjimCcQPorsd9+W70kGV/QQyYlIG5ac65fNlxg0Gp+EwY3dYS2MY63TcmKj99zF4K
+         OnjccWIuvtn06QWgWZzEzGMJEqqqfot0/Yq5Mwj/X/fZnYlC7QW2iOyv0/Ihq2GgIkNe
+         39Fz7stbik7z2033tcY9eKxWbTjQG0a+NSimLwRmuU2iZRQCP9qfDYwoGaUSrADVojZN
+         u87jJ/Sh5FzrpqzsuddA1fcse9NQrGdPYq+U7M7hrgNZlikCsaFzqbENaXp67rJ3OoN1
+         p27g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=XOycsyS8WRs8WZM/52QyGEA5jLYLxAJ/W6Zuel7qkRA=;
+        b=1SxqU4jwvSYNJGBlhnjvZD6znh/sEuYEGNGF0C7OPEiGjO2XNIDk3qTXC71+n9M9VD
+         163E/MLVobU9Xy0G/9br/d3XdZ2xYZFynEobSJaXW1TYoQTZjq1kxIqpSvmnZoe59oEL
+         0Dar+bvDNx7dpaWqiayDSJx/4LGfQU4sMqsoKN16DHQml9leOks/48m/NoSOUjvu0hCl
+         GjrwDrdDf8c+UZgbM+EPUjcKWvi5Xp9HAmpbLkPQzRs0oOxRsoslV+Ii/zNFn4Ho09ES
+         BMriww0O7RN7UBOUIno+Z3yoA1rEwX/UqwiLCHDiyiV/1L7o+HTfe1QilEidJOvgE9Ep
+         IO/A==
+X-Gm-Message-State: AOAM5336ib7cLSbc4ZsuJKnL10F+oyU5I3y2h/qc0nNfSLzUwO6mKxax
+        sRwK6oR+Aq4xC5CsSPUBtqkxkylNQzp4/zvrKKA=
+X-Google-Smtp-Source: ABdhPJygraWvDHKvyuxpxngNnC4QXAScfUHM6x8UGZe8SCemHuEUTx268K8bXq/C3brNH2IxBxPJc/Eipk/UZ/IYTaE=
+X-Received: by 2002:a05:620a:24cf:: with SMTP id m15mr17357368qkn.434.1635233655314;
+ Tue, 26 Oct 2021 00:34:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ad4:5d66:0:0:0:0:0 with HTTP; Tue, 26 Oct 2021 00:34:14
+ -0700 (PDT)
+Reply-To: ayishagddafio@mail.ru
+From:   Aisha Gaddafi <mrzakirhossain4444@gmail.com>
+Date:   Tue, 26 Oct 2021 00:34:14 -0700
+Message-ID: <CAJGJQubW63on415rLVLETXQWQG-BCLgzyQJPxPCA12Z6VvzNCg@mail.gmail.com>
+Subject: Dearest Friend,?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 21 Oct 2021 09:31:31 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Dearest Friend,
 
-> > > +# Stop tracing while reading the trace file by default, to prevent
-> > > +# the test results while checking it and to avoid taking a long time
-> > > +# to check the result.
-> > > +    [ -f options/pause-on-trace ] && echo 1 > options/pause-on-trace
-> > > +  
-> > 
-> > Is there a way we can save the previous setting and put it back on reset?  
-> 
-> No, since each testcase must be run under the clean state. Would we need to
-> recover the settings?
+In the name of God, Most Gracious, Most Merciful.
 
-I would at least put it back to the default. If someone runs the tests,
-it should at least put it back to what it was at boot. Otherwise,
-someone might run the tests, and then wonder why events are being
-dropped when they are reading the trace.
+Peace be upon you and mercy be upon you and blessings be upon you.
+I have the sum of $27.5 million USD for investment, I am interested in
+you for investment project assistance in your country. My name is
+Aisha  Gaddafi and presently living in Oman, I am a Widow and single
+Mother with three Children, the only biological Daughter of late
+Libyan President (Late Colonel Muammar Gaddafi) and presently I am
+under political asylum protection by the Omani Government.
 
--- Steve
+Kindly reply urgently for more details.
+
+my email address below: ayishagddafio@mail.ru
+Thanks
+Yours Truly Aisha
