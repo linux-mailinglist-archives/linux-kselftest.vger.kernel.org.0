@@ -2,105 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6E643B5ED
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Oct 2021 17:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253B343B60A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Oct 2021 17:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235900AbhJZPqM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Oct 2021 11:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S237085AbhJZPvi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Oct 2021 11:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235892AbhJZPqL (ORCPT
+        with ESMTP id S237083AbhJZPvZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Oct 2021 11:46:11 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F57BC061745
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 08:43:47 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id f24so10836486uav.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 08:43:47 -0700 (PDT)
+        Tue, 26 Oct 2021 11:51:25 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE7DC061348
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 08:49:00 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id d204so20633083ybb.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 08:49:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=VyoOlx1f4bY9qJ0WEn854eIaH9saJD/psl6FGa9mBmM=;
-        b=PYjGf1rSfLl3AT/XmHIgxkE/MkWPrNFapw7LKRlbQJnDGsCzRlzTcKlcjl6drzLmpD
-         PIHMrLFga8mSRuUiu9HJWk01nPt2tCeS1E6yGe+cvrht/eEWwL7KvFbiU7gw6HQ0RUSN
-         w3mK4wQiXtLieIbNccbZnXpAcH5AXCYX8OVE1H650IO8A0VK3uTskGzQLLL0W6Peyj4k
-         rhllbJzUdxQeUHiBTMd1gGoYURUeXOMKSQwwI7vgJUJe5FEmfk8/ll4xo9r1+SiYAxK8
-         Ef4GIKcv6u07n/azdD3Rq65MZok0yaFabVd8E2JTn7XZgb7WdkFLvxaEt2AaDyoBQ3ja
-         s+bw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9bVpuD1Y0J9AqmF+3g16iWc8OCZsFp8I5PNhkQ+ZVF8=;
+        b=ETLLMFRoQJtWWgBJT0RT3eQfsBfYysOXlgNe2DEvEZ1QazSwauaMIoM44pYme32Cmf
+         5wDxSE86ikalKtUTF8YaP1Vkcs/bOKBzt0fci7rR3EbizNznCCEx/0w0v70ni5jpJVBn
+         Sh62U8y41huL0JAATtLmBuahL1Xvkh1iSGtriC0Ko45kmdHgePn3PtuEZZHBjRrSzBBJ
+         dGjnlJj7MYVxr1qqvL87tedwzYyPKh3xKjvudUVGo7CSSjA3VfLQ9uqL4RjTuNMod5w7
+         zMBED7gaNA16iIjHd5Hnj6vSRP7OvuF+zHyueWTRLv5g9HUUT/3huLUFxWp7eKQl28lK
+         6V9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=VyoOlx1f4bY9qJ0WEn854eIaH9saJD/psl6FGa9mBmM=;
-        b=rCuysWEwXdHF+pywdsVs+Nit7LZw8zN9OVGal3J6/raVSagewe4DB94lnv7uSKZi1c
-         nfWjH5UyuzrwmMnVvQ0W9D7QYKVplmSOUHjCbiYO/OBpvAKocpHeEJknrckfqc7n/uMG
-         ryTD2+718lbHkK843cw1Hx30qUVLkfQJLZFH3uIpiSgsohQfnXXnu7X8s+/CfyELMpyd
-         ghe6VvDQZcgC+ZBv2WlHoqCbjqZBt0OzWwEyr/1sfP6C1cgr9yPEiiMoaB1043bDYEY3
-         6y+6gMUPO+v6vkJe5qalJqOvrAqOcZuJPPaCkeqVyp7Zi8qekYBTGnt3YpF7PzrzHvDK
-         /hDg==
-X-Gm-Message-State: AOAM530BedTzXsBgINdxLIfCFkeUlvPTr3QvHaCRFRvfWKBKme7VAX9h
-        Zak1RfRj1qFZY/8iL3OV34tQLnDWaNOrIHk8xB0=
-X-Google-Smtp-Source: ABdhPJyNYtmw60n6JU2ln4cM/jqvgxUV9T9jjXbRo/qFYUyUZkmh1kEAHX72WvC+m2CrsAeao5HU9LfWXSEnfEp4QNM=
-X-Received: by 2002:a67:c205:: with SMTP id i5mr24319494vsj.19.1635263026437;
- Tue, 26 Oct 2021 08:43:46 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9bVpuD1Y0J9AqmF+3g16iWc8OCZsFp8I5PNhkQ+ZVF8=;
+        b=FgrLJRCQtwQl6vaJCRlzAP6F51xVGqz+iH/f6T9mZZyI9WtXcmNaFTgKSFgoJTVvv/
+         83SJfxp8aBi1eNUUcNC+aLVMkqOg4mTbRhit9bILrFNCha2DPua9a4vHohPvFz+SB2kx
+         xucRBKwmQ8O4D65DGy83371WEkGV44uNxajdyLZ7OQvVgMLBYLa7gwrKxW96IPdKB75M
+         w5UeVVZB417HBWbrLO+V+bAgjHZPOsyAYxwWUH/aq0KnGC4rFwjhGADGB7omJc42q9VA
+         tqL0OIu9u2+YBEb1AkO5tN+O3nK7J58Oe6r5jfGiMGuUEsGRGlYEsyvlUIGQSM8ahQWz
+         2rUQ==
+X-Gm-Message-State: AOAM532VF/wVaV6iYPAXq6Xqld/gbvTsmMqyQNCmrR4ZE1uXMMn6LOh2
+        USYUmi3OWweQosmNQRdB+idGFKfnVo1r9BvF07sLvw==
+X-Google-Smtp-Source: ABdhPJxkAfBCqV5ai6x0PYyirty5FemxittcYFhZ6c9nyXWtlQOHD/jYuUO4dkRqgU2YSYIgmFfT9YLe/rbjhyI0rAo=
+X-Received: by 2002:a25:2514:: with SMTP id l20mr26110968ybl.30.1635263339751;
+ Tue, 26 Oct 2021 08:48:59 -0700 (PDT)
 MIME-Version: 1.0
-Sender: aishagaddafi1056@gmail.com
-Received: by 2002:a59:cf85:0:b0:235:f6e1:247f with HTTP; Tue, 26 Oct 2021
- 08:43:46 -0700 (PDT)
-From:   DINA MCKENNA <dinamckennahowley@gmail.com>
-Date:   Tue, 26 Oct 2021 15:43:46 +0000
-X-Google-Sender-Auth: La5vyoLeifJCpfF95J7FaooDtgw
-Message-ID: <CANtwLy3KoG-xoW4nZgjy2ttiKzG8hi8gXR6HE2CXZpgEtwQXqQ@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
+References: <20211005234459.430873-1-michael.roth@amd.com> <20211005234459.430873-3-michael.roth@amd.com>
+ <CAL715W+-H7ZSQZeZmAbbJNGKaZCNqf4VdLismivxux=gerFuDw@mail.gmail.com> <20211021033723.tfnhazbnlz4z5czl@amd.com>
+In-Reply-To: <20211021033723.tfnhazbnlz4z5czl@amd.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Tue, 26 Oct 2021 08:48:48 -0700
+Message-ID: <CAL715W+kJpnx5Jax2-vtFRDNrQFsc6+YT+q5ZkWbBM7gFVKjkg@mail.gmail.com>
+Subject: Re: [RFC 02/16] KVM: selftests: add hooks for managing encrypted
+ guest memory
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     linux-kselftest@vger.kernel.org, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello my dear ,
+On Wed, Oct 20, 2021 at 8:46 PM Michael Roth <michael.roth@amd.com> wrote:
+>
+> On Mon, Oct 18, 2021 at 08:00:00AM -0700, Mingwei Zhang wrote:
+> > > +void vm_set_memory_encryption(struct kvm_vm *vm, bool enc_by_default, bool has_enc_bit,
+> > > +                             uint8_t enc_bit)
+> > > +{
+> > > +       vm->memcrypt.enabled = true;
+> > > +       vm->memcrypt.enc_by_default = enc_by_default;
+> > > +       vm->memcrypt.has_enc_bit = has_enc_bit;
+> > > +       vm->memcrypt.enc_bit = enc_bit;
+> > > +}
+> > > +
+> > > +struct sparsebit *
+> > > +vm_get_encrypted_phy_pages(struct kvm_vm *vm, int slot, vm_paddr_t *gpa_start,
+> > > +                          uint64_t *size)
+> > > +{
+> > > +       struct userspace_mem_region *region;
+> > > +       struct sparsebit *encrypted_phy_pages;
+> > > +
+> > > +       if (!vm->memcrypt.enabled)
+> > > +               return NULL;
+> > > +
+> > > +       region = memslot2region(vm, slot);
+> > > +       if (!region)
+> > > +               return NULL;
+> > > +
+> > > +       encrypted_phy_pages = sparsebit_alloc();
+> > > +       sparsebit_copy(encrypted_phy_pages, region->encrypted_phy_pages);
+> >
+> > Do we have to make a copy for the sparsebit? Why not just return the
+> > pointer? By looking at your subsequent patches, I find that this data
+> > structure seems to be just read-only?
+>
+> Yes, it's only intended to be used for read access. But I'll if I can
+> enforce that without the need to use a copy.
+>
 
- I sent this mail praying it will get to you in a good condition of
-health, since I myself are in a very critical health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day. I bring peace and love to you. It is by the grace of God, I
-had no choice than to do what is lawful and right in the sight of God
-for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
-y
-and glory upon my life. I am Mrs. Dina Mckenna Howley., a widow. I am
-suffering from a long time brain tumor, It has defiled all forms of
-medical treatment, and right now I have about a few months to leave,
-according to medical experts. The situation has gotten complicated
-recently with my inability to hear proper, am communicating with you
-with the help of the chief nurse herein the hospital, from all
-indication my conditions is really deteriorating and it is quite
-obvious that, according to my doctors they have advised me that I may
-not live too long, Because this illness has gotten to a very bad
-stage. I plead that you will not expose or betray this trust and
-confidence that I am about to repose on you for the mutual benefit of
-the orphans and the less privilege. I have some funds I inherited from
-my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
-Having known my condition, I decided to donate this fund to you
-believing that you will utilize it the way i am going to instruct
-herein. I need you to assist me and reclaim this money and use it for
-Charity works therein your country for orphanages and gives justice
-and help to the poor, needy and widows says The Lord." Jeremiah
-22:15-16.=E2=80=9C and also build schools for less privilege that will be
-named after my late husband if possible and to promote the word of God
-and the effort that the house of God is maintained. I do not want a
-situation where this money will be used in an ungodly manner. That's
-why I'm taking this decision. I'm not afraid of death, so I know where
-I'm going. I accept this decision because I do not have any child who
-will inherit this money after I die. Please I want your sincerely and
-urgent answer to know if you will be able to execute this project for
-the glory of God, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of God be with you and all those that you
-love and care for.
+Understood. Thanks for the clarification. Yeah, I think both making a
+copy and returning a const pointer should work. I will leave that to
+you then.
 
-I'm waiting for your immediate reply..
-
-May God Bless you,
-Mrs. Dina Mckenna..
+Thanks.
+-Mingwei
