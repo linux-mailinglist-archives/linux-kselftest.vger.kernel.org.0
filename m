@@ -2,150 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBF843C023
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 04:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7A543C09B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 05:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238487AbhJ0CpW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Oct 2021 22:45:22 -0400
-Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:49035 "EHLO
-        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238210AbhJ0CpW (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Oct 2021 22:45:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1635302576;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=JHhDMPq6SR2/prdc5o9jpxIqOUzjjtbtisEdYUNTRGw=;
-        b=fZGEhCSzFnwr3e30IB8s4RmxwMla3AAyLu8yJsPFHufXec7+/evcaGN3GIH483KZ
-        GsRduaIWxSZu/9lb6IlSOCAPUv5ZXBs6zngqcV2sdXsIXrkdVQ0C4EBo9y+DBOSFCyo
-        682v9J+938OaNxs10OFSW8h/geKlVYyPjcMIePZ0=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1635302576;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=JHhDMPq6SR2/prdc5o9jpxIqOUzjjtbtisEdYUNTRGw=;
-        b=LBJUPU9uKzQW9eSeSJ/bSLpRYNsJvrgjP/Zv2P6op8LQHg2HGdec04PKwGM7y04F
-        lpHMLFQwNn67n4ignVyTzGOd9Eo3G6H/EIUh3w8TB99UVMqvWeVCNIOgsUvgA9ECUKW
-        0s11zCnc/6dFLyML3ZnBEfCQe+oWGwi2Uy0O3dgI=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211025
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        id S237861AbhJ0DQt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Oct 2021 23:16:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43122 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237793AbhJ0DQs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Oct 2021 23:16:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C40B6058D;
+        Wed, 27 Oct 2021 03:14:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635304464;
+        bh=ThmsX7usvNVCUGc6vRHvY2s821PYyElO4mQiqD8wrzU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EUOzOwdfvn97rW1qcnes1+sFYWubQ4M7PV6nC5HDc/LDKp4blNQJU4m/LyC/uY8mr
+         WynYYh86a2GO6J3lmfvh9OAQw1ambNYjoe9CJbJkwydWTvya978QnPKLTqVGjD2Hqz
+         Qj77CL4/h9aFnEUQ8h0JwqKnIoPIQ/pfDuk+3QKU3t6x/Nwe4dI1fmidYqCFx81fIG
+         b5VnIxpESJL+odRoacfxThD+6hlg9xfr3tn3rslhi6KH69YFLka34UFMydJH5hFxYh
+         xTCPia1ip9H+z9QwBo8zk5UlRHRAhWF1YGF97YKCPTA9Kli+8fCCgfZ3wzhO6sWFyD
+         l3LsXnijB544g==
+Date:   Wed, 27 Oct 2021 12:14:20 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, surenb@google.com,
+        hridya@google.com, namhyung@kernel.org, kernel-team@android.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 7/8] tracing/selftests: Add tests for hist trigger
+ expression parsing
+Message-Id: <20211027121420.03a09fca1efc414189bb40bb@kernel.org>
+In-Reply-To: <CAC_TJvf8areGd1rQMbJV4r+J6JP2-DWXBLQwKRZEOzNWL_rqrQ@mail.gmail.com>
+References: <20211025200852.3002369-1-kaleshsingh@google.com>
+        <20211025200852.3002369-8-kaleshsingh@google.com>
+        <20211026214311.583c728d90d41778c38201dd@kernel.org>
+        <CAC_TJvfQQCyuSZqjzC0fuAah84uLgHJv5T+WtR8=9h5fN9nrLA@mail.gmail.com>
+        <20211026174420.0056bde2@gandalf.local.home>
+        <CAC_TJveMumb=BkGL53d_rS08uQ35fz1B7cM9jp8eKoCz0MUG_Q@mail.gmail.com>
+        <20211026202020.026e7907@rorschach.local.home>
+        <CAC_TJvf8areGd1rQMbJV4r+J6JP2-DWXBLQwKRZEOzNWL_rqrQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-ID: <0100017cbfa111e6-5f2fa98d-e6a1-42fd-8f9b-7989d84ec2f3-000000@email.amazonses.com>
-Date:   Wed, 27 Oct 2021 02:42:56 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.10.27-54.240.8.35
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc6
-* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: 9ae1fbdeabd3b3f668ad0bcb47d64b3a9fb4f8fc
-* git describe: next-20211025
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211025
+Hi Kalesh,
 
-## Regressions (compared to next-20211022)
-* i386, kselftest-rtc
-  - rtc.rtctest
+On Tue, 26 Oct 2021 18:15:34 -0700
+Kalesh Singh <kaleshsingh@google.com> wrote:
 
-* qemu_arm, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_migrate
+> On Tue, Oct 26, 2021 at 5:20 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > On Tue, 26 Oct 2021 16:36:03 -0700
+> > Kalesh Singh <kaleshsingh@google.com> wrote:
+> >
+> > > On my setup I without any of the changes applied (config hist triggers enabled):
+> > >
+> > > ./ftracetests
+> > >
+> > > # of passed:  41
+> > > # of failed:  40
+> > > # of unresolved:  0
+> > > # of untested:  0
+> > > # of unsupported:  32
+> > > # of xfailed:  0
+> > > # of undefined(test bug):  0
+> > >
+> > > Do all the tests pass for you, before any of the changes in this
+> > > series? Maybe some of the tests need updating?
+> >
+> > All my tests past, and I don't push any code if they fail.
+> >
+> > I'd like to understand why you have these failures. Are the test from
+> > the kernel you are testing?
+> 
+> The results are from the kernel before I apply any of the patches. I
+> am testing on an Android emulator (cuttlefish) with 5.15.0-rc6 kernel.
+> The tests clearly work so it must be something on my end. I'll
+> investigate and get back to you.
 
-* x15, kselftest-rtc
-  - rtc.rtctest.rtc.alarm_alm_set
-  - rtc.rtctest.rtc.alarm_alm_set_minute
-  - rtc.rtctest.rtc.alarm_wkalm_set
-  - rtc.rtctest.rtc.date_read
+Interesting. There should be test logs under logs/ directory in the
+ftracetest. Can you share the logs/*/ftracetest.log and your kernel kconfig?
+
+Thank you,
 
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211022)
-* qemu_i386, kselftest-rtc
-  - rtc.rtctest
-
-
-## Test result summary
-total: 2855, pass: 1699, fail: 247, skip: 909, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
