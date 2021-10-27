@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C1A43BF15
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 03:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E84C43BF17
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 03:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237600AbhJ0Bji (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Oct 2021 21:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S237622AbhJ0Bjj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Oct 2021 21:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237588AbhJ0Bjh (ORCPT
+        with ESMTP id S237614AbhJ0Bjj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Oct 2021 21:39:37 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C4BC061745
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 18:37:13 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id i128-20020a252286000000b005beea522aa8so1449059ybi.17
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 18:37:13 -0700 (PDT)
+        Tue, 26 Oct 2021 21:39:39 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08E8C061745
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 18:37:14 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id p28-20020a637f5c000000b002a3c58b5917so659101pgn.23
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 18:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=KbePLBSXjJc+ItO7+3Jnjlde8rtlRhHvWKH0kKd5B80=;
-        b=CL35BVEpYmt7VeoOZOl3RV+eDnImtLHSZOMLTZp55viCQSTRJNmRrF8NG8os4UrC3U
-         KRPCb4C31XIg7gqpkIZvAb/MpRDtkzcAURmeOPm5OvdRazmBGez2bjuL47tSXpt6je3T
-         fBHrStjoUKnyny8Ii1LE8VvfVfsQ2E04hPavmu04JaZHy9DMp23l1VAcLAfOhVeZwwQy
-         F44ryA5xwg/M3M2UDIAmU+LaKuEQDby2QSPAsdkp9kDkdAGhrA4Lm6E1wdvrBt9uDbDD
-         8Prno9NKc3Qn3ToEe29ZI1p4eDVkTiobB2ucDC8Ep7m4JmR4jHj63JQ8tH2QHQCLDb8E
-         v+JA==
+        bh=zdnP+CcH+cj0gO5XtMfjV6pCIZrG8LN0fjsgBOUCOoc=;
+        b=b92pU0ZPZUKilkgCeq0jDth2ifnAa83QiCk+5MfUApUiPVy9/uv1rEJVPOPooi3Ye3
+         YfCUuvbWmOHiEC2kiFUgckBwDx8ENqtu1wYm9f8ZZzOF6ZWP2R2VWrtb4/OJA5Qh7kHC
+         ockwapbrUmbsiLTmpcJfHXvND0KHLx3uk/mBv9dAkylFjmtjylw30n9ZsqovaSunDOyL
+         CC79OcNdjexhtkkPeny6kbLhIxQVyLc1U66yYRui05WVAQJLHWN1ZjSZhaqkKwCfncbx
+         al3w5JaVx8c3mYiPY1ySJmX5e6/pHOd69OcroHkmgDbIdSi9ygOfZOtNrWZjNHMBtRxR
+         fsjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=KbePLBSXjJc+ItO7+3Jnjlde8rtlRhHvWKH0kKd5B80=;
-        b=fszFY2heuHviGWAzctKMGLvn93ig2uJqoIWUfUhPyakiD//UNhi02AxXHE3y8j6OBn
-         dxg5nVV7Y/WcnBaupsPPlqK2sUkN6+v0rtioJ6tz/+XkvgQYUd001fm9Wet/a1oB/63q
-         +siYnLF8BIVZWcOnkiHODLM7mrU2yDuoLcQCntnUt0FFsVN0h+uA6Gad6/s7G8M2ZDDF
-         AP/whq/yKlHBUgGXVQbEvAS0OwBXolZM/5KtwCFgS9YB0GMae9+8M8cZielYBV8x/Wse
-         4VzsjwXV9BbcCAupJ8C7Frktci0l+sszUcTp/6aZhnjVSSrBIrB15yRyrZbaJpF5Wv0t
-         YuOg==
-X-Gm-Message-State: AOAM531ye8Bq7Ap5YKRVtzJoCEpv5OhyRGTKvk246yAReezM+zBvImxn
-        9CQVKOPnlfi+TqVPVmLfFxCHe5q5hGga8w==
-X-Google-Smtp-Source: ABdhPJwFvLepJVEy6r7oUTHD+UvCDDphjgm3QnJT5artkyBGE5h2xv2USvnTsN5zO4Wdsh2SXiKYRa3E0+tzyw==
+        bh=zdnP+CcH+cj0gO5XtMfjV6pCIZrG8LN0fjsgBOUCOoc=;
+        b=Ay6y6/Ix+SPPuM2aZ1tNK2KUC6YB5Lgf8v/Hp3HmqEz+9DReLSNJv+uWnX1AFN7M55
+         mzuXf6BKmsroMwCAOeIm/e93xejWiBAhUKQgxSKeh6pjjuEMgzqFFaqKkzZt+y03EArD
+         6pneSh853Tcj4cHIuuNRBbxfGQTlY/Texxtv5WCbxa1WHIYXGqxo1xskUFN0WWo9EoGA
+         0Kp6zNEJRa7h80xVIzbKYkXQihBl1APDt58P2i3755romvn4/Bs1tBnku4rvMOTMq+yl
+         riu7F9Z8kQo2MMynGKtd5iYpTPJ55lTBqyqzIL13aRitK44q2fas2CsjaGy4LR/Q/kLS
+         Ftkg==
+X-Gm-Message-State: AOAM53281zyNkoUBnn7p8+1cEQKbM0w51hM3V0JlEerfpomn6OnTA+83
+        RXsh/ONKQ32WKAcBmA18kKEZTzMIwWI9zQ==
+X-Google-Smtp-Source: ABdhPJwg2vr2nzlms3KujpRdCOHHVuWmWK5Bzr5xe8wdyiH+1BuM42b6Pjw14dOKIyYClEOzMDsPm2olcO1xAQ==
 X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:c628:e925:d58d:6232])
- (user=davidgow job=sendgmr) by 2002:a25:afcd:: with SMTP id
- d13mr29514222ybj.504.1635298632637; Tue, 26 Oct 2021 18:37:12 -0700 (PDT)
-Date:   Tue, 26 Oct 2021 18:37:00 -0700
+ (user=davidgow job=sendgmr) by 2002:a17:902:ed87:b0:141:5fe1:e794 with SMTP
+ id e7-20020a170902ed8700b001415fe1e794mr4334276plj.77.1635298634290; Tue, 26
+ Oct 2021 18:37:14 -0700 (PDT)
+Date:   Tue, 26 Oct 2021 18:37:01 -0700
 In-Reply-To: <20211027013702.2039566-1-davidgow@google.com>
-Message-Id: <20211027013702.2039566-2-davidgow@google.com>
+Message-Id: <20211027013702.2039566-3-davidgow@google.com>
 Mime-Version: 1.0
 References: <20211027013702.2039566-1-davidgow@google.com>
 X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH v2 2/4] kunit: tool: Report an error if any test has no subtests
+Subject: [PATCH v2 3/4] kunit: Don't crash if no parameters are generated
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Rae Moar <rmr167@gmail.com>,
@@ -64,104 +65,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It's possible for a test to have a subtest header, but zero valid
-subtests. We used to error on this if the test plan had no subtests
-listed, but it's possible to have subtests without a test plan (indeed,
-this is how parameterised tests work).
+It's possible that a parameterised test could end up with zero
+parameters. At the moment, the test function will nevertheless be called
+with NULL as the parameter. Instead, don't try to run the test code, and
+just mark the test as SKIPped.
 
-Tests with 0 subtests now have the result NO_TESTS, and will report an
-error (which does not halt test execution, but is printed in a scary red
-colour and is noted in the results summary).
-
+Reported-by: Daniel Latypov <dlatypov@google.com>
 Signed-off-by: David Gow <davidgow@google.com>
 ---
- tools/testing/kunit/kunit_parser.py                | 14 +++++++++-----
- tools/testing/kunit/kunit_tool_test.py             |  9 +++++++++
- .../test_is_test_passed-no_tests_no_plan.log       |  7 +++++++
- 3 files changed, 25 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
+ lib/kunit/test.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 50ded55c168c..3a838423c381 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -360,9 +360,6 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
- 	test.log.append(lines.pop())
- 	expected_count = int(match.group(1))
- 	test.expected_count = expected_count
--	if expected_count == 0:
--		test.status = TestStatus.NO_TESTS
--		test.add_error('0 tests run!')
- 	return True
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 3bd741e50a2d..e028d98e4f5b 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -500,7 +500,10 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	kunit_print_subtest_start(suite);
  
- TEST_RESULT = re.compile(r'^(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
-@@ -731,6 +728,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
- 		# test plan
- 		test.name = "main"
- 		parse_test_plan(lines, test)
-+		parent_test = True
- 	else:
- 		# If KTAP/TAP header is not found, test must be subtest
- 		# header or test result line so parse attempt to parser
-@@ -744,7 +742,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
- 	expected_count = test.expected_count
- 	subtests = []
- 	test_num = 1
--	while expected_count is None or test_num <= expected_count:
-+	while parent_test and (expected_count is None or test_num <= expected_count):
- 		# Loop to parse any subtests.
- 		# Break after parsing expected number of tests or
- 		# if expected number of tests is unknown break when test
-@@ -779,9 +777,15 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
- 			parse_test_result(lines, test, expected_num)
- 		else:
- 			test.add_error('missing subtest result line!')
-+
-+	# Check for there being no tests
-+	if parent_test and len(subtests) == 0:
-+		test.status = TestStatus.NO_TESTS
-+		test.add_error('0 tests run!')
-+
- 	# Add statuses to TestCounts attribute in Test object
- 	bubble_up_test_results(test)
--	if parent_test:
-+	if parent_test and not main:
- 		# If test has subtests and is not the main test object, print
- 		# footer.
- 		print_test_footer(test)
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index bc8793145713..c59fe0777387 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -208,6 +208,15 @@ class KUnitParserTest(unittest.TestCase):
- 		self.assertEqual(
- 			kunit_parser.TestStatus.NO_TESTS,
- 			result.status)
-+		no_plan_log = test_data_path('test_is_test_passed-no_tests_no_plan.log')
-+		with open(no_plan_log) as file:
-+			result = kunit_parser.parse_run_tests(
-+				kunit_parser.extract_tap_lines(file.readlines()))
-+		self.assertEqual(0, len(result.test.subtests[0].subtests[0].subtests))
-+		self.assertEqual(
-+			kunit_parser.TestStatus.NO_TESTS,
-+			result.test.subtests[0].subtests[0].status)
-+
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+-		struct kunit test = { .param_value = NULL, .param_index = 0 };
++		/* The initial param value is nonzero, as we want
++		 * non-parametrised tests to run once.
++		 */
++		struct kunit test = { .param_value = (void *)-1, .param_index = 0 };
+ 		struct kunit_result_stats param_stats = { 0 };
+ 		test_case->status = KUNIT_SKIPPED;
  
- 	def test_no_kunit_output(self):
- 		crash_log = test_data_path('test_insufficient_memory.log')
-diff --git a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
-new file mode 100644
-index 000000000000..dd873c981108
---- /dev/null
-+++ b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
-@@ -0,0 +1,7 @@
-+TAP version 14
-+1..1
-+  # Subtest: suite
-+  1..1
-+    # Subtest: case
-+  ok 1 - case # SKIP
-+ok 1 - suite
+@@ -510,7 +513,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 			test.param_value = test_case->generate_params(NULL, param_desc);
+ 		}
+ 
+-		do {
++		while (test.param_value) {
+ 			kunit_run_case_catch_errors(suite, test_case, &test);
+ 
+ 			if (test_case->generate_params) {
+@@ -530,11 +533,12 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 				param_desc[0] = '\0';
+ 				test.param_value = test_case->generate_params(test.param_value, param_desc);
+ 				test.param_index++;
+-			}
++			} else
++				test.param_value = NULL;
+ 
+ 			kunit_update_stats(&param_stats, test.status);
+ 
+-		} while (test.param_value);
++		}
+ 
+ 		kunit_print_test_stats(&test, param_stats);
+ 
 -- 
 2.33.0.1079.g6e70778dc9-goog
 
