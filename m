@@ -2,87 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 205DD43D3AD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 23:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6A343D622
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 23:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244250AbhJ0VSq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 17:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244277AbhJ0VSR (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 17:18:17 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D67CC061570
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 14:15:51 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id i26so4433642ila.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 14:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lm0+nNU7+O9MfXmzPflhpy32QYmyc8kaxNev2lDAAEs=;
-        b=QkZG2K8bVwvVE7egaAt2KoM2ozNWqnXnRYCDiO58eC/yTXl8qb52o9wIZwiEo5g82G
-         bccuMjBMX6s2/H00mP+Fr4qT57h9Uvc53WJXiMmwn/o5rOlpjbPpRCkoq6lDMvFiLf5M
-         Mn5WuZvMESLsr+yShl4950U8mxzBbei0DvPwtD4+tGwSShXC7YBnfa4bwCxG8yzvVmD9
-         ZWQzhlnZgrRF38+as+UM1Z5B3CgzFBucx490mDEgN/LQQOr5EPSwcVKAwJjxaors8Y2R
-         Rw7IGFcGLS8D7eew/S4U2b8sGZ7yETg9YaMlTaGrL0Kw4t4XBNIT+7a4JOw/7ThIseQ4
-         4gIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lm0+nNU7+O9MfXmzPflhpy32QYmyc8kaxNev2lDAAEs=;
-        b=3y9IICXUzC9vS05nJC83hYhEY64EnFwzsgrNvu8J/ErEslCFmlMjpWQxThaOn2HIC3
-         DHH5mcJIaoYGXHCkzO+E3Pro1nh6lvHQX3XDYGxeS9GfVcqp/0r9MfdIKT2vrxNZUSQf
-         Si2K4l7w99WZx3LjozwoyQJCxeIjJV8sZuXOKfQf/Xce8GQJzjC679Pbax5aE8g6ABVH
-         GfU3rYnTgox2vdKzEIFMmDGNCnZ0mI+8AolrrOZ1NugKzvdGfdKCN6zLPbFq+ls9+2MZ
-         GJwa5w08JxIRjUt0O7LHSVENSU9qFSZv4iScWtQSRA9tWnDrr/WVpMncHdxydGyr6Fw8
-         IHUQ==
-X-Gm-Message-State: AOAM531+uOhsfk0IywJ7oFOECXtGw0+Q79TxFfGfjY66MxFtjbe840Eb
-        hSyaNgB7ceJuJDma6FbFJjHs0JNoShcp7fgvcVExQw==
-X-Google-Smtp-Source: ABdhPJwFlVdGBs6/ghTfnA4EXQvfoHz1gslNeIB/tO5KGqaiLemu7UQV0bF5r1t7c+peB8KbFaYyT1obO1kHcSnGPSg=
-X-Received: by 2002:a92:2812:: with SMTP id l18mr181346ilf.239.1635369350499;
- Wed, 27 Oct 2021 14:15:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210930212309.4001967-1-axelrasmussen@google.com>
- <20210930212309.4001967-3-axelrasmussen@google.com> <CAJHvVcj9FpJgC5EsB1_6yfgDA8p5-=Oakccg+TUrGUWZB5nHzA@mail.gmail.com>
- <YXDCagVgh2O2YdIW@xz-m1.local>
-In-Reply-To: <YXDCagVgh2O2YdIW@xz-m1.local>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 27 Oct 2021 14:15:13 -0700
-Message-ID: <CAJHvVchb1XyQiu6=0d+viG04Qe4LV3Z6dmCLRxGNqKPxriULFQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] userfaultfd/selftests: fix feature support detection
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S229851AbhJ0WBU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 18:01:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45262 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229830AbhJ0WBT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Oct 2021 18:01:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F01A3610A6;
+        Wed, 27 Oct 2021 21:58:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635371934;
+        bh=R8YhZO5s1uz5ekNzWYz3BaLvSkHoIbKUHbDXl3Jhvwk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m25vswBwUn9xA7vOoqQN3oL5TwZz4VDAvswlOUoiw1Ssx5b44Me+jdaZfdpoP8V8f
+         9sLi0dML9i3lDn68cwc62Z3fHin5Cmfqe2mP7gMDQ2SlryyZWsxoRDNeoIGe9RdqfH
+         iZ9MS76NQsiOk5PB0c5g1Kyk9hA6wJzvxoaIWeuW8zTIo3r5u5AI6p1ct31XaX57Z0
+         eMXLcMXnGF4b1FhFFMWMN7gg4ElbgZIPJ/zmq0+nZmcEN79PyfQnySTOYiSfV3JBFC
+         7wipp0cJjjDnrnL+6q5to7nTXAK8qMhi1CIx+e9wvqcW969yDcSnhxI6uoEMpeDg1Y
+         CVIWguIXjuOxQ==
+Date:   Thu, 28 Oct 2021 06:58:49 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
+        kernel-team@android.com, rostedt@goodmis.org, mhiramat@kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] tracing/kselftests: Remove triggers with references
+ before their definitions
+Message-Id: <20211028065849.76b1bd7151e440881298b523@kernel.org>
+In-Reply-To: <20211027205919.1648553-3-kaleshsingh@google.com>
+References: <20211027205919.1648553-1-kaleshsingh@google.com>
+        <20211027205919.1648553-3-kaleshsingh@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 6:29 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Oct 20, 2021 at 11:28:49AM -0700, Axel Rasmussen wrote:
-> > Just a friendly bump for review. :) Peter, any objections to this
-> > version? I think it fairly closely matches your suggestions from v1.
->
-> Isn't the whole patchset already queued by Andrew? :)
+Hi Kalesh,
 
-Ah, true, but I was worried he might hold it there until it got a R-B?
-The process is still a bit fuzzy to me. :) Thanks for taking a look in
-any case!
+On Wed, 27 Oct 2021 13:59:09 -0700
+Kalesh Singh <kaleshsingh@google.com> wrote:
+
+> If an event trigger references a variable defined in another trigger, it
+> has to be removed before the trigger that defines the variable is
+> removed.
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>  tools/testing/selftests/ftrace/test.d/functions | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+> index 000fd05e84b1..bd9e85f4d626 100644
+> --- a/tools/testing/selftests/ftrace/test.d/functions
+> +++ b/tools/testing/selftests/ftrace/test.d/functions
+> @@ -22,6 +22,15 @@ reset_trigger_file() {
+>  	file=`echo $line | cut -f1 -d:`
+>  	echo "!$cmd" >> $file
+>      done
+> +
+> +    # remove triggers with references next
+> +    grep -H '\$' $@ |
+> +    while read line; do
+> +        cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
+> +	file=`echo $line | cut -f1 -d:`
+> +	echo "!$cmd" >> $file
+> +    done
+> +
+
+Why don't you use 'tac'? I love that idea :)
+Did you find any issue?
+
+I think the function which cleaning up the tracing file should use
+the 'tac' rollback method, because it is natural, simple and robust.
+Then the first loop for removing action triggers is not needed anymore.
+
+Thank you,
+
+>      grep -Hv ^# $@ |
+>      while read line; do
+>          cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
+> -- 
+> 2.33.0.1079.g6e70778dc9-goog
+> 
 
 
->
-> Anyway,
->
-> Reviewed-by: Peter Xu <peterx@redhat.com>
->
-> Thanks for the change!
->
-> --
-> Peter Xu
->
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
