@@ -2,125 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A960B43CD25
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 17:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D3243CDF5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 17:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236692AbhJ0PN2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 11:13:28 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:54107 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234640AbhJ0PNQ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 11:13:16 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 9F55F58061E;
-        Wed, 27 Oct 2021 11:10:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 27 Oct 2021 11:10:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=R6eD8s
-        U+mUAvQsxnh8GBjddlGvAFTfv9v84Yk822mOM=; b=LV0fxoTbDMe8MHyGGnky6A
-        Bgnk5gjxH5INNAiJpwXDmxyKz2Dqfi9xTgUDw/E36C8x1U9sVE7sLqhN06q5i4rp
-        BUtIISgNzyN2qDBhlUrJ0TrPZhbPr+H/yZ+0mTXe2vULdzHm5jv3cWqqgYgpWA0v
-        7m4X4PKEAZuVor8NxVdyU0lSH3jrjoFszz4MvWD3TTYeBH5V0JmmSXvBZLHKczNv
-        qBL1okooWhZUbxjVukg6h3oIGWi81JmFL4LM0HAfUK723wN9Dhq84O/9BEBz+1uO
-        jqjw35zKPgpDwFxDvsSn+UMQamm0WCjWOhhBdnGBaXFLwva9n1YchEiLzKxm3puw
-        ==
-X-ME-Sender: <xms:-Wt5Ydu8hVh1RAcM0iqi_mwBmq3mjxvLEtT2wuHtDkhXFNAf_LO2lg>
-    <xme:-Wt5YWdHeCTR2y0M7ph280xqL4I7Asrg1G4fxRLyzIhezf-GbvUOqBywlKa3V-IZ_
-    sRSJPLTIWRF9Mo>
-X-ME-Received: <xmr:-Wt5YQxJsbPdsCVea1raNhxJNkjz87fbCDG0YFetkuYpLhMgckGRSt-r5g_EAvfsiiKCl_uKZ9Dns0m-_mX-qFMN453B6g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdegtddgheefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
-    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:-Wt5YUNOEM7DEqdq0xlFDONCTTyEAH6RA8AMtoL1Rl99pcNyZ05vSw>
-    <xmx:-Wt5Yd9ISd8RDZWJygGj-1qrmMCMlkj6mr-n5OFo7WpedbKTFfk-4A>
-    <xmx:-Wt5YUX9JvocFF2Momh29CBeQVumFRHS5_2-Iuh7CCdoF9ZSs8ToSw>
-    <xmx:-mt5YcaFMSamRMWoYBDY7qlzyic3L-YBarDYumGYiT8GEDUq_VwsfA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 27 Oct 2021 11:10:48 -0400 (EDT)
-Date:   Wed, 27 Oct 2021 18:10:46 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "abyagowi@fb.com" <abyagowi@fb.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "mkubecek@suse.cz" <mkubecek@suse.cz>,
-        "saeed@kernel.org" <saeed@kernel.org>,
-        "michael.chan@broadcom.com" <michael.chan@broadcom.com>
-Subject: Re: [RFC v5 net-next 2/5] rtnetlink: Add new RTM_GETEECSTATE message
- to get SyncE status
-Message-ID: <YXlr9jEZ6jrywpe9@shredder>
-References: <20211026173146.1031412-1-maciej.machnikowski@intel.com>
- <20211026173146.1031412-3-maciej.machnikowski@intel.com>
- <YXj7WkEb0PagWfSw@shredder>
- <PH0PR11MB495191854BF5470E9BF223F5EA859@PH0PR11MB4951.namprd11.prod.outlook.com>
+        id S242854AbhJ0PxA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 11:53:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44480 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242848AbhJ0Pw6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Oct 2021 11:52:58 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AA391610A3;
+        Wed, 27 Oct 2021 15:50:31 +0000 (UTC)
+Date:   Wed, 27 Oct 2021 11:50:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Kalesh Singh <kaleshsingh@google.com>, surenb@google.com,
+        hridya@google.com, namhyung@kernel.org, kernel-team@android.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 7/8] tracing/selftests: Add tests for hist trigger
+ expression parsing
+Message-ID: <20211027115030.50edec1b@gandalf.local.home>
+In-Reply-To: <20211027110149.4bf5eb88@gandalf.local.home>
+References: <20211025200852.3002369-1-kaleshsingh@google.com>
+        <20211025200852.3002369-8-kaleshsingh@google.com>
+        <20211026214311.583c728d90d41778c38201dd@kernel.org>
+        <CAC_TJvfQQCyuSZqjzC0fuAah84uLgHJv5T+WtR8=9h5fN9nrLA@mail.gmail.com>
+        <20211026174420.0056bde2@gandalf.local.home>
+        <CAC_TJveMumb=BkGL53d_rS08uQ35fz1B7cM9jp8eKoCz0MUG_Q@mail.gmail.com>
+        <20211026202020.026e7907@rorschach.local.home>
+        <CAC_TJvf8areGd1rQMbJV4r+J6JP2-DWXBLQwKRZEOzNWL_rqrQ@mail.gmail.com>
+        <20211027121420.03a09fca1efc414189bb40bb@kernel.org>
+        <CAC_TJvdMXd+wnvvs7XrTmT2-iyepr==hH9Kkd_T9_f3jd3Edrg@mail.gmail.com>
+        <20211027103119.2365bc90@gandalf.local.home>
+        <20211027235229.06f268a62133882a547c3c01@kernel.org>
+        <20211027110149.4bf5eb88@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB495191854BF5470E9BF223F5EA859@PH0PR11MB4951.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 01:16:22PM +0000, Machnikowski, Maciej wrote:
+On Wed, 27 Oct 2021 11:01:49 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> And my build failed with:
 > 
+> make[2]: *** No rule to make target 'kernel/drivers/char/hw_random/tpm-rng.o', needed by 'modules-only.symvers'.  Stop.
+> make[1]: *** [/work/git/linux-test.git/Makefile:1783: modules] Error 2
 > 
-> > -----Original Message-----
-> > From: Ido Schimmel <idosch@idosch.org>
-> > Sent: Wednesday, October 27, 2021 9:10 AM
-> > To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
-> > Subject: Re: [RFC v5 net-next 2/5] rtnetlink: Add new RTM_GETEECSTATE
-> > message to get SyncE status
-> > 
-> > On Tue, Oct 26, 2021 at 07:31:43PM +0200, Maciej Machnikowski wrote:
-> > > +/* SyncE section */
-> > > +
-> > > +enum if_eec_state {
-> > > +	IF_EEC_STATE_INVALID = 0,
-> > > +	IF_EEC_STATE_FREERUN,
-> > > +	IF_EEC_STATE_LOCKED,
-> > > +	IF_EEC_STATE_LOCKED_HO_ACQ,
-> > 
-> > Is this referring to "Locked mode, acquiring holdover: This is a
-> > temporary mode, when coming from free-run, to acquire holdover
-> > memory."
-> > ?
-> 
-> Locked HO ACQ means locked and holdover acquired. It's the state that
-> allows transferring to the holdover state. Locked means that we locked
-> our frequency and started acquiring the holdover memory.
+> I'll tweak the config to go further.
 
-So that's a transient state, right? FWIW, I find it weird to call such a
-state "LOCKED".
+I got it booted, but also had to disable selinux. I wonder if that caused
+any issues?
 
->  
-> > It seems ice isn't using it, so maybe drop it? Can be added later in
-> > case we have a driver that can report it
-> 
-> I'll update the driver in the next revision
+It did find a minor bug. A warning happens if you try to connect an
+event-probe to an event that does not exist. That should not warn.
 
-You mean update it to use "IF_EEC_STATE_LOCKED_HO_ACQ" instead of
-"IF_EEC_STATE_LOCKED"?
+I'll go fix that, but it would still be good to see the logs.
 
-Regardless, would be good to document these values.
+Thanks,
 
->  
-> > There is also "Locked mode, holdover acquired: This is a steady state
-> > mode, entered when holdover memory is acquired." But I assume that's
-> > "IF_EEC_STATE_LOCKED"
-> > 
-> > > +	IF_EEC_STATE_HOLDOVER,
-> > > +};
+-- Steve
