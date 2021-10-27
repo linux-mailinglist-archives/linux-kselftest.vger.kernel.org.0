@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F27F43D132
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 20:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C3F43D133
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 20:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240490AbhJ0Sy4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 14:54:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34306 "EHLO mail.kernel.org"
+        id S243650AbhJ0Sy5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 14:54:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34360 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240514AbhJ0Syy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 14:54:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4CEC76103C;
-        Wed, 27 Oct 2021 18:52:26 +0000 (UTC)
+        id S240514AbhJ0Sy5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Oct 2021 14:54:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 11EEE600EF;
+        Wed, 27 Oct 2021 18:52:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635360748;
-        bh=sxN1a8xKEayg5DMYSIoQV28h/DzgOEuE25PSlg48rmQ=;
+        s=k20201202; t=1635360751;
+        bh=Sgok6UhtF0T7hgehfAxYt2HdlrzsmWPZqEF3mfkA2Do=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iXqCg6HUYhfoNw6AA8ri+kbEmwChtp6kVAUUxWfOYpLJOX2dBS4DTilUeRUMaWPMy
-         sBk9wO9b9kY/P4YnULJyn2r2NQOKaZ3+dqJ+gr8hsos1Q6wffrWi+HfIcvZ3jkG2Nn
-         wHN+yUeiW3ezlIypSKA6FU6kExfwLOn9cubf9znvgA1SEYATDmUmGGRxRs84FJUI7p
-         T/StN+034K6ic+gbbPFyLOxn7sL01AbzHOvmvY2bKvep+HcA8duq3NobMPAJaiOt7y
-         6OtkTnezZAj+3pd/gmQJjfQ5Vtk/PYv827yAuQEIm8VxtaCCZUJ/X9jaaihVP+qsSt
-         meeH99aWMTgzg==
+        b=NVYlUB29VPSXSq1DdFF9qSXKAQng4BaR+KTHnkYABuWFSNvtKw7pI9ftzENCwKFVy
+         uIHmXzYSdKaLOwKH9ZRvIFUCIMxkmyyB7X3HiUXrN95LE+wmzknnONPrPsPge4joUa
+         jZzVegTY9R3CTYe9rjt/wsCDwmaAwht3kMXCQp5TFvABi1PBh+GeKBcabXFsgvIFgA
+         umYjy+hbjuEW1mVFihYP/NVThw5VhNZd9LbkQxjfE1mdAZKvWhHSYRmVL+d0VxHiBM
+         btXG+AeDFrx/5pvkt4wHqqiwBkRxLedvYQZzuRTUMGkQd2m6z/bgiqoaTqjaIveDUR
+         pDuJIBlASfm2w==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -35,569 +35,450 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v5 34/38] kselftest/arm64: Add stress test for SME ZA context switching
-Date:   Wed, 27 Oct 2021 19:44:20 +0100
-Message-Id: <20211027184424.166237-35-broonie@kernel.org>
+Subject: [PATCH v5 35/38] kselftest/arm64: signal: Add SME signal handling tests
+Date:   Wed, 27 Oct 2021 19:44:21 +0100
+Message-Id: <20211027184424.166237-36-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211027184424.166237-1-broonie@kernel.org>
 References: <20211027184424.166237-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11842; h=from:subject; bh=sxN1a8xKEayg5DMYSIoQV28h/DzgOEuE25PSlg48rmQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBheZ4BzFsX9O4RadpMRYb7e6NrZXUvNfTxcCi9GKKT 8507tRGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYXmeAQAKCRAk1otyXVSH0AILB/ 99/xNr4gkMOTOHcB8JFxxrBlFBBnbtbBu84BQ633sBAJURlLnzhpRCozhb7hMVoy0D8lNT966rcZ3T gTf0kJDLdBrrZlMMeVJS4xIk+cLtsOo9rY9eArykDdXjdF4vPi4Yf/2S3KqQ8a6GcChJAPXgIdhy4p dsU3hPofOLvK6l73JkmFkzkPHyTa2M9le8XjX0Sywbl3rOSCBVZQDKRpfpqxxXuC1h5mtdTknMnHuP xfFLOwMNgmbTQB1wSoFZKo7Ws0qYHLsOwQAApAL9xXQ3EQ2cf9sMDqJ6I5DhAbAp4qGkX/8yvdxCUe 3S10UWqoaJtluaB+mXqGFTDGY3WfuJ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11674; h=from:subject; bh=Sgok6UhtF0T7hgehfAxYt2HdlrzsmWPZqEF3mfkA2Do=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBheZ4C9gb8ElYXJv7UeYHsNK8YjZCrEle8GYEy9KRz SHhp79iJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYXmeAgAKCRAk1otyXVSH0F2hB/ 9ub1DmjCIQVoM6DhkjDXprrkfCmhv/nsvfBSYScaJLHN4igi4f8nFEHgMadS949xIqHiIcDhovI9P3 HxfMyy6t42wnfhjf10LsyrBOOCEdBJFDB3JlG2wF9DCpKt37rxHBJPsLFAxXOhmmf/CvryOVu5qoEB h9jcgWKHVRfeavSJmrNGT1lmGz664Xcqlb4VEeKgrAiT/a7XFxHenJfGpcPQennI1FvF3VwIPNj8Co RMWxdNbdVzzwlNhIkfM9fHRr8B57AQt3gyAfFaZYF2w+5zg85sqYbPpKQT/QRoHI623ygYfvOcf3Vg zRykhoS9j72F2UV8Pk7IStNdJnhJ57
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a stress test for context switching of the ZA register state based on
-the similar tests Dave Martin wrote for FPSIMD and SVE registers. The test
-loops indefinitely writing a data pattern to ZA then reading it back and
-verifying that it's what was expected.
+Add test cases for the SME signal handing ABI patterned off the SVE tests.
+Due to the small size of the tests and the differences in ABI (especially
+around needing to account for both streaming SVE and ZA) there is some code
+duplication here.
 
-Unlike the other tests we manually assemble the SME instructions since at
-present no released toolchain has SME support integrated.
+We currently cover:
+ - Reporting of the vector length.
+ - Lack of support for changing vector length.
+ - Presence and size of register state for streaming SVE and ZA.
+
+As with the SVE tests we do not yet have any validation of register
+contents.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/.gitignore |   1 +
- tools/testing/selftests/arm64/fp/Makefile   |   3 +
- tools/testing/selftests/arm64/fp/za-stress  |  59 +++
- tools/testing/selftests/arm64/fp/za-test.S  | 431 ++++++++++++++++++++
- 4 files changed, 494 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/fp/za-stress
- create mode 100644 tools/testing/selftests/arm64/fp/za-test.S
+ .../testing/selftests/arm64/signal/.gitignore |   2 +
+ .../selftests/arm64/signal/test_signals.h     |   2 +
+ .../arm64/signal/test_signals_utils.c         |   3 +
+ .../testcases/fake_sigreturn_sme_change_vl.c  |  92 +++++++++++++
+ .../arm64/signal/testcases/sme_trap_za.c      |  36 +++++
+ .../selftests/arm64/signal/testcases/sme_vl.c |  70 ++++++++++
+ .../arm64/signal/testcases/ssve_regs.c        | 129 ++++++++++++++++++
+ 7 files changed, 334 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
 
-diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index 73c600e1ab81..1178fecc7aa1 100644
---- a/tools/testing/selftests/arm64/fp/.gitignore
-+++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -7,3 +7,4 @@ sve-test
- ssve-test
- vec-syscfg
- vlset
-+za-test
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index 6d9e4d1922e4..d77e9903116b 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -6,6 +6,7 @@ TEST_PROGS_EXTENDED := fpsimd-test fpsimd-stress \
- 	rdvl-sme rdvl-sve \
- 	sve-test sve-stress \
- 	ssve-test ssve-stress \
-+	za-test za-stress \
- 	vlset
+diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
+index c1742755abb9..4de8eb26d4de 100644
+--- a/tools/testing/selftests/arm64/signal/.gitignore
++++ b/tools/testing/selftests/arm64/signal/.gitignore
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ mangle_*
+ fake_sigreturn_*
++sme_*
++ssve_*
+ sve_*
+ !*.[ch]
+diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
+index ebe8694dbef0..d0523a50ee78 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals.h
++++ b/tools/testing/selftests/arm64/signal/test_signals.h
+@@ -34,11 +34,13 @@
+ enum {
+ 	FSSBS_BIT,
+ 	FSVE_BIT,
++	FSME_BIT,
+ 	FMAX_END
+ };
  
- all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
-@@ -22,5 +23,7 @@ ssve-test: sve-test.S asm-utils.o
- 	$(CC) -DSSVE -nostdlib $^ -o $@
- vec-syscfg: vec-syscfg.o rdvl.o
- vlset: vlset.o
-+za-test: za-test.o asm-utils.o
-+	$(CC) -nostdlib $^ -o $@
+ #define FEAT_SSBS		(1UL << FSSBS_BIT)
+ #define FEAT_SVE		(1UL << FSVE_BIT)
++#define FEAT_SME		(1UL << FSME_BIT)
  
- include ../../lib.mk
-diff --git a/tools/testing/selftests/arm64/fp/za-stress b/tools/testing/selftests/arm64/fp/za-stress
+ /*
+  * A descriptor used to describe and configure a test case.
+diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+index 8bb12be87a51..cfb95010791a 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
++++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+@@ -27,6 +27,7 @@ static int sig_copyctx = SIGTRAP;
+ static char const *const feats_names[FMAX_END] = {
+ 	" SSBS ",
+ 	" SVE ",
++	" SME ",
+ };
+ 
+ #define MAX_FEATS_SZ	128
+@@ -266,6 +267,8 @@ int test_init(struct tdescr *td)
+ 			td->feats_supported |= FEAT_SSBS;
+ 		if (getauxval(AT_HWCAP) & HWCAP_SVE)
+ 			td->feats_supported |= FEAT_SVE;
++		if (getauxval(AT_HWCAP2) & HWCAP2_SME)
++			td->feats_supported |= FEAT_SME;
+ 		if (feats_ok(td)) {
+ 			fprintf(stderr,
+ 				"Required Features: [%s] supported\n",
+diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
 new file mode 100644
-index 000000000000..5ac386b55b95
+index 000000000000..7ed762b7202f
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/za-stress
-@@ -0,0 +1,59 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright (C) 2015-2019 ARM Limited.
-+# Original author: Dave Martin <Dave.Martin@arm.com>
++++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Attempt to change the streaming SVE vector length in a signal
++ * handler, this is not supported and is expected to segfault.
++ */
 +
-+set -ue
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
 +
-+NR_CPUS=`nproc`
++#include "test_signals_utils.h"
++#include "testcases.h"
 +
-+pids=
-+logs=
++struct fake_sigframe sf;
++static unsigned int vls[SVE_VQ_MAX];
++unsigned int nvls = 0;
 +
-+cleanup () {
-+	trap - INT TERM CHLD
-+	set +e
++static bool sme_get_vls(struct tdescr *td)
++{
++	int vq, vl;
 +
-+	if [ -n "$pids" ]; then
-+		kill $pids
-+		wait $pids
-+		pids=
-+	fi
++	/*
++	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 */
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SVE_SET_VL, vq * 16);
++		if (vl == -1)
++			return false;
 +
-+	if [ -n "$logs" ]; then
-+		cat $logs
-+		rm $logs
-+		logs=
-+	fi
++		vl &= PR_SME_VL_LEN_MASK;
++
++		/* Skip missing VLs */
++		vq = sve_vq_from_vl(vl);
++
++		vls[nvls++] = vl;
++	}
++
++	/* We need at least two VLs */
++	if (nvls < 2) {
++		fprintf(stderr, "Only %d VL supported\n", nvls);
++		return false;
++	}
++
++	return true;
 +}
 +
-+interrupt () {
-+	cleanup
-+	exit 0
++static int fake_sigreturn_ssve_change_vl(struct tdescr *td,
++					 siginfo_t *si, ucontext_t *uc)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct sve_context *sve;
++
++	/* Get a signal context with a SME ZA frame in it */
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, SVE_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No SVE context\n");
++		return 1;
++	}
++
++	if (head->size != sizeof(struct sve_context)) {
++		fprintf(stderr, "Register data present, aborting\n");
++		return 1;
++	}
++
++	sve = (struct sve_context *)head;
++
++	/* No changes are supported; init left us at minimum VL so go to max */
++	fprintf(stderr, "Attempting to change VL from %d to %d\n",
++		sve->vl, vls[0]);
++	sve->vl = vls[0];
++
++	fake_sigreturn(&sf, sizeof(sf), 0);
++
++	return 1;
 +}
 +
-+child_died () {
-+	cleanup
-+	exit 1
-+}
-+
-+trap interrupt INT TERM EXIT
-+
-+for x in `seq 0 $((NR_CPUS * 4))`; do
-+	log=`mktemp`
-+	logs=$logs\ $log
-+	./za-test >$log &
-+	pids=$pids\ $!
-+done
-+
-+# Wait for all child processes to be created:
-+sleep 10
-+
-+while :; do
-+	kill -USR1 $pids
-+done &
-+pids=$pids\ $!
-+
-+wait
-+
-+exit 1
-diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
++struct tdescr tde = {
++	.name = "FAKE_SIGRETURN_SSVE_CHANGE",
++	.descr = "Attempt to change Streaming SVE VL",
++	.feats_required = FEAT_SME,
++	.sig_ok = SIGSEGV,
++	.timeout = 3,
++	.init = sme_get_vls,
++	.run = fake_sigreturn_ssve_change_vl,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c b/tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
 new file mode 100644
-index 000000000000..76bf49f1c13d
+index 000000000000..3a7747af4715
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/za-test.S
-@@ -0,0 +1,431 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2021 ARM Limited.
-+// Original author: Mark Brown <broonie@kernel.org>
-+//
-+// Scalable Matrix Extension ZA context switch test
-+// Repeatedly writes unique test patterns into each ZA tile
-+// and reads them back to verify integrity.
-+//
-+// for x in `seq 1 NR_CPUS`; do sve-test & pids=$pids\ $! ; done
-+// (leave it running for as long as you want...)
-+// kill $pids
-+
-+#include <asm/unistd.h>
-+#include "assembler.h"
-+#include "asm-offsets.h"
-+
-+.arch_extension sve
-+
-+#define MAXVL     2048
-+#define MAXVL_B   (MAXVL / 8)
-+
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * LDR (vector to ZA array):
-+ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that accessing ZA without enabling it generates a SIGILL.
 + */
-+.macro _ldr_za nw, nxbase, offset=0
-+	.inst	0xe1000000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
 +
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++int sme_trap_za_trigger(struct tdescr *td)
++{
++	/* ZERO ZA */
++	asm volatile(".inst 0xc00800ff");
++
++	return 0;
++}
++
++int sme_trap_za_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	return 1;
++}
++
++struct tdescr tde = {
++	.name = "SME ZA trap",
++	.descr = "Check that we get a SIGILL if we access ZA without enabling",
++	.timeout = 3,
++	.sanity_disabled = true,
++	.trigger = sme_trap_za_trigger,
++	.run = sme_trap_za_run,
++	.sig_ok = SIGILL,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_vl.c b/tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+new file mode 100644
+index 000000000000..c40e339a1bc3
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+@@ -0,0 +1,70 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * STR (vector from ZA array):
-+ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Check that the SME vector length reported in signal contexts is the
++ * expected one.
 + */
-+.macro _str_za nw, nxbase, offset=0
-+	.inst	0xe1200000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
-+.macro smstart
-+	msr	S0_3_C4_C7_3, xzr
-+.endm
-+
-+.macro smstart_sm
-+	msr	S0_3_C4_C3_3, xzr
-+.endm
-+
-+.macro smstop
-+	msr	S0_3_C4_C6_3, xzr
-+.endm
-+
-+.macro smstop_sm
-+	msr	S0_3_C4_C2_3, xzr
-+.endm
-+
-+// Declare some storage space to shadow ZA register contents and a
-+// scratch buffer for a vector.
-+.pushsection .text
-+.data
-+.align 4
-+zaref:
-+	.space	MAXVL_B * MAXVL_B
-+scratch:
-+	.space	MAXVL_B
-+.popsection
-+
-+// Trivial memory copy: copy x2 bytes, starting at address x1, to address x0.
-+// Clobbers x0-x3
-+function memcpy
-+	cmp	x2, #0
-+	b.eq	1f
-+0:	ldrb	w3, [x1], #1
-+	strb	w3, [x0], #1
-+	subs	x2, x2, #1
-+	b.ne	0b
-+1:	ret
-+endfunction
-+
-+// Generate a test pattern for storage in ZA
-+// x0: pid
-+// x1: row in ZA
-+// x2: generation
-+
-+// These values are used to constuct a 32-bit pattern that is repeated in the
-+// scratch buffer as many times as will fit:
-+// bits 31:28	generation number (increments once per test_loop)
-+// bits 27:16	pid
-+// bits 15: 8	row number
-+// bits  7: 0	32-bit lane index
-+
-+function pattern
-+	mov	w3, wzr
-+	bfi	w3, w0, #16, #12	// PID
-+	bfi	w3, w1, #8, #8		// Row
-+	bfi	w3, w2, #28, #4		// Generation
-+
-+	ldr	x0, =scratch
-+	mov	w1, #MAXVL_B / 4
-+
-+0:	str	w3, [x0], #4
-+	add	w3, w3, #1		// Lane
-+	subs	w1, w1, #1
-+	b.ne	0b
-+
-+	ret
-+endfunction
-+
-+// Get the address of shadow data for ZA horizontal vector xn
-+.macro _adrza xd, xn, nrtmp
-+	ldr	\xd, =zaref
-+	smstart_sm
-+	rdvl	x\nrtmp, #1
-+	smstop_sm
-+	madd	\xd, x\nrtmp, \xn, \xd
-+.endm
-+
-+// Set up test pattern in a ZA horizontal vector
-+// x0: pid
-+// x1: row number
-+// x2: generation
-+function setup_za
-+	mov	x4, x30
-+	mov	x12, x1			// Use x12 for vector select
-+
-+	bl	pattern			// Get pattern in scratch buffer
-+	_adrza	x0, x12, 2		// Shadow buffer pointer to x0 and x5
-+	mov	x5, x0
-+	ldr	x1, =scratch
-+	bl	memcpy			// length set up in x2 by _adrza
-+
-+	_ldr_za 12, 5			// load vector w12 from pointer x5
-+
-+	ret	x4
-+endfunction
-+
-+// Trivial memory compare: compare x2 bytes starting at address x0 with
-+// bytes starting at address x1.
-+// Returns only if all bytes match; otherwise, the program is aborted.
-+// Clobbers x0-x5.
-+function memcmp
-+	cbz	x2, 2f
-+
-+	stp	x0, x1, [sp, #-0x20]!
-+	str	x2, [sp, #0x10]
-+
-+	mov	x5, #0
-+0:	ldrb	w3, [x0, x5]
-+	ldrb	w4, [x1, x5]
-+	add	x5, x5, #1
-+	cmp	w3, w4
-+	b.ne	1f
-+	subs	x2, x2, #1
-+	b.ne	0b
-+
-+1:	ldr	x2, [sp, #0x10]
-+	ldp	x0, x1, [sp], #0x20
-+	b.ne	barf
-+
-+2:	ret
-+endfunction
-+
-+// Verify that a ZA vector matches its shadow in memory, else abort
-+// x0: row number
-+// Clobbers x0-x7 and x12.
-+function check_za
-+	mov	x3, x30
-+
-+	mov	x12, x0
-+	_adrza	x5, x0, 6		// pointer to expected value in x5
-+	mov	x4, x0
-+	ldr	x7, =scratch		// x7 is scratch
-+
-+	mov	x0, x7			// Poison scratch
-+	mov	x1, x6
-+	bl	memfill_ae
-+
-+	_str_za 12, 7			// save vector w12 to pointer x7
-+
-+	mov	x0, x5
-+	mov	x1, x7
-+	mov	x2, x6
-+	mov	x30, x3
-+	b	memcmp
-+endfunction
-+
-+// Any SME register modified here can cause corruption in the main
-+// thread -- but *only* the locations modified here.
-+function irritator_handler
-+	// Increment the irritation signal count (x23):
-+	ldr	x0, [x2, #ucontext_regs + 8 * 23]
-+	add	x0, x0, #1
-+	str	x0, [x2, #ucontext_regs + 8 * 23]
-+
-+	// Corrupt some random ZA data
-+#if 0
-+	adr	x0, .text + (irritator_handler - .text) / 16 * 16
-+	movi	v0.8b, #1
-+	movi	v9.16b, #2
-+	movi	v31.8b, #3
-+#endif
-+
-+	ret
-+endfunction
-+
-+function terminate_handler
-+	mov	w21, w0
-+	mov	x20, x2
-+
-+	puts	"Terminated by signal "
-+	mov	w0, w21
-+	bl	putdec
-+	puts	", no error, iterations="
-+	ldr	x0, [x20, #ucontext_regs + 8 * 22]
-+	bl	putdec
-+	puts	", signals="
-+	ldr	x0, [x20, #ucontext_regs + 8 * 23]
-+	bl	putdecn
-+
-+	mov	x0, #0
-+	mov	x8, #__NR_exit
-+	svc	#0
-+endfunction
-+
-+// w0: signal number
-+// x1: sa_action
-+// w2: sa_flags
-+// Clobbers x0-x6,x8
-+function setsignal
-+	str	x30, [sp, #-((sa_sz + 15) / 16 * 16 + 16)]!
-+
-+	mov	w4, w0
-+	mov	x5, x1
-+	mov	w6, w2
-+
-+	add	x0, sp, #16
-+	mov	x1, #sa_sz
-+	bl	memclr
-+
-+	mov	w0, w4
-+	add	x1, sp, #16
-+	str	w6, [x1, #sa_flags]
-+	str	x5, [x1, #sa_handler]
-+	mov	x2, #0
-+	mov	x3, #sa_mask_sz
-+	mov	x8, #__NR_rt_sigaction
-+	svc	#0
-+
-+	cbz	w0, 1f
-+
-+	puts	"sigaction failure\n"
-+	b	.Labort
-+
-+1:	ldr	x30, [sp], #((sa_sz + 15) / 16 * 16 + 16)
-+	ret
-+endfunction
-+
-+// Main program entry point
-+.globl _start
-+function _start
-+_start:
-+	puts	"Streaming mode "
-+	smstart
-+
-+	// Sanity-check and report the vector length
-+
-+	rdvl	x19, #8
-+	cmp	x19, #128
-+	b.lo	1f
-+	cmp	x19, #2048
-+	b.hi	1f
-+	tst	x19, #(8 - 1)
-+	b.eq	2f
-+
-+1:	puts	"bad vector length: "
-+	mov	x0, x19
-+	bl	putdecn
-+	b	.Labort
-+
-+2:	puts	"vector length:\t"
-+	mov	x0, x19
-+	bl	putdec
-+	puts	" bits\n"
-+
-+	// Obtain our PID, to ensure test pattern uniqueness between processes
-+	mov	x8, #__NR_getpid
-+	svc	#0
-+	mov	x20, x0
-+
-+	puts	"PID:\t"
-+	mov	x0, x20
-+	bl	putdecn
-+
-+	mov	x23, #0		// Irritation signal count
-+
-+	mov	w0, #SIGINT
-+	adr	x1, terminate_handler
-+	mov	w2, #SA_SIGINFO
-+	bl	setsignal
-+
-+	mov	w0, #SIGTERM
-+	adr	x1, terminate_handler
-+	mov	w2, #SA_SIGINFO
-+	bl	setsignal
-+
-+	mov	w0, #SIGUSR1
-+	adr	x1, irritator_handler
-+	mov	w2, #SA_SIGINFO
-+	orr	w2, w2, #SA_NODEFER
-+	bl	setsignal
-+
-+	mov	x22, #0		// generation number, increments per iteration
-+.Ltest_loop:
-+	smstart_sm		// printing/signals/yielding dropped out of SM
-+	rdvl	x0, #8
-+	cmp	x0, x19
-+	b.ne	vl_barf
-+
-+	rdvl	x21, #1		// Set up ZA & shadow with test pattern
-+	smstop_sm
-+0:	mov	x0, x20
-+	sub	x1, x21, #1
-+	mov	x2, x22
-+	bl	setup_za
-+	subs	x21, x21, #1
-+	b.ne	0b
-+
-+	and	x8, x22, #127		// Every 128 interations...
-+	cbz	x8, 0f
-+	mov	x8, #__NR_getpid	// (otherwise minimal syscall)
-+	b	1f
-+0:
-+	mov	x8, #__NR_sched_yield	// ...encourage preemption
-+1:
-+	svc	#0
-+
-+	mrs	x0, S3_3_C4_C2_2	// SVCR should have ZA=1,SM=0
-+	and	x1, x0, #3
-+	cmp	x1, #2
-+	b.ne	svcr_barf
-+
-+	smstart_sm
-+	rdvl	x21, #1			// Verify that the data made it through
-+	rdvl	x24, #1			// Verify that the data made it through
-+	smstop_sm
-+0:	sub	x0, x24, x21
-+	bl	check_za
-+	subs	x21, x21, #1
-+	bne	0b
-+
-+	add	x22, x22, #1	// Everything still working
-+	b	.Ltest_loop
-+
-+.Labort:
-+	mov	x0, #0
-+	mov	x1, #SIGABRT
-+	mov	x8, #__NR_kill
-+	svc	#0
-+endfunction
-+
-+function barf
-+// fpsimd.c acitivty log dump hack
-+//	ldr	w0, =0xdeadc0de
-+//	mov	w8, #__NR_exit
-+//	svc	#0
-+// end hack
-+	smstop
-+	mov	x10, x0	// expected data
-+	mov	x11, x1	// actual data
-+	mov	x12, x2	// data size
-+
-+	puts	"Mismatch: PID="
-+	mov	x0, x20
-+	bl	putdec
-+	puts	", iteration="
-+	mov	x0, x22
-+	bl	putdec
-+	puts	", row="
-+	mov	x0, x21
-+	bl	putdecn
-+	puts	"\tExpected ["
-+	mov	x0, x10
-+	mov	x1, x12
-+	bl	dumphex
-+	puts	"]\n\tGot      ["
-+	mov	x0, x11
-+	mov	x1, x12
-+	bl	dumphex
-+	puts	"]\n"
-+
-+	mov	x8, #__NR_getpid
-+	svc	#0
-+// fpsimd.c acitivty log dump hack
-+//	ldr	w0, =0xdeadc0de
-+//	mov	w8, #__NR_exit
-+//	svc	#0
-+// ^ end of hack
-+	mov	x1, #SIGABRT
-+	mov	x8, #__NR_kill
-+	svc	#0
-+//	mov	x8, #__NR_exit
-+//	mov	x1, #1
-+//	svc	#0
-+endfunction
-+
-+function vl_barf
-+	mov	x10, x0
-+
-+	puts	"Bad active VL: "
-+	mov	x0, x10
-+	bl	putdecn
-+
-+	mov	x8, #__NR_exit
-+	mov	x1, #1
-+	svc	#0
-+endfunction
-+
-+function svcr_barf
-+	mov	x10, x0
-+
-+	puts	"Bad SVCR: "
-+	mov	x0, x10
-+	bl	putdecn
-+
-+	mov	x8, #__NR_exit
-+	mov	x1, #1
-+	svc	#0
-+endfunction
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++struct fake_sigframe sf;
++unsigned int vl;
++
++static bool get_sme_vl(struct tdescr *td)
++{
++	int ret = prctl(PR_SME_GET_VL);
++	if (ret == -1)
++		return false;
++
++	vl = ret;
++
++	return true;
++}
++
++static int sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct sve_context *sve;
++
++	/* Get a signal context which should have a SVE frame in it */
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, SVE_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No SVE context\n");
++		return 1;
++	}
++	sve = (struct sve_context *)head;
++
++	if (sve->vl != vl) {
++		fprintf(stderr, "SSVE sigframe VL %u, expected %u\n",
++			sve->vl, vl);
++		return 1;
++	} else {
++		fprintf(stderr, "got SSVE expected VL %u\n", vl);
++	}
++
++	/* Also check ZA VL */
++
++	td->pass = 1;
++
++	return 0;
++}
++
++struct tdescr tde = {
++	.name = "SME VL",
++	.descr = "Check that we get the right SME VL reported",
++	.feats_required = FEAT_SME,
++	.timeout = 3,
++	.init = get_sme_vl,
++	.run = sme_vl,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+new file mode 100644
+index 000000000000..44a08d43cd50
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+@@ -0,0 +1,129 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that the streaming SVE register context in signal frames is
++ * set up as expected.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++struct fake_sigframe sf;
++static unsigned int vls[SVE_VQ_MAX];
++unsigned int nvls = 0;
++
++static bool sme_get_vls(struct tdescr *td)
++{
++	int vq, vl;
++
++	/*
++	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 */
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SVE_SET_VL, vq * 16);
++		if (vl == -1)
++			return false;
++
++		vl &= PR_SME_VL_LEN_MASK;
++
++		/* Skip missing VLs */
++		vq = sve_vq_from_vl(vl);
++
++		vls[nvls++] = vl;
++	}
++
++	/* We need at least one VL */
++	if (nvls < 1) {
++		fprintf(stderr, "Only %d VL supported\n", nvls);
++		return false;
++	}
++
++	return true;
++}
++
++static void setup_ssve_regs(void)
++{
++	/* SMSTART SM */
++	asm volatile(".inst 0x7f4303d5");
++
++	/* RDVL x16, #1 so we should have SVE regs; real data is TODO */
++	asm volatile(".inst 0x04bf5030" : : : "x16" );
++}
++
++static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
++			 unsigned int vl)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct sve_context *ssve;
++
++	fprintf(stderr, "Testing VL %d\n", vl);
++
++	if (prctl(PR_SME_SET_VL, vl) == -1) {
++		fprintf(stderr, "Failed to set VL\n");
++		return 1;
++	}
++
++	/* 
++	 * Get a signal context which should have a SVE frame and registers
++	 * in it.
++	 */
++	setup_ssve_regs();
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, SVE_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No SVE context\n");
++		return 1;
++	}
++
++	ssve = (struct sve_context *)head;
++	if (ssve->vl != vl) {
++		fprintf(stderr, "Got VL %d, expected %d\n", ssve->vl, vl);
++		return 1;
++	}
++
++	/* The actual size validation is done in get_current_context() */
++	fprintf(stderr, "Got expected size %u and VL %d\n",
++		head->size, ssve->vl);
++
++	return 0;
++}
++
++static int sme_regs(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	int i;
++
++	for (i = 0; i < nvls; i++) {
++		/*
++		 * TODO: the signal test helpers can't currently cope
++		 * with signal frames bigger than struct sigcontext,
++		 * skip VLs that will trigger that.
++		 */
++		if (vls[i] > 64)
++			continue;
++
++		if (do_one_sme_vl(td, si, uc, vls[i]))
++			return 1;
++	}
++
++	td->pass = 1;
++
++	return 0;
++}
++
++struct tdescr tde = {
++	.name = "Streaming SVE registers",
++	.descr = "Check that we get the right Streaming SVE registers reported",
++	.feats_required = FEAT_SME,
++	.timeout = 3,
++	.init = sme_get_vls,
++	.run = sme_regs,
++};
 -- 
 2.30.2
 
