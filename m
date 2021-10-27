@@ -2,129 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A13F043BE02
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 01:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B17C43BE6C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 02:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236325AbhJZXlu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Oct 2021 19:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235920AbhJZXlt (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Oct 2021 19:41:49 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A78EC061767
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 16:39:25 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id k2-20020a17090ac50200b001a218b956aaso694821pjt.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 16:39:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UGc8wLx9Y9uYc1sV+rqKsRejtsRqKlqZmOxOwdL9dxo=;
-        b=lgak8A5JAimuhKaibtc98+IZJupYTHZrci4KeklKbTahRGCywHv/kh8spzrzks3Ooa
-         4kzviyAyUN30XjNWTMniYD6ih/SqpaSMNLQvaeV9p67QG3C85mEimzInwQ05N7bTrp0H
-         rzfAhb1xGIZUS6zH5aePLgh6GholdaqTq1NhMvZyWaDsky9Itxn29QRavydkGf9S4kap
-         uVxLTLJGrX3vnCrnPa3IxRGjorSjJGA6pSQ7njDn4munlyhfqS8BNwRCXAwmQCQ4AlgG
-         kRYlI4hyqIyCRWl2+HhbEbncIWQrGrH83LsQfvEykfHOVARGERXHzpyB+iv0aNBSwU9Y
-         mY4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UGc8wLx9Y9uYc1sV+rqKsRejtsRqKlqZmOxOwdL9dxo=;
-        b=rhMKNDycToZ0D9UMMWoK5fIivh0/6ZPbNrCzx1ZHYjRppiI5oBWkrrvsJ20m12+oDH
-         yjrb42H6alYUBMCLWKqBwOifZA1gIO3kZqE+KQ1fT/MqlgR1Z8ANEAUpfRxo6evUEKo6
-         jDBKdfxWlRLw1YZAuRUnJmvMbDSSOE1Yvi/NS9GfyKMZYsvPnU9/C/OPFe3StRNgX4VQ
-         WCOtrM3kXRqPhtzQU6JHynnVFTccGZTaPJTNvvJAafzMHE4bpOb+kunL8x96RNxOZlNJ
-         0fAXJ1raFlJrjQ5PT5pmWvHO+YtQHHNsxrUFH/SvSELdvfNZzr11ym0tiAKUnYVoHXrv
-         jjHg==
-X-Gm-Message-State: AOAM531qll11TpGr4Al9oV3nXvkF0RX5kPBEFXxp615lw5CZ6Cl+3Koc
-        3pK512xfk5dkOlMhPk5GKNA8SmEjIY1r5TgRiz0gsg==
-X-Google-Smtp-Source: ABdhPJzeAmpt6HrgmDoiSxmoSMQGtLPDR45n0ttxg8f33uar4tiH2S9UcjbIbifjly/2KDpzcF4Fp20BBPVzc7588+0=
-X-Received: by 2002:a17:903:183:b0:140:47c1:1f2e with SMTP id
- z3-20020a170903018300b0014047c11f2emr17151977plg.69.1635291564597; Tue, 26
- Oct 2021 16:39:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211025200852.3002369-1-kaleshsingh@google.com>
- <20211025200852.3002369-7-kaleshsingh@google.com> <20211026151451.7f3e09a4@gandalf.local.home>
-In-Reply-To: <20211026151451.7f3e09a4@gandalf.local.home>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Tue, 26 Oct 2021 16:39:13 -0700
-Message-ID: <CAC_TJveHgsPZw7p7BWOgQw6h8GNU_Pv_WUjNmw3AUq+wnSzk6Q@mail.gmail.com>
-Subject: Re: [PATCH v4 6/8] tracing/histogram: Optimize division by a power of 2
-To:     Steven Rostedt <rostedt@goodmis.org>
+        id S231934AbhJ0AVP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Oct 2021 20:21:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54564 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231166AbhJ0AVO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Oct 2021 20:21:14 -0400
+Received: from rorschach.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 437C86103B;
+        Wed, 27 Oct 2021 00:18:49 +0000 (UTC)
+Date:   Tue, 26 Oct 2021 20:18:46 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
 Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
         kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
         Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 6/8] tracing/histogram: Optimize division by a power
+ of 2
+Message-ID: <20211026201846.08990d1d@rorschach.local.home>
+In-Reply-To: <CAC_TJveHgsPZw7p7BWOgQw6h8GNU_Pv_WUjNmw3AUq+wnSzk6Q@mail.gmail.com>
+References: <20211025200852.3002369-1-kaleshsingh@google.com>
+        <20211025200852.3002369-7-kaleshsingh@google.com>
+        <20211026151451.7f3e09a4@gandalf.local.home>
+        <CAC_TJveHgsPZw7p7BWOgQw6h8GNU_Pv_WUjNmw3AUq+wnSzk6Q@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 12:14 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Mon, 25 Oct 2021 13:08:38 -0700
-> Kalesh Singh <kaleshsingh@google.com> wrote:
->
-> > == Results ==
-> >
-> > Divisor is a power of 2 (divisor == 32):
-> >
-> >    test_hist_field_div_not_optimized  | 8,717,091 cpu-cycles
-> >    test_hist_field_div_optimized      | 1,643,137 cpu-cycles
-> >
-> > If the divisor is a power of 2, the optimized version is ~5.3x faster.
-> >
-> > Divisor is not a power of 2 (divisor == 33):
-> >
-> >    test_hist_field_div_not_optimized  | 4,444,324 cpu-cycles
-> >    test_hist_field_div_optimized      | 5,497,958 cpu-cycles
->
-> To optimize this even more, if the divisor is constant, we could make a
-> separate function to not do the branch, and just shift or divide.
+On Tue, 26 Oct 2021 16:39:13 -0700
+Kalesh Singh <kaleshsingh@google.com> wrote:
 
-Ack. I can update to use separate functions for the constant divisors.
+> >         // This works best for small divisors
+> >         if (div > max_div) {
+> >                 // only do a real division
+> >                 return;
+> >         }
+> >         shift = 20;
+> >         mult = ((1 << shift) + div - 1) / div;
+> >         delta = mult * div - (1 << shift);
+> >         if (!delta) {
+> >                 /* div is a power of 2 */
+> >                 max = -1;
+> >                 return;
+> >         }
+> >         max = (1 << shift) / delta;  
+> 
+> I'm still trying to digest the above algorithm. 
 
->
-> And even if it is not a power of 2, for constants, we could implement a
-> multiplication and shift, and guarantee an accuracy up to a defined max.
->
->
-> If div is a constant, then we can calculate the mult and shift, and max
-> dividend. Let's use 20 for shift.
->
->         // This works best for small divisors
->         if (div > max_div) {
->                 // only do a real division
->                 return;
->         }
->         shift = 20;
->         mult = ((1 << shift) + div - 1) / div;
->         delta = mult * div - (1 << shift);
->         if (!delta) {
->                 /* div is a power of 2 */
->                 max = -1;
->                 return;
->         }
->         max = (1 << shift) / delta;
+mult = (2^20 + div - 1) / div;
 
-I'm still trying to digest the above algorithm. But doesn't this add 2
-extra divisions? What am I missing here?
+The "div - 1" is to round up.
 
-Thanks,
-Kalesh
+Basically, it's doing:  X / div  = X * (2^20 / div) / 2^20
 
->
-> We would of course need to use 64 bit operations (maybe only do this for 64
-> bit machines). And perhaps even use bigger shift values to get a bigger max.
->
-> Then we could do:
->
->         if (val1 < max)
->                 return (val1 * mult) >> shift;
->
-> -- Steve
+If div is constant, the 2^20 / div is constant, and the "2^20" is the
+same as a shift.
+
+So multiplier is 2^20 / div, and the shift is 20.
+
+But because there's rounding errors it is only accurate up to the
+difference of:
+
+  delta = mult * div / 2^20
+
+That is if mult is a power of two, then there would be no rounding
+errors, and the delta is zero, making the max infinite:
+
+  max = 2^20 / delta as delta goes to zero.
+
+> But doesn't this add 2 extra divisions? What am I missing here?
+
+The above is only done at parsing not during the trace, where we care
+about.
+
+> > 
+> >
+> > We would of course need to use 64 bit operations (maybe only do this for 64
+> > bit machines). And perhaps even use bigger shift values to get a bigger max.
+> >
+> > Then we could do:
+> >
+> >         if (val1 < max)
+> >                 return (val1 * mult) >> shift;
+
+This is done at the time of recording.
+
+Actually, it would be:
+
+	if (val1 < max)
+		return (val1 * mult) >> shift;
+	else
+		return val1 / div;
+
+-- Steve
