@@ -2,98 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07FDC43D660
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 00:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E60943D719
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 01:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbhJ0WPt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 18:15:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49282 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230091AbhJ0WPt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 18:15:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 45FD860EFE;
-        Wed, 27 Oct 2021 22:13:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635372803;
-        bh=Qusou+GTSRWee2wKlxAwgNDheywqVp69l4gLDXw9uj0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DIhLgQ17rx0gtZdAOFcI636rtClyZ9Hpe4HlkQJ9q4YUkgBx89pNPBjB72Thz/KqH
-         f9gtqZcBFR0Rvsz/n7+WudLHNo5RoBVXRdBqrvsfgO2fG9+D/fXQaKi93DQp+HKjjs
-         ek0rxdT3K4MG3eGBS4g1DQTI2fBlsbeYD8+/FtNllj554LwxNtb5irENhGYh6lvIGo
-         iYy0VGj7o5d5r84vGP2SV5rV1pZAVs8hPSkKf1FkjqMjXJAt5XlguMkNr2hg2j+Zgu
-         xg1825g+bz4w17Drr3ZtlTCYfXS1AgA3cYT+jCuapVXxW0ZLMLksl+YIR6XdBXY4fX
-         U0hJdp7kpfS9Q==
-Date:   Thu, 28 Oct 2021 07:13:19 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
-        kernel-team@android.com, rostedt@goodmis.org, mhiramat@kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/3] tracing/histogram: Document hist trigger variables
-Message-Id: <20211028071319.44e3e885352866713dd08046@kernel.org>
-In-Reply-To: <20211027205919.1648553-2-kaleshsingh@google.com>
-References: <20211027205919.1648553-1-kaleshsingh@google.com>
-        <20211027205919.1648553-2-kaleshsingh@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S230156AbhJ0XFY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 19:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230128AbhJ0XFX (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Oct 2021 19:05:23 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AA0C061745
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 16:02:57 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id k7so6687474wrd.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 16:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DkNDhiEnUBFd5g6Q7nEnrcdTNYozC6sABi5j39jJUF8=;
+        b=O57Zy/hgeucXgevrTxtL8Wv4sU2LKVUiZQ68zd/yTuraAcKI9j4ZpvMgxRU2jfJF6L
+         1rh56ESO/dUOk7Wi2e+OpC3mrxyxrzVQ3TxRjLTzx0BGas/reMb9hVgpmFh0/khc2P7M
+         ZVa1qUPybjco2VRP7TiTOagAaCUc7QG7Z6dS648ZstOlb3HqJ/1O/gf/dVVyyNFdxNjv
+         DMi2hHGtTJb7hWtn3/Gpd3SaCtrTVdPE1jyicUQtktSj25G2XHfxb3claF160a41FPap
+         zLX4XtOTPFVRpDJ+NpZXkhKIdHPWjJXxFoVC/PywSnVjM55edlzrxbZ6U8OB7bhMkcGy
+         n/cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DkNDhiEnUBFd5g6Q7nEnrcdTNYozC6sABi5j39jJUF8=;
+        b=tou4F1UtkGopv8GnTXZ2b0/BeqsOJ2TzcXN9RGXX37wMfNOkyNNMmhXm1YOs/BfazO
+         ewnekAB0XGX0R7YO2ABYYZNDaZA530H256OZr6h72nFOnWWR1DlxjeodccNm1xZrG2YZ
+         16yrHx6ss+0tJwAxtBxy1veMBZQN/v++EtnRayZMe4mqXYWGZzTm6tjZ5QajobDKRRTC
+         GRxQx/vTu/LIsRb0cxkZNckvC8fA8ICZGAeGh283tlL1Ejm08w5EexSSIx2fFccF49Mz
+         QrQTpUzXYGxdNTH8RhIv/L1tL/geWHUevun5P5fl7G6UAxhfOZd0zPpKzcq5m2WoosgS
+         IWzQ==
+X-Gm-Message-State: AOAM531lNQcJEAbak/EomGIi1FO4/LRRp7JFyIIp6QvQC8hd9ZRo4JN7
+        QK4KjEUsuQFICgZ3D1RRHh3ajt5tzfXHS0GAU08+xA==
+X-Google-Smtp-Source: ABdhPJyO1vwvDrD3z/hjTZUkPwoCJGxlHZGp1P4reZ7iy0UtXE2yq8mDVVpaGENP60V2gmhuJF8PbiES4vM1e/WK3qE=
+X-Received: by 2002:adf:d0c3:: with SMTP id z3mr789158wrh.44.1635375776246;
+ Wed, 27 Oct 2021 16:02:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211027013702.2039566-1-davidgow@google.com> <CAGS_qxo2=NmXEnEnkg4E_1k-DXwniGK8xFZi08nKZZkb8otXzQ@mail.gmail.com>
+In-Reply-To: <CAGS_qxo2=NmXEnEnkg4E_1k-DXwniGK8xFZi08nKZZkb8otXzQ@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 28 Oct 2021 07:02:45 +0800
+Message-ID: <CABVgOSnQ73ZqnF=Y7Wg-rO_wp-ttSbK8=p2EXUbh7ogGpDPUfA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] kunit: tool: Do not error on tests without test plans
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 27 Oct 2021 13:59:08 -0700
-Kalesh Singh <kaleshsingh@google.com> wrote:
+On Thu, Oct 28, 2021 at 6:13 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Tue, Oct 26, 2021 at 6:37 PM David Gow <davidgow@google.com> wrote:
+> >
+> > The (K)TAP spec encourages test output to begin with a 'test plan': a
+> > count of the number of tests being run of the form:
+> > 1..n
+> >
+> > However, some test suites might not know the number of subtests in
+> > advance (for example, KUnit's parameterised tests use a generator
+> > function). In this case, it's not possible to print the test plan in
+> > advance.
+> >
+> > kunit_tool already parses test output which doesn't contain a plan, but
+> > reports an error. Since we want to use nested subtests with KUnit
+> > paramterised tests, remove this error.
+> >
+> > Signed-off-by: David Gow <davidgow@google.com>
+>
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+>
+> This looks to be unchanged from v1.
 
-> Update the tracefs README to describe how hist trigger variables
-> can be created.
-> 
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+Yeah, the changes in v2 were all in the new patches.
 
-This looks good to me.
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thank you!
-
-> ---
->  kernel/trace/trace.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index bc677cd64224..c41b3786401d 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -5628,6 +5628,7 @@ static const char readme_msg[] =
->  #ifdef CONFIG_HIST_TRIGGERS
->  	"      hist trigger\t- If set, event hits are aggregated into a hash table\n"
->  	"\t    Format: hist:keys=<field1[,field2,...]>\n"
-> +	"\t            [:<var1>=<field|var_ref|numeric_literal>[,<var2>=...]]\n"
->  	"\t            [:values=<field1[,field2,...]>]\n"
->  	"\t            [:sort=<field1[,field2,...]>]\n"
->  	"\t            [:size=#entries]\n"
-> @@ -5639,6 +5640,16 @@ static const char readme_msg[] =
->  	"\t            common_timestamp - to record current timestamp\n"
->  	"\t            common_cpu - to record the CPU the event happened on\n"
->  	"\n"
-> +	"\t    A hist trigger variable can be:\n"
-> +	"\t        - a reference to a field e.g. x=current_timestamp,\n"
-> +	"\t        - a reference to another variable e.g. y=$x,\n"
-> +	"\t        - a numeric literal: e.g. ms_per_sec=1000,\n"
-> +	"\t        - an arithmetic expression: e.g. time_secs=current_timestamp/1000\n"
-> +	"\n"
-> +	"\t    hist trigger aritmethic expressions support addition(+), subtraction(-),\n"
-> +	"\t    multiplication(*) and division(/) operators. An operand can be either a\n"
-> +	"\t    variable reference, field or numeric literal.\n"
-> +	"\n"
->  	"\t    When a matching event is hit, an entry is added to a hash\n"
->  	"\t    table using the key(s) and value(s) named, and the value of a\n"
->  	"\t    sum called 'hitcount' is incremented.  Keys and values\n"
-> -- 
-> 2.33.0.1079.g6e70778dc9-goog
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+-- David
