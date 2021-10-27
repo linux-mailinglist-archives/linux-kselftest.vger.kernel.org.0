@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EFD43CCF5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 17:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A960B43CD25
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 17:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237897AbhJ0PHe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 11:07:34 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:49211 "EHLO
+        id S236692AbhJ0PN2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 11:13:28 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:54107 "EHLO
         new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235373AbhJ0PHe (ORCPT
+        by vger.kernel.org with ESMTP id S234640AbhJ0PNQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 11:07:34 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 6E11B580615;
-        Wed, 27 Oct 2021 11:05:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 27 Oct 2021 11:05:08 -0400
+        Wed, 27 Oct 2021 11:13:16 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 9F55F58061E;
+        Wed, 27 Oct 2021 11:10:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 27 Oct 2021 11:10:50 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=hq6pi+
-        m3tGTJ4s3XHUs6Y2MN1sZYG9iVHys0Kpw4DVM=; b=mLR4e7FbhsGItPTJRu+8dZ
-        03uNLJrjcc8uEjecgCQNvb3MHPdGytumCqygPFIAe/TAfuN7hIyWwzMtbzIFVsy0
-        adr/A8d54CfOmi4sfHCinzz3sJXUsIrW3qGb76Fpp15NgetbhkfnBDzspBQR705Z
-        hHA002IEhtIGCI2koOIeJto9VBOmv0xVbebTbasEF0X/aDUpiLh9P2fu/tQZZXz2
-        Xdu99BDffSc3g6g/riXbv5LmwZ435FDxDGruNabDWGvmFCktTTyjiAozjSTMB+Vi
-        uR1vgbCbrBzxOCO50rQ+bRfMVPAZBg7EFmXqez6PHd6h6Szrskz9OuLLtXKGEV7w
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=R6eD8s
+        U+mUAvQsxnh8GBjddlGvAFTfv9v84Yk822mOM=; b=LV0fxoTbDMe8MHyGGnky6A
+        Bgnk5gjxH5INNAiJpwXDmxyKz2Dqfi9xTgUDw/E36C8x1U9sVE7sLqhN06q5i4rp
+        BUtIISgNzyN2qDBhlUrJ0TrPZhbPr+H/yZ+0mTXe2vULdzHm5jv3cWqqgYgpWA0v
+        7m4X4PKEAZuVor8NxVdyU0lSH3jrjoFszz4MvWD3TTYeBH5V0JmmSXvBZLHKczNv
+        qBL1okooWhZUbxjVukg6h3oIGWi81JmFL4LM0HAfUK723wN9Dhq84O/9BEBz+1uO
+        jqjw35zKPgpDwFxDvsSn+UMQamm0WCjWOhhBdnGBaXFLwva9n1YchEiLzKxm3puw
         ==
-X-ME-Sender: <xms:o2p5YSmtZI2knkQVqvceWeWbtAxhgNrLlWU8aEBUORP3sKwn0ISjRg>
-    <xme:o2p5YZ2sMh8MyAJ0Epv8j4_HZH8vEA3BU-5U0k9058o-L4mn-Fw1ULVIn3r62ZlYo
-    ZIX-gMuGPfeMG8>
-X-ME-Received: <xmr:o2p5YQrlxA3HonDHC0XZXH1CUs-yw99SfH7Bcvmi5ddtaFqNLQiL2KVhz6eeXtqrOEMCTGddEP1kQuT2jruiUsHeduUMjA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdegtddgkeduucetufdoteggodetrfdotf
+X-ME-Sender: <xms:-Wt5Ydu8hVh1RAcM0iqi_mwBmq3mjxvLEtT2wuHtDkhXFNAf_LO2lg>
+    <xme:-Wt5YWdHeCTR2y0M7ph280xqL4I7Asrg1G4fxRLyzIhezf-GbvUOqBywlKa3V-IZ_
+    sRSJPLTIWRF9Mo>
+X-ME-Received: <xmr:-Wt5YQxJsbPdsCVea1raNhxJNkjz87fbCDG0YFetkuYpLhMgckGRSt-r5g_EAvfsiiKCl_uKZ9Dns0m-_mX-qFMN453B6g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdegtddgheefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
@@ -40,13 +40,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdegtddgkeduucetufdoteggod
     gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
     teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
     hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:o2p5YWntt9gUY8X4BkIIpmhkZSyUsYqr45jxB9rUDTo_RopLPWtv4A>
-    <xmx:o2p5YQ0wrKwaa20uAjUgAa5SYBc3DxZ_HgmV5FC1OJ3E6dQZ3vRjMA>
-    <xmx:o2p5Ydu_Xks3Bm_SBGVgWYS8r6yFM7zYq1b2lEAAhGMxW9MPaBZaTQ>
-    <xmx:pGp5YWw6N4essO1oEXwSwlXw1wIc7AOfdKpVOpV3w35nI71n0r-Qrw>
+X-ME-Proxy: <xmx:-Wt5YUNOEM7DEqdq0xlFDONCTTyEAH6RA8AMtoL1Rl99pcNyZ05vSw>
+    <xmx:-Wt5Yd9ISd8RDZWJygGj-1qrmMCMlkj6mr-n5OFo7WpedbKTFfk-4A>
+    <xmx:-Wt5YUX9JvocFF2Momh29CBeQVumFRHS5_2-Iuh7CCdoF9ZSs8ToSw>
+    <xmx:-mt5YcaFMSamRMWoYBDY7qlzyic3L-YBarDYumGYiT8GEDUq_VwsfA>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 27 Oct 2021 11:05:06 -0400 (EDT)
-Date:   Wed, 27 Oct 2021 18:05:01 +0300
+ 27 Oct 2021 11:10:48 -0400 (EDT)
+Date:   Wed, 27 Oct 2021 18:10:46 +0300
 From:   Ido Schimmel <idosch@idosch.org>
 To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
 Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
@@ -60,120 +60,67 @@ Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "mkubecek@suse.cz" <mkubecek@suse.cz>,
         "saeed@kernel.org" <saeed@kernel.org>,
         "michael.chan@broadcom.com" <michael.chan@broadcom.com>
-Subject: Re: [RFC v5 net-next 0/5] Add RTNL interface for SyncE
-Message-ID: <YXlqnXRw2iL7bGrh@shredder>
+Subject: Re: [RFC v5 net-next 2/5] rtnetlink: Add new RTM_GETEECSTATE message
+ to get SyncE status
+Message-ID: <YXlr9jEZ6jrywpe9@shredder>
 References: <20211026173146.1031412-1-maciej.machnikowski@intel.com>
- <YXj2oKjjobd0ZgBi@shredder>
- <PH0PR11MB4951A17040D860D8AC6975C1EA859@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20211026173146.1031412-3-maciej.machnikowski@intel.com>
+ <YXj7WkEb0PagWfSw@shredder>
+ <PH0PR11MB495191854BF5470E9BF223F5EA859@PH0PR11MB4951.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB4951A17040D860D8AC6975C1EA859@PH0PR11MB4951.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB495191854BF5470E9BF223F5EA859@PH0PR11MB4951.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 01:21:58PM +0000, Machnikowski, Maciej wrote:
+On Wed, Oct 27, 2021 at 01:16:22PM +0000, Machnikowski, Maciej wrote:
 > 
 > 
 > > -----Original Message-----
 > > From: Ido Schimmel <idosch@idosch.org>
-> > Sent: Wednesday, October 27, 2021 8:50 AM
+> > Sent: Wednesday, October 27, 2021 9:10 AM
 > > To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
-> > Cc: netdev@vger.kernel.org; intel-wired-lan@lists.osuosl.org;
-> > richardcochran@gmail.com; abyagowi@fb.com; Nguyen, Anthony L
-> > <anthony.l.nguyen@intel.com>; davem@davemloft.net; kuba@kernel.org;
-> > linux-kselftest@vger.kernel.org; mkubecek@suse.cz; saeed@kernel.org;
-> > michael.chan@broadcom.com
-> > Subject: Re: [RFC v5 net-next 0/5] Add RTNL interface for SyncE
+> > Subject: Re: [RFC v5 net-next 2/5] rtnetlink: Add new RTM_GETEECSTATE
+> > message to get SyncE status
 > > 
-> > On Tue, Oct 26, 2021 at 07:31:41PM +0200, Maciej Machnikowski wrote:
-> > > Synchronous Ethernet networks use a physical layer clock to syntonize
-> > > the frequency across different network elements.
-> > >
-> > > Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
-> > > Equipment Clock (EEC) and have the ability to recover synchronization
-> > > from the synchronization inputs - either traffic interfaces or external
-> > > frequency sources.
-> > > The EEC can synchronize its frequency (syntonize) to any of those sources.
-> > > It is also able to select synchronization source through priority tables
-> > > and synchronization status messaging. It also provides neccessary
-> > > filtering and holdover capabilities
-> > >
-> > > This patch series introduces basic interface for reading the Ethernet
-> > > Equipment Clock (EEC) state on a SyncE capable device. This state gives
-> > > information about the source of the syntonization signal (ether my port,
-> > > or any external one) and the state of EEC. This interface is required\
-> > > to implement Synchronization Status Messaging on upper layers.
-> > >
-> > > v2:
-> > > - removed whitespace changes
-> > > - fix issues reported by test robot
-> > > v3:
-> > > - Changed naming from SyncE to EEC
-> > > - Clarify cover letter and commit message for patch 1
-> > > v4:
-> > > - Removed sync_source and pin_idx info
-> > > - Changed one structure to attributes
-> > > - Added EEC_SRC_PORT flag to indicate that the EEC is synchronized
-> > >   to the recovered clock of a port that returns the state
-> > > v5:
-> > > - add EEC source as an optiona attribute
-> > > - implement support for recovered clocks
-> > > - align states returned by EEC to ITU-T G.781
+> > On Tue, Oct 26, 2021 at 07:31:43PM +0200, Maciej Machnikowski wrote:
+> > > +/* SyncE section */
+> > > +
+> > > +enum if_eec_state {
+> > > +	IF_EEC_STATE_INVALID = 0,
+> > > +	IF_EEC_STATE_FREERUN,
+> > > +	IF_EEC_STATE_LOCKED,
+> > > +	IF_EEC_STATE_LOCKED_HO_ACQ,
 > > 
-> > Hi,
-> > 
-> > Thanks for continuing to work on this.
-> > 
-> > I was under the impression (might be wrong) that the consensus last time
-> > was to add a new ethtool message to query the mapping between the port
-> > and the EEC clock (similar to TSINFO_GET) and then use a new generic
-> > netlink family to perform operations on the clock itself.
+> > Is this referring to "Locked mode, acquiring holdover: This is a
+> > temporary mode, when coming from free-run, to acquire holdover
+> > memory."
+> > ?
 > 
-> Hi!
-> 
-> I believe we finally agreed to continue with this implementations (for a
-> simplified devices) and when the DPLL subsystem is ready, plug it into this
-> API as well using the discovery mechanism. As there may be some simplified
-> solutions that would not use the controllable DPLL and only provide the
-> status (i.e. using physical signals)
+> Locked HO ACQ means locked and holdover acquired. It's the state that
+> allows transferring to the holdover state. Locked means that we locked
+> our frequency and started acquiring the holdover memory.
 
-By "simplified solutions" you are referring to simple NEs that only
-synchronize their frequency according to what they extract from the
-physical layer as opposed to an external source such as in the PRC case?
-
-> 
-> > At least in the case of RTM_GETEECSTATE and a multi-port adapter, you
-> > would actually query the same state via each netdev, but without
-> > realizing it's the same clock.
-> 
-> True, yet for a given port we need info whether we are locked or not,
-> so the interdependency wouldn't break anything.
-
-But if two ports are using the same EEC, then it's not possible for them
-to report a different EEC state, right? The only difference is that one
-port can be the source and the other isn't, but this is also an
-attribute of the EEC.
-
-Basically, I'm saying that it seems that we report attributes of a
-single object (the EEC) via multiple objects using it (the netdevs)
-without making the relation clear to user space.
-
-I'm not strictly against it, but rather wondering why.
+So that's a transient state, right? FWIW, I find it weird to call such a
+state "LOCKED".
 
 >  
-> > I think another reason to move to ethtool was that this stuff is
-> > completely specific to Ethernet and not applicable to all logical
-> > netdevs.
+> > It seems ice isn't using it, so maybe drop it? Can be added later in
+> > case we have a driver that can report it
 > 
-> That was an open in previous discussion. Wanted to first show the
-> full API to discuss where it fits. I believe all other networks (like SONET)
-> may also benefit from having it in the netdev, but am open for discussion.
+> I'll update the driver in the next revision
 
-OK, didn't think about SONET. There is include/uapi/linux/sonet.h with a
-few SONET specific ioctls and a couple of drivers implementing them. The
-whole thing looks quite dead...
+You mean update it to use "IF_EEC_STATE_LOCKED_HO_ACQ" instead of
+"IF_EEC_STATE_LOCKED"?
 
-ethtool still seems like a better option for something that has
-"Ethernet" in its name :)
+Regardless, would be good to document these values.
+
+>  
+> > There is also "Locked mode, holdover acquired: This is a steady state
+> > mode, entered when holdover memory is acquired." But I assume that's
+> > "IF_EEC_STATE_LOCKED"
+> > 
+> > > +	IF_EEC_STATE_HOLDOVER,
+> > > +};
