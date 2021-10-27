@@ -2,121 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF6543BFE8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 04:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBF843C023
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 04:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238358AbhJ0Cgo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Oct 2021 22:36:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58080 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238214AbhJ0Cgo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Oct 2021 22:36:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BAF0B60F0F;
-        Wed, 27 Oct 2021 02:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635302059;
-        bh=tJuz9xU+39xdBxstvNh2Lqyyxlqzg73RtzfkS9+Mx50=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DBREyDU5e++mtcWEZgz8YzaxZtExD++2IO7ykow899wUqCr8ulbm1Wjr9wgtaiA83
-         COG3pR0aXfKuPDapxFwMeUN2YiA083KMVzSOhkqJPcQNGsO1lNlbGlNl4hK3KaFPNq
-         JOI3Y4X/KIrNCXyH8ZUWwpmhvwcHC+ePSAH9L3AQ2RwOWuRVd4+ZGcKvkl0y/Vh0Rf
-         yNCJBGp+3UAdQS4KHq9WJ5BQ1+Rz1w3s4OL2dHfFuVABa33nCH+gT4PXedcLQjQ7uU
-         2PxBHj85C4m0V6ejXzBbiwYcOGl9ZqBVI/8BXx6jiltLrNVGYyeK1K+jloHXrQXYf2
-         qBQAg2vJw5HNw==
-Date:   Wed, 27 Oct 2021 11:34:16 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
-        kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 7/8] tracing/selftests: Add tests for hist trigger
- expression parsing
-Message-Id: <20211027113416.fdad2adf8d162e67405e44ba@kernel.org>
-In-Reply-To: <CAC_TJvfQQCyuSZqjzC0fuAah84uLgHJv5T+WtR8=9h5fN9nrLA@mail.gmail.com>
-References: <20211025200852.3002369-1-kaleshsingh@google.com>
-        <20211025200852.3002369-8-kaleshsingh@google.com>
-        <20211026214311.583c728d90d41778c38201dd@kernel.org>
-        <CAC_TJvfQQCyuSZqjzC0fuAah84uLgHJv5T+WtR8=9h5fN9nrLA@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S238487AbhJ0CpW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Oct 2021 22:45:22 -0400
+Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:49035 "EHLO
+        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238210AbhJ0CpW (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Oct 2021 22:45:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1635302576;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=JHhDMPq6SR2/prdc5o9jpxIqOUzjjtbtisEdYUNTRGw=;
+        b=fZGEhCSzFnwr3e30IB8s4RmxwMla3AAyLu8yJsPFHufXec7+/evcaGN3GIH483KZ
+        GsRduaIWxSZu/9lb6IlSOCAPUv5ZXBs6zngqcV2sdXsIXrkdVQ0C4EBo9y+DBOSFCyo
+        682v9J+938OaNxs10OFSW8h/geKlVYyPjcMIePZ0=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1635302576;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=JHhDMPq6SR2/prdc5o9jpxIqOUzjjtbtisEdYUNTRGw=;
+        b=LBJUPU9uKzQW9eSeSJ/bSLpRYNsJvrgjP/Zv2P6op8LQHg2HGdec04PKwGM7y04F
+        lpHMLFQwNn67n4ignVyTzGOd9Eo3G6H/EIUh3w8TB99UVMqvWeVCNIOgsUvgA9ECUKW
+        0s11zCnc/6dFLyML3ZnBEfCQe+oWGwi2Uy0O3dgI=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211025
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+Message-ID: <0100017cbfa111e6-5f2fa98d-e6a1-42fd-8f9b-7989d84ec2f3-000000@email.amazonses.com>
+Date:   Wed, 27 Oct 2021 02:42:56 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.10.27-54.240.8.35
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 26 Oct 2021 07:28:39 -0700
-Kalesh Singh <kaleshsingh@google.com> wrote:
+## Build
+* kernel: 5.15.0-rc6
+* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: 9ae1fbdeabd3b3f668ad0bcb47d64b3a9fb4f8fc
+* git describe: next-20211025
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211025
 
-> On Tue, Oct 26, 2021 at 5:43 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi Kalesh,
-> >
-> > On Mon, 25 Oct 2021 13:08:39 -0700
-> > Kalesh Singh <kaleshsingh@google.com> wrote:
-> >
-> > > Add tests for the parsing of hist trigger expressions; and to
-> > > validate expression evaluation.
-> > >
-> > > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > > Reviewed-by: Namhyung Kim <namhyung@kernel.org>
-> > > ---
-> > >
-> > > Changes in v3:
-> > >   - Remove .sym-offset error check tests
-> > >
-> > > Changes in v2:
-> > >   - Add Namhyung's Reviewed-by
-> > >   - Update comment to clarify err_pos in "Too many subexpressions" test
-> > >
-> > >
-> > >  .../testing/selftests/ftrace/test.d/functions |  4 +-
-> > >  .../trigger/trigger-hist-expressions.tc       | 72 +++++++++++++++++++
-> > >  2 files changed, 74 insertions(+), 2 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
-> > >
-> > > diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-> > > index 000fd05e84b1..1855a63559ad 100644
-> > > --- a/tools/testing/selftests/ftrace/test.d/functions
-> > > +++ b/tools/testing/selftests/ftrace/test.d/functions
-> > > @@ -16,13 +16,13 @@ reset_tracer() { # reset the current tracer
-> > >
-> > >  reset_trigger_file() {
-> > >      # remove action triggers first
-> > > -    grep -H ':on[^:]*(' $@ |
-> > > +    grep -H ':on[^:]*(' $@ | tac |
-> > >      while read line; do
-> > >          cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
-> > >       file=`echo $line | cut -f1 -d:`
-> > >       echo "!$cmd" >> $file
-> > >      done
-> > > -    grep -Hv ^# $@ |
-> > > +    grep -Hv ^# $@ | tac |
-> > >      while read line; do
-> > >          cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
-> > >       file=`echo $line | cut -f1 -d:`
-> >
-> > If this update has any meaning, please make a separate patch for this part.
-> 
-> Hi Masami,
-> 
-> Thanks for the feedback. The above change is to ensure we remove
-> triggers in the reverse order that we created them - important when
-> one trigger depends on another.
+## Regressions (compared to next-20211022)
+* i386, kselftest-rtc
+  - rtc.rtctest
 
-Hi Kalesh,
-That's a good reason to make this an independent patch :)
+* qemu_arm, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_migrate
 
-> I can split it out into a separate
-> patch and will add a README pattern check to the requires tag for
-> these tests.
-
-Thank you!
+* x15, kselftest-rtc
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.date_read
 
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+
+## Fixes (compared to next-20211022)
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+
+## Test result summary
+total: 2855, pass: 1699, fail: 247, skip: 909, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
