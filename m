@@ -2,542 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BA643D137
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 20:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4265443D154
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 21:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240487AbhJ0SzG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 14:55:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34504 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240485AbhJ0SzF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 14:55:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 604BC60F38;
-        Wed, 27 Oct 2021 18:52:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635360759;
-        bh=DCMJxJMe4OLl4PJbn5L+sskMaVKlBlAwxUKMmtLZgjE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oDjsNWuEgL/TM7iSsB97L8lEbN3sj1REqr0WKycCxOPcTtQBUm/HaMfFEwYo0Xclb
-         rPCRs9vWHCJuy8NI+M3sKKN4nKDxGENKkHOewyGPqdZ3twMMlzCTSidvfNOelYvzUT
-         KGDhIFg28Y6zaLn2PDNKyXgTmlUZk9SV0a/p0AxSNLjDOOnFan/Wx7n2JT7Mq4Zgcf
-         F3T49p3Y5xzIkr0OAZDfIw0GndJnWJSXHcKHRa1IF6q64vth9jTn0PUHfDxKPIk9tq
-         dhz7oTN/NP6UAI+LlJnH6cTBDLMFlY7eSHsGMmm7gfUAD/Cf5IHXhB/4JtMLFPx7pj
-         mD4J7mM+awzdA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v5 38/38] kselftest/arm64: Add SME support to syscall ABI test
-Date:   Wed, 27 Oct 2021 19:44:24 +0100
-Message-Id: <20211027184424.166237-39-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211027184424.166237-1-broonie@kernel.org>
-References: <20211027184424.166237-1-broonie@kernel.org>
+        id S238919AbhJ0TCf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 15:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230073AbhJ0TCe (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Oct 2021 15:02:34 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B40AC061745
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 12:00:08 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id r194so4972531iod.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 12:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jXKCRvYW+G/U3lCt5Bb406ecBZvxMrSVY/Zc9yEqb98=;
+        b=JzW/KRnOs36+qiUImtSUHxPTHogPFxD/HyvIaGOpbyqDP6UWSNjZESlNnNXdG7qc5r
+         AOJvgF/J0F2v8NdyUM12Ek/0kcHtSCoWu+9psXlZgl3FfrIYxAMmmSxStB4ilq2L8ikc
+         0DCCVMyvRYI4Mx9kTv2gUUgUORl3/jSUAhEPAxbhKIaUnkBSBA3ERg6Uu7V4l/TcebPs
+         CMMTrLHzggpXA+tyFPDCrLNZwkr8hPpltgN+vF5CZaJpU+K5YILQR8VuxCGyHQw0X8Z2
+         fY48qUx1qErXd7uz1QwwT3ML5p10B2ZC9yx1KqX2egWksVNV/+GpsF/R+pvj0HSkc081
+         h2nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jXKCRvYW+G/U3lCt5Bb406ecBZvxMrSVY/Zc9yEqb98=;
+        b=Mis34dNiR9spPhi1yBiOAc/nrcCs/ck/uNUDxQvAvRlizTsZwviQN9GB2+Rgg4X4g9
+         JaL+4Ekx2mGv0ZYe5v8HUb1EsUkIObIakOKGAu9nPtnLwUFjLsEvcaW2ptFY3Tn4hsTk
+         BJOjKY3JclgYlTqSLvLX+TAyIBNn+g46bluUfRiNEOGa58ub/jf8JpVhvRx3r1jzXwk2
+         CEfE0IV7Ostdz2ClHlbt8DkZebUfVY+jZSogXcCGj32wrkco+uA7IOoS4CqFziybGXKU
+         LreEQR5o9z5dpcD9CRr03o984kdr9R9Q0208lf3DTYfDZkrX0nMf3yHcCNmKz1+CZ5kV
+         Ukng==
+X-Gm-Message-State: AOAM530Z6rmlOTf78UE0wfHIBLG4TbTHhXs9xJ7wVriVc0mG4FcqLE28
+        wmgOgsk0scur+QEw6R1/OCaHQdW/NtVJyfsCGZdkNQ==
+X-Google-Smtp-Source: ABdhPJxLBNMYnPhlvTfJ3h65LeVfM2OrbYYAMCXnwzpGjtBk+VleJKFtur6a+yaGJ4iS8fBHLaAPxgfPIb/Ybswfaik=
+X-Received: by 2002:a02:a907:: with SMTP id n7mr15849878jam.96.1635361207311;
+ Wed, 27 Oct 2021 12:00:07 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=14317; h=from:subject; bh=DCMJxJMe4OLl4PJbn5L+sskMaVKlBlAwxUKMmtLZgjE=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBheZ4Em16VUbOkM1nwEw5UgHEZcC+J0grbqA/lWVKE xFiq1kmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYXmeBAAKCRAk1otyXVSH0B78B/ 9SAhNmMcgVQ+/W/0SN5AoHxR3evryFCL5yVp7wViFjdAQfS/iwkiScU82P3eZfRWLZtp9ZGp7z+Aso +YXOeALUcSdAYfA2OrWlgigREwhHJ9tUcXPNkKUqCzJHsorNmoEPvuw3HiO1J5YT/XaDy2InMnEjcw escuIAZnrfLy+2CsovJs0E67WpT49aDFJkJ/lspVUXe7hN9Jy8CRQ5Vb9n2BwQ5mHVCtJAecvCY6NJ iJnd6jBstQMiEf3K/O0qP/J8yAVfG/B+MTtu7O3UU29TtOuDS+DjelLDYpSqziBbrcrTuP+p1kQj+D VzcsPb8alZ9pBpsUAMvwxXoMv9vj20
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
+References: <20211027013702.2039566-1-davidgow@google.com> <20211027013702.2039566-3-davidgow@google.com>
+In-Reply-To: <20211027013702.2039566-3-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 27 Oct 2021 11:59:55 -0700
+Message-ID: <CAGS_qxqbJd+8U4TQCusmcNND0vdUCF2EJqBqXhtx3NBt4KAAGQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] kunit: Don't crash if no parameters are generated
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For every possible combination of SVE and SME vector length verify that for
-each possible value of SVCR after a syscall we leave streaming mode and ZA
-is preserved. We don't need to take account of any streaming/non streaming
-SVE vector length changes in the assembler code since the store instructions
-will handle the vector length for us. We log if the system supports FA64 and
-only try to set FFR in streaming mode if it does.
+On Tue, Oct 26, 2021 at 6:37 PM David Gow <davidgow@google.com> wrote:
+>
+> It's possible that a parameterised test could end up with zero
+> parameters. At the moment, the test function will nevertheless be called
+> with NULL as the parameter. Instead, don't try to run the test code, and
+> just mark the test as SKIPped.
+>
+> Reported-by: Daniel Latypov <dlatypov@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>  lib/kunit/test.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 3bd741e50a2d..e028d98e4f5b 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -500,7 +500,10 @@ int kunit_run_tests(struct kunit_suite *suite)
+>         kunit_print_subtest_start(suite);
+>
+>         kunit_suite_for_each_test_case(suite, test_case) {
+> -               struct kunit test = { .param_value = NULL, .param_index = 0 };
+> +               /* The initial param value is nonzero, as we want
+> +                * non-parametrised tests to run once.
+> +                */
+> +               struct kunit test = { .param_value = (void *)-1, .param_index = 0 };
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- .../selftests/arm64/abi/syscall-abi-asm.S     |  69 +++++-
- .../testing/selftests/arm64/abi/syscall-abi.c | 204 ++++++++++++++++--
- 2 files changed, 250 insertions(+), 23 deletions(-)
+(Not a strong preference)
 
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
-index 983467cfcee0..bc70e04224bf 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
-@@ -9,15 +9,42 @@
- // invoked is configured in x8 of the input GPR data.
- //
- // x0:	SVE VL, 0 for FP only
-+// x1:	SME VL
- //
- //	GPRs:	gpr_in, gpr_out
- //	FPRs:	fpr_in, fpr_out
- //	Zn:	z_in, z_out
- //	Pn:	p_in, p_out
- //	FFR:	ffr_in, ffr_out
-+//	ZA:	za_in, za_out
-+//	SVCR:	svcr_in, svcr_out
-+
-+#include "syscall-abi.h"
- 
- .arch_extension sve
- 
-+/*
-+ * LDR (vector to ZA array):
-+ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _ldr_za nw, nxbase, offset=0
-+	.inst	0xe1000000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
-+/*
-+ * STR (vector from ZA array):
-+ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _str_za nw, nxbase, offset=0
-+	.inst	0xe1200000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
- .globl do_syscall
- do_syscall:
- 	// Store callee saved registers x19-x29 (80 bytes) plus x0 and x1
-@@ -30,6 +57,24 @@ do_syscall:
- 	stp	x25, x26, [sp, #80]
- 	stp	x27, x28, [sp, #96]
- 
-+	// Set SVCR if we're doing SME
-+	cbz	x1, 1f
-+	adrp	x2, svcr_in
-+	ldr	x2, [x2, :lo12:svcr_in]
-+	msr	S3_3_C4_C2_2, x2
-+1:
-+
-+	// Load ZA if it's enabled - uses x12 as scratch due to SME LDR
-+	tbz	x2, #SVCR_ZA_SHIFT, 1f
-+	mov	w12, #0
-+	ldr	x2, =za_in
-+2:	_ldr_za 12, 2
-+	add	x2, x2, x1
-+	add	x12, x12, #1
-+	cmp	x1, x12
-+	bne	2b
-+1:
-+
- 	// Load GPRs x8-x28, and save our SP/FP for later comparison
- 	ldr	x2, =gpr_in
- 	add	x2, x2, #64
-@@ -68,7 +113,7 @@ do_syscall:
- 	ldp	q30, q31, [x2, #16 * 30]
- 1:
- 
--	// Load the SVE registers if we're doing SVE
-+	// Load the SVE registers if we're doing SVE/SME
- 	cbz	x0, 1f
- 
- 	ldr	x2, =z_in
-@@ -105,9 +150,13 @@ do_syscall:
- 	ldr	z30, [x2, #30, MUL VL]
- 	ldr	z31, [x2, #31, MUL VL]
- 
-+	// Only set a non-zero FFR, test patterns must be zero since the
-+	// syscall should clear it - this lets us handle FA64.
- 	ldr	x2, =ffr_in
-+	cbz	x2, 2f
- 	ldr	p0, [x2, #0]
- 	wrffr	p0.b
-+2:
- 
- 	ldr	x2, =p_in
- 	ldr	p0, [x2, #0, MUL VL]
-@@ -169,6 +218,24 @@ do_syscall:
- 	stp	q28, q29, [x2, #16 * 28]
- 	stp	q30, q31, [x2, #16 * 30]
- 
-+	// Save SVCR if we're doing SME
-+	cbz	x1, 1f
-+	mrs	x2, S3_3_C4_C2_2
-+	adrp	x3, svcr_out
-+	str	x2, [x3, :lo12:svcr_out]
-+1:
-+
-+	// Save ZA if it's enabled - uses x12 as scratch due to SME STR
-+	tbz	x2, #SVCR_ZA_SHIFT, 1f
-+	mov	w12, #0
-+	ldr	x2, =za_out
-+2:	_str_za 12, 2
-+	add	x2, x2, x1
-+	add	x12, x12, #1
-+	cmp	x1, x12
-+	bne	2b
-+1:
-+
- 	// Save the SVE state if we have some
- 	cbz	x0, 1f
- 
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index d103acf1ab79..ae38cb06a56c 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi.c
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -18,10 +18,14 @@
- 
- #include "../../kselftest.h"
- 
-+#include "syscall-abi.h"
-+
- #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
- #define NUM_VL ((SVE_VQ_MAX - SVE_VQ_MIN) + 1)
- 
--extern void do_syscall(int sve_vl);
-+static int default_sme_vl;
-+
-+extern void do_syscall(int sve_vl, int sme_vl);
- 
- static void fill_random(void *buf, size_t size)
- {
-@@ -49,14 +53,15 @@ static struct syscall_cfg {
- uint64_t gpr_in[NUM_GPR];
- uint64_t gpr_out[NUM_GPR];
- 
--static void setup_gpr(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_gpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		      uint64_t svcr)
- {
- 	fill_random(gpr_in, sizeof(gpr_in));
- 	gpr_in[8] = cfg->syscall_nr;
- 	memset(gpr_out, 0, sizeof(gpr_out));
- }
- 
--static int check_gpr(struct syscall_cfg *cfg, int sve_vl)
-+static int check_gpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl, uint64_t svcr)
- {
- 	int errors = 0;
- 	int i;
-@@ -80,13 +85,15 @@ static int check_gpr(struct syscall_cfg *cfg, int sve_vl)
- uint64_t fpr_in[NUM_FPR * 2];
- uint64_t fpr_out[NUM_FPR * 2];
- 
--static void setup_fpr(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		      uint64_t svcr)
- {
- 	fill_random(fpr_in, sizeof(fpr_in));
- 	memset(fpr_out, 0, sizeof(fpr_out));
- }
- 
--static int check_fpr(struct syscall_cfg *cfg, int sve_vl)
-+static int check_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		     uint64_t svcr)
- {
- 	int errors = 0;
- 	int i;
-@@ -110,13 +117,15 @@ static uint8_t z_zero[__SVE_ZREG_SIZE(SVE_VQ_MAX)];
- uint8_t z_in[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
- uint8_t z_out[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
- 
--static void setup_z(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_z(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
- {
- 	fill_random(z_in, sizeof(z_in));
- 	fill_random(z_out, sizeof(z_out));
- }
- 
--static int check_z(struct syscall_cfg *cfg, int sve_vl)
-+static int check_z(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		   uint64_t svcr)
- {
- 	size_t reg_size = sve_vl;
- 	int errors = 0;
-@@ -127,13 +136,17 @@ static int check_z(struct syscall_cfg *cfg, int sve_vl)
- 
- 	/*
- 	 * After a syscall the low 128 bits of the Z registers should
--	 * be preserved and the rest be zeroed.
-+	 * be preserved and the rest be zeroed, except if we were in
-+	 * streaming mode in which case the low 128 bits may also be
-+	 * cleared by the transition out of streaming mode.
- 	 */
- 	for (i = 0; i < SVE_NUM_ZREGS; i++) {
- 		void *in = &z_in[reg_size * i];
- 		void *out = &z_out[reg_size * i];
- 
--		if (memcmp(in, out, SVE_VQ_BYTES) != 0) {
-+		if ((memcmp(in, out, SVE_VQ_BYTES) != 0) &&
-+		    !((svcr & SVCR_SM_MASK) &&
-+		      memcmp(z_zero, out, SVE_VQ_BYTES) == 0)) {
- 			ksft_print_msg("%s SVE VL %d Z%d low 128 bits changed\n",
- 				       cfg->name, sve_vl, i);
- 			errors++;
-@@ -153,13 +166,15 @@ static int check_z(struct syscall_cfg *cfg, int sve_vl)
- uint8_t p_in[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
- uint8_t p_out[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
- 
--static void setup_p(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_p(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
- {
- 	fill_random(p_in, sizeof(p_in));
- 	fill_random(p_out, sizeof(p_out));
- }
- 
--static int check_p(struct syscall_cfg *cfg, int sve_vl)
-+static int check_p(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		   uint64_t svcr)
- {
- 	size_t reg_size = sve_vq_from_vl(sve_vl) * 2; /* 1 bit per VL byte */
- 
-@@ -183,8 +198,19 @@ static int check_p(struct syscall_cfg *cfg, int sve_vl)
- uint8_t ffr_in[__SVE_PREG_SIZE(SVE_VQ_MAX)];
- uint8_t ffr_out[__SVE_PREG_SIZE(SVE_VQ_MAX)];
- 
--static void setup_ffr(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_ffr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		      uint64_t svcr)
- {
-+	/*
-+	 * If we are in streaming mode and do not have FA64 then FFR
-+	 * is unavailable.
-+	 */
-+	if ((svcr & SVCR_SM_MASK) &&
-+	    !(getauxval(AT_HWCAP2) & HWCAP2_SME_FA64)) {
-+		memset(&ffr_in, 0, sizeof(ffr_in));
-+		return;
-+	}
-+
- 	/*
- 	 * It is only valid to set a contiguous set of bits starting
- 	 * at 0.  For now since we're expecting this to be cleared by
-@@ -194,7 +220,8 @@ static void setup_ffr(struct syscall_cfg *cfg, int sve_vl)
- 	fill_random(ffr_out, sizeof(ffr_out));
- }
- 
--static int check_ffr(struct syscall_cfg *cfg, int sve_vl)
-+static int check_ffr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		     uint64_t svcr)
- {
- 	size_t reg_size = sve_vq_from_vl(sve_vl) * 2;  /* 1 bit per VL byte */
- 	int errors = 0;
-@@ -203,6 +230,10 @@ static int check_ffr(struct syscall_cfg *cfg, int sve_vl)
- 	if (!sve_vl)
- 		return 0;
- 
-+	if ((svcr & SVCR_SM_MASK) &&
-+	    !(getauxval(AT_HWCAP2) & HWCAP2_SME_FA64))
-+		return 0;
-+
- 	/* After a syscall the P registers should be zeroed */
- 	for (i = 0; i < reg_size; i++)
- 		if (ffr_out[i])
-@@ -214,8 +245,65 @@ static int check_ffr(struct syscall_cfg *cfg, int sve_vl)
- 	return errors;
- }
- 
--typedef void (*setup_fn)(struct syscall_cfg *cfg, int sve_vl);
--typedef int (*check_fn)(struct syscall_cfg *cfg, int sve_vl);
-+uint64_t svcr_in, svcr_out;
-+
-+static void setup_svcr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
-+{
-+	svcr_in = svcr;
-+}
-+
-+static int check_svcr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		      uint64_t svcr)
-+{
-+	int errors = 0;
-+
-+	if (svcr_out & SVCR_SM_MASK) {
-+		ksft_print_msg("%s Still in SM, SVCR %llx\n",
-+			       cfg->name, svcr_out);
-+		errors++;
-+	}
-+
-+	if ((svcr_in & SVCR_ZA_MASK) != (svcr_out & SVCR_ZA_MASK)) {
-+		ksft_print_msg("%s PSTATE.ZA changed, SVCR %llx != %llx\n",
-+			       cfg->name, svcr_in, svcr_out);
-+		errors++;
-+	}
-+
-+	return errors;
-+}
-+
-+uint8_t za_in[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
-+uint8_t za_out[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
-+
-+static void setup_za(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		     uint64_t svcr)
-+{
-+	fill_random(za_in, sizeof(za_in));
-+	memset(za_out, 0, sizeof(za_out));
-+}
-+
-+static int check_za(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
-+{
-+	size_t reg_size = sme_vl * sme_vl;
-+	int errors = 0;
-+
-+	if (!(svcr & SVCR_ZA_MASK))
-+		return 0;
-+
-+	if (memcmp(za_in, za_out, reg_size) != 0) {
-+		ksft_print_msg("SME VL %d ZA does not match\n", sme_vl);
-+		errors++;
-+	}
-+
-+	return errors;
-+}
-+
-+typedef void (*setup_fn)(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+			 uint64_t svcr);
-+typedef int (*check_fn)(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+			uint64_t svcr);
- 
- /*
-  * Each set of registers has a setup function which is called before
-@@ -233,20 +321,23 @@ static struct {
- 	{ setup_z, check_z },
- 	{ setup_p, check_p },
- 	{ setup_ffr, check_ffr },
-+	{ setup_svcr, check_svcr },
-+	{ setup_za, check_za },
- };
- 
--static bool do_test(struct syscall_cfg *cfg, int sve_vl)
-+static bool do_test(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
- {
- 	int errors = 0;
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(regset); i++)
--		regset[i].setup(cfg, sve_vl);
-+		regset[i].setup(cfg, sve_vl, sme_vl, svcr);
- 
--	do_syscall(sve_vl);
-+	do_syscall(sve_vl, sme_vl);
- 
- 	for (i = 0; i < ARRAY_SIZE(regset); i++)
--		errors += regset[i].check(cfg, sve_vl);
-+		errors += regset[i].check(cfg, sve_vl, sme_vl, svcr);
- 
- 	return errors == 0;
- }
-@@ -254,9 +345,10 @@ static bool do_test(struct syscall_cfg *cfg, int sve_vl)
- static void test_one_syscall(struct syscall_cfg *cfg)
- {
- 	int sve_vq, sve_vl;
-+	int sme_vq, sme_vl;
- 
- 	/* FPSIMD only case */
--	ksft_test_result(do_test(cfg, 0),
-+	ksft_test_result(do_test(cfg, 0, default_sme_vl, 0),
- 			 "%s FPSIMD\n", cfg->name);
- 
- 	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
-@@ -273,8 +365,36 @@ static void test_one_syscall(struct syscall_cfg *cfg)
- 		if (sve_vq != sve_vq_from_vl(sve_vl))
- 			sve_vq = sve_vq_from_vl(sve_vl);
- 
--		ksft_test_result(do_test(cfg, sve_vl),
-+		ksft_test_result(do_test(cfg, sve_vl, default_sme_vl, 0),
- 				 "%s SVE VL %d\n", cfg->name, sve_vl);
-+
-+		if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
-+			continue;
-+
-+		for (sme_vq = SVE_VQ_MAX; sme_vq > 0; --sme_vq) {
-+			sme_vl = prctl(PR_SME_SET_VL, sme_vq * 16);
-+			if (sme_vl == -1)
-+				ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
-+						   strerror(errno), errno);
-+
-+			sme_vl &= PR_SME_VL_LEN_MASK;
-+
-+			if (sme_vq != sve_vq_from_vl(sme_vl))
-+				sme_vq = sve_vq_from_vl(sme_vl);
-+
-+			ksft_test_result(do_test(cfg, sve_vl, sme_vl,
-+						 SVCR_ZA_MASK | SVCR_SM_MASK),
-+					 "%s SVE VL %d/SME VL %d SM+ZA\n",
-+					 cfg->name, sve_vl, sme_vl);
-+			ksft_test_result(do_test(cfg, sve_vl, sme_vl,
-+						 SVCR_SM_MASK),
-+					 "%s SVE VL %d/SME VL %d SM\n",
-+					 cfg->name, sve_vl, sme_vl);
-+			ksft_test_result(do_test(cfg, sve_vl, sme_vl,
-+						 SVCR_ZA_MASK),
-+					 "%s SVE VL %d/SME VL %d ZA\n",
-+					 cfg->name, sve_vl, sme_vl);
-+		}
- 	}
- }
- 
-@@ -307,14 +427,54 @@ int sve_count_vls(void)
- 	return vl_count;
- }
- 
-+int sme_count_vls(void)
-+{
-+	unsigned int vq;
-+	int vl_count = 0;
-+	int vl;
-+
-+	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
-+		return 0;
-+
-+	/* Ensure we configure a SME VL, used to flag if SVCR is set */
-+	default_sme_vl = 16;
-+
-+	/*
-+	 * Enumerate up to SVE_VQ_MAX vector lengths
-+	 */
-+	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
-+		vl = prctl(PR_SME_SET_VL, vq * 16);
-+		if (vl == -1)
-+			ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
-+					   strerror(errno), errno);
-+
-+		vl &= PR_SME_VL_LEN_MASK;
-+
-+		if (vq != sve_vq_from_vl(vl))
-+			vq = sve_vq_from_vl(vl);
-+
-+		vl_count++;
-+	}
-+
-+	return vl_count;
-+}
-+
- int main(void)
- {
- 	int i;
-+	int tests = 1;  /* FPSIMD */
- 
- 	srandom(getpid());
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(syscalls) * (sve_count_vls() + 1));
-+	tests += sve_count_vls();
-+	tests += (sve_count_vls() * sme_count_vls()) * 3;
-+	ksft_set_plan(ARRAY_SIZE(syscalls) * tests);
-+
-+	if (getauxval(AT_HWCAP2) & HWCAP2_SME_FA64)
-+		ksft_print_msg("SME with FA64\n");
-+	else if (getauxval(AT_HWCAP2) & HWCAP2_SME)
-+		ksft_print_msg("SME without FA64\n");
- 
- 	for (i = 0; i < ARRAY_SIZE(syscalls); i++)
- 		test_one_syscall(&syscalls[i]);
--- 
-2.30.2
+Hmm, I'd slightly prefer we don't set a dummy value of -1 for this.
+I personally think something like this is a bit less subtle:
 
+/* Run non-parameterised tests once */
+while (!test_case->generate_param || test.param_value) {
+
+  if (!test_case->generate_param) break;
+}
+
+Alternatively, we don't need to share the loop
+
+if (!test_case->generate_param) {
+  kunit_run_case_catch_errors(suite, test_case, &test);
+  kunit_update_stats(&param_stats, test.status);
+} else while (test_param.value) {
+   kunit_run_case_catch_errors(suite, test_case, &test);
+   kunit_update_stats(&param_stats, test.status);
+   /* print subtest and advance next param */
+}
+
+}
+
+
+>                 struct kunit_result_stats param_stats = { 0 };
+>                 test_case->status = KUNIT_SKIPPED;
+>
+> @@ -510,7 +513,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+>                         test.param_value = test_case->generate_params(NULL, param_desc);
+>                 }
+>
+> -               do {
+> +               while (test.param_value) {
+>                         kunit_run_case_catch_errors(suite, test_case, &test);
+>
+>                         if (test_case->generate_params) {
+> @@ -530,11 +533,12 @@ int kunit_run_tests(struct kunit_suite *suite)
+>                                 param_desc[0] = '\0';
+>                                 test.param_value = test_case->generate_params(test.param_value, param_desc);
+>                                 test.param_index++;
+> -                       }
+> +                       } else
+> +                               test.param_value = NULL;
+>
+>                         kunit_update_stats(&param_stats, test.status);
+>
+> -               } while (test.param_value);
+> +               }
+>
+>                 kunit_print_test_stats(&test, param_stats);
+>
+> --
+> 2.33.0.1079.g6e70778dc9-goog
+>
