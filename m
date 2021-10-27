@@ -2,159 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2602543D655
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 00:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE8A43D65C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 00:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbhJ0WO5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 18:14:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48890 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230063AbhJ0WO5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 18:14:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ED54B60E75;
-        Wed, 27 Oct 2021 22:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635372751;
-        bh=qDYo3qUo7XfTZD0MoKBSQuJOm3bh9eM3O0CK7xq0y4M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FTPoSM+NFFoCPZQle5PvcjGOM5OOYZM2caCgZb8ftod6yw1Rfn2FSwmO5IgVOlSnx
-         P2upKErThXMT5mtRZ4Rvyn4FxfFTvmaFgvmEROAcd4IgD1m8uxzGIqi5IRJU0SJFGK
-         AEns2ks5yw8ECdPUfKWmRj6KjmlLPAzFiI0bbQQaxZ4pPzsrEpA2T3WjBqqkfZMdil
-         eleeJyNL+J57Ge2FLrOmfGHakLHxacbKB4l4ofyn8LX7IfFELEMt+CnM6ajeXULLR/
-         86wNADmxJyKOajO4lLmyCT+7hLrBLCNmvnmHJjYOSeTKyEUslLsER5oUSaNqD8vFkj
-         1uvc4mWH93DCQ==
-Date:   Thu, 28 Oct 2021 07:12:26 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
-        kernel-team@android.com, rostedt@goodmis.org, mhiramat@kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] tracing/selftests: Add tests for hist trigger
- expression parsing
-Message-Id: <20211028071226.9d1d0bd1f4a5d04999c1a9f0@kernel.org>
-In-Reply-To: <20211027205919.1648553-4-kaleshsingh@google.com>
-References: <20211027205919.1648553-1-kaleshsingh@google.com>
-        <20211027205919.1648553-4-kaleshsingh@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S230122AbhJ0WPb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 18:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230097AbhJ0WPa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Oct 2021 18:15:30 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08A7C061745
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 15:13:04 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id q127so4559064iod.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 15:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nsPi011gcGKznhyjP8gBINhHiBPj2QE+X2X3O0VWlpk=;
+        b=MZtSKBHP1KVQ1mjg5IuFaSQD293zXvnDzt0544S3lh+JNRUKzK3t1ttv1plljLefLi
+         fB0n2RfBbHIfle2mgpvE83wmLDV40SuJRepz4Sy1qzjZKrbVCzYMOLRr/VUmYZXWY6h3
+         wheImgLZt5QAb5G6YzlonG3u2R0r9RfoL74nuP4fRSYaCYIdyR/IrvAjHAQPjDWoeF4E
+         qgLcyQzS9qeoQA2r6oGv9Ogz0FFStG0TpvrAJPtjdjMaQcGUPAr8VloRAi0tNaRWHonU
+         3UjDGvvsWOajH/556/6IbcWMfQSKhujDCe04xsK/FN4Eq4q6y+GdwsCXrV4DMftnCXF8
+         kxXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nsPi011gcGKznhyjP8gBINhHiBPj2QE+X2X3O0VWlpk=;
+        b=rFUi7PSp1onzBZN+H34EktMFvNrCr6ptm7Cx/gaEVynd2gMuqv0HZZaski+goXDsCh
+         9F4LgRa5ABsmLBnLWywu4DzAXyI9muys1O7TJMaMJjmicKLvjs5frRy0aKR00LNsWNxX
+         qnxWFGo9+ovz5epEw62IenBluWOepV+GVa4bjepx6nP6f8ff2GAwqco5tLf6YIjh/SJI
+         7vwyO9kkDu4yrVwQ9Vac0wGZOsM2S4ZUs3o/374z1a1/1cFykcZtqRvuRfP8YqJ4Qf1x
+         6YNr0BudN7YHSpb/Nqlm9S2GhlVBZrttQUTy1RrsY3Qgd9EEYbwtpgXLJZ4X2ngQvabe
+         4UUQ==
+X-Gm-Message-State: AOAM531QvOKzHq3Yi3C2VZnCeZ6SlaE7QVpnqaBwP5bX3/QRVZm2ZK6A
+        15KP9WwQ/gt2uiLqATiEtOA2A3dQPDBeMHRJRIBD+Q==
+X-Google-Smtp-Source: ABdhPJwnKnH5eg4CHR4DQH4tbzYgXD2kRYKfzNsaBOrSDwm/OgpJbhqbbqA4QefQdPSg7bUSYn+TlUCA1iJ2HtpKLq4=
+X-Received: by 2002:a05:6638:dc6:: with SMTP id m6mr390546jaj.48.1635372783922;
+ Wed, 27 Oct 2021 15:13:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211027013702.2039566-1-davidgow@google.com>
+In-Reply-To: <20211027013702.2039566-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 27 Oct 2021 15:12:52 -0700
+Message-ID: <CAGS_qxo2=NmXEnEnkg4E_1k-DXwniGK8xFZi08nKZZkb8otXzQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] kunit: tool: Do not error on tests without test plans
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 27 Oct 2021 13:59:10 -0700
-Kalesh Singh <kaleshsingh@google.com> wrote:
+On Tue, Oct 26, 2021 at 6:37 PM David Gow <davidgow@google.com> wrote:
+>
+> The (K)TAP spec encourages test output to begin with a 'test plan': a
+> count of the number of tests being run of the form:
+> 1..n
+>
+> However, some test suites might not know the number of subtests in
+> advance (for example, KUnit's parameterised tests use a generator
+> function). In this case, it's not possible to print the test plan in
+> advance.
+>
+> kunit_tool already parses test output which doesn't contain a plan, but
+> reports an error. Since we want to use nested subtests with KUnit
+> paramterised tests, remove this error.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-> Add tests for the parsing of hist trigger expressions; and to
-> validate expression evaluation.
-> 
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-This looks good to me :)
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thanks!
+This looks to be unchanged from v1.
+Looks good to me given kunit itself will report SKIPPED for parameterised tests.
 
 > ---
-> Changes in v5:
->   - Add README pattern to requires tag, per Masami
-> 
-> Changes in v3:
->   - Remove .sym-offset error check tests
-> 
-> Changes in v2:
->   - Add Namhyung's Reviewed-by
->   - Update comment to clarify err_pos in "Too many subexpressions" test
-> 
->  .../trigger/trigger-hist-expressions.tc       | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
-> new file mode 100644
-> index 000000000000..9690f9f809e7
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
-> @@ -0,0 +1,72 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: event trigger - test histogram expression parsing
-> +# requires: set_event events/sched/sched_process_fork/trigger events/sched/sched_process_fork/hist error_log "<var1>=<field|var_ref|numeric_literal>":README
-> +
-> +
-> +fail() { #msg
-> +    echo $1
-> +    exit_fail
-> +}
-> +
-> +get_hist_var() { #var_name hist_path
-> +    hist_output=`grep -m1 "$1: " $2`
-> +    hitcount=`echo $hist_output | awk '{ for (i=1; i<=NF; ++i) { if ($i ~ "hitcount:") print $(i+1)} }'`
-> +    var_sum=`echo $hist_output | awk '{ for (i=1; i<=NF; ++i) { if ($i ~ "'$1':") print $(i+1)} }'`
-> +    var_val=$(( var_sum / hitcount ))
-> +    echo $var_val
-> +}
-> +
-> +test_hist_expr() { # test_name expression expected_val
-> +    reset_trigger
-> +
-> +    echo "Test hist trigger expressions - $1"
-> +
-> +    echo "hist:keys=common_pid:x=$2" > events/sched/sched_process_fork/trigger
-> +    echo 'hist:keys=common_pid:vals=$x' >> events/sched/sched_process_fork/trigger
-> +    for i in `seq 1 10` ; do ( echo "forked" > /dev/null); done
-> +
-> +    actual=`get_hist_var x events/sched/sched_process_fork/hist`
-> +
-> +    if [ $actual != $3 ]; then
-> +        fail "Failed hist trigger expression evaluation: Expression: $2 Expected: $3, Actual: $actual"
-> +    fi
-> +
-> +    reset_trigger
-> +}
-> +
-> +check_error() { # test_name command-with-error-pos-by-^
-> +    reset_trigger
-> +
-> +    echo "Test hist trigger expressions - $1"
-> +    ftrace_errlog_check 'hist:sched:sched_process_fork' "$2" 'events/sched/sched_process_fork/trigger'
-> +
-> +    reset_trigger
-> +}
-> +
-> +test_hist_expr "Variable assignment" "123" "123"
-> +
-> +test_hist_expr "Subtraction not associative" "16-8-4-2" "2"
-> +
-> +test_hist_expr "Division not associative" "64/8/4/2" "1"
-> +
-> +test_hist_expr "Same precedence operators (+,-) evaluated left to right" "16-8+4+2" "14"
-> +
-> +test_hist_expr "Same precedence operators (*,/) evaluated left to right" "4*3/2*2" "12"
-> +
-> +test_hist_expr "Multiplication evaluated before addition/subtraction" "4+3*2-2" "8"
-> +
-> +test_hist_expr "Division evaluated before addition/subtraction" "4+6/2-2" "5"
-> +
-> +# Division by zero returns -1
-> +test_hist_expr "Handles division by zero" "3/0" "-1"
-> +
-> +# err pos for "too many subexpressions" is dependent on where
-> +# the last subexpression was detected. This can vary depending
-> +# on how the expression tree was generated.
-> +check_error "Too many subexpressions" 'hist:keys=common_pid:x=32+^10*3/20-4'
-> +check_error "Too many subexpressions" 'hist:keys=common_pid:x=^1+2+3+4+5'
-> +
-> +check_error "Unary minus not supported in subexpression" 'hist:keys=common_pid:x=-(^1)+2'
-> +
-> +exit 0
-> -- 
+>  tools/testing/kunit/kunit_parser.py    | 5 ++---
+>  tools/testing/kunit/kunit_tool_test.py | 5 ++++-
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index 3355196d0515..50ded55c168c 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -340,8 +340,8 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
+>         """
+>         Parses test plan line and stores the expected number of subtests in
+>         test object. Reports an error if expected count is 0.
+> -       Returns False and reports missing test plan error if fails to parse
+> -       test plan.
+> +       Returns False and sets expected_count to None if there is no valid test
+> +       plan.
+>
+>         Accepted format:
+>         - '1..[number of subtests]'
+> @@ -356,7 +356,6 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
+>         match = TEST_PLAN.match(lines.peek())
+>         if not match:
+>                 test.expected_count = None
+> -               test.add_error('missing plan line!')
+>                 return False
+>         test.log.append(lines.pop())
+>         expected_count = int(match.group(1))
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 9c4126731457..bc8793145713 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -191,7 +191,10 @@ class KUnitParserTest(unittest.TestCase):
+>                         result = kunit_parser.parse_run_tests(
+>                                 kunit_parser.extract_tap_lines(
+>                                 file.readlines()))
+> -               self.assertEqual(2, result.test.counts.errors)
+> +               # A missing test plan is not an error.
+> +               self.assertEqual(0, result.test.counts.errors)
+> +               # All tests should be accounted for.
+> +               self.assertEqual(10, result.test.counts.total())
+>                 self.assertEqual(
+>                         kunit_parser.TestStatus.SUCCESS,
+>                         result.status)
+> --
 > 2.33.0.1079.g6e70778dc9-goog
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+>
