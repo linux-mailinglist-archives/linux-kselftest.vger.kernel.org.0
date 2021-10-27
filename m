@@ -2,105 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C9C43C120
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 06:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D85C43C2FC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 08:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbhJ0EHG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 00:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhJ0EHG (ORCPT
+        id S236716AbhJ0G3s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 02:29:48 -0400
+Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:47611 "EHLO
+        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230342AbhJ0G3r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 00:07:06 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E3BC061570
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 21:04:41 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id m26so1497274pff.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 21:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Izz2fSeyp7FglLJXkUAzOzwe9eczJwqGRtb97g7cQGw=;
-        b=NyISBRU3aODLArR4lea/SISpA7/zkEP9FG+wdnUmbXfTYwn+iY4lxF+u4WsnyaWcsE
-         EfK/OT4dk3HwYCy9gjZC4VwyzjQ9zmAhuutnXxJIpPAD/w3uVCtjWogL0sYgvLG74R+v
-         g6R5D7ncWinK5HCdKMsc6NiEeGrmqQoRWJFAQQAA77aRoza/R0cG29084cNFUn7f0aUm
-         VdmFFyGKLjWLIuGKycPA6pLy3hjB+XFt6+F3hUABK9tinH9C+Aa/rOkKwPQVM1WJZl+u
-         bow0zvjF7qRvdF3zi3kG4OxKHn1OHxdmRFNVC9hREC+r19Dom3frarwKheRIMqVPZ+FQ
-         /cng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Izz2fSeyp7FglLJXkUAzOzwe9eczJwqGRtb97g7cQGw=;
-        b=S33MNgZIVPKH414I9NzhZjTZk8fwA0vyqAXFlgzehlE0tHZqSKOBOo5eI4cT50xIXv
-         Ru/H2aYp6c4KhrTwwKFlyCzMGSOxGveRzaBnCZ67RPbiyICmmBL5UmPtOM8eqrBJFsTu
-         YJxiQYmKVkd75T0IuxJh7kSsSkpD/ChFuSImYwf8SgyiT8798bE5hL90v9fYU92I2XxT
-         rALZINxE2a5B09ArSB6PNrcXMICpbdWfvpahf6IXS58pV1MYyDERa/gr0HBrk8+jrtv7
-         hvmYyKANnOQiVKFahwu6rw4NqHSkkAK/mkUGoszTBzRpSso7oOWVYcAxzwf3HqT290sm
-         +wDA==
-X-Gm-Message-State: AOAM533LSJNOdAMjl3PuikCu2sjdw615/UEZza/61QZ8NNRHwOPHWgGV
-        K/0pb+6rcltjE4pZ8YRjJxvn40M9w5fC+YtcSVA8wA==
-X-Google-Smtp-Source: ABdhPJz0w3mvn4TX+ptIQYahw35WumxHe6KDzRZcbPE7yRtG2MVa4Il8IeujEeZaRa+ai+C0+yqpV1LFJQgVSPxIohU=
-X-Received: by 2002:a65:6499:: with SMTP id e25mr21858529pgv.146.1635307480887;
- Tue, 26 Oct 2021 21:04:40 -0700 (PDT)
+        Wed, 27 Oct 2021 02:29:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1635316042;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=nwZas2kyVRqntbwWYevctH0P/I7R7DBfP9/Sk5R+ius=;
+        b=gY2hQJC4Yl7kTxe2Gyy0c5qFlGpxEcEOuGIoA92DXBR6GqPjoxacA3z4lYa/r0+G
+        fRLT5FZgAgxbqbRfUf58XNZyR/WAI+L97rXFCJB0OPDcUObqFtzVQzkif+rheWNSWP+
+        xS2n796RXsUFqJXQnmt3Vchoi8ApCq3CuUPWnaNs=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1635316042;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=nwZas2kyVRqntbwWYevctH0P/I7R7DBfP9/Sk5R+ius=;
+        b=i2ANB7hp2k0oGWc2Ses4yo5YhlfY8fy6Y7bViLjvKb82nfdFUH1JykxGlMtyqQp2
+        GVf0r5VM9CAZc6MUR0p+X6z2ILodf0g2usMptCJuNRjzlANcleNivg1U93ouML60zBg
+        ml4fL/C8d+oQwl+qQ9ZoQcM90W+jP79lMjLFc2KE=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211026
 MIME-Version: 1.0
-References: <20211025200852.3002369-1-kaleshsingh@google.com>
- <20211025200852.3002369-7-kaleshsingh@google.com> <20211026151451.7f3e09a4@gandalf.local.home>
- <CAC_TJveHgsPZw7p7BWOgQw6h8GNU_Pv_WUjNmw3AUq+wnSzk6Q@mail.gmail.com>
- <20211026201846.08990d1d@rorschach.local.home> <CAC_TJve-mKSojaXtukdFeQKvPz-8TQtS=pgGD0Z18Wt6yJi7dg@mail.gmail.com>
- <20211026211511.403d76ca@rorschach.local.home> <CAC_TJvdwqQAKrVs3w6NcQNBT+bAgdyqR+8Zt_An7R9AQSSthGA@mail.gmail.com>
- <20211026222123.5e206fcf@rorschach.local.home> <20211026231557.1eedad9b@rorschach.local.home>
-In-Reply-To: <20211026231557.1eedad9b@rorschach.local.home>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Tue, 26 Oct 2021 21:04:29 -0700
-Message-ID: <CAC_TJveyKhZ3jyTZ33jbxSKTxxJ1WG+NUUUbf11pJ8Gqk7UeaQ@mail.gmail.com>
-Subject: Re: [PATCH v4 6/8] tracing/histogram: Optimize division by a power of 2
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
-        kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017cc06e895c-495217de-58e3-4d59-a7b9-6fb9f6b12901-000000@email.amazonses.com>
+Date:   Wed, 27 Oct 2021 06:27:22 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.10.27-54.240.48.37
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 8:16 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Tue, 26 Oct 2021 22:21:23 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> > I'm sure there's an algorithm somewhere that can give as the real max.
->
-> You got me playing with this more ;-)
->
-> OK, I added the rounding in the wrong place. I found that we can make
-> the max_div to be the same as the shift! The bigger the shift, the
-> bigger the max!
+## Build
+* kernel: 5.15.0-rc7
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 2376e5fe91bcad74b997d2cc0535abff79ec73c5
+* git describe: next-20211026
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211026
 
-Nice! :)
->
->         mult = (1 << shift) / div;
->         max_div = (1 << shift)
->
-> But the rounding needs to be with the mult / shift:
->
->         return (val * mult + ((1 << shift) - 1)) >> shift;
->
->
-> When val goes pass 1 << shift, then the error will be off by more than
-> one.
-Did you mean, val should be such that when we do the (val * mult) we
-only get rounding errors less than (1 << shift)?
+## Regressions (compared to next-20211022)
+* hi6220-hikey, kselftest-timers
+  - timers.rtcpie
 
-I think we also need to flip the delta now since we round down initially:
+* i386, kselftest-rtc
+  - rtc.rtctest
 
-    delta =  (1 << shift) - (mult * div)
+* x15, kselftest-rtc
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.date_read
 
-Thanks,
-Kalesh
->
-> -- Steve
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211022)
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
+
+
+## Test result summary
+total: 2936, pass: 1722, fail: 259, skip: 955, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-vm[
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
