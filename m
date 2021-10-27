@@ -2,83 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 935EF43C8C2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 13:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B023743C8FF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 13:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241695AbhJ0LpH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 07:45:07 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:44210 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239798AbhJ0LpG (ORCPT
+        id S235278AbhJ0L7F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 07:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235347AbhJ0L7F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 07:45:06 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 633E01FD3C;
-        Wed, 27 Oct 2021 11:42:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1635334959; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fo5sUfTsUY3UOkgJ2rkzuihsx0B4xmZU0SJdKHg3/K8=;
-        b=BOue54GcW/uw1WPm5hiAmIdhozSdpxtIujuKNq+5lCqra257QQ5+yVC0mYQ5eawxHlKDyr
-        nU0ifZU6580JYGww6p7MTa4j1eGWh/EpWynHxEW0BXP7jLQv8eUL4O/7yjEmIobBV3v+V+
-        clwH2P5+gllvmD14GruEDwwE2lrVid8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1635334959;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fo5sUfTsUY3UOkgJ2rkzuihsx0B4xmZU0SJdKHg3/K8=;
-        b=+LylReF1y8AGvSIYf9Izx8bkit9K4VmPNvnYXAU1IXcpJZ3PzIoU+CbwuMhJJKdrER1wb3
-        YbEesObRpQJsk5Bg==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B48FCA3B84;
-        Wed, 27 Oct 2021 11:42:38 +0000 (UTC)
-Date:   Wed, 27 Oct 2021 13:42:38 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Ming Lei <ming.lei@redhat.com>
-cc:     Petr Mladek <pmladek@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
-        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
-        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org
-Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
-In-Reply-To: <YXgguuAY5iEUIV0u@T590>
-Message-ID: <alpine.LSU.2.21.2110271340180.3655@pobox.suse.cz>
-References: <YWq3Z++uoJ/kcp+3@T590> <YW3LuzaPhW96jSBK@bombadil.infradead.org> <YW4uwep3BCe9Vxq8@T590> <alpine.LSU.2.21.2110190820590.15009@pobox.suse.cz> <YW6OptglA6UykZg/@T590> <alpine.LSU.2.21.2110200835490.26817@pobox.suse.cz> <YW/KEsfWJMIPnz76@T590>
- <alpine.LSU.2.21.2110201014400.26817@pobox.suse.cz> <YW/q70dLyF+YudyF@T590> <YXfA0jfazCPDTEBw@alley> <YXgguuAY5iEUIV0u@T590>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 27 Oct 2021 07:59:05 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1817BC061570
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 04:56:40 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id m63so5623671ybf.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 04:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=dy4Q63vwnui/mY3PyZTbcUeIPLCxMn026uu+8ErF5Jc=;
+        b=n1rjKYTifD/h8RznOc8AgZv0aJh53MhxY/3pr7rPPW1nA5cyzVKCzjIPryMWn5VUbR
+         pgj6Z34oH21q6v7TVRWTEuo3BMGbq70Uvjt89pb2rZw1G4t2c9SNBe+Iizs4PPWu2Ab5
+         7lQLQlNg6/5+PqQDHHvE6jX1ljI+QklrITcGt/p6LSxfW2L6ede29kQp8QB/ewwH7G/T
+         xVHx0lZmPGe2hfsFclOZHxHmFgO3my60tEbdXYYo++6WtrSE1Nm4jTi0WgcZEzMdWkO7
+         58gP8TnteBL99SKwqBdzYaQDXQFjipDZy4+6y85HcH4hMBDyTYQ/ufXWHPyGMbRhXGiX
+         DAFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=dy4Q63vwnui/mY3PyZTbcUeIPLCxMn026uu+8ErF5Jc=;
+        b=HhJqmOkYI4M7ZRIEM55Ok7HVzmpERqhhbBMk86708AEb1TtQGptJHakBWRVI8oZOa8
+         H51IEa3F8u2VIrk6eKJs0Tv3sldp8/u57lZAQbvzwaeAi7xyQGRwvL2tigFImmRX+ujS
+         LGEuDgrggL8147FGMB89Q/egd9btkPYYefwrHxSa2zpv243QCMKtvgj4xYbY5haNuV9i
+         pH4OI1gXlJhguvYKr2PSEkY8WIHBb4KOAMWNYcdH3PGGv3DaCNjr2WhsKnHFuNi+X4Tl
+         RM9+Dd6v2hma2MXUo1TQwx+kmG1MYEDTtajrKvaLnPD6ImCYD6jMKmXAdXKfA39VA+zY
+         cHhQ==
+X-Gm-Message-State: AOAM531JqC23uPiEOgfDFm4ws8mdIH3JIIaL0x9rmucrriey8H0zp49B
+        0VHelt2EhXhvLI+vrh3xaYFkeCUeDf/uhcpeF5M=
+X-Google-Smtp-Source: ABdhPJy0HZbeE4ZKx16AnuRKBY2ZIVwVQECfWKicLIGqPEzzaGemR2yZpdaKc31/ZBjqEbg/JriOvUBuOCrlJWoDvao=
+X-Received: by 2002:a25:bb0c:: with SMTP id z12mr32844496ybg.181.1635335799374;
+ Wed, 27 Oct 2021 04:56:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Sender: hookersgroove@gmail.com
+Received: by 2002:a05:7010:5904:b0:198:b5b0:e155 with HTTP; Wed, 27 Oct 2021
+ 04:56:38 -0700 (PDT)
+From:   Ibrahim idewu <ibrahimidewu4@gmail.com>
+Date:   Wed, 27 Oct 2021 12:56:38 +0100
+X-Google-Sender-Auth: JpqcukQ-1lh_d3MmaiOLfQjq68U
+Message-ID: <CAEF8BQQ4kqOND2higf6ScBvxfKq_imN+YZcj8P3wWtt8+7W-_Q@mail.gmail.com>
+Subject: I NEED YOUR RESPOND PLEASE
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> > 
-> > The livepatch code uses workqueue because the livepatch can be
-> > disabled via sysfs interface. It obviously could not wait until
-> > the sysfs interface is removed in the sysfs write() callback
-> > that triggered the removal.
-> 
-> If klp_free_patch_* is moved into module_exit() and not let enable
-> store() to kill kobjects, all kobjects can be deleted in module_exit(),
-> then wait_for_completion(patch->finish) may be removed, also wq isn't
-> required for the async cleanup.
+Dear Friend,
 
-It sounds like a nice cleanup. If we combine kobject_del() to prevent any 
-show()/store() accesses and free everything later in module_exit(), it 
-could work. If I am not missing something around how we maintain internal 
-lists of live patches and their modules.
+My name is Mr.Ibrahim Idewu.I have decided to seek a confidential
+co-operation  with you in the execution of the deal described
+here-under for our both  mutual benefit and I hope you will keep it a
+top secret because of the nature  of the transaction, During the
+course of our bank year auditing, I discovered  an unclaimed/abandoned
+fund, sum total of {US$19.3 Million United State  Dollars} in the bank
+account that belongs to a Saudi Arabia businessman Who unfortunately
+lost his life and entire family in a Motor Accident.
+I want to present you to the bank as the next of kin to the dead
+business man after the money will be sent to you we then share
+60percent to me and 40percent to you.
+All necessary arrangements to secure the fund have been made by
+me,upon consideration of this offer.
 
-Thanks
+send me the below information
 
-Miroslav
+
+-Your Full Name:
+-Your Contact Address:
+-Your direct Mobile telephone Number:
+-Your Date of Birth:
+-Your occupation:
+
+
+I await your swift response and re-assurance.
+
+
+Best regards,
+Mr.Ibrahim Idewu.
